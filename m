@@ -1,32 +1,43 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 17 Dec 2020 04:59:00 +0000
-Subject: [Buildroot] [Bug 12131] qt5webengine builderror in the latest
- stable Buildroot 2019.05.01 version
-In-Reply-To: <bug-12131-163@https.bugs.busybox.net/>
-References: <bug-12131-163@https.bugs.busybox.net/>
-Message-ID: <bug-12131-163-l83XCYJcsq@https.bugs.busybox.net/>
+From: Tian Yuanhao <tianyuanhao@aliyun.com>
+Date: Thu, 17 Dec 2020 14:01:22 +0800
+Subject: [Buildroot] [PATCH 5/5] package/docker-engine: bump version to
+ 20.10.1
+In-Reply-To: <20201216080013.547261-5-christian@paral.in>
+References: <20201216080013.547261-1-christian@paral.in>
+ <20201216080013.547261-5-christian@paral.in>
+Message-ID: <a2bb55e3-2ab0-29ad-9531-21575dcb7e5d@aliyun.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12131
+Hi Christian,
 
-benstokes <benstokes788@gmail.com> changed:
+After applying this series of patches, the output is as follows:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                URL|                            |https://www.fieldengineer.c
-                   |                            |om/skills/system-support-sp
-                   |                            |ecialist
+ ??? # docker version
+ ??? Client:
+ ??? ?Version:?????????? 20.10.1
+ ??? ?Git commit:??????? 20.10.1
+ ??? ?Built:???????????? unknown-buildtime
 
---- Comment #16 from benstokes <benstokes788@gmail.com> ---
-System support specialists provide help desk assistance and technical support
-for all types of issues affecting end users
+ ??? Server:
+ ??? ?Engine:
+ ??? ? Version:????????? 20.10.1
+ ??? ? Git commit:?????? buildroot
+ ??? ? Built:
+ ??? ?containerd:
+ ??? ? Version:????????? 1.4.3
+ ??? ? GitCommit:
+ ??? ?runc:
+ ??? ? Version:????????? 1.0.0-rc92
+ ??? ? GitCommit:
+ ??? ?docker-init:
+ ??? ? Version:????????? 0.19.0
+ ??? ? GitCommit:
 
-https://www.fieldengineer.com/skills/system-support-specialist
+To make the output more consistent, I suggest setting both BuildTime and 
+GitCommit empty.
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Regards, Yuanhao
