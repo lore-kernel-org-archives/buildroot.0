@@ -1,57 +1,76 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Thu, 17 Dec 2020 14:18:58 +0100
-Subject: [Buildroot] Fwd: Less Restrictive attribute error on
- init_module and cleanup_module
-In-Reply-To: <CAGshWo20BfGQMhgwQs9L9qFdtDSbHFGi=N33bSC586x1+OJmNA@mail.gmail.com>
-References: <CAGshWo14F9x8-OzHXCpep7roX49G9AesBUyC3ppzSTUwAvzmHw@mail.gmail.com>
- <CAGshWo20BfGQMhgwQs9L9qFdtDSbHFGi=N33bSC586x1+OJmNA@mail.gmail.com>
-Message-ID: <1871a6ad-4028-1b7b-2877-30edd6d435c4@smile.fr>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Thu, 17 Dec 2020 15:02:41 +0100
+Subject: [Buildroot] Nitrogen8M stuck at boot with master branch
+In-Reply-To: <69c3d27e81a21ac582be4104b28485381a51cdb9.camel@collabora.com>
+References: <CACvgo51BjX9MzFbqp+5pim_wjv_B_QSdEcpkz23p+4BCS1-R3g@mail.gmail.com>
+ <CACvgo53Ucwqsk7HntMR4o9gshbUFdt4R2OXTk2EPQPYkuXCTVw@mail.gmail.com>
+ <CACvgo51qebOMi1f8EUOZt2TbQ9EdUB+m6XLz=d-keQPnTH2ODQ@mail.gmail.com>
+ <X9sUGn6EigrpqtlA@p1g2>
+ <69c3d27e81a21ac582be4104b28485381a51cdb9.camel@collabora.com>
+Message-ID: <X9tlAc/YgP1aQuhe@p1g2>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Ezekiel,
 
-Le 17/12/2020 ? 13:32, manu f a ?crit?:
-> Hello all, I am Manu from France.
+On Thu, Dec 17, 2020 at 10:24:07AM -0300, Ezequiel Garcia wrote:
+> Hi Gary,
 > 
-> Actually I try to compile buidroot 2020.8 on ubuntu 20.04LTS for imx6
-> target with internal toolchain arm 2019.12
+> Thanks for the reply.
 > 
-> I got these errrors:
+> On Thu, 2020-12-17 at 09:17 +0100, Gary Bisson wrote:
+> > Hi,
+> > 
+> > On Thu, Dec 17, 2020 at 01:03:26AM +0000, Emil Velikov wrote:
+> > > On Wed, 16 Dec 2020 at 13:11, Emil Velikov <emil.l.velikov@gmail.com> wrote:
+> > > > 
+> > > > On Wed, 16 Dec 2020 at 13:10, Emil Velikov <emil.l.velikov@gmail.com> wrote:
+> > > > > 
+> > > > > Greetings everyone,
+> > > > > 
+> > > > > Recently I've started thinkering with a Nitrogen8M SBC - the regular
+> > > > > one, not the Mini, Nano or SOM ones.
+> > > > > 
+> > > > > Since this was my first experience with the board, initially I tried
+> > > > > the vendor provided Ubuntu image [1], which was working OOTB.
+> > > > > 
+> > > > > Booting a minimal buildroot (make nitrogen8m_defconfig && make) seems
+> > > > > to be getting stuck as below. The full boot log attached.
+> > > > > 
+> > > > Forgot the boot.log :-)
+> > > > 
+> > > Upon a closer look, it appears that boot locks up during the first
+> > > arm_smccc_smc().
+> > > The one in busfreq_probe() for the vendor kernel or imx8m_ddrc_probe()
+> > > for the upstream ones.
+> > > 
+> > > Wild guess is that the built lpddr4_pmu_train firmware has regressed
+> > > or we're not using it properly.
+> > > 
+> > > As always, any hints will be appreciated.
+> > 
+> > We've seen people having issues with 5.4 kernels when their bootloader
+> > was old. Please make sure to upgrade to latest U-Boot [1].
+> > 
+> > This is due to ATF changes NXP made which seemed to be needed for 5.4.
+> > 
+> > Regards,
+> > Gary
+> > 
+> > [1] https://boundarydevices.com/how-to-upgrade-u-boot/
 > 
-> error: 'init_module' specifies less restrictive attribute than its target
-> 'gpu_init': 'cold' [-Werror=missing-attributes]
 > 
-> I googled and found this problem come from new gcc get new warning but
-> warning are treat as error cause -Werror flag on buildroot make files.
-> 
-> some answer told to force CONFIG_PPC_DISABLE_WERROR in kconfig option
+> Note that we are using Buildroot's Nitrogen defconfig. Do you think
+> we should bump Buildroot's U-Boot?
 
-This option is only for powerpc and should be already set by Buildroot since:
-https://git.buildroot.net/buildroot/commit/?id=1713c3c344be26ec3bcb02a0a0068f21907ab881
+No if you upgraded to Buildroot's U-Boot it should work. But you have to
+explicitely do that upgrade as the image generate by Buildroot goes in
+the user partition of the eMMC whereas the bootloader is located into
+the boot partition. So when you flash the sdcard image, that doesn't
+update the U-Boot binary.
 
-But you are on ARM imx6.
-
-Can you test with KCFLAGS=-Wno-error ?
-
-Best regards,
-Romain
-
-> 
-> I am sorry I an newby on linux compile and I don"t know how to do that.
-> 
-> Could somebody could help me on this problem ?
-> 
-> Regards.
-> 
-> Manu
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+Regards,
+Gary
