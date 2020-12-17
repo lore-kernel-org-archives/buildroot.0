@@ -1,35 +1,42 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Thu, 17 Dec 2020 01:48:18 +0100
-Subject: [Buildroot] [PATCH v2] package/bind: fix compile/linking failure
-In-Reply-To: <20201214222407.23104-1-ps.report@gmx.net>
-References: <20201214222407.23104-1-ps.report@gmx.net>
-Message-ID: <20201217004818.GA349927@pevik>
+From: Emil Velikov <emil.l.velikov@gmail.com>
+Date: Thu, 17 Dec 2020 01:03:26 +0000
+Subject: [Buildroot] Nitrogen8M stuck at boot with master branch
+In-Reply-To: <CACvgo53Ucwqsk7HntMR4o9gshbUFdt4R2OXTk2EPQPYkuXCTVw@mail.gmail.com>
+References: <CACvgo51BjX9MzFbqp+5pim_wjv_B_QSdEcpkz23p+4BCS1-R3g@mail.gmail.com>
+ <CACvgo53Ucwqsk7HntMR4o9gshbUFdt4R2OXTk2EPQPYkuXCTVw@mail.gmail.com>
+Message-ID: <CACvgo51qebOMi1f8EUOZt2TbQ9EdUB+m6XLz=d-keQPnTH2ODQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+On Wed, 16 Dec 2020 at 13:11, Emil Velikov <emil.l.velikov@gmail.com> wrote:
+>
+> On Wed, 16 Dec 2020 at 13:10, Emil Velikov <emil.l.velikov@gmail.com> wrote:
+> >
+> > Greetings everyone,
+> >
+> > Recently I've started thinkering with a Nitrogen8M SBC - the regular
+> > one, not the Mini, Nano or SOM ones.
+> >
+> > Since this was my first experience with the board, initially I tried
+> > the vendor provided Ubuntu image [1], which was working OOTB.
+> >
+> > Booting a minimal buildroot (make nitrogen8m_defconfig && make) seems
+> > to be getting stuck as below. The full boot log attached.
+> >
+> Forgot the boot.log :-)
+>
+Upon a closer look, it appears that boot locks up during the first
+arm_smccc_smc().
+The one in busfreq_probe() for the vendor kernel or imx8m_ddrc_probe()
+for the upstream ones.
 
-> Fixes:
+Wild guess is that the built lpddr4_pmu_train firmware has regressed
+or we're not using it properly.
 
->   - http://autobuild.buildroot.net/results/966a3de94aa97fa8e9895eede29c9cbfb4bd7301
+As always, any hints will be appreciated.
 
->   .../host/lib/gcc/arm-buildroot-linux-musleabihf/9.3.0/../../../../arm-buildroot-linux-musleabihf/bin/ld: warning: libisccfg.so.163, needed by ../../lib/bind9/.libs/libbind9.so, not found (try using -rpath or -rpath-link)
->   .../host/lib/gcc/arm-buildroot-linux-musleabihf/9.3.0/../../../../arm-buildroot-linux-musleabihf/bin/ld: ../../lib/bind9/.libs/libbind9.so: undefined reference to `cfg_obj_line'
-
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
-> Changes v1 -> v2:
->   - ISCCFGDEPLIBS vs. ISCCFGLIBS
-
-Thanks for upstreaming this fix (you could have added upstream status):
-https://gitlab.isc.org/isc-projects/bind9/-/issues/2348
-
-But it looks like upstream suggest different fix:
-https://gitlab.isc.org/isc-projects/bind9/-/merge_requests/4497/diffs
-(draft, actually two commits).
-
-Kind regards,
-Petr
+Regards,
+Emil
