@@ -1,79 +1,46 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 17 Dec 2020 22:45:27 +0100
-Subject: [Buildroot] [PATCH] fix the single character python file bug
-In-Reply-To: <CAAV4SYY66WVh1=-h3v7doZcYiFnCMCZ9ath0MaZiEdbp2LBeXA@mail.gmail.com>
-References: <CAAV4SYY66WVh1=-h3v7doZcYiFnCMCZ9ath0MaZiEdbp2LBeXA@mail.gmail.com>
-Message-ID: <20201217214527.GE3188@scaer>
+Date: Thu, 17 Dec 2020 22:49:02 +0100
+Subject: [Buildroot] pycompile script doesn't compile files with single
+ character names
+In-Reply-To: <CAAV4SYaqA+gr-mS+Q=6AxhQH8hB14JAGhJ97gPPi0-C+3EYVeQ@mail.gmail.com>
+References: <CAAV4SYZLndA0mHnZO6+9+YGaVKtPQwGYHxWi4=ckF67AzibDzw@mail.gmail.com>
+ <CAHfJR7j8YdVLnYyXu7imzcnTC_9AcEnBwBi1BFFJTtqRNxXKGg@mail.gmail.com>
+ <CAAV4SYaqA+gr-mS+Q=6AxhQH8hB14JAGhJ97gPPi0-C+3EYVeQ@mail.gmail.com>
+Message-ID: <20201217214902.GF3188@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Charles, All,
+Caharles, Julien, All,
 
-Thanks for this quick followup.
+On 2020-12-17 06:58 -0500, Charles Eidsness via buildroot spake thusly:
+> On Thu, 17 Dec 2020 at 03:22, Julien Floret <julien.floret@6wind.com> wrote:
+> > Le mer. 16 d?c. 2020 ? 14:37, Charles Eidsness via buildroot
+> > <buildroot@busybox.net> a ?crit :
+[--SNIP--]
+> > Could you send a git patch using "git
+> > send-email", so that it can be applied by the maintainers?
 
-The commit log should be formatted with a prefix that defines what is
-touched and a brief description of the change. Then the body of the
-commit log should contain a more detailed explanation. Eventually, we
-will need that you sign-off your change.
+Interestingly, this initial patch did get caught up in the patchowrk
+list.
 
-For example:
+> I don't have git send-email setup but used git format-patch and sent
+> out an email, hopefully it'll work.
 
-    support/pycompile: support scripts with a single-charater filename
+I have now replied to that second iteration, thanks.
 
-    We can only pre-compile files that can be imported; the regexp that
-    filters filenames rejects filenames that contains a single
-    character, although this is perfectly valid.
+What I forgot to add is: add previous reviewers in Cc when you resend a
+patch. You can do that by just adding Cc. in the patch commit log, jut
+after your Signed-off-by. Keeping previous reviewers in Cc help them
+keep track of resend, and look at it again (so they can eventually reply
+with their reviewed-by tags, hint-hint Julien ;-) ).
 
-    Fix the regexp to accept those filenames.
-
-    Signed-off-by: Your REAL-NAME <your-email@adress>
-
-See: https://buildroot.org/downloads/manual/manual.html#submitting-patches
-
-However, I have a question about your change, see below...
-
-On 2020-12-17 06:56 -0500, Charles Eidsness via buildroot spake thusly:
-> ---
->  support/scripts/pycompile.py | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/support/scripts/pycompile.py b/support/scripts/pycompile.py
-> index 7041a0506b..e2cfc2683c 100644
-> --- a/support/scripts/pycompile.py
-> +++ b/support/scripts/pycompile.py
-> @@ -30,7 +30,7 @@ def compile_one(host_path, strip_root=None, verbose=False):
->          return  # only compile real files
-> 
->      if not re.match(
-> -            r"^[_A-Za-z][_A-Za-z0-9]+\.py$", os.path.basename(host_path)
-> +            r"^[_A-Za-z][_A-Za-z0-9]*\.py$", os.path.basename(host_path)
-
-The current code in buildroot master looks like:
-
-    if not re.match(r"^[_A-Za-z][_A-Za-z0-9]+\.py$",
-                    os.path.basename(host_path)):
-
-So your patch does not apply. What tree did you base your change on?
-
-Otherwise, the change looks semantically perfectly correct.
-
-Can you fix the above and resend a fixed patch, please?
+Thanks!
 
 Regards,
 Yann E. MORIN.
-
->      ):
->          return  # only compile "importable" python modules
-> 
-> -- 
-> 2.29.2
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
