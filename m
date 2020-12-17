@@ -1,24 +1,57 @@
-From: Maxim Kochetkov <fido_max@inbox.ru>
-Date: Thu, 17 Dec 2020 16:22:06 +0300
-Subject: [Buildroot] [PATCH 0/2] fix timescaledb-1.7.4 build
-Message-ID: <20201217132208.778308-1-fido_max@inbox.ru>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Thu, 17 Dec 2020 14:18:58 +0100
+Subject: [Buildroot] Fwd: Less Restrictive attribute error on
+ init_module and cleanup_module
+In-Reply-To: <CAGshWo20BfGQMhgwQs9L9qFdtDSbHFGi=N33bSC586x1+OJmNA@mail.gmail.com>
+References: <CAGshWo14F9x8-OzHXCpep7roX49G9AesBUyC3ppzSTUwAvzmHw@mail.gmail.com>
+ <CAGshWo20BfGQMhgwQs9L9qFdtDSbHFGi=N33bSC586x1+OJmNA@mail.gmail.com>
+Message-ID: <1871a6ad-4028-1b7b-2877-30edd6d435c4@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-*** BLURB HERE ***
+Hello,
 
-Maxim Kochetkov (2):
-  package/postgresql: allow to select postgresql version
-  package/timescaledb: add dependency on postgresql 12
+Le 17/12/2020 ? 13:32, manu f a ?crit?:
+> Hello all, I am Manu from France.
+> 
+> Actually I try to compile buidroot 2020.8 on ubuntu 20.04LTS for imx6
+> target with internal toolchain arm 2019.12
+> 
+> I got these errrors:
+> 
+> error: 'init_module' specifies less restrictive attribute than its target
+> 'gpu_init': 'cold' [-Werror=missing-attributes]
+> 
+> I googled and found this problem come from new gcc get new warning but
+> warning are treat as error cause -Werror flag on buildroot make files.
+> 
+> some answer told to force CONFIG_PPC_DISABLE_WERROR in kconfig option
 
- package/postgresql/Config.in       | 21 +++++++++++++++++++++
- package/postgresql/postgresql.hash |  3 +++
- package/postgresql/postgresql.mk   |  2 +-
- package/timescaledb/Config.in      |  1 +
- 4 files changed, 26 insertions(+), 1 deletion(-)
+This option is only for powerpc and should be already set by Buildroot since:
+https://git.buildroot.net/buildroot/commit/?id=1713c3c344be26ec3bcb02a0a0068f21907ab881
 
--- 
-2.29.2
+But you are on ARM imx6.
+
+Can you test with KCFLAGS=-Wno-error ?
+
+Best regards,
+Romain
+
+> 
+> I am sorry I an newby on linux compile and I don"t know how to do that.
+> 
+> Could somebody could help me on this problem ?
+> 
+> Regards.
+> 
+> Manu
+> 
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
