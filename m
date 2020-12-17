@@ -1,55 +1,26 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 16 Dec 2020 23:46:20 +0100
-Subject: [Buildroot] [PATCH 2/2] package/bind: fix mdig library
- dependencies
-In-Reply-To: <sjaqahxhgg.ln2@ID-313208.user.individual.net>
-References: <20201212091306.222405-1-bernd.kuhls@t-online.de>
- <20201212091306.222405-2-bernd.kuhls@t-online.de>
- <20201214231433.6cbf6aab@gmx.net>
- <sjaqahxhgg.ln2@ID-313208.user.individual.net>
-Message-ID: <20201216234620.1cb17aeb@gmx.net>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Thu, 17 Dec 2020 01:30:06 +0100
+Subject: [Buildroot] Patch for linux-headers
+Message-ID: <20201217003006.GA343694@pevik>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Bernd,
+Hi,
 
-On Wed, 16 Dec 2020 22:25:48 +0100, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+I wonder if it's allowed to add patch to add patch for linux-headers.
+There would have to be more versions for the patch (due headers being built for
+more versions). I'd like to use my upstreamed patch [1] which fixes
+"redefinition of struct sysinfo" build failure on MUSL.
+This so far required to patch affected packages or simply disable them
+(depends on !BR2_TOOLCHAIN_USES_MUSL).
 
-> Hi Peter,
->
-> Am Mon, 14 Dec 2020 23:14:33 +0100 schrieb Peter Seiderer:
->
-> >> +Upstream status: pending upload
-> >
-> > What does 'pending upload' mean?
->
-> this describes the fact that I am unable to register on gitlab.com, their
-> verification mail does not arrive so I can not activate my account ;)
+Actually, much simpler patch from Khem Raj could be used [2].
 
-I used (as suggestd by Petr Vorel):
+Kind regards,
+Petr
 
-	https://gitlab.isc.org/isc-projects/bind9
-
->
-> > Dependency entry '${ISCCFGDEPLIBS}' missing?
->
-> Yes, combined with your upstream patch I think your patch should be
-> applied, so I closed mine as "rejected".
-
-Thanks (and hoping the suggested patch is accepted in one form or the
-other from upstream)...
-
-Regards,
-Peter
-
-
->
-> Regards, Bernd
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a85cbe6159ffc973e5702f70a3bd5185f8f3c38d
+[2] https://git.alpinelinux.org/aports/tree/main/linux-headers/0003-remove-inclusion-of-sysinfo.h-in-kernel.h.patch
