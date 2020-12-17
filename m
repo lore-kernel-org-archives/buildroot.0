@@ -1,28 +1,54 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Thu, 17 Dec 2020 13:23:50 -0300
-Subject: [Buildroot] Fwd: Less Restrictive attribute error on
- init_module and cleanup_module
-In-Reply-To: <CAGshWo15+LOi5ji9o5FqFq9-SVRHs9uUPh3VR8+tMe-n3h9FSQ@mail.gmail.com>
-References: <CAGshWo14F9x8-OzHXCpep7roX49G9AesBUyC3ppzSTUwAvzmHw@mail.gmail.com>
- <CAGshWo20BfGQMhgwQs9L9qFdtDSbHFGi=N33bSC586x1+OJmNA@mail.gmail.com>
- <CAOMZO5BsMA_wgUYtG3LjAZ87_9b1uLgL-_PPatAGry910+7nnA@mail.gmail.com>
- <CAGshWo15+LOi5ji9o5FqFq9-SVRHs9uUPh3VR8+tMe-n3h9FSQ@mail.gmail.com>
-Message-ID: <CAOMZO5A5Hak+w5j+ymCTtAhy4pvjY=RJoiUzHmrvexDC911d9A@mail.gmail.com>
+From: Heiko Stuebner <heiko@sntech.de>
+Date: Thu, 17 Dec 2020 18:23:22 +0100
+Subject: [Buildroot] [PATCH v3] package/icu: bump to version 68-1
+Message-ID: <20201217172322.3561127-1-heiko@sntech.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-[Please don't remove the Buildroot from CC]
+From: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
 
-On Thu, Dec 17, 2020 at 10:54 AM manu f <e.fiancette@gmail.com> wrote:
->
-> @Fabio Estevan
->
-> Because it is the default setting for this card..and was thinking it was the default buildroot toolchain
-> what is the default buildroot toolchain and how to set it ( menuconfig -> toolchain I think )
+Bump icu to the newest release.
 
-It should be no problem to use the default Buildroot toolchain on imx6.
+Tested in conjunction with qt 5.15.1 and a qt-based application.
 
-Do you have a custom board? Which kernel version?
+Signed-off-by: Heiko Stuebner <heiko.stuebner@theobroma-systems.com>
+---
+changes in v3:
+- fix license hash in new version
+
+changes in v2:
+- redo commit message
+- drop the mention of the CVE, that was already fixed in 67.1
+
+ package/icu/icu.hash | 4 ++--
+ package/icu/icu.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/icu/icu.hash b/package/icu/icu.hash
+index 5c10008d8a..80cdd7df0c 100644
+--- a/package/icu/icu.hash
++++ b/package/icu/icu.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  94a80cd6f251a53bd2a997f6f1b5ac6653fe791dfab66e1eb0227740fb86d5dc  icu4c-67_1-src.tgz
+-sha256  25e21013a7bc2fad735e28c5278a120e4c7f1c327c8c8b9b4df1751748cddbb2  LICENSE
++sha256  a9f2e3d8b4434b8e53878b4308bd1e6ee51c9c7042e2b1a376abefb6fbb29f2d  icu4c-68_1-src.tgz
++sha256  7915b19db903070778581ae05d8bf4ea241b34a05deb51ca4f5cbb15ea1cbba3  LICENSE
+diff --git a/package/icu/icu.mk b/package/icu/icu.mk
+index c07ca2da3b..8d0288578c 100644
+--- a/package/icu/icu.mk
++++ b/package/icu/icu.mk
+@@ -7,7 +7,7 @@
+ # Git tags (and therefore versions on release-monitoring.org) use the
+ # XX-Y format, but the tarballs are named XX_Y and the containing
+ # directories XX.Y.
+-ICU_VERSION = 67-1
++ICU_VERSION = 68-1
+ ICU_SOURCE = icu4c-$(subst -,_,$(ICU_VERSION))-src.tgz
+ ICU_SITE = \
+ 	https://github.com/unicode-org/icu/releases/download/release-$(ICU_VERSION)
+-- 
+2.29.2
