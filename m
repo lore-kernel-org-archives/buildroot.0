@@ -1,88 +1,75 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 17 Dec 2020 22:27:51 +0100
-Subject: [Buildroot] [PATCH 1/1] pkg-cmake.mk: fix host ccache support
- for CMake 3.19
-In-Reply-To: <20201212225224.117940-1-bernd.amend@gmail.com>
-References: <20201212225224.117940-1-bernd.amend@gmail.com>
-Message-ID: <20201217212751.GD3188@scaer>
+Date: Thu, 17 Dec 2020 22:45:27 +0100
+Subject: [Buildroot] [PATCH] fix the single character python file bug
+In-Reply-To: <CAAV4SYY66WVh1=-h3v7doZcYiFnCMCZ9ath0MaZiEdbp2LBeXA@mail.gmail.com>
+References: <CAAV4SYY66WVh1=-h3v7doZcYiFnCMCZ9ath0MaZiEdbp2LBeXA@mail.gmail.com>
+Message-ID: <20201217214527.GE3188@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+Charles, All,
 
-On 2020-12-12 23:52 +0100, Bernd Amend spake thusly:
-> Starting with CMake 3.4 CMake supports setting a compiler launcher
-> like ccache. The feature is described in
-> https://cmake.org/cmake/help/latest/variable/CMAKE_LANG_COMPILER_LAUNCHER.html
-> This should be safe since everything is built for the host using make or ninja.
-> The use of *_ARG1 is discouraged by the cmake developers
-> https://cmake-developers.cmake.narkive.com/OTa9EKfj/cmake-c-compiler-arg-not-documented .
-> 
-> Without this patch I get the following error message with CMake 3.19.1 on Arch Linux.
-> Disabling BR2_CCACHE also resolves the issue.
-> 
-> /usr/bin/cmake [~]/buildroot/build/host-lzo-2.10/ -DCMAKE_INSTALL_SO_NO_EXE=0 -DCMAKE_FIND_ROOT_PATH="[...]" -DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM="BOTH" -DCMAKE_FIND_ROOT_P
-> ATH_MODE_LIBRARY="BOTH" -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE="BOTH" -DCMAKE_INSTALL_PREFIX="[...]" -DCMAKE_C_FLAGS="-O2 -I[...]/include" -DCMAKE_CXX_FLAGS="-O2 -I[...]/include" -DCMAKE_EXE_LINKER_FLAGS="-L[...]/lib -Wl,-rpath,[...]/lib" -DCMAKE_SHARED_LINKER_FLAGS="-L[...]/l
-> ib -Wl,-rpath,[...]/lib" -DCMAKE_ASM_COMPILER="/usr/bin/as" -DCMAKE_C_COMPILER="[...]/bin/ccache" -DCMAKE_CXX_COMPILER="[...]/bin/ccache"
-> -DCMAKE_C_COMPILER_ARG1="/usr/bin/gcc" -DCMAKE_CXX_COMPILER_ARG1="/usr/bin/g++"  -DCMAKE_COLOR_MAKEFILE=OFF -DBUILD_DOC=OFF -DBUILD_DOCS=OFF -DBUILD_EXAMPLE=OFF -DBUILD_EXAMPLES=OFF -DBUILD_TEST=OFF -DBUILD_TESTS=OFF -DBUILD_TESTING=O
-> FF  -DENABLE_SHARED=ON -DENABLE_STATIC=OFF )
-> -- The C compiler identification is unknown
-> -- Detecting C compiler ABI info
-> -- Detecting C compiler ABI info - failed
-> -- Check for working C compiler: [...]/bin/ccache
-> -- Check for working C compiler: [...]/bin/ccache - broken
-> CMake Error at /usr/share/cmake-3.19/Modules/CMakeTestCCompiler.cmake:66 (message):
-> The C compiler
-> 
-> Signed-off-by: Bernd Amend <bernd.amend@gmail.com>
+Thanks for this quick followup.
 
-Applied to master, thanks!
+The commit log should be formatted with a prefix that defines what is
+touched and a brief description of the change. Then the body of the
+commit log should contain a more detailed explanation. Eventually, we
+will need that you sign-off your change.
+
+For example:
+
+    support/pycompile: support scripts with a single-charater filename
+
+    We can only pre-compile files that can be imported; the regexp that
+    filters filenames rejects filenames that contains a single
+    character, although this is perfectly valid.
+
+    Fix the regexp to accept those filenames.
+
+    Signed-off-by: Your REAL-NAME <your-email@adress>
+
+See: https://buildroot.org/downloads/manual/manual.html#submitting-patches
+
+However, I have a question about your change, see below...
+
+On 2020-12-17 06:56 -0500, Charles Eidsness via buildroot spake thusly:
+> ---
+>  support/scripts/pycompile.py | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/support/scripts/pycompile.py b/support/scripts/pycompile.py
+> index 7041a0506b..e2cfc2683c 100644
+> --- a/support/scripts/pycompile.py
+> +++ b/support/scripts/pycompile.py
+> @@ -30,7 +30,7 @@ def compile_one(host_path, strip_root=None, verbose=False):
+>          return  # only compile real files
+> 
+>      if not re.match(
+> -            r"^[_A-Za-z][_A-Za-z0-9]+\.py$", os.path.basename(host_path)
+> +            r"^[_A-Za-z][_A-Za-z0-9]*\.py$", os.path.basename(host_path)
+
+The current code in buildroot master looks like:
+
+    if not re.match(r"^[_A-Za-z][_A-Za-z0-9]+\.py$",
+                    os.path.basename(host_path)):
+
+So your patch does not apply. What tree did you base your change on?
+
+Otherwise, the change looks semantically perfectly correct.
+
+Can you fix the above and resend a fixed patch, please?
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  package/pkg-cmake.mk | 14 +++++++-------
->  1 file changed, 7 insertions(+), 7 deletions(-)
+>      ):
+>          return  # only compile "importable" python modules
 > 
-> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-> index dc545caed9..3ee7067250 100644
-> --- a/package/pkg-cmake.mk
-> +++ b/package/pkg-cmake.mk
-> @@ -22,10 +22,10 @@
->  
->  # Set compiler variables.
->  ifeq ($(BR2_CCACHE),y)
-> -CMAKE_HOST_C_COMPILER = $(HOST_DIR)/bin/ccache
-> -CMAKE_HOST_CXX_COMPILER = $(HOST_DIR)/bin/ccache
-> -CMAKE_HOST_C_COMPILER_ARG1 = $(HOSTCC_NOCCACHE)
-> -CMAKE_HOST_CXX_COMPILER_ARG1 = $(HOSTCXX_NOCCACHE)
-> +CMAKE_HOST_C_COMPILER = $(HOSTCC_NOCCACHE)
-> +CMAKE_HOST_CXX_COMPILER = $(HOSTCXX_NOCCACHE)
-> +CMAKE_HOST_C_COMPILER_LAUNCHER = $(HOST_DIR)/bin/ccache
-> +CMAKE_HOST_CXX_COMPILER_LAUNCHER = $(HOST_DIR)/bin/ccache
->  else
->  CMAKE_HOST_C_COMPILER = $(HOSTCC)
->  CMAKE_HOST_CXX_COMPILER = $(HOSTCXX)
-> @@ -134,9 +134,9 @@ define $(2)_CONFIGURE_CMDS
->  		-DCMAKE_ASM_COMPILER="$$(HOSTAS)" \
->  		-DCMAKE_C_COMPILER="$$(CMAKE_HOST_C_COMPILER)" \
->  		-DCMAKE_CXX_COMPILER="$$(CMAKE_HOST_CXX_COMPILER)" \
-> -		$(if $$(CMAKE_HOST_C_COMPILER_ARG1),\
-> -			-DCMAKE_C_COMPILER_ARG1="$$(CMAKE_HOST_C_COMPILER_ARG1)" \
-> -			-DCMAKE_CXX_COMPILER_ARG1="$$(CMAKE_HOST_CXX_COMPILER_ARG1)" \
-> +		$(if $$(CMAKE_HOST_C_COMPILER_LAUNCHER),\
-> +			-DCMAKE_C_COMPILER_LAUNCHER="$$(CMAKE_HOST_C_COMPILER_LAUNCHER)" \
-> +			-DCMAKE_CXX_COMPILER_LAUNCHER="$$(CMAKE_HOST_CXX_COMPILER_LAUNCHER)" \
->  		) \
->  		-DCMAKE_COLOR_MAKEFILE=OFF \
->  		-DBUILD_DOC=OFF \
 > -- 
 > 2.29.2
-> 
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
