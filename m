@@ -1,43 +1,77 @@
-From: Qais Yousef <qais.yousef@arm.com>
-Date: Thu, 17 Dec 2020 18:48:37 +0000
-Subject: [Buildroot] [PATCH v4 3/4] package/libbpf: new package
-In-Reply-To: <d11f8b8a-6878-bd1c-5867-7a44bd5b146b@gmail.com>
-References: <20201107002836.3101760-1-romain.naour@gmail.com>
- <20201107002836.3101760-3-romain.naour@gmail.com>
- <20201129152701.ccfvkwjpih3otpxb@e107158-lin.cambridge.arm.com>
- <d11f8b8a-6878-bd1c-5867-7a44bd5b146b@gmail.com>
-Message-ID: <20201217184837.ceiq7zhiinlsppnq@e107158-lin.cambridge.arm.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 17 Dec 2020 22:26:03 +0100
+Subject: [Buildroot] [git commit] pkg-cmake.mk: fix host ccache support for
+ CMake 3.19
+Message-ID: <20201217211015.223D887EA8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/06/20 18:09, Romain Naour wrote:
-> Hello Qais,
-> 
-> Le 29/11/2020 ? 16:27, Qais Yousef a ?crit?:
-> > Hi Romain
-> > 
-> > Shiny new package! Should we add a couple of sentences about the package in the
-> > commit message rather than leaving it empty?
-> 
-> I can copy past the Config.in help text:
-> 
-> 	  libbpf library.
-> 	  A mirror of bpf-next linux tree bpf-next/tools/lib/bpf
-> 	  directory plus its supporting header files. The version
-> 	  of the package reflects the version of ABI.
-> 
-> I don't have much to say.
+commit: https://git.buildroot.net/buildroot/commit/?id=0e310b4fd0ca14547356645b184a21f52b0c881b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Sounds good to me. It's hard to say much I agree.
+Starting with CMake 3.4 CMake supports setting a compiler launcher
+like ccache. The feature is described in
+https://cmake.org/cmake/help/latest/variable/CMAKE_LANG_COMPILER_LAUNCHER.html
+This should be safe since everything is built for the host using make or ninja.
+The use of *_ARG1 is discouraged by the cmake developers
+https://cmake-developers.cmake.narkive.com/OTa9EKfj/cmake-c-compiler-arg-not-documented .
 
-> Maybe that building libbpf from the kernel source (as linux-tools package) failed.
+Without this patch I get the following error message with CMake 3.19.1 on Arch Linux.
+Disabling BR2_CCACHE also resolves the issue.
 
-Would be worth adding I'd say. But it's up to you.
+/usr/bin/cmake [~]/buildroot/build/host-lzo-2.10/ -DCMAKE_INSTALL_SO_NO_EXE=0 -DCMAKE_FIND_ROOT_PATH="[...]" -DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM="BOTH" -DCMAKE_FIND_ROOT_P
+ATH_MODE_LIBRARY="BOTH" -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE="BOTH" -DCMAKE_INSTALL_PREFIX="[...]" -DCMAKE_C_FLAGS="-O2 -I[...]/include" -DCMAKE_CXX_FLAGS="-O2 -I[...]/include" -DCMAKE_EXE_LINKER_FLAGS="-L[...]/lib -Wl,-rpath,[...]/lib" -DCMAKE_SHARED_LINKER_FLAGS="-L[...]/l
+ib -Wl,-rpath,[...]/lib" -DCMAKE_ASM_COMPILER="/usr/bin/as" -DCMAKE_C_COMPILER="[...]/bin/ccache" -DCMAKE_CXX_COMPILER="[...]/bin/ccache"
+-DCMAKE_C_COMPILER_ARG1="/usr/bin/gcc" -DCMAKE_CXX_COMPILER_ARG1="/usr/bin/g++"  -DCMAKE_COLOR_MAKEFILE=OFF -DBUILD_DOC=OFF -DBUILD_DOCS=OFF -DBUILD_EXAMPLE=OFF -DBUILD_EXAMPLES=OFF -DBUILD_TEST=OFF -DBUILD_TESTS=OFF -DBUILD_TESTING=O
+FF  -DENABLE_SHARED=ON -DENABLE_STATIC=OFF )
+-- The C compiler identification is unknown
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - failed
+-- Check for working C compiler: [...]/bin/ccache
+-- Check for working C compiler: [...]/bin/ccache - broken
+CMake Error at /usr/share/cmake-3.19/Modules/CMakeTestCCompiler.cmake:66 (message):
+The C compiler
 
-Thanks
+Signed-off-by: Bernd Amend <bernd.amend@gmail.com>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Tested-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/pkg-cmake.mk | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
---
-Qais Yousef
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index dc545caed9..3ee7067250 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -22,10 +22,10 @@
+ 
+ # Set compiler variables.
+ ifeq ($(BR2_CCACHE),y)
+-CMAKE_HOST_C_COMPILER = $(HOST_DIR)/bin/ccache
+-CMAKE_HOST_CXX_COMPILER = $(HOST_DIR)/bin/ccache
+-CMAKE_HOST_C_COMPILER_ARG1 = $(HOSTCC_NOCCACHE)
+-CMAKE_HOST_CXX_COMPILER_ARG1 = $(HOSTCXX_NOCCACHE)
++CMAKE_HOST_C_COMPILER = $(HOSTCC_NOCCACHE)
++CMAKE_HOST_CXX_COMPILER = $(HOSTCXX_NOCCACHE)
++CMAKE_HOST_C_COMPILER_LAUNCHER = $(HOST_DIR)/bin/ccache
++CMAKE_HOST_CXX_COMPILER_LAUNCHER = $(HOST_DIR)/bin/ccache
+ else
+ CMAKE_HOST_C_COMPILER = $(HOSTCC)
+ CMAKE_HOST_CXX_COMPILER = $(HOSTCXX)
+@@ -134,9 +134,9 @@ define $(2)_CONFIGURE_CMDS
+ 		-DCMAKE_ASM_COMPILER="$$(HOSTAS)" \
+ 		-DCMAKE_C_COMPILER="$$(CMAKE_HOST_C_COMPILER)" \
+ 		-DCMAKE_CXX_COMPILER="$$(CMAKE_HOST_CXX_COMPILER)" \
+-		$(if $$(CMAKE_HOST_C_COMPILER_ARG1),\
+-			-DCMAKE_C_COMPILER_ARG1="$$(CMAKE_HOST_C_COMPILER_ARG1)" \
+-			-DCMAKE_CXX_COMPILER_ARG1="$$(CMAKE_HOST_CXX_COMPILER_ARG1)" \
++		$(if $$(CMAKE_HOST_C_COMPILER_LAUNCHER),\
++			-DCMAKE_C_COMPILER_LAUNCHER="$$(CMAKE_HOST_C_COMPILER_LAUNCHER)" \
++			-DCMAKE_CXX_COMPILER_LAUNCHER="$$(CMAKE_HOST_CXX_COMPILER_LAUNCHER)" \
+ 		) \
+ 		-DCMAKE_COLOR_MAKEFILE=OFF \
+ 		-DBUILD_DOC=OFF \
