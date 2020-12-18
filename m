@@ -1,103 +1,122 @@
 From: Dick Olsson <hi@senzilla.io>
-Date: Fri, 18 Dec 2020 20:27:21 +0000
-Subject: [Buildroot] [PATCH v3 03/11] package/edk2-platforms: new package
+Date: Fri, 18 Dec 2020 20:28:03 +0000
+Subject: [Buildroot] [PATCH v3 10/11]
+ configs/socionext_developerbox_defconfig: new config for Developerbox
 In-Reply-To: <20201218202646.1060123-1-hi@senzilla.io>
 References: <20201218202646.1060123-1-hi@senzilla.io>
-Message-ID: <20201218202646.1060123-4-hi@senzilla.io>
+Message-ID: <20201218202646.1060123-11-hi@senzilla.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-EDK2 firmware is usually built from two sources; the core EDK2
-environment, and additional platform description files maintained
-separately. This host package adds the latter set of description files
-that the core EDK2 package will depend on for certain platforms during
-the building process.
+This introduces configuration for the Socionext Developerbox. Its an
+Aarch64 workstation built with ARM Trusted Firmware and EDK2 firmware.
 
 Signed-off-by: Dick Olsson <hi@senzilla.io>
-
 ---
+ board/socionext/developerbox/genimage.cfg  | 24 ++++++++++++++++++++++
+ board/socionext/developerbox/post-image.sh |  9 ++++++++
+ board/socionext/developerbox/readme.txt    | 14 +++++++++++++
+ configs/socionext_developerbox_defconfig   | 21 +++++++++++++++++++
+ 4 files changed, 68 insertions(+)
+ create mode 100644 board/socionext/developerbox/genimage.cfg
+ create mode 100755 board/socionext/developerbox/post-image.sh
+ create mode 100644 board/socionext/developerbox/readme.txt
+ create mode 100644 configs/socionext_developerbox_defconfig
 
-Revision 3:
-
- * Added standard comment header
- * Added sha256 of the license file
- * Updated to hash matching edk2 202008
-
-Revision 2:
-
- * Now installs all description files into HOST_DIR so other packages do not
-   have to compile from its BUILD_DIR (suggested by Thomas Petazzoni)
----
- package/Config.in.host                     |  1 +
- package/edk2-platforms/Config.in.host      |  8 ++++++++
- package/edk2-platforms/edk2-platforms.hash |  3 +++
- package/edk2-platforms/edk2-platforms.mk   | 18 ++++++++++++++++++
- 4 files changed, 30 insertions(+)
- create mode 100644 package/edk2-platforms/Config.in.host
- create mode 100644 package/edk2-platforms/edk2-platforms.hash
- create mode 100644 package/edk2-platforms/edk2-platforms.mk
-
-diff --git a/package/Config.in.host b/package/Config.in.host
-index c69c756f3a..58d19795f6 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -20,6 +20,7 @@ menu "Host utilities"
- 	source "package/e2fsprogs/Config.in.host"
- 	source "package/e2tools/Config.in.host"
- 	source "package/environment-setup/Config.in.host"
-+	source "package/edk2-platforms/Config.in.host"
- 	source "package/erofs-utils/Config.in.host"
- 	source "package/eudev/Config.in.host"
- 	source "package/exfatprogs/Config.in.host"
-diff --git a/package/edk2-platforms/Config.in.host b/package/edk2-platforms/Config.in.host
+diff --git a/board/socionext/developerbox/genimage.cfg b/board/socionext/developerbox/genimage.cfg
 new file mode 100644
-index 0000000000..d1e2deb1d1
+index 0000000000..5d8457e4ac
 --- /dev/null
-+++ b/package/edk2-platforms/Config.in.host
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_HOST_EDK2_PLATFORMS
-+	bool "host edk2-platforms"
-+	help
-+	  EDK II description files for all supported platforms. The main EDK2
-+	  bootloader package will depend on these description files while building
-+	  firmware for certain platforms.
++++ b/board/socionext/developerbox/genimage.cfg
+@@ -0,0 +1,24 @@
++image efi-part.vfat {
++  vfat {
++    file EFI {
++      image = "efi-part/EFI"
++    }
++  }
++  size = 32M
++}
 +
-+	  https://github.com/tianocore/edk2-platforms
-diff --git a/package/edk2-platforms/edk2-platforms.hash b/package/edk2-platforms/edk2-platforms.hash
++image sdcard.img {
++  hdimage {
++    gpt = true
++  }
++
++  partition boot {
++    partition-type = 0xEF
++    image = "efi-part.vfat"
++  }
++
++  partition root {
++    partition-type = 0x83
++    image = "rootfs.ext2"
++  }
++}
+diff --git a/board/socionext/developerbox/post-image.sh b/board/socionext/developerbox/post-image.sh
+new file mode 100755
+index 0000000000..7dfea3fa9d
+--- /dev/null
++++ b/board/socionext/developerbox/post-image.sh
+@@ -0,0 +1,9 @@
++#!/bin/bash
++
++set -e
++
++EFI_DIR=${BINARIES_DIR}/efi-part/EFI/BOOT
++
++# Set up the kernel executable according to the UEFI standard.
++mkdir -p ${EFI_DIR}
++ln -sf ${BINARIES_DIR}/Image ${EFI_DIR}/bootaa64.efi
+diff --git a/board/socionext/developerbox/readme.txt b/board/socionext/developerbox/readme.txt
 new file mode 100644
-index 0000000000..217d520710
+index 0000000000..c596051187
 --- /dev/null
-+++ b/package/edk2-platforms/edk2-platforms.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256 7cdbeb5671a77a3d9cf09a2f232ae7ed4730064465c8d40943a01d673607a2f6  edk2-platforms-7aab81a35aef7b295e73d7d6dfd528cc812790ed.tar.gz
-+sha256 50ce20c9cfdb0e19ee34fe0a51fc0afe961f743697b068359ab2f862b494df80  License.txt
-diff --git a/package/edk2-platforms/edk2-platforms.mk b/package/edk2-platforms/edk2-platforms.mk
++++ b/board/socionext/developerbox/readme.txt
+@@ -0,0 +1,14 @@
++Intro
++=====
++
++This is the board support for the Socionext SynQuacer Developerbox (SC2A11).
++The firmware is built with ARM Trusted Firmware and EDK2 (UEFI).
++
++More info
++=========
++
++For more information about this board and the firmware see:
++
++- https://www.96boards.org/product/developerbox/
++- https://www.96boards.org/documentation/enterprise/developerbox/downloads/edk2.md.html
++- https://trustedfirmware-a.readthedocs.io/en/latest/plat/synquacer.html
+diff --git a/configs/socionext_developerbox_defconfig b/configs/socionext_developerbox_defconfig
 new file mode 100644
-index 0000000000..6ba8bf130b
+index 0000000000..1848ed449a
 --- /dev/null
-+++ b/package/edk2-platforms/edk2-platforms.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# edk2-platforms
-+#
-+################################################################################
-+
-+EDK2_PLATFORMS_VERSION = 7aab81a35aef7b295e73d7d6dfd528cc812790ed
-+EDK2_PLATFORMS_SITE = $(call github,tianocore,edk2-platforms,$(EDK2_PLATFORMS_VERSION))
-+EDK2_PLATFORMS_LICENSE = BSD-2-Clause
-+EDK2_PLATFORMS_LICENSE_FILE = License.txt
-+
-+# There is nothing to build for edk2-platforms. All we need to do is to copy
-+# all description files to the host directory for other packages to build with.
-+define HOST_EDK2_PLATFORMS_INSTALL_CMDS
-+	cp -rf $(@D) $(HOST_DIR)/share/edk2-platforms
-+endef
-+
-+$(eval $(host-generic-package))
++++ b/configs/socionext_developerbox_defconfig
+@@ -0,0 +1,21 @@
++BR2_aarch64=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_9=y
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/socionext/developerbox/post-image.sh support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/socionext/developerbox/genimage.cfg"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.9.12"
++BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="200M"
++# BR2_TARGET_ROOTFS_TAR is not set
++BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="synquacer"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_TARGETS="bl31 fiptool"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="PRELOADED_BL33_BASE=0x8200000"
++BR2_TARGET_EDK2=y
++BR2_TARGET_EDK2_PLATFORM_SOCIONEXT_DEVELOPERBOX=y
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
 -- 
 2.25.1
