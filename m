@@ -1,137 +1,93 @@
 From: Dick Olsson <hi@senzilla.io>
-Date: Fri, 18 Dec 2020 20:28:10 +0000
-Subject: [Buildroot] [PATCH v3 11/11]
- configs/solidrun_macchiatobin_efi_defconfig: EFI config for MacchiatoBin
+Date: Fri, 18 Dec 2020 20:27:33 +0000
+Subject: [Buildroot] [PATCH v3 05/11] configs/aarch64_efi_defconfig: build
+ the EDK2 firmware from source
 In-Reply-To: <20201218202646.1060123-1-hi@senzilla.io>
 References: <20201218202646.1060123-1-hi@senzilla.io>
-Message-ID: <20201218202646.1060123-12-hi@senzilla.io>
+Message-ID: <20201218202646.1060123-6-hi@senzilla.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This introduces an alternative board build for the MacchiatoBin based on
-EDK2 (UEFI) firmware loaded as BL33 by ARM Trusted Firmware.
+Prior to this, you had to manually download a pre-built EDK2 flash
+device image (QEMU_EFI.fd) in order to boot this configuration with
+QEMU. Now, the configuration is building EDK2 from source.
 
 Signed-off-by: Dick Olsson <hi@senzilla.io>
----
- board/solidrun/macchiatobin-efi/genimage.cfg  | 24 +++++++++++++++++++
- .../solidrun/macchiatobin-efi/linux.fragment  |  4 ++++
- board/solidrun/macchiatobin-efi/post-image.sh |  9 +++++++
- board/solidrun/macchiatobin-efi/readme.txt    | 14 +++++++++++
- configs/solidrun_macchiatobin_efi_defconfig   | 24 +++++++++++++++++++
- 5 files changed, 75 insertions(+)
- create mode 100644 board/solidrun/macchiatobin-efi/genimage.cfg
- create mode 100644 board/solidrun/macchiatobin-efi/linux.fragment
- create mode 100755 board/solidrun/macchiatobin-efi/post-image.sh
- create mode 100644 board/solidrun/macchiatobin-efi/readme.txt
- create mode 100644 configs/solidrun_macchiatobin_efi_defconfig
 
-diff --git a/board/solidrun/macchiatobin-efi/genimage.cfg b/board/solidrun/macchiatobin-efi/genimage.cfg
-new file mode 100644
-index 0000000000..5d8457e4ac
---- /dev/null
-+++ b/board/solidrun/macchiatobin-efi/genimage.cfg
-@@ -0,0 +1,24 @@
-+image efi-part.vfat {
-+  vfat {
-+    file EFI {
-+      image = "efi-part/EFI"
-+    }
-+  }
-+  size = 32M
-+}
-+
-+image sdcard.img {
-+  hdimage {
-+    gpt = true
-+  }
-+
-+  partition boot {
-+    partition-type = 0xEF
-+    image = "efi-part.vfat"
-+  }
-+
-+  partition root {
-+    partition-type = 0x83
-+    image = "rootfs.ext2"
-+  }
-+}
-diff --git a/board/solidrun/macchiatobin-efi/linux.fragment b/board/solidrun/macchiatobin-efi/linux.fragment
-new file mode 100644
-index 0000000000..7e6a75f191
---- /dev/null
-+++ b/board/solidrun/macchiatobin-efi/linux.fragment
-@@ -0,0 +1,4 @@
-+CONFIG_CMDLINE="console=ttyS0,115200n8 root=/dev/mmcblk1p2 rootwait"
-+CONFIG_MARVELL_PHY=y
-+CONFIG_MARVELL_10G_PHY=y
-+CONFIG_SFP=y
-diff --git a/board/solidrun/macchiatobin-efi/post-image.sh b/board/solidrun/macchiatobin-efi/post-image.sh
-new file mode 100755
-index 0000000000..7dfea3fa9d
---- /dev/null
-+++ b/board/solidrun/macchiatobin-efi/post-image.sh
-@@ -0,0 +1,9 @@
+---
+
+Revision 3:
+
+ * post-image.sh will now provide resized flash devices
+ * readme.txt suggests pflash instead of bios
+
+Revision 2:
+
+ * Explicitly added the default EDK2 platform to defconfig
+---
+ board/aarch64-efi/post-image.sh | 12 +++++++++++-
+ board/aarch64-efi/readme.txt    |  9 ++++-----
+ configs/aarch64_efi_defconfig   |  2 ++
+ 3 files changed, 17 insertions(+), 6 deletions(-)
+
+diff --git a/board/aarch64-efi/post-image.sh b/board/aarch64-efi/post-image.sh
+index f0214dc866..c90dfa21e0 100755
+--- a/board/aarch64-efi/post-image.sh
++++ b/board/aarch64-efi/post-image.sh
+@@ -1,5 +1,15 @@
+-#!/bin/sh
 +#!/bin/bash
+ 
+ BOARD_DIR="$(dirname $0)"
+ 
+ cp -f ${BOARD_DIR}/grub.cfg ${BINARIES_DIR}/efi-part/EFI/BOOT/grub.cfg
 +
-+set -e
++# Function taking file $1 as input and outputs file $2 padded to size $3.
++function resize_flash {
++  dd if=/dev/zero of="${BINARIES_DIR}/${2}" bs=1M count="${3}"
++  dd if="${BINARIES_DIR}/${1}" of="${BINARIES_DIR}/${2}" conv=notrunc
++}
 +
-+EFI_DIR=${BINARIES_DIR}/efi-part/EFI/BOOT
-+
-+# Set up the kernel executable according to the UEFI standard.
-+mkdir -p ${EFI_DIR}
-+ln -sf ${BINARIES_DIR}/Image ${EFI_DIR}/bootaa64.efi
-diff --git a/board/solidrun/macchiatobin-efi/readme.txt b/board/solidrun/macchiatobin-efi/readme.txt
-new file mode 100644
-index 0000000000..42205f3d4e
---- /dev/null
-+++ b/board/solidrun/macchiatobin-efi/readme.txt
-@@ -0,0 +1,14 @@
-+Intro
-+=====
-+
-+This is the board support for MacchiatoBin with UEFI. Refer to
-+board/solidrun/macchiatobin/readme.txt for more information.
-+
-+More info
-+=========
-+
-+For more information about the UEFI support for this board see:
-+
-+- https://developer.solid-run.com/knowledge-base/armada-8040-uefi/
-+- http://wiki.macchiatobin.net/tiki-index.php?page=Build+from+source+-+UEFI+EDK+II
-+- http://wiki.macchiatobin.net/tiki-index.php?page=Update+the+Bootloader
-diff --git a/configs/solidrun_macchiatobin_efi_defconfig b/configs/solidrun_macchiatobin_efi_defconfig
-new file mode 100644
-index 0000000000..194d092b98
---- /dev/null
-+++ b/configs/solidrun_macchiatobin_efi_defconfig
-@@ -0,0 +1,24 @@
-+BR2_aarch64=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_9=y
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/solidrun/macchiatobin-efi/post-image.sh support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/solidrun/macchiatobin-efi/genimage.cfg"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.9.12"
-+BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="200M"
-+# BR2_TARGET_ROOTFS_TAR is not set
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="a80x0_mcbin"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_EDK2_AS_BL33=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_TARGETS="mrvl_flash"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="USE_COHERENT_MEM=0"
-+BR2_TARGET_BINARIES_MARVELL=y
++# The QEMU virt machine expects flash devices to be 64M.
++resize_flash QEMU_EFI.fd QEMU_EFI_RESIZED.fd 64
++resize_flash QEMU_VARS.fd QEMU_VARS_RESIZED.fd 64
+diff --git a/board/aarch64-efi/readme.txt b/board/aarch64-efi/readme.txt
+index 65a6345b6c..d0f900c616 100644
+--- a/board/aarch64-efi/readme.txt
++++ b/board/aarch64-efi/readme.txt
+@@ -22,13 +22,12 @@ qemu-system-aarch64 \
+ 	-cpu cortex-a57 \
+ 	-m 512 \
+ 	-nographic \
+-	-bios </path/to/QEMU_EFI.fd> \
++	-drive file=output/images/QEMU_EFI_RESIZED.fd,if=pflash,format=raw \
++	-drive file=output/images/QEMU_VARS_RESIZED.fd,if=pflash,format=raw \
+ 	-drive file=output/images/disk.img,if=none,format=raw,id=hd0 \
+ 	-device virtio-blk-device,drive=hd0 \
+ 	-netdev user,id=eth0 \
+ 	-device virtio-net-device,netdev=eth0
+ 
+-Note that </path/to/QEMU_EFI.fd> needs to point to a valid aarch64 UEFI
+-firmware image for qemu.
+-It may be provided by your distribution as a edk2-aarch64 or AAVMF
+-package, in path such as /usr/share/edk2/aarch64/QEMU_EFI.fd .
++Note that output/images/QEMU_*.fd are the flash device files built by
++the EDK2 package.
+diff --git a/configs/aarch64_efi_defconfig b/configs/aarch64_efi_defconfig
+index 2aab6e9699..3da6542ea0 100644
+--- a/configs/aarch64_efi_defconfig
++++ b/configs/aarch64_efi_defconfig
+@@ -12,6 +12,8 @@ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
+ 
+ # Bootloader
 +BR2_TARGET_EDK2=y
-+BR2_TARGET_EDK2_PLATFORM_SOLIDRUN_ARMADA80X0MCBIN=y
-+BR2_TARGET_MV_DDR_MARVELL=y
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
++BR2_TARGET_EDK2_PLATFORM_ARM_VIRT_QEMU=y
+ BR2_TARGET_GRUB2=y
+ BR2_TARGET_GRUB2_ARM64_EFI=y
+ 
 -- 
 2.25.1
