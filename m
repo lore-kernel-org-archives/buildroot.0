@@ -1,87 +1,182 @@
 From: Dick Olsson <hi@senzilla.io>
-Date: Fri, 18 Dec 2020 20:27:15 +0000
-Subject: [Buildroot] [PATCH v3 02/11] boot/mv-ddr-marvell: Bump to HEAD as
- of 20201207
+Date: Fri, 18 Dec 2020 20:27:57 +0000
+Subject: [Buildroot] [PATCH v3 09/11]
+ configs/qemu_aarch64_virt_efi_defconfig: new config for QEMU Virt EFI
 In-Reply-To: <20201218202646.1060123-1-hi@senzilla.io>
 References: <20201218202646.1060123-1-hi@senzilla.io>
-Message-ID: <20201218202646.1060123-3-hi@senzilla.io>
+Message-ID: <20201218202646.1060123-10-hi@senzilla.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Rebase on the mv-ddr-devel branch as the release branches are no longer
-maintained.
+This introduces a configuration for QEMU Virt that boots Linux with ATF
+and the EDK2 EFI firmware without any additional bootloaders. ATF is
+loading EDK2 in EL2 using the BL33 payload configuration.
 
 Signed-off-by: Dick Olsson <hi@senzilla.io>
----
- ...raining_leveling.c-uninitialized-var.patch | 31 -------------------
- boot/mv-ddr-marvell/mv-ddr-marvell.hash       |  2 +-
- boot/mv-ddr-marvell/mv-ddr-marvell.mk         |  4 +--
- 3 files changed, 3 insertions(+), 34 deletions(-)
- delete mode 100644 boot/mv-ddr-marvell/0001-mv_ddr-mv_ddr4_training_leveling.c-uninitialized-var.patch
 
-diff --git a/boot/mv-ddr-marvell/0001-mv_ddr-mv_ddr4_training_leveling.c-uninitialized-var.patch b/boot/mv-ddr-marvell/0001-mv_ddr-mv_ddr4_training_leveling.c-uninitialized-var.patch
-deleted file mode 100644
-index eada18b473..0000000000
---- a/boot/mv-ddr-marvell/0001-mv_ddr-mv_ddr4_training_leveling.c-uninitialized-var.patch
-+++ /dev/null
-@@ -1,31 +0,0 @@
--From 5867fcad6e88af3d843bfa831648d84a53732d57 Mon Sep 17 00:00:00 2001
--From: Heinrich Schuchardt <xypron.glpk@gmx.de>
--Date: Wed, 19 Dec 2018 17:17:13 +0100
--Subject: [PATCH] mv_ddr: mv_ddr4_training_leveling.c: uninitialized variable
--
--With GCC 8.2 uninitialized variables lead to a build error.
--
--Signed-off-by: Heinrich Schuchardt <xypron.glpk@gmx.de>
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Upstream status: commit 5867fcad6e8
--
-- mv_ddr4_training_leveling.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/mv_ddr4_training_leveling.c b/mv_ddr4_training_leveling.c
--index 144e21a03c01..cb95389f5466 100644
----- a/mv_ddr4_training_leveling.c
--+++ b/mv_ddr4_training_leveling.c
--@@ -368,7 +368,7 @@ static int mv_ddr4_dynamic_pb_wl_supp(u32 dev_num, enum mv_wl_supp_mode ecc_mode
-- 	u32 subphy_num = ddr3_tip_dev_attr_get(dev_num, MV_ATTR_OCTET_PER_INTERFACE);
-- 	u8 compare_result = 0;
-- 	u32 orig_phase;
---	u32 rd_data, wr_data;
--+	u32 rd_data, wr_data = 0;
-- 	u32 flag, step;
-- 	struct mv_ddr_topology_map *tm = mv_ddr_topology_map_get();
-- 	u32 ecc_phy_access_id;
---- 
--2.20.1
--
-diff --git a/boot/mv-ddr-marvell/mv-ddr-marvell.hash b/boot/mv-ddr-marvell/mv-ddr-marvell.hash
-index ec2fe6ed37..e1a86008db 100644
---- a/boot/mv-ddr-marvell/mv-ddr-marvell.hash
-+++ b/boot/mv-ddr-marvell/mv-ddr-marvell.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  39dcc8baccb82cbc746d8f82ce7f673e1b1236e8aee0d09e7ab12c27eeb6ecda  mv-ddr-marvell-618dadd1491eb2f7b2fd74313c04f7accddae475.tar.gz
-+sha256  bfab74a625d65238c569b9df282b55c0fc9a1e2d3decedcf194d44774df2ede4  mv-ddr-marvell-305d923e6bc4236cd3b902f6679b0aef9e5fa52d.tar.gz
- sha256  69208236fc322026920b92d1d839ebdc521ca65379bfdb3368a24945e794fc78  ddr3_init.c
-diff --git a/boot/mv-ddr-marvell/mv-ddr-marvell.mk b/boot/mv-ddr-marvell/mv-ddr-marvell.mk
-index a4e0c0467d..442b6aed53 100644
---- a/boot/mv-ddr-marvell/mv-ddr-marvell.mk
-+++ b/boot/mv-ddr-marvell/mv-ddr-marvell.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--# This is the commit for mv_ddr-armada-18.12.0
--MV_DDR_MARVELL_VERSION = 618dadd1491eb2f7b2fd74313c04f7accddae475
-+# This is the latest commit on mv-ddr-devel as of 20201207
-+MV_DDR_MARVELL_VERSION = 305d923e6bc4236cd3b902f6679b0aef9e5fa52d
- MV_DDR_MARVELL_SITE = $(call github,MarvellEmbeddedProcessors,mv-ddr-marvell,$(MV_DDR_MARVELL_VERSION))
- MV_DDR_MARVELL_LICENSE = GPL-2.0+ or LGPL-2.1 with freertos-exception-2.0, BSD-3-Clause, Marvell Commercial
- MV_DDR_MARVELL_LICENSE_FILES = ddr3_init.c
+---
+
+Revision 3:
+
+ * Changed flash device setup to work with QEMU 5.0
+---
+ board/qemu/aarch64-virt-efi/genimage.cfg   | 24 +++++++++++
+ board/qemu/aarch64-virt-efi/linux.fragment |  1 +
+ board/qemu/aarch64-virt-efi/post-image.sh  | 15 +++++++
+ board/qemu/aarch64-virt-efi/readme.txt     | 27 +++++++++++++
+ configs/qemu_aarch64_virt_efi_defconfig    | 46 ++++++++++++++++++++++
+ 5 files changed, 113 insertions(+)
+ create mode 100644 board/qemu/aarch64-virt-efi/genimage.cfg
+ create mode 100644 board/qemu/aarch64-virt-efi/linux.fragment
+ create mode 100755 board/qemu/aarch64-virt-efi/post-image.sh
+ create mode 100644 board/qemu/aarch64-virt-efi/readme.txt
+ create mode 100644 configs/qemu_aarch64_virt_efi_defconfig
+
+diff --git a/board/qemu/aarch64-virt-efi/genimage.cfg b/board/qemu/aarch64-virt-efi/genimage.cfg
+new file mode 100644
+index 0000000000..f653b1f35d
+--- /dev/null
++++ b/board/qemu/aarch64-virt-efi/genimage.cfg
+@@ -0,0 +1,24 @@
++image efi-part.vfat {
++  vfat {
++    file EFI {
++      image = "efi-part/EFI"
++    }
++  }
++  size = 32M
++}
++
++image disk.img {
++  hdimage {
++    gpt = true
++  }
++
++  partition boot {
++    partition-type = 0xEF
++    image = "efi-part.vfat"
++  }
++
++  partition root {
++    partition-type = 0x83
++    image = "rootfs.ext2"
++  }
++}
+diff --git a/board/qemu/aarch64-virt-efi/linux.fragment b/board/qemu/aarch64-virt-efi/linux.fragment
+new file mode 100644
+index 0000000000..03d553a18d
+--- /dev/null
++++ b/board/qemu/aarch64-virt-efi/linux.fragment
+@@ -0,0 +1 @@
++CONFIG_CMDLINE="root=/dev/vda2 rootwait console=ttyAMA0"
+diff --git a/board/qemu/aarch64-virt-efi/post-image.sh b/board/qemu/aarch64-virt-efi/post-image.sh
+new file mode 100755
+index 0000000000..82eb05798d
+--- /dev/null
++++ b/board/qemu/aarch64-virt-efi/post-image.sh
+@@ -0,0 +1,15 @@
++#!/bin/bash
++
++set -e
++
++BOARD_DIR="$(dirname $0)"
++EFI_DIR=${BINARIES_DIR}/efi-part/EFI/BOOT
++
++# Set up the kernel executable according to the UEFI standard.
++mkdir -p ${EFI_DIR}
++ln -sf ${BINARIES_DIR}/Image ${EFI_DIR}/bootaa64.efi
++
++# The QEMU virt machine expects the BIOS flash device to be 64M.
++rm -rf ${BINARIES_DIR}/flash.bin
++dd if=${BINARIES_DIR}/bl1.bin of=${BINARIES_DIR}/flash.bin bs=4096 conv=notrunc
++dd if=${BINARIES_DIR}/fip.bin of=${BINARIES_DIR}/flash.bin seek=64 bs=4096 conv=notrunc
+diff --git a/board/qemu/aarch64-virt-efi/readme.txt b/board/qemu/aarch64-virt-efi/readme.txt
+new file mode 100644
+index 0000000000..35fc257855
+--- /dev/null
++++ b/board/qemu/aarch64-virt-efi/readme.txt
+@@ -0,0 +1,27 @@
++Intro
++=====
++
++This board allows to build a minimal Linux system that boot directly
++with Arm Trusted Firmware, EDK2 (UEFI), ACPI and GICv3 without any
++additional bootloaders like GRUB2.
++
++Build
++=====
++
++  $ make qemu_aarch64_virt_efi_defconfig
++  $ make
++
++Emulation
++=========
++
++Run the emulation with:
++
++  output/host/bin/qemu-system-aarch64 \
++    -M virt,secure=on,gic-version=3 \
++    -cpu cortex-a57 \
++    -smp 4 \
++    -m 1024 \
++    -nographic \
++    -bios output/images/flash.bin \
++	-drive file=output/images/disk.img,if=none,format=raw,id=hd0 \
++	-device virtio-blk-device,drive=hd0
+diff --git a/configs/qemu_aarch64_virt_efi_defconfig b/configs/qemu_aarch64_virt_efi_defconfig
+new file mode 100644
+index 0000000000..e1d3bcda4b
+--- /dev/null
++++ b/configs/qemu_aarch64_virt_efi_defconfig
+@@ -0,0 +1,46 @@
++# Architecture
++BR2_aarch64=y
++
++# Toolchain
++BR2_TOOLCHAIN_BUILDROOT=y
++
++# System
++BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
++
++# Filesystem / image
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="200M"
++# BR2_TARGET_ROOTFS_TAR is not set
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/aarch64-virt-efi/post-image.sh support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/qemu/aarch64-virt-efi/genimage.cfg"
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.53"
++BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/aarch64-virt-efi/linux.fragment"
++
++# Linux headers same as kernel, a 5.4 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
++
++# UEFI firmware
++BR2_TARGET_EDK2=y
++BR2_TARGET_EDK2_PLATFORM_ARM_VIRT_QEMU_KERNEL=y
++
++# ARM Trusted Firmware
++BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="qemu"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_EDK2_AS_BL33=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="QEMU_USE_GIC_DRIVER=QEMU_GICV3"
++
++# Host tools for genimage
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_MTOOLS=y
++
++# host-qemu for testing
++BR2_PACKAGE_HOST_QEMU=y
++BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
 -- 
 2.25.1
