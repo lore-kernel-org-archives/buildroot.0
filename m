@@ -1,90 +1,122 @@
 From: Dick Olsson <hi@senzilla.io>
-Date: Fri, 18 Dec 2020 20:27:42 +0000
-Subject: [Buildroot] [PATCH v3 07/11] boot/arm-trusted-firmware: add EDK2 as
- BL33 option
-In-Reply-To: <20201218202646.1060123-1-hi@senzilla.io>
-References: <20201218202646.1060123-1-hi@senzilla.io>
-Message-ID: <20201218202646.1060123-8-hi@senzilla.io>
+Date: Fri, 18 Dec 2020 20:27:03 +0000
+Subject: [Buildroot] [PATCH v3 00/11] Introduce EDK2 firmware package
+Message-ID: <20201218202646.1060123-1-hi@senzilla.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ARM Trusted Firmware (ATF) has the ability to load EDK2 UEFI when
-dropping into EL2. This is done via a new configuration option that
-build the BL33 payload with EDK2 images that will run in the EL2
-context.
+Hi all,
 
-Signed-off-by: Dick Olsson <hi@senzilla.io>
+Here is the third revision of the series introducing two hardware
+targets and not just virtual platforms. This latest revision also
+includes updates to bootarm-trusted-firmware as well as
+boot/mv-ddr-marvell both required to build properly with the latest
+stable release of EDK2.
 
----
+This series is introducing the EDK2 bootloader package which can build
+firmware for five different platforms, on both x86-64 and AArch64.
 
-Revision 3:
+ * QEMU x86-64 pc machine
+ * QEMU aarch64 virt machine, booting directly from flash
+ * QEMU aarch64 virt machine, booting via kernel protocol
+ * QEMU aarch64 sbsa-ref machine
+ * ARM FVP vexpress machine
+ * Socionext Developerbox
+ * SolidRun MacchiatoBin
 
- * Fixed merge conflict after previous spurious change
+The EDK2 build system is very particular and includes different
+dependencies and a lot of custom scripting, which has lead to these
+design decisions when building these Buildroot packages:
 
-Revision 2:
+ * EDK2 needs to rely on Git submodules because its dependencies are not
+   easy to build separately
+ * Each platform is a specific configuration option (instead of a
+   string) because they require slightly different packages etc.
 
- * It was concluded that relying on variables from EDK2 is ok
-   since they are expanded inside _BUILD_CMDS
- * Now relying on the more specific variable EDK2_EL2_NAME for BL33
----
- boot/arm-trusted-firmware/Config.in               | 15 ++++++++++++++-
- boot/arm-trusted-firmware/arm-trusted-firmware.mk |  8 ++++++++
- 2 files changed, 22 insertions(+), 1 deletion(-)
+Dick Olsson (11):
+  boot/arm-trusted-firmware: Bump to version 2.4
+  boot/mv-ddr-marvell: Bump to HEAD as of 20201207
+  package/edk2-platforms: new package
+  boot/edk2: new package
+  configs/aarch64_efi_defconfig: build the EDK2 firmware from source
+  configs/pc_x86_64_defconfig: build the EDK2 firmware from source
+  boot/arm-trusted-firmware: add EDK2 as BL33 option
+  configs/qemu_aarch64_sbsa_defconfig: new config for QEMU sbsa-ref
+  configs/qemu_aarch64_virt_efi_defconfig: new config for QEMU Virt EFI
+  configs/socionext_developerbox_defconfig: new config for Developerbox
+  configs/solidrun_macchiatobin_efi_defconfig: EFI config for
+    MacchiatoBin
 
-diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
-index c06294040e..a28a699e35 100644
---- a/boot/arm-trusted-firmware/Config.in
-+++ b/boot/arm-trusted-firmware/Config.in
-@@ -1,7 +1,7 @@
- config BR2_TARGET_ARM_TRUSTED_FIRMWARE
- 	bool "ARM Trusted Firmware (ATF)"
- 	depends on (BR2_ARM_CPU_ARMV8A || BR2_ARM_CPU_ARMV7A) && \
--		   BR2_TARGET_UBOOT
-+		   (BR2_TARGET_UBOOT || BR2_TARGET_EDK2)
- 	help
- 	  Enable this option if you want to build the ATF for your ARM
- 	  based embedded device.
-@@ -115,6 +115,19 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE
- 
- endchoice
- 
-+config BR2_TARGET_ARM_TRUSTED_FIRMWARE_EDK2_AS_BL33
-+	bool "Use EDK2 as BL33"
-+	depends on BR2_TARGET_EDK2
-+	help
-+	  This option allows to embed EDK2 as the BL33 part of
-+	  the ARM Trusted Firmware. It ensures that the EDK2 package
-+	  gets built before ATF, and that the appropriate BL33
-+	  variable pointing to the EDK2 is passed when building ATF.
-+
-+	  Do not choose this option if you intend to build ATF and EDK2
-+	  for the 'qemu_sbsa' platform. In this case, due to the EDK2
-+	  build system, the dependency between ATF and EDK is reversed.
-+
- config BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33
- 	bool "Use U-Boot as BL33"
- 	depends on BR2_TARGET_UBOOT
-diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-index a3553e36cf..51a5877ba1 100644
---- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-+++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-@@ -79,6 +79,14 @@ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += AARCH32_SP=optee
- endif
- endif # BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE
- 
-+ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_EDK2_AS_BL33),y)
-+ARM_TRUSTED_FIRMWARE_DEPENDENCIES += edk2
-+# Since the flash device name vary between platforms, we use the variable
-+# provided by the EDK2 package for this. Using this variable here is OK
-+# as it will expand after all dependencies are resolved, inside _BUILD_CMDS.
-+ARM_TRUSTED_FIRMWARE_MAKE_OPTS += BL33=$(BINARIES_DIR)/$(EDK2_EL2_NAME).fd
-+endif
-+
- ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33),y)
- ARM_TRUSTED_FIRMWARE_UBOOT_BIN = $(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_BL33_IMAGE))
- ARM_TRUSTED_FIRMWARE_MAKE_OPTS += BL33=$(BINARIES_DIR)/$(ARM_TRUSTED_FIRMWARE_UBOOT_BIN)
+ board/aarch64-efi/post-image.sh               |  12 +-
+ board/aarch64-efi/readme.txt                  |   9 +-
+ board/pc/readme.txt                           |   9 +-
+ board/qemu/aarch64-sbsa/genimage.cfg          |  24 +++
+ board/qemu/aarch64-sbsa/linux.fragment        |   1 +
+ board/qemu/aarch64-sbsa/post-image.sh         |  20 +++
+ board/qemu/aarch64-sbsa/readme.txt            |  34 ++++
+ board/qemu/aarch64-virt-efi/genimage.cfg      |  24 +++
+ board/qemu/aarch64-virt-efi/linux.fragment    |   1 +
+ board/qemu/aarch64-virt-efi/post-image.sh     |  15 ++
+ board/qemu/aarch64-virt-efi/readme.txt        |  27 +++
+ board/socionext/developerbox/genimage.cfg     |  24 +++
+ board/socionext/developerbox/post-image.sh    |   9 +
+ board/socionext/developerbox/readme.txt       |  14 ++
+ board/solidrun/macchiatobin-efi/genimage.cfg  |  24 +++
+ .../solidrun/macchiatobin-efi/linux.fragment  |   4 +
+ board/solidrun/macchiatobin-efi/post-image.sh |   9 +
+ board/solidrun/macchiatobin-efi/readme.txt    |  14 ++
+ boot/Config.in                                |   1 +
+ boot/arm-trusted-firmware/Config.in           |  19 +-
+ .../arm-trusted-firmware.hash                 |   2 +-
+ .../arm-trusted-firmware.mk                   |   8 +
+ ...GenFds-Compatibility-with-Python-3.9.patch |  35 ++++
+ boot/edk2/Config.in                           |  88 ++++++++++
+ boot/edk2/edk2.hash                           |   3 +
+ boot/edk2/edk2.mk                             | 164 ++++++++++++++++++
+ ...raining_leveling.c-uninitialized-var.patch |  31 ----
+ boot/mv-ddr-marvell/mv-ddr-marvell.hash       |   2 +-
+ boot/mv-ddr-marvell/mv-ddr-marvell.mk         |   4 +-
+ configs/aarch64_efi_defconfig                 |   2 +
+ configs/pc_x86_64_efi_defconfig               |   2 +
+ configs/qemu_aarch64_sbsa_defconfig           |  44 +++++
+ configs/qemu_aarch64_virt_efi_defconfig       |  46 +++++
+ configs/socionext_developerbox_defconfig      |  21 +++
+ configs/solidrun_macchiatobin_efi_defconfig   |  24 +++
+ package/Config.in.host                        |   1 +
+ package/edk2-platforms/Config.in.host         |   8 +
+ package/edk2-platforms/edk2-platforms.hash    |   3 +
+ package/edk2-platforms/edk2-platforms.mk      |  18 ++
+ 39 files changed, 751 insertions(+), 49 deletions(-)
+ create mode 100644 board/qemu/aarch64-sbsa/genimage.cfg
+ create mode 100644 board/qemu/aarch64-sbsa/linux.fragment
+ create mode 100755 board/qemu/aarch64-sbsa/post-image.sh
+ create mode 100644 board/qemu/aarch64-sbsa/readme.txt
+ create mode 100644 board/qemu/aarch64-virt-efi/genimage.cfg
+ create mode 100644 board/qemu/aarch64-virt-efi/linux.fragment
+ create mode 100755 board/qemu/aarch64-virt-efi/post-image.sh
+ create mode 100644 board/qemu/aarch64-virt-efi/readme.txt
+ create mode 100644 board/socionext/developerbox/genimage.cfg
+ create mode 100755 board/socionext/developerbox/post-image.sh
+ create mode 100644 board/socionext/developerbox/readme.txt
+ create mode 100644 board/solidrun/macchiatobin-efi/genimage.cfg
+ create mode 100644 board/solidrun/macchiatobin-efi/linux.fragment
+ create mode 100755 board/solidrun/macchiatobin-efi/post-image.sh
+ create mode 100644 board/solidrun/macchiatobin-efi/readme.txt
+ create mode 100644 boot/edk2/0001-GenFds-Compatibility-with-Python-3.9.patch
+ create mode 100644 boot/edk2/Config.in
+ create mode 100644 boot/edk2/edk2.hash
+ create mode 100644 boot/edk2/edk2.mk
+ delete mode 100644 boot/mv-ddr-marvell/0001-mv_ddr-mv_ddr4_training_leveling.c-uninitialized-var.patch
+ create mode 100644 configs/qemu_aarch64_sbsa_defconfig
+ create mode 100644 configs/qemu_aarch64_virt_efi_defconfig
+ create mode 100644 configs/socionext_developerbox_defconfig
+ create mode 100644 configs/solidrun_macchiatobin_efi_defconfig
+ create mode 100644 package/edk2-platforms/Config.in.host
+ create mode 100644 package/edk2-platforms/edk2-platforms.hash
+ create mode 100644 package/edk2-platforms/edk2-platforms.mk
+
 -- 
 2.25.1
