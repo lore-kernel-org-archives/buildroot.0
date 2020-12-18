@@ -1,51 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 17 Dec 2020 22:49:02 +0100
-Subject: [Buildroot] pycompile script doesn't compile files with single
- character names
-In-Reply-To: <CAAV4SYaqA+gr-mS+Q=6AxhQH8hB14JAGhJ97gPPi0-C+3EYVeQ@mail.gmail.com>
-References: <CAAV4SYZLndA0mHnZO6+9+YGaVKtPQwGYHxWi4=ckF67AzibDzw@mail.gmail.com>
- <CAHfJR7j8YdVLnYyXu7imzcnTC_9AcEnBwBi1BFFJTtqRNxXKGg@mail.gmail.com>
- <CAAV4SYaqA+gr-mS+Q=6AxhQH8hB14JAGhJ97gPPi0-C+3EYVeQ@mail.gmail.com>
-Message-ID: <20201217214902.GF3188@scaer>
+From: Tian Yuanhao <tianyuanhao@aliyun.com>
+Date: Fri, 18 Dec 2020 13:58:56 +0800
+Subject: [Buildroot] [PATCH 1/1] package/pkg-golang.mk: postpone evaluation
+ of TARGET_DIR and HOST_DIR
+Message-ID: <20201218055856.3489177-1-tianyuanhao@aliyun.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Caharles, Julien, All,
+When BR2_PER_PACKAGE_DIRECTORIES=y, $(TARGET_DIR) is evaluated as
+$(BASE_DIR)/target, but $$(TARGET_DIR) is evaluated as
+$(BASE_DIR)/per-package/$(PKG)_NAME/target.
 
-On 2020-12-17 06:58 -0500, Charles Eidsness via buildroot spake thusly:
-> On Thu, 17 Dec 2020 at 03:22, Julien Floret <julien.floret@6wind.com> wrote:
-> > Le mer. 16 d?c. 2020 ? 14:37, Charles Eidsness via buildroot
-> > <buildroot@busybox.net> a ?crit :
-[--SNIP--]
-> > Could you send a git patch using "git
-> > send-email", so that it can be applied by the maintainers?
+Signed-off-by: Tian Yuanhao <tianyuanhao@aliyun.com>
+---
+ package/pkg-golang.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Interestingly, this initial patch did get caught up in the patchowrk
-list.
-
-> I don't have git send-email setup but used git format-patch and sent
-> out an email, hopefully it'll work.
-
-I have now replied to that second iteration, thanks.
-
-What I forgot to add is: add previous reviewers in Cc when you resend a
-patch. You can do that by just adding Cc. in the patch commit log, jut
-after your Signed-off-by. Keeping previous reviewers in Cc help them
-keep track of resend, and look at it again (so they can eventually reply
-with their reviewed-by tags, hint-hint Julien ;-) ).
-
-Thanks!
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
+index 3813e1c406..d07242310d 100644
+--- a/package/pkg-golang.mk
++++ b/package/pkg-golang.mk
+@@ -121,7 +121,7 @@ endif
+ ifndef $(2)_INSTALL_TARGET_CMDS
+ define $(2)_INSTALL_TARGET_CMDS
+ 	$$(foreach d,$$($(2)_INSTALL_BINS),\
+-		$(INSTALL) -D -m 0755 $$(@D)/bin/$$(d) $(TARGET_DIR)/usr/bin/$$(d)
++		$(INSTALL) -D -m 0755 $$(@D)/bin/$$(d) $$(TARGET_DIR)/usr/bin/$$(d)
+ 	)
+ endef
+ endif
+@@ -130,7 +130,7 @@ endif
+ ifndef $(2)_INSTALL_CMDS
+ define $(2)_INSTALL_CMDS
+ 	$$(foreach d,$$($(2)_INSTALL_BINS),\
+-		$(INSTALL) -D -m 0755 $$(@D)/bin/$$(d) $(HOST_DIR)/bin/$$(d)
++		$(INSTALL) -D -m 0755 $$(@D)/bin/$$(d) $$(HOST_DIR)/bin/$$(d)
+ 	)
+ endef
+ endif
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.25.1
