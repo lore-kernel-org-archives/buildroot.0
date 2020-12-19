@@ -1,61 +1,67 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 19 Dec 2020 08:32:34 +0100
-Subject: [Buildroot] [git commit] package/wireshark: security bump to
- version 3.4.2
-Message-ID: <20201219071948.4F0618692A@busybox.osuosl.org>
+Date: Sat, 19 Dec 2020 08:33:05 +0100
+Subject: [Buildroot] [git commit] package/tinycbor: fix build on musl
+Message-ID: <20201219071948.613518648E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1fba651d5b84c3ae5b6609bb36c4ba42d90332c7
+commit: https://git.buildroot.net/buildroot/commit/?id=eaff5c39c15e3ec071a16c47911f72e9be9168c0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The following vulnerabilities have been fixed:
- - wnpa-sec-2020-16 Kafka dissector memory leak. Bug 16739.
-   CVE-2020-26418.
- - wnpa-sec-2020-17 USB HID dissector crash. Bug 16958. CVE-2020-26421.
- - wnpa-sec-2020-18 RTPS dissector memory leak. Bug 16994.
-   CVE-2020-26420.
- - wnpa-sec-2020-19 Multiple dissector memory leak. Bug 17032.
-   CVE-2020-26419.
- - wnpa-sec-2020-20 QUIC dissector crash Bug 17073.
-
-https://www.wireshark.org/docs/relnotes/wireshark-3.4.1.html
-https://www.wireshark.org/docs/relnotes/wireshark-3.4.2.html
+Fixes:
+ - http://autobuild.buildroot.org/results/c23b694442e7f86cbdd14d8789b12e6a8fd26a70
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wireshark/wireshark.hash | 6 +++---
- package/wireshark/wireshark.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...01-Enable-build-for-different-c-libraries.patch | 39 ++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
 
-diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-index 667d8a371e..b0e7687e1b 100644
---- a/package/wireshark/wireshark.hash
-+++ b/package/wireshark/wireshark.hash
-@@ -1,6 +1,6 @@
--# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.4.0.txt
--sha1  6fdf4f394c287f1e21b48c5293ec1a6e6b627996  wireshark-3.4.0.tar.xz
--sha256  67e4ebbd9153fc589fd67dc21b93176674c73adc3d5a43934c3ac69d8594a8ae  wireshark-3.4.0.tar.xz
-+# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.4.2.txt
-+sha1  b33276e4e6c3d6a057da3b569b58316330a5f3e3  wireshark-3.4.2.tar.xz
-+sha256  de9868729e426a469baabd8d444240d84fa5445020e92c842dd19afd0d47a4c4  wireshark-3.4.2.tar.xz
- 
- # Locally calculated
- sha256  7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index 567c8cc115..84dfe74948 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIRESHARK_VERSION = 3.4.0
-+WIRESHARK_VERSION = 3.4.2
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
- WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
+diff --git a/package/tinycbor/0001-Enable-build-for-different-c-libraries.patch b/package/tinycbor/0001-Enable-build-for-different-c-libraries.patch
+new file mode 100644
+index 0000000000..40f9288604
+--- /dev/null
++++ b/package/tinycbor/0001-Enable-build-for-different-c-libraries.patch
+@@ -0,0 +1,39 @@
++From 085ca40781f7c39febe6d14fb7e5cba342e1804b Mon Sep 17 00:00:00 2001
++From: Ricardo Crudo <ricardo.crudo@gmail.com>
++Date: Sat, 30 May 2020 22:03:01 +0200
++Subject: [PATCH] Enable build for different c libraries
++
++The open_memstream.c was using GLIBC macro definition to test if the
++library is building on a Linux box. This makes impossible to build
++tinycbor against other C libraries, as musl for example.
++
++Signed-off-by: Ricardo Crudo <ricardo.crudo@gmail.com>
++[Retrieved from:
++https://github.com/intel/tinycbor/commit/085ca40781f7c39febe6d14fb7e5cba342e1804b]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/open_memstream.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/src/open_memstream.c b/src/open_memstream.c
++index 18f3de8..3365378 100644
++--- a/src/open_memstream.c
+++++ b/src/open_memstream.c
++@@ -38,7 +38,7 @@
++ #ifdef __APPLE__
++ typedef int RetType;
++ typedef int LenType;
++-#elif __GLIBC__
+++#elif __linux__
++ typedef ssize_t RetType;
++ typedef size_t LenType;
++ #else
++@@ -101,7 +101,7 @@ FILE *open_memstream(char **bufptr, size_t *lenptr)
++ 
++ #ifdef __APPLE__
++     return funopen(b, NULL, write_to_buffer, NULL, close_buffer);
++-#elif __GLIBC__
+++#elif __linux__
++     static const cookie_io_functions_t vtable = {
++         NULL,
++         write_to_buffer,
