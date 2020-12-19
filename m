@@ -1,86 +1,41 @@
-From: Michael Baudino <michael@baudi.no>
-Date: Sat, 19 Dec 2020 11:38:10 +0000
-Subject: [Buildroot] [PATCH] package/go: fix a typo in CC and CXX env
- values
-In-Reply-To: <20201219111146.GG3188@scaer>
-References: <8selkOZpKE5CREY0ZZ4DfQgdVGdikFT69Rfm3Jo05uQO5vUDo-KlPp3AZiao5Qiwu03f-XUFHGg6uuYrhxGJYLk_9KqwZcQbj2O2ue5jaAc=@baudi.no>
- <20201219111146.GG3188@scaer>
-Message-ID: <rDBFX1ZQA2ztWDQmG-IWNS2l7QI0Ksz7Y7qnGby2x-o924jqY1N-YbUX9R627F0zhCvEJaLh0099jec9EuuS4UGnINUC5EYY2mrt4fsjJ1Y=@baudi.no>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Sat, 19 Dec 2020 08:18:22 -0300
+Subject: [Buildroot] [PATCH] package/stella: bump version to 6.4
+Message-ID: <20201219111822.8247-1-sergio.prado@e-labworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+---
+ package/stella/stella.hash | 2 +-
+ package/stella/stella.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thanks for taking the manual extra steps ? (on both patches!)
-
-I created the patch with `git format-patch` but I have `diff.noprefix` in my global git config, may this have caused the depth issue?
-
-Anyway, thanks for accepting the patch and for all the work done on Buildroot ??
-
--------- Original Message --------
-On Dec 19, 2020, 12:11, Yann E. MORIN wrote:
-
-> Michael, All,
->
-> On 2020-12-18 09:57 +0000, Michael Baudino spake thusly:
->> This commit fixes a typo in variable names that caused CC and CXX
->> environment variables to be empty.
->>
->> Signed-off-by: Michael Baudino <michael@baudi.no>
->
-> Applied to master, thanks.
->
-> However, see a little comment, below...
->
->> ---
->> package/go/go.mk | 4 ++--
->> 1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git package/go/go.mk package/go/go.mk
->> index d9f4905..cabbdc8 100644
->> --- package/go/go.mk
->> +++ package/go/go.mk
->
-> I'm not sure how you generated your patch, but this does not apply as-is
-> because it is not the expected depth, so git-am chokes on it.
->
-> Next time, please use 'git send-email' to send your patches, as it
-> ensures that patches are properly formatted.
->
-> I fixed it locally (and will do so on your next patch too), so no need
-> to resend those two.
->
-> Regards,
-> Yann E. MORIN.
->
->> @@ -99,8 +99,8 @@ HOST_GO_HOST_ENV = \
->> $(HOST_GO_COMMON_ENV) \
->> GOARCH="" \
->> GOCACHE="$(HOST_GO_HOST_CACHE)" \
->> - CC="$(HOST_CCNOCCACHE)" \
->> - CXX="$(HOST_CXXNOCCACHE)" \
->> + CC="$(HOSTCC_NOCCACHE)" \
->> + CXX="$(HOSTCXX_NOCCACHE)" \
->> CGO_CFLAGS="$(HOST_CFLAGS)" \
->> CGO_CXXFLAGS="$(HOST_CXXFLAGS)" \
->> CGO_LDFLAGS="$(HOST_LDFLAGS)"
->> --
->> 2.7.4
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> | Yann E. MORIN | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software Designer | \ / CAMPAIGN | ___ |
-> | +33 561 099 427 `------------.-------: X AGAINST | \e/ There is no |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL | v conspiracy. |
-> '------------------------------^-------^------------------^--------------------'
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201219/a3297b6e/attachment.html>
+diff --git a/package/stella/stella.hash b/package/stella/stella.hash
+index 18e325b1e45a..c40d96616ab3 100644
+--- a/package/stella/stella.hash
++++ b/package/stella/stella.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256  59ee35a3e49f52e64fa15e0217ecda90ccb768dcb075d997e72d5e5a3198f82e  stella-6.3-src.tar.xz
++sha256  0346900e9ba4b6d532b72d956adc5078502a9bd6bbc1648bb3dd68f5ffd4859b  stella-6.4-src.tar.xz
+ sha256  d207ee9e563fdd062582df8cbb6c8303b9879bd107692c0db2a32477e47dfa35  Copyright.txt
+ sha256  58530d09b6fcb91ae27071be0081af90e6c2d7fdf991d34a29e234a2a5e75455  License.txt
+diff --git a/package/stella/stella.mk b/package/stella/stella.mk
+index 1e2cbaf9fae8..2dcfbeaccd3c 100644
+--- a/package/stella/stella.mk
++++ b/package/stella/stella.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-STELLA_VERSION = 6.3
++STELLA_VERSION = 6.4
+ STELLA_SOURCE = stella-$(STELLA_VERSION)-src.tar.xz
+ STELLA_SITE = https://github.com/stella-emu/stella/releases/download/$(STELLA_VERSION)
+ STELLA_LICENSE = GPL-2.0+
+-- 
+2.17.1
