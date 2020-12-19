@@ -1,71 +1,43 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 19 Dec 2020 12:11:46 +0100
-Subject: [Buildroot] [PATCH] package/go: fix a typo in CC and CXX env
- values
-In-Reply-To: <8selkOZpKE5CREY0ZZ4DfQgdVGdikFT69Rfm3Jo05uQO5vUDo-KlPp3AZiao5Qiwu03f-XUFHGg6uuYrhxGJYLk_9KqwZcQbj2O2ue5jaAc=@baudi.no>
-References: <8selkOZpKE5CREY0ZZ4DfQgdVGdikFT69Rfm3Jo05uQO5vUDo-KlPp3AZiao5Qiwu03f-XUFHGg6uuYrhxGJYLk_9KqwZcQbj2O2ue5jaAc=@baudi.no>
-Message-ID: <20201219111146.GG3188@scaer>
+Date: Sat, 19 Dec 2020 12:17:12 +0100
+Subject: [Buildroot] [git commit] package/go: enable ARMv7 optimizations for
+ 32-bit ARMv8
+Message-ID: <20201219110110.CE5E281E14@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Michael, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=c59409afd93b2a9bda9d5c3d6b765eaa4c1720dd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-12-18 09:57 +0000, Michael Baudino spake thusly:
-> This commit fixes a typo in variable names that caused CC and CXX
-> environment variables to be empty.
-> 
-> Signed-off-by: Michael Baudino <michael@baudi.no>
+When building for an ARMv8 in 32-bit, Go does not yet support ARMv8
+optimizations (see issue: https://github.com/golang/go/issues/29373)
+but can still benefit from ARMv7 optimizations.
 
-Applied to master, thanks.
+Signed-off-by: Michael Baudino <michael@baudi.no>
+[yann.morin.1998 at free.fr:
+  - move the comment to its own line, expand and reword it a bit
+  - reword the commit log
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/go/go.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-However, see a little comment, below...
-
-> ---
->  package/go/go.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git package/go/go.mk package/go/go.mk
-> index d9f4905..cabbdc8 100644
-> --- package/go/go.mk
-> +++ package/go/go.mk
-
-I'm not sure how you generated your patch, but this does not apply as-is
-because it is not the expected depth, so git-am chokes on it.
-
-Next time, please use 'git send-email' to send your patches, as it
-ensures that patches are properly formatted.
-
-I fixed it locally (and will do so on your next patch too), so no need
-to resend those two.
-
-Regards,
-Yann E. MORIN.
-
-> @@ -99,8 +99,8 @@ HOST_GO_HOST_ENV = \
->  	$(HOST_GO_COMMON_ENV) \
->  	GOARCH="" \
->  	GOCACHE="$(HOST_GO_HOST_CACHE)" \
-> -	CC="$(HOST_CCNOCCACHE)" \
-> -	CXX="$(HOST_CXXNOCCACHE)" \
-> +	CC="$(HOSTCC_NOCCACHE)" \
-> +	CXX="$(HOSTCXX_NOCCACHE)" \
->  	CGO_CFLAGS="$(HOST_CFLAGS)" \
->  	CGO_CXXFLAGS="$(HOST_CXXFLAGS)" \
->  	CGO_LDFLAGS="$(HOST_LDFLAGS)"
-> --
-> 2.7.4
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/go/go.mk b/package/go/go.mk
+index cabbdc84b7..f2d10f5dad 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -39,6 +39,10 @@ else ifeq ($(BR2_ARM_CPU_ARMV6),y)
+ GO_GOARM = 6
+ else ifeq ($(BR2_ARM_CPU_ARMV7A),y)
+ GO_GOARM = 7
++else ifeq ($(BR2_ARM_CPU_ARMV8A),y)
++# Go doesn't support 32-bit GOARM=8 (https://github.com/golang/go/issues/29373)
++# but can still benefit from amrv7 optimisations
++GO_GOARM = 7
+ endif
+ else ifeq ($(BR2_aarch64),y)
+ GO_GOARCH = arm64
