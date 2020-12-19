@@ -1,58 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 19 Dec 2020 16:35:25 +0100
-Subject: [Buildroot] [PATCH v2 12/12] docs/manual/adding-packages-cargo.txt:
- rewrite explanation about dependency management
-In-Reply-To: <20201219153525.1361175-1-thomas.petazzoni@bootlin.com>
-References: <20201219153525.1361175-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20201219153525.1361175-13-thomas.petazzoni@bootlin.com>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Sat, 19 Dec 2020 13:34:28 -0300
+Subject: [Buildroot] [PATCH] package/snort: bump to version 2.9.17
+Message-ID: <20201219163428.29727-1-sergio.prado@e-labworks.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that we have vendoring support for Cargo packages, let's rewrite
-the dependency management section in a more accurate way.
-
-We drop the part about the local cache of the registry, because
-+CARGO_HOME+ in Buildroot points to $(HOST_DIR)/share/cargo, which is
-not shared between builds nor preserved accross builds, so its effect
-as a cache is limited.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
 ---
- docs/manual/adding-packages-cargo.txt | 22 ++++++++++------------
- 1 file changed, 10 insertions(+), 12 deletions(-)
+ package/snort/snort.hash | 4 ++--
+ package/snort/snort.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/docs/manual/adding-packages-cargo.txt b/docs/manual/adding-packages-cargo.txt
-index c65a32f017..fb3e7d0780 100644
---- a/docs/manual/adding-packages-cargo.txt
-+++ b/docs/manual/adding-packages-cargo.txt
-@@ -85,15 +85,13 @@ typical packages will therefore only use a few of them.
+diff --git a/package/snort/snort.hash b/package/snort/snort.hash
+index 733cf605adc5..1103152eadf0 100644
+--- a/package/snort/snort.hash
++++ b/package/snort/snort.hash
+@@ -1,8 +1,8 @@
+ # From https://www.snort.org/downloads/snort/md5s
+-md5  ec148a494cde9095fb590a51efa306de  snort-2.9.16.1.tar.gz
++md5  3fe89f22def4e9ffda01f07f816e666d  snort-2.9.17.tar.gz
  
- ==== About Dependencies Management
+ # Locally computed:
+-sha256  e3ac45a1a3cc2c997d52d19cd92f1adf5641c3a919387adab47a4d13a9dc9f8e  snort-2.9.16.1.tar.gz
++sha256  c3b234c3922a09b0368b847ddb8d1fa371b741f032f42aa9ab53d67b428dc648  snort-2.9.17.tar.gz
  
--A crate can depend on other libraries from crates.io or git repositories, listed
--in its Cargo.toml file. Before starting a build, Cargo usually downloads
--automatically them. This step can also be performed independently, via the
--+cargo fetch+ command.
--
--Cargo maintains a local cache of the registry index and of git checkouts of the
--crates, whose location is given by +$CARGO_HOME+.
--
--This dependency download mechanism is not convenient when performing an offline
--build, as Cargo will fail to fetch the dependencies. In that case, it is advised
--to generate a tarball of the dependencies using the +cargo vendor+ and add it to
--+FOO_EXTRA_DOWNLOADS+.
-+A crate can depend on other libraries from crates.io or git
-+repositories, listed in its Cargo.toml file. Buildroot automatically
-+takes care of downloading such dependencies as part of the download
-+step of packages that use the +cargo-package+ infrastructure. Such
-+dependencies are then kept together with the package source code in
-+the tarball cached in Buildroot's +DL_DIR+, and therefore the hash of
-+the package's tarball includes such dependencies.
-+
-+This mechanism ensures that any change in the dependencies will be
-+detected, and allows the build to be performed completely offline.
+ # Hash for license files:
+ sha256  f98260a6d3e5ef4ede8a2a6b698e5ac91d64c09243f7171e1c5b17b920a835c7  LICENSE
+diff --git a/package/snort/snort.mk b/package/snort/snort.mk
+index 794bd1f670df..c618b4a6af62 100644
+--- a/package/snort/snort.mk
++++ b/package/snort/snort.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SNORT_VERSION = 2.9.16.1
++SNORT_VERSION = 2.9.17
+ SNORT_SITE = https://www.snort.org/downloads/snort
+ SNORT_LICENSE = GPL-2.0
+ SNORT_LICENSE_FILES = LICENSE COPYING
 -- 
-2.29.2
+2.17.1
