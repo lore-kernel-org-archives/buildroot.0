@@ -1,37 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 19 Dec 2020 14:19:56 +0100
-Subject: [Buildroot] [git commit] DEVELOPERS: remove Owen Walpole
-Message-ID: <20201219130407.4A5BF86E2B@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 19 Dec 2020 14:38:04 +0000
+Subject: [Buildroot] [Bug 13396] New: Mirai Virus ?
+Message-ID: <bug-13396-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d98e906dfced8fac5f8f733ce3e1d0b34f4a9401
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=13396
 
-His e-mail has been bouncing for quite a while:
+            Bug ID: 13396
+           Summary: Mirai Virus ?
+           Product: buildroot
+           Version: unspecified
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: david.vantyghem at laposte.net
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-<owen@walpole.dev>: connect to mail.walpole.dev[99.91.194.115]:25: Connection
-    timed out
+In
+https://www.uclibc.org/downloads/binaries/0.9.30.1/mini-native-x86_64.tar.bz2 ,
+ldconfig could contain the Mirai virus ?
+https://www.virustotal.com/gui/file/e3686c960bd29a830c81a5c0396638b73bb7949b3f707fe029d4fbbff9ebe1d4/detection
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS | 3 ---
- 1 file changed, 3 deletions(-)
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 882e8cd825..0697c5de9c 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1967,9 +1967,6 @@ F:	package/openjpeg/
- N:	Olivier Singla <olivier.singla@gmail.com>
- F:	package/shellinabox/
- 
--N:	Owen Walpole <owen@walpole.dev>
--F:	package/parprouted/
--
- N:	Parnell Springmeyer <parnell@digitalmentat.com>
- F:	package/scrypt/
- 
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
