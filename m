@@ -1,59 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 19 Dec 2020 16:35:22 +0100
-Subject: [Buildroot] [PATCH v2 09/12] package/ripgrep: convert to cargo
- infrastructure
+Date: Sat, 19 Dec 2020 16:35:23 +0100
+Subject: [Buildroot] [PATCH v2 10/12] package/sentry-cli: convert to
+ host-cargo-package infrastructure
 In-Reply-To: <20201219153525.1361175-1-thomas.petazzoni@bootlin.com>
 References: <20201219153525.1361175-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20201219153525.1361175-10-thomas.petazzoni@bootlin.com>
+Message-ID: <20201219153525.1361175-11-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Patrick Havelange <patrick.havelange@essensium.com>
-
-Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/ripgrep/ripgrep.mk | 28 +---------------------------
- 1 file changed, 1 insertion(+), 27 deletions(-)
+ package/sentry-cli/sentry-cli.mk | 22 ++--------------------
+ 1 file changed, 2 insertions(+), 20 deletions(-)
 
-diff --git a/package/ripgrep/ripgrep.mk b/package/ripgrep/ripgrep.mk
-index 9dd8d58de1..97e9e2ce5f 100644
---- a/package/ripgrep/ripgrep.mk
-+++ b/package/ripgrep/ripgrep.mk
-@@ -9,30 +9,4 @@ RIPGREP_SITE = $(call github,burntsushi,ripgrep,$(RIPGREP_VERSION))
- RIPGREP_LICENSE = MIT
- RIPGREP_LICENSE_FILES = LICENSE-MIT
+diff --git a/package/sentry-cli/sentry-cli.mk b/package/sentry-cli/sentry-cli.mk
+index 7e53f16026..40ca22fdf9 100644
+--- a/package/sentry-cli/sentry-cli.mk
++++ b/package/sentry-cli/sentry-cli.mk
+@@ -9,24 +9,6 @@ SENTRY_CLI_SITE = $(call github,getsentry,sentry-cli,$(SENTRY_CLI_VERSION))
+ SENTRY_CLI_LICENSE = BSD-3-clause
+ SENTRY_CLI_LICENSE_FILES = LICENSE
  
--RIPGREP_DEPENDENCIES = host-rustc
--RIPGREP_CARGO_ENV = CARGO_HOME=$(HOST_DIR)/share/cargo
+-HOST_SENTRY_CLI_DEPENDENCIES = host-rustc host-zlib
++HOST_SENTRY_CLI_DEPENDENCIES = host-zlib
+ 
+-HOST_SENTRY_CLI_CARGO_ENV = \
+-	CARGO_HOME=$(HOST_DIR)/share/cargo \
+-	RUSTFLAGS="$(addprefix -C link-args=,$(HOST_LDFLAGS))"
 -
--RIPGREP_BIN_DIR = target/$(RUSTC_TARGET_NAME)/$(RIPGREP_CARGO_BIN_SUBDIR)
--
--RIPGREP_CARGO_OPTS = \
--	--target=$(RUSTC_TARGET_NAME) \
+-HOST_SENTRY_CLI_CARGO_OPTS = \
+-	--release \
 -	--manifest-path=$(@D)/Cargo.toml
 -
--ifeq ($(BR2_ENABLE_DEBUG),y)
--RIPGREP_CARGO_BIN_SUBDIR = debug
--else
--RIPGREP_CARGO_OPTS += --release
--RIPGREP_CARGO_BIN_SUBDIR = release
--endif
--
--define RIPGREP_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(RIPGREP_CARGO_ENV) \
--		cargo build $(RIPGREP_CARGO_OPTS)
+-define HOST_SENTRY_CLI_BUILD_CMDS
+-	$(HOST_MAKE_ENV) $(HOST_SENTRY_CLI_CARGO_ENV) \
+-		cargo build $(HOST_SENTRY_CLI_CARGO_OPTS)
 -endef
 -
--define RIPGREP_INSTALL_TARGET_CMDS
--	$(INSTALL) -D -m 0755 $(@D)/$(RIPGREP_BIN_DIR)/rg \
--		$(TARGET_DIR)/usr/bin/rg
+-define HOST_SENTRY_CLI_INSTALL_CMDS
+-	$(INSTALL) -D -m 0755 $(@D)/target/release/sentry-cli \
+-		$(HOST_DIR)/bin/sentry-cli
 -endef
 -
--$(eval $(generic-package))
-+$(eval $(cargo-package))
+-$(eval $(host-generic-package))
++$(eval $(host-cargo-package))
 -- 
 2.29.2
