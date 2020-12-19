@@ -1,7 +1,9 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 19 Dec 2020 14:38:04 +0000
-Subject: [Buildroot] [Bug 13396] New: Mirai Virus ?
-Message-ID: <bug-13396-163@https.bugs.busybox.net/>
+Date: Sat, 19 Dec 2020 14:39:28 +0000
+Subject: [Buildroot] [Bug 13396] Mirai Virus ?
+In-Reply-To: <bug-13396-163@https.bugs.busybox.net/>
+References: <bug-13396-163@https.bugs.busybox.net/>
+Message-ID: <bug-13396-163-vUOL4Nk3EI@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,25 +12,9 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=13396
 
-            Bug ID: 13396
-           Summary: Mirai Virus ?
-           Product: buildroot
-           Version: unspecified
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: david.vantyghem at laposte.net
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
-
-In
-https://www.uclibc.org/downloads/binaries/0.9.30.1/mini-native-x86_64.tar.bz2 ,
-ldconfig could contain the Mirai virus ?
-https://www.virustotal.com/gui/file/e3686c960bd29a830c81a5c0396638b73bb7949b3f707fe029d4fbbff9ebe1d4/detection
+--- Comment #1 from InfoLibre <david.vantyghem@laposte.net> ---
+When this version is used, the same virus is then detected in Ventoy :
+https://github.com/ventoy/Ventoy/issues/660
 
 -- 
 You are receiving this mail because:
