@@ -1,41 +1,38 @@
-From: Sergio Prado <sergio.prado@e-labworks.com>
-Date: Sat, 19 Dec 2020 08:18:22 -0300
-Subject: [Buildroot] [PATCH] package/stella: bump version to 6.4
-Message-ID: <20201219111822.8247-1-sergio.prado@e-labworks.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 19 Dec 2020 14:20:24 +0100
+Subject: [Buildroot] [git commit] DEVELOPERS: remove Thomas Davis
+Message-ID: <20201219130407.893DB817A8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
----
- package/stella/stella.hash | 2 +-
- package/stella/stella.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=fd5eeabac03c98672230e079ac1a73104565470f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/stella/stella.hash b/package/stella/stella.hash
-index 18e325b1e45a..c40d96616ab3 100644
---- a/package/stella/stella.hash
-+++ b/package/stella/stella.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256  59ee35a3e49f52e64fa15e0217ecda90ccb768dcb075d997e72d5e5a3198f82e  stella-6.3-src.tar.xz
-+sha256  0346900e9ba4b6d532b72d956adc5078502a9bd6bbc1648bb3dd68f5ffd4859b  stella-6.4-src.tar.xz
- sha256  d207ee9e563fdd062582df8cbb6c8303b9879bd107692c0db2a32477e47dfa35  Copyright.txt
- sha256  58530d09b6fcb91ae27071be0081af90e6c2d7fdf991d34a29e234a2a5e75455  License.txt
-diff --git a/package/stella/stella.mk b/package/stella/stella.mk
-index 1e2cbaf9fae8..2dcfbeaccd3c 100644
---- a/package/stella/stella.mk
-+++ b/package/stella/stella.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+His e-mail has been bouncing for quite a while:
+
+<sunsetbrew@sunsetbrew.com>: connect to
+    sunsetbrew.com[2a05:d014:9da:8c10:306e:3e07:a16f:a552]:25: Network is
+    unreachable
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 0697c5de9c..9406f30cd5 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2500,9 +2500,6 @@ N:	Thomas Claveirole <thomas.claveirole@green-communications.fr>
+ F:	package/fcgiwrap/
+ F:	package/openlayers/
  
--STELLA_VERSION = 6.3
-+STELLA_VERSION = 6.4
- STELLA_SOURCE = stella-$(STELLA_VERSION)-src.tar.xz
- STELLA_SITE = https://github.com/stella-emu/stella/releases/download/$(STELLA_VERSION)
- STELLA_LICENSE = GPL-2.0+
--- 
-2.17.1
+-N:	Thomas Davis <sunsetbrew@sunsetbrew.com>
+-F:	package/civetweb/
+-
+ N:	Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+ F:	docs/manual/
+ F:	package/cereal/
