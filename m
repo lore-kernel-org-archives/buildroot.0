@@ -1,97 +1,162 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 19 Dec 2020 16:35:19 +0100
-Subject: [Buildroot] [PATCH v2 06/12] package/tinifier: new package
+Date: Sat, 19 Dec 2020 16:35:21 +0100
+Subject: [Buildroot] [PATCH v2 08/12] docs/manual/cargo: document the
+ cargo-package infrastructure
 In-Reply-To: <20201219153525.1361175-1-thomas.petazzoni@bootlin.com>
 References: <20201219153525.1361175-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20201219153525.1361175-7-thomas.petazzoni@bootlin.com>
+Message-ID: <20201219153525.1361175-9-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is a Go package that needs vendor modules to be downloaded at
-build time.
+From: Patrick Havelange <patrick.havelange@essensium.com>
 
+The Buildroot manual was already providing some details on how to
+integrate Cargo packages, and those details now need to be updated
+with a proper documentation for the cargo-package infrastructure.
+
+Signed-off-by: Patrick Havelange <patrick.havelange@essensium.com>
+[Thomas: numerous updates and extensions.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                     |  1 +
- package/Config.in              |  1 +
- package/tinifier/Config.in     | 10 ++++++++++
- package/tinifier/tinifier.hash |  3 +++
- package/tinifier/tinifier.mk   | 13 +++++++++++++
- 5 files changed, 28 insertions(+)
- create mode 100644 package/tinifier/Config.in
- create mode 100644 package/tinifier/tinifier.hash
- create mode 100644 package/tinifier/tinifier.mk
+ docs/manual/adding-packages-cargo.txt | 88 ++++++++++++---------------
+ 1 file changed, 39 insertions(+), 49 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 9406f30cd5..1a7c22b718 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2590,6 +2590,7 @@ F:	package/rtc-tools/
- F:	package/sam-ba/
- F:	package/scons/
- F:	package/squashfs/
-+F:	package/tinifier/
- F:	package/wayland/
- F:	package/weston/
- F:	support/testing/tests/boot/test_syslinux.py
-diff --git a/package/Config.in b/package/Config.in
-index dc7139a49a..d5d8caef47 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -298,6 +298,7 @@ comment "Graphic applications"
- 	source "package/rrdtool/Config.in"
- 	source "package/stellarium/Config.in"
- 	source "package/tesseract-ocr/Config.in"
-+	source "package/tinifier/Config.in"
+diff --git a/docs/manual/adding-packages-cargo.txt b/docs/manual/adding-packages-cargo.txt
+index 8fcc80bcc6..c65a32f017 100644
+--- a/docs/manual/adding-packages-cargo.txt
++++ b/docs/manual/adding-packages-cargo.txt
+@@ -1,7 +1,7 @@
+ // -*- mode:doc; -*-
+ // vim: set syntax=asciidoc:
  
- comment "Graphic libraries"
- 	source "package/cegui/Config.in"
-diff --git a/package/tinifier/Config.in b/package/tinifier/Config.in
-new file mode 100644
-index 0000000000..fbadfe6bd9
---- /dev/null
-+++ b/package/tinifier/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_TINIFIER
-+	bool "tinifier"
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-+	help
-+	  CLI tool for images compressing
+-=== Integration of Cargo-based packages
++=== Infrastructure for Cargo-based packages
+ 
+ Cargo is the package manager for the Rust programming language. It allows the
+ user to build programs or libraries written in Rust, but it also downloads and
+@@ -10,7 +10,7 @@ called "crates".
+ 
+ [[cargo-package-tutorial]]
+ 
+-==== Cargo-based package's +Config.in+ file
++==== +cargo-package+ tutorial
+ 
+ The +Config.in+ file of Cargo-based package 'foo' should contain:
+ 
+@@ -25,11 +25,7 @@ The +Config.in+ file of Cargo-based package 'foo' should contain:
+ 08: 	  http://foosoftware.org/foo/
+ ---------------------------
+ 
+-==== Cargo-based package's +.mk+ file
+-
+-Buildroot does not (yet) provide a dedicated package infrastructure for
+-Cargo-based packages. So, we will explain how to write a +.mk+ file for such a
+-package. Let's start with an example:
++And the +.mk+ file for this package should contain:
+ 
+ ------------------------------
+ 01: ################################################################################
+@@ -44,52 +40,48 @@ package. Let's start with an example:
+ 10: FOO_LICENSE = GPL-3.0+
+ 11: FOO_LICENSE_FILES = COPYING
+ 12:
+-13: FOO_DEPENDENCIES = host-rustc
+-14:
+-15: FOO_CARGO_ENV = CARGO_HOME=$(HOST_DIR)/share/cargo
+-16:
+-17: FOO_BIN_DIR = target/$(RUSTC_TARGET_NAME)/$(FOO_CARGO_MODE)
+-18:
+-19: FOO_CARGO_OPTS = \
+-20: 	$(if $(BR2_ENABLE_DEBUG),,--release) \
+-21: 	--target=$(RUSTC_TARGET_NAME) \
+-22: 	--manifest-path=$(@D)/Cargo.toml
+-23:
+-24: define FOO_BUILD_CMDS
+-25: 	$(TARGET_MAKE_ENV) $(FOO_CARGO_ENV) \
+-26: 		cargo build $(FOO_CARGO_OPTS)
+-27: endef
+-28:
+-29: define FOO_INSTALL_TARGET_CMDS
+-30: 	$(INSTALL) -D -m 0755 $(@D)/$(FOO_BIN_DIR)/foo \
+-31: 		$(TARGET_DIR)/usr/bin/foo
+-32: endef
+-33:
+-34: $(eval $(generic-package))
++13: $(eval $(cargo-package))
+ --------------------------------
+ 
+-The Makefile starts with the definition of the standard variables for package
+-declaration (lines 7 to 11).
++The Makefile starts with the definition of the standard variables for
++package declaration (lines 7 to 11).
 +
-+	  This tool uses tinypng.com API endpoint for compressing your
-+	  local jpg/png images (it supports parallel jobs).
++As seen in line 13, it is based on the +cargo-package+
++infrastructure. Cargo will be invoked automatically by this
++infrastructure to build and install the package.
 +
-+	  https://github.com/tarampampam/tinifier
-diff --git a/package/tinifier/tinifier.hash b/package/tinifier/tinifier.hash
-new file mode 100644
-index 0000000000..146700817b
---- /dev/null
-+++ b/package/tinifier/tinifier.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  707a1d9e55aab8c83b65bb10f3ec8c3bc094d77cd576b266f821d9f39133ac3c  tinifier-2.1.0.tar.gz
-+sha256  791d8fd993ace44d4d83e2f4820a64d5ad3e37412f029afad46d17a9259de2b6  LICENSE
-diff --git a/package/tinifier/tinifier.mk b/package/tinifier/tinifier.mk
-new file mode 100644
-index 0000000000..b47d265a8e
---- /dev/null
-+++ b/package/tinifier/tinifier.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# tinifier
-+#
-+################################################################################
++It is still possible to define custom build commands or install
++commands (i.e.  with FOO_BUILD_CMDS and FOO_INSTALL_TARGET_CMDS).
++Those will then replace the commands from the cargo infrastructure.
 +
-+TINIFIER_VERSION = 2.1.0
-+TINIFIER_SITE = $(call github,tarampampam,tinifier,v$(TINIFIER_VERSION))
-+TINIFIER_LICENSE = MIT
-+TINIFIER_LICENSE_FILES = LICENSE
-+TINIFIER_GOMOD = tinifier
++==== +cargo-package+ reference
 +
-+$(eval $(golang-package))
++The main macros for the Cargo package infrastructure are
+++cargo-package+ for target packages and +host-cargo-package+ for host
++packages.
++
++Just like the generic infrastructure, the Cargo infrastructure works
++by defining a number of variables before calling the +cargo-package+
++or +host-cargo-package+ macros.
+ 
+-As seen in line 34, it is based on the
+-xref:generic-package-tutorial[+generic-package+ infrastructure]. So, it defines
+-the variables required by this particular infrastructure, where Cargo is
+-invoked:
++First, all the package metadata information variables that exist in
++the generic infrastructure also exist in the Cargo infrastructure:
+++FOO_VERSION+, +FOO_SOURCE+, +FOO_PATCH+, +FOO_SITE+,
+++FOO_DEPENDENCIES+, +FOO_LICENSE+, +FOO_LICENSE_FILES+, etc.
+ 
+-* +FOO_BUILD_CMDS+: Cargo is invoked to perform the build. The options required
+-  to configure the cross-compilation of the package are passed via
+-  +FOO_CONF_OPTS+.
++A few additional variables, specific to the Cargo infrastructure, can
++also be defined. Many of them are only useful in very specific cases,
++typical packages will therefore only use a few of them.
+ 
+-* +FOO_INSTALL_TARGET_CMDS+: The binary executable generated is installed on
+-  the target.
++* +FOO_CARGO_ENV+ can be used to pass additional variables in the
++  environment of +cargo+ invocations. It used at both build and
++  installation time
+ 
+-In order to have Cargo available for the build, +FOO_DEPENDENCIES+ needs to
+-contain +host-cargo+.
++* +FOO_CARGO_BUILD_OPTS+ can be used to pass additional options to
++  +cargo+ at build time.
+ 
+-To sum it up, to add a new Cargo-based package, the Makefile example can be
+-copied verbatim then edited to replace all occurences of +FOO+ with the
+-uppercase name of the new package and update the values of the standard
+-variables.
++* +FOO_CARGO_INSTALL_OPTS+ can be used to pass additional options to
++  +cargo+ at install time.
+ 
+ ==== About Dependencies Management
+ 
+@@ -99,9 +91,7 @@ automatically them. This step can also be performed independently, via the
+ +cargo fetch+ command.
+ 
+ Cargo maintains a local cache of the registry index and of git checkouts of the
+-crates, whose location is given by +$CARGO_HOME+. As seen in the package
+-Makefile example at line 15, this environment variable is set to
+-+$(HOST_DIR)/share/cargo+.
++crates, whose location is given by +$CARGO_HOME+.
+ 
+ This dependency download mechanism is not convenient when performing an offline
+ build, as Cargo will fail to fetch the dependencies. In that case, it is advised
 -- 
 2.29.2
