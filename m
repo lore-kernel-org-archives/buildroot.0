@@ -1,40 +1,60 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 19 Dec 2020 20:24:45 +0100
-Subject: [Buildroot] [PATCH v1] configs/chromebook_elm_defconfig: use linux
- headers same as kernel (5.9 series)
-Message-ID: <20201219192445.27681-1-ps.report@gmx.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 19 Dec 2020 21:29:21 +0100
+Subject: [Buildroot] [PATCH v2 04/12]
+ support/download/post-process-helpers: add helper function for post process
+ scripts
+In-Reply-To: <20201219173933.GJ3188@scaer>
+References: <20201219153525.1361175-1-thomas.petazzoni@bootlin.com>
+ <20201219153525.1361175-5-thomas.petazzoni@bootlin.com>
+ <20201219173933.GJ3188@scaer>
+Message-ID: <20201219202921.GK3188@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use linux headers same as kernel (5.9 series).
+Thomas, All,
 
-Fixes:
+A few mre tweaks I forgot about...
 
-  - https://gitlab.com/buildroot.org/buildroot/-/jobs/917539050
+On 2020-12-19 18:39 +0100, Yann E. MORIN spake thusly:
+> On 2020-12-19 16:35 +0100, Thomas Petazzoni spake thusly:
+[--SNIP--]
+> > +        mkdir ${dest}
 
-  Incorrect selection of kernel headers: expected 5.10.x, got 5.9.x
+Using 'mkdir -p' would ensure that parent direcotries are created as
+needed.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- configs/chromebook_elm_defconfig | 3 +++
- 1 file changed, 3 insertions(+)
+> 
+>     one_file="$(find "${dest}" -type f |head -n1)"
 
-diff --git a/configs/chromebook_elm_defconfig b/configs/chromebook_elm_defconfig
-index 05e82ffc31..4f82370fb9 100644
---- a/configs/chromebook_elm_defconfig
-+++ b/configs/chromebook_elm_defconfig
-@@ -9,6 +9,9 @@ BR2_GLOBAL_PATCH_DIR="board/chromebook/elm/patches/"
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- 
-+# Linux headers same as kernel (5.9 series)
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_9=y
-+
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+Of course, the output should be sorted in the C locale, to ensure the
+same file is always used as reference (and hence a better name for that
+file):
+
+    local ref_file
+    ref_file="$(find "${dest}" -type f |LC_ALL=C sort |head -n1)"
+    touch -r "${ref_file}" "${dest}.timestamp"
+
+[--SNIP--]
+> > +        # let's use a fixed hardcoded date to be reproducible
+> > +        date="2020-02-06 01:02:03 +0000"
+> Assuming that unpack's dest and repack's src are pointing to the same
+> directory:
+>         date="$(stat -c "${src}.timestamp")"
+
+Meh.. I forgot the actual format:
+
+    date="$(stat -c '%y' "${src}.timestamp")"
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.29.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
