@@ -1,111 +1,89 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 20 Dec 2020 16:15:02 +0100
-Subject: [Buildroot] [PATCH v4 2/4] package/bcc: new package
-In-Reply-To: <20201217184437.lg3byn2xasaokeqw@e107158-lin.cambridge.arm.com>
-References: <20201107002836.3101760-1-romain.naour@gmail.com>
- <20201107002836.3101760-2-romain.naour@gmail.com>
- <20201129151406.neufl54p6pjiraux@e107158-lin.cambridge.arm.com>
- <bbccfc8c-1210-8e8b-02d4-920dba6a3810@gmail.com>
- <20201217184437.lg3byn2xasaokeqw@e107158-lin.cambridge.arm.com>
-Message-ID: <d4cd4f62-ecea-f173-6f57-c4f779457009@gmail.com>
+Date: Sun, 20 Dec 2020 16:22:20 +0100
+Subject: [Buildroot] [PATCHv5 4/5] package/bpftrace: new package
+In-Reply-To: <96e61ace-fde1-3887-2ffa-e70696ce4458@gmail.com>
+References: <20201206173537.1397691-1-romain.naour@gmail.com>
+ <20201206173537.1397691-4-romain.naour@gmail.com>
+ <20201220014716.qmk3sdnugkemgeqy@e107158-lin.cambridge.arm.com>
+ <96e61ace-fde1-3887-2ffa-e70696ce4458@gmail.com>
+Message-ID: <f8bf164c-0a2c-89a6-5ad8-35d83f9737d3@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Qais,
-
-Le 17/12/2020 ? 19:44, Qais Yousef a ?crit?:
-> Hi Romain
-> 
-> Sorry this slipped through the cracks :(
-
-no problem :)
-
-> 
-> On 12/06/20 17:59, Romain Naour wrote:
-> 
-> [...]
-> 
+Le 20/12/2020 ? 11:01, Romain Naour a ?crit?:
+> Le 20/12/2020 ? 02:47, Qais Yousef a ?crit?:
+>> On 12/06/20 18:35, Romain Naour wrote:
+>>> From: Qais Yousef <qais.yousef@arm.com>
 >>>
->>>> - Remove python module install hook (Quais)
->>>> - Keep BCC_LINUX_CONFIG_FIXUPS but only for kernel built by Buildroot.
+>>> bpftrace is a high-level tracing language for Linux enhanced Berkeley
+>>> Packet Filter (eBPF) available in recent Linux kernels (4.x).
 >>>
->>> I still think this will be a maintenance headache. Are you sure you want to
->>> continue to maintain this list of fixups for all kernel versions given how fast
->>> ebpf moves?
->>
->> This option is only used when you build the kernel with Buildroot.
->> At some point ebpf kernel options must be stable.
->>
->> Also the bcc project provide this list of kernel options, so we can follow their
->> requirements:
->> https://github.com/iovisor/bcc/blob/master/INSTALL.md#kernel-configuration
->>
->> You can search for LINUX_CONFIG_FIXUPS usage in the Buildroot tree, we can
->> notice that some packages requires some kernel options.
->> Why not to do so with bcc ?
-> 
-> Fair enough. It was more of a question if we really want that than an objection
-> really. As long as this conditional on building the kernel within buildroot
-> I have no problem really. I build the kernel myself so wouldn't be affected
-> by this.
-> 
->>> I still this the Clang build error for i386, x86_64, arm and arm64
+>>> Only tested on x86_64 and aarch64. The package doesn't support i386 and
+>>> aarch32.
 >>>
->>> 	/usr/bin/ld: CMakeFiles/libclang.dir/CIndexer.cpp.o: in function `clang::CIndexer::getClangResourcesPath[abi:cxx11]()':
->>> 	CIndexer.cpp:(.text._ZN5clang8CIndexer21getClangResourcesPathB5cxx11Ev+0x9b): undefined reference to `dladdr'
->>> 	collect2: error: ld returned 1 exit status
->>> 	make[4]: *** [tools/libclang/CMakeFiles/libclang.dir/build.make:395: lib/libclang.so.9] Error 1
->>> 	make[3]: *** [CMakeFiles/Makefile2:8451: tools/libclang/CMakeFiles/libclang.dir/all] Error 2
->>>
->>> I had a hacky patch for that in my series. Should we just report this to the
->>> clang package maintainer in buildroot? I'm assuming you're not hitting it,
->>> right?
+>>> Signed-off-by: Qais Yousef <qais.yousef@arm.com>
+>>> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+>>> Cc: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+>>> ---
+>>> v2: patch to build bundled libraries statically
+>>>     Add glibc dependency
+>>>     Rework to select bcc, libbpf and llvm RTII dependencies.
+>>>     Add reverse dependencies
+>>>     Add BR2_PACKAGE_BPFTRACE_ARCH_SUPPORTS
+>>>     Bump the version to the latest (upcoming 0.12)
+>>>       due to many build issues (and patch to backport) with
+>>>       the latest release.
+>>>     Add binutils optional dependency to provide libbfd and libopcodes.
+>>>     Disable manpages.
+>>> ---
 >>
->> Guess who is one of the clang package "maintainer" in Buildroot :p
->> (use ./utils/get-developers -p clang)
+>> I don't think we need the dependency on libbpf? BCC provides it and we depend
+>> on it.
 > 
-> Yeah I saw that after I sent the email and wanted to report it. I realized then
-> I actually did ;-)
+> The libbpf provided by BCC is named libbcc_bpf.so but bpftrace really expect
+> libbpf.so
 > 
->>
->> I'm not able the reproduce this issue. Are you using uclibc toolchain ?
+> I added libbpf package since distribution packages use it.
+> https://archlinux.org/packages/community/x86_64/bpftrace/
+> https://src.fedoraproject.org/rpms/bpftrace/blob/master/f/bpftrace.spec#_27
 > 
-> No, Glibc.
+> But bpftrace try to find bcc_bpf only for static linking.
+> It's not clear what's the libbpf implementation the buildsystem is trying to
+> use. Why it is not using the same bpf library for both static ans shared linking ?
 > 
->> Also, the Buildroot autobuilder didn't report such error, I receive autobuilder
->> failure directly to my mail in-box.
->>
->>>
->>> I was based on 2020.08.2 tag.
->>
->> Clang is still at  9.x release so we have this version since a while.
->>
->>>
->>> I couldn't fully test this series yet because of this error.
->>
->> Please, share your defconfig.
-> 
-> Attached. I'll try to dig more into it. Anyway this issue shouldn't be
-> a blocker and can be fixed separately.
+> I think it's better use use the library from upstream (libbpf) rather than a
+> library bundled in another software (bcc_libbpf).
 
-Sorry, but I can't reproduce here with your defconfig.
-I did a full rebuild using the patch series applied.
-
-> 
-> I'll test and review v5 and hopefully it should be good to be accepted.
-
-I just sent a new version with your tested/reviewed tag.
+I added a new comment about the libbpf dependency needed for BTF support.
+The buildsystem really want to use libbpf, so I kept bpftrace as it was.
 
 Best regards,
 Romain
 
-
 > 
-> Thanks
+>>
+>> Feel free to add my name to DEVELOPERS file too and your name too.
 > 
-> --
-> Qais Yousef
+> Indeed, the DEVELOPERS file update is missing :-/
+> 
+>>
+>> Beside the question on the addition of libbpf dependency, this looks good to
+>> me.
+>>
+>> Thanks for the rework!
+> 
+> Thanks again for your help!
+> 
+> Best regards,
+> Romain
+> 
+>>
+>> Cheers
+>>
+>> --
+>> Qais Yousef
+>>
 > 
