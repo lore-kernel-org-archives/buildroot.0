@@ -1,48 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 20 Dec 2020 09:51:13 +0100
-Subject: [Buildroot] [git commit] package/snort: bump to version 2.9.17
-Message-ID: <20201220083506.F205C810A5@busybox.osuosl.org>
+Date: Sun, 20 Dec 2020 09:51:03 +0100
+Subject: [Buildroot] [git commit] configs/chromebook_elm_defconfig: use
+ linux headers same as kernel (5.9 series)
+Message-ID: <20201220083506.E883788175@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cbb0483f9875d6e24ce32e9259cccfdac21ff20a
+commit: https://git.buildroot.net/buildroot/commit/?id=9e67e9e51d25a22b46c0eef54f323946a1ff59f2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+Use linux headers same as kernel (5.9 series).
+
+Fixes:
+
+  - https://gitlab.com/buildroot.org/buildroot/-/jobs/917539050
+
+  Incorrect selection of kernel headers: expected 5.10.x, got 5.9.x
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/snort/snort.hash | 4 ++--
- package/snort/snort.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ configs/chromebook_elm_defconfig | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/snort/snort.hash b/package/snort/snort.hash
-index 733cf605ad..1103152ead 100644
---- a/package/snort/snort.hash
-+++ b/package/snort/snort.hash
-@@ -1,8 +1,8 @@
- # From https://www.snort.org/downloads/snort/md5s
--md5  ec148a494cde9095fb590a51efa306de  snort-2.9.16.1.tar.gz
-+md5  3fe89f22def4e9ffda01f07f816e666d  snort-2.9.17.tar.gz
+diff --git a/configs/chromebook_elm_defconfig b/configs/chromebook_elm_defconfig
+index 05e82ffc31..4f82370fb9 100644
+--- a/configs/chromebook_elm_defconfig
++++ b/configs/chromebook_elm_defconfig
+@@ -9,6 +9,9 @@ BR2_GLOBAL_PATCH_DIR="board/chromebook/elm/patches/"
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
  
- # Locally computed:
--sha256  e3ac45a1a3cc2c997d52d19cd92f1adf5641c3a919387adab47a4d13a9dc9f8e  snort-2.9.16.1.tar.gz
-+sha256  c3b234c3922a09b0368b847ddb8d1fa371b741f032f42aa9ab53d67b428dc648  snort-2.9.17.tar.gz
- 
- # Hash for license files:
- sha256  f98260a6d3e5ef4ede8a2a6b698e5ac91d64c09243f7171e1c5b17b920a835c7  LICENSE
-diff --git a/package/snort/snort.mk b/package/snort/snort.mk
-index 794bd1f670..c618b4a6af 100644
---- a/package/snort/snort.mk
-+++ b/package/snort/snort.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SNORT_VERSION = 2.9.16.1
-+SNORT_VERSION = 2.9.17
- SNORT_SITE = https://www.snort.org/downloads/snort
- SNORT_LICENSE = GPL-2.0
- SNORT_LICENSE_FILES = LICENSE COPYING
++# Linux headers same as kernel (5.9 series)
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_9=y
++
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
