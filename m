@@ -1,123 +1,131 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 20 Dec 2020 16:12:03 +0100
-Subject: [Buildroot] [PATCHv6 5/5] package/bcc: add optional luajit
- dependency
+Date: Sun, 20 Dec 2020 16:12:01 +0100
+Subject: [Buildroot] [PATCHv6 3/5] package/libbpf: new package
 In-Reply-To: <20201220151203.2206747-1-romain.naour@gmail.com>
 References: <20201220151203.2206747-1-romain.naour@gmail.com>
-Message-ID: <20201220151203.2206747-5-romain.naour@gmail.com>
+Message-ID: <20201220151203.2206747-3-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The luajit dependency was explicitely disabled when bcc has
-been added to Buildroot.
-Even if the python binding is probably more used, enable
-luajit binding if luajit package is enabled in the defconfig.
+A mirror of bpf-next linux tree bpf-next/tools/lib/bpf
+directory plus its supporting header files. The version
+of the package reflects the version of ABI.
 
-Fix the luajit command line used to build bcc.o, otherwise
-bcc.o is build for the host.
-
+Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Cc: Qais Yousef <qais.yousef@arm.com>
 ---
- .../bcc/0003-fix-aarch64-cross-compile.patch  | 65 +++++++++++++++++++
- package/bcc/bcc.mk                            | 10 ++-
- 2 files changed, 73 insertions(+), 2 deletions(-)
- create mode 100644 package/bcc/0003-fix-aarch64-cross-compile.patch
+I'm not sure if updating the bpf.h provided by the toolchain linux-headers
+is the right things to do.
 
-diff --git a/package/bcc/0003-fix-aarch64-cross-compile.patch b/package/bcc/0003-fix-aarch64-cross-compile.patch
+v6: Update DEVELOPERS file
+---
+ DEVELOPERS               |  1 +
+ package/Config.in        |  1 +
+ package/libbpf/Config.in | 20 ++++++++++++++++++++
+ package/libbpf/libbpf.mk | 40 ++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 62 insertions(+)
+ create mode 100644 package/libbpf/Config.in
+ create mode 100644 package/libbpf/libbpf.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 681c4e18db..00e12af974 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2249,6 +2249,7 @@ F:	package/glibc/
+ F:	package/irrlicht/
+ F:	package/liblinear/
+ F:	package/lensfun/
++F:	package/libbpf/
+ F:	package/libclc/
+ F:	package/libgta/
+ F:	package/libspatialindex/
+diff --git a/package/Config.in b/package/Config.in
+index c04392126c..4dc27694d1 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -107,6 +107,7 @@ menu "Debugging, profiling and benchmark"
+ 	source "package/kvm-unit-tests/Config.in"
+ 	source "package/kyua/Config.in"
+ 	source "package/latencytop/Config.in"
++	source "package/libbpf/Config.in"
+ 	source "package/lmbench/Config.in"
+ 	source "package/lsof/Config.in"
+ 	source "package/ltp-testsuite/Config.in"
+diff --git a/package/libbpf/Config.in b/package/libbpf/Config.in
 new file mode 100644
-index 0000000000..6b4279754c
+index 0000000000..c5b24c5eb5
 --- /dev/null
-+++ b/package/bcc/0003-fix-aarch64-cross-compile.patch
-@@ -0,0 +1,65 @@
-+From 5a5b0f04484e00c88e7be902101367d6d591fb96 Mon Sep 17 00:00:00 2001
-+From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-+Date: Thu, 2 May 2019 11:06:23 +0200
-+Subject: [PATCH] cmake/luajit: Provide the target architecture to luaJIT while
-+ cross-compiling
++++ b/package/libbpf/Config.in
+@@ -0,0 +1,20 @@
++config BR2_PACKAGE_LIBBPF
++	bool "libbpf"
++	depends on BR2_USE_WCHAR # elfutils
++	depends on !BR2_STATIC_LIBS # elfutils
++	depends on BR2_TOOLCHAIN_HAS_THREADS # elfutils
++	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC # elfutils
++	select BR2_PACKAGE_ELFUTILS
++	select BR2_PACKAGE_ZLIB
++	help
++	  libbpf library.
++	  A mirror of bpf-next linux tree bpf-next/tools/lib/bpf
++	  directory plus its supporting header files. The version
++	  of the package reflects the version of ABI.
 +
-+Unlike CMAKE_SYSTEM_PROCESSOR which identifies aarch64
-+as a valid architecture, luajit does not recognize it.
-+luajit defines aarch64 as arm64.
++	  https://github.com/libbpf/libbpf
 +
-+LuaJIT doesn't use usual arch naming, so we have to convert
-+between CMake and Luajit for each architectures while
-+cross-compiling.
++comment "libbpf needs a uClibc or glibc toolchain w/ wchar, dynamic library, threads"
++	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS \
++		|| !BR2_TOOLCHAIN_HAS_THREADS \
++		|| !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
+diff --git a/package/libbpf/libbpf.mk b/package/libbpf/libbpf.mk
+new file mode 100644
+index 0000000000..33e303db16
+--- /dev/null
++++ b/package/libbpf/libbpf.mk
+@@ -0,0 +1,40 @@
++################################################################################
++#
++# libbpf
++#
++################################################################################
 +
-+Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-+Signed-off-by: Romain Naour <romain.naour@smile.fr>
-+---
-+v2: Do the same for other architecture supported by LuaJIT.
-+https://github.com/iovisor/bcc/pull/2480
-+---
-+ src/lua/CMakeLists.txt | 29 ++++++++++++++++++++++++++++-
-+ 1 file changed, 28 insertions(+), 1 deletion(-)
++LIBBPF_VERSION = 0.2
++LIBBPF_SITE = $(call github,libbpf,libbpf,v$(LIBBPF_VERSION))
++LIBBPF_LICENSE = GPL-2.0, LGPL-2.1, BSD-2-Clause
++LIBBPF_LICENSE_FILES = LICENSE LICENSE.BSD-2-Clause LICENSE.LPGL-2.1
++LIBBPF_DEPENDENCIES = host-bison host-flex host-pkgconf elfutils zlib
++LIBBPF_INSTALL_STAGING = YES
 +
-+diff --git a/src/lua/CMakeLists.txt b/src/lua/CMakeLists.txt
-+index 7541d48df..226e1b1d2 100644
-+--- a/src/lua/CMakeLists.txt
-++++ b/src/lua/CMakeLists.txt
-+@@ -13,9 +13,36 @@ if (LUAJIT_LIBRARIES AND LUAJIT)
-+ 		DEPENDS ${SRC_LUA} ${CMAKE_CURRENT_SOURCE_DIR}/squishy
-+ 	)
-+ 
-++	# LuaJIT doesn't use usual arch naming, so we have to convert
-++	# between CMake and Luajit while cross-compiling.
-++	if (CMAKE_CROSSCOMPILING)
-++		SET (LUAJIT_TARGET_ARCH "-a")
-++		# https://github.com/LuaJIT/LuaJIT/blob/f0e865dd4861520258299d0f2a56491bd9d602e1/src/jit/bcsave.lua#L30
-++		# https://github.com/LuaJIT/LuaJIT/blob/f0e865dd4861520258299d0f2a56491bd9d602e1/src/jit/bcsave.lua#L65
-++		if (CMAKE_SYSTEM_PROCESSOR STREQUAL "aarch64")
-++			SET (LUAJIT_TARGET_ARCH ${LUAJIT_TARGET_ARCH} "arm64")
-++		elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64_be")
-++			SET (LUAJIT_TARGET_ARCH ${LUAJIT_TARGET_ARCH} "arm64be")
-++		elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "arm")
-++			SET (LUAJIT_TARGET_ARCH ${LUAJIT_TARGET_ARCH} "arm")
-++		elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "^(i.86)$")
-++			SET (LUAJIT_TARGET_ARCH ${LUAJIT_TARGET_ARCH} "x86")
-++		elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "mips")
-++			SET (LUAJIT_TARGET_ARCH ${LUAJIT_TARGET_ARCH} "mips")
-++		elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "mipsel")
-++			SET (LUAJIT_TARGET_ARCH ${LUAJIT_TARGET_ARCH} "mipsel")
-++		elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "powerpc")
-++			SET (LUAJIT_TARGET_ARCH ${LUAJIT_TARGET_ARCH} "ppc")
-++		elseif (CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")
-++			SET (LUAJIT_TARGET_ARCH ${LUAJIT_TARGET_ARCH} "x64")
-++		else()
-++			MESSAGE(FATAL_ERROR "${CMAKE_SYSTEM_PROCESSOR} is not supported by LuaJIT")
-++		endif()
-++	endif()
-++
-+ 	ADD_CUSTOM_COMMAND(
-+ 		OUTPUT bcc.o
-+-		COMMAND ${LUAJIT} -bg bcc.lua bcc.o
-++		COMMAND ${LUAJIT} -bg bcc.lua ${LUAJIT_TARGET_ARCH} bcc.o
-+ 		DEPENDS bcc.lua
-+ 	)
-+ 
-diff --git a/package/bcc/bcc.mk b/package/bcc/bcc.mk
-index bafa9e2096..8b6ba63f90 100644
---- a/package/bcc/bcc.mk
-+++ b/package/bcc/bcc.mk
-@@ -19,8 +19,14 @@ BCC_DEPENDENCIES = host-bison host-flex clang elfutils flex llvm python3 tar
- BCC_CONF_OPTS = -DENABLE_LLVM_SHARED=ON \
- 	-DREVISION=$(BCC_VERSION) \
- 	-DENABLE_CLANG_JIT=ON \
--	-DENABLE_MAN=OFF \
--	-DENABLE_LUAJIT=OFF
-+	-DENABLE_MAN=OFF
++define LIBBPF_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) \
++		-C $(@D)/src
++endef
 +
-+ifeq ($(BR2_PACKAGE_LUAJIT),y)
-+BCC_DEPENDENCIES += luajit
-+BCC_CONF_OPTS += -DENABLE_LUAJIT=ON
-+else
-+BCC_CONF_OPTS += -DENABLE_LUAJIT=OFF
++# bpf/bpf.h installed by libbpf use enm bpf_iter_link_info that was added since
++# kernel 5.9, so we need to update some uapi headers in STAGING_DIR if the
++# toolchain is build with linux-headers < 5.9.
++# Otherwise bpf/bpf.h is broken due to out of date linux/bpf.h installed by the
++# toolchain.
++# https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=a5cbe05a6673b85bed2a63ffcfea6a96c6410cff
++ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_9),)
++LIBBPF_UPDATE_UAPI_HEADERS = install_uapi_headers
 +endif
- 
- define BCC_LINUX_CONFIG_FIXUPS
- 	# Enable kernel support for eBPF
++
++define LIBBPF_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) \
++		-C $(@D)/src install $(LIBBPF_UPDATE_UAPI_HEADERS) \
++		DESTDIR=$(STAGING_DIR)
++endef
++
++define LIBBPF_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) \
++		-C $(@D)/src install DESTDIR=$(TARGET_DIR)
++endef
++
++$(eval $(generic-package))
 -- 
 2.25.4
