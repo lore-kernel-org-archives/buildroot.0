@@ -1,89 +1,60 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 20 Dec 2020 16:22:20 +0100
-Subject: [Buildroot] [PATCHv5 4/5] package/bpftrace: new package
-In-Reply-To: <96e61ace-fde1-3887-2ffa-e70696ce4458@gmail.com>
-References: <20201206173537.1397691-1-romain.naour@gmail.com>
- <20201206173537.1397691-4-romain.naour@gmail.com>
- <20201220014716.qmk3sdnugkemgeqy@e107158-lin.cambridge.arm.com>
- <96e61ace-fde1-3887-2ffa-e70696ce4458@gmail.com>
-Message-ID: <f8bf164c-0a2c-89a6-5ad8-35d83f9737d3@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 20 Dec 2020 18:55:56 +0100
+Subject: [Buildroot] [PATCH 1/1] package/cryptopp: security bump to version
+ 8.3.0
+Message-ID: <20201220175556.10038-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le 20/12/2020 ? 11:01, Romain Naour a ?crit?:
-> Le 20/12/2020 ? 02:47, Qais Yousef a ?crit?:
->> On 12/06/20 18:35, Romain Naour wrote:
->>> From: Qais Yousef <qais.yousef@arm.com>
->>>
->>> bpftrace is a high-level tracing language for Linux enhanced Berkeley
->>> Packet Filter (eBPF) available in recent Linux kernels (4.x).
->>>
->>> Only tested on x86_64 and aarch64. The package doesn't support i386 and
->>> aarch32.
->>>
->>> Signed-off-by: Qais Yousef <qais.yousef@arm.com>
->>> Signed-off-by: Romain Naour <romain.naour@gmail.com>
->>> Cc: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
->>> ---
->>> v2: patch to build bundled libraries statically
->>>     Add glibc dependency
->>>     Rework to select bcc, libbpf and llvm RTII dependencies.
->>>     Add reverse dependencies
->>>     Add BR2_PACKAGE_BPFTRACE_ARCH_SUPPORTS
->>>     Bump the version to the latest (upcoming 0.12)
->>>       due to many build issues (and patch to backport) with
->>>       the latest release.
->>>     Add binutils optional dependency to provide libbfd and libopcodes.
->>>     Disable manpages.
->>> ---
->>
->> I don't think we need the dependency on libbpf? BCC provides it and we depend
->> on it.
-> 
-> The libbpf provided by BCC is named libbcc_bpf.so but bpftrace really expect
-> libbpf.so
-> 
-> I added libbpf package since distribution packages use it.
-> https://archlinux.org/packages/community/x86_64/bpftrace/
-> https://src.fedoraproject.org/rpms/bpftrace/blob/master/f/bpftrace.spec#_27
-> 
-> But bpftrace try to find bcc_bpf only for static linking.
-> It's not clear what's the libbpf implementation the buildsystem is trying to
-> use. Why it is not using the same bpf library for both static ans shared linking ?
-> 
-> I think it's better use use the library from upstream (libbpf) rather than a
-> library bundled in another software (bcc_libbpf).
+- Fix CVE-2019-14318: Crypto++ 8.3.0 and earlier contains a timing side
+  channel in ECDSA signature generation. This allows a local or remote
+  attacker, able to measure the duration of hundreds to thousands of
+  signing operations, to compute the private key used. The issue occurs
+  because scalar multiplication in ecp.cpp (prime field curves, small
+  leakage) and algebra.cpp (binary field curves, large leakage) is not
+  constant time and leaks the bit length of the scalar among other
+  information.
+- Update license hash due to the addition of ARM SHA1 and SHA256 asm
+  implementation from Cryptogams
+  https://github.com/weidai11/cryptopp/commit/1a63112faf5af60e0ebcc60654eef806e7f6f11a
+  https://github.com/weidai11/cryptopp/commit/4c9ca6b723b5ec5aab7eec720ad4d22598abe941
 
-I added a new comment about the libbpf dependency needed for BTF support.
-The buildsystem really want to use libbpf, so I kept bpftrace as it was.
+https://www.cryptopp.com/release830.html
 
-Best regards,
-Romain
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/cryptopp/cryptopp.hash | 6 +++---
+ package/cryptopp/cryptopp.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-> 
->>
->> Feel free to add my name to DEVELOPERS file too and your name too.
-> 
-> Indeed, the DEVELOPERS file update is missing :-/
-> 
->>
->> Beside the question on the addition of libbpf dependency, this looks good to
->> me.
->>
->> Thanks for the rework!
-> 
-> Thanks again for your help!
-> 
-> Best regards,
-> Romain
-> 
->>
->> Cheers
->>
->> --
->> Qais Yousef
->>
-> 
+diff --git a/package/cryptopp/cryptopp.hash b/package/cryptopp/cryptopp.hash
+index c0d442a97b..2774dc70ec 100644
+--- a/package/cryptopp/cryptopp.hash
++++ b/package/cryptopp/cryptopp.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://www.cryptopp.com/release820.html:
+-sha256  03f0e2242e11b9d19b28d0ec5a3fa8ed5cc7b27640e6bed365744f593e858058  cryptopp820.zip
++# Hash from: https://www.cryptopp.com/release830.html:
++sha512  ad5219a66c5924d330d3646d0ff996dd235006f6812074bc4eb9e8c662a4f000ba20449d377f24b133d19ce682f7b2a3b2eb4c08857ce0f5bb39743d1d425147  cryptopp830.zip
+ 
+ # Hash for license file:
+-sha256  f29d65ae3f0c8e327284f193524643ffb4d682fcca3e1740a5c6cbab0e720583  License.txt
++sha256  e668af8c73a38a66a1e8951d14ec24e7582fee5254dd6c3dae488a416d105d5f  License.txt
+diff --git a/package/cryptopp/cryptopp.mk b/package/cryptopp/cryptopp.mk
+index f1d19386ab..c1b8aaa44c 100644
+--- a/package/cryptopp/cryptopp.mk
++++ b/package/cryptopp/cryptopp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CRYPTOPP_VERSION = 8.2.0
++CRYPTOPP_VERSION = 8.3.0
+ CRYPTOPP_SOURCE = cryptopp$(subst .,,$(CRYPTOPP_VERSION)).zip
+ CRYPTOPP_SITE = https://cryptopp.com
+ CRYPTOPP_LICENSE = BSL-1.0, BSD-3-Clause (CRYPTOGAMS), Public domain (ChaCha SSE2 and AVX)
+-- 
+2.29.2
