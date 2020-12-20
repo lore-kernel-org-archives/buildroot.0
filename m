@@ -1,84 +1,64 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 20 Dec 2020 15:57:10 +0100
-Subject: [Buildroot] [PATCH v1] package/qt5webengine: add optional
- host-freetype/host-libjpeg dependency
-Message-ID: <20201220145710.30974-1-ps.report@gmx.net>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 20 Dec 2020 16:11:59 +0100
+Subject: [Buildroot] [PATCHv6 1/5] package/llvm: add BPF backend
+Message-ID: <20201220151203.2206747-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- add optional host-freetype dependency
+From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
 
-Fixes:
+bcc is a front-end tool for eBPF :
+https://github.com/iovisor/bcc/blob/master/README.md.
+eBPF is the most powerful Linux tracer, and bcc
+allows to write eBPF scripts in C and PYTHON3.
 
-  Command: .../host/bin/python2 .../build/qt5webengine-5.15.2/src/3rdparty/chromium/build/config/linux/pkg-config.py -p .../build/qt5webengine-5.15.2/host-bin/host-pkg-config freetype2
-  Returned 1.
-  stderr:
+BCC requires enabling LLVM backend BPF support.
 
-  Package freetype2 was not found in the pkg-config search path.
-  Perhaps you should add the directory containing `freetype2.pc'
-  to the PKG_CONFIG_PATH environment variable
-  Package 'freetype2', required by 'virtual:world', not found
-  Could not run pkg-config.
-
-  See //build/linux/BUILD.gn:24:3: whence it was called.
-    pkg_config("freetype_from_pkgconfig") {
-    ^--------------------------------------
-  See //build/config/freetype/BUILD.gn:10:24: which caused the file to be included.
-      public_configs = [ "//build/linux:freetype_from_pkgconfig" ]
-                         ^--------------------------------------
-  Project ERROR: GN run error!
-  make[4]: *** [Makefile:82: sub-gn_run-pro-make_first] Error 3
-  make[3]: *** [Makefile:79: sub-core-make_first] Error 2
-  make[2]: *** [Makefile:49: sub-src-make_first] Error 2
-
-- add optiobal hist-libjpeg dependency
-
-Fixes:
-
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/917539230
-
-  Command: .../host/bin/python2 .../build/qt5webengine-5.15.2/src/3rdparty/chromium/build/config/linux/pkg-config.py -p .../build/qt5webengine-5.15.2/host-bin/host-pkg-config libjpeg
-  Returned 1.
-  stderr:
-  Package libjpeg was not found in the pkg-config search path.
-  Perhaps you should add the directory containing `libjpeg.pc'
-  to the PKG_CONFIG_PATH environment variable
-  Package 'libjpeg', required by 'virtual:world', not found
-  Could not run pkg-config.
-  See //third_party/BUILD.gn:17:3: whence it was called.
-    pkg_config("system_libjpeg") {
-    ^-----------------------------
-  See //third_party/blink/renderer/platform/BUILD.gn:159:5: which caused the file to be included.
-      "//third_party:jpeg",
-      ^-------------------
-  Project ERROR: GN run error!
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Tested-by: Qais Yousef <qais.yousef@arm.com>
+Reviewed-by: Qais Yousef <qais.yousef@arm.com>
+Cc: Qais Yousef <qais.yousef@arm.com>
 ---
- package/qt5/qt5webengine/qt5webengine.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/llvm/Config.in | 6 ++++++
+ package/llvm/llvm.mk   | 5 +++++
+ 2 files changed, 11 insertions(+)
 
-diff --git a/package/qt5/qt5webengine/qt5webengine.mk b/package/qt5/qt5webengine/qt5webengine.mk
-index 64c9c96cc2..8ab50a0fbf 100644
---- a/package/qt5/qt5webengine/qt5webengine.mk
-+++ b/package/qt5/qt5webengine/qt5webengine.mk
-@@ -29,6 +29,14 @@ endif
+diff --git a/package/llvm/Config.in b/package/llvm/Config.in
+index 1d21d879da..6ec2ffcfe6 100644
+--- a/package/llvm/Config.in
++++ b/package/llvm/Config.in
+@@ -47,6 +47,12 @@ config BR2_PACKAGE_LLVM_RTTI
  
- QT5WEBENGINE_DEPENDENCIES += host-libpng host-libnss libnss
+ 	  https://llvm.org/docs/HowToSetUpLLVMStyleRTTI.html
  
-+ifeq ($(BR2_PACKAGE_QT5BASE_FONTCONFIG),y)
-+QT5WEBENGINE_DEPENDENCIES += host-freetype
++config BR2_PACKAGE_LLVM_BPF
++	bool "BPF backend"
++	help
++	  Build BPF target. Select this option if you are going
++	  to install bcc on the target.
++
+ endif
+ 
+ comment "llvm needs a toolchain w/ wchar, threads, C++, gcc >= 4.8, dynamic library"
+diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
+index 24d033d124..48a298191c 100644
+--- a/package/llvm/llvm.mk
++++ b/package/llvm/llvm.mk
+@@ -61,6 +61,11 @@ ifeq ($(BR2_PACKAGE_LLVM_AMDGPU),y)
+ LLVM_TARGETS_TO_BUILD += AMDGPU
+ endif
+ 
++# Build BPF backend
++ifeq ($(BR2_PACKAGE_LLVM_BPF),y)
++LLVM_TARGETS_TO_BUILD += BPF
 +endif
 +
-+ifeq ($(BR2_PACKAGE_QT5BASE_JPEG),y)
-+QT5WEBENGINE_DEPENDENCIES += host-libjpeg
-+endif
-+
- QT5WEBENGINE_CONF_OPTS += WEBENGINE_CONFIG+=use_system_ffmpeg
+ # Use native llvm-tblgen from host-llvm (needed for cross-compilation)
+ LLVM_CONF_OPTS += -DLLVM_TABLEGEN=$(HOST_DIR)/bin/llvm-tblgen
  
- ifeq ($(BR2_PACKAGE_QT5WEBENGINE_PROPRIETARY_CODECS),y)
 -- 
-2.29.2
+2.25.4
