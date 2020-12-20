@@ -1,71 +1,44 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 20 Dec 2020 10:17:56 +0100
-Subject: [Buildroot] [PATCHv5 2/5] package/bcc: new package
-In-Reply-To: <20201220014439.fetlfhngmdh5zy3o@e107158-lin.cambridge.arm.com>
-References: <20201206173537.1397691-1-romain.naour@gmail.com>
- <20201206173537.1397691-2-romain.naour@gmail.com>
- <20201220014439.fetlfhngmdh5zy3o@e107158-lin.cambridge.arm.com>
-Message-ID: <bd8588fc-c0b1-9298-df73-4062024c361c@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 20 Dec 2020 09:54:44 +0000
+Subject: [Buildroot] [Bug 13396] Mirai Virus ?
+In-Reply-To: <bug-13396-163@https.bugs.busybox.net/>
+References: <bug-13396-163@https.bugs.busybox.net/>
+Message-ID: <bug-13396-163-GUM8oIgFVN@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Qais,
+https://bugs.busybox.net/show_bug.cgi?id=13396
 
-Le 20/12/2020 ? 02:44, Qais Yousef a ?crit?:
-> Hi Romain
-> 
-> On 12/06/20 18:35, Romain Naour wrote:
->> From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
->>
->> bcc is a front-end tool for eBPF :
->> https://github.com/iovisor/bcc/blob/master/README.md.
->> eBPF is the most powerful Linux tracer, and bcc
->> allows to write eBPF scripts in C and PYTHON3.
->>
->> bcc can help to troubleshoot issues quickly on
->> embedded systems (as long as Linux kernel
->> version >= 4.1).
->>
->> bcc can also make it easy to create observabilty tools,
->> SDN configuration, ddos mitigation, intrusion detection
->> and secure containers. More information is available at:
->> https://ebpf.io/
->>
->> BCC can be tested on the target :
->> $ mount -t debugfs none /sys/kernel/debug
->> $ cd /usr/share/bcc/tools
->> $ ./execsnoop
->>
->> Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
->> Signed-off-by: Romain Naour <romain.naour@gmail.com>
->> Cc: Qais Yousef <qais.yousef@arm.com>
->> ---
-> 
-> This only missed adding my patch to fix up python installation path (attached).
+Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
-Sorry I missed it.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |uclibc-cvs at uclibc.org,
+                   |                            |yann.morin.1998 at free.fr
+            Product|buildroot                   |uClibc
+          Component|Other                       |Other
+           Assignee|unassigned at buildroot.uclibc |unassigned at uclibc.org
+                   |.org                        |
+         Resolution|---                         |INVALID
+             Status|NEW                         |RESOLVED
 
-> 
-> With that patch added
+--- Comment #2 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+First, uClibc has had no activity since 2015. It's dead and has been replaced
+with uClibc-ng: https://uclibc-ng.org/. As such, any bug should probably
+reported there now.
 
-Added for the next submission.
+Second, 2015 was before the disclosure of Mirai, and the ldconfig code had
+anyway not been touched since 2011.
 
-> 
-> Tested-by: Qais Yousef <qais.yousef@arm.com>
-> Reviewed-by: Qais Yousef <qais.yousef@arm.com>
+Third, you are referencing a toolchain that was built in April 2009, more than
+11 years ago now, so at least seven years before Mirai was discovered. I would
+wager that this definitely predates Mirai.
 
-Thanks for your tests and review!
+I would believe that this is a false positive.
 
-Best regards,
-Romain
-
-
-> 
-> Thanks
-> 
-> --
-> Qais Yousef
-> 
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
