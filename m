@@ -1,124 +1,40 @@
-From: Chris Packham <judge.packham@gmail.com>
-Date: Sun, 20 Dec 2020 23:34:45 +1300
-Subject: [Buildroot] Extracting DDR3 training code from bootable
- (Marvell Armada 370)
-In-Reply-To: <e15851e4-569d-213a-13f5-e53d8ea36863@holosynth.com>
-References: <e15851e4-569d-213a-13f5-e53d8ea36863@holosynth.com>
-Message-ID: <CAFOYHZAnHVAEsrss5KRuZJB9LWSKxvd85qYLrcpNowMqwYs4VQ@mail.gmail.com>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+Date: Sun, 20 Dec 2020 13:40:32 +0100
+Subject: [Buildroot] [PATCH] package/ttyd: bump to version 1.6.2
+Message-ID: <20201220124032.489120-1-b.bilas@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 20 Dec 2020, 4:01 AM Trond Melen, <trond.melen@holosynth.com> wrote:
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+---
+ package/ttyd/ttyd.hash | 2 +-
+ package/ttyd/ttyd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> Dear All,
->
-> I'm trying to build U-Boot for Netgear ReadyNAS RN102
-> (https://wikidevi.wi-cat.ru/Netgear_ReadyNAS_RN102) which hosts a
-> Marvell Armada 370 SoC (88F6710). I believe what I need to do is
-> something like this:
->
-> dd if=backup.mtd0 of=u-boot-spl.bin bs=1 skip=X count=Y
->
-> Right? Is there sufficient information below to make a qualified guess
-> about the values X and Y?
->
-
-The image format is available in the Marvell datasheets if you can get
-access to them. You could also figure it out from the kwbimage.h in the
-u-boot source. Note there are different versions of the header and I'm not
-sure what the armada-370 uses
-
-https://gitlab.denx.de/u-boot/u-boot/-/blob/master/tools/kwbimage.h
-
-
-> Regards,
-> Trond Melen
->
->
-> DDR3 training code for this CPU is not included in the U-Boot source
-> tree, so, as expected, 'make' in '~/buildroot-2020.11' fails:
-> [...]
->    MKIMAGE u-boot.kwb
-> Didn't find the file 'spl/u-boot-spl.bin' in
-> '/home/tme/buildroot-2020.11/output/build/uboot-2020.10' which is
-> mandatory to generate the image
-> This file generally contains the DDR3 training code, and should be
-> extracted from an existing bootable
-> image for your board. See 'kwbimage -x' to extract it from an existing
-> image.
->
-
-This is relevant for you. Kwbimage is built with u-boot and can be used to
-do what you were planning on doing with dd.
-
-[...]
-> Could not create image
-> make[2]: *** [Makefile:1440: u-boot.kwb] Error 1
-> make[2]: *** Deleting file 'u-boot.kwb'
-> make[2]: *** Waiting for unfinished jobs....
-> [...]
->
-> On the box I did:
-> ================
-> tme at debian:~$ cat /proc/mtd
-> dev:    size   erasesize  name
-> mtd0: 00180000 00020000 "u-boot"
-> mtd1: 00020000 00020000 "u-boot-env"
-> mtd2: 00600000 00020000 "uImage"
-> mtd3: 00400000 00020000 "minirootfs"
-> mtd4: 07400000 00020000 "ubifs"
->
-> tme at debian:~$ sudo nanddump --noecc --omitoob -f backup.mtd0 /dev/mtd0
-> Block size 131072, page size 2048, OOB size 64
-> Dumping data starting at 0x00000000 and ending at 0x00180000...
->
-> tme at debian:~$ binwalk backup.mtd0
-> DECIMAL       HEXADECIMAL     DESCRIPTION
->
-> --------------------------------------------------------------------------------
-> 600340        0x92914         device tree image (dtb)
-> 608589        0x9494D         Certificate in DER format (x509 v3),
-> header length: 4, sequence length: 1284
-> 608705        0x949C1         Certificate in DER format (x509 v3),
-> header length: 4, sequence length: 1288
-> 662640        0xA1C70         CRC32 polynomial table, little endian
-> 667340        0xA2ECC         CRC32 polynomial table, little endian
-> 671327        0xA3E5F         LZO compressed data
-> 868352        0xD4000         device tree image (dtb)
->
-> me at debian:~$ hexdump backup.mtd0 | head
-> 0000000 008b 0000 5f18 000c 0101 4000 4000 0001
-> 0000010 0000 0000 0000 0000 0200 0001 0000 e001
-> 0000020 0102 3518 0002 0000 005b 0000 0000 0000
-> 0000030 5fff e92d 001c fa00 0000 e3a0 9fff e8bd
-> 0000040 1ffe e92d 0f36 ee07 1ffe e8bd ff1e e12f
-> 0000050 1ffe e92d 0fba ee07 0f3e ee07 0f9a ee07
-> 0000060 1ffe e8bd ff1e e12f 1ffe e92d f05f f57f
-> 0000070 0f3e ee07 f04f f57f 1ffe e8bd ff1e e12f
-> 0000080 1f10 ee11 1a02 e3c1 1000 e181 1f10 ee01
-> 0000090 f04f f57f ff1e e12f 1000 e10f 1c01 e3c1
->
-> tme at debian:~$ hexdump backup.mtd0 | tail
-> 00d75e0 6c6c 702c 6963 2d65 6f70 7472 6d00 7261
-> 00d75f0 6576 6c6c 702c 6963 2d65 616c 656e 6400
-> 00d7600 6665 7561 746c 732d 6174 6574 6c00 6e69
-> 00d7610 7875 632c 646f 0065 0a0a 0a0a 0a0a 0a0a
-> 00d7620 0a0a 0a0a 0a0a 0a0a 0a0a 0a0a 0a0a 0a0a
-> *
-> 00d9f10 0a0a 0a0a 4783 d19c ffff ffff ffff ffff
-> 00d9f20 ffff ffff ffff ffff ffff ffff ffff ffff
-> *
-> 0180000
-> ================
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201220/b5bbf6c2/attachment.html>
+diff --git a/package/ttyd/ttyd.hash b/package/ttyd/ttyd.hash
+index 8810282618..8448c978a4 100644
+--- a/package/ttyd/ttyd.hash
++++ b/package/ttyd/ttyd.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  d72dcca3dec00cda87b80a0a25ae4fee2f8b9098c1cdb558508dcb14fbb6fafc  ttyd-1.6.1.tar.gz
++sha256  fd3256099e1cc5c470220cbfbb3ab2c7fa1f92232c503f583556a8965aa83bac  ttyd-1.6.2.tar.gz
+ sha256  711762f081c180ade3d09d7b0b7537eaf35eca8d1671e47bc66eaa39376edb12  LICENSE
+diff --git a/package/ttyd/ttyd.mk b/package/ttyd/ttyd.mk
+index 91b650c49e..9c456d16cd 100644
+--- a/package/ttyd/ttyd.mk
++++ b/package/ttyd/ttyd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TTYD_VERSION = 1.6.1
++TTYD_VERSION = 1.6.2
+ TTYD_SITE = $(call github,tsl0922,ttyd,$(TTYD_VERSION))
+ TTYD_LICENSE = MIT
+ TTYD_LICENSE_FILES = LICENSE
+-- 
+2.29.2
