@@ -1,31 +1,96 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 21 Dec 2020 10:30:57 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/rtl8188eu: Bump to 60cb0b5
- (v5.2.2.4 branch HEAD)
-In-Reply-To: <20201210212653.12879-1-petr.vorel@gmail.com> (Petr Vorel's
- message of "Thu, 10 Dec 2020 22:26:53 +0100")
-References: <20201210212653.12879-1-petr.vorel@gmail.com>
-Message-ID: <87v9cvqze6.fsf@dell.be.48ers.dk>
+Date: Mon, 21 Dec 2020 10:28:36 +0100
+Subject: [Buildroot] [git commit] package/perl-math-int64: new package
+Message-ID: <20201221091743.DCC9B8812E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Petr" == Petr Vorel <petr.vorel@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=bf07c3c3d690b26080be66247d10aa01dbeed142
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > This allows to build against newer kernels (up to 5.10).
- > Added support for new HW (Edimax EW-7811Un V2, RTL8188FU, MERCUSYS
- > MW150US v2, various RTL8188CE)
+Signed-off-by: Joeri Barbarien <joeri.barbarien@nokia.com>
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ DEVELOPERS                                   |  1 +
+ package/Config.in                            |  1 +
+ package/perl-math-int64/Config.in            | 10 ++++++++++
+ package/perl-math-int64/perl-math-int64.hash |  6 ++++++
+ package/perl-math-int64/perl-math-int64.mk   | 14 ++++++++++++++
+ 5 files changed, 32 insertions(+)
 
- > Tested on kernel v5.9.
-
- > Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
- > ---
- > Changes v1->v2:
- > * fixed git version (previous was head of master)
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/DEVELOPERS b/DEVELOPERS
+index ad96706627..d0b4cd7531 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2515,6 +2515,7 @@ F:	package/perl-devel-size/
+ F:	package/perl-i18n/
+ F:	package/perl-locale-maketext-lexicon/
+ F:	package/perl-lwp-protocol-https/
++F:	package/perl-math-int64/
+ F:	package/perl-math-prime-util/
+ F:	package/perl-mime-base64-urlsafe/
+ F:	package/perl-mojolicious-plugin-authentication/
+diff --git a/package/Config.in b/package/Config.in
+index ae4a41115c..c3677dd15e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -783,6 +783,7 @@ menu "Perl libraries/modules"
+ 	source "package/perl-lwp-protocol-https/Config.in"
+ 	source "package/perl-mail-dkim/Config.in"
+ 	source "package/perl-mailtools/Config.in"
++	source "package/perl-math-int64/Config.in"
+ 	source "package/perl-math-prime-util/Config.in"
+ 	source "package/perl-mime-base64-urlsafe/Config.in"
+ 	source "package/perl-mime-tools/Config.in"
+diff --git a/package/perl-math-int64/Config.in b/package/perl-math-int64/Config.in
+new file mode 100644
+index 0000000000..8fbea44af3
+--- /dev/null
++++ b/package/perl-math-int64/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_PERL_MATH_INT64
++	bool "perl-math-int64"
++	depends on !BR2_STATIC_LIBS
++	help
++	  Manipulate 64 bits integers in Perl.
++
++	  http://metacpan.org/release/Math-Int64
++
++comment "perl-math-int64 needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
+diff --git a/package/perl-math-int64/perl-math-int64.hash b/package/perl-math-int64/perl-math-int64.hash
+new file mode 100644
+index 0000000000..4f2374b107
+--- /dev/null
++++ b/package/perl-math-int64/perl-math-int64.hash
+@@ -0,0 +1,6 @@
++# retrieved by scancpan from http://cpan.metacpan.org/
++md5  1ad0ce8b5e903dfe9f7ffbabd8a43014  Math-Int64-0.54.tar.gz
++sha256  dcfc51e698437ea6b9cefe0276215c56cdb6a7f85e3e24a2b6b4189f1960d351  Math-Int64-0.54.tar.gz
++
++# computed by scancpan
++sha256  59feedfdc4f99a746c54e06ac46c4627fb1e29be3bc71756184f92333600f72b  COPYING
+diff --git a/package/perl-math-int64/perl-math-int64.mk b/package/perl-math-int64/perl-math-int64.mk
+new file mode 100644
+index 0000000000..749ff60c97
+--- /dev/null
++++ b/package/perl-math-int64/perl-math-int64.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# perl-math-int64
++#
++################################################################################
++
++PERL_MATH_INT64_VERSION = 0.54
++PERL_MATH_INT64_SOURCE = Math-Int64-$(PERL_MATH_INT64_VERSION).tar.gz
++PERL_MATH_INT64_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SA/SALVA
++PERL_MATH_INT64_LICENSE = Artistic or GPL-1.0+
++PERL_MATH_INT64_LICENSE_FILES = COPYING
++PERL_MATH_INT64_DISTNAME = Math-Int64
++
++$(eval $(perl-package))
