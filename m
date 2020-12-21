@@ -1,27 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 21 Dec 2020 14:56:50 +0100
-Subject: [Buildroot] [PATCH 2/2] package/suricata: bump to version 6.0.1
-In-Reply-To: <20201213170420.992917-2-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 13 Dec 2020 18:04:20 +0100")
-References: <20201213170420.992917-1-fontaine.fabrice@gmail.com>
- <20201213170420.992917-2-fontaine.fabrice@gmail.com>
-Message-ID: <87lfdrnty5.fsf@dell.be.48ers.dk>
+Date: Mon, 21 Dec 2020 14:44:35 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/libglib2: correct
+ upstream status for patch 0001
+Message-ID: <20201221134010.920C6880C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=0b4493fe9ee7d595e8465595a3d1068b024111ad
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
- > These releases are bug fix releases, fixing numerous important issues.
- > The 6.0.1 release also improves the experimental HTTP/2 support.
+Patch '0001-fix-compile-time-atomic-detection.patch' claims to be Merged but
+this is not true. The linked issue is closed with 'Needs information', and
+the code itself is effectively not merged.
 
- > https://suricata-ids.org/2020/12/04/suricata-6-0-1-5-0-5-and-4-1-10-released
+Clarify the 'Upstream-status' line to make this more clear.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 43021dfb77b1a841305f625d923688316dc53d4a)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libglib2/0001-fix-compile-time-atomic-detection.patch | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Committed to 2020.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libglib2/0001-fix-compile-time-atomic-detection.patch b/package/libglib2/0001-fix-compile-time-atomic-detection.patch
+index 9d2381bb35..d84a1ab460 100644
+--- a/package/libglib2/0001-fix-compile-time-atomic-detection.patch
++++ b/package/libglib2/0001-fix-compile-time-atomic-detection.patch
+@@ -5,7 +5,7 @@ Subject: [PATCH] Fix compile time atomic detection
+ 
+ Improved compile-time detection of atomic support in the compiler.
+ 
+-Upstream-Status: Merged
++Upstream-Status: 'Needs information'
+ See : https://gitlab.gnome.org/GNOME/glib/issues/1063
+ 
+ Signed-off-by: Brendan Heading <brendanheading@gmail.com>
