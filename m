@@ -1,92 +1,96 @@
 From: Marcin Niestroj <m.niestroj@grinn-global.com>
-Date: Mon, 21 Dec 2020 19:28:00 +0100
-Subject: [Buildroot] [PATCH] package/python-bleak: new package
-Message-ID: <20201221182800.66205-1-m.niestroj@grinn-global.com>
+Date: Mon, 21 Dec 2020 19:28:58 +0100
+Subject: [Buildroot] [PATCH] package/connman: improve SysV init script
+Message-ID: <20201221182858.66326-1-m.niestroj@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Use a more generic template for SysV init script, similar to packages
+like syslog-ng. This includes adding support for both reload and
+restart. Add support for sourcing /etc/default/connmand file, so that
+new commandline arguments can be added more easily.
+
 Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 ---
- DEVELOPERS                             |  1 +
- package/Config.in                      |  1 +
- package/python-bleak/Config.in         |  7 +++++++
- package/python-bleak/python-bleak.hash |  5 +++++
- package/python-bleak/python-bleak.mk   | 14 ++++++++++++++
- 5 files changed, 28 insertions(+)
- create mode 100644 package/python-bleak/Config.in
- create mode 100644 package/python-bleak/python-bleak.hash
- create mode 100644 package/python-bleak/python-bleak.mk
+ package/connman/S45connman | 64 ++++++++++++++++++++++++++++----------
+ 1 file changed, 47 insertions(+), 17 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index d0b4cd7531..be12f60b97 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1595,6 +1595,7 @@ F:	package/luaossl/
- F:	package/murata-cyw-fw/
- F:	package/netdata/
- F:	package/python-ansicolors/
-+F:	package/python-bleak/
- F:	package/python-iniconfig/
- F:	package/python-intelhex/
- F:	package/python-packaging/
-diff --git a/package/Config.in b/package/Config.in
-index c3677dd15e..c6eb53d23d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -899,6 +899,7 @@ menu "External python modules"
- 	source "package/python-bcrypt/Config.in"
- 	source "package/python-beautifulsoup4/Config.in"
- 	source "package/python-bitstring/Config.in"
-+	source "package/python-bleak/Config.in"
- 	source "package/python-bluezero/Config.in"
- 	source "package/python-boto3/Config.in"
- 	source "package/python-botocore/Config.in"
-diff --git a/package/python-bleak/Config.in b/package/python-bleak/Config.in
-new file mode 100644
-index 0000000000..3266932883
---- /dev/null
-+++ b/package/python-bleak/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_BLEAK
-+	bool "python-bleak"
-+	select BR2_PACKAGE_PYTHON_TXDBUS # runtime
-+	help
-+	  Bluetooth Low Energy platform Agnostic Klient.
+diff --git a/package/connman/S45connman b/package/connman/S45connman
+index d3d4bd5df4..c8e913d3a1 100644
+--- a/package/connman/S45connman
++++ b/package/connman/S45connman
+@@ -1,22 +1,52 @@
+ #!/bin/sh
+ 
++DAEMON="connmand"
++PIDFILE="/var/run/$DAEMON.pid"
 +
-+	  https://github.com/hbldh/bleak
-diff --git a/package/python-bleak/python-bleak.hash b/package/python-bleak/python-bleak.hash
-new file mode 100644
-index 0000000000..9506822c1b
---- /dev/null
-+++ b/package/python-bleak/python-bleak.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/bleak/json
-+md5  e891b33804b69f0247eb770ca27fa0d5  bleak-0.10.0.tar.gz
-+sha256  5c3a873965f2910865895e572e7a4f10533d6e150e6ba17936397426bf8d1eee  bleak-0.10.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256  c4029a2b63b3824ab68be841f414addbdde20cb79cdbe272fa80c0b2abe65374  LICENSE
-diff --git a/package/python-bleak/python-bleak.mk b/package/python-bleak/python-bleak.mk
-new file mode 100644
-index 0000000000..040d64ed41
---- /dev/null
-+++ b/package/python-bleak/python-bleak.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-bleak
-+#
-+################################################################################
++CONNMAND_ARGS="-n"
 +
-+PYTHON_BLEAK_VERSION = 0.10.0
-+PYTHON_BLEAK_SOURCE = bleak-$(PYTHON_BLEAK_VERSION).tar.gz
-+PYTHON_BLEAK_SITE = https://files.pythonhosted.org/packages/80/37/c8c88709e4f1ca4636bf11c96d1ec046d7426cd02670ae80a3542280558b
-+PYTHON_BLEAK_SETUP_TYPE = setuptools
-+PYTHON_BLEAK_LICENSE = MIT
-+PYTHON_BLEAK_LICENSE_FILES = LICENSE
++# shellcheck source=/dev/null
++[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
 +
-+$(eval $(python-package))
++start() {
++	printf 'Starting %s: ' "$DAEMON"
++	# shellcheck disable=SC2086 # we need the word splitting
++	start-stop-daemon -S -q -m -b -p "$PIDFILE" -x "/usr/sbin/$DAEMON" \
++		-- $CONNMAND_ARGS
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++stop() {
++	printf 'Stopping %s: ' "$DAEMON"
++	start-stop-daemon -K -q -p "$PIDFILE"
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++restart() {
++	stop
++	sleep 1
++	start
++}
++
+ case "$1" in
+-	start)
+-		printf "Starting connman ... "
+-		start-stop-daemon -S -q -m -b -p /var/run/connmand.pid --exec /usr/sbin/connmand -- -n
+-		echo "done."
+-		;;
+-	stop)
+-		printf "Stopping connman ..."
+-		start-stop-daemon -K -q -p /var/run/connmand.pid
+-		echo "done."
+-		;;
+-	restart)
+-		$0 stop
+-		sleep 1
+-		$0 start
+-		;;
++	start|stop|restart)
++		"$1";;
++	reload)
++		# Restart, since there is no true "reload" feature.
++		restart;;
+ 	*)
+-		echo "usage: $0 {start|stop|restart}"
+-		;;
++		echo "Usage: $0 {start|stop|restart|reload}"
++		exit 1
+ esac
 -- 
 2.29.2
