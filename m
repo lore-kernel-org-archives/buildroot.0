@@ -1,34 +1,35 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 21 Dec 2020 14:42:28 +0100
-Subject: [Buildroot] [PATCH] package/python-lxml: security bump to
- version 4.6.2
-In-Reply-To: <20201213230152.5819-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Mon, 14 Dec 2020 00:01:52 +0100")
-References: <20201213230152.5819-1-peter@korsgaard.com>
-Message-ID: <877dpbp96j.fsf@dell.be.48ers.dk>
+From: Qais Yousef <qais.yousef@arm.com>
+Date: Mon, 21 Dec 2020 13:43:52 +0000
+Subject: [Buildroot] [PATCHv6 3/5] package/libbpf: new package
+In-Reply-To: <20201220151203.2206747-3-romain.naour@gmail.com>
+References: <20201220151203.2206747-1-romain.naour@gmail.com>
+ <20201220151203.2206747-3-romain.naour@gmail.com>
+Message-ID: <20201221134352.qv3bunyym5pyvlar@e107158-lin>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+On 12/20/20 16:12, Romain Naour wrote:
+> A mirror of bpf-next linux tree bpf-next/tools/lib/bpf
+> directory plus its supporting header files. The version
+> of the package reflects the version of ABI.
+> 
+> Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Cc: Qais Yousef <qais.yousef@arm.com>
+> ---
+> I'm not sure if updating the bpf.h provided by the toolchain linux-headers
+> is the right things to do.
+> 
+> v6: Update DEVELOPERS file
 
- > Fixes the following security issues:
- > * 4.6.2: A vulnerability (CVE-2020-27783) was discovered in the HTML Cleaner
- >   by Yaniv Nizry, which allowed JavaScript to pass through.  The cleaner now
- >   removes more sneaky "style" content.
+LGTM.
 
- > * 4.6.1: A vulnerability was discovered in the HTML Cleaner by Yaniv Nizry,
- >   which allowed JavaScript to pass through.  The cleaner now removes more
- >   sneaky "style" content.
+Reviewed-by: Qais Yousef <qais.yousef@arm.com>
 
- > For more details, see the changes file:
- > https://github.com/lxml/lxml/blob/lxml-4.6.2/CHANGES.txt
+Thanks
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed to 2020.02.x, 2020.08.x and 2020.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+--
+Qais Yousef
