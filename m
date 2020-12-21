@@ -1,76 +1,89 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 21 Dec 2020 15:16:00 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x]
- boot/arm-trusted-firmware: Forward stack protection configuration
-Message-ID: <20201221140342.2CB9687EB2@busybox.osuosl.org>
+Date: Mon, 21 Dec 2020 15:17:15 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/kismet: fix
+ static build with uclibc
+Message-ID: <20201221140342.3C0C488365@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=52df7280b2c4c566259f84e8c7da373ba72be1f5
+commit: https://git.buildroot.net/buildroot/commit/?id=692c97e92842460066d6a3467cc35d1d8ba08947
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-TF-A supports stack smashing protection (-fstack-protector-*).
-However, that feature is currently silently disabled because
-ENABLE_STACK_PROTECTOR is not set during build time.
+Fixes:
+ - http://autobuild.buildroot.org/results/b859eb3850c0beb23e18010dc2f07cd0f5c14440
 
-As documented in the TF-A user guide, the flag ENABLE_STACK_PROTECTOR
-is required to enable stack protection support. When enabled the symbols
-for the stack protector (e.g. __stack_chk_guard) are built.
-This needs to be done because TF-A does not link against an external
-library that provides that symbols (e.g. libc).
-
-So in case we see that BR2_SSP_* is enabled, let's enable the corresponding
-ENABLE_STACK_PROTECTOR build flag for TF-A as documented in the TF-A user guide.
-
-This patch also fixes a the following linker errors with older TF-A versions
-if BR2_SSP_* is enabled (i.e. -fstack-protector-* is used as compiler flag)
-and ENABLE_STACK_PROTECTOR is not set, which are caused by the missing
-stack protector symbols:
-
-  [...]
-  params_setup.c:(.text.params_early_setup+0xc): undefined reference to `__stack_chk_guard'
-  aarch64-none-linux-gnu-ld: params_setup.c:(.text.params_early_setup+0x14): undefined reference to `__stack_chk_guard'
-  aarch64-none-linux-gnu-ld: params_setup.c:(.text.params_early_setup+0x104): undefined reference to `__stack_chk_guard'
-  aarch64-none-linux-gnu-ld: params_setup.c:(.text.params_early_setup+0x118): undefined reference to `__stack_chk_fail'
-  aarch64-none-linux-gnu-ld: ./build/px30/release/bl31/pmu.o: in function `rockchip_soc_sys_pwr_dm_suspend':
-  pmu.c:(.text.rockchip_soc_sys_pwr_dm_suspend+0xc): undefined reference to `__stack_chk_guard'
-  [...]
-
-TF-A releases after Nov 2019, that include 7af195e29a4, will circumvent
-these issue by explicitliy and silently disabling the stack protector
-by appending '-fno-stack-protector' to the compiler flags in case
-ENABLE_STACK_PROTECTOR is not set.
-
-Tested on a Rockchip PX30 based system (TF-A v2.2 and upstream/master).
-
-Signed-off-by: Christoph M??llner <christoph.muellner@theobroma-systems.com>
-Reviewed-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 7b3fcbcdaa8cb6a99208399d1402c837685d7639)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+(cherry picked from commit a2dafc4180f456c2f84170567436d234b5b6e95f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/arm-trusted-firmware/arm-trusted-firmware.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ ...e.ac-don-t-override-LDFLAGS-with-CPPFLAGS.patch | 44 ++++++++++++++++++++++
+ package/kismet/kismet.mk                           |  2 +
+ 2 files changed, 46 insertions(+)
 
-diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-index a3553e36cf..0597cecf71 100644
---- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-+++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-@@ -100,6 +100,14 @@ ARM_TRUSTED_FIRMWARE_MAKE_OPTS += MV_DDR_PATH=$(MV_DDR_MARVELL_DIR)
- ARM_TRUSTED_FIRMWARE_DEPENDENCIES += mv-ddr-marvell
- endif
- 
-+ifeq ($(BR2_SSP_REGULAR),y)
-+ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ENABLE_STACK_PROTECTOR=default
-+else ifeq ($(BR2_SSP_STRONG),y)
-+ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ENABLE_STACK_PROTECTOR=strong
-+else ifeq ($(BR2_SSP_ALL),y)
-+ARM_TRUSTED_FIRMWARE_MAKE_OPTS += ENABLE_STACK_PROTECTOR=all
-+endif
+diff --git a/package/kismet/0001-configure.ac-don-t-override-LDFLAGS-with-CPPFLAGS.patch b/package/kismet/0001-configure.ac-don-t-override-LDFLAGS-with-CPPFLAGS.patch
+new file mode 100644
+index 0000000000..e2c28a2ebd
+--- /dev/null
++++ b/package/kismet/0001-configure.ac-don-t-override-LDFLAGS-with-CPPFLAGS.patch
+@@ -0,0 +1,44 @@
++From e70968bcbca86dd448d619c40cdeaae8b7dcee98 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 24 Nov 2020 23:01:55 +0100
++Subject: [PATCH] configure.ac: don't override LDFLAGS with CPPFLAGS
 +
- ARM_TRUSTED_FIRMWARE_MAKE_TARGETS = all
++Don't override LDFLAGS with CPPFLAGS to avoid a build failure when
++building statically with uclibc due to -static keyword being lost:
++
++/home/buildroot/autobuild/run/instance-3/output-1/host/bin/xtensa-buildroot-linux-uclibc-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -o kismet_cap_linux_wifi ../interface_control.c.o ../wifi_ht_channels.c.o linux_wireless_control.c.o linux_netlink_control.c.o linux_nexmon_control.c.o linux_wireless_rfkill.c.o capture_linux_wifi.c.o ../libkismetdatasource.a -L/home/buildroot/autobuild/run/instance-3/output-1/host/bin/../xtensa-buildroot-linux-uclibc/sysroot/usr/lib -lpcap -L/home/buildroot/autobuild/run/instance-3/output-1/host/bin/../xtensa-buildroot-linux-uclibc/sysroot/home/buildroot/autobuild/run/instance-3/output-1/host/xtensa-buildroot-linux-uclibc/sysroot/usr/lib/.libs -lnl-genl-3 -lnl-3   -L/home/buildroot/autobuild/run/instance-3/output-1/host/bin/../xtensa-buildroot-linux-uclibc/sysroot/usr/lib -lpthread -lnl-genl-3 -lnl-3 -lpthread   -lpthread -L/home/buildroot/autobuild/run/instance-3/output-1/host/bin/../xtensa-buildroot-linux-uclibc/sysroot/usr/
+ lib -lprotobuf-c  -lm
++/home/buildroot/autobuild/run/instance-3/output-1/host/lib/gcc/xtensa-buildroot-linux-uclibc/9.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: /home/buildroot/autobuild/run/instance-3/output-1/host/lib/gcc/xtensa-buildroot-linux-uclibc/9.3.0/libgcc.a(unwind-dw2-fde-dip.o): in function `_Unwind_Find_registered_FDE':
++/home/buildroot/autobuild/run/instance-3/output-1/build/host-gcc-final-9.3.0/build/xtensa-buildroot-linux-uclibc/libgcc/../../../libgcc/unwind-dw2-fde.c:1040: undefined reference to `dl_iterate_phdr'
++collect2: error: ld returned 1 exit status
++
++To fix this build failure, just drop OCPPFLAGS and OLDFLAGS which are
++not used anymore
++
++Fixes:
++ - http://autobuild.buildroot.org/results/b859eb3850c0beb23e18010dc2f07cd0f5c14440
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/kismetwireless/kismet/pull/326 (merged)]
++---
++ configure.ac | 5 -----
++ 1 file changed, 5 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index aab47fb0..4df37a29 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -619,11 +619,6 @@ else
++     AC_MSG_RESULT([no])
++ fi
++ 
++-OCPPFLAGS=$CPPFLAGS
++-CPPFLAGS="$CPPFLAGS"
++-OLDFLAGS=$LDFLAGS
++-LDFLAGS="$CPPFLAGS"
++-
++ # Do we need libm for math functions?
++ AC_MSG_CHECKING([for libm math function in std libs])
++ OCFL="$CFLAGS"
++-- 
++2.29.2
++
+diff --git a/package/kismet/kismet.mk b/package/kismet/kismet.mk
+index 54d014021f..0a4ae00f08 100644
+--- a/package/kismet/kismet.mk
++++ b/package/kismet/kismet.mk
+@@ -17,6 +17,8 @@ KISMET_DEPENDENCIES = \
+ 	zlib
+ KISMET_LICENSE = GPL-2.0+
+ KISMET_LICENSE_FILES = LICENSE
++# We're patching configure.ac
++KISMET_AUTORECONF = YES
+ KISMET_CONF_OPTS = --disable-debuglibs
  
- ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP),y)
+ KISMET_CXXFLAGS = $(TARGET_CXXFLAGS)
