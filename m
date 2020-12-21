@@ -1,61 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 21 Dec 2020 14:41:47 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/python-lxml:
- security bump to version 4.6.2
-Message-ID: <20201221132718.09809881A0@busybox.osuosl.org>
+Date: Mon, 21 Dec 2020 14:43:20 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/unbound: security
+ bump to version 1.13.0
+Message-ID: <20201221132718.1CC658831B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fb729aa9b01a0f2c453891ff0310506f6885af27
+commit: https://git.buildroot.net/buildroot/commit/?id=067d922b69f409ba6f8de4a1f69136ee6fc78ab7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-Fixes the following security issues:
+This version has fixes to connect for UDP sockets, slowing down
+potential ICMP side channel leakage. The fix can be controlled with the
+option udp-connect: yes, it is enabled by default.
 
-* 4.6.2: A vulnerability (CVE-2020-27783) was discovered in the HTML Cleaner
-  by Yaniv Nizry, which allowed JavaScript to pass through.  The cleaner now
-  removes more sneaky "style" content.
+Additionally CVE-2020-28935 is fixed, this solves a problem where the
+pidfile is altered by a symlink, and fails if a symlink is encountered.
+See https://nlnetlabs.nl/downloads/unbound/CVE-2020-28935.txt for more
+information.
 
-* 4.6.1: A vulnerability was discovered in the HTML Cleaner by Yaniv Nizry,
-  which allowed JavaScript to pass through.  The cleaner now removes more
-  sneaky "style" content.
+https://github.com/NLnetLabs/unbound/releases/tag/release-1.13.0
 
-For more details, see the changes file:
-https://github.com/lxml/lxml/blob/lxml-4.6.2/CHANGES.txt
-
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit ea41a5faab3fda4589956b24d4731292872934a5)
+(cherry picked from commit 4eb320112037445b8310f0fde1cde511ed05ecb3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-lxml/python-lxml.hash | 2 +-
- package/python-lxml/python-lxml.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/unbound/unbound.hash | 6 ++++--
+ package/unbound/unbound.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-lxml/python-lxml.hash b/package/python-lxml/python-lxml.hash
-index 240314e888..7918e08745 100644
---- a/package/python-lxml/python-lxml.hash
-+++ b/package/python-lxml/python-lxml.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  27ee0faf8077c7c1a589573b1450743011117f1aa1a91d5ae776bbc5ca6070f2  lxml-4.5.1.tar.gz
-+sha256  cd11c7e8d21af997ee8079037fff88f16fda188a9776eb4b81c7e4c9c0a7d7fc  lxml-4.6.2.tar.gz
- sha256  41d49dd406aa0e1548a6d5f21a30d6bf638b3cd96eb7289dd348d83ed2e40392  LICENSES.txt
- sha256  69edb445c1335a8312d4c09271847e9956d84f0d9f724d125340cc3fad767b2a  doc/licenses/BSD.txt
- sha256  0497ae8138811ef4466ede653bab7a59feb3d3c14f9ed50fc33a00aeb5bec32e  doc/licenses/elementtree.txt
-diff --git a/package/python-lxml/python-lxml.mk b/package/python-lxml/python-lxml.mk
-index 7e727a6753..a8874737e2 100644
---- a/package/python-lxml/python-lxml.mk
-+++ b/package/python-lxml/python-lxml.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/unbound/unbound.hash b/package/unbound/unbound.hash
+index c2c6ab7ff6..9ccea6eb88 100644
+--- a/package/unbound/unbound.hash
++++ b/package/unbound/unbound.hash
+@@ -1,3 +1,5 @@
++# From https://nlnetlabs.nl/downloads/unbound/unbound-1.13.0.tar.gz.sha256
++sha256  a954043a95b0326ca4037e50dace1f3a207a0a19e9a4a22f4c6718fc623db2a1  unbound-1.13.0.tar.gz
++
+ # Locally calculated
+-sha256 5b9253a97812f24419bf2e6b3ad28c69287261cf8c8fa79e3e9f6d3bf7ef5835  unbound-1.12.0.tar.gz
+-sha256 8eb9a16cbfb8703090bbfa3a2028fd46bb351509a2f90dc1001e51fbe6fd45db  LICENSE
++sha256  8eb9a16cbfb8703090bbfa3a2028fd46bb351509a2f90dc1001e51fbe6fd45db  LICENSE
+diff --git a/package/unbound/unbound.mk b/package/unbound/unbound.mk
+index d60180b6ca..8b7d1e8e9f 100644
+--- a/package/unbound/unbound.mk
++++ b/package/unbound/unbound.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_LXML_VERSION = 4.5.1
--PYTHON_LXML_SITE = https://files.pythonhosted.org/packages/03/a8/73d795778143be51d8b86750b371b3efcd7139987f71618ad9f4b8b65543
-+PYTHON_LXML_VERSION = 4.6.2
-+PYTHON_LXML_SITE = https://files.pythonhosted.org/packages/db/f7/43fecb94d66959c1e23aa53d6161231dca0e93ec500224cf31b3c4073e37
- PYTHON_LXML_SOURCE = lxml-$(PYTHON_LXML_VERSION).tar.gz
- 
- # Not including the GPL, because it is used only for the test scripts.
+-UNBOUND_VERSION = 1.12.0
++UNBOUND_VERSION = 1.13.0
+ UNBOUND_SITE = https://www.unbound.net/downloads
+ UNBOUND_DEPENDENCIES = host-pkgconf expat libevent openssl
+ UNBOUND_LICENSE = BSD-3-Clause
