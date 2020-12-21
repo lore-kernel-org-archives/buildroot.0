@@ -1,34 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 21 Dec 2020 17:25:44 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/uclibc-ng-test:
- add hashes
-Message-ID: <20201221224759.7FCF77FB95@busybox.osuosl.org>
+Date: Mon, 21 Dec 2020 17:28:02 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/go: bump to
+ version 1.15.6
+Message-ID: <20201221224759.8C9B87FB95@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5497772bc39dc577274a5fe4242aa9d9afc4304d
+commit: https://git.buildroot.net/buildroot/commit/?id=8cfa41773481928480279d7bf9f23d189246e679
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-Fixes:
-http://autobuild.buildroot.net/results/4bb/4bb46976665bea99ac62c86d3953ad025f7f0a96/
+go1.15.6 (released 2020/12/03) includes fixes to the compiler, linker, runtime,
+the go command, and the io package.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 4c921fdee6d52a31a6ffcc5737075028ce0ca179)
+Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 267dd8b4271c72796c66d602ceb9ae1bde6cdb2a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/uclibc-ng-test/uclibc-ng-test.hash | 3 +++
- 1 file changed, 3 insertions(+)
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/uclibc-ng-test/uclibc-ng-test.hash b/package/uclibc-ng-test/uclibc-ng-test.hash
-new file mode 100644
-index 0000000000..2a73237f06
---- /dev/null
-+++ b/package/uclibc-ng-test/uclibc-ng-test.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  1f22e4143413550d64cbde193de388e8884eb7398cd41d3835e5d8a06a488423  uclibc-ng-test-c64d6ac77f0e745c70e76024212c72e4bbe2091a.tar.gz
-+sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING.LIB
+diff --git a/package/go/go.hash b/package/go/go.hash
+index 79d6abe8df..de2cf74cbb 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,3 +1,3 @@
+ # From https://golang.org/dl/
+-sha256  c1076b90cf94b73ebed62a81d802cd84d43d02dea8c07abdc922c57a071c84f1  go1.15.5.src.tar.gz
++sha256  890bba73c5e2b19ffb1180e385ea225059eb008eb91b694875dd86ea48675817  go1.15.6.src.tar.gz
+ sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index d2ab9b81dd..d9f4905eb9 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GO_VERSION = 1.15.5
++GO_VERSION = 1.15.6
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
