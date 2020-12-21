@@ -1,49 +1,69 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 21 Dec 2020 12:24:14 +0100
-Subject: [Buildroot] [PATCH] package/rauc: security bump to version 1.5
-Message-ID: <20201221112415.29503-1-peter@korsgaard.com>
+From: Adam Wujek <dev_public@wujek.eu>
+Date: Mon, 21 Dec 2020 11:25:34 +0000
+Subject: [Buildroot] [PATCH 1/1] package/netsnmp: fix memory leak in IP-MIB
+ when running without IPv6
+Message-ID: <1608549912-29585-1-git-send-email-dev_public@wujek.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issue:
+In a Linux system without IPv6 support (or booted with "ipv6.disable=1")
+file /proc/net/snmp6 is not present. If such file is not present an allocated
+memory is not freed. Memory leak occurs even without snmp queries.
 
-- CVE-2020-25860: Time-of-Check-Time-of-Use Vulnerability in code that
-  checks and installs a firmware bundle.
-  For more details, see the advisory:
-  https://github.com/rauc/rauc/security/advisories/GHSA-cgf3-h62j-w9vv
+Problem seen at least since netsnmp 5.7.3 (probably even v5.6.1).
+Patch backported from netsnmp 5.9, where the problem does not appear any more.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Adam Wujek <dev_public@wujek.eu>
 ---
- package/rauc/rauc.hash | 4 ++--
- package/rauc/rauc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...-Linux-Fix-a-memory-leak-in-an-error-path.patch | 37 ++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+ create mode 100644 package/netsnmp/0006-IP-MIB-Linux-Fix-a-memory-leak-in-an-error-path.patch
 
-diff --git a/package/rauc/rauc.hash b/package/rauc/rauc.hash
-index d327122293..73c1add995 100644
---- a/package/rauc/rauc.hash
-+++ b/package/rauc/rauc.hash
-@@ -1,4 +1,4 @@
- # Locally calculated, after verifying against
--# https://github.com/rauc/rauc/releases/download/v1.4/rauc-1.4.tar.xz.asc
--sha256  85aabf214cd93a37f7ad0b3aaad89eb94facf0f3ebf6e2edca945acbca9b0967  rauc-1.4.tar.xz
-+# https://github.com/rauc/rauc/releases/download/v1.5/rauc-1.5.tar.xz.asc
-+sha256  5dfbc46e808240c5014d318cfe64f0431307c37aa79cb2b013caa12daaf96d9d  rauc-1.5.tar.xz
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
-index a6c7c01095..fd39f000a8 100644
---- a/package/rauc/rauc.mk
-+++ b/package/rauc/rauc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RAUC_VERSION = 1.4
-+RAUC_VERSION = 1.5
- RAUC_SITE = https://github.com/rauc/rauc/releases/download/v$(RAUC_VERSION)
- RAUC_SOURCE = rauc-$(RAUC_VERSION).tar.xz
- RAUC_LICENSE = LGPL-2.1
+diff --git a/package/netsnmp/0006-IP-MIB-Linux-Fix-a-memory-leak-in-an-error-path.patch b/package/netsnmp/0006-IP-MIB-Linux-Fix-a-memory-leak-in-an-error-path.patch
+new file mode 100644
+index 0000000..fb68e17
+--- /dev/null
++++ b/package/netsnmp/0006-IP-MIB-Linux-Fix-a-memory-leak-in-an-error-path.patch
+@@ -0,0 +1,37 @@
++From 7c073e3a1b736689135fd2ed44ede5b83790bd37 Mon Sep 17 00:00:00 2001
++From: Bart Van Assche <bvanassche@acm.org>
++Date: Mon, 26 Aug 2019 18:32:08 -0700
++Subject: IP-MIB, Linux: Fix a memory leak in an error path
++
++When a Linux system is booted with "ipv6.disable=1" in the kernel command
++line, the file "/proc/net/snmp6" is not created. Fix the memory leak in
++_systemstats_v6_load_systemstats() that is triggered with IPv6 disabled.
++
++See also https://sourceforge.net/p/net-snmp/bugs/2976/.
++
++Reported-by: Mark E Rusk <marker55@users.sourceforge.net>
++---
++ agent/mibgroup/ip-mib/data_access/systemstats_linux.c | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
++
++diff --git a/agent/mibgroup/ip-mib/data_access/systemstats_linux.c b/agent/mibgroup/ip-mib/data_access/systemstats_linux.c
++index e28ff93..f68d122 100644
++--- a/agent/mibgroup/ip-mib/data_access/systemstats_linux.c
+++++ b/agent/mibgroup/ip-mib/data_access/systemstats_linux.c
++@@ -560,10 +560,12 @@ _systemstats_v6_load_systemstats(netsnmp_container* container, u_int load_flags)
++      * try to open file. If we can't, that's ok - maybe the module hasn't
++      * been loaded yet.
++      */
++-    if (!(devin = fopen(filename, "r"))) {
+++    devin = fopen(filename, "r");
+++    if (!devin) {
++         DEBUGMSGTL(("access:systemstats",
++                 "Failed to load Systemstats Table (linux1), cannot open %s\n",
++                 filename));
+++        netsnmp_access_systemstats_entry_free(entry);
++         return 0;
++     }
++     
++-- 
++2.7.4
++
 -- 
-2.20.1
+2.7.4
