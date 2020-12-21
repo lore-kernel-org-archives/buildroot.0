@@ -1,101 +1,111 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 21 Dec 2020 10:53:59 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] configs/beaglebone_qt5:
- switch to using KMS instead of wayland+weston
-Message-ID: <20201221124821.7E66681531@busybox.osuosl.org>
+Date: Mon, 21 Dec 2020 11:05:25 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/qt5base: fix
+ build with TI SGX GL stack
+Message-ID: <20201221124821.94C4A81531@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f2d88ddba1d06bc39d50dd6c9c598e70ac06c23e
+commit: https://git.buildroot.net/buildroot/commit/?id=188503ad6e5b2420caa65cdc0c8b0ef86e896c2f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-weston does not work on the ti-sgx SDK, so switch to using KMS directly,
-and drop the wayland-related config options.
+qt5base FTBFS with TI SGX GL stack because it defines a type that is
+incompatible with that expected by Qt.
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-[yann.morin.1998 at free.fr: split into its own patch]
+Fix that by adapting a mix of upstream bug reports, upstream tentative
+patch, and various comments on various Qt forums, none of which were
+satisfying for various reasons explained in each resource:
+
+  - https://bugreports.qt.io/browse/QTBUG-72567
+  - https://codereview.qt-project.org/c/qt/qtbase/+/248270
+  - https://forum.qt.io/topic/88588/qtbase-compilation-error-with-device-linux-rasp-pi3-g-qeglfskmsgbmwindow-cpp/8
+  - https://forum.qt.io/topic/91596/raspberry-pi-3-compiling-qt-5-11-0-problem/6
+  - https://patchwork.ozlabs.org/project/buildroot/patch/20200702201125.3639873-1-aduskett at gmail.com/#2579598
+
+... which, mixed together with my little understanding of Qt, GL, and
+C++, gave a relatively simple patch that overcomes the build failure on
+TI's SGX, while at the same time keeping buildability and functionality
+on other platforms.
+
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Adam Duskett <aduskett@gmail.com>
+Cc: Markus <zehnder@live.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 8efc5dce98f9795d97b7a3452f9be4a774032379)
+(cherry picked from commit cf7f3112f6a4d83a3802cb5bc1abf1a048541773)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/beaglebone/readme.txt                               | 12 +++++++++++-
- .../beaglebone/rootfs_overlay/etc/qt5/eglfs_kms_cfg.json  | 15 +++++++++++++++
- configs/beaglebone_qt5_defconfig                          |  5 +----
- 3 files changed, 27 insertions(+), 5 deletions(-)
+ ...on-for-obscure-EGLNativeDisplayType-types.patch | 63 ++++++++++++++++++++++
+ 1 file changed, 63 insertions(+)
 
-diff --git a/board/beaglebone/readme.txt b/board/beaglebone/readme.txt
-index e6647dad2a..231e977a89 100644
---- a/board/beaglebone/readme.txt
-+++ b/board/beaglebone/readme.txt
-@@ -7,7 +7,7 @@ Description
- This configuration will build a complete image for the beaglebone and
- the TI AM335x-EVM, the board type is identified by the on-board
- EEPROM. The configuration is based on the
--ti-processor-sdk-02.00.00.00. Device tree blobs for beaglebone
-+ti-processor-sdk-06.01.00.08. Device tree blobs for beaglebone
- variants and the evm-sk are built too.
- 
- For Qt5 support support use the beaglebone_qt5_defconfig.
-@@ -43,10 +43,20 @@ output/images/
- To copy the image file to the sdcard use dd:
- $ dd if=output/images/sdcard.img of=/dev/XXX
- 
-+
-+Running Qt5 hellowindow opengl demo:
-+===================
-+# export QT_QPA_EGLFS_KMS_CONFIG=/etc/qt5/eglfs_kms_cfg.json
-+# export QT_QPA_PLATFORM=eglfs
-+# export QT_QPA_EGLFS_INTEGRATION=none
-+# /usr/lib/qt/examples/opengl/hellowindow/hellowindow
-+
-+
- Tested hardware
- ===============
- am335x-evm (rev. 1.1A)
- beagleboneblack (rev. A5A)
- beaglebone (rev. A6)
- 
-+2020, Adam Duskett <aduskett@gmail.com>
- 2016, Lothar Felten <lothar.felten@gmail.com>
-diff --git a/board/beaglebone/rootfs_overlay/etc/qt5/eglfs_kms_cfg.json b/board/beaglebone/rootfs_overlay/etc/qt5/eglfs_kms_cfg.json
+diff --git a/package/qt5/qt5base/0005-eglfs-avoid-breaking-compilation-for-obscure-EGLNativeDisplayType-types.patch b/package/qt5/qt5base/0005-eglfs-avoid-breaking-compilation-for-obscure-EGLNativeDisplayType-types.patch
 new file mode 100644
-index 0000000000..76f5e7d379
+index 0000000000..3621cdb2d3
 --- /dev/null
-+++ b/board/beaglebone/rootfs_overlay/etc/qt5/eglfs_kms_cfg.json
-@@ -0,0 +1,15 @@
-+{
-+  "device": "/dev/dri/card0",
-+  "hwcursor": false,
-+  "pbuffers": true,
-+  "outputs": [
-+    {
-+      "name": "VGA1",
-+      "mode": "off"
-+    },
-+    {
-+      "name": "HDMI1",
-+      "mode": "1024x768"
-+    }
-+  ]
-+}
-diff --git a/configs/beaglebone_qt5_defconfig b/configs/beaglebone_qt5_defconfig
-index 5f7b911e5d..6e0371a7d3 100644
---- a/configs/beaglebone_qt5_defconfig
-+++ b/configs/beaglebone_qt5_defconfig
-@@ -20,11 +20,8 @@ BR2_PACKAGE_FBV=y
- BR2_PACKAGE_QT5=y
- BR2_PACKAGE_QT5BASE_EXAMPLES=y
- BR2_PACKAGE_QT5BASE_EGLFS=y
--BR2_PACKAGE_QT5BASE_DEFAULT_QPA="wayland"
-+BR2_PACKAGE_QT5BASE_DEFAULT_QPA="eglfs"
- BR2_PACKAGE_QT5QUICKCONTROLS=y
--BR2_PACKAGE_QT5WAYLAND=y
--BR2_PACKAGE_QT5WAYLAND_COMPOSITOR=y
--BR2_PACKAGE_WESTON=y
- BR2_PACKAGE_TI_SGX_DEMOS=y
- BR2_PACKAGE_TI_SGX_KM=y
- BR2_PACKAGE_TI_SGX_UM=y
++++ b/package/qt5/qt5base/0005-eglfs-avoid-breaking-compilation-for-obscure-EGLNativeDisplayType-types.patch
+@@ -0,0 +1,63 @@
++From 0eb7058b473069a04cde60a800dfd04148c0c8b1 Mon Sep 17 00:00:00 2001
++From: Yann E. MORIN <yann.morin.1998@free.fr>
++Date: Sat, 14 Dec 2020 21:15:17 +0100
++Subject: [PATCH] plugins/eglfs/gbm: don't FTBFS when EGLNativeDisplayType is not a pointer
++
++On some platforms, EGLNativeDisplayType is not a pointer, but some kind
++of integer, like an int (e.g. TI's SGX) or an unsigned int. In those
++cases, the build breaks with:
++
++    qeglfskmsgbmintegration.cpp: In member function ???virtual void* QEglFSKmsGbmIntegration::createDisplay(EGLNativeDisplayType)???:
++    qeglfskmsgbmintegration.cpp:83:60: error: invalid conversion from ???EGLNativeDisplayType??? {aka ???int???} to ???void*??? [-fpermissive]
++       83 |         display = getPlatformDisplay(EGL_PLATFORM_GBM_KHR, nativeDisplay, nullptr);
++          |                                                            ^~~~~~~~~~~~~
++          |                                                            |
++          |                                                            EGLNativeDisplayType {aka int}
++
++We fix that by casting nativeDisplay to void* as expected by
++getPlatformDisplay().
++
++We can do that, because usually, nativeDisplay is already a pointer, and
++thus this cast is a no-op. When it is not already a pointer, we either
++don't care because the code path will not be taken at runtime, or the
++integer really is an opaque handle to some internal, low-level memory
++management, much like a void* is an pointer to an opaque memory type...
++
++It is to be noted, though, that in some ABIs (like x32), the size of a
++nativeDisplay that is not already a pointer, might be bigger than that
++of a pointer. There is not much we can do here anyway, since there would
++be no way to fit that in a void* to begin with, and the build will still
++fail for those situations. Those types of ABIs are far frome being
++widespread, the most prominent one, x32, even being retired...
++
++To be noted further: a more usual solution (as suggested in QTBUG-72567
++or in Gerrit:248270) would be to first cast to a qintptr or a quintptr,
++before finally casting to a void*. However, casting to either (resp.)
++qintptr or quintptr first, risk the case that nativeDisplay is of the other
++kind of signedness, (resp.) unsigned or signed, which would also cause
++some compile-time breakage.
++
++Finally, if nativeDisplay is something that is not an int-like, and that
++can't be cast into a void*, this would be hugely weird, so much so, that
++we do not even attempt to catter for that case.
++
++Fixes: QTBUG-72567
++Inspired-by: https://codereview.qt-project.org/c/qt/qtbase/+/248270
++Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
++---
++
++diff --git a/src/plugins/platforms/eglfs/deviceintegration/eglfs_kms/qeglfskmsgbmintegration.cpp b/src/plugins/platforms/eglfs/deviceintegration/eglfs_kms/qeglfskmsgbmintegration.cpp
++index d495a8d..059a580 100644
++--- a/src/plugins/platforms/eglfs/deviceintegration/eglfs_kms/qeglfskmsgbmintegration.cpp
+++++ b/src/plugins/platforms/eglfs/deviceintegration/eglfs_kms/qeglfskmsgbmintegration.cpp
++@@ -80,7 +80,9 @@
++     }
++ 
++     if (getPlatformDisplay) {
++-        display = getPlatformDisplay(EGL_PLATFORM_GBM_KHR, nativeDisplay, nullptr);
+++        // EGLNativeDisplayType may be int on some platforms but those
+++        // won't hit this path. Have to keep it compiling nonetheless.
+++        display = getPlatformDisplay(EGL_PLATFORM_GBM_KHR, reinterpret_cast<void *>(nativeDisplay), nullptr);
++     } else {
++         qCDebug(qLcEglfsKmsDebug, "No eglGetPlatformDisplay for GBM, falling back to eglGetDisplay");
++         display = eglGetDisplay(nativeDisplay);
