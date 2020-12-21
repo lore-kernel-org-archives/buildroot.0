@@ -1,36 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 21 Dec 2020 14:12:54 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/dtv-scan-tables:
- switch upstream location
-Message-ID: <20201221132722.CC187881A0@busybox.osuosl.org>
+Date: Mon, 21 Dec 2020 14:42:54 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/unbound: security
+ bump to version 1.13.0
+Message-ID: <20201221132722.E93BE881A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4fcff0a59779e05cf8f25488b41ee4b06dd9fdd9
+commit: https://git.buildroot.net/buildroot/commit/?id=1c20a067ffc85af633aab4882d9e915db19b766b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-The old git tree is unreachable now, switch to using the new one.
+This version has fixes to connect for UDP sockets, slowing down
+potential ICMP side channel leakage. The fix can be controlled with the
+option udp-connect: yes, it is enabled by default.
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit c7bd3805bded7c840731956c97233b0607a78e3f)
+Additionally CVE-2020-28935 is fixed, this solves a problem where the
+pidfile is altered by a symlink, and fails if a symlink is encountered.
+See https://nlnetlabs.nl/downloads/unbound/CVE-2020-28935.txt for more
+information.
+
+https://github.com/NLnetLabs/unbound/releases/tag/release-1.13.0
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 4eb320112037445b8310f0fde1cde511ed05ecb3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dtv-scan-tables/dtv-scan-tables.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/unbound/unbound.hash | 6 ++++--
+ package/unbound/unbound.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/dtv-scan-tables/dtv-scan-tables.mk b/package/dtv-scan-tables/dtv-scan-tables.mk
-index 5933f16776..5fad615b6b 100644
---- a/package/dtv-scan-tables/dtv-scan-tables.mk
-+++ b/package/dtv-scan-tables/dtv-scan-tables.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/unbound/unbound.hash b/package/unbound/unbound.hash
+index c2c6ab7ff6..9ccea6eb88 100644
+--- a/package/unbound/unbound.hash
++++ b/package/unbound/unbound.hash
+@@ -1,3 +1,5 @@
++# From https://nlnetlabs.nl/downloads/unbound/unbound-1.13.0.tar.gz.sha256
++sha256  a954043a95b0326ca4037e50dace1f3a207a0a19e9a4a22f4c6718fc623db2a1  unbound-1.13.0.tar.gz
++
+ # Locally calculated
+-sha256 5b9253a97812f24419bf2e6b3ad28c69287261cf8c8fa79e3e9f6d3bf7ef5835  unbound-1.12.0.tar.gz
+-sha256 8eb9a16cbfb8703090bbfa3a2028fd46bb351509a2f90dc1001e51fbe6fd45db  LICENSE
++sha256  8eb9a16cbfb8703090bbfa3a2028fd46bb351509a2f90dc1001e51fbe6fd45db  LICENSE
+diff --git a/package/unbound/unbound.mk b/package/unbound/unbound.mk
+index d60180b6ca..8b7d1e8e9f 100644
+--- a/package/unbound/unbound.mk
++++ b/package/unbound/unbound.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- DTV_SCAN_TABLES_VERSION = 6d019038cd04e837d9dd58701202c15924c1c654
--DTV_SCAN_TABLES_SITE = http://git.linuxtv.org/cgit.cgi/dtv-scan-tables.git
-+DTV_SCAN_TABLES_SITE = https://git.linuxtv.org/dtv-scan-tables.git
- DTV_SCAN_TABLES_SITE_METHOD = git
- 
- # This package only contains the transponders data. This is not a 'work'
+-UNBOUND_VERSION = 1.12.0
++UNBOUND_VERSION = 1.13.0
+ UNBOUND_SITE = https://www.unbound.net/downloads
+ UNBOUND_DEPENDENCIES = host-pkgconf expat libevent openssl
+ UNBOUND_LICENSE = BSD-3-Clause
