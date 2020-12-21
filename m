@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 21 Dec 2020 10:47:18 +0100
-Subject: [Buildroot] [PATCH 1/1] package/cryptopp: security bump to
- version 8.3.0
-In-Reply-To: <20201220175556.10038-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 20 Dec 2020 18:55:56 +0100")
-References: <20201220175556.10038-1-fontaine.fabrice@gmail.com>
-Message-ID: <87im8vqymx.fsf@dell.be.48ers.dk>
+Date: Mon, 21 Dec 2020 10:47:44 +0100
+Subject: [Buildroot] [PATCH 1/1] package/imagemagick: security bump to
+ version 7.10.51
+In-Reply-To: <20201220222001.128092-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 20 Dec 2020 23:20:01 +0100")
+References: <20201220222001.128092-1-fontaine.fabrice@gmail.com>
+Message-ID: <87eejjqym7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,15 +14,19 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > - Fix CVE-2019-14318: Crypto++ 8.3.0 and earlier contains a timing side
+ > - Fix CVE-2020-29599: ImageMagick before 6.9.11-40 and 7.x before
+ >   7.0.10-40 mishandles the -authenticate option, which allows setting a
+ >   password for password-protected PDF files. The user-controlled password
+ >   was not properly escaped/sanitized and it was therefore possible to
+ >   inject additional shell commands via coders/pdf.c.
+ > - Update license hash (correct wording to match Apache 2 license:
+ >   https://github.com/ImageMagick/ImageMagick/commit/45e5d2493c08e7cb49f7268c01d847e88f78fd6c)
 
-That sounds odd, giving that you are bumping to 8.3.0. Looking at the
-bugtracker issue (https://github.com/weidai11/cryptopp/issues/869), I
-believe the issue is in fact fixed in 8.3.0 and the above should have
-said 8.2.0 instead.
+ > https://github.com/ImageMagick/ImageMagick/blob/7.0.10-51/ChangeLog
 
-I've updated the commit message to reflect that and added a link to the
-bugtracker issue for more info and committed, thanks.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
