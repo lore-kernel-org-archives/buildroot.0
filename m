@@ -1,73 +1,45 @@
-From: Qais Yousef <qais.yousef@arm.com>
-Date: Mon, 21 Dec 2020 16:42:24 +0000
-Subject: [Buildroot] [PATCHv6 5/5] package/bcc: add optional luajit
- dependency
-In-Reply-To: <20201221143056.lwutjzww3wxk2fr6@e107158-lin>
-References: <20201220151203.2206747-1-romain.naour@gmail.com>
- <20201220151203.2206747-5-romain.naour@gmail.com>
- <20201221143056.lwutjzww3wxk2fr6@e107158-lin>
-Message-ID: <20201221164224.oasccletgxynmid2@e107158-lin>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 21 Dec 2020 19:01:48 +0100
+Subject: [Buildroot] [PATCH 1/1] package/lldpd: bump to version 1.0.7
+Message-ID: <20201221180148.806353-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/21/20 14:30, Qais Yousef wrote:
-> On 12/20/20 16:12, Romain Naour wrote:
-> > The luajit dependency was explicitely disabled when bcc has
-> > been added to Buildroot.
-> > Even if the python binding is probably more used, enable
-> > luajit binding if luajit package is enabled in the defconfig.
-> > 
-> > Fix the luajit command line used to build bcc.o, otherwise
-> > bcc.o is build for the host.
-> > 
-> > Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> > Cc: Qais Yousef <qais.yousef@arm.com>
-> > ---
-> 
-> This compiles fine for me. And the patch looks good to me too. But when I tried
-> to test it by following the example from the website
-> 
-> 	$ sudo src/lua/bcc-probe examples/lua/task_switch.lua
-> 
-> I noticed there's no bcc-probe in the target. When I copied it manually and
-> tried to run the above command I ended up with the below error.
-> 
-> 	# /root/bcc-probe examples/lua/task_switch.lua
-> 	luajit: /root/bcc-probe:20: module 'bcc.run' not found:
-> 		no field package.preload['bcc.run']
-> 		no file '/root//bcc/run.lua'
-> 		no file './bcc/run.lua'
-> 		no file '/usr/share/luajit-2.1.2/bcc/run.lua'
-> 		no file '/usr/local/share/lua/5.1/bcc/run.lua'
-> 		no file '/usr/local/share/lua/5.1/bcc/run/init.lua'
-> 		no file '/usr/share/lua/5.1/bcc/run.lua'
-> 		no file '/usr/share/lua/5.1/bcc/run/init.lua'
-> 		no file './bcc/run.so'
-> 		no file '/usr/local/lib/lua/5.1/bcc/run.so'
-> 		no file '/usr/lib/lua/5.1/bcc/run.so'
-> 		no file '/usr/local/lib/lua/5.1/loadall.so'
-> 		no file './bcc.so'
-> 		no file '/usr/local/lib/lua/5.1/bcc.so'
-> 		no file '/usr/lib/lua/5.1/bcc.so'
-> 		no file '/usr/local/lib/lua/5.1/loadall.so'
-> 	stack traceback:
-> 		[C]: in function 'require'
-> 		/root/bcc-probe:20: in main chunk
-> 		[C]: at 0x00402414
-> 
-> I admit I enabled luajit after initially building bcc without it. Although
-> I deleted output/build/bcc* to ensure it gets rebuilt against the new
-> dependency.
-> 
-> I'll try again with a full clean build to see if this fixes it.
+https://github.com/lldpd/lldpd/blob/1.0.7/NEWS
 
-Same thing with a new clean build. I just enabled BR2_PACKAGE_LUAJIT. Is there
-a dependency on lua 5.1 too?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/lldpd/lldpd.hash | 4 ++--
+ package/lldpd/lldpd.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Thanks
-
---
-Qais Yousef
+diff --git a/package/lldpd/lldpd.hash b/package/lldpd/lldpd.hash
+index 4283b4aec8..ee6e72ba55 100644
+--- a/package/lldpd/lldpd.hash
++++ b/package/lldpd/lldpd.hash
+@@ -1,5 +1,5 @@
+ # Locally computed after checking gpg key
+-# https://media.luffy.cx/files/lldpd/lldpd-1.0.5.tar.gz.gpg
++# https://media.luffy.cx/files/lldpd/lldpd-1.0.7.tar.gz.gpg
+ # using key AEF2348766F371C689A7360095A42FE8353525F9
+-sha256  2dd3b212f4dbabfcbb2794c0010b245f9f8e74b387984e757be6243a74c6cb99  lldpd-1.0.5.tar.gz
++sha256  1df79179d489c841b49265f2ab5ff05f284a647e95862d2f3c02b3fb079a87e1  lldpd-1.0.7.tar.gz
+ sha256  0e96a5aea65f16e2239231ce4ab90497f8bc3bb8fe6abe9299aade4726ff7c8d  LICENSE
+diff --git a/package/lldpd/lldpd.mk b/package/lldpd/lldpd.mk
+index 585d1ed7ba..7860b70c39 100644
+--- a/package/lldpd/lldpd.mk
++++ b/package/lldpd/lldpd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LLDPD_VERSION = 1.0.5
++LLDPD_VERSION = 1.0.7
+ LLDPD_SITE = https://media.luffy.cx/files/lldpd
+ LLDPD_DEPENDENCIES = \
+ 	$(if $(BR2_PACKAGE_CHECK),check) \
+-- 
+2.29.2
