@@ -1,53 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 21 Dec 2020 14:56:06 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/suricata: bump to
- version 6.0.1
-Message-ID: <20201221134010.C700681309@busybox.osuosl.org>
+Date: Mon, 21 Dec 2020 14:51:25 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/haproxy: bump to
+ version 2.2.4
+Message-ID: <20201221134035.8868883E46@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=850aa92b170b751e2b2d7d5188f5df3452924ac0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=fc8e5d212466fad6e5b5b9b0730a5a34dd1dd6f8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-These releases are bug fix releases, fixing numerous important issues.
-
-The 6.0.1 release also improves the experimental HTTP/2 support.
-
-https://suricata-ids.org/2020/12/04/suricata-6-0-1-5-0-5-and-4-1-10-released
+https://www.mail-archive.com/haproxy at formilux.org/msg38543.html
+http://www.haproxy.org/download/2.2/src/CHANGELOG
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 611d06d48670e341ab2906da9b42df64b8b62ff6)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit b5881e19e4108fa1090c7d6bfcd458190eae0ce6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/suricata/suricata.hash | 2 +-
- package/suricata/suricata.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/haproxy/haproxy.hash | 4 ++--
+ package/haproxy/haproxy.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/suricata/suricata.hash b/package/suricata/suricata.hash
-index a6cf43fb66..7435c1b96f 100644
---- a/package/suricata/suricata.hash
-+++ b/package/suricata/suricata.hash
+diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
+index a1da516b0b..a127af9195 100644
+--- a/package/haproxy/haproxy.hash
++++ b/package/haproxy/haproxy.hash
 @@ -1,5 +1,5 @@
+-# From: http://www.haproxy.org/download/2.2/src/haproxy-2.2.2.tar.gz.sha256
+-sha256  391c705a46c6208a63a67ea842c6600146ca24618531570c89c7915b0c6a54d6  haproxy-2.2.2.tar.gz
++# From: http://www.haproxy.org/download/2.2/src/haproxy-2.2.4.tar.gz.sha256
++sha256  87a4d9d4ff8dc3094cb61bbed4a8eed2c40b5ac47b9604daebaf036d7b541be2  haproxy-2.2.4.tar.gz
  # Locally computed:
--sha256  3c175a6dee9071141391f64828502cfb6e48dc1a20833e1411fb45be5368923b  suricata-6.0.0.tar.gz
-+sha256  e7a1798fe59c1d213f752feefbf8bb54168f9fa56235cf3380347c696ecdb1ae  suricata-6.0.1.tar.gz
- 
- # Hash for license files:
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/suricata/suricata.mk b/package/suricata/suricata.mk
-index 94c4784dd4..a8970fe9a4 100644
---- a/package/suricata/suricata.mk
-+++ b/package/suricata/suricata.mk
-@@ -4,7 +4,7 @@
- #
+ sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
+ sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
+diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
+index 3ceb761c94..70ff997fbe 100644
+--- a/package/haproxy/haproxy.mk
++++ b/package/haproxy/haproxy.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--SURICATA_VERSION = 6.0.0
-+SURICATA_VERSION = 6.0.1
- SURICATA_SITE = https://www.openinfosecfoundation.org/download
- SURICATA_LICENSE = GPL-2.0
- SURICATA_LICENSE_FILES = COPYING LICENSE
+ HAPROXY_VERSION_MAJOR = 2.2
+-HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).2
++HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).4
+ HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
+ HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
+ HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
