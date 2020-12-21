@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 21 Dec 2020 15:16:08 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x]
+Date: Mon, 21 Dec 2020 15:16:00 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x]
  boot/arm-trusted-firmware: Forward stack protection configuration
-Message-ID: <20201221140337.DD0AC88365@busybox.osuosl.org>
+Message-ID: <20201221140342.2CB9687EB2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=325e8e89f6db6db8746c85b2b8dd87ba06266235
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=52df7280b2c4c566259f84e8c7da373ba72be1f5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
 TF-A supports stack smashing protection (-fstack-protector-*).
 However, that feature is currently silently disabled because
