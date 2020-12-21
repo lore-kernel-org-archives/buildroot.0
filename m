@@ -1,35 +1,45 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 21 Dec 2020 14:46:26 +0100
-Subject: [Buildroot] [PATCH] package/libglib2: correct upstream status
- for patch 0001
-In-Reply-To: <20201209112634.18600-1-patrickdepinguin@gmail.com> (Thomas De
- Schampheleire's message of "Wed, 9 Dec 2020 12:26:32 +0100")
-References: <20201209112634.18600-1-patrickdepinguin@gmail.com>
-Message-ID: <87y2hrnufh.fsf@dell.be.48ers.dk>
+From: Muhammad Masood <masoodmohammad54@gmail.com>
+Date: Mon, 21 Dec 2020 14:53:11 +0100
+Subject: [Buildroot] Beaglebone Black interface with LCD cape
+In-Reply-To: <CAFheWCcOVFiNTshTp6SBDLUJbej1R-D_zPAJtsuQUUuywVHn6A@mail.gmail.com>
+References: <CAFheWCcOVFiNTshTp6SBDLUJbej1R-D_zPAJtsuQUUuywVHn6A@mail.gmail.com>
+Message-ID: <CAFheWCdrzxsteEM3e7Vksk-RmDDYLeppLpkQ8ejX0gPtT-FK8A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+Hallo Buildroot Team,
 
- > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
- > Patch '0001-fix-compile-time-atomic-detection.patch' claims to be Merged but
- > this is not true. The linked issue is closed with 'Needs information', and
- > the code itself is effectively not merged.
+I solved this problem..
+thanks
 
- > Clarify the 'Upstream-status' line to make this more clear.
+Regards
+Masood
 
- > Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
- > ---
- >  package/libglib2/0001-fix-compile-time-atomic-detection.patch | 2 +-
- >  1 file changed, 1 insertion(+), 1 deletion(-)
 
- > Note: I leave the actual discussion with upstream to Adam, as he was involved in
- > the issue before.
+On Mon, Dec 21, 2020 at 10:16 AM Muhammad Masood <masoodmohammad54@gmail.com>
+wrote:
 
-Committed to 2020.02.x, 2020.08.x and 2020.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+> Hallo Buildroot Team,
+>
+> I want to add a device tree overlay for the BeagleBone Black with an LCD
+> screen (4D Systems gen4-4DCAPE-43T).
+> I found this bug ( Bug 11656 ) but the below paste lines are not clear for
+> me.
+> "Therefore I created the attached device tree source code, which takes the
+> am335x-boneblack.dts as a basis (#include) and adds the definitions from <
+> https://github.com/beagleboard/bb.org-overlays/blob/master/src/arm/BB-BONE-4D4R-01-00A1.dts>
+> translated from "overlay fragment" syntax to normal dts code (reference: <
+> https://pastebin.com/b8kZfhRG>)."
+>
+> My question is how to create this file am335x-withcapes-4d4r.dts?
+> Please can you explain to me the above text step by step?
+>
+> Regards
+> Masood
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201221/a5bf3a76/attachment.html>
