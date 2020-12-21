@@ -1,58 +1,101 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 21 Dec 2020 12:08:39 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/qt5canvas3d: drop
- qt 5.6 support
-Message-ID: <20201221124320.02AC188314@busybox.osuosl.org>
+Date: Mon, 21 Dec 2020 10:56:39 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] configs/beaglebone_qt5:
+ switch to using KMS instead of wayland+weston
+Message-ID: <20201221124319.BBE7488314@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=65670e9e4e93ff2cb7580a8b367ee159c9e328eb
+commit: https://git.buildroot.net/buildroot/commit/?id=4ee7723e7649bbf5b8c7573e05ad5637f0728fd7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 50a3409a91b71cfa4ff87ec5de560e3012aa9a3f)
+weston does not work on the ti-sgx SDK, so switch to using KMS directly,
+and drop the wayland-related config options.
+
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+[yann.morin.1998 at free.fr: split into its own patch]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 8efc5dce98f9795d97b7a3452f9be4a774032379)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qt5/qt5canvas3d/qt5canvas3d.hash | 6 ------
- package/qt5/qt5canvas3d/qt5canvas3d.mk   | 5 -----
- 2 files changed, 11 deletions(-)
+ board/beaglebone/readme.txt                               | 12 +++++++++++-
+ .../beaglebone/rootfs_overlay/etc/qt5/eglfs_kms_cfg.json  | 15 +++++++++++++++
+ configs/beaglebone_qt5_defconfig                          |  5 +----
+ 3 files changed, 27 insertions(+), 5 deletions(-)
 
-diff --git a/package/qt5/qt5canvas3d/qt5canvas3d.hash b/package/qt5/qt5canvas3d/qt5canvas3d.hash
-index 19f9b8450c..8acb223220 100644
---- a/package/qt5/qt5canvas3d/qt5canvas3d.hash
-+++ b/package/qt5/qt5canvas3d/qt5canvas3d.hash
-@@ -1,6 +1,3 @@
--# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtcanvas3d-opensource-src-5.6.3.tar.xz.mirrorlist
--sha256 e99e0e159f2fba539b7947a1921072f6807f20958d32809edbf12aac571f56ff qtcanvas3d-opensource-src-5.6.3.tar.xz
--
- # Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.8/submodules/qtcanvas3d-everywhere-src-5.12.8.tar.xz.sha256
- sha256  a30deda1021266b3be4d016474fbf4df6b40356ff870c026320204f2364d12cc  qtcanvas3d-everywhere-src-5.12.8.tar.xz
+diff --git a/board/beaglebone/readme.txt b/board/beaglebone/readme.txt
+index e6647dad2a..231e977a89 100644
+--- a/board/beaglebone/readme.txt
++++ b/board/beaglebone/readme.txt
+@@ -7,7 +7,7 @@ Description
+ This configuration will build a complete image for the beaglebone and
+ the TI AM335x-EVM, the board type is identified by the on-board
+ EEPROM. The configuration is based on the
+-ti-processor-sdk-02.00.00.00. Device tree blobs for beaglebone
++ti-processor-sdk-06.01.00.08. Device tree blobs for beaglebone
+ variants and the evm-sk are built too.
  
-@@ -9,6 +6,3 @@ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE.GPL3
- sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652 LICENSE.GPL3-EXCEPT
- sha256 da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768 LICENSE.LGPL3
--sha256 edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253 LICENSE.GPLv2
--sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17 LICENSE.GPLv3
--sha256 5ceb37d1c7c1d92878b82af3c0fd5558087f3d5a08a3a4d43850bad4ad265a52 LICENSE.LGPLv3
-diff --git a/package/qt5/qt5canvas3d/qt5canvas3d.mk b/package/qt5/qt5canvas3d/qt5canvas3d.mk
-index b550ff00f2..2366afb352 100644
---- a/package/qt5/qt5canvas3d/qt5canvas3d.mk
-+++ b/package/qt5/qt5canvas3d/qt5canvas3d.mk
-@@ -10,13 +10,8 @@ QT5CANVAS3D_SOURCE = qtcanvas3d-$(QT5_SOURCE_TARBALL_PREFIX)-$(QT5CANVAS3D_VERSI
- QT5CANVAS3D_DEPENDENCIES = qt5base qt5declarative
- QT5CANVAS3D_INSTALL_STAGING = YES
+ For Qt5 support support use the beaglebone_qt5_defconfig.
+@@ -43,10 +43,20 @@ output/images/
+ To copy the image file to the sdcard use dd:
+ $ dd if=output/images/sdcard.img of=/dev/XXX
  
--ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
- QT5CANVAS3D_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools)
- QT5CANVAS3D_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.GPL3-EXCEPT LICENSE.LGPL3
--else
--QT5CANVAS3D_LICENSE = GPL-2.0 or GPL-3.0 or LGPL-3.0
--QT5CANVAS3D_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.LGPLv3
--endif
++
++Running Qt5 hellowindow opengl demo:
++===================
++# export QT_QPA_EGLFS_KMS_CONFIG=/etc/qt5/eglfs_kms_cfg.json
++# export QT_QPA_PLATFORM=eglfs
++# export QT_QPA_EGLFS_INTEGRATION=none
++# /usr/lib/qt/examples/opengl/hellowindow/hellowindow
++
++
+ Tested hardware
+ ===============
+ am335x-evm (rev. 1.1A)
+ beagleboneblack (rev. A5A)
+ beaglebone (rev. A6)
  
- define QT5CANVAS3D_CONFIGURE_CMDS
- 	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/bin/qmake)
++2020, Adam Duskett <aduskett@gmail.com>
+ 2016, Lothar Felten <lothar.felten@gmail.com>
+diff --git a/board/beaglebone/rootfs_overlay/etc/qt5/eglfs_kms_cfg.json b/board/beaglebone/rootfs_overlay/etc/qt5/eglfs_kms_cfg.json
+new file mode 100644
+index 0000000000..76f5e7d379
+--- /dev/null
++++ b/board/beaglebone/rootfs_overlay/etc/qt5/eglfs_kms_cfg.json
+@@ -0,0 +1,15 @@
++{
++  "device": "/dev/dri/card0",
++  "hwcursor": false,
++  "pbuffers": true,
++  "outputs": [
++    {
++      "name": "VGA1",
++      "mode": "off"
++    },
++    {
++      "name": "HDMI1",
++      "mode": "1024x768"
++    }
++  ]
++}
+diff --git a/configs/beaglebone_qt5_defconfig b/configs/beaglebone_qt5_defconfig
+index 6e07bc9ac0..c75bbd7593 100644
+--- a/configs/beaglebone_qt5_defconfig
++++ b/configs/beaglebone_qt5_defconfig
+@@ -20,11 +20,8 @@ BR2_PACKAGE_FBV=y
+ BR2_PACKAGE_QT5=y
+ BR2_PACKAGE_QT5BASE_EXAMPLES=y
+ BR2_PACKAGE_QT5BASE_EGLFS=y
+-BR2_PACKAGE_QT5BASE_DEFAULT_QPA="wayland"
++BR2_PACKAGE_QT5BASE_DEFAULT_QPA="eglfs"
+ BR2_PACKAGE_QT5QUICKCONTROLS=y
+-BR2_PACKAGE_QT5WAYLAND=y
+-BR2_PACKAGE_QT5WAYLAND_COMPOSITOR=y
+-BR2_PACKAGE_WESTON=y
+ BR2_PACKAGE_TI_SGX_DEMOS=y
+ BR2_PACKAGE_TI_SGX_KM=y
+ BR2_PACKAGE_TI_SGX_UM=y
