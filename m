@@ -1,60 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 21 Dec 2020 11:02:33 +0100
-Subject: [Buildroot] [git commit] package/ti-sgx-*: fix
- s/correpsonds/corresponds/ typo
-Message-ID: <20201221094621.4AFF787EB2@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 21 Dec 2020 11:23:18 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libdrm: add license file
+Message-ID: <20201221102318.40227-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=292475976f20df8c105aa3af1854f582ab0bbab5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Add xf86drm.c as the license file and while at it, update the indentation
+in hash file (two spaces)
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/ti-sgx-demos/ti-sgx-demos.mk | 2 +-
- package/ti-sgx-km/ti-sgx-km.mk       | 2 +-
- package/ti-sgx-um/ti-sgx-um.mk       | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ package/libdrm/libdrm.hash | 7 +++++--
+ package/libdrm/libdrm.mk   | 1 +
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/package/ti-sgx-demos/ti-sgx-demos.mk b/package/ti-sgx-demos/ti-sgx-demos.mk
-index ea6c6c6b08..4baebb9be5 100644
---- a/package/ti-sgx-demos/ti-sgx-demos.mk
-+++ b/package/ti-sgx-demos/ti-sgx-demos.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
+index 84caffc792..b6a62d4c18 100644
+--- a/package/libdrm/libdrm.hash
++++ b/package/libdrm/libdrm.hash
+@@ -1,3 +1,6 @@
+ # From https://lists.freedesktop.org/archives/dri-devel/2020-November/285471.html
+-sha256 3fe0affdba6460166a7323290c18cf68e9b59edcb520722826cb244e9cb50222  libdrm-2.4.103.tar.xz
+-sha512 15b098b962008271400692b6b15ecb7e22676f8698e0220ad969735ac2315ccc737d19558afb6abda82bae15117e5f306c048184a2369f434b85ecaa670ca885  libdrm-2.4.103.tar.xz
++sha256  3fe0affdba6460166a7323290c18cf68e9b59edcb520722826cb244e9cb50222  libdrm-2.4.103.tar.xz
++sha512  15b098b962008271400692b6b15ecb7e22676f8698e0220ad969735ac2315ccc737d19558afb6abda82bae15117e5f306c048184a2369f434b85ecaa670ca885  libdrm-2.4.103.tar.xz
++
++# Hash for license file
++sha256  2ece103921b7b5619198b9572fb9242db7bbfa6d3b33f9f93f22e1fb738ed8ac  xf86drm.c
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index 0c332a4a9c..0ff30ee53e 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -8,6 +8,7 @@ LIBDRM_VERSION = 2.4.103
+ LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.xz
+ LIBDRM_SITE = https://dri.freedesktop.org/libdrm
+ LIBDRM_LICENSE = MIT
++LIBDRM_LICENSE_FILES = xf86drm.c
+ LIBDRM_INSTALL_STAGING = YES
  
--# This correpsonds to SDK 06.00.00.07 plus one pull request
-+# This corresponds to SDK 06.00.00.07 plus one pull request
- TI_SGX_DEMOS_VERSION = bb8b74cdd1323e76697b3eb2258f863b15fee287
- TI_SGX_DEMOS_SITE = http://git.ti.com/git/graphics/img-pvr-sdk.git
- TI_SGX_DEMOS_SITE_METHOD = git
-diff --git a/package/ti-sgx-km/ti-sgx-km.mk b/package/ti-sgx-km/ti-sgx-km.mk
-index 25f1f83ca7..8ca6dbde2c 100644
---- a/package/ti-sgx-km/ti-sgx-km.mk
-+++ b/package/ti-sgx-km/ti-sgx-km.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--# This correpsonds to SDK 06.01.00.08
-+# This corresponds to SDK 06.01.00.08
- TI_SGX_KM_VERSION = cf7f48cb30abfd5df7a60c9bf4bbb1dde0d496d9
- TI_SGX_KM_SITE = http://git.ti.com/git/graphics/omap5-sgx-ddk-linux.git
- TI_SGX_KM_SITE_METHOD = git
-diff --git a/package/ti-sgx-um/ti-sgx-um.mk b/package/ti-sgx-um/ti-sgx-um.mk
-index 30d1ef81f0..83dbc6804c 100644
---- a/package/ti-sgx-um/ti-sgx-um.mk
-+++ b/package/ti-sgx-um/ti-sgx-um.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--# This correpsonds to SDK 06.01.00.08
-+# This corresponds to SDK 06.01.00.08
- TI_SGX_UM_VERSION = 909e237baf47d0bde006ff25552f5403fd7e359d
- TI_SGX_UM_SITE = http://git.ti.com/git/graphics/omap5-sgx-ddk-um-linux.git
- TI_SGX_UM_SITE_METHOD = git
+ LIBDRM_DEPENDENCIES = \
+-- 
+2.29.2
