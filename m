@@ -1,55 +1,35 @@
-From: Qais Yousef <qais.yousef@arm.com>
-Date: Mon, 21 Dec 2020 13:45:49 +0000
-Subject: [Buildroot] [PATCHv6 4/5] package/bpftrace: new package
-In-Reply-To: <20201220151203.2206747-4-romain.naour@gmail.com>
-References: <20201220151203.2206747-1-romain.naour@gmail.com>
- <20201220151203.2206747-4-romain.naour@gmail.com>
-Message-ID: <20201221134549.nk4eu6qpto36ahpq@e107158-lin>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 21 Dec 2020 14:46:26 +0100
+Subject: [Buildroot] [PATCH] package/libglib2: correct upstream status
+ for patch 0001
+In-Reply-To: <20201209112634.18600-1-patrickdepinguin@gmail.com> (Thomas De
+ Schampheleire's message of "Wed, 9 Dec 2020 12:26:32 +0100")
+References: <20201209112634.18600-1-patrickdepinguin@gmail.com>
+Message-ID: <87y2hrnufh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/20/20 16:12, Romain Naour wrote:
-> From: Qais Yousef <qais.yousef@arm.com>
-> 
-> bpftrace is a high-level tracing language for Linux enhanced Berkeley
-> Packet Filter (eBPF) available in recent Linux kernels (4.x).
-> 
-> Only tested on x86_64 and aarch64. The package doesn't support i386 and
-> aarch32.
-> 
-> The libbpf dependency allow to enable the BTF support:
->  # bpftrace --info
->  System
->    OS: Linux 5.4.58 #1 SMP Sun Dec 20 15:56:56 CET 2020
->    Arch: aarch64
-> 
->  Build
->    version: 2020.11-328-g019a9
->    LLVM: 9.0.1
->    foreach_sym: yes
->    unsafe uprobe: no
->    bfd: yes
->    bpf_attach_kfunc: yes
->    bcc_usdt_addsem: yes
->    bcc bpf_attach_uprobe refcount: yes
->    libbpf: yes
->    libbpf btf dump: yes
->    libbpf btf dump type decl: yes
-> 
-> bfptrace doesn't use the libbpf_bcc library provided by bcc package.
-> 
-> Signed-off-by: Qais Yousef <qais.yousef@arm.com>
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-> ---
-> v6: Update DEVELOPERS file
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
-LGTM.
+ > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+ > Patch '0001-fix-compile-time-atomic-detection.patch' claims to be Merged but
+ > this is not true. The linked issue is closed with 'Needs information', and
+ > the code itself is effectively not merged.
 
-Thanks
+ > Clarify the 'Upstream-status' line to make this more clear.
 
---
-Qais Yousef
+ > Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+ > ---
+ >  package/libglib2/0001-fix-compile-time-atomic-detection.patch | 2 +-
+ >  1 file changed, 1 insertion(+), 1 deletion(-)
+
+ > Note: I leave the actual discussion with upstream to Adam, as he was involved in
+ > the issue before.
+
+Committed to 2020.02.x, 2020.08.x and 2020.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
