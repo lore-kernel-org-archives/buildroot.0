@@ -1,45 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 21 Dec 2020 14:43:13 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/unbound: bump
- version to 1.12.0
-Message-ID: <20201221132718.14487881A0@busybox.osuosl.org>
+Date: Mon, 21 Dec 2020 14:40:49 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/sqlcipher:
+ security bump to version 4.4.2
+Message-ID: <20201221132717.F2989881A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c5bb00629f8194eb8b8ff017855848b81813ae11
+commit: https://git.buildroot.net/buildroot/commit/?id=22cf9bf4868e94c3f8702e6de0e26d878acf0b31
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-Signed-off-by: Stefan Ott <stefan@ott.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit eb4ff9f11fe3585ca5f0e0b7bfd31b93dafd2dd1)
+Fix CVE-2020-27207: Zetetic SQLCipher 4.x before 4.4.1 has a
+use-after-free, related to sqlcipher_codec_pragma and sqlite3Strlen30 in
+sqlite3.c. A remote denial of service attack can be performed. For
+example, a SQL injection can be used to execute the crafted SQL command
+sequence. After that, some unexpected RAM data is read.
+
+https://www.zetetic.net/blog/2020/11/25/sqlcipher-442-release
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit f38893f8dd7c9fb13b14cf4fe471eb62d345c5f0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/unbound/unbound.hash | 2 +-
- package/unbound/unbound.mk   | 2 +-
+ package/sqlcipher/sqlcipher.hash | 2 +-
+ package/sqlcipher/sqlcipher.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/unbound/unbound.hash b/package/unbound/unbound.hash
-index 650120d40e..c2c6ab7ff6 100644
---- a/package/unbound/unbound.hash
-+++ b/package/unbound/unbound.hash
+diff --git a/package/sqlcipher/sqlcipher.hash b/package/sqlcipher/sqlcipher.hash
+index c37db7a20a..96a6a74013 100644
+--- a/package/sqlcipher/sqlcipher.hash
++++ b/package/sqlcipher/sqlcipher.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256 9f2f0798f76eb8f30feaeda7e442ceed479bc54db0e3ac19c052d68685e51ef7  unbound-1.11.0.tar.gz
-+sha256 5b9253a97812f24419bf2e6b3ad28c69287261cf8c8fa79e3e9f6d3bf7ef5835  unbound-1.12.0.tar.gz
- sha256 8eb9a16cbfb8703090bbfa3a2028fd46bb351509a2f90dc1001e51fbe6fd45db  LICENSE
-diff --git a/package/unbound/unbound.mk b/package/unbound/unbound.mk
-index 6cf852ad9d..d60180b6ca 100644
---- a/package/unbound/unbound.mk
-+++ b/package/unbound/unbound.mk
+ # locally computed
+-sha256  fccb37e440ada898902b294d02cde7af9e8706b185d77ed9f6f4d5b18b4c305f  sqlcipher-4.3.0.tar.gz
++sha256  87458e0e16594b3ba6c7a1f046bc1ba783d002d35e0e7b61bb6b7bb862f362a7  sqlcipher-4.4.2.tar.gz
+ sha256  3eee3c7964a9becc94d747bd36703d31fc86eb994680b06a61bfd4f2661eaac8  LICENSE
+diff --git a/package/sqlcipher/sqlcipher.mk b/package/sqlcipher/sqlcipher.mk
+index 14290745aa..5a9a77c1ee 100644
+--- a/package/sqlcipher/sqlcipher.mk
++++ b/package/sqlcipher/sqlcipher.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--UNBOUND_VERSION = 1.11.0
-+UNBOUND_VERSION = 1.12.0
- UNBOUND_SITE = https://www.unbound.net/downloads
- UNBOUND_DEPENDENCIES = host-pkgconf expat libevent openssl
- UNBOUND_LICENSE = BSD-3-Clause
+-SQLCIPHER_VERSION = 4.3.0
++SQLCIPHER_VERSION = 4.4.2
+ SQLCIPHER_SITE = $(call github,sqlcipher,sqlcipher,v$(SQLCIPHER_VERSION))
+ SQLCIPHER_LICENSE = BSD-3-Clause
+ SQLCIPHER_LICENSE_FILES = LICENSE
