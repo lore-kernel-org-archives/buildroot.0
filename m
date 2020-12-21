@@ -1,107 +1,68 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 21 Dec 2020 15:19:07 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x]
- package/shadowsocks-libev: fix static build with netfilter_conntrack
-Message-ID: <20201221140342.4A37C88365@busybox.osuosl.org>
+From: Qais Yousef <qais.yousef@arm.com>
+Date: Mon, 21 Dec 2020 14:30:56 +0000
+Subject: [Buildroot] [PATCHv6 5/5] package/bcc: add optional luajit
+ dependency
+In-Reply-To: <20201220151203.2206747-5-romain.naour@gmail.com>
+References: <20201220151203.2206747-1-romain.naour@gmail.com>
+ <20201220151203.2206747-5-romain.naour@gmail.com>
+Message-ID: <20201221143056.lwutjzww3wxk2fr6@e107158-lin>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fe7f69379c0a1f26b6581a42fe278965defe3e4f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+On 12/20/20 16:12, Romain Naour wrote:
+> The luajit dependency was explicitely disabled when bcc has
+> been added to Buildroot.
+> Even if the python binding is probably more used, enable
+> luajit binding if luajit package is enabled in the defconfig.
+> 
+> Fix the luajit command line used to build bcc.o, otherwise
+> bcc.o is build for the host.
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Cc: Qais Yousef <qais.yousef@arm.com>
+> ---
 
-Fixes:
- - http://autobuild.buildroot.org/results/6cad497a7ab941a0ee3fd7007defc81e30cdcbe0
+This compiles fine for me. And the patch looks good to me too. But when I tried
+to test it by following the example from the website
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 1294447142d73b8f0766abb638979867b314b600)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...c-use-pkg-config-to-find-netfilter_conntr.patch | 62 ++++++++++++++++++++++
- package/shadowsocks-libev/shadowsocks-libev.mk     |  2 +
- 2 files changed, 64 insertions(+)
+	$ sudo src/lua/bcc-probe examples/lua/task_switch.lua
 
-diff --git a/package/shadowsocks-libev/0001-configure.ac-use-pkg-config-to-find-netfilter_conntr.patch b/package/shadowsocks-libev/0001-configure.ac-use-pkg-config-to-find-netfilter_conntr.patch
-new file mode 100644
-index 0000000000..781d3c0e64
---- /dev/null
-+++ b/package/shadowsocks-libev/0001-configure.ac-use-pkg-config-to-find-netfilter_conntr.patch
-@@ -0,0 +1,62 @@
-+From b3c61360a93b7f08fc9c33526056211408301ea9 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 23 Nov 2020 21:16:38 +0100
-+Subject: [PATCH] configure.ac: use pkg-config to find netfilter_conntrack
-+
-+Use pkg-config to retrieve the dependencies of netfilter_conntrack
-+and avoid the following build failure when building statically:
-+
-+configure:13096: /data/buildroot-test/instance-1/output-1/host/bin/x86_64-linux-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -static -I/data/buildroot-test/instance-1/output-1/host/x86_64-buildroot-linux-uclibc/sysroot/usr/include -DPCRE_STATIC -pthread -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -static -L/data/buildroot-test/instance-1/output-1/host/x86_64-buildroot-linux-uclibc/sysroot/usr/lib conftest.c -lnetfilter_conntrack -lnfnetlink -lev  -lcares -lsodium -lmbedcrypto -lpcre  >&5
-+/data/buildroot-test/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-uclibc/8.3.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: /data/buildroot-test/instance-1/output-1/host/x86_64-buildroot-linux-uclibc/sysroot/usr/lib/libnetfilter_conntrack.a(api.o): in function `nfct_fill_hdr.constprop.4':
-+api.c:(.text+0x3f): undefined reference to `mnl_nlmsg_put_header'
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/6cad497a7ab941a0ee3fd7007defc81e30cdcbe0
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status:
-+https://github.com/shadowsocks/shadowsocks-libev/pull/2773]
-+---
-+ configure.ac    | 5 +++--
-+ src/Makefile.am | 2 +-
-+ 2 files changed, 4 insertions(+), 3 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 9787bc2..207c041 100755
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -252,7 +252,8 @@ AC_ARG_ENABLE(connmarktos,
-+ if test x"$enable_connmarktos" = "xyes" ; then
-+ 	AC_MSG_NOTICE([Linux Netfilter Conntrack support requested by --enable-connmarktos: ${enable_connmarktos}])
-+ 	if test "x$enable_connmarktos" != "xno"; then
-+-	    AC_SEARCH_LIBS([nfct_query], [netfilter_conntrack],,[
-++	    PKG_CHECK_MODULES([NETFILTER_CONNTRACK], [libnetfilter_conntrack],,
-++	    [AC_SEARCH_LIBS([nfct_query], [netfilter_conntrack],,[
-+ 	        if test x"$enable_connmarktos" = "xyes"; then
-+ 	            AC_MSG_ERROR([--enable-connmarktos specified but libnetfilter-conntrack library not found])
-+ 	        fi
-+@@ -262,7 +263,7 @@ if test x"$enable_connmarktos" = "xyes" ; then
-+ 	        if test x"$enable_connmarktos" = "xyes"; then
-+ 	            AC_MSG_ERROR([--enable-connmarktos specified but libnetfilter-conntrack headers not found])
-+ 	        fi
-+-	        with_netfilter_conntrack=no])
-++	        with_netfilter_conntrack=no])])
-+ 	  # If nothing is broken; enable the libraries usage.
-+ 	  if test "x$with_netfilter_conntrack" != "xno"; then
-+ 		with_netfilter_conntrack=yes
-+diff --git a/src/Makefile.am b/src/Makefile.am
-+index c261ed0..b81ced7 100644
-+--- a/src/Makefile.am
-++++ b/src/Makefile.am
-+@@ -9,7 +9,7 @@ AM_CFLAGS += -I$(top_srcdir)/libcork/include
-+ endif
-+ AM_CFLAGS += $(LIBPCRE_CFLAGS)
-+ 
-+-SS_COMMON_LIBS = $(INET_NTOP_LIB) $(LIBPCRE_LIBS)
-++SS_COMMON_LIBS = $(INET_NTOP_LIB) $(LIBPCRE_LIBS) $(NETFILTER_CONNTRACK_LIBS)
-+ if !USE_SYSTEM_SHARED_LIB
-+ SS_COMMON_LIBS += $(top_builddir)/libbloom/libbloom.la \
-+                   $(top_builddir)/libipset/libipset.la \
-+-- 
-+2.29.2
-+
-diff --git a/package/shadowsocks-libev/shadowsocks-libev.mk b/package/shadowsocks-libev/shadowsocks-libev.mk
-index 3ba4cb875c..d69a377851 100644
---- a/package/shadowsocks-libev/shadowsocks-libev.mk
-+++ b/package/shadowsocks-libev/shadowsocks-libev.mk
-@@ -10,6 +10,8 @@ SHADOWSOCKS_LIBEV_LICENSE = GPL-3.0+, BSD-2-Clause (libbloom), BSD-3-Clause (lib
- SHADOWSOCKS_LIBEV_LICENSE_FILES = COPYING libbloom/LICENSE libcork/COPYING
- SHADOWSOCKS_LIBEV_DEPENDENCIES = host-pkgconf c-ares libev libsodium mbedtls pcre
- SHADOWSOCKS_LIBEV_INSTALL_STAGING = YES
-+# We're patching configure.ac
-+SHADOWSOCKS_LIBEV_AUTORECONF = YES
- SHADOWSOCKS_LIBEV_CONF_OPTS = \
- 	--with-pcre=$(STAGING_DIR)/usr \
- 	--disable-ssp
+I noticed there's no bcc-probe in the target. When I copied it manually and
+tried to run the above command I ended up with the below error.
+
+	# /root/bcc-probe examples/lua/task_switch.lua
+	luajit: /root/bcc-probe:20: module 'bcc.run' not found:
+		no field package.preload['bcc.run']
+		no file '/root//bcc/run.lua'
+		no file './bcc/run.lua'
+		no file '/usr/share/luajit-2.1.2/bcc/run.lua'
+		no file '/usr/local/share/lua/5.1/bcc/run.lua'
+		no file '/usr/local/share/lua/5.1/bcc/run/init.lua'
+		no file '/usr/share/lua/5.1/bcc/run.lua'
+		no file '/usr/share/lua/5.1/bcc/run/init.lua'
+		no file './bcc/run.so'
+		no file '/usr/local/lib/lua/5.1/bcc/run.so'
+		no file '/usr/lib/lua/5.1/bcc/run.so'
+		no file '/usr/local/lib/lua/5.1/loadall.so'
+		no file './bcc.so'
+		no file '/usr/local/lib/lua/5.1/bcc.so'
+		no file '/usr/lib/lua/5.1/bcc.so'
+		no file '/usr/local/lib/lua/5.1/loadall.so'
+	stack traceback:
+		[C]: in function 'require'
+		/root/bcc-probe:20: in main chunk
+		[C]: at 0x00402414
+
+I admit I enabled luajit after initially building bcc without it. Although
+I deleted output/build/bcc* to ensure it gets rebuilt against the new
+dependency.
+
+I'll try again with a full clean build to see if this fixes it.
+
+Thanks
+
+--
+Qais Yousef
