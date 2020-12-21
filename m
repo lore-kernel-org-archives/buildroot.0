@@ -1,53 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 21 Dec 2020 14:51:06 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/haproxy: bump to
- version 2.2.6
-Message-ID: <20201221134010.ACE5681309@busybox.osuosl.org>
+Date: Mon, 21 Dec 2020 14:56:00 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/libhtp: bump to
+ version 0.5.36
+Message-ID: <20201221134010.BA51781309@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=89cce3707b9f06f42f395c6ab8124c3f2f3344bd
+commit: https://git.buildroot.net/buildroot/commit/?id=280a8fcb971c8f19076f3bd0a1e1c99a7b965fcf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-Two major bugs were fixed in this versions, both leading to a memory
-corruption and random crashes.
-
-https://www.mail-archive.com/haproxy at formilux.org/msg39068.html
+https://github.com/OISF/libhtp/releases/tag/0.5.36
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit ed5082f012daedad6049491383215fc46af9979b)
+(cherry picked from commit f1a8511a92389a36d89e644e5776011ad6606a8d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/haproxy/haproxy.hash | 4 ++--
- package/haproxy/haproxy.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libhtp/libhtp.hash | 2 +-
+ package/libhtp/libhtp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
-index 5140c6a944..fbbd2e4bab 100644
---- a/package/haproxy/haproxy.hash
-+++ b/package/haproxy/haproxy.hash
-@@ -1,5 +1,5 @@
--# From: http://www.haproxy.org/download/2.2/src/haproxy-2.2.5.tar.gz.sha256
--sha256  63ad1813e01992d0fbe5ac7ca3e516a53fc62cdb17845d5ac90260031b6dd747  haproxy-2.2.5.tar.gz
-+# From: http://www.haproxy.org/download/2.2/src/haproxy-2.2.6.tar.gz.sha256
-+sha256  be1c6754cbaceafc4837e0c6036c7f81027a3992516435cbbbc5dc749bf5a087  haproxy-2.2.6.tar.gz
+diff --git a/package/libhtp/libhtp.hash b/package/libhtp/libhtp.hash
+index df75336df6..8bc1506180 100644
+--- a/package/libhtp/libhtp.hash
++++ b/package/libhtp/libhtp.hash
+@@ -1,3 +1,3 @@
  # Locally computed:
- sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
- sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
-diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
-index 1912a219e1..a6e07c9adb 100644
---- a/package/haproxy/haproxy.mk
-+++ b/package/haproxy/haproxy.mk
-@@ -5,7 +5,7 @@
+-sha256  4c3ac4c6027710455ffe725f24ac6a83b2c13fe0afc83b74df2cca78ba46976a  libhtp-0.5.35.tar.gz
++sha256  ab1dd6cfd4ab4c36624a5c74793d80d1b7f50f5791620f47bfd831a79e32bc4b  libhtp-0.5.36.tar.gz
+ sha256  87c93904e5434c81622ea690c2b90097b9f162aaa92a96542649a157dbf98d15  LICENSE
+diff --git a/package/libhtp/libhtp.mk b/package/libhtp/libhtp.mk
+index c402cf750e..de82caaa53 100644
+--- a/package/libhtp/libhtp.mk
++++ b/package/libhtp/libhtp.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- HAPROXY_VERSION_MAJOR = 2.2
--HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).5
-+HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).6
- HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
- HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
- HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
+-LIBHTP_VERSION = 0.5.35
++LIBHTP_VERSION = 0.5.36
+ LIBHTP_SITE = $(call github,OISF,libhtp,$(LIBHTP_VERSION))
+ LIBHTP_LICENSE = BSD-3-Clause
+ LIBHTP_LICENSE_FILES = LICENSE
