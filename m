@@ -1,36 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 21 Dec 2020 14:13:36 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/dtv-scan-tables:
- switch upstream location
-Message-ID: <20201221132717.E4E73881A0@busybox.osuosl.org>
+Date: Mon, 21 Dec 2020 14:41:47 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/python-lxml:
+ security bump to version 4.6.2
+Message-ID: <20201221132718.09809881A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aa189a6277d68c49253a112f9fbb829c3654251e
+commit: https://git.buildroot.net/buildroot/commit/?id=fb729aa9b01a0f2c453891ff0310506f6885af27
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-The old git tree is unreachable now, switch to using the new one.
+Fixes the following security issues:
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit c7bd3805bded7c840731956c97233b0607a78e3f)
+* 4.6.2: A vulnerability (CVE-2020-27783) was discovered in the HTML Cleaner
+  by Yaniv Nizry, which allowed JavaScript to pass through.  The cleaner now
+  removes more sneaky "style" content.
+
+* 4.6.1: A vulnerability was discovered in the HTML Cleaner by Yaniv Nizry,
+  which allowed JavaScript to pass through.  The cleaner now removes more
+  sneaky "style" content.
+
+For more details, see the changes file:
+https://github.com/lxml/lxml/blob/lxml-4.6.2/CHANGES.txt
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit ea41a5faab3fda4589956b24d4731292872934a5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dtv-scan-tables/dtv-scan-tables.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/python-lxml/python-lxml.hash | 2 +-
+ package/python-lxml/python-lxml.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/dtv-scan-tables/dtv-scan-tables.mk b/package/dtv-scan-tables/dtv-scan-tables.mk
-index 5933f16776..5fad615b6b 100644
---- a/package/dtv-scan-tables/dtv-scan-tables.mk
-+++ b/package/dtv-scan-tables/dtv-scan-tables.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/python-lxml/python-lxml.hash b/package/python-lxml/python-lxml.hash
+index 240314e888..7918e08745 100644
+--- a/package/python-lxml/python-lxml.hash
++++ b/package/python-lxml/python-lxml.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  27ee0faf8077c7c1a589573b1450743011117f1aa1a91d5ae776bbc5ca6070f2  lxml-4.5.1.tar.gz
++sha256  cd11c7e8d21af997ee8079037fff88f16fda188a9776eb4b81c7e4c9c0a7d7fc  lxml-4.6.2.tar.gz
+ sha256  41d49dd406aa0e1548a6d5f21a30d6bf638b3cd96eb7289dd348d83ed2e40392  LICENSES.txt
+ sha256  69edb445c1335a8312d4c09271847e9956d84f0d9f724d125340cc3fad767b2a  doc/licenses/BSD.txt
+ sha256  0497ae8138811ef4466ede653bab7a59feb3d3c14f9ed50fc33a00aeb5bec32e  doc/licenses/elementtree.txt
+diff --git a/package/python-lxml/python-lxml.mk b/package/python-lxml/python-lxml.mk
+index 7e727a6753..a8874737e2 100644
+--- a/package/python-lxml/python-lxml.mk
++++ b/package/python-lxml/python-lxml.mk
+@@ -4,8 +4,8 @@
+ #
  ################################################################################
  
- DTV_SCAN_TABLES_VERSION = 6d019038cd04e837d9dd58701202c15924c1c654
--DTV_SCAN_TABLES_SITE = http://git.linuxtv.org/cgit.cgi/dtv-scan-tables.git
-+DTV_SCAN_TABLES_SITE = https://git.linuxtv.org/dtv-scan-tables.git
- DTV_SCAN_TABLES_SITE_METHOD = git
+-PYTHON_LXML_VERSION = 4.5.1
+-PYTHON_LXML_SITE = https://files.pythonhosted.org/packages/03/a8/73d795778143be51d8b86750b371b3efcd7139987f71618ad9f4b8b65543
++PYTHON_LXML_VERSION = 4.6.2
++PYTHON_LXML_SITE = https://files.pythonhosted.org/packages/db/f7/43fecb94d66959c1e23aa53d6161231dca0e93ec500224cf31b3c4073e37
+ PYTHON_LXML_SOURCE = lxml-$(PYTHON_LXML_VERSION).tar.gz
  
- # This package only contains the transponders data. This is not a 'work'
+ # Not including the GPL, because it is used only for the test scripts.
