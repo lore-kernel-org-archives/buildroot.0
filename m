@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 21 Dec 2020 10:57:09 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/ti-sgx-demos: use
+Date: Mon, 21 Dec 2020 10:57:25 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/ti-sgx-demos: use
  KMS-based demos
-Message-ID: <20201221124815.3D9CE83E72@busybox.osuosl.org>
+Message-ID: <20201221124821.8B2AF81531@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e407761975a9458e2572bd27c71d3184c7f46ad3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=1e58e23a1af57f7e2f378c56f58a963511618fcd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
 Weston does not work with the ti-sgx SDK, so switch to using the
 KMS-based demos.
