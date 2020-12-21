@@ -1,51 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 21 Dec 2020 14:51:25 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/haproxy: bump to
- version 2.2.4
-Message-ID: <20201221134035.8868883E46@busybox.osuosl.org>
+Date: Mon, 21 Dec 2020 14:46:06 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/libglib2: correct
+ upstream status for patch 0001
+Message-ID: <20201221134035.7CFFE83E46@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fc8e5d212466fad6e5b5b9b0730a5a34dd1dd6f8
+commit: https://git.buildroot.net/buildroot/commit/?id=b53e87054830bcddda64c11299b3f48ba3da5589
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-https://www.mail-archive.com/haproxy at formilux.org/msg38543.html
-http://www.haproxy.org/download/2.2/src/CHANGELOG
+Patch '0001-fix-compile-time-atomic-detection.patch' claims to be Merged but
+this is not true. The linked issue is closed with 'Needs information', and
+the code itself is effectively not merged.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit b5881e19e4108fa1090c7d6bfcd458190eae0ce6)
+Clarify the 'Upstream-status' line to make this more clear.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 43021dfb77b1a841305f625d923688316dc53d4a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/haproxy/haproxy.hash | 4 ++--
- package/haproxy/haproxy.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libglib2/0001-fix-compile-time-atomic-detection.patch | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
-index a1da516b0b..a127af9195 100644
---- a/package/haproxy/haproxy.hash
-+++ b/package/haproxy/haproxy.hash
-@@ -1,5 +1,5 @@
--# From: http://www.haproxy.org/download/2.2/src/haproxy-2.2.2.tar.gz.sha256
--sha256  391c705a46c6208a63a67ea842c6600146ca24618531570c89c7915b0c6a54d6  haproxy-2.2.2.tar.gz
-+# From: http://www.haproxy.org/download/2.2/src/haproxy-2.2.4.tar.gz.sha256
-+sha256  87a4d9d4ff8dc3094cb61bbed4a8eed2c40b5ac47b9604daebaf036d7b541be2  haproxy-2.2.4.tar.gz
- # Locally computed:
- sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
- sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
-diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
-index 3ceb761c94..70ff997fbe 100644
---- a/package/haproxy/haproxy.mk
-+++ b/package/haproxy/haproxy.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/libglib2/0001-fix-compile-time-atomic-detection.patch b/package/libglib2/0001-fix-compile-time-atomic-detection.patch
+index 9d2381bb35..d84a1ab460 100644
+--- a/package/libglib2/0001-fix-compile-time-atomic-detection.patch
++++ b/package/libglib2/0001-fix-compile-time-atomic-detection.patch
+@@ -5,7 +5,7 @@ Subject: [PATCH] Fix compile time atomic detection
  
- HAPROXY_VERSION_MAJOR = 2.2
--HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).2
-+HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).4
- HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
- HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
- HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
+ Improved compile-time detection of atomic support in the compiler.
+ 
+-Upstream-Status: Merged
++Upstream-Status: 'Needs information'
+ See : https://gitlab.gnome.org/GNOME/glib/issues/1063
+ 
+ Signed-off-by: Brendan Heading <brendanheading@gmail.com>
