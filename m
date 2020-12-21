@@ -1,61 +1,55 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 21 Dec 2020 14:41:36 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/python-lxml:
- security bump to version 4.6.2
-Message-ID: <20201221132722.DED02814D1@busybox.osuosl.org>
+From: Qais Yousef <qais.yousef@arm.com>
+Date: Mon, 21 Dec 2020 13:45:49 +0000
+Subject: [Buildroot] [PATCHv6 4/5] package/bpftrace: new package
+In-Reply-To: <20201220151203.2206747-4-romain.naour@gmail.com>
+References: <20201220151203.2206747-1-romain.naour@gmail.com>
+ <20201220151203.2206747-4-romain.naour@gmail.com>
+Message-ID: <20201221134549.nk4eu6qpto36ahpq@e107158-lin>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=df85380be79a0024cbecb72fde3f2f5c6c4333f7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+On 12/20/20 16:12, Romain Naour wrote:
+> From: Qais Yousef <qais.yousef@arm.com>
+> 
+> bpftrace is a high-level tracing language for Linux enhanced Berkeley
+> Packet Filter (eBPF) available in recent Linux kernels (4.x).
+> 
+> Only tested on x86_64 and aarch64. The package doesn't support i386 and
+> aarch32.
+> 
+> The libbpf dependency allow to enable the BTF support:
+>  # bpftrace --info
+>  System
+>    OS: Linux 5.4.58 #1 SMP Sun Dec 20 15:56:56 CET 2020
+>    Arch: aarch64
+> 
+>  Build
+>    version: 2020.11-328-g019a9
+>    LLVM: 9.0.1
+>    foreach_sym: yes
+>    unsafe uprobe: no
+>    bfd: yes
+>    bpf_attach_kfunc: yes
+>    bcc_usdt_addsem: yes
+>    bcc bpf_attach_uprobe refcount: yes
+>    libbpf: yes
+>    libbpf btf dump: yes
+>    libbpf btf dump type decl: yes
+> 
+> bfptrace doesn't use the libbpf_bcc library provided by bcc package.
+> 
+> Signed-off-by: Qais Yousef <qais.yousef@arm.com>
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Cc: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+> ---
+> v6: Update DEVELOPERS file
 
-Fixes the following security issues:
+LGTM.
 
-* 4.6.2: A vulnerability (CVE-2020-27783) was discovered in the HTML Cleaner
-  by Yaniv Nizry, which allowed JavaScript to pass through.  The cleaner now
-  removes more sneaky "style" content.
+Thanks
 
-* 4.6.1: A vulnerability was discovered in the HTML Cleaner by Yaniv Nizry,
-  which allowed JavaScript to pass through.  The cleaner now removes more
-  sneaky "style" content.
-
-For more details, see the changes file:
-https://github.com/lxml/lxml/blob/lxml-4.6.2/CHANGES.txt
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit ea41a5faab3fda4589956b24d4731292872934a5)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python-lxml/python-lxml.hash | 2 +-
- package/python-lxml/python-lxml.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/python-lxml/python-lxml.hash b/package/python-lxml/python-lxml.hash
-index 240314e888..7918e08745 100644
---- a/package/python-lxml/python-lxml.hash
-+++ b/package/python-lxml/python-lxml.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  27ee0faf8077c7c1a589573b1450743011117f1aa1a91d5ae776bbc5ca6070f2  lxml-4.5.1.tar.gz
-+sha256  cd11c7e8d21af997ee8079037fff88f16fda188a9776eb4b81c7e4c9c0a7d7fc  lxml-4.6.2.tar.gz
- sha256  41d49dd406aa0e1548a6d5f21a30d6bf638b3cd96eb7289dd348d83ed2e40392  LICENSES.txt
- sha256  69edb445c1335a8312d4c09271847e9956d84f0d9f724d125340cc3fad767b2a  doc/licenses/BSD.txt
- sha256  0497ae8138811ef4466ede653bab7a59feb3d3c14f9ed50fc33a00aeb5bec32e  doc/licenses/elementtree.txt
-diff --git a/package/python-lxml/python-lxml.mk b/package/python-lxml/python-lxml.mk
-index 7e727a6753..a8874737e2 100644
---- a/package/python-lxml/python-lxml.mk
-+++ b/package/python-lxml/python-lxml.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--PYTHON_LXML_VERSION = 4.5.1
--PYTHON_LXML_SITE = https://files.pythonhosted.org/packages/03/a8/73d795778143be51d8b86750b371b3efcd7139987f71618ad9f4b8b65543
-+PYTHON_LXML_VERSION = 4.6.2
-+PYTHON_LXML_SITE = https://files.pythonhosted.org/packages/db/f7/43fecb94d66959c1e23aa53d6161231dca0e93ec500224cf31b3c4073e37
- PYTHON_LXML_SOURCE = lxml-$(PYTHON_LXML_VERSION).tar.gz
- 
- # Not including the GPL, because it is used only for the test scripts.
+--
+Qais Yousef
