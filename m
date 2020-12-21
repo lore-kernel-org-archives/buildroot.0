@@ -1,79 +1,68 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 21 Dec 2020 12:32:30 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/qt5multimedia:
- drop qt 5.6 support
-Message-ID: <20201221124320.88BCE815EC@busybox.osuosl.org>
+Date: Mon, 21 Dec 2020 12:40:12 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/qt5tools: drop qt
+ 5.6 support
+Message-ID: <20201221124322.9F9EC88314@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3152f3995aeb9dc4ec609aca28d781bb99ee9f54
+commit: https://git.buildroot.net/buildroot/commit/?id=5bf9a0325214a1de2830978996a45ccfc872779f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit be8015ac6d85a31542834e0198dccab07aa5e177)
+(cherry picked from commit 86940ea633cfde1e5513bd3e2d20cbcb45d303e3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qt5/qt5multimedia/qt5multimedia.hash |  7 -------
- package/qt5/qt5multimedia/qt5multimedia.mk   | 14 --------------
- 2 files changed, 21 deletions(-)
+ package/qt5/qt5tools/qt5tools.hash | 7 -------
+ package/qt5/qt5tools/qt5tools.mk   | 7 +------
+ 2 files changed, 1 insertion(+), 13 deletions(-)
 
-diff --git a/package/qt5/qt5multimedia/qt5multimedia.hash b/package/qt5/qt5multimedia/qt5multimedia.hash
-index aab49b6f04..eb310836bd 100644
---- a/package/qt5/qt5multimedia/qt5multimedia.hash
-+++ b/package/qt5/qt5multimedia/qt5multimedia.hash
+diff --git a/package/qt5/qt5tools/qt5tools.hash b/package/qt5/qt5tools/qt5tools.hash
+index 12531a6372..ba880076a5 100644
+--- a/package/qt5/qt5tools/qt5tools.hash
++++ b/package/qt5/qt5tools/qt5tools.hash
 @@ -1,6 +1,3 @@
--# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtmultimedia-opensource-src-5.6.3.tar.xz.mirrorlist
--sha256 ae36039ea8037742342f1615687e0ca2188f3ed0d700627a5e5be546c15e1b46 qtmultimedia-opensource-src-5.6.3.tar.xz
+-# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qttools-opensource-src-5.6.3.tar.xz.mirrorlist
+-sha256 1a63ba838058d73cb540040589b235ded77f76402693decfd6d4d3c75ea67926 qttools-opensource-src-5.6.3.tar.xz
 -
- # Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.8/submodules/qtmultimedia-everywhere-src-5.12.8.tar.xz.sha256
- sha256  26fc117f6ad012ac140353ade4371c234d6d73492f834f93b0b200b8b5552fe2  qtmultimedia-everywhere-src-5.12.8.tar.xz
+ # Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.8/submodules/qttools-everywhere-src-5.12.8.tar.xz.sha256
+ sha256  21347e8e2422689d63a08195e27c637983c0d4261d5205ce6b493a2adfe826b4  qttools-everywhere-src-5.12.8.tar.xz
  
-@@ -10,8 +7,4 @@ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE.
+@@ -10,7 +7,3 @@ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE.
  sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652 LICENSE.GPL3-EXCEPT
  sha256 da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768 LICENSE.LGPL3
  sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d LICENSE.FDL
--sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17 LICENSE.GPLv3
--sha256 1996a36160b2158c2be264d2ddfa6148ebe0f1ececff55aca8d754a1ddcc7bb8 LICENSE.LGPLv21
+-sha256 8ab0b8fe7c8e580e8c571b8fa455baf307e9394d4b3ac53ce50d8e960a8934c5 LICENSE.GPLv3
+-sha256 66f6bb53f6d985a4d651bf1ecfe8bbcbe32b0f744708d588f047580ee85d8ec8 LICENSE.LGPLv21
 -sha256 438c1f9a2b256e47dac33249f2ad6d4a9df643f1ec5312216d528a2f7ad82084 LGPL_EXCEPTION.txt
--sha256 5ceb37d1c7c1d92878b82af3c0fd5558087f3d5a08a3a4d43850bad4ad265a52 LICENSE.LGPLv3
- sha256 c1d75c15db4409bcbb182180d582f410a263dc9a631cd546b256e95f1da42165 examples/multimedia/spectrum/3rdparty/fftreal/license.txt
-diff --git a/package/qt5/qt5multimedia/qt5multimedia.mk b/package/qt5/qt5multimedia/qt5multimedia.mk
-index e598140a9a..0e9a6b97c9 100644
---- a/package/qt5/qt5multimedia/qt5multimedia.mk
-+++ b/package/qt5/qt5multimedia/qt5multimedia.mk
-@@ -10,13 +10,8 @@ QT5MULTIMEDIA_SOURCE = qtmultimedia-$(QT5_SOURCE_TARBALL_PREFIX)-$(QT5MULTIMEDIA
- QT5MULTIMEDIA_DEPENDENCIES = qt5base
- QT5MULTIMEDIA_INSTALL_STAGING = YES
+-sha256 68afaf3392f8c04218fbf29db43cc0b18bf651c1db086556aa584046de9f3e35 LICENSE.LGPLv3
+diff --git a/package/qt5/qt5tools/qt5tools.mk b/package/qt5/qt5tools/qt5tools.mk
+index 0d00022998..401b57a211 100644
+--- a/package/qt5/qt5tools/qt5tools.mk
++++ b/package/qt5/qt5tools/qt5tools.mk
+@@ -19,13 +19,8 @@ ifeq ($(BR2_PACKAGE_QT5DECLARATIVE),y)
+ QT5TOOLS_DEPENDENCIES += qt5declarative
+ endif
  
 -ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
- QT5MULTIMEDIA_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
- QT5MULTIMEDIA_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.GPL3-EXCEPT LICENSE.LGPL3 LICENSE.FDL
+ QT5TOOLS_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
+ QT5TOOLS_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.GPL3-EXCEPT LICENSE.LGPL3 LICENSE.FDL
 -else
--QT5MULTIMEDIA_LICENSE = GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3 (docs)
--QT5MULTIMEDIA_LICENSE_FILES = LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
+-QT5TOOLS_LICENSE = GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3 (docs)
+-QT5TOOLS_LICENSE_FILES = LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
 -endif
  
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE),y)
- QT5MULTIMEDIA_DEPENDENCIES += gst1-plugins-base
-@@ -47,18 +42,9 @@ define QT5MULTIMEDIA_INSTALL_STAGING_CMDS
- endef
+ QT5TOOLS_BUILD_DIRS_$(BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS) += \
+ 	linguist/lconvert linguist/lrelease linguist/lupdate
+@@ -35,7 +30,7 @@ QT5TOOLS_INSTALL_STAGING_DIR_$(BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS) += \
+ ifeq ($(BR2_PACKAGE_QT5TOOLS_QDOC_TOOL),y)
+ QT5TOOLS_BUILD_DIRS_y += qdoc
+ QT5TOOLS_INSTALL_STAGING_DIR_y += qdoc
+-QT5TOOLS_DEPENDENCIES += $(if $(BR2_PACKAGE_QT5_VERSION_LATEST),host-clang)
++QT5TOOLS_DEPENDENCIES += host-clang
+ endif
  
- ifeq ($(BR2_STATIC_LIBS),)
--# since Qt5.10.1 libqgsttools was renamed to libQtMultimediaGstTools
--# and is installed by the default target install step below
--ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST)x$(BR2_PACKAGE_GST1_PLUGINS_BASE),xy)
--define QT5MULTIMEDIA_INSTALL_TARGET_QGSTTOOLS_LIB
--	cp -dpf $(STAGING_DIR)/usr/lib/libqgsttools*.so.* $(TARGET_DIR)/usr/lib
--endef
--endif
--
- define QT5MULTIMEDIA_INSTALL_TARGET_LIBS
- 	cp -dpf $(STAGING_DIR)/usr/lib/libQt5Multimedia*.so.* $(TARGET_DIR)/usr/lib
- 	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/* $(TARGET_DIR)/usr/lib/qt/plugins
--	$(QT5MULTIMEDIA_INSTALL_TARGET_QGSTTOOLS_LIB)
- endef
- endif # !BR2_STATIC_LIBS
- 
+ QT5TOOLS_BUILD_DIRS_$(BR2_PACKAGE_QT5TOOLS_PIXELTOOL) += pixeltool
