@@ -1,48 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 21 Dec 2020 10:35:48 +0100
-Subject: [Buildroot] [git commit] package/glib-networking: bump to version
- 2.66.0
-Message-ID: <20201221093424.9DBC380567@busybox.osuosl.org>
+Date: Mon, 21 Dec 2020 10:47:33 +0100
+Subject: [Buildroot] [git commit] package/imagemagick: security bump to
+ version 7.10.51
+Message-ID: <20201221093424.BC14A80567@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=78dc1dddd0ad8e182cf65ca7b5247adebde135ee
+commit: https://git.buildroot.net/buildroot/commit/?id=b898e80639988d2da9e4a432337e3c914dc0859c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://gitlab.gnome.org/GNOME/glib-networking/-/blob/2.66.0/NEWS
+- Fix CVE-2020-29599: ImageMagick before 6.9.11-40 and 7.x before
+  7.0.10-40 mishandles the -authenticate option, which allows setting a
+  password for password-protected PDF files. The user-controlled password
+  was not properly escaped/sanitized and it was therefore possible to
+  inject additional shell commands via coders/pdf.c.
+- Update license hash (correct wording to match Apache 2 license:
+  https://github.com/ImageMagick/ImageMagick/commit/45e5d2493c08e7cb49f7268c01d847e88f78fd6c)
+
+https://github.com/ImageMagick/ImageMagick/blob/7.0.10-51/ChangeLog
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/glib-networking/glib-networking.hash | 4 ++--
- package/glib-networking/glib-networking.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/imagemagick/imagemagick.hash | 4 ++--
+ package/imagemagick/imagemagick.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/glib-networking/glib-networking.hash b/package/glib-networking/glib-networking.hash
-index 336e0aa07b..976a19f25e 100644
---- a/package/glib-networking/glib-networking.hash
-+++ b/package/glib-networking/glib-networking.hash
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index 3380378fd7..8a111edb15 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
 @@ -1,3 +1,3 @@
--# From http://ftp.gnome.org/pub/gnome/sources/glib-networking/2.64/glib-networking-2.64.3.sha256sum
--sha256  937a06b124052813bfc0b0b86bff42016ff01067582e1aca65bb6dbe0845a168  glib-networking-2.64.3.tar.xz
-+# From http://ftp.gnome.org/pub/gnome/sources/glib-networking/2.66/glib-networking-2.66.0.sha256sum
-+sha256  c5d7be2437fdd196eebfb70c4517b96d3ba7ec13bd496318b8f02dea383e0099  glib-networking-2.66.0.tar.xz
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/glib-networking/glib-networking.mk b/package/glib-networking/glib-networking.mk
-index 295c7516cc..743053390f 100644
---- a/package/glib-networking/glib-networking.mk
-+++ b/package/glib-networking/glib-networking.mk
-@@ -4,8 +4,8 @@
+ # Locally computed
+-sha256  9f2b8b131222354b196c640fca4e53eb0bbf62246621b9d467f223366272d7a7  imagemagick-7.0.10-28.tar.gz
+-sha256  e2d364de83dd9e7c866bd99ee7dac2fe92071fb70e9b187293353fb285cf09ac  LICENSE
++sha256  fa993169a06052267eaf81cf85bbf5a30c0bf243511017d986f47abbe65ff262  imagemagick-7.0.10-51.tar.gz
++sha256  7b43ee798e835f5e0dc03c92c52d288b46a771c4561d57ef2a9a8b2c76bf33cb  LICENSE
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index d44b7d1d14..f30d3dfc2b 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GLIB_NETWORKING_VERSION_MAJOR = 2.64
--GLIB_NETWORKING_VERSION = $(GLIB_NETWORKING_VERSION_MAJOR).3
-+GLIB_NETWORKING_VERSION_MAJOR = 2.66
-+GLIB_NETWORKING_VERSION = $(GLIB_NETWORKING_VERSION_MAJOR).0
- GLIB_NETWORKING_SITE = http://ftp.gnome.org/pub/gnome/sources/glib-networking/$(GLIB_NETWORKING_VERSION_MAJOR)
- GLIB_NETWORKING_SOURCE = glib-networking-$(GLIB_NETWORKING_VERSION).tar.xz
- GLIB_NETWORKING_INSTALL_STAGING = YES
+-IMAGEMAGICK_VERSION = 7.0.10-28
++IMAGEMAGICK_VERSION = 7.0.10-51
+ IMAGEMAGICK_SITE = $(call github,ImageMagick,ImageMagick,$(IMAGEMAGICK_VERSION))
+ IMAGEMAGICK_LICENSE = Apache-2.0
+ IMAGEMAGICK_LICENSE_FILES = LICENSE
