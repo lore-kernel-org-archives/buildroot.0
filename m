@@ -1,61 +1,63 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 21 Dec 2020 12:46:07 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/qt5websockets:
+Date: Mon, 21 Dec 2020 12:48:23 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/qt5xmlpatterns:
  drop qt 5.6 support
-Message-ID: <20201221124323.1332288314@busybox.osuosl.org>
+Message-ID: <20201221124323.39C83815EC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bd1881d1ec2cf5e7a49ecbd93f35c9b5e9843a78
+commit: https://git.buildroot.net/buildroot/commit/?id=e8b2fcec133c0cad114e748265930ac38f0ebd3e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 9c59c7471468290dddc8d5871602080194848197)
+(cherry picked from commit 80dd5c98f492299583b862b440f9f55ae4de54ee)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qt5/qt5websockets/qt5websockets.hash | 7 -------
- package/qt5/qt5websockets/qt5websockets.mk   | 7 +------
+ package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash | 7 -------
+ package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk   | 7 +------
  2 files changed, 1 insertion(+), 13 deletions(-)
 
-diff --git a/package/qt5/qt5websockets/qt5websockets.hash b/package/qt5/qt5websockets/qt5websockets.hash
-index 5373c2af7b..293b8fa9f7 100644
---- a/package/qt5/qt5websockets/qt5websockets.hash
-+++ b/package/qt5/qt5websockets/qt5websockets.hash
-@@ -1,6 +1,3 @@
--# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtwebsockets-opensource-src-5.6.3.tar.xz.mirrorlist
--sha256 a2439045616c89dfe06333734ff4726075c92e01db6e6b6863bc138e39c028eb qtwebsockets-opensource-src-5.6.3.tar.xz
+diff --git a/package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash b/package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash
+index 0a5d4b7998..0f82d3450b 100644
+--- a/package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash
++++ b/package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash
+@@ -1,16 +1,9 @@
+-# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtxmlpatterns-opensource-src-5.6.3.tar.xz.mirrorlist
+-sha256 a461ff9f0d7310de9b9904ff9cd34919e958bf4071a6fc7096450b8990ab51f6 qtxmlpatterns-opensource-src-5.6.3.tar.xz
 -
- # Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.8/submodules/qtwebsockets-everywhere-src-5.12.8.tar.xz.sha256
- sha256  aa4fe8ac7cffb86745aa4441c4dcaa8965b77a629755b430dac5a98d04be8465  qtwebsockets-everywhere-src-5.12.8.tar.xz
+ # Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.8/submodules/qtxmlpatterns-everywhere-src-5.12.8.tar.xz.sha256
+ sha256  10bee783e4a9fcee312cd03c7d288e5811dd9d0fe9aec828baabcd05dd47144e  qtxmlpatterns-everywhere-src-5.12.8.tar.xz
  
-@@ -9,7 +6,3 @@ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.
+ # Hashes for license files:
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
  sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE.GPL3
+-sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17 LICENSE.GPLv3
  sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652 LICENSE.GPL3-EXCEPT
  sha256 da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768 LICENSE.LGPL3
--sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17 LICENSE.GPLv3
--sha256 1996a36160b2158c2be264d2ddfa6148ebe0f1ececff55aca8d754a1ddcc7bb8 LICENSE.LGPLv21
--sha256 79949ee74297883df6e4e7c4bfe1e75a6e7695376b4a87ffc013e27bda509cb2 LGPL_EXCEPTION.txt
 -sha256 5ceb37d1c7c1d92878b82af3c0fd5558087f3d5a08a3a4d43850bad4ad265a52 LICENSE.LGPLv3
-diff --git a/package/qt5/qt5websockets/qt5websockets.mk b/package/qt5/qt5websockets/qt5websockets.mk
-index 6e734a3bf3..bd4d49940a 100644
---- a/package/qt5/qt5websockets/qt5websockets.mk
-+++ b/package/qt5/qt5websockets/qt5websockets.mk
-@@ -9,14 +9,9 @@ QT5WEBSOCKETS_SITE = $(QT5_SITE)
- QT5WEBSOCKETS_SOURCE = qtwebsockets-$(QT5_SOURCE_TARBALL_PREFIX)-$(QT5WEBSOCKETS_VERSION).tar.xz
- QT5WEBSOCKETS_DEPENDENCIES = qt5base
- QT5WEBSOCKETS_INSTALL_STAGING = YES
+ sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d LICENSE.FDL
+-sha256 1996a36160b2158c2be264d2ddfa6148ebe0f1ececff55aca8d754a1ddcc7bb8 LICENSE.LGPLv21
+-sha256 438c1f9a2b256e47dac33249f2ad6d4a9df643f1ec5312216d528a2f7ad82084 LGPL_EXCEPTION.txt
+diff --git a/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk b/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk
+index 5ce4064cb6..0d358264c7 100644
+--- a/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk
++++ b/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk
+@@ -9,14 +9,9 @@ QT5XMLPATTERNS_SITE = $(QT5_SITE)
+ QT5XMLPATTERNS_SOURCE = qtxmlpatterns-$(QT5_SOURCE_TARBALL_PREFIX)-$(QT5XMLPATTERNS_VERSION).tar.xz
+ QT5XMLPATTERNS_DEPENDENCIES = qt5base
+ QT5XMLPATTERNS_INSTALL_STAGING = YES
 -
 -ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
- QT5WEBSOCKETS_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools)
- QT5WEBSOCKETS_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.GPL3-EXCEPT LICENSE.LGPL3
+ QT5XMLPATTERNS_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
+ QT5XMLPATTERNS_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.GPL3-EXCEPT LICENSE.LGPL3 LICENSE.FDL
 -else
--QT5WEBSOCKETS_LICENSE = GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0
--QT5WEBSOCKETS_LICENSE_FILES = LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3
+-QT5XMLPATTERNS_LICENSE = GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3 (docs)
+-QT5XMLPATTERNS_LICENSE_FILES = LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
 -endif
 +
  ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
- QT5WEBSOCKETS_LICENSE += , BSD-3-Clause (examples)
+ QT5XMLPATTERNS_LICENSE += , BSD-3-Clause (examples)
  endif
