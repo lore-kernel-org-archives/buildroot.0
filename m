@@ -1,57 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 21 Dec 2020 12:31:11 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/qt5imageformats:
- drop qt 5.6 support
-Message-ID: <20201221124320.69AD0807BB@busybox.osuosl.org>
+Date: Mon, 21 Dec 2020 12:10:45 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/qt5charts: drop
+ qt 5.6 support
+Message-ID: <20201221124320.0F57388314@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6a204ef35a3bc4e173fe21287fef369f0cd3734c
+commit: https://git.buildroot.net/buildroot/commit/?id=3e0af84a27995dadbb3d5e7d208f2491dfd246df
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit fce260c8c00c6fc3b77f47f61381ed329fbe2ccb)
+(cherry picked from commit 4ccf0f8360a74905c3e6e7f69f451c1915dc92e8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qt5/qt5imageformats/qt5imageformats.hash | 5 -----
- package/qt5/qt5imageformats/qt5imageformats.mk   | 5 -----
+ package/qt5/qt5charts/qt5charts.hash | 3 ---
+ package/qt5/qt5charts/qt5charts.mk   | 7 -------
  2 files changed, 10 deletions(-)
 
-diff --git a/package/qt5/qt5imageformats/qt5imageformats.hash b/package/qt5/qt5imageformats/qt5imageformats.hash
-index 238afd4672..2d32dd6ec2 100644
---- a/package/qt5/qt5imageformats/qt5imageformats.hash
-+++ b/package/qt5/qt5imageformats/qt5imageformats.hash
+diff --git a/package/qt5/qt5charts/qt5charts.hash b/package/qt5/qt5charts/qt5charts.hash
+index 0010d1b9f7..57c53b1f74 100644
+--- a/package/qt5/qt5charts/qt5charts.hash
++++ b/package/qt5/qt5charts/qt5charts.hash
 @@ -1,6 +1,3 @@
--# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtimageformats-opensource-src-5.6.3.tar.xz.mirrorlist
--sha256 efe4da3c90c976c9b9a2eb6b081d2b8e1435935695104456276ce98e8a5848c3 qtimageformats-opensource-src-5.6.3.tar.xz
+-# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtcharts-opensource-src-2.1.3.tar.xz.mirrorlist
+-sha256 f636a9b1c255f678f11b36cd73abc807d16dae0c31ecbc75c09524703aae7d2f  qtcharts-opensource-src-2.1.3.tar.xz
 -
- # Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.8/submodules/qtimageformats-everywhere-src-5.12.8.tar.xz.sha256
- sha256  e176463c49762152131c93d6b02f1b1ff72fcd0aae3092c9fa05e57464d043b0  qtimageformats-everywhere-src-5.12.8.tar.xz
+ # Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.8/submodules/qtcharts-everywhere-src-5.12.8.tar.xz.sha256
+ sha256  ded463b3f99bf5cc5fe39ed2d70183948c6e955430ce0b21eb235b5c13bc9d16  qtcharts-everywhere-src-5.12.8.tar.xz
  
-@@ -10,5 +7,3 @@ sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17 LICENSE.
- sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652 LICENSE.GPL3-EXCEPT
- sha256 5ceb37d1c7c1d92878b82af3c0fd5558087f3d5a08a3a4d43850bad4ad265a52 LICENSE.LGPLv3
- sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d LICENSE.FDL
--sha256 1996a36160b2158c2be264d2ddfa6148ebe0f1ececff55aca8d754a1ddcc7bb8 LICENSE.LGPLv21
--sha256 438c1f9a2b256e47dac33249f2ad6d4a9df643f1ec5312216d528a2f7ad82084 LGPL_EXCEPTION.txt
-diff --git a/package/qt5/qt5imageformats/qt5imageformats.mk b/package/qt5/qt5imageformats/qt5imageformats.mk
-index fa13ebedaf..b8e581c489 100644
---- a/package/qt5/qt5imageformats/qt5imageformats.mk
-+++ b/package/qt5/qt5imageformats/qt5imageformats.mk
-@@ -10,13 +10,8 @@ QT5IMAGEFORMATS_SOURCE = qtimageformats-$(QT5_SOURCE_TARBALL_PREFIX)-$(QT5IMAGEF
- QT5IMAGEFORMATS_DEPENDENCIES = qt5base
- QT5IMAGEFORMATS_INSTALL_STAGING = YES
+diff --git a/package/qt5/qt5charts/qt5charts.mk b/package/qt5/qt5charts/qt5charts.mk
+index e359747503..f7adcc1cd5 100644
+--- a/package/qt5/qt5charts/qt5charts.mk
++++ b/package/qt5/qt5charts/qt5charts.mk
+@@ -4,21 +4,14 @@
+ #
+ ################################################################################
  
+-# Qt5Charts does not follow Qt versionning for 5.6
 -ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
- QT5IMAGEFORMATS_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
- QT5IMAGEFORMATS_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.GPL3-EXCEPT LICENSE.LGPLv3 LICENSE.FDL
+ QT5CHARTS_VERSION = $(QT5_VERSION)
 -else
--QT5IMAGEFORMATS_LICENSE = GPL-2.0 or GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3 (docs)
--QT5IMAGEFORMATS_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
+-QT5CHARTS_VERSION = 2.1.3
+-endif
+ QT5CHARTS_SITE = $(QT5_SITE)
+ QT5CHARTS_SOURCE = qtcharts-$(QT5_SOURCE_TARBALL_PREFIX)-$(QT5CHARTS_VERSION).tar.xz
+ QT5CHARTS_DEPENDENCIES = qt5base
+ QT5CHARTS_INSTALL_STAGING = YES
+ 
+ QT5CHARTS_LICENSE = GPL-3.0
+-ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+ QT5CHARTS_LICENSE_FILES = LICENSE.GPL3
 -endif
  
- define QT5IMAGEFORMATS_CONFIGURE_CMDS
- 	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/bin/qmake)
+ ifeq ($(BR2_PACKAGE_QT5DECLARATIVE),y)
+ QT5CHARTS_DEPENDENCIES += qt5declarative
