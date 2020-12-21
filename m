@@ -1,53 +1,34 @@
-From: Qais Yousef <qais.yousef@arm.com>
-Date: Mon, 21 Dec 2020 13:41:26 +0000
-Subject: [Buildroot] [PATCHv6 2/5] package/bcc: new package
-In-Reply-To: <20201220151203.2206747-2-romain.naour@gmail.com>
-References: <20201220151203.2206747-1-romain.naour@gmail.com>
- <20201220151203.2206747-2-romain.naour@gmail.com>
-Message-ID: <20201221134126.izyj6oiavibysvo4@e107158-lin>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 21 Dec 2020 14:42:28 +0100
+Subject: [Buildroot] [PATCH] package/python-lxml: security bump to
+ version 4.6.2
+In-Reply-To: <20201213230152.5819-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Mon, 14 Dec 2020 00:01:52 +0100")
+References: <20201213230152.5819-1-peter@korsgaard.com>
+Message-ID: <877dpbp96j.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/20/20 16:12, Romain Naour wrote:
-> From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-> 
-> bcc is a front-end tool for eBPF :
-> https://github.com/iovisor/bcc/blob/master/README.md.
-> eBPF is the most powerful Linux tracer, and bcc
-> allows to write eBPF scripts in C and PYTHON3.
-> 
-> bcc can help to troubleshoot issues quickly on
-> embedded systems (as long as Linux kernel
-> version >= 4.1).
-> 
-> bcc can also make it easy to create observabilty tools,
-> SDN configuration, ddos mitigation, intrusion detection
-> and secure containers. More information is available at:
-> https://ebpf.io/
-> 
-> BCC can be tested on the target :
-> $ mount -t debugfs none /sys/kernel/debug
-> $ cd /usr/share/bcc/tools
-> $ ./execsnoop
-> 
-> Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Tested-by: Qais Yousef <qais.yousef@arm.com>
-> Cc: Qais Yousef <qais.yousef@arm.com>
-> ---
-> v6
-> - Add missing python patch from Qais
-> - remove luajit patch since the luajit support is explicitely disabled
-> - keep tested-by from Qais since he tested bcc (but not the luajit support)
-> - drop the reviewed-by due to luajit and python changes
-> - Add Romain in DEVELOPERS file
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Reviewed-by: Qais Yousef <qais.yousef@arm.com>
+ > Fixes the following security issues:
+ > * 4.6.2: A vulnerability (CVE-2020-27783) was discovered in the HTML Cleaner
+ >   by Yaniv Nizry, which allowed JavaScript to pass through.  The cleaner now
+ >   removes more sneaky "style" content.
 
-Thanks!
+ > * 4.6.1: A vulnerability was discovered in the HTML Cleaner by Yaniv Nizry,
+ >   which allowed JavaScript to pass through.  The cleaner now removes more
+ >   sneaky "style" content.
 
---
-Qais Yousef
+ > For more details, see the changes file:
+ > https://github.com/lxml/lxml/blob/lxml-4.6.2/CHANGES.txt
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed to 2020.02.x, 2020.08.x and 2020.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
