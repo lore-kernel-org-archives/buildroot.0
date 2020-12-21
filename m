@@ -1,34 +1,44 @@
 From: Marcin Niestroj <m.niestroj@grinn-global.com>
-Date: Mon, 21 Dec 2020 19:24:50 +0100
-Subject: [Buildroot] [PATCH] package/python-crc16: allow to build with
- python3
-Message-ID: <20201221182450.65921-1-m.niestroj@grinn-global.com>
+Date: Mon, 21 Dec 2020 19:25:40 +0100
+Subject: [Buildroot] [PATCH] package/python-txdbus: bump to version 1.1.2
+Message-ID: <20201221182540.66071-1-m.niestroj@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-python3 is officially supported by package, as there is a usage example
-at [1]. Simply remove dependency on BR2_PACKAGE_PYTHON.
-
-[1] https://pypi.org/project/crc16/
-
 Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 ---
- package/python-crc16/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+ package/python-txdbus/python-txdbus.hash | 4 ++--
+ package/python-txdbus/python-txdbus.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-crc16/Config.in b/package/python-crc16/Config.in
-index b7a10b66ad..06ad00778c 100644
---- a/package/python-crc16/Config.in
-+++ b/package/python-crc16/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_PYTHON_CRC16
- 	bool "python-crc16"
--	depends on BR2_PACKAGE_PYTHON
- 	help
- 	  This library calculates only CRC16 (16-bit codes) and the
- 	  only supported variant at the moment is CRC-CCITT (XModem).
+diff --git a/package/python-txdbus/python-txdbus.hash b/package/python-txdbus/python-txdbus.hash
+index 60740e29d2..5d386272b8 100644
+--- a/package/python-txdbus/python-txdbus.hash
++++ b/package/python-txdbus/python-txdbus.hash
+@@ -1,3 +1,3 @@
+ # md5, sha256 from https://pypi.org/pypi/txdbus/json
+-sha256	eefcffa4efbf82ba11222f17f5989fe1b2b6ef57226ef896c4a7084c990ba217  txdbus-1.1.1.tar.gz
+-md5	ce8a0e0a17cdbada725e3159802ae75f  txdbus-1.1.1.tar.gz
++md5  d397357dee78750385f92ca9c6c1f063  txdbus-1.1.2.tar.gz
++sha256  8375a5fb68a12054f0def91af800c821fb2232949337756ed975f88d8ea2bc97  txdbus-1.1.2.tar.gz
+diff --git a/package/python-txdbus/python-txdbus.mk b/package/python-txdbus/python-txdbus.mk
+index d8e7a7bee9..4e4ddf03cb 100644
+--- a/package/python-txdbus/python-txdbus.mk
++++ b/package/python-txdbus/python-txdbus.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_TXDBUS_VERSION = 1.1.1
++PYTHON_TXDBUS_VERSION = 1.1.2
+ PYTHON_TXDBUS_SOURCE = txdbus-$(PYTHON_TXDBUS_VERSION).tar.gz
+-PYTHON_TXDBUS_SITE = https://files.pythonhosted.org/packages/4a/68/dfd06f3f349999cbbb31eade239fe76fbff2d6a905eb7d20449666d1b2ce
++PYTHON_TXDBUS_SITE = https://files.pythonhosted.org/packages/d6/ef/43377e975b8d37862fd1166a4998f908651f5e205ddc9bbd7a57c6e5b4b6
+ PYTHON_TXDBUS_SETUP_TYPE = setuptools
+ PYTHON_TXDBUS_LICENSE = MIT
+ 
 -- 
 2.29.2
