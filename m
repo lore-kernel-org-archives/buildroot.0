@@ -1,27 +1,45 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 21 Dec 2020 14:14:09 +0100
-Subject: [Buildroot] [git commit] package/dtv-scan-tables: switch
- upstream location
-In-Reply-To: <20201213195530.C89FF82B7C@busybox.osuosl.org> (Yann E. MORIN's
- message of "Sun, 13 Dec 2020 21:09:59 +0100")
-References: <20201213195530.C89FF82B7C@busybox.osuosl.org>
-Message-ID: <87ft3zpahq.fsf@dell.be.48ers.dk>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 21 Dec 2020 14:22:49 +0100
+Subject: [Buildroot] [PATCH 1/1] package/librsvg: bump to version 2.50.2
+Message-ID: <20201221132249.732645-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+https://gitlab.gnome.org/GNOME/librsvg/-/blob/2.50.2/NEWS
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=c7bd3805bded7c840731956c97233b0607a78e3f
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/librsvg/librsvg.hash | 4 ++--
+ package/librsvg/librsvg.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- > The old git tree is unreachable now, switch to using the new one.
-
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-
-Committed to 2020.02.x, 2020.08.x and 2020.11.x, thanks.
-
+diff --git a/package/librsvg/librsvg.hash b/package/librsvg/librsvg.hash
+index da9f758f48..1b3c26687b 100644
+--- a/package/librsvg/librsvg.hash
++++ b/package/librsvg/librsvg.hash
+@@ -1,5 +1,5 @@
+-# From http://ftp.gnome.org/pub/gnome/sources/librsvg/2.50/librsvg-2.50.0.sha256sum
+-sha256  b3fadba240f09b9c9898ab20cb7311467243e607cf8f928b7c5f842474ee3df4  librsvg-2.50.0.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/librsvg/2.50/librsvg-2.50.2.sha256sum
++sha256  6211f271ce4cd44a7318190d36712e9cea384a933d3e3570004edeb210a056d3  librsvg-2.50.2.tar.xz
+ 
+ # Locally computed
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/librsvg/librsvg.mk b/package/librsvg/librsvg.mk
+index 120f71c792..6a45fc97e2 100644
+--- a/package/librsvg/librsvg.mk
++++ b/package/librsvg/librsvg.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBRSVG_VERSION_MAJOR = 2.50
+-LIBRSVG_VERSION = $(LIBRSVG_VERSION_MAJOR).0
++LIBRSVG_VERSION = $(LIBRSVG_VERSION_MAJOR).2
+ LIBRSVG_SITE = http://ftp.gnome.org/pub/gnome/sources/librsvg/$(LIBRSVG_VERSION_MAJOR)
+ LIBRSVG_SOURCE = librsvg-$(LIBRSVG_VERSION).tar.xz
+ LIBRSVG_INSTALL_STAGING = YES
 -- 
-Bye, Peter Korsgaard
+2.29.2
