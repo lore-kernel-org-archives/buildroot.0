@@ -1,68 +1,31 @@
-From: Qais Yousef <qais.yousef@arm.com>
-Date: Mon, 21 Dec 2020 14:30:56 +0000
-Subject: [Buildroot] [PATCHv6 5/5] package/bcc: add optional luajit
- dependency
-In-Reply-To: <20201220151203.2206747-5-romain.naour@gmail.com>
-References: <20201220151203.2206747-1-romain.naour@gmail.com>
- <20201220151203.2206747-5-romain.naour@gmail.com>
-Message-ID: <20201221143056.lwutjzww3wxk2fr6@e107158-lin>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 21 Dec 2020 17:26:28 +0100
+Subject: [Buildroot] [PATCH 1/1] package/uclibc-ng-test: disable TLS for
+ nios2
+In-Reply-To: <20201128102639.1158730-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 28 Nov 2020 11:26:39 +0100")
+References: <20201128102639.1158730-1-fontaine.fabrice@gmail.com>
+Message-ID: <874kkfnn0r.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/20/20 16:12, Romain Naour wrote:
-> The luajit dependency was explicitely disabled when bcc has
-> been added to Buildroot.
-> Even if the python binding is probably more used, enable
-> luajit binding if luajit package is enabled in the defconfig.
-> 
-> Fix the luajit command line used to build bcc.o, otherwise
-> bcc.o is build for the host.
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Qais Yousef <qais.yousef@arm.com>
-> ---
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-This compiles fine for me. And the patch looks good to me too. But when I tried
-to test it by following the example from the website
+ > Disable TLS for nios2 to avoid the following build failure:
+ > In file included from tst-tls1.c:6:
+ > tls-macros.h:101:3: error: #error "No support for this architecture so far."
+ >  # error "No support for this architecture so far."
+ >    ^~~~~
 
-	$ sudo src/lua/bcc-probe examples/lua/task_switch.lua
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/303e50d996b7261896f163418831fabb40779ff5
 
-I noticed there's no bcc-probe in the target. When I copied it manually and
-tried to run the above command I ended up with the below error.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-	# /root/bcc-probe examples/lua/task_switch.lua
-	luajit: /root/bcc-probe:20: module 'bcc.run' not found:
-		no field package.preload['bcc.run']
-		no file '/root//bcc/run.lua'
-		no file './bcc/run.lua'
-		no file '/usr/share/luajit-2.1.2/bcc/run.lua'
-		no file '/usr/local/share/lua/5.1/bcc/run.lua'
-		no file '/usr/local/share/lua/5.1/bcc/run/init.lua'
-		no file '/usr/share/lua/5.1/bcc/run.lua'
-		no file '/usr/share/lua/5.1/bcc/run/init.lua'
-		no file './bcc/run.so'
-		no file '/usr/local/lib/lua/5.1/bcc/run.so'
-		no file '/usr/lib/lua/5.1/bcc/run.so'
-		no file '/usr/local/lib/lua/5.1/loadall.so'
-		no file './bcc.so'
-		no file '/usr/local/lib/lua/5.1/bcc.so'
-		no file '/usr/lib/lua/5.1/bcc.so'
-		no file '/usr/local/lib/lua/5.1/loadall.so'
-	stack traceback:
-		[C]: in function 'require'
-		/root/bcc-probe:20: in main chunk
-		[C]: at 0x00402414
+Committed to 2020.11.x, thanks.
 
-I admit I enabled luajit after initially building bcc without it. Although
-I deleted output/build/bcc* to ensure it gets rebuilt against the new
-dependency.
-
-I'll try again with a full clean build to see if this fixes it.
-
-Thanks
-
---
-Qais Yousef
+-- 
+Bye, Peter Korsgaard
