@@ -1,64 +1,58 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 21 Dec 2020 12:47:36 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/qt5x11extras:
- drop qt 5.6 support
-Message-ID: <20201221124323.2D7C8815EC@busybox.osuosl.org>
+Date: Mon, 21 Dec 2020 12:39:39 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/qt5svg: drop qt
+ 5.6 support
+Message-ID: <20201221124322.9380288314@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bcfcd258f3468b645eb9c5de0cc387c5c29ff284
+commit: https://git.buildroot.net/buildroot/commit/?id=55e1da2290b5760bcb70d1f22ebcb914322cf48d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-And get rid of the 5.12.8 subdir now that the version selection is gone.
-
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 83f8813d4145087f5d58ccaf119b35b6bb4c972a)
+(cherry picked from commit c99c2f7e6af0a37fb6156d24884656e70e24e212)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qt5/qt5x11extras/5.6.3/qt5x11extras.hash        | 10 ----------
- package/qt5/qt5x11extras/{5.12.8 => }/qt5x11extras.hash |  0
- package/qt5/qt5x11extras/qt5x11extras.mk                |  6 ------
- 3 files changed, 16 deletions(-)
+ package/qt5/qt5svg/qt5svg.hash | 5 -----
+ package/qt5/qt5svg/qt5svg.mk   | 6 ------
+ 2 files changed, 11 deletions(-)
 
-diff --git a/package/qt5/qt5x11extras/5.6.3/qt5x11extras.hash b/package/qt5/qt5x11extras/5.6.3/qt5x11extras.hash
-deleted file mode 100644
-index b34c059983..0000000000
---- a/package/qt5/qt5x11extras/5.6.3/qt5x11extras.hash
-+++ /dev/null
-@@ -1,10 +0,0 @@
--# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtx11extras-opensource-src-5.6.3.tar.xz.mirrorlist
--sha256 1e7a8e96e0629f2b2b78de684b156b357210cf5df6b42f30789423f2cb07677f qtx11extras-opensource-src-5.6.3.tar.xz
+diff --git a/package/qt5/qt5svg/qt5svg.hash b/package/qt5/qt5svg/qt5svg.hash
+index a3af0a4646..ffb4fe4199 100644
+--- a/package/qt5/qt5svg/qt5svg.hash
++++ b/package/qt5/qt5svg/qt5svg.hash
+@@ -1,6 +1,3 @@
+-# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtsvg-opensource-src-5.6.3.tar.xz.mirrorlist
+-sha256 100f183517b46554079beabd8d2cabe3070a74dd0a2e64b6a304eac71cfadcec qtsvg-opensource-src-5.6.3.tar.xz
 -
--# Hashes for license files:
--sha256 edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253 LICENSE.GPLv2
--sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17 LICENSE.GPLv3
+ # Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.8/submodules/qtsvg-everywhere-src-5.12.8.tar.xz.sha256
+ sha256  af2aad75a48c2e4ad70aa298decceb5afc41d499aec119ad72635363a2dfbb5d  qtsvg-everywhere-src-5.12.8.tar.xz
+ 
+@@ -9,5 +6,3 @@ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.
+ sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17 LICENSE.GPLv3
+ sha256 5ceb37d1c7c1d92878b82af3c0fd5558087f3d5a08a3a4d43850bad4ad265a52 LICENSE.LGPLv3
+ sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d LICENSE.FDL
 -sha256 1996a36160b2158c2be264d2ddfa6148ebe0f1ececff55aca8d754a1ddcc7bb8 LICENSE.LGPLv21
 -sha256 438c1f9a2b256e47dac33249f2ad6d4a9df643f1ec5312216d528a2f7ad82084 LGPL_EXCEPTION.txt
--sha256 5ceb37d1c7c1d92878b82af3c0fd5558087f3d5a08a3a4d43850bad4ad265a52 LICENSE.LGPLv3
--sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d LICENSE.FDL
-diff --git a/package/qt5/qt5x11extras/5.12.8/qt5x11extras.hash b/package/qt5/qt5x11extras/qt5x11extras.hash
-similarity index 100%
-rename from package/qt5/qt5x11extras/5.12.8/qt5x11extras.hash
-rename to package/qt5/qt5x11extras/qt5x11extras.hash
-diff --git a/package/qt5/qt5x11extras/qt5x11extras.mk b/package/qt5/qt5x11extras/qt5x11extras.mk
-index 6acc9462c1..5d6e564c05 100644
---- a/package/qt5/qt5x11extras/qt5x11extras.mk
-+++ b/package/qt5/qt5x11extras/qt5x11extras.mk
-@@ -9,14 +9,8 @@ QT5X11EXTRAS_SITE = $(QT5_SITE)
- QT5X11EXTRAS_SOURCE = qtx11extras-$(QT5_SOURCE_TARBALL_PREFIX)-$(QT5X11EXTRAS_VERSION).tar.xz
- QT5X11EXTRAS_DEPENDENCIES = qt5base
- QT5X11EXTRAS_INSTALL_STAGING = YES
+diff --git a/package/qt5/qt5svg/qt5svg.mk b/package/qt5/qt5svg/qt5svg.mk
+index cb91844efd..f91c75694e 100644
+--- a/package/qt5/qt5svg/qt5svg.mk
++++ b/package/qt5/qt5svg/qt5svg.mk
+@@ -9,14 +9,8 @@ QT5SVG_SITE = $(QT5_SITE)
+ QT5SVG_SOURCE = qtsvg-$(QT5_SOURCE_TARBALL_PREFIX)-$(QT5SVG_VERSION).tar.xz
+ QT5SVG_DEPENDENCIES = qt5base
+ QT5SVG_INSTALL_STAGING = YES
 -
 -ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
- QT5X11EXTRAS_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
- QT5X11EXTRAS_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.GPL3-EXCEPT LICENSE.LGPL3 LICENSE.FDL
+ QT5SVG_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
+ QT5SVG_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPLv3 LICENSE.LGPLv3 LICENSE.FDL
 -else
--QT5X11EXTRAS_LICENSE = GPL-2.0 or GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3 (docs)
--QT5X11EXTRAS_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
+-QT5SVG_LICENSE = GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3 (docs)
+-QT5SVG_LICENSE_FILES = LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
 -endif
  
- define QT5X11EXTRAS_CONFIGURE_CMDS
+ define QT5SVG_CONFIGURE_CMDS
  	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/bin/qmake)
