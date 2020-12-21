@@ -1,35 +1,33 @@
-From: Qais Yousef <qais.yousef@arm.com>
-Date: Mon, 21 Dec 2020 13:43:52 +0000
-Subject: [Buildroot] [PATCHv6 3/5] package/libbpf: new package
-In-Reply-To: <20201220151203.2206747-3-romain.naour@gmail.com>
-References: <20201220151203.2206747-1-romain.naour@gmail.com>
- <20201220151203.2206747-3-romain.naour@gmail.com>
-Message-ID: <20201221134352.qv3bunyym5pyvlar@e107158-lin>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 21 Dec 2020 14:43:54 +0100
+Subject: [Buildroot] [PATCH 1/1] package/unbound: security bump to
+ version 1.13.0
+In-Reply-To: <20201212215558.29057-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 12 Dec 2020 22:55:58 +0100")
+References: <20201212215558.29057-1-fontaine.fabrice@gmail.com>
+Message-ID: <8735zzp945.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 12/20/20 16:12, Romain Naour wrote:
-> A mirror of bpf-next linux tree bpf-next/tools/lib/bpf
-> directory plus its supporting header files. The version
-> of the package reflects the version of ABI.
-> 
-> Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Qais Yousef <qais.yousef@arm.com>
-> ---
-> I'm not sure if updating the bpf.h provided by the toolchain linux-headers
-> is the right things to do.
-> 
-> v6: Update DEVELOPERS file
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-LGTM.
+ > This version has fixes to connect for UDP sockets, slowing down
+ > potential ICMP side channel leakage. The fix can be controlled with the
+ > option udp-connect: yes, it is enabled by default.
 
-Reviewed-by: Qais Yousef <qais.yousef@arm.com>
+ > Additionally CVE-2020-28935 is fixed, this solves a problem where the
+ > pidfile is altered by a symlink, and fails if a symlink is encountered.
+ > See https://nlnetlabs.nl/downloads/unbound/CVE-2020-28935.txt for more
+ > information.
 
-Thanks
+ > https://github.com/NLnetLabs/unbound/releases/tag/release-1.13.0
 
---
-Qais Yousef
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed to 2020.08.x and 2020.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
