@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 21 Dec 2020 15:19:54 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x]
+Date: Mon, 21 Dec 2020 15:19:45 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x]
  package/shadowsocks-libev: fix static build with netfilter_conntrack
-Message-ID: <20201221140331.17CB683554@busybox.osuosl.org>
+Message-ID: <20201221140338.027F188395@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ed1777c0e415bd58703ac906a509ea2363065b9e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=41bd2e0009867a0cfb4908199c650e595fd3cf9e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
 Fixes:
  - http://autobuild.buildroot.org/results/6cad497a7ab941a0ee3fd7007defc81e30cdcbe0
