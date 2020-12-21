@@ -1,59 +1,65 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 21 Dec 2020 12:07:40 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/qt53d: drop 5.6
- support
-Message-ID: <20201221124319.E993988314@busybox.osuosl.org>
+Date: Mon, 21 Dec 2020 12:30:05 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/qt5enginio: drop
+ qt 5.6 support
+Message-ID: <20201221124320.409EE815EC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b31ec94b7176f70a9def05d4008b2c11974f0ab8
+commit: https://git.buildroot.net/buildroot/commit/?id=0df80d89692cdae4a6398165c3af49f952b39b92
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
+And get rid of the now unused BR2_PACKAGE_QT5BASE_OPENSSL symbol.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 66afb27b9d546d251e765ad1bde06471e65bbc17)
+(cherry picked from commit 366b3bb39f03465ec7c27ef316089d5f4290501b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qt5/qt53d/qt53d.hash |  3 ---
- package/qt5/qt53d/qt53d.mk   | 10 ++--------
- 2 files changed, 2 insertions(+), 11 deletions(-)
+ package/qt5/qt5base/Config.in    |  4 ----
+ package/qt5/qt5enginio/Config.in | 12 +-----------
+ 2 files changed, 1 insertion(+), 15 deletions(-)
 
-diff --git a/package/qt5/qt53d/qt53d.hash b/package/qt5/qt53d/qt53d.hash
-index 5e7db55a56..7ed0e4bca3 100644
---- a/package/qt5/qt53d/qt53d.hash
-+++ b/package/qt5/qt53d/qt53d.hash
-@@ -1,6 +1,3 @@
--# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qt3d-opensource-src-5.6.3.tar.xz.mirrorlist
--sha256 10d05a30e925fcad971126c7f47a5e32c39f007dab96b298b2094501f9607ffe qt3d-opensource-src-5.6.3.tar.xz
+diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
+index 1862a7d9b6..60a611e292 100644
+--- a/package/qt5/qt5base/Config.in
++++ b/package/qt5/qt5base/Config.in
+@@ -283,10 +283,6 @@ comment "icu support needs a toolchain w/ gcc >= 4.8"
+ 	depends on !BR2_BINFMT_FLAT
+ 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 
+-config BR2_PACKAGE_QT5BASE_OPENSSL
+-	bool
+-	default y if BR2_PACKAGE_OPENSSL
 -
- # Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.8/submodules/qt3d-everywhere-src-5.12.8.tar.xz.sha256
- sha256  066d360df173c024264c957546b8265ac14e44ef8007a181e1d723399f7c1257  qt3d-everywhere-src-5.12.8.tar.xz
+ config BR2_PACKAGE_QT5BASE_TSLIB
+ 	bool "Enable Tslib support"
+ 	select BR2_PACKAGE_TSLIB
+diff --git a/package/qt5/qt5enginio/Config.in b/package/qt5/qt5enginio/Config.in
+index f84d234771..d445d91dea 100644
+--- a/package/qt5/qt5enginio/Config.in
++++ b/package/qt5/qt5enginio/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_QT5ENGINIO
+ 	bool "qt5enginio"
+-	depends on BR2_PACKAGE_QT5BASE_OPENSSL
++	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_QT5BASE_GUI
+ 	select BR2_PACKAGE_QT5BASE_NETWORK
+ 	help
+@@ -14,13 +14,3 @@ config BR2_PACKAGE_QT5ENGINIO
+ 	  5.6 and not recommended for new design.
  
-diff --git a/package/qt5/qt53d/qt53d.mk b/package/qt5/qt53d/qt53d.mk
-index 7674b44558..1028dd6a65 100644
---- a/package/qt5/qt53d/qt53d.mk
-+++ b/package/qt5/qt53d/qt53d.mk
-@@ -36,19 +36,13 @@ endef
- endif
- 
- ifeq ($(BR2_STATIC_LIBS),)
--ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
--# Available since 5.9
--define QT53D_INSTALL_TARGET_LATEST
--	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/geometryloaders $(TARGET_DIR)/usr/lib/qt/plugins
--	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/renderplugins $(TARGET_DIR)/usr/lib/qt/plugins
--endef
--endif
- define QT53D_INSTALL_TARGET_CMDS
- 	cp -dpf $(STAGING_DIR)/usr/lib/libQt53D*.so.* $(TARGET_DIR)/usr/lib
- 	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/sceneparsers $(TARGET_DIR)/usr/lib/qt/plugins
- 	cp -dpfr $(STAGING_DIR)/usr/qml/Qt3D $(TARGET_DIR)/usr/qml
- 	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick $(TARGET_DIR)/usr/qml
--	$(QT53D_INSTALL_TARGET_LATEST)
-+	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/geometryloaders $(TARGET_DIR)/usr/lib/qt/plugins
-+	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/renderplugins $(TARGET_DIR)/usr/lib/qt/plugins
- 	$(QT53D_INSTALL_TARGET_EXAMPLES)
- endef
- endif
+ 	  http://doc.qt.io/archives/qt-5.5/enginio-index.html
+-
+-# When Qt 5.6 is removed, replace the depends on
+-# BR2_PACKAGE_QT5BASE_OPENSSL above by a select BR2_PACKAGE_OPENSSL.
+-comment "qt5enginio needs libressl"
+-	depends on BR2_PACKAGE_QT5_VERSION_5_6
+-	depends on !BR2_PACKAGE_QT5BASE_OPENSSL
+-
+-comment "qt5enginio needs openssl"
+-	depends on BR2_PACKAGE_QT5_VERSION_LATEST
+-	depends on !BR2_PACKAGE_QT5BASE_OPENSSL
