@@ -1,45 +1,30 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 21 Dec 2020 14:22:49 +0100
-Subject: [Buildroot] [PATCH 1/1] package/librsvg: bump to version 2.50.2
-Message-ID: <20201221132249.732645-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 21 Dec 2020 14:41:09 +0100
+Subject: [Buildroot] [PATCH 1/1] package/sqlcipher: security bump to
+ version 4.4.2
+In-Reply-To: <20201210220853.375772-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 10 Dec 2020 23:08:53 +0100")
+References: <20201210220853.375772-1-fontaine.fabrice@gmail.com>
+Message-ID: <87blenp98q.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://gitlab.gnome.org/GNOME/librsvg/-/blob/2.50.2/NEWS
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/librsvg/librsvg.hash | 4 ++--
- package/librsvg/librsvg.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ > Fix CVE-2020-27207: Zetetic SQLCipher 4.x before 4.4.1 has a
+ > use-after-free, related to sqlcipher_codec_pragma and sqlite3Strlen30 in
+ > sqlite3.c. A remote denial of service attack can be performed. For
+ > example, a SQL injection can be used to execute the crafted SQL command
+ > sequence. After that, some unexpected RAM data is read.
 
-diff --git a/package/librsvg/librsvg.hash b/package/librsvg/librsvg.hash
-index da9f758f48..1b3c26687b 100644
---- a/package/librsvg/librsvg.hash
-+++ b/package/librsvg/librsvg.hash
-@@ -1,5 +1,5 @@
--# From http://ftp.gnome.org/pub/gnome/sources/librsvg/2.50/librsvg-2.50.0.sha256sum
--sha256  b3fadba240f09b9c9898ab20cb7311467243e607cf8f928b7c5f842474ee3df4  librsvg-2.50.0.tar.xz
-+# From http://ftp.gnome.org/pub/gnome/sources/librsvg/2.50/librsvg-2.50.2.sha256sum
-+sha256  6211f271ce4cd44a7318190d36712e9cea384a933d3e3570004edeb210a056d3  librsvg-2.50.2.tar.xz
- 
- # Locally computed
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/librsvg/librsvg.mk b/package/librsvg/librsvg.mk
-index 120f71c792..6a45fc97e2 100644
---- a/package/librsvg/librsvg.mk
-+++ b/package/librsvg/librsvg.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LIBRSVG_VERSION_MAJOR = 2.50
--LIBRSVG_VERSION = $(LIBRSVG_VERSION_MAJOR).0
-+LIBRSVG_VERSION = $(LIBRSVG_VERSION_MAJOR).2
- LIBRSVG_SITE = http://ftp.gnome.org/pub/gnome/sources/librsvg/$(LIBRSVG_VERSION_MAJOR)
- LIBRSVG_SOURCE = librsvg-$(LIBRSVG_VERSION).tar.xz
- LIBRSVG_INSTALL_STAGING = YES
+ > https://www.zetetic.net/blog/2020/11/25/sqlcipher-442-release
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed to 2020.02.x, 2020.08.x and 2020.11.x, thanks.
+
 -- 
-2.29.2
+Bye, Peter Korsgaard
