@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 21 Dec 2020 10:29:50 +0100
-Subject: [Buildroot] [PATCH 2/3] package/perl-devel-size: new package
-In-Reply-To: <20201207100443.13727-2-patrickdepinguin@gmail.com> (Thomas De
- Schampheleire's message of "Mon, 7 Dec 2020 11:04:39 +0100")
+Date: Mon, 21 Dec 2020 10:29:55 +0100
+Subject: [Buildroot] [PATCH 3/3] package/perl-math-int64: new package
+In-Reply-To: <20201207100443.13727-3-patrickdepinguin@gmail.com> (Thomas De
+ Schampheleire's message of "Mon, 7 Dec 2020 11:04:40 +0100")
 References: <20201207100443.13727-1-patrickdepinguin@gmail.com>
- <20201207100443.13727-2-patrickdepinguin@gmail.com>
-Message-ID: <874kkfse0h.fsf@dell.be.48ers.dk>
+ <20201207100443.13727-3-patrickdepinguin@gmail.com>
+Message-ID: <87zh27qzfw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
