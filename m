@@ -1,47 +1,41 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 21 Dec 2020 15:10:01 +0100
-Subject: [Buildroot] [PATCH 1/1] package/memcached: bump to version 1.6.9
-Message-ID: <20201221141001.766199-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 21 Dec 2020 14:46:14 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/libglib2: correct
+ upstream status for patch 0001
+Message-ID: <20201221135846.1C47B87EB2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://github.com/memcached/memcached/wiki/ReleaseNotes169
+commit: https://git.buildroot.net/buildroot/commit/?id=0e6c245f7a5b2ce97a698d3c25070fac81b5dc99
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Patch '0001-fix-compile-time-atomic-detection.patch' claims to be Merged but
+this is not true. The linked issue is closed with 'Needs information', and
+the code itself is effectively not merged.
+
+Clarify the 'Upstream-status' line to make this more clear.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 43021dfb77b1a841305f625d923688316dc53d4a)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/memcached/memcached.hash | 6 +++---
- package/memcached/memcached.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libglib2/0001-fix-compile-time-atomic-detection.patch | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/memcached/memcached.hash b/package/memcached/memcached.hash
-index 1330f6521c..a86a6f9f73 100644
---- a/package/memcached/memcached.hash
-+++ b/package/memcached/memcached.hash
-@@ -1,6 +1,6 @@
--# From http://www.memcached.org/files/memcached-1.6.8.tar.gz.sha1
--sha1  8f3efd851efc5b822bd991b93d06a271b2fac052  memcached-1.6.8.tar.gz
-+# From http://www.memcached.org/files/memcached-1.6.9.tar.gz.sha1
-+sha1  42ae062094fdf083cfe7b21ff377c781011c2be1  memcached-1.6.9.tar.gz
+diff --git a/package/libglib2/0001-fix-compile-time-atomic-detection.patch b/package/libglib2/0001-fix-compile-time-atomic-detection.patch
+index a471275243..461be19b72 100644
+--- a/package/libglib2/0001-fix-compile-time-atomic-detection.patch
++++ b/package/libglib2/0001-fix-compile-time-atomic-detection.patch
+@@ -5,7 +5,7 @@ Subject: [PATCH] Fix compile time atomic detection
  
- # Locally computed
--sha256  e23b3a11f6ff52ac04ae5ea2e287052ce58fd1eadd394622eb65c3598fcd7939  memcached-1.6.8.tar.gz
-+sha256  d5a62ce377314dbffdb37c4467e7763e3abae376a16171e613cbe69956f092d1  memcached-1.6.9.tar.gz
- sha256  bc887c4ad8051fe690ace9528fe37a2e0bb362e6d963331d82e845ca9b585a0c  COPYING
-diff --git a/package/memcached/memcached.mk b/package/memcached/memcached.mk
-index 378f57a276..049e3409f0 100644
---- a/package/memcached/memcached.mk
-+++ b/package/memcached/memcached.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ Improved compile-time detection of atomic support in the compiler.
  
--MEMCACHED_VERSION = 1.6.8
-+MEMCACHED_VERSION = 1.6.9
- MEMCACHED_SITE = http://www.memcached.org/files
- MEMCACHED_DEPENDENCIES = libevent
- MEMCACHED_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
--- 
-2.29.2
+-Upstream-Status: Merged
++Upstream-Status: 'Needs information'
+ See : https://gitlab.gnome.org/GNOME/glib/issues/1063
+ 
+ Signed-off-by: Brendan Heading <brendanheading@gmail.com>
