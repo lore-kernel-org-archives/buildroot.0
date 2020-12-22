@@ -1,40 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 22 Dec 2020 11:49:53 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] DEVELOPERS: remove Owen
- Walpole
-Message-ID: <20201222103551.8A732884F6@busybox.osuosl.org>
+Date: Tue, 22 Dec 2020 11:51:44 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/ncurses: don't
+ attempt calling ldconfig in host-ncurses
+Message-ID: <20201222103556.08FA4884F6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=faada8a71df418d33a679a65015b3cf8c53fbbad
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=9f1e9894ba042893f284271ab6ec8bd479d5d351
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-His e-mail has been bouncing for quite a while:
+The host-ncurses install step attempts to run ldconfig, causing a permission
+failure:
 
-<owen@walpole.dev>: connect to mail.walpole.dev[99.91.194.115]:25: Connection
-    timed out
+cd /buildroot/output/host/lib && (ln -s -f libncurses.so.6.0 libncurses.so.6; ln -s -f libncurses.so.6 libncurses.so; )
+test -z "" && /sbin/ldconfig
+/sbin/ldconfig: Can't create temporary cache file /etc/ld.so.cache~: Permission denied
+make[3]: [/buildroot/output/host/lib/libncurses.so.6.0] Error 1 (ignored)
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit d98e906dfced8fac5f8f733ce3e1d0b34f4a9401)
+The error is non-fatal and ignored, but confusing.
+
+The ncurses makefiles already avoid calling ldconfig when DESTDIR is set
+(target case) but for host-ncurses DESTDIR is empty and the output/host path
+is passed via --prefix.
+
+Pass an empty ac_cv_path_LDCONFIG to the configure step, so than ldconfig is
+not called.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 389f48fe90cc8ed77a76a245d3e3ec1fa965df64)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 3 ---
- 1 file changed, 3 deletions(-)
+ package/ncurses/ncurses.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 8096c89e4f..eefe3f9fbd 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1946,9 +1946,6 @@ F:	package/openjpeg/
- N:	Olivier Singla <olivier.singla@gmail.com>
- F:	package/shellinabox/
+diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
+index f4e4784a3c..4d8dcecc3a 100644
+--- a/package/ncurses/ncurses.mk
++++ b/package/ncurses/ncurses.mk
+@@ -187,6 +187,9 @@ define HOST_NCURSES_BUILD_CMDS
+ 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)/progs tic
+ endef
  
--N:	Owen Walpole <owen@walpole.dev>
--F:	package/parprouted/
--
- N:	Parnell Springmeyer <parnell@digitalmentat.com>
- F:	package/scrypt/
- 
++HOST_NCURSES_CONF_ENV = \
++	ac_cv_path_LDCONFIG=""
++
+ HOST_NCURSES_CONF_OPTS = \
+ 	--with-shared \
+ 	--without-gpm \
