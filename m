@@ -1,38 +1,35 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 22 Dec 2020 15:15:38 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/python-pyqt5: fix
- qt5 openssl conditional
-Message-ID: <20201222140147.08295815F1@busybox.osuosl.org>
+From: Maxime Chevallier <maxime.chevallier@bootlin.com>
+Date: Tue, 22 Dec 2020 16:07:24 +0100
+Subject: [Buildroot] [PATCH 03/15] package/network-manager: add SELinux
+ module
+In-Reply-To: <20201222150736.319593-1-maxime.chevallier@bootlin.com>
+References: <20201222150736.319593-1-maxime.chevallier@bootlin.com>
+Message-ID: <20201222150736.319593-4-maxime.chevallier@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=97376bf7a4fd6d8d7df5107807d6bfe762b47b11
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+Support for NetworkManager is added by the services/networkmanager
+module in the SELinux refpolicy.
 
-BR2_PACKAGE_QT5BASE_OPENSSL was dropped by commit 4be1f9b9873
-(package/qt5enginio: drop qt 5.6 support), but python-pyqt5 not updated to
-match.  Fix that.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 54854dc44e6ff937834bf00a2b63186fd066477c)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
 ---
- package/python-pyqt5/python-pyqt5.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/network-manager/network-manager.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/python-pyqt5/python-pyqt5.mk b/package/python-pyqt5/python-pyqt5.mk
-index 9285b6497c..8f28c90d15 100644
---- a/package/python-pyqt5/python-pyqt5.mk
-+++ b/package/python-pyqt5/python-pyqt5.mk
-@@ -135,7 +135,7 @@ PYTHON_PYQT5_QTDETAIL_TYPE = shared
- # Turn off features that aren't available in current qt configuration
- PYTHON_PYQT5_QTDETAIL_DISABLE_FEATURES += $(if $(BR2_PACKAGE_QT5BASE_OPENGL),,PyQt_OpenGL)
- PYTHON_PYQT5_QTDETAIL_DISABLE_FEATURES += $(if $(BR2_PACKAGE_QT5BASE_OPENGL_DESKTOP),,PyQt_Desktop_OpenGL)
--PYTHON_PYQT5_QTDETAIL_DISABLE_FEATURES += $(if $(BR2_PACKAGE_QT5BASE_OPENSSL),,PyQt_SSL)
-+PYTHON_PYQT5_QTDETAIL_DISABLE_FEATURES += $(if $(BR2_PACKAGE_OPENSSL),,PyQt_SSL)
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index 3dc3188f32..4b2ade5b9b 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -13,6 +13,7 @@ NETWORK_MANAGER_DEPENDENCIES = host-pkgconf udev gnutls libglib2 \
+ 	libgcrypt wireless_tools util-linux host-intltool readline libndp
+ NETWORK_MANAGER_LICENSE = GPL-2.0+ (app), LGPL-2.1+ (libnm)
+ NETWORK_MANAGER_LICENSE_FILES = COPYING COPYING.LGPL CONTRIBUTING
++NETWORK_MANAGER_SELINUX_MODULES = networkmanager
  
- define PYTHON_PYQT5_QTDETAIL
- 	echo $(1) >> $(2)/qtdetail.out
+ NETWORK_MANAGER_CONF_ENV = \
+ 	ac_cv_path_LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config \
+-- 
+2.25.4
