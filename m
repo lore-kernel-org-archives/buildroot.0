@@ -1,50 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 22 Dec 2020 13:51:11 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/ghostscript: bump
- to version 9.53.3
-Message-ID: <20201222140041.3F0E188271@busybox.osuosl.org>
+Date: Tue, 22 Dec 2020 15:15:47 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/python-pyqt5: fix
+ qt5 openssl conditional
+Message-ID: <20201222140041.5351A8645C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9b29bfa5dc4fd4098cb3227d57d252a2b7acdd8a
+commit: https://git.buildroot.net/buildroot/commit/?id=d74ea609ab3c746d903ef94677ef2373a6686339
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-https://www.ghostscript.com/doc/9.53.3/News.htm
+BR2_PACKAGE_QT5BASE_OPENSSL was dropped by commit 4be1f9b9873
+(package/qt5enginio: drop qt 5.6 support), but python-pyqt5 not updated to
+match.  Fix that.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d1c5397e9e7576ededb25c6d48b45f5783977615)
+(cherry picked from commit 54854dc44e6ff937834bf00a2b63186fd066477c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ghostscript/ghostscript.hash | 4 ++--
- package/ghostscript/ghostscript.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-pyqt5/python-pyqt5.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/ghostscript/ghostscript.hash b/package/ghostscript/ghostscript.hash
-index 143b28014d..f6cedc6198 100644
---- a/package/ghostscript/ghostscript.hash
-+++ b/package/ghostscript/ghostscript.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9532/SHA512SUMS
--sha512  73aa6013aeecbd1345317a40349089a2f19a2205fc11b8ca0b619df1e91f2ca8b03efc09be9e079cb5ab8e1b838aa2236349cd1c177217c14308242f99138ae4  ghostscript-9.53.2.tar.gz
-+# From https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9533/SHA512SUMS
-+sha512  c142ef9d83896aa8fd18c8e412220fe8f4950614be00d327d27ab051fe85e16524bf2ee00f46c2aca7a352ce47bc3acf2c4de0f7bbea7e4c55474b8af6cdc0a6  ghostscript-9.53.3.tar.gz
+diff --git a/package/python-pyqt5/python-pyqt5.mk b/package/python-pyqt5/python-pyqt5.mk
+index 9285b6497c..8f28c90d15 100644
+--- a/package/python-pyqt5/python-pyqt5.mk
++++ b/package/python-pyqt5/python-pyqt5.mk
+@@ -135,7 +135,7 @@ PYTHON_PYQT5_QTDETAIL_TYPE = shared
+ # Turn off features that aren't available in current qt configuration
+ PYTHON_PYQT5_QTDETAIL_DISABLE_FEATURES += $(if $(BR2_PACKAGE_QT5BASE_OPENGL),,PyQt_OpenGL)
+ PYTHON_PYQT5_QTDETAIL_DISABLE_FEATURES += $(if $(BR2_PACKAGE_QT5BASE_OPENGL_DESKTOP),,PyQt_Desktop_OpenGL)
+-PYTHON_PYQT5_QTDETAIL_DISABLE_FEATURES += $(if $(BR2_PACKAGE_QT5BASE_OPENSSL),,PyQt_SSL)
++PYTHON_PYQT5_QTDETAIL_DISABLE_FEATURES += $(if $(BR2_PACKAGE_OPENSSL),,PyQt_SSL)
  
- # Hash for license file:
- sha256  6f852249f975287b3efd43a5883875e47fa9f3125e2f1b18b5c09517ac30ecf2  LICENSE
-diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
-index 31d23fd20e..6c8e1bde1b 100644
---- a/package/ghostscript/ghostscript.mk
-+++ b/package/ghostscript/ghostscript.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GHOSTSCRIPT_VERSION = 9.53.2
-+GHOSTSCRIPT_VERSION = 9.53.3
- GHOSTSCRIPT_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs$(subst .,,$(GHOSTSCRIPT_VERSION))
- GHOSTSCRIPT_LICENSE = AGPL-3.0
- GHOSTSCRIPT_LICENSE_FILES = LICENSE
+ define PYTHON_PYQT5_QTDETAIL
+ 	echo $(1) >> $(2)/qtdetail.out
