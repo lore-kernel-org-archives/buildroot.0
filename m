@@ -1,179 +1,119 @@
-From: Patricia Holden <pholden@nklabs.com>
-Date: Tue, 22 Dec 2020 15:05:33 -0500
-Subject: [Buildroot] Configuring OpenGL
-In-Reply-To: <20201222184141.00cab268@gmx.net>
-References: <CAJ6EmCejgFnDSza2xbcWgJrjrY1Wc7pz1AZLCna4TneuZd0gyw@mail.gmail.com>
- <20201221101354.3685cbee@gmx.net>
- <CAJ6EmCfAmfum2Fm9DgNyeoz6cvkj9rJbYJYnxoX1dz4MOvge-Q@mail.gmail.com>
- <20201222184141.00cab268@gmx.net>
-Message-ID: <CAJ6EmCdAQjD1H7a6NqZQ5FFSuMqUDnHG_gg7DVh0Q2QUdn5Hqw@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 22 Dec 2020 23:25:12 +0100
+Subject: [Buildroot] [PATCH] package/xen: security bump to version 4.14.1
+Message-ID: <20201222222512.13322-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Includes security fixes up to XSA-359:
 
-> Sorry, no Beagle/Ti expert... and no hardware to test myself, but there
-was an
-> Beagle/Ti software stack update recently suggested (and I believe already
-> committed on buildroot git master), see [1]...
+XSA-345: x86: Race condition in Xen mapping code
+XSA-346: undue deferral of IOMMU TLB flushes
+XSA-347: unsafe AMD IOMMU page table updates
+XSA-348: undue recursion in x86 HVM context switch code (CVE-2020-29566)
+XSA-351: Information leak via power sidechannel (CVE-2020-28368)
+XSA-352: oxenstored: node ownership can be changed by unprivileged clients
+         (CVE-2020-29486)
+XSA-353: oxenstored: permissions not checked on root node (CVE-2020-29479)
+XSA-355: stack corruption from XSA-346 change
+XSA-356: infinite loop when cleaning up IRQ vectors (CVE-2020-29567)
+XSA-358: FIFO event channels control block related ordering (CVE-2020-29570)
+XSA-359: FIFO event channels control structure ordering (CVE-2020-29571)
 
-> Regards,
-> Peter
+And drop now upstreamed security patches.
 
-> [1] http://lists.busybox.net/pipermail/buildroot/2020-December/298361.html
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/xen/xen.hash | 26 +-------------------------
+ package/xen/xen.mk   | 39 +--------------------------------------
+ 2 files changed, 2 insertions(+), 63 deletions(-)
 
-Thanks, I will take a look at what has been done!
-
-
-On Tue, Dec 22, 2020 at 12:41 PM Peter Seiderer <ps.report@gmx.net> wrote:
-
-> Hello Patricia,
->
-> On Mon, 21 Dec 2020 19:04:05 -0500, Patricia Holden <pholden@nklabs.com>
-> wrote:
->
-> > Hello Peter,
-> >
-> > Thanks for the comprehensive info on how-to!  I do have a question on the
-> > hardware info:
-> >
-> > > For example Raspberry Pi hardware there are two options, use
-> > > rpi-userland (the old way/32-bit only) or mesa3d/v3d/vc4 (the
-> > > new way 32-bit/64-bit)...
-> >
-> > My client's system is the TI Sitara board (Beaglebone-X15).  I tried
-> > selecting ti-sgx-km, but it failed to build.  I think the version of
-> Linux
-> > supported by the board I'm using is outdated vs the version of Linux
-> > expected to compile this option.  The dev-board we started with uses
-> > Linux 4.9.147-ti-rt-r121.  We are using a local linux-custom version,
-> but I
-> > am afraid to migrate to a newer version of the kernel.  You know how it
-> > goes with hardware vendors!  Any suggestions?
->
-> Sorry, no Beagle/Ti expert... and no hardware to test myself, but there
-> was an
-> Beagle/Ti software stack update recently suggested (and I believe already
-> committed on buildroot git master), see [1]...
->
-> Regards,
-> Peter
->
-> [1] http://lists.busybox.net/pipermail/buildroot/2020-December/298361.html
->
-> >
-> > Thanks!
-> > Patricia
-> >
-> >
-> > On Mon, Dec 21, 2020 at 4:13 AM Peter Seiderer <ps.report@gmx.net>
-> wrote:
-> >
-> > > Hello Patricia,
-> > >
-> > > On Sun, 20 Dec 2020 19:01:53 -0500, Patricia Holden <
-> pholden at nklabs.com>
-> > > wrote:
-> > >
-> > > > I know this topic has been visited a couple times, but I did not see
-> my
-> > > > particular problem in the threads.  I am trying to add a package that
-> > > > requires QT5 components and Gstreamer.  In order to add QT5, openGL
-> is
-> > > > required.
-> > > >
-> > > > Buildroot version I am using is  buildroot-2020-02.
-> > > >
-> > > > I went into the menuconfig->Libraries->Graphics after looking at
-> > > > package/Config.in to find out where I would enable it.  When I got
-> into
-> > > the
-> > > > Graphics libraries, openGL was not an option anywhere in the list.
-> > > >
-> > > > My question is:  What do I need to do to enable opengl in the
-> menuconfig
-> > > so
-> > > > that I can get my package built and into target?
-> > >
-> > > It depends on your platform and/or graphics hardware. In short your
-> need
-> > > an OpenGL provider.
-> > >
-> > > For the long/technical answer take a look at
-> package/qt5/qt5base/Config.in:
-> > >
-> > >  138 comment "OpenGL support needs an OpenGL-capable backend"
-> > >  139         depends on !BR2_PACKAGE_QT5_GL_AVAILABLE
-> > >  140
-> > >  141 config BR2_PACKAGE_QT5BASE_OPENGL
-> > >  142         bool "OpenGL support"
-> > >  143         depends on BR2_PACKAGE_QT5_GL_AVAILABLE
-> > >  144         help
-> > >  145           This option enables OpenGL support.
-> > >
-> > > and package/qt5/Config.in:
-> > >
-> > >   1 config BR2_PACKAGE_QT5_GL_AVAILABLE
-> > >   2         bool
-> > >   3         default y
-> > >   4         depends on BR2_PACKAGE_HAS_LIBGL || BR2_PACKAGE_HAS_LIBGLES
-> > >   5
-> > >
-> > > So grep for BR2_PACKAGE_HAS_LIBGL or BR2_PACKAGE_HAS_LIBGLES providers:
-> > >
-> > >         $ git grep "select BR2_PACKAGE_HAS_LIBGL"
-> > > package/freescale-imx/gpu-amd-bin-mx51/Config.in:       select
-> > > BR2_PACKAGE_HAS_LIBGLES
-> > > package/freescale-imx/imx-gpu-viv/Config.in:    select
-> > > BR2_PACKAGE_HAS_LIBGLES
-> > > package/gcnano-binaries/Config.in:      select BR2_PACKAGE_HAS_LIBGLES
-> > > package/mali-t76x/Config.in:    select BR2_PACKAGE_HAS_LIBGLES
-> > > package/mesa3d/Config.in:       select BR2_PACKAGE_HAS_LIBGL
-> > > package/mesa3d/Config.in:       select BR2_PACKAGE_HAS_LIBGLES
-> > > package/nvidia-driver/Config.in:        select BR2_PACKAGE_HAS_LIBGL
-> > > package/nvidia-driver/Config.in:        select BR2_PACKAGE_HAS_LIBGLES
-> > > package/rpi-userland/Config.in: select BR2_PACKAGE_HAS_LIBGLES
-> > > package/sunxi-mali-mainline/Config.in:  select BR2_PACKAGE_HAS_LIBGLES
-> > > package/ti-gfx/Config.in:       select BR2_PACKAGE_HAS_LIBGLES
-> > > package/ti-sgx-um/Config.in:    select BR2_PACKAGE_HAS_LIBGLES
-> > >
-> > >         $ git grep "select BR2_PACKAGE_HAS_LIBGLES" | cat
-> > > package/freescale-imx/gpu-amd-bin-mx51/Config.in:       select
-> > > BR2_PACKAGE_HAS_LIBGLES
-> > > package/freescale-imx/imx-gpu-viv/Config.in:    select
-> > > BR2_PACKAGE_HAS_LIBGLES
-> > > package/gcnano-binaries/Config.in:      select BR2_PACKAGE_HAS_LIBGLES
-> > > package/mali-t76x/Config.in:    select BR2_PACKAGE_HAS_LIBGLES
-> > > package/mesa3d/Config.in:       select BR2_PACKAGE_HAS_LIBGLES
-> > > package/nvidia-driver/Config.in:        select BR2_PACKAGE_HAS_LIBGLES
-> > > package/rpi-userland/Config.in: select BR2_PACKAGE_HAS_LIBGLES
-> > > package/sunxi-mali-mainline/Config.in:  select BR2_PACKAGE_HAS_LIBGLES
-> > > package/ti-gfx/Config.in:       select BR2_PACKAGE_HAS_LIBGLES
-> > > package/ti-sgx-um/Config.in:    select BR2_PACKAGE_HAS_LIBGLES
-> > >
-> > >
-> > > For example Raspberry Pi hardware there are two options, use
-> > > rpi-userland (the old way/32-bit only) or mesa3d/v3d/vc4 (the
-> > > new way 32-bit/64-bit)...
-> > >
-> > > Regards,
-> > > Peter
-> > >
-> > > >
-> > > > Thanks!
-> > > > Patricia
-> > > >
-> > >
-> > >
-> >
->
->
-
+diff --git a/package/xen/xen.hash b/package/xen/xen.hash
+index eb5b18b416..95061c3fc8 100644
+--- a/package/xen/xen.hash
++++ b/package/xen/xen.hash
+@@ -1,27 +1,3 @@
+ # Locally computed
+-sha256  06839f68ea7620669dbe8b67861213223cc2a7d02ced61b56e5249c50e87f035  xen-4.14.0.tar.gz
++sha256  cf0d7316ad674491f49b7ef0518cb1d906a2e3bfad639deef0ef2343b119ac0c  xen-4.14.1.tar.gz
+ sha256  ecca9538e9d3f7e3c2bff827502f4495e2ef9e22c451298696ea08886b176c2c  COPYING
+-# https://xenbits.xenproject.org/xsa/advisory-333.html
+-sha256  8edec914fbdf036fba8cb54a75d3a9b025fac936e0af35512954a2dc2b12a26f  xsa333.patch
+-# https://xenbits.xenproject.org/xsa/advisory-334.html
+-sha256  323cd9d24b2e95643833865a9943172c56edd25dfd170e4741034d28dfd0d4bd  xsa334.patch
+-# https://xenbits.xenproject.org/xsa/advisory-336.html
+-sha256  ecb59876fb92cfe0916ed5f3227a30efe038224c1f6ec36bc3706c4e2214552c  xsa336.patch
+-# https://xenbits.xenproject.org/xsa/advisory-337.html
+-sha256  98c48781dd46bf6ff6cc46246c6c9f2e2be6ec696c0e7918d4b82845588ce04e  xsa337-1.patch
+-sha256  9e8ae24222371379f2ea62e14fcc7f7282e01c356dff230c22c9ab1d2fb941e2  xsa337-2.patch
+-# https://xenbits.xenproject.org/xsa/advisory-338.html
+-sha256  7345eac1cbad23b082523e9cbd0331f8a9f16c6e459fb2a686606253f5514c9b  xsa338.patch
+-# https://xenbits.xenproject.org/xsa/advisory-339.html
+-sha256  b6ffa7671d905aa12498ad64915be3b7cba74ce1c5bf6bce18b1f106ebf6d715  xsa339.patch
+-# https://xenbits.xenproject.org/xsa/advisory-340.html
+-sha256  2bb088fcc1f8f79bf5ddb7b4e101cb1db76a343d2fb1cdafb7cd54612e4009da  xsa340.patch
+-# https://xenbits.xenproject.org/xsa/advisory-342.html
+-sha256  060caee3fb5971fca0f2fbdef622c52d9bc6e0ed9efad33de5b6b504651c2112  xsa342.patch
+-# https://xenbits.xenproject.org/xsa/advisory-343.html
+-sha256  d714a542bae9d96b6a061c5a8f754549d699dcfb7bf2a766b721f6bbe33aefd2  xsa343-1.patch
+-sha256  657c44c8ea13523d2e59776531237bbc20166c9b7c3960e0e9ad381fce927344  xsa343-2.patch
+-sha256  2b275e3fa559167c1b59e6fd4a20bc4d1df9d9cb0cbd0050a3db9c3d0299b233  xsa343-3.patch
+-# https://xenbits.xenproject.org/xsa/advisory-344.html
+-sha256  5f9dbdc48bed502d614a76e5819afa41a72cec603c5a2c9491d73873a991a5ed  xsa344-1.patch
+-sha256  381ca5c51bc120bfd5c742be3988f570abb870c4b75c8a48cf49ae4fa1046d73  xsa344-2.patch
+diff --git a/package/xen/xen.mk b/package/xen/xen.mk
+index 0c3ecbb909..cb1ea23ba6 100644
+--- a/package/xen/xen.mk
++++ b/package/xen/xen.mk
+@@ -4,45 +4,8 @@
+ #
+ ################################################################################
+ 
+-XEN_VERSION = 4.14.0
++XEN_VERSION = 4.14.1
+ XEN_SITE = https://downloads.xenproject.org/release/xen/$(XEN_VERSION)
+-XEN_PATCH = \
+-	https://xenbits.xenproject.org/xsa/xsa333.patch \
+-	https://xenbits.xenproject.org/xsa/xsa334.patch \
+-	https://xenbits.xenproject.org/xsa/xsa336.patch \
+-	https://xenbits.xenproject.org/xsa/xsa337/xsa337-1.patch \
+-	https://xenbits.xenproject.org/xsa/xsa337/xsa337-2.patch \
+-	https://xenbits.xenproject.org/xsa/xsa338.patch \
+-	https://xenbits.xenproject.org/xsa/xsa339.patch \
+-	https://xenbits.xenproject.org/xsa/xsa340.patch \
+-	https://xenbits.xenproject.org/xsa/xsa342.patch \
+-	https://xenbits.xenproject.org/xsa/xsa343/xsa343-1.patch \
+-	https://xenbits.xenproject.org/xsa/xsa343/xsa343-2.patch \
+-	https://xenbits.xenproject.org/xsa/xsa343/xsa343-3.patch \
+-	https://xenbits.xenproject.org/xsa/xsa344/xsa344-1.patch \
+-	https://xenbits.xenproject.org/xsa/xsa344/xsa344-2.patch
+-
+-# xsa333.patch
+-XEN_IGNORE_CVES += CVE-2020-25602
+-# xsa334.patch
+-XEN_IGNORE_CVES += CVE-2020-25598
+-# xsa336.patch
+-XEN_IGNORE_CVES += CVE-2020-25604
+-# xsa337-1.patch, xsa337-2.patch
+-XEN_IGNORE_CVES += CVE-2020-25595
+-# xsa338.patch
+-XEN_IGNORE_CVES += CVE-2020-25597
+-# xsa339.patch
+-XEN_IGNORE_CVES += CVE-2020-25596
+-# xsa340.patch
+-XEN_IGNORE_CVES += CVE-2020-25603
+-# xsa342.patch
+-XEN_IGNORE_CVES += CVE-2020-25600
+-# xsa343-1.patch, xsa-343-2.patch, xsa-343-3.patch
+-XEN_IGNORE_CVES += CVE-2020-25599
+-# xsa344-1.patch, xsa344-2.patch
+-XEN_IGNORE_CVES += CVE-2020-25601
+-
+ XEN_LICENSE = GPL-2.0
+ XEN_LICENSE_FILES = COPYING
+ XEN_DEPENDENCIES = host-acpica host-python3
 -- 
-Patricia A. Holden
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201222/452aa0eb/attachment.html>
+2.20.1
