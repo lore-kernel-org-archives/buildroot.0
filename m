@@ -1,48 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 22 Dec 2020 11:48:49 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/pkg-golang.mk:
- postpone evaluation of TARGET_DIR and HOST_DIR
-Message-ID: <20201222103551.7F0BD884F6@busybox.osuosl.org>
+Date: Tue, 22 Dec 2020 11:51:49 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/ncurses: don't
+ attempt calling ldconfig in host-ncurses
+Message-ID: <20201222103551.B0EC2884F6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9d8c5d41666fb83a0e29f98b5affba916501ab69
+commit: https://git.buildroot.net/buildroot/commit/?id=d407dcd1044ca7751c4046fcb6c69a2cc99b92b1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-When BR2_PER_PACKAGE_DIRECTORIES=y, $(TARGET_DIR) is evaluated as
-$(BASE_DIR)/target, but $$(TARGET_DIR) is evaluated as
-$(BASE_DIR)/per-package/$(PKG)_NAME/target.
+The host-ncurses install step attempts to run ldconfig, causing a permission
+failure:
 
-Signed-off-by: Tian Yuanhao <tianyuanhao@aliyun.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 8d595c0d926d6b352b0e08366095bb92c7318c4c)
+cd /buildroot/output/host/lib && (ln -s -f libncurses.so.6.0 libncurses.so.6; ln -s -f libncurses.so.6 libncurses.so; )
+test -z "" && /sbin/ldconfig
+/sbin/ldconfig: Can't create temporary cache file /etc/ld.so.cache~: Permission denied
+make[3]: [/buildroot/output/host/lib/libncurses.so.6.0] Error 1 (ignored)
+
+The error is non-fatal and ignored, but confusing.
+
+The ncurses makefiles already avoid calling ldconfig when DESTDIR is set
+(target case) but for host-ncurses DESTDIR is empty and the output/host path
+is passed via --prefix.
+
+Pass an empty ac_cv_path_LDCONFIG to the configure step, so than ldconfig is
+not called.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 389f48fe90cc8ed77a76a245d3e3ec1fa965df64)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-golang.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/ncurses/ncurses.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
-index 2494ce028c..51ed92c7af 100644
---- a/package/pkg-golang.mk
-+++ b/package/pkg-golang.mk
-@@ -141,7 +141,7 @@ endif
- ifndef $(2)_INSTALL_TARGET_CMDS
- define $(2)_INSTALL_TARGET_CMDS
- 	$$(foreach d,$$($(2)_INSTALL_BINS),\
--		$(INSTALL) -D -m 0755 $$(@D)/bin/$$(d) $(TARGET_DIR)/usr/bin/$$(d)
-+		$(INSTALL) -D -m 0755 $$(@D)/bin/$$(d) $$(TARGET_DIR)/usr/bin/$$(d)
- 	)
+diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
+index f4e4784a3c..4d8dcecc3a 100644
+--- a/package/ncurses/ncurses.mk
++++ b/package/ncurses/ncurses.mk
+@@ -187,6 +187,9 @@ define HOST_NCURSES_BUILD_CMDS
+ 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)/progs tic
  endef
- endif
-@@ -150,7 +150,7 @@ endif
- ifndef $(2)_INSTALL_CMDS
- define $(2)_INSTALL_CMDS
- 	$$(foreach d,$$($(2)_INSTALL_BINS),\
--		$(INSTALL) -D -m 0755 $$(@D)/bin/$$(d) $(HOST_DIR)/bin/$$(d)
-+		$(INSTALL) -D -m 0755 $$(@D)/bin/$$(d) $$(HOST_DIR)/bin/$$(d)
- 	)
- endef
- endif
+ 
++HOST_NCURSES_CONF_ENV = \
++	ac_cv_path_LDCONFIG=""
++
+ HOST_NCURSES_CONF_OPTS = \
+ 	--with-shared \
+ 	--without-gpm \
