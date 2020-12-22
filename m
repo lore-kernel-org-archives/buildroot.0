@@ -1,29 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 22 Dec 2020 11:50:56 +0100
-Subject: [Buildroot] [PATCH v1] configs/chromebook_elm_defconfig: use
- linux headers same as kernel (5.9 series)
-In-Reply-To: <20201219192445.27681-1-ps.report@gmx.net> (Peter Seiderer's
- message of "Sat, 19 Dec 2020 20:24:45 +0100")
-References: <20201219192445.27681-1-ps.report@gmx.net>
-Message-ID: <87sg7yktbj.fsf@dell.be.48ers.dk>
+Date: Tue, 22 Dec 2020 11:51:31 +0100
+Subject: [Buildroot] [PATCH] package/opkg-utils: needs Python3 on the
+ host
+In-Reply-To: <20201209151551.21986-1-patrickdepinguin@gmail.com> (Thomas De
+ Schampheleire's message of "Wed, 9 Dec 2020 16:15:50 +0100")
+References: <20201209151551.21986-1-patrickdepinguin@gmail.com>
+Message-ID: <87o8imktak.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
- > Use linux headers same as kernel (5.9 series).
- > Fixes:
+ > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+ > The 'opkg.py' script installed by host-opkg-utils has as shebang:
+ >     #!/usr/bin/env python3
 
- >   - https://gitlab.com/buildroot.org/buildroot/-/jobs/917539050
+ > which may not be available on all host machines.
+ > Add a potential dependency on host-python3 via BR2_PYTHON3_HOST_DEPENDENCY,
+ > which will only add the host-python3 dependency if no python3 is already
+ > available on the host.
 
- >   Incorrect selection of kernel headers: expected 5.10.x, got 5.9.x
+ > Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
- > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-
-Committed to 2020.11.x, thanks.
+Committed to 2020.02.x, 2020.08.x and 2020.11.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
