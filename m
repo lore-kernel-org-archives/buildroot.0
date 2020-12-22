@@ -1,57 +1,128 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 22 Dec 2020 09:46:55 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/wireshark:
- security bump to version 3.2.10
-Message-ID: <20201222091353.F383B82846@busybox.osuosl.org>
+From: Yair Ben-Avraham <yairba@protonmail.com>
+Date: Tue, 22 Dec 2020 10:32:11 +0000
+Subject: [Buildroot] [PATCH v2 1/1] package/tpm2-pkcs11: new package
+Message-ID: <SGDgZj-pm-mozXqzyYLgjWGtvHWsy8qa1Kw6VF-fcpovCSrMu0Qs7Ry7qCgTBZGY5YN_G52hu2w2tOTmfw2y6LvTNUWBN71P9sXb-A0JjTU=@protonmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9b550a71e33a928c3cd0c1fbf2eeede81c3d86c5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+A PKCS#11 interface for TPM2 hardware
 
-The following vulnerabilities have been fixed:
-- wnpa-sec-2020-16 Kafka dissector memory leak. Bug 16739.
-  CVE-2020-26418.
-- wnpa-sec-2020-17 USB HID dissector crash. Bug 16958. CVE-2020-26421.
-- wnpa-sec-2020-18 RTPS dissector memory leak. Bug 16994.
-  CVE-2020-26420.
-
-https://www.wireshark.org/docs/relnotes/wireshark-3.2.9.html
-https://www.wireshark.org/docs/relnotes/wireshark-3.2.10.html
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yair Ben-Avraham <yairba@protonmail.com>
 ---
- package/wireshark/wireshark.hash | 6 +++---
- package/wireshark/wireshark.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ DEVELOPERS                           |  1 +
+ package/Config.in                    |  1 +
+ package/tpm2-pkcs11/Config.in        | 15 ++++++++++
+ package/tpm2-pkcs11/tpm2-pkcs11.hash |  3 ++
+ package/tpm2-pkcs11/tpm2-pkcs11.mk   | 42 ++++++++++++++++++++++++++++
+ 5 files changed, 62 insertions(+)
+ create mode 100644 package/tpm2-pkcs11/Config.in
+ create mode 100644 package/tpm2-pkcs11/tpm2-pkcs11.hash
+ create mode 100644 package/tpm2-pkcs11/tpm2-pkcs11.mk
 
-diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-index 8d1a3b3a2e..8d4b0c6347 100644
---- a/package/wireshark/wireshark.hash
-+++ b/package/wireshark/wireshark.hash
-@@ -1,6 +1,6 @@
--# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.2.8.txt
--sha1  5fdcbbe3a50cea38a8fa5f10b21f58cbef31793e  wireshark-3.2.8.tar.xz
--sha256  a8a595d08f38c6bd083886f6c199b9d4fb007e363031b263667c7da72323cc32  wireshark-3.2.8.tar.xz
-+# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.2.10.txt
-+sha1  691bd151d0d5e7a23b73e7972490947c0af9cf1d  wireshark-3.2.10.tar.xz
-+sha256  1e9e239f2449f240a7910ed598084ccaf8ea308b2b46b196c5adbec59612226c  wireshark-3.2.10.tar.xz
- 
- # Locally calculated
- sha256  7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index 0d4fedb3f0..91c4420251 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIRESHARK_VERSION = 3.2.8
-+WIRESHARK_VERSION = 3.2.10
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
- WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d0b4cd7531..11f20a1c49 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2687,6 +2687,7 @@ F:	package/fwup/
+
+ N:	Yair Ben Avraham <yairba@protonmail.com>
+ F:	package/gloox/
++F:	package/tpm2-pkcs11/
+
+ N:	Yann E. MORIN <yann.morin.1998@free.fr>
+ F:	board/friendlyarm/nanopi-neo/
+diff --git a/package/Config.in b/package/Config.in
+index c3677dd15e..43a7549841 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1363,6 +1363,7 @@ menu "Crypto"
+ 	source "package/pkcs11-helper/Config.in"
+ 	source "package/rhash/Config.in"
+ 	source "package/tinydtls/Config.in"
++	source "package/tpm2-pkcs11/Config.in"
+ 	source "package/tpm2-tss/Config.in"
+ 	source "package/trousers/Config.in"
+ 	source "package/ustream-ssl/Config.in"
+diff --git a/package/tpm2-pkcs11/Config.in b/package/tpm2-pkcs11/Config.in
+new file mode 100644
+index 0000000000..ab7ad02480
+--- /dev/null
++++ b/package/tpm2-pkcs11/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_TPM2_PKCS11
++	bool "tpm2-pkcs11"
++	depends on !BR2_STATIC_LIBS # tpm2-tss
++	select BR2_PACKAGE_LIBYAML
++	select BR2_PACKAGE_P11_KIT
++	select BR2_PACKAGE_SQLITE
++	select BR2_PACKAGE_TPM2_TOOLS
++	select BR2_PACKAGE_TPM2_TSS
++	help
++	  A PKCS#11 interface for TPM2 hardware
++
++	  https://github.com/tpm2-software/tpm2-pkcs11
++
++comment "tpm2-pkcs11 needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
+diff --git a/package/tpm2-pkcs11/tpm2-pkcs11.hash b/package/tpm2-pkcs11/tpm2-pkcs11.hash
+new file mode 100644
+index 0000000000..16dd9166ba
+--- /dev/null
++++ b/package/tpm2-pkcs11/tpm2-pkcs11.hash
+@@ -0,0 +1,3 @@
++# Locally computed:
++sha256  13425c34358ec798d333743099b9aec5e42f6a4653c4c0e40eb075681f369687  tpm2-pkcs11-1.5.0.tar.gz
++sha256  793aa007f793458434d7cc60b1c827053a399308658b32fcaa6023802adc22e1  LICENSE
+diff --git a/package/tpm2-pkcs11/tpm2-pkcs11.mk b/package/tpm2-pkcs11/tpm2-pkcs11.mk
+new file mode 100644
+index 0000000000..14ff1e4e07
+--- /dev/null
++++ b/package/tpm2-pkcs11/tpm2-pkcs11.mk
+@@ -0,0 +1,42 @@
++################################################################################
++#
++# tpm2-pkcs11
++#
++################################################################################
++
++TPM2_PKCS11_VERSION = 1.5.0
++TPM2_PKCS11_SITE = https://github.com/tpm2-software/tpm2-pkcs11/releases/download/$(TPM2_PKCS11_VERSION)
++TPM2_PKCS11_LICENSE = BSD-2-Clause
++TPM2_PKCS11_LICENSE_FILES = LICENSE
++TPM2_PKCS11_DEPENDENCIES = libyaml p11-kit sqlite tpm2-tools tpm2-tss
++
++TPM2_PKCS11_CONF_OPTS += \
++		--disable-hardening \
++		--with-p11kitconfigdir=/../usr/share/p11-kit/modules
++
++# Fix tpm.c:746:5: error: 'for' loop initial declarations are only allowed in C99 mode
++# Fix implicit declaration of function 'strnlen'
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM),y)
++TPM2_PKCS11_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -std=gnu99"
++endif
++
++# do not build man pages
++TPM2_PKCS11_CONF_ENV += ac_cv_prog_PANDOC=''
++
++ifeq ($(BR2_PACKAGE_TPM2_TOOLS),y)
++TPM2_PKCS11_CONF_ENV += \
++	ac_cv_prog_tpm2_createprimary=yes \
++	ac_cv_prog_tpm2_create=yes \
++	ac_cv_prog_tpm2_evictcontrol=yes \
++	ac_cv_prog_tpm2_readpublic=yes \
++	ac_cv_prog_tpm2_load=yes \
++	ac_cv_prog_tpm2_loadexternal=yes \
++	ac_cv_prog_tpm2_unseal=yes \
++	ac_cv_prog_tpm2_encryptdecrypt=yes \
++	ac_cv_prog_tpm2_sign=yes \
++	ac_cv_prog_tpm2_getcap=yes \
++	ac_cv_prog_tpm2_import=yes \
++	ac_cv_prog_tpm2_changeauth=yes
++endif
++
++$(eval $(autotools-package))
+--
+2.20.1
