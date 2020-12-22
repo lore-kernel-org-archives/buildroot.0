@@ -1,43 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 22 Dec 2020 11:51:22 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/opkg-utils: needs
- Python3 on the host
-Message-ID: <20201222103555.F22F7884F6@busybox.osuosl.org>
+Date: Tue, 22 Dec 2020 11:49:46 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] DEVELOPERS: remove Thomas
+ Davis
+Message-ID: <20201222103555.E7009884F6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=10a8c7a0caf9b7e11d01bf4e0a37d73ce631d18d
+commit: https://git.buildroot.net/buildroot/commit/?id=6226bd680ba4e44d787f6efd88dc6f8c31ece1f6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-The 'opkg.py' script installed by host-opkg-utils has as shebang:
-    #!/usr/bin/env python3
+His e-mail has been bouncing for quite a while:
 
-which may not be available on all host machines.
-Add a potential dependency on host-python3 via BR2_PYTHON3_HOST_DEPENDENCY,
-which will only add the host-python3 dependency if no python3 is already
-available on the host.
+<sunsetbrew@sunsetbrew.com>: connect to
+    sunsetbrew.com[2a05:d014:9da:8c10:306e:3e07:a16f:a552]:25: Network is
+    unreachable
 
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 7dcd20f9d5cca7dba2c510988b457c93532108cd)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit fd5eeabac03c98672230e079ac1a73104565470f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/opkg-utils/opkg-utils.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ DEVELOPERS | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/package/opkg-utils/opkg-utils.mk b/package/opkg-utils/opkg-utils.mk
-index 38137bc67b..68876b874f 100644
---- a/package/opkg-utils/opkg-utils.mk
-+++ b/package/opkg-utils/opkg-utils.mk
-@@ -10,6 +10,8 @@ OPKG_UTILS_SITE_METHOD = git
- OPKG_UTILS_LICENSE = GPL-2.0+
- OPKG_UTILS_LICENSE_FILES = COPYING
+diff --git a/DEVELOPERS b/DEVELOPERS
+index e9af836242..810cab9e3d 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2328,9 +2328,6 @@ N:	Thomas Claveirole <thomas.claveirole@green-communications.fr>
+ F:	package/fcgiwrap/
+ F:	package/openlayers/
  
-+HOST_OPKG_UTILS_DEPENDENCIES += $(BR2_PYTHON3_HOST_DEPENDENCY)
-+
- define HOST_OPKG_UTILS_BUILD_CMDS
- 	$(MAKE) -C $(@D) $(HOST_CONFIGURE_OPTS)
- endef
+-N:	Thomas Davis <sunsetbrew@sunsetbrew.com>
+-F:	package/civetweb/
+-
+ N:	Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+ F:	docs/manual/
+ F:	package/cereal/
