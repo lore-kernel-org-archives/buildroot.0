@@ -1,33 +1,34 @@
 From: Maxime Chevallier <maxime.chevallier@bootlin.com>
-Date: Tue, 22 Dec 2020 16:07:32 +0100
-Subject: [Buildroot] [PATCH 11/15] package/mtr: add SELinux module
+Date: Tue, 22 Dec 2020 16:07:29 +0100
+Subject: [Buildroot] [PATCH 08/15] package/nftables: add SELinux module
 In-Reply-To: <20201222150736.319593-1-maxime.chevallier@bootlin.com>
 References: <20201222150736.319593-1-maxime.chevallier@bootlin.com>
-Message-ID: <20201222150736.319593-12-maxime.chevallier@bootlin.com>
+Message-ID: <20201222150736.319593-9-maxime.chevallier@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Support for mtr is added by the admin/netutils module in the SELinux
+Support for nft is added by the system/iptables module in the SELinux
 refpolicy.
 
 Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
 ---
- package/mtr/mtr.mk | 1 +
+ package/nftables/nftables.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/mtr/mtr.mk b/package/mtr/mtr.mk
-index 7a4b140267..263482534e 100644
---- a/package/mtr/mtr.mk
-+++ b/package/mtr/mtr.mk
-@@ -11,5 +11,6 @@ MTR_CONF_OPTS = --without-gtk
- MTR_DEPENDENCIES = host-pkgconf $(if $(BR2_PACKAGE_NCURSES),ncurses)
- MTR_LICENSE = GPL-2.0
- MTR_LICENSE_FILES = COPYING
-+MTR_SELINUX_MODULES = netutils
+diff --git a/package/nftables/nftables.mk b/package/nftables/nftables.mk
+index 8a003a5e34..f9468c5250 100644
+--- a/package/nftables/nftables.mk
++++ b/package/nftables/nftables.mk
+@@ -11,6 +11,7 @@ NFTABLES_DEPENDENCIES = libmnl libnftnl host-pkgconf $(TARGET_NLS_DEPENDENCIES)
+ NFTABLES_LICENSE = GPL-2.0
+ NFTABLES_LICENSE_FILES = COPYING
+ NFTABLES_CONF_OPTS = --disable-man-doc --disable-pdf-doc
++NFTABLES_SELINUX_MODULES = iptables
  
- $(eval $(autotools-package))
+ ifeq ($(BR2_PACKAGE_GMP),y)
+ NFTABLES_DEPENDENCIES += gmp
 -- 
 2.25.4
