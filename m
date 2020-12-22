@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 22 Dec 2020 10:30:40 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/wireshark:
+Date: Tue, 22 Dec 2020 09:46:55 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/wireshark:
  security bump to version 3.2.10
-Message-ID: <20201222091347.E371D82846@busybox.osuosl.org>
+Message-ID: <20201222091353.F383B82846@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=901ea2b3bdbfde8dcbe349fa202bf0d415c84196
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=9b550a71e33a928c3cd0c1fbf2eeede81c3d86c5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 The following vulnerabilities have been fixed:
 - wnpa-sec-2020-16 Kafka dissector memory leak. Bug 16739.
