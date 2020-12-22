@@ -1,52 +1,179 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 22 Dec 2020 21:00:28 +0100
-Subject: [Buildroot] [PATCH] package/nodejs: security bump to version 12.19.1
-Message-ID: <20201222200029.2315-1-peter@korsgaard.com>
+From: Patricia Holden <pholden@nklabs.com>
+Date: Tue, 22 Dec 2020 15:05:33 -0500
+Subject: [Buildroot] Configuring OpenGL
+In-Reply-To: <20201222184141.00cab268@gmx.net>
+References: <CAJ6EmCejgFnDSza2xbcWgJrjrY1Wc7pz1AZLCna4TneuZd0gyw@mail.gmail.com>
+ <20201221101354.3685cbee@gmx.net>
+ <CAJ6EmCfAmfum2Fm9DgNyeoz6cvkj9rJbYJYnxoX1dz4MOvge-Q@mail.gmail.com>
+ <20201222184141.00cab268@gmx.net>
+Message-ID: <CAJ6EmCdAQjD1H7a6NqZQ5FFSuMqUDnHG_gg7DVh0Q2QUdn5Hqw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issue:
+Hi Peter,
 
-- CVE-2020-8277: Denial of Service through DNS request (High).  A Node.js
-  application that allows an attacker to trigger a DNS request for a host of
-  their choice could trigger a Denial of Service by getting the application
-  to resolve a DNS record with a larger number of responses.
+> Sorry, no Beagle/Ti expert... and no hardware to test myself, but there
+was an
+> Beagle/Ti software stack update recently suggested (and I believe already
+> committed on buildroot git master), see [1]...
 
-https://nodejs.org/en/blog/release/v12.19.1/
+> Regards,
+> Peter
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/nodejs/nodejs.hash | 4 ++--
- package/nodejs/nodejs.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+> [1] http://lists.busybox.net/pipermail/buildroot/2020-December/298361.html
 
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index 33fb407882..61259425ba 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,5 +1,5 @@
--# From https://nodejs.org/dist/v12.18.4/SHASUMS256.txt
--sha256  25f03cb18e53b6d0959d0c219e701a85eb4693f526bdda7c72bc6199b364f609  node-v12.18.4.tar.xz
-+# From https://nodejs.org/dist/v12.19.1/SHASUMS256.txt
-+sha256  74077e0cc3db000a6f3cc685b220e609807b61adc8e7d8243e8511d478d1b17d  node-v12.19.1.tar.xz
- 
- # Hash for license file
- sha256  0dc03af08b95ea0c1e27f8fd591dee4383eb6f2c304db6eb6cdfb6751f7da87b  LICENSE
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index b159b10253..524a6b5d8f 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NODEJS_VERSION = 12.18.4
-+NODEJS_VERSION = 12.19.1
- NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
- NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
- NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
+Thanks, I will take a look at what has been done!
+
+
+On Tue, Dec 22, 2020 at 12:41 PM Peter Seiderer <ps.report@gmx.net> wrote:
+
+> Hello Patricia,
+>
+> On Mon, 21 Dec 2020 19:04:05 -0500, Patricia Holden <pholden@nklabs.com>
+> wrote:
+>
+> > Hello Peter,
+> >
+> > Thanks for the comprehensive info on how-to!  I do have a question on the
+> > hardware info:
+> >
+> > > For example Raspberry Pi hardware there are two options, use
+> > > rpi-userland (the old way/32-bit only) or mesa3d/v3d/vc4 (the
+> > > new way 32-bit/64-bit)...
+> >
+> > My client's system is the TI Sitara board (Beaglebone-X15).  I tried
+> > selecting ti-sgx-km, but it failed to build.  I think the version of
+> Linux
+> > supported by the board I'm using is outdated vs the version of Linux
+> > expected to compile this option.  The dev-board we started with uses
+> > Linux 4.9.147-ti-rt-r121.  We are using a local linux-custom version,
+> but I
+> > am afraid to migrate to a newer version of the kernel.  You know how it
+> > goes with hardware vendors!  Any suggestions?
+>
+> Sorry, no Beagle/Ti expert... and no hardware to test myself, but there
+> was an
+> Beagle/Ti software stack update recently suggested (and I believe already
+> committed on buildroot git master), see [1]...
+>
+> Regards,
+> Peter
+>
+> [1] http://lists.busybox.net/pipermail/buildroot/2020-December/298361.html
+>
+> >
+> > Thanks!
+> > Patricia
+> >
+> >
+> > On Mon, Dec 21, 2020 at 4:13 AM Peter Seiderer <ps.report@gmx.net>
+> wrote:
+> >
+> > > Hello Patricia,
+> > >
+> > > On Sun, 20 Dec 2020 19:01:53 -0500, Patricia Holden <
+> pholden at nklabs.com>
+> > > wrote:
+> > >
+> > > > I know this topic has been visited a couple times, but I did not see
+> my
+> > > > particular problem in the threads.  I am trying to add a package that
+> > > > requires QT5 components and Gstreamer.  In order to add QT5, openGL
+> is
+> > > > required.
+> > > >
+> > > > Buildroot version I am using is  buildroot-2020-02.
+> > > >
+> > > > I went into the menuconfig->Libraries->Graphics after looking at
+> > > > package/Config.in to find out where I would enable it.  When I got
+> into
+> > > the
+> > > > Graphics libraries, openGL was not an option anywhere in the list.
+> > > >
+> > > > My question is:  What do I need to do to enable opengl in the
+> menuconfig
+> > > so
+> > > > that I can get my package built and into target?
+> > >
+> > > It depends on your platform and/or graphics hardware. In short your
+> need
+> > > an OpenGL provider.
+> > >
+> > > For the long/technical answer take a look at
+> package/qt5/qt5base/Config.in:
+> > >
+> > >  138 comment "OpenGL support needs an OpenGL-capable backend"
+> > >  139         depends on !BR2_PACKAGE_QT5_GL_AVAILABLE
+> > >  140
+> > >  141 config BR2_PACKAGE_QT5BASE_OPENGL
+> > >  142         bool "OpenGL support"
+> > >  143         depends on BR2_PACKAGE_QT5_GL_AVAILABLE
+> > >  144         help
+> > >  145           This option enables OpenGL support.
+> > >
+> > > and package/qt5/Config.in:
+> > >
+> > >   1 config BR2_PACKAGE_QT5_GL_AVAILABLE
+> > >   2         bool
+> > >   3         default y
+> > >   4         depends on BR2_PACKAGE_HAS_LIBGL || BR2_PACKAGE_HAS_LIBGLES
+> > >   5
+> > >
+> > > So grep for BR2_PACKAGE_HAS_LIBGL or BR2_PACKAGE_HAS_LIBGLES providers:
+> > >
+> > >         $ git grep "select BR2_PACKAGE_HAS_LIBGL"
+> > > package/freescale-imx/gpu-amd-bin-mx51/Config.in:       select
+> > > BR2_PACKAGE_HAS_LIBGLES
+> > > package/freescale-imx/imx-gpu-viv/Config.in:    select
+> > > BR2_PACKAGE_HAS_LIBGLES
+> > > package/gcnano-binaries/Config.in:      select BR2_PACKAGE_HAS_LIBGLES
+> > > package/mali-t76x/Config.in:    select BR2_PACKAGE_HAS_LIBGLES
+> > > package/mesa3d/Config.in:       select BR2_PACKAGE_HAS_LIBGL
+> > > package/mesa3d/Config.in:       select BR2_PACKAGE_HAS_LIBGLES
+> > > package/nvidia-driver/Config.in:        select BR2_PACKAGE_HAS_LIBGL
+> > > package/nvidia-driver/Config.in:        select BR2_PACKAGE_HAS_LIBGLES
+> > > package/rpi-userland/Config.in: select BR2_PACKAGE_HAS_LIBGLES
+> > > package/sunxi-mali-mainline/Config.in:  select BR2_PACKAGE_HAS_LIBGLES
+> > > package/ti-gfx/Config.in:       select BR2_PACKAGE_HAS_LIBGLES
+> > > package/ti-sgx-um/Config.in:    select BR2_PACKAGE_HAS_LIBGLES
+> > >
+> > >         $ git grep "select BR2_PACKAGE_HAS_LIBGLES" | cat
+> > > package/freescale-imx/gpu-amd-bin-mx51/Config.in:       select
+> > > BR2_PACKAGE_HAS_LIBGLES
+> > > package/freescale-imx/imx-gpu-viv/Config.in:    select
+> > > BR2_PACKAGE_HAS_LIBGLES
+> > > package/gcnano-binaries/Config.in:      select BR2_PACKAGE_HAS_LIBGLES
+> > > package/mali-t76x/Config.in:    select BR2_PACKAGE_HAS_LIBGLES
+> > > package/mesa3d/Config.in:       select BR2_PACKAGE_HAS_LIBGLES
+> > > package/nvidia-driver/Config.in:        select BR2_PACKAGE_HAS_LIBGLES
+> > > package/rpi-userland/Config.in: select BR2_PACKAGE_HAS_LIBGLES
+> > > package/sunxi-mali-mainline/Config.in:  select BR2_PACKAGE_HAS_LIBGLES
+> > > package/ti-gfx/Config.in:       select BR2_PACKAGE_HAS_LIBGLES
+> > > package/ti-sgx-um/Config.in:    select BR2_PACKAGE_HAS_LIBGLES
+> > >
+> > >
+> > > For example Raspberry Pi hardware there are two options, use
+> > > rpi-userland (the old way/32-bit only) or mesa3d/v3d/vc4 (the
+> > > new way 32-bit/64-bit)...
+> > >
+> > > Regards,
+> > > Peter
+> > >
+> > > >
+> > > > Thanks!
+> > > > Patricia
+> > > >
+> > >
+> > >
+> >
+>
+>
+
 -- 
-2.20.1
+Patricia A. Holden
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201222/452aa0eb/attachment.html>
