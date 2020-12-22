@@ -1,56 +1,70 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 22 Dec 2020 11:54:07 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/imagemagick:
- security bump to version 7.10.51
-Message-ID: <20201222103807.04603868A2@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 22 Dec 2020 12:10:12 +0100
+Subject: [Buildroot] [PATCH 1/1] package/rauc: fix build with headers < 4.14
+Message-ID: <20201222111012.1641693-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7b9243543c122ff27d6f2eac178044a9ae2c5177
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
-
-- Fix CVE-2020-29599: ImageMagick before 6.9.11-40 and 7.x before
-  7.0.10-40 mishandles the -authenticate option, which allows setting a
-  password for password-protected PDF files. The user-controlled password
-  was not properly escaped/sanitized and it was therefore possible to
-  inject additional shell commands via coders/pdf.c.
-- Update license hash (correct wording to match Apache 2 license:
-  https://github.com/ImageMagick/ImageMagick/commit/45e5d2493c08e7cb49f7268c01d847e88f78fd6c)
-
-https://github.com/ImageMagick/ImageMagick/blob/7.0.10-51/ChangeLog
+Fixes:
+ - http://autobuild.buildroot.org/results/829ae7ed66686c11a941ac99bd08a06f754affb4
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit b898e80639988d2da9e4a432337e3c914dc0859c)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/imagemagick/imagemagick.hash | 4 ++--
- package/imagemagick/imagemagick.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...c-mount.c-fix-build-with-kernel-4.14.patch | 43 +++++++++++++++++++
+ 1 file changed, 43 insertions(+)
+ create mode 100644 package/rauc/0001-src-mount.c-fix-build-with-kernel-4.14.patch
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index 3380378fd7..8a111edb15 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  9f2b8b131222354b196c640fca4e53eb0bbf62246621b9d467f223366272d7a7  imagemagick-7.0.10-28.tar.gz
--sha256  e2d364de83dd9e7c866bd99ee7dac2fe92071fb70e9b187293353fb285cf09ac  LICENSE
-+sha256  fa993169a06052267eaf81cf85bbf5a30c0bf243511017d986f47abbe65ff262  imagemagick-7.0.10-51.tar.gz
-+sha256  7b43ee798e835f5e0dc03c92c52d288b46a771c4561d57ef2a9a8b2c76bf33cb  LICENSE
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index d44b7d1d14..f30d3dfc2b 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IMAGEMAGICK_VERSION = 7.0.10-28
-+IMAGEMAGICK_VERSION = 7.0.10-51
- IMAGEMAGICK_SITE = $(call github,ImageMagick,ImageMagick,$(IMAGEMAGICK_VERSION))
- IMAGEMAGICK_LICENSE = Apache-2.0
- IMAGEMAGICK_LICENSE_FILES = LICENSE
+diff --git a/package/rauc/0001-src-mount.c-fix-build-with-kernel-4.14.patch b/package/rauc/0001-src-mount.c-fix-build-with-kernel-4.14.patch
+new file mode 100644
+index 0000000000..9604e8878a
+--- /dev/null
++++ b/package/rauc/0001-src-mount.c-fix-build-with-kernel-4.14.patch
+@@ -0,0 +1,43 @@
++From f73eefdbc0577b125f7d36f54a27d8e95af831dd Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 22 Dec 2020 11:52:31 +0100
++Subject: [PATCH] src/mount.c: fix build with kernel < 4.14
++
++Build with kernel headers < 4.14 fails since version 1.5.0 and
++https://github.com/rauc/rauc/commit/527bf2f7f746e0253f7843542e19cb0fa0c7c869:
++
++src/mount.c: In function 'r_setup_loop':
++src/mount.c:201:25: error: 'LOOP_SET_BLOCK_SIZE' undeclared (first use in this function)
++  looprc = ioctl(loopfd, LOOP_SET_BLOCK_SIZE, 4096);
++                         ^
++
++Indeed, LOOP_SET_BLOCK_SIZE is only defined since
++https://github.com/torvalds/linux/commit/89e4fdecb51cf5535867026274bc97de9480ade5
++
++Fixes:
++ - http://autobuild.buildroot.org/results/829ae7ed66686c11a941ac99bd08a06f754affb4
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/rauc/rauc/pull/673]
++---
++ src/mount.c | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/src/mount.c b/src/mount.c
++index 2e593ca..75acf49 100644
++--- a/src/mount.c
+++++ b/src/mount.c
++@@ -11,6 +11,10 @@
++ #include "mount.h"
++ #include "utils.h"
++ 
+++#ifndef LOOP_SET_BLOCK_SIZE
+++#define LOOP_SET_BLOCK_SIZE 0x4C09
+++#endif
+++
++ gboolean r_mount_bundle(const gchar *source, const gchar *mountpoint, GError **error)
++ {
++ 	const unsigned long flags = MS_NODEV | MS_NOSUID | MS_RDONLY;
++-- 
++2.29.2
++
+-- 
+2.29.2
