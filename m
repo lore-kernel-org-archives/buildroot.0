@@ -1,41 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 22 Dec 2020 11:49:46 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] DEVELOPERS: remove Thomas
- Davis
-Message-ID: <20201222103555.E7009884F6@busybox.osuosl.org>
+Date: Tue, 22 Dec 2020 11:49:02 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/pkg-golang.mk:
+ postpone evaluation of TARGET_DIR and HOST_DIR
+Message-ID: <20201222103555.D824B884F6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6226bd680ba4e44d787f6efd88dc6f8c31ece1f6
+commit: https://git.buildroot.net/buildroot/commit/?id=f9e0f044c4a53c7afa1e3e71268d3dc3f8f51ff0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-His e-mail has been bouncing for quite a while:
+When BR2_PER_PACKAGE_DIRECTORIES=y, $(TARGET_DIR) is evaluated as
+$(BASE_DIR)/target, but $$(TARGET_DIR) is evaluated as
+$(BASE_DIR)/per-package/$(PKG)_NAME/target.
 
-<sunsetbrew@sunsetbrew.com>: connect to
-    sunsetbrew.com[2a05:d014:9da:8c10:306e:3e07:a16f:a552]:25: Network is
-    unreachable
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit fd5eeabac03c98672230e079ac1a73104565470f)
+Signed-off-by: Tian Yuanhao <tianyuanhao@aliyun.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 8d595c0d926d6b352b0e08366095bb92c7318c4c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 3 ---
- 1 file changed, 3 deletions(-)
+ package/pkg-golang.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index e9af836242..810cab9e3d 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2328,9 +2328,6 @@ N:	Thomas Claveirole <thomas.claveirole@green-communications.fr>
- F:	package/fcgiwrap/
- F:	package/openlayers/
- 
--N:	Thomas Davis <sunsetbrew@sunsetbrew.com>
--F:	package/civetweb/
--
- N:	Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
- F:	docs/manual/
- F:	package/cereal/
+diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
+index 2494ce028c..51ed92c7af 100644
+--- a/package/pkg-golang.mk
++++ b/package/pkg-golang.mk
+@@ -141,7 +141,7 @@ endif
+ ifndef $(2)_INSTALL_TARGET_CMDS
+ define $(2)_INSTALL_TARGET_CMDS
+ 	$$(foreach d,$$($(2)_INSTALL_BINS),\
+-		$(INSTALL) -D -m 0755 $$(@D)/bin/$$(d) $(TARGET_DIR)/usr/bin/$$(d)
++		$(INSTALL) -D -m 0755 $$(@D)/bin/$$(d) $$(TARGET_DIR)/usr/bin/$$(d)
+ 	)
+ endef
+ endif
+@@ -150,7 +150,7 @@ endif
+ ifndef $(2)_INSTALL_CMDS
+ define $(2)_INSTALL_CMDS
+ 	$$(foreach d,$$($(2)_INSTALL_BINS),\
+-		$(INSTALL) -D -m 0755 $$(@D)/bin/$$(d) $(HOST_DIR)/bin/$$(d)
++		$(INSTALL) -D -m 0755 $$(@D)/bin/$$(d) $$(HOST_DIR)/bin/$$(d)
+ 	)
+ endef
+ endif
