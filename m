@@ -1,53 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 22 Dec 2020 15:16:06 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/rauc: security
- bump to version 1.5
-Message-ID: <20201222140147.13E6D81F6E@busybox.osuosl.org>
+Date: Tue, 22 Dec 2020 15:15:38 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/python-pyqt5: fix
+ qt5 openssl conditional
+Message-ID: <20201222140147.08295815F1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4a676776ef58537f83a3eff41e5cdfd81b3f026a
+commit: https://git.buildroot.net/buildroot/commit/?id=97376bf7a4fd6d8d7df5107807d6bfe762b47b11
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-Fixes the following security issue:
-
-- CVE-2020-25860: Time-of-Check-Time-of-Use Vulnerability in code that
-  checks and installs a firmware bundle.
-  For more details, see the advisory:
-  https://github.com/rauc/rauc/security/advisories/GHSA-cgf3-h62j-w9vv
+BR2_PACKAGE_QT5BASE_OPENSSL was dropped by commit 4be1f9b9873
+(package/qt5enginio: drop qt 5.6 support), but python-pyqt5 not updated to
+match.  Fix that.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 41bbe8df540e2c630ad04f8db7383a7e7705f368)
+(cherry picked from commit 54854dc44e6ff937834bf00a2b63186fd066477c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rauc/rauc.hash | 4 ++--
- package/rauc/rauc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-pyqt5/python-pyqt5.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/rauc/rauc.hash b/package/rauc/rauc.hash
-index d327122293..73c1add995 100644
---- a/package/rauc/rauc.hash
-+++ b/package/rauc/rauc.hash
-@@ -1,4 +1,4 @@
- # Locally calculated, after verifying against
--# https://github.com/rauc/rauc/releases/download/v1.4/rauc-1.4.tar.xz.asc
--sha256  85aabf214cd93a37f7ad0b3aaad89eb94facf0f3ebf6e2edca945acbca9b0967  rauc-1.4.tar.xz
-+# https://github.com/rauc/rauc/releases/download/v1.5/rauc-1.5.tar.xz.asc
-+sha256  5dfbc46e808240c5014d318cfe64f0431307c37aa79cb2b013caa12daaf96d9d  rauc-1.5.tar.xz
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
-index a6c7c01095..fd39f000a8 100644
---- a/package/rauc/rauc.mk
-+++ b/package/rauc/rauc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/python-pyqt5/python-pyqt5.mk b/package/python-pyqt5/python-pyqt5.mk
+index 9285b6497c..8f28c90d15 100644
+--- a/package/python-pyqt5/python-pyqt5.mk
++++ b/package/python-pyqt5/python-pyqt5.mk
+@@ -135,7 +135,7 @@ PYTHON_PYQT5_QTDETAIL_TYPE = shared
+ # Turn off features that aren't available in current qt configuration
+ PYTHON_PYQT5_QTDETAIL_DISABLE_FEATURES += $(if $(BR2_PACKAGE_QT5BASE_OPENGL),,PyQt_OpenGL)
+ PYTHON_PYQT5_QTDETAIL_DISABLE_FEATURES += $(if $(BR2_PACKAGE_QT5BASE_OPENGL_DESKTOP),,PyQt_Desktop_OpenGL)
+-PYTHON_PYQT5_QTDETAIL_DISABLE_FEATURES += $(if $(BR2_PACKAGE_QT5BASE_OPENSSL),,PyQt_SSL)
++PYTHON_PYQT5_QTDETAIL_DISABLE_FEATURES += $(if $(BR2_PACKAGE_OPENSSL),,PyQt_SSL)
  
--RAUC_VERSION = 1.4
-+RAUC_VERSION = 1.5
- RAUC_SITE = https://github.com/rauc/rauc/releases/download/v$(RAUC_VERSION)
- RAUC_SOURCE = rauc-$(RAUC_VERSION).tar.xz
- RAUC_LICENSE = LGPL-2.1
+ define PYTHON_PYQT5_QTDETAIL
+ 	echo $(1) >> $(2)/qtdetail.out
