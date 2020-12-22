@@ -1,26 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 22 Dec 2020 11:49:17 +0100
-Subject: [Buildroot] [PATCH 1/1] package/pkg-golang.mk: postpone
- evaluation of TARGET_DIR and HOST_DIR
-In-Reply-To: <20201218055856.3489177-1-tianyuanhao@aliyun.com> (Tian Yuanhao
- via buildroot's message of "Fri, 18 Dec 2020 13:58:56 +0800")
-References: <20201218055856.3489177-1-tianyuanhao@aliyun.com>
-Message-ID: <87wnxaktea.fsf@dell.be.48ers.dk>
+Date: Tue, 22 Dec 2020 11:50:56 +0100
+Subject: [Buildroot] [PATCH v1] configs/chromebook_elm_defconfig: use
+ linux headers same as kernel (5.9 series)
+In-Reply-To: <20201219192445.27681-1-ps.report@gmx.net> (Peter Seiderer's
+ message of "Sat, 19 Dec 2020 20:24:45 +0100")
+References: <20201219192445.27681-1-ps.report@gmx.net>
+Message-ID: <87sg7yktbj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Tian" == Tian Yuanhao via buildroot <buildroot@busybox.net> writes:
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
- > When BR2_PER_PACKAGE_DIRECTORIES=y, $(TARGET_DIR) is evaluated as
- > $(BASE_DIR)/target, but $$(TARGET_DIR) is evaluated as
- > $(BASE_DIR)/per-package/$(PKG)_NAME/target.
+ > Use linux headers same as kernel (5.9 series).
+ > Fixes:
 
- > Signed-off-by: Tian Yuanhao <tianyuanhao@aliyun.com>
+ >   - https://gitlab.com/buildroot.org/buildroot/-/jobs/917539050
 
-Committed to 2020.02.x, 2020.08.x and 2020.11.x, thanks.
+ >   Incorrect selection of kernel headers: expected 5.10.x, got 5.9.x
+
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+
+Committed to 2020.11.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
