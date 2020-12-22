@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 22 Dec 2020 11:39:38 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/tinycbor: fix
+Date: Tue, 22 Dec 2020 11:39:21 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/tinycbor: fix
  build on musl
-Message-ID: <20201222102344.D23F288270@busybox.osuosl.org>
+Message-ID: <20201222102350.1933C884CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3f15816d79b7c2863a91de7e5b8ee196be95d596
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=57650747fb576abc5e44f3b442ec7b861a80553f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
 Fixes:
  - http://autobuild.buildroot.org/results/c23b694442e7f86cbdd14d8789b12e6a8fd26a70
