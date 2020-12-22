@@ -1,45 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 22 Dec 2020 11:50:25 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x]
- configs/chromebook_elm_defconfig: use linux headers same as kernel (5.9
- series)
-Message-ID: <20201222103540.F16B6884F6@busybox.osuosl.org>
+Date: Tue, 22 Dec 2020 11:51:53 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/ncurses: don't
+ attempt calling ldconfig in host-ncurses
+Message-ID: <20201222103541.11CF8884F6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ededbaab79bc6457564c7bd8e0ed3595bf7a5190
+commit: https://git.buildroot.net/buildroot/commit/?id=20711aca5b537cfefb3f0d16d1a67a4f50303412
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-Use linux headers same as kernel (5.9 series).
+The host-ncurses install step attempts to run ldconfig, causing a permission
+failure:
 
-Fixes:
+cd /buildroot/output/host/lib && (ln -s -f libncurses.so.6.0 libncurses.so.6; ln -s -f libncurses.so.6 libncurses.so; )
+test -z "" && /sbin/ldconfig
+/sbin/ldconfig: Can't create temporary cache file /etc/ld.so.cache~: Permission denied
+make[3]: [/buildroot/output/host/lib/libncurses.so.6.0] Error 1 (ignored)
 
-  - https://gitlab.com/buildroot.org/buildroot/-/jobs/917539050
+The error is non-fatal and ignored, but confusing.
 
-  Incorrect selection of kernel headers: expected 5.10.x, got 5.9.x
+The ncurses makefiles already avoid calling ldconfig when DESTDIR is set
+(target case) but for host-ncurses DESTDIR is empty and the output/host path
+is passed via --prefix.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Pass an empty ac_cv_path_LDCONFIG to the configure step, so than ldconfig is
+not called.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 9e67e9e51d25a22b46c0eef54f323946a1ff59f2)
+(cherry picked from commit 389f48fe90cc8ed77a76a245d3e3ec1fa965df64)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/chromebook_elm_defconfig | 3 +++
+ package/ncurses/ncurses.mk | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/configs/chromebook_elm_defconfig b/configs/chromebook_elm_defconfig
-index 05e82ffc31..4f82370fb9 100644
---- a/configs/chromebook_elm_defconfig
-+++ b/configs/chromebook_elm_defconfig
-@@ -9,6 +9,9 @@ BR2_GLOBAL_PATCH_DIR="board/chromebook/elm/patches/"
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
+diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
+index f4e4784a3c..4d8dcecc3a 100644
+--- a/package/ncurses/ncurses.mk
++++ b/package/ncurses/ncurses.mk
+@@ -187,6 +187,9 @@ define HOST_NCURSES_BUILD_CMDS
+ 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)/progs tic
+ endef
  
-+# Linux headers same as kernel (5.9 series)
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_9=y
++HOST_NCURSES_CONF_ENV = \
++	ac_cv_path_LDCONFIG=""
 +
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+ HOST_NCURSES_CONF_OPTS = \
+ 	--with-shared \
+ 	--without-gpm \
