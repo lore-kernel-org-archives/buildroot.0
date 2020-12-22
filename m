@@ -1,40 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 22 Dec 2020 11:52:00 +0100
-Subject: [Buildroot] [PATCH] package/ncurses: don't attempt calling
- ldconfig in host-ncurses
-In-Reply-To: <20201209145925.20850-1-patrickdepinguin@gmail.com> (Thomas De
- Schampheleire's message of "Wed, 9 Dec 2020 15:59:23 +0100")
-References: <20201209145925.20850-1-patrickdepinguin@gmail.com>
-Message-ID: <87k0takt9r.fsf@dell.be.48ers.dk>
+Date: Tue, 22 Dec 2020 11:48:44 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/pkg-golang.mk:
+ postpone evaluation of TARGET_DIR and HOST_DIR
+Message-ID: <20201222103540.D3AA3825CA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=80c291079c09df31227b4f75c1a4b89fb75d4795
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
- > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
- > The host-ncurses install step attempts to run ldconfig, causing a permission
- > failure:
+When BR2_PER_PACKAGE_DIRECTORIES=y, $(TARGET_DIR) is evaluated as
+$(BASE_DIR)/target, but $$(TARGET_DIR) is evaluated as
+$(BASE_DIR)/per-package/$(PKG)_NAME/target.
 
- > cd /buildroot/output/host/lib && (ln -s -f libncurses.so.6.0 libncurses.so.6; ln -s -f libncurses.so.6 libncurses.so; )
- > test -z "" && /sbin/ldconfig
- > /sbin/ldconfig: Can't create temporary cache file /etc/ld.so.cache~: Permission denied
- > make[3]: [/buildroot/output/host/lib/libncurses.so.6.0] Error 1 (ignored)
+Signed-off-by: Tian Yuanhao <tianyuanhao@aliyun.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 8d595c0d926d6b352b0e08366095bb92c7318c4c)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/pkg-golang.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- > The error is non-fatal and ignored, but confusing.
-
- > The ncurses makefiles already avoid calling ldconfig when DESTDIR is set
- > (target case) but for host-ncurses DESTDIR is empty and the output/host path
- > is passed via --prefix.
-
- > Pass an empty ac_cv_path_LDCONFIG to the configure step, so than ldconfig is
- > not called.
-
- > Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-
-Committed to 2020.02.x, 2020.08.x and 2020.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
+index 3813e1c406..d07242310d 100644
+--- a/package/pkg-golang.mk
++++ b/package/pkg-golang.mk
+@@ -121,7 +121,7 @@ endif
+ ifndef $(2)_INSTALL_TARGET_CMDS
+ define $(2)_INSTALL_TARGET_CMDS
+ 	$$(foreach d,$$($(2)_INSTALL_BINS),\
+-		$(INSTALL) -D -m 0755 $$(@D)/bin/$$(d) $(TARGET_DIR)/usr/bin/$$(d)
++		$(INSTALL) -D -m 0755 $$(@D)/bin/$$(d) $$(TARGET_DIR)/usr/bin/$$(d)
+ 	)
+ endef
+ endif
+@@ -130,7 +130,7 @@ endif
+ ifndef $(2)_INSTALL_CMDS
+ define $(2)_INSTALL_CMDS
+ 	$$(foreach d,$$($(2)_INSTALL_BINS),\
+-		$(INSTALL) -D -m 0755 $$(@D)/bin/$$(d) $(HOST_DIR)/bin/$$(d)
++		$(INSTALL) -D -m 0755 $$(@D)/bin/$$(d) $$(HOST_DIR)/bin/$$(d)
+ 	)
+ endef
+ endif
