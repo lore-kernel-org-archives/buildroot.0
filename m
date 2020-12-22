@@ -1,38 +1,79 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 22 Dec 2020 09:29:59 +0100
-Subject: [Buildroot] [PATCH 1/1] package/wireshark: security bump to
- version 3.4.2
-In-Reply-To: <20201218221541.625712-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 18 Dec 2020 23:15:41 +0100")
-References: <20201218221541.625712-1-fontaine.fabrice@gmail.com>
-Message-ID: <87eejimeew.fsf@dell.be.48ers.dk>
+Date: Tue, 22 Dec 2020 09:23:05 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] pkg-cmake.mk: fix host
+ ccache support for CMake 3.19
+Message-ID: <20201222081330.D015088492@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=432eb23e19b7ef3e35db8f1579165097985bd430
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
- > The following vulnerabilities have been fixed:
- >  - wnpa-sec-2020-16 Kafka dissector memory leak. Bug 16739.
- >    CVE-2020-26418.
- >  - wnpa-sec-2020-17 USB HID dissector crash. Bug 16958. CVE-2020-26421.
- >  - wnpa-sec-2020-18 RTPS dissector memory leak. Bug 16994.
- >    CVE-2020-26420.
- >  - wnpa-sec-2020-19 Multiple dissector memory leak. Bug 17032.
- >    CVE-2020-26419.
- >  - wnpa-sec-2020-20 QUIC dissector crash Bug 17073.
+Starting with CMake 3.4 CMake supports setting a compiler launcher
+like ccache. The feature is described in
+https://cmake.org/cmake/help/latest/variable/CMAKE_LANG_COMPILER_LAUNCHER.html
+This should be safe since everything is built for the host using make or ninja.
+The use of *_ARG1 is discouraged by the cmake developers
+https://cmake-developers.cmake.narkive.com/OTa9EKfj/cmake-c-compiler-arg-not-documented .
 
- > https://www.wireshark.org/docs/relnotes/wireshark-3.4.1.html
- > https://www.wireshark.org/docs/relnotes/wireshark-3.4.2.html
+Without this patch I get the following error message with CMake 3.19.1 on Arch Linux.
+Disabling BR2_CCACHE also resolves the issue.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+/usr/bin/cmake [~]/buildroot/build/host-lzo-2.10/ -DCMAKE_INSTALL_SO_NO_EXE=0 -DCMAKE_FIND_ROOT_PATH="[...]" -DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM="BOTH" -DCMAKE_FIND_ROOT_P
+ATH_MODE_LIBRARY="BOTH" -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE="BOTH" -DCMAKE_INSTALL_PREFIX="[...]" -DCMAKE_C_FLAGS="-O2 -I[...]/include" -DCMAKE_CXX_FLAGS="-O2 -I[...]/include" -DCMAKE_EXE_LINKER_FLAGS="-L[...]/lib -Wl,-rpath,[...]/lib" -DCMAKE_SHARED_LINKER_FLAGS="-L[...]/l
+ib -Wl,-rpath,[...]/lib" -DCMAKE_ASM_COMPILER="/usr/bin/as" -DCMAKE_C_COMPILER="[...]/bin/ccache" -DCMAKE_CXX_COMPILER="[...]/bin/ccache"
+-DCMAKE_C_COMPILER_ARG1="/usr/bin/gcc" -DCMAKE_CXX_COMPILER_ARG1="/usr/bin/g++"  -DCMAKE_COLOR_MAKEFILE=OFF -DBUILD_DOC=OFF -DBUILD_DOCS=OFF -DBUILD_EXAMPLE=OFF -DBUILD_EXAMPLES=OFF -DBUILD_TEST=OFF -DBUILD_TESTS=OFF -DBUILD_TESTING=O
+FF  -DENABLE_SHARED=ON -DENABLE_STATIC=OFF )
+-- The C compiler identification is unknown
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - failed
+-- Check for working C compiler: [...]/bin/ccache
+-- Check for working C compiler: [...]/bin/ccache - broken
+CMake Error at /usr/share/cmake-3.19/Modules/CMakeTestCCompiler.cmake:66 (message):
+The C compiler
 
-Committed to 2020.11.x, thanks.
+Signed-off-by: Bernd Amend <bernd.amend@gmail.com>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Tested-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 0e310b4fd0ca14547356645b184a21f52b0c881b)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/pkg-cmake.mk | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-For 2020.02.x and 2020.08.x I will instead bump to 3.2.10, which
-contains the same fixes.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index 57bfea9be5..0f3d88679c 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -22,10 +22,10 @@
+ 
+ # Set compiler variables.
+ ifeq ($(BR2_CCACHE),y)
+-CMAKE_HOST_C_COMPILER = $(HOST_DIR)/bin/ccache
+-CMAKE_HOST_CXX_COMPILER = $(HOST_DIR)/bin/ccache
+-CMAKE_HOST_C_COMPILER_ARG1 = $(HOSTCC_NOCCACHE)
+-CMAKE_HOST_CXX_COMPILER_ARG1 = $(HOSTCXX_NOCCACHE)
++CMAKE_HOST_C_COMPILER = $(HOSTCC_NOCCACHE)
++CMAKE_HOST_CXX_COMPILER = $(HOSTCXX_NOCCACHE)
++CMAKE_HOST_C_COMPILER_LAUNCHER = $(HOST_DIR)/bin/ccache
++CMAKE_HOST_CXX_COMPILER_LAUNCHER = $(HOST_DIR)/bin/ccache
+ else
+ CMAKE_HOST_C_COMPILER = $(HOSTCC)
+ CMAKE_HOST_CXX_COMPILER = $(HOSTCXX)
+@@ -134,9 +134,9 @@ define $(2)_CONFIGURE_CMDS
+ 		-DCMAKE_ASM_COMPILER="$$(HOSTAS)" \
+ 		-DCMAKE_C_COMPILER="$$(CMAKE_HOST_C_COMPILER)" \
+ 		-DCMAKE_CXX_COMPILER="$$(CMAKE_HOST_CXX_COMPILER)" \
+-		$(if $$(CMAKE_HOST_C_COMPILER_ARG1),\
+-			-DCMAKE_C_COMPILER_ARG1="$$(CMAKE_HOST_C_COMPILER_ARG1)" \
+-			-DCMAKE_CXX_COMPILER_ARG1="$$(CMAKE_HOST_CXX_COMPILER_ARG1)" \
++		$(if $$(CMAKE_HOST_C_COMPILER_LAUNCHER),\
++			-DCMAKE_C_COMPILER_LAUNCHER="$$(CMAKE_HOST_C_COMPILER_LAUNCHER)" \
++			-DCMAKE_CXX_COMPILER_LAUNCHER="$$(CMAKE_HOST_CXX_COMPILER_LAUNCHER)" \
+ 		) \
+ 		-DCMAKE_COLOR_MAKEFILE=OFF \
+ 		-DBUILD_DOC=OFF \
