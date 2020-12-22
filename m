@@ -1,47 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 22 Dec 2020 15:17:01 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/rauc: bump
- version to 1.4
-Message-ID: <20201222140041.6FEC0813D8@busybox.osuosl.org>
+Date: Tue, 22 Dec 2020 15:17:10 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/rauc: fix URL of
+ the signed tarball
+Message-ID: <20201222140041.7E155813D8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ebe548a23ad840393157516f0e63d9ee365fdc10
+commit: https://git.buildroot.net/buildroot/commit/?id=523963d8f24fc125144f1282cbd59e5bb5ce69cd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Signed-off-by: Yair Ben Avraham <yairba@protonmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit ac841cc7ac5051522f1c03d37d06ae95cea4eae9)
+Reported-by: Yair Ben Avraham <yairba@protonmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit a9b454387cdc60a69fc2bac8a24d0e2cf3c5ddb3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rauc/rauc.hash | 4 ++--
- package/rauc/rauc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/rauc/rauc.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/rauc/rauc.hash b/package/rauc/rauc.hash
-index b73eb60d86..51f37f6cb8 100644
+index 51f37f6cb8..d327122293 100644
 --- a/package/rauc/rauc.hash
 +++ b/package/rauc/rauc.hash
 @@ -1,4 +1,4 @@
  # Locally calculated, after verifying against
--# https://github.com/rauc/rauc/releases/download/v1.3/rauc-1.3.tar.xz.asc
--sha256  4f6144447254753fcd19f2c5c70e79fa91d27253185b8928436f01528aa65e6c  rauc-1.3.tar.xz
-+# https://github.com/rauc/rauc/releases/download/v1.3/rauc-1.4.tar.xz.asc
-+sha256  85aabf214cd93a37f7ad0b3aaad89eb94facf0f3ebf6e2edca945acbca9b0967  rauc-1.4.tar.xz
+-# https://github.com/rauc/rauc/releases/download/v1.3/rauc-1.4.tar.xz.asc
++# https://github.com/rauc/rauc/releases/download/v1.4/rauc-1.4.tar.xz.asc
+ sha256  85aabf214cd93a37f7ad0b3aaad89eb94facf0f3ebf6e2edca945acbca9b0967  rauc-1.4.tar.xz
  sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
-index a827c5e9d3..a6c7c01095 100644
---- a/package/rauc/rauc.mk
-+++ b/package/rauc/rauc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RAUC_VERSION = 1.3
-+RAUC_VERSION = 1.4
- RAUC_SITE = https://github.com/rauc/rauc/releases/download/v$(RAUC_VERSION)
- RAUC_SOURCE = rauc-$(RAUC_VERSION).tar.xz
- RAUC_LICENSE = LGPL-2.1
