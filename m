@@ -1,97 +1,93 @@
-From: Antoine Tenart <atenart@kernel.org>
-Date: Tue, 22 Dec 2020 16:54:55 +0100
-Subject: [Buildroot] [PATCH 00/15] packages: Add SELinux modules to some
- packages
-In-Reply-To: <20201222150736.319593-1-maxime.chevallier@bootlin.com>
-References: <20201222150736.319593-1-maxime.chevallier@bootlin.com>
-Message-ID: <160865249576.1448242.9915039771107087372@kwain.local>
+From: Marcin Niestroj <m.niestroj@grinn-global.com>
+Date: Tue, 22 Dec 2020 17:39:15 +0100
+Subject: [Buildroot] [PATCH 1/2] package/python-pytest-asyncio: new package
+Message-ID: <20201222163916.68061-1-m.niestroj@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Maxime,
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+---
+ DEVELOPERS                                         |  1 +
+ package/Config.in                                  |  1 +
+ package/python-pytest-asyncio/Config.in            |  8 ++++++++
+ .../python-pytest-asyncio.hash                     |  5 +++++
+ .../python-pytest-asyncio/python-pytest-asyncio.mk | 14 ++++++++++++++
+ 5 files changed, 29 insertions(+)
+ create mode 100644 package/python-pytest-asyncio/Config.in
+ create mode 100644 package/python-pytest-asyncio/python-pytest-asyncio.hash
+ create mode 100644 package/python-pytest-asyncio/python-pytest-asyncio.mk
 
-Quoting Maxime Chevallier (2020-12-22 16:07:21)
-> 
-> Following the recent support for the SELinux refpolicy and the ability
-> for packages to select their own SELinux module in the refpolicy [1],
-> this series adds a first batch of matching between packages and their
-> respective module.
-
-Nice to see packages using this feature :)
-
-> This series focuses on the tools that are impacted by the following
-> modules in the refpolicy [2] :
-> 
->   - services/networkmanager, which adds support for :
->     - dhcp
-
-I'm not sure about this one. When looking at the module definitions
-dhclient and dhcpcd seem to be supported by system/sysnetwork rather
-than than by services/networkmanager. (Haven't built an image to test
-though).
-
->     - iwd
->     - network-manager
->     - wpa_supplicant
-> 
->   - system/ipatbles, which adds support for :
->     - ebtables
->     - ipset
->     - iptables
->     - nftables
-> 
->   - admin/netutils, which adds support for :
->     - fping
->     - iputils
-
-iputils can install lots of utilities based on the configuration, many
-of which are supported by admin/netutils. Some are not supported in the
-refpolicy, and some by other modules, such as rdisc or tftpd.
-
-I think the selinux module selection should be conditional depending on
-the utilities installed by the iputils package, to avoid installing an
-unused selinux module and to fix the support of others.
-
->     - mtr
->     - nmap
->     - tcpdump
-> 
->   - services/entropyd, which adds support for :
->     - haveged
->     - jitterentropy-library
-
-The other selinux module selections LGTM.
-
-> With this series, the above-mentionned tools can now be used on systems
-> that have SELinux enabled.
-> 
-> This series was split per-package, which generates lots of one-liner
-> patches. Due to the nature of the changes, I expect more patches like
-> that to follow, so we might also use a "one package per module" approach
-> if you want.
-
-> Maxime Chevallier (15):
->   packages/dhcp: add SELinux module
-
-Nitpick: s/packages/package/
-
->   package/iwd: add SELinux module
->   package/network-manager: add SELinux module
->   package/wpa_supplicant: add SELinux module
->   package/ebtables: add SELinux module
->   package/ipset: add SELinux module
->   package/iptables: add SELinux module
->   package/nftables: add SELinux module
->   package/fping: add SELinux module
->   package/iputils: add SELinux module
->   package/mtr: add SELinux module
->   package/nmap: add SELinux module
->   package/tcpdump: add SELinux module
->   package/haveged: add SELinux module
->   package/jitterentropy-library: add SELinux module
-
-Thanks!
-Antoine
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d0b4cd7531..f4eab97b47 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1600,6 +1600,7 @@ F:	package/python-intelhex/
+ F:	package/python-packaging/
+ F:	package/python-pluggy/
+ F:	package/python-pytest/
++F:	package/python-pytest-asyncio/
+ F:	package/python-xmodem/
+ F:	package/rs485conf/
+ F:	package/turbolua/
+diff --git a/package/Config.in b/package/Config.in
+index c3677dd15e..59bdfc4092 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1135,6 +1135,7 @@ menu "External python modules"
+ 	source "package/python-pytablereader/Config.in"
+ 	source "package/python-pytablewriter/Config.in"
+ 	source "package/python-pytest/Config.in"
++	source "package/python-pytest-asyncio/Config.in"
+ 	source "package/python-pytrie/Config.in"
+ 	source "package/python-pytz/Config.in"
+ 	source "package/python-pyudev/Config.in"
+diff --git a/package/python-pytest-asyncio/Config.in b/package/python-pytest-asyncio/Config.in
+new file mode 100644
+index 0000000000..3fa90e4e18
+--- /dev/null
++++ b/package/python-pytest-asyncio/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_PYTEST_ASYNCIO
++	bool "python-pytest-asyncio"
++	depends on BR2_PACKAGE_PYTHON3 # pytest
++	select BR2_PACKAGE_PYTHON_PYTEST # runtime
++	help
++	  Pytest support for asyncio.
++
++	  https://github.com/pytest-dev/pytest-asyncio
+diff --git a/package/python-pytest-asyncio/python-pytest-asyncio.hash b/package/python-pytest-asyncio/python-pytest-asyncio.hash
+new file mode 100644
+index 0000000000..40541f54ba
+--- /dev/null
++++ b/package/python-pytest-asyncio/python-pytest-asyncio.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/pytest-asyncio/json
++md5  b63593bc08f445f6e3f14c34128a68ed  pytest-asyncio-0.14.0.tar.gz
++sha256  9882c0c6b24429449f5f969a5158b528f39bde47dc32e85b9f0403965017e700  pytest-asyncio-0.14.0.tar.gz
++# Locally computed sha256 checksums
++sha256  cb5e8e7e5f4a3988e1063c142c60dc2df75605f4c46515e776e3aca6df976e14  LICENSE
+diff --git a/package/python-pytest-asyncio/python-pytest-asyncio.mk b/package/python-pytest-asyncio/python-pytest-asyncio.mk
+new file mode 100644
+index 0000000000..0645db3eb7
+--- /dev/null
++++ b/package/python-pytest-asyncio/python-pytest-asyncio.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-pytest-asyncio
++#
++################################################################################
++
++PYTHON_PYTEST_ASYNCIO_VERSION = 0.14.0
++PYTHON_PYTEST_ASYNCIO_SOURCE = pytest-asyncio-$(PYTHON_PYTEST_ASYNCIO_VERSION).tar.gz
++PYTHON_PYTEST_ASYNCIO_SITE = https://files.pythonhosted.org/packages/65/09/9472d4db0625cf56d40f4e405f955faf6469be00858a273b71332f3fcd1f
++PYTHON_PYTEST_ASYNCIO_SETUP_TYPE = setuptools
++PYTHON_PYTEST_ASYNCIO_LICENSE = Apache-2.0
++PYTHON_PYTEST_ASYNCIO_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
+-- 
+2.29.2
