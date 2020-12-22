@@ -1,53 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 22 Dec 2020 11:51:49 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/ncurses: don't
- attempt calling ldconfig in host-ncurses
-Message-ID: <20201222103551.B0EC2884F6@busybox.osuosl.org>
+Date: Tue, 22 Dec 2020 11:49:57 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] DEVELOPERS: remove Thomas
+ Davis
+Message-ID: <20201222103551.94FA1884F6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d407dcd1044ca7751c4046fcb6c69a2cc99b92b1
+commit: https://git.buildroot.net/buildroot/commit/?id=b46fe00c03a3dbeeafa3cde374885298ba96446d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-The host-ncurses install step attempts to run ldconfig, causing a permission
-failure:
+His e-mail has been bouncing for quite a while:
 
-cd /buildroot/output/host/lib && (ln -s -f libncurses.so.6.0 libncurses.so.6; ln -s -f libncurses.so.6 libncurses.so; )
-test -z "" && /sbin/ldconfig
-/sbin/ldconfig: Can't create temporary cache file /etc/ld.so.cache~: Permission denied
-make[3]: [/buildroot/output/host/lib/libncurses.so.6.0] Error 1 (ignored)
+<sunsetbrew@sunsetbrew.com>: connect to
+    sunsetbrew.com[2a05:d014:9da:8c10:306e:3e07:a16f:a552]:25: Network is
+    unreachable
 
-The error is non-fatal and ignored, but confusing.
-
-The ncurses makefiles already avoid calling ldconfig when DESTDIR is set
-(target case) but for host-ncurses DESTDIR is empty and the output/host path
-is passed via --prefix.
-
-Pass an empty ac_cv_path_LDCONFIG to the configure step, so than ldconfig is
-not called.
-
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 389f48fe90cc8ed77a76a245d3e3ec1fa965df64)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit fd5eeabac03c98672230e079ac1a73104565470f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ncurses/ncurses.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ DEVELOPERS | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
-index f4e4784a3c..4d8dcecc3a 100644
---- a/package/ncurses/ncurses.mk
-+++ b/package/ncurses/ncurses.mk
-@@ -187,6 +187,9 @@ define HOST_NCURSES_BUILD_CMDS
- 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)/progs tic
- endef
+diff --git a/DEVELOPERS b/DEVELOPERS
+index eefe3f9fbd..de5e4ff29a 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2454,9 +2454,6 @@ N:	Thomas Claveirole <thomas.claveirole@green-communications.fr>
+ F:	package/fcgiwrap/
+ F:	package/openlayers/
  
-+HOST_NCURSES_CONF_ENV = \
-+	ac_cv_path_LDCONFIG=""
-+
- HOST_NCURSES_CONF_OPTS = \
- 	--with-shared \
- 	--without-gpm \
+-N:	Thomas Davis <sunsetbrew@sunsetbrew.com>
+-F:	package/civetweb/
+-
+ N:	Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+ F:	docs/manual/
+ F:	package/cereal/
