@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 22 Dec 2020 11:51:31 +0100
-Subject: [Buildroot] [PATCH] package/opkg-utils: needs Python3 on the
- host
-In-Reply-To: <20201209151551.21986-1-patrickdepinguin@gmail.com> (Thomas De
- Schampheleire's message of "Wed, 9 Dec 2020 16:15:50 +0100")
-References: <20201209151551.21986-1-patrickdepinguin@gmail.com>
-Message-ID: <87o8imktak.fsf@dell.be.48ers.dk>
+Date: Tue, 22 Dec 2020 11:52:00 +0100
+Subject: [Buildroot] [PATCH] package/ncurses: don't attempt calling
+ ldconfig in host-ncurses
+In-Reply-To: <20201209145925.20850-1-patrickdepinguin@gmail.com> (Thomas De
+ Schampheleire's message of "Wed, 9 Dec 2020 15:59:23 +0100")
+References: <20201209145925.20850-1-patrickdepinguin@gmail.com>
+Message-ID: <87k0takt9r.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,13 +15,22 @@ To: buildroot@busybox.net
 >>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
  > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
- > The 'opkg.py' script installed by host-opkg-utils has as shebang:
- >     #!/usr/bin/env python3
+ > The host-ncurses install step attempts to run ldconfig, causing a permission
+ > failure:
 
- > which may not be available on all host machines.
- > Add a potential dependency on host-python3 via BR2_PYTHON3_HOST_DEPENDENCY,
- > which will only add the host-python3 dependency if no python3 is already
- > available on the host.
+ > cd /buildroot/output/host/lib && (ln -s -f libncurses.so.6.0 libncurses.so.6; ln -s -f libncurses.so.6 libncurses.so; )
+ > test -z "" && /sbin/ldconfig
+ > /sbin/ldconfig: Can't create temporary cache file /etc/ld.so.cache~: Permission denied
+ > make[3]: [/buildroot/output/host/lib/libncurses.so.6.0] Error 1 (ignored)
+
+ > The error is non-fatal and ignored, but confusing.
+
+ > The ncurses makefiles already avoid calling ldconfig when DESTDIR is set
+ > (target case) but for host-ncurses DESTDIR is empty and the output/host path
+ > is passed via --prefix.
+
+ > Pass an empty ac_cv_path_LDCONFIG to the configure step, so than ldconfig is
+ > not called.
 
  > Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
