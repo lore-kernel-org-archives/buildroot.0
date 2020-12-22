@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 22 Dec 2020 09:23:05 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] pkg-cmake.mk: fix host
+Date: Tue, 22 Dec 2020 09:22:26 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] pkg-cmake.mk: fix host
  ccache support for CMake 3.19
-Message-ID: <20201222081330.D015088492@busybox.osuosl.org>
+Message-ID: <20201222081335.6B0DB814CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=432eb23e19b7ef3e35db8f1579165097985bd430
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=866db91ae207adb26c63821ed98c7ea69fd2930d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
 Starting with CMake 3.4 CMake supports setting a compiler launcher
 like ccache. The feature is described in
