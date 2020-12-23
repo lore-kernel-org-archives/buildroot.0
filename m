@@ -1,63 +1,136 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Wed, 23 Dec 2020 16:33:25 +0100
-Subject: [Buildroot] [PATCH 3/3] package/freescale-imx/imx-gpu-viv: is an
- libopencl provider
-In-Reply-To: <20201223153325.12302-1-romain.naour@smile.fr>
-References: <20201223153325.12302-1-romain.naour@smile.fr>
-Message-ID: <20201223153325.12302-3-romain.naour@smile.fr>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 23 Dec 2020 16:42:07 +0100
+Subject: [Buildroot] [PATCH 1/1] package/rhash: fix build failure due to
+ gcc -v
+In-Reply-To: <20201213172010.7bfbe21a@gmx.net>
+References: <20201203202853.616174-1-fontaine.fabrice@gmail.com>
+ <20201205213101.72a80abc@windsurf.home>
+ <CAPi7W80FOkm4g+zKQqpmzCdK-9X9H80ww=q_iJhpjqz9f4G4zQ@mail.gmail.com>
+ <20201213170736.4cb4859c@gmx.net> <20201213172010.7bfbe21a@gmx.net>
+Message-ID: <CAPi7W82Eds9P6b0JVL+18FhngsjmtQLOu4ZLW3-Bxn6vKBHANw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The imx-gpu-viv install libOpenCL.so.1.2 library and cl.h header,
-so declare it as a libopencl provider.
+Hi Peter,
 
-With this support we can select the clinfo package provided by
-Buildroot instead of the one provided by imx-gpu-viv package.
+Le dim. 13 d?c. 2020 ? 17:20, Peter Seiderer <ps.report@gmx.net> a ?crit :
+>
+> Hello Fabrice, Thomas,
+>
+> On Sun, 13 Dec 2020 17:07:36 +0100, Peter Seiderer <ps.report@gmx.net> wrote:
+>
+> > Hello Fabrice, Thomas,
+> >
+> > On Sat, 5 Dec 2020 21:44:05 +0100, Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+> >
+> > > Hi,
+> > >
+> > > Le sam. 5 d?c. 2020 ? 21:31, Thomas Petazzoni
+> > > <thomas.petazzoni@bootlin.com> a ?crit :
+> > > >
+> > > > On Thu,  3 Dec 2020 21:28:53 +0100
+> > > > Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+> > > >
+> > > > > Fixes:
+> > > > >  - http://autobuild.buildroot.org/results/8605c16cc28316954ce8b9dcc266974390c5da20
+> > > > >
+> > > > > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > > >
+> > > > Why isn't gcc -v working ?
+> > > I don't know, you can see the full trace here:
+> > > http://autobuild.buildroot.org/results/8605c16cc28316954ce8b9dcc266974390c5da20/rhash-1.4.0/config.log
+> >
+> > May be a problem with the toolchain-wrapper?
+> >
+> >       $ ls -l .../host/bin/arm-linux-gcc
+> > .../host/bin/arm-linux-gcc -> toolchain-wrapper
+> >
+> >       $ .../host/bin/arm-linux-gcc -v
+> > Using built-in specs.
+> > COLLECT_GCC=.../host/opt/ext-toolchain/bin/arm-linux-gcc.br_real
+> > COLLECT_LTO_WRAPPER=.../host/opt/ext-toolchain/bin/../libexec/gcc/arm-buildroot-linux-uclibcgnueabihf/8.3.0/lto-wrapper
+> > Target: arm-buildroot-linux-uclibcgnueabihf
+> > Configured with: ./configure --prefix=/opt/br-arm11-full-nothread-2020.02 --sysconfdir=/opt/br-arm11-full-nothread-2020.02/etc --enable-static --target=arm-buildroot-linux-uclibcgnueabihf --with-sysroot=/opt/br-arm11-full-nothread-2020.02/arm-buildroot-linux-uclibcgnueabihf/sysroot --enable-__cxa_atexit --with-gnu-ld --disable-libssp --disable-multilib --disable-decimal-float --with-gmp=/opt/br-arm11-full-nothread-2020.02 --with-mpc=/opt/br-arm11-full-nothread-2020.02 --with-mpfr=/opt/br-arm11-full-nothread-2020.02 --with-pkgversion='Buildroot 2020.02' --with-bugurl=http://bugs.buildroot.net/ --disable-libquadmath --disable-libsanitizer --disable-tls --disable-threads --disable-libitm --disable-libatomic --without-isl --without-cloog --with-abi=aapcs-linux --with-cpu=arm1176jzf-s --with-fpu=vfp --with-float=hard --with-mode=arm --enable-languages=c,c++ --with-build-time-tools=/opt/br-arm11-full-nothread-2020.02/arm-buildroot-linux-uclibcgnueabihf/bin --enable-shared --disable-libgomp
+> > Thread model: single
+> > gcc version 8.3.0 (Buildroot 2020.02)
+> > COMPILER_PATH=.../host/opt/ext-toolchain/bin/../libexec/gcc/arm-buildroot-linux-uclibcgnueabihf/8.3.0/:.../host/opt/ext-toolchain/bin/../libexec/gcc/:.../host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabihf/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabihf/bin/
+> > LIBRARY_PATH=.../host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabihf/8.3.0/:.../host/opt/ext-toolchain/bin/../lib/gcc/:.../host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabihf/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabihf/lib/:.../host/arm-buildroot-linux-uclibcgnueabihf/sysroot/lib/:.../host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib/
+> > COLLECT_GCC_OPTIONS='-mabi=aapcs-linux' '-mfpu=vfp' '-marm' '-mfloat-abi=hard' '-mcpu=arm1176jzf-s' '-v' '-mtls-dialect=gnu' '-march=armv6kz+fp'
+> >  .../host/opt/ext-toolchain/bin/../libexec/gcc/arm-buildroot-linux-uclibcgnueabihf/8.3.0/collect2 -plugin .../host/opt/ext-toolchain/bin/../libexec/gcc/arm-buildroot-linux-uclibcgnueabihf/8.3.0/liblto_plugin.so -plugin-opt=.../host/opt/ext-toolchain/bin/../libexec/gcc/arm-buildroot-linux-uclibcgnueabihf/8.3.0/lto-wrapper -plugin-opt=-fresolution=/tmp/ccb9JJ1m.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --sysroot=.../host/arm-buildroot-linux-uclibcgnueabihf/sysroot --eh-frame-hdr -dynamic-linker /lib/ld-uClibc.so.0 -X -m armelf_linux_eabi .../host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib/crt1.o .../host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib/crti.o .../host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabihf/8.3.0/crtbegin.o -L.../host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabihf/8.3.0 -L.../host/opt/ext-toolchain/bin/../lib/gcc -L.../host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabihf/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabihf/lib -L.../host/arm-buildroot-linux-uclibcgnueabihf/sysroot/lib -L.../host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib -z relro -lgcc --as-needed -lgcc_s --no-as-needed -lc -lgcc --as-needed -lgcc_s --no-as-needed .../host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabihf/8.3.0/crtend.o .../host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib/crtn.o
+> > .../host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabihf/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabihf/bin/ld: .../host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib/crt1.o: in function `_start':
+> > (.text+0x34): undefined reference to `main'
+> > collect2: error: ld returned 1 exit status
+> >
+> >
+> > The toolchain-wrapper seems to do/try some compile after the '-v'
+> > handling (all output after the 'gcc version 8.3.0 (Buildroot 2020.02)'
+> > line)
+>
+> A strace of
+>
+>         $ .../host/bin/arm-linux-gcc -v
+>
+> shows
+>
+>         24399 execve(".../host/opt/ext-toolchain/bin/arm-linux-gcc.br_real", ["/home/seiderer/Work/Buildroot/bu"..., "--sysroot", "/.../bu"..., "-mabi=aapcs-linux", "-mfpu=vfp", "-marm", "-mfloat-abi=hard", "-mcpu=arm1176jzf-s", "-Wl,-z,relro", "-v"], 0x7ffca405b940 /* 93 vars */) = 0
+>
+>
+> This one works:
+>
+>         $ .../host/opt/ext-toolchain/bin/arm-linux-gcc.br_real --sysroot bla -mabi=aapcs-linux -mfpu=vfp -marm -mfloat-abi=hard -mcpu=arm1176jzf-s  -v
+>
+> This one fails:
+>
+>         $ .../host/opt/ext-toolchain/bin/arm-linux-gcc.br_real --sysroot bla -mabi=aapcs-linux -mfpu=vfp -marm -mfloat-abi=hard -mcpu=arm1176jzf-s -Wl,-z,relro -v
+Indeed, it seems that -Wl,-z,relro and -v doesn't work, I'll send a
+patch to update toolchain-wrapper.c.
+>
+> Regards,
+> Peter
+>
+>
+> >
+> > The gcc -v output from the host for compare:
+> >
+> >       $ gcc -v
+> > Using built-in specs.
+> > COLLECT_GCC=gcc
+> > COLLECT_LTO_WRAPPER=/usr/lib64/gcc/x86_64-suse-linux/10/lto-wrapper
+> > OFFLOAD_TARGET_NAMES=nvptx-none:amdgcn-amdhsa
+> > OFFLOAD_TARGET_DEFAULT=1
+> > Target: x86_64-suse-linux
+> > Configured with: ../configure --prefix=/usr --infodir=/usr/share/info --mandir=/usr/share/man --libdir=/usr/lib64 --libexecdir=/usr/lib64 --enable-languages=c,c++,objc,fortran,obj-c++,ada,go,d --enable-offload-targets=nvptx-none,amdgcn-amdhsa, --without-cuda-driver --enable-checking=release --disable-werror --with-gxx-include-dir=/usr/include/c++/10 --enable-ssp --disable-libssp --disable-libvtv --enable-cet=auto --disable-libcc1 --enable-plugin --with-bugurl=https://bugs.opensuse.org/ --with-pkgversion='SUSE Linux' --with-slibdir=/lib64 --with-system-zlib --enable-libstdcxx-allocator=new --disable-libstdcxx-pch --enable-libphobos --enable-version-specific-runtime-libs --with-gcc-major-version-only --enable-linker-build-id --enable-linux-futex --enable-gnu-indirect-function --program-suffix=-10 --without-system-libunwind --enable-multilib --with-arch-32=x86-64 --with-tune=generic --with-build-config=bootstrap-lto-lean --enable-link-mutex --build=x86_64-suse-linux --host=x86_64-suse-linux
+> > Thread model: posix
+> > Supported LTO compression algorithms: zlib zstd
+> > gcc version 10.2.1 20201202 [revision e563687cf9d3d1278f45aaebd03e0f66531076c9] (SUSE Linux)
+> >
+> >
+> > Regards,
+> > Peter
+> >
+> >
+> > > >
+> > > > Thomas
+> > > > --
+> > > > Thomas Petazzoni, CTO, Bootlin
+> > > > Embedded Linux and Kernel engineering
+> > > > https://bootlin.com
+> > > Best Regards,
+> > >
+> > > Fabrice
+> > > _______________________________________________
+> > > buildroot mailing list
+> > > buildroot at busybox.net
+> > > http://lists.busybox.net/mailman/listinfo/buildroot
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+>
+Best Regards,
 
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Cc: Gary Bisson <gary.bisson@boundarydevices.com>
----
- package/freescale-imx/imx-gpu-viv/Config.in      | 4 ++++
- package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk | 2 +-
- 2 files changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/package/freescale-imx/imx-gpu-viv/Config.in b/package/freescale-imx/imx-gpu-viv/Config.in
-index a2deaf2e12..753a71ee00 100644
---- a/package/freescale-imx/imx-gpu-viv/Config.in
-+++ b/package/freescale-imx/imx-gpu-viv/Config.in
-@@ -14,6 +14,7 @@ config BR2_PACKAGE_IMX_GPU_VIV
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	select BR2_PACKAGE_HAS_LIBEGL
- 	select BR2_PACKAGE_HAS_LIBGLES
-+	select BR2_PACKAGE_HAS_LIBOPENCL
- 	select BR2_PACKAGE_HAS_LIBOPENVG
- 	help
- 	  Userspace libraries for Vivante GPU on i.MX platforms
-@@ -74,6 +75,9 @@ config BR2_PACKAGE_PROVIDES_LIBEGL
- config BR2_PACKAGE_PROVIDES_LIBGLES
- 	default "imx-gpu-viv"
- 
-+config BR2_PACKAGE_PROVIDES_LIBOPENCL
-+	default "imx-gpu-viv"
-+
- config BR2_PACKAGE_PROVIDES_LIBOPENVG
- 	default "imx-gpu-viv"
- 
-diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
-index 06c74869cd..ba41af676f 100644
---- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
-+++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
-@@ -18,7 +18,7 @@ IMX_GPU_VIV_LICENSE = NXP Semiconductor Software License Agreement
- IMX_GPU_VIV_LICENSE_FILES = EULA COPYING
- IMX_GPU_VIV_REDISTRIBUTE = NO
- 
--IMX_GPU_VIV_PROVIDES = libegl libgles libopenvg
-+IMX_GPU_VIV_PROVIDES = libegl libgles libopencl libopenvg
- IMX_GPU_VIV_LIB_TARGET = $(call qstrip,$(BR2_PACKAGE_IMX_GPU_VIV_OUTPUT))
- 
- ifeq ($(IMX_GPU_VIV_LIB_TARGET),x11)
--- 
-2.21.3
+Fabrice
