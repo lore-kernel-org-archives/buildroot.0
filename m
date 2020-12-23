@@ -1,50 +1,47 @@
-From: wujek dev <dev_public@wujek.eu>
-Date: Wed, 23 Dec 2020 18:11:36 +0000
-Subject: [Buildroot] [PATCH 1/1] package/netsnmp: fix memory leak in
- IP-MIB when running without IPv6
-In-Reply-To: <87lfdokiti.fsf@dell.be.48ers.dk>
-References: <1608549912-29585-1-git-send-email-dev_public@wujek.eu>
- <87lfdokiti.fsf@dell.be.48ers.dk>
-Message-ID: <1Xo9xihl1qAi9-3z-mGRWT1Q3ZMOVJmNN2ek_8uuL58OXoVEap5pmvAEbu0zqqWXpeN0nvk6uZg85ZJZf1zRENPU38-isMll7nhtdq3l4Hs=@wujek.eu>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 23 Dec 2020 19:27:40 +0100
+Subject: [Buildroot] [PATCH 1/1] toolchain/toolchain-wrapper: fix gcc -v
+ with relro
+Message-ID: <20201223182740.2879160-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> This function is only called once, right?
-Unfortunately not. The bug fixed in this commit causes a leak of 356 bytes every 60 seconds!
-To hit this problem your system has to fulfil the following:
---Linux system with no IPv6 support (precisely, no /proc/net/snmp6 file in the system)
---included IP-MIB in the netsnmp
+rhash in version 1.4.0 with relro fails to build because gcc -v raises
+the following build failure:
 
-The leak also happens when snmp queries are not performed.
+/data/buildroot-test/instance-1/output-1/host/mips64el-buildroot-linux-gnu/sysroot/soft-float/el/usr/lib64/Scrt1.o: In function `__start':
+(.text+0x20): undefined reference to `main'
+collect2: error: ld returned 1 exit status
+Run result: 1
 
-Note: in netsnmp 5.7.3 there is an option for configure "--enable-ipv6", even without this option enabled the bug show up. In 5.8 the option is contrary "--disable-ipv6", but I haven't checked if the problem is when the disable of ipv6 is activated. For sure the leak happens if netsnmp is compiled with ipv6 support, but there is no such support by a Linux kernel.
-In 5.9 this problem is fixed.
+This buid failure is raised because the toolchain-wrapper calls gcc with
+-Wl,-z,relro and as a result gcc wrongly assumes that some linking must
+be done with -v
 
-IMHO: this patch should be pushed to all maintenance branches. Would you like to send such patch (with appropriate header) to this mailing list?
+Fixes:
+ - http://autobuild.buildroot.org/results/8605c16cc28316954ce8b9dcc266974390c5da20
 
-??????? Original Message ???????
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ toolchain/toolchain-wrapper.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-On Wednesday, December 23rd, 2020 at 09:50, Peter Korsgaard <peter@korsgaard.com> wrote:
-
-> >>>>> "Adam" == Adam Wujek dev_public at wujek.eu writes:
->
-> > In a Linux system without IPv6 support (or booted with "ipv6.disable=1")
->
-> > file /proc/net/snmp6 is not present. If such file is not present an allocated
->
-> > memory is not freed. Memory leak occurs even without snmp queries.
->
-> > Problem seen at least since netsnmp 5.7.3 (probably even v5.6.1).
->
-> > Patch backported from netsnmp 5.9, where the problem does not appear any more.
->
-> Committed, thanks.
->
-> This function is only called once, right?
->
-> ----------------------------------------------------------------
->
-> Bye, Peter Korsgaard
+diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
+index 0fb6064b1c..4c3375cfbc 100644
+--- a/toolchain/toolchain-wrapper.c
++++ b/toolchain/toolchain-wrapper.c
+@@ -456,7 +456,8 @@ int main(int argc, char **argv)
+ 	/* Are we building the Linux Kernel or U-Boot? */
+ 	for (i = 1; i < argc; i++) {
+ 		if (!strcmp(argv[i], "-D__KERNEL__") ||
+-		    !strcmp(argv[i], "-D__UBOOT__"))
++		    !strcmp(argv[i], "-D__UBOOT__") ||
++		    !strcmp(argv[i], "-v"))
+ 			break;
+ 	}
+ 	if (i == argc) {
+-- 
+2.29.2
