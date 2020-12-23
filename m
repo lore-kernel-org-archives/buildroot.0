@@ -1,70 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 23 Dec 2020 09:33:37 +0100
-Subject: [Buildroot] [git commit] package/netsnmp: fix memory leak in IP-MIB
- when running without IPv6
-Message-ID: <20201223085640.DB67681540@busybox.osuosl.org>
+Date: Wed, 23 Dec 2020 09:50:21 +0100
+Subject: [Buildroot] [git commit] package/mongodb: bump to version 4.2.11
+Message-ID: <20201223085640.E808A81540@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5e6f6e074508ece2207b02545a8ede5a296978c9
+commit: https://git.buildroot.net/buildroot/commit/?id=5a4f13b8a8dbb9970a6b8f502bd8bfd160e60a3f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In a Linux system without IPv6 support (or booted with "ipv6.disable=1")
-file /proc/net/snmp6 is not present. If such file is not present an allocated
-memory is not freed. Memory leak occurs even without snmp queries.
+https://docs.mongodb.com/master/release-notes/4.2-changelog/#id1
 
-Problem seen at least since netsnmp 5.7.3 (probably even v5.6.1).
-Patch backported from netsnmp 5.9, where the problem does not appear any more.
-
-Signed-off-by: Adam Wujek <dev_public@wujek.eu>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-Linux-Fix-a-memory-leak-in-an-error-path.patch | 37 ++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
+ package/mongodb/mongodb.hash | 2 +-
+ package/mongodb/mongodb.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/netsnmp/0006-IP-MIB-Linux-Fix-a-memory-leak-in-an-error-path.patch b/package/netsnmp/0006-IP-MIB-Linux-Fix-a-memory-leak-in-an-error-path.patch
-new file mode 100644
-index 0000000000..fb68e175e5
---- /dev/null
-+++ b/package/netsnmp/0006-IP-MIB-Linux-Fix-a-memory-leak-in-an-error-path.patch
-@@ -0,0 +1,37 @@
-+From 7c073e3a1b736689135fd2ed44ede5b83790bd37 Mon Sep 17 00:00:00 2001
-+From: Bart Van Assche <bvanassche@acm.org>
-+Date: Mon, 26 Aug 2019 18:32:08 -0700
-+Subject: IP-MIB, Linux: Fix a memory leak in an error path
-+
-+When a Linux system is booted with "ipv6.disable=1" in the kernel command
-+line, the file "/proc/net/snmp6" is not created. Fix the memory leak in
-+_systemstats_v6_load_systemstats() that is triggered with IPv6 disabled.
-+
-+See also https://sourceforge.net/p/net-snmp/bugs/2976/.
-+
-+Reported-by: Mark E Rusk <marker55@users.sourceforge.net>
-+---
-+ agent/mibgroup/ip-mib/data_access/systemstats_linux.c | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/agent/mibgroup/ip-mib/data_access/systemstats_linux.c b/agent/mibgroup/ip-mib/data_access/systemstats_linux.c
-+index e28ff93..f68d122 100644
-+--- a/agent/mibgroup/ip-mib/data_access/systemstats_linux.c
-++++ b/agent/mibgroup/ip-mib/data_access/systemstats_linux.c
-+@@ -560,10 +560,12 @@ _systemstats_v6_load_systemstats(netsnmp_container* container, u_int load_flags)
-+      * try to open file. If we can't, that's ok - maybe the module hasn't
-+      * been loaded yet.
-+      */
-+-    if (!(devin = fopen(filename, "r"))) {
-++    devin = fopen(filename, "r");
-++    if (!devin) {
-+         DEBUGMSGTL(("access:systemstats",
-+                 "Failed to load Systemstats Table (linux1), cannot open %s\n",
-+                 filename));
-++        netsnmp_access_systemstats_entry_free(entry);
-+         return 0;
-+     }
-+     
-+-- 
-+2.7.4
-+
+diff --git a/package/mongodb/mongodb.hash b/package/mongodb/mongodb.hash
+index ab13d77651..3b2580cc43 100644
+--- a/package/mongodb/mongodb.hash
++++ b/package/mongodb/mongodb.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256  f44a846514f8db8be2a662210ad7fefc059d8e17ab2c59aceeae8b0b173d8286  mongodb-src-r4.2.10.tar.gz
++sha256  ab5a8b6e967614a8ad67c0ca87124c4f380d4a476508973a7995d54ed902b02e  mongodb-src-r4.2.11.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  APACHE-2.0.txt
+ sha256  09d99ca61eb07873d5334077acba22c33e7f7d0a9fa08c92734e0ac8430d6e27  LICENSE-Community.txt
+diff --git a/package/mongodb/mongodb.mk b/package/mongodb/mongodb.mk
+index 6a1caf4fcb..e16bb2a169 100644
+--- a/package/mongodb/mongodb.mk
++++ b/package/mongodb/mongodb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MONGODB_VERSION = 4.2.10
++MONGODB_VERSION = 4.2.11
+ MONGODB_SITE = https://fastdl.mongodb.org/src
+ MONGODB_SOURCE = mongodb-src-r$(MONGODB_VERSION).tar.gz
+ 
