@@ -1,217 +1,199 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 23 Dec 2020 10:12:19 +0100
-Subject: [Buildroot] [git commit] configs/raspberrypi*: bump kernel version
- to 967d45b (5.10.1)
-Message-ID: <20201223085641.5045982203@busybox.osuosl.org>
+Date: Wed, 23 Dec 2020 09:51:44 +0100
+Subject: [Buildroot] [git commit] package/minizip: bump to version 2.10.5
+Message-ID: <20201223085641.0C24081540@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e934f23cef4bd2ef01ecd31eef13483772d9280c
+commit: https://git.buildroot.net/buildroot/commit/?id=f9d31de3b7585e3521aafe2089fcff79bf7f037d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Now based on 5.10.1 (from 5.4.80).
+- Drop patches (already in version)
+- Set MZ_FETCH_LIBS to OFF (available since version 2.10.5 and
+  https://github.com/nmoinvaz/minizip/commit/a1602ed9c82c6b2dd5ea8753dd3fecc3dcc74ba5)
+- Use MZ_ICONV which is available since version 2.10.4 and
+  https://github.com/nmoinvaz/minizip/commit/628830ff93c2fb1fd1bbb87ccea5857c5caf2af4
+- Add xz optional dependency which is available since version 2.10.2 and
+  https://github.com/nmoinvaz/minizip/commit/f1cc0e3898b23828765378b2ab6ba7622d1f8dbe
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Reviewed-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+https://github.com/nmoinvaz/minizip/releases/tag/2.10.5
+https://github.com/nmoinvaz/minizip/releases/tag/2.10.4
+https://github.com/nmoinvaz/minizip/releases/tag/2.10.3
+https://github.com/nmoinvaz/minizip/releases/tag/2.10.2
+https://github.com/nmoinvaz/minizip/releases/tag/2.10.1
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/raspberrypi0_defconfig       | 6 +++---
- configs/raspberrypi0w_defconfig      | 6 +++---
- configs/raspberrypi2_defconfig       | 6 +++---
- configs/raspberrypi3_64_defconfig    | 6 +++---
- configs/raspberrypi3_defconfig       | 6 +++---
- configs/raspberrypi3_qt5we_defconfig | 6 +++---
- configs/raspberrypi4_64_defconfig    | 6 +++---
- configs/raspberrypi4_defconfig       | 6 +++---
- configs/raspberrypi_defconfig        | 6 +++---
- 9 files changed, 27 insertions(+), 27 deletions(-)
+ .../minizip/0001-Use-pkg-config-to-find-ZSTD.patch | 30 -----------
+ .../minizip/0002-mz.h-fix-build-with-gcc-4.8.patch | 60 ----------------------
+ package/minizip/minizip.hash                       |  2 +-
+ package/minizip/minizip.mk                         | 23 +++++++--
+ 4 files changed, 19 insertions(+), 96 deletions(-)
 
-diff --git a/configs/raspberrypi0_defconfig b/configs/raspberrypi0_defconfig
-index 3b2178c3cb..c06d6dfcb5 100644
---- a/configs/raspberrypi0_defconfig
-+++ b/configs/raspberrypi0_defconfig
-@@ -2,14 +2,14 @@ BR2_arm=y
- BR2_arm1176jzf_s=y
- BR2_ARM_EABIHF=y
+diff --git a/package/minizip/0001-Use-pkg-config-to-find-ZSTD.patch b/package/minizip/0001-Use-pkg-config-to-find-ZSTD.patch
+deleted file mode 100644
+index 5866099634..0000000000
+--- a/package/minizip/0001-Use-pkg-config-to-find-ZSTD.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-From 69afd09aee3727f2804e1b063ef50800b22c6bb9 Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?Patrik=20Novotn=C3=BD?= <panovotn@redhat.com>
+-Date: Wed, 1 Jul 2020 11:18:08 +0200
+-Subject: [PATCH] Use pkg-config to find ZSTD
+-
+-[Retrieved from: https://github.com/nmoinvaz/minizip/pull/509]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- CMakeLists.txt | 8 +++++++-
+- 1 file changed, 7 insertions(+), 1 deletion(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index a6deb4ce..987e7947 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -115,7 +115,13 @@ endif()
+- # Check if zstd installation is present
+- if(MZ_ZSTD)
+-     if(NOT ZSTD_FORCE_FETCH)
+--        find_package(ZSTD QUIET)
+-+        find_package(PkgConfig)
+-+        if(PKGCONFIG_FOUND)
+-+            pkg_check_modules(ZSTD libzstd)
+-+        endif()
+-+        if(NOT ZSTD_FOUND)
+-+            find_package(ZSTD QUIET)
+-+        endif()
+-     endif()
+-     if(ZSTD_FOUND AND NOT ZSTD_FORCE_FETCH)
+-         message(STATUS "Using ZSTD")
+diff --git a/package/minizip/0002-mz.h-fix-build-with-gcc-4.8.patch b/package/minizip/0002-mz.h-fix-build-with-gcc-4.8.patch
+deleted file mode 100644
+index f9d28a3c75..0000000000
+--- a/package/minizip/0002-mz.h-fix-build-with-gcc-4.8.patch
++++ /dev/null
+@@ -1,60 +0,0 @@
+-From d38254c2cfdfa2baceef9e4fa553b74ed2e0247e Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sat, 25 Jul 2020 14:36:11 +0200
+-Subject: [PATCH] mz.h: fix build with gcc 4.8
+-
+-gcc 4.8 does not support __has_include directive as a result the build
+-will fail on:
+-
+-/home/naourr/work/instance-1/output-1/build/minizip-2.10.0/mz.h:162:44: error: missing binary operator before token "("
+-    (defined(__has_include) && __has_include(<stdint.h>))
+-                                            ^
+-
+-Fix it by appling:
+-https://gcc.gnu.org/onlinedocs/gcc-10.1.0/cpp/_005f_005fhas_005finclude.html
+-
+-Fix #510
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/nmoinvaz/minizip/pull/515]
+----
+- mz.h | 14 ++++++++++----
+- 1 file changed, 10 insertions(+), 4 deletions(-)
+-
+-diff --git a/mz.h b/mz.h
+-index 4d3732b..83662e0 100644
+---- a/mz.h
+-+++ b/mz.h
+-@@ -158,9 +158,12 @@
+- #include <string.h> /* memset, strncpy, strlen */
+- #include <limits.h>
+- 
+--#if defined(HAVE_STDINT_H) || \
+--   (defined(__has_include) && __has_include(<stdint.h>))
+-+#if defined(HAVE_STDINT_H)
+- #  include <stdint.h>
+-+#elif defined(__has_include)
+-+#  if __has_include(<stdint.h>)
+-+#    include <stdint.h>
+-+#  endif
+- #endif
+- 
+- #ifndef __INT8_TYPE__
+-@@ -188,9 +191,12 @@ typedef unsigned int       uint32_t;
+- typedef unsigned long long uint64_t;
+- #endif
+- 
+--#if defined(HAVE_INTTYPES_H) || \
+--   (defined(__has_include) && __has_include(<inttypes.h>))
+-+#if defined(HAVE_INTTYPES_H)
+- #  include <inttypes.h>
+-+#elif defined(__has_include)
+-+#  if __has_include(<inttypes.h>)
+-+#    include <inttypes.h>
+-+#  endif
+- #endif
+- 
+- #ifndef PRId8
+--- 
+-2.27.0
+-
+diff --git a/package/minizip/minizip.hash b/package/minizip/minizip.hash
+index 74799b9d58..9262f3a3e7 100644
+--- a/package/minizip/minizip.hash
++++ b/package/minizip/minizip.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  4c7f236268fef57ce5dcbd9645235a22890d62480a592e1b0515ecff93f9989b  minizip-2.10.0.tar.gz
++sha256  1c6420d3f3509e722178d9130a57cb77537b34900e7b67acca7e3e2858846939  minizip-2.10.5.tar.gz
+ sha256  675181c03fc1302a1c8554c00f7be9bb420c5dbc9dcc2013433cec144413de03  LICENSE
+diff --git a/package/minizip/minizip.mk b/package/minizip/minizip.mk
+index 3fafab5f94..e2abfd4f20 100644
+--- a/package/minizip/minizip.mk
++++ b/package/minizip/minizip.mk
+@@ -4,15 +4,14 @@
+ #
+ ################################################################################
  
--# Linux headers same as kernel, a 5.4 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
-+# Linux headers same as kernel, a 5.10 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+-MINIZIP_VERSION = 2.10.0
++MINIZIP_VERSION = 2.10.5
+ MINIZIP_SITE = $(call github,nmoinvaz,minizip,$(MINIZIP_VERSION))
+-MINIZIP_DEPENDENCIES = \
+-	host-pkgconf \
+-	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
++MINIZIP_DEPENDENCIES = host-pkgconf
+ MINIZIP_INSTALL_STAGING = YES
+ MINIZIP_CONF_OPTS = \
+ 	$(if $(BR2_PACKAGE_MINIZIP_DEMOS),-DMZ_BUILD_TEST=ON) \
+-	-DMZ_COMPAT=OFF
++	-DMZ_COMPAT=OFF \
++	-DMZ_FETCH_LIBS=OFF
+ MINIZIP_LICENSE = Zlib
+ MINIZIP_LICENSE_FILES = LICENSE
  
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
+@@ -23,6 +22,13 @@ else
+ MINIZIP_CONF_OPTS += -DMZ_BZIP2=OFF
+ endif
  
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,f4b5d0de4ffad239ed01ce08d49d4f7eeeccb1a6)/linux-f4b5d0de4ffad239ed01ce08d49d4f7eeeccb1a6.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,967d45b29ca2902f031b867809d72e3b3d623e7a)/linux-967d45b29ca2902f031b867809d72e3b3d623e7a.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
++ifeq ($(BR2_PACKAGE_LIBICONV),y)
++MINIZIP_DEPENDENCIES += libiconv
++MINIZIP_CONF_OPTS += -DMZ_ICONV=ON
++else
++MINIZIP_CONF_OPTS += -DMZ_ICONV=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBBSD),y)
+ MINIZIP_DEPENDENCIES += libbsd
+ MINIZIP_CONF_OPTS += -DMZ_LIBBSD=ON
+@@ -37,6 +43,13 @@ else
+ MINIZIP_CONF_OPTS += -DMZ_OPENSSL=OFF
+ endif
  
- # Build the DTBs for A/B from the kernel sources: the zero is the same
-diff --git a/configs/raspberrypi0w_defconfig b/configs/raspberrypi0w_defconfig
-index 2f2dafbedd..b54bb34ad9 100644
---- a/configs/raspberrypi0w_defconfig
-+++ b/configs/raspberrypi0w_defconfig
-@@ -2,14 +2,14 @@ BR2_arm=y
- BR2_arm1176jzf_s=y
- BR2_ARM_EABIHF=y
- 
--# Linux headers same as kernel, a 5.4 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
-+# Linux headers same as kernel, a 5.10 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
- 
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,f4b5d0de4ffad239ed01ce08d49d4f7eeeccb1a6)/linux-f4b5d0de4ffad239ed01ce08d49d4f7eeeccb1a6.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,967d45b29ca2902f031b867809d72e3b3d623e7a)/linux-967d45b29ca2902f031b867809d72e3b3d623e7a.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2708-rpi-zero-w"
-diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
-index 431e194c02..5104422cb1 100644
---- a/configs/raspberrypi2_defconfig
-+++ b/configs/raspberrypi2_defconfig
-@@ -7,12 +7,12 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
- 
- BR2_SYSTEM_DHCP="eth0"
- 
--# Linux headers same as kernel, a 5.4 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
-+# Linux headers same as kernel, a 5.10 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,f4b5d0de4ffad239ed01ce08d49d4f7eeeccb1a6)/linux-f4b5d0de4ffad239ed01ce08d49d4f7eeeccb1a6.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,967d45b29ca2902f031b867809d72e3b3d623e7a)/linux-967d45b29ca2902f031b867809d72e3b3d623e7a.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
- 
- # Build the DTB from the kernel sources
-diff --git a/configs/raspberrypi3_64_defconfig b/configs/raspberrypi3_64_defconfig
-index e71602f760..65c1291e6a 100644
---- a/configs/raspberrypi3_64_defconfig
-+++ b/configs/raspberrypi3_64_defconfig
-@@ -6,12 +6,12 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
- 
- BR2_SYSTEM_DHCP="eth0"
- 
--# Linux headers same as kernel, a 5.4 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
-+# Linux headers same as kernel, a 5.10 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,f4b5d0de4ffad239ed01ce08d49d4f7eeeccb1a6)/linux-f4b5d0de4ffad239ed01ce08d49d4f7eeeccb1a6.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,967d45b29ca2902f031b867809d72e3b3d623e7a)/linux-967d45b29ca2902f031b867809d72e3b3d623e7a.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi3"
- 
- # Build the DTB from the kernel sources
-diff --git a/configs/raspberrypi3_defconfig b/configs/raspberrypi3_defconfig
-index faa93920e9..96eca54f0d 100644
---- a/configs/raspberrypi3_defconfig
-+++ b/configs/raspberrypi3_defconfig
-@@ -6,12 +6,12 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
- 
- BR2_SYSTEM_DHCP="eth0"
- 
--# Linux headers same as kernel, a 5.4 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
-+# Linux headers same as kernel, a 5.10 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,f4b5d0de4ffad239ed01ce08d49d4f7eeeccb1a6)/linux-f4b5d0de4ffad239ed01ce08d49d4f7eeeccb1a6.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,967d45b29ca2902f031b867809d72e3b3d623e7a)/linux-967d45b29ca2902f031b867809d72e3b3d623e7a.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
- 
- # Build the DTB from the kernel sources
-diff --git a/configs/raspberrypi3_qt5we_defconfig b/configs/raspberrypi3_qt5we_defconfig
-index 8c54e70bbd..8015288acb 100644
---- a/configs/raspberrypi3_qt5we_defconfig
-+++ b/configs/raspberrypi3_qt5we_defconfig
-@@ -7,12 +7,12 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
- 
- BR2_SYSTEM_DHCP="eth0"
- 
--# Linux headers same as kernel, a 5.4 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
-+# Linux headers same as kernel, a 5.10 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,f4b5d0de4ffad239ed01ce08d49d4f7eeeccb1a6)/linux-f4b5d0de4ffad239ed01ce08d49d4f7eeeccb1a6.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,967d45b29ca2902f031b867809d72e3b3d623e7a)/linux-967d45b29ca2902f031b867809d72e3b3d623e7a.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
- 
- # Build the DTB from the kernel sources
-diff --git a/configs/raspberrypi4_64_defconfig b/configs/raspberrypi4_64_defconfig
-index c344d88e0d..94ac5cf5ec 100644
---- a/configs/raspberrypi4_64_defconfig
-+++ b/configs/raspberrypi4_64_defconfig
-@@ -6,12 +6,12 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
- 
- BR2_SYSTEM_DHCP="eth0"
- 
--# Linux headers same as kernel, a 5.4 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
-+# Linux headers same as kernel, a 5.10 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,f4b5d0de4ffad239ed01ce08d49d4f7eeeccb1a6)/linux-f4b5d0de4ffad239ed01ce08d49d4f7eeeccb1a6.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,967d45b29ca2902f031b867809d72e3b3d623e7a)/linux-967d45b29ca2902f031b867809d72e3b3d623e7a.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
- 
- # Build the DTB from the kernel sources
-diff --git a/configs/raspberrypi4_defconfig b/configs/raspberrypi4_defconfig
-index 76e4f99cb6..c2ed5e73c5 100644
---- a/configs/raspberrypi4_defconfig
-+++ b/configs/raspberrypi4_defconfig
-@@ -6,12 +6,12 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
- 
- BR2_SYSTEM_DHCP="eth0"
- 
--# Linux headers same as kernel, a 5.4 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
-+# Linux headers same as kernel, a 5.10 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,f4b5d0de4ffad239ed01ce08d49d4f7eeeccb1a6)/linux-f4b5d0de4ffad239ed01ce08d49d4f7eeeccb1a6.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,967d45b29ca2902f031b867809d72e3b3d623e7a)/linux-967d45b29ca2902f031b867809d72e3b3d623e7a.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
- 
- # Build the DTB from the kernel sources
-diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
-index 59af19fa1d..2d3bb536bf 100644
---- a/configs/raspberrypi_defconfig
-+++ b/configs/raspberrypi_defconfig
-@@ -4,14 +4,14 @@ BR2_ARM_EABIHF=y
- 
- BR2_SYSTEM_DHCP="eth0"
- 
--# Linux headers same as kernel, a 5.4 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
-+# Linux headers same as kernel, a 5.10 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
- 
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
- 
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,f4b5d0de4ffad239ed01ce08d49d4f7eeeccb1a6)/linux-f4b5d0de4ffad239ed01ce08d49d4f7eeeccb1a6.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,967d45b29ca2902f031b867809d72e3b3d623e7a)/linux-967d45b29ca2902f031b867809d72e3b3d623e7a.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
- 
- # Build the DTBs for A/B, A+/B+ and compute module from the kernel sources
++ifeq ($(BR2_PACKAGE_XZ),y)
++MINIZIP_DEPENDENCIES += xz
++MINIZIP_CONF_OPTS += -DMZ_LZMA=ON
++else
++MINIZIP_CONF_OPTS += -DMZ_LZMA=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ MINIZIP_DEPENDENCIES += zlib
+ MINIZIP_CONF_OPTS += -DMZ_ZLIB=ON
