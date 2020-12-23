@@ -1,49 +1,95 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 23 Dec 2020 09:53:01 +0100
-Subject: [Buildroot] [git commit] package/memcached: bump to version 1.6.9
-Message-ID: <20201223085641.1678B81540@busybox.osuosl.org>
+Date: Wed, 23 Dec 2020 09:29:29 +0100
+Subject: [Buildroot] [git commit] package/mutt: fix CVE-2020-28896
+Message-ID: <20201223085640.C4CAD82203@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dfebf58aba287b110b489cb6ac365ab8ff64dbb6
+commit: https://git.buildroot.net/buildroot/commit/?id=89a9f74fa85a8f0e080328393a356181033f4ad9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/memcached/memcached/wiki/ReleaseNotes169
+Mutt before 2.0.2 and NeoMutt before 2020-11-20 did not ensure that
+$ssl_force_tls was processed if an IMAP server's initial server response
+was invalid. The connection was not properly closed, and the code could
+continue attempting to authenticate. This could result in authentication
+credentials being exposed on an unencrypted connection, or to a
+machine-in-the-middle.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/memcached/memcached.hash | 6 +++---
- package/memcached/memcached.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...ection-is-closed-after-a-connection-error.patch | 48 ++++++++++++++++++++++
+ package/mutt/mutt.mk                               |  3 ++
+ 2 files changed, 51 insertions(+)
 
-diff --git a/package/memcached/memcached.hash b/package/memcached/memcached.hash
-index 1330f6521c..a86a6f9f73 100644
---- a/package/memcached/memcached.hash
-+++ b/package/memcached/memcached.hash
-@@ -1,6 +1,6 @@
--# From http://www.memcached.org/files/memcached-1.6.8.tar.gz.sha1
--sha1  8f3efd851efc5b822bd991b93d06a271b2fac052  memcached-1.6.8.tar.gz
-+# From http://www.memcached.org/files/memcached-1.6.9.tar.gz.sha1
-+sha1  42ae062094fdf083cfe7b21ff377c781011c2be1  memcached-1.6.9.tar.gz
+diff --git a/package/mutt/0001-Ensure-IMAP-connection-is-closed-after-a-connection-error.patch b/package/mutt/0001-Ensure-IMAP-connection-is-closed-after-a-connection-error.patch
+new file mode 100644
+index 0000000000..7afc736085
+--- /dev/null
++++ b/package/mutt/0001-Ensure-IMAP-connection-is-closed-after-a-connection-error.patch
+@@ -0,0 +1,48 @@
++From 04b06aaa3e0cc0022b9b01dbca2863756ebbf59a Mon Sep 17 00:00:00 2001
++From: Kevin McCarthy <kevin@8t8.us>
++Date: Mon, 16 Nov 2020 10:20:21 -0800
++Subject: [PATCH] Ensure IMAP connection is closed after a connection error.
++
++During connection, if the server provided an illegal initial response,
++Mutt "bailed", but did not actually close the connection.  The calling
++code unfortunately relied on the connection status to decide to
++continue with authentication, instead of checking the "bail" return
++value.
++
++This could result in authentication credentials being sent over an
++unencrypted connection, without $ssl_force_tls being consulted.
++
++Fix this by strictly closing the connection on any invalid response
++during connection.  The fix is intentionally small, to ease
++backporting.  A better fix would include removing the 'err_close_conn'
++label, and perhaps adding return value checking in the caller (though
++this change obviates the need for that).
++
++This addresses CVE-2020-28896.  Thanks to Gabriel Salles-Loustau for
++reporting the problem, and providing test cases to reproduce.
++
++[Retrieved from:
++https://gitlab.com/muttmua/mutt/-/commit/04b06aaa3e0cc0022b9b01dbca2863756ebbf59a]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ imap/imap.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/imap/imap.c b/imap/imap.c
++index b24e8a3f..b13dd54d 100644
++--- a/imap/imap.c
+++++ b/imap/imap.c
++@@ -561,9 +561,9 @@ int imap_open_connection (IMAP_DATA* idata)
++ 
++ #if defined(USE_SSL)
++ err_close_conn:
++-  imap_close_connection (idata);
++ #endif
++ bail:
+++  imap_close_connection (idata);
++   FREE (&idata->capstr);
++   return -1;
++ }
++-- 
++GitLab
++
+diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
+index 0ff03724c1..58c80d445d 100644
+--- a/package/mutt/mutt.mk
++++ b/package/mutt/mutt.mk
+@@ -11,6 +11,9 @@ MUTT_LICENSE_FILES = GPL
+ MUTT_DEPENDENCIES = ncurses
+ MUTT_CONF_OPTS = --disable-doc --disable-smtp
  
- # Locally computed
--sha256  e23b3a11f6ff52ac04ae5ea2e287052ce58fd1eadd394622eb65c3598fcd7939  memcached-1.6.8.tar.gz
-+sha256  d5a62ce377314dbffdb37c4467e7763e3abae376a16171e613cbe69956f092d1  memcached-1.6.9.tar.gz
- sha256  bc887c4ad8051fe690ace9528fe37a2e0bb362e6d963331d82e845ca9b585a0c  COPYING
-diff --git a/package/memcached/memcached.mk b/package/memcached/memcached.mk
-index 378f57a276..049e3409f0 100644
---- a/package/memcached/memcached.mk
-+++ b/package/memcached/memcached.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MEMCACHED_VERSION = 1.6.8
-+MEMCACHED_VERSION = 1.6.9
- MEMCACHED_SITE = http://www.memcached.org/files
- MEMCACHED_DEPENDENCIES = libevent
- MEMCACHED_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
++# 0001-Ensure-IMAP-connection-is-closed-after-a-connection-error.patch
++MUTT_IGNORE_CVES += CVE-2020-28896
++
+ ifeq ($(BR2_PACKAGE_LIBICONV),y)
+ MUTT_DEPENDENCIES += libiconv
+ MUTT_CONF_OPTS += --enable-iconv
