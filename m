@@ -1,46 +1,41 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Wed, 23 Dec 2020 13:56:51 +0100
-Subject: [Buildroot] [PATCH] board/boundarydevices: add promote
- buildroot-external-boundary project
-Message-ID: <20201223125651.6818-1-romain.naour@smile.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 23 Dec 2020 14:24:50 +0100
+Subject: [Buildroot] [PATCH v2] package/bind: fix compile/linking failure
+In-Reply-To: <20201217004818.GA349927@pevik> (Petr Vorel's message of "Thu, 17
+ Dec 2020 01:48:18 +0100")
+References: <20201214222407.23104-1-ps.report@gmx.net>
+ <20201217004818.GA349927@pevik>
+Message-ID: <8735zwhcyl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It may be useful for users using Boundary Devices boards to find
-more advanced defconfigs that the one provided by Buildroot.
+>>>>> "Petr" == Petr Vorel <petr.vorel@gmail.com> writes:
 
-See:
-https://github.com/boundarydevices/buildroot-external-boundary#configurations-details
+ > Hi Peter,
+ >> Fixes:
 
-Update the readme.txt to add the link to the br2_external maintained
-by Boundary Devices.
+ >> - http://autobuild.buildroot.net/results/966a3de94aa97fa8e9895eede29c9cbfb4bd7301
 
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Cc: Gary Bisson <gary.bisson@boundarydevices.com>
----
- board/boundarydevices/common/readme.txt | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ >> .../host/lib/gcc/arm-buildroot-linux-musleabihf/9.3.0/../../../../arm-buildroot-linux-musleabihf/bin/ld: warning: libisccfg.so.163, needed by ../../lib/bind9/.libs/libbind9.so, not found (try using -rpath or -rpath-link)
+ >> .../host/lib/gcc/arm-buildroot-linux-musleabihf/9.3.0/../../../../arm-buildroot-linux-musleabihf/bin/ld: ../../lib/bind9/.libs/libbind9.so: undefined reference to `cfg_obj_line'
 
-diff --git a/board/boundarydevices/common/readme.txt b/board/boundarydevices/common/readme.txt
-index d1bb3fa598..62bc0d3f81 100644
---- a/board/boundarydevices/common/readme.txt
-+++ b/board/boundarydevices/common/readme.txt
-@@ -40,3 +40,13 @@ Where 'sdX' is the device node of the uSD partition.
- To upgrade u-boot, cancel autoboot and type:
- 
- > run upgradeu
-+
-+See Boundary Devices's buildroot-external-boundary project
-+for additional and advanced defconfigs using Qt5, gstreamer,
-+NXP proprietary packages with demo applications:
-+
-+https://github.com/boundarydevices/buildroot-external-boundary
-+
-+Only some stable Buildroot releases are supported (2017.08.x,
-+2018.02.x, 2020.08.x). Using another Buildroot version may
-+requires some work.
+ >> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ >> ---
+ >> Changes v1 -> v2:
+ >> - ISCCFGDEPLIBS vs. ISCCFGLIBS
+
+ > Thanks for upstreaming this fix (you could have added upstream status):
+ > https://gitlab.isc.org/isc-projects/bind9/-/issues/2348
+
+ > But it looks like upstream suggest different fix:
+ > https://gitlab.isc.org/isc-projects/bind9/-/merge_requests/4497/diffs
+ > (draft, actually two commits).
+
+These have now been merged to the v9_11 branch. Committed after
+replacing the patch by the upstream ones, thanks.
+
 -- 
-2.21.3
+Bye, Peter Korsgaard
