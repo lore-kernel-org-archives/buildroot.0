@@ -1,54 +1,55 @@
 From: Stefan Agner <stefan@agner.ch>
-Date: Wed, 23 Dec 2020 11:11:23 +0100
-Subject: [Buildroot] [PATCH] package/linux-firmware: add new option for USB
- TI 3410/5052 firmware
-Message-ID: <2a63d2fb5dc2a51888737af1d3e868b4b8cf74c8.1608718184.git.stefan@agner.ch>
+Date: Wed, 23 Dec 2020 11:11:36 +0100
+Subject: [Buildroot] [PATCH] package/linux-firmware: add new option for
+ Samsung MFC firmware
+Message-ID: <31eb4b6dd64977c2476a727128ed0a093634c831.1608718175.git.stefan@agner.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Multi format codec (MFC) is the IP present in Samsung Exynos
+series SoCs for video encoding/decoding operations.
+
 Signed-off-by: Stefan Agner <stefan@agner.ch>
 ---
- package/linux-firmware/Config.in         | 9 +++++++++
+ package/linux-firmware/Config.in         | 5 +++++
  package/linux-firmware/linux-firmware.mk | 6 ++++++
- 2 files changed, 15 insertions(+)
+ 2 files changed, 11 insertions(+)
 
 diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index dbdfdb52b3..6d5e961527 100644
+index 105daf42b8..dbdfdb52b3 100644
 --- a/package/linux-firmware/Config.in
 +++ b/package/linux-firmware/Config.in
-@@ -490,4 +490,13 @@ config BR2_PACKAGE_LINUX_FIRMWARE_QAT_C62X
+@@ -44,6 +44,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_QCOM_ADRENO
+ 	help
+ 	  Firmware files for Qualcomm Adreno GPU firmware
  
- endmenu
- 
-+menu "USB to Serial Firmware"
-+
-+config BR2_PACKAGE_LINUX_FIRMWARE_USB_SERIAL_TI
-+	bool "USB TI 3410/5052 Serial Firmware"
++config BR2_PACKAGE_LINUX_FIRMWARE_MFC_V8
++	bool "Samsung MFC video encoder/decoder v8 firmware"
 +	help
-+	  Firmware files for TI 3410/5052
++	  Firmware files for Samsung MFC video encoder/decoder driver v8
 +
-+endmenu
-+
- endif
+ endmenu # Video
+ 
+ menu "Bluetooth firmware"
 diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index f1c84a134d..f00fb2e6ae 100644
+index 8808b5284c..f1c84a134d 100644
 --- a/package/linux-firmware/linux-firmware.mk
 +++ b/package/linux-firmware/linux-firmware.mk
-@@ -620,6 +620,12 @@ LINUX_FIRMWARE_FILES += qat_c62x.bin qat_c62x_mmp.bin
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.qat_firmware
+@@ -39,6 +39,12 @@ LINUX_FIRMWARE_FILES += qcom/a*
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSE.qcom qcom/NOTICE.txt
  endif
  
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_USB_SERIAL_TI),y)
-+LINUX_FIRMWARE_FILES += ti_3410.fw ti_5052.fw
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_MFC_V8),y)
++LINUX_FIRMWARE_FILES += s5p-mfc-v8.fw
 +# No license file; the license is in the file WHENCE
 +# which is installed unconditionally
 +endif
 +
- ifneq ($(LINUX_FIRMWARE_FILES),)
- define LINUX_FIRMWARE_INSTALL_FILES
- 	cd $(@D) && \
+ # Intel Wireless Bluetooth
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_IBT),y)
+ LINUX_FIRMWARE_FILES += intel/ibt-*
 -- 
 2.29.2
