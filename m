@@ -1,103 +1,44 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 23 Dec 2020 22:13:21 +0100
-Subject: [Buildroot] [PATCH 1/1] toolchain/toolchain-wrapper: fix gcc -v
- with relro
-In-Reply-To: <20201223211709.45524133@gmx.net>
-References: <20201223182740.2879160-1-fontaine.fabrice@gmail.com>
- <20201223211709.45524133@gmx.net>
-Message-ID: <CAPi7W821fZ2YZS3TGQW3BpiRvWgDKWd_zF4VVPcNpT779mtwLQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 23 Dec 2020 22:30:11 +0100
+Subject: [Buildroot] [PATCH 1/1] package/netsnmp: fix memory leak in
+ IP-MIB when running without IPv6
+In-Reply-To: <1Xo9xihl1qAi9-3z-mGRWT1Q3ZMOVJmNN2ek_8uuL58OXoVEap5pmvAEbu0zqqWXpeN0nvk6uZg85ZJZf1zRENPU38-isMll7nhtdq3l4Hs=@wujek.eu>
+ (wujek dev's message of "Wed, 23 Dec 2020 18:11:36 +0000")
+References: <1608549912-29585-1-git-send-email-dev_public@wujek.eu>
+ <87lfdokiti.fsf@dell.be.48ers.dk>
+ <1Xo9xihl1qAi9-3z-mGRWT1Q3ZMOVJmNN2ek_8uuL58OXoVEap5pmvAEbu0zqqWXpeN0nvk6uZg85ZJZf1zRENPU38-isMll7nhtdq3l4Hs=@wujek.eu>
+Message-ID: <87tuscfbx8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+>>>>> "wujek" == wujek dev <dev_public@wujek.eu> writes:
 
-Le mer. 23 d?c. 2020 ? 21:17, Peter Seiderer <ps.report@gmx.net> a ?crit :
->
-> Hello Fabrice,
->
-> patch works, some nitpicks/possible improvements below:
->
-> On Wed, 23 Dec 2020 19:27:40 +0100, Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
->
-> > rhash in version 1.4.0 with relro fails to build because gcc -v raises
-> > the following build failure:
->
-> ...with relro enabled fails to build because the configure step call
-> '.../host/bin/arm-linux-gcc -v' (which is done via the buildroot
-> toolchain-wrapper fails with:
->
-> >
-> > /data/buildroot-test/instance-1/output-1/host/mips64el-buildroot-linux-gnu/sysroot/soft-float/el/usr/lib64/Scrt1.o: In function `__start':
-> > (.text+0x20): undefined reference to `main'
-> > collect2: error: ld returned 1 exit status
-> > Run result: 1
-> >
-> > This buid failure is raised because the toolchain-wrapper calls gcc with
->
-> s/buid/build/
->
-> > -Wl,-z,relro and as a result gcc wrongly assumes that some linking must
-> > be done with -v
->
-> ...some linking must be done.
->
-> >
-> > Fixes:
-> >  - http://autobuild.buildroot.org/results/8605c16cc28316954ce8b9dcc266974390c5da20
-> >
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > ---
-> >  toolchain/toolchain-wrapper.c | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
-> > index 0fb6064b1c..4c3375cfbc 100644
-> > --- a/toolchain/toolchain-wrapper.c
-> > +++ b/toolchain/toolchain-wrapper.c
-> > @@ -456,7 +456,8 @@ int main(int argc, char **argv)
-> >       /* Are we building the Linux Kernel or U-Boot? */
->
-> With your enhancement the comment above is no longer fully applicable...
->
->
-> >       for (i = 1; i < argc; i++) {
-> >               if (!strcmp(argv[i], "-D__KERNEL__") ||
-> > -                 !strcmp(argv[i], "-D__UBOOT__"))
-> > +                 !strcmp(argv[i], "-D__UBOOT__") ||
-> > +                 !strcmp(argv[i], "-v"))
->
-> Is a '-v ' somewhere in the argument list a strong enough condition, or
-> should it be better '-v' as the only argument?
-Thanks for your feedback, I can fix the issues that you have pointed out above.
-However, on this one, it should be noted that the build will also fail
-if -v is not the only argument.
-For example, even on the latest gcc 10.2.0, the following commands fail:
- - gcc -Wl,-z,relro -Dtest -v
- - gcc -Wl,-z,relro -fPIE -v
+ >> This function is only called once, right?
+ > Unfortunately not. The bug fixed in this commit causes a leak of 356 bytes every 60 seconds!
+ > To hit this problem your system has to fulfil the following:
+ > --Linux system with no IPv6 support (precisely, no /proc/net/snmp6 file in the system)
+ > --included IP-MIB in the netsnmp
 
-But, finally, I'm wondering if this is the right fix, as stated by gcc
---help, -v option means "Display the programs invoked by the
-compiler." so gcc -v is not equivalent to gcc --version.
-With this patch, we'll not apply relro if -v is one of the argument
-which seems wrong.
-Applying the workaround only if -v is the only argument does not seem
-right either.
-So, patching rhash to use --version instead of -v was probably a
-better approach.
->
-> >                       break;
-> >       }
-> >       if (i == argc) {
->
-> Build failure fixed, so you can add my:
->
-> Tested-by: Peter Seiderer <ps.report@gmx.net>
->
-> Regards,
-> Peter
-Best Regards,
+ > The leak also happens when snmp queries are not performed.
 
-Fabrice
+Ok :/
+
+ > Note: in netsnmp 5.7.3 there is an option for configure
+ > "--enable-ipv6", even without this option enabled the bug show up. In
+ > 5.8 the option is contrary "--disable-ipv6", but I haven't checked if
+ > the problem is when the disable of ipv6 is activated. For sure the
+ > leak happens if netsnmp is compiled with ipv6 support, but there is no
+ > such support by a Linux kernel.
+ > In 5.9 this problem is fixed.
+
+ > IMHO: this patch should be pushed to all maintenance branches. Would
+ > you like to send such patch (with appropriate header) to this mailing
+ > list?
+
+Don't worry, I'll take care of backporting it myself.
+
+-- 
+Bye, Peter Korsgaard
