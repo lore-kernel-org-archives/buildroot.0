@@ -1,11 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 23 Dec 2020 13:17:36 +0100
-Subject: [Buildroot] [PATCH] package/azure-iot-sdk-c: bump version to
- LTS_07_2020_Ref02
-In-Reply-To: <20201219152221.23425-1-sergio.prado@e-labworks.com> (Sergio
- Prado's message of "Sat, 19 Dec 2020 12:22:21 -0300")
-References: <20201219152221.23425-1-sergio.prado@e-labworks.com>
-Message-ID: <871rfgiun3.fsf@dell.be.48ers.dk>
+Date: Wed, 23 Dec 2020 13:19:31 +0100
+Subject: [Buildroot] [PATCH] package/stella: bump version to 6.4
+In-Reply-To: <20201219111822.8247-1-sergio.prado@e-labworks.com> (Sergio
+ Prado's message of "Sat, 19 Dec 2020 08:18:22 -0300")
+References: <20201219111822.8247-1-sergio.prado@e-labworks.com>
+Message-ID: <87wnx8hfzg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
