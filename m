@@ -1,103 +1,65 @@
-From: Philippe REYNES <philippe.reynes@softathome.com>
-Date: Wed, 23 Dec 2020 15:18:23 +0100
-Subject: [Buildroot] [PATCH v3] package/ninja: fix to be cmake-3.10
- compatible again
-In-Reply-To: <20201212205411.8528-1-ps.report@gmx.net>
-References: <20201212205411.8528-1-ps.report@gmx.net>
-Message-ID: <7425d726-fb44-3a9a-9506-fed144c0ff9c@softathome.com>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Wed, 23 Dec 2020 15:42:08 +0100
+Subject: [Buildroot] [PATCH v4 4/8] boot/uboot/imx8: Add new target
+ needed for mainline u-boot
+In-Reply-To: <20201125183017.15585-5-xroumegue@gmail.com>
+References: <20201109142309.1135596-2-xroumegue@gmail.com>
+ <20201125183017.15585-5-xroumegue@gmail.com>
+Message-ID: <X+NXQCzENQozNpBW@p1g2>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Hi Xavier,
 
+On Wed, Nov 25, 2020 at 07:30:13PM +0100, Xavier Roumegue wrote:
+> Mainline u-boot support for the iMX8M based boards is no longer
+> using the external imx-mkimage command and instead building
+> the fit image directly inside U-Boot.
+> 
+> This fit image usually embeds ddr/hdmi firmware for iMX8M target.
+> 
+> Inspired from
+> https://github.com/SolidRun/buildroot/commit/0f2b2971e836b508bf9c2dac34426a59a9d83572
+> 
+> Signed-off-by: Xavier Roumegue <xroumegue@gmail.com>
+> Tested-by: Heiko Thiery <heiko.thiery@gmail.com>
+> ---
+>  boot/uboot/Config.in | 5 +++++
+>  boot/uboot/uboot.mk  | 6 ++++++
+>  2 files changed, 11 insertions(+)
+> 
+> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+> index f2faff826b..2e1d836cf8 100644
+> --- a/boot/uboot/Config.in
+> +++ b/boot/uboot/Config.in
+> @@ -281,6 +281,11 @@ config BR2_TARGET_UBOOT_FORMAT_DTB_IMX
+>  config BR2_TARGET_UBOOT_FORMAT_ITB
+>  	bool "u-boot.itb"
+>  
+> +config BR2_TARGET_UBOOT_FORMAT_IMX_FIT
 
-Le 12/12/2020 ? 21:54, Peter Seiderer a ?crit?:
-> Use cmake-3.10 conform COMPILE_FLAGS instead of 3.15 INCLUDE_DIRECTORIES
-> property (as this one is unknown/unused for older cmake versions and
-> has no effect, resuling in a build failure because of missing extra
-> include path).
->
-> Fixes:
->
->    - http://lists.busybox.net/pipermail/buildroot/2020-December/298159.html
->
->    [ 96%] Building CXX object CMakeFiles/ninja.dir/src/browse.cc.o
->    .../build/host-ninja-1.10.2/src/browse.cc:23:10: fatal error: build/browse_py.h: No such file or directory
->       23 | #include "build/browse_py.h"
->          |          ^~~~~~~~~~~~~~~~~~~
->    compilation terminated.
->
-> Reported-by: Yegor Yefremov <yegorslists@googlemail.com>
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+I know this was copied from SolidRun but I'm not a fan of the IMX_FIT
+name. True flash.bin includes a FIT image but SPL/FW etc are outside of
+it, it's not just a FIT image.
+Maybe NXP will do another boot image format in the future that will also
+include a FIT image but the rest would be different.
+Since the U-Boot target is simply "flash.bin" I would name it
+UBOOT_FORMAT_FLASH_BIN.
 
-Tested-by: Philippe Reynes <philippe.reynes@softathome.com>
+> +	bool "flash.bin"
+> +	select BR2_PACKAGE_FIRMWARE_IMX
 
+You can't do that unfortunately, you need to either have a test around
+that option or add a depends on BR2_PACKAGE_FREESCALE_IMX.
+
+Otherwise it will give this:
+WARNING: unmet direct dependencies detected for BR2_PACKAGE_FIRMWARE_IMX
+  Depends on [n]: BR2_PACKAGE_FREESCALE_IMX [=n] && (BR2_arm [=y] || BR2_aarch64 [=n])
+  Selected by [y]:
+  - BR2_TARGET_UBOOT_FORMAT_IMX_FIT [=y] && BR2_TARGET_UBOOT [=y]
 
 Regards,
-
-Philippe
-
-
-> ---
-> Changes v1 -> v2:
->    - really use COMPILE_FLAGS (as the patch subject says)
->      (suggested by Yegor Yefremov)
->
-> Changes v2 -> v3:
->    - add reported-by, reviewed-by Yegor Yefremov
->    - update commit description
-> ---
->   ...onform-COMPILE_FLAGS-instead-of-3.15.patch | 40 +++++++++++++++++++
->   1 file changed, 40 insertions(+)
->   create mode 100644 package/ninja/0002-use-cmake-3.10-conform-COMPILE_FLAGS-instead-of-3.15.patch
->
-> diff --git a/package/ninja/0002-use-cmake-3.10-conform-COMPILE_FLAGS-instead-of-3.15.patch b/package/ninja/0002-use-cmake-3.10-conform-COMPILE_FLAGS-instead-of-3.15.patch
-> new file mode 100644
-> index 0000000000..83ec77c76c
-> --- /dev/null
-> +++ b/package/ninja/0002-use-cmake-3.10-conform-COMPILE_FLAGS-instead-of-3.15.patch
-> @@ -0,0 +1,40 @@
-> +From 80c34cb11c093f3f0c4217ecf078a1a626da50bd Mon Sep 17 00:00:00 2001
-> +From: Peter Seiderer <ps.report@gmx.net>
-> +Date: Thu, 10 Dec 2020 20:29:19 +0100
-> +Subject: [PATCH] use cmake-3.10 conform COMPILE_FLAGS instead of 3.15
-> + INCLUDE_DIRECTORIES property
-> +
-> +Use cmake-3.10 conform COMPILE_FLAGS instead of 3.15 INCLUDE_DIRECTORIES
-> +property (as this one is unknown/unused for older cmake versions and
-> +has no effect, resuling in a build failure because of missing extra
-> +include path).
-> +
-> +Fixes:
-> +
-> +  [ 96%] Building CXX object CMakeFiles/ninja.dir/src/browse.cc.o
-> +  .../build/host-ninja-1.10.2/src/browse.cc:23:10: fatal error: build/browse_py.h: No such file or directory
-> +     23 | #include "build/browse_py.h"
-> +        |          ^~~~~~~~~~~~~~~~~~~
-> +  compilation terminated.
-> +
-> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> +---
-> + CMakeLists.txt | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/CMakeLists.txt b/CMakeLists.txt
-> +index 7f03c35..f582d2f 100644
-> +--- a/CMakeLists.txt
-> ++++ b/CMakeLists.txt
-> +@@ -156,7 +156,7 @@ if(platform_supports_ninja_browse)
-> + 	set_source_files_properties(src/browse.cc
-> + 		PROPERTIES
-> + 			OBJECT_DEPENDS "${CMAKE_BINARY_DIR}/build/browse_py.h"
-> +-			INCLUDE_DIRECTORIES "${CMAKE_BINARY_DIR}"
-> ++			COMPILE_FLAGS "-I${CMAKE_BINARY_DIR}"
-> + 			COMPILE_DEFINITIONS NINJA_PYTHON="python"
-> + 	)
-> + endif()
-> +--
-> +2.29.2
-> +
+Gary
