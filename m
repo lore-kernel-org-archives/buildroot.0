@@ -1,65 +1,79 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 23 Dec 2020 19:50:39 +0100
-Subject: [Buildroot] [PATCH 1/1] package/mosquitto: fix static build with
- cjson
-Message-ID: <20201223185039.2883616-1-fontaine.fabrice@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Wed, 23 Dec 2020 21:17:09 +0100
+Subject: [Buildroot] [PATCH 1/1] toolchain/toolchain-wrapper: fix gcc -v
+ with relro
+In-Reply-To: <20201223182740.2879160-1-fontaine.fabrice@gmail.com>
+References: <20201223182740.2879160-1-fontaine.fabrice@gmail.com>
+Message-ID: <20201223211709.45524133@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/98e0bccf3e1a964bb6a52265bd6f11a681ec220d
+Hello Fabrice,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...onfig.mk-fix-static-build-with-cjson.patch | 37 +++++++++++++++++++
- 1 file changed, 37 insertions(+)
- create mode 100644 package/mosquitto/0004-config.mk-fix-static-build-with-cjson.patch
+patch works, some nitpicks/possible improvements below:
 
-diff --git a/package/mosquitto/0004-config.mk-fix-static-build-with-cjson.patch b/package/mosquitto/0004-config.mk-fix-static-build-with-cjson.patch
-new file mode 100644
-index 0000000000..c4f98f65d4
---- /dev/null
-+++ b/package/mosquitto/0004-config.mk-fix-static-build-with-cjson.patch
-@@ -0,0 +1,37 @@
-+From eabde6538bc54f6bfde6b7945aeb70833efbbcb7 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 23 Dec 2020 18:49:28 +0100
-+Subject: [PATCH] config.mk: fix static build with cjson
-+
-+Add -lcjson to CLIENT_LDFLAGS to fix the following failure when building
-+statically:
-+
-+/home/buildroot/autobuild/instance-0/output-1/host/bin/microblazeel-buildroot-linux-uclibc-gcc rr_client.o client_props.o client_shared.o pub_shared.o sub_client_output.o ../lib/libmosquitto.a -o mosquitto_rr -static -L../lib  -lssl -lcrypto -lpthread -lcares -L/home/buildroot/autobuild/instance-0/output-1/host/bin/../microblazeel-buildroot-linux-uclibc/sysroot/usr/lib -lssl -L/home/buildroot/autobuild/instance-0/output-1/host/bin/../microblazeel-buildroot-linux-uclibc/sysroot/usr/lib -lz -latomic -lpthread -lcrypto -lz -latomic -lpthread
-+/home/buildroot/autobuild/instance-0/output-1/host/lib/gcc/microblazeel-buildroot-linux-uclibc/9.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: sub_client_output.o: in function `json_print':
-+(.text+0xe4): undefined reference to `cJSON_CreateObject'
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/98e0bccf3e1a964bb6a52265bd6f11a681ec220d
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/eclipse/mosquitto/pull/1976]
-+---
-+ config.mk | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/config.mk b/config.mk
-+index a807c606..65400382 100644
-+--- a/config.mk
-++++ b/config.mk
-+@@ -367,7 +367,7 @@ ifeq ($(WITH_CJSON),yes)
-+ 	CLIENT_CFLAGS:=$(CLIENT_CFLAGS) -DWITH_CJSON
-+ 	CLIENT_LDADD:=$(CLIENT_LDADD) -lcjson
-+ 	CLIENT_STATIC_LDADD:=$(CLIENT_STATIC_LDADD) -lcjson
-+-	CLIENT_LDFLAGS:=$(CLIENT_LDFLAGS)
-++	CLIENT_LDFLAGS:=$(CLIENT_LDFLAGS) -lcjson
-+ endif
-+ 
-+ ifeq ($(WITH_XTREPORT),yes)
-+-- 
-+2.29.2
-+
--- 
-2.29.2
+On Wed, 23 Dec 2020 19:27:40 +0100, Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+
+> rhash in version 1.4.0 with relro fails to build because gcc -v raises
+> the following build failure:
+
+...with relro enabled fails to build because the configure step call
+'.../host/bin/arm-linux-gcc -v' (which is done via the buildroot
+toolchain-wrapper fails with:
+
+>
+> /data/buildroot-test/instance-1/output-1/host/mips64el-buildroot-linux-gnu/sysroot/soft-float/el/usr/lib64/Scrt1.o: In function `__start':
+> (.text+0x20): undefined reference to `main'
+> collect2: error: ld returned 1 exit status
+> Run result: 1
+>
+> This buid failure is raised because the toolchain-wrapper calls gcc with
+
+s/buid/build/
+
+> -Wl,-z,relro and as a result gcc wrongly assumes that some linking must
+> be done with -v
+
+...some linking must be done.
+
+>
+> Fixes:
+>  - http://autobuild.buildroot.org/results/8605c16cc28316954ce8b9dcc266974390c5da20
+>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  toolchain/toolchain-wrapper.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
+> index 0fb6064b1c..4c3375cfbc 100644
+> --- a/toolchain/toolchain-wrapper.c
+> +++ b/toolchain/toolchain-wrapper.c
+> @@ -456,7 +456,8 @@ int main(int argc, char **argv)
+>  	/* Are we building the Linux Kernel or U-Boot? */
+
+With your enhancement the comment above is no longer fully applicable...
+
+
+>  	for (i = 1; i < argc; i++) {
+>  		if (!strcmp(argv[i], "-D__KERNEL__") ||
+> -		    !strcmp(argv[i], "-D__UBOOT__"))
+> +		    !strcmp(argv[i], "-D__UBOOT__") ||
+> +		    !strcmp(argv[i], "-v"))
+
+Is a '-v ' somewhere in the argument list a strong enough condition, or
+should it be better '-v' as the only argument?
+
+>  			break;
+>  	}
+>  	if (i == argc) {
+
+Build failure fixed, so you can add my:
+
+Tested-by: Peter Seiderer <ps.report@gmx.net>
+
+Regards,
+Peter
