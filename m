@@ -1,65 +1,58 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Wed, 23 Dec 2020 15:42:08 +0100
-Subject: [Buildroot] [PATCH v4 4/8] boot/uboot/imx8: Add new target
- needed for mainline u-boot
-In-Reply-To: <20201125183017.15585-5-xroumegue@gmail.com>
-References: <20201109142309.1135596-2-xroumegue@gmail.com>
- <20201125183017.15585-5-xroumegue@gmail.com>
-Message-ID: <X+NXQCzENQozNpBW@p1g2>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Wed, 23 Dec 2020 16:50:04 +0200
+Subject: [Buildroot] [PATCH 1/1] package/wpewebkit: security bump to version
+ 2.30.4
+Message-ID: <20201223145004.4179379-1-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Xavier,
+This is a minor release which provides a fix for CVE-2020-13543.
 
-On Wed, Nov 25, 2020 at 07:30:13PM +0100, Xavier Roumegue wrote:
-> Mainline u-boot support for the iMX8M based boards is no longer
-> using the external imx-mkimage command and instead building
-> the fit image directly inside U-Boot.
-> 
-> This fit image usually embeds ddr/hdmi firmware for iMX8M target.
-> 
-> Inspired from
-> https://github.com/SolidRun/buildroot/commit/0f2b2971e836b508bf9c2dac34426a59a9d83572
-> 
-> Signed-off-by: Xavier Roumegue <xroumegue@gmail.com>
-> Tested-by: Heiko Thiery <heiko.thiery@gmail.com>
-> ---
->  boot/uboot/Config.in | 5 +++++
->  boot/uboot/uboot.mk  | 6 ++++++
->  2 files changed, 11 insertions(+)
-> 
-> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-> index f2faff826b..2e1d836cf8 100644
-> --- a/boot/uboot/Config.in
-> +++ b/boot/uboot/Config.in
-> @@ -281,6 +281,11 @@ config BR2_TARGET_UBOOT_FORMAT_DTB_IMX
->  config BR2_TARGET_UBOOT_FORMAT_ITB
->  	bool "u-boot.itb"
->  
-> +config BR2_TARGET_UBOOT_FORMAT_IMX_FIT
+Full release notes:
 
-I know this was copied from SolidRun but I'm not a fan of the IMX_FIT
-name. True flash.bin includes a FIT image but SPL/FW etc are outside of
-it, it's not just a FIT image.
-Maybe NXP will do another boot image format in the future that will also
-include a FIT image but the rest would be different.
-Since the U-Boot target is simply "flash.bin" I would name it
-UBOOT_FORMAT_FLASH_BIN.
+  https://wpewebkit.org/release/wpewebkit-2.30.4.html
 
-> +	bool "flash.bin"
-> +	select BR2_PACKAGE_FIRMWARE_IMX
+A detailed security advisory can be found at:
 
-You can't do that unfortunately, you need to either have a test around
-that option or add a depends on BR2_PACKAGE_FREESCALE_IMX.
+  https://wpewebkit.org/security/WSA-2020-0009.html
 
-Otherwise it will give this:
-WARNING: unmet direct dependencies detected for BR2_PACKAGE_FIRMWARE_IMX
-  Depends on [n]: BR2_PACKAGE_FREESCALE_IMX [=n] && (BR2_arm [=y] || BR2_aarch64 [=n])
-  Selected by [y]:
-  - BR2_TARGET_UBOOT_FORMAT_IMX_FIT [=y] && BR2_TARGET_UBOOT [=y]
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+---
+ package/wpewebkit/wpewebkit.hash | 8 ++++----
+ package/wpewebkit/wpewebkit.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Regards,
-Gary
+diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
+index 3534abf0e4..42bd27f11d 100644
+--- a/package/wpewebkit/wpewebkit.hash
++++ b/package/wpewebkit/wpewebkit.hash
+@@ -1,7 +1,7 @@
+-# From https://wpewebkit.org/releases/wpewebkit-2.30.3.tar.xz.sums
+-md5  75f6ef1819b182043a25b916272ebec6  wpewebkit-2.30.3.tar.xz
+-sha1  2ed723f779513205449e0c5b7c080eb19d635aee  wpewebkit-2.30.3.tar.xz
+-sha256  f2dfc1a6279810353f601bb9bd0d8ef671b41b38352d679b93d01631c2bf7b4b  wpewebkit-2.30.3.tar.xz
++# From https://wpewebkit.org/releases/wpewebkit-2.30.4.tar.xz.sums
++md5  d423a01ffb5be44e6ad59b2cfb9d6eb3  wpewebkit-2.30.4.tar.xz
++sha1  2fdca7b888966ad2ed7d998bef52c9024dae063f  wpewebkit-2.30.4.tar.xz
++sha256  1e521d85cf8cf344b9fd08eabad7a1d18a330fb7862a77eaf78d7d7b10d5f6ef  wpewebkit-2.30.4.tar.xz
+ 
+ # Hashes for license files:
+ sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
+diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
+index 66f86edf4d..d3afdf0094 100644
+--- a/package/wpewebkit/wpewebkit.mk
++++ b/package/wpewebkit/wpewebkit.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WPEWEBKIT_VERSION = 2.30.3
++WPEWEBKIT_VERSION = 2.30.4
+ WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
+ WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
+ WPEWEBKIT_INSTALL_STAGING = YES
+-- 
+2.29.2
