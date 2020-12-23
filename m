@@ -1,47 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 23 Dec 2020 09:51:33 +0100
-Subject: [Buildroot] [git commit] package/librsvg: bump to version 2.50.2
-Message-ID: <20201223085640.F405E81540@busybox.osuosl.org>
+Date: Wed, 23 Dec 2020 10:10:40 +0100
+Subject: [Buildroot] [git commit] package/nodejs: security bump to version
+ 12.19.1
+Message-ID: <20201223085641.347D281540@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=61b54fa31bb2bfd44367355e86566f97750de5a5
+commit: https://git.buildroot.net/buildroot/commit/?id=f359580796a7d0295680821213ed562c4f8ca24e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://gitlab.gnome.org/GNOME/librsvg/-/blob/2.50.2/NEWS
+Fixes the following security issue:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+- CVE-2020-8277: Denial of Service through DNS request (High).  A Node.js
+  application that allows an attacker to trigger a DNS request for a host of
+  their choice could trigger a Denial of Service by getting the application
+  to resolve a DNS record with a larger number of responses.
+
+https://nodejs.org/en/blog/release/v12.19.1/
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/librsvg/librsvg.hash | 4 ++--
- package/librsvg/librsvg.mk   | 2 +-
+ package/nodejs/nodejs.hash | 4 ++--
+ package/nodejs/nodejs.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/librsvg/librsvg.hash b/package/librsvg/librsvg.hash
-index da9f758f48..1b3c26687b 100644
---- a/package/librsvg/librsvg.hash
-+++ b/package/librsvg/librsvg.hash
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index 33fb407882..61259425ba 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
 @@ -1,5 +1,5 @@
--# From http://ftp.gnome.org/pub/gnome/sources/librsvg/2.50/librsvg-2.50.0.sha256sum
--sha256  b3fadba240f09b9c9898ab20cb7311467243e607cf8f928b7c5f842474ee3df4  librsvg-2.50.0.tar.xz
-+# From http://ftp.gnome.org/pub/gnome/sources/librsvg/2.50/librsvg-2.50.2.sha256sum
-+sha256  6211f271ce4cd44a7318190d36712e9cea384a933d3e3570004edeb210a056d3  librsvg-2.50.2.tar.xz
+-# From https://nodejs.org/dist/v12.18.4/SHASUMS256.txt
+-sha256  25f03cb18e53b6d0959d0c219e701a85eb4693f526bdda7c72bc6199b364f609  node-v12.18.4.tar.xz
++# From https://nodejs.org/dist/v12.19.1/SHASUMS256.txt
++sha256  74077e0cc3db000a6f3cc685b220e609807b61adc8e7d8243e8511d478d1b17d  node-v12.19.1.tar.xz
  
- # Locally computed
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/librsvg/librsvg.mk b/package/librsvg/librsvg.mk
-index 120f71c792..6a45fc97e2 100644
---- a/package/librsvg/librsvg.mk
-+++ b/package/librsvg/librsvg.mk
-@@ -5,7 +5,7 @@
+ # Hash for license file
+ sha256  0dc03af08b95ea0c1e27f8fd591dee4383eb6f2c304db6eb6cdfb6751f7da87b  LICENSE
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index b159b10253..524a6b5d8f 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- LIBRSVG_VERSION_MAJOR = 2.50
--LIBRSVG_VERSION = $(LIBRSVG_VERSION_MAJOR).0
-+LIBRSVG_VERSION = $(LIBRSVG_VERSION_MAJOR).2
- LIBRSVG_SITE = http://ftp.gnome.org/pub/gnome/sources/librsvg/$(LIBRSVG_VERSION_MAJOR)
- LIBRSVG_SOURCE = librsvg-$(LIBRSVG_VERSION).tar.xz
- LIBRSVG_INSTALL_STAGING = YES
+-NODEJS_VERSION = 12.18.4
++NODEJS_VERSION = 12.19.1
+ NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
+ NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
+ NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
