@@ -1,45 +1,50 @@
-From: Marcin Niestroj <m.niestroj@grinn-global.com>
-Date: Wed, 23 Dec 2020 17:12:24 +0100
-Subject: [Buildroot] [PATCH 3/3] package/python-aiohttp: add missing
- python-typing-extensions dependency
-In-Reply-To: <20201223161224.69815-1-m.niestroj@grinn-global.com>
-References: <20201223161224.69815-1-m.niestroj@grinn-global.com>
-Message-ID: <20201223161224.69815-4-m.niestroj@grinn-global.com>
+From: wujek dev <dev_public@wujek.eu>
+Date: Wed, 23 Dec 2020 18:11:36 +0000
+Subject: [Buildroot] [PATCH 1/1] package/netsnmp: fix memory leak in
+ IP-MIB when running without IPv6
+In-Reply-To: <87lfdokiti.fsf@dell.be.48ers.dk>
+References: <1608549912-29585-1-git-send-email-dev_public@wujek.eu>
+ <87lfdokiti.fsf@dell.be.48ers.dk>
+Message-ID: <1Xo9xihl1qAi9-3z-mGRWT1Q3ZMOVJmNN2ek_8uuL58OXoVEap5pmvAEbu0zqqWXpeN0nvk6uZg85ZJZf1zRENPU38-isMll7nhtdq3l4Hs=@wujek.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-typing_extensions package is needed starting from aiohttp v3.7.1.
+> This function is only called once, right?
+Unfortunately not. The bug fixed in this commit causes a leak of 356 bytes every 60 seconds!
+To hit this problem your system has to fulfil the following:
+--Linux system with no IPv6 support (precisely, no /proc/net/snmp6 file in the system)
+--included IP-MIB in the netsnmp
 
-While at it sort all dependencies alphabetically.
+The leak also happens when snmp queries are not performed.
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
----
- package/python-aiohttp/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Note: in netsnmp 5.7.3 there is an option for configure "--enable-ipv6", even without this option enabled the bug show up. In 5.8 the option is contrary "--disable-ipv6", but I haven't checked if the problem is when the disable of ipv6 is activated. For sure the leak happens if netsnmp is compiled with ipv6 support, but there is no such support by a Linux kernel.
+In 5.9 this problem is fixed.
 
-diff --git a/package/python-aiohttp/Config.in b/package/python-aiohttp/Config.in
-index d75c440225..9ffea088e4 100644
---- a/package/python-aiohttp/Config.in
-+++ b/package/python-aiohttp/Config.in
-@@ -1,13 +1,14 @@
- config BR2_PACKAGE_PYTHON_AIOHTTP
- 	bool "python-aiohttp"
- 	depends on BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_PYTHON_AIODNS # runtime
-+	select BR2_PACKAGE_PYTHON_ASYNC_TIMEOUT # runtime
- 	select BR2_PACKAGE_PYTHON_ATTRS # runtime
- 	select BR2_PACKAGE_PYTHON_CCHARDET if BR2_INSTALL_LIBSTDCPP # runtime
- 	select BR2_PACKAGE_PYTHON_CHARDET if !BR2_INSTALL_LIBSTDCPP # runtime
- 	select BR2_PACKAGE_PYTHON_MULTIDICT # runtime
--	select BR2_PACKAGE_PYTHON_ASYNC_TIMEOUT # runtime
-+	select BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS # runtime
- 	select BR2_PACKAGE_PYTHON_YARL # runtime
--	select BR2_PACKAGE_PYTHON_AIODNS # runtime
- 	select BR2_PACKAGE_PYTHON3_ZLIB # runtime
- 	help
- 	  Async http client/server framework (asyncio).
--- 
-2.29.2
+IMHO: this patch should be pushed to all maintenance branches. Would you like to send such patch (with appropriate header) to this mailing list?
+
+??????? Original Message ???????
+
+On Wednesday, December 23rd, 2020 at 09:50, Peter Korsgaard <peter@korsgaard.com> wrote:
+
+> >>>>> "Adam" == Adam Wujek dev_public at wujek.eu writes:
+>
+> > In a Linux system without IPv6 support (or booted with "ipv6.disable=1")
+>
+> > file /proc/net/snmp6 is not present. If such file is not present an allocated
+>
+> > memory is not freed. Memory leak occurs even without snmp queries.
+>
+> > Problem seen at least since netsnmp 5.7.3 (probably even v5.6.1).
+>
+> > Patch backported from netsnmp 5.9, where the problem does not appear any more.
+>
+> Committed, thanks.
+>
+> This function is only called once, right?
+>
+> ----------------------------------------------------------------
+>
+> Bye, Peter Korsgaard
