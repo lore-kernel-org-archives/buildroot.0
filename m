@@ -1,66 +1,58 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 23 Dec 2020 12:33:54 +0100
-Subject: [Buildroot] [PATCH 1/1] package/bustle: bump to version 0.8.0
-Message-ID: <20201223113354.2295201-1-fontaine.fabrice@gmail.com>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Wed, 23 Dec 2020 13:43:53 +0200
+Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: security bump to version
+ 2.30.4
+Message-ID: <20201223114353.3921353-1-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Update license hash and remove GPL-3.0:
-  https://gitlab.freedesktop.org/bustle/bustle/-/commit/c3f2f160c528c874c483a314ebbf997abfd85492
-- Use PCAP_CONFIG which is available since
-  https://gitlab.freedesktop.org/bustle/bustle/-/commit/7e2daf2984fc4d479b153e899b80e8d669ff54cf
-- Update indentation in hash file (two spaces)
+This is a minor release which provides a fix for CVE-2020-13543.
 
-https://hackage.haskell.org/package/bustle-0.8.0/changelog
+Full release notes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+  https://webkitgtk.org/2020/12/15/webkitgtk2.30.4-released.html
+
+A detailed security advisory can be found at:
+
+  https://webkitgtk.org/security/WSA-2020-0009.html
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 ---
- package/bustle/bustle.hash |  4 ++--
- package/bustle/bustle.mk   | 14 +++++---------
- 2 files changed, 7 insertions(+), 11 deletions(-)
+ package/webkitgtk/webkitgtk.hash | 8 ++++----
+ package/webkitgtk/webkitgtk.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/bustle/bustle.hash b/package/bustle/bustle.hash
-index 05281c4f11..0bb899f1c4 100644
---- a/package/bustle/bustle.hash
-+++ b/package/bustle/bustle.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 7760a695b25cb264e7342f353dcdc6d2b7faeacdcd85dd14e03c61b18e791664  bustle-0.7.5.tar.gz
--sha256 a6d6109e5b086de8e852e451b91b08b323302f55b6975d506c64c43bb094be38  LICENSE
-+sha256  2fb3e9d9a97db3cd9a3ce763e86947b642bd7733b46206177a1677f08726573c  bustle-0.8.0.tar.gz
-+sha256  ad168b537264fba8f94380cb10f60847da7db551fb4281bb6d4f24c74f652a1d  LICENSE
-diff --git a/package/bustle/bustle.mk b/package/bustle/bustle.mk
-index 1dbad64aef..c6c3a72a91 100644
---- a/package/bustle/bustle.mk
-+++ b/package/bustle/bustle.mk
-@@ -4,20 +4,16 @@
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index 1849d9eff9..27f0e5a69d 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,7 +1,7 @@
+-# From https://webkitgtk.org/releases/webkitgtk-2.30.3.tar.xz.sums
+-md5  3db32cffeab82efcade1ce77f94865c2  webkitgtk-2.30.3.tar.xz
+-sha1  6eed6e8a3c2f47533821169679fe381ceb0550be  webkitgtk-2.30.3.tar.xz
+-sha256  6dea14f03916882816f2fed9497a5103fc54b2ab8602ab145ca991e4951e5e7f  webkitgtk-2.30.3.tar.xz
++# From https://webkitgtk.org/releases/webkitgtk-2.30.4.tar.xz.sums
++md5  81c813d77a7b52ef655922f9b387f3a1  webkitgtk-2.30.4.tar.xz
++sha1  330f45d7badf944fb01a3238ebb2ceaad8c2a91f  webkitgtk-2.30.4.tar.xz
++sha256  d595a37c5001ff787266b155e303a5f2e5b48a6d466f2714c2f30c11392f7b24  webkitgtk-2.30.4.tar.xz
+ 
+ # Hashes for license files:
+ sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index 0310f058f1..73111d383a 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BUSTLE_VERSION = 0.7.5
--BUSTLE_SITE = https://www.freedesktop.org/software/bustle/$(BUSTLE_VERSION)
--BUSTLE_LICENSE = LGPL-2.1+, GPL-3.0 (binaries)
-+BUSTLE_VERSION = 0.8.0
-+BUSTLE_SITE = https://hackage.haskell.org/package/bustle-$(BUSTLE_VERSION)
-+BUSTLE_LICENSE = LGPL-2.1+
- BUSTLE_LICENSE_FILES = LICENSE
- BUSTLE_DEPENDENCIES = libglib2 libpcap host-pkgconf
--
--BUSTLE_PCAP_FLAGS = "-lpcap"
--ifeq ($(BR2_STATIC_LIBS),y)
--BUSTLE_PCAP_FLAGS += `$(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs`
--endif
-+BUSTLE_MAKE_OPTS = PCAP_CONFIG=$(STAGING_DIR)/usr/bin/pcap-config
- 
- define BUSTLE_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
--		PCAP_FLAGS="$(BUSTLE_PCAP_FLAGS)" -C $(@D) dist/build/bustle-pcap
-+		$(BUSTLE_MAKE_OPTS) -C $(@D) dist/build/bustle-pcap
- endef
- 
- define BUSTLE_INSTALL_TARGET_CMDS
+-WEBKITGTK_VERSION = 2.30.3
++WEBKITGTK_VERSION = 2.30.4
+ WEBKITGTK_SITE = https://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
 -- 
 2.29.2
