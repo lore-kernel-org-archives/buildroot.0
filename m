@@ -1,97 +1,103 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Wed, 23 Dec 2020 15:32:31 +0100
-Subject: [Buildroot] [PATCH v4 1/8] package/freescale-imx/firmware-imx:
- Add option to install all ddr fw files
-In-Reply-To: <20201125183017.15585-2-xroumegue@gmail.com>
-References: <20201109142309.1135596-2-xroumegue@gmail.com>
- <20201125183017.15585-2-xroumegue@gmail.com>
-Message-ID: <X+NU/0eQvvVjCh9Y@p1g2>
+From: Philippe REYNES <philippe.reynes@softathome.com>
+Date: Wed, 23 Dec 2020 15:18:23 +0100
+Subject: [Buildroot] [PATCH v3] package/ninja: fix to be cmake-3.10
+ compatible again
+In-Reply-To: <20201212205411.8528-1-ps.report@gmx.net>
+References: <20201212205411.8528-1-ps.report@gmx.net>
+Message-ID: <7425d726-fb44-3a9a-9506-fed144c0ff9c@softathome.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Xavier,
+Hi Peter,
 
-Thanks for your contribution.
 
-On Wed, Nov 25, 2020 at 07:30:10PM +0100, Xavier Roumegue wrote:
-> Selecting this option will copy all ([lp]ddr4.bin) DDR training files to
-> BINARIES_DIR.
-> 
-> Signed-off-by: Xavier Roumegue <xroumegue@gmail.com>
-> Tested-by: Heiko Thiery <heiko.thiery@gmail.com>
-> ---
-> Changes v3 -> v4:
->     - Fix indentation issue (detected by Stephane Viau)
-> ---
->  package/freescale-imx/firmware-imx/Config.in       |  3 +++
->  package/freescale-imx/firmware-imx/firmware-imx.mk | 12 ++++++++++++
->  2 files changed, 15 insertions(+)
-> 
-> diff --git a/package/freescale-imx/firmware-imx/Config.in b/package/freescale-imx/firmware-imx/Config.in
-> index 587f402426..09ccacb0c1 100644
-> --- a/package/freescale-imx/firmware-imx/Config.in
-> +++ b/package/freescale-imx/firmware-imx/Config.in
-> @@ -81,6 +81,9 @@ config BR2_PACKAGE_FIRMWARE_IMX_DMEM_LEN
->  	help
->  	  The DMEM firmware will be padded to this length
->  
-> +config BR2_PACKAGE_FIRMWARE_IMX_DDR_FW_MULTIPLE
-> +	bool
-> +
->  endif # BR2_PACKAGE_FIRMWARE_IMX_NEEDS_DDR_FW
->  
->  endif # BR2_PACKAGE_FIRMWARE_IMX
-> diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
-> index fb3cfe640b..c5ae4fad25 100644
-> --- a/package/freescale-imx/firmware-imx/firmware-imx.mk
-> +++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
-> @@ -36,6 +36,16 @@ define FIRMWARE_IMX_PREPARE_DDR_FW
->  		$(FIRMWARE_IMX_DDRFW_DIR)/$(strip $(3)).bin
->  endef
->  
-> +ifeq ($(BR2_PACKAGE_FIRMWARE_IMX_DDR_FW_MULTIPLE),y)
-> +define FIRMWARE_IMX_COPY_DDR_FW
-> +	cp $(1) $(BINARIES_DIR)/
-> +endef
-> +else
-> +define FIRMWARE_IMX_COPY_DDR_FW
-> +	true
-> +endef
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_FIRMWARE_IMX_LPDDR4),y)
->  FIRMWARE_IMX_DDRFW_DIR = $(@D)/firmware/ddr/synopsys
->  
-> @@ -51,6 +61,7 @@ define FIRMWARE_IMX_INSTALL_IMAGE_DDR_FW
->  		$(FIRMWARE_IMX_DDRFW_DIR)/lpddr4_pmu_train_2d_fw.bin > \
->  		$(BINARIES_DIR)/lpddr4_pmu_train_fw.bin
->  	ln -sf $(BINARIES_DIR)/lpddr4_pmu_train_fw.bin $(BINARIES_DIR)/ddr_fw.bin
-> +	$(call FIRMWARE_IMX_COPY_DDR_FW, $(FIRMWARE_IMX_DDRFW_DIR)/lpddr4*.bin)
->  endef
->  endif
->  
-> @@ -69,6 +80,7 @@ define FIRMWARE_IMX_INSTALL_IMAGE_DDR_FW
->  		$(FIRMWARE_IMX_DDRFW_DIR)/ddr4_2d_201810_fw.bin > \
->  		$(BINARIES_DIR)/ddr4_201810_fw.bin
->  	ln -sf $(BINARIES_DIR)/ddr4_201810_fw.bin $(BINARIES_DIR)/ddr_fw.bin
-> +	$(call FIRMWARE_IMX_COPY_DDR_FW, $(FIRMWARE_IMX_DDRFW_DIR)/ddr4*.bin)
+Le 12/12/2020 ? 21:54, Peter Seiderer a ?crit?:
+> Use cmake-3.10 conform COMPILE_FLAGS instead of 3.15 INCLUDE_DIRECTORIES
+> property (as this one is unknown/unused for older cmake versions and
+> has no effect, resuling in a build failure because of missing extra
+> include path).
+>
+> Fixes:
+>
+>    - http://lists.busybox.net/pipermail/buildroot/2020-December/298159.html
+>
+>    [ 96%] Building CXX object CMakeFiles/ninja.dir/src/browse.cc.o
+>    .../build/host-ninja-1.10.2/src/browse.cc:23:10: fatal error: build/browse_py.h: No such file or directory
+>       23 | #include "build/browse_py.h"
+>          |          ^~~~~~~~~~~~~~~~~~~
+>    compilation terminated.
+>
+> Reported-by: Yegor Yefremov <yegorslists@googlemail.com>
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-Overvall I'm not against this but have a few remarks:
-1- Wouldn't it be just easier to copy the ddr binaries in BINARIES_DIR
-without adding another option for it?
-My take is that we should make that copy without adding
-FIRMWARE_IMX_COPY_DDR_FW. We could even remove ddr_fw.bin generation
-from here and leave it to imx8-bootloader-prepare.sh to do it. And as a
-second step the best would be to get rid of this script when everybody
-moved to U-Boot flash.bin generation.
-Maybe Thomas has some insights as to what is the preferred option.
+Tested-by: Philippe Reynes <philippe.reynes@softathome.com>
 
-2- If we keep that option to make the copy, maybe just merge this patch
-with "Copy of all DDR files if uboot needs fw." and move the squashed
-commit _after_ UBOOT_NEEDS_FW patch.
 
 Regards,
-Gary
+
+Philippe
+
+
+> ---
+> Changes v1 -> v2:
+>    - really use COMPILE_FLAGS (as the patch subject says)
+>      (suggested by Yegor Yefremov)
+>
+> Changes v2 -> v3:
+>    - add reported-by, reviewed-by Yegor Yefremov
+>    - update commit description
+> ---
+>   ...onform-COMPILE_FLAGS-instead-of-3.15.patch | 40 +++++++++++++++++++
+>   1 file changed, 40 insertions(+)
+>   create mode 100644 package/ninja/0002-use-cmake-3.10-conform-COMPILE_FLAGS-instead-of-3.15.patch
+>
+> diff --git a/package/ninja/0002-use-cmake-3.10-conform-COMPILE_FLAGS-instead-of-3.15.patch b/package/ninja/0002-use-cmake-3.10-conform-COMPILE_FLAGS-instead-of-3.15.patch
+> new file mode 100644
+> index 0000000000..83ec77c76c
+> --- /dev/null
+> +++ b/package/ninja/0002-use-cmake-3.10-conform-COMPILE_FLAGS-instead-of-3.15.patch
+> @@ -0,0 +1,40 @@
+> +From 80c34cb11c093f3f0c4217ecf078a1a626da50bd Mon Sep 17 00:00:00 2001
+> +From: Peter Seiderer <ps.report@gmx.net>
+> +Date: Thu, 10 Dec 2020 20:29:19 +0100
+> +Subject: [PATCH] use cmake-3.10 conform COMPILE_FLAGS instead of 3.15
+> + INCLUDE_DIRECTORIES property
+> +
+> +Use cmake-3.10 conform COMPILE_FLAGS instead of 3.15 INCLUDE_DIRECTORIES
+> +property (as this one is unknown/unused for older cmake versions and
+> +has no effect, resuling in a build failure because of missing extra
+> +include path).
+> +
+> +Fixes:
+> +
+> +  [ 96%] Building CXX object CMakeFiles/ninja.dir/src/browse.cc.o
+> +  .../build/host-ninja-1.10.2/src/browse.cc:23:10: fatal error: build/browse_py.h: No such file or directory
+> +     23 | #include "build/browse_py.h"
+> +        |          ^~~~~~~~~~~~~~~~~~~
+> +  compilation terminated.
+> +
+> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> +---
+> + CMakeLists.txt | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/CMakeLists.txt b/CMakeLists.txt
+> +index 7f03c35..f582d2f 100644
+> +--- a/CMakeLists.txt
+> ++++ b/CMakeLists.txt
+> +@@ -156,7 +156,7 @@ if(platform_supports_ninja_browse)
+> + 	set_source_files_properties(src/browse.cc
+> + 		PROPERTIES
+> + 			OBJECT_DEPENDS "${CMAKE_BINARY_DIR}/build/browse_py.h"
+> +-			INCLUDE_DIRECTORIES "${CMAKE_BINARY_DIR}"
+> ++			COMPILE_FLAGS "-I${CMAKE_BINARY_DIR}"
+> + 			COMPILE_DEFINITIONS NINJA_PYTHON="python"
+> + 	)
+> + endif()
+> +--
+> +2.29.2
+> +
