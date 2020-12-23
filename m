@@ -1,11 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 23 Dec 2020 10:10:54 +0100
-Subject: [Buildroot] [PATCH] package/nodejs: security bump to version
- 12.19.1
-In-Reply-To: <20201222200029.2315-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Tue, 22 Dec 2020 21:00:28 +0100")
-References: <20201222200029.2315-1-peter@korsgaard.com>
-Message-ID: <87mty4j3a9.fsf@dell.be.48ers.dk>
+Date: Wed, 23 Dec 2020 10:10:59 +0100
+Subject: [Buildroot] [PATCH] package/xen: security bump to version 4.14.1
+In-Reply-To: <20201222222512.13322-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 22 Dec 2020 23:25:12 +0100")
+References: <20201222222512.13322-1-peter@korsgaard.com>
+Message-ID: <87im8sj3a4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,13 +13,21 @@ To: buildroot@busybox.net
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Fixes the following security issue:
- > - CVE-2020-8277: Denial of Service through DNS request (High).  A Node.js
- >   application that allows an attacker to trigger a DNS request for a host of
- >   their choice could trigger a Denial of Service by getting the application
- >   to resolve a DNS record with a larger number of responses.
+ > Includes security fixes up to XSA-359:
+ > XSA-345: x86: Race condition in Xen mapping code
+ > XSA-346: undue deferral of IOMMU TLB flushes
+ > XSA-347: unsafe AMD IOMMU page table updates
+ > XSA-348: undue recursion in x86 HVM context switch code (CVE-2020-29566)
+ > XSA-351: Information leak via power sidechannel (CVE-2020-28368)
+ > XSA-352: oxenstored: node ownership can be changed by unprivileged clients
+ >          (CVE-2020-29486)
+ > XSA-353: oxenstored: permissions not checked on root node (CVE-2020-29479)
+ > XSA-355: stack corruption from XSA-346 change
+ > XSA-356: infinite loop when cleaning up IRQ vectors (CVE-2020-29567)
+ > XSA-358: FIFO event channels control block related ordering (CVE-2020-29570)
+ > XSA-359: FIFO event channels control structure ordering (CVE-2020-29571)
 
- > https://nodejs.org/en/blog/release/v12.19.1/
+ > And drop now upstreamed security patches.
 
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
