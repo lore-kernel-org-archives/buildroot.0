@@ -1,37 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 23 Dec 2020 13:36:39 +0100
-Subject: [Buildroot] [git commit] package/bind: drop unrecognized option
-Message-ID: <20201223130810.E860A7F8DB@busybox.osuosl.org>
+Date: Wed, 23 Dec 2020 13:35:51 +0100
+Subject: [Buildroot] [git commit] package/bind: bump version to 9.11.25
+Message-ID: <20201223130810.E2B23885D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a2be92afc28fa006f17a7a01d93f75d3611b7212
+commit: https://git.buildroot.net/buildroot/commit/?id=39b582eba40ed2919aca66b10b66dcee77ee02ca
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop --enable-newstats option which is not recognized
+Release notes:
+https://ftp.isc.org/isc/bind9/9.11.25/RELEASE-NOTES-bind-9.11.25.html
 
-Unrecognized options:
-    --disable-gtk-doc, --disable-gtk-doc-html, --disable-doc, --disable-docs, --disable-documentation, --with-xmlto, --with-fop, --disable-dependency-tracking, --disable-nls, --enable-newstats
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bind/bind.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/bind/bind.hash | 4 ++--
+ package/bind/bind.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index cbd9562b56..ae196dacd5 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
+@@ -1,4 +1,4 @@
+-# Verified from https://ftp.isc.org/isc/bind9/9.11.24/bind-9.11.24.tar.gz.asc
++# Verified from https://ftp.isc.org/isc/bind9/9.11.25/bind-9.11.25.tar.gz.asc
+ # with key 95CEDA256B1CA0A15F302FB59521A7ED5DACE918
+-sha256  f261587c5d37c7f14e8393547c4556faefa701a646930f1b6408d71519a30428  bind-9.11.24.tar.gz
++sha256  8491c24e5a3da68f421d0fcb946602c8d0ff963012fdd176b8026c8890f3a117  bind-9.11.25.tar.gz
+ sha256  e316d9d12b3cc3600985d71011d7856f5ff93d28e748155a3a18171b32d98d8b  COPYRIGHT
 diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 4098f948a9..0df2467bc5 100644
+index ba60c111ef..4098f948a9 100644
 --- a/package/bind/bind.mk
 +++ b/package/bind/bind.mk
-@@ -47,7 +47,7 @@ BIND_CONF_OPTS += --disable-linux-caps
- endif
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_LIBXML2),y)
--BIND_CONF_OPTS += --with-libxml2=$(STAGING_DIR)/usr --enable-newstats
-+BIND_CONF_OPTS += --with-libxml2=$(STAGING_DIR)/usr
- BIND_DEPENDENCIES += libxml2
- else
- BIND_CONF_OPTS += --with-libxml2=no
+-BIND_VERSION = 9.11.24
++BIND_VERSION = 9.11.25
+ BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ # bind does not support parallel builds.
+ BIND_MAKE = $(MAKE1)
