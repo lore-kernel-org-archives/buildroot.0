@@ -1,29 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 23 Dec 2020 22:31:48 +0100
-Subject: [Buildroot] [PATCH 1/1] package/wpewebkit: security bump to
- version 2.30.4
-In-Reply-To: <20201223145004.4179379-1-aperez@igalia.com> (Adrian Perez de
- Castro's message of "Wed, 23 Dec 2020 16:50:04 +0200")
-References: <20201223145004.4179379-1-aperez@igalia.com>
-Message-ID: <87pn30fbuj.fsf@dell.be.48ers.dk>
+Date: Wed, 23 Dec 2020 22:32:35 +0100
+Subject: [Buildroot] [PATCH 1/2] package/sysstat: bump to version 12.4.2
+In-Reply-To: <20201223112259.2290938-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 23 Dec 2020 12:22:58 +0100")
+References: <20201223112259.2290938-1-fontaine.fabrice@gmail.com>
+Message-ID: <87lfdofbt8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > This is a minor release which provides a fix for CVE-2020-13543.
- > Full release notes:
+ > Drop NLS workaround, not needed since
+ > https://github.com/sysstat/sysstat/commit/1b4185b599730e6139aaaaaa48eb6626fb732c9d
 
- >   https://wpewebkit.org/release/wpewebkit-2.30.4.html
+ > https://github.com/sysstat/sysstat/blob/v12.4.2/CHANGES
 
- > A detailed security advisory can be found at:
-
- >   https://wpewebkit.org/security/WSA-2020-0009.html
-
- > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
 
