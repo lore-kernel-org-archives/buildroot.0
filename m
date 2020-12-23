@@ -1,40 +1,31 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 22 Dec 2020 23:38:26 +0100
-Subject: [Buildroot] [PATCH v1] package/tiff: bump version to 4.2.0
-Message-ID: <20201222223826.20863-1-ps.report@gmx.net>
+From: Tian Yuanhao <tianyuanhao@aliyun.com>
+Date: Wed, 23 Dec 2020 10:16:27 +0800
+Subject: [Buildroot] [PATCH 1/1] package/libfuse3: enable CONFIG_FUSE_FS in
+ kernel config
+Message-ID: <20201223021627.1820551-1-tianyuanhao@aliyun.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Tian Yuanhao <tianyuanhao@aliyun.com>
 ---
- package/tiff/tiff.hash | 2 +-
- package/tiff/tiff.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libfuse3/libfuse3.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/tiff/tiff.hash b/package/tiff/tiff.hash
-index 36f30c4418..472ec40e55 100644
---- a/package/tiff/tiff.hash
-+++ b/package/tiff/tiff.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 5d29f32517dadb6dbcd1255ea5bbc93a2b54b94fbf83653b4d65c7d6775b8634  tiff-4.1.0.tar.gz
-+sha256 eb0484e568ead8fa23b513e9b0041df7e327f4ee2d22db5a533929dfc19633cb  tiff-4.2.0.tar.gz
- sha256 fbd6fed7938541d2c809c0826225fc85e551fdbfa8732b10f0c87e0847acafd7  COPYRIGHT
-diff --git a/package/tiff/tiff.mk b/package/tiff/tiff.mk
-index b26900ac70..7568215f92 100644
---- a/package/tiff/tiff.mk
-+++ b/package/tiff/tiff.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libfuse3/libfuse3.mk b/package/libfuse3/libfuse3.mk
+index f6d8dd0ab9..0a896d8dad 100644
+--- a/package/libfuse3/libfuse3.mk
++++ b/package/libfuse3/libfuse3.mk
+@@ -23,4 +23,8 @@ define LIBFUSE3_PERMISSIONS
+ 	/usr/bin/fusermount3 f 4755 0 0 - - - - -
+ endef
  
--TIFF_VERSION = 4.1.0
-+TIFF_VERSION = 4.2.0
- TIFF_SITE = http://download.osgeo.org/libtiff
- TIFF_LICENSE = tiff license
- TIFF_LICENSE_FILES = COPYRIGHT
++define LIBFUSE3_LINUX_CONFIG_FIXUPS
++	$(call KCONFIG_ENABLE_OPT,CONFIG_FUSE_FS)
++endef
++
+ $(eval $(meson-package))
 -- 
-2.29.2
+2.25.1
