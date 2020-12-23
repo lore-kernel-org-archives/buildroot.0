@@ -1,34 +1,32 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Wed, 23 Dec 2020 14:59:06 +0100
-Subject: [Buildroot] [PATCH 1/1]
- package/freescale-imx/firmware-imx/Config.in: install imx6q binaries for
- IM6UL platform
-In-Reply-To: <20201113101026.1824-1-pawnrob@gmail.com>
-References: <20201113101026.1824-1-pawnrob@gmail.com>
-Message-ID: <X+NNKoJi6YuAxO1Y@p1g2>
+Date: Wed, 23 Dec 2020 15:01:24 +0100
+Subject: [Buildroot] [PATCH] package/freescale-imx/firmware-imx: add sdma
+ file for IMX6S platform
+Message-ID: <20201223140124.426856-1-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Rob,
+Uses the same file as IMX6Q platform, see imx6sl.dtsi.
 
-Thanks for your contribution and sorry for the delayed response.
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+---
+ package/freescale-imx/firmware-imx/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-On Fri, Nov 13, 2020 at 10:10:26AM +0000, pawnrob at gmail.com wrote:
-> From: RMellor <Rob.Mellor@ultra-pals.com>
-> 
-> linux-*/arch/arm/boot/dts/imx6ul.dtsi
-> requires the install of the sdma-imx6q.bin as stated in
-> line 727: fsl,sdma-ram-script-name = "imx/sdma/sdma-imx6q.bin";
-> 
-> without the BR2_PACKAGE_FIRMWARE_IMX_SDMA_FW_NAME being set to "imx6q"
-> line 102 of firmware-imx.mk does not install the firmware to to target
-> 
-> Signed-off-by: RMellor <Rob.Mellor@ultra-pals.com>
-
-Reviewed-by: Gary Bisson <gary.bisson@boundarydevices.com>
-
-Regards,
-Gary
+diff --git a/package/freescale-imx/firmware-imx/Config.in b/package/freescale-imx/firmware-imx/Config.in
+index fcf22c55b3..8810779799 100644
+--- a/package/freescale-imx/firmware-imx/Config.in
++++ b/package/freescale-imx/firmware-imx/Config.in
+@@ -18,6 +18,7 @@ config BR2_PACKAGE_FIRMWARE_IMX_SDMA_FW_NAME
+ 	default "imx51" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX51
+ 	default "imx53" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53
+ 	default "imx6q" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
++	default "imx6q" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6S
+ 	default "imx6q" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6UL
+ 	default "imx7d" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7
+ 	default "imx7d" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M
+-- 
+2.29.2
