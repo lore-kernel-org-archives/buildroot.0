@@ -1,45 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 23 Dec 2020 09:50:21 +0100
-Subject: [Buildroot] [git commit] package/mongodb: bump to version 4.2.11
-Message-ID: <20201223085640.E808A81540@busybox.osuosl.org>
+Date: Wed, 23 Dec 2020 10:12:33 +0100
+Subject: [Buildroot] [git commit] package/rpi-firmware: bump version to
+ d016a6e
+Message-ID: <20201223085641.5B1E882203@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5a4f13b8a8dbb9970a6b8f502bd8bfd160e60a3f
+commit: https://git.buildroot.net/buildroot/commit/?id=1921846c0681060fc33ab12fc38e0e6d8117dafa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://docs.mongodb.com/master/release-notes/4.2-changelog/#id1
+Keep rpi-firmware up-to-date with the kernel
+version bump (5.10.1).
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Reviewed-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mongodb/mongodb.hash | 2 +-
- package/mongodb/mongodb.mk   | 2 +-
+ package/rpi-firmware/rpi-firmware.hash | 2 +-
+ package/rpi-firmware/rpi-firmware.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mongodb/mongodb.hash b/package/mongodb/mongodb.hash
-index ab13d77651..3b2580cc43 100644
---- a/package/mongodb/mongodb.hash
-+++ b/package/mongodb/mongodb.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256  f44a846514f8db8be2a662210ad7fefc059d8e17ab2c59aceeae8b0b173d8286  mongodb-src-r4.2.10.tar.gz
-+sha256  ab5a8b6e967614a8ad67c0ca87124c4f380d4a476508973a7995d54ed902b02e  mongodb-src-r4.2.11.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  APACHE-2.0.txt
- sha256  09d99ca61eb07873d5334077acba22c33e7f7d0a9fa08c92734e0ac8430d6e27  LICENSE-Community.txt
-diff --git a/package/mongodb/mongodb.mk b/package/mongodb/mongodb.mk
-index 6a1caf4fcb..e16bb2a169 100644
---- a/package/mongodb/mongodb.mk
-+++ b/package/mongodb/mongodb.mk
+diff --git a/package/rpi-firmware/rpi-firmware.hash b/package/rpi-firmware/rpi-firmware.hash
+index 7767479daf..691b200259 100644
+--- a/package/rpi-firmware/rpi-firmware.hash
++++ b/package/rpi-firmware/rpi-firmware.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  fdf199b1af35d8ba874c1e963344f8e6edf21a7f37a9633fa4bddaea19aad84a  rpi-firmware-08ed7a0c9ad4d9db559aaec462520ab435c7ce1c.tar.gz
++sha256  ae4e317681995e0f7becd7900ae667cba394e3a0b7ca93a267f3303df7284697  rpi-firmware-d016a6eb01c8c7326a89cb42809fed2a21525de5.tar.gz
+ sha256  c7283ff51f863d93a275c66e3b4cb08021a5dd4d8c1e7acc47d872fbe52d3d6b  boot/LICENCE.broadcom
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index 0255a5bff5..f3d28ef825 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MONGODB_VERSION = 4.2.10
-+MONGODB_VERSION = 4.2.11
- MONGODB_SITE = https://fastdl.mongodb.org/src
- MONGODB_SOURCE = mongodb-src-r$(MONGODB_VERSION).tar.gz
- 
+-RPI_FIRMWARE_VERSION = 08ed7a0c9ad4d9db559aaec462520ab435c7ce1c
++RPI_FIRMWARE_VERSION = d016a6eb01c8c7326a89cb42809fed2a21525de5
+ RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
+ RPI_FIRMWARE_LICENSE = BSD-3-Clause
+ RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
