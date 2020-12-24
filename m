@@ -1,53 +1,27 @@
-From: Stephane Viau <stephane.viau@oss.nxp.com>
-Date: Thu, 24 Dec 2020 07:59:40 +0100
-Subject: [Buildroot] [PATCH 02/15] package/freescale-imx/imx-gpu-g2d: bump
- to version 6.4.3.p0.0
-In-Reply-To: <1608793193-11843-1-git-send-email-stephane.viau@oss.nxp.com>
-References: <1608793193-11843-1-git-send-email-stephane.viau@oss.nxp.com>
-Message-ID: <1608793193-11843-3-git-send-email-stephane.viau@oss.nxp.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 24 Dec 2020 12:48:25 +0100
+Subject: [Buildroot] [PATCH] package/python-crc16: allow to build with
+ python3
+In-Reply-To: <20201221182450.65921-1-m.niestroj@grinn-global.com> (Marcin
+ Niestroj's message of "Mon, 21 Dec 2020 19:24:50 +0100")
+References: <20201221182450.65921-1-m.niestroj@grinn-global.com>
+Message-ID: <87eejfe86u.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This version is aligned with 5.4.47_2.2.0 NXP Linux BSP.
+>>>>> "Marcin" == Marcin Niestroj <m.niestroj@grinn-global.com> writes:
 
-Signed-off-by: Stephane Viau <stephane.viau@oss.nxp.com>
----
- package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash | 8 ++++----
- package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ > python3 is officially supported by package, as there is a usage example
+ > at [1]. Simply remove dependency on BR2_PACKAGE_PYTHON.
 
-diff --git a/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash
-index 4ff5926..bab4bfe 100644
---- a/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash
-+++ b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256	010bab5780476f26406e16b058514453dc235a0e7f4b995fa03c976d06e5cb96  imx-gpu-g2d-6.4.0.p2.4-arm.bin
--sha256	553bbe9ee1caa222fd14b835deb2afedf9ed936b7a13424328df75892286f666  imx-gpu-g2d-6.4.0.p2.4-aarch64.bin
--sha256	2ceab29de5ea533b86f570bcc4e9ddbfb5fe85a1da4978a8613ff3fd9bed781d  COPYING
--sha256	7ffad92e72e5f6b23027e7cf93a770a4acef00a92dcf79f22701ed401c5478c0  EULA
-+sha256	725ad2edd41661713540d5e32509c754cda452acc608955689b8a64977b26ced  imx-gpu-g2d-6.4.3.p0.0-arm.bin
-+sha256	97ee90c81fa0db88e3249cb7df77f17f816ceb9a40355e03f72df99e600d7331  imx-gpu-g2d-6.4.3.p0.0-aarch64.bin
-+sha256	69cbb76b3f10ac5a8c36f34df7bbdf50825815560c00a946fff2922365ef01a2  COPYING
-+sha256	a39da2e94bd8b99eaac4325633854620ea3a55145259c3a7748c610a80714cfc  EULA
-diff --git a/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk
-index 15cfe66..8bf7bed 100644
---- a/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk
-+++ b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk
-@@ -5,9 +5,9 @@
- ################################################################################
- 
- ifeq ($(BR2_aarch64),y)
--IMX_GPU_G2D_VERSION = 6.4.0.p2.4-aarch64
-+IMX_GPU_G2D_VERSION = 6.4.3.p0.0-aarch64
- else
--IMX_GPU_G2D_VERSION = 6.4.0.p2.4-arm
-+IMX_GPU_G2D_VERSION = 6.4.3.p0.0-arm
- endif
- IMX_GPU_G2D_SITE = $(FREESCALE_IMX_SITE)
- IMX_GPU_G2D_SOURCE = imx-gpu-g2d-$(IMX_GPU_G2D_VERSION).bin
+ > [1] https://pypi.org/project/crc16/
+
+ > Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+
+Committed to 2020.02.x, 2020.08.x and 2020.11.x, thanks.
+
 -- 
-2.7.4
+Bye, Peter Korsgaard
