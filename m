@@ -1,21 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Dec 2020 12:49:22 +0100
-Subject: [Buildroot] [PATCH] package/openldap: bump to version 2.4.56
-In-Reply-To: <20201222171149.343164-1-francois.perrad@gadz.org> (Francois
- Perrad's message of "Tue, 22 Dec 2020 18:11:49 +0100")
-References: <20201222171149.343164-1-francois.perrad@gadz.org>
-Message-ID: <87a6u3e859.fsf@dell.be.48ers.dk>
+Date: Thu, 24 Dec 2020 12:51:50 +0100
+Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: security bump to
+ version 2.30.4
+In-Reply-To: <20201223114353.3921353-1-aperez@igalia.com> (Adrian Perez de
+ Castro's message of "Wed, 23 Dec 2020 13:43:53 +0200")
+References: <20201223114353.3921353-1-aperez@igalia.com>
+Message-ID: <875z4re815.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
+>>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
 
- > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+ > This is a minor release which provides a fix for CVE-2020-13543.
+ > Full release notes:
 
-Committed to 2020.02.x, 2020.08.x and 2020.11.x, thanks.
+ >   https://webkitgtk.org/2020/12/15/webkitgtk2.30.4-released.html
+
+ > A detailed security advisory can be found at:
+
+ >   https://webkitgtk.org/security/WSA-2020-0009.html
+
+ > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+
+Committed to 2020.11.x, thanks.
+
+2020.02.x/2020.08.x are still on 2.28.4, I wonder what to do there.
 
 -- 
 Bye, Peter Korsgaard
