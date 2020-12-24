@@ -1,143 +1,72 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Dec 2020 09:43:54 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/apitrace: disable
- unit tests
-Message-ID: <20201224083307.8092E8888E@busybox.osuosl.org>
+Date: Thu, 24 Dec 2020 09:35:52 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/netsnmp: fix
+ memory leak in IP-MIB when running without IPv6
+Message-ID: <20201224083307.5DC568834F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fc1a0fb5a075752baa22e6914dcc4725d7092073
+commit: https://git.buildroot.net/buildroot/commit/?id=16927d88083ef8547bcc372436ee49d8ae0f8f69
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-This will avoid the following build failure with xtensa:
+In a Linux system without IPv6 support (or booted with "ipv6.disable=1")
+file /proc/net/snmp6 is not present. If such file is not present an allocated
+memory is not freed. Memory leak occurs even without snmp queries.
 
-[ 62%] Linking CXX executable ../../guids_test
-[ 62%] Building CXX object retrace/CMakeFiles/retrace_common.dir/retrace.cpp.o
-CMakeFiles/guids_test.dir/guids_test.cpp.o:(.debug_line+0xf7b): dangerous relocation: overflow after relaxation
-collect2: error: ld returned 1 exit status
-lib/guids/CMakeFiles/guids_test.dir/build.make:85: recipe for target 'guids_test' failed
+Problem seen at least since netsnmp 5.7.3 (probably even v5.6.1).
+Patch backported from netsnmp 5.9, where the problem does not appear any more.
 
-Fixes:
- - http://autobuild.buildroot.org/results/8fea93a88bb34e98e391a048c3b996b45ebac803
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Adam Wujek <dev_public@wujek.eu>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 0d209dce35d3484ac94d949cfd656d81c21cd41d)
+(cherry picked from commit 5e6f6e074508ece2207b02545a8ede5a296978c9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-CMakeLists.txt-respect-BUILD_TESTING-OFF.patch | 104 +++++++++++++++++++++
- 1 file changed, 104 insertions(+)
+ ...-Linux-Fix-a-memory-leak-in-an-error-path.patch | 37 ++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
-diff --git a/package/apitrace/0003-CMakeLists.txt-respect-BUILD_TESTING-OFF.patch b/package/apitrace/0003-CMakeLists.txt-respect-BUILD_TESTING-OFF.patch
+diff --git a/package/netsnmp/0006-IP-MIB-Linux-Fix-a-memory-leak-in-an-error-path.patch b/package/netsnmp/0006-IP-MIB-Linux-Fix-a-memory-leak-in-an-error-path.patch
 new file mode 100644
-index 0000000000..8cc1f8bb0b
+index 0000000000..fb68e175e5
 --- /dev/null
-+++ b/package/apitrace/0003-CMakeLists.txt-respect-BUILD_TESTING-OFF.patch
-@@ -0,0 +1,104 @@
-+From 7f0f1e7e34f997eef697856804dd478b54bb365e Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 22 Dec 2020 10:45:21 +0100
-+Subject: [PATCH] CMakeLists.txt: respect BUILD_TESTING=OFF
++++ b/package/netsnmp/0006-IP-MIB-Linux-Fix-a-memory-leak-in-an-error-path.patch
+@@ -0,0 +1,37 @@
++From 7c073e3a1b736689135fd2ed44ede5b83790bd37 Mon Sep 17 00:00:00 2001
++From: Bart Van Assche <bvanassche@acm.org>
++Date: Mon, 26 Aug 2019 18:32:08 -0700
++Subject: IP-MIB, Linux: Fix a memory leak in an error path
 +
-+Allow the user to disable unit tests through BUILD_TESTING=OFF:
-+https://cmake.org/cmake/help/latest/command/enable_testing.html
++When a Linux system is booted with "ipv6.disable=1" in the kernel command
++line, the file "/proc/net/snmp6" is not created. Fix the memory leak in
++_systemstats_v6_load_systemstats() that is triggered with IPv6 disabled.
 +
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/apitrace/apitrace/pull/698]
++See also https://sourceforge.net/p/net-snmp/bugs/2976/.
++
++Reported-by: Mark E Rusk <marker55@users.sourceforge.net>
 +---
-+ CMakeLists.txt           | 6 +++++-
-+ gui/CMakeLists.txt       | 6 ++++--
-+ lib/guids/CMakeLists.txt | 6 ++++--
-+ lib/os/CMakeLists.txt    | 6 ++++--
-+ lib/trace/CMakeLists.txt | 6 ++++--
-+ 5 files changed, 21 insertions(+), 9 deletions(-)
++ agent/mibgroup/ip-mib/data_access/systemstats_linux.c | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
 +
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 4a07f069..ee401887 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -41,6 +41,8 @@ option (ENABLE_FRAME_POINTER "Disable frame pointer omission" ON)
-+ 
-+ option (ENABLE_ASAN "Enable Address Sanitizer" OFF)
-+ 
-++option (BUILD_TESTING "Enable unit tests" ON)
-++
-+ option (ENABLE_TESTS "Enable additional tests" OFF)
-+ 
-+ if (ANDROID)
-+@@ -433,7 +435,9 @@ endmacro ()
-+ # which subdirectory they are declared
-+ set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
-+ 
-+-enable_testing ()
-++if (BUILD_TESTING)
-++    enable_testing ()
-++endif ()
-+ if (CMAKE_CROSSCOMPILING)
-+     add_custom_target (check)
-+ elseif (DEFINED CMAKE_BUILD_TYPE)
-+diff --git a/gui/CMakeLists.txt b/gui/CMakeLists.txt
-+index 5baf3552..ad6ee501 100644
-+--- a/gui/CMakeLists.txt
-++++ b/gui/CMakeLists.txt
-+@@ -13,8 +13,10 @@ add_library (qubjson STATIC
-+     qubjson.cpp
-+ )
-+ 
-+-add_gtest (qubjson_test qubjson_test.cpp)
-+-target_link_libraries (qubjson_test qubjson)
-++if (BUILD_TESTING)
-++    add_gtest (qubjson_test qubjson_test.cpp)
-++    target_link_libraries (qubjson_test qubjson)
-++endif ()
-+ 
-+ set(qapitrace_SRCS
-+    apisurface.cpp
-+diff --git a/lib/guids/CMakeLists.txt b/lib/guids/CMakeLists.txt
-+index ce0f86da..ea28a18f 100644
-+--- a/lib/guids/CMakeLists.txt
-++++ b/lib/guids/CMakeLists.txt
-+@@ -5,5 +5,7 @@ add_library (guids STATIC
-+     guids.hpp
-+ )
-+ 
-+-add_gtest (guids_test guids_test.cpp)
-+-target_link_libraries (guids_test guids)
-++if (BUILD_TESTING)
-++    add_gtest (guids_test guids_test.cpp)
-++    target_link_libraries (guids_test guids)
-++endif ()
-+diff --git a/lib/os/CMakeLists.txt b/lib/os/CMakeLists.txt
-+index 222411e0..b7134b57 100644
-+--- a/lib/os/CMakeLists.txt
-++++ b/lib/os/CMakeLists.txt
-+@@ -36,5 +36,7 @@ if (APPLE)
-+     )
-+ endif ()
-+ 
-+-add_gtest (os_thread_test os_thread_test.cpp)
-+-target_link_libraries (os_thread_test os)
-++if (BUILD_TESTING)
-++    add_gtest (os_thread_test os_thread_test.cpp)
-++    target_link_libraries (os_thread_test os)
-++endif ()
-+diff --git a/lib/trace/CMakeLists.txt b/lib/trace/CMakeLists.txt
-+index c68bd00f..d95df978 100644
-+--- a/lib/trace/CMakeLists.txt
-++++ b/lib/trace/CMakeLists.txt
-+@@ -34,5 +34,7 @@ target_link_libraries (common
-+     brotli_dec brotli_common
-+ )
-+ 
-+-add_gtest (trace_parser_flags_test trace_parser_flags_test.cpp)
-+-target_link_libraries (trace_parser_flags_test common)
-++if (BUILD_TESTING)
-++    add_gtest (trace_parser_flags_test trace_parser_flags_test.cpp)
-++    target_link_libraries (trace_parser_flags_test common)
-++endif ()
++diff --git a/agent/mibgroup/ip-mib/data_access/systemstats_linux.c b/agent/mibgroup/ip-mib/data_access/systemstats_linux.c
++index e28ff93..f68d122 100644
++--- a/agent/mibgroup/ip-mib/data_access/systemstats_linux.c
+++++ b/agent/mibgroup/ip-mib/data_access/systemstats_linux.c
++@@ -560,10 +560,12 @@ _systemstats_v6_load_systemstats(netsnmp_container* container, u_int load_flags)
++      * try to open file. If we can't, that's ok - maybe the module hasn't
++      * been loaded yet.
++      */
++-    if (!(devin = fopen(filename, "r"))) {
+++    devin = fopen(filename, "r");
+++    if (!devin) {
++         DEBUGMSGTL(("access:systemstats",
++                 "Failed to load Systemstats Table (linux1), cannot open %s\n",
++                 filename));
+++        netsnmp_access_systemstats_entry_free(entry);
++         return 0;
++     }
++     
 +-- 
-+2.29.2
++2.7.4
 +
