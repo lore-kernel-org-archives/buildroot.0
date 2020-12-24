@@ -1,55 +1,48 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 24 Dec 2020 11:18:40 +0100
-Subject: [Buildroot] [PATCH v2,
- 1/1] toolchain/toolchain-wrapper: fix gcc -v with relro
-Message-ID: <20201224101840.3428243-1-fontaine.fabrice@gmail.com>
+From: Stephane Viau <stephane.viau@oss.nxp.com>
+Date: Thu, 24 Dec 2020 07:59:39 +0100
+Subject: [Buildroot] [PATCH 01/15] package/freescale-imx/firmware-imx: bump
+ version to 8.9
+In-Reply-To: <1608793193-11843-1-git-send-email-stephane.viau@oss.nxp.com>
+References: <1608793193-11843-1-git-send-email-stephane.viau@oss.nxp.com>
+Message-ID: <1608793193-11843-2-git-send-email-stephane.viau@oss.nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-rhash in version 1.4.0 with relro fails to build because gcc -v raises
-the following build failure:
+This version is aligned with 5.4.47_2.2.0 NXP Linux BSP.
 
-/data/buildroot-test/instance-1/output-1/host/mips64el-buildroot-linux-gnu/sysroot/soft-float/el/usr/lib64/Scrt1.o: In function `__start':
-(.text+0x20): undefined reference to `main'
-collect2: error: ld returned 1 exit status
-Run result: 1
-
-This build failure is raised because the toolchain-wrapper calls gcc with
--Wl,-z,relro and as a result gcc wrongly assumes that some linking must
-be done.
-
-Fixes:
- - http://autobuild.buildroot.org/results/8605c16cc28316954ce8b9dcc266974390c5da20
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Tested-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Stephane Viau <stephane.viau@oss.nxp.com>
 ---
-Changes v1 -> v2 (after review of Peter Seiderer):
- - Fix typos in commit log and update comment in source code
+ package/freescale-imx/firmware-imx/firmware-imx.hash | 6 +++---
+ package/freescale-imx/firmware-imx/firmware-imx.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
- toolchain/toolchain-wrapper.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
-index 0fb6064b1c..2a7dd61729 100644
---- a/toolchain/toolchain-wrapper.c
-+++ b/toolchain/toolchain-wrapper.c
-@@ -453,10 +453,11 @@ int main(int argc, char **argv)
- 			*cur++ = "-pie";
- 	}
- #endif
--	/* Are we building the Linux Kernel or U-Boot? */
-+	/* Are we building the Linux Kernel or U-Boot or displaying the programs invoked by the compiler? */
- 	for (i = 1; i < argc; i++) {
- 		if (!strcmp(argv[i], "-D__KERNEL__") ||
--		    !strcmp(argv[i], "-D__UBOOT__"))
-+		    !strcmp(argv[i], "-D__UBOOT__") ||
-+		    !strcmp(argv[i], "-v"))
- 			break;
- 	}
- 	if (i == argc) {
+diff --git a/package/freescale-imx/firmware-imx/firmware-imx.hash b/package/freescale-imx/firmware-imx/firmware-imx.hash
+index b0a1502..3230677 100644
+--- a/package/freescale-imx/firmware-imx/firmware-imx.hash
++++ b/package/freescale-imx/firmware-imx/firmware-imx.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  5ca1f8b6e6b191594d17ac7b51c38cdbc2ff808d15568ab4b0bbeb5dc6c621f6  firmware-imx-8.8.bin
+-sha256  7ffad92e72e5f6b23027e7cf93a770a4acef00a92dcf79f22701ed401c5478c0  EULA
+-sha256  2ceab29de5ea533b86f570bcc4e9ddbfb5fe85a1da4978a8613ff3fd9bed781d  COPYING
++sha256  a72f70fd2ecaa58800bb88ed672fddc322ab9843ee7777eb89b82016b0aa3614  firmware-imx-8.9.bin
++sha256  a39da2e94bd8b99eaac4325633854620ea3a55145259c3a7748c610a80714cfc  EULA
++sha256  69cbb76b3f10ac5a8c36f34df7bbdf50825815560c00a946fff2922365ef01a2  COPYING
+diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
+index fb3cfe6..7d1f42f 100644
+--- a/package/freescale-imx/firmware-imx/firmware-imx.mk
++++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FIRMWARE_IMX_VERSION = 8.8
++FIRMWARE_IMX_VERSION = 8.9
+ FIRMWARE_IMX_SITE = $(FREESCALE_IMX_SITE)
+ FIRMWARE_IMX_SOURCE = firmware-imx-$(FIRMWARE_IMX_VERSION).bin
+ 
 -- 
-2.29.2
+2.7.4
