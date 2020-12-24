@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Dec 2020 09:44:13 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/apitrace: disable
+Date: Thu, 24 Dec 2020 09:44:02 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/apitrace: disable
  unit tests
-Message-ID: <20201224083318.4FF72888C9@busybox.osuosl.org>
+Message-ID: <20201224083312.6A1AA888AF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a76c9fd92db34266843dcecc441af97bd3800b3d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=84e76715f7416fde9a45b62b58b28ced4b007cb3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
 This will avoid the following build failure with xtensa:
 
