@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Dec 2020 09:38:34 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/mongodb: bump to
+Date: Thu, 24 Dec 2020 09:39:40 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/mongodb: bump to
  version 4.2.11
-Message-ID: <20201224083312.60C32888AA@busybox.osuosl.org>
+Message-ID: <20201224083307.700E288883@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a8015bbbf1274edfec2410b4e6235f1ee8c0ebed
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=84097da97fd96b4959ad36e977d501da78b50bc1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
 https://docs.mongodb.com/master/release-notes/4.2-changelog/#id1
 
