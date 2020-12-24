@@ -1,38 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Dec 2020 12:48:13 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/python-crc16:
- allow to build with python3
-Message-ID: <20201224113602.9D20B88988@busybox.osuosl.org>
+Date: Thu, 24 Dec 2020 12:50:26 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/wpewebkit:
+ security bump to version 2.30.4
+Message-ID: <20201224113602.B74B688666@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c2c84d931b32e4c581e3856f42bc8a5310ca9854
+commit: https://git.buildroot.net/buildroot/commit/?id=253a40d5fb1f37553e81fbf3e55f7ed19fadd960
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-python3 is officially supported by package, as there is a usage example
-at [1]. Simply remove dependency on BR2_PACKAGE_PYTHON.
+This is a minor release which provides a fix for CVE-2020-13543.
 
-[1] https://pypi.org/project/crc16/
+Full release notes:
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+  https://wpewebkit.org/release/wpewebkit-2.30.4.html
+
+A detailed security advisory can be found at:
+
+  https://wpewebkit.org/security/WSA-2020-0009.html
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit a7fdc5686bb269cc3797d7c550f10f75074f2e71)
+(cherry picked from commit 81a9e9064fbd7409b77a30fa5759690af62e5527)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-crc16/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+ package/wpewebkit/wpewebkit.hash | 8 ++++----
+ package/wpewebkit/wpewebkit.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-crc16/Config.in b/package/python-crc16/Config.in
-index b7a10b66ad..06ad00778c 100644
---- a/package/python-crc16/Config.in
-+++ b/package/python-crc16/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_PYTHON_CRC16
- 	bool "python-crc16"
--	depends on BR2_PACKAGE_PYTHON
- 	help
- 	  This library calculates only CRC16 (16-bit codes) and the
- 	  only supported variant at the moment is CRC-CCITT (XModem).
+diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
+index 3534abf0e4..42bd27f11d 100644
+--- a/package/wpewebkit/wpewebkit.hash
++++ b/package/wpewebkit/wpewebkit.hash
+@@ -1,7 +1,7 @@
+-# From https://wpewebkit.org/releases/wpewebkit-2.30.3.tar.xz.sums
+-md5  75f6ef1819b182043a25b916272ebec6  wpewebkit-2.30.3.tar.xz
+-sha1  2ed723f779513205449e0c5b7c080eb19d635aee  wpewebkit-2.30.3.tar.xz
+-sha256  f2dfc1a6279810353f601bb9bd0d8ef671b41b38352d679b93d01631c2bf7b4b  wpewebkit-2.30.3.tar.xz
++# From https://wpewebkit.org/releases/wpewebkit-2.30.4.tar.xz.sums
++md5  d423a01ffb5be44e6ad59b2cfb9d6eb3  wpewebkit-2.30.4.tar.xz
++sha1  2fdca7b888966ad2ed7d998bef52c9024dae063f  wpewebkit-2.30.4.tar.xz
++sha256  1e521d85cf8cf344b9fd08eabad7a1d18a330fb7862a77eaf78d7d7b10d5f6ef  wpewebkit-2.30.4.tar.xz
+ 
+ # Hashes for license files:
+ sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
+diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
+index 66f86edf4d..d3afdf0094 100644
+--- a/package/wpewebkit/wpewebkit.mk
++++ b/package/wpewebkit/wpewebkit.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WPEWEBKIT_VERSION = 2.30.3
++WPEWEBKIT_VERSION = 2.30.4
+ WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
+ WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
+ WPEWEBKIT_INSTALL_STAGING = YES
