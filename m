@@ -1,98 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 23 Dec 2020 23:06:38 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/mutt: fix
- CVE-2020-28896
-Message-ID: <20201224083312.46DCE888A2@busybox.osuosl.org>
+Date: Thu, 24 Dec 2020 09:46:12 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/nodejs: security
+ bump to version 12.19.1
+Message-ID: <20201224083312.7505A888B3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=478919b1a0cd176f7db40ba44d434f2f36e46c85
+commit: https://git.buildroot.net/buildroot/commit/?id=5db108552908e9912d91cdd43c17d5e8de72d4f3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-Mutt before 2.0.2 and NeoMutt before 2020-11-20 did not ensure that
-$ssl_force_tls was processed if an IMAP server's initial server response
-was invalid. The connection was not properly closed, and the code could
-continue attempting to authenticate. This could result in authentication
-credentials being exposed on an unencrypted connection, or to a
-machine-in-the-middle.
+Fixes the following security issue:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+- CVE-2020-8277: Denial of Service through DNS request (High).  A Node.js
+  application that allows an attacker to trigger a DNS request for a host of
+  their choice could trigger a Denial of Service by getting the application
+  to resolve a DNS record with a larger number of responses.
+
+https://nodejs.org/en/blog/release/v12.19.1/
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 89a9f74fa85a8f0e080328393a356181033f4ad9)
+(cherry picked from commit f359580796a7d0295680821213ed562c4f8ca24e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ection-is-closed-after-a-connection-error.patch | 48 ++++++++++++++++++++++
- package/mutt/mutt.mk                               |  3 ++
- 2 files changed, 51 insertions(+)
+ package/nodejs/nodejs.hash | 4 ++--
+ package/nodejs/nodejs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mutt/0001-Ensure-IMAP-connection-is-closed-after-a-connection-error.patch b/package/mutt/0001-Ensure-IMAP-connection-is-closed-after-a-connection-error.patch
-new file mode 100644
-index 0000000000..7afc736085
---- /dev/null
-+++ b/package/mutt/0001-Ensure-IMAP-connection-is-closed-after-a-connection-error.patch
-@@ -0,0 +1,48 @@
-+From 04b06aaa3e0cc0022b9b01dbca2863756ebbf59a Mon Sep 17 00:00:00 2001
-+From: Kevin McCarthy <kevin@8t8.us>
-+Date: Mon, 16 Nov 2020 10:20:21 -0800
-+Subject: [PATCH] Ensure IMAP connection is closed after a connection error.
-+
-+During connection, if the server provided an illegal initial response,
-+Mutt "bailed", but did not actually close the connection.  The calling
-+code unfortunately relied on the connection status to decide to
-+continue with authentication, instead of checking the "bail" return
-+value.
-+
-+This could result in authentication credentials being sent over an
-+unencrypted connection, without $ssl_force_tls being consulted.
-+
-+Fix this by strictly closing the connection on any invalid response
-+during connection.  The fix is intentionally small, to ease
-+backporting.  A better fix would include removing the 'err_close_conn'
-+label, and perhaps adding return value checking in the caller (though
-+this change obviates the need for that).
-+
-+This addresses CVE-2020-28896.  Thanks to Gabriel Salles-Loustau for
-+reporting the problem, and providing test cases to reproduce.
-+
-+[Retrieved from:
-+https://gitlab.com/muttmua/mutt/-/commit/04b06aaa3e0cc0022b9b01dbca2863756ebbf59a]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ imap/imap.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/imap/imap.c b/imap/imap.c
-+index b24e8a3f..b13dd54d 100644
-+--- a/imap/imap.c
-++++ b/imap/imap.c
-+@@ -561,9 +561,9 @@ int imap_open_connection (IMAP_DATA* idata)
-+ 
-+ #if defined(USE_SSL)
-+ err_close_conn:
-+-  imap_close_connection (idata);
-+ #endif
-+ bail:
-++  imap_close_connection (idata);
-+   FREE (&idata->capstr);
-+   return -1;
-+ }
-+-- 
-+GitLab
-+
-diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
-index 0ff03724c1..58c80d445d 100644
---- a/package/mutt/mutt.mk
-+++ b/package/mutt/mutt.mk
-@@ -11,6 +11,9 @@ MUTT_LICENSE_FILES = GPL
- MUTT_DEPENDENCIES = ncurses
- MUTT_CONF_OPTS = --disable-doc --disable-smtp
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index 33fb407882..61259425ba 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
+@@ -1,5 +1,5 @@
+-# From https://nodejs.org/dist/v12.18.4/SHASUMS256.txt
+-sha256  25f03cb18e53b6d0959d0c219e701a85eb4693f526bdda7c72bc6199b364f609  node-v12.18.4.tar.xz
++# From https://nodejs.org/dist/v12.19.1/SHASUMS256.txt
++sha256  74077e0cc3db000a6f3cc685b220e609807b61adc8e7d8243e8511d478d1b17d  node-v12.19.1.tar.xz
  
-+# 0001-Ensure-IMAP-connection-is-closed-after-a-connection-error.patch
-+MUTT_IGNORE_CVES += CVE-2020-28896
-+
- ifeq ($(BR2_PACKAGE_LIBICONV),y)
- MUTT_DEPENDENCIES += libiconv
- MUTT_CONF_OPTS += --enable-iconv
+ # Hash for license file
+ sha256  0dc03af08b95ea0c1e27f8fd591dee4383eb6f2c304db6eb6cdfb6751f7da87b  LICENSE
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index b159b10253..524a6b5d8f 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NODEJS_VERSION = 12.18.4
++NODEJS_VERSION = 12.19.1
+ NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
+ NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
+ NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
