@@ -1,44 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Dec 2020 09:44:50 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x]
- configs/nitrogen6x_defconfig: remove duplicate
- BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-Message-ID: <20201224083307.90BBE8830E@busybox.osuosl.org>
+Date: Thu, 24 Dec 2020 09:38:34 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/mongodb: bump to
+ version 4.2.11
+Message-ID: <20201224083312.60C32888AA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dece04055881b3a8068c930253e9b958d73d9496
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a8015bbbf1274edfec2410b4e6235f1ee8c0ebed
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-The commit [1] added this option a second time.
-Remove the first occurence.
+https://docs.mongodb.com/master/release-notes/4.2-changelog/#id1
 
-Fixes:
-configs/nitrogen6x_defconfig:31:warning: override: reassigning to symbol BR2_PACKAGE_HOST_UBOOT_TOOLS
-
-[1] 6ea9f662a03e0f4b4a9000a25095b8e6293b07b6
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 667a68c4a6a51287330f56c235d7f3a28c00da3a)
+(cherry picked from commit 5a4f13b8a8dbb9970a6b8f502bd8bfd160e60a3f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/nitrogen6x_defconfig | 1 -
- 1 file changed, 1 deletion(-)
+ package/mongodb/mongodb.hash | 2 +-
+ package/mongodb/mongodb.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/configs/nitrogen6x_defconfig b/configs/nitrogen6x_defconfig
-index 5353b38fd5..13c14e6d2a 100644
---- a/configs/nitrogen6x_defconfig
-+++ b/configs/nitrogen6x_defconfig
-@@ -11,7 +11,6 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/boundarydevices/common/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/boundarydevices/common/post-image.sh"
- BR2_PACKAGE_HOST_GENIMAGE=y
--BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+diff --git a/package/mongodb/mongodb.hash b/package/mongodb/mongodb.hash
+index ab13d77651..3b2580cc43 100644
+--- a/package/mongodb/mongodb.hash
++++ b/package/mongodb/mongodb.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256  f44a846514f8db8be2a662210ad7fefc059d8e17ab2c59aceeae8b0b173d8286  mongodb-src-r4.2.10.tar.gz
++sha256  ab5a8b6e967614a8ad67c0ca87124c4f380d4a476508973a7995d54ed902b02e  mongodb-src-r4.2.11.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  APACHE-2.0.txt
+ sha256  09d99ca61eb07873d5334077acba22c33e7f7d0a9fa08c92734e0ac8430d6e27  LICENSE-Community.txt
+diff --git a/package/mongodb/mongodb.mk b/package/mongodb/mongodb.mk
+index 6a1caf4fcb..e16bb2a169 100644
+--- a/package/mongodb/mongodb.mk
++++ b/package/mongodb/mongodb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # filesystem
- BR2_TARGET_ROOTFS_EXT2=y
+-MONGODB_VERSION = 4.2.10
++MONGODB_VERSION = 4.2.11
+ MONGODB_SITE = https://fastdl.mongodb.org/src
+ MONGODB_SOURCE = mongodb-src-r$(MONGODB_VERSION).tar.gz
+ 
