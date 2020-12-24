@@ -1,72 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Dec 2020 09:36:54 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/netsnmp: fix
- memory leak in IP-MIB when running without IPv6
-Message-ID: <20201224083312.5495D888A6@busybox.osuosl.org>
+Date: Thu, 24 Dec 2020 09:44:50 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x]
+ configs/nitrogen6x_defconfig: remove duplicate
+ BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+Message-ID: <20201224083307.90BBE8830E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ec6f098e715182c94d0d1e2b5fa6c98494cd120d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=dece04055881b3a8068c930253e9b958d73d9496
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-In a Linux system without IPv6 support (or booted with "ipv6.disable=1")
-file /proc/net/snmp6 is not present. If such file is not present an allocated
-memory is not freed. Memory leak occurs even without snmp queries.
+The commit [1] added this option a second time.
+Remove the first occurence.
 
-Problem seen at least since netsnmp 5.7.3 (probably even v5.6.1).
-Patch backported from netsnmp 5.9, where the problem does not appear any more.
+Fixes:
+configs/nitrogen6x_defconfig:31:warning: override: reassigning to symbol BR2_PACKAGE_HOST_UBOOT_TOOLS
 
-Signed-off-by: Adam Wujek <dev_public@wujek.eu>
+[1] 6ea9f662a03e0f4b4a9000a25095b8e6293b07b6
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 5e6f6e074508ece2207b02545a8ede5a296978c9)
+(cherry picked from commit 667a68c4a6a51287330f56c235d7f3a28c00da3a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-Linux-Fix-a-memory-leak-in-an-error-path.patch | 37 ++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
+ configs/nitrogen6x_defconfig | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/netsnmp/0006-IP-MIB-Linux-Fix-a-memory-leak-in-an-error-path.patch b/package/netsnmp/0006-IP-MIB-Linux-Fix-a-memory-leak-in-an-error-path.patch
-new file mode 100644
-index 0000000000..fb68e175e5
---- /dev/null
-+++ b/package/netsnmp/0006-IP-MIB-Linux-Fix-a-memory-leak-in-an-error-path.patch
-@@ -0,0 +1,37 @@
-+From 7c073e3a1b736689135fd2ed44ede5b83790bd37 Mon Sep 17 00:00:00 2001
-+From: Bart Van Assche <bvanassche@acm.org>
-+Date: Mon, 26 Aug 2019 18:32:08 -0700
-+Subject: IP-MIB, Linux: Fix a memory leak in an error path
-+
-+When a Linux system is booted with "ipv6.disable=1" in the kernel command
-+line, the file "/proc/net/snmp6" is not created. Fix the memory leak in
-+_systemstats_v6_load_systemstats() that is triggered with IPv6 disabled.
-+
-+See also https://sourceforge.net/p/net-snmp/bugs/2976/.
-+
-+Reported-by: Mark E Rusk <marker55@users.sourceforge.net>
-+---
-+ agent/mibgroup/ip-mib/data_access/systemstats_linux.c | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/agent/mibgroup/ip-mib/data_access/systemstats_linux.c b/agent/mibgroup/ip-mib/data_access/systemstats_linux.c
-+index e28ff93..f68d122 100644
-+--- a/agent/mibgroup/ip-mib/data_access/systemstats_linux.c
-++++ b/agent/mibgroup/ip-mib/data_access/systemstats_linux.c
-+@@ -560,10 +560,12 @@ _systemstats_v6_load_systemstats(netsnmp_container* container, u_int load_flags)
-+      * try to open file. If we can't, that's ok - maybe the module hasn't
-+      * been loaded yet.
-+      */
-+-    if (!(devin = fopen(filename, "r"))) {
-++    devin = fopen(filename, "r");
-++    if (!devin) {
-+         DEBUGMSGTL(("access:systemstats",
-+                 "Failed to load Systemstats Table (linux1), cannot open %s\n",
-+                 filename));
-++        netsnmp_access_systemstats_entry_free(entry);
-+         return 0;
-+     }
-+     
-+-- 
-+2.7.4
-+
+diff --git a/configs/nitrogen6x_defconfig b/configs/nitrogen6x_defconfig
+index 5353b38fd5..13c14e6d2a 100644
+--- a/configs/nitrogen6x_defconfig
++++ b/configs/nitrogen6x_defconfig
+@@ -11,7 +11,6 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/boundarydevices/common/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/boundarydevices/common/post-image.sh"
+ BR2_PACKAGE_HOST_GENIMAGE=y
+-BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+ 
+ # filesystem
+ BR2_TARGET_ROOTFS_EXT2=y
