@@ -1,29 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Dec 2020 09:44:21 +0100
-Subject: [Buildroot] [PATCH 1/1] package/apitrace: disable unit tests
-In-Reply-To: <20201222104411.1250878-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 22 Dec 2020 11:44:11 +0100")
-References: <20201222104411.1250878-1-fontaine.fabrice@gmail.com>
-Message-ID: <87zh23egpm.fsf@dell.be.48ers.dk>
+Date: Thu, 24 Dec 2020 09:45:43 +0100
+Subject: [Buildroot] [PATCH] configs/nitrogen6x_defconfig: remove
+ duplicate BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+In-Reply-To: <20201222172743.2725308-1-romain.naour@gmail.com> (Romain Naour's
+ message of "Tue, 22 Dec 2020 18:27:43 +0100")
+References: <20201222172743.2725308-1-romain.naour@gmail.com>
+Message-ID: <87v9cregnc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
- > This will avoid the following build failure with xtensa:
- > [ 62%] Linking CXX executable ../../guids_test
- > [ 62%] Building CXX object retrace/CMakeFiles/retrace_common.dir/retrace.cpp.o
- > CMakeFiles/guids_test.dir/guids_test.cpp.o:(.debug_line+0xf7b): dangerous relocation: overflow after relaxation
- > collect2: error: ld returned 1 exit status
- > lib/guids/CMakeFiles/guids_test.dir/build.make:85: recipe for target 'guids_test' failed
+ > The commit [1] added this option a second time.
+ > Remove the first occurence.
 
  > Fixes:
- >  - http://autobuild.buildroot.org/results/8fea93a88bb34e98e391a048c3b996b45ebac803
+ > configs/nitrogen6x_defconfig:31:warning: override: reassigning to symbol BR2_PACKAGE_HOST_UBOOT_TOOLS
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > [1] 6ea9f662a03e0f4b4a9000a25095b8e6293b07b6
+
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ > Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
 
 Committed to 2020.02.x, 2020.08.x and 2020.11.x, thanks.
 
