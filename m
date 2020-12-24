@@ -1,70 +1,54 @@
 From: Stephane Viau <stephane.viau@oss.nxp.com>
-Date: Thu, 24 Dec 2020 07:59:38 +0100
-Subject: [Buildroot] [PATCH 00/15] Bump NXP BSP components to 5.4.47_2.2.0
-Message-ID: <1608793193-11843-1-git-send-email-stephane.viau@oss.nxp.com>
+Date: Thu, 24 Dec 2020 07:59:53 +0100
+Subject: [Buildroot] [PATCH 15/15] configs/freescale_imx8qxpmek: bump BSP
+ components to 5.4.47_2.2.0
+In-Reply-To: <1608793193-11843-1-git-send-email-stephane.viau@oss.nxp.com>
+References: <1608793193-11843-1-git-send-email-stephane.viau@oss.nxp.com>
+Message-ID: <1608793193-11843-16-git-send-email-stephane.viau@oss.nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
+Signed-off-by: Stephane Viau <stephane.viau@oss.nxp.com>
+[Build- and run-tested on i.MX8QXP MEK rev B0]
+Tested-by: Stephane Viau <stephane.viau@oss.nxp.com>
 
-Here is a patch set to bump freescale-imx configs and packages to match
-the latest publicly availaible Linux release, that is 5.4.47_2.2.0.
-Some are run-tested, others aren't... but all are build-tested.
+Signed-off-by: Stephane Viau <stephane.viau@oss.nxp.com>
+---
+ configs/freescale_imx8qxpmek_defconfig | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Enjoy!
-
-BR,
-Stephane.
-
-Stephane Viau (15):
-  package/freescale-imx/firmware-imx: bump version to 8.9
-  package/freescale-imx/imx-gpu-g2d: bump to version 6.4.3.p0.0
-  package/freescale-imx/imx-gpu-viv: bump version to 6.4.3.p0.0
-  package/freescale-imx/imx-sc-firmware: bump version to 1.6.0
-  package/freescale-imx/imx-seco: bump version to 3.7.1
-  package/freescale-imx/imx-vpu: bump version to 5.4.39.3
-  package/freescale-imx/imx-vpu-hantro: bump version to 1.19.0
-  package/imx-mkimage: bump to version rel_imx_5.4.47_2.2.0
-  configs/freescale_imx6*: bump BSP components to 5.4.47_2.2.0
-  configs/freescale_imx7dsabresd: bump BSP components to 5.4.47_2.2.0
-  configs/freescale_imx8mmevk: bump BSP components to 5.4.47_2.2.0
-  configs/freescale_imx8mnevk: bump BSP components to 5.4.47_2.2.0
-  configs/freescale_imx8mqevk: bump BSP components to 5.4.47_2.2.0
-  configs/freescale_imx8qmmek: bump BSP components to 5.4.47_2.2.0
-  configs/freescale_imx8qxpmek: bump BSP components to 5.4.47_2.2.0
-
- configs/freescale_imx6dlsabreauto_defconfig                | 4 ++--
- configs/freescale_imx6dlsabresd_defconfig                  | 4 ++--
- configs/freescale_imx6qsabreauto_defconfig                 | 4 ++--
- configs/freescale_imx6qsabresd_defconfig                   | 4 ++--
- configs/freescale_imx6sxsabresd_defconfig                  | 4 ++--
- configs/freescale_imx6ullevk_defconfig                     | 4 ++--
- configs/freescale_imx7dsabresd_defconfig                   | 4 ++--
- configs/freescale_imx8mmevk_defconfig                      | 6 +++---
- configs/freescale_imx8mnevk_defconfig                      | 6 +++---
- configs/freescale_imx8mqevk_defconfig                      | 6 +++---
- configs/freescale_imx8qmmek_defconfig                      | 6 +++---
- configs/freescale_imx8qxpmek_defconfig                     | 6 +++---
- package/freescale-imx/firmware-imx/firmware-imx.hash       | 6 +++---
- package/freescale-imx/firmware-imx/firmware-imx.mk         | 2 +-
- package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash         | 8 ++++----
- package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk           | 4 ++--
- package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash         | 8 ++++----
- package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk           | 4 ++--
- package/freescale-imx/imx-sc-firmware/imx-sc-firmware.hash | 6 +++---
- package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk   | 2 +-
- package/freescale-imx/imx-seco/imx-seco.hash               | 6 +++---
- package/freescale-imx/imx-seco/imx-seco.mk                 | 2 +-
- package/freescale-imx/imx-vpu-hantro/imx-vpu-hantro.hash   | 6 +++---
- package/freescale-imx/imx-vpu-hantro/imx-vpu-hantro.mk     | 2 +-
- package/freescale-imx/imx-vpu/imx-vpu.hash                 | 6 +++---
- package/freescale-imx/imx-vpu/imx-vpu.mk                   | 2 +-
- package/imx-mkimage/imx-mkimage.hash                       | 2 +-
- package/imx-mkimage/imx-mkimage.mk                         | 2 +-
- 28 files changed, 63 insertions(+), 63 deletions(-)
-
+diff --git a/configs/freescale_imx8qxpmek_defconfig b/configs/freescale_imx8qxpmek_defconfig
+index 7c4a456..c57c38c 100644
+--- a/configs/freescale_imx8qxpmek_defconfig
++++ b/configs/freescale_imx8qxpmek_defconfig
+@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/fsl-imx8qxp-mek.dtb"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_5.4.24_2.1.0"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_5.4.47_2.2.0"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v8"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8qxp-mek"
+@@ -24,14 +24,14 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/imx-atf"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="rel_imx_5.4.24_2.1.0"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="rel_imx_5.4.47_2.2.0"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8qx"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/uboot-imx"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_5.4.24_2.1.0"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_5.4.47_2.2.0"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8qxp_mek"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
 -- 
 2.7.4
