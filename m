@@ -1,48 +1,70 @@
 From: Stephane Viau <stephane.viau@oss.nxp.com>
-Date: Thu, 24 Dec 2020 07:59:44 +0100
-Subject: [Buildroot] [PATCH 06/15] package/freescale-imx/imx-vpu: bump
- version to 5.4.39.3
-In-Reply-To: <1608793193-11843-1-git-send-email-stephane.viau@oss.nxp.com>
-References: <1608793193-11843-1-git-send-email-stephane.viau@oss.nxp.com>
-Message-ID: <1608793193-11843-7-git-send-email-stephane.viau@oss.nxp.com>
+Date: Thu, 24 Dec 2020 07:59:38 +0100
+Subject: [Buildroot] [PATCH 00/15] Bump NXP BSP components to 5.4.47_2.2.0
+Message-ID: <1608793193-11843-1-git-send-email-stephane.viau@oss.nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This version is aligned with 5.4.47_2.2.0 NXP Linux BSP.
+Hello all,
 
-Signed-off-by: Stephane Viau <stephane.viau@oss.nxp.com>
----
- package/freescale-imx/imx-vpu/imx-vpu.hash | 6 +++---
- package/freescale-imx/imx-vpu/imx-vpu.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Here is a patch set to bump freescale-imx configs and packages to match
+the latest publicly availaible Linux release, that is 5.4.47_2.2.0.
+Some are run-tested, others aren't... but all are build-tested.
 
-diff --git a/package/freescale-imx/imx-vpu/imx-vpu.hash b/package/freescale-imx/imx-vpu/imx-vpu.hash
-index 81ea35a..6ab6751 100644
---- a/package/freescale-imx/imx-vpu/imx-vpu.hash
-+++ b/package/freescale-imx/imx-vpu/imx-vpu.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  b7bb67b00daf436fd91a2760c2db375a962e2c919045ce8bf81bd54b95d999c5  imx-vpu-5.4.39.1.bin
--sha256  d55f024af2bfff714b90de596f6d0399124b999e8c18a86b13a3b507bae6f561  COPYING
--sha256  9665930f69c0b6f4a4c055d7fe2b8ee563e771efbc83892abb1955e61492cdf7  EULA
-+sha256  87cb799a57df654db29403cb74a75ca5185a1517022d3a4a16b8d69056c36127  imx-vpu-5.4.39.3.bin
-+sha256  69cbb76b3f10ac5a8c36f34df7bbdf50825815560c00a946fff2922365ef01a2  COPYING
-+sha256  a39da2e94bd8b99eaac4325633854620ea3a55145259c3a7748c610a80714cfc  EULA
-diff --git a/package/freescale-imx/imx-vpu/imx-vpu.mk b/package/freescale-imx/imx-vpu/imx-vpu.mk
-index e61b9f8..14a1a7a 100644
---- a/package/freescale-imx/imx-vpu/imx-vpu.mk
-+++ b/package/freescale-imx/imx-vpu/imx-vpu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IMX_VPU_VERSION = 5.4.39.1
-+IMX_VPU_VERSION = 5.4.39.3
- IMX_VPU_SITE = $(FREESCALE_IMX_SITE)
- IMX_VPU_SOURCE = imx-vpu-$(IMX_VPU_VERSION).bin
- 
+Enjoy!
+
+BR,
+Stephane.
+
+Stephane Viau (15):
+  package/freescale-imx/firmware-imx: bump version to 8.9
+  package/freescale-imx/imx-gpu-g2d: bump to version 6.4.3.p0.0
+  package/freescale-imx/imx-gpu-viv: bump version to 6.4.3.p0.0
+  package/freescale-imx/imx-sc-firmware: bump version to 1.6.0
+  package/freescale-imx/imx-seco: bump version to 3.7.1
+  package/freescale-imx/imx-vpu: bump version to 5.4.39.3
+  package/freescale-imx/imx-vpu-hantro: bump version to 1.19.0
+  package/imx-mkimage: bump to version rel_imx_5.4.47_2.2.0
+  configs/freescale_imx6*: bump BSP components to 5.4.47_2.2.0
+  configs/freescale_imx7dsabresd: bump BSP components to 5.4.47_2.2.0
+  configs/freescale_imx8mmevk: bump BSP components to 5.4.47_2.2.0
+  configs/freescale_imx8mnevk: bump BSP components to 5.4.47_2.2.0
+  configs/freescale_imx8mqevk: bump BSP components to 5.4.47_2.2.0
+  configs/freescale_imx8qmmek: bump BSP components to 5.4.47_2.2.0
+  configs/freescale_imx8qxpmek: bump BSP components to 5.4.47_2.2.0
+
+ configs/freescale_imx6dlsabreauto_defconfig                | 4 ++--
+ configs/freescale_imx6dlsabresd_defconfig                  | 4 ++--
+ configs/freescale_imx6qsabreauto_defconfig                 | 4 ++--
+ configs/freescale_imx6qsabresd_defconfig                   | 4 ++--
+ configs/freescale_imx6sxsabresd_defconfig                  | 4 ++--
+ configs/freescale_imx6ullevk_defconfig                     | 4 ++--
+ configs/freescale_imx7dsabresd_defconfig                   | 4 ++--
+ configs/freescale_imx8mmevk_defconfig                      | 6 +++---
+ configs/freescale_imx8mnevk_defconfig                      | 6 +++---
+ configs/freescale_imx8mqevk_defconfig                      | 6 +++---
+ configs/freescale_imx8qmmek_defconfig                      | 6 +++---
+ configs/freescale_imx8qxpmek_defconfig                     | 6 +++---
+ package/freescale-imx/firmware-imx/firmware-imx.hash       | 6 +++---
+ package/freescale-imx/firmware-imx/firmware-imx.mk         | 2 +-
+ package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash         | 8 ++++----
+ package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk           | 4 ++--
+ package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash         | 8 ++++----
+ package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk           | 4 ++--
+ package/freescale-imx/imx-sc-firmware/imx-sc-firmware.hash | 6 +++---
+ package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk   | 2 +-
+ package/freescale-imx/imx-seco/imx-seco.hash               | 6 +++---
+ package/freescale-imx/imx-seco/imx-seco.mk                 | 2 +-
+ package/freescale-imx/imx-vpu-hantro/imx-vpu-hantro.hash   | 6 +++---
+ package/freescale-imx/imx-vpu-hantro/imx-vpu-hantro.mk     | 2 +-
+ package/freescale-imx/imx-vpu/imx-vpu.hash                 | 6 +++---
+ package/freescale-imx/imx-vpu/imx-vpu.mk                   | 2 +-
+ package/imx-mkimage/imx-mkimage.hash                       | 2 +-
+ package/imx-mkimage/imx-mkimage.mk                         | 2 +-
+ 28 files changed, 63 insertions(+), 63 deletions(-)
+
 -- 
 2.7.4
