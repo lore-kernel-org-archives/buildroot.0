@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Dec 2020 09:42:00 +0100
-Subject: [Buildroot] [PATCH 1/1] package/mongodb: bump to version 4.2.11
-In-Reply-To: <20201221115849.294721-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 21 Dec 2020 12:58:49 +0100")
-References: <20201221115849.294721-1-fontaine.fabrice@gmail.com>
-Message-ID: <874kkbfvdz.fsf@dell.be.48ers.dk>
+Date: Thu, 24 Dec 2020 09:44:21 +0100
+Subject: [Buildroot] [PATCH 1/1] package/apitrace: disable unit tests
+In-Reply-To: <20201222104411.1250878-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 22 Dec 2020 11:44:11 +0100")
+References: <20201222104411.1250878-1-fontaine.fabrice@gmail.com>
+Message-ID: <87zh23egpm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,10 +13,19 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > https://docs.mongodb.com/master/release-notes/4.2-changelog/#id1
+ > This will avoid the following build failure with xtensa:
+ > [ 62%] Linking CXX executable ../../guids_test
+ > [ 62%] Building CXX object retrace/CMakeFiles/retrace_common.dir/retrace.cpp.o
+ > CMakeFiles/guids_test.dir/guids_test.cpp.o:(.debug_line+0xf7b): dangerous relocation: overflow after relaxation
+ > collect2: error: ld returned 1 exit status
+ > lib/guids/CMakeFiles/guids_test.dir/build.make:85: recipe for target 'guids_test' failed
+
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/8fea93a88bb34e98e391a048c3b996b45ebac803
+
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Committed to 2020.08.x and 2020.11.x, thanks.
+Committed to 2020.02.x, 2020.08.x and 2020.11.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
