@@ -1,72 +1,98 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Dec 2020 09:37:11 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/netsnmp: fix
- memory leak in IP-MIB when running without IPv6
-Message-ID: <20201224083318.46FCB888C4@busybox.osuosl.org>
+Date: Thu, 24 Dec 2020 09:34:02 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/mutt: fix
+ CVE-2020-28896
+Message-ID: <20201224083318.3AC4488490@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3f457f8323dd71a6f8fcfb45d0b9ec16748a06e6
+commit: https://git.buildroot.net/buildroot/commit/?id=b246d3450762f38ef4592db3b00a381f8298bf9d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-In a Linux system without IPv6 support (or booted with "ipv6.disable=1")
-file /proc/net/snmp6 is not present. If such file is not present an allocated
-memory is not freed. Memory leak occurs even without snmp queries.
+Mutt before 2.0.2 and NeoMutt before 2020-11-20 did not ensure that
+$ssl_force_tls was processed if an IMAP server's initial server response
+was invalid. The connection was not properly closed, and the code could
+continue attempting to authenticate. This could result in authentication
+credentials being exposed on an unencrypted connection, or to a
+machine-in-the-middle.
 
-Problem seen at least since netsnmp 5.7.3 (probably even v5.6.1).
-Patch backported from netsnmp 5.9, where the problem does not appear any more.
-
-Signed-off-by: Adam Wujek <dev_public@wujek.eu>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 5e6f6e074508ece2207b02545a8ede5a296978c9)
+(cherry picked from commit 89a9f74fa85a8f0e080328393a356181033f4ad9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-Linux-Fix-a-memory-leak-in-an-error-path.patch | 37 ++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
+ ...ection-is-closed-after-a-connection-error.patch | 48 ++++++++++++++++++++++
+ package/mutt/mutt.mk                               |  3 ++
+ 2 files changed, 51 insertions(+)
 
-diff --git a/package/netsnmp/0006-IP-MIB-Linux-Fix-a-memory-leak-in-an-error-path.patch b/package/netsnmp/0006-IP-MIB-Linux-Fix-a-memory-leak-in-an-error-path.patch
+diff --git a/package/mutt/0004-Ensure-IMAP-connection-is-closed-after-a-connection-error.patch b/package/mutt/0004-Ensure-IMAP-connection-is-closed-after-a-connection-error.patch
 new file mode 100644
-index 0000000000..fb68e175e5
+index 0000000000..7afc736085
 --- /dev/null
-+++ b/package/netsnmp/0006-IP-MIB-Linux-Fix-a-memory-leak-in-an-error-path.patch
-@@ -0,0 +1,37 @@
-+From 7c073e3a1b736689135fd2ed44ede5b83790bd37 Mon Sep 17 00:00:00 2001
-+From: Bart Van Assche <bvanassche@acm.org>
-+Date: Mon, 26 Aug 2019 18:32:08 -0700
-+Subject: IP-MIB, Linux: Fix a memory leak in an error path
++++ b/package/mutt/0004-Ensure-IMAP-connection-is-closed-after-a-connection-error.patch
+@@ -0,0 +1,48 @@
++From 04b06aaa3e0cc0022b9b01dbca2863756ebbf59a Mon Sep 17 00:00:00 2001
++From: Kevin McCarthy <kevin@8t8.us>
++Date: Mon, 16 Nov 2020 10:20:21 -0800
++Subject: [PATCH] Ensure IMAP connection is closed after a connection error.
 +
-+When a Linux system is booted with "ipv6.disable=1" in the kernel command
-+line, the file "/proc/net/snmp6" is not created. Fix the memory leak in
-+_systemstats_v6_load_systemstats() that is triggered with IPv6 disabled.
++During connection, if the server provided an illegal initial response,
++Mutt "bailed", but did not actually close the connection.  The calling
++code unfortunately relied on the connection status to decide to
++continue with authentication, instead of checking the "bail" return
++value.
 +
-+See also https://sourceforge.net/p/net-snmp/bugs/2976/.
++This could result in authentication credentials being sent over an
++unencrypted connection, without $ssl_force_tls being consulted.
 +
-+Reported-by: Mark E Rusk <marker55@users.sourceforge.net>
++Fix this by strictly closing the connection on any invalid response
++during connection.  The fix is intentionally small, to ease
++backporting.  A better fix would include removing the 'err_close_conn'
++label, and perhaps adding return value checking in the caller (though
++this change obviates the need for that).
++
++This addresses CVE-2020-28896.  Thanks to Gabriel Salles-Loustau for
++reporting the problem, and providing test cases to reproduce.
++
++[Retrieved from:
++https://gitlab.com/muttmua/mutt/-/commit/04b06aaa3e0cc0022b9b01dbca2863756ebbf59a]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
-+ agent/mibgroup/ip-mib/data_access/systemstats_linux.c | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
++ imap/imap.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/agent/mibgroup/ip-mib/data_access/systemstats_linux.c b/agent/mibgroup/ip-mib/data_access/systemstats_linux.c
-+index e28ff93..f68d122 100644
-+--- a/agent/mibgroup/ip-mib/data_access/systemstats_linux.c
-++++ b/agent/mibgroup/ip-mib/data_access/systemstats_linux.c
-+@@ -560,10 +560,12 @@ _systemstats_v6_load_systemstats(netsnmp_container* container, u_int load_flags)
-+      * try to open file. If we can't, that's ok - maybe the module hasn't
-+      * been loaded yet.
-+      */
-+-    if (!(devin = fopen(filename, "r"))) {
-++    devin = fopen(filename, "r");
-++    if (!devin) {
-+         DEBUGMSGTL(("access:systemstats",
-+                 "Failed to load Systemstats Table (linux1), cannot open %s\n",
-+                 filename));
-++        netsnmp_access_systemstats_entry_free(entry);
-+         return 0;
-+     }
-+     
++diff --git a/imap/imap.c b/imap/imap.c
++index b24e8a3f..b13dd54d 100644
++--- a/imap/imap.c
+++++ b/imap/imap.c
++@@ -561,9 +561,9 @@ int imap_open_connection (IMAP_DATA* idata)
++ 
++ #if defined(USE_SSL)
++ err_close_conn:
++-  imap_close_connection (idata);
++ #endif
++ bail:
+++  imap_close_connection (idata);
++   FREE (&idata->capstr);
++   return -1;
++ }
 +-- 
-+2.7.4
++GitLab
 +
+diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
+index 5d400f8b8c..21d27a11ad 100644
+--- a/package/mutt/mutt.mk
++++ b/package/mutt/mutt.mk
+@@ -16,6 +16,9 @@ MUTT_AUTORECONF = YES
+ # 0003-Prevent-possible-IMAP-MITM-via-PREAUTH-response.patch
+ MUTT_IGNORE_CVES += CVE-2020-14093
+ 
++# 0004-Ensure-IMAP-connection-is-closed-after-a-connection-error.patch
++MUTT_IGNORE_CVES += CVE-2020-28896
++
+ ifeq ($(BR2_PACKAGE_LIBICONV),y)
+ MUTT_DEPENDENCIES += libiconv
+ MUTT_CONF_OPTS += --enable-iconv
