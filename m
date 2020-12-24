@@ -1,62 +1,102 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 Dec 2020 12:50:26 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/wpewebkit:
- security bump to version 2.30.4
-Message-ID: <20201224113602.B74B688666@busybox.osuosl.org>
+Date: Thu, 24 Dec 2020 12:48:45 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/openldap:
+ security bump to version 2.4.56
+Message-ID: <20201224113602.AD6CB816C9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=253a40d5fb1f37553e81fbf3e55f7ed19fadd960
+commit: https://git.buildroot.net/buildroot/commit/?id=8e17ab88666d11294a96a96233affd0aadc4af5c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-This is a minor release which provides a fix for CVE-2020-13543.
+Fixes the following security issue:
 
-Full release notes:
+- CVE-2020-25692: A NULL pointer dereference was found in OpenLDAP server
+  and was fixed in openldap 2.4.55, during a request for renaming RDNs.  An
+  unauthenticated attacker could remotely crash the slapd process by sending
+  a specially crafted request, causing a Denial of Service.
 
-  https://wpewebkit.org/release/wpewebkit-2.30.4.html
+- CVE-2020-25709: Assertion failure in CSN normalization with invalid input
 
-A detailed security advisory can be found at:
+- CVE-2020-25710: Assertion failure in CSN normalization with invalid input
 
-  https://wpewebkit.org/security/WSA-2020-0009.html
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+[Peter: add CVE info]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 81a9e9064fbd7409b77a30fa5759690af62e5527)
+(cherry picked from commit 09a565d9408f47e219972b0a71f3cbe0d801225c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wpewebkit/wpewebkit.hash | 8 ++++----
- package/wpewebkit/wpewebkit.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/openldap/0001-fix_cross_strip.patch |  2 +-
+ package/openldap/0002-fix-bignum.patch      |  4 ++--
+ package/openldap/openldap.hash              | 10 +++++-----
+ package/openldap/openldap.mk                |  2 +-
+ 4 files changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
-index 3534abf0e4..42bd27f11d 100644
---- a/package/wpewebkit/wpewebkit.hash
-+++ b/package/wpewebkit/wpewebkit.hash
+diff --git a/package/openldap/0001-fix_cross_strip.patch b/package/openldap/0001-fix_cross_strip.patch
+index ed4964e44b..d9d6f9d505 100644
+--- a/package/openldap/0001-fix_cross_strip.patch
++++ b/package/openldap/0001-fix_cross_strip.patch
+@@ -44,7 +44,7 @@ diff -rupN openldap-2.4.40/clients/tools/Makefile.in openldap-2.4.40-br/clients/
+ diff -rupN openldap-2.4.40/configure.in openldap-2.4.40-br/configure.in
+ --- openldap-2.4.40/configure.in	2014-09-18 21:48:49.000000000 -0400
+ +++ openldap-2.4.40-br/configure.in	2015-01-16 15:50:48.874816786 -0500
+-@@ -669,6 +669,15 @@ if test -z "${AR}"; then
++@@ -668,6 +668,15 @@ if test -z "${AR}"; then
+  	fi
+  fi
+  
+diff --git a/package/openldap/0002-fix-bignum.patch b/package/openldap/0002-fix-bignum.patch
+index d3dc88fc37..159ea8e228 100644
+--- a/package/openldap/0002-fix-bignum.patch
++++ b/package/openldap/0002-fix-bignum.patch
+@@ -15,7 +15,7 @@ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ diff -durN openldap-2.4.40.orig/configure openldap-2.4.40/configure
+ --- openldap-2.4.40.orig/configure	2014-09-19 03:48:49.000000000 +0200
+ +++ openldap-2.4.40/configure	2015-01-25 18:44:54.216879362 +0100
+-@@ -23478,7 +23478,7 @@
++@@ -23431,7 +23431,7 @@
+  
+  	if test "$ac_cv_header_openssl_bn_h" = "yes" &&
+  		test "$ac_cv_header_openssl_crypto_h" = "yes" &&
+@@ -27,7 +27,7 @@ diff -durN openldap-2.4.40.orig/configure openldap-2.4.40/configure
+ diff -durN openldap-2.4.40.orig/configure.in openldap-2.4.40/configure.in
+ --- openldap-2.4.40.orig/configure.in	2014-09-19 03:48:49.000000000 +0200
+ +++ openldap-2.4.40/configure.in	2015-01-25 18:44:37.628676446 +0100
+-@@ -2367,7 +2367,7 @@
++@@ -2383,7 +2383,7 @@
+  	AC_CHECK_HEADERS(openssl/crypto.h)
+  	if test "$ac_cv_header_openssl_bn_h" = "yes" &&
+  		test "$ac_cv_header_openssl_crypto_h" = "yes" &&
+diff --git a/package/openldap/openldap.hash b/package/openldap/openldap.hash
+index 6790e8b7aa..4908f6e69e 100644
+--- a/package/openldap/openldap.hash
++++ b/package/openldap/openldap.hash
 @@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/wpewebkit-2.30.3.tar.xz.sums
--md5  75f6ef1819b182043a25b916272ebec6  wpewebkit-2.30.3.tar.xz
--sha1  2ed723f779513205449e0c5b7c080eb19d635aee  wpewebkit-2.30.3.tar.xz
--sha256  f2dfc1a6279810353f601bb9bd0d8ef671b41b38352d679b93d01631c2bf7b4b  wpewebkit-2.30.3.tar.xz
-+# From https://wpewebkit.org/releases/wpewebkit-2.30.4.tar.xz.sums
-+md5  d423a01ffb5be44e6ad59b2cfb9d6eb3  wpewebkit-2.30.4.tar.xz
-+sha1  2fdca7b888966ad2ed7d998bef52c9024dae063f  wpewebkit-2.30.4.tar.xz
-+sha256  1e521d85cf8cf344b9fd08eabad7a1d18a330fb7862a77eaf78d7d7b10d5f6ef  wpewebkit-2.30.4.tar.xz
- 
- # Hashes for license files:
- sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
-index 66f86edf4d..d3afdf0094 100644
---- a/package/wpewebkit/wpewebkit.mk
-+++ b/package/wpewebkit/wpewebkit.mk
+-# From https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.50.md5
+-md5  f9ed44ef373abed04c9e4c8586260f9e  openldap-2.4.50.tgz
+-# From https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.50.sha1
+-sha1  82f576e0d0d334e9e798d9de8936683546247bb9  openldap-2.4.50.tgz
++# From https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.56.md5
++md5  82a7dcf7aeaf95fdad16017c0ed9983a  openldap-2.4.56.tgz
++# From https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.56.sha1
++sha1  4c617b87bd50ef8d071e7deb7525af79b08d4910  openldap-2.4.56.tgz
+ # Locally computed
+-sha256  5cb57d958bf5c55a678c6a0f06821e0e5504d5a92e6a33240841fbca1db586b8  openldap-2.4.50.tgz
++sha256  25520e0363c93f3bcb89802a4aa3db33046206039436e0c7c9262db5a61115e0  openldap-2.4.56.tgz
+ sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
+diff --git a/package/openldap/openldap.mk b/package/openldap/openldap.mk
+index a9e71be595..e44c958c41 100644
+--- a/package/openldap/openldap.mk
++++ b/package/openldap/openldap.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WPEWEBKIT_VERSION = 2.30.3
-+WPEWEBKIT_VERSION = 2.30.4
- WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
- WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
- WPEWEBKIT_INSTALL_STAGING = YES
+-OPENLDAP_VERSION = 2.4.50
++OPENLDAP_VERSION = 2.4.56
+ OPENLDAP_SOURCE = openldap-$(OPENLDAP_VERSION).tgz
+ OPENLDAP_SITE = https://www.openldap.org/software/download/OpenLDAP/openldap-release
+ OPENLDAP_LICENSE = OpenLDAP Public License
