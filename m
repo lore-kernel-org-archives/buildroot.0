@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 25 Dec 2020 23:34:41 +0100
-Subject: [Buildroot] [PATCH 1/1] package/rhash: fix build failure due to
- gcc -v
-In-Reply-To: <20201203202853.616174-1-fontaine.fabrice@gmail.com>
-References: <20201203202853.616174-1-fontaine.fabrice@gmail.com>
-Message-ID: <20201225223441.GH1680670@scaer>
+Date: Fri, 25 Dec 2020 23:38:39 +0100
+Subject: [Buildroot] [PATCH v2,
+ 1/1] toolchain/toolchain-wrapper: fix gcc -v with relro
+In-Reply-To: <20201224101840.3428243-1-fontaine.fabrice@gmail.com>
+References: <20201224101840.3428243-1-fontaine.fabrice@gmail.com>
+Message-ID: <20201225223839.GI1680670@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,80 +13,66 @@ To: buildroot@busybox.net
 
 Fabrice, All,
 
-On 2020-12-03 21:28 +0100, Fabrice Fontaine spake thusly:
+On 2020-12-24 11:18 +0100, Fabrice Fontaine spake thusly:
+> rhash in version 1.4.0 with relro fails to build because gcc -v raises
+> the following build failure:
+> 
+> /data/buildroot-test/instance-1/output-1/host/mips64el-buildroot-linux-gnu/sysroot/soft-float/el/usr/lib64/Scrt1.o: In function `__start':
+> (.text+0x20): undefined reference to `main'
+> collect2: error: ld returned 1 exit status
+> Run result: 1
+> 
+> This build failure is raised because the toolchain-wrapper calls gcc with
+> -Wl,-z,relro and as a result gcc wrongly assumes that some linking must
+> be done.
+> 
 > Fixes:
 >  - http://autobuild.buildroot.org/results/8605c16cc28316954ce8b9dcc266974390c5da20
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Applied to master with the following changes:
+I have applied a tweaked version of your previous rhash fix, now.
 
-  - retain "$CC -v" as default, fallback to "$CC --version", in the hope
-    that it stands better chance with upstream
-  - write a commit log to explain the actual root-cause of the build
-    failure
+I still believe this change in the toolchain wrapper to be missing extra
+safeguards, as calling -v to do an actual link step is still valid. With
+your patch, the link would thus be done without -z relro, which is not
+correct.
 
-Thanks!
+But since the rhash build has now been fixed with a patch in rhash, I
+don;t think we need to investigate further in our toolchain wrapper for
+the time being. If there are more packages impacted, we can revisit
+later.
+
+Thanks you! :-)
 
 Regards,
 Yann E. MORIN.
 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Tested-by: Peter Seiderer <ps.report@gmx.net>
 > ---
->  ...01-configure-allow-cross-compilation.patch | 45 +++++++++++++++++++
->  1 file changed, 45 insertions(+)
->  create mode 100644 package/rhash/0001-configure-allow-cross-compilation.patch
+> Changes v1 -> v2 (after review of Peter Seiderer):
+>  - Fix typos in commit log and update comment in source code
 > 
-> diff --git a/package/rhash/0001-configure-allow-cross-compilation.patch b/package/rhash/0001-configure-allow-cross-compilation.patch
-> new file mode 100644
-> index 0000000000..e33353f8b3
-> --- /dev/null
-> +++ b/package/rhash/0001-configure-allow-cross-compilation.patch
-> @@ -0,0 +1,45 @@
-> +From 0605ddf795330c03ff52e993726de99a984cf2f4 Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Sat, 10 Oct 2020 11:07:39 +0200
-> +Subject: [PATCH] configure: allow cross-compilation
-> +
-> +Update configure to allow the user to pass a cross-compiler such as
-> +--cc=/home/fabrice/buildroot/output/host/bin/riscv64-buildroot-linux-uclibc-gcc
-> +
-> +First, use --version instead of -v to avoid a build failure and set
-> +cc_vendor to gnu if CC compiler contains gcc
-> +
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + configure | 8 ++++----
-> + 1 file changed, 4 insertions(+), 4 deletions(-)
-> +
-> +diff --git a/configure b/configure
-> +index 2783b85..c8e1ea7 100755
-> +--- a/configure
-> ++++ b/configure
-> +@@ -512,9 +512,9 @@ else
-> +   CC_TMP="$CC"
-> +   test -n "$OPT_CC" && OTHER_CC= || OTHER_CC="gcc cc"
-> +   for CC in "$CC_TMP" $OTHER_CC; do
-> +-    if run_cmd "$CC -v"; then
-> +-      cc_name_tmp=$($CC -v 2>&1 | tail -n 1 | cut -d ' ' -f 1)
-> +-      if test "$cc_name_tmp" = "gcc"; then
-> ++    if run_cmd "$CC --version"; then
-> ++      cc_name_tmp=$($CC --version 2>&1 | head -n 1 | cut -d ' ' -f 1)
-> ++      if echo "$cc_name_tmp" | grep -q "gcc"; then
-> +         cc_name=$cc_name_tmp
-> +         start_check "$CC version"
-> +         cc_vendor=gnu
-> +@@ -538,7 +538,7 @@ else
-> +         finish_check "$cc_name $cc_version"
-> +         break
-> +       fi
-> +-      if $CC -v 2>&1 | grep -q "clang"; then
-> ++      if $CC --version 2>&1 | grep -q "clang"; then
-> +         start_check "$CC version"
-> +         cc_vendor=clang
-> +         cc_version=$($CC -dumpversion 2>&1)
-> +-- 
-> +2.29.2
-> +
+>  toolchain/toolchain-wrapper.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
+> index 0fb6064b1c..2a7dd61729 100644
+> --- a/toolchain/toolchain-wrapper.c
+> +++ b/toolchain/toolchain-wrapper.c
+> @@ -453,10 +453,11 @@ int main(int argc, char **argv)
+>  			*cur++ = "-pie";
+>  	}
+>  #endif
+> -	/* Are we building the Linux Kernel or U-Boot? */
+> +	/* Are we building the Linux Kernel or U-Boot or displaying the programs invoked by the compiler? */
+>  	for (i = 1; i < argc; i++) {
+>  		if (!strcmp(argv[i], "-D__KERNEL__") ||
+> -		    !strcmp(argv[i], "-D__UBOOT__"))
+> +		    !strcmp(argv[i], "-D__UBOOT__") ||
+> +		    !strcmp(argv[i], "-v"))
+>  			break;
+>  	}
+>  	if (i == argc) {
 > -- 
 > 2.29.2
 > 
