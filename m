@@ -1,104 +1,101 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 25 Dec 2020 18:09:55 +0100
-Subject: [Buildroot] [PATCH v2,
- 1/1] toolchain/toolchain-wrapper: fix gcc -v with relro
-In-Reply-To: <20201224101840.3428243-1-fontaine.fabrice@gmail.com>
-References: <20201224101840.3428243-1-fontaine.fabrice@gmail.com>
-Message-ID: <20201225170955.GA1680670@scaer>
+Date: Fri, 25 Dec 2020 19:01:11 +0100
+Subject: [Buildroot] [PATCH] docker: add AppArmor support
+In-Reply-To: <dd83e231779b8daaeaa0a78d6686b80eeb49c12b.1608718340.git.stefan@agner.ch>
+References: <dd83e231779b8daaeaa0a78d6686b80eeb49c12b.1608718340.git.stefan@agner.ch>
+Message-ID: <20201225180111.GB1680670@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Stefan, All,
 
-On 2020-12-24 11:18 +0100, Fabrice Fontaine spake thusly:
-> rhash in version 1.4.0 with relro fails to build because gcc -v raises
-> the following build failure:
-> 
-> /data/buildroot-test/instance-1/output-1/host/mips64el-buildroot-linux-gnu/sysroot/soft-float/el/usr/lib64/Scrt1.o: In function `__start':
-> (.text+0x20): undefined reference to `main'
-> collect2: error: ld returned 1 exit status
-> Run result: 1
-> 
-> This build failure is raised because the toolchain-wrapper calls gcc with
-> -Wl,-z,relro and as a result gcc wrongly assumes that some linking must
-> be done.
+On 2020-12-23 11:13 +0100, Stefan Agner spake thusly:
+> From: Pascal Vizeli <pvizeli@syshack.ch>
 
-Although I do undesrstand the problem, I am not sure this is a good
-solution.
+So, does that mean that Pascal is the original author of that patch? If
+that is so, then you should have carried his authorship when propagating
+the patch. You can fix that by amending your commit:
 
-Indeed, it is perfectly legit to call gcc -v while doing an acutal
-compile or link:
+    $ git commit --amend --author="Pascal Vizeli <pvizeli@syshack.ch>"
 
-    $ echo 'main() { return 0; }' |gcc -v -Wl,-z,relro -o ess -x c -
+> Signed-off-by: Pascal Vizeli <pvizeli@syshack.ch>
+> Signed-off-by: Stefan Agner <stefan@agner.ch>
 
-Indeed, using -v is a good way to see the actual programs gcc calls in
-the various steps, and has already helped me debug some difficult
-issues...
+However, adding your SoB after theirs is perfect, thanks.
 
-So, I think we need to be a little bit smarter in how we detect whether
-an actual link is attempted. It is however not trivial to come up with
-such a heuristic.
+> ---
+>  package/docker-containerd/docker-containerd.mk | 5 +++++
+>  package/docker-engine/docker-engine.mk         | 5 +++++
+>  package/runc/runc.mk                           | 5 +++++
 
-But it might be simpler to "fix" rhash itself, with something like:
+Do we really need to add AppArmor in those three at the same time?
 
-    diff -durN rhash-1.4.0.orig/configure rhash-1.4.0/configure
-    --- rhash-1.4.0.orig/configure2020-07-14 21:35: 11.000000000 +0200
-    +++ rhash-1.4.0/configure2020-12-25 18:07:15.52 9581029 +0100
-    @@ -513,8 +513,13 @@
-       CC_TMP="$CC"
-       test -n "$OPT_CC" && OTHER_CC= || OTHER_CC="gcc cc"
-       for CC in "$CC_TMP" $OTHER_CC; do
-    +    cc_name_tmp=
-         if run_cmd "$CC -v"; then
-           cc_name_tmp=$($CC -v 2>&1 | tail -n 1 | cut -d ' ' -f 1)
-    +    elif run_cmd "$CC --version"; then
-    +      cc_name_tmp=$($CC --version 2>&1 | head -n 1 | cut -d ' ' -f 1)
-    +    fi
-    +    if test "${cc_name_tmp}"; then
-           if test "$cc_name_tmp" = "gcc"; then
-             cc_name=$cc_name_tmp
-             start_check "$CC version"
+Usually, we try to limit the changes to the minimal. i.e. one change per
+package, unless the change must be done at the same time (e.g. otherwise
+it fails to build or run).
 
-This should also be hopefully accpetable upstream (too bad they do not
-want to switch a common, well-known buildsystem, and that the cmake
-suppot has languished without any comment for more than a year now...)
+If the change must be done in one patch, the commit log should explain
+why.
+
+Care to resend, with proper authorship, and by either splitting the
+patch or adding the explanation in the commit log?
 
 Regards,
 Yann E. MORIN.
 
-> Fixes:
->  - http://autobuild.buildroot.org/results/8605c16cc28316954ce8b9dcc266974390c5da20
+>  3 files changed, 15 insertions(+)
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> Tested-by: Peter Seiderer <ps.report@gmx.net>
-> ---
-> Changes v1 -> v2 (after review of Peter Seiderer):
->  - Fix typos in commit log and update comment in source code
-> 
->  toolchain/toolchain-wrapper.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
-> index 0fb6064b1c..2a7dd61729 100644
-> --- a/toolchain/toolchain-wrapper.c
-> +++ b/toolchain/toolchain-wrapper.c
-> @@ -453,10 +453,11 @@ int main(int argc, char **argv)
->  			*cur++ = "-pie";
->  	}
->  #endif
-> -	/* Are we building the Linux Kernel or U-Boot? */
-> +	/* Are we building the Linux Kernel or U-Boot or displaying the programs invoked by the compiler? */
->  	for (i = 1; i < argc; i++) {
->  		if (!strcmp(argv[i], "-D__KERNEL__") ||
-> -		    !strcmp(argv[i], "-D__UBOOT__"))
-> +		    !strcmp(argv[i], "-D__UBOOT__") ||
-> +		    !strcmp(argv[i], "-v"))
->  			break;
->  	}
->  	if (i == argc) {
+> diff --git a/package/docker-containerd/docker-containerd.mk b/package/docker-containerd/docker-containerd.mk
+> index d9a0eb28a6..c68e3818a8 100644
+> --- a/package/docker-containerd/docker-containerd.mk
+> +++ b/package/docker-containerd/docker-containerd.mk
+> @@ -18,6 +18,11 @@ DOCKER_CONTAINERD_BUILD_TARGETS = cmd/ctr cmd/containerd cmd/containerd-shim
+>  
+>  DOCKER_CONTAINERD_INSTALL_BINS = containerd containerd-shim
+>  
+> +ifeq ($(BR2_PACKAGE_LIBAPPARMOR),y)
+> +DOCKER_CONTAINERD_DEPENDENCIES += libapparmor
+> +DOCKER_CONTAINERD_TAGS += apparmor
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
+>  DOCKER_CONTAINERD_DEPENDENCIES += libseccomp host-pkgconf
+>  DOCKER_CONTAINERD_TAGS += seccomp
+> diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+> index 8cedf307ba..7f898680b7 100644
+> --- a/package/docker-engine/docker-engine.mk
+> +++ b/package/docker-engine/docker-engine.mk
+> @@ -20,6 +20,11 @@ DOCKER_ENGINE_LDFLAGS = \
+>  DOCKER_ENGINE_TAGS = cgo exclude_graphdriver_zfs autogen
+>  DOCKER_ENGINE_BUILD_TARGETS = cmd/dockerd
+>  
+> +ifeq ($(BR2_PACKAGE_LIBAPPARMOR),y)
+> +DOCKER_ENGINE_DEPENDENCIES += libapparmor
+> +DOCKER_ENGINE_TAGS += apparmor
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
+>  DOCKER_ENGINE_TAGS += seccomp
+>  DOCKER_ENGINE_DEPENDENCIES += libseccomp
+> diff --git a/package/runc/runc.mk b/package/runc/runc.mk
+> index 3d177d23d5..c559244e83 100644
+> --- a/package/runc/runc.mk
+> +++ b/package/runc/runc.mk
+> @@ -12,6 +12,11 @@ RUNC_LICENSE_FILES = LICENSE
+>  RUNC_LDFLAGS = -X main.gitCommit=$(RUNC_VERSION)
+>  RUNC_TAGS = cgo static_build
+>  
+> +ifeq ($(BR2_PACKAGE_LIBAPPARMOR),y)
+> +RUNC_DEPENDENCIES += libapparmor
+> +RUNC_TAGS += apparmor
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
+>  RUNC_TAGS += seccomp
+>  RUNC_DEPENDENCIES += libseccomp host-pkgconf
 > -- 
 > 2.29.2
 > 
