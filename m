@@ -1,65 +1,129 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 25 Dec 2020 17:03:14 +0100
-Subject: [Buildroot] [PATCH 1/1] pkg-meson: Force-disable binary
- stripping
-In-Reply-To: <20201225121600.2805074-1-glex.spb@gmail.com>
-References: <20201225121600.2805074-1-glex.spb@gmail.com>
-Message-ID: <20201225160314.GB1640183@scaer>
+Date: Fri, 25 Dec 2020 17:25:45 +0100
+Subject: [Buildroot] [PATCH] package/ninja: drop workarounds for cmake-3.10
+Message-ID: <20201225162545.1681288-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gleb, All,
+Now that we require cmake-3.15, whicj is what upstream ninja requires,
+we can drop the workarounds we carry to build with cmake-3.10.
 
-On 2020-12-25 12:15 +0000, Gleb Mazovetskiy spake thusly:
-> In buildroot, stripping is configured and implemented globally via `BR2_STRIP_strip`.
-> 
-> Signed-off-by: Gleb Mazovetskiy <glex.spb@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Peter Seiderer <ps.report@gmx.net>
+Cc: Yegor Yefremov <yegorslists@googlemail.com>
+Cc: Philippe REYNES <philippe.reynes@softathome.com>
+---
+ ...01-set-minimum-cmake-version-to-3.10.patch | 32 ----------
+ .../0003-CMake-fix-object-library-usage.patch | 59 -------------------
+ 2 files changed, 91 deletions(-)
+ delete mode 100644 package/ninja/0001-set-minimum-cmake-version-to-3.10.patch
+ delete mode 100644 package/ninja/0003-CMake-fix-object-library-usage.patch
 
-Applied to master, after expanding the commit log, and switching the
-host variant to stripping.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/pkg-meson.mk | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-> index 3a34ba703b..e134885d74 100644
-> --- a/package/pkg-meson.mk
-> +++ b/package/pkg-meson.mk
-> @@ -87,6 +87,7 @@ define $(2)_CONFIGURE_CMDS
->  		--default-library=$(if $(BR2_STATIC_LIBS),static,shared) \
->  		--buildtype=$(if $(BR2_ENABLE_DEBUG),debug,release) \
->  		--cross-file=$$($$(PKG)_SRCDIR)/build/cross-compilation.conf \
-> +		-Dstrip=false \
->  		-Dbuild.pkg_config_path=$$(HOST_DIR)/lib/pkgconfig \
->  		$$($$(PKG)_CONF_OPTS) \
->  		$$($$(PKG)_SRCDIR) $$($$(PKG)_SRCDIR)/build
-> @@ -105,6 +106,7 @@ define $(2)_CONFIGURE_CMDS
->  		--localstatedir=$$(HOST_DIR)/var \
->  		--default-library=shared \
->  		--buildtype=release \
-> +		-Dstrip=false \
->  		$$($$(PKG)_CONF_OPTS) \
->  		$$($$(PKG)_SRCDIR) $$($$(PKG)_SRCDIR)/build
->  endef
-> -- 
-> 2.27.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/ninja/0001-set-minimum-cmake-version-to-3.10.patch b/package/ninja/0001-set-minimum-cmake-version-to-3.10.patch
+deleted file mode 100644
+index e53a136a94..0000000000
+--- a/package/ninja/0001-set-minimum-cmake-version-to-3.10.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From 386fa849157dabde42ab39de7acb31750956490c Mon Sep 17 00:00:00 2001
+-From: Adam Duskett <aduskett@gmail.com>
+-Date: Mon, 3 Feb 2020 06:21:57 -0800
+-Subject: [PATCH] set minimum cmake version to 3.10
+-
+-The CMakeLists.txt file uses the CMP0091 which is an MSVC runtime library flag
+-abstraction macro.
+-
+-Because we are not building ninja for Microsoft, it is safe to remove this
+-macro and set the minimum version to 3.10.
+-
+-Signed-off-by: Adam Duskett <aduskett@gmail.com>
+-[Rebased for ninja-1.10.2 - CMP0091 usage was removed upstream by
+-https://github.com/ninja-build/ninja/commit/e6f5bcffb3c561d228d88ff26edab26575b7d520]
+-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+----
+- CMakeLists.txt | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 7f03c35..4b61479 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -1,4 +1,4 @@
+--cmake_minimum_required(VERSION 3.15)
+-+cmake_minimum_required(VERSION 3.10)
+- 
+- include(CheckIncludeFileCXX)
+- include(CheckIPOSupported)
+--- 
+-2.29.2
+-
+diff --git a/package/ninja/0003-CMake-fix-object-library-usage.patch b/package/ninja/0003-CMake-fix-object-library-usage.patch
+deleted file mode 100644
+index 9b9fe506a4..0000000000
+--- a/package/ninja/0003-CMake-fix-object-library-usage.patch
++++ /dev/null
+@@ -1,59 +0,0 @@
+-From 17539ae9d09ded695167911f9e3ec0cf4bc9fed9 Mon Sep 17 00:00:00 2001
+-From: Yegor Yefremov <yegorslists@googlemail.com>
+-Date: Wed, 5 Feb 2020 12:28:44 +0100
+-Subject: [PATCH] CMake: fix object library usage
+-
+-Object libraries cannot be use in target_link_libraries() command
+-as they are no normal binary files like *.a or *.so but a collection
+-of object files.
+-
+-See add_library() definition for details.
+-
+-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+-[Rebased for for ninja-1.10.2]
+-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+----
+- CMakeLists.txt | 9 ++++-----
+- 1 file changed, 4 insertions(+), 5 deletions(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 4b61479..3701f3a 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -132,8 +132,7 @@ if(CMAKE_SYSTEM_NAME STREQUAL "OS400" OR CMAKE_SYSTEM_NAME STREQUAL "AIX")
+- endif()
+- 
+- # Main executable is library plus main() function.
+--add_executable(ninja src/ninja.cc)
+--target_link_libraries(ninja PRIVATE libninja libninja-re2c)
+-+add_executable(ninja src/ninja.cc $<TARGET_OBJECTS:libninja> $<TARGET_OBJECTS:libninja-re2c>)
+- 
+- # Adds browse mode into the ninja binary if it's supported by the host platform.
+- if(platform_supports_ninja_browse)
+-@@ -183,11 +182,12 @@ if(BUILD_TESTING)
+-     src/subprocess_test.cc
+-     src/test.cc
+-     src/util_test.cc
+-+    $<TARGET_OBJECTS:libninja>
+-+    $<TARGET_OBJECTS:libninja-re2c>
+-   )
+-   if(WIN32)
+-     target_sources(ninja_test PRIVATE src/includes_normalize_test.cc src/msvc_helper_test.cc)
+-   endif()
+--  target_link_libraries(ninja_test PRIVATE libninja libninja-re2c)
+- 
+-   foreach(perftest
+-     build_log_perftest
+-@@ -197,8 +197,7 @@ if(BUILD_TESTING)
+-     hash_collision_bench
+-     manifest_parser_perftest
+-   )
+--    add_executable(${perftest} src/${perftest}.cc)
+--    target_link_libraries(${perftest} PRIVATE libninja libninja-re2c)
+-+    add_executable(${perftest} src/${perftest}.cc $<TARGET_OBJECTS:libninja> $<TARGET_OBJECTS:libninja-re2c>)
+-   endforeach()
+- 
+-   if(CMAKE_SYSTEM_NAME STREQUAL "AIX" AND CMAKE_SIZEOF_VOID_P EQUAL 4)
+--- 
+-2.29.2
+-
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.25.1
