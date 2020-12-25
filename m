@@ -1,144 +1,116 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 25 Dec 2020 18:07:21 +0100
-Subject: [Buildroot] [PATCH] package/ninja: drop workarounds for
- cmake-3.10
-In-Reply-To: <20201225162545.1681288-1-yann.morin.1998@free.fr>
-References: <20201225162545.1681288-1-yann.morin.1998@free.fr>
-Message-ID: <CAGm1_kt0Ayu9G+=AJEvYWpBr45hD7XQUxZpENKt-zydg8SPM=Q@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 25 Dec 2020 18:09:55 +0100
+Subject: [Buildroot] [PATCH v2,
+ 1/1] toolchain/toolchain-wrapper: fix gcc -v with relro
+In-Reply-To: <20201224101840.3428243-1-fontaine.fabrice@gmail.com>
+References: <20201224101840.3428243-1-fontaine.fabrice@gmail.com>
+Message-ID: <20201225170955.GA1680670@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, all,
+Fabrice, All,
 
-On Fri, Dec 25, 2020 at 5:25 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> Now that we require cmake-3.15, whicj is what upstream ninja requires,
+On 2020-12-24 11:18 +0100, Fabrice Fontaine spake thusly:
+> rhash in version 1.4.0 with relro fails to build because gcc -v raises
+> the following build failure:
+> 
+> /data/buildroot-test/instance-1/output-1/host/mips64el-buildroot-linux-gnu/sysroot/soft-float/el/usr/lib64/Scrt1.o: In function `__start':
+> (.text+0x20): undefined reference to `main'
+> collect2: error: ld returned 1 exit status
+> Run result: 1
+> 
+> This build failure is raised because the toolchain-wrapper calls gcc with
+> -Wl,-z,relro and as a result gcc wrongly assumes that some linking must
+> be done.
 
-s/whicj/which
+Although I do undesrstand the problem, I am not sure this is a good
+solution.
 
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Indeed, it is perfectly legit to call gcc -v while doing an acutal
+compile or link:
 
-Yegor
+    $ echo 'main() { return 0; }' |gcc -v -Wl,-z,relro -o ess -x c -
 
-> we can drop the workarounds we carry to build with cmake-3.10.
->
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Peter Seiderer <ps.report@gmx.net>
-> Cc: Yegor Yefremov <yegorslists@googlemail.com>
-> Cc: Philippe REYNES <philippe.reynes@softathome.com>
+Indeed, using -v is a good way to see the actual programs gcc calls in
+the various steps, and has already helped me debug some difficult
+issues...
+
+So, I think we need to be a little bit smarter in how we detect whether
+an actual link is attempted. It is however not trivial to come up with
+such a heuristic.
+
+But it might be simpler to "fix" rhash itself, with something like:
+
+    diff -durN rhash-1.4.0.orig/configure rhash-1.4.0/configure
+    --- rhash-1.4.0.orig/configure2020-07-14 21:35: 11.000000000 +0200
+    +++ rhash-1.4.0/configure2020-12-25 18:07:15.52 9581029 +0100
+    @@ -513,8 +513,13 @@
+       CC_TMP="$CC"
+       test -n "$OPT_CC" && OTHER_CC= || OTHER_CC="gcc cc"
+       for CC in "$CC_TMP" $OTHER_CC; do
+    +    cc_name_tmp=
+         if run_cmd "$CC -v"; then
+           cc_name_tmp=$($CC -v 2>&1 | tail -n 1 | cut -d ' ' -f 1)
+    +    elif run_cmd "$CC --version"; then
+    +      cc_name_tmp=$($CC --version 2>&1 | head -n 1 | cut -d ' ' -f 1)
+    +    fi
+    +    if test "${cc_name_tmp}"; then
+           if test "$cc_name_tmp" = "gcc"; then
+             cc_name=$cc_name_tmp
+             start_check "$CC version"
+
+This should also be hopefully accpetable upstream (too bad they do not
+want to switch a common, well-known buildsystem, and that the cmake
+suppot has languished without any comment for more than a year now...)
+
+Regards,
+Yann E. MORIN.
+
+> Fixes:
+>  - http://autobuild.buildroot.org/results/8605c16cc28316954ce8b9dcc266974390c5da20
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Tested-by: Peter Seiderer <ps.report@gmx.net>
 > ---
->  ...01-set-minimum-cmake-version-to-3.10.patch | 32 ----------
->  .../0003-CMake-fix-object-library-usage.patch | 59 -------------------
->  2 files changed, 91 deletions(-)
->  delete mode 100644 package/ninja/0001-set-minimum-cmake-version-to-3.10.patch
->  delete mode 100644 package/ninja/0003-CMake-fix-object-library-usage.patch
->
-> diff --git a/package/ninja/0001-set-minimum-cmake-version-to-3.10.patch b/package/ninja/0001-set-minimum-cmake-version-to-3.10.patch
-> deleted file mode 100644
-> index e53a136a94..0000000000
-> --- a/package/ninja/0001-set-minimum-cmake-version-to-3.10.patch
-> +++ /dev/null
-> @@ -1,32 +0,0 @@
-> -From 386fa849157dabde42ab39de7acb31750956490c Mon Sep 17 00:00:00 2001
-> -From: Adam Duskett <aduskett@gmail.com>
-> -Date: Mon, 3 Feb 2020 06:21:57 -0800
-> -Subject: [PATCH] set minimum cmake version to 3.10
-> -
-> -The CMakeLists.txt file uses the CMP0091 which is an MSVC runtime library flag
-> -abstraction macro.
-> -
-> -Because we are not building ninja for Microsoft, it is safe to remove this
-> -macro and set the minimum version to 3.10.
-> -
-> -Signed-off-by: Adam Duskett <aduskett@gmail.com>
-> -[Rebased for ninja-1.10.2 - CMP0091 usage was removed upstream by
-> -https://github.com/ninja-build/ninja/commit/e6f5bcffb3c561d228d88ff26edab26575b7d520]
-> -Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ----
-> - CMakeLists.txt | 2 +-
-> - 1 file changed, 1 insertion(+), 1 deletion(-)
-> -
-> -diff --git a/CMakeLists.txt b/CMakeLists.txt
-> -index 7f03c35..4b61479 100644
-> ---- a/CMakeLists.txt
-> -+++ b/CMakeLists.txt
-> -@@ -1,4 +1,4 @@
-> --cmake_minimum_required(VERSION 3.15)
-> -+cmake_minimum_required(VERSION 3.10)
-> -
-> - include(CheckIncludeFileCXX)
-> - include(CheckIPOSupported)
-> ---
-> -2.29.2
-> -
-> diff --git a/package/ninja/0003-CMake-fix-object-library-usage.patch b/package/ninja/0003-CMake-fix-object-library-usage.patch
-> deleted file mode 100644
-> index 9b9fe506a4..0000000000
-> --- a/package/ninja/0003-CMake-fix-object-library-usage.patch
-> +++ /dev/null
-> @@ -1,59 +0,0 @@
-> -From 17539ae9d09ded695167911f9e3ec0cf4bc9fed9 Mon Sep 17 00:00:00 2001
-> -From: Yegor Yefremov <yegorslists@googlemail.com>
-> -Date: Wed, 5 Feb 2020 12:28:44 +0100
-> -Subject: [PATCH] CMake: fix object library usage
-> -
-> -Object libraries cannot be use in target_link_libraries() command
-> -as they are no normal binary files like *.a or *.so but a collection
-> -of object files.
-> -
-> -See add_library() definition for details.
-> -
-> -Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> -[Rebased for for ninja-1.10.2]
-> -Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ----
-> - CMakeLists.txt | 9 ++++-----
-> - 1 file changed, 4 insertions(+), 5 deletions(-)
-> -
-> -diff --git a/CMakeLists.txt b/CMakeLists.txt
-> -index 4b61479..3701f3a 100644
-> ---- a/CMakeLists.txt
-> -+++ b/CMakeLists.txt
-> -@@ -132,8 +132,7 @@ if(CMAKE_SYSTEM_NAME STREQUAL "OS400" OR CMAKE_SYSTEM_NAME STREQUAL "AIX")
-> - endif()
-> -
-> - # Main executable is library plus main() function.
-> --add_executable(ninja src/ninja.cc)
-> --target_link_libraries(ninja PRIVATE libninja libninja-re2c)
-> -+add_executable(ninja src/ninja.cc $<TARGET_OBJECTS:libninja> $<TARGET_OBJECTS:libninja-re2c>)
-> -
-> - # Adds browse mode into the ninja binary if it's supported by the host platform.
-> - if(platform_supports_ninja_browse)
-> -@@ -183,11 +182,12 @@ if(BUILD_TESTING)
-> -     src/subprocess_test.cc
-> -     src/test.cc
-> -     src/util_test.cc
-> -+    $<TARGET_OBJECTS:libninja>
-> -+    $<TARGET_OBJECTS:libninja-re2c>
-> -   )
-> -   if(WIN32)
-> -     target_sources(ninja_test PRIVATE src/includes_normalize_test.cc src/msvc_helper_test.cc)
-> -   endif()
-> --  target_link_libraries(ninja_test PRIVATE libninja libninja-re2c)
-> -
-> -   foreach(perftest
-> -     build_log_perftest
-> -@@ -197,8 +197,7 @@ if(BUILD_TESTING)
-> -     hash_collision_bench
-> -     manifest_parser_perftest
-> -   )
-> --    add_executable(${perftest} src/${perftest}.cc)
-> --    target_link_libraries(${perftest} PRIVATE libninja libninja-re2c)
-> -+    add_executable(${perftest} src/${perftest}.cc $<TARGET_OBJECTS:libninja> $<TARGET_OBJECTS:libninja-re2c>)
-> -   endforeach()
-> -
-> -   if(CMAKE_SYSTEM_NAME STREQUAL "AIX" AND CMAKE_SIZEOF_VOID_P EQUAL 4)
-> ---
-> -2.29.2
-> -
-> --
-> 2.25.1
->
+> Changes v1 -> v2 (after review of Peter Seiderer):
+>  - Fix typos in commit log and update comment in source code
+> 
+>  toolchain/toolchain-wrapper.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
+> index 0fb6064b1c..2a7dd61729 100644
+> --- a/toolchain/toolchain-wrapper.c
+> +++ b/toolchain/toolchain-wrapper.c
+> @@ -453,10 +453,11 @@ int main(int argc, char **argv)
+>  			*cur++ = "-pie";
+>  	}
+>  #endif
+> -	/* Are we building the Linux Kernel or U-Boot? */
+> +	/* Are we building the Linux Kernel or U-Boot or displaying the programs invoked by the compiler? */
+>  	for (i = 1; i < argc; i++) {
+>  		if (!strcmp(argv[i], "-D__KERNEL__") ||
+> -		    !strcmp(argv[i], "-D__UBOOT__"))
+> +		    !strcmp(argv[i], "-D__UBOOT__") ||
+> +		    !strcmp(argv[i], "-v"))
+>  			break;
+>  	}
+>  	if (i == argc) {
+> -- 
+> 2.29.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
