@@ -1,68 +1,60 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 25 Dec 2020 16:32:32 +0100
+Date: Fri, 25 Dec 2020 16:39:00 +0100
 Subject: [Buildroot] [PATCH 1/1] support/dependencies: set cmake version
- min to 3.15
-In-Reply-To: <20201015054600.90183-1-fontaine.fabrice@gmail.com>
-References: <20201015054600.90183-1-fontaine.fabrice@gmail.com>
-Message-ID: <20201225153232.GN3188@scaer>
+ min to 3.15.3
+In-Reply-To: <20200428054352.110007-1-james.hilliard1@gmail.com>
+References: <20200428054352.110007-1-james.hilliard1@gmail.com>
+Message-ID: <20201225153900.GA1640183@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+James, All,
 
-On 2020-10-15 07:46 +0200, Fabrice Fontaine spake thusly:
-> quazip requires cmake 3.15 since version 1.0 and
-> https://github.com/stachenov/quazip/commit/89e7c201f0215032d347eef6fc0c671a1845738b
-> https://github.com/stachenov/quazip/commit/818adc82246cefffa2e8851534016cf1db349da7
-> 
-> The rationale for this requirement is that "default locations for the
-> install(TARGETS command based on the GNUInstallDirs package were only
-> added in 3.14" and "3.15 is not that much of a difference from 3.14 and
-> it introduced a lot of useful UI improvements.":
-> https://github.com/stachenov/quazip/issues/82
+Sorry to come back to that one so late...
+
+On 2020-04-27 23:43 -0600, James Hilliard spake thusly:
+> This is required by uvw.
 > 
 > Fixes:
->  - http://autobuild.buildroot.org/results/5d848a46109aef448ea1d1b857a500d9461dc2d9
+> http://autobuild.buildroot.net/results/ab6/ab6954a65fd6d43c0674cb7a38a941102cb0dfe3/build-end.log
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-I was not too keen on applying this bump, because that is going to
-increas the build quite quite a bit on older distros...
+Following the discussion on this thread back at the time, it turned out
+that the real minimum version was in fact 3.13, not 3.15, and it still
+is, but I can't see a v2 of that patch changing to just 3.13.
 
-However, there is not much we can do against upstream's will.
-Furthermore, we can only count on more packages requiring a newer cmake
-version as tiem passes, so bumping the requirement is inevitable.
-I've added a note to that effect in the commit log, and applied to
-master, thanks.
+Furthermore, I've now applied another, nore recent, patch by Fabrice,
+who provided a better commit log at explaining another good reason to
+bump to 3.15.
+
+Thanks!
 
 Regards,
 Yann E. MORIN.
 
 > ---
->  support/dependencies/check-host-cmake.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  support/dependencies/check-host-cmake.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
 > diff --git a/support/dependencies/check-host-cmake.mk b/support/dependencies/check-host-cmake.mk
-> index 01f38da376..e1bbcd62c8 100644
+> index 01f38da376..b0a704c0f2 100644
 > --- a/support/dependencies/check-host-cmake.mk
 > +++ b/support/dependencies/check-host-cmake.mk
-> @@ -1,9 +1,9 @@
-> -# Set this to either 3.10 or higher, depending on the highest minimum
-> +# Set this to either 3.15 or higher, depending on the highest minimum
->  # version required by any of the packages bundled in Buildroot. If a
+> @@ -3,7 +3,7 @@
 >  # package is bumped or a new one added, and it requires a higher
 >  # version, our cmake infra will catch it and build its own.
 >  #
 > -BR2_CMAKE_VERSION_MIN = 3.10
-> +BR2_CMAKE_VERSION_MIN = 3.15
+> +BR2_CMAKE_VERSION_MIN = 3.15.3
 >  
 >  BR2_CMAKE_CANDIDATES ?= cmake cmake3
 >  BR2_CMAKE ?= $(call suitable-host-package,cmake,\
 > -- 
-> 2.28.0
+> 2.20.1
 > 
 > _______________________________________________
 > buildroot mailing list
