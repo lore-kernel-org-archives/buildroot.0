@@ -1,43 +1,40 @@
-From: Stephane Viau (OSS) <stephane.viau@oss.nxp.com>
-Date: Fri, 25 Dec 2020 07:55:43 +0000
-Subject: [Buildroot] [PATCH 00/15] Bump NXP BSP components to
- 5.4.47_2.2.0
-In-Reply-To: <X+R2rtZz0sZ+UuOl@p1g2>
-References: <1608793193-11843-1-git-send-email-stephane.viau@oss.nxp.com>,
- <X+R2rtZz0sZ+UuOl@p1g2>
-Message-ID: <AM0PR04MB452945618663AF85CEC1D40FA7DC0@AM0PR04MB4529.eurprd04.prod.outlook.com>
+From: Gleb Mazovetskiy <glex.spb@gmail.com>
+Date: Fri, 25 Dec 2020 10:54:06 +0000
+Subject: [Buildroot] [PATCH 1/1] pkg-meson: Strip binaries on install
+Message-ID: <20201225105407.2796089-1-glex.spb@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->
->Hi Stephane,
+Strips binaries on install by adding `-Dstrip=true` to the default
+configuration options.
 
-Hi Gary,
+Signed-off-by: Gleb Mazovetskiy <glex.spb@gmail.com>
+---
+ package/pkg-meson.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
->> Hello all,
->> 
->> Here is a patch set to bump freescale-imx configs and packages to match
->> the latest publicly availaible Linux release, that is 5.4.47_2.2.0.
->> Some are run-tested, others aren't... but all are build-tested.
->Thanks you for this series. I'm wondering why you haven't used latest
->5.4.70_2.3.0 release from NXP? [1]
-
-Yeah, I meant to send these out a while ago (when 5.4.70_2.3.0 was not available yet)...
-
->This new release is a GA for all platforms including i.MX 8M Plus which
->would be nice to have in BR.
->Let me know if you can respin with latest packages?
-
-Will try and do this in the coming days.
-
-BR,
-Stephane.
-
->
->Regards,
->Gary
->
->[1] https://source.codeaurora.org/external/imx/meta-imx/tree/?h=zeus-5.4.70-2.3.0
+diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+index 3a34ba703b..7890219b20 100644
+--- a/package/pkg-meson.mk
++++ b/package/pkg-meson.mk
+@@ -88,6 +88,7 @@ define $(2)_CONFIGURE_CMDS
+ 		--buildtype=$(if $(BR2_ENABLE_DEBUG),debug,release) \
+ 		--cross-file=$$($$(PKG)_SRCDIR)/build/cross-compilation.conf \
+ 		-Dbuild.pkg_config_path=$$(HOST_DIR)/lib/pkgconfig \
++		-Dstrip=true \
+ 		$$($$(PKG)_CONF_OPTS) \
+ 		$$($$(PKG)_SRCDIR) $$($$(PKG)_SRCDIR)/build
+ endef
+@@ -105,6 +106,7 @@ define $(2)_CONFIGURE_CMDS
+ 		--localstatedir=$$(HOST_DIR)/var \
+ 		--default-library=shared \
+ 		--buildtype=release \
++		-Dstrip=true \
+ 		$$($$(PKG)_CONF_OPTS) \
+ 		$$($$(PKG)_SRCDIR) $$($$(PKG)_SRCDIR)/build
+ endef
+-- 
+2.27.0
