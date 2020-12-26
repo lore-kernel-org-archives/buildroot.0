@@ -1,31 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 26 Dec 2020 18:22:06 +0100
-Subject: [Buildroot] [PATCH] package/refpolicy: bump to 2.20200818
-In-Reply-To: <20201223105029.3520409-1-atenart@kernel.org>
-References: <20201223105029.3520409-1-atenart@kernel.org>
-Message-ID: <20201226182206.48145a95@windsurf.home>
+Date: Sat, 26 Dec 2020 18:22:22 +0100
+Subject: [Buildroot] [git commit] package/mutt: fix activation of openssl on
+ imap
+Message-ID: <20201226170551.382F881480@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 23 Dec 2020 11:50:29 +0100
-Antoine Tenart <atenart@kernel.org> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=dc1ec5b78bb9cc6ccc1ffb7367eb8ce68dc04fa8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Changelog:
-> https://github.com/SELinuxProject/refpolicy/releases/tag/RELEASE_2_20200818
-> 
-> Signed-off-by: Antoine Tenart <atenart@kernel.org>
-> ---
->  package/refpolicy/refpolicy.hash | 2 +-
->  package/refpolicy/refpolicy.mk   | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
+Activation of openssl for imap is broken since commit
+0fcd010a2db771c259224ad1d025fb4c5a9baf3b because of the following typo:
+BR2_PACKAGET_MUTT_IMAP
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/mutt/mutt.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
+index 58c80d445d..cc4b5f56b4 100644
+--- a/package/mutt/mutt.mk
++++ b/package/mutt/mutt.mk
+@@ -43,7 +43,7 @@ MUTT_CONF_OPTS += --disable-pop
+ endif
+ 
+ # SSL support is only used by imap or pop3 module
+-ifneq ($(BR2_PACKAGET_MUTT_IMAP)$(BR2_PACKAGE_MUTT_POP3),)
++ifneq ($(BR2_PACKAGE_MUTT_IMAP)$(BR2_PACKAGE_MUTT_POP3),)
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ MUTT_DEPENDENCIES += openssl
+ MUTT_CONF_OPTS += --with-ssl=$(STAGING_DIR)/usr
