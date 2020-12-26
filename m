@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 26 Dec 2020 11:41:58 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/{libuv,
+Date: Sat, 26 Dec 2020 11:41:04 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/{libuv,
  uvw}: bump to versions 1.40.0, 2.8.0_libuv_v1.40
-Message-ID: <20201226110905.90C7688365@busybox.osuosl.org>
+Message-ID: <20201226110911.9FF6082AAA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3e2c4e4fba298d176d00e553dd50b40def97642f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=b53c9554e1833f1db6d1ffa4d5cd1fc7c57d18a2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
