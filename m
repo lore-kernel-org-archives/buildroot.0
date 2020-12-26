@@ -1,45 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 26 Dec 2020 18:26:48 +0100
-Subject: [Buildroot] [git commit] package/botan: bump to version 2.17.3
-Message-ID: <20201226170943.A1CDA88162@busybox.osuosl.org>
+Date: Sat, 26 Dec 2020 18:26:58 +0100
+Subject: [Buildroot] [git commit] package/opencv3: bump to version 3.4.13
+Message-ID: <20201226170943.AD40D88162@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5e1c1d8aed5004b57388aae57291300a0b07e852
+commit: https://git.buildroot.net/buildroot/commit/?id=3cfb8a8393a1683846e3df3fc2cf67a865ff6a51
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://botan.randombit.net/news.html#version-2-17-3-2020-12-21
+https://github.com/opencv/opencv/wiki/ChangeLog#version3413
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/botan/botan.hash | 2 +-
- package/botan/botan.mk   | 2 +-
+ package/opencv3/opencv3.hash | 2 +-
+ package/opencv3/opencv3.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/botan/botan.hash b/package/botan/botan.hash
-index f8fa6e5151..d1b1d14acb 100644
---- a/package/botan/botan.hash
-+++ b/package/botan/botan.hash
-@@ -1,4 +1,4 @@
- # From https://botan.randombit.net/releases/sha256sums.txt
--sha256  ebe27dfe2b55d7e02bf520e926606c48b76b22facb483256b13ab38e018e1e6c  Botan-2.17.2.tar.xz
-+sha256  79123b654445a4abba486e09a431788545c708237382a3e765664c9f55b03b88  Botan-2.17.3.tar.xz
- # Locally computed
- sha256  fb7f0322d36fba55ca17d77bc203a9f09a40daa8a249b75cf8887aba36cec9d0  license.txt
-diff --git a/package/botan/botan.mk b/package/botan/botan.mk
-index 4fe2e54c55..0f251fc350 100644
---- a/package/botan/botan.mk
-+++ b/package/botan/botan.mk
+diff --git a/package/opencv3/opencv3.hash b/package/opencv3/opencv3.hash
+index 545108a738..04eed67cfe 100644
+--- a/package/opencv3/opencv3.hash
++++ b/package/opencv3/opencv3.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  c8919dfb5ead6be67534bf794cb0925534311f1cd5c6680f8164ad1813c88d13  opencv3-3.4.12.tar.gz
++sha256  70230049194ae03ed8bfaab6cd1388569aa1b5c482d8b50d3af1cd2ae5a0b95d  opencv3-3.4.13.tar.gz
+ sha256  a5a7cf90fe5ac9763baad852cf69cf9d9b89bff934a679fdc5c8fcecaeba9a25  LICENSE
+diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
+index 3e3e5987a5..2bf70261c7 100644
+--- a/package/opencv3/opencv3.mk
++++ b/package/opencv3/opencv3.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BOTAN_VERSION = 2.17.2
-+BOTAN_VERSION = 2.17.3
- BOTAN_SOURCE = Botan-$(BOTAN_VERSION).tar.xz
- BOTAN_SITE = http://botan.randombit.net/releases
- BOTAN_LICENSE = BSD-2-Clause
+-OPENCV3_VERSION = 3.4.12
++OPENCV3_VERSION = 3.4.13
+ OPENCV3_SITE = $(call github,opencv,opencv,$(OPENCV3_VERSION))
+ OPENCV3_INSTALL_STAGING = YES
+ OPENCV3_LICENSE = BSD-3-Clause
