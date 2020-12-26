@@ -1,42 +1,57 @@
-From: Waldemar Brodkorb <wbx@openadk.org>
-Date: Sat, 26 Dec 2020 19:32:28 +0100
-Subject: [Buildroot] [PATCH] uclibc: update to 1.0.37
-Message-ID: <20201226183228.GA18334@waldemar-brodkorb.de>
+From: David Barbion <davidb@230ruedubac.fr>
+Date: Sat, 26 Dec 2020 23:08:47 +0100
+Subject: [Buildroot] [grub2] possible bug in grub2.mk
+Message-ID: <63684684-a9d4-cf3e-1e2a-f09cf8f6519a@230ruedubac.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- package/uclibc/uclibc.hash | 4 ++--
- package/uclibc/uclibc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hello,
 
-diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
-index 7319a70c82..e8bd5c5192 100644
---- a/package/uclibc/uclibc.hash
-+++ b/package/uclibc/uclibc.hash
-@@ -1,4 +1,4 @@
--# From https://downloads.uclibc-ng.org/releases/1.0.36/uClibc-ng-1.0.36.tar.xz.sha256
--sha256  010f40841669809422e01b47e7169d49c61bf3382f493c2571a8a96634ed300c  uClibc-ng-1.0.36.tar.xz
-+# From https://downloads.uclibc-ng.org/releases/1.0.37/uClibc-ng-1.0.37.tar.xz.sha256
-+sha256  b2b815d20645cf604b99728202bf3ecb62507ce39dfa647884b4453caf86212c  uClibc-ng-1.0.37.tar.xz
- # Locally calculated
- sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING.LIB
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index 524fc98d29..53983e852d 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UCLIBC_VERSION = 1.0.36
-+UCLIBC_VERSION = 1.0.37
- UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
- UCLIBC_SITE = https://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
- UCLIBC_LICENSE = LGPL-2.1+
--- 
-2.20.1
+I'm facing a rather strange behaviour of grub after having 
+(successfully) compiled an complete image. For my need, I use grub2 as 
+bootloader.
+
+I decided to set optimization level to 3 (-O3) for gcc.
+
+Grub2 compiles finely but when I try to boot on a legacy BIOS, it 
+displays "GRUB loading..." and then reboot infinitely...
+
+After 2 days of tests and tries, I figured out that -O3 cause something 
+not nice for grub. Indeed, compiling with -O2 solves the issue.
+
+Regarding buildroot, I tried to force -O2 only for grub and the mk is 
+done like:
+
+[...]
+GRUB2_CONF_ENV = \
+ ??? CPP="$(TARGET_CC) -E" \
+ ??? TARGET_CC="$(TARGET_CC)" \
+ ??? TARGET_CFLAGS="$(TARGET_CFLAGS)" \
+ ??? TARGET_CPPFLAGS="$(TARGET_CPPFLAGS) -fno-stack-protector" \
+ ??? TARGET_LDFLAGS="$(TARGET_LDFLAGS)" \
+ ??? TARGET_NM="$(TARGET_NM)" \
+ ??? TARGET_OBJCOPY="$(TARGET_OBJCOPY)" \
+ ??? TARGET_STRIP="$(TARGET_CROSS)strip"
+[...]
+
+In fact, envvars are passed to configure script, but instead of the 
+standard CC, CFLAGS, CPPFLAGS and LDFLAGS, there are prefixed with TARGET_.
+I replaced TARGET_CFLAGS and co without the TARGET_ prefix, then added 
+the -O2 flag and grub2 now works, as:
+
+[...]
+GRUB2_CONF_ENV = \
+ ??? CPP="$(TARGET_CC) -E" \
+ ??? TARGET_CC="$(TARGET_CC)" \
+ ??? CFLAGS="$(TARGET_CFLAGS) -O2" \
+ ??? CPPFLAGS="$(TARGET_CPPFLAGS) -O2 -fno-stack-protector" \
+ ??? LDFLAGS="$(TARGET_LDFLAGS) -O2" \
+ ??? TARGET_NM="$(TARGET_NM)" \
+ ??? TARGET_OBJCOPY="$(TARGET_OBJCOPY)" \
+ ??? TARGET_STRIP="$(TARGET_CROSS)strip"
+[...]
+
+David.
