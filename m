@@ -1,36 +1,131 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 26 Dec 2020 11:36:46 +0000
-Subject: [Buildroot] [Bug 13416] New: dhcpcd start warning message: no such
- user dhcpcd
-Message-ID: <bug-13416-163@https.bugs.busybox.net/>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 26 Dec 2020 12:36:38 +0100
+Subject: [Buildroot] [PATCH 1/1] package/samba4: fix build with glibc 2.32
+Message-ID: <20201226113638.1174165-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13416
+Fixes:
+ - http://autobuild.buildroot.org/results/2ceef1b861fe952b2c053da70540bd830014bf7a
 
-            Bug ID: 13416
-           Summary: dhcpcd start warning message: no such user dhcpcd
-           Product: buildroot
-           Version: 2020.11
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: minor
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: alfredo.pons at gmail.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...-function-conflicts-with-glibc-nss-h.patch | 104 ++++++++++++++++++
+ 1 file changed, 104 insertions(+)
+ create mode 100644 package/samba4/0005-nsswitch-nsstest-c-Avoid-nss-function-conflicts-with-glibc-nss-h.patch
 
-Pass --disable-privsep to configure script to eliminate dhcpcd start warning
-message: no such user dhcpcd.
-
-Or create dhcpcd user automatically.
-
+diff --git a/package/samba4/0005-nsswitch-nsstest-c-Avoid-nss-function-conflicts-with-glibc-nss-h.patch b/package/samba4/0005-nsswitch-nsstest-c-Avoid-nss-function-conflicts-with-glibc-nss-h.patch
+new file mode 100644
+index 0000000000..c5e0b55dea
+--- /dev/null
++++ b/package/samba4/0005-nsswitch-nsstest-c-Avoid-nss-function-conflicts-with-glibc-nss-h.patch
+@@ -0,0 +1,104 @@
++From 6e496aa3635557b59792e469f7c7f8eccd822322 Mon Sep 17 00:00:00 2001
++From: Khem Raj <raj.khem@gmail.com>
++Date: Wed, 22 Jul 2020 22:42:09 -0700
++Subject: [PATCH] nsswitch/nsstest.c: Avoid nss function conflicts with glibc
++ nss.h
++
++glibc 2.32 will define these varibles [1] which results in conflicts
++with these static function names, therefore prefix these function names
++with samba_ to avoid it
++
++[1] https://sourceware.org/git/?p=glibc.git;a=commit;h=499a92df8b9fc64a054cf3b7f728f8967fc1da7d
++
++Signed-off-by: Khem Raj <raj.khem@gmail.com>
++Reviewed-by: Volker Lendecke <vl@samba.org>
++Reviewed-by: Noel Power <npower@samba.org>
++
++Autobuild-User(master): Noel Power <npower@samba.org>
++Autobuild-Date(master): Tue Jul 28 10:52:00 UTC 2020 on sn-devel-184
++
++[Retrieved from:
++https://gitlab.com/samba-team/samba/-/commit/6e496aa3635557b59792e469f7c7f8eccd822322]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ nsswitch/nsstest.c | 16 ++++++++--------
++ 1 file changed, 8 insertions(+), 8 deletions(-)
++
++diff --git a/nsswitch/nsstest.c b/nsswitch/nsstest.c
++index e8c4306441d..e2ee9fbf3af 100644
++--- a/nsswitch/nsstest.c
+++++ b/nsswitch/nsstest.c
++@@ -137,7 +137,7 @@ static struct passwd *nss_getpwuid(uid_t uid)
++ 	return &pwd;
++ }
++ 
++-static void nss_setpwent(void)
+++static void samba_nss_setpwent(void)
++ {
++ 	NSS_STATUS (*_nss_setpwent)(void) =
++ 		(NSS_STATUS(*)(void))find_fn("setpwent");
++@@ -152,7 +152,7 @@ static void nss_setpwent(void)
++ 	}
++ }
++ 
++-static void nss_endpwent(void)
+++static void samba_nss_endpwent(void)
++ {
++ 	NSS_STATUS (*_nss_endpwent)(void) =
++ 		(NSS_STATUS (*)(void))find_fn("endpwent");
++@@ -290,7 +290,7 @@ again:
++ 	return &grp;
++ }
++ 
++-static void nss_setgrent(void)
+++static void samba_nss_setgrent(void)
++ {
++ 	NSS_STATUS (*_nss_setgrent)(void) =
++ 		(NSS_STATUS (*)(void))find_fn("setgrent");
++@@ -305,7 +305,7 @@ static void nss_setgrent(void)
++ 	}
++ }
++ 
++-static void nss_endgrent(void)
+++static void samba_nss_endgrent(void)
++ {
++ 	NSS_STATUS (*_nss_endgrent)(void) =
++ 		(NSS_STATUS (*)(void))find_fn("endgrent");
++@@ -402,7 +402,7 @@ static void nss_test_users(void)
++ {
++ 	struct passwd *pwd;
++ 
++-	nss_setpwent();
+++	samba_nss_setpwent();
++ 	/* loop over all users */
++ 	while ((pwd = nss_getpwent())) {
++ 		printf("Testing user %s\n", pwd->pw_name);
++@@ -424,14 +424,14 @@ static void nss_test_users(void)
++ 		printf("initgroups: "); nss_test_initgroups(pwd->pw_name, pwd->pw_gid);
++ 		printf("\n");
++ 	}
++-	nss_endpwent();
+++	samba_nss_endpwent();
++ }
++ 
++ static void nss_test_groups(void)
++ {
++ 	struct group *grp;
++ 
++-	nss_setgrent();
+++	samba_nss_setgrent();
++ 	/* loop over all groups */
++ 	while ((grp = nss_getgrent())) {
++ 		printf("Testing group %s\n", grp->gr_name);
++@@ -452,7 +452,7 @@ static void nss_test_groups(void)
++ 		printf("getgrgid: "); print_group(grp);
++ 		printf("\n");
++ 	}
++-	nss_endgrent();
+++	samba_nss_endgrent();
++ }
++ 
++ static void nss_test_errors(void)
++-- 
++GitLab
++
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.29.2
