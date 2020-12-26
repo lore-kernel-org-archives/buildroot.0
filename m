@@ -1,44 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 26 Dec 2020 18:32:44 +0100
-Subject: [Buildroot] [git commit] board/boundarydevices: promote
- buildroot-external-boundary project
-Message-ID: <20201226171541.F12C48818F@busybox.osuosl.org>
+Date: Sat, 26 Dec 2020 18:32:46 +0100
+Subject: [Buildroot] [git commit] package/freescale-imx/imx-gpu-viv: is an
+ libopencl provider
+Message-ID: <20201226171542.2C75988DA8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=75543322843f9ce72a4f39f1ee6239059c061e6c
+commit: https://git.buildroot.net/buildroot/commit/?id=f296b7ac5917bcbc0389d93856201066d0bb97fb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It may be useful for users using Boundary Devices boards to find
-more advanced defconfigs that the one provided by Buildroot.
+The imx-gpu-viv install libOpenCL.so.1.2 library and cl.h header,
+so declare it as a libopencl provider.
 
-See:
-https://github.com/boundarydevices/buildroot-external-boundary#configurations-details
-
-Update the readme.txt to add the link to the br2_external maintained
-by Boundary Devices.
+With this support we can select the clinfo package provided by
+Buildroot instead of the one provided by imx-gpu-viv package.
 
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 Cc: Gary Bisson <gary.bisson@boundarydevices.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- board/boundarydevices/common/readme.txt | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/freescale-imx/imx-gpu-viv/Config.in      | 4 ++++
+ package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk | 2 +-
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/board/boundarydevices/common/readme.txt b/board/boundarydevices/common/readme.txt
-index d1bb3fa598..307cfb5549 100644
---- a/board/boundarydevices/common/readme.txt
-+++ b/board/boundarydevices/common/readme.txt
-@@ -40,3 +40,9 @@ Where 'sdX' is the device node of the uSD partition.
- To upgrade u-boot, cancel autoboot and type:
+diff --git a/package/freescale-imx/imx-gpu-viv/Config.in b/package/freescale-imx/imx-gpu-viv/Config.in
+index a2deaf2e12..753a71ee00 100644
+--- a/package/freescale-imx/imx-gpu-viv/Config.in
++++ b/package/freescale-imx/imx-gpu-viv/Config.in
+@@ -14,6 +14,7 @@ config BR2_PACKAGE_IMX_GPU_VIV
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
+ 	select BR2_PACKAGE_HAS_LIBEGL
+ 	select BR2_PACKAGE_HAS_LIBGLES
++	select BR2_PACKAGE_HAS_LIBOPENCL
+ 	select BR2_PACKAGE_HAS_LIBOPENVG
+ 	help
+ 	  Userspace libraries for Vivante GPU on i.MX platforms
+@@ -74,6 +75,9 @@ config BR2_PACKAGE_PROVIDES_LIBEGL
+ config BR2_PACKAGE_PROVIDES_LIBGLES
+ 	default "imx-gpu-viv"
  
- > run upgradeu
++config BR2_PACKAGE_PROVIDES_LIBOPENCL
++	default "imx-gpu-viv"
 +
-+See Boundary Devices's buildroot-external-boundary project
-+for additional and advanced defconfigs using Qt5, gstreamer,
-+NXP proprietary packages with demo applications:
-+
-+https://github.com/boundarydevices/buildroot-external-boundary
+ config BR2_PACKAGE_PROVIDES_LIBOPENVG
+ 	default "imx-gpu-viv"
+ 
+diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
+index a248da6069..9d69acb7ae 100644
+--- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
++++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
+@@ -18,7 +18,7 @@ IMX_GPU_VIV_LICENSE = NXP Semiconductor Software License Agreement
+ IMX_GPU_VIV_LICENSE_FILES = EULA COPYING
+ IMX_GPU_VIV_REDISTRIBUTE = NO
+ 
+-IMX_GPU_VIV_PROVIDES = libegl libgles libopenvg
++IMX_GPU_VIV_PROVIDES = libegl libgles libopencl libopenvg
+ IMX_GPU_VIV_LIB_TARGET = $(call qstrip,$(BR2_PACKAGE_IMX_GPU_VIV_OUTPUT))
+ 
+ ifeq ($(IMX_GPU_VIV_LIB_TARGET),x11)
