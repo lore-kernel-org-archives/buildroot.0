@@ -1,39 +1,54 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 26 Dec 2020 16:47:29 +0100
-Subject: [Buildroot] [PATCH] package/opencv3: do not detect ccache
-Message-ID: <20201226154729.2507761-1-yann.morin.1998@free.fr>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 26 Dec 2020 18:17:43 +0100
+Subject: [Buildroot] [PATCH 1/3] package/dhcpcd: enhance syntax
+Message-ID: <20201226171745.2414764-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-OpenCV-3's buildsystem will try to detect ccache and use it if
-available. This may yield a system-installed ccache.
+Add all configure options through DHCP_CONFIG_OPTS and avoid splitting
+lines when they are less than 80 characters
 
-However, in Buildroot, ccache is entirely hidden away and handled in the
-toolchain wrapper.
-
-Forcibly disable detection of ccache.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Cc: Samuel Martin <s.martin49@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/opencv3/opencv3.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/dhcpcd/dhcpcd.mk | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
-index 3e3e5987a5..f836562acf 100644
---- a/package/opencv3/opencv3.mk
-+++ b/package/opencv3/opencv3.mk
-@@ -46,6 +46,7 @@ endif
- # OpenCV build options
- OPENCV3_CONF_OPTS += \
- 	-DBUILD_WITH_STATIC_CRT=OFF \
-+	-DENABLE_CCACHE=OFF \
- 	-DENABLE_COVERAGE=OFF \
- 	-DENABLE_FAST_MATH=ON \
- 	-DENABLE_IMPL_COLLECTION=OFF \
+diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
+index 0dcd36f369..11d78e1847 100644
+--- a/package/dhcpcd/dhcpcd.mk
++++ b/package/dhcpcd/dhcpcd.mk
+@@ -11,6 +11,10 @@ DHCPCD_DEPENDENCIES = host-pkgconf
+ DHCPCD_LICENSE = BSD-2-Clause
+ DHCPCD_LICENSE_FILES = LICENSE
+ 
++DHCPCD_CONFIG_OPTS = \
++	--libexecdir=/lib/dhcpcd \
++	--os=linux
++
+ ifeq ($(BR2_STATIC_LIBS),y)
+ DHCPCD_CONFIG_OPTS += --enable-static
+ endif
+@@ -20,16 +24,11 @@ DHCPCD_CONFIG_OPTS += --disable-fork --disable-privsep
+ endif
+ 
+ define DHCPCD_CONFIGURE_CMDS
+-	(cd $(@D); \
+-	$(TARGET_CONFIGURE_OPTS) ./configure \
+-		--os=linux \
+-		--libexecdir=/lib/dhcpcd \
+-		$(DHCPCD_CONFIG_OPTS) )
++	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure $(DHCPCD_CONFIG_OPTS))
+ endef
+ 
+ define DHCPCD_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) \
+-		-C $(@D) all
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) all
+ endef
+ 
+ define DHCPCD_INSTALL_TARGET_CMDS
 -- 
-2.25.1
+2.29.2
