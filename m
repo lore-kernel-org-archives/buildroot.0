@@ -1,51 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 26 Dec 2020 18:30:50 +0100
-Subject: [Buildroot] [git commit] configs/freescale_imx8qmmek: bump BSP
- components to 5.4.47_2.2.0
-Message-ID: <20201226171348.A41098167C@busybox.osuosl.org>
+Date: Sat, 26 Dec 2020 18:30:32 +0100
+Subject: [Buildroot] [git commit] package/imx-mkimage: bump to version
+ rel_imx_5.4.47_2.2.0
+Message-ID: <20201226171348.60247816CA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f4ea5c2f5b09ababa4defd2bf192b052b23ba630
+commit: https://git.buildroot.net/buildroot/commit/?id=e6bbbb789ff4959360d0ae31447b4d8be5cb2817
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+This version is aligned with 5.4.47_2.2.0 NXP Linux BSP.
+
 Signed-off-by: Stephane Viau <stephane.viau@oss.nxp.com>
-[Build- and run-tested on i.MX8QM MEK]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/freescale_imx8qmmek_defconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/imx-mkimage/imx-mkimage.hash | 2 +-
+ package/imx-mkimage/imx-mkimage.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/configs/freescale_imx8qmmek_defconfig b/configs/freescale_imx8qmmek_defconfig
-index 45b4dbd1b9..4241c4d33b 100644
---- a/configs/freescale_imx8qmmek_defconfig
-+++ b/configs/freescale_imx8qmmek_defconfig
-@@ -6,7 +6,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/fsl-imx8qm-mek.dtb"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_5.4.24_2.1.0"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_5.4.47_2.2.0"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v8"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8qm-mek"
-@@ -22,14 +22,14 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/imx-atf"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="rel_imx_5.4.24_2.1.0"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="rel_imx_5.4.47_2.2.0"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8qm"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/uboot-imx"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_5.4.24_2.1.0"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_5.4.47_2.2.0"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8qm_mek"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
+diff --git a/package/imx-mkimage/imx-mkimage.hash b/package/imx-mkimage/imx-mkimage.hash
+index 6d5a329ed5..e06706070d 100644
+--- a/package/imx-mkimage/imx-mkimage.hash
++++ b/package/imx-mkimage/imx-mkimage.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 a7e4c1c45b0d36e088bd7891335aa3c726682750984b7ca072e3c6329def92cf  imx-mkimage-rel_imx_4.19.35_1.1.0.tar.gz
++sha256 19745a7b9d06a420e7574328de65e6f5f7e82c87beed926c8f0f6bd1512afbe6  imx-mkimage-rel_imx_5.4.47_2.2.0.tar.gz
+ sha256 231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
+diff --git a/package/imx-mkimage/imx-mkimage.mk b/package/imx-mkimage/imx-mkimage.mk
+index ed0e435a73..51eb79e5f5 100644
+--- a/package/imx-mkimage/imx-mkimage.mk
++++ b/package/imx-mkimage/imx-mkimage.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IMX_MKIMAGE_VERSION = rel_imx_4.19.35_1.1.0
++IMX_MKIMAGE_VERSION = rel_imx_5.4.47_2.2.0
+ IMX_MKIMAGE_SITE = https://source.codeaurora.org/external/imx/imx-mkimage
+ IMX_MKIMAGE_SITE_METHOD = git
+ IMX_MKIMAGE_LICENSE = GPL-2.0+
