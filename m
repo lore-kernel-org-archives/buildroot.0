@@ -1,23 +1,30 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 26 Dec 2020 17:20:13 +0000
-Subject: [Buildroot] [Bug 13416] dhcpcd start warning message: no such user
- dhcpcd
-In-Reply-To: <bug-13416-163@https.bugs.busybox.net/>
-References: <bug-13416-163@https.bugs.busybox.net/>
-Message-ID: <bug-13416-163-aRZXYIkXwL@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 26 Dec 2020 18:21:24 +0100
+Subject: [Buildroot] [PATCH] package/freescale-imx/firmware-imx: add
+ sdma file for IMX6S platform
+In-Reply-To: <20201223140124.426856-1-gary.bisson@boundarydevices.com>
+References: <20201223140124.426856-1-gary.bisson@boundarydevices.com>
+Message-ID: <20201226182124.077e0b32@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13416
+On Wed, 23 Dec 2020 15:01:24 +0100
+Gary Bisson <gary.bisson@boundarydevices.com> wrote:
 
---- Comment #1 from Fabrice Fontaine <fontaine.fabrice@gmail.com> ---
-Thanks for your bug report.
-I sent a patch to create dhcpcd user:
-https://patchwork.ozlabs.org/project/buildroot/patch/20201226171745.2414764-2-fontaine.fabrice at gmail.com/
+> Uses the same file as IMX6Q platform, see imx6sl.dtsi.
+> 
+> Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+> ---
+>  package/freescale-imx/firmware-imx/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
 
+Applied to master, thanks.
+
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
