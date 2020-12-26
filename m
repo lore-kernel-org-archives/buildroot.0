@@ -1,48 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 26 Dec 2020 18:30:29 +0100
-Subject: [Buildroot] [git commit] package/freescale-imx/imx-seco: bump
- version to 3.7.1
-Message-ID: <20201226171348.3E50E816CA@busybox.osuosl.org>
+Date: Sat, 26 Dec 2020 18:30:45 +0100
+Subject: [Buildroot] [git commit] configs/freescale_imx8mnevk: bump BSP
+ components to 5.4.47_2.2.0
+Message-ID: <20201226171348.901D88167C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5ecc1e55612c40851656b9347720a2908e6b7ff3
+commit: https://git.buildroot.net/buildroot/commit/?id=1fb7596197d7abca0a4ba65374677304d7c4f525
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This version is aligned with 5.4.47_2.2.0 NXP Linux BSP.
-
 Signed-off-by: Stephane Viau <stephane.viau@oss.nxp.com>
+[Build- and run-tested on i.MX8MN DDR4 EVK]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/freescale-imx/imx-seco/imx-seco.hash | 6 +++---
- package/freescale-imx/imx-seco/imx-seco.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ configs/freescale_imx8mnevk_defconfig | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/freescale-imx/imx-seco/imx-seco.hash b/package/freescale-imx/imx-seco/imx-seco.hash
-index 930801e839..c8526d2b57 100644
---- a/package/freescale-imx/imx-seco/imx-seco.hash
-+++ b/package/freescale-imx/imx-seco/imx-seco.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  52ba07633e0f8707d8c26724b5cd03ef96444c8de1e0e134acac50acacf3e7dd  imx-seco-3.6.3.bin
--sha256  7ffad92e72e5f6b23027e7cf93a770a4acef00a92dcf79f22701ed401c5478c0  EULA
--sha256  2ceab29de5ea533b86f570bcc4e9ddbfb5fe85a1da4978a8613ff3fd9bed781d  COPYING
-+sha256  b09f63139df6c4dfef3533570cd60b22eb4c48eed05f314268178e80b8de40fc  imx-seco-3.7.1.bin
-+sha256  a39da2e94bd8b99eaac4325633854620ea3a55145259c3a7748c610a80714cfc  EULA
-+sha256  69cbb76b3f10ac5a8c36f34df7bbdf50825815560c00a946fff2922365ef01a2  COPYING
-diff --git a/package/freescale-imx/imx-seco/imx-seco.mk b/package/freescale-imx/imx-seco/imx-seco.mk
-index be3f3c4419..cc46ad7e5d 100644
---- a/package/freescale-imx/imx-seco/imx-seco.mk
-+++ b/package/freescale-imx/imx-seco/imx-seco.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IMX_SECO_VERSION = 3.6.3
-+IMX_SECO_VERSION = 3.7.1
- IMX_SECO_SITE = $(FREESCALE_IMX_SITE)
- IMX_SECO_SOURCE = imx-seco-$(IMX_SECO_VERSION).bin
- 
+diff --git a/configs/freescale_imx8mnevk_defconfig b/configs/freescale_imx8mnevk_defconfig
+index 8c795fe217..f9ccd898dc 100644
+--- a/configs/freescale_imx8mnevk_defconfig
++++ b/configs/freescale_imx8mnevk_defconfig
+@@ -7,7 +7,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/imx8mn-ddr4-evk.dtb"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_5.4.24_2.1.0"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_5.4.47_2.2.0"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v8"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mn-ddr4-evk"
+@@ -22,14 +22,14 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/imx-atf"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="rel_imx_5.4.24_2.1.0"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="rel_imx_5.4.47_2.2.0"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mn"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/uboot-imx"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_5.4.24_2.1.0"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_5.4.47_2.2.0"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8mn_ddr4_evk"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
