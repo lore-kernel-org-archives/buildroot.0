@@ -1,54 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 26 Dec 2020 18:23:01 +0100
-Subject: [Buildroot] [git commit] package/mutt: add gnutls optional
- dependency
-Message-ID: <20201226170551.594C180E57@busybox.osuosl.org>
+Date: Sat, 26 Dec 2020 18:22:26 +0100
+Subject: [Buildroot] [git commit] package/mutt: add zlib optional dependency
+Message-ID: <20201226170551.447E081480@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4446556e40ab55ecc9e49d58c862611f409f70a6
+commit: https://git.buildroot.net/buildroot/commit/?id=554610803c3807775c1d9e153187ee99ccfd11ad
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-gnutls is an optional dependency since version 1.5.7 and
-https://gitlab.com/muttmua/mutt/-/commit/457d70d6b10860bae084837024eb34aa3bfbc5fa
+zlib is an optional dependency which is enabled by default since version
+1.14.1 and
+https://gitlab.com/muttmua/mutt/-/commit/136ae0add512f21bc418f9e31a2f1b970ad1a490
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mutt/mutt.mk | 17 ++++++++++++++---
- 1 file changed, 14 insertions(+), 3 deletions(-)
+ package/mutt/mutt.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
-index 4e14004577..67fc4ed838 100644
+index cc4b5f56b4..4e14004577 100644
 --- a/package/mutt/mutt.mk
 +++ b/package/mutt/mutt.mk
-@@ -46,12 +46,23 @@ endif
- ifneq ($(BR2_PACKAGE_MUTT_IMAP)$(BR2_PACKAGE_MUTT_POP3),)
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- MUTT_DEPENDENCIES += openssl
--MUTT_CONF_OPTS += --with-ssl=$(STAGING_DIR)/usr
-+MUTT_CONF_OPTS += \
-+	--without-gnutls \
-+	--with-ssl=$(STAGING_DIR)/usr
-+else ifeq ($(BR2_PACKAGE_GNUTLS),y)
-+MUTT_DEPENDENCIES += gnutls
-+MUTT_CONF_OPTS += \
-+	--with-gnutls=$(STAGING_DIR)/usr \
-+	--without-ssl
- else
--MUTT_CONF_OPTS += --without-ssl
-+MUTT_CONF_OPTS += \
-+	--without-gnutls \
-+	--without-ssl
- endif
- else
--MUTT_CONF_OPTS += --without-ssl
-+MUTT_CONF_OPTS += \
-+	--without-gnutls \
-+	--without-ssl
+@@ -61,6 +61,13 @@ else
+ MUTT_CONF_OPTS += --without-sqlite3
  endif
  
- ifeq ($(BR2_PACKAGE_SQLITE),y)
++ifeq ($(BR2_PACKAGE_ZLIB),y)
++MUTT_DEPENDENCIES += zlib
++MUTT_CONF_OPTS += --with-zlib=$(STAGING_DIR)/usr
++else
++MUTT_CONF_OPTS += --without-zlib
++endif
++
+ # Avoid running tests to check for:
+ #  - target system is *BSD
+ #  - C99 conformance (snprintf, vsnprintf)
