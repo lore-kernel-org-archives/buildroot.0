@@ -1,63 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 26 Dec 2020 18:32:46 +0100
-Subject: [Buildroot] [git commit] package/freescale-imx/imx-gpu-viv: is an
- libopencl provider
-Message-ID: <20201226171542.2C75988DA8@busybox.osuosl.org>
+Date: Sat, 26 Dec 2020 18:32:45 +0100
+Subject: [Buildroot] [git commit] package/freescale-imx/imx-gpu-viv: install
+ Vendor ICDs file (Vivante.icd)
+Message-ID: <20201226171542.1758E80F3D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f296b7ac5917bcbc0389d93856201066d0bb97fb
+commit: https://git.buildroot.net/buildroot/commit/?id=b37cd79daf874e0af7931510821444af2ff0ed51
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The imx-gpu-viv install libOpenCL.so.1.2 library and cl.h header,
-so declare it as a libopencl provider.
+Without this file, the clinfo binary provided by the package doesn't
+detect the opencl support.
 
-With this support we can select the clinfo package provided by
-Buildroot instead of the one provided by imx-gpu-viv package.
+Fixes:
+https://github.com/boundarydevices/buildroot-external-boundary/issues/5
 
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 Cc: Gary Bisson <gary.bisson@boundarydevices.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/freescale-imx/imx-gpu-viv/Config.in      | 4 ++++
- package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk | 2 +-
- 2 files changed, 5 insertions(+), 1 deletion(-)
+ package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/freescale-imx/imx-gpu-viv/Config.in b/package/freescale-imx/imx-gpu-viv/Config.in
-index a2deaf2e12..753a71ee00 100644
---- a/package/freescale-imx/imx-gpu-viv/Config.in
-+++ b/package/freescale-imx/imx-gpu-viv/Config.in
-@@ -14,6 +14,7 @@ config BR2_PACKAGE_IMX_GPU_VIV
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	select BR2_PACKAGE_HAS_LIBEGL
- 	select BR2_PACKAGE_HAS_LIBGLES
-+	select BR2_PACKAGE_HAS_LIBOPENCL
- 	select BR2_PACKAGE_HAS_LIBOPENVG
- 	help
- 	  Userspace libraries for Vivante GPU on i.MX platforms
-@@ -74,6 +75,9 @@ config BR2_PACKAGE_PROVIDES_LIBEGL
- config BR2_PACKAGE_PROVIDES_LIBGLES
- 	default "imx-gpu-viv"
- 
-+config BR2_PACKAGE_PROVIDES_LIBOPENCL
-+	default "imx-gpu-viv"
-+
- config BR2_PACKAGE_PROVIDES_LIBOPENVG
- 	default "imx-gpu-viv"
- 
 diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
-index a248da6069..9d69acb7ae 100644
+index 0bb923a2f4..a248da6069 100644
 --- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
 +++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
-@@ -18,7 +18,7 @@ IMX_GPU_VIV_LICENSE = NXP Semiconductor Software License Agreement
- IMX_GPU_VIV_LICENSE_FILES = EULA COPYING
- IMX_GPU_VIV_REDISTRIBUTE = NO
- 
--IMX_GPU_VIV_PROVIDES = libegl libgles libopenvg
-+IMX_GPU_VIV_PROVIDES = libegl libgles libopencl libopenvg
- IMX_GPU_VIV_LIB_TARGET = $(call qstrip,$(BR2_PACKAGE_IMX_GPU_VIV_OUTPUT))
- 
- ifeq ($(IMX_GPU_VIV_LIB_TARGET),x11)
+@@ -108,6 +108,7 @@ define IMX_GPU_VIV_INSTALL_TARGET_CMDS
+ 	$(IMX_GPU_VIV_INSTALL_EXAMPLES)
+ 	$(IMX_GPU_VIV_INSTALL_GMEM_INFO)
+ 	cp -a $(@D)/gpu-core/usr/lib $(TARGET_DIR)/usr
++	$(INSTALL) -D -m 0644 $(@D)/gpu-core/etc/Vivante.icd $(TARGET_DIR)/etc/OpenCL/vendors/Vivante.icd
+ 	for lib in EGL GAL GLESv2 VDK; do \
+ 		for f in $(TARGET_DIR)/usr/lib/lib$${lib}-*.so; do \
+ 			case $$f in \
