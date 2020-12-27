@@ -1,86 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 Dec 2020 15:23:34 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] Update for 2020.11.1
-Message-ID: <20201227140706.CC9E282B9F@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 27 Dec 2020 15:35:53 +0100
+Subject: [Buildroot] [PATCH 1/1] package/paho-mqtt-c: bump to version 1.3.8
+Message-ID: <20201227143553.2831663-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=804a9e18656c1584b059129e0b5cebe2a2405fac
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+https://github.com/eclipse/paho.mqtt.c/milestone/15?closed=1
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- CHANGES                  | 29 +++++++++++++++++++++++++++++
- Makefile                 |  4 ++--
- support/misc/Vagrantfile |  2 +-
- 3 files changed, 32 insertions(+), 3 deletions(-)
+ package/paho-mqtt-c/paho-mqtt-c.hash | 2 +-
+ package/paho-mqtt-c/paho-mqtt-c.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 3894193d39..a33ad56a71 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,32 @@
-+2020.11.1, released December 27th, 2020
-+
-+	Important / security related fixes.
-+
-+	Infrastructure:
-+	- cmake: fix host ccache handling for CMake 3.19
-+	- meson: Forcibly disable binary stripping for
-+	  target builds, enable for host builds
-+	- golang: Fix HOST / TARGET directories for per-package builds
-+
-+	Defconfigs: Beaglebone Qt5: Fix ti-sgx related issues
-+
-+	Updated/fixed packages: apitrace, arm-trusted-firmware,
-+	ca-certificates, cryptopp, dhcpcd, dtv-scan-tables,
-+	flare-engine, ghostscript, go, haproxy, imagemagick,
-+	imx-gpu-viv, jasper, kismet, libcurl, libglib2, libhtp,
-+	libopenssl, libressl, libuv, libuvw, lua, mbedtls, mongodb,
-+	mutt, ncurses, netsnmp, nodejs, opencv3, openldap, opkg-utils,
-+	paho-mqtt-c, python-crc16, python-lxml, python-pyparsing,
-+	python-pyqt5, qt5base, rauc, shadowsocks-libev, sqlcipher,
-+	suricata, ti-sgx-demos, tinycbor, uclibc-ng-test, unbound,
-+	webkitgtk, wpewebkit, wireshark, x11vnc, xen,
-+	xserver_xorg-server
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#13316: beaglebone_qt5_defconfig: PowerVR fails to start
-+	#13416: dhcpcd start warning message: no such user dhcpcd
-+
- 2020.11, released December 2nd, 2020
- 
- 	Various fixes.
-diff --git a/Makefile b/Makefile
-index 34237a2125..06f1ef6aea 100644
---- a/Makefile
-+++ b/Makefile
-@@ -92,9 +92,9 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2020.11
-+export BR2_VERSION := 2020.11.1
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1606948000
-+BR2_VERSION_EPOCH = 1609079000
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
-diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
-index db2a752c3b..753a9bdcdc 100644
---- a/support/misc/Vagrantfile
-+++ b/support/misc/Vagrantfile
-@@ -5,7 +5,7 @@
+diff --git a/package/paho-mqtt-c/paho-mqtt-c.hash b/package/paho-mqtt-c/paho-mqtt-c.hash
+index 93ce1b34f2..5223757f0f 100644
+--- a/package/paho-mqtt-c/paho-mqtt-c.hash
++++ b/package/paho-mqtt-c/paho-mqtt-c.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256  19e9f04ddf244ab8c937d7e631ca15cedce7df95712c554107600e80efdaf277  paho-mqtt-c-1.3.7.tar.gz
++sha256  4920ff685344cdb0272568bc4414dcf48fcdfc4a98c78b1f3ca49c38417bf391  paho-mqtt-c-1.3.8.tar.gz
+ sha256  83bbba033dc985487e321b6dfde111772affb73460be48726299fed3da684b1c  edl-v10
+ sha256  0becf16567beb77fa252b7664631dd177c8f9a1889e48995b45379c7130e5303  epl-v20
+ sha256  bc0f3f447097eb82a29ad6c2f4929572bb548b6bd4c9e38fde1bf131a771b7a0  LICENSE
+diff --git a/package/paho-mqtt-c/paho-mqtt-c.mk b/package/paho-mqtt-c/paho-mqtt-c.mk
+index a477c8baaa..b9b4f217fb 100644
+--- a/package/paho-mqtt-c/paho-mqtt-c.mk
++++ b/package/paho-mqtt-c/paho-mqtt-c.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- # Buildroot version to use
--RELEASE='2020.11'
-+RELEASE='2020.11.1'
- 
- ### Change here for more memory/cores ###
- VM_MEMORY=2048
+-PAHO_MQTT_C_VERSION = 1.3.7
++PAHO_MQTT_C_VERSION = 1.3.8
+ PAHO_MQTT_C_SITE = $(call github,eclipse,paho.mqtt.c,v$(PAHO_MQTT_C_VERSION))
+ PAHO_MQTT_C_LICENSE = EPL-2.0 or BSD-3-Clause
+ PAHO_MQTT_C_LICENSE_FILES = epl-v20 edl-v10 LICENSE
+-- 
+2.29.2
