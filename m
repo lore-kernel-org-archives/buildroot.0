@@ -1,11 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 Dec 2020 09:09:29 +0100
-Subject: [Buildroot] [PATCH 2/3] package/dhcpcd: create dhcpcd user
-In-Reply-To: <20201226171745.2414764-2-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 26 Dec 2020 18:17:44 +0100")
+Date: Sun, 27 Dec 2020 09:11:11 +0100
+Subject: [Buildroot] [PATCH 3/3] package/dhcpcd: add udev optional
+ dependency
+In-Reply-To: <20201226171745.2414764-3-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 26 Dec 2020 18:17:45 +0100")
 References: <20201226171745.2414764-1-fontaine.fabrice@gmail.com>
- <20201226171745.2414764-2-fontaine.fabrice@gmail.com>
-Message-ID: <877dp3d612.fsf@dell.be.48ers.dk>
+ <20201226171745.2414764-3-fontaine.fabrice@gmail.com>
+Message-ID: <8735zrd5y8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,20 +15,12 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > privsep is supported since version 9.0.0 and
- > https://github.com/rsmarples/dhcpcd/commit/d5786118da1bad4c247631cae86344f1b249a8cb
- > It is enabled by default since
- > https://github.com/rsmarples/dhcpcd/commit/3a4c2e5604d72151b06ed365aa71493740a3ad75
-
- > So use --privsepuser to avoid that the detection mechanism finds a wrong
- > value from host and create it on the target
-
- > Fixes:
- >  - https://bugs.buildroot.org/show_bug.cgi?id=13416
+ > udev is an optional dependency (enabled by default) since version 6.1.0:
+ > https://github.com/rsmarples/dhcpcd/commit/12bbc8cb5c7507be15a7e0af4140c3d81125c46c
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Committed to 2020.08.x and 2020.11.x, thanks.
+Committed to 2020.02.x, 2020.08.x and 2020.11.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
