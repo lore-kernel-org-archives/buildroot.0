@@ -1,41 +1,58 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 Dec 2020 09:33:48 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x]
- package/freescale-imx/imx-gpu-viv: install Vendor ICDs file (Vivante.icd)
-Message-ID: <20201227082348.1D15880DB6@busybox.osuosl.org>
+Date: Sun, 27 Dec 2020 09:21:32 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/pkg-meson:
+ force-disable binary stripping
+Message-ID: <20201227082348.0979880DB6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=067b7faa895f59ed63ec87a608dd57d50d9c1a56
+commit: https://git.buildroot.net/buildroot/commit/?id=6ea9c167b3a603b3dfc6419f91c6511c6a8829e9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Without this file, the clinfo binary provided by the package doesn't
-detect the opencl support.
+In buildroot, stripping for the target is configured and implemented
+with the global `BR2_STRIP_strip` option that drive the stripping in
+the target-finalize step.
 
-Fixes:
-https://github.com/boundarydevices/buildroot-external-boundary/issues/5
+So, we explicitly disable stripping at build time for the target
+variants.
 
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Cc: Gary Bisson <gary.bisson@boundarydevices.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit b37cd79daf874e0af7931510821444af2ff0ed51)
+For the host variants, however, we don't much care about symbols and
+stuff, but smaller executables will hopefully load faster than bigger
+ones (disputable, given that sections in ELF files are paged-in
+on-demand), so we explictly enable stripping.
+
+Signed-off-by: Gleb Mazovetskiy <glex.spb@gmail.com>
+[yann.morin.1998 at free.fr:
+  - add burb about the target-finalize step
+  - enable stripping for host variants
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 3f39f902b3cd685c3c971941138e0df50947737c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/pkg-meson.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
-index 646d4e3673..194afbf3e0 100644
---- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
-+++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
-@@ -118,6 +118,7 @@ define IMX_GPU_VIV_INSTALL_TARGET_CMDS
- 	$(IMX_GPU_VIV_INSTALL_EXAMPLES)
- 	$(IMX_GPU_VIV_INSTALL_GMEM_INFO)
- 	cp -a $(@D)/gpu-core/usr/lib $(TARGET_DIR)/usr
-+	$(INSTALL) -D -m 0644 $(@D)/gpu-core/etc/Vivante.icd $(TARGET_DIR)/etc/OpenCL/vendors/Vivante.icd
- 	for lib in EGL GAL GLESv2 VDK; do \
- 		for f in $(TARGET_DIR)/usr/lib/lib$${lib}-*.so; do \
- 			case $$f in \
+diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+index 185832bd0c..14f3552fc6 100644
+--- a/package/pkg-meson.mk
++++ b/package/pkg-meson.mk
+@@ -86,6 +86,7 @@ define $(2)_CONFIGURE_CMDS
+ 		--default-library=$(if $(BR2_STATIC_LIBS),static,shared) \
+ 		--buildtype=$(if $(BR2_ENABLE_DEBUG),debug,release) \
+ 		--cross-file=$$($$(PKG)_SRCDIR)/build/cross-compilation.conf \
++		-Dstrip=false \
+ 		$$($$(PKG)_CONF_OPTS) \
+ 		$$($$(PKG)_SRCDIR) $$($$(PKG)_SRCDIR)/build
+ endef
+@@ -103,6 +104,7 @@ define $(2)_CONFIGURE_CMDS
+ 		--localstatedir=$$(HOST_DIR)/var \
+ 		--default-library=shared \
+ 		--buildtype=release \
++		-Dstrip=true \
+ 		$$($$(PKG)_CONF_OPTS) \
+ 		$$($$(PKG)_SRCDIR) $$($$(PKG)_SRCDIR)/build
+ endef
