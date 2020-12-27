@@ -1,49 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 Dec 2020 14:11:22 +0100
-Subject: [Buildroot] [git commit] package/opencv3: fix build with protobuf
- and gcc < 6
-Message-ID: <20201227130124.55F3181604@busybox.osuosl.org>
+Date: Sun, 27 Dec 2020 14:17:47 +0100
+Subject: [Buildroot] [git commit] package/uclibc: bump version to 1.0.37
+Message-ID: <20201227130124.5F3C082AA5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bf96f4e8d327a8d7a4b1ab732486aced3d1d8da8
+commit: https://git.buildroot.net/buildroot/commit/?id=d7da7e8aacf4cf674bde76fc5a562632d47c9fe8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix the folloing build failure with protobuf (enabled since commit
-31c68a449ecd7da61ecfd909bea7ce799f9a6450) and gcc 5.3.0:
-
-[ 53%] Building CXX object modules/dnn/CMakeFiles/opencv_dnn.dir/opencv-caffe.pb.cc.o
-In file included from /home/peko/autobuild/instance-1/output-1/per-package/opencv3/host/opt/ext-toolchain/mips64el-buildroot-linux-uclibc/include/c++/5.5.0/atomic:38:0,
-                 from /home/peko/autobuild/instance-1/output-1/per-package/opencv3/host/mips64el-buildroot-linux-uclibc/sysroot/usr/include/google/protobuf/io/coded_stream.h:115,
-                 from /home/peko/autobuild/instance-1/output-1/build/opencv3-3.4.12/buildroot-build/modules/dnn/opencv-caffe.pb.h:23,
-                 from /home/peko/autobuild/instance-1/output-1/build/opencv3-3.4.12/buildroot-build/modules/dnn/opencv-caffe.pb.cc:4:
-/home/peko/autobuild/instance-1/output-1/per-package/opencv3/host/opt/ext-toolchain/mips64el-buildroot-linux-uclibc/include/c++/5.5.0/bits/c++0x_warning.h:32:2: error: #error This file requires compiler and library support for the ISO C++ 2011 standard. This support must be enabled with the -std=c++11 or -std=gnu++11 compiler options.
- #error This file requires compiler and library support \
-  ^
-
-Fixes:
- - http://autobuild.buildroot.org/results/7caf175af039054a032b8f63b458b3940d9ec0f3
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/opencv3/opencv3.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/uclibc/uclibc.hash | 4 ++--
+ package/uclibc/uclibc.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
-index 231d44395e..b1b86ba71d 100644
---- a/package/opencv3/opencv3.mk
-+++ b/package/opencv3/opencv3.mk
-@@ -287,7 +287,9 @@ OPENCV3_CONF_OPTS += -DWITH_PNG=OFF
- endif
+diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
+index 7319a70c82..e8bd5c5192 100644
+--- a/package/uclibc/uclibc.hash
++++ b/package/uclibc/uclibc.hash
+@@ -1,4 +1,4 @@
+-# From https://downloads.uclibc-ng.org/releases/1.0.36/uClibc-ng-1.0.36.tar.xz.sha256
+-sha256  010f40841669809422e01b47e7169d49c61bf3382f493c2571a8a96634ed300c  uClibc-ng-1.0.36.tar.xz
++# From https://downloads.uclibc-ng.org/releases/1.0.37/uClibc-ng-1.0.37.tar.xz.sha256
++sha256  b2b815d20645cf604b99728202bf3ecb62507ce39dfa647884b4453caf86212c  uClibc-ng-1.0.37.tar.xz
+ # Locally calculated
+ sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING.LIB
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 524fc98d29..53983e852d 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_OPENCV3_WITH_PROTOBUF),y)
-+# protobuf needs c++11 (since 3.6.0)
- OPENCV3_CONF_OPTS += \
-+	-DENABLE_CXX11=ON \
- 	-DPROTOBUF_UPDATE_FILES=ON \
- 	-DWITH_PROTOBUF=ON
- OPENCV3_DEPENDENCIES += protobuf
+-UCLIBC_VERSION = 1.0.36
++UCLIBC_VERSION = 1.0.37
+ UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
+ UCLIBC_SITE = https://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
+ UCLIBC_LICENSE = LGPL-2.1+
