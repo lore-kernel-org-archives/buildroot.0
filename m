@@ -1,51 +1,68 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 Dec 2020 17:11:17 +0100
-Subject: [Buildroot] [git commit] docs/website: update for 2020.08.3
-Message-ID: <20201227155426.2A0FA82C1F@busybox.osuosl.org>
+Date: Sun, 27 Dec 2020 16:40:23 +0100
+Subject: [Buildroot] [git commit] Update for 2020.08.3
+Message-ID: <20201227155426.1CF2282DDE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e80f28a35b15840080a9eabad6d5bee83c3a1952
+commit: https://git.buildroot.net/buildroot/commit/?id=ea67cda8792f409ae23ea052da63d9abbc85fea2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit b6a0f0d08de2d3942b63506cb4432f428ae3796f)
+[Peter: drop Makefile changes]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/website/news.html | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ CHANGES | 36 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 2be57b5a8c..8b0e37ba89 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,28 @@
- <h2>News</h2>
- <ul class="timeline">
+diff --git a/CHANGES b/CHANGES
+index a33ad56a71..84d5cee0c3 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -168,6 +168,42 @@
+ 	#13236: Can't compile linux 5.4.8 (with gcc 10 on host)
+ 	#13286: The system hangs in vmware workstation on the line..
  
-+  <li class="timeline-inverted">
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2020.08.3 released, 2020.08.x series EOL</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>27 December 2020</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2020.08.3 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2020.08.2 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2020.08.3">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2020-December/299456.html">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2020.08.3.tar.bz2">2020.08.3 release</a>.</p>
++2020.08.3, released December 27th, 2020
 +
-+	  <p>Notice that the 2020.08.x series is now end of life. Please migrate to
-+	  the 2020.11 series instead which will be supported until March 2021.</p>
-+      </div>
-+    </div>
-+  </li>
++	Important / security related fixes.
 +
-   <li>
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
++	Infrastructure:
++	- cmake: fix host ccache handling for CMake 3.19
++	- meson: Forcibly disable binary stripping for
++	  target builds, enable for host builds
++	- golang: Fix HOST / TARGET directories for per-package builds
++
++	Defconfigs: Beaglebone Qt5: Fix ti-sgx related issues
++
++	Updated/fixed packages: apitrace, arm-trusted-firmware,
++	bustle, c-ares, ca-certificates, cage, cdrkit, cryptopp,
++	dhcpcd, docker-containerd, dtv-scan-tables, flare-engine,
++	ghostscript, gvfs, haproxy, imagemagick, imx-gpu-viv, jasper,
++	jemalloc, jpeg-turbo, libcamera, libcap, libcurl, libglib2,
++	libgpiod, libkrb5, libopenssl, libplist, libressl, libuv,
++	libuvw, lynx, mariadb, mbedtls, minidlna, mongodb, monkey,
++	musl, mutt, ncurses, netsnmp, netsurf, nodejs, opencv3,
++	openldap, openrc, opkg-utils, paho-mqtt-c, php, privoxy,
++	proftpd, python-crc16, python-flask-cors, python-lxml,
++	python-pip, python-pyparsing, python-pyqt5, qemu, qt5base,
++	raptor, rauc, ruby, setserial, shadowsocks-libev, slirp,
++	sqlcipher, thermald, ti-sgx-demos, tinycbor, unbound, vsftpd,
++	wireless-regdb, wireshark, wlroots, x11vnc, xen, xinetd,
++	xserver_xorg-server
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#13276: libcap builds libcap.pc incorrectly
++	#13316: beaglebone_qt5_defconfig: PowerVR fails to start
++	#13336: thermald-1.9.1 compilation failure with musl 1.2.1
++	#13341: Mistake in /etc/init.d/S70vsftpd
++	#13416: dhcpcd start warning message: no such user dhcpcd
++
+ 2020.08.2, released November 16th, 2020
+ 
+ 	Important / security related fixes.
