@@ -1,90 +1,63 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 Dec 2020 17:55:12 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] Update for 2020.02.9
-Message-ID: <20201227163805.3654582BD9@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun, 27 Dec 2020 18:08:32 +0100
+Subject: [Buildroot] [PATCH v1] package/iwd: fix static linking (readline
+ needs ncurses)
+Message-ID: <20201227170832.23903-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=15a05e6d5a875759d217d61b3c7b31ec87ea4eb5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+Fixes:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+  - http://autobuild.buildroot.net/results/26c7536b95cc475bc10d4283e93ea9ccd6ced665
+
+  .../arm-buildroot-linux-musleabihf/bin/ld: .../arm-buildroot-linux-musleabihf/sysroot/usr/lib/libreadline.a(display.o): in function `_rl_move_cursor_relative':
+  display.c:(.text+0x1164): undefined reference to `tputs'
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- CHANGES                  | 33 +++++++++++++++++++++++++++++++++
- Makefile                 |  4 ++--
- support/misc/Vagrantfile |  2 +-
- 3 files changed, 36 insertions(+), 3 deletions(-)
+ ...tatic-linking-readline-needs-ncurses.patch | 31 +++++++++++++++++++
+ 1 file changed, 31 insertions(+)
+ create mode 100644 package/iwd/0001-iwctl-fix-static-linking-readline-needs-ncurses.patch
 
-diff --git a/CHANGES b/CHANGES
-index 389e305a50..dfb3c5447b 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,36 @@
-+2020.02.9, released December 27th, 2020
+diff --git a/package/iwd/0001-iwctl-fix-static-linking-readline-needs-ncurses.patch b/package/iwd/0001-iwctl-fix-static-linking-readline-needs-ncurses.patch
+new file mode 100644
+index 0000000000..a204d982b8
+--- /dev/null
++++ b/package/iwd/0001-iwctl-fix-static-linking-readline-needs-ncurses.patch
+@@ -0,0 +1,31 @@
++From 84a4eb23ccca883d3823785225858bd437e3833a Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Sun, 27 Dec 2020 17:56:35 +0100
++Subject: [PATCH] iwctl: fix static linking (readline needs ncurses)
 +
-+	Important / security related fixes.
++Fixes:
 +
-+	Infrastructure:
-+	- cmake: fix host ccache handling for CMake 3.19
-+	- meson: Forcibly disable binary stripping for
-+	  target builds, enable for host builds
-+	- golang: Fix HOST / TARGET directories for per-package builds
++  .../arm-buildroot-linux-musleabihf/bin/ld: .../arm-buildroot-linux-musleabihf/sysroot/usr/lib/libreadline.a(display.o): in function `_rl_move_cursor_relative':
++  display.c:(.text+0x1164): undefined reference to `tputs'
 +
-+	Defconfigs: Beaglebone Qt5: Fix ti-sgx related issues
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ Makefile.am | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+	Updated/fixed packages: apitrace, arm-trusted-firmware,
-+	bustle, c-ares, ca-certificates, cdrkit, cryptopp, dhcpcd,
-+	docker-containerd, dtv-scan-tables, flare-engine, ghostscript,
-+	haproxy, imagemagick, imx-gpu-viv, jasper, jemalloc,
-+	jpeg-turbo, libcap, libcurl, libglib2, libgpiod, libkrb5,
-+	libopenssl, libplist, libressl, libuv, libuvw, lynx, mariadb,
-+	mbedtls, minidlna, monkey, musl, mutt, ncurses, netsnmp,
-+	nodejs, opencv3, openldap, openrc, opkg-utils, paho-mqtt-c,
-+	php, privoxy, proftpd, python-crc16, python-flask-cors,
-+	python-lxml, python-pip, python-pyparsing, python-pyqt5, qemu,
-+	qt5base, raptor, rauc, ruby, setserial, shadowsocks-libev,
-+	slirp, sqlcipher, ti-sgx-demos, tinycbor, vsftpd,
-+	wireless-regdb, wireshark, x11vnc, xen, xinetd,
-+	xserver_xorg-server
++diff --git a/Makefile.am b/Makefile.am
++index 1f0b0d3..5ae4a98 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -286,7 +286,7 @@ client_iwctl_SOURCES = client/main.c \
++ 			client/network.h client/network.c \
++ 			client/properties.h client/properties.c \
++ 			client/wsc.c client/station.c
++-client_iwctl_LDADD = $(ell_ldadd) -lreadline
+++client_iwctl_LDADD = $(ell_ldadd) -lreadline -lncurses
++ 
++ if MANUAL_PAGES
++ man_MANS += client/iwctl.1
++-- 
++2.29.2
 +
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#13276: libcap builds libcap.pc incorrectly
-+	#13316: beaglebone_qt5_defconfig: PowerVR fails to start
-+	#13341: Mistake in /etc/init.d/S70vsftpd
-+
- 2020.02.8, released November 16th, 2020
- 
- 	Important / security related fixes.
-diff --git a/Makefile b/Makefile
-index a3fc46e6f2..514816978a 100644
---- a/Makefile
-+++ b/Makefile
-@@ -92,9 +92,9 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2020.02.8
-+export BR2_VERSION := 2020.02.9
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1605567000
-+BR2_VERSION_EPOCH = 1609088000
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
-diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
-index 1695972664..b0c9ade199 100644
---- a/support/misc/Vagrantfile
-+++ b/support/misc/Vagrantfile
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # Buildroot version to use
--RELEASE='2020.02.8'
-+RELEASE='2020.02.9'
- 
- ### Change here for more memory/cores ###
- VM_MEMORY=2048
+-- 
+2.29.2
