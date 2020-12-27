@@ -1,46 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 Dec 2020 09:30:34 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] board/boundarydevices:
- promote buildroot-external-boundary project
-Message-ID: <20201227082348.13BA880DB6@busybox.osuosl.org>
+Date: Sun, 27 Dec 2020 08:49:51 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/libcurl: bump to
+ version 7.73.0
+Message-ID: <20201227082347.BCFCA88D35@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a06a86582ab6ad452ba0aceeb5820f6ee33345fb
+commit: https://git.buildroot.net/buildroot/commit/?id=4e8399040b012d3ac68299c4d0ec056c1f4e0c05
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-It may be useful for users using Boundary Devices boards to find
-more advanced defconfigs than the one provided by Buildroot.
-
-See:
-https://github.com/boundarydevices/buildroot-external-boundary#configurations-details
-
-Update the readme.txt to add the link to the br2_external maintained
-by Boundary Devices.
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Cc: Gary Bisson <gary.bisson@boundarydevices.com>
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 75543322843f9ce72a4f39f1ee6239059c061e6c)
+(cherry picked from commit 2d0be6577e8df799f94a900975b1db8f7a5be2d6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/boundarydevices/common/readme.txt | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/libcurl/libcurl.hash | 4 ++--
+ package/libcurl/libcurl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/board/boundarydevices/common/readme.txt b/board/boundarydevices/common/readme.txt
-index 0625deef26..6de6c107a9 100644
---- a/board/boundarydevices/common/readme.txt
-+++ b/board/boundarydevices/common/readme.txt
-@@ -28,3 +28,9 @@ Where 'sdX' is the device node of the uSD partition.
- To upgrade u-boot, cancel autoboot and type:
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index 2bd1890caf..332614d820 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://curl.haxx.se/download/curl-7.72.0.tar.xz.asc
++# https://curl.haxx.se/download/curl-7.73.0.tar.xz.asc
+ # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
+-sha256  0ded0808c4d85f2ee0db86980ae610cc9d165e9ca9da466196cc73c346513713  curl-7.72.0.tar.xz
++sha256  7c4c7ca4ea88abe00fea4740dcf81075c031b1d0bb23aff2d5efde20a3c2408a  curl-7.73.0.tar.xz
+ sha256  db3c4a3b3695a0f317a0c5176acd2f656d18abc45b3ee78e50935a78eb1e132e  COPYING
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index e233926cbc..4eed3b3cf0 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- > run upgradeu
-+
-+See Boundary Devices's buildroot-external-boundary project
-+for additional and advanced defconfigs using Qt5, gstreamer,
-+NXP proprietary packages with demo applications:
-+
-+https://github.com/boundarydevices/buildroot-external-boundary
+-LIBCURL_VERSION = 7.72.0
++LIBCURL_VERSION = 7.73.0
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.haxx.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
