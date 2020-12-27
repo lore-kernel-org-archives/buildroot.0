@@ -1,59 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 Dec 2020 09:10:53 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/dhcpcd: enhance
- syntax
-Message-ID: <20201227082347.E219E80DB6@busybox.osuosl.org>
+Date: Sun, 27 Dec 2020 09:33:43 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x]
+ package/freescale-imx/imx-gpu-viv: install Vendor ICDs file (Vivante.icd)
+Message-ID: <20201227082413.9AE69815BE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a69107c62b9f1d64adf03a4314973339eb0ef7f5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=bcac3a16da6b3da3482ac5f536cf32b67be0da49
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-Add all configure options through DHCP_CONFIG_OPTS and avoid splitting
-lines when they are less than 80 characters
+Without this file, the clinfo binary provided by the package doesn't
+detect the opencl support.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes:
+https://github.com/boundarydevices/buildroot-external-boundary/issues/5
+
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Cc: Gary Bisson <gary.bisson@boundarydevices.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 909432e0bb55b1bcf7c90e8b60c47ebc02b36a6c)
+(cherry picked from commit b37cd79daf874e0af7931510821444af2ff0ed51)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dhcpcd/dhcpcd.mk | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
-index 63dbbee86c..3abd4cec68 100644
---- a/package/dhcpcd/dhcpcd.mk
-+++ b/package/dhcpcd/dhcpcd.mk
-@@ -11,6 +11,10 @@ DHCPCD_DEPENDENCIES = host-pkgconf
- DHCPCD_LICENSE = BSD-2-Clause
- DHCPCD_LICENSE_FILES = LICENSE
- 
-+DHCPCD_CONFIG_OPTS = \
-+	--libexecdir=/lib/dhcpcd \
-+	--os=linux
-+
- ifeq ($(BR2_STATIC_LIBS),y)
- DHCPCD_CONFIG_OPTS += --enable-static
- endif
-@@ -20,16 +24,11 @@ DHCPCD_CONFIG_OPTS += --disable-fork
- endif
- 
- define DHCPCD_CONFIGURE_CMDS
--	(cd $(@D); \
--	$(TARGET_CONFIGURE_OPTS) ./configure \
--		--os=linux \
--		--libexecdir=/lib/dhcpcd \
--		$(DHCPCD_CONFIG_OPTS) )
-+	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure $(DHCPCD_CONFIG_OPTS))
- endef
- 
- define DHCPCD_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) \
--		-C $(@D) all
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) all
- endef
- 
- define DHCPCD_INSTALL_TARGET_CMDS
+diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
+index b6b070e4f6..8e8f7355dc 100644
+--- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
++++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
+@@ -118,6 +118,7 @@ define IMX_GPU_VIV_INSTALL_TARGET_CMDS
+ 	$(IMX_GPU_VIV_INSTALL_EXAMPLES)
+ 	$(IMX_GPU_VIV_INSTALL_GMEM_INFO)
+ 	cp -a $(@D)/gpu-core/usr/lib $(TARGET_DIR)/usr
++	$(INSTALL) -D -m 0644 $(@D)/gpu-core/etc/Vivante.icd $(TARGET_DIR)/etc/OpenCL/vendors/Vivante.icd
+ 	for lib in EGL GAL GLESv2 VDK; do \
+ 		for f in $(TARGET_DIR)/usr/lib/lib$${lib}-*.so; do \
+ 			case $$f in \
