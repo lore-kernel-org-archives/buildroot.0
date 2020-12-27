@@ -1,103 +1,113 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 27 Dec 2020 18:24:45 +0100
-Subject: [Buildroot] [PATCH 1/1] package/iwd: fix static build with
- readline
-In-Reply-To: <20201216070409.142699-1-fontaine.fabrice@gmail.com>
-References: <20201216070409.142699-1-fontaine.fabrice@gmail.com>
-Message-ID: <20201227182445.322532fa@gmx.net>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 27 Dec 2020 19:52:32 +0200
+Subject: [Buildroot] [PATCH] package/rt-tests: add config option to
+ build without numactl
+In-Reply-To: <20201227123747.GA15039@arbad>
+References: <20201227123747.GA15039@arbad>
+Message-ID: <874kk79lwf.fsf@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice,
+Hi Andreas,
 
-On Wed, 16 Dec 2020 08:04:09 +0100, Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
-
-> Fixes:
->  - http://autobuild.buildroot.org/results/8fb1341f2f5094c346456b43b4fc04996c2e1485
+On Sun, Dec 27 2020, Andreas Klinger wrote:
+> rt-tests don't show up in config menu and is not build if
+> BR2_PACKAGE_NUMACTL_ARCH_SUPPORTS is not available on the target
+> architecture. In such a case numactl is also not available what applies
+> for most small embedded targets.
 >
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> This dependency was introduced with commit 7f50cbfb800e
+> ("package/rt-tests: bump to version 1.8")
+>
+> But rt-tests can also be build without numactl when passing NUMA=0 to
+> make. This possibility is documented on
+> https://wiki.linuxfoundation.org/realtime/documentation/howto/tools/rt-tests
+>
+> Add an option BR2_PACKAGE_RT_TESTS_WITHOUT_NUMACTL to build without
+> numactl to the configuration menu.
+>
+> Signed-off-by: Andreas Klinger <ak@it-klinger.de>
 > ---
->  ...re.ac-fix-static-build-with-readline.patch | 61 +++++++++++++++++++
->  1 file changed, 61 insertions(+)
->  create mode 100644 package/iwd/0001-configure.ac-fix-static-build-with-readline.patch
+>  package/rt-tests/Config.in   | 11 +++++++++--
+>  package/rt-tests/rt-tests.mk |  8 ++++++--
+>  2 files changed, 15 insertions(+), 4 deletions(-)
 >
-> diff --git a/package/iwd/0001-configure.ac-fix-static-build-with-readline.patch b/package/iwd/0001-configure.ac-fix-static-build-with-readline.patch
-> new file mode 100644
-> index 0000000000..37dbdb18e5
-> --- /dev/null
-> +++ b/package/iwd/0001-configure.ac-fix-static-build-with-readline.patch
-> @@ -0,0 +1,61 @@
-> +From 358e0755c3a434d7a815519b8c10ae5d347caad0 Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Wed, 16 Dec 2020 07:51:04 +0100
-> +Subject: [PATCH] configure.ac: fix static build with readline
-> +
-> +Retrieve the dependencies of readline through pkg-config (and fallback
-> +to -lreadline) to avoid the following build failure:
-> +
-> +/nvme/rc-buildroot-test/scripts/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-uclibc/8.3.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: /nvme/rc-buildroot-test/scripts/instance-0/output-1/host/bin/../x86_64-buildroot-linux-uclibc/sysroot/usr/lib/libreadline.a(display.o): in function `cr':
-> +display.c:(.text+0x1ab): undefined reference to `tputs'
-> +
-> +Fixes:
-> + - http://autobuild.buildroot.org/results/8fb1341f2f5094c346456b43b4fc04996c2e1485
-> +
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +[Upstream status:
-> +https://lists.01.org/hyperkitty/list/iwd at lists.01.org/thread/NFI4P52Y65T6XX7S7DGIVDMZISNQWUUC/]
+> diff --git a/package/rt-tests/Config.in b/package/rt-tests/Config.in
+> index cc9b14dccb..d2fffacde6 100644
+> --- a/package/rt-tests/Config.in
+> +++ b/package/rt-tests/Config.in
+> @@ -5,7 +5,6 @@ config BR2_PACKAGE_RT_TESTS
+>  	depends on BR2_USE_MMU # fork()
+>  	depends on !BR2_STATIC_LIBS # dlopen
+>  	depends on !BR2_TOOLCHAIN_USES_MUSL # cyclictest
+> -	depends on BR2_PACKAGE_NUMACTL_ARCH_SUPPORTS
+>  	select BR2_PACKAGE_NUMACTL
+>  	help
+>  	  Set of utilities for testing the real-time behaviour of a
+> @@ -25,6 +24,15 @@ config BR2_PACKAGE_RT_TESTS
+>  
+>  	  https://wiki.linuxfoundation.org/realtime/documentation/howto/tools/rt-tests
+>  
+> +config BR2_PACKAGE_RT_TESTS_WITHOUT_NUMACTL
+> +	bool "build without numactl"
+> +	default y if !BR2_PACKAGE_NUMACTL_ARCH_SUPPORTS
+> +	depends on BR2_PACKAGE_RT_TESTS
+> +	help
+> +	  Build rt-tests with NUMA=0 for allowing embedded systems to use
+> +	  it.
+> +	  Select this if you don't have numactl on your target.
 
-Accepted upstream, see [1]...
+No need for another config option. Just disable NUMA on
+!BR2_PACKAGE_NUMACTL_ARCH_SUPPORTS.
 
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+> +
+>  comment "rt-tests may not work on MIPS with an external uClibc toolchain"
+>  	depends on BR2_PACKAGE_RT_TESTS
+>  	depends on BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+> @@ -34,4 +42,3 @@ comment "rt-tests needs a uClibc or glibc toolchain w/ NPTL, headers >= 3.14, dy
+>  	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS \
+>  		|| BR2_TOOLCHAIN_USES_MUSL || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
+>  	depends on BR2_USE_MMU
+> -	depends on BR2_PACKAGE_NUMACTL_ARCH_SUPPORTS
+> diff --git a/package/rt-tests/rt-tests.mk b/package/rt-tests/rt-tests.mk
+> index 26c257213b..4c845cf070 100644
+> --- a/package/rt-tests/rt-tests.mk
+> +++ b/package/rt-tests/rt-tests.mk
+> @@ -9,13 +9,17 @@ RT_TESTS_SOURCE = rt-tests-$(RT_TESTS_VERSION).tar.xz
+>  RT_TESTS_VERSION = 1.9
+>  RT_TESTS_LICENSE = GPL-2.0+
+>  RT_TESTS_LICENSE_FILES = COPYING
+> -RT_TESTS_DEPENDENCIES = numactl
 
-Regards,
-Peter
+We still need the numactl dependency for the
+BR2_PACKAGE_NUMACTL_ARCH_SUPPORTS case.
 
-[1] https://git.kernel.org/pub/scm/network/wireless/iwd.git/commit/?id=62d31539d6e31a40d7d33c73637e37b50c59ef40
+> +
+> +ifeq ($(BR2_PACKAGE_RT_TESTS_WITHOUT_NUMACTL),y)
 
-> +---
-> + Makefile.am  | 4 ++--
-> + configure.ac | 3 +++
-> + 2 files changed, 5 insertions(+), 2 deletions(-)
-> +
-> +diff --git a/Makefile.am b/Makefile.am
-> +index 3cd7eaa6..493d06cc 100644
-> +--- a/Makefile.am
-> ++++ b/Makefile.am
-> +@@ -288,7 +288,7 @@ client_iwctl_SOURCES = client/main.c \
-> + 			client/network.h client/network.c \
-> + 			client/properties.h client/properties.c \
-> + 			client/wsc.c client/station.c
-> +-client_iwctl_LDADD = $(ell_ldadd) -lreadline
-> ++client_iwctl_LDADD = $(ell_ldadd) $(READLINE_LIBS)
-> +
-> + if MANUAL_PAGES
-> + man_MANS += client/iwctl.1
-> +@@ -504,7 +504,7 @@ unit_test_client_SOURCES = unit/test-client.c \
-> + 				client/display.h client/display.c \
-> + 				client/network.h client/network.c \
-> + 				client/properties.h client/properties.c
-> +-unit_test_client_LDADD = $(ell_ldadd) -lreadline
-> ++unit_test_client_LDADD = $(ell_ldadd) $(READLINE_LIBS)
-> + endif
-> +
-> + unit_test_sae_SOURCES = unit/test-sae.c \
-> +diff --git a/configure.ac b/configure.ac
-> +index 7bd917a4..52f27ed9 100644
-> +--- a/configure.ac
-> ++++ b/configure.ac
-> +@@ -154,6 +154,9 @@ AC_ARG_ENABLE([client], AC_HELP_STRING([--disable-client],
-> + if (test "${enable_client}" != "no"); then
-> + 	AC_CHECK_HEADERS(readline/readline.h, enable_readline=yes,
-> + 			AC_MSG_ERROR(readline header files are required))
-> ++	PKG_CHECK_MODULES(READLINE, readline, dummy=yes, READLINE_LIBS=-lreadline)
-> ++	AC_SUBST(READLINE_CFLAGS)
-> ++	AC_SUBST(READLINE_LIBS)
-> + fi
-> + AM_CONDITIONAL(CLIENT, test "${enable_client}" != "no")
-> +
-> +--
-> +2.29.2
-> +
+So test for BR2_PACKAGE_NUMACTL_ARCH_SUPPORTS here instead.
+
+baruch
+
+> +RT_TESTS_MAKE_OPTS += NUMA=0
+> +endif
+>  
+>  define RT_TESTS_BUILD_CMDS
+>  	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+>  		CC="$(TARGET_CC)" \
+>  		CFLAGS="$(TARGET_CFLAGS)" \
+> -		prefix=/usr
+> +		prefix=/usr \
+> +		$(RT_TESTS_MAKE_OPTS)
+>  endef
+>  
+>  define RT_TESTS_INSTALL_TARGET_CMDS
+
+
+-- 
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
