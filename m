@@ -1,44 +1,83 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 27 Dec 2020 15:35:53 +0100
-Subject: [Buildroot] [PATCH 1/1] package/paho-mqtt-c: bump to version 1.3.8
-Message-ID: <20201227143553.2831663-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 27 Dec 2020 15:38:12 +0100
+Subject: [Buildroot] Buildroot 2020.11.1 released
+Message-ID: <87im8n9uwb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://github.com/eclipse/paho.mqtt.c/milestone/15?closed=1
+Hi,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/paho-mqtt-c/paho-mqtt-c.hash | 2 +-
- package/paho-mqtt-c/paho-mqtt-c.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Buildroot is a simple tool for creating complete embedded Linux systems
+(http://buildroot.org).
 
-diff --git a/package/paho-mqtt-c/paho-mqtt-c.hash b/package/paho-mqtt-c/paho-mqtt-c.hash
-index 93ce1b34f2..5223757f0f 100644
---- a/package/paho-mqtt-c/paho-mqtt-c.hash
-+++ b/package/paho-mqtt-c/paho-mqtt-c.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256  19e9f04ddf244ab8c937d7e631ca15cedce7df95712c554107600e80efdaf277  paho-mqtt-c-1.3.7.tar.gz
-+sha256  4920ff685344cdb0272568bc4414dcf48fcdfc4a98c78b1f3ca49c38417bf391  paho-mqtt-c-1.3.8.tar.gz
- sha256  83bbba033dc985487e321b6dfde111772affb73460be48726299fed3da684b1c  edl-v10
- sha256  0becf16567beb77fa252b7664631dd177c8f9a1889e48995b45379c7130e5303  epl-v20
- sha256  bc0f3f447097eb82a29ad6c2f4929572bb548b6bd4c9e38fde1bf131a771b7a0  LICENSE
-diff --git a/package/paho-mqtt-c/paho-mqtt-c.mk b/package/paho-mqtt-c/paho-mqtt-c.mk
-index a477c8baaa..b9b4f217fb 100644
---- a/package/paho-mqtt-c/paho-mqtt-c.mk
-+++ b/package/paho-mqtt-c/paho-mqtt-c.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PAHO_MQTT_C_VERSION = 1.3.7
-+PAHO_MQTT_C_VERSION = 1.3.8
- PAHO_MQTT_C_SITE = $(call github,eclipse,paho.mqtt.c,v$(PAHO_MQTT_C_VERSION))
- PAHO_MQTT_C_LICENSE = EPL-2.0 or BSD-3-Clause
- PAHO_MQTT_C_LICENSE_FILES = epl-v20 edl-v10 LICENSE
+Buildroot 2020.11.1 is released - Go download it at:
+
+http://buildroot.org/downloads/buildroot-2020.11.1.tar.gz
+
+or
+
+http://buildroot.org/downloads/buildroot-2020.11.1.tar.bz2
+
+Or get it from Git:
+
+git://git.buildroot.org/buildroot
+
+Buildroot 2020.11.1 is a bugfix release, fixing a number of important /
+security related issues discovered since the 2020.11 release.
+
+- Infrastructure:
+  - cmake: fix host ccache handling for CMake 3.19
+  - meson: Forcibly disable binary stripping for target builds, enable
+    for host builds
+  - golang: Fix HOST / TARGET directories for per-package builds
+
+- Security fixes for cryptopp, imagemagick, jasper, libcurl, libopenssl,
+  libressl, mbedtls, mutt, nodejs, openldap, python-lxml, rauc,
+  sqlcipher, unbound, webkitgtk, wireshark, wpewebkit, x11vnc, xen
+
+- Fixes for download/compilation/runtime/license issues in apitrace,
+  arm-trusted-firmware, ca-certificates, dhcpcd, dtv-scan-tables,
+  flare-engine, ghostscript, go, haproxy, imx-gpu-viv, kismet, lua,
+  mongodb, ncurses, netsnmp, opencv3, opkg-utils, paho-mqtt-c,
+  python-crc16, qt5base, shadowsocks-libev, suricata, ti-sgx-demos,
+  tinycbor, uclibc-ng-test, xserver_xorg-server
+
+For more details, see the CHANGES file:
+
+https://git.buildroot.net/buildroot/plain/CHANGES?id=2020.11.1
+
+Users of the affected packages are strongly encouraged to upgrade.
+
+Many thanks to all the people contributing to this release:
+
+git shortlog -sn 2020.11..
+
+    27  Fabrice Fontaine
+     9  Peter Korsgaard
+     4  Bernd Kuhls
+     4  Romain Naour
+     3  Thomas De Schampheleire
+     3  Yann E. MORIN
+     2  Adam Duskett
+     2  Adrian Perez de Castro
+     2  Francois Perrad
+     2  Marcin Niestroj
+     2  Michael Baudino
+     2  Thomas Petazzoni
+     1  Adam Wujek
+     1  Asaf Kahlon
+     1  Baruch Siach
+     1  Bernd Amend
+     1  Christian Stewart
+     1  Christoph M?llner
+     1  Gleb Mazovetskiy
+     1  Julien Grossholtz
+     1  Michael Vetter
+     1  Peter Seiderer
+     1  Tian Yuanhao
+
 -- 
-2.29.2
+Bye, Peter Korsgaard
