@@ -1,44 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 Dec 2020 14:17:47 +0100
-Subject: [Buildroot] [git commit] package/uclibc: bump version to 1.0.37
-Message-ID: <20201227130124.5F3C082AA5@busybox.osuosl.org>
+Date: Sun, 27 Dec 2020 14:20:57 +0100
+Subject: [Buildroot] [PATCH] package/opencv3: do not detect ccache
+In-Reply-To: <20201226154729.2507761-1-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Sat, 26 Dec 2020 16:47:29 +0100")
+References: <20201226154729.2507761-1-yann.morin.1998@free.fr>
+Message-ID: <87v9cn9yh2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d7da7e8aacf4cf674bde76fc5a562632d47c9fe8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/uclibc/uclibc.hash | 4 ++--
- package/uclibc/uclibc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ > OpenCV-3's buildsystem will try to detect ccache and use it if
+ > available. This may yield a system-installed ccache.
 
-diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
-index 7319a70c82..e8bd5c5192 100644
---- a/package/uclibc/uclibc.hash
-+++ b/package/uclibc/uclibc.hash
-@@ -1,4 +1,4 @@
--# From https://downloads.uclibc-ng.org/releases/1.0.36/uClibc-ng-1.0.36.tar.xz.sha256
--sha256  010f40841669809422e01b47e7169d49c61bf3382f493c2571a8a96634ed300c  uClibc-ng-1.0.36.tar.xz
-+# From https://downloads.uclibc-ng.org/releases/1.0.37/uClibc-ng-1.0.37.tar.xz.sha256
-+sha256  b2b815d20645cf604b99728202bf3ecb62507ce39dfa647884b4453caf86212c  uClibc-ng-1.0.37.tar.xz
- # Locally calculated
- sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING.LIB
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index 524fc98d29..53983e852d 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UCLIBC_VERSION = 1.0.36
-+UCLIBC_VERSION = 1.0.37
- UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
- UCLIBC_SITE = https://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
- UCLIBC_LICENSE = LGPL-2.1+
+ > However, in Buildroot, ccache is entirely hidden away and handled in the
+ > toolchain wrapper.
+
+ > Forcibly disable detection of ccache.
+
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ > Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Cc: Samuel Martin <s.martin49@gmail.com>
+
+Committed to 2020.02.x, 2020.08.x and 2020.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
