@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 Dec 2020 14:20:23 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] package/opencv3: do not
+Date: Sun, 27 Dec 2020 14:20:18 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/opencv3: do not
  detect ccache
-Message-ID: <20201227133026.7D06182B8B@busybox.osuosl.org>
+Message-ID: <20201227133033.6420182B8B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=76736ca80a1172dcd405dac5f09e78981473008b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=633223a42db4b637d264f1741a720da0f128f4ca
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
 OpenCV-3's buildsystem will try to detect ccache and use it if
 available. This may yield a system-installed ccache.
@@ -31,7 +31,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 1 insertion(+)
 
 diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
-index 24def546f2..865f69ac8f 100644
+index 3e3e5987a5..f836562acf 100644
 --- a/package/opencv3/opencv3.mk
 +++ b/package/opencv3/opencv3.mk
 @@ -46,6 +46,7 @@ endif
