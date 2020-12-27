@@ -1,31 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 Dec 2020 08:50:23 +0100
-Subject: [Buildroot] [PATCH] libcurl: security bump to version 7.74.0
-In-Reply-To: <d29e572b126866f1a91ea9ef1befceff4744f01c.1608816139.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Thu, 24 Dec 2020 15:22:19 +0200")
-References: <d29e572b126866f1a91ea9ef1befceff4744f01c.1608816139.git.baruch@tkos.co.il>
-Message-ID: <87sg7rd6ww.fsf@dell.be.48ers.dk>
+Date: Sun, 27 Dec 2020 08:55:51 +0100
+Subject: [Buildroot] [PATCH 1/1] package/rhash: fix build failure due to
+ gcc -v
+In-Reply-To: <20201225223441.GH1680670@scaer> (Yann E. MORIN's message of
+ "Fri, 25 Dec 2020 23:34:41 +0100")
+References: <20201203202853.616174-1-fontaine.fabrice@gmail.com>
+ <20201225223441.GH1680670@scaer>
+Message-ID: <87o8ifd6ns.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Fixes security issues:
- > CVE-2020-8286: Inferior OCSP verification
+ > Fabrice, All,
+ > On 2020-12-03 21:28 +0100, Fabrice Fontaine spake thusly:
+ >> Fixes:
+ >> - http://autobuild.buildroot.org/results/8605c16cc28316954ce8b9dcc266974390c5da20
+ >> 
+ >> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
- > CVE-2020-8285: FTP wildcard stack overflow
+ > Applied to master with the following changes:
 
- > CVE-2020-8284: trusting FTP PASV responses
+ >   - retain "$CC -v" as default, fallback to "$CC --version", in the hope
+ >     that it stands better chance with upstream
+ >   - write a commit log to explain the actual root-cause of the build
+ >     failure
 
- > Drop upstream patch.
-
- > Cc: Matt Weber <matthew.weber@rockwellcollins.com>
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-
-Committed to 2020.02.x, 2020.08.x and 2020.11.x, thanks.
+This is only an issue with rhash 1.4.0, and not the older versions we
+have on the stable branches, right?
 
 -- 
 Bye, Peter Korsgaard
