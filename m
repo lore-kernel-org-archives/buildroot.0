@@ -1,46 +1,83 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 Dec 2020 09:30:21 +0100
-Subject: [Buildroot] [git commit branch/2020.08.x] board/boundarydevices:
- promote buildroot-external-boundary project
-Message-ID: <20201227082413.901F7815BE@busybox.osuosl.org>
+Date: Sun, 27 Dec 2020 08:49:20 +0100
+Subject: [Buildroot] [git commit branch/2020.08.x] package/libcurl: fix
+ build with libssh2 and disabled proxy
+Message-ID: <20201227082413.2BB6C88179@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=24016d8ad548fd13bfcaed61d76ebdd68dd3d94c
+commit: https://git.buildroot.net/buildroot/commit/?id=ffedd4dfa7c68d7dafcb41e735515c1cc3721e0b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.08.x
 
-It may be useful for users using Boundary Devices boards to find
-more advanced defconfigs than the one provided by Buildroot.
+Add patch fixing build of libssh2 support when
+BR2_PACKAGE_LIBCURL_PROXY_SUPPORT is disabled.
 
-See:
-https://github.com/boundarydevices/buildroot-external-boundary#configurations-details
+Fixes:
+http://autobuild.buildroot.net/results/113407c1721b601cf2b721d0b78392622000cc3f/
+http://autobuild.buildroot.net/results/a5abdcc6a12d2326da0fe3daf9ecbb96e5c6cac3/
+http://autobuild.buildroot.net/results/ab1f7b9837ac74fad359e6c239f45ed25ad31df3/
 
-Update the readme.txt to add the link to the br2_external maintained
-by Boundary Devices.
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Cc: Gary Bisson <gary.bisson@boundarydevices.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 75543322843f9ce72a4f39f1ee6239059c061e6c)
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 0fa9af8be0763cf32d7a2d55a7d3e04a7f9e2cb7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/boundarydevices/common/readme.txt | 6 ++++++
- 1 file changed, 6 insertions(+)
+ ...sh2-fix-build-with-disabled-proxy-support.patch | 46 ++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
 
-diff --git a/board/boundarydevices/common/readme.txt b/board/boundarydevices/common/readme.txt
-index d1bb3fa598..307cfb5549 100644
---- a/board/boundarydevices/common/readme.txt
-+++ b/board/boundarydevices/common/readme.txt
-@@ -40,3 +40,9 @@ Where 'sdX' is the device node of the uSD partition.
- To upgrade u-boot, cancel autoboot and type:
- 
- > run upgradeu
+diff --git a/package/libcurl/0001-libssh2-fix-build-with-disabled-proxy-support.patch b/package/libcurl/0001-libssh2-fix-build-with-disabled-proxy-support.patch
+new file mode 100644
+index 0000000000..180f243581
+--- /dev/null
++++ b/package/libcurl/0001-libssh2-fix-build-with-disabled-proxy-support.patch
+@@ -0,0 +1,46 @@
++From 75d2b1787b3253784a94c66016829acf1f442526 Mon Sep 17 00:00:00 2001
++Message-Id: <75d2b1787b3253784a94c66016829acf1f442526.1603688719.git.baruch@tkos.co.il>
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Mon, 26 Oct 2020 06:56:49 +0200
++Subject: [PATCH] libssh2: fix build with disabled proxy support
 +
-+See Boundary Devices's buildroot-external-boundary project
-+for additional and advanced defconfigs using Qt5, gstreamer,
-+NXP proprietary packages with demo applications:
++Build breaks because the http_proxy field is missing:
 +
-+https://github.com/boundarydevices/buildroot-external-boundary
++vssh/libssh2.c: In function 'ssh_connect':
++vssh/libssh2.c:3119:10: error: 'struct connectdata' has no member named 'http_proxy'
++   if(conn->http_proxy.proxytype == CURLPROXY_HTTPS) {
++		  ^
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: https://github.com/curl/curl/pull/6125
++
++ lib/vssh/libssh2.c | 5 ++++-
++ 1 file changed, 4 insertions(+), 1 deletion(-)
++
++diff --git a/lib/vssh/libssh2.c b/lib/vssh/libssh2.c
++index 6c6db049bf5a..74cd5d887549 100644
++--- a/lib/vssh/libssh2.c
+++++ b/lib/vssh/libssh2.c
++@@ -3094,6 +3094,7 @@ static CURLcode ssh_connect(struct connectdata *conn, bool *done)
++     return CURLE_FAILED_INIT;
++   }
++ 
+++#ifndef CURL_DISABLE_PROXY
++   if(conn->http_proxy.proxytype == CURLPROXY_HTTPS) {
++     /*
++      * This crazy union dance is here to avoid assigning a void pointer a
++@@ -3132,7 +3133,9 @@ static CURLcode ssh_connect(struct connectdata *conn, bool *done)
++     libssh2_session_callback_set(ssh->ssh_session,
++                                  LIBSSH2_CALLBACK_SEND, sshsend.sendp);
++   }
++-  else if(conn->handler->protocol & CURLPROTO_SCP) {
+++  else
+++#endif /* CURL_DISABLE_PROXY */
+++  if(conn->handler->protocol & CURLPROTO_SCP) {
++     conn->recv[FIRSTSOCKET] = scp_recv;
++     conn->send[FIRSTSOCKET] = scp_send;
++   }
++-- 
++2.28.0
++
