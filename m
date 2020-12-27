@@ -1,75 +1,94 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 27 Dec 2020 18:19:40 +0100
-Subject: [Buildroot] [PATCH v1] package/iwd: fix static linking
- (readline needs ncurses)
-In-Reply-To: <20201227170832.23903-1-ps.report@gmx.net>
-References: <20201227170832.23903-1-ps.report@gmx.net>
-Message-ID: <20201227181940.60e15575@gmx.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 27 Dec 2020 18:20:55 +0100
+Subject: [Buildroot] Buildroot 2020.02.9 released
+Message-ID: <87a6tz9nd4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 27 Dec 2020 18:08:32 +0100, Peter Seiderer <ps.report@gmx.net> wrote:
+Hi,
 
-> Fixes:
->
->   - http://autobuild.buildroot.net/results/26c7536b95cc475bc10d4283e93ea9ccd6ced665
->
->   .../arm-buildroot-linux-musleabihf/bin/ld: .../arm-buildroot-linux-musleabihf/sysroot/usr/lib/libreadline.a(display.o): in function `_rl_move_cursor_relative':
->   display.c:(.text+0x1164): undefined reference to `tputs'
->
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  ...tatic-linking-readline-needs-ncurses.patch | 31 +++++++++++++++++++
->  1 file changed, 31 insertions(+)
->  create mode 100644 package/iwd/0001-iwctl-fix-static-linking-readline-needs-ncurses.patch
->
-> diff --git a/package/iwd/0001-iwctl-fix-static-linking-readline-needs-ncurses.patch b/package/iwd/0001-iwctl-fix-static-linking-readline-needs-ncurses.patch
-> new file mode 100644
-> index 0000000000..a204d982b8
-> --- /dev/null
-> +++ b/package/iwd/0001-iwctl-fix-static-linking-readline-needs-ncurses.patch
-> @@ -0,0 +1,31 @@
-> +From 84a4eb23ccca883d3823785225858bd437e3833a Mon Sep 17 00:00:00 2001
-> +From: Peter Seiderer <ps.report@gmx.net>
-> +Date: Sun, 27 Dec 2020 17:56:35 +0100
-> +Subject: [PATCH] iwctl: fix static linking (readline needs ncurses)
-> +
-> +Fixes:
-> +
-> +  .../arm-buildroot-linux-musleabihf/bin/ld: .../arm-buildroot-linux-musleabihf/sysroot/usr/lib/libreadline.a(display.o): in function `_rl_move_cursor_relative':
-> +  display.c:(.text+0x1164): undefined reference to `tputs'
-> +
-> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> +---
-> + Makefile.am | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/Makefile.am b/Makefile.am
-> +index 1f0b0d3..5ae4a98 100644
-> +--- a/Makefile.am
-> ++++ b/Makefile.am
-> +@@ -286,7 +286,7 @@ client_iwctl_SOURCES = client/main.c \
-> + 			client/network.h client/network.c \
-> + 			client/properties.h client/properties.c \
-> + 			client/wsc.c client/station.c
-> +-client_iwctl_LDADD = $(ell_ldadd) -lreadline
-> ++client_iwctl_LDADD = $(ell_ldadd) -lreadline -lncurses
-> +
-> + if MANUAL_PAGES
-> + man_MANS += client/iwctl.1
-> +--
-> +2.29.2
-> +
+Buildroot is a simple tool for creating complete embedded Linux systems
+(http://buildroot.org).
 
-There is already a prior (and better) fix by Fabrice Fontaine ([1]) which
-is accepted upstream ([2])..., forget about this one (and sorry for the
-noise)...
+Buildroot 2020.02.9 is released - Go download it at:
 
-Regards,
-Peter
+http://buildroot.org/downloads/buildroot-2020.02.9.tar.gz
 
-[1] http://lists.busybox.net/pipermail/buildroot/2020-December/298672.html
-[2] https://git.kernel.org/pub/scm/network/wireless/iwd.git/commit/?id=62d31539d6e31a40d7d33c73637e37b50c59ef40
+or
+
+http://buildroot.org/downloads/buildroot-2020.02.9.tar.bz2
+
+Or get it from Git:
+
+git://git.buildroot.org/buildroot
+
+Buildroot 2020.02.9 is a bugfix release on the current long term
+release, fixing a number of important / security related issues
+discovered since the 2020.02.8 release. The 2020.02.x series is
+supported until April 2021.
+
+- Infrastructure:
+  - cmake: fix host ccache handling for CMake 3.19
+  - meson: Forcibly disable binary stripping for target builds, enable
+    for host builds
+  - golang: Fix HOST / TARGET directories for per-package builds
+
+- Security fixes for c-ares, cryptopp, docker-containerd, imagemagick,
+  jasper, jpeg-turbo, libcurl, libkrb5, libopenssl, libressl, mariadb,
+  mbedtls, minidlna, musl, mutt, nodejs, openldap, openrc, php, privoxy,
+  proftpd, python-flask-cors, python-lxml, raptor, rauc, ruby, slirp,
+  sqlcipher, wireshark, x11vnc, xen, xinetd, xserver_xorg-server
+
+- Fixes for download/compilation/runtime/license issues in apitrace,
+  arm-trusted-firmware, bustle, cdrkit, dhcpcd, dtv-scan-tables,
+  flare-engine, ghostscript, haproxy, imx-gpu-viv, jemalloc, libcap,
+  libgpiod, lynx, mutt, ncurses, netsnmp, opencv3, opkg-utils,
+  paho-mqtt-c, python-crc16, python-pip, python-pyqt5, qemu, qt5base,
+  shadowsocks-libev, ti-sgx-demos, tinycbor, vsftpd, wireless-regdb,
+  xserver_xorg-server
+
+For more details, see the CHANGES file:
+
+https://git.buildroot.net/buildroot/plain/CHANGES?id=2020.02.9
+
+Users of the affected packages are strongly encouraged to upgrade.
+
+Many thanks to all the people contributing to this release:
+
+git shortlog -sn 2020.02.8..
+
+    58  Peter Korsgaard
+    30  Fabrice Fontaine
+     6  Bernd Kuhls
+     4  Adam Duskett
+     4  Asaf Kahlon
+     4  Baruch Siach
+     4  Michael Vetter
+     3  Romain Naour
+     3  Thomas De Schampheleire
+     3  Yann E. MORIN
+     2  Christian Stewart
+     2  Marcin Niestroj
+     2  Peter Seiderer
+     2  Pierre-Jean Texier
+     2  Thomas Petazzoni
+     1  Adam Wujek
+     1  Bartosz Bilas
+     1  Bernd Amend
+     1  Christoph M?llner
+     1  Francois Perrad
+     1  Gleb Mazovetskiy
+     1  Heiko Stuebner
+     1  Heiko Thiery
+     1  James Hilliard
+     1  Julien Grossholtz
+     1  J?rg Krause
+     1  Michael Nosthoff
+     1  Tian Yuanhao
+     1  Yair Ben-Avraham
+
+-- 
+Bye, Peter Korsgaard
