@@ -1,55 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 Dec 2020 09:46:16 +0100
-Subject: [Buildroot] [git commit] package/mosquitto: fix static build with
- cjson
-Message-ID: <20201227083127.EFBAD814ED@busybox.osuosl.org>
+Date: Sun, 27 Dec 2020 09:43:15 +0100
+Subject: [Buildroot] [git commit] package/opencv3: do not detect ccache
+Message-ID: <20201227083127.E283B8259E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5e657530a12a03e8558017c7e741a51356c4f329
+commit: https://git.buildroot.net/buildroot/commit/?id=505e7f47715c77d8586444a4fefe4a190b77aaad
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
- - http://autobuild.buildroot.org/results/98e0bccf3e1a964bb6a52265bd6f11a681ec220d
+OpenCV-3's buildsystem will try to detect ccache and use it if
+available. This may yield a system-installed ccache.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+However, in Buildroot, ccache is entirely hidden away and handled in the
+toolchain wrapper.
+
+Forcibly disable detection of ccache.
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mosquitto/mosquitto.mk | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ package/opencv3/opencv3.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index 0db78a384a..74fd7401da 100644
---- a/package/mosquitto/mosquitto.mk
-+++ b/package/mosquitto/mosquitto.mk
-@@ -11,6 +11,7 @@ MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v20 edl-v10
- MOSQUITTO_INSTALL_STAGING = YES
- 
- MOSQUITTO_MAKE_OPTS = \
-+	CLIENT_STATIC_LDADD="$(MOSQUITTO_STATIC_LIBS)" \
- 	UNAME=Linux \
- 	STRIP=true \
- 	prefix=/usr \
-@@ -50,9 +51,8 @@ endif
- 
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- MOSQUITTO_DEPENDENCIES += host-pkgconf openssl
--MOSQUITTO_MAKE_OPTS += \
--	WITH_TLS=yes \
--	CLIENT_STATIC_LDADD="`$(PKG_CONFIG_HOST_BINARY) --libs openssl`"
-+MOSQUITTO_MAKE_OPTS += WITH_TLS=yes
-+MOSQUITTO_STATIC_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs openssl`
- else
- MOSQUITTO_MAKE_OPTS += WITH_TLS=no
- endif
-@@ -60,6 +60,7 @@ endif
- ifeq ($(BR2_PACKAGE_CJSON),y)
- MOSQUITTO_DEPENDENCIES += cjson
- MOSQUITTO_MAKE_OPTS += WITH_CJSON=yes
-+MOSQUITTO_STATIC_LIBS += -lcjson
- else
- MOSQUITTO_MAKE_OPTS += WITH_CJSON=no
- endif
+diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
+index 2bf70261c7..231d44395e 100644
+--- a/package/opencv3/opencv3.mk
++++ b/package/opencv3/opencv3.mk
+@@ -46,6 +46,7 @@ endif
+ # OpenCV build options
+ OPENCV3_CONF_OPTS += \
+ 	-DBUILD_WITH_STATIC_CRT=OFF \
++	-DENABLE_CCACHE=OFF \
+ 	-DENABLE_COVERAGE=OFF \
+ 	-DENABLE_FAST_MATH=ON \
+ 	-DENABLE_IMPL_COLLECTION=OFF \
