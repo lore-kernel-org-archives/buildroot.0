@@ -1,39 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 Dec 2020 09:01:10 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/mutt: fix
- activation of openssl on imap
-Message-ID: <20201227082441.BB294812EC@busybox.osuosl.org>
+Date: Sun, 27 Dec 2020 09:01:39 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/mutt: add zlib
+ optional dependency
+Message-ID: <20201227082441.C8ACA81370@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=498be71046b86b365f03947a057afaad9f00e422
+commit: https://git.buildroot.net/buildroot/commit/?id=fa41416454cd584a480716b4a96ba84dea2bd7cf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-Activation of openssl for imap is broken since commit
-0fcd010a2db771c259224ad1d025fb4c5a9baf3b because of the following typo:
-BR2_PACKAGET_MUTT_IMAP
+zlib is an optional dependency which is enabled by default since version
+1.14.1 and
+https://gitlab.com/muttmua/mutt/-/commit/136ae0add512f21bc418f9e31a2f1b970ad1a490
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit dc1ec5b78bb9cc6ccc1ffb7367eb8ce68dc04fa8)
+(cherry picked from commit 554610803c3807775c1d9e153187ee99ccfd11ad)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mutt/mutt.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/mutt/mutt.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
-index 58c80d445d..cc4b5f56b4 100644
+index cc4b5f56b4..4e14004577 100644
 --- a/package/mutt/mutt.mk
 +++ b/package/mutt/mutt.mk
-@@ -43,7 +43,7 @@ MUTT_CONF_OPTS += --disable-pop
+@@ -61,6 +61,13 @@ else
+ MUTT_CONF_OPTS += --without-sqlite3
  endif
  
- # SSL support is only used by imap or pop3 module
--ifneq ($(BR2_PACKAGET_MUTT_IMAP)$(BR2_PACKAGE_MUTT_POP3),)
-+ifneq ($(BR2_PACKAGE_MUTT_IMAP)$(BR2_PACKAGE_MUTT_POP3),)
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- MUTT_DEPENDENCIES += openssl
- MUTT_CONF_OPTS += --with-ssl=$(STAGING_DIR)/usr
++ifeq ($(BR2_PACKAGE_ZLIB),y)
++MUTT_DEPENDENCIES += zlib
++MUTT_CONF_OPTS += --with-zlib=$(STAGING_DIR)/usr
++else
++MUTT_CONF_OPTS += --without-zlib
++endif
++
+ # Avoid running tests to check for:
+ #  - target system is *BSD
+ #  - C99 conformance (snprintf, vsnprintf)
