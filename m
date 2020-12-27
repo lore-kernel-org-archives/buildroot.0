@@ -1,51 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 Dec 2020 14:45:31 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/opencv3: fix
- build with protobuf and gcc < 6
-Message-ID: <20201227133021.F1FE182B84@busybox.osuosl.org>
+Date: Sun, 27 Dec 2020 14:20:27 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/opencv3: do not
+ detect ccache
+Message-ID: <20201227133021.E50DB82B84@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fc321efabbfe2eff86382f1a7b3fdf6ebcf8d65f
+commit: https://git.buildroot.net/buildroot/commit/?id=1420d5bcca306036e11b9510a9b239ff499cb919
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Fix the folloing build failure with protobuf (enabled since commit
-31c68a449ecd7da61ecfd909bea7ce799f9a6450) and gcc 5.3.0:
+OpenCV-3's buildsystem will try to detect ccache and use it if
+available. This may yield a system-installed ccache.
 
-[ 53%] Building CXX object modules/dnn/CMakeFiles/opencv_dnn.dir/opencv-caffe.pb.cc.o
-In file included from /home/peko/autobuild/instance-1/output-1/per-package/opencv3/host/opt/ext-toolchain/mips64el-buildroot-linux-uclibc/include/c++/5.5.0/atomic:38:0,
-                 from /home/peko/autobuild/instance-1/output-1/per-package/opencv3/host/mips64el-buildroot-linux-uclibc/sysroot/usr/include/google/protobuf/io/coded_stream.h:115,
-                 from /home/peko/autobuild/instance-1/output-1/build/opencv3-3.4.12/buildroot-build/modules/dnn/opencv-caffe.pb.h:23,
-                 from /home/peko/autobuild/instance-1/output-1/build/opencv3-3.4.12/buildroot-build/modules/dnn/opencv-caffe.pb.cc:4:
-/home/peko/autobuild/instance-1/output-1/per-package/opencv3/host/opt/ext-toolchain/mips64el-buildroot-linux-uclibc/include/c++/5.5.0/bits/c++0x_warning.h:32:2: error: #error This file requires compiler and library support for the ISO C++ 2011 standard. This support must be enabled with the -std=c++11 or -std=gnu++11 compiler options.
- #error This file requires compiler and library support \
-  ^
+However, in Buildroot, ccache is entirely hidden away and handled in the
+toolchain wrapper.
 
-Fixes:
- - http://autobuild.buildroot.org/results/7caf175af039054a032b8f63b458b3940d9ec0f3
+Forcibly disable detection of ccache.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Samuel Martin <s.martin49@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit bf96f4e8d327a8d7a4b1ab732486aced3d1d8da8)
+(cherry picked from commit 505e7f47715c77d8586444a4fefe4a190b77aaad)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/opencv3/opencv3.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/opencv3/opencv3.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
-index d98e0e19f4..0c41ca4d14 100644
+index 4e24f886bf..d98e0e19f4 100644
 --- a/package/opencv3/opencv3.mk
 +++ b/package/opencv3/opencv3.mk
-@@ -288,7 +288,9 @@ OPENCV3_CONF_OPTS += -DWITH_PNG=OFF
- endif
- 
- ifeq ($(BR2_PACKAGE_OPENCV3_WITH_PROTOBUF),y)
-+# protobuf needs c++11 (since 3.6.0)
+@@ -46,6 +46,7 @@ endif
+ # OpenCV build options
  OPENCV3_CONF_OPTS += \
-+	-DENABLE_CXX11=ON \
- 	-DPROTOBUF_UPDATE_FILES=ON \
- 	-DWITH_PROTOBUF=ON
- OPENCV3_DEPENDENCIES += protobuf
+ 	-DBUILD_WITH_STATIC_CRT=OFF \
++	-DENABLE_CCACHE=OFF \
+ 	-DENABLE_COVERAGE=OFF \
+ 	-DENABLE_FAST_MATH=ON \
+ 	-DENABLE_IMPL_COLLECTION=OFF \
