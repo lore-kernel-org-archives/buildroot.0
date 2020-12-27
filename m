@@ -1,81 +1,86 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 27 Dec 2020 15:20:03 +0100
-Subject: [Buildroot] [PATCH 1/1] package/assimp: don't install zlib
-Message-ID: <20201227142003.2818138-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 27 Dec 2020 15:23:34 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] Update for 2020.11.1
+Message-ID: <20201227140706.CC9E282B9F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-assimp uses and installs its own embedded version of zlib since commit
-b529a582ba4d7671597e95d7ab54ee652cbbc261.
+commit: https://git.buildroot.net/buildroot/commit/?id=804a9e18656c1584b059129e0b5cebe2a2405fac
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-Don't install it to avoid the following build failure when building
-hiawatha:
-
--- Found ZLIB: optimized;/home/buildroot/autobuild/instance-0/output-1/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libz.so;debug;/home/buildroot/autobuild/instance-0/output-1/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libzlibstaticd.a (found version "1.2.11")
-
--- Looking for /home/buildroot/autobuild/instance-0/output-1/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libz.so in optimized
-CMake Error at /home/buildroot/autobuild/instance-0/output-1/build/hiawatha-10.11/CMakeFiles/CMakeTmp/CMakeLists.txt:15 (target_link_libraries):
-  The "optimized" argument must be followed by a library.
-
-Fixes:
- - http://autobuild.buildroot.org/results/9cac31962d48245a5579da692dbc9488292a397e
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ib-CMakeLists.txt-don-t-install-zlib.patch | 42 +++++++++++++++++++
- 1 file changed, 42 insertions(+)
- create mode 100644 package/assimp/0004-contrib-zlib-CMakeLists.txt-don-t-install-zlib.patch
+ CHANGES                  | 29 +++++++++++++++++++++++++++++
+ Makefile                 |  4 ++--
+ support/misc/Vagrantfile |  2 +-
+ 3 files changed, 32 insertions(+), 3 deletions(-)
 
-diff --git a/package/assimp/0004-contrib-zlib-CMakeLists.txt-don-t-install-zlib.patch b/package/assimp/0004-contrib-zlib-CMakeLists.txt-don-t-install-zlib.patch
-new file mode 100644
-index 0000000000..3d9a03c85f
---- /dev/null
-+++ b/package/assimp/0004-contrib-zlib-CMakeLists.txt-don-t-install-zlib.patch
-@@ -0,0 +1,42 @@
-+From 1bc628747391d7f7c7435bcd81578bf1c671ff9d Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 27 Dec 2020 12:53:02 +0100
-+Subject: [PATCH] contrib/zlib/CMakeLists.txt: don't install zlib
+diff --git a/CHANGES b/CHANGES
+index 3894193d39..a33ad56a71 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,32 @@
++2020.11.1, released December 27th, 2020
 +
-+assimp uses and installs its own embedded version of zlib since commit
-+b529a582ba4d7671597e95d7ab54ee652cbbc261.
++	Important / security related fixes.
 +
-+Don't install this library to avoid the following build failure when
-+building hiawatha:
++	Infrastructure:
++	- cmake: fix host ccache handling for CMake 3.19
++	- meson: Forcibly disable binary stripping for
++	  target builds, enable for host builds
++	- golang: Fix HOST / TARGET directories for per-package builds
 +
-+-- Found ZLIB: optimized;/home/buildroot/autobuild/instance-0/output-1/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libz.so;debug;/home/buildroot/autobuild/instance-0/output-1/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libzlibstaticd.a (found version "1.2.11")
++	Defconfigs: Beaglebone Qt5: Fix ti-sgx related issues
 +
-+-- Looking for /home/buildroot/autobuild/instance-0/output-1/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libz.so in optimized
-+CMake Error at /home/buildroot/autobuild/instance-0/output-1/build/hiawatha-10.11/CMakeFiles/CMakeTmp/CMakeLists.txt:15 (target_link_libraries):
-+  The "optimized" argument must be followed by a library.
++	Updated/fixed packages: apitrace, arm-trusted-firmware,
++	ca-certificates, cryptopp, dhcpcd, dtv-scan-tables,
++	flare-engine, ghostscript, go, haproxy, imagemagick,
++	imx-gpu-viv, jasper, kismet, libcurl, libglib2, libhtp,
++	libopenssl, libressl, libuv, libuvw, lua, mbedtls, mongodb,
++	mutt, ncurses, netsnmp, nodejs, opencv3, openldap, opkg-utils,
++	paho-mqtt-c, python-crc16, python-lxml, python-pyparsing,
++	python-pyqt5, qt5base, rauc, shadowsocks-libev, sqlcipher,
++	suricata, ti-sgx-demos, tinycbor, uclibc-ng-test, unbound,
++	webkitgtk, wpewebkit, wireshark, x11vnc, xen,
++	xserver_xorg-server
 +
-+Fixes:
-+ - http://autobuild.buildroot.org/results/9cac31962d48245a5579da692dbc9488292a397e
++	Issues resolved (http://bugs.uclibc.org):
 +
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ contrib/zlib/CMakeLists.txt | 7 -------
-+ 1 file changed, 7 deletions(-)
++	#13316: beaglebone_qt5_defconfig: PowerVR fails to start
++	#13416: dhcpcd start warning message: no such user dhcpcd
 +
-+diff --git a/contrib/zlib/CMakeLists.txt b/contrib/zlib/CMakeLists.txt
-+index c284656e..e78fd25d 100644
-+--- a/contrib/zlib/CMakeLists.txt
-++++ b/contrib/zlib/CMakeLists.txt
-+@@ -197,9 +197,3 @@ if(MINGW)
-+ endif(MINGW)
-+ 
-+ add_library(zlibstatic STATIC ${ZLIB_SRCS} ${ZLIB_ASMS} ${ZLIB_PUBLIC_HDRS} ${ZLIB_PRIVATE_HDRS})
-+-
-+-INSTALL( TARGETS zlibstatic
-+-         LIBRARY DESTINATION ${ASSIMP_LIB_INSTALL_DIR}
-+-         ARCHIVE DESTINATION ${ASSIMP_LIB_INSTALL_DIR}
-+-         RUNTIME DESTINATION ${ASSIMP_BIN_INSTALL_DIR}
-+-         COMPONENT ${LIBASSIMP_COMPONENT})
-+-- 
-+2.29.2
-+
--- 
-2.29.2
+ 2020.11, released December 2nd, 2020
+ 
+ 	Various fixes.
+diff --git a/Makefile b/Makefile
+index 34237a2125..06f1ef6aea 100644
+--- a/Makefile
++++ b/Makefile
+@@ -92,9 +92,9 @@ all:
+ .PHONY: all
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2020.11
++export BR2_VERSION := 2020.11.1
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1606948000
++BR2_VERSION_EPOCH = 1609079000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
+index db2a752c3b..753a9bdcdc 100644
+--- a/support/misc/Vagrantfile
++++ b/support/misc/Vagrantfile
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # Buildroot version to use
+-RELEASE='2020.11'
++RELEASE='2020.11.1'
+ 
+ ### Change here for more memory/cores ###
+ VM_MEMORY=2048
