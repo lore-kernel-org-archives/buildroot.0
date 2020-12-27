@@ -1,29 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 Dec 2020 09:46:24 +0100
-Subject: [Buildroot] [PATCH] package/opencv3: do not detect ccache
-In-Reply-To: <20201226154729.2507761-1-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Sat, 26 Dec 2020 16:47:29 +0100")
-References: <20201226154729.2507761-1-yann.morin.1998@free.fr>
-Message-ID: <87lfdjbpr3.fsf@dell.be.48ers.dk>
+Date: Sun, 27 Dec 2020 09:46:50 +0100
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/mosquitto: fix static build with cjson
+In-Reply-To: <20201225215032.3796886-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 25 Dec 2020 22:50:32 +0100")
+References: <20201225215032.3796886-1-fontaine.fabrice@gmail.com>
+Message-ID: <87h7o7bpqd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > OpenCV-3's buildsystem will try to detect ccache and use it if
- > available. This may yield a system-installed ccache.
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/98e0bccf3e1a964bb6a52265bd6f11a681ec220d
 
- > However, in Buildroot, ccache is entirely hidden away and handled in the
- > toolchain wrapper.
-
- > Forcibly disable detection of ccache.
-
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
- > Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > Cc: Samuel Martin <s.martin49@gmail.com>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > ---
+ > Changes v1 -> v2 (after review of Peter Korsgaard):
+ >  - Use CLIENT_STATIC_LDADD instead of adding -lcjson to CLIENT_LDFLAGS
+ >    in config.mk
 
 Committed, thanks.
 
