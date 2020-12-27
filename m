@@ -1,100 +1,103 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 Dec 2020 18:24:10 +0100
-Subject: [Buildroot] [git commit] docs/website: update for 2020.02.9
-Message-ID: <20201227170717.7CCB481424@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun, 27 Dec 2020 18:24:45 +0100
+Subject: [Buildroot] [PATCH 1/1] package/iwd: fix static build with
+ readline
+In-Reply-To: <20201216070409.142699-1-fontaine.fabrice@gmail.com>
+References: <20201216070409.142699-1-fontaine.fabrice@gmail.com>
+Message-ID: <20201227182445.322532fa@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1a78af4d10f59df965ba47247689135c114792b6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Fabrice,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+), 9 deletions(-)
+On Wed, 16 Dec 2020 08:04:09 +0100, Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 0f0ce46340..db7cd991ba 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -8,37 +8,37 @@
-     <div class="panel-heading">Download</div>
-     <div class="panel-body">
- 
--      <h3 style="text-align: center;">Latest long term support release: <b>2020.02.8</b></h3>
-+      <h3 style="text-align: center;">Latest long term support release: <b>2020.02.9</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2020.02.8.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.02.9.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2020.02.8.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.02.9.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2020.02.8.tar.gz">buildroot-2020.02.8.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2020.02.8.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2020.02.9.tar.gz">buildroot-2020.02.9.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2020.02.9.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2020.02.8.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.02.9.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2020.02.8.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.02.9.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2020.02.8.tar.bz2">buildroot-2020.02.8.tar.bz2</a></h3>
--	  <p><a href="/downloads/buildroot-2020.02.8.tar.bz2.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2020.02.9.tar.bz2">buildroot-2020.02.9.tar.bz2</a></h3>
-+	  <p><a href="/downloads/buildroot-2020.02.9.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
- 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 8b0e37ba89..0d463473c4 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li>
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2020.02.9 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>27 December 2020</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2020.02.9 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2020.02.8 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2020.02.9">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2020-December/299462.html">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2020.02.9.tar.bz2">2020.02.9 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
-+
-   <li class="timeline-inverted">
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
+> Fixes:
+>  - http://autobuild.buildroot.org/results/8fb1341f2f5094c346456b43b4fc04996c2e1485
+>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  ...re.ac-fix-static-build-with-readline.patch | 61 +++++++++++++++++++
+>  1 file changed, 61 insertions(+)
+>  create mode 100644 package/iwd/0001-configure.ac-fix-static-build-with-readline.patch
+>
+> diff --git a/package/iwd/0001-configure.ac-fix-static-build-with-readline.patch b/package/iwd/0001-configure.ac-fix-static-build-with-readline.patch
+> new file mode 100644
+> index 0000000000..37dbdb18e5
+> --- /dev/null
+> +++ b/package/iwd/0001-configure.ac-fix-static-build-with-readline.patch
+> @@ -0,0 +1,61 @@
+> +From 358e0755c3a434d7a815519b8c10ae5d347caad0 Mon Sep 17 00:00:00 2001
+> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Date: Wed, 16 Dec 2020 07:51:04 +0100
+> +Subject: [PATCH] configure.ac: fix static build with readline
+> +
+> +Retrieve the dependencies of readline through pkg-config (and fallback
+> +to -lreadline) to avoid the following build failure:
+> +
+> +/nvme/rc-buildroot-test/scripts/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-uclibc/8.3.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: /nvme/rc-buildroot-test/scripts/instance-0/output-1/host/bin/../x86_64-buildroot-linux-uclibc/sysroot/usr/lib/libreadline.a(display.o): in function `cr':
+> +display.c:(.text+0x1ab): undefined reference to `tputs'
+> +
+> +Fixes:
+> + - http://autobuild.buildroot.org/results/8fb1341f2f5094c346456b43b4fc04996c2e1485
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +[Upstream status:
+> +https://lists.01.org/hyperkitty/list/iwd at lists.01.org/thread/NFI4P52Y65T6XX7S7DGIVDMZISNQWUUC/]
+
+Accepted upstream, see [1]...
+
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+
+Regards,
+Peter
+
+[1] https://git.kernel.org/pub/scm/network/wireless/iwd.git/commit/?id=62d31539d6e31a40d7d33c73637e37b50c59ef40
+
+> +---
+> + Makefile.am  | 4 ++--
+> + configure.ac | 3 +++
+> + 2 files changed, 5 insertions(+), 2 deletions(-)
+> +
+> +diff --git a/Makefile.am b/Makefile.am
+> +index 3cd7eaa6..493d06cc 100644
+> +--- a/Makefile.am
+> ++++ b/Makefile.am
+> +@@ -288,7 +288,7 @@ client_iwctl_SOURCES = client/main.c \
+> + 			client/network.h client/network.c \
+> + 			client/properties.h client/properties.c \
+> + 			client/wsc.c client/station.c
+> +-client_iwctl_LDADD = $(ell_ldadd) -lreadline
+> ++client_iwctl_LDADD = $(ell_ldadd) $(READLINE_LIBS)
+> +
+> + if MANUAL_PAGES
+> + man_MANS += client/iwctl.1
+> +@@ -504,7 +504,7 @@ unit_test_client_SOURCES = unit/test-client.c \
+> + 				client/display.h client/display.c \
+> + 				client/network.h client/network.c \
+> + 				client/properties.h client/properties.c
+> +-unit_test_client_LDADD = $(ell_ldadd) -lreadline
+> ++unit_test_client_LDADD = $(ell_ldadd) $(READLINE_LIBS)
+> + endif
+> +
+> + unit_test_sae_SOURCES = unit/test-sae.c \
+> +diff --git a/configure.ac b/configure.ac
+> +index 7bd917a4..52f27ed9 100644
+> +--- a/configure.ac
+> ++++ b/configure.ac
+> +@@ -154,6 +154,9 @@ AC_ARG_ENABLE([client], AC_HELP_STRING([--disable-client],
+> + if (test "${enable_client}" != "no"); then
+> + 	AC_CHECK_HEADERS(readline/readline.h, enable_readline=yes,
+> + 			AC_MSG_ERROR(readline header files are required))
+> ++	PKG_CHECK_MODULES(READLINE, readline, dummy=yes, READLINE_LIBS=-lreadline)
+> ++	AC_SUBST(READLINE_CFLAGS)
+> ++	AC_SUBST(READLINE_LIBS)
+> + fi
+> + AM_CONDITIONAL(CLIENT, test "${enable_client}" != "no")
+> +
+> +--
+> +2.29.2
+> +
