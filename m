@@ -1,88 +1,91 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 27 Dec 2020 11:44:42 +0100
-Subject: [Buildroot] [PATCH 1/1] package/php: fix build on mips r6
-Message-ID: <20201227104442.889130-1-bernd.kuhls@t-online.de>
+From: Andreas Klinger <ak@it-klinger.de>
+Date: Sun, 27 Dec 2020 13:37:48 +0100
+Subject: [Buildroot] [PATCH] package/rt-tests: add config option to build
+ without numactl
+Message-ID: <20201227123747.GA15039@arbad>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/4a5/4a582af6b66c59a61b75a7047d8530202972ebdd/
+rt-tests don't show up in config menu and is not build if
+BR2_PACKAGE_NUMACTL_ARCH_SUPPORTS is not available on the target
+architecture. In such a case numactl is also not available what applies
+for most small embedded targets.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+This dependency was introduced with commit 7f50cbfb800e
+("package/rt-tests: bump to version 1.8")
+
+But rt-tests can also be build without numactl when passing NUMA=0 to
+make. This possibility is documented on
+https://wiki.linuxfoundation.org/realtime/documentation/howto/tools/rt-tests
+
+Add an option BR2_PACKAGE_RT_TESTS_WITHOUT_NUMACTL to build without
+numactl to the configuration menu.
+
+Signed-off-by: Andreas Klinger <ak@it-klinger.de>
 ---
- ...the-standard-code-path-of-sljit-emit.patch | 61 +++++++++++++++++++
- 1 file changed, 61 insertions(+)
- create mode 100644 package/php/0005-Use-the-standard-code-path-of-sljit-emit.patch
+ package/rt-tests/Config.in   | 11 +++++++++--
+ package/rt-tests/rt-tests.mk |  8 ++++++--
+ 2 files changed, 15 insertions(+), 4 deletions(-)
 
-diff --git a/package/php/0005-Use-the-standard-code-path-of-sljit-emit.patch b/package/php/0005-Use-the-standard-code-path-of-sljit-emit.patch
-new file mode 100644
-index 0000000000..d8961ee1b6
---- /dev/null
-+++ b/package/php/0005-Use-the-standard-code-path-of-sljit-emit.patch
-@@ -0,0 +1,61 @@
-+From 5d7f6573c1eef30a9720edd31a92c1a4b99b7d86 Mon Sep 17 00:00:00 2001
-+From: Zoltan Herczeg <zherczeg.u-szeged@partner.samsung.com>
-+Date: Tue, 3 Nov 2020 14:12:01 +0100
-+Subject: [PATCH] Use the standard code path of sljit_emit_cmov on mips r6.
-+ (#97)
+diff --git a/package/rt-tests/Config.in b/package/rt-tests/Config.in
+index cc9b14dccb..d2fffacde6 100644
+--- a/package/rt-tests/Config.in
++++ b/package/rt-tests/Config.in
+@@ -5,7 +5,6 @@ config BR2_PACKAGE_RT_TESTS
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on !BR2_STATIC_LIBS # dlopen
+ 	depends on !BR2_TOOLCHAIN_USES_MUSL # cyclictest
+-	depends on BR2_PACKAGE_NUMACTL_ARCH_SUPPORTS
+ 	select BR2_PACKAGE_NUMACTL
+ 	help
+ 	  Set of utilities for testing the real-time behaviour of a
+@@ -25,6 +24,15 @@ config BR2_PACKAGE_RT_TESTS
+ 
+ 	  https://wiki.linuxfoundation.org/realtime/documentation/howto/tools/rt-tests
+ 
++config BR2_PACKAGE_RT_TESTS_WITHOUT_NUMACTL
++	bool "build without numactl"
++	default y if !BR2_PACKAGE_NUMACTL_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_RT_TESTS
++	help
++	  Build rt-tests with NUMA=0 for allowing embedded systems to use
++	  it.
++	  Select this if you don't have numactl on your target.
 +
-+Downloaded from upstream commit
-+https://github.com/zherczeg/sljit/commit/5d7f6573c1eef30a9720edd31a92c1a4b99b7d86
-+SVN commit: https://vcs.pcre.org/pcre2?view=revision&revision=1281
+ comment "rt-tests may not work on MIPS with an external uClibc toolchain"
+ 	depends on BR2_PACKAGE_RT_TESTS
+ 	depends on BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+@@ -34,4 +42,3 @@ comment "rt-tests needs a uClibc or glibc toolchain w/ NPTL, headers >= 3.14, dy
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS \
+ 		|| BR2_TOOLCHAIN_USES_MUSL || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
+ 	depends on BR2_USE_MMU
+-	depends on BR2_PACKAGE_NUMACTL_ARCH_SUPPORTS
+diff --git a/package/rt-tests/rt-tests.mk b/package/rt-tests/rt-tests.mk
+index 26c257213b..4c845cf070 100644
+--- a/package/rt-tests/rt-tests.mk
++++ b/package/rt-tests/rt-tests.mk
+@@ -9,13 +9,17 @@ RT_TESTS_SOURCE = rt-tests-$(RT_TESTS_VERSION).tar.xz
+ RT_TESTS_VERSION = 1.9
+ RT_TESTS_LICENSE = GPL-2.0+
+ RT_TESTS_LICENSE_FILES = COPYING
+-RT_TESTS_DEPENDENCIES = numactl
 +
-+[Bernd: ported to php-7.4.13]
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ ext/pcre/pcre2lib/sljit/sljitLir.c               | 2 +-
-+ ext/pcre/pcre2lib/sljit/sljitNativeMIPS_common.c | 8 ++++----
-+ 2 files changed, 5 insertions(+), 5 deletions(-)
-+
-+diff --git a/ext/pcre/pcre2lib/sljit/sljitLir.c b/ext/pcre/pcre2lib/sljit/sljitLir.c
-+index 4078613..d817c90 100644
-+--- a/ext/pcre/pcre2lib/sljit/sljitLir.c
-++++ b/ext/pcre/pcre2lib/sljit/sljitLir.c
-+@@ -2034,7 +2034,7 @@ static SLJIT_INLINE sljit_s32 emit_mov_before_return(struct sljit_compiler *comp
-+ #if (defined SLJIT_CONFIG_X86 && SLJIT_CONFIG_X86) \
-+ 		|| (defined SLJIT_CONFIG_PPC && SLJIT_CONFIG_PPC) \
-+ 		|| (defined SLJIT_CONFIG_SPARC_32 && SLJIT_CONFIG_SPARC_32) \
-+-		|| ((defined SLJIT_CONFIG_MIPS && SLJIT_CONFIG_MIPS) && !(defined SLJIT_MIPS_REV && SLJIT_MIPS_REV >= 1))
-++		|| ((defined SLJIT_CONFIG_MIPS && SLJIT_CONFIG_MIPS) && !(defined SLJIT_MIPS_REV && SLJIT_MIPS_REV >= 1 && SLJIT_MIPS_REV < 6))
-+ 
-+ static SLJIT_INLINE sljit_s32 sljit_emit_cmov_generic(struct sljit_compiler *compiler, sljit_s32 type,
-+ 	sljit_s32 dst_reg,
-+diff --git a/ext/pcre/pcre2lib/sljit/sljitNativeMIPS_common.c b/ext/pcre/pcre2lib/sljit/sljitNativeMIPS_common.c
-+index 8b8c12a..ecf4dac 100644
-+--- a/ext/pcre/pcre2lib/sljit/sljitNativeMIPS_common.c
-++++ b/ext/pcre/pcre2lib/sljit/sljitNativeMIPS_common.c
-+@@ -2185,14 +2185,14 @@ SLJIT_API_FUNC_ATTRIBUTE sljit_s32 sljit_emit_cmov(struct sljit_compiler *compil
-+ 	sljit_s32 dst_reg,
-+ 	sljit_s32 src, sljit_sw srcw)
-+ {
-+-#if (defined SLJIT_MIPS_REV && SLJIT_MIPS_REV >= 1)
-++#if (defined SLJIT_MIPS_REV && SLJIT_MIPS_REV >= 1 && SLJIT_MIPS_REV < 6)
-+ 	sljit_ins ins;
-+-#endif /* SLJIT_MIPS_REV >= 1 */
-++#endif /* SLJIT_MIPS_REV >= 1 && SLJIT_MIPS_REV < 6 */
-+ 
-+ 	CHECK_ERROR();
-+ 	CHECK(check_sljit_emit_cmov(compiler, type, dst_reg, src, srcw));
-+ 
-+-#if (defined SLJIT_MIPS_REV && SLJIT_MIPS_REV >= 1)
-++#if (defined SLJIT_MIPS_REV && SLJIT_MIPS_REV >= 1 && SLJIT_MIPS_REV < 6)
-+ 
-+ 	if (SLJIT_UNLIKELY(src & SLJIT_IMM)) {
-+ #if (defined SLJIT_CONFIG_MIPS_64 && SLJIT_CONFIG_MIPS_64)
-+@@ -2249,7 +2249,7 @@ SLJIT_API_FUNC_ATTRIBUTE sljit_s32 sljit_emit_cmov(struct sljit_compiler *compil
-+ 
-+ 	return push_inst(compiler, ins | S(src) | D(dst_reg), DR(dst_reg));
-+ 
-+-#else /* SLJIT_MIPS_REV < 1 */
-++#else /* SLJIT_MIPS_REV < 1 || SLJIT_MIPS_REV >= 6 */
-+ 	return sljit_emit_cmov_generic(compiler, type, dst_reg, src, srcw);
-+ #endif /* SLJIT_MIPS_REV >= 1 */
-+ }
++ifeq ($(BR2_PACKAGE_RT_TESTS_WITHOUT_NUMACTL),y)
++RT_TESTS_MAKE_OPTS += NUMA=0
++endif
+ 
+ define RT_TESTS_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+ 		CC="$(TARGET_CC)" \
+ 		CFLAGS="$(TARGET_CFLAGS)" \
+-		prefix=/usr
++		prefix=/usr \
++		$(RT_TESTS_MAKE_OPTS)
+ endef
+ 
+ define RT_TESTS_INSTALL_TARGET_CMDS
 -- 
-2.29.2
+2.20.1
