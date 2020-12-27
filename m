@@ -1,58 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 Dec 2020 09:21:32 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/pkg-meson:
- force-disable binary stripping
-Message-ID: <20201227082348.0979880DB6@busybox.osuosl.org>
+Date: Sun, 27 Dec 2020 09:10:53 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/dhcpcd: enhance
+ syntax
+Message-ID: <20201227082347.E219E80DB6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6ea9c167b3a603b3dfc6419f91c6511c6a8829e9
+commit: https://git.buildroot.net/buildroot/commit/?id=a69107c62b9f1d64adf03a4314973339eb0ef7f5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-In buildroot, stripping for the target is configured and implemented
-with the global `BR2_STRIP_strip` option that drive the stripping in
-the target-finalize step.
+Add all configure options through DHCP_CONFIG_OPTS and avoid splitting
+lines when they are less than 80 characters
 
-So, we explicitly disable stripping at build time for the target
-variants.
-
-For the host variants, however, we don't much care about symbols and
-stuff, but smaller executables will hopefully load faster than bigger
-ones (disputable, given that sections in ELF files are paged-in
-on-demand), so we explictly enable stripping.
-
-Signed-off-by: Gleb Mazovetskiy <glex.spb@gmail.com>
-[yann.morin.1998 at free.fr:
-  - add burb about the target-finalize step
-  - enable stripping for host variants
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 3f39f902b3cd685c3c971941138e0df50947737c)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 909432e0bb55b1bcf7c90e8b60c47ebc02b36a6c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-meson.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/dhcpcd/dhcpcd.mk | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-index 185832bd0c..14f3552fc6 100644
---- a/package/pkg-meson.mk
-+++ b/package/pkg-meson.mk
-@@ -86,6 +86,7 @@ define $(2)_CONFIGURE_CMDS
- 		--default-library=$(if $(BR2_STATIC_LIBS),static,shared) \
- 		--buildtype=$(if $(BR2_ENABLE_DEBUG),debug,release) \
- 		--cross-file=$$($$(PKG)_SRCDIR)/build/cross-compilation.conf \
-+		-Dstrip=false \
- 		$$($$(PKG)_CONF_OPTS) \
- 		$$($$(PKG)_SRCDIR) $$($$(PKG)_SRCDIR)/build
+diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
+index 63dbbee86c..3abd4cec68 100644
+--- a/package/dhcpcd/dhcpcd.mk
++++ b/package/dhcpcd/dhcpcd.mk
+@@ -11,6 +11,10 @@ DHCPCD_DEPENDENCIES = host-pkgconf
+ DHCPCD_LICENSE = BSD-2-Clause
+ DHCPCD_LICENSE_FILES = LICENSE
+ 
++DHCPCD_CONFIG_OPTS = \
++	--libexecdir=/lib/dhcpcd \
++	--os=linux
++
+ ifeq ($(BR2_STATIC_LIBS),y)
+ DHCPCD_CONFIG_OPTS += --enable-static
+ endif
+@@ -20,16 +24,11 @@ DHCPCD_CONFIG_OPTS += --disable-fork
+ endif
+ 
+ define DHCPCD_CONFIGURE_CMDS
+-	(cd $(@D); \
+-	$(TARGET_CONFIGURE_OPTS) ./configure \
+-		--os=linux \
+-		--libexecdir=/lib/dhcpcd \
+-		$(DHCPCD_CONFIG_OPTS) )
++	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure $(DHCPCD_CONFIG_OPTS))
  endef
-@@ -103,6 +104,7 @@ define $(2)_CONFIGURE_CMDS
- 		--localstatedir=$$(HOST_DIR)/var \
- 		--default-library=shared \
- 		--buildtype=release \
-+		-Dstrip=true \
- 		$$($$(PKG)_CONF_OPTS) \
- 		$$($$(PKG)_SRCDIR) $$($$(PKG)_SRCDIR)/build
+ 
+ define DHCPCD_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) \
+-		-C $(@D) all
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) all
  endef
+ 
+ define DHCPCD_INSTALL_TARGET_CMDS
