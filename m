@@ -1,40 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 27 Dec 2020 10:09:34 +0100
-Subject: [Buildroot] [PATCH 1/1] package/vdr: bump to version 2.4.6
-In-Reply-To: <20201223202608.3051064-1-fontaine.fabrice@gmail.com>
-References: <20201223202608.3051064-1-fontaine.fabrice@gmail.com>
-Message-ID: <20201227100934.6c9c8317@windsurf.home>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 27 Dec 2020 11:26:49 +0100
+Subject: [Buildroot] [PATCH 1/1] package/rhash: fix build failure due to
+ gcc -v
+In-Reply-To: <87o8ifd6ns.fsf@dell.be.48ers.dk>
+References: <20201203202853.616174-1-fontaine.fabrice@gmail.com>
+ <20201225223441.GH1680670@scaer> <87o8ifd6ns.fsf@dell.be.48ers.dk>
+Message-ID: <CAPi7W81o7h3xRBb5_GjgrmuEpn+M+b4LrD4=D97tbPVrM0BKbA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 23 Dec 2020 21:26:08 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Hi Peter,
 
-> - Drop patches (already in version)
-> - pkg-config can be used to retrieve dependencies since
->   https://projects.vdr-developer.org/git/vdr.git/commit?id=f5dba03447fa73da6e181ead7fb98c2b0a2fed41
->   so use it and drop unneeded workarounds such as VDR_INCLUDE_DIRS
-> - Update indentation in hash file (two spaces)
-> 
-> https://projects.vdr-developer.org/git/vdr.git/tree/HISTORY?id=V20406
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/vdr/0001-libjpeg.patch                | 40 -------------------
->  ...ility-with-current-versions-of-glibc.patch | 27 -------------
->  package/vdr/vdr.hash                          |  8 ++--
->  package/vdr/vdr.mk                            |  8 ++--
->  4 files changed, 7 insertions(+), 76 deletions(-)
->  delete mode 100644 package/vdr/0001-libjpeg.patch
->  delete mode 100644 package/vdr/0002-Fixed-compatibility-with-current-versions-of-glibc.patch
+Le dim. 27 d?c. 2020 ? 08:55, Peter Korsgaard <peter@korsgaard.com> a ?crit :
+>
+> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>
+>  > Fabrice, All,
+>  > On 2020-12-03 21:28 +0100, Fabrice Fontaine spake thusly:
+>  >> Fixes:
+>  >> - http://autobuild.buildroot.org/results/8605c16cc28316954ce8b9dcc266974390c5da20
+>  >>
+>  >> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>
+>  > Applied to master with the following changes:
+>
+>  >   - retain "$CC -v" as default, fallback to "$CC --version", in the hope
+>  >     that it stands better chance with upstream
+>  >   - write a commit log to explain the actual root-cause of the build
+>  >     failure
+>
+> This is only an issue with rhash 1.4.0, and not the older versions we
+> have on the stable branches, right?
+Right, this issue is raised by the configure script which is available
+since version 1.3.6.
+We're using it since our bump to version 1.4.0 with commit
+cdaf43862229fb0f10d2b6b7448bcded2ef8edde.
+>
+> --
+> Bye, Peter Korsgaard
+Best Regards,
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fabrice
