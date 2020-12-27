@@ -1,46 +1,88 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 27 Dec 2020 11:26:49 +0100
-Subject: [Buildroot] [PATCH 1/1] package/rhash: fix build failure due to
- gcc -v
-In-Reply-To: <87o8ifd6ns.fsf@dell.be.48ers.dk>
-References: <20201203202853.616174-1-fontaine.fabrice@gmail.com>
- <20201225223441.GH1680670@scaer> <87o8ifd6ns.fsf@dell.be.48ers.dk>
-Message-ID: <CAPi7W81o7h3xRBb5_GjgrmuEpn+M+b4LrD4=D97tbPVrM0BKbA@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 27 Dec 2020 11:44:42 +0100
+Subject: [Buildroot] [PATCH 1/1] package/php: fix build on mips r6
+Message-ID: <20201227104442.889130-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Fixes
+http://autobuild.buildroot.net/results/4a5/4a582af6b66c59a61b75a7047d8530202972ebdd/
 
-Le dim. 27 d?c. 2020 ? 08:55, Peter Korsgaard <peter@korsgaard.com> a ?crit :
->
-> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
->
->  > Fabrice, All,
->  > On 2020-12-03 21:28 +0100, Fabrice Fontaine spake thusly:
->  >> Fixes:
->  >> - http://autobuild.buildroot.org/results/8605c16cc28316954ce8b9dcc266974390c5da20
->  >>
->  >> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->
->  > Applied to master with the following changes:
->
->  >   - retain "$CC -v" as default, fallback to "$CC --version", in the hope
->  >     that it stands better chance with upstream
->  >   - write a commit log to explain the actual root-cause of the build
->  >     failure
->
-> This is only an issue with rhash 1.4.0, and not the older versions we
-> have on the stable branches, right?
-Right, this issue is raised by the configure script which is available
-since version 1.3.6.
-We're using it since our bump to version 1.4.0 with commit
-cdaf43862229fb0f10d2b6b7448bcded2ef8edde.
->
-> --
-> Bye, Peter Korsgaard
-Best Regards,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ ...the-standard-code-path-of-sljit-emit.patch | 61 +++++++++++++++++++
+ 1 file changed, 61 insertions(+)
+ create mode 100644 package/php/0005-Use-the-standard-code-path-of-sljit-emit.patch
 
-Fabrice
+diff --git a/package/php/0005-Use-the-standard-code-path-of-sljit-emit.patch b/package/php/0005-Use-the-standard-code-path-of-sljit-emit.patch
+new file mode 100644
+index 0000000000..d8961ee1b6
+--- /dev/null
++++ b/package/php/0005-Use-the-standard-code-path-of-sljit-emit.patch
+@@ -0,0 +1,61 @@
++From 5d7f6573c1eef30a9720edd31a92c1a4b99b7d86 Mon Sep 17 00:00:00 2001
++From: Zoltan Herczeg <zherczeg.u-szeged@partner.samsung.com>
++Date: Tue, 3 Nov 2020 14:12:01 +0100
++Subject: [PATCH] Use the standard code path of sljit_emit_cmov on mips r6.
++ (#97)
++
++Downloaded from upstream commit
++https://github.com/zherczeg/sljit/commit/5d7f6573c1eef30a9720edd31a92c1a4b99b7d86
++SVN commit: https://vcs.pcre.org/pcre2?view=revision&revision=1281
++
++[Bernd: ported to php-7.4.13]
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ ext/pcre/pcre2lib/sljit/sljitLir.c               | 2 +-
++ ext/pcre/pcre2lib/sljit/sljitNativeMIPS_common.c | 8 ++++----
++ 2 files changed, 5 insertions(+), 5 deletions(-)
++
++diff --git a/ext/pcre/pcre2lib/sljit/sljitLir.c b/ext/pcre/pcre2lib/sljit/sljitLir.c
++index 4078613..d817c90 100644
++--- a/ext/pcre/pcre2lib/sljit/sljitLir.c
+++++ b/ext/pcre/pcre2lib/sljit/sljitLir.c
++@@ -2034,7 +2034,7 @@ static SLJIT_INLINE sljit_s32 emit_mov_before_return(struct sljit_compiler *comp
++ #if (defined SLJIT_CONFIG_X86 && SLJIT_CONFIG_X86) \
++ 		|| (defined SLJIT_CONFIG_PPC && SLJIT_CONFIG_PPC) \
++ 		|| (defined SLJIT_CONFIG_SPARC_32 && SLJIT_CONFIG_SPARC_32) \
++-		|| ((defined SLJIT_CONFIG_MIPS && SLJIT_CONFIG_MIPS) && !(defined SLJIT_MIPS_REV && SLJIT_MIPS_REV >= 1))
+++		|| ((defined SLJIT_CONFIG_MIPS && SLJIT_CONFIG_MIPS) && !(defined SLJIT_MIPS_REV && SLJIT_MIPS_REV >= 1 && SLJIT_MIPS_REV < 6))
++ 
++ static SLJIT_INLINE sljit_s32 sljit_emit_cmov_generic(struct sljit_compiler *compiler, sljit_s32 type,
++ 	sljit_s32 dst_reg,
++diff --git a/ext/pcre/pcre2lib/sljit/sljitNativeMIPS_common.c b/ext/pcre/pcre2lib/sljit/sljitNativeMIPS_common.c
++index 8b8c12a..ecf4dac 100644
++--- a/ext/pcre/pcre2lib/sljit/sljitNativeMIPS_common.c
+++++ b/ext/pcre/pcre2lib/sljit/sljitNativeMIPS_common.c
++@@ -2185,14 +2185,14 @@ SLJIT_API_FUNC_ATTRIBUTE sljit_s32 sljit_emit_cmov(struct sljit_compiler *compil
++ 	sljit_s32 dst_reg,
++ 	sljit_s32 src, sljit_sw srcw)
++ {
++-#if (defined SLJIT_MIPS_REV && SLJIT_MIPS_REV >= 1)
+++#if (defined SLJIT_MIPS_REV && SLJIT_MIPS_REV >= 1 && SLJIT_MIPS_REV < 6)
++ 	sljit_ins ins;
++-#endif /* SLJIT_MIPS_REV >= 1 */
+++#endif /* SLJIT_MIPS_REV >= 1 && SLJIT_MIPS_REV < 6 */
++ 
++ 	CHECK_ERROR();
++ 	CHECK(check_sljit_emit_cmov(compiler, type, dst_reg, src, srcw));
++ 
++-#if (defined SLJIT_MIPS_REV && SLJIT_MIPS_REV >= 1)
+++#if (defined SLJIT_MIPS_REV && SLJIT_MIPS_REV >= 1 && SLJIT_MIPS_REV < 6)
++ 
++ 	if (SLJIT_UNLIKELY(src & SLJIT_IMM)) {
++ #if (defined SLJIT_CONFIG_MIPS_64 && SLJIT_CONFIG_MIPS_64)
++@@ -2249,7 +2249,7 @@ SLJIT_API_FUNC_ATTRIBUTE sljit_s32 sljit_emit_cmov(struct sljit_compiler *compil
++ 
++ 	return push_inst(compiler, ins | S(src) | D(dst_reg), DR(dst_reg));
++ 
++-#else /* SLJIT_MIPS_REV < 1 */
+++#else /* SLJIT_MIPS_REV < 1 || SLJIT_MIPS_REV >= 6 */
++ 	return sljit_emit_cmov_generic(compiler, type, dst_reg, src, srcw);
++ #endif /* SLJIT_MIPS_REV >= 1 */
++ }
+-- 
+2.29.2
