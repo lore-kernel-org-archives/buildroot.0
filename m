@@ -1,139 +1,65 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 27 Dec 2020 22:30:50 +0100
-Subject: [Buildroot] [PATCH 1/1] package/assimp: don't install zlib
-In-Reply-To: <20201227142003.2818138-1-fontaine.fabrice@gmail.com>
-References: <20201227142003.2818138-1-fontaine.fabrice@gmail.com>
-Message-ID: <20201227213050.GK1680670@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 27 Dec 2020 23:52:23 +0100
+Subject: [Buildroot] [PATCH] {linux, linux-headers}: bump 5.{4, 9,
+ 10}.x series
+Message-ID: <20201227225223.15240-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, Peter, All,
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ linux/Config.in                      | 2 +-
+ linux/linux.hash                     | 6 +++---
+ package/linux-headers/Config.in.host | 6 +++---
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-On 2020-12-27 15:20 +0100, Fabrice Fontaine spake thusly:
-> assimp uses and installs its own embedded version of zlib since commit
-> b529a582ba4d7671597e95d7ab54ee652cbbc261.
-
-Looking back that that commit, and the build failure it was supposed to
-fix, I am not so sure forcing assimp to build its own bundled zlib was
-the correct solution.
-
-Indeed, the original build failure was about type mismatch, on a musl
-toolchain. Also, that commit nted that assimp "is picky about the
-provided [system zlib] versions". But there are very few "recent" zlib
-version in the field:
-
-    1.2.11 (15 Jan 2017)
-    1.2.10 (2 Jan 2017)
-    1.2.9 (31 Dec 2016)
-    1.2.8 (28 Apr 2013)
-    1.2.7.3 (13 Apr 2013)
-    1.2.7.2 (13 Apr 2013)
-    1.2.7.1 (24 Mar 2013
-    1.2.7 (2 May 2012)
-
-Besides, zlib had been extra stable and extra conservative since its
-inception, so much so that I think dubious the pickyness claim...
-
-Furthermore, the reported build failure was in the minizip bundled
-implementation, not about zlib...
-
-Finally, I think upstream has fixed that issue with their commit
-bb3db0ebaffc6b76de256e597ec1d1e4d2a6663f, which references their issue
-https://github.com/assimp/assimp/issues/2954, which suspiciously reds
-like the original build failure we had:
-
-    5.0.1 is broken on the i386 architecture: typedef redefinition with
-    different types ('long' vs '__ssize_t' (aka 'int'))
-
-So, we should instead either bump assimp to a version that has the fix,
-or backport that patch (and revert our fix b529a582ba4d7).
-
-Thoughts?
-
-Regards,
-Yann E. MORIN.
-
-> Don't install it to avoid the following build failure when building
-> hiawatha:
-> 
-> -- Found ZLIB: optimized;/home/buildroot/autobuild/instance-0/output-1/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libz.so;debug;/home/buildroot/autobuild/instance-0/output-1/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libzlibstaticd.a (found version "1.2.11")
-> 
-> -- Looking for /home/buildroot/autobuild/instance-0/output-1/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libz.so in optimized
-> CMake Error at /home/buildroot/autobuild/instance-0/output-1/build/hiawatha-10.11/CMakeFiles/CMakeTmp/CMakeLists.txt:15 (target_link_libraries):
->   The "optimized" argument must be followed by a library.
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/9cac31962d48245a5579da692dbc9488292a397e
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...ib-CMakeLists.txt-don-t-install-zlib.patch | 42 +++++++++++++++++++
->  1 file changed, 42 insertions(+)
->  create mode 100644 package/assimp/0004-contrib-zlib-CMakeLists.txt-don-t-install-zlib.patch
-> 
-> diff --git a/package/assimp/0004-contrib-zlib-CMakeLists.txt-don-t-install-zlib.patch b/package/assimp/0004-contrib-zlib-CMakeLists.txt-don-t-install-zlib.patch
-> new file mode 100644
-> index 0000000000..3d9a03c85f
-> --- /dev/null
-> +++ b/package/assimp/0004-contrib-zlib-CMakeLists.txt-don-t-install-zlib.patch
-> @@ -0,0 +1,42 @@
-> +From 1bc628747391d7f7c7435bcd81578bf1c671ff9d Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Sun, 27 Dec 2020 12:53:02 +0100
-> +Subject: [PATCH] contrib/zlib/CMakeLists.txt: don't install zlib
-> +
-> +assimp uses and installs its own embedded version of zlib since commit
-> +b529a582ba4d7671597e95d7ab54ee652cbbc261.
-> +
-> +Don't install this library to avoid the following build failure when
-> +building hiawatha:
-> +
-> +-- Found ZLIB: optimized;/home/buildroot/autobuild/instance-0/output-1/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libz.so;debug;/home/buildroot/autobuild/instance-0/output-1/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libzlibstaticd.a (found version "1.2.11")
-> +
-> +-- Looking for /home/buildroot/autobuild/instance-0/output-1/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libz.so in optimized
-> +CMake Error at /home/buildroot/autobuild/instance-0/output-1/build/hiawatha-10.11/CMakeFiles/CMakeTmp/CMakeLists.txt:15 (target_link_libraries):
-> +  The "optimized" argument must be followed by a library.
-> +
-> +Fixes:
-> + - http://autobuild.buildroot.org/results/9cac31962d48245a5579da692dbc9488292a397e
-> +
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + contrib/zlib/CMakeLists.txt | 7 -------
-> + 1 file changed, 7 deletions(-)
-> +
-> +diff --git a/contrib/zlib/CMakeLists.txt b/contrib/zlib/CMakeLists.txt
-> +index c284656e..e78fd25d 100644
-> +--- a/contrib/zlib/CMakeLists.txt
-> ++++ b/contrib/zlib/CMakeLists.txt
-> +@@ -197,9 +197,3 @@ if(MINGW)
-> + endif(MINGW)
-> + 
-> + add_library(zlibstatic STATIC ${ZLIB_SRCS} ${ZLIB_ASMS} ${ZLIB_PUBLIC_HDRS} ${ZLIB_PRIVATE_HDRS})
-> +-
-> +-INSTALL( TARGETS zlibstatic
-> +-         LIBRARY DESTINATION ${ASSIMP_LIB_INSTALL_DIR}
-> +-         ARCHIVE DESTINATION ${ASSIMP_LIB_INSTALL_DIR}
-> +-         RUNTIME DESTINATION ${ASSIMP_BIN_INSTALL_DIR}
-> +-         COMPONENT ${LIBASSIMP_COMPONENT})
-> +-- 
-> +2.29.2
-> +
-> -- 
-> 2.29.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/linux/Config.in b/linux/Config.in
+index fd6174747e..92b0543515 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -125,7 +125,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "5.10" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "5.10.3" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "4.19.152-cip37" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "4.19.152-cip37-rt16" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 83bc3b851d..cb702146bd 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,7 +1,7 @@
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  dcdf99e43e98330d925016985bfbc7b83c66d367b714b2de0cbbfcbf83d8ca43  linux-5.10.tar.xz
+-sha256  39fcfb41dcdf71b6b42b88eff3d8cedbe7523830ccae847f3914c0b97e1e6b49  linux-5.9.14.tar.xz
+-sha256  beec970bbb93de8ab839f27930f7ab00c7bd65af0ffa07a50e765affdc2561c6  linux-5.4.83.tar.xz
++sha256  f9153333e5ce60c9cd9a501fbcb342ba6032b8fdb2cb492115c5595712a19525  linux-5.10.3.tar.xz
++sha256  b0d7abae88e5f91893627c645e680a95c818defd1b4fcaf3e2afb4b2b6b4ab86  linux-5.9.16.tar.xz
++sha256  1de3586d8e7a9a814726610745d80907a267590d2770ec1079ef2875c4984008  linux-5.4.85.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+ sha256  e52a49ceb639d871478a143c314648c35e22222c317ecdf49866830fea5c3dfc  linux-4.4.248.tar.xz
+ sha256  4687268061c9933c298b30d28e4bf1a30dfbab7c0da4bee194968e4f81ffeccf  linux-4.9.248.tar.xz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 25cdc2ba33..7b27cee036 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -354,9 +354,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "4.9.248"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.14.212"	if BR2_KERNEL_HEADERS_4_14
+ 	default "4.19.163"	if BR2_KERNEL_HEADERS_4_19
+-	default "5.4.83"	if BR2_KERNEL_HEADERS_5_4
+-	default "5.9.14"	if BR2_KERNEL_HEADERS_5_9
+-	default "5.10"		if BR2_KERNEL_HEADERS_5_10
++	default "5.4.85"	if BR2_KERNEL_HEADERS_5_4
++	default "5.9.16"	if BR2_KERNEL_HEADERS_5_9
++	default "5.10.3"	if BR2_KERNEL_HEADERS_5_10
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
