@@ -1,50 +1,31 @@
-From: Gleb Mazovetskiy <glex.spb@gmail.com>
-Date: Sun, 27 Dec 2020 02:15:05 +0000
-Subject: [Buildroot] [PATCH 1/1] package/pkg-meson: Fix deprecation warnings
- in cross-compilation config
-Message-ID: <20201227021505.1970065-1-glex.spb@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 27 Dec 2020 08:50:23 +0100
+Subject: [Buildroot] [PATCH] libcurl: security bump to version 7.74.0
+In-Reply-To: <d29e572b126866f1a91ea9ef1befceff4744f01c.1608816139.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Thu, 24 Dec 2020 15:22:19 +0200")
+References: <d29e572b126866f1a91ea9ef1befceff4744f01c.1608816139.git.baruch@tkos.co.il>
+Message-ID: <87sg7rd6ww.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As of meson 0.56.0, `<lang>_args` and `<lang>_link_args` in the `[properties]` section are deprecated and should be placed in the `[built-in options]` section instead.
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-Source: https://mesonbuild.com/Machine-files.html#properties
+ > Fixes security issues:
+ > CVE-2020-8286: Inferior OCSP verification
 
-Fixes the following deprecation warnings:
+ > CVE-2020-8285: FTP wildcard stack overflow
 
-> DEPRECATION: c_args in the [properties] section of the machine file is deprecated, use the [built-in options] section.
-> DEPRECATION: c_link_args in the [properties] section of the machine file is deprecated, use the [built-in options] section.
-> DEPRECATION: cpp_args in the [properties] section of the machine file is deprecated, use the [built-in options] section.
-> DEPRECATION: cpp_link_args in the [properties] section of the machine file is deprecated, use the [built-in options] section.
+ > CVE-2020-8284: trusting FTP PASV responses
 
-Signed-off-by: Gleb Mazovetskiy <glex.spb@gmail.com>
----
- package/meson/cross-compilation.conf.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ > Drop upstream patch.
 
-diff --git a/package/meson/cross-compilation.conf.in b/package/meson/cross-compilation.conf.in
-index 1880051315..37b49eea3b 100644
---- a/package/meson/cross-compilation.conf.in
-+++ b/package/meson/cross-compilation.conf.in
-@@ -12,12 +12,14 @@ pkgconfig = '@HOST_DIR@/bin/pkgconf'
- g-ir-compiler = '@STAGING_DIR@/usr/bin/g-ir-compiler'
- g-ir-scanner = '@STAGING_DIR@/usr/bin/g-ir-scanner'
- 
--[properties]
--needs_exe_wrapper = true
-+[built-in options]
- c_args = [@TARGET_CFLAGS@]
- c_link_args = [@TARGET_LDFLAGS@]
- cpp_args = [@TARGET_CXXFLAGS@]
- cpp_link_args = [@TARGET_LDFLAGS@]
-+
-+[properties]
-+needs_exe_wrapper = true
- sys_root = '@STAGING_DIR@'
- pkg_config_libdir = '@STAGING_DIR@/usr/lib/pkgconfig:@STAGING_DIR@/usr/share/pkgconfig'
- pkg_config_static = '@STATIC@'
+ > Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+
+Committed to 2020.02.x, 2020.08.x and 2020.11.x, thanks.
+
 -- 
-2.27.0
+Bye, Peter Korsgaard
