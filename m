@@ -1,44 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 Dec 2020 09:01:39 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/mutt: add zlib
- optional dependency
-Message-ID: <20201227082441.C8ACA81370@busybox.osuosl.org>
+Date: Sun, 27 Dec 2020 09:29:57 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] board/boundarydevices:
+ promote buildroot-external-boundary project
+Message-ID: <20201227082442.07063812EC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fa41416454cd584a480716b4a96ba84dea2bd7cf
+commit: https://git.buildroot.net/buildroot/commit/?id=9ca45e0f05812fa454adbb6732c854adf83ba34d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-zlib is an optional dependency which is enabled by default since version
-1.14.1 and
-https://gitlab.com/muttmua/mutt/-/commit/136ae0add512f21bc418f9e31a2f1b970ad1a490
+It may be useful for users using Boundary Devices boards to find
+more advanced defconfigs than the one provided by Buildroot.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+See:
+https://github.com/boundarydevices/buildroot-external-boundary#configurations-details
+
+Update the readme.txt to add the link to the br2_external maintained
+by Boundary Devices.
+
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Cc: Gary Bisson <gary.bisson@boundarydevices.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 554610803c3807775c1d9e153187ee99ccfd11ad)
+(cherry picked from commit 75543322843f9ce72a4f39f1ee6239059c061e6c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mutt/mutt.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ board/boundarydevices/common/readme.txt | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
-index cc4b5f56b4..4e14004577 100644
---- a/package/mutt/mutt.mk
-+++ b/package/mutt/mutt.mk
-@@ -61,6 +61,13 @@ else
- MUTT_CONF_OPTS += --without-sqlite3
- endif
+diff --git a/board/boundarydevices/common/readme.txt b/board/boundarydevices/common/readme.txt
+index d1bb3fa598..307cfb5549 100644
+--- a/board/boundarydevices/common/readme.txt
++++ b/board/boundarydevices/common/readme.txt
+@@ -40,3 +40,9 @@ Where 'sdX' is the device node of the uSD partition.
+ To upgrade u-boot, cancel autoboot and type:
  
-+ifeq ($(BR2_PACKAGE_ZLIB),y)
-+MUTT_DEPENDENCIES += zlib
-+MUTT_CONF_OPTS += --with-zlib=$(STAGING_DIR)/usr
-+else
-+MUTT_CONF_OPTS += --without-zlib
-+endif
+ > run upgradeu
 +
- # Avoid running tests to check for:
- #  - target system is *BSD
- #  - C99 conformance (snprintf, vsnprintf)
++See Boundary Devices's buildroot-external-boundary project
++for additional and advanced defconfigs using Qt5, gstreamer,
++NXP proprietary packages with demo applications:
++
++https://github.com/boundarydevices/buildroot-external-boundary
