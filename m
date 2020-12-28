@@ -1,122 +1,51 @@
-From: Maxime Chevallier <maxime.chevallier@bootlin.com>
-Date: Mon, 28 Dec 2020 09:31:33 +0100
-Subject: [Buildroot] [PATCH 00/15] packages: Add SELinux modules to some
- packages
-In-Reply-To: <160865249576.1448242.9915039771107087372@kwain.local>
-References: <20201222150736.319593-1-maxime.chevallier@bootlin.com>
- <160865249576.1448242.9915039771107087372@kwain.local>
-Message-ID: <20201228093133.3da428af@bootlin.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 28 Dec 2020 09:40:25 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
+ 2020-12-27
+In-Reply-To: <87sg7q8hh7.fsf@tarshish>
+References: <20201228081344.55D67861C5@fraxinus.osuosl.org>
+ <87sg7q8hh7.fsf@tarshish>
+Message-ID: <20201228094025.049b87d4@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Antoine,
+Hello Baruch,
 
-Thanks for the review !
+On Mon, 28 Dec 2020 10:25:40 +0200
+Baruch Siach <baruch@tkos.co.il> wrote:
 
-On Tue, 22 Dec 2020 16:54:55 +0100
-Antoine Tenart <atenart@kernel.org> wrote:
+> On Mon, Dec 28 2020, Thomas Petazzoni wrote:
+> > Packages having a newer version
+> > ===============================
+> >
+> >                        libcurl |  DISTRO  | https://release-monitoring.org/project/00381 | 7.73.0       | 7.74.0       |     
+> >                         strace |  DISTRO  | https://release-monitoring.org/project/04897 | 5.9          | 5.10         |     
+> >                        uhubctl |  DISTRO  | https://release-monitoring.org/project/17364 | 2.2.0        | 2.3.0        |       
+> 
+> Current master (commit 1a78af4d10f) have the latest version of all these
+> packages. What commit is this report based on?
 
->Hi Maxime,
->
->Quoting Maxime Chevallier (2020-12-22 16:07:21)
->> 
->> Following the recent support for the SELinux refpolicy and the ability
->> for packages to select their own SELinux module in the refpolicy [1],
->> this series adds a first batch of matching between packages and their
->> respective module.  
->
->Nice to see packages using this feature :)
->
->> This series focuses on the tools that are impacted by the following
->> modules in the refpolicy [2] :
->> 
->>   - services/networkmanager, which adds support for :
->>     - dhcp  
->
->I'm not sure about this one. When looking at the module definitions
->dhclient and dhcpcd seem to be supported by system/sysnetwork rather
->than than by services/networkmanager. (Haven't built an image to test
->though).
+Thanks for reporting this! The report is based on next when a next
+branch exists, otherwise on master. The thing is that after merging
+next into master following the 2020.11 release, the next branch was not
+removed from the official repo, which meant this report was still
+generated based on the next branch, rather than next.
 
-You're correct, I'll remove that from the list for now. It does seem
-that services/networkmanager also references some files in /etc/dhcp,
-hence the confusion. 
+We need to remember to delete the next branch when it is merged into
+master. Or perhaps we need to change the logic that decides what is the
+"latest" code base.
 
->>     - iwd
->>     - network-manager
->>     - wpa_supplicant
->> 
->>   - system/ipatbles, which adds support for :
->>     - ebtables
->>     - ipset
->>     - iptables
->>     - nftables
->> 
->>   - admin/netutils, which adds support for :
->>     - fping
->>     - iputils  
->
->iputils can install lots of utilities based on the configuration, many
->of which are supported by admin/netutils. Some are not supported in the
->refpolicy, and some by other modules, such as rdisc or tftpd.
->
->I think the selinux module selection should be conditional depending on
->the utilities installed by the iputils package, to avoid installing an
->unused selinux module and to fix the support of others.
+In the mean time, I have dropped the next branch from the official
+repo, so tomorrow's report should be updated. Let me know if it isn't
+the case.
 
-You're right, I'll add the conditionnals :)
+Best regards,
 
->>     - mtr
->>     - nmap
->>     - tcpdump
->> 
->>   - services/entropyd, which adds support for :
->>     - haveged
->>     - jitterentropy-library  
->
->The other selinux module selections LGTM.
-
-Thanks for the thourough review !
-
-Maxime
-
->> With this series, the above-mentionned tools can now be used on systems
->> that have SELinux enabled.
->> 
->> This series was split per-package, which generates lots of one-liner
->> patches. Due to the nature of the changes, I expect more patches like
->> that to follow, so we might also use a "one package per module" approach
->> if you want.  
->
->> Maxime Chevallier (15):
->>   packages/dhcp: add SELinux module  
->
->Nitpick: s/packages/package/
->
->>   package/iwd: add SELinux module
->>   package/network-manager: add SELinux module
->>   package/wpa_supplicant: add SELinux module
->>   package/ebtables: add SELinux module
->>   package/ipset: add SELinux module
->>   package/iptables: add SELinux module
->>   package/nftables: add SELinux module
->>   package/fping: add SELinux module
->>   package/iputils: add SELinux module
->>   package/mtr: add SELinux module
->>   package/nmap: add SELinux module
->>   package/tcpdump: add SELinux module
->>   package/haveged: add SELinux module
->>   package/jitterentropy-library: add SELinux module  
->
->Thanks!
->Antoine
-
-
-
+Thomas
 -- 
-Maxime Chevallier, Bootlin
-Embedded Linux and kernel engineering
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
 https://bootlin.com
