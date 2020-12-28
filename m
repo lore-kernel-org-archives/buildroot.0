@@ -1,34 +1,90 @@
 From: Maxime Chevallier <maxime.chevallier@bootlin.com>
-Date: Mon, 28 Dec 2020 17:11:27 +0100
-Subject: [Buildroot] [PATCH v2 07/14] package/nftables: add SELinux module
-In-Reply-To: <20201228161134.303992-1-maxime.chevallier@bootlin.com>
-References: <20201228161134.303992-1-maxime.chevallier@bootlin.com>
-Message-ID: <20201228161134.303992-8-maxime.chevallier@bootlin.com>
+Date: Mon, 28 Dec 2020 17:11:20 +0100
+Subject: [Buildroot] [PATCH v2 00/14] packages: Add SELinux modules to some
+ packages
+Message-ID: <20201228161134.303992-1-maxime.chevallier@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Support for nft is added by the system/iptables module in the SELinux
-refpolicy.
+Hello everyone,
 
-Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
----
- package/nftables/nftables.mk | 1 +
- 1 file changed, 1 insertion(+)
+This is the second iteration of the series adding matching between
+packages and the SELinux refpolicy module that supports them.
 
-diff --git a/package/nftables/nftables.mk b/package/nftables/nftables.mk
-index 8a003a5e34..f9468c5250 100644
---- a/package/nftables/nftables.mk
-+++ b/package/nftables/nftables.mk
-@@ -11,6 +11,7 @@ NFTABLES_DEPENDENCIES = libmnl libnftnl host-pkgconf $(TARGET_NLS_DEPENDENCIES)
- NFTABLES_LICENSE = GPL-2.0
- NFTABLES_LICENSE_FILES = COPYING
- NFTABLES_CONF_OPTS = --disable-man-doc --disable-pdf-doc
-+NFTABLES_SELINUX_MODULES = iptables
- 
- ifeq ($(BR2_PACKAGE_GMP),y)
- NFTABLES_DEPENDENCIES += gmp
+This series focuses on the tools that are impacted by the following
+modules in the refpolicy [2] :
+
+  - services/networkmanager, which adds support for :
+    - iwd
+    - network-manager
+    - wpa_supplicant
+
+  - system/ipatbles, which adds support for :
+    - ebtables
+    - ipset
+    - iptables
+    - nftables
+
+  - admin/netutils, which adds support for :
+    - fping
+    - Some of the iputils tools :
+      - arping
+      - ping
+      - tracepath
+      - traceroute6
+    - mtr
+    - nmap
+    - tcpdump
+
+  - services/entropyd, which adds support for :
+    - haveged
+    - jitterentropy-library
+
+With this series, the above-mentionned tools can now be used on systems
+that have SELinux enabled.
+
+Since V1, the main changes were the removal of the dhcp package which
+will be part of another series, and the rework of the iputils package
+according to Antoine Tenart's review.
+
+Thanks,
+
+Maxime
+
+Maxime Chevallier (14):
+  package/iwd: add SELinux module
+  package/network-manager: add SELinux module
+  package/wpa_supplicant: add SELinux module
+  package/ebtables: add SELinux module
+  package/ipset: add SELinux module
+  package/iptables: add SELinux module
+  package/nftables: add SELinux module
+  package/fping: add SELinux module
+  package/iputils: add SELinux module
+  package/mtr: add SELinux module
+  package/nmap: add SELinux module
+  package/tcpdump: add SELinux module
+  package/haveged: add SELinux module
+  package/jitterentropy-library: add SELinux module
+
+ package/ebtables/ebtables.mk                     |  1 +
+ package/fping/fping.mk                           |  1 +
+ package/haveged/haveged.mk                       |  1 +
+ package/ipset/ipset.mk                           |  1 +
+ package/iptables/iptables.mk                     |  2 ++
+ package/iputils/iputils.mk                       | 16 ++++++++++++++++
+ package/iwd/iwd.mk                               |  1 +
+ .../jitterentropy-library.mk                     |  1 +
+ package/mtr/mtr.mk                               |  1 +
+ package/network-manager/network-manager.mk       |  1 +
+ package/nftables/nftables.mk                     |  1 +
+ package/nmap/nmap.mk                             |  1 +
+ package/tcpdump/tcpdump.mk                       |  1 +
+ package/wpa_supplicant/wpa_supplicant.mk         |  1 +
+ 14 files changed, 30 insertions(+)
+
 -- 
 2.25.4
