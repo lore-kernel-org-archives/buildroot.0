@@ -1,43 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 28 Dec 2020 22:53:25 +0100
-Subject: [Buildroot] [PATCH 1/1] package/erlang-jiffy: needs -fPIC
-In-Reply-To: <20201224101440.3427472-1-fontaine.fabrice@gmail.com>
-References: <20201224101440.3427472-1-fontaine.fabrice@gmail.com>
-Message-ID: <20201228225325.4f973ae1@windsurf.home>
+Date: Mon, 28 Dec 2020 22:53:43 +0100
+Subject: [Buildroot] [git commit] package/sysvinit: bump version to 2.98
+Message-ID: <20201228213629.DED688353A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice,
+commit: https://git.buildroot.net/buildroot/commit/?id=e3e36ac8784deff594960dc592e6b9495cb6a2a2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 24 Dec 2020 11:14:40 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/sysvinit/sysvinit.hash | 2 +-
+ package/sysvinit/sysvinit.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> Fixes:
->  - http://autobuild.buildroot.org/results/9ac6e1bf9eaf922c0b7f869416ec33f40ed3543c
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Thanks for the patch. As usual, I'm kind of interested to understand
-since when this is happening, why suddenly we need a fix like this. Is
-this following a version bump of this package ?
-
-> +     {"(linux|solaris|freebsd|netbsd|openbsd|dragonfly|darwin|gnu)",
-> +-        "LDFLAGS", "$LDFLAGS $FLTO_FLAG -lstdc++"},
-> ++        "LDFLAGS", "$LDFLAGS $FLTO_FLAG -lstdc++ -fPIC"},
-
-It is surprising that only LDFLAGS need to be changed. Indeed, -fPIC is
-also needed at *compile* time when compiling each individual object
-file, so typically in CFLAGS/CXXFLAGS. Why isn't it needed in CXXFLAGS
-here ? Because it's already passed at compile time, but forgotten at
-link time ? Or because LDFLAGS are also used by rebar at compile time ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/sysvinit/sysvinit.hash b/package/sysvinit/sysvinit.hash
+index c1d9f94461..24e5333d23 100644
+--- a/package/sysvinit/sysvinit.hash
++++ b/package/sysvinit/sysvinit.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256	2a2e26b72aa235a23ab1c8471005f890309ce1196c83fbc9413c57b9ab62b587  sysvinit-2.96.tar.xz
++sha256	7b2c3ffaf19eaf1ca80268762f85f9e4eb8e3c973213d49f9802605b72caa7dc  sysvinit-2.98.tar.xz
+ 
+ # Hash for license files:
+ sha256	ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/sysvinit/sysvinit.mk b/package/sysvinit/sysvinit.mk
+index c778a9cde5..c7ddf67c2f 100644
+--- a/package/sysvinit/sysvinit.mk
++++ b/package/sysvinit/sysvinit.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SYSVINIT_VERSION = 2.96
++SYSVINIT_VERSION = 2.98
+ SYSVINIT_SOURCE = sysvinit-$(SYSVINIT_VERSION).tar.xz
+ SYSVINIT_SITE = http://download.savannah.nongnu.org/releases/sysvinit
+ SYSVINIT_LICENSE = GPL-2.0+
