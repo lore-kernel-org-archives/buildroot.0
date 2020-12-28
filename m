@@ -1,8 +1,10 @@
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Mon, 28 Dec 2020 02:54:45 +0100
-Subject: [Buildroot] [PATCH 1/2] package/at: format hash file according to
- two spaces guideline
-Message-ID: <20201228015446.98011-1-giulio.benetti@benettiengineering.com>
+Date: Mon, 28 Dec 2020 02:54:46 +0100
+Subject: [Buildroot] [PATCH 2/2] package/sunxi-mali-mainline: format hash
+ file according to two spaces guideline
+In-Reply-To: <20201228015446.98011-1-giulio.benetti@benettiengineering.com>
+References: <20201228015446.98011-1-giulio.benetti@benettiengineering.com>
+Message-ID: <20201228015446.98011-2-giulio.benetti@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,21 +13,18 @@ To: buildroot@busybox.net
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/at/at.hash | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/sunxi-mali-mainline/sunxi-mali-mainline.hash | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/at/at.hash b/package/at/at.hash
-index e20c00b3cd..108a2c06ff 100644
---- a/package/at/at.hash
-+++ b/package/at/at.hash
-@@ -1,5 +1,5 @@
+diff --git a/package/sunxi-mali-mainline/sunxi-mali-mainline.hash b/package/sunxi-mali-mainline/sunxi-mali-mainline.hash
+index 978be01024..e1c18fd4f7 100644
+--- a/package/sunxi-mali-mainline/sunxi-mali-mainline.hash
++++ b/package/sunxi-mali-mainline/sunxi-mali-mainline.hash
+@@ -1,3 +1,3 @@
  # Locally calculated
--sha256 9ae5761a1fb897cda3a6f14439bed33cda33c0eedfcee6866e3d2ebad67fbd2f  at-7c74fa1aece6bc6db351763dc012193d5d634b7e.tar.gz
-+sha256  9ae5761a1fb897cda3a6f14439bed33cda33c0eedfcee6866e3d2ebad67fbd2f  at-7c74fa1aece6bc6db351763dc012193d5d634b7e.tar.gz
- 
--sha256 01dccc0975aa9ba1a9f83e7c5e04f16077353d3c72a0a759b8846ee7a5b2b616  Copyright
--sha256 c38aee9e3c8c4d5d594ff548a1be05453023016d6286931f6512db215ec1fd42  COPYING
-+sha256  01dccc0975aa9ba1a9f83e7c5e04f16077353d3c72a0a759b8846ee7a5b2b616  Copyright
-+sha256  c38aee9e3c8c4d5d594ff548a1be05453023016d6286931f6512db215ec1fd42  COPYING
+-sha256 72969ecf470b9e5ce787c2f8f36242926e1e892af0891924ee59a2cd206de39f  sunxi-mali-mainline-d691cb93884ca8ac67860502117bbec283dc19aa.tar.gz
+-sha256 8a06bcae44a41a886f339b4338422415a786787f113e9ed6456ae117104a0b6a  EULA_for_Mali_400MP_AW.pdf
++sha256  72969ecf470b9e5ce787c2f8f36242926e1e892af0891924ee59a2cd206de39f  sunxi-mali-mainline-d691cb93884ca8ac67860502117bbec283dc19aa.tar.gz
++sha256  8a06bcae44a41a886f339b4338422415a786787f113e9ed6456ae117104a0b6a  EULA_for_Mali_400MP_AW.pdf
 -- 
 2.25.1
