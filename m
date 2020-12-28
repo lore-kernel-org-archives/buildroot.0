@@ -1,27 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 28 Dec 2020 22:32:37 +0100
-Subject: [Buildroot] [PATCH] {linux, linux-headers}: bump 5.{4, 9,
- 10}.x series
-In-Reply-To: <20201227225223.15240-1-peter@korsgaard.com>
-References: <20201227225223.15240-1-peter@korsgaard.com>
-Message-ID: <20201228223237.19cb546d@windsurf.home>
+Date: Mon, 28 Dec 2020 22:32:46 +0100
+Subject: [Buildroot] [PATCH 1/2] package/at: format hash file according
+ to two spaces guideline
+In-Reply-To: <20201228015446.98011-1-giulio.benetti@benettiengineering.com>
+References: <20201228015446.98011-1-giulio.benetti@benettiengineering.com>
+Message-ID: <20201228223246.5a901b18@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 27 Dec 2020 23:52:23 +0100
-Peter Korsgaard <peter@korsgaard.com> wrote:
+On Mon, 28 Dec 2020 02:54:45 +0100
+Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 > ---
->  linux/Config.in                      | 2 +-
->  linux/linux.hash                     | 6 +++---
->  package/linux-headers/Config.in.host | 6 +++---
->  3 files changed, 7 insertions(+), 7 deletions(-)
+>  package/at/at.hash | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
+Both applied. Thanks!
 
 Thomas
 -- 
