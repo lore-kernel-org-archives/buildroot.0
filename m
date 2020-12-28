@@ -1,82 +1,67 @@
 From: Stefan Agner <stefan@agner.ch>
-Date: Mon, 28 Dec 2020 14:54:10 +0100
-Subject: [Buildroot] [PATCH] package/linux-firmware: add new option for
- USB TI 3410/5052 firmware
-In-Reply-To: <20201225182828.GD1680670@scaer>
-References: <2a63d2fb5dc2a51888737af1d3e868b4b8cf74c8.1608718184.git.stefan@agner.ch>
- <20201225182828.GD1680670@scaer>
-Message-ID: <ecbe0c9150403734524848c861d2c29d@agner.ch>
+Date: Mon, 28 Dec 2020 15:06:18 +0100
+Subject: [Buildroot] [PATCH] docker: add AppArmor support
+In-Reply-To: <20201225180111.GB1680670@scaer>
+References: <dd83e231779b8daaeaa0a78d6686b80eeb49c12b.1608718340.git.stefan@agner.ch>
+ <20201225180111.GB1680670@scaer>
+Message-ID: <a7039d32c27fb937747593a7312fe1ae@agner.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2020-12-25 19:28, Yann E. MORIN wrote:
+Hi Yann,
+
+On 2020-12-25 19:01, Yann E. MORIN wrote:
 > Stefan, All,
 > 
-> On 2020-12-23 11:11 +0100, Stefan Agner spake thusly:
+> On 2020-12-23 11:13 +0100, Stefan Agner spake thusly:
+>> From: Pascal Vizeli <pvizeli@syshack.ch>
+> 
+> So, does that mean that Pascal is the original author of that patch? If
+> that is so, then you should have carried his authorship when propagating
+> the patch. You can fix that by amending your commit:
+> 
+>     $ git commit --amend --author="Pascal Vizeli <pvizeli@syshack.ch>"
+> 
+
+Yes, Pascal was the original author, and he is the git author in my git
+history. When doing "git format-patch", git creates a mbox file with the
+From: line. Once sending out, a proper email requires to send it from my
+email, but the From: is retained above in the message. This is not me,
+that is just "git format-patch" and "git send-email" doing what it is
+doing... When you download the mbox file and use "git am", it will
+pickup the last From: and restore Pascal Vizeli as author.
+
+>> Signed-off-by: Pascal Vizeli <pvizeli@syshack.ch>
 >> Signed-off-by: Stefan Agner <stefan@agner.ch>
+> 
+> However, adding your SoB after theirs is perfect, thanks.
+> 
 >> ---
->>  package/linux-firmware/Config.in         | 9 +++++++++
->>  package/linux-firmware/linux-firmware.mk | 6 ++++++
->>  2 files changed, 15 insertions(+)
->>
->> diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
->> index dbdfdb52b3..6d5e961527 100644
->> --- a/package/linux-firmware/Config.in
->> +++ b/package/linux-firmware/Config.in
->> @@ -490,4 +490,13 @@ config BR2_PACKAGE_LINUX_FIRMWARE_QAT_C62X
->>
->>  endmenu
->>
->> +menu "USB to Serial Firmware"
->> +
->> +config BR2_PACKAGE_LINUX_FIRMWARE_USB_SERIAL_TI
->> +	bool "USB TI 3410/5052 Serial Firmware"
->> +	help
->> +	  Firmware files for TI 3410/5052
->> +
->> +endmenu
->> +
->>  endif
->> diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
->> index f1c84a134d..f00fb2e6ae 100644
->> --- a/package/linux-firmware/linux-firmware.mk
->> +++ b/package/linux-firmware/linux-firmware.mk
->> @@ -620,6 +620,12 @@ LINUX_FIRMWARE_FILES += qat_c62x.bin qat_c62x_mmp.bin
->>  LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.qat_firmware
->>  endif
->>
->> +ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_USB_SERIAL_TI),y)
->> +LINUX_FIRMWARE_FILES += ti_3410.fw ti_5052.fw
+>>  package/docker-containerd/docker-containerd.mk | 5 +++++
+>>  package/docker-engine/docker-engine.mk         | 5 +++++
+>>  package/runc/runc.mk                           | 5 +++++
 > 
-> That driver lists a lot of other firmware files:
+> Do we really need to add AppArmor in those three at the same time?
 > 
->    492 MODULE_FIRMWARE("ti_3410.fw");
->    493 MODULE_FIRMWARE("ti_5052.fw");
->    494 MODULE_FIRMWARE("mts_cdma.fw");
->    495 MODULE_FIRMWARE("mts_gsm.fw");
->    496 MODULE_FIRMWARE("mts_edge.fw");
->    497 MODULE_FIRMWARE("mts_mt9234mu.fw");
->    498 MODULE_FIRMWARE("mts_mt9234zba.fw");
->    499 MODULE_FIRMWARE("moxa/moxa-1110.fw");
->    500 MODULE_FIRMWARE("moxa/moxa-1130.fw");
->    501 MODULE_FIRMWARE("moxa/moxa-1131.fw");
->    502 MODULE_FIRMWARE("moxa/moxa-1150.fw");
->    503 MODULE_FIRMWARE("moxa/moxa-1151.fw");
-> 
-> which are all available in linux-firmware. I was about to add them to
-> the list and commit that, but the situation is a bit more complex, as
-> there is a license file for the moxa firmwares.
-> 
-> Care to respin with the extra firmware added to the list, please?
+> Usually, we try to limit the changes to the minimal. i.e. one change per
+> package, unless the change must be done at the same time (e.g. otherwise
+> it fails to build or run).
 
-Hm, I was thinking those are relatively specific devices, but I see that
-at least the Moxa are rather generic USB to serial converters. So I
-guess it make sense to pack them as well.
+Uh, I did not test what would happen if you run this components
+with/without apparmor, but I don't think that is what one typically
+wants.
 
-Will resend.
+> 
+> If the change must be done in one patch, the commit log should explain
+> why.
+> 
+> Care to resend, with proper authorship, and by either splitting the
+> patch or adding the explanation in the commit log?
+
+Sure, can resend in a splitted version.
 
 --
 Stefan
@@ -85,13 +70,60 @@ Stefan
 > Regards,
 > Yann E. MORIN.
 > 
->> +# No license file; the license is in the file WHENCE
->> +# which is installed unconditionally
+>>  3 files changed, 15 insertions(+)
+>>
+>> diff --git a/package/docker-containerd/docker-containerd.mk b/package/docker-containerd/docker-containerd.mk
+>> index d9a0eb28a6..c68e3818a8 100644
+>> --- a/package/docker-containerd/docker-containerd.mk
+>> +++ b/package/docker-containerd/docker-containerd.mk
+>> @@ -18,6 +18,11 @@ DOCKER_CONTAINERD_BUILD_TARGETS = cmd/ctr cmd/containerd cmd/containerd-shim
+>>
+>>  DOCKER_CONTAINERD_INSTALL_BINS = containerd containerd-shim
+>>
+>> +ifeq ($(BR2_PACKAGE_LIBAPPARMOR),y)
+>> +DOCKER_CONTAINERD_DEPENDENCIES += libapparmor
+>> +DOCKER_CONTAINERD_TAGS += apparmor
 >> +endif
 >> +
->>  ifneq ($(LINUX_FIRMWARE_FILES),)
->>  define LINUX_FIRMWARE_INSTALL_FILES
->>  	cd $(@D) && \
+>>  ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
+>>  DOCKER_CONTAINERD_DEPENDENCIES += libseccomp host-pkgconf
+>>  DOCKER_CONTAINERD_TAGS += seccomp
+>> diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+>> index 8cedf307ba..7f898680b7 100644
+>> --- a/package/docker-engine/docker-engine.mk
+>> +++ b/package/docker-engine/docker-engine.mk
+>> @@ -20,6 +20,11 @@ DOCKER_ENGINE_LDFLAGS = \
+>>  DOCKER_ENGINE_TAGS = cgo exclude_graphdriver_zfs autogen
+>>  DOCKER_ENGINE_BUILD_TARGETS = cmd/dockerd
+>>
+>> +ifeq ($(BR2_PACKAGE_LIBAPPARMOR),y)
+>> +DOCKER_ENGINE_DEPENDENCIES += libapparmor
+>> +DOCKER_ENGINE_TAGS += apparmor
+>> +endif
+>> +
+>>  ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
+>>  DOCKER_ENGINE_TAGS += seccomp
+>>  DOCKER_ENGINE_DEPENDENCIES += libseccomp
+>> diff --git a/package/runc/runc.mk b/package/runc/runc.mk
+>> index 3d177d23d5..c559244e83 100644
+>> --- a/package/runc/runc.mk
+>> +++ b/package/runc/runc.mk
+>> @@ -12,6 +12,11 @@ RUNC_LICENSE_FILES = LICENSE
+>>  RUNC_LDFLAGS = -X main.gitCommit=$(RUNC_VERSION)
+>>  RUNC_TAGS = cgo static_build
+>>
+>> +ifeq ($(BR2_PACKAGE_LIBAPPARMOR),y)
+>> +RUNC_DEPENDENCIES += libapparmor
+>> +RUNC_TAGS += apparmor
+>> +endif
+>> +
+>>  ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
+>>  RUNC_TAGS += seccomp
+>>  RUNC_DEPENDENCIES += libseccomp host-pkgconf
 >> --
 >> 2.29.2
 >>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
