@@ -1,31 +1,23 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 28 Dec 2020 22:54:01 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libepoxy: bump to version 1.5.5
-In-Reply-To: <20201223223544.198464-1-aperez@igalia.com>
-References: <20201223223544.198464-1-aperez@igalia.com>
-Message-ID: <20201228225401.7a4a8ce3@windsurf.home>
+Date: Mon, 28 Dec 2020 22:54:09 +0100
+Subject: [Buildroot] [PATCH v1] package/sysvinit: bump version to 2.98
+In-Reply-To: <20201223221722.5864-1-ps.report@gmx.net>
+References: <20201223221722.5864-1-ps.report@gmx.net>
+Message-ID: <20201228225409.3a153614@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 24 Dec 2020 00:35:44 +0200
-Adrian Perez de Castro <aperez@igalia.com> wrote:
+On Wed, 23 Dec 2020 23:17:22 +0100
+Peter Seiderer <ps.report@gmx.net> wrote:
 
-> This version removes Python 2 support, the autotools based build system
-> (not a problem as Buildroot has been using Meson for a while), and some
-> small fixes.
-> 
-> Full release notes can be found at:
-> 
->   https://github.com/anholt/libepoxy/releases/tag/1.5.5
-> 
-> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 > ---
->  package/libepoxy/libepoxy.hash | 4 ++--
->  package/libepoxy/libepoxy.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/sysvinit/sysvinit.hash | 2 +-
+>  package/sysvinit/sysvinit.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
