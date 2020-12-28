@@ -1,44 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 28 Dec 2020 22:53:43 +0100
-Subject: [Buildroot] [git commit] package/sysvinit: bump version to 2.98
-Message-ID: <20201228213629.DED688353A@busybox.osuosl.org>
+Date: Mon, 28 Dec 2020 22:53:54 +0100
+Subject: [Buildroot] [git commit] package/libepoxy: bump to version 1.5.5
+Message-ID: <20201228213629.EEA9A8353A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e3e36ac8784deff594960dc592e6b9495cb6a2a2
+commit: https://git.buildroot.net/buildroot/commit/?id=33ec293ea5edee7f9107e30d12870ed0654289e6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+This version removes Python 2 support, the autotools based build system
+(not a problem as Buildroot has been using Meson for a while), and some
+small fixes.
+
+Full release notes can be found at:
+
+  https://github.com/anholt/libepoxy/releases/tag/1.5.5
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/sysvinit/sysvinit.hash | 2 +-
- package/sysvinit/sysvinit.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libepoxy/libepoxy.hash | 4 ++--
+ package/libepoxy/libepoxy.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/sysvinit/sysvinit.hash b/package/sysvinit/sysvinit.hash
-index c1d9f94461..24e5333d23 100644
---- a/package/sysvinit/sysvinit.hash
-+++ b/package/sysvinit/sysvinit.hash
+diff --git a/package/libepoxy/libepoxy.hash b/package/libepoxy/libepoxy.hash
+index a37e3949a6..79876ad01d 100644
+--- a/package/libepoxy/libepoxy.hash
++++ b/package/libepoxy/libepoxy.hash
 @@ -1,5 +1,5 @@
- # Locally computed:
--sha256	2a2e26b72aa235a23ab1c8471005f890309ce1196c83fbc9413c57b9ab62b587  sysvinit-2.96.tar.xz
-+sha256	7b2c3ffaf19eaf1ca80268762f85f9e4eb8e3c973213d49f9802605b72caa7dc  sysvinit-2.98.tar.xz
+-# From http://ftp.gnome.org/pub/gnome/sources/libepoxy/1.5/libepoxy-1.5.4.sha256sum
+-sha256 0bd2cc681dfeffdef739cb29913f8c3caa47a88a451fd2bc6e606c02997289d2  libepoxy-1.5.4.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/libepoxy/1.5/libepoxy-1.5.5.sha256sum
++sha256 261663db21bcc1cc232b07ea683252ee6992982276536924271535875f5b0556  libepoxy-1.5.5.tar.xz
  
- # Hash for license files:
- sha256	ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/sysvinit/sysvinit.mk b/package/sysvinit/sysvinit.mk
-index c778a9cde5..c7ddf67c2f 100644
---- a/package/sysvinit/sysvinit.mk
-+++ b/package/sysvinit/sysvinit.mk
-@@ -4,7 +4,7 @@
- #
+ # Hashes for license files:
+ sha256 8d5144666f9c4df9bbd69b8900086d5979259152a1060421cdcc0fb9061a1c12  COPYING
+diff --git a/package/libepoxy/libepoxy.mk b/package/libepoxy/libepoxy.mk
+index efc23a7636..bb578fb02c 100644
+--- a/package/libepoxy/libepoxy.mk
++++ b/package/libepoxy/libepoxy.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--SYSVINIT_VERSION = 2.96
-+SYSVINIT_VERSION = 2.98
- SYSVINIT_SOURCE = sysvinit-$(SYSVINIT_VERSION).tar.xz
- SYSVINIT_SITE = http://download.savannah.nongnu.org/releases/sysvinit
- SYSVINIT_LICENSE = GPL-2.0+
+ LIBEPOXY_VERSION_MAJOR = 1.5
+-LIBEPOXY_VERSION = $(LIBEPOXY_VERSION_MAJOR).4
++LIBEPOXY_VERSION = $(LIBEPOXY_VERSION_MAJOR).5
+ LIBEPOXY_SITE = http://ftp.gnome.org/pub/gnome/sources/libepoxy/$(LIBEPOXY_VERSION_MAJOR)
+ LIBEPOXY_SOURCE = libepoxy-$(LIBEPOXY_VERSION).tar.xz
+ LIBEPOXY_INSTALL_STAGING = YES
