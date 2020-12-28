@@ -1,46 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 28 Dec 2020 22:33:16 +0100
-Subject: [Buildroot] [git commit] package/paho-mqtt-c: bump to version 1.3.8
-Message-ID: <20201228211741.69E4983591@busybox.osuosl.org>
+Date: Mon, 28 Dec 2020 22:32:11 +0100
+Subject: [Buildroot] [git commit] package/sunxi-mali-mainline: format hash
+ file according to two spaces guideline
+Message-ID: <20201228211741.47F6783591@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f811ecd79be150c5c7aba0d83b08629d88df3aba
+commit: https://git.buildroot.net/buildroot/commit/?id=cb5c911e2e217bb47d82a791b48f10c376d725f3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/eclipse/paho.mqtt.c/milestone/15?closed=1
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/paho-mqtt-c/paho-mqtt-c.hash | 2 +-
- package/paho-mqtt-c/paho-mqtt-c.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/sunxi-mali-mainline/sunxi-mali-mainline.hash | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/paho-mqtt-c/paho-mqtt-c.hash b/package/paho-mqtt-c/paho-mqtt-c.hash
-index 93ce1b34f2..5223757f0f 100644
---- a/package/paho-mqtt-c/paho-mqtt-c.hash
-+++ b/package/paho-mqtt-c/paho-mqtt-c.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256  19e9f04ddf244ab8c937d7e631ca15cedce7df95712c554107600e80efdaf277  paho-mqtt-c-1.3.7.tar.gz
-+sha256  4920ff685344cdb0272568bc4414dcf48fcdfc4a98c78b1f3ca49c38417bf391  paho-mqtt-c-1.3.8.tar.gz
- sha256  83bbba033dc985487e321b6dfde111772affb73460be48726299fed3da684b1c  edl-v10
- sha256  0becf16567beb77fa252b7664631dd177c8f9a1889e48995b45379c7130e5303  epl-v20
- sha256  bc0f3f447097eb82a29ad6c2f4929572bb548b6bd4c9e38fde1bf131a771b7a0  LICENSE
-diff --git a/package/paho-mqtt-c/paho-mqtt-c.mk b/package/paho-mqtt-c/paho-mqtt-c.mk
-index a477c8baaa..b9b4f217fb 100644
---- a/package/paho-mqtt-c/paho-mqtt-c.mk
-+++ b/package/paho-mqtt-c/paho-mqtt-c.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PAHO_MQTT_C_VERSION = 1.3.7
-+PAHO_MQTT_C_VERSION = 1.3.8
- PAHO_MQTT_C_SITE = $(call github,eclipse,paho.mqtt.c,v$(PAHO_MQTT_C_VERSION))
- PAHO_MQTT_C_LICENSE = EPL-2.0 or BSD-3-Clause
- PAHO_MQTT_C_LICENSE_FILES = epl-v20 edl-v10 LICENSE
+diff --git a/package/sunxi-mali-mainline/sunxi-mali-mainline.hash b/package/sunxi-mali-mainline/sunxi-mali-mainline.hash
+index 978be01024..e1c18fd4f7 100644
+--- a/package/sunxi-mali-mainline/sunxi-mali-mainline.hash
++++ b/package/sunxi-mali-mainline/sunxi-mali-mainline.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 72969ecf470b9e5ce787c2f8f36242926e1e892af0891924ee59a2cd206de39f  sunxi-mali-mainline-d691cb93884ca8ac67860502117bbec283dc19aa.tar.gz
+-sha256 8a06bcae44a41a886f339b4338422415a786787f113e9ed6456ae117104a0b6a  EULA_for_Mali_400MP_AW.pdf
++sha256  72969ecf470b9e5ce787c2f8f36242926e1e892af0891924ee59a2cd206de39f  sunxi-mali-mainline-d691cb93884ca8ac67860502117bbec283dc19aa.tar.gz
++sha256  8a06bcae44a41a886f339b4338422415a786787f113e9ed6456ae117104a0b6a  EULA_for_Mali_400MP_AW.pdf
