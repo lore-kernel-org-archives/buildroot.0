@@ -1,36 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 28 Dec 2020 22:50:04 +0100
-Subject: [Buildroot] [PATCH 1/1] package/pkg-meson: Fix deprecation
- warnings in cross-compilation config
-In-Reply-To: <20201227021505.1970065-1-glex.spb@gmail.com>
-References: <20201227021505.1970065-1-glex.spb@gmail.com>
-Message-ID: <20201228225004.19168dde@windsurf.home>
+Date: Mon, 28 Dec 2020 22:53:25 +0100
+Subject: [Buildroot] [PATCH 1/1] package/erlang-jiffy: needs -fPIC
+In-Reply-To: <20201224101440.3427472-1-fontaine.fabrice@gmail.com>
+References: <20201224101440.3427472-1-fontaine.fabrice@gmail.com>
+Message-ID: <20201228225325.4f973ae1@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 27 Dec 2020 02:15:05 +0000
-Gleb Mazovetskiy <glex.spb@gmail.com> wrote:
+Hello Fabrice,
 
-> As of meson 0.56.0, `<lang>_args` and `<lang>_link_args` in the `[properties]` section are deprecated and should be placed in the `[built-in options]` section instead.
-> 
-> Source: https://mesonbuild.com/Machine-files.html#properties
-> 
-> Fixes the following deprecation warnings:
-> 
-> > DEPRECATION: c_args in the [properties] section of the machine file is deprecated, use the [built-in options] section.
-> > DEPRECATION: c_link_args in the [properties] section of the machine file is deprecated, use the [built-in options] section.
-> > DEPRECATION: cpp_args in the [properties] section of the machine file is deprecated, use the [built-in options] section.
-> > DEPRECATION: cpp_link_args in the [properties] section of the machine file is deprecated, use the [built-in options] section.  
-> 
-> Signed-off-by: Gleb Mazovetskiy <glex.spb@gmail.com>
-> ---
->  package/meson/cross-compilation.conf.in | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+On Thu, 24 Dec 2020 11:14:40 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Applied to master, thanks.
+> Fixes:
+>  - http://autobuild.buildroot.org/results/9ac6e1bf9eaf922c0b7f869416ec33f40ed3543c
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Thanks for the patch. As usual, I'm kind of interested to understand
+since when this is happening, why suddenly we need a fix like this. Is
+this following a version bump of this package ?
+
+> +     {"(linux|solaris|freebsd|netbsd|openbsd|dragonfly|darwin|gnu)",
+> +-        "LDFLAGS", "$LDFLAGS $FLTO_FLAG -lstdc++"},
+> ++        "LDFLAGS", "$LDFLAGS $FLTO_FLAG -lstdc++ -fPIC"},
+
+It is surprising that only LDFLAGS need to be changed. Indeed, -fPIC is
+also needed at *compile* time when compiling each individual object
+file, so typically in CFLAGS/CXXFLAGS. Why isn't it needed in CXXFLAGS
+here ? Because it's already passed at compile time, but forgotten at
+link time ? Or because LDFLAGS are also used by rebar at compile time ?
+
+Thanks!
 
 Thomas
 -- 
