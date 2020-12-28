@@ -1,60 +1,97 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 28 Dec 2020 14:13:53 +0100
-Subject: [Buildroot] [PATCH 1/1] package/boost: add BR2_PACKAGE_BOOST_NOWIDE
-Message-ID: <20201228131353.3829106-1-fontaine.fabrice@gmail.com>
+From: Stefan Agner <stefan@agner.ch>
+Date: Mon, 28 Dec 2020 14:54:10 +0100
+Subject: [Buildroot] [PATCH] package/linux-firmware: add new option for
+ USB TI 3410/5052 firmware
+In-Reply-To: <20201225182828.GD1680670@scaer>
+References: <2a63d2fb5dc2a51888737af1d3e868b4b8cf74c8.1608718184.git.stefan@agner.ch>
+ <20201225182828.GD1680670@scaer>
+Message-ID: <ecbe0c9150403734524848c861d2c29d@agner.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-nowide library has been added in version 1.73.0 and is enabled by
-default
+On 2020-12-25 19:28, Yann E. MORIN wrote:
+> Stefan, All,
+> 
+> On 2020-12-23 11:11 +0100, Stefan Agner spake thusly:
+>> Signed-off-by: Stefan Agner <stefan@agner.ch>
+>> ---
+>>  package/linux-firmware/Config.in         | 9 +++++++++
+>>  package/linux-firmware/linux-firmware.mk | 6 ++++++
+>>  2 files changed, 15 insertions(+)
+>>
+>> diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
+>> index dbdfdb52b3..6d5e961527 100644
+>> --- a/package/linux-firmware/Config.in
+>> +++ b/package/linux-firmware/Config.in
+>> @@ -490,4 +490,13 @@ config BR2_PACKAGE_LINUX_FIRMWARE_QAT_C62X
+>>
+>>  endmenu
+>>
+>> +menu "USB to Serial Firmware"
+>> +
+>> +config BR2_PACKAGE_LINUX_FIRMWARE_USB_SERIAL_TI
+>> +	bool "USB TI 3410/5052 Serial Firmware"
+>> +	help
+>> +	  Firmware files for TI 3410/5052
+>> +
+>> +endmenu
+>> +
+>>  endif
+>> diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+>> index f1c84a134d..f00fb2e6ae 100644
+>> --- a/package/linux-firmware/linux-firmware.mk
+>> +++ b/package/linux-firmware/linux-firmware.mk
+>> @@ -620,6 +620,12 @@ LINUX_FIRMWARE_FILES += qat_c62x.bin qat_c62x_mmp.bin
+>>  LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.qat_firmware
+>>  endif
+>>
+>> +ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_USB_SERIAL_TI),y)
+>> +LINUX_FIRMWARE_FILES += ti_3410.fw ti_5052.fw
+> 
+> That driver lists a lot of other firmware files:
+> 
+>    492 MODULE_FIRMWARE("ti_3410.fw");
+>    493 MODULE_FIRMWARE("ti_5052.fw");
+>    494 MODULE_FIRMWARE("mts_cdma.fw");
+>    495 MODULE_FIRMWARE("mts_gsm.fw");
+>    496 MODULE_FIRMWARE("mts_edge.fw");
+>    497 MODULE_FIRMWARE("mts_mt9234mu.fw");
+>    498 MODULE_FIRMWARE("mts_mt9234zba.fw");
+>    499 MODULE_FIRMWARE("moxa/moxa-1110.fw");
+>    500 MODULE_FIRMWARE("moxa/moxa-1130.fw");
+>    501 MODULE_FIRMWARE("moxa/moxa-1131.fw");
+>    502 MODULE_FIRMWARE("moxa/moxa-1150.fw");
+>    503 MODULE_FIRMWARE("moxa/moxa-1151.fw");
+> 
+> which are all available in linux-firmware. I was about to add them to
+> the list and commit that, but the situation is a bit more complex, as
+> there is a license file for the moxa firmwares.
+> 
+> Care to respin with the extra firmware added to the list, please?
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/boost/Config.in | 5 +++++
- package/boost/boost.mk  | 5 +++--
- 2 files changed, 8 insertions(+), 2 deletions(-)
+Hm, I was thinking those are relatively specific devices, but I see that
+at least the Moxa are rather generic USB to serial converters. So I
+guess it make sense to pack them as well.
 
-diff --git a/package/boost/Config.in b/package/boost/Config.in
-index 121650b8bc..ba5bffd94e 100644
---- a/package/boost/Config.in
-+++ b/package/boost/Config.in
-@@ -253,6 +253,11 @@ config BR2_PACKAGE_BOOST_MPI
- 	  Message Passing Interface library, for use in
- 	  distributed-memory parallel application programming.
- 
-+config BR2_PACKAGE_BOOST_NOWIDE
-+	bool "boost-nowide"
-+	help
-+	  Library for cross-platform, unicode aware programming.
-+
- config BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
- 	bool "boost-program_options"
- 	help
-diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-index 82fe42d6b2..365d4342b8 100644
---- a/package/boost/boost.mk
-+++ b/package/boost/boost.mk
-@@ -19,8 +19,8 @@ BOOST_IGNORE_CVES += CVE-2009-3654
- HOST_BOOST_FLAGS = --without-icu --with-toolset=gcc \
- 	--without-libraries=$(subst $(space),$(comma),atomic chrono context \
- 	contract coroutine date_time exception filesystem graph graph_parallel \
--	iostreams locale log math mpi program_options python random regex \
--	serialization system test thread timer type_erasure wave)
-+	iostreams locale log math mpi nowide program_options python random \
-+	regex serialization system test thread timer type_erasure wave)
- 
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_ATOMIC),,atomic)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CHRONO),,chrono)
-@@ -39,6 +39,7 @@ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_LOCALE),,locale)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_LOG),,log)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_MATH),,math)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_MPI),,mpi)
-+BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_NOWIDE),,nowide)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_PROGRAM_OPTIONS),,program_options)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_PYTHON),,python)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_RANDOM),,random)
--- 
-2.29.2
+Will resend.
+
+--
+Stefan
+
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+>> +# No license file; the license is in the file WHENCE
+>> +# which is installed unconditionally
+>> +endif
+>> +
+>>  ifneq ($(LINUX_FIRMWARE_FILES),)
+>>  define LINUX_FIRMWARE_INSTALL_FILES
+>>  	cd $(@D) && \
+>> --
+>> 2.29.2
+>>
