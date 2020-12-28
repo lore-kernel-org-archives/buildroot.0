@@ -1,132 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 28 Dec 2020 22:48:23 +0100
-Subject: [Buildroot] [git commit] package/samba4: fix build with glibc 2.32
-Message-ID: <20201228213228.CF2BD82A55@busybox.osuosl.org>
+Date: Mon, 28 Dec 2020 22:49:50 +0100
+Subject: [Buildroot] [git commit] package/pkg-meson.mk: fix deprecation
+ warnings in cross-compilation.conf
+Message-ID: <20201228213228.D826782211@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=be533f69419ab33e87eb92abb3c5afbecffddbce
+commit: https://git.buildroot.net/buildroot/commit/?id=e51d73a941cc5abb3f4a71e674e2f17072b6e671
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
- - http://autobuild.buildroot.org/results/2ceef1b861fe952b2c053da70540bd830014bf7a
+As of meson 0.56.0, `<lang>_args` and `<lang>_link_args` in the
+`[properties]` section are deprecated and should be placed in the
+`[built-in options]` section instead.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Source: https://mesonbuild.com/Machine-files.html#properties
+
+Fixes the following deprecation warnings:
+
+> DEPRECATION: c_args in the [properties] section of the machine file is deprecated, use the [built-in options] section.
+> DEPRECATION: c_link_args in the [properties] section of the machine file is deprecated, use the [built-in options] section.
+> DEPRECATION: cpp_args in the [properties] section of the machine file is deprecated, use the [built-in options] section.
+> DEPRECATION: cpp_link_args in the [properties] section of the machine file is deprecated, use the [built-in options] section.
+
+Signed-off-by: Gleb Mazovetskiy <glex.spb@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...d-nss-function-conflicts-with-glibc-nss-h.patch | 104 +++++++++++++++++++++
- 1 file changed, 104 insertions(+)
+ package/meson/cross-compilation.conf.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/samba4/0005-nsswitch-nsstest-c-Avoid-nss-function-conflicts-with-glibc-nss-h.patch b/package/samba4/0005-nsswitch-nsstest-c-Avoid-nss-function-conflicts-with-glibc-nss-h.patch
-new file mode 100644
-index 0000000000..c5e0b55dea
---- /dev/null
-+++ b/package/samba4/0005-nsswitch-nsstest-c-Avoid-nss-function-conflicts-with-glibc-nss-h.patch
-@@ -0,0 +1,104 @@
-+From 6e496aa3635557b59792e469f7c7f8eccd822322 Mon Sep 17 00:00:00 2001
-+From: Khem Raj <raj.khem@gmail.com>
-+Date: Wed, 22 Jul 2020 22:42:09 -0700
-+Subject: [PATCH] nsswitch/nsstest.c: Avoid nss function conflicts with glibc
-+ nss.h
+diff --git a/package/meson/cross-compilation.conf.in b/package/meson/cross-compilation.conf.in
+index 1880051315..37b49eea3b 100644
+--- a/package/meson/cross-compilation.conf.in
++++ b/package/meson/cross-compilation.conf.in
+@@ -12,12 +12,14 @@ pkgconfig = '@HOST_DIR@/bin/pkgconf'
+ g-ir-compiler = '@STAGING_DIR@/usr/bin/g-ir-compiler'
+ g-ir-scanner = '@STAGING_DIR@/usr/bin/g-ir-scanner'
+ 
+-[properties]
+-needs_exe_wrapper = true
++[built-in options]
+ c_args = [@TARGET_CFLAGS@]
+ c_link_args = [@TARGET_LDFLAGS@]
+ cpp_args = [@TARGET_CXXFLAGS@]
+ cpp_link_args = [@TARGET_LDFLAGS@]
 +
-+glibc 2.32 will define these varibles [1] which results in conflicts
-+with these static function names, therefore prefix these function names
-+with samba_ to avoid it
-+
-+[1] https://sourceware.org/git/?p=glibc.git;a=commit;h=499a92df8b9fc64a054cf3b7f728f8967fc1da7d
-+
-+Signed-off-by: Khem Raj <raj.khem@gmail.com>
-+Reviewed-by: Volker Lendecke <vl@samba.org>
-+Reviewed-by: Noel Power <npower@samba.org>
-+
-+Autobuild-User(master): Noel Power <npower@samba.org>
-+Autobuild-Date(master): Tue Jul 28 10:52:00 UTC 2020 on sn-devel-184
-+
-+[Retrieved from:
-+https://gitlab.com/samba-team/samba/-/commit/6e496aa3635557b59792e469f7c7f8eccd822322]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ nsswitch/nsstest.c | 16 ++++++++--------
-+ 1 file changed, 8 insertions(+), 8 deletions(-)
-+
-+diff --git a/nsswitch/nsstest.c b/nsswitch/nsstest.c
-+index e8c4306441d..e2ee9fbf3af 100644
-+--- a/nsswitch/nsstest.c
-++++ b/nsswitch/nsstest.c
-+@@ -137,7 +137,7 @@ static struct passwd *nss_getpwuid(uid_t uid)
-+ 	return &pwd;
-+ }
-+ 
-+-static void nss_setpwent(void)
-++static void samba_nss_setpwent(void)
-+ {
-+ 	NSS_STATUS (*_nss_setpwent)(void) =
-+ 		(NSS_STATUS(*)(void))find_fn("setpwent");
-+@@ -152,7 +152,7 @@ static void nss_setpwent(void)
-+ 	}
-+ }
-+ 
-+-static void nss_endpwent(void)
-++static void samba_nss_endpwent(void)
-+ {
-+ 	NSS_STATUS (*_nss_endpwent)(void) =
-+ 		(NSS_STATUS (*)(void))find_fn("endpwent");
-+@@ -290,7 +290,7 @@ again:
-+ 	return &grp;
-+ }
-+ 
-+-static void nss_setgrent(void)
-++static void samba_nss_setgrent(void)
-+ {
-+ 	NSS_STATUS (*_nss_setgrent)(void) =
-+ 		(NSS_STATUS (*)(void))find_fn("setgrent");
-+@@ -305,7 +305,7 @@ static void nss_setgrent(void)
-+ 	}
-+ }
-+ 
-+-static void nss_endgrent(void)
-++static void samba_nss_endgrent(void)
-+ {
-+ 	NSS_STATUS (*_nss_endgrent)(void) =
-+ 		(NSS_STATUS (*)(void))find_fn("endgrent");
-+@@ -402,7 +402,7 @@ static void nss_test_users(void)
-+ {
-+ 	struct passwd *pwd;
-+ 
-+-	nss_setpwent();
-++	samba_nss_setpwent();
-+ 	/* loop over all users */
-+ 	while ((pwd = nss_getpwent())) {
-+ 		printf("Testing user %s\n", pwd->pw_name);
-+@@ -424,14 +424,14 @@ static void nss_test_users(void)
-+ 		printf("initgroups: "); nss_test_initgroups(pwd->pw_name, pwd->pw_gid);
-+ 		printf("\n");
-+ 	}
-+-	nss_endpwent();
-++	samba_nss_endpwent();
-+ }
-+ 
-+ static void nss_test_groups(void)
-+ {
-+ 	struct group *grp;
-+ 
-+-	nss_setgrent();
-++	samba_nss_setgrent();
-+ 	/* loop over all groups */
-+ 	while ((grp = nss_getgrent())) {
-+ 		printf("Testing group %s\n", grp->gr_name);
-+@@ -452,7 +452,7 @@ static void nss_test_groups(void)
-+ 		printf("getgrgid: "); print_group(grp);
-+ 		printf("\n");
-+ 	}
-+-	nss_endgrent();
-++	samba_nss_endgrent();
-+ }
-+ 
-+ static void nss_test_errors(void)
-+-- 
-+GitLab
-+
++[properties]
++needs_exe_wrapper = true
+ sys_root = '@STAGING_DIR@'
+ pkg_config_libdir = '@STAGING_DIR@/usr/lib/pkgconfig:@STAGING_DIR@/usr/share/pkgconfig'
+ pkg_config_static = '@STATIC@'
