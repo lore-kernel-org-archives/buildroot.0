@@ -1,117 +1,60 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 28 Dec 2020 13:01:00 +0100
-Subject: [Buildroot] [PATCH 1/3] Revert "package/assimp: fix musl zlib/zip
- related compile failure"
-Message-ID: <20201228120102.3055620-1-fontaine.fabrice@gmail.com>
+Date: Mon, 28 Dec 2020 13:01:01 +0100
+Subject: [Buildroot] [PATCH 2/3] Revert "package/assimp: fix static only
+ build"
+In-Reply-To: <20201228120102.3055620-1-fontaine.fabrice@gmail.com>
+References: <20201228120102.3055620-1-fontaine.fabrice@gmail.com>
+Message-ID: <20201228120102.3055620-2-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This reverts commit b529a582ba4d7671597e95d7ab54ee652cbbc261 as it
-raises a build failure with hiawatha because assimp installs its own
-zlib library in staging directory.
-
-Fixes:
- - http://autobuild.buildroot.org/results/9cac31962d48245a5579da692dbc9488292a397e
+This reverts commit b44b5cb265e3764169aa4856f40e8e2db55cba22.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...ssize_t-typedef-mismatch-for-musl-co.patch | 50 -------------------
- package/assimp/Config.in                      |  1 +
- package/assimp/assimp.mk                      |  3 +-
- 3 files changed, 3 insertions(+), 51 deletions(-)
- delete mode 100644 package/assimp/0002-contrib-zip-fix-ssize_t-typedef-mismatch-for-musl-co.patch
+ ...lib-disable-dynamic-library-building.patch | 31 -------------------
+ 1 file changed, 31 deletions(-)
+ delete mode 100644 package/assimp/0003-contrib-zlib-disable-dynamic-library-building.patch
 
-diff --git a/package/assimp/0002-contrib-zip-fix-ssize_t-typedef-mismatch-for-musl-co.patch b/package/assimp/0002-contrib-zip-fix-ssize_t-typedef-mismatch-for-musl-co.patch
+diff --git a/package/assimp/0003-contrib-zlib-disable-dynamic-library-building.patch b/package/assimp/0003-contrib-zlib-disable-dynamic-library-building.patch
 deleted file mode 100644
-index a9a30c4834..0000000000
---- a/package/assimp/0002-contrib-zip-fix-ssize_t-typedef-mismatch-for-musl-co.patch
+index 8661311be5..0000000000
+--- a/package/assimp/0003-contrib-zlib-disable-dynamic-library-building.patch
 +++ /dev/null
-@@ -1,50 +0,0 @@
--From 3fef857a570d1ef2c96401358fe8e239625b48c9 Mon Sep 17 00:00:00 2001
+@@ -1,31 +0,0 @@
+-From 2b8684aded0c383be64bac0fa59e39870252963f Mon Sep 17 00:00:00 2001
 -From: Peter Seiderer <ps.report@gmx.net>
--Date: Fri, 10 Apr 2020 18:11:50 +0200
--Subject: [PATCH] contrib/zip: fix ssize_t typedef mismatch for musl compile
+-Date: Sun, 12 Apr 2020 18:19:13 +0200
+-Subject: [PATCH] contrib/zlib: disable dynamic library building
 -
--Musl uses defines __DEFINED_ssize_t to indicate ssize_t
--availability. So backport this part of upstream commit [1]
--to fixl musl compile.
--
--https://github.com/assimp/assimp/commit/f78446b14aff46db2ef27d062a275b6a01fd68b1
+-Fixes compile failure for static only toolchains (and assimp
+-links against the static one).
 -
 -Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ----
-- contrib/zip/src/zip.h | 13 +++++++++++--
-- 1 file changed, 11 insertions(+), 2 deletions(-)
+- contrib/zlib/CMakeLists.txt | 3 ---
+- 1 file changed, 3 deletions(-)
 -
--diff --git a/contrib/zip/src/zip.h b/contrib/zip/src/zip.h
--index 5f39df50..4672eb3e 100644
----- a/contrib/zip/src/zip.h
--+++ b/contrib/zip/src/zip.h
--@@ -20,8 +20,9 @@ extern "C" {
-- #endif
+-diff --git a/contrib/zlib/CMakeLists.txt b/contrib/zlib/CMakeLists.txt
+-index 9d1fcc94..78346233 100644
+---- a/contrib/zlib/CMakeLists.txt
+-+++ b/contrib/zlib/CMakeLists.txt
+-@@ -195,10 +195,7 @@ if(MINGW)
+-     set(ZLIB_DLL_SRCS ${CMAKE_CURRENT_BINARY_DIR}/zlib1rc.obj)
+- endif(MINGW)
 - 
-- #if !defined(_SSIZE_T_DEFINED) && !defined(_SSIZE_T_DEFINED_) &&               \
---    !defined(_SSIZE_T) && !defined(_SSIZE_T_) && !defined(__ssize_t_defined)
---#define _SSIZE_T
--+    !defined(__DEFINED_ssize_t) && !defined(__ssize_t_defined) &&              \
--+    !defined(_SSIZE_T) && !defined(_SSIZE_T_)
--+
-- // 64-bit Windows is the only mainstream platform
-- // where sizeof(long) != sizeof(void*)
-- #ifdef _WIN64
--@@ -29,6 +30,14 @@ typedef long long  ssize_t;  /* byte count or error */
-- #else
-- typedef long  ssize_t;  /* byte count or error */
-- #endif
--+
--+#define _SSIZE_T_DEFINED
--+#define _SSIZE_T_DEFINED_
--+#define __DEFINED_ssize_t
--+#define __ssize_t_defined
--+#define _SSIZE_T
--+#define _SSIZE_T_
--+
-- #endif
+--add_library(zlib SHARED ${ZLIB_SRCS} ${ZLIB_ASMS} ${ZLIB_DLL_SRCS} ${ZLIB_PUBLIC_HDRS} ${ZLIB_PRIVATE_HDRS})
+- add_library(zlibstatic STATIC ${ZLIB_SRCS} ${ZLIB_ASMS} ${ZLIB_PUBLIC_HDRS} ${ZLIB_PRIVATE_HDRS})
+--set_target_properties(zlib PROPERTIES DEFINE_SYMBOL ZLIB_DLL)
+--set_target_properties(zlib PROPERTIES SOVERSION 1)
 - 
-- #ifndef MAX_PATH
+- INSTALL( TARGETS zlibstatic
+-          LIBRARY DESTINATION ${ASSIMP_LIB_INSTALL_DIR}
 --- 
 -2.26.0
 -
-diff --git a/package/assimp/Config.in b/package/assimp/Config.in
-index 9bdc054909..42bfee945d 100644
---- a/package/assimp/Config.in
-+++ b/package/assimp/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_ASSIMP
- 	bool "assimp"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
-+	select BR2_PACKAGE_ZLIB
- 	help
- 	  Open Asset Import Library (assimp) is a portable Open Source
- 	  library to import various well-known 3D model formats in a
-diff --git a/package/assimp/assimp.mk b/package/assimp/assimp.mk
-index e1b9a23499..eddfbc48b0 100644
---- a/package/assimp/assimp.mk
-+++ b/package/assimp/assimp.mk
-@@ -8,6 +8,7 @@ ASSIMP_VERSION = 5.0.1
- ASSIMP_SITE = $(call github,assimp,assimp,v$(ASSIMP_VERSION))
- ASSIMP_LICENSE = BSD-3-Clause
- ASSIMP_LICENSE_FILES = LICENSE
-+ASSIMP_DEPENDENCIES = zlib
- ASSIMP_INSTALL_STAGING = YES
- 
- # relocation truncated to fit: R_68K_GOT16O. We also need to disable
-@@ -36,7 +37,7 @@ ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
- ASSIMP_CXXFLAGS += -O0
- endif
- 
--ASSIMP_CONF_OPTS += -DASSIMP_BUILD_ZLIB=ON -DASSIMP_BUILD_TESTS=OFF \
-+ASSIMP_CONF_OPTS += -DASSIMP_BUILD_TESTS=OFF \
- 	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) $(ASSIMP_CXXFLAGS)"
- 
- $(eval $(cmake-package))
 -- 
 2.29.2
