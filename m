@@ -1,34 +1,34 @@
 From: Maxime Chevallier <maxime.chevallier@bootlin.com>
-Date: Mon, 28 Dec 2020 17:11:33 +0100
-Subject: [Buildroot] [PATCH v2 13/14] package/haveged: add SELinux module
+Date: Mon, 28 Dec 2020 17:11:32 +0100
+Subject: [Buildroot] [PATCH v2 12/14] package/tcpdump: add SELinux module
 In-Reply-To: <20201228161134.303992-1-maxime.chevallier@bootlin.com>
 References: <20201228161134.303992-1-maxime.chevallier@bootlin.com>
-Message-ID: <20201228161134.303992-14-maxime.chevallier@bootlin.com>
+Message-ID: <20201228161134.303992-13-maxime.chevallier@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Support for haveged is added by the services/entropyd module in the
-SELinux refpolicy.
+Support for tcpdump is added by the admin/netutils module in the SELinux
+refpolicy.
 
 Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
 ---
- package/haveged/haveged.mk | 1 +
+ package/tcpdump/tcpdump.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/haveged/haveged.mk b/package/haveged/haveged.mk
-index 924b499fa9..3980f80132 100644
---- a/package/haveged/haveged.mk
-+++ b/package/haveged/haveged.mk
-@@ -8,6 +8,7 @@ HAVEGED_VERSION = 1.9.13
- HAVEGED_SITE = $(call github,jirka-h,haveged,v$(HAVEGED_VERSION))
- HAVEGED_LICENSE = GPL-3.0+
- HAVEGED_LICENSE_FILES = COPYING
-+HAVEGED_SELINUX_MODULES = entropyd
+diff --git a/package/tcpdump/tcpdump.mk b/package/tcpdump/tcpdump.mk
+index 8db35694ea..23e9333a8f 100644
+--- a/package/tcpdump/tcpdump.mk
++++ b/package/tcpdump/tcpdump.mk
+@@ -17,6 +17,7 @@ TCPDUMP_CONF_OPTS = \
+ 	--with-system-libpcap \
+ 	$(if $(BR2_PACKAGE_TCPDUMP_SMB),--enable-smb,--disable-smb)
+ TCPDUMP_DEPENDENCIES = libpcap
++TCPDUMP_SELINUX_MODULES = netutils
  
- ifeq ($(BR2_sparc_v8)$(BR2_sparc_leon3),y)
- HAVEGED_CONF_OPTS += --enable-clock_gettime=yes
+ # 0001-PPP-When-un-escaping-don-t-allocate-a-too-large-buffer.patch
+ TCPDUMP_IGNORE_CVES += CVE-2020-8037
 -- 
 2.25.4
