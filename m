@@ -1,34 +1,34 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 29 Dec 2020 14:09:17 +0100
-Subject: [Buildroot] [git commit] package/nmap: add SELinux module
-Message-ID: <20201229134644.1918182830@busybox.osuosl.org>
+Date: Tue, 29 Dec 2020 14:09:20 +0100
+Subject: [Buildroot] [git commit] package/haveged: add SELinux module
+Message-ID: <20201229134644.35DC082830@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=be41ce5c53355200e6f55beaea56a8eb671e23e3
+commit: https://git.buildroot.net/buildroot/commit/?id=3de1eed00d20729131b3a01185a9f8911738e6cc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Support for nmap is added by the admin/netutils module in the SELinux
-refpolicy.
+Support for haveged is added by the services/entropyd module in the
+SELinux refpolicy.
 
 Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/nmap/nmap.mk | 1 +
+ package/haveged/haveged.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
-index 46ffd5aef4..aed278ccba 100644
---- a/package/nmap/nmap.mk
-+++ b/package/nmap/nmap.mk
-@@ -12,6 +12,7 @@ NMAP_CONF_OPTS = --without-liblua --without-zenmap \
- 	--with-libdnet=included
- NMAP_LICENSE = nmap license
- NMAP_LICENSE_FILES = LICENSE
-+NMAP_SELINUX_MODULES = netutils
+diff --git a/package/haveged/haveged.mk b/package/haveged/haveged.mk
+index 924b499fa9..3980f80132 100644
+--- a/package/haveged/haveged.mk
++++ b/package/haveged/haveged.mk
+@@ -8,6 +8,7 @@ HAVEGED_VERSION = 1.9.13
+ HAVEGED_SITE = $(call github,jirka-h,haveged,v$(HAVEGED_VERSION))
+ HAVEGED_LICENSE = GPL-3.0+
+ HAVEGED_LICENSE_FILES = COPYING
++HAVEGED_SELINUX_MODULES = entropyd
  
- # needed by libpcap
- NMAP_LIBS_FOR_STATIC_LINK += `$(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs`
+ ifeq ($(BR2_sparc_v8)$(BR2_sparc_leon3),y)
+ HAVEGED_CONF_OPTS += --enable-clock_gettime=yes
