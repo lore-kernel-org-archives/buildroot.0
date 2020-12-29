@@ -1,44 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 29 Dec 2020 15:40:25 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2020-12-27
-In-Reply-To: <2e43559b-f163-db99-09c9-83942feb5e81@grinn-global.com>
-References: <2e43559b-f163-db99-09c9-83942feb5e81@grinn-global.com>
-Message-ID: <20201229154025.723c8a9d@windsurf.home>
+From: Andreas Hilse <andreas.hilse@googlemail.com>
+Date: Tue, 29 Dec 2020 16:03:18 +0100
+Subject: [Buildroot] [PATCH 1/1] package/sysklogd: bump to version 2.1.2
+In-Reply-To: <CANabuZeh=hZ6sUdq-2NOnt7AnS70bmb=ZQkxemFKuHc3-AtiyA@mail.gmail.com>
+References: <20200812160843.24064-1-andreas.hilse@googlemail.com>
+ <20201205222153.75769040@windsurf.home>
+ <CANabuZeh=hZ6sUdq-2NOnt7AnS70bmb=ZQkxemFKuHc3-AtiyA@mail.gmail.com>
+Message-ID: <CANabuZfN6X33VpRN6NX4J2ZgTGY9NT1fMvUMaZa9-h0ZYqPWaQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Thomas, Hello Joachim,
 
-On Tue, 29 Dec 2020 15:36:20 +0100
-Bartosz Bilas <b.bilas@grinn-global.com> wrote:
+Joachim is the maintainer/developer of sysklogd. He already integrated the
+newer sysklogd as an external package in his project "netbox":
+https://github.com/westermo/netbox/tree/master/package/sysklogd2
+The mentioned bug also has been fixed already by him (but not in a release).
+For my correspondence with Joachim please refer to
+https://github.com/troglobit/sysklogd/issues/24
 
-> >               name              | found by |        link to release-monitoring.org        |   version    |   upstream
-> > -------------------------------+----------+----------------------------------------------+--------------+--------------
-> >                  python-esptool |  DISTRO  | https://release-monitoring.org/project/11619 | 2.8          | 3.0  
-> https://patchwork.ozlabs.org/project/buildroot/patch/20201109191210.1037530-1-b.bilas at grinn-global.com/
-> >    
-> >                        qt5scxml |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.1       | 6.0.0
-> >                      qt5webview |  DISTRO  | https://release-monitoring.org/project/07927 | 5.15.1       | 6.0.0
-> >                            ttyd |  DISTRO  | https://release-monitoring.org/project/13890 | 1.6.1        | 1.6.2  
-> ttyd is already bumped into 1.6.2
+Would it be useful for buildroot users to have the choice between the old
+and the new version of sysklogd?
 
-Yes, this was due to the fact that the report was based on the stale
-"next" branch. I've dropped the stale "next" branch, so the report now
-properly uses the "master" branch, and you can see at
-http://autobuild.buildroot.net/stats/ that it sees ttyd being at 1.6.2,
-which is up-to-date.
-
-So you won't receive any notification about ttyd being not update next
-Monday. Unless of course 1.6.3 is released in the mean time :-)
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Best regards
+Andreas
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201229/9165b088/attachment.html>
