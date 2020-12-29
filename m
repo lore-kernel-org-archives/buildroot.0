@@ -1,151 +1,53 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Tue, 29 Dec 2020 22:40:52 +0100
-Subject: [Buildroot] [PATCH 2/2] configs/nitrogen*: bump u-boot to version
- 2020.10
-In-Reply-To: <20201229214053.1045556-1-gary.bisson@boundarydevices.com>
-References: <20201229214053.1045556-1-gary.bisson@boundarydevices.com>
-Message-ID: <20201229214053.1045556-3-gary.bisson@boundarydevices.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 29 Dec 2020 22:41:17 +0100
+Subject: [Buildroot] [git commit] package/gdb: make gdb 9.2 the default
+ version
+Message-ID: <20201229212933.2DE9A82DE2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- U-Boot branch boundary-imx_v2020.10 from our repo
-- Also bump ATF to boundary-imx_5.4.47_2.2.0 for i.MX8*
+commit: https://git.buildroot.net/buildroot/commit/?id=1e0a56c3703a25dacb9020828f69d98cad872bbb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Now that we have added gdb 10.1, let's switch to using gdb 9.2 as the
+default version.
+
+Noe that there previously was a discrepancy between the default when a
+host gdb was enabled, and when it was not: in the ofrmer case, the
+default was 8.3.x, while for the latter it was 8.2.x. Now both are
+aligned to 9.2.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[yann.morin.1998 at free.fr: add blurb about previous version discrepancy]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- configs/nitrogen6sx_defconfig | 4 ++--
- configs/nitrogen6x_defconfig  | 4 ++--
- configs/nitrogen7_defconfig   | 4 ++--
- configs/nitrogen8m_defconfig  | 8 ++++----
- configs/nitrogen8mm_defconfig | 8 ++++----
- configs/nitrogen8mn_defconfig | 8 ++++----
- 6 files changed, 18 insertions(+), 18 deletions(-)
+ package/gdb/Config.in.host | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/configs/nitrogen6sx_defconfig b/configs/nitrogen6sx_defconfig
-index d395608008..8f1f7d7f67 100644
---- a/configs/nitrogen6sx_defconfig
-+++ b/configs/nitrogen6sx_defconfig
-@@ -24,8 +24,8 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--# Last version of branch boundary-v2018.07
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/f9c6c45b.tar.gz"
-+# Last version of branch boundary-v2020.10
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/e27d3240.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen6sx"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-diff --git a/configs/nitrogen6x_defconfig b/configs/nitrogen6x_defconfig
-index 50c97b92bc..b3b69fd34b 100644
---- a/configs/nitrogen6x_defconfig
-+++ b/configs/nitrogen6x_defconfig
-@@ -23,8 +23,8 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--# Last version of branch boundary-v2018.07
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/f9c6c45b.tar.gz"
-+# Last version of branch boundary-v2020.10
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/e27d3240.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen6q"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-diff --git a/configs/nitrogen7_defconfig b/configs/nitrogen7_defconfig
-index c473fd9138..156089ba39 100644
---- a/configs/nitrogen7_defconfig
-+++ b/configs/nitrogen7_defconfig
-@@ -23,8 +23,8 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--# Last version of branch boundary-v2018.07
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/f9c6c45b.tar.gz"
-+# Last version of branch boundary-v2020.10
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/e27d3240.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen7"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-diff --git a/configs/nitrogen8m_defconfig b/configs/nitrogen8m_defconfig
-index 637c82cdbc..7445d32c11 100644
---- a/configs/nitrogen8m_defconfig
-+++ b/configs/nitrogen8m_defconfig
-@@ -28,8 +28,8 @@ BR2_PACKAGE_FIRMWARE_IMX=y
- # ARM Trusted Firmware
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
--# Latest revision of branch boundary-imx_4.14.98_2.3.0
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/imx-atf/archive/99e07a29.tar.gz"
-+# Latest revision of branch boundary-imx_5.4.47_2.2.0
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/imx-atf/archive/515fb041.tar.gz"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mq"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+index 3abc4f7d23..f4e1c6d9ba 100644
+--- a/package/gdb/Config.in.host
++++ b/package/gdb/Config.in.host
+@@ -63,7 +63,7 @@ config BR2_PACKAGE_HOST_GDB_SIM
  
-@@ -38,8 +38,8 @@ BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen8m"
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--# Latest revision of branch boundary-imx_v2018.07
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/f9c6c45b.tar.gz"
-+# Latest revision of branch boundary-imx_v2020.10
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/e27d3240.tar.gz"
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
-diff --git a/configs/nitrogen8mm_defconfig b/configs/nitrogen8mm_defconfig
-index 636ad5ec73..8692e527b7 100644
---- a/configs/nitrogen8mm_defconfig
-+++ b/configs/nitrogen8mm_defconfig
-@@ -28,8 +28,8 @@ BR2_PACKAGE_FIRMWARE_IMX=y
- # ARM Trusted Firmware
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
--# Latest revision of branch boundary-imx_4.14.98_2.3.0
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/imx-atf/archive/99e07a29.tar.gz"
-+# Latest revision of branch boundary-imx_5.4.47_2.2.0
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/imx-atf/archive/515fb041.tar.gz"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mm"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
- 
-@@ -38,8 +38,8 @@ BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen8mm_2g"
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--# Latest revision of branch boundary-imx_v2018.07
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/f9c6c45b.tar.gz"
-+# Latest revision of branch boundary-imx_v2020.10
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/e27d3240.tar.gz"
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
-diff --git a/configs/nitrogen8mn_defconfig b/configs/nitrogen8mn_defconfig
-index 93be9568a2..a160234d61 100644
---- a/configs/nitrogen8mn_defconfig
-+++ b/configs/nitrogen8mn_defconfig
-@@ -28,8 +28,8 @@ BR2_PACKAGE_FIRMWARE_IMX=y
- # ARM Trusted Firmware
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
--# Latest revision of branch boundary-imx_4.14.98_2.3.0
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/imx-atf/archive/99e07a29.tar.gz"
-+# Latest revision of branch boundary-imx_5.4.47_2.2.0
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/imx-atf/archive/515fb041.tar.gz"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mn"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
- 
-@@ -38,8 +38,8 @@ BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen8_nano_8mn1gr0"
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--# Latest revision of branch boundary-imx_v2018.07
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/f9c6c45b.tar.gz"
-+# Latest revision of branch boundary-imx_v2020.10
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/e27d3240.tar.gz"
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
--- 
-2.29.2
+ choice
+ 	prompt "GDB debugger Version"
+-	default BR2_GDB_VERSION_8_3
++	default BR2_GDB_VERSION_9_2
+ 	depends on !BR2_arc
+ 	depends on !BR2_csky
+ 	help
+@@ -90,8 +90,8 @@ config BR2_GDB_VERSION
+ 	string
+ 	default "arc-2020.09-release-gdb" if BR2_arc
+ 	default "4ecb98fbc2f94dbe01b69384afbc515107de73df" if BR2_csky
+-	default "8.2.1"    if BR2_GDB_VERSION_8_2 || !BR2_PACKAGE_HOST_GDB
++	default "8.2.1"    if BR2_GDB_VERSION_8_2
+ 	default "8.3.1"    if BR2_GDB_VERSION_8_3
+-	default "9.2"      if BR2_GDB_VERSION_9_2
++	default "9.2"      if BR2_GDB_VERSION_9_2 || !BR2_PACKAGE_HOST_GDB
+ 	default "10.1"	   if BR2_GDB_VERSION_10
+ 	depends on BR2_PACKAGE_GDB || BR2_PACKAGE_HOST_GDB
