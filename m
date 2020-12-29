@@ -1,28 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 29 Dec 2020 23:01:27 +0100
-Subject: [Buildroot] [PATCH 1/2] utils/scancpan: handles README.pod as
- license file
-In-Reply-To: <20201206062250.625306-1-francois.perrad@gadz.org>
-References: <20201206062250.625306-1-francois.perrad@gadz.org>
-Message-ID: <20201229230127.25977beb@windsurf>
+Date: Tue, 29 Dec 2020 23:03:07 +0100
+Subject: [Buildroot] [git commit] package/quickjs: depends on gcc 4.9 at
+ least
+Message-ID: <20201229214551.DF2E38353F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun,  6 Dec 2020 07:22:49 +0100
-Francois Perrad <fperrad@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=09a7118fb20394fcf5e5b88bf00e159895cb1081
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  utils/scancpan | 3 +++
->  1 file changed, 3 insertions(+)
+fix build http://autobuild.buildroot.org/results/d45/d456eefffd138a714e367f9520adb662f5e0f57e/
+missing include <stdatomic.h>
 
-Both applied. Thanks!
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/quickjs/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/quickjs/Config.in b/package/quickjs/Config.in
+index ee53744bde..886cbd4db6 100644
+--- a/package/quickjs/Config.in
++++ b/package/quickjs/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_QUICKJS
+ 	depends on !BR2_STATIC_LIBS
+ 	# No way to check for fenv support.
+ 	depends on !BR2_TOOLCHAIN_USES_UCLIBC
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C11/stdatomic.h
+ 	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  QuickJS is a small and embeddable Javascript engine.
+@@ -11,6 +12,6 @@ config BR2_PACKAGE_QUICKJS
+ 
+ 	  https://bellard.org/quickjs/
+ 
+-comment "quickjs needs a glibc or musl toolchain w/ dynamic library"
++comment "quickjs needs a glibc or musl toolchain w/ gcc >= 4.9, dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_UCLIBC
++	depends on BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_UCLIBC || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
