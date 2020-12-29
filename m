@@ -1,84 +1,102 @@
-From: Maxim Kochetkov <fido_max@inbox.ru>
-Date: Tue, 29 Dec 2020 12:52:54 +0300
-Subject: [Buildroot] [PATCH 1/2] package/postgresql: allow to select
- postgresql version
-In-Reply-To: <20201229095255.183687-1-fido_max@inbox.ru>
-References: <20201229095255.183687-1-fido_max@inbox.ru>
-Message-ID: <20201229095255.183687-2-fido_max@inbox.ru>
+From: Antoine Tenart <atenart@kernel.org>
+Date: Tue, 29 Dec 2020 11:30:31 +0100
+Subject: [Buildroot] [PATCH v2 00/14] packages: Add SELinux modules to
+ some packages
+In-Reply-To: <20201228161134.303992-1-maxime.chevallier@bootlin.com>
+References: <20201228161134.303992-1-maxime.chevallier@bootlin.com>
+Message-ID: <160923783184.3405.5115059649034806034@kwain.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some packages (like timescaledb) needs older version of PostgreSQL.
-Another use case is supporting older database format. PostgreSQL can't
-automatically upgrade database to next major version.
+Hi Maxime,
 
-Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
----
- package/postgresql/Config.in       | 24 ++++++++++++++++++++++++
- package/postgresql/postgresql.hash |  3 +++
- package/postgresql/postgresql.mk   |  2 +-
- 3 files changed, 28 insertions(+), 1 deletion(-)
+Quoting Maxime Chevallier (2020-12-28 17:11:20)
+> Hello everyone,
+> 
+> This is the second iteration of the series adding matching between
+> packages and the SELinux refpolicy module that supports them.
+> 
+> This series focuses on the tools that are impacted by the following
+> modules in the refpolicy [2] :
+> 
+>   - services/networkmanager, which adds support for :
+>     - iwd
+>     - network-manager
+>     - wpa_supplicant
+> 
+>   - system/ipatbles, which adds support for :
+>     - ebtables
+>     - ipset
+>     - iptables
+>     - nftables
+> 
+>   - admin/netutils, which adds support for :
+>     - fping
+>     - Some of the iputils tools :
+>       - arping
+>       - ping
+>       - tracepath
+>       - traceroute6
+>     - mtr
+>     - nmap
+>     - tcpdump
+> 
+>   - services/entropyd, which adds support for :
+>     - haveged
+>     - jitterentropy-library
+> 
+> With this series, the above-mentionned tools can now be used on systems
+> that have SELinux enabled.
+> 
+> Since V1, the main changes were the removal of the dhcp package which
+> will be part of another series, and the rework of the iputils package
+> according to Antoine Tenart's review.
 
-diff --git a/package/postgresql/Config.in b/package/postgresql/Config.in
-index 2f677daf5b..aa9b28dcb3 100644
---- a/package/postgresql/Config.in
-+++ b/package/postgresql/Config.in
-@@ -22,3 +22,27 @@ config BR2_PACKAGE_POSTGRESQL
- comment "postgresql needs a toolchain w/ dynamic library, wchar"
- 	depends on BR2_USE_MMU
- 	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR
-+
-+if BR2_PACKAGE_POSTGRESQL
-+
-+choice
-+	prompt "PostgreSQL Version"
-+	default BR2_POSTGRESQL_VERSION_12
-+	help
-+	  Select the version of postgresql you wish to use.
-+
-+config BR2_POSTGRESQL_VERSION_12
-+	bool "postgresql 12"
-+
-+config BR2_POSTGRESQL_VERSION_13
-+	bool "postgresql 13"
-+
-+endchoice
-+
-+config BR2_POSTGRESQL_VERSION
-+	string
-+	default "12.5"    if BR2_POSTGRESQL_VERSION_12
-+	default "13.1"    if BR2_POSTGRESQL_VERSION_13
-+	depends on BR2_PACKAGE_POSTGRESQL
-+
-+endif
-diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-index ef676cccc4..ed61e79a09 100644
---- a/package/postgresql/postgresql.hash
-+++ b/package/postgresql/postgresql.hash
-@@ -1,5 +1,8 @@
- # From https://ftp.postgresql.org/pub/source/v13.1/postgresql-13.1.tar.bz2.sha256
- sha256  12345c83b89aa29808568977f5200d6da00f88a035517f925293355432ffe61f  postgresql-13.1.tar.bz2
- 
-+# From https://ftp.postgresql.org/pub/source/v13.1/postgresql-12.5.tar.bz2.sha256
-+sha256  bd0d25341d9578b5473c9506300022de26370879581f5fddd243a886ce79ff95  postgresql-12.5.tar.bz2
-+
- # License file, Locally calculated
- sha256  739e5d454d81d31a482469338b7c856f1f5c6b4cdda1551cea6f0f6d18eef62c  COPYRIGHT
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 98361c00c8..09f226bd85 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--POSTGRESQL_VERSION = 13.1
-+POSTGRESQL_VERSION = $(call qstrip,$(BR2_POSTGRESQL_VERSION))
- POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
- POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
- POSTGRESQL_LICENSE = PostgreSQL
--- 
-2.29.2
+The series looks good to me.
+
+Thanks!
+Antoine
+
+> Maxime Chevallier (14):
+>   package/iwd: add SELinux module
+>   package/network-manager: add SELinux module
+>   package/wpa_supplicant: add SELinux module
+>   package/ebtables: add SELinux module
+>   package/ipset: add SELinux module
+>   package/iptables: add SELinux module
+>   package/nftables: add SELinux module
+>   package/fping: add SELinux module
+>   package/iputils: add SELinux module
+>   package/mtr: add SELinux module
+>   package/nmap: add SELinux module
+>   package/tcpdump: add SELinux module
+>   package/haveged: add SELinux module
+>   package/jitterentropy-library: add SELinux module
+> 
+>  package/ebtables/ebtables.mk                     |  1 +
+>  package/fping/fping.mk                           |  1 +
+>  package/haveged/haveged.mk                       |  1 +
+>  package/ipset/ipset.mk                           |  1 +
+>  package/iptables/iptables.mk                     |  2 ++
+>  package/iputils/iputils.mk                       | 16 ++++++++++++++++
+>  package/iwd/iwd.mk                               |  1 +
+>  .../jitterentropy-library.mk                     |  1 +
+>  package/mtr/mtr.mk                               |  1 +
+>  package/network-manager/network-manager.mk       |  1 +
+>  package/nftables/nftables.mk                     |  1 +
+>  package/nmap/nmap.mk                             |  1 +
+>  package/tcpdump/tcpdump.mk                       |  1 +
+>  package/wpa_supplicant/wpa_supplicant.mk         |  1 +
+>  14 files changed, 30 insertions(+)
+> 
+> -- 
+> 2.25.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
