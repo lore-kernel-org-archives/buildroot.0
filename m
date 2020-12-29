@@ -1,151 +1,159 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 29 Dec 2020 23:23:07 +0100
-Subject: [Buildroot] [git commit] configs/nitrogen*: bump u-boot to version
- 2020.10
-Message-ID: <20201229220713.E26AE7F9E6@busybox.osuosl.org>
+Date: Tue, 29 Dec 2020 23:24:22 +0100
+Subject: [Buildroot] [git commit] package/freescale-imx/imx-gpu-viv: bump to
+ version 6.4.3.p1.0
+Message-ID: <20201229220713.ED0A37F9E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8f75e63ec4989f00e3f142af9a94b63bd15899ca
+commit: https://git.buildroot.net/buildroot/commit/?id=8171aad89bc89c2d2f2377cb40d474856ce70016
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- U-Boot branch boundary-imx_v2020.10 from our repo
-- Also bump ATF to boundary-imx_5.4.47_2.2.0 for i.MX8*
+- Same version as NXP release 5.4.70-2.3.0
+- EULA/COPYING: update to LA_OPT_NXP_Software_License v17
+- backend libraries have moved to separated folders
+  - can now be simply copied, no more symlink or -fb/wl/x11.so
+- wayland backend was renamed from 'wl' to 'wayland'
+- sed on headers for LINUX removed as packages now expected to use
+pkgconfig files properly (just like fb fixup was removed)
+
+Key Improvements (from NXP changelog):
+- GLES CTS 3.2.6.1
+- Vulkan 1.1.6
+- OpenVX 1.2
+- GPU & NPU accelerated ML support
+- OpenCV 4.2
+- Chromium v74
+- Support for renderdoc 1.7
+- Support for TFlite 2.2
+- NNCTS 1.2
+- Vulkan backend support for Unity
+
+Fixes: afbeed5d17 ("package/freescale-imx/imx-gpu-viv: bump version to
+6.4.3.p0.0")
 
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/nitrogen6sx_defconfig | 4 ++--
- configs/nitrogen6x_defconfig  | 4 ++--
- configs/nitrogen7_defconfig   | 4 ++--
- configs/nitrogen8m_defconfig  | 8 ++++----
- configs/nitrogen8mm_defconfig | 8 ++++----
- configs/nitrogen8mn_defconfig | 8 ++++----
- 6 files changed, 18 insertions(+), 18 deletions(-)
+ package/freescale-imx/imx-gpu-viv/Config.in        |  2 +-
+ package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash |  8 ++---
+ package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk   | 40 +++++-----------------
+ 3 files changed, 14 insertions(+), 36 deletions(-)
 
-diff --git a/configs/nitrogen6sx_defconfig b/configs/nitrogen6sx_defconfig
-index d395608008..8f1f7d7f67 100644
---- a/configs/nitrogen6sx_defconfig
-+++ b/configs/nitrogen6sx_defconfig
-@@ -24,8 +24,8 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--# Last version of branch boundary-v2018.07
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/f9c6c45b.tar.gz"
-+# Last version of branch boundary-v2020.10
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/e27d3240.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen6sx"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-diff --git a/configs/nitrogen6x_defconfig b/configs/nitrogen6x_defconfig
-index 50c97b92bc..b3b69fd34b 100644
---- a/configs/nitrogen6x_defconfig
-+++ b/configs/nitrogen6x_defconfig
-@@ -23,8 +23,8 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--# Last version of branch boundary-v2018.07
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/f9c6c45b.tar.gz"
-+# Last version of branch boundary-v2020.10
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/e27d3240.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen6q"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-diff --git a/configs/nitrogen7_defconfig b/configs/nitrogen7_defconfig
-index c473fd9138..156089ba39 100644
---- a/configs/nitrogen7_defconfig
-+++ b/configs/nitrogen7_defconfig
-@@ -23,8 +23,8 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--# Last version of branch boundary-v2018.07
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/f9c6c45b.tar.gz"
-+# Last version of branch boundary-v2020.10
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/e27d3240.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen7"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-diff --git a/configs/nitrogen8m_defconfig b/configs/nitrogen8m_defconfig
-index 637c82cdbc..7445d32c11 100644
---- a/configs/nitrogen8m_defconfig
-+++ b/configs/nitrogen8m_defconfig
-@@ -28,8 +28,8 @@ BR2_PACKAGE_FIRMWARE_IMX=y
- # ARM Trusted Firmware
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
--# Latest revision of branch boundary-imx_4.14.98_2.3.0
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/imx-atf/archive/99e07a29.tar.gz"
-+# Latest revision of branch boundary-imx_5.4.47_2.2.0
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/imx-atf/archive/515fb041.tar.gz"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mq"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+diff --git a/package/freescale-imx/imx-gpu-viv/Config.in b/package/freescale-imx/imx-gpu-viv/Config.in
+index 753a71ee00..cca2689905 100644
+--- a/package/freescale-imx/imx-gpu-viv/Config.in
++++ b/package/freescale-imx/imx-gpu-viv/Config.in
+@@ -67,7 +67,7 @@ config BR2_PACKAGE_IMX_GPU_VIV_OUTPUT
+ 	string
+ 	default "x11" if BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_X11
+ 	default "fb" if BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_FB
+-	default "wl" if BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_WL
++	default "wayland" if BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_WL
  
-@@ -38,8 +38,8 @@ BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen8m"
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--# Latest revision of branch boundary-imx_v2018.07
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/f9c6c45b.tar.gz"
-+# Latest revision of branch boundary-imx_v2020.10
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/e27d3240.tar.gz"
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
-diff --git a/configs/nitrogen8mm_defconfig b/configs/nitrogen8mm_defconfig
-index 636ad5ec73..8692e527b7 100644
---- a/configs/nitrogen8mm_defconfig
-+++ b/configs/nitrogen8mm_defconfig
-@@ -28,8 +28,8 @@ BR2_PACKAGE_FIRMWARE_IMX=y
- # ARM Trusted Firmware
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
--# Latest revision of branch boundary-imx_4.14.98_2.3.0
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/imx-atf/archive/99e07a29.tar.gz"
-+# Latest revision of branch boundary-imx_5.4.47_2.2.0
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/imx-atf/archive/515fb041.tar.gz"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mm"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+ config BR2_PACKAGE_PROVIDES_LIBEGL
+ 	default "imx-gpu-viv"
+diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash
+index 8978a3a769..9c18103996 100644
+--- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash
++++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256	cdec43e45e840fe30e188e3b6f07c44b4a1ceafc315e605c8d278564db5fcbe9  imx-gpu-viv-6.4.3.p0.0-aarch32.bin
+-sha256	b3bd03288106daf3a62d2301d09569292ef6a5c74c761cfa4e41dad85e4bf547  imx-gpu-viv-6.4.3.p0.0-aarch64.bin
+-sha256	69cbb76b3f10ac5a8c36f34df7bbdf50825815560c00a946fff2922365ef01a2  COPYING
+-sha256	a39da2e94bd8b99eaac4325633854620ea3a55145259c3a7748c610a80714cfc  EULA
++sha256	9960fadbc1ea919f8b1b5c1e2e38a52b7293b70c906518d7fff2ada4140c59ea  imx-gpu-viv-6.4.3.p1.0-aarch32.bin
++sha256	0505620c3851a980d2e08fee4b4fcd06eff92efac02d1646924bea86e4384ad4  imx-gpu-viv-6.4.3.p1.0-aarch64.bin
++sha256	9c16421e7c702f56756650b8ac954d34556327e598a8666e6e8f4eb3a1aa95f1  COPYING
++sha256	72edc2072c86d93aa1993d15d4d19d96270af3749b0108995ad50c81d1461f52  EULA
+diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
+index 9d69acb7ae..6ae9aa7acc 100644
+--- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
++++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
+@@ -5,9 +5,9 @@
+ ################################################################################
  
-@@ -38,8 +38,8 @@ BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen8mm_2g"
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--# Latest revision of branch boundary-imx_v2018.07
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/f9c6c45b.tar.gz"
-+# Latest revision of branch boundary-imx_v2020.10
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/e27d3240.tar.gz"
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
-diff --git a/configs/nitrogen8mn_defconfig b/configs/nitrogen8mn_defconfig
-index 93be9568a2..a160234d61 100644
---- a/configs/nitrogen8mn_defconfig
-+++ b/configs/nitrogen8mn_defconfig
-@@ -28,8 +28,8 @@ BR2_PACKAGE_FIRMWARE_IMX=y
- # ARM Trusted Firmware
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
--# Latest revision of branch boundary-imx_4.14.98_2.3.0
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/imx-atf/archive/99e07a29.tar.gz"
-+# Latest revision of branch boundary-imx_5.4.47_2.2.0
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/imx-atf/archive/515fb041.tar.gz"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mn"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+ ifeq ($(BR2_aarch64),y)
+-IMX_GPU_VIV_VERSION = 6.4.3.p0.0-aarch64
++IMX_GPU_VIV_VERSION = 6.4.3.p1.0-aarch64
+ else
+-IMX_GPU_VIV_VERSION = 6.4.3.p0.0-aarch32
++IMX_GPU_VIV_VERSION = 6.4.3.p1.0-aarch32
+ endif
+ IMX_GPU_VIV_SITE = $(FREESCALE_IMX_SITE)
+ IMX_GPU_VIV_SOURCE = imx-gpu-viv-$(IMX_GPU_VIV_VERSION).bin
+@@ -29,7 +29,7 @@ ifeq ($(IMX_GPU_VIV_LIB_TARGET),x11)
+ IMX_GPU_VIV_DEPENDENCIES += xlib_libXdamage xlib_libXext xlib_libXfixes
+ endif
  
-@@ -38,8 +38,8 @@ BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen8_nano_8mn1gr0"
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--# Latest revision of branch boundary-imx_v2018.07
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/f9c6c45b.tar.gz"
-+# Latest revision of branch boundary-imx_v2020.10
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/e27d3240.tar.gz"
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
+-ifeq ($(IMX_GPU_VIV_LIB_TARGET),wl)
++ifeq ($(IMX_GPU_VIV_LIB_TARGET),wayland)
+ IMX_GPU_VIV_DEPENDENCIES += libdrm wayland
+ endif
+ 
+@@ -38,24 +38,13 @@ define IMX_GPU_VIV_EXTRACT_CMDS
+ endef
+ 
+ # Instead of building, we fix up the inconsistencies that exist
+-# in the upstream archive here.
++# in the upstream archive here. We also remove unused backend files.
+ # Make sure these commands are idempotent.
+ define IMX_GPU_VIV_BUILD_CMDS
+-	$(SED) 's/defined(LINUX)/defined(__linux__)/g' $(@D)/gpu-core/usr/include/*/*.h
+-	$(if $(BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_X11)$(BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_WL),
+-		ln -sf libGL-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libGL.so
+-		ln -sf libGL-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libGL.so.1
+-		ln -sf libGL-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libGL.so.1.2
+-		ln -sf libGL-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libGL.so.1.2.0
+-	)
+-	ln -sf libEGL-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libEGL.so
+-	ln -sf libEGL-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libEGL.so.1
+-	ln -sf libEGL-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libEGL.so.1.0
+-	ln -sf libGLESv2-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libGLESv2.so
+-	ln -sf libGLESv2-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libGLESv2.so.2
+-	ln -sf libGLESv2-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libGLESv2.so.2.0.0
+-	ln -sf libGAL-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libGAL.so
+-	ln -sf libVDK-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libVDK.so
++	cp -dpfr $(@D)/gpu-core/usr/lib/$(IMX_GPU_VIV_LIB_TARGET)/* $(@D)/gpu-core/usr/lib/
++	for backend in fb x11 wayland; do \
++		$(RM) -r $(@D)/gpu-core/usr/lib/$$backend ; \
++	done
+ endef
+ 
+ ifeq ($(IMX_GPU_VIV_LIB_TARGET),fb)
+@@ -64,7 +53,7 @@ define IMX_GPU_VIV_FIXUP_PKGCONFIG
+ endef
+ endif
+ 
+-ifeq ($(IMX_GPU_VIV_LIB_TARGET),wl)
++ifeq ($(IMX_GPU_VIV_LIB_TARGET),wayland)
+ define IMX_GPU_VIV_FIXUP_PKGCONFIG
+ 	ln -sf egl_wayland.pc $(@D)/gpu-core/usr/lib/pkgconfig/egl.pc
+ endef
+@@ -101,22 +90,11 @@ define IMX_GPU_VIV_INSTALL_GMEM_INFO
+ endef
+ endif
+ 
+-# On the target, remove the unused libraries.
+-# Note that this is _required_, else ldconfig may create symlinks
+-# to the wrong library
+ define IMX_GPU_VIV_INSTALL_TARGET_CMDS
+ 	$(IMX_GPU_VIV_INSTALL_EXAMPLES)
+ 	$(IMX_GPU_VIV_INSTALL_GMEM_INFO)
+ 	cp -a $(@D)/gpu-core/usr/lib $(TARGET_DIR)/usr
+ 	$(INSTALL) -D -m 0644 $(@D)/gpu-core/etc/Vivante.icd $(TARGET_DIR)/etc/OpenCL/vendors/Vivante.icd
+-	for lib in EGL GAL GLESv2 VDK; do \
+-		for f in $(TARGET_DIR)/usr/lib/lib$${lib}-*.so; do \
+-			case $$f in \
+-				*-$(IMX_GPU_VIV_LIB_TARGET).so) : ;; \
+-				*) $(RM) $$f ;; \
+-			esac; \
+-		done; \
+-	done
+ endef
+ 
+ $(eval $(generic-package))
