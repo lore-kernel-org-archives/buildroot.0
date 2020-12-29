@@ -1,42 +1,57 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 29 Dec 2020 20:53:05 +0100
-Subject: [Buildroot] [git commit] package/tpm2-tss: bump version to 3.0.3
-Message-ID: <20201229193644.3805082AB7@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 29 Dec 2020 20:57:46 +0100
+Subject: [Buildroot] [git commit] package/p11-kit: libtasn1 is optional,
+ not mandatory
+Message-ID: <20201229194017.AB17081675@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=37427714374e7ee66d8629eda8f4389b9a65b7a2
+commit: https://git.buildroot.net/buildroot/commit/?id=d82da39d55ea16c3c8aa3c5a8ea91fd6c2ceafbb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Yair Ben-Avraham <yairba@protonmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/tpm2-tss/tpm2-tss.hash | 2 +-
- package/tpm2-tss/tpm2-tss.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/p11-kit/Config.in  | 1 -
+ package/p11-kit/p11-kit.mk | 8 +++++++-
+ 2 files changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/package/tpm2-tss/tpm2-tss.hash b/package/tpm2-tss/tpm2-tss.hash
-index 49432314d0..6856fd4fde 100644
---- a/package/tpm2-tss/tpm2-tss.hash
-+++ b/package/tpm2-tss/tpm2-tss.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  2432533a1cac0f0d15d0337d2f0a23591a50b36aad68ab72412ce694818b7e76  tpm2-tss-3.0.1.tar.gz
-+sha256  78392be7309baf47f51b122f566ac915fd4d1760ea78571cba2e1484f9b5be17  tpm2-tss-3.0.3.tar.gz
- sha256  18c1bf4b1ba1fb2c4ffa7398c234d83c0d55475298e470ae1e5e3a8a8bd2e448  LICENSE
-diff --git a/package/tpm2-tss/tpm2-tss.mk b/package/tpm2-tss/tpm2-tss.mk
-index 70e39bc2b3..bde6b352bf 100644
---- a/package/tpm2-tss/tpm2-tss.mk
-+++ b/package/tpm2-tss/tpm2-tss.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/p11-kit/Config.in b/package/p11-kit/Config.in
+index 5690418756..9be76c2f41 100644
+--- a/package/p11-kit/Config.in
++++ b/package/p11-kit/Config.in
+@@ -3,7 +3,6 @@ config BR2_PACKAGE_P11_KIT
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_PACKAGE_LIBTASN1
+ 	help
+ 	  Provides a way to load and enumerate PKCS#11 modules.
+ 	  Provides a standard configuration setup for installing PKCS#11
+diff --git a/package/p11-kit/p11-kit.mk b/package/p11-kit/p11-kit.mk
+index fef4791831..c2a7b23e9d 100644
+--- a/package/p11-kit/p11-kit.mk
++++ b/package/p11-kit/p11-kit.mk
+@@ -6,7 +6,6 @@
  
--TPM2_TSS_VERSION = 3.0.1
-+TPM2_TSS_VERSION = 3.0.3
- TPM2_TSS_SITE = https://github.com/tpm2-software/tpm2-tss/releases/download/$(TPM2_TSS_VERSION)
- TPM2_TSS_LICENSE = BSD-2-Clause
- TPM2_TSS_LICENSE_FILES = LICENSE
+ P11_KIT_VERSION = 0.23.16.1
+ P11_KIT_SITE = https://github.com/p11-glue/p11-kit/releases/download/$(P11_KIT_VERSION)
+-P11_KIT_DEPENDENCIES = host-pkgconf libtasn1
+ P11_KIT_INSTALL_STAGING = YES
+ P11_KIT_CONF_OPTS = --disable-static
+ P11_KIT_CONF_ENV = ac_cv_have_decl_program_invocation_short_name=yes \
+@@ -27,4 +26,11 @@ else
+ P11_KIT_CONF_OPTS += --without-libffi
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBTASN1),y)
++P11_KIT_DEPENDENCIES += host-pkgconf libtasn1
++P11_KIT_CONF_OPTS += --with-libtasn1
++else
++P11_KIT_CONF_OPTS += --without-libtasn1
++endif
++
+ $(eval $(autotools-package))
