@@ -1,42 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 29 Dec 2020 16:13:04 +0100
-Subject: [Buildroot] [PATCH 1/1] package/sysklogd: bump to version 2.1.2
-In-Reply-To: <CANabuZfN6X33VpRN6NX4J2ZgTGY9NT1fMvUMaZa9-h0ZYqPWaQ@mail.gmail.com>
-References: <20200812160843.24064-1-andreas.hilse@googlemail.com>
- <20201205222153.75769040@windsurf.home>
- <CANabuZeh=hZ6sUdq-2NOnt7AnS70bmb=ZQkxemFKuHc3-AtiyA@mail.gmail.com>
- <CANabuZfN6X33VpRN6NX4J2ZgTGY9NT1fMvUMaZa9-h0ZYqPWaQ@mail.gmail.com>
-Message-ID: <20201229161304.2ab04345@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 29 Dec 2020 17:14:39 +0100
+Subject: [Buildroot] [git commit] package/pkg-download.mk: add <pkg>_DL_ENV
+ variable
+Message-ID: <20201229155759.71CA9821DA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=53f23aacebae9adc2062d283b36ce92937028d8f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 29 Dec 2020 16:03:18 +0100
-Andreas Hilse via buildroot <buildroot@busybox.net> wrote:
+This variable can be used by package to pass extra environment
+variables to the download logic. It will be used for the Go/Cargo
+vendoring.
 
-> Joachim is the maintainer/developer of sysklogd. He already integrated the
-> newer sysklogd as an external package in his project "netbox":
-> https://github.com/westermo/netbox/tree/master/package/sysklogd2
-> The mentioned bug also has been fixed already by him (but not in a release).
-> For my correspondence with Joachim please refer to
-> https://github.com/troglobit/sysklogd/issues/24
-> 
-> Would it be useful for buildroot users to have the choice between the old
-> and the new version of sysklogd?
+The <pkg>_DL_ENV variable is intentionally not documented: at this
+point, it is not meant to be used by packages directly, but only by
+package infrastructures.
 
-Well, in this very thread, you simply bumped the sysklogd package to
-this new 2.x version, which is fine for me. There were just a few
-issues to resolve, but other than that on the principle, I'm fine with
-package/sysklogd simply using the 2.x version of the project.
+Suggested-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[yann.morin.1998 at free.fr: move the two _ENV variables to the same line]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/pkg-download.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index 951d2fb554..118df83855 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -99,7 +99,8 @@ endif
+ 
+ define DOWNLOAD
+ 	$(Q)mkdir -p $($(2)_DL_DIR)
+-	$(Q)$(EXTRA_ENV) flock $($(2)_DL_DIR)/.lock $(DL_WRAPPER) \
++	$(Q)$(EXTRA_ENV) $($(2)_DL_ENV) \
++		flock $($(2)_DL_DIR)/.lock $(DL_WRAPPER) \
+ 		-c '$($(2)_DL_VERSION)' \
+ 		-d '$($(2)_DL_DIR)' \
+ 		-D '$(DL_DIR)' \
