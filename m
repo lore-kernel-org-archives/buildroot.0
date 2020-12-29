@@ -1,72 +1,35 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 29 Dec 2020 18:11:49 +0100
-Subject: [Buildroot] [git commit] boot/lpc32xxcdl: switch upstream location
-Message-ID: <20201229165527.0BE83839A1@busybox.osuosl.org>
+Date: Tue, 29 Dec 2020 18:14:51 +0100
+Subject: [Buildroot] [git commit] package/graphicsmagick: fix license hash
+Message-ID: <20201229165733.BEB0182936@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bd560b6da54d65dcf2e6d67ec675238c3a0cc727
+commit: https://git.buildroot.net/buildroot/commit/?id=eb7529e6716ae949ffb595e48694466b273c8a4b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The upstream git tree has disappeared, but a ZIP file is still hosted
-somewhere at NXP. The content of that zip file has been verified to be
-100% identical to the tarball we hosted on s.b.o.
+Commit 3591056cd2ae04db3a73c50530bdc927773f26f8 forgot to update hash of
+Copyright.txt (footer removed by
+https://sourceforge.net/p/graphicsmagick/code/ci/86e54c771a8287c6aeba8fa778a7bb1bd02ff61c)
 
-As this is a zip file, we can't use the generic extract commands, and
-must come up with our own. As such, it no longer makes sense to fix the
-CRLF as a post-extract hook; this is moved to the extract command.
+Fixes:
+ - http://autobuild.buildroot.org/results/60c4c46c4cf7aed788c25980d3beff8777da99d8
 
-Add a hash file while at it.
-
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- boot/lpc32xxcdl/lpc32xxcdl.hash |  2 ++
- boot/lpc32xxcdl/lpc32xxcdl.mk   | 13 +++++++------
- 2 files changed, 9 insertions(+), 6 deletions(-)
+ package/graphicsmagick/graphicsmagick.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/boot/lpc32xxcdl/lpc32xxcdl.hash b/boot/lpc32xxcdl/lpc32xxcdl.hash
-new file mode 100644
-index 0000000000..8c6b73d63f
---- /dev/null
-+++ b/boot/lpc32xxcdl/lpc32xxcdl.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256  ded3fa936a96d3fb8188ca6214f57b5208bd49e5416bd69f38bfc810b34197bc  lpc32xx_cdl-v2.11.zip
-diff --git a/boot/lpc32xxcdl/lpc32xxcdl.mk b/boot/lpc32xxcdl/lpc32xxcdl.mk
-index 30afed050b..9f5cd27f50 100644
---- a/boot/lpc32xxcdl/lpc32xxcdl.mk
-+++ b/boot/lpc32xxcdl/lpc32xxcdl.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--LPC32XXCDL_VERSION = lpc32xx_cdl_v2.11
--LPC32XXCDL_SITE = http://git.lpcware.com/lpc3xxx_cdl.git
--LPC32XXCDL_SITE_METHOD = git
-+LPC32XXCDL_VERSION = 2.11
-+LPC32XXCDL_SOURCE = lpc32xx_cdl-v$(LPC32XXCDL_VERSION).zip
-+LPC32XXCDL_SITE = https://community.nxp.com/pwmxy87654/attachments/pwmxy87654/lpcware-archive/61/2
- 
- LPC32XXCDL_INSTALL_TARGET = NO
- LPC32XXCDL_INSTALL_IMAGES = YES
-@@ -45,13 +45,14 @@ LPC32XXCDL_BOARD_STARTUP_DIR = \
- # Source files are with dos newlines, which our patch infrastructure doesn't
- # handle. Work around it by converting the affected files to unix newlines
- # before patching
--define LPC32XXCDL_DOS2UNIX_FOR_PATCH
-+define LPC32XXCDL_EXTRACT_CMDS
-+	unzip $(LPC32XXCDL_DL_DIR)/$(LPC32XXCDL_SOURCE) -d $(@D)
-+	mv $(@D)/lpc3xxx_cdl/* $(@D)
-+	rmdir $(@D)/lpc3xxx_cdl/
- 	sed -n 's|^[+-]\{3\} [^/]\+\([^ \t]*\)\(.*\)|$(@D)\1|p' \
- 		boot/lpc32xxcdl/*.patch| sort -u | xargs $(SED) 's/\x0D$$//'
- endef
- 
--LPC32XXCDL_POST_EXTRACT_HOOKS += LPC32XXCDL_DOS2UNIX_FOR_PATCH
--
- define LPC32XXCDL_BUILD_CMDS
- 	$(MAKE1) $(LPC32XXCDL_BUILD_FLAGS) -C $(@D)
- 	$(MAKE1) $(LPC32XXCDL_BUILD_FLAGS) -C $(@D)/$(LPC32XXCDL_BOARD_STARTUP_DIR)/Burners/$(LPC32XXCDL_KICKSTART_BURNER)
+diff --git a/package/graphicsmagick/graphicsmagick.hash b/package/graphicsmagick/graphicsmagick.hash
+index 5a006dd160..6ad5de9d65 100644
+--- a/package/graphicsmagick/graphicsmagick.hash
++++ b/package/graphicsmagick/graphicsmagick.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+ sha256  5d5b3fde759cdfc307aaf21df9ebd8c752e3f088bb051dd5df8aac7ba7338f46  GraphicsMagick-1.3.36.tar.xz
+-sha256  1d28851631892098e0bf8653fd4e89f3524184d136391b54c664e89251ca3a9a  Copyright.txt
++sha256  aed5bd8e28cbce601cbe2ca2267b663ccd63152965f2d5caea1311bf0039c325  Copyright.txt
