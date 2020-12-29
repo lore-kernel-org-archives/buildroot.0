@@ -1,49 +1,40 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Tue, 29 Dec 2020 21:57:57 +0100
-Subject: [Buildroot] [PATCH 2/2] package/libtirpc: bump version to 1.3.1
-In-Reply-To: <20201229205012.GY1680670@scaer>
-References: <20201202184954.19808-1-petr.vorel@gmail.com>
- <20201202184954.19808-2-petr.vorel@gmail.com>
- <20201229205012.GY1680670@scaer>
-Message-ID: <20201229205757.GB2801@pevik>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 29 Dec 2020 22:03:17 +0100
+Subject: [Buildroot] [git commit]
+ toolchain/toolchain-external/toolchain-external-bootlin: regenerate for
+ riscv32 toolchain
+Message-ID: <20201229204554.9D0B280277@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+commit: https://git.buildroot.net/buildroot/commit/?id=e74cdd07a33785ca2c16b3ec394d41ceaf1f1aeb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Petr, All,
+The RISC-V 32-bit toolchain is using a recent glibc version that no
+longer has RPC support. Thanks to the change in
+gen-bootlin-toolchains, this is now properly detected.
 
-> On 2020-12-02 19:49 +0100, Petr Vorel spake thusly:
-> > Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-> > ---
-> >  package/libtirpc/libtirpc.hash | 4 ++--
-> >  package/libtirpc/libtirpc.mk   | 2 +-
-> >  2 files changed, 3 insertions(+), 3 deletions(-)
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/849510531
 
-> > diff --git a/package/libtirpc/libtirpc.hash b/package/libtirpc/libtirpc.hash
-> > index e437554285..0e77f23947 100644
-> > --- a/package/libtirpc/libtirpc.hash
-> > +++ b/package/libtirpc/libtirpc.hash
-> > @@ -1,5 +1,5 @@
-> >  # From sourceforge's info on download page:
-> > -sha1 f182235e32942fc0ac6b9b5b6fe7e32f69362659  libtirpc-1.2.6.tar.bz2
-> > +sha1 882eaf4c13f0cafb83afd96cd2855638f978d755  libtirpc-1.3.1.tar.bz2
-> >  # Locally computed
-> > -sha256 4278e9a5181d5af9cd7885322fdecebc444f9a3da87c526e7d47f7a12a37d1cc  libtirpc-1.2.6.tar.bz2
-> > +sha256 245895caf066bec5e3d4375942c8cb4366adad184c29c618d97f724ea309ee17  dl/libtirpc/libtirpc-1.3.1.tar.bz2
-> ___________________________________________________________________________,^^^^^^^^^^^^
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../toolchain-external/toolchain-external-bootlin/Config.in.options      | 1 -
+ 1 file changed, 1 deletion(-)
 
-> Hmmm... bad copy-paste. ;-)
-
-> Fixed, and applied to master, thanks.
-Uh, sorry for it, thanks for fixing!
-
-> Regards,
-> Yann E. MORIN.
-
-
-Kind regards,
-Petr
+diff --git a/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options b/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options
+index 3c94ae1535..be9c204193 100644
+--- a/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options
++++ b/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options
+@@ -3331,7 +3331,6 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_RISCV32_ILP32D_GLIBC_BLEEDING_EDGE
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+-	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	help
+ 	  Bootlin toolchain for the riscv32-ilp32d architecture,
+ 	  using the glibc C library. This is a bleeding-edge version,
