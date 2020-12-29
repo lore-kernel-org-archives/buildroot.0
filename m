@@ -1,55 +1,42 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 29 Dec 2020 19:23:25 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libfuse3: enable CONFIG_FUSE_FS
- in kernel config
-In-Reply-To: <20201223021627.1820551-1-tianyuanhao@aliyun.com>
-References: <20201223021627.1820551-1-tianyuanhao@aliyun.com>
-Message-ID: <20201229182325.GV1680670@scaer>
+Date: Tue, 29 Dec 2020 20:53:05 +0100
+Subject: [Buildroot] [git commit] package/tpm2-tss: bump version to 3.0.3
+Message-ID: <20201229193644.3805082AB7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Tian, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=37427714374e7ee66d8629eda8f4389b9a65b7a2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-12-23 10:16 +0800, Tian Yuanhao via buildroot spake thusly:
-> Signed-off-by: Tian Yuanhao <tianyuanhao@aliyun.com>
+Signed-off-by: Yair Ben-Avraham <yairba@protonmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/tpm2-tss/tpm2-tss.hash | 2 +-
+ package/tpm2-tss/tpm2-tss.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/libfuse3/libfuse3.mk | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/package/libfuse3/libfuse3.mk b/package/libfuse3/libfuse3.mk
-> index f6d8dd0ab9..0a896d8dad 100644
-> --- a/package/libfuse3/libfuse3.mk
-> +++ b/package/libfuse3/libfuse3.mk
-> @@ -23,4 +23,8 @@ define LIBFUSE3_PERMISSIONS
->  	/usr/bin/fusermount3 f 4755 0 0 - - - - -
->  endef
->  
-> +define LIBFUSE3_LINUX_CONFIG_FIXUPS
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_FUSE_FS)
-> +endef
-> +
->  $(eval $(meson-package))
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/tpm2-tss/tpm2-tss.hash b/package/tpm2-tss/tpm2-tss.hash
+index 49432314d0..6856fd4fde 100644
+--- a/package/tpm2-tss/tpm2-tss.hash
++++ b/package/tpm2-tss/tpm2-tss.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  2432533a1cac0f0d15d0337d2f0a23591a50b36aad68ab72412ce694818b7e76  tpm2-tss-3.0.1.tar.gz
++sha256  78392be7309baf47f51b122f566ac915fd4d1760ea78571cba2e1484f9b5be17  tpm2-tss-3.0.3.tar.gz
+ sha256  18c1bf4b1ba1fb2c4ffa7398c234d83c0d55475298e470ae1e5e3a8a8bd2e448  LICENSE
+diff --git a/package/tpm2-tss/tpm2-tss.mk b/package/tpm2-tss/tpm2-tss.mk
+index 70e39bc2b3..bde6b352bf 100644
+--- a/package/tpm2-tss/tpm2-tss.mk
++++ b/package/tpm2-tss/tpm2-tss.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TPM2_TSS_VERSION = 3.0.1
++TPM2_TSS_VERSION = 3.0.3
+ TPM2_TSS_SITE = https://github.com/tpm2-software/tpm2-tss/releases/download/$(TPM2_TSS_VERSION)
+ TPM2_TSS_LICENSE = BSD-2-Clause
+ TPM2_TSS_LICENSE_FILES = LICENSE
