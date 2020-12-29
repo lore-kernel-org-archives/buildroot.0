@@ -1,30 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 29 Dec 2020 10:43:42 +0100
-Subject: [Buildroot] [PATCH 1/1] package/erlang-jiffy: needs -fPIC
-In-Reply-To: <CAPi7W81Un5M_bA7_EqbZeFPdiKKP7+v1pjzheAa-FKGVHvu3ng@mail.gmail.com>
-References: <20201224101440.3427472-1-fontaine.fabrice@gmail.com>
- <20201228225325.4f973ae1@windsurf.home>
- <CAPi7W81Un5M_bA7_EqbZeFPdiKKP7+v1pjzheAa-FKGVHvu3ng@mail.gmail.com>
-Message-ID: <20201229104342.1eaa49a3@windsurf.home>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 29 Dec 2020 10:50:59 +0100
+Subject: [Buildroot] [PATCH 1/1] package/graphicsmagick: fix license hash
+Message-ID: <20201229095059.4181577-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 29 Dec 2020 10:39:27 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Commit 3591056cd2ae04db3a73c50530bdc927773f26f8 forgot to update hash of
+Copyright.txt (footer removed by
+https://sourceforge.net/p/graphicsmagick/code/ci/86e54c771a8287c6aeba8fa778a7bb1bd02ff61c)
 
-> This build failure is raised because of the -flto flag which is added
-> since version 1.0.0 and
-> https://github.com/davisp/jiffy/commit/feaf10f2d50e454f55a9d6b20c289031b0980503
-> It seems that -flto can't be used without -fPIC.
+Fixes:
+ - http://autobuild.buildroot.org/results/60c4c46c4cf7aed788c25980d3beff8777da99d8
 
-This seems super odd. I'm not sure what would be the relationship
-between LTO and PIC...
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/graphicsmagick/graphicsmagick.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
+diff --git a/package/graphicsmagick/graphicsmagick.hash b/package/graphicsmagick/graphicsmagick.hash
+index 5a006dd160..6ad5de9d65 100644
+--- a/package/graphicsmagick/graphicsmagick.hash
++++ b/package/graphicsmagick/graphicsmagick.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+ sha256  5d5b3fde759cdfc307aaf21df9ebd8c752e3f088bb051dd5df8aac7ba7338f46  GraphicsMagick-1.3.36.tar.xz
+-sha256  1d28851631892098e0bf8653fd4e89f3524184d136391b54c664e89251ca3a9a  Copyright.txt
++sha256  aed5bd8e28cbce601cbe2ca2267b663ccd63152965f2d5caea1311bf0039c325  Copyright.txt
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.29.2
