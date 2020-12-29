@@ -1,102 +1,72 @@
-From: Antoine Tenart <atenart@kernel.org>
-Date: Tue, 29 Dec 2020 11:30:31 +0100
-Subject: [Buildroot] [PATCH v2 00/14] packages: Add SELinux modules to
- some packages
-In-Reply-To: <20201228161134.303992-1-maxime.chevallier@bootlin.com>
-References: <20201228161134.303992-1-maxime.chevallier@bootlin.com>
-Message-ID: <160923783184.3405.5115059649034806034@kwain.local>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 29 Dec 2020 11:56:53 +0100
+Subject: [Buildroot] [PATCH] boot/lpc32xxcdl: switch upstream location
+Message-ID: <20201229105653.3156279-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Maxime,
+The upstream git tree has disapeared, but a ZIP file is still hosted
+somewhere at NXP,. The content of that zip file has been verified to
+be 100% identical to the tarball we hosted on s.b.o.
 
-Quoting Maxime Chevallier (2020-12-28 17:11:20)
-> Hello everyone,
-> 
-> This is the second iteration of the series adding matching between
-> packages and the SELinux refpolicy module that supports them.
-> 
-> This series focuses on the tools that are impacted by the following
-> modules in the refpolicy [2] :
-> 
->   - services/networkmanager, which adds support for :
->     - iwd
->     - network-manager
->     - wpa_supplicant
-> 
->   - system/ipatbles, which adds support for :
->     - ebtables
->     - ipset
->     - iptables
->     - nftables
-> 
->   - admin/netutils, which adds support for :
->     - fping
->     - Some of the iputils tools :
->       - arping
->       - ping
->       - tracepath
->       - traceroute6
->     - mtr
->     - nmap
->     - tcpdump
-> 
->   - services/entropyd, which adds support for :
->     - haveged
->     - jitterentropy-library
-> 
-> With this series, the above-mentionned tools can now be used on systems
-> that have SELinux enabled.
-> 
-> Since V1, the main changes were the removal of the dhcp package which
-> will be part of another series, and the rework of the iputils package
-> according to Antoine Tenart's review.
+As this is a zip file, we can't use the generic extract commands, and
+must come up with our own. As such, it no longer makes sense to fix the
+CRLF as a post-extract hook; this is moved to the extract command.
 
-The series looks good to me.
+Add a hash file while at it.
 
-Thanks!
-Antoine
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ boot/lpc32xxcdl/lpc32xxcdl.hash |  2 ++
+ boot/lpc32xxcdl/lpc32xxcdl.mk   | 13 +++++++------
+ 2 files changed, 9 insertions(+), 6 deletions(-)
+ create mode 100644 boot/lpc32xxcdl/lpc32xxcdl.hash
 
-> Maxime Chevallier (14):
->   package/iwd: add SELinux module
->   package/network-manager: add SELinux module
->   package/wpa_supplicant: add SELinux module
->   package/ebtables: add SELinux module
->   package/ipset: add SELinux module
->   package/iptables: add SELinux module
->   package/nftables: add SELinux module
->   package/fping: add SELinux module
->   package/iputils: add SELinux module
->   package/mtr: add SELinux module
->   package/nmap: add SELinux module
->   package/tcpdump: add SELinux module
->   package/haveged: add SELinux module
->   package/jitterentropy-library: add SELinux module
-> 
->  package/ebtables/ebtables.mk                     |  1 +
->  package/fping/fping.mk                           |  1 +
->  package/haveged/haveged.mk                       |  1 +
->  package/ipset/ipset.mk                           |  1 +
->  package/iptables/iptables.mk                     |  2 ++
->  package/iputils/iputils.mk                       | 16 ++++++++++++++++
->  package/iwd/iwd.mk                               |  1 +
->  .../jitterentropy-library.mk                     |  1 +
->  package/mtr/mtr.mk                               |  1 +
->  package/network-manager/network-manager.mk       |  1 +
->  package/nftables/nftables.mk                     |  1 +
->  package/nmap/nmap.mk                             |  1 +
->  package/tcpdump/tcpdump.mk                       |  1 +
->  package/wpa_supplicant/wpa_supplicant.mk         |  1 +
->  14 files changed, 30 insertions(+)
-> 
-> -- 
-> 2.25.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+diff --git a/boot/lpc32xxcdl/lpc32xxcdl.hash b/boot/lpc32xxcdl/lpc32xxcdl.hash
+new file mode 100644
+index 0000000000..8c6b73d63f
+--- /dev/null
++++ b/boot/lpc32xxcdl/lpc32xxcdl.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256  ded3fa936a96d3fb8188ca6214f57b5208bd49e5416bd69f38bfc810b34197bc  lpc32xx_cdl-v2.11.zip
+diff --git a/boot/lpc32xxcdl/lpc32xxcdl.mk b/boot/lpc32xxcdl/lpc32xxcdl.mk
+index 30afed050b..9f5cd27f50 100644
+--- a/boot/lpc32xxcdl/lpc32xxcdl.mk
++++ b/boot/lpc32xxcdl/lpc32xxcdl.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-LPC32XXCDL_VERSION = lpc32xx_cdl_v2.11
+-LPC32XXCDL_SITE = http://git.lpcware.com/lpc3xxx_cdl.git
+-LPC32XXCDL_SITE_METHOD = git
++LPC32XXCDL_VERSION = 2.11
++LPC32XXCDL_SOURCE = lpc32xx_cdl-v$(LPC32XXCDL_VERSION).zip
++LPC32XXCDL_SITE = https://community.nxp.com/pwmxy87654/attachments/pwmxy87654/lpcware-archive/61/2
+ 
+ LPC32XXCDL_INSTALL_TARGET = NO
+ LPC32XXCDL_INSTALL_IMAGES = YES
+@@ -45,13 +45,14 @@ LPC32XXCDL_BOARD_STARTUP_DIR = \
+ # Source files are with dos newlines, which our patch infrastructure doesn't
+ # handle. Work around it by converting the affected files to unix newlines
+ # before patching
+-define LPC32XXCDL_DOS2UNIX_FOR_PATCH
++define LPC32XXCDL_EXTRACT_CMDS
++	unzip $(LPC32XXCDL_DL_DIR)/$(LPC32XXCDL_SOURCE) -d $(@D)
++	mv $(@D)/lpc3xxx_cdl/* $(@D)
++	rmdir $(@D)/lpc3xxx_cdl/
+ 	sed -n 's|^[+-]\{3\} [^/]\+\([^ \t]*\)\(.*\)|$(@D)\1|p' \
+ 		boot/lpc32xxcdl/*.patch| sort -u | xargs $(SED) 's/\x0D$$//'
+ endef
+ 
+-LPC32XXCDL_POST_EXTRACT_HOOKS += LPC32XXCDL_DOS2UNIX_FOR_PATCH
+-
+ define LPC32XXCDL_BUILD_CMDS
+ 	$(MAKE1) $(LPC32XXCDL_BUILD_FLAGS) -C $(@D)
+ 	$(MAKE1) $(LPC32XXCDL_BUILD_FLAGS) -C $(@D)/$(LPC32XXCDL_BOARD_STARTUP_DIR)/Burners/$(LPC32XXCDL_KICKSTART_BURNER)
+-- 
+2.25.1
