@@ -1,35 +1,39 @@
-From: Maxim Kochetkov <fido_max@inbox.ru>
-Date: Tue, 29 Dec 2020 12:52:55 +0300
-Subject: [Buildroot] [PATCH 2/2] package/timescaledb: add dependency on
- postgresql 12
-In-Reply-To: <20201229095255.183687-1-fido_max@inbox.ru>
-References: <20201229095255.183687-1-fido_max@inbox.ru>
-Message-ID: <20201229095255.183687-3-fido_max@inbox.ru>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 29 Dec 2020 11:14:46 +0100
+Subject: [Buildroot] [PATCH 1/1] package/erlang-jiffy: needs -fPIC
+In-Reply-To: <20201229104342.1eaa49a3@windsurf.home>
+References: <20201224101440.3427472-1-fontaine.fabrice@gmail.com>
+ <20201228225325.4f973ae1@windsurf.home>
+ <CAPi7W81Un5M_bA7_EqbZeFPdiKKP7+v1pjzheAa-FKGVHvu3ng@mail.gmail.com>
+ <20201229104342.1eaa49a3@windsurf.home>
+Message-ID: <CAPi7W80-5tr3My7i44W_i0ZLsgF8exY6PNGTiE6ra9iVEr3anQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-TimescaleDB 1.7.4 does not support postgresql 13.
-PostgreSQL 12 must be selected to build timescaledb.
+Le mar. 29 d?c. 2020 ? 10:43, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> a ?crit :
+>
+> On Tue, 29 Dec 2020 10:39:27 +0100
+> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+>
+> > This build failure is raised because of the -flto flag which is added
+> > since version 1.0.0 and
+> > https://github.com/davisp/jiffy/commit/feaf10f2d50e454f55a9d6b20c289031b0980503
+> > It seems that -flto can't be used without -fPIC.
+>
+> This seems super odd. I'm not sure what would be the relationship
+> between LTO and PIC...
+Indeed but the build failure is fixed if I remove -flto from CFLAGS.
+I'll try to understand why ...
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+Best Regards,
 
-Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
----
- package/timescaledb/Config.in | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/timescaledb/Config.in b/package/timescaledb/Config.in
-index af4a868527..f0e1c2e9b2 100644
---- a/package/timescaledb/Config.in
-+++ b/package/timescaledb/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_TIMESCALEDB
- 	bool "timescaledb"
- 	depends on BR2_PACKAGE_POSTGRESQL
-+	depends on BR2_POSTGRESQL_VERSION_12
- 	help
- 	  TimescaleDB is an open-source database designed
- 	  to make SQL scalable for time-series data.
--- 
-2.29.2
+Fabrice
