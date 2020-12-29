@@ -1,39 +1,84 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 29 Dec 2020 11:14:46 +0100
-Subject: [Buildroot] [PATCH 1/1] package/erlang-jiffy: needs -fPIC
-In-Reply-To: <20201229104342.1eaa49a3@windsurf.home>
-References: <20201224101440.3427472-1-fontaine.fabrice@gmail.com>
- <20201228225325.4f973ae1@windsurf.home>
- <CAPi7W81Un5M_bA7_EqbZeFPdiKKP7+v1pjzheAa-FKGVHvu3ng@mail.gmail.com>
- <20201229104342.1eaa49a3@windsurf.home>
-Message-ID: <CAPi7W80-5tr3My7i44W_i0ZLsgF8exY6PNGTiE6ra9iVEr3anQ@mail.gmail.com>
+From: Maxim Kochetkov <fido_max@inbox.ru>
+Date: Tue, 29 Dec 2020 12:52:54 +0300
+Subject: [Buildroot] [PATCH 1/2] package/postgresql: allow to select
+ postgresql version
+In-Reply-To: <20201229095255.183687-1-fido_max@inbox.ru>
+References: <20201229095255.183687-1-fido_max@inbox.ru>
+Message-ID: <20201229095255.183687-2-fido_max@inbox.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le mar. 29 d?c. 2020 ? 10:43, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> a ?crit :
->
-> On Tue, 29 Dec 2020 10:39:27 +0100
-> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
->
-> > This build failure is raised because of the -flto flag which is added
-> > since version 1.0.0 and
-> > https://github.com/davisp/jiffy/commit/feaf10f2d50e454f55a9d6b20c289031b0980503
-> > It seems that -flto can't be used without -fPIC.
->
-> This seems super odd. I'm not sure what would be the relationship
-> between LTO and PIC...
-Indeed but the build failure is fixed if I remove -flto from CFLAGS.
-I'll try to understand why ...
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-Best Regards,
+Some packages (like timescaledb) needs older version of PostgreSQL.
+Another use case is supporting older database format. PostgreSQL can't
+automatically upgrade database to next major version.
 
-Fabrice
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+---
+ package/postgresql/Config.in       | 24 ++++++++++++++++++++++++
+ package/postgresql/postgresql.hash |  3 +++
+ package/postgresql/postgresql.mk   |  2 +-
+ 3 files changed, 28 insertions(+), 1 deletion(-)
+
+diff --git a/package/postgresql/Config.in b/package/postgresql/Config.in
+index 2f677daf5b..aa9b28dcb3 100644
+--- a/package/postgresql/Config.in
++++ b/package/postgresql/Config.in
+@@ -22,3 +22,27 @@ config BR2_PACKAGE_POSTGRESQL
+ comment "postgresql needs a toolchain w/ dynamic library, wchar"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR
++
++if BR2_PACKAGE_POSTGRESQL
++
++choice
++	prompt "PostgreSQL Version"
++	default BR2_POSTGRESQL_VERSION_12
++	help
++	  Select the version of postgresql you wish to use.
++
++config BR2_POSTGRESQL_VERSION_12
++	bool "postgresql 12"
++
++config BR2_POSTGRESQL_VERSION_13
++	bool "postgresql 13"
++
++endchoice
++
++config BR2_POSTGRESQL_VERSION
++	string
++	default "12.5"    if BR2_POSTGRESQL_VERSION_12
++	default "13.1"    if BR2_POSTGRESQL_VERSION_13
++	depends on BR2_PACKAGE_POSTGRESQL
++
++endif
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index ef676cccc4..ed61e79a09 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,5 +1,8 @@
+ # From https://ftp.postgresql.org/pub/source/v13.1/postgresql-13.1.tar.bz2.sha256
+ sha256  12345c83b89aa29808568977f5200d6da00f88a035517f925293355432ffe61f  postgresql-13.1.tar.bz2
+ 
++# From https://ftp.postgresql.org/pub/source/v13.1/postgresql-12.5.tar.bz2.sha256
++sha256  bd0d25341d9578b5473c9506300022de26370879581f5fddd243a886ce79ff95  postgresql-12.5.tar.bz2
++
+ # License file, Locally calculated
+ sha256  739e5d454d81d31a482469338b7c856f1f5c6b4cdda1551cea6f0f6d18eef62c  COPYRIGHT
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 98361c00c8..09f226bd85 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-POSTGRESQL_VERSION = 13.1
++POSTGRESQL_VERSION = $(call qstrip,$(BR2_POSTGRESQL_VERSION))
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
+-- 
+2.29.2
