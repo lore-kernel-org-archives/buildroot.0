@@ -1,49 +1,47 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Tue, 29 Dec 2020 23:03:59 +0100
-Subject: [Buildroot] [PATCH 3/3]
- package/freescale-imx/kernel-module-imx-gpu-viv: bump to version 6.4.3.p1.0
-In-Reply-To: <20201229220359.1048766-1-gary.bisson@boundarydevices.com>
-References: <20201229220359.1048766-1-gary.bisson@boundarydevices.com>
-Message-ID: <20201229220359.1048766-4-gary.bisson@boundarydevices.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 29 Dec 2020 23:04:09 +0100
+Subject: [Buildroot] [PATCH] package/minetest{-game}: bump to version
+ 5.3.0
+In-Reply-To: <20201206153528.1345269-1-romain.naour@gmail.com>
+References: <20201206153528.1345269-1-romain.naour@gmail.com>
+Message-ID: <20201229230409.3b894a60@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Same version as NXP release 5.4.70-2.3.0
-- No changelog provided by NXP
-- Tested on Nitrogen8M device with Weston (DRM backend) as follows:
- # cd /usr/share/examples/viv_samples/vdk/
- # ./tutorial7
+On Sun,  6 Dec 2020 16:35:28 +0100
+Romain Naour <romain.naour@gmail.com> wrote:
 
-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
----
- .../kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash    | 2 +-
- .../kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk      | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> See Changelog [1]
+> 
+> Disable unittests build with the new BUILD_UNITTESTS option.
+> 
+> Update minetest-game licence file hash for:
+>   mods/default/license.txt [2]
+>   mods/farming/license.txt [3]
+> 
+> Update minetest license file hash for:
+>   LICENSE.txt [4]
+> 
+> [1] https://dev.minetest.net/Changelog#5.2.0_.E2.86.92_5.3.0
+> [2] https://github.com/minetest/minetest_game/commit/0662f962842b071525fa00ce970d8cc645bd68a4
+> [3] https://github.com/minetest/minetest_game/commit/e5a7af1c4abaf06ad764bf7c5da058fd136871c0
+> [4] https://github.com/minetest/minetest/commit/9a64a9fd9427fc3b62d4dc9bf1ca7c15477ebc5a
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> ---
+>  package/minetest-game/minetest-game.hash | 6 +++---
+>  package/minetest-game/minetest-game.mk   | 2 +-
+>  package/minetest/minetest.hash           | 4 ++--
+>  package/minetest/minetest.mk             | 5 +++--
+>  4 files changed, 9 insertions(+), 8 deletions(-)
 
-diff --git a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
-index b9b93aeb5b..0fd8e04f21 100644
---- a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
-+++ b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
-@@ -1,3 +1,3 @@
- # locally computed
--sha256  52b7425453fa32300e4779220d5deebd4a43a7525991ce3e5ce27eba909780f3  kernel-module-imx-gpu-viv-f2e8483fbda59bf2482f77efb0804c014848f749.tar.gz
-+sha256  ee9227d8b3f6da84a4b0be59cdc9a4c67db5c941c719ab44a29e09fe73019cac  kernel-module-imx-gpu-viv-5c8eb7b0576dc2348fb206945ce13e41d0837cf1.tar.gz
- sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
-diff --git a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
-index 2cea117087..4a2fb3032b 100644
---- a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
-+++ b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KERNEL_MODULE_IMX_GPU_VIV_VERSION = f2e8483fbda59bf2482f77efb0804c014848f749
-+KERNEL_MODULE_IMX_GPU_VIV_VERSION = 5c8eb7b0576dc2348fb206945ce13e41d0837cf1
- KERNEL_MODULE_IMX_GPU_VIV_SITE = \
- 	$(call github,Freescale,kernel-module-imx-gpu-viv,$(KERNEL_MODULE_IMX_GPU_VIV_VERSION))
- KERNEL_MODULE_IMX_GPU_VIV_LICENSE = GPL-2.0
+Applied to master, thanks.
+
+Thomas
 -- 
-2.29.2
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
