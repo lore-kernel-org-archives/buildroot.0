@@ -1,32 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 29 Dec 2020 23:37:29 +0100
-Subject: [Buildroot] [PATCH 5/5] package/glibc: bump to version
- 2.32-23-g050022910be1d1f5c11cd5168f1685ad4f9580d2
-In-Reply-To: <20201229223451.GB1680670@scaer>
-References: <20201207204821.3588178-1-romain.naour@gmail.com>
- <20201207204821.3588178-5-romain.naour@gmail.com>
- <20201229223451.GB1680670@scaer>
-Message-ID: <20201229233729.1e3e6ba1@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 29 Dec 2020 23:53:43 +0100
+Subject: [Buildroot] [git commit] boot/barebox: kconfig needs the toolchain
+Message-ID: <20201229223743.23F6B82A3B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 29 Dec 2020 23:34:51 +0100
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=1c1a629d814fcf4b8c4c65ce6687635c534a22e9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Appied to master,now (when is 2.33 supposed to get out, now? ;-] )
+In barebox v2020.09.0, kconfig has been updated to a newer version
+based on Linux 5.9-rc2.  As in linux, kconfig can call the compiler
+to test its capabilities.
 
-"The current development version of glibc 2.33, releasing on or around February 1st, 2021."
+We have no way to know if a custom version would require it or not,
+so we just unconditionally depend on the toolchain
 
-https://www.gnu.org/software/libc/
+Signed-off-by: Jules Maselbas <jmaselbas@kalray.eu>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ boot/barebox/barebox.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-So 2.33 would be too late for Buildroot 2021.02, so moving to 2.32 now
-is a good plan IMO.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+index 9d62037e7a..77550aaed6 100644
+--- a/boot/barebox/barebox.mk
++++ b/boot/barebox/barebox.mk
+@@ -138,6 +138,11 @@ define $(1)_INSTALL_IMAGES_CMDS
+ 	$$($(1)_INSTALL_CUSTOM_ENV)
+ endef
+ 
++# Starting with barebox v2020.09.0, the kconfig used calls the
++# cross-compiler to check its capabilities. So we need the
++# toolchain before we can call the configurators.
++$(1)_KCONFIG_DEPENDENCIES += toolchain
++
+ ifeq ($$(BR2_TARGET_$(1)_BAREBOXENV),y)
+ define $(1)_INSTALL_TARGET_CMDS
+ 	cp $$(@D)/scripts/bareboxenv-target $$(TARGET_DIR)/usr/bin/bareboxenv
