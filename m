@@ -1,42 +1,163 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Tue, 29 Dec 2020 23:03:56 +0100
-Subject: [Buildroot] [PATCH 0/3] imx: gpu: bump to 6.4.3.p1.0
-Message-ID: <20201229220359.1048766-1-gary.bisson@boundarydevices.com>
+Date: Tue, 29 Dec 2020 23:03:57 +0100
+Subject: [Buildroot] [PATCH 1/3] package/freescale-imx/imx-gpu-viv: bump to
+ version 6.4.3.p1.0
+In-Reply-To: <20201229220359.1048766-1-gary.bisson@boundarydevices.com>
+References: <20201229220359.1048766-1-gary.bisson@boundarydevices.com>
+Message-ID: <20201229220359.1048766-2-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+- Same version as NXP release 5.4.70-2.3.0
+- EULA/COPYING: update to LA_OPT_NXP_Software_License v17
+- backend libraries have moved to separated folders
+  - can now be simply copied, no more symlink or -fb/wl/x11.so
+- wayland backend was renamed from 'wl' to 'wayland'
+- sed on headers for LINUX removed as packages now expected to use
+pkgconfig files properly (just like fb fixup was removed)
 
-This series bumps all the NXP graphics packages to their 6.4.3.p1.0
-version as found in NXP 5.4.70_2.3.0 release.
+Key Improvements (from NXP changelog):
+- GLES CTS 3.2.6.1
+- Vulkan 1.1.6
+- OpenVX 1.2
+- GPU & NPU accelerated ML support
+- OpenCV 4.2
+- Chromium v74
+- Support for renderdoc 1.7
+- Support for TFlite 2.2
+- NNCTS 1.2
+- Vulkan backend support for Unity
 
-It also cleans up the imx-gpu-viv package as its archive layout has changed,
-removing the need to dance around with symlinks to the proper backend
-Each backend-specific lib is now in its own folder that can be copied over.
-This fixes the previous update made to the package.
+Fixes: afbeed5d17 ("package/freescale-imx/imx-gpu-viv: bump version to
+6.4.3.p0.0")
 
-Let me know if you have any questions.
-
-Regards,
-Gary
-
-Gary Bisson (3):
-  package/freescale-imx/imx-gpu-viv: bump to version 6.4.3.p1.0
-  package/freescale-imx/imx-gpu-g2d: bump to version 6.4.3.p1.0
-  package/freescale-imx/kernel-module-imx-gpu-viv: bump to version
-    6.4.3.p1.0
-
- .../imx-gpu-g2d/imx-gpu-g2d.hash              |  8 ++--
- .../freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk  |  4 +-
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+---
+Note that with standard Weston package there's some flickering happening
+at the top of the screen. I'll investigate but using NXP Weston proves
+to be working fine.
+---
  package/freescale-imx/imx-gpu-viv/Config.in   |  2 +-
  .../imx-gpu-viv/imx-gpu-viv.hash              |  8 ++--
  .../freescale-imx/imx-gpu-viv/imx-gpu-viv.mk  | 40 +++++--------------
- .../kernel-module-imx-gpu-viv.hash            |  2 +-
- .../kernel-module-imx-gpu-viv.mk              |  2 +-
- 7 files changed, 22 insertions(+), 44 deletions(-)
+ 3 files changed, 14 insertions(+), 36 deletions(-)
 
+diff --git a/package/freescale-imx/imx-gpu-viv/Config.in b/package/freescale-imx/imx-gpu-viv/Config.in
+index 753a71ee00..cca2689905 100644
+--- a/package/freescale-imx/imx-gpu-viv/Config.in
++++ b/package/freescale-imx/imx-gpu-viv/Config.in
+@@ -67,7 +67,7 @@ config BR2_PACKAGE_IMX_GPU_VIV_OUTPUT
+ 	string
+ 	default "x11" if BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_X11
+ 	default "fb" if BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_FB
+-	default "wl" if BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_WL
++	default "wayland" if BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_WL
+ 
+ config BR2_PACKAGE_PROVIDES_LIBEGL
+ 	default "imx-gpu-viv"
+diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash
+index 8978a3a769..9c18103996 100644
+--- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash
++++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256	cdec43e45e840fe30e188e3b6f07c44b4a1ceafc315e605c8d278564db5fcbe9  imx-gpu-viv-6.4.3.p0.0-aarch32.bin
+-sha256	b3bd03288106daf3a62d2301d09569292ef6a5c74c761cfa4e41dad85e4bf547  imx-gpu-viv-6.4.3.p0.0-aarch64.bin
+-sha256	69cbb76b3f10ac5a8c36f34df7bbdf50825815560c00a946fff2922365ef01a2  COPYING
+-sha256	a39da2e94bd8b99eaac4325633854620ea3a55145259c3a7748c610a80714cfc  EULA
++sha256	9960fadbc1ea919f8b1b5c1e2e38a52b7293b70c906518d7fff2ada4140c59ea  imx-gpu-viv-6.4.3.p1.0-aarch32.bin
++sha256	0505620c3851a980d2e08fee4b4fcd06eff92efac02d1646924bea86e4384ad4  imx-gpu-viv-6.4.3.p1.0-aarch64.bin
++sha256	9c16421e7c702f56756650b8ac954d34556327e598a8666e6e8f4eb3a1aa95f1  COPYING
++sha256	72edc2072c86d93aa1993d15d4d19d96270af3749b0108995ad50c81d1461f52  EULA
+diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
+index 9d69acb7ae..6ae9aa7acc 100644
+--- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
++++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
+@@ -5,9 +5,9 @@
+ ################################################################################
+ 
+ ifeq ($(BR2_aarch64),y)
+-IMX_GPU_VIV_VERSION = 6.4.3.p0.0-aarch64
++IMX_GPU_VIV_VERSION = 6.4.3.p1.0-aarch64
+ else
+-IMX_GPU_VIV_VERSION = 6.4.3.p0.0-aarch32
++IMX_GPU_VIV_VERSION = 6.4.3.p1.0-aarch32
+ endif
+ IMX_GPU_VIV_SITE = $(FREESCALE_IMX_SITE)
+ IMX_GPU_VIV_SOURCE = imx-gpu-viv-$(IMX_GPU_VIV_VERSION).bin
+@@ -29,7 +29,7 @@ ifeq ($(IMX_GPU_VIV_LIB_TARGET),x11)
+ IMX_GPU_VIV_DEPENDENCIES += xlib_libXdamage xlib_libXext xlib_libXfixes
+ endif
+ 
+-ifeq ($(IMX_GPU_VIV_LIB_TARGET),wl)
++ifeq ($(IMX_GPU_VIV_LIB_TARGET),wayland)
+ IMX_GPU_VIV_DEPENDENCIES += libdrm wayland
+ endif
+ 
+@@ -38,24 +38,13 @@ define IMX_GPU_VIV_EXTRACT_CMDS
+ endef
+ 
+ # Instead of building, we fix up the inconsistencies that exist
+-# in the upstream archive here.
++# in the upstream archive here. We also remove unused backend files.
+ # Make sure these commands are idempotent.
+ define IMX_GPU_VIV_BUILD_CMDS
+-	$(SED) 's/defined(LINUX)/defined(__linux__)/g' $(@D)/gpu-core/usr/include/*/*.h
+-	$(if $(BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_X11)$(BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_WL),
+-		ln -sf libGL-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libGL.so
+-		ln -sf libGL-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libGL.so.1
+-		ln -sf libGL-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libGL.so.1.2
+-		ln -sf libGL-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libGL.so.1.2.0
+-	)
+-	ln -sf libEGL-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libEGL.so
+-	ln -sf libEGL-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libEGL.so.1
+-	ln -sf libEGL-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libEGL.so.1.0
+-	ln -sf libGLESv2-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libGLESv2.so
+-	ln -sf libGLESv2-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libGLESv2.so.2
+-	ln -sf libGLESv2-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libGLESv2.so.2.0.0
+-	ln -sf libGAL-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libGAL.so
+-	ln -sf libVDK-$(IMX_GPU_VIV_LIB_TARGET).so $(@D)/gpu-core/usr/lib/libVDK.so
++	cp -dpfr $(@D)/gpu-core/usr/lib/$(IMX_GPU_VIV_LIB_TARGET)/* $(@D)/gpu-core/usr/lib/
++	for backend in fb x11 wayland; do \
++		$(RM) -r $(@D)/gpu-core/usr/lib/$$backend ; \
++	done
+ endef
+ 
+ ifeq ($(IMX_GPU_VIV_LIB_TARGET),fb)
+@@ -64,7 +53,7 @@ define IMX_GPU_VIV_FIXUP_PKGCONFIG
+ endef
+ endif
+ 
+-ifeq ($(IMX_GPU_VIV_LIB_TARGET),wl)
++ifeq ($(IMX_GPU_VIV_LIB_TARGET),wayland)
+ define IMX_GPU_VIV_FIXUP_PKGCONFIG
+ 	ln -sf egl_wayland.pc $(@D)/gpu-core/usr/lib/pkgconfig/egl.pc
+ endef
+@@ -101,22 +90,11 @@ define IMX_GPU_VIV_INSTALL_GMEM_INFO
+ endef
+ endif
+ 
+-# On the target, remove the unused libraries.
+-# Note that this is _required_, else ldconfig may create symlinks
+-# to the wrong library
+ define IMX_GPU_VIV_INSTALL_TARGET_CMDS
+ 	$(IMX_GPU_VIV_INSTALL_EXAMPLES)
+ 	$(IMX_GPU_VIV_INSTALL_GMEM_INFO)
+ 	cp -a $(@D)/gpu-core/usr/lib $(TARGET_DIR)/usr
+ 	$(INSTALL) -D -m 0644 $(@D)/gpu-core/etc/Vivante.icd $(TARGET_DIR)/etc/OpenCL/vendors/Vivante.icd
+-	for lib in EGL GAL GLESv2 VDK; do \
+-		for f in $(TARGET_DIR)/usr/lib/lib$${lib}-*.so; do \
+-			case $$f in \
+-				*-$(IMX_GPU_VIV_LIB_TARGET).so) : ;; \
+-				*) $(RM) $$f ;; \
+-			esac; \
+-		done; \
+-	done
+ endef
+ 
+ $(eval $(generic-package))
 -- 
 2.29.2
