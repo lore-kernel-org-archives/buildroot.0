@@ -1,55 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 29 Dec 2020 23:24:28 +0100
-Subject: [Buildroot] [git commit] package/freescale-imx/imx-gpu-g2d: bump to
- version 6.4.3.p1.0
-Message-ID: <20201229220714.04DBF7F9E6@busybox.osuosl.org>
+Date: Tue, 29 Dec 2020 23:24:36 +0100
+Subject: [Buildroot] [git commit]
+ package/freescale-imx/kernel-module-imx-gpu-viv: bump to version 6.4.3.p1.0
+Message-ID: <20201229220714.148E98144C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=130f3426b63765c4b8457db77f65ab3c26c86617
+commit: https://git.buildroot.net/buildroot/commit/?id=d380e0979fb3eba410c053c5f2290867e3775c53
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 - Same version as NXP release 5.4.70-2.3.0
-- EULA/COPYING: update to LA_OPT_NXP_Software_License v17
 - No changelog provided by NXP
+- Tested on Nitrogen8M device with Weston (DRM backend) as follows:
+ # cd /usr/share/examples/viv_samples/vdk/
+ # ./tutorial7
 
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash | 8 ++++----
- package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ .../kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash            | 2 +-
+ .../kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk              | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash
-index bab4bfe9c0..8bfd302b16 100644
---- a/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash
-+++ b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256	725ad2edd41661713540d5e32509c754cda452acc608955689b8a64977b26ced  imx-gpu-g2d-6.4.3.p0.0-arm.bin
--sha256	97ee90c81fa0db88e3249cb7df77f17f816ceb9a40355e03f72df99e600d7331  imx-gpu-g2d-6.4.3.p0.0-aarch64.bin
--sha256	69cbb76b3f10ac5a8c36f34df7bbdf50825815560c00a946fff2922365ef01a2  COPYING
--sha256	a39da2e94bd8b99eaac4325633854620ea3a55145259c3a7748c610a80714cfc  EULA
-+sha256	8d3b024151d4bdcc4f68cdbba9c4e5d126d55c9258de5821c43b393ae3f840b4  imx-gpu-g2d-6.4.3.p1.0-arm.bin
-+sha256	47a39b171d83bced378b1b4f408be6304850fe2f25bf4577dd1ea78e22473f3d  imx-gpu-g2d-6.4.3.p1.0-aarch64.bin
-+sha256	9c16421e7c702f56756650b8ac954d34556327e598a8666e6e8f4eb3a1aa95f1  COPYING
-+sha256	72edc2072c86d93aa1993d15d4d19d96270af3749b0108995ad50c81d1461f52  EULA
-diff --git a/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk
-index 8bf7bedcc4..3e6c3fc1c5 100644
---- a/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk
-+++ b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk
-@@ -5,9 +5,9 @@
+diff --git a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
+index b9b93aeb5b..0fd8e04f21 100644
+--- a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
++++ b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
+@@ -1,3 +1,3 @@
+ # locally computed
+-sha256  52b7425453fa32300e4779220d5deebd4a43a7525991ce3e5ce27eba909780f3  kernel-module-imx-gpu-viv-f2e8483fbda59bf2482f77efb0804c014848f749.tar.gz
++sha256  ee9227d8b3f6da84a4b0be59cdc9a4c67db5c941c719ab44a29e09fe73019cac  kernel-module-imx-gpu-viv-5c8eb7b0576dc2348fb206945ce13e41d0837cf1.tar.gz
+ sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
+diff --git a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
+index 2cea117087..4a2fb3032b 100644
+--- a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
++++ b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- ifeq ($(BR2_aarch64),y)
--IMX_GPU_G2D_VERSION = 6.4.3.p0.0-aarch64
-+IMX_GPU_G2D_VERSION = 6.4.3.p1.0-aarch64
- else
--IMX_GPU_G2D_VERSION = 6.4.3.p0.0-arm
-+IMX_GPU_G2D_VERSION = 6.4.3.p1.0-arm
- endif
- IMX_GPU_G2D_SITE = $(FREESCALE_IMX_SITE)
- IMX_GPU_G2D_SOURCE = imx-gpu-g2d-$(IMX_GPU_G2D_VERSION).bin
+-KERNEL_MODULE_IMX_GPU_VIV_VERSION = f2e8483fbda59bf2482f77efb0804c014848f749
++KERNEL_MODULE_IMX_GPU_VIV_VERSION = 5c8eb7b0576dc2348fb206945ce13e41d0837cf1
+ KERNEL_MODULE_IMX_GPU_VIV_SITE = \
+ 	$(call github,Freescale,kernel-module-imx-gpu-viv,$(KERNEL_MODULE_IMX_GPU_VIV_VERSION))
+ KERNEL_MODULE_IMX_GPU_VIV_LICENSE = GPL-2.0
