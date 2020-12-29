@@ -1,63 +1,39 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 29 Dec 2020 23:56:16 +0100
-Subject: [Buildroot] [PATCH] boot/barebox: kconfig needs the toolchain
-In-Reply-To: <20201208101107.32758-1-jmaselbas@kalray.eu>
-References: <20201208101107.32758-1-jmaselbas@kalray.eu>
-Message-ID: <20201229225616.GC1680670@scaer>
+Date: Wed, 30 Dec 2020 00:00:13 +0100
+Subject: [Buildroot] [PATCH 1/2] libtirpc: remove NIS patch
+In-Reply-To: <20201229210600.GC2801@pevik>
+References: <20201202184954.19808-1-petr.vorel@gmail.com>
+ <20201229204658.GX1680670@scaer> <20201229210600.GC2801@pevik>
+Message-ID: <20201229230013.GD1680670@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jules, All,
+Petr, All,
 
-On 2020-12-08 11:11 +0100, Jules Maselbas via buildroot spake thusly:
-> In barebox v2020.09.0, kconfig has been updated to a newer version
-> based on Linux 5.9-rc2.  As in linux, kconfig can call the compiler
-> to test its capabilities.
+On 2020-12-29 22:06 +0100, Petr Vorel spake thusly:
+> > > But test fails with the same error even when this patch is kept.
+> > Indeed, the risc32 case is special: it uses a glibc more recent than
+> > 2.32. In glibc 2.32, RPC support was entirely removed, so it is not
+> > unexpected that we do have RPC-relacted issues for riscv32.
 > 
-> Signed-off-by: Jules Maselbas <jmaselbas@kalray.eu>
+> I wonder if there is some package which is not yet ported to libtirpc and
+> requires Sun-RPC. Suppose yes, otherwise there wouldn't be that check, but I
+> haven't find any.
+> 
+> FYI openSUSE has been using libtirpc as a drop-in replacement for quite long
+> time. Maybe that could be a solution for Buildroot as well.
 
-Applied to master, thanks!
+And this is exactly what we've just done tonight with Thomas;
+    9853983336 package/glibc, toolchain/toolchain-buildroot: disable
+               native RPC in glibc toolchains
 
-I've just added a little blurb about custom versions: since we can't
-know whether custom version need the toolchain or not, we just make that
-unconditional.
-
-Thanks!
+Thanks! ;-)
 
 Regards,
 Yann E. MORIN.
-
-> ---
->  boot/barebox/barebox.mk | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
-> index 422f27312d..2e80954741 100644
-> --- a/boot/barebox/barebox.mk
-> +++ b/boot/barebox/barebox.mk
-> @@ -88,6 +88,11 @@ $(1)_KCONFIG_DEPENDENCIES = \
->  	$(BR2_BISON_HOST_DEPENDENCY) \
->  	$(BR2_FLEX_HOST_DEPENDENCY)
->  
-> +# Starting with barebox v2020.09.0, the kconfig used calls the
-> +# cross-compiler to check its capabilities. So we need the
-> +# toolchain before we can call the configurators.
-> +$(1)_KCONFIG_DEPENDENCIES += toolchain
-> +
->  ifeq ($$(BR2_TARGET_$(1)_BAREBOXENV),y)
->  define $(1)_BUILD_BAREBOXENV_CMDS
->  	$$(TARGET_CC) $$(TARGET_CFLAGS) $$(TARGET_LDFLAGS) -o $$(@D)/bareboxenv \
-> -- 
-> 2.17.1
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
