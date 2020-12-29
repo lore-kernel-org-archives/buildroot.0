@@ -1,30 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 29 Dec 2020 23:03:29 +0100
-Subject: [Buildroot] [PATCH] package/quickjs: depends on gcc 4.9 at least
-In-Reply-To: <20201206063926.625756-1-francois.perrad@gadz.org>
-References: <20201206063926.625756-1-francois.perrad@gadz.org>
-Message-ID: <20201229230329.570cb579@windsurf>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Tue, 29 Dec 2020 23:03:56 +0100
+Subject: [Buildroot] [PATCH 0/3] imx: gpu: bump to 6.4.3.p1.0
+Message-ID: <20201229220359.1048766-1-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun,  6 Dec 2020 07:39:26 +0100
-Francois Perrad <fperrad@gmail.com> wrote:
+Hi,
 
-> fix build http://autobuild.buildroot.org/results/d45/d456eefffd138a714e367f9520adb662f5e0f57e/
-> missing include <stdatomic.h>
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/quickjs/Config.in | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
+This series bumps all the NXP graphics packages to their 6.4.3.p1.0
+version as found in NXP 5.4.70_2.3.0 release.
 
-Applied to master, thanks.
+It also cleans up the imx-gpu-viv package as its archive layout has changed,
+removing the need to dance around with symlinks to the proper backend
+Each backend-specific lib is now in its own folder that can be copied over.
+This fixes the previous update made to the package.
 
-Thomas
+Let me know if you have any questions.
+
+Regards,
+Gary
+
+Gary Bisson (3):
+  package/freescale-imx/imx-gpu-viv: bump to version 6.4.3.p1.0
+  package/freescale-imx/imx-gpu-g2d: bump to version 6.4.3.p1.0
+  package/freescale-imx/kernel-module-imx-gpu-viv: bump to version
+    6.4.3.p1.0
+
+ .../imx-gpu-g2d/imx-gpu-g2d.hash              |  8 ++--
+ .../freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk  |  4 +-
+ package/freescale-imx/imx-gpu-viv/Config.in   |  2 +-
+ .../imx-gpu-viv/imx-gpu-viv.hash              |  8 ++--
+ .../freescale-imx/imx-gpu-viv/imx-gpu-viv.mk  | 40 +++++--------------
+ .../kernel-module-imx-gpu-viv.hash            |  2 +-
+ .../kernel-module-imx-gpu-viv.mk              |  2 +-
+ 7 files changed, 22 insertions(+), 44 deletions(-)
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.29.2
