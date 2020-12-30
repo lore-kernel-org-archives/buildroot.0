@@ -1,111 +1,98 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 30 Dec 2020 10:30:40 +0100
-Subject: [Buildroot] [PATCH v3 02/11] boot/mv-ddr-marvell: Bump to HEAD
- as of 20201207
-In-Reply-To: <20201218202646.1060123-3-hi@senzilla.io>
-References: <20201218202646.1060123-1-hi@senzilla.io>
- <20201218202646.1060123-3-hi@senzilla.io>
-Message-ID: <20201230093040.GL1680670@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 30 Dec 2020 11:18:23 +0100
+Subject: [Buildroot] [PATCH v1] package/qt5webengine: add optional
+ host-freetype/host-libjpeg dependency
+In-Reply-To: <20201221203952.22168-3-ps.report@gmx.net>
+References: <20201221203952.22168-1-ps.report@gmx.net>
+ <20201221203952.22168-3-ps.report@gmx.net>
+Message-ID: <20201230111823.3114e2a6@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dick, All,
+Hello Peter,
 
-On 2020-12-18 20:27 +0000, Dick Olsson via buildroot spake thusly:
-> Rebase on the mv-ddr-devel branch as the release branches are no longer
-> maintained.
+On Mon, 21 Dec 2020 21:39:51 +0100
+Peter Seiderer <ps.report@gmx.net> wrote:
+
+> - add optional host-freetype dependency
 > 
-> Signed-off-by: Dick Olsson <hi@senzilla.io>
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
+> Fixes:
+> 
+>   Command: .../host/bin/python2 .../build/qt5webengine-5.15.2/src/3rdparty/chromium/build/config/linux/pkg-config.py -p .../build/qt5webengine-5.15.2/host-bin/host-pkg-config freetype2
+>   Returned 1.
+>   stderr:
+> 
+>   Package freetype2 was not found in the pkg-config search path.
+>   Perhaps you should add the directory containing `freetype2.pc'
+>   to the PKG_CONFIG_PATH environment variable
+>   Package 'freetype2', required by 'virtual:world', not found
+>   Could not run pkg-config.
+> 
+>   See //build/linux/BUILD.gn:24:3: whence it was called.
+>     pkg_config("freetype_from_pkgconfig") {
+>     ^--------------------------------------
+>   See //build/config/freetype/BUILD.gn:10:24: which caused the file to be included.
+>       public_configs = [ "//build/linux:freetype_from_pkgconfig" ]
+>                          ^--------------------------------------
+>   Project ERROR: GN run error!
+>   make[4]: *** [Makefile:82: sub-gn_run-pro-make_first] Error 3
+>   make[3]: *** [Makefile:79: sub-core-make_first] Error 2
+>   make[2]: *** [Makefile:49: sub-src-make_first] Error 2
+> 
+> - add optiobal hist-libjpeg dependency
+> 
+> Fixes:
+> 
+>   https://gitlab.com/buildroot.org/buildroot/-/jobs/917539230
+> 
+>   Command: .../host/bin/python2 .../build/qt5webengine-5.15.2/src/3rdparty/chromium/build/config/linux/pkg-config.py -p .../build/qt5webengine-5.15.2/host-bin/host-pkg-config libjpeg
+>   Returned 1.
+>   stderr:
+>   Package libjpeg was not found in the pkg-config search path.
+>   Perhaps you should add the directory containing `libjpeg.pc'
+>   to the PKG_CONFIG_PATH environment variable
+>   Package 'libjpeg', required by 'virtual:world', not found
+>   Could not run pkg-config.
+>   See //third_party/BUILD.gn:17:3: whence it was called.
+>     pkg_config("system_libjpeg") {
+>     ^-----------------------------
+>   See //third_party/blink/renderer/platform/BUILD.gn:159:5: which caused the file to be included.
+>       "//third_party:jpeg",
+>       ^-------------------
+>   Project ERROR: GN run error!
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 > ---
->  ...raining_leveling.c-uninitialized-var.patch | 31 -------------------
->  boot/mv-ddr-marvell/mv-ddr-marvell.hash       |  2 +-
->  boot/mv-ddr-marvell/mv-ddr-marvell.mk         |  4 +--
->  3 files changed, 3 insertions(+), 34 deletions(-)
->  delete mode 100644 boot/mv-ddr-marvell/0001-mv_ddr-mv_ddr4_training_leveling.c-uninitialized-var.patch
+>  package/qt5/qt5webengine/qt5webengine.mk | 8 ++++++++
+>  1 file changed, 8 insertions(+)
 > 
-> diff --git a/boot/mv-ddr-marvell/0001-mv_ddr-mv_ddr4_training_leveling.c-uninitialized-var.patch b/boot/mv-ddr-marvell/0001-mv_ddr-mv_ddr4_training_leveling.c-uninitialized-var.patch
-> deleted file mode 100644
-> index eada18b473..0000000000
-> --- a/boot/mv-ddr-marvell/0001-mv_ddr-mv_ddr4_training_leveling.c-uninitialized-var.patch
-> +++ /dev/null
-> @@ -1,31 +0,0 @@
-> -From 5867fcad6e88af3d843bfa831648d84a53732d57 Mon Sep 17 00:00:00 2001
-> -From: Heinrich Schuchardt <xypron.glpk@gmx.de>
-> -Date: Wed, 19 Dec 2018 17:17:13 +0100
-> -Subject: [PATCH] mv_ddr: mv_ddr4_training_leveling.c: uninitialized variable
-> -
-> -With GCC 8.2 uninitialized variables lead to a build error.
-> -
-> -Signed-off-by: Heinrich Schuchardt <xypron.glpk@gmx.de>
-> -Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ----
-> -Upstream status: commit 5867fcad6e8
-> -
-> - mv_ddr4_training_leveling.c | 2 +-
-> - 1 file changed, 1 insertion(+), 1 deletion(-)
-> -
-> -diff --git a/mv_ddr4_training_leveling.c b/mv_ddr4_training_leveling.c
-> -index 144e21a03c01..cb95389f5466 100644
-> ---- a/mv_ddr4_training_leveling.c
-> -+++ b/mv_ddr4_training_leveling.c
-> -@@ -368,7 +368,7 @@ static int mv_ddr4_dynamic_pb_wl_supp(u32 dev_num, enum mv_wl_supp_mode ecc_mode
-> - 	u32 subphy_num = ddr3_tip_dev_attr_get(dev_num, MV_ATTR_OCTET_PER_INTERFACE);
-> - 	u8 compare_result = 0;
-> - 	u32 orig_phase;
-> --	u32 rd_data, wr_data;
-> -+	u32 rd_data, wr_data = 0;
-> - 	u32 flag, step;
-> - 	struct mv_ddr_topology_map *tm = mv_ddr_topology_map_get();
-> - 	u32 ecc_phy_access_id;
-> --- 
-> -2.20.1
-> -
-> diff --git a/boot/mv-ddr-marvell/mv-ddr-marvell.hash b/boot/mv-ddr-marvell/mv-ddr-marvell.hash
-> index ec2fe6ed37..e1a86008db 100644
-> --- a/boot/mv-ddr-marvell/mv-ddr-marvell.hash
-> +++ b/boot/mv-ddr-marvell/mv-ddr-marvell.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256  39dcc8baccb82cbc746d8f82ce7f673e1b1236e8aee0d09e7ab12c27eeb6ecda  mv-ddr-marvell-618dadd1491eb2f7b2fd74313c04f7accddae475.tar.gz
-> +sha256  bfab74a625d65238c569b9df282b55c0fc9a1e2d3decedcf194d44774df2ede4  mv-ddr-marvell-305d923e6bc4236cd3b902f6679b0aef9e5fa52d.tar.gz
->  sha256  69208236fc322026920b92d1d839ebdc521ca65379bfdb3368a24945e794fc78  ddr3_init.c
-> diff --git a/boot/mv-ddr-marvell/mv-ddr-marvell.mk b/boot/mv-ddr-marvell/mv-ddr-marvell.mk
-> index a4e0c0467d..442b6aed53 100644
-> --- a/boot/mv-ddr-marvell/mv-ddr-marvell.mk
-> +++ b/boot/mv-ddr-marvell/mv-ddr-marvell.mk
-> @@ -4,8 +4,8 @@
->  #
->  ################################################################################
+> diff --git a/package/qt5/qt5webengine/qt5webengine.mk b/package/qt5/qt5webengine/qt5webengine.mk
+> index 64c9c96cc2..8ab50a0fbf 100644
+> --- a/package/qt5/qt5webengine/qt5webengine.mk
+> +++ b/package/qt5/qt5webengine/qt5webengine.mk
+> @@ -29,6 +29,14 @@ endif
 >  
-> -# This is the commit for mv_ddr-armada-18.12.0
-> -MV_DDR_MARVELL_VERSION = 618dadd1491eb2f7b2fd74313c04f7accddae475
-> +# This is the latest commit on mv-ddr-devel as of 20201207
-> +MV_DDR_MARVELL_VERSION = 305d923e6bc4236cd3b902f6679b0aef9e5fa52d
->  MV_DDR_MARVELL_SITE = $(call github,MarvellEmbeddedProcessors,mv-ddr-marvell,$(MV_DDR_MARVELL_VERSION))
->  MV_DDR_MARVELL_LICENSE = GPL-2.0+ or LGPL-2.1 with freertos-exception-2.0, BSD-3-Clause, Marvell Commercial
->  MV_DDR_MARVELL_LICENSE_FILES = ddr3_init.c
-> -- 
-> 2.25.1
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+>  QT5WEBENGINE_DEPENDENCIES += host-libpng host-libnss libnss
+>  
+> +ifeq ($(BR2_PACKAGE_QT5BASE_FONTCONFIG),y)
+> +QT5WEBENGINE_DEPENDENCIES += host-freetype
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_QT5BASE_JPEG),y)
+> +QT5WEBENGINE_DEPENDENCIES += host-libjpeg
+> +endif
 
+This looks really odd. Why would these target-related features require
+host-freetype and host-libjpeg ? Aren't we instead seeing some
+pkg-config issue where it's trying to find freetype/libjpeg for the
+target, but it for some reason doesn't work, and tries to find them for
+the host ?
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
