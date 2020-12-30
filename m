@@ -1,50 +1,65 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 30 Dec 2020 15:43:58 +0100
-Subject: [Buildroot] [PATCH 1/1] package/gtest: host-gtest install like
- a normal cmake package
-In-Reply-To: <20201216174404.47363-1-paul.soucy@sense.com>
-References: <20201216174404.47363-1-paul.soucy@sense.com>
-Message-ID: <20201230154358.46786e0c@windsurf>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Wed, 30 Dec 2020 16:18:29 +0100
+Subject: [Buildroot] [PATCH v1 2/3] package/opengl/libvulkan: new
+ virtual package
+In-Reply-To: <20200209134408.10534-2-tuzakli.refik@gmail.com>
+References: <20200209134408.10534-1-tuzakli.refik@gmail.com>
+ <20200209134408.10534-2-tuzakli.refik@gmail.com>
+Message-ID: <20201230161829.5e243c92@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Paul,
+Hello Refik,
 
-On Wed, 16 Dec 2020 12:44:04 -0500
-Paul Soucy <paul.soucy@sense.com> wrote:
+On Sun,  9 Feb 2020 16:44:07 +0300, Refik Tuzakli <tuzakli.refik@gmail.com> wrote:
 
-> host-gtest does not actually build and install gtest libraries or header files, it just installs the gmock_gen stuff. This patch will now build and install gtest to the host like a normal cmake package.
+> Signed-off-by: Refik Tuzakli <tuzakli.refik@gmail.com>
+> ---
+>  DEVELOPERS                         | 1 +
+>  package/opengl/Config.in           | 1 +
+>  package/opengl/libvulkan/Config.in | 6 ++++++
+>  3 files changed, 8 insertions(+)
+>  create mode 100644 package/opengl/libvulkan/Config.in
 > 
-> Signed-off-by: Paul Soucy <paul.soucy@sense.com>
-
-Thanks for your patch!
-
-Could you give some details as to why you need gtest to be installed in
-$(HOST_DIR) ?
-
-> -define HOST_GTEST_INSTALL_CMDS
-> +define HOST_GTEST_POST_INSTALL_PYTHON
->  	$(INSTALL) -D -m 0755 $(@D)/googlemock/scripts/generator/gmock_gen.py \
->  		$(HOST_DIR)/bin/gmock_gen
->  	cp -rp $(@D)/googlemock/scripts/generator/cpp \
->  		$(HOST_GTEST_GMOCK_PYTHONPATH)
->  endef
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index fa9043b0c4..7703d5fa3e 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -2077,6 +2077,7 @@ F:	package/ustream-ssl/
 >  
-> +HOST_GTEST_POST_INSTALL_HOOKS += HOST_GTEST_POST_INSTALL_PYTHON
+>  N:	Refik Tuzakli <tuzakli.refik@gmail.com>
+>  F:	package/opengl/libopenvx
+> +F:	package/opengl/libvulkan/
+>  F:	package/paho-mqtt-cpp/
+>  
+>  N:	R?mi R?rolle <remi.rerolle@gmail.com>
+> diff --git a/package/opengl/Config.in b/package/opengl/Config.in
+> index 10bdefdb39..af34fb6a46 100644
+> --- a/package/opengl/Config.in
+> +++ b/package/opengl/Config.in
+> @@ -5,3 +5,4 @@ source "package/opengl/libopencl/Config.in"
+>  source "package/opengl/libopenvg/Config.in"
+>  source "package/opengl/libopenmax/Config.in"
+>  source "package/opengl/libopenvx/Config.in"
+> +source "package/opengl/libvuulkan/Config.in"
 
-Is this thing still needed? I applied your patch, and I was able to
-successfully build the target gtest+gmock, even without gmock_gen being
-installed in $(HOST_DIR)/bin/ by host-gtest.
+s/libvuulkan/libvulkan/ ?
 
-Am I missing something?
+Regards,
+Peter
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> diff --git a/package/opengl/libvulkan/Config.in b/package/opengl/libvulkan/Config.in
+> new file mode 100644
+> index 0000000000..c0cae4681b
+> --- /dev/null
+> +++ b/package/opengl/libvulkan/Config.in
+> @@ -0,0 +1,6 @@
+> +config BR2_PACKAGE_HAS_LIBVULKAN
+> +	bool
+> +
+> +config BR2_PACKAGE_PROVIDES_LIBVULKAN
+> +	string
+> +	depends on BR2_PACKAGE_HAS_LIBVULKAN
