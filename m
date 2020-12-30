@@ -1,10 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 30 Dec 2020 10:00:04 +0100
-Subject: [Buildroot] [RFC v1 3/6] package/vulkan-tools: new package
-In-Reply-To: <20201223224553.8570-4-ps.report@gmx.net>
+Date: Wed, 30 Dec 2020 10:07:34 +0100
+Subject: [Buildroot] [RFC v1 4/6] package/mesa3d: add vulkan broadcom
+ driver support
+In-Reply-To: <20201223224553.8570-5-ps.report@gmx.net>
 References: <20201223224553.8570-1-ps.report@gmx.net>
- <20201223224553.8570-4-ps.report@gmx.net>
-Message-ID: <20201230090004.GH1680670@scaer>
+ <20201223224553.8570-5-ps.report@gmx.net>
+Message-ID: <20201230090734.GI1680670@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,49 +16,66 @@ Peter, All,
 
 On 2020-12-23 23:45 +0100, Peter Seiderer spake thusly:
 > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-[--SNIP--]
-> diff --git a/package/vulkan-tools/vulkan-tools.mk b/package/vulkan-tools/vulkan-tools.mk
-> new file mode 100644
-> index 0000000000..9a20ddf36b
-> --- /dev/null
-> +++ b/package/vulkan-tools/vulkan-tools.mk
-> @@ -0,0 +1,25 @@
-> +################################################################################
-> +#
-> +# vulkan-tools
-> +#
-> +################################################################################
-> +
-> +VULKAN_TOOLS_VERSION = 1.2.162
-> +VULKAN_TOOLS_SITE = $(call github,KhronosGroup,Vulkan-Tools,v$(VULKAN_TOOLS_VERSION))
-> +VULKAN_TOOLS_LICENSE = Apache-2.0 License
+> diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+> index 45eb62b701..73e7199e8c 100644
+> --- a/package/mesa3d/Config.in
+> +++ b/package/mesa3d/Config.in
+> @@ -388,6 +388,14 @@ config BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON
+>  
+>  comment "Vulkan drivers"
+>  
+> +config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_BROADCOM
+> +	bool "Vulkan broadcom driver"
+> +	depends on BR2_arm || BR2_aarch64
+> +	select BR2_PACKAGE_EXPAT
+> +	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
+> +	help
+> +	  Vulkan broadcom driver.
 
-Something I forgot to comment on on the other Vulkan packages: the SPDX
-short identifier is: Apache-2.0
-
-> +VULKAN_TOOLS_LICENSE_FILES = LICENSE.txt
-> +
-> +VULKAN_TOOLS_DEPENDENCIES = vulkan-headers vulkan-loader
-> +
-> +VULKAN_TOOLS_CONF_OPTS += \
-> +	-DBUILD_CUBE=OFF \
-> +	-DBUILD_VULKANINFO=ON \
-> +	-DBUILD_ICD=ON \
-> +	-DINSTALL_ICD=ON \
-> +	-DBUILD_WSI_XCB_SUPPORT=OFF \
-> +	-DBUILD_WSI_XLIB_SUPPORT=OFF \
-> +	-DBUILD_WSI_WAYLAND_SUPPORT=OFF \
-> +	-DBUILD_WSI_DIRECTFB_SUPPORT=OFF \
-
-I guess those will be conditional on the udnerlying libraries, e.g. when
-libxcb is enabled, we enable WSI_XCB, and so on, right?
+I guess this is where we would introduce the select BR2_PACKAGE_PROVIDES_LIBVULKAN
+of that other series I pointed earlier:
+    https://patchwork.ozlabs.org/project/buildroot/list/?series=157522
 
 Regards,
 Yann E. MORIN.
 
-> +	-DUSE_CCACHE=OFF
-> +
-> +$(eval $(cmake-package))
+>  config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL
+>  	bool "Vulkan Intel driver"
+>  	depends on BR2_i386 || BR2_x86_64
+> diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+> index d754cb8796..d9ea752d3e 100644
+> --- a/package/mesa3d/mesa3d.mk
+> +++ b/package/mesa3d/mesa3d.mk
+> @@ -110,6 +110,7 @@ MESA3D_DRI_DRIVERS-$(BR2_PACKAGE_MESA3D_DRI_DRIVER_I965)   += i965
+>  MESA3D_DRI_DRIVERS-$(BR2_PACKAGE_MESA3D_DRI_DRIVER_NOUVEAU) += nouveau
+>  MESA3D_DRI_DRIVERS-$(BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON) += r100
+>  # Vulkan Drivers
+> +MESA3D_VULKAN_DRIVERS-$(BR2_PACKAGE_MESA3D_VULKAN_DRIVER_BROADCOM) += broadcom
+>  MESA3D_VULKAN_DRIVERS-$(BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL)   += intel
+>  
+>  ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER),)
+> @@ -143,9 +144,11 @@ ifeq ($(BR2_PACKAGE_MESA3D_VULKAN_DRIVER),)
+>  MESA3D_CONF_OPTS += \
+>  	-Dvulkan-drivers=
+>  else
+> +ifeq ($(BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL),y)
+>  MESA3D_DEPENDENCIES += xlib_libxshmfence
+> +MESA3D_CONF_OPTS += -Ddri3=enabled
+> +endif
+>  MESA3D_CONF_OPTS += \
+> -	-Ddri3=enabled \
+
+Meh... dri3 is already driven by BR2_PACKAGE_MESA3D_DRI_DRIVER, and this
+is going to be quite another mess if we drive it in a second place (not
+the fault of your patch, it's already the case before, but tstill, a bit
+of cleanup is probably in order...)
+
+Regards,
+Yann E. MORIN.
+
+>  	-Dvulkan-drivers=$(subst $(space),$(comma),$(MESA3D_VULKAN_DRIVERS-y))
+>  endif
+>  
 > -- 
 > 2.29.2
 > 
