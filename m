@@ -1,165 +1,74 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 30 Dec 2020 21:54:42 +0100
-Subject: [Buildroot] [PATCH 1/1] package/kismet: bump to version
- 2020-12-R3
-In-Reply-To: <20201222164626.1867883-1-fontaine.fabrice@gmail.com>
-References: <20201222164626.1867883-1-fontaine.fabrice@gmail.com>
-Message-ID: <20201230205442.GC2902@scaer>
+Date: Wed, 30 Dec 2020 22:30:08 +0100
+Subject: [Buildroot] [PATCH v3 04/11] boot/edk2: new package
+In-Reply-To: <c7rvuYJmwrINEtoBR-3OFMOH1t8pSY5at39GXmU03PUhJRM9D5xKJmu0E7x6r7CKDpQj9Gyr718px_1So76Ga3KwZKGiVZy_ve6UJhAWG6I=@senzilla.io>
+References: <20201218202646.1060123-1-hi@senzilla.io>
+ <20201218202646.1060123-5-hi@senzilla.io>
+ <20201230105158.GM1680670@scaer>
+ <c7rvuYJmwrINEtoBR-3OFMOH1t8pSY5at39GXmU03PUhJRM9D5xKJmu0E7x6r7CKDpQj9Gyr718px_1So76Ga3KwZKGiVZy_ve6UJhAWG6I=@senzilla.io>
+Message-ID: <20201230213008.GD2902@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Dick, All,
 
-On 2020-12-22 17:46 +0100, Fabrice Fontaine spake thusly:
-> - Drop patch (already in version) and so autoreconf
-> - libmicrohttpd is not a dependency since version 2020-12-R1 and
->   https://github.com/kismetwireless/kismet/commit/a78a0ddc72f9916c4da54480c97b3040796c1047
-> - libwebsockets is an optional dependency since version 2020-12-R1 and
->   https://github.com/kismetwireless/kismet/commit/77b5809ae35e3f8d91f349c618e593d67b50f279
-> 
-> https://www.kismetwireless.net/release/kismet-2020-12-R1
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+On 2020-12-30 20:22 +0000, D. Olsson spake thusly:
+> > Please submit this patch upstream.
+> > See also: https://github.com/tianocore/edk2/pull/1234
+> I did submit it upstream and the discussion evolved a bit in their
+> mailing list. I'll update the patch accordingly and reference the
+> upstream conversation in the commit message. But for reference for
+> the purpose of this email:
 
-Applied to master, thanks.
+> https://edk2.groups.io/g/devel/message/69235
+> https://edk2.groups.io/g/devel/message/69390
+> https://bugzilla.tianocore.org/show_bug.cgi?id=3136
+
+Very good, thanks!
+
+Yes, we like to have reference to upstream patch status in the patch
+itself; this helps in the future when we have update the version and the
+patch no longer applied: with a reference to upstream, we can see
+whether the patch was applied and we can drop it, or if it was not
+applied and how we need to adapt it.
+
+Note that, until upstream has decided on a proper solution that suits
+them, it is OK that we have to carry our patch in the meantime.
+
+> > > +EDK2_OUTPUT_BASE = $(BINARIES_DIR)/edk2
+> > I am a bit uneasy about that one: does that mean that edk2 will store
+> > files there during its build step, or does that mean itr will look there
+> > for extra input files?
+> In order for EDK2 to consume images that ATF outputs they need to be
+> arranged in specific ways, they're called a "packages" in EDK2 terms
+> (see the PACKAGES_PATH build varaible).
+> 
+> For the Developerbox, we construct a "package" with a FIP from the ATF
+> images and put into a "package" structure. And for the QEMU SBSA the
+> ATF outputs can simply be copied into said directory structure.
+> 
+> So to summarise, it's a place where output files from one bootloader
+> are repackaged as input for EDK2. I thought this was similar to how
+> post build scripts repurpose e.g. the kernel image to build disk
+> images.
+> 
+> That said, it's EDK2 itself building these packages, so keeping it
+> under $(@D) might make the most sense. I'll play around with it to
+> see if I come up with something cleaner.
+
+Thanks for the explanations. Maybe a shorter version can be added to the
+commit log. ;-)
+
+IMHO those files are indeed only intermediate build files, and thus
+there is no reason for them to be in BINARIES_DIR.
+
+Thanks for the feedback. :-)
 
 Regards,
 Yann E. MORIN.
-
-> ---
->  ...don-t-override-LDFLAGS-with-CPPFLAGS.patch | 44 -------------------
->  package/kismet/Config.in                      |  1 -
->  package/kismet/kismet.hash                    |  2 +-
->  package/kismet/kismet.mk                      | 12 +++--
->  4 files changed, 9 insertions(+), 50 deletions(-)
->  delete mode 100644 package/kismet/0001-configure.ac-don-t-override-LDFLAGS-with-CPPFLAGS.patch
-> 
-> diff --git a/package/kismet/0001-configure.ac-don-t-override-LDFLAGS-with-CPPFLAGS.patch b/package/kismet/0001-configure.ac-don-t-override-LDFLAGS-with-CPPFLAGS.patch
-> deleted file mode 100644
-> index e2c28a2ebd..0000000000
-> --- a/package/kismet/0001-configure.ac-don-t-override-LDFLAGS-with-CPPFLAGS.patch
-> +++ /dev/null
-> @@ -1,44 +0,0 @@
-> -From e70968bcbca86dd448d619c40cdeaae8b7dcee98 Mon Sep 17 00:00:00 2001
-> -From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> -Date: Tue, 24 Nov 2020 23:01:55 +0100
-> -Subject: [PATCH] configure.ac: don't override LDFLAGS with CPPFLAGS
-> -
-> -Don't override LDFLAGS with CPPFLAGS to avoid a build failure when
-> -building statically with uclibc due to -static keyword being lost:
-> -
-> -/home/buildroot/autobuild/run/instance-3/output-1/host/bin/xtensa-buildroot-linux-uclibc-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -o kismet_cap_linux_wifi ../interface_control.c.o ../wifi_ht_channels.c.o linux_wireless_control.c.o linux_netlink_control.c.o linux_nexmon_control.c.o linux_wireless_rfkill.c.o capture_linux_wifi.c.o ../libkismetdatasource.a -L/home/buildroot/autobuild/run/instance-3/output-1/host/bin/../xtensa-buildroot-linux-uclibc/sysroot/usr/lib -lpcap -L/home/buildroot/autobuild/run/instance-3/output-1/host/bin/../xtensa-buildroot-linux-uclibc/sysroot/home/buildroot/autobuild/run/instance-3/output-1/host/xtensa-buildroot-linux-uclibc/sysroot/usr/lib/.libs -lnl-genl-3 -lnl-3   -L/home/buildroot/autobuild/run/instance-3/output-1/host/bin/../xtensa-buildroot-linux-uclibc/sysroot/usr/lib -lpthread -lnl-genl-3 -lnl-3 -lpthread   -lpthread -L/home/buildroot/autobuild/run/instance-3/output-1/host/bin/../xtensa-buildroot-linux-uclibc/sysroot/usr/
->  lib -lprotobuf-c  -lm
-> -/home/buildroot/autobuild/run/instance-3/output-1/host/lib/gcc/xtensa-buildroot-linux-uclibc/9.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: /home/buildroot/autobuild/run/instance-3/output-1/host/lib/gcc/xtensa-buildroot-linux-uclibc/9.3.0/libgcc.a(unwind-dw2-fde-dip.o): in function `_Unwind_Find_registered_FDE':
-> -/home/buildroot/autobuild/run/instance-3/output-1/build/host-gcc-final-9.3.0/build/xtensa-buildroot-linux-uclibc/libgcc/../../../libgcc/unwind-dw2-fde.c:1040: undefined reference to `dl_iterate_phdr'
-> -collect2: error: ld returned 1 exit status
-> -
-> -To fix this build failure, just drop OCPPFLAGS and OLDFLAGS which are
-> -not used anymore
-> -
-> -Fixes:
-> - - http://autobuild.buildroot.org/results/b859eb3850c0beb23e18010dc2f07cd0f5c14440
-> -
-> -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> -[Upstream status: https://github.com/kismetwireless/kismet/pull/326 (merged)]
-> ----
-> - configure.ac | 5 -----
-> - 1 file changed, 5 deletions(-)
-> -
-> -diff --git a/configure.ac b/configure.ac
-> -index aab47fb0..4df37a29 100644
-> ---- a/configure.ac
-> -+++ b/configure.ac
-> -@@ -619,11 +619,6 @@ else
-> -     AC_MSG_RESULT([no])
-> - fi
-> - 
-> --OCPPFLAGS=$CPPFLAGS
-> --CPPFLAGS="$CPPFLAGS"
-> --OLDFLAGS=$LDFLAGS
-> --LDFLAGS="$CPPFLAGS"
-> --
-> - # Do we need libm for math functions?
-> - AC_MSG_CHECKING([for libm math function in std libs])
-> - OCFL="$CFLAGS"
-> --- 
-> -2.29.2
-> -
-> diff --git a/package/kismet/Config.in b/package/kismet/Config.in
-> index 4ef84731da..02046e7efb 100644
-> --- a/package/kismet/Config.in
-> +++ b/package/kismet/Config.in
-> @@ -61,7 +61,6 @@ config BR2_PACKAGE_KISMET_SERVER
->  	depends on !BR2_STATIC_LIBS # dlfcn.h
->  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # protobuf
->  	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::future
-> -	select BR2_PACKAGE_LIBMICROHTTPD
->  	select BR2_PACKAGE_PROTOBUF
->  
->  comment "server needs a toolchain w/ dynamic library, gcc >= 4.8"
-> diff --git a/package/kismet/kismet.hash b/package/kismet/kismet.hash
-> index c55e31ef96..2b0baa1009 100644
-> --- a/package/kismet/kismet.hash
-> +++ b/package/kismet/kismet.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed
-> -sha256  79c9c343cc055523ec1c8607bf63f26bb826d8ffaccc1e6e033c945c8ada664d  kismet-2020-09-R4.tar.xz
-> +sha256  52a8eddd560688693552bcd8ff033f662a1a57b47650d6434c5e2c6d83e2bb33  kismet-2020-12-R3.tar.xz
->  sha256  93c7f0d7e356b0abfb6f494ff3ea37f96abc84e9a5619b25d4e43f7553a55739  LICENSE
-> diff --git a/package/kismet/kismet.mk b/package/kismet/kismet.mk
-> index 0a4ae00f08..b39b58d81b 100644
-> --- a/package/kismet/kismet.mk
-> +++ b/package/kismet/kismet.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -KISMET_VERSION = 2020-09-R4
-> +KISMET_VERSION = 2020-12-R3
->  KISMET_SOURCE = kismet-$(KISMET_VERSION).tar.xz
->  KISMET_SITE = http://www.kismetwireless.net/code
->  KISMET_DEPENDENCIES = \
-> @@ -17,8 +17,6 @@ KISMET_DEPENDENCIES = \
->  	zlib
->  KISMET_LICENSE = GPL-2.0+
->  KISMET_LICENSE_FILES = LICENSE
-> -# We're patching configure.ac
-> -KISMET_AUTORECONF = YES
->  KISMET_CONF_OPTS = --disable-debuglibs
->  
->  KISMET_CXXFLAGS = $(TARGET_CXXFLAGS)
-> @@ -47,6 +45,13 @@ else
->  KISMET_CONF_OPTS += --disable-libusb
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_LIBWEBSOCKETS),y)
-> +KISMET_DEPENDENCIES += libwebsockets
-> +KISMET_CONF_OPTS += --enable-libwebsockets
-> +else
-> +KISMET_CONF_OPTS += --disable-libwebsockets
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_LM_SENSORS),y)
->  KISMET_DEPENDENCIES += lm-sensors
->  KISMET_CONF_OPTS += --enable-lmsensors
-> @@ -77,7 +82,6 @@ KISMET_INSTALL_TARGET_OPTS += \
->  	SUIDGROUP=$(shell id -g)
->  
->  ifeq ($(BR2_PACKAGE_KISMET_SERVER),y)
-> -KISMET_DEPENDENCIES += libmicrohttpd
->  KISMET_CONF_OPTS += --disable-capture-tools-only
->  KISMET_INSTALL_TARGET_OPTS += install
->  else
-> -- 
-> 2.29.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
