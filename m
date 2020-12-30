@@ -1,100 +1,222 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 30 Dec 2020 09:38:17 +0100
-Subject: [Buildroot] [git commit] package/libuhttpd: bump version to 3.6.0
-Message-ID: <20201230082206.EB5B882C1F@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 30 Dec 2020 09:39:36 +0100
+Subject: [Buildroot] [RFC v1 0/6] Vulkan support
+In-Reply-To: <20201223224553.8570-1-ps.report@gmx.net>
+References: <20201223224553.8570-1-ps.report@gmx.net>
+Message-ID: <20201230083936.GE1680670@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6fd01e9e0552bf6378e484c6dd07940dbd72e718
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Peter, All,
 
-Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...sts.txt-fix-static-build-with-a-zlib-and-.patch | 51 ----------------------
- package/libuhttpd/libuhttpd.hash                   |  2 +-
- package/libuhttpd/libuhttpd.mk                     |  2 +-
- 3 files changed, 2 insertions(+), 53 deletions(-)
+On 2020-12-23 23:45 +0100, Peter Seiderer spake thusly:
+> A starting point to add some/more Vulkan support to Buildroot.
+> 
+> Targeting towards the RPi Vulkan support (as announced e.g. [1]),
+> but send as RFC as not (yet) functional:
+> 
+> - did only try to run standalone and/or with Qt EGLFS, but
+>   did not work out as the broadcom vulkan driver is  only
+>   functional with X11/XCB
+> 
+> - the Qt Vulkan support seems only be functional with
+>   EGLFS/Vivante and/or X11/XCB
 
-diff --git a/package/libuhttpd/0001-src-CMakeLists.txt-fix-static-build-with-a-zlib-and-.patch b/package/libuhttpd/0001-src-CMakeLists.txt-fix-static-build-with-a-zlib-and-.patch
-deleted file mode 100644
-index 289ed1aaed..0000000000
---- a/package/libuhttpd/0001-src-CMakeLists.txt-fix-static-build-with-a-zlib-and-.patch
-+++ /dev/null
-@@ -1,51 +0,0 @@
--From 0c2d85450e3eb77dfbe11e8612a5131c5f3f3938 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Tue, 1 Dec 2020 20:39:54 +0100
--Subject: [PATCH] src/CMakeLists.txt: fix static build with a zlib and mbedtls
--
--Static build with a zlib-enabled mbedtls fails on:
--
--[100%] Linking C executable example
--/home/buildroot/autobuild/instance-3/output-1/host/opt/ext-toolchain/arm-buildroot-uclinux-uclibcgnueabi/bin/ld.real: /home/buildroot/autobuild/instance-3/output-1/host/arm-buildroot-uclinux-uclibcgnueabi/sysroot/usr/lib/libmbedtls.a(ssl_tls.c.o): in function `mbedtls_ssl_transform_free.part.24':
--ssl_tls.c:(.text+0xbc6): undefined reference to `deflateEnd'
--
--As mbedtls does not provide a pkg-config file, search for zlib and link
--with it if necessary
--
--Fixes:
-- - http://autobuild.buildroot.org/results/5891d12e90182460cde1ddfa0ca75e9fd55e3dff
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/zhaojh329/libuhttpd/pull/13]
-----
-- src/CMakeLists.txt | 7 ++++++-
-- 1 file changed, 6 insertions(+), 1 deletion(-)
--
--diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
--index 132f243..f00fc8f 100644
----- a/src/CMakeLists.txt
--+++ b/src/CMakeLists.txt
--@@ -57,6 +57,7 @@ else()
--     endif()
--     find_package(WolfSSL)
--     find_package(MbedTLS)
--+    find_package(ZLIB)
-- 
-- 	if(UHTTPD_USE_OPENSSL)
-- 		if (NOT OPENSSL_FOUND)
--@@ -97,7 +98,11 @@ else()
-- 	elseif(UHTTPD_USE_MBEDTLS)
-- 		set(SSL_NAME "MbedTLS(PolarSSL)")
-- 		set(SSL_INC ${MBEDTLS_INCLUDE_DIR})
---		set(SSL_LIB ${MBEDTLS_LIBRARIES})
--+		if(ZLIB_FOUND)
--+			set(SSL_LIB ${MBEDTLS_LIBRARIES} ${ZLIB_LIBRARIES})
--+		else()
--+			set(SSL_LIB ${MBEDTLS_LIBRARIES})
--+		endif()
-- 		set(UHTTPD_HAVE_MBEDTLS_CONFIG 1)
-- 	endif()
-- 
---- 
--2.29.2
--
-diff --git a/package/libuhttpd/libuhttpd.hash b/package/libuhttpd/libuhttpd.hash
-index 0e2d125fe0..6053df6593 100644
---- a/package/libuhttpd/libuhttpd.hash
-+++ b/package/libuhttpd/libuhttpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  a7650915f4444c84ad7ea813fcff44ae03eaf0c4cddfd2de4dcbf5ce9083874f  libuhttpd-3.4.2.tar.gz
-+sha256  5cdbff570430530b46ed071363c52cc655bbb349943008b57f63061481586391  libuhttpd-3.6.0.tar.gz
- sha256  99efed4bbc0b62f96f999ef23399e38234fb91651af734fd389a52b033a85b55  LICENSE
-diff --git a/package/libuhttpd/libuhttpd.mk b/package/libuhttpd/libuhttpd.mk
-index fe8621c803..f665b27969 100644
---- a/package/libuhttpd/libuhttpd.mk
-+++ b/package/libuhttpd/libuhttpd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBUHTTPD_VERSION = 3.4.2
-+LIBUHTTPD_VERSION = 3.6.0
- LIBUHTTPD_SITE = https://github.com/zhaojh329/libuhttpd/releases/download/v$(LIBUHTTPD_VERSION)
- LIBUHTTPD_LICENSE = MIT
- LIBUHTTPD_LICENSE_FILES = LICENSE
+Speaking of which: have you seen this series:
+    https://patchwork.ozlabs.org/project/buildroot/list/?series=157522
+
+    package/opengl/libopenvx: new virtual package
+    package/opengl/libvulkan: new virtual package
+    package/freescale-imx/imx-gpu-viv: add options for new feture
+
+The last one introduces imx-gpu-viv as a provider for libvulkan, so at
+least it does not seem to contradict your assumptions that Vulkan is
+possible with Vivante.  ;-)
+
+Regards,
+Yann E. MORIN.
+
+> Tested with the following defconfig (and dtoverlay=vc4-kms-v3d-pi4):
+> 
+>   BR2_aarch64=y
+>   BR2_cortex_a72=y
+>   BR2_ARM_FPU_VFPV4=y
+>   BR2_ENABLE_DEBUG=y
+>   BR2_OPTIMIZE_3=y
+>   BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+>   BR2_PACKAGE_GLIBC_UTILS=y
+>   BR2_BINUTILS_VERSION_2_35_X=y
+>   BR2_GCC_VERSION_10_X=y
+>   BR2_TOOLCHAIN_BUILDROOT_CXX=y
+>   BR2_INIT_SYSV=y
+>   BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+>   BR2_SYSTEM_DHCP="eth0"
+>   BR2_GENERATE_LOCALE="en_US"
+>   BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi4-64/post-build.sh"
+>   BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi4-64/post-image.sh"
+>   BR2_ROOTFS_POST_SCRIPT_ARGS="--add-miniuart-bt-overlay --aarch64"
+>   BR2_LINUX_KERNEL=y
+>   BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+>   BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,967d45b29ca2902f031b867809d72e3b3d623e7a)/linux-967d45b29ca2902f031b867809d72e3b3d623e7a.tar.gz"
+>   BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
+>   BR2_LINUX_KERNEL_DTS_SUPPORT=y
+>   BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2711-rpi-4-b"
+>   BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+>   BR2_PACKAGE_DEJAVU=y
+>   BR2_PACKAGE_MESA3D=y
+>   BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO=y
+>   BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D=y
+>   BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4=y
+>   BR2_PACKAGE_MESA3D_VULKAN_DRIVER_BROADCOM=y
+>   BR2_PACKAGE_MESA3D_VULKAN_DRIVER_SWRAST=y
+>   BR2_PACKAGE_MESA3D_OPENGL_ES=y
+>   BR2_PACKAGE_VULKAN_TOOLS=y
+>   BR2_PACKAGE_QT5=y
+>   BR2_PACKAGE_QT5BASE_EXAMPLES=y
+>   BR2_PACKAGE_QT5BASE_GUI=y
+>   BR2_PACKAGE_QT5BASE_OPENGL_LIB=y
+>   BR2_PACKAGE_QT5BASE_VULKAN=y
+>   BR2_PACKAGE_QT5BASE_EGLFS=y
+>   BR2_PACKAGE_QT5BASE_FONTCONFIG=y
+>   BR2_PACKAGE_QT5BASE_HARFBUZZ=y
+>   BR2_PACKAGE_QT5BASE_GIF=y
+>   BR2_PACKAGE_QT5BASE_JPEG=y
+>   BR2_PACKAGE_QT5BASE_PNG=y
+>   BR2_PACKAGE_RPI_FIRMWARE=y
+>   BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4=y
+>   BR2_TARGET_ROOTFS_EXT2=y
+>   BR2_TARGET_ROOTFS_EXT2_4=y
+>   BR2_TARGET_ROOTFS_EXT2_SIZE="384M"
+>   # BR2_TARGET_ROOTFS_TAR is not set
+>   BR2_PACKAGE_HOST_DOSFSTOOLS=y
+>   BR2_PACKAGE_HOST_GENIMAGE=y
+>   BR2_PACKAGE_HOST_MTOOLS=y
+> 
+> There are three vulkan ICDs installed
+>   - /usr/lib/libvulkan_lvp.so: mesa3d/swrast
+>   - /usr/lib/libvulkan_broadcom.so: mesa3d/broadcom
+>   - /usr/lib/libVkICD_mock_icd.so: vulkan-tools/moc-ICD
+> 
+> Runtime test done:
+> 
+>   - vulkan-tools/moc-ICD (works):
+> 	$ VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/VkICD_mock_icd.json vulkaninfo
+> ==========
+> VULKANINFO
+> ==========
+> 
+> Vulkan Instance Version: 1.2.165
+> 
+> 
+> Instance Extensions: count = 19
+> ===============================
+> 	VK_EXT_debug_report                    : extension revision 9
+> 	VK_EXT_debug_utils                     : extension revision 2
+> 	VK_EXT_direct_mode_display             : extension revision 1
+> 	VK_EXT_display_surface_counter         : extension revision 1
+> 	VK_EXT_headless_surface                : extension revision 1
+> 	VK_EXT_swapchain_colorspace            : extension revision 4
+> 	VK_EXT_validation_features             : extension revision 4
+> 	VK_EXT_validation_flags                : extension revision 2
+> 	VK_KHR_device_group_creation           : extension revision 1
+> 	VK_KHR_display                         : extension revision 23
+> 	VK_KHR_external_fence_capabilities     : extension revision 1
+> 	VK_KHR_external_memory_capabilities    : extension revision 1
+> 	VK_KHR_external_semaphore_capabilities : extension revision 1
+> 	VK_KHR_get_display_properties2         : extension revision 1
+> 	VK_KHR_get_physical_device_properties2 : extension revision 2
+> 	VK_KHR_get_surface_capabilities2       : extension revision 1
+> 	VK_KHR_surface                         : extension revision 25
+> 	VK_KHR_surface_protected_capabilities  : extension revision 1
+> 	VK_NV_external_memory_capabilities     : extension revision 1
+> 
+> Layers: count = 0
+> =================
+> Groups:
+> =======
+> 	No Device Groups Found
+> 
+> Device Properties and Extensions:
+> =================================
+> GPU0:
+> VkPhysicalDeviceProperties:
+> ---------------------------
+> 	apiVersion     = 4198400 (1.1.0)
+> 	driverVersion  = 1 (0x0001)
+> 	vendorID       = 0xba5eba11
+> 	deviceID       = 0xf005ba11
+> 	deviceType     = PHYSICAL_DEVICE_TYPE_VIRTUAL_GPU
+> 	deviceName     = Vulkan Mock Device
+> [...]
+> 
+>   - mesa3d/swrast:
+> 	$ VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/lvp_icd.cortex-a72.json vulkaninfo
+> 	WARNING: lavapipe is not a conformant vulkan implementation, testing use only.
+> 	Segmentation fault
+> 
+>   - mesa3d/broadcom:
+> 	$ VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/broadcom_icd.cortex-a72.json vulkaninfo
+> 	ERROR at /home/seiderer/Work/Buildroot/build_rpi4_mesa_vc4_001/build/vulkan-tools-1.2.162/vulkaninfo/vulkaninfo.h:248:vkEnumerateInstanceExtensionProperties failed with ERROR_INITIALIZATION_FAILED
+> 
+> Next steps:
+>   - enable Vulkan/X11/XCB support
+>   - fix mesa3d/swrast stand-alone link failure
+> 
+> Regards,
+> Peter
+> 
+> [1] https://www.raspberrypi.org/blog/vulkan-update-were-conformant/
+> 
+> Peter Seiderer (6):
+>   package/vulkan-headers: new package
+>   package/vulkan-loader: new package
+>   package/vulkan-tools: new package
+>   package/mesa3d: add vulkan broadcom driver support
+>   package/mesa3d: add vulkan swrast driver support
+>   package/qt5base: add vulkan option
+> 
+>  package/Config.in                             |  3 ++
+>  package/mesa3d/Config.in                      | 21 ++++++++++++
+>  package/mesa3d/mesa3d.mk                      |  6 +++-
+>  package/qt5/qt5base/Config.in                 | 11 +++++++
+>  package/qt5/qt5base/qt5base.mk                |  7 ++++
+>  package/vulkan-headers/Config.in              |  7 ++++
+>  package/vulkan-headers/vulkan-headers.hash    |  3 ++
+>  package/vulkan-headers/vulkan-headers.mk      | 13 ++++++++
+>  .../0001-loader-fix-asm_offset-call.patch     | 32 +++++++++++++++++++
+>  package/vulkan-loader/Config.in               | 14 ++++++++
+>  package/vulkan-loader/vulkan-loader.hash      |  3 ++
+>  package/vulkan-loader/vulkan-loader.mk        | 22 +++++++++++++
+>  package/vulkan-tools/Config.in                | 17 ++++++++++
+>  package/vulkan-tools/vulkan-tools.hash        |  3 ++
+>  package/vulkan-tools/vulkan-tools.mk          | 25 +++++++++++++++
+>  15 files changed, 186 insertions(+), 1 deletion(-)
+>  create mode 100644 package/vulkan-headers/Config.in
+>  create mode 100644 package/vulkan-headers/vulkan-headers.hash
+>  create mode 100644 package/vulkan-headers/vulkan-headers.mk
+>  create mode 100644 package/vulkan-loader/0001-loader-fix-asm_offset-call.patch
+>  create mode 100644 package/vulkan-loader/Config.in
+>  create mode 100644 package/vulkan-loader/vulkan-loader.hash
+>  create mode 100644 package/vulkan-loader/vulkan-loader.mk
+>  create mode 100644 package/vulkan-tools/Config.in
+>  create mode 100644 package/vulkan-tools/vulkan-tools.hash
+>  create mode 100644 package/vulkan-tools/vulkan-tools.mk
+> 
+> -- 
+> 2.29.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
