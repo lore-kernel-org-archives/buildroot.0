@@ -1,42 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 30 Dec 2020 23:54:41 +0100
-Subject: [Buildroot] [PATCH] package/gcc: arc: Fix adc/sbc patterns
- handling in GCC 10
-In-Reply-To: <20201203192306.9648-1-kremneva@synopsys.com>
-References: <20201203192306.9648-1-kremneva@synopsys.com>
-Message-ID: <20201230235441.782096c1@windsurf>
+Date: Wed, 30 Dec 2020 23:56:02 +0100
+Subject: [Buildroot] [git commit] package/libnfc: pn53x_usb driver needs gcc
+ >= 4.9
+Message-ID: <20201230223829.573258399F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Veronika,
+commit: https://git.buildroot.net/buildroot/commit/?id=3beaa26e38dc310269891d4a362fe5edd4040464
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu,  3 Dec 2020 22:23:06 +0300
-Veronika Kremneva <Veronika.Kremneva@synopsys.com> wrote:
+Commit 8a26801c9fad1c7749200e22e9dfdeaeeb65f76e forgot to propagate
+gcc >= 4.9 dependency
 
-> There is a problem while building various packages with GCC 10.x for ARC:
-> 
-> ----------------------------->8---------------------------  
-> make[2]: *** [magick/libGraphicsMagick_la-analyze.lo] Error 1
-> make[2]: *** Waiting for unfinished jobs....
-> /tmp/ccFqDn0F.s: Assembler messages:
-> /tmp/ccFqDn0F.s:1586: Error: operand is not duplicate of the previous one for instruction 'adc'
-> ----------------------------->8---------------------------  
+Fixes:
+ - http://autobuild.buildroot.org/results/6586f4aecf9a47612bfedfc503c9c2948a17e9d6
 
-So this patch was no longer applying as-is, because it is already
-present for the ARC-specific gcc version. So I dropped this part of
-your patch, and applied the part adding the patch to the vanilla gcc
-10.2 version.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libnfc/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-It's now at
-https://git.buildroot.org/buildroot/commit/?id=a61529b6c372e03cda428c695b17ce4b986daac8
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libnfc/Config.in b/package/libnfc/Config.in
+index 073b8f37f5..ead61e4529 100644
+--- a/package/libnfc/Config.in
++++ b/package/libnfc/Config.in
+@@ -64,13 +64,15 @@ config BR2_PACKAGE_LIBNFC_PN53X_USB
+ 	bool "pn53x_usb driver"
+ 	default y
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libusb
+ 	select BR2_PACKAGE_LIBUSB
+ 	select BR2_PACKAGE_LIBUSB_COMPAT
+ 	help
+ 	  support for pn53x_usb driver
+ 
+-comment "pn53x_usb driver needs a toolchain w/ threads"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++comment "pn53x_usb driver needs a toolchain w/ threads, gcc >= 4.9"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 
+ config BR2_PACKAGE_LIBNFC_EXAMPLES
+ 	bool "build libnfc examples"
