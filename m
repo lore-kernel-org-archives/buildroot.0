@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 30 Dec 2020 10:07:34 +0100
-Subject: [Buildroot] [RFC v1 4/6] package/mesa3d: add vulkan broadcom
+Date: Wed, 30 Dec 2020 10:15:19 +0100
+Subject: [Buildroot] [RFC v1 5/6] package/mesa3d: add vulkan swrast
  driver support
-In-Reply-To: <20201223224553.8570-5-ps.report@gmx.net>
+In-Reply-To: <20201223224553.8570-6-ps.report@gmx.net>
 References: <20201223224553.8570-1-ps.report@gmx.net>
- <20201223224553.8570-5-ps.report@gmx.net>
-Message-ID: <20201230090734.GI1680670@scaer>
+ <20201223224553.8570-6-ps.report@gmx.net>
+Message-ID: <20201230091519.GJ1680670@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,66 +16,58 @@ Peter, All,
 
 On 2020-12-23 23:45 +0100, Peter Seiderer spake thusly:
 > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+> Notes:
+>   - link failure when selected stand alone, fine in case
+>     vulkan-broadcom is selected too
+
+Is it just vulkan-broadcom that fixes it, or would enabling the intel
+vulkan fix it too?
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/mesa3d/Config.in | 13 +++++++++++++
+>  package/mesa3d/mesa3d.mk |  1 +
+>  2 files changed, 14 insertions(+)
+> 
 > diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-> index 45eb62b701..73e7199e8c 100644
+> index 73e7199e8c..0bd904c270 100644
 > --- a/package/mesa3d/Config.in
 > +++ b/package/mesa3d/Config.in
-> @@ -388,6 +388,14 @@ config BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON
+> @@ -416,6 +416,19 @@ comment "intel vulkan depends on X.org and needs a glibc toolchain w/ headers >=
+>  	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 || \
+>  		!BR2_TOOLCHAIN_USES_GLIBC || !BR2_PACKAGE_XORG7
 >  
->  comment "Vulkan drivers"
->  
-> +config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_BROADCOM
-> +	bool "Vulkan broadcom driver"
-> +	depends on BR2_arm || BR2_aarch64
+> +config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_SWRAST
+> +	bool "Vulkan swrast driver"
+> +	depends on !BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST
 > +	select BR2_PACKAGE_EXPAT
+> +	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+> +	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
 > +	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
 > +	help
-> +	  Vulkan broadcom driver.
-
-I guess this is where we would introduce the select BR2_PACKAGE_PROVIDES_LIBVULKAN
-of that other series I pointed earlier:
-    https://patchwork.ozlabs.org/project/buildroot/list/?series=157522
-
-Regards,
-Yann E. MORIN.
-
->  config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL
->  	bool "Vulkan Intel driver"
->  	depends on BR2_i386 || BR2_x86_64
+> +	  Vulkan swrast driver.
+> +
+> +comment "Vulkan swrast: Only one swrast provider can be built"
+> +	depends on BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST
+> +
+>  comment "Off-screen Rendering"
+>  
+>  config BR2_PACKAGE_MESA3D_OSMESA_CLASSIC
 > diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-> index d754cb8796..d9ea752d3e 100644
+> index d9ea752d3e..f8eeb797a1 100644
 > --- a/package/mesa3d/mesa3d.mk
 > +++ b/package/mesa3d/mesa3d.mk
-> @@ -110,6 +110,7 @@ MESA3D_DRI_DRIVERS-$(BR2_PACKAGE_MESA3D_DRI_DRIVER_I965)   += i965
->  MESA3D_DRI_DRIVERS-$(BR2_PACKAGE_MESA3D_DRI_DRIVER_NOUVEAU) += nouveau
->  MESA3D_DRI_DRIVERS-$(BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON) += r100
+> @@ -112,6 +112,7 @@ MESA3D_DRI_DRIVERS-$(BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON) += r100
 >  # Vulkan Drivers
-> +MESA3D_VULKAN_DRIVERS-$(BR2_PACKAGE_MESA3D_VULKAN_DRIVER_BROADCOM) += broadcom
+>  MESA3D_VULKAN_DRIVERS-$(BR2_PACKAGE_MESA3D_VULKAN_DRIVER_BROADCOM) += broadcom
 >  MESA3D_VULKAN_DRIVERS-$(BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL)   += intel
+> +MESA3D_VULKAN_DRIVERS-$(BR2_PACKAGE_MESA3D_VULKAN_DRIVER_SWRAST) += swrast
 >  
 >  ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER),)
-> @@ -143,9 +144,11 @@ ifeq ($(BR2_PACKAGE_MESA3D_VULKAN_DRIVER),)
 >  MESA3D_CONF_OPTS += \
->  	-Dvulkan-drivers=
->  else
-> +ifeq ($(BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL),y)
->  MESA3D_DEPENDENCIES += xlib_libxshmfence
-> +MESA3D_CONF_OPTS += -Ddri3=enabled
-> +endif
->  MESA3D_CONF_OPTS += \
-> -	-Ddri3=enabled \
-
-Meh... dri3 is already driven by BR2_PACKAGE_MESA3D_DRI_DRIVER, and this
-is going to be quite another mess if we drive it in a second place (not
-the fault of your patch, it's already the case before, but tstill, a bit
-of cleanup is probably in order...)
-
-Regards,
-Yann E. MORIN.
-
->  	-Dvulkan-drivers=$(subst $(space),$(comma),$(MESA3D_VULKAN_DRIVERS-y))
->  endif
->  
 > -- 
 > 2.29.2
 > 
