@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 30 Dec 2020 10:30:12 +0100
-Subject: [Buildroot] [PATCH v3 01/11] boot/arm-trusted-firmware: Bump to
- version 2.4
-In-Reply-To: <20201218202646.1060123-2-hi@senzilla.io>
+Date: Wed, 30 Dec 2020 10:30:40 +0100
+Subject: [Buildroot] [PATCH v3 02/11] boot/mv-ddr-marvell: Bump to HEAD
+ as of 20201207
+In-Reply-To: <20201218202646.1060123-3-hi@senzilla.io>
 References: <20201218202646.1060123-1-hi@senzilla.io>
- <20201218202646.1060123-2-hi@senzilla.io>
-Message-ID: <20201230093012.GK1680670@scaer>
+ <20201218202646.1060123-3-hi@senzilla.io>
+Message-ID: <20201230093040.GL1680670@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,8 +15,8 @@ To: buildroot@busybox.net
 Dick, All,
 
 On 2020-12-18 20:27 +0000, Dick Olsson via buildroot spake thusly:
-> Required in order to build properly with the latest stable release of
-> EDK2 UEFI firmware.
+> Rebase on the mv-ddr-devel branch as the release branches are no longer
+> maintained.
 > 
 > Signed-off-by: Dick Olsson <hi@senzilla.io>
 
@@ -26,41 +26,73 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  boot/arm-trusted-firmware/Config.in                 | 4 ++--
->  boot/arm-trusted-firmware/arm-trusted-firmware.hash | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  ...raining_leveling.c-uninitialized-var.patch | 31 -------------------
+>  boot/mv-ddr-marvell/mv-ddr-marvell.hash       |  2 +-
+>  boot/mv-ddr-marvell/mv-ddr-marvell.mk         |  4 +--
+>  3 files changed, 3 insertions(+), 34 deletions(-)
+>  delete mode 100644 boot/mv-ddr-marvell/0001-mv_ddr-mv_ddr4_training_leveling.c-uninitialized-var.patch
 > 
-> diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
-> index e505dee9d0..c06294040e 100644
-> --- a/boot/arm-trusted-firmware/Config.in
-> +++ b/boot/arm-trusted-firmware/Config.in
-> @@ -15,7 +15,7 @@ choice
->  	  Select the specific ATF version you want to use
->  
->  config BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_VERSION
-> -	bool "v2.2"
-> +	bool "v2.4"
->  
->  config BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION
->  	bool "Custom version"
-> @@ -43,7 +43,7 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE
->  
->  config BR2_TARGET_ARM_TRUSTED_FIRMWARE_VERSION
->  	string
-> -	default "v2.2"		if BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_VERSION
-> +	default "v2.4"		if BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_VERSION
->  	default "custom"	if BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL
->  	default BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION \
->  				if BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT
-> diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.hash b/boot/arm-trusted-firmware/arm-trusted-firmware.hash
-> index 3cd83d78f2..970613f38d 100644
-> --- a/boot/arm-trusted-firmware/arm-trusted-firmware.hash
-> +++ b/boot/arm-trusted-firmware/arm-trusted-firmware.hash
+> diff --git a/boot/mv-ddr-marvell/0001-mv_ddr-mv_ddr4_training_leveling.c-uninitialized-var.patch b/boot/mv-ddr-marvell/0001-mv_ddr-mv_ddr4_training_leveling.c-uninitialized-var.patch
+> deleted file mode 100644
+> index eada18b473..0000000000
+> --- a/boot/mv-ddr-marvell/0001-mv_ddr-mv_ddr4_training_leveling.c-uninitialized-var.patch
+> +++ /dev/null
+> @@ -1,31 +0,0 @@
+> -From 5867fcad6e88af3d843bfa831648d84a53732d57 Mon Sep 17 00:00:00 2001
+> -From: Heinrich Schuchardt <xypron.glpk@gmx.de>
+> -Date: Wed, 19 Dec 2018 17:17:13 +0100
+> -Subject: [PATCH] mv_ddr: mv_ddr4_training_leveling.c: uninitialized variable
+> -
+> -With GCC 8.2 uninitialized variables lead to a build error.
+> -
+> -Signed-off-by: Heinrich Schuchardt <xypron.glpk@gmx.de>
+> -Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ----
+> -Upstream status: commit 5867fcad6e8
+> -
+> - mv_ddr4_training_leveling.c | 2 +-
+> - 1 file changed, 1 insertion(+), 1 deletion(-)
+> -
+> -diff --git a/mv_ddr4_training_leveling.c b/mv_ddr4_training_leveling.c
+> -index 144e21a03c01..cb95389f5466 100644
+> ---- a/mv_ddr4_training_leveling.c
+> -+++ b/mv_ddr4_training_leveling.c
+> -@@ -368,7 +368,7 @@ static int mv_ddr4_dynamic_pb_wl_supp(u32 dev_num, enum mv_wl_supp_mode ecc_mode
+> - 	u32 subphy_num = ddr3_tip_dev_attr_get(dev_num, MV_ATTR_OCTET_PER_INTERFACE);
+> - 	u8 compare_result = 0;
+> - 	u32 orig_phase;
+> --	u32 rd_data, wr_data;
+> -+	u32 rd_data, wr_data = 0;
+> - 	u32 flag, step;
+> - 	struct mv_ddr_topology_map *tm = mv_ddr_topology_map_get();
+> - 	u32 ecc_phy_access_id;
+> --- 
+> -2.20.1
+> -
+> diff --git a/boot/mv-ddr-marvell/mv-ddr-marvell.hash b/boot/mv-ddr-marvell/mv-ddr-marvell.hash
+> index ec2fe6ed37..e1a86008db 100644
+> --- a/boot/mv-ddr-marvell/mv-ddr-marvell.hash
+> +++ b/boot/mv-ddr-marvell/mv-ddr-marvell.hash
 > @@ -1,3 +1,3 @@
 >  # Locally calculated
-> -sha256  07e3c058ae2d95c7d516a46fc93565b797e912c3271ddbf29df523b1ab1ee911  arm-trusted-firmware-v2.2.tar.gz
-> +sha256  4bfda9fdbe5022f2e88ad3344165f7d38a8ae4a0e2d91d44d9a1603425cc642d  arm-trusted-firmware-v2.4.tar.gz
->  sha256  487795b8023df866259fa159bab94706b747fb0d623b7913f1c4955c0ab5f164  license.rst
+> -sha256  39dcc8baccb82cbc746d8f82ce7f673e1b1236e8aee0d09e7ab12c27eeb6ecda  mv-ddr-marvell-618dadd1491eb2f7b2fd74313c04f7accddae475.tar.gz
+> +sha256  bfab74a625d65238c569b9df282b55c0fc9a1e2d3decedcf194d44774df2ede4  mv-ddr-marvell-305d923e6bc4236cd3b902f6679b0aef9e5fa52d.tar.gz
+>  sha256  69208236fc322026920b92d1d839ebdc521ca65379bfdb3368a24945e794fc78  ddr3_init.c
+> diff --git a/boot/mv-ddr-marvell/mv-ddr-marvell.mk b/boot/mv-ddr-marvell/mv-ddr-marvell.mk
+> index a4e0c0467d..442b6aed53 100644
+> --- a/boot/mv-ddr-marvell/mv-ddr-marvell.mk
+> +++ b/boot/mv-ddr-marvell/mv-ddr-marvell.mk
+> @@ -4,8 +4,8 @@
+>  #
+>  ################################################################################
+>  
+> -# This is the commit for mv_ddr-armada-18.12.0
+> -MV_DDR_MARVELL_VERSION = 618dadd1491eb2f7b2fd74313c04f7accddae475
+> +# This is the latest commit on mv-ddr-devel as of 20201207
+> +MV_DDR_MARVELL_VERSION = 305d923e6bc4236cd3b902f6679b0aef9e5fa52d
+>  MV_DDR_MARVELL_SITE = $(call github,MarvellEmbeddedProcessors,mv-ddr-marvell,$(MV_DDR_MARVELL_VERSION))
+>  MV_DDR_MARVELL_LICENSE = GPL-2.0+ or LGPL-2.1 with freertos-exception-2.0, BSD-3-Clause, Marvell Commercial
+>  MV_DDR_MARVELL_LICENSE_FILES = ddr3_init.c
 > -- 
 > 2.25.1
 > 
