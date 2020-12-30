@@ -1,11 +1,11 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 30 Dec 2020 15:23:37 +0100
-Subject: [Buildroot] [RFC v1 1/6] package/vulkan-headers: new package
-In-Reply-To: <20201230084249.GF1680670@scaer>
+Date: Wed, 30 Dec 2020 15:32:20 +0100
+Subject: [Buildroot] [RFC v1 3/6] package/vulkan-tools: new package
+In-Reply-To: <20201230090004.GH1680670@scaer>
 References: <20201223224553.8570-1-ps.report@gmx.net>
- <20201223224553.8570-2-ps.report@gmx.net>
- <20201230084249.GF1680670@scaer>
-Message-ID: <20201230152337.00d7f103@gmx.net>
+ <20201223224553.8570-4-ps.report@gmx.net>
+ <20201230090004.GH1680670@scaer>
+Message-ID: <20201230153220.16333832@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,52 +14,62 @@ To: buildroot@busybox.net
 
 Hello Yann,
 
-On Wed, 30 Dec 2020 09:42:49 +0100, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+On Wed, 30 Dec 2020 10:00:04 +0100, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
 > Peter, All,
 >
 > On 2020-12-23 23:45 +0100, Peter Seiderer spake thusly:
 > > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > ---
 > [--SNIP--]
-> > diff --git a/package/vulkan-headers/vulkan-headers.mk b/package/vulkan-headers/vulkan-headers.mk
+> > diff --git a/package/vulkan-tools/vulkan-tools.mk b/package/vulkan-tools/vulkan-tools.mk
 > > new file mode 100644
-> > index 0000000000..a20f4d789c
+> > index 0000000000..9a20ddf36b
 > > --- /dev/null
-> > +++ b/package/vulkan-headers/vulkan-headers.mk
-> > @@ -0,0 +1,13 @@
+> > +++ b/package/vulkan-tools/vulkan-tools.mk
+> > @@ -0,0 +1,25 @@
 > > +################################################################################
 > > +#
-> > +# vulkan-headers
+> > +# vulkan-tools
 > > +#
 > > +################################################################################
 > > +
-> > +VULKAN_HEADERS_VERSION = 1.2.165
+> > +VULKAN_TOOLS_VERSION = 1.2.162
+> > +VULKAN_TOOLS_SITE = $(call github,KhronosGroup,Vulkan-Tools,v$(VULKAN_TOOLS_VERSION))
+> > +VULKAN_TOOLS_LICENSE = Apache-2.0 License
 >
-> As stated in there READ:E:
->
->     Marked version releases have undergone thorough testing but do not
->     imply the same quality level as SDK tags. SDK tags follow the
->     sdk-<version>.<patch> format (e.g., sdk-1.1.92.0).
->
-> Shouldn't we use SDK tags, rather than mere versions?
+> Something I forgot to comment on on the other Vulkan packages: the SPDX
+> short identifier is: Apache-2.0
 
-One reason why this patch series is sent as RFC ;-), but will update/or
-downgrade to an SDK tag (if it works) on next patch series iteration...
+O.k, will fix it on next patch iteration...
+
+>
+> > +VULKAN_TOOLS_LICENSE_FILES = LICENSE.txt
+> > +
+> > +VULKAN_TOOLS_DEPENDENCIES = vulkan-headers vulkan-loader
+> > +
+> > +VULKAN_TOOLS_CONF_OPTS += \
+> > +	-DBUILD_CUBE=OFF \
+> > +	-DBUILD_VULKANINFO=ON \
+> > +	-DBUILD_ICD=ON \
+> > +	-DINSTALL_ICD=ON \
+> > +	-DBUILD_WSI_XCB_SUPPORT=OFF \
+> > +	-DBUILD_WSI_XLIB_SUPPORT=OFF \
+> > +	-DBUILD_WSI_WAYLAND_SUPPORT=OFF \
+> > +	-DBUILD_WSI_DIRECTFB_SUPPORT=OFF \
+>
+> I guess those will be conditional on the udnerlying libraries, e.g. when
+> libxcb is enabled, we enable WSI_XCB, and so on, right?
+
+Yes, stuff for follow-up patches...
 
 Regards,
 Peter
 
 >
-> (Comment valid for the three Vulkan-related packages in your series).
->
 > Regards,
 > Yann E. MORIN.
 >
-> > +VULKAN_HEADERS_SITE = $(call github,KhronosGroup,Vulkan-Headers,v$(VULKAN_HEADERS_VERSION))
-> > +VULKAN_HEADERS_LICENSE = Apache-2.0 License
-> > +VULKAN_HEADERS_LICENSE_FILES = LICENSE.txt
-> > +VULKAN_HEADERS_INSTALL_STAGING = YES
+> > +	-DUSE_CCACHE=OFF
 > > +
 > > +$(eval $(cmake-package))
 > > --
