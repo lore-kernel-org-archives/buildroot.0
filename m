@@ -1,35 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 31 Dec 2020 14:41:53 +0100
-Subject: [Buildroot] [PATCH] package/libnss: bump version to 3.60
-In-Reply-To: <20201214121703.1189147-1-giulio.benetti@benettiengineering.com>
-References: <20201214121703.1189147-1-giulio.benetti@benettiengineering.com>
-Message-ID: <20201231144153.3ae1fbf5@windsurf>
+Date: Thu, 31 Dec 2020 14:44:01 +0100
+Subject: [Buildroot] [git commit] package/gdb: cleanup in gdb-python-config
+Message-ID: <20201231132635.15A6B839E9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 14 Dec 2020 13:17:03 +0100
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=7fe40110e89503f99fcf690dc96674c035285620
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Bump version to 3.60 and remove local patch that has been upstreamed.
-> 
-> Release Notes:
-> https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.60_release_notes
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
->  package/libnss/0001-fix-old-abi-ppc.patch | 40 -----------------------
->  package/libnss/libnss.hash                |  4 +--
->  package/libnss/libnss.mk                  |  2 +-
->  3 files changed, 3 insertions(+), 43 deletions(-)
->  delete mode 100644 package/libnss/0001-fix-old-abi-ppc.patch
+There was a mix of leading spaces and TABs. Szitch to using only spaces.
 
-Applied to master, thanks.
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/gdb/gdb-python-config | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/gdb/gdb-python-config b/package/gdb/gdb-python-config
+index 0f002281d7..222f1cf6ba 100755
+--- a/package/gdb/gdb-python-config
++++ b/package/gdb/gdb-python-config
+@@ -21,16 +21,16 @@ fi
+ 
+ case "$2" in
+     --includes)
+-	echo "-I${STAGING_DIR}/usr/include/python2.7"
+-	;;
++        echo "-I${STAGING_DIR}/usr/include/python2.7"
++        ;;
+     --ldflags)
+-	echo "-lpthread -ldl -lutil -lm -lpython2.7"
+-	;;
++        echo "-lpthread -ldl -lutil -lm -lpython2.7"
++        ;;
+     --exec-prefix)
+-	echo "/usr"
+-	;;
++        echo "/usr"
++        ;;
+     *)
+-	echo "Bad arg $2." >&2
+-	exit 1
+-	;;
++        echo "Bad arg $2." >&2
++        exit 1
++        ;;
+ esac
