@@ -1,39 +1,60 @@
-From: Konrad Schwarz <konrad.schwarz@siemens.com>
-Date: Thu, 31 Dec 2020 22:29:47 +0100
-Subject: [Buildroot] [PATCH 1/3] package/environment-setup: fix spelling of
- the script file in the manual.
-In-Reply-To: <20201231212949.2415485-1-konrad.schwarz@siemens.com>
-References: <20201231212949.2415485-1-konrad.schwarz@siemens.com>
-Message-ID: <20201231212949.2415485-2-konrad.schwarz@siemens.com>
+From: xu min <xuminready@gmail.com>
+Date: Thu, 31 Dec 2020 14:15:12 -0800
+Subject: [Buildroot] [PATCH 1/1] configs/rock64: update defconfig
+In-Reply-To: <20201231174145.64913277@windsurf>
+References: <20201215004903.8829-1-xuminready@gmail.com>
+ <20201231174145.64913277@windsurf>
+Message-ID: <CAMpS7mTOZZRnHW0B3j5eT2yBMTX6VenG-V5jen3c45TEVxyn7w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The manual incorrectly refers to the script file as `setup-environment';
-it is actually called `environment-setup'.
+Awesome, thanks!
 
-Signed-off-by: Konrad Schwarz <konrad.schwarz@siemens.com>
----
- docs/manual/using-buildroot-toolchain.txt | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On Thu, Dec 31, 2020 at 8:41 AM Thomas Petazzoni <
+thomas.petazzoni@bootlin.com> wrote:
 
-diff --git a/docs/manual/using-buildroot-toolchain.txt b/docs/manual/using-buildroot-toolchain.txt
-index 110be5939f..e202c7d09b 100644
---- a/docs/manual/using-buildroot-toolchain.txt
-+++ b/docs/manual/using-buildroot-toolchain.txt
-@@ -35,9 +35,9 @@ generating a tarball.
- 
- For your convenience, by selecting the option
- +BR2_PACKAGE_HOST_ENVIRONMENT_SETUP+, you can get a
--+setup-environment+ script installed in +output/host/+ and therefore
-++environment-setup+ script installed in +output/host/+ and therefore
- in your SDK.  This script can be sourced with
--+. your/sdk/path/environment-setup+ to export a number of environment
-++. your/sdk/path/setup-environment+ to export a number of environment
- variables that will help cross-compile your projects using the
- Buildroot SDK: the +PATH+ will contain the SDK binaries, standard
- _autotools_ variables will be defined with the appropriate values, and
+> Hello,
+>
+> On Tue, 15 Dec 2020 00:49:03 +0000
+> Min Xu <xuminready@gmail.com> wrote:
+>
+> > Revert "configs/rock64_defconfig: remove defconfig"
+> a5fa2469e6506ea4f5a91739aa099f63a10e45ce
+> >
+> > bump uboot from 2017.09 to release-2020-07 from
+> ayufan-rock64/linux-mainline-u-boot
+> >
+> > Signed-off-by: Min Xu <xuminready@gmail.com>
+>
+> Thanks, I've applied to master, with two changes. First, I changed the
+> commit title to "configs/rock64: new defconfig", as this commit is not
+> "updating" a defconfig, it's really adding a new one.
+>
+> > +BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+> > +BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="rk3328"
+> > +BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="bl31/*.elf"
+>
+> I've added a fixed version of ATF here instead of relying on the
+> default "latest" version, which can change over time.
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
+
+
 -- 
-2.25.4
+
+*Best Regards*
+
+*XuMin's Ready?*
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20201231/20cfe1c6/attachment.html>
