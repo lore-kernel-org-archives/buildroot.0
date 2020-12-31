@@ -1,63 +1,80 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 31 Dec 2020 11:18:59 +0100
-Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 20.3.2
-Message-ID: <20201231101859.173733-1-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 31 Dec 2020 14:29:56 +0100
+Subject: [Buildroot] [git commit] package/python-defusedxml: new package
+Message-ID: <20201231131352.F3D288039D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes:
-https://lists.freedesktop.org/archives/mesa-announce/2020-December/000614.html
+commit: https://git.buildroot.net/buildroot/commit/?id=0279bf08ce9b4b82b053711b9372d3ea3a9fd66f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+XML bomb protection for Python stdlib modules.
+
+Signed-off-by: Simon Rowe <simon.rowe@citrix.com>
+[yann.morin.1998 at free.fr: two spaces in hash file]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/mesa3d-headers/mesa3d-headers.mk | 2 +-
- package/mesa3d/mesa3d.hash               | 6 +++---
- package/mesa3d/mesa3d.mk                 | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/Config.in                                |  1 +
+ package/python-defusedxml/Config.in              |  6 ++++++
+ package/python-defusedxml/python-defusedxml.hash |  5 +++++
+ package/python-defusedxml/python-defusedxml.mk   | 14 ++++++++++++++
+ 4 files changed, 26 insertions(+)
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 40fbf0f27f..65048f4717 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 20.3.1
-+MESA3D_HEADERS_VERSION = 20.3.2
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index 45b69d8944..d19b5ad5e2 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,6 +1,6 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2020-December/000612.html
--sha256  af751b49bb2ab0264d58c31e73d869e80333de02b2d1becc93f1b28c67aa780f  mesa-20.3.1.tar.xz
--sha512  06638b8d2d866b5e27024c58a2ca03a73869221a7d536f7a8f1679d73708e5c1713446c8fedc594844b95596ae817bfceb88ace6b42423328189778e5036edf6  mesa-20.3.1.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2020-December/000614.html
-+sha256  cce001b685d23afb976b04138714906abcf7e7f996da6355e6a43e5ca486533d  mesa-20.3.2.tar.xz
-+sha512  0cabf8ddfd20b56098c8f4c081a3c2d4741ef42f40c929645e74284db99cf2a81137d7d279b7b6a0c15dea83905119ddf612411b36344dc22a488de9f311f5ed  mesa-20.3.2.tar.xz
- 
- # License
- sha256  1361129baa4519b6ed27a1bf4aeee33a58b060bf7bb9b6ea415ecede04e35e46  docs/license.rst
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 82a0f07840..f9dd861d5e 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 20.3.1
-+MESA3D_VERSION = 20.3.2
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://mesa.freedesktop.org/archive
- MESA3D_LICENSE = MIT, SGI, Khronos
--- 
-2.29.2
+diff --git a/package/Config.in b/package/Config.in
+index 333f774157..2dd477d1c6 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -946,6 +946,7 @@ menu "External python modules"
+ 	source "package/python-dataproperty/Config.in"
+ 	source "package/python-dateutil/Config.in"
+ 	source "package/python-decorator/Config.in"
++	source "package/python-defusedxml/Config.in"
+ 	source "package/python-dialog/Config.in"
+ 	source "package/python-dialog3/Config.in"
+ 	source "package/python-dicttoxml/Config.in"
+diff --git a/package/python-defusedxml/Config.in b/package/python-defusedxml/Config.in
+new file mode 100644
+index 0000000000..85285da5ec
+--- /dev/null
++++ b/package/python-defusedxml/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_DEFUSEDXML
++	bool "python-defusedxml"
++	help
++	  XML bomb protection for Python stdlib modules
++
++	  https://pypi.org/project/defusedxml/
+diff --git a/package/python-defusedxml/python-defusedxml.hash b/package/python-defusedxml/python-defusedxml.hash
+new file mode 100644
+index 0000000000..c782a97bbd
+--- /dev/null
++++ b/package/python-defusedxml/python-defusedxml.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/defusedxml/json
++md5  a59741f675c4cba649de40a99f732897  defusedxml-0.6.0.tar.gz
++sha256  f684034d135af4c6cbb949b8a4d2ed61634515257a67299e5f940fbaa34377f5  defusedxml-0.6.0.tar.gz
++# Locally computed sha256 checksums
++sha256  b80ce9da8c42a1f91079627fbbe2bf27210ae108a0ffe5f077d5b08e076c24c8  LICENSE
+diff --git a/package/python-defusedxml/python-defusedxml.mk b/package/python-defusedxml/python-defusedxml.mk
+new file mode 100644
+index 0000000000..6d2a9aff43
+--- /dev/null
++++ b/package/python-defusedxml/python-defusedxml.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-defusedxml
++#
++################################################################################
++
++PYTHON_DEFUSEDXML_VERSION = 0.6.0
++PYTHON_DEFUSEDXML_SOURCE = defusedxml-$(PYTHON_DEFUSEDXML_VERSION).tar.gz
++PYTHON_DEFUSEDXML_SITE = https://files.pythonhosted.org/packages/a4/5f/f8aa58ca0cf01cbcee728abc9d88bfeb74e95e6cb4334cfd5bed5673ea77
++PYTHON_DEFUSEDXML_SETUP_TYPE = setuptools
++PYTHON_DEFUSEDXML_LICENSE = Python-2.0
++PYTHON_DEFUSEDXML_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
