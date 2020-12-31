@@ -1,51 +1,67 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 31 Dec 2020 14:44:01 +0100
-Subject: [Buildroot] [git commit] package/gdb: cleanup in gdb-python-config
-Message-ID: <20201231132635.15A6B839E9@busybox.osuosl.org>
+Date: Thu, 31 Dec 2020 14:44:03 +0100
+Subject: [Buildroot] [git commit] package/gdb: do not hard-code python
+ version in gdb-python-config
+Message-ID: <20201231132635.25228825E1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7fe40110e89503f99fcf690dc96674c035285620
+commit: https://git.buildroot.net/buildroot/commit/?id=8f6e333f96189c812804bea14493eeb4c0febd0e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-There was a mix of leading spaces and TABs. Szitch to using only spaces.
+The gdb-python-config simulates a python-2.7, with a hard-coded 2.7
+version.
+
+gdb also supports running with python3 nowadays, so prepare the wrapper
+to return appropriate values.
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gdb/gdb-python-config | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+ package/gdb/gdb-python-config | 9 +++++++--
+ package/gdb/gdb.mk            | 3 +++
+ 2 files changed, 10 insertions(+), 2 deletions(-)
 
 diff --git a/package/gdb/gdb-python-config b/package/gdb/gdb-python-config
-index 0f002281d7..222f1cf6ba 100755
+index 222f1cf6ba..640c358305 100755
 --- a/package/gdb/gdb-python-config
 +++ b/package/gdb/gdb-python-config
-@@ -21,16 +21,16 @@ fi
+@@ -17,14 +17,19 @@ if [ $# -ne 2 ] ; then
+     exit 1
+ fi
+ 
++if [ -z "${BR_PYTHON_VERSION}" ]; then
++    echo "Environment variable BR_PYTHON_VERSION not set." >&2
++    exit 1
++fi
++
+ # The first argument is the path to python-config.py, ignore it.
  
  case "$2" in
      --includes)
--	echo "-I${STAGING_DIR}/usr/include/python2.7"
--	;;
-+        echo "-I${STAGING_DIR}/usr/include/python2.7"
-+        ;;
+-        echo "-I${STAGING_DIR}/usr/include/python2.7"
++        echo "-I${STAGING_DIR}/usr/include/python${BR_PYTHON_VERSION}"
+         ;;
      --ldflags)
--	echo "-lpthread -ldl -lutil -lm -lpython2.7"
--	;;
-+        echo "-lpthread -ldl -lutil -lm -lpython2.7"
-+        ;;
+-        echo "-lpthread -ldl -lutil -lm -lpython2.7"
++        echo "-lpthread -ldl -lutil -lm -lpython${BR_PYTHON_VERSION}"
+         ;;
      --exec-prefix)
--	echo "/usr"
--	;;
-+        echo "/usr"
-+        ;;
-     *)
--	echo "Bad arg $2." >&2
--	exit 1
--	;;
-+        echo "Bad arg $2." >&2
-+        exit 1
-+        ;;
- esac
+         echo "/usr"
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index c74279a43e..e35ece0153 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -194,6 +194,9 @@ GDB_CONF_OPTS += --disable-tui
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_GDB_PYTHON),y)
++# CONF_ENV: for top-level configure; MAKE_ENV: for sub-projects' configure.
++GDB_CONF_ENV += BR_PYTHON_VERSION=$(PYTHON_VERSION_MAJOR)
++GDB_MAKE_ENV += BR_PYTHON_VERSION=$(PYTHON_VERSION_MAJOR)
+ GDB_CONF_OPTS += --with-python=$(TOPDIR)/package/gdb/gdb-python-config
+ GDB_DEPENDENCIES += python
+ else
