@@ -1,39 +1,90 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 31 Dec 2020 17:31:09 +0100
-Subject: [Buildroot] [PATCH 1/1] package/openvpn: adds target install of
- systemd unit files
-In-Reply-To: <20201231154332.13ef7654@windsurf>
-References: <20201215163610.12070-1-edmundo.ferreira@esa.int>
- <20201231154332.13ef7654@windsurf>
-Message-ID: <20201231173109.7d874dc2@windsurf>
+Date: Thu, 31 Dec 2020 17:31:17 +0100
+Subject: [Buildroot] [git commit] package/iwd: fix static build with readline
+Message-ID: <20201231161346.E6A1A843B8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 31 Dec 2020 15:43:32 +0100
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=76d711b1dd309185136c8f030197c39823a03d69
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Hum, I've applied, but reading again distro/systemd/Makefile.am, it
-> seems like manually copying those files is not needed. If you pass
-> --enable-systemd, which we already do when BR2_PACKAGE_SYSTEMD=y. Isn't
-> that working ?
+Fixes:
+ - http://autobuild.buildroot.org/results/8fb1341f2f5094c346456b43b4fc04996c2e1485
 
-I found why: we had a custom OPENVPN_INSTALL_TARGET_CMDS instead of
-relying on the default "make install" behavior of the autotools-package
-infra. So, I made a follow-up commit that drops this as well as the
-custom systemd installation stuff, as "make install" does it all
-properly.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...nfigure.ac-fix-static-build-with-readline.patch | 61 ++++++++++++++++++++++
+ 1 file changed, 61 insertions(+)
 
-See:
-
-  https://git.buildroot.org/buildroot/commit/?id=30bc58d3766b240017120a25d843da0a2c5cf501
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/iwd/0001-configure.ac-fix-static-build-with-readline.patch b/package/iwd/0001-configure.ac-fix-static-build-with-readline.patch
+new file mode 100644
+index 0000000000..37dbdb18e5
+--- /dev/null
++++ b/package/iwd/0001-configure.ac-fix-static-build-with-readline.patch
+@@ -0,0 +1,61 @@
++From 358e0755c3a434d7a815519b8c10ae5d347caad0 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 16 Dec 2020 07:51:04 +0100
++Subject: [PATCH] configure.ac: fix static build with readline
++
++Retrieve the dependencies of readline through pkg-config (and fallback
++to -lreadline) to avoid the following build failure:
++
++/nvme/rc-buildroot-test/scripts/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-uclibc/8.3.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: /nvme/rc-buildroot-test/scripts/instance-0/output-1/host/bin/../x86_64-buildroot-linux-uclibc/sysroot/usr/lib/libreadline.a(display.o): in function `cr':
++display.c:(.text+0x1ab): undefined reference to `tputs'
++
++Fixes:
++ - http://autobuild.buildroot.org/results/8fb1341f2f5094c346456b43b4fc04996c2e1485
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status:
++https://lists.01.org/hyperkitty/list/iwd at lists.01.org/thread/NFI4P52Y65T6XX7S7DGIVDMZISNQWUUC/]
++---
++ Makefile.am  | 4 ++--
++ configure.ac | 3 +++
++ 2 files changed, 5 insertions(+), 2 deletions(-)
++
++diff --git a/Makefile.am b/Makefile.am
++index 3cd7eaa6..493d06cc 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -288,7 +288,7 @@ client_iwctl_SOURCES = client/main.c \
++ 			client/network.h client/network.c \
++ 			client/properties.h client/properties.c \
++ 			client/wsc.c client/station.c
++-client_iwctl_LDADD = $(ell_ldadd) -lreadline
+++client_iwctl_LDADD = $(ell_ldadd) $(READLINE_LIBS)
++ 
++ if MANUAL_PAGES
++ man_MANS += client/iwctl.1
++@@ -504,7 +504,7 @@ unit_test_client_SOURCES = unit/test-client.c \
++ 				client/display.h client/display.c \
++ 				client/network.h client/network.c \
++ 				client/properties.h client/properties.c
++-unit_test_client_LDADD = $(ell_ldadd) -lreadline
+++unit_test_client_LDADD = $(ell_ldadd) $(READLINE_LIBS)
++ endif
++ 
++ unit_test_sae_SOURCES = unit/test-sae.c \
++diff --git a/configure.ac b/configure.ac
++index 7bd917a4..52f27ed9 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -154,6 +154,9 @@ AC_ARG_ENABLE([client], AC_HELP_STRING([--disable-client],
++ if (test "${enable_client}" != "no"); then
++ 	AC_CHECK_HEADERS(readline/readline.h, enable_readline=yes,
++ 			AC_MSG_ERROR(readline header files are required))
+++	PKG_CHECK_MODULES(READLINE, readline, dummy=yes, READLINE_LIBS=-lreadline)
+++	AC_SUBST(READLINE_CFLAGS)
+++	AC_SUBST(READLINE_LIBS)
++ fi
++ AM_CONDITIONAL(CLIENT, test "${enable_client}" != "no")
++ 
++-- 
++2.29.2
++
