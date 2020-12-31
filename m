@@ -1,73 +1,103 @@
 From: Konrad Schwarz <konrad.schwarz@siemens.com>
-Date: Thu, 31 Dec 2020 22:29:49 +0100
-Subject: [Buildroot] [PATCH 3/3] package/environment-setup: improve
- legibility
+Date: Thu, 31 Dec 2020 22:29:48 +0100
+Subject: [Buildroot] [PATCH 2/3] package/environment-setup: make script
+ idempotent
 In-Reply-To: <20201231212949.2415485-1-konrad.schwarz@siemens.com>
 References: <20201231212949.2415485-1-konrad.schwarz@siemens.com>
-Message-ID: <20201231212949.2415485-4-konrad.schwarz@siemens.com>
+Message-ID: <20201231212949.2415485-3-konrad.schwarz@siemens.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Replaces absolute paths in cross-compilation macros such as CC
-with CROSS_COMPILE after first shortening CROSS_COMPILE to remove
-leading directories.  This is possible, since the referenced
-executables can be found by PATH search.
+One (slight) problem with this kind of environment setup files is when they
+are executed repeatedly (e.g., because something else is not quite right
+yet), they tend to extend the PATH variable with the same directory,
+creating a very unwieldy search path and potentially slowing down
+searches for executable files.
 
-The primary movtivation for this is that the output of
-build processes (make) becomes easier to read as less redundant
-information is being presented.
-Furthermore, the generated environment-setup script becomes easier
-to read and manually modify, should this be necessary.
+This fix adds a test such that PATH is extended only when necessary.
 
-Although relying on PATH to find the cross-compilation executables
-raises the possibility of mistakenly picking up wrong instances,
-the names are fairly unique, so this risk should be acceptable.
-Since in the original solution some executables were already being found
-by PATH search (namely all those not specified by a make macro such as
-CC), this change does not introduce fundamentally new risks.
+The code has also been simplified
+(using standard POSIX shell features) and make the generated
+script more readable, e.g., by splitting overly long lines.
 
 Signed-off-by: Konrad Schwarz <konrad.schwarz@siemens.com>
 ---
- package/environment-setup/environment-setup.mk | 17 ++++++++++-------
- 1 file changed, 10 insertions(+), 7 deletions(-)
+ .../environment-setup/environment-setup.mk    | 60 +++++++++----------
+ 1 file changed, 30 insertions(+), 30 deletions(-)
 
 diff --git a/package/environment-setup/environment-setup.mk b/package/environment-setup/environment-setup.mk
-index 5cb703e421..920dc3003e 100644
+index fcad013f0d..5cb703e421 100644
 --- a/package/environment-setup/environment-setup.mk
 +++ b/package/environment-setup/environment-setup.mk
-@@ -7,10 +7,17 @@
+@@ -4,38 +4,38 @@
+ #
+ ################################################################################
+ 
+-ENVIRONMENT_SETUP_FILE = $(HOST_DIR)/environment-setup
+-
  define HOST_ENVIRONMENT_SETUP_INSTALL_CMDS
- 	{ \
- 	cat package/environment-setup/environment-setup &&\
--	printf 'export "%s"\n' $(TARGET_CONFIGURE_OPTS) &&\
-+	printf 'export "CROSS_COMPILE=$(TARGET_CROSS)"\n' &&\
-+	printf 'CROSS_COMPILE=$${CROSS_COMPILE#$$SDK_PATH/bin/}\n' &&\
-+	printf 'export "%s"\n' $(TARGET_CONFIGURE_OPTS) |\
-+			sed\
-+			-e'/^export "PATH=/d'\
-+			-e's:$(TARGET_CROSS):$${CROSS_COMPILE}:g'\
-+			-e 's%$(HOST_DIR)/bin/%%g'\
-+			-e 's%$(HOST_DIR)%\$$SDK_PATH%g'\
-+			&&\
- 	printf %b\
- 	'export "ARCH=$(KERNEL_ARCH)"\n'\
--	'export "CROSS_COMPILE=$(TARGET_CROSS)"\n'\
- 	'export CONFIGURE_FLAGS=\\\n'\
- 		'"--target=$(GNU_TARGET_NAME) "\\\n'\
- 		'"--host=$(GNU_TARGET_NAME) "\\\n'\
-@@ -31,11 +38,7 @@ define HOST_ENVIRONMENT_SETUP_INSTALL_CMDS
- 	\
+-	cp package/environment-setup/environment-setup $(ENVIRONMENT_SETUP_FILE)
+-	for var in $(TARGET_CONFIGURE_OPTS); do \
+-		printf "export \"$$var\"\n" >> $(ENVIRONMENT_SETUP_FILE); \
+-	done
+-	printf "export \"ARCH=$(KERNEL_ARCH)\"\n" >> $(ENVIRONMENT_SETUP_FILE)
+-	printf "export \"CROSS_COMPILE=$(TARGET_CROSS)\"\n" >> $(ENVIRONMENT_SETUP_FILE)
+-	printf "export \"CONFIGURE_FLAGS=--target=$(GNU_TARGET_NAME) \
+-		--host=$(GNU_TARGET_NAME) \
+-		--build=$(GNU_HOST_NAME) \
+-		--prefix=/usr \
+-		--exec-prefix=/usr \
+-		--sysconfdir=/etc \
+-		--localstatedir=/var \
+-		--program-prefix=\"\n" >> $(ENVIRONMENT_SETUP_FILE)
+-	printf "alias configure=\"./configure \$${CONFIGURE_FLAGS}\"\n" \
+-		>> $(ENVIRONMENT_SETUP_FILE)
+-	printf "alias cmake=\"cmake \
+-		-DCMAKE_TOOLCHAIN_FILE=$(HOST_DIR)/share/buildroot/toolchainfile.cmake \
+-		-DCMAKE_INSTALL_PREFIX=/usr\"\n" >> $(ENVIRONMENT_SETUP_FILE)
+-	$(SED) 's%$(HOST_DIR)%\$$SDK_PATH%g' \
+-		-e 's%$(HOST_DIR)/bin/%%g' \
+-		-e '/^export "PATH=/c\' \
+-		$(ENVIRONMENT_SETUP_FILE)
+-	printf "export \"PATH=\$$SDK_PATH/bin:\$$SDK_PATH/sbin:\$$PATH\"\n" \
+-		>> $(ENVIRONMENT_SETUP_FILE)
+-
++	{ \
++	cat package/environment-setup/environment-setup &&\
++	printf 'export "%s"\n' $(TARGET_CONFIGURE_OPTS) &&\
++	printf %b\
++	'export "ARCH=$(KERNEL_ARCH)"\n'\
++	'export "CROSS_COMPILE=$(TARGET_CROSS)"\n'\
++	'export CONFIGURE_FLAGS=\\\n'\
++		'"--target=$(GNU_TARGET_NAME) "\\\n'\
++		'"--host=$(GNU_TARGET_NAME) "\\\n'\
++		'"--build=$(GNU_HOST_NAME) "\\\n'\
++		'"--prefix=/usr "\\\n'\
++		'"--exec-prefix=/usr "\\\n'\
++		'"--sysconfdir=/etc "\\\n'\
++		'"--localstatedir=/var "\\\n'\
++		'"--program-prefix= "\n'\
++	'alias configure="./configure \$$CONFIGURE_FLAGS"\n'\
++	'alias cmake="cmake"\\\n'\
++		'" -DCMAKE_TOOLCHAIN_FILE'\
++		'=$(HOST_DIR)/share/buildroot/toolchainfile.cmake"\\\n'\
++		'" -DCMAKE_INSTALL_PREFIX=/usr"\n'\
++	'if ! command -v $${CROSS_COMPILE}gcc > /dev/null\n'\
++	'then	export PATH="$$SDK_PATH/bin:$$SDK_PATH/sbin:$$PATH"\n'\
++	'fi\n'\
++	\
  	$(if $(BR2_LINUX_KERNEL),\
- 		'export "KERNELDIR=$(LINUX_BUILDDIR)"\n')\
--	; } |\
--	sed -e 's%$(HOST_DIR)%\$$SDK_PATH%g'\
--		-e 's%$(HOST_DIR)/bin/%%g'\
--		-e '/^export "PATH=/c\'\
--		>$(HOST_DIR)/environment-setup
-+	; } >$(HOST_DIR)/environment-setup
+-		printf "export \"KERNELDIR=$(LINUX_BUILDDIR)\"\n" \
+-			>> $(ENVIRONMENT_SETUP_FILE),)
++		'export "KERNELDIR=$(LINUX_BUILDDIR)"\n')\
++	; } |\
++	sed -e 's%$(HOST_DIR)%\$$SDK_PATH%g'\
++		-e 's%$(HOST_DIR)/bin/%%g'\
++		-e '/^export "PATH=/c\'\
++		>$(HOST_DIR)/environment-setup
  endef
  
  $(eval $(host-generic-package))
