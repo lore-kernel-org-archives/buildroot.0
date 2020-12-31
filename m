@@ -1,106 +1,96 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 31 Dec 2020 14:35:26 +0100
-Subject: [Buildroot] [PATCH 1/1] package/python-defusedxml: new package
-In-Reply-To: <20201127141038.30065-1-srowe@mose.org.uk>
-References: <20201127141038.30065-1-srowe@mose.org.uk>
-Message-ID: <20201231133526.GE2902@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 31 Dec 2020 14:39:07 +0100
+Subject: [Buildroot] [git commit] package/libnss: bump version to 3.60
+Message-ID: <20201231132356.DBCE88444A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Simon, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=76d021301c50b45ca558f04c9785b617cc2d0e07
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-11-27 14:10 +0000, Simon J. Rowe spake thusly:
-> From: Simon Rowe <simon.rowe@citrix.com>
-> 
-> XML bomb protection for Python stdlib modules.
-> 
-> Signed-off-by: Simon Rowe <simon.rowe@citrix.com>
+Bump version to 3.60 and remove local patch that has been upstreamed.
 
-Applied to master, thanks.
+Release Notes:
+https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.60_release_notes
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libnss/0001-fix-old-abi-ppc.patch | 40 -------------------------------
+ package/libnss/libnss.hash                |  4 ++--
+ package/libnss/libnss.mk                  |  2 +-
+ 3 files changed, 3 insertions(+), 43 deletions(-)
 
-> ---
->  package/Config.in                                |  1 +
->  package/python-defusedxml/Config.in              |  6 ++++++
->  package/python-defusedxml/python-defusedxml.hash |  5 +++++
->  package/python-defusedxml/python-defusedxml.mk   | 14 ++++++++++++++
->  4 files changed, 26 insertions(+)
->  create mode 100644 package/python-defusedxml/Config.in
->  create mode 100644 package/python-defusedxml/python-defusedxml.hash
->  create mode 100644 package/python-defusedxml/python-defusedxml.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 016a99ed1a..868c3b00ea 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -942,6 +942,7 @@ menu "External python modules"
->  	source "package/python-dataproperty/Config.in"
->  	source "package/python-dateutil/Config.in"
->  	source "package/python-decorator/Config.in"
-> +	source "package/python-defusedxml/Config.in"
->  	source "package/python-dialog/Config.in"
->  	source "package/python-dialog3/Config.in"
->  	source "package/python-dicttoxml/Config.in"
-> diff --git a/package/python-defusedxml/Config.in b/package/python-defusedxml/Config.in
-> new file mode 100644
-> index 0000000000..85285da5ec
-> --- /dev/null
-> +++ b/package/python-defusedxml/Config.in
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_PYTHON_DEFUSEDXML
-> +	bool "python-defusedxml"
-> +	help
-> +	  XML bomb protection for Python stdlib modules
-> +
-> +	  https://pypi.org/project/defusedxml/
-> diff --git a/package/python-defusedxml/python-defusedxml.hash b/package/python-defusedxml/python-defusedxml.hash
-> new file mode 100644
-> index 0000000000..9f9171858b
-> --- /dev/null
-> +++ b/package/python-defusedxml/python-defusedxml.hash
-> @@ -0,0 +1,5 @@
-> +# md5, sha256 from https://pypi.org/pypi/defusedxml/json
-> +md5	a59741f675c4cba649de40a99f732897  defusedxml-0.6.0.tar.gz
-> +sha256	f684034d135af4c6cbb949b8a4d2ed61634515257a67299e5f940fbaa34377f5  defusedxml-0.6.0.tar.gz
-> +# Locally computed sha256 checksums
-> +sha256	b80ce9da8c42a1f91079627fbbe2bf27210ae108a0ffe5f077d5b08e076c24c8  LICENSE
-> diff --git a/package/python-defusedxml/python-defusedxml.mk b/package/python-defusedxml/python-defusedxml.mk
-> new file mode 100644
-> index 0000000000..6d2a9aff43
-> --- /dev/null
-> +++ b/package/python-defusedxml/python-defusedxml.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# python-defusedxml
-> +#
-> +################################################################################
-> +
-> +PYTHON_DEFUSEDXML_VERSION = 0.6.0
-> +PYTHON_DEFUSEDXML_SOURCE = defusedxml-$(PYTHON_DEFUSEDXML_VERSION).tar.gz
-> +PYTHON_DEFUSEDXML_SITE = https://files.pythonhosted.org/packages/a4/5f/f8aa58ca0cf01cbcee728abc9d88bfeb74e95e6cb4334cfd5bed5673ea77
-> +PYTHON_DEFUSEDXML_SETUP_TYPE = setuptools
-> +PYTHON_DEFUSEDXML_LICENSE = Python-2.0
-> +PYTHON_DEFUSEDXML_LICENSE_FILES = LICENSE
-> +
-> +$(eval $(python-package))
-> -- 
-> 2.21.3
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/libnss/0001-fix-old-abi-ppc.patch b/package/libnss/0001-fix-old-abi-ppc.patch
+deleted file mode 100644
+index 202b4ad271..0000000000
+--- a/package/libnss/0001-fix-old-abi-ppc.patch
++++ /dev/null
+@@ -1,40 +0,0 @@
+-From a7a862bab5e4aae4615ddae3cbe230345f92ed0d Mon Sep 17 00:00:00 2001
+-From: Lauri Kasanen <cand@gmx.com>
+-Date: Mon, 1 Jun 2020 12:11:45 +0300
+-Subject: [PATCH v3] Bug 1642174 /usr/bin/ld: OBJS/Linux_SINGLE_SHLIB/sha512-p8.o:
+- ABI version 2 is not compatible with ABI version 1 output
+-
+-Don't try to build the SHA-2 accelerated asm on old-ABI ppc.
+-
+-Currently make only, I don't have enough gyp-fu to do that side.
+-However, the reporters of 1642174 and 1635625 both used make, not gyp.
+-
+-Signed-off-by: Lauri Kasanen <cand@gmx.com>
+-[Fetch-from: https://bugzilla.mozilla.org/show_bug.cgi?id=1642174
+- Manually modified paths to apply to nss subdirectory in release tarball.]
+-Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+----
+- lib/freebl/Makefile | 5 ++++-
+- 1 file changed, 4 insertions(+), 1 deletion(-)
+-
+-diff --git a/nss/lib/freebl/Makefile b/nss/lib/freebl/Makefile
+-index 5f7384429..e0461c7d3 100644
+---- a/nss/lib/freebl/Makefile
+-+++ b/nss/lib/freebl/Makefile
+-@@ -267,9 +267,12 @@ ifeq ($(CPU_ARCH),arm)
+- endif
+- ifeq ($(CPU_ARCH),ppc)
+-     EXTRA_SRCS += gcm-ppc.c
+--    ASFILES += sha512-p8.s
+- ifdef USE_64
+-     DEFINES += -DNSS_NO_INIT_SUPPORT
+-+    PPC_ABI := $(shell $(CC) -dM -E - < /dev/null | awk '$$2 == "_CALL_ELF" {print $$3}')
+-+    ifeq ($(PPC_ABI),2)
+-+        ASFILES += sha512-p8.s
+-+    endif
+- endif # USE_64
+- endif # ppc
+- endif # Linux
+---
+-2.19.1
+-
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index 02593c7dde..16a2e5c521 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_58_RTM/src/SHA256SUMS
+-sha256  9f73cf789b5f109b978e5239551b609b0cafa88d18f0bc8ce3f976cb629353c0  nss-3.58.tar.gz
++# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_60_RTM/src/SHA256SUMS
++sha256  84abd5575ab874c53ae511bd461e5d0868d1a1b384ee40753154cdd1d590fe3d  nss-3.60.tar.gz
+ # Locally calculated
+ sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 8e6a77d2cb..d762ac6f64 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNSS_VERSION = 3.58
++LIBNSS_VERSION = 3.60
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
