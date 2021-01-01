@@ -1,69 +1,84 @@
-From: John Doe <anonymous683854643863@outlook.com>
-Date: Fri, 1 Jan 2021 20:31:04 +0000
-Subject: [Buildroot] [PATCH] package/openssh: fix initscript killing
- subprocesses
-Message-ID: <VI1PR0402MB3373751FEE15D3FC11A1D5E6A7D50@VI1PR0402MB3373.eurprd04.prod.outlook.com>
+From: Edmundo Ferreira <fc.edmundo@gmail.com>
+Date: Fri, 1 Jan 2021 22:22:21 +0100
+Subject: [Buildroot] [PATCH 1/1] package/openvpn: adds target install of
+ systemd unit files
+In-Reply-To: <20201231173109.7d874dc2@windsurf>
+References: <20201215163610.12070-1-edmundo.ferreira@esa.int>
+ <20201231154332.13ef7654@windsurf> <20201231173109.7d874dc2@windsurf>
+Message-ID: <CAFv936FkPmRSQE3XnUpiwc6AP3iYMOn0w4VKAtJV8ZxETEJ8EQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The initscript currently calls `killall sshd` when stopping the service, which
-kills all active SSH sessions. Rewritten to use start-stop-daemon with PIDfile.
+Indeed I just arrived at the same conclusion, that
+OPENVPN_INSTALL_TARGET_CMDS, was overriding the default autotools install.
 
-Signed-off-by: John Johnson <anonymous683854643863@outlook.com>
----
- package/openssh/S50sshd | 27 +++++++++++++++++++++------
- 1 file changed, 21 insertions(+), 6 deletions(-)
+The following items get added now correctly to the target
 
-diff --git a/package/openssh/S50sshd b/package/openssh/S50sshd
-index 22da41d1ca..77a82308ca 100644
---- a/package/openssh/S50sshd
-+++ b/package/openssh/S50sshd
-@@ -3,6 +3,9 @@
- # sshd        Starts sshd.
- #
- 
-+DAEMON="sshd"
-+PIDFILE="/var/run/$DAEMON.pid"
-+
- # Make sure the ssh-keygen progam exists
- [ -f /usr/bin/ssh-keygen ] || exit 0
- 
-@@ -13,15 +16,27 @@ start() {
- 	/usr/bin/ssh-keygen -A
- 
- 	printf "Starting sshd: "
--	/usr/sbin/sshd
--	touch /var/lock/sshd
--	echo "OK"
-+	start-stop-daemon -S -q -p "$PIDFILE" -x "/usr/sbin/sshd"
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		touch /var/lock/sshd
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
- }
- stop() {
- 	printf "Stopping sshd: "
--	killall sshd
--	rm -f /var/lock/sshd
--	echo "OK"
-+	start-stop-daemon -K -q -p "$PIDFILE"
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		rm -f /var/lock/sshd
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
- }
- restart() {
- 	stop
--- 
-2.29.2
+./usr/share/doc/openvpn
+./usr/include/openvpn-msg.h
+./usr/include/openvpn-plugin.h
+./usr/lib/systemd/system/openvpn-server at .service
+./usr/lib/systemd/system/openvpn-client at .service
+./usr/lib/openvpn
+./usr/lib/openvpn/plugins/openvpn-plugin-auth-pam.la
+./usr/lib/openvpn/plugins/openvpn-plugin-down-root.so
+./usr/lib/openvpn/plugins/openvpn-plugin-auth-pam.so
+./usr/lib/openvpn/plugins/openvpn-plugin-down-root.la
+./usr/lib/tmpfiles.d/openvpn.conf
+./usr/sbin/openvpn
+
+Add after the documentation, headers and statics libs (in my case shared
+only) get removed.
+
+./usr/lib/systemd/system/openvpn-server at .service
+./usr/lib/systemd/system/openvpn-client at .service
+./usr/lib/openvpn
+./usr/lib/openvpn/plugins/openvpn-plugin-down-root.so
+./usr/lib/openvpn/plugins/openvpn-plugin-auth-pam.so
+./usr/lib/tmpfiles.d/openvpn.conf
+./usr/sbin/openvpn
+
+Thank you, for the fix.
+
+Best regards,
+Edmundo
+
+
+
+
+On Thu, Dec 31, 2020 at 5:31 PM Thomas Petazzoni <
+thomas.petazzoni@bootlin.com> wrote:
+
+> On Thu, 31 Dec 2020 15:43:32 +0100
+> Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+>
+> > Hum, I've applied, but reading again distro/systemd/Makefile.am, it
+> > seems like manually copying those files is not needed. If you pass
+> > --enable-systemd, which we already do when BR2_PACKAGE_SYSTEMD=y. Isn't
+> > that working ?
+>
+> I found why: we had a custom OPENVPN_INSTALL_TARGET_CMDS instead of
+> relying on the default "make install" behavior of the autotools-package
+> infra. So, I made a follow-up commit that drops this as well as the
+> custom systemd installation stuff, as "make install" does it all
+> properly.
+>
+> See:
+>
+>
+> https://git.buildroot.org/buildroot/commit/?id=30bc58d3766b240017120a25d843da0a2c5cf501
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210101/72022751/attachment.html>
