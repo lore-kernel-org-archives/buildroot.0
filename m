@@ -1,84 +1,52 @@
-From: Edmundo Ferreira <fc.edmundo@gmail.com>
-Date: Fri, 1 Jan 2021 22:22:21 +0100
-Subject: [Buildroot] [PATCH 1/1] package/openvpn: adds target install of
- systemd unit files
-In-Reply-To: <20201231173109.7d874dc2@windsurf>
-References: <20201215163610.12070-1-edmundo.ferreira@esa.int>
- <20201231154332.13ef7654@windsurf> <20201231173109.7d874dc2@windsurf>
-Message-ID: <CAFv936FkPmRSQE3XnUpiwc6AP3iYMOn0w4VKAtJV8ZxETEJ8EQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 1 Jan 2021 23:47:12 +0100
+Subject: [Buildroot] [git commit] package/python-chardet: bump version to
+ 4.0.0
+Message-ID: <20210101223449.4F0B88404B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Indeed I just arrived at the same conclusion, that
-OPENVPN_INSTALL_TARGET_CMDS, was overriding the default autotools install.
+commit: https://git.buildroot.net/buildroot/commit/?id=9c4851f782ecb0cbd8bcd5cd5d14add407caa05d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The following items get added now correctly to the target
+Added sha256 hash provided by upstream, reformatted hashes.
 
-./usr/share/doc/openvpn
-./usr/include/openvpn-msg.h
-./usr/include/openvpn-plugin.h
-./usr/lib/systemd/system/openvpn-server at .service
-./usr/lib/systemd/system/openvpn-client at .service
-./usr/lib/openvpn
-./usr/lib/openvpn/plugins/openvpn-plugin-auth-pam.la
-./usr/lib/openvpn/plugins/openvpn-plugin-down-root.so
-./usr/lib/openvpn/plugins/openvpn-plugin-auth-pam.so
-./usr/lib/openvpn/plugins/openvpn-plugin-down-root.la
-./usr/lib/tmpfiles.d/openvpn.conf
-./usr/sbin/openvpn
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-chardet/python-chardet.hash | 6 +++---
+ package/python-chardet/python-chardet.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Add after the documentation, headers and statics libs (in my case shared
-only) get removed.
-
-./usr/lib/systemd/system/openvpn-server at .service
-./usr/lib/systemd/system/openvpn-client at .service
-./usr/lib/openvpn
-./usr/lib/openvpn/plugins/openvpn-plugin-down-root.so
-./usr/lib/openvpn/plugins/openvpn-plugin-auth-pam.so
-./usr/lib/tmpfiles.d/openvpn.conf
-./usr/sbin/openvpn
-
-Thank you, for the fix.
-
-Best regards,
-Edmundo
-
-
-
-
-On Thu, Dec 31, 2020 at 5:31 PM Thomas Petazzoni <
-thomas.petazzoni@bootlin.com> wrote:
-
-> On Thu, 31 Dec 2020 15:43:32 +0100
-> Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
->
-> > Hum, I've applied, but reading again distro/systemd/Makefile.am, it
-> > seems like manually copying those files is not needed. If you pass
-> > --enable-systemd, which we already do when BR2_PACKAGE_SYSTEMD=y. Isn't
-> > that working ?
->
-> I found why: we had a custom OPENVPN_INSTALL_TARGET_CMDS instead of
-> relying on the default "make install" behavior of the autotools-package
-> infra. So, I made a follow-up commit that drops this as well as the
-> custom systemd installation stuff, as "make install" does it all
-> properly.
->
-> See:
->
->
-> https://git.buildroot.org/buildroot/commit/?id=30bc58d3766b240017120a25d843da0a2c5cf501
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210101/72022751/attachment.html>
+diff --git a/package/python-chardet/python-chardet.hash b/package/python-chardet/python-chardet.hash
+index a1804603a2..fb4260a227 100644
+--- a/package/python-chardet/python-chardet.hash
++++ b/package/python-chardet/python-chardet.hash
+@@ -1,5 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/chardet/json
+-md5	7dd1ba7f9c77e32351b0a0cfacf4055c  chardet-3.0.4.tar.gz
++# md5, sha256 from https://pypi.org/pypi/chardet/json
++md5  bc9a5603d8d0994b2d4cbf255f99e654  chardet-4.0.0.tar.gz
++sha256  0d6f53a15db4120f2b08c94f11e7d93d2c911ee118b6b30a04ec3ee8310179fa  chardet-4.0.0.tar.gz
+ # Locally computed
+-sha256	84ab92ed1c4d4f16916e05906b6b75a6c0fb5db821cc65e70cbd64a3e2a5eaae  chardet-3.0.4.tar.gz
+ sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  LICENSE
+diff --git a/package/python-chardet/python-chardet.mk b/package/python-chardet/python-chardet.mk
+index 5161098945..448877d056 100644
+--- a/package/python-chardet/python-chardet.mk
++++ b/package/python-chardet/python-chardet.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_CHARDET_VERSION = 3.0.4
++PYTHON_CHARDET_VERSION = 4.0.0
+ PYTHON_CHARDET_SOURCE = chardet-$(PYTHON_CHARDET_VERSION).tar.gz
+-PYTHON_CHARDET_SITE = https://pypi.python.org/packages/fc/bb/a5768c230f9ddb03acc9ef3f0d4a3cf93462473795d18e9535498c8f929d
++PYTHON_CHARDET_SITE = https://files.pythonhosted.org/packages/ee/2d/9cdc2b527e127b4c9db64b86647d567985940ac3698eeabc7ffaccb4ea61
+ PYTHON_CHARDET_SETUP_TYPE = setuptools
+ PYTHON_CHARDET_LICENSE = LGPL-2.1+
+ PYTHON_CHARDET_LICENSE_FILES = LICENSE
