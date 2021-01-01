@@ -1,50 +1,69 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri,  1 Jan 2021 20:41:11 +0100
-Subject: [Buildroot] [PATCH 1/3] package/python-chardet: bump version to
- 4.0.0
-Message-ID: <20210101194113.10929-1-bernd.kuhls@t-online.de>
+From: John Doe <anonymous683854643863@outlook.com>
+Date: Fri, 1 Jan 2021 20:31:04 +0000
+Subject: [Buildroot] [PATCH] package/openssh: fix initscript killing
+ subprocesses
+Message-ID: <VI1PR0402MB3373751FEE15D3FC11A1D5E6A7D50@VI1PR0402MB3373.eurprd04.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added sha256 hash provided by upstream, reformatted hashes.
+The initscript currently calls `killall sshd` when stopping the service, which
+kills all active SSH sessions. Rewritten to use start-stop-daemon with PIDfile.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: John Johnson <anonymous683854643863@outlook.com>
 ---
- package/python-chardet/python-chardet.hash | 6 +++---
- package/python-chardet/python-chardet.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/openssh/S50sshd | 27 +++++++++++++++++++++------
+ 1 file changed, 21 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-chardet/python-chardet.hash b/package/python-chardet/python-chardet.hash
-index a1804603a2..fb4260a227 100644
---- a/package/python-chardet/python-chardet.hash
-+++ b/package/python-chardet/python-chardet.hash
-@@ -1,5 +1,5 @@
--# md5 from https://pypi.python.org/pypi/chardet/json
--md5	7dd1ba7f9c77e32351b0a0cfacf4055c  chardet-3.0.4.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/chardet/json
-+md5  bc9a5603d8d0994b2d4cbf255f99e654  chardet-4.0.0.tar.gz
-+sha256  0d6f53a15db4120f2b08c94f11e7d93d2c911ee118b6b30a04ec3ee8310179fa  chardet-4.0.0.tar.gz
- # Locally computed
--sha256	84ab92ed1c4d4f16916e05906b6b75a6c0fb5db821cc65e70cbd64a3e2a5eaae  chardet-3.0.4.tar.gz
- sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  LICENSE
-diff --git a/package/python-chardet/python-chardet.mk b/package/python-chardet/python-chardet.mk
-index 5161098945..448877d056 100644
---- a/package/python-chardet/python-chardet.mk
-+++ b/package/python-chardet/python-chardet.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/openssh/S50sshd b/package/openssh/S50sshd
+index 22da41d1ca..77a82308ca 100644
+--- a/package/openssh/S50sshd
++++ b/package/openssh/S50sshd
+@@ -3,6 +3,9 @@
+ # sshd        Starts sshd.
  #
- ################################################################################
  
--PYTHON_CHARDET_VERSION = 3.0.4
-+PYTHON_CHARDET_VERSION = 4.0.0
- PYTHON_CHARDET_SOURCE = chardet-$(PYTHON_CHARDET_VERSION).tar.gz
--PYTHON_CHARDET_SITE = https://pypi.python.org/packages/fc/bb/a5768c230f9ddb03acc9ef3f0d4a3cf93462473795d18e9535498c8f929d
-+PYTHON_CHARDET_SITE = https://files.pythonhosted.org/packages/ee/2d/9cdc2b527e127b4c9db64b86647d567985940ac3698eeabc7ffaccb4ea61
- PYTHON_CHARDET_SETUP_TYPE = setuptools
- PYTHON_CHARDET_LICENSE = LGPL-2.1+
- PYTHON_CHARDET_LICENSE_FILES = LICENSE
++DAEMON="sshd"
++PIDFILE="/var/run/$DAEMON.pid"
++
+ # Make sure the ssh-keygen progam exists
+ [ -f /usr/bin/ssh-keygen ] || exit 0
+ 
+@@ -13,15 +16,27 @@ start() {
+ 	/usr/bin/ssh-keygen -A
+ 
+ 	printf "Starting sshd: "
+-	/usr/sbin/sshd
+-	touch /var/lock/sshd
+-	echo "OK"
++	start-stop-daemon -S -q -p "$PIDFILE" -x "/usr/sbin/sshd"
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		touch /var/lock/sshd
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
+ }
+ stop() {
+ 	printf "Stopping sshd: "
+-	killall sshd
+-	rm -f /var/lock/sshd
+-	echo "OK"
++	start-stop-daemon -K -q -p "$PIDFILE"
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		rm -f /var/lock/sshd
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
+ }
+ restart() {
+ 	stop
 -- 
 2.29.2
