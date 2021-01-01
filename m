@@ -1,52 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 1 Jan 2021 23:47:14 +0100
-Subject: [Buildroot] [git commit] package/python-requests-oauthlib: bump
- version to 1.3.0
-Message-ID: <20210101223449.5ABCD8404B@busybox.osuosl.org>
+Date: Fri, 1 Jan 2021 23:47:09 +0100
+Subject: [Buildroot] [git commit] package/python-mwscrape: bump version for
+ python3 support
+Message-ID: <20210101223449.37E8D80257@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e923f3ebf31b9e1aed9045471f18a20e8c29e2d3
+commit: https://git.buildroot.net/buildroot/commit/?id=63dd97f70f63b4ca4423382cd32f574e805148f2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Reformatted hashes.
+Upstream ported the package to support python >= 3.6:
+https://github.com/itkach/mwscrape/commit/568ccbe6e12dd6391277df02adf724ba0e5f9197
+
+Remove dependency to python-futures package because it was only needed
+for python2.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-requests-oauthlib/python-requests-oauthlib.hash | 6 +++---
- package/python-requests-oauthlib/python-requests-oauthlib.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-mwscrape/Config.in            | 3 +--
+ package/python-mwscrape/python-mwscrape.hash | 2 +-
+ package/python-mwscrape/python-mwscrape.mk   | 2 +-
+ 3 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-requests-oauthlib/python-requests-oauthlib.hash b/package/python-requests-oauthlib/python-requests-oauthlib.hash
-index 784ad8e692..d33cabfefc 100644
---- a/package/python-requests-oauthlib/python-requests-oauthlib.hash
-+++ b/package/python-requests-oauthlib/python-requests-oauthlib.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/requests-oauthlib/json
--md5	c32a54ce04123480132960a290d50792  requests-oauthlib-1.2.0.tar.gz
--sha256	bd6533330e8748e94bf0b214775fed487d309b8b8fe823dc45641ebcd9a32f57  requests-oauthlib-1.2.0.tar.gz
-+md5  1ebcd55f1b1b9281940b4bc33010e2ba  requests-oauthlib-1.3.0.tar.gz
-+sha256  b4261601a71fd721a8bd6d7aa1cc1d6a8a93b4a9f5e96626f8e4d91e8beeaa6a  requests-oauthlib-1.3.0.tar.gz
- # Locally computed sha256 checksums
--sha256	ae01846afad8a8291fe6a08966f3015af9a8ff675d84b981f9793c122f7876e8  LICENSE
-+sha256  ae01846afad8a8291fe6a08966f3015af9a8ff675d84b981f9793c122f7876e8  LICENSE
-diff --git a/package/python-requests-oauthlib/python-requests-oauthlib.mk b/package/python-requests-oauthlib/python-requests-oauthlib.mk
-index 41dca1abdd..9fe5b186b0 100644
---- a/package/python-requests-oauthlib/python-requests-oauthlib.mk
-+++ b/package/python-requests-oauthlib/python-requests-oauthlib.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/python-mwscrape/Config.in b/package/python-mwscrape/Config.in
+index 273ce9a4a8..cb1e30506f 100644
+--- a/package/python-mwscrape/Config.in
++++ b/package/python-mwscrape/Config.in
+@@ -1,8 +1,7 @@
+ config BR2_PACKAGE_PYTHON_MWSCRAPE
+ 	bool "python-mwscrape"
+-	depends on BR2_PACKAGE_PYTHON
++	depends on BR2_PACKAGE_PYTHON3
+ 	select BR2_PACKAGE_PYTHON_COUCHDB # runtime
+-	select BR2_PACKAGE_PYTHON_FUTURES # runtime
+ 	select BR2_PACKAGE_PYTHON_MWCLIENT # runtime
+ 	select BR2_PACKAGE_PYTHON_PYLRU # runtime
+ 	help
+diff --git a/package/python-mwscrape/python-mwscrape.hash b/package/python-mwscrape/python-mwscrape.hash
+index e6bdf396c8..0f64a9e19c 100644
+--- a/package/python-mwscrape/python-mwscrape.hash
++++ b/package/python-mwscrape/python-mwscrape.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  8de8a5ef257851f6e1e41247f64710f48859a5e3f91ebc7200bb60769f02f296  python-mwscrape-6a58d7801eb1e884fd0516f1adbedbd4481c10e6.tar.gz
++sha256  2d0e6c747f6a866dedbc759f78830b3f496e8d03401a3c727d0b48735341c5b6  python-mwscrape-568ccbe6e12dd6391277df02adf724ba0e5f9197.tar.gz
+ sha256  fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85  LICENSE.txt
+diff --git a/package/python-mwscrape/python-mwscrape.mk b/package/python-mwscrape/python-mwscrape.mk
+index 47b943f45f..3ffe9d6880 100644
+--- a/package/python-mwscrape/python-mwscrape.mk
++++ b/package/python-mwscrape/python-mwscrape.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_REQUESTS_OAUTHLIB_VERSION = 1.2.0
-+PYTHON_REQUESTS_OAUTHLIB_VERSION = 1.3.0
- PYTHON_REQUESTS_OAUTHLIB_SOURCE = requests-oauthlib-$(PYTHON_REQUESTS_OAUTHLIB_VERSION).tar.gz
--PYTHON_REQUESTS_OAUTHLIB_SITE = https://files.pythonhosted.org/packages/de/a2/f55312dfe2f7a344d0d4044fdfae12ac8a24169dc668bd55f72b27090c32
-+PYTHON_REQUESTS_OAUTHLIB_SITE = https://files.pythonhosted.org/packages/23/eb/68fc8fa86e0f5789832f275c8289257d8dc44dbe93fce7ff819112b9df8f
- PYTHON_REQUESTS_OAUTHLIB_SETUP_TYPE = setuptools
- PYTHON_REQUESTS_OAUTHLIB_LICENSE = ISC
- PYTHON_REQUESTS_OAUTHLIB_LICENSE_FILES = LICENSE
+-PYTHON_MWSCRAPE_VERSION = 6a58d7801eb1e884fd0516f1adbedbd4481c10e6
++PYTHON_MWSCRAPE_VERSION = 568ccbe6e12dd6391277df02adf724ba0e5f9197
+ PYTHON_MWSCRAPE_SITE = $(call github,itkach,mwscrape,$(PYTHON_MWSCRAPE_VERSION))
+ PYTHON_MWSCRAPE_LICENSE = MPL-2.0
+ PYTHON_MWSCRAPE_LICENSE_FILES = LICENSE.txt
