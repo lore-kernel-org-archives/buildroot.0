@@ -1,52 +1,66 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 1 Jan 2021 23:47:12 +0100
-Subject: [Buildroot] [git commit] package/python-chardet: bump version to
- 4.0.0
-Message-ID: <20210101223449.4F0B88404B@busybox.osuosl.org>
+Date: Fri, 1 Jan 2021 23:47:15 +0100
+Subject: [Buildroot] [git commit] package/{python,
+ python3}-requests: bump version to 2.25.1
+Message-ID: <20210101223449.68925852B4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9c4851f782ecb0cbd8bcd5cd5d14add407caa05d
+commit: https://git.buildroot.net/buildroot/commit/?id=cd3f8af96fefa47340b37097e9d604980490d2a9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Added sha256 hash provided by upstream, reformatted hashes.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-chardet/python-chardet.hash | 6 +++---
- package/python-chardet/python-chardet.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-requests/python-requests.hash | 4 ++--
+ package/python-requests/python-requests.mk   | 4 ++--
+ package/python3-requests/python3-requests.mk | 4 ++--
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-chardet/python-chardet.hash b/package/python-chardet/python-chardet.hash
-index a1804603a2..fb4260a227 100644
---- a/package/python-chardet/python-chardet.hash
-+++ b/package/python-chardet/python-chardet.hash
+diff --git a/package/python-requests/python-requests.hash b/package/python-requests/python-requests.hash
+index 95725a3552..e07c7bf5cc 100644
+--- a/package/python-requests/python-requests.hash
++++ b/package/python-requests/python-requests.hash
 @@ -1,5 +1,5 @@
--# md5 from https://pypi.python.org/pypi/chardet/json
--md5	7dd1ba7f9c77e32351b0a0cfacf4055c  chardet-3.0.4.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/chardet/json
-+md5  bc9a5603d8d0994b2d4cbf255f99e654  chardet-4.0.0.tar.gz
-+sha256  0d6f53a15db4120f2b08c94f11e7d93d2c911ee118b6b30a04ec3ee8310179fa  chardet-4.0.0.tar.gz
- # Locally computed
--sha256	84ab92ed1c4d4f16916e05906b6b75a6c0fb5db821cc65e70cbd64a3e2a5eaae  chardet-3.0.4.tar.gz
- sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  LICENSE
-diff --git a/package/python-chardet/python-chardet.mk b/package/python-chardet/python-chardet.mk
-index 5161098945..448877d056 100644
---- a/package/python-chardet/python-chardet.mk
-+++ b/package/python-chardet/python-chardet.mk
-@@ -4,9 +4,9 @@
- #
+ # md5, sha256 from https://pypi.org/pypi/requests/json
+-md5  94cd712029077897e252212c5f402b79  requests-2.25.0.tar.gz
+-sha256  7f1a0b932f4a60a1a65caa4263921bb7d9ee911957e0ae4a23a6dd08185ad5f8  requests-2.25.0.tar.gz
++md5  514d6f7eba77ada0b8c98ec7818828db  requests-2.25.1.tar.gz
++sha256  27973dd4a904a4f13b263a19c866c13b92a39ed1c964655f025f3f8d3d75b804  requests-2.25.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  09e8a9bcec8067104652c168685ab0931e7868f9c8284b66f5ae6edae5f1130b  LICENSE
+diff --git a/package/python-requests/python-requests.mk b/package/python-requests/python-requests.mk
+index 8c7b6c6748..2b543c0f9a 100644
+--- a/package/python-requests/python-requests.mk
++++ b/package/python-requests/python-requests.mk
+@@ -5,9 +5,9 @@
  ################################################################################
  
--PYTHON_CHARDET_VERSION = 3.0.4
-+PYTHON_CHARDET_VERSION = 4.0.0
- PYTHON_CHARDET_SOURCE = chardet-$(PYTHON_CHARDET_VERSION).tar.gz
--PYTHON_CHARDET_SITE = https://pypi.python.org/packages/fc/bb/a5768c230f9ddb03acc9ef3f0d4a3cf93462473795d18e9535498c8f929d
-+PYTHON_CHARDET_SITE = https://files.pythonhosted.org/packages/ee/2d/9cdc2b527e127b4c9db64b86647d567985940ac3698eeabc7ffaccb4ea61
- PYTHON_CHARDET_SETUP_TYPE = setuptools
- PYTHON_CHARDET_LICENSE = LGPL-2.1+
- PYTHON_CHARDET_LICENSE_FILES = LICENSE
+ # Please keep in sync with package/python3-requests/python3-requests.mk
+-PYTHON_REQUESTS_VERSION = 2.25.0
++PYTHON_REQUESTS_VERSION = 2.25.1
+ PYTHON_REQUESTS_SOURCE = requests-$(PYTHON_REQUESTS_VERSION).tar.gz
+-PYTHON_REQUESTS_SITE = https://files.pythonhosted.org/packages/9f/14/4a6542a078773957aa83101336375c9597e6fe5889d20abda9c38f9f3ff2
++PYTHON_REQUESTS_SITE = https://files.pythonhosted.org/packages/6b/47/c14abc08432ab22dc18b9892252efaf005ab44066de871e72a38d6af464b
+ PYTHON_REQUESTS_SETUP_TYPE = setuptools
+ PYTHON_REQUESTS_LICENSE = Apache-2.0
+ PYTHON_REQUESTS_LICENSE_FILES = LICENSE
+diff --git a/package/python3-requests/python3-requests.mk b/package/python3-requests/python3-requests.mk
+index 2e10c636af..b67d71a18b 100644
+--- a/package/python3-requests/python3-requests.mk
++++ b/package/python3-requests/python3-requests.mk
+@@ -5,9 +5,9 @@
+ ################################################################################
+ 
+ # Please keep in sync with package/python-requests/python-requests.mk
+-PYTHON3_REQUESTS_VERSION = 2.25.0
++PYTHON3_REQUESTS_VERSION = 2.25.1
+ PYTHON3_REQUESTS_SOURCE = requests-$(PYTHON3_REQUESTS_VERSION).tar.gz
+-PYTHON3_REQUESTS_SITE = https://files.pythonhosted.org/packages/9f/14/4a6542a078773957aa83101336375c9597e6fe5889d20abda9c38f9f3ff2
++PYTHON3_REQUESTS_SITE = https://files.pythonhosted.org/packages/6b/47/c14abc08432ab22dc18b9892252efaf005ab44066de871e72a38d6af464b
+ PYTHON3_REQUESTS_SETUP_TYPE = setuptools
+ PYTHON3_REQUESTS_LICENSE = Apache-2.0
+ PYTHON3_REQUESTS_LICENSE_FILES = LICENSE
