@@ -1,131 +1,80 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 1 Jan 2021 10:47:16 +0100
-Subject: [Buildroot] [git commit] package/ninja: drop workarounds for
- cmake-3.10
-Message-ID: <20210101093016.BDF5E8380D@busybox.osuosl.org>
+Date: Fri, 1 Jan 2021 11:01:53 +0100
+Subject: [Buildroot] [PATCH 1/1] package/erlang-jiffy: needs -fPIC
+In-Reply-To: <CAPi7W80-5tr3My7i44W_i0ZLsgF8exY6PNGTiE6ra9iVEr3anQ@mail.gmail.com>
+References: <20201224101440.3427472-1-fontaine.fabrice@gmail.com>
+ <20201228225325.4f973ae1@windsurf.home>
+ <CAPi7W81Un5M_bA7_EqbZeFPdiKKP7+v1pjzheAa-FKGVHvu3ng@mail.gmail.com>
+ <20201229104342.1eaa49a3@windsurf.home>
+ <CAPi7W80-5tr3My7i44W_i0ZLsgF8exY6PNGTiE6ra9iVEr3anQ@mail.gmail.com>
+Message-ID: <20210101100153.GI2902@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b0fed2d6e7a7a3b85b3e9b052d5c964541319749
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fabrice, Thomas, All,
 
-Now that we require cmake-3.15, which is what upstream ninja requires,
-we can drop the workarounds we carry to build with cmake-3.10.
+On 2020-12-29 11:14 +0100, Fabrice Fontaine spake thusly:
+> Le mar. 29 d?c. 2020 ? 10:43, Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> a ?crit :
+> >
+> > On Tue, 29 Dec 2020 10:39:27 +0100
+> > Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+> >
+> > > This build failure is raised because of the -flto flag which is added
+> > > since version 1.0.0 and
+> > > https://github.com/davisp/jiffy/commit/feaf10f2d50e454f55a9d6b20c289031b0980503
+> > > It seems that -flto can't be used without -fPIC.
+> >
+> > This seems super odd. I'm not sure what would be the relationship
+> > between LTO and PIC...
+> Indeed but the build failure is fixed if I remove -flto from CFLAGS.
+> I'll try to understand why ...
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Peter Seiderer <ps.report@gmx.net>
-Cc: Yegor Yefremov <yegorslists@googlemail.com>
-Cc: Philippe REYNES <philippe.reynes@softathome.com>
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- .../0001-set-minimum-cmake-version-to-3.10.patch   | 32 ------------
- .../0003-CMake-fix-object-library-usage.patch      | 59 ----------------------
- 2 files changed, 91 deletions(-)
+The thing with LTO, is that all files should (but in practice: must) be
+compiled with the same set of options; from the gcc man page:
 
-diff --git a/package/ninja/0001-set-minimum-cmake-version-to-3.10.patch b/package/ninja/0001-set-minimum-cmake-version-to-3.10.patch
-deleted file mode 100644
-index e53a136a94..0000000000
---- a/package/ninja/0001-set-minimum-cmake-version-to-3.10.patch
-+++ /dev/null
-@@ -1,32 +0,0 @@
--From 386fa849157dabde42ab39de7acb31750956490c Mon Sep 17 00:00:00 2001
--From: Adam Duskett <aduskett@gmail.com>
--Date: Mon, 3 Feb 2020 06:21:57 -0800
--Subject: [PATCH] set minimum cmake version to 3.10
--
--The CMakeLists.txt file uses the CMP0091 which is an MSVC runtime library flag
--abstraction macro.
--
--Because we are not building ninja for Microsoft, it is safe to remove this
--macro and set the minimum version to 3.10.
--
--Signed-off-by: Adam Duskett <aduskett@gmail.com>
--[Rebased for ninja-1.10.2 - CMP0091 usage was removed upstream by
--https://github.com/ninja-build/ninja/commit/e6f5bcffb3c561d228d88ff26edab26575b7d520]
--Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-----
-- CMakeLists.txt | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 7f03c35..4b61479 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -1,4 +1,4 @@
---cmake_minimum_required(VERSION 3.15)
--+cmake_minimum_required(VERSION 3.10)
-- 
-- include(CheckIncludeFileCXX)
-- include(CheckIPOSupported)
---- 
--2.29.2
--
-diff --git a/package/ninja/0003-CMake-fix-object-library-usage.patch b/package/ninja/0003-CMake-fix-object-library-usage.patch
-deleted file mode 100644
-index 9b9fe506a4..0000000000
---- a/package/ninja/0003-CMake-fix-object-library-usage.patch
-+++ /dev/null
-@@ -1,59 +0,0 @@
--From 17539ae9d09ded695167911f9e3ec0cf4bc9fed9 Mon Sep 17 00:00:00 2001
--From: Yegor Yefremov <yegorslists@googlemail.com>
--Date: Wed, 5 Feb 2020 12:28:44 +0100
--Subject: [PATCH] CMake: fix object library usage
--
--Object libraries cannot be use in target_link_libraries() command
--as they are no normal binary files like *.a or *.so but a collection
--of object files.
--
--See add_library() definition for details.
--
--Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
--[Rebased for for ninja-1.10.2]
--Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-----
-- CMakeLists.txt | 9 ++++-----
-- 1 file changed, 4 insertions(+), 5 deletions(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 4b61479..3701f3a 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -132,8 +132,7 @@ if(CMAKE_SYSTEM_NAME STREQUAL "OS400" OR CMAKE_SYSTEM_NAME STREQUAL "AIX")
-- endif()
-- 
-- # Main executable is library plus main() function.
---add_executable(ninja src/ninja.cc)
---target_link_libraries(ninja PRIVATE libninja libninja-re2c)
--+add_executable(ninja src/ninja.cc $<TARGET_OBJECTS:libninja> $<TARGET_OBJECTS:libninja-re2c>)
-- 
-- # Adds browse mode into the ninja binary if it's supported by the host platform.
-- if(platform_supports_ninja_browse)
--@@ -183,11 +182,12 @@ if(BUILD_TESTING)
--     src/subprocess_test.cc
--     src/test.cc
--     src/util_test.cc
--+    $<TARGET_OBJECTS:libninja>
--+    $<TARGET_OBJECTS:libninja-re2c>
--   )
--   if(WIN32)
--     target_sources(ninja_test PRIVATE src/includes_normalize_test.cc src/msvc_helper_test.cc)
--   endif()
---  target_link_libraries(ninja_test PRIVATE libninja libninja-re2c)
-- 
--   foreach(perftest
--     build_log_perftest
--@@ -197,8 +197,7 @@ if(BUILD_TESTING)
--     hash_collision_bench
--     manifest_parser_perftest
--   )
---    add_executable(${perftest} src/${perftest}.cc)
---    target_link_libraries(${perftest} PRIVATE libninja libninja-re2c)
--+    add_executable(${perftest} src/${perftest}.cc $<TARGET_OBJECTS:libninja> $<TARGET_OBJECTS:libninja-re2c>)
--   endforeach()
-- 
--   if(CMAKE_SYSTEM_NAME STREQUAL "AIX" AND CMAKE_SIZEOF_VOID_P EQUAL 4)
---- 
--2.29.2
--
+    It is recommended that you compile all the files participating in
+    the same link with the same options and also specify those options
+    at link time.
+
+and later:
+
+    There are some code generation flags preserved by GCC when generating
+    bytecodes, as they need to be used during the final link. Currently,
+    the following options and their settings are taken from the first
+    object file that explicitly specifies them: -fPIC, [...]
+
+So, if one file is compiled with -fPIC, then this is recorded in the .o
+for that file, which gcc notices later when doing the link, and thus all
+files must be -fPIC.
+
+This can be a file compiled by the package itself, or it may come from
+an external (staging) static library.
+
+Regards,
+Yann E. MORIN.
+
+> >
+> > Thomas
+> > --
+> > Thomas Petazzoni, CTO, Bootlin
+> > Embedded Linux and Kernel engineering
+> > https://bootlin.com
+> Best Regards,
+> 
+> Fabrice
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
