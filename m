@@ -1,101 +1,65 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 2 Jan 2021 10:11:16 +0100
-Subject: [Buildroot] [PATCH] package/openssh: fix initscript killing
- subprocesses
-In-Reply-To: <VI1PR0402MB3373751FEE15D3FC11A1D5E6A7D50@VI1PR0402MB3373.eurprd04.prod.outlook.com>
-References: <VI1PR0402MB3373751FEE15D3FC11A1D5E6A7D50@VI1PR0402MB3373.eurprd04.prod.outlook.com>
-Message-ID: <20210102091116.GB2997@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 1 Jan 2021 23:55:16 +0100
+Subject: [Buildroot] [git commit] package/sdl_ttf: bump to de50cffd41e6
+Message-ID: <20210102092300.24926841E7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-John, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=731473d61b4a12e9ae35d2ccef0b5e78073ce306
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-01-01 20:31 +0000, John Doe spake thusly:
-> The initscript currently calls `killall sshd` when stopping the service, which
-> kills all active SSH sessions. Rewritten to use start-stop-daemon with PIDfile.
-> 
-> Signed-off-by: John Johnson <anonymous683854643863@outlook.com>
+There is unlikely to be a new SDL_ttf release for the foreseeable future:
+https://bugzilla.libsdl.org/show_bug.cgi?id=5344#c1
 
-Thanks for your contribution.
+The unreleased version from HEAD as of 2020-11-09 has several bugfixes
+and DPI scaling support:
+https://hg.libsdl.org/SDL_ttf/rev/7dbd7cd826d6
 
-However, we can't accept anonymous contributions; we require that people
-use their real names. Furthermore, the authorship (the email address
-used to send the patch) shall match the sign-off tag.
+DPI scaling is used for rendering on HiDPI displays and displays
+with non-square pixels.
 
-I'm sorry, but I've marked this patch as rejected in our patchwork [0].
-Please respin using your real name.
+Signed-off-by: Gleb Mazovetskiy <glex.spb@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/sdl_ttf/sdl_ttf.hash |  2 +-
+ package/sdl_ttf/sdl_ttf.mk   | 15 ++++++++++++---
+ 2 files changed, 13 insertions(+), 4 deletions(-)
 
-[0] https://patchwork.ozlabs.org/project/buildroot/list/
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/openssh/S50sshd | 27 +++++++++++++++++++++------
->  1 file changed, 21 insertions(+), 6 deletions(-)
-> 
-> diff --git a/package/openssh/S50sshd b/package/openssh/S50sshd
-> index 22da41d1ca..77a82308ca 100644
-> --- a/package/openssh/S50sshd
-> +++ b/package/openssh/S50sshd
-> @@ -3,6 +3,9 @@
->  # sshd        Starts sshd.
->  #
->  
-> +DAEMON="sshd"
-> +PIDFILE="/var/run/$DAEMON.pid"
-> +
->  # Make sure the ssh-keygen progam exists
->  [ -f /usr/bin/ssh-keygen ] || exit 0
->  
-> @@ -13,15 +16,27 @@ start() {
->  	/usr/bin/ssh-keygen -A
->  
->  	printf "Starting sshd: "
-> -	/usr/sbin/sshd
-> -	touch /var/lock/sshd
-> -	echo "OK"
-> +	start-stop-daemon -S -q -p "$PIDFILE" -x "/usr/sbin/sshd"
-> +	status=$?
-> +	if [ "$status" -eq 0 ]; then
-> +		touch /var/lock/sshd
-> +		echo "OK"
-> +	else
-> +		echo "FAIL"
-> +	fi
-> +	return "$status"
->  }
->  stop() {
->  	printf "Stopping sshd: "
-> -	killall sshd
-> -	rm -f /var/lock/sshd
-> -	echo "OK"
-> +	start-stop-daemon -K -q -p "$PIDFILE"
-> +	status=$?
-> +	if [ "$status" -eq 0 ]; then
-> +		rm -f /var/lock/sshd
-> +		echo "OK"
-> +	else
-> +		echo "FAIL"
-> +	fi
-> +	return "$status"
->  }
->  restart() {
->  	stop
-> -- 
-> 2.29.2
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/sdl_ttf/sdl_ttf.hash b/package/sdl_ttf/sdl_ttf.hash
+index 86a15d6dd4..97416c18c6 100644
+--- a/package/sdl_ttf/sdl_ttf.hash
++++ b/package/sdl_ttf/sdl_ttf.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  724cd895ecf4da319a3ef164892b72078bd92632a5d812111261cde248ebcdb7  SDL_ttf-2.0.11.tar.gz
++sha256  f7bf5f6a4a21542a6ce5440dc0d81f3a26d029ee689e1fade62925b1e6667bd9  de50cffd41e6.tar.gz
+ sha256  b609721d3d4ac67facaf86f068c8b311b6c5f6cef89b6d84268aa38b7867ab7b  COPYING
+diff --git a/package/sdl_ttf/sdl_ttf.mk b/package/sdl_ttf/sdl_ttf.mk
+index 1d94c6c5cf..9ac12ef5b7 100644
+--- a/package/sdl_ttf/sdl_ttf.mk
++++ b/package/sdl_ttf/sdl_ttf.mk
+@@ -4,9 +4,18 @@
+ #
+ ################################################################################
+ 
+-SDL_TTF_VERSION = 2.0.11
+-SDL_TTF_SOURCE = SDL_ttf-$(SDL_TTF_VERSION).tar.gz
+-SDL_TTF_SITE = http://www.libsdl.org/projects/SDL_ttf/release
++# There is unlikely to be a new SDL_ttf release for the foreseeable future:
++# https://bugzilla.libsdl.org/show_bug.cgi?id=5344#c1
++#
++# The unreleased version from HEAD as of 2020-11-09 has several bugfixes
++# and DPI scaling support:
++# https://hg.libsdl.org/SDL_ttf/rev/7dbd7cd826d6
++#
++# DPI scaling is used for rendering on HiDPI displays and displays
++# with non-square pixels.
++SDL_TTF_VERSION = de50cffd41e6
++SDL_TTF_SOURCE = $(SDL_TTF_VERSION).tar.gz
++SDL_TTF_SITE = https://hg.libsdl.org/SDL_ttf/archive
+ SDL_TTF_LICENSE = Zlib
+ SDL_TTF_LICENSE_FILES = COPYING
+ 
