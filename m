@@ -1,59 +1,103 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 2 Jan 2021 22:05:46 +0100
-Subject: [Buildroot] [PATCH 2/2] package/php: needs pcre2
-In-Reply-To: <20201228223627.51a0a518@windsurf.home>
-References: <20201227183145.1965023-1-bernd.kuhls@t-online.de>
- <20201227183145.1965023-2-bernd.kuhls@t-online.de>
- <20201228223627.51a0a518@windsurf.home>
-Message-ID: <20210102210546.GE2997@scaer>
+Date: Sat, 2 Jan 2021 22:07:40 +0100
+Subject: [Buildroot] [git commit] package/php: needs pcre2
+Message-ID: <20210102205406.323BD817A8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Bernd, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=fabb1243ab02dbeb6677a74e02a71b3d05b66f3a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-12-28 22:36 +0100, Thomas Petazzoni spake thusly:
-> On Sun, 27 Dec 2020 19:31:45 +0100
-> Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
-> 
-> > -### Use external PCRE if it's available
-> > -ifeq ($(BR2_PACKAGE_PCRE2),y)
-> > -PHP_CONF_OPTS += --with-pcre-regex=$(STAGING_DIR)/usr
-> > -PHP_DEPENDENCIES += pcre2
-> > -
-> > -ifeq ($(BR2_PACKAGE_PCRE2_JIT),y)
-> > -PHP_CONF_OPTS += --with-pcre-jit=yes
-> > -PHP_CONF_ENV += ac_cv_have_pcre2_jit=yes
-> > -else
-> > -PHP_CONF_OPTS += --with-pcre-jit=no
-> > -PHP_CONF_ENV += ac_cv_have_pcre2_jit=no
-> > -endif
-> 
-> Are you sure this is no longer needed ? According to
-> https://github.com/php/php-src/commit/c1a22f3d4e69cb87f8deeed7d03d9434e6901537
-> that you are pointing, the --with-pcre-jit option is not only for the
-> bundled PCRE.
+Since 2008 pcre is a hard-dependency of php:
+https://github.com/php/php-src/commit/aa64c6727c2d33a647bdbd9769215044f7cf2967
 
-In fact, when cross-compiling, php will rely on a hard-coded list of
-architectures for which it believes JIT is available:
+Instead of optionally depending on the pcre2 package and building the
+bundled pcre2 code of php in case BR2_PACKAGE_PCRE2 was not selected
+we let php depend on pcre2.
 
-https://github.com/php/php-src/blob/3e2e0b58484c5364aca026b7b3df769a63dc5389/ext/pcre/config0.m4#L24
+While being at it rename the pcre-related configure option due to
+upstream commit:
+https://github.com/php/php-src/commit/c1a22f3d4e69cb87f8deeed7d03d9434e6901537
 
-Note that they got an incomplete list, as AArch64 does has JIT support,
-but it is not in PHP's whitelist.
+Fixes:
+http://autobuild.buildroot.net/results/4a5/4a582af6b66c59a61b75a7047d8530202972ebdd/
+because the pcre2 package already contains the fix for mips r6.
 
-So we indeed still need to explicitly enable or disable JIT *and*
-continue to pass the cache-variable to ocverride autodetection.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[yann.morin.1998 at free.fr: keep the JIT option]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/php/Config.in |  1 +
+ package/php/php.mk    | 23 ++---------------------
+ 2 files changed, 3 insertions(+), 21 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/php/Config.in b/package/php/Config.in
+index 2469573541..6fa420428b 100644
+--- a/package/php/Config.in
++++ b/package/php/Config.in
+@@ -10,6 +10,7 @@ config BR2_PACKAGE_PHP
+ 	       !BR2_PACKAGE_PHP_SAPI_FPM &&  \
+ 	       BR2_USE_MMU
+ 	select BR2_PACKAGE_PHP_SAPI_CLI if !BR2_USE_MMU
++	select BR2_PACKAGE_PCRE2
+ 	help
+ 	  PHP  is a widely-used general-purpose scripting
+ 	  language that is especially suited for Web development
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 0feb96e97a..d3c5a4d983 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -10,7 +10,7 @@ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
+ PHP_INSTALL_STAGING_OPTS = INSTALL_ROOT=$(STAGING_DIR) install
+ PHP_INSTALL_TARGET_OPTS = INSTALL_ROOT=$(TARGET_DIR) install
+-PHP_DEPENDENCIES = host-pkgconf
++PHP_DEPENDENCIES = host-pkgconf pcre2
+ PHP_LICENSE = PHP-3.01
+ PHP_LICENSE_FILES = LICENSE
+ PHP_CONF_OPTS = \
+@@ -18,6 +18,7 @@ PHP_CONF_OPTS = \
+ 	--infodir=/usr/share/info \
+ 	--with-config-file-scan-dir=/etc/php.d \
+ 	--disable-all \
++	--with-external-pcre \
+ 	--without-pear \
+ 	--with-config-file-path=/etc \
+ 	--disable-phpdbg \
+@@ -258,11 +259,6 @@ define PHP_DISABLE_VALGRIND
+ endef
+ PHP_POST_CONFIGURE_HOOKS += PHP_DISABLE_VALGRIND
+ 
+-### Use external PCRE if it's available
+-ifeq ($(BR2_PACKAGE_PCRE2),y)
+-PHP_CONF_OPTS += --with-pcre-regex=$(STAGING_DIR)/usr
+-PHP_DEPENDENCIES += pcre2
+-
+ ifeq ($(BR2_PACKAGE_PCRE2_JIT),y)
+ PHP_CONF_OPTS += --with-pcre-jit=yes
+ PHP_CONF_ENV += ac_cv_have_pcre2_jit=yes
+@@ -271,21 +267,6 @@ PHP_CONF_OPTS += --with-pcre-jit=no
+ PHP_CONF_ENV += ac_cv_have_pcre2_jit=no
+ endif
+ 
+-else
+-# The bundled pcre library is not configurable through ./configure options,
+-# and by default is configured to be thread-safe, so it wants pthreads. So
+-# we must explicitly tell it when we don't have threads.
+-ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
+-PHP_CFLAGS += -DSLJIT_SINGLE_THREADED=1
+-endif
+-# check ext/pcre/pcrelib/sljit/sljitConfigInternal.h for supported archs
+-ifeq ($(BR2_i386)$(BR2_x86_64)$(BR2_arm)$(BR2_armeb)$(BR2_aarch64)$(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el)$(BR2_powerpc)$(BR2_sparc),y)
+-PHP_CONF_OPTS += --with-pcre-jit
+-else
+-PHP_CONF_OPTS += --without-pcre-jit
+-endif
+-endif
+-
+ ifeq ($(BR2_PACKAGE_PHP_EXT_CURL),y)
+ PHP_CONF_OPTS += --with-curl
+ PHP_DEPENDENCIES += libcurl
