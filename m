@@ -1,41 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 2 Jan 2021 12:31:40 +0100
-Subject: [Buildroot] [PATCH 1/1] package/popperjs: new package
-In-Reply-To: <20201208181638.28938-1-patrickdepinguin@gmail.com>
-References: <20201208181638.28938-1-patrickdepinguin@gmail.com>
-Message-ID: <20210102123140.5abde46f@windsurf>
+Date: Sat, 2 Jan 2021 13:55:05 +0100
+Subject: [Buildroot] [PATCH] utils/checkpackagelib/lib_mk.py: handle
+ 'else' and 'elif' statements
+In-Reply-To: <20201209153219.17253-1-patrickdepinguin@gmail.com>
+References: <20201209153219.17253-1-patrickdepinguin@gmail.com>
+Message-ID: <20210102135505.276d62f8@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue,  8 Dec 2020 19:16:38 +0100
+On Wed,  9 Dec 2020 16:32:18 +0100
 Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote:
 
-> From: Joeri Barbarien <joeri.barbarien@nokia.com>
+> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 > 
-> Signed-off-by: Joeri Barbarien <joeri.barbarien@nokia.com>
+> An 'else' or 'elif' clause inside a make conditional should not be indented
+> in the same way as the if/endif clause. check-package did not recognize the
+> else statement and expected an indentation.
+> 
+> For example:
+> 
+> ifdef FOOBAR
+> 	interesting
+> else
+> 	more interesting
+> endif
+> 
+> would, according to check-package, need to become:
+> 
+> ifdef FOOBAR
+> 	interesting
+> 	else
+> 	more interesting
+> endif
+> 
+> Treat 'else' and 'elif' the same as if-like keywords in the Indent test, but
+> take into account that 'else' is also valid shell, so we need to correctly
+> handle line continuation to prevent complaining about the 'else' in:
+> 
+> ifdef FOOBAR
+> 	if true; \
+> 	    ... \
+> 	else \
+> 	    ... \
+> 	fi
+> endif
+> 
+> We don't add the 'else' and 'elif' statements to start_conditional, because
+> it would cause incorrect nesting counting in class OverriddenVariable.
+> 
 > Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 > ---
->  DEVELOPERS                     |  1 +
->  package/Config.in              |  1 +
->  package/popperjs/Config.in     |  6 ++++++
->  package/popperjs/popperjs.hash |  3 +++
->  package/popperjs/popperjs.mk   | 19 +++++++++++++++++++
->  5 files changed, 30 insertions(+)
->  create mode 100644 package/popperjs/Config.in
->  create mode 100644 package/popperjs/popperjs.hash
->  create mode 100644 package/popperjs/popperjs.mk
+>  utils/checkpackagelib/lib_mk.py | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 
-Applied to master after changing the VERSION/SITE lines to:
-
-+POPPERJS_VERSION = 1.16.0
-+POPPERJS_SITE = $(call github,popperjs,popper-core,v$(POPPERJS_VERSION))
-
-so that _VERSION doesn't contain the "v" prefix.
-
-Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
