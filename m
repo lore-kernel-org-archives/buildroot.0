@@ -1,143 +1,93 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 2 Jan 2021 11:26:43 +0100
-Subject: [Buildroot] [PATCH 1/1] package/casync: new package
-In-Reply-To: <onIw25oyihuYWcFwG2rTgzAbEF414WTH7efI53xEOXW2moxamXDh7mG1rqvPJT_5HOZ4Z52JarqzkoUbzYBk6z_8Z7UWehjNqnmXtRo45oI=@protonmail.com>
-References: <onIw25oyihuYWcFwG2rTgzAbEF414WTH7efI53xEOXW2moxamXDh7mG1rqvPJT_5HOZ4Z52JarqzkoUbzYBk6z_8Z7UWehjNqnmXtRo45oI=@protonmail.com>
-Message-ID: <20210102112643.3eef2517@windsurf>
+Date: Sat, 2 Jan 2021 11:31:58 +0100
+Subject: [Buildroot] [git commit] package/jszip: new package
+Message-ID: <20210102101427.B54EB834E7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yair,
+commit: https://git.buildroot.net/buildroot/commit/?id=e879e007c6da9022d4bb47a1f4139d91b2ca6440
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks for this contribution! There's however a number of things to be
-changed. See below.
+Signed-off-by: Joeri Barbarien <joeri.barbarien@nokia.com>
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS               |  1 +
+ package/Config.in        |  1 +
+ package/jszip/Config.in  |  7 +++++++
+ package/jszip/jszip.hash |  3 +++
+ package/jszip/jszip.mk   | 17 +++++++++++++++++
+ 5 files changed, 29 insertions(+)
 
-On Sun, 06 Dec 2020 14:50:01 +0000
-Yair Ben-Avraham via buildroot <buildroot@busybox.net> wrote:
-
-> Content-Addressable Data Synchronization Tool
-> 
-> Signed-off-by: Yair Ben-Avraham <yairba@protonmail.com>
-> ---
->  package/Config.in          |  1 +
->  package/casync/Config.in   | 16 ++++++++++++++++
->  package/casync/casync.hash |  3 +++
->  package/casync/casync.mk   | 28 ++++++++++++++++++++++++++++
->  4 files changed, 48 insertions(+)
-
-Could you add an entry to the DEVELOPERS file ?
-
-
-> diff --git a/package/casync/Config.in b/package/casync/Config.in
-> new file mode 100644
-> index 0000000000..2b00c849a3
-> --- /dev/null
-> +++ b/package/casync/Config.in
-> @@ -0,0 +1,16 @@
-> +config BR2_PACKAGE_CASYNC
-> +	bool "casync"
-> +	depends on BR2_PACKAGE_EUDEV
-
-You should not use BR2_PACKAGE_EUDEV, but BR2_PACKAGE_HAS_UDEV, so that
-either eudev or systemd can be used as a udev provider. However, udev
-is not a mandatory dependency, so in fact this dependency is not needed.
-
-> +	depends on BR2_TOOLCHAIN_USES_GLIBC
-
-Please document why this is needed in a comment. If I get it correctly,
-it's because casync uses scandirat(), which is not implemented by
-current versions of musl and uclibc-ng.
-
-> +	select BR2_PACKAGE_ACL
-> +	select BR2_PACKAGE_LIBCURL
-> +	select BR2_PACKAGE_OPENSSL
-> +	select BR2_PACKAGE_XZ
-
-This dependency is not mandatory.
-
-> +	select BR2_PACKAGE_ZSTD
-
-This dependency is not mandatory.
-
-Also, there's an optional dependency on zlib.
-
-> +	help
-> +	  Content-Addressable Data Synchronization Tool
-> +
-> +	  https://github.com/systemd/casync
-> +
-> +comment "casync needs a glibc toolchain"
-> +	depends on !BR2_TOOLCHAIN_USES_GLIBC
-> diff --git a/package/casync/casync.hash b/package/casync/casync.hash
-> new file mode 100644
-> index 0000000000..dbb85520de
-> --- /dev/null
-> +++ b/package/casync/casync.hash
-> @@ -0,0 +1,3 @@
-> +# sha256 locally computed
-> +sha256  d07f43e70e3c466152033da4c55c065f815d3025234a046c2bce1cfe4ac7d273  casync-4ad9bcb94bc83ff36cfc65515107ea06a88c2dfc.tar.gz
-> +sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
-> diff --git a/package/casync/casync.mk b/package/casync/casync.mk
-> new file mode 100644
-> index 0000000000..c1f450423c
-> --- /dev/null
-> +++ b/package/casync/casync.mk
-> @@ -0,0 +1,28 @@
-> +################################################################################
-> +#
-> +# casync
-> +#
-> +################################################################################
-> +
-> +CASYNC_VERSION = 4ad9bcb94bc83ff36cfc65515107ea06a88c2dfc
-> +CASYNC_SITE = $(call github,systemd,casync,$(CASYNC_VERSION))
-> +CASYNC_LICENSE = LGPL-2.1
-
-The license is LGPL-2.1+ according to the SPDX identifiers available in
-the source code:
-
-src/notify.c:/* SPDX-License-Identifier: LGPL-2.1+ */
-src/cachunk.h:/* SPDX-License-Identifier: LGPL-2.1+ */
-src/castore.h:/* SPDX-License-Identifier: LGPL-2.1+ */
-...
-
-> +CASYNC_LICENSE_FILES = LICENSE.LGPL2.1
-> +CASYNC_DEPENDENCIES += xz libcurl acl openssl zstd
-
-+= not needed, just use = here. xz and zstd are not mandatory
-dependencies. You also need to handle zlib as an optional dependency.
-Hint: pass -Dliblzma=disabled -Dlibz=disabled -Dlibzstd=disabled.
-
-Note that to handle udev as an optional dependency, there is a bug.
-Even if you pass -Dudev=false it still tries to query pkg-config about
-udev, due to a bug in meson.build. It would be good to fix the bug in
-meson.build. I just worked around the problem by passing -Dudev=false
--Dudevrulesdir=blah.
-
-> +CASYNC_CONF_OPTS += -Dman=False
-> +
-> +ifeq ($(BR2_PACKAGE_LIBFUSE),y)
-> +CASYNC_DEPENDENCIES += libfuse
-> +CASYNC_CONF_OPTS += -Dfuse=True
-> +else
-> +CASYNC_CONF_OPTS += -Dfuse=False
-
-I think everywhere else in meson packages we use lower-case "true" and
-"false".
-
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_BR2_PACKAGE_LIBSELINUX),y)
-
-Mistake here in the option name.
-
-Best regards,
-
-Thomas Petazzoni
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index f02011cd49..6ff5a31a1d 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2515,6 +2515,7 @@ N:	Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+ F:	docs/manual/
+ F:	package/cereal/
+ F:	package/chartjs/
++F:	package/jszip/
+ F:	package/libtelnet/
+ F:	package/opkg-utils/
+ F:	package/perl-convert-asn1/
+diff --git a/package/Config.in b/package/Config.in
+index 4690c54a66..9e8f354d1b 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1597,6 +1597,7 @@ endmenu
+ endif
+ 	source "package/jsmin/Config.in"
+ 	source "package/json-javascript/Config.in"
++	source "package/jszip/Config.in"
+ 	source "package/openlayers/Config.in"
+ 	source "package/spidermonkey/Config.in"
+ 	source "package/vuejs/Config.in"
+diff --git a/package/jszip/Config.in b/package/jszip/Config.in
+new file mode 100644
+index 0000000000..455891ab12
+--- /dev/null
++++ b/package/jszip/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_JSZIP
++	bool "jszip"
++	help
++	  JSZip is a javascript library for creating, reading and
++	  editing .zip files, with a lovely and simple API.
++
++	  https://stuk.github.io/jszip
+diff --git a/package/jszip/jszip.hash b/package/jszip/jszip.hash
+new file mode 100644
+index 0000000000..13a2076ade
+--- /dev/null
++++ b/package/jszip/jszip.hash
+@@ -0,0 +1,3 @@
++# Locally computed:
++sha256	e5343decfb781b15c54c0df9ddedd6c8518c800a4667a0a95741c694a4f38d34  jszip-3.2.2.tar.gz
++sha256	14450c78405ad2a2173e25740b56406556779149df9c4c83523a8c63d0686210  LICENSE.markdown
+diff --git a/package/jszip/jszip.mk b/package/jszip/jszip.mk
+new file mode 100644
+index 0000000000..04bd0a7b34
+--- /dev/null
++++ b/package/jszip/jszip.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# jszip
++#
++################################################################################
++
++JSZIP_VERSION = 3.2.2
++JSZIP_SITE = $(call github,Stuk,jszip,v$(JSZIP_VERSION))
++JSZIP_LICENSE = MIT or GPL-3.0
++JSZIP_LICENSE_FILES = LICENSE.markdown
++
++define JSZIP_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0644 -D $(@D)/dist/jszip.min.js \
++		$(TARGET_DIR)/var/www/jszip/js/jszip.min.js
++endef
++
++$(eval $(generic-package))
