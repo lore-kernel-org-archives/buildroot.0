@@ -1,84 +1,103 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  2 Jan 2021 11:56:05 +0100
-Subject: [Buildroot] [PATCH] Revert ".flake8: fix check for 80/132 columns"
-Message-ID: <20210102105605.119264-1-yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 2 Jan 2021 11:56:08 +0100
+Subject: [Buildroot] [git commit] package/datatables-buttons: new package
+Message-ID: <20210102104813.0FD0581846@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 7d17ae2acf63 (.flake8: fix check for 80/132 columns) introduced a
-difference in how flake8 behaves between the automatic checks done in
-the CI, where the maximum line length is 132, and the local checks,
-where the maximum line length is 80.
+commit: https://git.buildroot.net/buildroot/commit/?id=aa26809bf5d3138b0465d78a737003da1574eb95
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The rationale at the time was that we recommend 80 char lines, but that
-we accept 132 when it makes sense for readability.
-
-However, this is very annoying when running flake8 locally, because of
-two reasons:
-
- 1. human reviews on python scripts have not been as thorough as we did
-    expect; indeed, we've let a lot of long lines slip through; this
-    causes a lot of spurious failures that hide away the actual errors;
-
- 2. when hacking on a python script, the issues reported will not be
-    caused by the current changes, so the many reported failures
-    actually hide away the newly introduced issues.
-
-Additionally, our 'make check-flake8' rule already enforces the 132-char
-limit, and the issues reported are different than when manually running
-flake8 on individual files.
-
-Furthermore, the readability rationale for the 80-char limit is
-definitely shattered by the mere rationale of allowing 132-char limit
-for... readability...
-
-We've arrived to a point where this separation is causing our checks
-around flake8 to become mostly unusable and useless, as they do not
-report meaningful issues, and people are no longer paying attention, and
-this has caused actual issues to be introduced.
-
-Finally, terminal emulators of today have long lifted the 80-char limit,
-and are more than capable of displaying 132-char wide lines.
-
-Switch back to using a 132-char limit.
-
-This reverts commit 7d17ae2acf63810495cc480da38127c4612e4da9.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Joeri Barbarien <joeri.barbarien@nokia.com>
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .flake8  | 2 +-
- Makefile | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ DEVELOPERS                                         |  1 +
+ package/Config.in                                  |  1 +
+ package/datatables-buttons/Config.in               | 12 ++++++++++++
+ package/datatables-buttons/datatables-buttons.hash |  3 +++
+ package/datatables-buttons/datatables-buttons.mk   | 22 ++++++++++++++++++++++
+ 5 files changed, 39 insertions(+)
 
-diff --git a/.flake8 b/.flake8
-index ee3d5035a0..7dd7b541cc 100644
---- a/.flake8
-+++ b/.flake8
-@@ -2,4 +2,4 @@
- exclude=
-     # copied from the kernel sources
-     utils/diffconfig
--max-line-length=80
-+max-line-length=132
-diff --git a/Makefile b/Makefile
-index f0b3e43e0f..4d334adcd6 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1223,7 +1223,7 @@ check-flake8:
- 	| xargs file \
- 	| grep 'Python script' \
- 	| cut -d':' -f1 \
--	| xargs -- python3 -m flake8 --statistics --max-line-length=132
-+	| xargs -- python3 -m flake8 --statistics
- 
- check-package:
- 	find $(TOPDIR) -type f \( -name '*.mk' -o -name '*.hash' -o -name 'Config.*' \) \
--- 
-2.25.1
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 9985f7ce49..5ef979dec5 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2516,6 +2516,7 @@ F:	docs/manual/
+ F:	package/cereal/
+ F:	package/chartjs/
+ F:	package/datatables/
++F:	package/datatables-buttons/
+ F:	package/jszip/
+ F:	package/libtelnet/
+ F:	package/opkg-utils/
+diff --git a/package/Config.in b/package/Config.in
+index 2ada0a7a57..819d135685 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1580,6 +1580,7 @@ endif
+ 	source "package/bootstrap/Config.in"
+ 	source "package/chartjs/Config.in"
+ 	source "package/datatables/Config.in"
++	source "package/datatables-buttons/Config.in"
+ 	source "package/duktape/Config.in"
+ 	source "package/explorercanvas/Config.in"
+ 	source "package/flot/Config.in"
+diff --git a/package/datatables-buttons/Config.in b/package/datatables-buttons/Config.in
+new file mode 100644
+index 0000000000..515038ebe5
+--- /dev/null
++++ b/package/datatables-buttons/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_DATATABLES_BUTTONS
++	bool "datatables-buttons"
++	depends on BR2_PACKAGE_DATATABLES
++	select BR2_PACKAGE_JSZIP
++	help
++	  The Buttons library for DataTables provides a framework with
++	  common options and API that can be used with DataTables, but
++	  is also very extensible, recognising that you will likely want
++	  to use buttons which perform an action unique to your
++	  applications.
++
++	  https://datatables.net/extensions/buttons
+diff --git a/package/datatables-buttons/datatables-buttons.hash b/package/datatables-buttons/datatables-buttons.hash
+new file mode 100644
+index 0000000000..336e4afd24
+--- /dev/null
++++ b/package/datatables-buttons/datatables-buttons.hash
+@@ -0,0 +1,3 @@
++# Locally computed:
++sha256	427632c0245f488328edab83b53294545744c8de621a5eaa9dd3d257d7ed7775  Buttons-1.6.1.zip
++sha256	21fa7cbc3c00bcad1e0f3417d465e702bd470d7dc446a6deff80c8fc5eda9148  Buttons-1.6.1/License.txt
+diff --git a/package/datatables-buttons/datatables-buttons.mk b/package/datatables-buttons/datatables-buttons.mk
+new file mode 100644
+index 0000000000..fe66deac8e
+--- /dev/null
++++ b/package/datatables-buttons/datatables-buttons.mk
+@@ -0,0 +1,22 @@
++################################################################################
++#
++# datatables-buttons
++#
++################################################################################
++
++DATATABLES_BUTTONS_VERSION = 1.6.1
++DATATABLES_BUTTONS_SITE = https://datatables.net/releases
++DATATABLES_BUTTONS_SOURCE = Buttons-$(DATATABLES_BUTTONS_VERSION).zip
++DATATABLES_BUTTONS_LICENSE = MIT
++DATATABLES_BUTTONS_LICENSE_FILES = Buttons-$(DATATABLES_BUTTONS_VERSION)/License.txt
++define DATATABLES_BUTTONS_EXTRACT_CMDS
++	$(UNZIP) $(DATATABLES_BUTTONS_DL_DIR)/$(DATATABLES_BUTTONS_SOURCE) -d $(@D)
++endef
++
++define DATATABLES_BUTTONS_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0755 -d $(TARGET_DIR)/var/www/datatables-buttons/css $(TARGET_DIR)/var/www/datatables-buttons/js
++	$(INSTALL) -m 0644 -t $(TARGET_DIR)/var/www/datatables-buttons/css $(@D)/Buttons-$(DATATABLES_BUTTONS_VERSION)/css/*.min.css
++	$(INSTALL) -m 0644 -t $(TARGET_DIR)/var/www/datatables-buttons/js $(@D)/Buttons-$(DATATABLES_BUTTONS_VERSION)/js/*.min.js
++endef
++
++$(eval $(generic-package))
