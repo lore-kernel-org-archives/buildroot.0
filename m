@@ -1,72 +1,90 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 2 Jan 2021 17:38:27 +0100
-Subject: [Buildroot] [PATCH] Revert ".flake8: fix check for 80/132
- columns"
-In-Reply-To: <20210102105605.119264-1-yann.morin.1998@free.fr>
-References: <20210102105605.119264-1-yann.morin.1998@free.fr>
-Message-ID: <20210102173827.04b1d7d1@windsurf>
+From: Mark Corbin <mark@dibsco.co.uk>
+Date: Sat,  2 Jan 2021 16:56:55 +0000
+Subject: [Buildroot] [PATCH v2 1/1] package/chrony: bump to version 4.0
+Message-ID: <20210102165655.23697-1-mark@dibsco.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat,  2 Jan 2021 11:56:05 +0100
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+Update chrony to version 4.0 and add/remove configuration of
+features as necessary.
 
-> Commit 7d17ae2acf63 (.flake8: fix check for 80/132 columns) introduced a
-> difference in how flake8 behaves between the automatic checks done in
-> the CI, where the maximum line length is 132, and the local checks,
-> where the maximum line length is 80.
-> 
-> The rationale at the time was that we recommend 80 char lines, but that
-> we accept 132 when it makes sense for readability.
-> 
-> However, this is very annoying when running flake8 locally, because of
-> two reasons:
-> 
->  1. human reviews on python scripts have not been as thorough as we did
->     expect; indeed, we've let a lot of long lines slip through; this
->     causes a lot of spurious failures that hide away the actual errors;
-> 
->  2. when hacking on a python script, the issues reported will not be
->     caused by the current changes, so the many reported failures
->     actually hide away the newly introduced issues.
-> 
-> Additionally, our 'make check-flake8' rule already enforces the 132-char
-> limit, and the issues reported are different than when manually running
-> flake8 on individual files.
-> 
-> Furthermore, the readability rationale for the 80-char limit is
-> definitely shattered by the mere rationale of allowing 132-char limit
-> for... readability...
-> 
-> We've arrived to a point where this separation is causing our checks
-> around flake8 to become mostly unusable and useless, as they do not
-> report meaningful issues, and people are no longer paying attention, and
-> this has caused actual issues to be introduced.
-> 
-> Finally, terminal emulators of today have long lifted the 80-char limit,
-> and are more than capable of displaying 132-char wide lines.
-> 
-> Switch back to using a 132-char limit.
-> 
-> This reverts commit 7d17ae2acf63810495cc480da38127c4612e4da9.
-> 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  .flake8  | 2 +-
->  Makefile | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Remove support for readline. Add support for nettle and
+gnutls (required for NTS support). Add pkg-config support (for
+nss, nettle and gnutls).
 
-Applied to master, thanks.
+Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
+---
+Changes v1 -> v2:
+  - add/remove configuration features as necessary (Peter)
+---
+ package/chrony/chrony.hash |  4 ++--
+ package/chrony/chrony.mk   | 18 +++++++++++++++---
+ 2 files changed, 17 insertions(+), 5 deletions(-)
 
-Thomas
+diff --git a/package/chrony/chrony.hash b/package/chrony/chrony.hash
+index 57ce91ac80..87e0cf8ea0 100644
+--- a/package/chrony/chrony.hash
++++ b/package/chrony/chrony.hash
+@@ -1,4 +1,4 @@
+-# From https://listengine.tuxfamily.org/chrony.tuxfamily.org/chrony-announce/2020/08/msg00000.html
+-sha256  1ba82f70db85d414cd7420c39858e3ceca4b9eb8b028cbe869512c3a14a2dca7  chrony-3.5.1.tar.gz
++# From https://listengine.tuxfamily.org/chrony.tuxfamily.org/chrony-announce/2020/10/msg00000.html
++sha256  be27ea14c55e7a4434b2fa51d53018c7051c42fa6a3198c9aa6a1658bae0c625  chrony-4.0.tar.gz
+ # Locally calculated
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/chrony/chrony.mk b/package/chrony/chrony.mk
+index f8938a80f5..ef459ad38b 100644
+--- a/package/chrony/chrony.mk
++++ b/package/chrony/chrony.mk
+@@ -4,16 +4,16 @@
+ #
+ ################################################################################
+ 
+-CHRONY_VERSION = 3.5.1
++CHRONY_VERSION = 4.0
+ CHRONY_SITE = http://download.tuxfamily.org/chrony
+ CHRONY_LICENSE = GPL-2.0
+ CHRONY_LICENSE_FILES = COPYING
++CHRONY_DEPENDENCIES = host-pkgconf
+ 
+ CHRONY_CONF_OPTS = \
+ 	--host-system=Linux \
+ 	--host-machine=$(BR2_ARCH) \
+ 	--prefix=/usr \
+-	--without-readline \
+ 	--without-tomcrypt \
+ 	$(if $(BR2_PACKAGE_CHRONY_DEBUG_LOGGING),--enable-debug,--disable-debug)
+ 
+@@ -24,7 +24,7 @@ CHRONY_CONF_OPTS += --without-libcap
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBNSS),y)
+-CHRONY_DEPENDENCIES += host-pkgconf libnss
++CHRONY_DEPENDENCIES += libnss
+ else
+ CHRONY_CONF_OPTS += --without-nss
+ endif
+@@ -48,6 +48,18 @@ ifeq ($(BR2_PACKAGE_PPS_TOOLS),y)
+ CHRONY_DEPENDENCIES += pps-tools
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GNUTLS),y)
++CHRONY_DEPENDENCIES += gnutls
++else
++CHRONY_CONF_OPTS += --without-gnutls
++endif
++
++ifeq ($(BR2_PACKAGE_NETTLE),y)
++CHRONY_DEPENDENCIES += nettle
++else
++CHRONY_CONF_OPTS += --without-nettle
++endif
++
+ define CHRONY_CONFIGURE_CMDS
+ 	cd $(@D) && $(TARGET_CONFIGURE_OPTS) ./configure $(CHRONY_CONF_OPTS)
+ endef
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.1
