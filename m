@@ -1,60 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 2 Jan 2021 21:30:52 +0100
-Subject: [Buildroot] [git commit] package/linphone: bump to version 4.4.8
-Message-ID: <20210102201318.6F4FA81765@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 2 Jan 2021 22:05:46 +0100
+Subject: [Buildroot] [PATCH 2/2] package/php: needs pcre2
+In-Reply-To: <20201228223627.51a0a518@windsurf.home>
+References: <20201227183145.1965023-1-bernd.kuhls@t-online.de>
+ <20201227183145.1965023-2-bernd.kuhls@t-online.de>
+ <20201228223627.51a0a518@windsurf.home>
+Message-ID: <20210102210546.GE2997@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3f47775c266cd5d5d352ebe5948a8fd932be7031
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas, Bernd, All,
 
-Set GIT_EXECUTABLE to OFF to avoid the following build failure:
+On 2020-12-28 22:36 +0100, Thomas Petazzoni spake thusly:
+> On Sun, 27 Dec 2020 19:31:45 +0100
+> Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+> 
+> > -### Use external PCRE if it's available
+> > -ifeq ($(BR2_PACKAGE_PCRE2),y)
+> > -PHP_CONF_OPTS += --with-pcre-regex=$(STAGING_DIR)/usr
+> > -PHP_DEPENDENCIES += pcre2
+> > -
+> > -ifeq ($(BR2_PACKAGE_PCRE2_JIT),y)
+> > -PHP_CONF_OPTS += --with-pcre-jit=yes
+> > -PHP_CONF_ENV += ac_cv_have_pcre2_jit=yes
+> > -else
+> > -PHP_CONF_OPTS += --with-pcre-jit=no
+> > -PHP_CONF_ENV += ac_cv_have_pcre2_jit=no
+> > -endif
+> 
+> Are you sure this is no longer needed ? According to
+> https://github.com/php/php-src/commit/c1a22f3d4e69cb87f8deeed7d03d9434e6901537
+> that you are pointing, the --with-pcre-jit option is not only for the
+> bundled PCRE.
 
-CMake Error at /home/fabrice/br-test-pkg/br-arm-cortex-a9-glibc/host/arm-buildroot-linux-gnueabihf/sysroot/usr/share/bctoolbox/cmake/bctoolboxCMakeUtils.cmake:162 (message):
-  invalid git describe version: ''
-Call Stack (most recent call first):
-  CMakeLists.txt:125 (bc_compute_lib_version)
+In fact, when cross-compiling, php will rely on a hard-coded list of
+architectures for which it believes JIT is available:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/linphone/linphone.hash | 2 +-
- package/linphone/linphone.mk   | 5 +++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+https://github.com/php/php-src/blob/3e2e0b58484c5364aca026b7b3df769a63dc5389/ext/pcre/config0.m4#L24
 
-diff --git a/package/linphone/linphone.hash b/package/linphone/linphone.hash
-index 9aa03078d2..6d456ac9c9 100644
---- a/package/linphone/linphone.hash
-+++ b/package/linphone/linphone.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256  bfb195845ae23311667d5631c470310a63818fe46029cea2f1b77a5ed84e6e21  linphone-4.3.1.tar.gz
-+sha256  9956f6785a787041328da000cee5fcc1e41d6f17956ffe5e0402fac0f9a9676b  linphone-4.4.8.tar.gz
- # Locally computed
- sha256  1b3782ccad7b8614100cda30d3faf42fc39f2e97932908c543005053b654ca68  LICENSE.txt
-diff --git a/package/linphone/linphone.mk b/package/linphone/linphone.mk
-index 9fd69670e5..bb79e2f782 100644
---- a/package/linphone/linphone.mk
-+++ b/package/linphone/linphone.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LINPHONE_VERSION = 4.3.1
-+LINPHONE_VERSION = 4.4.8
- LINPHONE_SITE = \
- 	https://gitlab.linphone.org/BC/public/liblinphone/-/archive/$(LINPHONE_VERSION)
- LINPHONE_CONF_OPTS = \
-@@ -18,7 +18,8 @@ LINPHONE_CONF_OPTS = \
- 	-DENABLE_TUTORIALS=OFF \
- 	-DENABLE_UNIT_TESTS=OFF \
- 	-DENABLE_VCARD=OFF \
--	-DENABLE_VIDEO=OFF
-+	-DENABLE_VIDEO=OFF \
-+	-DGIT_EXECUTABLE=OFF
- LINPHONE_INSTALL_STAGING = YES
- LINPHONE_DEPENDENCIES = \
- 	belle-sip \
+Note that they got an incomplete list, as AArch64 does has JIT support,
+but it is not in PHP's whitelist.
+
+So we indeed still need to explicitly enable or disable JIT *and*
+continue to pass the cache-variable to ocverride autodetection.
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
