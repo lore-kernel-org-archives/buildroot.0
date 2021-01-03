@@ -1,72 +1,52 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 3 Jan 2021 21:55:34 +0100
-Subject: [Buildroot] [PATCH v1] package/bind: disable backtrace support
-In-Reply-To: <20210103192548.13720-1-ps.report@gmx.net>
-References: <20210103192548.13720-1-ps.report@gmx.net>
-Message-ID: <20210103205534.GQ2997@scaer>
+Date: Sun, 3 Jan 2021 22:03:51 +0100
+Subject: [Buildroot] [git commit] package/quickjs: needs host gcc >= 4.9
+ (C11/stdatomic.h)
+Message-ID: <20210103212208.71C408422F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=1af6d7408cc9aa466c276a3d527c245c374dd7ec
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-01-03 20:25 +0100, Peter Seiderer spake thusly:
-> Disable backtrace support, fixes linking failure for uclibc/musl based
-> toolchains.
-> 
-> Fixes:
-> 
->   - http://autobuild.buildroot.net/results/7a1a140314bc8d134f9eeb95ef2e46e7fb0ce9fd/
-> 
->   .../arm-buildroot-linux-uclibcgnueabi/bin/ld: ../isc/.libs/libisc.so: undefined reference to `_Unwind_GetIP'
-> 
->   - http://autobuild.buildroot.net/results/f0db5fe7fc6860b7270c784989c451e2e7aa2afb/
-> 
->   .../arm-buildroot-linux-uclibcgnueabi/bin/ld: ../isc/.libs/libisc.so: undefined reference to `_Unwind_GetIP'
-> 
->   - http://autobuild.buildroot.net/results/cb963298885df37f1e5c4d3ab3989773c01c54fc/
-> 
->   .../arm-buildroot-linux-musleabihf/bin/ld: ../isc/.libs/libisc.so: undefined reference to `_Unwind_GetIP'
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Fixes:
 
-Applied to master, thanks.
+  - http://autobuild.buildroot.net/results/c7882cc2d66984350f54d619f39cfee5065d941a
 
-Regards,
-Yann E. MORIN.
+  gcc -g -Wall -MMD -MF .obj/libregexp.host.o.d -Wno-array-bounds -Wno-format-truncation -D_GNU_SOURCE -DCONFIG_VERSION=\"2020-11-08\" -DCONFIG_BIGNUM -O2 -flto -c -o .obj/libregexp.host.o libregexp.c
+  quickjs.c:112:23: fatal error: stdatomic.h: No such file or directory
+   #include <stdatomic.h>
+                         ^
+  compilation terminated.
 
-> ---
->  package/bind/bind.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-> index 0df2467bc5..ab42762e12 100644
-> --- a/package/bind/bind.mk
-> +++ b/package/bind/bind.mk
-> @@ -30,7 +30,8 @@ BIND_CONF_OPTS = \
->  	--with-randomdev=/dev/urandom \
->  	--enable-epoll \
->  	--with-gssapi=no \
-> -	--enable-filter-aaaa
-> +	--enable-filter-aaaa \
-> +	--disable-backtrace
->  
->  ifeq ($(BR2_PACKAGE_ZLIB),y)
->  BIND_CONF_OPTS += --with-zlib=$(STAGING_DIR)/usr
-> -- 
-> 2.29.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/quickjs/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/quickjs/Config.in b/package/quickjs/Config.in
+index 886cbd4db6..5c3b068c3a 100644
+--- a/package/quickjs/Config.in
++++ b/package/quickjs/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_QUICKJS
+ 	# No way to check for fenv support.
+ 	depends on !BR2_TOOLCHAIN_USES_UCLIBC
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C11/stdatomic.h
++	depends on BR2_HOST_GCC_AT_LEAST_4_9 # C11/stdatomic.h
+ 	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  QuickJS is a small and embeddable Javascript engine.
+@@ -12,6 +13,7 @@ config BR2_PACKAGE_QUICKJS
+ 
+ 	  https://bellard.org/quickjs/
+ 
+-comment "quickjs needs a glibc or musl toolchain w/ gcc >= 4.9, dynamic library"
++comment "quickjs needs a glibc or musl toolchain w/ gcc >= 4.9, host gcc >= 4.9, dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_UCLIBC || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
++	depends on BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_UCLIBC || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || !BR2_HOST_GCC_AT_LEAST_4_9
