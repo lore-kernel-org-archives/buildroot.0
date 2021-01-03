@@ -1,131 +1,52 @@
-From: Gleb Mazovetskiy <glex.spb@gmail.com>
-Date: Sun,  3 Jan 2021 17:15:25 +0000
-Subject: [Buildroot] [PATCH v5 1/1] Makefile: Parallelize glibc locale
- generation
-Message-ID: <20210103171525.2323323-1-glex.spb@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  3 Jan 2021 18:23:42 +0100
+Subject: [Buildroot] [PATCH 1/1] package/fetchmail: bump version to 6.4.15
+Message-ID: <20210103172342.2034002-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Parallelizes locale generation based on `BR2_JLEVEL` setting.
+Updated license hash due to copyright year bump:
+https://sourceforge.net/p/fetchmail/git/ci/87069e887226907ebb0e557ae09e387396ad9a6b/tree/COPYING
 
-Locale generation always runs during the finalize stage and can consume
-a significant amount of time. Parallelizing it greatly reduces that time
-on multi-core machines.
+Release notes:
+https://sourceforge.net/p/fetchmail/mailman/message/37189309/
 
-To parallelize it, we first invoke `localedef` for every locale in
-parallel with the `--no-archive` option. This creates the intermediate
-locale data instead of writing to the finally archive directly.
-
-Then, we invoke `localedef` again once to create the archive from the
-intermediate compiled locale data files.
-
-We have to do it this way because `localedef` does not do any locking
-when writing to the archive file, so calling it without `--no-archive`
-concurrently could result in a corrupt archive file or an archive file
-that is missing some locales.
-
-Signed-off-by: Gleb Mazovetskiy <glex.spb@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- Makefile                          | 29 +++++++---------------
- support/misc/gen-glibc-locales.mk | 41 +++++++++++++++++++++++++++++++
- 2 files changed, 50 insertions(+), 20 deletions(-)
- create mode 100644 support/misc/gen-glibc-locales.mk
+ package/fetchmail/fetchmail.hash | 8 ++++----
+ package/fetchmail/fetchmail.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 4d334adcd6..dbeabf9e61 100644
---- a/Makefile
-+++ b/Makefile
-@@ -661,32 +661,21 @@ endef
- TARGET_FINALIZE_HOOKS += TOOLCHAIN_ECLIPSE_REGISTER
- endif
+diff --git a/package/fetchmail/fetchmail.hash b/package/fetchmail/fetchmail.hash
+index 759138ec2d..5b9049814d 100644
+--- a/package/fetchmail/fetchmail.hash
++++ b/package/fetchmail/fetchmail.hash
+@@ -1,6 +1,6 @@
+-# From https://sourceforge.net/p/fetchmail/mailman/message/37162383/
+-sha256  424707390f7cdc6d16db4887931117f2242873846b28cc1d0ae1c0ecf158bdcb  fetchmail-6.4.14.tar.xz
++# From https://sourceforge.net/p/fetchmail/mailman/message/37189309/
++sha256  735b217474937e13cfcdea2d42a346bf68487e0d61efebe4d0d9eddcb3a26b96  fetchmail-6.4.15.tar.xz
+ # From https://sourceforge.net/projects/fetchmail/files/branch_6.4/
+-sha1  f058c877d7909fe196b5d0425b052c99f87f86e3  fetchmail-6.4.14.tar.xz
++sha1  6491de7e4d2ef1aef6808127e8ca9d803bbdc220  fetchmail-6.4.15.tar.xz
+ # Locally computed:
+-sha256  89d6efe79c78f965b256e007d6acc367fff982c59b6195fb6ec5895ea0fc9bd5  COPYING
++sha256  8e3ec4863456a26fcd1cf84fadd4146efcb2fd8515bcec482e0f2b7060108895  COPYING
+diff --git a/package/fetchmail/fetchmail.mk b/package/fetchmail/fetchmail.mk
+index 430ec55329..d1ba95891b 100644
+--- a/package/fetchmail/fetchmail.mk
++++ b/package/fetchmail/fetchmail.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
--# Generate locale data. Basically, we call the localedef program
--# (built by the host-localedef package) for each locale. The input
--# data comes preferably from the toolchain, or if the toolchain does
--# not have them (Linaro toolchains), we use the ones available on the
--# host machine.
-+# Generate locale data.
- ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
- GLIBC_GENERATE_LOCALES = $(call qstrip,$(BR2_GENERATE_LOCALE))
- ifneq ($(GLIBC_GENERATE_LOCALES),)
- PACKAGES += host-localedef
- 
- define GENERATE_GLIBC_LOCALES
--	$(Q)mkdir -p $(TARGET_DIR)/usr/lib/locale/
--	$(Q)for locale in $(GLIBC_GENERATE_LOCALES) ; do \
--		inputfile=`echo $${locale} | cut -f1 -d'.'` ; \
--		charmap=`echo $${locale} | cut -f2 -d'.' -s` ; \
--		if test -z "$${charmap}" ; then \
--			charmap="UTF-8" ; \
--		fi ; \
--		echo "Generating locale $${inputfile}.$${charmap}" ; \
--		I18NPATH=$(STAGING_DIR)/usr/share/i18n:/usr/share/i18n \
--		$(HOST_DIR)/bin/localedef \
--			--prefix=$(TARGET_DIR) \
--			--$(call LOWERCASE,$(BR2_ENDIAN))-endian \
--			-i $${inputfile} -f $${charmap} \
--			$${locale} ; \
--	done
-+	$(TARGET_CONFIGURE_OPTS) \
-+	$(MAKE) -j$(PARALLEL_JOBS) -f support/misc/gen-glibc-locales.mk \
-+		HOST_DIR=$(HOST_DIR) \
-+		TARGET_DIR=$(TARGET_DIR) \
-+		STAGING_DIR=$(STAGING_DIR) \
-+		ENDIAN=$(call LOWERCASE,$(BR2_ENDIAN)) \
-+		LOCALES="$(GLIBC_GENERATE_LOCALES)" \
-+		Q=$(Q)
- endef
- TARGET_FINALIZE_HOOKS += GENERATE_GLIBC_LOCALES
- endif
-diff --git a/support/misc/gen-glibc-locales.mk b/support/misc/gen-glibc-locales.mk
-new file mode 100644
-index 0000000000..3db1e0dc11
---- /dev/null
-+++ b/support/misc/gen-glibc-locales.mk
-@@ -0,0 +1,41 @@
-+# Generates glibc locale data for target.
-+
-+inputfile = $(firstword $(subst ., ,$(1)))
-+charmap = $(or $(word 2,$(subst ., ,$(1))),UTF-8)
-+
-+# Packages all the generated locale data into the final archive.
-+#
-+# We sort the file names to produce consistent output regardless of
-+# the `find` outputs order.
-+$(TARGET_DIR)/usr/lib/locale/locale-archive: $(LOCALES)
-+	$(Q)rm -f $(@)
-+	$(Q)find $(TARGET_DIR)/usr/lib/locale/ -maxdepth 1 -mindepth 1 -type d -print0 \
-+	| sort -z \
-+	| xargs -0 \
-+		$(HOST_DIR)/bin/localedef \
-+			--prefix=$(TARGET_DIR) \
-+			--$(ENDIAN)-endian \
-+			--add-to-archive
-+
-+# Generates locale data for each locale.
-+#
-+# The input data comes preferably from the toolchain, or if the toolchain
-+# does not have them (Linaro toolchains), we use the ones available on the
-+# host machine.
-+#
-+# Uses `localedef`, which is built by the `host-localedef` package.
-+$(LOCALES): | $(TARGET_DIR)/usr/lib/locale/
-+	$(Q)echo "Generating locale $(@)"
-+	$(Q)I18NPATH=$(STAGING_DIR)/usr/share/i18n:/usr/share/i18n \
-+	$(HOST_DIR)/bin/localedef \
-+		--prefix=$(TARGET_DIR) \
-+		--$(ENDIAN)-endian \
-+		--no-archive \
-+		-i $(call inputfile,$(@)) \
-+		-f $(call charmap,$(@)) \
-+		$(@)
-+
-+.PHONY: $(LOCALES)
-+
-+$(TARGET_DIR)/usr/lib/locale/:
-+	$(Q)mkdir -p $(TARGET_DIR)/usr/lib/locale/
+ FETCHMAIL_VERSION_MAJOR = 6.4
+-FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).14
++FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).15
+ FETCHMAIL_SOURCE = fetchmail-$(FETCHMAIL_VERSION).tar.xz
+ FETCHMAIL_SITE = http://downloads.sourceforge.net/project/fetchmail/branch_$(FETCHMAIL_VERSION_MAJOR)
+ FETCHMAIL_LICENSE = GPL-2.0; some exceptions are mentioned in COPYING
 -- 
-2.27.0
+2.29.2
