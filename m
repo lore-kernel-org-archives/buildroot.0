@@ -1,8 +1,8 @@
 From: Gleb Mazovetskiy <glex.spb@gmail.com>
-Date: Sun,  3 Jan 2021 14:03:15 +0000
-Subject: [Buildroot] [PATCH 1/1] Makefile: Parallelize glibc locale
+Date: Sun,  3 Jan 2021 14:04:57 +0000
+Subject: [Buildroot] [PATCH v2 1/1] Makefile: Parallelize glibc locale
  generation
-Message-ID: <20210103140315.1301698-1-glex.spb@gmail.com>
+Message-ID: <20210103140457.1302666-1-glex.spb@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,7 +20,7 @@ Signed-off-by: Gleb Mazovetskiy <glex.spb@gmail.com>
  1 file changed, 11 insertions(+), 12 deletions(-)
 
 diff --git a/Makefile b/Makefile
-index 4d334adcd6..574b55e203 100644
+index 4d334adcd6..2ad60f3e42 100644
 --- a/Makefile
 +++ b/Makefile
 @@ -673,20 +673,19 @@ PACKAGES += host-localedef
@@ -44,7 +44,7 @@ index 4d334adcd6..574b55e203 100644
 +		echo $${locale} ; \
 +	done | \
 +	I18NPATH=$(STAGING_DIR)/usr/share/i18n:/usr/share/i18n \
-+	xargs -P $(PARALLEL_JOBS) -n 5 \
++	$(Q)xargs -P $(PARALLEL_JOBS) -n 5 \
  		$(HOST_DIR)/bin/localedef \
  			--prefix=$(TARGET_DIR) \
 -			--$(call LOWERCASE,$(BR2_ENDIAN))-endian \
