@@ -1,83 +1,39 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun,  3 Jan 2021 21:19:59 +0100
-Subject: [Buildroot] [PATCH v1 2/2] package/quickjs: link with libatomic
-In-Reply-To: <20210103201959.4035-1-ps.report@gmx.net>
-References: <20210103201959.4035-1-ps.report@gmx.net>
-Message-ID: <20210103201959.4035-2-ps.report@gmx.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 3 Jan 2021 21:26:29 +0100
+Subject: [Buildroot] [git commit] package/trace-cmd: installs nothing in
+ staging/
+Message-ID: <20210103200946.C2D7586189@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Link with libatomic if available.
+commit: https://git.buildroot.net/buildroot/commit/?id=896b93310a2e5f5945f3b792296a05be0373269f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
+Since its introduction in Buildroot in 2013 with commit 07203d78c24d
+(trace-cmd: new package), trace-cmd has declared installing in staging.
 
-  - http://autobuild.buildroot.net/results/e0766eef95a2559d51e58d1a81a9c40df84ae509
+But trace-cmd is a generic-package, and has never, ever provided any
+commands for staging installation.
 
-  .../build/quickjs-2020-11-08/quickjs.c:12229: undefined reference to `__atomic_fetch_xor_1'
+Drop this declaration.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...ile-add-optional-link-with-libatomic.patch | 30 +++++++++++++++++++
- package/quickjs/quickjs.mk                    |  6 +++-
- 2 files changed, 35 insertions(+), 1 deletion(-)
- create mode 100644 package/quickjs/0001-Makefile-add-optional-link-with-libatomic.patch
+ package/trace-cmd/trace-cmd.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/quickjs/0001-Makefile-add-optional-link-with-libatomic.patch b/package/quickjs/0001-Makefile-add-optional-link-with-libatomic.patch
-new file mode 100644
-index 0000000000..12f4eb2338
---- /dev/null
-+++ b/package/quickjs/0001-Makefile-add-optional-link-with-libatomic.patch
-@@ -0,0 +1,30 @@
-+From 2cf2aa34d5d55a4eedb1aedd4d56d89d24870230 Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Sun, 3 Jan 2021 21:11:44 +0100
-+Subject: [PATCH] Makefile: add optional link with libatomic
-+
-+Add optional libatomic linking if available to fix:
-+
-+  .../build/quickjs-2020-11-08/quickjs.c:12229: undefined reference to `__atomic_fetch_xor_1'
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ Makefile | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/Makefile b/Makefile
-+index e6ae827..22ad496 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -177,7 +177,7 @@ endif
-+ HOST_LIBS=-lm -ldl -lpthread
-+ LIBS=-lm
-+ ifndef CONFIG_WIN32
-+-LIBS+=-ldl -lpthread
-++LIBS+=-ldl -lpthread $(LIBATOMIC)
-+ endif
-+ 
-+ $(OBJDIR):
-+-- 
-+2.29.2
-+
-diff --git a/package/quickjs/quickjs.mk b/package/quickjs/quickjs.mk
-index 1a2e63278f..389ed71133 100644
---- a/package/quickjs/quickjs.mk
-+++ b/package/quickjs/quickjs.mk
-@@ -10,8 +10,12 @@ QUICKJS_SITE = https://bellard.org/quickjs
- QUICKJS_LICENSE = MIT
- QUICKJS_INSTALL_STAGING = YES
+diff --git a/package/trace-cmd/trace-cmd.mk b/package/trace-cmd/trace-cmd.mk
+index ffaf93a7cd..cd3fcb9755 100644
+--- a/package/trace-cmd/trace-cmd.mk
++++ b/package/trace-cmd/trace-cmd.mk
+@@ -7,7 +7,6 @@
+ TRACE_CMD_VERSION = trace-cmd-v2.9.1
+ TRACE_CMD_SITE = https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git
+ TRACE_CMD_SITE_METHOD = git
+-TRACE_CMD_INSTALL_STAGING = YES
+ TRACE_CMD_LICENSE = GPL-2.0, LGPL-2.1
+ TRACE_CMD_LICENSE_FILES = COPYING COPYING.LIB LICENSES/GPL-2.0 LICENSES/LGPL-2.1
  
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+QUICKJS_LIBATOMIC += -latomic
-+endif
-+
- define QUICKJS_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+	$(TARGET_MAKE_ENV) LIBATOMIC=$(QUICKJS_LIBATOMIC) $(MAKE) -C $(@D) \
- 		CROSS_PREFIX="$(TARGET_CROSS)" \
- 		all
- endef
--- 
-2.29.2
