@@ -1,36 +1,43 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  3 Jan 2021 14:40:18 +0100
-Subject: [Buildroot] [PATCH 1/1] package/bustle: fix static build
-Message-ID: <20210103134018.530599-1-fontaine.fabrice@gmail.com>
+Date: Sun,  3 Jan 2021 14:52:46 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libmdbx: fix build with glibc < 2.12
+Message-ID: <20210103135246.553734-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 436cb9308a50b1007a42eb490405a3155307a771 wrongly removed --static
-from pcap-config call
+Set CMAKE_BUILD_TYPE to Release to avoid the following build failure
+with glibc < 2.12:
+
+/home/buildroot/autobuild/run/instance-1/output-1/build/libmdbx-0.9.2/mdbx.c:487:5: error: #warning "libmdbx was only tested with GLIBC >= 2.12." [-Werror=cpp]
+ #   warning "libmdbx was only tested with GLIBC >= 2.12."
+     ^~~~~~~
+cc1: all warnings being treated as errors
 
 Fixes:
- - http://autobuild.buildroot.org/results/b5d8d8d8452342373c2446613ba3051c20a97c03
+ - http://autobuild.buildroot.org/results/1a60b2c3d2f276f99a22da48e8e16fcf5744eba0
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/bustle/bustle.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libmdbx/libmdbx.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/bustle/bustle.mk b/package/bustle/bustle.mk
-index c6c3a72a91..9010754d90 100644
---- a/package/bustle/bustle.mk
-+++ b/package/bustle/bustle.mk
-@@ -9,7 +9,7 @@ BUSTLE_SITE = https://hackage.haskell.org/package/bustle-$(BUSTLE_VERSION)
- BUSTLE_LICENSE = LGPL-2.1+
- BUSTLE_LICENSE_FILES = LICENSE
- BUSTLE_DEPENDENCIES = libglib2 libpcap host-pkgconf
--BUSTLE_MAKE_OPTS = PCAP_CONFIG=$(STAGING_DIR)/usr/bin/pcap-config
-+BUSTLE_MAKE_OPTS = PCAP_CONFIG="$(STAGING_DIR)/usr/bin/pcap-config --static"
+diff --git a/package/libmdbx/libmdbx.mk b/package/libmdbx/libmdbx.mk
+index 878ea87c07..370df2eaa3 100644
+--- a/package/libmdbx/libmdbx.mk
++++ b/package/libmdbx/libmdbx.mk
+@@ -14,7 +14,10 @@ LIBMDBX_REDISTRIBUTE = YES
+ LIBMDBX_STRIP_COMPONENTS = 0
+ LIBMDBX_INSTALL_STAGING = YES
  
- define BUSTLE_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
++# Set CMAKE_BUILD_TYPE to Release to remove -Werror and avoid a build failure
++# with glibc < 2.12
+ LIBMDBX_CONF_OPTS = \
++	-DCMAKE_BUILD_TYPE=Release \
+ 	-DMDBX_INSTALL_MANPAGES=OFF \
+ 	-DBUILD_FOR_NATIVE_CPU=OFF \
+ 	-DMDBX_BUILD_CXX=$(if $(BR2_PACKAGE_LIBMDBX_CXX),ON,OFF) \
 -- 
 2.29.2
