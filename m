@@ -1,59 +1,55 @@
-From: Gleb Mazovetskiy <glex.spb@gmail.com>
-Date: Sun,  3 Jan 2021 14:04:57 +0000
-Subject: [Buildroot] [PATCH v2 1/1] Makefile: Parallelize glibc locale
- generation
-Message-ID: <20210103140457.1302666-1-glex.spb@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  3 Jan 2021 15:21:01 +0100
+Subject: [Buildroot] [PATCH 1/1] package/kismet: server needs wchar
+Message-ID: <20210103142101.781654-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Parallelizes locale generation based on `BR2_JLEVEL` setting.
+kismet embeds its own copy of fmt since version 2019-04-R1 so add a
+dependency on wchar to avoid the following build failure when building
+the server:
 
-Uses `-P` (`--max-procs`) GNU xargs extension
-together with the standard `-n` xargs option (`--max-args`).
+./fmt/core.h:1245:1:
+ std::wstring vformat(wstring_view format_str, wformat_args args);
+ ^~~
+./fmt/core.h:1266:13: error: 'wstring' in namespace 'std' does not name a type
+ inline std::wstring format(wstring_view format_str, const Args & ... args) {
+             ^~~~~~~
+./fmt/core.h:1266:8: note: 'std::wstring' is defined in header '<string>'; did you forget to '#include <string>'?
 
-Signed-off-by: Gleb Mazovetskiy <glex.spb@gmail.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/f19b3d080514a799a1c75b38ff5f7ae4e8d2628d
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- Makefile | 23 +++++++++++------------
- 1 file changed, 11 insertions(+), 12 deletions(-)
+ package/kismet/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index 4d334adcd6..2ad60f3e42 100644
---- a/Makefile
-+++ b/Makefile
-@@ -673,20 +673,19 @@ PACKAGES += host-localedef
+diff --git a/package/kismet/Config.in b/package/kismet/Config.in
+index 02046e7efb..d9f8ebe03d 100644
+--- a/package/kismet/Config.in
++++ b/package/kismet/Config.in
+@@ -59,14 +59,16 @@ config BR2_PACKAGE_KISMET_SERVER
+ 	default y
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
+ 	depends on !BR2_STATIC_LIBS # dlfcn.h
++	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # protobuf
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::future
+ 	select BR2_PACKAGE_PROTOBUF
  
- define GENERATE_GLIBC_LOCALES
- 	$(Q)mkdir -p $(TARGET_DIR)/usr/lib/locale/
--	$(Q)for locale in $(GLIBC_GENERATE_LOCALES) ; do \
--		inputfile=`echo $${locale} | cut -f1 -d'.'` ; \
--		charmap=`echo $${locale} | cut -f2 -d'.' -s` ; \
--		if test -z "$${charmap}" ; then \
--			charmap="UTF-8" ; \
--		fi ; \
--		echo "Generating locale $${inputfile}.$${charmap}" ; \
--		I18NPATH=$(STAGING_DIR)/usr/share/i18n:/usr/share/i18n \
-+	$(Q)echo "Generating locales: $(GLIBC_GENERATE_LOCALES)"
-+	for locale in $(GLIBC_GENERATE_LOCALES) ; do \
-+		echo -i ; \
-+		echo $${locale%%.*} ; \
-+		echo -f ; \
-+		echo $${locale} | cut -f2 -d'.' || echo UTF-8 ; \
-+		echo $${locale} ; \
-+	done | \
-+	I18NPATH=$(STAGING_DIR)/usr/share/i18n:/usr/share/i18n \
-+	$(Q)xargs -P $(PARALLEL_JOBS) -n 5 \
- 		$(HOST_DIR)/bin/localedef \
- 			--prefix=$(TARGET_DIR) \
--			--$(call LOWERCASE,$(BR2_ENDIAN))-endian \
--			-i $${inputfile} -f $${charmap} \
--			$${locale} ; \
--	done
-+			--$(call LOWERCASE,$(call qstrip,$(BR2_ENDIAN)))-endian
- endef
- TARGET_FINALIZE_HOOKS += GENERATE_GLIBC_LOCALES
- endif
+-comment "server needs a toolchain w/ dynamic library, gcc >= 4.8"
++comment "server needs a toolchain w/ dynamic library, wchar, gcc >= 4.8"
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+-	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 
+ comment "server needs a toolchain not affected by GCC bug 64735"
+ 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
 -- 
-2.27.0
+2.29.2
