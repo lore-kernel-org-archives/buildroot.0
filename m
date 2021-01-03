@@ -1,83 +1,65 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  3 Jan 2021 16:03:06 +0100
-Subject: [Buildroot] [PATCH 1/1] package/python3: add optional support for
- lib2to3
-Message-ID: <20210103150306.1509091-1-bernd.kuhls@t-online.de>
+From: Gleb Mazovetskiy <glex.spb@gmail.com>
+Date: Sun,  3 Jan 2021 15:10:00 +0000
+Subject: [Buildroot] [PATCH v3 1/1] Makefile: Parallelize glibc locale
+ generation
+Message-ID: <20210103151000.1784905-1-glex.spb@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Kodi is in transition to support python3 instead of python2:
-https://kodi.wiki/view/General_information_about_migration_to_Python_3
+Parallelizes locale generation based on `BR2_JLEVEL` setting.
 
-"For Kodi 18 (Leia), only addons that are compatible with both Python 2
- and 3 will be accepted to the official addon repository."
+Uses `-P` (`--max-procs`) GNU xargs extension
+together with the standard `-n` xargs option (`--max-args`).
 
-Some of these addons depend on the Kodi addon script.module.future to
-provide support for both python versions.
-
-The script.module.future addon contains python-future:
-https://kodi.wiki/view/General_information_about_migration_to_Python_3#Future
-which in turn needs lib2to3 to be included in the target build of
-python3: http://python-future.org/automatic_conversion.html
-
-Kodi addons depending on the script.module.future addon are crashing on
-buildroot due to lib2to3 missing in the build.
-
-LibreELEC added lib2to3 to python3 to fix the problem:
-https://forum.libreelec.tv/thread/21239-lib2to3-pgen2-parse-missing/
-https://github.com/LibreELEC/LibreELEC.tv/pull/4146
-
-This patch provides the Config.in option to be used by Kodi 19.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Gleb Mazovetskiy <glex.spb@gmail.com>
 ---
- package/python3/Config.in  | 5 +++++
- package/python3/python3.mk | 7 ++++++-
- 2 files changed, 11 insertions(+), 1 deletion(-)
+ Makefile | 28 +++++++++++++++++-----------
+ 1 file changed, 17 insertions(+), 11 deletions(-)
 
-diff --git a/package/python3/Config.in b/package/python3/Config.in
-index 7e19f84843..efc4dbb3d4 100644
---- a/package/python3/Config.in
-+++ b/package/python3/Config.in
-@@ -41,6 +41,11 @@ menu "core python3 modules"
+diff --git a/Makefile b/Makefile
+index 4d334adcd6..4ef82df31b 100644
+--- a/Makefile
++++ b/Makefile
+@@ -673,20 +673,26 @@ PACKAGES += host-localedef
  
- comment "The following modules are unusual or require extra libraries"
- 
-+config BR2_PACKAGE_PYTHON3_2TO3
-+	bool "2to3 module"
-+	help
-+	  code translation from python 2 to 3
-+
- config BR2_PACKAGE_PYTHON3_BERKELEYDB
- 	bool "berkeleydb"
- 	select BR2_PACKAGE_BERKELEYDB
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index d200eecf76..de90b4a267 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -55,6 +55,12 @@ else
- PYTHON3_CONF_OPTS += --disable-berkeleydb
+ define GENERATE_GLIBC_LOCALES
+ 	$(Q)mkdir -p $(TARGET_DIR)/usr/lib/locale/
++	$(Q)echo "Generating locale data: $(GLIBC_GENERATE_LOCALES)"
+ 	$(Q)for locale in $(GLIBC_GENERATE_LOCALES) ; do \
+-		inputfile=`echo $${locale} | cut -f1 -d'.'` ; \
+-		charmap=`echo $${locale} | cut -f2 -d'.' -s` ; \
+-		if test -z "$${charmap}" ; then \
+-			charmap="UTF-8" ; \
+-		fi ; \
+-		echo "Generating locale $${inputfile}.$${charmap}" ; \
+-		I18NPATH=$(STAGING_DIR)/usr/share/i18n:/usr/share/i18n \
++		echo -i ; \
++		echo $${locale%%.*} ; \
++		echo -f ; \
++		echo $${locale} | cut -f2 -d'.' || echo UTF-8 ; \
++		echo $${locale} ; \
++	done \
++	| I18NPATH=$(STAGING_DIR)/usr/share/i18n:/usr/share/i18n \
++	xargs -P $(PARALLEL_JOBS) -n 5 \
+ 		$(HOST_DIR)/bin/localedef \
+ 			--prefix=$(TARGET_DIR) \
+-			--$(call LOWERCASE,$(BR2_ENDIAN))-endian \
+-			-i $${inputfile} -f $${charmap} \
+-			$${locale} ; \
+-	done
++			--$(call LOWERCASE,$(call qstrip,$(BR2_ENDIAN)))-endian \
++			--no-archive
++	$(Q)echo "Adding locales to archive"
++	$(Q)find $(TARGET_DIR)/usr/lib/locale/ -maxdepth 1 -mindepth 1 -type d -print0 \
++	| sort -z | xargs -x -0 $(HOST_DIR)/bin/localedef \
++			--prefix=$(TARGET_DIR) \
++			--$(call LOWERCASE,$(call qstrip,$(BR2_ENDIAN)))-endian \
++			--replace --add-to-archive
+ endef
+ TARGET_FINALIZE_HOOKS += GENERATE_GLIBC_LOCALES
  endif
- 
-+ifeq ($(BR2_PACKAGE_PYTHON3_2TO3),y)
-+PYTHON_CONF_OPTS += --enable-lib2to3
-+else
-+PYTHON_CONF_OPTS += --disable-lib2to3
-+endif
-+
- ifeq ($(BR2_PACKAGE_PYTHON3_READLINE),y)
- PYTHON3_DEPENDENCIES += readline
- else
-@@ -162,7 +168,6 @@ PYTHON3_CONF_OPTS += \
- 	--with-system-ffi \
- 	--disable-pydoc \
- 	--disable-test-modules \
--	--disable-lib2to3 \
- 	--disable-tk \
- 	--disable-nis \
- 	--disable-idle3 \
 -- 
-2.29.2
+2.27.0
