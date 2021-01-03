@@ -1,123 +1,64 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 3 Jan 2021 23:00:33 +0100
-Subject: [Buildroot] [PATCH 1/1] package/python3: add optional support
- for lib2to3
-In-Reply-To: <20210103150306.1509091-1-bernd.kuhls@t-online.de>
-References: <20210103150306.1509091-1-bernd.kuhls@t-online.de>
-Message-ID: <20210103220033.GT2997@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  3 Jan 2021 23:53:24 +0100
+Subject: [Buildroot] [PATCH 1/1] package/dcron: bump to
+ 1ba33c3325df48de46263276a43ed76cf9d81518
+Message-ID: <20210103225324.974773-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+- Add upstream link to patch
+- Use the new COPYING file
+- Update indentation in hash file (two spaces)
 
-On 2021-01-03 16:03 +0100, Bernd Kuhls spake thusly:
-> Kodi is in transition to support python3 instead of python2:
-> https://kodi.wiki/view/General_information_about_migration_to_Python_3
-> 
-> "For Kodi 18 (Leia), only addons that are compatible with both Python 2
->  and 3 will be accepted to the official addon repository."
-> 
-> Some of these addons depend on the Kodi addon script.module.future to
-> provide support for both python versions.
-> 
-> The script.module.future addon contains python-future:
-> https://kodi.wiki/view/General_information_about_migration_to_Python_3#Future
-> which in turn needs lib2to3 to be included in the target build of
-> python3: http://python-future.org/automatic_conversion.html
-> 
-> Kodi addons depending on the script.module.future addon are crashing on
-> buildroot due to lib2to3 missing in the build.
-> 
-> LibreELEC added lib2to3 to python3 to fix the problem:
-> https://forum.libreelec.tv/thread/21239-lib2to3-pgen2-parse-missing/
-> https://github.com/LibreELEC/LibreELEC.tv/pull/4146
-> 
-> This patch provides the Config.in option to be used by Kodi 19.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ....c-add-newline-to-logfile-openning-error-message.patch | 1 +
+ package/dcron/dcron.hash                                  | 3 ++-
+ package/dcron/dcron.mk                                    | 8 ++++----
+ 3 files changed, 7 insertions(+), 5 deletions(-)
 
-Applied to master, thanks.
-
-However, I had to do a few fixes;
-
-  - fix conflicts due to local changes in author's tree
-  - fix typ in variabl name (PYTHON_CONF_OPTS -> PYTHON3_CONF_OPTS)
-
-Please be carefull when you send patches: rebase them on master before
-sending (see below).
-
-Also, run: make check-package, that will hint at the variable typo I had
-to fix too.
-
-> ---
->  package/python3/Config.in  | 5 +++++
->  package/python3/python3.mk | 7 ++++++-
->  2 files changed, 11 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/python3/Config.in b/package/python3/Config.in
-> index 7e19f84843..efc4dbb3d4 100644
-> --- a/package/python3/Config.in
-> +++ b/package/python3/Config.in
-> @@ -41,6 +41,11 @@ menu "core python3 modules"
->  
->  comment "The following modules are unusual or require extra libraries"
->  
-> +config BR2_PACKAGE_PYTHON3_2TO3
-> +	bool "2to3 module"
-> +	help
-> +	  code translation from python 2 to 3
-> +
->  config BR2_PACKAGE_PYTHON3_BERKELEYDB
-
-We do not have that in master, so the patch did not apply cleanly...
-
-Will you send support for the bdb module?
-
-Regards,
-Yann E. MORIN.
-
->  	bool "berkeleydb"
->  	select BR2_PACKAGE_BERKELEYDB
-> diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-> index d200eecf76..de90b4a267 100644
-> --- a/package/python3/python3.mk
-> +++ b/package/python3/python3.mk
-> @@ -55,6 +55,12 @@ else
->  PYTHON3_CONF_OPTS += --disable-berkeleydb
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_PYTHON3_2TO3),y)
-> +PYTHON_CONF_OPTS += --enable-lib2to3
-> +else
-> +PYTHON_CONF_OPTS += --disable-lib2to3
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_PYTHON3_READLINE),y)
->  PYTHON3_DEPENDENCIES += readline
->  else
-> @@ -162,7 +168,6 @@ PYTHON3_CONF_OPTS += \
->  	--with-system-ffi \
->  	--disable-pydoc \
->  	--disable-test-modules \
-> -	--disable-lib2to3 \
->  	--disable-tk \
->  	--disable-nis \
->  	--disable-idle3 \
-> -- 
-> 2.29.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/dcron/0001-main.c-add-newline-to-logfile-openning-error-message.patch b/package/dcron/0001-main.c-add-newline-to-logfile-openning-error-message.patch
+index c838063e03..6abc3105e4 100644
+--- a/package/dcron/0001-main.c-add-newline-to-logfile-openning-error-message.patch
++++ b/package/dcron/0001-main.c-add-newline-to-logfile-openning-error-message.patch
+@@ -4,6 +4,7 @@ Date: Sat, 20 Jul 2019 00:27:31 -0300
+ Subject: [PATCH] main.c: add newline to logfile openning error message
+ 
+ Signed-off-by: Carlos Santos <unixmania@gmail.com>
++[Upstream status: https://github.com/dubiousjim/dcron/pull/22]
+ ---
+  main.c | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
+diff --git a/package/dcron/dcron.hash b/package/dcron/dcron.hash
+index 3e53ddc25f..35b02eb78b 100644
+--- a/package/dcron/dcron.hash
++++ b/package/dcron/dcron.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256	9e50edb6f5bd8153b16bad05087d985e5153ce45cc01ae77e7f842213fb4a824	dcron-4.5.tar.gz
++sha256  5a53930ba27b57c06c3b03635788cf569990283bde8ea9c1ee820e13f988288d  dcron-1ba33c3325df48de46263276a43ed76cf9d81518.tar.gz
++sha256  640d90f6ee401241ff62834d0d1b33f83049e99b8bfdfa04ed1b0a1635dde3e7  COPYING
+diff --git a/package/dcron/dcron.mk b/package/dcron/dcron.mk
+index 51ebb18745..f0c3efbf8f 100644
+--- a/package/dcron/dcron.mk
++++ b/package/dcron/dcron.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-DCRON_VERSION = 4.5
+-DCRON_SITE = http://www.jimpryor.net/linux/releases
+-# The source code does not specify the version of the GPL that is used.
+-DCRON_LICENSE = GPL
++DCRON_VERSION = 1ba33c3325df48de46263276a43ed76cf9d81518
++DCRON_SITE = $(call github,dubiousjim,dcron,$(DCRON_VERSION))
++DCRON_LICENSE = GPL-2.0+
++DCRON_LICENSE_FILES = COPYING
+ 
+ define DCRON_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS)
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.29.2
