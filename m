@@ -1,8 +1,8 @@
 From: Gleb Mazovetskiy <glex.spb@gmail.com>
-Date: Sun,  3 Jan 2021 17:01:50 +0000
-Subject: [Buildroot] [PATCH v4 1/1] Makefile: Parallelize glibc locale
+Date: Sun,  3 Jan 2021 17:15:25 +0000
+Subject: [Buildroot] [PATCH v5 1/1] Makefile: Parallelize glibc locale
  generation
-Message-ID: <20210103170150.2247979-1-glex.spb@gmail.com>
+Message-ID: <20210103171525.2323323-1-glex.spb@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -82,7 +82,7 @@ index 4d334adcd6..dbeabf9e61 100644
  endif
 diff --git a/support/misc/gen-glibc-locales.mk b/support/misc/gen-glibc-locales.mk
 new file mode 100644
-index 0000000000..e74f81b0af
+index 0000000000..3db1e0dc11
 --- /dev/null
 +++ b/support/misc/gen-glibc-locales.mk
 @@ -0,0 +1,41 @@
@@ -96,13 +96,13 @@ index 0000000000..e74f81b0af
 +# We sort the file names to produce consistent output regardless of
 +# the `find` outputs order.
 +$(TARGET_DIR)/usr/lib/locale/locale-archive: $(LOCALES)
++	$(Q)rm -f $(@)
 +	$(Q)find $(TARGET_DIR)/usr/lib/locale/ -maxdepth 1 -mindepth 1 -type d -print0 \
 +	| sort -z \
-+	| xargs -x -0 \
++	| xargs -0 \
 +		$(HOST_DIR)/bin/localedef \
 +			--prefix=$(TARGET_DIR) \
 +			--$(ENDIAN)-endian \
-+			--replace \
 +			--add-to-archive
 +
 +# Generates locale data for each locale.
