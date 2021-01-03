@@ -1,48 +1,48 @@
-From: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@essensium.com>
-Date: Sun,  3 Jan 2021 19:53:27 +0100
-Subject: [Buildroot] [PATCH] package/python-jmespath: bump to version 0.10.0
-Message-ID: <20210103185327.30278-1-raphael.melotte@essensium.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun,  3 Jan 2021 20:25:48 +0100
+Subject: [Buildroot] [PATCH v1] package/bind: disable backtrace support
+Message-ID: <20210103192548.13720-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Rapha?l M?lotte <raphael.melotte@mind.be>
+Disable backtrace support, fixes linking failure for uclibc/musl based
+toolchains.
 
-Signed-off-by: Rapha?l M?lotte <raphael.melotte@essensium.com>
+Fixes:
+
+  - http://autobuild.buildroot.net/results/7a1a140314bc8d134f9eeb95ef2e46e7fb0ce9fd/
+
+  .../arm-buildroot-linux-uclibcgnueabi/bin/ld: ../isc/.libs/libisc.so: undefined reference to `_Unwind_GetIP'
+
+  - http://autobuild.buildroot.net/results/f0db5fe7fc6860b7270c784989c451e2e7aa2afb/
+
+  .../arm-buildroot-linux-uclibcgnueabi/bin/ld: ../isc/.libs/libisc.so: undefined reference to `_Unwind_GetIP'
+
+  - http://autobuild.buildroot.net/results/cb963298885df37f1e5c4d3ab3989773c01c54fc/
+
+  .../arm-buildroot-linux-musleabihf/bin/ld: ../isc/.libs/libisc.so: undefined reference to `_Unwind_GetIP'
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/python-jmespath/python-jmespath.hash | 4 ++--
- package/python-jmespath/python-jmespath.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/bind/bind.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/python-jmespath/python-jmespath.hash b/package/python-jmespath/python-jmespath.hash
-index 4d1ccb5bbb..986db2e002 100644
---- a/package/python-jmespath/python-jmespath.hash
-+++ b/package/python-jmespath/python-jmespath.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/jmespath/json
--md5  5c3380a84c565d7438e4766fd4b7a775  jmespath-0.9.4.tar.gz
--sha256  bde2aef6f44302dfb30320115b17d030798de8c4110e28d5cf6cf91a7a31074c  jmespath-0.9.4.tar.gz
-+md5  65bdcb5fa5bcf1cc710ffa508e78e408  jmespath-0.10.0.tar.gz
-+sha256  b85d0567b8666149a93172712e68920734333c0ce7e89b78b3e987f71e5ed4f9  jmespath-0.10.0.tar.gz
- # Locally computed sha256 checksums
- sha256  66b313cce80ed0623fc7db3f24863a0c80fd83eb341a46b57864158ae74faa56  LICENSE.txt
-diff --git a/package/python-jmespath/python-jmespath.mk b/package/python-jmespath/python-jmespath.mk
-index 4afd06fd48..cf11dedb60 100644
---- a/package/python-jmespath/python-jmespath.mk
-+++ b/package/python-jmespath/python-jmespath.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 0df2467bc5..ab42762e12 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -30,7 +30,8 @@ BIND_CONF_OPTS = \
+ 	--with-randomdev=/dev/urandom \
+ 	--enable-epoll \
+ 	--with-gssapi=no \
+-	--enable-filter-aaaa
++	--enable-filter-aaaa \
++	--disable-backtrace
  
--PYTHON_JMESPATH_VERSION = 0.9.4
-+PYTHON_JMESPATH_VERSION = 0.10.0
- PYTHON_JMESPATH_SOURCE = jmespath-$(PYTHON_JMESPATH_VERSION).tar.gz
--PYTHON_JMESPATH_SITE = https://files.pythonhosted.org/packages/2c/30/f0162d3d83e398c7a3b70c91eef61d409dea205fb4dc2b47d335f429de32
-+PYTHON_JMESPATH_SITE = https://files.pythonhosted.org/packages/3c/56/3f325b1eef9791759784aa5046a8f6a1aff8f7c898a2e34506771d3b99d8
- PYTHON_JMESPATH_SETUP_TYPE = setuptools
- PYTHON_JMESPATH_LICENSE = MIT
- PYTHON_JMESPATH_LICENSE_FILES = LICENSE.txt
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ BIND_CONF_OPTS += --with-zlib=$(STAGING_DIR)/usr
 -- 
 2.29.2
