@@ -1,55 +1,83 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  3 Jan 2021 15:21:01 +0100
-Subject: [Buildroot] [PATCH 1/1] package/kismet: server needs wchar
-Message-ID: <20210103142101.781654-1-fontaine.fabrice@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  3 Jan 2021 16:03:06 +0100
+Subject: [Buildroot] [PATCH 1/1] package/python3: add optional support for
+ lib2to3
+Message-ID: <20210103150306.1509091-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-kismet embeds its own copy of fmt since version 2019-04-R1 so add a
-dependency on wchar to avoid the following build failure when building
-the server:
+Kodi is in transition to support python3 instead of python2:
+https://kodi.wiki/view/General_information_about_migration_to_Python_3
 
-./fmt/core.h:1245:1:
- std::wstring vformat(wstring_view format_str, wformat_args args);
- ^~~
-./fmt/core.h:1266:13: error: 'wstring' in namespace 'std' does not name a type
- inline std::wstring format(wstring_view format_str, const Args & ... args) {
-             ^~~~~~~
-./fmt/core.h:1266:8: note: 'std::wstring' is defined in header '<string>'; did you forget to '#include <string>'?
+"For Kodi 18 (Leia), only addons that are compatible with both Python 2
+ and 3 will be accepted to the official addon repository."
 
-Fixes:
- - http://autobuild.buildroot.org/results/f19b3d080514a799a1c75b38ff5f7ae4e8d2628d
+Some of these addons depend on the Kodi addon script.module.future to
+provide support for both python versions.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+The script.module.future addon contains python-future:
+https://kodi.wiki/view/General_information_about_migration_to_Python_3#Future
+which in turn needs lib2to3 to be included in the target build of
+python3: http://python-future.org/automatic_conversion.html
+
+Kodi addons depending on the script.module.future addon are crashing on
+buildroot due to lib2to3 missing in the build.
+
+LibreELEC added lib2to3 to python3 to fix the problem:
+https://forum.libreelec.tv/thread/21239-lib2to3-pgen2-parse-missing/
+https://github.com/LibreELEC/LibreELEC.tv/pull/4146
+
+This patch provides the Config.in option to be used by Kodi 19.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kismet/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/python3/Config.in  | 5 +++++
+ package/python3/python3.mk | 7 ++++++-
+ 2 files changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/package/kismet/Config.in b/package/kismet/Config.in
-index 02046e7efb..d9f8ebe03d 100644
---- a/package/kismet/Config.in
-+++ b/package/kismet/Config.in
-@@ -59,14 +59,16 @@ config BR2_PACKAGE_KISMET_SERVER
- 	default y
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
- 	depends on !BR2_STATIC_LIBS # dlfcn.h
-+	depends on BR2_USE_WCHAR
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # protobuf
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::future
- 	select BR2_PACKAGE_PROTOBUF
+diff --git a/package/python3/Config.in b/package/python3/Config.in
+index 7e19f84843..efc4dbb3d4 100644
+--- a/package/python3/Config.in
++++ b/package/python3/Config.in
+@@ -41,6 +41,11 @@ menu "core python3 modules"
  
--comment "server needs a toolchain w/ dynamic library, gcc >= 4.8"
-+comment "server needs a toolchain w/ dynamic library, wchar, gcc >= 4.8"
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735
--	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ comment "The following modules are unusual or require extra libraries"
  
- comment "server needs a toolchain not affected by GCC bug 64735"
- 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
++config BR2_PACKAGE_PYTHON3_2TO3
++	bool "2to3 module"
++	help
++	  code translation from python 2 to 3
++
+ config BR2_PACKAGE_PYTHON3_BERKELEYDB
+ 	bool "berkeleydb"
+ 	select BR2_PACKAGE_BERKELEYDB
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index d200eecf76..de90b4a267 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -55,6 +55,12 @@ else
+ PYTHON3_CONF_OPTS += --disable-berkeleydb
+ endif
+ 
++ifeq ($(BR2_PACKAGE_PYTHON3_2TO3),y)
++PYTHON_CONF_OPTS += --enable-lib2to3
++else
++PYTHON_CONF_OPTS += --disable-lib2to3
++endif
++
+ ifeq ($(BR2_PACKAGE_PYTHON3_READLINE),y)
+ PYTHON3_DEPENDENCIES += readline
+ else
+@@ -162,7 +168,6 @@ PYTHON3_CONF_OPTS += \
+ 	--with-system-ffi \
+ 	--disable-pydoc \
+ 	--disable-test-modules \
+-	--disable-lib2to3 \
+ 	--disable-tk \
+ 	--disable-nis \
+ 	--disable-idle3 \
 -- 
 2.29.2
