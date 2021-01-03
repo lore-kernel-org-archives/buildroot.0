@@ -1,343 +1,163 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 2 Jan 2021 23:56:12 +0100
-Subject: [Buildroot] [PATCH 2/2] utils/source-check: new script
-In-Reply-To: <20201204123313.14455-2-patrickdepinguin@gmail.com>
-References: <20201204123313.14455-1-patrickdepinguin@gmail.com>
- <20201204123313.14455-2-patrickdepinguin@gmail.com>
-Message-ID: <20210102225612.GJ2997@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 03 Jan 2021 08:18:53 -0000
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2021-01-02
+Message-ID: <20210103081900.21D2A8587C@whitealder.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hello,
 
-On 2020-12-04 13:33 +0100, Thomas De Schampheleire spake thusly:
-> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> 
-> This source-check script is a replacement for 'make source-check' that
-> existed in earlier versions of Buildroot.
-> 
-> It takes as input a list of defconfigs,
+Autobuild statistics for 2021-01-02
+===================================
 
-Make that work on the current configured directory. I.e. it should
-require a .config file to be already present.
+      branch |  OK | NOK | TIM | TOT |
+  2020.02.x  | 12  |  3  |  0  | 15  |
+  2020.11.x  | 18  |  4  |  2  | 24  |
+    master   | 105 | 59  |  0  | 164 |
 
-Scanning for multiple defconfigs should be left as an exercise to the
-interested parties (e.g. a job in a CI system, I believe).
+Classification of failures by reason for master
+-----------------------------------------------
 
-e.g.;
+                 uclibc-1.0.37 | 6 
+        host-sentry-cli-1.57.0 | 5 
+    python-mwclient-legal-info | 5 
+package/python-mwclient/pyt... | 4 
+            quickjs-2020-11-08 | 4 
+                  bind-9.11.25 | 3 
+              fetchmail-6.4.14 | 3 
+                       unknown | 3 
+                    qemu-5.2.0 | 2 
+                    ruby-2.7.2 | 2 
+               target-finalize | 2 
+             timescaledb-1.7.4 | 2 
+      trace-cmd-trace-cmd-v2.7 | 2 
+                  zeromq-4.3.3 | 2 
+               belle-sip-4.3.1 | 1 
+                  boost-1.74.0 | 1 
+                 dmalloc-5.5.2 | 1 
+            erlang-jiffy-1.0.6 | 1 
+                       gdb-9.2 | 1 
+          gstreamer1-mm-1.10.0 | 1 
+                hiawatha-10.11 | 1 
+           host-mono-6.12.0.90 | 1 
+                    htop-3.0.3 | 1 
+             kismet-2020-12-R3 | 1 
+                    mpv-0.32.0 | 1 
+                openblas-0.3.9 | 1 
+              wpewebkit-2.30.4 | 1 
+xdriver_xf86-video-amdgpu-1... | 1 
 
-    for cfg in configs/*_defconfig; do
-        make ${cfg#*/}
-        ./utils/source-check || { printf 'Failed: %s\n' "${cfg#*/}"; break; }
-    done
 
-> and then efficiently determines
-> whether all files needed can be downloaded, without actually downloading
-> them.
-> 
-> The settings of BR2_PRIMARY_SITE, BR2_PRIMARY_SITE_ONLY and
-> BR2_PRIMARY_SITE_ONLY_EXTENDED_DOMAINS will be used as specified in the
-> respective defconfigs.
-> 
-> Note: scp, hg, file, and http(s) protocols are currently covered. Others,
-> like git, bzr, svn currently are not. I don't really use these and am not
-> sure if it is possible to check remotely if something is valid or not,
-> without downloading the entire repository.
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> ---
->  utils/source-check | 220 +++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 220 insertions(+)
->  create mode 100755 utils/source-check
-> 
-> diff --git a/utils/source-check b/utils/source-check
-> new file mode 100755
-> index 0000000000..16566b9e81
-> --- /dev/null
-> +++ b/utils/source-check
-> @@ -0,0 +1,220 @@
-> +#!/usr/bin/env python3
-> +"""
-> +source-check: check that all packages needed for the specified defconfigs can be downloaded
-> +
-> +Given a list of defconfigs, determine which URLs are needed to build it, and
-> +check the accessibility of the packages represented by them. Typically this
-> +does not actually involve a real download, so this scripts works very fast.
-> +"""
-> +
-> +# example output of 'make show-info'
-> +# 'rsync': {'dependencies': ['host-ccache',
-> +#                            'host-skeleton',
-> +#                            'host-tar',
-> +#                            'popt',
-> +#                            'skeleton',
-> +#                            'toolchain',
-> +#                            'zlib'],
-> +#           'dl_dir': 'rsync',
-> +#           'downloads': [{'source': 'rsync-3.1.3.tar.gz',
-> +#                          'uris': ['scp|urlencode+scp://xxx at mirror.example.com/rsync',
-> +#                                   'scp|urlencode+scp://xxx at mirror.example.com',
-> +#                                   'http+http://rsync.samba.org/ftp/rsync/src',
-> +#                                   'http|urlencode+http://sources.buildroot.net/rsync',
-> +#                                   'http|urlencode+http://sources.buildroot.net']}],
-> +#           'install_images': False,
-> +#           'install_staging': False,
-> +#           'install_target': True,
-> +#           'licenses': 'GPL-3.0+',
-> +#           'reverse_dependencies': [],
-> +#           'type': 'target',
-> +#           'version': '3.1.3',
-> +#           'virtual': False},
-> +
-> +
-> +def get_files_to_check_one_defconfig(defconfig):
-> +    outputdir = 'sourcecheck_%s' % defconfig
-> +    subprocess.check_call([
-> +        'make', '--no-print-directory', '-s', 'O=%s' % outputdir,
-> +        defconfig
-> +    ])
-> +    # Note: set suitable-host-package to empty to pretend no suitable tools are
-> +    # present on the host, and thus force all potentially-needed sources in the
-> +    # list (e.g. cmake, gzip, ...)
-> +    output = subprocess.check_output([
-> +        'make', '--no-print-directory', '-s', 'O=%s' % outputdir,
-> +        'show-info', 'suitable-host-package='
-> +    ])
-> +    info = json.loads(output)
-> +
-> +    files_to_check = set()
-> +
-> +    for pkg in info:
-> +        if 'downloads' not in info[pkg]:
-> +            sys.stderr.write("Warning: %s: no downloads for package '%s'\n" % (defconfig, pkg))
-> +            continue
-> +        if not info[pkg]['downloads']:
-> +            sys.stderr.write("Warning: %s: empty downloads for package '%s'\n" % (defconfig, pkg))
-> +            continue
+Detail of failures for master
+-----------------------------
 
-Does that relayy warrant a warning? virtual packages have no download
-key; some system-level packages (skeletons, mkpasswd et al.) have a
-download key, but the dictionnary is empty. Having spurious warnings is
-the best way for people to simply ignore them...
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+   nios2     |        belle-sip-4.3.1         | NOK | http://autobuild.buildroot.net/results/9e162276a5a8c5582f50adf87d9b1d38417d61bf |     
+    arm      |          bind-9.11.25          | NOK | http://autobuild.buildroot.net/results/7a1a140314bc8d134f9eeb95ef2e46e7fb0ce9fd | ORPH
+    arm      |          bind-9.11.25          | NOK | http://autobuild.buildroot.net/results/f0db5fe7fc6860b7270c784989c451e2e7aa2afb | ORPH
+    arm      |          bind-9.11.25          | NOK | http://autobuild.buildroot.net/results/cb963298885df37f1e5c4d3ab3989773c01c54fc | ORPH
+   nios2     |          boost-1.74.0          | NOK | http://autobuild.buildroot.net/results/c08e3dbe326123ab37ca9bc510ae530be9b59d4d |     
+    arc      |         dmalloc-5.5.2          | NOK | http://autobuild.buildroot.net/results/bee53880394e8590d4f62fef7774dc5fd5c575b7 | ORPH
+  aarch64    |       erlang-jiffy-1.0.6       | NOK | http://autobuild.buildroot.net/results/da5d6706c64ba6d06a2d8db6d821cc8f86d87503 |     
+   mipsel    |        fetchmail-6.4.14        | NOK | http://autobuild.buildroot.net/results/d8a75d3ca63d1ddbdf80b9019512c5bd95ecfd47 |     
+   s390x     |        fetchmail-6.4.14        | NOK | http://autobuild.buildroot.net/results/2e56fd0c4bb63ecd64100e387535fded31d211bc |     
+    arm      |        fetchmail-6.4.14        | NOK | http://autobuild.buildroot.net/results/4570d0933f89118f92096281c5144ba88118c5be |     
+   s390x     |            gdb-9.2             | NOK | http://autobuild.buildroot.net/results/3b916ea8ab653545d51e9ea1b35177bdf57990a2 | ORPH
+  mips64el   |      gstreamer1-mm-1.10.0      | NOK | http://autobuild.buildroot.net/results/c6cc4940883e1d658a0fc81579444d3f7bd19f88 | ORPH
+    sh4      |         hiawatha-10.11         | NOK | http://autobuild.buildroot.net/results/1b27c9e4a55a89b82d7dc49f7666323604115bca |     
+  powerpc    |      host-mono-6.12.0.90       | NOK | http://autobuild.buildroot.net/results/81fce30cbf12394ac6a337571e8c30e2fd93d9f4 |     
+  powerpc    |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/0711301b9c0e8f9324c95dc7db5ec88432f48c36 |     
+   mipsel    |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/7e14b06e345454bbfd97bd749a61400a104c3351 |     
+  powerpc    |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/4764d71807db3b51cd83653a98af00a573eeff88 |     
+    arm      |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/b56aad8e2598c771a74dc8810ae15fe162a53ff1 |     
+  mips64el   |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/97cdcf5d017da678b850b6b3b9c9b2f6b81014d2 |     
+   xtensa    |           htop-3.0.3           | NOK | http://autobuild.buildroot.net/results/84ea9325dec3976d5df75d7a740cef1715666c5c | ORPH
+  powerpc    |       kismet-2020-12-R3        | NOK | http://autobuild.buildroot.net/results/f19b3d080514a799a1c75b38ff5f7ae4e8d2628d | ORPH
+    arm      |           mpv-0.32.0           | NOK | http://autobuild.buildroot.net/results/1b0706090511f68756b700f35dc9c1a150238b7a |     
+ aarch64_be  |         openblas-0.3.9         | NOK | http://autobuild.buildroot.net/results/5afdd14bc1538a6af967f07fed3c75730f57898c | ORPH
+  aarch64    | package/python-mwclient/pyt... | NOK | http://autobuild.buildroot.net/results/0bfe1fde82dd71832418c8b8bd68df2c4fa4024d |     
+    arm      | package/python-mwclient/pyt... | NOK | http://autobuild.buildroot.net/results/2b4ccb6ba6667322c00861ae9ce56f0c63f75a14 |     
+  aarch64    | package/python-mwclient/pyt... | NOK | http://autobuild.buildroot.net/results/cd2bf0decd7080c968be3861cf1691ba8735e374 |     
+    sh4      | package/python-mwclient/pyt... | NOK | http://autobuild.buildroot.net/results/cdf7a7d8095150ef622229b7bb8c11f54129a1c0 |     
+    mips     |   python-mwclient-legal-info   | NOK | http://autobuild.buildroot.net/results/a94b9fb4c42198c75f06315ee82cd1b565ca9080 |     
+  mips64el   |   python-mwclient-legal-info   | NOK | http://autobuild.buildroot.net/results/ab1c18813908ea76e7d9d88727ffd949e09688de |     
+    sh4      |   python-mwclient-legal-info   | NOK | http://autobuild.buildroot.net/results/6729857557ed1b3aa321f2b124cc27a08200f89b |     
+   mipsel    |   python-mwclient-legal-info   | NOK | http://autobuild.buildroot.net/results/4fa8d6c0ad8d38beb0a12242fede63c51dec8881 |     
+    arc      |   python-mwclient-legal-info   | NOK | http://autobuild.buildroot.net/results/555c3cf117ce07f144bb1617ff2c315cc57619b5 |     
+   x86_64    |           qemu-5.2.0           | NOK | http://autobuild.buildroot.net/results/7d0018857bf7dd72bd9cfae13e965bc53819ffd9 | ORPH
+    arm      |           qemu-5.2.0           | NOK | http://autobuild.buildroot.net/results/d02fb24a1f9ee79998560e8096c58ae3d0eb3d4c | ORPH
+  riscv64    |       quickjs-2020-11-08       | NOK | http://autobuild.buildroot.net/results/e0766eef95a2559d51e58d1a81a9c40df84ae509 |     
+  riscv64    |       quickjs-2020-11-08       | NOK | http://autobuild.buildroot.net/results/c7882cc2d66984350f54d619f39cfee5065d941a |     
+  riscv64    |       quickjs-2020-11-08       | NOK | http://autobuild.buildroot.net/results/15d631f4fd46337271b1bbfae164763a64903d63 |     
+    arm      |       quickjs-2020-11-08       | NOK | http://autobuild.buildroot.net/results/0a58b2275b85fef17c6359088ad4aef578b03103 |     
+    arm      |           ruby-2.7.2           | NOK | http://autobuild.buildroot.net/results/4a7ea5517c810d39fcc97189e22f0473ed76fac5 |     
+    arm      |           ruby-2.7.2           | NOK | http://autobuild.buildroot.net/results/1f997d96308b1ad99724b46c5ba0d669181350df |     
+    sh4      |        target-finalize         | NOK | http://autobuild.buildroot.net/results/004530d165b1aff3a26a01374970e8f20894812a |     
+  aarch64    |        target-finalize         | NOK | http://autobuild.buildroot.net/results/838da11cbd078ab8f42bcf203cdfd43455989cf4 |     
+    i686     |       timescaledb-1.7.4        | NOK | http://autobuild.buildroot.net/results/078fec2605199a8899572bddb6d28cddf7bd27e9 |     
+ powerpc64   |       timescaledb-1.7.4        | NOK | http://autobuild.buildroot.net/results/acdfbe7741182327c454570cff882cbc319615e8 |     
+    arm      |    trace-cmd-trace-cmd-v2.7    | NOK | http://autobuild.buildroot.net/results/4a2b239677bee23846d286cf77c04af2b5577898 |     
+    arm      |    trace-cmd-trace-cmd-v2.7    | NOK | http://autobuild.buildroot.net/results/287476db94f559b76f51a87f17bc573150bf6169 |     
+    arc      |         uclibc-1.0.37          | NOK | http://autobuild.buildroot.net/results/27a58e332d597e5385ed1a628428bae628b7f1c3 |     
+  riscv64    |         uclibc-1.0.37          | NOK | http://autobuild.buildroot.net/results/1c0054f6c9c47226b0ad5993546289d2bb2c8a00 |     
+    arc      |         uclibc-1.0.37          | NOK | http://autobuild.buildroot.net/results/18bdea64ac877a3dda826243015419b0cf848702 |     
+   xtensa    |         uclibc-1.0.37          | NOK | http://autobuild.buildroot.net/results/2add3a9d42cb564860bf12859fa6ef241cde33e4 |     
+    arc      |         uclibc-1.0.37          | NOK | http://autobuild.buildroot.net/results/5abd823ab7beac1ea68c5ee528b9a9bb51bf986c |     
+    arm      |         uclibc-1.0.37          | NOK | http://autobuild.buildroot.net/results/76278f52e7722e70061aecc39afdbbf2169b1659 |     
+    arm      |            unknown             | NOK | http://autobuild.buildroot.net/results/97df10aebe04bdfe82e0cb98342a2cad0d2833a4 |     
+   mipsel    |            unknown             | NOK | http://autobuild.buildroot.net/results/df10b03776f1ff1ce8be1ff27192bfba22360b8c |     
+  mips64el   |            unknown             | NOK | http://autobuild.buildroot.net/results/a8020aece5ec4d11aeaea5828423f2d8277ed835 |     
+    arm      |        wpewebkit-2.30.4        | NOK | http://autobuild.buildroot.net/results/24a55f860ec8e4785f7d0a207c4cc7df7ff9bd8f |     
+  riscv64    | xdriver_xf86-video-amdgpu-1... | NOK | http://autobuild.buildroot.net/results/298198c036931b10f7e1046176bd48310ae7455f |     
+    i586     |          zeromq-4.3.3          | NOK | http://autobuild.buildroot.net/results/9c7a6aa327b61f3c9fd2332419c744e8573eb800 |     
+    i686     |          zeromq-4.3.3          | NOK | http://autobuild.buildroot.net/results/9cf643349e1aca76e3abdf32580e47529f174543 |     
 
-> +        for download in info[pkg]['downloads']:
-> +            if 'source' not in download:
-> +                sys.stderr.write("Warning: %s: no source filename found for package '%s'\n" % (defconfig, pkg))
-> +                continue
-> +            if 'uris' not in download:
-> +                sys.stderr.write("Warning: %s: no uri's found for package '%s'\n" % (defconfig, pkg))
-> +                continue
 
-A download without a source or without a URI is an error, not a warning.
-Either it is a bug in the package, or it is a bug in the show-info infra.
-Either way, it must be fixed.
+Classification of failures by reason for 2020.02.x
+--------------------------------------------------
 
-> +            # tuple: (pkg, version, filename, uris)
-> +            # Note: host packages have the same sources as for target, so strip
-> +            # the 'host-' prefix. Because we are using a set, this will remove
-> +            # duplicate entries.
-> +            pkgname = pkg[5:] if pkg.startswith('host-') else pkg
-> +            files_to_check.add((
-> +                pkgname,
+          gstreamer1-mm-1.10.0 | 1 
+                 mesa3d-19.3.4 | 1 
+                qt5base-5.12.8 | 1 
 
-No need for the intermediate variable pkgname:
 
-    files_to_check.add((
-        pkg[5:] if pkg.startswith('host-') else pkg,
-        ...
-    ))
+Detail of failures for 2020.02.x
+--------------------------------
 
-> +                info[pkg]['version'],
-> +                download['source'],
-> +                tuple([uri for uri in download['uris']]),
-> +            ))
-> +
-> +    shutil.rmtree(outputdir)
-> +    return files_to_check
-> +
-> +
-> +def get_files_to_check(defconfigs):
-> +    total_files_to_check = set()
-> +
-> +    num_processes = multiprocessing.cpu_count() * 2
-> +    print('Dispatching over %s processes' % num_processes)
-> +    with multiprocessing.Pool(processes=num_processes) as pool:
-> +        result_objs = [
-> +            pool.apply_async(get_files_to_check_one_defconfig, (defconfig,))
-> +            for defconfig in defconfigs
-> +        ]
-> +        results = [p.get() for p in result_objs]
-> +
-> +    for result in results:
-> +        total_files_to_check |= result
-> +
-> +    return total_files_to_check
-> +
-> +
-> +def sourcecheck_one_uri(pkg, version, filename, uri):
-> +
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    mips     |      gstreamer1-mm-1.10.0      | NOK | http://autobuild.buildroot.net/results/97096d054828062e71d6c6fe3f35cb1992232274 | ORPH
+   x86_64    |         mesa3d-19.3.4          | NOK | http://autobuild.buildroot.net/results/7a062263267035ea7e749ddceea39080ba8b912d |     
+ aarch64_be  |         qt5base-5.12.8         | NOK | http://autobuild.buildroot.net/results/2049681f2382bd109979f78a58deba9bc726aef5 |     
 
-flake8 does not whine with or wihtout a leading empty line. I prefer
-when there is none, though...
 
-However, let's try something:
+Classification of failures by reason for 2020.11.x
+--------------------------------------------------
 
-    def sourcecheck_one_uri(pkg, version, filename, uri):
-        handler = dict()
+                 uclibc-1.0.36 | 2 
+              asterisk-16.14.1 | 1 
+                        bustle | 1 
+                 mesa3d-20.2.2 | 1 
+                       vmtouch | 1 
 
-        def sourcecheck_file(...):
-            ...
-        handler['file'] = source_check_file
 
-        def sourcecheck_hg(...);
-            ...
-        handler['hg'] = source_check_file
+Detail of failures for 2020.11.x
+--------------------------------
 
-        try:
-            return handler[uri.split('://', 1)[0]](pkg, version, filename, uri)
-        except KeyError:
-            raise Exeption('Meh unknown URI type "{}"'.format(uri)) from None
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+   nios2     |        asterisk-16.14.1        | NOK | http://autobuild.buildroot.net/results/01358dba3c6a31d2fbe4b6ef5e1ffecaaccb03df |     
+   mipsel    |             bustle             | TIM | http://autobuild.buildroot.net/results/5084603b23c17cda329cb43b8e16b7c580ecce4f |     
+    mips     |         mesa3d-20.2.2          | NOK | http://autobuild.buildroot.net/results/713de2344aaf6d1dfef68bb2a51b05430813a8cc |     
+    arc      |         uclibc-1.0.36          | NOK | http://autobuild.buildroot.net/results/6460d7d96c49810c08f6f7acb1dbfa8e438831ab |     
+  powerpc    |         uclibc-1.0.36          | NOK | http://autobuild.buildroot.net/results/c53d7fa2baa5eee3128316b3e1da6143b5e76879 |     
+microblazeel |            vmtouch             | TIM | http://autobuild.buildroot.net/results/1cee5248ff5c7d1e25e517974aeae11aa3a80170 |     
 
-Not sure how nicer the code would be. At least, we get an easy one-liner
-to demux the URI type (plus the try-except boilerplate).
 
-> +    def sourcecheck_scp(pkg, version, filename, uri):
-
-Please define handler in alphabetical order.
-
-> +        real_uri = uri.split('+', 1)[1] + '/' + filename
-> +        if real_uri.startswith('scp://'):
-> +            real_uri = real_uri[6:]
-> +        domain, path = real_uri.split(':', 1)
-> +        with open(os.devnull, 'w') as devnull:
-> +            ret = subprocess.call(
-> +                ['ssh', domain, 'test', '-f', path],
-> +                stderr=devnull
-> +            )
-> +        return ret == 0
-> +
-> +    def sourcecheck_hg(pkg, version, filename, uri):
-> +        real_uri = uri.split('+', 1)[1]
-> +        with open(os.devnull, 'w') as devnull:
-> +            ret = subprocess.call(
-> +                ['hg', 'identify', '--rev', version, real_uri],
-> +                stdout=devnull, stderr=devnull
-> +            )
-> +        return ret == 0
-> +
-> +    def sourcecheck_file(pkg, version, filename, uri):
-> +        real_uri = uri.split('+', 1)[1] + '/' + filename
-> +        if real_uri.startswith('file://'):
-> +            real_uri = real_uri[7:]
-> +        return os.path.exists(real_uri)
-> +
-> +    def sourcecheck_http(pkg, version, filename, uri):
-> +        real_uri = uri.split('+', 1)[1] + '/' + filename
-> +        with open(os.devnull, 'w') as devnull:
-> +            ret = subprocess.call(
-> +                ['wget', '--spider', real_uri],
-> +                stderr=devnull
-> +            )
-> +        return ret == 0
-> +
-> +    if uri.startswith('scp'):
-> +        handler = sourcecheck_scp
-> +    elif uri.startswith('hg'):
-> +        handler = sourcecheck_hg
-> +    elif uri.startswith('file'):
-> +        handler = sourcecheck_file
-> +    elif uri.startswith('http'):
-> +        handler = sourcecheck_http
-> +    else:
-> +        raise Exception("Cannot handle unknown URI type: '%s' for package '%s'" % (uri, pkg))
-> +
-> +    return handler(pkg, version, filename, uri)
-> +
-> +
-> +def sourcecheck_one_file(pkg, version, filename, uris):
-> +    result = any(
-> +        sourcecheck_one_uri(pkg, version, filename, uri)
-> +        for uri in uris
-> +    )
-> +    return pkg, version, filename, result
-> +
-> +
-> +def sourcecheck(files_to_check):
-> +
-> +    def process_result(result):
-> +        pkg, version, filename, success = result
-> +        if success:
-> +            print(' OK: pkg %s, filename %s' % (pkg, filename))
-> +        else:
-> +            sys.stderr.write('NOK: pkg %s, filename %s -- ERROR!\n' % (pkg, filename))
-> +
-> +    num_processes = multiprocessing.cpu_count() * 2
-> +    print('Dispatching over %s processes' % num_processes)
-
-Hmm... I don't much like this auto-parallelism... I think we should not
-try to do parallsism at all. But if you really insist, then make that a
-command line option (e.g. source-check -jN).
-
-Regards,
-Yann E. MORIN.
-
-> +    with multiprocessing.Pool(processes=num_processes) as pool:
-> +        result_objs = [
-> +            pool.apply_async(sourcecheck_one_file, entry, callback=process_result)
-> +            for entry in files_to_check
-> +        ]
-> +        results = [p.get() for p in result_objs]
-> +
-> +    succeeded = [
-> +        (pkg, version, filename, success)
-> +        for (pkg, version, filename, success) in results
-> +        if success
-> +    ]
-> +    failed = [
-> +        (pkg, version, filename, success)
-> +        for (pkg, version, filename, success) in results
-> +        if not success
-> +    ]
-> +
-> +    print('\nSummary: %s OK, %s NOK, %s total' % (len(succeeded), len(failed), len(results)))
-> +
-> +    if len(failed):
-> +        print('\nFAILED FILES')
-> +        for pkg, version, filename, success in sorted(failed):
-> +            print('pkg: %s, version: %s, file: %s/%s' % (pkg, version, pkg, filename))
-> +
-> +    return len(failed) == 0
-> +
-> +
-> +def main():
-> +    defconfigs = sys.argv[1:]
-> +    if not defconfigs:
-> +        sys.stderr.write('Error: pass list of defconfigs as arguments\n')
-> +        sys.exit(1)
-> +
-> +    total_files_to_check = get_files_to_check(defconfigs)
-> +    return sourcecheck(total_files_to_check)
-> +
-> +
-> +if __name__ == '__main__':
-> +    ret = main()
-> +    if not ret:
-> +        sys.exit(1)
-> -- 
-> 2.26.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+http://autobuild.buildroot.net
