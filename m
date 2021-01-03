@@ -1,39 +1,63 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 3 Jan 2021 21:26:29 +0100
-Subject: [Buildroot] [git commit] package/trace-cmd: installs nothing in
- staging/
-Message-ID: <20210103200946.C2D7586189@busybox.osuosl.org>
+Date: Sun, 3 Jan 2021 21:32:49 +0100
+Subject: [Buildroot] [PATCH 1/1] package/bustle: fix static build
+In-Reply-To: <20210103134018.530599-1-fontaine.fabrice@gmail.com>
+References: <20210103134018.530599-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210103203249.GO2997@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=896b93310a2e5f5945f3b792296a05be0373269f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fabrice, All,
 
-Since its introduction in Buildroot in 2013 with commit 07203d78c24d
-(trace-cmd: new package), trace-cmd has declared installing in staging.
+On 2021-01-03 14:40 +0100, Fabrice Fontaine spake thusly:
+> Commit 436cb9308a50b1007a42eb490405a3155307a771 wrongly removed --static
+> from pcap-config call
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/b5d8d8d8452342373c2446613ba3051c20a97c03
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/bustle/bustle.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/bustle/bustle.mk b/package/bustle/bustle.mk
+> index c6c3a72a91..9010754d90 100644
+> --- a/package/bustle/bustle.mk
+> +++ b/package/bustle/bustle.mk
+> @@ -9,7 +9,7 @@ BUSTLE_SITE = https://hackage.haskell.org/package/bustle-$(BUSTLE_VERSION)
+>  BUSTLE_LICENSE = LGPL-2.1+
+>  BUSTLE_LICENSE_FILES = LICENSE
+>  BUSTLE_DEPENDENCIES = libglib2 libpcap host-pkgconf
+> -BUSTLE_MAKE_OPTS = PCAP_CONFIG=$(STAGING_DIR)/usr/bin/pcap-config
+> +BUSTLE_MAKE_OPTS = PCAP_CONFIG="$(STAGING_DIR)/usr/bin/pcap-config --static"
 
-But trace-cmd is a generic-package, and has never, ever provided any
-commands for staging installation.
+Before commit 436cb9308a50, this was conditional on BR2_STATIC_LIBS.
+And I guess that, with BR2_SHARED_LIBS, --static does not makes sense
+either...
 
-Drop this declaration.
+Quid?
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/trace-cmd/trace-cmd.mk | 1 -
- 1 file changed, 1 deletion(-)
+Regards,
+Yann E. MORIN.
 
-diff --git a/package/trace-cmd/trace-cmd.mk b/package/trace-cmd/trace-cmd.mk
-index ffaf93a7cd..cd3fcb9755 100644
---- a/package/trace-cmd/trace-cmd.mk
-+++ b/package/trace-cmd/trace-cmd.mk
-@@ -7,7 +7,6 @@
- TRACE_CMD_VERSION = trace-cmd-v2.9.1
- TRACE_CMD_SITE = https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git
- TRACE_CMD_SITE_METHOD = git
--TRACE_CMD_INSTALL_STAGING = YES
- TRACE_CMD_LICENSE = GPL-2.0, LGPL-2.1
- TRACE_CMD_LICENSE_FILES = COPYING COPYING.LIB LICENSES/GPL-2.0 LICENSES/LGPL-2.1
- 
+>  define BUSTLE_BUILD_CMDS
+>  	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
+> -- 
+> 2.29.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
