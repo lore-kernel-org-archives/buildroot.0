@@ -1,43 +1,59 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  3 Jan 2021 14:52:46 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libmdbx: fix build with glibc < 2.12
-Message-ID: <20210103135246.553734-1-fontaine.fabrice@gmail.com>
+From: Gleb Mazovetskiy <glex.spb@gmail.com>
+Date: Sun,  3 Jan 2021 14:03:15 +0000
+Subject: [Buildroot] [PATCH 1/1] Makefile: Parallelize glibc locale
+ generation
+Message-ID: <20210103140315.1301698-1-glex.spb@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Set CMAKE_BUILD_TYPE to Release to avoid the following build failure
-with glibc < 2.12:
+Parallelizes locale generation based on `BR2_JLEVEL` setting.
 
-/home/buildroot/autobuild/run/instance-1/output-1/build/libmdbx-0.9.2/mdbx.c:487:5: error: #warning "libmdbx was only tested with GLIBC >= 2.12." [-Werror=cpp]
- #   warning "libmdbx was only tested with GLIBC >= 2.12."
-     ^~~~~~~
-cc1: all warnings being treated as errors
+Uses `-P` (`--max-procs`) GNU xargs extension
+together with the standard `-n` xargs option (`--max-args`).
 
-Fixes:
- - http://autobuild.buildroot.org/results/1a60b2c3d2f276f99a22da48e8e16fcf5744eba0
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Gleb Mazovetskiy <glex.spb@gmail.com>
 ---
- package/libmdbx/libmdbx.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ Makefile | 23 +++++++++++------------
+ 1 file changed, 11 insertions(+), 12 deletions(-)
 
-diff --git a/package/libmdbx/libmdbx.mk b/package/libmdbx/libmdbx.mk
-index 878ea87c07..370df2eaa3 100644
---- a/package/libmdbx/libmdbx.mk
-+++ b/package/libmdbx/libmdbx.mk
-@@ -14,7 +14,10 @@ LIBMDBX_REDISTRIBUTE = YES
- LIBMDBX_STRIP_COMPONENTS = 0
- LIBMDBX_INSTALL_STAGING = YES
+diff --git a/Makefile b/Makefile
+index 4d334adcd6..574b55e203 100644
+--- a/Makefile
++++ b/Makefile
+@@ -673,20 +673,19 @@ PACKAGES += host-localedef
  
-+# Set CMAKE_BUILD_TYPE to Release to remove -Werror and avoid a build failure
-+# with glibc < 2.12
- LIBMDBX_CONF_OPTS = \
-+	-DCMAKE_BUILD_TYPE=Release \
- 	-DMDBX_INSTALL_MANPAGES=OFF \
- 	-DBUILD_FOR_NATIVE_CPU=OFF \
- 	-DMDBX_BUILD_CXX=$(if $(BR2_PACKAGE_LIBMDBX_CXX),ON,OFF) \
+ define GENERATE_GLIBC_LOCALES
+ 	$(Q)mkdir -p $(TARGET_DIR)/usr/lib/locale/
+-	$(Q)for locale in $(GLIBC_GENERATE_LOCALES) ; do \
+-		inputfile=`echo $${locale} | cut -f1 -d'.'` ; \
+-		charmap=`echo $${locale} | cut -f2 -d'.' -s` ; \
+-		if test -z "$${charmap}" ; then \
+-			charmap="UTF-8" ; \
+-		fi ; \
+-		echo "Generating locale $${inputfile}.$${charmap}" ; \
+-		I18NPATH=$(STAGING_DIR)/usr/share/i18n:/usr/share/i18n \
++	$(Q)echo "Generating locales: $(GLIBC_GENERATE_LOCALES)"
++	for locale in $(GLIBC_GENERATE_LOCALES) ; do \
++		echo -i ; \
++		echo $${locale%%.*} ; \
++		echo -f ; \
++		echo $${locale} | cut -f2 -d'.' || echo UTF-8 ; \
++		echo $${locale} ; \
++	done | \
++	I18NPATH=$(STAGING_DIR)/usr/share/i18n:/usr/share/i18n \
++	xargs -P $(PARALLEL_JOBS) -n 5 \
+ 		$(HOST_DIR)/bin/localedef \
+ 			--prefix=$(TARGET_DIR) \
+-			--$(call LOWERCASE,$(BR2_ENDIAN))-endian \
+-			-i $${inputfile} -f $${charmap} \
+-			$${locale} ; \
+-	done
++			--$(call LOWERCASE,$(call qstrip,$(BR2_ENDIAN)))-endian
+ endef
+ TARGET_FINALIZE_HOOKS += GENERATE_GLIBC_LOCALES
+ endif
 -- 
-2.29.2
+2.27.0
