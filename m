@@ -1,68 +1,50 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 3 Jan 2021 21:47:54 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libmdbx: fix build with glibc <
- 2.12
-In-Reply-To: <20210103135246.553734-1-fontaine.fabrice@gmail.com>
-References: <20210103135246.553734-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210103204754.GP2997@scaer>
+Date: Sun, 3 Jan 2021 21:49:47 +0100
+Subject: [Buildroot] [git commit] package/bind: disable backtrace support
+Message-ID: <20210103203707.19FD383A28@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=700674b45c86d28570ecb50d657ac7f6dfd89784
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-01-03 14:52 +0100, Fabrice Fontaine spake thusly:
-> Set CMAKE_BUILD_TYPE to Release to avoid the following build failure
-> with glibc < 2.12:
-> 
-> /home/buildroot/autobuild/run/instance-1/output-1/build/libmdbx-0.9.2/mdbx.c:487:5: error: #warning "libmdbx was only tested with GLIBC >= 2.12." [-Werror=cpp]
->  #   warning "libmdbx was only tested with GLIBC >= 2.12."
->      ^~~~~~~
-> cc1: all warnings being treated as errors
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/1a60b2c3d2f276f99a22da48e8e16fcf5744eba0
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Disable backtrace support, fixes linking failure for uclibc/musl based
+toolchains.
 
-Applied to master, thanks.
+Fixes:
 
-Regards,
-Yann E. MORIN.
+  - http://autobuild.buildroot.net/results/7a1a140314bc8d134f9eeb95ef2e46e7fb0ce9fd/
 
-> ---
->  package/libmdbx/libmdbx.mk | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/package/libmdbx/libmdbx.mk b/package/libmdbx/libmdbx.mk
-> index 878ea87c07..370df2eaa3 100644
-> --- a/package/libmdbx/libmdbx.mk
-> +++ b/package/libmdbx/libmdbx.mk
-> @@ -14,7 +14,10 @@ LIBMDBX_REDISTRIBUTE = YES
->  LIBMDBX_STRIP_COMPONENTS = 0
->  LIBMDBX_INSTALL_STAGING = YES
->  
-> +# Set CMAKE_BUILD_TYPE to Release to remove -Werror and avoid a build failure
-> +# with glibc < 2.12
->  LIBMDBX_CONF_OPTS = \
-> +	-DCMAKE_BUILD_TYPE=Release \
->  	-DMDBX_INSTALL_MANPAGES=OFF \
->  	-DBUILD_FOR_NATIVE_CPU=OFF \
->  	-DMDBX_BUILD_CXX=$(if $(BR2_PACKAGE_LIBMDBX_CXX),ON,OFF) \
-> -- 
-> 2.29.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+  .../arm-buildroot-linux-uclibcgnueabi/bin/ld: ../isc/.libs/libisc.so: undefined reference to `_Unwind_GetIP'
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+  - http://autobuild.buildroot.net/results/f0db5fe7fc6860b7270c784989c451e2e7aa2afb/
+
+  .../arm-buildroot-linux-uclibcgnueabi/bin/ld: ../isc/.libs/libisc.so: undefined reference to `_Unwind_GetIP'
+
+  - http://autobuild.buildroot.net/results/cb963298885df37f1e5c4d3ab3989773c01c54fc/
+
+  .../arm-buildroot-linux-musleabihf/bin/ld: ../isc/.libs/libisc.so: undefined reference to `_Unwind_GetIP'
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/bind/bind.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 0df2467bc5..ab42762e12 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -30,7 +30,8 @@ BIND_CONF_OPTS = \
+ 	--with-randomdev=/dev/urandom \
+ 	--enable-epoll \
+ 	--with-gssapi=no \
+-	--enable-filter-aaaa
++	--enable-filter-aaaa \
++	--disable-backtrace
+ 
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ BIND_CONF_OPTS += --with-zlib=$(STAGING_DIR)/usr
