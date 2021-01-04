@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 4 Jan 2021 17:58:18 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] boot/lpc32xxcdl: switch
+Date: Mon, 4 Jan 2021 17:55:33 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] boot/lpc32xxcdl: switch
  upstream location
-Message-ID: <20210104164307.1D77084C70@busybox.osuosl.org>
+Message-ID: <20210104164311.C16B384C70@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a66200f6b304df3bea280d9b5a99633c402cb681
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=7fe5f5de86bab2f1e3a0d4ae21bf70af9078885b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
 The upstream git tree has disappeared, but a ZIP file is still hosted
 somewhere at NXP. The content of that zip file has been verified to be
