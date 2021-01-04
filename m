@@ -1,49 +1,113 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 4 Jan 2021 16:21:24 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/paho-mqtt-c: bump
- to version 1.3.8
-Message-ID: <20210104151314.22BD4837F6@busybox.osuosl.org>
+From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+Date: Mon,  4 Jan 2021 16:11:16 +0100
+Subject: [Buildroot] [PATCH 2/2] package/gnuradio: fix qtgui build when
+ gr-analog is not set
+In-Reply-To: <1609773076-72284-1-git-send-email-gwenj@trabucayre.com>
+References: <1609773076-72284-1-git-send-email-gwenj@trabucayre.com>
+Message-ID: <1609773076-72284-2-git-send-email-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dd6d8c363f102f4ce9352db92c59a9e41452393d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-https://github.com/eclipse/paho.mqtt.c/milestone/15?closed=1
+gr-qtgui examples needs to have gr-analog enabled, without this dependency
+compile crash with:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit f811ecd79be150c5c7aba0d83b08629d88df3aba)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+In file included from
+/x/output/build/gnuradio-3.8.1.0/gr-qtgui/examples/c++/display_qt.cc:22:
+/x/output/build/gnuradio-3.8.1.0/gr-qtgui/examples/c++/display_qt.h:24:10:
+fatal error: gnuradio/analog/noise_source.h: No such file or directory
+24 | #include <gnuradio/analog/noise_source.h>
+| ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[3]: *** [gr-qtgui/examples/c++/CMakeFiles/display_qt.dir/build.make:67:
+gr-qtgui/examples/c++/CMakeFiles/display_qt.dir/display_qt.cc.o] Error 1
+make[3]: *** Waiting for unfinished jobs....
+In file included from
+/somewhere/gnuradio/build/gr-qtgui/examples/c++/moc_display_qt.cpp:10:
+/somewhere/gnuradio/build/gr-qtgui/examples/c++/../../../../gr-qtgui/examples/c++/display_qt.h:24:10:
+fatal error: gnuradio/analog/noise_source.h: No such file or directory
+24 | #include <gnuradio/analog/noise_source.h>
+| ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+
+GR_ANALOG is not an explicit dependency of GR_QTGUI, so disable c++ examples if
+user has not selected this option.
+
+[backported from 7470a7a3771dd90defb826b464dfe62977cb1eb6]
+
+Fixes:
+- http://autobuild.buildroot.net/results/fde670499289f3d7d47379eebccf6e0f92c6d200/
+
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 ---
- package/paho-mqtt-c/paho-mqtt-c.hash | 2 +-
- package/paho-mqtt-c/paho-mqtt-c.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...add-examples-c-subdirectory-when-gr-.patch | 55 +++++++++++++++++++
+ 1 file changed, 55 insertions(+)
+ create mode 100644 package/gnuradio/0004-gr-qtgui-dont-t-add-examples-c-subdirectory-when-gr-.patch
 
-diff --git a/package/paho-mqtt-c/paho-mqtt-c.hash b/package/paho-mqtt-c/paho-mqtt-c.hash
-index 93ce1b34f2..5223757f0f 100644
---- a/package/paho-mqtt-c/paho-mqtt-c.hash
-+++ b/package/paho-mqtt-c/paho-mqtt-c.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256  19e9f04ddf244ab8c937d7e631ca15cedce7df95712c554107600e80efdaf277  paho-mqtt-c-1.3.7.tar.gz
-+sha256  4920ff685344cdb0272568bc4414dcf48fcdfc4a98c78b1f3ca49c38417bf391  paho-mqtt-c-1.3.8.tar.gz
- sha256  83bbba033dc985487e321b6dfde111772affb73460be48726299fed3da684b1c  edl-v10
- sha256  0becf16567beb77fa252b7664631dd177c8f9a1889e48995b45379c7130e5303  epl-v20
- sha256  bc0f3f447097eb82a29ad6c2f4929572bb548b6bd4c9e38fde1bf131a771b7a0  LICENSE
-diff --git a/package/paho-mqtt-c/paho-mqtt-c.mk b/package/paho-mqtt-c/paho-mqtt-c.mk
-index a477c8baaa..b9b4f217fb 100644
---- a/package/paho-mqtt-c/paho-mqtt-c.mk
-+++ b/package/paho-mqtt-c/paho-mqtt-c.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PAHO_MQTT_C_VERSION = 1.3.7
-+PAHO_MQTT_C_VERSION = 1.3.8
- PAHO_MQTT_C_SITE = $(call github,eclipse,paho.mqtt.c,v$(PAHO_MQTT_C_VERSION))
- PAHO_MQTT_C_LICENSE = EPL-2.0 or BSD-3-Clause
- PAHO_MQTT_C_LICENSE_FILES = epl-v20 edl-v10 LICENSE
+diff --git a/package/gnuradio/0004-gr-qtgui-dont-t-add-examples-c-subdirectory-when-gr-.patch b/package/gnuradio/0004-gr-qtgui-dont-t-add-examples-c-subdirectory-when-gr-.patch
+new file mode 100644
+index 0000000000..034c10c5cc
+--- /dev/null
++++ b/package/gnuradio/0004-gr-qtgui-dont-t-add-examples-c-subdirectory-when-gr-.patch
+@@ -0,0 +1,55 @@
++From 268b1a599304f58bd56c86ff09041b5912c24a0c Mon Sep 17 00:00:00 2001
++From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
++Date: Sun, 1 Nov 2020 17:24:36 +0100
++Subject: [PATCH] gr-qtgui: dont't add examples/c++ subdirectory when gr-analog
++ is disabled
++
++gr-qtgui examples needs to have gr-analog enabled, without this dependency
++compile crash with:
++
++In file included from
++/x/output/build/gnuradio-3.8.1.0/gr-qtgui/examples/c++/display_qt.cc:22:
++/x/output/build/gnuradio-3.8.1.0/gr-qtgui/examples/c++/display_qt.h:24:10:
++fatal error: gnuradio/analog/noise_source.h: No such file or directory
++24 | #include <gnuradio/analog/noise_source.h>
++| ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++compilation terminated.
++make[3]: *** [gr-qtgui/examples/c++/CMakeFiles/display_qt.dir/build.make:67:
++gr-qtgui/examples/c++/CMakeFiles/display_qt.dir/display_qt.cc.o] Error 1
++make[3]: *** Waiting for unfinished jobs....
++In file included from
++/somewhere/gnuradio/build/gr-qtgui/examples/c++/moc_display_qt.cpp:10:
++/somewhere/gnuradio/build/gr-qtgui/examples/c++/../../../../gr-qtgui/examples/c++/display_qt.h:24:10:
++fatal error: gnuradio/analog/noise_source.h: No such file or directory
++24 | #include <gnuradio/analog/noise_source.h>
++| ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++compilation terminated.
++
++GR_ANALOG is not an explicit dependency of GR_QTGUI, so disable c++ examples if
++user has not selected this option.
++
++[backported from 7470a7a3771dd90defb826b464dfe62977cb1eb6]
++
++Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
++---
++ gr-qtgui/CMakeLists.txt | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
++
++diff --git a/gr-qtgui/CMakeLists.txt b/gr-qtgui/CMakeLists.txt
++index 8831f3ad9..561186fbd 100644
++--- a/gr-qtgui/CMakeLists.txt
+++++ b/gr-qtgui/CMakeLists.txt
++@@ -68,7 +68,9 @@ if(ENABLE_GR_QTGUI)
++ add_subdirectory(include/gnuradio/qtgui)
++ add_subdirectory(lib)
++ add_subdirectory(docs)
++-add_subdirectory(examples/c++)
+++if (ENABLE_GR_ANALOG)
+++	add_subdirectory(examples/c++)
+++endif(ENABLE_GR_ANALOG)
++ if(ENABLE_PYTHON)
++     add_subdirectory(swig)
++     add_subdirectory(python/qtgui)
++-- 
++2.26.2
++
+-- 
+2.20.1
