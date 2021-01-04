@@ -1,51 +1,52 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 4 Jan 2021 21:29:45 +0100
-Subject: [Buildroot] [git commit] package/libarchive: bump to version 3.5.1
-Message-ID: <20210104201256.DE80A81243@busybox.osuosl.org>
+Date: Mon, 4 Jan 2021 21:29:43 +0100
+Subject: [Buildroot] [git commit] package/mongoose: bump to to version 7.0
+Message-ID: <20210104201256.CFB3286108@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e3fc6f63f1f6d1248e14a4b9d9ac26fa32ce58fd
+commit: https://git.buildroot.net/buildroot/commit/?id=91efa2e99f8be63f4217a94afa40ea7ac0e8eeee
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Libarchive 3.5.1 is a bugfix release.
+Update LICENSE hash; copyright year update:
 
-Update COPYRIGHT hash due to clarification about 'archive_entry.c' source
-file:
+-Copyright (c) 2004-2013 Sergey Lyubka <valenok@gmail.com>
+-Copyright (c) 2013-2018 Cesanta Software Limited
++Copyright (c) 2004-2013 Sergey Lyubka
++Copyright (c) 2013-2020 Cesanta Software Limited
 
- - https://github.com/libarchive/libarchive/commit/fde4660d7bda7debe8e6c8166d49fe9fa62db61d
+See https://github.com/cesanta/mongoose/releases/tag/7.0
 
 Signed-off-by: Pierre-Jean Texier <texier.pj2@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libarchive/libarchive.hash | 4 ++--
- package/libarchive/libarchive.mk   | 2 +-
+ package/mongoose/mongoose.hash | 4 ++--
+ package/mongoose/mongoose.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libarchive/libarchive.hash b/package/libarchive/libarchive.hash
-index 0660378097..bf0d6e4fdd 100644
---- a/package/libarchive/libarchive.hash
-+++ b/package/libarchive/libarchive.hash
-@@ -1,4 +1,4 @@
- # From https://www.libarchive.de/downloads/sha256sums
--sha256  ee1e749213c108cb60d53147f18c31a73d6717d7e3d2481c157e1b34c881ea39  libarchive-3.4.3.tar.gz
-+sha256  9015d109ec00bb9ae1a384b172bf2fc1dff41e2c66e5a9eeddf933af9db37f5a  libarchive-3.5.1.tar.gz
+diff --git a/package/mongoose/mongoose.hash b/package/mongoose/mongoose.hash
+index b8be69be0b..149c0f5866 100644
+--- a/package/mongoose/mongoose.hash
++++ b/package/mongoose/mongoose.hash
+@@ -1,3 +1,3 @@
  # Locally computed:
--sha256  e1e3d4ba9d0b0ccba333b5f5539f7c6c9a3ef3d57a96cd165d2c45eaa1cd026d  COPYING
-+sha256  b2cdf763345de2de34cebf54394df3c61a105c3b71288603c251f2fa638200ba  COPYING
-diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
-index 708ce637c2..1d4962cb20 100644
---- a/package/libarchive/libarchive.mk
-+++ b/package/libarchive/libarchive.mk
+-sha256  f5c10346abc9c72f7cac7885d853ca064fb09aad57580433941a8fd7a3543769  mongoose-6.18.tar.gz
+-sha256  fdc34eeea97327d75c83492abd34f1a3200c53dec04422ecda8071dc60a36d10  LICENSE
++sha256  28206185873b5c448765f56e54d86a7af5a856b0b5f241aa44ac94bf34af7eee  mongoose-7.0.tar.gz
++sha256  9553d057f2ba980642f2c18d87ed38896cff1c9612d77d684a73a11fe1443b05  LICENSE
+diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
+index 5faeafb374..ae20965be4 100644
+--- a/package/mongoose/mongoose.mk
++++ b/package/mongoose/mongoose.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBARCHIVE_VERSION = 3.4.3
-+LIBARCHIVE_VERSION = 3.5.1
- LIBARCHIVE_SITE = https://www.libarchive.de/downloads
- LIBARCHIVE_INSTALL_STAGING = YES
- LIBARCHIVE_LICENSE = BSD-2-Clause, BSD-3-Clause, CC0-1.0, OpenSSL, Apache-2.0
+-MONGOOSE_VERSION = 6.18
++MONGOOSE_VERSION = 7.0
+ MONGOOSE_SITE = $(call github,cesanta,mongoose,$(MONGOOSE_VERSION))
+ MONGOOSE_LICENSE = GPL-2.0
+ MONGOOSE_LICENSE_FILES = LICENSE
