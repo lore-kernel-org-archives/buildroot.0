@@ -1,49 +1,72 @@
-From: Pierre-Jean Texier <texier.pj2@gmail.com>
-Date: Mon,  4 Jan 2021 19:49:01 +0100
-Subject: [Buildroot] [PATCH] package/python-modbus-tk: bump to version 1.1.2
-Message-ID: <20210104184901.3552-1-texier.pj2@gmail.com>
+From: Klaus Heinrich Kiwi <klaus@linux.vnet.ibm.com>
+Date: Mon, 4 Jan 2021 16:42:39 -0300
+Subject: [Buildroot] [PATCH 1/1] package/wqy-zenhei: new package
+In-Reply-To: <20210102184224.13096374@windsurf>
+References: <20201204141737.27942-1-klaus@linux.vnet.ibm.com>
+ <20210102184224.13096374@windsurf>
+Message-ID: <12678409-b5dc-71fa-f0d1-9caf625f75c5@linux.vnet.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also Remove md5 hash
+Hi Thomas,
 
-Signed-off-by: Pierre-Jean Texier <texier.pj2@gmail.com>
----
- package/python-modbus-tk/python-modbus-tk.hash | 5 ++---
- package/python-modbus-tk/python-modbus-tk.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 5 deletions(-)
+On 1/2/2021 2:42 PM, Thomas Petazzoni wrote:
+> Hello Klaus,
+> 
+> Thanks for this contribution! I have applied your patch to master, with
+> a number of changes. See below for details.
 
-diff --git a/package/python-modbus-tk/python-modbus-tk.hash b/package/python-modbus-tk/python-modbus-tk.hash
-index c4fde683c3..c486e49715 100644
---- a/package/python-modbus-tk/python-modbus-tk.hash
-+++ b/package/python-modbus-tk/python-modbus-tk.hash
-@@ -1,6 +1,5 @@
--# md5, sha256 from https://pypi.org/pypi/modbus-tk/json
--md5  e52d5de22cc9d97f2c1086d9b11f0f1e  modbus_tk-1.1.1.tar.gz
--sha256  c6dd004bc6bbff6d9fa93e61654c30a26c817c6632036c656383c9ecadca6639  modbus_tk-1.1.1.tar.gz
-+# sha256 from https://pypi.org/pypi/modbus-tk/json
-+sha256  893514bbd8c92118d20a19979e0239e7cb2a63f8f1795a0271e57def09d11770  modbus_tk-1.1.2.tar.gz
- # Locally computed sha256 checksums
- sha256  3b6a7f9c478ac1982e86cdadb45eb4788241b95839500eb26839d5053b74a24a  license.txt
- sha256  aa7ca42152a13db6a27b31944f99851efc3b9ee813912ff21d7d6ceadca62e6f  copying.txt
-diff --git a/package/python-modbus-tk/python-modbus-tk.mk b/package/python-modbus-tk/python-modbus-tk.mk
-index 37927575ae..30056bb207 100644
---- a/package/python-modbus-tk/python-modbus-tk.mk
-+++ b/package/python-modbus-tk/python-modbus-tk.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_MODBUS_TK_VERSION = 1.1.1
-+PYTHON_MODBUS_TK_VERSION = 1.1.2
- PYTHON_MODBUS_TK_SOURCE = modbus_tk-$(PYTHON_MODBUS_TK_VERSION).tar.gz
--PYTHON_MODBUS_TK_SITE = https://files.pythonhosted.org/packages/63/2e/991c8965fd45db4c38fefe1fa70356825e847e1bbb1f14e127aa2b4d37aa
-+PYTHON_MODBUS_TK_SITE = https://files.pythonhosted.org/packages/ce/e9/30d86eb912bf868b8c97698b5747f10cf72dc26c674fd030249bc3275484
- PYTHON_MODBUS_TK_SETUP_TYPE = setuptools
- PYTHON_MODBUS_TK_LICENSE = LGPL-2.1+
- PYTHON_MODBUS_TK_LICENSE_FILES = license.txt copying.txt
+Thanks! Those look good and thank you for taking the time to write down
+useful explanations about the changes!
+
+>> +config BR2_PACKAGE_WQY_ZENHEI
+>> +	bool "wqy-zenhei (Free Chinese-capable fonts)"
+> 
+> Changed to:
+> 
+> 	bool "wqy-zenhei (Free Chinese-capable fonts)"
+> 
+> Indeed for consistency reason, we try to only use the lower-case
+> package name as the short prompt for packags.
+
+I was puzzled by this comment so I looked at the commit and I think you
+meant to say that you removed the "(Free Chinese-capable fonts)" from the bool.
+That makes sense, thanks!
+
+>> diff --git a/package/wqy-zenhei/wqy-zenhei.hash b/package/wqy-zenhei/wqy-zenhei.hash
+>> new file mode 100644
+>> index 0000000000..86ae38da4f
+>> --- /dev/null
+>> +++ b/package/wqy-zenhei/wqy-zenhei.hash
+>> @@ -0,0 +1,3 @@
+>> +# locally computed sha256 from:
+>> +# https://downloads.sourceforge.net/project/wqy/wqy-zenhei/0.9.45%20%28Fighting-state%20RC1%29/wqy-zenhei-0.9.45.tar.gz
+> 
+> Indicating the URL from which the tarball is downloaded and then the
+> hash calculated locally is not very useful. Also, SourceForge provides
+> md5 and sha1 hashes, and the hash of the license file was missing. So,
+> I've changed to:
+
+I understand the md5 and sha1 hashes that I completely missed, but couldn't decode why the locally computed/calculated
+sha256 is not useful.
+
+> 
+> +# from https://sourceforge.net/projects/wqy/files/wqy-zenhei/0.9.45%20%28Fighting-state%20RC1%29/
+> +md5  4c6c3f4e902dd5ee0a121e8c41d040bd  wqy-zenhei-0.9.45.tar.gz
+> +sha1  b86b65d3048ade868fcc89229cfac6baf80a3e54  wqy-zenhei-0.9.45.tar.gz
+> +# locally calculated
+> +sha256  e4b7e306475bf9427d1757578f0e4528930c84c44eaa3f167d4c42f110ee75d6  wqy-zenhei-0.9.45.tar.gz
+> +sha256  871c2a85e6bbf7bec65043820b706a265ed95d4e58c577fbb2c9f60c39c26ca7  COPYING
+
+> 
+> Applied with those changes. Thanks!
+> 
+> Thomas
+> 
+Thanks again!
+
 -- 
-2.17.1
+Klaus Heinrich Kiwi <klaus@linux.vnet.ibm.com>
