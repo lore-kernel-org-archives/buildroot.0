@@ -1,40 +1,39 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Mon,  4 Jan 2021 22:04:02 +0100
-Subject: [Buildroot] [PATCH] package/spi-tools: bump to version 0.8.6
-Message-ID: <20210104210402.2537-1-francois.perrad@gadz.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 4 Jan 2021 22:05:05 +0100
+Subject: [Buildroot] [PATCH v2 0/5] Introduce CPE ID matching for CVEs
+In-Reply-To: <20201204154601.125932-1-thomas.petazzoni@bootlin.com>
+References: <20201204154601.125932-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20210104220505.02f50dfc@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/spi-tools/spi-tools.hash | 2 +-
- package/spi-tools/spi-tools.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hello,
 
-diff --git a/package/spi-tools/spi-tools.hash b/package/spi-tools/spi-tools.hash
-index 8b7590b33..771f86e4c 100644
---- a/package/spi-tools/spi-tools.hash
-+++ b/package/spi-tools/spi-tools.hash
-@@ -1,3 +1,3 @@
- # locally computed hash
--sha256  a1846bf3b4d38fc419f8efe4555242aa581358fdca28452b3ca11f74e3572e33  spi-tools-0.8.5.tar.gz
-+sha256  319ad6ab296111109ea4a820e216cef392429295de7e10e76f7146677337cf09  spi-tools-0.8.6.tar.gz
- sha256  a01259a1b522cf0de95824f9860613b453153eebac468e96196d5d7dba84786c  LICENSE
-diff --git a/package/spi-tools/spi-tools.mk b/package/spi-tools/spi-tools.mk
-index 1af74c7a1..b2dd4db3f 100644
---- a/package/spi-tools/spi-tools.mk
-+++ b/package/spi-tools/spi-tools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SPI_TOOLS_VERSION = 0.8.5
-+SPI_TOOLS_VERSION = 0.8.6
- SPI_TOOLS_SITE = $(call github,cpb-,spi-tools,$(SPI_TOOLS_VERSION))
- # autoreconf must be run as specified in package documentation
- SPI_TOOLS_AUTORECONF = YES
+On Fri,  4 Dec 2020 16:45:56 +0100
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+
+> Gregory CLEMENT (1):
+>   support/script/pkg-stats: show CPE ID in results
+> 
+> Matt Weber (1):
+>   package: provide CPE ID details for numerous packages
+> 
+> Thomas Petazzoni (3):
+>   support/scripts/{pkg-stats,cve.py}: support CPE ID based matching
+>   support/scripts/pkg-stats: ignore packages with no valid infra and no
+>     version for CVE checking
+>   support/scripts/pkg-stats: improve rendering of CVE information
+
+I have now merged this series, since he had no feedback since December
+4, but positive feedback on its previous iteration.
+
+Best regards,
+
+Thomas
 -- 
-2.27.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
