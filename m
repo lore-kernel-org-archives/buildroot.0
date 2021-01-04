@@ -1,45 +1,87 @@
-From: Michael Vetter <jubalh@iodoru.org>
-Date: Mon,  4 Jan 2021 11:10:54 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libstrophe: bump to version 0.10.1
-Message-ID: <20210104101054.5392-1-jubalh@iodoru.org>
+From: Stephane Viau (OSS) <stephane.viau@oss.nxp.com>
+Date: Mon, 4 Jan 2021 09:31:20 +0000
+Subject: [Buildroot] [PATCH 03/15] package/freescale-imx/imx-gpu-viv:
+ bump version to 6.4.3.p0.0
+In-Reply-To: <X+ttZ1LqmL5tH6jW@p1g2>
+References: <1608793193-11843-1-git-send-email-stephane.viau@oss.nxp.com>
+ <1608793193-11843-4-git-send-email-stephane.viau@oss.nxp.com>,
+ <X+ttZ1LqmL5tH6jW@p1g2>
+Message-ID: <PA4PR04MB792091DE21DDDA580911135BA7D20@PA4PR04MB7920.eurprd04.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changes:
-* Fixed compilation error when LibreSSL is used
-* Fixed crash when NULL is provided as password
+>Hi Stephane,
 
-Signed-off-by: Michael Vetter <jubalh@iodoru.org>
----
- package/libstrophe/libstrophe.hash | 2 +-
- package/libstrophe/libstrophe.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hi Gary, 
 
-diff --git a/package/libstrophe/libstrophe.hash b/package/libstrophe/libstrophe.hash
-index 5f3b098c89..6aca289fb5 100644
---- a/package/libstrophe/libstrophe.hash
-+++ b/package/libstrophe/libstrophe.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256 8d804e4c74cea1133203cc95a59a88f700fbdaead076e7959b495d734dd7936d  libstrophe-0.10.0.tar.gz
-+sha256 4918c47029ecdea2deab4b0f9336ca4a8bb12c28b72b2cec397d98664b94c771  libstrophe-0.10.1.tar.gz
- sha256 82476f36ffd5e895a176013c0812166ba7b7d99f3d536fc7f5ed2e33e9f74a08  MIT-LICENSE.txt
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  GPL-LICENSE.txt
-diff --git a/package/libstrophe/libstrophe.mk b/package/libstrophe/libstrophe.mk
-index 81fc1b9f97..e078eb25cd 100644
---- a/package/libstrophe/libstrophe.mk
-+++ b/package/libstrophe/libstrophe.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBSTROPHE_VERSION = 0.10.0
-+LIBSTROPHE_VERSION = 0.10.1
- LIBSTROPHE_SITE = $(call github,strophe,libstrophe,$(LIBSTROPHE_VERSION))
- LIBSTROPHE_DEPENDENCIES = openssl host-pkgconf
- # Doesn't ship configure
--- 
-2.26.2
+>
+>Have you tried building Weston with that package? It fails to build for
+>me and it seems the makefile requires modifications to setup the symbolic
+>links properly.
+
+I currently only build all (default) *imx* configs found in the configs/ directory.
+
+>I'll take care of it as part of the update to latest (GA) version but I
+>recommend building not only the package but an actual application that
+>requires the GLES libs to be properly installed for next series ;)
+
+Thanks for fixing this! 
+I'll make sure to add such _custom_ config in our CI for next time.
+
+BR,
+Stephane.
+
+>
+>Thanks,
+>Gary
+>
+>On Thu, Dec 24, 2020 at 07:59:41AM +0100, Stephane Viau wrote:
+>> This version is aligned with 5.4.47_2.2.0 NXP Linux BSP.
+>>
+>> Signed-off-by: Stephane Viau <stephane.viau@oss.nxp.com>
+>> ---
+>>  package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash | 8 ++++----
+>>  package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk   | 4 ++--
+>>  2 files changed, 6 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash
+>> index 6de74a9..8978a3a 100644
+>> --- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash
+>> +++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash
+>> @@ -1,5 +1,5 @@
+>>  # Locally calculated
+>> -sha256       9cc4c6594083f5970bc394a698a0a8ed0c7f2a1a753dfbf25cb0be5ab8bdcbd5  imx-gpu-viv-6.4.0.p2.4-aarch32.bin
+>> -sha256       a295f41a6346c507fc8a677c26ecf9b2f416735e32e6d0734516ef5363027720  imx-gpu-viv-6.4.0.p2.4-aarch64.bin
+>> -sha256       2ceab29de5ea533b86f570bcc4e9ddbfb5fe85a1da4978a8613ff3fd9bed781d  COPYING
+>> -sha256       7ffad92e72e5f6b23027e7cf93a770a4acef00a92dcf79f22701ed401c5478c0  EULA
+>> +sha256       cdec43e45e840fe30e188e3b6f07c44b4a1ceafc315e605c8d278564db5fcbe9  imx-gpu-viv-6.4.3.p0.0-aarch32.bin
+>> +sha256       b3bd03288106daf3a62d2301d09569292ef6a5c74c761cfa4e41dad85e4bf547  imx-gpu-viv-6.4.3.p0.0-aarch64.bin
+>> +sha256       69cbb76b3f10ac5a8c36f34df7bbdf50825815560c00a946fff2922365ef01a2  COPYING
+>> +sha256       a39da2e94bd8b99eaac4325633854620ea3a55145259c3a7748c610a80714cfc  EULA
+>> diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
+>> index fca8a4d..0bb923a 100644
+>> --- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
+>> +++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
+>> @@ -5,9 +5,9 @@
+>>  ################################################################################
+>>
+>>  ifeq ($(BR2_aarch64),y)
+>> -IMX_GPU_VIV_VERSION = 6.4.0.p2.4-aarch64
+>> +IMX_GPU_VIV_VERSION = 6.4.3.p0.0-aarch64
+>>  else
+>> -IMX_GPU_VIV_VERSION = 6.4.0.p2.4-aarch32
+>> +IMX_GPU_VIV_VERSION = 6.4.3.p0.0-aarch32
+>>  endif
+>>  IMX_GPU_VIV_SITE = $(FREESCALE_IMX_SITE)
+>>  IMX_GPU_VIV_SOURCE = imx-gpu-viv-$(IMX_GPU_VIV_VERSION).bin
+>> --
+>> 2.7.4
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+>
