@@ -1,10 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 4 Jan 2021 21:31:56 +0100
-Subject: [Buildroot] [PATCH] package/python-modbus-tk: bump to version
- 1.1.2
-In-Reply-To: <20210104184901.3552-1-texier.pj2@gmail.com>
-References: <20210104184901.3552-1-texier.pj2@gmail.com>
-Message-ID: <20210104203156.GC1485369@scaer>
+Date: Mon, 4 Jan 2021 21:32:31 +0100
+Subject: [Buildroot] [PATCH] package/libarchive: bump to version 3.5.1
+In-Reply-To: <20210104184719.3105-1-texier.pj2@gmail.com>
+References: <20210104184719.3105-1-texier.pj2@gmail.com>
+Message-ID: <20210104203231.GD1485369@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,8 +12,13 @@ To: buildroot@busybox.net
 
 Pierre-Jean, All,
 
-On 2021-01-04 19:49 +0100, Pierre-Jean Texier spake thusly:
-> Also Remove md5 hash
+On 2021-01-04 19:47 +0100, Pierre-Jean Texier spake thusly:
+> Libarchive 3.5.1 is a bugfix release.
+> 
+> Update COPYRIGHT hash due to clarification about 'archive_entry.c' source
+> file:
+> 
+>  - https://github.com/libarchive/libarchive/commit/fde4660d7bda7debe8e6c8166d49fe9fa62db61d
 > 
 > Signed-off-by: Pierre-Jean Texier <texier.pj2@gmail.com>
 
@@ -24,39 +28,34 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/python-modbus-tk/python-modbus-tk.hash | 5 ++---
->  package/python-modbus-tk/python-modbus-tk.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 5 deletions(-)
+>  package/libarchive/libarchive.hash | 4 ++--
+>  package/libarchive/libarchive.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/python-modbus-tk/python-modbus-tk.hash b/package/python-modbus-tk/python-modbus-tk.hash
-> index c4fde683c3..c486e49715 100644
-> --- a/package/python-modbus-tk/python-modbus-tk.hash
-> +++ b/package/python-modbus-tk/python-modbus-tk.hash
-> @@ -1,6 +1,5 @@
-> -# md5, sha256 from https://pypi.org/pypi/modbus-tk/json
-> -md5  e52d5de22cc9d97f2c1086d9b11f0f1e  modbus_tk-1.1.1.tar.gz
-> -sha256  c6dd004bc6bbff6d9fa93e61654c30a26c817c6632036c656383c9ecadca6639  modbus_tk-1.1.1.tar.gz
-> +# sha256 from https://pypi.org/pypi/modbus-tk/json
-> +sha256  893514bbd8c92118d20a19979e0239e7cb2a63f8f1795a0271e57def09d11770  modbus_tk-1.1.2.tar.gz
->  # Locally computed sha256 checksums
->  sha256  3b6a7f9c478ac1982e86cdadb45eb4788241b95839500eb26839d5053b74a24a  license.txt
->  sha256  aa7ca42152a13db6a27b31944f99851efc3b9ee813912ff21d7d6ceadca62e6f  copying.txt
-> diff --git a/package/python-modbus-tk/python-modbus-tk.mk b/package/python-modbus-tk/python-modbus-tk.mk
-> index 37927575ae..30056bb207 100644
-> --- a/package/python-modbus-tk/python-modbus-tk.mk
-> +++ b/package/python-modbus-tk/python-modbus-tk.mk
-> @@ -4,9 +4,9 @@
+> diff --git a/package/libarchive/libarchive.hash b/package/libarchive/libarchive.hash
+> index 0660378097..bf0d6e4fdd 100644
+> --- a/package/libarchive/libarchive.hash
+> +++ b/package/libarchive/libarchive.hash
+> @@ -1,4 +1,4 @@
+>  # From https://www.libarchive.de/downloads/sha256sums
+> -sha256  ee1e749213c108cb60d53147f18c31a73d6717d7e3d2481c157e1b34c881ea39  libarchive-3.4.3.tar.gz
+> +sha256  9015d109ec00bb9ae1a384b172bf2fc1dff41e2c66e5a9eeddf933af9db37f5a  libarchive-3.5.1.tar.gz
+>  # Locally computed:
+> -sha256  e1e3d4ba9d0b0ccba333b5f5539f7c6c9a3ef3d57a96cd165d2c45eaa1cd026d  COPYING
+> +sha256  b2cdf763345de2de34cebf54394df3c61a105c3b71288603c251f2fa638200ba  COPYING
+> diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
+> index 708ce637c2..1d4962cb20 100644
+> --- a/package/libarchive/libarchive.mk
+> +++ b/package/libarchive/libarchive.mk
+> @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
 >  
-> -PYTHON_MODBUS_TK_VERSION = 1.1.1
-> +PYTHON_MODBUS_TK_VERSION = 1.1.2
->  PYTHON_MODBUS_TK_SOURCE = modbus_tk-$(PYTHON_MODBUS_TK_VERSION).tar.gz
-> -PYTHON_MODBUS_TK_SITE = https://files.pythonhosted.org/packages/63/2e/991c8965fd45db4c38fefe1fa70356825e847e1bbb1f14e127aa2b4d37aa
-> +PYTHON_MODBUS_TK_SITE = https://files.pythonhosted.org/packages/ce/e9/30d86eb912bf868b8c97698b5747f10cf72dc26c674fd030249bc3275484
->  PYTHON_MODBUS_TK_SETUP_TYPE = setuptools
->  PYTHON_MODBUS_TK_LICENSE = LGPL-2.1+
->  PYTHON_MODBUS_TK_LICENSE_FILES = license.txt copying.txt
+> -LIBARCHIVE_VERSION = 3.4.3
+> +LIBARCHIVE_VERSION = 3.5.1
+>  LIBARCHIVE_SITE = https://www.libarchive.de/downloads
+>  LIBARCHIVE_INSTALL_STAGING = YES
+>  LIBARCHIVE_LICENSE = BSD-2-Clause, BSD-3-Clause, CC0-1.0, OpenSSL, Apache-2.0
 > -- 
 > 2.17.1
 > 
