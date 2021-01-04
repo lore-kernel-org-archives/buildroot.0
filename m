@@ -1,83 +1,132 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 4 Jan 2021 23:09:34 +0100
-Subject: [Buildroot] [git commit] package/pango: bump to version 1.48.0
-Message-ID: <20210104215338.96C338645B@busybox.osuosl.org>
+Date: Mon, 4 Jan 2021 23:09:33 +0100
+Subject: [Buildroot] [git commit] package/lighttpd: bump to version 1.4.58
+Message-ID: <20210104215338.8627C811AD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b55894b6dbe44e64dd17faba67575d2d6469ff1f
+commit: https://git.buildroot.net/buildroot/commit/?id=0cf80c53ae94b56aabb440e7d1bfa129417d0cb0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+the part concerning pdf is merged upstream
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/pango/Config.in  |  2 +-
- package/pango/pango.hash |  4 ++--
- package/pango/pango.mk   | 10 +++++-----
- 3 files changed, 8 insertions(+), 8 deletions(-)
+ .../lighttpd/0001-Fix-default-config-file.patch    | 27 +++++-----------------
+ package/lighttpd/Config.in                         |  2 +-
+ package/lighttpd/lighttpd.hash                     |  6 ++---
+ package/lighttpd/lighttpd.mk                       |  2 +-
+ 4 files changed, 11 insertions(+), 26 deletions(-)
 
-diff --git a/package/pango/Config.in b/package/pango/Config.in
-index e810598eef..cf5170c8f3 100644
---- a/package/pango/Config.in
-+++ b/package/pango/Config.in
-@@ -22,7 +22,7 @@ config BR2_PACKAGE_PANGO
- 	  widget toolkit. Pango forms the core of text and font
- 	  handling for GTK+-2.x.
+diff --git a/package/lighttpd/0001-Fix-default-config-file.patch b/package/lighttpd/0001-Fix-default-config-file.patch
+index ada1589760..47a859770d 100644
+--- a/package/lighttpd/0001-Fix-default-config-file.patch
++++ b/package/lighttpd/0001-Fix-default-config-file.patch
+@@ -3,8 +3,6 @@ Modify the default lighttpd configuration file to have one a starting conf
+   * Changed the log path to /var/log and logs filenames
+   * Disable IPv6
+   * Do not setuid to a user that doesn't exist on the system
+-  * Disable pdf ranges fix for Adobe Reader since it uses regex and we
+-    don't always have pcre support
+   * Change the network backend to writev since linux-sendfile fails on buildroot
  
--	  http://www.pango.org/
-+	  https://pango.gnome.org/
+ Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+@@ -35,7 +33,7 @@ diff -Nura lighttpd-1.4.37.orig/doc/config/lighttpd.conf lighttpd-1.4.37/doc/con
+ -var.server_root = "/srv/www"
+ +var.log_root    = "/var/log"
+ +var.server_root = "/var/www"
+- var.state_dir   = "/var/run"
++ var.state_dir   = "/run"
+  var.home_dir    = "/var/lib/lighttpd"
+  var.conf_dir    = "/etc/lighttpd"
+ @@ -90,7 +90,7 @@
+@@ -56,9 +54,9 @@ diff -Nura lighttpd-1.4.37.orig/doc/config/lighttpd.conf lighttpd-1.4.37/doc/con
+ +server.username  = "www-data"
+ +server.groupname = "www-data"
+  
+- ## 
+- ## enable core files.
+-@@ -112,7 +112,7 @@
++ ##
++ ## Enable lighttpd to serve requests on sockets received from systemd
++@@ -118,7 +118,7 @@
+  ##
+  ## Document root
+  ##
+@@ -67,7 +65,7 @@ diff -Nura lighttpd-1.4.37.orig/doc/config/lighttpd.conf lighttpd-1.4.37/doc/con
+  
+  ##
+  ## The value for the "Server:" response field.
+-@@ -138,7 +138,7 @@
++@@ -144,7 +144,7 @@
+  ##
+  ## Path to the error log file
+  ##
+@@ -76,7 +74,7 @@ diff -Nura lighttpd-1.4.37.orig/doc/config/lighttpd.conf lighttpd-1.4.37/doc/con
+  
+  ##
+  ## If you want to log to syslog you have to unset the 
+-@@ -188,7 +188,7 @@
++@@ -195,7 +195,7 @@
+  ## sendfile       - is recommended for small files.
+  ## writev         - is recommended for sending many large files
+  ##
+@@ -85,16 +83,3 @@ diff -Nura lighttpd-1.4.37.orig/doc/config/lighttpd.conf lighttpd-1.4.37/doc/con
+  
+  ##
+  ## As lighttpd is a single-threaded server, its main resource limit is
+-@@ -311,9 +311,9 @@
+- ## disable range requests for pdf files
+- ## workaround for a bug in the Acrobat Reader plugin.
+- ##
+--$HTTP["url"] =~ "\.pdf$" {
+--  server.range-requests = "disable"
+--}
+-+# $HTTP["url"] =~ "\.pdf$" {
+-+#  server.range-requests = "disable"
+-+# }
+- 
+- ##
+- ## url handling modules (rewrite, redirect)
+diff --git a/package/lighttpd/Config.in b/package/lighttpd/Config.in
+index 7d75663629..e9a5aa34f0 100644
+--- a/package/lighttpd/Config.in
++++ b/package/lighttpd/Config.in
+@@ -16,7 +16,7 @@ config BR2_PACKAGE_LIGHTTPD
+ 	  webserver-software for every server that is suffering load
+ 	  problems.
  
- comment "pango needs a toolchain w/ wchar, threads, C++, gcc >= 4.8"
- 	depends on BR2_USE_MMU
-diff --git a/package/pango/pango.hash b/package/pango/pango.hash
-index 32808c6ca5..a672b7cfaf 100644
---- a/package/pango/pango.hash
-+++ b/package/pango/pango.hash
-@@ -1,5 +1,5 @@
--# From https://ftp.gnome.org/pub/GNOME/sources/pango/1.46/pango-1.46.2.sha256sum
--sha256  d89fab5f26767261b493279b65cfb9eb0955cd44c07c5628d36094609fc51841  pango-1.46.2.tar.xz
-+# From https://ftp.acc.umu.se/pub/GNOME/sources/pango/1.48/pango-1.48.0.sha256sum
-+sha256  391f26f3341c2d7053e0fb26a956bd42360dadd825efe7088b1e9340a65e74e6  pango-1.48.0.tar.xz
+-	  http://www.lighttpd.net/
++	  https://www.lighttpd.net/
  
- # Locally computed
- sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
-diff --git a/package/pango/pango.mk b/package/pango/pango.mk
-index 92bd6c3ea7..d719b76594 100644
---- a/package/pango/pango.mk
-+++ b/package/pango/pango.mk
-@@ -4,8 +4,8 @@
- #
+ if BR2_PACKAGE_LIGHTTPD
+ 
+diff --git a/package/lighttpd/lighttpd.hash b/package/lighttpd/lighttpd.hash
+index 7f20bf9dce..0a7cdfe3bc 100644
+--- a/package/lighttpd/lighttpd.hash
++++ b/package/lighttpd/lighttpd.hash
+@@ -1,4 +1,4 @@
+-# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.55.sha256sum
+-sha256 6a0b50e9c9d5cc3d9e48592315c25a2d645858f863e1ccd120507a30ce21e927  lighttpd-1.4.55.tar.xz
++# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.58.sha256sum
++sha256  267feffda13a190ebdce7b15172d8be16da98008457f30fddecd72832d126d0e  lighttpd-1.4.58.tar.xz
+ # Locally calculated
+-sha256 5c98cad2fbaf5c5e2562bcbab401a7c557c1bb1bac9914ecc63730925052fb13  COPYING
++sha256  5c98cad2fbaf5c5e2562bcbab401a7c557c1bb1bac9914ecc63730925052fb13  COPYING
+diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
+index 39600ef94b..df05227211 100644
+--- a/package/lighttpd/lighttpd.mk
++++ b/package/lighttpd/lighttpd.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--PANGO_VERSION_MAJOR = 1.46
--PANGO_VERSION = $(PANGO_VERSION_MAJOR).2
-+PANGO_VERSION_MAJOR = 1.48
-+PANGO_VERSION = $(PANGO_VERSION_MAJOR).0
- PANGO_SOURCE = pango-$(PANGO_VERSION).tar.xz
- PANGO_SITE = http://ftp.gnome.org/pub/GNOME/sources/pango/$(PANGO_VERSION_MAJOR)
- PANGO_INSTALL_STAGING = YES
-@@ -13,7 +13,7 @@ PANGO_LICENSE = LGPL-2.0+
- PANGO_LICENSE_FILES = COPYING
- 
- PANGO_CONF_OPTS = -Duse_fontconfig=true
--HOST_PANGO_CONF_OPTS = -Duse_fontconfig=true -Dintrospection=false
-+HOST_PANGO_CONF_OPTS = -Duse_fontconfig=true -Dintrospection=disabled
- 
- PANGO_DEPENDENCIES = \
- 	$(TARGET_NLS_DEPENDENCIES) \
-@@ -34,10 +34,10 @@ HOST_PANGO_DEPENDENCIES = \
- 	host-freetype
- 
- ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
--PANGO_CONF_OPTS += -Dintrospection=true
-+PANGO_CONF_OPTS += -Dintrospection=enabled
- PANGO_DEPENDENCIES += gobject-introspection
- else
--PANGO_CONF_OPTS += -Dintrospection=false
-+PANGO_CONF_OPTS += -Dintrospection=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_XORG7),y)
+ LIGHTTPD_VERSION_MAJOR = 1.4
+-LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).55
++LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).58
+ LIGHTTPD_SOURCE = lighttpd-$(LIGHTTPD_VERSION).tar.xz
+ LIGHTTPD_SITE = http://download.lighttpd.net/lighttpd/releases-$(LIGHTTPD_VERSION_MAJOR).x
+ LIGHTTPD_LICENSE = BSD-3-Clause
