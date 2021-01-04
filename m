@@ -1,183 +1,170 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 4 Jan 2021 21:36:50 +0100
-Subject: [Buildroot] [git commit] support/script/pkg-stats: show CPE ID in
- results
-Message-ID: <20210104202641.2579C84C6B@busybox.osuosl.org>
+Date: Mon, 4 Jan 2021 21:38:20 +0100
+Subject: [Buildroot] [git commit] support/scripts/{pkg-stats,
+ cve.py}: support CPE ID based matching
+Message-ID: <20210104202641.3092C8259E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=92e7089a8ca9f7dba5a5d690b7f768352cd6b983
+commit: https://git.buildroot.net/buildroot/commit/?id=e3ef352ef677b26d91aad02272468a5048589bb3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit improves the pkg-stats script to show the CPE ID of
-packages, if available. For now, it doesn't use CPE IDs to match CVEs.
+This commit modifies cve.py, as well as its users cve-checker and
+pkg-stats to support CPE ID based matching, for packages that have CPE
+ID information.
 
-Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+One of the non-trivial thing is that we can't simply iterate over all
+CVEs, and then iterate over all our packages to see which packages
+have CPE ID information that match the CPEs affected by the
+CVE. Indeed, this is an O(n^2) operation.
+
+So instead, we do a pre-filtering of packages potentially affected. In
+check_package_cves(), we build a cpe_product_pkgs dict that associates
+a CPE product name to the packages that have this CPE product
+name. The CPE product name is either derived from the CPE information
+provided by the package if available, and otherwise we use the package
+name, which is what was used prior to this patch.
+
+And then, when we look at CVEs, we only consider the packages that
+have a CPE product name matching the CPE products affected by the
+CVEs. This is done in check_package_cve_affects().
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/scripts/pkg-stats | 67 ++++++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 66 insertions(+), 1 deletion(-)
+ support/scripts/cve.py    | 41 +++++++++++++++++++++++++++++++++--------
+ support/scripts/pkg-stats | 25 ++++++++++++++++++-------
+ 2 files changed, 51 insertions(+), 15 deletions(-)
 
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index d44f8241c1..b012e1437a 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -78,6 +78,7 @@ class Package:
-     all_license_files = list()
-     all_versions = dict()
-     all_ignored_cves = dict()
-+    all_cpeids = dict ()
-     # This is the list of all possible checks. Add new checks to this list so
-     # a tool that post-processeds the json output knows the checks before
-     # iterating over the packages.
-@@ -98,6 +99,7 @@ class Package:
-         self.current_version = None
-         self.url = None
-         self.url_worker = None
-+        self.cpeid = None
-         self.cves = list()
-         self.latest_version = {'status': RM_API_STATUS_ERROR, 'version': None, 'id': None}
-         self.status = {}
-@@ -213,6 +215,21 @@ class Package:
-         if var in self.all_versions:
-             self.current_version = self.all_versions[var]
- 
-+    def set_cpeid(self):
-+        """
-+        Fills in the .cpeid field
-+        """
-+        var = self.pkgvar()
-+        if not self.has_valid_infra:
-+            self.status['cpe'] = ("na", "no valid package infra")
-+            return
-+
-+        if var in self.all_cpeids:
-+            self.cpeid = self.all_cpeids[var]
-+            self.status['cpe'] = ("ok", "verified CPE identifier")
-+        else:
-+            self.status['cpe'] = ("error", "no verified CPE identifier")
-+
-     def set_check_package_warnings(self):
-         """
-         Fills in the .warnings and .status['pkg-check'] fields
-@@ -342,7 +359,7 @@ def get_config_packages():
- def package_init_make_info():
-     # Fetch all variables at once
-     variables = subprocess.check_output(["make", "BR2_HAVE_DOT_CONFIG=y", "-s", "printvars",
--                                         "VARS=%_LICENSE %_LICENSE_FILES %_VERSION %_IGNORE_CVES"])
-+                                         "VARS=%_LICENSE %_LICENSE_FILES %_VERSION %_IGNORE_CVES %_CPE_ID"])
-     variable_list = variables.decode().splitlines()
- 
-     # We process first the host package VERSION, and then the target
-@@ -380,6 +397,9 @@ def package_init_make_info():
-             pkgvar = pkgvar[:-12]
-             Package.all_ignored_cves[pkgvar] = value.split()
- 
-+        elif pkgvar.endswith("_CPE_ID"):
-+            pkgvar = pkgvar[:-7]
-+            Package.all_cpeids[pkgvar] = value
- 
- check_url_count = 0
- 
-@@ -587,6 +607,10 @@ def calculate_stats(packages):
-         stats["total-cves"] += len(pkg.cves)
-         if len(pkg.cves) != 0:
-             stats["pkg-cves"] += 1
-+        if pkg.cpeid:
-+            stats["cpe-id"] += 1
-+        else:
-+            stats["no-cpe-id"] += 1
-     return stats
- 
- 
-@@ -642,6 +666,18 @@ td.version-error {
-  background: #ccc;
+diff --git a/support/scripts/cve.py b/support/scripts/cve.py
+index e7472cd470..6e97ea193f 100755
+--- a/support/scripts/cve.py
++++ b/support/scripts/cve.py
+@@ -47,6 +47,24 @@ ops = {
  }
  
-+td.cpe-ok {
-+  background: #d2ffc4;
-+}
+ 
++# Check if two CPE IDs match each other
++def cpe_matches(cpe1, cpe2):
++    cpe1_elems = cpe1.split(":")
++    cpe2_elems = cpe2.split(":")
 +
-+td.cpe-nok {
-+  background: #ff9a69;
-+}
++    remains = filter(lambda x: x[0] not in ["*", "-"] and x[1] not in ["*", "-"] and x[0] != x[1],
++                     zip(cpe1_elems, cpe2_elems))
++    return len(list(remains)) == 0
 +
-+td.cpe-unknown {
-+ background: #ffd870;
-+}
 +
- </style>
- <title>Statistics of Buildroot packages</title>
- </head>
-@@ -809,6 +845,23 @@ def dump_html_pkg(f, pkg):
-         f.write("   <a href=\"https://security-tracker.debian.org/tracker/%s\">%s<br/>\n" % (cve, cve))
-     f.write("  </td>\n")
- 
-+    # CPE ID
-+    td_class = ["left"]
-+    if pkg.status['cpe'][0] == "ok":
-+        td_class.append("cpe-ok")
-+    elif pkg.status['cpe'][0] == "error":
-+        td_class.append("cpe-nok")
-+    else:
-+        td_class.append("cpe-unknown")
-+    f.write("  <td class=\"%s\">\n" % " ".join(td_class))
-+    if pkg.status['cpe'][0] == "ok":
-+        f.write("  <code>%s</code>\n" % pkg.cpeid)
-+    elif pkg.status['cpe'][0] == "error":
-+        f.write("  N/A\n")
-+    else:
-+        f.write("  %s\n" % pkg.status['cpe'][1])
-+    f.write("  </td>\n")
++def cpe_product(cpe):
++    return cpe.split(':')[4]
 +
-     f.write(" </tr>\n")
++
++def cpe_version(cpe):
++    return cpe.split(':')[5]
++
++
+ class CVE:
+     """An accessor class for CVE Items in NVD files"""
+     CVE_AFFECTS = 1
+@@ -134,7 +152,11 @@ class CVE:
+         for cpe in node.get('cpe_match', ()):
+             if not cpe['vulnerable']:
+                 return
+-            vendor, product, version = cpe['cpe23Uri'].split(':')[3:6]
++            product = cpe_product(cpe['cpe23Uri'])
++            version = cpe_version(cpe['cpe23Uri'])
++            # ignore when product is '-', which means N/A
++            if product == '-':
++                return
+             op_start = ''
+             op_end = ''
+             v_start = ''
+@@ -163,8 +185,7 @@ class CVE:
+                     v_end = cpe['versionEndExcluding']
+ 
+             yield {
+-                'vendor': vendor,
+-                'product': product,
++                'id': cpe['cpe23Uri'],
+                 'v_start': v_start,
+                 'op_start': op_start,
+                 'v_end': v_end,
+@@ -182,11 +203,11 @@ class CVE:
+         return self.nvd_cve['cve']['CVE_data_meta']['ID']
+ 
+     @property
+-    def pkg_names(self):
+-        """The set of package names referred by this CVE definition"""
+-        return set(p['product'] for p in self.each_cpe())
++    def affected_products(self):
++        """The set of CPE products referred by this CVE definition"""
++        return set(cpe_product(p['id']) for p in self.each_cpe())
+ 
+-    def affects(self, name, version, cve_ignore_list):
++    def affects(self, name, version, cve_ignore_list, cpeid=None):
+         """
+         True if the Buildroot Package object passed as argument is affected
+         by this CVE.
+@@ -199,8 +220,12 @@ class CVE:
+             print("Cannot parse package '%s' version '%s'" % (name, version))
+             pkg_version = None
+ 
++        # if we don't have a cpeid, build one based on name and version
++        if not cpeid:
++            cpeid = "cpe:2.3:*:*:%s:%s:*:*:*:*:*:*:*" % (name, version)
++
+         for cpe in self.each_cpe():
+-            if cpe['product'] != name:
++            if not cpe_matches(cpe['id'], cpeid):
+                 continue
+             if not cpe['v_start'] and not cpe['v_end']:
+                 return self.CVE_AFFECTS
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index b012e1437a..100c7750d3 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -556,17 +556,28 @@ async def check_package_latest_version(packages):
+         await asyncio.wait(tasks)
  
  
-@@ -827,6 +880,7 @@ def dump_html_all_pkgs(f, packages):
- <td class=\"centered\">Warnings</td>
- <td class=\"centered\">Upstream URL</td>
- <td class=\"centered\">CVEs</td>
-+<td class=\"centered\">CPE ID</td>
- </tr>
- """)
-     for pkg in sorted(packages):
-@@ -869,6 +923,10 @@ def dump_html_stats(f, stats):
-             stats["pkg-cves"])
-     f.write("<tr><td>Total number of CVEs affecting all packages</td><td>%s</td></tr>\n" %
-             stats["total-cves"])
-+    f.write("<tr><td>Packages with CPE ID</td><td>%s</td></tr>\n" %
-+            stats["cpe-id"])
-+    f.write("<tr><td>Packages without CPE ID</td><td>%s</td></tr>\n" %
-+            stats["no-cpe-id"])
-     f.write("</table>\n")
++def check_package_cve_affects(cve, cpe_product_pkgs):
++    for product in cve.affected_products:
++        if not product in cpe_product_pkgs:
++            continue
++        for pkg in cpe_product_pkgs[product]:
++            if cve.affects(pkg.name, pkg.current_version, pkg.ignored_cves, pkg.cpeid) == cve.CVE_AFFECTS:
++                pkg.cves.append(cve.identifier)
++
+ def check_package_cves(nvd_path, packages):
+     if not os.path.isdir(nvd_path):
+         os.makedirs(nvd_path)
  
+-    for cve in cvecheck.CVE.read_nvd_dir(nvd_path):
+-        for pkg_name in cve.pkg_names:
+-            if pkg_name in packages:
+-                pkg = packages[pkg_name]
+-                if cve.affects(pkg.name, pkg.current_version, pkg.ignored_cves) == cve.CVE_AFFECTS:
+-                    pkg.cves.append(cve.identifier)
++    cpe_product_pkgs = defaultdict(list)
++    for pkg in packages:
++        if pkg.cpeid:
++            cpe_product = cvecheck.cpe_product(pkg.cpeid)
++            cpe_product_pkgs[cpe_product].append(pkg)
++        else:
++            cpe_product_pkgs[pkg.name].append(pkg)
  
-@@ -943,11 +1001,17 @@ def parse_args():
-                           help='List of packages (comma separated)')
-     parser.add_argument('--nvd-path', dest='nvd_path',
-                         help='Path to the local NVD database', type=resolvepath)
-+    parser.add_argument("--cpeid", action='store_true')
-     args = parser.parse_args()
-     if not args.html and not args.json:
-         parser.error('at least one of --html or --json (or both) is required')
-     return args
++    for cve in cvecheck.CVE.read_nvd_dir(nvd_path):
++        check_package_cve_affects(cve, cpe_product_pkgs)
  
-+def cpeid_name(pkg):
-+    try:
-+        return pkg.cpeid.split(':')[1]
-+    except:
-+        return ''
- 
- def __main__():
-     args = parse_args()
-@@ -979,6 +1043,7 @@ def __main__():
-         pkg.set_patch_count()
-         pkg.set_check_package_warnings()
-         pkg.set_current_version()
-+        pkg.set_cpeid()
-         pkg.set_url()
-         pkg.set_developers(developers)
-     print("Checking URL status")
+ def calculate_stats(packages):
+     stats = defaultdict(int)
+@@ -1054,7 +1065,7 @@ def __main__():
+     loop.run_until_complete(check_package_latest_version(packages))
+     if args.nvd_path:
+         print("Checking packages CVEs")
+-        check_package_cves(args.nvd_path, {p.name: p for p in packages})
++        check_package_cves(args.nvd_path, packages)
+     print("Calculate stats")
+     stats = calculate_stats(packages)
+     if args.html:
