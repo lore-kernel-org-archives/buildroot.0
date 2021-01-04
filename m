@@ -1,52 +1,52 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 4 Jan 2021 21:29:43 +0100
-Subject: [Buildroot] [git commit] package/mongoose: bump to to version 7.0
-Message-ID: <20210104201256.CFB3286108@busybox.osuosl.org>
+Date: Mon, 4 Jan 2021 21:29:46 +0100
+Subject: [Buildroot] [git commit] package/python-modbus-tk: bump to version
+ 1.1.2
+Message-ID: <20210104201256.ED82381243@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=91efa2e99f8be63f4217a94afa40ea7ac0e8eeee
+commit: https://git.buildroot.net/buildroot/commit/?id=1c971a45cf05f354c329ef0bcd372002004bd17f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update LICENSE hash; copyright year update:
-
--Copyright (c) 2004-2013 Sergey Lyubka <valenok@gmail.com>
--Copyright (c) 2013-2018 Cesanta Software Limited
-+Copyright (c) 2004-2013 Sergey Lyubka
-+Copyright (c) 2013-2020 Cesanta Software Limited
-
-See https://github.com/cesanta/mongoose/releases/tag/7.0
+Also Remove md5 hash
 
 Signed-off-by: Pierre-Jean Texier <texier.pj2@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/mongoose/mongoose.hash | 4 ++--
- package/mongoose/mongoose.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-modbus-tk/python-modbus-tk.hash | 5 ++---
+ package/python-modbus-tk/python-modbus-tk.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/mongoose/mongoose.hash b/package/mongoose/mongoose.hash
-index b8be69be0b..149c0f5866 100644
---- a/package/mongoose/mongoose.hash
-+++ b/package/mongoose/mongoose.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  f5c10346abc9c72f7cac7885d853ca064fb09aad57580433941a8fd7a3543769  mongoose-6.18.tar.gz
--sha256  fdc34eeea97327d75c83492abd34f1a3200c53dec04422ecda8071dc60a36d10  LICENSE
-+sha256  28206185873b5c448765f56e54d86a7af5a856b0b5f241aa44ac94bf34af7eee  mongoose-7.0.tar.gz
-+sha256  9553d057f2ba980642f2c18d87ed38896cff1c9612d77d684a73a11fe1443b05  LICENSE
-diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
-index 5faeafb374..ae20965be4 100644
---- a/package/mongoose/mongoose.mk
-+++ b/package/mongoose/mongoose.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-modbus-tk/python-modbus-tk.hash b/package/python-modbus-tk/python-modbus-tk.hash
+index c4fde683c3..c486e49715 100644
+--- a/package/python-modbus-tk/python-modbus-tk.hash
++++ b/package/python-modbus-tk/python-modbus-tk.hash
+@@ -1,6 +1,5 @@
+-# md5, sha256 from https://pypi.org/pypi/modbus-tk/json
+-md5  e52d5de22cc9d97f2c1086d9b11f0f1e  modbus_tk-1.1.1.tar.gz
+-sha256  c6dd004bc6bbff6d9fa93e61654c30a26c817c6632036c656383c9ecadca6639  modbus_tk-1.1.1.tar.gz
++# sha256 from https://pypi.org/pypi/modbus-tk/json
++sha256  893514bbd8c92118d20a19979e0239e7cb2a63f8f1795a0271e57def09d11770  modbus_tk-1.1.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256  3b6a7f9c478ac1982e86cdadb45eb4788241b95839500eb26839d5053b74a24a  license.txt
+ sha256  aa7ca42152a13db6a27b31944f99851efc3b9ee813912ff21d7d6ceadca62e6f  copying.txt
+diff --git a/package/python-modbus-tk/python-modbus-tk.mk b/package/python-modbus-tk/python-modbus-tk.mk
+index 37927575ae..30056bb207 100644
+--- a/package/python-modbus-tk/python-modbus-tk.mk
++++ b/package/python-modbus-tk/python-modbus-tk.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--MONGOOSE_VERSION = 6.18
-+MONGOOSE_VERSION = 7.0
- MONGOOSE_SITE = $(call github,cesanta,mongoose,$(MONGOOSE_VERSION))
- MONGOOSE_LICENSE = GPL-2.0
- MONGOOSE_LICENSE_FILES = LICENSE
+-PYTHON_MODBUS_TK_VERSION = 1.1.1
++PYTHON_MODBUS_TK_VERSION = 1.1.2
+ PYTHON_MODBUS_TK_SOURCE = modbus_tk-$(PYTHON_MODBUS_TK_VERSION).tar.gz
+-PYTHON_MODBUS_TK_SITE = https://files.pythonhosted.org/packages/63/2e/991c8965fd45db4c38fefe1fa70356825e847e1bbb1f14e127aa2b4d37aa
++PYTHON_MODBUS_TK_SITE = https://files.pythonhosted.org/packages/ce/e9/30d86eb912bf868b8c97698b5747f10cf72dc26c674fd030249bc3275484
+ PYTHON_MODBUS_TK_SETUP_TYPE = setuptools
+ PYTHON_MODBUS_TK_LICENSE = LGPL-2.1+
+ PYTHON_MODBUS_TK_LICENSE_FILES = license.txt copying.txt
