@@ -1,32 +1,36 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 04 Jan 2021 22:29:20 +0100
-Subject: [Buildroot] [PATCH 1/1] package/python3: add optional support
- for lib2to3
-References: <20210103150306.1509091-1-bernd.kuhls@t-online.de>
- <20210103220033.GT2997@scaer>
-Message-ID: <gudcchxlsh.ln2@ID-313208.user.individual.net>
+Date: Mon,  4 Jan 2021 22:59:01 +0100
+Subject: [Buildroot] [PATCH 1/1] package/mesa3d: fix gallium-xa configure
+ option
+Message-ID: <20210104215901.103994-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Fixes build warning:
 
-Am Sun, 03 Jan 2021 23:00:33 +0100 schrieb Yann E. MORIN:
+output/build/mesa3d-20.3.2/meson.build:727: WARNING:
+ gallium-xa option "false" deprecated, please use "disabled" instead.
 
-> Please be carefull when you send patches: rebase them on master before
-> sending (see below).
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/mesa3d/mesa3d.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-oops, sorry.
-
->>  config BR2_PACKAGE_PYTHON3_BERKELEYDB
-> 
-> We do not have that in master, so the patch did not apply cleanly...
-> 
-> Will you send support for the bdb module?
-
-http://patchwork.ozlabs.org/project/buildroot/patch/
-20200411201132.249731-1-bernd.kuhls at t-online.de/
-
-Regards, Bernd
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 5eca1f0906..a366eee4e9 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -74,7 +74,7 @@ endif
+ else
+ MESA3D_CONF_OPTS += \
+ 	-Dglx=disabled \
+-	-Dgallium-xa=false
++	-Dgallium-xa=disabled
+ endif
+ 
+ ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
+-- 
+2.29.2
