@@ -1,101 +1,83 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 4 Jan 2021 23:09:31 +0100
-Subject: [Buildroot] [git commit] package/harfbuzz: bump to version 2.7.4
-Message-ID: <20210104215338.62DB68264D@busybox.osuosl.org>
+Date: Mon, 4 Jan 2021 23:09:34 +0100
+Subject: [Buildroot] [git commit] package/pango: bump to version 1.48.0
+Message-ID: <20210104215338.96C338645B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5bb5f077a1347a9c612db77b478d2e0ab84149eb
+commit: https://git.buildroot.net/buildroot/commit/?id=b55894b6dbe44e64dd17faba67575d2d6469ff1f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-remove merged patch
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ... => 0001-meson.build-check-for-pthread.h.patch} |  2 +-
- ...uild-allow-introspection-when-cross-compi.patch | 33 ----------------------
- package/harfbuzz/harfbuzz.hash                     |  2 +-
- package/harfbuzz/harfbuzz.mk                       |  2 +-
- 4 files changed, 3 insertions(+), 36 deletions(-)
+ package/pango/Config.in  |  2 +-
+ package/pango/pango.hash |  4 ++--
+ package/pango/pango.mk   | 10 +++++-----
+ 3 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/package/harfbuzz/0002-meson.build-check-for-pthread.h.patch b/package/harfbuzz/0001-meson.build-check-for-pthread.h.patch
-similarity index 97%
-rename from package/harfbuzz/0002-meson.build-check-for-pthread.h.patch
-rename to package/harfbuzz/0001-meson.build-check-for-pthread.h.patch
-index 128876dfb7..6d7225cbb0 100644
---- a/package/harfbuzz/0002-meson.build-check-for-pthread.h.patch
-+++ b/package/harfbuzz/0001-meson.build-check-for-pthread.h.patch
-@@ -26,7 +26,7 @@ diff --git a/meson.build b/meson.build
- index bf3925db..6d263d48 100644
- --- a/meson.build
- +++ b/meson.build
--@@ -284,13 +284,15 @@ endif
-+@@ -281,13 +281,15 @@ endif
-  # threads
-  thread_dep = null_dep
-  if host_machine.system() != 'windows'
-diff --git a/package/harfbuzz/0001-src-meson.build-allow-introspection-when-cross-compi.patch b/package/harfbuzz/0001-src-meson.build-allow-introspection-when-cross-compi.patch
-deleted file mode 100644
-index 700f6f85e4..0000000000
---- a/package/harfbuzz/0001-src-meson.build-allow-introspection-when-cross-compi.patch
-+++ /dev/null
-@@ -1,33 +0,0 @@
--From 432dfd0a1d8fe0a8df89e7ce828c520c7758f10c Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Thu, 24 Sep 2020 21:00:34 +0200
--Subject: [PATCH] src/meson.build: allow introspection when cross-compiling
--
--introspection can be enabled when cross-compiling on certains conditions
--(for example it is supported by buildroot)
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/harfbuzz/harfbuzz/pull/2692]
-----
-- src/meson.build | 5 -----
-- 1 file changed, 5 deletions(-)
--
--diff --git a/src/meson.build b/src/meson.build
--index 19290245..7db43508 100644
----- a/src/meson.build
--+++ b/src/meson.build
--@@ -637,11 +637,6 @@ if have_gobject
--   gir = find_program('g-ir-scanner', required: get_option('introspection'))
--   build_gir = gir.found()
-- 
---  build_gir = build_gir and not meson.is_cross_build()
---  if not build_gir and get_option('introspection').enabled()
---    error('Introspection support is requested but it isn\'t available in cross builds')
---  endif
---
--   build_gir = build_gir and get_option('default_library') != 'static'
--   if not build_gir and get_option('introspection').enabled()
--     error('Introspection support is requested but the default library option should be shared or both')
---- 
--2.28.0
--
-diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
-index dac859bbd4..98b137c8bd 100644
---- a/package/harfbuzz/harfbuzz.hash
-+++ b/package/harfbuzz/harfbuzz.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/pango/Config.in b/package/pango/Config.in
+index e810598eef..cf5170c8f3 100644
+--- a/package/pango/Config.in
++++ b/package/pango/Config.in
+@@ -22,7 +22,7 @@ config BR2_PACKAGE_PANGO
+ 	  widget toolkit. Pango forms the core of text and font
+ 	  handling for GTK+-2.x.
+ 
+-	  http://www.pango.org/
++	  https://pango.gnome.org/
+ 
+ comment "pango needs a toolchain w/ wchar, threads, C++, gcc >= 4.8"
+ 	depends on BR2_USE_MMU
+diff --git a/package/pango/pango.hash b/package/pango/pango.hash
+index 32808c6ca5..a672b7cfaf 100644
+--- a/package/pango/pango.hash
++++ b/package/pango/pango.hash
+@@ -1,5 +1,5 @@
+-# From https://ftp.gnome.org/pub/GNOME/sources/pango/1.46/pango-1.46.2.sha256sum
+-sha256  d89fab5f26767261b493279b65cfb9eb0955cd44c07c5628d36094609fc51841  pango-1.46.2.tar.xz
++# From https://ftp.acc.umu.se/pub/GNOME/sources/pango/1.48/pango-1.48.0.sha256sum
++sha256  391f26f3341c2d7053e0fb26a956bd42360dadd825efe7088b1e9340a65e74e6  pango-1.48.0.tar.xz
+ 
  # Locally computed
--sha256  b8c048d7c2964a12f2c80deb6634dfc836b603dd12bf0d0a3df1627698e220ce  harfbuzz-2.7.2.tar.xz
-+sha256  6ad11d653347bd25d8317589df4e431a2de372c0cf9be3543368e07ec23bb8e7  harfbuzz-2.7.4.tar.xz
- sha256  beb3f017ceb41387667f78237a7cecf84defa0ed257c505894663d6a9f13211b  COPYING
-diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-index fae9278b7c..a17283bea9 100644
---- a/package/harfbuzz/harfbuzz.mk
-+++ b/package/harfbuzz/harfbuzz.mk
-@@ -4,7 +4,7 @@
+ sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
+diff --git a/package/pango/pango.mk b/package/pango/pango.mk
+index 92bd6c3ea7..d719b76594 100644
+--- a/package/pango/pango.mk
++++ b/package/pango/pango.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--HARFBUZZ_VERSION = 2.7.2
-+HARFBUZZ_VERSION = 2.7.4
- HARFBUZZ_SITE = https://github.com/harfbuzz/harfbuzz/releases/download/$(HARFBUZZ_VERSION)
- HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.xz
- HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
+-PANGO_VERSION_MAJOR = 1.46
+-PANGO_VERSION = $(PANGO_VERSION_MAJOR).2
++PANGO_VERSION_MAJOR = 1.48
++PANGO_VERSION = $(PANGO_VERSION_MAJOR).0
+ PANGO_SOURCE = pango-$(PANGO_VERSION).tar.xz
+ PANGO_SITE = http://ftp.gnome.org/pub/GNOME/sources/pango/$(PANGO_VERSION_MAJOR)
+ PANGO_INSTALL_STAGING = YES
+@@ -13,7 +13,7 @@ PANGO_LICENSE = LGPL-2.0+
+ PANGO_LICENSE_FILES = COPYING
+ 
+ PANGO_CONF_OPTS = -Duse_fontconfig=true
+-HOST_PANGO_CONF_OPTS = -Duse_fontconfig=true -Dintrospection=false
++HOST_PANGO_CONF_OPTS = -Duse_fontconfig=true -Dintrospection=disabled
+ 
+ PANGO_DEPENDENCIES = \
+ 	$(TARGET_NLS_DEPENDENCIES) \
+@@ -34,10 +34,10 @@ HOST_PANGO_DEPENDENCIES = \
+ 	host-freetype
+ 
+ ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
+-PANGO_CONF_OPTS += -Dintrospection=true
++PANGO_CONF_OPTS += -Dintrospection=enabled
+ PANGO_DEPENDENCIES += gobject-introspection
+ else
+-PANGO_CONF_OPTS += -Dintrospection=false
++PANGO_CONF_OPTS += -Dintrospection=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_XORG7),y)
