@@ -1,42 +1,52 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon,  4 Jan 2021 18:16:24 +0100
-Subject: [Buildroot] [PATCH 1/1] package/sigrok-cli: bump to version 0.7.1
-Message-ID: <20210104171624.1621869-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 4 Jan 2021 18:21:56 +0100
+Subject: [Buildroot] [PATCH v4 1/1] package/trace-cmd: bump to version
+ 2.9.1
+In-Reply-To: <CADYdroNCoM6CqOd+bEwLyFbZrmxzUS+r_B+pHkvQDiOYcdtTvw@mail.gmail.com>
+References: <20201203104841.152299-1-nolange79@gmail.com>
+ <20210103110920.GM2997@scaer>
+ <CADYdroNCoM6CqOd+bEwLyFbZrmxzUS+r_B+pHkvQDiOYcdtTvw@mail.gmail.com>
+Message-ID: <20210104172156.GA1485369@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://sigrok.org/gitweb/?p=sigrok-cli.git;a=blob;f=NEWS;h=614c910b791228203dd144f0c092204ba0491e8f;hb=6bb3c3dd27c0477705a5c0684a8c3fd506a35f48
+Norbert, All,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/sigrok-cli/sigrok-cli.hash | 2 +-
- package/sigrok-cli/sigrok-cli.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On 2021-01-04 14:19 +0100, Norbert Lange spake thusly:
+> Yann E. MORIN < [1]yann.morin.1998@free.fr> schrieb am So., 3. J?n. 2021, 12:09:
+>     - keep using a git clone
+> Why is a git checkout necessary/preferable ?
 
-diff --git a/package/sigrok-cli/sigrok-cli.hash b/package/sigrok-cli/sigrok-cli.hash
-index 63a3dd80aa..3231bf82cf 100644
---- a/package/sigrok-cli/sigrok-cli.hash
-+++ b/package/sigrok-cli/sigrok-cli.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  5669d968c2de3dfc6adfda76e83789b6ba76368407c832438cef5e7099a65e1c  sigrok-cli-0.7.0.tar.gz
-+sha256  f52413429f47d457c333db0fd068416ab7a3f9e35ca76de8624dc5ac6fb07797  sigrok-cli-0.7.1.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/sigrok-cli/sigrok-cli.mk b/package/sigrok-cli/sigrok-cli.mk
-index 1e017d69b8..3d1e187882 100644
---- a/package/sigrok-cli/sigrok-cli.mk
-+++ b/package/sigrok-cli/sigrok-cli.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SIGROK_CLI_VERSION = 0.7.0
-+SIGROK_CLI_VERSION = 0.7.1
- SIGROK_CLI_SITE = http://sigrok.org/download/source/sigrok-cli
- SIGROK_CLI_LICENSE = GPL-3.0+
- SIGROK_CLI_LICENSE_FILES = COPYING
+s,necessary/,,
+
+1. It was already a git clone previously
+
+2. git clones are cached locally (so re=usable between builds if pne had
+   exported BR2_DL_DIR ), and git clones are named after the package in
+   Buildroot, not after the upstream repo (but in this case, the basename
+   did not change)
+
+3. That tree is not very big (8.18MiB fetched, for a tarball that is
+   4.1MiB)
+
+4. Except for the first build, fetching new objects is going to be fast
+   when people update (probably faster than fetching the full archive).
+
+I also have a tendency to prefer git clones, as the archivers on remote
+sites have been known to change from time to time. For example, github
+has changed the way they create their archives at least twice in the
+past few years, which had an impact on our hashes...
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.29.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
