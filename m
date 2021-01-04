@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 4 Jan 2021 16:21:43 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/paho-mqtt-c: bump
+Date: Mon, 4 Jan 2021 16:21:24 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/paho-mqtt-c: bump
  to version 1.3.8
-Message-ID: <20210104151308.1708A8353F@busybox.osuosl.org>
+Message-ID: <20210104151314.22BD4837F6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=22690850643a4223009914fd5421d7f02ee9a8ad
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=dd6d8c363f102f4ce9352db92c59a9e41452393d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
 https://github.com/eclipse/paho.mqtt.c/milestone/15?closed=1
 
