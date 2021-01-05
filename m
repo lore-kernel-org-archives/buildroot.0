@@ -1,35 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 5 Jan 2021 22:38:47 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] DEVELOPERS: change email
- for Titouan Christophe
-Message-ID: <20210105213307.21CA886108@busybox.osuosl.org>
+Date: Tue, 05 Jan 2021 22:52:38 +0100
+Subject: [Buildroot] [PATCH v2,1/1] package/rpm: don't set openmp
+In-Reply-To: <20201203173710.540004-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 3 Dec 2020 18:37:10 +0100")
+References: <20201203173710.540004-1-fontaine.fabrice@gmail.com>
+Message-ID: <87r1mz59w9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c20877b3b4cd3f7afaad507ca4f27f92d2c164a8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 92c316f2c7a17e3320d33ced50a882f89f3269b8)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- DEVELOPERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Don't set openmp to fix a build failure with codesourcery toolchain that
+ > doesn't have OpenMP >= 4.5 indeed upstream doesn't want to remove the
+ > build failure if the user provides --enable-openmp and OpenMP is < 4.5:
+ > https://github.com/rpm-software-management/rpm/pull/1433
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index ca256e00d9..370da914e2 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2591,7 +2591,7 @@ F:	toolchain/
- N:	Timo Ketola <timo.ketola@exertus.fi>
- F:	package/fbgrab/
- 
--N:	Titouan Christophe <titouan.christophe@railnova.eu>
-+N:	Titouan Christophe <titouanchristophe@gmail.com>
- F:	package/avro-c/
- F:	package/mosquitto/
- F:	package/python-avro/
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/05dd945d24e8684aad6a2343ba7f6f8a7cea8349
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > ---
+ > Changes v1 -> v2:
+ >  - Don't set openmp instead of disabling it
+
+Committed to 2020.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
