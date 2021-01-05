@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 5 Jan 2021 22:54:54 +0100
-Subject: [Buildroot] [PATCH 01/10 v3] core/pkg-infra: prepare for
- alternate default source archives
-In-Reply-To: <7d52ccdb9dd1b0e56d1a3720e649f52693ee1c68.1609239666.git.yann.morin.1998@free.fr>
+Date: Tue, 5 Jan 2021 22:58:46 +0100
+Subject: [Buildroot] [PATCH 02/10 v3] core/pkg-infra: allow per
+ site-method sub-version strings
+In-Reply-To: <56c06f0c54667a42f32932601926032636a71f8a.1609239666.git.yann.morin.1998@free.fr>
 References: <cover.1609239666.git.yann.morin.1998@free.fr>
- <7d52ccdb9dd1b0e56d1a3720e649f52693ee1c68.1609239666.git.yann.morin.1998@free.fr>
-Message-ID: <70d03429-1f06-a327-cb4a-e01d6ad2d9d0@mind.be>
+ <56c06f0c54667a42f32932601926032636a71f8a.1609239666.git.yann.morin.1998@free.fr>
+Message-ID: <c32f359d-553a-d69b-b1cd-eb6b94c71860@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,52 +15,41 @@ To: buildroot@busybox.net
 
 
 On 29/12/2020 12:01, Yann E. MORIN wrote:
-> The .tar.gz default extension is historical, and we initially used
-> to only fetch tarballs from remote sites.
+> When we want to change the format of an archive we generate (e.g. those
+> we generate from git trees), the hashes of those archives will change.
 > 
-> When we introduced downloads from VCS repositories, we kept that
-> extension, and kept compressing with gz, by lack of good reason to
-> switch to some other compression scheme.
+> To avoid any issue (e.g. an older Buildroot using newer archives, or the
+> other way around) that would conclude that the hashes do not match, we
+> want to change the filenames of the generated archives whenever we
+> change their format.
 > 
-> However, nowadays, we will want to change the way we construct the
-> tarballs we generate from VCS. This will de facto change the hashes
-> of those tarballs.
+> Introduce a new internal variable, specific to each site method, that we
+> can set to include a "format version" for the archives generated from
+> that site method.
 > 
-> So we will want that the archives we generate do not clash with the
-> existing ones, so we need another filename. Thus, we need a way to
-> be able to use a different extension when we generate archives from
-> VCS.
-> 
-> Note that we do not need to play the host-defaults-to-target-value
-> dance we do for the _SOURCE variable, because this is a purely internal
-> variable, not exposed to packages, and as such, is not documented.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > Cc: Vincent Fazio <vfazio@xes-inc.com>
 > ---
->  package/pkg-generic.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  package/pkg-generic.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
 > diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 621fb91424..6a9389f1b5 100644
+> index 6a9389f1b5..8db79dc74a 100644
 > --- a/package/pkg-generic.mk
 > +++ b/package/pkg-generic.mk
-> @@ -514,11 +514,12 @@ ifneq ($$($(2)_OVERRIDE_SRCDIR),)
+> @@ -514,7 +514,7 @@ ifneq ($$($(2)_OVERRIDE_SRCDIR),)
 >  $(2)_VERSION = custom
 >  endif
 >  
-> +$(2)_SOURCE_EXT = .tar.gz
+> -$(2)_SOURCE_EXT = .tar.gz
+> +$(2)_SOURCE_EXT = $$(BR_FMT_VERSION_$$($(2)_SITE_METHOD)).tar.gz
 
- I generally don't like adding a per-package variable unless really needed,
-because we already have way to many. Roughly 285K, and this adds another 2.5K.
+ Another nitpick: _SITE_METHOD is only defined 10 lines below. It would make
+sense to move that definition before this line. (This remark becomes less
+relevant if you go with the macro approach, because then it becomes invisible).
 
- So I'd prefer to either:
-
-- put it directly in the _SOURCE definition; or
-- define it as a macro outside, i.e. use it as '$$(call source-ext,$(2))'
-
- This is really a nitpick though, so
+ Either way:
 
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
@@ -70,10 +59,4 @@ Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 >  ifndef $(2)_SOURCE
 >   ifdef $(3)_SOURCE
 >    $(2)_SOURCE = $$($(3)_SOURCE)
->   else ifdef $(2)_VERSION
-> -  $(2)_SOURCE			?= $$($(2)_BASENAME_RAW).tar.gz
-> +  $(2)_SOURCE			?= $$($(2)_BASENAME_RAW)$$($(2)_SOURCE_EXT)
->   endif
->  endif
->  
 > 
