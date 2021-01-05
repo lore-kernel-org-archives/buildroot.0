@@ -1,27 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 5 Jan 2021 10:22:56 +0100
-Subject: [Buildroot] [PATCH] package/minicom: bump to version 2.8 commit
-In-Reply-To: <20210104223821.72542-1-giulio.benetti@benettiengineering.com>
-References: <20210104223821.72542-1-giulio.benetti@benettiengineering.com>
-Message-ID: <20210105102256.66b37f6b@windsurf.home>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Tue, 5 Jan 2021 12:25:06 +0100
+Subject: [Buildroot] [PATCH 1/8] package/freescale-imx/firmware-imx:
+ bump version to 8.10
+In-Reply-To: <20210104173820.6720-2-stephane.viau@oss.nxp.com>
+References: <20210104173820.6720-1-stephane.viau@oss.nxp.com>
+ <20210104173820.6720-2-stephane.viau@oss.nxp.com>
+Message-ID: <X/RMkp0aXytk1R+Q@p1g2>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon,  4 Jan 2021 23:38:21 +0100
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+Hi Stephane,
 
-> -MINICOM_VERSION = 79ef3185df5ae9cdc8307f9b9ba17463743f22f0
-> +MINICOM_VERSION = 42102971cc309599e4576371e8db66c507c21424
+On Mon, Jan 04, 2021 at 06:38:13PM +0100, Stephane Viau wrote:
+> This version is aligned with 5.4.70_2.3.0 NXP Linux BSP.
 
-What about using the 2.8 tag ?https://salsa.debian.org/minicom-team/minicom/-/tree/2.8 ?
+I usually add a line providing the NXP terms version to explain the
+EULA/COPYING hash update:
+- EULA/COPYING: update to LA_OPT_NXP_Software_License v17
+(might not be necessary, more of a FYI)
 
-Best regards,
+> Signed-off-by: Stephane Viau <stephane.viau@oss.nxp.com>
+> ---
+>  package/freescale-imx/firmware-imx/firmware-imx.hash | 6 +++---
+>  package/freescale-imx/firmware-imx/firmware-imx.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/freescale-imx/firmware-imx/firmware-imx.hash b/package/freescale-imx/firmware-imx/firmware-imx.hash
+> index 3230677d49..0a717d40f5 100644
+> --- a/package/freescale-imx/firmware-imx/firmware-imx.hash
+> +++ b/package/freescale-imx/firmware-imx/firmware-imx.hash
+> @@ -1,4 +1,4 @@
+>  # Locally calculated
+> -sha256  a72f70fd2ecaa58800bb88ed672fddc322ab9843ee7777eb89b82016b0aa3614  firmware-imx-8.9.bin
+> -sha256  a39da2e94bd8b99eaac4325633854620ea3a55145259c3a7748c610a80714cfc  EULA
+> -sha256  69cbb76b3f10ac5a8c36f34df7bbdf50825815560c00a946fff2922365ef01a2  COPYING
+> +sha256  2b70f169d4065b2a7ac7a676afe24636128bd2dacc9f5230346758c3b146b2be  firmware-imx-8.10.bin
+> +sha256  72edc2072c86d93aa1993d15d4d19d96270af3749b0108995ad50c81d1461f52  EULA
+> +sha256  9c16421e7c702f56756650b8ac954d34556327e598a8666e6e8f4eb3a1aa95f1  COPYING
+> diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
+> index 7d1f42f1d8..b33ffb7ee8 100644
+> --- a/package/freescale-imx/firmware-imx/firmware-imx.mk
+> +++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -FIRMWARE_IMX_VERSION = 8.9
+> +FIRMWARE_IMX_VERSION = 8.10
+>  FIRMWARE_IMX_SITE = $(FREESCALE_IMX_SITE)
+>  FIRMWARE_IMX_SOURCE = firmware-imx-$(FIRMWARE_IMX_VERSION).bin
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Reviewed-by: Gary Bisson <gary.bisson@boundarydevices.com>
+
+Thanks,
+Gary
