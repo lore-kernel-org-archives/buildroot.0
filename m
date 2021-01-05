@@ -1,10 +1,8 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue,  5 Jan 2021 20:26:00 +0100
-Subject: [Buildroot] [PATCH 2/2] package/x11r7/xfont_font-misc-ethiopic:
- bump version to 1.0.4
-In-Reply-To: <20210105192600.1339698-1-bernd.kuhls@t-online.de>
-References: <20210105192600.1339698-1-bernd.kuhls@t-online.de>
-Message-ID: <20210105192600.1339698-2-bernd.kuhls@t-online.de>
+Date: Tue,  5 Jan 2021 20:25:59 +0100
+Subject: [Buildroot] [PATCH 1/2] package/x11r7/xfont_font-alias: bump
+ version to 1.0.4
+Message-ID: <20210105192600.1339698-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,37 +12,37 @@ To: buildroot@busybox.net
 Added hashes provided by upstream.
 
 Release notes:
-https://lists.x.org/archives/xorg-announce/2020-August/003055.html
+https://lists.x.org/archives/xorg-announce/2020-August/003054.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../xfont_font-misc-ethiopic/xfont_font-misc-ethiopic.hash    | 4 +++-
- .../xfont_font-misc-ethiopic/xfont_font-misc-ethiopic.mk      | 2 +-
+ package/x11r7/xfont_font-alias/xfont_font-alias.hash | 4 +++-
+ package/x11r7/xfont_font-alias/xfont_font-alias.mk   | 2 +-
  2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xfont_font-misc-ethiopic/xfont_font-misc-ethiopic.hash b/package/x11r7/xfont_font-misc-ethiopic/xfont_font-misc-ethiopic.hash
-index f806bf0898..45cf430018 100644
---- a/package/x11r7/xfont_font-misc-ethiopic/xfont_font-misc-ethiopic.hash
-+++ b/package/x11r7/xfont_font-misc-ethiopic/xfont_font-misc-ethiopic.hash
+diff --git a/package/x11r7/xfont_font-alias/xfont_font-alias.hash b/package/x11r7/xfont_font-alias/xfont_font-alias.hash
+index ae679a0ade..5390d1c126 100644
+--- a/package/x11r7/xfont_font-alias/xfont_font-alias.hash
++++ b/package/x11r7/xfont_font-alias/xfont_font-alias.hash
 @@ -1,3 +1,5 @@
-+# From https://lists.x.org/archives/xorg-announce/2020-August/003055.html
-+sha256  698c0f6ddf9ca482250bdafa08293893148393bb9cb23e0a9ca313c6dbfc4ae0  font-misc-ethiopic-1.0.4.tar.bz2
-+sha512  4fed9ff3782746898c56dac199e9ca89356f4967779937049b9ff4ffad202317c023859f92d44b371dfa5485d5368ccad648e64b12cde0ed21f7d4aee5affcd5  font-misc-ethiopic-1.0.4.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2020-August/003054.html
++sha256  f3111ae8bf2e980f5f56af400e8eefe5fc9f4207f4a412ea79637fd66c945276  font-alias-1.0.4.tar.bz2
++sha512  c67ac2ee344a601fcc09471580214b30c3fd6acc4800702840de44f0733e6d18b3faeec2fa3f4e2314025cc1724d7d6796ebaf620398fe350710182fd2c4b07d  font-alias-1.0.4.tar.bz2
  # locally computed
--sha256  53cb1fd83afdbe7939c0eac34003676ee0e6023216892d98054db90b703c98a5  font-misc-ethiopic-1.0.3.tar.bz2
- sha256  94835f274f1ddad34f8fd3a06b2c493222a68e4094f4097000d101f22ee0d0d5  COPYING
-diff --git a/package/x11r7/xfont_font-misc-ethiopic/xfont_font-misc-ethiopic.mk b/package/x11r7/xfont_font-misc-ethiopic/xfont_font-misc-ethiopic.mk
-index 6f345df52c..9ded4b6ced 100644
---- a/package/x11r7/xfont_font-misc-ethiopic/xfont_font-misc-ethiopic.mk
-+++ b/package/x11r7/xfont_font-misc-ethiopic/xfont_font-misc-ethiopic.mk
+-sha256  8b453b2aae1cfa8090009ca037037b8c5e333550651d5a158b7264ce1d472c9a  font-alias-1.0.3.tar.bz2
+ sha256  bdba5452fc080c0f1a56d66978ac4150d1d1a00a9cc0248bba4f0b76c80ad47e  COPYING
+diff --git a/package/x11r7/xfont_font-alias/xfont_font-alias.mk b/package/x11r7/xfont_font-alias/xfont_font-alias.mk
+index 8a37da44c0..7f8e4b2ea0 100644
+--- a/package/x11r7/xfont_font-alias/xfont_font-alias.mk
++++ b/package/x11r7/xfont_font-alias/xfont_font-alias.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XFONT_FONT_MISC_ETHIOPIC_VERSION = 1.0.3
-+XFONT_FONT_MISC_ETHIOPIC_VERSION = 1.0.4
- XFONT_FONT_MISC_ETHIOPIC_SOURCE = font-misc-ethiopic-$(XFONT_FONT_MISC_ETHIOPIC_VERSION).tar.bz2
- XFONT_FONT_MISC_ETHIOPIC_SITE = http://xorg.freedesktop.org/releases/individual/font
- XFONT_FONT_MISC_ETHIOPIC_LICENSE = MIT
+-XFONT_FONT_ALIAS_VERSION = 1.0.3
++XFONT_FONT_ALIAS_VERSION = 1.0.4
+ XFONT_FONT_ALIAS_SOURCE = font-alias-$(XFONT_FONT_ALIAS_VERSION).tar.bz2
+ XFONT_FONT_ALIAS_SITE = http://xorg.freedesktop.org/releases/individual/font
+ XFONT_FONT_ALIAS_LICENSE = MIT
 -- 
 2.29.2
