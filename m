@@ -1,63 +1,47 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue,  5 Jan 2021 20:13:49 +0100
-Subject: [Buildroot] [PATCH 1/1] package/python{,
- 3}-mako: bump to version 1.1.3
-Message-ID: <20210105191349.1180409-1-bernd.kuhls@t-online.de>
+Date: Tue,  5 Jan 2021 20:17:29 +0100
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xapp_fonttosfnt: bump version
+ to 1.2.1
+Message-ID: <20210105191729.1277616-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog: https://docs.makotemplates.org/en/latest/changelog.html
+Release notes:
+https://lists.x.org/archives/xorg-announce/2020-December/003068.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/python-mako/python-mako.hash | 4 ++--
- package/python-mako/python-mako.mk   | 4 ++--
- package/python3-mako/python3-mako.mk | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.hash | 4 ++--
+ package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-mako/python-mako.hash b/package/python-mako/python-mako.hash
-index 19b122179e..353799923f 100644
---- a/package/python-mako/python-mako.hash
-+++ b/package/python-mako/python-mako.hash
+diff --git a/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.hash b/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.hash
+index abd3d16f73..7faa797fde 100644
+--- a/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.hash
++++ b/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/mako/json
--md5  e1939facb40f38f15e8cc74cb5887c4c  Mako-1.1.2.tar.gz
--sha256  3139c5d64aa5d175dbafb95027057128b5fbd05a40c53999f3905ceb53366d9d  Mako-1.1.2.tar.gz
-+md5  184bb2ba4b937127e7c557b93db89377  Mako-1.1.3.tar.gz
-+sha256  8195c8c1400ceb53496064314c6736719c6f25e7479cd24c77be3d9361cddc27  Mako-1.1.3.tar.gz
- # Locally computed sha256 checksums
- sha256  47cd0d41b1092f9161cfb629ed15e5cea185144710ff4633a4281ef088ff5de7  LICENSE
-diff --git a/package/python-mako/python-mako.mk b/package/python-mako/python-mako.mk
-index ce34321cb1..d5d49f252d 100644
---- a/package/python-mako/python-mako.mk
-+++ b/package/python-mako/python-mako.mk
-@@ -6,9 +6,9 @@
+ # From https://lists.x.org/archives/xorg-announce/2020-October/003062.html
+-sha256  79f35ace377c5409c05ed71f0e8b75f8ca6ddf0a2f6b6d7ecb770ee10072a621  fonttosfnt-1.2.0.tar.bz2
+-sha512  a360bd8535beaef89afa6c0678a40f7c554e9d631e0fcb80bb1363ab72288e27a5e106521610f61c95b8101f79c7f02492a2068411b5f5b695de780d8a1c1b25  fonttosfnt-1.2.0.tar.bz2
++sha256  07c835f1f98d7b462be8f1493d072b62418282421be18197e50579c70b0c259b  fonttosfnt-1.2.1.tar.bz2
++sha512  3d4ece61e31d4a5ed56923ecc1883e80a9308d2062d37345cb5be081bc2b004aadebf99a989601749a63e03eb641e0522d07773a57bca0b4710ed453e4f20742  fonttosfnt-1.2.1.tar.bz2
+ # Locally computed
+ sha256  f83378580cb7909a98b52bf5cd6a29f4894d76318c5c5312dd3f17a3e92beef1  COPYING
+diff --git a/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk b/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk
+index 8e48234e29..bafc524901 100644
+--- a/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk
++++ b/package/x11r7/xapp_fonttosfnt/xapp_fonttosfnt.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Please keep in sync with
- # package/python3-mako/python3-mako.mk
--PYTHON_MAKO_VERSION = 1.1.2
-+PYTHON_MAKO_VERSION = 1.1.3
- PYTHON_MAKO_SOURCE = Mako-$(PYTHON_MAKO_VERSION).tar.gz
--PYTHON_MAKO_SITE = https://files.pythonhosted.org/packages/42/64/fc7c506d14d8b6ed363e7798ffec2dfe4ba21e14dda4cfab99f4430cba3a
-+PYTHON_MAKO_SITE = https://files.pythonhosted.org/packages/72/89/402d2b4589e120ca76a6aed8fee906a0f5ae204b50e455edd36eda6e778d
- PYTHON_MAKO_SETUP_TYPE = setuptools
- PYTHON_MAKO_LICENSE = MIT
- PYTHON_MAKO_LICENSE_FILES = LICENSE
-diff --git a/package/python3-mako/python3-mako.mk b/package/python3-mako/python3-mako.mk
-index 0296c68fc6..fd6b2ed49c 100644
---- a/package/python3-mako/python3-mako.mk
-+++ b/package/python3-mako/python3-mako.mk
-@@ -6,7 +6,7 @@
- 
- # Please keep in sync with
- # package/python-mako/python-mako.mk
--PYTHON3_MAKO_VERSION = 1.1.2
-+PYTHON3_MAKO_VERSION = 1.1.3
- PYTHON3_MAKO_SOURCE = Mako-$(PYTHON3_MAKO_VERSION).tar.gz
- PYTHON3_MAKO_SITE = https://files.pythonhosted.org/packages/42/64/fc7c506d14d8b6ed363e7798ffec2dfe4ba21e14dda4cfab99f4430cba3a
- PYTHON3_MAKO_SETUP_TYPE = setuptools
+-XAPP_FONTTOSFNT_VERSION = 1.2.0
++XAPP_FONTTOSFNT_VERSION = 1.2.1
+ XAPP_FONTTOSFNT_SOURCE = fonttosfnt-$(XAPP_FONTTOSFNT_VERSION).tar.bz2
+ XAPP_FONTTOSFNT_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_FONTTOSFNT_LICENSE = MIT
 -- 
 2.29.2
