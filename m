@@ -1,45 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 5 Jan 2021 23:04:50 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/x11r7/xapp_xload:
- disable gettext detection when not needed
-Message-ID: <20210105220828.7CBB0864DB@busybox.osuosl.org>
+Date: Tue, 5 Jan 2021 23:09:02 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/systemd: don't
+ fail if getty service directory already exists
+Message-ID: <20210105220828.A942B81383@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=05224503fa23ebe8fe17a0a1f587087c5377db65
+commit: https://git.buildroot.net/buildroot/commit/?id=ce2ca35fc11d8a5a1fc41501d76d757b05e73718
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Patch originates from FreeBSD:
-https://lists.freebsd.org/pipermail/freebsd-x11/2015-July/016528.html
-https://svnweb.freebsd.org/ports/head/x11/libXpm/Makefile?r1=384234&r2=391122&pathrev=391122
+Add -p argument that ignore that specified directory already exists.
 
-Fixes:
-http://autobuild.buildroot.net/results/2ad/2ad27875ce5c16a111d54d452eb395257e9b5e2b/
-
-Similar to how xlib_libXpm was fixed back in 2018, with 6653b0929f
-(package/x11r7/xlib_libXpm: disable gettext detection when not needed).
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+[yann.morin.1998 at free.fr:
+  - split to its own patch
+  - rewrite commit title
+]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 3dc427eb1daadcdcb04a5a8efdefc4315da65818)
+(cherry picked from commit 9c5ef6018e7d0bd9e56006fe192880395a8aa871)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xapp_xload/xapp_xload.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/systemd/systemd.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xapp_xload/xapp_xload.mk b/package/x11r7/xapp_xload/xapp_xload.mk
-index 4bb21ecf0b..9f491ccdc6 100644
---- a/package/x11r7/xapp_xload/xapp_xload.mk
-+++ b/package/x11r7/xapp_xload/xapp_xload.mk
-@@ -18,4 +18,8 @@ ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
- XAPP_XLOAD_CONF_OPTS += CFLAGS="$(TARGET_CFLAGS) -DRLOADSTUB"
- endif
- 
-+ifeq ($(BR2_SYSTEM_ENABLE_NLS),)
-+XAPP_XLOAD_CONF_ENV += ac_cv_search_gettext=no
-+endif
-+
- $(eval $(autotools-package))
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 4d988b0c4f..875b08cbee 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -462,7 +462,7 @@ ifneq ($(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT)),)
+ # * enable serial-getty at xxx for other $BR2_TARGET_GENERIC_TTY_PATH
+ # * rewrite baudrates if a baudrate is provided
+ define SYSTEMD_INSTALL_SERVICE_TTY
+-	mkdir $(TARGET_DIR)/usr/lib/systemd/system/getty at .service.d; \
++	mkdir -p $(TARGET_DIR)/usr/lib/systemd/system/getty at .service.d; \
+ 	printf '[Install]\nDefaultInstance=\n' \
+ 		>$(TARGET_DIR)/usr/lib/systemd/system/getty at .service.d/buildroot-console.conf; \
+ 	if [ $(BR2_TARGET_GENERIC_GETTY_PORT) = "console" ]; \
+@@ -474,7 +474,7 @@ define SYSTEMD_INSTALL_SERVICE_TTY
+ 			$(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT)) \
+ 			>$(TARGET_DIR)/usr/lib/systemd/system/getty at .service.d/buildroot-console.conf; \
+ 	else \
+-		mkdir $(TARGET_DIR)/usr/lib/systemd/system/serial-getty at .service.d;\
++		mkdir -p $(TARGET_DIR)/usr/lib/systemd/system/serial-getty at .service.d;\
+ 		printf '[Install]\nDefaultInstance=%s\n' \
+ 			$(call qstrip,$(BR2_TARGET_GENERIC_GETTY_PORT)) \
+ 			>$(TARGET_DIR)/usr/lib/systemd/system/serial-getty at .service.d/buildroot-console.conf;\
