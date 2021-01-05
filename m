@@ -1,49 +1,75 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 5 Jan 2021 23:28:10 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/nfs-utils:
- rpcbind is only needed for rpc.nfsd
-Message-ID: <20210105222212.6D638865B6@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 5 Jan 2021 23:41:18 +0100
+Subject: [Buildroot] [PATCH 09/10 v3] support/dependencies: drop check
+ for maximal tar version
+In-Reply-To: <3cf9b1b08bc5025058ad6dfaefaaead9a9cb82b5.1609239666.git.yann.morin.1998@free.fr>
+References: <cover.1609239666.git.yann.morin.1998@free.fr>
+ <3cf9b1b08bc5025058ad6dfaefaaead9a9cb82b5.1609239666.git.yann.morin.1998@free.fr>
+Message-ID: <d44c7aab-5a58-c790-e8ed-be39fb858057@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ad95564214c23de463d9d86a551050540c576fc8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-rpcbind is only used by nfsd to export nfs share supporting older
-v2, v3 protocols.
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-[yann.morin.1998 at free.fr:
-  - move the select to the corresponding symbol
-  - tweak the commit title
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 95fdf09731cc6bba748bed37878e6697c41f0c33)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/nfs-utils/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 29/12/2020 12:01, Yann E. MORIN wrote:
+> So far, we checked that the tar present on the host was at most tar
+> 1.29, because tar 1.30 changed the way it generates archives.
+> 
+> Having a maximum tar version requirement meant that we would eventually
+> always have to build our own host-tar, as distributions are updating
+> the version they use.
+> 
+> But now, we have found a way to generate reproducible archives starting
+> with tar 1.27 onward, so we no longer need the check for a maximum tar
+> version, so we can drop that requirement.
 
-diff --git a/package/nfs-utils/Config.in b/package/nfs-utils/Config.in
-index cfca034019..da563db0f1 100644
---- a/package/nfs-utils/Config.in
-+++ b/package/nfs-utils/Config.in
-@@ -7,7 +7,6 @@ config BR2_PACKAGE_NFS_UTILS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libtirpc, rpcbind
- 	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_LIBTIRPC # IPv6 requires libtirpc
--	select BR2_PACKAGE_RPCBIND # runtime
- 	help
- 	  The NFS Linux kernel server.
- 
-@@ -28,6 +27,7 @@ config BR2_PACKAGE_NFS_UTILS_RPC_LOCKD
- config BR2_PACKAGE_NFS_UTILS_RPC_NFSD
- 	bool "rpc.nfsd"
- 	default y
-+	select BR2_PACKAGE_RPCBIND # runtime
- 	help
- 	  NFS server
- 
+ You could have simply reverted b8fa273d500b44153e9939f0a100e97db2ff63ed, but OK.
+
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+ Regards,
+ Arnout
+
+> 
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Vincent Fazio <vfazio@xes-inc.com>
+> ---
+>  support/dependencies/check-host-tar.sh | 14 +-------------
+>  1 file changed, 1 insertion(+), 13 deletions(-)
+> 
+> diff --git a/support/dependencies/check-host-tar.sh b/support/dependencies/check-host-tar.sh
+> index 934cb61299..b7d607a47a 100755
+> --- a/support/dependencies/check-host-tar.sh
+> +++ b/support/dependencies/check-host-tar.sh
+> @@ -33,14 +33,7 @@ fi
+>  major_min=1
+>  minor_min=27
+>  
+> -# Maximal version = 1.29 (1.30 changed --numeric-owner output for
+> -# filenames > 100 characters). This is really a fix for a bug in
+> -# earlier tar versions regarding deterministic output so it is
+> -# unlikely to be reverted in later versions.
+> -major_max=1
+> -minor_max=29
+> -
+> -if [ $major -lt $major_min -o $major -gt $major_max ]; then
+> +if [ $major -lt $major_min ]; then
+>  	# echo nothing: no suitable tar found
+>  	exit 1
+>  fi
+> @@ -50,10 +43,5 @@ if [ $major -eq $major_min -a $minor -lt $minor_min ]; then
+>  	exit 1
+>  fi
+>  
+> -if [ $major -eq $major_max -a $minor -gt $minor_max ]; then
+> -	# echo nothing: no suitable tar found
+> -	exit 1
+> -fi
+> -
+>  # valid
+>  echo $tar
+> 
