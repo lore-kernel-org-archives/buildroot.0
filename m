@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 05 Jan 2021 23:07:37 +0100
-Subject: [Buildroot] [git commit] package/luarocks: fix copying our
- custom command if dest dir exists
-In-Reply-To: <20210103084614.AD2E186185@busybox.osuosl.org> (Yann E. MORIN's
- message of "Sun, 3 Jan 2021 09:59:06 +0100")
-References: <20210103084614.AD2E186185@busybox.osuosl.org>
-Message-ID: <87a6tn597a.fsf@dell.be.48ers.dk>
+Date: Tue, 05 Jan 2021 23:08:53 +0100
+Subject: [Buildroot] [git commit] package/syslog-ng: don't fail if
+ systemd service directory already exists
+In-Reply-To: <20210103084614.BBFB981012@busybox.osuosl.org> (Yann E. MORIN's
+ message of "Sun, 3 Jan 2021 10:01:23 +0100")
+References: <20210103084614.BBFB981012@busybox.osuosl.org>
+Message-ID: <875z4b5956.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,12 +14,13 @@ To: buildroot@busybox.net
 
 >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=25bd8ba6907f49d8ce54a6066b5e893416e7aea6
+ > commit: https://git.buildroot.net/buildroot/commit/?id=d2d629ecd8041a21b6c615e221137113837a42c2
  > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+ > Add -p argument that ignore that specified directory already exists.
 
  > Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
  > [yann.morin.1998 at free.fr:
- >   - use $(INSTALL), not "mkdir -p + cp"
  >   - split to its own patch
  >   - rewrite commit title
  > ]
