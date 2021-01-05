@@ -1,105 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 5 Jan 2021 22:58:42 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/php: needs pcre2
-Message-ID: <20210105214239.6206182B84@busybox.osuosl.org>
+Date: Tue, 05 Jan 2021 23:04:14 +0100
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/boost: atomics needs always lockfree atomic bytes
+In-Reply-To: <20201205221525.236045-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 5 Dec 2020 23:15:25 +0100")
+References: <20201205221525.236045-1-fontaine.fabrice@gmail.com>
+Message-ID: <87im8b59cx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=16aee2cb19435b2edb1c8a086653667aeff87648
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Since 2008 pcre is a hard-dependency of php:
-https://github.com/php/php-src/commit/aa64c6727c2d33a647bdbd9769215044f7cf2967
+ > Since version 1.74.0, boost atomics needs a toolchain that always
+ > supports lockfree atomic bytes so add dependendy on
+ > BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS:
+ > https://github.com/boostorg/atomic/issues/42
 
-Instead of optionally depending on the pcre2 package and building the
-bundled pcre2 code of php in case BR2_PACKAGE_PCRE2 was not selected
-we let php depend on pcre2.
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/c03a786791e3aa7801cf1bff9934c4a105f54ce1
 
-While being at it rename the pcre-related configure option due to
-upstream commit:
-https://github.com/php/php-src/commit/c1a22f3d4e69cb87f8deeed7d03d9434e6901537
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > ---
+ > Changes v1 -> v2 (after review of Thomas Petazzoni):
+ >  - Use && instead of ||?in bitcoin and gqrx comment
+ >  - Drop select of boost-atomic in boost-thread
+ >  - Update reverse dependencies of boost-thread: boost-context,
+ >    boost-coroutine, boost-fiber, boost-locale, boost-type_erasure,
+ >    boost-wave
 
-Fixes:
-http://autobuild.buildroot.net/results/4a5/4a582af6b66c59a61b75a7047d8530202972ebdd/
-because the pcre2 package already contains the fix for mips r6.
+Committed to 2020.11.x, thanks.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-[yann.morin.1998 at free.fr: keep the JIT option]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit fabb1243ab02dbeb6677a74e02a71b3d05b66f3a)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/php/Config.in |  1 +
- package/php/php.mk    | 23 ++---------------------
- 2 files changed, 3 insertions(+), 21 deletions(-)
-
-diff --git a/package/php/Config.in b/package/php/Config.in
-index 2469573541..6fa420428b 100644
---- a/package/php/Config.in
-+++ b/package/php/Config.in
-@@ -10,6 +10,7 @@ config BR2_PACKAGE_PHP
- 	       !BR2_PACKAGE_PHP_SAPI_FPM &&  \
- 	       BR2_USE_MMU
- 	select BR2_PACKAGE_PHP_SAPI_CLI if !BR2_USE_MMU
-+	select BR2_PACKAGE_PCRE2
- 	help
- 	  PHP  is a widely-used general-purpose scripting
- 	  language that is especially suited for Web development
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 307d75b9bc..a2d3cbff4f 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -10,7 +10,7 @@ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
- PHP_INSTALL_STAGING_OPTS = INSTALL_ROOT=$(STAGING_DIR) install
- PHP_INSTALL_TARGET_OPTS = INSTALL_ROOT=$(TARGET_DIR) install
--PHP_DEPENDENCIES = host-pkgconf
-+PHP_DEPENDENCIES = host-pkgconf pcre2
- PHP_LICENSE = PHP-3.01
- PHP_LICENSE_FILES = LICENSE
- PHP_CONF_OPTS = \
-@@ -18,6 +18,7 @@ PHP_CONF_OPTS = \
- 	--infodir=/usr/share/info \
- 	--with-config-file-scan-dir=/etc/php.d \
- 	--disable-all \
-+	--with-external-pcre \
- 	--without-pear \
- 	--with-config-file-path=/etc \
- 	--disable-phpdbg \
-@@ -259,11 +260,6 @@ define PHP_DISABLE_VALGRIND
- endef
- PHP_POST_CONFIGURE_HOOKS += PHP_DISABLE_VALGRIND
- 
--### Use external PCRE if it's available
--ifeq ($(BR2_PACKAGE_PCRE2),y)
--PHP_CONF_OPTS += --with-pcre-regex=$(STAGING_DIR)/usr
--PHP_DEPENDENCIES += pcre2
--
- ifeq ($(BR2_PACKAGE_PCRE2_JIT),y)
- PHP_CONF_OPTS += --with-pcre-jit=yes
- PHP_CONF_ENV += ac_cv_have_pcre2_jit=yes
-@@ -272,21 +268,6 @@ PHP_CONF_OPTS += --with-pcre-jit=no
- PHP_CONF_ENV += ac_cv_have_pcre2_jit=no
- endif
- 
--else
--# The bundled pcre library is not configurable through ./configure options,
--# and by default is configured to be thread-safe, so it wants pthreads. So
--# we must explicitly tell it when we don't have threads.
--ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
--PHP_CFLAGS += -DSLJIT_SINGLE_THREADED=1
--endif
--# check ext/pcre/pcrelib/sljit/sljitConfigInternal.h for supported archs
--ifeq ($(BR2_i386)$(BR2_x86_64)$(BR2_arm)$(BR2_armeb)$(BR2_aarch64)$(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el)$(BR2_powerpc)$(BR2_sparc),y)
--PHP_CONF_OPTS += --with-pcre-jit
--else
--PHP_CONF_OPTS += --without-pcre-jit
--endif
--endif
--
- ifeq ($(BR2_PACKAGE_PHP_EXT_CURL),y)
- PHP_CONF_OPTS += --with-curl
- PHP_DEPENDENCIES += libcurl
+-- 
+Bye, Peter Korsgaard
