@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 05 Jan 2021 23:08:53 +0100
-Subject: [Buildroot] [git commit] package/syslog-ng: don't fail if
- systemd service directory already exists
-In-Reply-To: <20210103084614.BBFB981012@busybox.osuosl.org> (Yann E. MORIN's
- message of "Sun, 3 Jan 2021 10:01:23 +0100")
-References: <20210103084614.BBFB981012@busybox.osuosl.org>
-Message-ID: <875z4b5956.fsf@dell.be.48ers.dk>
+Date: Tue, 05 Jan 2021 23:09:40 +0100
+Subject: [Buildroot] [git commit] package/systemd: don't fail if getty
+ service directory already exists
+In-Reply-To: <20210103084614.C068A84C4E@busybox.osuosl.org> (Yann E. MORIN's
+ message of "Sun, 3 Jan 2021 10:02:12 +0100")
+References: <20210103084614.C068A84C4E@busybox.osuosl.org>
+Message-ID: <871rez593v.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,7 +14,7 @@ To: buildroot@busybox.net
 
 >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=d2d629ecd8041a21b6c615e221137113837a42c2
+ > commit: https://git.buildroot.net/buildroot/commit/?id=9c5ef6018e7d0bd9e56006fe192880395a8aa871
  > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
  > Add -p argument that ignore that specified directory already exists.
