@@ -1,45 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 5 Jan 2021 15:54:47 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/tpm2-tss: bump
- version to 3.0.3
-Message-ID: <20210105145257.EE6F1810E4@busybox.osuosl.org>
+Date: Tue, 5 Jan 2021 16:10:43 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] boot/barebox: kconfig
+ needs the toolchain
+Message-ID: <20210105145258.0000D8642F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0b1ca8c56eb3ec7ab881c0fddcf832e6f9067c01
+commit: https://git.buildroot.net/buildroot/commit/?id=cfdc2515fb3eecff95b47b7913e86697765197b6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-Signed-off-by: Yair Ben-Avraham <yairba@protonmail.com>
+In barebox v2020.09.0, kconfig has been updated to a newer version
+based on Linux 5.9-rc2.  As in linux, kconfig can call the compiler
+to test its capabilities.
+
+We have no way to know if a custom version would require it or not,
+so we just unconditionally depend on the toolchain
+
+Signed-off-by: Jules Maselbas <jmaselbas@kalray.eu>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 37427714374e7ee66d8629eda8f4389b9a65b7a2)
+(cherry picked from commit 1c1a629d814fcf4b8c4c65ce6687635c534a22e9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tpm2-tss/tpm2-tss.hash | 2 +-
- package/tpm2-tss/tpm2-tss.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ boot/barebox/barebox.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/tpm2-tss/tpm2-tss.hash b/package/tpm2-tss/tpm2-tss.hash
-index 49432314d0..6856fd4fde 100644
---- a/package/tpm2-tss/tpm2-tss.hash
-+++ b/package/tpm2-tss/tpm2-tss.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  2432533a1cac0f0d15d0337d2f0a23591a50b36aad68ab72412ce694818b7e76  tpm2-tss-3.0.1.tar.gz
-+sha256  78392be7309baf47f51b122f566ac915fd4d1760ea78571cba2e1484f9b5be17  tpm2-tss-3.0.3.tar.gz
- sha256  18c1bf4b1ba1fb2c4ffa7398c234d83c0d55475298e470ae1e5e3a8a8bd2e448  LICENSE
-diff --git a/package/tpm2-tss/tpm2-tss.mk b/package/tpm2-tss/tpm2-tss.mk
-index 70e39bc2b3..bde6b352bf 100644
---- a/package/tpm2-tss/tpm2-tss.mk
-+++ b/package/tpm2-tss/tpm2-tss.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+index 9d62037e7a..77550aaed6 100644
+--- a/boot/barebox/barebox.mk
++++ b/boot/barebox/barebox.mk
+@@ -138,6 +138,11 @@ define $(1)_INSTALL_IMAGES_CMDS
+ 	$$($(1)_INSTALL_CUSTOM_ENV)
+ endef
  
--TPM2_TSS_VERSION = 3.0.1
-+TPM2_TSS_VERSION = 3.0.3
- TPM2_TSS_SITE = https://github.com/tpm2-software/tpm2-tss/releases/download/$(TPM2_TSS_VERSION)
- TPM2_TSS_LICENSE = BSD-2-Clause
- TPM2_TSS_LICENSE_FILES = LICENSE
++# Starting with barebox v2020.09.0, the kconfig used calls the
++# cross-compiler to check its capabilities. So we need the
++# toolchain before we can call the configurators.
++$(1)_KCONFIG_DEPENDENCIES += toolchain
++
+ ifeq ($$(BR2_TARGET_$(1)_BAREBOXENV),y)
+ define $(1)_INSTALL_TARGET_CMDS
+ 	cp $$(@D)/scripts/bareboxenv-target $$(TARGET_DIR)/usr/bin/bareboxenv
