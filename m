@@ -1,98 +1,41 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 5 Jan 2021 23:38:22 +0100
-Subject: [Buildroot] [PATCH 08/10 v3] support/download: change format of
- archives generated from svn
-In-Reply-To: <ab12b3a7a8aa528805008e540cec4cb486954921.1609239666.git.yann.morin.1998@free.fr>
-References: <cover.1609239666.git.yann.morin.1998@free.fr>
- <ab12b3a7a8aa528805008e540cec4cb486954921.1609239666.git.yann.morin.1998@free.fr>
-Message-ID: <22a36e3d-a52a-5bb9-66ae-502443b81224@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 5 Jan 2021 23:29:33 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/trace-cmd:
+ installs nothing in staging/
+Message-ID: <20210105222212.7F052865E4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=f0e4685c765037fc9f927796bd878f51427d8f12
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
+Since its introduction in Buildroot in 2013 with commit 07203d78c24d
+(trace-cmd: new package), trace-cmd has declared installing in staging.
 
-On 29/12/2020 12:01, Yann E. MORIN wrote:
-> Like we recently did for git, switch the archives generated from
-> subversion to be reproducible whatever the tar version.
-> 
-> We have no in-tree users of the svn backend which also has hashes,
-> so no hash to update.
-> 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Heiko Thiery <heiko.thiery@gmail.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Vincent Fazio <vfazio@xes-inc.com>
+But trace-cmd is a generic-package, and has never, ever provided any
+commands for staging installation.
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Drop this declaration.
 
- It's a pity we don't have a test of the svn backend...
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 896b93310a2e5f5945f3b792296a05be0373269f)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/trace-cmd/trace-cmd.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
- Regards,
- Arnout
-
-> ---
->  package/pkg-download.mk |  1 +
->  support/download/svn    | 22 +++++++++-------------
->  2 files changed, 10 insertions(+), 13 deletions(-)
-> 
-> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-> index 272f56a826..21b8493e3f 100644
-> --- a/package/pkg-download.mk
-> +++ b/package/pkg-download.mk
-> @@ -20,6 +20,7 @@ export LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
->  # Version of the format of the archives we generate in the corresponding
->  # download backend:
->  BR_FMT_VERSION_git = _br1
-> +BR_FMT_VERSION_svn = _br1
->  
->  DL_WRAPPER = support/download/dl-wrapper
->  
-> diff --git a/support/download/svn b/support/download/svn
-> index b7a6ac7443..839dccaf62 100755
-> --- a/support/download/svn
-> +++ b/support/download/svn
-> @@ -1,5 +1,10 @@
->  #!/usr/bin/env bash
->  
-> +# NOTE: if the output of this backend has to change (e.g. we change what gets
-> +# included in the archive, or we change the format of the archive (e.g. tar
-> +# options, compression ratio or method)), we MUST update the format version
-> +# in the variable BR_FTM_VERSION_svn, in package/pkg-download.mk.
-> +
->  # We want to catch any unexpected failure, and exit immediately
->  set -e
->  
-> @@ -15,6 +20,8 @@ set -e
->  # Environment:
->  #   SVN      : the svn command to call
->  
-> +. "${0%/*}/helpers"
-> +
->  verbose=
->  while getopts "${BR_BACKEND_DL_GETOPTS}" OPT; do
->      case "${OPT}" in
-> @@ -45,18 +52,7 @@ _svn export ${verbose} "${@}" "'${uri}@${rev}'" "'${basename}'"
->  # last line (svn outputs everything on stdout)
->  date="$( _svn info --show-item last-changed-date "'${uri}@${rev}'" |tail -n 1 )"
->  
-> -# Generate the archive, sort with the C locale so that it is reproducible.
-> +# Generate the archive.
->  # We did a 'svn export' above, so it's not a working copy (there is no .svn
->  # directory or file to ignore).
-> -find "${basename}" -not -type d >"${output}.list"
-> -LC_ALL=C sort <"${output}.list" >"${output}.list.sorted"
-> -
-> -# Create GNU-format tarballs, since that's the format of the tarballs on
-> -# sources.buildroot.org and used in the *.hash files
-> -tar cf - --transform="s#^\./#${basename}/#" \
-> -         --numeric-owner --owner=0 --group=0 --mtime="${date}" --format=gnu \
-> -         -T "${output}.list.sorted" >"${output}.tar"
-> -gzip -6 -n <"${output}.tar" >"${output}"
-> -
-> -rm -f "${output}.list"
-> -rm -f "${output}.list.sorted"
-> +mk_tar_gz "${basename}" "${basename}" "${date}" "${output}"
-> 
+diff --git a/package/trace-cmd/trace-cmd.mk b/package/trace-cmd/trace-cmd.mk
+index dfca6a170d..09bbf0f2e8 100644
+--- a/package/trace-cmd/trace-cmd.mk
++++ b/package/trace-cmd/trace-cmd.mk
+@@ -7,7 +7,6 @@
+ TRACE_CMD_VERSION = trace-cmd-v2.7
+ TRACE_CMD_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/trace-cmd.git
+ TRACE_CMD_SITE_METHOD = git
+-TRACE_CMD_INSTALL_STAGING = YES
+ TRACE_CMD_LICENSE = GPL-2.0, LGPL-2.1
+ TRACE_CMD_LICENSE_FILES = COPYING COPYING.LIB
+ 
