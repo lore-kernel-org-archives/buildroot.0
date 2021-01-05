@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 5 Jan 2021 23:07:20 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/luarocks: fix
+Date: Tue, 5 Jan 2021 23:06:56 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/luarocks: fix
  copying our custom command if dest dir exists
-Message-ID: <20210105220828.8E74981537@busybox.osuosl.org>
+Message-ID: <20210105220834.6105886258@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=08a3583c4d04ea9d2375c0119b565a99f15ef2d4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=796ed9536de1ca6050b7f003074dcf9b29ae59c0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
 Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 [yann.morin.1998 at free.fr:
@@ -26,11 +26,11 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 1 insertion(+), 2 deletions(-)
 
 diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
-index 123f8c0734..a5329735c4 100644
+index 670e7487af..6ce8f2fa86 100644
 --- a/package/luarocks/luarocks.mk
 +++ b/package/luarocks/luarocks.mk
-@@ -19,8 +19,7 @@ LUAROCKS_CFLAGS += -DLUA_COMPAT_5_2
- endif
+@@ -17,8 +17,7 @@ LUAROCKS_CONFIG_FILE = $(LUAROCKS_CONFIG_DIR)/luarocks/config.lua
+ HOST_LUAROCKS_CONFIG_FILE = $(LUAROCKS_CONFIG_DIR)/luarocks/host-config.lua
  
  define LUAROCKS_ADDON_EXTRACT
 -	mkdir $(@D)/src/luarocks/cmd/external
