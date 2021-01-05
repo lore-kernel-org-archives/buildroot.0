@@ -1,37 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 5 Jan 2021 22:36:21 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/libodb-mysql: fix
- static build with per-package directories
-Message-ID: <20210105213307.1121D86108@busybox.osuosl.org>
+Date: Tue, 5 Jan 2021 22:45:16 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/util-linux: bump
+ version to 2.36.1
+Message-ID: <20210105213307.2F7FC8182C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=96509aa506b86ba68d26ab7cbd224f4e71e7370f
+commit: https://git.buildroot.net/buildroot/commit/?id=b76338e3bf2f20cc65080d63d75cea6c046b2bff
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-Fixes:
- - http://autobuild.buildroot.org/results/ba2c5ef1bb54c2751569f79beef21ff486348469
+Release notes:
+https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.36/v2.36.1-ReleaseNotes
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit e3635ddda424c7b0d4c8f275de6db6f70219b2d9)
+(cherry picked from commit 0d146627cfa56e193658558d7fa21664a5869304)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libodb-mysql/libodb-mysql.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/util-linux/util-linux.hash | 2 +-
+ package/util-linux/util-linux.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libodb-mysql/libodb-mysql.mk b/package/libodb-mysql/libodb-mysql.mk
-index 835e5bc6bf..a9040c65f8 100644
---- a/package/libodb-mysql/libodb-mysql.mk
-+++ b/package/libodb-mysql/libodb-mysql.mk
-@@ -12,6 +12,6 @@ LIBODB_MYSQL_INSTALL_STAGING = YES
- LIBODB_MYSQL_LICENSE = GPL-2.0
- LIBODB_MYSQL_LICENSE_FILES = LICENSE
- LIBODB_MYSQL_DEPENDENCIES = libodb mysql
--LIBODB_MYSQL_CONF_ENV = LIBS="$(shell $(STAGING_DIR)/usr/bin/mysql_config --libs)"
-+LIBODB_MYSQL_CONF_ENV = LIBS=`$(STAGING_DIR)/usr/bin/mysql_config --libs`
+diff --git a/package/util-linux/util-linux.hash b/package/util-linux/util-linux.hash
+index fce97c4892..c5f5c69a4d 100644
+--- a/package/util-linux/util-linux.hash
++++ b/package/util-linux/util-linux.hash
+@@ -1,5 +1,5 @@
+ # From https://www.kernel.org/pub/linux/utils/util-linux/v2.36/sha256sums.asc
+-sha256  9e4b1c67eb13b9b67feb32ae1dc0d50e08ce9e5d82e1cccd0ee771ad2fa9e0b1  util-linux-2.36.tar.xz
++sha256  09fac242172cd8ec27f0739d8d192402c69417617091d8c6e974841568f37eed  util-linux-2.36.1.tar.xz
+ # License files, locally calculated
+ sha256  869660b5269f4f40a8a679da7f403ea3a6e71d46087aab5e14871b09bcb55955  README.licensing
+ sha256  9b718a9460fed5952466421235bc79eb49d4e9eacc920d7a9dd6285ab8fd6c6d  Documentation/licenses/COPYING.BSD-3-Clause
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index 0b29ef4d6f..b726f89505 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -8,7 +8,7 @@
+ # util-linux-libs/util-linux-libs.mk needs to be updated accordingly as well.
  
- $(eval $(autotools-package))
+ UTIL_LINUX_VERSION_MAJOR = 2.36
+-UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR)
++UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR).1
+ UTIL_LINUX_SOURCE = util-linux-$(UTIL_LINUX_VERSION).tar.xz
+ UTIL_LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/util-linux/v$(UTIL_LINUX_VERSION_MAJOR)
+ 
