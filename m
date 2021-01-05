@@ -1,68 +1,302 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 5 Jan 2021 23:13:30 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/python3: security
- bump to version 3.9.1
-Message-ID: <20210105220834.87E1386258@busybox.osuosl.org>
+Date: Tue, 5 Jan 2021 23:03:16 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/boost: atomics
+ needs always lockfree atomic bytes
+Message-ID: <20210105220834.44F2D86258@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6f75c02c1fc4128d03892e7e41f98f2488e768e7
+commit: https://git.buildroot.net/buildroot/commit/?id=df0e556d0d64901d018fa66d13a058bae705ffb8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-Release notes:
-https://www.python.org/downloads/release/python-391/
+Since version 1.74.0, boost atomics needs a toolchain that always
+supports lockfree atomic bytes so add dependendy on
+BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS:
+https://github.com/boostorg/atomic/issues/42
 
-Changelog:
-https://docs.python.org/release/3.9.1/whatsnew/changelog.html
+Fixes:
+ - http://autobuild.buildroot.org/results/c03a786791e3aa7801cf1bff9934c4a105f54ce1
 
-Fixes the following security issues:
-
-- bpo-42103: Prevented potential DoS attack via CPU and RAM exhaustion when
-  processing malformed Apple Property List files in binary format.
-
-- bpo-42051: The plistlib module no longer accepts entity declarations in
-  XML plist files to avoid XML vulnerabilities.  This should not affect
-  users as entity declarations are not used in regular plist files.
-
-- bpo-40791: Add volatile to the accumulator variable in
-  hmac.compare_digest, making constant-time-defeating optimizations less
-  likely.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit cde875bf8be463f2d626a3cedca74bce54ad591e)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[yann.morin.1998 at free.fr:
+  - add the new dependency as its own 'depends on' line
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit a4ad5fa132c5789ffb555d2bc9bb05073cb89a42)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python3/python3.hash | 6 +++---
- package/python3/python3.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/azmq/Config.in          |  2 ++
+ package/bitcoin/Config.in       |  2 ++
+ package/boost/Config.in         | 21 ++++++++++++++++++++-
+ package/domoticz/Config.in      |  2 ++
+ package/gnuradio/Config.in      |  2 ++
+ package/gqrx/Config.in          |  2 ++
+ package/libcpprestsdk/Config.in |  2 ++
+ package/uhd/Config.in           |  2 ++
+ 8 files changed, 34 insertions(+), 1 deletion(-)
 
-diff --git a/package/python3/python3.hash b/package/python3/python3.hash
-index 3de1e8353a..2165daffcc 100644
---- a/package/python3/python3.hash
-+++ b/package/python3/python3.hash
-@@ -1,5 +1,5 @@
--# From https://www.python.org/downloads/release/python-390/
--md5  6ebfe157f6e88d9eabfbaf3fa92129f6  Python-3.9.0.tar.xz
-+# From https://www.python.org/downloads/release/python-391/
-+md5  61981498e75ac8f00adcb908281fadb6  Python-3.9.1.tar.xz
- # Locally computed
--sha256  9c73e63c99855709b9be0b3cc9e5b072cb60f37311e8c4e50f15576a0bf82854  Python-3.9.0.tar.xz
-+sha256  991c3f8ac97992f3d308fefeb03a64db462574eadbff34ce8bc5bb583d9903ff  Python-3.9.1.tar.xz
- sha256  1dceef1677a39befa8bf0285ab2db441ba117520bb2de839547ace006a17750d  LICENSE
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index d4e08e91d5..f2516dee90 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/azmq/Config.in b/package/azmq/Config.in
+index 2904890d5f..37131a260a 100644
+--- a/package/azmq/Config.in
++++ b/package/azmq/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_AZMQ
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # boost-log
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+ 	depends on BR2_USE_WCHAR # boost
++	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-thread
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
+ 	select BR2_PACKAGE_ZEROMQ
+ 	select BR2_PACKAGE_BOOST
+@@ -21,6 +22,7 @@ config BR2_PACKAGE_AZMQ
+ 	  https://github.com/zeromq/azmq
  
- PYTHON3_VERSION_MAJOR = 3.9
--PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).0
-+PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).1
- PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
- PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
- PYTHON3_LICENSE = Python-2.0, others
+ comment "azmq needs a toolchain w/ C++11, wchar and NPTL"
++	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+ 	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 \
+ 		&& BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS_NPTL)
+ 
+diff --git a/package/bitcoin/Config.in b/package/bitcoin/Config.in
+index 65af15293d..7ce4f80656 100644
+--- a/package/bitcoin/Config.in
++++ b/package/bitcoin/Config.in
+@@ -10,6 +10,7 @@ config BR2_PACKAGE_BITCOIN_ARCH_SUPPORTS
+ config BR2_PACKAGE_BITCOIN
+ 	bool "bitcoin"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-thread
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::future
+ 	depends on BR2_PACKAGE_BITCOIN_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # boost
+@@ -37,6 +38,7 @@ config BR2_PACKAGE_BITCOIN
+ 
+ comment "bitcoin needs a toolchain w/ C++, threads, wchar"
+ 	depends on BR2_PACKAGE_BITCOIN_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+ 
+diff --git a/package/boost/Config.in b/package/boost/Config.in
+index 121650b8bc..f9e7b0a89c 100644
+--- a/package/boost/Config.in
++++ b/package/boost/Config.in
+@@ -52,6 +52,7 @@ config BR2_PACKAGE_BOOST_LAYOUT
+ 
+ config BR2_PACKAGE_BOOST_ATOMIC
+ 	bool "boost-atomic"
++	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+ 	help
+ 	  C++11-style atomic<>.
+ 
+@@ -82,6 +83,8 @@ config BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS
+ config BR2_PACKAGE_BOOST_CONTEXT
+ 	bool "boost-context"
+ 	depends on BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS \
++		|| BR2_TOOLCHAIN_GCC_AT_LEAST_6 # boost-thread
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+ 	select BR2_PACKAGE_BOOST_THREAD if !BR2_TOOLCHAIN_GCC_AT_LEAST_6
+ 	help
+@@ -101,6 +104,7 @@ comment "boost-contract needs a toolchain w/ NPTL"
+ config BR2_PACKAGE_BOOST_COROUTINE
+ 	bool "boost-coroutine"
+ 	depends on BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-thread
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-context, boost-thread
+ 	select BR2_PACKAGE_BOOST_CHRONO
+ 	select BR2_PACKAGE_BOOST_CONTEXT
+@@ -113,6 +117,7 @@ config BR2_PACKAGE_BOOST_COROUTINE
+ 
+ comment "boost-coroutine needs a toolchain not affected by GCC bug 64735"
+ 	depends on BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+ 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+ 
+ config BR2_PACKAGE_BOOST_DATE_TIME
+@@ -135,6 +140,8 @@ config BR2_PACKAGE_BOOST_FIBER
+ 	# mips support uses the "pause" instruction, only available
+ 	# since mips32r2/mips64r2.
+ 	depends on !BR2_MIPS_CPU_MIPS32 && !BR2_MIPS_CPU_MIPS64
++	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS \
++		|| BR2_TOOLCHAIN_GCC_AT_LEAST_6 # boost-context -> boost-thread
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-context
+ 	select BR2_PACKAGE_BOOST_CONTEXT
+ 	select BR2_PACKAGE_BOOST_FILESYSTEM
+@@ -144,10 +151,14 @@ config BR2_PACKAGE_BOOST_FIBER
+ 
+ comment "boost-fiber needs a toolchain w/ NPTL"
+ 	depends on BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS \
++		|| BR2_TOOLCHAIN_GCC_AT_LEAST_6
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 
+ comment "boost-fiber needs a toolchain not affected by GCC bug 64735"
+ 	depends on BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS \
++		|| BR2_TOOLCHAIN_GCC_AT_LEAST_6
+ 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+ 
+ config BR2_PACKAGE_BOOST_FILESYSTEM
+@@ -190,6 +201,8 @@ config BR2_PACKAGE_BOOST_LOCALE
+ 	# details.
+ 	depends on !(BR2_STATIC_LIBS && BR2_PACKAGE_ICU)
+ 	depends on !(BR2_TOOLCHAIN_HAS_GCC_BUG_64735 && BR2_PACKAGE_ICU) # boost-thread
++	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS \
++		|| !BR2_PACKAGE_ICU # boost-thread
+ 	select BR2_PACKAGE_BOOST_SYSTEM
+ 	select BR2_PACKAGE_BOOST_THREAD if BR2_PACKAGE_ICU
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+@@ -197,16 +210,19 @@ config BR2_PACKAGE_BOOST_LOCALE
+ 	  Provide localization and Unicode handling tools for C++.
+ 
+ comment "boost-locale needs a toolchain w/ dynamic library"
++	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+ 	depends on BR2_PACKAGE_ICU
+ 	depends on BR2_STATIC_LIBS
+ 
+ comment "boost-locale needs a toolchain not affected by GCC bug 64735"
++	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+ 	depends on BR2_PACKAGE_ICU
+ 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+ 
+ config BR2_PACKAGE_BOOST_LOG
+ 	bool "boost-log"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-atomic
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-thread
+ 	select BR2_PACKAGE_BOOST_ATOMIC
+ 	select BR2_PACKAGE_BOOST_DATE_TIME
+@@ -218,6 +234,7 @@ config BR2_PACKAGE_BOOST_LOG
+ 	  Logging library.
+ 
+ comment "boost-log needs a toolchain w/ NPTL"
++	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 
+ comment "boost-log needs a toolchain not affected by GCC bug 64735"
+@@ -313,8 +330,8 @@ config BR2_PACKAGE_BOOST_TEST
+ 
+ config BR2_PACKAGE_BOOST_THREAD
+ 	bool "boost-thread"
++	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::current_exception
+-	select BR2_PACKAGE_BOOST_ATOMIC if !BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+ 	select BR2_PACKAGE_BOOST_CHRONO
+ 	select BR2_PACKAGE_BOOST_SYSTEM
+ 	help
+@@ -332,6 +349,7 @@ config BR2_PACKAGE_BOOST_TIMER
+ 
+ config BR2_PACKAGE_BOOST_TYPE_ERASURE
+ 	bool "boost-type_erasure"
++	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-thread
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-thread
+ 	select BR2_PACKAGE_BOOST_SYSTEM
+ 	select BR2_PACKAGE_BOOST_THREAD
+@@ -346,6 +364,7 @@ config BR2_PACKAGE_BOOST_WAVE
+ 	# limitation of assembler for coldfire
+ 	# error: Tried to convert PC relative branch to absolute jump
+ 	depends on !BR2_m68k_cf
++	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-thread
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-thread
+ 	select BR2_PACKAGE_BOOST_DATE_TIME
+ 	select BR2_PACKAGE_BOOST_FILESYSTEM
+diff --git a/package/domoticz/Config.in b/package/domoticz/Config.in
+index 642d394828..88de232642 100644
+--- a/package/domoticz/Config.in
++++ b/package/domoticz/Config.in
+@@ -8,6 +8,7 @@ config BR2_PACKAGE_DOMOTICZ
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_PACKAGE_LUA_5_3
++	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-thread
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
+ 	select BR2_PACKAGE_BOOST
+ 	select BR2_PACKAGE_BOOST_DATE_TIME
+@@ -30,6 +31,7 @@ config BR2_PACKAGE_DOMOTICZ
+ 
+ comment "domoticz needs lua 5.3 and a toolchain w/ C++, gcc >= 4.8, NPTL, wchar, dynamic library"
+ 	depends on BR2_USE_MMU
++	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
+diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
+index cd31ce8864..c7b01b454b 100644
+--- a/package/gnuradio/Config.in
++++ b/package/gnuradio/Config.in
+@@ -1,5 +1,6 @@
+ comment "gnuradio needs a toolchain w/ C++, NPTL, wchar, dynamic library"
+ 	depends on BR2_USE_MMU
++	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
+ 
+@@ -13,6 +14,7 @@ config BR2_PACKAGE_GNURADIO
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_USE_MMU # use fork()
+ 	depends on BR2_USE_WCHAR # boost
++	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-atomic
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-thread
+ 	select BR2_PACKAGE_BOOST
+ 	select BR2_PACKAGE_BOOST_ATOMIC
+diff --git a/package/gqrx/Config.in b/package/gqrx/Config.in
+index d873c6a4d4..af4d69381e 100644
+--- a/package/gqrx/Config.in
++++ b/package/gqrx/Config.in
+@@ -1,6 +1,7 @@
+ comment "gqrx needs a toolchain w/ C++, threads, wchar, dynamic library"
+ 	depends on BR2_USE_MMU # gnuradio
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
++	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!BR2_USE_WCHAR || !BR2_STATIC_LIBS
+ 
+@@ -19,6 +20,7 @@ config BR2_PACKAGE_GQRX
+ 	depends on BR2_USE_WCHAR # boost
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on BR2_PACKAGE_QT5
++	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # gnuradio -> boost-atomic
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # gnuradio
+ 	select BR2_PACKAGE_BOOST
+ 	select BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
+diff --git a/package/libcpprestsdk/Config.in b/package/libcpprestsdk/Config.in
+index af97509d1b..97f00e3383 100644
+--- a/package/libcpprestsdk/Config.in
++++ b/package/libcpprestsdk/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_LIBCPPRESTSDK
+ 	depends on BR2_ENABLE_LOCALE
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR # boost
++	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-atomic
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_PACKAGE_BOOST
+@@ -23,6 +24,7 @@ config BR2_PACKAGE_LIBCPPRESTSDK
+ 	  https://github.com/Microsoft/cpprestsdk
+ 
+ comment "libcpprestsdk needs a toolchain w/ NPTL, C++, wchar, locale"
++	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
+ 		!BR2_INSTALL_LIBSTDCPP || \
+ 		!BR2_USE_WCHAR || !BR2_ENABLE_LOCALE
+diff --git a/package/uhd/Config.in b/package/uhd/Config.in
+index 32cb4cf89d..b9aa665c31 100644
+--- a/package/uhd/Config.in
++++ b/package/uhd/Config.in
+@@ -1,5 +1,6 @@
+ comment "uhd needs a toolchain w/ C++, NPTL, wchar, dynamic library"
+ 	depends on BR2_USE_MMU
++	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
+ 
+@@ -10,6 +11,7 @@ config BR2_PACKAGE_UHD
+ 	bool "uhd"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on !BR2_STATIC_LIBS
++	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-atomic
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-thread
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_USE_MMU # use fork()
