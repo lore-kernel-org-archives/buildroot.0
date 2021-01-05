@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 5 Jan 2021 23:41:18 +0100
-Subject: [Buildroot] [PATCH 09/10 v3] support/dependencies: drop check
- for maximal tar version
-In-Reply-To: <3cf9b1b08bc5025058ad6dfaefaaead9a9cb82b5.1609239666.git.yann.morin.1998@free.fr>
+Date: Tue, 5 Jan 2021 23:46:14 +0100
+Subject: [Buildroot] [PATCH 10/10 v3] package/tar: drop specific version
+ for host variant
+In-Reply-To: <a3b05faa57b2c10861825f5f00a4ab32d8fe5d81.1609239666.git.yann.morin.1998@free.fr>
 References: <cover.1609239666.git.yann.morin.1998@free.fr>
- <3cf9b1b08bc5025058ad6dfaefaaead9a9cb82b5.1609239666.git.yann.morin.1998@free.fr>
-Message-ID: <d44c7aab-5a58-c790-e8ed-be39fb858057@mind.be>
+ <a3b05faa57b2c10861825f5f00a4ab32d8fe5d81.1609239666.git.yann.morin.1998@free.fr>
+Message-ID: <6cf63267-6202-575f-9d64-1612612fdaf6@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,18 +15,18 @@ To: buildroot@busybox.net
 
 
 On 29/12/2020 12:01, Yann E. MORIN wrote:
-> So far, we checked that the tar present on the host was at most tar
-> 1.29, because tar 1.30 changed the way it generates archives.
+> Now that we can generate reproducible archives, with all known tar
+> versions starting with 1.27, we don't need to clamp the host-tar
+> version to the old 1.29, and can now bump to any later version.
 > 
-> Having a maximum tar version requirement meant that we would eventually
-> always have to build our own host-tar, as distributions are updating
-> the version they use.
+> Drop the host-tar version, and use the same as the target variant.
 > 
-> But now, we have found a way to generate reproducible archives starting
-> with tar 1.27 onward, so we no longer need the check for a maximum tar
-> version, so we can drop that requirement.
+> Note that we still need the _SOURCE trick, to avoid depending on tar
+> to extract the tar tarball...
 
- You could have simply reverted b8fa273d500b44153e9939f0a100e97db2ff63ed, but OK.
+ Note that e185f62c58f97378785fd46476cc8ec099989230 also changed TAR_VERSION to
+HOST_TAR_VERSION in the HOST_TAR_EXTRACT_CMDS, but I think the current
+HOST_TAR_VERSION is indeed more appropriate.
 
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
@@ -38,38 +38,28 @@ Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > Cc: Vincent Fazio <vfazio@xes-inc.com>
 > ---
->  support/dependencies/check-host-tar.sh | 14 +-------------
->  1 file changed, 1 insertion(+), 13 deletions(-)
+>  package/tar/tar.mk | 8 ++------
+>  1 file changed, 2 insertions(+), 6 deletions(-)
 > 
-> diff --git a/support/dependencies/check-host-tar.sh b/support/dependencies/check-host-tar.sh
-> index 934cb61299..b7d607a47a 100755
-> --- a/support/dependencies/check-host-tar.sh
-> +++ b/support/dependencies/check-host-tar.sh
-> @@ -33,14 +33,7 @@ fi
->  major_min=1
->  minor_min=27
+> diff --git a/package/tar/tar.mk b/package/tar/tar.mk
+> index 9e0a40e561..7822b1dada 100644
+> --- a/package/tar/tar.mk
+> +++ b/package/tar/tar.mk
+> @@ -29,14 +29,10 @@ endif
 >  
-> -# Maximal version = 1.29 (1.30 changed --numeric-owner output for
-> -# filenames > 100 characters). This is really a fix for a bug in
-> -# earlier tar versions regarding deterministic output so it is
-> -# unlikely to be reverted in later versions.
-> -major_max=1
-> -minor_max=29
-> -
-> -if [ $major -lt $major_min -o $major -gt $major_max ]; then
-> +if [ $major -lt $major_min ]; then
->  	# echo nothing: no suitable tar found
->  	exit 1
->  fi
-> @@ -50,10 +43,5 @@ if [ $major -eq $major_min -a $minor -lt $minor_min ]; then
->  	exit 1
->  fi
+>  $(eval $(autotools-package))
 >  
-> -if [ $major -eq $major_max -a $minor -gt $minor_max ]; then
-> -	# echo nothing: no suitable tar found
-> -	exit 1
-> -fi
-> -
->  # valid
->  echo $tar
+> -# host-tar is used to create the archives in the VCS download backends and tar
+> -# 1.30 and forward have changed the archive format. So archives generated with
+> -# earlier versions are not bit-for-bit reproducible and the hashes would not
+> -# match. Hence host-tar must be kept at version 1.29.
+> -HOST_TAR_VERSION = 1.29
+>  # host-tar: use cpio.gz instead of tar.gz to prevent chicken-egg problem
+>  # of needing tar to build tar.
+> -HOST_TAR_SOURCE = tar-$(HOST_TAR_VERSION).cpio.gz
+> +HOST_TAR_SOURCE = tar-$(TAR_VERSION).cpio.gz
+> +
+>  define HOST_TAR_EXTRACT_CMDS
+>  	mkdir -p $(@D)
+>  	cd $(@D) && \
 > 
