@@ -1,35 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 05 Jan 2021 20:55:47 +0100
-Subject: [Buildroot] [PATCH 1/1] package/openvpn: adds target install of
- systemd unit files
-In-Reply-To: <20201231173109.7d874dc2@windsurf> (Thomas Petazzoni's message of
- "Thu, 31 Dec 2020 17:31:09 +0100")
-References: <20201215163610.12070-1-edmundo.ferreira@esa.int>
- <20201231154332.13ef7654@windsurf> <20201231173109.7d874dc2@windsurf>
-Message-ID: <87h7nv6tvg.fsf@dell.be.48ers.dk>
+Date: Tue, 5 Jan 2021 20:43:06 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/tini: install
+ docker-init symlink
+Message-ID: <20210105194047.931CD864E8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=79fad79a3dc6ee35c4c1ce01f523f18f28070f37
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
- > On Thu, 31 Dec 2020 15:43:32 +0100
- > Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+This removes the warning that docker can't find docker-init in PATH.
 
- >> Hum, I've applied, but reading again distro/systemd/Makefile.am, it
- >> seems like manually copying those files is not needed. If you pass
- >> --enable-systemd, which we already do when BR2_PACKAGE_SYSTEMD=y. Isn't
- >> that working ?
+Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Tian Yuanhao <tianyuanhao@aliyun.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 072af885c4afedf4f131563a755c532f8ad45650)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/tini/tini.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
- > I found why: we had a custom OPENVPN_INSTALL_TARGET_CMDS instead of
- > relying on the default "make install" behavior of the autotools-package
- > infra. So, I made a follow-up commit that drops this as well as the
- > custom systemd installation stuff, as "make install" does it all
- > properly.
-
-Committed to 2020.02.x and 2020.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/tini/tini.mk b/package/tini/tini.mk
+index 157477f8df..af4a3bcb5e 100644
+--- a/package/tini/tini.mk
++++ b/package/tini/tini.mk
+@@ -30,6 +30,7 @@ endef
+ 
+ define TINI_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D -m 0755 $(@D)/bin/tini $(TARGET_DIR)/usr/bin/tini
++	ln -sf tini $(TARGET_DIR)/usr/bin/docker-init
+ endef
+ 
+ # Tini's CMakeLists.txt is not suitable for Buildroot.
