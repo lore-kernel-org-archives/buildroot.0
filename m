@@ -1,154 +1,111 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 05 Jan 2021 08:19:59 -0000
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2021-01-04
-Message-ID: <20210105082005.ED9F9867D2@whitealder.osuosl.org>
+From: D. Olsson <hi@senzilla.io>
+Date: Tue, 05 Jan 2021 09:09:41 +0000
+Subject: [Buildroot] [PATCH v3 09/11]
+ configs/qemu_aarch64_virt_efi_defconfig: new config for QEMU Virt EFI
+In-Reply-To: <20201230133037.GQ1680670@scaer>
+References: <20201218202646.1060123-1-hi@senzilla.io>
+ <20201218202646.1060123-10-hi@senzilla.io> <20201230133037.GQ1680670@scaer>
+Message-ID: <fJaHU_6nSNOlurIr_gpcfKXwue6M9hKkVTOLIXFOY9__bCSjpm7Mky2HV-jaUvjvulumd74_OSZiNNKxtrREqczH3eUPHEoaYIYqL0m0WhY=@senzilla.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Yann, all,
 
-Autobuild statistics for 2021-01-04
-===================================
+I will address the rest of your feedback for this series directly
+in the next revision. But this email requires some more in-depth
+explanation from me.
 
-      branch |  OK | NOK | TIM | TOT |
-  2020.02.x  | 16  |  2  |  1  | 19  |
-  2020.11.x  | 10  |  2  |  0  | 12  |
-    master   | 132 | 49  |  0  | 181 |
+On Wednesday, December 30, 2020 2:30 PM,
+Yann E. MORIN <yann.morin.1998@free.fr> wrote:
 
-Classification of failures by reason for master
------------------------------------------------
+> > +# Set up the kernel executable according to the UEFI standard.
+> > +mkdir -p ${EFI_DIR}
+> > +ln -sf ${BINARIES_DIR}/Image ${EFI_DIR}/bootaa64.efi
+>
+> So, if I understand correctly, ${EFI_DIR}/bootaa64.efi will be an
+> absolute symlink to ${BINARIES_DIR}/Image, and then ${EFI_DIR} will be
+> used to populate the VFAT image used as first partition.
+>
+> But two things:
+>
+> 1.  the symlinks target will be invalid at runtime, as it contains a
+>     path on the build machine;
+>
+> 2.  VFAT can't handle symlinks anyway.
+>
+>     So, does genimage follow symlinks when it generates the VFAT image?
 
-        host-sentry-cli-1.57.0 | 9 
-                 uclibc-1.0.37 | 6 
-                       unknown | 4 
-                 mesa3d-20.3.2 | 3 
-                rocksdb-6.13.3 | 3 
-                   mimic-1.1.0 | 2 
-                 rt-tests-1.10 | 2 
-             timescaledb-1.7.4 | 2 
-    trace-cmd-trace-cmd-v2.9.1 | 2 
-                  zeromq-4.3.3 | 2 
-                coreutils-8.32 | 1 
-                 dc3dd-7.2.641 | 1 
-            erlang-jiffy-1.0.6 | 1 
-          fuse-overlayfs-1.2.0 | 1 
-  gobject-introspection-1.64.1 | 1 
-                    htop-3.0.3 | 1 
-             kismet-2020-12-R3 | 1 
-              micropython-1.13 | 1 
-                mono-6.12.0.90 | 1 
-                    mpv-0.32.0 | 1 
-                  ndisc6-1.0.4 | 1 
-                    qemu-5.2.0 | 1 
-         s6-linux-init-1.0.3.1 | 1 
-         xkeyboard-config-2.31 | 1 
+So genimage will follow the symlinks and create the appropriate files in the image. I felt it was cleaner and more robust to
+create links rather than constantly copy and re-copy files on
+every build.
 
 
-Detail of failures for master
------------------------------
+> > +# The QEMU virt machine expects the BIOS flash device to be 64M.
+> > +rm -rf ${BINARIES_DIR}/flash.bin
+> > +dd if=${BINARIES_DIR}/bl1.bin of=${BINARIES_DIR}/flash.bin bs=4096 conv=notrunc
+> > +dd if=${BINARIES_DIR}/fip.bin of=${BINARIES_DIR}/flash.bin seek=64 bs=4096 conv=notrunc
+>
+> You said "flash device [must] be 64M" but 644K is not 64M. Also, this
+> just starts the dump at offset 644K, but does not guarantee theresulting file to be exactly 64M...
 
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    arm      |         coreutils-8.32         | NOK | http://autobuild.buildroot.net/results/e794f489eb38d529ed7b527bc9d9001b0272da55 | ORPH
-    arc      |         dc3dd-7.2.641          | NOK | http://autobuild.buildroot.net/results/8bdb217db7e917b567ad6085f4b9ea103feb824d | ORPH
-   mipsel    |       erlang-jiffy-1.0.6       | NOK | http://autobuild.buildroot.net/results/1a92a96dc3920773ec6b2ec87a846ca9a23c0749 |     
-  riscv64    |      fuse-overlayfs-1.2.0      | NOK | http://autobuild.buildroot.net/results/c71fc7a7945f2f4cc28fb7188f23550a6706fa70 |     
-   s390x     |  gobject-introspection-1.64.1  | NOK | http://autobuild.buildroot.net/results/7afaa85d70a6e3aa998d42f3353e941bdc781cfd | ORPH
-    arc      |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/404c4df3b18abeffa32b5053ccc97ee7b9cda6be |     
-microblazeel |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/21cb57b48ab17bce61a8c634757d10f23ce7508c |     
-microblazeel |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/2134ef8d38b270e4bcc31d6217d4bff4c5e45e80 |     
-  aarch64    |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/067e4516219e0f0b4f207a452ca5ba92c9b2c171 |     
-    arm      |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/d2ec379b65f15d0c4c382ef645cfc1d8ffe28e22 |     
-    i686     |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/3af76a1665e02cab1fab687ac10d5465e21fe60a |     
-  powerpc    |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/fe4f2cdbd779d85f563a7db59f9259d8a726ddbf |     
-   xtensa    |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/8f1520a951a09f0679c38223f5469c439e54b1a9 |     
-  riscv64    |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/1a30b9b63ac1777db2a8a685bcc10c9645979809 |     
-    arm      |           htop-3.0.3           | NOK | http://autobuild.buildroot.net/results/a604ff70c6b7896fbb9b3bd8586e772c18ceed41 | ORPH
-  riscv64    |       kismet-2020-12-R3        | NOK | http://autobuild.buildroot.net/results/10d9838f4656bee76b0b180ccd5a8ae0eb7167c2 | ORPH
-    arm      |         mesa3d-20.3.2          | NOK | http://autobuild.buildroot.net/results/ebca5efaecea7e0a98f18f814844f454e2fbc747 |     
-    arm      |         mesa3d-20.3.2          | NOK | http://autobuild.buildroot.net/results/21f676fc4bedc42a203673484bce05f75591774f |     
-    arm      |         mesa3d-20.3.2          | NOK | http://autobuild.buildroot.net/results/670f656a8d069a0373614d3ae882e78d489486f9 |     
-   xtensa    |        micropython-1.13        | NOK | http://autobuild.buildroot.net/results/1e62e1f6aab2959e2570c06f471b9d9fe274e7e1 |     
-  powerpc    |          mimic-1.1.0           | NOK | http://autobuild.buildroot.net/results/fce8fda0133e025d028df81728a3e1255dea4499 |     
-  powerpc    |          mimic-1.1.0           | NOK | http://autobuild.buildroot.net/results/747e876873ce0798ac39b613eaebb8a7a8f25dcb |     
-    arm      |         mono-6.12.0.90         | NOK | http://autobuild.buildroot.net/results/880de08d9876e3ebb7ee0a1c85f153187e98a3e5 |     
-    arm      |           mpv-0.32.0           | NOK | http://autobuild.buildroot.net/results/84c44aa6b85ec60afeb700a54a9105e3607923c4 |     
-    arm      |          ndisc6-1.0.4          | NOK | http://autobuild.buildroot.net/results/2423b8f8d0f8c23bd454417397b925cba7094d7c | ORPH
-   mipsel    |           qemu-5.2.0           | NOK | http://autobuild.buildroot.net/results/c78efba26c1a66f7c5a96599c8f7e4462a562ada | ORPH
-  powerpc    |         rocksdb-6.13.3         | NOK | http://autobuild.buildroot.net/results/b949fcaf74bab589200d37998a56b374ec87fa25 |     
-    arm      |         rocksdb-6.13.3         | NOK | http://autobuild.buildroot.net/results/df2ca0fd14b8b347a1499e6fca46b65a9278d2a0 |     
-  powerpc    |         rocksdb-6.13.3         | NOK | http://autobuild.buildroot.net/results/916931809b6dc721da86eab6752f60867e1c96d6 |     
-   mipsel    |         rt-tests-1.10          | NOK | http://autobuild.buildroot.net/results/663d69e8b5e06e69f24852aabe1db66169ccc0f1 |     
-   mipsel    |         rt-tests-1.10          | NOK | http://autobuild.buildroot.net/results/28a41906722459a62707db0e0b046625e422eacf |     
-  riscv64    |     s6-linux-init-1.0.3.1      | NOK | http://autobuild.buildroot.net/results/7ffb6358fdd26ea24abe6064d61c07c1a3fe00cc |     
-    arc      |       timescaledb-1.7.4        | NOK | http://autobuild.buildroot.net/results/10d1653ea51cb85b17996a72111f845365a31242 |     
-  aarch64    |       timescaledb-1.7.4        | NOK | http://autobuild.buildroot.net/results/d62f46676a318f6d082fd13c6946a7db70c1919e |     
-    arc      |   trace-cmd-trace-cmd-v2.9.1   | NOK | http://autobuild.buildroot.net/results/6b6d1997aecb809c3611fd569a1dc07c1c6be44b |     
-  riscv64    |   trace-cmd-trace-cmd-v2.9.1   | NOK | http://autobuild.buildroot.net/results/85ba0718f51eea348472dba89c566c136314a61e |     
-    arc      |         uclibc-1.0.37          | NOK | http://autobuild.buildroot.net/results/646eb3a535fc1afec272c245145a07bc0a28f275 |     
-    arc      |         uclibc-1.0.37          | NOK | http://autobuild.buildroot.net/results/89e2e7d8a3632c4d24824f9c17d4e4a37b009075 |     
-    arm      |         uclibc-1.0.37          | NOK | http://autobuild.buildroot.net/results/6c852177b93dd6d7404d058570cbca27e05fb91e |     
-   xtensa    |         uclibc-1.0.37          | NOK | http://autobuild.buildroot.net/results/163ab1bef0bf359d78e7247f27a5ec08ce7167f8 |     
-  powerpc    |         uclibc-1.0.37          | NOK | http://autobuild.buildroot.net/results/a078eeab36e03b62459b289310ca9d3491db30d6 |     
-    arc      |         uclibc-1.0.37          | NOK | http://autobuild.buildroot.net/results/ebd7cd990eb41894ccbff32e1cb9eb7ef1f50e9f |     
-    i686     |            unknown             | NOK | http://autobuild.buildroot.net/results/e91eee99754ce97c5e7859549b1d04e4c82be2f7 |     
-   nios2     |            unknown             | NOK | http://autobuild.buildroot.net/results/cf2656af77765b72f333cf9d8c83b9d83168154a |     
-   mipsel    |            unknown             | NOK | http://autobuild.buildroot.net/results/1f495c6021afb69106b8ee8bca21df7a4c0e0fc5 |     
-    arm      |            unknown             | NOK | http://autobuild.buildroot.net/results/ec023be5354e171e64cde381fb9502ac43b5a0ce |     
-   s390x     |     xkeyboard-config-2.31      | NOK | http://autobuild.buildroot.net/results/183015bee6158ef67a8054bdb1096106498912d9 |     
-    i686     |          zeromq-4.3.3          | NOK | http://autobuild.buildroot.net/results/73f80d451490c0df48b1572b46ec4bcf4ca1e212 |     
-    i686     |          zeromq-4.3.3          | NOK | http://autobuild.buildroot.net/results/41cad913aaa1d95f99772ce060cee16e9539acea |     
+The inline comment is incorrect, thanks for catching!
+I will fix in my next revision.
 
 
-Classification of failures by reason for 2020.02.x
---------------------------------------------------
+> cp "${BINARIES_DIR}/bl1.bin" "${BINARIES_DIR}/flash.bin"
+> truncate -s $((64*4096)) "${BINARIES_DIR}/flash.bin"
+> cat "${BINARIES_DIR}/fip.bin" >> "${BINARIES_DIR}/flash.bin"
+>
+>     truncate -s 64M "${BINARIES_DIR}/flash.bin"
+>
+>
+> But yes, I can see here how using truncate is sub-optimal... Keeping
+> some incantations of dd is acceptable here.
 
-              tinydtls-0.9-rc1 | 1 
-                 uclibc-1.0.32 | 1 
-                       vmtouch | 1 
-
-
-Detail of failures for 2020.02.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-   x86_64    |        tinydtls-0.9-rc1        | NOK | http://autobuild.buildroot.net/results/ca4572404f571d9f3cd8b16f9cd161d19f793f6e |     
-    arc      |         uclibc-1.0.32          | NOK | http://autobuild.buildroot.net/results/10efa33e593b9c535ae663b301ca5545183d3d6a |     
-    or1k     |            vmtouch             | TIM | http://autobuild.buildroot.net/results/107c45ee437ca33842b550ecb0ffc129299850c4 |     
+The offset for fip.bin needs to be exactly 64 bytes from the end of bl1.bin. So I think it's easier to use dd here instead of
+cat/truncate.
 
 
-Classification of failures by reason for 2020.11.x
---------------------------------------------------
+> > -   output/host/bin/qemu-system-aarch64 \
+> > -   -M virt,secure=on,gic-version=3 \
+> > -   -cpu cortex-a57 \
+> > -   -smp 4 \
+> > -   -m 1024 \
+> > -   -nographic \
+> > -   -bios output/images/flash.bin \
+> > -   -drive file=output/images/disk.img,if=none,format=raw,id=hd0 \
+> > -   -device virtio-blk-device,drive=hd0
+>
+> Mix of leading space and TAB s (use spaces only, please).
 
-                xenomai-3.0.10 | 1 
-                  zeromq-4.3.3 | 1 
+Will fix!
 
 
-Detail of failures for 2020.11.x
---------------------------------
+> > +# Filesystem / image
+> > +BR2_TARGET_ROOTFS_EXT2=y
+> > +BR2_TARGET_ROOTFS_EXT2_4=y
+> > +BR2_TARGET_ROOTFS_EXT2_SIZE="200M"
+> > +# BR2_TARGET_ROOTFS_TAR is not set
+> > +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/aarch64-virt-efi/post-image.sh support/scripts/genimage.sh"
+>
+> Ah, something I forgot to comment on on the other patches: the name
+> 'post-image.sh' is a bit too generic. Please try to find a better name
+> that explains what the script actually does, e.g.:
+>
+> board/qemu/aarch64-virt-efi/assemble-bios-flash-image
+>
+> (and no need to end the filename with '.sh')
 
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    arc      |         xenomai-3.0.10         | NOK | http://autobuild.buildroot.net/results/6ebabec01a7f04e57775be4f05395a168d45ab91 |     
-    i586     |          zeromq-4.3.3          | NOK | http://autobuild.buildroot.net/results/55cd704d7da61dcd3c62f3c2637cda5a13ddba71 |     
-
-
-Gitlab CI results for 2021-01-04
-================================
-
-Detail of runtime-test failures for master
-------------------------------------------
-
-             runtime-test |                        link to the job                        | orph?
---------------------------+---------------------------------------------------------------+------
-           TestATFMarvell |  https://gitlab.com/buildroot.org/buildroot/-/jobs/941876274  | ORPH 
-                 TestRust |  https://gitlab.com/buildroot.org/buildroot/-/jobs/941876472  | ORPH 
+Ok. Since it's not really BIOS in the strict sense I will simply
+name the scripts "assemble-flash-images" since we assemble
+multiple images, i.e. the EFI system partition and boot flash images.
 
 
 
--- 
-http://autobuild.buildroot.net
+Cheers
+
+D. Olsson
+PGP: 8204A8CD
