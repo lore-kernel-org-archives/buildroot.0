@@ -1,57 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 5 Jan 2021 20:52:36 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/openvpn: use make
- install instead of custom install step
-Message-ID: <20210105194053.C1A9286528@busybox.osuosl.org>
+Date: Tue, 05 Jan 2021 22:35:57 +0100
+Subject: [Buildroot] Patch for linux-headers
+In-Reply-To: <20201217003006.GA343694@pevik> (Petr Vorel's message of "Thu, 17
+ Dec 2020 01:30:06 +0100")
+References: <20201217003006.GA343694@pevik>
+Message-ID: <87czyj6p8i.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eb4ce04c19246fe17ec4c1c7723b6d98f7c9ff17
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>>>>> "Petr" == Petr Vorel <petr.vorel@gmail.com> writes:
 
-Commit 7105e65cd6b8f857bab54e4c0a8c57da776b0564 ("package/openvpn:
-adds target install of systemd unit files") added the installation of
-systemd unit files. But in fact, they can be installed by openvpn's
-build system. It was simply not working due to the custom install step
-implemented in openvpn.mk.
+ > Hi,
+ > I wonder if it's allowed to add patch to add patch for linux-headers.
+ > There would have to be more versions for the patch (due headers being built for
+ > more versions). I'd like to use my upstreamed patch [1] which fixes
+ > "redefinition of struct sysinfo" build failure on MUSL.
+ > This so far required to patch affected packages or simply disable them
+ > (depends on !BR2_TOOLCHAIN_USES_MUSL).
 
-So instead, let's have the autotools-package infra call "make
-install", which properly installs everything that's needed for
-openvpn, including systemd units, but also plugins, etc.
+ > Actually, much simpler patch from Khem Raj could be used [2].
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 30bc58d3766b240017120a25d843da0a2c5cf501)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/openvpn/openvpn.mk | 12 ------------
- 1 file changed, 12 deletions(-)
+It can be done if needed, but it is naturally easier to handle
+without. I noticed that you got some patches applied to the stable
+kernels related to this recently - Do those fix the issues, or is an
+additional patch needed?
 
-diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
-index 45acf335e3..d3d174686c 100644
---- a/package/openvpn/openvpn.mk
-+++ b/package/openvpn/openvpn.mk
-@@ -58,21 +58,9 @@ else
- OPENVPN_CONF_OPTS += --disable-systemd
- endif
- 
--define OPENVPN_INSTALL_TARGET_CMDS
--	$(INSTALL) -m 755 $(@D)/src/openvpn/openvpn \
--		$(TARGET_DIR)/usr/sbin/openvpn
--endef
--
- define OPENVPN_INSTALL_INIT_SYSV
- 	$(INSTALL) -m 755 -D package/openvpn/S60openvpn \
- 		$(TARGET_DIR)/etc/init.d/S60openvpn
- endef
- 
--define OPENVPN_INSTALL_INIT_SYSTEMD
--	$(INSTALL) -D -m 0644 $(@D)/distro/systemd/openvpn-client at .service \
--		$(TARGET_DIR)/usr/lib/systemd/system/openvpn-client at .service
--	$(INSTALL) -D -m 0644 $(@D)/distro/systemd/openvpn-server at .service \
--		$(TARGET_DIR)/usr/lib/systemd/system/openvpn-server at .service
--endef
--
- $(eval $(autotools-package))
+-- 
+Bye, Peter Korsgaard
