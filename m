@@ -1,37 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 05 Jan 2021 23:04:14 +0100
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/boost: atomics needs always lockfree atomic bytes
-In-Reply-To: <20201205221525.236045-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 5 Dec 2020 23:15:25 +0100")
-References: <20201205221525.236045-1-fontaine.fabrice@gmail.com>
-Message-ID: <87im8b59cx.fsf@dell.be.48ers.dk>
+Date: Tue, 05 Jan 2021 23:05:11 +0100
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xapp_xload: disable
+ gettext detection when not needed
+In-Reply-To: <20201204205052.1404782-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Fri, 4 Dec 2020 21:50:52 +0100")
+References: <20201204205052.1404782-1-bernd.kuhls@t-online.de>
+Message-ID: <87eeiz59bc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Since version 1.74.0, boost atomics needs a toolchain that always
- > supports lockfree atomic bytes so add dependendy on
- > BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS:
- > https://github.com/boostorg/atomic/issues/42
+ > Patch originates from FreeBSD:
+ > https://lists.freebsd.org/pipermail/freebsd-x11/2015-July/016528.html
+ > https://svnweb.freebsd.org/ports/head/x11/libXpm/Makefile?r1=384234&r2=391122&pathrev=391122
 
  > Fixes:
- >  - http://autobuild.buildroot.org/results/c03a786791e3aa7801cf1bff9934c4a105f54ce1
+ > http://autobuild.buildroot.net/results/2ad/2ad27875ce5c16a111d54d452eb395257e9b5e2b/
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
  > ---
- > Changes v1 -> v2 (after review of Thomas Petazzoni):
- >  - Use && instead of ||?in bitcoin and gqrx comment
- >  - Drop select of boost-atomic in boost-thread
- >  - Update reverse dependencies of boost-thread: boost-context,
- >    boost-coroutine, boost-fiber, boost-locale, boost-type_erasure,
- >    boost-wave
+ > xlib_libXpm was fixed the same way:
+ > http://patchwork.ozlabs.org/project/buildroot/patch/20180107175626.19944-1-bernd.kuhls at t-online.de/
 
-Committed to 2020.11.x, thanks.
+Committed to 2020.02.x and 2020.11.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
