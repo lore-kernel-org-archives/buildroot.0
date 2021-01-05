@@ -1,48 +1,57 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 5 Jan 2021 22:38:41 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/python-reentry: add host
- variant
-In-Reply-To: <ar1r3hxkiu.ln2@ID-313208.user.individual.net>
-References: <20191025185448.32633-1-asafka7@gmail.com>
- <20191025185448.32633-6-asafka7@gmail.com>
- <ar1r3hxkiu.ln2@ID-313208.user.individual.net>
-Message-ID: <20210105213841.GJ1485369@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 5 Jan 2021 22:38:38 +0100
+Subject: [Buildroot] [git commit] package/perl: add option to enable threads
+Message-ID: <20210105212044.46989810DE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Asaf, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=4c20eda273ca3937bfb2d1175a0dc7346fadd33e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2020-09-23 07:08 +0200, Bernd Kuhls spake thusly:
-> Am Fri, 25 Oct 2019 21:54:48 +0300 schrieb Asaf Kahlon:
-> > Packages which use reentry will have setup_requires=['reentry'] and
-> > reentry_register=True in their setup.py.
-> > A host variant is needed in order to invoke reentry when building the
-> > package and register the entrypoints.
-> as you pointed out in http://patchwork.ozlabs.org/project/buildroot/patch/
-> 20191020190142.18672-2-asafka7 at gmail.com/
-> 
-> 	"I don't see any Buildroot package which uses reentry..."
-> 
-> I think that your patch should not be applied to buildroot atm.
+Add config option for Perl to enable threads usage.
 
-I concur, so I have now marked that patch as rejected in patchwork.
+Signed-off-by: Hector Kesari <hector.kesari@rockwellcollins.com>
+Signed-off-by: Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/perl/Config.in | 10 ++++++++++
+ package/perl/perl.mk   |  4 ++++
+ 2 files changed, 14 insertions(+)
 
-If in the future we introduce a package that needs it, then will be the
-time to eventually add the host variant for reentry.
-
-Thanks!
-
-Regards,
-Yann E. MORIN.
-
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/perl/Config.in b/package/perl/Config.in
+index 32a3fd2ee9..0ead1c4a46 100644
+--- a/package/perl/Config.in
++++ b/package/perl/Config.in
+@@ -24,4 +24,14 @@ config BR2_PACKAGE_PERL_MODULES
+ 	  Leave empty for all modules (as far as the external libraries
+ 	  are available).
+ 
++config BR2_PACKAGE_PERL_THREADS
++	bool "thread support"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	help
++	  Enable use of threads in Perl scripts
++
++	  WARNING: The use of interpreter-based threads in Perl
++	  is officially discouraged.
++	  See https://perldoc.perl.org/threads.html#WARNING
++
+ endif
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index 2f82e1d6d5..5f6aa97674 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -62,6 +62,10 @@ ifeq ($(shell expr $(PERL_VERSION_MAJOR) % 2), 1)
+ PERL_CONF_OPTS += -Dusedevel
+ endif
+ 
++ifeq ($(BR2_PACKAGE_PERL_THREADS),y)
++PERL_CONF_OPTS += -Dusethreads
++endif
++
+ ifeq ($(BR2_STATIC_LIBS),y)
+ PERL_CONF_OPTS += --all-static --no-dynaloader
+ endif
