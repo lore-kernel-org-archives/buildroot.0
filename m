@@ -1,62 +1,41 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 5 Jan 2021 22:58:46 +0100
-Subject: [Buildroot] [PATCH 02/10 v3] core/pkg-infra: allow per
- site-method sub-version strings
-In-Reply-To: <56c06f0c54667a42f32932601926032636a71f8a.1609239666.git.yann.morin.1998@free.fr>
-References: <cover.1609239666.git.yann.morin.1998@free.fr>
- <56c06f0c54667a42f32932601926032636a71f8a.1609239666.git.yann.morin.1998@free.fr>
-Message-ID: <c32f359d-553a-d69b-b1cd-eb6b94c71860@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 05 Jan 2021 23:00:33 +0100
+Subject: [Buildroot] [git commit] package/php: needs pcre2
+In-Reply-To: <20210102205406.323BD817A8@busybox.osuosl.org> (Yann E. MORIN's
+ message of "Sat, 2 Jan 2021 22:07:40 +0100")
+References: <20210102205406.323BD817A8@busybox.osuosl.org>
+Message-ID: <87mtxn59j2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
+ > commit: https://git.buildroot.net/buildroot/commit/?id=fabb1243ab02dbeb6677a74e02a71b3d05b66f3a
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 29/12/2020 12:01, Yann E. MORIN wrote:
-> When we want to change the format of an archive we generate (e.g. those
-> we generate from git trees), the hashes of those archives will change.
-> 
-> To avoid any issue (e.g. an older Buildroot using newer archives, or the
-> other way around) that would conclude that the hashes do not match, we
-> want to change the filenames of the generated archives whenever we
-> change their format.
-> 
-> Introduce a new internal variable, specific to each site method, that we
-> can set to include a "format version" for the archives generated from
-> that site method.
-> 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Vincent Fazio <vfazio@xes-inc.com>
-> ---
->  package/pkg-generic.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 6a9389f1b5..8db79dc74a 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -514,7 +514,7 @@ ifneq ($$($(2)_OVERRIDE_SRCDIR),)
->  $(2)_VERSION = custom
->  endif
->  
-> -$(2)_SOURCE_EXT = .tar.gz
-> +$(2)_SOURCE_EXT = $$(BR_FMT_VERSION_$$($(2)_SITE_METHOD)).tar.gz
+ > Since 2008 pcre is a hard-dependency of php:
+ > https://github.com/php/php-src/commit/aa64c6727c2d33a647bdbd9769215044f7cf2967
 
- Another nitpick: _SITE_METHOD is only defined 10 lines below. It would make
-sense to move that definition before this line. (This remark becomes less
-relevant if you go with the macro approach, because then it becomes invisible).
+ > Instead of optionally depending on the pcre2 package and building the
+ > bundled pcre2 code of php in case BR2_PACKAGE_PCRE2 was not selected
+ > we let php depend on pcre2.
 
- Either way:
+ > While being at it rename the pcre-related configure option due to
+ > upstream commit:
+ > https://github.com/php/php-src/commit/c1a22f3d4e69cb87f8deeed7d03d9434e6901537
 
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ > Fixes:
+ > http://autobuild.buildroot.net/results/4a5/4a582af6b66c59a61b75a7047d8530202972ebdd/
+ > because the pcre2 package already contains the fix for mips r6.
 
- Regards,
- Arnout
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > [yann.morin.1998 at free.fr: keep the JIT option]
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 
->  ifndef $(2)_SOURCE
->   ifdef $(3)_SOURCE
->    $(2)_SOURCE = $$($(3)_SOURCE)
-> 
+Committed to 2020.02.x and 2020.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
