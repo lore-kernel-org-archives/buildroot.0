@@ -1,31 +1,58 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 5 Jan 2021 22:48:22 +0100
-Subject: [Buildroot] [PATCH 1/1] package/olsr: add pud plugin
-In-Reply-To: <20200118163618.662596-1-fontaine.fabrice@gmail.com>
-References: <20200118163618.662596-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210105224822.1c7249f3@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 05 Jan 2021 22:50:19 +0100
+Subject: [Buildroot] [PATCH] utils/checkpackagelib/lib_mk.py: handle
+ 'else' and 'elif' statements
+In-Reply-To: <20201209153219.17253-1-patrickdepinguin@gmail.com> (Thomas De
+ Schampheleire's message of "Wed, 9 Dec 2020 16:32:18 +0100")
+References: <20201209153219.17253-1-patrickdepinguin@gmail.com>
+Message-ID: <87v9cb5a04.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 18 Jan 2020 17:36:18 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
-> pud plugin needs gpsd and has a specific license
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...-lib-pud-Makefile-fix-parallel-build.patch | 33 +++++++++++++++++++
->  package/olsr/olsr.mk                          | 11 +++++--
->  2 files changed, 42 insertions(+), 2 deletions(-)
->  create mode 100644 package/olsr/0001-lib-pud-Makefile-fix-parallel-build.patch
+ > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+ > An 'else' or 'elif' clause inside a make conditional should not be indented
+ > in the same way as the if/endif clause. check-package did not recognize the
+ > else statement and expected an indentation.
 
-Applied to master, thanks.
+ > For example:
 
-Thomas
+ > ifdef FOOBAR
+ > 	interesting
+ > else
+ > 	more interesting
+ > endif
+
+ > would, according to check-package, need to become:
+
+ > ifdef FOOBAR
+ > 	interesting
+ > 	else
+ > 	more interesting
+ > endif
+
+ > Treat 'else' and 'elif' the same as if-like keywords in the Indent test, but
+ > take into account that 'else' is also valid shell, so we need to correctly
+ > handle line continuation to prevent complaining about the 'else' in:
+
+ > ifdef FOOBAR
+ > 	if true; \
+ > 	    ... \
+ > 	else \
+ > 	    ... \
+ > 	fi
+ > endif
+
+ > We don't add the 'else' and 'elif' statements to start_conditional, because
+ > it would cause incorrect nesting counting in class OverriddenVariable.
+
+ > Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+
+Committed to 2020.02.x and 2020.11.x, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
