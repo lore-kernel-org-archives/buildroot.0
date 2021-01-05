@@ -1,11 +1,11 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Tue, 5 Jan 2021 12:29:09 +0100
-Subject: [Buildroot] [PATCH 3/8] package/freescale-imx/imx-seco: bump
- version to 3.7.4
-In-Reply-To: <20210104173820.6720-4-stephane.viau@oss.nxp.com>
+Date: Tue, 5 Jan 2021 12:31:16 +0100
+Subject: [Buildroot] [PATCH 4/8] package/imx-mkimage: bump to version
+ rel_imx_5.4.70_2.3.0
+In-Reply-To: <20210104173820.6720-5-stephane.viau@oss.nxp.com>
 References: <20210104173820.6720-1-stephane.viau@oss.nxp.com>
- <20210104173820.6720-4-stephane.viau@oss.nxp.com>
-Message-ID: <X/RNhVwOlWO/tZ7d@p1g2>
+ <20210104173820.6720-5-stephane.viau@oss.nxp.com>
+Message-ID: <X/ROBI7FTzIcE0Jy@p1g2>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,41 +14,37 @@ To: buildroot@busybox.net
 
 Hi Stephane,
 
-On Mon, Jan 04, 2021 at 06:38:15PM +0100, Stephane Viau wrote:
-> This version is aligned with 5.4.70_2.3.0 NXP Linux BSP.
-> 
+On Mon, Jan 04, 2021 at 06:38:16PM +0100, Stephane Viau wrote:
 > Signed-off-by: Stephane Viau <stephane.viau@oss.nxp.com>
 > ---
->  package/freescale-imx/imx-seco/imx-seco.hash | 6 +++---
->  package/freescale-imx/imx-seco/imx-seco.mk   | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  package/imx-mkimage/imx-mkimage.hash | 2 +-
+>  package/imx-mkimage/imx-mkimage.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/freescale-imx/imx-seco/imx-seco.hash b/package/freescale-imx/imx-seco/imx-seco.hash
-> index c8526d2b57..2e111c64d7 100644
-> --- a/package/freescale-imx/imx-seco/imx-seco.hash
-> +++ b/package/freescale-imx/imx-seco/imx-seco.hash
-> @@ -1,4 +1,4 @@
+> diff --git a/package/imx-mkimage/imx-mkimage.hash b/package/imx-mkimage/imx-mkimage.hash
+> index e06706070d..4d3af3cd95 100644
+> --- a/package/imx-mkimage/imx-mkimage.hash
+> +++ b/package/imx-mkimage/imx-mkimage.hash
+> @@ -1,3 +1,3 @@
 >  # Locally calculated
-> -sha256  b09f63139df6c4dfef3533570cd60b22eb4c48eed05f314268178e80b8de40fc  imx-seco-3.7.1.bin
-> -sha256  a39da2e94bd8b99eaac4325633854620ea3a55145259c3a7748c610a80714cfc  EULA
-> -sha256  69cbb76b3f10ac5a8c36f34df7bbdf50825815560c00a946fff2922365ef01a2  COPYING
-> +sha256  2ed8177e48c8e33f742b3a642805be56a5ef56df78b1b29e10518552154da2bc  imx-seco-3.7.4.bin
-> +sha256  72edc2072c86d93aa1993d15d4d19d96270af3749b0108995ad50c81d1461f52  EULA
-> +sha256  9c16421e7c702f56756650b8ac954d34556327e598a8666e6e8f4eb3a1aa95f1  COPYING
-> diff --git a/package/freescale-imx/imx-seco/imx-seco.mk b/package/freescale-imx/imx-seco/imx-seco.mk
-> index cc46ad7e5d..f7aaca7e4b 100644
-> --- a/package/freescale-imx/imx-seco/imx-seco.mk
-> +++ b/package/freescale-imx/imx-seco/imx-seco.mk
+> -sha256 19745a7b9d06a420e7574328de65e6f5f7e82c87beed926c8f0f6bd1512afbe6  imx-mkimage-rel_imx_5.4.47_2.2.0.tar.gz
+> +sha256 26175ee0634bc07efe7fa64e306f8241919ed9fbea92dfd8881ffd05c1783f5a  imx-mkimage-rel_imx_5.4.70_2.3.0.tar.gz
+>  sha256 231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
+> diff --git a/package/imx-mkimage/imx-mkimage.mk b/package/imx-mkimage/imx-mkimage.mk
+> index 51eb79e5f5..626e3d873f 100644
+> --- a/package/imx-mkimage/imx-mkimage.mk
+> +++ b/package/imx-mkimage/imx-mkimage.mk
 > @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
 >  
-> -IMX_SECO_VERSION = 3.7.1
-> +IMX_SECO_VERSION = 3.7.4
->  IMX_SECO_SITE = $(FREESCALE_IMX_SITE)
->  IMX_SECO_SOURCE = imx-seco-$(IMX_SECO_VERSION).bin
+> -IMX_MKIMAGE_VERSION = rel_imx_5.4.47_2.2.0
+> +IMX_MKIMAGE_VERSION = rel_imx_5.4.70_2.3.0
+>  IMX_MKIMAGE_SITE = https://source.codeaurora.org/external/imx/imx-mkimage
+>  IMX_MKIMAGE_SITE_METHOD = git
+>  IMX_MKIMAGE_LICENSE = GPL-2.0+
 
 Reviewed-by: Gary Bisson <gary.bisson@boundarydevices.com>
 
-Regards,
+Thanks,
 Gary
