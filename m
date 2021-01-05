@@ -1,65 +1,51 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 5 Jan 2021 23:46:14 +0100
-Subject: [Buildroot] [PATCH 10/10 v3] package/tar: drop specific version
- for host variant
-In-Reply-To: <a3b05faa57b2c10861825f5f00a4ab32d8fe5d81.1609239666.git.yann.morin.1998@free.fr>
-References: <cover.1609239666.git.yann.morin.1998@free.fr>
- <a3b05faa57b2c10861825f5f00a4ab32d8fe5d81.1609239666.git.yann.morin.1998@free.fr>
-Message-ID: <6cf63267-6202-575f-9d64-1612612fdaf6@mind.be>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Tue, 5 Jan 2021 23:49:40 +0100
+Subject: [Buildroot] Patch for linux-headers
+In-Reply-To: <87czyj6p8i.fsf@dell.be.48ers.dk>
+References: <20201217003006.GA343694@pevik> <87czyj6p8i.fsf@dell.be.48ers.dk>
+Message-ID: <20210105224940.GA158146@pevik>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Peter,
 
+> >>>>> "Petr" == Petr Vorel <petr.vorel@gmail.com> writes:
 
-On 29/12/2020 12:01, Yann E. MORIN wrote:
-> Now that we can generate reproducible archives, with all known tar
-> versions starting with 1.27, we don't need to clamp the host-tar
-> version to the old 1.29, and can now bump to any later version.
-> 
-> Drop the host-tar version, and use the same as the target variant.
-> 
-> Note that we still need the _SOURCE trick, to avoid depending on tar
-> to extract the tar tarball...
+>  > Hi,
+>  > I wonder if it's allowed to add patch to add patch for linux-headers.
+>  > There would have to be more versions for the patch (due headers being built for
+>  > more versions). I'd like to use my upstreamed patch [1] which fixes
+>  > "redefinition of struct sysinfo" build failure on MUSL.
+>  > This so far required to patch affected packages or simply disable them
+>  > (depends on !BR2_TOOLCHAIN_USES_MUSL).
 
- Note that e185f62c58f97378785fd46476cc8ec099989230 also changed TAR_VERSION to
-HOST_TAR_VERSION in the HOST_TAR_EXTRACT_CMDS, but I think the current
-HOST_TAR_VERSION is indeed more appropriate.
+>  > Actually, much simpler patch from Khem Raj could be used [2].
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> It can be done if needed, but it is naturally easier to handle
+> without.
+Understand. More versions and kernel checking would be needed.
+I implemented it, but IMHO it'd have to also require Buildroot toolchain
+rebuild.
 
- Regards,
- Arnout
+> I noticed that you got some patches applied to the stable
+> kernels related to this recently - Do those fix the issues, or is an
+> additional patch needed?
+Yes, it fixes the issue. Thus no patching is needed.
 
-> 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Vincent Fazio <vfazio@xes-inc.com>
-> ---
->  package/tar/tar.mk | 8 ++------
->  1 file changed, 2 insertions(+), 6 deletions(-)
-> 
-> diff --git a/package/tar/tar.mk b/package/tar/tar.mk
-> index 9e0a40e561..7822b1dada 100644
-> --- a/package/tar/tar.mk
-> +++ b/package/tar/tar.mk
-> @@ -29,14 +29,10 @@ endif
->  
->  $(eval $(autotools-package))
->  
-> -# host-tar is used to create the archives in the VCS download backends and tar
-> -# 1.30 and forward have changed the archive format. So archives generated with
-> -# earlier versions are not bit-for-bit reproducible and the hashes would not
-> -# match. Hence host-tar must be kept at version 1.29.
-> -HOST_TAR_VERSION = 1.29
->  # host-tar: use cpio.gz instead of tar.gz to prevent chicken-egg problem
->  # of needing tar to build tar.
-> -HOST_TAR_SOURCE = tar-$(HOST_TAR_VERSION).cpio.gz
-> +HOST_TAR_SOURCE = tar-$(TAR_VERSION).cpio.gz
-> +
->  define HOST_TAR_EXTRACT_CMDS
->  	mkdir -p $(@D)
->  	cd $(@D) && \
-> 
+I didn't expect the fix would be accepted in stable,
+but it has been accepted (in the end it's a fix).
+
+OK, we need to wait till kernel stable releases, update kernel versions in
+Buildroot. But IMHO it still requires Buildroot toolchain rebuild. Or am I wrong?
+
+BTW I'm waiting for it for iproute2 upgrade (originally [1] and [2], now [3]).
+
+Kind regards,
+Petr
+
+[1] https://patchwork.ozlabs.org/project/buildroot/patch/20200818183832.7947-2-petr.vorel at gmail.com/
+[2] https://patchwork.ozlabs.org/project/buildroot/patch/20200903155728.19448-2-petr.vorel at gmail.com/
+[3] https://patchwork.ozlabs.org/project/buildroot/patch/20201104171416.1062-1-petr.vorel at gmail.com/
