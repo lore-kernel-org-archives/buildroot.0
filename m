@@ -1,50 +1,85 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 5 Jan 2021 22:45:16 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/util-linux: bump
- version to 2.36.1
-Message-ID: <20210105213307.2F7FC8182C@busybox.osuosl.org>
+Date: Tue, 5 Jan 2021 22:49:46 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x]
+ utils/checkpackagelib/lib_mk.py: handle 'else' and 'elif' statements
+Message-ID: <20210105213307.3A9C68182C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b76338e3bf2f20cc65080d63d75cea6c046b2bff
+commit: https://git.buildroot.net/buildroot/commit/?id=c52d5edae3befad25741c18e27579469bb70774b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-Release notes:
-https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.36/v2.36.1-ReleaseNotes
+An 'else' or 'elif' clause inside a make conditional should not be indented
+in the same way as the if/endif clause. check-package did not recognize the
+else statement and expected an indentation.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+For example:
+
+ifdef FOOBAR
+	interesting
+else
+	more interesting
+endif
+
+would, according to check-package, need to become:
+
+ifdef FOOBAR
+	interesting
+	else
+	more interesting
+endif
+
+Treat 'else' and 'elif' the same as if-like keywords in the Indent test, but
+take into account that 'else' is also valid shell, so we need to correctly
+handle line continuation to prevent complaining about the 'else' in:
+
+ifdef FOOBAR
+	if true; \
+	    ... \
+	else \
+	    ... \
+	fi
+endif
+
+We don't add the 'else' and 'elif' statements to start_conditional, because
+it would cause incorrect nesting counting in class OverriddenVariable.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 0d146627cfa56e193658558d7fa21664a5869304)
+(cherry picked from commit a1bb132a81889b057134669d8b7135168b2f8024)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/util-linux/util-linux.hash | 2 +-
- package/util-linux/util-linux.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ utils/checkpackagelib/lib_mk.py | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/util-linux/util-linux.hash b/package/util-linux/util-linux.hash
-index fce97c4892..c5f5c69a4d 100644
---- a/package/util-linux/util-linux.hash
-+++ b/package/util-linux/util-linux.hash
-@@ -1,5 +1,5 @@
- # From https://www.kernel.org/pub/linux/utils/util-linux/v2.36/sha256sums.asc
--sha256  9e4b1c67eb13b9b67feb32ae1dc0d50e08ce9e5d82e1cccd0ee771ad2fa9e0b1  util-linux-2.36.tar.xz
-+sha256  09fac242172cd8ec27f0739d8d192402c69417617091d8c6e974841568f37eed  util-linux-2.36.1.tar.xz
- # License files, locally calculated
- sha256  869660b5269f4f40a8a679da7f403ea3a6e71d46087aab5e14871b09bcb55955  README.licensing
- sha256  9b718a9460fed5952466421235bc79eb49d4e9eacc920d7a9dd6285ab8fd6c6d  Documentation/licenses/COPYING.BSD-3-Clause
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index 0b29ef4d6f..b726f89505 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -8,7 +8,7 @@
- # util-linux-libs/util-linux-libs.mk needs to be updated accordingly as well.
+diff --git a/utils/checkpackagelib/lib_mk.py b/utils/checkpackagelib/lib_mk.py
+index 45e37e4598..0278354434 100644
+--- a/utils/checkpackagelib/lib_mk.py
++++ b/utils/checkpackagelib/lib_mk.py
+@@ -16,12 +16,13 @@ from checkpackagelib.lib import Utf8Characters         # noqa: F401
  
- UTIL_LINUX_VERSION_MAJOR = 2.36
--UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR)
-+UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR).1
- UTIL_LINUX_SOURCE = util-linux-$(UTIL_LINUX_VERSION).tar.xz
- UTIL_LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/util-linux/v$(UTIL_LINUX_VERSION_MAJOR)
+ # used in more than one check
+ start_conditional = ["ifdef", "ifeq", "ifndef", "ifneq"]
++continue_conditional = ["elif", "else"]
+ end_conditional = ["endif"]
  
+ 
+ class Indent(_CheckFunction):
+     COMMENT = re.compile(r"^\s*#")
+-    CONDITIONAL = re.compile(r"^\s*({})\s".format("|".join(start_conditional + end_conditional)))
++    CONDITIONAL = re.compile(r"^\s*({})\s".format("|".join(start_conditional + end_conditional + continue_conditional)))
+     ENDS_WITH_BACKSLASH = re.compile(r"^[^#].*\\$")
+     END_DEFINE = re.compile(r"^\s*endef\s")
+     MAKEFILE_TARGET = re.compile(r"^[^# \t]+:\s")
+@@ -43,7 +44,7 @@ class Indent(_CheckFunction):
+         expect_tabs = False
+         if self.define or self.backslash or self.makefile_target:
+             expect_tabs = True
+-        if self.CONDITIONAL.search(text):
++        if not self.backslash and self.CONDITIONAL.search(text):
+             expect_tabs = False
+ 
+         # calculate for next line
