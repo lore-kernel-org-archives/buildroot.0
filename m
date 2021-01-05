@@ -1,37 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 5 Jan 2021 23:30:02 +0100
-Subject: [Buildroot] [PATCH] package/busybox: update .config file with
- Busybox 1.31.1
-In-Reply-To: <20200120075539.3071-1-joerg.krause@embedded.rocks>
-References: <20200120075539.3071-1-joerg.krause@embedded.rocks>
-Message-ID: <20210105233002.25ec5f6d@windsurf.home>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 5 Jan 2021 23:30:39 +0100
+Subject: [Buildroot] [PATCH 05/10 v3] WIP: boot+packages: update hash to
+ new git-tarballs format
+In-Reply-To: <29b653935ed3ec38f7e0bb05445be7e99473aa5d.1609239666.git.yann.morin.1998@free.fr>
+References: <cover.1609239666.git.yann.morin.1998@free.fr>
+ <29b653935ed3ec38f7e0bb05445be7e99473aa5d.1609239666.git.yann.morin.1998@free.fr>
+Message-ID: <b976af57-7237-cd64-c57b-b83d32dcaa36@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello J?rg,
 
-On Mon, 20 Jan 2020 08:55:38 +0100
-J?rg Krause <joerg.krause@embedded.rocks> wrote:
 
-> Commit 5530674e0ce21a927735ff77602a9e5854363751 bumped the version, but
-> did not update the config file.
+On 29/12/2020 12:01, Yann E. MORIN wrote:
+> ** WIP: should be squashed with the commit that updates the git backend
 > 
-> Update the configuration file by loading the busybox.config file and
-> saving it back.
+> Of all the bootloaders that have a git download method, vexpress-firmware
+> is the only one to have a hash. Others have no hash files, or they have
+> explicitly set BR_NO_CHECK_HASH_FOR.
 > 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> For the packages, linux-headers is the special snowflake, as the git
+> download is only for custom git tree, so it is excluded from the hash
+> verification with BR_NO_CHECK_HASH_FOR.
+> 
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Vincent Fazio <vfazio@xes-inc.com>
 
-Sorry for the long delay. Could you update this patch based on the
-current version of Busybox in Buildroot (1.32.0) as well as
-https://patchwork.ozlabs.org/project/buildroot/patch/20200120075539.3071-2-joerg.krause at embedded.rocks/.
-Also there is a Busybox 1.32.1 which we might want to update to. 1.33.0
-is out, but considered a development release.
+ Did you use a script to (partially) generate this? If yes, it would be nice to
+include it in the commit message.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+ I've only visually inspected this, I haven't checked if there are any packages
+that were missed. But as discussed orally: the autobuilders will catch those.
+
+ Regards,
+ Arnout
+
+
+[snip]
