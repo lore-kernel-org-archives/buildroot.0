@@ -1,34 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 05 Jan 2021 23:29:45 +0100
-Subject: [Buildroot] [git commit] package/trace-cmd: installs nothing in
- staging/
-In-Reply-To: <20210103200946.C2D7586189@busybox.osuosl.org> (Yann E. MORIN's
- message of "Sun, 3 Jan 2021 21:26:29 +0100")
-References: <20210103200946.C2D7586189@busybox.osuosl.org>
-Message-ID: <87lfd73tly.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 5 Jan 2021 23:30:02 +0100
+Subject: [Buildroot] [PATCH] package/busybox: update .config file with
+ Busybox 1.31.1
+In-Reply-To: <20200120075539.3071-1-joerg.krause@embedded.rocks>
+References: <20200120075539.3071-1-joerg.krause@embedded.rocks>
+Message-ID: <20210105233002.25ec5f6d@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Hello J?rg,
 
- > commit:
- > https://git.buildroot.net/buildroot/commit/?id=896b93310a2e5f5945f3b792296a05be0373269f
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 20 Jan 2020 08:55:38 +0100
+J?rg Krause <joerg.krause@embedded.rocks> wrote:
 
- > Since its introduction in Buildroot in 2013 with commit 07203d78c24d
- > (trace-cmd: new package), trace-cmd has declared installing in staging.
+> Commit 5530674e0ce21a927735ff77602a9e5854363751 bumped the version, but
+> did not update the config file.
+> 
+> Update the configuration file by loading the busybox.config file and
+> saving it back.
+> 
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 
- > But trace-cmd is a generic-package, and has never, ever provided any
- > commands for staging installation.
+Sorry for the long delay. Could you update this patch based on the
+current version of Busybox in Buildroot (1.32.0) as well as
+https://patchwork.ozlabs.org/project/buildroot/patch/20200120075539.3071-2-joerg.krause at embedded.rocks/.
+Also there is a Busybox 1.32.1 which we might want to update to. 1.33.0
+is out, but considered a development release.
 
- > Drop this declaration.
-
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-
-Committed to 2020.02.x and 2020.11.x, thanks.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
