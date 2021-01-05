@@ -1,41 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 05 Jan 2021 22:38:30 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libodb-mysql: fix static build
-In-Reply-To: <20201214214313.447831-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 14 Dec 2020 22:43:13 +0100")
-References: <20201214214313.447831-1-fontaine.fabrice@gmail.com>
-Message-ID: <878s976p49.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 5 Jan 2021 22:38:41 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/python-reentry: add host
+ variant
+In-Reply-To: <ar1r3hxkiu.ln2@ID-313208.user.individual.net>
+References: <20191025185448.32633-1-asafka7@gmail.com>
+ <20191025185448.32633-6-asafka7@gmail.com>
+ <ar1r3hxkiu.ln2@ID-313208.user.individual.net>
+Message-ID: <20210105213841.GJ1485369@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+Asaf, All,
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/ba2c5ef1bb54c2751569f79beef21ff486348469
+On 2020-09-23 07:08 +0200, Bernd Kuhls spake thusly:
+> Am Fri, 25 Oct 2019 21:54:48 +0300 schrieb Asaf Kahlon:
+> > Packages which use reentry will have setup_requires=['reentry'] and
+> > reentry_register=True in their setup.py.
+> > A host variant is needed in order to invoke reentry when building the
+> > package and register the entrypoints.
+> as you pointed out in http://patchwork.ozlabs.org/project/buildroot/patch/
+> 20191020190142.18672-2-asafka7 at gmail.com/
+> 
+> 	"I don't see any Buildroot package which uses reentry..."
+> 
+> I think that your patch should not be applied to buildroot atm.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > ---
- >  package/libodb-mysql/libodb-mysql.mk | 2 +-
- >  1 file changed, 1 insertion(+), 1 deletion(-)
+I concur, so I have now marked that patch as rejected in patchwork.
 
- > diff --git a/package/libodb-mysql/libodb-mysql.mk b/package/libodb-mysql/libodb-mysql.mk
- > index 835e5bc6bf..a9040c65f8 100644
- > --- a/package/libodb-mysql/libodb-mysql.mk
- > +++ b/package/libodb-mysql/libodb-mysql.mk
- > @@ -12,6 +12,6 @@ LIBODB_MYSQL_INSTALL_STAGING = YES
- >  LIBODB_MYSQL_LICENSE = GPL-2.0
- >  LIBODB_MYSQL_LICENSE_FILES = LICENSE
- >  LIBODB_MYSQL_DEPENDENCIES = libodb mysql
- > -LIBODB_MYSQL_CONF_ENV = LIBS="$(shell $(STAGING_DIR)/usr/bin/mysql_config --libs)"
- > +LIBODB_MYSQL_CONF_ENV = LIBS=`$(STAGING_DIR)/usr/bin/mysql_config --libs`
+If in the future we introduce a package that needs it, then will be the
+time to eventually add the host variant for reentry.
 
-Committed to 2020.11.x, thanks.
+Thanks!
 
-I see you dropped the quotes around the output of mysql_config, is that
-always guaranteed to only return a single word?
+Regards,
+Yann E. MORIN.
+
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
