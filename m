@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 5 Jan 2021 17:46:51 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/libllcp: drop
+Date: Tue, 5 Jan 2021 17:46:33 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/libllcp: drop
  wrong comment
-Message-ID: <20210105163029.8B08582A9F@busybox.osuosl.org>
+Message-ID: <20210105163037.E60A581539@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dbdea2ed1ff7213421fb21469b31d52bb45dc9e8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=59f12f740e4bae19f0ddd3b04f049201172b27b5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
 Dependency on threads comes from libllcp itself not from libusb (which
 is not even selected)
