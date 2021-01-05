@@ -1,45 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 5 Jan 2021 16:10:43 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] boot/barebox: kconfig
- needs the toolchain
-Message-ID: <20210105145258.0000D8642F@busybox.osuosl.org>
+Date: Tue, 5 Jan 2021 15:53:31 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/libfuse3: enable
+ CONFIG_FUSE_FS in kernel config
+Message-ID: <20210105145257.E683D864E0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cfdc2515fb3eecff95b47b7913e86697765197b6
+commit: https://git.buildroot.net/buildroot/commit/?id=07ced075521999363ce60c8e9cf849108e7e1909
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-In barebox v2020.09.0, kconfig has been updated to a newer version
-based on Linux 5.9-rc2.  As in linux, kconfig can call the compiler
-to test its capabilities.
-
-We have no way to know if a custom version would require it or not,
-so we just unconditionally depend on the toolchain
-
-Signed-off-by: Jules Maselbas <jmaselbas@kalray.eu>
+Signed-off-by: Tian Yuanhao <tianyuanhao@aliyun.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 1c1a629d814fcf4b8c4c65ce6687635c534a22e9)
+(cherry picked from commit 857992adec3148df1c5d086bb2533f4f894ba630)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/barebox/barebox.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/libfuse3/libfuse3.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
-index 9d62037e7a..77550aaed6 100644
---- a/boot/barebox/barebox.mk
-+++ b/boot/barebox/barebox.mk
-@@ -138,6 +138,11 @@ define $(1)_INSTALL_IMAGES_CMDS
- 	$$($(1)_INSTALL_CUSTOM_ENV)
+diff --git a/package/libfuse3/libfuse3.mk b/package/libfuse3/libfuse3.mk
+index f6d8dd0ab9..0a896d8dad 100644
+--- a/package/libfuse3/libfuse3.mk
++++ b/package/libfuse3/libfuse3.mk
+@@ -23,4 +23,8 @@ define LIBFUSE3_PERMISSIONS
+ 	/usr/bin/fusermount3 f 4755 0 0 - - - - -
  endef
  
-+# Starting with barebox v2020.09.0, the kconfig used calls the
-+# cross-compiler to check its capabilities. So we need the
-+# toolchain before we can call the configurators.
-+$(1)_KCONFIG_DEPENDENCIES += toolchain
++define LIBFUSE3_LINUX_CONFIG_FIXUPS
++	$(call KCONFIG_ENABLE_OPT,CONFIG_FUSE_FS)
++endef
 +
- ifeq ($$(BR2_TARGET_$(1)_BAREBOXENV),y)
- define $(1)_INSTALL_TARGET_CMDS
- 	cp $$(@D)/scripts/bareboxenv-target $$(TARGET_DIR)/usr/bin/bareboxenv
+ $(eval $(meson-package))
