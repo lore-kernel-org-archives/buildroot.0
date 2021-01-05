@@ -1,88 +1,43 @@
-From: Stephane Viau <stephane.viau@oss.nxp.com>
-Date: Tue,  5 Jan 2021 16:24:20 +0100
-Subject: [Buildroot] [PATCH v2 8/8] configs/freescale_imx8*: bump BSP
- components to 5.4.70_2.3.0
-In-Reply-To: <20210105152420.26379-1-stephane.viau@oss.nxp.com>
-References: <20210105152420.26379-1-stephane.viau@oss.nxp.com>
-Message-ID: <20210105152420.26379-9-stephane.viau@oss.nxp.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Tue,  5 Jan 2021 16:47:53 +0100
+Subject: [Buildroot] [PATCH v2] package/minicom: bump to version 2.8
+Message-ID: <20210105154753.279009-1-giulio.benetti@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump ATF, U-Boot and Linux kernel to the NXP BSP 5.4.70_2.3.0 versions.
-
-Build- and run-tested on:
-    o i.MX8QM MEK
-    o i.MX8QXP MEK rev B0
-
-Signed-off-by: Stephane Viau <stephane.viau@oss.nxp.com>
-Tested-by: Stephane Viau <stephane.viau@oss.nxp.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- configs/freescale_imx8qmmek_defconfig  | 6 +++---
- configs/freescale_imx8qxpmek_defconfig | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+V1->V2:
+* change VERSION from sha1 to tag v2.8
+---
+ package/minicom/minicom.hash | 2 +-
+ package/minicom/minicom.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/configs/freescale_imx8qmmek_defconfig b/configs/freescale_imx8qmmek_defconfig
-index 4241c4d33b..0342c0a206 100644
---- a/configs/freescale_imx8qmmek_defconfig
-+++ b/configs/freescale_imx8qmmek_defconfig
-@@ -6,7 +6,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/fsl-imx8qm-mek.dtb"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_5.4.47_2.2.0"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_5.4.70_2.3.0"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v8"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8qm-mek"
-@@ -22,14 +22,14 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/imx-atf"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="rel_imx_5.4.47_2.2.0"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="rel_imx_5.4.70_2.3.0"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8qm"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/uboot-imx"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_5.4.47_2.2.0"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_5.4.70_2.3.0"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8qm_mek"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
-diff --git a/configs/freescale_imx8qxpmek_defconfig b/configs/freescale_imx8qxpmek_defconfig
-index c57c38ca5f..e37a7553ad 100644
---- a/configs/freescale_imx8qxpmek_defconfig
-+++ b/configs/freescale_imx8qxpmek_defconfig
-@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/fsl-imx8qxp-mek.dtb"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_5.4.47_2.2.0"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_5.4.70_2.3.0"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v8"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8qxp-mek"
-@@ -24,14 +24,14 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/imx-atf"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="rel_imx_5.4.47_2.2.0"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="rel_imx_5.4.70_2.3.0"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8qx"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/uboot-imx"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_5.4.47_2.2.0"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_5.4.70_2.3.0"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8qxp_mek"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
+diff --git a/package/minicom/minicom.hash b/package/minicom/minicom.hash
+index 0b8b1d0745..970b7ad2c1 100644
+--- a/package/minicom/minicom.hash
++++ b/package/minicom/minicom.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  c0a72a099bea13abdf5a315f56a87a75a92000b71e36193188487cdad063b540  minicom-79ef3185df5ae9cdc8307f9b9ba17463743f22f0.tar.gz
++sha256  0e5d218d9f8f00fb9cc323f7517c49d8eb12a22d158efee513df3c50843619fb  minicom-v2.8.tar.gz
+ sha256  cf80a758014eefbf068afffe3d462fc34ff4f528527524d8e100329c42094e15  COPYING
+diff --git a/package/minicom/minicom.mk b/package/minicom/minicom.mk
+index 7aaf18880e..616a3bd24f 100644
+--- a/package/minicom/minicom.mk
++++ b/package/minicom/minicom.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MINICOM_VERSION = 79ef3185df5ae9cdc8307f9b9ba17463743f22f0
++MINICOM_VERSION = v2.8
+ MINICOM_SITE = https://salsa.debian.org/minicom-team/minicom.git
+ MINICOM_SITE_METHOD = git
+ MINICOM_LICENSE = GPL-2.0+
 -- 
-2.29.2
+2.25.1
