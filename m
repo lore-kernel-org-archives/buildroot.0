@@ -1,37 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 5 Jan 2021 20:43:06 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/tini: install
- docker-init symlink
-Message-ID: <20210105194047.931CD864E8@busybox.osuosl.org>
+Date: Tue, 5 Jan 2021 20:52:21 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/openvpn: adds
+ target install of systemd unit files
+Message-ID: <20210105194047.9EDB282A9F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=79fad79a3dc6ee35c4c1ce01f523f18f28070f37
+commit: https://git.buildroot.net/buildroot/commit/?id=15a36ea1e3ffb3ded1af884dd27e713649bd681d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-This removes the warning that docker can't find docker-init in PATH.
-
-Signed-off-by: Christian Stewart <christian@paral.in>
-Signed-off-by: Tian Yuanhao <tianyuanhao@aliyun.com>
+Signed-off-by: Edmundo Ferreira <fc.edmundo@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 072af885c4afedf4f131563a755c532f8ad45650)
+(cherry picked from commit 7105e65cd6b8f857bab54e4c0a8c57da776b0564)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tini/tini.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/openvpn/openvpn.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/tini/tini.mk b/package/tini/tini.mk
-index 157477f8df..af4a3bcb5e 100644
---- a/package/tini/tini.mk
-+++ b/package/tini/tini.mk
-@@ -30,6 +30,7 @@ endef
- 
- define TINI_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D -m 0755 $(@D)/bin/tini $(TARGET_DIR)/usr/bin/tini
-+	ln -sf tini $(TARGET_DIR)/usr/bin/docker-init
+diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
+index 1008c47b5a..caec41e2a5 100644
+--- a/package/openvpn/openvpn.mk
++++ b/package/openvpn/openvpn.mk
+@@ -82,4 +82,11 @@ define OPENVPN_INSTALL_INIT_SYSV
+ 		$(TARGET_DIR)/etc/init.d/S60openvpn
  endef
  
- # Tini's CMakeLists.txt is not suitable for Buildroot.
++define OPENVPN_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 0644 $(@D)/distro/systemd/openvpn-client at .service \
++		$(TARGET_DIR)/usr/lib/systemd/system/openvpn-client at .service
++	$(INSTALL) -D -m 0644 $(@D)/distro/systemd/openvpn-server at .service \
++		$(TARGET_DIR)/usr/lib/systemd/system/openvpn-server at .service
++endef
++
+ $(eval $(autotools-package))
