@@ -1,57 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 5 Jan 2021 20:52:28 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/openvpn: use make
- install instead of custom install step
-Message-ID: <20210105194047.AA0E182A9F@busybox.osuosl.org>
+Date: Tue, 5 Jan 2021 20:43:24 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/tini: install
+ docker-init symlink
+Message-ID: <20210105194053.AA19086528@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8b74f9ee092bdd24a746c8065593d36f689539ac
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=7d7afdf58cedc4f8433ab37d8a686d7c197d227e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Commit 7105e65cd6b8f857bab54e4c0a8c57da776b0564 ("package/openvpn:
-adds target install of systemd unit files") added the installation of
-systemd unit files. But in fact, they can be installed by openvpn's
-build system. It was simply not working due to the custom install step
-implemented in openvpn.mk.
+This removes the warning that docker can't find docker-init in PATH.
 
-So instead, let's have the autotools-package infra call "make
-install", which properly installs everything that's needed for
-openvpn, including systemd units, but also plugins, etc.
-
+Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Tian Yuanhao <tianyuanhao@aliyun.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 30bc58d3766b240017120a25d843da0a2c5cf501)
+(cherry picked from commit 072af885c4afedf4f131563a755c532f8ad45650)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openvpn/openvpn.mk | 12 ------------
- 1 file changed, 12 deletions(-)
+ package/tini/tini.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
-index caec41e2a5..bc01c893c2 100644
---- a/package/openvpn/openvpn.mk
-+++ b/package/openvpn/openvpn.mk
-@@ -72,21 +72,9 @@ else
- OPENVPN_CONF_OPTS += --disable-systemd
- endif
+diff --git a/package/tini/tini.mk b/package/tini/tini.mk
+index 986e612a83..caa5e24b39 100644
+--- a/package/tini/tini.mk
++++ b/package/tini/tini.mk
+@@ -30,6 +30,7 @@ endef
  
--define OPENVPN_INSTALL_TARGET_CMDS
--	$(INSTALL) -m 755 $(@D)/src/openvpn/openvpn \
--		$(TARGET_DIR)/usr/sbin/openvpn
--endef
--
- define OPENVPN_INSTALL_INIT_SYSV
- 	$(INSTALL) -m 755 -D package/openvpn/S60openvpn \
- 		$(TARGET_DIR)/etc/init.d/S60openvpn
+ define TINI_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D -m 0755 $(@D)/bin/tini $(TARGET_DIR)/usr/bin/tini
++	ln -sf tini $(TARGET_DIR)/usr/bin/docker-init
  endef
  
--define OPENVPN_INSTALL_INIT_SYSTEMD
--	$(INSTALL) -D -m 0644 $(@D)/distro/systemd/openvpn-client at .service \
--		$(TARGET_DIR)/usr/lib/systemd/system/openvpn-client at .service
--	$(INSTALL) -D -m 0644 $(@D)/distro/systemd/openvpn-server at .service \
--		$(TARGET_DIR)/usr/lib/systemd/system/openvpn-server at .service
--endef
--
- $(eval $(autotools-package))
+ # Tini's CMakeLists.txt is not suitable for Buildroot.
