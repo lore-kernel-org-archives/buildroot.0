@@ -1,62 +1,44 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 5 Jan 2021 23:33:52 +0100
-Subject: [Buildroot] [PATCH 07/10 v3] support/download: cleanup svn
- backend
-In-Reply-To: <7077b14d19b9d645fa45dcc39f8c62212216c4af.1609239666.git.yann.morin.1998@free.fr>
-References: <cover.1609239666.git.yann.morin.1998@free.fr>
- <7077b14d19b9d645fa45dcc39f8c62212216c4af.1609239666.git.yann.morin.1998@free.fr>
-Message-ID: <2b02fd2e-c977-809e-1a99-b663f061a5ee@mind.be>
+From: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
+Date: Tue,  5 Jan 2021 23:34:20 +0100
+Subject: [Buildroot] [PATCH] package/proj: bump to 7.2.1
+Message-ID: <20210105223420.812088-1-zgyarmati@zgyarmati.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Signed-off-by: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
+---
+ package/proj/proj.hash | 6 +++---
+ package/proj/proj.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-
-On 29/12/2020 12:01, Yann E. MORIN wrote:
-> Commit 89f5e9893 (support/download/svn: generate reproducible svn
-> archives) did what it said, but can be siplified a bit.
-                                         simplified
-
-> 
-> Indeed, we are doing an svn export, so we won't have any of the .svn
-> directories, neither at the root of the extract, nor in any of the
-> sub-directories.
-> 
-> As such, we do not need to filter them out  when we generate the list
-> of files to include in the archive.
-> 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Heiko Thiery <heiko.thiery@gmail.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Vincent Fazio <vfazio@xes-inc.com>
-
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
- Regards,
- Arnout
-
-> ---
->  support/download/svn | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
-> 
-> diff --git a/support/download/svn b/support/download/svn
-> index 012f286dd9..b7a6ac7443 100755
-> --- a/support/download/svn
-> +++ b/support/download/svn
-> @@ -46,10 +46,9 @@ _svn export ${verbose} "${@}" "'${uri}@${rev}'" "'${basename}'"
->  date="$( _svn info --show-item last-changed-date "'${uri}@${rev}'" |tail -n 1 )"
->  
->  # Generate the archive, sort with the C locale so that it is reproducible.
-> -# We do not want the .svn dir; we keep other .svn files, in case they are the
-> -# only files in their directory.
-> -find "${basename}" -not -type d \
-> -       -and -not -path "./.svn/*" >"${output}.list"
-> +# We did a 'svn export' above, so it's not a working copy (there is no .svn
-> +# directory or file to ignore).
-> +find "${basename}" -not -type d >"${output}.list"
->  LC_ALL=C sort <"${output}.list" >"${output}.list.sorted"
->  
->  # Create GNU-format tarballs, since that's the format of the tarballs on
-> 
+diff --git a/package/proj/proj.hash b/package/proj/proj.hash
+index 60b6b22c07..27cbc38490 100644
+--- a/package/proj/proj.hash
++++ b/package/proj/proj.hash
+@@ -1,5 +1,5 @@
+-# Fetched from http://download.osgeo.org/proj/proj-7.2.0.tar.gz.md5
+-md5  12748b74e4d6c12ade32ec3ca68dafc7  proj-7.2.0.tar.gz
++# Fetched from http://download.osgeo.org/proj/proj-7.2.1.tar.gz.md5
++md5  befbafd25e65ddf0c26a8321d8bcdcd2  proj-7.2.1.tar.gz
+ # Locally calculated
+-sha256  2957798e5fe295ff96a2af1889d0428e486363d210889422f76dd744f7885763  proj-7.2.0.tar.gz
++sha256  b384f42e5fb9c6d01fe5fa4d31da2e91329668863a684f97be5d4760dbbf0a14  proj-7.2.1.tar.gz
+ sha256  2dcac4af6990093ef48b896bfb81452d46a31b08d46cce34b27e83f93b2e37f6  COPYING
+diff --git a/package/proj/proj.mk b/package/proj/proj.mk
+index 3a390deb59..03ed9c0a2e 100644
+--- a/package/proj/proj.mk
++++ b/package/proj/proj.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PROJ_VERSION = 7.2.0
++PROJ_VERSION = 7.2.1
+ PROJ_SITE = http://download.osgeo.org/proj
+ PROJ_LICENSE = MIT
+ PROJ_LICENSE_FILES = COPYING
+-- 
+2.25.1
