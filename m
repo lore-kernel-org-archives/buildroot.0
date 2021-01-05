@@ -1,31 +1,49 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 5 Jan 2021 23:32:40 +0100
-Subject: [Buildroot] [PATCH 06/10 v3] WIP: support/testing: update
- git-hash checks with new archive format
-In-Reply-To: <74928f23343a32a47253eb2bedceb717ddb874b4.1609239666.git.yann.morin.1998@free.fr>
-References: <cover.1609239666.git.yann.morin.1998@free.fr>
- <74928f23343a32a47253eb2bedceb717ddb874b4.1609239666.git.yann.morin.1998@free.fr>
-Message-ID: <a415b775-ca0e-45b5-aaa7-5d728604050b@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 5 Jan 2021 23:32:48 +0100
+Subject: [Buildroot] [PATCH] package/nginx: use CacheDirectory
+In-Reply-To: <20200123083641.3808-1-p.debruijn@unilogic.nl>
+References: <20200123083641.3808-1-p.debruijn@unilogic.nl>
+Message-ID: <20210105233248.488eca66@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Thu, 23 Jan 2020 09:36:41 +0100
+Pascal de Bruijn <p.debruijn@unilogic.nl> wrote:
 
-
-On 29/12/2020 12:01, Yann E. MORIN wrote:
-> ** WIP: should be squashed into the commit that changes the git backend.
+> move
+>   http-client-body-temp-path
+>   http-proxy-temp-path
+>   http-fastcgi-temp-path
+>   http-scgi-temp-path
+>   http-uwsgi-temp-path
 > 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Vincent Fazio <vfazio@xes-inc.com>
+> from /var/tmp/nginx to /var/cache/nginx
+> 
+> this allows the use of systemd constructs
+> 
+>   LogsDirectory=nginx
+>   CacheDirectory=nginx
+> 
+> to replace
+> 
+>   ExecStartPre=/usr/bin/mkdir -p /var/log/nginx /var/tmp/nginx
+> 
+> as there isn't similar construct for /var/tmp
+> 
+> Signed-off-by: Pascal de Bruijn <p.debruijn@unilogic.nl>
+> ---
+>  package/nginx/S50nginx      |  2 +-
+>  package/nginx/nginx.mk      | 10 +++++-----
+>  package/nginx/nginx.service |  3 ++-
+>  3 files changed, 8 insertions(+), 7 deletions(-)
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Applied to master, thanks.
 
- Note that you can do `git commit --squash` to generate a message that
-automatically squashes with the previous ones when you do rebase -i. Or better
-yet, --fixup, then the commit message is dropped entirely.
-
- Regards,
- Arnout
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
