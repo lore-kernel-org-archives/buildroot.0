@@ -1,65 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 5 Jan 2021 23:25:11 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/python3: security
- bump to version 3.8.7
-Message-ID: <20210105220828.B96E181383@busybox.osuosl.org>
+Date: Tue, 5 Jan 2021 23:07:20 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/luarocks: fix
+ copying our custom command if dest dir exists
+Message-ID: <20210105220828.8E74981537@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a0b9dc672b369eaa230fa6ed992d7363b38ad28d
+commit: https://git.buildroot.net/buildroot/commit/?id=08a3583c4d04ea9d2375c0119b565a99f15ef2d4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Release notes:
-https://www.python.org/downloads/release/python-387/
-
-Changelog:
-https://docs.python.org/release/3.8.7/whatsnew/changelog.html
-
-Fixes the following security issues:
-
-- bpo-42103: Prevented potential DoS attack via CPU and RAM exhaustion when
-  processing malformed Apple Property List files in binary format.
-
-- bpo-42051: The plistlib module no longer accepts entity declarations in
-  XML plist files to avoid XML vulnerabilities.  This should not affect
-  users as entity declarations are not used in regular plist files.
-
-- bpo-40791: Add volatile to the accumulator variable in
-  hmac.compare_digest, making constant-time-defeating optimizations less
-  likely.
-
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+[yann.morin.1998 at free.fr:
+  - use $(INSTALL), not "mkdir -p + cp"
+  - split to its own patch
+  - rewrite commit title
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 25bd8ba6907f49d8ce54a6066b5e893416e7aea6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python3/python3.hash | 6 +++---
- package/python3/python3.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/luarocks/luarocks.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/python3/python3.hash b/package/python3/python3.hash
-index 4c03293dd1..d829fb9713 100644
---- a/package/python3/python3.hash
-+++ b/package/python3/python3.hash
-@@ -1,5 +1,5 @@
--# From https://www.python.org/downloads/release/python-386/
--md5  69e73c49eeb1a853cefd26d18c9d069d  Python-3.8.6.tar.xz
-+# From https://www.python.org/downloads/release/python-387/
-+md5  60fe018fffc7f33818e6c340d29e2db9  Python-3.8.7.tar.xz
- # Locally computed
--sha256  a9e0b79d27aa056eb9cce8d63a427b5f9bab1465dee3f942dcfdb25a82f4ab8a  Python-3.8.6.tar.xz
-+sha256  ddcc1df16bb5b87aa42ec5d20a5b902f2d088caa269b28e01590f97a798ec50a  Python-3.8.7.tar.xz
- sha256  1dceef1677a39befa8bf0285ab2db441ba117520bb2de839547ace006a17750d  LICENSE
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index 1a2edc6471..6675f84042 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
+index 123f8c0734..a5329735c4 100644
+--- a/package/luarocks/luarocks.mk
++++ b/package/luarocks/luarocks.mk
+@@ -19,8 +19,7 @@ LUAROCKS_CFLAGS += -DLUA_COMPAT_5_2
+ endif
  
- PYTHON3_VERSION_MAJOR = 3.8
--PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).6
-+PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).7
- PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
- PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
- PYTHON3_LICENSE = Python-2.0, others
+ define LUAROCKS_ADDON_EXTRACT
+-	mkdir $(@D)/src/luarocks/cmd/external
+-	cp package/luarocks/buildroot.lua $(@D)/src/luarocks/cmd/external/buildroot.lua
++	$(INSTALL) -D -m 0644 package/luarocks/buildroot.lua $(@D)/src/luarocks/cmd/external/buildroot.lua
+ endef
+ HOST_LUAROCKS_POST_EXTRACT_HOOKS += LUAROCKS_ADDON_EXTRACT
+ 
