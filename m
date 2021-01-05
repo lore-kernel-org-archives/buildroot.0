@@ -1,51 +1,40 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Tue,  5 Jan 2021 14:20:00 +0100
-Subject: [Buildroot] [PATCH] package/libwebsockets: bump to version 4.0.21
-Message-ID: <20210105132000.917678-1-francois.perrad@gadz.org>
+From: Ryan Barnett <ryanbarnett3@gmail.com>
+Date: Tue,  5 Jan 2021 08:05:40 -0600
+Subject: [Buildroot] [PATCH] package/c-periphery: bump to v2.3.1
+Message-ID: <20210105140540.154360-1-ryanbarnett3@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
 ---
- package/libwebsockets/Config.in          | 2 +-
- package/libwebsockets/libwebsockets.hash | 2 +-
- package/libwebsockets/libwebsockets.mk   | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ package/c-periphery/c-periphery.hash | 2 +-
+ package/c-periphery/c-periphery.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libwebsockets/Config.in b/package/libwebsockets/Config.in
-index 1d927bb4e..dff6688e8 100644
---- a/package/libwebsockets/Config.in
-+++ b/package/libwebsockets/Config.in
-@@ -6,4 +6,4 @@ config BR2_PACKAGE_LIBWEBSOCKETS
- 	  minimal CPU and memory resources, and provide fast throughput
- 	  in both directions.
- 
--	  http://libwebsockets.org/
-+	  https://libwebsockets.org/
-diff --git a/package/libwebsockets/libwebsockets.hash b/package/libwebsockets/libwebsockets.hash
-index 396337071..1761a7658 100644
---- a/package/libwebsockets/libwebsockets.hash
-+++ b/package/libwebsockets/libwebsockets.hash
+diff --git a/package/c-periphery/c-periphery.hash b/package/c-periphery/c-periphery.hash
+index daebb0435f..516cfb33e5 100644
+--- a/package/c-periphery/c-periphery.hash
++++ b/package/c-periphery/c-periphery.hash
 @@ -1,3 +1,3 @@
- # Locally computed:
--sha256  a26d243f2642a9b810e7d91f1e66b149d1da978decdca58ce1c9218c454f397e  libwebsockets-4.0.20.tar.gz
-+sha256  6ece1f422c6d38aabedec2476f2ac12e9aede8691b08137068ad85545ce3ff78  libwebsockets-4.0.21.tar.gz
- sha256  5756db345eb9c21cb06dd7cb69c38ec234657a233f9a186b4f5fa453681bd394  LICENSE
-diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
-index 8e6d02205..6f752f998 100644
---- a/package/libwebsockets/libwebsockets.mk
-+++ b/package/libwebsockets/libwebsockets.mk
+ # Locally calculated
+-sha256  d31fb19c2645b9658ad5ca9313c7f0488c16a52e5adf8b2845e1955ad94546ae  c-periphery-2.2.4.tar.gz
++sha256  ba298aac5c1f6ebe2b89ed623a2f678bedfa3b9dc78aaf4f0534a1dd304629da  c-periphery-2.3.1.tar.gz
+ sha256  7121a0a2ba36ed9388be2f1a916f0e3584d8e49cc7888fbcfcf83bab2a8bebef  LICENSE
+diff --git a/package/c-periphery/c-periphery.mk b/package/c-periphery/c-periphery.mk
+index ce0e03f1e9..dcc82f19c0 100644
+--- a/package/c-periphery/c-periphery.mk
++++ b/package/c-periphery/c-periphery.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBWEBSOCKETS_VERSION = 4.0.20
-+LIBWEBSOCKETS_VERSION = 4.0.21
- LIBWEBSOCKETS_SITE = $(call github,warmcat,libwebsockets,v$(LIBWEBSOCKETS_VERSION))
- LIBWEBSOCKETS_LICENSE = MIT with exceptions
- LIBWEBSOCKETS_LICENSE_FILES = LICENSE
+-C_PERIPHERY_VERSION = 2.2.4
++C_PERIPHERY_VERSION = 2.3.1
+ C_PERIPHERY_SITE = $(call github,vsergeev,c-periphery,v$(C_PERIPHERY_VERSION))
+ C_PERIPHERY_INSTALL_STAGING = YES
+ C_PERIPHERY_LICENSE = MIT
 -- 
-2.27.0
+2.25.1
