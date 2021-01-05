@@ -1,32 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 05 Jan 2021 22:35:57 +0100
-Subject: [Buildroot] Patch for linux-headers
-In-Reply-To: <20201217003006.GA343694@pevik> (Petr Vorel's message of "Thu, 17
- Dec 2020 01:30:06 +0100")
-References: <20201217003006.GA343694@pevik>
-Message-ID: <87czyj6p8i.fsf@dell.be.48ers.dk>
+Date: Tue, 05 Jan 2021 22:38:30 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libodb-mysql: fix static build
+In-Reply-To: <20201214214313.447831-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 14 Dec 2020 22:43:13 +0100")
+References: <20201214214313.447831-1-fontaine.fabrice@gmail.com>
+Message-ID: <878s976p49.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Petr" == Petr Vorel <petr.vorel@gmail.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Hi,
- > I wonder if it's allowed to add patch to add patch for linux-headers.
- > There would have to be more versions for the patch (due headers being built for
- > more versions). I'd like to use my upstreamed patch [1] which fixes
- > "redefinition of struct sysinfo" build failure on MUSL.
- > This so far required to patch affected packages or simply disable them
- > (depends on !BR2_TOOLCHAIN_USES_MUSL).
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/ba2c5ef1bb54c2751569f79beef21ff486348469
 
- > Actually, much simpler patch from Khem Raj could be used [2].
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > ---
+ >  package/libodb-mysql/libodb-mysql.mk | 2 +-
+ >  1 file changed, 1 insertion(+), 1 deletion(-)
 
-It can be done if needed, but it is naturally easier to handle
-without. I noticed that you got some patches applied to the stable
-kernels related to this recently - Do those fix the issues, or is an
-additional patch needed?
+ > diff --git a/package/libodb-mysql/libodb-mysql.mk b/package/libodb-mysql/libodb-mysql.mk
+ > index 835e5bc6bf..a9040c65f8 100644
+ > --- a/package/libodb-mysql/libodb-mysql.mk
+ > +++ b/package/libodb-mysql/libodb-mysql.mk
+ > @@ -12,6 +12,6 @@ LIBODB_MYSQL_INSTALL_STAGING = YES
+ >  LIBODB_MYSQL_LICENSE = GPL-2.0
+ >  LIBODB_MYSQL_LICENSE_FILES = LICENSE
+ >  LIBODB_MYSQL_DEPENDENCIES = libodb mysql
+ > -LIBODB_MYSQL_CONF_ENV = LIBS="$(shell $(STAGING_DIR)/usr/bin/mysql_config --libs)"
+ > +LIBODB_MYSQL_CONF_ENV = LIBS=`$(STAGING_DIR)/usr/bin/mysql_config --libs`
+
+Committed to 2020.11.x, thanks.
+
+I see you dropped the quotes around the output of mysql_config, is that
+always guaranteed to only return a single word?
 
 -- 
 Bye, Peter Korsgaard
