@@ -1,44 +1,63 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue,  5 Jan 2021 19:59:09 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libmicrohttpd: bump version to
- 0.9.72
-Message-ID: <20210105185909.967750-1-bernd.kuhls@t-online.de>
+Date: Tue,  5 Jan 2021 20:13:49 +0100
+Subject: [Buildroot] [PATCH 1/1] package/python{,
+ 3}-mako: bump to version 1.1.3
+Message-ID: <20210105191349.1180409-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes:
-https://lists.gnu.org/archive/html/libmicrohttpd/2020-12/msg00023.html
+Changelog: https://docs.makotemplates.org/en/latest/changelog.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libmicrohttpd/libmicrohttpd.hash | 2 +-
- package/libmicrohttpd/libmicrohttpd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-mako/python-mako.hash | 4 ++--
+ package/python-mako/python-mako.mk   | 4 ++--
+ package/python3-mako/python3-mako.mk | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libmicrohttpd/libmicrohttpd.hash b/package/libmicrohttpd/libmicrohttpd.hash
-index d853f67a76..e92032a216 100644
---- a/package/libmicrohttpd/libmicrohttpd.hash
-+++ b/package/libmicrohttpd/libmicrohttpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  e8f445e85faf727b89e9f9590daea4473ae00ead38b237cf1eda55172b89b182  libmicrohttpd-0.9.71.tar.gz
-+sha256  0ae825f8e0d7f41201fd44a0df1cf454c1cb0bc50fe9d59c26552260264c2ff8  libmicrohttpd-0.9.72.tar.gz
- sha256  7399547209438c93f9b90297954698773d4846cea44cde5ca982c84c45952a3b  COPYING
-diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
-index 4cb9dbcbfd..e3469df423 100644
---- a/package/libmicrohttpd/libmicrohttpd.mk
-+++ b/package/libmicrohttpd/libmicrohttpd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/python-mako/python-mako.hash b/package/python-mako/python-mako.hash
+index 19b122179e..353799923f 100644
+--- a/package/python-mako/python-mako.hash
++++ b/package/python-mako/python-mako.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/mako/json
+-md5  e1939facb40f38f15e8cc74cb5887c4c  Mako-1.1.2.tar.gz
+-sha256  3139c5d64aa5d175dbafb95027057128b5fbd05a40c53999f3905ceb53366d9d  Mako-1.1.2.tar.gz
++md5  184bb2ba4b937127e7c557b93db89377  Mako-1.1.3.tar.gz
++sha256  8195c8c1400ceb53496064314c6736719c6f25e7479cd24c77be3d9361cddc27  Mako-1.1.3.tar.gz
+ # Locally computed sha256 checksums
+ sha256  47cd0d41b1092f9161cfb629ed15e5cea185144710ff4633a4281ef088ff5de7  LICENSE
+diff --git a/package/python-mako/python-mako.mk b/package/python-mako/python-mako.mk
+index ce34321cb1..d5d49f252d 100644
+--- a/package/python-mako/python-mako.mk
++++ b/package/python-mako/python-mako.mk
+@@ -6,9 +6,9 @@
  
--LIBMICROHTTPD_VERSION = 0.9.71
-+LIBMICROHTTPD_VERSION = 0.9.72
- LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
- LIBMICROHTTPD_LICENSE_FILES = COPYING
- LIBMICROHTTPD_INSTALL_STAGING = YES
+ # Please keep in sync with
+ # package/python3-mako/python3-mako.mk
+-PYTHON_MAKO_VERSION = 1.1.2
++PYTHON_MAKO_VERSION = 1.1.3
+ PYTHON_MAKO_SOURCE = Mako-$(PYTHON_MAKO_VERSION).tar.gz
+-PYTHON_MAKO_SITE = https://files.pythonhosted.org/packages/42/64/fc7c506d14d8b6ed363e7798ffec2dfe4ba21e14dda4cfab99f4430cba3a
++PYTHON_MAKO_SITE = https://files.pythonhosted.org/packages/72/89/402d2b4589e120ca76a6aed8fee906a0f5ae204b50e455edd36eda6e778d
+ PYTHON_MAKO_SETUP_TYPE = setuptools
+ PYTHON_MAKO_LICENSE = MIT
+ PYTHON_MAKO_LICENSE_FILES = LICENSE
+diff --git a/package/python3-mako/python3-mako.mk b/package/python3-mako/python3-mako.mk
+index 0296c68fc6..fd6b2ed49c 100644
+--- a/package/python3-mako/python3-mako.mk
++++ b/package/python3-mako/python3-mako.mk
+@@ -6,7 +6,7 @@
+ 
+ # Please keep in sync with
+ # package/python-mako/python-mako.mk
+-PYTHON3_MAKO_VERSION = 1.1.2
++PYTHON3_MAKO_VERSION = 1.1.3
+ PYTHON3_MAKO_SOURCE = Mako-$(PYTHON3_MAKO_VERSION).tar.gz
+ PYTHON3_MAKO_SITE = https://files.pythonhosted.org/packages/42/64/fc7c506d14d8b6ed363e7798ffec2dfe4ba21e14dda4cfab99f4430cba3a
+ PYTHON3_MAKO_SETUP_TYPE = setuptools
 -- 
 2.29.2
