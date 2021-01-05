@@ -1,32 +1,79 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 05 Jan 2021 22:52:38 +0100
-Subject: [Buildroot] [PATCH v2,1/1] package/rpm: don't set openmp
-In-Reply-To: <20201203173710.540004-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 3 Dec 2020 18:37:10 +0100")
-References: <20201203173710.540004-1-fontaine.fabrice@gmail.com>
-Message-ID: <87r1mz59w9.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 5 Jan 2021 22:54:54 +0100
+Subject: [Buildroot] [PATCH 01/10 v3] core/pkg-infra: prepare for
+ alternate default source archives
+In-Reply-To: <7d52ccdb9dd1b0e56d1a3720e649f52693ee1c68.1609239666.git.yann.morin.1998@free.fr>
+References: <cover.1609239666.git.yann.morin.1998@free.fr>
+ <7d52ccdb9dd1b0e56d1a3720e649f52693ee1c68.1609239666.git.yann.morin.1998@free.fr>
+Message-ID: <70d03429-1f06-a327-cb4a-e01d6ad2d9d0@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Don't set openmp to fix a build failure with codesourcery toolchain that
- > doesn't have OpenMP >= 4.5 indeed upstream doesn't want to remove the
- > build failure if the user provides --enable-openmp and OpenMP is < 4.5:
- > https://github.com/rpm-software-management/rpm/pull/1433
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/05dd945d24e8684aad6a2343ba7f6f8a7cea8349
+On 29/12/2020 12:01, Yann E. MORIN wrote:
+> The .tar.gz default extension is historical, and we initially used
+> to only fetch tarballs from remote sites.
+> 
+> When we introduced downloads from VCS repositories, we kept that
+> extension, and kept compressing with gz, by lack of good reason to
+> switch to some other compression scheme.
+> 
+> However, nowadays, we will want to change the way we construct the
+> tarballs we generate from VCS. This will de facto change the hashes
+> of those tarballs.
+> 
+> So we will want that the archives we generate do not clash with the
+> existing ones, so we need another filename. Thus, we need a way to
+> be able to use a different extension when we generate archives from
+> VCS.
+> 
+> Note that we do not need to play the host-defaults-to-target-value
+> dance we do for the _SOURCE variable, because this is a purely internal
+> variable, not exposed to packages, and as such, is not documented.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Vincent Fazio <vfazio@xes-inc.com>
+> ---
+>  package/pkg-generic.mk | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 621fb91424..6a9389f1b5 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -514,11 +514,12 @@ ifneq ($$($(2)_OVERRIDE_SRCDIR),)
+>  $(2)_VERSION = custom
+>  endif
+>  
+> +$(2)_SOURCE_EXT = .tar.gz
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > ---
- > Changes v1 -> v2:
- >  - Don't set openmp instead of disabling it
+ I generally don't like adding a per-package variable unless really needed,
+because we already have way to many. Roughly 285K, and this adds another 2.5K.
 
-Committed to 2020.11.x, thanks.
+ So I'd prefer to either:
 
--- 
-Bye, Peter Korsgaard
+- put it directly in the _SOURCE definition; or
+- define it as a macro outside, i.e. use it as '$$(call source-ext,$(2))'
+
+ This is really a nitpick though, so
+
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+ Regards,
+ Arnout
+
+>  ifndef $(2)_SOURCE
+>   ifdef $(3)_SOURCE
+>    $(2)_SOURCE = $$($(3)_SOURCE)
+>   else ifdef $(2)_VERSION
+> -  $(2)_SOURCE			?= $$($(2)_BASENAME_RAW).tar.gz
+> +  $(2)_SOURCE			?= $$($(2)_BASENAME_RAW)$$($(2)_SOURCE_EXT)
+>   endif
+>  endif
+>  
+> 
