@@ -1,44 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 6 Jan 2021 08:05:57 +0100
-Subject: [Buildroot] [git commit] package/dav1d: bump version to 0.8.1
-Message-ID: <20210106064925.D760481232@busybox.osuosl.org>
+Date: Wed, 6 Jan 2021 08:07:03 +0100
+Subject: [Buildroot] [git commit] package/ytree: bump version to 2.03
+Message-ID: <20210106064925.ED23182CFA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=32ebbc2d50db594e5849523b436c1bf99a2583ff
+commit: https://git.buildroot.net/buildroot/commit/?id=9960e469f140b0dcb20988fc5d86fb271c82c391
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog: https://code.videolan.org/videolan/dav1d/-/blob/master/NEWS
+Changelog: https://www.han.de/~werner/ytree.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dav1d/dav1d.hash | 2 +-
- package/dav1d/dav1d.mk   | 2 +-
+ package/ytree/ytree.hash | 2 +-
+ package/ytree/ytree.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dav1d/dav1d.hash b/package/dav1d/dav1d.hash
-index 1121ec5cd6..45152f7a80 100644
---- a/package/dav1d/dav1d.hash
-+++ b/package/dav1d/dav1d.hash
+diff --git a/package/ytree/ytree.hash b/package/ytree/ytree.hash
+index 1e620e30e9..17d0d24c74 100644
+--- a/package/ytree/ytree.hash
++++ b/package/ytree/ytree.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  b62eb846fd8af15b402c8f6615a74405fe4448cf16663efd0358d4124db0829f  dav1d-0.8.0.tar.bz2
-+sha256  842da2945afcf54e651d17112bf2823a238e6c935a6c8dff3a8e96a2eb740269  dav1d-0.8.1.tar.bz2
- sha256  b327887de263238deaa80c34cdd2ff3e0ba1d35db585ce14a37ce3e74ee389e9  COPYING
-diff --git a/package/dav1d/dav1d.mk b/package/dav1d/dav1d.mk
-index c59f496d83..68f6fc8805 100644
---- a/package/dav1d/dav1d.mk
-+++ b/package/dav1d/dav1d.mk
+-sha256  e5bf41ab6bee59cf1e8fc0ca429e9a18e6aa83823f30f5807042b04c88a0e0ec  ytree-2.02.tar.gz
++sha256  583aa71552d1347e0eabe39a236fa5a174bf67dde98871853b9fe2a233bcaef1  ytree-2.03.tar.gz
+ sha256  eb6bf7204569b4fe8eaf9d4dffc57e44047c5efb5deba1b2d99069ddbc99d031  COPYING
+diff --git a/package/ytree/ytree.mk b/package/ytree/ytree.mk
+index 48b3f7eff9..fdecc0b19b 100644
+--- a/package/ytree/ytree.mk
++++ b/package/ytree/ytree.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DAV1D_VERSION = 0.8.0
-+DAV1D_VERSION = 0.8.1
- DAV1D_SOURCE = dav1d-$(DAV1D_VERSION).tar.bz2
- DAV1D_SITE = https://code.videolan.org/videolan/dav1d/-/archive/$(DAV1D_VERSION)
- DAV1D_LICENSE = BSD-2-Clause
+-YTREE_VERSION = 2.02
++YTREE_VERSION = 2.03
+ YTREE_SITE = https://www.han.de/~werner
+ YTREE_LICENSE = GPL-2.0+
+ YTREE_LICENSE_FILES = COPYING
