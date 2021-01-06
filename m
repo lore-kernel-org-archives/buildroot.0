@@ -1,22 +1,20 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 06 Jan 2021 12:03:58 +0100
-Subject: [Buildroot] [PATCH v2] package/minicom: bump to version 2.8
-In-Reply-To: <20210105154753.279009-1-giulio.benetti@benettiengineering.com>
- (Giulio Benetti's message of "Tue, 5 Jan 2021 16:47:53 +0100")
-References: <20210105154753.279009-1-giulio.benetti@benettiengineering.com>
-Message-ID: <87ble21g4h.fsf@dell.be.48ers.dk>
+Date: Wed, 06 Jan 2021 12:04:42 +0100
+Subject: [Buildroot] [PATCH 1/1] package/minizip: bump to version 2.10.6
+In-Reply-To: <20210104171419.1621541-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 4 Jan 2021 18:14:19 +0100")
+References: <20210104171419.1621541-1-fontaine.fabrice@gmail.com>
+Message-ID: <877doq1g39.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
- > ---
- > V1-> V2:
- > * change VERSION from sha1 to tag v2.8
+ > https://github.com/nmoinvaz/minizip/releases/tag/2.10.6
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
 
