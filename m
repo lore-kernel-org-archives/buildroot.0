@@ -1,50 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 6 Jan 2021 08:03:55 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xfont_font-alias: bump
- version to 1.0.4
-Message-ID: <20210106064925.A5C6581232@busybox.osuosl.org>
+Date: Wed, 06 Jan 2021 08:09:29 +0100
+Subject: [Buildroot] [PATCH 1/1] package/openjpeg: security bump to
+ version 2.4.0
+In-Reply-To: <20210104171042.1620641-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 4 Jan 2021 18:10:42 +0100")
+References: <20210104171042.1620641-1-fontaine.fabrice@gmail.com>
+Message-ID: <871rey35jq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dd6c7f7e3004c7204d3c3ae75346f4d55ad76ad4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Added hashes provided by upstream.
+ > - Drop upstreamed patches
+ > - Update indentation in hash file (two spaces)
+ > - Fix CVE-2020-27814, CVE-2020-27823, CVE-2020-27824 and
+ >   CVE-2020-27841 to CVE-2020-27845
 
-Release notes:
-https://lists.x.org/archives/xorg-announce/2020-August/003054.html
+ > https://github.com/uclouvain/openjpeg/releases/v2.4.0
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/x11r7/xfont_font-alias/xfont_font-alias.hash | 4 +++-
- package/x11r7/xfont_font-alias/xfont_font-alias.mk   | 2 +-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/x11r7/xfont_font-alias/xfont_font-alias.hash b/package/x11r7/xfont_font-alias/xfont_font-alias.hash
-index ae679a0ade..5390d1c126 100644
---- a/package/x11r7/xfont_font-alias/xfont_font-alias.hash
-+++ b/package/x11r7/xfont_font-alias/xfont_font-alias.hash
-@@ -1,3 +1,5 @@
-+# From https://lists.x.org/archives/xorg-announce/2020-August/003054.html
-+sha256  f3111ae8bf2e980f5f56af400e8eefe5fc9f4207f4a412ea79637fd66c945276  font-alias-1.0.4.tar.bz2
-+sha512  c67ac2ee344a601fcc09471580214b30c3fd6acc4800702840de44f0733e6d18b3faeec2fa3f4e2314025cc1724d7d6796ebaf620398fe350710182fd2c4b07d  font-alias-1.0.4.tar.bz2
- # locally computed
--sha256  8b453b2aae1cfa8090009ca037037b8c5e333550651d5a158b7264ce1d472c9a  font-alias-1.0.3.tar.bz2
- sha256  bdba5452fc080c0f1a56d66978ac4150d1d1a00a9cc0248bba4f0b76c80ad47e  COPYING
-diff --git a/package/x11r7/xfont_font-alias/xfont_font-alias.mk b/package/x11r7/xfont_font-alias/xfont_font-alias.mk
-index 8a37da44c0..7f8e4b2ea0 100644
---- a/package/x11r7/xfont_font-alias/xfont_font-alias.mk
-+++ b/package/x11r7/xfont_font-alias/xfont_font-alias.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XFONT_FONT_ALIAS_VERSION = 1.0.3
-+XFONT_FONT_ALIAS_VERSION = 1.0.4
- XFONT_FONT_ALIAS_SOURCE = font-alias-$(XFONT_FONT_ALIAS_VERSION).tar.bz2
- XFONT_FONT_ALIAS_SITE = http://xorg.freedesktop.org/releases/individual/font
- XFONT_FONT_ALIAS_LICENSE = MIT
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
