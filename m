@@ -1,28 +1,44 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 06 Jan 2021 07:30:27 +0100
-Subject: [Buildroot] [PATCH 1/1] package/python3: add optional support
- for lib2to3
-References: <20210103150306.1509091-1-bernd.kuhls@t-online.de>
- <87h7nv3t9k.fsf@dell.be.48ers.dk>
-Message-ID: <312gchxtjh.ln2@ID-313208.user.individual.net>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed,  6 Jan 2021 07:58:54 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libtorrent-rasterbar: drop host gcc
+ dependency
+Message-ID: <20210106065854.283992-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Tue, 05 Jan 2021 23:37:11 +0100 schrieb Peter Korsgaard:
+Drop host gcc dependency which has wrongly been added by commit
+0393f5d34433e34e49ff7ce0fb998735453ed4fc
 
-> Above you mention kodi 18, but here kodi 19? Is this only needed for
-> Kodi 19 or should it also be backported to 2020.02.x / 2020.11.x?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libtorrent-rasterbar/Config.in | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-Hi Peter,
-
-backporting this patch is not necessary as kodi19 (which depends on 
-python3) will imho never be backported to older buildroot versions.
-
-For kodi18 (which depends on python2) a similar patch was already 
-committed: https://git.buildroot.net/buildroot/commit/package/python?
-id=480e926db42b8df6d55de5c08a470a501910f6a8
-
-Regards, Bernd
+diff --git a/package/libtorrent-rasterbar/Config.in b/package/libtorrent-rasterbar/Config.in
+index b2508b8b70..fe9a9fc027 100644
+--- a/package/libtorrent-rasterbar/Config.in
++++ b/package/libtorrent-rasterbar/Config.in
+@@ -1,8 +1,8 @@
+ comment "libtorrent-rasterbar needs a toolchain w/ C++, threads, wchar, gcc >= 4.9"
+ 	depends on BR2_TOOLCHAIN_SUPPORTS_VARIADIC_MI_THUNK
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
+-		!BR2_HOST_GCC_AT_LEAST_4_9 || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 
+ comment "libtorrent-rasterbar needs exception_ptr"
+ 	depends on BR2_TOOLCHAIN_SUPPORTS_VARIADIC_MI_THUNK
+@@ -11,7 +11,6 @@ comment "libtorrent-rasterbar needs exception_ptr"
+ config BR2_PACKAGE_LIBTORRENT_RASTERBAR
+ 	bool "libtorrent-rasterbar"
+ 	depends on BR2_INSTALL_LIBSTDCPP # boost
+-	depends on BR2_HOST_GCC_AT_LEAST_4_9 # C++11
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # boost
+ 	depends on BR2_TOOLCHAIN_SUPPORTS_VARIADIC_MI_THUNK
+-- 
+2.29.2
