@@ -1,54 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 6 Jan 2021 12:01:34 +0100
-Subject: [Buildroot] [git commit] package/libwebsockets: bump to version
- 4.0.21
-Message-ID: <20210106104731.EF64F814D2@busybox.osuosl.org>
+Date: Wed, 6 Jan 2021 12:04:21 +0100
+Subject: [Buildroot] [git commit] package/minizip: bump to version 2.10.6
+Message-ID: <20210106104732.4D77D83FED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6958aca51e3a2ca62ea86950e42ad7d74745ea9f
+commit: https://git.buildroot.net/buildroot/commit/?id=5124f7eb035a9ff86c753a773ea297add769fd6f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+https://github.com/nmoinvaz/minizip/releases/tag/2.10.6
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libwebsockets/Config.in          | 2 +-
- package/libwebsockets/libwebsockets.hash | 2 +-
- package/libwebsockets/libwebsockets.mk   | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ package/minizip/minizip.hash | 2 +-
+ package/minizip/minizip.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libwebsockets/Config.in b/package/libwebsockets/Config.in
-index 1d927bb4ea..dff6688e83 100644
---- a/package/libwebsockets/Config.in
-+++ b/package/libwebsockets/Config.in
-@@ -6,4 +6,4 @@ config BR2_PACKAGE_LIBWEBSOCKETS
- 	  minimal CPU and memory resources, and provide fast throughput
- 	  in both directions.
- 
--	  http://libwebsockets.org/
-+	  https://libwebsockets.org/
-diff --git a/package/libwebsockets/libwebsockets.hash b/package/libwebsockets/libwebsockets.hash
-index 3963370710..1761a7658a 100644
---- a/package/libwebsockets/libwebsockets.hash
-+++ b/package/libwebsockets/libwebsockets.hash
+diff --git a/package/minizip/minizip.hash b/package/minizip/minizip.hash
+index 9262f3a3e7..f150770ae9 100644
+--- a/package/minizip/minizip.hash
++++ b/package/minizip/minizip.hash
 @@ -1,3 +1,3 @@
- # Locally computed:
--sha256  a26d243f2642a9b810e7d91f1e66b149d1da978decdca58ce1c9218c454f397e  libwebsockets-4.0.20.tar.gz
-+sha256  6ece1f422c6d38aabedec2476f2ac12e9aede8691b08137068ad85545ce3ff78  libwebsockets-4.0.21.tar.gz
- sha256  5756db345eb9c21cb06dd7cb69c38ec234657a233f9a186b4f5fa453681bd394  LICENSE
-diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
-index 8e6d02205a..6f752f998e 100644
---- a/package/libwebsockets/libwebsockets.mk
-+++ b/package/libwebsockets/libwebsockets.mk
+ # Locally computed
+-sha256  1c6420d3f3509e722178d9130a57cb77537b34900e7b67acca7e3e2858846939  minizip-2.10.5.tar.gz
++sha256  c2889690b1a1f55898d37d3fb51f05183a4861fb7d53ab702c6a5777bf232b75  minizip-2.10.6.tar.gz
+ sha256  675181c03fc1302a1c8554c00f7be9bb420c5dbc9dcc2013433cec144413de03  LICENSE
+diff --git a/package/minizip/minizip.mk b/package/minizip/minizip.mk
+index 9e60bc2aab..b2294fb530 100644
+--- a/package/minizip/minizip.mk
++++ b/package/minizip/minizip.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBWEBSOCKETS_VERSION = 4.0.20
-+LIBWEBSOCKETS_VERSION = 4.0.21
- LIBWEBSOCKETS_SITE = $(call github,warmcat,libwebsockets,v$(LIBWEBSOCKETS_VERSION))
- LIBWEBSOCKETS_LICENSE = MIT with exceptions
- LIBWEBSOCKETS_LICENSE_FILES = LICENSE
+-MINIZIP_VERSION = 2.10.5
++MINIZIP_VERSION = 2.10.6
+ MINIZIP_SITE = $(call github,nmoinvaz,minizip,$(MINIZIP_VERSION))
+ MINIZIP_DEPENDENCIES = host-pkgconf
+ MINIZIP_INSTALL_STAGING = YES
