@@ -1,50 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 6 Jan 2021 08:05:13 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xfont_font-misc-ethiopic:
- bump version to 1.0.4
-Message-ID: <20210106064925.BEFEB7F8DF@busybox.osuosl.org>
+Date: Wed, 6 Jan 2021 08:00:33 +0100
+Subject: [Buildroot] [git commit] package/dovecot: security bump version to
+ 2.3.13
+Message-ID: <20210106064925.54045866BC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=64e7e189810d30761a1af1114e57b53ccb8b6299
+commit: https://git.buildroot.net/buildroot/commit/?id=df4447724f2dbd4ee54dddec1d12ecd3b130602b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Added hashes provided by upstream.
+Updated license hash due to upstream commit:
+https://github.com/dovecot/core/commit/bf7952d33e39358a1258697505ed25c050e14bbb
+
+Fixes the following CVEs:
+
+CVE-2020-24386:
+https://dovecot.org/pipermail/dovecot-news/2021-January/000450.html
+
+CVE-2020-25275:
+https://dovecot.org/pipermail/dovecot-news/2021-January/000451.html
 
 Release notes:
-https://lists.x.org/archives/xorg-announce/2020-August/003055.html
+https://dovecot.org/pipermail/dovecot-news/2021-January/000448.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xfont_font-misc-ethiopic/xfont_font-misc-ethiopic.hash | 4 +++-
- package/x11r7/xfont_font-misc-ethiopic/xfont_font-misc-ethiopic.mk   | 2 +-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ package/dovecot/dovecot.hash | 4 ++--
+ package/dovecot/dovecot.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xfont_font-misc-ethiopic/xfont_font-misc-ethiopic.hash b/package/x11r7/xfont_font-misc-ethiopic/xfont_font-misc-ethiopic.hash
-index f806bf0898..45cf430018 100644
---- a/package/x11r7/xfont_font-misc-ethiopic/xfont_font-misc-ethiopic.hash
-+++ b/package/x11r7/xfont_font-misc-ethiopic/xfont_font-misc-ethiopic.hash
-@@ -1,3 +1,5 @@
-+# From https://lists.x.org/archives/xorg-announce/2020-August/003055.html
-+sha256  698c0f6ddf9ca482250bdafa08293893148393bb9cb23e0a9ca313c6dbfc4ae0  font-misc-ethiopic-1.0.4.tar.bz2
-+sha512  4fed9ff3782746898c56dac199e9ca89356f4967779937049b9ff4ffad202317c023859f92d44b371dfa5485d5368ccad648e64b12cde0ed21f7d4aee5affcd5  font-misc-ethiopic-1.0.4.tar.bz2
- # locally computed
--sha256  53cb1fd83afdbe7939c0eac34003676ee0e6023216892d98054db90b703c98a5  font-misc-ethiopic-1.0.3.tar.bz2
- sha256  94835f274f1ddad34f8fd3a06b2c493222a68e4094f4097000d101f22ee0d0d5  COPYING
-diff --git a/package/x11r7/xfont_font-misc-ethiopic/xfont_font-misc-ethiopic.mk b/package/x11r7/xfont_font-misc-ethiopic/xfont_font-misc-ethiopic.mk
-index 6f345df52c..9ded4b6ced 100644
---- a/package/x11r7/xfont_font-misc-ethiopic/xfont_font-misc-ethiopic.mk
-+++ b/package/x11r7/xfont_font-misc-ethiopic/xfont_font-misc-ethiopic.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
+index e5c2ab6f40..4d69f3abdd 100644
+--- a/package/dovecot/dovecot.hash
++++ b/package/dovecot/dovecot.hash
+@@ -1,5 +1,5 @@
+ # Locally computed after checking signature
+-sha256  d3d9ea9010277f57eb5b9f4166a5d2ba539b172bd6d5a2b2529a6db524baafdc  dovecot-2.3.11.3.tar.gz
+-sha256  a363b132e494f662d98c820d1481297e6ae72f194c2c91b6c39e1518b86240a8  COPYING
++sha256  a3f875b80ec11a452480690108660030978c94fa8e796ad6d943a874b496f1c4  dovecot-2.3.13.tar.gz
++sha256  319a9830aab406109cd67cb45496587566a8123203d66d037b209ca3e13de02a  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
+ sha256  52b8c95fabb19575281874b661ef7968ea47e8f5d74ba0dd40ce512e52b3fc97  COPYING.MIT
+diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
+index f0508753a2..3100bfbc93 100644
+--- a/package/dovecot/dovecot.mk
++++ b/package/dovecot/dovecot.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--XFONT_FONT_MISC_ETHIOPIC_VERSION = 1.0.3
-+XFONT_FONT_MISC_ETHIOPIC_VERSION = 1.0.4
- XFONT_FONT_MISC_ETHIOPIC_SOURCE = font-misc-ethiopic-$(XFONT_FONT_MISC_ETHIOPIC_VERSION).tar.bz2
- XFONT_FONT_MISC_ETHIOPIC_SITE = http://xorg.freedesktop.org/releases/individual/font
- XFONT_FONT_MISC_ETHIOPIC_LICENSE = MIT
+ DOVECOT_VERSION_MAJOR = 2.3
+-DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).11.3
++DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).13
+ DOVECOT_SITE = https://dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
+ DOVECOT_INSTALL_STAGING = YES
+ DOVECOT_LICENSE = LGPL-2.1, MIT, Public Domain, BSD-3-Clause, Unicode-DFS-2015
