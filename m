@@ -1,44 +1,46 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  6 Jan 2021 07:58:54 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libtorrent-rasterbar: drop host gcc
- dependency
-Message-ID: <20210106065854.283992-1-fontaine.fabrice@gmail.com>
+Date: Wed,  6 Jan 2021 07:59:46 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libtorrent-rasterbar: bump to
+ version 1.2.12
+Message-ID: <20210106065946.293239-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop host gcc dependency which has wrongly been added by commit
-0393f5d34433e34e49ff7ce0fb998735453ed4fc
+https://github.com/arvidn/libtorrent/blob/v1.2.12/ChangeLog
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libtorrent-rasterbar/Config.in | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ package/libtorrent-rasterbar/libtorrent-rasterbar.hash | 2 +-
+ package/libtorrent-rasterbar/libtorrent-rasterbar.mk   | 5 +++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/libtorrent-rasterbar/Config.in b/package/libtorrent-rasterbar/Config.in
-index b2508b8b70..fe9a9fc027 100644
---- a/package/libtorrent-rasterbar/Config.in
-+++ b/package/libtorrent-rasterbar/Config.in
-@@ -1,8 +1,8 @@
- comment "libtorrent-rasterbar needs a toolchain w/ C++, threads, wchar, gcc >= 4.9"
- 	depends on BR2_TOOLCHAIN_SUPPORTS_VARIADIC_MI_THUNK
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
--		!BR2_HOST_GCC_AT_LEAST_4_9 || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+diff --git a/package/libtorrent-rasterbar/libtorrent-rasterbar.hash b/package/libtorrent-rasterbar/libtorrent-rasterbar.hash
+index 2246d89947..8198a1ff9d 100644
+--- a/package/libtorrent-rasterbar/libtorrent-rasterbar.hash
++++ b/package/libtorrent-rasterbar/libtorrent-rasterbar.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  bc00069e65c0825cbe1eee5cdd26f94fcd9a621c4e7f791810b12fab64192f00  libtorrent-rasterbar-1.2.7.tar.gz
++sha256  c3744ac9fa41f6e6ebf79538a2ea678df76a2cbbaf3ac6ae2c05455314e5cce8  libtorrent-rasterbar-1.2.12.tar.gz
+ sha256  f3a5dd1558cce616b12edad521427ec8976ce2bb0af33f7f359cfa648bf55ad8  COPYING
+diff --git a/package/libtorrent-rasterbar/libtorrent-rasterbar.mk b/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
+index 1d23f00b35..de8c122520 100644
+--- a/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
++++ b/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
+@@ -4,8 +4,9 @@
+ #
+ ################################################################################
  
- comment "libtorrent-rasterbar needs exception_ptr"
- 	depends on BR2_TOOLCHAIN_SUPPORTS_VARIADIC_MI_THUNK
-@@ -11,7 +11,6 @@ comment "libtorrent-rasterbar needs exception_ptr"
- config BR2_PACKAGE_LIBTORRENT_RASTERBAR
- 	bool "libtorrent-rasterbar"
- 	depends on BR2_INSTALL_LIBSTDCPP # boost
--	depends on BR2_HOST_GCC_AT_LEAST_4_9 # C++11
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # boost
- 	depends on BR2_TOOLCHAIN_SUPPORTS_VARIADIC_MI_THUNK
+-LIBTORRENT_RASTERBAR_VERSION = 1.2.7
+-LIBTORRENT_RASTERBAR_SITE = https://github.com/arvidn/libtorrent/releases/download/libtorrent_$(subst .,_,$(LIBTORRENT_RASTERBAR_VERSION))
++LIBTORRENT_RASTERBAR_VERSION = 1.2.12
++LIBTORRENT_RASTERBAR_SITE = \
++	https://github.com/arvidn/libtorrent/releases/download/v$(LIBTORRENT_RASTERBAR_VERSION)
+ LIBTORRENT_RASTERBAR_LICENSE = BSD-3-Clause
+ LIBTORRENT_RASTERBAR_LICENSE_FILES = COPYING
+ LIBTORRENT_RASTERBAR_DEPENDENCIES = host-pkgconf boost openssl
 -- 
 2.29.2
