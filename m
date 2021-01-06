@@ -1,60 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 6 Jan 2021 08:00:33 +0100
-Subject: [Buildroot] [git commit] package/dovecot: security bump version to
- 2.3.13
-Message-ID: <20210106064925.54045866BC@busybox.osuosl.org>
+Date: Wed, 6 Jan 2021 08:03:55 +0100
+Subject: [Buildroot] [git commit] package/x11r7/xfont_font-alias: bump
+ version to 1.0.4
+Message-ID: <20210106064925.A5C6581232@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=df4447724f2dbd4ee54dddec1d12ecd3b130602b
+commit: https://git.buildroot.net/buildroot/commit/?id=dd6c7f7e3004c7204d3c3ae75346f4d55ad76ad4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Updated license hash due to upstream commit:
-https://github.com/dovecot/core/commit/bf7952d33e39358a1258697505ed25c050e14bbb
-
-Fixes the following CVEs:
-
-CVE-2020-24386:
-https://dovecot.org/pipermail/dovecot-news/2021-January/000450.html
-
-CVE-2020-25275:
-https://dovecot.org/pipermail/dovecot-news/2021-January/000451.html
+Added hashes provided by upstream.
 
 Release notes:
-https://dovecot.org/pipermail/dovecot-news/2021-January/000448.html
+https://lists.x.org/archives/xorg-announce/2020-August/003054.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dovecot/dovecot.hash | 4 ++--
- package/dovecot/dovecot.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/x11r7/xfont_font-alias/xfont_font-alias.hash | 4 +++-
+ package/x11r7/xfont_font-alias/xfont_font-alias.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
-index e5c2ab6f40..4d69f3abdd 100644
---- a/package/dovecot/dovecot.hash
-+++ b/package/dovecot/dovecot.hash
-@@ -1,5 +1,5 @@
- # Locally computed after checking signature
--sha256  d3d9ea9010277f57eb5b9f4166a5d2ba539b172bd6d5a2b2529a6db524baafdc  dovecot-2.3.11.3.tar.gz
--sha256  a363b132e494f662d98c820d1481297e6ae72f194c2c91b6c39e1518b86240a8  COPYING
-+sha256  a3f875b80ec11a452480690108660030978c94fa8e796ad6d943a874b496f1c4  dovecot-2.3.13.tar.gz
-+sha256  319a9830aab406109cd67cb45496587566a8123203d66d037b209ca3e13de02a  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
- sha256  52b8c95fabb19575281874b661ef7968ea47e8f5d74ba0dd40ce512e52b3fc97  COPYING.MIT
-diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
-index f0508753a2..3100bfbc93 100644
---- a/package/dovecot/dovecot.mk
-+++ b/package/dovecot/dovecot.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/x11r7/xfont_font-alias/xfont_font-alias.hash b/package/x11r7/xfont_font-alias/xfont_font-alias.hash
+index ae679a0ade..5390d1c126 100644
+--- a/package/x11r7/xfont_font-alias/xfont_font-alias.hash
++++ b/package/x11r7/xfont_font-alias/xfont_font-alias.hash
+@@ -1,3 +1,5 @@
++# From https://lists.x.org/archives/xorg-announce/2020-August/003054.html
++sha256  f3111ae8bf2e980f5f56af400e8eefe5fc9f4207f4a412ea79637fd66c945276  font-alias-1.0.4.tar.bz2
++sha512  c67ac2ee344a601fcc09471580214b30c3fd6acc4800702840de44f0733e6d18b3faeec2fa3f4e2314025cc1724d7d6796ebaf620398fe350710182fd2c4b07d  font-alias-1.0.4.tar.bz2
+ # locally computed
+-sha256  8b453b2aae1cfa8090009ca037037b8c5e333550651d5a158b7264ce1d472c9a  font-alias-1.0.3.tar.bz2
+ sha256  bdba5452fc080c0f1a56d66978ac4150d1d1a00a9cc0248bba4f0b76c80ad47e  COPYING
+diff --git a/package/x11r7/xfont_font-alias/xfont_font-alias.mk b/package/x11r7/xfont_font-alias/xfont_font-alias.mk
+index 8a37da44c0..7f8e4b2ea0 100644
+--- a/package/x11r7/xfont_font-alias/xfont_font-alias.mk
++++ b/package/x11r7/xfont_font-alias/xfont_font-alias.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- DOVECOT_VERSION_MAJOR = 2.3
--DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).11.3
-+DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).13
- DOVECOT_SITE = https://dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
- DOVECOT_INSTALL_STAGING = YES
- DOVECOT_LICENSE = LGPL-2.1, MIT, Public Domain, BSD-3-Clause, Unicode-DFS-2015
+-XFONT_FONT_ALIAS_VERSION = 1.0.3
++XFONT_FONT_ALIAS_VERSION = 1.0.4
+ XFONT_FONT_ALIAS_SOURCE = font-alias-$(XFONT_FONT_ALIAS_VERSION).tar.bz2
+ XFONT_FONT_ALIAS_SITE = http://xorg.freedesktop.org/releases/individual/font
+ XFONT_FONT_ALIAS_LICENSE = MIT
