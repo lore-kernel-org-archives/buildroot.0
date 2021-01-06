@@ -1,103 +1,195 @@
-From: Matthew Weber <matthew.weber@collins.com>
-Date: Wed, 6 Jan 2021 11:34:26 -0600
-Subject: [Buildroot] [PATCH 2/3] package/environment-setup: make script
- idempotent
-In-Reply-To: <20201231212949.2415485-3-konrad.schwarz@siemens.com>
-References: <20201231212949.2415485-1-konrad.schwarz@siemens.com>
- <20201231212949.2415485-3-konrad.schwarz@siemens.com>
-Message-ID: <CANQCQpZzAiF1AsrJThuH_H+cc3TXRykEMFkEXWkbPczPaN48yQ@mail.gmail.com>
+From: Andreas Klinger <ak@it-klinger.de>
+Date: Wed, 6 Jan 2021 20:47:04 +0100
+Subject: [Buildroot] [PATCH v2] package/ply: add new package
+Message-ID: <20210106194703.GA5083@arbad>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Konrad,
+ply is a light-weight dynamic tracer for Linux. By means of using the
+BPF it can attach probes to the linux kernel (e. g. kprobes).
 
-On Thu, Dec 31, 2020 at 3:51 PM Konrad Schwarz
-<konrad.schwarz@siemens.com> wrote:
->
-> One (slight) problem with this kind of environment setup files is when they
-> are executed repeatedly (e.g., because something else is not quite right
-> yet), they tend to extend the PATH variable with the same directory,
-> creating a very unwieldy search path and potentially slowing down
-> searches for executable files.
->
-> This fix adds a test such that PATH is extended only when necessary.
->
-> The code has also been simplified
-> (using standard POSIX shell features) and make the generated
-> script more readable, e.g., by splitting overly long lines.
->
-> Signed-off-by: Konrad Schwarz <konrad.schwarz@siemens.com>
-> ---
->  .../environment-setup/environment-setup.mk    | 60 +++++++++----------
->  1 file changed, 30 insertions(+), 30 deletions(-)
->
-> diff --git a/package/environment-setup/environment-setup.mk b/package/environment-setup/environment-setup.mk
-> index fcad013f0d..5cb703e421 100644
-> --- a/package/environment-setup/environment-setup.mk
-> +++ b/package/environment-setup/environment-setup.mk
-> @@ -4,38 +4,38 @@
->  #
->  ################################################################################
->
-> -ENVIRONMENT_SETUP_FILE = $(HOST_DIR)/environment-setup
-> -
->  define HOST_ENVIRONMENT_SETUP_INSTALL_CMDS
-> -       cp package/environment-setup/environment-setup $(ENVIRONMENT_SETUP_FILE)
-> -       for var in $(TARGET_CONFIGURE_OPTS); do \
-> -               printf "export \"$$var\"\n" >> $(ENVIRONMENT_SETUP_FILE); \
-> -       done
-> -       printf "export \"ARCH=$(KERNEL_ARCH)\"\n" >> $(ENVIRONMENT_SETUP_FILE)
-> -       printf "export \"CROSS_COMPILE=$(TARGET_CROSS)\"\n" >> $(ENVIRONMENT_SETUP_FILE)
-> -       printf "export \"CONFIGURE_FLAGS=--target=$(GNU_TARGET_NAME) \
-> -               --host=$(GNU_TARGET_NAME) \
-> -               --build=$(GNU_HOST_NAME) \
-> -               --prefix=/usr \
-> -               --exec-prefix=/usr \
-> -               --sysconfdir=/etc \
-> -               --localstatedir=/var \
-> -               --program-prefix=\"\n" >> $(ENVIRONMENT_SETUP_FILE)
-> -       printf "alias configure=\"./configure \$${CONFIGURE_FLAGS}\"\n" \
-> -               >> $(ENVIRONMENT_SETUP_FILE)
-> -       printf "alias cmake=\"cmake \
-> -               -DCMAKE_TOOLCHAIN_FILE=$(HOST_DIR)/share/buildroot/toolchainfile.cmake \
-> -               -DCMAKE_INSTALL_PREFIX=/usr\"\n" >> $(ENVIRONMENT_SETUP_FILE)
-> -       $(SED) 's%$(HOST_DIR)%\$$SDK_PATH%g' \
-> -               -e 's%$(HOST_DIR)/bin/%%g' \
-> -               -e '/^export "PATH=/c\' \
-> -               $(ENVIRONMENT_SETUP_FILE)
-> -       printf "export \"PATH=\$$SDK_PATH/bin:\$$SDK_PATH/sbin:\$$PATH\"\n" \
-> -               >> $(ENVIRONMENT_SETUP_FILE)
-> -
-> +       { \
-> +       cat package/environment-setup/environment-setup &&\
-> +       printf 'export "%s"\n' $(TARGET_CONFIGURE_OPTS) &&\
-> +       printf %b\
-> +       'export "ARCH=$(KERNEL_ARCH)"\n'\
-> +       'export "CROSS_COMPILE=$(TARGET_CROSS)"\n'\
-> +       'export CONFIGURE_FLAGS=\\\n'\
-> +               '"--target=$(GNU_TARGET_NAME) "\\\n'\
-> +               '"--host=$(GNU_TARGET_NAME) "\\\n'\
-> +               '"--build=$(GNU_HOST_NAME) "\\\n'\
-> +               '"--prefix=/usr "\\\n'\
-> +               '"--exec-prefix=/usr "\\\n'\
-> +               '"--sysconfdir=/etc "\\\n'\
-> +               '"--localstatedir=/var "\\\n'\
-> +               '"--program-prefix= "\n'\
-> +       'alias configure="./configure \$$CONFIGURE_FLAGS"\n'\
-> +       'alias cmake="cmake"\\\n'\
-> +               '" -DCMAKE_TOOLCHAIN_FILE'\
-> +               '=$(HOST_DIR)/share/buildroot/toolchainfile.cmake"\\\n'\
-> +               '" -DCMAKE_INSTALL_PREFIX=/usr"\n'\
-> +       'if ! command -v $${CROSS_COMPILE}gcc > /dev/null\n'\
-> +       'then   export PATH="$$SDK_PATH/bin:$$SDK_PATH/sbin:$$PATH"\n'\
-> +       'fi\n'\
+It's a small alternative to LLVM based tracers for embedded systems.
 
-Does this new path check work as you intend if the main system has the
-normal gcc tools installed?  Maybe checking for the cross variable not
-being empty would be a better option?
+Project page:
+https://github.com/wkz/ply/releases
 
-Regards,
-Matt
+Documentation can be found here:
+https://wkz.github.io/ply/
+
+Tested with beaglebone_defconfig (uClibc-ng as well as glibc)
+
+Signed-off-by: Andreas Klinger <ak@it-klinger.de>
+
+---
+
+Changes in v2:
+- project and download site (suggested by Tobias)
+- configure.ac uses a fixed version string because of annoying messages
+  ("fatal: not a git repository ...")
+
+ DEVELOPERS                                    |  3 ++
+ package/Config.in                             |  1 +
+ ...ure.ac-fix-error-with-version-string.patch | 29 +++++++++++++++++++
+ ...02-printxf.h-add-stdarg.h-in-include.patch | 27 +++++++++++++++++
+ package/ply/Config.in                         | 16 ++++++++++
+ package/ply/ply.hash                          |  4 +++
+ package/ply/ply.mk                            | 15 ++++++++++
+ 7 files changed, 95 insertions(+)
+ create mode 100644 package/ply/0001-configure.ac-fix-error-with-version-string.patch
+ create mode 100644 package/ply/0002-printxf.h-add-stdarg.h-in-include.patch
+ create mode 100644 package/ply/Config.in
+ create mode 100644 package/ply/ply.hash
+ create mode 100644 package/ply/ply.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index ddab7073b8..18e3c2ced7 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -131,6 +131,9 @@ F:	package/openal/
+ F:	package/p7zip/
+ F:	package/wine/
+ 
++N:	Andreas Klinger <ak@it-klinger.de>
++F:	package/ply/
++
+ N:	Andrey Smirnov <andrew.smirnov@gmail.com>
+ F:	package/python-backports-shutil-get-terminal-size/
+ F:	package/python-decorator/
+diff --git a/package/Config.in b/package/Config.in
+index 219dba1c9d..2ea61a3551 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -123,6 +123,7 @@ menu "Debugging, profiling and benchmark"
+ 	source "package/pax-utils/Config.in"
+ 	source "package/pcm-tools/Config.in"
+ 	source "package/piglit/Config.in"
++	source "package/ply/Config.in"
+ 	source "package/ptm2human/Config.in"
+ 	source "package/pv/Config.in"
+ 	source "package/racehound/Config.in"
+diff --git a/package/ply/0001-configure.ac-fix-error-with-version-string.patch b/package/ply/0001-configure.ac-fix-error-with-version-string.patch
+new file mode 100644
+index 0000000000..7532b3be29
+--- /dev/null
++++ b/package/ply/0001-configure.ac-fix-error-with-version-string.patch
+@@ -0,0 +1,29 @@
++From 684bae6043fa2242a5c6551c3f260c9db0cf7dc8 Mon Sep 17 00:00:00 2001
++From: Andreas Klinger <ak@it-klinger.de>
++Date: Mon, 4 Jan 2021 08:40:50 +0100
++Subject: [PATCH 1/2] configure.ac: fix error with version string
++
++When autoreconfiguring there's an error: "configure.ac:6: error: AC_INIT
++should be called with package and version arguments".
++
++Put version string in square brackets to satisfy autoconfigure.
++
++Signed-off-by: Andreas Klinger <ak@it-klinger.de>
++---
++ configure.ac | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 65387d6..7a0054e 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -1,5 +1,5 @@
++ AC_PREREQ(2.61)
++-AC_INIT(ply, m4_esyscmd_s(git describe --always --dirty),
+++AC_INIT(ply, [2.1.1],
++ 	     https://github.com/wkz/ply/issues)
++ 
++ AC_GNU_SOURCE
++-- 
++2.20.1
++
+diff --git a/package/ply/0002-printxf.h-add-stdarg.h-in-include.patch b/package/ply/0002-printxf.h-add-stdarg.h-in-include.patch
+new file mode 100644
+index 0000000000..19233659fc
+--- /dev/null
++++ b/package/ply/0002-printxf.h-add-stdarg.h-in-include.patch
+@@ -0,0 +1,27 @@
++From 3fb3cb779c535ec28cbba80573bbea42435108c0 Mon Sep 17 00:00:00 2001
++From: Andreas Klinger <ak@it-klinger.de>
++Date: Mon, 4 Jan 2021 20:48:41 +0100
++Subject: [PATCH 2/2] printxf.h: add stdarg.h in include
++
++Include of <stdarg.h> is needed for va_list.
++
++Signed-off-by: Andreas Klinger <ak@it-klinger.de>
++---
++ include/ply/printxf.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/include/ply/printxf.h b/include/ply/printxf.h
++index a59f0d2..e985936 100644
++--- a/include/ply/printxf.h
+++++ b/include/ply/printxf.h
++@@ -8,6 +8,7 @@
++ #define _PRINTXF_H
++ 
++ #include <stdio.h>
+++#include <stdarg.h>
++ 
++ struct printxf;
++ 
++-- 
++2.20.1
++
+diff --git a/package/ply/Config.in b/package/ply/Config.in
+new file mode 100644
+index 0000000000..7b88a397e8
+--- /dev/null
++++ b/package/ply/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_PLY
++	bool "ply"
++	help
++	  ply is a light-weight dynamic tracer for Linux. By means of using
++	  the BPF it can attach probes to the linux kernel (e. g. kprobes).
++
++	  It's a small alternative to LLVM based tracers for embedded
++	  systems.
++
++	  When using debugfs needs to be mounted on /sys/kernel/debug.
++
++	  Project page:
++	  https://github.com/wkz/ply
++
++	  Documentation can be found here:
++	  https://wkz.github.io/ply/
+diff --git a/package/ply/ply.hash b/package/ply/ply.hash
+new file mode 100644
+index 0000000000..0c8de6f8e8
+--- /dev/null
++++ b/package/ply/ply.hash
+@@ -0,0 +1,4 @@
++# Locally calculated
++sha256	cecf0913c65027750ac3272e936110c9f843435938f9ca2edbc34e99ba6c00e2  ply-2.1.1.tar.gz
++sha256	0e7bf51b014d4ad5be999b8b35eeefb8c99fe63454685b52a5c0c728290b1570  0001-configure.ac-fix-error-with-version-string.patch
++sha256	b445002ea0869a667e1195aad1b118d13eb3396adf10b85b80037669a59c6657  0002-printxf.h-add-stdarg.h-in-include.patch
+diff --git a/package/ply/ply.mk b/package/ply/ply.mk
+new file mode 100644
+index 0000000000..04fee3e4a8
+--- /dev/null
++++ b/package/ply/ply.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# ply
++#
++################################################################################
++
++PLY_VERSION = 2.1.1
++PLY_SITE = $(call github,wkz,ply,$(PLY_VERSION))
++PLY_AUTORECONF = YES
++
++PLY_LICENSE = GPL-2.0
++PLY_LICENSE_FILES = COPYING
++PLY_INSTALL_STAGING = YES
++
++$(eval $(autotools-package))
+-- 
+2.20.1
