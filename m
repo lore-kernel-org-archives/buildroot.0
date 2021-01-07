@@ -1,168 +1,105 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 7 Jan 2021 23:01:52 +0100
-Subject: [Buildroot] [git commit] package/coremark-pro: new package
-Message-ID: <20210107214707.80E2881529@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 7 Jan 2021 23:13:43 +0100
+Subject: [Buildroot] [PATCH 4/4] package/environment-setup: fix spelling
+ of the script file in the manual.
+In-Reply-To: <20210103172955.2424617-1-konrad.schwarz@siemens.com>
+References: <20201231212949.2415485-2-konrad.schwarz@siemens.com>
+ <20210103172955.2424617-1-konrad.schwarz@siemens.com>
+Message-ID: <dcff61f6-8fd1-cb59-5417-471d099125c6@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b9a2e4e8612b96483a20e75f2077f024b3594f45
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-CoreMark-Pro is a comprehensive, advanced processor benchmark that
-works with and enhances the market-proven industry-standard EEMBC
-CoreMark benchmark.
 
-https://www.eembc.org/coremark-pro/
+On 03/01/2021 18:29, Konrad Schwarz wrote:
+> My previous patch of the same name was erroneous;
+> the name of the setup file was actually spelled correctly
+> in one of two instances, and reversed in the other;
+> I mistakingly reversed the order in both instances.
+> 
+> Signed-off-by: Konrad Schwarz <konrad.schwarz@siemens.com>
 
-Signed-off-by: Chris Packham <judge.packham@gmail.com>
-Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- DEVELOPERS                             |  1 +
- package/Config.in                      |  1 +
- package/coremark-pro/Config.in         |  8 +++++++
- package/coremark-pro/coremark-pro.hash |  3 +++
- package/coremark-pro/coremark-pro.mk   | 42 ++++++++++++++++++++++++++++++++++
- package/coremark-pro/coremark-pro.sh   | 36 +++++++++++++++++++++++++++++
- 6 files changed, 91 insertions(+)
+ When you fix a patch that hasn't been applied yet, please don't send a patch on
+top of the previous one. Instead, squash the two and just send the final patch.
+Which in this case would be:
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 8c936f2046..ad2bc8ff19 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -494,6 +494,7 @@ F:	configs/orangepi_plus_defconfig
- 
- N:	Chris Packham <judge.packham@gmail.com>
- F:	package/coremark/
-+F:	package/coremark-pro/
- F:	package/gstreamer1/gst1-shark/
- F:	package/micropython/
- F:	package/micropython-lib/
-diff --git a/package/Config.in b/package/Config.in
-index 6dc84b0c63..2132f1609b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -88,6 +88,7 @@ menu "Debugging, profiling and benchmark"
- 	source "package/cache-calibrator/Config.in"
- 	source "package/clinfo/Config.in"
- 	source "package/coremark/Config.in"
-+	source "package/coremark-pro/Config.in"
- 	source "package/dacapo/Config.in"
- 	source "package/delve/Config.in"
- 	source "package/dhrystone/Config.in"
-diff --git a/package/coremark-pro/Config.in b/package/coremark-pro/Config.in
-new file mode 100644
-index 0000000000..dd6821056c
---- /dev/null
-+++ b/package/coremark-pro/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_COREMARK_PRO
-+	bool "coremark-pro"
-+	depends on BR2_USE_MMU # perl uses fork()
-+	select BR2_PACKAGE_PERL
-+	help
-+	  CoreMark-PRO is a comprehensive, advanced processor benchmark.
-+
-+	  https://www.eembc.org/coremark-pro/
-diff --git a/package/coremark-pro/coremark-pro.hash b/package/coremark-pro/coremark-pro.hash
-new file mode 100644
-index 0000000000..c43fc555c2
---- /dev/null
-+++ b/package/coremark-pro/coremark-pro.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  440223554134832efec4ad220795611769ded3869fbc3ce3c59b05b7ddeb9f6d  coremark-pro-1.1.2743.tar.gz
-+sha256  0d7775bd793ea71fef3594c18164a08ed2f5f66c898958d0644f7a236a536f2b  LICENSE.md
-diff --git a/package/coremark-pro/coremark-pro.mk b/package/coremark-pro/coremark-pro.mk
-new file mode 100644
-index 0000000000..d3e99fcdfd
---- /dev/null
-+++ b/package/coremark-pro/coremark-pro.mk
-@@ -0,0 +1,42 @@
-+################################################################################
-+#
-+# CoreMark-PRO
-+#
-+################################################################################
-+
-+COREMARK_PRO_VERSION = 1.1.2743
-+COREMARK_PRO_SITE = $(call github,eembc,coremark-pro,v$(COREMARK_PRO_VERSION))
-+COREMARK_PRO_LICENSE = Apache-2.0
-+COREMARK_PRO_LICENSE_FILES = LICENSE.md
-+COREMARK_PRO_DEPENDENCIES = perl
-+
-+ifeq ($(BR2_ENDIAN),"BIG")
-+COREMARK_PRO_MAKE_OPTS += PLATFORM_DEFINES='EE_BIG_ENDIAN=1 EE_LITTLE_ENDIAN=0'
-+else
-+COREMARK_PRO_MAKE_OPTS += PLATFORM_DEFINES='EE_BIG_ENDIAN=0 EE_LITTLE_ENDIAN=1'
-+endif
-+
-+COREMARK_PRO_MAKE_OPTS += \
-+	TARGET=linux$(if $(BR2_ARCH_IS_64),64) \
-+	EXE=
-+
-+define COREMARK_PRO_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_CC)" -C $(@D) \
-+		$(COREMARK_PRO_MAKE_OPTS) build
-+endef
-+
-+COREMARK_PRO_MARKS = cjpeg-rose7-preset core linear_alg-mid-100x100-sp loops-all-mid-10k-sp nnet_test parser-125k radix2-big-64k sha-test zip-test
-+COREMARK_PRO_SCRIPTS = results_parser.pl cert_median.pl cert_mark.pl headings.txt
-+
-+define COREMARK_PRO_INSTALL_TARGET_CMDS
-+	mkdir -p  $(TARGET_DIR)/usr/share/coremark-pro/logs
-+	$(foreach m,$(COREMARK_PRO_MARKS),\
-+		$(INSTALL) -D $(@D)/builds/linux$(if $(BR2_ARCH_IS_64),64)/gcc$(if $(BR2_ARCH_IS_64),64)/bin/$(m) $(TARGET_DIR)/usr/bin/$(m)$(sep) \
-+		size $(TARGET_DIR)/usr/bin/$(m) > $(TARGET_DIR)/usr/share/coremark-pro/logs/$(m).size.log$(sep))
-+	$(INSTALL) -D $(@D)/builds/linux$(if $(BR2_ARCH_IS_64),64)/gcc$(if $(BR2_ARCH_IS_64),64)/data/libbmp/Rose256.bmp $(TARGET_DIR)/usr/share/coremark-pro/Rose256.bmp
-+	$(foreach s,$(COREMARK_PRO_SCRIPTS),\
-+		$(INSTALL) -D $(@D)/util/perl/$(s) $(TARGET_DIR)/usr/share/coremark-pro/util/perl/$(s)$(sep))
-+	$(Q)cp package/coremark-pro/coremark-pro.sh $(TARGET_DIR)/usr/bin/
-+endef
-+
-+$(eval $(generic-package))
-diff --git a/package/coremark-pro/coremark-pro.sh b/package/coremark-pro/coremark-pro.sh
-new file mode 100755
-index 0000000000..65ad9df645
---- /dev/null
-+++ b/package/coremark-pro/coremark-pro.sh
-@@ -0,0 +1,36 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: Apache-2.0
-+
-+workloads="cjpeg-rose7-preset core linear_alg-mid-100x100-sp \
-+    loops-all-mid-10k-sp nnet_test parser-125k radix2-big-64k sha-test zip-test"
-+
-+rm -rf /tmp/coremark-pro
-+mkdir -p /tmp/coremark-pro
-+cp /usr/share/coremark-pro/Rose256.bmp /tmp/coremark-pro
-+cp /usr/share/coremark-pro/logs/*.size.log /tmp/coremark-pro
-+
-+cd /tmp/coremark-pro
-+
-+for contype in single best; do
-+    cat /usr/share/coremark-pro/util/perl/headings.txt >>result.log
-+    for wld in $workloads; do
-+        [ "$contype" = "single" ] && XCMD="-c1 -w1"
-+        [ "$contype" = "best" ] && XCMD="-c$(nproc) -w$(nproc)"
-+        echo "#Results for verification run started at $(date +%y%j:%H:%M:%S) XCMD=$XCMD" >$wld-$contype-result.log
-+        echo "Verification run for $wld"
-+        $wld $XCMD -v1 > $wld.run.log
-+        LC_ALL=C perl /usr/share/coremark-pro/util/perl/results_parser.pl $wld-$contype-result.log $wld.run.log
-+        echo "#Results for performance runs started at $(date +%y%j:%H:%M:%S) XCMD=$XCMD" >>$wld-$contype-result.log
-+        echo "Performance run for $wld"
-+        for i in 1 2 3; do
-+            $wld $XCMD -v0 > $wld.run.log
-+            LC_ALL=C perl /usr/share/coremark-pro/util/perl/results_parser.pl $wld-$contype-result.log $wld.run.log
-+        done
-+        echo "#Median for final result $wld" >>$wld-$contype-result.log
-+        LC_ALL=C perl /usr/share/coremark-pro/util/perl/cert_median.pl $wld-$contype-result.log $contype >>$wld-$contype-result.log
-+        cat $wld-$contype-result.log >>result.log
-+    done
-+done
-+LC_ALL=C perl /usr/share/coremark-pro/util/perl/cert_mark.pl -i result.log -s coremarkpro > result.mark
-+cat result.mark
-+cd - >/dev/null
+commit 7197b1bc44395cbe927dc56f0b7fc53d8ce07636 (HEAD -> master)
+Author: Konrad Schwarz <konrad.schwarz@siemens.com>
+Date:   Thu Dec 31 22:29:47 2020
+
+    package/environment-setup: fix spelling of the script file in the manual.
+
+    The manual incorrectly refers to the script file as `setup-environment';
+    it is actually called `environment-setup'.
+
+    Signed-off-by: Konrad Schwarz <konrad.schwarz@siemens.com>
+    Reviewed-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+    Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+diff --git a/docs/manual/using-buildroot-toolchain.txt
+b/docs/manual/using-buildroot-toolchain.txt
+index 110be5939f..09408ef05a 100644
+--- a/docs/manual/using-buildroot-toolchain.txt
++++ b/docs/manual/using-buildroot-toolchain.txt
+@@ -35,7 +35,7 @@ generating a tarball.
+
+ For your convenience, by selecting the option
+ +BR2_PACKAGE_HOST_ENVIRONMENT_SETUP+, you can get a
+-+setup-environment+ script installed in +output/host/+ and therefore
+++environment-setup+ script installed in +output/host/+ and therefore
+ in your SDK.  This script can be sourced with
+ +. your/sdk/path/environment-setup+ to export a number of environment
+ variables that will help cross-compile your projects using the
+
+
+
+ Also, make sure that the commit message doesn't contain "personal" messages
+like "I mistakingly reversed the order".
+
+
+ I fixed all of that and applied to master, thanks.
+
+> ---
+> Interdiff:
+>   diff --git a/docs/manual/using-buildroot-toolchain.txt b/docs/manual/using-buildroot-toolchain.txt
+>   index e202c7d09b..09408ef05a 100644
+>   --- a/docs/manual/using-buildroot-toolchain.txt
+>   +++ b/docs/manual/using-buildroot-toolchain.txt
+>   @@ -37,7 +37,7 @@ For your convenience, by selecting the option
+>    +BR2_PACKAGE_HOST_ENVIRONMENT_SETUP+, you can get a
+>    +environment-setup+ script installed in +output/host/+ and therefore
+>    in your SDK.  This script can be sourced with
+>   -+. your/sdk/path/setup-environment+ to export a number of environment
+>   ++. your/sdk/path/environment-setup+ to export a number of environment
+>    variables that will help cross-compile your projects using the
+>    Buildroot SDK: the +PATH+ will contain the SDK binaries, standard
+>    _autotools_ variables will be defined with the appropriate values, and
+
+ This interdiff is actually interesting - but here you actually just copied the
+patch that is just below...
+
+
+ Regards,
+ Arnout
+
+> 
+>  docs/manual/using-buildroot-toolchain.txt | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/docs/manual/using-buildroot-toolchain.txt b/docs/manual/using-buildroot-toolchain.txt
+> index e202c7d09b..09408ef05a 100644
+> --- a/docs/manual/using-buildroot-toolchain.txt
+> +++ b/docs/manual/using-buildroot-toolchain.txt
+> @@ -37,7 +37,7 @@ For your convenience, by selecting the option
+>  +BR2_PACKAGE_HOST_ENVIRONMENT_SETUP+, you can get a
+>  +environment-setup+ script installed in +output/host/+ and therefore
+>  in your SDK.  This script can be sourced with
+> -+. your/sdk/path/setup-environment+ to export a number of environment
+> ++. your/sdk/path/environment-setup+ to export a number of environment
+>  variables that will help cross-compile your projects using the
+>  Buildroot SDK: the +PATH+ will contain the SDK binaries, standard
+>  _autotools_ variables will be defined with the appropriate values, and
+> 
