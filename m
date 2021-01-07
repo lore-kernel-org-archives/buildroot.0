@@ -1,86 +1,56 @@
-From: Vineet Gupta <vgupta@synopsys.com>
-Date: Wed, 6 Jan 2021 15:36:36 -0800
-Subject: [Buildroot] ARC no console output (was Re: [PATCH 1/2]
- init/console: Use ttynull as a fallback when there is no console)
-In-Reply-To: <20201111135450.11214-2-pmladek@suse.com>
-References: <20201111135450.11214-1-pmladek@suse.com>
- <20201111135450.11214-2-pmladek@suse.com>
-Message-ID: <d2a3b3c0-e548-7dd1-730f-59bc5c04e191@synopsys.com>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Thu, 7 Jan 2021 02:23:42 +0100
+Subject: [Buildroot] Patch for linux-headers
+In-Reply-To: <87czyj3rv8.fsf@dell.be.48ers.dk>
+References: <20201217003006.GA343694@pevik> <87czyj6p8i.fsf@dell.be.48ers.dk>
+ <20210105224940.GA158146@pevik> <87czyj3rv8.fsf@dell.be.48ers.dk>
+Message-ID: <20210107012342.GA98187@pevik>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-+CC Buildroot folks
+Hi Peter,
 
-Hi Petr,
+> >>>>> "Petr" == Petr Vorel <petr.vorel@gmail.com> writes:
 
-On 11/11/20 5:54 AM, Petr Mladek wrote:
-> stdin, stdout, and stderr standard I/O stream are created for the init
-> process. They are not available when there is no console registered
-> for /dev/console. It might lead to a crash when the init process
-> tries to use them, see the commit 48021f98130880dd742 ("printk: handle
-> blank console arguments passed in.").
-> 
-> Normally, ttySX and ttyX consoles are used as a fallback when no consoles
-> are defined via the command line, device tree, or SPCR. But there
-> will be no console registered when an invalid console name is configured
-> or when the configured consoles do not exist on the system.
-> 
-> Users even try to avoid the console intentionally, for example,
-> by using console="" or console=null. It is used on production
-> systems where the serial port or terminal are not visible to
-> users. Pushing messages to these consoles would just unnecessary
-> slowdown the system.
-> 
-> Make sure that stdin, stdout, stderr, and /dev/console are always
-> available by a fallback to the existing ttynull driver. It has
-> been implemented for exactly this purpose but it was used only
-> when explicitly configured.
-> 
-> Signed-off-by: Petr Mladek <pmladek@suse.com>
+> Hi,
 
-> --- a/init/main.c
-> +++ b/init/main.c
-> @@ -1470,8 +1470,14 @@ void __init console_on_rootfs(void)
->   	struct file *file = filp_open("/dev/console", O_RDWR, 0);
->   
->   	if (IS_ERR(file)) {
-> -		pr_err("Warning: unable to open an initial console.\n");
-> -		return;
-> +		pr_err("Warning: unable to open an initial console. Fallback to ttynull.\n");
-> +		register_ttynull_console();
-> +
-> +		file = filp_open("/dev/console", O_RDWR, 0);
-> +		if (IS_ERR(file)) {
-> +			pr_err("Warning: Failed to add ttynull console. No stdin, stdout, and stderr for the init process!\n");
-> +			return;
-> +		}
+>  >> It can be done if needed, but it is naturally easier to handle
+>  >> without.
+>  > Understand. More versions and kernel checking would be needed.
+>  > I implemented it, but IMHO it'd have to also require Buildroot toolchain
+>  > rebuild.
 
+> Indeed.
+I backported it to all LTS and stable branches (except 5.9 which is EOL)
+It has been released to some of them, for the rest the patch is in
+stable-queue.git => will be released soon.
 
-This breaks ARC booting (no output on console).
+>  >> I noticed that you got some patches applied to the stable
+>  >> kernels related to this recently - Do those fix the issues, or is an
+>  >> additional patch needed?
+>  > Yes, it fixes the issue. Thus no patching is needed.
 
-Our Buildroot based setup has dynamic /dev where /dev/console doesn't 
-exist statically and there's a primoridla /init shell script which does 
-following
+> Ok, great!
 
-/bin/mount -t devtmpfs devtmpfs /dev
-exec 0</dev/console
-exec 1>/dev/console
-exec 2>/dev/console
-exec /sbin/init "$@"
+>  > OK, we need to wait till kernel stable releases, update kernel versions in
+>  > Buildroot. But IMHO it still requires Buildroot toolchain rebuild. Or am I wrong?
 
-Buildroot has had this way of handling missing /dev/console since 2011 
-[1] and [2].
+> Yes, the external toolchains will need to be rebuilt, but perhaps we can
+> blacklist those in the autobuilders until the toolchains are all rebuilt.
+Do you mean to disable MUSL based toolchains for affected packages?
+I'm carrying patch for LTP, which is not going to be upstreamed.
+Sure, I could drop this patch and add: depends on !BR2_TOOLCHAIN_USES_MUSL,
+but I expect more packages affected by <linux/sysinfo.h> bug.
 
-Please advise what needs to be done to unbork boot. Otherwise this seems 
-like a kernel change which breaks user-space and needs to be backed-out 
-(or perhaps conditionalize on CONFIG_NULL_TTY. I'm surprised it hasn't 
-been reported by any other  embedded folks
+>  > BTW I'm waiting for it for iproute2 upgrade (originally [1] and [2], now [3]).
 
-Thx,
--Vineet
+> Ahh, ok.
+I've prepared package for v5.8.0 which was blocked by this, then v5.9.0.
+There is already v5.10.0. I'm not sure what is better: allow BR2_TOOLCHAIN_USES_UCLIBC
+to have iproute2, but block new features (we still have v5.7.0).
 
-[1] http://lists.busybox.net/pipermail/buildroot/2011-July/044505.html
-[2] http://lists.busybox.net/pipermail/buildroot/2011-August/044832.html
+Kind regards,
+Petr
