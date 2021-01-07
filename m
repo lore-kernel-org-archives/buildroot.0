@@ -1,59 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 7 Jan 2021 23:20:31 +0100
-Subject: [Buildroot] [PATCH] package/luasyslog: bump to version 2.2.0
- (fork)
-In-Reply-To: <20200422092253.25466-1-francois.perrad@gadz.org>
-References: <20200422092253.25466-1-francois.perrad@gadz.org>
-Message-ID: <20210107232031.2ac9e312@windsurf.home>
+Date: Thu, 7 Jan 2021 23:21:21 +0100
+Subject: [Buildroot] [git commit] package/swupdate: note init script
+ tokenizing limitation
+Message-ID: <20210107220346.519268690A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fran?ois,
+commit: https://git.buildroot.net/buildroot/commit/?id=52683ea4073322d206e24d69de47744dc2fddc4f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 22 Apr 2020 11:22:53 +0200
-Francois Perrad <fperrad@gmail.com> wrote:
+Command line options reference:
+https://sbabic.github.io/swupdate/_sources/swupdate.txt
 
-> this fork has a good support for Lua 5.3the initial 1.0.0 is available as rock (which contains a tarball)
-> https://luarocks.org/modules/luarocks/luasyslog
-> but there is no public repository.
-> 
-> the fork has a public repository
-> https://github.com/ntd/luasyslog/
-> it is available as rock
-> https://luarocks.org/modules/ntd/luasyslog
-> unfortunately the rockspec uses a build method unavaible in our BR luarocks infrastructure
-> so, the autotools infrastructure must replace the luarocks one.
-> 
-> this fork has a good support for Lua 5.3
-> so, the patch "compat Lua 5.3" becomes useless.
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/swupdate/swupdate.sh | 3 +++
+ 1 file changed, 3 insertions(+)
 
-I've applied after reworking the commit log quite a bit. Also, some
-other changes, see below.
-
-> -LUASYSLOG_VERSION = 1.0.0-2
-> +LUASYSLOG_VERSION = 2.2.0
-> +LUASYSLOG_SITE = $(call github,ntd,luasyslog,$(LUASYSLOG_VERSION))
-> +LUASUSLOG_DEPENDENCIES = luainterpreter
-
-Typo: LUASUSLOG_DEPENDENCIES should have been LUASYSLOG_DEPENDENCIES.
-This was caught by "make check-package", so you could have seen it.
-
->  LUASYSLOG_LICENSE = MIT
-> -LUASYSLOG_LICENSE_FILES = $(LUASYSLOG_SUBDIR)/COPYING
-> +LUASYSLOG_LICENSE_FILES = COPYING
-> +LUASYSLOG_AUTORECONF = YES
-
-I've added a comment that says why autoreconf is needed.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/swupdate/swupdate.sh b/package/swupdate/swupdate.sh
+index 17d99ef0d4..31ec536373 100644
+--- a/package/swupdate/swupdate.sh
++++ b/package/swupdate/swupdate.sh
+@@ -5,6 +5,9 @@
+ 
+ # Override these variables in sourced script(s) located
+ # in /usr/lib/swupdate/conf.d or /etc/swupdate/conf.d
++# NOTE: There are substrings used in some swupdate commands which will
++#       need to be wrapped in a script to prevent tokenizing
++#       ( -p/-P post/pre cmds are good examples)
+ SWUPDATE_ARGS="-v ${SWUPDATE_EXTRA_ARGS}"
+ SWUPDATE_WEBSERVER_ARGS=""
+ SWUPDATE_SURICATTA_ARGS=""
