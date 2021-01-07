@@ -1,48 +1,161 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 7 Jan 2021 22:58:18 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libupnp: add
- LIBUPNP_CPE_ID_VENDOR
-In-Reply-To: <20210105171854.4114-1-fontaine.fabrice@gmail.com>
-References: <20210105171854.4114-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210107225818.60663d0c@windsurf.home>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 7 Jan 2021 23:00:10 +0100
+Subject: [Buildroot] [PATCH v2 2/2] package/coremark-pro: new package
+In-Reply-To: <20201111224102.28799-2-judge.packham@gmail.com>
+References: <20201111224102.28799-1-judge.packham@gmail.com>
+ <20201111224102.28799-2-judge.packham@gmail.com>
+Message-ID: <1f0fa112-fe2c-bf89-4e2a-12a0a6489620@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue,  5 Jan 2021 18:18:54 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/libupnp/libupnp.mk | 1 +
->  1 file changed, 1 insertion(+)
+
+On 11/11/2020 23:41, Chris Packham wrote:
+> CoreMark-Pro is a comprehensive, advanced processor benchmark that
+> works with and enhances the market-proven industry-standard EEMBC
+> CoreMark benchmark.
 > 
-> diff --git a/package/libupnp/libupnp.mk b/package/libupnp/libupnp.mk
-> index 8831885ba4..cb7b9668f7 100644
-> --- a/package/libupnp/libupnp.mk
-> +++ b/package/libupnp/libupnp.mk
-> @@ -11,5 +11,6 @@ LIBUPNP_CONF_ENV = ac_cv_lib_compat_ftime=no
->  LIBUPNP_INSTALL_STAGING = YES
->  LIBUPNP_LICENSE = BSD-3-Clause
->  LIBUPNP_LICENSE_FILES = LICENSE
-> +LIBUPNP_CPE_ID_VENDOR = libupnp_project
+> https://www.eembc.org/coremark-pro/
+> 
+> Signed-off-by: Chris Packham <judge.packham@gmail.com>
+> ---
+> Changes in v2:
+> - Add depends on BR2_USE_MMU (thanks Matt)
+> 
+[snip]
+> diff --git a/package/coremark-pro/coremark-pro.hash b/package/coremark-pro/coremark-pro.hash
+> new file mode 100644
+> index 0000000000..16b121edb3
+> --- /dev/null
+> +++ b/package/coremark-pro/coremark-pro.hash
+> @@ -0,0 +1,3 @@
+> +#locally computed
 
-Setting CPE_ID_VENDOR to <rawname>_project is already what the
-generic-package infrastructure does by default.
+ (nitpick)
 
-So I think here we should just do:
+# Locally computed
 
-LIBUPNP_CPE_ID_VALID = YES
+> +sha256  440223554134832efec4ad220795611769ded3869fbc3ce3c59b05b7ddeb9f6d  coremark-pro-1.1.2743.tar.gz
+> +sha256  0d7775bd793ea71fef3594c18164a08ed2f5f66c898958d0644f7a236a536f2b  LICENSE.md
+> diff --git a/package/coremark-pro/coremark-pro.mk b/package/coremark-pro/coremark-pro.mk
+> new file mode 100644
+> index 0000000000..d3e99fcdfd
+> --- /dev/null
+> +++ b/package/coremark-pro/coremark-pro.mk
+> @@ -0,0 +1,42 @@
+> +################################################################################
+> +#
+> +# CoreMark-PRO
+> +#
+> +################################################################################
+> +
+> +COREMARK_PRO_VERSION = 1.1.2743
+> +COREMARK_PRO_SITE = $(call github,eembc,coremark-pro,v$(COREMARK_PRO_VERSION))
+> +COREMARK_PRO_LICENSE = Apache-2.0
+> +COREMARK_PRO_LICENSE_FILES = LICENSE.md
+> +COREMARK_PRO_DEPENDENCIES = perl
+> +
+> +ifeq ($(BR2_ENDIAN),"BIG")
+> +COREMARK_PRO_MAKE_OPTS += PLATFORM_DEFINES='EE_BIG_ENDIAN=1 EE_LITTLE_ENDIAN=0'
+> +else
+> +COREMARK_PRO_MAKE_OPTS += PLATFORM_DEFINES='EE_BIG_ENDIAN=0 EE_LITTLE_ENDIAN=1'
+> +endif
+> +
+> +COREMARK_PRO_MAKE_OPTS += \
+> +	TARGET=linux$(if $(BR2_ARCH_IS_64),64) \
+> +	EXE=
+> +
+> +define COREMARK_PRO_BUILD_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_CC)" -C $(@D) \
+> +		$(COREMARK_PRO_MAKE_OPTS) build
+> +endef
+> +
+> +COREMARK_PRO_MARKS = cjpeg-rose7-preset core linear_alg-mid-100x100-sp loops-all-mid-10k-sp nnet_test parser-125k radix2-big-64k sha-test zip-test
+> +COREMARK_PRO_SCRIPTS = results_parser.pl cert_median.pl cert_mark.pl headings.txt
+> +
+> +define COREMARK_PRO_INSTALL_TARGET_CMDS
+> +	mkdir -p  $(TARGET_DIR)/usr/share/coremark-pro/logs
+> +	$(foreach m,$(COREMARK_PRO_MARKS),\
+> +		$(INSTALL) -D $(@D)/builds/linux$(if $(BR2_ARCH_IS_64),64)/gcc$(if $(BR2_ARCH_IS_64),64)/bin/$(m) $(TARGET_DIR)/usr/bin/$(m)$(sep) \
+> +		size $(TARGET_DIR)/usr/bin/$(m) > $(TARGET_DIR)/usr/share/coremark-pro/logs/$(m).size.log$(sep))
 
-Could you check if it works for you, and if it does, submit this as a
-patch ?
+ Why is this size.log needed? Would be nice to have mentioned that in the commit
+message.
 
-Thanks a lot, great to see this CPE stuff being picked up and used!
+> +	$(INSTALL) -D $(@D)/builds/linux$(if $(BR2_ARCH_IS_64),64)/gcc$(if $(BR2_ARCH_IS_64),64)/data/libbmp/Rose256.bmp $(TARGET_DIR)/usr/share/coremark-pro/Rose256.bmp
+> +	$(foreach s,$(COREMARK_PRO_SCRIPTS),\
+> +		$(INSTALL) -D $(@D)/util/perl/$(s) $(TARGET_DIR)/usr/share/coremark-pro/util/perl/$(s)$(sep))
+> +	$(Q)cp package/coremark-pro/coremark-pro.sh $(TARGET_DIR)/usr/bin/
+> +endef
+> +
+> +$(eval $(generic-package))
+> diff --git a/package/coremark-pro/coremark-pro.sh b/package/coremark-pro/coremark-pro.sh
+> new file mode 100755
+> index 0000000000..65ad9df645
+> --- /dev/null
+> +++ b/package/coremark-pro/coremark-pro.sh
+> @@ -0,0 +1,36 @@
+> +#!/bin/sh
+> +# SPDX-License-Identifier: Apache-2.0
+> +
+> +workloads="cjpeg-rose7-preset core linear_alg-mid-100x100-sp \
+> +    loops-all-mid-10k-sp nnet_test parser-125k radix2-big-64k sha-test zip-test"
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+ I think it would be better to set
+
+workloads="@COREMARK_PRO_MARKS#@"
+
+here, and substitute it from the .mk file. That way, changing the list has to be
+done only in one place.
+
+> +
+> +rm -rf /tmp/coremark-pro
+> +mkdir -p /tmp/coremark-pro
+> +cp /usr/share/coremark-pro/Rose256.bmp /tmp/coremark-pro
+> +cp /usr/share/coremark-pro/logs/*.size.log /tmp/coremark-pro
+> +
+> +cd /tmp/coremark-pro
+> +
+> +for contype in single best; do
+> +    cat /usr/share/coremark-pro/util/perl/headings.txt >>result.log
+> +    for wld in $workloads; do
+> +        [ "$contype" = "single" ] && XCMD="-c1 -w1"
+> +        [ "$contype" = "best" ] && XCMD="-c$(nproc) -w$(nproc)"
+> +        echo "#Results for verification run started at $(date +%y%j:%H:%M:%S) XCMD=$XCMD" >$wld-$contype-result.log
+> +        echo "Verification run for $wld"
+> +        $wld $XCMD -v1 > $wld.run.log
+> +        LC_ALL=C perl /usr/share/coremark-pro/util/perl/results_parser.pl $wld-$contype-result.log $wld.run.log> +        echo "#Results for performance runs started at $(date +%y%j:%H:%M:%S)
+XCMD=$XCMD" >>$wld-$contype-result.log
+> +        echo "Performance run for $wld"
+> +        for i in 1 2 3; do
+> +            $wld $XCMD -v0 > $wld.run.log
+> +            LC_ALL=C perl /usr/share/coremark-pro/util/perl/results_parser.pl $wld-$contype-result.log $wld.run.log
+> +        done
+> +        echo "#Median for final result $wld" >>$wld-$contype-result.log
+> +        LC_ALL=C perl /usr/share/coremark-pro/util/perl/cert_median.pl $wld-$contype-result.log $contype >>$wld-$contype-result.log
+
+ Since this script supposedly generates user-readable output, I'm not sure if
+the LC_ALL=C is appropriate. Similary, the timestamps should probably use
+"+%X %x" as well. And maybe the other perl invocations too.
+
+> +        cat $wld-$contype-result.log >>result.log
+> +    done
+> +done
+
+ Shouldn't the /tmp/coremark-pro directory be cleaned up again afterwards?
+
+
+ None of these are major concerns, so I've applied to master (with just the
+small fix in the hash file). Feel free to post improvements as follow up
+patches. Thanks!
+
+ Regards,
+ Arnout
+
+> +LC_ALL=C perl /usr/share/coremark-pro/util/perl/cert_mark.pl -i result.log -s coremarkpro > result.mark
+> +cat result.mark
+> +cd - >/dev/null
+> 
