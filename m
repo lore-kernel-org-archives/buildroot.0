@@ -1,36 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu,  7 Jan 2021 22:13:34 +0100
-Subject: [Buildroot] [PATCH] linux: indicate proper CPE prefix
-Message-ID: <20210107211336.3030397-1-thomas.petazzoni@bootlin.com>
+From: Schwarz, Konrad <konrad.schwarz@siemens.com>
+Date: Thu, 7 Jan 2021 21:15:52 +0000
+Subject: [Buildroot] [External] RE: [PATCH 2/3]
+ package/environment-setup: make script idempotent
+In-Reply-To: <CANQCQpYkkgdV4Z9Dcry1C53zOt14-LHoZpVpt6qHfSaG1y3M1A@mail.gmail.com>
+References: <20201231212949.2415485-1-konrad.schwarz@siemens.com>
+ <20201231212949.2415485-3-konrad.schwarz@siemens.com>
+ <CANQCQpZzAiF1AsrJThuH_H+cc3TXRykEMFkEXWkbPczPaN48yQ@mail.gmail.com>
+ <8ad435cc3aa244418144fe451e23430f@siemens.com>
+ <CANQCQpYkkgdV4Z9Dcry1C53zOt14-LHoZpVpt6qHfSaG1y3M1A@mail.gmail.com>
+Message-ID: <9b8f9336839b4b628858e587242c3926@siemens.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The CPE type of the Linux kernel is special, it should be "o", unlike
-all other packages that use "a". We therefore need to override
-<pkg>_CPE_ID_PREFIX, so that the CPE ID of the linux package matches
-with the CPE dictionary.
+Hi Matt,
 
-Reported-by: Matt Weber <matthew.weber@rockwellcollins.com>
-Cc: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- linux/linux.mk | 1 +
- 1 file changed, 1 insertion(+)
+> -----Original Message-----
+> From: Matthew Weber <matthew.weber@collins.com>
+> Sent: Thursday, January 7, 2021 19:57
+> To: Schwarz, Konrad (T RDA IOT SES-DE) <konrad.schwarz@siemens.com>
+> Cc: buildroot <buildroot@buildroot.org>
+> Subject: Re: [External] RE: [Buildroot] [PATCH 2/3] package/environment-setup: make script idempotent
+> > As written, the code extends PATH only when the Buildroot-specific cross-compilation toolchain cannot be found (using a PATH
+> search).  Conversely: if the Buildroot-specific toolchain is already in PATH, PATH won't be extended.
+> >
+> > The only situation I see in which this might be undesirable is if an identically-prefixed toolchain that should not be used were already
+> in the PATH; the original code would simply override that (because it prefixes PATH).   I consider this a remote possibility, because the
+> "vendor" part of the GNU target triplet should be unique to Buildroot, at least when using the internal compilation toolchain option;
+> but fundamentally the same reasoning should apply to the external toolchain option (e.g., buildroot assumes the user knows what he
+> is doing in this case).
+> 
+> Could you just grep the PATH to see if the SDK path is present instead of doing a command test?
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 648f6ea2a5..50d2ae3ff8 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -14,6 +14,7 @@ LINUX_LICENSE_FILES = \
- endif
- LINUX_CPE_ID_VENDOR = $(LINUX_NAME)
- LINUX_CPE_ID_NAME = $(LINUX_NAME)_kernel
-+LINUX_CPE_ID_PREFIX = cpe:2.3:o
- 
- define LINUX_HELP_CMDS
- 	@echo '  linux-menuconfig       - Run Linux kernel menuconfig'
--- 
-2.29.2
+	command -v executable
+is _the_ POSIX compliant way of checking if an executable can be found via PATH.  See https://pubs.opengroup.org/onlinepubs/9699919799/utilities/command.html.  Trying to recreate this via grep or other means would seem to be clearly more error prone (and command -v, being a built-in, is faster to boot -- no pun intended). Additionally, environments such as MSYS, where the path separation character is not : (colon) but ; (semicolon), as in MS-DOS, additionally complicate a manual re-implementation of command -v.
+
+--
+Konrad
