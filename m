@@ -1,11 +1,11 @@
 From: Vincent Fazio <vfazio@xes-inc.com>
-Date: Thu, 7 Jan 2021 13:50:13 -0600
-Subject: [Buildroot] [PATCH 04/10 v3] WIP: support/download: change
- format of archives generated from git
-In-Reply-To: <40590de01b9e5f003d38c9728ad04439cb17a72c.1609239666.git.yann.morin.1998@free.fr>
+Date: Thu, 7 Jan 2021 13:50:54 -0600
+Subject: [Buildroot] [PATCH 03/10 v3] support/download: add helper to
+ generate a reproducible archive
+In-Reply-To: <bcb281853f0da8cd970446f4afed093b317dcc82.1609239666.git.yann.morin.1998@free.fr>
 References: <cover.1609239666.git.yann.morin.1998@free.fr>
- <40590de01b9e5f003d38c9728ad04439cb17a72c.1609239666.git.yann.morin.1998@free.fr>
-Message-ID: <01c2654d-896c-13ce-f247-ff6fa3aefd60@xes-inc.com>
+ <bcb281853f0da8cd970446f4afed093b317dcc82.1609239666.git.yann.morin.1998@free.fr>
+Message-ID: <58de412b-b7db-dc59-d24c-51dea8173fc3@xes-inc.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,32 +15,42 @@ To: buildroot@busybox.net
 
 
 On 12/29/20 5:01 AM, Yann E. MORIN wrote:
-> ** WIP: needs an update to all the hashes.
+> We currently need to generate reproducible archives in at least two
+> locations: the git and svn download backends. We also know of some
+> future potential use (e.g. the other download backends, like cvs, or
+> in the upcoming download post-processors for vendoring, like cargo
+> and go).
 > 
-> Switch to using the tarball helper, that can generate reproducible
-> archives whatever the tar version >= 1.27.
+> However, we are currently limited to a narrow range of tar versions
+> that we support, to create reproducible archives, because the gnu
+> format we use has changed with tar 1.30.
 > 
-> However, those archives are not identical to the previous ones generated
-> in the (now-broken) gnu format.
+> As a consequence, and as time advances, more and more distros are,
+> or will eventually start, shipping with tar 1.30 or later, and thus
+> we need to always build our on host-tar.
 > 
-> To avoid any clashing between old and new archives, and new and old
-> Buildroot versions, we need to name the new generated archives
-> differently from the existing ones.
+> Now, thanks to some grunt work by Vincent, we have a set of options
+> that we can pass tar, to generate reproducible archives back from
+> tar-1.27 and up through tar-1.32, the latest released version.
 > 
-> So, we bump the git-specific format-version to _br1.
+> However, those options are non-trivial, so we do not want to have
+> to repeat those (and maintain them) in multiple locations.
 > 
-
-I agree with Arnout's comment about changing this from "_br1" to ".br1" or something similar so that it doesn't look 
-like an extension to the package version and is instead more clearly a Buildroot tarball version of a given package.
-
-> The %ci date  has been supported by git back to 1.6.0, released August
-> 2008); it is not strictly ISO8601, but is still accepted as a PAX date
-> header. The strict ISO8601 placeholder, %cI, was only intriduced with
-> 2.2.0, release in November 2014, so too recent to be widely available.
+> Introduce a helper that can generate a reproducible archive from
+> an input directory.
+> 
+> The --pax-option, to set specific PAX headers, does not accept
+> RFC2822 timestamps which value are too away from some fixed point
+> (set atcompile-time?):
+>      tar: Time stamp is out of allowed range
+> 
+> However, the same timestamps passed as strict compliant ISO 8601 are
+> accepted, so that's what we expect as a date format.
 > 
 > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Vincent Fazio <vfazio@xes-inc.com>
 > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Vincent Fazio <vfazio@xes-inc.com>
+> 
 
 Reviewed-by: Vincent Fazio <vfazio@xes-inc.com>
 
