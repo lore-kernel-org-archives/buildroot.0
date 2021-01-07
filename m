@@ -1,135 +1,140 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu,  7 Jan 2021 08:03:32 +0100
-Subject: [Buildroot] [PATCH 1/1] package/olsr: fix build of pud plugin
-Message-ID: <20210107070332.388993-1-fontaine.fabrice@gmail.com>
+From: Yair Ben-Avraham <yairba@protonmail.com>
+Date: Thu, 07 Jan 2021 07:12:57 +0000
+Subject: [Buildroot] [PATCH v2 1/1] package/casync: new package
+Message-ID: <-L4OoHbI_s2GypxkG9mFgazGU5zBSrAAbDJZ8-Z4fV4jx0pA4UFDZgnIAi8Jjovzv_ody4LtOlfNmnZ8evA-5BlsbQoa5goxcwgc3zOALIU=@protonmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix build of pud plugin which was added with commit
-318d160fe5b080e421dc133dff82d5ea2cf7d893
+Content-Addressable Data Synchronization Tool
 
-Fixes:
- - http://autobuild.buildroot.org/results/5b598d728e6aae61b295681b0d7777e83074fecd
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yair Ben-Avraham <yairba@protonmail.com>
 ---
- ...ud-adapt-to-API-changes-in-gpsd-3-20.patch | 105 ++++++++++++++++++
- 1 file changed, 105 insertions(+)
- create mode 100644 package/olsr/0003-pud-adapt-to-API-changes-in-gpsd-3-20.patch
+ DEVELOPERS                 |  1 +
+ package/Config.in          |  1 +
+ package/casync/Config.in   | 15 +++++++++++
+ package/casync/casync.hash |  3 +++
+ package/casync/casync.mk   | 54 ++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 74 insertions(+)
+ create mode 100644 package/casync/Config.in
+ create mode 100644 package/casync/casync.hash
+ create mode 100644 package/casync/casync.mk
 
-diff --git a/package/olsr/0003-pud-adapt-to-API-changes-in-gpsd-3-20.patch b/package/olsr/0003-pud-adapt-to-API-changes-in-gpsd-3-20.patch
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 258a51a14c..1917cd7f48 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2709,6 +2709,7 @@ F:	package/fwup/
+
+ N:	Yair Ben Avraham <yairba@protonmail.com>
+ F:	package/gloox/
++F:	package/casync/
+
+ N:	Yann CARDAILLAC <ycardaillac@sepro-group.com>
+ F:	package/open62541/
+diff --git a/package/Config.in b/package/Config.in
+index 7264198001..eff1a7f433 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2067,6 +2067,7 @@ menu "Networking applications"
+ 	source "package/c-icap-modules/Config.in"
+ 	source "package/can-utils/Config.in"
+ 	source "package/cannelloni/Config.in"
++	source "package/casync/Config.in"
+ 	source "package/chrony/Config.in"
+ 	source "package/civetweb/Config.in"
+ 	source "package/connman/Config.in"
+diff --git a/package/casync/Config.in b/package/casync/Config.in
 new file mode 100644
-index 0000000000..f97798d605
+index 0000000000..7cace7eacf
 --- /dev/null
-+++ b/package/olsr/0003-pud-adapt-to-API-changes-in-gpsd-3-20.patch
-@@ -0,0 +1,105 @@
-+From b2dfb6c27fcf4ddae87b0e99492f4bb8472fa39a Mon Sep 17 00:00:00 2001
-+From: Eneas U de Queiroz <cotequeiroz@gmail.com>
-+Date: Thu, 13 Feb 2020 17:26:41 -0300
-+Subject: [PATCH] pud: adapt to API changes in gpsd 3.20
++++ b/package/casync/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_CASYNC
++	bool "casync"
++	depends on BR2_PACKAGE_HAS_UDEV
++	depends on BR2_TOOLCHAIN_USES_GLIBC # scandirat() is not implemented by musl and uclibc-ng
++	select BR2_PACKAGE_ACL
++	select BR2_PACKAGE_LIBCURL
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_XZ
++	help
++	  Content-Addressable Data Synchronization Tool
 +
-+The timestamp fields were changed from double to struct timespec, and
-+the geoid separation field was moved to fix.geoid_sep.
++	  https://github.com/systemd/casync
 +
-+Signed-off-by: Eneas U de Queiroz <cotequeiroz@gmail.com>
++comment "casync needs a glibc toolchain"
++	depends on !BR2_TOOLCHAIN_USES_GLIBC
+diff --git a/package/casync/casync.hash b/package/casync/casync.hash
+new file mode 100644
+index 0000000000..dbb85520de
+--- /dev/null
++++ b/package/casync/casync.hash
+@@ -0,0 +1,3 @@
++# sha256 locally computed
++sha256  d07f43e70e3c466152033da4c55c065f815d3025234a046c2bce1cfe4ac7d273  casync-4ad9bcb94bc83ff36cfc65515107ea06a88c2dfc.tar.gz
++sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
+diff --git a/package/casync/casync.mk b/package/casync/casync.mk
+new file mode 100644
+index 0000000000..9cda386bb0
+--- /dev/null
++++ b/package/casync/casync.mk
+@@ -0,0 +1,54 @@
++################################################################################
++#
++# casync
++#
++################################################################################
 +
-+[Retrieved from:
-+https://github.com/OLSR/olsrd/commit/b2dfb6c27fcf4ddae87b0e99492f4bb8472fa39a]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ lib/pud/src/gpsdclient.c | 36 ++++++++++++++++++++++++++++++++----
-+ 1 file changed, 32 insertions(+), 4 deletions(-)
++CASYNC_VERSION = 4ad9bcb94bc83ff36cfc65515107ea06a88c2dfc
++CASYNC_SITE = $(call github,systemd,casync,$(CASYNC_VERSION))
++CASYNC_LICENSE = LGPL-2.1+
++CASYNC_LICENSE_FILES = LICENSE.LGPL2.1
++# xz is mandatory because of ./src/castore.c:5:10: #include <lzma.h>
++CASYNC_DEPENDENCIES = acl libcurl openssl xz
++CASYNC_CONF_OPTS += -Dman=false
 +
-+diff --git a/lib/pud/src/gpsdclient.c b/lib/pud/src/gpsdclient.c
-+index 9e7fb708d..2a7a26eef 100644
-+--- a/lib/pud/src/gpsdclient.c
-++++ b/lib/pud/src/gpsdclient.c
-+@@ -79,6 +79,23 @@ static void gpsdError(const char *s) {
-+   syslog(LOG_ERR, "gpsd error: %s", s);
-+ }
-+ 
-++#if GPSD_API_MAJOR_VERSION >= 9
-++static double time_as_double(struct timespec *ts) {
-++ return (ts->tv_sec + ts->tv_nsec * 1e-9);
-++}
-++
-++static bool is_online(struct gps_data_t *gpsdata) {
-++  return !!gpsdata->online.tv_sec;
-++}
-++#else
-++
-++#define time_as_double(x) *(x)
-++
-++static bool is_online(struct gps_data_t *gpsdata) {
-++  return !!gpsdata->online;
-++}
-++#endif
-++
-+ /* standard parsing of a GPS data source spec */
-+ void gpsdParseSourceSpec(char *arg, GpsDaemon *gpsDaemon) {
-+   if (!arg //
-+@@ -298,8 +315,8 @@ void nmeaInfoFromGpsd(struct gps_data_t *gpsdata, NmeaInfo *info, struct GpsdCon
-+             8, //
-+             dev->parity, //
-+             dev->stopbits, //
-+-            dev->cycle, //
-+-            dev->mincycle);
-++            time_as_double(&dev->cycle), //
-++            time_as_double(&dev->mincycle));
-+ 
-+         connectionTracking->devSeen[i] = true;
-+         connectionTracking->dev[i] = *dev;
-+@@ -367,11 +384,18 @@ void nmeaInfoFromGpsd(struct gps_data_t *gpsdata, NmeaInfo *info, struct GpsdCon
-+   nmeaInfoSetPresent(&info->present, NMEALIB_PRESENT_SMASK);
-+ 
-+   /* date & time */
-++#if GPSD_API_MAJOR_VERSION >= 9
-++  if (gpsdata->fix.time.tv_sec > 0) {
-++    struct tm *time = gmtime(&gpsdata->fix.time.tv_sec);
-++    unsigned int hsec = (unsigned int) (gpsdata->fix.time.tv_nsec / 10000000);
-++#else
-+   if (!isNaN(gpsdata->fix.time)) {
-+     double seconds;
-+     double fraction = modf(fabs(gpsdata->fix.time), &seconds);
-+     long sec = lrint(seconds);
-+     struct tm *time = gmtime(&sec);
-++    unsigned int hsec = (unsigned int) lrint(fraction * 100);
-++#endif
-+     if (time) {
-+       info->utc.year = (unsigned int) time->tm_year + 1900;
-+       info->utc.mon = (unsigned int) time->tm_mon + 1;
-+@@ -379,7 +403,7 @@ void nmeaInfoFromGpsd(struct gps_data_t *gpsdata, NmeaInfo *info, struct GpsdCon
-+       info->utc.hour = (unsigned int) time->tm_hour;
-+       info->utc.min = (unsigned int) time->tm_min;
-+       info->utc.sec = (unsigned int) time->tm_sec;
-+-      info->utc.hsec = (unsigned int) lrint(fraction * 100);
-++      info->utc.hsec = hsec;
-+ 
-+       nmeaInfoSetPresent(&info->present, NMEALIB_PRESENT_UTCDATE | NMEALIB_PRESENT_UTCTIME);
-+     }
-+@@ -387,7 +411,7 @@ void nmeaInfoFromGpsd(struct gps_data_t *gpsdata, NmeaInfo *info, struct GpsdCon
-+   gpsdata->set &= ~TIME_SET;
-+ 
-+   /* sig & fix */
-+-  if (!gpsdata->online) {
-++  if (!is_online(gpsdata)) {
-+     gpsdata->fix.mode = MODE_NO_FIX;
-+   }
-+ 
-+@@ -454,7 +478,11 @@ void nmeaInfoFromGpsd(struct gps_data_t *gpsdata, NmeaInfo *info, struct GpsdCon
-+   if ((gpsdata->fix.mode >= MODE_3D) //
-+       && !isNaN(gpsdata->fix.altitude)) {
-+     info->elevation = gpsdata->fix.altitude;
-++#if GPSD_API_MAJOR_VERSION >= 9
-++    info->height = gpsdata->fix.geoid_sep;
-++#else
-+     info->height = gpsdata->separation;
-++#endif
-+     nmeaInfoSetPresent(&info->present, NMEALIB_PRESENT_ELV | NMEALIB_PRESENT_HEIGHT);
-+   }
-+   gpsdata->set &= ~ALTITUDE_SET;
--- 
-2.29.2
++# meson booleans
++ifeq ($(BR2_PACKAGE_LIBFUSE),y)
++CASYNC_DEPENDENCIES += libfuse
++CASYNC_CONF_OPTS += -Dfuse=true
++else
++CASYNC_CONF_OPTS += -Dfuse=false
++endif
++
++ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
++CASYNC_DEPENDENCIES += libselinux
++CASYNC_CONF_OPTS += -Dselinux=true
++else
++CASYNC_CONF_OPTS += -Dselinux=false
++endif
++
++ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
++CASYNC_DEPENDENCIES += libudev
++CASYNC_CONF_OPTS += -Dudev=true
++else
++CASYNC_CONF_OPTS += -Dudev=false
++# Due to a bug in ./meson.build, 'udevrulesdir' must not be empty
++CASYNC_CONF_OPTS += -Dudevrulesdir=this_is_a_bug
++endif
++
++# meson features
++ifeq ($(BR2_PACKAGE_LIBZSTD),y)
++CASYNC_DEPENDENCIES += libzstd
++CASYNC_CONF_OPTS += -Dlibzstd=enabled
++else
++CASYNC_CONF_OPTS += -Dlibzstd=disabled
++endif
++
++ifeq ($(BR2_PACKAGE_ZLIB),y)
++CASYNC_DEPENDENCIES += zlib
++CASYNC_CONF_OPTS += -Dzlib=enabled
++else
++CASYNC_CONF_OPTS += -Dlibz=disabled
++endif
++
++$(eval $(meson-package))
+--
+2.20.1
