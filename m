@@ -1,98 +1,31 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Thu, 7 Jan 2021 18:41:01 +0100
-Subject: [Buildroot] Upgrading LLVM and Clang to version 11.0.0... issue
- with libclc
-In-Reply-To: <1ff5aafd-9aeb-2cf0-8e90-333c7c39cbaa@bootlin.com>
-References: <1ff5aafd-9aeb-2cf0-8e90-333c7c39cbaa@bootlin.com>
-Message-ID: <0a47a156-bcde-41a3-bd34-24df0549d0ba@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu,  7 Jan 2021 18:53:08 +0100
+Subject: [Buildroot] [PATCH 2/2] DEVELOPERS: add myself for php
+In-Reply-To: <20210107175308.722963-1-bernd.kuhls@t-online.de>
+References: <20210107175308.722963-1-bernd.kuhls@t-online.de>
+Message-ID: <20210107175308.722963-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Michael, All,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-Le 07/01/2021 ? 17:59, Michael Opdenacker a ?crit?:
-> Hi,
-> 
-> I'm trying to bump up the versions of LLVM, Clang and lld to 11.0.0
-> instead of 9.x currently. The end goal is to test and share a new
-> iteration of Matthew Weber's patches for compiler-rt support.
-
-Thanks for this work!
-
-> 
-> Though the upgrades were effortless, this broke support for libclc which
-> source code has been included in the llvm-project git repository. The
-> libclc sources are still available as a separate archive (for projects
-> such as Buildroot that want to build each component separately), but
-> configure.py script has been replaced by CMake used by LLVM.
-> 
-> Here's what libclc.mk looks like so far:
-> 
-> ################################################################################
-> #
-> # libclc
-> #
-> ################################################################################
-> 
-> # LLVM, Clang, lld and libclc should be version bumped together
-> LIBCLC_VERSION = 11.0.0
-> LIBCLC_SITE =
-> https://github.com/llvm/llvm-project/releases/download/llvmorg-$(LIBCLC_VERSION)
-> LIBCLC_SOURCE = libclc-$(LIBCLC_VERSION).src.tar.xz
-> LIBCLC_LICENSE = BSD-like or MIT
-> LIBCLC_LICENSE_FILES = LICENSE.TXT
-> 
-> LIBCLC_DEPENDENCIES = host-clang host-llvm
-> LIBCLC_INSTALL_STAGING = YES
-> 
-> $(eval $(cmake-package))
-> 
-> Unfortunately, I haven't managed to build libclc yet. Its configuration
-> step fails as follows (see the full log at the end of this e-mail):
-> 
-> -- Check for working CLC compiler:
-> /home/mike/buildroot/output/host/bin/clang -- broken
-> CMake Error at cmake/CMakeTestCLCCompiler.cmake:40 (message):
-> ? The CLC compiler "/home/mike/buildroot/output/host/bin/clang" is not able
-> ? to compile a simple test program.
-
-I believe CMake try to check clang as cross-compiler before using it.
-Can you share the CMake error log file ?
-
-For now, host/bin/clang can't be used as cross-compiler to build application
-(the simple test program) because we need to add a wrapper like for gcc.
-
-configure.py was kind enough to accept host/bin/clang as is to build libclc library.
-
-If we can skip the cmake test, the library should build as before.
-
-> 
-> How would I be supposed to add CLC support to Clang when the Clang and
-> LLVM source archives that we build don't contain libclc code?
-> 
-> This sounds like a chicken and egg issue. It would be so much easier to
-> grab the whole llvm-project sources and compile LLVM and Clang with all
-> the features that we want. But hey, there must be good reasons for
-> building components separately.
-
-I don't think we have to build libclc before clang, as you can see in the
-current packaging only mesa3d depends on libclc. Clang itself doesn't depend on
-libclc.
-
-You can find some details about the initial work in this blog:
-https://www.linuxembedded.fr/2018/07/llvmclang-integration-into-buildroot/
-
-> 
-> Thanks in advance for any light shed on this topic...
-
-Best regards,
-Romain
-
-> 
-> Cheers,
-> 
-> Michael.
-> 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index b46192deb1..72b7b6a1cd 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -410,6 +410,7 @@ F:	package/perl-timedate/
+ F:	package/perl-uri/
+ F:	package/perl-www-robotrules/
+ F:	package/pixman/
++F:	package/php/
+ F:	package/pngquant/
+ F:	package/pound/
+ F:	package/pulseaudio/
+-- 
+2.29.2
