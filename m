@@ -1,61 +1,60 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu,  7 Jan 2021 18:53:07 +0100
-Subject: [Buildroot] [PATCH 1/2] package/ph: security bump version to 7.4.14
-Message-ID: <20210107175308.722963-1-bernd.kuhls@t-online.de>
+From: Vineet Gupta <vgupta@synopsys.com>
+Date: Thu, 7 Jan 2021 09:58:05 -0800
+Subject: [Buildroot] ARC no console output (was Re: [PATCH 1/2]
+ init/console: Use ttynull as a fallback when there is no console)
+In-Reply-To: <X/c/ONCYz2QQdvOP@alley>
+References: <20201111135450.11214-1-pmladek@suse.com>
+ <20201111135450.11214-2-pmladek@suse.com>
+ <d2a3b3c0-e548-7dd1-730f-59bc5c04e191@synopsys.com>
+ <8735zdm86m.fsf@jogness.linutronix.de>
+ <50ade852-c598-6476-1f4b-9a3f8d11d143@synopsys.com> <X/c/ONCYz2QQdvOP@alley>
+Message-ID: <466644f5-bed7-caef-9fcd-e66208f65545@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2020-7071: https://bugs.php.net/bug.php?id=77423
+On 1/7/21 9:04 AM, Petr Mladek wrote:
+> On Thu 2021-01-07 08:43:16, Vineet Gupta wrote:
+>> Hi John,
+>>
+>> On 1/7/21 1:02 AM, John Ogness wrote:
+>>> Hi Vineet,
+>>>
+>>> On 2021-01-06, Vineet Gupta <vgupta@synopsys.com> wrote:
+>>>> This breaks ARC booting (no output on console).
+>>>
+>>> Could you provide the kernel boot arguments that you use? This series is
+>>> partly about addressing users that have used boot arguments that are
+>>> technically incorrect (even if had worked). Seeing the boot arguments of
+>>> users that are not experiencing problems may help to reveal some of the
+>>> unusual console usages until now.
+>>
+>>
+>> Kernel command line: earlycon=uart8250,mmio32,0xf0005000,115200n8
+>> console=ttyS0,115200n8 debug print-fatal-signals=1
+> 
+> This is strange, the problematic patch should use ttynull
+> only as a fallback. It should not be used when a particular console
+> is defined on the command line.
 
-Release notes: https://news-web.php.net/php.announce/304
-Changelog: https://www.php.net/ChangeLog-7.php#7.4.14
+What happens in my case is console_on_rootfs() doesn't find /dev/console 
+and switching to ttynull. /dev is not present because devtmpfs doesn't 
+automount for initramfs.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/php/0002-iconv-tweak-iconv-detection.patch | 2 +-
- package/php/php.hash                               | 2 +-
- package/php/php.mk                                 | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+> The only explanation would be that ttyS0 gets registered too late
+> and ttynull is added as a fallback in the meantime.
 
-diff --git a/package/php/0002-iconv-tweak-iconv-detection.patch b/package/php/0002-iconv-tweak-iconv-detection.patch
-index 959afd80da..65ed6055bc 100644
---- a/package/php/0002-iconv-tweak-iconv-detection.patch
-+++ b/package/php/0002-iconv-tweak-iconv-detection.patch
-@@ -26,7 +26,7 @@ diff --git a/build/php.m4 b/build/php.m4
- index 9586c490..8b3d47ed 100644
- --- a/build/php.m4
- +++ b/build/php.m4
--@@ -1967,7 +1967,7 @@ AC_DEFUN([PHP_SETUP_ICONV], [
-+@@ -1973,7 +1973,7 @@ AC_DEFUN([PHP_SETUP_ICONV], [
-    dnl Check external libs for iconv funcs.
-    if test "$found_iconv" = "no"; then
-  
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 5078228f48..46c589661d 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256  aead303e3abac23106529560547baebbedba0bb2943b91d5aa08fff1f41680f4  php-7.4.13.tar.xz
-+sha256  f9f3c37969fcd9006c1dbb1dd76ab53f28c698a1646fa2dde8547c3f45e02886  php-7.4.14.tar.xz
- 
- # License file
- sha256  0967ad6cf4b7fe81d38709d7aaef3fecb3bd685be7eebb37b864aa34c991baa7  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index d3c5a4d983..fa518c3012 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PHP_VERSION = 7.4.13
-+PHP_VERSION = 7.4.14
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
--- 
-2.29.2
+I don't know if ttyS0 console should have registered already but even if 
+it did - the /dev node missing would not have helped ?
+
+> 
+> Anyway, I propose the revert the problematic patch for 5.11-rc3,
+> see
+> https://lore.kernel.org/lkml/20210107164400.17904-2-pmladek at suse.com/
+> This mystery is a good reason to avoid bigger changes at this stage.
+> 
+> Best Regards,
+> Petr
+> 
