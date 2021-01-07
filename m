@@ -1,29 +1,46 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Thu,  7 Jan 2021 17:14:14 +0100
-Subject: [Buildroot] [PATCH] DEVELOPERS: Add Romain Naour for qemu package
-Message-ID: <20210107161414.1157042-1-romain.naour@gmail.com>
+From: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@essensium.com>
+Date: Thu,  7 Jan 2021 17:20:39 +0100
+Subject: [Buildroot] [PATCH] package/python-botocore: bump to version 1.19.48
+Message-ID: <20210107162040.8908-1-raphael.melotte@essensium.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Rapha?l M?lotte <raphael.melotte@essensium.com>
 ---
- DEVELOPERS | 1 +
- 1 file changed, 1 insertion(+)
+ package/python-botocore/python-botocore.hash | 4 ++--
+ package/python-botocore/python-botocore.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 258a51a14c..06d27a0dfe 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2277,6 +2277,7 @@ F:	package/ogre/
- F:	package/openpowerlink/
- F:	package/physfs/
- F:	package/piglit/
-+F:	package/qemu/
- F:	package/solarus/
- F:	package/stress-ng/
- F:	package/supertux/
+diff --git a/package/python-botocore/python-botocore.hash b/package/python-botocore/python-botocore.hash
+index 446c67f833..afaac12bde 100644
+--- a/package/python-botocore/python-botocore.hash
++++ b/package/python-botocore/python-botocore.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/botocore/json
+-md5  a75ae28d58d64dbf689d18ac3424342a  botocore-1.12.210.tar.gz
+-sha256  7983b7624b3f71648a7101fbcb437e3d599b4f79b754e89220e574482a2f8298  botocore-1.12.210.tar.gz
++md5  870be84c9b418430ad9d0cb5640e76ef  botocore-1.12.210.tar.gz
++sha256  b954c596f8bdf31d5fdf1eff8a2296bde8094e1e22961a79b83bb62ddeba8a49  botocore-1.19.48.tar.gz
+ # Locally computed sha256 checksums
+ sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE.txt
+diff --git a/package/python-botocore/python-botocore.mk b/package/python-botocore/python-botocore.mk
+index 378bd93768..76c59d0a2d 100644
+--- a/package/python-botocore/python-botocore.mk
++++ b/package/python-botocore/python-botocore.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_BOTOCORE_VERSION = 1.12.210
++PYTHON_BOTOCORE_VERSION = 1.19.48
+ PYTHON_BOTOCORE_SOURCE = botocore-$(PYTHON_BOTOCORE_VERSION).tar.gz
+-PYTHON_BOTOCORE_SITE = https://files.pythonhosted.org/packages/39/78/068e7cf5bb9901f34eacbf449cdfbdf32e470333930cbcda890cfc9fb820
++PYTHON_BOTOCORE_SITE = https://files.pythonhosted.org/packages/35/73/c6fe3fafb74cc86a2a9ddf565a2b8956777e668c6248927e6d76b66f61a4
+ PYTHON_BOTOCORE_SETUP_TYPE = setuptools
+ PYTHON_BOTOCORE_LICENSE = Apache-2.0
+ PYTHON_BOTOCORE_LICENSE_FILES = LICENSE.txt
 -- 
-2.25.4
+2.29.2
