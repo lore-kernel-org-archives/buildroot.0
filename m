@@ -1,88 +1,28 @@
-From: Matthew Weber <matthew.weber@collins.com>
-Date: Thu, 7 Jan 2021 13:16:56 -0600
-Subject: [Buildroot] [PATCH 10/10] docs/manual: add details about
- vulnerability management
-In-Reply-To: <20210107133948.2997849-11-thomas.petazzoni@bootlin.com>
-References: <20210107133948.2997849-1-thomas.petazzoni@bootlin.com>
- <20210107133948.2997849-11-thomas.petazzoni@bootlin.com>
-Message-ID: <CANQCQpaW4d11BLS=2rGY85X+ynjRB5CZceLGWf9PsiPs_F2rPA@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 07 Jan 2021 20:32:23 +0100
+Subject: [Buildroot] [PATCH v2 1/2] package/php: security bump version
+ to 7.4.14
+In-Reply-To: <20210107180216.736083-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Thu, 7 Jan 2021 19:02:15 +0100")
+References: <20210107180216.736083-1-bernd.kuhls@t-online.de>
+Message-ID: <87y2h4zgoo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-On Thu, Jan 7, 2021 at 7:40 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> This addition to the documentation gives some details about CPE/CVE,
-> pkg-stats and missing-cpe.
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  docs/manual/common-usage.txt | 42 ++++++++++++++++++++++++++++++++++++
->  1 file changed, 42 insertions(+)
->
-> diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
-> index 9ba87a8339..730c759cfb 100644
-> --- a/docs/manual/common-usage.txt
-> +++ b/docs/manual/common-usage.txt
-> @@ -417,6 +417,48 @@ effects:
->    be empty and it's only at the very end of the build that they will
->    be populated.
->
-> +[[vulnerability-management]]
-> +=== Vulnerability management
-> +
-> +Buildroot integrates a number of features that help tracking whether
-> +known security vulnerabilities are affecting some of the
-> +packages. Buildroot bases this logic on _CVEs_ (Common Vulnerabilities
-> +and Exposure) and the https://nvd.nist.gov/vuln[NVD database] provided
-> +by NIST.
-> +
-> +First, each package in Buildroot can be associated to a _CPE_
-> +identifier, by means of the various +FOO_CPE_ID_<something>+ variables
-> +that can be provided by each package. See
-> +xref:generic-package-reference[] for more details about those
-> +variables. When the _CPE_ identifier of a package is not defined, a
-> +default value is used, which may or may not be correct. This _CPE_
-> +identifier is used to find in the NVD database of vulnerabilities
-> +which _CVEs_ are affecting any given package.
-> +
-> +Based on this and the NIST databases, the +make pkg-stats+ target
-> +produces JSON and HTML formatted reports that indicate for each
-> +package of the current Buildroot configuration:
-> +
-> +* If there are known _CVEs_ for each package. Note that CVEs can
-> +  manually be ignored on a per-package basis using the
-> +  +FOO_IGNORED_CVES+ variable, for example if Buildroot has a patch
-> +  that fixes the vulnerability, or if the vulnerability is not
-> +  applicable to Buildroot for some reason.
-> +
-> +* If the _CPE_ identifier is valid and known in the
-> +  https://nvd.nist.gov/products/cpe[NIST CPE dictionary]. A _CPE_ is
-> +  valid is one of the +FOO_CPE_ID_<something>+ variable is defined, or
-> +  if +FOO_CPE_ID_VALID = YES+ validating that the default value of the
-> +  _CPE_ identifier is correct. In addition, _CPE_ are checked for
-> +  existence in the NIST CPE dictionary. If the _CPE_ identifier is not
-> +  known to the NIST CPE dictionary, then it is possible to contribute
-> +  to the NIST CPE dictionary: one need to submit a XML document that
-> +  describes the additional CPE identifier. Buildroot can help
-> +  generating such XML documents for missing CPE identifiers using the
-> +  +make missing-cpe+ target. The XML documents are generated in
-> +  +$(O)/cpe-updates+, and may need to be edited before submission to
+ > Fixes CVE-2020-7071: https://bugs.php.net/bug.php?id=77423
+ > Release notes: https://news-web.php.net/php.announce/304
+ > Changelog: https://www.php.net/ChangeLog-7.php#7.4.14
 
-I'd replace that last part with something like the following....
-"and will need to be edited before submission to NIST.  The edits
-would focus on verifying the version information and reviewing the
-reference URLs are reachable with a valid type (suggests for types are
-provided in the generated file).  If a previous _CPE_ entry was found
-in the NIST CPE dictionary, the XML document generation tries to
-minimize the entry differences between the existing versions in the
-dictionary.  The XML document generation uses the XML from the last
-version of that CPE as a template for the new submission."
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > ---
+ > v2: fixed subject
 
-Regards,
-Matt
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
