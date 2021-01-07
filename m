@@ -1,49 +1,64 @@
-From: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@essensium.com>
-Date: Thu,  7 Jan 2021 19:00:07 +0100
-Subject: [Buildroot] [PATCH] package/python-boto3: bump to version 1.16.50
-Message-ID: <20210107180007.18864-1-raphael.melotte@essensium.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu,  7 Jan 2021 19:02:15 +0100
+Subject: [Buildroot] [PATCH v2 1/2] package/php: security bump version to
+ 7.4.14
+Message-ID: <20210107180216.736083-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-While at it, use two spaces for all the hashes.
+Fixes CVE-2020-7071: https://bugs.php.net/bug.php?id=77423
 
-Signed-off-by: Rapha?l M?lotte <raphael.melotte@essensium.com>
+Release notes: https://news-web.php.net/php.announce/304
+Changelog: https://www.php.net/ChangeLog-7.php#7.4.14
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/python-boto3/python-boto3.hash | 6 +++---
- package/python-boto3/python-boto3.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+v2: fixed subject
 
-diff --git a/package/python-boto3/python-boto3.hash b/package/python-boto3/python-boto3.hash
-index 49eb9ae5c6..6752a2cca0 100644
---- a/package/python-boto3/python-boto3.hash
-+++ b/package/python-boto3/python-boto3.hash
+ package/php/0002-iconv-tweak-iconv-detection.patch | 2 +-
+ package/php/php.hash                               | 2 +-
+ package/php/php.mk                                 | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/php/0002-iconv-tweak-iconv-detection.patch b/package/php/0002-iconv-tweak-iconv-detection.patch
+index 959afd80da..65ed6055bc 100644
+--- a/package/php/0002-iconv-tweak-iconv-detection.patch
++++ b/package/php/0002-iconv-tweak-iconv-detection.patch
+@@ -26,7 +26,7 @@ diff --git a/build/php.m4 b/build/php.m4
+ index 9586c490..8b3d47ed 100644
+ --- a/build/php.m4
+ +++ b/build/php.m4
+-@@ -1967,7 +1967,7 @@ AC_DEFUN([PHP_SETUP_ICONV], [
++@@ -1973,7 +1973,7 @@ AC_DEFUN([PHP_SETUP_ICONV], [
+    dnl Check external libs for iconv funcs.
+    if test "$found_iconv" = "no"; then
+  
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 5078228f48..46c589661d 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/boto3/json
--md5	02e0d5ea4affd9c64e9166d5d3786766  boto3-1.9.210.tar.gz
--sha256	e221f6867282266e06aec2213f0ea5fdbd4eb3facbca4fcbf96886073350bc5e  boto3-1.9.210.tar.gz
-+md5  8cecdbf7ef6702837d7ddabaa3e39a89  boto3-1.16.50.tar.gz
-+sha256  4d502a842b81fdac4b950d3b88a5b9067ce118213b122b20f4192003cb067986  boto3-1.16.50.tar.gz
- # Locally computed sha256 checksums
--sha256	0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE
-+sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE
-diff --git a/package/python-boto3/python-boto3.mk b/package/python-boto3/python-boto3.mk
-index e00cb84ad1..a5c2b6ab31 100644
---- a/package/python-boto3/python-boto3.mk
-+++ b/package/python-boto3/python-boto3.mk
-@@ -4,9 +4,9 @@
+ # From https://www.php.net/downloads.php
+-sha256  aead303e3abac23106529560547baebbedba0bb2943b91d5aa08fff1f41680f4  php-7.4.13.tar.xz
++sha256  f9f3c37969fcd9006c1dbb1dd76ab53f28c698a1646fa2dde8547c3f45e02886  php-7.4.14.tar.xz
+ 
+ # License file
+ sha256  0967ad6cf4b7fe81d38709d7aaef3fecb3bd685be7eebb37b864aa34c991baa7  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index d3c5a4d983..fa518c3012 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_BOTO3_VERSION = 1.9.210
-+PYTHON_BOTO3_VERSION = 1.16.50
- PYTHON_BOTO3_SOURCE = boto3-$(PYTHON_BOTO3_VERSION).tar.gz
--PYTHON_BOTO3_SITE = https://files.pythonhosted.org/packages/d3/ac/79093e14a5397096d1fe4a17329a8453cebed8629cbc434e2dad5fb75b65
-+PYTHON_BOTO3_SITE = https://files.pythonhosted.org/packages/c8/c6/b4d9547a493ac2837f296f4a004dff6e7136cf6750d181769b8a61d63813
- PYTHON_BOTO3_SETUP_TYPE = setuptools
- PYTHON_BOTO3_LICENSE = Apache-2.0
- PYTHON_BOTO3_LICENSE_FILES = LICENSE
+-PHP_VERSION = 7.4.13
++PHP_VERSION = 7.4.14
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
 -- 
 2.29.2
