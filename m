@@ -1,85 +1,99 @@
-From: Yair Ben-Avraham <yairba@protonmail.com>
-Date: Thu, 07 Jan 2021 14:23:51 +0000
-Subject: [Buildroot] [PATCH v2 1/1] package/casync: new package
-In-Reply-To: <20210107111303.17d64eec@windsurf.home>
-References: <-L4OoHbI_s2GypxkG9mFgazGU5zBSrAAbDJZ8-Z4fV4jx0pA4UFDZgnIAi8Jjovzv_ody4LtOlfNmnZ8evA-5BlsbQoa5goxcwgc3zOALIU=@protonmail.com>
- <20210107111303.17d64eec@windsurf.home>
-Message-ID: <n6VbI4j9Y5f6LOECnjTyiq5_T7Z6HLi9MqC2RzalYw5LnZaE3N1MYSl1KOxoRaAr_iF6idqMaAZdUXtFajUAsonz3wbK72B6hW4-L6Fu2So=@protonmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 7 Jan 2021 16:11:26 +0100
+Subject: [Buildroot] [PATCH 1/1] package/genimage : fix dependency to
+ host-mtools mcopy is used by genimage when creating fat parts
+In-Reply-To: <20210107110634.65195-1-fabien.lehoussel@medianesysteme.com>
+References: <20210107110634.65195-1-fabien.lehoussel@medianesysteme.com>
+Message-ID: <20210107151126.GK1485369@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Fabien, All,
 
-I tried without xz, build failed, details below:
+On 2021-01-07 12:06 +0100, Fabien Lehoussel spake thusly:
+> Signed-off-by: Fabien Lehoussel <fabien.lehoussel@medianesysteme.com>
+> ---
+>  package/genimage/Config.in.host | 1 +
+>  package/genimage/genimage.mk    | 2 +-
+>  2 files changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/genimage/Config.in.host b/package/genimage/Config.in.host
+> index cf831a143c..8db7eed8e4 100644
+> --- a/package/genimage/Config.in.host
+> +++ b/package/genimage/Config.in.host
+> @@ -1,5 +1,6 @@
+>  config BR2_PACKAGE_HOST_GENIMAGE
+>  	bool "host genimage"
+> +	select BR2_PACKAGE_HOST_MTOOLS
+>  	help
+>  	  genimage is a tool to generate multiple filesystem and flash
+>  	  images from a given root filesystem tree. genimage is
+> diff --git a/package/genimage/genimage.mk b/package/genimage/genimage.mk
+> index dde8f8b9e0..1fa93e0854 100644
+> --- a/package/genimage/genimage.mk
+> +++ b/package/genimage/genimage.mk
+> @@ -7,7 +7,7 @@
+>  GENIMAGE_VERSION = 13
+>  GENIMAGE_SOURCE = genimage-$(GENIMAGE_VERSION).tar.xz
+>  GENIMAGE_SITE = https://github.com/pengutronix/genimage/releases/download/v$(GENIMAGE_VERSION)
+> -HOST_GENIMAGE_DEPENDENCIES = host-pkgconf host-libconfuse
+> +HOST_GENIMAGE_DEPENDENCIES = host-pkgconf host-libconfuse host-mtools
 
-./casync.config:
-BR2_PACKAGE_ACL=y
-BR2_PACKAGE_LIBCURL=y
-BR2_PACKAGE_OPENSSL=y
+Not all genimage configurations require creating a vfat partition.
 
+For example, we do have a few such configurations in Buildroot:
 
-./package/casync/casync.mk:
-CASYNC_DEPENDENCIES = acl libcurl openssl
-...
-ifeq ($(BR2_PACKAGE_XZ),y)
-CASYNC_DEPENDENCIES += xz
-CASYNC_CONF_OPTS += -Dliblzma=enabled
-else
-CASYNC_CONF_OPTS += -Dliblzma=disabled
-endif
-...
+    $ grep -c vfat $(find board/ -name '*genimage*') |grep -E ':0$' |wc -l
+    27
 
+    $ cat board/amarula/vyasa/genimage.cfg
+    image sdcard.img {
+        hdimage {
+        }
 
-br-arm-cortex-a9-glibc/logfile:
-../src/castore.c:5:10: fatal error: lzma.h: No such file or directory
-    5 | #include <lzma.h>
-      |          ^~~~~~~~
-compilation terminated.
+        partition u-boot-tpl-spl-dtb {
+            in-partition-table = "no"
+            image = "u-boot-tpl-spl-dtb.img"
+            offset = 32K
+        }
 
+        partition u-boot-dtb {
+            in-partition-table = "no"
+            image = "u-boot-dtb.img"
+            offset = 8M
+            size = 30M # falcon mode: args @ 16M args, uImage @ 17M
+        }
 
-In addition, in file ./src/castore.c , include <lzma.h> is not under if HAVE_LIBLZMA block, see counterexample inside ./src/compressor.h
+        partition rootfs {
+            partition-type = 0x83
+            image = "rootfs.ext4"
+        }
+    }
 
-So it's either adding xz to the dependencies or include <lzma.h> under if condition and try to build. What is better?
+It is your respnsibility to enable whatever filesystem image generators
+you need for your system.
 
-Yair
---
-Yair Ben-Avraham
-yairba at protonmail.com
-+31.6.1316.5535
+Regards,
+Yann E. MORIN.
 
-??????? Original Message ???????
-On Thursday, January 7, 2021 11:13 AM, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+>  GENIMAGE_LICENSE = GPL-2.0
+>  GENIMAGE_LICENSE_FILES = COPYING
+>  
+> -- 
+> 2.25.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-> Hello,
->
-> Thanks for the new iteration!
->
-> On Thu, 07 Jan 2021 07:12:57 +0000
-> Yair Ben-Avraham via buildroot buildroot at busybox.net wrote:
->
-> > -   depends on BR2_PACKAGE_HAS_UDEV
->
-> udev is not a mandatory dependency.
->
-> > +CASYNC_VERSION = 4ad9bcb94bc83ff36cfc65515107ea06a88c2dfc
-> > +CASYNC_SITE = $(call github,systemd,casync,$(CASYNC_VERSION))
-> > +CASYNC_LICENSE = LGPL-2.1+
-> > +CASYNC_LICENSE_FILES = LICENSE.LGPL2.1
-> > +# xz is mandatory because of ./src/castore.c:5:10: #include <lzma.h>
-> > +CASYNC_DEPENDENCIES = acl libcurl openssl xz
->
-> This seems odd, Ithink I got it to build without xz. Did you pass
-> the right -D option ?
->
-> Other than those two questions, looks good to me!
->
-> Thomas
->
-> -----------------------------------------------------------------------------------------------------------------------------------------------------
->
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
