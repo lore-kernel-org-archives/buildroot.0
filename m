@@ -1,74 +1,88 @@
 From: Matthew Weber <matthew.weber@collins.com>
-Date: Thu, 7 Jan 2021 12:57:09 -0600
-Subject: [Buildroot] [External] RE: [PATCH 2/3]
- package/environment-setup: make script idempotent
-In-Reply-To: <8ad435cc3aa244418144fe451e23430f@siemens.com>
-References: <20201231212949.2415485-1-konrad.schwarz@siemens.com>
- <20201231212949.2415485-3-konrad.schwarz@siemens.com>
- <CANQCQpZzAiF1AsrJThuH_H+cc3TXRykEMFkEXWkbPczPaN48yQ@mail.gmail.com>
- <8ad435cc3aa244418144fe451e23430f@siemens.com>
-Message-ID: <CANQCQpYkkgdV4Z9Dcry1C53zOt14-LHoZpVpt6qHfSaG1y3M1A@mail.gmail.com>
+Date: Thu, 7 Jan 2021 13:16:56 -0600
+Subject: [Buildroot] [PATCH 10/10] docs/manual: add details about
+ vulnerability management
+In-Reply-To: <20210107133948.2997849-11-thomas.petazzoni@bootlin.com>
+References: <20210107133948.2997849-1-thomas.petazzoni@bootlin.com>
+ <20210107133948.2997849-11-thomas.petazzoni@bootlin.com>
+Message-ID: <CANQCQpaW4d11BLS=2rGY85X+ynjRB5CZceLGWf9PsiPs_F2rPA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Konrad,
+Thomas,
 
-
-On Thu, Jan 7, 2021 at 3:58 AM Schwarz, Konrad
-<konrad.schwarz@siemens.com> wrote:
+On Thu, Jan 7, 2021 at 7:40 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
 >
-> Hi Matt,
+> This addition to the documentation gives some details about CPE/CVE,
+> pkg-stats and missing-cpe.
 >
-> > -----Original Message-----
-> > From: Matthew Weber <matthew.weber@collins.com>
-> > Sent: Wednesday, January 6, 2021 18:34
-> > To: Schwarz, Konrad (T RDA IOT SES-DE) <konrad.schwarz@siemens.com>
-> > Cc: buildroot <buildroot@buildroot.org>
-> > Subject: Re: [Buildroot] [PATCH 2/3] package/environment-setup: make script idempotent
-> >
-> > > One (slight) problem with this kind of environment setup files is when
-> > > they are executed repeatedly (e.g., because something else is not
-> > > quite right yet), they tend to extend the PATH variable with the same
-> > > directory, creating a very unwieldy search path and potentially
-> > > slowing down searches for executable files.
-> > >
-> > > This fix adds a test such that PATH is extended only when necessary.
-> > >
-> [...]
-> > +       'export "CROSS_COMPILE=$(TARGET_CROSS)"\n'\
-> [...]
-> > > +       'if ! command -v $${CROSS_COMPILE}gcc > /dev/null\n'\
-> > > +       'then   export PATH="$$SDK_PATH/bin:$$SDK_PATH/sbin:$$PATH"\n'\
-> > > +       'fi\n'\
-> >
-> > Does this new path check work as you intend if the main system has the normal gcc tools installed?  Maybe checking for the cross
-> > variable not being empty would be a better option?
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  docs/manual/common-usage.txt | 42 ++++++++++++++++++++++++++++++++++++
+>  1 file changed, 42 insertions(+)
 >
-> As an aside: if the main system hast the "normal gcc tools" installed (I'm assuming you mean the native tools) and visible on PATH you wouldn't want PATH extended either, right?
-
-Not really a case we should hit like I clarified below.  If that
-command test failed, someone moved the script before sourcing or there
-is a dependency issue where the command executable doesn't work.
-
+> diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
+> index 9ba87a8339..730c759cfb 100644
+> --- a/docs/manual/common-usage.txt
+> +++ b/docs/manual/common-usage.txt
+> @@ -417,6 +417,48 @@ effects:
+>    be empty and it's only at the very end of the build that they will
+>    be populated.
 >
-> As written, the code extends PATH only when the Buildroot-specific cross-compilation toolchain cannot be found (using a PATH search).  Conversely: if the Buildroot-specific toolchain is already in PATH, PATH won't be extended.
->
-> The only situation I see in which this might be undesirable is if an identically-prefixed toolchain that should not be used were already in the PATH; the original code would simply override that (because it prefixes PATH).   I consider this a remote possibility, because the "vendor" part of the GNU target triplet should be unique to Buildroot, at least when using the internal compilation toolchain option; but fundamentally the same reasoning should apply to the external toolchain option (e.g., buildroot assumes the user knows what he is doing in this case).
+> +[[vulnerability-management]]
+> +=== Vulnerability management
+> +
+> +Buildroot integrates a number of features that help tracking whether
+> +known security vulnerabilities are affecting some of the
+> +packages. Buildroot bases this logic on _CVEs_ (Common Vulnerabilities
+> +and Exposure) and the https://nvd.nist.gov/vuln[NVD database] provided
+> +by NIST.
+> +
+> +First, each package in Buildroot can be associated to a _CPE_
+> +identifier, by means of the various +FOO_CPE_ID_<something>+ variables
+> +that can be provided by each package. See
+> +xref:generic-package-reference[] for more details about those
+> +variables. When the _CPE_ identifier of a package is not defined, a
+> +default value is used, which may or may not be correct. This _CPE_
+> +identifier is used to find in the NVD database of vulnerabilities
+> +which _CVEs_ are affecting any given package.
+> +
+> +Based on this and the NIST databases, the +make pkg-stats+ target
+> +produces JSON and HTML formatted reports that indicate for each
+> +package of the current Buildroot configuration:
+> +
+> +* If there are known _CVEs_ for each package. Note that CVEs can
+> +  manually be ignored on a per-package basis using the
+> +  +FOO_IGNORED_CVES+ variable, for example if Buildroot has a patch
+> +  that fixes the vulnerability, or if the vulnerability is not
+> +  applicable to Buildroot for some reason.
+> +
+> +* If the _CPE_ identifier is valid and known in the
+> +  https://nvd.nist.gov/products/cpe[NIST CPE dictionary]. A _CPE_ is
+> +  valid is one of the +FOO_CPE_ID_<something>+ variable is defined, or
+> +  if +FOO_CPE_ID_VALID = YES+ validating that the default value of the
+> +  _CPE_ identifier is correct. In addition, _CPE_ are checked for
+> +  existence in the NIST CPE dictionary. If the _CPE_ identifier is not
+> +  known to the NIST CPE dictionary, then it is possible to contribute
+> +  to the NIST CPE dictionary: one need to submit a XML document that
+> +  describes the additional CPE identifier. Buildroot can help
+> +  generating such XML documents for missing CPE identifiers using the
+> +  +make missing-cpe+ target. The XML documents are generated in
+> +  +$(O)/cpe-updates+, and may need to be edited before submission to
 
-Could you just grep the PATH to see if the SDK path is present instead
-of doing a command test?
+I'd replace that last part with something like the following....
+"and will need to be edited before submission to NIST.  The edits
+would focus on verifying the version information and reviewing the
+reference URLs are reachable with a valid type (suggests for types are
+provided in the generated file).  If a previous _CPE_ entry was found
+in the NIST CPE dictionary, the XML document generation tries to
+minimize the entry differences between the existing versions in the
+dictionary.  The XML document generation uses the XML from the last
+version of that CPE as a template for the new submission."
 
->
-> When debugging PATH problems, I'd much prefer to have as clean of a PATH as possible; elimination of (redundant) duplicates is a key part of this.
->
-> Note that the script itself sets CROSS_COMPILE at the start, so I don't see when it would be empty.
-
-Yeah, I was thinking about it from the perspective of someone moving
-the script from its original location before sourcing (ie the
-variables get set but w/ an incorrect path).  However that isn't
-probably a real use case so it should be fine and like you said.
-
+Regards,
 Matt
