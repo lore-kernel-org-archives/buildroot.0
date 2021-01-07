@@ -1,62 +1,135 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu,  7 Jan 2021 07:48:55 +0100
-Subject: [Buildroot] [PATCH v2,1/1] package/htop: needs dynamic library
-Message-ID: <20210107064855.261938-1-fontaine.fabrice@gmail.com>
+Date: Thu,  7 Jan 2021 08:03:32 +0100
+Subject: [Buildroot] [PATCH 1/1] package/olsr: fix build of pud plugin
+Message-ID: <20210107070332.388993-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-htop unconditionally uses dlopen since version 3.0.3 and
-https://github.com/htop-dev/htop/commit/2a9e8ca07475e61e74d7b6f0afd0a5fd272cb07f
+Fix build of pud plugin which was added with commit
+318d160fe5b080e421dc133dff82d5ea2cf7d893
 
 Fixes:
- - http://autobuild.buildroot.org/results/2976729b0b95bf822c3095efbcf3f86d6c71874f
+ - http://autobuild.buildroot.org/results/5b598d728e6aae61b295681b0d7777e83074fecd
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v1 -> v2:
- - Drop static workaround for ARC
+ ...ud-adapt-to-API-changes-in-gpsd-3-20.patch | 105 ++++++++++++++++++
+ 1 file changed, 105 insertions(+)
+ create mode 100644 package/olsr/0003-pud-adapt-to-API-changes-in-gpsd-3-20.patch
 
- package/htop/Config.in | 5 +++++
- package/htop/htop.mk   | 7 -------
- 2 files changed, 5 insertions(+), 7 deletions(-)
-
-diff --git a/package/htop/Config.in b/package/htop/Config.in
-index 7bb0fe6e07..214a9a1c99 100644
---- a/package/htop/Config.in
-+++ b/package/htop/Config.in
-@@ -1,9 +1,14 @@
- config BR2_PACKAGE_HTOP
- 	bool "htop"
- 	depends on BR2_USE_MMU # fork()
-+	depends on !BR2_STATIC_LIBS # dlopen()
- 	select BR2_PACKAGE_NCURSES
- 	help
- 	  htop is an interactive text-mode process viewer for Linux.
- 	  It aims to be a better top.
- 
- 	  https://htop.dev/
+diff --git a/package/olsr/0003-pud-adapt-to-API-changes-in-gpsd-3-20.patch b/package/olsr/0003-pud-adapt-to-API-changes-in-gpsd-3-20.patch
+new file mode 100644
+index 0000000000..f97798d605
+--- /dev/null
++++ b/package/olsr/0003-pud-adapt-to-API-changes-in-gpsd-3-20.patch
+@@ -0,0 +1,105 @@
++From b2dfb6c27fcf4ddae87b0e99492f4bb8472fa39a Mon Sep 17 00:00:00 2001
++From: Eneas U de Queiroz <cotequeiroz@gmail.com>
++Date: Thu, 13 Feb 2020 17:26:41 -0300
++Subject: [PATCH] pud: adapt to API changes in gpsd 3.20
 +
-+comment "htop needs a toolchain w/ dynamic library"
-+	depends on BR2_USE_MMU
-+	depends on BR2_STATIC_LIBS
-diff --git a/package/htop/htop.mk b/package/htop/htop.mk
-index bb6185a56d..25d1a9a129 100644
---- a/package/htop/htop.mk
-+++ b/package/htop/htop.mk
-@@ -18,11 +18,4 @@ else
- HTOP_CONF_OPTS += --disable-unicode
- endif
- 
--# ARC uses an old uClibc that needs dladdr() for backtrace support,
--# which doesn't work for static only scenario, so as a workaround, we
--# pretend that execinfo.h is not available.
--ifeq ($(BR2_arc)$(BR2_STATIC_LIBS),yy)
--HTOP_CONF_ENV += ac_cv_header_execinfo_h=no
--endif
--
- $(eval $(autotools-package))
++The timestamp fields were changed from double to struct timespec, and
++the geoid separation field was moved to fix.geoid_sep.
++
++Signed-off-by: Eneas U de Queiroz <cotequeiroz@gmail.com>
++
++[Retrieved from:
++https://github.com/OLSR/olsrd/commit/b2dfb6c27fcf4ddae87b0e99492f4bb8472fa39a]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ lib/pud/src/gpsdclient.c | 36 ++++++++++++++++++++++++++++++++----
++ 1 file changed, 32 insertions(+), 4 deletions(-)
++
++diff --git a/lib/pud/src/gpsdclient.c b/lib/pud/src/gpsdclient.c
++index 9e7fb708d..2a7a26eef 100644
++--- a/lib/pud/src/gpsdclient.c
+++++ b/lib/pud/src/gpsdclient.c
++@@ -79,6 +79,23 @@ static void gpsdError(const char *s) {
++   syslog(LOG_ERR, "gpsd error: %s", s);
++ }
++ 
+++#if GPSD_API_MAJOR_VERSION >= 9
+++static double time_as_double(struct timespec *ts) {
+++ return (ts->tv_sec + ts->tv_nsec * 1e-9);
+++}
+++
+++static bool is_online(struct gps_data_t *gpsdata) {
+++  return !!gpsdata->online.tv_sec;
+++}
+++#else
+++
+++#define time_as_double(x) *(x)
+++
+++static bool is_online(struct gps_data_t *gpsdata) {
+++  return !!gpsdata->online;
+++}
+++#endif
+++
++ /* standard parsing of a GPS data source spec */
++ void gpsdParseSourceSpec(char *arg, GpsDaemon *gpsDaemon) {
++   if (!arg //
++@@ -298,8 +315,8 @@ void nmeaInfoFromGpsd(struct gps_data_t *gpsdata, NmeaInfo *info, struct GpsdCon
++             8, //
++             dev->parity, //
++             dev->stopbits, //
++-            dev->cycle, //
++-            dev->mincycle);
+++            time_as_double(&dev->cycle), //
+++            time_as_double(&dev->mincycle));
++ 
++         connectionTracking->devSeen[i] = true;
++         connectionTracking->dev[i] = *dev;
++@@ -367,11 +384,18 @@ void nmeaInfoFromGpsd(struct gps_data_t *gpsdata, NmeaInfo *info, struct GpsdCon
++   nmeaInfoSetPresent(&info->present, NMEALIB_PRESENT_SMASK);
++ 
++   /* date & time */
+++#if GPSD_API_MAJOR_VERSION >= 9
+++  if (gpsdata->fix.time.tv_sec > 0) {
+++    struct tm *time = gmtime(&gpsdata->fix.time.tv_sec);
+++    unsigned int hsec = (unsigned int) (gpsdata->fix.time.tv_nsec / 10000000);
+++#else
++   if (!isNaN(gpsdata->fix.time)) {
++     double seconds;
++     double fraction = modf(fabs(gpsdata->fix.time), &seconds);
++     long sec = lrint(seconds);
++     struct tm *time = gmtime(&sec);
+++    unsigned int hsec = (unsigned int) lrint(fraction * 100);
+++#endif
++     if (time) {
++       info->utc.year = (unsigned int) time->tm_year + 1900;
++       info->utc.mon = (unsigned int) time->tm_mon + 1;
++@@ -379,7 +403,7 @@ void nmeaInfoFromGpsd(struct gps_data_t *gpsdata, NmeaInfo *info, struct GpsdCon
++       info->utc.hour = (unsigned int) time->tm_hour;
++       info->utc.min = (unsigned int) time->tm_min;
++       info->utc.sec = (unsigned int) time->tm_sec;
++-      info->utc.hsec = (unsigned int) lrint(fraction * 100);
+++      info->utc.hsec = hsec;
++ 
++       nmeaInfoSetPresent(&info->present, NMEALIB_PRESENT_UTCDATE | NMEALIB_PRESENT_UTCTIME);
++     }
++@@ -387,7 +411,7 @@ void nmeaInfoFromGpsd(struct gps_data_t *gpsdata, NmeaInfo *info, struct GpsdCon
++   gpsdata->set &= ~TIME_SET;
++ 
++   /* sig & fix */
++-  if (!gpsdata->online) {
+++  if (!is_online(gpsdata)) {
++     gpsdata->fix.mode = MODE_NO_FIX;
++   }
++ 
++@@ -454,7 +478,11 @@ void nmeaInfoFromGpsd(struct gps_data_t *gpsdata, NmeaInfo *info, struct GpsdCon
++   if ((gpsdata->fix.mode >= MODE_3D) //
++       && !isNaN(gpsdata->fix.altitude)) {
++     info->elevation = gpsdata->fix.altitude;
+++#if GPSD_API_MAJOR_VERSION >= 9
+++    info->height = gpsdata->fix.geoid_sep;
+++#else
++     info->height = gpsdata->separation;
+++#endif
++     nmeaInfoSetPresent(&info->present, NMEALIB_PRESENT_ELV | NMEALIB_PRESENT_HEIGHT);
++   }
++   gpsdata->set &= ~ALTITUDE_SET;
 -- 
 2.29.2
