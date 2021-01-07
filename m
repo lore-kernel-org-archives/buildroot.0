@@ -1,65 +1,83 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Thu,  7 Jan 2021 12:04:49 +0100
-Subject: [Buildroot] [RFC: 3/4] package/x11r7/xdriver_xf86-video-imx-viv:
- bump to version rel_imx_5.4.24_2.1.0
-In-Reply-To: <20210107110450.4031102-1-romain.naour@gmail.com>
-References: <20210107110450.4031102-1-romain.naour@gmail.com>
-Message-ID: <20210107110450.4031102-3-romain.naour@gmail.com>
+Date: Thu,  7 Jan 2021 12:04:47 +0100
+Subject: [Buildroot] [RFC: 1/4] package/freescale-imx/imx-gpu-viv:
+ BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_{X11, WL} are libgl provider
+Message-ID: <20210107110450.4031102-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package needs to be updated to build with the NXP imx_5.4.x_2.1.0 release.
-
-Don't override CFLAGS on the command line otherwise we loose some include paths
-(ex: -I./vivante_gal).
-CFLAGS is already provided by TARGET_CONFIGURE_OPTS in make environment.
+libGL.so is installed when BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_X11 or BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_WL
+is selected, so declare it as a libgl provider.
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: J?r?me Pouiller <jezz@sysmic.org>
 Cc: Gary Bisson <gary.bisson@boundarydevices.com>
 ---
 
-Note: xdriinfo report a too old libGL library
- # xdriinfo
- libGL is too old.
----
- .../xdriver_xf86-video-imx-viv.hash                           | 2 +-
- .../xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk  | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Not related to this patch but mesa3d-demo doesn't build with imx-gpu-viv
+as GL provider. meta-freescale provide a patch that replace glWindowPos2iARB
+calls with glWindowPos2i but it was rejected by upstream.
 
-diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash
-index e5d46c86f3..7295061d36 100644
---- a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash
-+++ b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	61b3a7a22f80d1cbc797c329615e1699f3906c9261de7eabcf0de2bf2399de55  xdriver_xf86-video-imx-viv-rel_imx_4.9.x_1.0.0_ga.tar.gz
-+sha256  2f927114e8b888237f1a15830ff5dbde3990fc737227b7a2b94dc6fdbcd7fe19  xdriver_xf86-video-imx-viv-rel_imx_5.4.24_2.1.0.tar.gz
- sha256  9d3e373f0440cc0c58853e963636a7c1ffda9308ec5f30ebe9adfb9c16a8a1e4  COPYING-MIT
-diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
-index 0913427542..9aa2b50cad 100644
---- a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
-+++ b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+https://github.com/Freescale/meta-freescale/blob/dunfell/recipes-graphics/mesa/mesa-demos/Replace-glWindowPos2iARB-calls-with-glWindowPos2i.patch
+---
+ package/freescale-imx/imx-gpu-viv/Config.in      | 6 ++++++
+ package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk | 4 ++--
+ 2 files changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/package/freescale-imx/imx-gpu-viv/Config.in b/package/freescale-imx/imx-gpu-viv/Config.in
+index cca2689905..4e53044d1d 100644
+--- a/package/freescale-imx/imx-gpu-viv/Config.in
++++ b/package/freescale-imx/imx-gpu-viv/Config.in
+@@ -44,6 +44,7 @@ config BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_X11
+ 	select BR2_PACKAGE_XLIB_LIBXDAMAGE
+ 	select BR2_PACKAGE_XLIB_LIBXEXT
+ 	select BR2_PACKAGE_XLIB_LIBXFIXES
++	select BR2_PACKAGE_HAS_LIBGL # libGL-x11.so
  
--XDRIVER_XF86_VIDEO_IMX_VIV_VERSION = rel_imx_4.9.x_1.0.0_ga
-+XDRIVER_XF86_VIDEO_IMX_VIV_VERSION = rel_imx_5.4.24_2.1.0
- XDRIVER_XF86_VIDEO_IMX_VIV_SITE = https://source.codeaurora.org/external/imx/xf86-video-imx-vivante
- XDRIVER_XF86_VIDEO_IMX_VIV_SITE_METHOD = git
- XDRIVER_XF86_VIDEO_IMX_VIV_DEPENDENCIES = imx-gpu-viv imx-gpu-g2d xserver_xorg-server \
-@@ -17,7 +17,7 @@ XDRIVER_XF86_VIDEO_IMX_VIV_MAKE_CMD = $(TARGET_CONFIGURE_OPTS) $(MAKE1) -C $(@D)
- define XDRIVER_XF86_VIDEO_IMX_VIV_BUILD_CMDS
- 	$(XDRIVER_XF86_VIDEO_IMX_VIV_MAKE_CMD) sysroot=$(STAGING_DIR) \
- 		BUSID_HAS_NUMBER=1 BUILD_IN_YOCTO=1 XSERVER_GREATER_THAN_13=1 \
--		CFLAGS="$(TARGET_CFLAGS)"
-+		SDKTARGETSYSROOT="$(STAGING_DIR)"
+ comment "X11 backend needs Xorg package"
+ 	depends on !BR2_PACKAGE_XORG7
+@@ -60,6 +61,7 @@ config BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_WL
+ 	select BR2_PACKAGE_LIBDRM
+ 	select BR2_PACKAGE_WAYLAND
+ 	select BR2_PACKAGE_HAS_LIBEGL_WAYLAND
++	select BR2_PACKAGE_HAS_LIBGL # libGL-wl.so
+ 
+ endchoice
+ 
+@@ -72,6 +74,10 @@ config BR2_PACKAGE_IMX_GPU_VIV_OUTPUT
+ config BR2_PACKAGE_PROVIDES_LIBEGL
+ 	default "imx-gpu-viv"
+ 
++config BR2_PACKAGE_PROVIDES_LIBGL
++	default "imx-gpu-viv" if BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_X11 || \
++		BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_WL
++
+ config BR2_PACKAGE_PROVIDES_LIBGLES
+ 	default "imx-gpu-viv"
+ 
+diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
+index 6ae9aa7acc..f03415b336 100644
+--- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
++++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
+@@ -61,7 +61,7 @@ endif
+ 
+ ifeq ($(IMX_GPU_VIV_LIB_TARGET),x11)
+ define IMX_GPU_VIV_FIXUP_PKGCONFIG
+-	for lib in egl gbm glesv1_cm glesv2 vg; do \
++	for lib in egl gbm glesv1_cm glesv2 gl vg; do \
+ 		ln -sf $${lib}_x11.pc $(@D)/gpu-core/usr/lib/pkgconfig/$${lib}.pc || exit 1; \
+ 	done
  endef
- 
- define XDRIVER_XF86_VIDEO_IMX_VIV_INSTALL_STAGING_CMDS
+@@ -70,7 +70,7 @@ endif
+ define IMX_GPU_VIV_INSTALL_STAGING_CMDS
+ 	cp -r $(@D)/gpu-core/usr/* $(STAGING_DIR)/usr
+ 	$(IMX_GPU_VIV_FIXUP_PKGCONFIG)
+-	for lib in egl gbm glesv1_cm glesv2 vg; do \
++	for lib in egl gbm glesv1_cm glesv2 gl vg; do \
+ 		$(INSTALL) -m 0644 -D \
+ 			$(@D)/gpu-core/usr/lib/pkgconfig/$${lib}.pc \
+ 			$(STAGING_DIR)/usr/lib/pkgconfig/$${lib}.pc; \
 -- 
 2.25.4
