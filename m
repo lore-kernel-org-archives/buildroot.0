@@ -1,47 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 7 Jan 2021 22:34:47 +0100
-Subject: [Buildroot] [PATCH] support/scripts/pkg-stats: properly handle
- host packages with -c option
-In-Reply-To: <20210107213207.GO1485369@scaer>
-References: <20210107211336.3030397-1-thomas.petazzoni@bootlin.com>
- <20210107211336.3030397-2-thomas.petazzoni@bootlin.com>
- <20210107213207.GO1485369@scaer>
-Message-ID: <20210107223447.4a2b8674@windsurf.home>
+Date: Thu, 7 Jan 2021 22:14:55 +0100
+Subject: [Buildroot] [git commit] package/open62541: add patch to allow
+ building without a C++ compiler
+Message-ID: <20210107211813.AF2B286528@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=efdc0cedc6433e4066900de69bddb0574e3344a6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 7 Jan 2021 22:32:07 +0100
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+This patch was intended to be added in commit
+b36ea68b5ad0f89ffd92cac3f91654e180683b1c ("package/open62541: new
+package") but was missed, causing open62541 to not build on
+configurations that lack a C++ compiler. This patch removes the need
+for a C++ compiler by properly declaring the CMake project.
 
-> I think the correct fix would be for the json output to already contain
-> the base name of the package, and the script to use that field, rather
-> than the key, as a package name. That way, the behaviour would be the
-> same for both target and host packages.
+Fixes:
 
-Right, that could certainly work as well.
+  http://autobuild.buildroot.net/results/86ca6a5a01ecfc7030c6be0da81924436b41d057/
 
-> 
-> Something like:
-> 
->     diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
->     index a2cc160d0b..0f9d612f12 100644
->     --- a/package/pkg-utils.mk
->     +++ b/package/pkg-utils.mk
->     @@ -91,6 +91,7 @@ endef
->      # $(1): upper-case package or filesystem name
->      define json-info
->      	"$($(1)_NAME)": {
->     +		"name": "$($(1)_RAWNAME)",
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...akeLists.txt-project-only-contains-C-code.patch | 27 ++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-"name" or "rawname" ?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/open62541/0001-CMakeLists.txt-project-only-contains-C-code.patch b/package/open62541/0001-CMakeLists.txt-project-only-contains-C-code.patch
+new file mode 100644
+index 0000000000..52a9cbaac5
+--- /dev/null
++++ b/package/open62541/0001-CMakeLists.txt-project-only-contains-C-code.patch
+@@ -0,0 +1,27 @@
++From 61f9440dfeacad517965451773371aca0332d700 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Tue, 5 Jan 2021 23:08:53 +0100
++Subject: [PATCH] CMakeLists.txt: project only contains C code
++
++Make sure CMake doesn't check for a C++ compiler when it's not needed,
++as open62541 is in C.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ CMakeLists.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 94ceb127..acc41ab2 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -1,5 +1,5 @@
++ cmake_minimum_required(VERSION 3.0...3.12)
++-project(open62541)
+++project(open62541 C)
++ # set(CMAKE_VERBOSE_MAKEFILE ON)
++ if(${CMAKE_VERSION} VERSION_LESS 3.12)
++     cmake_policy(VERSION ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION})
++-- 
++2.29.2
++
