@@ -1,11 +1,11 @@
 From: Vincent Fazio <vfazio@xes-inc.com>
-Date: Thu, 7 Jan 2021 13:40:42 -0600
-Subject: [Buildroot] [PATCH 09/10 v3] support/dependencies: drop check
- for maximal tar version
-In-Reply-To: <3cf9b1b08bc5025058ad6dfaefaaead9a9cb82b5.1609239666.git.yann.morin.1998@free.fr>
+Date: Thu, 7 Jan 2021 13:42:51 -0600
+Subject: [Buildroot] [PATCH 07/10 v3] support/download: cleanup svn
+ backend
+In-Reply-To: <7077b14d19b9d645fa45dcc39f8c62212216c4af.1609239666.git.yann.morin.1998@free.fr>
 References: <cover.1609239666.git.yann.morin.1998@free.fr>
- <3cf9b1b08bc5025058ad6dfaefaaead9a9cb82b5.1609239666.git.yann.morin.1998@free.fr>
-Message-ID: <2182bb91-e642-e1f9-c6cf-475539ec23ad@xes-inc.com>
+ <7077b14d19b9d645fa45dcc39f8c62212216c4af.1609239666.git.yann.morin.1998@free.fr>
+Message-ID: <7d140d62-4c42-17c9-5e1d-f2a08560144e@xes-inc.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,55 +15,42 @@ To: buildroot@busybox.net
 
 
 On 12/29/20 5:01 AM, Yann E. MORIN wrote:
-> So far, we checked that the tar present on the host was at most tar
-> 1.29, because tar 1.30 changed the way it generates archives.
+> Commit 89f5e9893 (support/download/svn: generate reproducible svn
+> archives) did what it said, but can be siplified a bit.
 > 
-> Having a maximum tar version requirement meant that we would eventually
-> always have to build our own host-tar, as distributions are updating
-> the version they use.
+> Indeed, we are doing an svn export, so we won't have any of the .svn
+> directories, neither at the root of the extract, nor in any of the
+> sub-directories.
 > 
-> But now, we have found a way to generate reproducible archives starting
-> with tar 1.27 onward, so we no longer need the check for a maximum tar
-> version, so we can drop that requirement.
+> As such, we do not need to filter them out  when we generate the list
+> of files to include in the archive.
 > 
 > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: Heiko Thiery <heiko.thiery@gmail.com>
 > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > Cc: Vincent Fazio <vfazio@xes-inc.com>
 > ---
->   support/dependencies/check-host-tar.sh | 14 +-------------
->   1 file changed, 1 insertion(+), 13 deletions(-)
+>   support/download/svn | 7 +++----
+>   1 file changed, 3 insertions(+), 4 deletions(-)
 > 
-> diff --git a/support/dependencies/check-host-tar.sh b/support/dependencies/check-host-tar.sh
-> index 934cb61299..b7d607a47a 100755
-> --- a/support/dependencies/check-host-tar.sh
-> +++ b/support/dependencies/check-host-tar.sh
-> @@ -33,14 +33,7 @@ fi
->   major_min=1
->   minor_min=27
+> diff --git a/support/download/svn b/support/download/svn
+> index 012f286dd9..b7a6ac7443 100755
+> --- a/support/download/svn
+> +++ b/support/download/svn
+> @@ -46,10 +46,9 @@ _svn export ${verbose} "${@}" "'${uri}@${rev}'" "'${basename}'"
+>   date="$( _svn info --show-item last-changed-date "'${uri}@${rev}'" |tail -n 1 )"
 >   
-> -# Maximal version = 1.29 (1.30 changed --numeric-owner output for
-> -# filenames > 100 characters). This is really a fix for a bug in
-> -# earlier tar versions regarding deterministic output so it is
-> -# unlikely to be reverted in later versions.
-> -major_max=1
-> -minor_max=29
-> -
-> -if [ $major -lt $major_min -o $major -gt $major_max ]; then
-> +if [ $major -lt $major_min ]; then
->   	# echo nothing: no suitable tar found
->   	exit 1
->   fi
-> @@ -50,10 +43,5 @@ if [ $major -eq $major_min -a $minor -lt $minor_min ]; then
->   	exit 1
->   fi
+>   # Generate the archive, sort with the C locale so that it is reproducible.
+> -# We do not want the .svn dir; we keep other .svn files, in case they are the
+> -# only files in their directory.
+> -find "${basename}" -not -type d \
+> -       -and -not -path "./.svn/*" >"${output}.list"
+> +# We did a 'svn export' above, so it's not a working copy (there is no .svn
+> +# directory or file to ignore).
+> +find "${basename}" -not -type d >"${output}.list"
+>   LC_ALL=C sort <"${output}.list" >"${output}.list.sorted"
 >   
-> -if [ $major -eq $major_max -a $minor -gt $minor_max ]; then
-> -	# echo nothing: no suitable tar found
-> -	exit 1
-> -fi
-> -
->   # valid
->   echo $tar
+>   # Create GNU-format tarballs, since that's the format of the tarballs on
 > 
 
 Reviewed-by: Vincent Fazio <vfazio@xes-inc.com>
