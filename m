@@ -1,50 +1,71 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 7 Jan 2021 17:55:43 +0100
-Subject: [Buildroot] [PATCH 1/3] package/refpolicy: Add patches pending
- the next release
-In-Reply-To: <20210107135307.1762186-2-maxime.chevallier@bootlin.com>
-References: <20210107135307.1762186-1-maxime.chevallier@bootlin.com>
- <20210107135307.1762186-2-maxime.chevallier@bootlin.com>
-Message-ID: <20210107175543.2fb51ec6@windsurf.home>
+From: Michael Opdenacker <michael.opdenacker@bootlin.com>
+Date: Thu, 7 Jan 2021 17:59:31 +0100
+Subject: [Buildroot] Upgrading LLVM and Clang to version 11.0.0... issue
+ with libclc
+Message-ID: <1ff5aafd-9aeb-2cf0-8e90-333c7c39cbaa@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi,
 
-On Thu,  7 Jan 2021 14:53:05 +0100
-Maxime Chevallier <maxime.chevallier@bootlin.com> wrote:
+I'm trying to bump up the versions of LLVM, Clang and lld to 11.0.0
+instead of 9.x currently. The end goal is to test and share a new
+iteration of Matthew Weber's patches for compiler-rt support.
 
-> diff --git a/package/refpolicy/0001-pending-next-release.patch b/package/refpolicy/0001-pending-next-release.patch
-> new file mode 100644
-> index 0000000000..e049845638
-> --- /dev/null
-> +++ b/package/refpolicy/0001-pending-next-release.patch
-> @@ -0,0 +1,673 @@
-> +From 2566e2dac2c759392e0b9f3d442b8489b726cb10 Mon Sep 17 00:00:00 2001
-> +From: Antoine Tenart <antoine.tenart@bootlin.com>
-> +Date: Mon, 31 Aug 2020 15:38:13 +0200
-> +Subject: [PATCH 1/8] [pending next release]
+Though the upgrades were effortless, this broke support for libclc which
+source code has been included in the llvm-project git repository. The
+libclc sources are still available as a separate archive (for projects
+such as Buildroot that want to build each component separately), but
+configure.py script has been replaced by CMake used by LLVM.
 
-Could you generate patches for packages with git format-patch -N to
-avoid the numbering PATCH X/Y ? This is normally caught by "make
-check-package".
+Here's what libclc.mk looks like so far:
 
-Also, this particular patch is apparently a huge aggregation of several
-individual upstream commits. We do want to have each individual commit
-as a separate patch in Buildroot, with a reference to the upstream
-commit, a bit like this:
+################################################################################
+#
+# libclc
+#
+################################################################################
 
-Signed-off-by: Antoine T?nart ...
-Upstream: link to upstream commit, or at least commit hash
-Signed-off-by: You
+# LLVM, Clang, lld and libclc should be version bumped together
+LIBCLC_VERSION = 11.0.0
+LIBCLC_SITE =
+https://github.com/llvm/llvm-project/releases/download/llvmorg-$(LIBCLC_VERSION)
+LIBCLC_SOURCE = libclc-$(LIBCLC_VERSION).src.tar.xz
+LIBCLC_LICENSE = BSD-like or MIT
+LIBCLC_LICENSE_FILES = LICENSE.TXT
 
-Thanks!
+LIBCLC_DEPENDENCIES = host-clang host-llvm
+LIBCLC_INSTALL_STAGING = YES
 
-Thomas
+$(eval $(cmake-package))
+
+Unfortunately, I haven't managed to build libclc yet. Its configuration
+step fails as follows (see the full log at the end of this e-mail):
+
+-- Check for working CLC compiler:
+/home/mike/buildroot/output/host/bin/clang -- broken
+CMake Error at cmake/CMakeTestCLCCompiler.cmake:40 (message):
+? The CLC compiler "/home/mike/buildroot/output/host/bin/clang" is not able
+? to compile a simple test program.
+
+How would I be supposed to add CLC support to Clang when the Clang and
+LLVM source archives that we build don't contain libclc code?
+
+This sounds like a chicken and egg issue. It would be so much easier to
+grab the whole llvm-project sources and compile LLVM and Clang with all
+the features that we want. But hey, there must be good reasons for
+building components separately.
+
+Thanks in advance for any light shed on this topic...
+
+Cheers,
+
+Michael.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
+Michael Opdenacker, CEO, Bootlin
 Embedded Linux and Kernel engineering
 https://bootlin.com
