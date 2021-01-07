@@ -1,76 +1,78 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu,  7 Jan 2021 14:39:47 +0100
-Subject: [Buildroot] [PATCH 10/10] docs/manual: add details about
- vulnerability management
-In-Reply-To: <20210107133948.2997849-1-thomas.petazzoni@bootlin.com>
-References: <20210107133948.2997849-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20210107133948.2997849-11-thomas.petazzoni@bootlin.com>
+From: Maxime Chevallier <maxime.chevallier@bootlin.com>
+Date: Thu,  7 Jan 2021 14:53:04 +0100
+Subject: [Buildroot] [PATCH 0/3] refpolicy: Allow booting without denied
+ actions
+Message-ID: <20210107135307.1762186-1-maxime.chevallier@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This addition to the documentation gives some details about CPE/CVE,
-pkg-stats and missing-cpe.
+Following the refpolicy support recently added, this series adds support
+for booting basic systems using SELinux with a first batch of fixes,
+allowing a clean boot without denied actions.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- docs/manual/common-usage.txt | 42 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
+Some remaining issues are left to be fixed in order to boot in Enforcing
+mode.
 
-diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
-index 9ba87a8339..730c759cfb 100644
---- a/docs/manual/common-usage.txt
-+++ b/docs/manual/common-usage.txt
-@@ -417,6 +417,48 @@ effects:
-   be empty and it's only at the very end of the build that they will
-   be populated.
- 
-+[[vulnerability-management]]
-+=== Vulnerability management
-+
-+Buildroot integrates a number of features that help tracking whether
-+known security vulnerabilities are affecting some of the
-+packages. Buildroot bases this logic on _CVEs_ (Common Vulnerabilities
-+and Exposure) and the https://nvd.nist.gov/vuln[NVD database] provided
-+by NIST.
-+
-+First, each package in Buildroot can be associated to a _CPE_
-+identifier, by means of the various +FOO_CPE_ID_<something>+ variables
-+that can be provided by each package. See
-+xref:generic-package-reference[] for more details about those
-+variables. When the _CPE_ identifier of a package is not defined, a
-+default value is used, which may or may not be correct. This _CPE_
-+identifier is used to find in the NVD database of vulnerabilities
-+which _CVEs_ are affecting any given package.
-+
-+Based on this and the NIST databases, the +make pkg-stats+ target
-+produces JSON and HTML formatted reports that indicate for each
-+package of the current Buildroot configuration:
-+
-+* If there are known _CVEs_ for each package. Note that CVEs can
-+  manually be ignored on a per-package basis using the
-+  +FOO_IGNORED_CVES+ variable, for example if Buildroot has a patch
-+  that fixes the vulnerability, or if the vulnerability is not
-+  applicable to Buildroot for some reason.
-+
-+* If the _CPE_ identifier is valid and known in the
-+  https://nvd.nist.gov/products/cpe[NIST CPE dictionary]. A _CPE_ is
-+  valid is one of the +FOO_CPE_ID_<something>+ variable is defined, or
-+  if +FOO_CPE_ID_VALID = YES+ validating that the default value of the
-+  _CPE_ identifier is correct. In addition, _CPE_ are checked for
-+  existence in the NIST CPE dictionary. If the _CPE_ identifier is not
-+  known to the NIST CPE dictionary, then it is possible to contribute
-+  to the NIST CPE dictionary: one need to submit a XML document that
-+  describes the additional CPE identifier. Buildroot can help
-+  generating such XML documents for missing CPE identifiers using the
-+  +make missing-cpe+ target. The XML documents are generated in
-+  +$(O)/cpe-updates+, and may need to be edited before submission to
-+  NIST.
-+
- include::eclipse-integration.txt[]
- 
- include::advanced.txt[]
+Most of the series adds the missing rules in the refpolicy for Buildroot
+to be supported. An ongoing effort is currently being made to upstream
+as much of these rules in the refpolicy itself, and some of these fixes
+are already there, waiting for the next release.
+
+Some other fixes are still being discussed, and finally some are waiting
+to be better analysed in order to find the correct solution for
+upstreaming in the refpolicy.
+
+Still, this series adds patches that apply onto the refpolicy to fix
+ongoing issues, along with a buildroot SELinux module to fix some rules
+that needs to be analysed and upstreamed, being specific to embedded
+systems.
+
+Finally, the last patch adds a check for the number of denied actions in
+the bootlog for the 2 testcases currently existing for SELinux, while
+still using the Permissive mode.
+
+These patches and the module are due to evolve, hopefully being thinner
+and thinner until we can use the vanilla refpolicy.
+
+Thanks to Antoine Tenart <atenart@kernel.org> for initiating this work
+and doing the heavy lifting.
+
+Thanks,
+
+Maxime
+
+Maxime Chevallier (3):
+  package/refpolicy: Add patches pending the next release
+  package/refpolicy: Add a buildroot module
+  support/testing: improve SELinux test
+
+ .../refpolicy/0001-pending-next-release.patch | 673 ++++++++++++++++++
+ ...-private-type-for-run-systemd-userdb.patch | 130 ++++
+ .../0003-authlogin-connect-to-userdb.patch    |  92 +++
+ ...0004-systemd-logind-utilize-nsswitch.patch |  33 +
+ ...0005-getty-utilize-auth_use_nsswitch.patch |  40 ++
+ ...d-tmpfiles-utilize-auth_use_nsswitch.patch |  32 +
+ .../refpolicy/0007-first-udevadm-patch.patch  | 130 ++++
+ ...ing-Fixes-for-Buildroot-to-boot-in-e.patch | 190 +++++
+ .../refpolicy/selinux-modules/buildroot.fc    |   0
+ .../refpolicy/selinux-modules/buildroot.if    |   1 +
+ .../refpolicy/selinux-modules/buildroot.te    | 121 ++++
+ .../tests/init/test_systemd_selinux.py        |   6 +
+ 12 files changed, 1448 insertions(+)
+ create mode 100644 package/refpolicy/0001-pending-next-release.patch
+ create mode 100644 package/refpolicy/0002-systemd-private-type-for-run-systemd-userdb.patch
+ create mode 100644 package/refpolicy/0003-authlogin-connect-to-userdb.patch
+ create mode 100644 package/refpolicy/0004-systemd-logind-utilize-nsswitch.patch
+ create mode 100644 package/refpolicy/0005-getty-utilize-auth_use_nsswitch.patch
+ create mode 100644 package/refpolicy/0006-systemd-tmpfiles-utilize-auth_use_nsswitch.patch
+ create mode 100644 package/refpolicy/0007-first-udevadm-patch.patch
+ create mode 100644 package/refpolicy/0008-pending-upstreaming-Fixes-for-Buildroot-to-boot-in-e.patch
+ create mode 100644 package/refpolicy/selinux-modules/buildroot.fc
+ create mode 100644 package/refpolicy/selinux-modules/buildroot.if
+ create mode 100644 package/refpolicy/selinux-modules/buildroot.te
+
 -- 
-2.29.2
+2.25.4
