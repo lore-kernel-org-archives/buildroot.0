@@ -1,83 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu,  7 Jan 2021 14:39:37 +0100
-Subject: [Buildroot] [PATCH 00/10] CPE validation
-Message-ID: <20210107133948.2997849-1-thomas.petazzoni@bootlin.com>
+Date: Thu,  7 Jan 2021 14:39:38 +0100
+Subject: [Buildroot] [PATCH 01/10] support/scripts/pkg-stats: improvements
+ in is_status_*() methods
+In-Reply-To: <20210107133948.2997849-1-thomas.petazzoni@bootlin.com>
+References: <20210107133948.2997849-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20210107133948.2997849-2-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Make is_status_ok() work when the given status name is not even listed
+in the status dict. This will be necessary for following commits.
 
-We have recently merged support to allow packages to express their CPE
-identifier, which is a unique identifier used by the NIST database to
-identify software products, and associate CVEs to them.
+Introduced similar methods for the error and na status, which will be
+used in following commits.
 
-This patch series extends that by ensuring that CPEs affected to
-packages in Buildroot do exist in the official CPE dictionary from
-NIST, and if they do not exist, assist in generating the XML snippet
-that the CPE dictionary maintainers expect.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ support/scripts/pkg-stats | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-In more details:
-
- - PATCHes 1 to 5 are just fixes/improvements to pkg-stats.
-
- - PATCH 6 introduces support/scripts/cpedb.py, which is a new set of
-   helper that is capable of downloading the CPE dictionary, parsing
-   it, and generating XML snippets to submit new CPE entries.
-
- - PATCH 7 modifies support/scripts/pkg-stats to leverage the features
-   of cpedb.py to include validation of CPE identifiers of Buildroot
-   patches.
-
- - PATCH 8 adds support/scripts/gen-missing-cpe, which allows to
-   generate the XML snippets expected by the CPE dictionary mainainers
-
- - PATCH 9 hooks up support/scripts/gen-missing-cpe as the "make
-   missing-cpe" top-level make target
-
- - PATCH 10 extends the documentation with more details about
-   Buildroot features related to vulnerability management.
-
-This is based on work from Matt Weber, which has been further
-refactored/rewritten by Gr?gory Clement and myself.
-
-To test this:
-
- $ make pkg-stats
- $ firefox output/pkg-stats.html
- $ make missing-cpe
- $ ls output/cpe-updates/
-
-This work is also available at:
-
-  https://github.com/tpetazzoni/buildroot/commits/cpe-validation
-
-Thomas
-
-Matt Weber (2):
-  support/scripts/cpedb.py: new CPE XML helper
-  support/scripts/gen-missing-cpe: add new script
-
-Thomas Petazzoni (8):
-  support/scripts/pkg-stats: improvements in is_status_*() methods
-  support/scripts/pkg-stats: fix the status reporting of CVEs
-  support/scripts/pkg-stats: drop unused cpeid_name() function
-  support/scripts/pkg-stats: drop unused --cpeid option
-  support/scripts/pkg-stats: fix flake8 warnings
-  support/scripts/pkg-stats: check CPE existence in CPE dictionnary
-  Makefile: add new missing-cpe target
-  docs/manual: add details about vulnerability management
-
- Makefile                        |   8 ++
- docs/manual/common-usage.txt    |  42 +++++++
- support/scripts/cpedb.py        | 193 ++++++++++++++++++++++++++++++++
- support/scripts/gen-missing-cpe |  65 +++++++++++
- support/scripts/pkg-stats       |  60 ++++++----
- 5 files changed, 344 insertions(+), 24 deletions(-)
- create mode 100644 support/scripts/cpedb.py
- create mode 100755 support/scripts/gen-missing-cpe
-
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index 4a9ff1ffa0..900f290e11 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -276,7 +276,13 @@ class Package:
+             self.status['developers'] = ("warning", "no developers")
+ 
+     def is_status_ok(self, name):
+-        return self.status[name][0] == 'ok'
++        return name in self.status and self.status[name][0] == 'ok'
++
++    def is_status_error(self, name):
++        return name in self.status and self.status[name][0] == 'error'
++
++    def is_status_na(self, name):
++        return name in self.status and self.status[name][0] == 'na'
+ 
+     def __eq__(self, other):
+         return self.path == other.path
 -- 
 2.29.2
