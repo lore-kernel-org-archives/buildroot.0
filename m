@@ -1,36 +1,36 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 7 Jan 2021 22:48:00 +0100
-Subject: [Buildroot] [PATCH v2 1/2] package/coremark: new package
-In-Reply-To: <20201111224102.28799-1-judge.packham@gmail.com>
-References: <20201111224102.28799-1-judge.packham@gmail.com>
-Message-ID: <04d0d6ca-1c24-2b1f-4a84-4cb6ed7663d1@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 7 Jan 2021 22:50:21 +0100
+Subject: [Buildroot] [git commit] package/boost: drop BOOST_IGNORE_CVES
+Message-ID: <20210107213756.ACF1B8688D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Chris,
+commit: https://git.buildroot.net/buildroot/commit/?id=23f49799473739752cf2edeee01daac2b97bfd87
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 11/11/2020 23:41, Chris Packham wrote:
-> CoreMark is a simple, yet sophisticated benchmark that is designed
-> specifically to test the functionality of a processor core. Running
-> CoreMark produces a single-number score allowing users to make quick
-> comparisons between processors.
-> 
-> https://www.eembc.org/coremark/
-> 
-> Signed-off-by: Chris Packham <judge.packham@gmail.com>
+Not needed since commit 63332c33aa0771532807fd2684d4eee4eb952435
 
- Matt tested the first iteration of this patch, so you should keep his Tested-by
-tag (otherwise it gets lost...).
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/boost/boost.mk | 4 ----
+ 1 file changed, 4 deletions(-)
 
- With that, applied to master, thanks.
-
- Regards,
- Arnout
-
-> ---
-> Changes in v2:
-> - None
-[snip]
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index f574e5c47d..b61f6ea838 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -12,10 +12,6 @@ BOOST_LICENSE = BSL-1.0
+ BOOST_LICENSE_FILES = LICENSE_1_0.txt
+ BOOST_CPE_ID_VENDOR = $(BOOST_NAME)
+ 
+-# CVE-2009-3654 is misclassified (by our CVE tracker) as affecting to boost,
+-# while in fact it affects Drupal (a module called boost in there).
+-BOOST_IGNORE_CVES += CVE-2009-3654
+-
+ # keep host variant as minimal as possible
+ HOST_BOOST_FLAGS = --without-icu --with-toolset=gcc \
+ 	--without-libraries=$(subst $(space),$(comma),atomic chrono context \
