@@ -1,48 +1,58 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 7 Jan 2021 20:34:20 +0100
-Subject: [Buildroot] [git commit] package/jasper: Bump to 2.0.24
-Message-ID: <20210107193355.D8612868A0@busybox.osuosl.org>
+From: Vincent Fazio <vfazio@xes-inc.com>
+Date: Thu, 7 Jan 2021 13:52:39 -0600
+Subject: [Buildroot] [PATCH 02/10 v3] core/pkg-infra: allow per
+ site-method sub-version strings
+In-Reply-To: <56c06f0c54667a42f32932601926032636a71f8a.1609239666.git.yann.morin.1998@free.fr>
+References: <cover.1609239666.git.yann.morin.1998@free.fr>
+ <56c06f0c54667a42f32932601926032636a71f8a.1609239666.git.yann.morin.1998@free.fr>
+Message-ID: <3304ba67-0c11-2f62-72e5-74b7e3066b65@xes-inc.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7a5c61d59be35c059e96730cd70a92d47cb4e8e0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changes:
-* Add JAS_VERSION_MAJOR, JAS_VERSION_MINOR, JAS_VERSION_PATCH for
-  easier access to the JasPer version.
-* Fixes stack overflow bug on Windows, where variable-length
-  arrays are not available. (#256)
 
-Signed-off-by: Michael Vetter <jubalh@iodoru.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/jasper/jasper.hash | 2 +-
- package/jasper/jasper.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On 12/29/20 5:01 AM, Yann E. MORIN wrote:
+> When we want to change the format of an archive we generate (e.g. those
+> we generate from git trees), the hashes of those archives will change.
+> 
+> To avoid any issue (e.g. an older Buildroot using newer archives, or the
+> other way around) that would conclude that the hashes do not match, we
+> want to change the filenames of the generated archives whenever we
+> change their format.
+> 
+> Introduce a new internal variable, specific to each site method, that we
+> can set to include a "format version" for the archives generated from
+> that site method.
+> 
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Vincent Fazio <vfazio@xes-inc.com>
+> ---
+>   package/pkg-generic.mk | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 6a9389f1b5..8db79dc74a 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -514,7 +514,7 @@ ifneq ($$($(2)_OVERRIDE_SRCDIR),)
+>   $(2)_VERSION = custom
+>   endif
+>   
+> -$(2)_SOURCE_EXT = .tar.gz
+> +$(2)_SOURCE_EXT = $$(BR_FMT_VERSION_$$($(2)_SITE_METHOD)).tar.gz
+>   ifndef $(2)_SOURCE
+>    ifdef $(3)_SOURCE
+>     $(2)_SOURCE = $$($(3)_SOURCE)
+> 
 
-diff --git a/package/jasper/jasper.hash b/package/jasper/jasper.hash
-index 2a0a4fdff0..7386c2179f 100644
---- a/package/jasper/jasper.hash
-+++ b/package/jasper/jasper.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  20facc904bd9d38c20e0c090b1be3ae02ae5b2703b803013be2ecad586a18927  jasper-2.0.23.tar.gz
-+sha256  d2d28e115968d38499163cf8086179503668ce0d71b90dd33855b3de96a1ca1d  jasper-2.0.24.tar.gz
- sha256  4ad1bb42aff888c4403d792e6e2c5f1716d6c279fea70b296333c9d577d30b81  LICENSE
-diff --git a/package/jasper/jasper.mk b/package/jasper/jasper.mk
-index 3386108323..bb50168d67 100644
---- a/package/jasper/jasper.mk
-+++ b/package/jasper/jasper.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--JASPER_VERSION = 2.0.23
-+JASPER_VERSION = 2.0.24
- JASPER_SITE = $(call github,jasper-software,jasper,version-$(JASPER_VERSION))
- JASPER_INSTALL_STAGING = YES
- JASPER_LICENSE = JasPer-2.0
+Reviewed-by: Vincent Fazio <vfazio@xes-inc.com>
+
+-- 
+Vincent Fazio
+Embedded Software Engineer - Linux
+Extreme Engineering Solutions, Inc
+http://www.xes-inc.com
