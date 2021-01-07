@@ -1,72 +1,63 @@
-From: Matthew Weber <matthew.weber@collins.com>
-Date: Thu, 7 Jan 2021 13:37:59 -0600
-Subject: [Buildroot] [PATCH 07/10] support/scripts/pkg-stats: check CPE
- existence in CPE dictionnary
-In-Reply-To: <20210107133948.2997849-8-thomas.petazzoni@bootlin.com>
-References: <20210107133948.2997849-1-thomas.petazzoni@bootlin.com>
- <20210107133948.2997849-8-thomas.petazzoni@bootlin.com>
-Message-ID: <CANQCQpb1HyQ=LmJNm5J2jAmNJuJuKE+_RteKAMucQMAanb-MUg@mail.gmail.com>
+From: Vincent Fazio <vfazio@xes-inc.com>
+Date: Thu, 7 Jan 2021 13:40:21 -0600
+Subject: [Buildroot] [PATCH 10/10 v3] package/tar: drop specific version
+ for host variant
+In-Reply-To: <a3b05faa57b2c10861825f5f00a4ab32d8fe5d81.1609239666.git.yann.morin.1998@free.fr>
+References: <cover.1609239666.git.yann.morin.1998@free.fr>
+ <a3b05faa57b2c10861825f5f00a4ab32d8fe5d81.1609239666.git.yann.morin.1998@free.fr>
+Message-ID: <7a85842a-0dc8-aa3c-9693-76f4ed94713d@xes-inc.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gregory/Thomas,
 
-On Thu, Jan 7, 2021 at 7:40 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> This commit extends pkg-stats to leverage the recently introduced
-> CPEDB class to verify that the CPEs provided by Buildroot packages are
-> indeed known in the official CPE dictionnary provided by NVD.
->
-> Co-Developed-by: Gr?gory Clement <gregory.clement@bootlin.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+On 12/29/20 5:01 AM, Yann E. MORIN wrote:
+> Now that we can generate reproducible archives, with all known tar
+> versions starting with 1.27, we don't need to clamp the host-tar
+> version to the old 1.29, and can now bump to any later version.
+> 
+> Drop the host-tar version, and use the same as the target variant.
+> 
+> Note that we still need the _SOURCE trick, to avoid depending on tar
+> to extract the tar tarball...
+> 
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Vincent Fazio <vfazio@xes-inc.com>
 > ---
->  support/scripts/pkg-stats | 30 +++++++++++++++++++++---------
->  1 file changed, 21 insertions(+), 9 deletions(-)
->
-> diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-> index 854ece389d..2c82dc96ad 100755
-> --- a/support/scripts/pkg-stats
-> +++ b/support/scripts/pkg-stats
-> @@ -33,7 +33,7 @@ brpath = os.path.normpath(os.path.join(os.path.dirname(__file__), "..", ".."))
->  sys.path.append(os.path.join(brpath, "utils"))
->  from getdeveloperlib import parse_developers  # noqa: E402
->  import cve as cvecheck  # noqa: E402
-> -
-> +from cpedb import CPEDB  # noqa: E402
->
->  INFRA_RE = re.compile(r"\$\(eval \$\(([a-z-]*)-package\)\)")
->  URL_RE = re.compile(r"\s*https?://\S*\s*$")
-> @@ -226,7 +226,8 @@ class Package:
->
->          if var in self.all_cpeids:
->              self.cpeid = self.all_cpeids[var]
-> -            self.status['cpe'] = ("ok", "verified CPE identifier")
-> +            # Set a preliminary status, it might be overridden by check_package_cpes()
-> +            self.status['cpe'] = ("warning", "not checked against CPE dictionnary")
->          else:
->              self.status['cpe'] = ("error", "no verified CPE identifier")
->
-> @@ -601,6 +602,18 @@ def check_package_cves(nvd_path, packages):
->                  pkg.status['cve'] = ("ok", "not affected by CVEs")
->
->
-> +def check_package_cpes(nvd_path, packages):
-> +    cpedb = CPEDB(nvd_path)
-> +    cpedb.get_xml_dict()
-> +    for p in packages:
-> +        if not p.cpeid:
-> +            continue
-> +        if cpedb.find(p.cpeid):
-> +            p.status['cpe'] = ("ok", "verified CPE identifier")
-> +        else:
-> +            p.status['cpe'] = ("error", "CPE identifier unknown in CPE database")
+>   package/tar/tar.mk | 8 ++------
+>   1 file changed, 2 insertions(+), 6 deletions(-)
+> 
+> diff --git a/package/tar/tar.mk b/package/tar/tar.mk
+> index 9e0a40e561..7822b1dada 100644
+> --- a/package/tar/tar.mk
+> +++ b/package/tar/tar.mk
+> @@ -29,14 +29,10 @@ endif
+>   
+>   $(eval $(autotools-package))
+>   
+> -# host-tar is used to create the archives in the VCS download backends and tar
+> -# 1.30 and forward have changed the archive format. So archives generated with
+> -# earlier versions are not bit-for-bit reproducible and the hashes would not
+> -# match. Hence host-tar must be kept at version 1.29.
+> -HOST_TAR_VERSION = 1.29
+>   # host-tar: use cpio.gz instead of tar.gz to prevent chicken-egg problem
+>   # of needing tar to build tar.
+> -HOST_TAR_SOURCE = tar-$(HOST_TAR_VERSION).cpio.gz
+> +HOST_TAR_SOURCE = tar-$(TAR_VERSION).cpio.gz
+> +
+>   define HOST_TAR_EXTRACT_CMDS
+>   	mkdir -p $(@D)
+>   	cd $(@D) && \
+> 
 
-I noticed in the pkgstats output that busybox which has an exact match
-was coming up as the following.
+Reviewed-by: Vincent Fazio <vfazio@xes-inc.com>
 
-cpe:2.3:a:busybox:busybox:1.32.0:*:*:*:*:*:*:*
-CPE identifier unknown in CPE database
+-- 
+Vincent Fazio
+Embedded Software Engineer - Linux
+Extreme Engineering Solutions, Inc
+http://www.xes-inc.com
