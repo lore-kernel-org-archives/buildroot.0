@@ -1,56 +1,42 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Thu, 7 Jan 2021 02:23:42 +0100
-Subject: [Buildroot] Patch for linux-headers
-In-Reply-To: <87czyj3rv8.fsf@dell.be.48ers.dk>
-References: <20201217003006.GA343694@pevik> <87czyj6p8i.fsf@dell.be.48ers.dk>
- <20210105224940.GA158146@pevik> <87czyj3rv8.fsf@dell.be.48ers.dk>
-Message-ID: <20210107012342.GA98187@pevik>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu,  7 Jan 2021 07:40:31 +0100
+Subject: [Buildroot] [PATCH 1/1] package/htop: needs dynamic library
+Message-ID: <20210107064031.257459-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+htop unconditionally uses dlopen since version 3.0.3 and
+https://github.com/htop-dev/htop/commit/2a9e8ca07475e61e74d7b6f0afd0a5fd272cb07f
 
-> >>>>> "Petr" == Petr Vorel <petr.vorel@gmail.com> writes:
+Fixes:
+ - http://autobuild.buildroot.org/results/2976729b0b95bf822c3095efbcf3f86d6c71874f
 
-> Hi,
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/htop/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
->  >> It can be done if needed, but it is naturally easier to handle
->  >> without.
->  > Understand. More versions and kernel checking would be needed.
->  > I implemented it, but IMHO it'd have to also require Buildroot toolchain
->  > rebuild.
-
-> Indeed.
-I backported it to all LTS and stable branches (except 5.9 which is EOL)
-It has been released to some of them, for the rest the patch is in
-stable-queue.git => will be released soon.
-
->  >> I noticed that you got some patches applied to the stable
->  >> kernels related to this recently - Do those fix the issues, or is an
->  >> additional patch needed?
->  > Yes, it fixes the issue. Thus no patching is needed.
-
-> Ok, great!
-
->  > OK, we need to wait till kernel stable releases, update kernel versions in
->  > Buildroot. But IMHO it still requires Buildroot toolchain rebuild. Or am I wrong?
-
-> Yes, the external toolchains will need to be rebuilt, but perhaps we can
-> blacklist those in the autobuilders until the toolchains are all rebuilt.
-Do you mean to disable MUSL based toolchains for affected packages?
-I'm carrying patch for LTP, which is not going to be upstreamed.
-Sure, I could drop this patch and add: depends on !BR2_TOOLCHAIN_USES_MUSL,
-but I expect more packages affected by <linux/sysinfo.h> bug.
-
->  > BTW I'm waiting for it for iproute2 upgrade (originally [1] and [2], now [3]).
-
-> Ahh, ok.
-I've prepared package for v5.8.0 which was blocked by this, then v5.9.0.
-There is already v5.10.0. I'm not sure what is better: allow BR2_TOOLCHAIN_USES_UCLIBC
-to have iproute2, but block new features (we still have v5.7.0).
-
-Kind regards,
-Petr
+diff --git a/package/htop/Config.in b/package/htop/Config.in
+index 7bb0fe6e07..214a9a1c99 100644
+--- a/package/htop/Config.in
++++ b/package/htop/Config.in
+@@ -1,9 +1,14 @@
+ config BR2_PACKAGE_HTOP
+ 	bool "htop"
+ 	depends on BR2_USE_MMU # fork()
++	depends on !BR2_STATIC_LIBS # dlopen()
+ 	select BR2_PACKAGE_NCURSES
+ 	help
+ 	  htop is an interactive text-mode process viewer for Linux.
+ 	  It aims to be a better top.
+ 
+ 	  https://htop.dev/
++
++comment "htop needs a toolchain w/ dynamic library"
++	depends on BR2_USE_MMU
++	depends on BR2_STATIC_LIBS
+-- 
+2.29.2
