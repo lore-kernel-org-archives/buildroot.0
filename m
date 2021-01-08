@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 8 Jan 2021 08:32:35 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x]
+Date: Fri, 8 Jan 2021 08:31:15 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x]
  package/dovecot-pigeonhole: bump version to 0.5.13
-Message-ID: <20210108071452.EEC8C86ADA@busybox.osuosl.org>
+Message-ID: <20210108071459.DEA7981952@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=912bf39711a177ae7f8ffb720e963299321a2e2e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=0cfa03c9942b61089e556b461666cea207d0f483
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
 Release notes:
 https://dovecot.org/pipermail/dovecot-news/2021-January/000449.html
