@@ -1,90 +1,66 @@
-From: Vivek Kumar Gautam <vivek.gautam@arm.com>
-Date: Fri, 8 Jan 2021 14:20:43 +0530
-Subject: [Buildroot] [PATCH] configs/aarch64_rdinfra: add new config for
- infra rd plaforms
-In-Reply-To: <8bb9244f-9ac1-a265-bd22-5d05b642c2dc@arm.com>
-References: <20201126100507.27484-1-vivek.gautam@arm.com>
- <8bb9244f-9ac1-a265-bd22-5d05b642c2dc@arm.com>
-Message-ID: <9755e6ac-fa23-67ed-cdaa-9606038342de@arm.com>
+From: Schwarz, Konrad <konrad.schwarz@siemens.com>
+Date: Fri, 8 Jan 2021 12:32:19 +0000
+Subject: [Buildroot] [PATCH 2/3] package/environment-setup: make script
+ idempotent
+In-Reply-To: <aacff91f-ea3c-ed65-3906-0cc8ac3bf30f@mind.be>
+References: <20201231212949.2415485-1-konrad.schwarz@siemens.com>
+ <20201231212949.2415485-3-konrad.schwarz@siemens.com>
+ <aacff91f-ea3c-ed65-3906-0cc8ac3bf30f@mind.be>
+Message-ID: <b80a6fab1082443ea9bd5cd423642b38@siemens.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Hi Arnout,
 
+> -----Original Message-----
+> From: Arnout Vandecappelle <arnout@mind.be>
+> Sent: Thursday, January 7, 2021 22:43
+> To: Schwarz, Konrad (T RDA IOT SES-DE) <konrad.schwarz@siemens.com>; buildroot at buildroot.org
+> Subject: Re: [Buildroot] [PATCH 2/3] package/environment-setup: make script idempotent
 
-On 12/5/20 10:59 AM, Vivek Kumar Gautam wrote:
-> Hi,
->
->
-> On 11/26/20 3:35 PM, Vivek Kumar Gautam wrote:
->> This defconfig enables Arm aarch64 Infra RD platforms to use
->> buildroot backed ramdisks to perform simple unit/sanity testing.
->> These infra platforms are currently enabled with a scripts based
->> build system as can be seen in linaro public repos[1]. A busybox
->> based boot is also enabled[2].
->> We plan to use buildroot for a richer experience while testing and
->> therefore this config.
->> This config will also be first step towards enabling buildroot
->> based build system for infra rd platforms in near future.
->> It comes with following minimal stuff -
->>   -neoverse_n1 cpu
->>   -bash shell
->>   -vim
->>   -pciutils
->>   -libdtc
->>   -screen
->>
->> [1]
->> https://git.linaro.org/landing-teams/working/arm/arm-reference-platforms.git/about/
->>
->> [2]
->> https://git.linaro.org/landing-teams/working/arm/arm-reference-platforms.git/about/docs/rdn1edge/how-to/busybox-boot.rst
->>
->>
->> Signed-off-by: Vivek Kumar Gautam <vivek.gautam@arm.com>
->> ---
->>   configs/aarch64_rdinfra_defconfig | 21 +++++++++++++++++++++
->>   1 file changed, 21 insertions(+)
->>   create mode 100644 configs/aarch64_rdinfra_defconfig
->>
->> diff --git a/configs/aarch64_rdinfra_defconfig
->> b/configs/aarch64_rdinfra_defconfig
->> new file mode 100644
->> index 0000000000..71e44e537c
->> --- /dev/null
->> +++ b/configs/aarch64_rdinfra_defconfig
->> @@ -0,0 +1,21 @@
->> +# Architecture
->> +BR2_aarch64=y
->> +
->> +# Processor
->> +BR2_neoverse_n1=y
->> +
->> +# Toolchain
->> +BR2_TOOLCHAIN_EXTERNAL=y
->> +
->> +# Additional system packages
->> +BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
->> +BR2_PACKAGE_PCIUTILS=y
->> +BR2_PACKAGE_DTC=y
->> +BR2_PACKAGE_DTC_PROGRAMS=y
->> +BR2_PACKAGE_LIBEVENT=y
->> +BR2_PACKAGE_BASH=y
->> +BR2_PACKAGE_SCREEN=y
->> +BR2_PACKAGE_VIM=y
->> +
->> +# Target filesystem
->> +BR2_TARGET_ROOTFS_CPIO=y
->
-> Gentle ping. Any comments on this?
+> > The code has also been simplified
+> > (using standard POSIX shell features) and make the generated script
+> > more readable, e.g., by splitting overly long lines.
+> 
+>  Maybe the generated script is more readable (and I'm not entirely convinced), but the code in the .mk file is much *less* readable.
 
-I will be more than happy to address any feedback on this config patch.
-Please let me know if there are missing pieces.
+Well, beauty is obviously in the eye of the beholder. 
 
-Best regards
-Vivek
+Objectively, the change eliminates wrapping each generated line with
+"printf ... >> $(ENVIRONMENT_SETUP_FILE)" by placing the code in a compound block,
+and can eliminate the variable ENVIRONMENT_SETUP_FILE, since its value ends up being used
+only once in the result.
 
-IMPORTANT NOTICE: The contents of this email and any attachments are confidential and may also be privileged. If you are not the intended recipient, please notify the sender immediately and do not disclose the contents to any other person, use it for any purpose, or store or copy the information in any medium. Thank you.
+It eliminates the for ;do done loop over TARGET_CONFIGURE_OPTS, because printf(1) has this ability built in.
+
+It eliminates all occurrences of backslash-escaped double quotes, because it uses single quotes to
+quote strings (that may contain double quotes).
+
+Backslash escapes are still required to indicate the ends of continued lines in the generated shell file
+(i.e., a backslash followed by a newline), but I value the readability of the generated file high enough so I am
+willing to make that trade-off.   This is because I expect many more users to look at the generated script than its'
+generator to figure out what the script does (and where it fails).
+
+The number of these sequences could have been reduced by using more printf
+statements; I don't think that alternative is a clear win, because you would end up with more mental switches
+between generator and generated code.
+
+It eliminates re-editing of the generated file by using sed as a filter in a pipeline.
+
+>  If you want to make it more readable, I think it would be better to do change the environment-setup script to environment-setup.in
+> that contains @VAR@ references which are replaced with sed. In fact, since this kind of approach is used in many places, it would be
+> worth adding a make function that does exactly that. But maybe that's going a bit too far :-)
+
+I don't see how that technique is applicable here; simple substitution of this sort is also prone to breakage
+(aka SQL injection).
+
+>  Also, this change of how the script is formatted should be split in a separate patch from the PATH manipulation, they are pretty much
+> unrelated.
+
+I hope the individual changes to the script mechanics have now been sufficiently motivated.
+
+--
+Konrad
