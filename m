@@ -1,71 +1,70 @@
-From: Maxime Chevallier <maxime.chevallier@bootlin.com>
-Date: Fri, 8 Jan 2021 10:59:18 +0100
-Subject: [Buildroot] [PATCH 1/3] package/refpolicy: Add patches pending
- the next release
-In-Reply-To: <20210107175543.2fb51ec6@windsurf.home>
-References: <20210107135307.1762186-1-maxime.chevallier@bootlin.com>
- <20210107135307.1762186-2-maxime.chevallier@bootlin.com>
- <20210107175543.2fb51ec6@windsurf.home>
-Message-ID: <20210108105918.177d00b3@bootlin.com>
+From: Michael Opdenacker <michael.opdenacker@bootlin.com>
+Date: Fri, 8 Jan 2021 11:07:59 +0100
+Subject: [Buildroot] Upgrading LLVM and Clang to version 11.0.0... issue
+ with libclc
+In-Reply-To: <0a47a156-bcde-41a3-bd34-24df0549d0ba@gmail.com>
+References: <1ff5aafd-9aeb-2cf0-8e90-333c7c39cbaa@bootlin.com>
+ <0a47a156-bcde-41a3-bd34-24df0549d0ba@gmail.com>
+Message-ID: <148a6a55-99e4-e4f1-252c-17c693f5df57@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi Romain,
 
-On Thu, 7 Jan 2021 17:55:43 +0100
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+Many thanks for your help and insights!
 
->Hello,
+On 1/7/21 6:41 PM, Romain Naour wrote:
+> I believe CMake try to check clang as cross-compiler before using it.
+> Can you share the CMake error log file ?
+
+
+Here are the contents of the CMakeError.log file:
+
+>>>
+
+Determining if the CLC compiler works failed with the following output:
+
+
+Determining if the CLC compiler works failed with the following output:
+
+
+Determining if the CLC compiler works failed with the following output:
+
+
+Determining if the CLC compiler works failed with the following output:
+
+<<<
+
+CMakeOutput.log is a bit too big to share here
+
 >
->On Thu,  7 Jan 2021 14:53:05 +0100
->Maxime Chevallier <maxime.chevallier@bootlin.com> wrote:
+> For now, host/bin/clang can't be used as cross-compiler to build application
+> (the simple test program) because we need to add a wrapper like for gcc.
 >
->> diff --git a/package/refpolicy/0001-pending-next-release.patch b/package/refpolicy/0001-pending-next-release.patch
->> new file mode 100644
->> index 0000000000..e049845638
->> --- /dev/null
->> +++ b/package/refpolicy/0001-pending-next-release.patch
->> @@ -0,0 +1,673 @@
->> +From 2566e2dac2c759392e0b9f3d442b8489b726cb10 Mon Sep 17 00:00:00 2001
->> +From: Antoine Tenart <antoine.tenart@bootlin.com>
->> +Date: Mon, 31 Aug 2020 15:38:13 +0200
->> +Subject: [PATCH 1/8] [pending next release]  
+> configure.py was kind enough to accept host/bin/clang as is to build libclc library.
 >
->Could you generate patches for packages with git format-patch -N to
->avoid the numbering PATCH X/Y ? This is normally caught by "make
->check-package".
+> If we can skip the cmake test, the library should build as before.
 
-OK I'll do that.
+Ok, I'll try.
 
->Also, this particular patch is apparently a huge aggregation of several
->individual upstream commits. We do want to have each individual commit
->as a separate patch in Buildroot, with a reference to the upstream
->commit, a bit like this:
+> I don't think we have to build libclc before clang, as you can see in the
+> current packaging only mesa3d depends on libclc. Clang itself doesn't depend on
+> libclc.
 >
->Signed-off-by: Antoine T?nart ...
->Upstream: link to upstream commit, or at least commit hash
->Signed-off-by: You
-
-OK I'll resubmit with individual patches. I wanted to ease the task by
-grouping patches that could be removed all at once in the next release.
-
-I hope that having a large number of patches bundled with the refpolicy
-package will be acceptable.
-
-Thanks,
-
-Maxime
-
->Thanks!
->
->Thomas
+> You can find some details about the initial work in this blog:
+> https://www.linuxembedded.fr/2018/07/llvmclang-integration-into-buildroot/
 
 
+Great! This will definitely be useful.
+
+Many thanks,
+
+Michael.
 
 -- 
-Maxime Chevallier, Bootlin
-Embedded Linux and kernel engineering
+Michael Opdenacker, CEO, Bootlin
+Embedded Linux and Kernel engineering
 https://bootlin.com
