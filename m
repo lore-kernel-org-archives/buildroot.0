@@ -1,234 +1,165 @@
-From: Chris Packham <judge.packham@gmail.com>
-Date: Fri, 8 Jan 2021 21:04:22 +1300
-Subject: [Buildroot] [PATCH v2 2/2] package/coremark-pro: new package
-In-Reply-To: <1f0fa112-fe2c-bf89-4e2a-12a0a6489620@mind.be>
-References: <20201111224102.28799-1-judge.packham@gmail.com>
- <20201111224102.28799-2-judge.packham@gmail.com>
- <1f0fa112-fe2c-bf89-4e2a-12a0a6489620@mind.be>
-Message-ID: <CAFOYHZCLpEWZOh9kivB4QC6MhrBLZOq9s1zE24LjQ6G8mXazQA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 08 Jan 2021 08:34:05 -0000
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2021-01-07
+Message-ID: <20210108083411.5288780077@whitealder.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 8 Jan 2021, 11:00 AM Arnout Vandecappelle, <arnout@mind.be> wrote:
+Hello,
 
->
->
-> On 11/11/2020 23:41, Chris Packham wrote:
-> > CoreMark-Pro is a comprehensive, advanced processor benchmark that
-> > works with and enhances the market-proven industry-standard EEMBC
-> > CoreMark benchmark.
-> >
-> > https://www.eembc.org/coremark-pro/
-> >
-> > Signed-off-by: Chris Packham <judge.packham@gmail.com>
-> > ---
-> > Changes in v2:
-> > - Add depends on BR2_USE_MMU (thanks Matt)
-> >
-> [snip]
-> > diff --git a/package/coremark-pro/coremark-pro.hash
-> b/package/coremark-pro/coremark-pro.hash
-> > new file mode 100644
-> > index 0000000000..16b121edb3
-> > --- /dev/null
-> > +++ b/package/coremark-pro/coremark-pro.hash
-> > @@ -0,0 +1,3 @@
-> > +#locally computed
->
->  (nitpick)
->
-> # Locally computed
->
+Autobuild statistics for 2021-01-07
+===================================
 
-Noted
+      branch |  OK | NOK | TIM | TOT |
+  2020.02.x  | 19  |  9  |  0  | 28  |
+  2020.11.x  | 19  |  3  |  0  | 22  |
+    master   | 139 | 54  |  1  | 194 |
 
+Classification of failures by reason for master
+-----------------------------------------------
 
-> > +sha256
-> 440223554134832efec4ad220795611769ded3869fbc3ce3c59b05b7ddeb9f6d
-> coremark-pro-1.1.2743.tar.gz
-> > +sha256
-> 0d7775bd793ea71fef3594c18164a08ed2f5f66c898958d0644f7a236a536f2b  LICENSE.md
-> > diff --git a/package/coremark-pro/coremark-pro.mk
-> b/package/coremark-pro/coremark-pro.mk
-> > new file mode 100644
-> > index 0000000000..d3e99fcdfd
-> > --- /dev/null
-> > +++ b/package/coremark-pro/coremark-pro.mk
-> > @@ -0,0 +1,42 @@
-> >
-> +################################################################################
-> > +#
-> > +# CoreMark-PRO
-> > +#
-> >
-> +################################################################################
-> > +
-> > +COREMARK_PRO_VERSION = 1.1.2743
-> > +COREMARK_PRO_SITE = $(call
-> github,eembc,coremark-pro,v$(COREMARK_PRO_VERSION))
-> > +COREMARK_PRO_LICENSE = Apache-2.0
-> > +COREMARK_PRO_LICENSE_FILES = LICENSE.md
-> > +COREMARK_PRO_DEPENDENCIES = perl
-> > +
-> > +ifeq ($(BR2_ENDIAN),"BIG")
-> > +COREMARK_PRO_MAKE_OPTS += PLATFORM_DEFINES='EE_BIG_ENDIAN=1
-> EE_LITTLE_ENDIAN=0'
-> > +else
-> > +COREMARK_PRO_MAKE_OPTS += PLATFORM_DEFINES='EE_BIG_ENDIAN=0
-> EE_LITTLE_ENDIAN=1'
-> > +endif
-> > +
-> > +COREMARK_PRO_MAKE_OPTS += \
-> > +     TARGET=linux$(if $(BR2_ARCH_IS_64),64) \
-> > +     EXE=
-> > +
-> > +define COREMARK_PRO_BUILD_CMDS
-> > +     $(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_CC)" -C
-> $(@D) \
-> > +             $(COREMARK_PRO_MAKE_OPTS) build
-> > +endef
-> > +
-> > +COREMARK_PRO_MARKS = cjpeg-rose7-preset core linear_alg-mid-100x100-sp
-> loops-all-mid-10k-sp nnet_test parser-125k radix2-big-64k sha-test zip-test
-> > +COREMARK_PRO_SCRIPTS = results_parser.pl cert_median.pl cert_mark.pl
-> headings.txt
-> > +
-> > +define COREMARK_PRO_INSTALL_TARGET_CMDS
-> > +     mkdir -p  $(TARGET_DIR)/usr/share/coremark-pro/logs
-> > +     $(foreach m,$(COREMARK_PRO_MARKS),\
-> > +             $(INSTALL) -D $(@D)/builds/linux$(if
-> $(BR2_ARCH_IS_64),64)/gcc$(if $(BR2_ARCH_IS_64),64)/bin/$(m)
-> $(TARGET_DIR)/usr/bin/$(m)$(sep) \
-> > +             size $(TARGET_DIR)/usr/bin/$(m) >
-> $(TARGET_DIR)/usr/share/coremark-pro/logs/$(m).size.log$(sep))
->
->  Why is this size.log needed? Would be nice to have mentioned that in the
-> commit
-> message.
->
-
-I _think_ it's used as part of verifying the benchmarks. Doing it this way
-saves having to depend on binutils for the target.
+                 uclibc-1.0.37 | 9 
+        host-sentry-cli-1.57.0 | 6 
+            erlang-jiffy-1.0.6 | 3 
+ Makefile:753: target-finalize | 3 
+            qt5location-5.15.2 | 3 
+                clamav-0.103.0 | 2 
+                coreutils-8.32 | 2 
+                 mesa3d-20.3.2 | 2 
+                    olsr-0.9.8 | 2 
+                 open62541-1.0 | 2 
+                       unknown | 2 
+               belle-sip-4.4.8 | 1 
+               capnproto-0.8.0 | 1 
+              fstrcmp-0.7.D001 | 1 
+  gobject-introspection-1.64.1 | 1 
+                   gvfs-1.44.1 | 1 
+                 haproxy-2.2.6 | 1 
+             kismet-2020-12-R3 | 1 
+               libuhttpd-3.6.0 | 1 
+                 libusb-1.0.24 | 1 
+                  monkey-1.6.9 | 1 
+                mono-6.12.0.90 | 1 
+   openvmtools-10.3.5-10430147 | 1 
+           python-pybind-2.6.1 | 1 
+                    qemu-5.2.0 | 1 
+               target-finalize | 1 
+    trace-cmd-trace-cmd-v2.9.1 | 1 
+                    vlc-3.0.11 | 1 
+                       vmtouch | 1 
+               wireshark-3.4.2 | 1 
 
 
-> > +     $(INSTALL) -D $(@D)/builds/linux$(if $(BR2_ARCH_IS_64),64)/gcc$(if
-> $(BR2_ARCH_IS_64),64)/data/libbmp/Rose256.bmp
-> $(TARGET_DIR)/usr/share/coremark-pro/Rose256.bmp
-> > +     $(foreach s,$(COREMARK_PRO_SCRIPTS),\
-> > +             $(INSTALL) -D $(@D)/util/perl/$(s)
-> $(TARGET_DIR)/usr/share/coremark-pro/util/perl/$(s)$(sep))
-> > +     $(Q)cp package/coremark-pro/coremark-pro.sh $(TARGET_DIR)/usr/bin/
-> > +endef
-> > +
-> > +$(eval $(generic-package))
-> > diff --git a/package/coremark-pro/coremark-pro.sh
-> b/package/coremark-pro/coremark-pro.sh
-> > new file mode 100755
-> > index 0000000000..65ad9df645
-> > --- /dev/null
-> > +++ b/package/coremark-pro/coremark-pro.sh
-> > @@ -0,0 +1,36 @@
-> > +#!/bin/sh
-> > +# SPDX-License-Identifier: Apache-2.0
-> > +
-> > +workloads="cjpeg-rose7-preset core linear_alg-mid-100x100-sp \
-> > +    loops-all-mid-10k-sp nnet_test parser-125k radix2-big-64k sha-test
-> zip-test"
->
->  I think it would be better to set
->
-> workloads="@COREMARK_PRO_MARKS#@"
->
-> here, and substitute it from the .mk file. That way, changing the list has
-> to be
-> done only in one place.
->
+Detail of failures for master
+-----------------------------
 
-Yep agreed. For such things is it normal to have a .sh.in and "build" the
-actual .sh file or just sed it in place?
-
-
-> > +
-> > +rm -rf /tmp/coremark-pro
-> > +mkdir -p /tmp/coremark-pro
-> > +cp /usr/share/coremark-pro/Rose256.bmp /tmp/coremark-pro
-> > +cp /usr/share/coremark-pro/logs/*.size.log /tmp/coremark-pro
-> > +
-> > +cd /tmp/coremark-pro
-> > +
-> > +for contype in single best; do
-> > +    cat /usr/share/coremark-pro/util/perl/headings.txt >>result.log
-> > +    for wld in $workloads; do
-> > +        [ "$contype" = "single" ] && XCMD="-c1 -w1"
-> > +        [ "$contype" = "best" ] && XCMD="-c$(nproc) -w$(nproc)"
-> > +        echo "#Results for verification run started at $(date
-> +%y%j:%H:%M:%S) XCMD=$XCMD" >$wld-$contype-result.log
-> > +        echo "Verification run for $wld"
-> > +        $wld $XCMD -v1 > $wld.run.log
-> > +        LC_ALL=C perl /usr/share/coremark-pro/util/perl/
-> results_parser.pl $wld-$contype-result.log $wld.run.log> +        echo
-> "#Results for performance runs started at $(date +%y%j:%H:%M:%S)
-> XCMD=$XCMD" >>$wld-$contype-result.log
-> > +        echo "Performance run for $wld"
-> > +        for i in 1 2 3; do
-> > +            $wld $XCMD -v0 > $wld.run.log
-> > +            LC_ALL=C perl /usr/share/coremark-pro/util/perl/
-> results_parser.pl $wld-$contype-result.log $wld.run.log
-> > +        done
-> > +        echo "#Median for final result $wld" >>$wld-$contype-result.log
-> > +        LC_ALL=C perl /usr/share/coremark-pro/util/perl/cert_median.pl
-> $wld-$contype-result.log $contype >>$wld-$contype-result.log
->
->  Since this script supposedly generates user-readable output, I'm not sure
-> if
-> the LC_ALL=C is appropriate.
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+   nios2     |        belle-sip-4.4.8         | NOK | http://autobuild.buildroot.net/results/7aa9bc600cfa63125fe2bb38c824eca621b7c335 |     
+  riscv64    |        capnproto-0.8.0         | NOK | http://autobuild.buildroot.net/results/99efcbac2be28b8a831a2caf0080b623c3dc8144 |     
+  riscv64    |         clamav-0.103.0         | NOK | http://autobuild.buildroot.net/results/e26bad81ad291af8f5fc33b03ecfe84a4fd689a5 |     
+  riscv64    |         clamav-0.103.0         | NOK | http://autobuild.buildroot.net/results/37b365f104cd1074f889697db51ea9631f618639 |     
+    arm      |         coreutils-8.32         | NOK | http://autobuild.buildroot.net/results/46dbf08eec07dc8865399457548c27a7117b4bce | ORPH
+    arm      |         coreutils-8.32         | NOK | http://autobuild.buildroot.net/results/f0e5b621ef12ab128de5e791d1fd51bf634c4453 | ORPH
+   mipsel    |       erlang-jiffy-1.0.6       | NOK | http://autobuild.buildroot.net/results/f22344ddc03cecaac15d6b87fcf0cb4496d0d0af |     
+  aarch64    |       erlang-jiffy-1.0.6       | NOK | http://autobuild.buildroot.net/results/9100f213bcf294f069416592c165593027b5a057 |     
+   x86_64    |       erlang-jiffy-1.0.6       | NOK | http://autobuild.buildroot.net/results/af6a5714990cd53e5f8a8278910162cbb66786f7 |     
+    arm      |        fstrcmp-0.7.D001        | NOK | http://autobuild.buildroot.net/results/b209df4414c970d58bf7032df92c89c89bde65a1 |     
+   s390x     |  gobject-introspection-1.64.1  | NOK | http://autobuild.buildroot.net/results/e11f2cedd5b2e55fb295ebf920f9eedf20e1d9f3 | ORPH
+    arm      |          gvfs-1.44.1           | NOK | http://autobuild.buildroot.net/results/ab1b7ba76c4de5e1e32ee9b9a3fd314f6918bc07 | ORPH
+    sh4      |         haproxy-2.2.6          | NOK | http://autobuild.buildroot.net/results/c58376165406ed28cf736cb13158629f654a7491 |     
+microblazeel |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/bfdda3a7e1a133c82a9f84bdd091583074a3fdd9 |     
+    arc      |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/e9eff105a815302b7d19710097c2a832b74a56b5 |     
+  powerpc    |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/f35f8d462fc64e571a11af15dd73b2fc5387a633 |     
+   nios2     |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/e66be1c6cfdf39a7e1cc617c20cfc9dd22a14c67 |     
+    arm      |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/660fb94162df9525de0295999517a26f597a3d85 |     
+  powerpc    |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/2d6f9e07d87e4aac79de231a4e494c6377f4c960 |     
+    arc      |       kismet-2020-12-R3        | NOK | http://autobuild.buildroot.net/results/6393b1348ba065cebc62fd3df0046bc80c357fe3 | ORPH
+   x86_64    |        libuhttpd-3.6.0         | NOK | http://autobuild.buildroot.net/results/0d53b561ba02db018ca90dce29e9064b12c1276b |     
+    arm      |         libusb-1.0.24          | NOK | http://autobuild.buildroot.net/results/51defe571f612222b8624898b6ea7f1ee86df9c7 |     
+  aarch64    | Makefile:753: target-finalize  | NOK | http://autobuild.buildroot.net/results/602d02e59be7588d1245c89a582a4d9ec7ffa2f4 |     
+    arc      | Makefile:753: target-finalize  | NOK | http://autobuild.buildroot.net/results/c7f5b39d3f2685050fbffd20c7af347a0f88cccf |     
+    mips     | Makefile:753: target-finalize  | NOK | http://autobuild.buildroot.net/results/53f6e3c908edc5dc7f61dd0844f85c971ffe827c |     
+  powerpc    |         mesa3d-20.3.2          | NOK | http://autobuild.buildroot.net/results/d90aa19f49da4172e94451f44b3a4ab2c0f6e927 |     
+    mips     |         mesa3d-20.3.2          | NOK | http://autobuild.buildroot.net/results/caabb146470d4bf813a91545964acb1772e65a58 |     
+    arm      |          monkey-1.6.9          | NOK | http://autobuild.buildroot.net/results/d9f05fa8557b9a849955aa387b128f070a9eafa8 | ORPH
+    arm      |         mono-6.12.0.90         | NOK | http://autobuild.buildroot.net/results/c49de5742aba01dc1332ea2dfcf49cdb73b0a188 |     
+    arm      |           olsr-0.9.8           | NOK | http://autobuild.buildroot.net/results/5b598d728e6aae61b295681b0d7777e83074fecd | ORPH
+  mips64el   |           olsr-0.9.8           | NOK | http://autobuild.buildroot.net/results/b457b18dfdc9a38a0e5c8198e5d760906822ab5c | ORPH
+    arm      |         open62541-1.0          | NOK | http://autobuild.buildroot.net/results/8a719397079b5b529fa83d7bd27780d40bcbd4ee |     
+    arm      |         open62541-1.0          | NOK | http://autobuild.buildroot.net/results/86ca6a5a01ecfc7030c6be0da81924436b41d057 |     
+   x86_64    |  openvmtools-10.3.5-10430147   | NOK | http://autobuild.buildroot.net/results/3af7b9fd6538d71d3374fd9611f389b9165b35c2 |     
+  aarch64    |      python-pybind-2.6.1       | NOK | http://autobuild.buildroot.net/results/27bc01a960cba062803f37466e136d84fa0d6eed |     
+   mipsel    |           qemu-5.2.0           | NOK | http://autobuild.buildroot.net/results/3b8f239e987643d3ed31f48858f42a71d36b32e2 |     
+    i686     |       qt5location-5.15.2       | NOK | http://autobuild.buildroot.net/results/4cb79e99ef8ef680aa3d4e8655451b70a3706e1b |     
+  aarch64    |       qt5location-5.15.2       | NOK | http://autobuild.buildroot.net/results/5ff5013c7edb723d011df4164a23ba9f3311d839 |     
+   mipsel    |       qt5location-5.15.2       | NOK | http://autobuild.buildroot.net/results/255ffa6c5bb11c2bf3baad4231f00c2dcb31e2ba |     
+  riscv64    |        target-finalize         | NOK | http://autobuild.buildroot.net/results/ba24ba65dd75a14e2f52d6f6c966a3642c5e336e |     
+   x86_64    |   trace-cmd-trace-cmd-v2.9.1   | NOK | http://autobuild.buildroot.net/results/47642e2827cecfe7238ea5f8521ebfa7e5cde781 |     
+  riscv64    |         uclibc-1.0.37          | NOK | http://autobuild.buildroot.net/results/6c77d6e0f447c92486ba868d3de91f82242f5484 |     
+   xtensa    |         uclibc-1.0.37          | NOK | http://autobuild.buildroot.net/results/651138237f878b3532b8f1de0594e084f9f9f0e6 |     
+    arm      |         uclibc-1.0.37          | NOK | http://autobuild.buildroot.net/results/5e12dca19dbf1458253154a0a383d3a9d05c733a |     
+  powerpc    |         uclibc-1.0.37          | NOK | http://autobuild.buildroot.net/results/0660816acbd3df7a3d4e47506238050bd4c9e11a |     
+    arm      |         uclibc-1.0.37          | NOK | http://autobuild.buildroot.net/results/bf9b635894eaba5dbdadf0a210b0ab2939c33562 |     
+    arc      |         uclibc-1.0.37          | NOK | http://autobuild.buildroot.net/results/701e9b0ef83307a57b9f7f8d42ff00618fc4e1be |     
+    arc      |         uclibc-1.0.37          | NOK | http://autobuild.buildroot.net/results/5c6d9a99e6691609670d206134a21a9b9c62ef2d |     
+  powerpc    |         uclibc-1.0.37          | NOK | http://autobuild.buildroot.net/results/6ec9eab5d789930ed0bcd5a8d0a3d9e273013b8b |     
+    arc      |         uclibc-1.0.37          | NOK | http://autobuild.buildroot.net/results/780609cec563478c633bcee0af177c02b48aaba8 |     
+   mipsel    |            unknown             | NOK | http://autobuild.buildroot.net/results/c289fae14280744538972a6e23e5e41f6afdcbc0 |     
+  riscv64    |            unknown             | NOK | http://autobuild.buildroot.net/results/b55a8cffc624afa90c6ed6fff712bbc7c466bba4 |     
+    i586     |           vlc-3.0.11           | NOK | http://autobuild.buildroot.net/results/fb12d981f7ebb859618bc17ed5f18a9fee1e98ee |     
+    arm      |            vmtouch             | TIM | http://autobuild.buildroot.net/results/97aec12189aa5d8c8d8c643bf32346ff8ec7b8c3 |     
+  powerpc    |        wireshark-3.4.2         | NOK | http://autobuild.buildroot.net/results/878a2755e2a80f2372e688572c202388c72c809d | ORPH
 
 
-I think LC_ALL=C is appropriate as it enables comparison between
-boards/SoCs without subtle differences due to the current locale.
+Classification of failures by reason for 2020.02.x
+--------------------------------------------------
 
-Similary, the timestamps should probably use
-> "+%X %x" as well.
-
-
-Yep that's reasonable.
-
-And maybe the other perl invocations too.
->
-> > +        cat $wld-$contype-result.log >>result.log
-> > +    done
-> > +done
->
->  Shouldn't the /tmp/coremark-pro directory be cleaned up again afterwards?
->
-
-I kind of went the otherway in deleting it at the start of the script. My
-thought was to leave the artifacts around so they could be manually
-inspected or further processed.
+          gstreamer1-mm-1.10.0 | 2 
+                 uclibc-1.0.32 | 2 
+                bitcoin-0.20.1 | 1 
+                  cairo-1.16.0 | 1 
+        qt5imageformats-5.12.8 | 1 
+                suricata-4.1.9 | 1 
+              wireshark-3.2.10 | 1 
 
 
->  None of these are major concerns, so I've applied to master (with just the
-> small fix in the hash file). Feel free to post improvements as follow up
-> patches. Thanks!
->
+Detail of failures for 2020.02.x
+--------------------------------
 
-Thank you. I'm still on an extended break (southern hemisphere summer) so
-I'll look at sending some of these updates when I'm in front of a real
-keyboard.
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+  mips64el   |         bitcoin-0.20.1         | NOK | http://autobuild.buildroot.net/results/93854425df6d7df55c06aa0cb004a21aa3d8b80c |     
+    m68k     |          cairo-1.16.0          | NOK | http://autobuild.buildroot.net/results/61a7b391adb5656a47544ba36423286e6f7f650b |     
+    mips     |      gstreamer1-mm-1.10.0      | NOK | http://autobuild.buildroot.net/results/53b4eeebe33d2f2c2e74911185803af9728c2c15 | ORPH
+  mips64el   |      gstreamer1-mm-1.10.0      | NOK | http://autobuild.buildroot.net/results/16fda7936892be752f27b03a29ce2f21b9d3bc4b | ORPH
+  riscv64    |     qt5imageformats-5.12.8     | NOK | http://autobuild.buildroot.net/results/28a9efaf4d2552b2e3291d0a735d3de3abec4c0d |     
+    m68k     |         suricata-4.1.9         | NOK | http://autobuild.buildroot.net/results/d60adc9b881bd6a3a22468179a031d37f3334963 |     
+   xtensa    |         uclibc-1.0.32          | NOK | http://autobuild.buildroot.net/results/0f2a74e0432528c73b9b144c2433dd88fca27ac9 |     
+  powerpc    |         uclibc-1.0.32          | NOK | http://autobuild.buildroot.net/results/c77e830532159d40fb685f8bbc5ae6f1b210e54b |     
+  powerpc    |        wireshark-3.2.10        | NOK | http://autobuild.buildroot.net/results/968f68da894f1489414e78fd7c7330fabbceb6d0 | ORPH
 
 
->  Regards,
->  Arnout
->
-> > +LC_ALL=C perl /usr/share/coremark-pro/util/perl/cert_mark.pl -i
-> result.log -s coremarkpro > result.mark
-> > +cat result.mark
-> > +cd - >/dev/null
-> >
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210108/a8dd09d2/attachment.html>
+Classification of failures by reason for 2020.11.x
+--------------------------------------------------
+
+        host-sentry-cli-1.57.0 | 2 
+                host-go-1.15.6 | 1 
+
+
+Detail of failures for 2020.11.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+  mips64el   |         host-go-1.15.6         | NOK | http://autobuild.buildroot.net/results/6c5dad3bdf78f2e2d4c326150e2c4ff8bcac8aaf |     
+   mipsel    |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/3a36865d91138b7a64ac8bc6cdb898b4acccfd13 |     
+   s390x     |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/8c6bb183f94f486219264db6b61f728231099de3 |     
+
+
+
+-- 
+http://autobuild.buildroot.net
