@@ -1,49 +1,74 @@
-From: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@essensium.com>
-Date: Fri,  8 Jan 2021 18:50:49 +0100
-Subject: [Buildroot] [PATCH] package/python-s3transfer: bump to version 0.3.3
-Message-ID: <20210108175050.31445-1-raphael.melotte@essensium.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri,  8 Jan 2021 19:19:53 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libiec61850: fix CVE-2020-15158
+Message-ID: <20210108181953.610531-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-While at it, use two spaces for all the hashes.
+In libIEC61850 before version 1.4.3, when a message with COTP message
+length field with value < 4 is received an integer underflow will happen
+leading to heap buffer overflow. This can cause an application crash or
+on some platforms even the execution of remote code. If your application
+is used in open networks or there are untrusted nodes in the network it
+is highly recommend to apply the patch. This was patched with commit
+033ab5b. Users of version 1.4.x should upgrade to version 1.4.3 when
+available. As a workaround changes of commit 033ab5b can be applied to
+older versions.
 
-Signed-off-by: Rapha?l M?lotte <raphael.melotte@essensium.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/python-s3transfer/python-s3transfer.hash | 6 +++---
- package/python-s3transfer/python-s3transfer.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ ...uffer-overflow-when-handling-message.patch | 27 +++++++++++++++++++
+ package/libiec61850/libiec61850.mk            |  3 +++
+ 2 files changed, 30 insertions(+)
+ create mode 100644 package/libiec61850/0003-COTP-fixed-possible-heap-buffer-overflow-when-handling-message.patch
 
-diff --git a/package/python-s3transfer/python-s3transfer.hash b/package/python-s3transfer/python-s3transfer.hash
-index 6b554607da..496acc045c 100644
---- a/package/python-s3transfer/python-s3transfer.hash
-+++ b/package/python-s3transfer/python-s3transfer.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/s3transfer/json
--md5	8ca74015d9dc58af26c68276a8867eca  s3transfer-0.2.1.tar.gz
--sha256	6efc926738a3cd576c2a79725fed9afde92378aa5c6a957e3af010cb019fac9d  s3transfer-0.2.1.tar.gz
-+md5  e351d246498fca53e2ca2bf75c550d60  s3transfer-0.3.3.tar.gz
-+sha256  921a37e2aefc64145e7b73d50c71bb4f26f46e4c9f414dc648c6245ff92cf7db  s3transfer-0.3.3.tar.gz
- # Locally computed sha256 checksums
--sha256	8c6db340475136df3c1201d458fa5755698eace76e510471ecc9d857d6083dac  LICENSE.txt
-+sha256  8c6db340475136df3c1201d458fa5755698eace76e510471ecc9d857d6083dac  LICENSE.txt
-diff --git a/package/python-s3transfer/python-s3transfer.mk b/package/python-s3transfer/python-s3transfer.mk
-index 86bdc19eae..946be261a3 100644
---- a/package/python-s3transfer/python-s3transfer.mk
-+++ b/package/python-s3transfer/python-s3transfer.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/libiec61850/0003-COTP-fixed-possible-heap-buffer-overflow-when-handling-message.patch b/package/libiec61850/0003-COTP-fixed-possible-heap-buffer-overflow-when-handling-message.patch
+new file mode 100644
+index 0000000000..88048555b7
+--- /dev/null
++++ b/package/libiec61850/0003-COTP-fixed-possible-heap-buffer-overflow-when-handling-message.patch
+@@ -0,0 +1,27 @@
++From 033ab5b6488250c8c3b838f25a7cbc3e099230bb Mon Sep 17 00:00:00 2001
++From: Michael Zillgith <michael.zillgith@mz-automation.de>
++Date: Wed, 12 Aug 2020 07:25:37 +0200
++Subject: [PATCH] - COTP: fixed possible heap buffer overflow when handling
++ message with invalid (zero) value in length field (#250)
++
++[Retrieved from:
++https://github.com/mz-automation/libiec61850/commit/033ab5b6488250c8c3b838f25a7cbc3e099230bb]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/mms/iso_cotp/cotp.c | 3 +++
++ 1 file changed, 3 insertions(+)
++
++diff --git a/src/mms/iso_cotp/cotp.c b/src/mms/iso_cotp/cotp.c
++index cbb34b36..8c37d262 100644
++--- a/src/mms/iso_cotp/cotp.c
+++++ b/src/mms/iso_cotp/cotp.c
++@@ -720,6 +720,9 @@ CotpConnection_readToTpktBuffer(CotpConnection* self)
++             goto exit_waiting;
++     }
++ 
+++    if (self->packetSize <= bufPos)
+++        goto exit_error;
+++
++     readBytes = readFromSocket(self, buffer + bufPos, self->packetSize - bufPos);
++ 
++     if (readBytes < 0)
+diff --git a/package/libiec61850/libiec61850.mk b/package/libiec61850/libiec61850.mk
+index 9d527f5831..6413073805 100644
+--- a/package/libiec61850/libiec61850.mk
++++ b/package/libiec61850/libiec61850.mk
+@@ -12,4 +12,7 @@ LIBIEC61850_LICENSE_FILES = COPYING
+ LIBIEC61850_CONF_OPTS = -DBUILD_EXAMPLES=OFF \
+ 	-DBUILD_PYTHON_BINDINGS=OFF
  
--PYTHON_S3TRANSFER_VERSION = 0.2.1
-+PYTHON_S3TRANSFER_VERSION = 0.3.3
- PYTHON_S3TRANSFER_SOURCE = s3transfer-$(PYTHON_S3TRANSFER_VERSION).tar.gz
--PYTHON_S3TRANSFER_SITE = https://files.pythonhosted.org/packages/39/12/150cd55c606ebca6725683642a8e7068cd6af10f837ce5419a9f16b7fb55
-+PYTHON_S3TRANSFER_SITE = https://files.pythonhosted.org/packages/50/de/2b688c062107942486c81a739383b1432a72717d9a85a6a1a692f003c70c
- PYTHON_S3TRANSFER_SETUP_TYPE = setuptools
- PYTHON_S3TRANSFER_LICENSE = Apache-2.0
- PYTHON_S3TRANSFER_LICENSE_FILES = LICENSE.txt
++# 0003-COTP-fixed-possible-heap-buffer-overflow-when-handling-message.patch
++LIBIEC61850_IGNORE_CVES += CVE-2020-15158
++
+ $(eval $(cmake-package))
 -- 
 2.29.2
