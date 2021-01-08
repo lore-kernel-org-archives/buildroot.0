@@ -1,29 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 08 Jan 2021 08:44:40 +0100
-Subject: [Buildroot] [PATCH 1/1]
- package/freescale-imx/firmware-imx/Config.in: install imx6q binaries for
- IM6UL platform
-In-Reply-To: <20201113101026.1824-1-pawnrob@gmail.com> (pawnrob's message of
- "Fri, 13 Nov 2020 10:10:26 +0000")
-References: <20201113101026.1824-1-pawnrob@gmail.com>
-Message-ID: <87mtxjyis7.fsf@dell.be.48ers.dk>
+Date: Fri, 08 Jan 2021 08:46:07 +0100
+Subject: [Buildroot] [PATCH 1/3] package/environment-setup: fix spelling
+ of the script file in the manual.
+In-Reply-To: <20201231212949.2415485-2-konrad.schwarz@siemens.com> (Konrad
+ Schwarz's message of "Thu, 31 Dec 2020 22:29:47 +0100")
+References: <20201231212949.2415485-1-konrad.schwarz@siemens.com>
+ <20201231212949.2415485-2-konrad.schwarz@siemens.com>
+Message-ID: <87im87yips.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "pawnrob" == pawnrob  <pawnrob@gmail.com> writes:
+>>>>> "Konrad" == Konrad Schwarz <konrad.schwarz@siemens.com> writes:
 
- > From: RMellor <Rob.Mellor@ultra-pals.com>
- > linux-*/arch/arm/boot/dts/imx6ul.dtsi
- > requires the install of the sdma-imx6q.bin as stated in
- > line 727: fsl,sdma-ram-script-name = "imx/sdma/sdma-imx6q.bin";
+ > The manual incorrectly refers to the script file as `setup-environment';
+ > it is actually called `environment-setup'.
 
- > without the BR2_PACKAGE_FIRMWARE_IMX_SDMA_FW_NAME being set to "imx6q"
- > line 102 of firmware-imx.mk does not install the firmware to to target
-
- > Signed-off-by: RMellor <Rob.Mellor@ultra-pals.com>
+ > Signed-off-by: Konrad Schwarz <konrad.schwarz@siemens.com>
 
 Committed to 2020.11.x, thanks.
 
