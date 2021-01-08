@@ -1,37 +1,90 @@
-From: Andrey Nechypurenko <andreynech@gmail.com>
-Date: Fri, 8 Jan 2021 13:01:51 +0100
-Subject: [Buildroot] package/dotnet: add host-dotnet-sdk
-In-Reply-To: <CABWPoFFFA_jB0bqBSGDmnk+7YvM6br0=7=KcnKUvnctVrvmQNA@mail.gmail.com>
-References: <CABWPoFG8k9WccFXRKC6ufRLKDHzdwCyeN3Q1PJZzqpg83fwc1w@mail.gmail.com>
- <20210104085858.68f57652@windsurf>
- <CAOiXNkARyVd8=v7ZShcdAw7eZHDY+Apf5_vLDsxiGT-tpGsEvg@mail.gmail.com>
- <CABWPoFFFA_jB0bqBSGDmnk+7YvM6br0=7=KcnKUvnctVrvmQNA@mail.gmail.com>
-Message-ID: <CAOiXNkBPm8ksDHTWXrzA9zmFZxShEWSOSeG4pn0r3iYRZxKq6g@mail.gmail.com>
+From: Vivek Kumar Gautam <vivek.gautam@arm.com>
+Date: Fri, 8 Jan 2021 14:20:43 +0530
+Subject: [Buildroot] [PATCH] configs/aarch64_rdinfra: add new config for
+ infra rd plaforms
+In-Reply-To: <8bb9244f-9ac1-a265-bd22-5d05b642c2dc@arm.com>
+References: <20201126100507.27484-1-vivek.gautam@arm.com>
+ <8bb9244f-9ac1-a265-bd22-5d05b642c2dc@arm.com>
+Message-ID: <9755e6ac-fa23-67ed-cdaa-9606038342de@arm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi all,
 
-> Regarding Andrey's patch, I'm not sure if that is the correct approach, I
-> mean, the idea is okay for most of the cases, but what if you install the
-> dotnet-runtime -> v5.0.0 and the package that you want to install needs
-> v3.1.0 ?
 
-AFAIK, it is possible to have multiple runtimes installed. There are many
-ways to say which one should be used by a particular application. One of
-them, for example, using DOTNET_ENVIRONMENT environment variable (
-https://docs.microsoft.com/en-us/aspnet/core/fundamentals/environments?view=aspnetcore-5.0
-) . Also, AFAIK, if the application is packaged with runtime, it will use
-this packaged version even if there is separate runtime installed.
+On 12/5/20 10:59 AM, Vivek Kumar Gautam wrote:
+> Hi,
+>
+>
+> On 11/26/20 3:35 PM, Vivek Kumar Gautam wrote:
+>> This defconfig enables Arm aarch64 Infra RD platforms to use
+>> buildroot backed ramdisks to perform simple unit/sanity testing.
+>> These infra platforms are currently enabled with a scripts based
+>> build system as can be seen in linaro public repos[1]. A busybox
+>> based boot is also enabled[2].
+>> We plan to use buildroot for a richer experience while testing and
+>> therefore this config.
+>> This config will also be first step towards enabling buildroot
+>> based build system for infra rd platforms in near future.
+>> It comes with following minimal stuff -
+>>   -neoverse_n1 cpu
+>>   -bash shell
+>>   -vim
+>>   -pciutils
+>>   -libdtc
+>>   -screen
+>>
+>> [1]
+>> https://git.linaro.org/landing-teams/working/arm/arm-reference-platforms.git/about/
+>>
+>> [2]
+>> https://git.linaro.org/landing-teams/working/arm/arm-reference-platforms.git/about/docs/rdn1edge/how-to/busybox-boot.rst
+>>
+>>
+>> Signed-off-by: Vivek Kumar Gautam <vivek.gautam@arm.com>
+>> ---
+>>   configs/aarch64_rdinfra_defconfig | 21 +++++++++++++++++++++
+>>   1 file changed, 21 insertions(+)
+>>   create mode 100644 configs/aarch64_rdinfra_defconfig
+>>
+>> diff --git a/configs/aarch64_rdinfra_defconfig
+>> b/configs/aarch64_rdinfra_defconfig
+>> new file mode 100644
+>> index 0000000000..71e44e537c
+>> --- /dev/null
+>> +++ b/configs/aarch64_rdinfra_defconfig
+>> @@ -0,0 +1,21 @@
+>> +# Architecture
+>> +BR2_aarch64=y
+>> +
+>> +# Processor
+>> +BR2_neoverse_n1=y
+>> +
+>> +# Toolchain
+>> +BR2_TOOLCHAIN_EXTERNAL=y
+>> +
+>> +# Additional system packages
+>> +BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
+>> +BR2_PACKAGE_PCIUTILS=y
+>> +BR2_PACKAGE_DTC=y
+>> +BR2_PACKAGE_DTC_PROGRAMS=y
+>> +BR2_PACKAGE_LIBEVENT=y
+>> +BR2_PACKAGE_BASH=y
+>> +BR2_PACKAGE_SCREEN=y
+>> +BR2_PACKAGE_VIM=y
+>> +
+>> +# Target filesystem
+>> +BR2_TARGET_ROOTFS_CPIO=y
+>
+> Gentle ping. Any comments on this?
 
-Anyway, I think there is no "right way" [tm]. It depends on the application.
-For example, in a well controlled environment such as an embedded system
-where only a predefined set of applications is installed, common runtime
-would be preferable because it saves a considerable amount of space if
-multiple applications need it.
+I will be more than happy to address any feedback on this config patch.
+Please let me know if there are missing pieces.
 
-Regards,
-Andrey.
+Best regards
+Vivek
+
+IMPORTANT NOTICE: The contents of this email and any attachments are confidential and may also be privileged. If you are not the intended recipient, please notify the sender immediately and do not disclose the contents to any other person, use it for any purpose, or store or copy the information in any medium. Thank you.
