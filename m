@@ -1,34 +1,36 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  8 Jan 2021 07:53:41 +0100
-Subject: [Buildroot] [PATCH 1/1] package/poppler: use ENABLE_GLIB
-Message-ID: <20210108065341.1546867-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 08 Jan 2021 08:32:58 +0100
+Subject: [Buildroot] [PATCH 1/2] package/dovecot: security bump version
+ to 2.3.13
+In-Reply-To: <20210105172208.295396-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Tue, 5 Jan 2021 18:22:07 +0100")
+References: <20210105172208.295396-1-bernd.kuhls@t-online.de>
+Message-ID: <878s93zxw5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use ENABLE_GLIB which is available since version 0.60 and
-https://github.com/freedesktop/poppler/commit/766a32ff59dadd9ae4639d8a79861a17be6aec52
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/poppler/poppler.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ > Updated license hash due to upstream commit:
+ > https://github.com/dovecot/core/commit/bf7952d33e39358a1258697505ed25c050e14bbb
 
-diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
-index 41a5e40e68..70dcd4bef4 100644
---- a/package/poppler/poppler.mk
-+++ b/package/poppler/poppler.mk
-@@ -95,6 +95,9 @@ endif
- 
- ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
- POPPLER_DEPENDENCIES += libglib2
-+POPPLER_CONF_OPTS += -DENABLE_GLIB=ON
-+else
-+POPPLER_CONF_OPTS += -DENABLE_GLIB=OFF
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBNSS),y)
+ > Fixes the following CVEs:
+
+ > CVE-2020-24386:
+ > https://dovecot.org/pipermail/dovecot-news/2021-January/000450.html
+
+ > CVE-2020-25275:
+ > https://dovecot.org/pipermail/dovecot-news/2021-January/000451.html
+
+ > Release notes:
+ > https://dovecot.org/pipermail/dovecot-news/2021-January/000448.html
+
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+Committed to 2020.02.x and 2020.11.x, thanks.
+
 -- 
-2.29.2
+Bye, Peter Korsgaard
