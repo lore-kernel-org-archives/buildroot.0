@@ -1,48 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 8 Jan 2021 08:31:15 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x]
- package/dovecot-pigeonhole: bump version to 0.5.13
-Message-ID: <20210108071459.DEA7981952@busybox.osuosl.org>
+Date: Fri, 8 Jan 2021 08:31:00 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/dovecot: security
+ bump version to 2.3.13
+Message-ID: <20210108071459.CDAA286889@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0cfa03c9942b61089e556b461666cea207d0f483
+commit: https://git.buildroot.net/buildroot/commit/?id=1bd660bbdc74b7ece0594cf1d86fe55682949762
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
+Updated license hash due to upstream commit:
+https://github.com/dovecot/core/commit/bf7952d33e39358a1258697505ed25c050e14bbb
+
+Fixes the following CVEs:
+
+CVE-2020-24386:
+https://dovecot.org/pipermail/dovecot-news/2021-January/000450.html
+
+CVE-2020-25275:
+https://dovecot.org/pipermail/dovecot-news/2021-January/000451.html
+
 Release notes:
-https://dovecot.org/pipermail/dovecot-news/2021-January/000449.html
+https://dovecot.org/pipermail/dovecot-news/2021-January/000448.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 8d1c4c717e8902b37979a155f2c073b7f8bbb519)
+(cherry picked from commit df4447724f2dbd4ee54dddec1d12ecd3b130602b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dovecot-pigeonhole/dovecot-pigeonhole.hash | 2 +-
- package/dovecot-pigeonhole/dovecot-pigeonhole.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/dovecot/dovecot.hash | 4 ++--
+ package/dovecot/dovecot.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
-index 7f4b8579c1..f2c76a05fd 100644
---- a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
-+++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
+index e5c2ab6f40..4d69f3abdd 100644
+--- a/package/dovecot/dovecot.hash
++++ b/package/dovecot/dovecot.hash
+@@ -1,5 +1,5 @@
  # Locally computed after checking signature
--sha256  0b972a441f680545ddfacd2f41fb2a705fb03249d46ed5ce7e01fe68b6cfb5f0  dovecot-2.3-pigeonhole-0.5.11.tar.gz
-+sha256  911fe566da5b638eab1b11105314300bc9049cc3832d4bd2aed44c265013bf17  dovecot-2.3-pigeonhole-0.5.13.tar.gz
- sha256  fc9e9522216f2a9a28b31300e3c73c1df56acc27dfae951bf516e7995366b51a  COPYING
-diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
-index 462c992902..5c4cdb633e 100644
---- a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
-+++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
-@@ -4,7 +4,7 @@
- #
+-sha256  d3d9ea9010277f57eb5b9f4166a5d2ba539b172bd6d5a2b2529a6db524baafdc  dovecot-2.3.11.3.tar.gz
+-sha256  a363b132e494f662d98c820d1481297e6ae72f194c2c91b6c39e1518b86240a8  COPYING
++sha256  a3f875b80ec11a452480690108660030978c94fa8e796ad6d943a874b496f1c4  dovecot-2.3.13.tar.gz
++sha256  319a9830aab406109cd67cb45496587566a8123203d66d037b209ca3e13de02a  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
+ sha256  52b8c95fabb19575281874b661ef7968ea47e8f5d74ba0dd40ce512e52b3fc97  COPYING.MIT
+diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
+index f0508753a2..3100bfbc93 100644
+--- a/package/dovecot/dovecot.mk
++++ b/package/dovecot/dovecot.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--DOVECOT_PIGEONHOLE_VERSION = 0.5.11
-+DOVECOT_PIGEONHOLE_VERSION = 0.5.13
- DOVECOT_PIGEONHOLE_SOURCE = dovecot-2.3-pigeonhole-$(DOVECOT_PIGEONHOLE_VERSION).tar.gz
- DOVECOT_PIGEONHOLE_SITE = https://pigeonhole.dovecot.org/releases/2.3
- DOVECOT_PIGEONHOLE_LICENSE = LGPL-2.1
+ DOVECOT_VERSION_MAJOR = 2.3
+-DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).11.3
++DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).13
+ DOVECOT_SITE = https://dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
+ DOVECOT_INSTALL_STAGING = YES
+ DOVECOT_LICENSE = LGPL-2.1, MIT, Public Domain, BSD-3-Clause, Unicode-DFS-2015
