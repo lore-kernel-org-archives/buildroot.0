@@ -1,46 +1,66 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  8 Jan 2021 18:06:29 +0100
-Subject: [Buildroot] [PATCH 1/1] package/multipath-tools: disable -Werror
-Message-ID: <20210108170629.35571-1-fontaine.fabrice@gmail.com>
+Date: Fri,  8 Jan 2021 18:32:59 +0100
+Subject: [Buildroot] [PATCH 1/1] package/openjpeg: fix build with poppler
+Message-ID: <20210108173259.536639-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Set the new WARNFLAGS to "" which has been added since version 0.8.5 and
-https://github.com/opensvc/multipath-tools/commit/82f1b164cb21c9632b3c73f865d97777c7a61e0d
-
-Otherwise, -Werror will raise the following build failure:
-
-/srv/storage/autobuild/run/instance-3/output-1/host/bin/mipsel-linux-gcc --std=gnu99 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2  -D_FORTIFY_SOURCE=1  -Werror -Wall -Wextra -Wformat=2 -Werror=implicit-int -Werror=implicit-function-declaration -Werror=format-security -Wno-clobbered -Wno-error=clobbered -Werror=cast-qual -Werror=discarded-qualifiers -pipe -DBIN_DIR=\"/sbin\" -DLIB_STRING=\"lib\" -DRUN_DIR=\"run\" -MMD -MP -fPIC -I.. -I../../libmultipath/nvme -Wp,-D_FORTIFY_SOURCE=2  -c -o nvme.o nvme.c
-<command-line>: error: "_FORTIFY_SOURCE" redefined [-Werror]
+Fix build of poppler with openjpeg in version 2.4.0
 
 Fixes:
- - http://autobuild.buildroot.org/results/71f7661e7d26ca8608e902eee9f2a92376b00601
+ - http://autobuild.buildroot.org/results/e4e43519a1c70686844b08257971cc350a746636
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/multipath-tools/multipath-tools.mk | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ ...IR-for-OPENJPEG_INCLUDE_DIRS-fixes-u.patch | 37 +++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+ create mode 100644 package/openjpeg/0004-Revert-Use-INC_DIR-for-OPENJPEG_INCLUDE_DIRS-fixes-u.patch
 
-diff --git a/package/multipath-tools/multipath-tools.mk b/package/multipath-tools/multipath-tools.mk
-index d5cca7ba57..7fe9033a15 100644
---- a/package/multipath-tools/multipath-tools.mk
-+++ b/package/multipath-tools/multipath-tools.mk
-@@ -9,7 +9,12 @@ MULTIPATH_TOOLS_SITE = $(call github,opensvc,multipath-tools,$(MULTIPATH_TOOLS_V
- MULTIPATH_TOOLS_LICENSE = LGPL-2.0
- MULTIPATH_TOOLS_LICENSE_FILES = COPYING
- MULTIPATH_TOOLS_DEPENDENCIES = lvm2 json-c readline udev liburcu libaio host-pkgconf
--MULTIPATH_TOOLS_MAKE_OPTS = LIB="lib" RUN="run" OPTFLAGS="" STACKPROT=""
-+MULTIPATH_TOOLS_MAKE_OPTS = \
-+	LIB="lib" \
-+	RUN="run" \
-+	OPTFLAGS="" \
-+	STACKPROT="" \
-+	WARNFLAGS=""
- 
- ifeq ($(BR2_PACKAGE_SYSTEMD),y)
- MULTIPATH_TOOLS_DEPENDENCIES += systemd
+diff --git a/package/openjpeg/0004-Revert-Use-INC_DIR-for-OPENJPEG_INCLUDE_DIRS-fixes-u.patch b/package/openjpeg/0004-Revert-Use-INC_DIR-for-OPENJPEG_INCLUDE_DIRS-fixes-u.patch
+new file mode 100644
+index 0000000000..b85556a679
+--- /dev/null
++++ b/package/openjpeg/0004-Revert-Use-INC_DIR-for-OPENJPEG_INCLUDE_DIRS-fixes-u.patch
+@@ -0,0 +1,37 @@
++From 14f4c27e7c91f745a1dda9991b5deea3cbef2072 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Thu, 7 Jan 2021 14:09:50 +0100
++Subject: [PATCH] Revert "Use INC_DIR for OPENJPEG_INCLUDE_DIRS (fixes
++ uclouvain#1174)"
++
++This reverts commit 65586374d639cfc0104419992f9022174b412594 which
++breaks cross-compilation of poppler under buildroot (because of
++DESTDIR usage).
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/uclouvain/openjpeg/pull/1321]
++---
++ cmake/OpenJPEGConfig.cmake.in | 6 +++++-
++ 1 file changed, 5 insertions(+), 1 deletion(-)
++
++diff --git a/cmake/OpenJPEGConfig.cmake.in b/cmake/OpenJPEGConfig.cmake.in
++index 8a726697..2925108a 100644
++--- a/cmake/OpenJPEGConfig.cmake.in
+++++ b/cmake/OpenJPEGConfig.cmake.in
++@@ -27,8 +27,12 @@ if(EXISTS ${SELF_DIR}/OpenJPEGTargets.cmake)
++   # This is an install tree
++   include(${SELF_DIR}/OpenJPEGTargets.cmake)
++ 
+++  # We find a relative path from the PKG directory to header files.
+++  set(PKG_DIR "@CMAKE_INSTALL_PREFIX@/@OPENJPEG_INSTALL_PACKAGE_DIR@")
++   set(INC_DIR "@CMAKE_INSTALL_PREFIX@/@OPENJPEG_INSTALL_INCLUDE_DIR@")
++-  get_filename_component(OPENJPEG_INCLUDE_DIRS "${INC_DIR}" ABSOLUTE)
+++  file(RELATIVE_PATH PKG_TO_INC_RPATH "${PKG_DIR}" "${INC_DIR}")
+++
+++  get_filename_component(OPENJPEG_INCLUDE_DIRS "${SELF_DIR}/${PKG_TO_INC_RPATH}" ABSOLUTE)
++ 
++ else()
++   if(EXISTS ${SELF_DIR}/OpenJPEGExports.cmake)
++-- 
++2.29.2
++
 -- 
 2.29.2
