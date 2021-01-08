@@ -1,192 +1,81 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 7 Jan 2021 23:58:41 +0100
-Subject: [Buildroot] [git commit] package/balena-engine: new package
-Message-ID: <20210107224034.E83588690E@busybox.osuosl.org>
+From: Vineet Gupta <vgupta@synopsys.com>
+Date: Thu, 7 Jan 2021 21:18:20 -0800
+Subject: [Buildroot] ARC no console output (was Re: [PATCH 1/2]
+ init/console: Use ttynull as a fallback when there is no console)
+In-Reply-To: <X/fWGjYI5LapMdGW@jagdpanzerIV.localdomain>
+References: <20201111135450.11214-1-pmladek@suse.com>
+ <20201111135450.11214-2-pmladek@suse.com>
+ <d2a3b3c0-e548-7dd1-730f-59bc5c04e191@synopsys.com>
+ <8735zdm86m.fsf@jogness.linutronix.de>
+ <50ade852-c598-6476-1f4b-9a3f8d11d143@synopsys.com> <X/c/ONCYz2QQdvOP@alley>
+ <466644f5-bed7-caef-9fcd-e66208f65545@synopsys.com>
+ <X/fWGjYI5LapMdGW@jagdpanzerIV.localdomain>
+Message-ID: <d7db7948-4831-8dac-0d16-7933bcd9d995@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cb0d87004c824dc6bb421fe8316428d51e1335bd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 1/7/21 7:48 PM, Sergey Senozhatsky wrote:
+> On (21/01/07 09:58), Vineet Gupta wrote:
+>> On 1/7/21 9:04 AM, Petr Mladek wrote:
+>>> On Thu 2021-01-07 08:43:16, Vineet Gupta wrote:
+>>>> Hi John,
+>>>>
+>>>> On 1/7/21 1:02 AM, John Ogness wrote:
+>>>>> Hi Vineet,
+>>>>>
+>>>>> On 2021-01-06, Vineet Gupta <vgupta@synopsys.com> wrote:
+>>>>>> This breaks ARC booting (no output on console).
+>>>>>
+>>>>> Could you provide the kernel boot arguments that you use? This series is
+>>>>> partly about addressing users that have used boot arguments that are
+>>>>> technically incorrect (even if had worked). Seeing the boot arguments of
+>>>>> users that are not experiencing problems may help to reveal some of the
+>>>>> unusual console usages until now.
+>>>>
+>>>>
+>>>> Kernel command line: earlycon=uart8250,mmio32,0xf0005000,115200n8
+>>>> console=ttyS0,115200n8 debug print-fatal-signals=1
+>>>
+>>> This is strange, the problematic patch should use ttynull
+>>> only as a fallback. It should not be used when a particular console
+>>> is defined on the command line.
+>>
+>> What happens in my case is console_on_rootfs() doesn't find /dev/console and
+>> switching to ttynull. /dev is not present because devtmpfs doesn't automount
+>> for initramfs.
+> 
+> I wonder if we'll move the nulltty fallback logic into printk code [1]
+> will it fix the problem?
+> 
+> [1] https://lore.kernel.org/lkml/X6x%2FAxD1qanC6evJ at jagdpanzerIV.localdomain/
 
-Signed-off-by: Tian Yuanhao <tianyuanhao@aliyun.com>
-Signed-off-by: Christian Stewart <christian@paral.in>
-Reviewed-by: Christian Stewart <christian@paral.in>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/Config.in                        |   1 +
- package/balena-engine/Config.in          |  26 ++++++++
- package/balena-engine/balena-engine.hash |   3 +
- package/balena-engine/balena-engine.mk   | 109 +++++++++++++++++++++++++++++++
- 4 files changed, 139 insertions(+)
+Your reasoning in the post above makes total sense.
 
-diff --git a/package/Config.in b/package/Config.in
-index 056d419ac2..9ed02ec890 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2398,6 +2398,7 @@ menu "System tools"
- 	source "package/atop/Config.in"
- 	source "package/attr/Config.in"
- 	source "package/audit/Config.in"
-+	source "package/balena-engine/Config.in"
- 	source "package/bubblewrap/Config.in"
- 	source "package/cgroupfs-mount/Config.in"
- 	source "package/circus/Config.in"
-diff --git a/package/balena-engine/Config.in b/package/balena-engine/Config.in
-new file mode 100644
-index 0000000000..f48f361dc2
---- /dev/null
-+++ b/package/balena-engine/Config.in
-@@ -0,0 +1,26 @@
-+config BR2_PACKAGE_BALENA_ENGINE
-+	bool "balena-engine"
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC # no fexecve
-+	depends on BR2_USE_MMU # util-linux
-+	select BR2_PACKAGE_CGROUPFS_MOUNT if !BR2_PACKAGE_SYSTEMD # runtime
-+	select BR2_PACKAGE_IPTABLES # runtime
-+	select BR2_PACKAGE_SQLITE # runtime
-+	select BR2_PACKAGE_UTIL_LINUX # runtime
-+	select BR2_PACKAGE_UTIL_LINUX_BINARIES # runtime
-+	select BR2_PACKAGE_UTIL_LINUX_MOUNT # runtime
-+	select BR2_PACKAGE_UTIL_LINUX_MOUNTPOINT # runtime
-+	select BR2_PACKAGE_UTIL_LINUX_PIVOT_ROOT # runtime
-+	help
-+	  balenaEngine is a new container engine purpose-built for
-+	  embedded and IoT use cases and compatible with Docker
-+	  containers.
-+
-+	  https://github.com/balena-os/balena-engine
-+
-+comment "balena-engine needs a glibc or musl toolchain w/ threads"
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_UCLIBC
-+	depends on BR2_USE_MMU
-diff --git a/package/balena-engine/balena-engine.hash b/package/balena-engine/balena-engine.hash
-new file mode 100644
-index 0000000000..3f632ef381
---- /dev/null
-+++ b/package/balena-engine/balena-engine.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  389282706562118608b6ac580e7beacd6a43f0bb3481c69fb1856bed9ac49b85  balena-engine-19.03.14.tar.gz
-+sha256  7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
-diff --git a/package/balena-engine/balena-engine.mk b/package/balena-engine/balena-engine.mk
-new file mode 100644
-index 0000000000..b3eb2ca75b
---- /dev/null
-+++ b/package/balena-engine/balena-engine.mk
-@@ -0,0 +1,109 @@
-+################################################################################
-+#
-+# balena-engine
-+#
-+################################################################################
-+
-+BALENA_ENGINE_VERSION = 19.03.14
-+BALENA_ENGINE_SITE = $(call github,balena-os,balena-engine,v$(BALENA_ENGINE_VERSION))
-+
-+BALENA_ENGINE_LICENSE = Apache-2.0
-+BALENA_ENGINE_LICENSE_FILES = LICENSE
-+
-+BALENA_ENGINE_DEPENDENCIES = host-pkgconf
-+BALENA_ENGINE_GOMOD = github.com/docker/docker
-+
-+BALENA_ENGINE_LDFLAGS = \
-+	-X github.com/docker/cli/cli/version.Version=N/A \
-+	-X github.com/docker/cli/cli/version.GitCommit= \
-+	-X github.com/docker/cli/cli/version.BuildTime= \
-+	-X github.com/containerd/containerd/version.Version=N/A \
-+	-X github.com/opencontainers/runc.version=N/A
-+
-+BALENA_ENGINE_TAGS = \
-+	cgo \
-+	exclude_graphdriver_zfs \
-+	autogen \
-+	no_buildkit \
-+	no_btrfs \
-+	no_cri \
-+	no_devmapper \
-+	no_zfs \
-+	exclude_disk_quota \
-+	exclude_graphdriver_btrfs \
-+	exclude_graphdriver_devicemapper
-+
-+BALENA_ENGINE_BUILD_TARGETS = cmd/balena-engine
-+
-+ifeq ($(BR2_INIT_SYSTEMD),y)
-+BALENA_ENGINE_DEPENDENCIES += systemd
-+BALENA_ENGINE_TAGS += journald
-+endif
-+
-+define BALENA_ENGINE_RUN_AUTOGEN
-+	cd $(@D) && \
-+		VERSION=$(BALENA_ENGINE_VERSION) \
-+		PKG_CONFIG=$(PKG_CONFIG_HOST_BINARY) \
-+		$(TARGET_MAKE_ENV) \
-+		$(SHELL) hack/make/.go-autogen
-+endef
-+
-+BALENA_ENGINE_POST_CONFIGURE_HOOKS += BALENA_ENGINE_RUN_AUTOGEN
-+
-+define BALENA_ENGINE_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 $(@D)/contrib/init/systemd/balena-engine.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/balena-engine.service
-+	$(INSTALL) -D -m 644 $(@D)/contrib/init/systemd/balena-engine.socket \
-+		$(TARGET_DIR)/usr/lib/systemd/system/balena-engine.socket
-+endef
-+
-+define BALENA_ENGINE_USERS
-+	- - balena-engine -1 * - - - balenaEngine daemon
-+endef
-+
-+define BALENA_ENGINE_LINUX_CONFIG_FIXUPS
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_POSIX_MQUEUE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUPS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_MEMCG)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_SCHED)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_FREEZER)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CPUSETS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_DEVICE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_CPUACCT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NAMESPACES)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_UTS_NS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IPC_NS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_PID_NS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_NS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_ADVANCED)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_BRIDGE_NETFILTER)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_ADDRTYPE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_CONNTRACK)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_IPVS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_IPTABLES)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_FILTER)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_NAT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_MASQUERADE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_BRIDGE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_DUMMY)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_MACVLAN)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_VXLAN)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_VETH)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_OVERLAY_FS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_KEYS)
-+endef
-+
-+define BALENA_ENGINE_INSTALL_SYMLINK
-+	ln -f -s balena-engine $(TARGET_DIR)/usr/bin/balena-engine-daemon
-+	ln -f -s balena-engine $(TARGET_DIR)/usr/bin/balena-engine-containerd
-+	ln -f -s balena-engine $(TARGET_DIR)/usr/bin/balena-engine-containerd-shim
-+	ln -f -s balena-engine $(TARGET_DIR)/usr/bin/balena-engine-containerd-ctr
-+	ln -f -s balena-engine $(TARGET_DIR)/usr/bin/balena-engine-runc
-+	ln -f -s balena-engine $(TARGET_DIR)/usr/bin/balena-engine-proxy
-+	$(if $(BR2_PACKAGE_TINI),ln -f -s tini $(TARGET_DIR)/usr/bin/balena-engine-init)
-+endef
-+BALENA_ENGINE_POST_INSTALL_TARGET_HOOKS += BALENA_ENGINE_INSTALL_SYMLINK
-+
-+$(eval $(golang-package))
+I tired the patch: adding register_ttynull_console() call in 
+console_device(), removing from console_on_rootfs() band that works too.
+
+
+| Warning: unable to open an initial console. Fallback to ttynull.
+| Warning: Failed to add ttynull console. No stdin, stdout, and stderr 
+for the init process!
+| Freeing unused kernel memory: 3096K
+| This architecture does not have kernel memory protection.
+| Run /init as init process
+| with arguments:
+|    /init
+|  with environment:
+|    HOME=/
+|    TERM=linux
+| Starting System logger (syslogd)
+| Bringing up loopback device
+| Starting inetd
+| Mounting Posix Mqueue filesys
+| 
+CONFIG_INITRAMFS_SOURCE="~/arc/RAMFS/archs/ramfs_2011-GNU-2020-03-glibc-2.32-tiny"
+| **********************************************************************
+|			Welcome to ARCLinux
+| **********************************************************************
+| [ARCLinux]#
