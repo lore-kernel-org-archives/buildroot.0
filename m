@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 8 Jan 2021 08:34:14 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/openjpeg:
+Date: Fri, 8 Jan 2021 08:33:49 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/openjpeg:
  security bump to version 2.4.0
-Message-ID: <20210108071615.50DB386904@busybox.osuosl.org>
+Message-ID: <20210108071629.64FEB86904@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0696b256f36329d40a7f9ab3ae58c1b023715e3e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=2a41fb9dd39debf690bbedfb9d3fc3303283ca00
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
 - Drop upstreamed patches
 - Update indentation in hash file (two spaces)
