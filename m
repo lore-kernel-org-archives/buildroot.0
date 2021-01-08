@@ -1,43 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 8 Jan 2021 08:44:07 +0100
+Date: Fri, 8 Jan 2021 08:45:07 +0100
 Subject: [Buildroot] [git commit branch/2020.11.x]
- package/freescale-imx/firmware-imx/Config.in: install imx6q binaries for
- IM6UL platform
-Message-ID: <20210108073947.9A1CF807F2@busybox.osuosl.org>
+ package/environment-setup: fix spelling of the script file in the manual.
+Message-ID: <20210108073947.A4E0E807F2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=94016794bad3ce051d1c8ef5baf180a8c8c1bea1
+commit: https://git.buildroot.net/buildroot/commit/?id=bc6b8cea8d5320648435ac1f2f28004d800c7838
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-linux-*/arch/arm/boot/dts/imx6ul.dtsi
-requires the install of the sdma-imx6q.bin as stated in
-line 727: fsl,sdma-ram-script-name = "imx/sdma/sdma-imx6q.bin";
+The manual incorrectly refers to the script file as `setup-environment';
+it is actually called `environment-setup'.
 
-without the BR2_PACKAGE_FIRMWARE_IMX_SDMA_FW_NAME being set to "imx6q"
-line 102 of firmware-imx.mk does not install the firmware to to target
-
-Signed-off-by: Rob Mellor <Rob.Mellor@ultra-pals.com>
-Reviewed-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Signed-off-by: Konrad Schwarz <konrad.schwarz@siemens.com>
+Reviewed-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 8e00c32b14c2e382cd8abb3ef2958e628cdaf4ad)
+(cherry picked from commit 7197b1bc44395cbe927dc56f0b7fc53d8ce07636)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/freescale-imx/firmware-imx/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ docs/manual/using-buildroot-toolchain.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/freescale-imx/firmware-imx/Config.in b/package/freescale-imx/firmware-imx/Config.in
-index d49241bff8..8810779799 100644
---- a/package/freescale-imx/firmware-imx/Config.in
-+++ b/package/freescale-imx/firmware-imx/Config.in
-@@ -19,6 +19,7 @@ config BR2_PACKAGE_FIRMWARE_IMX_SDMA_FW_NAME
- 	default "imx53" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53
- 	default "imx6q" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
- 	default "imx6q" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6S
-+	default "imx6q" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6UL
- 	default "imx7d" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7
- 	default "imx7d" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M
- 	default "imx7d" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM
+diff --git a/docs/manual/using-buildroot-toolchain.txt b/docs/manual/using-buildroot-toolchain.txt
+index 110be5939f..09408ef05a 100644
+--- a/docs/manual/using-buildroot-toolchain.txt
++++ b/docs/manual/using-buildroot-toolchain.txt
+@@ -35,7 +35,7 @@ generating a tarball.
+ 
+ For your convenience, by selecting the option
+ +BR2_PACKAGE_HOST_ENVIRONMENT_SETUP+, you can get a
+-+setup-environment+ script installed in +output/host/+ and therefore
+++environment-setup+ script installed in +output/host/+ and therefore
+ in your SDK.  This script can be sourced with
+ +. your/sdk/path/environment-setup+ to export a number of environment
+ variables that will help cross-compile your projects using the
