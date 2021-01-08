@@ -1,26 +1,20 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 08 Jan 2021 08:38:47 +0100
-Subject: [Buildroot] [PATCH v2 1/2] package/php: security bump version
- to 7.4.14
-In-Reply-To: <20210107180216.736083-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Thu, 7 Jan 2021 19:02:15 +0100")
-References: <20210107180216.736083-1-bernd.kuhls@t-online.de>
-Message-ID: <87v9c7yj20.fsf@dell.be.48ers.dk>
+Date: Fri, 08 Jan 2021 08:39:27 +0100
+Subject: [Buildroot] [PATCH] DEVELOPERS: Add Romain Naour for qemu
+ package
+In-Reply-To: <20210107161414.1157042-1-romain.naour@gmail.com> (Romain Naour's
+ message of "Thu, 7 Jan 2021 17:14:14 +0100")
+References: <20210107161414.1157042-1-romain.naour@gmail.com>
+Message-ID: <87r1mvyj0w.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
- > Fixes CVE-2020-7071: https://bugs.php.net/bug.php?id=77423
- > Release notes: https://news-web.php.net/php.announce/304
- > Changelog: https://www.php.net/ChangeLog-7.php#7.4.14
-
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- > ---
- > v2: fixed subject
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
 
 Committed to 2020.02.x and 2020.11.x, thanks.
 
