@@ -1,86 +1,49 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  8 Jan 2021 19:11:57 +0100
-Subject: [Buildroot] [PATCH 1/1] package/p11-kit: security bump to version
- 0.23.22
-Message-ID: <20210108181157.606055-1-fontaine.fabrice@gmail.com>
+From: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@essensium.com>
+Date: Fri,  8 Jan 2021 18:50:49 +0100
+Subject: [Buildroot] [PATCH] package/python-s3transfer: bump to version 0.3.3
+Message-ID: <20210108175050.31445-1-raphael.melotte@essensium.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Fix memory-safety issues that affect the RPC protocol (CVE-2020-29361,
-  CVE-2020-29362 and CVE-2020-29363)
-- Update indentation in hash file (two spaces)
+While at it, use two spaces for all the hashes.
 
-https://github.com/p11-glue/p11-kit/blob/0.23.22/NEWS
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Rapha?l M?lotte <raphael.melotte@essensium.com>
 ---
- ...ts-c-Add-stdint-h-to-fix-compilation.patch | 28 +++++++++++++++++++
- package/p11-kit/p11-kit.hash                  |  4 +--
- package/p11-kit/p11-kit.mk                    |  3 +-
- 3 files changed, 32 insertions(+), 3 deletions(-)
- create mode 100644 package/p11-kit/0001-p11-kit-lists-c-Add-stdint-h-to-fix-compilation.patch
+ package/python-s3transfer/python-s3transfer.hash | 6 +++---
+ package/python-s3transfer/python-s3transfer.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/p11-kit/0001-p11-kit-lists-c-Add-stdint-h-to-fix-compilation.patch b/package/p11-kit/0001-p11-kit-lists-c-Add-stdint-h-to-fix-compilation.patch
-new file mode 100644
-index 0000000000..d4828666d3
---- /dev/null
-+++ b/package/p11-kit/0001-p11-kit-lists-c-Add-stdint-h-to-fix-compilation.patch
-@@ -0,0 +1,28 @@
-+From 507c394cfcf4edffc5e4450c5d737e545c26b857 Mon Sep 17 00:00:00 2001
-+From: Daniel Engberg <daniel.engberg.lists@pyret.net>
-+Date: Sat, 12 Dec 2020 18:56:38 +0100
-+Subject: [PATCH] p11-kit/lists.c: Add stdint.h to fix compilation
-+
-+Add stdint.h otherwise compilation fails on FreeBSD 13-CURRENT with "use of undeclared identifier 'SIZE_MAX'"
-+
-+Signed-off-by: Daniel Engberg <daniel.engberg.lists@pyret.net>
-+
-+[Retrieved from:
-+https://github.com/p11-glue/p11-kit/commit/507c394cfcf4edffc5e4450c5d737e545c26b857]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ p11-kit/lists.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/p11-kit/lists.c b/p11-kit/lists.c
-+index 365a6d89..1d9062be 100644
-+--- a/p11-kit/lists.c
-++++ b/p11-kit/lists.c
-+@@ -39,6 +39,7 @@
-+ 
-+ #include <assert.h>
-+ #include <ctype.h>
-++#include <stdint.h>
-+ #include <string.h>
-+ #include <stdio.h>
-+ #include <stdlib.h>
-diff --git a/package/p11-kit/p11-kit.hash b/package/p11-kit/p11-kit.hash
-index 45f0f1d64e..3481a40b00 100644
---- a/package/p11-kit/p11-kit.hash
-+++ b/package/p11-kit/p11-kit.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256 4b34e92ae36fa493e0d94366c767f06d5f9951e3d8581d10fd935d738db1574d  p11-kit-0.23.16.1.tar.gz
-+sha256  8a8f40153dd5a3f8e7c03e641f8db400133fb2a6a9ab2aee1b6d0cb0495ec6b6  p11-kit-0.23.22.tar.xz
- # Locally computed
--sha256 2e1ba993904df807a10c3eda1e5c272338edc35674b679773a8b3ad460731054  COPYING
-+sha256  2e1ba993904df807a10c3eda1e5c272338edc35674b679773a8b3ad460731054  COPYING
-diff --git a/package/p11-kit/p11-kit.mk b/package/p11-kit/p11-kit.mk
-index 1ffc7e21c8..81972f811b 100644
---- a/package/p11-kit/p11-kit.mk
-+++ b/package/p11-kit/p11-kit.mk
-@@ -4,7 +4,8 @@
+diff --git a/package/python-s3transfer/python-s3transfer.hash b/package/python-s3transfer/python-s3transfer.hash
+index 6b554607da..496acc045c 100644
+--- a/package/python-s3transfer/python-s3transfer.hash
++++ b/package/python-s3transfer/python-s3transfer.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/s3transfer/json
+-md5	8ca74015d9dc58af26c68276a8867eca  s3transfer-0.2.1.tar.gz
+-sha256	6efc926738a3cd576c2a79725fed9afde92378aa5c6a957e3af010cb019fac9d  s3transfer-0.2.1.tar.gz
++md5  e351d246498fca53e2ca2bf75c550d60  s3transfer-0.3.3.tar.gz
++sha256  921a37e2aefc64145e7b73d50c71bb4f26f46e4c9f414dc648c6245ff92cf7db  s3transfer-0.3.3.tar.gz
+ # Locally computed sha256 checksums
+-sha256	8c6db340475136df3c1201d458fa5755698eace76e510471ecc9d857d6083dac  LICENSE.txt
++sha256  8c6db340475136df3c1201d458fa5755698eace76e510471ecc9d857d6083dac  LICENSE.txt
+diff --git a/package/python-s3transfer/python-s3transfer.mk b/package/python-s3transfer/python-s3transfer.mk
+index 86bdc19eae..946be261a3 100644
+--- a/package/python-s3transfer/python-s3transfer.mk
++++ b/package/python-s3transfer/python-s3transfer.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--P11_KIT_VERSION = 0.23.16.1
-+P11_KIT_VERSION = 0.23.22
-+P11_KIT_SOURCE = p11-kit-$(P11_KIT_VERSION).tar.xz
- P11_KIT_SITE = https://github.com/p11-glue/p11-kit/releases/download/$(P11_KIT_VERSION)
- P11_KIT_INSTALL_STAGING = YES
- P11_KIT_CONF_OPTS = --disable-static
+-PYTHON_S3TRANSFER_VERSION = 0.2.1
++PYTHON_S3TRANSFER_VERSION = 0.3.3
+ PYTHON_S3TRANSFER_SOURCE = s3transfer-$(PYTHON_S3TRANSFER_VERSION).tar.gz
+-PYTHON_S3TRANSFER_SITE = https://files.pythonhosted.org/packages/39/12/150cd55c606ebca6725683642a8e7068cd6af10f837ce5419a9f16b7fb55
++PYTHON_S3TRANSFER_SITE = https://files.pythonhosted.org/packages/50/de/2b688c062107942486c81a739383b1432a72717d9a85a6a1a692f003c70c
+ PYTHON_S3TRANSFER_SETUP_TYPE = setuptools
+ PYTHON_S3TRANSFER_LICENSE = Apache-2.0
+ PYTHON_S3TRANSFER_LICENSE_FILES = LICENSE.txt
 -- 
 2.29.2
