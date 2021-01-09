@@ -1,57 +1,46 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Sat,  9 Jan 2021 13:18:55 +0100
-Subject: [Buildroot] [PATCH] package/nano: bump to version 5.4
-Message-ID: <20210109121855.52341-1-francois.perrad@gadz.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat,  9 Jan 2021 13:33:37 +0100
+Subject: [Buildroot] [PATCH 1/1] toolchain: CodeSourcery AArch64 2014.11
+ does not contain libatomic
+Message-ID: <20210109123337.1512700-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/nano/Config.in | 2 +-
- package/nano/nano.hash | 4 ++--
- package/nano/nano.mk   | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+Fixes build error
 
-diff --git a/package/nano/Config.in b/package/nano/Config.in
-index 4b340ff5b..b0b7a3e7a 100644
---- a/package/nano/Config.in
-+++ b/package/nano/Config.in
-@@ -8,7 +8,7 @@ config BR2_PACKAGE_NANO
- 	  A nice ncurses-based editor. Started out as a clone of pico.
- 	  Great editor for new users.
+output/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-amd-linux-gnu/4.9.1/../../../../aarch64-amd-linux-gnu/bin/ld:
+ cannot find -latomic
+
+using this defconfig
+
+BR2_aarch64=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64=y
+BR2_PACKAGE_OPENSSL=y
+
+libopenssl is only used here as an example: all packages adding -latomic
+if BR2_TOOLCHAIN_HAS_LIBATOMIC=y are broken, like dav1d, ffmpeg, gnutls,
+kodi and vlc.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ toolchain/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 395c8e36b8..553612c4aa 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -702,6 +702,7 @@ config BR2_TOOLCHAIN_HAS_SYNC_8
+ config BR2_TOOLCHAIN_HAS_LIBATOMIC
+ 	bool
+ 	default y if BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 && \
++		!BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64 && \
+ 		BR2_TOOLCHAIN_HAS_THREADS && \
+ 		!BR2_BINFMT_FLAT
  
--	  http://www.nano-editor.org/
-+	  https://www.nano-editor.org/
- 
- if BR2_PACKAGE_NANO
- 
-diff --git a/package/nano/nano.hash b/package/nano/nano.hash
-index 792f18a09..2126f576a 100644
---- a/package/nano/nano.hash
-+++ b/package/nano/nano.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://www.nano-editor.org/dist/v5/nano-5.2.tar.xz.asc
-+# https://www.nano-editor.org/dist/v5/nano-5.4.tar.xz.asc
- # using key BFD009061E535052AD0DF2150D28D4D2A0ACE884
--sha256  32c2da43e1ae9a5e43437d8c6e1ec0388af870c7762c479e5bffb5f292bda7e1  nano-5.2.tar.xz
-+sha256  fe993408b22286355809ce48ebecc4444d19af8203ed4959d269969112ed86e9  nano-5.4.tar.xz
- sha256  fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
-diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-index 67ce07298..a86474bfb 100644
---- a/package/nano/nano.mk
-+++ b/package/nano/nano.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- NANO_VERSION_MAJOR = 5
--NANO_VERSION = $(NANO_VERSION_MAJOR).2
-+NANO_VERSION = $(NANO_VERSION_MAJOR).4
- NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
- NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
- NANO_LICENSE = GPL-3.0+
 -- 
-2.27.0
+2.29.2
