@@ -1,69 +1,123 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 9 Jan 2021 19:14:34 +0100
-Subject: [Buildroot] [PATCH] package/bats-core: bump version to 1.2.1
-In-Reply-To: <20210109175507.12578-1-peter@korsgaard.com>
-References: <20210109175507.12578-1-peter@korsgaard.com>
-Message-ID: <20210109181434.GB3044608@scaer>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sat, 9 Jan 2021 20:49:20 +0100
+Subject: [Buildroot] [PATCH v1 2/2] package/quickjs: link with libatomic
+In-Reply-To: <20210103214550.GS2997@scaer>
+References: <20210103201959.4035-1-ps.report@gmx.net>
+ <20210103201959.4035-2-ps.report@gmx.net>
+ <20210103214550.GS2997@scaer>
+Message-ID: <20210109204920.417081f0@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Hello Yann,
 
-On 2021-01-09 18:55 +0100, Peter Korsgaard spake thusly:
-> For details, see the release notes:
-> https://github.com/bats-core/bats-core/releases/tag/v1.2.1
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+On Sun, 3 Jan 2021 22:45:50 +0100, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-Applied to master, thanks.
+> Peter, All,
+>
+> On 2021-01-03 21:19 +0100, Peter Seiderer spake thusly:
+> > Link with libatomic if available.
+> >
+> > Fixes:
+> >
+> >   - http://autobuild.buildroot.net/results/e0766eef95a2559d51e58d1a81a9c40df84ae509
+> >
+> >   .../build/quickjs-2020-11-08/quickjs.c:12229: undefined reference to `__atomic_fetch_xor_1'
+> >
+> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+>
+> Applied to master, thanks.
+>
+> But see below for a small nit...
+>
+> > ---
+> >  ...ile-add-optional-link-with-libatomic.patch | 30 +++++++++++++++++++
+> >  package/quickjs/quickjs.mk                    |  6 +++-
+> >  2 files changed, 35 insertions(+), 1 deletion(-)
+> >  create mode 100644 package/quickjs/0001-Makefile-add-optional-link-with-libatomic.patch
+> >
+> > diff --git a/package/quickjs/0001-Makefile-add-optional-link-with-libatomic.patch b/package/quickjs/0001-Makefile-add-optional-link-with-libatomic.patch
+> > new file mode 100644
+> > index 0000000000..12f4eb2338
+> > --- /dev/null
+> > +++ b/package/quickjs/0001-Makefile-add-optional-link-with-libatomic.patch
+> > @@ -0,0 +1,30 @@
+> > +From 2cf2aa34d5d55a4eedb1aedd4d56d89d24870230 Mon Sep 17 00:00:00 2001
+> > +From: Peter Seiderer <ps.report@gmx.net>
+> > +Date: Sun, 3 Jan 2021 21:11:44 +0100
+> > +Subject: [PATCH] Makefile: add optional link with libatomic
+> > +
+> > +Add optional libatomic linking if available to fix:
+> > +
+> > +  .../build/quickjs-2020-11-08/quickjs.c:12229: undefined reference to `__atomic_fetch_xor_1'
+> > +
+> > +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> > +---
+> > + Makefile | 2 +-
+> > + 1 file changed, 1 insertion(+), 1 deletion(-)
+> > +
+> > +diff --git a/Makefile b/Makefile
+> > +index e6ae827..22ad496 100644
+> > +--- a/Makefile
+> > ++++ b/Makefile
+> > +@@ -177,7 +177,7 @@ endif
+> > + HOST_LIBS=-lm -ldl -lpthread
+> > + LIBS=-lm
+> > + ifndef CONFIG_WIN32
+> > +-LIBS+=-ldl -lpthread
+> > ++LIBS+=-ldl -lpthread $(LIBATOMIC)
+> > + endif
+>
+> I've changed that to be a generic variable, not tied to -latomic:
+>
+>     LIBS+=$(EXTRA_LIBS)
+
+Thanks for improvement, definitely better...
+
+>
+> Do not forget to send the patch upstream. ;-)
+
+Finally done, see [1]...
 
 Regards,
-Yann E. MORIN.
+Peter
 
-> ---
->  package/bats-core/bats-core.hash | 2 +-
->  package/bats-core/bats-core.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/bats-core/bats-core.hash b/package/bats-core/bats-core.hash
-> index becc1aecae..b50543a269 100644
-> --- a/package/bats-core/bats-core.hash
-> +++ b/package/bats-core/bats-core.hash
-> @@ -1,5 +1,5 @@
->  # Locally calculated
-> -sha256  c74ea5517d9381c044e8e87427de0113be6ad591213d489aeaa28146daf1c723  bats-core-1.2.0.tar.gz
-> +sha256  91c49b1fe6f0656c46491929ed728f8dfa9a96df0cce294963e8c6082bff87a2  bats-core-1.2.1.tar.gz
->  
->  # License files
->  sha256  55074b2b3b87809105034e1468e59076554d76a80c67bcc592000cc3d929852d  LICENSE.md
-> diff --git a/package/bats-core/bats-core.mk b/package/bats-core/bats-core.mk
-> index 2bcfca70d3..fc8ac674ae 100644
-> --- a/package/bats-core/bats-core.mk
-> +++ b/package/bats-core/bats-core.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -BATS_CORE_VERSION = 1.2.0
-> +BATS_CORE_VERSION = 1.2.1
->  BATS_CORE_SITE = $(call github,bats-core,bats-core,v$(BATS_CORE_VERSION))
->  BATS_CORE_LICENSE = MIT
->  BATS_CORE_LICENSE_FILES = LICENSE.md
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+[1] https://www.freelists.org/post/quickjs-devel/PATCH-Makefile-allow-linking-with-extra-libraries
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+>
+> Regards,
+> Yann E. MORIN.
+>
+> > + $(OBJDIR):
+> > +--
+> > +2.29.2
+> > +
+> > diff --git a/package/quickjs/quickjs.mk b/package/quickjs/quickjs.mk
+> > index 1a2e63278f..389ed71133 100644
+> > --- a/package/quickjs/quickjs.mk
+> > +++ b/package/quickjs/quickjs.mk
+> > @@ -10,8 +10,12 @@ QUICKJS_SITE = https://bellard.org/quickjs
+> >  QUICKJS_LICENSE = MIT
+> >  QUICKJS_INSTALL_STAGING = YES
+> >
+> > +ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+> > +QUICKJS_LIBATOMIC += -latomic
+> > +endif
+> > +
+> >  define QUICKJS_BUILD_CMDS
+> > -	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+> > +	$(TARGET_MAKE_ENV) LIBATOMIC=$(QUICKJS_LIBATOMIC) $(MAKE) -C $(@D) \
+> >  		CROSS_PREFIX="$(TARGET_CROSS)" \
+> >  		all
+> >  endef
+> > --
+> > 2.29.2
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+>
