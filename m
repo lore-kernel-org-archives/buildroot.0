@@ -1,81 +1,34 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sat,  9 Jan 2021 22:09:21 +0200
-Subject: [Buildroot] [PATCH] configs/solidrun_clearfog_gt_8k: bump BSP
- components
-Message-ID: <23fe4026fc46bc903537099ce600c350c65616dc.1610222961.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 9 Jan 2021 21:14:24 +0100
+Subject: [Buildroot] [PATCH 1/1] package/openvpn: set
+ OPENVPN_CPE_ID_VENDOR
+In-Reply-To: <874kjqxi53.fsf@dell.be.48ers.dk>
+References: <20210108175300.537545-1-fontaine.fabrice@gmail.com>
+ <874kjqxi53.fsf@dell.be.48ers.dk>
+Message-ID: <20210109211424.11091067@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Switch to upstream ATF of recent version to fix build with recently
-updated mv-ddr. The vendor does not provide public access to newer ATF
-versions anymore.
+On Sat, 09 Jan 2021 16:08:24 +0100
+Peter Korsgaard <peter@korsgaard.com> wrote:
 
-Bump U-Boot and kernel to fix dtc build on hosts with gcc 10.
+>  > +OPENVPN_CPE_ID_VENDOR = $(OPENVPN_NAME)  
+> 
+> I am not sure why we do this obfuscation with the _NAME variable instead
+> of just "openvpn" -  But ok, a bunch of other packages do so as well.
 
-Increase rootfs size. The default 60MB is not enough.
+Yes, it was done like this in the original patch from Matt, and I kept
+it as-is, but I also wasn't too sure about it. But since nobody
+complained when I posted the patch, I applied it as-is.
 
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/948622614
+I definitely wouldn't oppose to changing this to not use the
+<pkg>_NAME variable, as it find this indirection to not be very useful.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- configs/solidrun_clearfog_gt_8k_defconfig | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
-
-diff --git a/configs/solidrun_clearfog_gt_8k_defconfig b/configs/solidrun_clearfog_gt_8k_defconfig
-index 8804ce0473f5..bec4a7daccc6 100644
---- a/configs/solidrun_clearfog_gt_8k_defconfig
-+++ b/configs/solidrun_clearfog_gt_8k_defconfig
-@@ -1,17 +1,16 @@
- BR2_aarch64=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_2=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
- BR2_TARGET_GENERIC_HOSTNAME="clearfog-gt-8k"
- BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for SolidRun Clearfog GT-8K"
- 
- # Firmware
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/MarvellEmbeddedProcessors/atf-marvell.git"
--# This commit corresponds to release armada-18.12.2
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="9484123bfe29011ed44b717a23eb53a70b97ce3d"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.4"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="a80x0_mcbin"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_TARGETS="mrvl_flash"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="USE_COHERENT_MEM=0"
- BR2_TARGET_BINARIES_MARVELL=y
- BR2_TARGET_MV_DDR_MARVELL=y
-@@ -19,7 +18,7 @@ BR2_TARGET_MV_DDR_MARVELL=y
- # U-Boot
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.07"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.10"
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="clearfog_gt_8k"
- BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/solidrun/clearfog_gt_8k/uboot-fragment.config"
-@@ -27,7 +26,7 @@ BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/solidrun/clearfog_gt_8k/uboot-frag
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.2.14"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.5"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/solidrun/clearfog_gt_8k/linux-extras.config"
-@@ -38,6 +37,7 @@ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- # rootfs
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+Thomas
 -- 
-2.29.2
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
