@@ -1,68 +1,45 @@
-From: Andrea Ricchi <andrea.ricchi@amarulasolutions.com>
-Date: Sat,  9 Jan 2021 17:19:00 +0100
-Subject: [Buildroot] [PATCH 1/1] package/uclibc: add backtrace support option
-Message-ID: <20210109161900.51824-1-andrea.ricchi@amarulasolutions.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat,  9 Jan 2021 18:55:07 +0100
+Subject: [Buildroot] [PATCH] package/bats-core: bump version to 1.2.1
+Message-ID: <20210109175507.12578-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add toolchain configuration to support execinfo.h and backtrace
-features.
+For details, see the release notes:
+https://github.com/bats-core/bats-core/releases/tag/v1.2.1
 
-Signed-off-by: Andrea Ricchi <andrea.ricchi@amarulasolutions.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/uclibc/Config.in |  7 +++++++
- package/uclibc/uclibc.mk | 11 +++++++++++
- 2 files changed, 18 insertions(+)
+ package/bats-core/bats-core.hash | 2 +-
+ package/bats-core/bats-core.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index e59fef3c69..fa3abc2f50 100644
---- a/package/uclibc/Config.in
-+++ b/package/uclibc/Config.in
-@@ -39,6 +39,13 @@ config BR2_TOOLCHAIN_BUILDROOT_LOCALE
- 	  Enable this option if you want your toolchain to support
- 	  localization and internationalization.
+diff --git a/package/bats-core/bats-core.hash b/package/bats-core/bats-core.hash
+index becc1aecae..b50543a269 100644
+--- a/package/bats-core/bats-core.hash
++++ b/package/bats-core/bats-core.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  c74ea5517d9381c044e8e87427de0113be6ad591213d489aeaa28146daf1c723  bats-core-1.2.0.tar.gz
++sha256  91c49b1fe6f0656c46491929ed728f8dfa9a96df0cce294963e8c6082bff87a2  bats-core-1.2.1.tar.gz
  
-+config BR2_TOOLCHAIN_BUILDROOT_BACKTRACE
-+	bool "Enable backtrace support"
-+	select BR2_USE_BACKTRACE
-+	help
-+	  Enable this option if you want your toolchain to support
-+	  execinfo.h and backtrace features.
-+
- choice
- 	prompt "Thread library implementation"
- 	help
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index 53983e852d..b6f6c0f824 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -359,6 +359,16 @@ else
- UCLIBC_SHARED_LIBS_CONFIG = $(call KCONFIG_ENABLE_OPT,HAVE_SHARED)
- endif
- 
-+#
-+# backtrace support
-+#
-+
-+ifeq ($(BR2_TOOLCHAIN_BUILDROOT_BACKTRACE),y)
-+UCLIBC_BACKTRACE_CONFIG = $(call KCONFIG_ENABLE_OPT,UCLIBC_HAS_BACKTRACE)
-+else
-+UCLIBC_BACKTRACE_CONFIG = $(call KCONFIG_DISABLE_OPT,UCLIBC_HAS_BACKTRACE)
-+endif
-+
+ # License files
+ sha256  55074b2b3b87809105034e1468e59076554d76a80c67bcc592000cc3d929852d  LICENSE.md
+diff --git a/package/bats-core/bats-core.mk b/package/bats-core/bats-core.mk
+index 2bcfca70d3..fc8ac674ae 100644
+--- a/package/bats-core/bats-core.mk
++++ b/package/bats-core/bats-core.mk
+@@ -4,7 +4,7 @@
  #
- # Commands
- #
-@@ -401,6 +411,7 @@ define UCLIBC_KCONFIG_FIXUP_CMDS
- 	$(UCLIBC_LOCALE_CONFIG)
- 	$(UCLIBC_WCHAR_CONFIG)
- 	$(UCLIBC_SHARED_LIBS_CONFIG)
-+	$(UCLIBC_BACKTRACE_CONFIG)
- endef
+ ################################################################################
  
- define UCLIBC_BUILD_CMDS
+-BATS_CORE_VERSION = 1.2.0
++BATS_CORE_VERSION = 1.2.1
+ BATS_CORE_SITE = $(call github,bats-core,bats-core,v$(BATS_CORE_VERSION))
+ BATS_CORE_LICENSE = MIT
+ BATS_CORE_LICENSE_FILES = LICENSE.md
 -- 
-2.25.1
+2.20.1
