@@ -1,112 +1,59 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 9 Jan 2021 12:25:25 +0100
-Subject: [Buildroot] [PATCH] package/libclc: switch to using LLVM's
- monorepo
-In-Reply-To: <20210109103353.2860299-1-yann.morin.1998@free.fr>
-References: <20210109103353.2860299-1-yann.morin.1998@free.fr>
-Message-ID: <49909594-62d0-5efb-effb-86b96b4fcfe7@gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Sat,  9 Jan 2021 13:17:19 +0100
+Subject: [Buildroot] [PATCH] package/dbus: bump to version 1.12.20
+Message-ID: <20210109121719.52155-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann,
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/dbus/Config.in | 2 +-
+ package/dbus/dbus.hash | 5 +++--
+ package/dbus/dbus.mk   | 2 +-
+ 3 files changed, 5 insertions(+), 4 deletions(-)
 
-Le 09/01/2021 ? 11:33, Yann E. MORIN a ?crit?:
-> The LLVM project has switched to using a monorepo to host all their
-> components. The separate, individual repositories have been closed
-> late 2020 / early 2021. The libclc repository is no longer.
-> 
-> Switch to using the libclc source from the llvm monorepo; switch to
-> using the github helper, to avoid a huge git clone (still 115MiB
-> instead of the previous 172KiB...).
-
-I didn't noticed that the repository is no longer available because I'm using a
-mirror locally: https://github.com/llvm-mirror/libclc.git
-
-If we really care about thee download size, maybe we can use the mirror before
-updating to llvm 11.0 that's the first release providing an archive for libclc:
-
-https://github.com/llvm/llvm-project/releases/download/llvmorg-11.0.0/libclc-11.0.0.src.tar.xz
-
-Otherwise ok for me.
-
-> 
-> Finding the corresponding commit was made easy because the commit
-> logs embed a reference to the svn revision the git commit is made
-> from (and comparing with a local git clone of the previous repo).
-> 
-> Adapt the build commands and license location accordingly; switch
-> to the new, two-space separator in the hash file.
-> 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Romain Naour <romain.naour@gmail.com>
-> Cc: Valentin Korenblit <valentinkorenblit@gmail.com>
-> Cc: Michael Opdenacker <michael.opdenacker@bootlin.com>
-> ---
->  package/libclc/libclc.hash |  4 ++--
->  package/libclc/libclc.mk   | 15 +++++++--------
->  2 files changed, 9 insertions(+), 10 deletions(-)
-> 
-> diff --git a/package/libclc/libclc.hash b/package/libclc/libclc.hash
-> index 29728fbc76..f685fe7354 100644
-> --- a/package/libclc/libclc.hash
-> +++ b/package/libclc/libclc.hash
-> @@ -1,3 +1,3 @@
->  # locally calculated
-> -sha256 5ea2cd2fa7fa1474d3e0580064e7a22014ef8d64dbbd7c546277fa4beb5acf86 libclc-d1cbc92e2ceee59963f5c3a576382e5bba31f060.tar.gz
-> -sha256 3c536c052db9afd997809e38785c9f2a9e54e2892330fa7c5b438e18a7413479 LICENSE.TXT
-> +sha256  b025a5fb23c78deee144e4a7fee76bedca46e327d99695484a2a2cbf7f2192f9  libclc-2abbe2f09119ccad8ad96841ea4632a9c8a8f04d.tar.gz
-> +sha256  3c536c052db9afd997809e38785c9f2a9e54e2892330fa7c5b438e18a7413479  libclc/LICENSE.TXT
-> diff --git a/package/libclc/libclc.mk b/package/libclc/libclc.mk
-> index 630616905c..e2b20695b2 100644
-> --- a/package/libclc/libclc.mk
-> +++ b/package/libclc/libclc.mk
-> @@ -5,11 +5,10 @@
->  ################################################################################
->  
->  # Use the latest commit from release_90 branch.
-> -LIBCLC_VERSION = d1cbc92e2ceee59963f5c3a576382e5bba31f060
-> -LIBCLC_SITE = https://git.llvm.org/git/libclc
-> -LIBCLC_SITE_METHOD = git
-> +LIBCLC_VERSION = 2abbe2f09119ccad8ad96841ea4632a9c8a8f04d
-> +LIBCLC_SITE = $(call github,llvm,llvm-project,$(LIBCLC_VERSION))
->  LIBCLC_LICENSE = Apache-2.0 with exceptions or MIT
-> -LIBCLC_LICENSE_FILES = LICENSE.TXT
-> +LIBCLC_LICENSE_FILES = libclc/LICENSE.TXT
->  
->  LIBCLC_DEPENDENCIES = host-clang host-llvm
->  LIBCLC_INSTALL_STAGING = YES
-> @@ -28,19 +27,19 @@ LIBCLC_CONF_OPTS = \
->  	--with-cxx-compiler=$(HOSTCXX_NOCCACHE)
->  
->  define LIBCLC_CONFIGURE_CMDS
-> -	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure.py $(LIBCLC_CONF_OPTS))
-> +	cd $(@D)/libclc && $(TARGET_CONFIGURE_OPTS) ./configure.py $(LIBCLC_CONF_OPTS)
-
-Here you're removing the sub-shell but it's used for most other packages.
-
-Best regards,
-Romain
-
-
->  endef
->  
->  define LIBCLC_BUILD_CMDS
-> -	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/libclc
->  endef
->  
->  define LIBCLC_INSTALL_TARGET_CMDS
-> -	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/libclc DESTDIR=$(TARGET_DIR) install
->  endef
->  
->  define LIBCLC_INSTALL_STAGING_CMDS
-> -	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
-> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/libclc DESTDIR=$(STAGING_DIR) install
->  endef
->  
->  $(eval $(generic-package))
-> 
+diff --git a/package/dbus/Config.in b/package/dbus/Config.in
+index 653f7482f..5650b5777 100644
+--- a/package/dbus/Config.in
++++ b/package/dbus/Config.in
+@@ -7,7 +7,7 @@ config BR2_PACKAGE_DBUS
+ 	help
+ 	  The D-Bus message bus system.
+ 
+-	  http://www.freedesktop.org/wiki/Software/dbus
++	  https://www.freedesktop.org/wiki/Software/dbus
+ 
+ comment "dbus needs a toolchain w/ threads"
+ 	depends on BR2_USE_MMU
+diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
+index cfa06301f..06512e565 100644
+--- a/package/dbus/dbus.hash
++++ b/package/dbus/dbus.hash
+@@ -1,6 +1,7 @@
+ # Locally calculated after checking pgp signature
+-# https://dbus.freedesktop.org/releases/dbus/dbus-1.12.18.tar.gz.asc
++# https://dbus.freedesktop.org/releases/dbus/dbus-1.12.20.tar.gz.asc
+ # using key 36EC5A6448A4F5EF79BEFE98E05AE1478F814C4F
+-sha256  64cf4d70840230e5e9bc784d153880775ab3db19d656ead8a0cb9c0ab5a95306  dbus-1.12.18.tar.gz
++sha256  f77620140ecb4cdc67f37fb444f8a6bea70b5b6461f12f1cbe2cec60fa7de5fe  dbus-1.12.20.tar.gz
++
+ # Locally calculated
+ sha256  0e46f54efb12d04ab5c33713bacd0e140c9a35b57ae29e03c853203266e8f3a1  COPYING
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index b58f1ddda..149183437 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DBUS_VERSION = 1.12.18
++DBUS_VERSION = 1.12.20
+ DBUS_SITE = https://dbus.freedesktop.org/releases/dbus
+ DBUS_LICENSE = AFL-2.1 or GPL-2.0+ (library, tools), GPL-2.0+ (tools)
+ DBUS_LICENSE_FILES = COPYING
+-- 
+2.27.0
