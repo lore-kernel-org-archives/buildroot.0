@@ -1,56 +1,37 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 9 Jan 2021 14:46:24 +0100
-Subject: [Buildroot] [PATCH 05/10 v3] WIP: boot+packages: update hash to
- new git-tarballs format
-In-Reply-To: <b976af57-7237-cd64-c57b-b83d32dcaa36@mind.be>
-References: <cover.1609239666.git.yann.morin.1998@free.fr>
- <29b653935ed3ec38f7e0bb05445be7e99473aa5d.1609239666.git.yann.morin.1998@free.fr>
- <b976af57-7237-cd64-c57b-b83d32dcaa36@mind.be>
-Message-ID: <20210109134624.GT1485369@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 09 Jan 2021 16:01:50 +0100
+Subject: [Buildroot] [PATCH 1/1] package/multipath-tools: disable -Werror
+In-Reply-To: <20210108170629.35571-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 8 Jan 2021 18:06:29 +0100")
+References: <20210108170629.35571-1-fontaine.fabrice@gmail.com>
+Message-ID: <87czyexig1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-On 2021-01-05 23:30 +0100, Arnout Vandecappelle spake thusly:
-> On 29/12/2020 12:01, Yann E. MORIN wrote:
-> > ** WIP: should be squashed with the commit that updates the git backend
-> > 
-> > Of all the bootloaders that have a git download method, vexpress-firmware
-> > is the only one to have a hash. Others have no hash files, or they have
-> > explicitly set BR_NO_CHECK_HASH_FOR.
-> > 
-> > For the packages, linux-headers is the special snowflake, as the git
-> > download is only for custom git tree, so it is excluded from the hash
-> > verification with BR_NO_CHECK_HASH_FOR.
-> > 
-> > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> > Cc: Vincent Fazio <vfazio@xes-inc.com>
-> 
->  Did you use a script to (partially) generate this? If yes, it would be nice to
-> include it in the commit message.
+ > Set the new WARNFLAGS to "" which has been added since version 0.8.5 and
+ > https://github.com/opensvc/multipath-tools/commit/82f1b164cb21c9632b3c73f865d97777c7a61e0d
 
-Yeah, you know me all too well. I'll include the script in the commit
-log.
+ > Otherwise, -Werror will raise the following build failure:
 
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> 
->  I've only visually inspected this, I haven't checked if there are any packages
-> that were missed. But as discussed orally: the autobuilders will catch those.
+ > /srv/storage/autobuild/run/instance-3/output-1/host/bin/mipsel-linux-gcc
+ > --std=gnu99 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+ > -D_FILE_OFFSET_BITS=64 -O2 -D_FORTIFY_SOURCE=1 -Werror -Wall -Wextra
+ > -Wformat=2 -Werror=implicit-int -Werror=implicit-function-declaration
+ > -Werror=format-security -Wno-clobbered -Wno-error=clobbered
+ > -Werror=cast-qual -Werror=discarded-qualifiers -pipe
+ > -DBIN_DIR=\"/sbin\" -DLIB_STRING=\"lib\" -DRUN_DIR=\"run\" -MMD -MP
+ > -fPIC -I.. -I../../libmultipath/nvme -Wp,-D_FORTIFY_SOURCE=2 -c -o
+ > nvme.o nvme.c
+ > <command-line>: error: "_FORTIFY_SOURCE" redefined [-Werror]
 
-Yup.
-
-Regards,
-Yann E. MORIN.
+Ideally we should fix the package to not set _FORTIFY_SOURCE (so our
+BR2_FORTIFY_* settings are used), but Ok - Disabling Werror is good
+anyway, so committed, thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
