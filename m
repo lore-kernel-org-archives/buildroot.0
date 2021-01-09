@@ -1,49 +1,34 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 9 Jan 2021 22:38:01 +0100
-Subject: [Buildroot] [git commit] package/apcupsd: fix reverse dependency
- for libusb
-Message-ID: <20210109212159.ABCA7862FA@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 9 Jan 2021 22:54:08 +0100
+Subject: [Buildroot] [PATCH 1/1] package/openvpn: set
+ OPENVPN_CPE_ID_VENDOR
+In-Reply-To: <87czydx10z.fsf@dell.be.48ers.dk>
+References: <20210108175300.537545-1-fontaine.fabrice@gmail.com>
+ <874kjqxi53.fsf@dell.be.48ers.dk>
+ <20210109211424.11091067@windsurf.home>
+ <87czydx10z.fsf@dell.be.48ers.dk>
+Message-ID: <20210109225408.5b8e15f7@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c1a9f10b7933e837eafbc5ab011b38dacbb8d5df
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, 09 Jan 2021 22:18:04 +0100
+Peter Korsgaard <peter@korsgaard.com> wrote:
 
-Commit 8a26801c9f (package/libusb: needs gcc >= 4.9) added a dependency
-to gcc >= 4.9 for libusb but forgot to propagate the reverse dependency
-to BR2_PACKAGE_APCUPSD_USB.
+> Ok, good. It may make sense to default _CPE_ID_VENDOR to $($(PKG)_NAME),
+> which is perhaps where this comes from?
 
-Fixes:
-http://autobuild.buildroot.net/results/f34/f348fe8e5530970a14589ca878810a3bdaf98f67/
+CPE_ID_VENDOR already has a default, which is:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/apcupsd/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+   $(2)_CPE_ID_VENDOR = $$($(2)_RAWNAME)_project
 
-diff --git a/package/apcupsd/Config.in b/package/apcupsd/Config.in
-index f87f6a8b55..2a00d43d67 100644
---- a/package/apcupsd/Config.in
-+++ b/package/apcupsd/Config.in
-@@ -57,13 +57,15 @@ config BR2_PACKAGE_APCUPSD_SNMP
- config BR2_PACKAGE_APCUPSD_USB
- 	bool "usb"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libusb
- 	select BR2_PACKAGE_LIBUSB
- 	select BR2_PACKAGE_LIBUSB_COMPAT
- 	help
- 	  Compile USB UPS code
- 
--comment "usb support needs a toolchain w/ threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+comment "usb support needs a toolchain w/ threads, gcc >= 4.9"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 
- endif
- 
+Indeed, for a large number of packages, the CPE vendor ID follows that
+<foo>_project scheme.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
