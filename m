@@ -1,87 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 9 Jan 2021 16:09:14 +0100
-Subject: [Buildroot] [git commit] package/p11-kit: security bump to version
- 0.23.22
-Message-ID: <20210109145346.1ECFD7FA48@busybox.osuosl.org>
+Date: Sat, 9 Jan 2021 16:00:28 +0100
+Subject: [Buildroot] [git commit] package/multipath-tools: disable -Werror
+Message-ID: <20210109145345.C981D86669@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bad5b8c05b1714d4477ae0e98b832871e6dac042
+commit: https://git.buildroot.net/buildroot/commit/?id=fe4b4e9dc339da13bbb7583e44c7ed2177018a1b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Fix memory-safety issues that affect the RPC protocol (CVE-2020-29361,
-  CVE-2020-29362 and CVE-2020-29363)
-- Update indentation in hash file (two spaces)
+Set the new WARNFLAGS to "" which has been added since version 0.8.5 and
+https://github.com/opensvc/multipath-tools/commit/82f1b164cb21c9632b3c73f865d97777c7a61e0d
 
-https://github.com/p11-glue/p11-kit/blob/0.23.22/NEWS
+Otherwise, -Werror will raise the following build failure:
+
+/srv/storage/autobuild/run/instance-3/output-1/host/bin/mipsel-linux-gcc --std=gnu99 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2  -D_FORTIFY_SOURCE=1  -Werror -Wall -Wextra -Wformat=2 -Werror=implicit-int -Werror=implicit-function-declaration -Werror=format-security -Wno-clobbered -Wno-error=clobbered -Werror=cast-qual -Werror=discarded-qualifiers -pipe -DBIN_DIR=\"/sbin\" -DLIB_STRING=\"lib\" -DRUN_DIR=\"run\" -MMD -MP -fPIC -I.. -I../../libmultipath/nvme -Wp,-D_FORTIFY_SOURCE=2  -c -o nvme.o nvme.c
+<command-line>: error: "_FORTIFY_SOURCE" redefined [-Werror]
+
+Fixes:
+ - http://autobuild.buildroot.org/results/71f7661e7d26ca8608e902eee9f2a92376b00601
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...t-lists-c-Add-stdint-h-to-fix-compilation.patch | 28 ++++++++++++++++++++++
- package/p11-kit/p11-kit.hash                       |  4 ++--
- package/p11-kit/p11-kit.mk                         |  3 ++-
- 3 files changed, 32 insertions(+), 3 deletions(-)
+ package/multipath-tools/multipath-tools.mk | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/package/p11-kit/0001-p11-kit-lists-c-Add-stdint-h-to-fix-compilation.patch b/package/p11-kit/0001-p11-kit-lists-c-Add-stdint-h-to-fix-compilation.patch
-new file mode 100644
-index 0000000000..d4828666d3
---- /dev/null
-+++ b/package/p11-kit/0001-p11-kit-lists-c-Add-stdint-h-to-fix-compilation.patch
-@@ -0,0 +1,28 @@
-+From 507c394cfcf4edffc5e4450c5d737e545c26b857 Mon Sep 17 00:00:00 2001
-+From: Daniel Engberg <daniel.engberg.lists@pyret.net>
-+Date: Sat, 12 Dec 2020 18:56:38 +0100
-+Subject: [PATCH] p11-kit/lists.c: Add stdint.h to fix compilation
-+
-+Add stdint.h otherwise compilation fails on FreeBSD 13-CURRENT with "use of undeclared identifier 'SIZE_MAX'"
-+
-+Signed-off-by: Daniel Engberg <daniel.engberg.lists@pyret.net>
-+
-+[Retrieved from:
-+https://github.com/p11-glue/p11-kit/commit/507c394cfcf4edffc5e4450c5d737e545c26b857]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ p11-kit/lists.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/p11-kit/lists.c b/p11-kit/lists.c
-+index 365a6d89..1d9062be 100644
-+--- a/p11-kit/lists.c
-++++ b/p11-kit/lists.c
-+@@ -39,6 +39,7 @@
-+ 
-+ #include <assert.h>
-+ #include <ctype.h>
-++#include <stdint.h>
-+ #include <string.h>
-+ #include <stdio.h>
-+ #include <stdlib.h>
-diff --git a/package/p11-kit/p11-kit.hash b/package/p11-kit/p11-kit.hash
-index 45f0f1d64e..3481a40b00 100644
---- a/package/p11-kit/p11-kit.hash
-+++ b/package/p11-kit/p11-kit.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256 4b34e92ae36fa493e0d94366c767f06d5f9951e3d8581d10fd935d738db1574d  p11-kit-0.23.16.1.tar.gz
-+sha256  8a8f40153dd5a3f8e7c03e641f8db400133fb2a6a9ab2aee1b6d0cb0495ec6b6  p11-kit-0.23.22.tar.xz
- # Locally computed
--sha256 2e1ba993904df807a10c3eda1e5c272338edc35674b679773a8b3ad460731054  COPYING
-+sha256  2e1ba993904df807a10c3eda1e5c272338edc35674b679773a8b3ad460731054  COPYING
-diff --git a/package/p11-kit/p11-kit.mk b/package/p11-kit/p11-kit.mk
-index 1ffc7e21c8..81972f811b 100644
---- a/package/p11-kit/p11-kit.mk
-+++ b/package/p11-kit/p11-kit.mk
-@@ -4,7 +4,8 @@
- #
- ################################################################################
+diff --git a/package/multipath-tools/multipath-tools.mk b/package/multipath-tools/multipath-tools.mk
+index d5cca7ba57..7fe9033a15 100644
+--- a/package/multipath-tools/multipath-tools.mk
++++ b/package/multipath-tools/multipath-tools.mk
+@@ -9,7 +9,12 @@ MULTIPATH_TOOLS_SITE = $(call github,opensvc,multipath-tools,$(MULTIPATH_TOOLS_V
+ MULTIPATH_TOOLS_LICENSE = LGPL-2.0
+ MULTIPATH_TOOLS_LICENSE_FILES = COPYING
+ MULTIPATH_TOOLS_DEPENDENCIES = lvm2 json-c readline udev liburcu libaio host-pkgconf
+-MULTIPATH_TOOLS_MAKE_OPTS = LIB="lib" RUN="run" OPTFLAGS="" STACKPROT=""
++MULTIPATH_TOOLS_MAKE_OPTS = \
++	LIB="lib" \
++	RUN="run" \
++	OPTFLAGS="" \
++	STACKPROT="" \
++	WARNFLAGS=""
  
--P11_KIT_VERSION = 0.23.16.1
-+P11_KIT_VERSION = 0.23.22
-+P11_KIT_SOURCE = p11-kit-$(P11_KIT_VERSION).tar.xz
- P11_KIT_SITE = https://github.com/p11-glue/p11-kit/releases/download/$(P11_KIT_VERSION)
- P11_KIT_INSTALL_STAGING = YES
- P11_KIT_CONF_OPTS = --disable-static
+ ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+ MULTIPATH_TOOLS_DEPENDENCIES += systemd
