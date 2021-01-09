@@ -1,48 +1,48 @@
-From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Sat, 9 Jan 2021 16:32:05 +0300
-Subject: [Buildroot] [PATCH v3 02/11] boot/mv-ddr-marvell: Bump to HEAD
- as of 20201207
-In-Reply-To: <20201218202646.1060123-3-hi@senzilla.io>
-References: <20201218202646.1060123-1-hi@senzilla.io>
- <20201218202646.1060123-3-hi@senzilla.io>
-Message-ID: <X/mwVYvTNW+tGYiV@curiosity>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat,  9 Jan 2021 14:37:08 +0100
+Subject: [Buildroot] [PATCH 1/1] package/apcupsd: fix reverse dependency for
+ libusb
+Message-ID: <20210109133708.1832131-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Dec 18, 2020 at 08:27:15PM +0000, Dick Olsson via buildroot wrote:
-> Rebase on the mv-ddr-devel branch as the release branches are no longer
-> maintained.
-> 
-> Signed-off-by: Dick Olsson <hi@senzilla.io>
-> ---
->  ...raining_leveling.c-uninitialized-var.patch | 31 -------------------
->  boot/mv-ddr-marvell/mv-ddr-marvell.hash       |  2 +-
->  boot/mv-ddr-marvell/mv-ddr-marvell.mk         |  4 +--
->  3 files changed, 3 insertions(+), 34 deletions(-)
->  delete mode 100644 boot/mv-ddr-marvell/0001-mv_ddr-mv_ddr4_training_leveling.c-uninitialized-var.patch
+Commit
+https://git.buildroot.net/buildroot/commit/?id=8a26801c9fad1c7749200e22e9dfdeaeeb65f76e
+added a dependency to gcc >= 4.9 for libusb but forgot to propagate
+the reverse dependency to BR2_PACKAGE_APCUPSD_USB.
 
+Fixes:
+http://autobuild.buildroot.net/results/f34/f348fe8e5530970a14589ca878810a3bdaf98f67/
 
-Hello Dick,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/apcupsd/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-My apologies for the late feedback. This change breaks the build for
-MacchiatoBin board. I guess it also breaks the build for ClearFrog
-GT 8k board. The reason is straightforward: both boards make use of
-Marvell ATF v18.12.x which is compatible with mv-ddr-marvell release
-devel-18.12.x. Your change bumps mv-ddr-marvell version, however the
-new version is not compatible with older Marvell ATF release since
-mv_ddr_topology_map structure has been changed.
-
-Could you please clarify the reason behind this change ? There are no
-users for mv-ddr-marvell other than Marvell ATF that is used only for
-MacchiatoBin and ClearFrog GT 8k boards. So on the first glance it
-looks like this change has been introduced as an accompanying 
-update/cleanup during your work on adding EDK2 firmware.
-
-If so, then I would suggest to revert this particular commit. Let me
-know if you have any objections for this change.
-
-Regards,
-Sergey
+diff --git a/package/apcupsd/Config.in b/package/apcupsd/Config.in
+index f87f6a8b55..2a00d43d67 100644
+--- a/package/apcupsd/Config.in
++++ b/package/apcupsd/Config.in
+@@ -57,13 +57,15 @@ config BR2_PACKAGE_APCUPSD_SNMP
+ config BR2_PACKAGE_APCUPSD_USB
+ 	bool "usb"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libusb
+ 	select BR2_PACKAGE_LIBUSB
+ 	select BR2_PACKAGE_LIBUSB_COMPAT
+ 	help
+ 	  Compile USB UPS code
+ 
+-comment "usb support needs a toolchain w/ threads"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++comment "usb support needs a toolchain w/ threads, gcc >= 4.9"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 
+ endif
+ 
+-- 
+2.29.2
