@@ -1,67 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 9 Jan 2021 16:02:43 +0100
-Subject: [Buildroot] [git commit] package/openjpeg: fix build with poppler
-Message-ID: <20210109145345.E89667FA48@busybox.osuosl.org>
+Date: Sat, 9 Jan 2021 16:10:33 +0100
+Subject: [Buildroot] [git commit] package/nano: bump to version 5.4
+Message-ID: <20210109145347.4E02980584@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d92539e25594c8954eab2073a9940fd5881e04c1
+commit: https://git.buildroot.net/buildroot/commit/?id=32d962700b81e162bd0b50a00748ccbc2ee15bc7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix build of poppler with openjpeg in version 2.4.0
-
-Fixes:
- - http://autobuild.buildroot.org/results/e4e43519a1c70686844b08257971cc350a746636
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...INC_DIR-for-OPENJPEG_INCLUDE_DIRS-fixes-u.patch | 37 ++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
+ package/nano/Config.in | 2 +-
+ package/nano/nano.hash | 4 ++--
+ package/nano/nano.mk   | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/openjpeg/0004-Revert-Use-INC_DIR-for-OPENJPEG_INCLUDE_DIRS-fixes-u.patch b/package/openjpeg/0004-Revert-Use-INC_DIR-for-OPENJPEG_INCLUDE_DIRS-fixes-u.patch
-new file mode 100644
-index 0000000000..b85556a679
---- /dev/null
-+++ b/package/openjpeg/0004-Revert-Use-INC_DIR-for-OPENJPEG_INCLUDE_DIRS-fixes-u.patch
-@@ -0,0 +1,37 @@
-+From 14f4c27e7c91f745a1dda9991b5deea3cbef2072 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 7 Jan 2021 14:09:50 +0100
-+Subject: [PATCH] Revert "Use INC_DIR for OPENJPEG_INCLUDE_DIRS (fixes
-+ uclouvain#1174)"
-+
-+This reverts commit 65586374d639cfc0104419992f9022174b412594 which
-+breaks cross-compilation of poppler under buildroot (because of
-+DESTDIR usage).
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/uclouvain/openjpeg/pull/1321]
-+---
-+ cmake/OpenJPEGConfig.cmake.in | 6 +++++-
-+ 1 file changed, 5 insertions(+), 1 deletion(-)
-+
-+diff --git a/cmake/OpenJPEGConfig.cmake.in b/cmake/OpenJPEGConfig.cmake.in
-+index 8a726697..2925108a 100644
-+--- a/cmake/OpenJPEGConfig.cmake.in
-++++ b/cmake/OpenJPEGConfig.cmake.in
-+@@ -27,8 +27,12 @@ if(EXISTS ${SELF_DIR}/OpenJPEGTargets.cmake)
-+   # This is an install tree
-+   include(${SELF_DIR}/OpenJPEGTargets.cmake)
-+ 
-++  # We find a relative path from the PKG directory to header files.
-++  set(PKG_DIR "@CMAKE_INSTALL_PREFIX@/@OPENJPEG_INSTALL_PACKAGE_DIR@")
-+   set(INC_DIR "@CMAKE_INSTALL_PREFIX@/@OPENJPEG_INSTALL_INCLUDE_DIR@")
-+-  get_filename_component(OPENJPEG_INCLUDE_DIRS "${INC_DIR}" ABSOLUTE)
-++  file(RELATIVE_PATH PKG_TO_INC_RPATH "${PKG_DIR}" "${INC_DIR}")
-++
-++  get_filename_component(OPENJPEG_INCLUDE_DIRS "${SELF_DIR}/${PKG_TO_INC_RPATH}" ABSOLUTE)
-+ 
-+ else()
-+   if(EXISTS ${SELF_DIR}/OpenJPEGExports.cmake)
-+-- 
-+2.29.2
-+
+diff --git a/package/nano/Config.in b/package/nano/Config.in
+index 4b340ff5b8..b0b7a3e7a3 100644
+--- a/package/nano/Config.in
++++ b/package/nano/Config.in
+@@ -8,7 +8,7 @@ config BR2_PACKAGE_NANO
+ 	  A nice ncurses-based editor. Started out as a clone of pico.
+ 	  Great editor for new users.
+ 
+-	  http://www.nano-editor.org/
++	  https://www.nano-editor.org/
+ 
+ if BR2_PACKAGE_NANO
+ 
+diff --git a/package/nano/nano.hash b/package/nano/nano.hash
+index 792f18a098..2126f576a4 100644
+--- a/package/nano/nano.hash
++++ b/package/nano/nano.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://www.nano-editor.org/dist/v5/nano-5.2.tar.xz.asc
++# https://www.nano-editor.org/dist/v5/nano-5.4.tar.xz.asc
+ # using key BFD009061E535052AD0DF2150D28D4D2A0ACE884
+-sha256  32c2da43e1ae9a5e43437d8c6e1ec0388af870c7762c479e5bffb5f292bda7e1  nano-5.2.tar.xz
++sha256  fe993408b22286355809ce48ebecc4444d19af8203ed4959d269969112ed86e9  nano-5.4.tar.xz
+ sha256  fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
+diff --git a/package/nano/nano.mk b/package/nano/nano.mk
+index 67ce072980..a86474bfb4 100644
+--- a/package/nano/nano.mk
++++ b/package/nano/nano.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ NANO_VERSION_MAJOR = 5
+-NANO_VERSION = $(NANO_VERSION_MAJOR).2
++NANO_VERSION = $(NANO_VERSION_MAJOR).4
+ NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
+ NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
+ NANO_LICENSE = GPL-3.0+
