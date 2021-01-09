@@ -1,60 +1,68 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 9 Jan 2021 17:06:57 +0100
-Subject: [Buildroot] [PATCH] linux: indicate proper CPE prefix
-In-Reply-To: <20210107211336.3030397-1-thomas.petazzoni@bootlin.com>
-References: <20210107211336.3030397-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20210109160657.GU1485369@scaer>
+From: Andrea Ricchi <andrea.ricchi@amarulasolutions.com>
+Date: Sat,  9 Jan 2021 17:19:00 +0100
+Subject: [Buildroot] [PATCH 1/1] package/uclibc: add backtrace support option
+Message-ID: <20210109161900.51824-1-andrea.ricchi@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Add toolchain configuration to support execinfo.h and backtrace
+features.
 
-On 2021-01-07 22:13 +0100, Thomas Petazzoni spake thusly:
-> The CPE type of the Linux kernel is special, it should be "o", unlike
-> all other packages that use "a". We therefore need to override
-> <pkg>_CPE_ID_PREFIX, so that the CPE ID of the linux package matches
-> with the CPE dictionary.
-> 
-> Reported-by: Matt Weber <matthew.weber@rockwellcollins.com>
-> Cc: Matt Weber <matthew.weber@rockwellcollins.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Andrea Ricchi <andrea.ricchi@amarulasolutions.com>
+---
+ package/uclibc/Config.in |  7 +++++++
+ package/uclibc/uclibc.mk | 11 +++++++++++
+ 2 files changed, 18 insertions(+)
 
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  linux/linux.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index 648f6ea2a5..50d2ae3ff8 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -14,6 +14,7 @@ LINUX_LICENSE_FILES = \
->  endif
->  LINUX_CPE_ID_VENDOR = $(LINUX_NAME)
->  LINUX_CPE_ID_NAME = $(LINUX_NAME)_kernel
-> +LINUX_CPE_ID_PREFIX = cpe:2.3:o
->  
->  define LINUX_HELP_CMDS
->  	@echo '  linux-menuconfig       - Run Linux kernel menuconfig'
-> -- 
-> 2.29.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index e59fef3c69..fa3abc2f50 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -39,6 +39,13 @@ config BR2_TOOLCHAIN_BUILDROOT_LOCALE
+ 	  Enable this option if you want your toolchain to support
+ 	  localization and internationalization.
+ 
++config BR2_TOOLCHAIN_BUILDROOT_BACKTRACE
++	bool "Enable backtrace support"
++	select BR2_USE_BACKTRACE
++	help
++	  Enable this option if you want your toolchain to support
++	  execinfo.h and backtrace features.
++
+ choice
+ 	prompt "Thread library implementation"
+ 	help
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 53983e852d..b6f6c0f824 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -359,6 +359,16 @@ else
+ UCLIBC_SHARED_LIBS_CONFIG = $(call KCONFIG_ENABLE_OPT,HAVE_SHARED)
+ endif
+ 
++#
++# backtrace support
++#
++
++ifeq ($(BR2_TOOLCHAIN_BUILDROOT_BACKTRACE),y)
++UCLIBC_BACKTRACE_CONFIG = $(call KCONFIG_ENABLE_OPT,UCLIBC_HAS_BACKTRACE)
++else
++UCLIBC_BACKTRACE_CONFIG = $(call KCONFIG_DISABLE_OPT,UCLIBC_HAS_BACKTRACE)
++endif
++
+ #
+ # Commands
+ #
+@@ -401,6 +411,7 @@ define UCLIBC_KCONFIG_FIXUP_CMDS
+ 	$(UCLIBC_LOCALE_CONFIG)
+ 	$(UCLIBC_WCHAR_CONFIG)
+ 	$(UCLIBC_SHARED_LIBS_CONFIG)
++	$(UCLIBC_BACKTRACE_CONFIG)
+ endef
+ 
+ define UCLIBC_BUILD_CMDS
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.25.1
