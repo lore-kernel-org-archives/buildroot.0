@@ -1,123 +1,81 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 9 Jan 2021 20:49:20 +0100
-Subject: [Buildroot] [PATCH v1 2/2] package/quickjs: link with libatomic
-In-Reply-To: <20210103214550.GS2997@scaer>
-References: <20210103201959.4035-1-ps.report@gmx.net>
- <20210103201959.4035-2-ps.report@gmx.net>
- <20210103214550.GS2997@scaer>
-Message-ID: <20210109204920.417081f0@gmx.net>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sat,  9 Jan 2021 22:09:21 +0200
+Subject: [Buildroot] [PATCH] configs/solidrun_clearfog_gt_8k: bump BSP
+ components
+Message-ID: <23fe4026fc46bc903537099ce600c350c65616dc.1610222961.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann,
+Switch to upstream ATF of recent version to fix build with recently
+updated mv-ddr. The vendor does not provide public access to newer ATF
+versions anymore.
 
-On Sun, 3 Jan 2021 22:45:50 +0100, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+Bump U-Boot and kernel to fix dtc build on hosts with gcc 10.
 
-> Peter, All,
->
-> On 2021-01-03 21:19 +0100, Peter Seiderer spake thusly:
-> > Link with libatomic if available.
-> >
-> > Fixes:
-> >
-> >   - http://autobuild.buildroot.net/results/e0766eef95a2559d51e58d1a81a9c40df84ae509
-> >
-> >   .../build/quickjs-2020-11-08/quickjs.c:12229: undefined reference to `__atomic_fetch_xor_1'
-> >
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
->
-> Applied to master, thanks.
->
-> But see below for a small nit...
->
-> > ---
-> >  ...ile-add-optional-link-with-libatomic.patch | 30 +++++++++++++++++++
-> >  package/quickjs/quickjs.mk                    |  6 +++-
-> >  2 files changed, 35 insertions(+), 1 deletion(-)
-> >  create mode 100644 package/quickjs/0001-Makefile-add-optional-link-with-libatomic.patch
-> >
-> > diff --git a/package/quickjs/0001-Makefile-add-optional-link-with-libatomic.patch b/package/quickjs/0001-Makefile-add-optional-link-with-libatomic.patch
-> > new file mode 100644
-> > index 0000000000..12f4eb2338
-> > --- /dev/null
-> > +++ b/package/quickjs/0001-Makefile-add-optional-link-with-libatomic.patch
-> > @@ -0,0 +1,30 @@
-> > +From 2cf2aa34d5d55a4eedb1aedd4d56d89d24870230 Mon Sep 17 00:00:00 2001
-> > +From: Peter Seiderer <ps.report@gmx.net>
-> > +Date: Sun, 3 Jan 2021 21:11:44 +0100
-> > +Subject: [PATCH] Makefile: add optional link with libatomic
-> > +
-> > +Add optional libatomic linking if available to fix:
-> > +
-> > +  .../build/quickjs-2020-11-08/quickjs.c:12229: undefined reference to `__atomic_fetch_xor_1'
-> > +
-> > +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > +---
-> > + Makefile | 2 +-
-> > + 1 file changed, 1 insertion(+), 1 deletion(-)
-> > +
-> > +diff --git a/Makefile b/Makefile
-> > +index e6ae827..22ad496 100644
-> > +--- a/Makefile
-> > ++++ b/Makefile
-> > +@@ -177,7 +177,7 @@ endif
-> > + HOST_LIBS=-lm -ldl -lpthread
-> > + LIBS=-lm
-> > + ifndef CONFIG_WIN32
-> > +-LIBS+=-ldl -lpthread
-> > ++LIBS+=-ldl -lpthread $(LIBATOMIC)
-> > + endif
->
-> I've changed that to be a generic variable, not tied to -latomic:
->
->     LIBS+=$(EXTRA_LIBS)
+Increase rootfs size. The default 60MB is not enough.
 
-Thanks for improvement, definitely better...
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/948622614
 
->
-> Do not forget to send the patch upstream. ;-)
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ configs/solidrun_clearfog_gt_8k_defconfig | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-Finally done, see [1]...
-
-Regards,
-Peter
-
-[1] https://www.freelists.org/post/quickjs-devel/PATCH-Makefile-allow-linking-with-extra-libraries
-
->
-> Regards,
-> Yann E. MORIN.
->
-> > + $(OBJDIR):
-> > +--
-> > +2.29.2
-> > +
-> > diff --git a/package/quickjs/quickjs.mk b/package/quickjs/quickjs.mk
-> > index 1a2e63278f..389ed71133 100644
-> > --- a/package/quickjs/quickjs.mk
-> > +++ b/package/quickjs/quickjs.mk
-> > @@ -10,8 +10,12 @@ QUICKJS_SITE = https://bellard.org/quickjs
-> >  QUICKJS_LICENSE = MIT
-> >  QUICKJS_INSTALL_STAGING = YES
-> >
-> > +ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-> > +QUICKJS_LIBATOMIC += -latomic
-> > +endif
-> > +
-> >  define QUICKJS_BUILD_CMDS
-> > -	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-> > +	$(TARGET_MAKE_ENV) LIBATOMIC=$(QUICKJS_LIBATOMIC) $(MAKE) -C $(@D) \
-> >  		CROSS_PREFIX="$(TARGET_CROSS)" \
-> >  		all
-> >  endef
-> > --
-> > 2.29.2
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
->
+diff --git a/configs/solidrun_clearfog_gt_8k_defconfig b/configs/solidrun_clearfog_gt_8k_defconfig
+index 8804ce0473f5..bec4a7daccc6 100644
+--- a/configs/solidrun_clearfog_gt_8k_defconfig
++++ b/configs/solidrun_clearfog_gt_8k_defconfig
+@@ -1,17 +1,16 @@
+ BR2_aarch64=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_2=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ BR2_TARGET_GENERIC_HOSTNAME="clearfog-gt-8k"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for SolidRun Clearfog GT-8K"
+ 
+ # Firmware
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/MarvellEmbeddedProcessors/atf-marvell.git"
+-# This commit corresponds to release armada-18.12.2
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="9484123bfe29011ed44b717a23eb53a70b97ce3d"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.4"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="a80x0_mcbin"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_TARGETS="mrvl_flash"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="USE_COHERENT_MEM=0"
+ BR2_TARGET_BINARIES_MARVELL=y
+ BR2_TARGET_MV_DDR_MARVELL=y
+@@ -19,7 +18,7 @@ BR2_TARGET_MV_DDR_MARVELL=y
+ # U-Boot
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.07"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.10"
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="clearfog_gt_8k"
+ BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/solidrun/clearfog_gt_8k/uboot-fragment.config"
+@@ -27,7 +26,7 @@ BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/solidrun/clearfog_gt_8k/uboot-frag
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.2.14"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.5"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/solidrun/clearfog_gt_8k/linux-extras.config"
+@@ -38,6 +37,7 @@ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ # rootfs
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+-- 
+2.29.2
