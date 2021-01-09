@@ -1,36 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 9 Jan 2021 23:06:22 +0100
-Subject: [Buildroot] [PATCH 1/1] package/minidlna: fix build with
- musl-1.2.0
-In-Reply-To: <20200503075312.703486-1-bernd.kuhls@t-online.de>
-References: <20200503075312.703486-1-bernd.kuhls@t-online.de>
-Message-ID: <20210109230622.3977be20@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 9 Jan 2021 23:20:10 +0100
+Subject: [Buildroot] [git commit] toolchain: CodeSourcery AArch64 2014.11
+ does not contain libatomic
+Message-ID: <20210109220155.6D0B786DC1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun,  3 May 2020 09:53:12 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=a530fd4a4268b44961d8ab0a053fa0cf3b29fb5c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Fixes:
-> http://autobuild.buildroot.net/results/31b/31bf9814a5a45081cf58675a9f7fa7183b4ef0bf/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Fixes build error
 
-minidlna now builds fine with musl: since we bumped to minidlna 1.3.0,
-there are no longer any failures in the autobuilders on minidlna.
+output/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-amd-linux-gnu/4.9.1/../../../../aarch64-amd-linux-gnu/bin/ld:
+ cannot find -latomic
 
-And indeed, upstream commit 347aafa6d7275cbb44963f10cf4d12168bc3cb8c
-was made to fix musl issues.
+using this defconfig
 
-So I've marked this patch as not applicable.
+BR2_aarch64=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64=y
+BR2_PACKAGE_OPENSSL=y
 
-Thanks!
+libopenssl is only used here as an example: all packages adding -latomic
+if BR2_TOOLCHAIN_HAS_LIBATOMIC=y are broken, like dav1d, ffmpeg, gnutls,
+kodi and vlc.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ toolchain/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 395c8e36b8..553612c4aa 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -702,6 +702,7 @@ config BR2_TOOLCHAIN_HAS_SYNC_8
+ config BR2_TOOLCHAIN_HAS_LIBATOMIC
+ 	bool
+ 	default y if BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 && \
++		!BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64 && \
+ 		BR2_TOOLCHAIN_HAS_THREADS && \
+ 		!BR2_BINFMT_FLAT
+ 
