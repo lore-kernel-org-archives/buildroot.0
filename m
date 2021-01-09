@@ -1,7 +1,7 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sat,  9 Jan 2021 13:17:19 +0100
-Subject: [Buildroot] [PATCH] package/dbus: bump to version 1.12.20
-Message-ID: <20210109121719.52155-1-francois.perrad@gadz.org>
+Date: Sat,  9 Jan 2021 13:18:55 +0100
+Subject: [Buildroot] [PATCH] package/nano: bump to version 5.4
+Message-ID: <20210109121855.52341-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,50 +10,48 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/dbus/Config.in | 2 +-
- package/dbus/dbus.hash | 5 +++--
- package/dbus/dbus.mk   | 2 +-
- 3 files changed, 5 insertions(+), 4 deletions(-)
+ package/nano/Config.in | 2 +-
+ package/nano/nano.hash | 4 ++--
+ package/nano/nano.mk   | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/dbus/Config.in b/package/dbus/Config.in
-index 653f7482f..5650b5777 100644
---- a/package/dbus/Config.in
-+++ b/package/dbus/Config.in
-@@ -7,7 +7,7 @@ config BR2_PACKAGE_DBUS
- 	help
- 	  The D-Bus message bus system.
+diff --git a/package/nano/Config.in b/package/nano/Config.in
+index 4b340ff5b..b0b7a3e7a 100644
+--- a/package/nano/Config.in
++++ b/package/nano/Config.in
+@@ -8,7 +8,7 @@ config BR2_PACKAGE_NANO
+ 	  A nice ncurses-based editor. Started out as a clone of pico.
+ 	  Great editor for new users.
  
--	  http://www.freedesktop.org/wiki/Software/dbus
-+	  https://www.freedesktop.org/wiki/Software/dbus
+-	  http://www.nano-editor.org/
++	  https://www.nano-editor.org/
  
- comment "dbus needs a toolchain w/ threads"
- 	depends on BR2_USE_MMU
-diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
-index cfa06301f..06512e565 100644
---- a/package/dbus/dbus.hash
-+++ b/package/dbus/dbus.hash
-@@ -1,6 +1,7 @@
+ if BR2_PACKAGE_NANO
+ 
+diff --git a/package/nano/nano.hash b/package/nano/nano.hash
+index 792f18a09..2126f576a 100644
+--- a/package/nano/nano.hash
++++ b/package/nano/nano.hash
+@@ -1,5 +1,5 @@
  # Locally calculated after checking pgp signature
--# https://dbus.freedesktop.org/releases/dbus/dbus-1.12.18.tar.gz.asc
-+# https://dbus.freedesktop.org/releases/dbus/dbus-1.12.20.tar.gz.asc
- # using key 36EC5A6448A4F5EF79BEFE98E05AE1478F814C4F
--sha256  64cf4d70840230e5e9bc784d153880775ab3db19d656ead8a0cb9c0ab5a95306  dbus-1.12.18.tar.gz
-+sha256  f77620140ecb4cdc67f37fb444f8a6bea70b5b6461f12f1cbe2cec60fa7de5fe  dbus-1.12.20.tar.gz
-+
- # Locally calculated
- sha256  0e46f54efb12d04ab5c33713bacd0e140c9a35b57ae29e03c853203266e8f3a1  COPYING
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index b58f1ddda..149183437 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -4,7 +4,7 @@
- #
+-# https://www.nano-editor.org/dist/v5/nano-5.2.tar.xz.asc
++# https://www.nano-editor.org/dist/v5/nano-5.4.tar.xz.asc
+ # using key BFD009061E535052AD0DF2150D28D4D2A0ACE884
+-sha256  32c2da43e1ae9a5e43437d8c6e1ec0388af870c7762c479e5bffb5f292bda7e1  nano-5.2.tar.xz
++sha256  fe993408b22286355809ce48ebecc4444d19af8203ed4959d269969112ed86e9  nano-5.4.tar.xz
+ sha256  fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
+diff --git a/package/nano/nano.mk b/package/nano/nano.mk
+index 67ce07298..a86474bfb 100644
+--- a/package/nano/nano.mk
++++ b/package/nano/nano.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--DBUS_VERSION = 1.12.18
-+DBUS_VERSION = 1.12.20
- DBUS_SITE = https://dbus.freedesktop.org/releases/dbus
- DBUS_LICENSE = AFL-2.1 or GPL-2.0+ (library, tools), GPL-2.0+ (tools)
- DBUS_LICENSE_FILES = COPYING
+ NANO_VERSION_MAJOR = 5
+-NANO_VERSION = $(NANO_VERSION_MAJOR).2
++NANO_VERSION = $(NANO_VERSION_MAJOR).4
+ NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
+ NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
+ NANO_LICENSE = GPL-3.0+
 -- 
 2.27.0
