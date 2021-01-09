@@ -1,34 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 9 Jan 2021 21:14:24 +0100
-Subject: [Buildroot] [PATCH 1/1] package/openvpn: set
- OPENVPN_CPE_ID_VENDOR
-In-Reply-To: <874kjqxi53.fsf@dell.be.48ers.dk>
-References: <20210108175300.537545-1-fontaine.fabrice@gmail.com>
- <874kjqxi53.fsf@dell.be.48ers.dk>
-Message-ID: <20210109211424.11091067@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat,  9 Jan 2021 22:10:04 +0100
+Subject: [Buildroot] [PATCHv2] package/libclc: switch to use the frozen,
+ legacy mirror
+Message-ID: <20210109211004.3108263-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 09 Jan 2021 16:08:24 +0100
-Peter Korsgaard <peter@korsgaard.com> wrote:
+The LLVM project has switched to using a monorepo to host all their
+components. The separate, individual repositories have been closed
+late 2020 / early 2021. The libclc repository is no longer.
 
->  > +OPENVPN_CPE_ID_VENDOR = $(OPENVPN_NAME)  
-> 
-> I am not sure why we do this obfuscation with the _NAME variable instead
-> of just "openvpn" -  But ok, a bunch of other packages do so as well.
+Switch to using the libclc source from the llvm legacy and frozen
+mirror.
 
-Yes, it was done like this in the original patch from Matt, and I kept
-it as-is, but I also wasn't too sure about it. But since nobody
-complained when I posted the patch, I applied it as-is.
+Even though we could switch over to using the github helper, we just
+keep using the git download method: it is a small repository, and it
+will not impact people that were already using it.
 
-I definitely wouldn't oppose to changing this to not use the
-<pkg>_NAME variable, as it find this indirection to not be very useful.
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Romain Naour <romain.naour@gmail.com>
+Cc: Valentin Korenblit <valentinkorenblit@gmail.com>
+Cc: Michael Opdenacker <michael.opdenacker@bootlin.com>
 
-Thomas
+---
+Changes v1 -> v2:
+  - keep everything as-is, just switch to the frozen mirror
+---
+ package/libclc/libclc.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/libclc/libclc.mk b/package/libclc/libclc.mk
+index 630616905c..6fe8e10a77 100644
+--- a/package/libclc/libclc.mk
++++ b/package/libclc/libclc.mk
+@@ -6,7 +6,7 @@
+ 
+ # Use the latest commit from release_90 branch.
+ LIBCLC_VERSION = d1cbc92e2ceee59963f5c3a576382e5bba31f060
+-LIBCLC_SITE = https://git.llvm.org/git/libclc
++LIBCLC_SITE = https://github.com/llvm-mirror/libclc
+ LIBCLC_SITE_METHOD = git
+ LIBCLC_LICENSE = Apache-2.0 with exceptions or MIT
+ LIBCLC_LICENSE_FILES = LICENSE.TXT
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.25.1
