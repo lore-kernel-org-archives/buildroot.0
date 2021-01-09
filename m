@@ -1,109 +1,48 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 9 Jan 2021 23:51:11 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/casync: new package
-In-Reply-To: <n6VbI4j9Y5f6LOECnjTyiq5_T7Z6HLi9MqC2RzalYw5LnZaE3N1MYSl1KOxoRaAr_iF6idqMaAZdUXtFajUAsonz3wbK72B6hW4-L6Fu2So=@protonmail.com>
-References: <-L4OoHbI_s2GypxkG9mFgazGU5zBSrAAbDJZ8-Z4fV4jx0pA4UFDZgnIAi8Jjovzv_ody4LtOlfNmnZ8evA-5BlsbQoa5goxcwgc3zOALIU=@protonmail.com>
- <20210107111303.17d64eec@windsurf.home>
- <n6VbI4j9Y5f6LOECnjTyiq5_T7Z6HLi9MqC2RzalYw5LnZaE3N1MYSl1KOxoRaAr_iF6idqMaAZdUXtFajUAsonz3wbK72B6hW4-L6Fu2So=@protonmail.com>
-Message-ID: <20210109225111.GJ3044608@scaer>
+Date: Sat, 9 Jan 2021 23:51:54 +0100
+Subject: [Buildroot] [git commit] package/clinfo: bump to version
+ 3.0.20.11.20
+Message-ID: <20210109223349.D2B4486259@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yair, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=5e42ac9793a137a7b56b2516da77af47b7b07848
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-01-07 14:23 +0000, Yair Ben-Avraham via buildroot spake thusly:
-> I tried without xz, build failed, details below:
-> 
-> ./casync.config:
-> BR2_PACKAGE_ACL=y
-> BR2_PACKAGE_LIBCURL=y
-> BR2_PACKAGE_OPENSSL=y
-> 
-> ./package/casync/casync.mk:
-> CASYNC_DEPENDENCIES = acl libcurl openssl
-> ...
-> ifeq ($(BR2_PACKAGE_XZ),y)
-> CASYNC_DEPENDENCIES += xz
-> CASYNC_CONF_OPTS += -Dliblzma=enabled
-> else
-> CASYNC_CONF_OPTS += -Dliblzma=disabled
-> endif
-> ...
-> 
-> br-arm-cortex-a9-glibc/logfile:
-> ../src/castore.c:5:10: fatal error: lzma.h: No such file or directory
->     5 | #include <lzma.h>
->       |          ^~~~~~~~
-> compilation terminated.
-> 
-> In addition, in file ./src/castore.c , include <lzma.h> is not under if HAVE_LIBLZMA block, see counterexample inside ./src/compressor.h
-> 
-> So it's either adding xz to the dependencies or include <lzma.h> under if condition and try to build. What is better?
+Update indentation of hash file (two spaces).
 
-The proper solution, IMHO, would be to fix ./src/castore.c. AFAICS,
-lzma.h is not needed from src/castore.c.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/clinfo/clinfo.hash | 6 +++---
+ package/clinfo/clinfo.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-If that is indeed true, then patch it out, and send the patch upstream.
-
-Afterall, upstream has an option to enable/disable use of liblzma, so
-they do expect the build to succeed without it, I would wager.
-
-Regards,
-Yann E. MORIN.
-
-> Yair
-> --
-> Yair Ben-Avraham
-> yairba at protonmail.com
-> +31.6.1316.5535
-> 
-> ??????? Original Message ???????
-> On Thursday, January 7, 2021 11:13 AM, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
-> 
-> > Hello,
-> >
-> > Thanks for the new iteration!
-> >
-> > On Thu, 07 Jan 2021 07:12:57 +0000
-> > Yair Ben-Avraham via buildroot buildroot at busybox.net wrote:
-> >
-> > > -   depends on BR2_PACKAGE_HAS_UDEV
-> >
-> > udev is not a mandatory dependency.
-> >
-> > > +CASYNC_VERSION = 4ad9bcb94bc83ff36cfc65515107ea06a88c2dfc
-> > > +CASYNC_SITE = $(call github,systemd,casync,$(CASYNC_VERSION))
-> > > +CASYNC_LICENSE = LGPL-2.1+
-> > > +CASYNC_LICENSE_FILES = LICENSE.LGPL2.1
-> > > +# xz is mandatory because of ./src/castore.c:5:10: #include <lzma.h>
-> > > +CASYNC_DEPENDENCIES = acl libcurl openssl xz
-> >
-> > This seems odd, Ithink I got it to build without xz. Did you pass
-> > the right -D option ?
-> >
-> > Other than those two questions, looks good to me!
-> >
-> > Thomas
-> >
-> > -----------------------------------------------------------------------------------------------------------------------------------------------------
-> >
-> > Thomas Petazzoni, CTO, Bootlin
-> > Embedded Linux and Kernel engineering
-> > https://bootlin.com
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/clinfo/clinfo.hash b/package/clinfo/clinfo.hash
+index d5766e6322..2528a9e6c8 100644
+--- a/package/clinfo/clinfo.hash
++++ b/package/clinfo/clinfo.hash
+@@ -1,4 +1,4 @@
+ # locally calculated
+-sha256 64b02e68ccff3b95437bd0bd70dcb88438c58adec16a7145a5d4e5c26a898ccf clinfo-2.2.18.03.26.tar.gz
+-sha256 a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499 legalcode.txt
+-sha256 2a7a9321be169ea6edbc6b1010e8f7bb0f4c1482a2f65c34a49e9719f129b79a LICENSE
++sha256  3c506083e72e9ee09fc7d5de513be7c5eff0284f198a60fb60ab493f6f0a549a  clinfo-3.0.20.11.20.tar.gz
++sha256  a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499  legalcode.txt
++sha256  2a7a9321be169ea6edbc6b1010e8f7bb0f4c1482a2f65c34a49e9719f129b79a  LICENSE
+diff --git a/package/clinfo/clinfo.mk b/package/clinfo/clinfo.mk
+index cf08692316..404e5f7535 100644
+--- a/package/clinfo/clinfo.mk
++++ b/package/clinfo/clinfo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CLINFO_VERSION = 2.2.18.03.26
++CLINFO_VERSION = 3.0.20.11.20
+ CLINFO_SITE = $(call github,Oblomov,clinfo,$(CLINFO_VERSION))
+ CLINFO_LICENSE = CC0-1.0
+ CLINFO_LICENSE_FILES = legalcode.txt LICENSE
