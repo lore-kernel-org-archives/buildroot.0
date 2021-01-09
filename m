@@ -1,70 +1,43 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 8 Jan 2021 22:37:37 +0100
-Subject: [Buildroot] [PATCH] support/scripts/pkg-stats: properly handle
- host packages with -c option
-In-Reply-To: <20210107223447.4a2b8674@windsurf.home>
-References: <20210107211336.3030397-1-thomas.petazzoni@bootlin.com>
- <20210107211336.3030397-2-thomas.petazzoni@bootlin.com>
- <20210107213207.GO1485369@scaer>
- <20210107223447.4a2b8674@windsurf.home>
-Message-ID: <20210108213737.GP1485369@scaer>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Sat,  9 Jan 2021 08:41:23 +0100
+Subject: [Buildroot] [PATCH] package/readline: bump to version 8.1
+Message-ID: <20210109074123.2202-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/readline/readline.hash | 4 ++--
+ package/readline/readline.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On 2021-01-07 22:34 +0100, Thomas Petazzoni spake thusly:
-> On Thu, 7 Jan 2021 22:32:07 +0100
-> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
-> 
-> > I think the correct fix would be for the json output to already contain
-> > the base name of the package, and the script to use that field, rather
-> > than the key, as a package name. That way, the behaviour would be the
-> > same for both target and host packages.
-> 
-> Right, that could certainly work as well.
-> 
-> > 
-> > Something like:
-> > 
-> >     diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-> >     index a2cc160d0b..0f9d612f12 100644
-> >     --- a/package/pkg-utils.mk
-> >     +++ b/package/pkg-utils.mk
-> >     @@ -91,6 +91,7 @@ endef
-> >      # $(1): upper-case package or filesystem name
-> >      define json-info
-> >      	"$($(1)_NAME)": {
-> >     +		"name": "$($(1)_RAWNAME)",
-> 
-> "name" or "rawname" ?
-
-"rawname" is a detail of the naming of our internal variables. WE do not
-want to propagate that to the outside world.
-
-"name" is really that: the name of the package, by which people know it
-and talk about.
-
-Regards,
-Yann E. MORIN.
-
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/readline/readline.hash b/package/readline/readline.hash
+index 560154c2f..63172f112 100644
+--- a/package/readline/readline.hash
++++ b/package/readline/readline.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256 e339f51971478d369f8a053a330a190781acb9864cf4c541060f12078948e461  readline-8.0.tar.gz
++sha256  f8ceb4ee131e3232226a17f51b164afc46cd0b9e6cef344be87c65962cb82b02  readline-8.1.tar.gz
+ 
+ # Hash for license file
+-sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/readline/readline.mk b/package/readline/readline.mk
+index f5d7d5bf9..e48055133 100644
+--- a/package/readline/readline.mk
++++ b/package/readline/readline.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-READLINE_VERSION = 8.0
++READLINE_VERSION = 8.1
+ READLINE_SITE = $(BR2_GNU_MIRROR)/readline
+ READLINE_INSTALL_STAGING = YES
+ READLINE_DEPENDENCIES = ncurses host-autoconf
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.27.0
