@@ -1,80 +1,100 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 10 Jan 2021 22:28:49 +0100
-Subject: [Buildroot] [PATCH-2020.11.x] package/glibc: security bump for
- additional post-2.31.x fixes
-In-Reply-To: <20210110211825.7966-1-peter@korsgaard.com>
-References: <20210110211825.7966-1-peter@korsgaard.com>
-Message-ID: <20210110212849.GV3044608@scaer>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun, 10 Jan 2021 23:28:22 +0100
+Subject: [Buildroot] [RFC v2 01/12] package/mesa3d: add config option for
+ DRI3 support
+In-Reply-To: <20210110222833.26301-1-ps.report@gmx.net>
+References: <20210110222833.26301-1-ps.report@gmx.net>
+Message-ID: <20210110222833.26301-2-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Add config option for DRI3 support and use it instead
+of DRI3 enable/disable logic in *.mk file.
 
-On 2021-01-10 22:18 +0100, Peter Korsgaard spake thusly:
-> Fixes the following security issues:
-> 
-> CVE-2020-27618: An infinite loop has been fixed in the iconv program when
-> invoked with input containing redundant shift sequences in the IBM1364,
-> IBM1371, IBM1388, IBM1390, or IBM1399 character sets.
-> 
-> CVE-2020-29562: An assertion failure has been fixed in the iconv function
-> when invoked with UCS4 input containing an invalid character.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+Changes v1 -> v2:
+  - new patch
+---
+ package/mesa3d/Config.in |  8 ++++++++
+ package/mesa3d/mesa3d.mk | 12 +++++++-----
+ 2 files changed, 15 insertions(+), 5 deletions(-)
 
-Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  .../glibc.hash                                                  | 2 +-
->  package/glibc/glibc.mk                                          | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
->  rename package/glibc/{2.31-54-g6fdf971c9dbf7dac9bea552113fe4694015bbc4d => 2.31-70-gc4f5e32aae3094491641025a42fe2d55222c8f16}/glibc.hash (70%)
-> 
-> diff --git a/package/glibc/2.31-54-g6fdf971c9dbf7dac9bea552113fe4694015bbc4d/glibc.hash b/package/glibc/2.31-70-gc4f5e32aae3094491641025a42fe2d55222c8f16/glibc.hash
-> similarity index 70%
-> rename from package/glibc/2.31-54-g6fdf971c9dbf7dac9bea552113fe4694015bbc4d/glibc.hash
-> rename to package/glibc/2.31-70-gc4f5e32aae3094491641025a42fe2d55222c8f16/glibc.hash
-> index a1b2ae12fd..e7aaeab07c 100644
-> --- a/package/glibc/2.31-54-g6fdf971c9dbf7dac9bea552113fe4694015bbc4d/glibc.hash
-> +++ b/package/glibc/2.31-70-gc4f5e32aae3094491641025a42fe2d55222c8f16/glibc.hash
-> @@ -1,5 +1,5 @@
->  # Locally calculated (fetched from Github)
-> -sha256  e1f2c9b424a4e0c00e7ad123a4204f7bc8afd3c504aeb8c79b1086509fd67176  glibc-2.31-54-g6fdf971c9dbf7dac9bea552113fe4694015bbc4d.tar.gz
-> +sha256  9897155423ea50bfa255b0130d13608b7d11129e79848a52cf82670bb206439a  glibc-2.31-70-gc4f5e32aae3094491641025a42fe2d55222c8f16.tar.gz
->  
->  # Hashes for license files
->  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-> diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-> index 4721177d83..f4bba24ca0 100644
-> --- a/package/glibc/glibc.mk
-> +++ b/package/glibc/glibc.mk
-> @@ -20,7 +20,7 @@ else ifeq ($(BR2_RISCV_32),y)
->  # Until 2.33 is released, just use master
->  GLIBC_VERSION = 2.32.9000-69-gbd394d131c10c9ec22c6424197b79410042eed99
->  else
-> -GLIBC_VERSION = 2.31-54-g6fdf971c9dbf7dac9bea552113fe4694015bbc4d
-> +GLIBC_VERSION = 2.31-70-gc4f5e32aae3094491641025a42fe2d55222c8f16
->  endif
->  # Upstream doesn't officially provide an https download link.
->  # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 45eb62b701..347b1a2726 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -15,6 +15,11 @@ menuconfig BR2_PACKAGE_MESA3D
+ 
+ if BR2_PACKAGE_MESA3D
+ 
++config BR2_PACKAGE_MESA3D_DRI3
++	bool "Enable DRI3 support"
++	help
++	  Enable DRI3 support.
++
+ # Some Gallium driver needs libelf when built with LLVM support
+ config BR2_PACKAGE_MESA3D_NEEDS_ELFUTILS
+ 	bool
+@@ -64,6 +69,8 @@ config BR2_PACKAGE_MESA3D_DRI_DRIVER
+ 		!BR2_PACKAGE_MESA3D_OPENGL_GLX && \
+ 		!BR2_PACKAGE_MESA3D_OPENGL_EGL && \
+ 		!BR2_PACKAGE_MESA3D_OSMESA_CLASSIC
++	select BR2_PACKAGE_MESA3D_DRI3 if \
++		(BR2_PACKAGE_XORG7 && BR2_TOOLCHAIN_HAS_SYNC_4)
+ 	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if \
+ 		(BR2_PACKAGE_XORG7 && BR2_TOOLCHAIN_HAS_SYNC_4)
+ 
+@@ -396,6 +403,7 @@ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC # ifunc, static_assert
+ 	depends on BR2_PACKAGE_XORG7 # xorgproto
+ 	select BR2_PACKAGE_EXPAT
++	select BR2_PACKAGE_MESA3D_DRI3
+ 	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
+ 	select BR2_PACKAGE_XORGPROTO
+ 	select BR2_PACKAGE_XLIB_LIBXSHMFENCE
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 5eca1f0906..ea6265d723 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -36,6 +36,12 @@ ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM),y)
+ MESA3D_CONF_OPTS += -Db_asneeded=false
+ endif
+ 
++ifeq ($(BR2_PACKAGE_MESA3D_DRI3),y)
++MESA3D_CONF_OPTS += -Ddri3=enabled
++else
++MESA3D_CONF_OPTS += -Ddri3=disabled
++endif
++
+ ifeq ($(BR2_PACKAGE_MESA3D_LLVM),y)
+ MESA3D_DEPENDENCIES += host-llvm llvm
+ MESA3D_MESON_EXTRA_BINARIES += llvm-config='$(STAGING_DIR)/usr/bin/llvm-config'
+@@ -125,13 +131,10 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),)
+ MESA3D_CONF_OPTS += \
+-	-Ddri-drivers= -Ddri3=disabled
++	-Ddri-drivers=
+ else
+ ifeq ($(BR2_PACKAGE_XLIB_LIBXSHMFENCE),y)
+ MESA3D_DEPENDENCIES += xlib_libxshmfence
+-MESA3D_CONF_OPTS += -Ddri3=enabled
+-else
+-MESA3D_CONF_OPTS += -Ddri3=disabled
+ endif
+ MESA3D_CONF_OPTS += \
+ 	-Dshared-glapi=enabled \
+@@ -145,7 +148,6 @@ MESA3D_CONF_OPTS += \
+ else
+ MESA3D_DEPENDENCIES += xlib_libxshmfence
+ MESA3D_CONF_OPTS += \
+-	-Ddri3=enabled \
+ 	-Dvulkan-drivers=$(subst $(space),$(comma),$(MESA3D_VULKAN_DRIVERS-y))
+ endif
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.29.2
