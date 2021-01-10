@@ -1,142 +1,257 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 10 Jan 2021 11:38:30 +0100
-Subject: [Buildroot] [PATCH 1/1] package/rng-tools: bump to version 6.11
-Message-ID: <20210110103830.789917-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 10 Jan 2021 11:47:11 +0100
+Subject: [Buildroot] [git commit] package/casync: new package
+Message-ID: <20210110102925.B833B86539@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop patches (already in version)
+commit: https://git.buildroot.net/buildroot/commit/?id=f580f58f94c4e1b12b9d81aeb01366597b08aa96
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/nhorman/rng-tools/releases/tag/V6.11
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yair Ben-Avraham <yairba@protonmail.com>
+[yann.morin.1998 at free.fr:
+  - correctly fix build without lzma in an upstreamable fashion
+  - actually fix the build without udev
+  - depend on udev, not libudev (which does not exist)
+  - don't use += for the first variable assignment to _CONF_OPTS
+  - explicitly disable unsupported fuzz options
+  - add explicit optiopnal support for bash-completion
+  - drop useless comments about "features" and "booleans"
+  - fix alphabetical order in DEVELOPERS
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- ...-configure.ac-fix-with-rtlsdr-option.patch | 29 ----------
- ..._jitter-disambiguate-call-to-encrypt.patch | 53 -------------------
- package/rng-tools/rng-tools.hash              |  2 +-
- package/rng-tools/rng-tools.mk                |  2 +-
- 4 files changed, 2 insertions(+), 84 deletions(-)
- delete mode 100644 package/rng-tools/0001-configure.ac-fix-with-rtlsdr-option.patch
- delete mode 100644 package/rng-tools/0002-rngd_jitter-disambiguate-call-to-encrypt.patch
+ DEVELOPERS                                         |  1 +
+ package/Config.in                                  |  1 +
+ ...0001-castore-fix-build-without-lzma-or-xz.patch | 35 ++++++++++++
+ ...t-install-udev-rules-without-udev-support.patch | 53 ++++++++++++++++++
+ package/casync/Config.in                           | 13 +++++
+ package/casync/casync.hash                         |  3 +
+ package/casync/casync.mk                           | 64 ++++++++++++++++++++++
+ 7 files changed, 170 insertions(+)
 
-diff --git a/package/rng-tools/0001-configure.ac-fix-with-rtlsdr-option.patch b/package/rng-tools/0001-configure.ac-fix-with-rtlsdr-option.patch
-deleted file mode 100644
-index 586a44e21f..0000000000
---- a/package/rng-tools/0001-configure.ac-fix-with-rtlsdr-option.patch
-+++ /dev/null
-@@ -1,29 +0,0 @@
--From 45a8c51a20a518ed78c5ea1829a307c045f737be Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Fri, 27 Mar 2020 22:19:42 +0100
--Subject: [PATCH] configure.ac: fix --with-rtlsdr option
--
--Add missing ',' to allow the user to explicitly disable or enable rtlsdr
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/nhorman/rng-tools/pull/88]
-----
-- configure.ac | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/configure.ac b/configure.ac
--index ba796f8..1f55052 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -43,7 +43,7 @@ AC_ARG_WITH([pkcs11],
-- 
-- AC_ARG_WITH([rtlsdr],
-- 	AS_HELP_STRING([--without-rtlsdr],
---		[Disable rtlsdr support. ])
--+		[Disable rtlsdr support. ]),
-- 	[],
-- 	[with_rtlsdr=no]
-- )
---- 
--2.25.1
--
-diff --git a/package/rng-tools/0002-rngd_jitter-disambiguate-call-to-encrypt.patch b/package/rng-tools/0002-rngd_jitter-disambiguate-call-to-encrypt.patch
-deleted file mode 100644
-index 99997ce866..0000000000
---- a/package/rng-tools/0002-rngd_jitter-disambiguate-call-to-encrypt.patch
-+++ /dev/null
-@@ -1,53 +0,0 @@
--From dab16a5fd4efde8ef569b358e19b1fcbc7d0d938 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Mon, 30 Mar 2020 00:10:46 +0200
--Subject: [PATCH] rngd_jitter: disambiguate call to encrypt
--
--Commit 0f184ea7e792427fb20afe81d471b565aee96f0b disambiguate the call to
--encrypt in rngd_rdrand.c but did not update rngd_jitter.c.
--
--This raise the following build failure:
--
--rngd_jitter.c:75:12: error: conflicting types for 'encrypt'
-- static int encrypt(unsigned char *plaintext, int plaintext_len, unsigned char *key,
--            ^~~~~~~
--In file included from rngd_jitter.c:27:
--/home/dawncrow/buildroot-test/scripts/instance-0/output-1/host/powerpc-buildroot-linux-uclibc/sysroot/usr/include/unistd.h:1132:13: note: previous declaration of 'encrypt' was here
-- extern void encrypt (char *__block, int __edflag) __THROW __nonnull ((1));
--             ^~~~~~~
--Makefile:770: recipe for target 'rngd-rngd_jitter.o' failed
--
--Fixes:
-- - http://autobuild.buildroot.org/results/0ca6bf16e3acbc94065b88c4442d6595424b77cb
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/nhorman/rng-tools/pull/89]
-----
-- rngd_jitter.c | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/rngd_jitter.c b/rngd_jitter.c
--index c1b1aca..49a3825 100644
----- a/rngd_jitter.c
--+++ b/rngd_jitter.c
--@@ -72,7 +72,7 @@ unsigned char *aes_buf;
-- char key[AES_BLOCK];
-- static unsigned char iv_buf[CHUNK_SIZE] __attribute__((aligned(128)));
-- 
---static int encrypt(unsigned char *plaintext, int plaintext_len, unsigned char *key,
--+static int osslencrypt(unsigned char *plaintext, int plaintext_len, unsigned char *key,
--             unsigned char *iv, unsigned char *ciphertext)
-- {
--         EVP_CIPHER_CTX *ctx;
--@@ -122,7 +122,7 @@ static inline int openssl_mangle(unsigned char *tmp, struct rng *ent_src)
--         unsigned char ciphertext[CHUNK_SIZE * RDRAND_ROUNDS];
-- 
--         /* Encrypt the plaintext */
---        ciphertext_len = encrypt (tmp, strlen(tmp), key, iv_buf,
--+        ciphertext_len = osslencrypt (tmp, strlen(tmp), key, iv_buf,
--                               ciphertext);
--         if (!ciphertext_len)
--                 return -1;
---- 
--2.25.1
--
-diff --git a/package/rng-tools/rng-tools.hash b/package/rng-tools/rng-tools.hash
-index 5cb38e31b5..de1f72617c 100644
---- a/package/rng-tools/rng-tools.hash
-+++ b/package/rng-tools/rng-tools.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  2e462821aaa7d6dc24646aa0d2239d97cb8b07b3e60715159a9edcaa9189f8ef  rng-tools-6.11.tar.gz
-+sha256  644d8bd4e84cee29debddc7e6db72aff27e628e5a879ce310562edf50f12be41  rng-tools-6.11.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/rng-tools/rng-tools.mk b/package/rng-tools/rng-tools.mk
-index 888b4e323e..ae20d96362 100644
---- a/package/rng-tools/rng-tools.mk
-+++ b/package/rng-tools/rng-tools.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index ee175b7586..828b0a6b33 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2715,6 +2715,7 @@ N:	Wojciech Nizi??ski <niziak@spox.org>
+ F:	package/fwup/
  
- RNG_TOOLS_VERSION = 6.11
--RNG_TOOLS_SITE = $(call github,nhorman,$(RNG_TOOLS_NAME),v$(RNG_TOOLS_VERSION))
-+RNG_TOOLS_SITE = $(call github,nhorman,$(RNG_TOOLS_NAME),V$(RNG_TOOLS_VERSION))
- RNG_TOOLS_LICENSE = GPL-2.0
- RNG_TOOLS_LICENSE_FILES = COPYING
- RNG_TOOLS_DEPENDENCIES = libsysfs host-pkgconf openssl
--- 
-2.29.2
+ N:	Yair Ben Avraham <yairba@protonmail.com>
++F:	package/casync/
+ F:	package/gloox/
+ 
+ N:	Yann CARDAILLAC <ycardaillac@sepro-group.com>
+diff --git a/package/Config.in b/package/Config.in
+index f497fbffde..c24969f723 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2072,6 +2072,7 @@ menu "Networking applications"
+ 	source "package/c-icap-modules/Config.in"
+ 	source "package/can-utils/Config.in"
+ 	source "package/cannelloni/Config.in"
++	source "package/casync/Config.in"
+ 	source "package/chrony/Config.in"
+ 	source "package/civetweb/Config.in"
+ 	source "package/connman/Config.in"
+diff --git a/package/casync/0001-castore-fix-build-without-lzma-or-xz.patch b/package/casync/0001-castore-fix-build-without-lzma-or-xz.patch
+new file mode 100644
+index 0000000000..a528b1244c
+--- /dev/null
++++ b/package/casync/0001-castore-fix-build-without-lzma-or-xz.patch
+@@ -0,0 +1,35 @@
++From 06b667de02df34e3efa1864b4031853bd4ee010d Mon Sep 17 00:00:00 2001
++From: Yair Ben-Avraham <yairba@protonmail.com>
++Date: Sun, 10 Jan 2021 06:34:58 +0100
++Subject: [PATCH] castore: fix build without lzma or xz
++
++castore.c unconditioanlly includes lzma.h, but lzma support if optional.
++Furthermore, castore.c does not need anything from lzma.h.
++
++Drop the include altogether.
++
++Signed-off-by: Yair Ben-Avraham <yairba@protonmail.com>
++[yann.morin.1998 at free.fr:
++  - lzma.h is not needed at all
++  - rewrite commit log accordingly
++]
++Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
++---
++ src/castore.c | 1 -
++ 1 file changed, 1 deletion(-)
++
++diff --git a/src/castore.c b/src/castore.c
++index c290dfd..b2e5320 100644
++--- a/src/castore.c
+++++ b/src/castore.c
++@@ -2,7 +2,6 @@
++ 
++ #include <dirent.h>
++ #include <fcntl.h>
++-#include <lzma.h>
++ #include <sys/stat.h>
++ #include <unistd.h>
++ 
++-- 
++2.25.1
++
+diff --git a/package/casync/0002-build-don-t-install-udev-rules-without-udev-support.patch b/package/casync/0002-build-don-t-install-udev-rules-without-udev-support.patch
+new file mode 100644
+index 0000000000..838b065571
+--- /dev/null
++++ b/package/casync/0002-build-don-t-install-udev-rules-without-udev-support.patch
+@@ -0,0 +1,53 @@
++From e3f683dc3013d14bddb9f9ec5bdc31367dc51a1c Mon Sep 17 00:00:00 2001
++From: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Date: Sun, 10 Jan 2021 10:44:39 +0100
++Subject: [PATCH] build: don't install udev rules without udev support
++
++Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
++---
++ meson.build | 15 ++++++++-------
++ 1 file changed, 8 insertions(+), 7 deletions(-)
++
++diff --git a/meson.build b/meson.build
++index aac7727..92be1ea 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -151,6 +151,11 @@ conf.set10('HAVE_SELINUX', get_option('selinux'))
++ 
++ if get_option('udev')
++         libudev = dependency('libudev')
+++        udevrulesdir = get_option('udevrulesdir')
+++        if udevrulesdir == ''
+++                udev = dependency('udev', required : false)
+++                udevrulesdir = join_paths(udev.get_pkgconfig_variable('udevdir'), 'rules.d')
+++        endif
++ else
++         libudev = []
++ endif
++@@ -175,12 +180,6 @@ subdir('test')
++ 
++ includes = include_directories('src')
++ 
++-udevrulesdir = get_option('udevrulesdir')
++-if udevrulesdir == ''
++-        udev = dependency('udev', required : false)
++-        udevrulesdir = join_paths(udev.get_pkgconfig_variable('udevdir'), 'rules.d')
++-endif
++-
++ subdir('shell-completion/bash')
++ subdir('doc')
++ 
++@@ -318,7 +317,9 @@ udev_rule = configure_file(
++           input : 'src/75-casync.rules.in',
++           configuration : substs)
++ 
++-install_data(udev_rule, install_dir : udevrulesdir)
+++if get_option('udev')
+++        install_data(udev_rule, install_dir : udevrulesdir)
+++endif
++ 
++ ############################################################
++ 
++-- 
++2.25.1
++
+diff --git a/package/casync/Config.in b/package/casync/Config.in
+new file mode 100644
+index 0000000000..89a9520e35
+--- /dev/null
++++ b/package/casync/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_CASYNC
++	bool "casync"
++	depends on BR2_TOOLCHAIN_USES_GLIBC # scandirat() is not implemented by musl and uclibc-ng
++	select BR2_PACKAGE_ACL
++	select BR2_PACKAGE_LIBCURL
++	select BR2_PACKAGE_OPENSSL
++	help
++	  Content-Addressable Data Synchronization Tool
++
++	  https://github.com/systemd/casync
++
++comment "casync needs a glibc toolchain"
++	depends on !BR2_TOOLCHAIN_USES_GLIBC
+diff --git a/package/casync/casync.hash b/package/casync/casync.hash
+new file mode 100644
+index 0000000000..dbb85520de
+--- /dev/null
++++ b/package/casync/casync.hash
+@@ -0,0 +1,3 @@
++# sha256 locally computed
++sha256  d07f43e70e3c466152033da4c55c065f815d3025234a046c2bce1cfe4ac7d273  casync-4ad9bcb94bc83ff36cfc65515107ea06a88c2dfc.tar.gz
++sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
+diff --git a/package/casync/casync.mk b/package/casync/casync.mk
+new file mode 100644
+index 0000000000..d74cb1bfe8
+--- /dev/null
++++ b/package/casync/casync.mk
+@@ -0,0 +1,64 @@
++################################################################################
++#
++# casync
++#
++################################################################################
++
++CASYNC_VERSION = 4ad9bcb94bc83ff36cfc65515107ea06a88c2dfc
++CASYNC_SITE = $(call github,systemd,casync,$(CASYNC_VERSION))
++CASYNC_LICENSE = LGPL-2.1+
++CASYNC_LICENSE_FILES = LICENSE.LGPL2.1
++CASYNC_DEPENDENCIES = acl libcurl openssl
++
++CASYNC_CONF_OPTS = -Dman=false -Doss-fuzz=false -Dllvm-fuzz=false
++
++ifeq ($(BR2_PACKAGE_BASH_COMPLETION),y)
++CASYNC_DEPENDENCIES += bash-completion
++# The default path is correct, leave it as-is
++else
++CASYNC_CONF_OPTS += -Dbashcompletiondir=no
++endif
++
++ifeq ($(BR2_PACKAGE_LIBFUSE),y)
++CASYNC_DEPENDENCIES += libfuse
++CASYNC_CONF_OPTS += -Dfuse=true
++else
++CASYNC_CONF_OPTS += -Dfuse=false
++endif
++
++ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
++CASYNC_DEPENDENCIES += libselinux
++CASYNC_CONF_OPTS += -Dselinux=true
++else
++CASYNC_CONF_OPTS += -Dselinux=false
++endif
++
++ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
++CASYNC_DEPENDENCIES += udev
++CASYNC_CONF_OPTS += -Dudev=true
++else
++CASYNC_CONF_OPTS += -Dudev=false
++endif
++
++ifeq ($(BR2_PACKAGE_LIBZSTD),y)
++CASYNC_DEPENDENCIES += libzstd
++CASYNC_CONF_OPTS += -Dlibzstd=enabled
++else
++CASYNC_CONF_OPTS += -Dlibzstd=disabled
++endif
++
++ifeq ($(BR2_PACKAGE_XZ),y)
++CASYNC_DEPENDENCIES += xz
++CASYNC_CONF_OPTS += -Dliblzma=enabled
++else
++CASYNC_CONF_OPTS += -Dliblzma=disabled
++endif
++
++ifeq ($(BR2_PACKAGE_ZLIB),y)
++CASYNC_DEPENDENCIES += zlib
++CASYNC_CONF_OPTS += -Dlibz=enabled
++else
++CASYNC_CONF_OPTS += -Dlibz=disabled
++endif
++
++$(eval $(meson-package))
