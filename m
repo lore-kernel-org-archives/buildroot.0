@@ -1,55 +1,50 @@
-From: =?UTF-8?q?Jos=C3=A9=20Luis=20Salvador=20Rufo?= <salvador.joseluis@gmail.com>
-Date: Sun, 10 Jan 2021 20:05:59 +0100
-Subject: [Buildroot] [PATCH v2] fs/cpio: add zstd as compression option
-In-Reply-To: <20210110111217.GP3044608@scaer>
-References: <20210110111217.GP3044608@scaer>
-Message-ID: <20210110190559.1434055-1-salvador.joseluis@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 10 Jan 2021 20:06:16 +0100
+Subject: [Buildroot] [PATCH 1/1] package/gstreamer1/gst1-python: needs
+ gst1-plugins-base
+Message-ID: <20210110190616.1023612-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-U-Boot mkimage zstd is available since v2020.10:
-https://gitlab.denx.de/u-boot/u-boot/-/commit/26073f9ed3ab0aaf3c2a2b433fecb30a95a067d6
+gst1-plugins-base is a mandatory dependency since at least version
+1.9.90 and
+https://github.com/GStreamer/gst-python/commit/16f971226df1980b58ebde330123debaaf3b53d0
 
-Signed-off-by: Jos? Luis Salvador Rufo <salvador.joseluis@gmail.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/48b22c66c3a610d70931b9adfd6e5082bb3ff3d1
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- fs/common.mk      | 5 +++++
- fs/cpio/Config.in | 5 +++++
- 2 files changed, 10 insertions(+)
+ package/gstreamer1/gst1-python/Config.in      | 1 +
+ package/gstreamer1/gst1-python/gst1-python.mk | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/fs/common.mk b/fs/common.mk
-index 84e13d1b7e..da008ef9e8 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -154,6 +154,11 @@ ifeq ($(BR2_REPRODUCIBLE),)
- ROOTFS_$(2)_COMPRESS_CMD += -T $(PARALLEL_JOBS)
- endif
- endif
-+ifeq ($(BR2_TARGET_ROOTFS_$(2)_ZSTD),y)
-+ROOTFS_$(2)_DEPENDENCIES += host-zstd
-+ROOTFS_$(2)_COMPRESS_EXT = .zst
-+ROOTFS_$(2)_COMPRESS_CMD = zstd --ultra -22 -z -f -T$(PARALLEL_JOBS)
-+endif
- 
- $$(BINARIES_DIR)/$$(ROOTFS_$(2)_FINAL_IMAGE_NAME): ROOTFS=$(2)
- $$(BINARIES_DIR)/$$(ROOTFS_$(2)_FINAL_IMAGE_NAME): FAKEROOT_SCRIPT=$$(ROOTFS_$(2)_DIR)/fakeroot
-diff --git a/fs/cpio/Config.in b/fs/cpio/Config.in
-index 83a7fa5824..c1151a2881 100644
---- a/fs/cpio/Config.in
-+++ b/fs/cpio/Config.in
-@@ -51,6 +51,11 @@ config BR2_TARGET_ROOTFS_CPIO_XZ
+diff --git a/package/gstreamer1/gst1-python/Config.in b/package/gstreamer1/gst1-python/Config.in
+index 791562fea8..2f34984020 100644
+--- a/package/gstreamer1/gst1-python/Config.in
++++ b/package/gstreamer1/gst1-python/Config.in
+@@ -6,6 +6,7 @@ config BR2_PACKAGE_GST1_PYTHON
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC # gobject-introspection
+ 	depends on BR2_PACKAGE_PYTHON3 # gobject-introspection
+ 	select BR2_PACKAGE_GOBJECT_INTROSPECTION
++	select BR2_PACKAGE_GST1_PLUGINS_BASE
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_PYTHON_GOBJECT
  	help
- 	  Do compress the cpio filesystem with xz.
+diff --git a/package/gstreamer1/gst1-python/gst1-python.mk b/package/gstreamer1/gst1-python/gst1-python.mk
+index bf64c2c96a..0c506b260c 100644
+--- a/package/gstreamer1/gst1-python/gst1-python.mk
++++ b/package/gstreamer1/gst1-python/gst1-python.mk
+@@ -12,6 +12,7 @@ GST1_PYTHON_LICENSE_FILES = COPYING
+ GST1_PYTHON_LICENSE = LGPL-2.1+
  
-+config BR2_TARGET_ROOTFS_CPIO_ZSTD
-+	bool "zstd"
-+	help
-+	  Do compress the cpio filesystem with zstd.
-+
- endchoice
+ GST1_PYTHON_DEPENDENCIES = \
++	gst1-plugins-base \
+ 	gstreamer1 \
+ 	python-gobject
  
- config BR2_TARGET_ROOTFS_CPIO_UIMAGE
 -- 
-2.30.0
+2.29.2
