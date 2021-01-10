@@ -1,84 +1,104 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 10 Jan 2021 23:28:23 +0100
-Subject: [Buildroot] [RFC v2 02/12] package/mesa3d: fix vulkan/intel
- dependencies
+Date: Sun, 10 Jan 2021 23:28:28 +0100
+Subject: [Buildroot] [RFC v2 07/12] package/vulkan-tools: new package
 In-Reply-To: <20210110222833.26301-1-ps.report@gmx.net>
 References: <20210110222833.26301-1-ps.report@gmx.net>
-Message-ID: <20210110222833.26301-3-ps.report@gmx.net>
+Message-ID: <20210110222833.26301-8-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- enable X11/GLX free build
-
-- remove xorgproto dependency is already given via BR2_PACKAGE_MESA3D_OPENGL_GLX/BR2_PACKAGE_MESA3D_NEEDS_X11
-
-- libxshmfence only needed in case BR2_PACKAGE_MESA3D_OPENGL_GLX is enabled
-
-- the correct dependency for BR2_PACKAGE_XLIB_LIBXSHMFENCE would
-  be 'depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_MESA3D_OPENGL_GLX',
-  but this results in:
-
-  package/mesa3d/Config.in:81:error: recursive dependency detected!
-  package/mesa3d/Config.in:81:    symbol BR2_PACKAGE_MESA3D_DRIVER is selected by BR2_PACKAGE_MESA3D_VULKAN_DRIVER
-  package/mesa3d/Config.in:77:    symbol BR2_PACKAGE_MESA3D_VULKAN_DRIVER is selected by BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL
-  package/mesa3d/Config.in:406:   symbol BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL depends on BR2_PACKAGE_MESA3D_OPENGL_GLX
-  package/mesa3d/Config.in:461:   symbol BR2_PACKAGE_MESA3D_OPENGL_GLX depends on BR2_PACKAGE_MESA3D_DRIVER
-  For a resolution refer to Documentation/kbuild/kconfig-language.txt
-  subsection "Kconfig recursive dependency limitations"
-
-  so use unconditional 'depends on BR2_TOOLCHAIN_HAS_SYNC_4' instead
-
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
 Changes v1 -> v2:
-  - new patch
+  - fix license SPDX (Yann E. MORIN)
+  - disable ICD (as it is only a mock ICD for testing purpouse)
 ---
- package/mesa3d/Config.in | 10 ++++++----
- package/mesa3d/mesa3d.mk |  2 ++
- 2 files changed, 8 insertions(+), 4 deletions(-)
+ package/Config.in                      |  1 +
+ package/vulkan-tools/Config.in         | 17 +++++++++++++++++
+ package/vulkan-tools/vulkan-tools.hash |  3 +++
+ package/vulkan-tools/vulkan-tools.mk   | 25 +++++++++++++++++++++++++
+ 4 files changed, 46 insertions(+)
+ create mode 100644 package/vulkan-tools/Config.in
+ create mode 100644 package/vulkan-tools/vulkan-tools.hash
+ create mode 100644 package/vulkan-tools/vulkan-tools.mk
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 347b1a2726..d9c27f8b5c 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -398,15 +398,17 @@ comment "Vulkan drivers"
- config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL
- 	bool "Vulkan Intel driver"
- 	depends on BR2_i386 || BR2_x86_64
-+	# depends on BR2_TOOLCHAIN_HAS_SYNC_4 because of libxshmfence only
-+	# in case GLX is enabled but the following results in 'recursive
-+	# dependency detected!', so simple depend always on BR2_TOOLCHAIN_HAS_SYNC_4
-+	# depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_MESA3D_OPENGL_GLX # libxshmfence in case GLX is enabled
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libxshmfence
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # memfd.h
- 	depends on BR2_TOOLCHAIN_USES_GLIBC # ifunc, static_assert
--	depends on BR2_PACKAGE_XORG7 # xorgproto
- 	select BR2_PACKAGE_EXPAT
--	select BR2_PACKAGE_MESA3D_DRI3
-+	select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_MESA3D_OPENGL_GLX
- 	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
--	select BR2_PACKAGE_XORGPROTO
--	select BR2_PACKAGE_XLIB_LIBXSHMFENCE
-+	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if BR2_PACKAGE_MESA3D_OPENGL_GLX
- 	help
- 	  Vulkan driver for Intel hardware from Ivy Bridge onward.
+diff --git a/package/Config.in b/package/Config.in
+index 86676b57ef..b156d8de1a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -340,6 +340,7 @@ comment "Graphic libraries"
+ 	source "package/tk/Config.in"
+ 	source "package/vulkan-headers/Config.in"
+ 	source "package/vulkan-loader/Config.in"
++	source "package/vulkan-tools/Config.in"
  
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index ea6265d723..967b86810f 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -146,7 +146,9 @@ ifeq ($(BR2_PACKAGE_MESA3D_VULKAN_DRIVER),)
- MESA3D_CONF_OPTS += \
- 	-Dvulkan-drivers=
- else
-+ifeq ($(BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL)$(BR2_PACKAGE_MESA3D_OPENGL_GLX),yy)
- MESA3D_DEPENDENCIES += xlib_libxshmfence
-+endif
- MESA3D_CONF_OPTS += \
- 	-Dvulkan-drivers=$(subst $(space),$(comma),$(MESA3D_VULKAN_DRIVERS-y))
- endif
+ comment "Other GUIs"
+ 	source "package/qt5/Config.in"
+diff --git a/package/vulkan-tools/Config.in b/package/vulkan-tools/Config.in
+new file mode 100644
+index 0000000000..54fa539dab
+--- /dev/null
++++ b/package/vulkan-tools/Config.in
+@@ -0,0 +1,17 @@
++config BR2_PACKAGE_VULKAN_TOOLS
++	bool "vulkan-tools"
++	depends on BR2_INSTALL_LIBSTDCPP # vulkan-loader
++	depends on !BR2_STATIC_LIBS # vullan-loader
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11
++	depends on BR2_TOOLCHAIN_HAS_THREADS # vulkan-loader
++	select BR2_PACKAGE_VULKAN_HEADERS
++	select BR2_PACKAGE_VULKAN_LOADER
++
++	help
++	  The Khronos official Vulkan Tools and Utilities.
++
++	  https://github.com/KhronosGroup/Vulkan-Tools
++
++comment "vulkan-tools needs a toolchain w/ C++, dynamic library, threads, gcc >= 4.9"
++	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
++		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+diff --git a/package/vulkan-tools/vulkan-tools.hash b/package/vulkan-tools/vulkan-tools.hash
+new file mode 100644
+index 0000000000..a4cf97ab34
+--- /dev/null
++++ b/package/vulkan-tools/vulkan-tools.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  98a3a00471da65df833b4ffeb1ab29ec1d169d5feab54270cf4cd8f50f82e682  vulkan-tools-1.2.162.tar.gz
++sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
+diff --git a/package/vulkan-tools/vulkan-tools.mk b/package/vulkan-tools/vulkan-tools.mk
+new file mode 100644
+index 0000000000..129efddf3b
+--- /dev/null
++++ b/package/vulkan-tools/vulkan-tools.mk
+@@ -0,0 +1,25 @@
++################################################################################
++#
++# vulkan-tools
++#
++################################################################################
++
++VULKAN_TOOLS_VERSION = 1.2.162
++VULKAN_TOOLS_SITE = $(call github,KhronosGroup,Vulkan-Tools,v$(VULKAN_TOOLS_VERSION))
++VULKAN_TOOLS_LICENSE = Apache-2.0
++VULKAN_TOOLS_LICENSE_FILES = LICENSE.txt
++
++VULKAN_TOOLS_DEPENDENCIES = vulkan-headers vulkan-loader
++
++VULKAN_TOOLS_CONF_OPTS += \
++	-DBUILD_CUBE=OFF \
++	-DBUILD_VULKANINFO=ON \
++	-DBUILD_ICD=OFF \
++	-DINSTALL_ICD=OFF \
++	-DBUILD_WSI_XCB_SUPPORT=OFF \
++	-DBUILD_WSI_XLIB_SUPPORT=OFF \
++	-DBUILD_WSI_WAYLAND_SUPPORT=OFF \
++	-DBUILD_WSI_DIRECTFB_SUPPORT=OFF \
++	-DUSE_CCACHE=OFF
++
++$(eval $(cmake-package))
 -- 
 2.29.2
