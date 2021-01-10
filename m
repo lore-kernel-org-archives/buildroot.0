@@ -1,46 +1,50 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 10 Jan 2021 12:02:50 +0100
-Subject: [Buildroot] [PATCH 1/1] package/rng-tools: bump to version 6.11
-In-Reply-To: <20210110103830.789917-1-fontaine.fabrice@gmail.com>
-References: <20210110103830.789917-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210110110250.GO3044608@scaer>
+Date: Sun, 10 Jan 2021 12:12:17 +0100
+Subject: [Buildroot] [PATCH 1/1] fs/cpio: add zstd as compression option
+In-Reply-To: <20210110043831.22754-1-salvador.joseluis@gmail.com>
+References: <20210110043831.22754-1-salvador.joseluis@gmail.com>
+Message-ID: <20210110111217.GP3044608@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Jos?, all,
 
-On 2021-01-10 11:38 +0100, Fabrice Fontaine spake thusly:
-> Drop patches (already in version)
+On 2021-01-10 05:38 +0100, Jos? Luis Salvador Rufo spake thusly:
+> U-Boot mkimage zstd is available since v2020.10:
+> https://gitlab.denx.de/u-boot/u-boot/-/commit/26073f9ed3ab0aaf3c2a2b433fecb30a95a067d6
 > 
-> https://github.com/nhorman/rng-tools/releases/tag/V6.11
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Jos? Luis Salvador Rufo <salvador.joseluis@gmail.com>
 > ---
-[--SNIP--]
-> diff --git a/package/rng-tools/rng-tools.mk b/package/rng-tools/rng-tools.mk
-> index 888b4e323e..ae20d96362 100644
-> --- a/package/rng-tools/rng-tools.mk
-> +++ b/package/rng-tools/rng-tools.mk
-> @@ -5,7 +5,7 @@
->  ################################################################################
+>  fs/cpio/Config.in | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/fs/cpio/Config.in b/fs/cpio/Config.in
+> index 83a7fa5824..c1151a2881 100644
+> --- a/fs/cpio/Config.in
+> +++ b/fs/cpio/Config.in
+> @@ -51,6 +51,11 @@ config BR2_TARGET_ROOTFS_CPIO_XZ
+>  	help
+>  	  Do compress the cpio filesystem with xz.
 >  
->  RNG_TOOLS_VERSION = 6.11
+> +config BR2_TARGET_ROOTFS_CPIO_ZSTD
+> +	bool "zstd"
+> +	help
+> +	  Do compress the cpio filesystem with zstd.
 
-Uh? Did you forget to squash your pathes together before sending?
+How is that expected to work? We do not have zstd support in the fs
+infra: https://git.buildroot.org/buildroot/tree/fs/common.mk#n126
 
 Regards,
 Yann E. MORIN.
 
-> -RNG_TOOLS_SITE = $(call github,nhorman,$(RNG_TOOLS_NAME),v$(RNG_TOOLS_VERSION))
-> +RNG_TOOLS_SITE = $(call github,nhorman,$(RNG_TOOLS_NAME),V$(RNG_TOOLS_VERSION))
->  RNG_TOOLS_LICENSE = GPL-2.0
->  RNG_TOOLS_LICENSE_FILES = COPYING
->  RNG_TOOLS_DEPENDENCIES = libsysfs host-pkgconf openssl
+>  endchoice
+>  
+>  config BR2_TARGET_ROOTFS_CPIO_UIMAGE
 > -- 
-> 2.29.2
+> 2.30.0
 > 
 > _______________________________________________
 > buildroot mailing list
