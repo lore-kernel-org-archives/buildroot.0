@@ -1,67 +1,48 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 10 Jan 2021 17:02:41 +0100
-Subject: [Buildroot] [PATCH] package/readline: bump to version 8.1
-In-Reply-To: <20210109074123.2202-1-francois.perrad@gadz.org>
-References: <20210109074123.2202-1-francois.perrad@gadz.org>
-Message-ID: <20210110160241.GT3044608@scaer>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun, 10 Jan 2021 17:04:05 +0100
+Subject: [Buildroot] random segmentation fault during built
+In-Reply-To: <CAEUhbmUnHYTOhirctT9EVphsys9PPwbvM5hkBKP7sVabnv1zmg@mail.gmail.com>
+References: <CAEUhbmUnHYTOhirctT9EVphsys9PPwbvM5hkBKP7sVabnv1zmg@mail.gmail.com>
+Message-ID: <20210110170405.29cf9095@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fran?ois, All,
+Hello Bin,
 
-On 2021-01-09 08:41 +0100, Francois Perrad spake thusly:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+On Sun, 10 Jan 2021 21:57:45 +0800, Bin Meng <bmeng.cn@gmail.com> wrote:
 
-Applied to master, thanks.
+> Hi,
+>
+> I see a random segmentation fault during the build of buildroot. For example,
+>
+> Makefile:13408: recipe for target 'install-pylibmountexecPYTHON' failed
+> make[4]: *** [install-pylibmountexecPYTHON] Segmentation fault (core dumped)
+> make[4]: *** Waiting for unfinished jobs....
+>
+> Type "make" for the 2nd time with nothing changed, or rarely a 3rd
+> time, get a PASS build.
+>
+> This was observed by builds on Ubuntu 16.04 and Ubuntu 20.04 hosts.
+> Any ideas of what could be wrong?
+
+In case the errors are at random packages/locations (and succeed on iteration)
+check your hardware and/or memory, see e.g. [1]...
+
+Early versions of the AMD Ryzen CPU had heavy-load segfault bug, see [2]...
 
 Regards,
-Yann E. MORIN.
+Peter
 
-> ---
->  package/readline/readline.hash | 4 ++--
->  package/readline/readline.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/readline/readline.hash b/package/readline/readline.hash
-> index 560154c2f..63172f112 100644
-> --- a/package/readline/readline.hash
-> +++ b/package/readline/readline.hash
-> @@ -1,5 +1,5 @@
->  # Locally calculated after checking pgp signature
-> -sha256 e339f51971478d369f8a053a330a190781acb9864cf4c541060f12078948e461  readline-8.0.tar.gz
-> +sha256  f8ceb4ee131e3232226a17f51b164afc46cd0b9e6cef344be87c65962cb82b02  readline-8.1.tar.gz
->  
->  # Hash for license file
-> -sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-> +sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-> diff --git a/package/readline/readline.mk b/package/readline/readline.mk
-> index f5d7d5bf9..e48055133 100644
-> --- a/package/readline/readline.mk
-> +++ b/package/readline/readline.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -READLINE_VERSION = 8.0
-> +READLINE_VERSION = 8.1
->  READLINE_SITE = $(BR2_GNU_MIRROR)/readline
->  READLINE_INSTALL_STAGING = YES
->  READLINE_DEPENDENCIES = ncurses host-autoconf
-> -- 
-> 2.27.0
-> 
+[1] https://tldp.org/FAQ/sig11/html/index.html
+[2] https://techreport.com/news/32459/amd-ships-revised-ryzen-cpus-with-a-compile-bug-fix/
+
+>
+> Regards,
+> Bin
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
