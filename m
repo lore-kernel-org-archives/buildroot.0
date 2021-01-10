@@ -1,182 +1,56 @@
-From: Yair Ben-Avraham <yairba@protonmail.com>
-Date: Sun, 10 Jan 2021 08:35:35 +0000
-Subject: [Buildroot] [PATCH v3 1/1] package/casync: new package
-Message-ID: <NVlFsf4p-hDevSUmmsdNYsR87odtk0RPLWz3hIPYRvNNUDNNk6HX_FZ-LZly9XR9YK8s1UzTbGar5YW8gpp7kYG2kQ5KQAfcTOMjjujib_o=@protonmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 10 Jan 2021 09:59:51 +0100
+Subject: [Buildroot] [PATCH 1/1] package/multipath-tools: fix license
+Message-ID: <20210110085951.699900-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Content-Addressable Data Synchronization Tool
+As stated in README.md, multipath-tools is covered by several licenses
+and LGPL-2.0 is "just" the default license:
+ - GPL-2.0+ (e.g. libmultipath/alias.c)
+ - GPL-3.0+ (e.g. libdmmp/libdmmp.c)
+ - LGPL-2.1+ (e.g. libmpathcmd/mpath_cmd.c)
 
-Signed-off-by: Yair Ben-Avraham <yairba@protonmail.com>
+So replace COPYING (which is a symlink to LICENSES/LGPL-2.0) by the
+approriate license files in LICENSES directory
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- DEVELOPERS                                    |  1 +
- package/Config.in                             |  1 +
- .../0001-Insert-lzma-into-if-directive.patch  | 30 ++++++++++
- package/casync/Config.in                      | 13 ++++
- package/casync/casync.hash                    |  3 +
- package/casync/casync.mk                      | 60 +++++++++++++++++++
- 6 files changed, 108 insertions(+)
- create mode 100644 package/casync/0001-Insert-lzma-into-if-directive.patch
- create mode 100644 package/casync/Config.in
- create mode 100644 package/casync/casync.hash
- create mode 100644 package/casync/casync.mk
+ package/multipath-tools/multipath-tools.hash | 6 +++++-
+ package/multipath-tools/multipath-tools.mk   | 5 +++--
+ 2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index ee175b7586..91d3756557 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2716,6 +2716,7 @@ F:	package/fwup/
-
- N:	Yair Ben Avraham <yairba@protonmail.com>
- F:	package/gloox/
-+F:	package/casync/
-
- N:	Yann CARDAILLAC <ycardaillac@sepro-group.com>
- F:	package/open62541/
-diff --git a/package/Config.in b/package/Config.in
-index f497fbffde..c24969f723 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2072,6 +2072,7 @@ menu "Networking applications"
- 	source "package/c-icap-modules/Config.in"
- 	source "package/can-utils/Config.in"
- 	source "package/cannelloni/Config.in"
-+	source "package/casync/Config.in"
- 	source "package/chrony/Config.in"
- 	source "package/civetweb/Config.in"
- 	source "package/connman/Config.in"
-diff --git a/package/casync/0001-Insert-lzma-into-if-directive.patch b/package/casync/0001-Insert-lzma-into-if-directive.patch
-new file mode 100644
-index 0000000000..552294391b
---- /dev/null
-+++ b/package/casync/0001-Insert-lzma-into-if-directive.patch
-@@ -0,0 +1,30 @@
-+From d72e66f87f31f288f5445c3540520a8c82f6ff89 Mon Sep 17 00:00:00 2001
-+From: Yair Ben-Avraham <yairba@protonmail.com>
-+Date: Sun, 10 Jan 2021 06:34:58 +0100
-+Subject: [PATCH] Insert lzma into if directive
-+
-+lzma is a feature option in meson_options.txt
-+
-+Signed-off-by: Yair Ben-Avraham <yairba@protonmail.com>
-+---
-+ src/castore.c | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/castore.c b/src/castore.c
-+index c290dfd..73cbf8d 100644
-+--- a/src/castore.c
-++++ b/src/castore.c
-+@@ -2,7 +2,9 @@
-+
-+ #include <dirent.h>
-+ #include <fcntl.h>
-+-#include <lzma.h>
-++#if HAVE_LIBLZMA
-++#  include <lzma.h>
-++#endif
-+ #include <sys/stat.h>
-+ #include <unistd.h>
-+
-+--
-+2.20.1
-+
-diff --git a/package/casync/Config.in b/package/casync/Config.in
-new file mode 100644
-index 0000000000..89a9520e35
---- /dev/null
-+++ b/package/casync/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_CASYNC
-+	bool "casync"
-+	depends on BR2_TOOLCHAIN_USES_GLIBC # scandirat() is not implemented by musl and uclibc-ng
-+	select BR2_PACKAGE_ACL
-+	select BR2_PACKAGE_LIBCURL
-+	select BR2_PACKAGE_OPENSSL
-+	help
-+	  Content-Addressable Data Synchronization Tool
-+
-+	  https://github.com/systemd/casync
-+
-+comment "casync needs a glibc toolchain"
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC
-diff --git a/package/casync/casync.hash b/package/casync/casync.hash
-new file mode 100644
-index 0000000000..dbb85520de
---- /dev/null
-+++ b/package/casync/casync.hash
-@@ -0,0 +1,3 @@
-+# sha256 locally computed
-+sha256  d07f43e70e3c466152033da4c55c065f815d3025234a046c2bce1cfe4ac7d273  casync-4ad9bcb94bc83ff36cfc65515107ea06a88c2dfc.tar.gz
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
-diff --git a/package/casync/casync.mk b/package/casync/casync.mk
-new file mode 100644
-index 0000000000..cc00a5e885
---- /dev/null
-+++ b/package/casync/casync.mk
-@@ -0,0 +1,60 @@
-+################################################################################
-+#
-+# casync
-+#
-+################################################################################
-+
-+CASYNC_VERSION = 4ad9bcb94bc83ff36cfc65515107ea06a88c2dfc
-+CASYNC_SITE = $(call github,systemd,casync,$(CASYNC_VERSION))
-+CASYNC_LICENSE = LGPL-2.1+
-+CASYNC_LICENSE_FILES = LICENSE.LGPL2.1
-+CASYNC_DEPENDENCIES = acl libcurl openssl
-+CASYNC_CONF_OPTS += -Dman=false
-+
-+# meson booleans
-+ifeq ($(BR2_PACKAGE_LIBFUSE),y)
-+CASYNC_DEPENDENCIES += libfuse
-+CASYNC_CONF_OPTS += -Dfuse=true
-+else
-+CASYNC_CONF_OPTS += -Dfuse=false
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
-+CASYNC_DEPENDENCIES += libselinux
-+CASYNC_CONF_OPTS += -Dselinux=true
-+else
-+CASYNC_CONF_OPTS += -Dselinux=false
-+endif
-+
-+ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
-+CASYNC_DEPENDENCIES += libudev
-+CASYNC_CONF_OPTS += -Dudev=true
-+else
-+CASYNC_CONF_OPTS += -Dudev=false
-+# Due to a bug in ./meson.build, 'udevrulesdir' must not be empty
-+CASYNC_CONF_OPTS += -Dudevrulesdir=this_is_a_bug
-+endif
-+
-+# meson features
-+ifeq ($(BR2_PACKAGE_LIBZSTD),y)
-+CASYNC_DEPENDENCIES += libzstd
-+CASYNC_CONF_OPTS += -Dlibzstd=enabled
-+else
-+CASYNC_CONF_OPTS += -Dlibzstd=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XZ),y)
-+CASYNC_DEPENDENCIES += xz
-+CASYNC_CONF_OPTS += -Dliblzma=enabled
-+else
-+CASYNC_CONF_OPTS += -Dliblzma=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ZLIB),y)
-+CASYNC_DEPENDENCIES += zlib
-+CASYNC_CONF_OPTS += -Dlibz=enabled
-+else
-+CASYNC_CONF_OPTS += -Dlibz=disabled
-+endif
-+
-+$(eval $(meson-package))
---
-2.20.1
+diff --git a/package/multipath-tools/multipath-tools.hash b/package/multipath-tools/multipath-tools.hash
+index b6ce6164b6..fc94b3f724 100644
+--- a/package/multipath-tools/multipath-tools.hash
++++ b/package/multipath-tools/multipath-tools.hash
+@@ -1,3 +1,7 @@
+ # Locally computed:
+ sha256  0549ebe39fd3950ec49c16304da408c2bfe1b18d386d8e6647b5bcb60363c8aa  multipath-tools-0.8.5.tar.gz
+-sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSES/GPL-2.0
++sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  LICENSES/GPL-3.0
++sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  LICENSES/LGPL-2.0
++sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSES/LGPL-2.1
++sha256  afa9db94ff46f8d011251273f547ba958da6a0150a2b797b10fa8c8cfa74bbda  README.md
+diff --git a/package/multipath-tools/multipath-tools.mk b/package/multipath-tools/multipath-tools.mk
+index 7fe9033a15..4c1e28656b 100644
+--- a/package/multipath-tools/multipath-tools.mk
++++ b/package/multipath-tools/multipath-tools.mk
+@@ -6,8 +6,9 @@
+ 
+ MULTIPATH_TOOLS_VERSION = 0.8.5
+ MULTIPATH_TOOLS_SITE = $(call github,opensvc,multipath-tools,$(MULTIPATH_TOOLS_VERSION))
+-MULTIPATH_TOOLS_LICENSE = LGPL-2.0
+-MULTIPATH_TOOLS_LICENSE_FILES = COPYING
++MULTIPATH_TOOLS_LICENSE = LGPL-2.0 (default), LGPL-2.1+ (libmpathcmd), GPL-2.0+ (libmultipath), GPL-3.0+ (libdmmp)
++MULTIPATH_TOOLS_LICENSE_FILES = LICENSES/GPL-2.0 LICENSES/GPL-3.0 \
++	LICENSES/LGPL-2.0 LICENSES/LGPL-2.1 README.md
+ MULTIPATH_TOOLS_DEPENDENCIES = lvm2 json-c readline udev liburcu libaio host-pkgconf
+ MULTIPATH_TOOLS_MAKE_OPTS = \
+ 	LIB="lib" \
+-- 
+2.29.2
