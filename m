@@ -1,80 +1,68 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 10 Jan 2021 23:28:24 +0100
-Subject: [Buildroot] [RFC v2 03/12] package/mesa3d: fix gbm config warning
+Date: Sun, 10 Jan 2021 23:28:31 +0100
+Subject: [Buildroot] [RFC v2 10/12] package/vulkan-loader: add XCB support
 In-Reply-To: <20210110222833.26301-1-ps.report@gmx.net>
 References: <20210110222833.26301-1-ps.report@gmx.net>
-Message-ID: <20210110222833.26301-4-ps.report@gmx.net>
+Message-ID: <20210110222833.26301-11-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes for the following defconfig:
-
-  BR2_x86_64=y
-  BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-  BR2_TOOLCHAIN_BUILDROOT_CXX=y
-  BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-  BR2_TARGET_GENERIC_GETTY_PORT="tty1"
-  BR2_PACKAGE_MESA3D=y
-  BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL=y
-  BR2_PACKAGE_MESA3D_OPENGL_EGL=y
-  BR2_PACKAGE_MESA3D_OPENGL_ES=y
-
-this warning:
-
-  WARNING: unmet direct dependencies detected for BR2_PACKAGE_MESA3D_GBM
-    Depends on [n]: BR2_PACKAGE_MESA3D [=y] && BR2_PACKAGE_MESA3D_DRIVER [=y] && (BR2_PACKAGE_MESA3D_DRI_DRIVER [=n] || BR2_PACKAGE_MESA3D_GALLIUM_DRIVER [=n] && BR2_PACKAGE_MESA3D_OPENGL_EGL [=y])
-    Selected by [y]:
-    - BR2_PACKAGE_MESA3D_OPENGL_EGL [=y] && BR2_PACKAGE_MESA3D [=y] && BR2_PACKAGE_MESA3D_DRIVER [=y]
-
-  WARNING: unmet direct dependencies detected for BR2_PACKAGE_MESA3D_GBM
-    Depends on [n]: BR2_PACKAGE_MESA3D [=y] && BR2_PACKAGE_MESA3D_DRIVER [=y] && (BR2_PACKAGE_MESA3D_DRI_DRIVER [=n] || BR2_PACKAGE_MESA3D_GALLIUM_DRIVER [=n] && BR2_PACKAGE_MESA3D_OPENGL_EGL [=y])
-    Selected by [y]:
-    - BR2_PACKAGE_MESA3D_OPENGL_EGL [=y] && BR2_PACKAGE_MESA3D [=y] && BR2_PACKAGE_MESA3D_DRIVER [=y]
-
-as BR2_PACKAGE_MESA3D_VULKAN_DRIVER selects BR2_PACKAGE_MESA3D_DRIVER which
-enables possible selection of BR2_PACKAGE_MESA3D_OPENGL_EGL selecting
-BR2_PACKAGE_MESA3D_GBM.
-
-Selecting EGL with only a vulkan driver selected gives the following configure
-failure:
-
-  .../build/mesa3d-20.3.2/meson.build:424:4: ERROR: Problem encountered: EGL requires dri
-
-Note dri means here an dri or gallium driver (see meson.build and look
-for with_dri).
-
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
 Changes v1 -> v2:
   - new patch
 ---
- package/mesa3d/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/vulkan-loader/Config.in        | 12 ++++++++++++
+ package/vulkan-loader/vulkan-loader.mk |  8 +++++++-
+ 2 files changed, 19 insertions(+), 1 deletion(-)
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index d9c27f8b5c..7a976f4b2c 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -452,6 +452,8 @@ config BR2_PACKAGE_MESA3D_OPENGL_GLX
- comment "OpenGL GLX support needs X11"
- 	depends on !BR2_PACKAGE_XORG7
+diff --git a/package/vulkan-loader/Config.in b/package/vulkan-loader/Config.in
+index 9c215dc9ce..6ec4b13030 100644
+--- a/package/vulkan-loader/Config.in
++++ b/package/vulkan-loader/Config.in
+@@ -9,6 +9,18 @@ config BR2_PACKAGE_VULKAN_LOADER
  
-+if BR2_PACKAGE_MESA3D_DRI_DRIVER || BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-+
- config BR2_PACKAGE_MESA3D_OPENGL_EGL
- 	bool "OpenGL EGL"
- 	select BR2_PACKAGE_HAS_LIBEGL
-@@ -461,6 +463,8 @@ config BR2_PACKAGE_MESA3D_OPENGL_EGL
- 	  Use the Khronos EGL APIs. EGL is a window manager for OpenGL
- 	  applications similar to GLX, for X, and WGL, for Windows.
+ 	  https://github.com/KhronosGroup/Vulkan-Loader
  
-+endif # BR2_PACKAGE_MESA3D_DRI_DRIVER || BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
++if BR2_PACKAGE_VULKAN_LOADER
 +
- config BR2_PACKAGE_MESA3D_OPENGL_ES
- 	bool "OpenGL ES"
- 	select BR2_PACKAGE_HAS_LIBGLES
++config BR2_PACKAGE_VULKAN_LOADER_XCB
++	bool "X.org XCB support"
++	depends on BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_LIBXCB
++
++comment "X.org XCB support available if X.org is enabled"
++	depends on !BR2_PACKAGE_XORG7
++
++endif # BR2_PACKAGE_VULKAN_LOADER
++
+ comment "vulkan-loader needs a toolchain w/ C++, dynamic library, threads"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/vulkan-loader/vulkan-loader.mk b/package/vulkan-loader/vulkan-loader.mk
+index 9c9ccb2458..f0c20f5687 100644
+--- a/package/vulkan-loader/vulkan-loader.mk
++++ b/package/vulkan-loader/vulkan-loader.mk
+@@ -13,10 +13,16 @@ VULKAN_LOADER_INSTALL_STAGING = YES
+ VULKAN_LOADER_DEPENDENCIES = vulkan-headers
+ 
+ VULKAN_LOADER_CONF_OPTS += \
+-	-DBUILD_WSI_XCB_SUPPORT=OFF \
+ 	-DBUILD_WSI_XLIB_SUPPORT=OFF \
+ 	-DBUILD_WSI_WAYLAND_SUPPORT=OFF \
+ 	-DBUILD_WSI_DIRECTFB_SUPPORT=OFF \
+ 	-DUSE_CCACHE=OFF
+ 
++ifeq ($(BR2_PACKAGE_VULKAN_LOADER_XCB),y)
++VULKAN_LOADER_DEPENDENCIES += libxcb
++VULKAN_LOADER_CONF_OPTS += -DBUILD_WSI_XCB_SUPPORT=ON
++else
++VULKAN_LOADER_CONF_OPTS += -DBUILD_WSI_XCB_SUPPORT=OFF
++endif
++
+ $(eval $(cmake-package))
 -- 
 2.29.2
