@@ -1,68 +1,96 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 10 Jan 2021 23:28:31 +0100
-Subject: [Buildroot] [RFC v2 10/12] package/vulkan-loader: add XCB support
+Date: Sun, 10 Jan 2021 23:28:25 +0100
+Subject: [Buildroot] [RFC v2 04/12] package/mesa3d: DRI3 with GLX needs
+ xshmfence
 In-Reply-To: <20210110222833.26301-1-ps.report@gmx.net>
 References: <20210110222833.26301-1-ps.report@gmx.net>
-Message-ID: <20210110222833.26301-11-ps.report@gmx.net>
+Message-ID: <20210110222833.26301-5-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes for the following defconfig:
+
+  BR2_arm=y
+  BR2_cortex_a72=y
+  BR2_ARM_FPU_NEON_VFPV4=y
+  BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+  BR2_TOOLCHAIN_BUILDROOT_CXX=y
+  BR2_PACKAGE_MESA3D=y
+  BR2_PACKAGE_MESA3D_DRI3=y
+  BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO=y
+  BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D=y
+  BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4=y
+  BR2_PACKAGE_MESA3D_OPENGL_GLX=y
+
+this configure error:
+
+  .../build/mesa3d-20.3.2/meson.build:1772:6: ERROR: Dependency "xshmfence" not found, tried pkgconfig and cmake
+
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
 Changes v1 -> v2:
   - new patch
 ---
- package/vulkan-loader/Config.in        | 12 ++++++++++++
- package/vulkan-loader/vulkan-loader.mk |  8 +++++++-
- 2 files changed, 19 insertions(+), 1 deletion(-)
+ package/mesa3d/Config.in | 5 +++--
+ package/mesa3d/mesa3d.mk | 6 +++---
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/vulkan-loader/Config.in b/package/vulkan-loader/Config.in
-index 9c215dc9ce..6ec4b13030 100644
---- a/package/vulkan-loader/Config.in
-+++ b/package/vulkan-loader/Config.in
-@@ -9,6 +9,18 @@ config BR2_PACKAGE_VULKAN_LOADER
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 7a976f4b2c..8a01fa95e2 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -17,6 +17,8 @@ if BR2_PACKAGE_MESA3D
  
- 	  https://github.com/KhronosGroup/Vulkan-Loader
+ config BR2_PACKAGE_MESA3D_DRI3
+ 	bool "Enable DRI3 support"
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_MESA3D_OPENGL_GLX
++	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if BR2_PACKAGE_MESA3D_OPENGL_GLX
+ 	help
+ 	  Enable DRI3 support.
  
-+if BR2_PACKAGE_VULKAN_LOADER
-+
-+config BR2_PACKAGE_VULKAN_LOADER_XCB
-+	bool "X.org XCB support"
-+	depends on BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_LIBXCB
-+
-+comment "X.org XCB support available if X.org is enabled"
-+	depends on !BR2_PACKAGE_XORG7
-+
-+endif # BR2_PACKAGE_VULKAN_LOADER
-+
- comment "vulkan-loader needs a toolchain w/ C++, dynamic library, threads"
- 	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
- 		!BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/vulkan-loader/vulkan-loader.mk b/package/vulkan-loader/vulkan-loader.mk
-index 9c9ccb2458..f0c20f5687 100644
---- a/package/vulkan-loader/vulkan-loader.mk
-+++ b/package/vulkan-loader/vulkan-loader.mk
-@@ -13,10 +13,16 @@ VULKAN_LOADER_INSTALL_STAGING = YES
- VULKAN_LOADER_DEPENDENCIES = vulkan-headers
+@@ -398,7 +400,7 @@ comment "Vulkan drivers"
+ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL
+ 	bool "Vulkan Intel driver"
+ 	depends on BR2_i386 || BR2_x86_64
+-	# depends on BR2_TOOLCHAIN_HAS_SYNC_4 because of libxshmfence only
++	# depends on BR2_TOOLCHAIN_HAS_SYNC_4 because of dri3/libxshmfence only
+ 	# in case GLX is enabled but the following results in 'recursive
+ 	# dependency detected!', so simple depend always on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	# depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_MESA3D_OPENGL_GLX # libxshmfence in case GLX is enabled
+@@ -408,7 +410,6 @@ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL
+ 	select BR2_PACKAGE_EXPAT
+ 	select BR2_PACKAGE_MESA3D_DRI3 if BR2_PACKAGE_MESA3D_OPENGL_GLX
+ 	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
+-	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if BR2_PACKAGE_MESA3D_OPENGL_GLX
+ 	help
+ 	  Vulkan driver for Intel hardware from Ivy Bridge onward.
  
- VULKAN_LOADER_CONF_OPTS += \
--	-DBUILD_WSI_XCB_SUPPORT=OFF \
- 	-DBUILD_WSI_XLIB_SUPPORT=OFF \
- 	-DBUILD_WSI_WAYLAND_SUPPORT=OFF \
- 	-DBUILD_WSI_DIRECTFB_SUPPORT=OFF \
- 	-DUSE_CCACHE=OFF
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 967b86810f..31f1c12d63 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -38,6 +38,9 @@ endif
  
-+ifeq ($(BR2_PACKAGE_VULKAN_LOADER_XCB),y)
-+VULKAN_LOADER_DEPENDENCIES += libxcb
-+VULKAN_LOADER_CONF_OPTS += -DBUILD_WSI_XCB_SUPPORT=ON
-+else
-+VULKAN_LOADER_CONF_OPTS += -DBUILD_WSI_XCB_SUPPORT=OFF
+ ifeq ($(BR2_PACKAGE_MESA3D_DRI3),y)
+ MESA3D_CONF_OPTS += -Ddri3=enabled
++ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_GLX),y)
++MESA3D_DEPENDENCIES += xlib_libxshmfence
 +endif
-+
- $(eval $(cmake-package))
+ else
+ MESA3D_CONF_OPTS += -Ddri3=disabled
+ endif
+@@ -146,9 +149,6 @@ ifeq ($(BR2_PACKAGE_MESA3D_VULKAN_DRIVER),)
+ MESA3D_CONF_OPTS += \
+ 	-Dvulkan-drivers=
+ else
+-ifeq ($(BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL)$(BR2_PACKAGE_MESA3D_OPENGL_GLX),yy)
+-MESA3D_DEPENDENCIES += xlib_libxshmfence
+-endif
+ MESA3D_CONF_OPTS += \
+ 	-Dvulkan-drivers=$(subst $(space),$(comma),$(MESA3D_VULKAN_DRIVERS-y))
+ endif
 -- 
 2.29.2
