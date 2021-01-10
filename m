@@ -1,56 +1,57 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 10 Jan 2021 09:59:51 +0100
-Subject: [Buildroot] [PATCH 1/1] package/multipath-tools: fix license
-Message-ID: <20210110085951.699900-1-fontaine.fabrice@gmail.com>
+From: D. Olsson <hi@senzilla.io>
+Date: Sun, 10 Jan 2021 09:37:14 +0000
+Subject: [Buildroot] [PATCH v3 02/11] boot/mv-ddr-marvell: Bump to HEAD
+ as of 20201207
+In-Reply-To: <X/mwVYvTNW+tGYiV@curiosity>
+References: <20201218202646.1060123-1-hi@senzilla.io>
+ <20201218202646.1060123-3-hi@senzilla.io> <X/mwVYvTNW+tGYiV@curiosity>
+Message-ID: <cGJJkB-og8Jn4-_QkIs51CQXDaGcbNU611Z7EItf9_VAvIcfmnDOq2ikgutqZVlNQXds65qfBwogvb6QZhYswMLsMeb-evjf_8NEAJsqVok=@senzilla.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As stated in README.md, multipath-tools is covered by several licenses
-and LGPL-2.0 is "just" the default license:
- - GPL-2.0+ (e.g. libmultipath/alias.c)
- - GPL-3.0+ (e.g. libdmmp/libdmmp.c)
- - LGPL-2.1+ (e.g. libmpathcmd/mpath_cmd.c)
+Hi Sergey,
 
-So replace COPYING (which is a symlink to LICENSES/LGPL-2.0) by the
-approriate license files in LICENSES directory
+On Saturday, January 9, 2021 1:32 PM, Sergey Matyukevich <geomatsi@gmail.com> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/multipath-tools/multipath-tools.hash | 6 +++++-
- package/multipath-tools/multipath-tools.mk   | 5 +++--
- 2 files changed, 8 insertions(+), 3 deletions(-)
+> My apologies for the late feedback. This change breaks the
+> build for MacchiatoBin board. I guess it also breaks the
+> build for ClearFrog GT 8k board. The reason is straightforward: > both boards make use of Marvell ATF v18.12.x which is
+> compatible with mv-ddr-marvell release devel-18.12.x.
+> Your change bumps mv-ddr-marvell version, however the new
+> version is not compatible with older Marvell ATF release since
+> mv_ddr_topology_map structure has been changed.
 
-diff --git a/package/multipath-tools/multipath-tools.hash b/package/multipath-tools/multipath-tools.hash
-index b6ce6164b6..fc94b3f724 100644
---- a/package/multipath-tools/multipath-tools.hash
-+++ b/package/multipath-tools/multipath-tools.hash
-@@ -1,3 +1,7 @@
- # Locally computed:
- sha256  0549ebe39fd3950ec49c16304da408c2bfe1b18d386d8e6647b5bcb60363c8aa  multipath-tools-0.8.5.tar.gz
--sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSES/GPL-2.0
-+sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  LICENSES/GPL-3.0
-+sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  LICENSES/LGPL-2.0
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSES/LGPL-2.1
-+sha256  afa9db94ff46f8d011251273f547ba958da6a0150a2b797b10fa8c8cfa74bbda  README.md
-diff --git a/package/multipath-tools/multipath-tools.mk b/package/multipath-tools/multipath-tools.mk
-index 7fe9033a15..4c1e28656b 100644
---- a/package/multipath-tools/multipath-tools.mk
-+++ b/package/multipath-tools/multipath-tools.mk
-@@ -6,8 +6,9 @@
- 
- MULTIPATH_TOOLS_VERSION = 0.8.5
- MULTIPATH_TOOLS_SITE = $(call github,opensvc,multipath-tools,$(MULTIPATH_TOOLS_VERSION))
--MULTIPATH_TOOLS_LICENSE = LGPL-2.0
--MULTIPATH_TOOLS_LICENSE_FILES = COPYING
-+MULTIPATH_TOOLS_LICENSE = LGPL-2.0 (default), LGPL-2.1+ (libmpathcmd), GPL-2.0+ (libmultipath), GPL-3.0+ (libdmmp)
-+MULTIPATH_TOOLS_LICENSE_FILES = LICENSES/GPL-2.0 LICENSES/GPL-3.0 \
-+	LICENSES/LGPL-2.0 LICENSES/LGPL-2.1 README.md
- MULTIPATH_TOOLS_DEPENDENCIES = lvm2 json-c readline udev liburcu libaio host-pkgconf
- MULTIPATH_TOOLS_MAKE_OPTS = \
- 	LIB="lib" \
--- 
-2.29.2
+I'm very sorry for breaking this! I thought I tested a build with the original MacchiatoBin defconfig, but clearly my testing was flawed!
+
+> Could you please clarify the reason behind this change ? There
+> are no users for mv-ddr-marvell other than Marvell ATF that is
+> used only for MacchiatoBin and ClearFrog GT 8k boards. So on
+> the first glance it looks like this change has been introduced
+> as an accompanying update/cleanup during your work on adding
+> EDK2 firmware.
+
+Bumping to a later version of mv-ddr-marvell was required in
+order to successfully built with mainline ATF, which in turn is
+required in order to build well with the latest release of EDK2.
+Based on my brief analysis, most of the patches in Marvell's ATF
+has made it upstream to ATF v2.4 (or earlier). So I thought the
+best and most secure approach would be to use mainline.
+
+> If so, then I would suggest to revert this particular commit.
+> Let me know if you have any objections for this change.
+
+May I propose that we "roll-forward" instead, and update all
+Marvell defconfigs to use mainline ATF instead? I believe this
+would add the most value for Buildroot users, having access to
+the latest and most stable fixes. What do you think?
+
+I'll submit a patch for comments in the next day or so!
+
+
+Cheers
+
+Dick Olsson
+PGP: 8204A8CD
