@@ -1,9 +1,9 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 10 Jan 2021 23:28:30 +0100
-Subject: [Buildroot] [RFC v2 09/12] package/qt5base: add vulkan option
+Date: Sun, 10 Jan 2021 23:28:32 +0100
+Subject: [Buildroot] [RFC v2 11/12] package/vulkan-tools: add XCB support
 In-Reply-To: <20210110222833.26301-1-ps.report@gmx.net>
 References: <20210110222833.26301-1-ps.report@gmx.net>
-Message-ID: <20210110222833.26301-10-ps.report@gmx.net>
+Message-ID: <20210110222833.26301-12-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,60 +13,58 @@ To: buildroot@busybox.net
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
 Changes v1 -> v2:
-  - no changes
-
-Notes:
-  - eglfs/vulkan is only implemented for eglfs_viv
-    (see stub implementation for QEglFSDeviceIntegration::createPlatformVulkanInstance()
-    in src/plugins/platforms/eglfs/api/qeglfsdeviceintegration.cpp and
-    real implementation for QEglFSVivIntegration::createPlatformVulkanInstance()
-    in src/plugins/platforms/eglfs/deviceintegration/eglfs_viv/qeglfsvivintegration.cpp)
-  - or for xcb (see QXcbIntegration::createPlatformVulkanInstance()
-    in src/plugins/platforms/xcb/qxcbintegration.cpp)
+  - new patch
 ---
- package/qt5/qt5base/Config.in  | 11 +++++++++++
- package/qt5/qt5base/qt5base.mk |  7 +++++++
- 2 files changed, 18 insertions(+)
+ package/vulkan-tools/Config.in       | 14 ++++++++++++++
+ package/vulkan-tools/vulkan-tools.mk |  8 +++++++-
+ 2 files changed, 21 insertions(+), 1 deletion(-)
 
-diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
-index ee7c757c60..377a754f37 100644
---- a/package/qt5/qt5base/Config.in
-+++ b/package/qt5/qt5base/Config.in
-@@ -175,6 +175,17 @@ config BR2_PACKAGE_QT5BASE_OPENGL_LIB
+diff --git a/package/vulkan-tools/Config.in b/package/vulkan-tools/Config.in
+index 54fa539dab..14c4059074 100644
+--- a/package/vulkan-tools/Config.in
++++ b/package/vulkan-tools/Config.in
+@@ -12,6 +12,20 @@ config BR2_PACKAGE_VULKAN_TOOLS
  
- endif
+ 	  https://github.com/KhronosGroup/Vulkan-Tools
  
-+config BR2_PACKAGE_QT5BASE_VULKAN
-+	bool "Vulkan support"
-+	# all vulkan-loader introduced dependencies superseeded by qt5 own ones
-+	# depends on BR2_INSTALL_LIBSTDCPP # vulkan-loader
-+	# depends on !BR2_STATIC_LIBS # vulkan-loader
-+	# depends on BR2_TOOLCHAIN_HAS_THREADS # vulkan-loader
-+	select BR2_PACKAGE_VULKAN_HEADERS
-+	select BR2_PACKAGE_VULKAN_LOADER
-+	help
-+	  This option enables Vulkan support.
++if BR2_PACKAGE_VULKAN_TOOLS
 +
- config BR2_PACKAGE_QT5BASE_LINUXFB
- 	bool "linuxfb support"
++config BR2_PACKAGE_VULKAN_TOOLS_XCB
++	bool "X.org XCB support"
++	depends on BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBX11
++	select BR2_PACKAGE_LIBXCB
++	select BR2_PACKAGE_VULKAN_LOADER_XCB
++
++comment "X.org XCB support available if X.org is enabled"
++	depends on !BR2_PACKAGE_XORG7
++
++endif # BR2_PACKAGE_VULKAN_TOOLS
++
+ comment "vulkan-tools needs a toolchain w/ C++, dynamic library, threads, gcc >= 4.9"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+diff --git a/package/vulkan-tools/vulkan-tools.mk b/package/vulkan-tools/vulkan-tools.mk
+index 129efddf3b..5b4d761ddb 100644
+--- a/package/vulkan-tools/vulkan-tools.mk
++++ b/package/vulkan-tools/vulkan-tools.mk
+@@ -16,10 +16,16 @@ VULKAN_TOOLS_CONF_OPTS += \
+ 	-DBUILD_VULKANINFO=ON \
+ 	-DBUILD_ICD=OFF \
+ 	-DINSTALL_ICD=OFF \
+-	-DBUILD_WSI_XCB_SUPPORT=OFF \
+ 	-DBUILD_WSI_XLIB_SUPPORT=OFF \
+ 	-DBUILD_WSI_WAYLAND_SUPPORT=OFF \
+ 	-DBUILD_WSI_DIRECTFB_SUPPORT=OFF \
+ 	-DUSE_CCACHE=OFF
  
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index 84e9fa4edb..3755e306d1 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -196,6 +196,13 @@ else
- QT5BASE_CONFIGURE_OPTS += -no-opengl
- endif
- 
-+ifeq ($(BR2_PACKAGE_QT5BASE_VULKAN),y)
-+QT5BASE_CONFIGURE_OPTS += -feature-vulkan
-+QT5BASE_DEPENDENCIES   += vulkan-headers vulkan-loader
++ifeq ($(BR2_PACKAGE_VULKAN_TOOLS_XCB),y)
++VULKAN_TOOLS_DEPENDENCIES += libxcb xlib_libX11
++VULKAN_TOOLS_CONF_OPTS += -DBUILD_WSI_XCB_SUPPORT=ON
 +else
-+QT5BASE_CONFIGURE_OPTS += -no-feature-vulkan
++VULKAN_TOOLS_CONF_OPTS += -DBUILD_WSI_XCB_SUPPORT=OFF
 +endif
 +
- QT5BASE_DEFAULT_QPA = $(call qstrip,$(BR2_PACKAGE_QT5BASE_DEFAULT_QPA))
- QT5BASE_CONFIGURE_OPTS += $(if $(QT5BASE_DEFAULT_QPA),-qpa $(QT5BASE_DEFAULT_QPA))
- 
+ $(eval $(cmake-package))
 -- 
 2.29.2
