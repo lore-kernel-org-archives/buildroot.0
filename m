@@ -1,48 +1,59 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 10 Jan 2021 17:04:05 +0100
-Subject: [Buildroot] random segmentation fault during built
-In-Reply-To: <CAEUhbmUnHYTOhirctT9EVphsys9PPwbvM5hkBKP7sVabnv1zmg@mail.gmail.com>
-References: <CAEUhbmUnHYTOhirctT9EVphsys9PPwbvM5hkBKP7sVabnv1zmg@mail.gmail.com>
-Message-ID: <20210110170405.29cf9095@gmx.net>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 10 Jan 2021 17:47:11 +0100
+Subject: [Buildroot] [PATCH 2/2] package/tzdata: bump version to 2020f
+In-Reply-To: <20210110164711.1708062-1-bernd.kuhls@t-online.de>
+References: <20210110164711.1708062-1-bernd.kuhls@t-online.de>
+Message-ID: <20210110164711.1708062-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Bin,
+Release notes:
+https://mm.icann.org/pipermail/tz-announce/2020-December/000064.html
 
-On Sun, 10 Jan 2021 21:57:45 +0800, Bin Meng <bmeng.cn@gmail.com> wrote:
+Upstream removed timezones pacificnew and systemv:
+https://mm.icann.org/pipermail/tz-announce/2020-October/000059.html
 
-> Hi,
->
-> I see a random segmentation fault during the build of buildroot. For example,
->
-> Makefile:13408: recipe for target 'install-pylibmountexecPYTHON' failed
-> make[4]: *** [install-pylibmountexecPYTHON] Segmentation fault (core dumped)
-> make[4]: *** Waiting for unfinished jobs....
->
-> Type "make" for the 2nd time with nothing changed, or rarely a 3rd
-> time, get a PASS build.
->
-> This was observed by builds on Ubuntu 16.04 and Ubuntu 20.04 hosts.
-> Any ideas of what could be wrong?
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/tzdata/tzdata.hash | 4 ++--
+ package/tzdata/tzdata.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-In case the errors are at random packages/locations (and succeed on iteration)
-check your hardware and/or memory, see e.g. [1]...
-
-Early versions of the AMD Ryzen CPU had heavy-load segfault bug, see [2]...
-
-Regards,
-Peter
-
-[1] https://tldp.org/FAQ/sig11/html/index.html
-[2] https://techreport.com/news/32459/amd-ships-revised-ryzen-cpus-with-a-compile-bug-fix/
-
->
-> Regards,
-> Bin
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/tzdata/tzdata.hash b/package/tzdata/tzdata.hash
+index 8f0a9050fc..6a1ccc128d 100644
+--- a/package/tzdata/tzdata.hash
++++ b/package/tzdata/tzdata.hash
+@@ -1,4 +1,4 @@
+-# From https://mm.icann.org/pipermail/tz-announce/2020-April/000058.html
+-sha512  2a2fc2e3ad8a6e4c574242296c847ad582c2c1d86add9c556e65c812d19b9528522e3c4dddb5239017091825d2acc5a2ccaf21dc41b900b6c300ef4264cc5a9d  tzdata2020a.tar.gz
++# From https://mm.icann.org/pipermail/tz-announce/2020-December/000064.html
++sha512  dd312def18c807452fda2e697514e2064c5f51ebdbedd0cfe6f231252c76ee5d4409f653b295ed5657b7d30b868690047fdb70a10942e69eaa40b77473e3f9ca  tzdata2020f.tar.gz
+ # Locally computed:
+ sha256  0613408568889f5739e5ae252b722a2659c02002839ad970a63dc5e9174b27cf  LICENSE
+diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
+index 114d60195e..41c4971584 100644
+--- a/package/tzdata/tzdata.mk
++++ b/package/tzdata/tzdata.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TZDATA_VERSION = 2020a
++TZDATA_VERSION = 2020f
+ TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
+ TZDATA_SITE = https://www.iana.org/time-zones/repository/releases
+ TZDATA_STRIP_COMPONENTS = 0
+@@ -17,7 +17,7 @@ TZDATA_LICENSE_FILES = LICENSE
+ # dependencies
+ TZDATA_DEFAULT_ZONELIST = \
+ 	africa antarctica asia australasia europe northamerica \
+-	southamerica pacificnew etcetera backward systemv factory
++	southamerica etcetera backward factory
+ 
+ ifeq ($(call qstrip,$(BR2_TARGET_TZ_ZONELIST)),default)
+ TZDATA_ZONELIST = $(TZDATA_DEFAULT_ZONELIST)
+-- 
+2.29.2
