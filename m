@@ -1,51 +1,36 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 10 Jan 2021 03:06:45 +0000
-Subject: [Buildroot] [Bug 13436] New: PPP 2.4.9 is out
-Message-ID: <bug-13436-163@https.bugs.busybox.net/>
+From: =?UTF-8?q?Jos=C3=A9=20Luis=20Salvador=20Rufo?= <salvador.joseluis@gmail.com>
+Date: Sun, 10 Jan 2021 05:38:31 +0100
+Subject: [Buildroot] [PATCH 1/1] fs/cpio: add zstd as compression option
+Message-ID: <20210110043831.22754-1-salvador.joseluis@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13436
+U-Boot mkimage zstd is available since v2020.10:
+https://gitlab.denx.de/u-boot/u-boot/-/commit/26073f9ed3ab0aaf3c2a2b433fecb30a95a067d6
 
-            Bug ID: 13436
-           Summary: PPP 2.4.9 is out
-           Product: buildroot
-           Version: unspecified
-          Hardware: All
-                OS: All
-            Status: NEW
-          Severity: blocker
-          Priority: P5
-         Component: Outdated package
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: Neustradamus at hotmail.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+Signed-off-by: Jos? Luis Salvador Rufo <salvador.joseluis@gmail.com>
+---
+ fs/cpio/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Hello Buildroot team,
-
-I wish you a Happy New Year!
-
-Good news, PPP 2.4.9 has been released with several vulnerability fixes and a
-lot of improvements.
-
-Can you update it?
-
-Ticket here:
-- https://github.com/paulusmack/ppp/issues/111
-- https://github.com/paulusmack/ppp/issues/111#issuecomment-757402344
-
-If you have patches, please create a PR by patch to have directly in upstream.
-
-Thanks in advance.
-
-Regards,
-
-Neustradamus
-
+diff --git a/fs/cpio/Config.in b/fs/cpio/Config.in
+index 83a7fa5824..c1151a2881 100644
+--- a/fs/cpio/Config.in
++++ b/fs/cpio/Config.in
+@@ -51,6 +51,11 @@ config BR2_TARGET_ROOTFS_CPIO_XZ
+ 	help
+ 	  Do compress the cpio filesystem with xz.
+ 
++config BR2_TARGET_ROOTFS_CPIO_ZSTD
++	bool "zstd"
++	help
++	  Do compress the cpio filesystem with zstd.
++
+ endchoice
+ 
+ config BR2_TARGET_ROOTFS_CPIO_UIMAGE
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.30.0
