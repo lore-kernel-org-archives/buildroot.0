@@ -1,32 +1,31 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 11 Jan 2021 21:36:24 +0100
-Subject: [Buildroot] [PATCH 1/1] package/go: add GO_CPE_ID_VENDOR
-Message-ID: <20210111203624.1416107-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 11 Jan 2021 21:37:03 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libupnp: set
+ LIBUPNP_CPE_ID_VALID
+In-Reply-To: <20210111201441.1414609-1-fontaine.fabrice@gmail.com>
+References: <20210111201441.1414609-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210111213703.72b52be4@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-golang is the correct CPE ID vendor for the go package, see:
-https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Agolang%3Ago
+On Mon, 11 Jan 2021 21:14:41 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/go/go.mk | 1 +
- 1 file changed, 1 insertion(+)
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/libupnp/libupnp.mk | 1 +
+>  1 file changed, 1 insertion(+)
 
-diff --git a/package/go/go.mk b/package/go/go.mk
-index e9f8be7783..e65b24364f 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -10,6 +10,7 @@ GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
- GO_LICENSE = BSD-3-Clause
- GO_LICENSE_FILES = LICENSE
-+GO_CPE_ID_VENDOR = golang
- 
- HOST_GO_DEPENDENCIES = host-go-bootstrap
- HOST_GO_GOPATH = $(HOST_DIR)/usr/share/go-path
+Applied to master after adding more details to the commit log. Note
+that we have a strange situation with this package: libupnp is stuck at
+1.6.x, libupnp is stuck at 1.8.x, while the latest upstream version
+known by the CPE dictionary is 1.12.x.
+
+Thomas
 -- 
-2.29.2
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
