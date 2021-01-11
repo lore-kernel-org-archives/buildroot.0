@@ -1,60 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Jan 2021 22:38:33 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/p11-kit: libffi
+Date: Mon, 11 Jan 2021 22:38:38 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/p11-kit: libtasn1
  is optional, not mandatory
-Message-ID: <20210111220104.B0B298634A@busybox.osuosl.org>
+Message-ID: <20210111220104.BF22180046@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f6fae6744b004a712797a48ee699382a8c1ebf55
+commit: https://git.buildroot.net/buildroot/commit/?id=949045a4cb49ae056966ee76dd78bd524219d534
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 10a2fcc81eb6fedd83849b5ece7c6f7b220f465f)
+(cherry picked from commit d82da39d55ea16c3c8aa3c5a8ea91fd6c2ceafbb)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  package/p11-kit/Config.in  | 1 -
- package/p11-kit/p11-kit.mk | 9 ++++++++-
- 2 files changed, 8 insertions(+), 2 deletions(-)
+ package/p11-kit/p11-kit.mk | 8 +++++++-
+ 2 files changed, 7 insertions(+), 2 deletions(-)
 
 diff --git a/package/p11-kit/Config.in b/package/p11-kit/Config.in
-index a6b7261886..5690418756 100644
+index 5690418756..9be76c2f41 100644
 --- a/package/p11-kit/Config.in
 +++ b/package/p11-kit/Config.in
 @@ -3,7 +3,6 @@ config BR2_PACKAGE_P11_KIT
  	depends on !BR2_STATIC_LIBS
  	depends on BR2_USE_MMU
  	depends on BR2_TOOLCHAIN_HAS_THREADS
--	select BR2_PACKAGE_LIBFFI
- 	select BR2_PACKAGE_LIBTASN1
+-	select BR2_PACKAGE_LIBTASN1
  	help
  	  Provides a way to load and enumerate PKCS#11 modules.
+ 	  Provides a standard configuration setup for installing PKCS#11
 diff --git a/package/p11-kit/p11-kit.mk b/package/p11-kit/p11-kit.mk
-index 1f72e0515b..fef4791831 100644
+index fef4791831..c2a7b23e9d 100644
 --- a/package/p11-kit/p11-kit.mk
 +++ b/package/p11-kit/p11-kit.mk
-@@ -6,7 +6,7 @@
+@@ -6,7 +6,6 @@
  
  P11_KIT_VERSION = 0.23.16.1
  P11_KIT_SITE = https://github.com/p11-glue/p11-kit/releases/download/$(P11_KIT_VERSION)
--P11_KIT_DEPENDENCIES = host-pkgconf libffi libtasn1
-+P11_KIT_DEPENDENCIES = host-pkgconf libtasn1
+-P11_KIT_DEPENDENCIES = host-pkgconf libtasn1
  P11_KIT_INSTALL_STAGING = YES
  P11_KIT_CONF_OPTS = --disable-static
  P11_KIT_CONF_ENV = ac_cv_have_decl_program_invocation_short_name=yes \
-@@ -20,4 +20,11 @@ else
- P11_KIT_CONF_OPTS += --without-trust-paths
+@@ -27,4 +26,11 @@ else
+ P11_KIT_CONF_OPTS += --without-libffi
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBFFI),y)
-+P11_KIT_DEPENDENCIES += host-pkgconf libffi
-+P11_KIT_CONF_OPTS += --with-libffi
++ifeq ($(BR2_PACKAGE_LIBTASN1),y)
++P11_KIT_DEPENDENCIES += host-pkgconf libtasn1
++P11_KIT_CONF_OPTS += --with-libtasn1
 +else
-+P11_KIT_CONF_OPTS += --without-libffi
++P11_KIT_CONF_OPTS += --without-libtasn1
 +endif
 +
  $(eval $(autotools-package))
