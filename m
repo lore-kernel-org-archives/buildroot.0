@@ -1,47 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Jan 2021 20:11:08 +0100
-Subject: [Buildroot] [PATCH] package/wireguard-linux-compat: bump version to
- 1.0.20201221
-Message-ID: <20210111191108.28911-1-peter@korsgaard.com>
+Date: Mon, 11 Jan 2021 20:18:30 +0100
+Subject: [Buildroot] [PATCH v3 1/1] {linux, linux-headers}: bump 5.{4,
+ 10}.x 4.{4, 9, 14, 19} series
+In-Reply-To: <20210111175520.839692-1-petr.vorel@gmail.com> (Petr Vorel's
+ message of "Mon, 11 Jan 2021 18:55:20 +0100")
+References: <20210111175520.839692-1-petr.vorel@gmail.com>
+Message-ID: <87k0sjnuyh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes a build issue with linux-rt >= 5.4.  For details, see the
-announcement:
-https://lists.zx2c4.com/pipermail/wireguard/2020-December/006210.html
+>>>>> "Petr" == Petr Vorel <petr.vorel@gmail.com> writes:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/wireguard-linux-compat/wireguard-linux-compat.hash | 4 ++--
- package/wireguard-linux-compat/wireguard-linux-compat.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ > Drop 5.9 stable (EOL).
+ > Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+ > ---
+ > Changes v2->v3:
+ > * new releases for all supported versions
+ > * fix hash for 5.10 (I used .gz by accident, now use .xz)
 
-diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.hash b/package/wireguard-linux-compat/wireguard-linux-compat.hash
-index 8895875cf6..194c798570 100644
---- a/package/wireguard-linux-compat/wireguard-linux-compat.hash
-+++ b/package/wireguard-linux-compat/wireguard-linux-compat.hash
-@@ -1,4 +1,4 @@
--# https://lists.zx2c4.com/pipermail/wireguard/2020-November/005997.html
--sha256  89eae7f0c0bd6c8df3ba2e090984974ff68741a9f26aa0922890f8ca727897e1  wireguard-linux-compat-1.0.20201112.tar.xz
-+# https://lists.zx2c4.com/pipermail/wireguard/2020-December/006210.html
-+sha256  6e5289a8b602eaaf1383aebefcbc41b8ad2721269055858b150363076c1c2132  wireguard-linux-compat-1.0.20201221.tar.xz
- # Locally calculated
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.mk b/package/wireguard-linux-compat/wireguard-linux-compat.mk
-index 76585e0bc4..ef21e2e114 100644
---- a/package/wireguard-linux-compat/wireguard-linux-compat.mk
-+++ b/package/wireguard-linux-compat/wireguard-linux-compat.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIREGUARD_LINUX_COMPAT_VERSION = 1.0.20201112
-+WIREGUARD_LINUX_COMPAT_VERSION = 1.0.20201221
- WIREGUARD_LINUX_COMPAT_SITE = https://git.zx2c4.com/wireguard-linux-compat/snapshot
- WIREGUARD_LINUX_COMPAT_SOURCE = wireguard-linux-compat-$(WIREGUARD_LINUX_COMPAT_VERSION).tar.xz
- WIREGUARD_LINUX_COMPAT_LICENSE = GPL-2.0
+ > NOTE: all these versions contain MUSL toolchain fix a85cbe6159ff ("uapi:
+ > move constants from <linux/kernel.h> to <linux/const.h>").
+
+You forgot to add Config.in.legacy handling for the 5.9
+headers. Committed with that fixed, thanks.
+
 -- 
-2.20.1
+Bye, Peter Korsgaard
