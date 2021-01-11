@@ -1,41 +1,73 @@
-From: Chris Packham <judge.packham@gmail.com>
-Date: Mon, 11 Jan 2021 22:13:53 +1300
-Subject: [Buildroot] [PATCH] package/coremark-pro: fix build without threads
-Message-ID: <20210111091353.6978-1-judge.packham@gmail.com>
+From: Andrea Ricchi <andrea.ricchi@amarulasolutions.com>
+Date: Mon, 11 Jan 2021 11:46:55 +0100
+Subject: [Buildroot] [PATCH 1/1] package/uclibc: add backtrace support
+ option
+In-Reply-To: <20210109181112.GA3044608@scaer>
+References: <20210109161900.51824-1-andrea.ricchi@amarulasolutions.com>
+ <20210109180319.GA3037565@scaer> <20210109181112.GA3044608@scaer>
+Message-ID: <CABNF3=YV=LZmg4K+xTwAM=K-36xRTLSWeykFo_YHPrfBYh50yA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Coremark-pro requires threads so add a depends on
-BR2_TOOLCHAIN_HAS_THREADS.
+Hi Yann,
 
-Fixes:
-- http://autobuild.buildroot.net/results/ab574485a7856fcf5cd643c154c44b4bfcb34a97/
+Regarding the libbacktrace, in my application, I need to link the *execinfo.h
+*file that is included in the uClibc-ng toolchain when the build
+configuration includes UCLIBC_HAS_BACKTRACE. Because of this, I need to
+build the entire libubacktrace in the uClibc-ng.
 
-Signed-off-by: Chris Packham <judge.packham@gmail.com>
+Thanks
+
 ---
- package/coremark-pro/Config.in | 5 +++++
- 1 file changed, 5 insertions(+)
 
-diff --git a/package/coremark-pro/Config.in b/package/coremark-pro/Config.in
-index dd6821056c..362826f47b 100644
---- a/package/coremark-pro/Config.in
-+++ b/package/coremark-pro/Config.in
-@@ -1,8 +1,13 @@
- config BR2_PACKAGE_COREMARK_PRO
- 	bool "coremark-pro"
- 	depends on BR2_USE_MMU # perl uses fork()
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_PERL
- 	help
- 	  CoreMark-PRO is a comprehensive, advanced processor benchmark.
- 
- 	  https://www.eembc.org/coremark-pro/
-+
-+comment "coremark-pro needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_MMU
--- 
-2.30.0
+Andrea Ricchi
+
+Amarula Solutions s.r.o.
+
+Software Developer
+
+Peka?sk? 628/14, 155 00 Praha 5-Jinonice, Czechia
+
+T. +420 212 245 723
+
+M. +39 333 7754973
+[`as] https://www.amarulasolutions.com <http://www.amarulasolutions.com>
+
+
+On Sat, Jan 9, 2021 at 7:11 PM Yann E. MORIN <yann.morin.1998@free.fr>
+wrote:
+
+> Andrea, All,
+>
+> On 2021-01-09 19:03 +0100, Yann E. MORIN spake thusly:
+> > On 2021-01-09 17:19 +0100, Andrea Ricchi spake thusly:
+> > > Add toolchain configuration to support execinfo.h and backtrace
+> > > features.
+>
+> I also forgot to state that uClibc-ng builds libubacktrace, not
+> libbactrace, so applications would need to have special handling to
+> explicitly load libubacktrace anyway...
+>
+> Regards,
+> Yann E. MORIN.
+>
+> --
+>
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
+> conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
+>      |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is
+> no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
+>  conspiracy.  |
+>
+> '------------------------------^-------^------------------^--------------------'
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210111/61e609e4/attachment-0001.html>
