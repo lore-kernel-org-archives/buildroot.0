@@ -1,32 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 11 Jan 2021 21:38:03 +0100
-Subject: [Buildroot] [PATCH 1/1] docs/manual: replace
- LIBFOO_CPE_ID_PRODUCT
-In-Reply-To: <20210111201225.1414497-1-fontaine.fabrice@gmail.com>
-References: <20210111201225.1414497-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210111213803.2940f1c9@windsurf.home>
+Date: Mon, 11 Jan 2021 21:38:47 +0100
+Subject: [Buildroot] [git commit] package/go: add GO_CPE_ID_VENDOR
+Message-ID: <20210111202014.E7709870BB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 11 Jan 2021 21:12:25 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=d4eefdbed0632b30423c9d6421479f85ba3d40fd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Replace LIBFOO_CPE_ID_PRODUCT by LIBFOO_CPE_ID_NAME
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  docs/manual/adding-packages-generic.txt | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+golang is the correct CPE ID vendor for the go package, see:
+https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Agolang%3Ago
 
-Applied to master, thanks. In retrospect, we should have probably
-called this CPE_ID_PRODUCT. But oh well, there are so many CPE_ID_NAME
-now, I'm not sure it's worth changing anymore.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/go/go.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/go/go.mk b/package/go/go.mk
+index e9f8be7783..e65b24364f 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -10,6 +10,7 @@ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
+ GO_LICENSE = BSD-3-Clause
+ GO_LICENSE_FILES = LICENSE
++GO_CPE_ID_VENDOR = golang
+ 
+ HOST_GO_DEPENDENCIES = host-go-bootstrap
+ HOST_GO_GOPATH = $(HOST_DIR)/usr/share/go-path
