@@ -1,8 +1,8 @@
 From: Fabien LEHOUSSEL <fabien.lehoussel@medianesysteme.com>
-Date: Mon, 11 Jan 2021 16:11:39 +0000
+Date: Mon, 11 Jan 2021 16:15:51 +0000
 Subject: [Buildroot] BR2_PER_PACKAGE_DIRECTORIES : How to remove file
  installed from an other package
-Message-ID: <D18CFEE6F046494E82855511759DF30ABCBDB79D@ikhexmbxc02n01.ikhex.ikoula.com>
+Message-ID: <D18CFEE6F046494E82855511759DF30ABCBDB7B3@ikhexmbxc02n01.ikhex.ikoula.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -31,27 +31,6 @@ Best Regards
 
 Fabien
 
-
-Cordialement
-
-Fabien Lehoussel
-________________________________
-Fabien LEHOUSSEL / Chef de Projets
-M?diane Syst?me
-54 Route de Sartrouville - 78232 Le Pecq Cedex
-01.30.15.20.42 fabien.lehoussel at medianesysteme.com<mailto:fabien.lehoussel@medianesysteme.com>
-
-[http://medianesysteme.com/images/Logos/Logo_HG.png]<https://www.medianesysteme.com/images/Logos/Logo_HG.png>
-
-
-
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210111/de17fc66/attachment.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: image001.png
-Type: image/png
-Size: 11688 bytes
-Desc: image001.png
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210111/de17fc66/attachment.png>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210111/1cc8f723/attachment.html>
