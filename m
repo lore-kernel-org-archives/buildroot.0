@@ -1,81 +1,81 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 12 Jan 2021 00:28:06 +0100
-Subject: [Buildroot] [PATCH v4 2/5] package/linux4tegra: new package
-In-Reply-To: <CA+h8R2r0J8iaMXNOPcQFK9mNbfHfLu-rZckAyihMDVYE0+28Qw@mail.gmail.com>
-References: <20201119075328.8599-1-christian@paral.in>
- <20201119075328.8599-2-christian@paral.in>
- <25b062ad-cd77-fc0b-8ed0-934f48669bf1@gmail.com>
- <CA+h8R2r0J8iaMXNOPcQFK9mNbfHfLu-rZckAyihMDVYE0+28Qw@mail.gmail.com>
-Message-ID: <387dc1ab-cd11-282c-7cff-5d8b9b1d38c1@mind.be>
+From: Michael Walle <michael@walle.cc>
+Date: Tue, 12 Jan 2021 00:28:49 +0100
+Subject: [Buildroot] [PATCH] configs/kontron_smarc_sal28: enable u-boot
+Message-ID: <20210111232849.11810-1-michael@walle.cc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Enable building of the bootloader and integrate it into the resulting
+image.
 
+Signed-off-by: Michael Walle <michael@walle.cc>
+---
+ board/kontron/smarc-sal28/genimage.cfg |  6 ++++++
+ board/kontron/smarc-sal28/readme.txt   | 15 +++++++++++++++
+ configs/kontron_smarc_sal28_defconfig  |  9 +++++++++
+ 3 files changed, 30 insertions(+)
 
-On 21/11/2020 21:45, Christian Stewart wrote:
-> Hi Romain,
-> 
-> On Sat, Nov 21, 2020 at 2:40 AM Romain Naour <romain.naour@gmail.com> wrote:
-> [snip]
-> 
-> I applied the requested comment changes, patch change, and hash file
-> tabs -> spaces change to the latest revision:
-> 
-> https://github.com/skiffos/buildroot/tree/tx2
-> 
-> 
->>> +define LINUX4TEGRA_INSTALL_IMAGES_CMDS
->>> +     cp -r $(@D)/. $(BINARIES_DIR)/linux4tegra
->>> +endef
->>> +
->>> +LINUX4TEGRA_RSYNC = \
->>> +     rsync -a --ignore-times $(RSYNC_VCS_EXCLUSIONS) \
->>> +             --chmod=u=rwX,go=rX --exclude .empty --exclude '*~' \
->>> +             --keep-dirlinks --exclude=ld.so.conf.d
->>> +
->>> +define LINUX4TEGRA_INSTALL_TARGET_CMDS
->>> +     # install nvidia_drivers
->>> +     $(LINUX4TEGRA_RSYNC) $(@D)/nv_tegra/nvidia_drivers/ $(TARGET_DIR)/
->>> +     # install nvidia_configs
->>> +     $(LINUX4TEGRA_RSYNC) $(@D)/nv_tegra/nvidia_configs/ $(TARGET_DIR)/
->>> +     # install nvidia_tools
->>> +     $(LINUX4TEGRA_RSYNC) $(@D)/nv_tegra/nvidia_tools/ $(TARGET_DIR)/
->>> +endef
->>
->> This install a lot for prebuild binaries for example libGLX_nvidia.so.0.
->> This means that this package should be at least a LIBGL provider etc.
->>
->> There is a long list of shared libraries provided by this package, make sure to
->> not override anything already installed by anoter package (ex: libdrm.so.2)
-> 
-> Unfortunately this is beyond my scope in Buildroot, so if someone else
-> has a chance to take a look at marking LIBGL provided by this package,
-> please go ahead.
-
- It's not complicated. [1]
-
- The virtual package already exists (package/opengl/libgl) so you just need to
-do the provider part.
-
- The difficulty is finding out which libraries are opengl libraries, and which
-ones are nvidia-specific.
-
-
- Regards,
- Arnout
-
-> 
-> I'm not actually using the graphics libraries provided by Buildroot in
-> my applications, so it's important to me that linux4tegra compile even
-> if the graphics packages are not available.
-> 
-> Best regards,
-> Christian
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+diff --git a/board/kontron/smarc-sal28/genimage.cfg b/board/kontron/smarc-sal28/genimage.cfg
+index 9ef37de757..d75234d997 100644
+--- a/board/kontron/smarc-sal28/genimage.cfg
++++ b/board/kontron/smarc-sal28/genimage.cfg
+@@ -3,6 +3,12 @@ image sdcard-emmc.img {
+ 		gpt = true
+ 	}
+ 
++	partition u-boot {
++		offset = 1M
++		in-partition-table = "no"
++		image = "u-boot.rom"
++	}
++
+ 	partition rootfs {
+ 		offset = 2M
+ 		image = rootfs.ext4
+diff --git a/board/kontron/smarc-sal28/readme.txt b/board/kontron/smarc-sal28/readme.txt
+index 2047f09b64..bdf2258b59 100644
+--- a/board/kontron/smarc-sal28/readme.txt
++++ b/board/kontron/smarc-sal28/readme.txt
+@@ -71,3 +71,18 @@ You will see something like this at boot time:
+ [    4.563565] GPT:Alternate GPT header not at the end of the disk.
+ [    4.569596] GPT:266272 != 7864319
+ [    4.572925] GPT: Use GNU Parted to correct GPT errors.
++
++Updating the bootloader
++=======================
++
++Buildroot will automatically build the u-boot bootloader. The resulting
++image is called u-boot.rom and you can find it in the images/ directory.
++
++To update the bootloader on the board you could either copy it to an
++USB thumb drive or you could put it on a TFTP server. The following
++example assumes you have the bootloader image copied to the root of
++a thumb drive:
++
++  # usb start
++  # load usb 0:1 $loadaddr u-boot.rom
++  # sf probe 0 && sf update $fileaddr 0x210000 $filesize
+diff --git a/configs/kontron_smarc_sal28_defconfig b/configs/kontron_smarc_sal28_defconfig
+index b88f1aef4f..767858f601 100644
+--- a/configs/kontron_smarc_sal28_defconfig
++++ b/configs/kontron_smarc_sal28_defconfig
+@@ -19,5 +19,14 @@ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_ROOTFS_EXT2_SIZE="128M"
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.01"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="kontron_sl28"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++# BR2_TARGET_UBOOT_FORMAT_BIN is not set
++BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.rom"
+ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+-- 
+2.20.1
