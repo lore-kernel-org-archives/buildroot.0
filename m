@@ -1,72 +1,27 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 11 Jan 2021 22:39:19 +0100
-Subject: [Buildroot] BR2_PER_PACKAGE_DIRECTORIES : How to remove file
- installed from an other package
-In-Reply-To: <D18CFEE6F046494E82855511759DF30ABCBDB79D@ikhexmbxc02n01.ikhex.ikoula.com>
-References: <D18CFEE6F046494E82855511759DF30ABCBDB79D@ikhexmbxc02n01.ikhex.ikoula.com>
-Message-ID: <6d462b25-3492-cced-78ce-545448ab834d@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 11 Jan 2021 22:45:15 +0100
+Subject: [Buildroot] [PATCH] package/dbus: bump to version 1.12.20
+In-Reply-To: <20210109121719.52155-1-francois.perrad@gadz.org> (Francois
+ Perrad's message of "Sat, 9 Jan 2021 13:17:19 +0100")
+References: <20210109121719.52155-1-francois.perrad@gadz.org>
+Message-ID: <87turnm9lg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
 
+ > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
-On 11/01/2021 17:11, Fabien LEHOUSSEL wrote:
-> Hello,
-> 
-> I am trying to remove files installed from a dependency package without success.
-> 
-> Before using  BR2_PER_PACKAGE_DIRECTORIES, I did like this :
-> 
-> PACKAGE2_CONF_DEPENDENCIES = package1
-> 
-> define PACKAGE2_INSTALL_TARGET_CMDS
->                 rm $(TARGET_DIR)/etc/init.d/XX
-> endef
-> 
-> I have tried with hooks without success
-> 
-> What is the solution to make this work with BR2_PER_PACKAGE_DIRECTORIES ?
+Looking at the NEWS file, I see that this in fact fixes (a fairly
+unlikely) security issue, so it should have been marked as such:
 
- Instead of doing it in the _INSTALL_TARGET_CMDS, you should do it as a
-_TARGET_FINALIZE_HOOK. So:
+https://gitlab.freedesktop.org/dbus/dbus/blob/dbus-1.12/NEWS
 
-define PACKAGE2_REMOVE_XX_INIT
-	rm $(TARGET_DIR)/etc/init.d/XX
-endef
-PACKAGE2_TARGET_FINALIZE_HOOKS += PACKAGE2_REMOVE_XX_INIT
+Committed to 2020.02.x and 2020.11.x after adjusting the commit message
+to make this clear, thanks.
 
-
- Regards,
- Arnout
-
-> 
-> Thanks
-> 
-> Best Regards
-> 
-> Fabien
-> 
-> 
-> Cordialement
-> 
-> Fabien Lehoussel
-> ________________________________
-> Fabien LEHOUSSEL / Chef de Projets
-> M?diane Syst?me
-> 54 Route de Sartrouville - 78232 Le Pecq Cedex
-> 01.30.15.20.42 fabien.lehoussel at medianesysteme.com<mailto:fabien.lehoussel@medianesysteme.com>
-> 
-> [http://medianesysteme.com/images/Logos/Logo_HG.png]<https://www.medianesysteme.com/images/Logos/Logo_HG.png>
-> 
-> 
-> 
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+-- 
+Bye, Peter Korsgaard
