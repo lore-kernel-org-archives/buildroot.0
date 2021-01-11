@@ -1,119 +1,24 @@
-From: =?UTF-8?Q?Geoffrey_Le_Gourri=C3=A9rec?= <geoffrey.legourrierec@gmail.com>
-Date: Mon, 11 Jan 2021 16:06:02 +0100
-Subject: [Buildroot] [PATCH 1/1] configs/qemu_*: bump kernel version to
- 5.4.88
-In-Reply-To: <f70462ad-0ad3-1dbb-6acd-882ec36d51dc@smile.fr>
-References: <20210110203910.24698-1-geoffrey.legourrierec@gmail.com>
- <CACPK8Xe5gCZpxEs0VROgax9KV19s42JWo5mR_ShTJGjUheCdng@mail.gmail.com>
- <f70462ad-0ad3-1dbb-6acd-882ec36d51dc@smile.fr>
-Message-ID: <CADFgU5Ac-m9TyCs6-f3yw_cMJBZvQRQRvTUpLZWyNeVYjmChug@mail.gmail.com>
+From: Michael John <MJohn@midmark.com>
+Date: Mon, 11 Jan 2021 15:55:35 +0000
+Subject: [Buildroot] How to include initramfs in a build
+In-Reply-To: <DM6PR08MB4425D1744991DBE61A858B49AEAB0@DM6PR08MB4425.namprd08.prod.outlook.com>
+References: <DM6PR08MB4425D1744991DBE61A858B49AEAB0@DM6PR08MB4425.namprd08.prod.outlook.com>
+Message-ID: <DM6PR08MB44256C0960A1312B31B73DDFAEAB0@DM6PR08MB4425.namprd08.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello,
 
-> Le 11/01/2021 ? 02:09, Joel Stanley a ?crit :
-> > On Sun, 10 Jan 2021 at 20:39, Geoffrey Le Gourri?rec
-> > <geoffrey.legourrierec@gmail.com> wrote:
-> >>
-> >> Bump QEMU defconfigs to latest longterm kernel 5.4.88.
-> >>
-> >> Please note that QEMU boards not based on 5.4.y were ignored:
-> >> - qemu_csky810_virt_defconfig
-> >> - qemu_csky807_virt_defconfig
-> >> - qemu_csky610_virt_defconfig
-> >> - qemu_csky860_virt_defconfig
-> >>
-> >> Tests were carried out on all QEMU boards using Gitlab [1] (commit
-> >> message was slightly different, but the patch is identical)
-> >>
-> >> Additional actions needed were:
-> >> - board/qemu/sh4-r2d: Remove one of the two kernel patches [2] provided
-> >>   by Alan Modra fixing rodata alignment, carried here by Romain Naour [3]
-> >>   to fix an issue preventing kernel from booting with binutils 2.23.
-> >>   Patch is present in upstream Linux now.
-> >>
-> >> [1] https://gitlab.com/clumsyape/buildroot/-/pipelines/239483891
-> >> [2] https://www.sourceware.org/ml/binutils/2019-12/msg00112.html
-> >> [3] https://git.busybox.net/buildroot/commit/?id=a2331c8a61bdd71c47492efc818fb0458a349219
-> >>
-> >> Signed-off-by: Geoffrey Le Gourri?rec <geoffrey.legourrierec@gmail.com>
-> >
-> > Thanks for doing this. For the powerpc boards in particular:
-> >
-> > Reviewed-by: Joel Stanley <joel@jms.id.au>
+I've used buildroot to create an initramfs image. Using a second config I created a rootfs for my board. I'd like to take the initramfs image and include it in my rootfs build but I'm not seeing how this could be done. I see in the menu->Filesystem->initramfs option, but it appears this builds an initramfs from the rootfs (my second config). I believe I could hard code the path to my initramfs in the Kernel config, but is there any better way via buildroot?
 
-You're welcome.
+Thanks,
+Michael John
 
-> > Is there a plan to move boards up to v5.10 now that is the latest LTS?
->
-> Yes, that's something we can do for 2021.02.
->
-> @Geoffrey, if you're interested to do this change, feel free to do it :)
 
-Sure, looks like a nice occasion to contribute again. :)
-
-> Best regards,
-> Romain
->
-> >
-> > Cheers,
-> >
-> > Joel
-
-Cheers,
-Geoffrey
-
-Le lun. 11 janv. 2021 ? 10:07, Romain Naour <romain.naour@smile.fr> a ?crit :
->
-> Hello,
->
-> Le 11/01/2021 ? 02:09, Joel Stanley a ?crit :
-> > On Sun, 10 Jan 2021 at 20:39, Geoffrey Le Gourri?rec
-> > <geoffrey.legourrierec@gmail.com> wrote:
-> >>
-> >> Bump QEMU defconfigs to latest longterm kernel 5.4.88.
-> >>
-> >> Please note that QEMU boards not based on 5.4.y were ignored:
-> >> - qemu_csky810_virt_defconfig
-> >> - qemu_csky807_virt_defconfig
-> >> - qemu_csky610_virt_defconfig
-> >> - qemu_csky860_virt_defconfig
-> >>
-> >> Tests were carried out on all QEMU boards using Gitlab [1] (commit
-> >> message was slightly different, but the patch is identical)
-> >>
-> >> Additional actions needed were:
-> >> - board/qemu/sh4-r2d: Remove one of the two kernel patches [2] provided
-> >>   by Alan Modra fixing rodata alignment, carried here by Romain Naour [3]
-> >>   to fix an issue preventing kernel from booting with binutils 2.23.
-> >>   Patch is present in upstream Linux now.
-> >>
-> >> [1] https://gitlab.com/clumsyape/buildroot/-/pipelines/239483891
-> >> [2] https://www.sourceware.org/ml/binutils/2019-12/msg00112.html
-> >> [3] https://git.busybox.net/buildroot/commit/?id=a2331c8a61bdd71c47492efc818fb0458a349219
-> >>
-> >> Signed-off-by: Geoffrey Le Gourri?rec <geoffrey.legourrierec@gmail.com>
-> >
-> > Thanks for doing this. For the powerpc boards in particular:
-> >
-> > Reviewed-by: Joel Stanley <joel@jms.id.au>
-> >
-> > Is there a plan to move boards up to v5.10 now that is the latest LTS?
->
-> Yes, that's something we can do for 2021.02.
->
-> @Geoffrey, if you're interested to do this change, feel free to do it :)
->
-> Best regards,
-> Romain
->
-> >
-> > Cheers,
-> >
-> > Joel
-> >
-> [...]
+CONFIDENTIALITY NOTICE: This message, including any attachments, contains confidential information intended for a specific individual and purpose. If you are not the intended recipient, you should delete this message and any disclosure, copying, or distribution of this message, or the taking of any action based on it, by you is strictly prohibited.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210111/03c16940/attachment.html>
