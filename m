@@ -1,24 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 11 Jan 2021 22:15:26 +0100
+Date: Mon, 11 Jan 2021 22:15:50 +0100
 Subject: [Buildroot] [PATCH 1/1] package/links: add LINKS_CPE_ID_VENDOR
-In-Reply-To: <20210111074659.1283018-1-fontaine.fabrice@gmail.com>
+In-Reply-To: <CANQCQpbOEwKAENx4NJaKcPbugC+kQHit3gyNs1WdQFtbh2aKAg@mail.gmail.com>
 References: <20210111074659.1283018-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210111221526.73d682c7@windsurf.home>
+ <CANQCQpbOEwKAENx4NJaKcPbugC+kQHit3gyNs1WdQFtbh2aKAg@mail.gmail.com>
+Message-ID: <20210111221550.42fa8b97@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 11 Jan 2021 08:46:59 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Mon, 11 Jan 2021 08:43:37 -0600
+Matthew Weber via buildroot <buildroot@busybox.net> wrote:
 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/links/links.mk | 1 +
->  1 file changed, 1 insertion(+)
+> Reviewed-by: Matthew Weber >matthew.weber at rockwellcollins.com
 
-Applied to master, thanks.
+Thanks for the review! Note that the < > around your e-mails are not
+correct :)
+
+Thanks!
 
 Thomas
 -- 
