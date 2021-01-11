@@ -1,10 +1,8 @@
 From: Andrea Ricchi <andrea.ricchi@amarulasolutions.com>
-Date: Mon, 11 Jan 2021 12:03:11 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/uclibc: add backtrace support
+Date: Mon, 11 Jan 2021 14:07:05 +0100
+Subject: [Buildroot] [PATCH v3 1/1] package/uclibc: add backtrace support
  option
-In-Reply-To: <20210109161900.51824>
-References: <20210109161900.51824>
-Message-ID: <20210111110311.18568-1-andrea.ricchi@amarulasolutions.com>
+Message-ID: <20210111130705.25005-1-andrea.ricchi@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,25 +14,27 @@ features.
 
 Signed-off-by: Andrea Ricchi <andrea.ricchi@amarulasolutions.com>
 ---
-Changes v1 -> v2:
-  - add dependncy on shared lib (suggested by Yann Morin)
+Changes v2 -> v3:
+  - Remove BR2_USE_BACKTRACE selection (suggested by Angelo Compagnucci)
 
- package/uclibc/Config.in |  8 ++++++++
+Changes v1 -> v2:
+  - add shared library dependency (suggested by Yann Morin)
+
+ package/uclibc/Config.in |  7 +++++++
  package/uclibc/uclibc.mk | 11 +++++++++++
- 2 files changed, 19 insertions(+)
+ 2 files changed, 18 insertions(+)
 
 diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-index e59fef3c69..4dab46ae93 100644
+index e59fef3c69..dedd58f940 100644
 --- a/package/uclibc/Config.in
 +++ b/package/uclibc/Config.in
-@@ -39,6 +39,14 @@ config BR2_TOOLCHAIN_BUILDROOT_LOCALE
+@@ -39,6 +39,13 @@ config BR2_TOOLCHAIN_BUILDROOT_LOCALE
  	  Enable this option if you want your toolchain to support
  	  localization and internationalization.
  
 +config BR2_TOOLCHAIN_BUILDROOT_BACKTRACE
 +	bool "Enable backtrace support"
 +	depends on !BR2_STATIC_LIBS
-+	select BR2_USE_BACKTRACE
 +	help
 +	  Enable this option if you want your toolchain to support
 +	  execinfo.h and backtrace features.
