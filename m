@@ -1,36 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 11 Jan 2021 22:37:11 +0100
-Subject: [Buildroot] [PATCH 1/1] package/nano: fix tiny build
-In-Reply-To: <20210111190902.668095-1-bernd.kuhls@t-online.de>
-References: <20210111190902.668095-1-bernd.kuhls@t-online.de>
-Message-ID: <20210111223711.090b06c0@windsurf.home>
+Date: Mon, 11 Jan 2021 22:37:25 +0100
+Subject: [Buildroot] [git commit] package/wireguard-linux-compat: bump
+ version to 1.0.20201221
+Message-ID: <20210111211907.A601A87131@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 11 Jan 2021 20:09:02 +0100
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=5fa51794c0615058243164b6f20d76c22208b500
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Since upstream commit
-> https://git.savannah.gnu.org/cgit/nano.git/commit/configure.ac?id=235f92ce093099cd81f14827ab842bd331132790
-> 
-> --enable-color --enable-nanorc are needed for libmagic support in tiny
-> builds.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/248/24894e62d6cf89d078959b12e67596c821d64696/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/nano/nano.mk | 3 +++
->  1 file changed, 3 insertions(+)
+Fixes a build issue with linux-rt >= 5.4.  For details, see the
+announcement:
+https://lists.zx2c4.com/pipermail/wireguard/2020-December/006210.html
 
-Applied to master, thanks.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/wireguard-linux-compat/wireguard-linux-compat.hash | 4 ++--
+ package/wireguard-linux-compat/wireguard-linux-compat.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.hash b/package/wireguard-linux-compat/wireguard-linux-compat.hash
+index 8895875cf6..194c798570 100644
+--- a/package/wireguard-linux-compat/wireguard-linux-compat.hash
++++ b/package/wireguard-linux-compat/wireguard-linux-compat.hash
+@@ -1,4 +1,4 @@
+-# https://lists.zx2c4.com/pipermail/wireguard/2020-November/005997.html
+-sha256  89eae7f0c0bd6c8df3ba2e090984974ff68741a9f26aa0922890f8ca727897e1  wireguard-linux-compat-1.0.20201112.tar.xz
++# https://lists.zx2c4.com/pipermail/wireguard/2020-December/006210.html
++sha256  6e5289a8b602eaaf1383aebefcbc41b8ad2721269055858b150363076c1c2132  wireguard-linux-compat-1.0.20201221.tar.xz
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.mk b/package/wireguard-linux-compat/wireguard-linux-compat.mk
+index 76585e0bc4..ef21e2e114 100644
+--- a/package/wireguard-linux-compat/wireguard-linux-compat.mk
++++ b/package/wireguard-linux-compat/wireguard-linux-compat.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIREGUARD_LINUX_COMPAT_VERSION = 1.0.20201112
++WIREGUARD_LINUX_COMPAT_VERSION = 1.0.20201221
+ WIREGUARD_LINUX_COMPAT_SITE = https://git.zx2c4.com/wireguard-linux-compat/snapshot
+ WIREGUARD_LINUX_COMPAT_SOURCE = wireguard-linux-compat-$(WIREGUARD_LINUX_COMPAT_VERSION).tar.xz
+ WIREGUARD_LINUX_COMPAT_LICENSE = GPL-2.0
