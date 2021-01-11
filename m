@@ -1,73 +1,54 @@
-From: Andrea Ricchi <andrea.ricchi@amarulasolutions.com>
-Date: Mon, 11 Jan 2021 11:46:55 +0100
-Subject: [Buildroot] [PATCH 1/1] package/uclibc: add backtrace support
- option
-In-Reply-To: <20210109181112.GA3044608@scaer>
-References: <20210109161900.51824-1-andrea.ricchi@amarulasolutions.com>
- <20210109180319.GA3037565@scaer> <20210109181112.GA3044608@scaer>
-Message-ID: <CABNF3=YV=LZmg4K+xTwAM=K-36xRTLSWeykFo_YHPrfBYh50yA@mail.gmail.com>
+From: Raul Hidalgo Caballero <deinok@deinok.com>
+Date: Mon, 11 Jan 2021 12:50:28 +0100
+Subject: [Buildroot] package/dotnet: add host-dotnet-sdk
+In-Reply-To: <CAOiXNkBPm8ksDHTWXrzA9zmFZxShEWSOSeG4pn0r3iYRZxKq6g@mail.gmail.com>
+References: <CABWPoFG8k9WccFXRKC6ufRLKDHzdwCyeN3Q1PJZzqpg83fwc1w@mail.gmail.com>
+ <20210104085858.68f57652@windsurf>
+ <CAOiXNkARyVd8=v7ZShcdAw7eZHDY+Apf5_vLDsxiGT-tpGsEvg@mail.gmail.com>
+ <CABWPoFFFA_jB0bqBSGDmnk+7YvM6br0=7=KcnKUvnctVrvmQNA@mail.gmail.com>
+ <CAOiXNkBPm8ksDHTWXrzA9zmFZxShEWSOSeG4pn0r3iYRZxKq6g@mail.gmail.com>
+Message-ID: <CABWPoFH_UbU=b7T5yr2Wf23E1fz-dGe+SuVkiMqJGNtYXitLFg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Yes, I'm agree. There is no perfect way, we should found an approach that
+is perfectly fitted in all cases.
 
-Regarding the libbacktrace, in my application, I need to link the *execinfo.h
-*file that is included in the uClibc-ng toolchain when the build
-configuration includes UCLIBC_HAS_BACKTRACE. Because of this, I need to
-build the entire libubacktrace in the uClibc-ng.
-
-Thanks
-
----
-
-Andrea Ricchi
-
-Amarula Solutions s.r.o.
-
-Software Developer
-
-Peka?sk? 628/14, 155 00 Praha 5-Jinonice, Czechia
-
-T. +420 212 245 723
-
-M. +39 333 7754973
-[`as] https://www.amarulasolutions.com <http://www.amarulasolutions.com>
+For now, having support for host-dotnet-sdk is a must in any case
 
 
-On Sat, Jan 9, 2021 at 7:11 PM Yann E. MORIN <yann.morin.1998@free.fr>
+
+On Fri, Jan 8, 2021 at 1:02 PM Andrey Nechypurenko <andreynech@gmail.com>
 wrote:
 
-> Andrea, All,
+> Hi,
 >
-> On 2021-01-09 19:03 +0100, Yann E. MORIN spake thusly:
-> > On 2021-01-09 17:19 +0100, Andrea Ricchi spake thusly:
-> > > Add toolchain configuration to support execinfo.h and backtrace
-> > > features.
+> > Regarding Andrey's patch, I'm not sure if that is the correct approach, I
+> > mean, the idea is okay for most of the cases, but what if you install the
+> > dotnet-runtime -> v5.0.0 and the package that you want to install needs
+> > v3.1.0 ?
 >
-> I also forgot to state that uClibc-ng builds libubacktrace, not
-> libbactrace, so applications would need to have special handling to
-> explicitly load libubacktrace anyway...
+> AFAIK, it is possible to have multiple runtimes installed. There are many
+> ways to say which one should be used by a particular application. One of
+> them, for example, using DOTNET_ENVIRONMENT environment variable (
+>
+> https://docs.microsoft.com/en-us/aspnet/core/fundamentals/environments?view=aspnetcore-5.0
+> ) . Also, AFAIK, if the application is packaged with runtime, it will use
+> this packaged version even if there is separate runtime installed.
+>
+> Anyway, I think there is no "right way" [tm]. It depends on the
+> application.
+> For example, in a well controlled environment such as an embedded system
+> where only a predefined set of applications is installed, common runtime
+> would be preferable because it saves a considerable amount of space if
+> multiple applications need it.
 >
 > Regards,
-> Yann E. MORIN.
->
-> --
->
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
-> conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
->      |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is
-> no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
->  conspiracy.  |
->
-> '------------------------------^-------^------------------^--------------------'
+> Andrey.
 >
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210111/61e609e4/attachment-0001.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210111/aacb8d71/attachment.html>
