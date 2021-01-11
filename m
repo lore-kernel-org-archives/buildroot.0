@@ -1,70 +1,34 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 11 Jan 2021 23:24:39 +0100
-Subject: [Buildroot] [PATCH 0/3 v4] package/qt5/qt5webengine: fix
- options and dependencies (branch yem/qt5webengine-options)
-In-Reply-To: <cover.1600290685.git.yann.morin.1998@free.fr>
-References: <cover.1600290685.git.yann.morin.1998@free.fr>
-Message-ID: <16c81fd1-a2c3-6b4c-7d47-811551128d10@mind.be>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 11 Jan 2021 23:25:33 +0100
+Subject: [Buildroot] [PATCH 1/1] package/jhead: set JHEAD_CPE_ID_VALID
+Message-ID: <20210111222533.1417643-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+cpe:2.3:a:jhead_project:jhead is a valid CPE identifier for this
+package:
 
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ajhead_project%3Ajhead
 
-On 16/09/2020 23:11, Yann E. MORIN wrote:
-> Hello All!
-> 
-> This series is a refresh and respin of the commits by Nathan, which got
-> reviewed by Peter.
-> 
-> I (Yann) merely did the following changes:
-> 
->  1. refresh on top of master, now that we no longer have a version
->     choice for qt5,
-> 
->  2. split the first patch in two: the first to switch to the new options
->     instead of defines, the second to add the missing dependency
-> 
-> As such, I did not carry Peter's review on the first patch, since I
-> split it.
-> 
-> Note: this is not even build-tested; it's just a refresh-n-respin.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/jhead/jhead.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
- Since there was quite a bit of feedback on patches 1 and 3, I've marked this
-series as Changes Requested.
-
- Regards,
- Arnout
-
-> 
-> 
-> Regards,
-> Yann E. MORIN.
-> 
-> 
-> The following changes since commit e5f92758ff52ff713c9b45a52f4fdb1bfabdfc2f
-> 
->   package/qt5/qt5webengine: fix build with Bison 3.7 (2020-09-16 22:13:20 +0200)
-> 
-> 
-> are available in the git repository at:
-> 
->   https://git.busybox.net/~ymorin/git/buildroot
-> 
-> for you to fetch changes up to 6efc39e9d97769fae93be2bcb91f56b050dda219
-> 
->   package/qt5/qt5webengine: fix build dependencies for autodetected packages (2020-09-16 23:01:16 +0200)
-> 
-> 
-> ----------------------------------------------------------------
-> Nathan Ford (3):
->       package/qt5/qt5webengine: fix ffmpeg/codec/alsa option handling for latest
->       package/qt5/qt5webengine: ffmpeg supports needs webp mux
->       package/qt5/qt5webengine: fix build dependencies for autodetected packages
-> 
->  package/qt5/qt5webengine/Config.in       |  1 +
->  package/qt5/qt5webengine/qt5webengine.mk | 34 +++++++++++++++++++++++++++++---
->  2 files changed, 32 insertions(+), 3 deletions(-)
-> 
+diff --git a/package/jhead/jhead.mk b/package/jhead/jhead.mk
+index d56ee0daff..9c0d4d1237 100644
+--- a/package/jhead/jhead.mk
++++ b/package/jhead/jhead.mk
+@@ -8,6 +8,7 @@ JHEAD_VERSION = 3.04
+ JHEAD_SITE = http://www.sentex.net/~mwandel/jhead
+ JHEAD_LICENSE = Public Domain
+ JHEAD_LICENSE_FILES = readme.txt
++JHEAD_CPE_ID_VALID = YES
+ 
+ define JHEAD_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+-- 
+2.29.2
