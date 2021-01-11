@@ -1,28 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 11 Jan 2021 22:34:56 +0100
-Subject: [Buildroot] [PATCH] package/pdbg: Bump to version v3.2
-In-Reply-To: <20210111050910.339814-1-joel@jms.id.au>
-References: <20210111050910.339814-1-joel@jms.id.au>
-Message-ID: <20210111223456.6dc394a6@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 11 Jan 2021 22:35:43 +0100
+Subject: [Buildroot] [PATCH 1/1] package/openjpeg: fix build with poppler
+In-Reply-To: <20210108173259.536639-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 8 Jan 2021 18:32:59 +0100")
+References: <20210108173259.536639-1-fontaine.fabrice@gmail.com>
+Message-ID: <8735z7nols.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 11 Jan 2021 15:39:10 +1030
-Joel Stanley <joel@jms.id.au> wrote:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-> Signed-off-by: Joel Stanley <joel@jms.id.au>
-> ---
->  package/pdbg/pdbg.hash | 2 +-
->  package/pdbg/pdbg.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+ > Fix build of poppler with openjpeg in version 2.4.0
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/e4e43519a1c70686844b08257971cc350a746636
 
-Applied to master, thanks.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Thomas
+Committed to 2020.02.x and 2020.11.x, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
