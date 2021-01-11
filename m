@@ -1,33 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 11 Jan 2021 22:37:50 +0100
-Subject: [Buildroot] [PATCH] package/wireguard-linux-compat: bump
- version to 1.0.20201221
-In-Reply-To: <20210111191108.28911-1-peter@korsgaard.com>
-References: <20210111191108.28911-1-peter@korsgaard.com>
-Message-ID: <20210111223750.1fa138d6@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 11 Jan 2021 22:39:11 +0100
+Subject: [Buildroot] [PATCH 1/1] package/p11-kit: security bump to
+ version 0.23.22
+In-Reply-To: <20210108181157.606055-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 8 Jan 2021 19:11:57 +0100")
+References: <20210108181157.606055-1-fontaine.fabrice@gmail.com>
+Message-ID: <87y2gzm9vk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 11 Jan 2021 20:11:08 +0100
-Peter Korsgaard <peter@korsgaard.com> wrote:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-> Fixes a build issue with linux-rt >= 5.4.  For details, see the
-> announcement:
-> https://lists.zx2c4.com/pipermail/wireguard/2020-December/006210.html
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/wireguard-linux-compat/wireguard-linux-compat.hash | 4 ++--
->  package/wireguard-linux-compat/wireguard-linux-compat.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+ > - Fix memory-safety issues that affect the RPC protocol (CVE-2020-29361,
+ >   CVE-2020-29362 and CVE-2020-29363)
+ > - Update indentation in hash file (two spaces)
 
-Applied to master, thanks.
+ > https://github.com/p11-glue/p11-kit/blob/0.23.22/NEWS
 
-Thomas
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed to 2020.02.x and 2020.11.x, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
