@@ -1,54 +1,40 @@
-From: Bin Meng <bmeng.cn@gmail.com>
-Date: Mon, 11 Jan 2021 09:11:48 +0800
-Subject: [Buildroot] random segmentation fault during built
-In-Reply-To: <20210110170405.29cf9095@gmx.net>
-References: <CAEUhbmUnHYTOhirctT9EVphsys9PPwbvM5hkBKP7sVabnv1zmg@mail.gmail.com>
- <20210110170405.29cf9095@gmx.net>
-Message-ID: <CAEUhbmVURa_J3k46jCFTbV7UPWvQTVxWNq--w+T+Mz3jgSJaBQ@mail.gmail.com>
+From: Joel Stanley <joel@jms.id.au>
+Date: Mon, 11 Jan 2021 15:39:10 +1030
+Subject: [Buildroot] [PATCH] package/pdbg: Bump to version v3.2
+Message-ID: <20210111050910.339814-1-joel@jms.id.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Signed-off-by: Joel Stanley <joel@jms.id.au>
+---
+ package/pdbg/pdbg.hash | 2 +-
+ package/pdbg/pdbg.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Mon, Jan 11, 2021 at 12:04 AM Peter Seiderer <ps.report@gmx.net> wrote:
->
-> Hello Bin,
->
-> On Sun, 10 Jan 2021 21:57:45 +0800, Bin Meng <bmeng.cn@gmail.com> wrote:
->
-> > Hi,
-> >
-> > I see a random segmentation fault during the build of buildroot. For example,
-> >
-> > Makefile:13408: recipe for target 'install-pylibmountexecPYTHON' failed
-> > make[4]: *** [install-pylibmountexecPYTHON] Segmentation fault (core dumped)
-> > make[4]: *** Waiting for unfinished jobs....
-> >
-> > Type "make" for the 2nd time with nothing changed, or rarely a 3rd
-> > time, get a PASS build.
-> >
-> > This was observed by builds on Ubuntu 16.04 and Ubuntu 20.04 hosts.
-> > Any ideas of what could be wrong?
->
-> In case the errors are at random packages/locations (and succeed on iteration)
-> check your hardware and/or memory, see e.g. [1]...
->
-> Early versions of the AMD Ryzen CPU had heavy-load segfault bug, see [2]...
->
-> Regards,
-> Peter
->
-> [1] https://tldp.org/FAQ/sig11/html/index.html
-> [2] https://techreport.com/news/32459/amd-ships-revised-ryzen-cpus-with-a-compile-bug-fix/
-
-Thank you. I checked the above 2 links and suspect it's not related.
-
-The issue happens on one Intel Xeon CPU with a Ubuntu 16.04 and one
-Intel CORE i9 with a Ubuntu 20.04. The segmentation fault seems to
-happen randomly during package "make install" phase.
-
-Regards,
-Bin
+diff --git a/package/pdbg/pdbg.hash b/package/pdbg/pdbg.hash
+index bc5772f064d4..bc9f99b149b6 100644
+--- a/package/pdbg/pdbg.hash
++++ b/package/pdbg/pdbg.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 622446c76adbb41ccbe0b1e3a84b704ef66cdd8429e1e6fedec80493c54801e7 pdbg-3.1.tar.gz
++sha256 c47adcac1c404266217be8c4acb408d9eba59562b094c941e96e4f77f3ced7d2 pdbg-3.2.tar.gz
+ sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 COPYING
+diff --git a/package/pdbg/pdbg.mk b/package/pdbg/pdbg.mk
+index 79e4f5c7cc39..e8bb36c3272e 100644
+--- a/package/pdbg/pdbg.mk
++++ b/package/pdbg/pdbg.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PDBG_VERSION = 3.1
++PDBG_VERSION = 3.2
+ PDBG_SITE = $(call github,open-power,pdbg,v$(PDBG_VERSION))
+ PDBG_LICENSE = Apache-2.0
+ PDBG_LICENSE_FILES = COPYING
+-- 
+2.29.2
