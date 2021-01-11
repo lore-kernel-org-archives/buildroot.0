@@ -1,45 +1,28 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 11 Jan 2021 21:12:25 +0100
-Subject: [Buildroot] [PATCH 1/1] docs/manual: replace LIBFOO_CPE_ID_PRODUCT
-Message-ID: <20210111201225.1414497-1-fontaine.fabrice@gmail.com>
+Date: Mon, 11 Jan 2021 21:14:41 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libupnp: set LIBUPNP_CPE_ID_VALID
+Message-ID: <20210111201441.1414609-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Replace LIBFOO_CPE_ID_PRODUCT by LIBFOO_CPE_ID_NAME
-
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- docs/manual/adding-packages-generic.txt | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/libupnp/libupnp.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index 21fedd8b6b..e1d2a464de 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -515,7 +515,7 @@ LIBFOO_IGNORE_CVES += CVE-2020-54321
-    identifier. When not defined, the default value is
-    +<pkgname>_project+.
+diff --git a/package/libupnp/libupnp.mk b/package/libupnp/libupnp.mk
+index 8831885ba4..b7836590c2 100644
+--- a/package/libupnp/libupnp.mk
++++ b/package/libupnp/libupnp.mk
+@@ -11,5 +11,6 @@ LIBUPNP_CONF_ENV = ac_cv_lib_compat_ftime=no
+ LIBUPNP_INSTALL_STAGING = YES
+ LIBUPNP_LICENSE = BSD-3-Clause
+ LIBUPNP_LICENSE_FILES = LICENSE
++LIBUPNP_CPE_ID_VALID = YES
  
--** +LIBFOO_CPE_ID_PRODUCT+, specifies the product part of the CPE
-+** +LIBFOO_CPE_ID_NAME+, specifies the product part of the CPE
-    identifier. When not defined, the default value is +<pkgname>+.
- 
- ** +LIBFOO_CPE_ID_VERSION+, specifies the version part of the CPE
-@@ -533,9 +533,9 @@ package infrastructure will define +LIBFOO_CPE_ID+.
- +
- Alternatively, a package can also explicitly set +LIBFOO_CPE_ID_VALID
- = YES+ if the default values for +LIBFOO_CPE_ID_PREFIX+,
--+LIBFOO_CPE_ID_VENDOR+, +LIBFOO_CPE_ID_PRODUCT+,
--+LIBFOO_CPE_ID_VERSION+, +LIBFOO_CPE_ID_VERSION_MINOR+ are all correct
--for this package and don't need to be explicitly overridden.
-++LIBFOO_CPE_ID_VENDOR+, +LIBFOO_CPE_ID_NAME+, +LIBFOO_CPE_ID_VERSION+,
-++LIBFOO_CPE_ID_VERSION_MINOR+ are all correct for this package and
-+don't need to be explicitly overridden.
- +
- For a host package, if its +LIBFOO_CPE_ID_*+ variables are not
- defined, it inherits the value of those variables from the
+ $(eval $(autotools-package))
 -- 
 2.29.2
