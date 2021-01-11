@@ -1,58 +1,64 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Jan 2021 09:15:48 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/glibc: security
- bump for additional post-2.31.x fixes
-Message-ID: <20210111075756.1C8EC870CE@busybox.osuosl.org>
+From: Bin Meng <bmeng.cn@gmail.com>
+Date: Mon, 11 Jan 2021 17:01:11 +0800
+Subject: [Buildroot] [PATCH 1/2] boot/uboot: Introduce
+ BR2_TARGET_UBOOT_NEEDS_OPENSBI
+In-Reply-To: <1610355672-3008-1-git-send-email-bmeng.cn@gmail.com>
+References: <1610355672-3008-1-git-send-email-bmeng.cn@gmail.com>
+Message-ID: <1610355672-3008-2-git-send-email-bmeng.cn@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8e2e190469cf2ae5b499c2881e059b23cab5a7f0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+From: Bin Meng <bin.meng@windriver.com>
 
-Fixes the following security issues:
+Some RISC-V platforms (such as SiFive HiFive Unleashed) encapsulate
+the OpenSBI firmware image inside U-Boot.
 
-CVE-2020-27618: An infinite loop has been fixed in the iconv program when
-invoked with input containing redundant shift sequences in the IBM1364,
-IBM1371, IBM1388, IBM1390, or IBM1399 character sets.
-
-CVE-2020-29562: An assertion failure has been fixed in the iconv function
-when invoked with UCS4 input containing an invalid character.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bin Meng <bin.meng@windriver.com>
 ---
- .../glibc.hash                                                          | 2 +-
- package/glibc/glibc.mk                                                  | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/glibc/2.31-54-g6fdf971c9dbf7dac9bea552113fe4694015bbc4d/glibc.hash b/package/glibc/2.31-70-gc4f5e32aae3094491641025a42fe2d55222c8f16/glibc.hash
-similarity index 70%
-rename from package/glibc/2.31-54-g6fdf971c9dbf7dac9bea552113fe4694015bbc4d/glibc.hash
-rename to package/glibc/2.31-70-gc4f5e32aae3094491641025a42fe2d55222c8f16/glibc.hash
-index a1b2ae12fd..e7aaeab07c 100644
---- a/package/glibc/2.31-54-g6fdf971c9dbf7dac9bea552113fe4694015bbc4d/glibc.hash
-+++ b/package/glibc/2.31-70-gc4f5e32aae3094491641025a42fe2d55222c8f16/glibc.hash
-@@ -1,5 +1,5 @@
- # Locally calculated (fetched from Github)
--sha256  e1f2c9b424a4e0c00e7ad123a4204f7bc8afd3c504aeb8c79b1086509fd67176  glibc-2.31-54-g6fdf971c9dbf7dac9bea552113fe4694015bbc4d.tar.gz
-+sha256  9897155423ea50bfa255b0130d13608b7d11129e79848a52cf82670bb206439a  glibc-2.31-70-gc4f5e32aae3094491641025a42fe2d55222c8f16.tar.gz
+ boot/uboot/Config.in | 10 ++++++++++
+ boot/uboot/uboot.mk  |  5 +++++
+ 2 files changed, 15 insertions(+)
+
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index e4a0f48..b18216a 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -229,6 +229,16 @@ config BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF
  
- # Hashes for license files
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index 4721177d83..f4bba24ca0 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -20,7 +20,7 @@ else ifeq ($(BR2_RISCV_32),y)
- # Until 2.33 is released, just use master
- GLIBC_VERSION = 2.32.9000-69-gbd394d131c10c9ec22c6424197b79410042eed99
- else
--GLIBC_VERSION = 2.31-54-g6fdf971c9dbf7dac9bea552113fe4694015bbc4d
-+GLIBC_VERSION = 2.31-70-gc4f5e32aae3094491641025a42fe2d55222c8f16
+ endchoice
+ 
++config BR2_TARGET_UBOOT_NEEDS_OPENSBI
++	bool "U-Boot needs OpenSBI"
++	depends on BR2_TARGET_OPENSBI
++	help
++	  Some RISC-V platforms (such as SiFive HiFive Unleashed)
++	  encapsulate the OpenSBI firmware image inside U-Boot.
++	  This option makes sure OpenSBI gets built prior to U-Boot,
++	  and that the OpenSBI variable pointing to OpenSBI binary,
++	  is passed during the Buildroot build.
++
+ menu "U-Boot binary format"
+ 
+ config BR2_TARGET_UBOOT_FORMAT_AIS
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index a29d71f..d92000f 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -163,6 +163,11 @@ UBOOT_MAKE_OPTS += BL31=$(BINARIES_DIR)/bl31.bin
  endif
- # Upstream doesn't officially provide an https download link.
- # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
+ endif
+ 
++ifeq ($(BR2_TARGET_UBOOT_NEEDS_OPENSBI),y)
++UBOOT_DEPENDENCIES += opensbi
++UBOOT_MAKE_OPTS += OPENSBI=$(BINARIES_DIR)/fw_dynamic.bin
++endif
++
+ ifeq ($(BR2_TARGET_UBOOT_NEEDS_DTC),y)
+ UBOOT_DEPENDENCIES += host-dtc
+ endif
+-- 
+2.7.4
