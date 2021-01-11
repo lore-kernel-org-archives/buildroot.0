@@ -1,11 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 11 Jan 2021 18:11:13 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/uclibc: add backtrace
+Date: Mon, 11 Jan 2021 18:14:41 +0100
+Subject: [Buildroot] [PATCH v3 1/1] package/uclibc: add backtrace
  support option
-In-Reply-To: <20210111110311.18568-1-andrea.ricchi@amarulasolutions.com>
-References: <20210109161900.51824>
- <20210111110311.18568-1-andrea.ricchi@amarulasolutions.com>
-Message-ID: <20210111171113.GX3044608@scaer>
+In-Reply-To: <20210111130705.25005-1-andrea.ricchi@amarulasolutions.com>
+References: <20210111130705.25005-1-andrea.ricchi@amarulasolutions.com>
+Message-ID: <20210111171441.GY3044608@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,40 +13,46 @@ To: buildroot@busybox.net
 
 Andrea, All,
 
-On 2021-01-11 12:03 +0100, Andrea Ricchi spake thusly:
+On 2021-01-11 14:07 +0100, Andrea Ricchi spake thusly:
 > Add toolchain configuration to support execinfo.h and backtrace
 > features.
 > 
 > Signed-off-by: Andrea Ricchi <andrea.ricchi@amarulasolutions.com>
 > ---
+> Changes v2 -> v3:
+>   - Remove BR2_USE_BACKTRACE selection (suggested by Angelo Compagnucci)
+
+Ah, you noticed already, good. :-)
+
+I did not see the review mail by Angelo, so internal review I guess. In
+that case, it would have been nice that you Cc-ed him on the v3, with a
+ Cc: tag right below your own SoB line, so that git sends the Cc
+automatically. Basically, it is customary to add people that provided a
+review as Cc of your respins.
+
+Thanks!
+
+Regards,
+Yann E. MORIN.
+
 > Changes v1 -> v2:
->   - add dependncy on shared lib (suggested by Yann Morin)
+>   - add shared library dependency (suggested by Yann Morin)
 > 
->  package/uclibc/Config.in |  8 ++++++++
+>  package/uclibc/Config.in |  7 +++++++
 >  package/uclibc/uclibc.mk | 11 +++++++++++
->  2 files changed, 19 insertions(+)
+>  2 files changed, 18 insertions(+)
 > 
 > diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-> index e59fef3c69..4dab46ae93 100644
+> index e59fef3c69..dedd58f940 100644
 > --- a/package/uclibc/Config.in
 > +++ b/package/uclibc/Config.in
-> @@ -39,6 +39,14 @@ config BR2_TOOLCHAIN_BUILDROOT_LOCALE
+> @@ -39,6 +39,13 @@ config BR2_TOOLCHAIN_BUILDROOT_LOCALE
 >  	  Enable this option if you want your toolchain to support
 >  	  localization and internationalization.
 >  
 > +config BR2_TOOLCHAIN_BUILDROOT_BACKTRACE
 > +	bool "Enable backtrace support"
 > +	depends on !BR2_STATIC_LIBS
-> +	select BR2_USE_BACKTRACE
-
-As I already pointed out in my initial review [0]: BR2_USE_BACKTRACE
-does not exist in Buildroot.
-
-[0] http://lists.busybox.net/pipermail/buildroot/2021-January/300396.html
-
-Regards,
-Yann E. MORIN.
-
 > +	help
 > +	  Enable this option if you want your toolchain to support
 > +	  execinfo.h and backtrace features.
