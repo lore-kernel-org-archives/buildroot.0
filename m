@@ -1,62 +1,41 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Mon, 11 Jan 2021 10:07:20 +0100
-Subject: [Buildroot] [PATCH 1/1] configs/qemu_*: bump kernel version to
- 5.4.88
-In-Reply-To: <CACPK8Xe5gCZpxEs0VROgax9KV19s42JWo5mR_ShTJGjUheCdng@mail.gmail.com>
-References: <20210110203910.24698-1-geoffrey.legourrierec@gmail.com>
- <CACPK8Xe5gCZpxEs0VROgax9KV19s42JWo5mR_ShTJGjUheCdng@mail.gmail.com>
-Message-ID: <f70462ad-0ad3-1dbb-6acd-882ec36d51dc@smile.fr>
+From: Chris Packham <judge.packham@gmail.com>
+Date: Mon, 11 Jan 2021 22:13:53 +1300
+Subject: [Buildroot] [PATCH] package/coremark-pro: fix build without threads
+Message-ID: <20210111091353.6978-1-judge.packham@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Coremark-pro requires threads so add a depends on
+BR2_TOOLCHAIN_HAS_THREADS.
 
-Le 11/01/2021 ? 02:09, Joel Stanley a ?crit?:
-> On Sun, 10 Jan 2021 at 20:39, Geoffrey Le Gourri?rec
-> <geoffrey.legourrierec@gmail.com> wrote:
->>
->> Bump QEMU defconfigs to latest longterm kernel 5.4.88.
->>
->> Please note that QEMU boards not based on 5.4.y were ignored:
->> - qemu_csky810_virt_defconfig
->> - qemu_csky807_virt_defconfig
->> - qemu_csky610_virt_defconfig
->> - qemu_csky860_virt_defconfig
->>
->> Tests were carried out on all QEMU boards using Gitlab [1] (commit
->> message was slightly different, but the patch is identical)
->>
->> Additional actions needed were:
->> - board/qemu/sh4-r2d: Remove one of the two kernel patches [2] provided
->>   by Alan Modra fixing rodata alignment, carried here by Romain Naour [3]
->>   to fix an issue preventing kernel from booting with binutils 2.23.
->>   Patch is present in upstream Linux now.
->>
->> [1] https://gitlab.com/clumsyape/buildroot/-/pipelines/239483891
->> [2] https://www.sourceware.org/ml/binutils/2019-12/msg00112.html
->> [3] https://git.busybox.net/buildroot/commit/?id=a2331c8a61bdd71c47492efc818fb0458a349219
->>
->> Signed-off-by: Geoffrey Le Gourri?rec <geoffrey.legourrierec@gmail.com>
-> 
-> Thanks for doing this. For the powerpc boards in particular:
-> 
-> Reviewed-by: Joel Stanley <joel@jms.id.au>
-> 
-> Is there a plan to move boards up to v5.10 now that is the latest LTS?
+Fixes:
+- http://autobuild.buildroot.net/results/ab574485a7856fcf5cd643c154c44b4bfcb34a97/
 
-Yes, that's something we can do for 2021.02.
+Signed-off-by: Chris Packham <judge.packham@gmail.com>
+---
+ package/coremark-pro/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-@Geoffrey, if you're interested to do this change, feel free to do it :)
-
-Best regards,
-Romain
-
-> 
-> Cheers,
-> 
-> Joel
-> 
-[...]
+diff --git a/package/coremark-pro/Config.in b/package/coremark-pro/Config.in
+index dd6821056c..362826f47b 100644
+--- a/package/coremark-pro/Config.in
++++ b/package/coremark-pro/Config.in
+@@ -1,8 +1,13 @@
+ config BR2_PACKAGE_COREMARK_PRO
+ 	bool "coremark-pro"
+ 	depends on BR2_USE_MMU # perl uses fork()
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_PERL
+ 	help
+ 	  CoreMark-PRO is a comprehensive, advanced processor benchmark.
+ 
+ 	  https://www.eembc.org/coremark-pro/
++
++comment "coremark-pro needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_MMU
+-- 
+2.30.0
