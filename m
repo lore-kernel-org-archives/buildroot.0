@@ -1,40 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 11 Jan 2021 21:32:08 +0100
-Subject: [Buildroot] [PATCH 1/1] package/netcat: set NETCAT_CPE_ID_VALID
-In-Reply-To: <20210111201544.1414785-1-fontaine.fabrice@gmail.com>
-References: <20210111201544.1414785-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210111213208.05cb371a@windsurf.home>
+Date: Mon, 11 Jan 2021 21:32:33 +0100
+Subject: [Buildroot] [git commit] package/netcat: set NETCAT_CPE_ID_VALID
+Message-ID: <20210111201431.97F858658C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice,
+commit: https://git.buildroot.net/buildroot/commit/?id=376c010974e31bb66df29c407bfe13c3c1662ef7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 11 Jan 2021 21:15:44 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+cpe:2.3:a:netcat_project:netcat is indeed the right CPE identifier for
+this package, as can be seen from:
 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Anetcat_project%3Anetcat
 
-Thanks for all those CPE related patches, very useful. Since you're
-doing all those checks, perhaps it would be useful to have a pointer to
-something that confirms how you have validated a given CPE. Either in
-the commit log, or as a comment in the .mk file? Perhaps a comment in
-the commit log is sufficient?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/netcat/netcat.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Since you're doing the research, I guess it should be quite easy to add
-such a reference in the commit log. Maybe something such as:
-
-https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Anetcat_project%3Anetcat
-
-Note: no need to resend existing patches for this. This is just a
-suggestion for future patches.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/netcat/netcat.mk b/package/netcat/netcat.mk
+index eb7ddcac27..c9d7952e59 100644
+--- a/package/netcat/netcat.mk
++++ b/package/netcat/netcat.mk
+@@ -8,5 +8,6 @@ NETCAT_VERSION = 0.7.1
+ NETCAT_SITE = http://downloads.sourceforge.net/project/netcat/netcat/$(NETCAT_VERSION)
+ NETCAT_LICENSE = GPL-2.0+
+ NETCAT_LICENSE_FILES = COPYING
++NETCAT_CPE_ID_VALID = YES
+ 
+ $(eval $(autotools-package))
