@@ -1,33 +1,30 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 11 Jan 2021 09:07:00 +0100
-Subject: [Buildroot] [PATCH v2,1/1] package/quota: add CPE variables
-Message-ID: <20210111080700.1285185-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 11 Jan 2021 09:16:21 +0100
+Subject: [Buildroot] [PATCH-2020.11.x] package/glibc: security bump for
+ additional post-2.31.x fixes
+In-Reply-To: <20210110211825.7966-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sun, 10 Jan 2021 22:18:25 +0100")
+References: <20210110211825.7966-1-peter@korsgaard.com>
+Message-ID: <87o8hvopm2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2:
- - Move vendor before name
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- package/quota/quota.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ > Fixes the following security issues:
+ > CVE-2020-27618: An infinite loop has been fixed in the iconv program when
+ > invoked with input containing redundant shift sequences in the IBM1364,
+ > IBM1371, IBM1388, IBM1390, or IBM1399 character sets.
 
-diff --git a/package/quota/quota.mk b/package/quota/quota.mk
-index 18502da9aa..ce7d3641fc 100644
---- a/package/quota/quota.mk
-+++ b/package/quota/quota.mk
-@@ -9,6 +9,8 @@ QUOTA_SITE = http://downloads.sourceforge.net/project/linuxquota/quota-tools/$(Q
- QUOTA_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) host-nfs-utils
- QUOTA_LICENSE = GPL-2.0+
- QUOTA_LICENSE_FILES = COPYING
-+QUOTA_CPE_ID_VENDOR = jan_kara
-+QUOTA_CPE_ID_NAME = linux_diskquota
- QUOTA_CONF_ENV = LIBS="$(TARGET_NLS_LIBS)"
- QUOTA_CONF_OPTS = --disable-pie
- 
+ > CVE-2020-29562: An assertion failure has been fixed in the iconv function
+ > when invoked with UCS4 input containing an invalid character.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed to 2020.11.x, thanks.
+
 -- 
-2.29.2
+Bye, Peter Korsgaard
