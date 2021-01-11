@@ -1,60 +1,75 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Jan 2021 22:36:28 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/p11-kit: libffi
- is optional, not mandatory
-Message-ID: <20210111220100.32D9B7FFDD@busybox.osuosl.org>
+Date: Mon, 11 Jan 2021 22:42:28 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/dbus: security
+ bump to version 1.12.20
+Message-ID: <20210111220100.6E7248101B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8a04076ec04fa4251e0739ac4eaaaefe1a5f85c5
+commit: https://git.buildroot.net/buildroot/commit/?id=d8b37d4fec52ceae5a16c90d580d4f9667b55b38
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 10a2fcc81eb6fedd83849b5ece7c6f7b220f465f)
+Fixes the following security issue:
+
+- CVE-2020-35512: On Unix, avoid a use-after-free if two usernames have the
+  same numeric uid.  In older versions this could lead to a crash (denial of
+  service) or other undefined behaviour, possibly including incorrect
+  authorization decisions if <policy group=...> is used.  Like Unix
+  filesystems, D-Bus' model of identity cannot distinguish between users of
+  different names with the same numeric uid, so this configuration is not
+  advisable on systems where D-Bus will be used.
+
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit c80989aa9d6a638a8fc953320f255f367d017617)
+[Peter: mention security fix]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/p11-kit/Config.in  | 1 -
- package/p11-kit/p11-kit.mk | 9 ++++++++-
- 2 files changed, 8 insertions(+), 2 deletions(-)
+ package/dbus/Config.in | 2 +-
+ package/dbus/dbus.hash | 5 +++--
+ package/dbus/dbus.mk   | 2 +-
+ 3 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/p11-kit/Config.in b/package/p11-kit/Config.in
-index a6b7261886..5690418756 100644
---- a/package/p11-kit/Config.in
-+++ b/package/p11-kit/Config.in
-@@ -3,7 +3,6 @@ config BR2_PACKAGE_P11_KIT
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	select BR2_PACKAGE_LIBFFI
- 	select BR2_PACKAGE_LIBTASN1
+diff --git a/package/dbus/Config.in b/package/dbus/Config.in
+index 653f7482f6..5650b5777b 100644
+--- a/package/dbus/Config.in
++++ b/package/dbus/Config.in
+@@ -7,7 +7,7 @@ config BR2_PACKAGE_DBUS
  	help
- 	  Provides a way to load and enumerate PKCS#11 modules.
-diff --git a/package/p11-kit/p11-kit.mk b/package/p11-kit/p11-kit.mk
-index 1f72e0515b..fef4791831 100644
---- a/package/p11-kit/p11-kit.mk
-+++ b/package/p11-kit/p11-kit.mk
-@@ -6,7 +6,7 @@
+ 	  The D-Bus message bus system.
  
- P11_KIT_VERSION = 0.23.16.1
- P11_KIT_SITE = https://github.com/p11-glue/p11-kit/releases/download/$(P11_KIT_VERSION)
--P11_KIT_DEPENDENCIES = host-pkgconf libffi libtasn1
-+P11_KIT_DEPENDENCIES = host-pkgconf libtasn1
- P11_KIT_INSTALL_STAGING = YES
- P11_KIT_CONF_OPTS = --disable-static
- P11_KIT_CONF_ENV = ac_cv_have_decl_program_invocation_short_name=yes \
-@@ -20,4 +20,11 @@ else
- P11_KIT_CONF_OPTS += --without-trust-paths
- endif
+-	  http://www.freedesktop.org/wiki/Software/dbus
++	  https://www.freedesktop.org/wiki/Software/dbus
  
-+ifeq ($(BR2_PACKAGE_LIBFFI),y)
-+P11_KIT_DEPENDENCIES += host-pkgconf libffi
-+P11_KIT_CONF_OPTS += --with-libffi
-+else
-+P11_KIT_CONF_OPTS += --without-libffi
-+endif
+ comment "dbus needs a toolchain w/ threads"
+ 	depends on BR2_USE_MMU
+diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
+index cfa06301f6..06512e5656 100644
+--- a/package/dbus/dbus.hash
++++ b/package/dbus/dbus.hash
+@@ -1,6 +1,7 @@
+ # Locally calculated after checking pgp signature
+-# https://dbus.freedesktop.org/releases/dbus/dbus-1.12.18.tar.gz.asc
++# https://dbus.freedesktop.org/releases/dbus/dbus-1.12.20.tar.gz.asc
+ # using key 36EC5A6448A4F5EF79BEFE98E05AE1478F814C4F
+-sha256  64cf4d70840230e5e9bc784d153880775ab3db19d656ead8a0cb9c0ab5a95306  dbus-1.12.18.tar.gz
++sha256  f77620140ecb4cdc67f37fb444f8a6bea70b5b6461f12f1cbe2cec60fa7de5fe  dbus-1.12.20.tar.gz
 +
- $(eval $(autotools-package))
+ # Locally calculated
+ sha256  0e46f54efb12d04ab5c33713bacd0e140c9a35b57ae29e03c853203266e8f3a1  COPYING
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index b58f1ddda3..149183437e 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DBUS_VERSION = 1.12.18
++DBUS_VERSION = 1.12.20
+ DBUS_SITE = https://dbus.freedesktop.org/releases/dbus
+ DBUS_LICENSE = AFL-2.1 or GPL-2.0+ (library, tools), GPL-2.0+ (tools)
+ DBUS_LICENSE_FILES = COPYING
