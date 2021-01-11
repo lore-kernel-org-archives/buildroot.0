@@ -1,54 +1,75 @@
-From: Raul Hidalgo Caballero <deinok@deinok.com>
-Date: Mon, 11 Jan 2021 12:50:28 +0100
-Subject: [Buildroot] package/dotnet: add host-dotnet-sdk
-In-Reply-To: <CAOiXNkBPm8ksDHTWXrzA9zmFZxShEWSOSeG4pn0r3iYRZxKq6g@mail.gmail.com>
-References: <CABWPoFG8k9WccFXRKC6ufRLKDHzdwCyeN3Q1PJZzqpg83fwc1w@mail.gmail.com>
- <20210104085858.68f57652@windsurf>
- <CAOiXNkARyVd8=v7ZShcdAw7eZHDY+Apf5_vLDsxiGT-tpGsEvg@mail.gmail.com>
- <CABWPoFFFA_jB0bqBSGDmnk+7YvM6br0=7=KcnKUvnctVrvmQNA@mail.gmail.com>
- <CAOiXNkBPm8ksDHTWXrzA9zmFZxShEWSOSeG4pn0r3iYRZxKq6g@mail.gmail.com>
-Message-ID: <CABWPoFH_UbU=b7T5yr2Wf23E1fz-dGe+SuVkiMqJGNtYXitLFg@mail.gmail.com>
+From: Andrea Ricchi <andrea.ricchi@amarulasolutions.com>
+Date: Mon, 11 Jan 2021 12:03:11 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/uclibc: add backtrace support
+ option
+In-Reply-To: <20210109161900.51824>
+References: <20210109161900.51824>
+Message-ID: <20210111110311.18568-1-andrea.ricchi@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yes, I'm agree. There is no perfect way, we should found an approach that
-is perfectly fitted in all cases.
+Add toolchain configuration to support execinfo.h and backtrace
+features.
 
-For now, having support for host-dotnet-sdk is a must in any case
+Signed-off-by: Andrea Ricchi <andrea.ricchi@amarulasolutions.com>
+---
+Changes v1 -> v2:
+  - add dependncy on shared lib (suggested by Yann Morin)
 
+ package/uclibc/Config.in |  8 ++++++++
+ package/uclibc/uclibc.mk | 11 +++++++++++
+ 2 files changed, 19 insertions(+)
 
-
-On Fri, Jan 8, 2021 at 1:02 PM Andrey Nechypurenko <andreynech@gmail.com>
-wrote:
-
-> Hi,
->
-> > Regarding Andrey's patch, I'm not sure if that is the correct approach, I
-> > mean, the idea is okay for most of the cases, but what if you install the
-> > dotnet-runtime -> v5.0.0 and the package that you want to install needs
-> > v3.1.0 ?
->
-> AFAIK, it is possible to have multiple runtimes installed. There are many
-> ways to say which one should be used by a particular application. One of
-> them, for example, using DOTNET_ENVIRONMENT environment variable (
->
-> https://docs.microsoft.com/en-us/aspnet/core/fundamentals/environments?view=aspnetcore-5.0
-> ) . Also, AFAIK, if the application is packaged with runtime, it will use
-> this packaged version even if there is separate runtime installed.
->
-> Anyway, I think there is no "right way" [tm]. It depends on the
-> application.
-> For example, in a well controlled environment such as an embedded system
-> where only a predefined set of applications is installed, common runtime
-> would be preferable because it saves a considerable amount of space if
-> multiple applications need it.
->
-> Regards,
-> Andrey.
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210111/aacb8d71/attachment.html>
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index e59fef3c69..4dab46ae93 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -39,6 +39,14 @@ config BR2_TOOLCHAIN_BUILDROOT_LOCALE
+ 	  Enable this option if you want your toolchain to support
+ 	  localization and internationalization.
+ 
++config BR2_TOOLCHAIN_BUILDROOT_BACKTRACE
++	bool "Enable backtrace support"
++	depends on !BR2_STATIC_LIBS
++	select BR2_USE_BACKTRACE
++	help
++	  Enable this option if you want your toolchain to support
++	  execinfo.h and backtrace features.
++
+ choice
+ 	prompt "Thread library implementation"
+ 	help
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index 53983e852d..b6f6c0f824 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -359,6 +359,16 @@ else
+ UCLIBC_SHARED_LIBS_CONFIG = $(call KCONFIG_ENABLE_OPT,HAVE_SHARED)
+ endif
+ 
++#
++# backtrace support
++#
++
++ifeq ($(BR2_TOOLCHAIN_BUILDROOT_BACKTRACE),y)
++UCLIBC_BACKTRACE_CONFIG = $(call KCONFIG_ENABLE_OPT,UCLIBC_HAS_BACKTRACE)
++else
++UCLIBC_BACKTRACE_CONFIG = $(call KCONFIG_DISABLE_OPT,UCLIBC_HAS_BACKTRACE)
++endif
++
+ #
+ # Commands
+ #
+@@ -401,6 +411,7 @@ define UCLIBC_KCONFIG_FIXUP_CMDS
+ 	$(UCLIBC_LOCALE_CONFIG)
+ 	$(UCLIBC_WCHAR_CONFIG)
+ 	$(UCLIBC_SHARED_LIBS_CONFIG)
++	$(UCLIBC_BACKTRACE_CONFIG)
+ endef
+ 
+ define UCLIBC_BUILD_CMDS
+-- 
+2.25.1
