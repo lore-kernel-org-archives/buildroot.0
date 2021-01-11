@@ -1,77 +1,40 @@
-From: Alistair Francis <alistair23@gmail.com>
-Date: Mon, 11 Jan 2021 11:06:01 -0800
-Subject: [Buildroot] [PATCH 1/2] boot/uboot: Introduce
- BR2_TARGET_UBOOT_NEEDS_OPENSBI
-In-Reply-To: <1610355672-3008-2-git-send-email-bmeng.cn@gmail.com>
-References: <1610355672-3008-1-git-send-email-bmeng.cn@gmail.com>
- <1610355672-3008-2-git-send-email-bmeng.cn@gmail.com>
-Message-ID: <CAKmqyKOzp8=QgbY-ZwL9nQOxMFW2TdobWjabz8yQ7Q1204XF9w@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 11 Jan 2021 20:09:02 +0100
+Subject: [Buildroot] [PATCH 1/1] package/nano: fix tiny build
+Message-ID: <20210111190902.668095-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jan 11, 2021 at 1:01 AM Bin Meng <bmeng.cn@gmail.com> wrote:
->
-> From: Bin Meng <bin.meng@windriver.com>
->
-> Some RISC-V platforms (such as SiFive HiFive Unleashed) encapsulate
-> the OpenSBI firmware image inside U-Boot.
->
-> Signed-off-by: Bin Meng <bin.meng@windriver.com>
+Since upstream commit
+https://git.savannah.gnu.org/cgit/nano.git/commit/configure.ac?id=235f92ce093099cd81f14827ab842bd331132790
 
-Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
+--enable-color --enable-nanorc are needed for libmagic support in tiny
+builds.
 
-Alistair
+Fixes:
+http://autobuild.buildroot.net/results/248/24894e62d6cf89d078959b12e67596c821d64696/
 
-> ---
->
->  boot/uboot/Config.in | 10 ++++++++++
->  boot/uboot/uboot.mk  |  5 +++++
->  2 files changed, 15 insertions(+)
->
-> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-> index e4a0f48..b18216a 100644
-> --- a/boot/uboot/Config.in
-> +++ b/boot/uboot/Config.in
-> @@ -229,6 +229,16 @@ config BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF
->
->  endchoice
->
-> +config BR2_TARGET_UBOOT_NEEDS_OPENSBI
-> +       bool "U-Boot needs OpenSBI"
-> +       depends on BR2_TARGET_OPENSBI
-> +       help
-> +         Some RISC-V platforms (such as SiFive HiFive Unleashed)
-> +         encapsulate the OpenSBI firmware image inside U-Boot.
-> +         This option makes sure OpenSBI gets built prior to U-Boot,
-> +         and that the OpenSBI variable pointing to OpenSBI binary,
-> +         is passed during the Buildroot build.
-> +
->  menu "U-Boot binary format"
->
->  config BR2_TARGET_UBOOT_FORMAT_AIS
-> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-> index a29d71f..d92000f 100644
-> --- a/boot/uboot/uboot.mk
-> +++ b/boot/uboot/uboot.mk
-> @@ -163,6 +163,11 @@ UBOOT_MAKE_OPTS += BL31=$(BINARIES_DIR)/bl31.bin
->  endif
->  endif
->
-> +ifeq ($(BR2_TARGET_UBOOT_NEEDS_OPENSBI),y)
-> +UBOOT_DEPENDENCIES += opensbi
-> +UBOOT_MAKE_OPTS += OPENSBI=$(BINARIES_DIR)/fw_dynamic.bin
-> +endif
-> +
->  ifeq ($(BR2_TARGET_UBOOT_NEEDS_DTC),y)
->  UBOOT_DEPENDENCIES += host-dtc
->  endif
-> --
-> 2.7.4
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/nano/nano.mk | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/package/nano/nano.mk b/package/nano/nano.mk
+index a86474bfb4..9857ef3460 100644
+--- a/package/nano/nano.mk
++++ b/package/nano/nano.mk
+@@ -31,6 +31,9 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_NANO_TINY),y)
+ NANO_CONF_OPTS += --enable-tiny
++ifeq ($(BR2_PACKAGE_FILE),y)
++NANO_CONF_OPTS += --enable-color --enable-nanorc
++endif
+ define NANO_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -m 0755 $(@D)/src/nano $(TARGET_DIR)/usr/bin/nano
+ endef
+-- 
+2.29.2
