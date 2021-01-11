@@ -1,48 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 11 Jan 2021 22:22:30 +0100
-Subject: [Buildroot] [git commit] package/git: bump version to 2.30.0
-Message-ID: <20210111210408.C839D83B33@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 11 Jan 2021 22:25:53 +0100
+Subject: [Buildroot] [PATCH] support/scripts/pkg-stats: properly handle
+ host packages with -c option
+In-Reply-To: <20210108213737.GP1485369@scaer>
+References: <20210107211336.3030397-1-thomas.petazzoni@bootlin.com>
+ <20210107211336.3030397-2-thomas.petazzoni@bootlin.com>
+ <20210107213207.GO1485369@scaer> <20210107223447.4a2b8674@windsurf.home>
+ <20210108213737.GP1485369@scaer>
+Message-ID: <6e5e0a9b-9df1-bbba-1252-00241354a70e@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=192829cf0dc1230e5b21d3629d3e1e371b9467a1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For details see [1].
 
-[1] http://lkml.iu.edu/hypermail/linux/kernel/2012.3/03301.html
+On 08/01/2021 22:37, Yann E. MORIN wrote:
+> Thomas, All,
+> 
+> On 2021-01-07 22:34 +0100, Thomas Petazzoni spake thusly:
+>> On Thu, 7 Jan 2021 22:32:07 +0100
+>> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+>>
+>>> I think the correct fix would be for the json output to already contain
+>>> the base name of the package, and the script to use that field, rather
+>>> than the key, as a package name. That way, the behaviour would be the
+>>> same for both target and host packages.
+>>
+>> Right, that could certainly work as well.
+>>
+>>>
+>>> Something like:
+>>>
+>>>     diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+>>>     index a2cc160d0b..0f9d612f12 100644
+>>>     --- a/package/pkg-utils.mk
+>>>     +++ b/package/pkg-utils.mk
+>>>     @@ -91,6 +91,7 @@ endef
+>>>      # $(1): upper-case package or filesystem name
+>>>      define json-info
+>>>      	"$($(1)_NAME)": {
+>>>     +		"name": "$($(1)_RAWNAME)",
+>>
+>> "name" or "rawname" ?
+> 
+> "rawname" is a detail of the naming of our internal variables. WE do not
+> want to propagate that to the outside world.
+> 
+> "name" is really that: the name of the package, by which people know it
+> and talk about. 
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/git/git.hash | 2 +-
- package/git/git.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ +1
 
-diff --git a/package/git/git.hash b/package/git/git.hash
-index 87547b4ac0..375ce787e9 100644
---- a/package/git/git.hash
-+++ b/package/git/git.hash
-@@ -1,5 +1,5 @@
- # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
--sha256  f2fc436ebe657821a1360bcd1e5f4896049610082419143d60f6fa13c2f607c1  git-2.29.2.tar.xz
-+sha256  55735021109565721af805af382c45cce73c3cfaa59daad22443d1477d334d19  git-2.30.0.tar.xz
- # Locally calculated
- sha256  5b2198d1645f767585e8a88ac0499b04472164c0d2da22e75ecf97ef443ab32e  COPYING
- sha256  1922f45d2c49e390032c9c0ba6d7cac904087f7cec51af30c2b2ad022ce0e76a  LGPL-2.1
-diff --git a/package/git/git.mk b/package/git/git.mk
-index 6a15e3aeeb..8121add711 100644
---- a/package/git/git.mk
-+++ b/package/git/git.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GIT_VERSION = 2.29.2
-+GIT_VERSION = 2.30.0
- GIT_SOURCE = git-$(GIT_VERSION).tar.xz
- GIT_SITE = $(BR2_KERNEL_MIRROR)/software/scm/git
- GIT_LICENSE = GPL-2.0, LGPL-2.1+
+ Regards,
+ Arnout
