@@ -1,9 +1,9 @@
 From: Matthew Weber <matthew.weber@collins.com>
-Date: Mon, 11 Jan 2021 08:42:19 -0600
-Subject: [Buildroot] [PATCH 1/1] package/ed: add ED_CPE_ID_VENDOR
-In-Reply-To: <20210111075612.1283686-1-fontaine.fabrice@gmail.com>
-References: <20210111075612.1283686-1-fontaine.fabrice@gmail.com>
-Message-ID: <CANQCQpaXU8MkNtAK4U1tjUXy7JzPR_GY+WS+hGi0SqhZMQ8xzA@mail.gmail.com>
+Date: Mon, 11 Jan 2021 08:43:37 -0600
+Subject: [Buildroot] [PATCH 1/1] package/links: add LINKS_CPE_ID_VENDOR
+In-Reply-To: <20210111074659.1283018-1-fontaine.fabrice@gmail.com>
+References: <20210111074659.1283018-1-fontaine.fabrice@gmail.com>
+Message-ID: <CANQCQpbOEwKAENx4NJaKcPbugC+kQHit3gyNs1WdQFtbh2aKAg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,11 +12,12 @@ To: buildroot@busybox.net
 
 Fabrice,
 
-On Mon, Jan 11, 2021 at 1:57 AM Fabrice Fontaine
+On Mon, Jan 11, 2021 at 1:48 AM Fabrice Fontaine
 <fontaine.fabrice@gmail.com> wrote:
 >
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-I verified the name/vendor in the NIST dictionary.
+I verified this name/vendor customization creates a match in the NIST
+dictionary.
 
 Reviewed-by: Matthew Weber >matthew.weber at rockwellcollins.com
