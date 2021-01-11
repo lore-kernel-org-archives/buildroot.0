@@ -1,59 +1,53 @@
-From: Grzegorz Blach <grzegorz@blach.pl>
-Date: Mon, 11 Jan 2021 19:29:21 +0100
-Subject: [Buildroot] [PATCH] package/python-pyjwt: Bump to version 2.0.0
-Message-ID: <20210111182923.316881-1-grzegorz@blach.pl>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 11 Jan 2021 23:10:07 +0100
+Subject: [Buildroot] [git commit] package/libevdev: bump version to 1.10.1
+Message-ID: <20210111215137.5EC9487120@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
----
- package/python-pyjwt/Config.in         | 1 +
- package/python-pyjwt/python-pyjwt.hash | 6 +++---
- package/python-pyjwt/python-pyjwt.mk   | 4 ++--
- 3 files changed, 6 insertions(+), 5 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=8a5ba80b86529a653040ebef0acc623e70451dda
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/python-pyjwt/Config.in b/package/python-pyjwt/Config.in
-index 510875ce2f..f8d4f8a9b8 100644
---- a/package/python-pyjwt/Config.in
-+++ b/package/python-pyjwt/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_PYJWT
- 	bool "python-pyjwt"
-+	depends on BR2_PACKAGE_PYTHON3
- 	help
- 	  JSON Web Token implementation in Python.
+For details see [1].
+
+[1] https://lists.freedesktop.org/archives/input-tools/2021-January/001555.html
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libevdev/libevdev.hash | 8 +++-----
+ package/libevdev/libevdev.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 6 deletions(-)
+
+diff --git a/package/libevdev/libevdev.hash b/package/libevdev/libevdev.hash
+index 3003dc33fa..4376f863a3 100644
+--- a/package/libevdev/libevdev.hash
++++ b/package/libevdev/libevdev.hash
+@@ -1,8 +1,6 @@
+-# From https://lists.freedesktop.org/archives/input-tools/2020-October/001545.html
+-md5  c6239ef0d61c4f4911f25bb8426a0b82  libevdev-1.10.0.tar.xz
+-sha1  3eedd43652a238f687595ffd722fd3bb94359216  libevdev-1.10.0.tar.xz
+-sha256  3522c26e2c148be0ad68ce26fbced408a4185dea90bfe8079dc82b8ace962d4a  libevdev-1.10.0.tar.xz
+-sha512  94ab4ee7e0854c41a491d8e4713baa95ae66dd337b41823011c0913aa1c72e8bbf8b808d5936c2ef456af794b6d3a5cd7cd0515fbd1d06dd1b7ba19275bd928f  libevdev-1.10.0.tar.xz
++# From https://lists.freedesktop.org/archives/input-tools/2021-January/001555.html
++sha256  0330fe8357ece915db9366c1b9a6648941aea6f724b73ad6e71401127aa08932  libevdev-1.10.1.tar.xz
++sha512  6b42cd1920f6b5ef4c40e1c0db9623cabf634d87202fd98730f861e5dc4ffc30a26500ec48213a459ec18b761e2cd2f4cf47c0ab8752e6b6baa5c4fa47893964  libevdev-1.10.1.tar.xz
  
-diff --git a/package/python-pyjwt/python-pyjwt.hash b/package/python-pyjwt/python-pyjwt.hash
-index 62ec3559af..10875510f0 100644
---- a/package/python-pyjwt/python-pyjwt.hash
-+++ b/package/python-pyjwt/python-pyjwt.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/PyJWT/json
--md5	a4712f980c008696e13e09504120b2a0  PyJWT-1.7.1.tar.gz
--sha256	8d59a976fb773f3e6a39c85636357c4f0e242707394cadadd9814f5cbaa20e96  PyJWT-1.7.1.tar.gz
-+md5  7a1b1c8bfeb67c31ee4fdadefe5ff4b8  PyJWT-2.0.0.tar.gz
-+sha256  7a2b271c6dac2fda9e0c33d176c4253faba2c6c6b3a99c7f28a32c3c97522779  PyJWT-2.0.0.tar.gz
- # Locally computed sha256 checksums
--sha256	ec82af815b5f9da8685afb300cc5beb7949e1c22b79b6c1c054796cefdf6cac6  LICENSE
-+sha256  ec82af815b5f9da8685afb300cc5beb7949e1c22b79b6c1c054796cefdf6cac6  LICENSE
-diff --git a/package/python-pyjwt/python-pyjwt.mk b/package/python-pyjwt/python-pyjwt.mk
-index dfc66e5651..9215911389 100644
---- a/package/python-pyjwt/python-pyjwt.mk
-+++ b/package/python-pyjwt/python-pyjwt.mk
-@@ -4,9 +4,9 @@
+ # Hash for license files:
+ sha256  f063d1279b31e73007e1c54493391818b4cb5f9162d590120397e0347b932137  COPYING
+diff --git a/package/libevdev/libevdev.mk b/package/libevdev/libevdev.mk
+index 0453028f2f..45116332a5 100644
+--- a/package/libevdev/libevdev.mk
++++ b/package/libevdev/libevdev.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_PYJWT_VERSION = 1.7.1
-+PYTHON_PYJWT_VERSION = 2.0.0
- PYTHON_PYJWT_SOURCE = PyJWT-$(PYTHON_PYJWT_VERSION).tar.gz
--PYTHON_PYJWT_SITE = https://files.pythonhosted.org/packages/2f/38/ff37a24c0243c5f45f5798bd120c0f873eeed073994133c084e1cf13b95c
-+PYTHON_PYJWT_SITE = https://files.pythonhosted.org/packages/14/6d/096dc269d105ba374d6bfd3ecb22b516795ca0572499820dadc8178d9ae1
- PYTHON_PYJWT_SETUP_TYPE = setuptools
- PYTHON_PYJWT_LICENSE = MIT
- PYTHON_PYJWT_LICENSE_FILES = LICENSE
--- 
-2.27.0
+-LIBEVDEV_VERSION = 1.10.0
++LIBEVDEV_VERSION = 1.10.1
+ LIBEVDEV_SITE = http://www.freedesktop.org/software/libevdev
+ LIBEVDEV_SOURCE = libevdev-$(LIBEVDEV_VERSION).tar.xz
+ LIBEVDEV_LICENSE = X11
