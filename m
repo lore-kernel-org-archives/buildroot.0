@@ -1,7 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 11 Jan 2021 08:04:49 +0100
-Subject: [Buildroot] [PATCH 1/1] package/cereal: add CEREAL_CPE_ID_VENDOR
-Message-ID: <20210111070449.1281936-1-fontaine.fabrice@gmail.com>
+Date: Mon, 11 Jan 2021 08:38:49 +0100
+Subject: [Buildroot] [PATCH 1/1] package/quota: add CPE variables
+Message-ID: <20210111073849.1282617-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,20 +10,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/cereal/cereal.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/quota/quota.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/cereal/cereal.mk b/package/cereal/cereal.mk
-index 3811fdf32f..c9ce9976bf 100644
---- a/package/cereal/cereal.mk
-+++ b/package/cereal/cereal.mk
-@@ -9,6 +9,7 @@ CEREAL_SITE = $(call github,USCiLab,cereal,v$(CEREAL_VERSION))
- # For licensing, see also: https://github.com/USCiLab/cereal/issues/609
- CEREAL_LICENSE = BSD-3-Clause (cereal), Zlib (base64.hpp), MIT (rapidjson), BSL-1.0 or MIT (rapidxml)
- CEREAL_LICENSE_FILES = LICENSE include/cereal/external/base64.hpp include/cereal/external/rapidjson/rapidjson.h include/cereal/external/rapidxml/license.txt
-+CEREAL_CPE_ID_VENDOR = usc
- CEREAL_INSTALL_STAGING = YES
- CEREAL_INSTALL_TARGET = NO
- CEREAL_CONF_OPTS = \
+diff --git a/package/quota/quota.mk b/package/quota/quota.mk
+index 18502da9aa..512051f5ab 100644
+--- a/package/quota/quota.mk
++++ b/package/quota/quota.mk
+@@ -9,6 +9,8 @@ QUOTA_SITE = http://downloads.sourceforge.net/project/linuxquota/quota-tools/$(Q
+ QUOTA_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) host-nfs-utils
+ QUOTA_LICENSE = GPL-2.0+
+ QUOTA_LICENSE_FILES = COPYING
++QUOTA_CPE_ID_NAME = linux_diskquota
++QUOTA_CPE_ID_VENDOR = jan_kara
+ QUOTA_CONF_ENV = LIBS="$(TARGET_NLS_LIBS)"
+ QUOTA_CONF_OPTS = --disable-pie
+ 
 -- 
 2.29.2
