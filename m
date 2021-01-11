@@ -1,70 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Jan 2021 22:34:37 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/openjpeg: fix
- build with poppler
-Message-ID: <20210111220104.9AF4E8634A@busybox.osuosl.org>
+Date: Mon, 11 Jan 2021 22:38:33 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/p11-kit: libffi
+ is optional, not mandatory
+Message-ID: <20210111220104.B0B298634A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=144c1afa571c491f6ab9426d3e2f8ec6dbfd2b7e
+commit: https://git.buildroot.net/buildroot/commit/?id=f6fae6744b004a712797a48ee699382a8c1ebf55
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Fix build of poppler with openjpeg in version 2.4.0
-
-Fixes:
- - http://autobuild.buildroot.org/results/e4e43519a1c70686844b08257971cc350a746636
-
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d92539e25594c8954eab2073a9940fd5881e04c1)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 10a2fcc81eb6fedd83849b5ece7c6f7b220f465f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...INC_DIR-for-OPENJPEG_INCLUDE_DIRS-fixes-u.patch | 37 ++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
+ package/p11-kit/Config.in  | 1 -
+ package/p11-kit/p11-kit.mk | 9 ++++++++-
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/package/openjpeg/0004-Revert-Use-INC_DIR-for-OPENJPEG_INCLUDE_DIRS-fixes-u.patch b/package/openjpeg/0004-Revert-Use-INC_DIR-for-OPENJPEG_INCLUDE_DIRS-fixes-u.patch
-new file mode 100644
-index 0000000000..b85556a679
---- /dev/null
-+++ b/package/openjpeg/0004-Revert-Use-INC_DIR-for-OPENJPEG_INCLUDE_DIRS-fixes-u.patch
-@@ -0,0 +1,37 @@
-+From 14f4c27e7c91f745a1dda9991b5deea3cbef2072 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 7 Jan 2021 14:09:50 +0100
-+Subject: [PATCH] Revert "Use INC_DIR for OPENJPEG_INCLUDE_DIRS (fixes
-+ uclouvain#1174)"
+diff --git a/package/p11-kit/Config.in b/package/p11-kit/Config.in
+index a6b7261886..5690418756 100644
+--- a/package/p11-kit/Config.in
++++ b/package/p11-kit/Config.in
+@@ -3,7 +3,6 @@ config BR2_PACKAGE_P11_KIT
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_PACKAGE_LIBFFI
+ 	select BR2_PACKAGE_LIBTASN1
+ 	help
+ 	  Provides a way to load and enumerate PKCS#11 modules.
+diff --git a/package/p11-kit/p11-kit.mk b/package/p11-kit/p11-kit.mk
+index 1f72e0515b..fef4791831 100644
+--- a/package/p11-kit/p11-kit.mk
++++ b/package/p11-kit/p11-kit.mk
+@@ -6,7 +6,7 @@
+ 
+ P11_KIT_VERSION = 0.23.16.1
+ P11_KIT_SITE = https://github.com/p11-glue/p11-kit/releases/download/$(P11_KIT_VERSION)
+-P11_KIT_DEPENDENCIES = host-pkgconf libffi libtasn1
++P11_KIT_DEPENDENCIES = host-pkgconf libtasn1
+ P11_KIT_INSTALL_STAGING = YES
+ P11_KIT_CONF_OPTS = --disable-static
+ P11_KIT_CONF_ENV = ac_cv_have_decl_program_invocation_short_name=yes \
+@@ -20,4 +20,11 @@ else
+ P11_KIT_CONF_OPTS += --without-trust-paths
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBFFI),y)
++P11_KIT_DEPENDENCIES += host-pkgconf libffi
++P11_KIT_CONF_OPTS += --with-libffi
++else
++P11_KIT_CONF_OPTS += --without-libffi
++endif
 +
-+This reverts commit 65586374d639cfc0104419992f9022174b412594 which
-+breaks cross-compilation of poppler under buildroot (because of
-+DESTDIR usage).
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/uclouvain/openjpeg/pull/1321]
-+---
-+ cmake/OpenJPEGConfig.cmake.in | 6 +++++-
-+ 1 file changed, 5 insertions(+), 1 deletion(-)
-+
-+diff --git a/cmake/OpenJPEGConfig.cmake.in b/cmake/OpenJPEGConfig.cmake.in
-+index 8a726697..2925108a 100644
-+--- a/cmake/OpenJPEGConfig.cmake.in
-++++ b/cmake/OpenJPEGConfig.cmake.in
-+@@ -27,8 +27,12 @@ if(EXISTS ${SELF_DIR}/OpenJPEGTargets.cmake)
-+   # This is an install tree
-+   include(${SELF_DIR}/OpenJPEGTargets.cmake)
-+ 
-++  # We find a relative path from the PKG directory to header files.
-++  set(PKG_DIR "@CMAKE_INSTALL_PREFIX@/@OPENJPEG_INSTALL_PACKAGE_DIR@")
-+   set(INC_DIR "@CMAKE_INSTALL_PREFIX@/@OPENJPEG_INSTALL_INCLUDE_DIR@")
-+-  get_filename_component(OPENJPEG_INCLUDE_DIRS "${INC_DIR}" ABSOLUTE)
-++  file(RELATIVE_PATH PKG_TO_INC_RPATH "${PKG_DIR}" "${INC_DIR}")
-++
-++  get_filename_component(OPENJPEG_INCLUDE_DIRS "${SELF_DIR}/${PKG_TO_INC_RPATH}" ABSOLUTE)
-+ 
-+ else()
-+   if(EXISTS ${SELF_DIR}/OpenJPEGExports.cmake)
-+-- 
-+2.29.2
-+
+ $(eval $(autotools-package))
