@@ -1,49 +1,51 @@
-From: Michael Walle <michael@walle.cc>
-Date: Mon, 11 Jan 2021 22:33:12 +0100
-Subject: [Buildroot] [PATCH] boot/uboot: bump to version 2021.01
-Message-ID: <20210111213312.6375-1-michael@walle.cc>
+From: Chris Packham <judge.packham@gmail.com>
+Date: Tue, 12 Jan 2021 10:34:27 +1300
+Subject: [Buildroot] [PATCH] package/coremark-pro: fix build without
+ threads
+In-Reply-To: <20210111222216.09b50e12@windsurf.home>
+References: <20210111091353.6978-1-judge.packham@gmail.com>
+ <20210111222216.09b50e12@windsurf.home>
+Message-ID: <CAFOYHZCdF_t8G9AHW8GS+mWm28w0O_puxmh7km=PAKvBY=jFdg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Michael Walle <michael@walle.cc>
----
- boot/uboot/Config.in  | 4 ++--
- boot/uboot/uboot.hash | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On Tue, Jan 12, 2021, 10:22 Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+wrote:
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index e4a0f48deb..dc6b2dabd9 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -41,7 +41,7 @@ choice
- 	  Select the specific U-Boot version you want to use
- 
- config BR2_TARGET_UBOOT_LATEST_VERSION
--	bool "2020.10"
-+	bool "2021.01"
- 
- config BR2_TARGET_UBOOT_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -85,7 +85,7 @@ endif
- 
- config BR2_TARGET_UBOOT_VERSION
- 	string
--	default "2020.10"	if BR2_TARGET_UBOOT_LATEST_VERSION
-+	default "2021.01"	if BR2_TARGET_UBOOT_LATEST_VERSION
- 	default BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE \
- 		if BR2_TARGET_UBOOT_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
-diff --git a/boot/uboot/uboot.hash b/boot/uboot/uboot.hash
-index ba6ea0bfc0..7cbd785541 100644
---- a/boot/uboot/uboot.hash
-+++ b/boot/uboot/uboot.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  0d481bbdc05c0ee74908ec2f56a6daa53166cc6a78a0e4fac2ac5d025770a622  u-boot-2020.10.tar.bz2
-+sha256  b407e1510a74e863b8b5cb42a24625344f0e0c2fc7582d8c866bd899367d0454  u-boot-2021.01.tar.bz2
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Licenses/gpl-2.0.txt
--- 
-2.20.1
+> On Mon, 11 Jan 2021 22:13:53 +1300
+> Chris Packham <judge.packham@gmail.com> wrote:
+>
+> > Coremark-pro requires threads so add a depends on
+> > BR2_TOOLCHAIN_HAS_THREADS.
+> >
+> > Fixes:
+> > -
+> http://autobuild.buildroot.net/results/ab574485a7856fcf5cd643c154c44b4bfcb34a97/
+> >
+> > Signed-off-by: Chris Packham <judge.packham@gmail.com>
+> > ---
+> >  package/coremark-pro/Config.in | 5 +++++
+> >  1 file changed, 5 insertions(+)
+>
+> I've adjusted the commit title, but this commit doesn't really "fix
+> build without threads", it rather adds a dependency on threads :-)
+>
+
+Thanks. I did struggle to come up with a sensible commit message so ended
+up copying the last commit that did something similar.
+
+
+> Applied with this minor change. Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210112/ebf8aaa1/attachment.html>
