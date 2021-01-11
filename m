@@ -1,103 +1,107 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Mon, 11 Jan 2021 18:55:20 +0100
-Subject: [Buildroot] [PATCH v3 1/1] {linux, linux-headers}: bump 5.{4,
- 10}.x 4.{4, 9, 14, 19} series
-Message-ID: <20210111175520.839692-1-petr.vorel@gmail.com>
+From: Fabien LEHOUSSEL <fabien.lehoussel@medianesysteme.com>
+Date: Mon, 11 Jan 2021 18:24:10 +0000
+Subject: [Buildroot] BR2_PER_PACKAGE_DIRECTORIES : How to remove file
+ installed from an other package
+In-Reply-To: <20210111170337.GW3044608@scaer>
+References: <D18CFEE6F046494E82855511759DF30ABCBDB7B3@ikhexmbxc02n01.ikhex.ikoula.com>
+ <20210111170337.GW3044608@scaer>
+Message-ID: <D18CFEE6F046494E82855511759DF30ABCBDB7EF@ikhexmbxc02n01.ikhex.ikoula.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop 5.9 stable (EOL).
+Thank you for the answer.
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
----
-Changes v2->v3:
-* new releases for all supported versions
-* fix hash for 5.10 (I used .gz by accident, now use .xz)
+I finally succeeded with XX_TARGET_FINALIZE_HOOKS in my package B to remove file installed by package A.
 
-NOTE: all these versions contain MUSL toolchain fix a85cbe6159ff ("uapi:
-move constants from <linux/kernel.h> to <linux/const.h>").
+I don't want to use post-build script to delete this file because it depends of package B selection (which selects package A and does other actions).
 
-Kind regards,
-Petr
+Best Regards
 
- linux/Config.in                      |  2 +-
- linux/linux.hash                     | 13 ++++++-------
- package/linux-headers/Config.in.host | 17 ++++++-----------
- 3 files changed, 13 insertions(+), 19 deletions(-)
+Fabien Lehoussel 
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 92b0543515..7af8e77d4d 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -125,7 +125,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "5.10.3" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "5.10.6" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "4.19.152-cip37" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "4.19.152-cip37-rt16" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index cb702146bd..0b944c3d5f 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,12 +1,11 @@
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  f9153333e5ce60c9cd9a501fbcb342ba6032b8fdb2cb492115c5595712a19525  linux-5.10.3.tar.xz
--sha256  b0d7abae88e5f91893627c645e680a95c818defd1b4fcaf3e2afb4b2b6b4ab86  linux-5.9.16.tar.xz
--sha256  1de3586d8e7a9a814726610745d80907a267590d2770ec1079ef2875c4984008  linux-5.4.85.tar.xz
-+sha256  7767d02c1cb5eb2a8d3c2b15a3f93e85b98baa6e9d93a3b9e3ec0e959d0a690b  linux-5.10.6.tar.xz
-+sha256  4b8007c126c7146f020230fe19ce9924ba3b089c228002dea3ef54abba1824b2  linux-5.4.88.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256  e52a49ceb639d871478a143c314648c35e22222c317ecdf49866830fea5c3dfc  linux-4.4.248.tar.xz
--sha256  4687268061c9933c298b30d28e4bf1a30dfbab7c0da4bee194968e4f81ffeccf  linux-4.9.248.tar.xz
--sha256  0e1bc32c4842c3bbee3a15454408f528acd4d3c5e83312b93008d5ee2e9a0c79  linux-4.14.212.tar.xz
--sha256  3eeec4e5eb8a129be3536357ecb028fae7d82fac933dcfac0b6089ee398fc5fc  linux-4.19.163.tar.xz
-+sha256  ab386137ffae217a2b681d3efa41e8a338cb2ddbd04ffb85e42a93629024a18a  linux-4.4.250.tar.xz
-+sha256  9ebdbf45d83efc5ee096e98a9f0b0383ade1ad01645a25a70e6188285aff7197  linux-4.9.250.tar.xz
-+sha256  f54296216ace09a1bf81efaa9dbbd4ebbe8631dbf22df9c6f286157db827391e  linux-4.14.214.tar.xz
-+sha256  b98ef209321a4e39ce98ca6b8745a2268bdd927fd74e4e2c50bc68d9a637880e  linux-4.19.166.tar.xz
- # Locally computed
- sha256  d2a06f52143deb929b8d513cf9afc9bd065951389a80fa70bc4d63025b5b3fb9  linux-cip-4.19.152-cip37.tar.gz
- sha256  bc1dacd3d0f526de3e8754a444e8e02a54521527af639ddb907cb35cda775a8c  linux-cip-4.19.152-cip37-rt16.tar.gz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 7b27cee036..c5948a722a 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -54,10 +54,6 @@ config BR2_KERNEL_HEADERS_5_4
- 	bool "Linux 5.4.x kernel headers"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
- 
--config BR2_KERNEL_HEADERS_5_9
--	bool "Linux 5.9.x kernel headers"
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_9
--
- config BR2_KERNEL_HEADERS_5_10
- 	bool "Linux 5.10.x kernel headers"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10
-@@ -350,13 +346,12 @@ endchoice
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "4.4.248"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.248"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.212"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.163"	if BR2_KERNEL_HEADERS_4_19
--	default "5.4.85"	if BR2_KERNEL_HEADERS_5_4
--	default "5.9.16"	if BR2_KERNEL_HEADERS_5_9
--	default "5.10.3"	if BR2_KERNEL_HEADERS_5_10
-+	default "4.4.250"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.250"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.14.214"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.166"	if BR2_KERNEL_HEADERS_4_19
-+	default "5.4.88"	if BR2_KERNEL_HEADERS_5_4
-+	default "5.10.6"	if BR2_KERNEL_HEADERS_5_10
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+
+-----Message d'origine-----
+De?: Yann E. MORIN [mailto:yann.morin.1998 at free.fr] 
+Envoy??: lundi 11 janvier 2021 18:04
+??: Fabien LEHOUSSEL
+Cc?: buildroot at busybox.net
+Objet?: Re: [Buildroot] BR2_PER_PACKAGE_DIRECTORIES : How to remove file installed from an other package
+
+Fabien, All,
+
+On 2021-01-11 16:15 +0000, Fabien LEHOUSSEL spake thusly:
+> I am trying to remove files installed from a dependency package without success.
+> 
+> Before using  BR2_PER_PACKAGE_DIRECTORIES, I did like this :
+> 
+> PACKAGE2_CONF_DEPENDENCIES = package1
+> define PACKAGE2_INSTALL_TARGET_CMDS
+>                 rm $(TARGET_DIR)/etc/init.d/XX
+> endef
+> 
+> I have tried with hooks without success
+> 
+> What is the solution to make this work with BR2_PER_PACKAGE_DIRECTORIES ?
+
+You don't.
+
+Even without per-pacakge directories, you should *not* modify/remove
+files from other packages from a package commands.
+
+If you want to remove arbitrary files, then do so from a post-build
+script:
+    https://buildroot.org/downloads/manual/manual.html#rootfs-custom
+
+Now, the technical reason why it worked without PPD, and why it does not
+work with PPD:
+
+  - without PPD, the opackages are configured/built/instaleld in a
+    linear sequence, following the alphabetical order, with a guarantee
+    that dependencies are built first. So, since this is a linear
+    sequence, what hapenned hapenned and is finished [0]. And most
+    importantly, they all use a single TARGET_DIR to install to.
+
+  - with PPD, each package is configured/built/install in its own
+    silesystem hierarchy (potential in parallel one to the others).
+    Most importantly, they are each installed in their own TARGET_DIR.
+    At the end of the build, each individual TARGET_DIR, from all
+    packages, are gathered into the final TARGET_DIR, in aplhabetical
+    order of the packages. So, files are only added to the final
+    TARGET_DIR, they are not removed.
+
+[0] Worse, it is already broken anyway when you reisntall the initial
+package, e.g. 'make package1-reinstall; make', which would install that
+file again, but your pakcage is not reinstalled so will not remove it.
+
+Now, why is it a bad idea to meddle with files from other packages?
+
+Well, first and foremost, because of PPD: if two packages touch (modify)
+the same file, there is no way to tell what version of that file should
+end in the target. Removing a file is just a slightly-degenerate case of
+modifying a file. Say for example that packages A and B both provide
+/etc/some.conf. Since they have no relationship to each other, they have
+provided there own version of that file. How are we supopsed to merge
+those two files? If we keep A's version, B is broken, and conversely. We
+can't simply concatenate those files because they most probably have a
+formatting of their own (each XML, JSON, binary blob, etc...).
+
+Second, modifying a file breaks accountability: what package does a file
+belong too? What package should I try to trim to fit in the allocated
+flash? Is the license of that file acceptable for my product?
+
+So, if you want to tweak your filesystem by removing arbitrary files,
+use a post-build script. That is the only guaranteed-to-work solution.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.28.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
