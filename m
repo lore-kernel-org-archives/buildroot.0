@@ -1,7 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 11 Jan 2021 21:14:41 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libupnp: set LIBUPNP_CPE_ID_VALID
-Message-ID: <20210111201441.1414609-1-fontaine.fabrice@gmail.com>
+Date: Mon, 11 Jan 2021 21:15:44 +0100
+Subject: [Buildroot] [PATCH 1/1] package/netcat: set NETCAT_CPE_ID_VALID
+Message-ID: <20210111201544.1414785-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,18 +10,18 @@ To: buildroot@busybox.net
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libupnp/libupnp.mk | 1 +
+ package/netcat/netcat.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/libupnp/libupnp.mk b/package/libupnp/libupnp.mk
-index 8831885ba4..b7836590c2 100644
---- a/package/libupnp/libupnp.mk
-+++ b/package/libupnp/libupnp.mk
-@@ -11,5 +11,6 @@ LIBUPNP_CONF_ENV = ac_cv_lib_compat_ftime=no
- LIBUPNP_INSTALL_STAGING = YES
- LIBUPNP_LICENSE = BSD-3-Clause
- LIBUPNP_LICENSE_FILES = LICENSE
-+LIBUPNP_CPE_ID_VALID = YES
+diff --git a/package/netcat/netcat.mk b/package/netcat/netcat.mk
+index eb7ddcac27..c9d7952e59 100644
+--- a/package/netcat/netcat.mk
++++ b/package/netcat/netcat.mk
+@@ -8,5 +8,6 @@ NETCAT_VERSION = 0.7.1
+ NETCAT_SITE = http://downloads.sourceforge.net/project/netcat/netcat/$(NETCAT_VERSION)
+ NETCAT_LICENSE = GPL-2.0+
+ NETCAT_LICENSE_FILES = COPYING
++NETCAT_CPE_ID_VALID = YES
  
  $(eval $(autotools-package))
 -- 
