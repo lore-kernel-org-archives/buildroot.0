@@ -1,55 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 11 Jan 2021 21:29:30 +0100
-Subject: [Buildroot] [PATCH 1/1] package/gkrellm: new package
-In-Reply-To: <20200502100635.3520066-1-bernd.kuhls@t-online.de>
-References: <20200502100635.3520066-1-bernd.kuhls@t-online.de>
-Message-ID: <20210111212930.4891f683@windsurf.home>
+Date: Mon, 11 Jan 2021 21:32:08 +0100
+Subject: [Buildroot] [PATCH 1/1] package/netcat: set NETCAT_CPE_ID_VALID
+In-Reply-To: <20210111201544.1414785-1-fontaine.fabrice@gmail.com>
+References: <20210111201544.1414785-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210111213208.05cb371a@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Fabrice,
 
-On Sat,  2 May 2020 12:06:35 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+On Mon, 11 Jan 2021 21:15:44 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> +config BR2_PACKAGE_GKRELLM_SERVER
-> +	bool "daemon"
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Changed to "server" to match the option name.
+Thanks for all those CPE related patches, very useful. Since you're
+doing all those checks, perhaps it would be useful to have a pointer to
+something that confirms how you have validated a given CPE. Either in
+the commit log, or as a comment in the .mk file? Perhaps a comment in
+the commit log is sufficient?
 
-> +	help
-> +	  Enable gkrellm daemon.
+Since you're doing the research, I guess it should be quite easy to add
+such a reference in the commit log. Maybe something such as:
 
-Ditto.
+https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Anetcat_project%3Anetcat
 
-> +config BR2_PACKAGE_GKRELLM_CLIENT
-> +	bool "client"
-> +	depends on BR2_PACKAGE_XORG7 # libgtk2
-> +	depends on BR2_INSTALL_LIBSTDCPP # libgtk2 -> pango
-> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libgtk2 -> pango -> harfbuzz
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # libgtk2 -> pango -> harfbuzz
-> +	select BR2_PACKAGE_LIBGTK2
-> +	select BR2_PACKAGE_XLIB_LIBSM
-> +	help
-> +	  Enable gkrellm client.
-> +
-> +comment "client depends on X.org and needs a toolchain w/ C++, gcc >= 4.8"
-> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-> +	depends on BR2_PACKAGE_XORG7
-> +	depends on !BR2_INSTALL_LIBSTDCPP || \
-> +		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+Note: no need to resend existing patches for this. This is just a
+suggestion for future patches.
 
-We generally don't have a comment about the X.org dependency, so I
-change the prompt to just:
-
-comment "client needs a toolchain w/ C++, gcc >= 4.8"
-
-Applied with those minor changes. Thanks!
-
-Best regards,
+Thanks!
 
 Thomas
 -- 
