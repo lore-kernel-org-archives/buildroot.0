@@ -1,85 +1,66 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 12 Jan 2021 23:50:33 +0100
-Subject: [Buildroot] [PATCH v2 1/8] package/freescale-imx/firmware-imx:
- bump version to 8.10
-In-Reply-To: <20210105152420.26379-2-stephane.viau@oss.nxp.com>
-References: <20210105152420.26379-1-stephane.viau@oss.nxp.com>
- <20210105152420.26379-2-stephane.viau@oss.nxp.com>
-Message-ID: <636366db-0dd3-4a30-7097-d09423d91aa8@gmail.com>
+From: Markus Mayer <mmayer@broadcom.com>
+Date: Tue, 12 Jan 2021 15:26:56 -0800
+Subject: [Buildroot] Host tar 1.32 build issues
+In-Reply-To: <20210112210443.GZ3044608@scaer>
+References: <CAGt4E5srq1hg4T1YoKX9UUCTJ96DdnNL1XFrYvsgpWjM_KM1EA@mail.gmail.com>
+ <95c3b23f-6805-e526-8bc2-a0d48a66895c@mind.be> <20210112091905.GA382149@scaer>
+ <dad432a5-a41c-efed-ef6c-1b41fcee8819@mind.be>
+ <CAGt4E5uAjxt=oPGqzqN7OEGbGbv68DqKq+xE2KntB_wQoeo2Ew@mail.gmail.com>
+ <20210112210443.GZ3044608@scaer>
+Message-ID: <CAGt4E5tquWH5mqSW2vdj7Gx7OcMo+38JOtwTSUDF8odjKi7DDg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Tue, 12 Jan 2021 at 13:04, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>
+> Markus, Arnout, All,
+>
+> On 2021-01-12 10:23 -0800, Markus Mayer spake thusly:
+> > The two CPIO archives are on the GNU server now. I asked about it on
+> > the GNU tar mailing list last night (my time), and Sergey was so kind
+> > to upload the two missing CPIO archives.
+> >
+> > https://lists.gnu.org/archive/html/bug-tar/2021-01/msg00006.html
+> >
+> > So everything is in place now.
+>
+> There was still the update to the hash file that was missing. I've now
+> fixed it.
+>
+> Thank you for noticing the issue and reporting so promptly! :-)
 
-Le 05/01/2021 ? 16:24, Stephane Viau a ?crit?:
-> - Same version as NXP release 5.4.70-2.3.0
-> - EULA/COPYING: update to LA_OPT_NXP_Software_License v17
-> 
-> Signed-off-by: Stephane Viau <stephane.viau@oss.nxp.com>
-> Reviewed-by: Gary Bisson <gary.bisson@boundarydevices.com>
+I have an automated nightly build going that notices such things on my
+behalf. :-)
 
-Not related to this patch, but why those firmware are installed to
-$(TARGET_DIR)/lib/firmware/imx ?
+> Now, tar 1.33 is out, care to send an update? ;-]
 
-Because without any change I get:
+I did create a patch for this, but just as I was getting ready to
+submit it to the list, I noticed that a regression has been found in
+tar 1.33. Looks like it may only affect OpenBSD. At least I wasn't
+able to reproduce it on Linux.
 
-coda 2040000.vpu: Direct firmware load for vpu/vpu_fw_imx6q.bin failed with error -2
-coda 2040000.vpu: Falling back to sysfs fallback for: vpu/vpu_fw_imx6q.bin
-coda 2040000.vpu: Direct firmware load for v4l-coda960-imx6q.bin failed with
-error -2
-coda 2040000.vpu: Falling back to sysfs fallback for: v4l-coda960-imx6q.bin
-coda 2040000.vpu: firmware request failed
+https://lists.gnu.org/archive/html/bug-tar/2021-01/msg00012.html
 
-It seems that vpu directory is expected to be in "firmware" directory:
-$(TARGET_DIR)/lib/firmware/vpu
+Still, I am wondering if we do want to go ahead with 1.33 or if we
+should hold off and see whether 1.34 is released in the not too
+distant future.
 
-see:
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=8af7779f3cbc1f6720d15f00abc797493710d1ab
+Regards,
+-Markus
 
-At least we have to create a simlink:
-/lib/firmware/imx/vpu -> /lib/firmware/vpu
 
-or set fw_path_para in the kernel cmdline:
-firmware_class.path=/lib/firmware/imx/
 
-Best regards,
-Romain
 
-> ---
-> v2:
-> - Add "EULA/COPYING: update to LA_OPT_NXP_Software_License v17" in
->   commit log (Gary)
-> ---
->  package/freescale-imx/firmware-imx/firmware-imx.hash | 6 +++---
->  package/freescale-imx/firmware-imx/firmware-imx.mk   | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/freescale-imx/firmware-imx/firmware-imx.hash b/package/freescale-imx/firmware-imx/firmware-imx.hash
-> index 3230677d49..0a717d40f5 100644
-> --- a/package/freescale-imx/firmware-imx/firmware-imx.hash
-> +++ b/package/freescale-imx/firmware-imx/firmware-imx.hash
-> @@ -1,4 +1,4 @@
->  # Locally calculated
-> -sha256  a72f70fd2ecaa58800bb88ed672fddc322ab9843ee7777eb89b82016b0aa3614  firmware-imx-8.9.bin
-> -sha256  a39da2e94bd8b99eaac4325633854620ea3a55145259c3a7748c610a80714cfc  EULA
-> -sha256  69cbb76b3f10ac5a8c36f34df7bbdf50825815560c00a946fff2922365ef01a2  COPYING
-> +sha256  2b70f169d4065b2a7ac7a676afe24636128bd2dacc9f5230346758c3b146b2be  firmware-imx-8.10.bin
-> +sha256  72edc2072c86d93aa1993d15d4d19d96270af3749b0108995ad50c81d1461f52  EULA
-> +sha256  9c16421e7c702f56756650b8ac954d34556327e598a8666e6e8f4eb3a1aa95f1  COPYING
-> diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
-> index 7d1f42f1d8..b33ffb7ee8 100644
-> --- a/package/freescale-imx/firmware-imx/firmware-imx.mk
-> +++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -FIRMWARE_IMX_VERSION = 8.9
-> +FIRMWARE_IMX_VERSION = 8.10
->  FIRMWARE_IMX_SITE = $(FREESCALE_IMX_SITE)
->  FIRMWARE_IMX_SOURCE = firmware-imx-$(FIRMWARE_IMX_VERSION).bin
->  
-> 
+> Regards,
+> Yann E. MORIN.
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
