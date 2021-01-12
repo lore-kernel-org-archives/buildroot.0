@@ -1,40 +1,100 @@
-From: Markus Mayer <mmayer@broadcom.com>
-Date: Tue, 12 Jan 2021 10:23:53 -0800
-Subject: [Buildroot] Host tar 1.32 build issues
-In-Reply-To: <dad432a5-a41c-efed-ef6c-1b41fcee8819@mind.be>
-References: <CAGt4E5srq1hg4T1YoKX9UUCTJ96DdnNL1XFrYvsgpWjM_KM1EA@mail.gmail.com>
- <95c3b23f-6805-e526-8bc2-a0d48a66895c@mind.be> <20210112091905.GA382149@scaer>
- <dad432a5-a41c-efed-ef6c-1b41fcee8819@mind.be>
-Message-ID: <CAGt4E5uAjxt=oPGqzqN7OEGbGbv68DqKq+xE2KntB_wQoeo2Ew@mail.gmail.com>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Tue, 12 Jan 2021 19:59:05 +0100
+Subject: [Buildroot] [PATCH] configs/kontron_smarc_sal28: enable u-boot
+In-Reply-To: <20210111232849.11810-1-michael@walle.cc>
+References: <20210111232849.11810-1-michael@walle.cc>
+Message-ID: <CAEyMn7b+N3CGNO=k9QJAZWPm962Bh5gNxpNiT_O5urMh8oSfxQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 12 Jan 2021 at 02:54, Arnout Vandecappelle <arnout@mind.be> wrote:
+Hi Michael,
+
+Am Di., 12. Jan. 2021 um 00:29 Uhr schrieb Michael Walle <michael@walle.cc>:
 >
-> On 12/01/2021 10:19, Yann E. MORIN wrote:
-> > Markus, Arnout, All,
-> >
-> > Not so sure. 1.33 has been released 2021-01-07, but the cpio archives for
-> > it are indeed present, and dated today, 2021-01-12.
-> >
-> > So, maybe we can just point that out to the tar maintainers, that they
-> > forgot the cpio for 1.32.
+> Enable building of the bootloader and integrate it into the resulting
+> image.
 >
->  And as Yann told me on IRC, the cpio for 1.32 appeared today as well. So the
-> problem should be solved.
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> ---
+>  board/kontron/smarc-sal28/genimage.cfg |  6 ++++++
+>  board/kontron/smarc-sal28/readme.txt   | 15 +++++++++++++++
+>  configs/kontron_smarc_sal28_defconfig  |  9 +++++++++
+>  3 files changed, 30 insertions(+)
 >
->  The only thing missing now is that the .hash file still refers to 1.29.
+> diff --git a/board/kontron/smarc-sal28/genimage.cfg b/board/kontron/smarc-sal28/genimage.cfg
+> index 9ef37de757..d75234d997 100644
+> --- a/board/kontron/smarc-sal28/genimage.cfg
+> +++ b/board/kontron/smarc-sal28/genimage.cfg
+> @@ -3,6 +3,12 @@ image sdcard-emmc.img {
+>                 gpt = true
+>         }
+>
+> +       partition u-boot {
+> +               offset = 1M
+> +               in-partition-table = "no"
+> +               image = "u-boot.rom"
+> +       }
+> +
+>         partition rootfs {
+>                 offset = 2M
+>                 image = rootfs.ext4
+> diff --git a/board/kontron/smarc-sal28/readme.txt b/board/kontron/smarc-sal28/readme.txt
+> index 2047f09b64..bdf2258b59 100644
+> --- a/board/kontron/smarc-sal28/readme.txt
+> +++ b/board/kontron/smarc-sal28/readme.txt
+> @@ -71,3 +71,18 @@ You will see something like this at boot time:
+>  [    4.563565] GPT:Alternate GPT header not at the end of the disk.
+>  [    4.569596] GPT:266272 != 7864319
+>  [    4.572925] GPT: Use GNU Parted to correct GPT errors.
+> +
+> +Updating the bootloader
+> +=======================
+> +
+> +Buildroot will automatically build the u-boot bootloader. The resulting
+> +image is called u-boot.rom and you can find it in the images/ directory.
+> +
+> +To update the bootloader on the board you could either copy it to an
+> +USB thumb drive or you could put it on a TFTP server. The following
+> +example assumes you have the bootloader image copied to the root of
+> +a thumb drive:
+> +
+> +  # usb start
+> +  # load usb 0:1 $loadaddr u-boot.rom
+> +  # sf probe 0 && sf update $fileaddr 0x210000 $filesize
+> diff --git a/configs/kontron_smarc_sal28_defconfig b/configs/kontron_smarc_sal28_defconfig
+> index b88f1aef4f..767858f601 100644
+> --- a/configs/kontron_smarc_sal28_defconfig
+> +++ b/configs/kontron_smarc_sal28_defconfig
+> @@ -19,5 +19,14 @@ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+>  BR2_TARGET_ROOTFS_EXT2=y
+>  BR2_TARGET_ROOTFS_EXT2_4=y
+>  BR2_TARGET_ROOTFS_EXT2_SIZE="128M"
+> +BR2_TARGET_UBOOT=y
+> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+> +BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.01"
+> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="kontron_sl28"
+> +BR2_TARGET_UBOOT_NEEDS_DTC=y
 
-The two CPIO archives are on the GNU server now. I asked about it on
-the GNU tar mailing list last night (my time), and Sergey was so kind
-to upload the two missing CPIO archives.
+build succeeds.
+> +# BR2_TARGET_UBOOT_FORMAT_BIN is not set
+> +BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+> +BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.rom"
+>  BR2_PACKAGE_HOST_GENIMAGE=y
+>  BR2_PACKAGE_HOST_UBOOT_TOOLS=y
 
-https://lists.gnu.org/archive/html/bug-tar/2021-01/msg00006.html
+Just tried to build that defconfig with your patch and faced an issue
+building u-boot.
 
-So everything is in place now.
+  unable to execute 'swig': No such file or directory
+  error: command 'swig' failed with exit status 1
 
-Regards,
--Markus
+After adding:
+BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+build succeeds.
+
+-- 
+Heiko
