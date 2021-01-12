@@ -1,156 +1,79 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 12 Jan 2021 11:53:34 +0100
-Subject: [Buildroot] [RFC: 3/4]
- package/x11r7/xdriver_xf86-video-imx-viv: bump to version
- rel_imx_5.4.24_2.1.0
-In-Reply-To: <X/xOqBw1AkEKB3SP@p1g2>
-References: <20210107110450.4031102-1-romain.naour@gmail.com>
- <20210107110450.4031102-3-romain.naour@gmail.com>
- <53e43012-7460-6954-2467-dea1ddcf0be7@gmail.com> <X/xOqBw1AkEKB3SP@p1g2>
-Message-ID: <fc58f53f-2c7f-34cb-89b1-dce1f487b80c@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 12 Jan 2021 11:54:13 +0100
+Subject: [Buildroot] Host tar 1.32 build issues
+In-Reply-To: <20210112091905.GA382149@scaer>
+References: <CAGt4E5srq1hg4T1YoKX9UUCTJ96DdnNL1XFrYvsgpWjM_KM1EA@mail.gmail.com>
+ <95c3b23f-6805-e526-8bc2-a0d48a66895c@mind.be>
+ <20210112091905.GA382149@scaer>
+Message-ID: <dad432a5-a41c-efed-ef6c-1b41fcee8819@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Gary,
 
-Thanks for your feedback!
 
-Le 11/01/2021 ? 14:12, Gary Bisson a ?crit?:
-> Hi Romain,
+On 12/01/2021 10:19, Yann E. MORIN wrote:
+> Markus, Arnout, All,
 > 
-> On Sun, Jan 10, 2021 at 06:46:38PM +0100, Romain Naour wrote:
->> Hello,
->>
->> Le 07/01/2021 ? 12:04, Romain Naour a ?crit?:
->>> This package needs to be updated to build with the NXP imx_5.4.x_2.1.0 release.
->>>
->>> Don't override CFLAGS on the command line otherwise we loose some include paths
->>> (ex: -I./vivante_gal).
->>> CFLAGS is already provided by TARGET_CONFIGURE_OPTS in make environment.
->>
->> What's the status of vivante gpu support for X11 ? especially for kernel >= 5.4.
+> On 2021-01-12 09:39 +0100, Arnout Vandecappelle spake thusly:
+>> On 12/01/2021 00:45, Markus Mayer via buildroot wrote:
+>>> I noticed that host tar is no longer locked to 1.29 and has been
+>>> bumped to 1.32. The only problem is that the host tar build requires
+>>> tar in CPIO format, and that 1.32 does not exist as CPIO archive on
+>>> the official server. As per http://mirror.sergal.org/gnu/tar/, tar
+>>> 1.31 is the latest that has a CPIO archive. 1.32 and 1.33 do not.
+>>> ?
+>>> Naturally, that currently causes the build to fail if
+>>> BR2_FORCE_HOST_BUILD is enabled.
+>> ?
+>>> I don't know if the absence of CPIO archives is temporary or
+>>> permanent.
+>>  AFAIU it's permanent :-(
 > 
-> Don't know. To be honest, i.MX6 will soon be a legacy product for NXP
-> releases so I strongly suggest moving to mainline + Etnaviv.
-
-ok, but I used the vivante driver since I started from the nitrogen6x_defconfig
-for the sabrelite board that use the linux-imx6 from the Boundary BSP.
-
-Also, I wanted to try the opencl support provided by imx-gpu-viv. I'm not sure
-there is an opensource opencl provider for imx6 (mesa Clover only support r600
-and RadeonSI).
-
-I'll take a look at nitrogen6x_qt5_gst1_mainline_defconfig:
-
-https://github.com/boundarydevices/buildroot-external-boundary/blob/master/configs/nitrogen6x_qt5_gst1_mainline_defconfig
-
+> Not so sure. 1.33 has been released 2021-01-07, but the cpio archives for
+> it are indeed present, and dated today, 2021-01-12.
 > 
->> Because it's currently broken with several issues:
->>
->> 0) glxinfo fail to report OpenGL informations
->>
->> # glxinfo -B -display :0
->> name of display: :0
->> Error: glXMakeCurrent failed
->> X Error of failed request:  GLXBadContext
->>   Major opcode of failed request:  148 (GLX)
->>   Minor opcode of failed request:  4 (X_GLXDestroyContext)
->>   Serial number of failed request:  20
->>   Current serial number in output stream:  25
->> Perform final cleanup before process termination!
->>
->> (I'm using a patch that replace glWindowPos2iARB calls with glWindowPos2i:
->> https://github.com/Freescale/meta-freescale/blob/dunfell/recipes-graphics/mesa/mesa-demos/Replace-glWindowPos2iARB-calls-with-glWindowPos2i.patch)
-> 
-> Have you tried NXP pre-built image from latest release? Although it
-> seems they now use Wayland/XWayland. Yet it'd be surprising they'd
-> release a broken X11 package.
+> So, maybe we can just point that out to the tar maintainers, that they
+> forgot the cpio for 1.32.
 
-I haven't tested NXP pre-built image, I'll take a look.
+ And as Yann told me on IRC, the cpio for 1.32 appeared today as well. So the
+problem should be solved.
 
-Well, NXP pre-built image use a lot of imx fork. I can expect having some issues
-by using official/upstream release when building the image with Buildroot:
+ The only thing missing now is that the .hash file still refers to 1.29.
 
-https://www.nxp.com/docs/en/release-note/IMX_LINUX_RELEASE_NOTES.pdf
-
-It's more difficult that I expected :)
+ Regards,
+ Arnout
 
 > 
->> 1) vivante_fbdev is looking for a device with "platform:Vivante GCCore" using
->> drmOpen() [1]
->>
->>  strcpy(pDRIInfo->busIdString,"platform:Vivante GCCore");
->>  fd = drmOpen(NULL,pDRIInfo->busIdString);
->>
->> This string "platform:Vivante GCCore" is present in the linux-imx kernel up to
->> the version imx_4.19.35_1.1.0. The DRM_VIVANTE driver is missing in
->> imx_5.4.70_2.3.0.
->>
->> 2) I was able to workaround this issue by using "130000.gpu" instead of
->> "platform:Vivante GCCore" but the dri driver still fail to load.
->>
->> drmOpenByBusid: Searching for BusID 130000.gpu
->> drmOpenDevice: node name is /dev/dri/card0
->> drmOpenDevice: open result is 12, (OK)
->> drmOpenByBusid: drmOpenMinor returns 12
->> drmOpenByBusid: drmGetBusid reports 130000.gpu
->> (II) [drm] DRM interface version 1.4
->> (II) [drm] Could not create SAREA for DRM lock.
->> (EE) VIVANTE(0): [dri] DRIScreenInit failed.  Disabling DRI
->>
->> 3) I tried to enable X11_DRI3 but xdriver_xf86-video-imx-viv doesn't even build
->> due to recent change [2] (removing pScrPriv variable before using it along with
->> other issues).
->> See patch [3] that try to fix the issue.
->> (Note, X11_DRI3 needs libdrm-vivante fork to build)
->>
->>
->> To compare with a working system, I'm using the Debian (xfce) image provided by
->> Boundarydevices [4] but the kernel is 4.14.98-28-boundary-17b (DRM_VIVANTE is
->> still present). I noticed that the SWRAST DRI driver is used along with the
->> vivante driver:
->>
->> [    21.503] (II) Initializing extension GLX
->> [    21.504] (II) AIGLX: Screen 0 is not DRI2 capable
->> [    22.142] (II) IGLX: Loaded and initialized swrast
->> [    22.143] (II) GLX: Initialized DRISWRAST GL provider for screen 0
+>>> It might be better to use tar-latest.cpio.gz as the host
+>>> tar version to prevent this issue from happening again in the future.
+>>> ?
+>>> -HOST_TAR_SOURCE = tar-$(TAR_VERSION).cpio.gz
+>>> +HOST_TAR_SOURCE = tar-latest.cpio.gz
 > 
-> FYI, we haven't updated to 5.4 for i.MX6 and don't plan to.
-
-Ok. I think it would be good to add a comment in the help section of
-xf86-video-imx-viv package to recommend using a kernel imx_4.19.35_1.1.0.
-
+> That is a big no-no from me: since this archive is always pointing to
+> the latest version, that means it will be updated next time they do a
+> new release.
 > 
->> It means that we really need two LIBGL providers enabled at the same time in the
->> Buildroot configuration.
+> Which will be problematic as the hash we'd have for it will no longer
+> match.
 > 
-> OpenGL is another issue though, you can get X11 working without it. But
-> yes the implementation on libGL from imx-gpu-viv is messy. Thomas did
-> implement it once but never submitted it as the change was pretty
-> intrusive & hacky.
-
-I think I'll take into account the comment from J?r?me Pouiller and consider
-that imx-gpu-viv is a EGL and GLES provider only.
-
+>>  An alternative is to download a tarball and extract it with custom extraction
+>> commands that don't use --strip-components or --exclude or $(TAR_OPTIONS). That
+>> way, we can extract it with any POSIX-y tar version.
 > 
->> I have the feeling that I need to switch to Yocto to use meta-freescale and all
->> the imx hacks and imx forks (libdrm-imx) to get vivante GPU working with X11
->> (maybe).
+> I think this is the only good solution long-term.
 > 
-> Please let us know how that goes. Once again it feels like it would be
-> better to move to Etnaviv at this point.
-
-Well, I'm not sure to try the Yocto way for the moment.
-
-I'll try using Etnaviv.
-
-Best regards,
-Romain
-
+> Also, as a quick workaround for this issue, we can also bump to the
+> newly relased 1.33. ;-)
+> 
+> And I have tested with the Makefile in the commit log: 1.33 generates
+> archives that are reproducible.
+> 
+> I'll look more in-depth tonight (GMT+1)...
 > 
 > Regards,
-> Gary
+> Yann E. MORIN.
 > 
