@@ -1,43 +1,50 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Tue, 12 Jan 2021 21:10:17 +0100
-Subject: [Buildroot] [PATCH 1/1] package/upmpdcli: bump to version 1.5.8
-Message-ID: <20210112201017.237858-1-joerg.krause@embedded.rocks>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 12 Jan 2021 21:33:23 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] toolchain: CodeSourcery
+ AArch64 2014.11 does not contain libatomic
+Message-ID: <20210112201447.372A787628@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/upmpdcli/upmpdcli.hash | 4 ++--
- package/upmpdcli/upmpdcli.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=52bee93025332e4178377927453cb5d9c0c9ced7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-diff --git a/package/upmpdcli/upmpdcli.hash b/package/upmpdcli/upmpdcli.hash
-index b24aec9834..fe8999d471 100644
---- a/package/upmpdcli/upmpdcli.hash
-+++ b/package/upmpdcli/upmpdcli.hash
-@@ -1,5 +1,5 @@
--# From http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.5.5.tar.gz.sha256:
--sha256  45fce9c71a45f1ec0d1cb2924bf7ece444c44a918a0c437c1c768baa3d4a345d  upmpdcli-1.5.5.tar.gz
-+# From http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.5.8.tar.gz.sha256:
-+sha256  802a2ab795841fbb9bfff5fd7951881022f5414ed893a1db704801b999e658a8  upmpdcli-1.5.8.tar.gz
+Fixes build error
+
+output/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-amd-linux-gnu/4.9.1/../../../../aarch64-amd-linux-gnu/bin/ld:
+ cannot find -latomic
+
+using this defconfig
+
+BR2_aarch64=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64=y
+BR2_PACKAGE_OPENSSL=y
+
+libopenssl is only used here as an example: all packages adding -latomic
+if BR2_TOOLCHAIN_HAS_LIBATOMIC=y are broken, like dav1d, ffmpeg, gnutls,
+kodi and vlc.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit a530fd4a4268b44961d8ab0a053fa0cf3b29fb5c)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ toolchain/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index db2ab0f059..5611e5c6d5 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -697,6 +697,7 @@ config BR2_TOOLCHAIN_HAS_SYNC_8
+ config BR2_TOOLCHAIN_HAS_LIBATOMIC
+ 	bool
+ 	default y if BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 && \
++		!BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64 && \
+ 		BR2_TOOLCHAIN_HAS_THREADS && \
+ 		!BR2_BINFMT_FLAT
  
- # Hash for license file:
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
-index a987806725..3dc79f8f44 100644
---- a/package/upmpdcli/upmpdcli.mk
-+++ b/package/upmpdcli/upmpdcli.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UPMPDCLI_VERSION = 1.5.5
-+UPMPDCLI_VERSION = 1.5.8
- UPMPDCLI_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
- UPMPDCLI_LICENSE = LGPL-2.1+
- UPMPDCLI_LICENSE_FILES = COPYING
--- 
-2.30.0
