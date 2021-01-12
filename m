@@ -1,62 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Jan 2021 18:39:54 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/tzdata: bump
- version to 2020f
-Message-ID: <20210112172411.53F5D875E5@busybox.osuosl.org>
+Date: Tue, 12 Jan 2021 18:21:44 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/multipath-tools:
+ disable -Werror
+Message-ID: <20210112172417.3A4D17FD74@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=44fb5c67ef2bf5ef3ed01f5642b7bf615b43228d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=f725ba28ee8cf60909f6e677cce11a5ad5917e95
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-Release notes:
-https://mm.icann.org/pipermail/tz-announce/2020-December/000064.html
+Set the new WARNFLAGS to "" which has been added since version 0.8.5 and
+https://github.com/opensvc/multipath-tools/commit/82f1b164cb21c9632b3c73f865d97777c7a61e0d
 
-Upstream removed timezones pacificnew and systemv:
-https://mm.icann.org/pipermail/tz-announce/2020-October/000059.html
+Otherwise, -Werror will raise the following build failure:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit c99374ecbb5ea45d9eafcbb901abb6c0f9bc3f1b)
+/srv/storage/autobuild/run/instance-3/output-1/host/bin/mipsel-linux-gcc --std=gnu99 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2  -D_FORTIFY_SOURCE=1  -Werror -Wall -Wextra -Wformat=2 -Werror=implicit-int -Werror=implicit-function-declaration -Werror=format-security -Wno-clobbered -Wno-error=clobbered -Werror=cast-qual -Werror=discarded-qualifiers -pipe -DBIN_DIR=\"/sbin\" -DLIB_STRING=\"lib\" -DRUN_DIR=\"run\" -MMD -MP -fPIC -I.. -I../../libmultipath/nvme -Wp,-D_FORTIFY_SOURCE=2  -c -o nvme.o nvme.c
+<command-line>: error: "_FORTIFY_SOURCE" redefined [-Werror]
+
+Fixes:
+ - http://autobuild.buildroot.org/results/71f7661e7d26ca8608e902eee9f2a92376b00601
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit fe4b4e9dc339da13bbb7583e44c7ed2177018a1b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tzdata/tzdata.hash | 4 ++--
- package/tzdata/tzdata.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/multipath-tools/multipath-tools.mk | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/package/tzdata/tzdata.hash b/package/tzdata/tzdata.hash
-index 8f0a9050fc..6a1ccc128d 100644
---- a/package/tzdata/tzdata.hash
-+++ b/package/tzdata/tzdata.hash
-@@ -1,4 +1,4 @@
--# From https://mm.icann.org/pipermail/tz-announce/2020-April/000058.html
--sha512  2a2fc2e3ad8a6e4c574242296c847ad582c2c1d86add9c556e65c812d19b9528522e3c4dddb5239017091825d2acc5a2ccaf21dc41b900b6c300ef4264cc5a9d  tzdata2020a.tar.gz
-+# From https://mm.icann.org/pipermail/tz-announce/2020-December/000064.html
-+sha512  dd312def18c807452fda2e697514e2064c5f51ebdbedd0cfe6f231252c76ee5d4409f653b295ed5657b7d30b868690047fdb70a10942e69eaa40b77473e3f9ca  tzdata2020f.tar.gz
- # Locally computed:
- sha256  0613408568889f5739e5ae252b722a2659c02002839ad970a63dc5e9174b27cf  LICENSE
-diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
-index 114d60195e..41c4971584 100644
---- a/package/tzdata/tzdata.mk
-+++ b/package/tzdata/tzdata.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/multipath-tools/multipath-tools.mk b/package/multipath-tools/multipath-tools.mk
+index d5cca7ba57..7fe9033a15 100644
+--- a/package/multipath-tools/multipath-tools.mk
++++ b/package/multipath-tools/multipath-tools.mk
+@@ -9,7 +9,12 @@ MULTIPATH_TOOLS_SITE = $(call github,opensvc,multipath-tools,$(MULTIPATH_TOOLS_V
+ MULTIPATH_TOOLS_LICENSE = LGPL-2.0
+ MULTIPATH_TOOLS_LICENSE_FILES = COPYING
+ MULTIPATH_TOOLS_DEPENDENCIES = lvm2 json-c readline udev liburcu libaio host-pkgconf
+-MULTIPATH_TOOLS_MAKE_OPTS = LIB="lib" RUN="run" OPTFLAGS="" STACKPROT=""
++MULTIPATH_TOOLS_MAKE_OPTS = \
++	LIB="lib" \
++	RUN="run" \
++	OPTFLAGS="" \
++	STACKPROT="" \
++	WARNFLAGS=""
  
--TZDATA_VERSION = 2020a
-+TZDATA_VERSION = 2020f
- TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
- TZDATA_SITE = https://www.iana.org/time-zones/repository/releases
- TZDATA_STRIP_COMPONENTS = 0
-@@ -17,7 +17,7 @@ TZDATA_LICENSE_FILES = LICENSE
- # dependencies
- TZDATA_DEFAULT_ZONELIST = \
- 	africa antarctica asia australasia europe northamerica \
--	southamerica pacificnew etcetera backward systemv factory
-+	southamerica etcetera backward factory
- 
- ifeq ($(call qstrip,$(BR2_TARGET_TZ_ZONELIST)),default)
- TZDATA_ZONELIST = $(TZDATA_DEFAULT_ZONELIST)
+ ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+ MULTIPATH_TOOLS_DEPENDENCIES += systemd
