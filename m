@@ -1,33 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 12 Jan 2021 16:23:46 +0100
-Subject: [Buildroot] [PATCH 08/10] support/script/pkg-stats: show CPE ID
- in results
-In-Reply-To: <1a31c390-c2bd-5867-aa49-2f2a5c4edf33@mind.be>
-References: <20201104145145.1316167-1-thomas.petazzoni@bootlin.com>
- <20201104145145.1316167-9-thomas.petazzoni@bootlin.com>
- <1a31c390-c2bd-5867-aa49-2f2a5c4edf33@mind.be>
-Message-ID: <20210112162346.7c3ebc7f@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 12 Jan 2021 18:22:36 +0100
+Subject: [Buildroot] [PATCH 1/1] package/multipath-tools: disable -Werror
+In-Reply-To: <20210108170629.35571-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 8 Jan 2021 18:06:29 +0100")
+References: <20210108170629.35571-1-fontaine.fabrice@gmail.com>
+Message-ID: <87czyam5nn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 11 Jan 2021 23:37:35 +0100
-Arnout Vandecappelle <arnout@mind.be> wrote:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
->  This and the following two patches have received quite a few comments. However,
-> it's not entirely clear to me if I should mark it as Changes Requested in
-> patchwork, or just apply it as is...
+ > Set the new WARNFLAGS to "" which has been added since version 0.8.5 and
+ > https://github.com/opensvc/multipath-tools/commit/82f1b164cb21c9632b3c73f865d97777c7a61e0d
 
-This was an older iteration, which in fact was superseded, and I have
-applied the latest version of the patch series (sent December 4,
-applied early January).
+ > Otherwise, -Werror will raise the following build failure:
 
-Best regards,
+ > /srv/storage/autobuild/run/instance-3/output-1/host/bin/mipsel-linux-gcc
+ > --std=gnu99 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+ > -D_FILE_OFFSET_BITS=64 -O2 -D_FORTIFY_SOURCE=1 -Werror -Wall -Wextra
+ > -Wformat=2 -Werror=implicit-int -Werror=implicit-function-declaration
+ > -Werror=format-security -Wno-clobbered -Wno-error=clobbered
+ > -Werror=cast-qual -Werror=discarded-qualifiers -pipe
+ > -DBIN_DIR=\"/sbin\" -DLIB_STRING=\"lib\" -DRUN_DIR=\"run\" -MMD -MP
+ > -fPIC -I.. -I../../libmultipath/nvme -Wp,-D_FORTIFY_SOURCE=2 -c -o
+ > nvme.o nvme.c
+ > <command-line>: error: "_FORTIFY_SOURCE" redefined [-Werror]
 
-Thomas
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/71f7661e7d26ca8608e902eee9f2a92376b00601
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed to 2020.11.x, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
