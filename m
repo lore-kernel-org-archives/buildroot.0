@@ -1,56 +1,92 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Tue, 12 Jan 2021 08:14:01 +0100
-Subject: [Buildroot] [PATCH] package/libnss: bump version to 3.60.1
-In-Reply-To: <20210112071300.1663147-1-giulio.benetti@benettiengineering.com>
-References: <20210112071300.1663147-1-giulio.benetti@benettiengineering.com>
-Message-ID: <55ca2759-9fc8-a458-7200-a4a8bbe4d093@benettiengineering.com>
+From: Maxim Kochetkov <fido_max@inbox.ru>
+Date: Tue, 12 Jan 2021 11:18:55 +0300
+Subject: [Buildroot] [PATCH 1/1] package/libgeos: new package
+Message-ID: <20210112081855.521292-1-fido_max@inbox.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Just asked via bugzilla the missing Release Notes page:
-https://bugzilla.mozilla.org/show_bug.cgi?id=1686178
+GEOS (Geometry Engine - Open Source) is a C++ port of the ?JTS Topology Suite (JTS).
+It aims to contain the complete functionality of JTS in C++. This includes all the
+?OpenGIS Simple Features for SQL spatial predicate functions and spatial operators,
+as well as specific JTS enhanced functions.
 
-On 1/12/21 8:13 AM, Giulio Benetti wrote:
-> Bump version to 3.60.1 and remove local patch that has been upstreamed.
-> 
-> Release Notes:
-> https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.60_1_release_notes
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
->   package/libnss/libnss.hash | 4 ++--
->   package/libnss/libnss.mk   | 2 +-
->   2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-> index 16a2e5c521..f93fa5ad03 100644
-> --- a/package/libnss/libnss.hash
-> +++ b/package/libnss/libnss.hash
-> @@ -1,4 +1,4 @@
-> -# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_60_RTM/src/SHA256SUMS
-> -sha256  84abd5575ab874c53ae511bd461e5d0868d1a1b384ee40753154cdd1d590fe3d  nss-3.60.tar.gz
-> +# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_60_1_RTM/src/SHA256SUMS
-> +sha256  2051c20b61112df24bad533ac37f6c66c1bc0d6ea70bb9d9cad102d20324279d  nss-3.60.1.tar.gz
->   # Locally calculated
->   sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
-> diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-> index d762ac6f64..fc1be6f603 100644
-> --- a/package/libnss/libnss.mk
-> +++ b/package/libnss/libnss.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
->   
-> -LIBNSS_VERSION = 3.60
-> +LIBNSS_VERSION = 3.60.1
->   LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
->   LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
->   LIBNSS_DISTDIR = dist
-> 
+https://trac.osgeo.org/geos
 
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+---
+ package/Config.in            |  1 +
+ package/libgeos/Config.in    | 13 +++++++++++++
+ package/libgeos/libgeos.hash |  3 +++
+ package/libgeos/libgeos.mk   | 15 +++++++++++++++
+ 4 files changed, 32 insertions(+)
+ create mode 100644 package/libgeos/Config.in
+ create mode 100644 package/libgeos/libgeos.hash
+ create mode 100644 package/libgeos/libgeos.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index 5a16814ca8..670a5eb9a4 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1901,6 +1901,7 @@ menu "Other"
+ 	source "package/libevent/Config.in"
+ 	source "package/libffi/Config.in"
+ 	source "package/libgee/Config.in"
++	source "package/libgeos/Config.in"
+ 	source "package/libglib2/Config.in"
+ 	source "package/libglob/Config.in"
+ 	source "package/libical/Config.in"
+diff --git a/package/libgeos/Config.in b/package/libgeos/Config.in
+new file mode 100644
+index 0000000000..404832f4db
+--- /dev/null
++++ b/package/libgeos/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_LIBGEOS
++	bool "libgeos"
++	depends on BR2_INSTALL_LIBSTDCPP
++	help
++	  GEOS (Geometry Engine - Open Source) is a C++ port of the ?JTS Topology Suite (JTS).
++	  It aims to contain the complete functionality of JTS in C++. This includes all the
++	  ?OpenGIS Simple Features for SQL spatial predicate functions and spatial operators,
++	  as well as specific JTS enhanced functions.
++
++	  https://trac.osgeo.org/geos
++
++comment "libgeos needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
+\ No newline at end of file
+diff --git a/package/libgeos/libgeos.hash b/package/libgeos/libgeos.hash
+new file mode 100644
+index 0000000000..5b5e44c7c5
+--- /dev/null
++++ b/package/libgeos/libgeos.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  bd8082cf12f45f27630193c78bdb5a3cba847b81e72b20268356c2a4fc065269  geos-3.9.0.tar.bz2
++sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/libgeos/libgeos.mk b/package/libgeos/libgeos.mk
+new file mode 100644
+index 0000000000..7b4ace122d
+--- /dev/null
++++ b/package/libgeos/libgeos.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# libgeos
++#
++################################################################################
++
++LIBGEOS_VERSION = 3.9.0
++LIBGEOS_SITE = http://download.osgeo.org/geos
++LIBGEOS_SOURCE = geos-$(LIBGEOS_VERSION).tar.bz2
++LIBGEOS_LICENSE = LGPL-2.1
++LIBGEOS_LICENSE_FILES = COPYING
++LIBGEOS_INSTALL_STAGING = YES
++LIBGEOS_CONFIG_SCRIPTS = geos-config
++
++$(eval $(cmake-package))
 -- 
-Giulio Benetti
-Benetti Engineering sas
+2.29.2
