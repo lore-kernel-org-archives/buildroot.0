@@ -1,47 +1,47 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 12 Jan 2021 16:03:08 +0200
-Subject: [Buildroot] [PATCH 1/1] toolchain: CodeSourcery AArch64 2014.11
- does not contain libatomic
-In-Reply-To: <87pn2ampup.fsf@dell.be.48ers.dk>
-References: <20210109123337.1512700-1-bernd.kuhls@t-online.de>
- <87pn2ampup.fsf@dell.be.48ers.dk>
-Message-ID: <87o8huxnfn.fsf@tarshish>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 12 Jan 2021 15:21:45 +0100
+Subject: [Buildroot] package/dotnet: add host-dotnet-sdk
+In-Reply-To: <CABWPoFG2q8n27nSULRf1mh7ook=wSOJq1uw8xCTLcWmudEdo2A@mail.gmail.com>
+References: <CABWPoFG8k9WccFXRKC6ufRLKDHzdwCyeN3Q1PJZzqpg83fwc1w@mail.gmail.com>
+ <20210104085858.68f57652@windsurf>
+ <CAOiXNkARyVd8=v7ZShcdAw7eZHDY+Apf5_vLDsxiGT-tpGsEvg@mail.gmail.com>
+ <CABWPoFFFA_jB0bqBSGDmnk+7YvM6br0=7=KcnKUvnctVrvmQNA@mail.gmail.com>
+ <CAOiXNkBPm8ksDHTWXrzA9zmFZxShEWSOSeG4pn0r3iYRZxKq6g@mail.gmail.com>
+ <CABWPoFH_UbU=b7T5yr2Wf23E1fz-dGe+SuVkiMqJGNtYXitLFg@mail.gmail.com>
+ <CABWPoFG2q8n27nSULRf1mh7ook=wSOJq1uw8xCTLcWmudEdo2A@mail.gmail.com>
+Message-ID: <20210112152145.4d84029e@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Hello Raul,
 
-On Tue, Jan 12 2021, Peter Korsgaard wrote:
->>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
->
->  > Fixes build error
->  > output/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-amd-linux-gnu/4.9.1/../../../../aarch64-amd-linux-gnu/bin/ld:
->  >  cannot find -latomic
->
->  > using this defconfig
->
->  > BR2_aarch64=y
->  > BR2_TOOLCHAIN_EXTERNAL=y
->  > BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64=y
->  > BR2_PACKAGE_OPENSSL=y
->
->  > libopenssl is only used here as an example: all packages adding -latomic
->  > if BR2_TOOLCHAIN_HAS_LIBATOMIC=y are broken, like dav1d, ffmpeg, gnutls,
->  > kodi and vlc.
->
->  > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
->
-> Committed to 2020.02.x and 2020.11.x, thanks.
+On Tue, 12 Jan 2021 10:09:05 +0100
+Raul Hidalgo Caballero <deinok@deinok.com> wrote:
 
-Not in 2020.11.x as of commit b460962f5900 ("package/nodejs: security
-bump to version 12.20.1").
+> Hi Thomas,
+> 
+> Made a patch here: https://github.com/deinok/buildroot/pull/1/files
+> If it looks good I will send it all joined as a .patch file.
 
-baruch
+Thanks for the updated patch.
 
+Could you please submit as a patch on the Buildroot mailing list, so
+that we can give some review/feedback ?
+
+> Fixed all the issues except for:
+> Testing -> Do you have an example for testing a host package?
+
+The test case you have is already good. What would be better is to have
+the test case use the dotnet SDK to really build an example program,
+and then run it on the target.
+
+Best regards,
+
+Thomas
 -- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
