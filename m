@@ -1,70 +1,43 @@
-From: Raul Hidalgo Caballero <deinok@deinok.com>
-Date: Tue, 12 Jan 2021 10:09:05 +0100
-Subject: [Buildroot] package/dotnet: add host-dotnet-sdk
-In-Reply-To: <CABWPoFH_UbU=b7T5yr2Wf23E1fz-dGe+SuVkiMqJGNtYXitLFg@mail.gmail.com>
-References: <CABWPoFG8k9WccFXRKC6ufRLKDHzdwCyeN3Q1PJZzqpg83fwc1w@mail.gmail.com>
- <20210104085858.68f57652@windsurf>
- <CAOiXNkARyVd8=v7ZShcdAw7eZHDY+Apf5_vLDsxiGT-tpGsEvg@mail.gmail.com>
- <CABWPoFFFA_jB0bqBSGDmnk+7YvM6br0=7=KcnKUvnctVrvmQNA@mail.gmail.com>
- <CAOiXNkBPm8ksDHTWXrzA9zmFZxShEWSOSeG4pn0r3iYRZxKq6g@mail.gmail.com>
- <CABWPoFH_UbU=b7T5yr2Wf23E1fz-dGe+SuVkiMqJGNtYXitLFg@mail.gmail.com>
-Message-ID: <CABWPoFG2q8n27nSULRf1mh7ook=wSOJq1uw8xCTLcWmudEdo2A@mail.gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Tue, 12 Jan 2021 10:18:06 +0100
+Subject: [Buildroot] [PATCH] uboot: fix binman with a new dependency
+Message-ID: <20210112091806.906954-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+since 2021.01, tools/binman is broken.
+tools/binman/control.py imports pkg_resources
+the module pkg_resources is supplied by setuptools,
+so this new dependency is required.
 
-Made a patch here: https://github.com/deinok/buildroot/pull/1/files
-If it looks good I will send it all joined as a .patch file.
+binman is used only for building SPL
 
-Fixed all the issues except for:
-Testing -> Do you have an example for testing a host package?
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ boot/uboot/uboot.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-
-On Mon, Jan 11, 2021 at 12:50 PM Raul Hidalgo Caballero <deinok@deinok.com>
-wrote:
-
-> Yes, I'm agree. There is no perfect way, we should found an approach that
-> is perfectly fitted in all cases.
->
-> For now, having support for host-dotnet-sdk is a must in any case
->
->
->
-> On Fri, Jan 8, 2021 at 1:02 PM Andrey Nechypurenko <andreynech@gmail.com>
-> wrote:
->
->> Hi,
->>
->> > Regarding Andrey's patch, I'm not sure if that is the correct approach,
->> I
->> > mean, the idea is okay for most of the cases, but what if you install
->> the
->> > dotnet-runtime -> v5.0.0 and the package that you want to install needs
->> > v3.1.0 ?
->>
->> AFAIK, it is possible to have multiple runtimes installed. There are many
->> ways to say which one should be used by a particular application. One of
->> them, for example, using DOTNET_ENVIRONMENT environment variable (
->>
->> https://docs.microsoft.com/en-us/aspnet/core/fundamentals/environments?view=aspnetcore-5.0
->> ) . Also, AFAIK, if the application is packaged with runtime, it will use
->> this packaged version even if there is separate runtime installed.
->>
->> Anyway, I think there is no "right way" [tm]. It depends on the
->> application.
->> For example, in a well controlled environment such as an embedded system
->> where only a predefined set of applications is installed, common runtime
->> would be preferable because it saves a considerable amount of space if
->> multiple applications need it.
->>
->> Regards,
->> Andrey.
->>
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210112/2d1d614b/attachment.html>
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index d2b4e8dc6..a3d949a55 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -167,8 +167,14 @@ endif
+ 
+ ifeq ($(BR2_TARGET_UBOOT_NEEDS_PYTHON2),y)
+ UBOOT_DEPENDENCIES += host-python
++ifeq ($(BR2_TARGET_UBOOT_SPL),y)
++UBOOT_DEPENDENCIES += host-python-setuptools
++endif
+ else ifeq ($(BR2_TARGET_UBOOT_NEEDS_PYTHON3),y)
+ UBOOT_DEPENDENCIES += host-python3
++ifeq ($(BR2_TARGET_UBOOT_SPL),y)
++UBOOT_DEPENDENCIES += host-python3-setuptools
++endif
+ endif
+ 
+ ifeq ($(BR2_TARGET_UBOOT_NEEDS_PYLIBFDT),y)
+-- 
+2.27.0
