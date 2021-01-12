@@ -1,50 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Jan 2021 11:05:05 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] toolchain: CodeSourcery
- AArch64 2014.11 does not contain libatomic
-Message-ID: <20210112101551.86DC887555@busybox.osuosl.org>
+Date: Tue, 12 Jan 2021 11:32:10 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/poppler: use
+ ENABLE_GLIB
+Message-ID: <20210112101551.A692F87595@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c372155db0a90a309945a5f92cc1fe2cc57c9c21
+commit: https://git.buildroot.net/buildroot/commit/?id=9586b213151a02b2105716e7ebbb8f2f54d5e740
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Fixes build error
+Use ENABLE_GLIB which is available since version 0.60 and
+https://github.com/freedesktop/poppler/commit/766a32ff59dadd9ae4639d8a79861a17be6aec52
 
-output/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-amd-linux-gnu/4.9.1/../../../../aarch64-amd-linux-gnu/bin/ld:
- cannot find -latomic
-
-using this defconfig
-
-BR2_aarch64=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64=y
-BR2_PACKAGE_OPENSSL=y
-
-libopenssl is only used here as an example: all packages adding -latomic
-if BR2_TOOLCHAIN_HAS_LIBATOMIC=y are broken, like dav1d, ffmpeg, gnutls,
-kodi and vlc.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit a530fd4a4268b44961d8ab0a053fa0cf3b29fb5c)
+(cherry picked from commit bf68bd59c15047f02fbe5f52960c50617fc4a7e2)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- toolchain/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/poppler/poppler.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index bff572805d..ae8e605cdd 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -667,6 +667,7 @@ config BR2_TOOLCHAIN_HAS_SYNC_8
- config BR2_TOOLCHAIN_HAS_LIBATOMIC
- 	bool
- 	default y if BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 && \
-+		!BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64 && \
- 		BR2_TOOLCHAIN_HAS_THREADS && \
- 		!BR2_BINFMT_FLAT
+diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
+index e452c2336d..69a3bcace5 100644
+--- a/package/poppler/poppler.mk
++++ b/package/poppler/poppler.mk
+@@ -98,6 +98,9 @@ endif
  
+ ifeq ($(BR2_PACKAGE_LIBGLIB2),y)
+ POPPLER_DEPENDENCIES += libglib2
++POPPLER_CONF_OPTS += -DENABLE_GLIB=ON
++else
++POPPLER_CONF_OPTS += -DENABLE_GLIB=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBNSS),y)
