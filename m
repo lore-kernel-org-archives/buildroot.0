@@ -1,32 +1,40 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 12 Jan 2021 19:11:59 +0100
-Subject: [Buildroot] [PATCH 1/1] package/c-capnproto: fix tarball hash
-Message-ID: <20210112181159.12172-1-fontaine.fabrice@gmail.com>
+From: Markus Mayer <mmayer@broadcom.com>
+Date: Tue, 12 Jan 2021 10:23:53 -0800
+Subject: [Buildroot] Host tar 1.32 build issues
+In-Reply-To: <dad432a5-a41c-efed-ef6c-1b41fcee8819@mind.be>
+References: <CAGt4E5srq1hg4T1YoKX9UUCTJ96DdnNL1XFrYvsgpWjM_KM1EA@mail.gmail.com>
+ <95c3b23f-6805-e526-8bc2-a0d48a66895c@mind.be> <20210112091905.GA382149@scaer>
+ <dad432a5-a41c-efed-ef6c-1b41fcee8819@mind.be>
+Message-ID: <CAGt4E5uAjxt=oPGqzqN7OEGbGbv68DqKq+xE2KntB_wQoeo2Ew@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 5b95a5dc27c0d8002c00bda1c867ddea9218087e seems to have made a
-mistake in the tarball hash
+On Tue, 12 Jan 2021 at 02:54, Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+> On 12/01/2021 10:19, Yann E. MORIN wrote:
+> > Markus, Arnout, All,
+> >
+> > Not so sure. 1.33 has been released 2021-01-07, but the cpio archives for
+> > it are indeed present, and dated today, 2021-01-12.
+> >
+> > So, maybe we can just point that out to the tar maintainers, that they
+> > forgot the cpio for 1.32.
+>
+>  And as Yann told me on IRC, the cpio for 1.32 appeared today as well. So the
+> problem should be solved.
+>
+>  The only thing missing now is that the .hash file still refers to 1.29.
 
-Fixes:
- - http://autobuild.buildroot.org/results/2de9c6c8ce83569d18cc7140ebc60d6fe1aadcbf
+The two CPIO archives are on the GNU server now. I asked about it on
+the GNU tar mailing list last night (my time), and Sergey was so kind
+to upload the two missing CPIO archives.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/c-capnproto/c-capnproto.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+https://lists.gnu.org/archive/html/bug-tar/2021-01/msg00006.html
 
-diff --git a/package/c-capnproto/c-capnproto.hash b/package/c-capnproto/c-capnproto.hash
-index e215400ce5..493b45c7cd 100644
---- a/package/c-capnproto/c-capnproto.hash
-+++ b/package/c-capnproto/c-capnproto.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  1e35ef786bd8e418ff04fccb20ac881a87fa2fa76df1cbddc4774e35423bafb8  c-capnproto-9053ebe6eeb2ae762655b982e27c341cb568366d-br1.tar.gz
-+sha256  6913e2016b89987861566b1d0efe935fee1604bd3fb847cabaef354a9516d57b  c-capnproto-9053ebe6eeb2ae762655b982e27c341cb568366d-br1.tar.gz
- sha256  27797e6c7dce96675d79ed250584d157b7a86405db6eb6fba9644e6d96d42c57  COPYING
--- 
-2.29.2
+So everything is in place now.
+
+Regards,
+-Markus
