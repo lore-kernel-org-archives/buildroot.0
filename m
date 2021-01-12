@@ -1,51 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Jan 2021 18:21:44 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/multipath-tools:
- disable -Werror
-Message-ID: <20210112172417.3A4D17FD74@busybox.osuosl.org>
+Date: Tue, 12 Jan 2021 18:26:20 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/tzdata: drop
+ obosolete, legacy zic option -y
+Message-ID: <20210112172417.6AB908703A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f725ba28ee8cf60909f6e677cce11a5ad5917e95
+commit: https://git.buildroot.net/buildroot/commit/?id=de750659bcc9ccf752da3c6aa063bdd3f7bfc639
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-Set the new WARNFLAGS to "" which has been added since version 0.8.5 and
-https://github.com/opensvc/multipath-tools/commit/82f1b164cb21c9632b3c73f865d97777c7a61e0d
+The following commits:
+  - 7868289fd534 package/zic: bump version to 2020f
+  - c99374ecbb5e package/tzdata: bump version to 2020f
 
-Otherwise, -Werror will raise the following build failure:
+bumped the tzdata from version 2020a to 2020f. However, in 2020b, the
+zic option '-y' was removed, and so was the yearistype.sh script [0].
 
-/srv/storage/autobuild/run/instance-3/output-1/host/bin/mipsel-linux-gcc --std=gnu99 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2  -D_FORTIFY_SOURCE=1  -Werror -Wall -Wextra -Wformat=2 -Werror=implicit-int -Werror=implicit-function-declaration -Werror=format-security -Wno-clobbered -Wno-error=clobbered -Werror=cast-qual -Werror=discarded-qualifiers -pipe -DBIN_DIR=\"/sbin\" -DLIB_STRING=\"lib\" -DRUN_DIR=\"run\" -MMD -MP -fPIC -I.. -I../../libmultipath/nvme -Wp,-D_FORTIFY_SOURCE=2  -c -o nvme.o nvme.c
-<command-line>: error: "_FORTIFY_SOURCE" redefined [-Werror]
+This now spews annoying warnings:
 
-Fixes:
- - http://autobuild.buildroot.org/results/71f7661e7d26ca8608e902eee9f2a92376b00601
+    warning: -y ignored
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit fe4b4e9dc339da13bbb7583e44c7ed2177018a1b)
+Fortunately, it still consumes its argument, so the missing yearistype.sh
+is simply ignored.
+
+Drop that option.
+
+[0] https://mm.icann.org/pipermail/tz-announce/2020-October/000059.html
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+(cherry picked from commit 7f78eef767baaeab7bbc008c599027a77b6d3169)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/multipath-tools/multipath-tools.mk | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ package/tzdata/tzdata.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/multipath-tools/multipath-tools.mk b/package/multipath-tools/multipath-tools.mk
-index d5cca7ba57..7fe9033a15 100644
---- a/package/multipath-tools/multipath-tools.mk
-+++ b/package/multipath-tools/multipath-tools.mk
-@@ -9,7 +9,12 @@ MULTIPATH_TOOLS_SITE = $(call github,opensvc,multipath-tools,$(MULTIPATH_TOOLS_V
- MULTIPATH_TOOLS_LICENSE = LGPL-2.0
- MULTIPATH_TOOLS_LICENSE_FILES = COPYING
- MULTIPATH_TOOLS_DEPENDENCIES = lvm2 json-c readline udev liburcu libaio host-pkgconf
--MULTIPATH_TOOLS_MAKE_OPTS = LIB="lib" RUN="run" OPTFLAGS="" STACKPROT=""
-+MULTIPATH_TOOLS_MAKE_OPTS = \
-+	LIB="lib" \
-+	RUN="run" \
-+	OPTFLAGS="" \
-+	STACKPROT="" \
-+	WARNFLAGS=""
- 
- ifeq ($(BR2_PACKAGE_SYSTEMD),y)
- MULTIPATH_TOOLS_DEPENDENCIES += systemd
+diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
+index 41c4971584..04f5d84bf0 100644
+--- a/package/tzdata/tzdata.mk
++++ b/package/tzdata/tzdata.mk
+@@ -51,8 +51,8 @@ endef
+ define HOST_TZDATA_BUILD_CMDS
+ 	(cd $(@D); \
+ 		for zone in $(TZDATA_ZONELIST); do \
+-			$(ZIC) -d _output/posix -y yearistype.sh $$zone || exit 1; \
+-			$(ZIC) -d _output/right -L leapseconds -y yearistype.sh $$zone || exit 1; \
++			$(ZIC) -d _output/posix $$zone || exit 1; \
++			$(ZIC) -d _output/right -L leapseconds $$zone || exit 1; \
+ 		done; \
+ 	)
+ endef
