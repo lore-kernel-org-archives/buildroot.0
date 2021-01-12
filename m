@@ -1,100 +1,56 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Tue, 12 Jan 2021 19:59:05 +0100
-Subject: [Buildroot] [PATCH] configs/kontron_smarc_sal28: enable u-boot
-In-Reply-To: <20210111232849.11810-1-michael@walle.cc>
-References: <20210111232849.11810-1-michael@walle.cc>
-Message-ID: <CAEyMn7b+N3CGNO=k9QJAZWPm962Bh5gNxpNiT_O5urMh8oSfxQ@mail.gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 12 Jan 2021 20:32:11 +0100
+Subject: [Buildroot] [RFC: 3/4]
+ package/x11r7/xdriver_xf86-video-imx-viv: bump to version
+ rel_imx_5.4.24_2.1.0
+In-Reply-To: <2fc205fc-9dcb-7f47-1f87-f339fee6f94b@gmail.com>
+References: <20210107110450.4031102-1-romain.naour@gmail.com>
+ <53e43012-7460-6954-2467-dea1ddcf0be7@gmail.com>
+ <X/xOqBw1AkEKB3SP@p1g2> <7856829.T7Z3S40VBb@pc-42>
+ <2fc205fc-9dcb-7f47-1f87-f339fee6f94b@gmail.com>
+Message-ID: <20210112203211.67131ed6@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Michael,
+Hello Romain,
 
-Am Di., 12. Jan. 2021 um 00:29 Uhr schrieb Michael Walle <michael@walle.cc>:
->
-> Enable building of the bootloader and integrate it into the resulting
-> image.
->
-> Signed-off-by: Michael Walle <michael@walle.cc>
-> ---
->  board/kontron/smarc-sal28/genimage.cfg |  6 ++++++
->  board/kontron/smarc-sal28/readme.txt   | 15 +++++++++++++++
->  configs/kontron_smarc_sal28_defconfig  |  9 +++++++++
->  3 files changed, 30 insertions(+)
->
-> diff --git a/board/kontron/smarc-sal28/genimage.cfg b/board/kontron/smarc-sal28/genimage.cfg
-> index 9ef37de757..d75234d997 100644
-> --- a/board/kontron/smarc-sal28/genimage.cfg
-> +++ b/board/kontron/smarc-sal28/genimage.cfg
-> @@ -3,6 +3,12 @@ image sdcard-emmc.img {
->                 gpt = true
->         }
->
-> +       partition u-boot {
-> +               offset = 1M
-> +               in-partition-table = "no"
-> +               image = "u-boot.rom"
-> +       }
-> +
->         partition rootfs {
->                 offset = 2M
->                 image = rootfs.ext4
-> diff --git a/board/kontron/smarc-sal28/readme.txt b/board/kontron/smarc-sal28/readme.txt
-> index 2047f09b64..bdf2258b59 100644
-> --- a/board/kontron/smarc-sal28/readme.txt
-> +++ b/board/kontron/smarc-sal28/readme.txt
-> @@ -71,3 +71,18 @@ You will see something like this at boot time:
->  [    4.563565] GPT:Alternate GPT header not at the end of the disk.
->  [    4.569596] GPT:266272 != 7864319
->  [    4.572925] GPT: Use GNU Parted to correct GPT errors.
-> +
-> +Updating the bootloader
-> +=======================
-> +
-> +Buildroot will automatically build the u-boot bootloader. The resulting
-> +image is called u-boot.rom and you can find it in the images/ directory.
-> +
-> +To update the bootloader on the board you could either copy it to an
-> +USB thumb drive or you could put it on a TFTP server. The following
-> +example assumes you have the bootloader image copied to the root of
-> +a thumb drive:
-> +
-> +  # usb start
-> +  # load usb 0:1 $loadaddr u-boot.rom
-> +  # sf probe 0 && sf update $fileaddr 0x210000 $filesize
-> diff --git a/configs/kontron_smarc_sal28_defconfig b/configs/kontron_smarc_sal28_defconfig
-> index b88f1aef4f..767858f601 100644
-> --- a/configs/kontron_smarc_sal28_defconfig
-> +++ b/configs/kontron_smarc_sal28_defconfig
-> @@ -19,5 +19,14 @@ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
->  BR2_TARGET_ROOTFS_EXT2=y
->  BR2_TARGET_ROOTFS_EXT2_4=y
->  BR2_TARGET_ROOTFS_EXT2_SIZE="128M"
-> +BR2_TARGET_UBOOT=y
-> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-> +BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.01"
-> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="kontron_sl28"
-> +BR2_TARGET_UBOOT_NEEDS_DTC=y
+On Tue, 12 Jan 2021 12:05:58 +0100, Romain Naour <romain.naour@gmail.com> wrote:
 
-build succeeds.
-> +# BR2_TARGET_UBOOT_FORMAT_BIN is not set
-> +BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-> +BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.rom"
->  BR2_PACKAGE_HOST_GENIMAGE=y
->  BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+> Hi J?r?me,
+> 
+> Thanks for your feedback!
+> 
+> Le 11/01/2021 ? 15:02, J?r?me Pouiller a ?crit?:
+> > Hi Romain, Garry,
+> > 
+> > On Monday 11 January 2021 14:12:08 CET Gary Bisson wrote:  
+> >> On Sun, Jan 10, 2021 at 06:46:38PM +0100, Romain Naour wrote:  
+> >>> Le 07/01/2021 ? 12:04, Romain Naour a ?crit :  
+> >>>> This package needs to be updated to build with the NXP imx_5.4.x_2.1.0 release.
+> >>>>
+> >>>> Don't override CFLAGS on the command line otherwise we loose some include paths
+> >>>> (ex: -I./vivante_gal).
+> >>>> CFLAGS is already provided by TARGET_CONFIGURE_OPTS in make environment.  
+> >>>
+> >>> What's the status of vivante gpu support for X11 ? especially for kernel >= 5.4.  
+> >>
+> >> Don't know. To be honest, i.MX6 will soon be a legacy product for NXP
+> >> releases so I strongly suggest moving to mainline + Etnaviv.  
+> > 
+> > Same here, I haven't worked on iMX6 for a while. The last teams I know who develop
+> > new iMX6 designs use Etnaviv..  
+> 
+> I haven't worked a lot for customer on iMX6, but each time they used Yocto and
+> NXP BSP. Last time I tried to use Etnaviv with linux-imx, the kernel build was
+> broken.
+> 
 
-Just tried to build that defconfig with your patch and faced an issue
-building u-boot.
+On a past project I worked on a iMX6 platform with etnaviv (using Qt eglfs and
+qtquickcontrols for the GUI and GStreamer for video/audio recording/streaming)
+using mainline linux kernel...., worked very well...
 
-  unable to execute 'swig': No such file or directory
-  error: command 'swig' failed with exit status 1
-
-After adding:
-BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-build succeeds.
-
--- 
-Heiko
+Regards,
+Peter
