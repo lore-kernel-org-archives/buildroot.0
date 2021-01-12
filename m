@@ -1,162 +1,170 @@
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Tue, 12 Jan 2021 07:30:27 +0100
-Subject: [Buildroot] [PATCH] package/uhd: fix build with riscV
-Message-ID: <20210112063027.27344-1-gwenj@trabucayre.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 12 Jan 2021 07:52:24 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/mpv: bump version to 0.33.0
+Message-ID: <20210112065224.4275-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+rsound support was removed:
+https://github.com/mpv-player/mpv/commit/4583bd8cc7bf538bce424983d49729c934d13a53
 
-When the target CPU is riscV, msgpack is unable to detect endianness with a list of errors like:
+libass is now mandatory:
+https://github.com/mpv-player/mpv/commit/0b9ed9c2744ada1eefc1f254c5f3ade6c626ed72
+Propagate new dependencies to tovid.
 
-uhd/host/lib/deps/rpclib/include/rpc/msgpack/pack.hpp:190:2: error: #error msgpack-c supports only big endian and little endian
-  190 | #error msgpack-c supports only big endian and little endian
-      |  ^~~~~
+libsmbclient support was removed:
+https://github.com/mpv-player/mpv/commit/3b8b7cb9d481828953f105f92bacc07a3cb2f332
 
-and with subsequent errors:
-
-uhd0/host/lib/deps/rpclib/include/rpc/msgpack/pack.hpp:236:46: error: there are no arguments to 'take8_8' that depend on a template parameter, so a declaration of 'take8_8' must be available [-fpermissive]
-  236 |     char buf[2] = {static_cast<char>(0xccu), take8_8(d)};
-      |
-
-This is due to a missing support for this architecture in msgpack.
-This patch adapt commit from https://github.com/boostorg/predef
-
-[backported from https://github.com/EttusResearch/uhd/pull/400]
-
-Fix:
-- http://autobuild.buildroot.net/results/afacf5c5c2cd9dff6962523f1fdded9b474b9d66/
-- http://autobuild.buildroot.net/results/91530538d630a7f09d85327e514f01b45253c1a6/
-- http://autobuild.buildroot.net/results/91530538d630a7f09d85327e514f01b45253c1a6/
-- and others
-
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../0003-add-RISC-V-endian-detection.patch    | 113 ++++++++++++++++++
- 1 file changed, 113 insertions(+)
- create mode 100644 package/uhd/0003-add-RISC-V-endian-detection.patch
+v2: updated comments
 
-diff --git a/package/uhd/0003-add-RISC-V-endian-detection.patch b/package/uhd/0003-add-RISC-V-endian-detection.patch
-new file mode 100644
-index 0000000000..fb1168ba3e
---- /dev/null
-+++ b/package/uhd/0003-add-RISC-V-endian-detection.patch
-@@ -0,0 +1,113 @@
-+From d4717a38d2287c2f583fefb2a0ed273337a92bb6 Mon Sep 17 00:00:00 2001
-+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-+Date: Mon, 11 Jan 2021 18:18:26 +0100
-+Subject: [PATCH] msgpack/predef: add riscV support
-+
-+When the target CPU is riscV, msgpack is unable to detect endianness with a list of errors like:
-+
-+uhd/host/lib/deps/rpclib/include/rpc/msgpack/pack.hpp:190:2: error: #error msgpack-c supports only big endian and little endian
-+  190 | #error msgpack-c supports only big endian and little endian
-+      |  ^~~~~
-+
-+and with subsequent errors:
-+
-+uhd0/host/lib/deps/rpclib/include/rpc/msgpack/pack.hpp:236:46: error: there are no arguments to 'take8_8' that depend on a template parameter, so a declaration of 'take8_8' must be available [-fpermissive]
-+  236 |     char buf[2] = {static_cast<char>(0xccu), take8_8(d)};
-+      |      
-+
-+This is due to a missing support for this architecture in msgpack.
-+This patch adapt commit from https://github.com/boostorg/predef
-+
-+[backported from https://github.com/EttusResearch/uhd/pull/400]
-+
-+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-+---
-+ .../include/rpc/msgpack/predef/architecture.h |  1 +
-+ .../rpc/msgpack/predef/architecture/riscv.h   | 48 +++++++++++++++++++
-+ .../include/rpc/msgpack/predef/other/endian.h |  3 +-
-+ 3 files changed, 51 insertions(+), 1 deletion(-)
-+ create mode 100644 host/lib/deps/rpclib/include/rpc/msgpack/predef/architecture/riscv.h
-+
-+diff --git a/host/lib/deps/rpclib/include/rpc/msgpack/predef/architecture.h b/host/lib/deps/rpclib/include/rpc/msgpack/predef/architecture.h
-+index 4a0ce2749..1bd998c59 100644
-+--- a/host/lib/deps/rpclib/include/rpc/msgpack/predef/architecture.h
-++++ b/host/lib/deps/rpclib/include/rpc/msgpack/predef/architecture.h
-+@@ -18,6 +18,7 @@ http://www.boost.org/LICENSE_1_0.txt)
-+ #include <rpc/msgpack/predef/architecture/parisc.h>
-+ #include <rpc/msgpack/predef/architecture/ppc.h>
-+ #include <rpc/msgpack/predef/architecture/pyramid.h>
-++#include <rpc/msgpack/predef/architecture/riscv.h>
-+ #include <rpc/msgpack/predef/architecture/rs6k.h>
-+ #include <rpc/msgpack/predef/architecture/sparc.h>
-+ #include <rpc/msgpack/predef/architecture/superh.h>
-+diff --git a/host/lib/deps/rpclib/include/rpc/msgpack/predef/architecture/riscv.h b/host/lib/deps/rpclib/include/rpc/msgpack/predef/architecture/riscv.h
-+new file mode 100644
-+index 000000000..8b819d77e
-+--- /dev/null
-++++ b/host/lib/deps/rpclib/include/rpc/msgpack/predef/architecture/riscv.h
-+@@ -0,0 +1,48 @@
-++/*
-++Copyright Andreas Schwab 2019
-++Distributed under the Boost Software License, Version 1.0.
-++(See accompanying file LICENSE_1_0.txt or copy at
-++http://www.boost.org/LICENSE_1_0.txt)
-++*/
-++
-++#ifndef BOOST_PREDEF_ARCHITECTURE_RISCV_H
-++#define BOOST_PREDEF_ARCHITECTURE_RISCV_H
-++
-++#include <boost/predef/version_number.h>
-++#include <boost/predef/make.h>
-++
-++/* tag::reference[]
-++= `BOOST_ARCH_RISCV`
-++
-++http://en.wikipedia.org/wiki/RISC-V[RISC-V] architecture.
-++
-++[options="header"]
-++|===
-++| {predef_symbol} | {predef_version}
-++
-++| `+__riscv+` | {predef_detection}
-++|===
-++*/ // end::reference[]
-++
-++#define BOOST_ARCH_RISCV BOOST_VERSION_NUMBER_NOT_AVAILABLE
-++
-++#if defined(__riscv)
-++#   undef BOOST_ARCH_RISCV
-++#   define BOOST_ARCH_RISCV BOOST_VERSION_NUMBER_AVAILABLE
-++#endif
-++
-++#if BOOST_ARCH_RISCV
-++#   define BOOST_ARCH_RISCV_AVAILABLE
-++#endif
-++
-++#if BOOST_ARCH_RISCV
-++#   undef BOOST_ARCH_WORD_BITS_32
-++#   define BOOST_ARCH_WORD_BITS_32 BOOST_VERSION_NUMBER_AVAILABLE
-++#endif
-++
-++#define BOOST_ARCH_RISCV_NAME "RISC-V"
-++
-++#endif
-++
-++#include <boost/predef/detail/test.h>
-++BOOST_PREDEF_DECLARE_TEST(BOOST_ARCH_RISCV,BOOST_ARCH_RISCV_NAME)
-+diff --git a/host/lib/deps/rpclib/include/rpc/msgpack/predef/other/endian.h b/host/lib/deps/rpclib/include/rpc/msgpack/predef/other/endian.h
-+index 3f367b3d4..a7c1fb4dc 100644
-+--- a/host/lib/deps/rpclib/include/rpc/msgpack/predef/other/endian.h
-++++ b/host/lib/deps/rpclib/include/rpc/msgpack/predef/other/endian.h
-+@@ -127,7 +127,8 @@ information and acquired knowledge:
-+         defined(__AARCH64EL__) || \
-+         defined(_MIPSEL) || \
-+         defined(__MIPSEL) || \
-+-        defined(__MIPSEL__)
-++        defined(__MIPSEL__) || \
-++        defined(__riscv)
-+ #       undef MSGPACK_ENDIAN_LITTLE_BYTE
-+ #       define MSGPACK_ENDIAN_LITTLE_BYTE MSGPACK_VERSION_NUMBER_AVAILABLE
-+ #   endif
-+-- 
-+2.26.2
-+
+ package/mpv/Config.in   | 11 ++++++++---
+ package/mpv/mpv.hash    |  2 +-
+ package/mpv/mpv.mk      | 21 ++-------------------
+ package/tovid/Config.in | 11 +++++++----
+ 4 files changed, 18 insertions(+), 27 deletions(-)
+
+diff --git a/package/mpv/Config.in b/package/mpv/Config.in
+index 697ad57ba6..dd80e2772d 100644
+--- a/package/mpv/Config.in
++++ b/package/mpv/Config.in
+@@ -1,12 +1,15 @@
+ config BR2_PACKAGE_MPV
+ 	bool "mpv"
++	depends on BR2_INSTALL_LIBSTDCPP # libass -> harfbuzz
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libass -> harfbuzz
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # libass -> harfbuzz
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	select BR2_PACKAGE_FFMPEG
+ 	select BR2_PACKAGE_FFMPEG_SWSCALE
++	select BR2_PACKAGE_LIBASS
+ 	select BR2_PACKAGE_ZLIB
+ 	select BR2_PACKAGE_WAYLAND_PROTOCOLS if BR2_PACKAGE_WAYLAND
+ 	# Select xkbcommon for wayland to avoid being mysterious
+@@ -23,8 +26,10 @@ config BR2_PACKAGE_MPV
+ 
+ 	  https://mpv.io/
+ 
+-comment "mpv needs a toolchain w/ threads, gcc >= 4.5"
++comment "mpv needs a toolchain w/ C++, threads, gcc >= 4.8"
+ 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
++		!BR2_INSTALL_LIBSTDCPP || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+diff --git a/package/mpv/mpv.hash b/package/mpv/mpv.hash
+index 37db771356..548a0f0159 100644
+--- a/package/mpv/mpv.hash
++++ b/package/mpv/mpv.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  9163f64832226d22e24bbc4874ebd6ac02372cd717bef15c28a0aa858c5fe592  mpv-0.32.0.tar.gz
++sha256  f1b9baf5dc2eeaf376597c28a6281facf6ed98ff3d567e3955c95bf2459520b4  mpv-0.33.0.tar.gz
+ sha256  a99d7b0625a0566271aad6de694e52eafd566db024f9516720d526c680d3ee30  LICENSE.GPL
+diff --git a/package/mpv/mpv.mk b/package/mpv/mpv.mk
+index a7c9f7d74a..18f307d186 100644
+--- a/package/mpv/mpv.mk
++++ b/package/mpv/mpv.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-MPV_VERSION = 0.32.0
++MPV_VERSION = 0.33.0
+ MPV_SITE = $(call github,mpv-player,mpv,v$(MPV_VERSION))
+ MPV_DEPENDENCIES = \
+-	host-pkgconf ffmpeg zlib \
++	host-pkgconf ffmpeg libass zlib \
+ 	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
+ MPV_LICENSE = GPL-2.0+
+ MPV_LICENSE_FILES = LICENSE.GPL
+@@ -23,7 +23,6 @@ MPV_CONF_OPTS = \
+ 	--disable-coreaudio \
+ 	--disable-cuda-hwaccel \
+ 	--disable-opensles \
+-	--disable-rsound \
+ 	--disable-rubberband \
+ 	--disable-uchardet \
+ 	--disable-vapoursynth
+@@ -77,14 +76,6 @@ else
+ MPV_CONF_OPTS += --disable-libarchive
+ endif
+ 
+-# libass subtitle support
+-ifeq ($(BR2_PACKAGE_LIBASS),y)
+-MPV_CONF_OPTS += --enable-libass
+-MPV_DEPENDENCIES += libass
+-else
+-MPV_CONF_OPTS += --disable-libass
+-endif
+-
+ # bluray support
+ ifeq ($(BR2_PACKAGE_LIBBLURAY),y)
+ MPV_CONF_OPTS += --enable-libbluray
+@@ -150,14 +141,6 @@ else
+ MPV_CONF_OPTS += --disable-pulse
+ endif
+ 
+-# samba support
+-ifeq ($(BR2_PACKAGE_SAMBA4),y)
+-MPV_CONF_OPTS += --enable-libsmbclient
+-MPV_DEPENDENCIES += samba4
+-else
+-MPV_CONF_OPTS += --disable-libsmbclient
+-endif
+-
+ # SDL support
+ # Sdl2 requires 64-bit sync intrinsics
+ ifeq ($(BR2_TOOLCHAIN_HAS_SYNC_8)$(BR2_PACKAGE_SDL2),yy)
+diff --git a/package/tovid/Config.in b/package/tovid/Config.in
+index f4ddcfa4a0..ff92e93f8b 100644
+--- a/package/tovid/Config.in
++++ b/package/tovid/Config.in
+@@ -6,8 +6,9 @@ config BR2_PACKAGE_TOVID
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+ 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_5 # mpv
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # mpv -> libass -> harfbuzz
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC # mpv
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # mpv -> libass -> harfbuzz
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC # mpv
+ 	# The below dependencies are runtime dependencies only
+ 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # procps_ng
+@@ -28,12 +29,13 @@ config BR2_PACKAGE_TOVID
+ 
+ 	  http://tovid.wikia.com/wiki/Installing_tovid
+ 
+-comment "tovid needs a toolchain w/ threads, C++, wchar, gcc >= 4.5"
++comment "tovid needs a toolchain w/ threads, C++, wchar, gcc >= 4.8"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS \
+-		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_5 \
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 \
+ 		|| !BR2_INSTALL_LIBSTDCPP \
+ 		|| !BR2_USE_WCHAR
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
+@@ -42,6 +44,7 @@ comment "tovid depends on python or python3"
+ 	depends on !BR2_PACKAGE_PYTHON && !BR2_PACKAGE_PYTHON3
+ 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
 -- 
-2.20.1
+2.29.2
