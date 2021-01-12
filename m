@@ -1,76 +1,69 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 12 Jan 2021 09:39:22 +0100
-Subject: [Buildroot] Host tar 1.32 build issues
-In-Reply-To: <CAGt4E5srq1hg4T1YoKX9UUCTJ96DdnNL1XFrYvsgpWjM_KM1EA@mail.gmail.com>
-References: <CAGt4E5srq1hg4T1YoKX9UUCTJ96DdnNL1XFrYvsgpWjM_KM1EA@mail.gmail.com>
-Message-ID: <95c3b23f-6805-e526-8bc2-a0d48a66895c@mind.be>
+From: Chris Packham <judge.packham@gmail.com>
+Date: Tue, 12 Jan 2021 22:08:40 +1300
+Subject: [Buildroot] [PATCH] package/coremark-pro: clean up package
+Message-ID: <20210112090840.20230-1-judge.packham@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+- Use the COREMARK_PRO_MARKS definition from the build recipe to
+  generate the coremark-pro.sh
+- Use %x:%X as the date stamp in the results file.
 
+Suggested-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Chris Packham <judge.packham@gmail.com>
+---
+ package/coremark-pro/coremark-pro.mk                       | 3 ++-
+ .../coremark-pro/{coremark-pro.sh => coremark-pro.sh.in}   | 7 +++----
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+ rename package/coremark-pro/{coremark-pro.sh => coremark-pro.sh.in} (85%)
 
-On 12/01/2021 00:45, Markus Mayer via buildroot wrote:
-> Hi all,
-> 
-> I noticed that host tar is no longer locked to 1.29 and has been
-> bumped to 1.32. The only problem is that the host tar build requires
-> tar in CPIO format, and that 1.32 does not exist as CPIO archive on
-> the official server. As per http://mirror.sergal.org/gnu/tar/, tar
-> 1.31 is the latest that has a CPIO archive. 1.32 and 1.33 do not.
-> 
-> Naturally, that currently causes the build to fail if
-> BR2_FORCE_HOST_BUILD is enabled.
-
- Good catch!
-
-> I don't know if the absence of CPIO archives is temporary or
-> permanent.
-
- AFAIU it's permanent :-(
-
-> It might be better to use tar-latest.cpio.gz as the host
-> tar version to prevent this issue from happening again in the future.
-> 
-> -HOST_TAR_SOURCE = tar-$(TAR_VERSION).cpio.gz
-> +HOST_TAR_SOURCE = tar-latest.cpio.gz
-> 
-> I tried this out and, while it would be nice, it doesn't seem to be
-> possible to do it this way, because the directory inside the tar-ball
-> is the actual version number. It would try to use
-> "build/host-tar-last/tar-last/*" which doesn't exist, and the build
-> still fails.
-
- It should be possible to overcome this problem with:
-
--        mv $(@D)/tar-$(HOST_TAR_VERSION)/* $(@D)
-+        mv $(@D)/tar-*/* $(@D)
-
-(untested, of course).
-
- And for good measure, remove $(@D)/tar-* before extraction.
-
-
- An alternative is to download a tarball and extract it with custom extraction
-commands that don't use --strip-components or --exclude or $(TAR_OPTIONS). That
-way, we can extract it with any POSIX-y tar version.
-
-
- Regards,
- Arnout
-
-> The only way I have been able to get past the problem was to
-> reintroduce the host specific TAR variables that were removed and to
-> hard-code them to 1.31 (rather than 1.29 as it was before).
-> 
-> What's your take on this?
-> 
-> Thanks,
-> -Markus
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+diff --git a/package/coremark-pro/coremark-pro.mk b/package/coremark-pro/coremark-pro.mk
+index d3e99fcdfd..fdcfda33e8 100644
+--- a/package/coremark-pro/coremark-pro.mk
++++ b/package/coremark-pro/coremark-pro.mk
+@@ -36,7 +36,8 @@ define COREMARK_PRO_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D $(@D)/builds/linux$(if $(BR2_ARCH_IS_64),64)/gcc$(if $(BR2_ARCH_IS_64),64)/data/libbmp/Rose256.bmp $(TARGET_DIR)/usr/share/coremark-pro/Rose256.bmp
+ 	$(foreach s,$(COREMARK_PRO_SCRIPTS),\
+ 		$(INSTALL) -D $(@D)/util/perl/$(s) $(TARGET_DIR)/usr/share/coremark-pro/util/perl/$(s)$(sep))
+-	$(Q)cp package/coremark-pro/coremark-pro.sh $(TARGET_DIR)/usr/bin/
++	$(Q)sed "s/@COREMARK_PRO_MARKS@/$(COREMARK_PRO_MARKS)/" \
++		package/coremark-pro/coremark-pro.sh.in >$(TARGET_DIR)/usr/bin/coremark-pro.sh
+ endef
+ 
+ $(eval $(generic-package))
+diff --git a/package/coremark-pro/coremark-pro.sh b/package/coremark-pro/coremark-pro.sh.in
+similarity index 85%
+rename from package/coremark-pro/coremark-pro.sh
+rename to package/coremark-pro/coremark-pro.sh.in
+index 65ad9df645..8b370b7c75 100755
+--- a/package/coremark-pro/coremark-pro.sh
++++ b/package/coremark-pro/coremark-pro.sh.in
+@@ -1,8 +1,7 @@
+ #!/bin/sh
+ # SPDX-License-Identifier: Apache-2.0
+ 
+-workloads="cjpeg-rose7-preset core linear_alg-mid-100x100-sp \
+-    loops-all-mid-10k-sp nnet_test parser-125k radix2-big-64k sha-test zip-test"
++workloads="@COREMARK_PRO_MARKS@"
+ 
+ rm -rf /tmp/coremark-pro
+ mkdir -p /tmp/coremark-pro
+@@ -16,11 +15,11 @@ for contype in single best; do
+     for wld in $workloads; do
+         [ "$contype" = "single" ] && XCMD="-c1 -w1"
+         [ "$contype" = "best" ] && XCMD="-c$(nproc) -w$(nproc)"
+-        echo "#Results for verification run started at $(date +%y%j:%H:%M:%S) XCMD=$XCMD" >$wld-$contype-result.log
++        echo "#Results for verification run started at $(date +%x:%X) XCMD=$XCMD" >$wld-$contype-result.log
+         echo "Verification run for $wld"
+         $wld $XCMD -v1 > $wld.run.log
+         LC_ALL=C perl /usr/share/coremark-pro/util/perl/results_parser.pl $wld-$contype-result.log $wld.run.log
+-        echo "#Results for performance runs started at $(date +%y%j:%H:%M:%S) XCMD=$XCMD" >>$wld-$contype-result.log
++        echo "#Results for performance runs started at $(date +%x:%X) XCMD=$XCMD" >>$wld-$contype-result.log
+         echo "Performance run for $wld"
+         for i in 1 2 3; do
+             $wld $XCMD -v0 > $wld.run.log
+-- 
+2.30.0
