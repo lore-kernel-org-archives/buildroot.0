@@ -1,45 +1,37 @@
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Tue, 12 Jan 2021 10:34:21 +0100
-Subject: [Buildroot] [PATCH] package/gr-osmosdr: bump to 0.2.3
-Message-ID: <1610444061-29427-1-git-send-email-gwenj@trabucayre.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 12 Jan 2021 11:06:22 +0100
+Subject: [Buildroot] [PATCH 1/1] toolchain: CodeSourcery AArch64 2014.11
+ does not contain libatomic
+In-Reply-To: <20210109123337.1512700-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sat, 9 Jan 2021 13:33:37 +0100")
+References: <20210109123337.1512700-1-bernd.kuhls@t-online.de>
+Message-ID: <87pn2ampup.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-Bump to 0.2.3 and fix hash space.
+ > Fixes build error
+ > output/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-amd-linux-gnu/4.9.1/../../../../aarch64-amd-linux-gnu/bin/ld:
+ >  cannot find -latomic
 
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
----
- package/gr-osmosdr/gr-osmosdr.hash | 4 ++--
- package/gr-osmosdr/gr-osmosdr.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ > using this defconfig
 
-diff --git a/package/gr-osmosdr/gr-osmosdr.hash b/package/gr-osmosdr/gr-osmosdr.hash
-index 2acd85f32b..95f1137e38 100644
---- a/package/gr-osmosdr/gr-osmosdr.hash
-+++ b/package/gr-osmosdr/gr-osmosdr.hash
-@@ -1,3 +1,3 @@
- # Locally calculated:
--sha256  5a7ce7afee38a56191b5d16cb4a91c92476729ff16ed09cbba5a3851ac619713 gr-osmosdr-0.2.2.tar.gz
--sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 COPYING
-+sha256  11b1eb13725ced5ded9121a10aaf7bccf2430c5c69d020791408219968665b71  gr-osmosdr-0.2.3.tar.gz
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/gr-osmosdr/gr-osmosdr.mk b/package/gr-osmosdr/gr-osmosdr.mk
-index 919b43961a..870db60c55 100644
---- a/package/gr-osmosdr/gr-osmosdr.mk
-+++ b/package/gr-osmosdr/gr-osmosdr.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GR_OSMOSDR_VERSION = 0.2.2
-+GR_OSMOSDR_VERSION = 0.2.3
- GR_OSMOSDR_SITE = $(call github,osmocom,gr-osmosdr,v$(GR_OSMOSDR_VERSION))
- GR_OSMOSDR_LICENSE = GPL-3.0+
- GR_OSMOSDR_LICENSE_FILES = COPYING
+ > BR2_aarch64=y
+ > BR2_TOOLCHAIN_EXTERNAL=y
+ > BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AARCH64=y
+ > BR2_PACKAGE_OPENSSL=y
+
+ > libopenssl is only used here as an example: all packages adding -latomic
+ > if BR2_TOOLCHAIN_HAS_LIBATOMIC=y are broken, like dav1d, ffmpeg, gnutls,
+ > kodi and vlc.
+
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+Committed to 2020.02.x and 2020.11.x, thanks.
+
 -- 
-2.20.1
+Bye, Peter Korsgaard
