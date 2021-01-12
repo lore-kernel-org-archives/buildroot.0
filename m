@@ -1,40 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Jan 2021 18:41:59 +0100
-Subject: [Buildroot] [PATCHv2] package/libclc: switch to use the frozen,
- legacy mirror
-In-Reply-To: <20210109211004.3108263-1-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Sat, 9 Jan 2021 22:10:04 +0100")
-References: <20210109211004.3108263-1-yann.morin.1998@free.fr>
-Message-ID: <87r1mqkq6w.fsf@dell.be.48ers.dk>
+Date: Tue, 12 Jan 2021 18:40:00 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/tzdata: drop
+ obosolete, legacy zic option -y
+Message-ID: <20210112172411.478D380469@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=c676c2fc35c61923c07483a7692264ee6d21c277
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
- > The LLVM project has switched to using a monorepo to host all their
- > components. The separate, individual repositories have been closed
- > late 2020 / early 2021. The libclc repository is no longer.
+The following commits:
+  - 7868289fd534 package/zic: bump version to 2020f
+  - c99374ecbb5e package/tzdata: bump version to 2020f
 
- > Switch to using the libclc source from the llvm legacy and frozen
- > mirror.
+bumped the tzdata from version 2020a to 2020f. However, in 2020b, the
+zic option '-y' was removed, and so was the yearistype.sh script [0].
 
- > Even though we could switch over to using the github helper, we just
- > keep using the git download method: it is a small repository, and it
- > will not impact people that were already using it.
+This now spews annoying warnings:
 
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
- > Cc: Romain Naour <romain.naour@gmail.com>
- > Cc: Valentin Korenblit <valentinkorenblit@gmail.com>
- > Cc: Michael Opdenacker <michael.opdenacker@bootlin.com>
+    warning: -y ignored
 
- > ---
- > Changes v1 -> v2:
- >   - keep everything as-is, just switch to the frozen mirror
+Fortunately, it still consumes its argument, so the missing yearistype.sh
+is simply ignored.
 
-Committed to 2020.02.x and 2020.11.x, thanks.
+Drop that option.
 
--- 
-Bye, Peter Korsgaard
+[0] https://mm.icann.org/pipermail/tz-announce/2020-October/000059.html
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+(cherry picked from commit 7f78eef767baaeab7bbc008c599027a77b6d3169)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/tzdata/tzdata.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
+index 41c4971584..04f5d84bf0 100644
+--- a/package/tzdata/tzdata.mk
++++ b/package/tzdata/tzdata.mk
+@@ -51,8 +51,8 @@ endef
+ define HOST_TZDATA_BUILD_CMDS
+ 	(cd $(@D); \
+ 		for zone in $(TZDATA_ZONELIST); do \
+-			$(ZIC) -d _output/posix -y yearistype.sh $$zone || exit 1; \
+-			$(ZIC) -d _output/right -L leapseconds -y yearistype.sh $$zone || exit 1; \
++			$(ZIC) -d _output/posix $$zone || exit 1; \
++			$(ZIC) -d _output/right -L leapseconds $$zone || exit 1; \
+ 		done; \
+ 	)
+ endef
