@@ -1,649 +1,178 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Tue, 12 Jan 2021 09:30:43 +0100
-Subject: [Buildroot] [PATCH 1/1] package/netsniff-ng: bump version to 0.6.8
-Message-ID: <20210112083044.32439-1-heiko.thiery@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 12 Jan 2021 08:36:15 -0000
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2021-01-11
+Message-ID: <20210112083621.81E1D870C0@hemlock.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also drop upstream patches that are already in version.
+Hello,
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
----
- ...ezahn-remove-unused-MZ_SIZE_LONG_INT.patch |  41 ----
- ...e-needlessly-global-variables-static.patch | 139 -------------
- ...-variable-definitions-cli-h-to-cli-c.patch |  77 --------
- ...le-definitions-from-mops-h-to-mops-c.patch |  69 -------
- ...-definitions-from-llist-h-to-llist-c.patch |  47 -----
- ...definitions-from-mz-h-to-mausezahn-c.patch | 184 ------------------
- package/netsniff-ng/netsniff-ng.hash          |   2 +-
- package/netsniff-ng/netsniff-ng.mk            |   2 +-
- 8 files changed, 2 insertions(+), 559 deletions(-)
- delete mode 100644 package/netsniff-ng/0001-mausezahn-remove-unused-MZ_SIZE_LONG_INT.patch
- delete mode 100644 package/netsniff-ng/0002-mausezahn-make-needlessly-global-variables-static.patch
- delete mode 100644 package/netsniff-ng/0003-mausezahn-move-variable-definitions-cli-h-to-cli-c.patch
- delete mode 100644 package/netsniff-ng/0004-mausezahn-move-variable-definitions-from-mops-h-to-mops-c.patch
- delete mode 100644 package/netsniff-ng/0005-mausezahn-move-variable-definitions-from-llist-h-to-llist-c.patch
- delete mode 100644 package/netsniff-ng/0006-mausezahn-move-variable-definitions-from-mz-h-to-mausezahn-c.patch
+Autobuild statistics for 2021-01-11
+===================================
 
-diff --git a/package/netsniff-ng/0001-mausezahn-remove-unused-MZ_SIZE_LONG_INT.patch b/package/netsniff-ng/0001-mausezahn-remove-unused-MZ_SIZE_LONG_INT.patch
-deleted file mode 100644
-index b07682a76d..0000000000
---- a/package/netsniff-ng/0001-mausezahn-remove-unused-MZ_SIZE_LONG_INT.patch
-+++ /dev/null
-@@ -1,41 +0,0 @@
--From c6dd9abd8d7a5332d0c1078196528926054791ae Mon Sep 17 00:00:00 2001
--From: Tobias Klauser <tklauser@distanz.ch>
--Date: Mon, 15 Jun 2020 18:05:09 +0200
--Subject: [PATCH] mausezahn: remove unused MZ_SIZE_LONG_INT
--
--Signed-off-by: Tobias Klauser <tklauser@distanz.ch>
--[Retrieved from:
--https://github.com/netsniff-ng/netsniff-ng/commit/c6dd9abd8d7a5332d0c1078196528926054791ae]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- staging/mausezahn.c | 3 ---
-- staging/mz.h        | 2 --
-- 2 files changed, 5 deletions(-)
--
--diff --git a/staging/mausezahn.c b/staging/mausezahn.c
--index 6c36166e..19d2937a 100644
----- a/staging/mausezahn.c
--+++ b/staging/mausezahn.c
--@@ -192,9 +192,6 @@ int reset(void)
--    int i;
--    time_t t;
-- 
---   // Determine platform type sizes:
---   MZ_SIZE_LONG_INT = sizeof(long int);	     
---
--    mz_default_config_path[0] = 0x00;
--    mz_default_log_path[0] = 0x00;
-- 
--diff --git a/staging/mz.h b/staging/mz.h
--index 5afe57d1..c7a131d8 100644
----- a/staging/mz.h
--+++ b/staging/mz.h
--@@ -108,8 +108,6 @@ static inline void verbose_l2(const char *format, ...)
-- #define IPADDRSIZE 46
-- 
-- 
---int MZ_SIZE_LONG_INT;
---
-- char mz_default_config_path[256];
-- char mz_default_log_path[256];
-- 
-diff --git a/package/netsniff-ng/0002-mausezahn-make-needlessly-global-variables-static.patch b/package/netsniff-ng/0002-mausezahn-make-needlessly-global-variables-static.patch
-deleted file mode 100644
-index d944406f37..0000000000
---- a/package/netsniff-ng/0002-mausezahn-make-needlessly-global-variables-static.patch
-+++ /dev/null
-@@ -1,139 +0,0 @@
--From bfa3c89317869ffe1e90b7e01e7cacad7a7ea10e Mon Sep 17 00:00:00 2001
--From: Tobias Klauser <tklauser@distanz.ch>
--Date: Thu, 13 Aug 2020 12:09:28 +0200
--Subject: [PATCH] mausezahn: make needlessly global variables static
--
--Move variables only used withing a single compilation unit from mz.h and
--make them static. This avoids "multiple definition of symbol" linker
--errors with gcc-10.
--
--Updates #216
--
--Signed-off-by: Tobias Klauser <tklauser@distanz.ch>
--[Retrieved from:
--https://github.com/netsniff-ng/netsniff-ng/commit/bfa3c89317869ffe1e90b7e01e7cacad7a7ea10e]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- staging/dns.c     |  2 ++
-- staging/mz.h      | 28 +---------------------------
-- staging/rcv_rtp.c | 19 +++++++++++++++++++
-- staging/rtp.c     |  1 -
-- 4 files changed, 22 insertions(+), 28 deletions(-)
--
--diff --git a/staging/dns.c b/staging/dns.c
--index bfa61d84..83227e25 100644
----- a/staging/dns.c
--+++ b/staging/dns.c
--@@ -89,6 +89,8 @@
-- 		"|   arcount (or arc) ........... Number of RRs in additional records section  0  / 0\n" \
-- 		"\n"
-- 
--+static u_int8_t  gbuf[MAX_PAYLOAD_SIZE];  // This is only a generic global buffer to handover data more easily
--+static u_int32_t gbuf_s;
-- 
-- int dns_get_query (char* argval);
-- int dns_get_answer (char* argval);
--diff --git a/staging/mz.h b/staging/mz.h
--index c7a131d8..42e64cfc 100644
----- a/staging/mz.h
--+++ b/staging/mz.h
--@@ -285,11 +285,6 @@ FILE *fp, *fp2;             // global multipurpose file pointer
-- long double total_d;
-- clock_t mz_start, mz_stop;
-- 
---enum rtp_display_mode {
---	BAR, NCURSES, TEXT
---} rtp_dm;
---	
---
-- int mz_rand;
-- int bwidth;
-- 
--@@ -298,14 +293,7 @@ struct mz_timestamp {
-- 	u_int32_t nsec;
-- };
-- 
---struct mz_timestamp 
---	tv, 
---	timeTX[TIME_COUNT_MAX],  
---	timeRX[TIME_COUNT_MAX];
---
-- int32_t
---  time0,
---  jitter_rfc,
--   jitter[TIME_COUNT_MAX];   
-- 
-- int 
--@@ -322,14 +310,8 @@ u_int16_t
--   sqnr_next;
-- 
-- u_int32_t
---  drop,    // packet drop count
---  dis,     // packet disorder count
--   gind,      // a global index to run through deltaRX, deltaTX, and jitter
---  gind_max,  // the amount of entries used in the (ugly oversized) arrays; per default set to TIME_COUNT
---  gtotal;    // counts number of file write cycles (see "got_rtp_packet()") 
---
---
---char rtp_filter_str[64];
--+  gind_max;  // the amount of entries used in the (ugly oversized) arrays; per default set to TIME_COUNT
-- 
-- struct tx_struct
-- {
--@@ -496,14 +478,6 @@ struct tx_struct
--    
-- } tx;  // NOTE: tx elements are considered as default values for MOPS
-- 
---
---
---
---
---u_int8_t  gbuf[MAX_PAYLOAD_SIZE];  // This is only a generic global buffer to handover data more easily
---u_int32_t gbuf_s;                  //
---
---
-- // ************************************
-- // 
-- //  Prototypes: General Tools
--diff --git a/staging/rcv_rtp.c b/staging/rcv_rtp.c
--index 0a911552..f43b92cd 100644
----- a/staging/rcv_rtp.c
--+++ b/staging/rcv_rtp.c
--@@ -39,6 +39,25 @@
-- #include "mz.h"
-- #include "mops.h"
-- 
--+static enum rtp_display_mode {
--+	BAR, NCURSES, TEXT
--+} rtp_dm;
--+
--+static int32_t
--+  time0,
--+  jitter_rfc;
--+
--+static struct mz_timestamp
--+  timeTX[TIME_COUNT_MAX],
--+  timeRX[TIME_COUNT_MAX];
--+
--+static u_int32_t
--+  drop,    // packet drop count
--+  dis,     // packet disorder count
--+  gtotal;    // counts number of file write cycles (see "got_rtp_packet()")
--+
--+static char rtp_filter_str[64];
--+
-- // Initialize the rcv_rtp process: Read user parameters and initialize globals
-- int rcv_rtp_init(void)
-- {
--diff --git a/staging/rtp.c b/staging/rtp.c
--index 54a195eb..da40884b 100644
----- a/staging/rtp.c
--+++ b/staging/rtp.c
--@@ -56,7 +56,6 @@
-- 		"|\n"
-- 
-- 
---
-- int create_rtp_packet(void)
-- {
-- 	u_int8_t byte1,	byte2;
-diff --git a/package/netsniff-ng/0003-mausezahn-move-variable-definitions-cli-h-to-cli-c.patch b/package/netsniff-ng/0003-mausezahn-move-variable-definitions-cli-h-to-cli-c.patch
-deleted file mode 100644
-index 12662d78fc..0000000000
---- a/package/netsniff-ng/0003-mausezahn-move-variable-definitions-cli-h-to-cli-c.patch
-+++ /dev/null
-@@ -1,77 +0,0 @@
--From 0d5aa3246c20dad2d76165559fb575136b7216e8 Mon Sep 17 00:00:00 2001
--From: Tobias Klauser <tklauser@distanz.ch>
--Date: Wed, 19 Aug 2020 12:04:47 +0200
--Subject: [PATCH] mausezahn: move variable definitions cli.h to cli.c
--
--Move variable definitions to avoid "multiple definition of symbol"
--linker errors with gcc-10.
--
--Updates #216
--
--Signed-off-by: Tobias Klauser <tklauser@distanz.ch>
--[Retrieved from:
--https://github.com/netsniff-ng/netsniff-ng/commit/0d5aa3246c20dad2d76165559fb575136b7216e8]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- staging/cli.c | 13 +++++++++++++
-- staging/cli.h | 20 ++++++++++----------
-- 2 files changed, 23 insertions(+), 10 deletions(-)
--
--diff --git a/staging/cli.c b/staging/cli.c
--index 5b5a1592..dbfdb550 100644
----- a/staging/cli.c
--+++ b/staging/cli.c
--@@ -23,6 +23,19 @@
-- #include "mops.h"
-- #include "llist.h"
-- 
--+struct cli_def *gcli;
--+
--+char mz_username[32];
--+char mz_password[32];
--+char mz_enable[32];
--+char mz_listen_addr[16];
--+int mz_port;
--+struct mops *clipkt; // actual packet used by CLI thread
--+
--+int clidev;
--+
--+int cli_debug;
--+
-- void mz_cli_init(void)
-- {
-- 	amp_head = automops_init();
--diff --git a/staging/cli.h b/staging/cli.h
--index 1a0156fd..2ec153a0 100644
----- a/staging/cli.h
--+++ b/staging/cli.h
--@@ -54,19 +54,19 @@
-- #define MZ_DEFAULT_ENABLE_PASSWORD "mops"
-- #define MZ_DEFAULT_PORT     25542     // Towel day and 42
-- 
---struct cli_def *gcli;
---
---char mz_username[32];
---char mz_password[32];
---char mz_enable[32];
---char mz_listen_addr[16];
---int mz_port;
---struct mops *clipkt; // actual packet used by CLI thread
--+extern struct cli_def *gcli;
--+
--+extern char mz_username[32];
--+extern char mz_password[32];
--+extern char mz_enable[32];
--+extern char mz_listen_addr[16];
--+extern int mz_port;
--+extern struct mops *clipkt; // actual packet used by CLI thread
-- 	
---int clidev;
--+extern int clidev;
-- 
-- // =================================================================
---int cli_debug;
--+extern int cli_debug;
-- 
-- // Flags from 0x0000 to 0xFFFF
-- // cli_debug & 8000  => Developer specific debugs
-diff --git a/package/netsniff-ng/0004-mausezahn-move-variable-definitions-from-mops-h-to-mops-c.patch b/package/netsniff-ng/0004-mausezahn-move-variable-definitions-from-mops-h-to-mops-c.patch
-deleted file mode 100644
-index 834ee93a9b..0000000000
---- a/package/netsniff-ng/0004-mausezahn-move-variable-definitions-from-mops-h-to-mops-c.patch
-+++ /dev/null
-@@ -1,69 +0,0 @@
--From 3178ceb8c7e0a94ed29bbd1e277f03bb0d5a3d44 Mon Sep 17 00:00:00 2001
--From: Tobias Klauser <tklauser@distanz.ch>
--Date: Wed, 19 Aug 2020 12:58:51 +0200
--Subject: [PATCH] mausezahn: move variable definitions from mops.h to mops.c
--
--Move variable definitions to avoid "multiple definition of symbol"
--linker errors with gcc-10.
--
--Updates #216
--
--Signed-off-by: Tobias Klauser <tklauser@distanz.ch>
--[Retrieved from:
--https://github.com/netsniff-ng/netsniff-ng/commit/3178ceb8c7e0a94ed29bbd1e277f03bb0d5a3d44]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- staging/mops.c | 5 ++++-
-- staging/mops.h | 8 ++++----
-- 2 files changed, 8 insertions(+), 5 deletions(-)
--
--diff --git a/staging/mops.c b/staging/mops.c
--index 599d317f..fc00e29a 100644
----- a/staging/mops.c
--+++ b/staging/mops.c
--@@ -46,8 +46,11 @@
-- #include "mz.h"
-- #include "mops.h"
-- 
--+unsigned int min_frame_s;
--+unsigned int max_frame_s;
-- 
---
--+struct automops * amp_head;
--+struct mops *mp_head; // This global will point to the head of the mops list
-- 
-- // Creates first element, aka "head" element
-- // This element can also be used! See mops_alloc_packet!
--diff --git a/staging/mops.h b/staging/mops.h
--index 96953e66..cf19f098 100644
----- a/staging/mops.h
--+++ b/staging/mops.h
--@@ -114,8 +114,8 @@
-- // These are initialized with the definitions MIN_MOPS_FRAME_SIZE and 
-- // MAX_MOPS_FRAME_SIZE above but can be overridden by the user (without
-- // extending these limits)
---unsigned int min_frame_s;
---unsigned int max_frame_s;
--+extern unsigned int min_frame_s;
--+extern unsigned int max_frame_s;
-- 
-- struct mops_counter
-- {
--@@ -246,7 +246,7 @@ struct automops {
-- };
-- 
-- 
---struct automops * amp_head;
--+extern struct automops * amp_head;
-- 
-- 
-- struct mops
--@@ -688,7 +688,7 @@ struct mops_ext_syslog //TODO
--    
-- /////////////////////////////////////////////////////////////////
-- 
---struct mops *mp_head; // This global will point to the head of the mops list
--+extern struct mops *mp_head; // This global will point to the head of the mops list
-- 
-- /////////////////////////////////////////////////////////////////
-- // MOPS Prototypes:
-diff --git a/package/netsniff-ng/0005-mausezahn-move-variable-definitions-from-llist-h-to-llist-c.patch b/package/netsniff-ng/0005-mausezahn-move-variable-definitions-from-llist-h-to-llist-c.patch
-deleted file mode 100644
-index 99eba8e7da..0000000000
---- a/package/netsniff-ng/0005-mausezahn-move-variable-definitions-from-llist-h-to-llist-c.patch
-+++ /dev/null
-@@ -1,47 +0,0 @@
--From 6f20cd366ea73b8b9cf49568e9b95cd79922daed Mon Sep 17 00:00:00 2001
--From: Tobias Klauser <tklauser@distanz.ch>
--Date: Wed, 19 Aug 2020 13:13:34 +0200
--Subject: [PATCH] mausezahn: move variable definitions from llist.h to llist.c
--
--Move variable definitions to avoid "multiple definition of symbol"
--linker errors with gcc-10.
--
--Updates #216
--
--Signed-off-by: Tobias Klauser <tklauser@distanz.ch>
--[Retrieved from:
--https://github.com/netsniff-ng/netsniff-ng/commit/6f20cd366ea73b8b9cf49568e9b95cd79922daed]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- staging/llist.c | 2 ++
-- staging/llist.h | 4 ++--
-- 2 files changed, 4 insertions(+), 2 deletions(-)
--
--diff --git a/staging/llist.c b/staging/llist.c
--index d729e465..9ef2d1a2 100644
----- a/staging/llist.c
--+++ b/staging/llist.c
--@@ -40,6 +40,8 @@
--  * 
--  */ 
-- 
--+struct mz_ll *packet_sequences;
--+struct mz_ll *cli_seq; // currently edited packet sequence used by CLI
-- 
-- // Create new list element - may be the first one (list==NULL)
-- //
--diff --git a/staging/llist.h b/staging/llist.h
--index 49a87c7d..d9e59b86 100644
----- a/staging/llist.h
--+++ b/staging/llist.h
--@@ -49,8 +49,8 @@ struct mz_ll {
-- 	void *data; // points to your data
-- };
-- 
---struct mz_ll *packet_sequences;
---struct mz_ll *cli_seq; // currently edited packet sequence used by CLI
--+extern struct mz_ll *packet_sequences;
--+extern struct mz_ll *cli_seq; // currently edited packet sequence used by CLI
-- 
-- // prototypes
-- struct mz_ll * mz_ll_create_new_element(struct mz_ll *list);
-diff --git a/package/netsniff-ng/0006-mausezahn-move-variable-definitions-from-mz-h-to-mausezahn-c.patch b/package/netsniff-ng/0006-mausezahn-move-variable-definitions-from-mz-h-to-mausezahn-c.patch
-deleted file mode 100644
-index d8db7dffdd..0000000000
---- a/package/netsniff-ng/0006-mausezahn-move-variable-definitions-from-mz-h-to-mausezahn-c.patch
-+++ /dev/null
-@@ -1,184 +0,0 @@
--From 56f8f399a20275a4a73ebc4450bd8eeba7ee1656 Mon Sep 17 00:00:00 2001
--From: Tobias Klauser <tklauser@distanz.ch>
--Date: Wed, 19 Aug 2020 13:13:54 +0200
--Subject: [PATCH] mausezahn: move variable definitions from mz.h to mausezahn.c
--
--Move variable definitions to avoid "multiple definition of symbol"
--linker errors with gcc-10.
--
--Fixes #216
--
--Signed-off-by: Tobias Klauser <tklauser@distanz.ch>
--[Retrieved from:
--https://github.com/netsniff-ng/netsniff-ng/commit/56f8f399a20275a4a73ebc4450bd8eeba7ee1656]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- staging/mausezahn.c | 46 ++++++++++++++++++++++++++++++++++++++++
-- staging/mz.h        | 51 +++++++++++++++++++++++++--------------------
-- 2 files changed, 74 insertions(+), 23 deletions(-)
--
--diff --git a/staging/mausezahn.c b/staging/mausezahn.c
--index 19d2937a..cae57a1b 100644
----- a/staging/mausezahn.c
--+++ b/staging/mausezahn.c
--@@ -32,8 +32,54 @@
-- #include "die.h"
-- #include "dev.h"
-- 
--+enum operating_modes mode;
--+
--+int ipv6_mode;
--+int quiet;           // don't even print 'important standard short messages'
--+int verbose;         // report character
--+int simulate;        // if 1 then don't really send frames
--+
--+char path[256];
--+char filename[256];
--+FILE *fp, *fp2;             // global multipurpose file pointer
--+
--+long double total_d;
--+clock_t mz_start, mz_stop;
--+
--+int mz_rand;
--+int bwidth;
--+
--+int32_t
--+  jitter[TIME_COUNT_MAX];
--+
--+int
--+  rtp_log,
--+  time0_flag,        // If set then time0 has valid data
--+  sqnr0_flag;
--+
--+u_int8_t
--+  mz_ssrc[4];     // holds RTP stream identifier for rcv_rtp()
--+
--+u_int16_t
--+  sqnr_cur,
--+  sqnr_last,
--+  sqnr_next;
--+
--+u_int32_t
--+  gind,      // a global index to run through deltaRX, deltaTX, and jitter
--+  gind_max;  // the amount of entries used in the (ugly oversized) arrays; per default set to TIME_COUNT
--+
--+struct tx_struct tx;  // NOTE: tx elements are considered as default values for MOPS
--+
--+struct device_struct device_list[MZ_MAX_DEVICES];
--+
--+int device_list_entries;
--+
-- int verbose_level = 0;
-- 
--+char mz_default_config_path[256];
--+char mz_default_log_path[256];
--+
-- static const char *short_options = "46hqvVSxra:A:b:B:c:d:E:f:F:l:p:P:R:t:T:M:Q:X:";
-- 
-- static void signal_handler(int number)
--diff --git a/staging/mz.h b/staging/mz.h
--index 42e64cfc..33e74e60 100644
----- a/staging/mz.h
--+++ b/staging/mz.h
--@@ -108,8 +108,8 @@ static inline void verbose_l2(const char *format, ...)
-- #define IPADDRSIZE 46
-- 
-- 
---char mz_default_config_path[256];
---char mz_default_log_path[256];
--+extern char mz_default_config_path[256];
--+extern char mz_default_log_path[256];
-- 
-- 
-- struct arp_table_struct {
--@@ -159,9 +159,11 @@ struct device_struct
--    	struct pcap     *p_arp;                  // pcap handle
-- 	struct arp_table_struct *arp_table; // dedicated ARP table
-- 	int        ps;                    // packet socket
---} device_list[MZ_MAX_DEVICES];
--+};
--+
--+extern struct device_struct device_list[MZ_MAX_DEVICES];
-- 
---int device_list_entries;
--+extern int device_list_entries;
--                
-- 
-- #pragma pack(1)
--@@ -270,46 +272,47 @@ enum operating_modes
-- 	SYSLOG,
-- 	LLDP,
-- 	IGMP
---} mode;
--+};
-- 
--+extern enum operating_modes mode;
-- 
---int ipv6_mode;
---int quiet;           // don't even print 'important standard short messages'
---int verbose;         // report character
---int simulate;        // if 1 then don't really send frames
--+extern int ipv6_mode;
--+extern int quiet;           // don't even print 'important standard short messages'
--+extern int verbose;         // report character
--+extern int simulate;        // if 1 then don't really send frames
-- 
---char path[256];
---char filename[256];
---FILE *fp, *fp2;             // global multipurpose file pointer
--+extern char path[256];
--+extern char filename[256];
--+extern FILE *fp, *fp2;             // global multipurpose file pointer
-- 
---long double total_d;
---clock_t mz_start, mz_stop;
--+extern long double total_d;
--+extern clock_t mz_start, mz_stop;
-- 
---int mz_rand;
---int bwidth;
--+extern int mz_rand;
--+extern int bwidth;
-- 
-- struct mz_timestamp {
-- 	u_int32_t sec; 
-- 	u_int32_t nsec;
-- };
-- 
---int32_t
---  jitter[TIME_COUNT_MAX];   
--+extern int32_t
--+  jitter[TIME_COUNT_MAX];
-- 
---int 
--+extern int
--   rtp_log,
--   time0_flag,        // If set then time0 has valid data
--   sqnr0_flag;  
-- 
---u_int8_t
--+extern u_int8_t
--   mz_ssrc[4];     // holds RTP stream identifier for rcv_rtp()
-- 
---u_int16_t 
--+extern u_int16_t
--   sqnr_cur,
--   sqnr_last, 
--   sqnr_next;
-- 
---u_int32_t
--+extern u_int32_t
--   gind,      // a global index to run through deltaRX, deltaTX, and jitter
--   gind_max;  // the amount of entries used in the (ugly oversized) arrays; per default set to TIME_COUNT
-- 
--@@ -476,7 +479,9 @@ struct tx_struct
--      rtp_sqnr,
--      rtp_stmp;
--    
---} tx;  // NOTE: tx elements are considered as default values for MOPS
--+};
--+
--+extern struct tx_struct tx;  // NOTE: tx elements are considered as default values for MOPS
-- 
-- // ************************************
-- // 
-diff --git a/package/netsniff-ng/netsniff-ng.hash b/package/netsniff-ng/netsniff-ng.hash
-index 80736f85c2..40b015cb0d 100644
---- a/package/netsniff-ng/netsniff-ng.hash
-+++ b/package/netsniff-ng/netsniff-ng.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking signature
--sha256  96d85f2d216abcf6ba0ff610809b62c3a6430e21cbdd7bfef48cd9bde074848f  netsniff-ng-0.6.7.tar.xz
-+sha256  77d17d4158faf1d93c7d922a1bd7f093a8b437bd658292c830708540e10894ba  netsniff-ng-0.6.8.tar.xz
- # Locally computed
- sha256  b353349ba51e0d4b59cf2f188f0c285296e154ce8c58954bc5e0dc0282a4db2d  README
- sha256  8f6d85366f3763557d6ddd0637988b9ba11edef354e3c9302fff4262a235c387  COPYING
-diff --git a/package/netsniff-ng/netsniff-ng.mk b/package/netsniff-ng/netsniff-ng.mk
-index 46f1b3d152..f45246da63 100644
---- a/package/netsniff-ng/netsniff-ng.mk
-+++ b/package/netsniff-ng/netsniff-ng.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NETSNIFF_NG_VERSION = 0.6.7
-+NETSNIFF_NG_VERSION = 0.6.8
- NETSNIFF_NG_SITE = http://pub.netsniff-ng.org/netsniff-ng
- NETSNIFF_NG_SOURCE = netsniff-ng-$(NETSNIFF_NG_VERSION).tar.xz
- NETSNIFF_NG_LICENSE = GPL-2.0
+      branch |  OK | NOK | TIM | TOT |
+  2020.02.x  | 21  |  3  |  0  | 24  |
+  2020.11.x  | 19  |  3  |  0  | 22  |
+    master   | 121 | 60  |  4  | 185 |
+
+Classification of failures by reason for master
+-----------------------------------------------
+
+                      ell-0.35 | 6 
+        host-sentry-cli-1.57.0 | 6 
+at-7c74fa1aece6bc6db351763d... | 5 
+host-c-capnproto-9053ebe6ee... | 5 
+                 uclibc-1.0.37 | 4 
+                xenomai-3.0.10 | 4 
+                     host-mono | 3 
+libcamera-e59713c68678f3eb6... | 2 
+                      nano-5.4 | 2 
+                    olsr-0.9.8 | 2 
+                    qemu-5.2.0 | 2 
+            quickjs-2020-11-08 | 2 
+                rocksdb-6.13.3 | 2 
+             timescaledb-1.7.4 | 2 
+    trace-cmd-trace-cmd-v2.9.1 | 2 
+                       unknown | 2 
+                upmpdcli-1.5.5 | 2 
+               belle-sip-4.4.8 | 1 
+                  bustle-0.8.0 | 1 
+               capnproto-0.8.0 | 1 
+               collectd-5.12.0 | 1 
+         coremark-pro-1.1.2743 | 1 
+            erlang-jiffy-1.0.6 | 1 
+                    frotz-2.51 | 1 
+  gobject-introspection-1.64.1 | 1 
+                host-go-1.15.6 | 1 
+             kismet-2020-12-R3 | 1 
+                       vmtouch | 1 
+
+
+Detail of failures for master
+-----------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+   x86_64    | at-7c74fa1aece6bc6db351763d... | NOK | http://autobuild.buildroot.net/results/68404ba6e6d727e47a543a8b30c68bf1c068c826 |     
+   mipsel    | at-7c74fa1aece6bc6db351763d... | NOK | http://autobuild.buildroot.net/results/fbf3d103aa89339b5ae5e10932ab175385aef0c1 |     
+    i586     | at-7c74fa1aece6bc6db351763d... | NOK | http://autobuild.buildroot.net/results/d430f040a0e99f9e72a98026e98ecd3a1408ce77 |     
+    arc      | at-7c74fa1aece6bc6db351763d... | NOK | http://autobuild.buildroot.net/results/8965441c1c87786ee41a654bf7ab86059903d815 |     
+  riscv64    | at-7c74fa1aece6bc6db351763d... | NOK | http://autobuild.buildroot.net/results/62b7facbf6f047b75b30cc5a0593ef6694618856 |     
+   nios2     |        belle-sip-4.4.8         | NOK | http://autobuild.buildroot.net/results/a64ace2f833f61baf264d21001fdcc5e0bc19674 |     
+    arc      |          bustle-0.8.0          | NOK | http://autobuild.buildroot.net/results/b2f7b1a28c2c8085a0bc16e5015dcf092651e708 | ORPH
+  riscv64    |        capnproto-0.8.0         | NOK | http://autobuild.buildroot.net/results/0715cafb60791ff5ed73ef6d231f31b8500de751 |     
+  aarch64    |        collectd-5.12.0         | NOK | http://autobuild.buildroot.net/results/0e45117877ef8d9e08fec668b42658ade449904f |     
+    arm      |     coremark-pro-1.1.2743      | NOK | http://autobuild.buildroot.net/results/a2ecc2bf78cbbaa7288458163cbd980962e40245 |     
+   x86_64    |            ell-0.35            | NOK | http://autobuild.buildroot.net/results/067921c5aa468627245413b2e480a9385b76ba1c |     
+    arc      |            ell-0.35            | NOK | http://autobuild.buildroot.net/results/738e8eb5ce9d24f31f40f5904f165ecd018f621c |     
+   mipsel    |            ell-0.35            | NOK | http://autobuild.buildroot.net/results/757b94de0f30a224ae214f97c79cb7e54ff0d095 |     
+  powerpc    |            ell-0.35            | NOK | http://autobuild.buildroot.net/results/b6ed4e77d04636e18da21ee98eb26080770b6f10 |     
+    arm      |            ell-0.35            | NOK | http://autobuild.buildroot.net/results/e59eed089da09277fe1393b3bc589b26c78e51ed |     
+    arm      |            ell-0.35            | NOK | http://autobuild.buildroot.net/results/1cea8c8312fde3e0e4ca3da499f203945d1e2372 |     
+  aarch64    |       erlang-jiffy-1.0.6       | NOK | http://autobuild.buildroot.net/results/b5a2c493ed68aa1d8c4861b165ce513bfff96f66 |     
+    arm      |           frotz-2.51           | NOK | http://autobuild.buildroot.net/results/f78f02a0007d2f096093183f339dcc07feb89517 |     
+   s390x     |  gobject-introspection-1.64.1  | NOK | http://autobuild.buildroot.net/results/f9e8bd0d24657ce0d522ae8aee5983622e1bdd4c | ORPH
+   nios2     | host-c-capnproto-9053ebe6ee... | NOK | http://autobuild.buildroot.net/results/a56bc6fdb158683f32acc3791d02b4ce4d58dafd |     
+  riscv64    | host-c-capnproto-9053ebe6ee... | NOK | http://autobuild.buildroot.net/results/b4bb8dbcbfc49805e1c0e15430d42c4984e32ee8 |     
+  aarch64    | host-c-capnproto-9053ebe6ee... | NOK | http://autobuild.buildroot.net/results/552bdf7fb8cf6de9b4688c104faba47f1a4490f5 |     
+   s390x     | host-c-capnproto-9053ebe6ee... | NOK | http://autobuild.buildroot.net/results/ae61cab8c36f1e71a30e280eb8de4b8ce8dde920 |     
+    arm      | host-c-capnproto-9053ebe6ee... | NOK | http://autobuild.buildroot.net/results/f35f411177e24682ffb23f8078b373cf31330222 |     
+  mips64el   |         host-go-1.15.6         | NOK | http://autobuild.buildroot.net/results/fd9ee1a28cb36552d8b923bc601b7eba2f191544 |     
+    arm      |           host-mono            | TIM | http://autobuild.buildroot.net/results/9a02e043223e008eb2df5a15bea23bc08ac99d33 |     
+  powerpc    |           host-mono            | TIM | http://autobuild.buildroot.net/results/cf69c73f01e869700e0e9f85f8c06bb8218b6606 |     
+   x86_64    |           host-mono            | TIM | http://autobuild.buildroot.net/results/e0e102b667aa416a3a0f102cb1ae095fc1c0f267 |     
+  powerpc    |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/9ef976837e5f31497eaeaeabdc4cca25feef9baa |     
+  powerpc    |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/3fde17e51642cace1a301ecb5ff5b92a66a695ff |     
+   x86_64    |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/270fddd5d0fe1b114b9c77c633d7fa0738cee2b2 |     
+    arm      |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/58e5c87c6f3451155bbd9ce48e3a2806f5c83190 |     
+  riscv64    |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/dde6f061735f010daa9bb86fb68a49eaa9c3fc5a |     
+    arm      |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/18b2028a7cb7896d07feedfd27775ea71b33149a |     
+   xtensa    |       kismet-2020-12-R3        | NOK | http://autobuild.buildroot.net/results/d95b529157bc4e32769cc5ef320870e39d070039 | ORPH
+   mipsel    | libcamera-e59713c68678f3eb6... | NOK | http://autobuild.buildroot.net/results/6f476a617aa92c0a4b93b90dcb4165433c9ae74f |     
+ powerpc64   | libcamera-e59713c68678f3eb6... | NOK | http://autobuild.buildroot.net/results/a57b8c0e4e297fcb212ede797582e37061161248 |     
+  aarch64    |            nano-5.4            | NOK | http://autobuild.buildroot.net/results/5320ff8c1dea477832b050f81a42e71e60b7a57d | ORPH
+   mipsel    |            nano-5.4            | NOK | http://autobuild.buildroot.net/results/24894e62d6cf89d078959b12e67596c821d64696 | ORPH
+   mipsel    |           olsr-0.9.8           | NOK | http://autobuild.buildroot.net/results/b508943507f77ba0c4303b4c18f9bdeb994dd7aa | ORPH
+    arm      |           olsr-0.9.8           | NOK | http://autobuild.buildroot.net/results/e2455683018e33995e1646ef6720578919e1dd9d | ORPH
+   x86_64    |           qemu-5.2.0           | NOK | http://autobuild.buildroot.net/results/36c44e6f7b1f161de1392932f28e9db6774df6e6 |     
+    i686     |           qemu-5.2.0           | NOK | http://autobuild.buildroot.net/results/6c3f37ba018a61796944713e565dd1032810f044 |     
+   nios2     |       quickjs-2020-11-08       | NOK | http://autobuild.buildroot.net/results/ab1ba40fc2931324c86108bcece5e80ded0ef140 |     
+   nios2     |       quickjs-2020-11-08       | NOK | http://autobuild.buildroot.net/results/448d16a2799d81e7ab08cdad0e63d83d760aea4d |     
+    arm      |         rocksdb-6.13.3         | NOK | http://autobuild.buildroot.net/results/31acaea0cb4f28115d63b16054e0d46623383fa3 |     
+    arm      |         rocksdb-6.13.3         | NOK | http://autobuild.buildroot.net/results/20c3519be4d255ea0382248f7cce40d0adc87932 |     
+  mips64el   |       timescaledb-1.7.4        | NOK | http://autobuild.buildroot.net/results/d8d5aa2862c345aa74adf1d0e1d7950ef2b475ca |     
+    arc      |       timescaledb-1.7.4        | NOK | http://autobuild.buildroot.net/results/50c6ff194d4f69c32f7f6ec6f5d43b3975eabe86 |     
+    i586     |   trace-cmd-trace-cmd-v2.9.1   | NOK | http://autobuild.buildroot.net/results/96a2f17aaedf449998f0a8adac6c1fd290d9cf9e |     
+    arm      |   trace-cmd-trace-cmd-v2.9.1   | NOK | http://autobuild.buildroot.net/results/aa07d8184948092bbd630054d55bbec26527c23f |     
+   xtensa    |         uclibc-1.0.37          | NOK | http://autobuild.buildroot.net/results/374642b1b1dd614ec3ce1e2ce397af380e0211eb |     
+  powerpc    |         uclibc-1.0.37          | NOK | http://autobuild.buildroot.net/results/f094aa68743606ba0b0be7411cb7044390bfd80e |     
+    arm      |         uclibc-1.0.37          | NOK | http://autobuild.buildroot.net/results/0845943ebe32cee32ded4b00d1349768e45298e1 |     
+    arc      |         uclibc-1.0.37          | NOK | http://autobuild.buildroot.net/results/d9b7127ef4e86068744850bcf22660788b1577de |     
+    arm      |            unknown             | NOK | http://autobuild.buildroot.net/results/5187f3008b6b2f9797033b96e829833d56503d59 |     
+   x86_64    |            unknown             | NOK | http://autobuild.buildroot.net/results/2f499e5bb14782831e64f6fed7217b79f444fa3f |     
+    arm      |         upmpdcli-1.5.5         | NOK | http://autobuild.buildroot.net/results/aa3768338f61226150764937cf432519d766c0e7 |     
+    arm      |         upmpdcli-1.5.5         | NOK | http://autobuild.buildroot.net/results/bf36389b8195fe1cf76733b5d54f6655f9737da9 |     
+  powerpc    |            vmtouch             | TIM | http://autobuild.buildroot.net/results/848eeba53caf418589a6baa03bb4e4f5e2c0f0fb |     
+    arc      |         xenomai-3.0.10         | NOK | http://autobuild.buildroot.net/results/f17805adf0db208239415a86590c430212721e09 |     
+    arc      |         xenomai-3.0.10         | NOK | http://autobuild.buildroot.net/results/2cd955bb0179d8d95ec956e9699b2e8825929276 |     
+    arc      |         xenomai-3.0.10         | NOK | http://autobuild.buildroot.net/results/38731d9818a184bfea3c125a454fc2c6d7b02e77 |     
+    arc      |         xenomai-3.0.10         | NOK | http://autobuild.buildroot.net/results/67001e040b7376831194832b6ad0cdef115dc094 |     
+
+
+Classification of failures by reason for 2020.02.x
+--------------------------------------------------
+
+             kismet-2016-07-R1 | 1 
+                suricata-4.1.9 | 1 
+                       unknown | 1 
+
+
+Detail of failures for 2020.02.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    arm      |       kismet-2016-07-R1        | NOK | http://autobuild.buildroot.net/results/34fa163244930f9a56ca396d8c47161a08a47b16 | ORPH
+    m68k     |         suricata-4.1.9         | NOK | http://autobuild.buildroot.net/results/7a939fc2231d99fd653c554961fe869428ab4b6f |     
+  aarch64    |            unknown             | NOK | http://autobuild.buildroot.net/results/903ece08f4c799f68239422372b05a29428e2c73 |     
+
+
+Classification of failures by reason for 2020.11.x
+--------------------------------------------------
+
+                poppler-0.84.0 | 1 
+                 ripgrep-0.8.1 | 1 
+                 uclibc-1.0.36 | 1 
+
+
+Detail of failures for 2020.11.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+   mipsel    |         poppler-0.84.0         | NOK | http://autobuild.buildroot.net/results/34c620a0442b5eb18db23bb78d85b645019e4796 |     
+  aarch64    |         ripgrep-0.8.1          | NOK | http://autobuild.buildroot.net/results/2f380b262229463b0ceee0df026f05c91fbaebaa |     
+  riscv64    |         uclibc-1.0.36          | NOK | http://autobuild.buildroot.net/results/4d7725ee8bffdc3b703429f2b315ef9d0c365457 |     
+
+
+Gitlab CI results for 2021-01-11
+================================
+
+Detail of runtime-test failures for master
+------------------------------------------
+
+             runtime-test |                        link to the job                        | orph?
+--------------------------+---------------------------------------------------------------+------
+           TestATFMarvell |  https://gitlab.com/buildroot.org/buildroot/-/jobs/954398515  | ORPH 
+             TestDropbear |  https://gitlab.com/buildroot.org/buildroot/-/jobs/954398574  | ORPH 
+     TestGlibcAllTimezone |  https://gitlab.com/buildroot.org/buildroot/-/jobs/954398535  | ORPH 
+...DefaultLimitedTimezone |  https://gitlab.com/buildroot.org/buildroot/-/jobs/954398536  | ORPH 
+                 TestRust |  https://gitlab.com/buildroot.org/buildroot/-/jobs/954398709  | ORPH 
+
+
+
 -- 
-2.20.1
+http://autobuild.buildroot.net
