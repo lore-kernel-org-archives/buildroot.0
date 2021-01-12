@@ -1,75 +1,70 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Jan 2021 11:32:59 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/nodejs: security
- bump to version 12.20.1
-Message-ID: <20210112101557.7835386FE5@busybox.osuosl.org>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 12 Jan 2021 11:50:24 +0100
+Subject: [Buildroot] [git commit] package/coremark-pro: clean up package
+Message-ID: <20210112103158.95FBF875D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b460962f59006d4aa1e8c14fb9579a93407f117a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=f87315fad51209bb606fe27e20bb328c67a070aa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following security issues:
+- Use the COREMARK_PRO_MARKS definition from the build recipe to
+  generate the coremark-pro.sh
+- Use %x:%X as the date stamp in the results file.
 
-- CVE-2020-8265: use-after-free in TLSWrap (High) Affected Node.js versions
-  are vulnerable to a use-after-free bug in its TLS implementation.  When
-  writing to a TLS enabled socket, node::StreamBase::Write calls
-  node::TLSWrap::DoWrite with a freshly allocated WriteWrap object as first
-  argument.  If the DoWrite method does not return an error, this object is
-  passed back to the caller as part of a StreamWriteResult structure.  This
-  may be exploited to corrupt memory leading to a Denial of Service or
-  potentially other exploits
-
-- CVE-2020-8287: HTTP Request Smuggling in nodejs Affected versions of
-  Node.js allow two copies of a header field in a http request.  For
-  example, two Transfer-Encoding header fields.  In this case Node.js
-  identifies the first header field and ignores the second.  This can lead
-  to HTTP Request Smuggling
-
-- CVE-2020-1971: OpenSSL - EDIPARTYNAME NULL pointer de-reference (High)
-  This is a vulnerability in OpenSSL which may be exploited through Node.js.
-  You can read more about it in
-  https://www.openssl.org/news/secadv/20201208.txt
-
-Update the license hash for the addition of the (MIT licensed)
-cjs-module-lexer module:
-https://github.com/nodejs/node/commit/9eb1fa19248949dfc716807b1dc97dedf36da14e
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit ecc8f0fe8459c4c14844a8a58eb168c58b0485fc)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Suggested-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Chris Packham <judge.packham@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/nodejs/nodejs.hash | 6 +++---
- package/nodejs/nodejs.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/coremark-pro/coremark-pro.mk                         | 3 ++-
+ package/coremark-pro/{coremark-pro.sh => coremark-pro.sh.in} | 7 +++----
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index 61259425ba..b3ea15ca31 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,5 +1,5 @@
--# From https://nodejs.org/dist/v12.19.1/SHASUMS256.txt
--sha256  74077e0cc3db000a6f3cc685b220e609807b61adc8e7d8243e8511d478d1b17d  node-v12.19.1.tar.xz
-+# From https://nodejs.org/dist/v12.20.1/SHASUMS256.txt
-+sha256  e00eee325d705b2bfa9929b7d061eb2315402d7e8548945eac9870bf84321853  node-v12.20.1.tar.xz
+diff --git a/package/coremark-pro/coremark-pro.mk b/package/coremark-pro/coremark-pro.mk
+index d3e99fcdfd..fdcfda33e8 100644
+--- a/package/coremark-pro/coremark-pro.mk
++++ b/package/coremark-pro/coremark-pro.mk
+@@ -36,7 +36,8 @@ define COREMARK_PRO_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D $(@D)/builds/linux$(if $(BR2_ARCH_IS_64),64)/gcc$(if $(BR2_ARCH_IS_64),64)/data/libbmp/Rose256.bmp $(TARGET_DIR)/usr/share/coremark-pro/Rose256.bmp
+ 	$(foreach s,$(COREMARK_PRO_SCRIPTS),\
+ 		$(INSTALL) -D $(@D)/util/perl/$(s) $(TARGET_DIR)/usr/share/coremark-pro/util/perl/$(s)$(sep))
+-	$(Q)cp package/coremark-pro/coremark-pro.sh $(TARGET_DIR)/usr/bin/
++	$(Q)sed "s/@COREMARK_PRO_MARKS@/$(COREMARK_PRO_MARKS)/" \
++		package/coremark-pro/coremark-pro.sh.in >$(TARGET_DIR)/usr/bin/coremark-pro.sh
+ endef
  
- # Hash for license file
--sha256  0dc03af08b95ea0c1e27f8fd591dee4383eb6f2c304db6eb6cdfb6751f7da87b  LICENSE
-+sha256  221417a7ca275112a5ac54639b36ee3c5184e74631ea1e1b01b701293b655190  LICENSE
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index 524a6b5d8f..8916d47940 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ $(eval $(generic-package))
+diff --git a/package/coremark-pro/coremark-pro.sh b/package/coremark-pro/coremark-pro.sh.in
+similarity index 85%
+rename from package/coremark-pro/coremark-pro.sh
+rename to package/coremark-pro/coremark-pro.sh.in
+index 65ad9df645..8b370b7c75 100755
+--- a/package/coremark-pro/coremark-pro.sh
++++ b/package/coremark-pro/coremark-pro.sh.in
+@@ -1,8 +1,7 @@
+ #!/bin/sh
+ # SPDX-License-Identifier: Apache-2.0
  
--NODEJS_VERSION = 12.19.1
-+NODEJS_VERSION = 12.20.1
- NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
- NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
- NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
+-workloads="cjpeg-rose7-preset core linear_alg-mid-100x100-sp \
+-    loops-all-mid-10k-sp nnet_test parser-125k radix2-big-64k sha-test zip-test"
++workloads="@COREMARK_PRO_MARKS@"
+ 
+ rm -rf /tmp/coremark-pro
+ mkdir -p /tmp/coremark-pro
+@@ -16,11 +15,11 @@ for contype in single best; do
+     for wld in $workloads; do
+         [ "$contype" = "single" ] && XCMD="-c1 -w1"
+         [ "$contype" = "best" ] && XCMD="-c$(nproc) -w$(nproc)"
+-        echo "#Results for verification run started at $(date +%y%j:%H:%M:%S) XCMD=$XCMD" >$wld-$contype-result.log
++        echo "#Results for verification run started at $(date +%x:%X) XCMD=$XCMD" >$wld-$contype-result.log
+         echo "Verification run for $wld"
+         $wld $XCMD -v1 > $wld.run.log
+         LC_ALL=C perl /usr/share/coremark-pro/util/perl/results_parser.pl $wld-$contype-result.log $wld.run.log
+-        echo "#Results for performance runs started at $(date +%y%j:%H:%M:%S) XCMD=$XCMD" >>$wld-$contype-result.log
++        echo "#Results for performance runs started at $(date +%x:%X) XCMD=$XCMD" >>$wld-$contype-result.log
+         echo "Performance run for $wld"
+         for i in 1 2 3; do
+             $wld $XCMD -v0 > $wld.run.log
