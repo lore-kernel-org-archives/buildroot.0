@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Jan 2021 18:40:12 +0100
-Subject: [Buildroot] [PATCH 1/2] package/zic: bump version to 2020f
-In-Reply-To: <20210110164711.1708062-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sun, 10 Jan 2021 17:47:10 +0100")
+Date: Tue, 12 Jan 2021 18:40:16 +0100
+Subject: [Buildroot] [PATCH 2/2] package/tzdata: bump version to 2020f
+In-Reply-To: <20210110164711.1708062-2-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sun, 10 Jan 2021 17:47:11 +0100")
 References: <20210110164711.1708062-1-bernd.kuhls@t-online.de>
-Message-ID: <874kjmm4ub.fsf@dell.be.48ers.dk>
+ <20210110164711.1708062-2-bernd.kuhls@t-online.de>
+Message-ID: <87zh1ekq9r.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,7 +17,8 @@ To: buildroot@busybox.net
  > Release notes:
  > https://mm.icann.org/pipermail/tz-announce/2020-December/000064.html
 
- > Rebased patch.
+ > Upstream removed timezones pacificnew and systemv:
+ > https://mm.icann.org/pipermail/tz-announce/2020-October/000059.html
 
  > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
