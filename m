@@ -1,69 +1,70 @@
-From: Chris Packham <judge.packham@gmail.com>
-Date: Tue, 12 Jan 2021 22:08:40 +1300
-Subject: [Buildroot] [PATCH] package/coremark-pro: clean up package
-Message-ID: <20210112090840.20230-1-judge.packham@gmail.com>
+From: Raul Hidalgo Caballero <deinok@deinok.com>
+Date: Tue, 12 Jan 2021 10:09:05 +0100
+Subject: [Buildroot] package/dotnet: add host-dotnet-sdk
+In-Reply-To: <CABWPoFH_UbU=b7T5yr2Wf23E1fz-dGe+SuVkiMqJGNtYXitLFg@mail.gmail.com>
+References: <CABWPoFG8k9WccFXRKC6ufRLKDHzdwCyeN3Q1PJZzqpg83fwc1w@mail.gmail.com>
+ <20210104085858.68f57652@windsurf>
+ <CAOiXNkARyVd8=v7ZShcdAw7eZHDY+Apf5_vLDsxiGT-tpGsEvg@mail.gmail.com>
+ <CABWPoFFFA_jB0bqBSGDmnk+7YvM6br0=7=KcnKUvnctVrvmQNA@mail.gmail.com>
+ <CAOiXNkBPm8ksDHTWXrzA9zmFZxShEWSOSeG4pn0r3iYRZxKq6g@mail.gmail.com>
+ <CABWPoFH_UbU=b7T5yr2Wf23E1fz-dGe+SuVkiMqJGNtYXitLFg@mail.gmail.com>
+Message-ID: <CABWPoFG2q8n27nSULRf1mh7ook=wSOJq1uw8xCTLcWmudEdo2A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Use the COREMARK_PRO_MARKS definition from the build recipe to
-  generate the coremark-pro.sh
-- Use %x:%X as the date stamp in the results file.
+Hi Thomas,
 
-Suggested-by: Arnout Vandecappelle <arnout@mind.be>
-Signed-off-by: Chris Packham <judge.packham@gmail.com>
----
- package/coremark-pro/coremark-pro.mk                       | 3 ++-
- .../coremark-pro/{coremark-pro.sh => coremark-pro.sh.in}   | 7 +++----
- 2 files changed, 5 insertions(+), 5 deletions(-)
- rename package/coremark-pro/{coremark-pro.sh => coremark-pro.sh.in} (85%)
+Made a patch here: https://github.com/deinok/buildroot/pull/1/files
+If it looks good I will send it all joined as a .patch file.
 
-diff --git a/package/coremark-pro/coremark-pro.mk b/package/coremark-pro/coremark-pro.mk
-index d3e99fcdfd..fdcfda33e8 100644
---- a/package/coremark-pro/coremark-pro.mk
-+++ b/package/coremark-pro/coremark-pro.mk
-@@ -36,7 +36,8 @@ define COREMARK_PRO_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D $(@D)/builds/linux$(if $(BR2_ARCH_IS_64),64)/gcc$(if $(BR2_ARCH_IS_64),64)/data/libbmp/Rose256.bmp $(TARGET_DIR)/usr/share/coremark-pro/Rose256.bmp
- 	$(foreach s,$(COREMARK_PRO_SCRIPTS),\
- 		$(INSTALL) -D $(@D)/util/perl/$(s) $(TARGET_DIR)/usr/share/coremark-pro/util/perl/$(s)$(sep))
--	$(Q)cp package/coremark-pro/coremark-pro.sh $(TARGET_DIR)/usr/bin/
-+	$(Q)sed "s/@COREMARK_PRO_MARKS@/$(COREMARK_PRO_MARKS)/" \
-+		package/coremark-pro/coremark-pro.sh.in >$(TARGET_DIR)/usr/bin/coremark-pro.sh
- endef
- 
- $(eval $(generic-package))
-diff --git a/package/coremark-pro/coremark-pro.sh b/package/coremark-pro/coremark-pro.sh.in
-similarity index 85%
-rename from package/coremark-pro/coremark-pro.sh
-rename to package/coremark-pro/coremark-pro.sh.in
-index 65ad9df645..8b370b7c75 100755
---- a/package/coremark-pro/coremark-pro.sh
-+++ b/package/coremark-pro/coremark-pro.sh.in
-@@ -1,8 +1,7 @@
- #!/bin/sh
- # SPDX-License-Identifier: Apache-2.0
- 
--workloads="cjpeg-rose7-preset core linear_alg-mid-100x100-sp \
--    loops-all-mid-10k-sp nnet_test parser-125k radix2-big-64k sha-test zip-test"
-+workloads="@COREMARK_PRO_MARKS@"
- 
- rm -rf /tmp/coremark-pro
- mkdir -p /tmp/coremark-pro
-@@ -16,11 +15,11 @@ for contype in single best; do
-     for wld in $workloads; do
-         [ "$contype" = "single" ] && XCMD="-c1 -w1"
-         [ "$contype" = "best" ] && XCMD="-c$(nproc) -w$(nproc)"
--        echo "#Results for verification run started at $(date +%y%j:%H:%M:%S) XCMD=$XCMD" >$wld-$contype-result.log
-+        echo "#Results for verification run started at $(date +%x:%X) XCMD=$XCMD" >$wld-$contype-result.log
-         echo "Verification run for $wld"
-         $wld $XCMD -v1 > $wld.run.log
-         LC_ALL=C perl /usr/share/coremark-pro/util/perl/results_parser.pl $wld-$contype-result.log $wld.run.log
--        echo "#Results for performance runs started at $(date +%y%j:%H:%M:%S) XCMD=$XCMD" >>$wld-$contype-result.log
-+        echo "#Results for performance runs started at $(date +%x:%X) XCMD=$XCMD" >>$wld-$contype-result.log
-         echo "Performance run for $wld"
-         for i in 1 2 3; do
-             $wld $XCMD -v0 > $wld.run.log
--- 
-2.30.0
+Fixed all the issues except for:
+Testing -> Do you have an example for testing a host package?
+
+
+On Mon, Jan 11, 2021 at 12:50 PM Raul Hidalgo Caballero <deinok@deinok.com>
+wrote:
+
+> Yes, I'm agree. There is no perfect way, we should found an approach that
+> is perfectly fitted in all cases.
+>
+> For now, having support for host-dotnet-sdk is a must in any case
+>
+>
+>
+> On Fri, Jan 8, 2021 at 1:02 PM Andrey Nechypurenko <andreynech@gmail.com>
+> wrote:
+>
+>> Hi,
+>>
+>> > Regarding Andrey's patch, I'm not sure if that is the correct approach,
+>> I
+>> > mean, the idea is okay for most of the cases, but what if you install
+>> the
+>> > dotnet-runtime -> v5.0.0 and the package that you want to install needs
+>> > v3.1.0 ?
+>>
+>> AFAIK, it is possible to have multiple runtimes installed. There are many
+>> ways to say which one should be used by a particular application. One of
+>> them, for example, using DOTNET_ENVIRONMENT environment variable (
+>>
+>> https://docs.microsoft.com/en-us/aspnet/core/fundamentals/environments?view=aspnetcore-5.0
+>> ) . Also, AFAIK, if the application is packaged with runtime, it will use
+>> this packaged version even if there is separate runtime installed.
+>>
+>> Anyway, I think there is no "right way" [tm]. It depends on the
+>> application.
+>> For example, in a well controlled environment such as an embedded system
+>> where only a predefined set of applications is installed, common runtime
+>> would be preferable because it saves a considerable amount of space if
+>> multiple applications need it.
+>>
+>> Regards,
+>> Andrey.
+>>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210112/2d1d614b/attachment.html>
