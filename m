@@ -1,44 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 13 Jan 2021 10:34:34 +0100
-Subject: [Buildroot] [git commit] package/mpd: bump to version 0.22.3
-Message-ID: <20210113091840.EF3F2876AF@busybox.osuosl.org>
+Date: Wed, 13 Jan 2021 10:35:09 +0100
+Subject: [Buildroot] [git commit] package/shairport-sync: bump to version
+ 3.3.7
+Message-ID: <20210113091841.13507876AF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b6576a458ca0d2e01b97799f64fef4a34a0dc6ea
+commit: https://git.buildroot.net/buildroot/commit/?id=f07dff21329839279ab20cae8406fb012e32f3c2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mpd/mpd.hash | 2 +-
- package/mpd/mpd.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/shairport-sync/shairport-sync.hash | 2 +-
+ package/shairport-sync/shairport-sync.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index 0381430778..866c61d15f 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
+diff --git a/package/shairport-sync/shairport-sync.hash b/package/shairport-sync/shairport-sync.hash
+index 280090cc46..c451edb933 100644
+--- a/package/shairport-sync/shairport-sync.hash
++++ b/package/shairport-sync/shairport-sync.hash
 @@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  20a0ad01bf327b2dbeb6ae8e1af952cb0de83d2d63fab0fa4b7183a74765c201  mpd-0.21.25.tar.xz
-+sha256  338012037b5e67730529187c555a54cc567a85b15a7e8ddb3a807b1971566ccf  mpd-0.22.3.tar.xz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index a5825fffe0..6e8a3f36da 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -4,8 +4,8 @@
+ # Locally calculated
+-sha256  a8382affd25c473fa38ead5690148c6c3902098f359f9c881eefe139e1f49f49  shairport-sync-3.3.6.tar.gz
++sha256  7f8d4ecec53f2f681a962467bf09205568fc936c8c31a9ee07b1bd72d3d95b12  shairport-sync-3.3.7.tar.gz
+ sha256  1daaa904985807b7f9f2fa91f6b19f3faadf8df4e813f7451a691f89a6965e3f  LICENSES
+diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
+index 10348d7b55..1a02186dc1 100644
+--- a/package/shairport-sync/shairport-sync.mk
++++ b/package/shairport-sync/shairport-sync.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MPD_VERSION_MAJOR = 0.21
--MPD_VERSION = $(MPD_VERSION_MAJOR).25
-+MPD_VERSION_MAJOR = 0.22
-+MPD_VERSION = $(MPD_VERSION_MAJOR).3
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
- MPD_DEPENDENCIES = host-pkgconf boost
+-SHAIRPORT_SYNC_VERSION = 3.3.6
++SHAIRPORT_SYNC_VERSION = 3.3.7
+ SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VERSION))
+ 
+ SHAIRPORT_SYNC_LICENSE = MIT, BSD-3-Clause
