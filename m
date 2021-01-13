@@ -1,51 +1,149 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 13 Jan 2021 08:11:31 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x]
- package/wireguard-linux-compat: bump version to 1.0.20201221
-Message-ID: <20210113065547.BE80F875E2@busybox.osuosl.org>
+From: Raul Hidalgo Caballero <deinok@deinok.com>
+Date: Wed, 13 Jan 2021 08:25:28 +0100
+Subject: [Buildroot] [PATCH 1/1] package/dotnet-sdk: new package
+In-Reply-To: <20210112161935.17a05101@windsurf.home>
+References: <CABWPoFGENs+ze4jdFLHu7TNPTzRQ=D-QEs3gB0DuvmG_t4whow@mail.gmail.com>
+ <20210112161935.17a05101@windsurf.home>
+Message-ID: <CABWPoFH7vPERPFO6ubJX2Dx8XtRzFRutB5rCsxvdQ2_bAwnH5w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b8081da973e34af489bd851a0dae188bddb8db95
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+I Thomas,
 
-Fixes a build issue with linux-rt >= 5.4.  For details, see the
-announcement:
-https://lists.zx2c4.com/pipermail/wireguard/2020-December/006210.html
+Regarding the Config.in.host being in the dotnet package.
+In the future, I expect to add: dotnet-runtime and dotnet-aspnet. They all
+share most of the configuration, like the RID (Runtime Identifier,
+something like the target triplet) and end exposing the "dotnet" command.
+Basically, dotnet-runtime is a subset of dotnet-aspnet, and dotnet-aspnet
+is a subset of dotnet-sdk.
+I took as a reference the rust packages.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 5fa51794c0615058243164b6f20d76c22208b500)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/wireguard-linux-compat/wireguard-linux-compat.hash | 4 ++--
- package/wireguard-linux-compat/wireguard-linux-compat.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Regarding the tests, I expect to add more tests in the future while I add
+support for having the dotnet-sdk as a target package.
+Also I expect to add more tests for a bit more complex cases.
+So I would like to left the Tests as they are, except for the environment
+things that you are right. I'd just took the rust tests as a reference and
+I left that env variable.
 
-diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.hash b/package/wireguard-linux-compat/wireguard-linux-compat.hash
-index 8895875cf6..194c798570 100644
---- a/package/wireguard-linux-compat/wireguard-linux-compat.hash
-+++ b/package/wireguard-linux-compat/wireguard-linux-compat.hash
-@@ -1,4 +1,4 @@
--# https://lists.zx2c4.com/pipermail/wireguard/2020-November/005997.html
--sha256  89eae7f0c0bd6c8df3ba2e090984974ff68741a9f26aa0922890f8ca727897e1  wireguard-linux-compat-1.0.20201112.tar.xz
-+# https://lists.zx2c4.com/pipermail/wireguard/2020-December/006210.html
-+sha256  6e5289a8b602eaaf1383aebefcbc41b8ad2721269055858b150363076c1c2132  wireguard-linux-compat-1.0.20201221.tar.xz
- # Locally calculated
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.mk b/package/wireguard-linux-compat/wireguard-linux-compat.mk
-index 7d6ebf0f7e..19fef05436 100644
---- a/package/wireguard-linux-compat/wireguard-linux-compat.mk
-+++ b/package/wireguard-linux-compat/wireguard-linux-compat.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIREGUARD_LINUX_COMPAT_VERSION = 1.0.20201112
-+WIREGUARD_LINUX_COMPAT_VERSION = 1.0.20201221
- WIREGUARD_LINUX_COMPAT_SITE = https://git.zx2c4.com/wireguard-linux-compat/snapshot
- WIREGUARD_LINUX_COMPAT_SOURCE = wireguard-linux-compat-$(WIREGUARD_LINUX_COMPAT_VERSION).tar.xz
- WIREGUARD_LINUX_COMPAT_LICENSE = GPL-2.0
+
+On Tue, Jan 12, 2021 at 4:19 PM Thomas Petazzoni <
+thomas.petazzoni@bootlin.com> wrote:
+
+> Hello Raul,
+>
+> On Tue, 12 Jan 2021 16:07:23 +0100
+> Raul Hidalgo Caballero <deinok@deinok.com> wrote:
+>
+> > Signed-off-by: Raul Hidalgo Caballero <deinok@deinok.com>
+> > ---
+> >  DEVELOPERS                                    |  5 ++++
+> >  package/Config.in.host                        |  1 +
+> >  package/dotnet-sdk/dotnet-sdk.hash            |  3 ++
+> >  package/dotnet-sdk/dotnet-sdk.mk              | 20 +++++++++++++
+> >  package/dotnet/Config.in.host                 | 15 ++++++++++
+>
+> Why is this Config.in.host in package/dotnet/ and not
+> package/dotnet-sdk/ ?
+>
+> > diff --git a/package/dotnet-sdk/dotnet-sdk.hash
+> > b/package/dotnet-sdk/dotnet-sdk.hash
+> > new file mode 100644
+> > index 0000000000..a3016b2e49
+> > --- /dev/null
+> > +++ b/package/dotnet-sdk/dotnet-sdk.hash
+> > @@ -0,0 +1,3 @@
+> > +sha256  cfc21f5e8bd655ae997eec916138b707b1d290b83272c02a95c9f821b8c87310
+> >  LICENSE.txt
+> > +sha256  01564961f8ca9744d0ecc5d3e72d7c1659df95898f3a077fd9140fd4023f3579
+> >  ThirdPartyNotices.txt
+> > +sha256  23df1eca7eb1302dfb10f4edce7edf7150e57698576f61b2dcb777c833cbd80c
+> >  dotnet-sdk-5.0.101-linux-x64.tar.gz
+>
+> Note: your patch is line-wrapped. Could you use "git send-email" to
+> send it ?
+>
+> > diff --git a/package/dotnet/Config.in.host
+> b/package/dotnet/Config.in.host
+> > new file mode 100644
+> > index 0000000000..90b477a6a1
+> > --- /dev/null
+> > +++ b/package/dotnet/Config.in.host
+> > @@ -0,0 +1,15 @@
+> > +config BR2_PACKAGE_HOST_DOTNET_ARCH_SUPPORTS
+> > +       bool
+> > +       default y if BR2_HOSTARCH = "x86_64"
+> > +
+> > +config BR2_PACKAGE_HOST_DOTNET_RID
+> > +       string
+> > +       default "linux-x64" if BR2_HOSTARCH = "x86_64"
+> > +
+> > +config BR2_PACKAGE_HOST_DOTNET_SDK
+> > +       bool "host dotnet-sdk"
+> > +       depends on BR2_PACKAGE_HOST_DOTNET_ARCH_SUPPORTS
+> > +       help
+> > +               Dotnet SDK
+>
+> This is a bit short :-)
+>
+> > +
+> > +               https://dotnet.microsoft.com/
+>
+> The indentation for the help text is one tab + two spaces. You can run
+> "make check-package" to find this kind of coding style details.
+>
+> > +class TestDotnetSdkBase(infra.basetest.BRTest):
+>
+> You don't need this "Base" class, since there's only one subclass using
+> it.
+>
+> > +
+> > +    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
+> > +        """
+> > +        BR2_TARGET_ROOTFS_CPIO=y
+> > +        """
+> > +
+> > +class TestHostDotnetSdk(TestDotnetSdkBase):
+>
+> Just make this class inherit from infra.basetest.BRTest directly.
+>
+> > +    config = TestDotnetSdkBase.config + \
+> > +        """
+> > +        BR2_PACKAGE_HOST_DOTNET_SDK=y
+> > +        """
+>
+> use:
+>
+>         config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
+>                 """
+>                 BR2_PACKAGE_HOST_DOTNET_SDK=y
+>                 BR2_TARGET_ROOTFS_CPIO=y
+>                 """
+>
+> > +    def test_run(self):
+> > +        env = os.environ.copy()
+>
+> Why do we have to do this ? You don't tweak any environment variable.
+>
+> > +        hostdir = os.path.join(self.builddir, 'host')
+> > +        dotnet = os.path.join(hostdir, 'usr', 'bin', 'dotnet')
+> > +        cmd = [dotnet, '--version']
+> > +        exit_code = subprocess.call(cmd, stdout=self.b.logfile,
+> > stderr=self.b.logfile, env=env)
+> > +        self.assertEqual(exit_code, 0)
+> > --
+> > 2.25.1
+>
+> Otherwise, looks good. Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210113/7d0e13b1/attachment.html>
