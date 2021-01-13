@@ -1,57 +1,51 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 13 Jan 2021 23:07:45 +0100
-Subject: [Buildroot] ARC no console output (was Re: [PATCH 1/2]
- init/console: Use ttynull as a fallback when there is no console)
-In-Reply-To: <466644f5-bed7-caef-9fcd-e66208f65545@synopsys.com> (Vineet
- Gupta's message of "Thu, 7 Jan 2021 09:58:05 -0800")
-References: <20201111135450.11214-1-pmladek@suse.com>
- <20201111135450.11214-2-pmladek@suse.com>
- <d2a3b3c0-e548-7dd1-730f-59bc5c04e191@synopsys.com>
- <8735zdm86m.fsf@jogness.linutronix.de>
- <50ade852-c598-6476-1f4b-9a3f8d11d143@synopsys.com>
- <X/c/ONCYz2QQdvOP@alley>
- <466644f5-bed7-caef-9fcd-e66208f65545@synopsys.com>
-Message-ID: <87turkfq32.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 13 Jan 2021 23:10:14 +0100
+Subject: [Buildroot] [PATCH] pkg-generic: host variant use git submodules if
+ target variant does
+Message-ID: <20210113221014.687702-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vineet" == Vineet Gupta <vgupta@synopsys.com> writes:
+When a package has both a target and a host variant, and uses git
+submodules, and the host variant is downloaded before the targt one, we
+end up with the generated archive missing the submodules.
 
- > On 1/7/21 9:04 AM, Petr Mladek wrote:
- >> On Thu 2021-01-07 08:43:16, Vineet Gupta wrote:
- >>> Hi John,
- >>> 
- >>> On 1/7/21 1:02 AM, John Ogness wrote:
- >>>> Hi Vineet,
- >>>> 
- >>>> On 2021-01-06, Vineet Gupta <vgupta@synopsys.com> wrote:
- >>>>> This breaks ARC booting (no output on console).
- >>>> 
- >>>> Could you provide the kernel boot arguments that you use? This series is
- >>>> partly about addressing users that have used boot arguments that are
- >>>> technically incorrect (even if had worked). Seeing the boot arguments of
- >>>> users that are not experiencing problems may help to reveal some of the
- >>>> unusual console usages until now.
- >>> 
- >>> 
- >>> Kernel command line: earlycon=uart8250,mmio32,0xf0005000,115200n8
- >>> console=ttyS0,115200n8 debug print-fatal-signals=1
- >> 
- >> This is strange, the problematic patch should use ttynull
- >> only as a fallback. It should not be used when a particular console
- >> is defined on the command line.
+This happens in exactly one package in our tree: c-capnproto.
 
- > What happens in my case is console_on_rootfs() doesn't find
- > /dev/console and switching to ttynull. /dev is not present because
- > devtmpfs doesn't automount for initramfs.
+Weirdly enough, the issue was not caught until after we changed the way
+we generate tar archives from git downloads.
 
-But our initramfs/cpio logic ensures that the initramfs has a static
-/dev/console device node, so how can that be?
+Propagate the git submodule setting from the target variant to the host
+variant, unless the host variant explicitly opted-out.
 
-https://git.buildroot.net/buildroot/tree/fs/cpio/cpio.mk#n25
+Fixes:
+    http://autobuild.buildroot.org/results/2de9c6c8ce83569d18cc7140ebc60d6fe1aadcbf/
 
+Reported-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/pkg-generic.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index c46c742352..357a4ce453 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -567,6 +567,12 @@ ifneq ($$(filter bzr cvs hg,$$($(2)_SITE_METHOD)),)
+ BR_NO_CHECK_HASH_FOR += $$($(2)_SOURCE)
+ endif
+ 
++ifndef $(2)_GIT_SUBMODULES
++ ifdef $(3)_GIT_SUBMODULES
++  $(2)_GIT_SUBMODULES = $$($(3)_GIT_SUBMODULES)
++ endif
++endif
++
+ # Do not accept to download git submodule if not using the git method
+ ifneq ($$($(2)_GIT_SUBMODULES),)
+  ifneq ($$($(2)_SITE_METHOD),git)
 -- 
-Bye, Peter Korsgaard
+2.25.1
