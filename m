@@ -1,20 +1,24 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 13 Jan 2021 05:45:58 +0000
-Subject: [Buildroot] [Bug 13381] Juniper Networks Certified Expert Security
-In-Reply-To: <bug-13381-163@https.bugs.busybox.net/>
-References: <bug-13381-163@https.bugs.busybox.net/>
-Message-ID: <bug-13381-163-Q1oQ4ICEaU@https.bugs.busybox.net/>
+From: scdrj <scdrjcom@gmail.com>
+Date: Wed, 13 Jan 2021 00:22:08 -0600 (CST)
+Subject: [Buildroot] Support for NXP QorIQ Layerscape based boards?
+Message-ID: <1610518928213-0.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13381
+I am unable to find the config files for the NXP QorIQ Layerscape based
+boards.
 
---- Comment #1 from John Solomon <johnnsolomon1989@hotmail.com> ---
-https://www.nevastech.com/solutions/microsoft-dynamics-365/microsoft-dynamics-365-business-central/
+These are already available in the OpenIL project
+(https://github.com/openil/openil).
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Is there any plan to integrate the support for NXP QorIQ Layerscape boards
+in the original buildroot?
+
+
+
+
+--
+Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
