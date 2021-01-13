@@ -1,51 +1,26 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 13 Jan 2021 07:45:11 +0100
-Subject: [Buildroot] [PATCH 1/1] package/wavpack: security bump to version
- 5.4.0
-Message-ID: <20210113064511.120257-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 13 Jan 2021 08:11:58 +0100
+Subject: [Buildroot] [PATCH] package/wireguard-linux-compat: bump
+ version to 1.0.20201221
+In-Reply-To: <20210111191108.28911-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Mon, 11 Jan 2021 20:11:08 +0100")
+References: <20210111191108.28911-1-peter@korsgaard.com>
+Message-ID: <871repia4h.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-WavPack 5.4.0 contains a fix for CVE-2020-35738 wherein a specially
-crafted WAV file could cause the WAVPACK command-line program to crash
-with an out-of-bounds write (see issue #91).
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Update hash of COPYING (update in year:
-https://github.com/dbry/WavPack/commit/2ce3c069be548e82ea9c05741ace6583e549c6de)
+ > Fixes a build issue with linux-rt >= 5.4.  For details, see the
+ > announcement:
+ > https://lists.zx2c4.com/pipermail/wireguard/2020-December/006210.html
 
-https://github.com/dbry/WavPack/blob/5.4.0/NEWS
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/wavpack/wavpack.hash | 4 ++--
- package/wavpack/wavpack.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Committed to 2020.02.x and 2020.11.x, thanks.
 
-diff --git a/package/wavpack/wavpack.hash b/package/wavpack/wavpack.hash
-index eeef730321..abc9ab6905 100644
---- a/package/wavpack/wavpack.hash
-+++ b/package/wavpack/wavpack.hash
-@@ -1,3 +1,3 @@
- # locally computed hash
--sha256  b444379a0bee0330f137cb3e9a100e6a12a63a6d01987ba66b3729f85e282307  wavpack-5.3.0.tar.xz
--sha256  a0bbe245dfe263f73946b72306e8336818009ff1e52b119784c288f2785fc260  COPYING
-+sha256  4bde6a6b2a86614a6bd2579e60dcc974e2c8f93608d2281110a717c1b3c28b79  wavpack-5.4.0.tar.xz
-+sha256  f38defde000d62c4ff158f1445cb85a0c2f67cbc1d3cfa34ed882f439f6e3b43  COPYING
-diff --git a/package/wavpack/wavpack.mk b/package/wavpack/wavpack.mk
-index 586082fdd6..85185ab348 100644
---- a/package/wavpack/wavpack.mk
-+++ b/package/wavpack/wavpack.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WAVPACK_VERSION = 5.3.0
-+WAVPACK_VERSION = 5.4.0
- WAVPACK_SITE = \
- 	https://github.com/dbry/WavPack/releases/download/$(WAVPACK_VERSION)
- WAVPACK_SOURCE = wavpack-$(WAVPACK_VERSION).tar.xz
 -- 
-2.29.2
+Bye, Peter Korsgaard
