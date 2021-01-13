@@ -1,49 +1,71 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Wed, 13 Jan 2021 09:08:22 -0300
-Subject: [Buildroot] [PATCH] package/freescale-imx/firmware-imx: install the
- VPU firmware into a valid location
-Message-ID: <20210113120822.327-1-festevam@gmail.com>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Wed, 13 Jan 2021 13:54:11 +0100
+Subject: [Buildroot] [PATCH v2 1/8] package/freescale-imx/firmware-imx:
+ bump version to 8.10
+In-Reply-To: <CAEyMn7bW5Q+7FABNQrQrSwpuCB9WWqGf+qiVvaAVaPsKtiWzjA@mail.gmail.com>
+References: <20210105152420.26379-1-stephane.viau@oss.nxp.com>
+ <20210105152420.26379-2-stephane.viau@oss.nxp.com>
+ <636366db-0dd3-4a30-7097-d09423d91aa8@gmail.com>
+ <CAOMZO5CQ8-rHcZyKPmmSGCo+MSSEKRcbMJMDiFHp5VQDahG+Ug@mail.gmail.com>
+ <66568a2a-8730-9d9a-07b4-168bd8eea60b@gmail.com>
+ <CAEyMn7b2VmmNWevK_ZLwDPy+unW5HDqXFhMbMfO-me+TEacz=w@mail.gmail.com>
+ <e6d06607-a462-3ebf-c152-0cef36789418@smile.fr>
+ <CAEyMn7bW5Q+7FABNQrQrSwpuCB9WWqGf+qiVvaAVaPsKtiWzjA@mail.gmail.com>
+Message-ID: <7fddad6f-78b7-1616-9290-996df581b07c@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The mainline kernel searches the coda VPU firmware inside the following
-locations [1]:
+Hello Heiko,
 
-/lib/firmware/
-/lib/firmware/vpu/
+Le 13/01/2021 ? 12:56, Heiko Thiery a ?crit?:
+> Hi Romain,
+> 
+> Am Mi., 13. Jan. 2021 um 09:39 Uhr schrieb Romain Naour <romain.naour@smile.fr>:
+>>
+>> Hello Heiko,
+>>
+>> Le 13/01/2021 ? 09:27, Heiko Thiery a ?crit :
+>>> Hi All,
+>>>
+>>>> So with your change, the first try fail using "/lib/firmware/vpu_fw_imx53.bin".
+>>>> But "/lib/firmware/vpu/vpu_fw_imx53.bin" succeed.
+>>>>
+>>>> "firmware request failed" message should never appear in your dmesg log.
+>>>>
+>>>> I believe there is a confusion between firmware (such vpu firmware) and imx sdma
+>>>> firmware that require to be installed to "/lib/firmware/imx" directory.
+>>>
+>>> Not really related to this discussion about vpu fw but I also faced an
+>>> issue with an imx8mq board and the SDMA firmware.
+>>>
+>>> # dmesg | grep sdma
+>>> [    0.178729] imx-sdma 302c0000.sdma: Direct firmware load for
+>>> imx/sdma/sdma-imx7d.bin failed with error -2
+>>> [    0.178763] imx-sdma 302c0000.sdma: Falling back to sysfs fallback
+>>> for: imx/sdma/sdma-imx7d.bin
+>>
+>> based on the log timing, I would say that the rootfs wasn't mounted when the
+>> imx-sdma has been probed.
+>>
+>> Try to compile the driver as a module, not bundled into the kernel image.
+> 
+> Then I misunderstand the mechanism. I thought it would be retried
+> after 60 Seconds. I will try to compile it as a module and not
+> builtin.
 
-Currently Buildroot installs the coda firmware into /lib/firmware/imx/vpu,
-which is not a valid location.
+For some reason it doesn't seems to try again...
 
-Fix it to install the coda firmwares into /lib/firmware/vpu/ which
-is a valid path for both mainline and NXP vendor kernels. 
+It you want to compile the driver into the kernel, you may want to use
+CONFIG_EXTRA_FIRMWARE to add the firmware blob into the kernel image.
+But you have to be careful with the license.
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=8af7779f3cbc1f6720d15f00abc797493710d1ab
+Best regards,
+Romain
 
-Reported-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
----
- package/freescale-imx/firmware-imx/firmware-imx.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
-index 7d1f42f1d87b..f65614c9a79c 100644
---- a/package/freescale-imx/firmware-imx/firmware-imx.mk
-+++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
-@@ -116,9 +116,9 @@ endif
- FIRMWARE_IMX_VPU_FW_NAME = $(call qstrip,$(BR2_PACKAGE_FIRMWARE_IMX_VPU_FW_NAME))
- ifneq ($(FIRMWARE_IMX_VPU_FW_NAME),)
- define FIRMWARE_IMX_INSTALL_TARGET_VPU_FW
--	mkdir -p $(TARGET_DIR)/lib/firmware/imx/vpu
-+	mkdir -p $(TARGET_DIR)/lib/firmware/vpu
- 	cp $(@D)/firmware/vpu/vpu_fw_$(FIRMWARE_IMX_VPU_FW_NAME)*.bin \
--		$(TARGET_DIR)/lib/firmware/imx/vpu/
-+		$(TARGET_DIR)/lib/firmware/vpu/
- endef
- endif
- 
--- 
-2.17.1
+> 
+> Thank you.
+> 
