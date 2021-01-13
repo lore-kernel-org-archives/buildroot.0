@@ -1,25 +1,20 @@
-From: scdrj <scdrjcom@gmail.com>
-Date: Tue, 12 Jan 2021 23:41:50 -0600 (CST)
-Subject: [Buildroot] Per package src+build directory
-Message-ID: <1610516510799-0.post@n4.nabble.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 13 Jan 2021 05:45:58 +0000
+Subject: [Buildroot] [Bug 13381] Juniper Networks Certified Expert Security
+In-Reply-To: <bug-13381-163@https.bugs.busybox.net/>
+References: <bug-13381-163@https.bugs.busybox.net/>
+Message-ID: <bug-13381-163-Q1oQ4ICEaU@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-How do I set a custom src/build directory for a particular package?
+https://bugs.busybox.net/show_bug.cgi?id=13381
 
-I have tried OVERRIDE_SRCDIR, but it always performs rsync to the build
-folder (makes an extra copy).
+--- Comment #1 from John Solomon <johnnsolomon1989@hotmail.com> ---
+https://www.nevastech.com/solutions/microsoft-dynamics-365/microsoft-dynamics-365-business-central/
 
-I want to perform the in-place build. 
-
-Currently, I am doing it by creating a symbolic link in the build folder
-from the original src directory and by manually creating various
-downloaded/patched/extracted ".stamp_XXXXXX" files.
-
-
-
---
-Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
