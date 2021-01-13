@@ -1,38 +1,72 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 13 Jan 2021 22:22:33 +0100
-Subject: [Buildroot] [PATCH 1/1] package/c-capnproto: fix tarball hash
-In-Reply-To: <20210113211700.GA609249@scaer>
-References: <20210112181159.12172-1-fontaine.fabrice@gmail.com>
- <20210113211700.GA609249@scaer>
-Message-ID: <20210113212233.GB609249@scaer>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 13 Jan 2021 22:24:59 +0100
+Subject: [Buildroot] libusb host gcc version issue
+In-Reply-To: <2052796.irdbgypaU6@zgyarmati-w530>
+References: <cmu-lmtpd-11307-1610526062-0@imapb020.mykolab.com>
+ <2052796.irdbgypaU6@zgyarmati-w530>
+Message-ID: <1948c768-2735-f2fd-b367-45a2d79d312c@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
 
-On 2021-01-13 22:17 +0100, Yann E. MORIN spake thusly:
-> On 2021-01-12 19:11 +0100, Fabrice Fontaine spake thusly:
-> > Commit 5b95a5dc27c0d8002c00bda1c867ddea9218087e seems to have made a
-> > mistake in the tarball hash
+
+On 13/01/2021 10:27, Zoltan Gyarmati wrote:
+> Dear All,
 > 
-> Actually, I just re-checked locally, and I indeed still get the hash
-> currently in the tree.
+> compiling host-libusb requires gcc >=4.9 (due to   _Thread_local ), which 
+> causes autobuilder failures on older distros (like Ubuntu 14.04),
 
-Ah, but I am able to reproduce the problem with the _host_ variant!
+ That's what the symbol BR2_HOST_GCC_AT_LEAST_4_9 is for (and that's what the
+Ubuntu 14.04 autobuilder is for).
 
-So, the hash is correct when downloading the target variant, but it is
-not when downloading the host variant. Woot.. Weird... :-/
+ Regards,
+ Arnout
 
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> see the 
+> linked autobuild report below. Also the target build needs >= 4.9, but it's 
+> already being handled by Fabric's patch.
+>   One way to fix the host build to bump the minimal GCC version to 4.9 in 
+> 'support/dependencies/dependencies.mk', although I'm not sure it's desirable, 
+> as it's not only kicks out Ubuntu 14.04 (which is EOL anyway), but also CentOS 
+> 7 (which is supported until 2024). What is the public opinion on this?
+> 
+> Thx, regards
+> Zoltan Gyarmati
+> 
+> On 2021. janu?r 13., szerda 9:20:58 CET Thomas Petazzoni wrote:
+>> Hello,
+>>
+>> Autobuilder failures
+>> ====================
+>>
+>> Below is a list of build failures reported by the Buildroot
+>> autobuilders in relation to packages or CPU
+>> architectures you are in charge of. Please help us
+>> improving the quality of Buildroot by investigating
+>> those build failures and sending patches to fix
+>> them.Thanks!
+>>
+>> Results for the 'master' branch
+>> -------------------------------
+>>
+>> Build failures related to your packages:
+>>
+>>     arch     |             reason             |                             
+>>          url
+>> -------------+--------------------------------+----------------------------
+>> ----------------------------------------------------- arm      |      
+>> host-libusb-1.0.24       |
+>> http://autobuild.buildroot.net/results/a9a557eed77238fff36735f4391278bca40b
+>> 9d04
+> 
+> 
+> 
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
