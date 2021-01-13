@@ -1,51 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 13 Jan 2021 23:03:16 +0100
-Subject: [Buildroot] [git commit] package/minicom: use official tarball
-Message-ID: <20210113214512.6EE9E877A1@busybox.osuosl.org>
+Date: Wed, 13 Jan 2021 23:07:45 +0100
+Subject: [Buildroot] ARC no console output (was Re: [PATCH 1/2]
+ init/console: Use ttynull as a fallback when there is no console)
+In-Reply-To: <466644f5-bed7-caef-9fcd-e66208f65545@synopsys.com> (Vineet
+ Gupta's message of "Thu, 7 Jan 2021 09:58:05 -0800")
+References: <20201111135450.11214-1-pmladek@suse.com>
+ <20201111135450.11214-2-pmladek@suse.com>
+ <d2a3b3c0-e548-7dd1-730f-59bc5c04e191@synopsys.com>
+ <8735zdm86m.fsf@jogness.linutronix.de>
+ <50ade852-c598-6476-1f4b-9a3f8d11d143@synopsys.com>
+ <X/c/ONCYz2QQdvOP@alley>
+ <466644f5-bed7-caef-9fcd-e66208f65545@synopsys.com>
+Message-ID: <87turkfq32.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2df32e0d4437b422175089edf1917219656fccef
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Vineet" == Vineet Gupta <vgupta@synopsys.com> writes:
 
-Use official tarball (this will also have the nice side-effect of making
-MINICOM_VERSION compatible with release-monitoring.org)
+ > On 1/7/21 9:04 AM, Petr Mladek wrote:
+ >> On Thu 2021-01-07 08:43:16, Vineet Gupta wrote:
+ >>> Hi John,
+ >>> 
+ >>> On 1/7/21 1:02 AM, John Ogness wrote:
+ >>>> Hi Vineet,
+ >>>> 
+ >>>> On 2021-01-06, Vineet Gupta <vgupta@synopsys.com> wrote:
+ >>>>> This breaks ARC booting (no output on console).
+ >>>> 
+ >>>> Could you provide the kernel boot arguments that you use? This series is
+ >>>> partly about addressing users that have used boot arguments that are
+ >>>> technically incorrect (even if had worked). Seeing the boot arguments of
+ >>>> users that are not experiencing problems may help to reveal some of the
+ >>>> unusual console usages until now.
+ >>> 
+ >>> 
+ >>> Kernel command line: earlycon=uart8250,mmio32,0xf0005000,115200n8
+ >>> console=ttyS0,115200n8 debug print-fatal-signals=1
+ >> 
+ >> This is strange, the problematic patch should use ttynull
+ >> only as a fallback. It should not be used when a particular console
+ >> is defined on the command line.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/minicom/minicom.hash | 2 +-
- package/minicom/minicom.mk   | 7 ++++---
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ > What happens in my case is console_on_rootfs() doesn't find
+ > /dev/console and switching to ttynull. /dev is not present because
+ > devtmpfs doesn't automount for initramfs.
 
-diff --git a/package/minicom/minicom.hash b/package/minicom/minicom.hash
-index f67447212f..42a4499c85 100644
---- a/package/minicom/minicom.hash
-+++ b/package/minicom/minicom.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  18fa02dc32523834ed1e5dbc3d24ff3860e74fa3c6eb817f9bdf693dde3f7d4e  minicom-v2.8-br1.tar.gz
-+sha256  38cea30913a20349326ff3f1763ee1512b7b41601c24f065f365e18e9db0beba  minicom-2.8.tar.bz2
- sha256  cf80a758014eefbf068afffe3d462fc34ff4f528527524d8e100329c42094e15  COPYING
-diff --git a/package/minicom/minicom.mk b/package/minicom/minicom.mk
-index 616a3bd24f..1e12725983 100644
---- a/package/minicom/minicom.mk
-+++ b/package/minicom/minicom.mk
-@@ -4,9 +4,10 @@
- #
- ################################################################################
- 
--MINICOM_VERSION = v2.8
--MINICOM_SITE = https://salsa.debian.org/minicom-team/minicom.git
--MINICOM_SITE_METHOD = git
-+MINICOM_VERSION = 2.8
-+MINICOM_SOURCE = minicom-$(MINICOM_VERSION).tar.bz2
-+MINICOM_SITE = \
-+	https://salsa.debian.org/minicom-team/minicom/-/archive/$(MINICOM_VERSION)
- MINICOM_LICENSE = GPL-2.0+
- MINICOM_LICENSE_FILES = COPYING
- MINICOM_AUTORECONF = YES
+But our initramfs/cpio logic ensures that the initramfs has a static
+/dev/console device node, so how can that be?
+
+https://git.buildroot.net/buildroot/tree/fs/cpio/cpio.mk#n25
+
+-- 
+Bye, Peter Korsgaard
