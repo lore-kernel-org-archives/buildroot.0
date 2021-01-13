@@ -1,126 +1,33 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 13 Jan 2021 23:28:48 +0100
-Subject: [Buildroot] [PATCH 1/1] package/c-capnproto: fix tarball hash
-In-Reply-To: <20210113214406.GC609249@scaer>
-References: <20210112181159.12172-1-fontaine.fabrice@gmail.com>
- <20210113211700.GA609249@scaer> <20210113212233.GB609249@scaer>
- <20210113214406.GC609249@scaer>
-Message-ID: <93f6a2ae-67a3-d56d-c11a-28b613434a05@mind.be>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Wed, 13 Jan 2021 19:28:46 -0300
+Subject: [Buildroot] [PATCH] package/freescale-imx/firmware-imx: install
+ the VPU firmware into a valid location
+In-Reply-To: <2b2ee27f-f5c4-f8eb-61ff-b64d3ed0d623@gmail.com>
+References: <20210113120822.327-1-festevam@gmail.com>
+ <0a7f5a1d-e930-084a-3372-3ecc736a810a@smile.fr>
+ <CAOMZO5BTpG8f=weBKxE9fXtEf3PjGnvs7c979sNBNyKm576ixQ@mail.gmail.com>
+ <aeea51ae-483e-1cfc-0c5d-222aaf2d5400@gmail.com>
+ <CAOMZO5Bs5ieYti4i5L0TCEz6uV7Zt8UkXbh=_S7mC99MLKio-A@mail.gmail.com>
+ <2b2ee27f-f5c4-f8eb-61ff-b64d3ed0d623@gmail.com>
+Message-ID: <CAOMZO5C=S541vwNOX49V1JNVrt6f6jq-ktibYx-RRrUVSTVSrw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Wed, Jan 13, 2021 at 6:01 PM Romain Naour <romain.naour@gmail.com> wrote:
 
+> Something like this ?
+>
+> define FIRMWARE_IMX_INSTALL_TARGET_VPU_FW
+>         mkdir -p $(TARGET_DIR)/lib/firmware/vpu
+>         for i in $$(find $(@D)/firmware/vpu/vpu_fw_$(FIRMWARE_IMX_VPU_FW_NAME)*.bin); do \
+>                 cp $$i $(TARGET_DIR)/lib/firmware/vpu/ ; \
+>                 ln -sf vpu/$$(basename $$i) $(TARGET_DIR)/lib/firmware/$$(basename $$i) ; \
+>         done
+> endef
 
-On 13/01/2021 22:44, Yann E. MORIN wrote:
-> Fabrice, All,
-> 
-> On 2021-01-13 22:22 +0100, Yann E. MORIN spake thusly:
->> On 2021-01-13 22:17 +0100, Yann E. MORIN spake thusly:
->>> On 2021-01-12 19:11 +0100, Fabrice Fontaine spake thusly:
->>>> Commit 5b95a5dc27c0d8002c00bda1c867ddea9218087e seems to have made a
->>>> mistake in the tarball hash
->>>
->>> Actually, I just re-checked locally, and I indeed still get the hash
->>> currently in the tree.
->> Ah, but I am able to reproduce the problem with the _host_ variant!
->>
->> So, the hash is correct when downloading the target variant, but it is
->> not when downloading the host variant. Woot.. Weird... :-/
-> 
-> So what if I interrrupt the download process right after the archive is
-> generated from the git repo, but just before we check the hashes ?
-> 
->     $ ls -l output/build/.c-capnproto-9053ebe6eeb2ae762655b982e27c341cb568366d-br1.tar.gz.Byiova/output
->     -rw-r--r-- 1 ymorin ymorin 82K Jan 13 22:25 output/build/.c-capnproto-9053ebe6eeb2ae762655b982e27c341cb568366d-br1.tar.gz.Byiova/output
-> 
->     $ ls -l ${BR2_DL_DIR}/c-capnproto/c-capnproto-9053ebe6eeb2ae762655b982e27c341cb568366d-br1.tar.gz
->     -rw-r--r-- 1 ymorin ymorin 1.4M Jan 13 22:20 c-capnproto-9053ebe6eeb2ae762655b982e27c341cb568366d-br1.tar.gz
-> 
-> Wut? 82K vs. 1.4M?
-> 
-> And just by looking at package/c-capnproto/c-capnproto.mk I got an epiphany.
-> c-capnproto uses git submodules.
-> 
-> And indeed, the git submodule setting is not inherited from the target
-> variant to the host variant.
-> 
-> Joel: why is the host variant building successfully, but the target
-> variant needs the git submodules? Anyway, this is a separate topic for
-> further investigation.
+This works for me. I will send a v2 with your suggestion.
 
- Yann found the reason and explained it to me on IRC. Before the change of
-tarball name, the normal download of host-c-capnproto indeed failed the hash
-check. However, the autobuilders always fall back to sources.buildroot.net, and
-there indeed we have the tarball with the correct hash. I could reproduce this
-locally:
-
-2021-01-13T23:20:50 >>> host-c-capnproto
-9053ebe6eeb2ae762655b982e27c341cb568366d Downloading
-2021-01-13T23:20:50 Initialized empty Git repository in
-/home/arnout/src/buildroot-dl/c-capnproto/git/.git/
-2021-01-13T23:20:50 Fetching all references
-2021-01-13T23:20:52 remote: Enumerating objects: 1, done.
-2021-01-13T23:20:52 remote: Counting objects: 100% (1/1)^Mremote: Counting
-objects: 100% (1/1), done.
-[snip]
-2021-01-13T23:20:57 ERROR:
-c-capnproto-9053ebe6eeb2ae762655b982e27c341cb568366d.tar.gz has wrong sha256 hash:
-2021-01-13T23:20:57 ERROR: expected:
-88c454f4f4bad87c9b60cd739c7da5605c1085c0e92b317dd72d547bbb804279
-2021-01-13T23:20:57 ERROR: got     :
-8137ec5f468b2a084854954f6d405138106cfebcf150f4342fb27760184812f6
-2021-01-13T23:20:57 ERROR: Incomplete download, or man-in-the-middle (MITM) attack
-2021-01-13T23:20:57 --2021-01-13 23:20:57--
-http://sources.buildroot.net/c-capnproto/c-capnproto-9053ebe6eeb2ae762655b982e27c341cb568366d.tar.gz
-2021-01-13T23:20:57 Resolving sources.buildroot.net (sources.buildroot.net)...
-2606:4700:20::681a:25, 2606:4700:20::ac43:4838, 2606:4700:20::681a:125, ...
-2021-01-13T23:20:57 Connecting to sources.buildroot.net
-(sources.buildroot.net)|2606:4700:20::681a:25|:80... connected.
-2021-01-13T23:20:58 HTTP request sent, awaiting response... 200 OK
-2021-01-13T23:20:58 Length: 1367744 (1.3M) [application/x-gtar-compressed]
-2021-01-13T23:20:58 Saving to:
-?/home/arnout/src/buildroot/output/build/.c-capnproto-9053ebe6eeb2ae762655b982e27c341cb568366d.tar.gz.xuepYv/output?
-
-
- And how is it possible that we didn't notice this before while doing a version
-bump? Well, c-capnproto depends on host-gcc >= 5, and we only have one
-autobuilder with a recent gcc (Heiko's), and that one was only added in July
-this year. The previous bump of c-capnproto was in June.
-
- Regards,
- Arnout
-
-> 
-> Anyway, this is a real bug in our infra. How many packages are affected?
-> To be affected, a package must use git submodules, and have a host
-> variant:
-> 
->     $ git grep -l 'GIT_SUBMODULES = YES' |sed -r -e '\,support/,d'
->     package/azure-iot-sdk-c/azure-iot-sdk-c.mk
->     package/brickd/brickd.mk
->     package/c-capnproto/c-capnproto.mk
->     package/gstreamer1/gst1-interpipe/gst1-interpipe.mk
->     package/gstreamer1/gst1-shark/gst1-shark.mk
->     package/open62541/open62541.mk
-> 
-> And how many have a host variant:
-> 
->     $ grep -l -E 'host-.+-package' $(git grep -l 'GIT_SUBMODULES = YES' |sed -r -e '\,support/,d')
->     package/c-capnproto/c-capnproto.mk
-> 
-> Exactly one.
-> 
-> I missed one package when doing the conversion. One, Damned. Package.
-> And we were lucky one of the autobuilders noticed only just a few days
-> later.
-> 
-> Woot!
-> 
-> I'll send a fix patch, but the hash is definitely correct.
-> 
-> Regards,
-> Yann E. MORIN.
-> 
+Thanks!
