@@ -1,59 +1,67 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Wed, 13 Jan 2021 19:30:39 -0300
-Subject: [Buildroot] [PATCH v2] package/freescale-imx/firmware-imx: fix the
- VPU firmware location
-Message-ID: <20210113223039.14401-1-festevam@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 13 Jan 2021 23:33:30 +0100
+Subject: [Buildroot] [PATCH] pkg-generic: host variant use git
+ submodules if target variant does
+In-Reply-To: <20210113221014.687702-1-yann.morin.1998@free.fr>
+References: <20210113221014.687702-1-yann.morin.1998@free.fr>
+Message-ID: <5a2647fc-deca-046d-d83a-517fbf0c7e32@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The mainline kernel searches the coda VPU firmware inside the following
-locations [1]:
 
-/lib/firmware/
-/lib/firmware/vpu/
 
-Currently Buildroot installs the coda firmware into /lib/firmware/imx/vpu,
-which is not a valid location.
+On 13/01/2021 23:10, Yann E. MORIN wrote:
+> When a package has both a target and a host variant, and uses git
+> submodules, and the host variant is downloaded before the targt one, we
+> end up with the generated archive missing the submodules.
+> 
+> This happens in exactly one package in our tree: c-capnproto.
+> 
+> Weirdly enough, the issue was not caught until after we changed the way
+> we generate tar archives from git downloads.
 
-Fix it by installing the coda firmwares into /lib/firmware/vpu/ which
-is a valid path for both mainline and NXP vendor kernels. Also create a
-symlink to /lib/firmware/ so that mainline kernels do not need to wait
-more than 60 seconds to search again inside /lib/firmware/vpu/.
+ Applied to master after adding this explanation:
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=8af7779f3cbc1f6720d15f00abc797493710d1ab
+    This issue was not caught before because after a few days, the full
+    sources are added to sources.buildroot.net. So when the hash check
+    fails, the full tarball is simply downloaded from there.
 
-Reported-by: Romain Naour <romain.naour@gmail.com>
-Suggested-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
----
-Changes since v1:
-- Create symlinks to /lib/firmware to speed up mainline kernels to
-found the VPU firmware.
+ Thanks!
 
- package/freescale-imx/firmware-imx/firmware-imx.mk | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ Regards,
+ Arnout
 
-diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
-index 7d1f42f1d87b..6fba4e8a0cb3 100644
---- a/package/freescale-imx/firmware-imx/firmware-imx.mk
-+++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
-@@ -116,9 +116,11 @@ endif
- FIRMWARE_IMX_VPU_FW_NAME = $(call qstrip,$(BR2_PACKAGE_FIRMWARE_IMX_VPU_FW_NAME))
- ifneq ($(FIRMWARE_IMX_VPU_FW_NAME),)
- define FIRMWARE_IMX_INSTALL_TARGET_VPU_FW
--	mkdir -p $(TARGET_DIR)/lib/firmware/imx/vpu
--	cp $(@D)/firmware/vpu/vpu_fw_$(FIRMWARE_IMX_VPU_FW_NAME)*.bin \
--		$(TARGET_DIR)/lib/firmware/imx/vpu/
-+	mkdir -p $(TARGET_DIR)/lib/firmware/vpu
-+	for i in $$(find $(@D)/firmware/vpu/vpu_fw_$(FIRMWARE_IMX_VPU_FW_NAME)*.bin); do \
-+		cp $$i $(TARGET_DIR)/lib/firmware/vpu/ ; \
-+		ln -sf vpu/$$(basename $$i) $(TARGET_DIR)/lib/firmware/$$(basename $$i) ; \
-+	done
- endef
- endif
- 
--- 
-2.17.1
+> 
+> Propagate the git submodule setting from the target variant to the host
+> variant, unless the host variant explicitly opted-out.
+> 
+> Fixes:
+>     http://autobuild.buildroot.org/results/2de9c6c8ce83569d18cc7140ebc60d6fe1aadcbf/
+> 
+> Reported-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> ---
+>  package/pkg-generic.mk | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index c46c742352..357a4ce453 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -567,6 +567,12 @@ ifneq ($$(filter bzr cvs hg,$$($(2)_SITE_METHOD)),)
+>  BR_NO_CHECK_HASH_FOR += $$($(2)_SOURCE)
+>  endif
+>  
+> +ifndef $(2)_GIT_SUBMODULES
+> + ifdef $(3)_GIT_SUBMODULES
+> +  $(2)_GIT_SUBMODULES = $$($(3)_GIT_SUBMODULES)
+> + endif
+> +endif
+> +
+>  # Do not accept to download git submodule if not using the git method
+>  ifneq ($$($(2)_GIT_SUBMODULES),)
+>   ifneq ($$($(2)_SITE_METHOD),git)
+> 
