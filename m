@@ -1,51 +1,126 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 13 Jan 2021 23:10:14 +0100
-Subject: [Buildroot] [PATCH] pkg-generic: host variant use git submodules if
- target variant does
-Message-ID: <20210113221014.687702-1-yann.morin.1998@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 13 Jan 2021 23:28:48 +0100
+Subject: [Buildroot] [PATCH 1/1] package/c-capnproto: fix tarball hash
+In-Reply-To: <20210113214406.GC609249@scaer>
+References: <20210112181159.12172-1-fontaine.fabrice@gmail.com>
+ <20210113211700.GA609249@scaer> <20210113212233.GB609249@scaer>
+ <20210113214406.GC609249@scaer>
+Message-ID: <93f6a2ae-67a3-d56d-c11a-28b613434a05@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When a package has both a target and a host variant, and uses git
-submodules, and the host variant is downloaded before the targt one, we
-end up with the generated archive missing the submodules.
 
-This happens in exactly one package in our tree: c-capnproto.
 
-Weirdly enough, the issue was not caught until after we changed the way
-we generate tar archives from git downloads.
+On 13/01/2021 22:44, Yann E. MORIN wrote:
+> Fabrice, All,
+> 
+> On 2021-01-13 22:22 +0100, Yann E. MORIN spake thusly:
+>> On 2021-01-13 22:17 +0100, Yann E. MORIN spake thusly:
+>>> On 2021-01-12 19:11 +0100, Fabrice Fontaine spake thusly:
+>>>> Commit 5b95a5dc27c0d8002c00bda1c867ddea9218087e seems to have made a
+>>>> mistake in the tarball hash
+>>>
+>>> Actually, I just re-checked locally, and I indeed still get the hash
+>>> currently in the tree.
+>> Ah, but I am able to reproduce the problem with the _host_ variant!
+>>
+>> So, the hash is correct when downloading the target variant, but it is
+>> not when downloading the host variant. Woot.. Weird... :-/
+> 
+> So what if I interrrupt the download process right after the archive is
+> generated from the git repo, but just before we check the hashes ?
+> 
+>     $ ls -l output/build/.c-capnproto-9053ebe6eeb2ae762655b982e27c341cb568366d-br1.tar.gz.Byiova/output
+>     -rw-r--r-- 1 ymorin ymorin 82K Jan 13 22:25 output/build/.c-capnproto-9053ebe6eeb2ae762655b982e27c341cb568366d-br1.tar.gz.Byiova/output
+> 
+>     $ ls -l ${BR2_DL_DIR}/c-capnproto/c-capnproto-9053ebe6eeb2ae762655b982e27c341cb568366d-br1.tar.gz
+>     -rw-r--r-- 1 ymorin ymorin 1.4M Jan 13 22:20 c-capnproto-9053ebe6eeb2ae762655b982e27c341cb568366d-br1.tar.gz
+> 
+> Wut? 82K vs. 1.4M?
+> 
+> And just by looking at package/c-capnproto/c-capnproto.mk I got an epiphany.
+> c-capnproto uses git submodules.
+> 
+> And indeed, the git submodule setting is not inherited from the target
+> variant to the host variant.
+> 
+> Joel: why is the host variant building successfully, but the target
+> variant needs the git submodules? Anyway, this is a separate topic for
+> further investigation.
 
-Propagate the git submodule setting from the target variant to the host
-variant, unless the host variant explicitly opted-out.
+ Yann found the reason and explained it to me on IRC. Before the change of
+tarball name, the normal download of host-c-capnproto indeed failed the hash
+check. However, the autobuilders always fall back to sources.buildroot.net, and
+there indeed we have the tarball with the correct hash. I could reproduce this
+locally:
 
-Fixes:
-    http://autobuild.buildroot.org/results/2de9c6c8ce83569d18cc7140ebc60d6fe1aadcbf/
+2021-01-13T23:20:50 >>> host-c-capnproto
+9053ebe6eeb2ae762655b982e27c341cb568366d Downloading
+2021-01-13T23:20:50 Initialized empty Git repository in
+/home/arnout/src/buildroot-dl/c-capnproto/git/.git/
+2021-01-13T23:20:50 Fetching all references
+2021-01-13T23:20:52 remote: Enumerating objects: 1, done.
+2021-01-13T23:20:52 remote: Counting objects: 100% (1/1)^Mremote: Counting
+objects: 100% (1/1), done.
+[snip]
+2021-01-13T23:20:57 ERROR:
+c-capnproto-9053ebe6eeb2ae762655b982e27c341cb568366d.tar.gz has wrong sha256 hash:
+2021-01-13T23:20:57 ERROR: expected:
+88c454f4f4bad87c9b60cd739c7da5605c1085c0e92b317dd72d547bbb804279
+2021-01-13T23:20:57 ERROR: got     :
+8137ec5f468b2a084854954f6d405138106cfebcf150f4342fb27760184812f6
+2021-01-13T23:20:57 ERROR: Incomplete download, or man-in-the-middle (MITM) attack
+2021-01-13T23:20:57 --2021-01-13 23:20:57--
+http://sources.buildroot.net/c-capnproto/c-capnproto-9053ebe6eeb2ae762655b982e27c341cb568366d.tar.gz
+2021-01-13T23:20:57 Resolving sources.buildroot.net (sources.buildroot.net)...
+2606:4700:20::681a:25, 2606:4700:20::ac43:4838, 2606:4700:20::681a:125, ...
+2021-01-13T23:20:57 Connecting to sources.buildroot.net
+(sources.buildroot.net)|2606:4700:20::681a:25|:80... connected.
+2021-01-13T23:20:58 HTTP request sent, awaiting response... 200 OK
+2021-01-13T23:20:58 Length: 1367744 (1.3M) [application/x-gtar-compressed]
+2021-01-13T23:20:58 Saving to:
+?/home/arnout/src/buildroot/output/build/.c-capnproto-9053ebe6eeb2ae762655b982e27c341cb568366d.tar.gz.xuepYv/output?
 
-Reported-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/pkg-generic.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index c46c742352..357a4ce453 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -567,6 +567,12 @@ ifneq ($$(filter bzr cvs hg,$$($(2)_SITE_METHOD)),)
- BR_NO_CHECK_HASH_FOR += $$($(2)_SOURCE)
- endif
- 
-+ifndef $(2)_GIT_SUBMODULES
-+ ifdef $(3)_GIT_SUBMODULES
-+  $(2)_GIT_SUBMODULES = $$($(3)_GIT_SUBMODULES)
-+ endif
-+endif
-+
- # Do not accept to download git submodule if not using the git method
- ifneq ($$($(2)_GIT_SUBMODULES),)
-  ifneq ($$($(2)_SITE_METHOD),git)
--- 
-2.25.1
+ And how is it possible that we didn't notice this before while doing a version
+bump? Well, c-capnproto depends on host-gcc >= 5, and we only have one
+autobuilder with a recent gcc (Heiko's), and that one was only added in July
+this year. The previous bump of c-capnproto was in June.
+
+ Regards,
+ Arnout
+
+> 
+> Anyway, this is a real bug in our infra. How many packages are affected?
+> To be affected, a package must use git submodules, and have a host
+> variant:
+> 
+>     $ git grep -l 'GIT_SUBMODULES = YES' |sed -r -e '\,support/,d'
+>     package/azure-iot-sdk-c/azure-iot-sdk-c.mk
+>     package/brickd/brickd.mk
+>     package/c-capnproto/c-capnproto.mk
+>     package/gstreamer1/gst1-interpipe/gst1-interpipe.mk
+>     package/gstreamer1/gst1-shark/gst1-shark.mk
+>     package/open62541/open62541.mk
+> 
+> And how many have a host variant:
+> 
+>     $ grep -l -E 'host-.+-package' $(git grep -l 'GIT_SUBMODULES = YES' |sed -r -e '\,support/,d')
+>     package/c-capnproto/c-capnproto.mk
+> 
+> Exactly one.
+> 
+> I missed one package when doing the conversion. One, Damned. Package.
+> And we were lucky one of the autobuilders noticed only just a few days
+> later.
+> 
+> Woot!
+> 
+> I'll send a fix patch, but the hash is definitely correct.
+> 
+> Regards,
+> Yann E. MORIN.
+> 
