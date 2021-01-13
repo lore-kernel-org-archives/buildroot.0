@@ -1,33 +1,54 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Wed, 13 Jan 2021 19:28:46 -0300
-Subject: [Buildroot] [PATCH] package/freescale-imx/firmware-imx: install
- the VPU firmware into a valid location
-In-Reply-To: <2b2ee27f-f5c4-f8eb-61ff-b64d3ed0d623@gmail.com>
-References: <20210113120822.327-1-festevam@gmail.com>
- <0a7f5a1d-e930-084a-3372-3ecc736a810a@smile.fr>
- <CAOMZO5BTpG8f=weBKxE9fXtEf3PjGnvs7c979sNBNyKm576ixQ@mail.gmail.com>
- <aeea51ae-483e-1cfc-0c5d-222aaf2d5400@gmail.com>
- <CAOMZO5Bs5ieYti4i5L0TCEz6uV7Zt8UkXbh=_S7mC99MLKio-A@mail.gmail.com>
- <2b2ee27f-f5c4-f8eb-61ff-b64d3ed0d623@gmail.com>
-Message-ID: <CAOMZO5C=S541vwNOX49V1JNVrt6f6jq-ktibYx-RRrUVSTVSrw@mail.gmail.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Wed, 13 Jan 2021 23:32:31 +0100
+Subject: [Buildroot] [git commit] pkg-generic: host variant use git
+ submodules if target variant does
+Message-ID: <20210113221357.7A91687590@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jan 13, 2021 at 6:01 PM Romain Naour <romain.naour@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=4d03923b6a7776d30ee2a7452640d79442cfa2f0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Something like this ?
->
-> define FIRMWARE_IMX_INSTALL_TARGET_VPU_FW
->         mkdir -p $(TARGET_DIR)/lib/firmware/vpu
->         for i in $$(find $(@D)/firmware/vpu/vpu_fw_$(FIRMWARE_IMX_VPU_FW_NAME)*.bin); do \
->                 cp $$i $(TARGET_DIR)/lib/firmware/vpu/ ; \
->                 ln -sf vpu/$$(basename $$i) $(TARGET_DIR)/lib/firmware/$$(basename $$i) ; \
->         done
-> endef
+When a package has both a target and a host variant, and uses git
+submodules, and the host variant is downloaded before the target one, we
+end up with the generated archive missing the submodules.
 
-This works for me. I will send a v2 with your suggestion.
+This happens in exactly one package in our tree: c-capnproto.
 
-Thanks!
+This issue was not caught before because after a few days, the full
+sources are added to sources.buildroot.net. So when the hash check
+fails, the full tarball is simply downloaded from there.
+
+Propagate the git submodule setting from the target variant to the host
+variant, unless the host variant explicitly opted-out.
+
+Fixes:
+    http://autobuild.buildroot.org/results/2de9c6c8ce83569d18cc7140ebc60d6fe1aadcbf/
+
+Reported-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/pkg-generic.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index c46c742352..357a4ce453 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -567,6 +567,12 @@ ifneq ($$(filter bzr cvs hg,$$($(2)_SITE_METHOD)),)
+ BR_NO_CHECK_HASH_FOR += $$($(2)_SOURCE)
+ endif
+ 
++ifndef $(2)_GIT_SUBMODULES
++ ifdef $(3)_GIT_SUBMODULES
++  $(2)_GIT_SUBMODULES = $$($(3)_GIT_SUBMODULES)
++ endif
++endif
++
+ # Do not accept to download git submodule if not using the git method
+ ifneq ($$($(2)_GIT_SUBMODULES),)
+  ifneq ($$($(2)_SITE_METHOD),git)
