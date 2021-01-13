@@ -1,10 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 13 Jan 2021 22:24:59 +0100
-Subject: [Buildroot] libusb host gcc version issue
-In-Reply-To: <2052796.irdbgypaU6@zgyarmati-w530>
-References: <cmu-lmtpd-11307-1610526062-0@imapb020.mykolab.com>
- <2052796.irdbgypaU6@zgyarmati-w530>
-Message-ID: <1948c768-2735-f2fd-b367-45a2d79d312c@mind.be>
+Date: Wed, 13 Jan 2021 22:33:44 +0100
+Subject: [Buildroot] Per package src+build directory
+In-Reply-To: <1610516510799-0.post@n4.nabble.com>
+References: <1610516510799-0.post@n4.nabble.com>
+Message-ID: <6bc15ec5-a4eb-a223-b6bb-7b054cf9343a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,58 +12,42 @@ To: buildroot@busybox.net
 
 
 
-On 13/01/2021 10:27, Zoltan Gyarmati wrote:
-> Dear All,
-> 
-> compiling host-libusb requires gcc >=4.9 (due to   _Thread_local ), which 
-> causes autobuilder failures on older distros (like Ubuntu 14.04),
+On 13/01/2021 06:41, scdrj wrote:
+> How do I set a custom src/build directory for a particular package?
 
- That's what the symbol BR2_HOST_GCC_AT_LEAST_4_9 is for (and that's what the
-Ubuntu 14.04 autobuilder is for).
+ That is not possible, period. Only the source can be overriden, but as you say,
+it's always rsync'ed to the build directory.
+
+
+> I have tried OVERRIDE_SRCDIR, but it always performs rsync to the build
+> folder (makes an extra copy).
+> 
+> I want to perform the in-place build. 
+
+ Is there a specific reason to want this? Doing the build inside the source
+directory is not a good idea for many reasons.
+
+ If it's for the size or the build time - normally, the compilation itself
+should take a lot more time and produce a much bigger output, so the overhead
+should be negligible.
+
+ If it's because there's a large subtree that isn't actually used, *that* can be
+avoided by using package-specific excludes, with
+_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS (which is just a list of rsync argument, so
+you can actually put anything there).
+
 
  Regards,
  Arnout
 
-> see the 
-> linked autobuild report below. Also the target build needs >= 4.9, but it's 
-> already being handled by Fabric's patch.
->   One way to fix the host build to bump the minimal GCC version to 4.9 in 
-> 'support/dependencies/dependencies.mk', although I'm not sure it's desirable, 
-> as it's not only kicks out Ubuntu 14.04 (which is EOL anyway), but also CentOS 
-> 7 (which is supported until 2024). What is the public opinion on this?
-> 
-> Thx, regards
-> Zoltan Gyarmati
-> 
-> On 2021. janu?r 13., szerda 9:20:58 CET Thomas Petazzoni wrote:
->> Hello,
->>
->> Autobuilder failures
->> ====================
->>
->> Below is a list of build failures reported by the Buildroot
->> autobuilders in relation to packages or CPU
->> architectures you are in charge of. Please help us
->> improving the quality of Buildroot by investigating
->> those build failures and sending patches to fix
->> them.Thanks!
->>
->> Results for the 'master' branch
->> -------------------------------
->>
->> Build failures related to your packages:
->>
->>     arch     |             reason             |                             
->>          url
->> -------------+--------------------------------+----------------------------
->> ----------------------------------------------------- arm      |      
->> host-libusb-1.0.24       |
->> http://autobuild.buildroot.net/results/a9a557eed77238fff36735f4391278bca40b
->> 9d04
+> Currently, I am doing it by creating a symbolic link in the build folder
+> from the original src directory and by manually creating various
+> downloaded/patched/extracted ".stamp_XXXXXX" files.
 > 
 > 
 > 
-> 
+> --
+> Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
