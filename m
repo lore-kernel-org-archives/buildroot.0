@@ -1,43 +1,38 @@
-From: Mauricio Litinow <mauricio.penteado@litinow.com>
-Date: Wed, 13 Jan 2021 10:47:53 +0000
-Subject: [Buildroot] Buildroot ARM with Altera FPGA de10-standard
-Message-ID: <80f01170-5252-b7d6-0095-5c72d958f086@litinow.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Wed, 13 Jan 2021 08:16:41 -0300
+Subject: [Buildroot] [PATCH v2 1/8] package/freescale-imx/firmware-imx:
+ bump version to 8.10
+In-Reply-To: <d6faa5af-c22c-67b2-65a0-5721bf4aa2bf@gmail.com>
+References: <20210105152420.26379-1-stephane.viau@oss.nxp.com>
+ <20210105152420.26379-2-stephane.viau@oss.nxp.com>
+ <636366db-0dd3-4a30-7097-d09423d91aa8@gmail.com>
+ <CAOMZO5CQ8-rHcZyKPmmSGCo+MSSEKRcbMJMDiFHp5VQDahG+Ug@mail.gmail.com>
+ <CAOMZO5AZXr8oY1Z6K30-Bq+a3dF8RAaRmBB1S_51Fh_9UDWgdw@mail.gmail.com>
+ <d6faa5af-c22c-67b2-65a0-5721bf4aa2bf@gmail.com>
+Message-ID: <CAOMZO5DR1AdSHah4Y1JAGoK+UfiZGGAuLjjC7a6OnshCFcGbbw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi folks
+Hi Romain,
 
+On Wed, Jan 13, 2021 at 5:10 AM Romain Naour <romain.naour@gmail.com> wrote:
 
-I am working to regenerate the article published on the following web page:
+> I'm not sure if we should install the vpu firmware directly in "/lib/firmware/"
+> or "/lib/firmware/vpu". Feel free to submit a patch to discuss about this change.
 
-https://bitlog.it/20170820_building_embedded_linux_for_the_terasic_de10-nano.html 
+Mainline kernels search first inside /lib/firmware and then inside
+/lib/firmware/vpu
 
+The NXP BSPs search the VPU firmware inside /lib/firmware/vpu, so I
+think we need to use this location, which can make vendor and mainline
+kernels happy.
 
+However, it is not working for me if I place it inside
+/lib/firmware/vpu with a 5.10 kernel.
 
-My environment is a little different from the article because I am using 
-a de10-standard card instead of de10-nano.
+I will investigate this when I have a chance.
 
-
-Unfortunately, in step 7.1 - "Configuring Buildroot" my terminal hangs 
-out for too much time.
-
-
-I already left it building for 5 days without success.
-
-
-The worst part for me is a terminal hanged out without log messages.
-
-
-Please, how long should this step take to finish? Should it be more than 
-5 days?
-
-
-Is there some way to enable log messages or building progress messages?
-
-
-Best regards,
-
-Mauricio Penteado
+Thanks
