@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 13 Jan 2021 08:11:25 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x]
+Date: Wed, 13 Jan 2021 08:11:31 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x]
  package/wireguard-linux-compat: bump version to 1.0.20201221
-Message-ID: <20210113065540.59EB2875D1@busybox.osuosl.org>
+Message-ID: <20210113065547.BE80F875E2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=151f5b2cb7c4da2e869db94a3acd2fc1d413d9b8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=b8081da973e34af489bd851a0dae188bddb8db95
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 Fixes a build issue with linux-rt >= 5.4.  For details, see the
 announcement:
@@ -37,7 +37,7 @@ index 8895875cf6..194c798570 100644
  # Locally calculated
  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
 diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.mk b/package/wireguard-linux-compat/wireguard-linux-compat.mk
-index 76585e0bc4..ef21e2e114 100644
+index 7d6ebf0f7e..19fef05436 100644
 --- a/package/wireguard-linux-compat/wireguard-linux-compat.mk
 +++ b/package/wireguard-linux-compat/wireguard-linux-compat.mk
 @@ -4,7 +4,7 @@
