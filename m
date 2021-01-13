@@ -1,61 +1,39 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Wed, 13 Jan 2021 09:39:34 +0100
-Subject: [Buildroot] [PATCH v2 1/8] package/freescale-imx/firmware-imx:
- bump version to 8.10
-In-Reply-To: <CAEyMn7b2VmmNWevK_ZLwDPy+unW5HDqXFhMbMfO-me+TEacz=w@mail.gmail.com>
-References: <20210105152420.26379-1-stephane.viau@oss.nxp.com>
- <20210105152420.26379-2-stephane.viau@oss.nxp.com>
- <636366db-0dd3-4a30-7097-d09423d91aa8@gmail.com>
- <CAOMZO5CQ8-rHcZyKPmmSGCo+MSSEKRcbMJMDiFHp5VQDahG+Ug@mail.gmail.com>
- <66568a2a-8730-9d9a-07b4-168bd8eea60b@gmail.com>
- <CAEyMn7b2VmmNWevK_ZLwDPy+unW5HDqXFhMbMfO-me+TEacz=w@mail.gmail.com>
-Message-ID: <e6d06607-a462-3ebf-c152-0cef36789418@smile.fr>
+From: Alexander Egorenkov <egorenar@linux.ibm.com>
+Date: Wed, 13 Jan 2021 09:51:56 +0100
+Subject: [Buildroot] [PATCH 1/1] configs/qemu_s390x_defconfig: bump kernel
+ version to 5.10.7
+Message-ID: <20210113085156.1010703-1-egorenar@linux.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Heiko,
+Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
+---
+ configs/qemu_s390x_defconfig | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Le 13/01/2021 ? 09:27, Heiko Thiery a ?crit?:
-> Hi All,
-> 
->> So with your change, the first try fail using "/lib/firmware/vpu_fw_imx53.bin".
->> But "/lib/firmware/vpu/vpu_fw_imx53.bin" succeed.
->>
->> "firmware request failed" message should never appear in your dmesg log.
->>
->> I believe there is a confusion between firmware (such vpu firmware) and imx sdma
->> firmware that require to be installed to "/lib/firmware/imx" directory.
-> 
-> Not really related to this discussion about vpu fw but I also faced an
-> issue with an imx8mq board and the SDMA firmware.
-> 
-> # dmesg | grep sdma
-> [    0.178729] imx-sdma 302c0000.sdma: Direct firmware load for
-> imx/sdma/sdma-imx7d.bin failed with error -2
-> [    0.178763] imx-sdma 302c0000.sdma: Falling back to sysfs fallback
-> for: imx/sdma/sdma-imx7d.bin
-
-based on the log timing, I would say that the rootfs wasn't mounted when the
-imx-sdma has been probed.
-
-Try to compile the driver as a module, not bundled into the kernel image.
-
-Best regards,
-Romain
-
-
-> [   60.381850] imx-sdma 302c0000.sdma: external firmware not found,
-> using ROM firmware
-> [   60.389889] imx-sdma 30bd0000.sdma: external firmware not found,
-> using ROM firmware
-> # ls /lib/firmware/imx/sdma/^C
-> # find / -name sdma-imx7d.bin
-> /lib/firmware/imx/sdma/sdma-imx7d.bin
-> 
-> Has anyone an idea what is going wrong?
-> 
-> Thank you
-> 
+diff --git a/configs/qemu_s390x_defconfig b/configs/qemu_s390x_defconfig
+index b3c2641d15..9b3821f043 100644
+--- a/configs/qemu_s390x_defconfig
++++ b/configs/qemu_s390x_defconfig
+@@ -11,13 +11,13 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+-# Linux headers same as kernel, a 5.8 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_8=y
++# Linux headers same as kernel, a 5.10 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.8.7"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.7"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ 
+-- 
+2.26.2
