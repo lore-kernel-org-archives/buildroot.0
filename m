@@ -1,46 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 13 Jan 2021 10:36:26 +0100
-Subject: [Buildroot] [PATCH 1/1] package/gerbera: bump to version 1.6.4
-In-Reply-To: <20210112221149.1557387-1-joerg.krause@embedded.rocks>
- (=?utf-8?Q?=22J=C3=B6rg?=
- Krause"'s message of "Tue, 12 Jan 2021 23:11:49 +0100")
-References: <20210112221149.1557387-1-joerg.krause@embedded.rocks>
-Message-ID: <8735z5gov9.fsf@dell.be.48ers.dk>
+Date: Wed, 13 Jan 2021 10:34:08 +0100
+Subject: [Buildroot] [git commit] package/meson: bump to version 0.56.2
+Message-ID: <20210113091840.D44AE876AF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=7805cace8b5941226302b114932460ab9b63733f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
- > ---
- >  package/gerbera/gerbera.hash | 2 +-
- >  package/gerbera/gerbera.mk   | 2 +-
- >  2 files changed, 2 insertions(+), 2 deletions(-)
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/meson/meson.hash | 4 ++--
+ package/meson/meson.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- > diff --git a/package/gerbera/gerbera.hash b/package/gerbera/gerbera.hash
- > index 0ade0fd3af..e584db1354 100644
- > --- a/package/gerbera/gerbera.hash
- > +++ b/package/gerbera/gerbera.hash
- > @@ -1,3 +1,3 @@
- >  # Locally computed:
- > -sha256  3a4956ec5fea1101e8daa32d9cfb985db908a49e2ac6137a1b2bf509e2684a6c  gerbera-1.6.0.tar.gz
- > +sha256  cbe7ea78977db8c02fcca1759ed149f199a590afaf4a6d21ffcca8623d1a0cc5  gerbera-1.6.4.tar.gz
- >  sha256  cae4138373be41fd2be75faf41ce7efbcf49fb17d0e05ad1c51cc01ac335b9b6  LICENSE.md
- > diff --git a/package/gerbera/gerbera.mk b/package/gerbera/gerbera.mk
- > index 3dc8f0328c..2d3ea37fe0 100644
- > --- a/package/gerbera/gerbera.mk
- > +++ b/package/gerbera/gerbera.mk
- > @@ -4,7 +4,7 @@
- >  #
- >  ################################################################################
+diff --git a/package/meson/meson.hash b/package/meson/meson.hash
+index b1f36ab9c3..e07b914be5 100644
+--- a/package/meson/meson.hash
++++ b/package/meson/meson.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://github.com/mesonbuild/meson/releases/download/0.56.0/meson-0.56.0.tar.gz.asc
+-sha256  291dd38ff1cd55fcfca8fc985181dd39be0d3e5826e5f0013bf867be40117213  meson-0.56.0.tar.gz
++# https://github.com/mesonbuild/meson/releases/download/0.56.0/meson-0.56.2.tar.gz.asc
++sha256  3cb8bdb91383f7f8da642f916e4c44066a29262caa499341e2880f010edb87f4  meson-0.56.2.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  COPYING
+diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+index e45eddcd7f..7e39883db3 100644
+--- a/package/meson/meson.mk
++++ b/package/meson/meson.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- > -GERBERA_VERSION = 1.6.0
- > +GERBERA_VERSION = 1.6.4
-
-Hmm, what is this against? git master has 1.4.0.
-
--- 
-Bye, Peter Korsgaard
+-MESON_VERSION = 0.56.0
++MESON_VERSION = 0.56.2
+ MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
+ MESON_LICENSE = Apache-2.0
+ MESON_LICENSE_FILES = COPYING
