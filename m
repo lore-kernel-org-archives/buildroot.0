@@ -1,55 +1,35 @@
-From: Michael Walle <michael@walle.cc>
-Date: Thu, 14 Jan 2021 23:11:02 +0100
-Subject: [Buildroot] [PATCH] uboot: fix binman with a new dependency
-In-Reply-To: <20210112091806.906954-1-francois.perrad@gadz.org>
-References: <20210112091806.906954-1-francois.perrad@gadz.org>
-Message-ID: <d7be54607e5dc1b892211dfe1970b1cf@walle.cc>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 14 Jan 2021 23:19:48 +0100
+Subject: [Buildroot] [git commit] package/wavpack: set WAVPACK_CPE_ID_VENDOR
+Message-ID: <20210114220107.151EA7F911@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Francois,
+commit: https://git.buildroot.net/buildroot/commit/?id=fb8cdb077393c8739533000ccb88d50bfe861aae
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Am 2021-01-12 10:18, schrieb Francois Perrad:
-> since 2021.01, tools/binman is broken.
-> tools/binman/control.py imports pkg_resources
-> the module pkg_resources is supplied by setuptools,
-> so this new dependency is required.
-> 
-> binman is used only for building SPL
+cpe:2.3:a:wavpack:wavpack is a valid CPE identifier for this package:
 
-is it? AFAIK binman is just for generating images and can as
-well be used without SPL. There is also a CONFIG_BINMAN.
-I don't know if we could check the u-boot config for that.
-Otherwise, I guess we'd need yet another "u-boot uses binman"
-config option. I don't think checking of SPL is enough.
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Awavpack%3Awavpack
 
--michael
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/wavpack/wavpack.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  boot/uboot/uboot.mk | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-> index d2b4e8dc6..a3d949a55 100644
-> --- a/boot/uboot/uboot.mk
-> +++ b/boot/uboot/uboot.mk
-> @@ -167,8 +167,14 @@ endif
-> 
->  ifeq ($(BR2_TARGET_UBOOT_NEEDS_PYTHON2),y)
->  UBOOT_DEPENDENCIES += host-python
-> +ifeq ($(BR2_TARGET_UBOOT_SPL),y)
-> +UBOOT_DEPENDENCIES += host-python-setuptools
-> +endif
->  else ifeq ($(BR2_TARGET_UBOOT_NEEDS_PYTHON3),y)
->  UBOOT_DEPENDENCIES += host-python3
-> +ifeq ($(BR2_TARGET_UBOOT_SPL),y)
-> +UBOOT_DEPENDENCIES += host-python3-setuptools
-> +endif
->  endif
-> 
->  ifeq ($(BR2_TARGET_UBOOT_NEEDS_PYLIBFDT),y)
+diff --git a/package/wavpack/wavpack.mk b/package/wavpack/wavpack.mk
+index d44982232d..485ab9b2ae 100644
+--- a/package/wavpack/wavpack.mk
++++ b/package/wavpack/wavpack.mk
+@@ -12,6 +12,7 @@ WAVPACK_INSTALL_STAGING = YES
+ WAVPACK_DEPENDENCIES = $(if $(BR2_ENABLE_LOCALE),,libiconv)
+ WAVPACK_LICENSE = BSD-3-Clause
+ WAVPACK_LICENSE_FILES = COPYING
++WAVPACK_CPE_ID_VENDOR = wavpack
+ 
+ ifeq ($(BR2_PACKAGE_LIBICONV),y)
+ WAVPACK_CONF_OPTS += LIBS=-liconv
