@@ -1,54 +1,85 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Thu, 14 Jan 2021 22:30:46 +0100
-Subject: [Buildroot] [git commit] configs/kontron_smarc_sal28: integrate RCW
- into rootfs image
-Message-ID: <20210114211221.2E45C87892@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/kontron_smarc_sal28: enable u-boot
+Message-ID: <20210114211221.14F1E86280@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d752b544079d0a124a6e767df80a50698e480259
+commit: https://git.buildroot.net/buildroot/commit/?id=c0ce904fcad30ac4f1ca174f6ce393ed077a987f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Integrate the RCW into the storage device image, so the image can also
-be used a boot source. The SoC expects the RCW at offset 4096 of the SD
-card or eMMC.
+Enable building of the bootloader and integrate it into the resulting
+image.
 
 Signed-off-by: Michael Walle <michael@walle.cc>
+Tested-by: Heiko Thiery <heiko.thiery@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- board/kontron/smarc-sal28/genimage.cfg | 6 ++++++
- configs/kontron_smarc_sal28_defconfig  | 1 +
- 2 files changed, 7 insertions(+)
+ board/kontron/smarc-sal28/genimage.cfg |  6 ++++++
+ board/kontron/smarc-sal28/readme.txt   | 15 +++++++++++++++
+ configs/kontron_smarc_sal28_defconfig  | 10 ++++++++++
+ 3 files changed, 31 insertions(+)
 
 diff --git a/board/kontron/smarc-sal28/genimage.cfg b/board/kontron/smarc-sal28/genimage.cfg
-index d75234d997..f3fb77e00a 100644
+index 9ef37de757..d75234d997 100644
 --- a/board/kontron/smarc-sal28/genimage.cfg
 +++ b/board/kontron/smarc-sal28/genimage.cfg
 @@ -3,6 +3,12 @@ image sdcard-emmc.img {
  		gpt = true
  	}
  
-+	partition rcw {
-+		offset = 4k
++	partition u-boot {
++		offset = 1M
 +		in-partition-table = "no"
-+		image = "rcw.bin"
++		image = "u-boot.rom"
 +	}
 +
- 	partition u-boot {
- 		offset = 1M
- 		in-partition-table = "no"
+ 	partition rootfs {
+ 		offset = 2M
+ 		image = rootfs.ext4
+diff --git a/board/kontron/smarc-sal28/readme.txt b/board/kontron/smarc-sal28/readme.txt
+index 2047f09b64..bdf2258b59 100644
+--- a/board/kontron/smarc-sal28/readme.txt
++++ b/board/kontron/smarc-sal28/readme.txt
+@@ -71,3 +71,18 @@ You will see something like this at boot time:
+ [    4.563565] GPT:Alternate GPT header not at the end of the disk.
+ [    4.569596] GPT:266272 != 7864319
+ [    4.572925] GPT: Use GNU Parted to correct GPT errors.
++
++Updating the bootloader
++=======================
++
++Buildroot will automatically build the u-boot bootloader. The resulting
++image is called u-boot.rom and you can find it in the images/ directory.
++
++To update the bootloader on the board you could either copy it to an
++USB thumb drive or you could put it on a TFTP server. The following
++example assumes you have the bootloader image copied to the root of
++a thumb drive:
++
++  # usb start
++  # load usb 0:1 $loadaddr u-boot.rom
++  # sf probe 0 && sf update $fileaddr 0x210000 $filesize
 diff --git a/configs/kontron_smarc_sal28_defconfig b/configs/kontron_smarc_sal28_defconfig
-index a8412b9c38..fd001614f4 100644
+index b88f1aef4f..a8412b9c38 100644
 --- a/configs/kontron_smarc_sal28_defconfig
 +++ b/configs/kontron_smarc_sal28_defconfig
-@@ -16,6 +16,7 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/fsl-ls1028a-kontron-sl28 freescale/f
- BR2_LINUX_KERNEL_DTB_KEEP_DIRNAME=y
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_PACKAGE_RCW_SMARC_SAL28=y
+@@ -19,5 +19,15 @@ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
  BR2_TARGET_ROOTFS_EXT2=y
  BR2_TARGET_ROOTFS_EXT2_4=y
  BR2_TARGET_ROOTFS_EXT2_SIZE="128M"
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.01"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="kontron_sl28"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
++# BR2_TARGET_UBOOT_FORMAT_BIN is not set
++BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.rom"
+ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_UBOOT_TOOLS=y
