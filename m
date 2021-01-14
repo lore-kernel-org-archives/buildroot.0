@@ -1,42 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 14 Jan 2021 23:26:24 +0100
-Subject: [Buildroot] [PATCH 1/1] package/wavpack: set
- WAVPACK_CPE_ID_VENDOR
-In-Reply-To: <20210111222808.1418024-1-fontaine.fabrice@gmail.com>
-References: <20210111222808.1418024-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210114232624.25f86d79@windsurf.home>
+Date: Thu, 14 Jan 2021 23:34:31 +0100
+Subject: [Buildroot] [PATCH 2/2] package/linux-pam: drop useless
+ LINUX_PAM_CPE_ID_NAME definition
+In-Reply-To: <20210114223432.456542-1-thomas.petazzoni@bootlin.com>
+References: <20210114223432.456542-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20210114223432.456542-2-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 11 Jan 2021 23:28:08 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+This definition is useless, because it is equal to the default value
+of <pkg>_CPE_ID_NAME as calculated by generic-package.
 
-> cpe:2.3:a:wavpack:wavpack is a valid CPE identifier for this package:
-> 
->   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Awavpack%3Awavpack
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/wavpack/wavpack.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/wavpack/wavpack.mk b/package/wavpack/wavpack.mk
-> index 6403f93ac9..586082fdd6 100644
-> --- a/package/wavpack/wavpack.mk
-> +++ b/package/wavpack/wavpack.mk
-> @@ -12,6 +12,7 @@ WAVPACK_INSTALL_STAGING = YES
->  WAVPACK_DEPENDENCIES = $(if $(BR2_ENABLE_LOCALE),,libiconv)
->  WAVPACK_LICENSE = BSD-3-Clause
->  WAVPACK_LICENSE_FILES = COPYING
-> +WAVPACK_CPE_ID_VENDOR = $(WAVPACK_NAME)
+Before and after this patch, the CPE ID calculated for the linux-pam
+package is exactly the same, according to "make linux-pam-show-info".
 
-Changed to use "wavpack" directly.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/linux-pam/linux-pam.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-Thomas
+diff --git a/package/linux-pam/linux-pam.mk b/package/linux-pam/linux-pam.mk
+index be4d11bb10..9c0815db24 100644
+--- a/package/linux-pam/linux-pam.mk
++++ b/package/linux-pam/linux-pam.mk
+@@ -22,7 +22,6 @@ LINUX_PAM_LICENSE = BSD-3-Clause
+ LINUX_PAM_LICENSE_FILES = Copyright
+ LINUX_PAM_MAKE_OPTS += LIBS=$(TARGET_NLS_LIBS)
+ LINUX_PAM_CPE_ID_VENDOR = linux-pam
+-LINUX_PAM_CPE_ID_NAME = linux-pam
+ 
+ ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
+ LINUX_PAM_CONF_OPTS += --enable-selinux
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.29.2
