@@ -1,36 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 14 Jan 2021 22:37:17 +0100
-Subject: [Buildroot] [PATCH 1/1] package/bluez-alsa: bump to version
- 3.0.0
-In-Reply-To: <20210112222807.1649810-1-joerg.krause@embedded.rocks>
-References: <20210112222807.1649810-1-joerg.krause@embedded.rocks>
-Message-ID: <20210114223717.04b89d80@windsurf.home>
+Date: Thu, 14 Jan 2021 22:37:27 +0100
+Subject: [Buildroot] [git commit] package/freescale-imx/firmware-imx: fix
+ the VPU firmware location
+Message-ID: <20210114211839.C3766837ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 12 Jan 2021 23:28:07 +0100
-J?rg Krause <joerg.krause@embedded.rocks> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=ec18cac9f9e92d6a03d9d1936553abe1dcd2d327
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Drop upstream patch which is included in the new version.
-> 
-> Add additional config option `--enable-a2dpconf` to build small (13 kB)
-> utility `a2dpconf` which does not depend on any external dependencies.
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  .../0001-fix-build-issue-with-gcc-10.patch    | 140 ------------------
->  package/bluez-alsa/bluez-alsa.hash            |   2 +-
->  package/bluez-alsa/bluez-alsa.mk              |   3 +-
->  3 files changed, 3 insertions(+), 142 deletions(-)
->  delete mode 100644 package/bluez-alsa/0001-fix-build-issue-with-gcc-10.patch
+The mainline kernel searches the coda VPU firmware inside the following
+locations [1]:
 
-Applied to master, thanks.
+/lib/firmware/
+/lib/firmware/vpu/
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Currently Buildroot installs the coda firmware into /lib/firmware/imx/vpu,
+which is not a valid location.
+
+Fix it by installing the coda firmwares into /lib/firmware/vpu/ which
+is a valid path for both mainline and NXP vendor kernels. Also create a
+symlink to /lib/firmware/ so that mainline kernels do not need to wait
+more than 60 seconds to search again inside /lib/firmware/vpu/.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=8af7779f3cbc1f6720d15f00abc797493710d1ab
+
+Reported-by: Romain Naour <romain.naour@gmail.com>
+Suggested-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Acked-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/freescale-imx/firmware-imx/firmware-imx.mk | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
+index 7d1f42f1d8..6fba4e8a0c 100644
+--- a/package/freescale-imx/firmware-imx/firmware-imx.mk
++++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
+@@ -116,9 +116,11 @@ endif
+ FIRMWARE_IMX_VPU_FW_NAME = $(call qstrip,$(BR2_PACKAGE_FIRMWARE_IMX_VPU_FW_NAME))
+ ifneq ($(FIRMWARE_IMX_VPU_FW_NAME),)
+ define FIRMWARE_IMX_INSTALL_TARGET_VPU_FW
+-	mkdir -p $(TARGET_DIR)/lib/firmware/imx/vpu
+-	cp $(@D)/firmware/vpu/vpu_fw_$(FIRMWARE_IMX_VPU_FW_NAME)*.bin \
+-		$(TARGET_DIR)/lib/firmware/imx/vpu/
++	mkdir -p $(TARGET_DIR)/lib/firmware/vpu
++	for i in $$(find $(@D)/firmware/vpu/vpu_fw_$(FIRMWARE_IMX_VPU_FW_NAME)*.bin); do \
++		cp $$i $(TARGET_DIR)/lib/firmware/vpu/ ; \
++		ln -sf vpu/$$(basename $$i) $(TARGET_DIR)/lib/firmware/$$(basename $$i) ; \
++	done
+ endef
+ endif
+ 
