@@ -1,81 +1,99 @@
-From: Christian Stewart <christian@paral.in>
-Date: Thu, 14 Jan 2021 01:33:47 -0800
-Subject: [Buildroot] [PATCH v1 1/1] package/screen-fetch: new package
-Message-ID: <20210114093347.2997231-1-christian@paral.in>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Thu, 14 Jan 2021 11:11:34 +0100
+Subject: [Buildroot] [PATCH v2] configs/kontron_smarc_sal28: enable
+ u-boot
+In-Reply-To: <20210113190948.373-1-michael@walle.cc>
+References: <20210113190948.373-1-michael@walle.cc>
+Message-ID: <CAEyMn7YbxOjFWjRtafqT9rwbDpfj9YbSyMuS3vUUgGoLsoe6sw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Christian Stewart <christian@paral.in>
----
- package/Config.in                      |  1 +
- package/screen-fetch/Config.in         |  9 +++++++++
- package/screen-fetch/screen-fetch.hash |  2 ++
- package/screen-fetch/screen-fetch.mk   | 17 +++++++++++++++++
- 4 files changed, 29 insertions(+)
- create mode 100644 package/screen-fetch/Config.in
- create mode 100644 package/screen-fetch/screen-fetch.hash
- create mode 100644 package/screen-fetch/screen-fetch.mk
+Hi Michael,
 
-diff --git a/package/Config.in b/package/Config.in
-index 5a16814ca8..774a3b9506 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2384,6 +2384,7 @@ comment "Utilities"
- 	source "package/ranger/Config.in"
- 	source "package/rtty/Config.in"
- 	source "package/screen/Config.in"
-+	source "package/screen-fetch/Config.in"
- 	source "package/sudo/Config.in"
- 	source "package/terminology/Config.in"
- 	source "package/time/Config.in"
-diff --git a/package/screen-fetch/Config.in b/package/screen-fetch/Config.in
-new file mode 100644
-index 0000000000..91cea6f01a
---- /dev/null
-+++ b/package/screen-fetch/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_SCREEN_FETCH
-+	bool "screen-fetch"
-+	depends on BR2_USE_MMU # bash
-+	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # bash
-+	select BR2_PACKAGE_BASH # runtime dependency
-+	help
-+	  Screen Fetch is a bash script to display distro info.
-+
-+	  https://github.com/KittyKatt/screenFetch
-diff --git a/package/screen-fetch/screen-fetch.hash b/package/screen-fetch/screen-fetch.hash
-new file mode 100644
-index 0000000000..60f193bab3
---- /dev/null
-+++ b/package/screen-fetch/screen-fetch.hash
-@@ -0,0 +1,2 @@
-+sha256  aa97dcd2a8576ae18de6c16c19744aae1573a3da7541af4b98a91930a30a3178  screen-fetch-v3.9.1.tar.gz
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/screen-fetch/screen-fetch.mk b/package/screen-fetch/screen-fetch.mk
-new file mode 100644
-index 0000000000..874190faef
---- /dev/null
-+++ b/package/screen-fetch/screen-fetch.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# screen-fetch
-+#
-+################################################################################
-+
-+SCREEN_FETCH_VERSION = v3.9.1
-+SCREEN_FETCH_SITE = $(call github,KittyKatt,screenFetch,$(SCREEN_FETCH_VERSION))
-+SCREEN_FETCH_LICENSE = GPL-3.0+
-+SCREEN_FETCH_LICENSE_FILES = COPYING
-+
-+define SCREEN_FETCH_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/screenfetch-dev \
-+		$(TARGET_DIR)/usr/bin/screenfetch
-+endef
-+
-+$(eval $(generic-package))
+Am Mi., 13. Jan. 2021 um 20:09 Uhr schrieb Michael Walle <michael@walle.cc>:
+>
+> Enable building of the bootloader and integrate it into the resulting
+> image.
+>
+> Signed-off-by: Michael Walle <michael@walle.cc>
+
+Tested-by: Heiko Thiery <heiko.thiery@gmail.com>
+
+> ---
+> changes since v1:
+>  - added BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y, thanks Heiko
+>
+>  board/kontron/smarc-sal28/genimage.cfg |  6 ++++++
+>  board/kontron/smarc-sal28/readme.txt   | 15 +++++++++++++++
+>  configs/kontron_smarc_sal28_defconfig  | 10 ++++++++++
+>  3 files changed, 31 insertions(+)
+>
+> diff --git a/board/kontron/smarc-sal28/genimage.cfg b/board/kontron/smarc-sal28/genimage.cfg
+> index 9ef37de757..d75234d997 100644
+> --- a/board/kontron/smarc-sal28/genimage.cfg
+> +++ b/board/kontron/smarc-sal28/genimage.cfg
+> @@ -3,6 +3,12 @@ image sdcard-emmc.img {
+>                 gpt = true
+>         }
+>
+> +       partition u-boot {
+> +               offset = 1M
+> +               in-partition-table = "no"
+> +               image = "u-boot.rom"
+> +       }
+> +
+>         partition rootfs {
+>                 offset = 2M
+>                 image = rootfs.ext4
+> diff --git a/board/kontron/smarc-sal28/readme.txt b/board/kontron/smarc-sal28/readme.txt
+> index 2047f09b64..bdf2258b59 100644
+> --- a/board/kontron/smarc-sal28/readme.txt
+> +++ b/board/kontron/smarc-sal28/readme.txt
+> @@ -71,3 +71,18 @@ You will see something like this at boot time:
+>  [    4.563565] GPT:Alternate GPT header not at the end of the disk.
+>  [    4.569596] GPT:266272 != 7864319
+>  [    4.572925] GPT: Use GNU Parted to correct GPT errors.
+> +
+> +Updating the bootloader
+> +=======================
+> +
+> +Buildroot will automatically build the u-boot bootloader. The resulting
+> +image is called u-boot.rom and you can find it in the images/ directory.
+> +
+> +To update the bootloader on the board you could either copy it to an
+> +USB thumb drive or you could put it on a TFTP server. The following
+> +example assumes you have the bootloader image copied to the root of
+> +a thumb drive:
+> +
+> +  # usb start
+> +  # load usb 0:1 $loadaddr u-boot.rom
+> +  # sf probe 0 && sf update $fileaddr 0x210000 $filesize
+> diff --git a/configs/kontron_smarc_sal28_defconfig b/configs/kontron_smarc_sal28_defconfig
+> index b88f1aef4f..a8412b9c38 100644
+> --- a/configs/kontron_smarc_sal28_defconfig
+> +++ b/configs/kontron_smarc_sal28_defconfig
+> @@ -19,5 +19,15 @@ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+>  BR2_TARGET_ROOTFS_EXT2=y
+>  BR2_TARGET_ROOTFS_EXT2_4=y
+>  BR2_TARGET_ROOTFS_EXT2_SIZE="128M"
+> +BR2_TARGET_UBOOT=y
+> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+> +BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.01"
+> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="kontron_sl28"
+> +BR2_TARGET_UBOOT_NEEDS_DTC=y
+> +BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+> +# BR2_TARGET_UBOOT_FORMAT_BIN is not set
+> +BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+> +BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.rom"
+>  BR2_PACKAGE_HOST_GENIMAGE=y
+>  BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+> --
+> 2.20.1
+>
+
 -- 
-2.30.0
+Heiko
