@@ -1,45 +1,63 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 14 Jan 2021 07:56:08 +0100
-Subject: [Buildroot] [PATCH 1/1] package/usbutils: needs gcc >= 4.9
-Message-ID: <20210114065608.119951-1-fontaine.fabrice@gmail.com>
+Date: Thu, 14 Jan 2021 08:48:03 +0100
+Subject: [Buildroot] [PATCH 1/1] package/rhash: fix build with uclinux
+Message-ID: <20210114074803.125721-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 8a26801c9fad1c7749200e22e9dfdeaeeb65f76e forgot to propagate the
-gcc dependency from libusb to usbutils
-
 Fixes:
- - http://autobuild.buildroot.org/results/ed8706a1ead398b5097b046524e710b1d3d0bb1e
+ - http://autobuild.buildroot.org/results/598ca65cf0c7ecf9ceaecb75868b656570ae00d2
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/usbutils/Config.in | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ .../0002-configure-add-uclinux-target.patch   | 36 +++++++++++++++++++
+ 1 file changed, 36 insertions(+)
+ create mode 100644 package/rhash/0002-configure-add-uclinux-target.patch
 
-diff --git a/package/usbutils/Config.in b/package/usbutils/Config.in
-index 923853af04..a38eb2f2e5 100644
---- a/package/usbutils/Config.in
-+++ b/package/usbutils/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_USBUTILS
- 	bool "usbutils"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libusb
- 	depends on BR2_PACKAGE_HAS_UDEV # needs hwdb
- 	select BR2_PACKAGE_LIBUSB
- 	help
-@@ -8,5 +9,7 @@ config BR2_PACKAGE_USBUTILS
- 
- 	  http://linux-usb.sourceforge.net/
- 
--comment "usbutils needs udev /dev management and toolchain w/ threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_PACKAGE_HAS_UDEV
-+comment "usbutils needs udev /dev management and toolchain w/ threads, gcc >= 4.9"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_PACKAGE_HAS_UDEV || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+diff --git a/package/rhash/0002-configure-add-uclinux-target.patch b/package/rhash/0002-configure-add-uclinux-target.patch
+new file mode 100644
+index 0000000000..ca4a55644e
+--- /dev/null
++++ b/package/rhash/0002-configure-add-uclinux-target.patch
+@@ -0,0 +1,36 @@
++From 683f6875313cab9643402bb1710ebabb76e7c018 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Thu, 14 Jan 2021 08:37:06 +0100
++Subject: [PATCH] configure: add uclinux target
++
++Fix the following build failure with
++--target=arm-buildroot-uclinux-uclibcgnueabi:
++
++Checking for target OS ... UNKNOWN
++
++Error: Unknown target OS, please specify the --target option
++
++Fixes:
++ - http://autobuild.buildroot.org/results/598ca65cf0c7ecf9ceaecb75868b656570ae00d2
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ configure | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure b/configure
++index c8e1ea7..aae4dce 100755
++--- a/configure
+++++ b/configure
++@@ -426,7 +426,7 @@ else
++     component=$1
++     part=$(echo $BUILD_TARGET | cut -d '-' -f $component)
++     case "$(echo $part | tr '[A-Z]' '[a-z]')" in
++-      linux) TARGET_OS=Linux ;;
+++      linux|uclinux) TARGET_OS=Linux ;;
++       freebsd*) TARGET_OS=FreeBSD ;;
++       gnu/kfreebsd) TARGET_OS=FreeBSD ;;
++       netbsd) TARGET_OS=NetBSD ;;
++-- 
++2.29.2
++
 -- 
 2.29.2
