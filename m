@@ -1,72 +1,65 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 14 Jan 2021 22:42:07 +0100
-Subject: [Buildroot] [PATCH 1/1] package/mpd: depends on gcc and host
- gcc >= 7
-In-Reply-To: <20210114171102.5797-1-fontaine.fabrice@gmail.com>
-References: <20210114171102.5797-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210114214207.GD2375@scaer>
+Date: Thu, 14 Jan 2021 22:47:47 +0100
+Subject: [Buildroot] [PATCH] boot/uboot: bump to version 2021.01
+In-Reply-To: <20210111213312.6375-1-michael@walle.cc>
+References: <20210111213312.6375-1-michael@walle.cc>
+Message-ID: <20210114214747.GE2375@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Michael, All,
 
-On 2021-01-14 18:11 +0100, Fabrice Fontaine spake thusly:
-> mpd uses string_view since version 0.22 and
-> https://github.com/MusicPlayerDaemon/MPD/commit/fa45a8adfa44f6bc815ae7428770112c15c76d73
-> 
-> string_view is a C++17 feature:
-> https://github.com/MusicPlayerDaemon/MPD/commit/e0e5ed62ee98a0e21bc928f432a0051854193cd2
-> 
-> So add a dependency on host gcc >= 7
-> 
-> Moreover, C++17 is also mandatory on the target side since
-> https://github.com/MusicPlayerDaemon/MPD/commit/8f981845dc7376824d94fd24924788c582942929
-> so also bump the gcc dependency
-> 
-> Finally, drop BR2_TOOLCHAIN_HAS_GCC_BUG_64735 which is not needed as it
-> will always be true with gcc >= 7
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/e42a1d0cd808585a755754f839fe7d2080547191
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+On 2021-01-11 22:33 +0100, Michael Walle spake thusly:
+> Signed-off-by: Michael Walle <michael@walle.cc>
 > ---
->  package/mpd/Config.in | 13 ++++++-------
->  1 file changed, 6 insertions(+), 7 deletions(-)
+>  boot/uboot/Config.in  | 4 ++--
+>  boot/uboot/uboot.hash | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-> index e6db1fa268..de97bbab60 100644
-> --- a/package/mpd/Config.in
-> +++ b/package/mpd/Config.in
-[--SNIP--]
-> @@ -419,10 +419,9 @@ config BR2_PACKAGE_MPD_ID3TAG
+> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+> index e4a0f48deb..dc6b2dabd9 100644
+> --- a/boot/uboot/Config.in
+> +++ b/boot/uboot/Config.in
+> @@ -41,7 +41,7 @@ choice
+>  	  Select the specific U-Boot version you want to use
 >  
->  endif
->  
-> -comment "mpd needs a toolchain w/ C++, threads, wchar, gcc >= 6"
-> +comment "mpd needs a toolchain w/ C++, threads, wchar, gcc >= 7, host gcc >= 7"
->  	depends on BR2_TOOLCHAIN_HAS_ATOMIC
->  	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
-> -		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_6
+>  config BR2_TARGET_UBOOT_LATEST_VERSION
+> -	bool "2020.10"
+> +	bool "2021.01"
 
-This hunk does not apply, because it is missing the MMU dependency we
-have in master (since 2013)...
+Could you have a look at this related patch:
 
-Are you sure this was based on master and not on local changes?
+    uboot: fix binman with a new dependency
+    https://patchwork.ozlabs.org/project/buildroot/patch/20210112091806.906954-1-francois.perrad at gadz.org/
 
 Regards,
 Yann E. MORIN.
 
-> -comment "mpd needs a toolchain not affected by GCC bug 64735"
-> -	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-> +		!BR2_TOOLCHAIN_HAS_THREADS || \
-> +		!BR2_TOOLCHAIN_GCC_AT_LEAST_7 || \
-> +		!BR2_HOST_GCC_AT_LEAST_7
+>  config BR2_TARGET_UBOOT_CUSTOM_VERSION
+>  	bool "Custom version"
+> @@ -85,7 +85,7 @@ endif
+>  
+>  config BR2_TARGET_UBOOT_VERSION
+>  	string
+> -	default "2020.10"	if BR2_TARGET_UBOOT_LATEST_VERSION
+> +	default "2021.01"	if BR2_TARGET_UBOOT_LATEST_VERSION
+>  	default BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE \
+>  		if BR2_TARGET_UBOOT_CUSTOM_VERSION
+>  	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
+> diff --git a/boot/uboot/uboot.hash b/boot/uboot/uboot.hash
+> index ba6ea0bfc0..7cbd785541 100644
+> --- a/boot/uboot/uboot.hash
+> +++ b/boot/uboot/uboot.hash
+> @@ -1,3 +1,3 @@
+>  # Locally computed:
+> -sha256  0d481bbdc05c0ee74908ec2f56a6daa53166cc6a78a0e4fac2ac5d025770a622  u-boot-2020.10.tar.bz2
+> +sha256  b407e1510a74e863b8b5cb42a24625344f0e0c2fc7582d8c866bd899367d0454  u-boot-2021.01.tar.bz2
+>  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Licenses/gpl-2.0.txt
 > -- 
-> 2.29.2
+> 2.20.1
 > 
 > _______________________________________________
 > buildroot mailing list
