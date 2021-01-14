@@ -1,34 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 14 Jan 2021 22:27:47 +0100
-Subject: [Buildroot] [PATCH] package/boost: bump version to 1.75.0
-In-Reply-To: <20210114180753.591695-1-buildroot@heine.tech>
-References: <20210114180753.591695-1-buildroot@heine.tech>
-Message-ID: <20210114222747.21b637cb@windsurf.home>
+Date: Thu, 14 Jan 2021 22:27:54 +0100
+Subject: [Buildroot] [PATCH 1/2] package/gkrellm: fix build with NLS
+In-Reply-To: <20210114193544.1965646-1-fontaine.fabrice@gmail.com>
+References: <20210114193544.1965646-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210114222754.4e319320@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 14 Jan 2021 19:07:52 +0100
-Michael Nosthoff via buildroot <buildroot@busybox.net> wrote:
+On Thu, 14 Jan 2021 20:35:43 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
->  * add option for new library Boost.JSON
->  * drop patch 0001 as it's applied upstream
->  * host: disable options that were added over time but never disabled for the host-build
+> Fixes:
+>  - http://autobuild.buildroot.org/results/98d0eda546b09e60eebbd3c3a28493f09dff7e62
 > 
-> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  .../{0002-fenv.patch => 0001-fenv.patch}      |  0
->  package/boost/0001-fix-uclibc-eventfd.patch   | 38 -------------------
->  package/boost/Config.in                       | 10 +++++
->  package/boost/boost.hash                      |  2 +-
->  package/boost/boost.mk                        | 10 +++--
->  5 files changed, 17 insertions(+), 43 deletions(-)
->  rename package/boost/{0002-fenv.patch => 0001-fenv.patch} (100%)
->  delete mode 100644 package/boost/0001-fix-uclibc-eventfd.patch
+>  package/gkrellm/gkrellm.mk | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
+Both applied, thanks!
 
 Thomas
 -- 
