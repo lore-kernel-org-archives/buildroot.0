@@ -1,90 +1,65 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 14 Jan 2021 20:48:32 +0100
-Subject: [Buildroot] [PATCH 1/1] package/wolfssl: security bump to version
- 4.6.0
-Message-ID: <20210114194832.1975973-1-fontaine.fabrice@gmail.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Thu, 14 Jan 2021 20:49:09 +0100
+Subject: [Buildroot] [PATCH] package/libnss: bump version to 3.60.1
+In-Reply-To: <55ca2759-9fc8-a458-7200-a4a8bbe4d093@benettiengineering.com>
+References: <55ca2759-9fc8-a458-7200-a4a8bbe4d093@benettiengineering.com>
+Message-ID: <B44E227E-EC16-48CC-8996-097EAA206E09@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Fix CVE-2020-36177: RsaPad_PSS in wolfcrypt/src/rsa.c in wolfSSL
-  before 4.6.0 has an out-of-bounds write for certain relationships
-  between key size and digest size.
-- Drop patch (already in version)
+Hello,
 
-https://github.com/wolfSSL/wolfssl/releases/tag/v4.6.0-stable
+> Il giorno 12 gen 2021, alle ore 08:14, Giulio Benetti <giulio.benetti@benettiengineering.com> ha scritto:
+> 
+> ?Just asked via bugzilla the missing Release Notes page:
+> https://bugzilla.mozilla.org/show_bug.cgi?id=1686178
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...-available-for-big-and-little-endian.patch | 32 -------------------
- package/wolfssl/wolfssl.hash                  |  2 +-
- package/wolfssl/wolfssl.mk                    |  2 +-
- 3 files changed, 2 insertions(+), 34 deletions(-)
- delete mode 100644 package/wolfssl/0001-Make-ByteReverseWords-available-for-big-and-little-endian.patch
+Release Notes are available now, so now this patch?s commit log refer to an existing link and can be applied.
 
-diff --git a/package/wolfssl/0001-Make-ByteReverseWords-available-for-big-and-little-endian.patch b/package/wolfssl/0001-Make-ByteReverseWords-available-for-big-and-little-endian.patch
-deleted file mode 100644
-index 48a318d53e..0000000000
---- a/package/wolfssl/0001-Make-ByteReverseWords-available-for-big-and-little-endian.patch
-+++ /dev/null
-@@ -1,32 +0,0 @@
--From b90acc91d0cd276befe7f08f87ba2dc5ee7122ff Mon Sep 17 00:00:00 2001
--From: Tesfa Mael <tesfa@wolfssl.com>
--Date: Wed, 26 Aug 2020 10:13:06 -0700
--Subject: [PATCH] Make ByteReverseWords available for big and little endian
--
--[Retrieved from:
--https://github.com/wolfSSL/wolfssl/pull/3255/commits/b90acc91d0cd276befe7f08f87ba2dc5ee7122ff]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- wolfcrypt/src/misc.c | 2 --
-- 1 file changed, 2 deletions(-)
--
--diff --git a/wolfcrypt/src/misc.c b/wolfcrypt/src/misc.c
--index fe66ee0a1a..23bfa1adc5 100644
----- a/wolfcrypt/src/misc.c
--+++ b/wolfcrypt/src/misc.c
--@@ -120,7 +120,6 @@ WC_STATIC WC_INLINE word32 ByteReverseWord32(word32 value)
--     return rotlFixed(value, 16U);
-- #endif
-- }
---#if defined(LITTLE_ENDIAN_ORDER)
-- /* This routine performs a byte swap of words array of a given count. */
-- WC_STATIC WC_INLINE void ByteReverseWords(word32* out, const word32* in,
--                                     word32 byteCount)
--@@ -131,7 +130,6 @@ WC_STATIC WC_INLINE void ByteReverseWords(word32* out, const word32* in,
--         out[i] = ByteReverseWord32(in[i]);
-- 
-- }
---#endif /* LITTLE_ENDIAN_ORDER */
-- 
-- #if defined(WORD64_AVAILABLE) && !defined(WOLFSSL_NO_WORD64_OPS)
-- 
-diff --git a/package/wolfssl/wolfssl.hash b/package/wolfssl/wolfssl.hash
-index 0ee55276dc..f5a25fe980 100644
---- a/package/wolfssl/wolfssl.hash
-+++ b/package/wolfssl/wolfssl.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256  7de62300ce14daa0051bfefc7c4d6302f96cabc768b6ae49eda77523b118250c  wolfssl-4.5.0-stable.tar.gz
-+sha256  053aefbb02d0b06b27c5e2df6875b4b587318755b7db9d6aa8d72206b310a848  wolfssl-4.6.0-stable.tar.gz
- 
- # Hash for license files:
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
-index e2833144fb..2023401147 100644
---- a/package/wolfssl/wolfssl.mk
-+++ b/package/wolfssl/wolfssl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WOLFSSL_VERSION = 4.5.0-stable
-+WOLFSSL_VERSION = 4.6.0-stable
- WOLFSSL_SITE = $(call github,wolfSSL,wolfssl,v$(WOLFSSL_VERSION))
- WOLFSSL_INSTALL_STAGING = YES
- 
--- 
-2.29.2
+Best regards
+Giulio
+
+> 
+>> On 1/12/21 8:13 AM, Giulio Benetti wrote:
+>> Bump version to 3.60.1 and remove local patch that has been upstreamed.
+>> Release Notes:
+>> https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.60_1_release_notes
+>> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+>> ---
+>>  package/libnss/libnss.hash | 4 ++--
+>>  package/libnss/libnss.mk   | 2 +-
+>>  2 files changed, 3 insertions(+), 3 deletions(-)
+>> diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+>> index 16a2e5c521..f93fa5ad03 100644
+>> --- a/package/libnss/libnss.hash
+>> +++ b/package/libnss/libnss.hash
+>> @@ -1,4 +1,4 @@
+>> -# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_60_RTM/src/SHA256SUMS
+>> -sha256  84abd5575ab874c53ae511bd461e5d0868d1a1b384ee40753154cdd1d590fe3d  nss-3.60.tar.gz
+>> +# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_60_1_RTM/src/SHA256SUMS
+>> +sha256  2051c20b61112df24bad533ac37f6c66c1bc0d6ea70bb9d9cad102d20324279d  nss-3.60.1.tar.gz
+>>  # Locally calculated
+>>  sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+>> diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+>> index d762ac6f64..fc1be6f603 100644
+>> --- a/package/libnss/libnss.mk
+>> +++ b/package/libnss/libnss.mk
+>> @@ -4,7 +4,7 @@
+>>  #
+>>  ################################################################################
+>>  -LIBNSS_VERSION = 3.60
+>> +LIBNSS_VERSION = 3.60.1
+>>  LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+>>  LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+>>  LIBNSS_DISTDIR = dist
+> 
+> -- 
+> Giulio Benetti
+> Benetti Engineering sas
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
