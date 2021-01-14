@@ -1,49 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 14 Jan 2021 23:43:08 +0100
-Subject: [Buildroot] [PATCH]
- support/config-fragments/autobuild/bootlin-x86-64-glibc: use
- toolchain-external-bootlin
-Message-ID: <20210114224309.457805-1-thomas.petazzoni@bootlin.com>
+From: Matthew Weber <matthew.weber@collins.com>
+Date: Thu, 14 Jan 2021 17:50:08 -0600
+Subject: [Buildroot] [PATCH 2/2] package/linux-pam: drop useless
+ LINUX_PAM_CPE_ID_NAME definition
+In-Reply-To: <20210114223432.456542-2-thomas.petazzoni@bootlin.com>
+References: <20210114223432.456542-1-thomas.petazzoni@bootlin.com>
+ <20210114223432.456542-2-thomas.petazzoni@bootlin.com>
+Message-ID: <CANQCQpayxdNgu3QGtski2pxGZ0LOHAMkscRj19kq8wMXm=mEOg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Until now the bootlin-x86-64-glibc was using a Bootlin toolchain as a
-custom external toolchain. However, now that we have the
-toolchain-external-bootlin package explicitly supporting Bootlin
-toolchains as known toolchain profiles, it makes sense to use
-that. Indeed, this will ensure that this autobuilder configuration
-will use the latest available version of the Buildroot toolchain for
-x86-64 glibc.
+Thomas,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .../autobuild/bootlin-x86-64-glibc.config          | 14 ++------------
- 1 file changed, 2 insertions(+), 12 deletions(-)
+On Thu, Jan 14, 2021 at 4:35 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> This definition is useless, because it is equal to the default value
+> of <pkg>_CPE_ID_NAME as calculated by generic-package.
+>
+> Before and after this patch, the CPE ID calculated for the linux-pam
+> package is exactly the same, according to "make linux-pam-show-info".
+>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-diff --git a/support/config-fragments/autobuild/bootlin-x86-64-glibc.config b/support/config-fragments/autobuild/bootlin-x86-64-glibc.config
-index 6a372803b2..815eb658e0 100644
---- a/support/config-fragments/autobuild/bootlin-x86-64-glibc.config
-+++ b/support/config-fragments/autobuild/bootlin-x86-64-glibc.config
-@@ -1,15 +1,5 @@
- BR2_x86_64=y
- BR2_x86_corei7=y
- BR2_TOOLCHAIN_EXTERNAL=y
--BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
--BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_URL="http://toolchains.bootlin.com/downloads/releases/toolchains/x86-64-core-i7/tarballs/x86-64-core-i7--glibc--bleeding-edge-2020.02-2.tar.bz2"
--BR2_TOOLCHAIN_EXTERNAL_GCC_9=y
--BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_19=y
--# BR2_TOOLCHAIN_EXTERNAL_LOCALE is not set
--BR2_TOOLCHAIN_EXTERNAL_CXX=y
--BR2_TOOLCHAIN_EXTERNAL_HAS_SSP=y
--BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG=y
--BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS=y
--BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_NPTL=y
--BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_CORE_I7_GLIBC_BLEEDING_EDGE=y
--- 
-2.29.2
+Reviewed-by: Matthew Weber <matthew.weber@rockwellcollins.com>
