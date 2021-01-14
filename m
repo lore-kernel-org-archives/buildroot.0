@@ -1,33 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 14 Jan 2021 14:37:53 +0100
+From: =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+Date: Thu, 14 Jan 2021 14:54:22 +0100
 Subject: [Buildroot] Support for BCM953012HR board?
 In-Reply-To: <1610587332564-0.post@n4.nabble.com>
 References: <1610587332564-0.post@n4.nabble.com>
-Message-ID: <20210114143753.3591a3a5@windsurf.home>
+Message-ID: <CACna6rzFC7jbmSasCMfRPsCaqjmHgDexBL8VvvCx_Mq7TPjaqQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi,
 
-On Wed, 13 Jan 2021 19:22:12 -0600 (CST)
-scdrj <scdrjcom@gmail.com> wrote:
-
+On Thu, 14 Jan 2021 at 02:22, scdrj <scdrjcom@gmail.com> wrote:
 > How do I build the images for BCM953012HR (Broadcom Northstar Reference
 > board)?
 
-You need to create a Buildroot configuration that matches your
-platform, i.e that defines the target CPU, the Linux kernel version and
-configuration, the filesystem image format you need, etc. Once this
-configuration is defined (which is obviously the difficult part), build
-it with "make" and enjoy the build results in output/images/.
+I took care of adding upstream Linux support for a few Northstar hw
+components. Current support is quite complete except for:
+1. Hardware NAT acceleration
+2. Broadcom SoftMAC wireless chipsets
 
-Best regards,
+I planned to add buildroot support for Northstar boards but it takes
+many months to get my patches reviewed.
 
-Thomas
+My initial WiFi firmware patch was accepted after 5 months:
+[PATCH] package/linux-firmware: add options for Broadcom BCM4366
+Currently I'm waiting for lzma-alone decision:
+[PATCH] package/lzma-alone: new package
+
+Once I get lzma-alone somehow merged I'm planning to add Northstar
+boards support.
+
+Until that you can check OpenWrt project. It has target called
+"bcm53xx" that handles Northstar devices. There are only few
+downstream patches needed to get those devices running:
+https://git.openwrt.org/?p=openwrt/openwrt.git;a=tree;f=target/linux/bcm53xx/patches-5.4;hb=HEAD
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Rafa?
