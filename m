@@ -1,38 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 14 Jan 2021 22:33:03 +0100
-Subject: [Buildroot] [PATCH 1/1] package/wolfssl: security bump to
- version 4.6.0
-In-Reply-To: <20210114194832.1975973-1-fontaine.fabrice@gmail.com>
-References: <20210114194832.1975973-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210114223303.50f459d5@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 14 Jan 2021 22:33:23 +0100
+Subject: [Buildroot] [PATCH 0/2] Add support for an RCW on sl28 boards
+In-Reply-To: <20210112105154.31531-1-michael@walle.cc>
+References: <20210112105154.31531-1-michael@walle.cc>
+Message-ID: <20210114213323.GC2375@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 14 Jan 2021 20:48:32 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Michael, All,
 
-> - Fix CVE-2020-36177: RsaPad_PSS in wolfcrypt/src/rsa.c in wolfSSL
->   before 4.6.0 has an out-of-bounds write for certain relationships
->   between key size and digest size.
-> - Drop patch (already in version)
+On 2021-01-12 11:51 +0100, Michael Walle spake thusly:
+> Add a new package for the RCW and then use it on the sl28 board to
+> integrate it into the target image.
 > 
-> https://github.com/wolfSSL/wolfssl/releases/tag/v4.6.0-stable
+> Michael Walle (2):
+>   package/rcw-smarc-sal28: new package
+>   configs/kontron_smarc_sal28: integrate RCW into rootfs image
+
+Both applied to master, thanks.
+
+Regards,
+Yann E. MORIN.
+
+>  DEVELOPERS                                   |  1 +
+>  board/kontron/smarc-sal28/genimage.cfg       |  6 ++++
+>  configs/kontron_smarc_sal28_defconfig        |  1 +
+>  package/Config.in                            |  1 +
+>  package/rcw-smarc-sal28/Config.in            | 25 +++++++++++++
+>  package/rcw-smarc-sal28/rcw-smarc-sal28.hash |  3 ++
+>  package/rcw-smarc-sal28/rcw-smarc-sal28.mk   | 37 ++++++++++++++++++++
+>  7 files changed, 74 insertions(+)
+>  create mode 100644 package/rcw-smarc-sal28/Config.in
+>  create mode 100644 package/rcw-smarc-sal28/rcw-smarc-sal28.hash
+>  create mode 100644 package/rcw-smarc-sal28/rcw-smarc-sal28.mk
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...-available-for-big-and-little-endian.patch | 32 -------------------
->  package/wolfssl/wolfssl.hash                  |  2 +-
->  package/wolfssl/wolfssl.mk                    |  2 +-
->  3 files changed, 2 insertions(+), 34 deletions(-)
->  delete mode 100644 package/wolfssl/0001-Make-ByteReverseWords-available-for-big-and-little-endian.patch
+> -- 
+> 2.20.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Applied to master, thanks.
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
