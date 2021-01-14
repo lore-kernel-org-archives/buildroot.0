@@ -1,75 +1,60 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 14 Jan 2021 21:54:18 +0100
-Subject: [Buildroot] [PATCH 1/1] package/at: bump to version 3.2.1
-In-Reply-To: <20210114173720.41156-1-fontaine.fabrice@gmail.com>
-References: <20210114173720.41156-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210114205418.GA2375@scaer>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 14 Jan 2021 21:59:42 +0100
+Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
+ mesa3d-headers}: bump version to 20.3.3
+Message-ID: <20210114205942.29196-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/mesa3d-headers/mesa3d-headers.mk | 2 +-
+ package/mesa3d/mesa3d.hash               | 6 +++---
+ package/mesa3d/mesa3d.mk                 | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-On 2021-01-14 18:37 +0100, Fabrice Fontaine spake thusly:
-> There is only one commit between version 3.2.1 and current commit
-> 7c74fa1aece6bc6db351763dc012193d5d634b7e which updates the release file:
-> 
-> https://salsa.debian.org/debian/at/-/commit/6a9efb7dd2bd6a5e5249d9f29938acc639618e9c
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/at/at.hash | 2 +-
->  package/at/at.mk   | 6 +++---
->  2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/at/at.hash b/package/at/at.hash
-> index c266f1ec1a..c5daf4ef86 100644
-> --- a/package/at/at.hash
-> +++ b/package/at/at.hash
-> @@ -1,5 +1,5 @@
->  # Locally calculated
-> -sha256  cf00bc31a595dcacec1fee817460c81a1e0fb046e5c0984a13ca13c0f8fb779c  at-7c74fa1aece6bc6db351763dc012193d5d634b7e-br1.tar.gz
-> +sha256  62123a6fcf02b2606673afca80c2874358b83880c12db7f276a7c6cc70068cb2  at-upstream-3.2.1.tar.bz2
->  
->  sha256  01dccc0975aa9ba1a9f83e7c5e04f16077353d3c72a0a759b8846ee7a5b2b616  Copyright
->  sha256  c38aee9e3c8c4d5d594ff548a1be05453023016d6286931f6512db215ec1fd42  COPYING
-> diff --git a/package/at/at.mk b/package/at/at.mk
-> index dbf649c0be..6ac82e2de3 100644
-> --- a/package/at/at.mk
-> +++ b/package/at/at.mk
-> @@ -4,9 +4,9 @@
->  #
->  ################################################################################
->  
-> -AT_VERSION = 7c74fa1aece6bc6db351763dc012193d5d634b7e
-> -AT_SITE = https://salsa.debian.org/debian/at.git
-> -AT_SITE_METHOD = git
-> +AT_VERSION = 3.2.1
-> +AT_SOURCE = at-upstream-$(AT_VERSION).tar.bz2
-> +AT_SITE = https://salsa.debian.org/debian/at/-/archive/upstream/$(AT_VERSION)
->  AT_AUTORECONF = YES
->  AT_DEPENDENCIES = $(if $(BR2_PACKAGE_FLEX),flex) host-bison host-flex
->  AT_LICENSE = GPL-2.0+, GPL-3.0+, ISC
-> -- 
-> 2.29.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 65048f4717..8a6cbf45e2 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 20.3.2
++MESA3D_HEADERS_VERSION = 20.3.3
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index d19b5ad5e2..a7f7ae9f03 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2020-December/000614.html
+-sha256  cce001b685d23afb976b04138714906abcf7e7f996da6355e6a43e5ca486533d  mesa-20.3.2.tar.xz
+-sha512  0cabf8ddfd20b56098c8f4c081a3c2d4741ef42f40c929645e74284db99cf2a81137d7d279b7b6a0c15dea83905119ddf612411b36344dc22a488de9f311f5ed  mesa-20.3.2.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2021-January/000616.html
++sha256  f74e212d4838e982a10c203ffa998817d1855c5cf448ae87b58f96edea61d156  mesa-20.3.3.tar.xz
++sha512  77735462f4ccbe865d0cf7e9db47c42f8bc2600b9a030dca11066d29e43f73c18ca0422e6356129fc14ac1b1018ed752ae4ee45bd31ae706fea58f573a14d346  mesa-20.3.3.tar.xz
+ 
+ # License
+ sha256  1361129baa4519b6ed27a1bf4aeee33a58b060bf7bb9b6ea415ecede04e35e46  docs/license.rst
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index f9dd861d5e..1d7dcbaabd 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 20.3.2
++MESA3D_VERSION = 20.3.3
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_LICENSE = MIT, SGI, Khronos
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.29.2
