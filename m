@@ -1,49 +1,45 @@
-From: Andreas Ziegler <br015@umbiko.net>
-Date: Thu, 14 Jan 2021 06:08:35 +0000
-Subject: [Buildroot] Buildroot ARM with Altera FPGA de10-standard
-In-Reply-To: <mailman.9.1610539203.245130.buildroot@busybox.net>
-References: <mailman.9.1610539203.245130.buildroot@busybox.net>
-Message-ID: <c6f6425d6673f9ae60641de8a595af8d@umbiko.net>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 14 Jan 2021 07:56:08 +0100
+Subject: [Buildroot] [PATCH 1/1] package/usbutils: needs gcc >= 4.9
+Message-ID: <20210114065608.119951-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Mauricio,
+Commit 8a26801c9fad1c7749200e22e9dfdeaeeb65f76e forgot to propagate the
+gcc dependency from libusb to usbutils
 
-> Date: Wed, 13 Jan 2021 10:47:53 +0000
-> Message-ID: <80f01170-5252-b7d6-0095-5c72d958f086@litinow.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/ed8706a1ead398b5097b046524e710b1d3d0bb1e
 
-> Unfortunately, in step 7.1 - "Configuring Buildroot" my terminal hangs
-> out for too much time.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/usbutils/Config.in | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-> Please, how long should this step take to finish? Should it be more 
-> than
-> 5 days?
-
-Buildroot compiles a few files to display the ncurses menu. With a fresh 
-installation it should be finished in a few seconds.
-
-> Is there some way to enable log messages or building progress messages?
-
-Buildroot outputs compiler warnings on stderr and makefile output on 
-stdout, so you should see something, _unless_ your terminal somehow 
-redirects output. You might check if 'make -v' produces output.
-
-If you need additional output, invoke Buildroot with 'V=1' after the 
-make command. [1]
-
-   $ make V=1 -C buildroot nconfig
-
-Are you really using Buildroot version 2017? In that case you should 
-switch to a newer version [2]. You do not need architecture or toolchain 
-related commands when invoking Buildroot, this information is entered 
-later under 'Target Options' and 'Toolchain' as outlined in the Terasic 
-document.
-
-Good luck,
-Andreas
-
-[1] https://buildroot.org/downloads/manual/manual.html#make-tips
-[2] https://buildroot.org/download.html
+diff --git a/package/usbutils/Config.in b/package/usbutils/Config.in
+index 923853af04..a38eb2f2e5 100644
+--- a/package/usbutils/Config.in
++++ b/package/usbutils/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_USBUTILS
+ 	bool "usbutils"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libusb
+ 	depends on BR2_PACKAGE_HAS_UDEV # needs hwdb
+ 	select BR2_PACKAGE_LIBUSB
+ 	help
+@@ -8,5 +9,7 @@ config BR2_PACKAGE_USBUTILS
+ 
+ 	  http://linux-usb.sourceforge.net/
+ 
+-comment "usbutils needs udev /dev management and toolchain w/ threads"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_PACKAGE_HAS_UDEV
++comment "usbutils needs udev /dev management and toolchain w/ threads, gcc >= 4.9"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_PACKAGE_HAS_UDEV || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+-- 
+2.29.2
