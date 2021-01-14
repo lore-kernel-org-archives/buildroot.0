@@ -1,60 +1,47 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 14 Jan 2021 21:59:42 +0100
-Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 20.3.3
-Message-ID: <20210114205942.29196-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 14 Jan 2021 21:59:59 +0100
+Subject: [Buildroot] [git commit] package/usbutils: needs gcc >= 4.9
+Message-ID: <20210114204200.E881A876A4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/mesa3d-headers/mesa3d-headers.mk | 2 +-
- package/mesa3d/mesa3d.hash               | 6 +++---
- package/mesa3d/mesa3d.mk                 | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=d5a229551f966be0ebcd1e0004c7ec7e99f98eba
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 65048f4717..8a6cbf45e2 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
+Commit 8a26801c9fad1c7749200e22e9dfdeaeeb65f76e forgot to propagate the
+gcc dependency from libusb to usbutils
+
+Fixes:
+ - http://autobuild.buildroot.org/results/ed8706a1ead398b5097b046524e710b1d3d0bb1e
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/usbutils/Config.in | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/package/usbutils/Config.in b/package/usbutils/Config.in
+index 923853af04..a38eb2f2e5 100644
+--- a/package/usbutils/Config.in
++++ b/package/usbutils/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_USBUTILS
+ 	bool "usbutils"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libusb
+ 	depends on BR2_PACKAGE_HAS_UDEV # needs hwdb
+ 	select BR2_PACKAGE_LIBUSB
+ 	help
+@@ -8,5 +9,7 @@ config BR2_PACKAGE_USBUTILS
  
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 20.3.2
-+MESA3D_HEADERS_VERSION = 20.3.3
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index d19b5ad5e2..a7f7ae9f03 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,6 +1,6 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2020-December/000614.html
--sha256  cce001b685d23afb976b04138714906abcf7e7f996da6355e6a43e5ca486533d  mesa-20.3.2.tar.xz
--sha512  0cabf8ddfd20b56098c8f4c081a3c2d4741ef42f40c929645e74284db99cf2a81137d7d279b7b6a0c15dea83905119ddf612411b36344dc22a488de9f311f5ed  mesa-20.3.2.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2021-January/000616.html
-+sha256  f74e212d4838e982a10c203ffa998817d1855c5cf448ae87b58f96edea61d156  mesa-20.3.3.tar.xz
-+sha512  77735462f4ccbe865d0cf7e9db47c42f8bc2600b9a030dca11066d29e43f73c18ca0422e6356129fc14ac1b1018ed752ae4ee45bd31ae706fea58f573a14d346  mesa-20.3.3.tar.xz
+ 	  http://linux-usb.sourceforge.net/
  
- # License
- sha256  1361129baa4519b6ed27a1bf4aeee33a58b060bf7bb9b6ea415ecede04e35e46  docs/license.rst
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index f9dd861d5e..1d7dcbaabd 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 20.3.2
-+MESA3D_VERSION = 20.3.3
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://mesa.freedesktop.org/archive
- MESA3D_LICENSE = MIT, SGI, Khronos
--- 
-2.29.2
+-comment "usbutils needs udev /dev management and toolchain w/ threads"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_PACKAGE_HAS_UDEV
++comment "usbutils needs udev /dev management and toolchain w/ threads, gcc >= 4.9"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_PACKAGE_HAS_UDEV || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
