@@ -1,58 +1,51 @@
-From: =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-Date: Thu, 14 Jan 2021 18:26:15 +0100
-Subject: [Buildroot] Support for BCM953012HR board?
-In-Reply-To: <CAGF7ZoaOOw11phUqWcn0YsygywLOiFGE_6Oo=zFWBTw9-nrqkA@mail.gmail.com>
-References: <1610587332564-0.post@n4.nabble.com>
- <CACna6rzFC7jbmSasCMfRPsCaqjmHgDexBL8VvvCx_Mq7TPjaqQ@mail.gmail.com>
- <CAGF7ZoaOOw11phUqWcn0YsygywLOiFGE_6Oo=zFWBTw9-nrqkA@mail.gmail.com>
-Message-ID: <CACna6rwf6riTvyWW1EnSD-AOb=kt1nLE9KfujESeGzohx_WPTA@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 14 Jan 2021 18:37:20 +0100
+Subject: [Buildroot] [PATCH 1/1] package/at: bump to version 3.2.1
+Message-ID: <20210114173720.41156-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 14 Jan 2021 at 18:17, scd rjcom <scdrjcom@gmail.com> wrote:
-> On Thu, Jan 14, 2021 at 5:54 AM Rafa? Mi?ecki <zajec5@gmail.com> wrote:
->> On Thu, 14 Jan 2021 at 02:22, scdrj <scdrjcom@gmail.com> wrote:
->> > How do I build the images for BCM953012HR (Broadcom Northstar Reference
->> > board)?
->>
->> I took care of adding upstream Linux support for a few Northstar hw
->> components. Current support is quite complete except for:
->> 1. Hardware NAT acceleration
->> 2. Broadcom SoftMAC wireless chipsets
->>
->> I planned to add buildroot support for Northstar boards but it takes
->> many months to get my patches reviewed.
->>
->> My initial WiFi firmware patch was accepted after 5 months:
->> [PATCH] package/linux-firmware: add options for Broadcom BCM4366
->> Currently I'm waiting for lzma-alone decision:
->> [PATCH] package/lzma-alone: new package
->>
->> Once I get lzma-alone somehow merged I'm planning to add Northstar
->> boards support.
->>
->> Until that you can check OpenWrt project. It has target called
->> "bcm53xx" that handles Northstar devices. There are only few
->> downstream patches needed to get those devices running:
->> https://git.openwrt.org/?p=openwrt/openwrt.git;a=tree;f=target/linux/bcm53xx/patches-5.4;hb=HEAD
->>
->> --
->> Rafa?
->
->
-> Thanks for your valuable suggestion. I have checked the targets supported by openwrt for Northstar processors. It provides kernel and rootfs builds for Northstar based boards. (tried MR32)
-> I am unable to find the u-boot build for the Northstar based SoCs. How do I enable the u-boot build as well for any of these boards?
+There is only one commit between version 3.2.1 and current commit
+7c74fa1aece6bc6db351763dc012193d5d634b7e which updates the release file:
 
-I've never seen Northstar device using u-boot. I heard about some
-rough plans for porting u-boot to it, but I thought they got abonded.
+https://salsa.debian.org/debian/at/-/commit/6a9efb7dd2bd6a5e5249d9f29938acc639618e9c
 
-Can you provide bootloader log from your board?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/at/at.hash | 2 +-
+ package/at/at.mk   | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-
-> It would be great to see the support for Northstar boards in the buildroot as well.
-
+diff --git a/package/at/at.hash b/package/at/at.hash
+index c266f1ec1a..c5daf4ef86 100644
+--- a/package/at/at.hash
++++ b/package/at/at.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  cf00bc31a595dcacec1fee817460c81a1e0fb046e5c0984a13ca13c0f8fb779c  at-7c74fa1aece6bc6db351763dc012193d5d634b7e-br1.tar.gz
++sha256  62123a6fcf02b2606673afca80c2874358b83880c12db7f276a7c6cc70068cb2  at-upstream-3.2.1.tar.bz2
+ 
+ sha256  01dccc0975aa9ba1a9f83e7c5e04f16077353d3c72a0a759b8846ee7a5b2b616  Copyright
+ sha256  c38aee9e3c8c4d5d594ff548a1be05453023016d6286931f6512db215ec1fd42  COPYING
+diff --git a/package/at/at.mk b/package/at/at.mk
+index dbf649c0be..6ac82e2de3 100644
+--- a/package/at/at.mk
++++ b/package/at/at.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-AT_VERSION = 7c74fa1aece6bc6db351763dc012193d5d634b7e
+-AT_SITE = https://salsa.debian.org/debian/at.git
+-AT_SITE_METHOD = git
++AT_VERSION = 3.2.1
++AT_SOURCE = at-upstream-$(AT_VERSION).tar.bz2
++AT_SITE = https://salsa.debian.org/debian/at/-/archive/upstream/$(AT_VERSION)
+ AT_AUTORECONF = YES
+ AT_DEPENDENCIES = $(if $(BR2_PACKAGE_FLEX),flex) host-bison host-flex
+ AT_LICENSE = GPL-2.0+, GPL-3.0+, ISC
 -- 
-Rafa?
+2.29.2
