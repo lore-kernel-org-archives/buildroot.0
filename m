@@ -1,66 +1,58 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 14 Jan 2021 18:11:02 +0100
-Subject: [Buildroot] [PATCH 1/1] package/mpd: depends on gcc and host gcc >=
- 7
-Message-ID: <20210114171102.5797-1-fontaine.fabrice@gmail.com>
+From: scd rjcom <scdrjcom@gmail.com>
+Date: Thu, 14 Jan 2021 09:17:05 -0800
+Subject: [Buildroot] Support for BCM953012HR board?
+In-Reply-To: <CACna6rzFC7jbmSasCMfRPsCaqjmHgDexBL8VvvCx_Mq7TPjaqQ@mail.gmail.com>
+References: <1610587332564-0.post@n4.nabble.com>
+ <CACna6rzFC7jbmSasCMfRPsCaqjmHgDexBL8VvvCx_Mq7TPjaqQ@mail.gmail.com>
+Message-ID: <CAGF7ZoaOOw11phUqWcn0YsygywLOiFGE_6Oo=zFWBTw9-nrqkA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-mpd uses string_view since version 0.22 and
-https://github.com/MusicPlayerDaemon/MPD/commit/fa45a8adfa44f6bc815ae7428770112c15c76d73
+On Thu, Jan 14, 2021 at 5:54 AM Rafa? Mi?ecki <zajec5@gmail.com> wrote:
 
-string_view is a C++17 feature:
-https://github.com/MusicPlayerDaemon/MPD/commit/e0e5ed62ee98a0e21bc928f432a0051854193cd2
+> Hi,
+>
+> On Thu, 14 Jan 2021 at 02:22, scdrj <scdrjcom@gmail.com> wrote:
+> > How do I build the images for BCM953012HR (Broadcom Northstar Reference
+> > board)?
+>
+> I took care of adding upstream Linux support for a few Northstar hw
+> components. Current support is quite complete except for:
+> 1. Hardware NAT acceleration
+> 2. Broadcom SoftMAC wireless chipsets
+>
+> I planned to add buildroot support for Northstar boards but it takes
+> many months to get my patches reviewed.
+>
+> My initial WiFi firmware patch was accepted after 5 months:
+> [PATCH] package/linux-firmware: add options for Broadcom BCM4366
+> Currently I'm waiting for lzma-alone decision:
+> [PATCH] package/lzma-alone: new package
+>
+> Once I get lzma-alone somehow merged I'm planning to add Northstar
+> boards support.
+>
+> Until that you can check OpenWrt project. It has target called
+> "bcm53xx" that handles Northstar devices. There are only few
+> downstream patches needed to get those devices running:
+>
+> https://git.openwrt.org/?p=openwrt/openwrt.git;a=tree;f=target/linux/bcm53xx/patches-5.4;hb=HEAD
+>
+> --
+> Rafa?
+>
 
-So add a dependency on host gcc >= 7
+Thanks for your valuable suggestion. I have checked the targets supported
+by openwrt for Northstar processors. It provides kernel and rootfs builds
+for Northstar based boards. (tried MR32)
+I am unable to find the u-boot build for the Northstar based SoCs. How do I
+enable the u-boot build as well for any of these boards?
 
-Moreover, C++17 is also mandatory on the target side since
-https://github.com/MusicPlayerDaemon/MPD/commit/8f981845dc7376824d94fd24924788c582942929
-so also bump the gcc dependency
-
-Finally, drop BR2_TOOLCHAIN_HAS_GCC_BUG_64735 which is not needed as it
-will always be true with gcc >= 7
-
-Fixes:
- - http://autobuild.buildroot.org/results/e42a1d0cd808585a755754f839fe7d2080547191
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/mpd/Config.in | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
-
-diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-index e6db1fa268..de97bbab60 100644
---- a/package/mpd/Config.in
-+++ b/package/mpd/Config.in
-@@ -4,8 +4,8 @@ menuconfig BR2_PACKAGE_MPD
- 	depends on BR2_USE_WCHAR # boost
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_6 # C++14
--	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17
-+	depends on BR2_HOST_GCC_AT_LEAST_7 # C++17
- 	select BR2_PACKAGE_BOOST
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	help
-@@ -419,10 +419,9 @@ config BR2_PACKAGE_MPD_ID3TAG
- 
- endif
- 
--comment "mpd needs a toolchain w/ C++, threads, wchar, gcc >= 6"
-+comment "mpd needs a toolchain w/ C++, threads, wchar, gcc >= 7, host gcc >= 7"
- 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
--		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_6
--
--comment "mpd needs a toolchain not affected by GCC bug 64735"
--	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-+		!BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_7 || \
-+		!BR2_HOST_GCC_AT_LEAST_7
--- 
-2.29.2
+It would be great to see the support for Northstar boards in the buildroot
+as well.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210114/cc5899c6/attachment.html>
