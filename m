@@ -1,39 +1,37 @@
-From: Matthew Weber <matthew.weber@collins.com>
-Date: Thu, 14 Jan 2021 12:23:41 -0600
-Subject: [Buildroot] [PATCH v1 1/1] package/screen-fetch: new package
-In-Reply-To: <20210114093347.2997231-1-christian@paral.in>
-References: <20210114093347.2997231-1-christian@paral.in>
-Message-ID: <CANQCQpZ0uqannTXfpGaqS-Dwz2G6O=aYzH9C3mPUkV_js1qhZg@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 14 Jan 2021 20:35:43 +0100
+Subject: [Buildroot] [PATCH 1/2] package/gkrellm: fix build with NLS
+Message-ID: <20210114193544.1965646-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Christian,
+Fixes:
+ - http://autobuild.buildroot.org/results/98d0eda546b09e60eebbd3c3a28493f09dff7e62
 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/gkrellm/gkrellm.mk | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-On Thu, Jan 14, 2021 at 3:34 AM Christian Stewart <christian@paral.in> wrote:
->
-> Signed-off-by: Christian Stewart <christian@paral.in>
-
-Neat script.  I noticed some of the information didn't really fill in
-but that's probably not a Buildroot bug :-)
-
-                             root at buildroot
-                             OS: buildroot
-                             Kernel: aarch64 Linux 4.16.7
-         #####               Uptime: 21m
-        #######              Packages: Unknown
-        ##O#O##              Shell: BusyBox v1.31.1
-        #######              Disk:  /  ()
-      ###########            CPU: Unknown
-     #############           RAM: 19MiB / 104MiB
-    ###############
-    ################
-   #################
- #####################
- #####################
-   #################
-
-Tested-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+diff --git a/package/gkrellm/gkrellm.mk b/package/gkrellm/gkrellm.mk
+index 9e9dcd69ea..ebc0cd72f3 100644
+--- a/package/gkrellm/gkrellm.mk
++++ b/package/gkrellm/gkrellm.mk
+@@ -9,8 +9,10 @@ GKRELLM_SITE = http://gkrellm.srcbox.net/releases
+ GKRELLM_SOURCE = gkrellm-$(GKRELLM_VERSION).tar.bz2
+ GKRELLM_LICENSE = GPL-3.0+
+ GKRELLM_LICENSE_FILES = COPYING COPYRIGHT
+-GKRELLM_DEPENDENCIES = host-pkgconf libglib2
+-GKRELLM_BUILD_OPTS = STRIP=""
++GKRELLM_DEPENDENCIES = host-pkgconf libglib2 $(TARGET_NLS_DEPENDENCIES)
++GKRELLM_BUILD_OPTS = \
++	STRIP="" \
++	SYS_LIBS=$(TARGET_NLS_LIBS)
+ 
+ ifeq ($(BR2_PACKAGE_LM_SENSORS),y)
+ GKRELLM_DEPENDENCIES += lm-sensors
+-- 
+2.29.2
