@@ -1,47 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 14 Jan 2021 22:37:33 +0100
-Subject: [Buildroot] [PATCH v2] package/freescale-imx/firmware-imx: fix
- the VPU firmware location
-In-Reply-To: <20210113223039.14401-1-festevam@gmail.com>
-References: <20210113223039.14401-1-festevam@gmail.com>
-Message-ID: <20210114223733.27d24beb@windsurf.home>
+Date: Thu, 14 Jan 2021 22:37:46 +0100
+Subject: [Buildroot] [git commit] configs/qemu_s390x_defconfig: bump kernel
+ version to 5.10.7
+Message-ID: <20210114211858.482AA8636E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 13 Jan 2021 19:30:39 -0300
-Fabio Estevam <festevam@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=dd1d4d263475427ff454ebc0de236233723be44c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> The mainline kernel searches the coda VPU firmware inside the following
-> locations [1]:
-> 
-> /lib/firmware/
-> /lib/firmware/vpu/
-> 
-> Currently Buildroot installs the coda firmware into /lib/firmware/imx/vpu,
-> which is not a valid location.
-> 
-> Fix it by installing the coda firmwares into /lib/firmware/vpu/ which
-> is a valid path for both mainline and NXP vendor kernels. Also create a
-> symlink to /lib/firmware/ so that mainline kernels do not need to wait
-> more than 60 seconds to search again inside /lib/firmware/vpu/.
-> 
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=8af7779f3cbc1f6720d15f00abc797493710d1ab
-> 
-> Reported-by: Romain Naour <romain.naour@gmail.com>
-> Suggested-by: Romain Naour <romain.naour@gmail.com>
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
-> ---
-> Changes since v1:
-> - Create symlinks to /lib/firmware to speed up mainline kernels to
-> found the VPU firmware.
+Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ configs/qemu_s390x_defconfig | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/configs/qemu_s390x_defconfig b/configs/qemu_s390x_defconfig
+index b3c2641d15..9b3821f043 100644
+--- a/configs/qemu_s390x_defconfig
++++ b/configs/qemu_s390x_defconfig
+@@ -11,13 +11,13 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+ BR2_TARGET_ROOTFS_EXT2=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+-# Linux headers same as kernel, a 5.8 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_8=y
++# Linux headers same as kernel, a 5.10 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.8.7"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.7"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ 
