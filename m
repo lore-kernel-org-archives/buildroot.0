@@ -1,49 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 14 Jan 2021 22:35:19 +0100
-Subject: [Buildroot] [git commit] package/gmp: bump version to 6.2.1
-Message-ID: <20210114211709.9A5F2876AF@busybox.osuosl.org>
+Date: Thu, 14 Jan 2021 22:35:17 +0100
+Subject: [Buildroot] [git commit] package/upmpdcli: bump to version 1.5.8
+Message-ID: <20210114211709.815D9876AF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=87b2a30319394c2cc79efae1af7833cad8c62b32
+commit: https://git.buildroot.net/buildroot/commit/?id=2e456311d6ac2b62c4c1e3d045e8c190ee5111c2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes: https://gmplib.org/gmp6.2
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gmp/gmp.hash | 6 +++---
- package/gmp/gmp.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/upmpdcli/upmpdcli.hash | 4 ++--
+ package/upmpdcli/upmpdcli.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gmp/gmp.hash b/package/gmp/gmp.hash
-index 417b9d17bf..d55e312bbb 100644
---- a/package/gmp/gmp.hash
-+++ b/package/gmp/gmp.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--sha256	87b565e89a9a684fe4ebeeddb8399dce2599f9c9049854ca8c0dfbdea0e21912	gmp-6.1.2.tar.xz
-+sha256  fd4829912cddd12f84181c3451cc752be224643e87fac497b69edddadc49b4f2  gmp-6.2.1.tar.xz
+diff --git a/package/upmpdcli/upmpdcli.hash b/package/upmpdcli/upmpdcli.hash
+index b24aec9834..fe8999d471 100644
+--- a/package/upmpdcli/upmpdcli.hash
++++ b/package/upmpdcli/upmpdcli.hash
+@@ -1,5 +1,5 @@
+-# From http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.5.5.tar.gz.sha256:
+-sha256  45fce9c71a45f1ec0d1cb2924bf7ece444c44a918a0c437c1c768baa3d4a345d  upmpdcli-1.5.5.tar.gz
++# From http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.5.8.tar.gz.sha256:
++sha256  802a2ab795841fbb9bfff5fd7951881022f5414ed893a1db704801b999e658a8  upmpdcli-1.5.8.tar.gz
  
- # Locally calculated
--sha256	a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c	COPYING.LESSERv3
--sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYINGv2
-+sha256  a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LESSERv3
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYINGv2
-diff --git a/package/gmp/gmp.mk b/package/gmp/gmp.mk
-index a79d5b7d9a..5e16ef1916 100644
---- a/package/gmp/gmp.mk
-+++ b/package/gmp/gmp.mk
+ # Hash for license file:
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
+index a987806725..3dc79f8f44 100644
+--- a/package/upmpdcli/upmpdcli.mk
++++ b/package/upmpdcli/upmpdcli.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GMP_VERSION = 6.1.2
-+GMP_VERSION = 6.2.1
- GMP_SITE = $(BR2_GNU_MIRROR)/gmp
- GMP_SOURCE = gmp-$(GMP_VERSION).tar.xz
- GMP_INSTALL_STAGING = YES
+-UPMPDCLI_VERSION = 1.5.5
++UPMPDCLI_VERSION = 1.5.8
+ UPMPDCLI_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
+ UPMPDCLI_LICENSE = LGPL-2.1+
+ UPMPDCLI_LICENSE_FILES = COPYING
