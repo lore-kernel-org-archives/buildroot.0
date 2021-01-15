@@ -1,10 +1,9 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 15 Jan 2021 23:54:03 +0100
-Subject: [Buildroot] [PATCH v1 08/12] package/gst1-vaapi: bump version to
- 1.18.3
+Date: Fri, 15 Jan 2021 23:54:06 +0100
+Subject: [Buildroot] [PATCH v1 11/12] package/gst-omx: bump version to 1.18.3
 In-Reply-To: <20210115225407.2350-1-ps.report@gmx.net>
 References: <20210115225407.2350-1-ps.report@gmx.net>
-Message-ID: <20210115225407.2350-8-ps.report@gmx.net>
+Message-ID: <20210115225407.2350-11-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,32 +12,32 @@ To: buildroot@busybox.net
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/gstreamer1/gst1-vaapi/gst1-vaapi.hash | 4 ++--
- package/gstreamer1/gst1-vaapi/gst1-vaapi.mk   | 2 +-
+ package/gstreamer1/gst-omx/gst-omx.hash | 4 ++--
+ package/gstreamer1/gst-omx/gst-omx.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash b/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
-index a6607ac405..ae4c194130 100644
---- a/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
-+++ b/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
+diff --git a/package/gstreamer1/gst-omx/gst-omx.hash b/package/gstreamer1/gst-omx/gst-omx.hash
+index 117165866f..0615e06a87 100644
+--- a/package/gstreamer1/gst-omx/gst-omx.hash
++++ b/package/gstreamer1/gst-omx/gst-omx.hash
 @@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gstreamer-vaapi/gstreamer-vaapi-1.18.2.tar.xz.sha256sum
--sha256  8c7b2c74fda095d83dea67accde6a68ba9f608d97ed969fdcf278930f9b1c7c0  gstreamer-vaapi-1.18.2.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gstreamer-vaapi/gstreamer-vaapi-1.18.3.tar.xz.sha256sum
-+sha256  ae9877f15757a661d4dfe6a09755a2faa959ab60752f14ca26b7ff10765e1f12  gstreamer-vaapi-1.18.3.tar.xz
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk b/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
-index 41ab13a0c4..84cfb88583 100644
---- a/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
-+++ b/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
+-# From https://gstreamer.freedesktop.org/src/gst-omx/gst-omx-1.18.2.tar.xz.sha256sum
+-sha256  4c05d64544eecf4aaf5b337789916c67ed720317dfb2c8c8c335720fcc5c7cf4  gst-omx-1.18.2.tar.xz
++# From https://gstreamer.freedesktop.org/src/gst-omx/gst-omx-1.18.3.tar.xz.sha256sum
++sha256  ed0f26504e9a60e15055134410f156e40952336410f2a59bdbbda45e61e8b93f  gst-omx-1.18.3.tar.xz
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/gstreamer1/gst-omx/gst-omx.mk b/package/gstreamer1/gst-omx/gst-omx.mk
+index f5392391de..bd40452931 100644
+--- a/package/gstreamer1/gst-omx/gst-omx.mk
++++ b/package/gstreamer1/gst-omx/gst-omx.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GST1_VAAPI_VERSION = 1.18.2
-+GST1_VAAPI_VERSION = 1.18.3
- GST1_VAAPI_SITE = https://gstreamer.freedesktop.org/src/gstreamer-vaapi
- GST1_VAAPI_SOURCE = gstreamer-vaapi-$(GST1_VAAPI_VERSION).tar.xz
- GST1_VAAPI_LICENSE = LGPL-2.1+
+-GST_OMX_VERSION = 1.18.2
++GST_OMX_VERSION = 1.18.3
+ GST_OMX_SOURCE = gst-omx-$(GST_OMX_VERSION).tar.xz
+ GST_OMX_SITE = https://gstreamer.freedesktop.org/src/gst-omx
+ 
 -- 
 2.29.2
