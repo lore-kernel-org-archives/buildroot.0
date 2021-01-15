@@ -1,28 +1,38 @@
-From: Matthew Weber <matthew.weber@collins.com>
-Date: Fri, 15 Jan 2021 09:53:14 -0600
-Subject: [Buildroot] [PATCH]
- toolchain/toolchain-external/toolchain-external-bootlin: update PowerPC 440
- FP toolchain
-In-Reply-To: <20210114224000.456977-1-thomas.petazzoni@bootlin.com>
-References: <20210114224000.456977-1-thomas.petazzoni@bootlin.com>
-Message-ID: <CANQCQpZz1EBmqViYGHw_eEjWfeZVu7o5RN+FkNE4iomz+jb4EA@mail.gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Fri, 15 Jan 2021 18:01:56 +0100
+Subject: [Buildroot] [PATCH v2] uboot: fix binman with a new dependency
+Message-ID: <20210115170156.917086-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+since 2021.01, tools/binman is broken.
+tools/binman/control.py imports pkg_resources
+the module pkg_resources is supplied by setuptools,
+so this new dependency is required.
 
-On Thu, Jan 14, 2021 at 4:41 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> The Bootlin PowerPC 440 FP toolchain was rebuilt in version 2020.08-2,
-> which is rebased on Buildroot 2020.08.3 as that includes a fix for
-> SecurePLT support.
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ boot/uboot/uboot.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thanks for rev'n to pick up that PPC fix!
-
-Reviewed-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index d2b4e8dc6..3d057e709 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -166,9 +166,9 @@ UBOOT_DEPENDENCIES += host-dtc
+ endif
+ 
+ ifeq ($(BR2_TARGET_UBOOT_NEEDS_PYTHON2),y)
+-UBOOT_DEPENDENCIES += host-python
++UBOOT_DEPENDENCIES += host-python host-python-setuptools
+ else ifeq ($(BR2_TARGET_UBOOT_NEEDS_PYTHON3),y)
+-UBOOT_DEPENDENCIES += host-python3
++UBOOT_DEPENDENCIES += host-python3 host-python3-setuptools
+ endif
+ 
+ ifeq ($(BR2_TARGET_UBOOT_NEEDS_PYLIBFDT),y)
+-- 
+2.27.0
