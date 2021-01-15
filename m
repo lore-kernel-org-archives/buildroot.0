@@ -1,51 +1,82 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 15 Jan 2021 19:15:29 +0100
-Subject: [Buildroot] [PATCH 1/1] package/kodi-pvr-zattoo: fix json dependency
-Message-ID: <20210115181529.611511-1-bernd.kuhls@t-online.de>
+From: Christian Stewart <christian@paral.in>
+Date: Fri, 15 Jan 2021 11:35:39 -0800
+Subject: [Buildroot] [PATCH 1/1] package/neofetch: new package
+Message-ID: <20210115193539.471638-1-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Package depends on rapidjson, not rapidxml:
-https://github.com/rbuehlma/pvr.zattoo/blob/Leia/CMakeLists.txt#L10
-
-The bug was previously not noticed because kodi depends on rapidjson
-https://github.com/xbmc/xbmc/blob/Leia/CMakeLists.txt#L133
-and kodi-platform depends on kodi
-https://github.com/xbmc/kodi-platform/blob/master/CMakeLists.txt#L8
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/kodi-pvr-zattoo/Config.in          | 2 +-
- package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/Config.in              |  1 +
+ package/neofetch/Config.in     | 10 ++++++++++
+ package/neofetch/neofetch.hash |  2 ++
+ package/neofetch/neofetch.mk   | 17 +++++++++++++++++
+ 4 files changed, 30 insertions(+)
+ create mode 100644 package/neofetch/Config.in
+ create mode 100644 package/neofetch/neofetch.hash
+ create mode 100644 package/neofetch/neofetch.mk
 
-diff --git a/package/kodi-pvr-zattoo/Config.in b/package/kodi-pvr-zattoo/Config.in
-index ab7ff70034..5dfadcadd1 100644
---- a/package/kodi-pvr-zattoo/Config.in
-+++ b/package/kodi-pvr-zattoo/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_KODI_PVR_ZATTOO
- 	bool "kodi-pvr-zattoo"
- 	select BR2_PACKAGE_KODI_PLATFORM
- 	select BR2_PACKAGE_LIBPLATFORM
--	select BR2_PACKAGE_RAPIDXML
-+	select BR2_PACKAGE_RAPIDJSON
- 	select BR2_PACKAGE_TINYXML2
- 	help
- 	  Kodi PVR-Addon for Zattoo
-diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
-index 7afe92e87c..78fc01f195 100644
---- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
-+++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
-@@ -8,6 +8,6 @@ KODI_PVR_ZATTOO_VERSION = 18.1.21-Leia
- KODI_PVR_ZATTOO_SITE = $(call github,rbuehlma,pvr.zattoo,$(KODI_PVR_ZATTOO_VERSION))
- KODI_PVR_ZATTOO_LICENSE = GPL-2.0+
- KODI_PVR_ZATTOO_LICENSE_FILES = debian/copyright
--KODI_PVR_ZATTOO_DEPENDENCIES = kodi-platform libplatform rapidxml tinyxml2
-+KODI_PVR_ZATTOO_DEPENDENCIES = kodi-platform libplatform rapidjson tinyxml2
- 
- $(eval $(cmake-package))
+diff --git a/package/Config.in b/package/Config.in
+index 81ad4979a1..54b917b736 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2379,6 +2379,7 @@ comment "Utilities"
+ 	source "package/lockfile-progs/Config.in"
+ 	source "package/logrotate/Config.in"
+ 	source "package/logsurfer/Config.in"
++	source "package/neofetch/Config.in"
+ 	source "package/pdmenu/Config.in"
+ 	source "package/pinentry/Config.in"
+ 	source "package/qprint/Config.in"
+diff --git a/package/neofetch/Config.in b/package/neofetch/Config.in
+new file mode 100644
+index 0000000000..409466bc15
+--- /dev/null
++++ b/package/neofetch/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_NEOFETCH
++	bool "neofetch"
++	depends on BR2_USE_MMU # bash
++	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # bash
++	select BR2_PACKAGE_BASH # runtime dependency
++	help
++	  Neofetch is a bash script to display system information,
++	  including hardware, in a visually pleasing way.
++
++	  https://github.com/dylanaraps/neofetch
+diff --git a/package/neofetch/neofetch.hash b/package/neofetch/neofetch.hash
+new file mode 100644
+index 0000000000..0927715143
+--- /dev/null
++++ b/package/neofetch/neofetch.hash
+@@ -0,0 +1,2 @@
++sha256  58a95e6b714e41efc804eca389a223309169b2def35e57fa934482a6b47c27e7  neofetch-7.1.0.tar.gz
++sha256  fc3034b3dd3a08db109949b629210213bba52aa95455cbc5c2fefa2fc1183efe  LICENSE.md
+diff --git a/package/neofetch/neofetch.mk b/package/neofetch/neofetch.mk
+new file mode 100644
+index 0000000000..4ea6c27b2d
+--- /dev/null
++++ b/package/neofetch/neofetch.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# neofetch
++#
++################################################################################
++
++NEOFETCH_VERSION = 7.1.0
++NEOFETCH_SITE = $(call github,dylanaraps,neofetch,$(NEOFETCH_VERSION))
++NEOFETCH_LICENSE = MIT
++NEOFETCH_LICENSE_FILES = LICENSE.md
++
++define NEOFETCH_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/neofetch \
++		$(TARGET_DIR)/usr/bin/neofetch
++endef
++
++$(eval $(generic-package))
 -- 
-2.29.2
+2.30.0
