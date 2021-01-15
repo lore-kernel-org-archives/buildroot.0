@@ -1,35 +1,33 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 15 Jan 2021 08:52:49 +0100
-Subject: [Buildroot] [PATCH 1/1] package/lcms2: add CPE variables
-Message-ID: <20210115075249.2076903-1-fontaine.fabrice@gmail.com>
+Date: Fri, 15 Jan 2021 08:58:23 +0100
+Subject: [Buildroot] [PATCH 1/1] package/lftp: set LFTP_CPE_ID_VALID
+Message-ID: <20210115075823.2077298-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:littlecms:little_cms is a valid CPE identifier for this
-package:
+cpe:2.3:a:lftp_project:lftp is a valid CPE identifier for this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alittlecms%3Alittle_cms
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alftp_project%3Alftp
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/lcms2/lcms2.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/lftp/lftp.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/lcms2/lcms2.mk b/package/lcms2/lcms2.mk
-index d42c8c9a1f..34c2795e93 100644
---- a/package/lcms2/lcms2.mk
-+++ b/package/lcms2/lcms2.mk
-@@ -8,6 +8,8 @@ LCMS2_VERSION = 2.11
- LCMS2_SITE = http://downloads.sourceforge.net/project/lcms/lcms/$(LCMS2_VERSION)
- LCMS2_LICENSE = MIT
- LCMS2_LICENSE_FILES = COPYING
-+LCMS2_CPE_ID_VENDOR = littlecms
-+LCMS2_CPE_ID_NAME = little_cms
- LCMS2_INSTALL_STAGING = YES
+diff --git a/package/lftp/lftp.mk b/package/lftp/lftp.mk
+index 1348e137de..483ca298cd 100644
+--- a/package/lftp/lftp.mk
++++ b/package/lftp/lftp.mk
+@@ -9,6 +9,7 @@ LFTP_SOURCE = lftp-$(LFTP_VERSION).tar.xz
+ LFTP_SITE = http://lftp.yar.ru/ftp
+ LFTP_LICENSE = GPL-3.0+
+ LFTP_LICENSE_FILES = COPYING
++LFTP_CPE_ID_VALID = YES
+ LFTP_DEPENDENCIES = readline zlib host-pkgconf
  
- ifeq ($(BR2_PACKAGE_JPEG),y)
+ # Help lftp finding readline and zlib
 -- 
 2.29.2
