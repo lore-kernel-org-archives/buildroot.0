@@ -1,39 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 15 Jan 2021 08:03:04 +0100
-Subject: [Buildroot] [git commit] package/linux-pam: drop useless
- LINUX_PAM_CPE_ID_NAME definition
-Message-ID: <20210115064433.0278B827F8@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 15 Jan 2021 08:07:15 +0100
+Subject: [Buildroot] [PATCH 1/1] package/cairo: add CAIRO_CPE_ID_VENDOR
+Message-ID: <20210115070715.2075327-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=30bd7262e5f0a1dd35b4efbcd1619e892e4afa44
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+cpe:2.3:a:cairographics:cairo is a valid CPE identifier for this
+package:
 
-This definition is useless, because it is equal to the default value
-of <pkg>_CPE_ID_NAME as calculated by generic-package.
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Acairographics%3Acairo
 
-Before and after this patch, the CPE ID calculated for the linux-pam
-package is exactly the same, according to "make linux-pam-show-info".
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Reviewed-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/linux-pam/linux-pam.mk | 1 -
- 1 file changed, 1 deletion(-)
+ package/cairo/cairo.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/linux-pam/linux-pam.mk b/package/linux-pam/linux-pam.mk
-index be4d11bb10..9c0815db24 100644
---- a/package/linux-pam/linux-pam.mk
-+++ b/package/linux-pam/linux-pam.mk
-@@ -22,7 +22,6 @@ LINUX_PAM_LICENSE = BSD-3-Clause
- LINUX_PAM_LICENSE_FILES = Copyright
- LINUX_PAM_MAKE_OPTS += LIBS=$(TARGET_NLS_LIBS)
- LINUX_PAM_CPE_ID_VENDOR = linux-pam
--LINUX_PAM_CPE_ID_NAME = linux-pam
+diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
+index 3d2fdbd5de..98f270442a 100644
+--- a/package/cairo/cairo.mk
++++ b/package/cairo/cairo.mk
+@@ -8,6 +8,7 @@ CAIRO_VERSION = 1.16.0
+ CAIRO_SOURCE = cairo-$(CAIRO_VERSION).tar.xz
+ CAIRO_LICENSE = LGPL-2.1 or MPL-1.1 (library)
+ CAIRO_LICENSE_FILES = COPYING COPYING-LGPL-2.1 COPYING-MPL-1.1
++CAIRO_CPE_ID_VENDOR = cairographics
+ CAIRO_SITE = http://cairographics.org/releases
+ CAIRO_INSTALL_STAGING = YES
  
- ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
- LINUX_PAM_CONF_OPTS += --enable-selinux
+-- 
+2.29.2
