@@ -1,72 +1,111 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Fri, 15 Jan 2021 18:01:22 +0100
-Subject: [Buildroot] [PATCH] uboot: fix binman with a new dependency
-In-Reply-To: <d7be54607e5dc1b892211dfe1970b1cf@walle.cc>
-References: <20210112091806.906954-1-francois.perrad@gadz.org>
- <d7be54607e5dc1b892211dfe1970b1cf@walle.cc>
-Message-ID: <CAB0FRstTvLNNQwAXr3QfkbBYZdB0nNPzRT6F1SXdJwa+YG38nw@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri, 15 Jan 2021 18:33:32 +0100
+Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: add fixes from Kodi project
+Message-ID: <20210115173332.536722-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le ven. 15 janv. 2021 ? 16:36, Michael Walle <michael@walle.cc> a ?crit :
+Adding these patches brings our ffmpeg package to the same level as the
+kodi-provided ffmpeg package allowing us to switch the kodi build to
+use the system-provided ffmpeg instead of its internal build when kodi
+is bumped to version 19.0-Matrix.
 
-> Hi Francois,
->
-> Am 2021-01-12 10:18, schrieb Francois Perrad:
-> > since 2021.01, tools/binman is broken.
-> > tools/binman/control.py imports pkg_resources
-> > the module pkg_resources is supplied by setuptools,
-> > so this new dependency is required.
-> >
-> > binman is used only for building SPL
->
-> is it? AFAIK binman is just for generating images and can as
-> well be used without SPL. There is also a CONFIG_BINMAN.
-> I don't know if we could check the u-boot config for that.
-> Otherwise, I guess we'd need yet another "u-boot uses binman"
-> config option. I don't think checking of SPL is enough.
->
->
-setuptools is a very small package (compared to python itself).
-so, I will added it unconditionally with python.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ ...264-skip-decode-if-pic-has-no-slices.patch | 36 ++++++++++++++++++
+ ...-make-sure-mpegts-read-header-always.patch | 38 +++++++++++++++++++
+ 2 files changed, 74 insertions(+)
+ create mode 100644 package/ffmpeg/0003-avcodec-vaapi_h264-skip-decode-if-pic-has-no-slices.patch
+ create mode 100644 package/ffmpeg/0004-avformat-mpegts-make-sure-mpegts-read-header-always.patch
 
-Fran?ois
-
--michael
->
-> >
-> > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> > ---
-> >  boot/uboot/uboot.mk | 6 ++++++
-> >  1 file changed, 6 insertions(+)
-> >
-> > diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-> > index d2b4e8dc6..a3d949a55 100644
-> > --- a/boot/uboot/uboot.mk
-> > +++ b/boot/uboot/uboot.mk
-> > @@ -167,8 +167,14 @@ endif
-> >
-> >  ifeq ($(BR2_TARGET_UBOOT_NEEDS_PYTHON2),y)
-> >  UBOOT_DEPENDENCIES += host-python
-> > +ifeq ($(BR2_TARGET_UBOOT_SPL),y)
-> > +UBOOT_DEPENDENCIES += host-python-setuptools
-> > +endif
-> >  else ifeq ($(BR2_TARGET_UBOOT_NEEDS_PYTHON3),y)
-> >  UBOOT_DEPENDENCIES += host-python3
-> > +ifeq ($(BR2_TARGET_UBOOT_SPL),y)
-> > +UBOOT_DEPENDENCIES += host-python3-setuptools
-> > +endif
-> >  endif
-> >
-> >  ifeq ($(BR2_TARGET_UBOOT_NEEDS_PYLIBFDT),y)
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210115/278437a9/attachment.html>
+diff --git a/package/ffmpeg/0003-avcodec-vaapi_h264-skip-decode-if-pic-has-no-slices.patch b/package/ffmpeg/0003-avcodec-vaapi_h264-skip-decode-if-pic-has-no-slices.patch
+new file mode 100644
+index 0000000000..2892df9d81
+--- /dev/null
++++ b/package/ffmpeg/0003-avcodec-vaapi_h264-skip-decode-if-pic-has-no-slices.patch
+@@ -0,0 +1,36 @@
++From 2c6b3f357331e203ad87214984661c40704aceb7 Mon Sep 17 00:00:00 2001
++From: Rainer Hochecker <fernetmenta@online.de>
++Date: Sat, 26 Jan 2019 19:48:35 +0100
++Subject: [PATCH] avcodec/vaapi_h264: skip decode if pic has no slices
++
++This fixes / workarounds https://bugs.freedesktop.org/show_bug.cgi?id=105368.
++It was hit frequently when watching h264 channels received via DVB-X.
++Corresponding kodi bug: https://github.com/xbmc/xbmc/issues/15704
++
++Downloaded from Kodi ffmpeg repo:
++https://github.com/xbmc/FFmpeg/commit/2c6b3f357331e203ad87214984661c40704aceb7
++
++Patch was sent upstream:
++http://ffmpeg.org/pipermail/ffmpeg-devel/2019-March/240863.html
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ libavcodec/vaapi_h264.c | 5 +++++
++ 1 file changed, 5 insertions(+)
++
++diff --git a/libavcodec/vaapi_h264.c b/libavcodec/vaapi_h264.c
++index dd2a6571604..e521a05c4ff 100644
++--- a/libavcodec/vaapi_h264.c
+++++ b/libavcodec/vaapi_h264.c
++@@ -314,6 +314,11 @@ static int vaapi_h264_end_frame(AVCodecContext *avctx)
++     H264SliceContext *sl = &h->slice_ctx[0];
++     int ret;
++ 
+++    if (pic->nb_slices == 0) {
+++        ret = AVERROR_INVALIDDATA;
+++        goto finish;
+++    }
+++
++     ret = ff_vaapi_decode_issue(avctx, pic);
++     if (ret < 0)
++         goto finish;
+diff --git a/package/ffmpeg/0004-avformat-mpegts-make-sure-mpegts-read-header-always.patch b/package/ffmpeg/0004-avformat-mpegts-make-sure-mpegts-read-header-always.patch
+new file mode 100644
+index 0000000000..75a39d16fa
+--- /dev/null
++++ b/package/ffmpeg/0004-avformat-mpegts-make-sure-mpegts-read-header-always.patch
+@@ -0,0 +1,38 @@
++From 3136f41e6db8189994a8e4f72eacc92b669776d1 Mon Sep 17 00:00:00 2001
++From: Marton Balint <cus@passwd.hu>
++Date: Sun, 15 Nov 2020 00:39:41 +0100
++Subject: [PATCH] avformat/mpegts: make sure mpegts_read_header always stops at
++ the first pmt
++
++mpegts_read_header stops parsing the file at the first PMT. However the check
++that ensured this was wrong because streams can also be added before the first
++PMT is received (e.g. EIT).
++
++So let's make sure we are in the header reading phase by checking if ts->pkt is
++unset instead of checking if the number of streams found so far is 0.
++
++Downloaded from Kodi ffmpeg repo:
++https://github.com/xbmc/FFmpeg/commit/3136f41e6db8189994a8e4f72eacc92b669776d1
++
++Patch was committed upstream:
++http://git.videolan.org/?p=ffmpeg.git;a=patch;h=ca55240b8c1fd4cfdb61f88fd2cb378d475d910a
++
++Signed-off-by: Marton Balint <cus@passwd.hu>
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ libavformat/mpegts.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/libavformat/mpegts.c b/libavformat/mpegts.c
++index c6fd3e1cef63..1da81a0fe62a 100644
++--- a/libavformat/mpegts.c
+++++ b/libavformat/mpegts.c
++@@ -2352,7 +2352,7 @@ static void pmt_cb(MpegTSFilter *filter, const uint8_t *section, int section_len
++         goto out;
++ 
++     // stop parsing after pmt, we found header
++-    if (!ts->stream->nb_streams)
+++    if (!ts->pkt)
++         ts->stop_parse = 2;
++ 
++     set_pmt_found(ts, h->id);
+-- 
+2.29.2
