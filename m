@@ -1,40 +1,43 @@
-From: Andreas Ziegler <br015@umbiko.net>
-Date: Fri, 15 Jan 2021 05:44:55 +0000
-Subject: [Buildroot] Buildroot ARM with Altera FPGA de10-standard
-In-Reply-To: <2793fb72-6cbf-14b0-ea39-6a18a7b0d489@litinow.com>
-References: <mailman.9.1610539203.245130.buildroot@busybox.net>
- <c6f6425d6673f9ae60641de8a595af8d@umbiko.net>
- <2793fb72-6cbf-14b0-ea39-6a18a7b0d489@litinow.com>
-Message-ID: <ad26a529bd7fa2dc771ff67cbea3121f@umbiko.net>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 15 Jan 2021 07:31:49 +0100
+Subject: [Buildroot] [PATCH 1/1] package/sunxi-boards: needs host gcc >= 4.9
+Message-ID: <20210115063149.2072523-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Mauricio,
+Commit 8a26801c9fad1c7749200e22e9dfdeaeeb65f76e forgot to propagate the
+host gcc dependency from host-sunxi-tools to sunxi-boards
 
-On 2021-01-14 15:00, Mauricio Litinow wrote:
+Fixes:
+ - http://autobuild.buildroot.org/results/22fc93746b45a197cd64bfd116edb33494756bda
 
-> If I change it to use the last version of Buildroot, please can you
-> share with me what Terasic document describes the 'Target Options' and
-> the 'Toolchain' settings ? It is yet very confused in my mind.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/sunxi-boards/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-The 'Target options' did not change from the 2017 version, use the 
-settings from the Terasic documentation.
-
-'Toolchain' has a few additional options (e.g. additional languages), 
-take the settings from the documentation and leave the extra options at 
-their default value.
-
-> Also, what GCC linaro and kernel headers version should I use with the
-> last version of the Buildroot?
-
-I hope you used the newer kernel and toolchain from the documentation, 
-they should be OK. Don't change everything at once.
-
-You can skip step 7.2 if you don't want to change the Buildroot standard 
-settings, but take a look at Buildroot's 'System configuration' menu.
-
-Kind regards,
-Andreas
+diff --git a/package/sunxi-boards/Config.in b/package/sunxi-boards/Config.in
+index d9fd8529f3..eaf492f2b2 100644
+--- a/package/sunxi-boards/Config.in
++++ b/package/sunxi-boards/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_SUNXI_BOARDS
+ 	bool "sunxi script.bin board file"
+ 	depends on BR2_arm
++	depends on BR2_HOST_GCC_AT_LEAST_4_9 # host-sunxi-tools
+ 	select BR2_PACKAGE_HOST_SUNXI_TOOLS
+ 	help
+ 	  Sunxi-boards requires a compiled .fex files for hardware
+@@ -23,3 +24,7 @@ config BR2_PACKAGE_SUNXI_BOARDS_FEX_FILE
+ 	  See inside sys_config/ directory in sunxi-boards source code
+ 	  to see the list of valid .fex files.
+ endif
++
++comment "sunxi script.bin board file needs a toolchain w/ host gcc >= 4.9"
++	depends on BR2_arm
++	depends on !BR2_HOST_GCC_AT_LEAST_4_9
+-- 
+2.29.2
