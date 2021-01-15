@@ -1,84 +1,59 @@
 From: Vineet Gupta <Vineet.Gupta1@synopsys.com>
-Date: Fri, 15 Jan 2021 12:03:16 -0800
-Subject: [Buildroot] [PATCH 1/4] ARC: Add support for generic HS48 processor
+Date: Fri, 15 Jan 2021 12:03:19 -0800
+Subject: [Buildroot] [PATCH 4/4] configs/snps_archs38_hsdk_defconfig: update
+ for better out-of-box experience
 In-Reply-To: <20210115200319.4139041-1-vgupta@synopsys.com>
 References: <20210115200319.4139041-1-vgupta@synopsys.com>
-Message-ID: <20210115200319.4139041-2-vgupta@synopsys.com>
+Message-ID: <20210115200319.4139041-5-vgupta@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For the HS48 processor, BR currently builds with -mcpu=hs4x_rel31 which
-generates suboptimal code as it inhibits delay slot and back-back ST and so on.
-
-Enable a new variant to build with -mcpu=hs4x for normal codegen.
+ - Enable C++ support
+ - Don't strip executables
+ - Add minimal debug symbols
+ - Enable strace and openssh
+ - Enable perf (and elfutils)
 
 Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
 ---
- arch/Config.in.arc | 16 +++++++++++-----
- 1 file changed, 11 insertions(+), 5 deletions(-)
+ configs/snps_archs38_hsdk_defconfig | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/arch/Config.in.arc b/arch/Config.in.arc
-index fdfafda31c72..259d6f3ab8b9 100644
---- a/arch/Config.in.arc
-+++ b/arch/Config.in.arc
-@@ -39,9 +39,14 @@ config BR2_archs38_full
- 
- config BR2_archs4x_rel31
- 	bool "ARC HS48 rel 31"
-+	help
-+	   Build for HS48 release 3.1
-+
-+config BR2_archs4x
-+	bool "ARC HS48"
- 	help
- 	   Latest release of HS48 processor
--	   - Dual- and quad multiply and MC oprations
-+	   - Dual and Quad multiply and MAC operations
- 	   - Double-precision FPU
- 
- endchoice
-@@ -49,7 +54,7 @@ endchoice
- # Choice of atomic instructions presence
- config BR2_ARC_ATOMIC_EXT
- 	bool "Atomic extension (LLOCK/SCOND instructions)"
--	default y if BR2_arc770d || BR2_archs38 || BR2_archs38_64mpy || BR2_archs38_full || BR2_archs4x_rel31
-+	default y if BR2_arc770d || BR2_archs38 || BR2_archs38_64mpy || BR2_archs38_full || BR2_archs4x_rel31 || BR2_archs4x
- 
- config BR2_ARCH
- 	default "arc"	if BR2_arcle
-@@ -70,10 +75,11 @@ config BR2_GCC_TARGET_CPU
- 	default "hs38"	 if BR2_archs38_64mpy
- 	default "hs38_linux"	 if BR2_archs38_full
- 	default "hs4x_rel31"	 if BR2_archs4x_rel31
-+	default "hs4x"	 if BR2_archs4x
- 
- config BR2_READELF_ARCH_NAME
- 	default "ARCompact"	if BR2_arc750d || BR2_arc770d
--	default "ARCv2"		if BR2_archs38 || BR2_archs38_64mpy || BR2_archs38_full || BR2_archs4x_rel31
-+	default "ARCv2"		if BR2_archs38 || BR2_archs38_64mpy || BR2_archs38_full || BR2_archs4x_rel31 || BR2_archs4x
- 
- choice
- 	prompt "MMU Page Size"
-@@ -93,7 +99,7 @@ choice
- 
- config BR2_ARC_PAGE_SIZE_4K
- 	bool "4KB"
--	depends on BR2_arc770d || BR2_archs38 || BR2_archs38_64mpy || BR2_archs38_full || BR2_archs4x_rel31
-+	depends on BR2_arc770d || BR2_archs38 || BR2_archs38_64mpy || BR2_archs38_full || BR2_archs4x_rel31 || BR2_archs4x
- 
- config BR2_ARC_PAGE_SIZE_8K
- 	bool "8KB"
-@@ -103,7 +109,7 @@ config BR2_ARC_PAGE_SIZE_8K
- 
- config BR2_ARC_PAGE_SIZE_16K
- 	bool "16KB"
--	depends on BR2_arc770d || BR2_archs38 || BR2_archs38_64mpy || BR2_archs38_full || BR2_archs4x_rel31
-+	depends on BR2_arc770d || BR2_archs38 || BR2_archs38_64mpy || BR2_archs38_full || BR2_archs4x_rel31 || BR2_archs4x
- 
- endchoice
- 
+diff --git a/configs/snps_archs38_hsdk_defconfig b/configs/snps_archs38_hsdk_defconfig
+index 69d0b1936b3a..7d406a90ed3c 100644
+--- a/configs/snps_archs38_hsdk_defconfig
++++ b/configs/snps_archs38_hsdk_defconfig
+@@ -1,8 +1,12 @@
+ BR2_arcle=y
+ BR2_archs38_full=y
++BR2_ENABLE_DEBUG=y
++BR2_DEBUG_1=y
++# BR2_STRIP_strip is not set
+ BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_6=y
+ BR2_PACKAGE_GLIBC_UTILS=y
++BR2_TOOLCHAIN_BUILDROOT_CXX=y
+ BR2_TARGET_OPTIMIZATION="-mfpu=fpud_all"
+ BR2_TARGET_GENERIC_HOSTNAME="hsdk"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to the HSDK Platform"
+@@ -14,8 +18,15 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.6.3"
+ BR2_LINUX_KERNEL_DEFCONFIG="hsdk"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/synopsys/hsdk/linux.fragment"
++BR2_PACKAGE_LINUX_TOOLS_PERF=y
++BR2_PACKAGE_STRACE=y
++BR2_PACKAGE_MAKE=y
++BR2_PACKAGE_ELFUTILS=y
++BR2_PACKAGE_ELFUTILS_PROGS=y
++BR2_PACKAGE_OPENSSH=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="200M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
 -- 
 2.25.1
