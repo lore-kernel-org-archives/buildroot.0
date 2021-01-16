@@ -1,132 +1,77 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 16 Jan 2021 18:17:57 +0100
-Subject: [Buildroot] [git commit] package/mesa3d: unconditionally needs expat
-Message-ID: <20210116170231.7014587826@busybox.osuosl.org>
+Date: Sat, 16 Jan 2021 18:25:23 +0100
+Subject: [Buildroot] [PATCH] package/mesa3d: select EXPAT for freedreno
+In-Reply-To: <20210116160948.1364227-1-festevam@gmail.com>
+References: <20210116160948.1364227-1-festevam@gmail.com>
+Message-ID: <20210116172523.GO2375@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=86150bd7a2ae1ed69a73ddb7ffc00f3af0b74bf2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fabio, All,
 
-mesa3d should only need expat for a limited set of drivers. However,
-the condition in their meson.build is borked:
+On 2021-01-16 13:09 -0300, Fabio Estevam spake thusly:
+> Select expat when building the freedreno driver to fix the
+> following error:
+> 
+> Run-time dependency expat found: NO (tried pkgconfig and cmake)
+> Looking for a fallback subproject for the dependency expat
+> Downloading expat source from https://github.com/libexpat/libexpat/releases/download/R_2_2_5/expat-2.2.5.tar.bz2
+> <urlopen error unknown url type: https>
+> A fallback URL could be specified using source_fallback_url key in the wrap file
+> 
+> output/build/mesa3d-20.3.2/meson.build:1366:2: ERROR: could not get https://github.com/libexpat/libexpat/releases/download/R_2_2_5/expat-2.2.5.tar.bz2 is the internet available?
 
-    required: not with_platform_android or with_any_broadcom or with_any_intel
+Right when you sent this patch, we were discussing the exact same error
+with Titouan, but about the virgl driver.
 
-So, as soon as the platform is not android, expat is required. If it
-is not already present in the configuraiotn, then meson will try to be
-helpful and will try to download its own copy under the table:
+> Signed-off-by: Fabio Estevam <festevam@gmail.com>
 
-    Run-time dependency expat found: NO (tried pkgconfig and cmake)
-    Looking for a fallback subproject for the dependency expat
-    Downloading expat source from https://github.com/libexpat/libexpat/releases/download/R_2_2_5/expat-2.2.5.tar.bz2
-    <urlopen error unknown url type: https>
-    A fallback URL could be specified using source_fallback_url key in the wrap file
+Applied to master, but with the following changes:
 
-    ../O/build/mesa3d-20.3.3/meson.build:1366:2: ERROR: could not get https://github.com/libexpat/libexpat/releases/download/R_2_2_5/expat-2.2.5.tar.bz2 is the internet available?
-
-Ideally, we would like to fix the condition in the meson.build, to drop
-the spurious and dubious condition on the android platform. However it
-is not totally obvious what the prupose was, and expat compiles quikly,
-so we just add expat as an unconditional mandatory dependency.
-
-Fixes:
-    http://autobuild.buildroot.org/results/f71865771482b1d71d12e77767d236ca693785d5/
-    http://autobuild.buildroot.org/results/98290b9681a38b3be820017823a4a4196d474476/
-    ....
-
-Reported-by: Titouan Christophe <titouanchristophe@gmail.com>
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-[yann.morin.1998 at free.fr:
   - make it a generic fix, not tied to freedreno, reported by Fabio
   - rewrite commit log to explain the root cause
   - also reported about virgl, by Titouan
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/mesa3d/Config.in | 7 +------
- package/mesa3d/mesa3d.mk | 5 +----
- 2 files changed, 2 insertions(+), 10 deletions(-)
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 45eb62b701..a96fd46bbe 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -4,6 +4,7 @@ menuconfig BR2_PACKAGE_MESA3D
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_1
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	select BR2_PACKAGE_EXPAT
- 	select BR2_PACKAGE_LIBDRM
- 	select BR2_PACKAGE_WAYLAND_PROTOCOLS if BR2_PACKAGE_WAYLAND
- 	select BR2_PACKAGE_ZLIB
-@@ -138,7 +139,6 @@ comment "Gallium i915: Only one i915 provider can be built"
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS
- 	bool "Gallium iris driver"
- 	depends on BR2_i386 || BR2_x86_64
--	select BR2_PACKAGE_EXPAT
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	help
- 	  Mesa driver for iris-based Intel GPUs.
-@@ -263,7 +263,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_TEGRA
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D
- 	bool "Gallium v3d driver"
- 	depends on (BR2_arm && BR2_ARM_CPU_HAS_NEON) || BR2_aarch64
--	select BR2_PACKAGE_EXPAT
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	select BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
- 	select BR2_PACKAGE_LIBDRM_VC4
-@@ -279,7 +278,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4
- 	bool "Gallium vc4 driver"
- 	depends on BR2_arm || BR2_aarch64
--	select BR2_PACKAGE_EXPAT
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	select BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
- 	select BR2_PACKAGE_LIBDRM_VC4
-@@ -346,7 +344,6 @@ config BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST
- config BR2_PACKAGE_MESA3D_DRI_DRIVER_I915
- 	bool "DRI i915 driver"
- 	depends on BR2_i386 || BR2_x86_64
--	select BR2_PACKAGE_EXPAT
- 	select BR2_PACKAGE_MESA3D_DRI_DRIVER
- 	select BR2_PACKAGE_LIBDRM_INTEL
- 	help
-@@ -356,7 +353,6 @@ config BR2_PACKAGE_MESA3D_DRI_DRIVER_I965
- 	bool "DRI i965 driver"
- 	depends on BR2_i386 || BR2_x86_64
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # memfd.h
--	select BR2_PACKAGE_EXPAT
- 	select BR2_PACKAGE_MESA3D_DRI_DRIVER
- 	select BR2_PACKAGE_LIBDRM_INTEL
- 	help
-@@ -395,7 +391,6 @@ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # memfd.h
- 	depends on BR2_TOOLCHAIN_USES_GLIBC # ifunc, static_assert
- 	depends on BR2_PACKAGE_XORG7 # xorgproto
--	select BR2_PACKAGE_EXPAT
- 	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
- 	select BR2_PACKAGE_XORGPROTO
- 	select BR2_PACKAGE_XLIB_LIBXSHMFENCE
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index ce1197cc99..bc277bec5a 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -19,13 +19,10 @@ MESA3D_DEPENDENCIES = \
- 	host-bison \
- 	host-flex \
- 	host-python3-mako \
-+	expat \
- 	libdrm \
- 	zlib
- 
--ifeq ($(BR2_PACKAGE_EXPAT),y)
--MESA3D_DEPENDENCIES += expat
--endif
--
- MESA3D_CONF_OPTS = \
- 	-Dgallium-omx=disabled \
- 	-Dpower8=disabled
+Please look at the new commit log I pushed for further details, and how
+I eventually tweaked the file.
+
+I'll try to push a fix upstream, so maybe next time we bump, we can
+further relax the dependency by reverting the patch I applied.
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/mesa3d/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+> index 45eb62b701a7..773fbfde220e 100644
+> --- a/package/mesa3d/Config.in
+> +++ b/package/mesa3d/Config.in
+> @@ -119,6 +119,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_FREEDRENO
+>  	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+>  	select BR2_PACKAGE_LIBDRM_FREEDRENO
+>  	select BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
+> +	select BR2_PACKAGE_EXPAT
+>  	help
+>  	  Mesa driver for Freedreno GPUs.
+>  
+> -- 
+> 2.25.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
