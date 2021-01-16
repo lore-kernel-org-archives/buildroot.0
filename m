@@ -1,95 +1,34 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 16 Jan 2021 23:45:27 +0100
-Subject: [Buildroot] [PATCH v2 1/8] package/freescale-imx/firmware-imx:
- bump version to 8.10
-In-Reply-To: <PA4PR04MB7920F971C3C02747462F012DA7A60@PA4PR04MB7920.eurprd04.prod.outlook.com>
-References: <20210105152420.26379-1-stephane.viau@oss.nxp.com>
- <20210105152420.26379-2-stephane.viau@oss.nxp.com>
- <0f9e83af-c4fb-50f2-feeb-9768a97aa94d@gmail.com>
- <PA4PR04MB7920F971C3C02747462F012DA7A60@PA4PR04MB7920.eurprd04.prod.outlook.com>
-Message-ID: <2831c795-29b1-3b7c-f4a6-22d41a8fe9e1@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 17 Jan 2021 00:09:32 +0100
+Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: add FFMPEG_CPE_ID_VENDOR
+Message-ID: <20210116230932.212050-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Stephane,
+cpe:2.3:a:ffmpeg:ffmpeg is a valid CPE identifier for this package:
 
-Le 16/01/2021 ? 22:31, Stephane Viau (OSS) a ?crit?:
-> 
->> Hi Stephane,
-> 
-> Hi Romain, 
-> 
->> Le 05/01/2021 ? 16:24, Stephane Viau a ?crit :
->>> - Same version as NXP release 5.4.70-2.3.0
->>> - EULA/COPYING: update to LA_OPT_NXP_Software_License v17
->>>
->>> Signed-off-by: Stephane Viau <stephane.viau@oss.nxp.com>
->>> Reviewed-by: Gary Bisson <gary.bisson@boundarydevices.com>
->>
->> Still not related to this version bump but the sdma firmwares for imx[6,7,8] are
->> provided by two packages: firmware-imx and linux-firmware
->>
->> $ sha256sum ./firmware-imx-8.10/firmware/sdma/sdma-imx6q.bin
->> 7790c161b7e013a9dbcbffb17cc5d4cb63d952949a505647e4679f02d04c4784
->> ./firmware-imx-8.10/firmware/sdma/sdma-imx6q.bin
->>
->> $ sha256sum  ./linux-firmware-20201022/imx/sdma/sdma-imx6q.bin
->> 7790c161b7e013a9dbcbffb17cc5d4cb63d952949a505647e4679f02d04c4784
->> ./linux-firmware-20201022/imx/sdma/sdma-imx6q.bin
->>
->> We have two options: BR2_PACKAGE_FIRMWARE_IMX_SDMA_FW_NAME and
->> BR2_PACKAGE_LINUX_FIRMWARE_IMX_SDMA
-> 
-> I don't know the whole history behind the presence of both options but
-> what I know is that some effort has been put in over the last 6 months or so to
-> clean up the package/freescale-imx/firmware-imx, including the logic behind "when
-> to fetch the sdma firmware?" (BR2_PACKAGE_FIRMWARE_IMX_NEEDS_SDMA_FW).
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Affmpeg%3Affmpeg
 
-BR2_PACKAGE_LINUX_FIRMWARE_IMX_SDMA has been added back in 2017:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/ffmpeg/ffmpeg.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-https://git.buildroot.net/buildroot/commit/?id=b87eec6555dd716d051285d7314d55143578dd63
-
-But indeed, the firmware-imx package install sdma firmware since the package has
-been added back in 2012:
-
-https://git.buildroot.net/buildroot/commit/?id=22001201ded95850f0f9388f26333c077230b6c6
-
-> 
->>
->> The only difference is that firmware-imx provide firmware for old imx cpus.
->>
->> $ ls linux-firmware-20201022/imx/sdma/sdma-imx
->> sdma-imx6q.bin  sdma-imx7d.bin
->>
->> $ ls firmware-imx-8.10/firmware/sdma/sdma-imx
->> sdma-imx25-to1.bin  sdma-imx31-to1.bin  sdma-imx31-to2.bin  sdma-imx35-to1.bin
->> sdma-imx35-to2.bin  sdma-imx51-to3.bin  sdma-imx53-to1.bin  sdma-imx6q.bin
->> sdma-imx7d.bin
->>
->> Maybe we can keep one of firmware provider.
-> 
-> If a choice must be made, I'd pick the former option rather than the latter...
-> but that's just my opinion.
-
-Fabio, do you have an opinion ?
-
-It seems BR2_PACKAGE_LINUX_FIRMWARE_IMX_SDMA install the same firmware than the
-one provided by firmware-imx package. Also BR2_PACKAGE_LINUX_FIRMWARE_IMX_SDMA
-in not used by any in-tree defconfigs.
-
-If you're ok, we should remove it.
-
-Best regards,
-Romain
-
-
-> 
-> BR,
-> Stephane.
-> 
->>
->> Best regards,
->> Romain
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index fd4a8ab1c4..6d28bfbed7 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -16,6 +16,8 @@ FFMPEG_LICENSE += and GPL-2.0+
+ FFMPEG_LICENSE_FILES += COPYING.GPLv2
+ endif
+ 
++FFMPEG_CPE_ID_VENDOR = ffmpeg
++
+ FFMPEG_CONF_OPTS = \
+ 	--prefix=/usr \
+ 	--enable-avfilter \
+-- 
+2.29.2
