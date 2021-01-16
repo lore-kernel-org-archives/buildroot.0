@@ -1,28 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 16 Jan 2021 23:04:09 +0100
-Subject: [Buildroot] [PATCH] package/proj: bump to 7.2.1
-In-Reply-To: <20210105223420.812088-1-zgyarmati@zgyarmati.de>
-References: <20210105223420.812088-1-zgyarmati@zgyarmati.de>
-Message-ID: <20210116230409.40ff6f70@windsurf.home>
+Date: Sat, 16 Jan 2021 23:04:20 +0100
+Subject: [Buildroot] [git commit] package/python{,
+ 3}-mako: bump to version 1.1.3
+Message-ID: <20210116214523.14C027F9A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue,  5 Jan 2021 23:34:20 +0100
-Zoltan Gyarmati <zgyarmati@zgyarmati.de> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=41a280d2feaa3b0997a74a607268bc142096d226
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
-> ---
->  package/proj/proj.hash | 6 +++---
->  package/proj/proj.mk   | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
+Changelog: https://docs.makotemplates.org/en/latest/changelog.html
 
-Applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-mako/python-mako.hash | 4 ++--
+ package/python-mako/python-mako.mk   | 4 ++--
+ package/python3-mako/python3-mako.mk | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/python-mako/python-mako.hash b/package/python-mako/python-mako.hash
+index 19b122179e..353799923f 100644
+--- a/package/python-mako/python-mako.hash
++++ b/package/python-mako/python-mako.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/mako/json
+-md5  e1939facb40f38f15e8cc74cb5887c4c  Mako-1.1.2.tar.gz
+-sha256  3139c5d64aa5d175dbafb95027057128b5fbd05a40c53999f3905ceb53366d9d  Mako-1.1.2.tar.gz
++md5  184bb2ba4b937127e7c557b93db89377  Mako-1.1.3.tar.gz
++sha256  8195c8c1400ceb53496064314c6736719c6f25e7479cd24c77be3d9361cddc27  Mako-1.1.3.tar.gz
+ # Locally computed sha256 checksums
+ sha256  47cd0d41b1092f9161cfb629ed15e5cea185144710ff4633a4281ef088ff5de7  LICENSE
+diff --git a/package/python-mako/python-mako.mk b/package/python-mako/python-mako.mk
+index ce34321cb1..d5d49f252d 100644
+--- a/package/python-mako/python-mako.mk
++++ b/package/python-mako/python-mako.mk
+@@ -6,9 +6,9 @@
+ 
+ # Please keep in sync with
+ # package/python3-mako/python3-mako.mk
+-PYTHON_MAKO_VERSION = 1.1.2
++PYTHON_MAKO_VERSION = 1.1.3
+ PYTHON_MAKO_SOURCE = Mako-$(PYTHON_MAKO_VERSION).tar.gz
+-PYTHON_MAKO_SITE = https://files.pythonhosted.org/packages/42/64/fc7c506d14d8b6ed363e7798ffec2dfe4ba21e14dda4cfab99f4430cba3a
++PYTHON_MAKO_SITE = https://files.pythonhosted.org/packages/72/89/402d2b4589e120ca76a6aed8fee906a0f5ae204b50e455edd36eda6e778d
+ PYTHON_MAKO_SETUP_TYPE = setuptools
+ PYTHON_MAKO_LICENSE = MIT
+ PYTHON_MAKO_LICENSE_FILES = LICENSE
+diff --git a/package/python3-mako/python3-mako.mk b/package/python3-mako/python3-mako.mk
+index 0296c68fc6..fd6b2ed49c 100644
+--- a/package/python3-mako/python3-mako.mk
++++ b/package/python3-mako/python3-mako.mk
+@@ -6,7 +6,7 @@
+ 
+ # Please keep in sync with
+ # package/python-mako/python-mako.mk
+-PYTHON3_MAKO_VERSION = 1.1.2
++PYTHON3_MAKO_VERSION = 1.1.3
+ PYTHON3_MAKO_SOURCE = Mako-$(PYTHON3_MAKO_VERSION).tar.gz
+ PYTHON3_MAKO_SITE = https://files.pythonhosted.org/packages/42/64/fc7c506d14d8b6ed363e7798ffec2dfe4ba21e14dda4cfab99f4430cba3a
+ PYTHON3_MAKO_SETUP_TYPE = setuptools
