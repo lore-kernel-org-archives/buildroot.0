@@ -1,72 +1,53 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 16 Jan 2021 18:25:23 +0100
+Date: Sat, 16 Jan 2021 18:27:22 +0100
 Subject: [Buildroot] [PATCH] package/mesa3d: select EXPAT for freedreno
-In-Reply-To: <20210116160948.1364227-1-festevam@gmail.com>
+In-Reply-To: <20210116175544.27d53874@gmx.net>
 References: <20210116160948.1364227-1-festevam@gmail.com>
-Message-ID: <20210116172523.GO2375@scaer>
+ <20210116175544.27d53874@gmx.net>
+Message-ID: <20210116172722.GP2375@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabio, All,
+Peter, All,
 
-On 2021-01-16 13:09 -0300, Fabio Estevam spake thusly:
-> Select expat when building the freedreno driver to fix the
-> following error:
+On 2021-01-16 17:55 +0100, Peter Seiderer spake thusly:
+> On Sat, 16 Jan 2021 13:09:48 -0300, Fabio Estevam <festevam@gmail.com> wrote:
+> > Select expat when building the freedreno driver to fix the
+> > following error:
+> >
+> > Run-time dependency expat found: NO (tried pkgconfig and cmake)
+> > Looking for a fallback subproject for the dependency expat
+> > Downloading expat source from https://github.com/libexpat/libexpat/releases/download/R_2_2_5/expat-2.2.5.tar.bz2
+> > <urlopen error unknown url type: https>
+> > A fallback URL could be specified using source_fallback_url key in the wrap file
+> >
+> > output/build/mesa3d-20.3.2/meson.build:1366:2: ERROR: could not get https://github.com/libexpat/libexpat/releases/download/R_2_2_5/expat-2.2.5.tar.bz2 is the internet available?
+> >
 > 
-> Run-time dependency expat found: NO (tried pkgconfig and cmake)
-> Looking for a fallback subproject for the dependency expat
-> Downloading expat source from https://github.com/libexpat/libexpat/releases/download/R_2_2_5/expat-2.2.5.tar.bz2
-> <urlopen error unknown url type: https>
-> A fallback URL could be specified using source_fallback_url key in the wrap file
+> Not 100 percent sure (and did not yet test it), but I believe this not the
+> right fix...., suspect the need for expat was introduced in the mesa meson
+> build with mesa commit 81a0f1eca24b8605b9f2506122ff90db7129c39e ([1]):
+
+Yes, we've been discussing this on IRC with Titouan...
+
+> Leading to an mandatory expat dependency in case 'not android'..., just not
+> matching the commit description..., the right required line would be:
 > 
-> output/build/mesa3d-20.3.2/meson.build:1366:2: ERROR: could not get https://github.com/libexpat/libexpat/releases/download/R_2_2_5/expat-2.2.5.tar.bz2 is the internet available?
+> 	required: with_any_broadcom or with_any_intel)
 
-Right when you sent this patch, we were discussing the exact same error
-with Titouan, but about the virgl driver.
+This is the patch I am currently testing and was about to submit
+upstream in a few minutes... Nice that someone else thinks it would be a
+could fix. ;-)
 
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+> Not your fault, but maybe worth to check it out (or ask upstream)?
 
-Applied to master, but with the following changes:
-
-  - make it a generic fix, not tied to freedreno, reported by Fabio
-  - rewrite commit log to explain the root cause
-  - also reported about virgl, by Titouan
-
-Please look at the new commit log I pushed for further details, and how
-I eventually tweaked the file.
-
-I'll try to push a fix upstream, so maybe next time we bump, we can
-further relax the dependency by reverting the patch I applied.
+I'm taking care of that.
 
 Regards,
 Yann E. MORIN.
-
-> ---
->  package/mesa3d/Config.in | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-> index 45eb62b701a7..773fbfde220e 100644
-> --- a/package/mesa3d/Config.in
-> +++ b/package/mesa3d/Config.in
-> @@ -119,6 +119,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_FREEDRENO
->  	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
->  	select BR2_PACKAGE_LIBDRM_FREEDRENO
->  	select BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
-> +	select BR2_PACKAGE_EXPAT
->  	help
->  	  Mesa driver for Freedreno GPUs.
->  
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
