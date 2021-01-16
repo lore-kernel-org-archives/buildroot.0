@@ -1,28 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 16 Jan 2021 22:00:53 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libcap-ng: set
- LIBCAP_NG_CPE_ID_VALID
-In-Reply-To: <20210115080755.2078014-1-fontaine.fabrice@gmail.com>
-References: <20210115080755.2078014-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210116220053.55545dea@windsurf.home>
+Date: Sat, 16 Jan 2021 22:01:35 +0100
+Subject: [Buildroot] [PATCH]
+ toolchain/toolchain-external/toolchain-external-bootlin: update PowerPC 440
+ FP toolchain
+In-Reply-To: <20210114224000.456977-1-thomas.petazzoni@bootlin.com>
+References: <20210114224000.456977-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20210116220135.034aeb68@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 15 Jan 2021 09:07:55 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Thu, 14 Jan 2021 23:39:59 +0100
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-> cpe:2.3:a:libcap-ng_project:libcap-ng is a valid CPE identifier for this
-> package:
+> The Bootlin PowerPC 440 FP toolchain was rebuilt in version 2020.08-2,
+> which is rebased on Buildroot 2020.08.3 as that includes a fix for
+> SecurePLT support.
 > 
->   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alibcap-ng_project%3Alibcap-ng
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > ---
->  package/libcap-ng/libcap-ng.mk | 1 +
->  1 file changed, 1 insertion(+)
+>  .../Config.in.options                         | 16 ++++++-------
+>  .../toolchain-external-bootlin.hash           | 24 +++++++++----------
+>  .../toolchain-external-bootlin.mk             | 12 +++++-----
+>  3 files changed, 26 insertions(+), 26 deletions(-)
 
 Applied to master, thanks.
 
