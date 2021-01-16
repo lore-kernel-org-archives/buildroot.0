@@ -1,36 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 16 Jan 2021 21:56:37 +0100
-Subject: [Buildroot] [git commit] package/domoticz: add
- DOMOTICZ_CPE_ID_VENDOR
-Message-ID: <20210116203845.92FF587A38@busybox.osuosl.org>
+Date: Sat, 16 Jan 2021 21:56:48 +0100
+Subject: [Buildroot] [git commit] package/lcms2: add CPE variables
+Message-ID: <20210116203845.D38B287A38@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=026a1b02d0708a2274b4aa446ce813c0c07c14fe
+commit: https://git.buildroot.net/buildroot/commit/?id=58e319927ffeb1b68d67ce8c1a5d84bebc5c4157
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:domoticz:domoticz is a valid CPE identifier for this package:
+cpe:2.3:a:littlecms:little_cms is a valid CPE identifier for this
+package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Adomoticz%3Adomoticz
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alittlecms%3Alittle_cms
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/domoticz/domoticz.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/lcms2/lcms2.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/domoticz/domoticz.mk b/package/domoticz/domoticz.mk
-index 0ceaab87b4..0cd3520a71 100644
---- a/package/domoticz/domoticz.mk
-+++ b/package/domoticz/domoticz.mk
-@@ -8,6 +8,7 @@ DOMOTICZ_VERSION = 2020.1
- DOMOTICZ_SITE = $(call github,domoticz,domoticz,$(DOMOTICZ_VERSION))
- DOMOTICZ_LICENSE = GPL-3.0
- DOMOTICZ_LICENSE_FILES = License.txt
-+DOMOTICZ_CPE_ID_VENDOR = domoticz
- DOMOTICZ_DEPENDENCIES = \
- 	boost \
- 	host-pkgconf \
+diff --git a/package/lcms2/lcms2.mk b/package/lcms2/lcms2.mk
+index d42c8c9a1f..34c2795e93 100644
+--- a/package/lcms2/lcms2.mk
++++ b/package/lcms2/lcms2.mk
+@@ -8,6 +8,8 @@ LCMS2_VERSION = 2.11
+ LCMS2_SITE = http://downloads.sourceforge.net/project/lcms/lcms/$(LCMS2_VERSION)
+ LCMS2_LICENSE = MIT
+ LCMS2_LICENSE_FILES = COPYING
++LCMS2_CPE_ID_VENDOR = littlecms
++LCMS2_CPE_ID_NAME = little_cms
+ LCMS2_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_JPEG),y)
