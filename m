@@ -1,61 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 16 Jan 2021 22:42:14 +0100
-Subject: [Buildroot] [PATCH 2/2] board/sifive: Update
- hifive_unleashed_defconfig and genimage.cfg
-In-Reply-To: <1610355672-3008-3-git-send-email-bmeng.cn@gmail.com>
-References: <1610355672-3008-1-git-send-email-bmeng.cn@gmail.com>
- <1610355672-3008-3-git-send-email-bmeng.cn@gmail.com>
-Message-ID: <20210116224214.6f1ce3af@windsurf.home>
+Date: Sat, 16 Jan 2021 22:45:34 +0100
+Subject: [Buildroot] [git commit] fs/cpio: add zstd as compression option
+Message-ID: <20210116213246.46AE8874FA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Bin,
+commit: https://git.buildroot.net/buildroot/commit/?id=b717952074d213f5bcfdb87c905d92afb0949d11
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 11 Jan 2021 17:01:12 +0800
-Bin Meng <bmeng.cn@gmail.com> wrote:
+U-Boot mkimage zstd is available since v2020.10:
+https://gitlab.denx.de/u-boot/u-boot/-/commit/26073f9ed3ab0aaf3c2a2b433fecb30a95a067d6
 
-> diff --git a/board/sifive/hifive-unleashed/genimage_spi-nor.cfg b/board/sifive/hifive-unleashed/genimage_spi-nor.cfg
-> new file mode 100644
-> index 0000000..7f90997
-> --- /dev/null
-> +++ b/board/sifive/hifive-unleashed/genimage_spi-nor.cfg
-> @@ -0,0 +1,25 @@
-> +image spi-nor.img {
-> +	size = 32M
-> +
-> +	hdimage {
-> +		gpt = true
-> +	}
-> +
-> +	partition u-boot-spl {
-> +		image = "u-boot-spl.bin"
-> +		offset = 20K
-> +		partition-type-uuid = 5B193300-FC78-40CD-8002-E86C45580B47
-> +	}
-> +
-> +	partition u-boot {
-> +		image = "u-boot.itb"
-> +		offset = 1044K
-> +		partition-type-uuid = 2E54B353-1271-4842-806F-E436D6AF6985
-> +	}
-> +
-> +	partition rootfs {
-> +		image = "rootfs.ext4"
-> +		partition-type-uuid = 0FC63DAF-8483-4772-8E79-3D69D8477DE4
-> +		bootable = true
-> +	}
-> +}
+Signed-off-by: Jos?? Luis Salvador Rufo <salvador.joseluis@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ fs/common.mk      | 5 +++++
+ fs/cpio/Config.in | 5 +++++
+ 2 files changed, 10 insertions(+)
 
-This looks strange. You really use a GPT partition table on SPI flash,
-and use an ext4 filesystem on a SPI flash ?
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/fs/common.mk b/fs/common.mk
+index 84e13d1b7e..afab7b50fb 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -154,6 +154,11 @@ ifeq ($(BR2_REPRODUCIBLE),)
+ ROOTFS_$(2)_COMPRESS_CMD += -T $(PARALLEL_JOBS)
+ endif
+ endif
++ifeq ($(BR2_TARGET_ROOTFS_$(2)_ZSTD),y)
++ROOTFS_$(2)_DEPENDENCIES += host-zstd
++ROOTFS_$(2)_COMPRESS_EXT = .zst
++ROOTFS_$(2)_COMPRESS_CMD = zstd -19 -z -f -T$(PARALLEL_JOBS)
++endif
+ 
+ $$(BINARIES_DIR)/$$(ROOTFS_$(2)_FINAL_IMAGE_NAME): ROOTFS=$(2)
+ $$(BINARIES_DIR)/$$(ROOTFS_$(2)_FINAL_IMAGE_NAME): FAKEROOT_SCRIPT=$$(ROOTFS_$(2)_DIR)/fakeroot
+diff --git a/fs/cpio/Config.in b/fs/cpio/Config.in
+index 83a7fa5824..c1151a2881 100644
+--- a/fs/cpio/Config.in
++++ b/fs/cpio/Config.in
+@@ -51,6 +51,11 @@ config BR2_TARGET_ROOTFS_CPIO_XZ
+ 	help
+ 	  Do compress the cpio filesystem with xz.
+ 
++config BR2_TARGET_ROOTFS_CPIO_ZSTD
++	bool "zstd"
++	help
++	  Do compress the cpio filesystem with zstd.
++
+ endchoice
+ 
+ config BR2_TARGET_ROOTFS_CPIO_UIMAGE
