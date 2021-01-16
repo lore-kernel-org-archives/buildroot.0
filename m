@@ -1,68 +1,66 @@
-From: Stephane Viau (OSS) <stephane.viau@oss.nxp.com>
-Date: Sat, 16 Jan 2021 21:31:18 +0000
-Subject: [Buildroot] [PATCH v2 1/8] package/freescale-imx/firmware-imx:
- bump version to 8.10
-In-Reply-To: <0f9e83af-c4fb-50f2-feeb-9768a97aa94d@gmail.com>
-References: <20210105152420.26379-1-stephane.viau@oss.nxp.com>
- <20210105152420.26379-2-stephane.viau@oss.nxp.com>,
- <0f9e83af-c4fb-50f2-feeb-9768a97aa94d@gmail.com>
-Message-ID: <PA4PR04MB7920F971C3C02747462F012DA7A60@PA4PR04MB7920.eurprd04.prod.outlook.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 16 Jan 2021 22:32:52 +0100
+Subject: [Buildroot] [git commit] package/open62541: fix build without
+ threads
+Message-ID: <20210116211509.7C7BA83566@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=2d9eab98550749e24cc425dc752d5145e5ae5998
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
->Hi Stephane,
+Fixes:
+ - http://autobuild.buildroot.org/results/87ec3c987c991f790757276316d6caf81e635fa2
 
-Hi Romain, 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...-CMakeLists.txt-fix-build-without-threads.patch | 37 ++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
->Le 05/01/2021 ? 16:24, Stephane Viau a ?crit :
->> - Same version as NXP release 5.4.70-2.3.0
->> - EULA/COPYING: update to LA_OPT_NXP_Software_License v17
->> 
->> Signed-off-by: Stephane Viau <stephane.viau@oss.nxp.com>
->> Reviewed-by: Gary Bisson <gary.bisson@boundarydevices.com>
->
->Still not related to this version bump but the sdma firmwares for imx[6,7,8] are
->provided by two packages: firmware-imx and linux-firmware
->
->$ sha256sum ./firmware-imx-8.10/firmware/sdma/sdma-imx6q.bin
->7790c161b7e013a9dbcbffb17cc5d4cb63d952949a505647e4679f02d04c4784
->./firmware-imx-8.10/firmware/sdma/sdma-imx6q.bin
->
->$ sha256sum  ./linux-firmware-20201022/imx/sdma/sdma-imx6q.bin
->7790c161b7e013a9dbcbffb17cc5d4cb63d952949a505647e4679f02d04c4784
->./linux-firmware-20201022/imx/sdma/sdma-imx6q.bin
->
->We have two options: BR2_PACKAGE_FIRMWARE_IMX_SDMA_FW_NAME and
->BR2_PACKAGE_LINUX_FIRMWARE_IMX_SDMA
-
-I don't know the whole history behind the presence of both options but
-what I know is that some effort has been put in over the last 6 months or so to
-clean up the package/freescale-imx/firmware-imx, including the logic behind "when
-to fetch the sdma firmware?" (BR2_PACKAGE_FIRMWARE_IMX_NEEDS_SDMA_FW).
-
->
->The only difference is that firmware-imx provide firmware for old imx cpus.
->
->$ ls linux-firmware-20201022/imx/sdma/sdma-imx
->sdma-imx6q.bin  sdma-imx7d.bin
->
->$ ls firmware-imx-8.10/firmware/sdma/sdma-imx
->sdma-imx25-to1.bin  sdma-imx31-to1.bin  sdma-imx31-to2.bin  sdma-imx35-to1.bin
->sdma-imx35-to2.bin  sdma-imx51-to3.bin  sdma-imx53-to1.bin  sdma-imx6q.bin
->sdma-imx7d.bin
->
->Maybe we can keep one of firmware provider.
-
-If a choice must be made, I'd pick the former option rather than the latter...
-but that's just my opinion.
-
-BR,
-Stephane.
-
->
->Best regards,
->Romain
+diff --git a/package/open62541/0002-arch-posix-CMakeLists.txt-fix-build-without-threads.patch b/package/open62541/0002-arch-posix-CMakeLists.txt-fix-build-without-threads.patch
+new file mode 100644
+index 0000000000..94ee76ad92
+--- /dev/null
++++ b/package/open62541/0002-arch-posix-CMakeLists.txt-fix-build-without-threads.patch
+@@ -0,0 +1,37 @@
++From a312e82124fb8c9f139d5a40fa5a28123bb77a33 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 10 Jan 2021 14:25:56 +0100
++Subject: [PATCH] arch/posix/CMakeLists.txt: fix build without threads
++
++Fix the following build failure without threads:
++
++[100%] Linking C shared library bin/libopen62541.so
++/home/buildroot/autobuild/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabihf/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabihf/bin/ld: cannot find -lpthread
++collect2: error: ld returned 1 exit status
++CMakeFiles/open62541.dir/build.make:192: recipe for target 'bin/libopen62541.so.0.0.0' failed
++make[3]: *** [bin/libopen62541.so.0.0.0] Error 1
++
++Fixes:
++ - http://autobuild.buildroot.org/results/87ec3c987c991f790757276316d6caf81e635fa2
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ arch/posix/CMakeLists.txt | 2 --
++ 1 file changed, 2 deletions(-)
++
++diff --git a/arch/posix/CMakeLists.txt b/arch/posix/CMakeLists.txt
++index bb24757c..a53c9f2c 100644
++--- a/arch/posix/CMakeLists.txt
+++++ b/arch/posix/CMakeLists.txt
++@@ -20,8 +20,6 @@ if (${_index} GREATER -1 OR "${UA_ARCHITECTURE}" STREQUAL "posix")
++           ua_architecture_append_to_library(netdb ndblib socket)
++         else()
++           ua_architecture_append_to_library(m)
++-          #TODO - Error on first make run if pthread is included conditional?
++-          ua_architecture_append_to_library(pthread)
++           if(UA_ENABLE_MULTITHREADING OR UA_BUILD_UNIT_TESTS)
++             ua_architecture_append_to_library(pthread)
++           endif()
++-- 
++2.29.2
++
