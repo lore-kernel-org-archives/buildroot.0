@@ -1,46 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 16 Jan 2021 21:43:46 +0100
-Subject: [Buildroot] [git commit] package/gstreamer1-editing-services: bump
- version to 1.18.3
-Message-ID: <20210116203504.7FDF886C18@busybox.osuosl.org>
+Date: Sat, 16 Jan 2021 21:43:44 +0100
+Subject: [Buildroot] [git commit] package/gst1-vaapi: bump version to 1.18.3
+Message-ID: <20210116203504.653EA86C18@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f75f83f2b34a54cc635da15f7b7afe480a5a667b
+commit: https://git.buildroot.net/buildroot/commit/?id=fbde6724b821b15951a905e5a8bf52ee23ea30d3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../gstreamer1-editing-services/gstreamer1-editing-services.hash      | 4 ++--
- .../gstreamer1-editing-services/gstreamer1-editing-services.mk        | 2 +-
+ package/gstreamer1/gst1-vaapi/gst1-vaapi.hash | 4 ++--
+ package/gstreamer1/gst1-vaapi/gst1-vaapi.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-index e7ee3a4473..1959a73bd0 100644
---- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-+++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-@@ -1,5 +1,5 @@
--# From https://gstreamer.freedesktop.org/src/gstreamer-editing-services/gst-editing-services-1.18.2.tar.xz.sha256sum
--sha256  25ac7cd252a9bcb9ae179eca0b52fc9cf5384c1df16adab4d87bd84b3f9a625f  gst-editing-services-1.18.2.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gstreamer-editing-services/gst-editing-services-1.18.3.tar.xz.sha256sum
-+sha256  8ae139b13b1646a20ba63b0b90877d35813e24cd87642d325e751fc7cb175e20  gst-editing-services-1.18.3.tar.xz
- 
- # Hashes for license files:
- sha256  f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a  COPYING
-diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
-index 6fc5b71358..456467a92d 100644
---- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
-+++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
+diff --git a/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash b/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
+index a6607ac405..ae4c194130 100644
+--- a/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
++++ b/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
+@@ -1,3 +1,3 @@
+-# From https://gstreamer.freedesktop.org/src/gstreamer-vaapi/gstreamer-vaapi-1.18.2.tar.xz.sha256sum
+-sha256  8c7b2c74fda095d83dea67accde6a68ba9f608d97ed969fdcf278930f9b1c7c0  gstreamer-vaapi-1.18.2.tar.xz
++# From https://gstreamer.freedesktop.org/src/gstreamer-vaapi/gstreamer-vaapi-1.18.3.tar.xz.sha256sum
++sha256  ae9877f15757a661d4dfe6a09755a2faa959ab60752f14ca26b7ff10765e1f12  gstreamer-vaapi-1.18.3.tar.xz
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk b/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
+index 41ab13a0c4..84cfb88583 100644
+--- a/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
++++ b/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GSTREAMER1_EDITING_SERVICES_VERSION = 1.18.2
-+GSTREAMER1_EDITING_SERVICES_VERSION = 1.18.3
- GSTREAMER1_EDITING_SERVICES_SOURCE = gst-editing-services-$(GSTREAMER1_EDITING_SERVICES_VERSION).tar.xz
- GSTREAMER1_EDITING_SERVICES_SITE = https://gstreamer.freedesktop.org/src/gstreamer-editing-services
- GSTREAMER1_EDITING_SERVICES_LICENSE = LGPL-2.0+
+-GST1_VAAPI_VERSION = 1.18.2
++GST1_VAAPI_VERSION = 1.18.3
+ GST1_VAAPI_SITE = https://gstreamer.freedesktop.org/src/gstreamer-vaapi
+ GST1_VAAPI_SOURCE = gstreamer-vaapi-$(GST1_VAAPI_VERSION).tar.xz
+ GST1_VAAPI_LICENSE = LGPL-2.1+
