@@ -1,31 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 16 Jan 2021 22:36:55 +0100
-Subject: [Buildroot] [PATCH] package/python-boto3: bump to version
- 1.16.50
-In-Reply-To: <20210107180007.18864-1-raphael.melotte@essensium.com>
-References: <20210107180007.18864-1-raphael.melotte@essensium.com>
-Message-ID: <20210116223655.5f52b4c4@windsurf.home>
+Date: Sat, 16 Jan 2021 22:38:14 +0100
+Subject: [Buildroot] [git commit] package/kodi-pvr-zattoo: fix json
+ dependency
+Message-ID: <20210116211917.E75CD86401@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu,  7 Jan 2021 19:00:07 +0100
-Rapha?l M?lotte <raphael.melotte@essensium.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=e1ecd5b582b1266da6a4da296866cf603407694c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> While at it, use two spaces for all the hashes.
-> 
-> Signed-off-by: Rapha?l M?lotte <raphael.melotte@essensium.com>
-> ---
->  package/python-boto3/python-boto3.hash | 6 +++---
->  package/python-boto3/python-boto3.mk   | 4 ++--
->  2 files changed, 5 insertions(+), 5 deletions(-)
+Package depends on rapidjson, not rapidxml:
+https://github.com/rbuehlma/pvr.zattoo/blob/Leia/CMakeLists.txt#L10
 
-Applied to master, thanks.
+The bug was previously not noticed because kodi depends on rapidjson
+https://github.com/xbmc/xbmc/blob/Leia/CMakeLists.txt#L133
+and kodi-platform depends on kodi
+https://github.com/xbmc/kodi-platform/blob/master/CMakeLists.txt#L8
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/kodi-pvr-zattoo/Config.in          | 2 +-
+ package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/kodi-pvr-zattoo/Config.in b/package/kodi-pvr-zattoo/Config.in
+index ab7ff70034..5dfadcadd1 100644
+--- a/package/kodi-pvr-zattoo/Config.in
++++ b/package/kodi-pvr-zattoo/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_KODI_PVR_ZATTOO
+ 	bool "kodi-pvr-zattoo"
+ 	select BR2_PACKAGE_KODI_PLATFORM
+ 	select BR2_PACKAGE_LIBPLATFORM
+-	select BR2_PACKAGE_RAPIDXML
++	select BR2_PACKAGE_RAPIDJSON
+ 	select BR2_PACKAGE_TINYXML2
+ 	help
+ 	  Kodi PVR-Addon for Zattoo
+diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
+index 7afe92e87c..78fc01f195 100644
+--- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
++++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
+@@ -8,6 +8,6 @@ KODI_PVR_ZATTOO_VERSION = 18.1.21-Leia
+ KODI_PVR_ZATTOO_SITE = $(call github,rbuehlma,pvr.zattoo,$(KODI_PVR_ZATTOO_VERSION))
+ KODI_PVR_ZATTOO_LICENSE = GPL-2.0+
+ KODI_PVR_ZATTOO_LICENSE_FILES = debian/copyright
+-KODI_PVR_ZATTOO_DEPENDENCIES = kodi-platform libplatform rapidxml tinyxml2
++KODI_PVR_ZATTOO_DEPENDENCIES = kodi-platform libplatform rapidjson tinyxml2
+ 
+ $(eval $(cmake-package))
