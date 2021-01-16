@@ -1,43 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 16 Jan 2021 21:43:35 +0100
-Subject: [Buildroot] [git commit] package/gstreamer1: bump version to 1.18.3
-Message-ID: <20210116203504.0C92F87892@busybox.osuosl.org>
+Date: Sat, 16 Jan 2021 21:43:46 +0100
+Subject: [Buildroot] [git commit] package/gstreamer1-editing-services: bump
+ version to 1.18.3
+Message-ID: <20210116203504.7FDF886C18@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1c5ff187e174a9c217a8b5066b1ca55a69f4a39e
+commit: https://git.buildroot.net/buildroot/commit/?id=f75f83f2b34a54cc635da15f7b7afe480a5a667b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gstreamer1/gstreamer1/gstreamer1.hash | 4 ++--
- package/gstreamer1/gstreamer1/gstreamer1.mk   | 2 +-
+ .../gstreamer1-editing-services/gstreamer1-editing-services.hash      | 4 ++--
+ .../gstreamer1-editing-services/gstreamer1-editing-services.mk        | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gstreamer1/gstreamer1.hash b/package/gstreamer1/gstreamer1/gstreamer1.hash
-index ca255f7f6f..18fb343ff0 100644
---- a/package/gstreamer1/gstreamer1/gstreamer1.hash
-+++ b/package/gstreamer1/gstreamer1/gstreamer1.hash
-@@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.18.2.tar.xz.sha256sum
--sha256  66cdeb4f970c2e55932a2f427177d438fe2c55c0b6d29e80fda80263f2ae5446  gstreamer-1.18.2.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.18.3.tar.xz.sha256sum
-+sha256  0c2e09e18f2df69a99b5cb3bd53c597b3cc2e35cf6c98043bb86a66f3d312100  gstreamer-1.18.3.tar.xz
+diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
+index e7ee3a4473..1959a73bd0 100644
+--- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
++++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
+@@ -1,5 +1,5 @@
+-# From https://gstreamer.freedesktop.org/src/gstreamer-editing-services/gst-editing-services-1.18.2.tar.xz.sha256sum
+-sha256  25ac7cd252a9bcb9ae179eca0b52fc9cf5384c1df16adab4d87bd84b3f9a625f  gst-editing-services-1.18.2.tar.xz
++# From https://gstreamer.freedesktop.org/src/gstreamer-editing-services/gst-editing-services-1.18.3.tar.xz.sha256sum
++sha256  8ae139b13b1646a20ba63b0b90877d35813e24cd87642d325e751fc7cb175e20  gst-editing-services-1.18.3.tar.xz
+ 
+ # Hashes for license files:
  sha256  f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a  COPYING
-diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
-index a4df1862db..a63a17676f 100644
---- a/package/gstreamer1/gstreamer1/gstreamer1.mk
-+++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
+diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
+index 6fc5b71358..456467a92d 100644
+--- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
++++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GSTREAMER1_VERSION = 1.18.2
-+GSTREAMER1_VERSION = 1.18.3
- GSTREAMER1_SOURCE = gstreamer-$(GSTREAMER1_VERSION).tar.xz
- GSTREAMER1_SITE = https://gstreamer.freedesktop.org/src/gstreamer
- GSTREAMER1_INSTALL_STAGING = YES
+-GSTREAMER1_EDITING_SERVICES_VERSION = 1.18.2
++GSTREAMER1_EDITING_SERVICES_VERSION = 1.18.3
+ GSTREAMER1_EDITING_SERVICES_SOURCE = gst-editing-services-$(GSTREAMER1_EDITING_SERVICES_VERSION).tar.xz
+ GSTREAMER1_EDITING_SERVICES_SITE = https://gstreamer.freedesktop.org/src/gstreamer-editing-services
+ GSTREAMER1_EDITING_SERVICES_LICENSE = LGPL-2.0+
