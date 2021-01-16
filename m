@@ -1,29 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 16 Jan 2021 21:54:56 +0100
-Subject: [Buildroot] [PATCH v1 01/12] package/gstreamer1: bump version
- to 1.18.3
-In-Reply-To: <20210115225407.2350-1-ps.report@gmx.net>
-References: <20210115225407.2350-1-ps.report@gmx.net>
-Message-ID: <20210116215456.66d4a456@windsurf.home>
+Date: Sat, 16 Jan 2021 21:55:33 +0100
+Subject: [Buildroot] [git commit] package/wolfssl: add WOLFSSL_CPE_ID_VENDOR
+Message-ID: <20210116203845.80AB887A38@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 15 Jan 2021 23:53:56 +0100
-Peter Seiderer <ps.report@gmx.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=964824ec8164f0235e1e010b590c971e5e5ac50b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  package/gstreamer1/gstreamer1/gstreamer1.hash | 4 ++--
->  package/gstreamer1/gstreamer1/gstreamer1.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+cpe:2.3:a:wolfssl:wolfssl is a valid CPE identifier for this package:
 
-Series applied. Thanks!
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Awolfssl%3Awolfssl
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/wolfssl/wolfssl.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
+index 2023401147..d66a1c2800 100644
+--- a/package/wolfssl/wolfssl.mk
++++ b/package/wolfssl/wolfssl.mk
+@@ -10,6 +10,7 @@ WOLFSSL_INSTALL_STAGING = YES
+ 
+ WOLFSSL_LICENSE = GPL-2.0+
+ WOLFSSL_LICENSE_FILES = COPYING LICENSING
++WOLFSSL_CPE_ID_VENDOR = wolfssl
+ 
+ WOLFSSL_DEPENDENCIES = host-pkgconf
+ 
