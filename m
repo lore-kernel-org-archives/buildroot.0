@@ -1,45 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 16 Jan 2021 22:18:16 +0100
-Subject: [Buildroot] [git commit] package/xterm: bump version to 363
-Message-ID: <20210116210035.47B2F82CFA@busybox.osuosl.org>
+Date: Sat, 16 Jan 2021 22:19:41 +0100
+Subject: [Buildroot] [git commit] package/xorriso: bump version to 1.5.2
+Message-ID: <20210116210044.C8CE6864D7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=145e377a0af8881e93ec01929352e73b6a4459ae
+commit: https://git.buildroot.net/buildroot/commit/?id=ce94a8b7ced26e5839cbc0558df1df0d161da3ce
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog: https://invisible-island.net/xterm/xterm.log.html
+Release notes:
+https://lists.gnu.org/archive/html/bug-xorriso/2019-10/msg00005.html
+
+Reformatted hashes.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/xterm/xterm.hash | 2 +-
- package/xterm/xterm.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/xorriso/xorriso.hash | 6 +++---
+ package/xorriso/xorriso.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/xterm/xterm.hash b/package/xterm/xterm.hash
-index 7f2ff2c301..8e2d2c5309 100644
---- a/package/xterm/xterm.hash
-+++ b/package/xterm/xterm.hash
+diff --git a/package/xorriso/xorriso.hash b/package/xorriso/xorriso.hash
+index b594b91438..faaeab5fa0 100644
+--- a/package/xorriso/xorriso.hash
++++ b/package/xorriso/xorriso.hash
 @@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256  7cdb106962910a99700b3c45fa1a1493e46e97a5aa3785093a786e07196fbf7b  xterm-358.tgz
-+sha256  d81a3639e26552b6765bdcf28be1ecdb8acabf907955708e830ad6397ea10b48  xterm-363.tgz
- # Locally calculated
- sha256  c655a5fa3dec936543e02f863b8c1343d08522a2821cb484df6c5f62afa7354d  COPYING
-diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
-index 5e3e64fff4..0984ef4dc8 100644
---- a/package/xterm/xterm.mk
-+++ b/package/xterm/xterm.mk
+ # Locally computed
+-sha256 a93fa7ae5bb1902198cddfec25201388156932f36f2f5da829bf4fcae9a6062b  xorriso-1.5.0.tar.gz
+-sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+-sha256 72e99e72cd68f226415e5d898f3b38e24ae7991ed038ed72d789fff5b060f028  COPYRIGHT
++sha256  3b69f5c93ae7c40c5bbe4a847fa3963f5efc9c565551622f77121c5792fc17e7  xorriso-1.5.2.tar.gz
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
++sha256  72e99e72cd68f226415e5d898f3b38e24ae7991ed038ed72d789fff5b060f028  COPYRIGHT
+diff --git a/package/xorriso/xorriso.mk b/package/xorriso/xorriso.mk
+index 472623ea5e..7b38f268bb 100644
+--- a/package/xorriso/xorriso.mk
++++ b/package/xorriso/xorriso.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XTERM_VERSION = 358
-+XTERM_VERSION = 363
- XTERM_SOURCE = xterm-$(XTERM_VERSION).tgz
- XTERM_SITE = http://invisible-mirror.net/archives/xterm
- XTERM_DEPENDENCIES = ncurses xlib_libXaw host-pkgconf
+-XORRISO_VERSION = 1.5.0
++XORRISO_VERSION = 1.5.2
+ XORRISO_SITE = $(BR2_GNU_MIRROR)/xorriso
+ XORRISO_LICENSE = GPL-3.0+
+ XORRISO_LICENSE_FILES = COPYING COPYRIGHT
