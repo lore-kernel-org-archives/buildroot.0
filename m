@@ -1,44 +1,136 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 16 Jan 2021 23:06:41 +0100
-Subject: [Buildroot] [git commit] package/imx-mkimage: bump to version
- rel_imx_5.4.70_2.3.0
-Message-ID: <20210116214849.527E7874EC@busybox.osuosl.org>
+Date: Sat, 16 Jan 2021 23:07:03 +0100
+Subject: [Buildroot] [git commit] configs/freescale_imx8m*: bump BSP
+ components to 5.4.70_2.3.0
+Message-ID: <20210116214849.85C5582817@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=75cf8ef19dbc8ff085715f52c9dda1f3a4c72a7c
+commit: https://git.buildroot.net/buildroot/commit/?id=8c03cd51b681ffc69cf95f1a9643c98e654fd3e1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Bump ATF, U-Boot and Linux kernel to the NXP BSP 5.4.70_2.3.0 versions.
+
+Note for configs/freescale_imx8mmevk:
+
+    On 5.4.70_2.3.0 the default "i.MX8MM LPDDR4 EVK RevB board" support is
+    removed and replaced by "i.MX8MM LPDDR4 EVK with QCA WIFI revB board".
+
+    In case an older revB board is used, then the following step in U-Boot is
+    needed:
+
+    => setenv fdt_file imx8mm-evk-revb-qca-wifi.dtb
+    => saveenv
+    => reset
+
+Build- and run-tested on:
+    o i.MX8MN DDR4 EVK
+    o i.MX8MQ EVK
+Build-tested only for other configs.
+
 Signed-off-by: Stephane Viau <stephane.viau@oss.nxp.com>
-Reviewed-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Tested-by: Stephane Viau <stephane.viau@oss.nxp.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/imx-mkimage/imx-mkimage.hash | 2 +-
- package/imx-mkimage/imx-mkimage.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ configs/freescale_imx8mmevk_defconfig | 8 ++++----
+ configs/freescale_imx8mnevk_defconfig | 6 +++---
+ configs/freescale_imx8mqevk_defconfig | 6 +++---
+ 3 files changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/package/imx-mkimage/imx-mkimage.hash b/package/imx-mkimage/imx-mkimage.hash
-index 9ef1a118e2..88fac9bb39 100644
---- a/package/imx-mkimage/imx-mkimage.hash
-+++ b/package/imx-mkimage/imx-mkimage.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  482d10bf59dd9ae87ae5e29305e338a35f8fa3bc4ec40c61ada232f682f2358f  imx-mkimage-rel_imx_5.4.47_2.2.0-br1.tar.gz
-+sha256  2746136aa5ed79ba24cfbe877d29022a2a33f6614b1bba728e95d1b2f0448196  imx-mkimage-rel_imx_5.4.70_2.3.0-br1.tar.gz
- sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
-diff --git a/package/imx-mkimage/imx-mkimage.mk b/package/imx-mkimage/imx-mkimage.mk
-index 51eb79e5f5..626e3d873f 100644
---- a/package/imx-mkimage/imx-mkimage.mk
-+++ b/package/imx-mkimage/imx-mkimage.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IMX_MKIMAGE_VERSION = rel_imx_5.4.47_2.2.0
-+IMX_MKIMAGE_VERSION = rel_imx_5.4.70_2.3.0
- IMX_MKIMAGE_SITE = https://source.codeaurora.org/external/imx/imx-mkimage
- IMX_MKIMAGE_SITE_METHOD = git
- IMX_MKIMAGE_LICENSE = GPL-2.0+
+diff --git a/configs/freescale_imx8mmevk_defconfig b/configs/freescale_imx8mmevk_defconfig
+index 353b327ab8..13117189e5 100644
+--- a/configs/freescale_imx8mmevk_defconfig
++++ b/configs/freescale_imx8mmevk_defconfig
+@@ -7,10 +7,10 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/imx8mm-evk.dtb"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_5.4.47_2.2.0"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_5.4.70_2.3.0"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v8"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mm-evk freescale/imx8mm-evk-revb"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mm-evk freescale/imx8mm-evk-revb-qca-wifi"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ BR2_PACKAGE_FREESCALE_IMX=y
+ BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM=y
+@@ -21,14 +21,14 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/imx-atf"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="rel_imx_5.4.47_2.2.0"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="rel_imx_5.4.70_2.3.0"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mm"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/uboot-imx"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_5.4.47_2.2.0"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_5.4.70_2.3.0"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8mm_evk"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+diff --git a/configs/freescale_imx8mnevk_defconfig b/configs/freescale_imx8mnevk_defconfig
+index f9ccd898dc..192f5d297e 100644
+--- a/configs/freescale_imx8mnevk_defconfig
++++ b/configs/freescale_imx8mnevk_defconfig
+@@ -7,7 +7,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/imx8mn-ddr4-evk.dtb"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_5.4.47_2.2.0"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_5.4.70_2.3.0"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v8"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mn-ddr4-evk"
+@@ -22,14 +22,14 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/imx-atf"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="rel_imx_5.4.47_2.2.0"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="rel_imx_5.4.70_2.3.0"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mn"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/uboot-imx"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_5.4.47_2.2.0"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_5.4.70_2.3.0"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8mn_ddr4_evk"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+diff --git a/configs/freescale_imx8mqevk_defconfig b/configs/freescale_imx8mqevk_defconfig
+index c369ca075c..d5d22dcf2b 100644
+--- a/configs/freescale_imx8mqevk_defconfig
++++ b/configs/freescale_imx8mqevk_defconfig
+@@ -7,7 +7,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/imx8mq-evk.dtb"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_5.4.47_2.2.0"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_5.4.70_2.3.0"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v8"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mq-evk"
+@@ -21,14 +21,14 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/imx-atf"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="rel_imx_5.4.47_2.2.0"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="rel_imx_5.4.70_2.3.0"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mq"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/uboot-imx"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_5.4.47_2.2.0"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_5.4.70_2.3.0"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8mq_evk"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
