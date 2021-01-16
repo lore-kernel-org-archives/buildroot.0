@@ -1,28 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 16 Jan 2021 23:10:05 +0100
-Subject: [Buildroot] [PATCH v1] package/bcm2835: bump version to 1.68
-In-Reply-To: <20201109223821.6896-1-ps.report@gmx.net>
-References: <20201109223821.6896-1-ps.report@gmx.net>
-Message-ID: <20210116231005.70381591@windsurf.home>
+Date: Sat, 16 Jan 2021 23:10:16 +0100
+Subject: [Buildroot] [git commit] package/wlroots: bump to version 0.12.0
+Message-ID: <20210116215119.A355C87F72@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon,  9 Nov 2020 23:38:21 +0100
-Peter Seiderer <ps.report@gmx.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=7f1a4c40da776eb0647f1e0a39b904f5adbf0751
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  package/bcm2835/bcm2835.hash | 2 +-
->  package/bcm2835/bcm2835.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/wlroots/wlroots.hash | 4 ++--
+ package/wlroots/wlroots.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/wlroots/wlroots.hash b/package/wlroots/wlroots.hash
+index 636f391011..2fab9b30b4 100644
+--- a/package/wlroots/wlroots.hash
++++ b/package/wlroots/wlroots.hash
+@@ -1,5 +1,5 @@
+-# Generated locally, after checking https://github.com/swaywm/wlroots/releases/download/0.11.0/wlroots-0.11.0.tar.gz.sig
+-sha256  a7645e77229aab4942748c621be8bdb8b073d94f35f3e032b867246862bf2d01  wlroots-0.11.0.tar.gz
++# Generated locally, after checking https://github.com/swaywm/wlroots/releases/download/0.12.0/wlroots-0.12.0.tar.gz.sig
++sha256  c9e9f4f6d2f526d0b2886daf3ec37e64831773059aa669fb98a88522a1626bdb  wlroots-0.12.0.tar.gz
+ 
+ # Hashes for license files:
+ sha256  ffd3737a478b83a8b51b42757d3bf909ef36694508355879722e11fc1fa6736b  LICENSE
+diff --git a/package/wlroots/wlroots.mk b/package/wlroots/wlroots.mk
+index c1771df41d..5665d5a956 100644
+--- a/package/wlroots/wlroots.mk
++++ b/package/wlroots/wlroots.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WLROOTS_VERSION = 0.11.0
++WLROOTS_VERSION = 0.12.0
+ WLROOTS_SITE = https://github.com/swaywm/wlroots/releases/download/$(WLROOTS_VERSION)
+ WLROOTS_LICENSE = MIT
+ WLROOTS_LICENSE_FILES = LICENSE
+@@ -21,7 +21,7 @@ WLROOTS_DEPENDENCIES = \
+ 	wayland \
+ 	wayland-protocols
+ 
+-WLROOTS_CONF_OPTS = -Dexamples=false -Dxcb-errors=disabled
++WLROOTS_CONF_OPTS = -Dexamples=false -Dxcb-errors=disabled -Dlibseat=disabled
+ 
+ ifeq ($(BR2_PACKAGE_FFMPEG),y)
+ WLROOTS_DEPENDENCIES += ffmpeg
