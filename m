@@ -1,40 +1,60 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Sat, 16 Jan 2021 13:09:48 -0300
-Subject: [Buildroot] [PATCH] package/mesa3d: select EXPAT for freedreno
-Message-ID: <20210116160948.1364227-1-festevam@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 16 Jan 2021 17:30:47 +0100
+Subject: [Buildroot] [PATCH 1/1] package/mesa3d: fix gallium-xa
+ configure option
+In-Reply-To: <20210104215901.103994-1-bernd.kuhls@t-online.de>
+References: <20210104215901.103994-1-bernd.kuhls@t-online.de>
+Message-ID: <20210116163047.GN2375@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Select expat when building the freedreno driver to fix the
-following error:
+Bernd, All,
 
-Run-time dependency expat found: NO (tried pkgconfig and cmake)
-Looking for a fallback subproject for the dependency expat
-Downloading expat source from https://github.com/libexpat/libexpat/releases/download/R_2_2_5/expat-2.2.5.tar.bz2
-<urlopen error unknown url type: https>
-A fallback URL could be specified using source_fallback_url key in the wrap file
+On 2021-01-04 22:59 +0100, Bernd Kuhls spake thusly:
+> Fixes build warning:
+> 
+> output/build/mesa3d-20.3.2/meson.build:727: WARNING:
+>  gallium-xa option "false" deprecated, please use "disabled" instead.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-output/build/mesa3d-20.3.2/meson.build:1366:2: ERROR: could not get https://github.com/libexpat/libexpat/releases/download/R_2_2_5/expat-2.2.5.tar.bz2 is the internet available?
+Applied to master, thanks.
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
----
- package/mesa3d/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+Regards,
+Yann E. MORIN.
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 45eb62b701a7..773fbfde220e 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -119,6 +119,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_FREEDRENO
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	select BR2_PACKAGE_LIBDRM_FREEDRENO
- 	select BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
-+	select BR2_PACKAGE_EXPAT
- 	help
- 	  Mesa driver for Freedreno GPUs.
- 
+> ---
+>  package/mesa3d/mesa3d.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+> index 5eca1f0906..a366eee4e9 100644
+> --- a/package/mesa3d/mesa3d.mk
+> +++ b/package/mesa3d/mesa3d.mk
+> @@ -74,7 +74,7 @@ endif
+>  else
+>  MESA3D_CONF_OPTS += \
+>  	-Dglx=disabled \
+> -	-Dgallium-xa=false
+> +	-Dgallium-xa=disabled
+>  endif
+>  
+>  ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
+> -- 
+> 2.29.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.25.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
