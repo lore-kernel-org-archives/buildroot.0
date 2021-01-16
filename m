@@ -1,27 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 16 Jan 2021 22:00:41 +0100
-Subject: [Buildroot] [PATCH 1/1] package/hiredis: add
- HIREDIS_CPE_ID_VENDOR
-In-Reply-To: <20210115074238.2076460-1-fontaine.fabrice@gmail.com>
-References: <20210115074238.2076460-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210116220041.722e8af6@windsurf.home>
+Date: Sat, 16 Jan 2021 22:00:44 +0100
+Subject: [Buildroot] [PATCH 1/1] package/lcms2: add CPE variables
+In-Reply-To: <20210115075249.2076903-1-fontaine.fabrice@gmail.com>
+References: <20210115075249.2076903-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210116220044.5c34acaf@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 15 Jan 2021 08:42:38 +0100
+On Fri, 15 Jan 2021 08:52:49 +0100
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> cpe:2.3:a:redislabs:hiredis is a valid CPE identifier for this package:
+> cpe:2.3:a:littlecms:little_cms is a valid CPE identifier for this
+> package:
 > 
->   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aredislabs%3Ahiredis
+>   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alittlecms%3Alittle_cms
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/hiredis/hiredis.mk | 1 +
->  1 file changed, 1 insertion(+)
+>  package/lcms2/lcms2.mk | 2 ++
+>  1 file changed, 2 insertions(+)
 
 Applied to master, thanks.
 
