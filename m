@@ -1,32 +1,33 @@
-From: Bin Meng <bmeng.cn@gmail.com>
-Date: Sat, 16 Jan 2021 22:23:46 +0800
-Subject: [Buildroot] [PATCH 1/2] boot/uboot: Introduce
- BR2_TARGET_UBOOT_NEEDS_OPENSBI
-In-Reply-To: <CAKmqyKOzp8=QgbY-ZwL9nQOxMFW2TdobWjabz8yQ7Q1204XF9w@mail.gmail.com>
-References: <1610355672-3008-1-git-send-email-bmeng.cn@gmail.com>
- <1610355672-3008-2-git-send-email-bmeng.cn@gmail.com>
- <CAKmqyKOzp8=QgbY-ZwL9nQOxMFW2TdobWjabz8yQ7Q1204XF9w@mail.gmail.com>
-Message-ID: <CAEUhbmXgbCmDn1o3p8Kb=edHt3SRAwQ_sPMS5x4MPsaaW_X-UA@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 16 Jan 2021 16:21:11 +0100
+Subject: [Buildroot] [git commit] configs/snps_archs38_hsdk_defconfig:
+ enable C++ support
+Message-ID: <20210116150346.E8D86875E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-+Peter, Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=793415647d0d8f4380262a83fc1f098aa96f1e2a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, Jan 12, 2021 at 3:06 AM Alistair Francis <alistair23@gmail.com> wrote:
->
-> On Mon, Jan 11, 2021 at 1:01 AM Bin Meng <bmeng.cn@gmail.com> wrote:
-> >
-> > From: Bin Meng <bin.meng@windriver.com>
-> >
-> > Some RISC-V platforms (such as SiFive HiFive Unleashed) encapsulate
-> > the OpenSBI firmware image inside U-Boot.
-> >
-> > Signed-off-by: Bin Meng <bin.meng@windriver.com>
->
-> Reviewed-by: Alistair Francis <alistair.francis@wdc.com>
->
+Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
+[yann.morin.1998 at free.fr: only enable C++]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ configs/snps_archs38_hsdk_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-Ping for apply? Thanks!
+diff --git a/configs/snps_archs38_hsdk_defconfig b/configs/snps_archs38_hsdk_defconfig
+index 69d0b1936b..4a1ac3fcff 100644
+--- a/configs/snps_archs38_hsdk_defconfig
++++ b/configs/snps_archs38_hsdk_defconfig
+@@ -3,6 +3,7 @@ BR2_archs38_full=y
+ BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_6=y
+ BR2_PACKAGE_GLIBC_UTILS=y
++BR2_TOOLCHAIN_BUILDROOT_CXX=y
+ BR2_TARGET_OPTIMIZATION="-mfpu=fpud_all"
+ BR2_TARGET_GENERIC_HOSTNAME="hsdk"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to the HSDK Platform"
