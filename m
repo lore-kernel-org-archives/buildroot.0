@@ -1,54 +1,136 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 16 Jan 2021 23:00:44 +0100
-Subject: [Buildroot] [PATCH v2] fs/cpio: add zstd as compression option
-In-Reply-To: <20210110190559.1434055-1-salvador.joseluis@gmail.com>
-References: <20210110111217.GP3044608@scaer>
- <20210110190559.1434055-1-salvador.joseluis@gmail.com>
-Message-ID: <20210116230044.219ee827@windsurf.home>
+Date: Sat, 16 Jan 2021 23:01:11 +0100
+Subject: [Buildroot] [git commit] package/olsr: fix build of pud plugin
+Message-ID: <20210116214214.F039581586@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=efe51a7be0e4ff6b3b14e99696e7a4e25996717f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 10 Jan 2021 20:05:59 +0100
-Jos? Luis Salvador Rufo <salvador.joseluis@gmail.com> wrote:
+Fix build of pud plugin which was added with commit
+318d160fe5b080e421dc133dff82d5ea2cf7d893
 
-> U-Boot mkimage zstd is available since v2020.10:
-> https://gitlab.denx.de/u-boot/u-boot/-/commit/26073f9ed3ab0aaf3c2a2b433fecb30a95a067d6
-> 
-> Signed-off-by: Jos? Luis Salvador Rufo <salvador.joseluis@gmail.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/5b598d728e6aae61b295681b0d7777e83074fecd
 
-Thanks, I have applied, with one change, see below.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...003-pud-adapt-to-API-changes-in-gpsd-3-20.patch | 105 +++++++++++++++++++++
+ 1 file changed, 105 insertions(+)
 
-> ---
->  fs/common.mk      | 5 +++++
->  fs/cpio/Config.in | 5 +++++
->  2 files changed, 10 insertions(+)
-> 
-> diff --git a/fs/common.mk b/fs/common.mk
-> index 84e13d1b7e..da008ef9e8 100644
-> --- a/fs/common.mk
-> +++ b/fs/common.mk
-> @@ -154,6 +154,11 @@ ifeq ($(BR2_REPRODUCIBLE),)
->  ROOTFS_$(2)_COMPRESS_CMD += -T $(PARALLEL_JOBS)
->  endif
->  endif
-> +ifeq ($(BR2_TARGET_ROOTFS_$(2)_ZSTD),y)
-> +ROOTFS_$(2)_DEPENDENCIES += host-zstd
-> +ROOTFS_$(2)_COMPRESS_EXT = .zst
-> +ROOTFS_$(2)_COMPRESS_CMD = zstd --ultra -22 -z -f -T$(PARALLEL_JOBS)
-
-To me, it felt a bit extreme to use the --ultra -22 level, which is
-documented as requiring a lot of memory, both for compression and
-uncompression. So I changed to just -19 instead.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/olsr/0003-pud-adapt-to-API-changes-in-gpsd-3-20.patch b/package/olsr/0003-pud-adapt-to-API-changes-in-gpsd-3-20.patch
+new file mode 100644
+index 0000000000..f97798d605
+--- /dev/null
++++ b/package/olsr/0003-pud-adapt-to-API-changes-in-gpsd-3-20.patch
+@@ -0,0 +1,105 @@
++From b2dfb6c27fcf4ddae87b0e99492f4bb8472fa39a Mon Sep 17 00:00:00 2001
++From: Eneas U de Queiroz <cotequeiroz@gmail.com>
++Date: Thu, 13 Feb 2020 17:26:41 -0300
++Subject: [PATCH] pud: adapt to API changes in gpsd 3.20
++
++The timestamp fields were changed from double to struct timespec, and
++the geoid separation field was moved to fix.geoid_sep.
++
++Signed-off-by: Eneas U de Queiroz <cotequeiroz@gmail.com>
++
++[Retrieved from:
++https://github.com/OLSR/olsrd/commit/b2dfb6c27fcf4ddae87b0e99492f4bb8472fa39a]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ lib/pud/src/gpsdclient.c | 36 ++++++++++++++++++++++++++++++++----
++ 1 file changed, 32 insertions(+), 4 deletions(-)
++
++diff --git a/lib/pud/src/gpsdclient.c b/lib/pud/src/gpsdclient.c
++index 9e7fb708d..2a7a26eef 100644
++--- a/lib/pud/src/gpsdclient.c
+++++ b/lib/pud/src/gpsdclient.c
++@@ -79,6 +79,23 @@ static void gpsdError(const char *s) {
++   syslog(LOG_ERR, "gpsd error: %s", s);
++ }
++ 
+++#if GPSD_API_MAJOR_VERSION >= 9
+++static double time_as_double(struct timespec *ts) {
+++ return (ts->tv_sec + ts->tv_nsec * 1e-9);
+++}
+++
+++static bool is_online(struct gps_data_t *gpsdata) {
+++  return !!gpsdata->online.tv_sec;
+++}
+++#else
+++
+++#define time_as_double(x) *(x)
+++
+++static bool is_online(struct gps_data_t *gpsdata) {
+++  return !!gpsdata->online;
+++}
+++#endif
+++
++ /* standard parsing of a GPS data source spec */
++ void gpsdParseSourceSpec(char *arg, GpsDaemon *gpsDaemon) {
++   if (!arg //
++@@ -298,8 +315,8 @@ void nmeaInfoFromGpsd(struct gps_data_t *gpsdata, NmeaInfo *info, struct GpsdCon
++             8, //
++             dev->parity, //
++             dev->stopbits, //
++-            dev->cycle, //
++-            dev->mincycle);
+++            time_as_double(&dev->cycle), //
+++            time_as_double(&dev->mincycle));
++ 
++         connectionTracking->devSeen[i] = true;
++         connectionTracking->dev[i] = *dev;
++@@ -367,11 +384,18 @@ void nmeaInfoFromGpsd(struct gps_data_t *gpsdata, NmeaInfo *info, struct GpsdCon
++   nmeaInfoSetPresent(&info->present, NMEALIB_PRESENT_SMASK);
++ 
++   /* date & time */
+++#if GPSD_API_MAJOR_VERSION >= 9
+++  if (gpsdata->fix.time.tv_sec > 0) {
+++    struct tm *time = gmtime(&gpsdata->fix.time.tv_sec);
+++    unsigned int hsec = (unsigned int) (gpsdata->fix.time.tv_nsec / 10000000);
+++#else
++   if (!isNaN(gpsdata->fix.time)) {
++     double seconds;
++     double fraction = modf(fabs(gpsdata->fix.time), &seconds);
++     long sec = lrint(seconds);
++     struct tm *time = gmtime(&sec);
+++    unsigned int hsec = (unsigned int) lrint(fraction * 100);
+++#endif
++     if (time) {
++       info->utc.year = (unsigned int) time->tm_year + 1900;
++       info->utc.mon = (unsigned int) time->tm_mon + 1;
++@@ -379,7 +403,7 @@ void nmeaInfoFromGpsd(struct gps_data_t *gpsdata, NmeaInfo *info, struct GpsdCon
++       info->utc.hour = (unsigned int) time->tm_hour;
++       info->utc.min = (unsigned int) time->tm_min;
++       info->utc.sec = (unsigned int) time->tm_sec;
++-      info->utc.hsec = (unsigned int) lrint(fraction * 100);
+++      info->utc.hsec = hsec;
++ 
++       nmeaInfoSetPresent(&info->present, NMEALIB_PRESENT_UTCDATE | NMEALIB_PRESENT_UTCTIME);
++     }
++@@ -387,7 +411,7 @@ void nmeaInfoFromGpsd(struct gps_data_t *gpsdata, NmeaInfo *info, struct GpsdCon
++   gpsdata->set &= ~TIME_SET;
++ 
++   /* sig & fix */
++-  if (!gpsdata->online) {
+++  if (!is_online(gpsdata)) {
++     gpsdata->fix.mode = MODE_NO_FIX;
++   }
++ 
++@@ -454,7 +478,11 @@ void nmeaInfoFromGpsd(struct gps_data_t *gpsdata, NmeaInfo *info, struct GpsdCon
++   if ((gpsdata->fix.mode >= MODE_3D) //
++       && !isNaN(gpsdata->fix.altitude)) {
++     info->elevation = gpsdata->fix.altitude;
+++#if GPSD_API_MAJOR_VERSION >= 9
+++    info->height = gpsdata->fix.geoid_sep;
+++#else
++     info->height = gpsdata->separation;
+++#endif
++     nmeaInfoSetPresent(&info->present, NMEALIB_PRESENT_ELV | NMEALIB_PRESENT_HEIGHT);
++   }
++   gpsdata->set &= ~ALTITUDE_SET;
