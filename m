@@ -1,39 +1,55 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 16 Jan 2021 13:42:11 +0100
-Subject: [Buildroot] [git commit] configs/snps_archs38_hsdk_defconfig: use
- hard-float
-Message-ID: <20210116150346.DA116875DE@busybox.osuosl.org>
+Date: Sat, 16 Jan 2021 16:29:10 +0100
+Subject: [Buildroot] [PATCH 0/4] ARC updates
+In-Reply-To: <20210115200319.4139041-1-vgupta@synopsys.com>
+References: <20210115200319.4139041-1-vgupta@synopsys.com>
+Message-ID: <20210116152910.GJ2375@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=32113c8a25c0f4c1b666dac96b7cdff649873b3e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Vineet, All,
 
-Hard-float support is pretty stable, so make that default for HSDK
-boards.
+On 2021-01-15 12:03 -0800, Vineet Gupta spake thusly:
+> PFA assorted ARC changes. Main being a hw config for -mcpu=hs4x which
+> schedules code for HS48x dual issue pipeline.
 
-The hard-float setting is a bit convulated since current ARC gcc lacks
---with-fpu - so this is done with BR2_TARGET_OPTIMIZATION
+Series applied to master, thanks!
 
-Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
-[yann.morin.1998 at free.fr: split off into its own commit]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- configs/snps_archs38_hsdk_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+I have however done a bit of changes, so I will reply individually to
+affected patches.
 
-diff --git a/configs/snps_archs38_hsdk_defconfig b/configs/snps_archs38_hsdk_defconfig
-index 8dceb3450b..69d0b1936b 100644
---- a/configs/snps_archs38_hsdk_defconfig
-+++ b/configs/snps_archs38_hsdk_defconfig
-@@ -3,6 +3,7 @@ BR2_archs38_full=y
- BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_6=y
- BR2_PACKAGE_GLIBC_UTILS=y
-+BR2_TARGET_OPTIMIZATION="-mfpu=fpud_all"
- BR2_TARGET_GENERIC_HOSTNAME="hsdk"
- BR2_TARGET_GENERIC_ISSUE="Welcome to the HSDK Platform"
- BR2_SYSTEM_DHCP="eth0"
+Regards,
+Yann E. MORIN.
+
+> Thx,
+> -Vineet
+> 
+> Vineet Gupta (4):
+>   ARC: Add support for generic HS48 processor
+>   configs/snps_archs38_hsdk_defconfig: refresh defconfig
+>   configs/snps_archs38_hsdk_defconfig: switch to glibc hard-float
+>   configs/snps_archs38_hsdk_defconfig: update for better out-of-box
+>     experience
+> 
+>  arch/Config.in.arc                  | 16 +++++++++----
+>  configs/snps_archs38_hsdk_defconfig | 36 +++++++++++++++--------------
+>  2 files changed, 30 insertions(+), 22 deletions(-)
+> 
+> -- 
+> 2.25.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
