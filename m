@@ -1,92 +1,40 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 16 Jan 2021 16:40:34 +0100
-Subject: [Buildroot] [PATCH 4/4] configs/snps_archs38_hsdk_defconfig:
- update for better out-of-box experience
-In-Reply-To: <20210115200319.4139041-5-vgupta@synopsys.com>
-References: <20210115200319.4139041-1-vgupta@synopsys.com>
- <20210115200319.4139041-5-vgupta@synopsys.com>
-Message-ID: <20210116154034.GM2375@scaer>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Sat, 16 Jan 2021 13:09:48 -0300
+Subject: [Buildroot] [PATCH] package/mesa3d: select EXPAT for freedreno
+Message-ID: <20210116160948.1364227-1-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Vineet, All,
+Select expat when building the freedreno driver to fix the
+following error:
 
-On 2021-01-15 12:03 -0800, Vineet Gupta spake thusly:
->  - Enable C++ support
->  - Don't strip executables
->  - Add minimal debug symbols
->  - Enable strace and openssh
->  - Enable perf (and elfutils)
+Run-time dependency expat found: NO (tried pkgconfig and cmake)
+Looking for a fallback subproject for the dependency expat
+Downloading expat source from https://github.com/libexpat/libexpat/releases/download/R_2_2_5/expat-2.2.5.tar.bz2
+<urlopen error unknown url type: https>
+A fallback URL could be specified using source_fallback_url key in the wrap file
 
-Of all those, I only kept adding C++.
+output/build/mesa3d-20.3.2/meson.build:1366:2: ERROR: could not get https://github.com/libexpat/libexpat/releases/download/R_2_2_5/expat-2.2.5.tar.bz2 is the internet available?
 
-None of the other defconfigs enable debug, or disable stripping.
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ package/mesa3d/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-Also, we like our defconfigs to truly be minimal. We could however
-accept an additional defconfig with more packages, as a "demo" of sorts,
-though. But the selection of packages you added is not kind of "demoing"
-that specific board...
-
-So, I just kept C++.
-
-Thanks!
-
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
-> ---
->  configs/snps_archs38_hsdk_defconfig | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/configs/snps_archs38_hsdk_defconfig b/configs/snps_archs38_hsdk_defconfig
-> index 69d0b1936b3a..7d406a90ed3c 100644
-> --- a/configs/snps_archs38_hsdk_defconfig
-> +++ b/configs/snps_archs38_hsdk_defconfig
-> @@ -1,8 +1,12 @@
->  BR2_arcle=y
->  BR2_archs38_full=y
-> +BR2_ENABLE_DEBUG=y
-> +BR2_DEBUG_1=y
-> +# BR2_STRIP_strip is not set
->  BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
->  BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_6=y
->  BR2_PACKAGE_GLIBC_UTILS=y
-> +BR2_TOOLCHAIN_BUILDROOT_CXX=y
->  BR2_TARGET_OPTIMIZATION="-mfpu=fpud_all"
->  BR2_TARGET_GENERIC_HOSTNAME="hsdk"
->  BR2_TARGET_GENERIC_ISSUE="Welcome to the HSDK Platform"
-> @@ -14,8 +18,15 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
->  BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.6.3"
->  BR2_LINUX_KERNEL_DEFCONFIG="hsdk"
->  BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/synopsys/hsdk/linux.fragment"
-> +BR2_PACKAGE_LINUX_TOOLS_PERF=y
-> +BR2_PACKAGE_STRACE=y
-> +BR2_PACKAGE_MAKE=y
-> +BR2_PACKAGE_ELFUTILS=y
-> +BR2_PACKAGE_ELFUTILS_PROGS=y
-> +BR2_PACKAGE_OPENSSH=y
->  BR2_TARGET_ROOTFS_EXT2=y
->  BR2_TARGET_ROOTFS_EXT2_4=y
-> +BR2_TARGET_ROOTFS_EXT2_SIZE="200M"
->  # BR2_TARGET_ROOTFS_TAR is not set
->  BR2_TARGET_UBOOT=y
->  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 45eb62b701a7..773fbfde220e 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -119,6 +119,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_FREEDRENO
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ 	select BR2_PACKAGE_LIBDRM_FREEDRENO
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
++	select BR2_PACKAGE_EXPAT
+ 	help
+ 	  Mesa driver for Freedreno GPUs.
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.25.1
