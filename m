@@ -1,88 +1,92 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 16 Jan 2021 16:40:28 +0100
-Subject: [Buildroot] [PATCH v2 1/8] package/freescale-imx/firmware-imx:
- bump version to 8.10
-In-Reply-To: <20210105152420.26379-2-stephane.viau@oss.nxp.com>
-References: <20210105152420.26379-1-stephane.viau@oss.nxp.com>
- <20210105152420.26379-2-stephane.viau@oss.nxp.com>
-Message-ID: <0f9e83af-c4fb-50f2-feeb-9768a97aa94d@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 16 Jan 2021 16:40:34 +0100
+Subject: [Buildroot] [PATCH 4/4] configs/snps_archs38_hsdk_defconfig:
+ update for better out-of-box experience
+In-Reply-To: <20210115200319.4139041-5-vgupta@synopsys.com>
+References: <20210115200319.4139041-1-vgupta@synopsys.com>
+ <20210115200319.4139041-5-vgupta@synopsys.com>
+Message-ID: <20210116154034.GM2375@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Stephane,
+Vineet, All,
 
-Le 05/01/2021 ? 16:24, Stephane Viau a ?crit?:
-> - Same version as NXP release 5.4.70-2.3.0
-> - EULA/COPYING: update to LA_OPT_NXP_Software_License v17
-> 
-> Signed-off-by: Stephane Viau <stephane.viau@oss.nxp.com>
-> Reviewed-by: Gary Bisson <gary.bisson@boundarydevices.com>
+On 2021-01-15 12:03 -0800, Vineet Gupta spake thusly:
+>  - Enable C++ support
+>  - Don't strip executables
+>  - Add minimal debug symbols
+>  - Enable strace and openssh
+>  - Enable perf (and elfutils)
 
-Still not related to this version bump but the sdma firmwares for imx[6,7,8] are
-provided by two packages: firmware-imx and linux-firmware
+Of all those, I only kept adding C++.
 
-$ sha256sum ./firmware-imx-8.10/firmware/sdma/sdma-imx6q.bin
-7790c161b7e013a9dbcbffb17cc5d4cb63d952949a505647e4679f02d04c4784
-./firmware-imx-8.10/firmware/sdma/sdma-imx6q.bin
+None of the other defconfigs enable debug, or disable stripping.
 
-$ sha256sum  ./linux-firmware-20201022/imx/sdma/sdma-imx6q.bin
-7790c161b7e013a9dbcbffb17cc5d4cb63d952949a505647e4679f02d04c4784
-./linux-firmware-20201022/imx/sdma/sdma-imx6q.bin
+Also, we like our defconfigs to truly be minimal. We could however
+accept an additional defconfig with more packages, as a "demo" of sorts,
+though. But the selection of packages you added is not kind of "demoing"
+that specific board...
 
-We have two options: BR2_PACKAGE_FIRMWARE_IMX_SDMA_FW_NAME and
-BR2_PACKAGE_LINUX_FIRMWARE_IMX_SDMA
+So, I just kept C++.
 
-The only difference is that firmware-imx provide firmware for old imx cpus.
+Thanks!
 
-$ ls linux-firmware-20201022/imx/sdma/sdma-imx
-sdma-imx6q.bin  sdma-imx7d.bin
+Regards,
+Yann E. MORIN.
 
-$ ls firmware-imx-8.10/firmware/sdma/sdma-imx
-sdma-imx25-to1.bin  sdma-imx31-to1.bin  sdma-imx31-to2.bin  sdma-imx35-to1.bin
-sdma-imx35-to2.bin  sdma-imx51-to3.bin  sdma-imx53-to1.bin  sdma-imx6q.bin
-sdma-imx7d.bin
-
-Maybe we can keep one of firmware provider.
-
-Best regards,
-Romain
-
-
+> Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
 > ---
-> v2:
-> - Add "EULA/COPYING: update to LA_OPT_NXP_Software_License v17" in
->   commit log (Gary)
-> ---
->  package/freescale-imx/firmware-imx/firmware-imx.hash | 6 +++---
->  package/freescale-imx/firmware-imx/firmware-imx.mk   | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  configs/snps_archs38_hsdk_defconfig | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
 > 
-> diff --git a/package/freescale-imx/firmware-imx/firmware-imx.hash b/package/freescale-imx/firmware-imx/firmware-imx.hash
-> index 3230677d49..0a717d40f5 100644
-> --- a/package/freescale-imx/firmware-imx/firmware-imx.hash
-> +++ b/package/freescale-imx/firmware-imx/firmware-imx.hash
-> @@ -1,4 +1,4 @@
->  # Locally calculated
-> -sha256  a72f70fd2ecaa58800bb88ed672fddc322ab9843ee7777eb89b82016b0aa3614  firmware-imx-8.9.bin
-> -sha256  a39da2e94bd8b99eaac4325633854620ea3a55145259c3a7748c610a80714cfc  EULA
-> -sha256  69cbb76b3f10ac5a8c36f34df7bbdf50825815560c00a946fff2922365ef01a2  COPYING
-> +sha256  2b70f169d4065b2a7ac7a676afe24636128bd2dacc9f5230346758c3b146b2be  firmware-imx-8.10.bin
-> +sha256  72edc2072c86d93aa1993d15d4d19d96270af3749b0108995ad50c81d1461f52  EULA
-> +sha256  9c16421e7c702f56756650b8ac954d34556327e598a8666e6e8f4eb3a1aa95f1  COPYING
-> diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
-> index 7d1f42f1d8..b33ffb7ee8 100644
-> --- a/package/freescale-imx/firmware-imx/firmware-imx.mk
-> +++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -FIRMWARE_IMX_VERSION = 8.9
-> +FIRMWARE_IMX_VERSION = 8.10
->  FIRMWARE_IMX_SITE = $(FREESCALE_IMX_SITE)
->  FIRMWARE_IMX_SOURCE = firmware-imx-$(FIRMWARE_IMX_VERSION).bin
->  
+> diff --git a/configs/snps_archs38_hsdk_defconfig b/configs/snps_archs38_hsdk_defconfig
+> index 69d0b1936b3a..7d406a90ed3c 100644
+> --- a/configs/snps_archs38_hsdk_defconfig
+> +++ b/configs/snps_archs38_hsdk_defconfig
+> @@ -1,8 +1,12 @@
+>  BR2_arcle=y
+>  BR2_archs38_full=y
+> +BR2_ENABLE_DEBUG=y
+> +BR2_DEBUG_1=y
+> +# BR2_STRIP_strip is not set
+>  BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+>  BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_6=y
+>  BR2_PACKAGE_GLIBC_UTILS=y
+> +BR2_TOOLCHAIN_BUILDROOT_CXX=y
+>  BR2_TARGET_OPTIMIZATION="-mfpu=fpud_all"
+>  BR2_TARGET_GENERIC_HOSTNAME="hsdk"
+>  BR2_TARGET_GENERIC_ISSUE="Welcome to the HSDK Platform"
+> @@ -14,8 +18,15 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+>  BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.6.3"
+>  BR2_LINUX_KERNEL_DEFCONFIG="hsdk"
+>  BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/synopsys/hsdk/linux.fragment"
+> +BR2_PACKAGE_LINUX_TOOLS_PERF=y
+> +BR2_PACKAGE_STRACE=y
+> +BR2_PACKAGE_MAKE=y
+> +BR2_PACKAGE_ELFUTILS=y
+> +BR2_PACKAGE_ELFUTILS_PROGS=y
+> +BR2_PACKAGE_OPENSSH=y
+>  BR2_TARGET_ROOTFS_EXT2=y
+>  BR2_TARGET_ROOTFS_EXT2_4=y
+> +BR2_TARGET_ROOTFS_EXT2_SIZE="200M"
+>  # BR2_TARGET_ROOTFS_TAR is not set
+>  BR2_TARGET_UBOOT=y
+>  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+> -- 
+> 2.25.1
 > 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
