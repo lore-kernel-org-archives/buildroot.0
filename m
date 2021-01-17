@@ -1,26 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 17 Jan 2021 15:04:09 +0100
-Subject: [Buildroot] [PATCH 1/1] package/midori: add MIDORI_CPE_ID_VENDOR
-In-Reply-To: <20210117112428.310889-1-fontaine.fabrice@gmail.com>
-References: <20210117112428.310889-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210117150409.23301391@windsurf.home>
+Date: Sun, 17 Jan 2021 15:04:12 +0100
+Subject: [Buildroot] [PATCH 1/1] package/patch: add PATCH_CPE_ID_VENDOR
+In-Reply-To: <20210117114300.313331-1-fontaine.fabrice@gmail.com>
+References: <20210117114300.313331-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210117150412.1e960009@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 17 Jan 2021 12:24:28 +0100
+On Sun, 17 Jan 2021 12:43:00 +0100
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> cpe:2.3:a:midori-browser:midori is a valid CPE identifier for this
-> package:
+> cpe:2.3:a:gnu:patch is a valid CPE identifier for this package:
 > 
->   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Amidori-browser%3Amidori
+>   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Agnu%3Apatch
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/midori/midori.mk | 1 +
+>  package/patch/patch.mk | 1 +
 >  1 file changed, 1 insertion(+)
 
 Applied to master, thanks.
