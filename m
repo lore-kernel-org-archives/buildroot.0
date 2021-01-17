@@ -1,41 +1,33 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 17 Jan 2021 17:20:40 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libexif: set
- LIBEXIF_CPE_ID_VALID
-In-Reply-To: <20210117152820.6bf7f1bb@windsurf.home>
-References: <20210117141439.345753-1-fontaine.fabrice@gmail.com>
- <20210117152820.6bf7f1bb@windsurf.home>
-Message-ID: <87sg6z614n.fsf@tarshish>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 17 Jan 2021 16:22:45 +0100
+Subject: [Buildroot] [PATCH 1/1] package/dovecot: add DOVECOT_CPE_ID_VENDOR
+Message-ID: <20210117152245.347806-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+cpe:2.3:a:dovecot:dovecot is a valid CPE identifier for this package:
 
-On Sun, Jan 17 2021, Thomas Petazzoni wrote:
-> On Sun, 17 Jan 2021 15:14:39 +0100
-> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
->
->> cpe:2.3:a:libexif_project:libexif is a valid CPE identifier for this
->> package:
->> 
->>   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alibexif_project%3Alibexif
->> 
->> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->> ---
->>  package/libexif/libexif.mk | 1 +
->>  1 file changed, 1 insertion(+)
->
-> Applied to master, thanks.
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Adovecot%3Adovecot
 
-Not in master as of commit 6ed703646454 ("package/mpd: depends on gcc
-and host gcc >= 7").
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/dovecot/dovecot.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-baruch
-
+diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
+index 3100bfbc93..8635ea5c4f 100644
+--- a/package/dovecot/dovecot.mk
++++ b/package/dovecot/dovecot.mk
+@@ -10,6 +10,7 @@ DOVECOT_SITE = https://dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
+ DOVECOT_INSTALL_STAGING = YES
+ DOVECOT_LICENSE = LGPL-2.1, MIT, Public Domain, BSD-3-Clause, Unicode-DFS-2015
+ DOVECOT_LICENSE_FILES = COPYING COPYING.LGPL COPYING.MIT
++DOVECOT_CPE_ID_VENDOR = dovecot
+ DOVECOT_DEPENDENCIES = \
+ 	host-pkgconf \
+ 	$(if $(BR2_PACKAGE_LIBICONV),libiconv) \
 -- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.29.2
