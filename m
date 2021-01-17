@@ -1,34 +1,32 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 17 Jan 2021 00:20:40 +0100
-Subject: [Buildroot] [PATCH 1/1] package/civetweb: set CIVETWEB_CPE_ID_VALID
-Message-ID: <20210116232040.213196-1-fontaine.fabrice@gmail.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Sat, 16 Jan 2021 23:06:49 -0300
+Subject: [Buildroot] [PATCH v2 1/8] package/freescale-imx/firmware-imx:
+ bump version to 8.10
+In-Reply-To: <2831c795-29b1-3b7c-f4a6-22d41a8fe9e1@gmail.com>
+References: <20210105152420.26379-1-stephane.viau@oss.nxp.com>
+ <20210105152420.26379-2-stephane.viau@oss.nxp.com>
+ <0f9e83af-c4fb-50f2-feeb-9768a97aa94d@gmail.com>
+ <PA4PR04MB7920F971C3C02747462F012DA7A60@PA4PR04MB7920.eurprd04.prod.outlook.com>
+ <2831c795-29b1-3b7c-f4a6-22d41a8fe9e1@gmail.com>
+Message-ID: <CAOMZO5AH_om8nG1Bn=-Etf2SNY7E5BmgDu_gPhz_6X2NaeXVHw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:civetweb_project:civetweb is a valid CPE identifier for this
-package:
+Hi Romain,
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Acivetweb_project%3Acivetweb
+On Sat, Jan 16, 2021 at 7:45 PM Romain Naour <romain.naour@gmail.com> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/civetweb/civetweb.mk | 1 +
- 1 file changed, 1 insertion(+)
+> Fabio, do you have an opinion ?
+>
+> It seems BR2_PACKAGE_LINUX_FIRMWARE_IMX_SDMA install the same firmware than the
+> one provided by firmware-imx package. Also BR2_PACKAGE_LINUX_FIRMWARE_IMX_SDMA
+> in not used by any in-tree defconfigs.
+>
+> If you're ok, we should remove it.
 
-diff --git a/package/civetweb/civetweb.mk b/package/civetweb/civetweb.mk
-index 448f979b41..afc9cb1703 100644
---- a/package/civetweb/civetweb.mk
-+++ b/package/civetweb/civetweb.mk
-@@ -8,6 +8,7 @@ CIVETWEB_VERSION = 1.13
- CIVETWEB_SITE = $(call github,civetweb,civetweb,v$(CIVETWEB_VERSION))
- CIVETWEB_LICENSE = MIT
- CIVETWEB_LICENSE_FILES = LICENSE.md
-+CIVETWEB_CPE_ID_VALID = YES
- 
- CIVETWEB_CONF_OPTS = TARGET_OS=LINUX WITH_IPV6=1 \
- 	$(if $(BR2_INSTALL_LIBSTDCPP),WITH_CPP=1)
--- 
-2.29.2
+Yes, agree. Only having the firmware-imx package is enough.
+
+Thanks
