@@ -1,68 +1,68 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 Jan 2021 11:09:12 +0100
-Subject: [Buildroot] [PATCH 1/1] package/sunxi-boards: needs host gcc >=
- 4.9
-In-Reply-To: <20210115063149.2072523-1-fontaine.fabrice@gmail.com>
-References: <20210115063149.2072523-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210117100912.GC2375@scaer>
+From: Bin Meng <bmeng.cn@gmail.com>
+Date: Sun, 17 Jan 2021 18:28:11 +0800
+Subject: [Buildroot] [PATCH 2/2] board/sifive: Update
+ hifive_unleashed_defconfig and genimage.cfg
+In-Reply-To: <20210116224214.6f1ce3af@windsurf.home>
+References: <1610355672-3008-1-git-send-email-bmeng.cn@gmail.com>
+ <1610355672-3008-3-git-send-email-bmeng.cn@gmail.com>
+ <20210116224214.6f1ce3af@windsurf.home>
+Message-ID: <CAEUhbmUa-bsPVaa-j19Hpt10uofqAPuXOZt6VY4sK_DYa+d=PQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Hi Thomas,
 
-On 2021-01-15 07:31 +0100, Fabrice Fontaine spake thusly:
-> Commit 8a26801c9fad1c7749200e22e9dfdeaeeb65f76e forgot to propagate the
-> host gcc dependency from host-sunxi-tools to sunxi-boards
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/22fc93746b45a197cd64bfd116edb33494756bda
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+On Sun, Jan 17, 2021 at 5:42 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello Bin,
+>
+> On Mon, 11 Jan 2021 17:01:12 +0800
+> Bin Meng <bmeng.cn@gmail.com> wrote:
+>
+> > diff --git a/board/sifive/hifive-unleashed/genimage_spi-nor.cfg b/board/sifive/hifive-unleashed/genimage_spi-nor.cfg
+> > new file mode 100644
+> > index 0000000..7f90997
+> > --- /dev/null
+> > +++ b/board/sifive/hifive-unleashed/genimage_spi-nor.cfg
+> > @@ -0,0 +1,25 @@
+> > +image spi-nor.img {
+> > +     size = 32M
+> > +
+> > +     hdimage {
+> > +             gpt = true
+> > +     }
+> > +
+> > +     partition u-boot-spl {
+> > +             image = "u-boot-spl.bin"
+> > +             offset = 20K
+> > +             partition-type-uuid = 5B193300-FC78-40CD-8002-E86C45580B47
+> > +     }
+> > +
+> > +     partition u-boot {
+> > +             image = "u-boot.itb"
+> > +             offset = 1044K
+> > +             partition-type-uuid = 2E54B353-1271-4842-806F-E436D6AF6985
+> > +     }
+> > +
+> > +     partition rootfs {
+> > +             image = "rootfs.ext4"
+> > +             partition-type-uuid = 0FC63DAF-8483-4772-8E79-3D69D8477DE4
+> > +             bootable = true
+> > +     }
+> > +}
+>
+> This looks strange. You really use a GPT partition table on SPI flash,
+> and use an ext4 filesystem on a SPI flash ?
+>
 
-Applied to master, thanks.
+When booting from SPI flash, the GPT partition is required by the ZSBL
+on the board to load U-Boot SPL images. The kernel still uses ext4 on
+the SD card as the rootfs. The SPI flash is just the backup for the
+rootfs.
 
 Regards,
-Yann E. MORIN.
-
-> ---
->  package/sunxi-boards/Config.in | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/package/sunxi-boards/Config.in b/package/sunxi-boards/Config.in
-> index d9fd8529f3..eaf492f2b2 100644
-> --- a/package/sunxi-boards/Config.in
-> +++ b/package/sunxi-boards/Config.in
-> @@ -1,6 +1,7 @@
->  config BR2_PACKAGE_SUNXI_BOARDS
->  	bool "sunxi script.bin board file"
->  	depends on BR2_arm
-> +	depends on BR2_HOST_GCC_AT_LEAST_4_9 # host-sunxi-tools
->  	select BR2_PACKAGE_HOST_SUNXI_TOOLS
->  	help
->  	  Sunxi-boards requires a compiled .fex files for hardware
-> @@ -23,3 +24,7 @@ config BR2_PACKAGE_SUNXI_BOARDS_FEX_FILE
->  	  See inside sys_config/ directory in sunxi-boards source code
->  	  to see the list of valid .fex files.
->  endif
-> +
-> +comment "sunxi script.bin board file needs a toolchain w/ host gcc >= 4.9"
-> +	depends on BR2_arm
-> +	depends on !BR2_HOST_GCC_AT_LEAST_4_9
-> -- 
-> 2.29.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bin
