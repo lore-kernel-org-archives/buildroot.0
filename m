@@ -1,82 +1,81 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 Jan 2021 12:23:29 +0100
-Subject: [Buildroot] [git commit] package/screenfetch: new package
-Message-ID: <20210117110441.5FDAE827F8@busybox.osuosl.org>
+Date: Sun, 17 Jan 2021 12:16:47 +0100
+Subject: [Buildroot] [git commit] package/neofetch: new package
+Message-ID: <20210117110441.52956864DA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bb449b19c528849e2a6f8a38265338de760cb640
+commit: https://git.buildroot.net/buildroot/commit/?id=3860eccd5bb908528dc8340f46fd666e2d27831a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Christian Stewart <christian@paral.in>
-Tested-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-[yann.morin.1998 at free.fr: rename package]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/Config.in                    |  1 +
- package/screenfetch/Config.in        |  9 +++++++++
- package/screenfetch/screenfetch.hash |  2 ++
- package/screenfetch/screenfetch.mk   | 17 +++++++++++++++++
- 4 files changed, 29 insertions(+)
+ package/Config.in              |  1 +
+ package/neofetch/Config.in     | 10 ++++++++++
+ package/neofetch/neofetch.hash |  2 ++
+ package/neofetch/neofetch.mk   | 17 +++++++++++++++++
+ 4 files changed, 30 insertions(+)
 
 diff --git a/package/Config.in b/package/Config.in
-index 54b917b736..bfc60b5a69 100644
+index 81ad4979a1..54b917b736 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -2386,6 +2386,7 @@ comment "Utilities"
- 	source "package/ranger/Config.in"
- 	source "package/rtty/Config.in"
- 	source "package/screen/Config.in"
-+	source "package/screenfetch/Config.in"
- 	source "package/sudo/Config.in"
- 	source "package/terminology/Config.in"
- 	source "package/time/Config.in"
-diff --git a/package/screenfetch/Config.in b/package/screenfetch/Config.in
+@@ -2379,6 +2379,7 @@ comment "Utilities"
+ 	source "package/lockfile-progs/Config.in"
+ 	source "package/logrotate/Config.in"
+ 	source "package/logsurfer/Config.in"
++	source "package/neofetch/Config.in"
+ 	source "package/pdmenu/Config.in"
+ 	source "package/pinentry/Config.in"
+ 	source "package/qprint/Config.in"
+diff --git a/package/neofetch/Config.in b/package/neofetch/Config.in
 new file mode 100644
-index 0000000000..c0e7100f38
+index 0000000000..409466bc15
 --- /dev/null
-+++ b/package/screenfetch/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_SCREENFETCH
-+	bool "screenfetch"
++++ b/package/neofetch/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_NEOFETCH
++	bool "neofetch"
 +	depends on BR2_USE_MMU # bash
 +	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # bash
 +	select BR2_PACKAGE_BASH # runtime dependency
 +	help
-+	  screenFetch is a bash script to display distro info.
++	  Neofetch is a bash script to display system information,
++	  including hardware, in a visually pleasing way.
 +
-+	  https://github.com/KittyKatt/screenFetch
-diff --git a/package/screenfetch/screenfetch.hash b/package/screenfetch/screenfetch.hash
++	  https://github.com/dylanaraps/neofetch
+diff --git a/package/neofetch/neofetch.hash b/package/neofetch/neofetch.hash
 new file mode 100644
-index 0000000000..9730041948
+index 0000000000..0927715143
 --- /dev/null
-+++ b/package/screenfetch/screenfetch.hash
++++ b/package/neofetch/neofetch.hash
 @@ -0,0 +1,2 @@
-+sha256  aa97dcd2a8576ae18de6c16c19744aae1573a3da7541af4b98a91930a30a3178  screenfetch-v3.9.1.tar.gz
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/screenfetch/screenfetch.mk b/package/screenfetch/screenfetch.mk
++sha256  58a95e6b714e41efc804eca389a223309169b2def35e57fa934482a6b47c27e7  neofetch-7.1.0.tar.gz
++sha256  fc3034b3dd3a08db109949b629210213bba52aa95455cbc5c2fefa2fc1183efe  LICENSE.md
+diff --git a/package/neofetch/neofetch.mk b/package/neofetch/neofetch.mk
 new file mode 100644
-index 0000000000..b4eb452c97
+index 0000000000..4ea6c27b2d
 --- /dev/null
-+++ b/package/screenfetch/screenfetch.mk
++++ b/package/neofetch/neofetch.mk
 @@ -0,0 +1,17 @@
 +################################################################################
 +#
-+# screenfetch
++# neofetch
 +#
 +################################################################################
 +
-+SCREENFETCH_VERSION = v3.9.1
-+SCREENFETCH_SITE = $(call github,KittyKatt,screenFetch,$(SCREENFETCH_VERSION))
-+SCREENFETCH_LICENSE = GPL-3.0+
-+SCREENFETCH_LICENSE_FILES = COPYING
++NEOFETCH_VERSION = 7.1.0
++NEOFETCH_SITE = $(call github,dylanaraps,neofetch,$(NEOFETCH_VERSION))
++NEOFETCH_LICENSE = MIT
++NEOFETCH_LICENSE_FILES = LICENSE.md
 +
-+define SCREENFETCH_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/screenfetch-dev \
-+		$(TARGET_DIR)/usr/bin/screenfetch
++define NEOFETCH_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/neofetch \
++		$(TARGET_DIR)/usr/bin/neofetch
 +endef
 +
 +$(eval $(generic-package))
