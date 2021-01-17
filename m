@@ -1,35 +1,33 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 17 Jan 2021 18:13:12 +0100
-Subject: [Buildroot] [PATCH 1/1] package/syslog-ng: add
- SYSLOG_NG_CPE_ID_VENDOR
-Message-ID: <20210117171312.356255-1-fontaine.fabrice@gmail.com>
+Date: Sun, 17 Jan 2021 18:16:22 +0100
+Subject: [Buildroot] [PATCH 1/1] package/cups: add CUPS_CPE_ID_VENDOR
+Message-ID: <20210117171622.356521-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:oneidentity:syslog-ng is a valid CPE identifier for this
-package:
+cpe:2.3:a:cups:cups is a valid CPE identifier for this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aoneidentity%3Asyslog-ng
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Acups%3Acups
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/syslog-ng/syslog-ng.mk | 1 +
+ package/cups/cups.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
-index b6b5fad7da..6d22883116 100644
---- a/package/syslog-ng/syslog-ng.mk
-+++ b/package/syslog-ng/syslog-ng.mk
-@@ -10,6 +10,7 @@ SYSLOG_NG_VERSION = 3.30.1
- SYSLOG_NG_SITE = https://github.com/balabit/syslog-ng/releases/download/syslog-ng-$(SYSLOG_NG_VERSION)
- SYSLOG_NG_LICENSE = LGPL-2.1+ (syslog-ng core), GPL-2.0+ (modules)
- SYSLOG_NG_LICENSE_FILES = COPYING GPL.txt LGPL.txt
-+SYSLOG_NG_CPE_ID_VENDOR = oneidentity
- SYSLOG_NG_DEPENDENCIES = host-bison host-flex host-pkgconf \
- 	libglib2 openssl pcre
- # We're patching configure.ac
+diff --git a/package/cups/cups.mk b/package/cups/cups.mk
+index 2f4385671c..2fe9b03a60 100644
+--- a/package/cups/cups.mk
++++ b/package/cups/cups.mk
+@@ -9,6 +9,7 @@ CUPS_SOURCE = cups-$(CUPS_VERSION)-source.tar.gz
+ CUPS_SITE = https://github.com/apple/cups/releases/download/v$(CUPS_VERSION)
+ CUPS_LICENSE = Apache-2.0 with GPL-2.0/LGPL-2.0 exception
+ CUPS_LICENSE_FILES = LICENSE NOTICE
++CUPS_CPE_ID_VENDOR = cups
+ CUPS_INSTALL_STAGING = YES
+ 
+ # Using autoconf, not autoheader, so we cannot use AUTORECONF = YES.
 -- 
 2.29.2
