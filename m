@@ -1,55 +1,36 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 17 Jan 2021 18:52:07 +0100
-Subject: [Buildroot] [PATCH 4/5] package/unzip: add UNZIP_IGNORE_CVES entries
+Date: Sun, 17 Jan 2021 18:52:08 +0100
+Subject: [Buildroot] [PATCH 5/5] package/unzip: set UNZIP_CPE_ID_VALID
 In-Reply-To: <20210117175208.366428-1-fontaine.fabrice@gmail.com>
 References: <20210117175208.366428-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210117175208.366428-4-fontaine.fabrice@gmail.com>
+Message-ID: <20210117175208.366428-5-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+cpe:2.3:a:unzip_project:unzip is a valid CPE identifier for this
+package:
+
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aunzip_project%3Aunzip
+
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/unzip/unzip.mk | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+ package/unzip/unzip.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/package/unzip/unzip.mk b/package/unzip/unzip.mk
-index 5efe5bcd09..9eff5e0639 100644
+index 9eff5e0639..e96a109c2e 100644
 --- a/package/unzip/unzip.mk
 +++ b/package/unzip/unzip.mk
-@@ -31,4 +31,31 @@ UNZIP_PATCH = \
- 	https://sources.debian.org/data/main/u/unzip/6.0-26/debian/patches/25-cve-2019-13232-fix-bug-in-uzbunzip2.patch \
- 	https://sources.debian.org/data/main/u/unzip/6.0-26/debian/patches/26-cve-2019-13232-fix-bug-in-uzinflate.patch
+@@ -9,6 +9,7 @@ UNZIP_SOURCE = unzip$(subst .,,$(UNZIP_VERSION)).tgz
+ UNZIP_SITE = ftp://ftp.info-zip.org/pub/infozip/src
+ UNZIP_LICENSE = Info-ZIP
+ UNZIP_LICENSE_FILES = LICENSE
++UNZIP_CPE_ID_VALID = YES
  
-+# 07-increase-size-of-cfactorstr.patch
-+UNZIP_IGNORE_CVES += CVE-2018-18384
-+# 09-cve-2014-8139-crc-overflow.patch
-+UNZIP_IGNORE_CVES += CVE-2014-8139
-+# 10-cve-2014-8140-test-compr-eb.patch
-+UNZIP_IGNORE_CVES += CVE-2014-8140
-+# 11-cve-2014-8141-getzip64data.patch
-+UNZIP_IGNORE_CVES += CVE-2014-8141
-+# 12-cve-2014-9636-test-compr-eb.patch
-+UNZIP_IGNORE_CVES += CVE-2014-9636
-+# 14-cve-2015-7696.patch
-+UNZIP_IGNORE_CVES += CVE-2015-7696
-+# 15-cve-2015-7697.patch
-+UNZIP_IGNORE_CVES += CVE-2015-7697
-+# 18-cve-2014-9913-unzip-buffer-overflow
-+UNZIP_IGNORE_CVES += CVE-2014-9913
-+# 19-cve-2016-9844-zipinfo-buffer-overflow.patch
-+UNZIP_IGNORE_CVES += CVE-2016-9844
-+# 20-cve-2018-1000035-unzip-buffer-overflow.patch
-+UNZIP_IGNORE_CVES += CVE-2018-1000035
-+# 22-cve-2019-13232-fix-bug-in-undefer-input.patch
-+# 23-cve-2019-13232-zip-bomb-with-overlapped-entries.patch
-+# 24-cve-2019-13232-do-not-raise-alert-for-misplaced-central-directory.patch
-+# 25-cve-2019-13232-fix-bug-in-uzbunzip2.patch
-+# 26-cve-2019-13232-fix-bug-in-uzinflate.patch
-+UNZIP_IGNORE_CVES += CVE-2019-13232
-+
- $(eval $(cmake-package))
+ UNZIP_PATCH = \
+ 	https://sources.debian.org/data/main/u/unzip/6.0-26/debian/patches/07-increase-size-of-cfactorstr.patch \
 -- 
 2.29.2
