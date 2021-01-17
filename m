@@ -1,88 +1,35 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 Jan 2021 09:53:04 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libglew: bump version to 2.2.0
-In-Reply-To: <20210116092349.816488-1-bernd.kuhls@t-online.de>
-References: <20210116092349.816488-1-bernd.kuhls@t-online.de>
-Message-ID: <20210117085304.GU2375@scaer>
+Date: Sun, 17 Jan 2021 10:00:10 +0100
+Subject: [Buildroot] [git commit] package/bsdiff: add BSDIFF_CPE_ID_VENDOR
+Message-ID: <20210117084212.DFC117FACB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=751f38f5a4711b913070b79b2a77182fbc1961dd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-01-16 10:23 +0100, Bernd Kuhls spake thusly:
-> As noted on https://sourceforge.net/projects/glew/ the package moved to
-> github.com, update URLs.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+cpe:2.3:a:daemonology:bsdiff is a valid CPE identifier for this package:
 
-Applied to master, thanks.
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Adaemonology%3Absdiff
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/bsdiff/bsdiff.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-> ---
->  package/libglew/Config.in    | 2 +-
->  package/libglew/libglew.hash | 7 ++-----
->  package/libglew/libglew.mk   | 4 ++--
->  3 files changed, 5 insertions(+), 8 deletions(-)
-> 
-> diff --git a/package/libglew/Config.in b/package/libglew/Config.in
-> index 099c9461a4..1d28c018b6 100644
-> --- a/package/libglew/Config.in
-> +++ b/package/libglew/Config.in
-> @@ -14,7 +14,7 @@ config BR2_PACKAGE_LIBGLEW
->  	  and extension functionality is exposed in a single header
->  	  file.
->  
-> -	  http://glew.sourceforge.net
-> +	  https://github.com/nigels-com/glew
->  
->  comment "libglew depends on X.org and needs an OpenGL backend"
->  	depends on !BR2_PACKAGE_XORG7 || !BR2_PACKAGE_HAS_LIBGL
-> diff --git a/package/libglew/libglew.hash b/package/libglew/libglew.hash
-> index 2e1b1f3c3c..29e63fa308 100644
-> --- a/package/libglew/libglew.hash
-> +++ b/package/libglew/libglew.hash
-> @@ -1,6 +1,3 @@
-> -# From https://sourceforge.net/projects/glew/files/glew/2.1.0/
-> -sha1 18eca05460d0b61709fc115e632b6fe320718b44  glew-2.1.0.tgz
-> -md5 b2ab12331033ddfaa50dc39345343980  glew-2.1.0.tgz
->  # Locally computed:
-> -sha256 04de91e7e6763039bc11940095cd9c7f880baba82196a7765f727ac05a993c95  glew-2.1.0.tgz
-> -sha256 8991cd11befec7c6a63662700f03c0cc42e864b6e77c7e70b80297c951a7f0ff  LICENSE.txt
-> +sha256  d4fc82893cfb00109578d0a1a2337fb8ca335b3ceccf97b97e5cc7f08e4353e1  glew-2.2.0.tgz
-> +sha256  8991cd11befec7c6a63662700f03c0cc42e864b6e77c7e70b80297c951a7f0ff  LICENSE.txt
-> diff --git a/package/libglew/libglew.mk b/package/libglew/libglew.mk
-> index fa26292567..c9c49e6987 100644
-> --- a/package/libglew/libglew.mk
-> +++ b/package/libglew/libglew.mk
-> @@ -4,9 +4,9 @@
->  #
->  ################################################################################
->  
-> -LIBGLEW_VERSION = 2.1.0
-> +LIBGLEW_VERSION = 2.2.0
->  LIBGLEW_SOURCE = glew-$(LIBGLEW_VERSION).tgz
-> -LIBGLEW_SITE = http://sourceforge.net/projects/glew/files/glew/$(LIBGLEW_VERSION)
-> +LIBGLEW_SITE = https://github.com/nigels-com/glew/releases/download/glew-$(LIBGLEW_VERSION)
->  LIBGLEW_LICENSE = BSD-3-Clause, MIT
->  LIBGLEW_LICENSE_FILES = LICENSE.txt
->  LIBGLEW_INSTALL_STAGING = YES
-> -- 
-> 2.29.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/bsdiff/bsdiff.mk b/package/bsdiff/bsdiff.mk
+index 9030284a0a..97a1b3921d 100644
+--- a/package/bsdiff/bsdiff.mk
++++ b/package/bsdiff/bsdiff.mk
+@@ -9,6 +9,7 @@ BSDIFF_SITE = http://www.daemonology.net/bsdiff
+ BSDIFF_DEPENDENCIES = bzip2
+ BSDIFF_LICENSE = BSD-2-Clause
+ BSDIFF_LICENSE_FILES = bsdiff.c
++BSDIFF_CPE_ID_VENDOR = daemonology
+ 
+ define BSDIFF_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) \
