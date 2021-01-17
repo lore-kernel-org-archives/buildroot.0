@@ -1,53 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 17 Jan 2021 15:25:35 +0100
-Subject: [Buildroot] [PATCH 1/1] package/resiprocate: resiprocate-apps
- need openssl
-In-Reply-To: <20210117100612.1210505-1-bernd.kuhls@t-online.de>
-References: <20210117100612.1210505-1-bernd.kuhls@t-online.de>
-Message-ID: <20210117152535.07bf1463@windsurf.home>
+Date: Sun, 17 Jan 2021 15:25:55 +0100
+Subject: [Buildroot] [git commit] package/python-esptool: fix zlib module
+ for python3
+Message-ID: <20210117140655.959DA87826@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Bernd,
+commit: https://git.buildroot.net/buildroot/commit/?id=c9e001fa9229e205878091dee93181ff51513eaf
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 17 Jan 2021 11:06:12 +0100
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+Fixes config with BR2_PACKAGE_PYTHON3=y
 
-> Fixes:
-> http://autobuild.buildroot.net/results/7ac/7ac82a3ac4b06cb5ad44e92548d66a0f79d149a6/
-> 
-> In file included from Server.cxx:19:
-> ../../resip/stack/ssl/Security.hxx:32:10: fatal error: openssl/ssl.h: No such file or directory
-> 
-> clicktoall needs openssl:
-> https://github.com/resiprocate/resiprocate/blob/resiprocate-1.12/apps/clicktocall/Makefile.am#L16
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/resiprocate/Config.in | 1 +
->  1 file changed, 1 insertion(+)
+WARNING: unmet direct dependencies detected for BR2_PACKAGE_PYTHON_ZLIB
+  Depends on [n]: BR2_PACKAGE_PYTHON [=n]
+  Selected by [y]:
+  - BR2_PACKAGE_PYTHON_ESPTOOL [=y] && (BR2_PACKAGE_PYTHON [=n] || BR2_PACKAGE_PYTHON3 [=y])
 
-I have applied, *but* I think the issue should be reported upstream.
-Indeed, I see at least two problems:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-esptool/Config.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
- (1) ./configure happily succeeds with --with-apps but without SSL
-     support... which it should not if one of the applications requires SSL
-     support
-
- (2) the resip/stack/ssl/Security.hxx header gets installed
-     unconditionally, even when OpenSSL support is not enabled... and it
-     includes an OpenSSL header.
-
-Both of these things seem very wrong in the build system/source code of
-resiprocate.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/python-esptool/Config.in b/package/python-esptool/Config.in
+index 7d3579abdc..570f9aa42f 100644
+--- a/package/python-esptool/Config.in
++++ b/package/python-esptool/Config.in
+@@ -3,7 +3,8 @@ config BR2_PACKAGE_PYTHON_ESPTOOL
+ 	select BR2_PACKAGE_PYTHON_ECDSA # runtime
+ 	select BR2_PACKAGE_PYTHON_PYAES # runtime
+ 	select BR2_PACKAGE_PYTHON_SERIAL # runtime
+-	select BR2_PACKAGE_PYTHON_ZLIB # runtime
++	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3
+ 	help
+ 	  A serial utility to communicate & flash code to Espressif
+ 	  ESP8266 & ESP32 chips.
