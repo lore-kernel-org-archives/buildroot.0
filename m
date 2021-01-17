@@ -1,33 +1,34 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 17 Jan 2021 15:11:38 +0100
-Subject: [Buildroot] [PATCH 1/1] package/openjpeg: add OPENJPEG_CPE_ID_VENDOR
-Message-ID: <20210117141138.345507-1-fontaine.fabrice@gmail.com>
+Date: Sun, 17 Jan 2021 15:14:39 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libexif: set LIBEXIF_CPE_ID_VALID
+Message-ID: <20210117141439.345753-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:uclouvain:openjpeg is a valid CPE identifier for this package:
+cpe:2.3:a:libexif_project:libexif is a valid CPE identifier for this
+package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Auclouvain%3Aopenjpeg
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alibexif_project%3Alibexif
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/openjpeg/openjpeg.mk | 1 +
+ package/libexif/libexif.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/openjpeg/openjpeg.mk b/package/openjpeg/openjpeg.mk
-index 688f5c8fec..b5d433df32 100644
---- a/package/openjpeg/openjpeg.mk
-+++ b/package/openjpeg/openjpeg.mk
-@@ -8,6 +8,7 @@ OPENJPEG_VERSION = 2.4.0
- OPENJPEG_SITE = $(call github,uclouvain,openjpeg,v$(OPENJPEG_VERSION))
- OPENJPEG_LICENSE = BSD-2-Clause
- OPENJPEG_LICENSE_FILES = LICENSE
-+OPENJPEG_CPE_ID_VENDOR = uclouvain
- OPENJPEG_INSTALL_STAGING = YES
- 
- ifeq ($(BR2_PACKAGE_OPENJPEG_CODEC),y)
+diff --git a/package/libexif/libexif.mk b/package/libexif/libexif.mk
+index 594e8855c5..9d29cbf590 100644
+--- a/package/libexif/libexif.mk
++++ b/package/libexif/libexif.mk
+@@ -12,6 +12,7 @@ LIBEXIF_INSTALL_STAGING = YES
+ LIBEXIF_DEPENDENCIES = host-pkgconf
+ LIBEXIF_LICENSE = LGPL-2.1+
+ LIBEXIF_LICENSE_FILES = COPYING
++LIBEXIF_CPE_ID_VALID = YES
+ # 0001-fixed-another-unsigned-integer-overflow.patch
+ LIBEXIF_IGNORE_CVES += CVE-2020-0198
+ # 0002-fixed-a-incorrect-overflow-check.patch
 -- 
 2.29.2
