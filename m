@@ -1,46 +1,94 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 17 Jan 2021 14:27:27 +0100
-Subject: [Buildroot] [PATCH 1/1] package/pulseaudio: bump version to 14.2
-Message-ID: <20210117132727.2847597-1-bernd.kuhls@t-online.de>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 17 Jan 2021 14:31:19 +0100
+Subject: [Buildroot] [PATCH] package/linux-firmware: remove imx sdma firmware
+Message-ID: <20210117133119.73546-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes:
-https://lists.freedesktop.org/archives/pulseaudio-discuss/2021-January/031990.html
+As reported on the mailing list [1], the imx sdma firmwares for
+imx[6,7,8] are provided by two packages: firmware-imx and
+linux-firmware
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+$ sha256sum ./firmware-imx-8.10/firmware/sdma/sdma-imx6q.bin
+7790c161b7e013a9dbcbffb17cc5d4cb63d952949a505647e4679f02d04c4784
+./firmware-imx-8.10/firmware/sdma/sdma-imx6q.bin
+
+$ sha256sum  ./linux-firmware-20201022/imx/sdma/sdma-imx6q.bin
+7790c161b7e013a9dbcbffb17cc5d4cb63d952949a505647e4679f02d04c4784
+./linux-firmware-20201022/imx/sdma/sdma-imx6q.bin
+
+Keep firmware-imx as the only imx sdma firmware provider.
+
+[1] http://lists.busybox.net/pipermail/buildroot/2021-January/300938.html
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Fabio Estevam <festevam@gmail.com>
+Cc: Stephane Viau <stephane.viau@oss.nxp.com>
+Cc: Gary Bisson <gary.bisson@boundarydevices.com>
 ---
- package/pulseaudio/pulseaudio.hash | 4 ++--
- package/pulseaudio/pulseaudio.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ Config.in.legacy                         | 8 ++++++++
+ package/linux-firmware/Config.in         | 9 ---------
+ package/linux-firmware/linux-firmware.mk | 6 ------
+ 3 files changed, 8 insertions(+), 15 deletions(-)
 
-diff --git a/package/pulseaudio/pulseaudio.hash b/package/pulseaudio/pulseaudio.hash
-index 5989f8e920..b3e19fdcca 100644
---- a/package/pulseaudio/pulseaudio.hash
-+++ b/package/pulseaudio/pulseaudio.hash
-@@ -1,5 +1,5 @@
--# From https://lists.freedesktop.org/archives/pulseaudio-discuss/2021-January/031986.html
--sha256  b0bcca2a45e4fe1f73c7709dcf75a17dd5235688d5d150069e765dda4884b837  pulseaudio-14.1.tar.xz
-+# From https://lists.freedesktop.org/archives/pulseaudio-discuss/2021-January/031990.html
-+sha256  75d3f7742c1ae449049a4c88900e454b8b350ecaa8c544f3488a2562a9ff66f1  pulseaudio-14.2.tar.xz
- # Locally computed
- sha256  c38aee9e3c8c4d5d594ff548a1be05453023016d6286931f6512db215ec1fd42  GPL
- sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  LGPL
-diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
-index 472a1d3943..ad1710c6f7 100644
---- a/package/pulseaudio/pulseaudio.mk
-+++ b/package/pulseaudio/pulseaudio.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 3c022d21d7..a322d18cb3 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,14 @@ endif
  
--PULSEAUDIO_VERSION = 14.1
-+PULSEAUDIO_VERSION = 14.2
- PULSEAUDIO_SOURCE = pulseaudio-$(PULSEAUDIO_VERSION).tar.xz
- PULSEAUDIO_SITE = https://freedesktop.org/software/pulseaudio/releases
- PULSEAUDIO_INSTALL_STAGING = YES
+ comment "Legacy options removed in 2021.02"
+ 
++config BR2_PACKAGE_LINUX_FIRMWARE_IMX_SDMA
++	bool "imx sdma firmware is provided by firmware-imx"
++	select BR2_LEGACY
++	select BR2_PACKAGE_FIRMWARE_IMX
++	help
++	  linux-firmware provide the same firmware as firmware-imx.
++	  We prefer using firmware-imx as the only provider.
++
+ config BR2_GDB_VERSION_8_2
+ 	bool "gdb 8.2.x has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
+index 8e71c21251..a41310ff2a 100644
+--- a/package/linux-firmware/Config.in
++++ b/package/linux-firmware/Config.in
+@@ -459,15 +459,6 @@ config BR2_PACKAGE_LINUX_FIRMWARE_XCx000
+ 
+ endmenu
+ 
+-menu "SoC Firmware"
+-
+-config BR2_PACKAGE_LINUX_FIRMWARE_IMX_SDMA
+-	bool "Freescale i.MX SDMA"
+-	help
+-	  Firmware files for i.MX SDMA.
+-
+-endmenu
+-
+ menu "Fibre Channel Adapter Firmware"
+ 
+ config BR2_PACKAGE_LINUX_FIRMWARE_QLOGIC_2XXX
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 22fac9d7aa..f23da171c6 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -64,12 +64,6 @@ LINUX_FIRMWARE_FILES += qca/rampatch_usb_00000302.bin qca/nvm_usb_00000302.bin
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSE.qcom
+ endif
+ 
+-# Freescale i.MX SDMA
+-ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_IMX_SDMA),y)
+-LINUX_FIRMWARE_FILES += imx/sdma/sdma-imx6q.bin imx/sdma/sdma-imx7d.bin
+-LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSE.sdma_firmware
+-endif
+-
+ # rt2501/rt61
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT61),y)
+ LINUX_FIRMWARE_FILES += rt2561.bin rt2561s.bin rt2661.bin
 -- 
-2.29.2
+2.25.4
