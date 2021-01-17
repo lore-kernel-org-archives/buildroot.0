@@ -1,26 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 17 Jan 2021 15:03:58 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libtorrent-rasterbar: bump to
- version 1.2.12
-In-Reply-To: <20210106065946.293239-1-fontaine.fabrice@gmail.com>
-References: <20210106065946.293239-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210117150358.021501da@windsurf.home>
+Date: Sun, 17 Jan 2021 15:04:09 +0100
+Subject: [Buildroot] [PATCH 1/1] package/midori: add MIDORI_CPE_ID_VENDOR
+In-Reply-To: <20210117112428.310889-1-fontaine.fabrice@gmail.com>
+References: <20210117112428.310889-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210117150409.23301391@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed,  6 Jan 2021 07:59:46 +0100
+On Sun, 17 Jan 2021 12:24:28 +0100
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> https://github.com/arvidn/libtorrent/blob/v1.2.12/ChangeLog
+> cpe:2.3:a:midori-browser:midori is a valid CPE identifier for this
+> package:
+> 
+>   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Amidori-browser%3Amidori
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/libtorrent-rasterbar/libtorrent-rasterbar.hash | 2 +-
->  package/libtorrent-rasterbar/libtorrent-rasterbar.mk   | 5 +++--
->  2 files changed, 4 insertions(+), 3 deletions(-)
+>  package/midori/midori.mk | 1 +
+>  1 file changed, 1 insertion(+)
 
 Applied to master, thanks.
 
