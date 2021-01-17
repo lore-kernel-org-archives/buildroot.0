@@ -1,33 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 17 Jan 2021 15:28:20 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libexif: set
- LIBEXIF_CPE_ID_VALID
-In-Reply-To: <20210117141439.345753-1-fontaine.fabrice@gmail.com>
-References: <20210117141439.345753-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210117152820.6bf7f1bb@windsurf.home>
+Date: Sun, 17 Jan 2021 15:29:58 +0100
+Subject: [Buildroot] [git commit] package/zstd: build multithreaded library
+ if supported
+Message-ID: <20210117141124.3C349875F6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 17 Jan 2021 15:14:39 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=52154e52069d20105f62191e6c9f903f188a5129
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> cpe:2.3:a:libexif_project:libexif is a valid CPE identifier for this
-> package:
-> 
->   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alibexif_project%3Alibexif
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/libexif/libexif.mk | 1 +
->  1 file changed, 1 insertion(+)
+libzstd.so is built without multi-threading support by default.
+The 'HAVE_THREAD' flag is not respected by lib/Makefile, only by
+programs/Makefile.
 
-Applied to master, thanks.
+Use the %-mt recipe in lib/Makefile to enable multithreading.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/zstd/zstd.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
+index e26e67f46b..c3af9bd58c 100644
+--- a/package/zstd/zstd.mk
++++ b/package/zstd/zstd.mk
+@@ -48,6 +48,14 @@ ZSTD_BUILD_LIBS = libzstd.a libzstd
+ ZSTD_INSTALL_LIBS = install-static install-shared
+ endif
+ 
++# The HAVE_THREAD flag is read by the 'programs' makefile but not by  the 'lib'
++# one. Building a multi-threaded binary with a library (which defaults to
++# single-threaded) gives a runtime error when compressing files.
++# The 'lib' makefile provides specific '%-mt' targets for this purpose.
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
++ZSTD_BUILD_LIBS := $(addsuffix -mt,$(ZSTD_BUILD_LIBS))
++endif
++
+ define ZSTD_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+ 		-C $(@D)/lib $(ZSTD_BUILD_LIBS)
