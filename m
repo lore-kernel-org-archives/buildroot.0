@@ -1,33 +1,33 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 17 Jan 2021 19:02:41 +0100
-Subject: [Buildroot] [PATCH 1/1] package/ntfs-3g: add NTFS_3G_CPE_ID_VENDOR
-Message-ID: <20210117180241.367089-1-fontaine.fabrice@gmail.com>
+Date: Sun, 17 Jan 2021 19:08:52 +0100
+Subject: [Buildroot] [PATCH 1/1] package/jquery: add JQUERY_CPE_ID_VENDOR
+Message-ID: <20210117180852.367541-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:tuxera:ntfs-3g is a valid CPE identifier for this package:
+cpe:2.3:a:jquery:jquery is a valid CPE identifier for this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Atuxera%3Antfs-3g
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ajquery%3Ajquery
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/ntfs-3g/ntfs-3g.mk | 1 +
+ package/jquery/jquery.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/ntfs-3g/ntfs-3g.mk b/package/ntfs-3g/ntfs-3g.mk
-index cbb356195c..1a388af761 100644
---- a/package/ntfs-3g/ntfs-3g.mk
-+++ b/package/ntfs-3g/ntfs-3g.mk
-@@ -12,6 +12,7 @@ NTFS_3G_INSTALL_STAGING = YES
- NTFS_3G_DEPENDENCIES = host-pkgconf
- NTFS_3G_LICENSE = GPL-2.0+, LGPL-2.0+
- NTFS_3G_LICENSE_FILES = COPYING COPYING.LIB
-+NTFS_3G_CPE_ID_VENDOR = tuxera
+diff --git a/package/jquery/jquery.mk b/package/jquery/jquery.mk
+index 88ab84fa05..8febed36ca 100644
+--- a/package/jquery/jquery.mk
++++ b/package/jquery/jquery.mk
+@@ -8,6 +8,7 @@ JQUERY_VERSION = 3.5.1
+ JQUERY_SITE = http://code.jquery.com
+ JQUERY_SOURCE = jquery-$(JQUERY_VERSION).min.js
+ JQUERY_LICENSE = MIT
++JQUERY_CPE_ID_VENDOR = jquery
  
- # 0001-Fixed-reporting-an-error-when-failed-to-build-the-mo.patch
- NTFS_3G_IGNORE_CVES += CVE-2019-9755
+ define JQUERY_EXTRACT_CMDS
+ 	cp $(JQUERY_DL_DIR)/$(JQUERY_SOURCE) $(@D)
 -- 
 2.29.2
