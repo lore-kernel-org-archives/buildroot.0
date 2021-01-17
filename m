@@ -1,94 +1,112 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 17 Jan 2021 14:31:19 +0100
-Subject: [Buildroot] [PATCH] package/linux-firmware: remove imx sdma firmware
-Message-ID: <20210117133119.73546-1-romain.naour@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 17 Jan 2021 14:41:40 +0100
+Subject: [Buildroot] [PATCH 1/1] package/ell: drop first patch
+Message-ID: <20210117134140.343299-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As reported on the mailing list [1], the imx sdma firmwares for
-imx[6,7,8] are provided by two packages: firmware-imx and
-linux-firmware
+First patch is not needed since commit
+7b3ac6d24db08b241df4687f22f757837ddcb5ce which adds a dependency on
+headers >= 4.12
 
-$ sha256sum ./firmware-imx-8.10/firmware/sdma/sdma-imx6q.bin
-7790c161b7e013a9dbcbffb17cc5d4cb63d952949a505647e4679f02d04c4784
-./firmware-imx-8.10/firmware/sdma/sdma-imx6q.bin
+It should also be noted that upstream didn't merge it either
 
-$ sha256sum  ./linux-firmware-20201022/imx/sdma/sdma-imx6q.bin
-7790c161b7e013a9dbcbffb17cc5d4cb63d952949a505647e4679f02d04c4784
-./linux-firmware-20201022/imx/sdma/sdma-imx6q.bin
-
-Keep firmware-imx as the only imx sdma firmware provider.
-
-[1] http://lists.busybox.net/pipermail/buildroot/2021-January/300938.html
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Fabio Estevam <festevam@gmail.com>
-Cc: Stephane Viau <stephane.viau@oss.nxp.com>
-Cc: Gary Bisson <gary.bisson@boundarydevices.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- Config.in.legacy                         | 8 ++++++++
- package/linux-firmware/Config.in         | 9 ---------
- package/linux-firmware/linux-firmware.mk | 6 ------
- 3 files changed, 8 insertions(+), 15 deletions(-)
+ ...01-build-Add-rawmemchr-to-missing.h.patch} |  0
+ ...nl-fix-compile-with-older-toolchains.patch | 70 -------------------
+ ...-add-missing-include-in-dhcp-server.patch} |  0
+ 3 files changed, 70 deletions(-)
+ rename package/ell/{0002-build-Add-rawmemchr-to-missing.h.patch => 0001-build-Add-rawmemchr-to-missing.h.patch} (100%)
+ delete mode 100644 package/ell/0001-ell-rtnl-fix-compile-with-older-toolchains.patch
+ rename package/ell/{0003-ell-add-missing-include-in-dhcp-server.patch => 0002-ell-add-missing-include-in-dhcp-server.patch} (100%)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 3c022d21d7..a322d18cb3 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,14 @@ endif
- 
- comment "Legacy options removed in 2021.02"
- 
-+config BR2_PACKAGE_LINUX_FIRMWARE_IMX_SDMA
-+	bool "imx sdma firmware is provided by firmware-imx"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_FIRMWARE_IMX
-+	help
-+	  linux-firmware provide the same firmware as firmware-imx.
-+	  We prefer using firmware-imx as the only provider.
-+
- config BR2_GDB_VERSION_8_2
- 	bool "gdb 8.2.x has been removed"
- 	select BR2_LEGACY
-diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index 8e71c21251..a41310ff2a 100644
---- a/package/linux-firmware/Config.in
-+++ b/package/linux-firmware/Config.in
-@@ -459,15 +459,6 @@ config BR2_PACKAGE_LINUX_FIRMWARE_XCx000
- 
- endmenu
- 
--menu "SoC Firmware"
+diff --git a/package/ell/0002-build-Add-rawmemchr-to-missing.h.patch b/package/ell/0001-build-Add-rawmemchr-to-missing.h.patch
+similarity index 100%
+rename from package/ell/0002-build-Add-rawmemchr-to-missing.h.patch
+rename to package/ell/0001-build-Add-rawmemchr-to-missing.h.patch
+diff --git a/package/ell/0001-ell-rtnl-fix-compile-with-older-toolchains.patch b/package/ell/0001-ell-rtnl-fix-compile-with-older-toolchains.patch
+deleted file mode 100644
+index 0375be854c..0000000000
+--- a/package/ell/0001-ell-rtnl-fix-compile-with-older-toolchains.patch
++++ /dev/null
+@@ -1,70 +0,0 @@
+-From c4218f71352ae5e39692e030d9af2c665dbb2eee Mon Sep 17 00:00:00 2001
+-From: Peter Seiderer <ps.report@gmx.net>
+-Date: Thu, 9 Apr 2020 22:21:36 +0200
+-Subject: [PATCH] ell/rtnl: fix compile with older toolchains
 -
--config BR2_PACKAGE_LINUX_FIRMWARE_IMX_SDMA
--	bool "Freescale i.MX SDMA"
--	help
--	  Firmware files for i.MX SDMA.
+-Older toolchains need to include sys/types.h and sys/socket.h before
+-linux/if.h, RTA_PREF was introduces with linux-4.1.x.
 -
--endmenu
+-Fixes:
 -
- menu "Fibre Channel Adapter Firmware"
- 
- config BR2_PACKAGE_LINUX_FIRMWARE_QLOGIC_2XXX
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 22fac9d7aa..f23da171c6 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -64,12 +64,6 @@ LINUX_FIRMWARE_FILES += qca/rampatch_usb_00000302.bin qca/nvm_usb_00000302.bin
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSE.qcom
- endif
- 
--# Freescale i.MX SDMA
--ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_IMX_SDMA),y)
--LINUX_FIRMWARE_FILES += imx/sdma/sdma-imx6q.bin imx/sdma/sdma-imx7d.bin
--LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSE.sdma_firmware
--endif
+-  In file included from ell/rtnl.c:28:0:
+-  .../host/arm-buildroot-linux-gnueabi/sysroot/usr/include/linux/if.h:185:19: error: field 'ifru_addr' has incomplete type
+-  .../host/arm-buildroot-linux-gnueabi/sysroot/usr/include/linux/if.h:186:19: error: field 'ifru_dstaddr' has incomplete type
+-  .../host/arm-buildroot-linux-gnueabi/sysroot/usr/include/linux/if.h:187:19: error: field 'ifru_broadaddr' has incomplete type
+-  .../host/arm-buildroot-linux-gnueabi/sysroot/usr/include/linux/if.h:188:19: error: field 'ifru_netmask' has incomplete type
+-  .../arm-buildroot-linux-gnueabi/sysroot/usr/include/linux/if.h:189:20: error: field 'ifru_hwaddr' has incomplete type
+-  ell/rtnl.c: In function 'l_rtnl_route_extract':
+-  ell/rtnl.c:120:8: error: 'RTA_PREF' undeclared (first use in this function)
 -
- # rt2501/rt61
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_RALINK_RT61),y)
- LINUX_FIRMWARE_FILES += rt2561.bin rt2561s.bin rt2661.bin
+-[Upstream: https://lists.ofono.org/hyperkitty/list/ell at lists.01.org/thread/TOJ5XEY7X6WMOMJHX4KWI5LFEOX2QTBQ]
+-[Rebased for ell-0.35]
+-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+----
+- configure.ac | 2 ++
+- ell/rtnl.c   | 7 ++++++-
+- 2 files changed, 8 insertions(+), 1 deletion(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 1e5ead9..bec472d 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -110,6 +110,8 @@ AC_CHECK_FUNC(epoll_create, dummy=yes,
+- 
+- AC_CHECK_HEADERS(linux/types.h linux/if_alg.h)
+- 
+-+AC_CHECK_DECLS([RTA_PREF], [], [], [[#include <linux/rtnetlink.h>]])
+-+
+- AC_ARG_ENABLE(glib, AC_HELP_STRING([--enable-glib],
+- 				[enable ell/glib main loop example]),
+- 					[enable_glib=${enableval}])
+-diff --git a/ell/rtnl.c b/ell/rtnl.c
+-index c115573..ccfa6fe 100644
+---- a/ell/rtnl.c
+-+++ b/ell/rtnl.c
+-@@ -25,9 +25,10 @@
+- #endif
+- 
+- #define _GNU_SOURCE
+--#include <linux/if.h>
+-+#include <sys/types.h>
+- #include <linux/icmpv6.h>
+- #include <sys/socket.h>
+-+#include <linux/if.h>
+- #include <arpa/inet.h>
+- 
+- #include "util.h"
+-@@ -524,6 +525,10 @@ LIB_EXPORT bool l_rtnl_route_set_scope(struct l_rtnl_route *rt, uint8_t scope)
+- 	return true;
+- }
+- 
+-+#if defined HAVE_DECL_RTA_PREF && !HAVE_DECL_RTA_PREF
+-+#define RTA_PREF 20
+-+#endif
+-+
+- static size_t rta_add_u8(void *rta_buf, unsigned short type, uint8_t value)
+- {
+- 	struct rtattr *rta = rta_buf;
+--- 
+-2.29.2
+-
+diff --git a/package/ell/0003-ell-add-missing-include-in-dhcp-server.patch b/package/ell/0002-ell-add-missing-include-in-dhcp-server.patch
+similarity index 100%
+rename from package/ell/0003-ell-add-missing-include-in-dhcp-server.patch
+rename to package/ell/0002-ell-add-missing-include-in-dhcp-server.patch
 -- 
-2.25.4
+2.29.2
