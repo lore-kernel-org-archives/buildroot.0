@@ -1,72 +1,33 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 Jan 2021 16:49:43 +0100
-Subject: [Buildroot] [PATCH] package/grpc: bump version to 1.34.0
-In-Reply-To: <20210112131837.195012-1-buildroot@heine.tech>
-References: <20210112131837.195012-1-buildroot@heine.tech>
-Message-ID: <20210117154943.GM2375@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 17 Jan 2021 16:50:57 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libgit2: add LIBGIT2_CPE_ID_VENDOR
+Message-ID: <20210117155057.350123-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Michael, All,
+cpe:2.3:a:libgit2:libgit2 is a valid CPE identifier for this package:
 
-On 2021-01-12 14:18 +0100, Michael Nosthoff via buildroot spake thusly:
-> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alibgit2%3Alibgit2
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libgit2/libgit2.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Do we still need our hack that was introduced to workaround a deficiency
-in the gcc-4.8 packaged in Ubujntu 14.04:
-
-    19dfe7f6e78e package/grpc: fix build on ubuntu gcc 4.8
-
-There is now a dependency on gcc > 4.9 and host gcc >= 4.9, so maybe we
-can finally get rid of that hack. Thoughts?
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/grpc/grpc.hash | 2 +-
->  package/grpc/grpc.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/grpc/grpc.hash b/package/grpc/grpc.hash
-> index b264694800..68d0d27c65 100644
-> --- a/package/grpc/grpc.hash
-> +++ b/package/grpc/grpc.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed
-> -sha256  2060769f2d4b0d3535ba594b2ab614d7f68a492f786ab94b4318788d45e3278a  grpc-1.33.2.tar.gz
-> +sha256  7372a881122cd85a7224435a1d58bc5e11c88d4fb98a64b83f36f3d1c2f16d39  grpc-1.34.0.tar.gz
->  sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-> diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
-> index 04c741fe9d..8585b6bdc3 100644
-> --- a/package/grpc/grpc.mk
-> +++ b/package/grpc/grpc.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -GRPC_VERSION = 1.33.2
-> +GRPC_VERSION = 1.34.0
->  GRPC_SITE = $(call github,grpc,grpc,v$(GRPC_VERSION))
->  GRPC_LICENSE = Apache-2.0
->  GRPC_LICENSE_FILES = LICENSE
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/libgit2/libgit2.mk b/package/libgit2/libgit2.mk
+index 30e6f24887..14709a0939 100644
+--- a/package/libgit2/libgit2.mk
++++ b/package/libgit2/libgit2.mk
+@@ -8,6 +8,7 @@ LIBGIT2_VERSION = 1.1.0
+ LIBGIT2_SITE = https://github.com/libgit2/libgit2/releases/download/v$(LIBGIT2_VERSION)
+ LIBGIT2_LICENSE = GPL-2.0 with linking exception, MIT (sha1), wildmatch license (wildmatch)
+ LIBGIT2_LICENSE_FILES = COPYING
++LIBGIT2_CPE_ID_VALID = YES
+ LIBGIT2_INSTALL_STAGING = YES
+ 
+ LIBGIT2_CONF_OPTS = \
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.29.2
