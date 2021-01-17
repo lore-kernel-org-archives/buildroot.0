@@ -1,50 +1,33 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Sun, 17 Jan 2021 16:33:22 +0100
-Subject: [Buildroot] [PATCH] package/nano: bump to version 5.5
-Message-ID: <20210117153322.936579-1-francois.perrad@gadz.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 17 Jan 2021 16:33:43 +0100
+Subject: [Buildroot] [PATCH 1/1] package/haproxy: add HAPROXY_CPE_ID_VENDOR
+Message-ID: <20210117153343.348696-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-support for Slang has been removed
+cpe:2.3:a:haproxy:haproxy is a valid CPE identifier for this package:
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ahaproxy%3Ahaproxy
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/nano/nano.hash | 4 ++--
- package/nano/nano.mk   | 3 +--
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ package/haproxy/haproxy.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/nano/nano.hash b/package/nano/nano.hash
-index 2126f576a..4498414fd 100644
---- a/package/nano/nano.hash
-+++ b/package/nano/nano.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://www.nano-editor.org/dist/v5/nano-5.4.tar.xz.asc
-+# https://www.nano-editor.org/dist/v5/nano-5.5.tar.xz.asc
- # using key BFD009061E535052AD0DF2150D28D4D2A0ACE884
--sha256  fe993408b22286355809ce48ebecc4444d19af8203ed4959d269969112ed86e9  nano-5.4.tar.xz
-+sha256  390b81bf9b41ff736db997aede4d1f60b4453fbd75a519a4ddb645f6fd687e4a  nano-5.5.tar.xz
- sha256  fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
-diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-index 1fc499c34..097afadc3 100644
---- a/package/nano/nano.mk
-+++ b/package/nano/nano.mk
-@@ -5,12 +5,11 @@
- ################################################################################
+diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
+index 0a4a72fcce..7c05decf2f 100644
+--- a/package/haproxy/haproxy.mk
++++ b/package/haproxy/haproxy.mk
+@@ -9,6 +9,7 @@ HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).8
+ HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
+ HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
+ HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
++HAPROXY_CPE_ID_VENDOR = haproxy
  
- NANO_VERSION_MAJOR = 5
--NANO_VERSION = $(NANO_VERSION_MAJOR).4
-+NANO_VERSION = $(NANO_VERSION_MAJOR).5
- NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
- NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
- NANO_LICENSE = GPL-3.0+
- NANO_LICENSE_FILES = COPYING
--NANO_CONF_OPTS = --without-slang
- NANO_DEPENDENCIES = ncurses
- 
- ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
+ HAPROXY_MAKE_OPTS = \
+ 	LD=$(TARGET_CC) \
 -- 
-2.27.0
+2.29.2
