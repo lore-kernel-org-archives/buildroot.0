@@ -1,36 +1,34 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 Jan 2021 17:06:08 +0100
-Subject: [Buildroot] [git commit] package/libexif: set LIBEXIF_CPE_ID_VALID
-Message-ID: <20210117155738.B739787590@busybox.osuosl.org>
+Date: Sun, 17 Jan 2021 17:08:50 +0100
+Subject: [Buildroot] [git commit] package/asn1c: set ASN1C_CPE_ID_VALID
+Message-ID: <20210117155738.CD553815E9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=553c9e547e688b5ed3631299e3500292e2bce005
+commit: https://git.buildroot.net/buildroot/commit/?id=56e9aa463ca817aceb5b39816d00436400ce96dc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:libexif_project:libexif is a valid CPE identifier for this
-package:
+cpe:2.3:a:asn1c_project:asn1c is a valid CPE identifier for this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alibexif_project%3Alibexif
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aasn1c_project%3Aasn1c
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libexif/libexif.mk | 1 +
+ package/asn1c/asn1c.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/libexif/libexif.mk b/package/libexif/libexif.mk
-index 594e8855c5..9d29cbf590 100644
---- a/package/libexif/libexif.mk
-+++ b/package/libexif/libexif.mk
-@@ -12,6 +12,7 @@ LIBEXIF_INSTALL_STAGING = YES
- LIBEXIF_DEPENDENCIES = host-pkgconf
- LIBEXIF_LICENSE = LGPL-2.1+
- LIBEXIF_LICENSE_FILES = COPYING
-+LIBEXIF_CPE_ID_VALID = YES
- # 0001-fixed-another-unsigned-integer-overflow.patch
- LIBEXIF_IGNORE_CVES += CVE-2020-0198
- # 0002-fixed-a-incorrect-overflow-check.patch
+diff --git a/package/asn1c/asn1c.mk b/package/asn1c/asn1c.mk
+index 314462a92b..e76a9f84fd 100644
+--- a/package/asn1c/asn1c.mk
++++ b/package/asn1c/asn1c.mk
+@@ -8,5 +8,6 @@ ASN1C_VERSION = 0.9.28
+ ASN1C_SITE = https://github.com/vlm/asn1c/releases/download/v$(ASN1C_VERSION)
+ ASN1C_LICENSE = BSD-2-Clause
+ ASN1C_LICENSE_FILES = LICENSE
++ASN1C_CPE_ID_VALID = YES
+ 
+ $(eval $(host-autotools-package))
