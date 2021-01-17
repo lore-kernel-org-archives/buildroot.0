@@ -1,46 +1,66 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 Jan 2021 09:49:56 +0100
-Subject: [Buildroot] [git commit] package/libva-utils: bump version to 2.10.0
-Message-ID: <20210117083229.4757E8658C@busybox.osuosl.org>
+Date: Sun, 17 Jan 2021 09:49:57 +0100
+Subject: [Buildroot] [git commit] package/libglew: bump version to 2.2.0
+Message-ID: <20210117083229.553FC88092@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=70fe8518cd4a64235e94c264f4a3dc759c2c5027
+commit: https://git.buildroot.net/buildroot/commit/?id=08421133f02842330aff43c3f2ab77c1299e47d2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+As noted on https://sourceforge.net/projects/glew/ the package moved to
+github.com, update URLs.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libva-utils/libva-utils.hash | 6 +++---
- package/libva-utils/libva-utils.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libglew/Config.in    | 2 +-
+ package/libglew/libglew.hash | 7 ++-----
+ package/libglew/libglew.mk   | 4 ++--
+ 3 files changed, 5 insertions(+), 8 deletions(-)
 
-diff --git a/package/libva-utils/libva-utils.hash b/package/libva-utils/libva-utils.hash
-index 208da06592..349fcc42ae 100644
---- a/package/libva-utils/libva-utils.hash
-+++ b/package/libva-utils/libva-utils.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/intel/libva-utils/releases/download/2.9.1/libva-utils-2.9.1.tar.bz2.sha1sum
--sha1  92d8118e112bca8d8497c10a5f896610883a9775  libva-utils-2.9.1.tar.bz2
-+# From https://github.com/intel/libva-utils/releases/download/2.10.0/libva-utils-2.10.0.tar.bz2.sha1sum
-+sha1  083a31354d2d49a4b9b8d4bccd6e7b77fc447154  libva-utils-2.10.0.tar.bz2
- # Locally computed
--sha256  66558051b280f0f82781b80d355c198105235b5887e6fcb703ef1a679646c814  libva-utils-2.9.1.tar.bz2
-+sha256  33f06929faa395f55ec816432679219c56d70850bf465c848f0418e8a4f0352b  libva-utils-2.10.0.tar.bz2
- sha256  c6220c9f87832c27abcb8a32eafdd2823e13ce146b3ea63d5deae2a76798ef50  COPYING
-diff --git a/package/libva-utils/libva-utils.mk b/package/libva-utils/libva-utils.mk
-index 2e26df7100..4634ba4eb7 100644
---- a/package/libva-utils/libva-utils.mk
-+++ b/package/libva-utils/libva-utils.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/libglew/Config.in b/package/libglew/Config.in
+index 099c9461a4..1d28c018b6 100644
+--- a/package/libglew/Config.in
++++ b/package/libglew/Config.in
+@@ -14,7 +14,7 @@ config BR2_PACKAGE_LIBGLEW
+ 	  and extension functionality is exposed in a single header
+ 	  file.
+ 
+-	  http://glew.sourceforge.net
++	  https://github.com/nigels-com/glew
+ 
+ comment "libglew depends on X.org and needs an OpenGL backend"
+ 	depends on !BR2_PACKAGE_XORG7 || !BR2_PACKAGE_HAS_LIBGL
+diff --git a/package/libglew/libglew.hash b/package/libglew/libglew.hash
+index 2e1b1f3c3c..29e63fa308 100644
+--- a/package/libglew/libglew.hash
++++ b/package/libglew/libglew.hash
+@@ -1,6 +1,3 @@
+-# From https://sourceforge.net/projects/glew/files/glew/2.1.0/
+-sha1 18eca05460d0b61709fc115e632b6fe320718b44  glew-2.1.0.tgz
+-md5 b2ab12331033ddfaa50dc39345343980  glew-2.1.0.tgz
+ # Locally computed:
+-sha256 04de91e7e6763039bc11940095cd9c7f880baba82196a7765f727ac05a993c95  glew-2.1.0.tgz
+-sha256 8991cd11befec7c6a63662700f03c0cc42e864b6e77c7e70b80297c951a7f0ff  LICENSE.txt
++sha256  d4fc82893cfb00109578d0a1a2337fb8ca335b3ceccf97b97e5cc7f08e4353e1  glew-2.2.0.tgz
++sha256  8991cd11befec7c6a63662700f03c0cc42e864b6e77c7e70b80297c951a7f0ff  LICENSE.txt
+diff --git a/package/libglew/libglew.mk b/package/libglew/libglew.mk
+index fa26292567..c9c49e6987 100644
+--- a/package/libglew/libglew.mk
++++ b/package/libglew/libglew.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--LIBVA_UTILS_VERSION = 2.9.1
-+LIBVA_UTILS_VERSION = 2.10.0
- LIBVA_UTILS_SOURCE = libva-utils-$(LIBVA_UTILS_VERSION).tar.bz2
- LIBVA_UTILS_SITE = https://github.com/intel/libva-utils/releases/download/$(LIBVA_UTILS_VERSION)
- LIBVA_UTILS_LICENSE = MIT
+-LIBGLEW_VERSION = 2.1.0
++LIBGLEW_VERSION = 2.2.0
+ LIBGLEW_SOURCE = glew-$(LIBGLEW_VERSION).tgz
+-LIBGLEW_SITE = http://sourceforge.net/projects/glew/files/glew/$(LIBGLEW_VERSION)
++LIBGLEW_SITE = https://github.com/nigels-com/glew/releases/download/glew-$(LIBGLEW_VERSION)
+ LIBGLEW_LICENSE = BSD-3-Clause, MIT
+ LIBGLEW_LICENSE_FILES = LICENSE.txt
+ LIBGLEW_INSTALL_STAGING = YES
