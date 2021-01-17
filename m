@@ -1,33 +1,35 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 17 Jan 2021 18:07:03 +0100
-Subject: [Buildroot] [PATCH 1/1] package/tor: add TOR_CPE_ID_VENDOR
-Message-ID: <20210117170703.355979-1-fontaine.fabrice@gmail.com>
+Date: Sun, 17 Jan 2021 18:13:12 +0100
+Subject: [Buildroot] [PATCH 1/1] package/syslog-ng: add
+ SYSLOG_NG_CPE_ID_VENDOR
+Message-ID: <20210117171312.356255-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:torproject:tor is a valid CPE identifier for this package:
+cpe:2.3:a:oneidentity:syslog-ng is a valid CPE identifier for this
+package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Atorproject%3Ator
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aoneidentity%3Asyslog-ng
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/tor/tor.mk | 1 +
+ package/syslog-ng/syslog-ng.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/tor/tor.mk b/package/tor/tor.mk
-index b7095aa39c..098c517aa7 100644
---- a/package/tor/tor.mk
-+++ b/package/tor/tor.mk
-@@ -8,6 +8,7 @@ TOR_VERSION = 0.4.4.6
- TOR_SITE = https://dist.torproject.org
- TOR_LICENSE = BSD-3-Clause
- TOR_LICENSE_FILES = LICENSE
-+TOR_CPE_ID_VENDOR = torproject
- TOR_DEPENDENCIES = libevent openssl zlib
- TOR_AUTORECONF = YES
- 
+diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
+index b6b5fad7da..6d22883116 100644
+--- a/package/syslog-ng/syslog-ng.mk
++++ b/package/syslog-ng/syslog-ng.mk
+@@ -10,6 +10,7 @@ SYSLOG_NG_VERSION = 3.30.1
+ SYSLOG_NG_SITE = https://github.com/balabit/syslog-ng/releases/download/syslog-ng-$(SYSLOG_NG_VERSION)
+ SYSLOG_NG_LICENSE = LGPL-2.1+ (syslog-ng core), GPL-2.0+ (modules)
+ SYSLOG_NG_LICENSE_FILES = COPYING GPL.txt LGPL.txt
++SYSLOG_NG_CPE_ID_VENDOR = oneidentity
+ SYSLOG_NG_DEPENDENCIES = host-bison host-flex host-pkgconf \
+ 	libglib2 openssl pcre
+ # We're patching configure.ac
 -- 
 2.29.2
