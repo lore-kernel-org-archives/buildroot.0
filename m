@@ -1,48 +1,69 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 17 Jan 2021 15:48:11 +0100
-Subject: [Buildroot] [PATCH/RFC 1/1] package/clamav: disable on riscv64
-In-Reply-To: <20201114165100.2220981-1-bernd.kuhls@t-online.de>
-References: <20201114165100.2220981-1-bernd.kuhls@t-online.de>
-Message-ID: <20210117154811.79532aac@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 17 Jan 2021 15:45:51 +0100
+Subject: [Buildroot] [git commit] package/mpd: depends on gcc and host gcc
+ >= 7
+Message-ID: <20210117143011.7C3DA86528@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=6ed7036464541e06b241a5a71d3e39d932410ddc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 14 Nov 2020 17:51:00 +0100
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+mpd uses string_view since version 0.22 and
+https://github.com/MusicPlayerDaemon/MPD/commit/fa45a8adfa44f6bc815ae7428770112c15c76d73
 
-> Fixes:
-> http://autobuild.buildroot.net/results/6ad/6adc1ff74be4848c057aaf7bd02cc4b7d3610b1c/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> The real fix is to add
-> 
->     "#define __ARCH_WANT_RENAMEAT"
-> 
-> to the kernel headers in arch/riscv/include/uapi/asm/unistd.h
-> Inspired by https://lore.kernel.org/patchwork/patch/856923/#1053531
-> 
-> But patching kernel headers/image seems to be complicated.
-> Because I did not find a way to do so I am sending this patch as RFC
-> combined with a request for help.
+string_view is a C++17 feature:
+https://github.com/MusicPlayerDaemon/MPD/commit/e0e5ed62ee98a0e21bc928f432a0051854193cd2
 
-The problem is that uClibc-ng only implements renameat() in terms of
-the renameat() system call, and not using the renameat2() system call.
-Because RISC-V is a fairly new CPU architecture, there is no reason for
-it to support the renameat system call, which is just the same as
-renameat2 without the flags argument.
+So add a dependency on host gcc >= 7
 
-Waldemar ?
+Moreover, C++17 is also mandatory on the target side since
+https://github.com/MusicPlayerDaemon/MPD/commit/8f981845dc7376824d94fd24924788c582942929
+so also bump the gcc dependency
 
-Best regards,
+Finally, drop BR2_TOOLCHAIN_HAS_GCC_BUG_64735 which is not needed as it
+will always be true with gcc >= 7
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fixes:
+ - http://autobuild.buildroot.org/results/e42a1d0cd808585a755754f839fe7d2080547191
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/mpd/Config.in | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
+
+diff --git a/package/mpd/Config.in b/package/mpd/Config.in
+index fbde82ab58..b19113d8c0 100644
+--- a/package/mpd/Config.in
++++ b/package/mpd/Config.in
+@@ -5,8 +5,8 @@ menuconfig BR2_PACKAGE_MPD
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # fork
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_6 # C++14
+-	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17
++	depends on BR2_HOST_GCC_AT_LEAST_7 # C++17
+ 	select BR2_PACKAGE_BOOST
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	help
+@@ -405,11 +405,10 @@ config BR2_PACKAGE_MPD_ID3TAG
+ 
+ endif
+ 
+-comment "mpd needs a toolchain w/ C++, threads, wchar, gcc >= 6"
++comment "mpd needs a toolchain w/ C++, threads, wchar, gcc >= 7, host gcc >= 7"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+-		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_6
+-
+-comment "mpd needs a toolchain not affected by GCC bug 64735"
+-	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
++		!BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_7 || \
++		!BR2_HOST_GCC_AT_LEAST_7
