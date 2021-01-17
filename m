@@ -1,140 +1,51 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 Jan 2021 10:26:32 +0100
-Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: add fixes from Kodi
- project
-In-Reply-To: <20210115173332.536722-1-bernd.kuhls@t-online.de>
-References: <20210115173332.536722-1-bernd.kuhls@t-online.de>
-Message-ID: <20210117092632.GA2375@scaer>
+Date: Sun, 17 Jan 2021 10:29:17 +0100
+Subject: [Buildroot] [git commit]
+ support/config-fragments/autobuild/bootlin-x86-64-glibc: use
+ toolchain-external-bootlin
+Message-ID: <20210117091214.9300287CDD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=01533244a59ae67323ce11e43be4494d0b35f0f1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-01-15 18:33 +0100, Bernd Kuhls spake thusly:
-> Adding these patches brings our ffmpeg package to the same level as the
-> kodi-provided ffmpeg package allowing us to switch the kodi build to
-> use the system-provided ffmpeg instead of its internal build when kodi
-> is bumped to version 19.0-Matrix.
+Until now the bootlin-x86-64-glibc was using a Bootlin toolchain as a
+custom external toolchain. However, now that we have the
+toolchain-external-bootlin package explicitly supporting Bootlin
+toolchains as known toolchain profiles, it makes sense to use
+that. Indeed, this will ensure that this autobuilder configuration
+will use the latest available version of the Buildroot toolchain for
+x86-64 glibc.
 
-Although I usually frown on carrying patches specific to a downstream,
-in this case one patch is an ctual backport, and the other has seen a
-pretty good reception so far upstream.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ .../config-fragments/autobuild/bootlin-x86-64-glibc.config | 14 ++------------
+ 1 file changed, 2 insertions(+), 12 deletions(-)
 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  ...264-skip-decode-if-pic-has-no-slices.patch | 36 ++++++++++++++++++
->  ...-make-sure-mpegts-read-header-always.patch | 38 +++++++++++++++++++
->  2 files changed, 74 insertions(+)
->  create mode 100644 package/ffmpeg/0003-avcodec-vaapi_h264-skip-decode-if-pic-has-no-slices.patch
->  create mode 100644 package/ffmpeg/0004-avformat-mpegts-make-sure-mpegts-read-header-always.patch
-> 
-> diff --git a/package/ffmpeg/0003-avcodec-vaapi_h264-skip-decode-if-pic-has-no-slices.patch b/package/ffmpeg/0003-avcodec-vaapi_h264-skip-decode-if-pic-has-no-slices.patch
-> new file mode 100644
-> index 0000000000..2892df9d81
-> --- /dev/null
-> +++ b/package/ffmpeg/0003-avcodec-vaapi_h264-skip-decode-if-pic-has-no-slices.patch
-> @@ -0,0 +1,36 @@
-> +From 2c6b3f357331e203ad87214984661c40704aceb7 Mon Sep 17 00:00:00 2001
-> +From: Rainer Hochecker <fernetmenta@online.de>
-> +Date: Sat, 26 Jan 2019 19:48:35 +0100
-> +Subject: [PATCH] avcodec/vaapi_h264: skip decode if pic has no slices
-> +
-> +This fixes / workarounds https://bugs.freedesktop.org/show_bug.cgi?id=105368.
-> +It was hit frequently when watching h264 channels received via DVB-X.
-> +Corresponding kodi bug: https://github.com/xbmc/xbmc/issues/15704
-> +
-> +Downloaded from Kodi ffmpeg repo:
-> +https://github.com/xbmc/FFmpeg/commit/2c6b3f357331e203ad87214984661c40704aceb7
-> +
-> +Patch was sent upstream:
-> +http://ffmpeg.org/pipermail/ffmpeg-devel/2019-March/240863.html
-> +
-> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> +---
-> + libavcodec/vaapi_h264.c | 5 +++++
-> + 1 file changed, 5 insertions(+)
-> +
-> +diff --git a/libavcodec/vaapi_h264.c b/libavcodec/vaapi_h264.c
-> +index dd2a6571604..e521a05c4ff 100644
-> +--- a/libavcodec/vaapi_h264.c
-> ++++ b/libavcodec/vaapi_h264.c
-> +@@ -314,6 +314,11 @@ static int vaapi_h264_end_frame(AVCodecContext *avctx)
-> +     H264SliceContext *sl = &h->slice_ctx[0];
-> +     int ret;
-> + 
-> ++    if (pic->nb_slices == 0) {
-> ++        ret = AVERROR_INVALIDDATA;
-> ++        goto finish;
-> ++    }
-> ++
-> +     ret = ff_vaapi_decode_issue(avctx, pic);
-> +     if (ret < 0)
-> +         goto finish;
-> diff --git a/package/ffmpeg/0004-avformat-mpegts-make-sure-mpegts-read-header-always.patch b/package/ffmpeg/0004-avformat-mpegts-make-sure-mpegts-read-header-always.patch
-> new file mode 100644
-> index 0000000000..75a39d16fa
-> --- /dev/null
-> +++ b/package/ffmpeg/0004-avformat-mpegts-make-sure-mpegts-read-header-always.patch
-> @@ -0,0 +1,38 @@
-> +From 3136f41e6db8189994a8e4f72eacc92b669776d1 Mon Sep 17 00:00:00 2001
-> +From: Marton Balint <cus@passwd.hu>
-> +Date: Sun, 15 Nov 2020 00:39:41 +0100
-> +Subject: [PATCH] avformat/mpegts: make sure mpegts_read_header always stops at
-> + the first pmt
-> +
-> +mpegts_read_header stops parsing the file at the first PMT. However the check
-> +that ensured this was wrong because streams can also be added before the first
-> +PMT is received (e.g. EIT).
-> +
-> +So let's make sure we are in the header reading phase by checking if ts->pkt is
-> +unset instead of checking if the number of streams found so far is 0.
-> +
-> +Downloaded from Kodi ffmpeg repo:
-> +https://github.com/xbmc/FFmpeg/commit/3136f41e6db8189994a8e4f72eacc92b669776d1
-> +
-> +Patch was committed upstream:
-> +http://git.videolan.org/?p=ffmpeg.git;a=patch;h=ca55240b8c1fd4cfdb61f88fd2cb378d475d910a
-> +
-> +Signed-off-by: Marton Balint <cus@passwd.hu>
-> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> +---
-> + libavformat/mpegts.c | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/libavformat/mpegts.c b/libavformat/mpegts.c
-> +index c6fd3e1cef63..1da81a0fe62a 100644
-> +--- a/libavformat/mpegts.c
-> ++++ b/libavformat/mpegts.c
-> +@@ -2352,7 +2352,7 @@ static void pmt_cb(MpegTSFilter *filter, const uint8_t *section, int section_len
-> +         goto out;
-> + 
-> +     // stop parsing after pmt, we found header
-> +-    if (!ts->stream->nb_streams)
-> ++    if (!ts->pkt)
-> +         ts->stop_parse = 2;
-> + 
-> +     set_pmt_found(ts, h->id);
-> -- 
-> 2.29.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/support/config-fragments/autobuild/bootlin-x86-64-glibc.config b/support/config-fragments/autobuild/bootlin-x86-64-glibc.config
+index 6a372803b2..815eb658e0 100644
+--- a/support/config-fragments/autobuild/bootlin-x86-64-glibc.config
++++ b/support/config-fragments/autobuild/bootlin-x86-64-glibc.config
+@@ -1,15 +1,5 @@
+ BR2_x86_64=y
+ BR2_x86_corei7=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+-BR2_TOOLCHAIN_EXTERNAL_URL="http://toolchains.bootlin.com/downloads/releases/toolchains/x86-64-core-i7/tarballs/x86-64-core-i7--glibc--bleeding-edge-2020.02-2.tar.bz2"
+-BR2_TOOLCHAIN_EXTERNAL_GCC_9=y
+-BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_19=y
+-# BR2_TOOLCHAIN_EXTERNAL_LOCALE is not set
+-BR2_TOOLCHAIN_EXTERNAL_CXX=y
+-BR2_TOOLCHAIN_EXTERNAL_HAS_SSP=y
+-BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG=y
+-BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS=y
+-BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_NPTL=y
+-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
++BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
++BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_CORE_I7_GLIBC_BLEEDING_EDGE=y
