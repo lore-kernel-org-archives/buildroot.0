@@ -1,47 +1,35 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Sun, 17 Jan 2021 17:31:55 +0100
-Subject: [Buildroot] [PATCH 2/2] package/lua-curl: bump to version 0.3.12
-In-Reply-To: <20210117163155.172533-1-francois.perrad@gadz.org>
-References: <20210117163155.172533-1-francois.perrad@gadz.org>
-Message-ID: <20210117163155.172533-2-francois.perrad@gadz.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 17 Jan 2021 17:36:24 +0100
+Subject: [Buildroot] [PATCH 1/1] package/logrotate: set
+ LOGROTATE_CPE_ID_VALID
+Message-ID: <20210117163624.353773-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-diff LICENSE:
-- Copyright (c) 2014-2019 Alexey Melnichuk
-+ Copyright (c) 2014-2021 Alexey Melnichuk
+cpe:2.3:a:logrotate_project:logrotate is a valid CPE identifier for this
+package:
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alogrotate_project%3Alogrotate
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/lua-curl/lua-curl.hash | 4 ++--
- package/lua-curl/lua-curl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/logrotate/logrotate.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/lua-curl/lua-curl.hash b/package/lua-curl/lua-curl.hash
-index 33cc68e32..5210ceb0f 100644
---- a/package/lua-curl/lua-curl.hash
-+++ b/package/lua-curl/lua-curl.hash
-@@ -1,3 +1,3 @@
- # computed by luarocks/buildroot
--sha256 01578439ba90338abba86ec77641a4998450dbc42c06cff41eeefa119a6962bc  lua-curl-0.3.11-1.src.rock
--sha256 3049265c5c05a5e2a40eb28dbf3fe46a51cd03e5f62cc1a419e352130e278e02  Lua-cURLv3-0.3.11/LICENSE
-+sha256 b6b860cd416ad883f2c7c2e1696aceda60c96036f660fb8c0236a5cc3d961c04  lua-curl-0.3.12-1.src.rock
-+sha256 0f92f4c4665aadffb023de44b16022282040fe4409d5cd3148f1812dec30cdff  Lua-cURLv3-0.3.12/LICENSE
-diff --git a/package/lua-curl/lua-curl.mk b/package/lua-curl/lua-curl.mk
-index 3a0f1c69b..37fbf30cc 100644
---- a/package/lua-curl/lua-curl.mk
-+++ b/package/lua-curl/lua-curl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LUA_CURL_VERSION_UPSTREAM = 0.3.11
-+LUA_CURL_VERSION_UPSTREAM = 0.3.12
- LUA_CURL_VERSION = $(LUA_CURL_VERSION_UPSTREAM)-1
- LUA_CURL_SUBDIR = Lua-cURLv3-$(LUA_CURL_VERSION_UPSTREAM)
- LUA_CURL_LICENSE = MIT
+diff --git a/package/logrotate/logrotate.mk b/package/logrotate/logrotate.mk
+index fe674ee6a5..747d8c2930 100644
+--- a/package/logrotate/logrotate.mk
++++ b/package/logrotate/logrotate.mk
+@@ -8,6 +8,7 @@ LOGROTATE_VERSION = 3.17.0
+ LOGROTATE_SITE = $(call github,logrotate,logrotate,$(LOGROTATE_VERSION))
+ LOGROTATE_LICENSE = GPL-2.0+
+ LOGROTATE_LICENSE_FILES = COPYING
++LOGROTATE_CPE_ID_VALID = YES
+ LOGROTATE_DEPENDENCIES = popt host-pkgconf
+ # tarball does not have a generated configure script
+ LOGROTATE_AUTORECONF = YES
 -- 
-2.27.0
+2.29.2
