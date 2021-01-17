@@ -1,68 +1,70 @@
-From: Bin Meng <bmeng.cn@gmail.com>
-Date: Sun, 17 Jan 2021 18:28:11 +0800
-Subject: [Buildroot] [PATCH 2/2] board/sifive: Update
- hifive_unleashed_defconfig and genimage.cfg
-In-Reply-To: <20210116224214.6f1ce3af@windsurf.home>
-References: <1610355672-3008-1-git-send-email-bmeng.cn@gmail.com>
- <1610355672-3008-3-git-send-email-bmeng.cn@gmail.com>
- <20210116224214.6f1ce3af@windsurf.home>
-Message-ID: <CAEUhbmUa-bsPVaa-j19Hpt10uofqAPuXOZt6VY4sK_DYa+d=PQ@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 17 Jan 2021 12:04:59 +0100
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/mpd: depends on gcc and host gcc >= 7
+Message-ID: <20210117110459.295231-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+mpd uses string_view since version 0.22 and
+https://github.com/MusicPlayerDaemon/MPD/commit/fa45a8adfa44f6bc815ae7428770112c15c76d73
 
-On Sun, Jan 17, 2021 at 5:42 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello Bin,
->
-> On Mon, 11 Jan 2021 17:01:12 +0800
-> Bin Meng <bmeng.cn@gmail.com> wrote:
->
-> > diff --git a/board/sifive/hifive-unleashed/genimage_spi-nor.cfg b/board/sifive/hifive-unleashed/genimage_spi-nor.cfg
-> > new file mode 100644
-> > index 0000000..7f90997
-> > --- /dev/null
-> > +++ b/board/sifive/hifive-unleashed/genimage_spi-nor.cfg
-> > @@ -0,0 +1,25 @@
-> > +image spi-nor.img {
-> > +     size = 32M
-> > +
-> > +     hdimage {
-> > +             gpt = true
-> > +     }
-> > +
-> > +     partition u-boot-spl {
-> > +             image = "u-boot-spl.bin"
-> > +             offset = 20K
-> > +             partition-type-uuid = 5B193300-FC78-40CD-8002-E86C45580B47
-> > +     }
-> > +
-> > +     partition u-boot {
-> > +             image = "u-boot.itb"
-> > +             offset = 1044K
-> > +             partition-type-uuid = 2E54B353-1271-4842-806F-E436D6AF6985
-> > +     }
-> > +
-> > +     partition rootfs {
-> > +             image = "rootfs.ext4"
-> > +             partition-type-uuid = 0FC63DAF-8483-4772-8E79-3D69D8477DE4
-> > +             bootable = true
-> > +     }
-> > +}
->
-> This looks strange. You really use a GPT partition table on SPI flash,
-> and use an ext4 filesystem on a SPI flash ?
->
+string_view is a C++17 feature:
+https://github.com/MusicPlayerDaemon/MPD/commit/e0e5ed62ee98a0e21bc928f432a0051854193cd2
 
-When booting from SPI flash, the GPT partition is required by the ZSBL
-on the board to load U-Boot SPL images. The kernel still uses ext4 on
-the SD card as the rootfs. The SPI flash is just the backup for the
-rootfs.
+So add a dependency on host gcc >= 7
 
-Regards,
-Bin
+Moreover, C++17 is also mandatory on the target side since
+https://github.com/MusicPlayerDaemon/MPD/commit/8f981845dc7376824d94fd24924788c582942929
+so also bump the gcc dependency
+
+Finally, drop BR2_TOOLCHAIN_HAS_GCC_BUG_64735 which is not needed as it
+will always be true with gcc >= 7
+
+Fixes:
+ - http://autobuild.buildroot.org/results/e42a1d0cd808585a755754f839fe7d2080547191
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2 (after review of Yann E. Morin):
+ - Fix patch so it applies cleanly on master
+
+ package/mpd/Config.in | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
+
+diff --git a/package/mpd/Config.in b/package/mpd/Config.in
+index fbde82ab58..b19113d8c0 100644
+--- a/package/mpd/Config.in
++++ b/package/mpd/Config.in
+@@ -5,8 +5,8 @@ menuconfig BR2_PACKAGE_MPD
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # fork
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_6 # C++14
+-	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17
++	depends on BR2_HOST_GCC_AT_LEAST_7 # C++17
+ 	select BR2_PACKAGE_BOOST
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	help
+@@ -405,11 +405,10 @@ config BR2_PACKAGE_MPD_ID3TAG
+ 
+ endif
+ 
+-comment "mpd needs a toolchain w/ C++, threads, wchar, gcc >= 6"
++comment "mpd needs a toolchain w/ C++, threads, wchar, gcc >= 7, host gcc >= 7"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+-		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_6
+-
+-comment "mpd needs a toolchain not affected by GCC bug 64735"
+-	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
++		!BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_7 || \
++		!BR2_HOST_GCC_AT_LEAST_7
+-- 
+2.29.2
