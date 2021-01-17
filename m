@@ -1,33 +1,33 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 17 Jan 2021 17:57:34 +0100
-Subject: [Buildroot] [PATCH 1/1] package/nginx: add NGINX_CPE_ID_VENDOR
-Message-ID: <20210117165734.355387-1-fontaine.fabrice@gmail.com>
+Date: Sun, 17 Jan 2021 18:07:03 +0100
+Subject: [Buildroot] [PATCH 1/1] package/tor: add TOR_CPE_ID_VENDOR
+Message-ID: <20210117170703.355979-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:nginx:nginx is a valid CPE identifier for this package:
+cpe:2.3:a:torproject:tor is a valid CPE identifier for this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Anginx%3Anginx
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Atorproject%3Ator
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/nginx/nginx.mk | 1 +
+ package/tor/tor.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index fb06108ab3..9c32546835 100644
---- a/package/nginx/nginx.mk
-+++ b/package/nginx/nginx.mk
-@@ -8,6 +8,7 @@ NGINX_VERSION = 1.18.0
- NGINX_SITE = http://nginx.org/download
- NGINX_LICENSE = BSD-2-Clause
- NGINX_LICENSE_FILES = LICENSE
-+NGINX_CPE_ID_VENDOR = nginx
- NGINX_DEPENDENCIES = host-pkgconf
+diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+index b7095aa39c..098c517aa7 100644
+--- a/package/tor/tor.mk
++++ b/package/tor/tor.mk
+@@ -8,6 +8,7 @@ TOR_VERSION = 0.4.4.6
+ TOR_SITE = https://dist.torproject.org
+ TOR_LICENSE = BSD-3-Clause
+ TOR_LICENSE_FILES = LICENSE
++TOR_CPE_ID_VENDOR = torproject
+ TOR_DEPENDENCIES = libevent openssl zlib
+ TOR_AUTORECONF = YES
  
- NGINX_CONF_OPTS = \
 -- 
 2.29.2
