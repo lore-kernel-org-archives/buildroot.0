@@ -1,59 +1,74 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Sun, 17 Jan 2021 22:08:37 +0100
-Subject: [Buildroot] [PATCH] package/ipmitool: set IPMITOOL_CPE_ID_VALID
-In-Reply-To: <20210117161947.GS2375@scaer>
-References: <20210117143329.27231-1-heiko.thiery@gmail.com>
- <20210117161947.GS2375@scaer>
-Message-ID: <CAEyMn7apJavtAERyYYkqPe+dy38e37c4d1c9im-hKuDCfn91aQ@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 17 Jan 2021 22:10:37 +0100
+Subject: [Buildroot] [PATCH 1/2] package/sudo: security bump to version
+ 1.9.5p1
+Message-ID: <20210117211038.487795-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+- Fixes CVE-2021-23239, a potential information leak in sudoedit that
+  could be used to test for the existence of directories not normally
+  accessible to the user in certain circumstances. When creating a new
+  file, sudoedit checks to make sure the parent directory of the new
+  file exists before running the editor. However, a race condition
+  exists if the invoking user can replace (or create) the parent
+  directory. If a symbolic link is created in place of the parent
+  directory, sudoedit will run the editor as long as the target of the
+  link exists. If the target of the link does not exist, an error
+  message will be displayed. The race condition can be used to test for
+  the existence of an arbitrary directory. However, it cannot be used to
+  write to an arbitrary location.
+- Fixes CVE-2021-23240, a flaw in the temporary file handling of
+  sudoedit's SELinux RBAC support. On systems where SELinux is enabled,
+  a user with sudoedit permissions may be able to set the owner of an
+  arbitrary file to the user-ID of the target user. On Linux kernels
+  that support protected symlinks setting
+  /proc/sys/fs/protected_symlinks to 1 will prevent the bug from being
+  exploited. For more information, see Symbolic link attack in
+  SELinux-enabled sudoedit.
+- Update license hash:
+  - copyright of python bindings added with
+    https://github.com/sudo-project/sudo/commit/6c1b155fed23348c58a03f6c1193922132b5b66a
+  - a few other files (ISC licenced) added with
+    https://github.com/sudo-project/sudo/commit/d4b2db9078bd54f158261017dcb4d1340398a5fa
+  - year updated with
+    https://github.com/sudo-project/sudo/commit/9e111eae57524ca72002ad1db36eb68ccd50b167
+- Update indentation in hash file (two spaces)
 
-Am So., 17. Jan. 2021 um 17:19 Uhr schrieb Yann E. MORIN
-<yann.morin.1998@free.fr>:
->
-> Heiko, All,
->
-> On 2021-01-17 15:33 +0100, Heiko Thiery spake thusly:
-> > cpe:2.3:a:ipmitool_project:ipmitool is a valid CPE identifier for this
-> > package:
-> >
-> > https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=ipmitool
-> >
-> > Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-> > ---
-> >  package/ipmitool/ipmitool.mk | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/package/ipmitool/ipmitool.mk b/package/ipmitool/ipmitool.mk
-> > index 123dd274f4..facd97a0b8 100644
-> > --- a/package/ipmitool/ipmitool.mk
-> > +++ b/package/ipmitool/ipmitool.mk
-> > @@ -9,6 +9,7 @@ IPMITOOL_SOURCE = ipmitool-$(IPMITOOL_VERSION).tar.bz2
-> >  IPMITOOL_SITE = http://downloads.sourceforge.net/project/ipmitool/ipmitool/$(IPMITOOL_VERSION)
-> >  IPMITOOL_LICENSE = BSD-3-Clause
-> >  IPMITOOL_LICENSE_FILES = COPYING
-> > +IPMITOOL_CPE_ID_VENDOR = ipmitool_project
->
-> This is the default value when _CPE_ID_VALID is set to YES, so I
-> switched to that.
+https://www.sudo.ws/stable.html#1.9.5p1
 
-Oh ok .. I did misunderstand that. Now it is clear to me.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/sudo/sudo.hash | 4 ++--
+ package/sudo/sudo.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> Also, by the looksof the commit log, it looks like
-> that's what you indeed wanted to do, hopefully... ;-)
-
-By chance I copy/paste the right commit message from another commit
-;-/ So you're right commit log was right .. changes weren't.
-Thank you for checking that.
-
-> Applied to master, thanks.
-
-Thank you.
-
+diff --git a/package/sudo/sudo.hash b/package/sudo/sudo.hash
+index fff1aa2343..3a0ff46838 100644
+--- a/package/sudo/sudo.hash
++++ b/package/sudo/sudo.hash
+@@ -1,4 +1,4 @@
+ # From: http://www.sudo.ws/download.html
+-sha256 7ea8d97a3cee4c844e0887ea7a1bd80eb54cc98fd77966776cb1a80653ad454f  sudo-1.8.31.tar.gz
++sha256  4dddf37c22653defada299e5681e0daef54bb6f5fc950f63997bb8eb966b7882  sudo-1.9.5p1.tar.gz
+ # Locally calculated
+-sha256 be099fd0ee954224f392dde163aef6d6359c58a5afa1ebb1bd55058318add789  doc/LICENSE
++sha256  505c5955c373514e2533a24a8346f44038e29cba874f5ca83beb171a7409089f  doc/LICENSE
+diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
+index a4def4368a..6faccfa25b 100644
+--- a/package/sudo/sudo.mk
++++ b/package/sudo/sudo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SUDO_VERSION = 1.8.31
++SUDO_VERSION = 1.9.5p1
+ SUDO_SITE = https://www.sudo.ws/sudo/dist
+ SUDO_LICENSE = ISC, BSD-3-Clause
+ SUDO_LICENSE_FILES = doc/LICENSE
 -- 
-Heiko
+2.29.2
