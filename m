@@ -1,57 +1,111 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 Jan 2021 10:13:20 +0100
-Subject: [Buildroot] [PATCH 1/1] package/python-bleak: depend on python3
-In-Reply-To: <20210116082508.239321-1-asafka7@gmail.com>
-References: <20210116082508.239321-1-asafka7@gmail.com>
-Message-ID: <20210117091320.GZ2375@scaer>
+Date: Sun, 17 Jan 2021 10:24:13 +0100
+Subject: [Buildroot] [git commit] package/ffmpeg: add fixes from Kodi project
+Message-ID: <20210117090528.B064283537@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Asaf, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=bc76c0c6e38b26047673cb1360ac705575046393
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-01-16 10:25 +0200, Asaf Kahlon spake thusly:
-> python-bleak doesn't support python2.
-> 
-> Fixes:
->  - http://autobuild.buildroot.net/results/22e6139a221e64ce96e23d68a58b60074fc95473/
-> 
-> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Adding these patches brings our ffmpeg package to the same level as the
+kodi-provided ffmpeg package allowing us to switch the kodi build to
+use the system-provided ffmpeg instead of its internal build when kodi
+is bumped to version 19.0-Matrix.
 
-Applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ ...api_h264-skip-decode-if-pic-has-no-slices.patch | 36 ++++++++++++++++++++
+ ...pegts-make-sure-mpegts-read-header-always.patch | 38 ++++++++++++++++++++++
+ 2 files changed, 74 insertions(+)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/python-bleak/Config.in | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/python-bleak/Config.in b/package/python-bleak/Config.in
-> index 3266932883..6015361899 100644
-> --- a/package/python-bleak/Config.in
-> +++ b/package/python-bleak/Config.in
-> @@ -1,5 +1,6 @@
->  config BR2_PACKAGE_PYTHON_BLEAK
->  	bool "python-bleak"
-> +	depends on BR2_PACKAGE_PYTHON3
->  	select BR2_PACKAGE_PYTHON_TXDBUS # runtime
->  	help
->  	  Bluetooth Low Energy platform Agnostic Klient.
-> -- 
-> 2.27.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/ffmpeg/0003-avcodec-vaapi_h264-skip-decode-if-pic-has-no-slices.patch b/package/ffmpeg/0003-avcodec-vaapi_h264-skip-decode-if-pic-has-no-slices.patch
+new file mode 100644
+index 0000000000..2892df9d81
+--- /dev/null
++++ b/package/ffmpeg/0003-avcodec-vaapi_h264-skip-decode-if-pic-has-no-slices.patch
+@@ -0,0 +1,36 @@
++From 2c6b3f357331e203ad87214984661c40704aceb7 Mon Sep 17 00:00:00 2001
++From: Rainer Hochecker <fernetmenta@online.de>
++Date: Sat, 26 Jan 2019 19:48:35 +0100
++Subject: [PATCH] avcodec/vaapi_h264: skip decode if pic has no slices
++
++This fixes / workarounds https://bugs.freedesktop.org/show_bug.cgi?id=105368.
++It was hit frequently when watching h264 channels received via DVB-X.
++Corresponding kodi bug: https://github.com/xbmc/xbmc/issues/15704
++
++Downloaded from Kodi ffmpeg repo:
++https://github.com/xbmc/FFmpeg/commit/2c6b3f357331e203ad87214984661c40704aceb7
++
++Patch was sent upstream:
++http://ffmpeg.org/pipermail/ffmpeg-devel/2019-March/240863.html
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ libavcodec/vaapi_h264.c | 5 +++++
++ 1 file changed, 5 insertions(+)
++
++diff --git a/libavcodec/vaapi_h264.c b/libavcodec/vaapi_h264.c
++index dd2a6571604..e521a05c4ff 100644
++--- a/libavcodec/vaapi_h264.c
+++++ b/libavcodec/vaapi_h264.c
++@@ -314,6 +314,11 @@ static int vaapi_h264_end_frame(AVCodecContext *avctx)
++     H264SliceContext *sl = &h->slice_ctx[0];
++     int ret;
++ 
+++    if (pic->nb_slices == 0) {
+++        ret = AVERROR_INVALIDDATA;
+++        goto finish;
+++    }
+++
++     ret = ff_vaapi_decode_issue(avctx, pic);
++     if (ret < 0)
++         goto finish;
+diff --git a/package/ffmpeg/0004-avformat-mpegts-make-sure-mpegts-read-header-always.patch b/package/ffmpeg/0004-avformat-mpegts-make-sure-mpegts-read-header-always.patch
+new file mode 100644
+index 0000000000..75a39d16fa
+--- /dev/null
++++ b/package/ffmpeg/0004-avformat-mpegts-make-sure-mpegts-read-header-always.patch
+@@ -0,0 +1,38 @@
++From 3136f41e6db8189994a8e4f72eacc92b669776d1 Mon Sep 17 00:00:00 2001
++From: Marton Balint <cus@passwd.hu>
++Date: Sun, 15 Nov 2020 00:39:41 +0100
++Subject: [PATCH] avformat/mpegts: make sure mpegts_read_header always stops at
++ the first pmt
++
++mpegts_read_header stops parsing the file at the first PMT. However the check
++that ensured this was wrong because streams can also be added before the first
++PMT is received (e.g. EIT).
++
++So let's make sure we are in the header reading phase by checking if ts->pkt is
++unset instead of checking if the number of streams found so far is 0.
++
++Downloaded from Kodi ffmpeg repo:
++https://github.com/xbmc/FFmpeg/commit/3136f41e6db8189994a8e4f72eacc92b669776d1
++
++Patch was committed upstream:
++http://git.videolan.org/?p=ffmpeg.git;a=patch;h=ca55240b8c1fd4cfdb61f88fd2cb378d475d910a
++
++Signed-off-by: Marton Balint <cus@passwd.hu>
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ libavformat/mpegts.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/libavformat/mpegts.c b/libavformat/mpegts.c
++index c6fd3e1cef63..1da81a0fe62a 100644
++--- a/libavformat/mpegts.c
+++++ b/libavformat/mpegts.c
++@@ -2352,7 +2352,7 @@ static void pmt_cb(MpegTSFilter *filter, const uint8_t *section, int section_len
++         goto out;
++ 
++     // stop parsing after pmt, we found header
++-    if (!ts->stream->nb_streams)
+++    if (!ts->pkt)
++         ts->stop_parse = 2;
++ 
++     set_pmt_found(ts, h->id);
