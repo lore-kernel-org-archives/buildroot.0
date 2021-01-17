@@ -1,70 +1,55 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 17 Jan 2021 12:04:59 +0100
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/mpd: depends on gcc and host gcc >= 7
-Message-ID: <20210117110459.295231-1-fontaine.fabrice@gmail.com>
+Date: Sun, 17 Jan 2021 12:18:36 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libuhttpd: bump to version 3.8.0
+Message-ID: <20210117111836.310037-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-mpd uses string_view since version 0.22 and
-https://github.com/MusicPlayerDaemon/MPD/commit/fa45a8adfa44f6bc815ae7428770112c15c76d73
+BUILD_TEST_PLUGIN has been dropped since version 3.5.0 and
+https://github.com/zhaojh329/libuhttpd/commit/0b2c2f4a3bdc192fffcec6fb6fd297068b6ff873
 
-string_view is a C++17 feature:
-https://github.com/MusicPlayerDaemon/MPD/commit/e0e5ed62ee98a0e21bc928f432a0051854193cd2
-
-So add a dependency on host gcc >= 7
-
-Moreover, C++17 is also mandatory on the target side since
-https://github.com/MusicPlayerDaemon/MPD/commit/8f981845dc7376824d94fd24924788c582942929
-so also bump the gcc dependency
-
-Finally, drop BR2_TOOLCHAIN_HAS_GCC_BUG_64735 which is not needed as it
-will always be true with gcc >= 7
+https://github.com/zhaojh329/libuhttpd/releases/tag/v3.7.0
+https://github.com/zhaojh329/libuhttpd/releases/tag/v3.8.0
 
 Fixes:
- - http://autobuild.buildroot.org/results/e42a1d0cd808585a755754f839fe7d2080547191
+ - http://autobuild.buildroot.org/results/0d53b561ba02db018ca90dce29e9064b12c1276b
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v1 -> v2 (after review of Yann E. Morin):
- - Fix patch so it applies cleanly on master
+ package/libuhttpd/libuhttpd.hash | 2 +-
+ package/libuhttpd/libuhttpd.mk   | 3 +--
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
- package/mpd/Config.in | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
-
-diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-index fbde82ab58..b19113d8c0 100644
---- a/package/mpd/Config.in
-+++ b/package/mpd/Config.in
-@@ -5,8 +5,8 @@ menuconfig BR2_PACKAGE_MPD
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # fork
- 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_6 # C++14
--	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17
-+	depends on BR2_HOST_GCC_AT_LEAST_7 # C++17
- 	select BR2_PACKAGE_BOOST
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	help
-@@ -405,11 +405,10 @@ config BR2_PACKAGE_MPD_ID3TAG
+diff --git a/package/libuhttpd/libuhttpd.hash b/package/libuhttpd/libuhttpd.hash
+index 6053df6593..98ae64bf70 100644
+--- a/package/libuhttpd/libuhttpd.hash
++++ b/package/libuhttpd/libuhttpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  5cdbff570430530b46ed071363c52cc655bbb349943008b57f63061481586391  libuhttpd-3.6.0.tar.gz
++sha256  cdf97020be8ef73e74f12e0703e0f871ebd26c641ce2cb31f67c90a79483c372  libuhttpd-3.8.0.tar.gz
+ sha256  99efed4bbc0b62f96f999ef23399e38234fb91651af734fd389a52b033a85b55  LICENSE
+diff --git a/package/libuhttpd/libuhttpd.mk b/package/libuhttpd/libuhttpd.mk
+index f665b27969..60f0455ddd 100644
+--- a/package/libuhttpd/libuhttpd.mk
++++ b/package/libuhttpd/libuhttpd.mk
+@@ -4,13 +4,12 @@
+ #
+ ################################################################################
  
- endif
+-LIBUHTTPD_VERSION = 3.6.0
++LIBUHTTPD_VERSION = 3.8.0
+ LIBUHTTPD_SITE = https://github.com/zhaojh329/libuhttpd/releases/download/v$(LIBUHTTPD_VERSION)
+ LIBUHTTPD_LICENSE = MIT
+ LIBUHTTPD_LICENSE_FILES = LICENSE
+ LIBUHTTPD_INSTALL_STAGING = YES
+ LIBUHTTPD_DEPENDENCIES = libev
+-LIBUHTTPD_CONF_OPTS = -DBUILD_TEST_PLUGIN=OFF
  
--comment "mpd needs a toolchain w/ C++, threads, wchar, gcc >= 6"
-+comment "mpd needs a toolchain w/ C++, threads, wchar, gcc >= 7, host gcc >= 7"
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
--		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_6
--
--comment "mpd needs a toolchain not affected by GCC bug 64735"
--	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-+		!BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_7 || \
-+		!BR2_HOST_GCC_AT_LEAST_7
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ LIBUHTTPD_DEPENDENCIES += openssl
 -- 
 2.29.2
