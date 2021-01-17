@@ -1,48 +1,24 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 Jan 2021 15:34:12 +0100
-Subject: [Buildroot] [git commit] package/pulseaudio: bump version to 14.2
-Message-ID: <20210117141835.994C1870CE@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 17 Jan 2021 14:44:04 +0000
+Subject: [Buildroot] [Bug 13456] ccache prevents build
+In-Reply-To: <bug-13456-163@https.bugs.busybox.net/>
+References: <bug-13456-163@https.bugs.busybox.net/>
+Message-ID: <bug-13456-163-fzOuGiSk4x@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4481671f319c998b9924edc7aac02ee4b51ef439
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=13456
 
-Release notes:
-https://lists.freedesktop.org/archives/pulseaudio-discuss/2021-January/031990.html
+--- Comment #2 from Frank Wunderlich <frank-w@public-files.de> ---
+mhm, seems to be fixed in 2020.11-825...ccache is also created in
+~/.buildroot-ccache (298 MB)
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/pulseaudio/pulseaudio.hash | 4 ++--
- package/pulseaudio/pulseaudio.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+btw. is there a way to make clean but leave compiled toolchain (i want to
+compile for armhf and aarch64)?
 
-diff --git a/package/pulseaudio/pulseaudio.hash b/package/pulseaudio/pulseaudio.hash
-index 5989f8e920..b3e19fdcca 100644
---- a/package/pulseaudio/pulseaudio.hash
-+++ b/package/pulseaudio/pulseaudio.hash
-@@ -1,5 +1,5 @@
--# From https://lists.freedesktop.org/archives/pulseaudio-discuss/2021-January/031986.html
--sha256  b0bcca2a45e4fe1f73c7709dcf75a17dd5235688d5d150069e765dda4884b837  pulseaudio-14.1.tar.xz
-+# From https://lists.freedesktop.org/archives/pulseaudio-discuss/2021-January/031990.html
-+sha256  75d3f7742c1ae449049a4c88900e454b8b350ecaa8c544f3488a2562a9ff66f1  pulseaudio-14.2.tar.xz
- # Locally computed
- sha256  c38aee9e3c8c4d5d594ff548a1be05453023016d6286931f6512db215ec1fd42  GPL
- sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  LGPL
-diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
-index 472a1d3943..ad1710c6f7 100644
---- a/package/pulseaudio/pulseaudio.mk
-+++ b/package/pulseaudio/pulseaudio.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PULSEAUDIO_VERSION = 14.1
-+PULSEAUDIO_VERSION = 14.2
- PULSEAUDIO_SOURCE = pulseaudio-$(PULSEAUDIO_VERSION).tar.xz
- PULSEAUDIO_SITE = https://freedesktop.org/software/pulseaudio/releases
- PULSEAUDIO_INSTALL_STAGING = YES
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
