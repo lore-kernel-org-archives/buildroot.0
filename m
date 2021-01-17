@@ -1,33 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 17 Jan 2021 15:30:52 +0100
-Subject: [Buildroot] [PATCHv2 1/2] package/zstd: build multithreaded
- library if supported
-In-Reply-To: <20201204095703.4714-1-patrickdepinguin@gmail.com>
+Date: Sun, 17 Jan 2021 15:31:11 +0100
+Subject: [Buildroot] [PATCHv2 2/2] package/zstd: link programs
+ dynamically with libzstd to save space
+In-Reply-To: <20201204095703.4714-2-patrickdepinguin@gmail.com>
 References: <20201204095703.4714-1-patrickdepinguin@gmail.com>
-Message-ID: <20210117153052.0d4448ff@windsurf.home>
+ <20201204095703.4714-2-patrickdepinguin@gmail.com>
+Message-ID: <20210117153111.58379c24@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri,  4 Dec 2020 10:57:01 +0100
+On Fri,  4 Dec 2020 10:57:02 +0100
 Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote:
 
 > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 > 
-> libzstd.so is built without multi-threading support by default.
-> The 'HAVE_THREAD' flag is not respected by lib/Makefile, only by
-> programs/Makefile.
+> Even when a shared libzstd is built, the zstd command-line programs are
+> statically linked with libzstd, causing a large rootfs footprint.
 > 
-> Use the %-mt recipe in lib/Makefile to enable multithreading.
+> While the cmake backend in zstd already supported a flag
+> ZSTD_PROGRAMS_LINK_SHARED, the make backend did not.
+> 
+> This commit adds support for ZSTD_PROGRAMS_LINK_SHARED in the make system
+> and applies it for the target compilation, unless only static libs are
+> supported.
+> 
+> See https://github.com/facebook/zstd/issues/2261 .
 > 
 > Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 > ---
-> v2: split off of next patch
+> v2: no functional changes other than splitting off part to a separate patch
 
-Applied to master, thanks. It would be good to have a patch that
-enables the multi-threading for the host variant of zstd.
+I've marked as Changes Requested, as you proposed in the review of
+PATCH 1/2 in this series.
+
+Thanks,
 
 Thomas
 -- 
