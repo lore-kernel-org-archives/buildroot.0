@@ -1,44 +1,47 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sun, 17 Jan 2021 17:31:54 +0100
-Subject: [Buildroot] [PATCH 1/2] package/lua-bit32: bump to version 5.3.5.1
-Message-ID: <20210117163155.172533-1-francois.perrad@gadz.org>
+Date: Sun, 17 Jan 2021 17:31:55 +0100
+Subject: [Buildroot] [PATCH 2/2] package/lua-curl: bump to version 0.3.12
+In-Reply-To: <20210117163155.172533-1-francois.perrad@gadz.org>
+References: <20210117163155.172533-1-francois.perrad@gadz.org>
+Message-ID: <20210117163155.172533-2-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+diff LICENSE:
+- Copyright (c) 2014-2019 Alexey Melnichuk
++ Copyright (c) 2014-2021 Alexey Melnichuk
+
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/lua-bit32/lua-bit32.hash | 4 ++--
- package/lua-bit32/lua-bit32.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/lua-curl/lua-curl.hash | 4 ++--
+ package/lua-curl/lua-curl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/lua-bit32/lua-bit32.hash b/package/lua-bit32/lua-bit32.hash
-index ea9aca19a..9a4f64b66 100644
---- a/package/lua-bit32/lua-bit32.hash
-+++ b/package/lua-bit32/lua-bit32.hash
+diff --git a/package/lua-curl/lua-curl.hash b/package/lua-curl/lua-curl.hash
+index 33cc68e32..5210ceb0f 100644
+--- a/package/lua-curl/lua-curl.hash
++++ b/package/lua-curl/lua-curl.hash
 @@ -1,3 +1,3 @@
  # computed by luarocks/buildroot
--sha256 5d820979918637c2b86e1b0a55002bcfc2fa649469bc50e47aa954ea9fde499d  bit32-5.3.5-1.src.rock
--sha256 1b24f475812c979684fb3469f6faccbdc7c33c9d39421728aa0d78deda5a89a5  lua-compat-5.3-0.9/LICENSE
-+sha256 0e273427f2b877270f9cec5642ebe2670242926ba9638d4e6df7e4e1263ca12c  bit32-5.3.5.1-1.src.rock
-+sha256 1b24f475812c979684fb3469f6faccbdc7c33c9d39421728aa0d78deda5a89a5  lua-compat-5.3-0.10/LICENSE
-diff --git a/package/lua-bit32/lua-bit32.mk b/package/lua-bit32/lua-bit32.mk
-index c254cffd8..0fa5048d7 100644
---- a/package/lua-bit32/lua-bit32.mk
-+++ b/package/lua-bit32/lua-bit32.mk
-@@ -4,9 +4,9 @@
+-sha256 01578439ba90338abba86ec77641a4998450dbc42c06cff41eeefa119a6962bc  lua-curl-0.3.11-1.src.rock
+-sha256 3049265c5c05a5e2a40eb28dbf3fe46a51cd03e5f62cc1a419e352130e278e02  Lua-cURLv3-0.3.11/LICENSE
++sha256 b6b860cd416ad883f2c7c2e1696aceda60c96036f660fb8c0236a5cc3d961c04  lua-curl-0.3.12-1.src.rock
++sha256 0f92f4c4665aadffb023de44b16022282040fe4409d5cd3148f1812dec30cdff  Lua-cURLv3-0.3.12/LICENSE
+diff --git a/package/lua-curl/lua-curl.mk b/package/lua-curl/lua-curl.mk
+index 3a0f1c69b..37fbf30cc 100644
+--- a/package/lua-curl/lua-curl.mk
++++ b/package/lua-curl/lua-curl.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LUA_BIT32_VERSION = 5.3.5-1
-+LUA_BIT32_VERSION = 5.3.5.1-1
- LUA_BIT32_NAME_UPSTREAM = bit32
--LUA_BIT32_SUBDIR = lua-compat-5.3-0.9
-+LUA_BIT32_SUBDIR = lua-compat-5.3-0.10
- LUA_BIT32_LICENSE = MIT
- LUA_BIT32_LICENSE_FILES = $(LUA_BIT32_SUBDIR)/LICENSE
- 
+-LUA_CURL_VERSION_UPSTREAM = 0.3.11
++LUA_CURL_VERSION_UPSTREAM = 0.3.12
+ LUA_CURL_VERSION = $(LUA_CURL_VERSION_UPSTREAM)-1
+ LUA_CURL_SUBDIR = Lua-cURLv3-$(LUA_CURL_VERSION_UPSTREAM)
+ LUA_CURL_LICENSE = MIT
 -- 
 2.27.0
