@@ -1,59 +1,102 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 17 Jan 2021 10:02:01 +0100
-Subject: [Buildroot] [PATCH 1/1] package/civetweb: set
- CIVETWEB_CPE_ID_VALID
-In-Reply-To: <20210116232040.213196-1-fontaine.fabrice@gmail.com>
-References: <20210116232040.213196-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210117090201.GX2375@scaer>
+Date: Sun, 17 Jan 2021 10:09:06 +0100
+Subject: [Buildroot] [git commit] package/mpv: needs gcc >= 4.9
+Message-ID: <20210117085128.A889D87F3E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=a35df169b52bf86f29a61303e52a65eaafedb346
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-01-17 00:20 +0100, Fabrice Fontaine spake thusly:
-> cpe:2.3:a:civetweb_project:civetweb is a valid CPE identifier for this
-> package:
-> 
->   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Acivetweb_project%3Acivetweb
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes:
+http://autobuild.buildroot.net/results/e41/e41f0a779d46565d448a1d20cf5e17060d9a70b8/
 
-Applied to master, thanks.
+Quoted from build/config.log
+err: ../test.c:1:23: fatal error: stdatomic.h: No such file or directory
 
-Regards,
-Yann E. MORIN.
+This header was added with gcc-4.9:
+https://gcc.gnu.org/gcc-4.9/changes.html
+"ISO C11 atomics (the _Atomic type specifier and qualifier and the
+ <stdatomic.h> header) are now supported."
 
-> ---
->  package/civetweb/civetweb.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/civetweb/civetweb.mk b/package/civetweb/civetweb.mk
-> index 448f979b41..afc9cb1703 100644
-> --- a/package/civetweb/civetweb.mk
-> +++ b/package/civetweb/civetweb.mk
-> @@ -8,6 +8,7 @@ CIVETWEB_VERSION = 1.13
->  CIVETWEB_SITE = $(call github,civetweb,civetweb,v$(CIVETWEB_VERSION))
->  CIVETWEB_LICENSE = MIT
->  CIVETWEB_LICENSE_FILES = LICENSE.md
-> +CIVETWEB_CPE_ID_VALID = YES
->  
->  CIVETWEB_CONF_OPTS = TARGET_OS=LINUX WITH_IPV6=1 \
->  	$(if $(BR2_INSTALL_LIBSTDCPP),WITH_CPP=1)
-> -- 
-> 2.29.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+According to
+https://github.com/mpv-player/mpv/commit/06718da79c79a98d5524f42d034b0d406b14e04c
+"In theory, a user can still use --disable-stdatomic to enable the
+ emulation code, but that's sort of hidden. Actual support will be
+ removed after the next release or so."
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Although adding --disable-stdatomic could fix the current issue we
+require gcc >= 4.9 now to follow the recommendation from upstream.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/mpv/Config.in   | 6 +++---
+ package/tovid/Config.in | 8 ++++----
+ 2 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/package/mpv/Config.in b/package/mpv/Config.in
+index fd3a3f787d..812491e3a9 100644
+--- a/package/mpv/Config.in
++++ b/package/mpv/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_MPV
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libass
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # libass
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C11/stdatomic.h
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	select BR2_PACKAGE_FFMPEG
+@@ -26,10 +26,10 @@ config BR2_PACKAGE_MPV
+ 
+ 	  https://mpv.io/
+ 
+-comment "mpv needs a toolchain w/ C++, threads, gcc >= 4.8"
++comment "mpv needs a toolchain w/ C++, threads, gcc >= 4.9"
+ 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+diff --git a/package/tovid/Config.in b/package/tovid/Config.in
+index a0a6af712f..f972e18852 100644
+--- a/package/tovid/Config.in
++++ b/package/tovid/Config.in
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_TOVID
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_PACKAGE_PYTHON || BR2_PACKAGE_PYTHON3
+ 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # mpv
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # mpv
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC # mpv
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # mpv
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC # mpv
+@@ -29,13 +29,13 @@ config BR2_PACKAGE_TOVID
+ 
+ 	  http://tovid.wikia.com/wiki/Installing_tovid
+ 
+-comment "tovid needs a toolchain w/ threads, C++, wchar, gcc >= 4.8"
++comment "tovid needs a toolchain w/ threads, C++, wchar, gcc >= 4.9"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS \
+-		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 \
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 \
+ 		|| !BR2_INSTALL_LIBSTDCPP \
+ 		|| !BR2_USE_WCHAR
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
+@@ -46,5 +46,5 @@ comment "tovid depends on python or python3"
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
