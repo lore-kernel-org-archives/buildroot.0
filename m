@@ -1,24 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 18 Jan 2021 22:35:57 +0100
-Subject: [Buildroot] [PATCH v1 1/3] package/pkg-cmake.mk: fix indent
-In-Reply-To: <20210118212700.2316-1-ps.report@gmx.net>
+Date: Mon, 18 Jan 2021 22:36:44 +0100
+Subject: [Buildroot] [PATCH v1 3/3] docs: add cmake-package
+ _INSTALL_OPTS description
+In-Reply-To: <20210118212700.2316-3-ps.report@gmx.net>
 References: <20210118212700.2316-1-ps.report@gmx.net>
-Message-ID: <20210118223557.0844f825@windsurf.home>
+ <20210118212700.2316-3-ps.report@gmx.net>
+Message-ID: <20210118223644.7dfb2fc6@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 18 Jan 2021 22:26:58 +0100
+On Mon, 18 Jan 2021 22:27:00 +0100
 Peter Seiderer <ps.report@gmx.net> wrote:
 
 > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 > ---
->  package/pkg-cmake.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Notes:
+>   - why _INSTALL_OPTS and not _INSTALL_HOST_OPTS (besides historically
+>     reasons)?
 
-Series applied, thanks!
+Note that we have the same naming in the autotools-package
+infrastructure.
+
+>   - mabe the cmake _INSTALL_OPTS is so seldom used, so not worth
+>     an extra doc entry?
+
+I've applied anyway, it's meant to be overridden if needed.
+
+However, why are we using install/fast for the target installation, but
+not for the host installation ?
 
 Thomas
 -- 
