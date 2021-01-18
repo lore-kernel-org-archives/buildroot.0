@@ -1,27 +1,35 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 18 Jan 2021 22:12:49 +0100
-Subject: [Buildroot] [PATCH]
- toolchain/toolchain-external/toolchain-external-bootlin: update PowerPC 440
- FP toolchain
-In-Reply-To: <20210114224000.456977-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Thu, 14 Jan 2021 23:39:59 +0100")
-References: <20210114224000.456977-1-thomas.petazzoni@bootlin.com>
-Message-ID: <87sg6ydk4u.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 18 Jan 2021 22:12:58 +0100
+Subject: [Buildroot] [git commit] Config.in.legacy: fix selection of
+ firmware-imx
+Message-ID: <20210118205558.C31F387120@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=7e2d5aa2d6320f0b20eda629f5ad6cf8db377bbf
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > The Bootlin PowerPC 440 FP toolchain was rebuilt in version 2020.08-2,
- > which is rebased on Buildroot 2020.08.3 as that includes a fix for
- > SecurePLT support.
+In order to select firmware-imx we have to select freescale-imx first.
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Reported-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ Config.in.legacy | 1 +
+ 1 file changed, 1 insertion(+)
 
-Committed to 2020.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/Config.in.legacy b/Config.in.legacy
+index a322d18cb3..7c87f3de38 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -149,6 +149,7 @@ comment "Legacy options removed in 2021.02"
+ config BR2_PACKAGE_LINUX_FIRMWARE_IMX_SDMA
+ 	bool "imx sdma firmware is provided by firmware-imx"
+ 	select BR2_LEGACY
++	select BR2_PACKAGE_FREESCALE_IMX
+ 	select BR2_PACKAGE_FIRMWARE_IMX
+ 	help
+ 	  linux-firmware provide the same firmware as firmware-imx.
