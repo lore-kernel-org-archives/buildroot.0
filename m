@@ -1,35 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 18 Jan 2021 21:49:15 +0100
-Subject: [Buildroot] [git commit] package/thttpd: add THTTPD_CPE_ID_VENDOR
-Message-ID: <20210118203943.BE94388530@busybox.osuosl.org>
+Date: Mon, 18 Jan 2021 21:49:19 +0100
+Subject: [Buildroot] [git commit] package/sudo: add CPE variables
+Message-ID: <20210118203943.DDE6188530@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2b19cf61a87e3e24e8636751f513a82343a6395a
+commit: https://git.buildroot.net/buildroot/commit/?id=466abd778c5f1c662e5ca8ac33a685fb5086c483
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:acme:thttpd is a valid CPE identifier for this package:
+cpe:2.3:a:sudo_project:sudo is a valid CPE identifier for this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aacme%3Athttpd
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Asudo_project%3Asudo
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/thttpd/thttpd.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/sudo/sudo.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/package/thttpd/thttpd.mk b/package/thttpd/thttpd.mk
-index fe96f7df65..3815705b58 100644
---- a/package/thttpd/thttpd.mk
-+++ b/package/thttpd/thttpd.mk
-@@ -8,6 +8,7 @@ THTTPD_VERSION = 2.29
- THTTPD_SITE = https://acme.com/software/thttpd
- THTTPD_LICENSE = BSD-2-Clause
- THTTPD_LICENSE_FILES = thttpd.c
-+THTTPD_CPE_ID_VENDOR = acme
+diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
+index 6faccfa25b..129bcc0280 100644
+--- a/package/sudo/sudo.mk
++++ b/package/sudo/sudo.mk
+@@ -4,10 +4,13 @@
+ #
+ ################################################################################
  
- THTTPD_MAKE = $(MAKE1)
- 
+-SUDO_VERSION = 1.9.5p1
++SUDO_VERSION = $(SUDO_CPE_ID_VERSION)$(SUDO_CPE_ID_VERSION_MINOR)
+ SUDO_SITE = https://www.sudo.ws/sudo/dist
+ SUDO_LICENSE = ISC, BSD-3-Clause
+ SUDO_LICENSE_FILES = doc/LICENSE
++SUDO_CPE_ID_VALID = YES
++SUDO_CPE_ID_VERSION = 1.9.5
++SUDO_CPE_ID_VERSION_MINOR = p1
+ # This is to avoid sudo's make install from chown()ing files which fails
+ SUDO_INSTALL_TARGET_OPTS = INSTALL_OWNER="" DESTDIR="$(TARGET_DIR)" install
+ SUDO_CONF_OPTS = \
