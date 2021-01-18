@@ -1,32 +1,73 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 18 Jan 2021 21:32:12 +0100
-Subject: [Buildroot] [PATCH] Config.in.legacy: fix selection of firmware-imx
-Message-ID: <20210118203212.5213-1-romain.naour@gmail.com>
+Date: Mon, 18 Jan 2021 21:32:23 +0100
+Subject: [Buildroot] [PATCH] package/linux-firmware: remove imx sdma
+ firmware
+In-Reply-To: <YAVAA4aR93t80jKJ@p1g2>
+References: <20210117133119.73546-1-romain.naour@gmail.com>
+ <YAVAA4aR93t80jKJ@p1g2>
+Message-ID: <36471d79-a59c-1359-33f0-978ce2cc9650@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In order to select firmware-imx we have to select freescale-imx first.
+Hi Gary,
 
-Reported-by: Gary Bisson <gary.bisson@boundarydevices.com>
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
- Config.in.legacy | 1 +
- 1 file changed, 1 insertion(+)
+Le 18/01/2021 ? 09:00, Gary Bisson a ?crit?:
+> Hi Romain,
+> 
+> On Sun, Jan 17, 2021 at 02:31:19PM +0100, Romain Naour wrote:
+>> As reported on the mailing list [1], the imx sdma firmwares for
+>> imx[6,7,8] are provided by two packages: firmware-imx and
+>> linux-firmware
+>>
+>> $ sha256sum ./firmware-imx-8.10/firmware/sdma/sdma-imx6q.bin
+>> 7790c161b7e013a9dbcbffb17cc5d4cb63d952949a505647e4679f02d04c4784
+>> ./firmware-imx-8.10/firmware/sdma/sdma-imx6q.bin
+>>
+>> $ sha256sum  ./linux-firmware-20201022/imx/sdma/sdma-imx6q.bin
+>> 7790c161b7e013a9dbcbffb17cc5d4cb63d952949a505647e4679f02d04c4784
+>> ./linux-firmware-20201022/imx/sdma/sdma-imx6q.bin
+>>
+>> Keep firmware-imx as the only imx sdma firmware provider.
+>>
+>> [1] http://lists.busybox.net/pipermail/buildroot/2021-January/300938.html
+>>
+>> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+>> Cc: Fabio Estevam <festevam@gmail.com>
+>> Cc: Stephane Viau <stephane.viau@oss.nxp.com>
+>> Cc: Gary Bisson <gary.bisson@boundarydevices.com>
+>> ---
+>>  Config.in.legacy                         | 8 ++++++++
+>>  package/linux-firmware/Config.in         | 9 ---------
+>>  package/linux-firmware/linux-firmware.mk | 6 ------
+>>  3 files changed, 8 insertions(+), 15 deletions(-)
+>>
+>> diff --git a/Config.in.legacy b/Config.in.legacy
+>> index 3c022d21d7..a322d18cb3 100644
+>> --- a/Config.in.legacy
+>> +++ b/Config.in.legacy
+>> @@ -146,6 +146,14 @@ endif
+>>  
+>>  comment "Legacy options removed in 2021.02"
+>>  
+>> +config BR2_PACKAGE_LINUX_FIRMWARE_IMX_SDMA
+>> +	bool "imx sdma firmware is provided by firmware-imx"
+>> +	select BR2_LEGACY
+>> +	select BR2_PACKAGE_FIRMWARE_IMX
+> 
+> I know it's too late as Yann already merged that commit, but I believe
+> the above is wrong. You can't select this option unless
+> BR2_PACKAGE_FREESCALE_IMX is also defined.
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index a322d18cb3..7c87f3de38 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -149,6 +149,7 @@ comment "Legacy options removed in 2021.02"
- config BR2_PACKAGE_LINUX_FIRMWARE_IMX_SDMA
- 	bool "imx sdma firmware is provided by firmware-imx"
- 	select BR2_LEGACY
-+	select BR2_PACKAGE_FREESCALE_IMX
- 	select BR2_PACKAGE_FIRMWARE_IMX
- 	help
- 	  linux-firmware provide the same firmware as firmware-imx.
--- 
-2.25.4
+Indeed, BR2_PACKAGE_FREESCALE_IMX must be selected here.
+
+Best regards,
+Romain
+
+
+> 
+> Regards,
+> Gary
+> 
