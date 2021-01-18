@@ -1,56 +1,39 @@
-From: Stephane Viau (OSS) <stephane.viau@oss.nxp.com>
-Date: Mon, 18 Jan 2021 10:26:27 +0000
-Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2021-01-15
-In-Reply-To: <6fdd08ad-8de6-464b-a7b2-47c9cbedad77@HE1EUR01FT006.eop-EUR01.prod.protection.outlook.com>
-References: <6fdd08ad-8de6-464b-a7b2-47c9cbedad77@HE1EUR01FT006.eop-EUR01.prod.protection.outlook.com>
-Message-ID: <PA4PR04MB7920C4990EEA59953B4C3C4DA7A40@PA4PR04MB7920.eurprd04.prod.outlook.com>
+From: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+Date: Mon, 18 Jan 2021 12:34:19 +0100
+Subject: [Buildroot] [PATCH 1/1] package/openlayers: bump to version 6.5.0
+Message-ID: <20210118113419.3508147-1-thomas.claveirole@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->________________________________________                                        
->From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>                           
->Sent: Saturday, January 16, 2021 8:18 AM                                        
->To: Stephane Viau (OSS)                                                         
->Subject: [autobuild.buildroot.net] Your daily results for 2021-01-15            
->                                                                                
->Hello,                                                                          
->                                                                                
->Gitlab CI failures                                                              
->==================                                                              
->                                                                                
->Below is a list of Gitlab CI job failures in relation to defconfigs             
->or runtime tests you are in charge of. Please help us                           
->improving the quality of Buildroot by investigating                             
->those build failures and sending patches to fix                                 
->them.Thanks!                                                                    
->                                                                                
->Results for 'master'                                                            
->--------------------                                                            
->                                                                                
->Build failures related to your defconfigs:                                      
->                                                                                
->                        defconfig |                        link to the job      
->----------------------------------+--------------------------------------------------------------
->              freescale_imx8mnevk |  https://gitlab.com/buildroot.org/buildroot/-/jobs/962451205
->                                                                                
-                                                                                 
-Hello Thomas, Yann,                                                              
-                                                                                 
-Today, none of the freescale_imx* defconfig build on master.                     
-                                                                                 
-A git bisect blames commit 5b95a5dc2 ("support/download: change format of        
-archives generated from git"), introduced by Yann on January 10th.               
-                                                                                 
-Any idea whether someone is looking into these failures?                         
-                                                                                 
-BR,                                                                              
-Stephane.                                                                        
-                                                                                 
->                                                                                
->                                                                                
->--                                                                              
->http://autobuild.buildroot.net                                                  
+Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
+---
+ package/openlayers/openlayers.hash | 2 +-
+ package/openlayers/openlayers.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/openlayers/openlayers.hash b/package/openlayers/openlayers.hash
+index 2774b8064b..23683bd6e9 100644
+--- a/package/openlayers/openlayers.hash
++++ b/package/openlayers/openlayers.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256	8371bbca2f7b33be0db5b416a78bc9559dd8f9afb6a406994daeeecf7b37f3f6	v6.4.3-dist.zip
++sha256	ab80014b15963404ec269a71f563fd3568581c55de160d5663600ea0787cf568	v6.5.0-dist.zip
+diff --git a/package/openlayers/openlayers.mk b/package/openlayers/openlayers.mk
+index c3e137adcd..db464ef8a6 100644
+--- a/package/openlayers/openlayers.mk
++++ b/package/openlayers/openlayers.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENLAYERS_VERSION = 6.4.3
++OPENLAYERS_VERSION = 6.5.0
+ OPENLAYERS_SOURCE = v$(OPENLAYERS_VERSION)-dist.zip
+ OPENLAYERS_SITE = https://github.com/openlayers/openlayers/releases/download/v$(OPENLAYERS_VERSION)
+ OPENLAYERS_LICENSE = BSD-2-Clause
+-- 
+2.30.0
