@@ -1,39 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 18 Jan 2021 22:29:44 +0100
-Subject: [Buildroot] [PATCH 2/5] package/unzip: fix URL of patches
-In-Reply-To: <20210117175208.366428-2-fontaine.fabrice@gmail.com>
-References: <20210117175208.366428-1-fontaine.fabrice@gmail.com>
- <20210117175208.366428-2-fontaine.fabrice@gmail.com>
-Message-ID: <20210118222944.13ef7ead@windsurf.home>
+Date: Mon, 18 Jan 2021 22:30:16 +0100
+Subject: [Buildroot] [git commit] package/unzip: set UNZIP_CPE_ID_VALID
+Message-ID: <20210118211111.CBCCA884D5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 17 Jan 2021 18:52:05 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=3a8e039a0e9624b6d75e36df6c9ee51e93e1a254
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> https://sources.debian.org/data/main/u/unzip/6.0-25 is unreachable so
-> replace it by
-> https://sources.debian.org/data/main/u/unzip/6.0-26
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+cpe:2.3:a:unzip_project:unzip is a valid CPE identifier for this
+package:
 
-The problem is that this patch is not really going to fix it for the
-long term. Stuff on sources.debian.org come and goes, which is why we
-use snapshot.debian.org whenever possible.
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aunzip_project%3Aunzip
 
-So we should probably use
-http://snapshot.debian.org/archive/debian-debug/20210110T203547Z/pool/main/u/unzip/unzip_6.0-26.debian.tar.xz
-which contains all the Debian patches, but at a stable URL.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/unzip/unzip.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Could you have a look at doing this ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/unzip/unzip.mk b/package/unzip/unzip.mk
+index d435fb6b5d..231abc86be 100644
+--- a/package/unzip/unzip.mk
++++ b/package/unzip/unzip.mk
+@@ -9,6 +9,7 @@ UNZIP_SOURCE = unzip$(subst .,,$(UNZIP_VERSION)).tgz
+ UNZIP_SITE = ftp://ftp.info-zip.org/pub/infozip/src
+ UNZIP_LICENSE = Info-ZIP
+ UNZIP_LICENSE_FILES = LICENSE
++UNZIP_CPE_ID_VALID = YES
+ 
+ UNZIP_PATCH = \
+ 	https://sources.debian.org/data/main/u/unzip/6.0-25/debian/patches/07-increase-size-of-cfactorstr.patch \
