@@ -1,56 +1,44 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 18 Jan 2021 21:37:52 +0100
-Subject: [Buildroot] [PATCH] package/zstd: build multithreaded host-zstd
-Message-ID: <20210118203753.30241-1-patrickdepinguin@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 18 Jan 2021 21:38:02 +0100
+Subject: [Buildroot] [PATCH v2] package/freescale-imx/firmware-imx: fix
+ the VPU firmware location
+In-Reply-To: <20210113223039.14401-1-festevam@gmail.com> (Fabio Estevam's
+ message of "Wed, 13 Jan 2021 19:30:39 -0300")
+References: <20210113223039.14401-1-festevam@gmail.com>
+Message-ID: <87wnwadlqt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+>>>>> "Fabio" == Fabio Estevam <festevam@gmail.com> writes:
 
-Under the assumption that all Buildroot build hosts nowadays are
-multithreaded, we can boost performance of host-zstd by enabling
-multithreaded operation.
+ > The mainline kernel searches the coda VPU firmware inside the following
+ > locations [1]:
 
-See also commit 52154e52069d20105f62191e6c9f903f188a5129.
+ > /lib/firmware/
+ > /lib/firmware/vpu/
 
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
----
- package/zstd/zstd.mk | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+ > Currently Buildroot installs the coda firmware into /lib/firmware/imx/vpu,
+ > which is not a valid location.
 
-diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
-index c3af9bd58c..a4f0632fcf 100644
---- a/package/zstd/zstd.mk
-+++ b/package/zstd/zstd.mk
-@@ -76,18 +76,20 @@ define ZSTD_INSTALL_TARGET_CMDS
- 		DESTDIR=$(TARGET_DIR) PREFIX=/usr -C $(@D)/lib $(ZSTD_INSTALL_LIBS)
- endef
- 
--# note: no 'HAVE_...' options for host library build only
-+# note: only limited 'HAVE_...' options for host library build only
-+HOST_ZSTD_OPTS = HAVE_THREAD=1
-+
- define HOST_ZSTD_BUILD_CMDS
--	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) \
--		-C $(@D)/lib libzstd.a libzstd
--	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) \
-+	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) $(HOST_ZSTD_OPTS) \
-+		-C $(@D)/lib libzstd.a-mt libzstd-mt
-+	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) $(HOST_ZSTD_OPTS) \
- 		-C $(@D) zstd
- endef
- 
- define HOST_ZSTD_INSTALL_CMDS
--	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) \
-+	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) $(HOST_ZSTD_OPTS) \
- 		DESTDIR=$(HOST_DIR) PREFIX=/usr -C $(@D)/lib install
--	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) \
-+	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) $(HOST_ZSTD_OPTS) \
- 		DESTDIR=$(HOST_DIR) PREFIX=/usr -C $(@D)/programs install
- endef
- 
+ > Fix it by installing the coda firmwares into /lib/firmware/vpu/ which
+ > is a valid path for both mainline and NXP vendor kernels. Also create a
+ > symlink to /lib/firmware/ so that mainline kernels do not need to wait
+ > more than 60 seconds to search again inside /lib/firmware/vpu/.
+
+ > [1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=8af7779f3cbc1f6720d15f00abc797493710d1ab
+
+ > Reported-by: Romain Naour <romain.naour@gmail.com>
+ > Suggested-by: Romain Naour <romain.naour@gmail.com>
+ > Signed-off-by: Fabio Estevam <festevam@gmail.com>
+ > ---
+ > Changes since v1:
+ > - Create symlinks to /lib/firmware to speed up mainline kernels to
+ > found the VPU firmware.
+
+Committed to 2020.11.x, thanks.
+
 -- 
-2.26.2
+Bye, Peter Korsgaard
