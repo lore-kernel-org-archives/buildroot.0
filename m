@@ -1,25 +1,27 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 18 Jan 2021 22:33:00 +0100
-Subject: [Buildroot] [PATCH 1/1] package/xerces: renumber patch
-Message-ID: <20210118213300.662442-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 18 Jan 2021 22:35:57 +0100
+Subject: [Buildroot] [PATCH v1 1/3] package/pkg-cmake.mk: fix indent
+In-Reply-To: <20210118212700.2316-1-ps.report@gmx.net>
+References: <20210118212700.2316-1-ps.report@gmx.net>
+Message-ID: <20210118223557.0844f825@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 7f115d2de4276972098b8f4cfeb0150c8e851d89 forgot to renumber the
-remaining patch
+On Mon, 18 Jan 2021 22:26:58 +0100
+Peter Seiderer <ps.report@gmx.net> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...ng-with-curl.patch => 0001-fix-static-linking-with-curl.patch} | 0
- 1 file changed, 0 insertions(+), 0 deletions(-)
- rename package/xerces/{0002-fix-static-linking-with-curl.patch => 0001-fix-static-linking-with-curl.patch} (100%)
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+>  package/pkg-cmake.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/xerces/0002-fix-static-linking-with-curl.patch b/package/xerces/0001-fix-static-linking-with-curl.patch
-similarity index 100%
-rename from package/xerces/0002-fix-static-linking-with-curl.patch
-rename to package/xerces/0001-fix-static-linking-with-curl.patch
+Series applied, thanks!
+
+Thomas
 -- 
-2.29.2
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
