@@ -1,42 +1,39 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 18 Jan 2021 22:27:00 +0100
-Subject: [Buildroot] [PATCH v1 3/3] docs: add cmake-package _INSTALL_OPTS
- description
-In-Reply-To: <20210118212700.2316-1-ps.report@gmx.net>
-References: <20210118212700.2316-1-ps.report@gmx.net>
-Message-ID: <20210118212700.2316-3-ps.report@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 18 Jan 2021 22:29:44 +0100
+Subject: [Buildroot] [PATCH 2/5] package/unzip: fix URL of patches
+In-Reply-To: <20210117175208.366428-2-fontaine.fabrice@gmail.com>
+References: <20210117175208.366428-1-fontaine.fabrice@gmail.com>
+ <20210117175208.366428-2-fontaine.fabrice@gmail.com>
+Message-ID: <20210118222944.13ef7ead@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
-Notes:
-  - why _INSTALL_OPTS and not _INSTALL_HOST_OPTS (besides historically
-    reasons)?
-  - mabe the cmake _INSTALL_OPTS is so seldom used, so not worth
-    an extra doc entry?
----
- docs/manual/adding-packages-cmake.txt | 5 +++++
- 1 file changed, 5 insertions(+)
+On Sun, 17 Jan 2021 18:52:05 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-diff --git a/docs/manual/adding-packages-cmake.txt b/docs/manual/adding-packages-cmake.txt
-index 00974d30d8..73f0943024 100644
---- a/docs/manual/adding-packages-cmake.txt
-+++ b/docs/manual/adding-packages-cmake.txt
-@@ -126,6 +126,11 @@ typical packages will therefore only use a few of them.
-   in the build step. These are passed after the +make+ command. By
-   default, empty.
- 
-+* +LIBFOO_INSTALL_OPTS+ contains the make options used to
-+  install the package to the host directory. By default, the value
-+  is +install+, which is correct for most CMake packages. It is still
-+  possible to override it.
-+
- * +LIBFOO_INSTALL_STAGING_OPTS+ contains the make options used to
-   install the package to the staging directory. By default, the value
-   is +DESTDIR=$(STAGING_DIR) install/fast+, which is correct for most
+> https://sources.debian.org/data/main/u/unzip/6.0-25 is unreachable so
+> replace it by
+> https://sources.debian.org/data/main/u/unzip/6.0-26
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+The problem is that this patch is not really going to fix it for the
+long term. Stuff on sources.debian.org come and goes, which is why we
+use snapshot.debian.org whenever possible.
+
+So we should probably use
+http://snapshot.debian.org/archive/debian-debug/20210110T203547Z/pool/main/u/unzip/unzip_6.0-26.debian.tar.xz
+which contains all the Debian patches, but at a stable URL.
+
+Could you have a look at doing this ?
+
+Thanks!
+
+Thomas
 -- 
-2.29.2
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
