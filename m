@@ -1,38 +1,56 @@
-From: Michael Nosthoff <buildroot@heine.tech>
-Date: Mon, 18 Jan 2021 10:46:33 +0100
-Subject: [Buildroot] [PATCH] package/grpc: drop host gcc 4.8 workaround
-Message-ID: <20210118094635.750975-1-buildroot@heine.tech>
+From: Stephane Viau (OSS) <stephane.viau@oss.nxp.com>
+Date: Mon, 18 Jan 2021 10:26:27 +0000
+Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
+ 2021-01-15
+In-Reply-To: <6fdd08ad-8de6-464b-a7b2-47c9cbedad77@HE1EUR01FT006.eop-EUR01.prod.protection.outlook.com>
+References: <6fdd08ad-8de6-464b-a7b2-47c9cbedad77@HE1EUR01FT006.eop-EUR01.prod.protection.outlook.com>
+Message-ID: <PA4PR04MB7920C4990EEA59953B4C3C4DA7A40@PA4PR04MB7920.eurprd04.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Due to libabseil dependencies the host gcc is at least 4.9.
-So the fix for host gcc 4.8 is no longer needed.
-
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
----
- package/grpc/grpc.mk | 8 --------
- 1 file changed, 8 deletions(-)
-
-diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
-index 8585b6bdc3..f7ddffd386 100644
---- a/package/grpc/grpc.mk
-+++ b/package/grpc/grpc.mk
-@@ -72,13 +72,5 @@ HOST_GRPC_CONF_OPTS = \
- 	-DgRPC_SSL_PROVIDER=package \
- 	-DgRPC_ZLIB_PROVIDER=package
- 
--# With gcc 4.8 (at least on ubuntu) there is a bug in LTO which breaks
--# the linkage of the grpc_cpp_plugin with libprotobuf and pthread. This
--# additional flag fixes this.
--ifeq ($(BR2_HOST_GCC_AT_LEAST_4_9),)
--HOST_GRPC_CONF_OPTS += \
--	-DCMAKE_EXE_LINKER_FLAGS="$(HOST_LDFLAGS) -Wl,--no-as-needed"
--endif
--
- $(eval $(cmake-package))
- $(eval $(host-cmake-package))
--- 
-2.25.1
+>________________________________________                                        
+>From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>                           
+>Sent: Saturday, January 16, 2021 8:18 AM                                        
+>To: Stephane Viau (OSS)                                                         
+>Subject: [autobuild.buildroot.net] Your daily results for 2021-01-15            
+>                                                                                
+>Hello,                                                                          
+>                                                                                
+>Gitlab CI failures                                                              
+>==================                                                              
+>                                                                                
+>Below is a list of Gitlab CI job failures in relation to defconfigs             
+>or runtime tests you are in charge of. Please help us                           
+>improving the quality of Buildroot by investigating                             
+>those build failures and sending patches to fix                                 
+>them.Thanks!                                                                    
+>                                                                                
+>Results for 'master'                                                            
+>--------------------                                                            
+>                                                                                
+>Build failures related to your defconfigs:                                      
+>                                                                                
+>                        defconfig |                        link to the job      
+>----------------------------------+--------------------------------------------------------------
+>              freescale_imx8mnevk |  https://gitlab.com/buildroot.org/buildroot/-/jobs/962451205
+>                                                                                
+                                                                                 
+Hello Thomas, Yann,                                                              
+                                                                                 
+Today, none of the freescale_imx* defconfig build on master.                     
+                                                                                 
+A git bisect blames commit 5b95a5dc2 ("support/download: change format of        
+archives generated from git"), introduced by Yann on January 10th.               
+                                                                                 
+Any idea whether someone is looking into these failures?                         
+                                                                                 
+BR,                                                                              
+Stephane.                                                                        
+                                                                                 
+>                                                                                
+>                                                                                
+>--                                                                              
+>http://autobuild.buildroot.net                                                  
