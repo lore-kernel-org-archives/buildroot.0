@@ -1,32 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 18 Jan 2021 22:56:42 +0100
-Subject: [Buildroot] [PATCH 1/1] package/xerces: renumber patch
-In-Reply-To: <20210118213300.662442-1-fontaine.fabrice@gmail.com>
-References: <20210118213300.662442-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210118225642.1585994d@windsurf.home>
+Date: Mon, 18 Jan 2021 22:58:22 +0100
+Subject: [Buildroot] [git commit] package/poppler: add gobject-introspection
+ support
+Message-ID: <20210118213920.340D282586@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 18 Jan 2021 22:33:00 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=9d1d4818c39d97ad7a1cdf6e075b9acae6dfff71
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Commit 7f115d2de4276972098b8f4cfeb0150c8e851d89 forgot to renumber the
-> remaining patch
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...ng-with-curl.patch => 0001-fix-static-linking-with-curl.patch} | 0
->  1 file changed, 0 insertions(+), 0 deletions(-)
->  rename package/xerces/{0002-fix-static-linking-with-curl.patch => 0001-fix-static-linking-with-curl.patch} (100%)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/poppler/poppler.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-Applied to master, thanks. Perhaps we should have a "make
-check-package" check for improperly numbered patches ?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
+index 69a3bcace5..8e8dafc715 100644
+--- a/package/poppler/poppler.mk
++++ b/package/poppler/poppler.mk
+@@ -17,7 +17,6 @@ POPPLER_CONF_OPTS = \
+ 	-DBUILD_GTK_TESTS=OFF \
+ 	-DBUILD_QT5_TESTS=OFF \
+ 	-DBUILD_CPP_TESTS=OFF \
+-	-DENABLE_GOBJECT_INTROSPECTION=OFF \
+ 	-DENABLE_GTK_DOC=OFF
+ 
+ # cmake older than 3.10 requires this to avoid try_run() in FindThreads
+@@ -34,6 +33,13 @@ else
+ POPPLER_CONF_OPTS += -DENABLE_DCTDECODER=none -DWITH_JPEG=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
++POPPLER_DEPENDENCIES += gobject-introspection
++POPPLER_CONF_OPTS += -DENABLE_GOBJECT_INTROSPECTION=ON
++else
++POPPLER_CONF_OPTS += -DENABLE_GOBJECT_INTROSPECTION=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBPNG),y)
+ POPPLER_DEPENDENCIES += libpng
+ POPPLER_CONF_OPTS += -DWITH_PNG=ON
