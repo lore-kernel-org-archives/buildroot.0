@@ -1,29 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 18 Jan 2021 22:25:30 +0100
-Subject: [Buildroot] [PATCH 1/1] package/openlayers: bump to version
- 6.5.0
-In-Reply-To: <20210118113419.3508147-1-thomas.claveirole@green-communications.fr>
-References: <20210118113419.3508147-1-thomas.claveirole@green-communications.fr>
-Message-ID: <20210118222530.62948b94@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 18 Jan 2021 22:26:00 +0100
+Subject: [Buildroot] [PATCH 1/1] package/kodi-pvr-zattoo: fix json
+ dependency
+In-Reply-To: <20210115181529.611511-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Fri, 15 Jan 2021 19:15:29 +0100")
+References: <20210115181529.611511-1-bernd.kuhls@t-online.de>
+Message-ID: <87k0sadjiv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 18 Jan 2021 12:34:19 +0100
-Thomas Claveirole <thomas.claveirole@green-communications.fr> wrote:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-> Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
-> ---
->  package/openlayers/openlayers.hash | 2 +-
->  package/openlayers/openlayers.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+ > Package depends on rapidjson, not rapidxml:
+ > https://github.com/rbuehlma/pvr.zattoo/blob/Leia/CMakeLists.txt#L10
 
-Applied to master, thanks.
+ > The bug was previously not noticed because kodi depends on rapidjson
+ > https://github.com/xbmc/xbmc/blob/Leia/CMakeLists.txt#L133
+ > and kodi-platform depends on kodi
+ > https://github.com/xbmc/kodi-platform/blob/master/CMakeLists.txt#L8
 
-Thomas
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+Committed to 2020.11.x, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
