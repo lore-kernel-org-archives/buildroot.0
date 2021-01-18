@@ -1,32 +1,30 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 17 Jan 2021 23:01:01 +0100
-Subject: [Buildroot] [PATCH 1/1] Config.in.legacy: fix typo
-Message-ID: <20210117220101.491914-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 18 Jan 2021 08:55:22 +0100
+Subject: [Buildroot] [PATCH 2/2] Replace LIBFOO_CPE_ID_NAME by
+ LIBFOO_CPE_ID_PRODUCT
+In-Reply-To: <20210117213439.490165-2-fontaine.fabrice@gmail.com>
+References: <20210117213439.490165-1-fontaine.fabrice@gmail.com>
+ <20210117213439.490165-2-fontaine.fabrice@gmail.com>
+Message-ID: <20210118085522.179636b6@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-oriq-rcw -> qoriq-rcw
+On Sun, 17 Jan 2021 22:34:39 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- Config.in.legacy | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index a322d18cb3..4e59fbb190 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -162,7 +162,7 @@ config BR2_GDB_VERSION_8_2
- 	  version such as 8.3 or more recent.
- 
- config BR2_PACKAGE_HOST_RCW
--	bool "rcw package was renamed to oriq-rcw"
-+	bool "rcw package was renamed to qoriq-rcw"
- 	select BR2_PACKAGE_HOST_QORIQ_RCW
- 	select BR2_LEGACY
- 	help
+This would benefit from a proper commit log that explains the
+reasoning. Did you suddenly change your mind? Has there been some
+discussion about this ?
+
+Thanks!
+
+Thomas
 -- 
-2.29.2
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
