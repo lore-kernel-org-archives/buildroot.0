@@ -1,30 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 18 Jan 2021 22:12:45 +0100
-Subject: [Buildroot] [PATCH 1/3] Revert "package/coremark-pro: add
- dependency on threads"
-In-Reply-To: <20210118203842.657013-1-fontaine.fabrice@gmail.com>
-References: <20210118203842.657013-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210118221245.56bcceef@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 18 Jan 2021 22:12:49 +0100
+Subject: [Buildroot] [PATCH]
+ toolchain/toolchain-external/toolchain-external-bootlin: update PowerPC 440
+ FP toolchain
+In-Reply-To: <20210114224000.456977-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Thu, 14 Jan 2021 23:39:59 +0100")
+References: <20210114224000.456977-1-thomas.petazzoni@bootlin.com>
+Message-ID: <87sg6ydk4u.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 18 Jan 2021 21:38:40 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-> This reverts commit 6627cea610ee11cbc02649c9b12cbe0b2b8e83b6.
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/coremark-pro/Config.in | 5 -----
->  1 file changed, 5 deletions(-)
+ > The Bootlin PowerPC 440 FP toolchain was rebuilt in version 2020.08-2,
+ > which is rebased on Buildroot 2020.08.3 as that includes a fix for
+ > SecurePLT support.
 
-Series applied. Thanks!
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-Thomas
+Committed to 2020.11.x, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
