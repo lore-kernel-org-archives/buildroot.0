@@ -1,26 +1,38 @@
 From: Michael Nosthoff <buildroot@heine.tech>
-Date: Mon, 18 Jan 2021 09:43:20 +0100
-Subject: [Buildroot] 
- =?utf-8?q?=5BPATCH=5D_package/grpc=3A_bump_version_t?=
- =?utf-8?q?o_1=2E34=2E0?=
-In-Reply-To: <20210117154943.GM2375@scaer>
-Message-ID: <6b65-60054a00-1-5bb15180@216770832>
+Date: Mon, 18 Jan 2021 10:46:33 +0100
+Subject: [Buildroot] [PATCH] package/grpc: drop host gcc 4.8 workaround
+Message-ID: <20210118094635.750975-1-buildroot@heine.tech>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
- 
-On Sunday, January 17, 2021 16:49 CET, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote: 
- 
-> Michael, All,
-> 
-> There is now a dependency on gcc > 4.9 and host gcc >= 4.9, so maybe we
-> can finally get rid of that hack. Thoughts?
+Due to libabseil dependencies the host gcc is at least 4.9.
+So the fix for host gcc 4.8 is no longer needed.
 
-That makes sense. Do you want to revert the commit or should I send a patch?
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+---
+ package/grpc/grpc.mk | 8 --------
+ 1 file changed, 8 deletions(-)
 
-Regards,
-Michael
+diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
+index 8585b6bdc3..f7ddffd386 100644
+--- a/package/grpc/grpc.mk
++++ b/package/grpc/grpc.mk
+@@ -72,13 +72,5 @@ HOST_GRPC_CONF_OPTS = \
+ 	-DgRPC_SSL_PROVIDER=package \
+ 	-DgRPC_ZLIB_PROVIDER=package
+ 
+-# With gcc 4.8 (at least on ubuntu) there is a bug in LTO which breaks
+-# the linkage of the grpc_cpp_plugin with libprotobuf and pthread. This
+-# additional flag fixes this.
+-ifeq ($(BR2_HOST_GCC_AT_LEAST_4_9),)
+-HOST_GRPC_CONF_OPTS += \
+-	-DCMAKE_EXE_LINKER_FLAGS="$(HOST_LDFLAGS) -Wl,--no-as-needed"
+-endif
+-
+ $(eval $(cmake-package))
+ $(eval $(host-cmake-package))
+-- 
+2.25.1
