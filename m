@@ -1,30 +1,26 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 18 Jan 2021 22:16:12 +0100
-Subject: [Buildroot] [PATCH] package/htpdate: bump to version 1.2.6
-In-Reply-To: <20210117213714.1336561-1-angelo@amarulasolutions.com>
-References: <20210117213714.1336561-1-angelo@amarulasolutions.com>
-Message-ID: <20210118221612.256b6b1b@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 18 Jan 2021 22:18:19 +0100
+Subject: [Buildroot] [PATCH 1/1] package/xorriso: bump version to 1.5.2
+In-Reply-To: <20210110180312.2546943-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sun, 10 Jan 2021 19:03:12 +0100")
+References: <20210110180312.2546943-1-bernd.kuhls@t-online.de>
+Message-ID: <87o8hmdjvo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 17 Jan 2021 22:37:14 +0100
-Angelo Compagnucci <angelo@amarulasolutions.com> wrote:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-> Thi patch bumps htpdate to version 1.2.6.
-> 
-> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-> ---
->  package/htpdate/htpdate.hash | 2 +-
->  package/htpdate/htpdate.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+ > Release notes:
+ > https://lists.gnu.org/archive/html/bug-xorriso/2019-10/msg00005.html
 
-Applied to master, thanks.
+ > Reformatted hashes.
 
-Thomas
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+Committed to 2020.02.x and 2020.11.x given the amount of bugfixes, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
