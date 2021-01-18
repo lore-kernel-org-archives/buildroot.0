@@ -1,191 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 18 Jan 2021 22:12:27 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x]
- toolchain/toolchain-external/toolchain-external-bootlin: update PowerPC 440
- FP toolchain
-Message-ID: <20210118210704.0984F88390@busybox.osuosl.org>
+Date: Mon, 18 Jan 2021 22:25:32 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/kodi-pvr-zattoo:
+ fix json dependency
+Message-ID: <20210118210704.2B90A87113@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c043b783e14b9fea9fadc2696c6c01fadb7586ec
+commit: https://git.buildroot.net/buildroot/commit/?id=99e4d80815f19954636e56354466b13167cab456
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-The Bootlin PowerPC 440 FP toolchain was rebuilt in version 2020.08-2,
-which is rebased on Buildroot 2020.08.3 as that includes a fix for
-SecurePLT support.
+Package depends on rapidjson, not rapidxml:
+https://github.com/rbuehlma/pvr.zattoo/blob/Leia/CMakeLists.txt#L10
 
+The bug was previously not noticed because kodi depends on rapidjson
+https://github.com/xbmc/xbmc/blob/Leia/CMakeLists.txt#L133
+and kodi-platform depends on kodi
+https://github.com/xbmc/kodi-platform/blob/master/CMakeLists.txt#L8
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Reviewed-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit e8a6ca68211775654add2b0f042a4ad5958c2bd0)
+(cherry picked from commit e1ecd5b582b1266da6a4da296866cf603407694c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../toolchain-external-bootlin/Config.in.options   | 16 +++++++--------
- .../toolchain-external-bootlin.hash                | 24 +++++++++++-----------
- .../toolchain-external-bootlin.mk                  | 12 +++++------
- 3 files changed, 26 insertions(+), 26 deletions(-)
+ package/kodi-pvr-zattoo/Config.in          | 2 +-
+ package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options b/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options
-index 3c94ae1535..c64c4bb356 100644
---- a/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options
-+++ b/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options
-@@ -2523,7 +2523,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_OPENRISC_UCLIBC_STABLE
- 	  https://toolchains.bootlin.com/
- 
- config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_440FP_GLIBC_BLEEDING_EDGE
--	bool "powerpc-440fp glibc bleeding-edge 2020.08-1"
-+	bool "powerpc-440fp glibc bleeding-edge 2020.08-2"
- 	depends on BR2_powerpc
- 	depends on BR2_powerpc_440fp
- 	depends on BR2_USE_MMU
-@@ -2538,8 +2538,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_440FP_GLIBC_BLEEDING_EDGE
- 	select BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
--	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+diff --git a/package/kodi-pvr-zattoo/Config.in b/package/kodi-pvr-zattoo/Config.in
+index ab7ff70034..5dfadcadd1 100644
+--- a/package/kodi-pvr-zattoo/Config.in
++++ b/package/kodi-pvr-zattoo/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_KODI_PVR_ZATTOO
+ 	bool "kodi-pvr-zattoo"
+ 	select BR2_PACKAGE_KODI_PLATFORM
+ 	select BR2_PACKAGE_LIBPLATFORM
+-	select BR2_PACKAGE_RAPIDXML
++	select BR2_PACKAGE_RAPIDJSON
+ 	select BR2_PACKAGE_TINYXML2
  	help
- 	  Bootlin toolchain for the powerpc-440fp architecture, using
- 	  the glibc C library. This is a bleeding-edge version, which
-@@ -2549,7 +2549,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_440FP_GLIBC_BLEEDING_EDGE
- 	  https://toolchains.bootlin.com/
+ 	  Kodi PVR-Addon for Zattoo
+diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
+index 7afe92e87c..78fc01f195 100644
+--- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
++++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
+@@ -8,6 +8,6 @@ KODI_PVR_ZATTOO_VERSION = 18.1.21-Leia
+ KODI_PVR_ZATTOO_SITE = $(call github,rbuehlma,pvr.zattoo,$(KODI_PVR_ZATTOO_VERSION))
+ KODI_PVR_ZATTOO_LICENSE = GPL-2.0+
+ KODI_PVR_ZATTOO_LICENSE_FILES = debian/copyright
+-KODI_PVR_ZATTOO_DEPENDENCIES = kodi-platform libplatform rapidxml tinyxml2
++KODI_PVR_ZATTOO_DEPENDENCIES = kodi-platform libplatform rapidjson tinyxml2
  
- config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_440FP_GLIBC_STABLE
--	bool "powerpc-440fp glibc stable 2020.08-1"
-+	bool "powerpc-440fp glibc stable 2020.08-2"
- 	depends on BR2_powerpc
- 	depends on BR2_powerpc_440fp
- 	depends on BR2_USE_MMU
-@@ -2564,8 +2564,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_440FP_GLIBC_STABLE
- 	select BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
--	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	help
- 	  Bootlin toolchain for the powerpc-440fp architecture, using
- 	  the glibc C library. This is a stable version, which means
-@@ -2575,7 +2575,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_440FP_GLIBC_STABLE
- 	  https://toolchains.bootlin.com/
- 
- config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_440FP_MUSL_BLEEDING_EDGE
--	bool "powerpc-440fp musl bleeding-edge 2020.08-1"
-+	bool "powerpc-440fp musl bleeding-edge 2020.08-2"
- 	depends on BR2_powerpc
- 	depends on BR2_powerpc_440fp
- 	depends on BR2_USE_MMU
-@@ -2598,7 +2598,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_440FP_MUSL_BLEEDING_EDGE
- 	  https://toolchains.bootlin.com/
- 
- config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_440FP_MUSL_STABLE
--	bool "powerpc-440fp musl stable 2020.08-1"
-+	bool "powerpc-440fp musl stable 2020.08-2"
- 	depends on BR2_powerpc
- 	depends on BR2_powerpc_440fp
- 	depends on BR2_USE_MMU
-@@ -2621,7 +2621,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_440FP_MUSL_STABLE
- 	  https://toolchains.bootlin.com/
- 
- config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_440FP_UCLIBC_BLEEDING_EDGE
--	bool "powerpc-440fp uclibc bleeding-edge 2020.08-1"
-+	bool "powerpc-440fp uclibc bleeding-edge 2020.08-2"
- 	depends on BR2_powerpc
- 	depends on BR2_powerpc_440fp
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_10
-@@ -2645,7 +2645,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_440FP_UCLIBC_BLEEDING_EDGE
- 	  https://toolchains.bootlin.com/
- 
- config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_440FP_UCLIBC_STABLE
--	bool "powerpc-440fp uclibc stable 2020.08-1"
-+	bool "powerpc-440fp uclibc stable 2020.08-2"
- 	depends on BR2_powerpc
- 	depends on BR2_powerpc_440fp
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_9
-diff --git a/toolchain/toolchain-external/toolchain-external-bootlin/toolchain-external-bootlin.hash b/toolchain/toolchain-external/toolchain-external-bootlin/toolchain-external-bootlin.hash
-index 8764f395fa..3e6eb99cc8 100644
---- a/toolchain/toolchain-external/toolchain-external-bootlin/toolchain-external-bootlin.hash
-+++ b/toolchain/toolchain-external/toolchain-external-bootlin/toolchain-external-bootlin.hash
-@@ -200,18 +200,18 @@ sha256  697ef122917022f400003931bc6da75fe07bb5234ef8186cbe027e560f04a168  openri
- sha256  e45d02c9272c909db1c92b6403ed1e0813889ef0c22b2f5166d2675f62d3f20f  openrisc--uclibc--bleeding-edge-2020.08-1.tar.bz2
- # From https://toolchains.bootlin.com/downloads/releases/toolchains/openrisc/tarballs/openrisc--uclibc--stable-2020.08-1.sha256
- sha256  62c60f9f99828a01f3a16060ceba74b8e2603a8ca3585649434a66f721ecdf75  openrisc--uclibc--stable-2020.08-1.tar.bz2
--# From https://toolchains.bootlin.com/downloads/releases/toolchains/powerpc-440fp/tarballs/powerpc-440fp--glibc--bleeding-edge-2020.08-1.sha256
--sha256  d7e3ab961be0b39f40b428790e48f9f3e44290bb7bed51446bc7c8d66aacf0da  powerpc-440fp--glibc--bleeding-edge-2020.08-1.tar.bz2
--# From https://toolchains.bootlin.com/downloads/releases/toolchains/powerpc-440fp/tarballs/powerpc-440fp--glibc--stable-2020.08-1.sha256
--sha256  99ab7272cf8fec3e0ce67935bea9c077a2e9bd9076388238c3976cdf1e8f19e0  powerpc-440fp--glibc--stable-2020.08-1.tar.bz2
--# From https://toolchains.bootlin.com/downloads/releases/toolchains/powerpc-440fp/tarballs/powerpc-440fp--musl--bleeding-edge-2020.08-1.sha256
--sha256  182dd8d2a4203863c663301b8ee6e59101a0b87dbb03aa3b919944338a2947fe  powerpc-440fp--musl--bleeding-edge-2020.08-1.tar.bz2
--# From https://toolchains.bootlin.com/downloads/releases/toolchains/powerpc-440fp/tarballs/powerpc-440fp--musl--stable-2020.08-1.sha256
--sha256  4658f631506b7d73a7f6816caa6b8e052d5d203e14a77bd6904af8ee9ebf2868  powerpc-440fp--musl--stable-2020.08-1.tar.bz2
--# From https://toolchains.bootlin.com/downloads/releases/toolchains/powerpc-440fp/tarballs/powerpc-440fp--uclibc--bleeding-edge-2020.08-1.sha256
--sha256  e6570a1683260620bec129e849f68488e59460a99158c5c3e48b30432ec043c7  powerpc-440fp--uclibc--bleeding-edge-2020.08-1.tar.bz2
--# From https://toolchains.bootlin.com/downloads/releases/toolchains/powerpc-440fp/tarballs/powerpc-440fp--uclibc--stable-2020.08-1.sha256
--sha256  ed632b806c8e8fa77e0d1f43d57ae169629ce94e4783044771ee60775001d207  powerpc-440fp--uclibc--stable-2020.08-1.tar.bz2
-+# From https://toolchains.bootlin.com/downloads/releases/toolchains/powerpc-440fp/tarballs/powerpc-440fp--glibc--bleeding-edge-2020.08-2.sha256
-+sha256  7b7c2f66ccd3d44cd8a829b5879277be9cfb17f34a26d5055b29a6bab40ff9df  powerpc-440fp--glibc--bleeding-edge-2020.08-2.tar.bz2
-+# From https://toolchains.bootlin.com/downloads/releases/toolchains/powerpc-440fp/tarballs/powerpc-440fp--glibc--stable-2020.08-2.sha256
-+sha256  ae7b3d06090dfcf54b1e3b4bd4fda9ae5aaaf34aba9118820e6e9d8f1b70c0c4  powerpc-440fp--glibc--stable-2020.08-2.tar.bz2
-+# From https://toolchains.bootlin.com/downloads/releases/toolchains/powerpc-440fp/tarballs/powerpc-440fp--musl--bleeding-edge-2020.08-2.sha256
-+sha256  a6def102659538e3e5838bf4267cd33486d795db753a7109b5e413499ef5df89  powerpc-440fp--musl--bleeding-edge-2020.08-2.tar.bz2
-+# From https://toolchains.bootlin.com/downloads/releases/toolchains/powerpc-440fp/tarballs/powerpc-440fp--musl--stable-2020.08-2.sha256
-+sha256  76de0310078633ff34654c8c54d7e80a609c58521a7f2a8041ae4a574889d38a  powerpc-440fp--musl--stable-2020.08-2.tar.bz2
-+# From https://toolchains.bootlin.com/downloads/releases/toolchains/powerpc-440fp/tarballs/powerpc-440fp--uclibc--bleeding-edge-2020.08-2.sha256
-+sha256  abbe38fc92a71d568c08452f99fe3470e5ded9a666c6829d9104fcf06b984503  powerpc-440fp--uclibc--bleeding-edge-2020.08-2.tar.bz2
-+# From https://toolchains.bootlin.com/downloads/releases/toolchains/powerpc-440fp/tarballs/powerpc-440fp--uclibc--stable-2020.08-2.sha256
-+sha256  d4346ce563ddfbd4946b2dfbc766cafebbf4b09488dc8b398ab8bb242bac9268  powerpc-440fp--uclibc--stable-2020.08-2.tar.bz2
- # From https://toolchains.bootlin.com/downloads/releases/toolchains/powerpc-e300c3/tarballs/powerpc-e300c3--glibc--bleeding-edge-2020.08-1.sha256
- sha256  fe4b9817f060d84118fff5b7d855eacac472975f2adfececb641d2999f94a7ea  powerpc-e300c3--glibc--bleeding-edge-2020.08-1.tar.bz2
- # From https://toolchains.bootlin.com/downloads/releases/toolchains/powerpc-e300c3/tarballs/powerpc-e300c3--glibc--stable-2020.08-1.sha256
-diff --git a/toolchain/toolchain-external/toolchain-external-bootlin/toolchain-external-bootlin.mk b/toolchain/toolchain-external/toolchain-external-bootlin/toolchain-external-bootlin.mk
-index 71f53f6d58..cfe447428d 100644
---- a/toolchain/toolchain-external/toolchain-external-bootlin/toolchain-external-bootlin.mk
-+++ b/toolchain/toolchain-external/toolchain-external-bootlin/toolchain-external-bootlin.mk
-@@ -607,37 +607,37 @@ TOOLCHAIN_EXTERNAL_BOOTLIN_SITE = https://toolchains.bootlin.com/downloads/relea
- endif
- 
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_440FP_GLIBC_BLEEDING_EDGE),y)
--TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION = 2020.08-1
-+TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION = 2020.08-2
- TOOLCHAIN_EXTERNAL_BOOTLIN_SOURCE = powerpc-440fp--glibc--bleeding-edge-$(TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION).tar.bz2
- TOOLCHAIN_EXTERNAL_BOOTLIN_SITE = https://toolchains.bootlin.com/downloads/releases/toolchains/powerpc-440fp/tarballs
- endif
- 
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_440FP_GLIBC_STABLE),y)
--TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION = 2020.08-1
-+TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION = 2020.08-2
- TOOLCHAIN_EXTERNAL_BOOTLIN_SOURCE = powerpc-440fp--glibc--stable-$(TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION).tar.bz2
- TOOLCHAIN_EXTERNAL_BOOTLIN_SITE = https://toolchains.bootlin.com/downloads/releases/toolchains/powerpc-440fp/tarballs
- endif
- 
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_440FP_MUSL_BLEEDING_EDGE),y)
--TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION = 2020.08-1
-+TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION = 2020.08-2
- TOOLCHAIN_EXTERNAL_BOOTLIN_SOURCE = powerpc-440fp--musl--bleeding-edge-$(TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION).tar.bz2
- TOOLCHAIN_EXTERNAL_BOOTLIN_SITE = https://toolchains.bootlin.com/downloads/releases/toolchains/powerpc-440fp/tarballs
- endif
- 
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_440FP_MUSL_STABLE),y)
--TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION = 2020.08-1
-+TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION = 2020.08-2
- TOOLCHAIN_EXTERNAL_BOOTLIN_SOURCE = powerpc-440fp--musl--stable-$(TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION).tar.bz2
- TOOLCHAIN_EXTERNAL_BOOTLIN_SITE = https://toolchains.bootlin.com/downloads/releases/toolchains/powerpc-440fp/tarballs
- endif
- 
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_440FP_UCLIBC_BLEEDING_EDGE),y)
--TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION = 2020.08-1
-+TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION = 2020.08-2
- TOOLCHAIN_EXTERNAL_BOOTLIN_SOURCE = powerpc-440fp--uclibc--bleeding-edge-$(TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION).tar.bz2
- TOOLCHAIN_EXTERNAL_BOOTLIN_SITE = https://toolchains.bootlin.com/downloads/releases/toolchains/powerpc-440fp/tarballs
- endif
- 
- ifeq ($(BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_440FP_UCLIBC_STABLE),y)
--TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION = 2020.08-1
-+TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION = 2020.08-2
- TOOLCHAIN_EXTERNAL_BOOTLIN_SOURCE = powerpc-440fp--uclibc--stable-$(TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION).tar.bz2
- TOOLCHAIN_EXTERNAL_BOOTLIN_SITE = https://toolchains.bootlin.com/downloads/releases/toolchains/powerpc-440fp/tarballs
- endif
+ $(eval $(cmake-package))
