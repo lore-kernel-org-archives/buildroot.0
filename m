@@ -1,43 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 18 Jan 2021 21:48:29 +0100
-Subject: [Buildroot] [git commit] package/json-for-modern-cpp: bump to
- version 3.9.0
-Message-ID: <20210118203943.0A081818AD@busybox.osuosl.org>
+Date: Mon, 18 Jan 2021 21:48:57 +0100
+Subject: [Buildroot] [git commit] package/mutt: add MUTT_CPE_ID_VENDOR
+Message-ID: <20210118203943.28826805F2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9bd94f5bbc1138a92d8a75bb89640d5b6172f55d
+commit: https://git.buildroot.net/buildroot/commit/?id=f155076f7eea8a631ba33850fbd2fef78bf5a4dd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Ignacy Gaw??dzki <ignacy.gawedzki@green-communications.fr>
+cpe:2.3:a:mutt:mutt is a valid CPE identifier for this package:
+
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Amutt%3Amutt
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/json-for-modern-cpp/json-for-modern-cpp.hash | 2 +-
- package/json-for-modern-cpp/json-for-modern-cpp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/mutt/mutt.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/json-for-modern-cpp/json-for-modern-cpp.hash b/package/json-for-modern-cpp/json-for-modern-cpp.hash
-index 4d540f2404..eb9270b311 100644
---- a/package/json-for-modern-cpp/json-for-modern-cpp.hash
-+++ b/package/json-for-modern-cpp/json-for-modern-cpp.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  7d0edf65f2ac7390af5e5a0b323b31202a6c11d744a74b588dc30f5a8c9865ba  json-3.8.0.tar.gz
-+sha256  9943db11eeaa5b23e58a88fbc26c453faccef7b546e55063ad00e7caaaf76d0b  json-3.9.0.tar.gz
- sha256  50be9457e5c9faaba5e60d9c73f8eabe9e0737a2d9c3e58357d856661862c18e  LICENSE.MIT
-diff --git a/package/json-for-modern-cpp/json-for-modern-cpp.mk b/package/json-for-modern-cpp/json-for-modern-cpp.mk
-index afc900b7dd..6e21723fd4 100644
---- a/package/json-for-modern-cpp/json-for-modern-cpp.mk
-+++ b/package/json-for-modern-cpp/json-for-modern-cpp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
+index 67fc4ed838..0823e8afc0 100644
+--- a/package/mutt/mutt.mk
++++ b/package/mutt/mutt.mk
+@@ -8,6 +8,7 @@ MUTT_VERSION = 1.14.7
+ MUTT_SITE = https://bitbucket.org/mutt/mutt/downloads
+ MUTT_LICENSE = GPL-2.0+
+ MUTT_LICENSE_FILES = GPL
++MUTT_CPE_ID_VENDOR = mutt
+ MUTT_DEPENDENCIES = ncurses
+ MUTT_CONF_OPTS = --disable-doc --disable-smtp
  
--JSON_FOR_MODERN_CPP_VERSION = 3.8.0
-+JSON_FOR_MODERN_CPP_VERSION = 3.9.0
- JSON_FOR_MODERN_CPP_SOURCE = json-$(JSON_FOR_MODERN_CPP_VERSION).tar.gz
- JSON_FOR_MODERN_CPP_SITE = $(call github,nlohmann,json,v$(JSON_FOR_MODERN_CPP_VERSION))
- JSON_FOR_MODERN_CPP_LICENSE = MIT
