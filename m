@@ -1,44 +1,133 @@
-From: Laurent Hartanerot <laurent.hartanerot@gmail.com>
-Date: Mon, 18 Jan 2021 20:13:34 +0100
-Subject: [Buildroot] [PATCH 1/1] package/qoriq-rcw: bump to version
- LSDK-20.12
-Message-ID: <20210118191334.13595-1-laurent.hartanerot@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 18 Jan 2021 20:22:02 +0100
+Subject: [Buildroot] random segmentation fault during built
+In-Reply-To: <CAEUhbmVC0p2UBGEDg_k9LW-NBfWVdurzynDkZjTL76jA6iZ-3g@mail.gmail.com>
+References: <CAEUhbmUnHYTOhirctT9EVphsys9PPwbvM5hkBKP7sVabnv1zmg@mail.gmail.com>
+ <20210110170405.29cf9095@gmx.net>
+ <CAEUhbmVURa_J3k46jCFTbV7UPWvQTVxWNq--w+T+Mz3jgSJaBQ@mail.gmail.com>
+ <20210111203057.07299bb3@gmx.net>
+ <CAEUhbmWy918HoQtKzGwadJTRPqCenGG+j8K1jQ0DPhckhmKUSw@mail.gmail.com>
+ <CAEUhbmVC0p2UBGEDg_k9LW-NBfWVdurzynDkZjTL76jA6iZ-3g@mail.gmail.com>
+Message-ID: <20210118202202.2d4e6f51@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Laurent Hartanerot <laurent.hartanerot@atos.net>
+Hello Bin,
 
-Signed-off-by: Laurent Hartanerot <laurent.hartanerot@atos.net>
----
- package/qoriq-rcw/qoriq-rcw.hash | 4 ++--
- package/qoriq-rcw/qoriq-rcw.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+re-added CC: buildroot at busybox.net
 
-diff --git a/package/qoriq-rcw/qoriq-rcw.hash b/package/qoriq-rcw/qoriq-rcw.hash
-index 8c7c5d1fbf..5848799a0c 100644
---- a/package/qoriq-rcw/qoriq-rcw.hash
-+++ b/package/qoriq-rcw/qoriq-rcw.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  33fd492448a3ea3a29ee90d03544e437e32a0d1ea64a6c0a42b569e5864d4972  qoriq-rcw-LSDK-19.09-br1.tar.gz
--sha256  a531b3146425e592db17a51ff39c4801cb01fb4055ffdaada0572decc0655bcd  LICENSE
-+sha256  bbb595f0b68beb114620f7aeaff073b90938329e10cd6b36daa9f2087f3119a0  qoriq-rcw-LSDK-20.12-br1.tar.gz
-+sha256  68f4b15ecc085729419bc60ca6eeadca5af0237bbfec791e8a79da9c943d42e9  LICENSE
-diff --git a/package/qoriq-rcw/qoriq-rcw.mk b/package/qoriq-rcw/qoriq-rcw.mk
-index 2e06b6d53e..ecc5ce5eb4 100644
---- a/package/qoriq-rcw/qoriq-rcw.mk
-+++ b/package/qoriq-rcw/qoriq-rcw.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--QORIQ_RCW_VERSION = LSDK-19.09
-+QORIQ_RCW_VERSION = LSDK-20.12
- QORIQ_RCW_SITE = https://source.codeaurora.org/external/qoriq/qoriq-components/rcw
- QORIQ_RCW_SITE_METHOD = git
- QORIQ_RCW_LICENSE = BSD-3-Clause
--- 
-2.20.1
+On Sun, 17 Jan 2021 23:58:04 +0800, Bin Meng <bmeng.cn@gmail.com> wrote:
+
+> Hi Peter,
+>
+> On Sun, Jan 17, 2021 at 11:30 PM Bin Meng <bmeng.cn@gmail.com> wrote:
+> >
+> > Hi Peter,
+> >
+> > On Tue, Jan 12, 2021 at 3:30 AM Peter Seiderer <ps.report@gmx.net> wrote:
+> > >
+> > > Hello Bin,
+> > >
+> > > On Mon, 11 Jan 2021 09:11:48 +0800, Bin Meng <bmeng.cn@gmail.com> wrote:
+> > >
+> > > > Hi Peter,
+> > > >
+> > > > On Mon, Jan 11, 2021 at 12:04 AM Peter Seiderer <ps.report@gmx.net> wrote:
+> > > > >
+> > > > > Hello Bin,
+> > > > >
+> > > > > On Sun, 10 Jan 2021 21:57:45 +0800, Bin Meng <bmeng.cn@gmail.com> wrote:
+> > > > >
+> > > > > > Hi,
+> > > > > >
+> > > > > > I see a random segmentation fault during the build of buildroot. For example,
+> > > > > >
+> > > > > > Makefile:13408: recipe for target 'install-pylibmountexecPYTHON' failed
+> > > > > > make[4]: *** [install-pylibmountexecPYTHON] Segmentation fault (core dumped)
+> > > > > > make[4]: *** Waiting for unfinished jobs....
+> > > > > >
+> > > > > > Type "make" for the 2nd time with nothing changed, or rarely a 3rd
+> > > > > > time, get a PASS build.
+> > > > > >
+> > > > > > This was observed by builds on Ubuntu 16.04 and Ubuntu 20.04 hosts.
+> > > > > > Any ideas of what could be wrong?
+> > > > >
+> > > > > In case the errors are at random packages/locations (and succeed on iteration)
+> > > > > check your hardware and/or memory, see e.g. [1]...
+> > > > >
+> > > > > Early versions of the AMD Ryzen CPU had heavy-load segfault bug, see [2]...
+> > > > >
+> > > > > Regards,
+> > > > > Peter
+> > > > >
+> > > > > [1] https://tldp.org/FAQ/sig11/html/index.html
+> > > > > [2] https://techreport.com/news/32459/amd-ships-revised-ryzen-cpus-with-a-compile-bug-fix/
+> > > >
+> > > > Thank you. I checked the above 2 links and suspect it's not related.
+> > > >
+> > > > The issue happens on one Intel Xeon CPU with a Ubuntu 16.04 and one
+> > > > Intel CORE i9 with a Ubuntu 20.04. The segmentation fault seems to
+> > > > happen randomly during package "make install" phase.
+> > >
+> > > Back to the first question: random packages/locations or always at the same (or
+> > > similar) location? Always some python (related) package?
+> >
+> > Looks it's random, not always some Python packages. For example, I saw
+> > this today:
+> >
+> > make[3]: *** [Makefile:1826: install-pkgconfDATA] Segmentation fault
+> > make[3]: *** Waiting for unfinished jobs....
+> >
+> > >
+> > > Which buildroot version? Mind to share your .config file?
+> >
+> > The current buildroot HEAD with commit
+> > 6d4f1324d4a4a23938e40cc12a033a3a264b4ec1, plus my patch:
+> > http://patchwork.ozlabs.org/project/buildroot/patch/1610355672-3008-3-git-send-email-bmeng.cn at gmail.com/
+> >
+> > .config file attached
+> >
+> > >
+> > > Mind to enable core-dump ('ulimit -c unlimited') and take a look at the core
+> > > file?
+> > >
+> >
+> > Sorry I did not enable core dump. I will have to turn it on now.
+>
+> Without any change, I ran a second time build with my configuration
+> with core dump enabled, and hit the segmentation fault during "make
+> install" another package:
+>
+> make[4]: *** [Makefile:8649: install-dist_calcxxDATA] Segmentation
+> fault (core dumped)
+>
+> I now got 4 core dump files. 3 of which are generated by conftest, and
+> the other one is by sh.
+>
+> $ find . -name *conftest*
+> ./output/build/linux-headers-5.10/scripts/kconfig/tests/conftest.py
+> ./dl/linux/git/scripts/kconfig/tests/conftest.py
+>
+> This looks like Python related. I am not sure how to debug this core
+> dump. Do you have any idea? Thanks!
+
+Normally 'file <core_file>' should give a hint which command failed
+(or on modern systems the output of dmesg or with systemd core
+facility 'coredumpctl dump') and then you can examine the core file
+with gdb, e.g.:
+
+	$ gdb <cmd> <core_file>
+
+and from the gdb command prompt call 'where' (in case install the missing
+debuginfos as announced by gdb)...
+
+Regards,
+Peter
+
+
+>
+> Regards,
+> Bin
