@@ -1,27 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 18 Jan 2021 22:23:01 +0100
-Subject: [Buildroot] [PATCH] package/grpc: drop host gcc 4.8 workaround
-In-Reply-To: <20210118094635.750975-1-buildroot@heine.tech>
-References: <20210118094635.750975-1-buildroot@heine.tech>
-Message-ID: <20210118222301.7a0a6339@windsurf.home>
+Date: Mon, 18 Jan 2021 22:23:09 +0100
+Subject: [Buildroot] [PATCH 1/1] package/qoriq-rcw: bump to version
+ LSDK-20.12
+In-Reply-To: <20210118191334.13595-1-laurent.hartanerot@gmail.com>
+References: <20210118191334.13595-1-laurent.hartanerot@gmail.com>
+Message-ID: <20210118222309.2f32efed@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 18 Jan 2021 10:46:33 +0100
-Michael Nosthoff via buildroot <buildroot@busybox.net> wrote:
+On Mon, 18 Jan 2021 20:13:34 +0100
+Laurent Hartanerot <laurent.hartanerot@gmail.com> wrote:
 
-> Due to libabseil dependencies the host gcc is at least 4.9.
-> So the fix for host gcc 4.8 is no longer needed.
+> From: Laurent Hartanerot <laurent.hartanerot@atos.net>
 > 
-> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+> Signed-off-by: Laurent Hartanerot <laurent.hartanerot@atos.net>
 > ---
->  package/grpc/grpc.mk | 8 --------
->  1 file changed, 8 deletions(-)
+>  package/qoriq-rcw/qoriq-rcw.hash | 4 ++--
+>  package/qoriq-rcw/qoriq-rcw.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Well spotted, applied to master, thanks.
+Applied to master, thanks.
 
 Thomas
 -- 
