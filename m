@@ -1,43 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 18 Jan 2021 22:33:03 +0100
-Subject: [Buildroot] [git commit] docs/manual/pkg-cmake.txt: fix
- _INSTALL_STAGING_OPTS/_INSTALL_TARGET_OPTS description
-Message-ID: <20210118211406.7193E88518@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 18 Jan 2021 22:33:00 +0100
+Subject: [Buildroot] [PATCH 1/1] package/xerces: renumber patch
+Message-ID: <20210118213300.662442-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0c80a0da9aaf1e051ceb1a319ebef7a933674ca9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Commit 7f115d2de4276972098b8f4cfeb0150c8e851d89 forgot to renumber the
+remaining patch
 
-Since commit dfcc18f84b0d90b0ed5937bac3c4b12aba086cd5 cmake-package
-_INSTALL_STAGING_OPTS/_INSTALL_TARGET_OPTS use 'install/fast'
-instead of 'install', adjust documentation accordingly.
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- docs/manual/adding-packages-cmake.txt | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ ...ng-with-curl.patch => 0001-fix-static-linking-with-curl.patch} | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ rename package/xerces/{0002-fix-static-linking-with-curl.patch => 0001-fix-static-linking-with-curl.patch} (100%)
 
-diff --git a/docs/manual/adding-packages-cmake.txt b/docs/manual/adding-packages-cmake.txt
-index 6ccf3902f8..00974d30d8 100644
---- a/docs/manual/adding-packages-cmake.txt
-+++ b/docs/manual/adding-packages-cmake.txt
-@@ -128,12 +128,12 @@ typical packages will therefore only use a few of them.
- 
- * +LIBFOO_INSTALL_STAGING_OPTS+ contains the make options used to
-   install the package to the staging directory. By default, the value
--  is +DESTDIR=$(STAGING_DIR) install+, which is correct for most
-+  is +DESTDIR=$(STAGING_DIR) install/fast+, which is correct for most
-   CMake packages. It is still possible to override it.
- 
- * +LIBFOO_INSTALL_TARGET_OPTS+ contains the make options used to
-   install the package to the target directory. By default, the value
--  is +DESTDIR=$(TARGET_DIR) install+. The default value is correct
-+  is +DESTDIR=$(TARGET_DIR) install/fast+. The default value is correct
-   for most CMake packages, but it is still possible to override it if
-   needed.
- 
+diff --git a/package/xerces/0002-fix-static-linking-with-curl.patch b/package/xerces/0001-fix-static-linking-with-curl.patch
+similarity index 100%
+rename from package/xerces/0002-fix-static-linking-with-curl.patch
+rename to package/xerces/0001-fix-static-linking-with-curl.patch
+-- 
+2.29.2
