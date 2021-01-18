@@ -1,37 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 18 Jan 2021 21:49:10 +0100
-Subject: [Buildroot] [git commit] package/imagemagick: add
- IMAGEMAGICK_CPE_ID_VENDOR
-Message-ID: <20210118203943.94D7E818AD@busybox.osuosl.org>
+Date: Mon, 18 Jan 2021 21:49:00 +0100
+Subject: [Buildroot] [git commit] package/cpio: add CPIO_CPE_ID_VENDOR
+Message-ID: <20210118203943.3F7D6818AD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=249e40d7adbd7b67ac514d755c5e4b2075b4b5b1
+commit: https://git.buildroot.net/buildroot/commit/?id=282654ba47a126727a205438628a48e2592c8509
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:imagemagick:imagemagick is a valid CPE identifier for this
-package:
+cpe:2.3:a:gnu:cpio is a valid CPE identifier for this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aimagemagick%3Aimagemagick
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Agnu%3Acpio
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/imagemagick/imagemagick.mk | 1 +
+ package/cpio/cpio.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index f30d3dfc2b..ea181c97f9 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -8,6 +8,7 @@ IMAGEMAGICK_VERSION = 7.0.10-51
- IMAGEMAGICK_SITE = $(call github,ImageMagick,ImageMagick,$(IMAGEMAGICK_VERSION))
- IMAGEMAGICK_LICENSE = Apache-2.0
- IMAGEMAGICK_LICENSE_FILES = LICENSE
-+IMAGEMAGICK_CPE_ID_VENDOR = imagemagick
+diff --git a/package/cpio/cpio.mk b/package/cpio/cpio.mk
+index 1d9c54669e..9ce281dd1c 100644
+--- a/package/cpio/cpio.mk
++++ b/package/cpio/cpio.mk
+@@ -10,6 +10,7 @@ CPIO_SITE = $(BR2_GNU_MIRROR)/cpio
+ CPIO_CONF_OPTS = --bindir=/bin
+ CPIO_LICENSE = GPL-3.0+
+ CPIO_LICENSE_FILES = COPYING
++CPIO_CPE_ID_VENDOR = gnu
  
- IMAGEMAGICK_INSTALL_STAGING = YES
- IMAGEMAGICK_CONFIG_SCRIPTS = \
+ # cpio uses argp.h which is not provided by uclibc or musl by default.
+ # Use the argp-standalone package to provide this.
