@@ -1,25 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 18 Jan 2021 22:05:46 +0100
-Subject: [Buildroot] [PATCH 1/1] package/mono: add MONO_CPE_ID_VENDOR
-In-Reply-To: <20210117164438.354311-1-fontaine.fabrice@gmail.com>
-References: <20210117164438.354311-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210118220546.376eab93@windsurf.home>
+Date: Mon, 18 Jan 2021 22:05:49 +0100
+Subject: [Buildroot] [PATCH 1/1] package/cpio: add CPIO_CPE_ID_VENDOR
+In-Reply-To: <20210117164649.354578-1-fontaine.fabrice@gmail.com>
+References: <20210117164649.354578-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210118220549.12f6c584@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 17 Jan 2021 17:44:38 +0100
+On Sun, 17 Jan 2021 17:46:49 +0100
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> cpe:2.3:a:mono-project:mono is a valid CPE identifier for this package:
+> cpe:2.3:a:gnu:cpio is a valid CPE identifier for this package:
 > 
->   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Amono-project%3Amono
+>   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Agnu%3Acpio
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/mono/mono.mk | 1 +
+>  package/cpio/cpio.mk | 1 +
 >  1 file changed, 1 insertion(+)
 
 Applied to master, thanks.
