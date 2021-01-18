@@ -1,29 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 18 Jan 2021 22:56:01 +0100
-Subject: [Buildroot] [PATCH] package/python-pyjwt: Bump to version 2.0.0
-In-Reply-To: <20210111182923.316881-1-grzegorz@blach.pl>
-References: <20210111182923.316881-1-grzegorz@blach.pl>
-Message-ID: <20210118225601.5adeef32@windsurf.home>
+Date: Mon, 18 Jan 2021 22:56:17 +0100
+Subject: [Buildroot] [git commit] package/xerces: renumber patch
+Message-ID: <20210118213711.D783B826DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 11 Jan 2021 19:29:21 +0100
-Grzegorz Blach <grzegorz@blach.pl> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=635c59ef725688b7e719939c83daa5126a2c0131
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
-> ---
->  package/python-pyjwt/Config.in         | 1 +
->  package/python-pyjwt/python-pyjwt.hash | 6 +++---
->  package/python-pyjwt/python-pyjwt.mk   | 4 ++--
->  3 files changed, 6 insertions(+), 5 deletions(-)
+Commit 7f115d2de4276972098b8f4cfeb0150c8e851d89 forgot to renumber the
+remaining patch
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...ic-linking-with-curl.patch => 0001-fix-static-linking-with-curl.patch} | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/xerces/0002-fix-static-linking-with-curl.patch b/package/xerces/0001-fix-static-linking-with-curl.patch
+similarity index 100%
+rename from package/xerces/0002-fix-static-linking-with-curl.patch
+rename to package/xerces/0001-fix-static-linking-with-curl.patch
