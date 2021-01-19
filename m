@@ -1,62 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 Jan 2021 15:23:47 +0100
+Date: Tue, 19 Jan 2021 15:23:56 +0100
 Subject: [Buildroot] [git commit branch/2020.11.x]
- support/scripts/pkg-stats: import cve module only when needed
-Message-ID: <20210119141350.0647780462@busybox.osuosl.org>
+ support/scripts/pkg-stats: fix Python 3.8 deprecation warning
+Message-ID: <20210119141350.152A583A06@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ee4e2f1611d501785b4b225e37a50b4a275a90de
+commit: https://git.buildroot.net/buildroot/commit/?id=9d160596deda82a581c02c067347923755c774dc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-The cve module needs ijson, which may not be installed. Since cve
-matching is only enabled when --nvd-path is passed, it is a bit silly
-to error out about ijson being missing if it's not used.
+With Python 3.8, the following deprecation warnings are emitted:
 
-So instead of unconditionally importing the cve module, only do it
-conditionally.
+/home/thomas/projets/buildroot/./support/scripts/pkg-stats:418: DeprecationWarning: The explicit passing of coroutine objects to asyncio.wait() is deprecated since Python 3.8, and scheduled for removal in Python 3.11.
 
-However, instead of doing it right at the point where it is used, we
-do it at the beginning of the main() function. Indeed, if the cve
-module is needed but cannot be imported, we want to error out
-immediately rather than doing a whole bunch of things, and failing on
-the user later on in the middle of the pkg-stats execution.
+/home/thomas/projets/buildroot/./support/scripts/pkg-stats:536: DeprecationWarning: The explicit passing of coroutine objects to asyncio.wait() is deprecated since Python 3.8, and scheduled for removal in Python 3.11.
+
+The correct way to pass coroutines is to use asyncio.create_task(),
+but this is rather new method (Python 3.7), and using it breaks
+compatibility with older Python versions. As suggested at
+https://docs.python.org/3/library/asyncio-task.html#asyncio.create_task,
+use the more cryptic, but also more compatible asyncio.ensure_future()
+method.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Tested-by: Heiko Thiery <heiko.thiery@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 824032d16854ae3c0e6e67c534a7e8850199091a)
+(cherry picked from commit ffb262040500151261107321e0e7d2f8b4632bd8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/pkg-stats | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ support/scripts/pkg-stats | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index d44f8241c1..2676cc49dd 100755
+index 2676cc49dd..e472b67784 100755
 --- a/support/scripts/pkg-stats
 +++ b/support/scripts/pkg-stats
-@@ -32,7 +32,6 @@ brpath = os.path.normpath(os.path.join(os.path.dirname(__file__), "..", ".."))
- 
- sys.path.append(os.path.join(brpath, "utils"))
- from getdeveloperlib import parse_developers  # noqa: E402
--import cve as cvecheck  # noqa: E402
- 
- 
- INFRA_RE = re.compile(r"\$\(eval \$\(([a-z-]*)-package\)\)")
-@@ -950,7 +949,13 @@ def parse_args():
+@@ -413,7 +413,7 @@ async def check_package_urls(packages):
+     async with aiohttp.ClientSession(connector=connector, trust_env=True) as sess:
+         packages = [p for p in packages if p.status['url'][0] == 'ok']
+         for pkg in packages:
+-            tasks.append(check_url_status(sess, pkg, len(packages)))
++            tasks.append(asyncio.ensure_future(check_url_status(sess, pkg, len(packages))))
+         await asyncio.wait(tasks)
  
  
- def __main__():
-+    global cvecheck
-+
-     args = parse_args()
-+
-+    if args.nvd_path:
-+        import cve as cvecheck
-+
-     if args.packages:
-         package_list = args.packages.split(",")
-     elif args.configpackages:
+@@ -531,7 +531,7 @@ async def check_package_latest_version(packages):
+     async with aiohttp.ClientSession(connector=connector, trust_env=True) as sess:
+         packages = [p for p in packages if p.has_valid_infra]
+         for pkg in packages:
+-            tasks.append(check_package_latest_version_get(sess, pkg, len(packages)))
++            tasks.append(asyncio.ensure_future(check_package_latest_version_get(sess, pkg, len(packages))))
+         await asyncio.wait(tasks)
+ 
+ 
