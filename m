@@ -1,44 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 Jan 2021 15:24:46 +0100
-Subject: [Buildroot] [PATCH 1/4] support/scripts/pkg-stats: import cve
- module only when needed
-In-Reply-To: <20210117153246.5e84374d@windsurf.home> (Thomas Petazzoni's
- message of "Sun, 17 Jan 2021 15:32:46 +0100")
-References: <20201119145354.1175043-1-thomas.petazzoni@bootlin.com>
- <20210117153246.5e84374d@windsurf.home>
-Message-ID: <87y2gpc8cx.fsf@dell.be.48ers.dk>
+Date: Tue, 19 Jan 2021 15:18:03 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/resiprocate:
+ resiprocate-apps need openssl
+Message-ID: <20210119141349.EEC3883A06@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=6fc8ee105f074fdf5628cae808bb39e975d2347b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
- > On Thu, 19 Nov 2020 15:53:51 +0100
- > Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+Fixes:
+http://autobuild.buildroot.net/results/7ac/7ac82a3ac4b06cb5ad44e92548d66a0f79d149a6/
 
- >> The cve module needs ijson, which may not be installed. Since cve
- >> matching is only enabled when --nvd-path is passed, it is a bit silly
- >> to error out about ijson being missing if it's not used.
- >> 
- >> So instead of unconditionally importing the cve module, only do it
- >> conditionally.
- >> 
- >> However, instead of doing it right at the point where it is used, we
- >> do it at the beginning of the main() function. Indeed, if the cve
- >> module is needed but cannot be imported, we want to error out
- >> immediately rather than doing a whole bunch of things, and failing on
- >> the user later on in the middle of the pkg-stats execution.
- >> 
- >> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- >> ---
- >> support/scripts/pkg-stats | 7 ++++++-
- >> 1 file changed, 6 insertions(+), 1 deletion(-)
+In file included from Server.cxx:19:
+../../resip/stack/ssl/Security.hxx:32:10: fatal error: openssl/ssl.h: No such file or directory
 
- > Series applied.
+clicktoall needs openssl:
+https://github.com/resiprocate/resiprocate/blob/resiprocate-1.12/apps/clicktocall/Makefile.am#L16
 
-Committed to 2020.02.x and 2020.11.x, thanks.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 2cc6bd748276027745dfe748a28980a55cd3b0d3)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/resiprocate/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/resiprocate/Config.in b/package/resiprocate/Config.in
+index ed57e09c1b..509c11ffda 100644
+--- a/package/resiprocate/Config.in
++++ b/package/resiprocate/Config.in
+@@ -41,6 +41,7 @@ config BR2_PACKAGE_RESIPROCATE_REND
+ 
+ config BR2_PACKAGE_RESIPROCATE_APPS
+ 	bool "resiprocate-apps"
++	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_PCRE
+ 	help
+ 	  Build apps clicktocall and sipdial
