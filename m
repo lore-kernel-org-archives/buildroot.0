@@ -1,31 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 Jan 2021 18:57:25 +0100
-Subject: [Buildroot] [PATCH 2/2] package/chartjs: security bump to 2.9.4
-In-Reply-To: <20210119154607.11101-2-patrickdepinguin@gmail.com> (Thomas De
- Schampheleire's message of "Tue, 19 Jan 2021 16:46:05 +0100")
-References: <20210119154607.11101-1-patrickdepinguin@gmail.com>
- <20210119154607.11101-2-patrickdepinguin@gmail.com>
-Message-ID: <87k0s8byii.fsf@dell.be.48ers.dk>
+Date: Tue, 19 Jan 2021 18:56:37 +0100
+Subject: [Buildroot] [git commit] package/chartjs: move 'v' version prefix
+ out of CHARTJS_VERSION
+Message-ID: <20210119173821.DA4D087015@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=0244b11597461919d4240f9ee93dcb61a27e47d4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > From: Joeri Barbarien <joeri.barbarien@nokia.com>
- > CVE-2020-7746 (https://nvd.nist.gov/vuln/detail/CVE-2020-7746)
+chartjs 2.9.3 has a security vulnerability (CVE-2020-7746) which is not
+detected by the CVE scripts, presumably because our version variable starts
+with a 'v'.
 
- >     The options parameter is not properly sanitized when it is processed.
- >     When the options are processed, the existing options (or the defaults
- >     options) are deeply merged with provided options. However, during this
- >     operation, the keys of the object being set are not checked, leading to
- >     a prototype pollution.
+Move that 'v' prefix out of the version variable to fix that.
 
- > Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/chartjs/chartjs.hash | 2 +-
+ package/chartjs/chartjs.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/chartjs/chartjs.hash b/package/chartjs/chartjs.hash
+index d2426ea614..a029d16ab1 100644
+--- a/package/chartjs/chartjs.hash
++++ b/package/chartjs/chartjs.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256	8079d8fd39131fcfaec33f1c7799412bcf8e051e25b10bd6e37fc16159417aa1  chartjs-v2.9.3.tar.gz
++sha256	8079d8fd39131fcfaec33f1c7799412bcf8e051e25b10bd6e37fc16159417aa1  chartjs-2.9.3.tar.gz
+ sha256	7b43caae91f31b18dc81fae6e0f7aa1acbecaa6d84e3249905cbe15308307d67  LICENSE.md
+diff --git a/package/chartjs/chartjs.mk b/package/chartjs/chartjs.mk
+index 171e0a4a7c..960b3e24af 100644
+--- a/package/chartjs/chartjs.mk
++++ b/package/chartjs/chartjs.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-CHARTJS_VERSION = v2.9.3
+-CHARTJS_SITE = $(call github,chartjs,Chart.js,$(CHARTJS_VERSION))
++CHARTJS_VERSION = 2.9.3
++CHARTJS_SITE = $(call github,chartjs,Chart.js,v$(CHARTJS_VERSION))
+ CHARTJS_LICENSE = MIT
+ CHARTJS_LICENSE_FILES = LICENSE.md
+ 
