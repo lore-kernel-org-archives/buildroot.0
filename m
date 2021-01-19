@@ -1,40 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 19 Jan 2021 22:22:34 +0100
-Subject: [Buildroot] [PATCH v1] package/qt5webengine: add optional
- host-freetype/host-libjpeg dependency
-In-Reply-To: <20201230111823.3114e2a6@windsurf>
-References: <20201221203952.22168-1-ps.report@gmx.net>
- <20201221203952.22168-3-ps.report@gmx.net>
- <20201230111823.3114e2a6@windsurf>
-Message-ID: <20210119222234.29ac8a2a@windsurf.home>
+Date: Tue, 19 Jan 2021 22:22:57 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/sysklogd: bump to version
+ 2.1.2
+In-Reply-To: <20201229181125.704233-1-andreas.hilse@googlemail.com>
+References: <20200812160843.24064-1-andreas.hilse@googlemail.com>
+ <20201229181125.704233-1-andreas.hilse@googlemail.com>
+Message-ID: <20210119222257.361cb35d@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
+On Tue, 29 Dec 2020 19:11:25 +0100
+Andreas Hilse via buildroot <buildroot@busybox.net> wrote:
 
-On Wed, 30 Dec 2020 11:18:23 +0100
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
-
-> > +ifeq ($(BR2_PACKAGE_QT5BASE_FONTCONFIG),y)
-> > +QT5WEBENGINE_DEPENDENCIES += host-freetype
-> > +endif
-> > +
-> > +ifeq ($(BR2_PACKAGE_QT5BASE_JPEG),y)
-> > +QT5WEBENGINE_DEPENDENCIES += host-libjpeg
-> > +endif  
+> - fixes: sysklogd 1.6 klogd with newer glibcs: kernel messages are logged to user facility
+> - sysklogd removed klogd, functionality has been moved to syslogd
+> - now supports config fragments in /etc/syslog.d
+> - disabled sysklogd logger to not interfere with other loggers
+> - license has changed from GPL-2.0+ to BSD-3-Clause
 > 
-> This looks really odd. Why would these target-related features require
-> host-freetype and host-libjpeg ? Aren't we instead seeing some
-> pkg-config issue where it's trying to find freetype/libjpeg for the
-> target, but it for some reason doesn't work, and tries to find them for
-> the host ?
+> Signed-off-by: Andreas Hilse <andreas.hilse@googlemail.com>
+> 
+> ---
+> Changes v1 -> v2:
+>   - added patch for O_CLOEXEC build failure with uClibc
+>   - mention license change
+>   - extended help text in Config.in
 
-Do you have some further feedback on this issue ?
-
-Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
