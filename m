@@ -1,71 +1,28 @@
-From: Raul Hidalgo Caballero <deinok@deinok.com>
-Date: Tue, 19 Jan 2021 10:23:07 +0100
-Subject: [Buildroot] package/dotnet: add host-dotnet-sdk
-In-Reply-To: <CABWPoFFQpPVsZDgBviS2uTopZxk+g5S2t04_FidLcVJGd5ar5Q@mail.gmail.com>
-References: <CABWPoFG8k9WccFXRKC6ufRLKDHzdwCyeN3Q1PJZzqpg83fwc1w@mail.gmail.com>
- <20210104085858.68f57652@windsurf>
- <CAOiXNkARyVd8=v7ZShcdAw7eZHDY+Apf5_vLDsxiGT-tpGsEvg@mail.gmail.com>
- <CABWPoFFFA_jB0bqBSGDmnk+7YvM6br0=7=KcnKUvnctVrvmQNA@mail.gmail.com>
- <CAOiXNkBPm8ksDHTWXrzA9zmFZxShEWSOSeG4pn0r3iYRZxKq6g@mail.gmail.com>
- <CABWPoFH_UbU=b7T5yr2Wf23E1fz-dGe+SuVkiMqJGNtYXitLFg@mail.gmail.com>
- <CABWPoFG2q8n27nSULRf1mh7ook=wSOJq1uw8xCTLcWmudEdo2A@mail.gmail.com>
- <20210112152145.4d84029e@windsurf.home>
- <CABWPoFFQpPVsZDgBviS2uTopZxk+g5S2t04_FidLcVJGd5ar5Q@mail.gmail.com>
-Message-ID: <CABWPoFHa6tUdhvfLJhAAOzffVKRX7h-x9Q+bMSoC0N3CBzkWCQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 19 Jan 2021 14:20:56 +0100
+Subject: [Buildroot] [PATCH] package/sunxi-mali-mainline-driver: fix
+ build failure with Linux 5.9 and 5.10
+In-Reply-To: <20210106212919.540837-1-giulio.benetti@benettiengineering.com>
+ (Giulio Benetti's message of "Wed, 6 Jan 2021 22:29:19 +0100")
+References: <20210106212919.540837-1-giulio.benetti@benettiengineering.com>
+Message-ID: <87bldldpvr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+>>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
 
-Patch sended, is there any other change I should make?
-Link here:
-https://patchwork.ozlabs.org/project/buildroot/list/?series=224068
+ > Add 2 patches pending[1] upstream to fix build failure with both Linux 5.9
+ > and Linux 5.10 due to uaccess.h file moved after version >= 5.9 and and
+ > due to moved code from dma-contiguous.h to dma-mapping.
 
+ > [1]: https://github.com/mripard/sunxi-mali/pull/89
 
-On Tue, Jan 12, 2021 at 4:08 PM Raul Hidalgo Caballero <deinok@deinok.com>
-wrote:
+ > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
-> Done In a new patch, and ready for acceptance.
-> That kind of testing will be done when i make the generic-package for
-> dotnet
->
-> On Tue, Jan 12, 2021 at 3:21 PM Thomas Petazzoni <
-> thomas.petazzoni at bootlin.com> wrote:
->
->> Hello Raul,
->>
->> On Tue, 12 Jan 2021 10:09:05 +0100
->> Raul Hidalgo Caballero <deinok@deinok.com> wrote:
->>
->> > Hi Thomas,
->> >
->> > Made a patch here: https://github.com/deinok/buildroot/pull/1/files
->> > If it looks good I will send it all joined as a .patch file.
->>
->> Thanks for the updated patch.
->>
->> Could you please submit as a patch on the Buildroot mailing list, so
->> that we can give some review/feedback ?
->>
->> > Fixed all the issues except for:
->> > Testing -> Do you have an example for testing a host package?
->>
->> The test case you have is already good. What would be better is to have
->> the test case use the dotnet SDK to really build an example program,
->> and then run it on the target.
->>
->> Best regards,
->>
->> Thomas
->> --
->> Thomas Petazzoni, CTO, Bootlin
->> Embedded Linux and Kernel engineering
->> https://bootlin.com
->>
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210119/6bb36b08/attachment.html>
+Committed to 2020.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
