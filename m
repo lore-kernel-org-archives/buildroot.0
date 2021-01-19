@@ -1,73 +1,77 @@
-From: Chris Packham <judge.packham@gmail.com>
-Date: Tue, 19 Jan 2021 19:32:00 +1300
-Subject: [Buildroot] [PATCH 2/3] package/coremark-pro: fix build without
- threads
-In-Reply-To: <20210118203842.657013-2-fontaine.fabrice@gmail.com>
-References: <20210118203842.657013-1-fontaine.fabrice@gmail.com>
- <20210118203842.657013-2-fontaine.fabrice@gmail.com>
-Message-ID: <CAFOYHZCiFPqwSQhnLq8sBo9dv3TaxUC5rPGxQ0egmmBDOud87g@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 19 Jan 2021 07:53:48 +0100
+Subject: [Buildroot] [PATCH 1/1] package/i7z: fix build with gcc 10
+Message-ID: <20210119065348.785776-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 19 Jan 2021, 9:39 AM Fabrice Fontaine, <fontaine.fabrice@gmail.com>
-wrote:
+Fixes:
+ - http://autobuild.buildroot.org/results/1a433611ba8676cf1ca276fccaf3633971bd562e
 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/coremark-pro/coremark-pro.mk | 23 +++++++++++++++++++++--
->  1 file changed, 21 insertions(+), 2 deletions(-)
->
-> diff --git a/package/coremark-pro/coremark-pro.mk b/package/coremark-pro/
-> coremark-pro.mk
-> index fdcfda33e8..f69279d5cd 100644
-> --- a/package/coremark-pro/coremark-pro.mk
-> +++ b/package/coremark-pro/coremark-pro.mk
-> @@ -10,13 +10,32 @@ COREMARK_PRO_LICENSE = Apache-2.0
->  COREMARK_PRO_LICENSE_FILES = LICENSE.md
->  COREMARK_PRO_DEPENDENCIES = perl
->
-> +COREMARK_PRO_LDFLAGS = -lm
-> +
->  ifeq ($(BR2_ENDIAN),"BIG")
-> -COREMARK_PRO_MAKE_OPTS += PLATFORM_DEFINES='EE_BIG_ENDIAN=1
-> EE_LITTLE_ENDIAN=0'
-> +COREMARK_PRO_DEFINES += \
-> +       EE_BIG_ENDIAN=1 \
-> +       EE_LITTLE_ENDIAN=0
-> +else
-> +COREMARK_PRO_DEFINES += \
-> +       EE_BIG_ENDIAN=0 \
-> +       EE_LITTLE_ENDIAN=1
-> +endif
-> +
-> +ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-> +COREMARK_PRO_DEFINES += \
-> +       USE_NATIVE_PTHREAD=1 \
-> +       USE_SINGLE_CONTEXT=0
-> +COREMARK_PRO_LDFLAGS += -lpthread
->  else
-> -COREMARK_PRO_MAKE_OPTS += PLATFORM_DEFINES='EE_BIG_ENDIAN=0
-> EE_LITTLE_ENDIAN=1'
-> +COREMARK_PRO_DEFINES += \
-> +       USE_NATIVE_PTHREAD=0 \
-> +       USE_SINGLE_CONTEXT=1
->  endif
->
->  COREMARK_PRO_MAKE_OPTS += \
-> +       LINKER_LAST="$(COREMARK_PRO_LDFLAGS)" \
-> +       PLATFORM_DEFINES="$(COREMARK_PRO_DEFINES)" \
->         TARGET=linux$(if $(BR2_ARCH_IS_64),64) \
->         EXE=
-> --
->
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/i7z/0001-fix-build-with-gcc-10.patch | 50 ++++++++++++++++++++
+ 1 file changed, 50 insertions(+)
+ create mode 100644 package/i7z/0001-fix-build-with-gcc-10.patch
 
-Thanks. I did find USE_NATIVE_PTHREAD when I looked at the original failure
-but I couldn't figure out how to inject it into the build.
-
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210119/3e4d9905/attachment.html>
+diff --git a/package/i7z/0001-fix-build-with-gcc-10.patch b/package/i7z/0001-fix-build-with-gcc-10.patch
+new file mode 100644
+index 0000000000..ee10310000
+--- /dev/null
++++ b/package/i7z/0001-fix-build-with-gcc-10.patch
+@@ -0,0 +1,50 @@
++From 5be260153ff1145e3e0c0574324db9af3e00298f Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 19 Jan 2021 07:47:58 +0100
++Subject: [PATCH] fix build with gcc 10
++
++Fix the following build failure with gcc 10 (which defaults to
++-fno-common):
++
++/home/buildroot/autobuild/instance-2/output-1/host/bin/x86_64-linux-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -fno-schedule-insns2  -fno-schedule-insns -fno-inline-small-functions -fno-caller-saves -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DBUILD_MAIN -Wimplicit-function-declaration -Dx64_BIT  -o i7z i7z.o helper_functions.o i7z_Single_Socket.o i7z_Dual_Socket.o -lncurses -lpthread -lrt -lm
++/home/buildroot/autobuild/instance-2/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/10.2.0/../../../../x86_64-buildroot-linux-gnu/bin/ld: i7z_Dual_Socket.o:(.bss+0x0): multiple definition of `global_ts'; i7z_Single_Socket.o:(.bss+0x0): first defined here
++
++Fixes:
++ - http://autobuild.buildroot.org/results/1a433611ba8676cf1ca276fccaf3633971bd562e
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/ajaiantilal/i7z/pull/27]
++---
++ i7z_Dual_Socket.c   | 2 +-
++ i7z_Single_Socket.c | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/i7z_Dual_Socket.c b/i7z_Dual_Socket.c
++index 1388339..4a67c43 100644
++--- a/i7z_Dual_Socket.c
+++++ b/i7z_Dual_Socket.c
++@@ -37,7 +37,7 @@ float Read_Voltage_CPU(int cpu_num);
++ extern struct program_options prog_options;
++ FILE *fp_log_file;
++ 
++-struct timespec global_ts;
+++static struct timespec global_ts;
++ extern FILE *fp_log_file_freq_1, *fp_log_file_freq_2;
++ 
++ extern char* CPU_FREQUENCY_LOGGING_FILE_single;
++diff --git a/i7z_Single_Socket.c b/i7z_Single_Socket.c
++index 16e98c1..df8d35e 100644
++--- a/i7z_Single_Socket.c
+++++ b/i7z_Single_Socket.c
++@@ -35,7 +35,7 @@ int Read_Thermal_Status_CPU(int cpu_num);
++ extern struct program_options prog_options;
++ extern FILE *fp_log_file_freq;
++ 
++-struct timespec global_ts;
+++static struct timespec global_ts;
++ 
++ extern char* CPU_FREQUENCY_LOGGING_FILE_single;
++ extern char* CPU_FREQUENCY_LOGGING_FILE_dual;
++-- 
++2.29.2
++
+-- 
+2.29.2
