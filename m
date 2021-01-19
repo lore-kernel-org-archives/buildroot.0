@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 19 Jan 2021 21:25:52 +0100
-Subject: [Buildroot] [PATCH 1/1] package/zziplib: set
- ZZIPLIB_CPE_ID_VALID
-In-Reply-To: <20210119071302.787295-1-fontaine.fabrice@gmail.com>
-References: <20210119071302.787295-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210119202552.GY2375@scaer>
+Date: Tue, 19 Jan 2021 21:30:49 +0100
+Subject: [Buildroot] [PATCH 2/2] package/nano: fix tiny build
+In-Reply-To: <20210119175326.497192-2-fontaine.fabrice@gmail.com>
+References: <20210119175326.497192-1-fontaine.fabrice@gmail.com>
+ <20210119175326.497192-2-fontaine.fabrice@gmail.com>
+Message-ID: <20210119203049.GZ2375@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,42 +13,61 @@ To: buildroot@busybox.net
 
 Fabrice, All,
 
-On 2021-01-19 08:13 +0100, Fabrice Fontaine spake thusly:
-> cpe:2.3:a:zziplib_project:zziplib is a valid CPE identifier for this
-> package:
+On 2021-01-19 18:53 +0100, Fabrice Fontaine spake thusly:
+> Since upstream commit
+> https://git.savannah.gnu.org/cgit/nano.git/commit/configure.ac?id=235f92ce093099cd81f14827ab842bd331132790
 > 
->   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Azziplib_project%3Azziplib
+> --enable-color --enable-nanorc are needed for libmagic support in tiny
+> builds however as --enable-color needs fork() and tiny is selected when
+> !BR2_USE_MMU, it is easier to just disable libmagic with tiny builds
+> 
+> Fixes:
+>  - http://autobuild.buildroot.net/results/24894e62d6cf89d078959b12e67596c821d64696
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/nano/nano.mk | 12 +++++-------
+>  1 file changed, 5 insertions(+), 7 deletions(-)
+> 
+> diff --git a/package/nano/nano.mk b/package/nano/nano.mk
+> index c688ff216c..af6e1d62de 100644
+> --- a/package/nano/nano.mk
+> +++ b/package/nano/nano.mk
+> @@ -19,18 +19,16 @@ NANO_CONF_ENV += ac_cv_prog_NCURSESW_CONFIG=false
+>  NANO_MAKE_ENV += CURSES_LIB="-lncurses"
+>  endif
+>  
+> -ifeq ($(BR2_PACKAGE_FILE),y)
+> -NANO_DEPENDENCIES += file
+> -NANO_CONF_OPTS += --enable-libmagic
+> -else
+> -NANO_CONF_OPTS += --disable-libmagic
+> -endif
+> -
+>  ifeq ($(BR2_PACKAGE_NANO_TINY),y)
+>  NANO_CONF_OPTS += --enable-tiny
 
-I'm getting too lazy to reply individually, so:
+Don't wee also need an explicit --disable-libmagice in this case?
 
-  - libbluray
-  - ncmpc
-  - zzipib
-  - libebml
+>  define NANO_INSTALL_TARGET_CMDS
+>  	$(INSTALL) -m 0755 $(@D)/src/nano $(TARGET_DIR)/usr/bin/nano
+>  endef
+> +else ifeq ($(BR2_PACKAGE_FILE),y)
+> +NANO_DEPENDENCIES += file
+> +NANO_CONF_OPTS += --enable-libmagic
 
-All 4 applied to master, thanks.
+And here, don't we need explicit --enable-color --enable-nanorc ?
+
+Unless they are only needed for tiny?
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  package/zziplib/zziplib.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/zziplib/zziplib.mk b/package/zziplib/zziplib.mk
-> index 6c2efe7558..6cb9dedce8 100644
-> --- a/package/zziplib/zziplib.mk
-> +++ b/package/zziplib/zziplib.mk
-> @@ -8,6 +8,7 @@ ZZIPLIB_VERSION = 0.13.72
->  ZZIPLIB_SITE = $(call github,gdraheim,zziplib,v$(ZZIPLIB_VERSION))
->  ZZIPLIB_LICENSE = LGPL-2.0+ or MPL-1.1
->  ZZIPLIB_LICENSE_FILES = docs/COPYING.LIB docs/COPYING.MPL docs/copying.htm
-> +ZZIPLIB_CPE_ID_VALID = YES
->  ZZIPLIB_INSTALL_STAGING = YES
->  ZZIPLIB_CONF_OPTS += \
->  	-DZZIPDOCS=OFF \
+> +else
+> +NANO_CONF_OPTS += --disable-libmagic
+>  endif
+>  
+>  $(eval $(autotools-package))
 > -- 
 > 2.29.2
 > 
