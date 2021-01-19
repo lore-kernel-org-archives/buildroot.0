@@ -1,35 +1,39 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 19 Jan 2021 18:59:20 +0100
-Subject: [Buildroot] [PATCH] packages: carry site-method archive format
- version when overriding _SOURCE
-In-Reply-To: <20210118224005.4ecd8ee3@windsurf.home>
-References: <20210118181612.77863-1-yann.morin.1998@free.fr>
- <20210118224005.4ecd8ee3@windsurf.home>
-Message-ID: <20210119175920.GX2375@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 19 Jan 2021 19:05:42 +0100
+Subject: [Buildroot] [PATCH 1/1] package/poppler: add boost optional
+ dependency
+Message-ID: <20210119180542.497919-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+boost is an optional dependency which is enabled by default since
+version 0.80.0 and
+https://github.com/freedesktop/poppler/commit/355fd8d58ca0209284fe568b3add28f207e995c1
 
-On 2021-01-18 22:40 +0100, Thomas Petazzoni spake thusly:
-> On Mon, 18 Jan 2021 19:16:12 +0100
-> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
-> > Fix that by manually propagating the per-site-method format-version.
-> I find it not so nice that this "internal" detail has to creep in all
-> the way up to barebox.mk and linux-headers.mk,
+There is no cmake option to enable or disable this dependency
 
-Neither do I, neither do I... Guess what I'm working on...
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/poppler/poppler.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
+index 669ee6be7f..aba8602e06 100644
+--- a/package/poppler/poppler.mk
++++ b/package/poppler/poppler.mk
+@@ -23,6 +23,10 @@ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+ POPPLER_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -latomic"
+ endif
+ 
++ifeq ($(BR2_PACKAGE_BOOST),y)
++POPPLER_DEPENDENCIES += boost
++endif
++
+ ifeq ($(BR2_PACKAGE_JPEG),y)
+ POPPLER_DEPENDENCIES += jpeg
+ POPPLER_CONF_OPTS += -DENABLE_DCTDECODER=libjpeg -DWITH_JPEG=ON
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.29.2
