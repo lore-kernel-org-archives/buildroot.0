@@ -1,121 +1,51 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Tue, 19 Jan 2021 22:31:18 +0100
-Subject: [Buildroot] [PATCH 1/1] package/iproute2: bump version to 5.10.0
-Message-ID: <20210119213118.23579-1-petr.vorel@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 19 Jan 2021 22:53:13 +0100
+Subject: [Buildroot] [PATCH 1/2] package/jack2: bump to version 1.9.17
+Message-ID: <20210119215314.1040456-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-NOTE: iproute2 since v5.8.0 requires {name, open}_to_handle_at(),
-thus uClibc toolchain must be >= 1.0.35.
+- Add COPYING as a license files, available since version 1.9.15 and
+  https://github.com/jackaudio/jack2/commit/d75ddb82304bf500b031f52c11b0a106e2dc9a55
+- Update indentation in hash file (two spaces)
 
-Drop patch from v5.8.0.
+https://github.com/jackaudio/jack2/releases/tag/v1.9.15
+https://github.com/jackaudio/jack2/releases/tag/v1.9.16
+https://github.com/jackaudio/jack2/releases/tag/v1.9.17
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Hi,
+ package/jack2/jack2.hash | 3 ++-
+ package/jack2/jack2.mk   | 3 ++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-At least some uClibc based toolchains are 1.0.32, thus this still have to wait
-for rebuilding uClibc toolchains.
-
-Understand that rebuilding all toolchains takes lots of time.
-I guess there is no way to define two versions for a package.
-Is there any other way how to upgrade without break important package
-for uClibc based toolchains? If not, not a big deal.
-
-Kind regards,
-Petr
-
- .../0001-devlink-update-include-files.patch   | 55 -------------------
- package/iproute2/iproute2.hash                |  2 +-
- package/iproute2/iproute2.mk                  |  2 +-
- 3 files changed, 2 insertions(+), 57 deletions(-)
- delete mode 100644 package/iproute2/0001-devlink-update-include-files.patch
-
-diff --git a/package/iproute2/0001-devlink-update-include-files.patch b/package/iproute2/0001-devlink-update-include-files.patch
-deleted file mode 100644
-index 8cc6e4ec60..0000000000
---- a/package/iproute2/0001-devlink-update-include-files.patch
-+++ /dev/null
-@@ -1,55 +0,0 @@
--From 12fafa27c7b306e6c397e858f4d5a8159500f659 Mon Sep 17 00:00:00 2001
--From: Stephen Hemminger <stephen@networkplumber.org>
--Date: Thu, 11 Jun 2020 09:46:46 -0700
--Subject: devlink: update include files
--
--Use the tool iwyu to get more complete list of includes for
--all the bits used by devlink.
--
--This should also fix build with musl libc.
--
--Fixes: c4dfddccef4e ("fix JSON output of mon command")
--Reported-off-by: Dan Robertson <dan@dlrobertson.com>
--Signed-off-by: Stephen Hemminger <stephen@networkplumber.org>
--
--[Retrieved from:
--https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/commit/?id=12fafa27c7b306e6c397e858f4d5a8159500f659]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- devlink/devlink.c | 9 ++++++++-
-- 1 file changed, 8 insertions(+), 1 deletion(-)
--
--diff --git a/devlink/devlink.c b/devlink/devlink.c
--index 507972c3..ce2e4676 100644
----- a/devlink/devlink.c
--+++ b/devlink/devlink.c
--@@ -19,18 +19,25 @@
-- #include <limits.h>
-- #include <errno.h>
-- #include <inttypes.h>
--+#include <signal.h>
--+#include <time.h>
--+#include <netinet/in.h>
--+#include <arpa/inet.h>
-- #include <sys/sysinfo.h>
-- #define _LINUX_SYSINFO_H /* avoid collision with musl header */
-- #include <linux/genetlink.h>
-- #include <linux/devlink.h>
--+#include <linux/netlink.h>
-- #include <libmnl/libmnl.h>
-- #include <netinet/ether.h>
--+#include <sys/select.h>
--+#include <sys/socket.h>
-- #include <sys/types.h>
-- 
-- #include "SNAPSHOT.h"
-- #include "list.h"
-- #include "mnlg.h"
---#include "json_writer.h"
--+#include "json_print.h"
-- #include "utils.h"
-- #include "namespace.h"
-- 
---- 
--cgit 1.2.3-1.el7
--
-diff --git a/package/iproute2/iproute2.hash b/package/iproute2/iproute2.hash
-index b2a9e21e11..bcf0f4c7a1 100644
---- a/package/iproute2/iproute2.hash
-+++ b/package/iproute2/iproute2.hash
-@@ -1,3 +1,3 @@
- # From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
--sha256  725dc7ba94aae54c6f8d4223ca055d9fb4fe89d6994b1c03bfb4411c4dd10f21  iproute2-5.7.0.tar.xz
-+sha256  a54a34ae309c0406b2d1fb3a46158613ffb83d33fefd5d4a27f0010237ac53e9  iproute2-5.10.0.tar.xz
- sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING
-diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
-index 1b71f5c06a..81418331c3 100644
---- a/package/iproute2/iproute2.mk
-+++ b/package/iproute2/iproute2.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/jack2/jack2.hash b/package/jack2/jack2.hash
+index aec56e24a4..df708f7ca5 100644
+--- a/package/jack2/jack2.hash
++++ b/package/jack2/jack2.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256 a20a32366780c0061fd58fbb5f09e514ea9b7ce6e53b080a44b11a558a83217c  jack2-1.9.14.tar.gz
++sha256  38f674bbc57852a8eb3d9faa1f96a0912d26f7d5df14c11005ad499c8ae352f2  jack2-1.9.17.tar.gz
++sha256  d8c320ffc0030d1b096ae4732b50d2b811cf95e9a9b7377c1127b2563e0a0388  COPYING
+diff --git a/package/jack2/jack2.mk b/package/jack2/jack2.mk
+index db63b7f4b7..d09b54b35c 100644
+--- a/package/jack2/jack2.mk
++++ b/package/jack2/jack2.mk
+@@ -4,9 +4,10 @@
  #
  ################################################################################
  
--IPROUTE2_VERSION = 5.7.0
-+IPROUTE2_VERSION = 5.10.0
- IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
- IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
- IPROUTE2_DEPENDENCIES = host-bison host-flex host-pkgconf \
+-JACK2_VERSION = 1.9.14
++JACK2_VERSION = 1.9.17
+ JACK2_SITE = $(call github,jackaudio,jack2,v$(JACK2_VERSION))
+ JACK2_LICENSE = GPL-2.0+ (jack server), LGPL-2.1+ (jack library)
++JACK2_LICENSE_FILES = COPYING
+ JACK2_DEPENDENCIES = libsamplerate libsndfile alsa-lib
+ JACK2_INSTALL_STAGING = YES
+ 
 -- 
-2.30.0
+2.29.2
