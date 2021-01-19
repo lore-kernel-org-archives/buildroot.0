@@ -1,38 +1,51 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 Jan 2021 15:55:56 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x]
- docs/manual/pkg-cmake.txt: add _INSTALL_OPTS description
-Message-ID: <20210119144001.D8844883B9@busybox.osuosl.org>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue, 19 Jan 2021 16:46:04 +0100
+Subject: [Buildroot] [PATCH 1/2] package/chartjs: move 'v' version prefix
+ out of CHARTJS_VERSION
+Message-ID: <20210119154607.11101-1-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f95aebff5afae1e95edee845963c67beaf764b95
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 93daabcfbd8df17ea6f9943de34579e82dc41d00)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+chartjs 2.9.3 has a security vulnerability (CVE-2020-7746) which is not
+detected by the CVE scripts, presumably because our version variable starts
+with a 'v'.
+
+Move that 'v' prefix out of the version variable to fix that.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- docs/manual/adding-packages-cmake.txt | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/chartjs/chartjs.hash | 2 +-
+ package/chartjs/chartjs.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/docs/manual/adding-packages-cmake.txt b/docs/manual/adding-packages-cmake.txt
-index 00974d30d8..73f0943024 100644
---- a/docs/manual/adding-packages-cmake.txt
-+++ b/docs/manual/adding-packages-cmake.txt
-@@ -126,6 +126,11 @@ typical packages will therefore only use a few of them.
-   in the build step. These are passed after the +make+ command. By
-   default, empty.
+diff --git a/package/chartjs/chartjs.hash b/package/chartjs/chartjs.hash
+index d2426ea614..a029d16ab1 100644
+--- a/package/chartjs/chartjs.hash
++++ b/package/chartjs/chartjs.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256	8079d8fd39131fcfaec33f1c7799412bcf8e051e25b10bd6e37fc16159417aa1  chartjs-v2.9.3.tar.gz
++sha256	8079d8fd39131fcfaec33f1c7799412bcf8e051e25b10bd6e37fc16159417aa1  chartjs-2.9.3.tar.gz
+ sha256	7b43caae91f31b18dc81fae6e0f7aa1acbecaa6d84e3249905cbe15308307d67  LICENSE.md
+diff --git a/package/chartjs/chartjs.mk b/package/chartjs/chartjs.mk
+index 171e0a4a7c..960b3e24af 100644
+--- a/package/chartjs/chartjs.mk
++++ b/package/chartjs/chartjs.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
-+* +LIBFOO_INSTALL_OPTS+ contains the make options used to
-+  install the package to the host directory. By default, the value
-+  is +install+, which is correct for most CMake packages. It is still
-+  possible to override it.
-+
- * +LIBFOO_INSTALL_STAGING_OPTS+ contains the make options used to
-   install the package to the staging directory. By default, the value
-   is +DESTDIR=$(STAGING_DIR) install/fast+, which is correct for most
+-CHARTJS_VERSION = v2.9.3
+-CHARTJS_SITE = $(call github,chartjs,Chart.js,$(CHARTJS_VERSION))
++CHARTJS_VERSION = 2.9.3
++CHARTJS_SITE = $(call github,chartjs,Chart.js,v$(CHARTJS_VERSION))
+ CHARTJS_LICENSE = MIT
+ CHARTJS_LICENSE_FILES = LICENSE.md
+ 
+-- 
+2.26.2
