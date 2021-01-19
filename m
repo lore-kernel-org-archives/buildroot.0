@@ -1,12 +1,15 @@
-From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-Date: Tue, 19 Jan 2021 19:09:08 +0100
-Subject: [Buildroot] [PATCH 1/1] package/dnsmasq: security bump to 2.83
-Message-ID: <20210119180908.18903-1-nicolas.cavallari@green-communications.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 19 Jan 2021 20:18:25 +0100
+Subject: [Buildroot] [git commit] package/dnsmasq: security bump to 2.83
+Message-ID: <20210119185942.3B4688636E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+commit: https://git.buildroot.net/buildroot/commit/?id=5cd5d85cdab72b2e62d1daca6311f480a7e68546
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 From the annoucement:
 http://lists.thekelleys.org.uk/pipermail/dnsmasq-discuss/2021q1/014599.html
@@ -24,70 +27,8 @@ Fixes CVE-2020-25681, CVE-2020-25682, CVE-2020-25683, CVE-2020-25684,
 Details: https://www.jsof-tech.com/disclosures/dnspooq
 
 Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
-Tested with test-pkg:
-
-BR2_PACKAGE_DNSMASQ=y
-BR2_PACKAGE_DNSMASQ_TFTP=y
-BR2_PACKAGE_DNSMASQ_DHCP=y
-BR2_PACKAGE_DNSMASQ_DNSSEC=y
-BR2_PACKAGE_DNSMASQ_IDN=y
-BR2_PACKAGE_DNSMASQ_LUA=y
-BR2_PACKAGE_DNSMASQ_CONNTRACK=y
-BR2_PACKAGE_LUA=y
-BR2_PACKAGE_LUA_5_3=y
-BR2_PACKAGE_LUA_32BITS=y
-BR2_PACKAGE_HAS_LUAINTERPRETER=y
-BR2_PACKAGE_LUA_EDITING_NONE=y
-BR2_PACKAGE_LIBIDN2=y
-BR2_PACKAGE_DBUS=y
-
-                             andes-nds32 [ 1/45]: OK
-                             arm-aarch64 [ 2/45]: OK
-                    bootlin-x86-64-glibc [ 3/45]: OK
-                        br-aarch64-glibc [ 4/45]: OK
-                           br-arcle-hs38 [ 5/45]: OK
-                            br-arm-basic [ 6/45]: OK
-                  br-arm-cortex-a9-glibc [ 7/45]: OK
-                   br-arm-cortex-a9-musl [ 8/45]: OK
-                   br-arm-cortex-m4-full [ 9/45]: SKIPPED
-                             br-arm-full [10/45]: OK
-                    br-arm-full-nothread [11/45]: SKIPPED
-                      br-arm-full-static [12/45]: OK
-                   br-i386-pentium4-full [13/45]: OK
-                br-i386-pentium-mmx-musl [14/45]: OK
-                       br-m68k-5208-full [15/45]: SKIPPED
-                      br-m68k-68040-full [16/45]: OK
-                    br-microblazeel-full [17/45]: OK
-                 br-mips32r6-el-hf-glibc [18/45]: OK
-                      br-mips64-n64-full [19/45]: OK
-                 br-mips64r6-el-hf-glibc [20/45]: OK
-                      br-mipsel-o32-full [21/45]: OK
-                          br-nios2-glibc [22/45]: OK
-                      br-openrisc-uclibc [23/45]: OK
-               br-powerpc-603e-basic-cpp [24/45]: OK
-             br-powerpc64le-power8-glibc [25/45]: OK
-               br-powerpc64-power7-glibc [26/45]: OK
-                  br-powerpc-e500mc-full [27/45]: OK
-                              br-riscv32 [28/45]: OK
-                              br-riscv64 [29/45]: OK
-                         br-riscv64-musl [30/45]: OK
-                             br-sh4-full [31/45]: OK
-                        br-sparc64-glibc [32/45]: OK
-                         br-sparc-uclibc [33/45]: OK
-                    br-x86-64-core2-full [34/45]: OK
-                          br-x86-64-musl [35/45]: OK
-                          br-xtensa-full [36/45]: OK
-                       linaro-aarch64-be [37/45]: OK
-                          linaro-aarch64 [38/45]: OK
-                              linaro-arm [39/45]: OK
-                     sourcery-arm-armv4t [40/45]: OK
-                            sourcery-arm [41/45]: OK
-                     sourcery-arm-thumb2 [42/45]: OK
-                         sourcery-mips64 [43/45]: OK
-                           sourcery-mips [44/45]: OK
-                          sourcery-nios2 [45/45]: OK
-45 builds, 3 skipped, 0 build failed, 0 legal-info failed
  package/dnsmasq/dnsmasq.hash | 4 ++--
  package/dnsmasq/dnsmasq.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
@@ -118,5 +59,3 @@ index b7e924c2d8..fb21dc7ad0 100644
  DNSMASQ_SOURCE = dnsmasq-$(DNSMASQ_VERSION).tar.xz
  DNSMASQ_SITE = http://thekelleys.org.uk/dnsmasq
  DNSMASQ_MAKE_ENV = $(TARGET_MAKE_ENV) CC="$(TARGET_CC)"
--- 
-2.29.2
