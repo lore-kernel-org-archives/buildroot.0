@@ -1,180 +1,78 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 Jan 2021 15:23:01 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] utils/getdeveloperlib.py:
- use relative paths for files
-Message-ID: <20210119141354.633A387F36@busybox.osuosl.org>
+Date: Tue, 19 Jan 2021 15:46:31 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/sudo: security
+ bump to version 1.9.5p1
+Message-ID: <20210119142721.67F1A88701@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8e5eebd53042cfa4ca4769c1b396c13ae9779028
+commit: https://git.buildroot.net/buildroot/commit/?id=f237c46b32f570ba733b2ce974c15cd1bda0479b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Using absolute paths within getdeveloperlib isn't very sensible, it
-makes a lot more sense to handle everything as relative paths from the
-top-level Buildroot source directory.
+- Fixes CVE-2021-23239, a potential information leak in sudoedit that
+  could be used to test for the existence of directories not normally
+  accessible to the user in certain circumstances. When creating a new
+  file, sudoedit checks to make sure the parent directory of the new
+  file exists before running the editor. However, a race condition
+  exists if the invoking user can replace (or create) the parent
+  directory. If a symbolic link is created in place of the parent
+  directory, sudoedit will run the editor as long as the target of the
+  link exists. If the target of the link does not exist, an error
+  message will be displayed. The race condition can be used to test for
+  the existence of an arbitrary directory. However, it cannot be used to
+  write to an arbitrary location.
+- Fixes CVE-2021-23240, a flaw in the temporary file handling of
+  sudoedit's SELinux RBAC support. On systems where SELinux is enabled,
+  a user with sudoedit permissions may be able to set the owner of an
+  arbitrary file to the user-ID of the target user. On Linux kernels
+  that support protected symlinks setting
+  /proc/sys/fs/protected_symlinks to 1 will prevent the bug from being
+  exploited. For more information, see Symbolic link attack in
+  SELinux-enabled sudoedit.
+- Update license hash:
+  - copyright of python bindings added with
+    https://github.com/sudo-project/sudo/commit/6c1b155fed23348c58a03f6c1193922132b5b66a
+  - a few other files (ISC licenced) added with
+    https://github.com/sudo-project/sudo/commit/d4b2db9078bd54f158261017dcb4d1340398a5fa
+  - year updated with
+    https://github.com/sudo-project/sudo/commit/9e111eae57524ca72002ad1db36eb68ccd50b167
+- Update indentation in hash file (two spaces)
 
-parse_developers() is changed to no longer take the base path as
-argument: it is automatically calculated based on the location of
-utils/getdeveloperlib.py. Then, the rest of the logic is adjusted to
-use relative paths, and prepend them with the base "brpath" when
-needed.
+https://www.sudo.ws/stable.html#1.9.5p1
 
-This commit allows pkg-stats to report correct developers information
-even when executed from an out of tree directory.
-
-Before this patch:
-
-$ ~/buildroot/support/scripts/pkg-stats -p ipmitool --json out.json
-$ cat out.json | jq '.packages.ipmitool.developers'
-[]
-
-$ cat out.json | jq '.defconfigs.stm32f469_disco'
-{
-  "name": "stm32f469_disco",
-  "path": "configs/stm32f469_disco_defconfig",
-  "developers": []
-}
-
-After this patch:
-
-$ ~/buildroot/support/scripts/pkg-stats -p ipmitool --json out.json
-$ cat out.json | jq '.packages.ipmitool.developers'
-[
-  "Floris Bos <bos@je-eigen-domein.nl>",
-  "Heiko Thiery <heiko.thiery@gmail.com>"
-]
-$ cat out.json | jq '.defconfigs.stm32f469_disco'
-{
-  "name": "stm32f469_disco",
-  "path": "configs/stm32f469_disco_defconfig",
-  "developers": [
-    "Christophe Priouzeau <christophe.priouzeau@st.com>"
-  ]
-}
-
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Tested-by: Heiko Thiery <heiko.thiery@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 40bb37bd70d46822e803aaa5169dee8ff8b51093)
+(cherry picked from commit 1b14e996660d1f77e5428ba9b6aef71d540d7523)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- utils/get-developers     |  5 -----
- utils/getdeveloperlib.py | 25 ++++++++++++-------------
- 2 files changed, 12 insertions(+), 18 deletions(-)
+ package/sudo/sudo.hash | 4 ++--
+ package/sudo/sudo.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/utils/get-developers b/utils/get-developers
-index 20272ed60b..e027c26562 100755
---- a/utils/get-developers
-+++ b/utils/get-developers
-@@ -45,10 +45,6 @@ def __main__():
-         print("No action specified")
-         return
- 
--    # getdeveloperlib expects to be executed from the toplevel buildroot
--    # directory, which is one level up from this script
--    os.chdir(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..'))
--
-     devs = getdeveloperlib.parse_developers()
-     if devs is None:
-         sys.exit(1)
-@@ -75,7 +71,6 @@ def __main__():
- 
-     # Handle the files action
-     if args.files is not None:
--        args.files = [os.path.abspath(f) for f in args.files]
-         for dev in devs:
-             for f in args.files:
-                 if dev.hasfile(f):
-diff --git a/utils/getdeveloperlib.py b/utils/getdeveloperlib.py
-index dc0cc07cc7..d7a90457ed 100644
---- a/utils/getdeveloperlib.py
-+++ b/utils/getdeveloperlib.py
-@@ -6,6 +6,8 @@ import subprocess
- import sys
- import unittest
- 
-+brpath = os.path.normpath(os.path.join(os.path.dirname(__file__), ".."))
-+
+diff --git a/package/sudo/sudo.hash b/package/sudo/sudo.hash
+index fff1aa2343..3a0ff46838 100644
+--- a/package/sudo/sudo.hash
++++ b/package/sudo/sudo.hash
+@@ -1,4 +1,4 @@
+ # From: http://www.sudo.ws/download.html
+-sha256 7ea8d97a3cee4c844e0887ea7a1bd80eb54cc98fd77966776cb1a80653ad454f  sudo-1.8.31.tar.gz
++sha256  4dddf37c22653defada299e5681e0daef54bb6f5fc950f63997bb8eb966b7882  sudo-1.9.5p1.tar.gz
+ # Locally calculated
+-sha256 be099fd0ee954224f392dde163aef6d6359c58a5afa1ebb1bd55058318add789  doc/LICENSE
++sha256  505c5955c373514e2533a24a8346f44038e29cba874f5ca83beb171a7409089f  doc/LICENSE
+diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
+index a4def4368a..6faccfa25b 100644
+--- a/package/sudo/sudo.mk
++++ b/package/sudo/sudo.mk
+@@ -4,7 +4,7 @@
  #
- # Patch parsing functions
- #
-@@ -94,14 +96,14 @@ def get_all_test_cases(suite):
-         yield (suite.__module__, suite.__class__.__name__)
+ ################################################################################
  
- 
--def list_unittests(path):
-+def list_unittests():
-     """Use the unittest module to retreive all test cases from a given
-     directory"""
-     loader = unittest.TestLoader()
--    suite = loader.discover(path)
-+    suite = loader.discover(os.path.join(brpath, "support", "testing"))
-     tests = {}
-     for module, test in get_all_test_cases(suite):
--        module_path = os.path.join(path, *module.split('.'))
-+        module_path = os.path.join("support", "testing", *module.split('.'))
-         tests.setdefault(module_path, []).append('%s.%s' % (module, test))
-     return tests
- 
-@@ -124,7 +126,6 @@ class Developer:
-         self.defconfigs = parse_developer_defconfigs(files)
- 
-     def hasfile(self, f):
--        f = os.path.abspath(f)
-         for fs in self.files:
-             if f.startswith(fs):
-                 return True
-@@ -157,7 +158,7 @@ def parse_developer_packages(fnames):
-     patterns, and return a list of those packages."""
-     packages = set()
-     for fname in fnames:
--        for root, dirs, files in os.walk(fname):
-+        for root, dirs, files in os.walk(os.path.join(brpath, fname)):
-             for f in files:
-                 path = os.path.join(root, f)
-                 if fname_get_package_infra(path):
-@@ -222,7 +223,7 @@ def parse_developer_runtime_tests(fnames):
-     # List all files recursively
-     for fname in fnames:
-         if os.path.isdir(fname):
--            for root, _dirs, files in os.walk(fname):
-+            for root, _dirs, files in os.walk(os.path.join(brpath, fname)):
-                 all_files += [os.path.join(root, f) for f in files]
-         else:
-             all_files.append(fname)
-@@ -236,15 +237,13 @@ def parse_developer_runtime_tests(fnames):
-     return runtimes
- 
- 
--def parse_developers(basepath=None):
-+def parse_developers():
-     """Parse the DEVELOPERS file and return a list of Developer objects."""
-     developers = []
-     linen = 0
--    if basepath is None:
--        basepath = os.getcwd()
-     global unittests
--    unittests = list_unittests(os.path.join(basepath, 'support/testing'))
--    with open(os.path.join(basepath, "DEVELOPERS"), "r") as f:
-+    unittests = list_unittests()
-+    with open(os.path.join(brpath, "DEVELOPERS"), "r") as f:
-         files = []
-         name = None
-         for line in f:
-@@ -258,11 +257,11 @@ def parse_developers(basepath=None):
-                 name = line[2:].strip()
-             elif line.startswith("F:"):
-                 fname = line[2:].strip()
--                dev_files = glob.glob(os.path.join(basepath, fname))
-+                dev_files = glob.glob(os.path.join(brpath, fname))
-                 if len(dev_files) == 0:
-                     print("WARNING: '%s' doesn't match any file" % fname,
-                           file=sys.stderr)
--                files += dev_files
-+                files += [os.path.relpath(f, brpath) for f in dev_files]
-             elif line == "":
-                 if not name:
-                     continue
+-SUDO_VERSION = 1.8.31
++SUDO_VERSION = 1.9.5p1
+ SUDO_SITE = https://www.sudo.ws/sudo/dist
+ SUDO_LICENSE = ISC, BSD-3-Clause
+ SUDO_LICENSE_FILES = doc/LICENSE
