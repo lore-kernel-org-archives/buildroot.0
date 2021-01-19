@@ -1,26 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 Jan 2021 14:20:56 +0100
-Subject: [Buildroot] [PATCH] package/sunxi-mali-mainline-driver: fix
- build failure with Linux 5.9 and 5.10
-In-Reply-To: <20210106212919.540837-1-giulio.benetti@benettiengineering.com>
- (Giulio Benetti's message of "Wed, 6 Jan 2021 22:29:19 +0100")
-References: <20210106212919.540837-1-giulio.benetti@benettiengineering.com>
-Message-ID: <87bldldpvr.fsf@dell.be.48ers.dk>
+Date: Tue, 19 Jan 2021 15:10:16 +0100
+Subject: [Buildroot] [PATCH]
+ support/config-fragments/autobuild/bootlin-x86-64-glibc: use
+ toolchain-external-bootlin
+In-Reply-To: <20210114224309.457805-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Thu, 14 Jan 2021 23:43:08 +0100")
+References: <20210114224309.457805-1-thomas.petazzoni@bootlin.com>
+Message-ID: <877do9dnlj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > Add 2 patches pending[1] upstream to fix build failure with both Linux 5.9
- > and Linux 5.10 due to uaccess.h file moved after version >= 5.9 and and
- > due to moved code from dma-contiguous.h to dma-mapping.
+ > Until now the bootlin-x86-64-glibc was using a Bootlin toolchain as a
+ > custom external toolchain. However, now that we have the
+ > toolchain-external-bootlin package explicitly supporting Bootlin
+ > toolchains as known toolchain profiles, it makes sense to use
+ > that. Indeed, this will ensure that this autobuilder configuration
+ > will use the latest available version of the Buildroot toolchain for
+ > x86-64 glibc.
 
- > [1]: https://github.com/mripard/sunxi-mali/pull/89
-
- > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
 Committed to 2020.11.x, thanks.
 
