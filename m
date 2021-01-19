@@ -1,89 +1,121 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 19 Jan 2021 22:26:36 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/sysklogd: bump to version
- 2.1.2
-In-Reply-To: <87turgy8vi.fsf@gmail.com>
-References: <20200812160843.24064-1-andreas.hilse@googlemail.com>
- <20201229181125.704233-1-andreas.hilse@googlemail.com>
- <87turgy8vi.fsf@gmail.com>
-Message-ID: <20210119222636.42b6121a@windsurf.home>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Tue, 19 Jan 2021 22:31:18 +0100
+Subject: [Buildroot] [PATCH 1/1] package/iproute2: bump version to 5.10.0
+Message-ID: <20210119213118.23579-1-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Joachim,
+NOTE: iproute2 since v5.8.0 requires {name, open}_to_handle_at(),
+thus uClibc toolchain must be >= 1.0.35.
 
-Thanks for your additional feedback!
+Drop patch from v5.8.0.
 
-On Sat, 16 Jan 2021 20:33:37 +0100
-Joachim Wiberg <troglobit@gmail.com> wrote:
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+---
+Hi,
 
-> On Tue, Dec 29, 2020 at 19:11, Andreas Hilse via buildroot <buildroot@busybox.net> wrote:
-> > - fixes: sysklogd 1.6 klogd with newer glibcs: kernel messages are logged to user facility
-> > - sysklogd removed klogd, functionality has been moved to syslogd
-> > - now supports config fragments in /etc/syslog.d
-> > - disabled sysklogd logger to not interfere with other loggers
-> > - license has changed from GPL-2.0+ to BSD-3-Clause  
-> 
-> These two could also be relevant:
-> 
-> - RFC3164 style logging, fully RFC compliant not just BSD style
-> - RFC5424 style logging to file and remote log servers
+At least some uClibc based toolchains are 1.0.32, thus this still have to wait
+for rebuilding uClibc toolchains.
 
-Right, but the commit log mainly documents the changes that have an
-impact on packaging, not necessarily all the additional (good) features
-of the the new upstream release.
+Understand that rebuilding all toolchains takes lots of time.
+I guess there is no way to define two versions for a package.
+Is there any other way how to upgrade without break important package
+for uClibc based toolchains? If not, not a big deal.
 
-> > +	  The continuation of the original sysklogd package, based on
-> > +	  the original Berkeley syslog daemon.  Now with kernel logging,
-> > +	  and log rotation built-in.  It ca both receive from and send  
->                                            ^
-> Minor, spelling.
+Kind regards,
+Petr
 
-Fixed.
+ .../0001-devlink-update-include-files.patch   | 55 -------------------
+ package/iproute2/iproute2.hash                |  2 +-
+ package/iproute2/iproute2.mk                  |  2 +-
+ 3 files changed, 2 insertions(+), 57 deletions(-)
+ delete mode 100644 package/iproute2/0001-devlink-update-include-files.patch
 
-> > +	  to remote syslog servers.  The v2.x series include extended
-> > +	  support for RFC5424 with an alt. syslogp() API for clients.  
-> [snip]
-> > +sha256	09fe1edca882a9ae976cdbf516786edc1629347b9507d45dc005d9d969f94702	sysklogd-2.1.2.tar.gz
-> > +sha256	7a71d7603a7c4456df441463e54da35acf151c1be0879246de63544f1f34f477	LICENSE
-> > +sha256	569321607efe6ba0ecb820b3cb23d933e92f6ab50d2f8fcceb23fc8a43756ef0	0001-Define-_GNU_SOURCE_required_for_O_CLOEXEC_on_uClibc.patch  
-> 
-> I actually released v2.2.0 the other day, and there's a SHA256 on GitHub
-> now.  This version comes with proper /dev/kmsg support on Linux, which
-> support multiple consumers, instead of the old /proc/kmsg support.  If
-> /dev/kmsg isn't found it falls back to the old.  It also has the build
-> fix for O_CLOEXEC and another fix for an ARMv5 build warning.
-> 
-> I've tested it with a few Bootlin toolchains in our NetBox repo, so it
-> should be a much smoother ride.
-
-Will definitely be good to have a follow-up patch bumping to 2.2.0.
-
-> > +SYSKLOGD_CONF_OPTS = --exec-prefix=/ --without-logger  
-> 
-> The logger tool that comes with sysklogd is quite advanced, allowing the
-> user to leverage the RFC5424 `syslogp()` API to its fullest.  However,
-> it collides with its namesake in BusyBox, but so does the logger tool in
-> util-linux.  I'd very much like to see it in Buildroot, but I can submit
-> a patch later to add menuconfig support :)
-
-Patch welcome indeed!
-
-Regarding the collision with Busybox, we do have a mechanism in place
-to handle that, so it should be fine. Busybox already has the sysklogd
-package in its dependencies, which means that sysklogd if enabled will
-always be built before Busybox. And the Busybox installation is careful
-to not overwrite any file. So if /bin/foobar has been installed by
-sysklogd, even if Busybox has support for /bin/foobar, it will not
-overwrite /bin/foobar with its own symlink.
-
-Best regards,
-
-Thomas
+diff --git a/package/iproute2/0001-devlink-update-include-files.patch b/package/iproute2/0001-devlink-update-include-files.patch
+deleted file mode 100644
+index 8cc6e4ec60..0000000000
+--- a/package/iproute2/0001-devlink-update-include-files.patch
++++ /dev/null
+@@ -1,55 +0,0 @@
+-From 12fafa27c7b306e6c397e858f4d5a8159500f659 Mon Sep 17 00:00:00 2001
+-From: Stephen Hemminger <stephen@networkplumber.org>
+-Date: Thu, 11 Jun 2020 09:46:46 -0700
+-Subject: devlink: update include files
+-
+-Use the tool iwyu to get more complete list of includes for
+-all the bits used by devlink.
+-
+-This should also fix build with musl libc.
+-
+-Fixes: c4dfddccef4e ("fix JSON output of mon command")
+-Reported-off-by: Dan Robertson <dan@dlrobertson.com>
+-Signed-off-by: Stephen Hemminger <stephen@networkplumber.org>
+-
+-[Retrieved from:
+-https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/commit/?id=12fafa27c7b306e6c397e858f4d5a8159500f659]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- devlink/devlink.c | 9 ++++++++-
+- 1 file changed, 8 insertions(+), 1 deletion(-)
+-
+-diff --git a/devlink/devlink.c b/devlink/devlink.c
+-index 507972c3..ce2e4676 100644
+---- a/devlink/devlink.c
+-+++ b/devlink/devlink.c
+-@@ -19,18 +19,25 @@
+- #include <limits.h>
+- #include <errno.h>
+- #include <inttypes.h>
+-+#include <signal.h>
+-+#include <time.h>
+-+#include <netinet/in.h>
+-+#include <arpa/inet.h>
+- #include <sys/sysinfo.h>
+- #define _LINUX_SYSINFO_H /* avoid collision with musl header */
+- #include <linux/genetlink.h>
+- #include <linux/devlink.h>
+-+#include <linux/netlink.h>
+- #include <libmnl/libmnl.h>
+- #include <netinet/ether.h>
+-+#include <sys/select.h>
+-+#include <sys/socket.h>
+- #include <sys/types.h>
+- 
+- #include "SNAPSHOT.h"
+- #include "list.h"
+- #include "mnlg.h"
+--#include "json_writer.h"
+-+#include "json_print.h"
+- #include "utils.h"
+- #include "namespace.h"
+- 
+--- 
+-cgit 1.2.3-1.el7
+-
+diff --git a/package/iproute2/iproute2.hash b/package/iproute2/iproute2.hash
+index b2a9e21e11..bcf0f4c7a1 100644
+--- a/package/iproute2/iproute2.hash
++++ b/package/iproute2/iproute2.hash
+@@ -1,3 +1,3 @@
+ # From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
+-sha256  725dc7ba94aae54c6f8d4223ca055d9fb4fe89d6994b1c03bfb4411c4dd10f21  iproute2-5.7.0.tar.xz
++sha256  a54a34ae309c0406b2d1fb3a46158613ffb83d33fefd5d4a27f0010237ac53e9  iproute2-5.10.0.tar.xz
+ sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index 1b71f5c06a..81418331c3 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IPROUTE2_VERSION = 5.7.0
++IPROUTE2_VERSION = 5.10.0
+ IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
+ IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
+ IPROUTE2_DEPENDENCIES = host-bison host-flex host-pkgconf \
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.30.0
