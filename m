@@ -1,49 +1,33 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 19 Jan 2021 22:53:13 +0100
-Subject: [Buildroot] [PATCH 1/2] package/jack2: bump to version 1.9.17
-Message-ID: <20210119215314.1040456-1-fontaine.fabrice@gmail.com>
+Date: Tue, 19 Jan 2021 22:53:14 +0100
+Subject: [Buildroot] [PATCH 2/2] package/jack2: add JACK2_CPE_ID_VENDOR
+In-Reply-To: <20210119215314.1040456-1-fontaine.fabrice@gmail.com>
+References: <20210119215314.1040456-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210119215314.1040456-2-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Add COPYING as a license files, available since version 1.9.15 and
-  https://github.com/jackaudio/jack2/commit/d75ddb82304bf500b031f52c11b0a106e2dc9a55
-- Update indentation in hash file (two spaces)
+cpe:2.3:a:jackaudio:jack2 is a valid CPE identifier for this package:
 
-https://github.com/jackaudio/jack2/releases/tag/v1.9.15
-https://github.com/jackaudio/jack2/releases/tag/v1.9.16
-https://github.com/jackaudio/jack2/releases/tag/v1.9.17
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ajackaudio%3Ajack2
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/jack2/jack2.hash | 3 ++-
- package/jack2/jack2.mk   | 3 ++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ package/jack2/jack2.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/jack2/jack2.hash b/package/jack2/jack2.hash
-index aec56e24a4..df708f7ca5 100644
---- a/package/jack2/jack2.hash
-+++ b/package/jack2/jack2.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 a20a32366780c0061fd58fbb5f09e514ea9b7ce6e53b080a44b11a558a83217c  jack2-1.9.14.tar.gz
-+sha256  38f674bbc57852a8eb3d9faa1f96a0912d26f7d5df14c11005ad499c8ae352f2  jack2-1.9.17.tar.gz
-+sha256  d8c320ffc0030d1b096ae4732b50d2b811cf95e9a9b7377c1127b2563e0a0388  COPYING
 diff --git a/package/jack2/jack2.mk b/package/jack2/jack2.mk
-index db63b7f4b7..d09b54b35c 100644
+index d09b54b35c..e6a036bac9 100644
 --- a/package/jack2/jack2.mk
 +++ b/package/jack2/jack2.mk
-@@ -4,9 +4,10 @@
- #
- ################################################################################
- 
--JACK2_VERSION = 1.9.14
-+JACK2_VERSION = 1.9.17
+@@ -8,6 +8,7 @@ JACK2_VERSION = 1.9.17
  JACK2_SITE = $(call github,jackaudio,jack2,v$(JACK2_VERSION))
  JACK2_LICENSE = GPL-2.0+ (jack server), LGPL-2.1+ (jack library)
-+JACK2_LICENSE_FILES = COPYING
+ JACK2_LICENSE_FILES = COPYING
++JACK2_CPE_ID_VENDOR = jackaudio
  JACK2_DEPENDENCIES = libsamplerate libsndfile alsa-lib
  JACK2_INSTALL_STAGING = YES
  
