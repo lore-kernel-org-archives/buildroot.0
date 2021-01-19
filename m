@@ -1,178 +1,150 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 19 Jan 2021 22:22:26 +0100
-Subject: [Buildroot] [PATCH 1/1] package/atop: bump to version 2.6.0
-Message-ID: <20210119212226.792731-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 19 Jan 2021 22:24:45 +0100
+Subject: [Buildroot] [PATCH 1/1] package/unzip: switch to debian
+In-Reply-To: <20210118221419.683950-1-fontaine.fabrice@gmail.com>
+References: <20210118221419.683950-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210119212445.GA2375@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-wchar is needed since
-https://github.com/Atoptool/atop/commit/fa101b4dc5d3729d84466f708c29959570bd0919
+Fabrice, All,
 
-https://www.atoptool.nl/downloadatop.php
+On 2021-01-18 23:14 +0100, Fabrice Fontaine spake thusly:
+> https://sources.debian.org/data/main/u/unzip/6.0-25 is unreachable so
+> switch to the debian archive provided by snapshot.debian.org to retrieve
+> all debian patches at once
+> 
+> While at it, also update indentation in hash file and add
+> UNZIP_IGNORE_CVES entries
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...1-ifprop.c-fix-build-with-kernel-4.6.patch | 51 +++++++++++++++++++
- .../0002-photosyst.c-fix-build-on-musl.patch  | 38 ++++++++++++++
- package/atop/Config.in                        |  7 ++-
- package/atop/atop.hash                        |  2 +-
- package/atop/atop.mk                          |  2 +-
- 5 files changed, 96 insertions(+), 4 deletions(-)
- create mode 100644 package/atop/0001-ifprop.c-fix-build-with-kernel-4.6.patch
- create mode 100644 package/atop/0002-photosyst.c-fix-build-on-musl.patch
+Applied to master, with the following changes:
 
-diff --git a/package/atop/0001-ifprop.c-fix-build-with-kernel-4.6.patch b/package/atop/0001-ifprop.c-fix-build-with-kernel-4.6.patch
-new file mode 100644
-index 0000000000..0dfe4f4301
---- /dev/null
-+++ b/package/atop/0001-ifprop.c-fix-build-with-kernel-4.6.patch
-@@ -0,0 +1,51 @@
-+From aff473ee28903775e1bb35793b9c4c50ee0c7270 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 22 Dec 2020 12:23:33 +0100
-+Subject: [PATCH] ifprop.c: fix build with kernel < 4.6
-+
-+Build fails with kernel headers < 4.6 since version 2.6.0 and
-+https://github.com/Atoptool/atop/commit/08c622ecaa5bb0bb260984ceaddc4730d1b312a7
-+
-+Indeed, ethtool_link_settings and ETHTOOL_GLINKSETTINGS are only
-+available since
-+https://github.com/torvalds/linux/commit/3f1ac7a700d039c61d8d8b99f28d605d489a60cf
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/Atoptool/atop/pull/142]
-+---
-+ ifprop.c | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/ifprop.c b/ifprop.c
-+index 60fa3fa..63fce5a 100644
-+--- a/ifprop.c
-++++ b/ifprop.c
-+@@ -104,7 +104,9 @@ initifprop(void)
-+ 	char 				*cp, linebuf[2048];
-+ 	int				i=0, sockfd;
-+ 
-++#ifdef ETHTOOL_GLINKSETTINGS
-+ 	struct ethtool_link_settings 	ethlink;	// preferred!
-++#endif
-+ 	struct ethtool_cmd 		ethcmd;		// deprecated	
-+ 
-+ 	struct ifreq		 	ifreq;
-+@@ -153,6 +155,7 @@ initifprop(void)
-+ 		strncpy((void *)&ifreq.ifr_ifrn.ifrn_name, ifprops[i].name,
-+ 				sizeof ifreq.ifr_ifrn.ifrn_name-1);
-+ 
-++#ifdef ETHTOOL_GLINKSETTINGS
-+ 		ethlink.cmd              = ETHTOOL_GLINKSETTINGS;
-+ 		ifreq.ifr_ifru.ifru_data = (void *)&ethlink;
-+ 
-+@@ -164,6 +167,7 @@ initifprop(void)
-+ 			phy_addr = ethlink.phy_address;
-+ 		}
-+ 		else
-++#endif
-+ 		{
-+ 			ethcmd.cmd               = ETHTOOL_GSET;
-+ 			ifreq.ifr_ifru.ifru_data = (void *)&ethcmd;
-+-- 
-+2.29.2
-+
-diff --git a/package/atop/0002-photosyst.c-fix-build-on-musl.patch b/package/atop/0002-photosyst.c-fix-build-on-musl.patch
-new file mode 100644
-index 0000000000..8573d59d6b
---- /dev/null
-+++ b/package/atop/0002-photosyst.c-fix-build-on-musl.patch
-@@ -0,0 +1,38 @@
-+From 34996ad1eb6d295382e7737ef34bd362abdd4944 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 19 Jan 2021 22:15:45 +0100
-+Subject: [PATCH] photosyst.c: fix build on musl
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Build on musl is broken since version 2.6.0 and
-+https://github.com/Atoptool/atop/commit/e889c66fbe1d0b7ae38fbcbaa46cea749257f486
-+because limits.h is not included:
-+
-+photosyst.c: In function ?lvmmapname?:
-+photosyst.c:1624:14: error: ?PATH_MAX? undeclared (first use in this function); did you mean ?AF_MAX??
-+   char  path[PATH_MAX];
-+              ^~~~~~~~
-+              AF_MAX
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ photosyst.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/photosyst.c b/photosyst.c
-+index 3de874b..67ae92f 100644
-+--- a/photosyst.c
-++++ b/photosyst.c
-+@@ -165,6 +165,7 @@
-+ #include <dirent.h>
-+ #include <sys/ioctl.h>
-+ #include <sys/sysmacros.h>
-++#include <limits.h>
-+ 
-+ #define SCALINGMAXCPU	8	// threshold for scaling info per CPU
-+ 
-+-- 
-+2.29.2
-+
-diff --git a/package/atop/Config.in b/package/atop/Config.in
-index 9e42eddb57..4d405bb0f3 100644
---- a/package/atop/Config.in
-+++ b/package/atop/Config.in
-@@ -1,8 +1,10 @@
- config BR2_PACKAGE_ATOP
- 	bool "atop"
- 	depends on BR2_USE_MMU # fork()
-+	depends on BR2_USE_WCHAR # ncurses wchar
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14 # PERF_FLAG_FD_CLOEXEC
- 	select BR2_PACKAGE_NCURSES
-+	select BR2_PACKAGE_NCURSES_WCHAR 
- 	select BR2_PACKAGE_ZLIB
- 	help
- 	  Atop is an ASCII full-screen performance monitor for Linux
-@@ -18,6 +20,7 @@ config BR2_PACKAGE_ATOP
- 
- 	  http://www.atoptool.nl
- 
--comment "atop needs a toolchain w/ headers >= 3.14"
-+comment "atop needs a toolchain w/ wchar, headers >= 3.14"
- 	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
-+	depends on !BR2_USE_WCHAR || \
-+		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_14
-diff --git a/package/atop/atop.hash b/package/atop/atop.hash
-index f404ed5d1b..65148b8578 100644
---- a/package/atop/atop.hash
-+++ b/package/atop/atop.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256  4b911057ce50463b6e8b3016c5963d48535c0cddeebc6eda817e292b22f93f33  atop-2.5.0.tar.gz
-+sha256  9ec2ca3a571692f7efaa095f99a5106432bcb71cc22cd6c49597ef0481058f72  atop-2.6.0.tar.gz
- 
- # Hash for license file:
- sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  COPYING
-diff --git a/package/atop/atop.mk b/package/atop/atop.mk
-index 587a5b3604..acbaf2995a 100644
---- a/package/atop/atop.mk
-+++ b/package/atop/atop.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ATOP_VERSION = 2.5.0
-+ATOP_VERSION = 2.6.0
- ATOP_SITE = http://www.atoptool.nl/download
- ATOP_LICENSE = GPL-2.0+
- ATOP_LICENSE_FILES = COPYING
+  - don't wrap _SITE line that is anyway too long even when wrapped
+  - don't enumerate Debian patches one by one, just refere to them
+    globally
+  - as a consequence, reorder CVEs
+
+Thanks!
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/unzip/unzip.hash | 24 ++++---------------
+>  package/unzip/unzip.mk   | 50 ++++++++++++++++++++++++----------------
+>  2 files changed, 35 insertions(+), 39 deletions(-)
+> 
+> diff --git a/package/unzip/unzip.hash b/package/unzip/unzip.hash
+> index d05957d5e2..8b3f275533 100644
+> --- a/package/unzip/unzip.hash
+> +++ b/package/unzip/unzip.hash
+> @@ -1,20 +1,6 @@
+> +# From https://snapshot.debian.org/archive/debian/20210110T204103Z/pool/main/u/unzip/unzip_6.0-26.dsc
+> +sha256  036d96991646d0449ed0aa952e4fbe21b476ce994abc276e49d30e686708bd37  unzip_6.0.orig.tar.gz
+> +sha256  88cb7c0f1fd13252b662dfd224b64b352f9e75cd86389557fcb23fa6d2638599  unzip_6.0-26.debian.tar.xz
+> +
+>  # Locally computed:
+> -sha256 036d96991646d0449ed0aa952e4fbe21b476ce994abc276e49d30e686708bd37 unzip60.tgz
+> -sha256 7469b81d5d29ac4fd670f7c86ba0cb9fa34f137a2d4d5198437d92ddf918984b LICENSE
+> -sha256 66a364d75cea29363768ca6d43dd11b9913a59e42b8da16c4f63516c3e4ce7c1 07-increase-size-of-cfactorstr.patch
+> -sha256 3a8cfd2702d220c6c119eaf805b018b66460284e585e92adc8a572d190471724 08-allow-greater-hostver-values.patch
+> -sha256 0a1b23118b2f4a3ed097348ab33050d4f79b3863ab30e6d64ac382589834e3de 09-cve-2014-8139-crc-overflow.patch
+> -sha256 32b1eda30644c44a8bdb9a02ff08bb2eca107f8eb16dda6992a9b778a0de395e 10-cve-2014-8140-test-compr-eb.patch
+> -sha256 1f60f6e28b36f3cddb7da64c528cfe29160cefa1232e13bb8a47561f574067a9 11-cve-2014-8141-getzip64data.patch
+> -sha256 c05885bb48b41603f0893ada88f15c0fae3b3f9f6489f24ad630a400f6271351 12-cve-2014-9636-test-compr-eb.patch
+> -sha256 788c29727ff0689c3b1828466127758426f6d2c769048aa985950373747c76f3 14-cve-2015-7696.patch
+> -sha256 e85dab65c3ebf3c4ab3359a4143cfd0efccfd1cac517a4e7bd5f518f41a02b6f 15-cve-2015-7697.patch
+> -sha256 95dd15d5d9cdf5cea18c357b152930d6d52660599e0fd4907d6405870fdd9fe1 16-fix-integer-underflow-csiz-decrypted.patch
+> -sha256 ea04cfc8b7ca3b3c03117da0d891870b8c542d26188ef5593fd7e479f4f29f4e 17-restore-unix-timestamps-accurately.patch
+> -sha256 1872ffdd4d82edd7b1e62c469642bf16a1ca12dd26d41bd3f0b44f0f7602eb63 18-cve-2014-9913-unzip-buffer-overflow.patch
+> -sha256 60840ea8f5d11a276972fb5b43652cdd49a9ed93b2cc0586ad309bf52104b012 19-cve-2016-9844-zipinfo-buffer-overflow.patch
+> -sha256 4eabc3faeddd56ebc3d5053486b61f8758d840902725fd555d3472cffb094437 20-cve-2018-1000035-unzip-buffer-overflow.patch
+> -sha256 df3b0eeea8dcc161a2565e306b5dda13d27de43145e198baaf0eab822321ee7e 21-fix-warning-messages-on-big-files.patch
+> -sha256 2cf5a89e921da99e883bcde0ea03e2c77ae9185f57efaf35e7d43bc24353cfdc 22-cve-2019-13232-fix-bug-in-undefer-input.patch
+> -sha256 c8e82c80fc7760f90567118a465e4cfa1b8e5d0a5723f9c70e3d21247e550615 23-cve-2019-13232-zip-bomb-with-overlapped-entries.patch
+> -sha256 37ba0bea723beeb22670babda18bd980368cc6591bc7bd9caa04f62692c7e5ac 24-cve-2019-13232-do-not-raise-alert-for-misplaced-central-directory.patch
+> +sha256  7469b81d5d29ac4fd670f7c86ba0cb9fa34f137a2d4d5198437d92ddf918984b  LICENSE
+> diff --git a/package/unzip/unzip.mk b/package/unzip/unzip.mk
+> index 231abc86be..19e8bcb6bd 100644
+> --- a/package/unzip/unzip.mk
+> +++ b/package/unzip/unzip.mk
+> @@ -5,29 +5,39 @@
+>  ################################################################################
+>  
+>  UNZIP_VERSION = 6.0
+> -UNZIP_SOURCE = unzip$(subst .,,$(UNZIP_VERSION)).tgz
+> -UNZIP_SITE = ftp://ftp.info-zip.org/pub/infozip/src
+> +UNZIP_SOURCE = unzip_$(UNZIP_VERSION).orig.tar.gz
+> +UNZIP_PATCH = unzip_$(UNZIP_VERSION)-26.debian.tar.xz
+> +UNZIP_SITE = \
+> +	https://snapshot.debian.org/archive/debian/20210110T204103Z/pool/main/u/unzip
+>  UNZIP_LICENSE = Info-ZIP
+>  UNZIP_LICENSE_FILES = LICENSE
+>  UNZIP_CPE_ID_VALID = YES
+>  
+> -UNZIP_PATCH = \
+> -	https://sources.debian.org/data/main/u/unzip/6.0-25/debian/patches/07-increase-size-of-cfactorstr.patch \
+> -	https://sources.debian.org/data/main/u/unzip/6.0-25/debian/patches/08-allow-greater-hostver-values.patch \
+> -	https://sources.debian.org/data/main/u/unzip/6.0-25/debian/patches/09-cve-2014-8139-crc-overflow.patch \
+> -	https://sources.debian.org/data/main/u/unzip/6.0-25/debian/patches/10-cve-2014-8140-test-compr-eb.patch \
+> -	https://sources.debian.org/data/main/u/unzip/6.0-25/debian/patches/11-cve-2014-8141-getzip64data.patch \
+> -	https://sources.debian.org/data/main/u/unzip/6.0-25/debian/patches/12-cve-2014-9636-test-compr-eb.patch \
+> -	https://sources.debian.org/data/main/u/unzip/6.0-25/debian/patches/14-cve-2015-7696.patch \
+> -	https://sources.debian.org/data/main/u/unzip/6.0-25/debian/patches/15-cve-2015-7697.patch \
+> -	https://sources.debian.org/data/main/u/unzip/6.0-25/debian/patches/16-fix-integer-underflow-csiz-decrypted.patch \
+> -	https://sources.debian.org/data/main/u/unzip/6.0-25/debian/patches/17-restore-unix-timestamps-accurately.patch \
+> -	https://sources.debian.org/data/main/u/unzip/6.0-25/debian/patches/18-cve-2014-9913-unzip-buffer-overflow.patch \
+> -	https://sources.debian.org/data/main/u/unzip/6.0-25/debian/patches/19-cve-2016-9844-zipinfo-buffer-overflow.patch \
+> -	https://sources.debian.org/data/main/u/unzip/6.0-25/debian/patches/20-cve-2018-1000035-unzip-buffer-overflow.patch \
+> -	https://sources.debian.org/data/main/u/unzip/6.0-25/debian/patches/21-fix-warning-messages-on-big-files.patch \
+> -	https://sources.debian.org/data/main/u/unzip/6.0-25/debian/patches/22-cve-2019-13232-fix-bug-in-undefer-input.patch \
+> -	https://sources.debian.org/data/main/u/unzip/6.0-25/debian/patches/23-cve-2019-13232-zip-bomb-with-overlapped-entries.patch \
+> -	https://sources.debian.org/data/main/u/unzip/6.0-25/debian/patches/24-cve-2019-13232-do-not-raise-alert-for-misplaced-central-directory.patch
+> +# 07-increase-size-of-cfactorstr.patch
+> +UNZIP_IGNORE_CVES += CVE-2018-18384
+> +# 09-cve-2014-8139-crc-overflow.patch
+> +UNZIP_IGNORE_CVES += CVE-2014-8139
+> +# 10-cve-2014-8140-test-compr-eb.patch
+> +UNZIP_IGNORE_CVES += CVE-2014-8140
+> +# 11-cve-2014-8141-getzip64data.patch
+> +UNZIP_IGNORE_CVES += CVE-2014-8141
+> +# 12-cve-2014-9636-test-compr-eb.patch
+> +UNZIP_IGNORE_CVES += CVE-2014-9636
+> +# 14-cve-2015-7696.patch
+> +UNZIP_IGNORE_CVES += CVE-2015-7696
+> +# 15-cve-2015-7697.patch
+> +UNZIP_IGNORE_CVES += CVE-2015-7697
+> +# 18-cve-2014-9913-unzip-buffer-overflow
+> +UNZIP_IGNORE_CVES += CVE-2014-9913
+> +# 19-cve-2016-9844-zipinfo-buffer-overflow.patch
+> +UNZIP_IGNORE_CVES += CVE-2016-9844
+> +# 20-cve-2018-1000035-unzip-buffer-overflow.patch
+> +UNZIP_IGNORE_CVES += CVE-2018-1000035
+> +# 22-cve-2019-13232-fix-bug-in-undefer-input.patch
+> +# 23-cve-2019-13232-zip-bomb-with-overlapped-entries.patch
+> +# 24-cve-2019-13232-do-not-raise-alert-for-misplaced-central-directory.patch
+> +# 25-cve-2019-13232-fix-bug-in-uzbunzip2.patch
+> +# 26-cve-2019-13232-fix-bug-in-uzinflate.patch
+> +UNZIP_IGNORE_CVES += CVE-2019-13232
+>  
+>  $(eval $(cmake-package))
+> -- 
+> 2.29.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.29.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
