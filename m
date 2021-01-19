@@ -1,50 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 19 Jan 2021 23:06:35 +0100
-Subject: [Buildroot] [PATCH/next v1 1/5] package/python3-jinja2: add
- special host variant
-In-Reply-To: <20201117223436.24036-1-ps.report@gmx.net>
-References: <20201117223436.24036-1-ps.report@gmx.net>
-Message-ID: <20210119230635.096c0506@windsurf.home>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 19 Jan 2021 23:31:08 +0100
+Subject: [Buildroot] [PATCH 1/2] package/sysklogd: drop unneeded hash
+Message-ID: <20210119223109.1168744-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 17 Nov 2020 23:34:32 +0100
-Peter Seiderer <ps.report@gmx.net> wrote:
+Commit 6a91580c1175b098fe2508ca11bfcf621ecbbe9f added the hash of
+0001-Define-_GNU_SOURCE_required_for_O_CLOEXEC_on_uClibc.patch but this
+is not needed as this file is included in buildroot and not downloaded
 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  package/python-jinja2/python-jinja2.mk     |  1 +
->  package/python3-jinja2/python3-jinja2.hash |  5 +++++
->  package/python3-jinja2/python3-jinja2.mk   | 18 ++++++++++++++++++
->  3 files changed, 24 insertions(+)
->  create mode 100644 package/python3-jinja2/python3-jinja2.hash
->  create mode 100644 package/python3-jinja2/python3-jinja2.mk
+While at it, update indentation in hash file (two spaces)
 
-So, despite Arnout's disagreement, I have applied the series. Indeed,
-what you're doing in this series is what we do today with host Python
-packages when they must be available with Python 3. My view is that
-there is not much point in changing how we do things today until we get
-rid of Python 2.x altogether.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/sysklogd/sysklogd.hash | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-However, in your series, I changed a few things:
-
- * The patch for jinja2 should have been after the patch for
-   markupsafe, as jinja2 uses markupsafe
-
- * You duplicated the hash files of the packages between the
-   python-<foo> package and the corresponding python3-<foo> package,
-   while we normally use a symlink for the hash file, so I've done that.
-
- * Due to other changes since then on the Git downloading, the change
-   in the libcamera hash file was no longer correct, I fixed that.
-
-So, entire series applied with those changes. Thanks!
-
-Thomas
+diff --git a/package/sysklogd/sysklogd.hash b/package/sysklogd/sysklogd.hash
+index 9f9fd192e1..978a670d30 100644
+--- a/package/sysklogd/sysklogd.hash
++++ b/package/sysklogd/sysklogd.hash
+@@ -1,4 +1,3 @@
+ # Locally calculated
+-sha256	09fe1edca882a9ae976cdbf516786edc1629347b9507d45dc005d9d969f94702	sysklogd-2.1.2.tar.gz
+-sha256	7a71d7603a7c4456df441463e54da35acf151c1be0879246de63544f1f34f477	LICENSE
+-sha256	569321607efe6ba0ecb820b3cb23d933e92f6ab50d2f8fcceb23fc8a43756ef0	0001-Define-_GNU_SOURCE_required_for_O_CLOEXEC_on_uClibc.patch
++sha256  09fe1edca882a9ae976cdbf516786edc1629347b9507d45dc005d9d969f94702  sysklogd-2.1.2.tar.gz
++sha256  7a71d7603a7c4456df441463e54da35acf151c1be0879246de63544f1f34f477  LICENSE
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.29.2
