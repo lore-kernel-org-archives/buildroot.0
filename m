@@ -1,35 +1,66 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 19 Jan 2021 22:53:14 +0100
-Subject: [Buildroot] [PATCH 2/2] package/jack2: add JACK2_CPE_ID_VENDOR
-In-Reply-To: <20210119215314.1040456-1-fontaine.fabrice@gmail.com>
-References: <20210119215314.1040456-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210119215314.1040456-2-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 19 Jan 2021 22:39:48 +0100
+Subject: [Buildroot] [git commit] package/python3-jinja2: add special host
+ variant
+Message-ID: <20210119213844.6899380845@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:jackaudio:jack2 is a valid CPE identifier for this package:
+commit: https://git.buildroot.net/buildroot/commit/?id=d3cbde64647142bdef5857fc94da2576a1e98d7a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ajackaudio%3Ajack2
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/jack2/jack2.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/python-jinja2/python-jinja2.mk     |  1 +
+ package/python3-jinja2/python3-jinja2.hash |  1 +
+ package/python3-jinja2/python3-jinja2.mk   | 18 ++++++++++++++++++
+ 3 files changed, 20 insertions(+)
 
-diff --git a/package/jack2/jack2.mk b/package/jack2/jack2.mk
-index d09b54b35c..e6a036bac9 100644
---- a/package/jack2/jack2.mk
-+++ b/package/jack2/jack2.mk
-@@ -8,6 +8,7 @@ JACK2_VERSION = 1.9.17
- JACK2_SITE = $(call github,jackaudio,jack2,v$(JACK2_VERSION))
- JACK2_LICENSE = GPL-2.0+ (jack server), LGPL-2.1+ (jack library)
- JACK2_LICENSE_FILES = COPYING
-+JACK2_CPE_ID_VENDOR = jackaudio
- JACK2_DEPENDENCIES = libsamplerate libsndfile alsa-lib
- JACK2_INSTALL_STAGING = YES
+diff --git a/package/python-jinja2/python-jinja2.mk b/package/python-jinja2/python-jinja2.mk
+index 5f6492915c..51b484d03e 100644
+--- a/package/python-jinja2/python-jinja2.mk
++++ b/package/python-jinja2/python-jinja2.mk
+@@ -4,6 +4,7 @@
+ #
+ ################################################################################
  
--- 
-2.29.2
++# Please keep in sync with package/python3-jinja2/python3-jinja2.mk
+ PYTHON_JINJA2_VERSION = 2.11.2
+ PYTHON_JINJA2_SOURCE = Jinja2-$(PYTHON_JINJA2_VERSION).tar.gz
+ PYTHON_JINJA2_SITE = https://files.pythonhosted.org/packages/64/a7/45e11eebf2f15bf987c3bc11d37dcc838d9dc81250e67e4c5968f6008b6c
+diff --git a/package/python3-jinja2/python3-jinja2.hash b/package/python3-jinja2/python3-jinja2.hash
+new file mode 120000
+index 0000000000..543e981aa0
+--- /dev/null
++++ b/package/python3-jinja2/python3-jinja2.hash
+@@ -0,0 +1 @@
++../python-jinja2/python-jinja2.hash
+\ No newline at end of file
+diff --git a/package/python3-jinja2/python3-jinja2.mk b/package/python3-jinja2/python3-jinja2.mk
+new file mode 100644
+index 0000000000..cc8b1ff86f
+--- /dev/null
++++ b/package/python3-jinja2/python3-jinja2.mk
+@@ -0,0 +1,18 @@
++################################################################################
++#
++# python3-jinja2
++#
++################################################################################
++
++PYTHON3_JINJA2_VERSION = 2.11.2
++PYTHON3_JINJA2_SOURCE = Jinja2-$(PYTHON3_JINJA2_VERSION).tar.gz
++PYTHON3_JINJA2_SITE = https://files.pythonhosted.org/packages/64/a7/45e11eebf2f15bf987c3bc11d37dcc838d9dc81250e67e4c5968f6008b6c
++PYTHON3_JINJA2_SETUP_TYPE = setuptools
++PYTHON3_JINJA2_LICENSE = BSD-3-Clause
++PYTHON3_JINJA2_LICENSE_FILES = LICENSE.rst
++
++HOST_PYTHON3_JINJA2_NEEDS_HOST_PYTHON = python3
++# In host build, setup.py tries to download markupsafe if it is not installed
++HOST_PYTHON3_JINJA2_DEPENDENCIES = host-python3-markupsafe
++
++$(eval $(host-python-package))
