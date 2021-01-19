@@ -1,53 +1,51 @@
-From: Christian Stewart <christian@paral.in>
-Date: Mon, 18 Jan 2021 19:52:30 -0800
-Subject: [Buildroot] Buildroot on Windows Subsystem for Linux (WSL)
-In-Reply-To: <878s8qf1cm.fsf@dell.be.48ers.dk>
-References: <87h7njrilt.fsf@paral.in> <878s8qf1cm.fsf@dell.be.48ers.dk>
-Message-ID: <CA+h8R2oGKpEX8fwJw6SHHbQnV7uvcZkArz3X8m_5Sk39U5PbLA@mail.gmail.com>
+From: Stephane Viau (OSS) <stephane.viau@oss.nxp.com>
+Date: Tue, 19 Jan 2021 05:52:51 +0000
+Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
+ 2021-01-15
+In-Reply-To: <20210118173019.GW2375@scaer>
+References: <6fdd08ad-8de6-464b-a7b2-47c9cbedad77@HE1EUR01FT006.eop-EUR01.prod.protection.outlook.com>
+ <PA4PR04MB7920C4990EEA59953B4C3C4DA7A40@PA4PR04MB7920.eurprd04.prod.outlook.com>,
+ <20210118173019.GW2375@scaer>
+Message-ID: <PA4PR04MB79201C9F63E33256D0D9B8C4A7A30@PA4PR04MB7920.eurprd04.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+>> Today, none of the freescale_imx* defconfig build on master.                  
+>>                                                                               
+>> A git bisect blames commit 5b95a5dc2 ("support/download: change format of     
+>> archives generated from git"), introduced by Yann on January 10th.            
+>                                                                                
+>Oh damn. I did not even think about testing the defconfigs during that          
+>conversion.                                                                     
+>                                                                                
+>Grrr... I'm stupid...                                                           
 
-On Mon, Jan 18, 2021 at 12:15 PM Peter Korsgaard <peter@korsgaard.com> wrote:
->
-> >>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
->  > The Buildroot system works as expected in the WSL environment. The
->  > buildroot output tar.gz can be imported directly into WSL 2.0. WSL 1.0
->  > requires using the WSL-DistroLauncher project to load the distribution
->  > via a Windows Appx.
->
->  > This is an interesting way to use Buildroot under Windows.
->
-> Cute. Besides the fact that you are booting a (heavily patched) Linux
-> kernel, is there any specific advantages to just creating a docker
-> container or a classic VM from a Buildroot build?
+No worries, CI builds are there to help us with this stuff... ;-)
 
-By my (limited) understanding, WSL2 promises tighter integration
-between Linux and the Windows OS.
+>                                                                                
+>> Any idea whether someone is looking into these failures?                      
+>                                                                                
+>I will be looking into that, yes. Thanks for reporting.                         
 
-I haven't tested it, but docs say you can override the kernel image.
+Thank you for the quick feedback and fix[1]! 
+I appreciate it. 
 
-It forces a wsl-provided /init binary, which forks several times to
-consume PID 1, 2, 3.
+[1] http://lists.busybox.net/pipermail/buildroot/2021-January/301281.html        
 
-https://github.com/microsoft/WSL2-Linux-Kernel/issues/30#issuecomment-698922943
+BR,                                                                              
+Stephane.
 
-According to this, Windows 10 insider builds 20201 or above, you can
-add a custom init process:
-
-Adding to /etc/wsl.conf inside the VM:
-
-[boot]
-command = "/my-init"
-
-However, the my-init binary will not run as PID 1.
-
-I am working on a workaround similar to the "systemd-genie" project to
-create a PID namespace and run systemd as PID 1 inside that.
-
-Best regards,
-Christian Stewart
+>                                                                                
+>Regards,                                                                        
+>Yann E. MORIN.                                                                  
+>                                                                                
+>--                                                                              
+>.-----------------.--------------------.------------------.--------------------.
+>|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+>| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+>| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+>| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+>'------------------------------^-------^------------------^--------------------'
