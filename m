@@ -1,66 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 19 Jan 2021 22:39:48 +0100
-Subject: [Buildroot] [git commit] package/python3-jinja2: add special host
- variant
-Message-ID: <20210119213844.6899380845@busybox.osuosl.org>
+Date: Tue, 19 Jan 2021 22:56:59 +0100
+Subject: [Buildroot] [git commit] package/libcamera: bump version to
+ de5d03673
+Message-ID: <20210119213844.851A180845@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d3cbde64647142bdef5857fc94da2576a1e98d7a
+commit: https://git.buildroot.net/buildroot/commit/?id=7fe45990872c34e5eb9188534632450730e88eba
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+- add new host-python3-jinja2 and host-python3-ply dependencies
+- change android, documentation options from boolean to feature
+- disable new tracing option (needs lttng-ust)
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-jinja2/python-jinja2.mk     |  1 +
- package/python3-jinja2/python3-jinja2.hash |  1 +
- package/python3-jinja2/python3-jinja2.mk   | 18 ++++++++++++++++++
- 3 files changed, 20 insertions(+)
+ package/libcamera/libcamera.hash | 2 +-
+ package/libcamera/libcamera.mk   | 9 ++++++---
+ 2 files changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-jinja2/python-jinja2.mk b/package/python-jinja2/python-jinja2.mk
-index 5f6492915c..51b484d03e 100644
---- a/package/python-jinja2/python-jinja2.mk
-+++ b/package/python-jinja2/python-jinja2.mk
-@@ -4,6 +4,7 @@
- #
+diff --git a/package/libcamera/libcamera.hash b/package/libcamera/libcamera.hash
+index 47c160e8f4..4a2d63e8a2 100644
+--- a/package/libcamera/libcamera.hash
++++ b/package/libcamera/libcamera.hash
+@@ -1,4 +1,4 @@
+-sha256  cea2bf375b12c13945f9888119a4eeb999d7aeb550ecadcb5f919517b0b83c09  libcamera-e59713c68678f3eb6b6ebe97cabdc88c7042567f-br1.tar.gz
++sha256  9e1eb5ac366eac6bc35f3600f9f5176723cb4af14b75ab23e196450bb28eeb67  libcamera-de5d03673c41f5f117d03c23495de5620fd6f42e-br1.tar.gz
+ 
+ # license files
+ sha256  fd38b2c053c0cce46d9c5ef3545a6e34d157a240ba99c9b8dca5d37a8147da6c  LICENSES/BSD-2-Clause.txt
+diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
+index e6cd714207..aed5c6e83c 100644
+--- a/package/libcamera/libcamera.mk
++++ b/package/libcamera/libcamera.mk
+@@ -5,17 +5,20 @@
  ################################################################################
  
-+# Please keep in sync with package/python3-jinja2/python3-jinja2.mk
- PYTHON_JINJA2_VERSION = 2.11.2
- PYTHON_JINJA2_SOURCE = Jinja2-$(PYTHON_JINJA2_VERSION).tar.gz
- PYTHON_JINJA2_SITE = https://files.pythonhosted.org/packages/64/a7/45e11eebf2f15bf987c3bc11d37dcc838d9dc81250e67e4c5968f6008b6c
-diff --git a/package/python3-jinja2/python3-jinja2.hash b/package/python3-jinja2/python3-jinja2.hash
-new file mode 120000
-index 0000000000..543e981aa0
---- /dev/null
-+++ b/package/python3-jinja2/python3-jinja2.hash
-@@ -0,0 +1 @@
-+../python-jinja2/python-jinja2.hash
-\ No newline at end of file
-diff --git a/package/python3-jinja2/python3-jinja2.mk b/package/python3-jinja2/python3-jinja2.mk
-new file mode 100644
-index 0000000000..cc8b1ff86f
---- /dev/null
-+++ b/package/python3-jinja2/python3-jinja2.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# python3-jinja2
-+#
-+################################################################################
-+
-+PYTHON3_JINJA2_VERSION = 2.11.2
-+PYTHON3_JINJA2_SOURCE = Jinja2-$(PYTHON3_JINJA2_VERSION).tar.gz
-+PYTHON3_JINJA2_SITE = https://files.pythonhosted.org/packages/64/a7/45e11eebf2f15bf987c3bc11d37dcc838d9dc81250e67e4c5968f6008b6c
-+PYTHON3_JINJA2_SETUP_TYPE = setuptools
-+PYTHON3_JINJA2_LICENSE = BSD-3-Clause
-+PYTHON3_JINJA2_LICENSE_FILES = LICENSE.rst
-+
-+HOST_PYTHON3_JINJA2_NEEDS_HOST_PYTHON = python3
-+# In host build, setup.py tries to download markupsafe if it is not installed
-+HOST_PYTHON3_JINJA2_DEPENDENCIES = host-python3-markupsafe
-+
-+$(eval $(host-python-package))
+ LIBCAMERA_SITE = https://git.linuxtv.org/libcamera.git
+-LIBCAMERA_VERSION = e59713c68678f3eb6b6ebe97cabdc88c7042567f
++LIBCAMERA_VERSION = de5d03673c41f5f117d03c23495de5620fd6f42e
+ LIBCAMERA_SITE_METHOD = git
+ LIBCAMERA_DEPENDENCIES = \
+ 	host-openssl \
+ 	host-pkgconf \
++	host-python3-jinja2 \
++	host-python3-ply \
+ 	host-python3-pyyaml \
+ 	gnutls
+ LIBCAMERA_CONF_OPTS = \
+-	-Dandroid=false \
+-	-Ddocumentation=false \
++	-Dandroid=disabled \
++	-Ddocumentation=disabled \
+ 	-Dtest=false \
++	-Dtracing=disabled \
+ 	-Dwerror=false
+ LIBCAMERA_INSTALL_STAGING = YES
+ LIBCAMERA_LICENSE = \
