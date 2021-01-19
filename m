@@ -1,41 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 Jan 2021 08:06:27 +0100
-Subject: [Buildroot] Buildroot on Windows Subsystem for Linux (WSL)
-In-Reply-To: <CA+h8R2oGKpEX8fwJw6SHHbQnV7uvcZkArz3X8m_5Sk39U5PbLA@mail.gmail.com>
- (Christian Stewart's message of "Mon, 18 Jan 2021 19:52:30 -0800")
-References: <87h7njrilt.fsf@paral.in> <878s8qf1cm.fsf@dell.be.48ers.dk>
- <CA+h8R2oGKpEX8fwJw6SHHbQnV7uvcZkArz3X8m_5Sk39U5PbLA@mail.gmail.com>
-Message-ID: <87ft2xe77w.fsf@dell.be.48ers.dk>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 19 Jan 2021 08:07:37 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libbluray: add
+ LIBBLURAY_CPE_ID_VENDOR
+Message-ID: <20210119070737.786477-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
+cpe:2.3:a:videolan:libbluray is a valid CPE identifier for this package:
 
- > Hi Peter,
- > On Mon, Jan 18, 2021 at 12:15 PM Peter Korsgaard <peter@korsgaard.com> wrote:
- >> 
- >> >>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
- >> > The Buildroot system works as expected in the WSL environment. The
- >> > buildroot output tar.gz can be imported directly into WSL 2.0. WSL 1.0
- >> > requires using the WSL-DistroLauncher project to load the distribution
- >> > via a Windows Appx.
- >> 
- >> > This is an interesting way to use Buildroot under Windows.
- >> 
- >> Cute. Besides the fact that you are booting a (heavily patched) Linux
- >> kernel, is there any specific advantages to just creating a docker
- >> container or a classic VM from a Buildroot build?
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Avideolan%3Alibbluray
 
- > By my (limited) understanding, WSL2 promises tighter integration
- > between Linux and the Windows OS.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libbluray/libbluray.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
- > I haven't tested it, but docs say you can override the kernel image.
-
-You haven't tested it? Didn't the defconfig you point to build a Linux
-kernel as well?
-
+diff --git a/package/libbluray/libbluray.mk b/package/libbluray/libbluray.mk
+index e2d7fc0c7d..36f59190b1 100644
+--- a/package/libbluray/libbluray.mk
++++ b/package/libbluray/libbluray.mk
+@@ -10,6 +10,7 @@ LIBBLURAY_SOURCE = libbluray-$(LIBBLURAY_VERSION).tar.bz2
+ LIBBLURAY_INSTALL_STAGING = YES
+ LIBBLURAY_LICENSE = LGPL-2.1+
+ LIBBLURAY_LICENSE_FILES = COPYING
++LIBBLURAY_CPE_ID_VENDOR = videolan
+ LIBBLURAY_DEPENDENCIES = host-pkgconf
+ 
+ LIBBLURAY_CONF_OPTS = --disable-bdjava-jar
 -- 
-Bye, Peter Korsgaard
+2.29.2
