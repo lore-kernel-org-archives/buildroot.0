@@ -1,49 +1,89 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 Jan 2021 21:50:40 +0100
-Subject: [Buildroot] [git commit] package/python-jmespath: bump to version
- 0.10.0
-Message-ID: <20210119203252.A4A0B8850F@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 19 Jan 2021 21:56:41 +0100
+Subject: [Buildroot] [git commit] package/chrony: bump to version 4.0
+Message-ID: <20210119203811.D81F888C96@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b7546c7ca47abc589225acd8b6c758bb3f90f442
+commit: https://git.buildroot.net/buildroot/commit/?id=37f24f5580283523f48e3241a0677be97e87d355
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Rapha??l M??lotte <raphael.melotte@essensium.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python-jmespath/python-jmespath.hash | 4 ++--
- package/python-jmespath/python-jmespath.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Update chrony to version 4.0 and add/remove configuration of
+features as necessary.
 
-diff --git a/package/python-jmespath/python-jmespath.hash b/package/python-jmespath/python-jmespath.hash
-index 4d1ccb5bbb..986db2e002 100644
---- a/package/python-jmespath/python-jmespath.hash
-+++ b/package/python-jmespath/python-jmespath.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/jmespath/json
--md5  5c3380a84c565d7438e4766fd4b7a775  jmespath-0.9.4.tar.gz
--sha256  bde2aef6f44302dfb30320115b17d030798de8c4110e28d5cf6cf91a7a31074c  jmespath-0.9.4.tar.gz
-+md5  65bdcb5fa5bcf1cc710ffa508e78e408  jmespath-0.10.0.tar.gz
-+sha256  b85d0567b8666149a93172712e68920734333c0ce7e89b78b3e987f71e5ed4f9  jmespath-0.10.0.tar.gz
- # Locally computed sha256 checksums
- sha256  66b313cce80ed0623fc7db3f24863a0c80fd83eb341a46b57864158ae74faa56  LICENSE.txt
-diff --git a/package/python-jmespath/python-jmespath.mk b/package/python-jmespath/python-jmespath.mk
-index 4afd06fd48..cf11dedb60 100644
---- a/package/python-jmespath/python-jmespath.mk
-+++ b/package/python-jmespath/python-jmespath.mk
-@@ -4,9 +4,9 @@
+Remove support for readline. Add support for nettle and
+gnutls (required for NTS support). Add pkg-config support (for
+nss, nettle and gnutls).
+
+Signed-off-by: Mark Corbin <mark@dibsco.co.uk>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/chrony/chrony.hash |  4 ++--
+ package/chrony/chrony.mk   | 18 +++++++++++++++---
+ 2 files changed, 17 insertions(+), 5 deletions(-)
+
+diff --git a/package/chrony/chrony.hash b/package/chrony/chrony.hash
+index 57ce91ac80..87e0cf8ea0 100644
+--- a/package/chrony/chrony.hash
++++ b/package/chrony/chrony.hash
+@@ -1,4 +1,4 @@
+-# From https://listengine.tuxfamily.org/chrony.tuxfamily.org/chrony-announce/2020/08/msg00000.html
+-sha256  1ba82f70db85d414cd7420c39858e3ceca4b9eb8b028cbe869512c3a14a2dca7  chrony-3.5.1.tar.gz
++# From https://listengine.tuxfamily.org/chrony.tuxfamily.org/chrony-announce/2020/10/msg00000.html
++sha256  be27ea14c55e7a4434b2fa51d53018c7051c42fa6a3198c9aa6a1658bae0c625  chrony-4.0.tar.gz
+ # Locally calculated
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/chrony/chrony.mk b/package/chrony/chrony.mk
+index f8938a80f5..ef459ad38b 100644
+--- a/package/chrony/chrony.mk
++++ b/package/chrony/chrony.mk
+@@ -4,16 +4,16 @@
  #
  ################################################################################
  
--PYTHON_JMESPATH_VERSION = 0.9.4
-+PYTHON_JMESPATH_VERSION = 0.10.0
- PYTHON_JMESPATH_SOURCE = jmespath-$(PYTHON_JMESPATH_VERSION).tar.gz
--PYTHON_JMESPATH_SITE = https://files.pythonhosted.org/packages/2c/30/f0162d3d83e398c7a3b70c91eef61d409dea205fb4dc2b47d335f429de32
-+PYTHON_JMESPATH_SITE = https://files.pythonhosted.org/packages/3c/56/3f325b1eef9791759784aa5046a8f6a1aff8f7c898a2e34506771d3b99d8
- PYTHON_JMESPATH_SETUP_TYPE = setuptools
- PYTHON_JMESPATH_LICENSE = MIT
- PYTHON_JMESPATH_LICENSE_FILES = LICENSE.txt
+-CHRONY_VERSION = 3.5.1
++CHRONY_VERSION = 4.0
+ CHRONY_SITE = http://download.tuxfamily.org/chrony
+ CHRONY_LICENSE = GPL-2.0
+ CHRONY_LICENSE_FILES = COPYING
++CHRONY_DEPENDENCIES = host-pkgconf
+ 
+ CHRONY_CONF_OPTS = \
+ 	--host-system=Linux \
+ 	--host-machine=$(BR2_ARCH) \
+ 	--prefix=/usr \
+-	--without-readline \
+ 	--without-tomcrypt \
+ 	$(if $(BR2_PACKAGE_CHRONY_DEBUG_LOGGING),--enable-debug,--disable-debug)
+ 
+@@ -24,7 +24,7 @@ CHRONY_CONF_OPTS += --without-libcap
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBNSS),y)
+-CHRONY_DEPENDENCIES += host-pkgconf libnss
++CHRONY_DEPENDENCIES += libnss
+ else
+ CHRONY_CONF_OPTS += --without-nss
+ endif
+@@ -48,6 +48,18 @@ ifeq ($(BR2_PACKAGE_PPS_TOOLS),y)
+ CHRONY_DEPENDENCIES += pps-tools
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GNUTLS),y)
++CHRONY_DEPENDENCIES += gnutls
++else
++CHRONY_CONF_OPTS += --without-gnutls
++endif
++
++ifeq ($(BR2_PACKAGE_NETTLE),y)
++CHRONY_DEPENDENCIES += nettle
++else
++CHRONY_CONF_OPTS += --without-nettle
++endif
++
+ define CHRONY_CONFIGURE_CMDS
+ 	cd $(@D) && $(TARGET_CONFIGURE_OPTS) ./configure $(CHRONY_CONF_OPTS)
+ endef
