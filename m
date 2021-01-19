@@ -1,36 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 19 Jan 2021 22:13:36 +0100
-Subject: [Buildroot] [PATCH 1/1] package/dcron: bump to
- 1ba33c3325df48de46263276a43ed76cf9d81518
-In-Reply-To: <20210103225324.974773-1-fontaine.fabrice@gmail.com>
-References: <20210103225324.974773-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210119221336.2842f0ef@windsurf.home>
+Date: Tue, 19 Jan 2021 22:14:30 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libstrophe: bump to version
+ 0.10.1
+In-Reply-To: <20210104101054.5392-1-jubalh@iodoru.org>
+References: <20210104101054.5392-1-jubalh@iodoru.org>
+Message-ID: <20210119221430.76bfaa9c@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun,  3 Jan 2021 23:53:24 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Hello Michael,
 
-> - Add upstream link to patch
-> - Use the new COPYING file
-> - Update indentation in hash file (two spaces)
+On Mon,  4 Jan 2021 11:10:54 +0100
+Michael Vetter <jubalh@iodoru.org> wrote:
+
+> Changes:
+> * Fixed compilation error when LibreSSL is used
+> * Fixed crash when NULL is provided as password
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ....c-add-newline-to-logfile-openning-error-message.patch | 1 +
->  package/dcron/dcron.hash                                  | 3 ++-
->  package/dcron/dcron.mk                                    | 8 ++++----
->  3 files changed, 7 insertions(+), 5 deletions(-)
+> Signed-off-by: Michael Vetter <jubalh@iodoru.org>
 
-Applied to master with a slightly tweaked commit title/log to indicate
-that we're changing from a tarball to github, as the latest official
-release is from May 2011, while the git repo has a number of extra
-changes on top of that latest release.
+Thanks a lot for the patch, but it doesn't work here, I don't get the
+same hash as you do for the download. Could you check this on your side
+?
 
-Thanks!
+Here is what I get:
+
+ERROR: libstrophe-0.10.1.tar.gz has wrong sha256 hash:
+ERROR: expected: 4918c47029ecdea2deab4b0f9336ca4a8bb12c28b72b2cec397d98664b94c771
+ERROR: got     : 5bf0bbc555cb6059008f1b748370d4d2ee1e1fabd3eeab68475263556405ba39
+ERROR: Incomplete download, or man-in-the-middle (MITM) attack
+
+Best regards,
 
 Thomas
 -- 
