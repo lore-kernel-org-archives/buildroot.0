@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 Jan 2021 15:46:31 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/sudo: security
+Date: Tue, 19 Jan 2021 15:46:18 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/sudo: security
  bump to version 1.9.5p1
-Message-ID: <20210119142721.67F1A88701@busybox.osuosl.org>
+Message-ID: <20210119142726.E399288701@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f237c46b32f570ba733b2ce974c15cd1bda0479b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=f8360ca3343e0f6bbf5f88625abe14235573716e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
 - Fixes CVE-2021-23239, a potential information leak in sudoedit that
   could be used to test for the existence of directories not normally
