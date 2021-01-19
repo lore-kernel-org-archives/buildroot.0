@@ -1,51 +1,73 @@
-From: Stephane Viau (OSS) <stephane.viau@oss.nxp.com>
-Date: Tue, 19 Jan 2021 05:52:51 +0000
-Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2021-01-15
-In-Reply-To: <20210118173019.GW2375@scaer>
-References: <6fdd08ad-8de6-464b-a7b2-47c9cbedad77@HE1EUR01FT006.eop-EUR01.prod.protection.outlook.com>
- <PA4PR04MB7920C4990EEA59953B4C3C4DA7A40@PA4PR04MB7920.eurprd04.prod.outlook.com>,
- <20210118173019.GW2375@scaer>
-Message-ID: <PA4PR04MB79201C9F63E33256D0D9B8C4A7A30@PA4PR04MB7920.eurprd04.prod.outlook.com>
+From: Chris Packham <judge.packham@gmail.com>
+Date: Tue, 19 Jan 2021 19:32:00 +1300
+Subject: [Buildroot] [PATCH 2/3] package/coremark-pro: fix build without
+ threads
+In-Reply-To: <20210118203842.657013-2-fontaine.fabrice@gmail.com>
+References: <20210118203842.657013-1-fontaine.fabrice@gmail.com>
+ <20210118203842.657013-2-fontaine.fabrice@gmail.com>
+Message-ID: <CAFOYHZCiFPqwSQhnLq8sBo9dv3TaxUC5rPGxQ0egmmBDOud87g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->> Today, none of the freescale_imx* defconfig build on master.                  
->>                                                                               
->> A git bisect blames commit 5b95a5dc2 ("support/download: change format of     
->> archives generated from git"), introduced by Yann on January 10th.            
->                                                                                
->Oh damn. I did not even think about testing the defconfigs during that          
->conversion.                                                                     
->                                                                                
->Grrr... I'm stupid...                                                           
+On Tue, 19 Jan 2021, 9:39 AM Fabrice Fontaine, <fontaine.fabrice@gmail.com>
+wrote:
 
-No worries, CI builds are there to help us with this stuff... ;-)
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/coremark-pro/coremark-pro.mk | 23 +++++++++++++++++++++--
+>  1 file changed, 21 insertions(+), 2 deletions(-)
+>
+> diff --git a/package/coremark-pro/coremark-pro.mk b/package/coremark-pro/
+> coremark-pro.mk
+> index fdcfda33e8..f69279d5cd 100644
+> --- a/package/coremark-pro/coremark-pro.mk
+> +++ b/package/coremark-pro/coremark-pro.mk
+> @@ -10,13 +10,32 @@ COREMARK_PRO_LICENSE = Apache-2.0
+>  COREMARK_PRO_LICENSE_FILES = LICENSE.md
+>  COREMARK_PRO_DEPENDENCIES = perl
+>
+> +COREMARK_PRO_LDFLAGS = -lm
+> +
+>  ifeq ($(BR2_ENDIAN),"BIG")
+> -COREMARK_PRO_MAKE_OPTS += PLATFORM_DEFINES='EE_BIG_ENDIAN=1
+> EE_LITTLE_ENDIAN=0'
+> +COREMARK_PRO_DEFINES += \
+> +       EE_BIG_ENDIAN=1 \
+> +       EE_LITTLE_ENDIAN=0
+> +else
+> +COREMARK_PRO_DEFINES += \
+> +       EE_BIG_ENDIAN=0 \
+> +       EE_LITTLE_ENDIAN=1
+> +endif
+> +
+> +ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+> +COREMARK_PRO_DEFINES += \
+> +       USE_NATIVE_PTHREAD=1 \
+> +       USE_SINGLE_CONTEXT=0
+> +COREMARK_PRO_LDFLAGS += -lpthread
+>  else
+> -COREMARK_PRO_MAKE_OPTS += PLATFORM_DEFINES='EE_BIG_ENDIAN=0
+> EE_LITTLE_ENDIAN=1'
+> +COREMARK_PRO_DEFINES += \
+> +       USE_NATIVE_PTHREAD=0 \
+> +       USE_SINGLE_CONTEXT=1
+>  endif
+>
+>  COREMARK_PRO_MAKE_OPTS += \
+> +       LINKER_LAST="$(COREMARK_PRO_LDFLAGS)" \
+> +       PLATFORM_DEFINES="$(COREMARK_PRO_DEFINES)" \
+>         TARGET=linux$(if $(BR2_ARCH_IS_64),64) \
+>         EXE=
+> --
+>
 
->                                                                                
->> Any idea whether someone is looking into these failures?                      
->                                                                                
->I will be looking into that, yes. Thanks for reporting.                         
+Thanks. I did find USE_NATIVE_PTHREAD when I looked at the original failure
+but I couldn't figure out how to inject it into the build.
 
-Thank you for the quick feedback and fix[1]! 
-I appreciate it. 
-
-[1] http://lists.busybox.net/pipermail/buildroot/2021-January/301281.html        
-
-BR,                                                                              
-Stephane.
-
->                                                                                
->Regards,                                                                        
->Yann E. MORIN.                                                                  
->                                                                                
->--                                                                              
->.-----------------.--------------------.------------------.--------------------.
->|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
->| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
->| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
->| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
->'------------------------------^-------^------------------^--------------------'
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210119/3e4d9905/attachment.html>
