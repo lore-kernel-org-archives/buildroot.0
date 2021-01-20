@@ -1,34 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 20 Jan 2021 11:38:11 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/sysklogd: bump to version
- 2.1.2
-In-Reply-To: <CANabuZdyTY9tOdXqAiW4bjvOK=RDYW2MZvzw5eMQ-iCiYpQZFQ@mail.gmail.com>
-References: <20200812160843.24064-1-andreas.hilse@googlemail.com>
- <20201229181125.704233-1-andreas.hilse@googlemail.com>
- <87turgy8vi.fsf@gmail.com> <20210119222636.42b6121a@windsurf.home>
- <CANabuZdyTY9tOdXqAiW4bjvOK=RDYW2MZvzw5eMQ-iCiYpQZFQ@mail.gmail.com>
-Message-ID: <20210120113811.08f7e90f@windsurf.home>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 20 Jan 2021 14:40:07 +0100
+Subject: [Buildroot] [PATCH] package/syslog-ng: fix build if net-snmp is
+ installed on the host (again)
+Message-ID: <20210120134008.31802-1-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 20 Jan 2021 11:11:30 +0100
-Andreas Hilse <andreas.hilse@googlemail.com> wrote:
+From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-> The issue I had with the logger tool is that the base dir for sysklogd
-> (exec-prefix) is /, thus it is placed in /bin. The busybox logger is
-> placed in /usr/bin so I ended up with both in my rootfs.
-> 
-> To make this work sysklogd exec-prefix should be /usr - which implies
-> additional changes in the package files.
-> Would this be ok?
+See also commit 4ff6e5239240a4e1bdf73c41d6e9bff9473ec62c which describes the
+problem in detail.
 
-Yes, it's certainly OK to change sysklogd.mk as necessary.
+The same problem now arises again, because syslog-ng renamed the
+--enable-snmp-dest option into --enable-afsnmp. See syslog-ng commit
+4537938474771673ef5bd4a9cad7c9a7dc20b7c1, first part of 3.27.1.
 
-Thomas
+Update the configure options passed from Buildroot accordingly.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+---
+ package/syslog-ng/syslog-ng.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
+index 6d22883116..14888d2aed 100644
+--- a/package/syslog-ng/syslog-ng.mk
++++ b/package/syslog-ng/syslog-ng.mk
+@@ -100,10 +100,10 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_NETSNMP),y)
+ SYSLOG_NG_DEPENDENCIES += netsnmp
+-SYSLOG_NG_CONF_OPTS += --enable-snmp-dest
++SYSLOG_NG_CONF_OPTS += --enable-afsnmp
+ SYSLOG_NG_CONF_OPTS += --with-net-snmp="$(STAGING_DIR)/usr/bin"
+ else
+-SYSLOG_NG_CONF_OPTS += --disable-snmp-dest
++SYSLOG_NG_CONF_OPTS += --disable-afsnmp
+ endif
+ 
+ define SYSLOG_NG_INSTALL_INIT_SYSV
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.26.2
