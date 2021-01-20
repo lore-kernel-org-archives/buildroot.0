@@ -1,42 +1,33 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Wed, 20 Jan 2021 21:22:10 +0100
-Subject: [Buildroot] [PATCH 1/1] package/kmod: bump version to 28
-Message-ID: <20210120202210.2832-1-petr.vorel@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 20 Jan 2021 21:48:52 +0100
+Subject: [Buildroot] [PATCH 1/1] package/zsh: add ZSH_CPE_ID_VENDOR
+Message-ID: <20210120204852.183216-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
----
- package/kmod/kmod.hash | 2 +-
- package/kmod/kmod.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+cpe:2.3:a:zsh:zsh is a valid CPE identifier for this package:
 
-diff --git a/package/kmod/kmod.hash b/package/kmod/kmod.hash
-index 3cb60b2dd3..f0bd436dc8 100644
---- a/package/kmod/kmod.hash
-+++ b/package/kmod/kmod.hash
-@@ -1,5 +1,5 @@
- # From https://www.kernel.org/pub/linux/utils/kernel/kmod/sha256sums.asc
--sha256  c1d3fbf16ca24b95f334c1de1b46f17bbe5a10b0e81e72668bdc922ebffbbc0c  kmod-27.tar.xz
-+sha256  3969fc0f13daa98084256337081c442f8749310089e48aa695c9b4dfe1b3a26c  kmod-28.tar.xz
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Azsh%3Azsh
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/zsh/zsh.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/zsh/zsh.mk b/package/zsh/zsh.mk
+index c3d9e52152..1a04833211 100644
+--- a/package/zsh/zsh.mk
++++ b/package/zsh/zsh.mk
+@@ -12,6 +12,7 @@ ZSH_CONF_OPTS = --bindir=/bin
+ ZSH_CONF_ENV = zsh_cv_sys_nis=no zsh_cv_sys_nis_plus=no
+ ZSH_LICENSE = MIT-like
+ ZSH_LICENSE_FILES = LICENCE
++ZSH_CPE_ID_VENDOR = zsh
  
- # Locally calculated
- sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  libkmod/COPYING
-diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
-index d0f26a8841..7fed252c22 100644
---- a/package/kmod/kmod.mk
-+++ b/package/kmod/kmod.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KMOD_VERSION = 27
-+KMOD_VERSION = 28
- KMOD_SOURCE = kmod-$(KMOD_VERSION).tar.xz
- KMOD_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kmod
- KMOD_INSTALL_STAGING = YES
+ ifeq ($(BR2_PACKAGE_GDBM),y)
+ ZSH_CONF_OPTS += --enable-gdbm
 -- 
-2.30.0
+2.29.2
