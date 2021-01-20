@@ -1,153 +1,55 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 20 Jan 2021 07:45:56 +0000
-Subject: [Buildroot] [Bug 13461] New: patchelf tool crashes with
- 'std::out_of_range' exception,
- but is probably failing to work in all cases when --make-rpath-relative
- isn't a canonical path
-Message-ID: <bug-13461-163@https.bugs.busybox.net/>
+From: Michael Vetter <jubalh@iodoru.org>
+Date: Wed, 20 Jan 2021 09:06:29 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libstrophe: bump to version
+ 0.10.1
+In-Reply-To: <20210119221430.76bfaa9c@windsurf.home>
+References: <20210104101054.5392-1-jubalh@iodoru.org>
+ <20210119221430.76bfaa9c@windsurf.home>
+Message-ID: <20210120090629.2d700397@maitreya.fritz.box>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13461
+Hello Thomas,
 
-            Bug ID: 13461
-           Summary: patchelf tool crashes with 'std::out_of_range'
-                    exception, but is probably failing to work in all
-                    cases when --make-rpath-relative isn't a canonical
-                    path
-           Product: buildroot
-           Version: 2020.08.1
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: major
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: andyg1001 at hotmail.co.uk
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+On Tue, 19 Jan 2021 22:14:30 +0100
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-Hi,
+> Hello Michael,
+> 
+> On Mon,  4 Jan 2021 11:10:54 +0100
+> Michael Vetter <jubalh@iodoru.org> wrote:
+> 
+> > Changes:
+> > * Fixed compilation error when LibreSSL is used
+> > * Fixed crash when NULL is provided as password
+> > 
+> > Signed-off-by: Michael Vetter <jubalh@iodoru.org>  
+> 
+> Thanks a lot for the patch, but it doesn't work here, I don't get the
+> same hash as you do for the download. Could you check this on your
+> side ?
+> 
+> Here is what I get:
+> 
+> ERROR: libstrophe-0.10.1.tar.gz has wrong sha256 hash:
+> ERROR: expected:
+> 4918c47029ecdea2deab4b0f9336ca4a8bb12c28b72b2cec397d98664b94c771
+> ERROR: got     :
+> 5bf0bbc555cb6059008f1b748370d4d2ee1e1fabd3eeab68475263556405ba39
+> ERROR: Incomplete download, or man-in-the-middle (MITM) attack
 
-Building buildroot image causes a number of failures with the patchelf tool,
-for example from the output log:
+I'm sorry about that. We had some disagreement at JasPer and we removed
+an existing tag and created the same tag on a different commit. Thus
+generating a different tarball under the same tag..
 
->>>   Sanitizing RPATH in target tree
-PER_PACKAGE_DIR=/media/SSD/Toolchains/my-toolchain/build/buildroot-2020.08/per-package
-/media/SSD/Toolchains/my-toolchain/source/buildroot-2020.08/support/scripts/fix-rpath
-target
-terminate called after throwing an instance of 'std::out_of_range'
-  what():  basic_string::substr: __pos (which is 72) > this->size() (which is
-49)
-/media/SSD/Toolchains/my-toolchain/source/buildroot-2020.08/support/scripts/fix-rpath:
-line 61: 27743 Aborted                 ${PATCHELF} --make-rpath-relative
-"${rootdir}" ${sanitize_extra_args[@]} "${file}"
-FAILED:
-/media/SSD/Toolchains/my-toolchain/build/buildroot-2020.08/host/bin/patchelf
---make-rpath-relative
-'/media/SSD/Toolchains/my-toolchain/source/buildroot-2020.08/../../target'
---no-standard-lib-dirs
-'/media/SSD/Toolchains/my-toolchain/source/buildroot-2020.08/../../target/usr/libexec/lzo/examples/lzopack'
-terminate called after throwing an instance of 'std::out_of_range'
-  what():  basic_string::substr: __pos (which is 72) > this->size() (which is
-49)
-/media/SSD/Toolchains/my-toolchain/source/buildroot-2020.08/support/scripts/fix-rpath:
-line 61: 27750 Aborted                 ${PATCHELF} --make-rpath-relative
-"${rootdir}" ${sanitize_extra_args[@]} "${file}"
-FAILED:
-/media/SSD/Toolchains/my-toolchain/build/buildroot-2020.08/host/bin/patchelf
---make-rpath-relative
-'/media/SSD/Toolchains/my-toolchain/source/buildroot-2020.08/../../target'
---no-standard-lib-dirs
-'/media/SSD/Toolchains/my-toolchain/source/buildroot-2020.08/../../target/usr/libexec/lzo/examples/lzotest'
-terminate called after throwing an instance of 'std::out_of_range'
-  what():  basic_string::substr: __pos (which is 72) > this->size() (which is
-49)
-/media/SSD/Toolchains/my-toolchain/source/buildroot-2020.08/support/scripts/fix-rpath:
-line 61: 27766 Aborted                 ${PATCHELF} --make-rpath-relative
-"${rootdir}" ${sanitize_extra_args[@]} "${file}"
-FAILED:
-/media/SSD/Toolchains/my-toolchain/build/buildroot-2020.08/host/bin/patchelf
---make-rpath-relative
-'/media/SSD/Toolchains/my-toolchain/source/buildroot-2020.08/../../target'
---no-standard-lib-dirs
-'/media/SSD/Toolchains/my-toolchain/source/buildroot-2020.08/../../target/usr/libexec/lzo/examples/simple'
-terminate called after throwing an instance of 'std::out_of_range'
-  what():  basic_string::substr: __pos (which is 72) > this->size() (which is
-49)
-/media/SSD/Toolchains/my-toolchain/source/buildroot-2020.08/support/scripts/fix-rpath:
-line 61: 28047 Aborted                 ${PATCHELF} --make-rpath-relative
-"${rootdir}" ${sanitize_extra_args[@]} "${file}"
-FAILED:
-/media/SSD/Toolchains/my-toolchain/build/buildroot-2020.08/host/bin/patchelf
---make-rpath-relative
-'/media/SSD/Toolchains/my-toolchain/source/buildroot-2020.08/../../target'
---no-standard-lib-dirs
-'/media/SSD/Toolchains/my-toolchain/source/buildroot-2020.08/../../target/usr/lib/libturbojpeg.so.0.2.0'
-terminate called after throwing an instance of 'std::out_of_range'
-  what():  basic_string::substr: __pos (which is 72) > this->size() (which is
-49)
-/media/SSD/Toolchains/my-toolchain/source/buildroot-2020.08/support/scripts/fix-rpath:
-line 61: 28081 Aborted                 ${PATCHELF} --make-rpath-relative
-"${rootdir}" ${sanitize_extra_args[@]} "${file}"
-FAILED:
-/media/SSD/Toolchains/my-toolchain/build/buildroot-2020.08/host/bin/patchelf
---make-rpath-relative
-'/media/SSD/Toolchains/my-toolchain/source/buildroot-2020.08/../../target'
---no-standard-lib-dirs
-'/media/SSD/Toolchains/my-toolchain/source/buildroot-2020.08/../../target/usr/lib/libjpeg.so.8.2.2'
-terminate called after throwing an instance of 'std::out_of_range'
-  what():  basic_string::substr: __pos (which is 72) > this->size() (which is
-49)
-/media/SSD/Toolchains/my-toolchain/source/buildroot-2020.08/support/scripts/fix-rpath:
-line 61: 28096 Aborted                 ${PATCHELF} --make-rpath-relative
-"${rootdir}" ${sanitize_extra_args[@]} "${file}"
-FAILED:
-/media/SSD/Toolchains/my-toolchain/build/buildroot-2020.08/host/bin/patchelf
---make-rpath-relative
-'/media/SSD/Toolchains/my-toolchain/source/buildroot-2020.08/../../target'
---no-standard-lib-dirs
-'/media/SSD/Toolchains/my-toolchain/source/buildroot-2020.08/../../target/usr/lib/libhistory.so.8.0'
-terminate called after throwing an instance of 'std::out_of_range'
-  what():  basic_string::substr: __pos (which is 72) > this->size() (which is
-49)
-/media/SSD/Toolchains/my-toolchain/source/buildroot-2020.08/support/scripts/fix-rpath:
-line 61: 28118 Aborted                 ${PATCHELF} --make-rpath-relative
-"${rootdir}" ${sanitize_extra_args[@]} "${file}"
-FAILED:
-/media/SSD/Toolchains/my-toolchain/build/buildroot-2020.08/host/bin/patchelf
---make-rpath-relative
-'/media/SSD/Toolchains/my-toolchain/source/buildroot-2020.08/../../target'
---no-standard-lib-dirs
-'/media/SSD/Toolchains/my-toolchain/source/buildroot-2020.08/../../target/usr/lib/libreadline.so.8.0'
-touch
-/media/SSD/Toolchains/my-toolchain/source/buildroot-2020.08/../../target/usr
+I thought I only did the buildroot update after this, but maybe I
+remember wrong.
 
+Would you mind changing the commit to use the new hash? Or should I
+send a new patch?
 
-I have managed to track down the error to a change brought in by the patch
-0003-Add-option-to-make-the-rpath-relative-under-a-specif.patch.
-
-Please see
-https://git.busybox.net/buildroot/tree/package/patchelf/0003-Add-option-to-make-the-rpath-relative-under-a-specif.patch#n257,
-at line 257.
-
-At this point canonicalPath is
-"/media/SSD/Toolchains/my-toolchain/target/usr/lib" but rootDir is longer:
-"/media/SSD/Toolchains/my-toolchain/source/buildroot-2020.08/../../target",
-hence the exception.
-
-It seems that the tool is missing the ability to resolve the "../" components
-of the rootDir path to make it canonical and I would guess that therefore the
-tool cannot be working in any case since the paths inside the target executable
-will never match the passed-in rootDir...
-
-Cheers,
-Andy
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Best,
+Michael
