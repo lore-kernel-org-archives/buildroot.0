@@ -1,160 +1,1026 @@
-From: Joel Stanley <joel@jms.id.au>
-Date: Wed, 20 Jan 2021 22:29:04 +0000
-Subject: [Buildroot] [PATCH 1/2] configs/qemu_*: bump kernel version to
- 5.10.7
-In-Reply-To: <20210120195954.31797-1-geoffrey.legourrierec@gmail.com>
-References: <20210120195954.31797-1-geoffrey.legourrierec@gmail.com>
-Message-ID: <CACPK8XdWzEuu_4x5cWNx6EpatbSfn91FdQf42RzCyotGz9Hn6g@mail.gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Thu, 21 Jan 2021 00:02:34 +0100
+Subject: [Buildroot] [PATCH] package/gcc: fix gcc 8.4,
+ 9.4 and 10.2 for sparcv8 (ss10)
+Message-ID: <20210120230234.2086807-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 20 Jan 2021 at 20:00, Geoffrey Le Gourri?rec
-<geoffrey.legourrierec@gmail.com> wrote:
->
-> Bump most QEMU defconfigs (every one that was previously on 5.4.y)
-> to latest longterm kernel 5.10.7.
->
-> Please note the following exceptions/modifications:
-> - board/qemu/qemu_s390x_defconfig: ignored (already up to date)
-> - board/qemu/sh4*-r2d:
->     - Remove the remaining kernel patch [1] provided by Alan Modra
->       fixing rodata alignment, carried here by Romain Naour [2] to
->       fix an issue preventing kernel from booting with binutils 2.23.
->       Patch is present in upstream Linux now.
->     - Fix compile-time error regarding 64-bit time data structures
->       from kernel headers when building with uclibc. Previous fix [3]
->       existed upstream; but see details below.
->     - board/qemu/ppc-mpc8544ds: Updated kernel patch
-> - board/qemu/arm-versatile: Updated kernel patch
-> - board/qemu/mips*r6*: Updated kernel patch
->
-> Tested on all configs/qemu* configurations. [4]
->
-> [1] https://www.sourceware.org/ml/binutils/2019-12/msg00112.html
-> [2] https://git.busybox.net/buildroot/commit/?id=a2331c8a61bdd71c47492efc818fb0458a349219
-> [3] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fc94cf2092c7c1267fa2deb8388d624f50eba808
-> [4] https://gitlab.com/clumsyape/buildroot/-/pipelines/244024195
->
-> Signed-off-by: Geoffrey Le Gourri?rec <geoffrey.legourrierec@gmail.com>
+As reported on IRC by sephthir, the defconfig qemu_sparc_ss10_defconfig
+doesn't work as expected. Instead it produce illegal instruction
+messages.
 
-Nice work.
+gcc 8.3, 9.2 are the latest working gcc version.
+git bisect between gcc 8.4 and 8.4 allowed to identify
+the commit that introcuce the regression.
 
-Reviewed-by: Joel Stanley <joel@jms.id.au>
+Reverting this patch allowed to produce a working rootfs.
 
-> ---
-> Regarding the 64-bit time data structures, an upstream fix [3]
-> had supposedly prepared for this situation where the libc has not
-> moved to 64-bits data structures yet, but unfortunately we seem to
-> slip into a crack here. Some quick header dependency analysis from
-> the offending __kernel_time64_t type managed to "follow up" to
-> linux/time_types.h (which is the one explicitly added in [3]) as
-> expected; so no luck here.
-> Any help on that matter would be appreciated.
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/786589934
 
-I saw your commit message for the sockios.h patch has cc Arnd. Did you
-get a response from him on this issue?
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ ...get-92095-internal-error-with-O1-mcp.patch | 325 ++++++++++++++++++
+ ...get-92095-internal-error-with-O1-mcp.patch | 322 +++++++++++++++++
+ ...get-92095-internal-error-with-O1-mcp.patch | 325 ++++++++++++++++++
+ 3 files changed, 972 insertions(+)
+ create mode 100644 package/gcc/10.2.0/0002-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch
+ create mode 100644 package/gcc/8.4.0/0002-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch
+ create mode 100644 package/gcc/9.3.0/0005-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch
 
-It looks like time_types.h needs a definition of __kernel_time64_t.
-This appears to live in posix_types.h for uapi headers. Would this
-patch to the kernel fix the problem?
-
---- a/include/uapi/linux/time_types.h
-+++ b/include/uapi/linux/time_types.h
-@@ -3,6 +3,7 @@
- #define _UAPI_LINUX_TIME_TYPES_H
-
- #include <linux/types.h>
-+#include <linux/posix_types.h>
-
- struct __kernel_timespec {
-        __kernel_time64_t       tv_sec;                 /* seconds */
-
-Cheers,
-
-Joel
-
-> diff --git a/board/qemu/sh4eb-r2d/patches/linux-headers/0001-Use-types.h-and-not-time_types.h-in-sockios.h.patch b/board/qemu/sh4eb-r2d/patches/linux-headers/0001-Use-types.h-and-not-time_types.h-in-sockios.h.patch
-> new file mode 100644
-> index 0000000000..90bd4e8c6c
-> --- /dev/null
-> +++ b/board/qemu/sh4eb-r2d/patches/linux-headers/0001-Use-types.h-and-not-time_types.h-in-sockios.h.patch
-> @@ -0,0 +1,76 @@
-> +From 34c78b21878ae7b0471299d11a7e861125e31b2c Mon Sep 17 00:00:00 2001
-> +From: =?UTF-8?q?Geoffrey=20Le=20Gourri=C3=A9rec?=
-> + <geoffrey.legourrierec@gmail.com>
-> +Date: Mon, 18 Jan 2021 23:40:28 +0100
-> +Subject: [PATCH] Use types.h and not time_types.h in sockios.h
-> +MIME-Version: 1.0
-> +Content-Type: text/plain; charset=UTF-8
-> +Content-Transfer-Encoding: 8bit
-> +
-> +This fixes builds for sh arch when libc is not using relevant
-> +time data structures definitions for 32-bit machines. A previous
-> +commit [1] provided a fix, that we seemed to slip through here.
-> +
-> +As of the time of this writing, the bug was found with non-
-> +up to date uclibc 1.0.37 only (currently the only libc supporting
-> +sh architecture).
-> +
-> +[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fc94cf2092c7c1267fa2deb8388d624f50eba808
-> +
-> +Signed-off-by: Geoffrey Le Gourri?rec <geoffrey.legourrierec@gmail.com>
-> +Cc: Arnd Bergmann <arnd@arndb.de>
-> +
-> +---
-> +
-> +For the record, here's the build-time error:
-> +
-> +/usr/bin/make -j2 -C /builds/clumsyape/buildroot/output/build/uclibc-1.0.37 ARCH="sh" CROSS_COMPILE="/builds/clumsyape/buildroot/output/host/bin/sh4-buildroot-linux-uclibc-" UCLIBC_EXTRA_CFLAGS="" HOSTCC="/usr/bin/gcc"
-> +make[1]: Entering directory '/builds/clumsyape/buildroot/output/build/uclibc-1.0.37'
-> +  GEN libpthread/nptl/sysdeps/unix/sysv/linux/lowlevelcond.h
-> +  GEN libpthread/nptl/sysdeps/unix/sysv/linux/lowlevelcond.h
-> +  GEN libpthread/nptl/sysdeps/unix/sysv/linux/lowlevelrobustlock.h
-> +  GEN libpthread/nptl/sysdeps/unix/sysv/linux/lowlevelrobustlock.h
-> +In file included from /builds/clumsyape/buildroot/output/build/linux-headers-5.10.7/usr/include/asm/sockios.h:5,
-> +                 from /builds/clumsyape/buildroot/output/build/linux-headers-5.10.7/usr/include/asm-generic/socket.h:6,
-> +                 from /builds/clumsyape/buildroot/output/build/linux-headers-5.10.7/usr/include/asm/socket.h:1,
-> +                 from ./include/bits/socket.h:360,
-> +                 from ./include/sys/socket.h:39,
-> +                 from ./include/netinet/in.h:24,
-> +                 from ./include/resolv.h:57,
-> +                 from ./libpthread/nptl/descr.h:36,
-> +                 from ./libpthread/nptl/pthreadP.h:25,
-> +                 from <stdin>:2:
-> +/builds/clumsyape/buildroot/output/build/linux-headers-5.10.7/usr/include/linux/time_types.h:8:2: error: unknown type name '__kernel_time64_t'
-> +    8 |  __kernel_time64_t       tv_sec;                 /* seconds */
-> +      |  ^~~~~~~~~~~~~~~~~
-> +/builds/clumsyape/buildroot/output/build/linux-headers-5.10.7/usr/include/linux/time_types.h:32:2: error: unknown type name '__kernel_old_time_t'
-> +   32 |  __kernel_old_time_t tv_sec;  /* seconds */
-> +      |  ^~~~~~~~~~~~~~~~~~~
-> +libpthread/nptl/sysdeps/unix/sysv/linux/Makefile.commonarch:135: recipe for target 'libpthread/nptl/sysdeps/unix/sysv/linux/lowlevelrobustlock.h' failed
-> +make[1]: *** [libpthread/nptl/sysdeps/unix/sysv/linux/lowlevelrobustlock.h] Error 1
-> +make[1]: Leaving directory '/builds/clumsyape/buildroot/output/build/uclibc-1.0.37'
-> +
-> +I did a quick header dependency analysis starting from __kernel_time64_t
-> +(one of the offending types), but could "follow up" to linux/time_types.h
-> +as expected; so I fail to understand how this could break. What's even
-> +more confusing is linux/time_types.h includes linux/types.h itself.
-> +---
-> + arch/sh/include/uapi/asm/sockios.h | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/arch/sh/include/uapi/asm/sockios.h b/arch/sh/include/uapi/asm/sockios.h
-> +index ef01ced9e169..d97d14685305 100644
-> +--- a/arch/sh/include/uapi/asm/sockios.h
-> ++++ b/arch/sh/include/uapi/asm/sockios.h
-> +@@ -2,7 +2,7 @@
-> + #ifndef __ASM_SH_SOCKIOS_H
-> + #define __ASM_SH_SOCKIOS_H
-> +
-> +-#include <linux/time_types.h>
-> ++#include <linux/types.h>
-> +
-> + /* Socket-level I/O control calls. */
-> + #define FIOGETOWN     _IOR('f', 123, int)
-> +--
-> +2.17.1
-> +
+diff --git a/package/gcc/10.2.0/0002-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch b/package/gcc/10.2.0/0002-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch
+new file mode 100644
+index 0000000000..6f11713c6b
+--- /dev/null
++++ b/package/gcc/10.2.0/0002-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch
+@@ -0,0 +1,325 @@
++From 472472ee0aaccb6389747d6281c34c558bcca7d8 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Wed, 20 Jan 2021 23:26:29 +0100
++Subject: [PATCH] Revert "re PR target/92095 (internal error with -O1
++ -mcpu=niagara2 -fPIE)"
++
++This reverts commit 0a83f1a441d7aaadecb368c237b6ee70bd7b91d6.
++
++Building the Buildroot defconfig qemu_sparc_ss10_defconfig using
++gcc 8.4, 9.3 and 10 produce a broken rootfs that trigger illegal
++instruction messages.
++
++gcc 8.3, 9.2 are the latest working gcc version.
++git bisect between gcc 8.4 and 8.4 allowed to identify
++the commit that introcuce the regression.
++
++Reverting this patch allowed to produce a working rootfs.
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++Cc: Eric Botcazou <ebotcazou@gcc.gnu.org>
++---
++ gcc/config/sparc/sparc-protos.h               |   1 -
++ gcc/config/sparc/sparc.c                      | 121 +++++++-----------
++ gcc/config/sparc/sparc.md                     |   5 +-
++ .../gcc.c-torture/compile/20191108-1.c        |  14 --
++ gcc/testsuite/gcc.target/sparc/overflow-3.c   |   2 +-
++ gcc/testsuite/gcc.target/sparc/overflow-4.c   |   2 +-
++ gcc/testsuite/gcc.target/sparc/overflow-5.c   |   2 +-
++ 7 files changed, 53 insertions(+), 94 deletions(-)
++ delete mode 100644 gcc/testsuite/gcc.c-torture/compile/20191108-1.c
++
++diff --git a/gcc/config/sparc/sparc-protos.h b/gcc/config/sparc/sparc-protos.h
++index f525cd7a422..0d9f47af644 100644
++--- a/gcc/config/sparc/sparc-protos.h
+++++ b/gcc/config/sparc/sparc-protos.h
++@@ -69,7 +69,6 @@ extern void sparc_split_reg_mem (rtx, rtx, machine_mode);
++ extern void sparc_split_mem_reg (rtx, rtx, machine_mode);
++ extern int sparc_split_reg_reg_legitimate (rtx, rtx);
++ extern void sparc_split_reg_reg (rtx, rtx, machine_mode);
++-extern const char *output_load_pcrel_sym (rtx *);
++ extern const char *output_ubranch (rtx, rtx_insn *);
++ extern const char *output_cbranch (rtx, rtx, int, int, int, rtx_insn *);
++ extern const char *output_return (rtx_insn *);
++diff --git a/gcc/config/sparc/sparc.c b/gcc/config/sparc/sparc.c
++index aefced85fe1..3ff6f9200f6 100644
++--- a/gcc/config/sparc/sparc.c
+++++ b/gcc/config/sparc/sparc.c
++@@ -4192,6 +4192,13 @@ eligible_for_sibcall_delay (rtx_insn *trial)
++ static bool
++ sparc_cannot_force_const_mem (machine_mode mode, rtx x)
++ {
+++  /* After IRA has run in PIC mode, it is too late to put anything into the
+++     constant pool if the PIC register hasn't already been initialized.  */
+++  if ((lra_in_progress || reload_in_progress)
+++      && flag_pic
+++      && !crtl->uses_pic_offset_table)
+++    return true;
+++
++   switch (GET_CODE (x))
++     {
++     case CONST_INT:
++@@ -4227,11 +4234,9 @@ sparc_cannot_force_const_mem (machine_mode mode, rtx x)
++ }
++ 
++ /* Global Offset Table support.  */
++-static GTY(()) rtx got_symbol_rtx = NULL_RTX;
++-static GTY(()) rtx got_register_rtx = NULL_RTX;
++ static GTY(()) rtx got_helper_rtx = NULL_RTX;
++-
++-static GTY(()) bool got_helper_needed = false;
+++static GTY(()) rtx got_register_rtx = NULL_RTX;
+++static GTY(()) rtx got_symbol_rtx = NULL_RTX;
++ 
++ /* Return the SYMBOL_REF for the Global Offset Table.  */
++ 
++@@ -4244,6 +4249,27 @@ sparc_got (void)
++   return got_symbol_rtx;
++ }
++ 
+++#ifdef HAVE_GAS_HIDDEN
+++# define USE_HIDDEN_LINKONCE 1
+++#else
+++# define USE_HIDDEN_LINKONCE 0
+++#endif
+++
+++static void
+++get_pc_thunk_name (char name[32], unsigned int regno)
+++{
+++  const char *reg_name = reg_names[regno];
+++
+++  /* Skip the leading '%' as that cannot be used in a
+++     symbol name.  */
+++  reg_name += 1;
+++
+++  if (USE_HIDDEN_LINKONCE)
+++    sprintf (name, "__sparc_get_pc_thunk.%s", reg_name);
+++  else
+++    ASM_GENERATE_INTERNAL_LABEL (name, "LADDPC", regno);
+++}
+++
++ /* Wrapper around the load_pcrel_sym{si,di} patterns.  */
++ 
++ static rtx
++@@ -4263,78 +4289,30 @@ gen_load_pcrel_sym (rtx op0, rtx op1, rtx op2)
++   return insn;
++ }
++ 
++-/* Output the load_pcrel_sym{si,di} patterns.  */
++-
++-const char *
++-output_load_pcrel_sym (rtx *operands)
++-{
++-  if (flag_delayed_branch)
++-    {
++-      output_asm_insn ("sethi\t%%hi(%a1-4), %0", operands);
++-      output_asm_insn ("call\t%a2", operands);
++-      output_asm_insn (" add\t%0, %%lo(%a1+4), %0", operands);
++-    }
++-  else
++-    {
++-      output_asm_insn ("sethi\t%%hi(%a1-8), %0", operands);
++-      output_asm_insn ("add\t%0, %%lo(%a1-4), %0", operands);
++-      output_asm_insn ("call\t%a2", operands);
++-      output_asm_insn (" nop", NULL);
++-    }
++-
++-  if (operands[2] == got_helper_rtx)
++-    got_helper_needed = true;
++-
++-  return "";
++-}
++-
++-#ifdef HAVE_GAS_HIDDEN
++-# define USE_HIDDEN_LINKONCE 1
++-#else
++-# define USE_HIDDEN_LINKONCE 0
++-#endif
++-
++ /* Emit code to load the GOT register.  */
++ 
++ void
++ load_got_register (void)
++ {
++-  rtx insn;
+++  if (!got_register_rtx)
+++    got_register_rtx = gen_rtx_REG (Pmode, GLOBAL_OFFSET_TABLE_REGNUM);
++ 
++   if (TARGET_VXWORKS_RTP)
++-    {
++-      if (!got_register_rtx)
++-	got_register_rtx = pic_offset_table_rtx;
++-
++-      insn = gen_vxworks_load_got ();
++-    }
+++    emit_insn (gen_vxworks_load_got ());
++   else
++     {
++-      if (!got_register_rtx)
++-	got_register_rtx = gen_rtx_REG (Pmode, GLOBAL_OFFSET_TABLE_REGNUM);
++-
++       /* The GOT symbol is subject to a PC-relative relocation so we need a
++ 	 helper function to add the PC value and thus get the final value.  */
++       if (!got_helper_rtx)
++ 	{
++ 	  char name[32];
++-
++-	  /* Skip the leading '%' as that cannot be used in a symbol name.  */
++-	  if (USE_HIDDEN_LINKONCE)
++-	    sprintf (name, "__sparc_get_pc_thunk.%s",
++-		     reg_names[REGNO (got_register_rtx)] + 1);
++-	  else
++-	    ASM_GENERATE_INTERNAL_LABEL (name, "LADDPC",
++-					 REGNO (got_register_rtx));
++-
+++	  get_pc_thunk_name (name, GLOBAL_OFFSET_TABLE_REGNUM);
++ 	  got_helper_rtx = gen_rtx_SYMBOL_REF (Pmode, ggc_strdup (name));
++ 	}
++ 
++-      insn
++-	= gen_load_pcrel_sym (got_register_rtx, sparc_got (), got_helper_rtx);
+++      emit_insn (gen_load_pcrel_sym (got_register_rtx, sparc_got (),
+++				     got_helper_rtx));
++     }
++-
++-  emit_insn (insn);
++ }
++ 
++ /* Ensure that we are not using patterns that are not OK with PIC.  */
++@@ -5499,7 +5477,7 @@ save_local_or_in_reg_p (unsigned int regno, int leaf_function)
++     return true;
++ 
++   /* GOT register (%l7) if needed.  */
++-  if (got_register_rtx && regno == REGNO (got_register_rtx))
+++  if (regno == GLOBAL_OFFSET_TABLE_REGNUM && got_register_rtx)
++     return true;
++ 
++   /* If the function accesses prior frames, the frame pointer and the return
++@@ -12542,9 +12520,10 @@ static void
++ sparc_file_end (void)
++ {
++   /* If we need to emit the special GOT helper function, do so now.  */
++-  if (got_helper_needed)
+++  if (got_helper_rtx)
++     {
++       const char *name = XSTR (got_helper_rtx, 0);
+++      const char *reg_name = reg_names[GLOBAL_OFFSET_TABLE_REGNUM];
++ #ifdef DWARF2_UNWIND_INFO
++       bool do_cfi;
++ #endif
++@@ -12581,22 +12560,17 @@ sparc_file_end (void)
++ #ifdef DWARF2_UNWIND_INFO
++       do_cfi = dwarf2out_do_cfi_asm ();
++       if (do_cfi)
++-	output_asm_insn (".cfi_startproc", NULL);
+++	fprintf (asm_out_file, "\t.cfi_startproc\n");
++ #endif
++       if (flag_delayed_branch)
++-	{
++-	  output_asm_insn ("jmp\t%%o7+8", NULL);
++-	  output_asm_insn (" add\t%%o7, %0, %0", &got_register_rtx);
++-	}
+++	fprintf (asm_out_file, "\tjmp\t%%o7+8\n\t add\t%%o7, %s, %s\n",
+++		 reg_name, reg_name);
++       else
++-	{
++-	  output_asm_insn ("add\t%%o7, %0, %0", &got_register_rtx);
++-	  output_asm_insn ("jmp\t%%o7+8", NULL);
++-	  output_asm_insn (" nop", NULL);
++-	}
+++	fprintf (asm_out_file, "\tadd\t%%o7, %s, %s\n\tjmp\t%%o7+8\n\t nop\n",
+++		 reg_name, reg_name);
++ #ifdef DWARF2_UNWIND_INFO
++       if (do_cfi)
++-	output_asm_insn (".cfi_endproc", NULL);
+++	fprintf (asm_out_file, "\t.cfi_endproc\n");
++ #endif
++     }
++ 
++@@ -13091,10 +13065,7 @@ sparc_init_pic_reg (void)
++   edge entry_edge;
++   rtx_insn *seq;
++ 
++-  /* In PIC mode, we need to always initialize the PIC register if optimization
++-     is enabled, because we are called from IRA and LRA may later force things
++-     to the constant pool for optimization purposes.  */
++-  if (!flag_pic || (!crtl->uses_pic_offset_table && !optimize))
+++  if (!crtl->uses_pic_offset_table)
++     return;
++ 
++   start_sequence ();
++diff --git a/gcc/config/sparc/sparc.md b/gcc/config/sparc/sparc.md
++index 231c0d84778..899804b80ae 100644
++--- a/gcc/config/sparc/sparc.md
+++++ b/gcc/config/sparc/sparc.md
++@@ -1604,7 +1604,10 @@
++    (clobber (reg:P O7_REG))]
++   "REGNO (operands[0]) == INTVAL (operands[3])"
++ {
++-  return output_load_pcrel_sym (operands);
+++  if (flag_delayed_branch)
+++    return "sethi\t%%hi(%a1-4), %0\n\tcall\t%a2\n\t add\t%0, %%lo(%a1+4), %0";
+++  else
+++    return "sethi\t%%hi(%a1-8), %0\n\tadd\t%0, %%lo(%a1-4), %0\n\tcall\t%a2\n\t nop";
++ }
++   [(set (attr "type") (const_string "multi"))
++    (set (attr "length")
++diff --git a/gcc/testsuite/gcc.c-torture/compile/20191108-1.c b/gcc/testsuite/gcc.c-torture/compile/20191108-1.c
++deleted file mode 100644
++index 7929751bb06..00000000000
++--- a/gcc/testsuite/gcc.c-torture/compile/20191108-1.c
+++++ /dev/null
++@@ -1,14 +0,0 @@
++-/* PR target/92095 */
++-/* Testcase by Sergei Trofimovich <slyfox@inbox.ru> */
++-
++-typedef union {
++-  double a;
++-  int b[2];
++-} c;
++-
++-double d(int e)
++-{
++-  c f;
++-  (&f)->b[0] = 15728640;
++-  return e ? -(&f)->a : (&f)->a;
++-}
++diff --git a/gcc/testsuite/gcc.target/sparc/overflow-3.c b/gcc/testsuite/gcc.target/sparc/overflow-3.c
++index 52d6ab2b688..86dddfb09e6 100644
++--- a/gcc/testsuite/gcc.target/sparc/overflow-3.c
+++++ b/gcc/testsuite/gcc.target/sparc/overflow-3.c
++@@ -1,6 +1,6 @@
++ /* { dg-do compile } */
++ /* { dg-require-effective-target lp64 } */
++-/* { dg-options "-O -fno-pie" } */
+++/* { dg-options "-O" } */
++ 
++ #include <stdbool.h>
++ #include <stdint.h>
++diff --git a/gcc/testsuite/gcc.target/sparc/overflow-4.c b/gcc/testsuite/gcc.target/sparc/overflow-4.c
++index c6121b958c3..019feee335c 100644
++--- a/gcc/testsuite/gcc.target/sparc/overflow-4.c
+++++ b/gcc/testsuite/gcc.target/sparc/overflow-4.c
++@@ -1,6 +1,6 @@
++ /* { dg-do compile } */
++ /* { dg-require-effective-target lp64 } */
++-/* { dg-options "-O -fno-pie -mno-vis3 -mno-vis4" } */
+++/* { dg-options "-O -mno-vis3 -mno-vis4" } */
++ 
++ #include <stdbool.h>
++ #include <stdint.h>
++diff --git a/gcc/testsuite/gcc.target/sparc/overflow-5.c b/gcc/testsuite/gcc.target/sparc/overflow-5.c
++index f00283f6e7b..67d4ac38095 100644
++--- a/gcc/testsuite/gcc.target/sparc/overflow-5.c
+++++ b/gcc/testsuite/gcc.target/sparc/overflow-5.c
++@@ -1,6 +1,6 @@
++ /* { dg-do compile } */
++ /* { dg-require-effective-target lp64 } */
++-/* { dg-options "-O -fno-pie -mvis3" } */
+++/* { dg-options "-O -mvis3" } */
++ 
++ #include <stdbool.h>
++ #include <stdint.h>
++-- 
++2.25.4
++
+diff --git a/package/gcc/8.4.0/0002-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch b/package/gcc/8.4.0/0002-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch
+new file mode 100644
+index 0000000000..ec2bf8835d
+--- /dev/null
++++ b/package/gcc/8.4.0/0002-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch
+@@ -0,0 +1,322 @@
++From bb9b71752267444b4360442b89129bfc0ae938d3 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Wed, 20 Jan 2021 23:06:07 +0100
++Subject: [PATCH] Revert "re PR target/92095 (internal error with -O1
++ -mcpu=niagara2 -fPIE)"
++
++This reverts commit 3fcce773f0f914c0499b130c6e9efa0e45ee54a0.
++
++Building the Buildroot defconfig qemu_sparc_ss10_defconfig using
++gcc 8.4, 9.3 and 10 produce a broken rootfs that trigger illegal
++instruction messages.
++
++gcc 8.3, 9.2 are the latest working gcc version.
++git bisect between gcc 8.4 and 8.4 allowed to identify
++the commit that introcuce the regression.
++
++Reverting this patch allowed to produce a working rootfs.
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++Cc: Eric Botcazou <ebotcazou@gcc.gnu.org>
++---
++ gcc/config/sparc/sparc-protos.h               |   1 -
++ gcc/config/sparc/sparc.c                      | 121 +++++++-----------
++ gcc/config/sparc/sparc.md                     |   5 +-
++ .../gcc.c-torture/compile/20191108-1.c        |  14 --
++ gcc/testsuite/gcc.target/sparc/overflow-3.c   |   2 +-
++ gcc/testsuite/gcc.target/sparc/overflow-4.c   |   2 +-
++ gcc/testsuite/gcc.target/sparc/overflow-5.c   |   2 +-
++ 7 files changed, 53 insertions(+), 94 deletions(-)
++ delete mode 100644 gcc/testsuite/gcc.c-torture/compile/20191108-1.c
++
++diff --git a/gcc/config/sparc/sparc-protos.h b/gcc/config/sparc/sparc-protos.h
++index b3f73c2f2bf..71a067e871c 100644
++--- a/gcc/config/sparc/sparc-protos.h
+++++ b/gcc/config/sparc/sparc-protos.h
++@@ -69,7 +69,6 @@ extern void sparc_split_reg_mem (rtx, rtx, machine_mode);
++ extern void sparc_split_mem_reg (rtx, rtx, machine_mode);
++ extern int sparc_split_reg_reg_legitimate (rtx, rtx);
++ extern void sparc_split_reg_reg (rtx, rtx, machine_mode);
++-extern const char *output_load_pcrel_sym (rtx *);
++ extern const char *output_ubranch (rtx, rtx_insn *);
++ extern const char *output_cbranch (rtx, rtx, int, int, int, rtx_insn *);
++ extern const char *output_return (rtx_insn *);
++diff --git a/gcc/config/sparc/sparc.c b/gcc/config/sparc/sparc.c
++index 73032d33596..db1b428db90 100644
++--- a/gcc/config/sparc/sparc.c
+++++ b/gcc/config/sparc/sparc.c
++@@ -4200,6 +4200,13 @@ eligible_for_sibcall_delay (rtx_insn *trial)
++ static bool
++ sparc_cannot_force_const_mem (machine_mode mode, rtx x)
++ {
+++  /* After IRA has run in PIC mode, it is too late to put anything into the
+++     constant pool if the PIC register hasn't already been initialized.  */
+++  if ((lra_in_progress || reload_in_progress)
+++      && flag_pic
+++      && !crtl->uses_pic_offset_table)
+++    return true;
+++
++   switch (GET_CODE (x))
++     {
++     case CONST_INT:
++@@ -4235,11 +4242,9 @@ sparc_cannot_force_const_mem (machine_mode mode, rtx x)
++ }
++ 
++ /* Global Offset Table support.  */
++-static GTY(()) rtx got_symbol_rtx = NULL_RTX;
++-static GTY(()) rtx got_register_rtx = NULL_RTX;
++ static GTY(()) rtx got_helper_rtx = NULL_RTX;
++-
++-static GTY(()) bool got_helper_needed = false;
+++static GTY(()) rtx got_register_rtx = NULL_RTX;
+++static GTY(()) rtx got_symbol_rtx = NULL_RTX;
++ 
++ /* Return the SYMBOL_REF for the Global Offset Table.  */
++ 
++@@ -4252,6 +4257,27 @@ sparc_got (void)
++   return got_symbol_rtx;
++ }
++ 
+++#ifdef HAVE_GAS_HIDDEN
+++# define USE_HIDDEN_LINKONCE 1
+++#else
+++# define USE_HIDDEN_LINKONCE 0
+++#endif
+++
+++static void
+++get_pc_thunk_name (char name[32], unsigned int regno)
+++{
+++  const char *reg_name = reg_names[regno];
+++
+++  /* Skip the leading '%' as that cannot be used in a
+++     symbol name.  */
+++  reg_name += 1;
+++
+++  if (USE_HIDDEN_LINKONCE)
+++    sprintf (name, "__sparc_get_pc_thunk.%s", reg_name);
+++  else
+++    ASM_GENERATE_INTERNAL_LABEL (name, "LADDPC", regno);
+++}
+++
++ /* Wrapper around the load_pcrel_sym{si,di} patterns.  */
++ 
++ static rtx
++@@ -4271,78 +4297,30 @@ gen_load_pcrel_sym (rtx op0, rtx op1, rtx op2)
++   return insn;
++ }
++ 
++-/* Output the load_pcrel_sym{si,di} patterns.  */
++-
++-const char *
++-output_load_pcrel_sym (rtx *operands)
++-{
++-  if (flag_delayed_branch)
++-    {
++-      output_asm_insn ("sethi\t%%hi(%a1-4), %0", operands);
++-      output_asm_insn ("call\t%a2", operands);
++-      output_asm_insn (" add\t%0, %%lo(%a1+4), %0", operands);
++-    }
++-  else
++-    {
++-      output_asm_insn ("sethi\t%%hi(%a1-8), %0", operands);
++-      output_asm_insn ("add\t%0, %%lo(%a1-4), %0", operands);
++-      output_asm_insn ("call\t%a2", operands);
++-      output_asm_insn (" nop", NULL);
++-    }
++-
++-  if (operands[2] == got_helper_rtx)
++-    got_helper_needed = true;
++-
++-  return "";
++-}
++-
++-#ifdef HAVE_GAS_HIDDEN
++-# define USE_HIDDEN_LINKONCE 1
++-#else
++-# define USE_HIDDEN_LINKONCE 0
++-#endif
++-
++ /* Emit code to load the GOT register.  */
++ 
++ void
++ load_got_register (void)
++ {
++-  rtx insn;
+++  if (!got_register_rtx)
+++    got_register_rtx = gen_rtx_REG (Pmode, GLOBAL_OFFSET_TABLE_REGNUM);
++ 
++   if (TARGET_VXWORKS_RTP)
++-    {
++-      if (!got_register_rtx)
++-	got_register_rtx = pic_offset_table_rtx;
++-
++-      insn = gen_vxworks_load_got ();
++-    }
+++    emit_insn (gen_vxworks_load_got ());
++   else
++     {
++-      if (!got_register_rtx)
++-	got_register_rtx = gen_rtx_REG (Pmode, GLOBAL_OFFSET_TABLE_REGNUM);
++-
++       /* The GOT symbol is subject to a PC-relative relocation so we need a
++ 	 helper function to add the PC value and thus get the final value.  */
++       if (!got_helper_rtx)
++ 	{
++ 	  char name[32];
++-
++-	  /* Skip the leading '%' as that cannot be used in a symbol name.  */
++-	  if (USE_HIDDEN_LINKONCE)
++-	    sprintf (name, "__sparc_get_pc_thunk.%s",
++-		     reg_names[REGNO (got_register_rtx)] + 1);
++-	  else
++-	    ASM_GENERATE_INTERNAL_LABEL (name, "LADDPC",
++-					 REGNO (got_register_rtx));
++-
+++	  get_pc_thunk_name (name, GLOBAL_OFFSET_TABLE_REGNUM);
++ 	  got_helper_rtx = gen_rtx_SYMBOL_REF (Pmode, ggc_strdup (name));
++ 	}
++ 
++-      insn
++-	= gen_load_pcrel_sym (got_register_rtx, sparc_got (), got_helper_rtx);
+++      emit_insn (gen_load_pcrel_sym (got_register_rtx, sparc_got (),
+++				     got_helper_rtx));
++     }
++-
++-  emit_insn (insn);
++ }
++ 
++ /* Ensure that we are not using patterns that are not OK with PIC.  */
++@@ -5494,7 +5472,7 @@ save_local_or_in_reg_p (unsigned int regno, int leaf_function)
++     return true;
++ 
++   /* GOT register (%l7) if needed.  */
++-  if (got_register_rtx && regno == REGNO (got_register_rtx))
+++  if (regno == GLOBAL_OFFSET_TABLE_REGNUM && got_register_rtx)
++     return true;
++ 
++   /* If the function accesses prior frames, the frame pointer and the return
++@@ -12475,9 +12453,10 @@ static void
++ sparc_file_end (void)
++ {
++   /* If we need to emit the special GOT helper function, do so now.  */
++-  if (got_helper_needed)
+++  if (got_helper_rtx)
++     {
++       const char *name = XSTR (got_helper_rtx, 0);
+++      const char *reg_name = reg_names[GLOBAL_OFFSET_TABLE_REGNUM];
++ #ifdef DWARF2_UNWIND_INFO
++       bool do_cfi;
++ #endif
++@@ -12514,22 +12493,17 @@ sparc_file_end (void)
++ #ifdef DWARF2_UNWIND_INFO
++       do_cfi = dwarf2out_do_cfi_asm ();
++       if (do_cfi)
++-	output_asm_insn (".cfi_startproc", NULL);
+++	fprintf (asm_out_file, "\t.cfi_startproc\n");
++ #endif
++       if (flag_delayed_branch)
++-	{
++-	  output_asm_insn ("jmp\t%%o7+8", NULL);
++-	  output_asm_insn (" add\t%%o7, %0, %0", &got_register_rtx);
++-	}
+++	fprintf (asm_out_file, "\tjmp\t%%o7+8\n\t add\t%%o7, %s, %s\n",
+++		 reg_name, reg_name);
++       else
++-	{
++-	  output_asm_insn ("add\t%%o7, %0, %0", &got_register_rtx);
++-	  output_asm_insn ("jmp\t%%o7+8", NULL);
++-	  output_asm_insn (" nop", NULL);
++-	}
+++	fprintf (asm_out_file, "\tadd\t%%o7, %s, %s\n\tjmp\t%%o7+8\n\t nop\n",
+++		 reg_name, reg_name);
++ #ifdef DWARF2_UNWIND_INFO
++       if (do_cfi)
++-	output_asm_insn (".cfi_endproc", NULL);
+++	fprintf (asm_out_file, "\t.cfi_endproc\n");
++ #endif
++     }
++ 
++@@ -13035,10 +13009,7 @@ sparc_init_pic_reg (void)
++   edge entry_edge;
++   rtx_insn *seq;
++ 
++-  /* In PIC mode, we need to always initialize the PIC register if optimization
++-     is enabled, because we are called from IRA and LRA may later force things
++-     to the constant pool for optimization purposes.  */
++-  if (!flag_pic || (!crtl->uses_pic_offset_table && !optimize))
+++  if (!crtl->uses_pic_offset_table)
++     return;
++ 
++   start_sequence ();
++diff --git a/gcc/config/sparc/sparc.md b/gcc/config/sparc/sparc.md
++index 468e2cc5d3b..25134bd1148 100644
++--- a/gcc/config/sparc/sparc.md
+++++ b/gcc/config/sparc/sparc.md
++@@ -1601,7 +1601,10 @@
++    (clobber (reg:P O7_REG))]
++   "REGNO (operands[0]) == INTVAL (operands[3])"
++ {
++-  return output_load_pcrel_sym (operands);
+++  if (flag_delayed_branch)
+++    return "sethi\t%%hi(%a1-4), %0\n\tcall\t%a2\n\t add\t%0, %%lo(%a1+4), %0";
+++  else
+++    return "sethi\t%%hi(%a1-8), %0\n\tadd\t%0, %%lo(%a1-4), %0\n\tcall\t%a2\n\t nop";
++ }
++   [(set (attr "type") (const_string "multi"))
++    (set (attr "length")
++diff --git a/gcc/testsuite/gcc.c-torture/compile/20191108-1.c b/gcc/testsuite/gcc.c-torture/compile/20191108-1.c
++deleted file mode 100644
++index 7929751bb06..00000000000
++--- a/gcc/testsuite/gcc.c-torture/compile/20191108-1.c
+++++ /dev/null
++@@ -1,14 +0,0 @@
++-/* PR target/92095 */
++-/* Testcase by Sergei Trofimovich <slyfox@inbox.ru> */
++-
++-typedef union {
++-  double a;
++-  int b[2];
++-} c;
++-
++-double d(int e)
++-{
++-  c f;
++-  (&f)->b[0] = 15728640;
++-  return e ? -(&f)->a : (&f)->a;
++-}
++diff --git a/gcc/testsuite/gcc.target/sparc/overflow-3.c b/gcc/testsuite/gcc.target/sparc/overflow-3.c
++index 18253bb6e5e..8cb24f52f7b 100644
++--- a/gcc/testsuite/gcc.target/sparc/overflow-3.c
+++++ b/gcc/testsuite/gcc.target/sparc/overflow-3.c
++@@ -1,5 +1,5 @@
++ /* { dg-do compile } */
++-/* { dg-options "-O -fno-pie" } */
+++/* { dg-options "-O" } */
++ /* { dg-require-effective-target lp64 } */
++ 
++ #include <stdbool.h>
++diff --git a/gcc/testsuite/gcc.target/sparc/overflow-4.c b/gcc/testsuite/gcc.target/sparc/overflow-4.c
++index fb30877efb9..868edea2b9e 100644
++--- a/gcc/testsuite/gcc.target/sparc/overflow-4.c
+++++ b/gcc/testsuite/gcc.target/sparc/overflow-4.c
++@@ -1,5 +1,5 @@
++ /* { dg-do compile } */
++-/* { dg-options "-O -fno-pie -mno-vis3" } */
+++/* { dg-options "-O -mno-vis3" } */
++ /* { dg-require-effective-target lp64 } */
++ 
++ #include <stdbool.h>
++diff --git a/gcc/testsuite/gcc.target/sparc/overflow-5.c b/gcc/testsuite/gcc.target/sparc/overflow-5.c
++index 509d957715d..501ce04f7a1 100644
++--- a/gcc/testsuite/gcc.target/sparc/overflow-5.c
+++++ b/gcc/testsuite/gcc.target/sparc/overflow-5.c
++@@ -1,5 +1,5 @@
++ /* { dg-do compile } */
++-/* { dg-options "-O -fno-pie -mvis3" } */
+++/* { dg-options "-O -mvis3" } */
++ /* { dg-require-effective-target lp64 } */
++ 
++ #include <stdbool.h>
++-- 
++2.25.4
++
+diff --git a/package/gcc/9.3.0/0005-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch b/package/gcc/9.3.0/0005-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch
+new file mode 100644
+index 0000000000..8ed281e981
+--- /dev/null
++++ b/package/gcc/9.3.0/0005-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch
+@@ -0,0 +1,325 @@
++From 0d7fe4806d9dce76367c193d5199df6a2b98009f Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Wed, 20 Jan 2021 23:22:16 +0100
++Subject: [PATCH] Revert "re PR target/92095 (internal error with -O1
++ -mcpu=niagara2 -fPIE)"
++
++This reverts commit 6bf2990842388101897b6f465524cbc295ee8cf9.
++
++Building the Buildroot defconfig qemu_sparc_ss10_defconfig using
++gcc 8.4, 9.3 and 10 produce a broken rootfs that trigger illegal
++instruction messages.
++
++gcc 8.3, 9.2 are the latest working gcc version.
++git bisect between gcc 8.4 and 8.4 allowed to identify
++the commit that introcuce the regression.
++
++Reverting this patch allowed to produce a working rootfs.
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++Cc: Eric Botcazou <ebotcazou@gcc.gnu.org>
++---
++ gcc/config/sparc/sparc-protos.h               |   1 -
++ gcc/config/sparc/sparc.c                      | 121 +++++++-----------
++ gcc/config/sparc/sparc.md                     |   5 +-
++ .../gcc.c-torture/compile/20191108-1.c        |  14 --
++ gcc/testsuite/gcc.target/sparc/overflow-3.c   |   2 +-
++ gcc/testsuite/gcc.target/sparc/overflow-4.c   |   2 +-
++ gcc/testsuite/gcc.target/sparc/overflow-5.c   |   2 +-
++ 7 files changed, 53 insertions(+), 94 deletions(-)
++ delete mode 100644 gcc/testsuite/gcc.c-torture/compile/20191108-1.c
++
++diff --git a/gcc/config/sparc/sparc-protos.h b/gcc/config/sparc/sparc-protos.h
++index ef1adb69ede..9bdae7b9faa 100644
++--- a/gcc/config/sparc/sparc-protos.h
+++++ b/gcc/config/sparc/sparc-protos.h
++@@ -69,7 +69,6 @@ extern void sparc_split_reg_mem (rtx, rtx, machine_mode);
++ extern void sparc_split_mem_reg (rtx, rtx, machine_mode);
++ extern int sparc_split_reg_reg_legitimate (rtx, rtx);
++ extern void sparc_split_reg_reg (rtx, rtx, machine_mode);
++-extern const char *output_load_pcrel_sym (rtx *);
++ extern const char *output_ubranch (rtx, rtx_insn *);
++ extern const char *output_cbranch (rtx, rtx, int, int, int, rtx_insn *);
++ extern const char *output_return (rtx_insn *);
++diff --git a/gcc/config/sparc/sparc.c b/gcc/config/sparc/sparc.c
++index a993aab7639..2974d174e93 100644
++--- a/gcc/config/sparc/sparc.c
+++++ b/gcc/config/sparc/sparc.c
++@@ -4205,6 +4205,13 @@ eligible_for_sibcall_delay (rtx_insn *trial)
++ static bool
++ sparc_cannot_force_const_mem (machine_mode mode, rtx x)
++ {
+++  /* After IRA has run in PIC mode, it is too late to put anything into the
+++     constant pool if the PIC register hasn't already been initialized.  */
+++  if ((lra_in_progress || reload_in_progress)
+++      && flag_pic
+++      && !crtl->uses_pic_offset_table)
+++    return true;
+++
++   switch (GET_CODE (x))
++     {
++     case CONST_INT:
++@@ -4240,11 +4247,9 @@ sparc_cannot_force_const_mem (machine_mode mode, rtx x)
++ }
++ 
++ /* Global Offset Table support.  */
++-static GTY(()) rtx got_symbol_rtx = NULL_RTX;
++-static GTY(()) rtx got_register_rtx = NULL_RTX;
++ static GTY(()) rtx got_helper_rtx = NULL_RTX;
++-
++-static GTY(()) bool got_helper_needed = false;
+++static GTY(()) rtx got_register_rtx = NULL_RTX;
+++static GTY(()) rtx got_symbol_rtx = NULL_RTX;
++ 
++ /* Return the SYMBOL_REF for the Global Offset Table.  */
++ 
++@@ -4257,6 +4262,27 @@ sparc_got (void)
++   return got_symbol_rtx;
++ }
++ 
+++#ifdef HAVE_GAS_HIDDEN
+++# define USE_HIDDEN_LINKONCE 1
+++#else
+++# define USE_HIDDEN_LINKONCE 0
+++#endif
+++
+++static void
+++get_pc_thunk_name (char name[32], unsigned int regno)
+++{
+++  const char *reg_name = reg_names[regno];
+++
+++  /* Skip the leading '%' as that cannot be used in a
+++     symbol name.  */
+++  reg_name += 1;
+++
+++  if (USE_HIDDEN_LINKONCE)
+++    sprintf (name, "__sparc_get_pc_thunk.%s", reg_name);
+++  else
+++    ASM_GENERATE_INTERNAL_LABEL (name, "LADDPC", regno);
+++}
+++
++ /* Wrapper around the load_pcrel_sym{si,di} patterns.  */
++ 
++ static rtx
++@@ -4276,78 +4302,30 @@ gen_load_pcrel_sym (rtx op0, rtx op1, rtx op2)
++   return insn;
++ }
++ 
++-/* Output the load_pcrel_sym{si,di} patterns.  */
++-
++-const char *
++-output_load_pcrel_sym (rtx *operands)
++-{
++-  if (flag_delayed_branch)
++-    {
++-      output_asm_insn ("sethi\t%%hi(%a1-4), %0", operands);
++-      output_asm_insn ("call\t%a2", operands);
++-      output_asm_insn (" add\t%0, %%lo(%a1+4), %0", operands);
++-    }
++-  else
++-    {
++-      output_asm_insn ("sethi\t%%hi(%a1-8), %0", operands);
++-      output_asm_insn ("add\t%0, %%lo(%a1-4), %0", operands);
++-      output_asm_insn ("call\t%a2", operands);
++-      output_asm_insn (" nop", NULL);
++-    }
++-
++-  if (operands[2] == got_helper_rtx)
++-    got_helper_needed = true;
++-
++-  return "";
++-}
++-
++-#ifdef HAVE_GAS_HIDDEN
++-# define USE_HIDDEN_LINKONCE 1
++-#else
++-# define USE_HIDDEN_LINKONCE 0
++-#endif
++-
++ /* Emit code to load the GOT register.  */
++ 
++ void
++ load_got_register (void)
++ {
++-  rtx insn;
+++  if (!got_register_rtx)
+++    got_register_rtx = gen_rtx_REG (Pmode, GLOBAL_OFFSET_TABLE_REGNUM);
++ 
++   if (TARGET_VXWORKS_RTP)
++-    {
++-      if (!got_register_rtx)
++-	got_register_rtx = pic_offset_table_rtx;
++-
++-      insn = gen_vxworks_load_got ();
++-    }
+++    emit_insn (gen_vxworks_load_got ());
++   else
++     {
++-      if (!got_register_rtx)
++-	got_register_rtx = gen_rtx_REG (Pmode, GLOBAL_OFFSET_TABLE_REGNUM);
++-
++       /* The GOT symbol is subject to a PC-relative relocation so we need a
++ 	 helper function to add the PC value and thus get the final value.  */
++       if (!got_helper_rtx)
++ 	{
++ 	  char name[32];
++-
++-	  /* Skip the leading '%' as that cannot be used in a symbol name.  */
++-	  if (USE_HIDDEN_LINKONCE)
++-	    sprintf (name, "__sparc_get_pc_thunk.%s",
++-		     reg_names[REGNO (got_register_rtx)] + 1);
++-	  else
++-	    ASM_GENERATE_INTERNAL_LABEL (name, "LADDPC",
++-					 REGNO (got_register_rtx));
++-
+++	  get_pc_thunk_name (name, GLOBAL_OFFSET_TABLE_REGNUM);
++ 	  got_helper_rtx = gen_rtx_SYMBOL_REF (Pmode, ggc_strdup (name));
++ 	}
++ 
++-      insn
++-	= gen_load_pcrel_sym (got_register_rtx, sparc_got (), got_helper_rtx);
+++      emit_insn (gen_load_pcrel_sym (got_register_rtx, sparc_got (),
+++				     got_helper_rtx));
++     }
++-
++-  emit_insn (insn);
++ }
++ 
++ /* Ensure that we are not using patterns that are not OK with PIC.  */
++@@ -5512,7 +5490,7 @@ save_local_or_in_reg_p (unsigned int regno, int leaf_function)
++     return true;
++ 
++   /* GOT register (%l7) if needed.  */
++-  if (got_register_rtx && regno == REGNO (got_register_rtx))
+++  if (regno == GLOBAL_OFFSET_TABLE_REGNUM && got_register_rtx)
++     return true;
++ 
++   /* If the function accesses prior frames, the frame pointer and the return
++@@ -12555,9 +12533,10 @@ static void
++ sparc_file_end (void)
++ {
++   /* If we need to emit the special GOT helper function, do so now.  */
++-  if (got_helper_needed)
+++  if (got_helper_rtx)
++     {
++       const char *name = XSTR (got_helper_rtx, 0);
+++      const char *reg_name = reg_names[GLOBAL_OFFSET_TABLE_REGNUM];
++ #ifdef DWARF2_UNWIND_INFO
++       bool do_cfi;
++ #endif
++@@ -12594,22 +12573,17 @@ sparc_file_end (void)
++ #ifdef DWARF2_UNWIND_INFO
++       do_cfi = dwarf2out_do_cfi_asm ();
++       if (do_cfi)
++-	output_asm_insn (".cfi_startproc", NULL);
+++	fprintf (asm_out_file, "\t.cfi_startproc\n");
++ #endif
++       if (flag_delayed_branch)
++-	{
++-	  output_asm_insn ("jmp\t%%o7+8", NULL);
++-	  output_asm_insn (" add\t%%o7, %0, %0", &got_register_rtx);
++-	}
+++	fprintf (asm_out_file, "\tjmp\t%%o7+8\n\t add\t%%o7, %s, %s\n",
+++		 reg_name, reg_name);
++       else
++-	{
++-	  output_asm_insn ("add\t%%o7, %0, %0", &got_register_rtx);
++-	  output_asm_insn ("jmp\t%%o7+8", NULL);
++-	  output_asm_insn (" nop", NULL);
++-	}
+++	fprintf (asm_out_file, "\tadd\t%%o7, %s, %s\n\tjmp\t%%o7+8\n\t nop\n",
+++		 reg_name, reg_name);
++ #ifdef DWARF2_UNWIND_INFO
++       if (do_cfi)
++-	output_asm_insn (".cfi_endproc", NULL);
+++	fprintf (asm_out_file, "\t.cfi_endproc\n");
++ #endif
++     }
++ 
++@@ -13115,10 +13089,7 @@ sparc_init_pic_reg (void)
++   edge entry_edge;
++   rtx_insn *seq;
++ 
++-  /* In PIC mode, we need to always initialize the PIC register if optimization
++-     is enabled, because we are called from IRA and LRA may later force things
++-     to the constant pool for optimization purposes.  */
++-  if (!flag_pic || (!crtl->uses_pic_offset_table && !optimize))
+++  if (!crtl->uses_pic_offset_table)
++     return;
++ 
++   start_sequence ();
++diff --git a/gcc/config/sparc/sparc.md b/gcc/config/sparc/sparc.md
++index 0a6e27ffa83..7af62d599b9 100644
++--- a/gcc/config/sparc/sparc.md
+++++ b/gcc/config/sparc/sparc.md
++@@ -1604,7 +1604,10 @@
++    (clobber (reg:P O7_REG))]
++   "REGNO (operands[0]) == INTVAL (operands[3])"
++ {
++-  return output_load_pcrel_sym (operands);
+++  if (flag_delayed_branch)
+++    return "sethi\t%%hi(%a1-4), %0\n\tcall\t%a2\n\t add\t%0, %%lo(%a1+4), %0";
+++  else
+++    return "sethi\t%%hi(%a1-8), %0\n\tadd\t%0, %%lo(%a1-4), %0\n\tcall\t%a2\n\t nop";
++ }
++   [(set (attr "type") (const_string "multi"))
++    (set (attr "length")
++diff --git a/gcc/testsuite/gcc.c-torture/compile/20191108-1.c b/gcc/testsuite/gcc.c-torture/compile/20191108-1.c
++deleted file mode 100644
++index 7929751bb06..00000000000
++--- a/gcc/testsuite/gcc.c-torture/compile/20191108-1.c
+++++ /dev/null
++@@ -1,14 +0,0 @@
++-/* PR target/92095 */
++-/* Testcase by Sergei Trofimovich <slyfox@inbox.ru> */
++-
++-typedef union {
++-  double a;
++-  int b[2];
++-} c;
++-
++-double d(int e)
++-{
++-  c f;
++-  (&f)->b[0] = 15728640;
++-  return e ? -(&f)->a : (&f)->a;
++-}
++diff --git a/gcc/testsuite/gcc.target/sparc/overflow-3.c b/gcc/testsuite/gcc.target/sparc/overflow-3.c
++index 52d6ab2b688..86dddfb09e6 100644
++--- a/gcc/testsuite/gcc.target/sparc/overflow-3.c
+++++ b/gcc/testsuite/gcc.target/sparc/overflow-3.c
++@@ -1,6 +1,6 @@
++ /* { dg-do compile } */
++ /* { dg-require-effective-target lp64 } */
++-/* { dg-options "-O -fno-pie" } */
+++/* { dg-options "-O" } */
++ 
++ #include <stdbool.h>
++ #include <stdint.h>
++diff --git a/gcc/testsuite/gcc.target/sparc/overflow-4.c b/gcc/testsuite/gcc.target/sparc/overflow-4.c
++index c6121b958c3..019feee335c 100644
++--- a/gcc/testsuite/gcc.target/sparc/overflow-4.c
+++++ b/gcc/testsuite/gcc.target/sparc/overflow-4.c
++@@ -1,6 +1,6 @@
++ /* { dg-do compile } */
++ /* { dg-require-effective-target lp64 } */
++-/* { dg-options "-O -fno-pie -mno-vis3 -mno-vis4" } */
+++/* { dg-options "-O -mno-vis3 -mno-vis4" } */
++ 
++ #include <stdbool.h>
++ #include <stdint.h>
++diff --git a/gcc/testsuite/gcc.target/sparc/overflow-5.c b/gcc/testsuite/gcc.target/sparc/overflow-5.c
++index f00283f6e7b..67d4ac38095 100644
++--- a/gcc/testsuite/gcc.target/sparc/overflow-5.c
+++++ b/gcc/testsuite/gcc.target/sparc/overflow-5.c
++@@ -1,6 +1,6 @@
++ /* { dg-do compile } */
++ /* { dg-require-effective-target lp64 } */
++-/* { dg-options "-O -fno-pie -mvis3" } */
+++/* { dg-options "-O -mvis3" } */
++ 
++ #include <stdbool.h>
++ #include <stdint.h>
++-- 
++2.25.4
++
+-- 
+2.25.4
