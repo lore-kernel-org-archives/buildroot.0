@@ -1,30 +1,30 @@
-From: =?UTF-8?Q?Sebasti=C3=A1n_Conti?= <sebaconti19@gmail.com>
-Date: Tue, 19 Jan 2021 23:56:12 -0300
-Subject: [Buildroot] Buildroot Touchscreen goes to coordinates 0 0
-Message-ID: <CAONQdNmac47XOqi2kec20PbdohXW4jYov-sM3hDvDTsKZZmXTw@mail.gmail.com>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Wed, 20 Jan 2021 05:02:27 +0100
+Subject: [Buildroot] [PATCH 1/1] package/iproute2: bump version to 5.10.0
+In-Reply-To: <20210119230354.094e2cdc@windsurf.home>
+References: <20210119213118.23579-1-petr.vorel@gmail.com>
+ <20210119230354.094e2cdc@windsurf.home>
+Message-ID: <20210120040227.GA50583@pevik>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I think is a usb touchscreen that is plug and play and have speakers, but
-when I am trying to run a example from qt that you can draw, it draws a
-line from coordinates 0 0 to where my finger is.
-After installing evtest and building buildroot, the final coordinates of
-every touch are 0x 0y.
+Hi Thomas,
 
-If I test evest on other linux distro it works perfectly.
+> On Tue, 19 Jan 2021 22:31:18 +0100
+> Petr Vorel <petr.vorel@gmail.com> wrote:
 
-Thanks
+> > Understand that rebuilding all toolchains takes lots of time.
 
-Init screen: https://i.stack.imgur.com/1NqWY.jpg
+> It doesn't really take that much time. I just kicked-off a rebuild of
+> the toolchains with Buildroot 2020.11, and I'll try to follow-up on
+> that.
+Great, thanks a lot! I hope you mean 2020.11.x branch, which contains also fix
+for MUSL toolchain ("uapi: move constants from <linux/kernel.h> to <linux/const.h>").
 
+Kind regards,
+Petr
 
-Qt example: https://i.stack.imgur.com/xcnq4.jpg
-
-
-Evtest: https://i.stack.imgur.com/Hqzce.jpg
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210119/c8d68c3c/attachment.html>
+> Thomas
