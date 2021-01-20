@@ -1,7 +1,7 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 20 Jan 2021 09:36:26 +0100
-Subject: [Buildroot] [PATCH] packago/go: security bump to version 1.5.7
-Message-ID: <20210120083627.5893-1-peter@korsgaard.com>
+Date: Wed, 20 Jan 2021 09:36:52 +0100
+Subject: [Buildroot] [PATCH v2] packago/go: security bump to version 1.15.7
+Message-ID: <20210120083652.6067-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
