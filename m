@@ -1,46 +1,64 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 20 Jan 2021 14:40:07 +0100
-Subject: [Buildroot] [PATCH] package/syslog-ng: fix build if net-snmp is
- installed on the host (again)
-Message-ID: <20210120134008.31802-1-patrickdepinguin@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 20 Jan 2021 14:15:22 +0000
+Subject: [Buildroot] [Bug 13466] New: creation of bridge interface via
+ interfaces does not work
+Message-ID: <bug-13466-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+https://bugs.busybox.net/show_bug.cgi?id=13466
 
-See also commit 4ff6e5239240a4e1bdf73c41d6e9bff9473ec62c which describes the
-problem in detail.
+            Bug ID: 13466
+           Summary: creation of bridge interface via interfaces does not
+                    work
+           Product: buildroot
+           Version: 2020.11.1
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: frank-w at public-files.de
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-The same problem now arises again, because syslog-ng renamed the
---enable-snmp-dest option into --enable-afsnmp. See syslog-ng commit
-4537938474771673ef5bd4a9cad7c9a7dc20b7c1, first part of 3.27.1.
+Hi,
 
-Update the configure options passed from Buildroot accordingly.
+i try to add bridge-interface via interfaces file (overlay_rootfs), but i got
+only an error on bootup.
 
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
----
- package/syslog-ng/syslog-ng.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Cannot find device "br0"
 
-diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
-index 6d22883116..14888d2aed 100644
---- a/package/syslog-ng/syslog-ng.mk
-+++ b/package/syslog-ng/syslog-ng.mk
-@@ -100,10 +100,10 @@ endif
- 
- ifeq ($(BR2_PACKAGE_NETSNMP),y)
- SYSLOG_NG_DEPENDENCIES += netsnmp
--SYSLOG_NG_CONF_OPTS += --enable-snmp-dest
-+SYSLOG_NG_CONF_OPTS += --enable-afsnmp
- SYSLOG_NG_CONF_OPTS += --with-net-snmp="$(STAGING_DIR)/usr/bin"
- else
--SYSLOG_NG_CONF_OPTS += --disable-snmp-dest
-+SYSLOG_NG_CONF_OPTS += --disable-afsnmp
- endif
- 
- define SYSLOG_NG_INSTALL_INIT_SYSV
+bridge-related part of interfaces-file (config of lan0 also there and this
+works)
+
+auto lan1
+iface lan1 inet manual
+auto lan2
+iface lan2 inet manual
+
+auto br0
+iface br0 inet static
+    address 192.168.40.1
+    netmask 255.255.255.0
+    bridge_ports lan1 lan2
+    bridge_fd 5
+    bridge_stp no
+
+also posted a question at stack-overflow because this is maybe no bug as it
+looks like for me
+https://unix.stackexchange.com/questions/629714/buildroot-adding-bridge-via-interfaces
+
+of course i have added bridge-utils package and can add the bridge manually,
+but not via /etc/network/interfaces file
+
+regards Frank
+
 -- 
-2.26.2
+You are receiving this mail because:
+You are on the CC list for the bug.
