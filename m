@@ -1,55 +1,72 @@
-From: Michael Vetter <jubalh@iodoru.org>
-Date: Wed, 20 Jan 2021 09:06:29 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libstrophe: bump to version
- 0.10.1
-In-Reply-To: <20210119221430.76bfaa9c@windsurf.home>
-References: <20210104101054.5392-1-jubalh@iodoru.org>
- <20210119221430.76bfaa9c@windsurf.home>
-Message-ID: <20210120090629.2d700397@maitreya.fritz.box>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 20 Jan 2021 09:36:26 +0100
+Subject: [Buildroot] [PATCH] packago/go: security bump to version 1.5.7
+Message-ID: <20210120083627.5893-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Fixes the following security issues:
 
-On Tue, 19 Jan 2021 22:14:30 +0100
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+- cmd/go: packages using cgo can cause arbitrary code execution at build time
 
-> Hello Michael,
-> 
-> On Mon,  4 Jan 2021 11:10:54 +0100
-> Michael Vetter <jubalh@iodoru.org> wrote:
-> 
-> > Changes:
-> > * Fixed compilation error when LibreSSL is used
-> > * Fixed crash when NULL is provided as password
-> > 
-> > Signed-off-by: Michael Vetter <jubalh@iodoru.org>  
-> 
-> Thanks a lot for the patch, but it doesn't work here, I don't get the
-> same hash as you do for the download. Could you check this on your
-> side ?
-> 
-> Here is what I get:
-> 
-> ERROR: libstrophe-0.10.1.tar.gz has wrong sha256 hash:
-> ERROR: expected:
-> 4918c47029ecdea2deab4b0f9336ca4a8bb12c28b72b2cec397d98664b94c771
-> ERROR: got     :
-> 5bf0bbc555cb6059008f1b748370d4d2ee1e1fabd3eeab68475263556405ba39
-> ERROR: Incomplete download, or man-in-the-middle (MITM) attack
+  The go command may execute arbitrary code at build time when cgo is in use
+  on Windows.  This may occur when running ?go get?, or any other command
+  that builds code.  Only users who build untrusted code (and don?t execute
+  it) are affected.
 
-I'm sorry about that. We had some disagreement at JasPer and we removed
-an existing tag and created the same tag on a different commit. Thus
-generating a different tarball under the same tag..
+  In addition to Windows users, this can also affect Unix users who have ?.?
+  listed explicitly in their PATH and are running ?go get? or build commands
+  outside of a module or with module mode disabled.
 
-I thought I only did the buildroot update after this, but maybe I
-remember wrong.
+  Thanks to RyotaK (https://twitter.com/ryotkak) for reporting this issue.
 
-Would you mind changing the commit to use the new hash? Or should I
-send a new patch?
+  This issue is CVE-2021-3115 and Go issue golang.org/issue/43783.
 
-Best,
-Michael
+- crypto/elliptic: incorrect operations on the P-224 curve
+
+  The P224() Curve implementation can in rare circumstances generate
+  incorrect outputs, including returning invalid points from ScalarMult.
+
+  The crypto/x509 and golang.org/x/crypto/ocsp (but not crypto/tls) packages
+  support P-224 ECDSA keys, but they are not supported by publicly trusted
+  certificate authorities.  No other standard library or golang.org/x/crypto
+  package supports or uses the P-224 curve.
+
+  The incorrect output was found by the elliptic-curve-differential-fuzzer
+  project running on OSS-Fuzz and reported by Philippe Antoine (Catena cyber).
+
+  This issue is CVE-2021-3114 and Go issue golang.org/issue/43786.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/go/go.hash b/package/go/go.hash
+index de2cf74cbb..1bd7ab7ca9 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,3 +1,3 @@
+ # From https://golang.org/dl/
+-sha256  890bba73c5e2b19ffb1180e385ea225059eb008eb91b694875dd86ea48675817  go1.15.6.src.tar.gz
++sha256  8631b3aafd8ecb9244ec2ffb8a2a8b4983cf4ad15572b9801f7c5b167c1a2abc  go1.15.7.src.tar.gz
+ sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index e65b24364f..21a33d215c 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GO_VERSION = 1.15.6
++GO_VERSION = 1.15.7
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
+-- 
+2.20.1
