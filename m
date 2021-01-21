@@ -1,37 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 21 Jan 2021 22:19:52 +0100
-Subject: [Buildroot] [PATCH 2/2] package/mono: disable boehm
-In-Reply-To: <20210120175443.157316-2-fontaine.fabrice@gmail.com>
-References: <20210120175443.157316-1-fontaine.fabrice@gmail.com>
- <20210120175443.157316-2-fontaine.fabrice@gmail.com>
-Message-ID: <20210121221952.34051359@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 21 Jan 2021 22:20:08 +0100
+Subject: [Buildroot] [git commit] package/sysklogd: drop unneeded hash
+Message-ID: <20210121210128.60AFB87113@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 20 Jan 2021 18:54:43 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=db523a784246c00bd36f718306475f54e5f1a6fa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> mono uses the Unity fork of recent Boehm since version 6.10.0.65 and
-> https://github.com/mono/mono/commit/cc137237d86b0553e844dc34c9a3cbc5b20782c0
-> 
-> However, this raises the following build failure:
-> 
-> /tmp/instance-0/output-1/per-package/mono/host/arm-buildroot-linux-gnueabi/sysroot/usr/include/bits/string3.h:81: warning: memset used with constant zero length parameter; this could be due to transposed parameters
-> ../../external/bdwgc/.libs/libgc.a(gc.o): In function `GC_steal_mark_stack':
-> gc.c:(.text+0x1d18): undefined reference to `AO_store_full_emulation'
+Commit 6a91580c1175b098fe2508ca11bfcf621ecbbe9f added the hash of
+0001-Define-_GNU_SOURCE_required_for_O_CLOEXEC_on_uClibc.patch but this
+is not needed as this file is included in buildroot and not downloaded
 
-Well, isn't it simply forgetting to link with libatomic_ops ?
+While at it, update indentation in hash file (two spaces)
 
-Look at your patch from 2018 on bdgwc:
-http://lists.busybox.net/pipermail/buildroot/2018-November/235145.html,
-the issue was the same, and was caused by the fact that it wasn't
-linking with libatomic_ops.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/sysklogd/sysklogd.hash | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/sysklogd/sysklogd.hash b/package/sysklogd/sysklogd.hash
+index 9f9fd192e1..978a670d30 100644
+--- a/package/sysklogd/sysklogd.hash
++++ b/package/sysklogd/sysklogd.hash
+@@ -1,4 +1,3 @@
+ # Locally calculated
+-sha256	09fe1edca882a9ae976cdbf516786edc1629347b9507d45dc005d9d969f94702	sysklogd-2.1.2.tar.gz
+-sha256	7a71d7603a7c4456df441463e54da35acf151c1be0879246de63544f1f34f477	LICENSE
+-sha256	569321607efe6ba0ecb820b3cb23d933e92f6ab50d2f8fcceb23fc8a43756ef0	0001-Define-_GNU_SOURCE_required_for_O_CLOEXEC_on_uClibc.patch
++sha256  09fe1edca882a9ae976cdbf516786edc1629347b9507d45dc005d9d969f94702  sysklogd-2.1.2.tar.gz
++sha256  7a71d7603a7c4456df441463e54da35acf151c1be0879246de63544f1f34f477  LICENSE
