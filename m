@@ -1,61 +1,34 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 21 Jan 2021 23:04:19 +0100
-Subject: [Buildroot] [PATCH 1/2] package/libgcrypt: drop
- LIBGCRYPT_DISABLE_TESTS
-In-Reply-To: <20210121204357.2359264-1-fontaine.fabrice@gmail.com>
-References: <20210121204357.2359264-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210121220419.GE2375@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 21 Jan 2021 23:04:56 +0100
+Subject: [Buildroot] [PATCH 1/1] package/chartjs: add CPE variables
+Message-ID: <20210121220456.2370992-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+cpe:2.3:a:chartjs:chart.js is a valid CPE identifier for this package:
 
-On 2021-01-21 21:43 +0100, Fabrice Fontaine spake thusly:
-> Drop LIBGCRYPT_DISABLE_TESTS which is not needed since commit
-> ef79770dcd4337e52725c43922b2fb2dbeda43b8
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Achartjs%3Achart.js
 
-Both applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/chartjs/chartjs.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/libgcrypt/libgcrypt.mk | 7 -------
->  1 file changed, 7 deletions(-)
-> 
-> diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
-> index 7146b3aa95..170c4946b0 100644
-> --- a/package/libgcrypt/libgcrypt.mk
-> +++ b/package/libgcrypt/libgcrypt.mk
-> @@ -31,11 +31,4 @@ ifeq ($(BR2_arm),y)
->  LIBGCRYPT_CONF_ENV += CFLAGS="$(patsubst -mthumb,,$(TARGET_CFLAGS))"
->  endif
->  
-> -# Tests use fork()
-> -define LIBGCRYPT_DISABLE_TESTS
-> -	$(SED) 's/ tests//' $(@D)/Makefile.in
-> -endef
-> -
-> -LIBGCRYPT_POST_PATCH_HOOKS += LIBGCRYPT_DISABLE_TESTS
-> -
->  $(eval $(autotools-package))
-> -- 
-> 2.29.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/chartjs/chartjs.mk b/package/chartjs/chartjs.mk
+index 82c86dc6cc..2748a94d36 100644
+--- a/package/chartjs/chartjs.mk
++++ b/package/chartjs/chartjs.mk
+@@ -8,6 +8,8 @@ CHARTJS_VERSION = 2.9.4
+ CHARTJS_SITE = $(call github,chartjs,Chart.js,v$(CHARTJS_VERSION))
+ CHARTJS_LICENSE = MIT
+ CHARTJS_LICENSE_FILES = LICENSE.md
++CHARTJS_CPE_ID_VENDOR = chartjs
++CHARTJS_CPE_ID_PRODUCT = chart.js
+ 
+ define CHARTJS_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -m 0644 -D $(@D)/dist/Chart.min.css \
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.29.2
