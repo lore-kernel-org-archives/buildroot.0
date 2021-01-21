@@ -1,71 +1,61 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 21 Jan 2021 22:30:08 +0100
-Subject: [Buildroot] [PATCH 1/1] package/sysklogd: needs threads
-In-Reply-To: <20210120173803.90884-1-fontaine.fabrice@gmail.com>
-References: <20210120173803.90884-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210121213008.GC2375@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 21 Jan 2021 22:35:31 +0100
+Subject: [Buildroot] [PATCH 1/2] configs/qemu_*: bump kernel version to
+ 5.10.7
+In-Reply-To: <20210120195954.31797-1-geoffrey.legourrierec@gmail.com>
+References: <20210120195954.31797-1-geoffrey.legourrierec@gmail.com>
+Message-ID: <20210121223531.1bb899e3@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+On Wed, 20 Jan 2021 20:59:53 +0100
+Geoffrey Le Gourri?rec <geoffrey.legourrierec@gmail.com> wrote:
 
-On 2021-01-20 18:38 +0100, Fabrice Fontaine spake thusly:
-> threads is mandatory since version 2.0 and
-> https://github.com/troglobit/sysklogd/commit/f6e17bd6b30397912dcae33842b7aba8d32710a2
+> Bump most QEMU defconfigs (every one that was previously on 5.4.y)
+> to latest longterm kernel 5.10.7.
 > 
-> Fixes:
->  - http://autobuild.buildroot.org/results/33846ba0c6746c2befcd3c3ce0bbe0c5b32669ed
+> Please note the following exceptions/modifications:
+> - board/qemu/qemu_s390x_defconfig: ignored (already up to date)
+> - board/qemu/sh4*-r2d:
+>     - Remove the remaining kernel patch [1] provided by Alan Modra
+>       fixing rodata alignment, carried here by Romain Naour [2] to
+>       fix an issue preventing kernel from booting with binutils 2.23.
+>       Patch is present in upstream Linux now.
+>     - Fix compile-time error regarding 64-bit time data structures
+>       from kernel headers when building with uclibc. Previous fix [3]
+>       existed upstream; but see details below.
+>     - board/qemu/ppc-mpc8544ds: Updated kernel patch
+> - board/qemu/arm-versatile: Updated kernel patch
+> - board/qemu/mips*r6*: Updated kernel patch
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Applied to master, with dependencies reordered;
-    https://buildroot.org/downloads/manual/manual.html#_config_files
-
-Thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/sysklogd/Config.in | 6 ++++++
->  1 file changed, 6 insertions(+)
+> Tested on all configs/qemu* configurations. [4]
 > 
-> diff --git a/package/sysklogd/Config.in b/package/sysklogd/Config.in
-> index 18aff091c0..f4609f8297 100644
-> --- a/package/sysklogd/Config.in
-> +++ b/package/sysklogd/Config.in
-> @@ -2,6 +2,7 @@ config BR2_PACKAGE_SYSKLOGD
->  	bool "sysklogd"
->  	depends on BR2_USE_MMU # fork()
->  	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
->  	help
->  	  The continuation of the original sysklogd package, based on
->  	  the original Berkeley syslog daemon. Now with kernel
-> @@ -11,3 +12,8 @@ config BR2_PACKAGE_SYSKLOGD
->  	  clients.
->  
->  	  https://github.com/troglobit/sysklogd/
-> +
-> +comment "sysklogd needs a toolchain w/ threads"
-> +	depends on BR2_USE_MMU
-> +	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-> +	depends on !BR2_TOOLCHAIN_HAS_THREADS
-> -- 
-> 2.29.2
+> [1] https://www.sourceware.org/ml/binutils/2019-12/msg00112.html
+> [2] https://git.busybox.net/buildroot/commit/?id=a2331c8a61bdd71c47492efc818fb0458a349219
+> [3] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fc94cf2092c7c1267fa2deb8388d624f50eba808
+> [4] https://gitlab.com/clumsyape/buildroot/-/pipelines/244024195
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Signed-off-by: Geoffrey Le Gourri?rec <geoffrey.legourrierec@gmail.com>
 
+Thanks, series applied!
+
+
+>  ....h-and-not-time_types.h-in-sockios.h.patch | 76 +++++++++++++++++++
+>  ....h-and-not-time_types.h-in-sockios.h.patch | 76 +++++++++++++++++++
+
+I am not a huge fan of those linux-headers patches buried deep into
+defconfig-specific locations. Indeed, I just tried today to build a SH4
+toolchain... and fell precisely into those problems, and your patch is
+not going to fix them.
+
+What about having the patches in package/linux-headers/ for the few
+linux headers versions that we officially support ?
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
