@@ -1,35 +1,74 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 21 Jan 2021 22:04:36 +0100
-Subject: [Buildroot] [git commit] package/zsh: add ZSH_CPE_ID_VENDOR
-Message-ID: <20210121205056.ECB3280DF5@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 21 Jan 2021 22:11:46 +0100
+Subject: [Buildroot] [git commit] package/pkg-meson.mk avoid host ccache
+ detection
+Message-ID: <20210121205312.EC21E88F0F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4af3af95a4cd1b6e6ddf06f2fe8e421b9231baae
+commit: https://git.buildroot.net/buildroot/commit/?id=f4a61d1ae23ec7729af3a8a165bbee45b6b9ef75
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:zsh:zsh is a valid CPE identifier for this package:
+meson will by default try to detect the presence of ccache, and if
+found, will use it unconditionally.
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Azsh%3Azsh
+However, using a system-wide ccache, which would be using our own cache
+directory, may very well conflict with our own ccache.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+But there is no option to disable that meson behaviour. The only
+workaround that is even the official documented way to do so, is to
+actually pass environment variables that point to the compiler:
+
+    https://mesonbuild.com/Feature-autodetection.html#ccache
+
+For the host variants, we pass $(HOST_CONFIGURE_OPTS) in the environment,
+and this contains correct settings for CC and CXX, so meson does not try
+and detect ccache; it uses exactly what we tell it to use.
+
+For the target variant, the settings for the cross-compiler are defined
+in the cross-compilation file, and so meson just abides by our will. But
+for the compiler-for-build, there is no way to specify the CC_FOR_BUILD
+or CXX_FOR_BUILD via a cross-compilation file:
+
+    https://mesonbuild.com/Machine-files.html
+    https://mesonbuild.com/Cross-compilation.html
+
+We could pass the full TARGET_CONFIGURE_OPTS in the environment, like we
+do for the host variant, but this contains a lot more variables that are
+supposed to be covered by the cross-compilation file.
+
+So, we stay safe and just provide the exact two variables that meson
+will use to avoid detecting ccache.
+
+If the current configuration defines the use of ccache, then these two
+variables will be properly setup to use our own ccache.
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Gleb Mazovetskiy <glex.spb@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>
+Cc: Norbert Lange <nolange79@gmail.com>
 ---
- package/zsh/zsh.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/pkg-meson.mk | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/package/zsh/zsh.mk b/package/zsh/zsh.mk
-index c3d9e52152..1a04833211 100644
---- a/package/zsh/zsh.mk
-+++ b/package/zsh/zsh.mk
-@@ -12,6 +12,7 @@ ZSH_CONF_OPTS = --bindir=/bin
- ZSH_CONF_ENV = zsh_cv_sys_nis=no zsh_cv_sys_nis_plus=no
- ZSH_LICENSE = MIT-like
- ZSH_LICENSE_FILES = LICENCE
-+ZSH_CPE_ID_VENDOR = zsh
- 
- ifeq ($(BR2_PACKAGE_GDBM),y)
- ZSH_CONF_OPTS += --enable-gdbm
+diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+index e0b843dc3c..de0e6e8ea3 100644
+--- a/package/pkg-meson.mk
++++ b/package/pkg-meson.mk
+@@ -81,7 +81,11 @@ define $(2)_CONFIGURE_CMDS
+ 	    -e "/^\[properties\]$$$$/s:$$$$:$$(foreach x,$$($(2)_MESON_EXTRA_PROPERTIES),\n$$(x)):" \
+ 	    package/meson/cross-compilation.conf.in \
+ 	    > $$($$(PKG)_SRCDIR)/build/cross-compilation.conf
+-	PATH=$$(BR_PATH) $$($$(PKG)_CONF_ENV) $$(MESON) \
++	PATH=$$(BR_PATH) \
++	CC_FOR_BUILD="$(HOSTCC)" \
++	CXX_FOR_BUILD="$(HOSTCC)" \
++	$$($$(PKG)_CONF_ENV) \
++	$$(MESON) \
+ 		--prefix=/usr \
+ 		--libdir=lib \
+ 		--default-library=$(if $(BR2_STATIC_LIBS),static,shared) \
