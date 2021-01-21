@@ -1,41 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 21 Jan 2021 20:47:41 +0100
-Subject: [Buildroot] : How to add a path to environment variable ?
-In-Reply-To: <CAGshWo2KMW3VvWSGeOvqqhvi3z-Onn_hdyA-4Yjb=YEKdUDuTw@mail.gmail.com>
-References: <CAGshWo0jnJNF-v=-WJH9tUH4CAtzZY9XwrPTgUeBhgyeRfKMzw@mail.gmail.com>
- <20210121174729.31850f5c@windsurf.home>
- <CAGshWo2KMW3VvWSGeOvqqhvi3z-Onn_hdyA-4Yjb=YEKdUDuTw@mail.gmail.com>
-Message-ID: <20210121204741.08247783@windsurf.home>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 21 Jan 2021 20:22:38 +0000
+Subject: [Buildroot] [Bug 13471] New: package/mpd/mpd.conf make use of path
+ not created
+Message-ID: <bug-13471-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=13471
 
-On Thu, 21 Jan 2021 18:02:39 +0100
-manu f <e.fiancette@gmail.com> wrote:
+            Bug ID: 13471
+           Summary: package/mpd/mpd.conf make use of path not created
+           Product: buildroot
+           Version: 2020.11.1
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: miohna at freenet.de
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-> Thanks for your suggestion!
-> in the last buildroot version, nodejs is deprecated!
-> So I use my own compiled version of nodejs.
+As I am new to buildroot I am not fully sure whether this is a bug or a
+misunderstanding on my side...
 
-Deprecated ? We definitely still have a nodejs package, and it's not
-deprecated at all.
+The music player daemon config in package mpd makes use of files in folder
+"/var/lib/mpd". However, this folder is not created by the makefile.
 
-> about etc/profile.d , I was just working on it, so its confirm this is the
-> good way.
-> But I was thinking there was a way to add natively the path ac buildroot
-> compilation time. sorry I am newby.
+A simple "mkdir -p /var/lib/mpd" in mpd.mk may do. Maybe also adding the
+subfolder "music", "playlists".
 
-In fact, you can also tweak the option BR2_SYSTEM_DEFAULT_PATH which
-sets the default PATH value.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
