@@ -1,53 +1,82 @@
-From: manu f <e.fiancette@gmail.com>
-Date: Thu, 21 Jan 2021 18:02:39 +0100
-Subject: [Buildroot] : How to add a path to environment variable ?
-In-Reply-To: <20210121174729.31850f5c@windsurf.home>
-References: <CAGshWo0jnJNF-v=-WJH9tUH4CAtzZY9XwrPTgUeBhgyeRfKMzw@mail.gmail.com>
- <20210121174729.31850f5c@windsurf.home>
-Message-ID: <CAGshWo2KMW3VvWSGeOvqqhvi3z-Onn_hdyA-4Yjb=YEKdUDuTw@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 21 Jan 2021 19:16:03 +0200
+Subject: [Buildroot] [PATCH 1/2] package/libpcap: bump to version 1.10.0
+Message-ID: <b121a9435d868681c957e7bc9243fb84676d80e3.1611249364.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks for your suggestion!
-in the last buildroot version, nodejs is deprecated!
-So I use my own compiled version of nodejs.
+configure script now uses pkg-config. Add host-pkgconf dependency.
 
-about etc/profile.d , I was just working on it, so its confirm this is the
-good way.
-But I was thinking there was a way to add natively the path ac buildroot
-compilation time. sorry I am newby.
+pkg-config should provide necessary info for libnl build/link. Don't
+pass paths to configure.
 
-Regards
+Add --without-dpdk to make sure we don't link with host installed
+libraries.
 
+Format hashes with two space delimiters.
 
-Le jeu. 21 janv. 2021 ? 17:47, Thomas Petazzoni <
-thomas.petazzoni@bootlin.com> a ?crit :
+Use https for SITE to save redirect.
 
-> On Thu, 21 Jan 2021 16:32:56 +0100
-> manu f <e.fiancette@gmail.com> wrote:
->
-> > I create an overlay to install nodejs in usr/local/lib/nodejs
->
-> Why don't you use the nodejs package that Buildroot has ?
->
-> > and I need to add to the target environment varriable the path to the bin
-> > contain directory.
-> > How to do that ?
->
-> Add an extra file in /etc/profile.d/ to expand the PATH as needed. You
-> can use a root filesystem overlay to achieve this.
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210121/c0968578/attachment.html>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/libpcap/libpcap.hash |  5 +++--
+ package/libpcap/libpcap.mk   | 12 ++++++------
+ 2 files changed, 9 insertions(+), 8 deletions(-)
+
+diff --git a/package/libpcap/libpcap.hash b/package/libpcap/libpcap.hash
+index a24fba24dead..e70d071294a5 100644
+--- a/package/libpcap/libpcap.hash
++++ b/package/libpcap/libpcap.hash
+@@ -1,5 +1,6 @@
+ # Locally calculated after checking pgp signature
+-sha256	635237637c5b619bcceba91900666b64d56ecb7be63f298f601ec786ce087094	libpcap-1.9.1.tar.gz
++# https://www.tcpdump.org/release/libpcap-1.10.0.tar.gz.sig
++sha256  8d12b42623eeefee872f123bd0dc85d535b00df4d42e865f993c40f7bfc92b1e  libpcap-1.10.0.tar.gz
+ 
+ # Hash for license file:
+-sha256	8a54594d257e14a5260ac770f1633516cb51e3fc28c40136ce2697014eda7afd	LICENSE
++sha256  8a54594d257e14a5260ac770f1633516cb51e3fc28c40136ce2697014eda7afd  LICENSE
+diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
+index e323461529fe..81e7cd4ab05c 100644
+--- a/package/libpcap/libpcap.mk
++++ b/package/libpcap/libpcap.mk
+@@ -4,19 +4,20 @@
+ #
+ ################################################################################
+ 
+-LIBPCAP_VERSION = 1.9.1
+-LIBPCAP_SITE = http://www.tcpdump.org/release
++LIBPCAP_VERSION = 1.10.0
++LIBPCAP_SITE = https://www.tcpdump.org/release
+ LIBPCAP_LICENSE = BSD-3-Clause
+ LIBPCAP_LICENSE_FILES = LICENSE
+ LIBPCAP_CPE_ID_VENDOR = tcpdump
+ LIBPCAP_INSTALL_STAGING = YES
+-LIBPCAP_DEPENDENCIES = host-flex host-bison
++LIBPCAP_DEPENDENCIES = host-flex host-bison host-pkgconf
+ 
+ LIBPCAP_CONF_ENV = \
+ 	ac_cv_header_linux_wireless_h=yes \
+ 	CFLAGS="$(LIBPCAP_CFLAGS)"
+ LIBPCAP_CFLAGS = $(TARGET_CFLAGS)
+-LIBPCAP_CONF_OPTS = --disable-yydebug --with-pcap=linux --without-dag
++LIBPCAP_CONF_OPTS = --disable-yydebug --with-pcap=linux --without-dag \
++	--without-dpdk
+ # Disable dbus to break recursive dependencies
+ LIBPCAP_CONF_OPTS += --disable-dbus
+ LIBPCAP_CONFIG_SCRIPTS = pcap-config
+@@ -35,8 +36,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBNL),y)
+ LIBPCAP_DEPENDENCIES += libnl
+-LIBPCAP_CFLAGS += "-I$(STAGING_DIR)/usr/include/libnl3"
+-LIBPCAP_CONF_OPTS += --with-libnl=$(STAGING_DIR)/usr
++LIBPCAP_CONF_OPTS += --with-libnl
+ else
+ LIBPCAP_CONF_OPTS += --without-libnl
+ endif
+-- 
+2.29.2
