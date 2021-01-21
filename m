@@ -1,30 +1,35 @@
-From: Joachim Wiberg <troglobit@gmail.com>
-Date: Thu, 21 Jan 2021 13:45:47 +0100
-Subject: [Buildroot] [PATCH 1/1] package/sysklogd: needs threads
-In-Reply-To: <20210120173803.90884-1-fontaine.fabrice@gmail.com>
-References: <20210120173803.90884-1-fontaine.fabrice@gmail.com>
-Message-ID: <87im7qwj9g.fsf@gmail.com>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Thu, 21 Jan 2021 14:36:25 +0100
+Subject: [Buildroot] [PATCH 01/15] package/iwd: add IWD_CPE_ID_VENDOR and
+ IWD_CPE_ID_NAME
+Message-ID: <20210121133639.7332-1-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+cpe:2.3:a:intel:inet_wireless_daemon is a valid CPE identifier for this package:
 
-On Wed, Jan 20, 2021 at 18:38, Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
-> threads is mandatory since version 2.0 and
-> https://github.com/troglobit/sysklogd/commit/f6e17bd6b30397912dcae33842b7aba8d32710a2
+https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=iwd
 
-Had completely forgotten about that mutex, thanks for fixing this!
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+---
+ package/iwd/iwd.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> Fixes:
->  - http://autobuild.buildroot.org/results/33846ba0c6746c2befcd3c3ce0bbe0c5b32669ed
-
-I love the autobuilders :)
-
-There should be a link from the front page to them (and perhaps a
-redirect from https to http). 
-
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Acked-by: Joachim Wiberg <troglobit@gmail.com>
+diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
+index b164970196..db98c02b58 100644
+--- a/package/iwd/iwd.mk
++++ b/package/iwd/iwd.mk
+@@ -9,6 +9,8 @@ IWD_SITE = https://git.kernel.org/pub/scm/network/wireless/iwd.git
+ IWD_SITE_METHOD = git
+ IWD_LICENSE = LGPL-2.1+
+ IWD_LICENSE_FILES = COPYING
++IWD_CPE_ID_VENDOR = intel
++IWD_CPE_ID_NAME = inet_wireless_daemon
+ # sources from git, no configure script provided
+ IWD_AUTORECONF = YES
+ IWD_SELINUX_MODULES = networkmanager
+-- 
+2.30.0
