@@ -1,28 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 21 Jan 2021 21:41:08 +0100
-Subject: [Buildroot] [PATCH 1/1] package/kmod: bump version to 28
-In-Reply-To: <20210120202210.2832-1-petr.vorel@gmail.com>
-References: <20210120202210.2832-1-petr.vorel@gmail.com>
-Message-ID: <20210121214108.41a34b03@windsurf.home>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 21 Jan 2021 21:43:56 +0100
+Subject: [Buildroot] [PATCH 1/2] package/libgcrypt: drop
+ LIBGCRYPT_DISABLE_TESTS
+Message-ID: <20210121204357.2359264-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 20 Jan 2021 21:22:10 +0100
-Petr Vorel <petr.vorel@gmail.com> wrote:
+Drop LIBGCRYPT_DISABLE_TESTS which is not needed since commit
+ef79770dcd4337e52725c43922b2fb2dbeda43b8
 
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-> ---
->  package/kmod/kmod.hash | 2 +-
->  package/kmod/kmod.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libgcrypt/libgcrypt.mk | 7 -------
+ 1 file changed, 7 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
+diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
+index 7146b3aa95..170c4946b0 100644
+--- a/package/libgcrypt/libgcrypt.mk
++++ b/package/libgcrypt/libgcrypt.mk
+@@ -31,11 +31,4 @@ ifeq ($(BR2_arm),y)
+ LIBGCRYPT_CONF_ENV += CFLAGS="$(patsubst -mthumb,,$(TARGET_CFLAGS))"
+ endif
+ 
+-# Tests use fork()
+-define LIBGCRYPT_DISABLE_TESTS
+-	$(SED) 's/ tests//' $(@D)/Makefile.in
+-endef
+-
+-LIBGCRYPT_POST_PATCH_HOOKS += LIBGCRYPT_DISABLE_TESTS
+-
+ $(eval $(autotools-package))
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.29.2
