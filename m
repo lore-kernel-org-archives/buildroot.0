@@ -1,61 +1,122 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 21 Jan 2021 22:35:31 +0100
-Subject: [Buildroot] [PATCH 1/2] configs/qemu_*: bump kernel version to
- 5.10.7
-In-Reply-To: <20210120195954.31797-1-geoffrey.legourrierec@gmail.com>
-References: <20210120195954.31797-1-geoffrey.legourrierec@gmail.com>
-Message-ID: <20210121223531.1bb899e3@windsurf.home>
+Date: Thu, 21 Jan 2021 22:36:12 +0100
+Subject: [Buildroot] [git commit] configs/qemu_ppc_virtex_ml507: remove
+ defconfig
+Message-ID: <20210121211655.047007FCFE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 20 Jan 2021 20:59:53 +0100
-Geoffrey Le Gourri?rec <geoffrey.legourrierec@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=370e663593b4e5baaa1ff1d65fa1618530b0f3b4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Bump most QEMU defconfigs (every one that was previously on 5.4.y)
-> to latest longterm kernel 5.10.7.
-> 
-> Please note the following exceptions/modifications:
-> - board/qemu/qemu_s390x_defconfig: ignored (already up to date)
-> - board/qemu/sh4*-r2d:
->     - Remove the remaining kernel patch [1] provided by Alan Modra
->       fixing rodata alignment, carried here by Romain Naour [2] to
->       fix an issue preventing kernel from booting with binutils 2.23.
->       Patch is present in upstream Linux now.
->     - Fix compile-time error regarding 64-bit time data structures
->       from kernel headers when building with uclibc. Previous fix [3]
->       existed upstream; but see details below.
->     - board/qemu/ppc-mpc8544ds: Updated kernel patch
-> - board/qemu/arm-versatile: Updated kernel patch
-> - board/qemu/mips*r6*: Updated kernel patch
-> 
-> Tested on all configs/qemu* configurations. [4]
-> 
-> [1] https://www.sourceware.org/ml/binutils/2019-12/msg00112.html
-> [2] https://git.busybox.net/buildroot/commit/?id=a2331c8a61bdd71c47492efc818fb0458a349219
-> [3] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fc94cf2092c7c1267fa2deb8388d624f50eba808
-> [4] https://gitlab.com/clumsyape/buildroot/-/pipelines/244024195
-> 
-> Signed-off-by: Geoffrey Le Gourri?rec <geoffrey.legourrierec@gmail.com>
+Support for this board was removed in Linux upstream [1] since Xilinx
+new design tools dropped these platforms in 2013, along with all
+PPC405/PPC440 new designs. They are not maintained nor tested anymore.
 
-Thanks, series applied!
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7ade8495dcfd788a76e6877c9ea86f5207369ea4
 
+Signed-off-by: Geoffrey Le Gourri??rec <geoffrey.legourrierec@gmail.com>
+Reviewed-by: Joel Stanley <joel@jms.id.au>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ board/qemu/ppc-virtex-ml507/linux.config | 36 --------------------------------
+ board/qemu/ppc-virtex-ml507/readme.txt   |  5 -----
+ configs/qemu_ppc_virtex_ml507_defconfig  | 34 ------------------------------
+ 3 files changed, 75 deletions(-)
 
->  ....h-and-not-time_types.h-in-sockios.h.patch | 76 +++++++++++++++++++
->  ....h-and-not-time_types.h-in-sockios.h.patch | 76 +++++++++++++++++++
-
-I am not a huge fan of those linux-headers patches buried deep into
-defconfig-specific locations. Indeed, I just tried today to build a SH4
-toolchain... and fell precisely into those problems, and your patch is
-not going to fix them.
-
-What about having the patches in package/linux-headers/ for the few
-linux headers versions that we officially support ?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/board/qemu/ppc-virtex-ml507/linux.config b/board/qemu/ppc-virtex-ml507/linux.config
+deleted file mode 100644
+index ed4eb792b6..0000000000
+--- a/board/qemu/ppc-virtex-ml507/linux.config
++++ /dev/null
+@@ -1,36 +0,0 @@
+-CONFIG_44x=y
+-CONFIG_SYSVIPC=y
+-CONFIG_POSIX_MQUEUE=y
+-CONFIG_SLAB=y
+-CONFIG_MODULES=y
+-CONFIG_MODULE_UNLOAD=y
+-CONFIG_MODULE_FORCE_UNLOAD=y
+-# CONFIG_EBONY is not set
+-CONFIG_XILINX_VIRTEX440_GENERIC_BOARD=y
+-CONFIG_MATH_EMULATION=y
+-CONFIG_NET=y
+-CONFIG_PACKET=y
+-CONFIG_UNIX=y
+-CONFIG_INET=y
+-CONFIG_BLK_DEV_LOOP=y
+-CONFIG_BLK_DEV_RAM=y
+-CONFIG_BLK_DEV_RAM_SIZE=8192
+-CONFIG_XILINX_SYSACE=y
+-CONFIG_NETDEVICES=y
+-CONFIG_SERIO_XILINX_XPS_PS2=y
+-CONFIG_SERIAL_8250=y
+-CONFIG_SERIAL_8250_CONSOLE=y
+-CONFIG_SERIAL_UARTLITE=y
+-CONFIG_SERIAL_UARTLITE_CONSOLE=y
+-CONFIG_SERIAL_OF_PLATFORM=y
+-CONFIG_XILINX_HWICAP=y
+-CONFIG_GPIOLIB=y
+-CONFIG_GPIO_SYSFS=y
+-CONFIG_GPIO_XILINX=y
+-CONFIG_FB=y
+-CONFIG_FB_XILINX=y
+-CONFIG_FRAMEBUFFER_CONSOLE=y
+-CONFIG_EXT4_FS=y
+-CONFIG_AUTOFS4_FS=y
+-CONFIG_VFAT_FS=y
+-CONFIG_TMPFS=y
+diff --git a/board/qemu/ppc-virtex-ml507/readme.txt b/board/qemu/ppc-virtex-ml507/readme.txt
+deleted file mode 100644
+index feb4b2d7d6..0000000000
+--- a/board/qemu/ppc-virtex-ml507/readme.txt
++++ /dev/null
+@@ -1,5 +0,0 @@
+-Run the emulation with:
+-
+- qemu-system-ppc -M virtex-ml507 -kernel output/images/vmlinux -m 256 -nographic -append "console=ttyS0" -dtb output/images/virtex440-ml507.dtb # qemu_ppc_virtex_ml507_defconfig
+-
+-The login prompt will appear in the terminal that started Qemu.
+diff --git a/configs/qemu_ppc_virtex_ml507_defconfig b/configs/qemu_ppc_virtex_ml507_defconfig
+deleted file mode 100644
+index 0d1ab8e5d7..0000000000
+--- a/configs/qemu_ppc_virtex_ml507_defconfig
++++ /dev/null
+@@ -1,34 +0,0 @@
+-# Architecture
+-BR2_powerpc=y
+-BR2_powerpc_440=y
+-
+-# Filesystem
+-# BR2_TARGET_ROOTFS_TAR is not set
+-BR2_TARGET_ROOTFS_INITRAMFS=y
+-
+-# Image
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+-
+-# Linux headers same as kernel, a 5.4 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
+-
+-# Use soft float
+-BR2_POWERPC_SOFT_FLOAT=y
+-
+-# Kernel
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.88"
+-BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/ppc-virtex-ml507/linux.config"
+-BR2_LINUX_KERNEL_VMLINUX=y
+-BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="virtex440-ml507"
+-
+-# Kernel needs mkimage
+-BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+-
+-# host-qemu for gitlab testing
+-BR2_PACKAGE_HOST_QEMU=y
+-BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
