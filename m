@@ -1,73 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 21 Jan 2021 22:49:24 +0100
-Subject: [Buildroot] [PATCH 1/1] package/timescaledb: bump to version
- 2.0.0
-In-Reply-To: <20210112061025.33054-1-fido_max@inbox.ru>
-References: <20210112061025.33054-1-fido_max@inbox.ru>
-Message-ID: <20210121224924.129e3612@windsurf.home>
+Date: Thu, 21 Jan 2021 22:54:25 +0100
+Subject: [Buildroot] [PATCH] configs/aarch64_rdinfra: add new config for
+ infra rd plaforms
+In-Reply-To: <20201126100507.27484-1-vivek.gautam@arm.com>
+References: <20201126100507.27484-1-vivek.gautam@arm.com>
+Message-ID: <20210121225425.385f0d71@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Maxim,
+Hello Vivek,
 
-On Tue, 12 Jan 2021 09:10:25 +0300
-Maxim Kochetkov via buildroot <buildroot@busybox.net> wrote:
+On Thu, 26 Nov 2020 15:35:07 +0530
+Vivek Kumar Gautam <vivek.gautam@arm.com> wrote:
 
-> Add PG13 patches.
-> Debug builds (BR2_ENABLE_DEBUG=y) fails because of warnings, so disable WARNINGS_AS_ERRORS.
+> This defconfig enables Arm aarch64 Infra RD platforms to use
+> buildroot backed ramdisks to perform simple unit/sanity testing.
+> These infra platforms are currently enabled with a scripts based
+> build system as can be seen in linaro public repos[1]. A busybox
+> based boot is also enabled[2].
+> We plan to use buildroot for a richer experience while testing and
+> therefore this config.
+> This config will also be first step towards enabling buildroot
+> based build system for infra rd platforms in near future.
+> It comes with following minimal stuff -
+>  -neoverse_n1 cpu
+>  -bash shell
+>  -vim
+>  -pciutils
+>  -libdtc
+>  -screen
 > 
-> Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
-> ---
->  ...1-Allow-building-against-PG13-source.patch |  85 ++++
->  ...-wrapper-functions-for-base64-encodi.patch |  73 +++
->  ...003-Add-missing-utils-acl.h-includes.patch | 149 ++++++
->  ...support-for-PG13-List-implementation.patch | 473 ++++++++++++++++++
->  ...djust-code-to-PG13-list-sort-changes.patch |  59 +++
->  ...y-code-to-PG13-addRTEtoQuery-changes.patch |  37 ++
->  ...G13-convert_tuples_by_name-signature.patch |  65 +++
->  ...ode-to-PG13-tuple-conversion-changes.patch | 259 ++++++++++
->  ...hypertable-expansion-to-PG13-changes.patch |  88 ++++
->  ...decompress-code-to-Var-field-renames.patch |  41 ++
->  ...1-Adjust-jsonb_utils-to-PG13-changes.patch |  39 ++
->  ...AT_DropExpression-in-process_utility.patch |  48 ++
->  ...013-Adjust-copy-code-to-PG13-changes.patch |  34 ++
->  ...-PG13-command-completion-tag-changes.patch | 186 +++++++
->  ...-to-PG13-HEAP_INSERT_SKIP_WAL-change.patch |  51 ++
->  ...ode-to-PG13-planner_hook-signature-c.patch |  58 +++
->  ...just-code-to-deparse_context-changes.patch |  34 ++
->  .../timescaledb/0018-Update-compat.h.patch    |  27 +
->  package/timescaledb/timescaledb.hash          |   2 +-
->  package/timescaledb/timescaledb.mk            |   3 +-
->  20 files changed, 1809 insertions(+), 2 deletions(-)
->  create mode 100644 package/timescaledb/0001-Allow-building-against-PG13-source.patch
->  create mode 100644 package/timescaledb/0002-Add-compatibilty-wrapper-functions-for-base64-encodi.patch
->  create mode 100644 package/timescaledb/0003-Add-missing-utils-acl.h-includes.patch
->  create mode 100644 package/timescaledb/0004-Add-support-for-PG13-List-implementation.patch
->  create mode 100644 package/timescaledb/0005-Adjust-code-to-PG13-list-sort-changes.patch
->  create mode 100644 package/timescaledb/0006-Adjust-copy-code-to-PG13-addRTEtoQuery-changes.patch
->  create mode 100644 package/timescaledb/0007-Adjust-code-to-PG13-convert_tuples_by_name-signature.patch
->  create mode 100644 package/timescaledb/0008-Adjust-code-to-PG13-tuple-conversion-changes.patch
->  create mode 100644 package/timescaledb/0009-Adjust-hypertable-expansion-to-PG13-changes.patch
->  create mode 100644 package/timescaledb/0010-Adjust-decompress-code-to-Var-field-renames.patch
->  create mode 100644 package/timescaledb/0011-Adjust-jsonb_utils-to-PG13-changes.patch
->  create mode 100644 package/timescaledb/0012-Handle-AT_DropExpression-in-process_utility.patch
->  create mode 100644 package/timescaledb/0013-Adjust-copy-code-to-PG13-changes.patch
->  create mode 100644 package/timescaledb/0014-Adjust-code-to-PG13-command-completion-tag-changes.patch
->  create mode 100644 package/timescaledb/0015-Adjust-copy-to-PG13-HEAP_INSERT_SKIP_WAL-change.patch
->  create mode 100644 package/timescaledb/0016-Adjust-planner-code-to-PG13-planner_hook-signature-c.patch
->  create mode 100644 package/timescaledb/0017-Adjust-code-to-deparse_context-changes.patch
->  create mode 100644 package/timescaledb/0018-Update-compat.h.patch
+> [1] https://git.linaro.org/landing-teams/working/arm/arm-reference-platforms.git/about/
+> [2] https://git.linaro.org/landing-teams/working/arm/arm-reference-platforms.git/about/docs/rdn1edge/how-to/busybox-boot.rst
+> 
+> Signed-off-by: Vivek Kumar Gautam <vivek.gautam@arm.com>
 
-Thanks for the patch. I have applied, even though it is really annoying
-to carry those 18 patches. Hopefully they will be accepted upstream in
-the near future.
+Thanks for the patch and contribution. However, I kind of fail to see
+the point of a defconfig like the one you propose. It is really doing
+nothing but building a CPIO archive with a bunch of somewhat random
+selection of user-space programs and libraries.
 
-Thanks a lot!
+Our defconfigs are meant to support specific HW platforms, and used to
+easily build a combination of firmware/bootloader/kernel that works on
+this hardware platforms, and those defconfigs are typically minimal in
+terms of user-space packages enabled, as it is very use-case specific
+what are the user-space packages that make sense to have.
 
-Thomas
+Therefore, as it is, your configuration that does not build a kernel,
+does not build any bootloader, doesn't bring much. Anyone can easily
+fire up Buildroot, select ARM64, an external toolchain, and a random
+selection of user-space packages. No defconfig is necessary to achieve
+this.
+
+Could you provide more details about what you are trying to achieve ?
+
+Best regards,
+
+Thomas Petazzoni
 -- 
 Thomas Petazzoni, CTO, Bootlin
 Embedded Linux and Kernel engineering
