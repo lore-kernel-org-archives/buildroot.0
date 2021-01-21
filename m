@@ -1,36 +1,48 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 21 Jan 2021 22:24:41 +0100
-Subject: [Buildroot] [git commit] package/sysklogd: set SYSKLOGD_CPE_ID_VALID
-Message-ID: <20210121210526.CE3D488F1B@busybox.osuosl.org>
+Date: Thu, 21 Jan 2021 22:27:42 +0100
+Subject: [Buildroot] [git commit] package/sysklogd: needs threads
+Message-ID: <20210121210841.4B5AF83E68@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e6b567941b1ab934679c4b38c1316b36aadc2110
+commit: https://git.buildroot.net/buildroot/commit/?id=44f1f423f809027b589508f85c7e8645c0db8cde
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:sysklogd_project:sysklogd is a valid CPE identifier for this
-package:
+threads is mandatory since version 2.0 and
+https://github.com/troglobit/sysklogd/commit/f6e17bd6b30397912dcae33842b7aba8d32710a2
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Asysklogd_project%3Asysklogd
+Fixes:
+ - http://autobuild.buildroot.org/results/33846ba0c6746c2befcd3c3ce0bbe0c5b32669ed
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Acked-by: Joachim Wiberg <troglobit@gmail.com>
+[yann.morin.1998 at free.fr: reorder dependencies]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/sysklogd/sysklogd.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/sysklogd/Config.in | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/sysklogd/sysklogd.mk b/package/sysklogd/sysklogd.mk
-index cd013f658c..200738897d 100644
---- a/package/sysklogd/sysklogd.mk
-+++ b/package/sysklogd/sysklogd.mk
-@@ -8,6 +8,7 @@ SYSKLOGD_VERSION = 2.1.2
- SYSKLOGD_SITE = $(call github,troglobit,sysklogd,v$(SYSKLOGD_VERSION))
- SYSKLOGD_LICENSE = BSD-3-Clause
- SYSKLOGD_LICENSE_FILES = LICENSE
-+SYSKLOGD_CPE_ID_VALID = YES
- # From git
- SYSKLOGD_AUTORECONF = YES
- SYSKLOGD_CONF_OPTS = --exec-prefix=/ --without-logger
+diff --git a/package/sysklogd/Config.in b/package/sysklogd/Config.in
+index 18aff091c0..90649caa83 100644
+--- a/package/sysklogd/Config.in
++++ b/package/sysklogd/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_SYSKLOGD
+ 	bool "sysklogd"
+ 	depends on BR2_USE_MMU # fork()
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	help
+ 	  The continuation of the original sysklogd package, based on
+@@ -11,3 +12,8 @@ config BR2_PACKAGE_SYSKLOGD
+ 	  clients.
+ 
+ 	  https://github.com/troglobit/sysklogd/
++
++comment "sysklogd needs a toolchain w/ threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
