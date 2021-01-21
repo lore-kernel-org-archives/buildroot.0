@@ -1,37 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 21 Jan 2021 22:04:38 +0100
-Subject: [Buildroot] [git commit] package/xscreensaver: set
- XSCREENSAVER_CPE_ID_VALID
-Message-ID: <20210121205057.12D2B88F04@busybox.osuosl.org>
+Date: Thu, 21 Jan 2021 22:04:37 +0100
+Subject: [Buildroot] [git commit] package/znc: add ZNC_CPE_ID_VENDOR
+Message-ID: <20210121205057.05B1C80DF5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=df2a0dd9651686c3ecb56936c992b9d72780962a
+commit: https://git.buildroot.net/buildroot/commit/?id=c362882cd45ae404c359445e5c17b973181c1e96
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:xscreensaver_project:xscreensaver is a valid CPE identifier
-for this package:
+cpe:2.3:a:znc:znc is a valid CPE identifier for this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Axscreensaver_project%3Axscreensaver
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aznc%3Aznc
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/xscreensaver/xscreensaver.mk | 1 +
+ package/znc/znc.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/xscreensaver/xscreensaver.mk b/package/xscreensaver/xscreensaver.mk
-index 7893e49d08..cb1e440ea1 100644
---- a/package/xscreensaver/xscreensaver.mk
-+++ b/package/xscreensaver/xscreensaver.mk
-@@ -10,6 +10,7 @@ XSCREENSAVER_SITE = https://www.jwz.org/xscreensaver
- # N.B. GPL-2.0+ code (in the hacks/glx subdirectory) is not currently built.
- XSCREENSAVER_LICENSE = MIT-like, GPL-2.0+
- XSCREENSAVER_LICENSE_FILES = hacks/screenhack.h hacks/glx/chessmodels.h
-+XSCREENSAVER_CPE_ID_VALID = YES
+diff --git a/package/znc/znc.mk b/package/znc/znc.mk
+index 799efa8dc7..52a8d78aeb 100644
+--- a/package/znc/znc.mk
++++ b/package/znc/znc.mk
+@@ -8,6 +8,7 @@ ZNC_VERSION = 1.8.2
+ ZNC_SITE = http://znc.in/releases/archive
+ ZNC_LICENSE = Apache-2.0
+ ZNC_LICENSE_FILES = LICENSE
++ZNC_CPE_ID_VENDOR = znc
+ ZNC_DEPENDENCIES = host-pkgconf
+ ZNC_CONF_OPTS = -DWANT_CYRUS=OFF -DWANT_I18N=OFF -DWANT_PERL=OFF
  
- XSCREENSAVER_DEPENDENCIES = \
- 	gdk-pixbuf \
