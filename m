@@ -1,68 +1,46 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Thu, 21 Jan 2021 23:16:29 +0100
-Subject: [Buildroot] [PATCH] package/gcc: fix gcc 8.4,
- 9.4 and 10.2 for sparcv8 (ss10)
-In-Reply-To: <20210121220032.460d1d9b@windsurf.home>
-References: <20210120230234.2086807-1-romain.naour@gmail.com>
- <20210121220032.460d1d9b@windsurf.home>
-Message-ID: <eb515106-ba9d-b949-f028-d0ab18b261f5@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 21 Jan 2021 23:29:18 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libsocketcan: bump to version 0.0.12
+Message-ID: <20210121222918.2376671-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Update indentation in hash file (two spaces)
 
-Le 21/01/2021 ? 22:00, Thomas Petazzoni a ?crit?:
-> Hello,
-> 
-> In the title: gcc 9.3 and not gcc 9.4.
-> 
-> On Thu, 21 Jan 2021 00:02:34 +0100
-> Romain Naour <romain.naour@gmail.com> wrote:
-> 
->> As reported on IRC by sephthir, the defconfig qemu_sparc_ss10_defconfig
->> doesn't work as expected. Instead it produce illegal instruction
->> messages.
->>
->> gcc 8.3, 9.2 are the latest working gcc version.
->> git bisect between gcc 8.4 and 8.4 allowed to identify
-> 
-> between gcc 8.3 and 8.4
-> 
->> the commit that introcuce the regression.
->>
->> Reverting this patch allowed to produce a working rootfs.
->>
->> Fixes:
->> https://gitlab.com/buildroot.org/buildroot/-/jobs/786589934
->>
->> Signed-off-by: Romain Naour <romain.naour@gmail.com>
->> ---
->>  ...get-92095-internal-error-with-O1-mcp.patch | 325 ++++++++++++++++++
->>  ...get-92095-internal-error-with-O1-mcp.patch | 322 +++++++++++++++++
->>  ...get-92095-internal-error-with-O1-mcp.patch | 325 ++++++++++++++++++
->>  3 files changed, 972 insertions(+)
->>  create mode 100644 package/gcc/10.2.0/0002-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch
->>  create mode 100644 package/gcc/8.4.0/0002-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch
->>  create mode 100644 package/gcc/9.3.0/0005-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch
-> 
-> Applied with the two nits above fixed. Also, did you report this issue
-> to upstream gcc ?
+A single change in the source code:
+https://git.pengutronix.de/cgit/tools/libsocketcan/commit/?id=b5823dc86f8d0c2ff5f46fcda6e8b75728fc69ee
 
-Yes, see:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libsocketcan/libsocketcan.hash | 4 ++--
+ package/libsocketcan/libsocketcan.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=92095
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=98784
-> 
-> Thanks a lot for this investigation!
-
-You're welcome.
-
-Best regards,
-Romain
-
-> 
-> Thomas
-> 
+diff --git a/package/libsocketcan/libsocketcan.hash b/package/libsocketcan/libsocketcan.hash
+index 7e40493fbf..c2ad23554b 100644
+--- a/package/libsocketcan/libsocketcan.hash
++++ b/package/libsocketcan/libsocketcan.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	28923f47b3f3191ff966866aa45823325b6e3b4fce72f056e5d87d64e4d6699d	libsocketcan-0.0.11.tar.bz2
+-sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	LICENSE
++sha256  be8280124707701935e6294d366e2474158b758fa4b2e3cae571d5b256d2fe34  libsocketcan-0.0.12.tar.bz2
++sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE
+diff --git a/package/libsocketcan/libsocketcan.mk b/package/libsocketcan/libsocketcan.mk
+index dca8ede6e9..0261b33c11 100644
+--- a/package/libsocketcan/libsocketcan.mk
++++ b/package/libsocketcan/libsocketcan.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBSOCKETCAN_VERSION = 0.0.11
++LIBSOCKETCAN_VERSION = 0.0.12
+ LIBSOCKETCAN_SITE = http://www.pengutronix.de/software/libsocketcan/download
+ LIBSOCKETCAN_SOURCE = libsocketcan-$(LIBSOCKETCAN_VERSION).tar.bz2
+ LIBSOCKETCAN_INSTALL_STAGING = YES
+-- 
+2.29.2
