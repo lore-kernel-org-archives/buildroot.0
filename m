@@ -1,66 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 21 Jan 2021 22:54:25 +0100
-Subject: [Buildroot] [PATCH] configs/aarch64_rdinfra: add new config for
- infra rd plaforms
-In-Reply-To: <20201126100507.27484-1-vivek.gautam@arm.com>
-References: <20201126100507.27484-1-vivek.gautam@arm.com>
-Message-ID: <20210121225425.385f0d71@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 21 Jan 2021 23:03:39 +0100
+Subject: [Buildroot] [git commit] package/libgcrypt: drop
+ LIBGCRYPT_DISABLE_TESTS
+Message-ID: <20210121214424.13B6A863FE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Vivek,
+commit: https://git.buildroot.net/buildroot/commit/?id=b251b57f083a48bfc12fcb0ede4baa3f00a91498
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 26 Nov 2020 15:35:07 +0530
-Vivek Kumar Gautam <vivek.gautam@arm.com> wrote:
+Drop LIBGCRYPT_DISABLE_TESTS which is not needed since commit
+ef79770dcd4337e52725c43922b2fb2dbeda43b8
 
-> This defconfig enables Arm aarch64 Infra RD platforms to use
-> buildroot backed ramdisks to perform simple unit/sanity testing.
-> These infra platforms are currently enabled with a scripts based
-> build system as can be seen in linaro public repos[1]. A busybox
-> based boot is also enabled[2].
-> We plan to use buildroot for a richer experience while testing and
-> therefore this config.
-> This config will also be first step towards enabling buildroot
-> based build system for infra rd platforms in near future.
-> It comes with following minimal stuff -
->  -neoverse_n1 cpu
->  -bash shell
->  -vim
->  -pciutils
->  -libdtc
->  -screen
-> 
-> [1] https://git.linaro.org/landing-teams/working/arm/arm-reference-platforms.git/about/
-> [2] https://git.linaro.org/landing-teams/working/arm/arm-reference-platforms.git/about/docs/rdn1edge/how-to/busybox-boot.rst
-> 
-> Signed-off-by: Vivek Kumar Gautam <vivek.gautam@arm.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/libgcrypt/libgcrypt.mk | 7 -------
+ 1 file changed, 7 deletions(-)
 
-Thanks for the patch and contribution. However, I kind of fail to see
-the point of a defconfig like the one you propose. It is really doing
-nothing but building a CPIO archive with a bunch of somewhat random
-selection of user-space programs and libraries.
-
-Our defconfigs are meant to support specific HW platforms, and used to
-easily build a combination of firmware/bootloader/kernel that works on
-this hardware platforms, and those defconfigs are typically minimal in
-terms of user-space packages enabled, as it is very use-case specific
-what are the user-space packages that make sense to have.
-
-Therefore, as it is, your configuration that does not build a kernel,
-does not build any bootloader, doesn't bring much. Anyone can easily
-fire up Buildroot, select ARM64, an external toolchain, and a random
-selection of user-space packages. No defconfig is necessary to achieve
-this.
-
-Could you provide more details about what you are trying to achieve ?
-
-Best regards,
-
-Thomas Petazzoni
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
+index 7146b3aa95..170c4946b0 100644
+--- a/package/libgcrypt/libgcrypt.mk
++++ b/package/libgcrypt/libgcrypt.mk
+@@ -31,11 +31,4 @@ ifeq ($(BR2_arm),y)
+ LIBGCRYPT_CONF_ENV += CFLAGS="$(patsubst -mthumb,,$(TARGET_CFLAGS))"
+ endif
+ 
+-# Tests use fork()
+-define LIBGCRYPT_DISABLE_TESTS
+-	$(SED) 's/ tests//' $(@D)/Makefile.in
+-endef
+-
+-LIBGCRYPT_POST_PATCH_HOOKS += LIBGCRYPT_DISABLE_TESTS
+-
+ $(eval $(autotools-package))
