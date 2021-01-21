@@ -1,45 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 21 Jan 2021 16:48:27 +0100
-Subject: [Buildroot] [PATCH-2020.02.x 09/11] package/gst1-rtsp-server: bump
- version to 1.16.3
-In-Reply-To: <20210121154829.9353-1-peter@korsgaard.com>
-References: <20210121154829.9353-1-peter@korsgaard.com>
-Message-ID: <20210121154829.9353-9-peter@korsgaard.com>
+Date: Thu, 21 Jan 2021 17:02:53 +0100
+Subject: [Buildroot] [PATCH v2] packago/go: security bump to version
+ 1.15.7
+In-Reply-To: <20210120083652.6067-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Wed, 20 Jan 2021 09:36:52 +0100")
+References: <20210120083652.6067-1-peter@korsgaard.com>
+Message-ID: <87eeie9t1u.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash | 4 ++--
- package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-diff --git a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
-index f3dca615cf..484efdca39 100644
---- a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
-+++ b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
-@@ -1,4 +1,4 @@
--# From https://gstreamer.freedesktop.org/src/gst-rtsp-server/gst-rtsp-server-1.16.2.tar.xz.sha256sum
--sha256 de07a2837b3b04820ce68264a4909f70c221b85dbff0cede7926e9cdbb1dc26e gst-rtsp-server-1.16.2.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-rtsp-server/gst-rtsp-server-1.16.3.tar.xz.sha256sum
-+sha256 67886b872826d513c58f88d559d4dc4aa63382d03fb64ceac91a09537fe6fea0 gst-rtsp-server-1.16.3.tar.xz
- sha256 f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a COPYING
- sha256 f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a COPYING.LIB
-diff --git a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
-index df873ad732..accc6afdef 100644
---- a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
-+++ b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GST1_RTSP_SERVER_VERSION = 1.16.2
-+GST1_RTSP_SERVER_VERSION = 1.16.3
- GST1_RTSP_SERVER_SOURCE = gst-rtsp-server-$(GST1_RTSP_SERVER_VERSION).tar.xz
- GST1_RTSP_SERVER_SITE = http://gstreamer.freedesktop.org/src/gst-rtsp-server
- GST1_RTSP_SERVER_LICENSE = LGPL-2.0+
+ > Fixes the following security issues:
+ > - cmd/go: packages using cgo can cause arbitrary code execution at build time
+
+ >   The go command may execute arbitrary code at build time when cgo is in use
+ >   on Windows.  This may occur when running ?go get?, or any other command
+ >   that builds code.  Only users who build untrusted code (and don?t execute
+ >   it) are affected.
+
+ >   In addition to Windows users, this can also affect Unix users who have ?.?
+ >   listed explicitly in their PATH and are running ?go get? or build commands
+ >   outside of a module or with module mode disabled.
+
+ >   Thanks to RyotaK (https://twitter.com/ryotkak) for reporting this issue.
+
+ >   This issue is CVE-2021-3115 and Go issue golang.org/issue/43783.
+
+ > - crypto/elliptic: incorrect operations on the P-224 curve
+
+ >   The P224() Curve implementation can in rare circumstances generate
+ >   incorrect outputs, including returning invalid points from ScalarMult.
+
+ >   The crypto/x509 and golang.org/x/crypto/ocsp (but not crypto/tls) packages
+ >   support P-224 ECDSA keys, but they are not supported by publicly trusted
+ >   certificate authorities.  No other standard library or golang.org/x/crypto
+ >   package supports or uses the P-224 curve.
+
+ >   The incorrect output was found by the elliptic-curve-differential-fuzzer
+ >   project running on OSS-Fuzz and reported by Philippe Antoine (Catena cyber).
+
+ >   This issue is CVE-2021-3114 and Go issue golang.org/issue/43786.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed, thanks.
+
 -- 
-2.20.1
+Bye, Peter Korsgaard
