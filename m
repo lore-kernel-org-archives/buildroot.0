@@ -1,36 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 21 Jan 2021 22:01:58 +0100
-Subject: [Buildroot] [git commit] package/jansson: add JANSSON_CPE_ID_VALID
-Message-ID: <20210121204358.B603F812F0@busybox.osuosl.org>
+Date: Thu, 21 Jan 2021 22:04:24 +0100
+Subject: [Buildroot] [PATCH 01/15] package/iwd: add IWD_CPE_ID_VENDOR
+ and IWD_CPE_ID_NAME
+In-Reply-To: <20210121133639.7332-1-heiko.thiery@gmail.com>
+References: <20210121133639.7332-1-heiko.thiery@gmail.com>
+Message-ID: <20210121220424.3d8157b2@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1b9b24b3813cd576259e85ced26144e76ee54c21
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, 21 Jan 2021 14:36:25 +0100
+Heiko Thiery <heiko.thiery@gmail.com> wrote:
 
-cpe:2.3:a:jansson_project:jansson is a valid CPE identifier for this
-package:
+> cpe:2.3:a:intel:inet_wireless_daemon is a valid CPE identifier for this package:
+> 
+> https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=iwd
+> 
+> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+> ---
+>  package/iwd/iwd.mk | 2 ++
+>  1 file changed, 2 insertions(+)
 
-https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ajansson_project%3Ajansson
+I've applied the entire series. However, your series was supposed to
+have 15 patches, but the PATCH 15/15 never made it to the mailing list.
+Is this expected ?
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/jansson/jansson.mk | 1 +
- 1 file changed, 1 insertion(+)
+Thanks!
 
-diff --git a/package/jansson/jansson.mk b/package/jansson/jansson.mk
-index 83fb370160..4ac64b69ef 100644
---- a/package/jansson/jansson.mk
-+++ b/package/jansson/jansson.mk
-@@ -8,6 +8,7 @@ JANSSON_VERSION = 2.13.1
- JANSSON_SITE = http://www.digip.org/jansson/releases
- JANSSON_LICENSE = MIT
- JANSSON_LICENSE_FILES = LICENSE
-+JANSSON_CPE_ID_VALID = YES
- JANSSON_INSTALL_STAGING = YES
- JANSSON_CONF_ENV = LIBS="-lm"
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
