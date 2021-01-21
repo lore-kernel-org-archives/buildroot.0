@@ -1,56 +1,75 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 21 Jan 2021 22:00:32 +0100
-Subject: [Buildroot] [PATCH] package/gcc: fix gcc 8.4,
- 9.4 and 10.2 for sparcv8 (ss10)
-In-Reply-To: <20210120230234.2086807-1-romain.naour@gmail.com>
-References: <20210120230234.2086807-1-romain.naour@gmail.com>
-Message-ID: <20210121220032.460d1d9b@windsurf.home>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 21 Jan 2021 22:03:00 +0100
+Subject: [Buildroot] [PATCH v1] package/qt5webengine: add optional
+ host-freetype/host-libjpeg dependency
+In-Reply-To: <20210119222234.29ac8a2a@windsurf.home>
+References: <20201221203952.22168-1-ps.report@gmx.net>
+ <20201221203952.22168-3-ps.report@gmx.net>
+ <20201230111823.3114e2a6@windsurf>
+ <20210119222234.29ac8a2a@windsurf.home>
+Message-ID: <20210121220300.6858c020@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Thomas,
 
-In the title: gcc 9.3 and not gcc 9.4.
+On Tue, 19 Jan 2021 22:22:34 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-On Thu, 21 Jan 2021 00:02:34 +0100
-Romain Naour <romain.naour@gmail.com> wrote:
+> Hello Peter,
+>
+> On Wed, 30 Dec 2020 11:18:23 +0100
+> Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+>
+> > > +ifeq ($(BR2_PACKAGE_QT5BASE_FONTCONFIG),y)
+> > > +QT5WEBENGINE_DEPENDENCIES += host-freetype
+> > > +endif
+> > > +
+> > > +ifeq ($(BR2_PACKAGE_QT5BASE_JPEG),y)
+> > > +QT5WEBENGINE_DEPENDENCIES += host-libjpeg
+> > > +endif
+> >
+> > This looks really odd. Why would these target-related features require
+> > host-freetype and host-libjpeg ? Aren't we instead seeing some
+> > pkg-config issue where it's trying to find freetype/libjpeg for the
+> > target, but it for some reason doesn't work, and tries to find them for
+> > the host ?
+>
+> Do you have some further feedback on this issue ?
 
-> As reported on IRC by sephthir, the defconfig qemu_sparc_ss10_defconfig
-> doesn't work as expected. Instead it produce illegal instruction
-> messages.
-> 
-> gcc 8.3, 9.2 are the latest working gcc version.
-> git bisect between gcc 8.4 and 8.4 allowed to identify
+Did try to find out where the mismatch comes from...., but without success...
 
-between gcc 8.3 and 8.4
+The best solution/hack so far is:
 
-> the commit that introcuce the regression.
-> 
-> Reverting this patch allowed to produce a working rootfs.
-> 
-> Fixes:
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/786589934
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  ...get-92095-internal-error-with-O1-mcp.patch | 325 ++++++++++++++++++
->  ...get-92095-internal-error-with-O1-mcp.patch | 322 +++++++++++++++++
->  ...get-92095-internal-error-with-O1-mcp.patch | 325 ++++++++++++++++++
->  3 files changed, 972 insertions(+)
->  create mode 100644 package/gcc/10.2.0/0002-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch
->  create mode 100644 package/gcc/8.4.0/0002-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch
->  create mode 100644 package/gcc/9.3.0/0005-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch
+--- a/package/qt5/qt5webengine/host-pkg-config.in
++++ b/package/qt5/qt5webengine/host-pkg-config.in
+@@ -2,5 +2,5 @@
+ PKG_CONFIG_SYSROOT_DIR="/" \
+ PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
+ PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
+-PKG_CONFIG_LIBDIR="@HOST_DIR@/lib/pkgconfig:@HOST_DIR@/share/pkgconfig" \
++PKG_CONFIG_LIBDIR="@HOST_DIR@/lib/pkgconfig:@HOST_DIR@/share/pkgconfig:@SYSROOT@/usr/lib/pkgconfig" \
+ exec @HOST_DIR@/bin/pkgconf "$@"
 
-Applied with the two nits above fixed. Also, did you report this issue
-to upstream gcc ?
 
-Thanks a lot for this investigation!
+--- a/package/qt5/qt5webengine/qt5webengine.mk
++++ b/package/qt5/qt5webengine/qt5webengine.mk
+@@ -54,7 +54,7 @@ QT5WEBENGINE_PRE_CONFIGURE_HOOKS += QT5WEBENGINE_PYTHON2_SYMLINK
+ QT5WEBENGINE_ENV += NINJAFLAGS="-j$(PARALLEL_JOBS)"
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+ define QT5WEBENGINE_CREATE_HOST_PKG_CONFIG
+-	sed s%@HOST_DIR@%$(HOST_DIR)%g $(QT5WEBENGINE_PKGDIR)/host-pkg-config.in > $(@D)/host-bin/host-pkg-config
++	sed s%@HOST_DIR@%$(HOST_DIR)%g $(QT5WEBENGINE_PKGDIR)/host-pkg-config.in | sed s%@SYSROOT@%$(STAGING_DIR)%g > $(@D)/host-bin/host-pkg-config
+ 	chmod +x $(@D)/host-bin/host-pkg-config
+ endef
+ QT5WEBENGINE_PRE_CONFIGURE_HOOKS += QT5WEBENGINE_CREATE_HOST_PKG_CONFIG
+
+Regards,
+Peter
+
+>
+> Thanks!
+>
+> Thomas
