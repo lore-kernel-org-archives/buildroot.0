@@ -1,38 +1,35 @@
 From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Thu, 21 Jan 2021 14:36:29 +0100
-Subject: [Buildroot] [PATCH 03/15] package/angularjs: add
- ANGULARJS_CPE_ID_VENDOR and ANGULARJS_CPE_ID_NAME
+Date: Thu, 21 Jan 2021 14:36:31 +0100
+Subject: [Buildroot] [PATCH 04/15] package/rauc: add RAUC_CPE_ID_VENDOR
 In-Reply-To: <20210121133639.7332-1-heiko.thiery@gmail.com>
 References: <20210121133639.7332-1-heiko.thiery@gmail.com>
-Message-ID: <20210121133639.7332-3-heiko.thiery@gmail.com>
+Message-ID: <20210121133639.7332-4-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:angularjs:angular.js is a valid CPE identifier for this
-package:
+cpe:2.3:a:pengutronix:rauc is a valid CPE identifier for this package:
 
-https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=angularjs
+https://nvd.nist.gov/products/cpe/detail/850005?namingFormat=2.3&orderBy=CPEURI&keyword=rauc&status=FINAL
 
 Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 ---
- package/angularjs/angularjs.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/rauc/rauc.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/angularjs/angularjs.mk b/package/angularjs/angularjs.mk
-index a9bee02162..4c414c74fe 100644
---- a/package/angularjs/angularjs.mk
-+++ b/package/angularjs/angularjs.mk
-@@ -10,6 +10,8 @@ ANGULARJS_SITE = https://code.angularjs.org/$(ANGULARJS_VERSION)
- ANGULARJS_LICENSE = MIT
- # There's no separate license file in the archive, so use angular.js instead.
- ANGULARJS_LICENSE_FILES = angular.js
-+ANGULARJS_CPE_ID_VENDOR = angularjs
-+ANGULARJS_CPE_ID_NAME = angular.js
+diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
+index fd39f000a8..51087e9f36 100644
+--- a/package/rauc/rauc.mk
++++ b/package/rauc/rauc.mk
+@@ -9,6 +9,7 @@ RAUC_SITE = https://github.com/rauc/rauc/releases/download/v$(RAUC_VERSION)
+ RAUC_SOURCE = rauc-$(RAUC_VERSION).tar.xz
+ RAUC_LICENSE = LGPL-2.1
+ RAUC_LICENSE_FILES = COPYING
++RAUC_CPE_ID_VENDOR = pengutronix
+ RAUC_DEPENDENCIES = host-pkgconf openssl libglib2 dbus
  
- define ANGULARJS_EXTRACT_CMDS
- 	unzip $(ANGULARJS_DL_DIR)/$(ANGULARJS_SOURCE) -d $(@D)
+ ifeq ($(BR2_PACKAGE_RAUC_NETWORK),y)
 -- 
 2.30.0
