@@ -1,49 +1,160 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Jan 2021 20:07:40 +0100
-Subject: [Buildroot] [git commit] package/libsocketcan: bump to version
- 0.0.12
-Message-ID: <20210122184901.7B9777FF0C@busybox.osuosl.org>
+Date: Fri, 22 Jan 2021 20:05:52 +0100
+Subject: [Buildroot] [git commit] package/tcpdump: bump to version 4.99.0
+Message-ID: <20210122184901.587758163C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3c642c85c5a175f3228da1b163787ad14dd1cb5a
+commit: https://git.buildroot.net/buildroot/commit/?id=7e2d2b1bcb93541cdbcbbb36f6ac68482cc68d77
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update indentation in hash file (two spaces)
+Drop upstream security patch.
 
-A single change in the source code:
-https://git.pengutronix.de/cgit/tools/libsocketcan/commit/?id=b5823dc86f8d0c2ff5f46fcda6e8b75728fc69ee
+Rename --with-system-libpcap to --disable-local-libpcap following
+upstream change.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+The configure scripts uses pkg-config to find libpcap, add host-pkgconf
+dependency.
+
+pkg-config handles static build for us. Remove explicit static build
+handling.
+
+Use https for SITE to save redirect.
+
+Update license file hash due to whitespace changes.
+
+Format hashes with two space delimiters.
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libsocketcan/libsocketcan.hash | 4 ++--
- package/libsocketcan/libsocketcan.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...scaping-don-t-allocate-a-too-large-buffer.patch | 67 ----------------------
+ package/tcpdump/tcpdump.hash                       |  6 +-
+ package/tcpdump/tcpdump.mk                         | 15 ++---
+ 3 files changed, 7 insertions(+), 81 deletions(-)
 
-diff --git a/package/libsocketcan/libsocketcan.hash b/package/libsocketcan/libsocketcan.hash
-index 7e40493fbf..c2ad23554b 100644
---- a/package/libsocketcan/libsocketcan.hash
-+++ b/package/libsocketcan/libsocketcan.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	28923f47b3f3191ff966866aa45823325b6e3b4fce72f056e5d87d64e4d6699d	libsocketcan-0.0.11.tar.bz2
--sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	LICENSE
-+sha256  be8280124707701935e6294d366e2474158b758fa4b2e3cae571d5b256d2fe34  libsocketcan-0.0.12.tar.bz2
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE
-diff --git a/package/libsocketcan/libsocketcan.mk b/package/libsocketcan/libsocketcan.mk
-index dca8ede6e9..0261b33c11 100644
---- a/package/libsocketcan/libsocketcan.mk
-+++ b/package/libsocketcan/libsocketcan.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/tcpdump/0001-PPP-When-un-escaping-don-t-allocate-a-too-large-buffer.patch b/package/tcpdump/0001-PPP-When-un-escaping-don-t-allocate-a-too-large-buffer.patch
+deleted file mode 100644
+index 9e8674ac90..0000000000
+--- a/package/tcpdump/0001-PPP-When-un-escaping-don-t-allocate-a-too-large-buffer.patch
++++ /dev/null
+@@ -1,67 +0,0 @@
+-From 32027e199368dad9508965aae8cd8de5b6ab5231 Mon Sep 17 00:00:00 2001
+-From: Guy Harris <guy@alum.mit.edu>
+-Date: Sat, 18 Apr 2020 14:04:59 -0700
+-Subject: [PATCH] PPP: When un-escaping, don't allocate a too-large buffer.
+-
+-The buffer should be big enough to hold the captured data, but it
+-doesn't need to be big enough to hold the entire on-the-network packet,
+-if we haven't captured all of it.
+-
+-(backported from commit e4add0b010ed6f2180dcb05a13026242ed935334)
+-
+-[Retrieved from:
+-https://github.com/the-tcpdump-group/tcpdump/commit/32027e199368dad9508965aae8cd8de5b6ab5231]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- print-ppp.c | 18 ++++++++++++++----
+- 1 file changed, 14 insertions(+), 4 deletions(-)
+-
+-diff --git a/print-ppp.c b/print-ppp.c
+-index 891761728..33fb03412 100644
+---- a/print-ppp.c
+-+++ b/print-ppp.c
+-@@ -1367,19 +1367,29 @@ print_bacp_config_options(netdissect_options *ndo,
+- 	return 0;
+- }
+- 
+-+/*
+-+ * Un-escape RFC 1662 PPP in HDLC-like framing, with octet escapes.
+-+ * The length argument is the on-the-wire length, not the captured
+-+ * length; we can only un-escape the captured part.
+-+ */
+- static void
+- ppp_hdlc(netdissect_options *ndo,
+-          const u_char *p, int length)
+- {
+-+	u_int caplen = ndo->ndo_snapend - p;
+- 	u_char *b, *t, c;
+- 	const u_char *s;
+--	int i, proto;
+-+	u_int i;
+-+	int proto;
+- 	const void *se;
+- 
+-+	if (caplen == 0)
+-+		return;
+-+
+-         if (length <= 0)
+-                 return;
+- 
+--	b = (u_char *)malloc(length);
+-+	b = (u_char *)malloc(caplen);
+- 	if (b == NULL)
+- 		return;
+- 
+-@@ -1388,10 +1398,10 @@ ppp_hdlc(netdissect_options *ndo,
+- 	 * Do this so that we dont overwrite the original packet
+- 	 * contents.
+- 	 */
+--	for (s = p, t = b, i = length; i > 0 && ND_TTEST(*s); i--) {
+-+	for (s = p, t = b, i = caplen; i != 0; i--) {
+- 		c = *s++;
+- 		if (c == 0x7d) {
+--			if (i <= 1 || !ND_TTEST(*s))
+-+			if (i <= 1)
+- 				break;
+- 			i--;
+- 			c = *s++ ^ 0x20;
+diff --git a/package/tcpdump/tcpdump.hash b/package/tcpdump/tcpdump.hash
+index da5c9aa749..4aea5b7cb5 100644
+--- a/package/tcpdump/tcpdump.hash
++++ b/package/tcpdump/tcpdump.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature at
+-# http://www.tcpdump.org/release/tcpdump-4.9.3.tar.gz.sig
++# https://www.tcpdump.org/release/tcpdump-4.99.0.tar.gz.sig
+ # using key 1F166A5742ABB9E0249A8D30E089DEF1D9C15D0D
+-sha256 2cd47cb3d460b6ff75f4a9940f594317ad456cfbf2bd2c8e5151e16559db6410  tcpdump-4.9.3.tar.gz
+-sha256 9b03d5d13e66d6de02a4bb2d0dd1cb9f41808d045962cdcc42350d5291b141a1  LICENSE
++sha256  8cf2f17a9528774a7b41060323be8b73f76024f7778f59c34efa65d49d80b842  tcpdump-4.99.0.tar.gz
++sha256  8a54594d257e14a5260ac770f1633516cb51e3fc28c40136ce2697014eda7afd  LICENSE
+diff --git a/package/tcpdump/tcpdump.mk b/package/tcpdump/tcpdump.mk
+index 63991163ab..f8ea6576ee 100644
+--- a/package/tcpdump/tcpdump.mk
++++ b/package/tcpdump/tcpdump.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--LIBSOCKETCAN_VERSION = 0.0.11
-+LIBSOCKETCAN_VERSION = 0.0.12
- LIBSOCKETCAN_SITE = http://www.pengutronix.de/software/libsocketcan/download
- LIBSOCKETCAN_SOURCE = libsocketcan-$(LIBSOCKETCAN_VERSION).tar.bz2
- LIBSOCKETCAN_INSTALL_STAGING = YES
+-TCPDUMP_VERSION = 4.9.3
+-TCPDUMP_SITE = http://www.tcpdump.org/release
++TCPDUMP_VERSION = 4.99.0
++TCPDUMP_SITE = https://www.tcpdump.org/release
+ TCPDUMP_LICENSE = BSD-3-Clause
+ TCPDUMP_LICENSE_FILES = LICENSE
+ TCPDUMP_CPE_ID_VENDOR = tcpdump
+@@ -15,18 +15,11 @@ TCPDUMP_CONF_ENV = \
+ 	PCAP_CONFIG=$(STAGING_DIR)/usr/bin/pcap-config
+ TCPDUMP_CONF_OPTS = \
+ 	--without-crypto \
+-	--with-system-libpcap \
++	--disable-local-libpcap \
+ 	$(if $(BR2_PACKAGE_TCPDUMP_SMB),--enable-smb,--disable-smb)
+-TCPDUMP_DEPENDENCIES = libpcap
++TCPDUMP_DEPENDENCIES = libpcap host-pkgconf
+ TCPDUMP_SELINUX_MODULES = netutils
+ 
+-# 0001-PPP-When-un-escaping-don-t-allocate-a-too-large-buffer.patch
+-TCPDUMP_IGNORE_CVES += CVE-2020-8037
+-
+-ifeq ($(BR2_STATIC_LIBS),y)
+-TCPDUMP_CONF_OPTS += LIBS="`$(STAGING_DIR)/usr/bin/pcap-config --static --additional-libs`"
+-endif
+-
+ # make install installs an unneeded extra copy of the tcpdump binary
+ define TCPDUMP_REMOVE_DUPLICATED_BINARY
+ 	rm -f $(TARGET_DIR)/usr/sbin/tcpdump.$(TCPDUMP_VERSION)
