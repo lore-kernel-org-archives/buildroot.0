@@ -1,41 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Jan 2021 20:06:43 +0100
-Subject: [Buildroot] [git commit] package/ltp-testsuite: update patch status
-Message-ID: <20210122184901.61DAF826C6@busybox.osuosl.org>
+Date: Fri, 22 Jan 2021 20:08:06 +0100
+Subject: [Buildroot] [git commit] package/fuse-overlayfs: bump to version
+ 1.4.0
+Message-ID: <20210122184901.852DB81730@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=16f5b79130d62a49aeda5003f5d0d6a3be9f0b84
+commit: https://git.buildroot.net/buildroot/commit/?id=b13a590545499490a725100b4128f267504ff98e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0002-lapi-Add-sysinfo.h-to-fix-build-with-MUSL-libc.patch | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ package/fuse-overlayfs/fuse-overlayfs.hash | 2 +-
+ package/fuse-overlayfs/fuse-overlayfs.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ltp-testsuite/0002-lapi-Add-sysinfo.h-to-fix-build-with-MUSL-libc.patch b/package/ltp-testsuite/0002-lapi-Add-sysinfo.h-to-fix-build-with-MUSL-libc.patch
-index f1b6743f21..29a986cbab 100644
---- a/package/ltp-testsuite/0002-lapi-Add-sysinfo.h-to-fix-build-with-MUSL-libc.patch
-+++ b/package/ltp-testsuite/0002-lapi-Add-sysinfo.h-to-fix-build-with-MUSL-libc.patch
-@@ -26,7 +26,16 @@ In file included from ../include/tst_safe_macros.h:15,
- x86_64-buildroot-linux-musl/sysroot/usr/include/sys/sysinfo.h:10:8: note: originally defined here
+diff --git a/package/fuse-overlayfs/fuse-overlayfs.hash b/package/fuse-overlayfs/fuse-overlayfs.hash
+index 0c52e05cc9..9770ee0d3f 100644
+--- a/package/fuse-overlayfs/fuse-overlayfs.hash
++++ b/package/fuse-overlayfs/fuse-overlayfs.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  5df218732244059057686194b0e1fef66fb822d4087db48af88e1bc29bb1afde  fuse-overlayfs-1.2.0.tar.gz
++sha256  7e5666aef4f2047e6a5202d6438b08c2d314dba5b40e431014e7dbb8168d9018  fuse-overlayfs-1.4.0.tar.gz
+ # Locally computed
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/fuse-overlayfs/fuse-overlayfs.mk b/package/fuse-overlayfs/fuse-overlayfs.mk
+index 67bd9d1c7f..707cacce03 100644
+--- a/package/fuse-overlayfs/fuse-overlayfs.mk
++++ b/package/fuse-overlayfs/fuse-overlayfs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
--[ upstream status: https://patchwork.ozlabs.org/project/ltp/patch/20201001231256.6930-1-petr.vorel at gmail.com/ ]
-+
-+[ upstream status: https://patchwork.ozlabs.org/project/ltp/patch/20201001231256.6930-1-petr.vorel at gmail.com/
-+
-+But this patch is not going to get upstreamed because it got fixed in Linux kernel:
-+a85cbe6159ff "uapi: move constants from <linux/kernel.h> to <linux/const.h>"
-+
-+This patch was also backported to stable and LTS versions,
-+which we use since buildroot 54584d233b "{linux, linux-headers}: bump
-+5.{4, 10}.x 4.{4, 9, 14, 19} series".
-+We just wait for all musl based toolchains to be rebuilt. ]
- ---
-  include/lapi/sysinfo.h                        | 22 +++++++++++++++++++
-  include/tst_safe_macros.h                     |  2 +-
+-FUSE_OVERLAYFS_VERSION = 1.2.0
++FUSE_OVERLAYFS_VERSION = 1.4.0
+ FUSE_OVERLAYFS_SITE = $(call github,containers,fuse-overlayfs,v$(FUSE_OVERLAYFS_VERSION))
+ FUSE_OVERLAYFS_LICENSE = GPL-3.0
+ FUSE_OVERLAYFS_LICENSE_FILES = COPYING
