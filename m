@@ -1,63 +1,126 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Fri, 22 Jan 2021 19:30:18 +0100
-Subject: [Buildroot] [PATCH 08/10] package/perl-type-tiny: bump to version
- 1.012001
-In-Reply-To: <20210122183020.874889-1-francois.perrad@gadz.org>
-References: <20210122183020.874889-1-francois.perrad@gadz.org>
-Message-ID: <20210122183020.874889-8-francois.perrad@gadz.org>
+Date: Fri, 22 Jan 2021 19:30:46 +0100
+Subject: [Buildroot] [PATCH] perl: bump to version 5.32.0
+Message-ID: <20210122183046.874944-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-diff LICENSE:
--This software is copyright (c) 2020 by Toby Inkster.
-+This software is copyright (c) 2021 by Toby Inkster.
-
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-type-tiny/Config.in           | 2 +-
- package/perl-type-tiny/perl-type-tiny.hash | 6 +++---
- package/perl-type-tiny/perl-type-tiny.mk   | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ ...the-generated-subdirectory-Makefiles.patch | 32 -------------------
+ package/perl/perl.hash                        |  8 ++---
+ package/perl/perl.mk                          |  6 ++--
+ utils/scancpan                                |  8 ++---
+ 4 files changed, 11 insertions(+), 43 deletions(-)
+ delete mode 100644 package/perl/0001-fix-the-generated-subdirectory-Makefiles.patch
 
-diff --git a/package/perl-type-tiny/Config.in b/package/perl-type-tiny/Config.in
-index 96e5ea135..5ee3db6f9 100644
---- a/package/perl-type-tiny/Config.in
-+++ b/package/perl-type-tiny/Config.in
-@@ -4,4 +4,4 @@ config BR2_PACKAGE_PERL_TYPE_TINY
- 	help
- 	  tiny, yet Moo(se)-compatible type constraint.
+diff --git a/package/perl/0001-fix-the-generated-subdirectory-Makefiles.patch b/package/perl/0001-fix-the-generated-subdirectory-Makefiles.patch
+deleted file mode 100644
+index ae1ce0699..000000000
+--- a/package/perl/0001-fix-the-generated-subdirectory-Makefiles.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From 30ae4c9e2ac6cd27138ebf124cbda9232c56bdf7 Mon Sep 17 00:00:00 2001
+-From: Francois Perrad <francois.perrad@gadz.org>
+-Date: Tue, 16 Oct 2018 21:20:12 +0200
+-Subject: [PATCH] fix the generated subdirectory Makefiles
+-
+-all variables used by BR must be propagated
+-
+-similar to https://github.com/Perl-Toolchain-Gang/ExtUtils-MakeMaker/commit/98e8532fffe5afa8186329acc44fb957427f1823
+-
+-see https://github.com/Perl-Toolchain-Gang/ExtUtils-MakeMaker/pull/331, merged in EU-MM v7.35_08
+-
+-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+----
+- cpan/ExtUtils-MakeMaker/lib/ExtUtils/MakeMaker.pm | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MakeMaker.pm b/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MakeMaker.pm
+-index d579256e86..48642e98fa 100644
+---- a/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MakeMaker.pm
+-+++ b/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MakeMaker.pm
+-@@ -702,7 +702,7 @@ END
+-         }
+-         if ($self->{PARENT}) {
+-             $self->{PARENT}->{CHILDREN}->{$newclass} = $self;
+--            foreach my $opt (qw(POLLUTE PERL_CORE LINKTYPE LD OPTIMIZE)) {
+-+            foreach my $opt (qw(POLLUTE PERL_CORE LINKTYPE AR FULL_AR CC CCFLAGS OPTIMIZE LD LDDLFLAGS LDFLAGS PERL_ARCHLIB DESTDIR )) {
+-                 if (exists $self->{PARENT}->{$opt}
+-                     and not exists $self->{$opt})
+-                     {
+--- 
+-2.17.1
+-
+diff --git a/package/perl/perl.hash b/package/perl/perl.hash
+index ba3a39d43..28bfb4fa9 100644
+--- a/package/perl/perl.hash
++++ b/package/perl/perl.hash
+@@ -1,7 +1,7 @@
+-# Hashes from: http://www.cpan.org/src/5.0/perl-5.30.3.tar.xz.{md5,sha1,sha256}.txt
+-md5  0af2ab0f01ec13e37cc13a27de930936  perl-5.30.3.tar.xz
+-sha1  1003c6aa71d8966501038178459a9fa4e9aba747  perl-5.30.3.tar.xz
+-sha256  6967595f2e3f3a94544c35152f9a25e0cb8ea24ae45f4bf1882f2e33f4a400f4  perl-5.30.3.tar.xz
++# Hashes from: https://www.cpan.org/src/5.0/perl-5.32.0.tar.xz.{md5,sha1,sha256}.txt
++md5  3812cd9a096a72cb27767c7e2e40441c  perl-5.32.0.tar.xz
++sha1  0426c89d8ad5542def3e0065c299d449230aeb6c  perl-5.32.0.tar.xz
++sha256  6f436b447cf56d22464f980fac1916e707a040e96d52172984c5d184c09b859b  perl-5.32.0.tar.xz
  
--	  http://typetiny.toby.ink/
-+	  https://typetiny.toby.ink/
-diff --git a/package/perl-type-tiny/perl-type-tiny.hash b/package/perl-type-tiny/perl-type-tiny.hash
-index 0c14b7d0c..2e2726e38 100644
---- a/package/perl-type-tiny/perl-type-tiny.hash
-+++ b/package/perl-type-tiny/perl-type-tiny.hash
-@@ -1,6 +1,6 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5  6b7976fe3a6687a3ffdd5ab2b3b11931  Type-Tiny-1.012000.tar.gz
--sha256  d3db1220161c2aea6b0b8a2225c4fef526e8dbbe56b4bffe9daabc03e2efea90  Type-Tiny-1.012000.tar.gz
-+md5  7feab0f3f99810290a3fdea8dbf24d7b  Type-Tiny-1.012001.tar.gz
-+sha256  f907e5ad880fcc42fddb7e0de53c59429282abcbb3afb1a8651bf5ec6c42954d  Type-Tiny-1.012001.tar.gz
- 
- # computed by scancpan
--sha256  1fb7395e76eabf94c421912d7d0a4f7fa745d49e1acb76b222c21d605b66bd25  LICENSE
-+sha256  34427749499bd6d6e5d206089bc03d76c647a1350f8b5f95ea628d2b6ff56e4c  LICENSE
-diff --git a/package/perl-type-tiny/perl-type-tiny.mk b/package/perl-type-tiny/perl-type-tiny.mk
-index dbaeebd8b..2a475e53d 100644
---- a/package/perl-type-tiny/perl-type-tiny.mk
-+++ b/package/perl-type-tiny/perl-type-tiny.mk
-@@ -4,7 +4,7 @@
- #
+ # Hashes from: https://github.com/arsv/perl-cross/releases/download/1.3.4/perl-cross-1.3.4.hash
+ sha256  755aa0ca8141a942188a269564f86c3c82349f82c346ed5c992495d7f35138ba  perl-cross-1.3.4.tar.gz
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index 5f6aa9767..9b024e849 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -5,9 +5,9 @@
  ################################################################################
  
--PERL_TYPE_TINY_VERSION = 1.012000
-+PERL_TYPE_TINY_VERSION = 1.012001
- PERL_TYPE_TINY_SOURCE = Type-Tiny-$(PERL_TYPE_TINY_VERSION).tar.gz
- PERL_TYPE_TINY_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TO/TOBYINK
- PERL_TYPE_TINY_LICENSE = Artistic or GPL-1.0+
+ # When updating the version here, also update utils/scancpan
+-PERL_VERSION_MAJOR = 30
+-PERL_VERSION = 5.$(PERL_VERSION_MAJOR).3
+-PERL_SITE = http://www.cpan.org/src/5.0
++PERL_VERSION_MAJOR = 32
++PERL_VERSION = 5.$(PERL_VERSION_MAJOR).0
++PERL_SITE = https://www.cpan.org/src/5.0
+ PERL_SOURCE = perl-$(PERL_VERSION).tar.xz
+ PERL_LICENSE = Artistic or GPL-1.0+
+ PERL_LICENSE_FILES = Artistic Copying README
+diff --git a/utils/scancpan b/utils/scancpan
+index 3ce3203bd..075f19356 100755
+--- a/utils/scancpan
++++ b/utils/scancpan
+@@ -488,9 +488,9 @@ use Digest::SHA qw(sha256_hex);
+ use Text::Wrap;
+ $Text::Wrap::columns = 62;
+ 
+-# Below, 5.030 should be aligned with the version of perl actually
++# Below, 5.032 should be aligned with the version of perl actually
+ # bundled in Buildroot:
+-die <<"MSG" if $] < 5.030;
++die <<"MSG" if $] < 5.032;
+ This script needs a host perl with the same major version as Buildroot target perl.
+ 
+ Your current host perl is:
+@@ -498,7 +498,7 @@ Your current host perl is:
+     version $]
+ 
+ You may install a local one by running:
+-    perlbrew install perl-5.30.0
++    perlbrew install perl-5.32.0
+ MSG
+ 
+ my ($help, $man, $quiet, $force, $recommend, $test, $host);
+@@ -967,7 +967,7 @@ in order to work with the right CoreList data.
+ 
+ =head1 LICENSE
+ 
+-Copyright (C) 2013-2019 by Francois Perrad <francois.perrad@gadz.org>
++Copyright (C) 2013-2020 by Francois Perrad <francois.perrad@gadz.org>
+ 
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
 -- 
 2.27.0
