@@ -1,46 +1,38 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 21 Jan 2021 23:29:18 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libsocketcan: bump to version 0.0.12
-Message-ID: <20210121222918.2376671-1-fontaine.fabrice@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 22 Jan 2021 05:15:41 +0000
+Subject: [Buildroot] [Bug 13476] New: Building ti-gfx package with custom
+ linux does not work
+Message-ID: <bug-13476-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update indentation in hash file (two spaces)
+https://bugs.busybox.net/show_bug.cgi?id=13476
 
-A single change in the source code:
-https://git.pengutronix.de/cgit/tools/libsocketcan/commit/?id=b5823dc86f8d0c2ff5f46fcda6e8b75728fc69ee
+            Bug ID: 13476
+           Summary: Building ti-gfx package with custom linux  does not
+                    work
+           Product: buildroot
+           Version: 2020.02.2
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: pholden at nklabs.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libsocketcan/libsocketcan.hash | 4 ++--
- package/libsocketcan/libsocketcan.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Created attachment 8731
+  --> https://bugs.busybox.net/attachment.cgi?id=8731&action=edit
+Output from the build.
 
-diff --git a/package/libsocketcan/libsocketcan.hash b/package/libsocketcan/libsocketcan.hash
-index 7e40493fbf..c2ad23554b 100644
---- a/package/libsocketcan/libsocketcan.hash
-+++ b/package/libsocketcan/libsocketcan.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	28923f47b3f3191ff966866aa45823325b6e3b4fce72f056e5d87d64e4d6699d	libsocketcan-0.0.11.tar.bz2
--sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	LICENSE
-+sha256  be8280124707701935e6294d366e2474158b758fa4b2e3cae571d5b256d2fe34  libsocketcan-0.0.12.tar.bz2
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE
-diff --git a/package/libsocketcan/libsocketcan.mk b/package/libsocketcan/libsocketcan.mk
-index dca8ede6e9..0261b33c11 100644
---- a/package/libsocketcan/libsocketcan.mk
-+++ b/package/libsocketcan/libsocketcan.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBSOCKETCAN_VERSION = 0.0.11
-+LIBSOCKETCAN_VERSION = 0.0.12
- LIBSOCKETCAN_SITE = http://www.pengutronix.de/software/libsocketcan/download
- LIBSOCKETCAN_SOURCE = libsocketcan-$(LIBSOCKETCAN_VERSION).tar.bz2
- LIBSOCKETCAN_INSTALL_STAGING = YES
+The package doesn't seem to honor LINUX_DIR, even though it is in the .mk file.
+
 -- 
-2.29.2
+You are receiving this mail because:
+You are on the CC list for the bug.
