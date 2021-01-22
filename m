@@ -1,54 +1,50 @@
-From: manu f <e.fiancette@gmail.com>
-Date: Fri, 22 Jan 2021 23:53:30 +0100
-Subject: [Buildroot] No rule to make target 'host-python !!
-In-Reply-To: <CAGshWo02DNPmGa_Nj7aBjf5TrQgVz2ePTP8EkABRfGFSYBsU0A@mail.gmail.com>
-References: <CAGshWo02DNPmGa_Nj7aBjf5TrQgVz2ePTP8EkABRfGFSYBsU0A@mail.gmail.com>
-Message-ID: <CAGshWo1eWoWDUd_0jD8xQbpZg7dGzOzhwNeNmhrc5ewh9z6TSQ@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 22 Jan 2021 23:52:21 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libpcap: fix build failure without
+ wchar
+Message-ID: <20210122225221.3234679-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ok, I remove libevdev in Target package =>libraries=>Other and its copile
-without error!
+libpcap requires c99 since version 1.10.0 and
+https://github.com/the-tcpdump-group/libpcap/commit/68e5ca3f4cbb66d687582ae9563009c87bf3d184
 
-(But I dont know if I realy need this lib... )
+However, this test will fail without wchar on:
 
-Well why it no compile with libdevdev ?
-@ Thomas Petazzoni I saw you already got problem and make patch for
-host-python interpreter...is there something to see with ?
+configure:3609: /home/buildroot/autobuild/run/instance-2/output-1/host/bin/arm-linux-gcc -std=gnu99 -c -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 conftest.c >&5
+conftest.c:52:9: error: unknown type name 'wchar_t'
+   const wchar_t *name;
+         ^~~~~~~
 
-Regards
+So hardcode ac_cv_prog_cc_c99 as already done in numerous package such
+as apparmor, wireshark, xz, etc.
 
-Le ven. 22 janv. 2021 ? 23:21, manu f <e.fiancette@gmail.com> a ?crit :
+Fixes:
+ - http://autobuild.buildroot.org/results/6e87c25a0dccccf5e7ad03742597a0613f554506
 
-> Hello all
->
-> I got this error and dont know what to do with that !
->
-> make[1]: *** No rule to make target 'host-python', needed by
-> '/home/user/cleta_buildroot/output/build/libevdev-1.8.0/.stamp_configured'.
-> Stop.
-> make: *** [Makefile:84: _all] Error 2
-> make: Leaving directory '/home/user/cleta_buildroot/buildroot'
-> user at LinuxDev:~/cleta_buildroot$
->
->
-> I already compiled with success bet I add some packages and got this.
-> I try to remove my change but got this error again... strange
-> Could I have a guidance to find from where problem come ?
->
-> (I compile the 2020.02.8 buildroot version for a specific imx6 board with
-> buildroot toolchain.)
->
->
->
->
->
->
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210122/2d62645f/attachment.html>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libpcap/libpcap.mk | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
+index 69247d316d..502570b24d 100644
+--- a/package/libpcap/libpcap.mk
++++ b/package/libpcap/libpcap.mk
+@@ -13,8 +13,11 @@ LIBPCAP_INSTALL_STAGING = YES
+ LIBPCAP_DEPENDENCIES = host-flex host-bison host-pkgconf
+ HOST_LIBPCAP_DEPENDENCIES = host-flex host-bison host-pkgconf
+ 
++# ac_cv_prog_cc_c99 is required for BR2_USE_WCHAR=n because the C99 test
++# provided by autoconf relies on wchar_t.
+ LIBPCAP_CONF_ENV = \
+ 	ac_cv_header_linux_wireless_h=yes \
++	ac_cv_prog_cc_c99=-std=gnu99 \
+ 	CFLAGS="$(LIBPCAP_CFLAGS)"
+ LIBPCAP_CFLAGS = $(TARGET_CFLAGS)
+ LIBPCAP_CONF_OPTS = --disable-yydebug --with-pcap=linux --without-dag \
+-- 
+2.29.2
