@@ -1,10 +1,10 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Fri, 22 Jan 2021 19:30:17 +0100
-Subject: [Buildroot] [PATCH 07/10] package/perl-role-tiny: bump to version
- 2.002003
+Date: Fri, 22 Jan 2021 19:30:18 +0100
+Subject: [Buildroot] [PATCH 08/10] package/perl-type-tiny: bump to version
+ 1.012001
 In-Reply-To: <20210122183020.874889-1-francois.perrad@gadz.org>
 References: <20210122183020.874889-1-francois.perrad@gadz.org>
-Message-ID: <20210122183020.874889-7-francois.perrad@gadz.org>
+Message-ID: <20210122183020.874889-8-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,41 +12,52 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 diff LICENSE:
--This software is Copyright (c) 2019 by mst - Matt S. Trout (cpan:MSTROUT) <mst@shadowcat.co.uk>.
-+This software is Copyright (c) 2021 by mst - Matt S. Trout (cpan:MSTROUT) <mst@shadowcat.co.uk>.
+-This software is copyright (c) 2020 by Toby Inkster.
++This software is copyright (c) 2021 by Toby Inkster.
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-role-tiny/perl-role-tiny.hash | 6 +++---
- package/perl-role-tiny/perl-role-tiny.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/perl-type-tiny/Config.in           | 2 +-
+ package/perl-type-tiny/perl-type-tiny.hash | 6 +++---
+ package/perl-type-tiny/perl-type-tiny.mk   | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/perl-role-tiny/perl-role-tiny.hash b/package/perl-role-tiny/perl-role-tiny.hash
-index c05873e65..9de786800 100644
---- a/package/perl-role-tiny/perl-role-tiny.hash
-+++ b/package/perl-role-tiny/perl-role-tiny.hash
+diff --git a/package/perl-type-tiny/Config.in b/package/perl-type-tiny/Config.in
+index 96e5ea135..5ee3db6f9 100644
+--- a/package/perl-type-tiny/Config.in
++++ b/package/perl-type-tiny/Config.in
+@@ -4,4 +4,4 @@ config BR2_PACKAGE_PERL_TYPE_TINY
+ 	help
+ 	  tiny, yet Moo(se)-compatible type constraint.
+ 
+-	  http://typetiny.toby.ink/
++	  https://typetiny.toby.ink/
+diff --git a/package/perl-type-tiny/perl-type-tiny.hash b/package/perl-type-tiny/perl-type-tiny.hash
+index 0c14b7d0c..2e2726e38 100644
+--- a/package/perl-type-tiny/perl-type-tiny.hash
++++ b/package/perl-type-tiny/perl-type-tiny.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    98446826608b1e943e65c1f6e35942fe Role-Tiny-2.001004.tar.gz
--sha256 92ba5712850a74102c93c942eb6e7f62f7a4f8f483734ed289d08b324c281687 Role-Tiny-2.001004.tar.gz
-+md5  065e459cdc3c6e163c6e8359baf69f45  Role-Tiny-2.002003.tar.gz
-+sha256  6981e5f2d0beded157840199d678da462b22a9a3753333cab322ab6efb0fbb89  Role-Tiny-2.002003.tar.gz
+-md5  6b7976fe3a6687a3ffdd5ab2b3b11931  Type-Tiny-1.012000.tar.gz
+-sha256  d3db1220161c2aea6b0b8a2225c4fef526e8dbbe56b4bffe9daabc03e2efea90  Type-Tiny-1.012000.tar.gz
++md5  7feab0f3f99810290a3fdea8dbf24d7b  Type-Tiny-1.012001.tar.gz
++sha256  f907e5ad880fcc42fddb7e0de53c59429282abcbb3afb1a8651bf5ec6c42954d  Type-Tiny-1.012001.tar.gz
  
  # computed by scancpan
--sha256 88f4a8719c584d756dcfeebc7f35643066354188bfb57c672fbafcd44e044e9c LICENSE
-+sha256  a8a1595c2347f7d10e896809d4f3dea85ccc10ac5644b8073111233cd120b14a  LICENSE
-diff --git a/package/perl-role-tiny/perl-role-tiny.mk b/package/perl-role-tiny/perl-role-tiny.mk
-index 0e1974fa1..5a6477f94 100644
---- a/package/perl-role-tiny/perl-role-tiny.mk
-+++ b/package/perl-role-tiny/perl-role-tiny.mk
+-sha256  1fb7395e76eabf94c421912d7d0a4f7fa745d49e1acb76b222c21d605b66bd25  LICENSE
++sha256  34427749499bd6d6e5d206089bc03d76c647a1350f8b5f95ea628d2b6ff56e4c  LICENSE
+diff --git a/package/perl-type-tiny/perl-type-tiny.mk b/package/perl-type-tiny/perl-type-tiny.mk
+index dbaeebd8b..2a475e53d 100644
+--- a/package/perl-type-tiny/perl-type-tiny.mk
++++ b/package/perl-type-tiny/perl-type-tiny.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_ROLE_TINY_VERSION = 2.001004
-+PERL_ROLE_TINY_VERSION = 2.002003
- PERL_ROLE_TINY_SOURCE = Role-Tiny-$(PERL_ROLE_TINY_VERSION).tar.gz
- PERL_ROLE_TINY_SITE = $(BR2_CPAN_MIRROR)/authors/id/H/HA/HAARG
- PERL_ROLE_TINY_LICENSE = Artistic or GPL-1.0+
+-PERL_TYPE_TINY_VERSION = 1.012000
++PERL_TYPE_TINY_VERSION = 1.012001
+ PERL_TYPE_TINY_SOURCE = Type-Tiny-$(PERL_TYPE_TINY_VERSION).tar.gz
+ PERL_TYPE_TINY_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TO/TOBYINK
+ PERL_TYPE_TINY_LICENSE = Artistic or GPL-1.0+
 -- 
 2.27.0
