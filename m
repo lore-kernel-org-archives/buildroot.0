@@ -1,9 +1,10 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Fri, 22 Jan 2021 19:30:19 +0100
-Subject: [Buildroot] [PATCH 09/10] package/perl-uri: bump to version 5.06
+Date: Fri, 22 Jan 2021 19:30:15 +0100
+Subject: [Buildroot] [PATCH 05/10] package/perl-net-http: bump to version
+ 6.20
 In-Reply-To: <20210122183020.874889-1-francois.perrad@gadz.org>
 References: <20210122183020.874889-1-francois.perrad@gadz.org>
-Message-ID: <20210122183020.874889-9-francois.perrad@gadz.org>
+Message-ID: <20210122183020.874889-5-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,35 +13,36 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-uri/perl-uri.hash | 4 ++--
- package/perl-uri/perl-uri.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/perl-net-http/perl-net-http.hash | 6 +++---
+ package/perl-net-http/perl-net-http.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/perl-uri/perl-uri.hash b/package/perl-uri/perl-uri.hash
-index 39f2f4765..c6cb7971f 100644
---- a/package/perl-uri/perl-uri.hash
-+++ b/package/perl-uri/perl-uri.hash
+diff --git a/package/perl-net-http/perl-net-http.hash b/package/perl-net-http/perl-net-http.hash
+index 5c93ad117..42ae6bd97 100644
+--- a/package/perl-net-http/perl-net-http.hash
++++ b/package/perl-net-http/perl-net-http.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5  978454ba823a6908bad1c3c1804945d3  URI-5.05.tar.gz
--sha256  a5c113d2d02706d9fbdca6a86f290c5b05b2f86836d4e7fe1447f063261b79ec  URI-5.05.tar.gz
-+md5  3dd176c522e9d39d88bcf1221fcd7ab2  URI-5.06.tar.gz
-+sha256  68555c576763769be43340459b9db7e159378edcd7db6d7518e16efdabdeb0c1  URI-5.06.tar.gz
+-md5    6cbebcc76099ce822f0aa7764af11f73 Net-HTTP-6.19.tar.gz
+-sha256 52b76ec13959522cae64d965f15da3d99dcb445eddd85d2ce4e4f4df385b2fc4 Net-HTTP-6.19.tar.gz
++md5  00f825fb848d50202aeec074c3608453  Net-HTTP-6.20.tar.gz
++sha256  92527b2a24512961b8e3637c6216a057751e39b6fa751422ed181ff599779f1e  Net-HTTP-6.20.tar.gz
  
  # computed by scancpan
- sha256  65cd6f88516a30f56fd4e0080fb78ea69424fc89067470dc994e4abfba08664e  LICENSE
-diff --git a/package/perl-uri/perl-uri.mk b/package/perl-uri/perl-uri.mk
-index 1a4886590..6eccb1b9b 100644
---- a/package/perl-uri/perl-uri.mk
-+++ b/package/perl-uri/perl-uri.mk
+-sha256 49fbcc80e17295888b909176a0029f275a8c17b6cbfaf8867fe571ebe9a9ca79 LICENSE
++sha256  49fbcc80e17295888b909176a0029f275a8c17b6cbfaf8867fe571ebe9a9ca79  LICENSE
+diff --git a/package/perl-net-http/perl-net-http.mk b/package/perl-net-http/perl-net-http.mk
+index c7d0e3d0a..f8da63100 100644
+--- a/package/perl-net-http/perl-net-http.mk
++++ b/package/perl-net-http/perl-net-http.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_URI_VERSION = 5.05
-+PERL_URI_VERSION = 5.06
- PERL_URI_SOURCE = URI-$(PERL_URI_VERSION).tar.gz
- PERL_URI_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
- PERL_URI_LICENSE = Artistic or GPL-1.0+
+-PERL_NET_HTTP_VERSION = 6.19
++PERL_NET_HTTP_VERSION = 6.20
+ PERL_NET_HTTP_SOURCE = Net-HTTP-$(PERL_NET_HTTP_VERSION).tar.gz
+ PERL_NET_HTTP_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
+ PERL_NET_HTTP_LICENSE = Artistic or GPL-1.0+
 -- 
 2.27.0
