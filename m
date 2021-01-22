@@ -1,79 +1,54 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 22 Jan 2021 23:37:23 +0100
-Subject: [Buildroot] [PATCH 2/2] package/zeromq: add websocket option
-In-Reply-To: <20210122223723.3178834-1-fontaine.fabrice@gmail.com>
-References: <20210122223723.3178834-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210122223723.3178834-2-fontaine.fabrice@gmail.com>
+From: manu f <e.fiancette@gmail.com>
+Date: Fri, 22 Jan 2021 23:53:30 +0100
+Subject: [Buildroot] No rule to make target 'host-python !!
+In-Reply-To: <CAGshWo02DNPmGa_Nj7aBjf5TrQgVz2ePTP8EkABRfGFSYBsU0A@mail.gmail.com>
+References: <CAGshWo02DNPmGa_Nj7aBjf5TrQgVz2ePTP8EkABRfGFSYBsU0A@mail.gmail.com>
+Message-ID: <CAGshWo1eWoWDUd_0jD8xQbpZg7dGzOzhwNeNmhrc5ewh9z6TSQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-websocket support is available since version 4.3.3 and
-https://github.com/zeromq/libzmq/commit/9be833493877258af3bc6acdc65565db6674768d
-It is enabled if --enable-drafts is passed by the user.
+ok, I remove libevdev in Target package =>libraries=>Other and its copile
+without error!
 
-websocket can use libnss or gnutls instead of its builtin SHA1 since
-https://github.com/zeromq/libzmq/commit/7296fb5b151920a4a8d272da69196df8ca155aa1
+(But I dont know if I realy need this lib... )
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/zeromq/Config.in |  5 +++++
- package/zeromq/zeromq.mk | 20 ++++++++++++++++++++
- 2 files changed, 25 insertions(+)
+Well why it no compile with libdevdev ?
+@ Thomas Petazzoni I saw you already got problem and make patch for
+host-python interpreter...is there something to see with ?
 
-diff --git a/package/zeromq/Config.in b/package/zeromq/Config.in
-index aeedff17b8..cf5c644c39 100644
---- a/package/zeromq/Config.in
-+++ b/package/zeromq/Config.in
-@@ -59,4 +59,9 @@ config BR2_PACKAGE_ZEROMQ_DRAFTS
- 
- 	  https://pyzmq.readthedocs.io/en/latest/draft.html
- 
-+config BR2_PACKAGE_ZEROMQ_WEBSOCKET
-+	bool "WebSocket support"
-+	help
-+	  Enable WebSocket transport
-+
- endif
-diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
-index 4eb6931f1d..fa72a41f23 100644
---- a/package/zeromq/zeromq.mk
-+++ b/package/zeromq/zeromq.mk
-@@ -53,6 +53,19 @@ else
- ZEROMQ_CONF_OPTS += --disable-drafts
- endif
- 
-+ifeq ($(BR2_PACKAGE_ZEROMQ_WEBSOCKET),y)
-+ZEROMQ_CONF_OPTS += --enable-ws
-+else
-+ZEROMQ_CONF_OPTS += --disable-ws
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GNUTLS),y)
-+ZEROMQ_DEPENDENCIES += host-pkgconf gnutls
-+ZEROMQ_CONF_OPTS += --with-tls
-+else
-+ZEROMQ_CONF_OPTS += --without-tls
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBBSD),y)
- ZEROMQ_DEPENDENCIES += host-pkgconf libbsd
- ZEROMQ_CONF_OPTS += --enable-libbsd
-@@ -60,6 +73,13 @@ else
- ZEROMQ_CONF_OPTS += --disable-libbsd
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBNSS),y)
-+ZEROMQ_DEPENDENCIES += host-pkgconf libnss
-+ZEROMQ_CONF_OPTS += --with-nss
-+else
-+ZEROMQ_CONF_OPTS += --without-nss
-+endif
-+
- # ZeroMQ uses libsodium if it's available.
- ifeq ($(BR2_PACKAGE_LIBSODIUM),y)
- ZEROMQ_DEPENDENCIES += libsodium
--- 
-2.29.2
+Regards
+
+Le ven. 22 janv. 2021 ? 23:21, manu f <e.fiancette@gmail.com> a ?crit :
+
+> Hello all
+>
+> I got this error and dont know what to do with that !
+>
+> make[1]: *** No rule to make target 'host-python', needed by
+> '/home/user/cleta_buildroot/output/build/libevdev-1.8.0/.stamp_configured'.
+> Stop.
+> make: *** [Makefile:84: _all] Error 2
+> make: Leaving directory '/home/user/cleta_buildroot/buildroot'
+> user at LinuxDev:~/cleta_buildroot$
+>
+>
+> I already compiled with success bet I add some packages and got this.
+> I try to remove my change but got this error again... strange
+> Could I have a guidance to find from where problem come ?
+>
+> (I compile the 2020.02.8 buildroot version for a specific imx6 board with
+> buildroot toolchain.)
+>
+>
+>
+>
+>
+>
+>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210122/2d62645f/attachment.html>
