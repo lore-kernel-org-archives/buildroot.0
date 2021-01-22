@@ -1,84 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Jan 2021 20:05:02 +0100
-Subject: [Buildroot] [git commit] package/libpcap: bump to version 1.10.0
-Message-ID: <20210122184901.46A9F7FF0C@busybox.osuosl.org>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Fri, 22 Jan 2021 23:15:22 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-fire: bump to version 0.4.0
+Message-ID: <20210122211522.2603694-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=34708006e2b799cc55cf76e17d35ba686b843129
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-configure script now uses pkg-config. Add host-pkgconf dependency.
-
-pkg-config should provide necessary info for libnl build/link. Don't
-pass paths to configure.
-
-Add --without-dpdk to make sure we don't link with host installed
-libraries.
-
-Format hashes with two space delimiters.
-
-Use https for SITE to save redirect.
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/libpcap/libpcap.hash |  5 +++--
- package/libpcap/libpcap.mk   | 12 ++++++------
- 2 files changed, 9 insertions(+), 8 deletions(-)
+ package/python-fire/python-fire.hash | 4 ++--
+ package/python-fire/python-fire.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libpcap/libpcap.hash b/package/libpcap/libpcap.hash
-index a24fba24de..e70d071294 100644
---- a/package/libpcap/libpcap.hash
-+++ b/package/libpcap/libpcap.hash
-@@ -1,5 +1,6 @@
- # Locally calculated after checking pgp signature
--sha256	635237637c5b619bcceba91900666b64d56ecb7be63f298f601ec786ce087094	libpcap-1.9.1.tar.gz
-+# https://www.tcpdump.org/release/libpcap-1.10.0.tar.gz.sig
-+sha256  8d12b42623eeefee872f123bd0dc85d535b00df4d42e865f993c40f7bfc92b1e  libpcap-1.10.0.tar.gz
- 
- # Hash for license file:
--sha256	8a54594d257e14a5260ac770f1633516cb51e3fc28c40136ce2697014eda7afd	LICENSE
-+sha256  8a54594d257e14a5260ac770f1633516cb51e3fc28c40136ce2697014eda7afd  LICENSE
-diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
-index e323461529..81e7cd4ab0 100644
---- a/package/libpcap/libpcap.mk
-+++ b/package/libpcap/libpcap.mk
-@@ -4,19 +4,20 @@
+diff --git a/package/python-fire/python-fire.hash b/package/python-fire/python-fire.hash
+index a6a2df8c00..d86376c52b 100644
+--- a/package/python-fire/python-fire.hash
++++ b/package/python-fire/python-fire.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/fire/json
+-md5  af6da611394a2332fbd5bd9f1227254e  fire-0.3.1.tar.gz
+-sha256  9736a16227c3d469e5d2d296bce5b4d8fa8d7851e953bda327a455fc2994307f  fire-0.3.1.tar.gz
++md5  799be84cbbd7df2cf159cdcb538ab6f9  fire-0.4.0.tar.gz
++sha256  c5e2b8763699d1142393a46d0e3e790c5eb2f0706082df8f647878842c216a62  fire-0.4.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  a5de77b62266bca0bb97bf058992f0b0f308a83a8ca55ee10fbf6bd8ed8f7ed0  LICENSE
+diff --git a/package/python-fire/python-fire.mk b/package/python-fire/python-fire.mk
+index f6a2e073f0..7ba971abc4 100644
+--- a/package/python-fire/python-fire.mk
++++ b/package/python-fire/python-fire.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--LIBPCAP_VERSION = 1.9.1
--LIBPCAP_SITE = http://www.tcpdump.org/release
-+LIBPCAP_VERSION = 1.10.0
-+LIBPCAP_SITE = https://www.tcpdump.org/release
- LIBPCAP_LICENSE = BSD-3-Clause
- LIBPCAP_LICENSE_FILES = LICENSE
- LIBPCAP_CPE_ID_VENDOR = tcpdump
- LIBPCAP_INSTALL_STAGING = YES
--LIBPCAP_DEPENDENCIES = host-flex host-bison
-+LIBPCAP_DEPENDENCIES = host-flex host-bison host-pkgconf
- 
- LIBPCAP_CONF_ENV = \
- 	ac_cv_header_linux_wireless_h=yes \
- 	CFLAGS="$(LIBPCAP_CFLAGS)"
- LIBPCAP_CFLAGS = $(TARGET_CFLAGS)
--LIBPCAP_CONF_OPTS = --disable-yydebug --with-pcap=linux --without-dag
-+LIBPCAP_CONF_OPTS = --disable-yydebug --with-pcap=linux --without-dag \
-+	--without-dpdk
- # Disable dbus to break recursive dependencies
- LIBPCAP_CONF_OPTS += --disable-dbus
- LIBPCAP_CONFIG_SCRIPTS = pcap-config
-@@ -35,8 +36,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_LIBNL),y)
- LIBPCAP_DEPENDENCIES += libnl
--LIBPCAP_CFLAGS += "-I$(STAGING_DIR)/usr/include/libnl3"
--LIBPCAP_CONF_OPTS += --with-libnl=$(STAGING_DIR)/usr
-+LIBPCAP_CONF_OPTS += --with-libnl
- else
- LIBPCAP_CONF_OPTS += --without-libnl
- endif
+-PYTHON_FIRE_VERSION = 0.3.1
++PYTHON_FIRE_VERSION = 0.4.0
+ PYTHON_FIRE_SOURCE = fire-$(PYTHON_FIRE_VERSION).tar.gz
+-PYTHON_FIRE_SITE = https://files.pythonhosted.org/packages/34/a7/0e22e70778aca01a52b9c899d9c145c6396d7b613719cd63db97ffa13f2f
++PYTHON_FIRE_SITE = https://files.pythonhosted.org/packages/11/07/a119a1aa04d37bc819940d95ed7e135a7dcca1c098123a3764a6dcace9e7
+ PYTHON_FIRE_SETUP_TYPE = setuptools
+ PYTHON_FIRE_LICENSE = Apache-2.0
+ PYTHON_FIRE_LICENSE_FILES = LICENSE
+-- 
+2.27.0
