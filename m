@@ -1,10 +1,10 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Fri, 22 Jan 2021 19:30:12 +0100
-Subject: [Buildroot] [PATCH 02/10] package/perl-http-message: bump to
- version 6.27
+Date: Fri, 22 Jan 2021 19:30:14 +0100
+Subject: [Buildroot] [PATCH 04/10] package/perl-lwp-protocol-https: bump to
+ version 6.10
 In-Reply-To: <20210122183020.874889-1-francois.perrad@gadz.org>
 References: <20210122183020.874889-1-francois.perrad@gadz.org>
-Message-ID: <20210122183020.874889-2-francois.perrad@gadz.org>
+Message-ID: <20210122183020.874889-4-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,35 +13,49 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-http-message/perl-http-message.hash | 4 ++--
- package/perl-http-message/perl-http-message.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/perl-lwp-protocol-https/Config.in                    | 2 +-
+ package/perl-lwp-protocol-https/perl-lwp-protocol-https.hash | 4 ++--
+ package/perl-lwp-protocol-https/perl-lwp-protocol-https.mk   | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/perl-http-message/perl-http-message.hash b/package/perl-http-message/perl-http-message.hash
-index 989d7efd0..4e406c9d4 100644
---- a/package/perl-http-message/perl-http-message.hash
-+++ b/package/perl-http-message/perl-http-message.hash
+diff --git a/package/perl-lwp-protocol-https/Config.in b/package/perl-lwp-protocol-https/Config.in
+index c4a7b306b..9793b6f5d 100644
+--- a/package/perl-lwp-protocol-https/Config.in
++++ b/package/perl-lwp-protocol-https/Config.in
+@@ -8,7 +8,7 @@ config BR2_PACKAGE_PERL_LWP_PROTOCOL_HTTPS
+ 	help
+ 	  Provide https support for LWP::UserAgent.
+ 
+-	  https://metacpan.org/release/LWP-Protocol-https
++	  https://github.com/libwww-perl/LWP-Protocol-https
+ 
+ comment "perl-lwp-protocol-https needs a toolchain w/ dynamic library"
+ 	depends on BR2_STATIC_LIBS
+diff --git a/package/perl-lwp-protocol-https/perl-lwp-protocol-https.hash b/package/perl-lwp-protocol-https/perl-lwp-protocol-https.hash
+index 680e24f60..a3c011fe8 100644
+--- a/package/perl-lwp-protocol-https/perl-lwp-protocol-https.hash
++++ b/package/perl-lwp-protocol-https/perl-lwp-protocol-https.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5  3b4b64fff4885429b997390564521db0  HTTP-Message-6.26.tar.gz
--sha256  6ce6c359de75c3bb86696a390189b485ec93e3ffc55326b6d044fa900f1725e1  HTTP-Message-6.26.tar.gz
-+md5  4b4038aef74f63c2b6baca189c6c6602  HTTP-Message-6.27.tar.gz
-+sha256  0be0f720fbbbdbae8711f6eec9b2f0d34bd5ed5046fc66b80dc3b42017c1e699  HTTP-Message-6.27.tar.gz
+-md5  6d497ec74f3cf88ad41898fcb8b01145  LWP-Protocol-https-6.09.tar.gz
+-sha256  16cfe1a511690b066db5667c8714802ee2b9c5d28a31a3e7bd36fbc70a3af592  LWP-Protocol-https-6.09.tar.gz
++md5  cf64e4bc57a9266ac4343cdf0808c5c8  LWP-Protocol-https-6.10.tar.gz
++sha256  cecfc31fe2d4fc854cac47fce13d3a502e8fdfe60c5bc1c09535743185f2a86c  LWP-Protocol-https-6.10.tar.gz
  
  # computed by scancpan
- sha256  1379396dcd2291f17a741d2d6bf14d379f5f2ab91b3c7e7b92c5f82856e2d7ac  LICENSE
-diff --git a/package/perl-http-message/perl-http-message.mk b/package/perl-http-message/perl-http-message.mk
-index 114fc8000..72b94356b 100644
---- a/package/perl-http-message/perl-http-message.mk
-+++ b/package/perl-http-message/perl-http-message.mk
+ sha256  294e73f9bd40ea600e9478cd57489a7da72558a83c6a66f37a82e4e0d5a706d9  LICENSE
+diff --git a/package/perl-lwp-protocol-https/perl-lwp-protocol-https.mk b/package/perl-lwp-protocol-https/perl-lwp-protocol-https.mk
+index 0c36e7aea..0663820b2 100644
+--- a/package/perl-lwp-protocol-https/perl-lwp-protocol-https.mk
++++ b/package/perl-lwp-protocol-https/perl-lwp-protocol-https.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_HTTP_MESSAGE_VERSION = 6.26
-+PERL_HTTP_MESSAGE_VERSION = 6.27
- PERL_HTTP_MESSAGE_SOURCE = HTTP-Message-$(PERL_HTTP_MESSAGE_VERSION).tar.gz
- PERL_HTTP_MESSAGE_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
- PERL_HTTP_MESSAGE_LICENSE = Artistic or GPL-1.0+
+-PERL_LWP_PROTOCOL_HTTPS_VERSION = 6.09
++PERL_LWP_PROTOCOL_HTTPS_VERSION = 6.10
+ PERL_LWP_PROTOCOL_HTTPS_SOURCE = LWP-Protocol-https-$(PERL_LWP_PROTOCOL_HTTPS_VERSION).tar.gz
+ PERL_LWP_PROTOCOL_HTTPS_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
+ PERL_LWP_PROTOCOL_HTTPS_LICENSE = Artistic or GPL-1.0+
 -- 
 2.27.0
