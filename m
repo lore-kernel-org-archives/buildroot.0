@@ -1,24 +1,20 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Jan 2021 20:07:46 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libsocketcan: bump to version
- 0.0.12
-In-Reply-To: <20210121222918.2376671-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 21 Jan 2021 23:29:18 +0100")
-References: <20210121222918.2376671-1-fontaine.fabrice@gmail.com>
-Message-ID: <87k0s47ptp.fsf@dell.be.48ers.dk>
+Date: Fri, 22 Jan 2021 20:08:15 +0100
+Subject: [Buildroot] [PATCH 1/1] package/fuse-overlayfs: bump to version
+ 1.4.0
+In-Reply-To: <20210122142936.2026366-1-asafka7@gmail.com> (Asaf Kahlon's
+ message of "Fri, 22 Jan 2021 16:29:35 +0200")
+References: <20210122142936.2026366-1-asafka7@gmail.com>
+Message-ID: <87ft2s7psw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Asaf" == Asaf Kahlon <asafka7@gmail.com> writes:
 
- > Update indentation in hash file (two spaces)
- > A single change in the source code:
- > https://git.pengutronix.de/cgit/tools/libsocketcan/commit/?id=b5823dc86f8d0c2ff5f46fcda6e8b75728fc69ee
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 
 Committed, thanks.
 
