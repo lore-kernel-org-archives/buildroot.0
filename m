@@ -1,47 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Jan 2021 16:35:26 +0100
-Subject: [Buildroot] : How to add a path to environment variable ?
-In-Reply-To: <CAGshWo3aGOKS6qqa8gg6i66z17vZDKeYQG-JE6VHF4LKfwvZHQ@mail.gmail.com>
- (manu f.'s message of "Fri, 22 Jan 2021 12:22:51 +0100")
-References: <CAGshWo0jnJNF-v=-WJH9tUH4CAtzZY9XwrPTgUeBhgyeRfKMzw@mail.gmail.com>
- <20210121174729.31850f5c@windsurf.home>
- <CAGshWo2KMW3VvWSGeOvqqhvi3z-Onn_hdyA-4Yjb=YEKdUDuTw@mail.gmail.com>
- <20210121204741.08247783@windsurf.home> <20210121214338.GD2375@scaer>
- <87mtx18cze.fsf@dell.be.48ers.dk>
- <CAGshWo3aGOKS6qqa8gg6i66z17vZDKeYQG-JE6VHF4LKfwvZHQ@mail.gmail.com>
-Message-ID: <87a6t17znl.fsf@dell.be.48ers.dk>
+From: Joachim Wiberg <troglobit@gmail.com>
+Date: Fri, 22 Jan 2021 16:43:30 +0100
+Subject: [Buildroot] [PATCH 0/3] package/sysklogd: version bump, some fixes,
+ and more menuconfig
+Message-ID: <20210122154333.1927190-1-troglobit@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "manu" == manu f <e.fiancette@gmail.com> writes:
+Hi!
 
- > Thanks all for your return,
- > ok, so I think I mistaken about buildroot nodejs version, sorry I used
- > "deprecated" term ;-)
- > I actualy use node version 14.15.0, but 12.x must work also.
- > I use the buildroot checkout version 2020.02.8 who must be if I well
- > understood at time I did it, the last stable version.
- > if I select the target package nodejs, in help, I saw it is based on V8.
+This series bumps sysklogd to the latest version, fixes an issue with
+fetching from GitHub (release tarballs exist), and finally adds some
+menuconfig options enabling the native logger tool and controlling
+the back-off time for unreachable remote syslog servers.
 
-V8 is a reference to the V8 Javascript engine used by nodejs (and
-Chrome):
+Cheers
+ /Joachim
 
-https://v8.dev/
+Joachim Wiberg (3):
+  package/sysklogd: bump to verson 2.2.0
+  package/sysklogd: add menuconfig support for enabling native logger
+  package/sysklogd: menuconfig support for remote syslog retry delay
 
-Buildroot 2020.02.8 provides nodejs 12.18.4 (2020.02.9 bumped that to
-nodejs 12.19.1 and the upcoming 2020.02.10 release will include 12.20.1
-to fix some security issues).
-
- > if I need to update to a newer version I think I need to install my own
- > nodejs package version, right ? (or is there a way to update the installed
- > package inside buildroot without moving to another buidrood version ?
-
-Correct, but if you do so, it would be nice if you could send a patch to
-change the version so the upcoming 2021.02 release will have then new
-version.
+ ...RCE_required_for_O_CLOEXEC_on_uClibc.patch | 44 -------------------
+ package/sysklogd/Config.in                    | 30 +++++++++++++
+ package/sysklogd/sysklogd.hash                |  2 +-
+ package/sysklogd/sysklogd.mk                  | 12 ++---
+ package/sysklogd/syslogd.service              |  3 +-
+ 5 files changed, 40 insertions(+), 51 deletions(-)
+ delete mode 100644 package/sysklogd/0001-Define-_GNU_SOURCE_required_for_O_CLOEXEC_on_uClibc.patch
 
 -- 
-Bye, Peter Korsgaard
+2.25.1
