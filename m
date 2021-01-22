@@ -1,37 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Jan 2021 20:07:22 +0100
-Subject: [Buildroot] [PATCH 2/2] package/ltp-testsuite: bump version to
- 20210121
-In-Reply-To: <20210121191208.16756-2-petr.vorel@gmail.com> (Petr Vorel's
- message of "Thu, 21 Jan 2021 20:12:08 +0100")
-References: <20210121191208.16756-1-petr.vorel@gmail.com>
- <20210121191208.16756-2-petr.vorel@gmail.com>
-Message-ID: <87o8hg7pud.fsf@dell.be.48ers.dk>
+Date: Fri, 22 Jan 2021 20:07:46 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libsocketcan: bump to version
+ 0.0.12
+In-Reply-To: <20210121222918.2376671-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 21 Jan 2021 23:29:18 +0100")
+References: <20210121222918.2376671-1-fontaine.fabrice@gmail.com>
+Message-ID: <87k0s47ptp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Petr" == Petr Vorel <petr.vorel@gmail.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Add --disable-metadata configure option. Buildroot by default disable
- > packages' doc generation.  Also generating LTP metadata documentation
- > would require have host package, which could be complicated since the
- > LTP build system is autoconf but not automake based.
+ > Update indentation in hash file (two spaces)
+ > A single change in the source code:
+ > https://git.pengutronix.de/cgit/tools/libsocketcan/commit/?id=b5823dc86f8d0c2ff5f46fcda6e8b75728fc69ee
 
- > Drop cacheflush01 patch (from this release) and rebase musl workaround
- > patch.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
- > Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
- > ---
- > Hi,
-
- > well I'll probably have to prepare host-ltp-testsuite package soon,
- > because we plan to have one build-time dependency from our sources,
- > but not needed so far.
-
-OK. Committed, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
