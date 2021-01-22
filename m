@@ -1,47 +1,52 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Fri, 22 Jan 2021 19:30:20 +0100
-Subject: [Buildroot] [PATCH 10/10] package/perl-mojolicious: bump to version
- 8.71
+Date: Fri, 22 Jan 2021 19:30:17 +0100
+Subject: [Buildroot] [PATCH 07/10] package/perl-role-tiny: bump to version
+ 2.002003
 In-Reply-To: <20210122183020.874889-1-francois.perrad@gadz.org>
 References: <20210122183020.874889-1-francois.perrad@gadz.org>
-Message-ID: <20210122183020.874889-10-francois.perrad@gadz.org>
+Message-ID: <20210122183020.874889-7-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+diff LICENSE:
+-This software is Copyright (c) 2019 by mst - Matt S. Trout (cpan:MSTROUT) <mst@shadowcat.co.uk>.
++This software is Copyright (c) 2021 by mst - Matt S. Trout (cpan:MSTROUT) <mst@shadowcat.co.uk>.
+
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-mojolicious/perl-mojolicious.hash | 4 ++--
- package/perl-mojolicious/perl-mojolicious.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/perl-role-tiny/perl-role-tiny.hash | 6 +++---
+ package/perl-role-tiny/perl-role-tiny.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/perl-mojolicious/perl-mojolicious.hash b/package/perl-mojolicious/perl-mojolicious.hash
-index 65a3b641a..a94c57abc 100644
---- a/package/perl-mojolicious/perl-mojolicious.hash
-+++ b/package/perl-mojolicious/perl-mojolicious.hash
+diff --git a/package/perl-role-tiny/perl-role-tiny.hash b/package/perl-role-tiny/perl-role-tiny.hash
+index c05873e65..9de786800 100644
+--- a/package/perl-role-tiny/perl-role-tiny.hash
++++ b/package/perl-role-tiny/perl-role-tiny.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5  7033bd9404776d92b48c0f86b81a0983  Mojolicious-8.63.tar.gz
--sha256  c62cc22d8a43982f6f81d47da6875f77ba6fbaa56760251857be4d13390085db  Mojolicious-8.63.tar.gz
-+md5  f93e56c64cad7002bd7bc1f8091ed05b  Mojolicious-8.71.tar.gz
-+sha256  155bfdcd1d49f4f10be71ec8eeb93de1873b9ab810f3d6d521d3ec10f0ef6e0d  Mojolicious-8.71.tar.gz
+-md5    98446826608b1e943e65c1f6e35942fe Role-Tiny-2.001004.tar.gz
+-sha256 92ba5712850a74102c93c942eb6e7f62f7a4f8f483734ed289d08b324c281687 Role-Tiny-2.001004.tar.gz
++md5  065e459cdc3c6e163c6e8359baf69f45  Role-Tiny-2.002003.tar.gz
++sha256  6981e5f2d0beded157840199d678da462b22a9a3753333cab322ab6efb0fbb89  Role-Tiny-2.002003.tar.gz
  
  # computed by scancpan
- sha256  19e2e0f2079ea1ce1576eb4ecc0575b33fe45b2b8e71f4aa589d6bedd1da4e0a  LICENSE
-diff --git a/package/perl-mojolicious/perl-mojolicious.mk b/package/perl-mojolicious/perl-mojolicious.mk
-index 049783ff3..eed097d90 100644
---- a/package/perl-mojolicious/perl-mojolicious.mk
-+++ b/package/perl-mojolicious/perl-mojolicious.mk
+-sha256 88f4a8719c584d756dcfeebc7f35643066354188bfb57c672fbafcd44e044e9c LICENSE
++sha256  a8a1595c2347f7d10e896809d4f3dea85ccc10ac5644b8073111233cd120b14a  LICENSE
+diff --git a/package/perl-role-tiny/perl-role-tiny.mk b/package/perl-role-tiny/perl-role-tiny.mk
+index 0e1974fa1..5a6477f94 100644
+--- a/package/perl-role-tiny/perl-role-tiny.mk
++++ b/package/perl-role-tiny/perl-role-tiny.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_MOJOLICIOUS_VERSION = 8.63
-+PERL_MOJOLICIOUS_VERSION = 8.71
- PERL_MOJOLICIOUS_SOURCE = Mojolicious-$(PERL_MOJOLICIOUS_VERSION).tar.gz
- PERL_MOJOLICIOUS_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SR/SRI
- PERL_MOJOLICIOUS_LICENSE = Artistic-2.0
+-PERL_ROLE_TINY_VERSION = 2.001004
++PERL_ROLE_TINY_VERSION = 2.002003
+ PERL_ROLE_TINY_SOURCE = Role-Tiny-$(PERL_ROLE_TINY_VERSION).tar.gz
+ PERL_ROLE_TINY_SITE = $(BR2_CPAN_MIRROR)/authors/id/H/HA/HAARG
+ PERL_ROLE_TINY_LICENSE = Artistic or GPL-1.0+
 -- 
 2.27.0
