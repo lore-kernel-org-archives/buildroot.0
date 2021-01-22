@@ -1,67 +1,64 @@
-From: Joachim Wiberg <troglobit@gmail.com>
-Date: Fri, 22 Jan 2021 16:43:32 +0100
-Subject: [Buildroot] [PATCH 2/3] package/sysklogd: add menuconfig support
- for enabling native logger
-In-Reply-To: <20210122154333.1927190-1-troglobit@gmail.com>
-References: <20210122154333.1927190-1-troglobit@gmail.com>
-Message-ID: <20210122154333.1927190-3-troglobit@gmail.com>
+From: manu f <e.fiancette@gmail.com>
+Date: Fri, 22 Jan 2021 16:45:13 +0100
+Subject: [Buildroot] : How to add a path to environment variable ?
+In-Reply-To: <87a6t17znl.fsf@dell.be.48ers.dk>
+References: <CAGshWo0jnJNF-v=-WJH9tUH4CAtzZY9XwrPTgUeBhgyeRfKMzw@mail.gmail.com>
+ <20210121174729.31850f5c@windsurf.home>
+ <CAGshWo2KMW3VvWSGeOvqqhvi3z-Onn_hdyA-4Yjb=YEKdUDuTw@mail.gmail.com>
+ <20210121204741.08247783@windsurf.home> <20210121214338.GD2375@scaer>
+ <87mtx18cze.fsf@dell.be.48ers.dk>
+ <CAGshWo3aGOKS6qqa8gg6i66z17vZDKeYQG-JE6VHF4LKfwvZHQ@mail.gmail.com>
+ <87a6t17znl.fsf@dell.be.48ers.dk>
+Message-ID: <CAGshWo1aqT17jo56QrEtoQX2ia1DqcZ7imZzVTQQEoB6pjNZhQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Installs to /usr/bin and thus replaces the BusyBox logger if enabled.
+I think I am not ready to make a patch for now :-)
+firstly because I am not sure that how I install it is the good way..
+also I never made patch before. :-/
 
-Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
----
- package/sysklogd/Config.in   | 17 +++++++++++++++++
- package/sysklogd/sysklogd.mk |  4 ++++
- 2 files changed, 21 insertions(+)
+but you could find the arm version here :
+https://nodejs.org/dist/v14.15.0/node-v14.15.0-linux-armv7l.tar.xz
+but you already know that !
+;-)
 
-diff --git a/package/sysklogd/Config.in b/package/sysklogd/Config.in
-index 90649caa83..52bed0cc18 100644
---- a/package/sysklogd/Config.in
-+++ b/package/sysklogd/Config.in
-@@ -13,7 +13,24 @@ config BR2_PACKAGE_SYSKLOGD
- 
- 	  https://github.com/troglobit/sysklogd/
- 
-+if BR2_PACKAGE_SYSKLOGD
-+
-+config BR2_PACKAGE_SYSKLOGD_LOGGER
-+	bool "logger tool"
-+	help
-+	  Generate log messages from scripts or from the command line.
-+
-+	  This version of logger is receommended for use with sysklogd.
-+	  It makes use of the new syslogp() API for RFC5424 style logs,
-+	  e.g. MSGID, strucutred data (SD), etc.
-+
-+	  The BusyBox, or util-linux, logger tools can also be used, but
-+	  are limited to RFC3164 style messages.
-+
-+endif
-+
- comment "sysklogd needs a toolchain w/ threads"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-+
-diff --git a/package/sysklogd/sysklogd.mk b/package/sysklogd/sysklogd.mk
-index fc54ab6936..235219c4fc 100644
---- a/package/sysklogd/sysklogd.mk
-+++ b/package/sysklogd/sysklogd.mk
-@@ -11,6 +11,10 @@ SYSKLOGD_LICENSE_FILES = LICENSE
- SYSKLOGD_CPE_ID_VALID = YES
- SYSKLOGD_CONF_OPTS =  --prefix=/usr --sysconfdir=/etc --localstatedir=/var
- 
-+# Disable/Enable utilities
-+SYSKLOGD_CONF_OPTS += \
-+	$(if $(BR2_PACKAGE_SYSKLOGD_LOGGER),--with-logger,--without-logger)
-+
- define SYSKLOGD_INSTALL_SAMPLE_CONFIG
- 	$(INSTALL) -D -m 0644 package/sysklogd/syslog.conf \
- 		$(TARGET_DIR)/etc/syslog.conf
--- 
-2.25.1
+Le ven. 22 janv. 2021 ? 16:35, Peter Korsgaard <peter@korsgaard.com> a
+?crit :
+
+> >>>>> "manu" == manu f <e.fiancette@gmail.com> writes:
+>
+>  > Thanks all for your return,
+>  > ok, so I think I mistaken about buildroot nodejs version, sorry I used
+>  > "deprecated" term ;-)
+>  > I actualy use node version 14.15.0, but 12.x must work also.
+>  > I use the buildroot checkout version 2020.02.8 who must be if I well
+>  > understood at time I did it, the last stable version.
+>  > if I select the target package nodejs, in help, I saw it is based on V8.
+>
+> V8 is a reference to the V8 Javascript engine used by nodejs (and
+> Chrome):
+>
+> https://v8.dev/
+>
+> Buildroot 2020.02.8 provides nodejs 12.18.4 (2020.02.9 bumped that to
+> nodejs 12.19.1 and the upcoming 2020.02.10 release will include 12.20.1
+> to fix some security issues).
+>
+>  > if I need to update to a newer version I think I need to install my own
+>  > nodejs package version, right ? (or is there a way to update the
+> installed
+>  > package inside buildroot without moving to another buidrood version ?
+>
+> Correct, but if you do so, it would be nice if you could send a patch to
+> change the version so the upcoming 2021.02 release will have then new
+> version.
+>
+> --
+> Bye, Peter Korsgaard
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210122/07355916/attachment.html>
