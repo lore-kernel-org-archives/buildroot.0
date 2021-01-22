@@ -1,10 +1,10 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Fri, 22 Jan 2021 19:30:16 +0100
-Subject: [Buildroot] [PATCH 06/10] package/perl-params-util: bump to version
- 1.102
+Date: Fri, 22 Jan 2021 19:30:20 +0100
+Subject: [Buildroot] [PATCH 10/10] package/perl-mojolicious: bump to version
+ 8.71
 In-Reply-To: <20210122183020.874889-1-francois.perrad@gadz.org>
 References: <20210122183020.874889-1-francois.perrad@gadz.org>
-Message-ID: <20210122183020.874889-6-francois.perrad@gadz.org>
+Message-ID: <20210122183020.874889-10-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,35 +13,35 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-params-util/perl-params-util.hash | 4 ++--
- package/perl-params-util/perl-params-util.mk   | 2 +-
+ package/perl-mojolicious/perl-mojolicious.hash | 4 ++--
+ package/perl-mojolicious/perl-mojolicious.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-params-util/perl-params-util.hash b/package/perl-params-util/perl-params-util.hash
-index d43b8baff..b0461372b 100644
---- a/package/perl-params-util/perl-params-util.hash
-+++ b/package/perl-params-util/perl-params-util.hash
+diff --git a/package/perl-mojolicious/perl-mojolicious.hash b/package/perl-mojolicious/perl-mojolicious.hash
+index 65a3b641a..a94c57abc 100644
+--- a/package/perl-mojolicious/perl-mojolicious.hash
++++ b/package/perl-mojolicious/perl-mojolicious.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5  eaf000a27bbd21abfd55f83473ab79fd  Params-Util-1.101.tar.gz
--sha256  97f391bc092b9c911e4536d103afd48058eb1f8a53d729af7adb65430eb338b7  Params-Util-1.101.tar.gz
-+md5  f1aa70ba570f03f14cd394096b9c6883  Params-Util-1.102.tar.gz
-+sha256  499bb1b482db24fda277a51525596ad092c2bd51dd508fa8fec2e9f849097402  Params-Util-1.102.tar.gz
+-md5  7033bd9404776d92b48c0f86b81a0983  Mojolicious-8.63.tar.gz
+-sha256  c62cc22d8a43982f6f81d47da6875f77ba6fbaa56760251857be4d13390085db  Mojolicious-8.63.tar.gz
++md5  f93e56c64cad7002bd7bc1f8091ed05b  Mojolicious-8.71.tar.gz
++sha256  155bfdcd1d49f4f10be71ec8eeb93de1873b9ab810f3d6d521d3ec10f0ef6e0d  Mojolicious-8.71.tar.gz
  
  # computed by scancpan
- sha256  08c2ed7589aff3b2076b48b792078d3479c2295559ee7bc4615e93abe0473939  ARTISTIC-1.0
-diff --git a/package/perl-params-util/perl-params-util.mk b/package/perl-params-util/perl-params-util.mk
-index 1a48a46fe..8c2a960c4 100644
---- a/package/perl-params-util/perl-params-util.mk
-+++ b/package/perl-params-util/perl-params-util.mk
+ sha256  19e2e0f2079ea1ce1576eb4ecc0575b33fe45b2b8e71f4aa589d6bedd1da4e0a  LICENSE
+diff --git a/package/perl-mojolicious/perl-mojolicious.mk b/package/perl-mojolicious/perl-mojolicious.mk
+index 049783ff3..eed097d90 100644
+--- a/package/perl-mojolicious/perl-mojolicious.mk
++++ b/package/perl-mojolicious/perl-mojolicious.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_PARAMS_UTIL_VERSION = 1.101
-+PERL_PARAMS_UTIL_VERSION = 1.102
- PERL_PARAMS_UTIL_SOURCE = Params-Util-$(PERL_PARAMS_UTIL_VERSION).tar.gz
- PERL_PARAMS_UTIL_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RE/REHSACK
- PERL_PARAMS_UTIL_LICENSE = Artistic or GPL-1.0+
+-PERL_MOJOLICIOUS_VERSION = 8.63
++PERL_MOJOLICIOUS_VERSION = 8.71
+ PERL_MOJOLICIOUS_SOURCE = Mojolicious-$(PERL_MOJOLICIOUS_VERSION).tar.gz
+ PERL_MOJOLICIOUS_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SR/SRI
+ PERL_MOJOLICIOUS_LICENSE = Artistic-2.0
 -- 
 2.27.0
