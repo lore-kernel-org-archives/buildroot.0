@@ -1,46 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Jan 2021 11:48:10 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/gstreamer1: bump
- version to 1.16.3
-Message-ID: <20210122103050.9993A8188A@busybox.osuosl.org>
+Date: Fri, 22 Jan 2021 11:48:20 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/gst1-plugins-bad:
+ security bump to version 1.16.3
+Message-ID: <20210122103051.C20C9818A4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=087895f23b4d3ab129d8b5f246cde01a790ba596
+commit: https://git.buildroot.net/buildroot/commit/?id=236c90d62b0911c563c021dfae3febe931352b12
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Bugfix release. For details, see the release notes:
-https://gstreamer.freedesktop.org/releases/1.16/#1.16.3
+Fixes the following security issue:
+
+- CVE-2021-3185: gstreamer: buffer overflow in
+  gst_h264_slice_parse_dec_ref_pic_marking
+
+For more details, see the advisory:
+https://www.openwall.com/lists/oss-security/2021/01/20/1
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer1/gstreamer1/gstreamer1.hash | 4 ++--
- package/gstreamer1/gstreamer1/gstreamer1.mk   | 2 +-
+ package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash | 4 ++--
+ package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gstreamer1/gstreamer1.hash b/package/gstreamer1/gstreamer1/gstreamer1.hash
-index dd379e6027..780bfddb25 100644
---- a/package/gstreamer1/gstreamer1/gstreamer1.hash
-+++ b/package/gstreamer1/gstreamer1/gstreamer1.hash
-@@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.16.2.tar.xz.sha256sum
--sha256 e3f044246783fd685439647373fa13ba14f7ab0b346eadd06437092f8419e94e gstreamer-1.16.2.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.16.3.tar.xz.sha256sum
-+sha256 692f037968e454e508b0f71d9674e2e26c78475021407fcf8193b1c7e59543c7 gstreamer-1.16.3.tar.xz
- sha256 f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a COPYING
-diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
-index 4eb3158b8f..9a3f9dbb52 100644
---- a/package/gstreamer1/gstreamer1/gstreamer1.mk
-+++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash
+index 7b59b4dbec..a778a4007c 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash
+@@ -1,4 +1,4 @@
+-# From https://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-1.16.2.tar.xz.sha256sum
+-sha256 f1cb7aa2389569a5343661aae473f0a940a90b872001824bc47fa8072a041e74 gst-plugins-bad-1.16.2.tar.xz
++# From https://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-1.16.3.tar.xz.sha256sum
++sha256 84efe57011658f0a53a5d5b20f64ef109f5105dccb0808c21e069e946673514d gst-plugins-bad-1.16.3.tar.xz
+ sha256 0b12e4d1cd5db5f8a0c04fc98a1d8c3acc533097b6198d6644420da78d460223 COPYING
+ sha256 cf9b86bcf2d298e8cf5b9d8982f9dab296465b002fdfa0347357a0732f961e03 COPYING.LIB
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+index ef36e4dc0a..fcb98e433f 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GSTREAMER1_VERSION = 1.16.2
-+GSTREAMER1_VERSION = 1.16.3
- GSTREAMER1_SOURCE = gstreamer-$(GSTREAMER1_VERSION).tar.xz
- GSTREAMER1_SITE = https://gstreamer.freedesktop.org/src/gstreamer
- GSTREAMER1_INSTALL_STAGING = YES
+-GST1_PLUGINS_BAD_VERSION = 1.16.2
++GST1_PLUGINS_BAD_VERSION = 1.16.3
+ GST1_PLUGINS_BAD_SOURCE = gst-plugins-bad-$(GST1_PLUGINS_BAD_VERSION).tar.xz
+ GST1_PLUGINS_BAD_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-bad
+ GST1_PLUGINS_BAD_INSTALL_STAGING = YES
