@@ -1,35 +1,42 @@
 From: Guy Ka <guyarkam@gmail.com>
-Date: Fri, 22 Jan 2021 16:47:08 -0500
-Subject: [Buildroot] RISCV32 How to avoid the generation of compressed
- instructions
-Message-ID: <CAEYXRPniVPF2VZze00+vhCvy-qZTG6QerUm1u0Ez61v+coGKqg@mail.gmail.com>
+Date: Fri, 22 Jan 2021 16:51:41 -0500
+Subject: [Buildroot] RV32 "initial RAM FS linked into the target"
+In-Reply-To: <CAEYXRPnWD3VZTwuMNnk6zk76xnhEy8imJEe-iXgpcT3B8Hkivw@mail.gmail.com>
+References: <CAEYXRPnWD3VZTwuMNnk6zk76xnhEy8imJEe-iXgpcT3B8Hkivw@mail.gmail.com>
+Message-ID: <CAEYXRPnCO5iVD-L1g2hPxZR6c_NKPOqr7CcNF3XdPOATf+1_eQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-I would like to build a RISCV32 system. My underlying hardware does not
-support compressed instructions. Using latest Buildroot (90a82161) from Jan
-21
-Outgoing from make qemu_riscv32_virt_defconfig
-I modified
-Target Options => Target Architecture Variant => Custom and I made sure
-that "C compressed Instructions" is unchecked.
-When I build the system, I still see compressed instructions in the kernel
-and in the boot loader and as a matter of fact, I see the line
-Boot HART ISA rv32imafdcsu during the OpenSbi boot up.
-I see the following lines in my config file
-BR2_RISCV_ISA_RVI=y
-BR2_RISCV_ISA_RVM=y
-BR2_RISCV_ISA_RVA=y
-BR2_RISCV_ISA_CUSTOM_RVM=y
-BR2_RISCV_ISA_CUSTOM_RVA=y
-# BR2_RISCV_ISA_CUSTOM_RVF is not set
-# BR2_RISCV_ISA_CUSTOM_RVC is not set
+I forgot to mention that I am using  the latest Buildroot (90a82161) from
+Jan 21.
+G
 
-Could it be that the ISA options are not forwarded to the kernel/bootloader?
+On Fri, Jan 22, 2021 at 4:23 PM Guy Ka <guyarkam@gmail.com> wrote:
+
+> Hello,,
+> I am trying to build an RV32 system with the Root FS linked into the
+> kernel
+> I started with make qemu_riscv32_virt_defconfig
+> and subsequently
+> make  menuconfig
+> In the Filesystem section I selected the option "Initial RAM filesystem
+> linked into Linux Kernel"
+> ( I also selected OpenSBI and included Linux as OpenSbi payload)
+> I saved my configuration and launched the build process.
+>
+> Everything completed without error. I can boot the kernel with spike/Qemu
+> while providing the rootfs as the --initrd parameter.
+> My assumption was that the rootfs would be included in the Linux and I
+> would not need to pass it as an initrd parameter
+> However, if I omit the rootfs and only provide the kernel/Opensbi, I get a
+> kernel panic message "Unable to mount root fs on unknown-block (0,0)"
+> Is my assumption correct? If yes is there any specific parameter that I
+> should pass to the Kernel for this to work?
+>
+>
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210122/ccfd041e/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210122/cafa3721/attachment.html>
