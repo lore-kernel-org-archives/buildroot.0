@@ -1,66 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 23 Jan 2021 21:27:13 +0100
-Subject: [Buildroot] [git commit] linux: add support for Image.gz kernel
- format
-Message-ID: <20210123200754.0DB9A8152E@busybox.osuosl.org>
+Date: Sat, 23 Jan 2021 21:27:40 +0100
+Subject: [Buildroot] [PATCH 01/10] package/perl-http-cookies: bump to
+ version 6.10
+In-Reply-To: <20210122183020.874889-1-francois.perrad@gadz.org>
+References: <20210122183020.874889-1-francois.perrad@gadz.org>
+Message-ID: <20210123212740.0e3c3986@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=96c26ce86322de1985138958af7a7d14d825afb8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri, 22 Jan 2021 19:30:11 +0100
+Francois Perrad <fperrad@gmail.com> wrote:
 
-arm64 / riscv supports building a gzip compressed 'Image' format kernel,
-which is sometimes useful. From arch/arm64/Makefile:
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/perl-http-cookies/perl-http-cookies.hash | 4 ++--
+>  package/perl-http-cookies/perl-http-cookies.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-all:	Image.gz
+Thanks, series applied!
 
-Image: vmlinux
-	$(Q)$(MAKE) $(build)=$(boot) $(boot)/$@
-
-Image.%: Image
-	$(Q)$(MAKE) $(build)=$(boot) $(boot)/$@
-
-(and similar logic for riscv)
-
-Future architectures may or may not copy this logic, so for robustness add
-an explicit Image.gz format rather than copying both Image and Image.gz when
-the Image format is used.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- linux/Config.in | 4 ++++
- linux/linux.mk  | 2 ++
- 2 files changed, 6 insertions(+)
-
-diff --git a/linux/Config.in b/linux/Config.in
-index 4010a9def8..7cef0f3655 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -263,6 +263,10 @@ config BR2_LINUX_KERNEL_IMAGE
- 	bool "Image"
- 	depends on BR2_aarch64 || BR2_riscv
- 
-+config BR2_LINUX_KERNEL_IMAGEGZ
-+	bool "Image.gz"
-+	depends on BR2_aarch64 || BR2_riscv
-+
- config BR2_LINUX_KERNEL_LINUX_BIN
- 	bool "linux.bin"
- 	depends on BR2_microblaze
-diff --git a/linux/linux.mk b/linux/linux.mk
-index c2ea0008d7..a212f42c28 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -204,6 +204,8 @@ else ifeq ($(BR2_LINUX_KERNEL_SIMPLEIMAGE),y)
- LINUX_IMAGE_NAME = simpleImage.$(firstword $(LINUX_DTS_NAME))
- else ifeq ($(BR2_LINUX_KERNEL_IMAGE),y)
- LINUX_IMAGE_NAME = Image
-+else ifeq ($(BR2_LINUX_KERNEL_IMAGEGZ),y)
-+LINUX_IMAGE_NAME = Image.gz
- else ifeq ($(BR2_LINUX_KERNEL_LINUX_BIN),y)
- LINUX_IMAGE_NAME = linux.bin
- else ifeq ($(BR2_LINUX_KERNEL_VMLINUX_BIN),y)
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
