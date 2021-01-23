@@ -1,51 +1,52 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Sat, 23 Jan 2021 14:01:03 -0300
-Subject: [Buildroot] [PATCH] configs/mx53loco: bump U-Boot and kernel
- versions
-Message-ID: <20210123170103.3578936-1-festevam@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 23 Jan 2021 18:05:01 +0100
+Subject: [Buildroot] [git commit] package/libpcap: fix build failure without
+ wchar
+Message-ID: <20210123164535.515E78151B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump to U-Boot 2021.01 and kernel 5.10.8 versions.
+commit: https://git.buildroot.net/buildroot/commit/?id=768213c71b7d3c2defb683b7073bc197236f80da
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+libpcap requires c99 since version 1.10.0 and
+https://github.com/the-tcpdump-group/libpcap/commit/68e5ca3f4cbb66d687582ae9563009c87bf3d184
+
+However, this test will fail without wchar on:
+
+configure:3609: /home/buildroot/autobuild/run/instance-2/output-1/host/bin/arm-linux-gcc -std=gnu99 -c -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 conftest.c >&5
+conftest.c:52:9: error: unknown type name 'wchar_t'
+   const wchar_t *name;
+         ^~~~~~~
+
+So hardcode ac_cv_prog_cc_c99 as already done in numerous package such
+as apparmor, wireshark, xz, etc.
+
+Fixes:
+ - http://autobuild.buildroot.org/results/6e87c25a0dccccf5e7ad03742597a0613f554506
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/mx53loco_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/libpcap/libpcap.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/configs/mx53loco_defconfig b/configs/mx53loco_defconfig
-index 69a94e071b2b..18785aa0c8d8 100644
---- a/configs/mx53loco_defconfig
-+++ b/configs/mx53loco_defconfig
-@@ -2,8 +2,8 @@
- BR2_arm=y
- BR2_cortex_a8=y
+diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
+index 81e7cd4ab0..24215ebed5 100644
+--- a/package/libpcap/libpcap.mk
++++ b/package/libpcap/libpcap.mk
+@@ -12,8 +12,11 @@ LIBPCAP_CPE_ID_VENDOR = tcpdump
+ LIBPCAP_INSTALL_STAGING = YES
+ LIBPCAP_DEPENDENCIES = host-flex host-bison host-pkgconf
  
--# Linux headers same as kernel, a 5.7 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_7=y
-+# Linux headers same as kernel, a 5.10 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
- 
- # System
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-@@ -22,13 +22,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx53loco"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.07"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.01"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.7.8"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.9"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx53-qsb imx53-qsrb"
--- 
-2.25.1
++# ac_cv_prog_cc_c99 is required for BR2_USE_WCHAR=n because the C99 test
++# provided by autoconf relies on wchar_t.
+ LIBPCAP_CONF_ENV = \
+ 	ac_cv_header_linux_wireless_h=yes \
++	ac_cv_prog_cc_c99=-std=gnu99 \
+ 	CFLAGS="$(LIBPCAP_CFLAGS)"
+ LIBPCAP_CFLAGS = $(TARGET_CFLAGS)
+ LIBPCAP_CONF_OPTS = --disable-yydebug --with-pcap=linux --without-dag \
