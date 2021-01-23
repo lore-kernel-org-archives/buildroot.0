@@ -1,103 +1,80 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 23 Jan 2021 22:17:21 +0100
-Subject: [Buildroot] [PATCH v3 1/1] package/uclibc: add backtrace
- support option
-In-Reply-To: <20210111130705.25005-1-andrea.ricchi@amarulasolutions.com>
-References: <20210111130705.25005-1-andrea.ricchi@amarulasolutions.com>
-Message-ID: <20210123211721.GE926565@scaer>
+Date: Sat, 23 Jan 2021 22:21:36 +0100
+Subject: [Buildroot] [git commit] {linux, linux-headers}: bump 5.{4,
+ 10}.x 4.{4, 9, 14, 19} series
+Message-ID: <20210123210233.C46228183F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Andrea, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=6943c84d9c27f6ac890ffb720a62932be0f4f358
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-01-11 14:07 +0100, Andrea Ricchi spake thusly:
-> Add toolchain configuration to support execinfo.h and backtrace
-> features.
-> 
-> Signed-off-by: Andrea Ricchi <andrea.ricchi@amarulasolutions.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ linux/Config.in                      |  2 +-
+ linux/linux.hash                     | 12 ++++++------
+ package/linux-headers/Config.in.host | 12 ++++++------
+ 3 files changed, 13 insertions(+), 13 deletions(-)
 
-We've discussed this amongst maintainers, and as I explained in my
-lengthy reply earlier, we believe this does not warrant a new option in
-the menuconfig.
-
-Thank you for your contribution nonetheless!
-
-Regards,
-Yann E. MORIN.
-
-> ---
-> Changes v2 -> v3:
->   - Remove BR2_USE_BACKTRACE selection (suggested by Angelo Compagnucci)
-> 
-> Changes v1 -> v2:
->   - add shared library dependency (suggested by Yann Morin)
-> 
->  package/uclibc/Config.in |  7 +++++++
->  package/uclibc/uclibc.mk | 11 +++++++++++
->  2 files changed, 18 insertions(+)
-> 
-> diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
-> index e59fef3c69..dedd58f940 100644
-> --- a/package/uclibc/Config.in
-> +++ b/package/uclibc/Config.in
-> @@ -39,6 +39,13 @@ config BR2_TOOLCHAIN_BUILDROOT_LOCALE
->  	  Enable this option if you want your toolchain to support
->  	  localization and internationalization.
->  
-> +config BR2_TOOLCHAIN_BUILDROOT_BACKTRACE
-> +	bool "Enable backtrace support"
-> +	depends on !BR2_STATIC_LIBS
-> +	help
-> +	  Enable this option if you want your toolchain to support
-> +	  execinfo.h and backtrace features.
-> +
->  choice
->  	prompt "Thread library implementation"
->  	help
-> diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-> index 53983e852d..b6f6c0f824 100644
-> --- a/package/uclibc/uclibc.mk
-> +++ b/package/uclibc/uclibc.mk
-> @@ -359,6 +359,16 @@ else
->  UCLIBC_SHARED_LIBS_CONFIG = $(call KCONFIG_ENABLE_OPT,HAVE_SHARED)
->  endif
->  
-> +#
-> +# backtrace support
-> +#
-> +
-> +ifeq ($(BR2_TOOLCHAIN_BUILDROOT_BACKTRACE),y)
-> +UCLIBC_BACKTRACE_CONFIG = $(call KCONFIG_ENABLE_OPT,UCLIBC_HAS_BACKTRACE)
-> +else
-> +UCLIBC_BACKTRACE_CONFIG = $(call KCONFIG_DISABLE_OPT,UCLIBC_HAS_BACKTRACE)
-> +endif
-> +
->  #
->  # Commands
->  #
-> @@ -401,6 +411,7 @@ define UCLIBC_KCONFIG_FIXUP_CMDS
->  	$(UCLIBC_LOCALE_CONFIG)
->  	$(UCLIBC_WCHAR_CONFIG)
->  	$(UCLIBC_SHARED_LIBS_CONFIG)
-> +	$(UCLIBC_BACKTRACE_CONFIG)
->  endef
->  
->  define UCLIBC_BUILD_CMDS
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/linux/Config.in b/linux/Config.in
+index 7cef0f3655..91d33cb5cb 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -125,7 +125,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "5.10.7" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "5.10.10" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "4.19.152-cip37" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "4.19.152-cip37-rt16" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 938c0eddf2..e9b6825c2b 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,11 +1,11 @@
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  4cbf6e09f90f2ae7160432c884d5a2aeb9d33a07ca7f50eb7d80f427706ffabe  linux-5.10.7.tar.xz
+-sha256  268dd5177b6df1867d4ed2452ffb11a016d955c43aba5e07940886f347ab0aaf  linux-5.4.89.tar.xz
++sha256  60ed866fa951522a5255ea37ec3ac2006d3f3427d4783a13ef478464f37cdb19  linux-5.10.10.tar.xz
++sha256  c0937ff98824c4b14cfea68a04340e0beb3c00f1cc02984daf2f3bdf542394fd  linux-5.4.92.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+-sha256  0679c8c31f40a35efd63d9c7a6a73dd2496c0cae5e3a4591c57e6dce38a7b68e  linux-4.4.251.tar.xz
+-sha256  ef4dcbbeb118c02c704581314832dc2a6912622946766bcede7ca3edbf1f960d  linux-4.9.251.tar.xz
+-sha256  9a844e290c61b39dd23df507ba1d9c2b2b4365e5993a978b19f1eb5610b926da  linux-4.14.215.tar.xz
+-sha256  312c67677c75adc4324078c5afb11411df379d5573ad0a429b3f4919f26bed01  linux-4.19.167.tar.xz
++sha256  661e98b9448cbac948c705fd44cd7d30200422ee1cb02950d142aa99a1b3985a  linux-4.4.253.tar.xz
++sha256  9a5b51a8350201bd38e3ff13909323a6571b4572a7b3caed76e462b07619bc18  linux-4.9.253.tar.xz
++sha256  62a36a25431016d98d0f1cff98be432086c51f86fd79042bd10a867b3a924d11  linux-4.14.217.tar.xz
++sha256  dd0d0264f8ef4363d0080054fd344470a73f07aca2cd673e91bf6e77fbe25b4a  linux-4.19.170.tar.xz
+ # Locally computed
+ sha256  d2a06f52143deb929b8d513cf9afc9bd065951389a80fa70bc4d63025b5b3fb9  linux-cip-4.19.152-cip37.tar.gz
+ sha256  bc1dacd3d0f526de3e8754a444e8e02a54521527af639ddb907cb35cda775a8c  linux-cip-4.19.152-cip37-rt16.tar.gz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 0eefaeb777..311999e7fa 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -346,12 +346,12 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "4.4.251"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.251"	if BR2_KERNEL_HEADERS_4_9
+-	default "4.14.215"	if BR2_KERNEL_HEADERS_4_14
+-	default "4.19.167"	if BR2_KERNEL_HEADERS_4_19
+-	default "5.4.89"	if BR2_KERNEL_HEADERS_5_4
+-	default "5.10.7"	if BR2_KERNEL_HEADERS_5_10
++	default "4.4.253"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.253"	if BR2_KERNEL_HEADERS_4_9
++	default "4.14.217"	if BR2_KERNEL_HEADERS_4_14
++	default "4.19.170"	if BR2_KERNEL_HEADERS_4_19
++	default "5.4.92"	if BR2_KERNEL_HEADERS_5_4
++	default "5.10.10"	if BR2_KERNEL_HEADERS_5_10
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
