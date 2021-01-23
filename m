@@ -1,47 +1,66 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 23 Jan 2021 21:26:46 +0100
-Subject: [Buildroot] [git commit] package/perl-mojolicious: bump to version
- 8.71
-Message-ID: <20210123200716.9F525811F8@busybox.osuosl.org>
+Date: Sat, 23 Jan 2021 21:27:13 +0100
+Subject: [Buildroot] [git commit] linux: add support for Image.gz kernel
+ format
+Message-ID: <20210123200754.0DB9A8152E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0afd150f5c3dc637a154c1c50e688e46ad50e6e7
+commit: https://git.buildroot.net/buildroot/commit/?id=96c26ce86322de1985138958af7a7d14d825afb8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+arm64 / riscv supports building a gzip compressed 'Image' format kernel,
+which is sometimes useful. From arch/arm64/Makefile:
+
+all:	Image.gz
+
+Image: vmlinux
+	$(Q)$(MAKE) $(build)=$(boot) $(boot)/$@
+
+Image.%: Image
+	$(Q)$(MAKE) $(build)=$(boot) $(boot)/$@
+
+(and similar logic for riscv)
+
+Future architectures may or may not copy this logic, so for robustness add
+an explicit Image.gz format rather than copying both Image and Image.gz when
+the Image format is used.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/perl-mojolicious/perl-mojolicious.hash | 4 ++--
- package/perl-mojolicious/perl-mojolicious.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ linux/Config.in | 4 ++++
+ linux/linux.mk  | 2 ++
+ 2 files changed, 6 insertions(+)
 
-diff --git a/package/perl-mojolicious/perl-mojolicious.hash b/package/perl-mojolicious/perl-mojolicious.hash
-index 65a3b641a1..a94c57abce 100644
---- a/package/perl-mojolicious/perl-mojolicious.hash
-+++ b/package/perl-mojolicious/perl-mojolicious.hash
-@@ -1,6 +1,6 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5  7033bd9404776d92b48c0f86b81a0983  Mojolicious-8.63.tar.gz
--sha256  c62cc22d8a43982f6f81d47da6875f77ba6fbaa56760251857be4d13390085db  Mojolicious-8.63.tar.gz
-+md5  f93e56c64cad7002bd7bc1f8091ed05b  Mojolicious-8.71.tar.gz
-+sha256  155bfdcd1d49f4f10be71ec8eeb93de1873b9ab810f3d6d521d3ec10f0ef6e0d  Mojolicious-8.71.tar.gz
+diff --git a/linux/Config.in b/linux/Config.in
+index 4010a9def8..7cef0f3655 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -263,6 +263,10 @@ config BR2_LINUX_KERNEL_IMAGE
+ 	bool "Image"
+ 	depends on BR2_aarch64 || BR2_riscv
  
- # computed by scancpan
- sha256  19e2e0f2079ea1ce1576eb4ecc0575b33fe45b2b8e71f4aa589d6bedd1da4e0a  LICENSE
-diff --git a/package/perl-mojolicious/perl-mojolicious.mk b/package/perl-mojolicious/perl-mojolicious.mk
-index 049783ff31..eed097d907 100644
---- a/package/perl-mojolicious/perl-mojolicious.mk
-+++ b/package/perl-mojolicious/perl-mojolicious.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PERL_MOJOLICIOUS_VERSION = 8.63
-+PERL_MOJOLICIOUS_VERSION = 8.71
- PERL_MOJOLICIOUS_SOURCE = Mojolicious-$(PERL_MOJOLICIOUS_VERSION).tar.gz
- PERL_MOJOLICIOUS_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SR/SRI
- PERL_MOJOLICIOUS_LICENSE = Artistic-2.0
++config BR2_LINUX_KERNEL_IMAGEGZ
++	bool "Image.gz"
++	depends on BR2_aarch64 || BR2_riscv
++
+ config BR2_LINUX_KERNEL_LINUX_BIN
+ 	bool "linux.bin"
+ 	depends on BR2_microblaze
+diff --git a/linux/linux.mk b/linux/linux.mk
+index c2ea0008d7..a212f42c28 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -204,6 +204,8 @@ else ifeq ($(BR2_LINUX_KERNEL_SIMPLEIMAGE),y)
+ LINUX_IMAGE_NAME = simpleImage.$(firstword $(LINUX_DTS_NAME))
+ else ifeq ($(BR2_LINUX_KERNEL_IMAGE),y)
+ LINUX_IMAGE_NAME = Image
++else ifeq ($(BR2_LINUX_KERNEL_IMAGEGZ),y)
++LINUX_IMAGE_NAME = Image.gz
+ else ifeq ($(BR2_LINUX_KERNEL_LINUX_BIN),y)
+ LINUX_IMAGE_NAME = linux.bin
+ else ifeq ($(BR2_LINUX_KERNEL_VMLINUX_BIN),y)
