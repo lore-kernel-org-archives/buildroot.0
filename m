@@ -1,43 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 23 Jan 2021 23:23:56 +0100
-Subject: [Buildroot] [PATCH v4 0/8] Add imx8mm platform using only
- upstream components
-In-Reply-To: <20201125183017.15585-1-xroumegue@gmail.com>
-References: <20201109142309.1135596-2-xroumegue@gmail.com>
- <20201125183017.15585-1-xroumegue@gmail.com>
-Message-ID: <20210123232356.647548fc@windsurf.home>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Sat, 23 Jan 2021 19:25:19 -0300
+Subject: [Buildroot] [PATCH] configs/wandboard: bump U-Boot and kernel
+ versions
+Message-ID: <20210123222519.197989-1-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Xavier,
+Bump to U-Boot 2021.01 and kernel 5.10.8 versions.
 
-On Wed, 25 Nov 2020 19:30:09 +0100
-Xavier Roumegue <xroumegue@gmail.com> wrote:
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ configs/wandboard_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
->  DEVELOPERS                                    |  3 ++
->  .../common/imx/genimage.cfg.template_imx8     |  2 +-
->  board/freescale/common/imx/post-image.sh      |  6 ++-
->  board/freescale/imx8mmevk/readme.txt          | 29 +++++++++++++-
->  boot/uboot/Config.in                          | 20 ++++++++++
->  boot/uboot/uboot.mk                           | 15 +++++++
->  configs/imx8mmevk_defconfig                   | 40 +++++++++++++++++++
->  package/freescale-imx/firmware-imx/Config.in  |  4 ++
->  .../firmware-imx/firmware-imx.mk              | 12 ++++++
->  9 files changed, 127 insertions(+), 4 deletions(-)
->  create mode 100644 configs/imx8mmevk_defconfig
-
-Sorry for the long delay on this patch series, but I finally took some
-time to look into it. Unfortunately, I'm still not quite happy about
-how things are handled. I will reply to individual patches to explain
-what I dislike and how I believe it should be changed.
-
-Thanks!
-
-Thomas
+diff --git a/configs/wandboard_defconfig b/configs/wandboard_defconfig
+index 4882042a1a1b..8f9e30a1a99f 100644
+--- a/configs/wandboard_defconfig
++++ b/configs/wandboard_defconfig
+@@ -3,8 +3,8 @@ BR2_cortex_a9=y
+ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_FPU_VFPV3=y
+-# Linux headers same as kernel, a 5.6 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_6=y
++# Linux headers same as kernel, a 5.10 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/wandboard/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+@@ -14,13 +14,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="wandboard"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.04"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.01"
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.6.3"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.9"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-wandboard imx6dl-wandboard imx6q-wandboard-revb1 imx6dl-wandboard-revb1 imx6q-wandboard-revd1 imx6dl-wandboard-revd1 imx6qp-wandboard-revd1"
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.25.1
