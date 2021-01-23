@@ -1,32 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 23 Jan 2021 21:58:11 +0100
-Subject: [Buildroot] [PATCH 1/1] package/nvme: add systemd optional
- dependency
-In-Reply-To: <20210120201622.179090-1-fontaine.fabrice@gmail.com>
-References: <20210120201622.179090-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210123215811.3a497226@windsurf.home>
+Date: Sat, 23 Jan 2021 21:58:38 +0100
+Subject: [Buildroot] [PATCH 1/1] package/sudo: fix static build without
+ closefrom
+In-Reply-To: <20210122070050.2621934-1-fontaine.fabrice@gmail.com>
+References: <20210122070050.2621934-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210123215838.458bc74b@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 20 Jan 2021 21:16:22 +0100
+On Fri, 22 Jan 2021 08:00:50 +0100
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> systemd is an optional dependency (enabled by default) since version
-> 1.10 and
-> https://github.com/linux-nvme/nvme-cli/commit/48c10dbfaf00777170e209db20f7d07e47f7a983
-> 
 > Fixes:
->  - http://autobuild.buildroot.org/results/8d14a5702aa1ffe3f036d1e1505e9596e3d4d466
+>  - http://autobuild.buildroot.org/results/515b45f876fa9de03c9235f86017f4dc10eb3b54
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/nvme/nvme.mk | 9 +++++++++
->  1 file changed, 9 insertions(+)
+>  ...efile.in-fix-static-build-without-cl.patch | 55 +++++++++++++++++++
+>  package/sudo/sudo.mk                          |  2 +
+>  2 files changed, 57 insertions(+)
+>  create mode 100644 package/sudo/0001-lib-eventlog-Makefile.in-fix-static-build-without-cl.patch
 
-Applied to master, thanks.
+Since your patch has been applied upstream, I've updated the upstream
+reference in the patch itself, and applied to master. Thanks!
 
 Thomas
 -- 
