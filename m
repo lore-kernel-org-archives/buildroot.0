@@ -1,71 +1,47 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 23 Jan 2021 21:46:55 +0100
-Subject: [Buildroot] [PATCH 0/6] package/mrouted: bump version and
- improve integration
-In-Reply-To: <20210123103155.2599311-1-troglobit@gmail.com>
-References: <20210123103155.2599311-1-troglobit@gmail.com>
-Message-ID: <20210123204655.GB926565@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 23 Jan 2021 21:49:01 +0100
+Subject: [Buildroot] [git commit] package/nvme: add systemd optional
+ dependency
+Message-ID: <20210123202929.60567815D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Joachim, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=282c7b6e64a328389dbf29fdea7e4f68916c1c8b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-01-23 11:31 +0100, Joachim Wiberg spake thusly:
-> Hi! :)
-> 
-> This series updates mrouted to the latest version[1], verifies that the
-> kernel config actually has multicast routing enabled, adds the missing
-> SysV init script, and replaces the hard-coded enabling of RSRR support
-> with a menuconfig option.  RSRR really is experimental and should not be
-> enbled by default.
-> 
-> Best regards
->  /Joachim
-> 
-> [1]: Release notes; https://github.com/troglobit/mrouted/releases/tag/4.2
-> 
-> Joachim Wiberg (6):
->   package/mrouted: bump to version 4.2
->   package/mrouted: ensure multicast routing is enabled in kernel
->   package/mrouted: update description a bit, mention oper. requirement
->   package/mrouted: add sysv init script
+systemd is an optional dependency (enabled by default) since version
+1.10 and
+https://github.com/linux-nvme/nvme-cli/commit/48c10dbfaf00777170e209db20f7d07e47f7a983
 
-Patches 1-4 applied, thanks.
+Fixes:
+ - http://autobuild.buildroot.org/results/8d14a5702aa1ffe3f036d1e1505e9596e3d4d466
 
->   package/mrouted: for merged usr, install to /usr by default, not /
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/nvme/nvme.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-I have concerns and questions about that one, so I'll reply individually
-to it.
-
->   package/mrouted: menuconfig support for enabling rsrr support
-
-Applied too, but I will also comment on it.
-
-Regards,
-Yann E. MORIN.
-
->  package/mrouted/Config.in    | 18 +++++++++++
->  package/mrouted/S41mrouted   | 62 ++++++++++++++++++++++++++++++++++++
->  package/mrouted/mrouted.hash |  6 ++--
->  package/mrouted/mrouted.mk   | 15 +++++++--
->  4 files changed, 96 insertions(+), 5 deletions(-)
->  create mode 100755 package/mrouted/S41mrouted
-> 
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/nvme/nvme.mk b/package/nvme/nvme.mk
+index 678b978211..53f9dff753 100644
+--- a/package/nvme/nvme.mk
++++ b/package/nvme/nvme.mk
+@@ -18,6 +18,15 @@ else
+ NVME_MAKE_OPTS += LIBUUID=1
+ endif
+ 
++# Yes, HAVE_SYSTEMD=0 means systemd support enabled.
++# HAVE_SYSTEMD=1 means systemd support disabled.
++ifeq ($(BR2_PACKAGE_SYSTEMD),y)
++NVME_DEPENDENCIES += systemd
++NVME_MAKE_OPTS += HAVE_SYSTEMD=0
++else
++NVME_MAKE_OPTS += HAVE_SYSTEMD=1
++endif
++
+ define NVME_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) \
+ 		$(NVME_MAKE_OPTS) -C $(@D)
