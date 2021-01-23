@@ -1,44 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 23 Jan 2021 21:34:08 +0100
-Subject: [Buildroot] [PATCH] perl: bump to version 5.32.0
-In-Reply-To: <20210122183046.874944-1-francois.perrad@gadz.org>
-References: <20210122183046.874944-1-francois.perrad@gadz.org>
-Message-ID: <20210123213408.60d1c28b@windsurf.home>
+Date: Sat, 23 Jan 2021 21:34:38 +0100
+Subject: [Buildroot] [git commit] boot/at91bootstrap3: add CPE variables
+Message-ID: <20210123201521.25C7482A95@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 22 Jan 2021 19:30:46 +0100
-Francois Perrad <fperrad@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=0aa8533213247e587286472789cb19578a2a4ec9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  ...the-generated-subdirectory-Makefiles.patch | 32 -------------------
->  package/perl/perl.hash                        |  8 ++---
->  package/perl/perl.mk                          |  6 ++--
->  utils/scancpan                                |  8 ++---
->  4 files changed, 11 insertions(+), 43 deletions(-)
->  delete mode 100644 package/perl/0001-fix-the-generated-subdirectory-Makefiles.patch
+cpe:2.3:a:linux_sam:at91bootstrap is a valid CPE identifier for this
+package:
 
-This commit breaks "make perl-legal-info":
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alinux_sam%3Aat91bootstrap
 
->>> perl 5.32.0 Collecting legal info
-Artistic: OK (sha256: dd90d4f42e4dcadf5a7c09eea0189d93c7b37ae560c91f0f6d5233ed3b9292a2)
-Copying: OK (sha256: d77d235e41d54594865151f4751e835c5a82322b0e87ace266567c3391a4b912)
-ERROR: README has wrong sha256 hash:
-ERROR: expected: 4916e95d32b84e07c045d839646f74996f577e5f497bbba8177a94b31415cee7
-ERROR: got     : f3742c110e125e5078745d71eb55059a672f933a8450ae9e8a807bfe685caf94
-ERROR: Incomplete download, or man-in-the-middle (MITM) attack
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ boot/at91bootstrap3/at91bootstrap3.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Also, you're updating perl, but not perl-cross. Is the perl-cross
-version we use still compatible, with no changes, with perl 5.32.0 ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/boot/at91bootstrap3/at91bootstrap3.mk b/boot/at91bootstrap3/at91bootstrap3.mk
+index 5cf865c681..a942afcdc9 100644
+--- a/boot/at91bootstrap3/at91bootstrap3.mk
++++ b/boot/at91bootstrap3/at91bootstrap3.mk
+@@ -24,6 +24,9 @@ ifeq ($(BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION),y)
+ AT91BOOTSTRAP3_LICENSE_FILES = main.c
+ endif
+ 
++AT91BOOTSTRAP3_CPE_ID_VENDOR = linux4sam
++AT91BOOTSTRAP3_CPE_ID_PRODUCT = at91bootstrap
++
+ AT91BOOTSTRAP3_INSTALL_IMAGES = YES
+ AT91BOOTSTRAP3_INSTALL_TARGET = NO
+ 
