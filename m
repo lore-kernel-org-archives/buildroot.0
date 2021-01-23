@@ -1,50 +1,35 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Sat, 23 Jan 2021 14:29:08 -0300
-Subject: [Buildroot] [PATCH] configs/mx51evk: bump U-Boot and kernel versions
-Message-ID: <20210123172908.3665711-1-festevam@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 23 Jan 2021 18:34:33 +0100
+Subject: [Buildroot] [PATCH 1/1] package/python-bluezero: needs python3
+Message-ID: <20210123173433.3214-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump to U-Boot 2021.01 and kernel 5.10.8 versions.
+python3 is mandatory since version 0.4.0 and
+https://github.com/ukBaz/python-bluezero/commit/55dc0fbc2710a75c9e8f519428e6b10747bf6eb7
+https://github.com/ukBaz/python-bluezero/commit/66e1b726d060f3d2b500ba2ec8268cf6743d65e9
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/cb4d637f1b0ca02377c04d67e20c48784b65c13a
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- configs/mx51evk_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/python-bluezero/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/configs/mx51evk_defconfig b/configs/mx51evk_defconfig
-index 0cb8f476cd05..a4bebdec976c 100644
---- a/configs/mx51evk_defconfig
-+++ b/configs/mx51evk_defconfig
-@@ -2,8 +2,8 @@
- BR2_arm=y
- BR2_cortex_a8=y
+diff --git a/package/python-bluezero/Config.in b/package/python-bluezero/Config.in
+index ed2277dc31..9ea3686a2b 100644
+--- a/package/python-bluezero/Config.in
++++ b/package/python-bluezero/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PYTHON_BLUEZERO
+ 	bool "python-bluezero"
++	depends on BR2_PACKAGE_PYTHON3
+ 	help
+ 	  Python library for Bluetooth Low Energy (BLE) on Linux.
  
--# Linux headers same as kernel, a 5.1 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_1=y
-+# Linux headers same as kernel, a 5.10 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
- 
- # System
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-@@ -22,13 +22,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx51evk"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.05"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.01"
- BR2_TARGET_UBOOT_FORMAT_IMX=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.1.10"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.9"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx51-babbage"
 -- 
-2.25.1
+2.29.2
