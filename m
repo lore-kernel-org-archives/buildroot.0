@@ -1,46 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 23 Jan 2021 21:27:46 +0100
-Subject: [Buildroot] [PATCH] linux: add support for Image.gz kernel
- format
-In-Reply-To: <20210122103949.8867-1-peter@korsgaard.com>
-References: <20210122103949.8867-1-peter@korsgaard.com>
-Message-ID: <20210123212746.3fb6ec19@windsurf.home>
+Date: Sat, 23 Jan 2021 21:28:14 +0100
+Subject: [Buildroot] [git commit] configs/mx53loco: bump U-Boot and kernel
+ versions
+Message-ID: <20210123200847.3F315817D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 22 Jan 2021 11:39:49 +0100
-Peter Korsgaard <peter@korsgaard.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=0689f177e8d647ea5a9c2c9b34067b60de702a82
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> arm64 / riscv supports building a gzip compressed 'Image' format kernel,
-> which is sometimes useful. From arch/arm64/Makefile:
-> 
-> all:	Image.gz
-> 
-> Image: vmlinux
-> 	$(Q)$(MAKE) $(build)=$(boot) $(boot)/$@
-> 
-> Image.%: Image
-> 	$(Q)$(MAKE) $(build)=$(boot) $(boot)/$@
-> 
-> (and similar logic for riscv)
-> 
-> Future architectures may or may not copy this logic, so for robustness add
-> an explicit Image.gz format rather than copying both Image and Image.gz when
-> the Image format is used.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  linux/Config.in | 4 ++++
->  linux/linux.mk  | 2 ++
->  2 files changed, 6 insertions(+)
+Bump to U-Boot 2021.01 and kernel 5.10.8 versions.
 
-Applied to master, thanks.
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ configs/mx53loco_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/configs/mx53loco_defconfig b/configs/mx53loco_defconfig
+index 69a94e071b..18785aa0c8 100644
+--- a/configs/mx53loco_defconfig
++++ b/configs/mx53loco_defconfig
+@@ -2,8 +2,8 @@
+ BR2_arm=y
+ BR2_cortex_a8=y
+ 
+-# Linux headers same as kernel, a 5.7 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_7=y
++# Linux headers same as kernel, a 5.10 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ 
+ # System
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+@@ -22,13 +22,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx53loco"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.07"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.01"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.7.8"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.9"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx53-qsb imx53-qsrb"
