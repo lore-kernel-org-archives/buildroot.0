@@ -1,9 +1,10 @@
 From: Joachim Wiberg <troglobit@gmail.com>
-Date: Sat, 23 Jan 2021 11:31:50 +0100
-Subject: [Buildroot] [PATCH 1/6] package/mrouted: bump to version 4.2
+Date: Sat, 23 Jan 2021 11:31:51 +0100
+Subject: [Buildroot] [PATCH 2/6] package/mrouted: ensure multicast routing
+ is enabled in kernel
 In-Reply-To: <20210123103155.2599311-1-troglobit@gmail.com>
 References: <20210123103155.2599311-1-troglobit@gmail.com>
-Message-ID: <20210123103155.2599311-2-troglobit@gmail.com>
+Message-ID: <20210123103155.2599311-3-troglobit@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,36 +13,22 @@ To: buildroot@busybox.net
 
 Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
 ---
- package/mrouted/mrouted.hash | 6 +++---
- package/mrouted/mrouted.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/mrouted/mrouted.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/mrouted/mrouted.hash b/package/mrouted/mrouted.hash
-index 22eeb8cef8..188293025f 100644
---- a/package/mrouted/mrouted.hash
-+++ b/package/mrouted/mrouted.hash
-@@ -1,6 +1,6 @@
--# From https://github.com/troglobit/mrouted/releases/download/4.1/mrouted-4.1.tar.gz.md5
--md5  e1f9bc0a895a2accae511a44e2a4a6f7  mrouted-4.1.tar.gz
-+# From https://github.com/troglobit/mrouted/releases/download/4.2/mrouted-4.2.tar.gz.md5
-+md5  b921f9e152e039efdac745438ef8362c  mrouted-4.2.tar.gz
- 
- # Locally calculated
--sha256  fd4735316f5510dfccfcbed441aa11619b261501dccf9e793a311d618c0843c5  mrouted-4.1.tar.gz
-+sha256  689541334ea951286054b771640e9d0f26b6a3242ff7f3894a3ef1b680811b34  mrouted-4.2.tar.gz
- sha256  834f45ed282fd010f354ecc0a50538af519a1cfcc4d2866de3be06982fa9ed29  LICENSE
 diff --git a/package/mrouted/mrouted.mk b/package/mrouted/mrouted.mk
-index 4e3715b445..6005066577 100644
+index 6005066577..c9ac8f0441 100644
 --- a/package/mrouted/mrouted.mk
 +++ b/package/mrouted/mrouted.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -18,4 +18,9 @@ define MROUTED_INSTALL_INIT_SYSTEMD
+ 		$(TARGET_DIR)/usr/lib/systemd/system/mrouted.service
+ endef
  
--MROUTED_VERSION = 4.1
-+MROUTED_VERSION = 4.2
- MROUTED_SITE = \
- 	https://github.com/troglobit/mrouted/releases/download/$(MROUTED_VERSION)
- MROUTED_DEPENDENCIES = host-bison
++define MROUTED_LINUX_CONFIG_FIXUPS
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_MULTICAST)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_MROUTE)
++endef
++
+ $(eval $(autotools-package))
 -- 
 2.25.1
