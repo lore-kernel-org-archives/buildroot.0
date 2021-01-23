@@ -1,52 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 23 Jan 2021 23:42:25 +0100
-Subject: [Buildroot] [PATCH v4 6/8] board/freescale/common/imx8: Use
- post build generated uboot image if present
-In-Reply-To: <20210123233628.323cc376@windsurf.home>
-References: <20201109142309.1135596-2-xroumegue@gmail.com>
- <20201125183017.15585-7-xroumegue@gmail.com>
- <20210123233628.323cc376@windsurf.home>
-Message-ID: <20210123234225.4484e229@windsurf.home>
+Date: Sat, 23 Jan 2021 23:45:22 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libtorrent-rasterbar: add CPE
+ variables
+In-Reply-To: <20210123221956.237522-1-fontaine.fabrice@gmail.com>
+References: <20210123221956.237522-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210123234522.50b93592@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 23 Jan 2021 23:36:28 +0100
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+On Sat, 23 Jan 2021 23:19:56 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> I don't really understand what the purpose of this change is. Indeed,
-> you're not removing the dedicated imx8 config template file in your
-> patch series. And even your defconfig calls
-> board/freescale/common/imx/post-image.sh, which based on:
+> cpe:2.3:a:libtorrent:libtorrent is a valid CPE identifier for this
+> package:
 > 
->         elif grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM=y$" ${BR2_CONFIG}; then
->                 echo "genimage.cfg.template_imx8"
+>   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alibtorrent%3Alibtorrent
 > 
-> will use the imx8 config template file for genimage.
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/libtorrent-rasterbar/libtorrent-rasterbar.mk | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> So I'm rather confused by what's going on here.
+> diff --git a/package/libtorrent-rasterbar/libtorrent-rasterbar.mk b/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
+> index de8c122520..7f60252e9b 100644
+> --- a/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
+> +++ b/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
+> @@ -9,6 +9,8 @@ LIBTORRENT_RASTERBAR_SITE = \
+>  	https://github.com/arvidn/libtorrent/releases/download/v$(LIBTORRENT_RASTERBAR_VERSION)
+>  LIBTORRENT_RASTERBAR_LICENSE = BSD-3-Clause
+>  LIBTORRENT_RASTERBAR_LICENSE_FILES = COPYING
+> +LIBTORRENT_RASTERBAR_CPE_ID_VENDOR = libtorrent
+> +LIBTORRENT_RASTERBAR_CPE_ID_PRODUCT = libtorrent
 
-Ah, I think that I see. The bootloader image name for i.MX8 always used
-to be imx8-boot-sd.bin, so it was hardcoded in
-genimage.cfg.template_imx8. But now, it might be imx8-boot-sd.bin for
-old vendor U-Boot, or flash.bin for new upstream U-Boot.
-
-And since you have no way to know which one is used, this patch is
-proposing to rely on the existence of imx8-boot-sd.bin to decide if it
-should be used or not.
-
-I am not a huge fan of the proposed solution, but I don't have a very
-nice proposal to make. We could extend post-image.sh to check if we're
-on an i.MX8 platform, and if so, if BR2_TARGET_UBOOT_FLASH_BIN=y, use
-flash.bin, otherwise use imx8-boot-sd.bin, but maybe that's getting
-over-complicated.
-
-So I think, let's stick with your solution, but with a better commit
-log that explains what's going on.
-
-Thanks!
+We also have package/libtorrent/ in Buildroot. How do we know for sure
+that the libtorrent:libtorrent CPE ID applies to
+package/libtorrent-rasterbar/ ? Yes indeed, the latest CPE ID known for
+libtorrent:libtorrent is 1.2.2, which is pretty close to the 1.2.12 we
+have in Buildroot for libtorrent-rasterbar. But other than that ?
 
 Thomas
 -- 
