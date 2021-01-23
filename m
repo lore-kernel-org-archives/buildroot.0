@@ -1,124 +1,34 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 23 Jan 2021 22:37:17 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libgeos: new package
-In-Reply-To: <20210112081855.521292-1-fido_max@inbox.ru>
-References: <20210112081855.521292-1-fido_max@inbox.ru>
-Message-ID: <20210123213717.GH926565@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 23 Jan 2021 22:39:41 +0100
+Subject: [Buildroot] [PATCH] package/piglit: Only support mesa and
+ nvidia OpenGL provider
+In-Reply-To: <011bb2fd-02a7-5876-6439-e97ad0f60c24@gmail.com>
+References: <20201114144554.1795422-1-romain.naour@gmail.com>
+ <20201114162518.2587e563@windsurf.home>
+ <011bb2fd-02a7-5876-6439-e97ad0f60c24@gmail.com>
+Message-ID: <20210123223941.7fab7556@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Maxim, All,
+On Sun, 15 Nov 2020 11:24:24 +0100
+Romain Naour <romain.naour@gmail.com> wrote:
 
-On 2021-01-12 11:18 +0300, Maxim Kochetkov via buildroot spake thusly:
-> GEOS (Geometry Engine - Open Source) is a C++ port of the ?JTS Topology Suite (JTS).
-> It aims to contain the complete functionality of JTS in C++. This includes all the
-> ?OpenGIS Simple Features for SQL spatial predicate functions and spatial operators,
-> as well as specific JTS enhanced functions.
-
-This commit log should be wrapped at ~72 chars, so I've rewrapped it.
-
-Also, it contains "invisible characters" <200b>, presumably the
-"arrow-out-of-box" charaters in the Trac website. I've dropped those
-chars.
-
-Ditto for both in the Config.in help text.
-
-> https://trac.osgeo.org/geos
+> > So perhaps we should instead have some logic that allows OpenGL and EGL
+> > providers to also declare which version of the OpenGL/EGL spec they
+> > provide, so that users can appropriate depend on OpenEGL and EGL
+> > providers that are suitable ?  
 > 
-> Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+> Something like BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION ?
 
-Applied to master, thanks.
+Yes, I'd rather work in terms of OpenGL/EGL versions or features
+provided by the different OpenGL providers, rather than ad-hoc
+conditions in each user of OpenGL APIs.
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/Config.in            |  1 +
->  package/libgeos/Config.in    | 13 +++++++++++++
->  package/libgeos/libgeos.hash |  3 +++
->  package/libgeos/libgeos.mk   | 15 +++++++++++++++
->  4 files changed, 32 insertions(+)
->  create mode 100644 package/libgeos/Config.in
->  create mode 100644 package/libgeos/libgeos.hash
->  create mode 100644 package/libgeos/libgeos.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 5a16814ca8..670a5eb9a4 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1901,6 +1901,7 @@ menu "Other"
->  	source "package/libevent/Config.in"
->  	source "package/libffi/Config.in"
->  	source "package/libgee/Config.in"
-> +	source "package/libgeos/Config.in"
->  	source "package/libglib2/Config.in"
->  	source "package/libglob/Config.in"
->  	source "package/libical/Config.in"
-> diff --git a/package/libgeos/Config.in b/package/libgeos/Config.in
-> new file mode 100644
-> index 0000000000..404832f4db
-> --- /dev/null
-> +++ b/package/libgeos/Config.in
-> @@ -0,0 +1,13 @@
-> +config BR2_PACKAGE_LIBGEOS
-> +	bool "libgeos"
-> +	depends on BR2_INSTALL_LIBSTDCPP
-> +	help
-> +	  GEOS (Geometry Engine - Open Source) is a C++ port of the ?JTS Topology Suite (JTS).
-> +	  It aims to contain the complete functionality of JTS in C++. This includes all the
-> +	  ?OpenGIS Simple Features for SQL spatial predicate functions and spatial operators,
-> +	  as well as specific JTS enhanced functions.
-> +
-> +	  https://trac.osgeo.org/geos
-> +
-> +comment "libgeos needs a toolchain w/ C++"
-> +	depends on !BR2_INSTALL_LIBSTDCPP
-> \ No newline at end of file
-> diff --git a/package/libgeos/libgeos.hash b/package/libgeos/libgeos.hash
-> new file mode 100644
-> index 0000000000..5b5e44c7c5
-> --- /dev/null
-> +++ b/package/libgeos/libgeos.hash
-> @@ -0,0 +1,3 @@
-> +# Locally calculated
-> +sha256  bd8082cf12f45f27630193c78bdb5a3cba847b81e72b20268356c2a4fc065269  geos-3.9.0.tar.bz2
-> +sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-> diff --git a/package/libgeos/libgeos.mk b/package/libgeos/libgeos.mk
-> new file mode 100644
-> index 0000000000..7b4ace122d
-> --- /dev/null
-> +++ b/package/libgeos/libgeos.mk
-> @@ -0,0 +1,15 @@
-> +################################################################################
-> +#
-> +# libgeos
-> +#
-> +################################################################################
-> +
-> +LIBGEOS_VERSION = 3.9.0
-> +LIBGEOS_SITE = http://download.osgeo.org/geos
-> +LIBGEOS_SOURCE = geos-$(LIBGEOS_VERSION).tar.bz2
-> +LIBGEOS_LICENSE = LGPL-2.1
-> +LIBGEOS_LICENSE_FILES = COPYING
-> +LIBGEOS_INSTALL_STAGING = YES
-> +LIBGEOS_CONFIG_SCRIPTS = geos-config
-> +
-> +$(eval $(cmake-package))
-> -- 
-> 2.29.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
