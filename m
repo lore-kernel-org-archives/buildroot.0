@@ -1,275 +1,607 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 23 Jan 2021 23:45:30 +0100
-Subject: [Buildroot] [git commit] package/vorbis-tools: bump to version 1.4.2
-Message-ID: <20210123222631.1B081813B8@busybox.osuosl.org>
+Date: Sat, 23 Jan 2021 23:45:33 +0100
+Subject: [Buildroot] [git commit] package/gd: bump to version 2.3.0
+Message-ID: <20210123222631.3F4737F9EA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3577b64c515d1b685f008f0da442ada0e8566a0e
+commit: https://git.buildroot.net/buildroot/commit/?id=1e317d5ff209816ae6135f1f3a2028c1a5f90c11
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- opusfile is an optional dependency since version 1.4.1 and
-  https://github.com/xiph/vorbis-tools/commit/4e7ab1ab09d26306e8ae7a8be36f93ff8c03bc92
-- Drop all patches (already in version)
-
-https://github.com/xiph/vorbis-tools/blob/v1.4.2/CHANGES
+- Drop patches (already in version)
+- gdlib-config has been dropped since
+  https://github.com/libgd/libgd/commit/d62f608c7c4a814c70d4ba777725e3e62d9e2cde
+- Update license hash
+- Update indentation in hash file (two spaces)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...oggenc-Fix-large-alloca-on-bad-AIFF-input.patch | 37 ---------
- ...date-count-of-channels-in-the-header-CVE-.patch | 88 ----------------------
- ...crash-on-raw-file-close-reported-by-Hanno.patch | 55 --------------
- package/vorbis-tools/vorbis-tools.hash             |  2 +-
- package/vorbis-tools/vorbis-tools.mk               | 13 ++--
- 5 files changed, 6 insertions(+), 189 deletions(-)
+ ...1-bmp-check-return-value-in-gdImageBmpPtr.patch |  80 --------
+ ...ential-infinite-loop-in-gdImageCreateFrom.patch |  61 ------
+ ...nitialized-read-in-gdImageCreateFromXbm-C.patch |  41 ----
+ ...-492-Potential-double-free-in-gdImage-Ptr.patch | 219 ---------------------
+ ...-NULL-pointer-dereference-in-gdImageClone.patch |  44 -----
+ ...Out-Of-Bounds-Write-on-Heap-CVE-2019-6977.patch |  39 ----
+ package/gd/gd.hash                                 |   4 +-
+ package/gd/gd.mk                                   |  19 +-
+ 8 files changed, 4 insertions(+), 503 deletions(-)
 
-diff --git a/package/vorbis-tools/0001-oggenc-Fix-large-alloca-on-bad-AIFF-input.patch b/package/vorbis-tools/0001-oggenc-Fix-large-alloca-on-bad-AIFF-input.patch
+diff --git a/package/gd/0001-bmp-check-return-value-in-gdImageBmpPtr.patch b/package/gd/0001-bmp-check-return-value-in-gdImageBmpPtr.patch
 deleted file mode 100644
-index 6df67869e5..0000000000
---- a/package/vorbis-tools/0001-oggenc-Fix-large-alloca-on-bad-AIFF-input.patch
+index f3c9ea481c..0000000000
+--- a/package/gd/0001-bmp-check-return-value-in-gdImageBmpPtr.patch
 +++ /dev/null
-@@ -1,37 +0,0 @@
--Fix CVE-2015-6749 - invalid AIFF file causes alloca() buffer overflow.
--See https://trac.xiph.org/ticket/2212
--Status: upstream
+@@ -1,80 +0,0 @@
+-From ac16bdf2d41724b5a65255d4c28fb0ec46bc42f5 Mon Sep 17 00:00:00 2001
+-From: Mike Frysinger <vapier@gentoo.org>
+-Date: Sat, 14 Jul 2018 13:54:08 -0400
+-Subject: [PATCH] bmp: check return value in gdImageBmpPtr
 -
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Closes #447.
 -
--diff --git a/oggenc/audio.c b/oggenc/audio.c
--index 477da8c..4921fb9 100644
----- a/oggenc/audio.c
--+++ b/oggenc/audio.c
--@@ -245,8 +245,8 @@ static int aiff_permute_matrix[6][6] =
-- int aiff_open(FILE *in, oe_enc_opt *opt, unsigned char *buf, int buflen)
-- {
--     int aifc; /* AIFC or AIFF? */
---    unsigned int len;
---    unsigned char *buffer;
--+    unsigned int len, readlen;
--+    unsigned char buffer[22];
--     unsigned char buf2[8];
--     aiff_fmt format;
--     aifffile *aiff = malloc(sizeof(aifffile));
--@@ -269,9 +269,9 @@ int aiff_open(FILE *in, oe_enc_opt *opt, unsigned char *buf, int buflen)
--         return 0; /* Weird common chunk */
--     }
-- 
---    buffer = alloca(len);
---
---    if(fread(buffer,1,len,in) < len)
--+    readlen = len < sizeof(buffer) ? len : sizeof(buffer);
--+    if(fread(buffer,1,readlen,in) < readlen ||
--+       (len > readlen && !seek_forward(in, len-readlen)))
--     {
--         fprintf(stderr, _("Warning: Unexpected EOF in reading AIFF header\n"));
--         return 0;
---- 
--2.5.0
+-CVE-2018-1000222
 -
-diff --git a/package/vorbis-tools/0002-oggenc-validate-count-of-channels-in-the-header-CVE-.patch b/package/vorbis-tools/0002-oggenc-validate-count-of-channels-in-the-header-CVE-.patch
-deleted file mode 100644
-index 0e9cae0613..0000000000
---- a/package/vorbis-tools/0002-oggenc-validate-count-of-channels-in-the-header-CVE-.patch
-+++ /dev/null
-@@ -1,88 +0,0 @@
--From 3bbabc06c4b35c84f6747ed850213161aca568c7 Mon Sep 17 00:00:00 2001
--From: Petter Reinholdtsen <pere@debian.org>
--Date: Tue, 22 Sep 2015 15:14:06 +0200
--Subject: [PATCH] oggenc: validate count of channels in the header
-- (CVE-2014-9638 & CVE-2014-9639)
--
--Author: Kamil Dudka <kdudka@redhat.com>
--Origin: http://lists.xiph.org/pipermail/vorbis-dev/2015-February/020423.html
--Bug: https://trac.xiph.org/ticket/2136
--Bug: https://trac.xiph.org/ticket/2137
--Bug-Debian: https://bugs.debian.org/776086
--Forwarded: not-needed
--Reviewed-By: Petter Reinholdtsen <pere@hungry.com>
--Last-Update: 2015-09-22
 -Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ----
-- oggenc/audio.c | 18 ++++++++++++++++--
-- 1 file changed, 16 insertions(+), 2 deletions(-)
+- src/gd_bmp.c | 17 ++++++++++++++---
+- 1 file changed, 14 insertions(+), 3 deletions(-)
 -
--diff --git a/oggenc/audio.c b/oggenc/audio.c
--index 4921fb9..535a704 100644
----- a/oggenc/audio.c
--+++ b/oggenc/audio.c
--@@ -13,6 +13,7 @@
-- #include <config.h>
-- #endif
+-diff --git a/src/gd_bmp.c b/src/gd_bmp.c
+-index bde0b9d..78f40d9 100644
+---- a/src/gd_bmp.c
+-+++ b/src/gd_bmp.c
+-@@ -47,6 +47,8 @@ static int bmp_read_4bit(gdImagePtr im, gdIOCtxPtr infile, bmp_info_t *info, bmp
+- static int bmp_read_8bit(gdImagePtr im, gdIOCtxPtr infile, bmp_info_t *info, bmp_hdr_t *header);
+- static int bmp_read_rle(gdImagePtr im, gdIOCtxPtr infile, bmp_info_t *info);
 - 
--+#include <limits.h>
-- #include <stdlib.h>
-- #include <stdio.h>
-- #include <string.h>
--@@ -251,6 +252,7 @@ int aiff_open(FILE *in, oe_enc_opt *opt, unsigned char *buf, int buflen)
--     aiff_fmt format;
--     aifffile *aiff = malloc(sizeof(aifffile));
--     int i;
--+    long channels;
-- 
--     if(buf[11]=='C')
--         aifc=1;
--@@ -277,11 +279,16 @@ int aiff_open(FILE *in, oe_enc_opt *opt, unsigned char *buf, int buflen)
--         return 0;
--     }
-- 
---    format.channels = READ_U16_BE(buffer);
--+    format.channels = channels = READ_U16_BE(buffer);
--     format.totalframes = READ_U32_BE(buffer+2);
--     format.samplesize = READ_U16_BE(buffer+6);
--     format.rate = (int)read_IEEE80(buffer+8);
-- 
--+    if(channels <= 0L || SHRT_MAX < channels)
--+    {
--+        fprintf(stderr, _("Warning: Unsupported count of channels in AIFF header\n"));
--+        return 0;
--+    }
--     aiff->bigendian = 1;
-- 
--     if(aifc)
--@@ -416,6 +423,7 @@ int wav_open(FILE *in, oe_enc_opt *opt, unsigned char *oldbuf, int buflen)
--     wav_fmt format;
--     wavfile *wav = malloc(sizeof(wavfile));
--     int i;
--+    long channels;
-- 
--     /* Ok. At this point, we know we have a WAV file. Now we have to detect
--      * whether we support the subtype, and we have to find the actual data
--@@ -453,12 +461,18 @@ int wav_open(FILE *in, oe_enc_opt *opt, unsigned char *oldbuf, int buflen)
--     }
-- 
--     format.format =      READ_U16_LE(buf);
---    format.channels =    READ_U16_LE(buf+2);
--+    format.channels = channels = READ_U16_LE(buf+2);
--     format.samplerate =  READ_U32_LE(buf+4);
--     format.bytespersec = READ_U32_LE(buf+8);
--     format.align =       READ_U16_LE(buf+12);
--     format.samplesize =  READ_U16_LE(buf+14);
-- 
--+    if(channels <= 0L || SHRT_MAX < channels)
--+    {
--+        fprintf(stderr, _("Warning: Unsupported count of channels in WAV header\n"));
--+        return 0;
--+    }
+-+static int _gdImageBmpCtx(gdImagePtr im, gdIOCtxPtr out, int compression);
 -+
--     if(format.format == -2) /* WAVE_FORMAT_EXTENSIBLE */
--     {
--       if(len<40)
+- #define BMP_DEBUG(s)
+- 
+- static int gdBMPPutWord(gdIOCtx *out, int w)
+-@@ -87,8 +89,10 @@ BGD_DECLARE(void *) gdImageBmpPtr(gdImagePtr im, int *size, int compression)
+- 	void *rv;
+- 	gdIOCtx *out = gdNewDynamicCtx(2048, NULL);
+- 	if (out == NULL) return NULL;
+--	gdImageBmpCtx(im, out, compression);
+--	rv = gdDPExtractData(out, size);
+-+	if (!_gdImageBmpCtx(im, out, compression))
+-+		rv = gdDPExtractData(out, size);
+-+	else
+-+		rv = NULL;
+- 	out->gd_free(out);
+- 	return rv;
+- }
+-@@ -141,6 +145,11 @@ BGD_DECLARE(void) gdImageBmp(gdImagePtr im, FILE *outFile, int compression)
+- 		compression - whether to apply RLE or not.
+- */
+- BGD_DECLARE(void) gdImageBmpCtx(gdImagePtr im, gdIOCtxPtr out, int compression)
+-+{
+-+	_gdImageBmpCtx(im, out, compression);
+-+}
+-+
+-+static int _gdImageBmpCtx(gdImagePtr im, gdIOCtxPtr out, int compression)
+- {
+- 	int bitmap_size = 0, info_size, total_size, padding;
+- 	int i, row, xpos, pixel;
+-@@ -148,6 +157,7 @@ BGD_DECLARE(void) gdImageBmpCtx(gdImagePtr im, gdIOCtxPtr out, int compression)
+- 	unsigned char *uncompressed_row = NULL, *uncompressed_row_start = NULL;
+- 	FILE *tmpfile_for_compression = NULL;
+- 	gdIOCtxPtr out_original = NULL;
+-+	int ret = 1;
+- 
+- 	/* No compression if its true colour or we don't support seek */
+- 	if (im->trueColor) {
+-@@ -325,6 +335,7 @@ BGD_DECLARE(void) gdImageBmpCtx(gdImagePtr im, gdIOCtxPtr out, int compression)
+- 		out_original = NULL;
+- 	}
+- 
+-+	ret = 0;
+- cleanup:
+- 	if (tmpfile_for_compression) {
+- #ifdef _WIN32
+-@@ -338,7 +349,7 @@ cleanup:
+- 	if (out_original) {
+- 		out_original->gd_free(out_original);
+- 	}
+--	return;
+-+	return ret;
+- }
+- 
+- static int compress_row(unsigned char *row, int length)
 --- 
 -2.20.1
 -
-diff --git a/package/vorbis-tools/0003-oggenc-fix-crash-on-raw-file-close-reported-by-Hanno.patch b/package/vorbis-tools/0003-oggenc-fix-crash-on-raw-file-close-reported-by-Hanno.patch
+diff --git a/package/gd/0002-Fix-420-Potential-infinite-loop-in-gdImageCreateFrom.patch b/package/gd/0002-Fix-420-Potential-infinite-loop-in-gdImageCreateFrom.patch
 deleted file mode 100644
-index e245e1534c..0000000000
---- a/package/vorbis-tools/0003-oggenc-fix-crash-on-raw-file-close-reported-by-Hanno.patch
+index 8d77f0ee18..0000000000
+--- a/package/gd/0002-Fix-420-Potential-infinite-loop-in-gdImageCreateFrom.patch
 +++ /dev/null
-@@ -1,55 +0,0 @@
--From 514116d7bea89dad9f1deb7617b2277b5e9115cd Mon Sep 17 00:00:00 2001
--From: Gregory Maxwell <greg@xiph.org>
--Date: Wed, 16 Apr 2014 23:55:10 +0000
--Subject: [PATCH] oggenc: fix crash on raw file close, reported by Hanno in
-- issue #2009. pointer to a non-static struct was escaping its scope. Also fix
-- a C99-ism.
+@@ -1,61 +0,0 @@
+-From a11f47475e6443b7f32d21f2271f28f417e2ac04 Mon Sep 17 00:00:00 2001
+-From: "Christoph M. Becker" <cmbecker69@gmx.de>
+-Date: Wed, 29 Nov 2017 19:37:38 +0100
+-Subject: [PATCH] Fix #420: Potential infinite loop in gdImageCreateFromGifCtx
 -
--svn path=/trunk/vorbis-tools/; revision=19117
+-Due to a signedness confusion in `GetCode_` a corrupt GIF file can
+-trigger an infinite loop.  Furthermore we make sure that a GIF without
+-any palette entries is treated as invalid *after* open palette entries
+-have been removed.
 -
--Fixes CVE-2014-9640
+-CVE-2018-5711
+-
+-See also https://bugs.php.net/bug.php?id=75571.
+-
+-[Peter: drop tests]
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- src/gd_gif_in.c             |  12 ++++++------
+- 1 files changed, 38 insertions(+), 6 deletions(-)
+-
+-diff --git a/src/gd_gif_in.c b/src/gd_gif_in.c
+-index daf26e7..0a8bd71 100644
+---- a/src/gd_gif_in.c
+-+++ b/src/gd_gif_in.c
+-@@ -335,11 +335,6 @@ terminated:
+- 		return 0;
+- 	}
+- 
+--	if(!im->colorsTotal) {
+--		gdImageDestroy(im);
+--		return 0;
+--	}
+--
+- 	/* Check for open colors at the end, so
+- 	 * we can reduce colorsTotal and ultimately
+- 	 * BitsPerPixel */
+-@@ -351,6 +346,11 @@ terminated:
+- 		}
+- 	}
+- 
+-+	if(!im->colorsTotal) {
+-+		gdImageDestroy(im);
+-+		return 0;
+-+	}
+-+
+- 	return im;
+- }
+- 
+-@@ -447,7 +447,7 @@ static int
+- GetCode_(gdIOCtx *fd, CODE_STATIC_DATA *scd, int code_size, int flag, int *ZeroDataBlockP)
+- {
+- 	int i, j, ret;
+--	unsigned char count;
+-+	int count;
+- 
+- 	if(flag) {
+- 		scd->curbit = 0;
+-
+--- 
+-2.20.1
+-
+diff --git a/package/gd/0003-Fix-501-Uninitialized-read-in-gdImageCreateFromXbm-C.patch b/package/gd/0003-Fix-501-Uninitialized-read-in-gdImageCreateFromXbm-C.patch
+deleted file mode 100644
+index 57df1a2fb1..0000000000
+--- a/package/gd/0003-Fix-501-Uninitialized-read-in-gdImageCreateFromXbm-C.patch
++++ /dev/null
+@@ -1,41 +0,0 @@
+-From e13a342c079aeb73e31dfa19eaca119761bac3f3 Mon Sep 17 00:00:00 2001
+-From: Jonas Meurer <jonas@freesources.org>
+-Date: Tue, 11 Jun 2019 12:16:46 +0200
+-Subject: [PATCH] Fix #501: Uninitialized read in gdImageCreateFromXbm
+- (CVE-2019-11038)
+-
+-Bug-Debian-Security: https://security-tracker.debian.org/tracker/CVE-2019-11038
+-Bug-Debian: https://bugs.debian.org/929821
+-Bug: https://github.com/libgd/libgd/issues/501
+-
+-We have to ensure that `sscanf()` does indeed read a hex value here,
+-and bail out otherwise.
+-
+-Original patch by Christoph M. Becker <cmbecker69@gmx.de> for PHP libgd ext.
+-https://git.php.net/?p=php-src.git;a=commit;h=ed6dee9a198c904ad5e03113e58a2d2c200f5184
 -
 -Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ----
-- oggenc/oggenc.c   | 4 ++--
-- oggenc/skeleton.h | 2 +-
-- 2 files changed, 3 insertions(+), 3 deletions(-)
+- src/gd_xbm.c | 6 +++++-
+- 1 file changed, 5 insertions(+), 1 deletion(-)
 -
--diff --git a/oggenc/oggenc.c b/oggenc/oggenc.c
--index 4a120f3..e7de0bb 100644
----- a/oggenc/oggenc.c
--+++ b/oggenc/oggenc.c
--@@ -97,6 +97,8 @@ int main(int argc, char **argv)
--               .3,-1,
--               0,0,0.f,
--               0, 0, 0, 0, 0};
--+    input_format raw_format = {NULL, 0, raw_open, wav_close, "raw", 
--+      N_("RAW file reader")};
-- 
--     int i;
-- 
--@@ -239,8 +241,6 @@ int main(int argc, char **argv)
-- 
--         if(opt.rawmode)
--         {
---            input_format raw_format = {NULL, 0, raw_open, wav_close, "raw", 
---                N_("RAW file reader")};
-- 
--             enc_opts.rate=opt.raw_samplerate;
--             enc_opts.channels=opt.raw_channels;
--diff --git a/oggenc/skeleton.h b/oggenc/skeleton.h
--index cf87dc2..168b8b6 100644
----- a/oggenc/skeleton.h
--+++ b/oggenc/skeleton.h
--@@ -41,7 +41,7 @@ typedef struct {
--     ogg_int64_t granule_rate_d;                            /* granule rate denominator */
--     ogg_int64_t start_granule;                             /* start granule value */
--     ogg_uint32_t preroll;                                   /* preroll */
---    unsigned char granule_shift; // a 8-bit field           /* 1 byte value holding the granule shift */
--+    unsigned char granule_shift;                            /* 1 byte value holding the granule shift */
--     char *message_header_fields;                            /* holds all the message header fields */
--     /* current total size of the message header fields, for realloc purpose, initially zero */
--     ogg_uint32_t current_header_size;
+-diff --git a/src/gd_xbm.c b/src/gd_xbm.c
+-index 4ca41ac..cf0545e 100644
+---- a/src/gd_xbm.c
+-+++ b/src/gd_xbm.c
+-@@ -169,7 +169,11 @@ BGD_DECLARE(gdImagePtr) gdImageCreateFromXbm(FILE * fd)
+- 			}
+- 			h[3] = ch;
+- 		}
+--		sscanf(h, "%x", &b);
+-+		if (sscanf(h, "%x", &b) != 1) {
+-+			gd_error("invalid XBM");
+-+			gdImageDestroy(im);
+-+			return 0;
+-+		}
+- 		for (bit = 1; bit <= max_bit; bit = bit << 1) {
+- 			gdImageSetPixel(im, x++, y, (b & bit) ? 1 : 0);
+- 			if (x == im->sx) {
 --- 
 -2.20.1
 -
-diff --git a/package/vorbis-tools/vorbis-tools.hash b/package/vorbis-tools/vorbis-tools.hash
-index 76122be13f..a4f463e466 100644
---- a/package/vorbis-tools/vorbis-tools.hash
-+++ b/package/vorbis-tools/vorbis-tools.hash
-@@ -1,4 +1,4 @@
- # From http://downloads.xiph.org/releases/vorbis/SHA256SUMS
--sha256  a389395baa43f8e5a796c99daf62397e435a7e73531c9f44d9084055a05d22bc  vorbis-tools-1.4.0.tar.gz
-+sha256  db7774ec2bf2c939b139452183669be84fda5774d6400fc57fde37f77624f0b0  vorbis-tools-1.4.2.tar.gz
- # Locally computed
- sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/vorbis-tools/vorbis-tools.mk b/package/vorbis-tools/vorbis-tools.mk
-index 49d7e26064..936d2d816c 100644
---- a/package/vorbis-tools/vorbis-tools.mk
-+++ b/package/vorbis-tools/vorbis-tools.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/gd/0004-Fix-492-Potential-double-free-in-gdImage-Ptr.patch b/package/gd/0004-Fix-492-Potential-double-free-in-gdImage-Ptr.patch
+deleted file mode 100644
+index e51428a646..0000000000
+--- a/package/gd/0004-Fix-492-Potential-double-free-in-gdImage-Ptr.patch
++++ /dev/null
+@@ -1,219 +0,0 @@
+-From 553702980ae89c83f2d6e254d62cf82e204956d0 Mon Sep 17 00:00:00 2001
+-From: "Christoph M. Becker" <cmbecker69@gmx.de>
+-Date: Thu, 17 Jan 2019 11:54:55 +0100
+-Subject: [PATCH] Fix #492: Potential double-free in gdImage*Ptr()
+-
+-Whenever `gdImage*Ptr()` calls `gdImage*Ctx()` and the latter fails, we
+-must not call `gdDPExtractData()`; otherwise a double-free would
+-happen.  Since `gdImage*Ctx()` are void functions, and we can't change
+-that for BC reasons, we're introducing static helpers which are used
+-internally.
+-
+-We're adding a regression test for `gdImageJpegPtr()`, but not for
+-`gdImageGifPtr()` and `gdImageWbmpPtr()` since we don't know how to
+-trigger failure of the respective `gdImage*Ctx()` calls.
+-
+-This potential security issue has been reported by Solmaz Salimi (aka.
+-Rooney).
+-
+-CVE-2019-6978
+-
+-[Peter: drop tests]
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- src/gd_gif_out.c                  | 18 +++++++++++++++---
+- src/gd_jpeg.c                     | 20 ++++++++++++++++----
+- src/gd_wbmp.c                     | 21 ++++++++++++++++++---
+- 3 files changed, 84 insertions(+), 11 deletions(-)
+-
+-diff --git a/src/gd_gif_out.c b/src/gd_gif_out.c
+-index 298a581..d5a9534 100644
+---- a/src/gd_gif_out.c
+-+++ b/src/gd_gif_out.c
+-@@ -99,6 +99,7 @@ static void char_init(GifCtx *ctx);
+- static void char_out(int c, GifCtx *ctx);
+- static void flush_char(GifCtx *ctx);
+- 
+-+static int _gdImageGifCtx(gdImagePtr im, gdIOCtxPtr out);
+- 
+- 
+- 
+-@@ -131,8 +132,11 @@ BGD_DECLARE(void *) gdImageGifPtr(gdImagePtr im, int *size)
+- 	void *rv;
+- 	gdIOCtx *out = gdNewDynamicCtx(2048, NULL);
+- 	if (out == NULL) return NULL;
+--	gdImageGifCtx(im, out);
+--	rv = gdDPExtractData(out, size);
+-+	if (!_gdImageGifCtx(im, out)) {
+-+		rv = gdDPExtractData(out, size);
+-+	} else {
+-+		rv = NULL;
+-+	}
+- 	out->gd_free(out);
+- 	return rv;
+- }
+-@@ -220,6 +224,12 @@ BGD_DECLARE(void) gdImageGif(gdImagePtr im, FILE *outFile)
+- 
+- */
+- BGD_DECLARE(void) gdImageGifCtx(gdImagePtr im, gdIOCtxPtr out)
+-+{
+-+	_gdImageGifCtx(im, out);
+-+}
+-+
+-+/* returns 0 on success, 1 on failure */
+-+static int _gdImageGifCtx(gdImagePtr im, gdIOCtxPtr out)
+- {
+- 	gdImagePtr pim = 0, tim = im;
+- 	int interlace, BitsPerPixel;
+-@@ -231,7 +241,7 @@ BGD_DECLARE(void) gdImageGifCtx(gdImagePtr im, gdIOCtxPtr out)
+- 		based temporary image. */
+- 		pim = gdImageCreatePaletteFromTrueColor(im, 1, 256);
+- 		if(!pim) {
+--			return;
+-+			return 1;
+- 		}
+- 		tim = pim;
+- 	}
+-@@ -247,6 +257,8 @@ BGD_DECLARE(void) gdImageGifCtx(gdImagePtr im, gdIOCtxPtr out)
+- 		/* Destroy palette based temporary image. */
+- 		gdImageDestroy(	pim);
+- 	}
+-+
+-+	return 0;
+- }
+- 
+- 
+-diff --git a/src/gd_jpeg.c b/src/gd_jpeg.c
+-index fc05842..96ef430 100644
+---- a/src/gd_jpeg.c
+-+++ b/src/gd_jpeg.c
+-@@ -117,6 +117,8 @@ static void fatal_jpeg_error(j_common_ptr cinfo)
+- 	exit(99);
+- }
+- 
+-+static int _gdImageJpegCtx(gdImagePtr im, gdIOCtx *outfile, int quality);
+-+
+- /*
+-  * Write IM to OUTFILE as a JFIF-formatted JPEG image, using quality
+-  * QUALITY.  If QUALITY is in the range 0-100, increasing values
+-@@ -231,8 +233,11 @@ BGD_DECLARE(void *) gdImageJpegPtr(gdImagePtr im, int *size, int quality)
+- 	void *rv;
+- 	gdIOCtx *out = gdNewDynamicCtx(2048, NULL);
+- 	if (out == NULL) return NULL;
+--	gdImageJpegCtx(im, out, quality);
+--	rv = gdDPExtractData(out, size);
+-+	if (!_gdImageJpegCtx(im, out, quality)) {
+-+		rv = gdDPExtractData(out, size);
+-+	} else {
+-+		rv = NULL;
+-+	}
+- 	out->gd_free(out);
+- 	return rv;
+- }
+-@@ -253,6 +258,12 @@ void jpeg_gdIOCtx_dest(j_compress_ptr cinfo, gdIOCtx *outfile);
+- 
+- */
+- BGD_DECLARE(void) gdImageJpegCtx(gdImagePtr im, gdIOCtx *outfile, int quality)
+-+{
+-+	_gdImageJpegCtx(im, outfile, quality);
+-+}
+-+
+-+/* returns 0 on success, 1 on failure */
+-+static int _gdImageJpegCtx(gdImagePtr im, gdIOCtx *outfile, int quality)
+- {
+- 	struct jpeg_compress_struct cinfo;
+- 	struct jpeg_error_mgr jerr;
+-@@ -287,7 +298,7 @@ BGD_DECLARE(void) gdImageJpegCtx(gdImagePtr im, gdIOCtx *outfile, int quality)
+- 		if(row) {
+- 			gdFree(row);
+- 		}
+--		return;
+-+		return 1;
+- 	}
+- 
+- 	cinfo.err->emit_message = jpeg_emit_message;
+-@@ -328,7 +339,7 @@ BGD_DECLARE(void) gdImageJpegCtx(gdImagePtr im, gdIOCtx *outfile, int quality)
+- 	if(row == 0) {
+- 		gd_error("gd-jpeg: error: unable to allocate JPEG row structure: gdCalloc returns NULL\n");
+- 		jpeg_destroy_compress(&cinfo);
+--		return;
+-+		return 1;
+- 	}
+- 
+- 	rowptr[0] = row;
+-@@ -405,6 +416,7 @@ BGD_DECLARE(void) gdImageJpegCtx(gdImagePtr im, gdIOCtx *outfile, int quality)
+- 	jpeg_finish_compress(&cinfo);
+- 	jpeg_destroy_compress(&cinfo);
+- 	gdFree(row);
+-+	return 0;
+- }
+- 
+- 
+-diff --git a/src/gd_wbmp.c b/src/gd_wbmp.c
+-index f19a1c9..a49bdbe 100644
+---- a/src/gd_wbmp.c
+-+++ b/src/gd_wbmp.c
+-@@ -88,6 +88,8 @@ int gd_getin(void *in)
+- 	return (gdGetC((gdIOCtx *)in));
+- }
+- 
+-+static int _gdImageWBMPCtx(gdImagePtr image, int fg, gdIOCtx *out);
+-+
+- /*
+- 	Function: gdImageWBMPCtx
+- 
+-@@ -100,6 +102,12 @@ int gd_getin(void *in)
+- 		out   - the stream where to write
+- */
+- BGD_DECLARE(void) gdImageWBMPCtx(gdImagePtr image, int fg, gdIOCtx *out)
+-+{
+-+	_gdImageWBMPCtx(image, fg, out);
+-+}
+-+
+-+/* returns 0 on success, 1 on failure */
+-+static int _gdImageWBMPCtx(gdImagePtr image, int fg, gdIOCtx *out)
+- {
+- 	int x, y, pos;
+- 	Wbmp *wbmp;
+-@@ -107,7 +115,7 @@ BGD_DECLARE(void) gdImageWBMPCtx(gdImagePtr image, int fg, gdIOCtx *out)
+- 	/* create the WBMP */
+- 	if((wbmp = createwbmp(gdImageSX(image), gdImageSY(image), WBMP_WHITE)) == NULL) {
+- 		gd_error("Could not create WBMP\n");
+--		return;
+-+		return 1;
+- 	}
+- 
+- 	/* fill up the WBMP structure */
+-@@ -123,11 +131,15 @@ BGD_DECLARE(void) gdImageWBMPCtx(gdImagePtr image, int fg, gdIOCtx *out)
+- 
+- 	/* write the WBMP to a gd file descriptor */
+- 	if(writewbmp(wbmp, &gd_putout, out)) {
+-+		freewbmp(wbmp);
+- 		gd_error("Could not save WBMP\n");
+-+		return 1;
+- 	}
+- 
+- 	/* des submitted this bugfix: gdFree the memory. */
+- 	freewbmp(wbmp);
+-+
+-+	return 0;
+- }
+- 
+- /*
+-@@ -271,8 +283,11 @@ BGD_DECLARE(void *) gdImageWBMPPtr(gdImagePtr im, int *size, int fg)
+- 	void *rv;
+- 	gdIOCtx *out = gdNewDynamicCtx(2048, NULL);
+- 	if (out == NULL) return NULL;
+--	gdImageWBMPCtx(im, fg, out);
+--	rv = gdDPExtractData(out, size);
+-+	if (!_gdImageWBMPCtx(im, fg, out)) {
+-+		rv = gdDPExtractData(out, size);
+-+	} else {
+-+		rv = NULL;
+-+	}
+- 	out->gd_free(out);
+- 	return rv;
+- }
+--- 
+-2.20.1
+-
+diff --git a/package/gd/0005-Fix-potential-NULL-pointer-dereference-in-gdImageClone.patch b/package/gd/0005-Fix-potential-NULL-pointer-dereference-in-gdImageClone.patch
+deleted file mode 100644
+index 8234de45a2..0000000000
+--- a/package/gd/0005-Fix-potential-NULL-pointer-dereference-in-gdImageClone.patch
++++ /dev/null
+@@ -1,44 +0,0 @@
+-From a93eac0e843148dc2d631c3ba80af17e9c8c860f Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?F=C3=A1bio=20Cabral=20Pacheco?= <fcabralpacheco@gmail.com>
+-Date: Fri, 20 Dec 2019 12:03:33 -0300
+-Subject: [PATCH] Fix potential NULL pointer dereference in gdImageClone()
+-
+-[Retrieved (and updated to remove .gitignore and tests) from:
+-https://github.com/libgd/libgd/commit/a93eac0e843148dc2d631c3ba80af17e9c8c860f]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- src/gd.c                          |  9 +--------
+- tests/gdimageclone/.gitignore     |  1 +
+- tests/gdimageclone/CMakeLists.txt |  1 +
+- tests/gdimageclone/Makemodule.am  |  3 ++-
+- tests/gdimageclone/style.c        | 30 ++++++++++++++++++++++++++++++
+- 5 files changed, 35 insertions(+), 9 deletions(-)
+- create mode 100644 tests/gdimageclone/style.c
+-
+-diff --git a/src/gd.c b/src/gd.c
+-index 592a0286..d564d1f9 100644
+---- a/src/gd.c
+-+++ b/src/gd.c
+-@@ -2865,14 +2865,6 @@ BGD_DECLARE(gdImagePtr) gdImageClone (gdImagePtr src) {
+- 		}
+- 	}
+- 
+--	if (src->styleLength > 0) {
+--		dst->styleLength = src->styleLength;
+--		dst->stylePos    = src->stylePos;
+--		for (i = 0; i < src->styleLength; i++) {
+--			dst->style[i] = src->style[i];
+--		}
+--	}
+--
+- 	dst->interlace   = src->interlace;
+- 
+- 	dst->alphaBlendingFlag = src->alphaBlendingFlag;
+-@@ -2907,6 +2899,7 @@ BGD_DECLARE(gdImagePtr) gdImageClone (gdImagePtr src) {
+- 
+- 	if (src->style) {
+- 		gdImageSetStyle(dst, src->style, src->styleLength);
+-+		dst->stylePos = src->stylePos;
+- 	}
+- 
+- 	for (i = 0; i < gdMaxColors; i++) {
+diff --git a/package/gd/0006-Fix-497-gdImageColorMatch-Out-Of-Bounds-Write-on-Heap-CVE-2019-6977.patch b/package/gd/0006-Fix-497-gdImageColorMatch-Out-Of-Bounds-Write-on-Heap-CVE-2019-6977.patch
+deleted file mode 100644
+index 11c7575dd4..0000000000
+--- a/package/gd/0006-Fix-497-gdImageColorMatch-Out-Of-Bounds-Write-on-Heap-CVE-2019-6977.patch
++++ /dev/null
+@@ -1,39 +0,0 @@
+-From 2e886046f86d0d6bfc14aab94a881259a081e3f4 Mon Sep 17 00:00:00 2001
+-From: wilson chen <willson.chenwx@gmail.com>
+-Date: Fri, 20 Dec 2019 10:12:04 +0800
+-Subject: [PATCH] Fix #497: gdImageColorMatch Out Of Bounds Write on Heap
+- (CVE-2019-6977)
+-
+-Fixed CVE-2019-6977 and add corresponding testcase.
+-
+-Original patch by Christoph M. Bechker <cmbecker69@gmx.de>
+-https://gist.github.com/cmb69/1f36d285eb297ed326f5c821d7aafced
+-
+-[Retrieved (and updated to remove .gitignore and tests) from:
+-https://github.com/libgd/libgd/commit/2e886046f86d0d6bfc14aab94a881259a081e3f4]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- src/gd_color_match.c                    |  5 ++---
+- tests/gdimagecolormatch/.gitignore      |  1 +
+- tests/gdimagecolormatch/CMakeLists.txt  |  1 +
+- tests/gdimagecolormatch/Makemodule.am   |  1 +
+- tests/gdimagecolormatch/cve_2019_6977.c | 25 +++++++++++++++++++++++++
+- 5 files changed, 30 insertions(+), 3 deletions(-)
+- create mode 100644 tests/gdimagecolormatch/cve_2019_6977.c
+-
+-diff --git a/src/gd_color_match.c b/src/gd_color_match.c
+-index f0842b69..f0194302 100644
+---- a/src/gd_color_match.c
+-+++ b/src/gd_color_match.c
+-@@ -31,9 +31,8 @@ BGD_DECLARE(int) gdImageColorMatch (gdImagePtr im1, gdImagePtr im2)
+- 		return -4; /* At least 1 color must be allocated */
+- 	}
+- 
+--	buf = (unsigned long *)gdMalloc(sizeof(unsigned long) * 5 * im2->colorsTotal);
+--	memset (buf, 0, sizeof(unsigned long) * 5 * im2->colorsTotal );
+--
+-+	buf = (unsigned long *)gdMalloc(sizeof(unsigned long) * 5 * gdMaxColors);
+-+	memset (buf, 0, sizeof(unsigned long) * 5 * gdMaxColors );
+- 	for (x=0; x < im1->sx; x++) {
+- 		for( y=0; y<im1->sy; y++ ) {
+- 			color = im2->pixels[y][x];
+diff --git a/package/gd/gd.hash b/package/gd/gd.hash
+index 1cd9e56b18..5aec317f2d 100644
+--- a/package/gd/gd.hash
++++ b/package/gd/gd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	8c302ccbf467faec732f0741a859eef4ecae22fea2d2ab87467be940842bde51	libgd-2.2.5.tar.xz
+-sha256  d02dae2141d49b8a6b09b2b73e68a8f17d7bbeaaf02b3b841ee11fea2d9e328d	COPYING
++sha256  ecd9155b9a417fb3f837f29e5966323796de247789163761dd72dbf83bfcac58  libgd-2.3.0.tar.xz
++sha256  4d80b4af6c38d7a65128c881623dee2a5daee6b3a6ccab74a5cdfa0dfda96da7  COPYING
+diff --git a/package/gd/gd.mk b/package/gd/gd.mk
+index 419d9a6384..f54c2b37a2 100644
+--- a/package/gd/gd.mk
++++ b/package/gd/gd.mk
+@@ -4,29 +4,15 @@
  #
  ################################################################################
  
--VORBIS_TOOLS_VERSION = 1.4.0
-+VORBIS_TOOLS_VERSION = 1.4.2
- VORBIS_TOOLS_SITE = http://downloads.xiph.org/releases/vorbis
- VORBIS_TOOLS_LICENSE = GPL-2.0
- VORBIS_TOOLS_LICENSE_FILES = COPYING
-@@ -12,13 +12,6 @@ VORBIS_TOOLS_CPE_ID_VENDOR = xiph
- VORBIS_TOOLS_DEPENDENCIES = libao libogg libvorbis libcurl
- VORBIS_TOOLS_CONF_OPTS = --program-transform-name=''
+-GD_VERSION = 2.2.5
++GD_VERSION = 2.3.0
+ GD_SOURCE = libgd-$(GD_VERSION).tar.xz
+ GD_SITE = https://github.com/libgd/libgd/releases/download/gd-$(GD_VERSION)
+ GD_INSTALL_STAGING = YES
+ GD_LICENSE = GD license
+ GD_LICENSE_FILES = COPYING
+-GD_CONFIG_SCRIPTS = gdlib-config
+ GD_CONF_OPTS = --without-x --disable-rpath --disable-werror
+ GD_DEPENDENCIES = host-pkgconf
  
--# 0001-oggenc-Fix-large-alloca-on-bad-AIFF-input.patch
--VORBIS_TOOLS_IGNORE_CVES += CVE-2015-6749
--# 0002-oggenc-validate-count-of-channels-in-the-header-CVE-.patch
--VORBIS_TOOLS_IGNORE_CVES += CVE-2014-9638 CVE-2014-9639
--# 0003-oggenc-fix-crash-on-raw-file-close-reported-by-Hanno.patch
--VORBIS_TOOLS_IGNORE_CVES += CVE-2014-9640
+-# 0001-bmp-check-return-value-in-gdImageBmpPtr.patch
+-GD_IGNORE_CVES += CVE-2018-1000222
+-# 0002-Fix-420-Potential-infinite-loop-in-gdImageCreateFrom.patch
+-GD_IGNORE_CVES += CVE-2018-5711
+-# 0003-Fix-501-Uninitialized-read-in-gdImageCreateFromXbm-C.patch
+-GD_IGNORE_CVES += CVE-2019-11038
+-# 0004-Fix-492-Potential-double-free-in-gdImage-Ptr.patch
+-GD_IGNORE_CVES += CVE-2019-6978
+-# 0005-Fix-potential-NULL-pointer-dereference-in-gdImageClone.patch
+-GD_IGNORE_CVES += CVE-2018-14553
+-# 0006-Fix-497-gdImageColorMatch-Out-Of-Bounds-Write-on-Heap-CVE-2019-6977.patch
+-GD_IGNORE_CVES += CVE-2019-6977
 -
- # ogg123 calls math functions but forgets to link with libm
- VORBIS_TOOLS_CONF_ENV = LIBS=-lm
+ # gd forgets to link utilities with -pthread even though it uses
+ # pthreads, causing linking errors with static linking
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+@@ -47,8 +33,7 @@ endif
  
-@@ -26,6 +19,10 @@ ifeq ($(BR2_PACKAGE_FLAC),y)
- VORBIS_TOOLS_DEPENDENCIES += flac
+ ifeq ($(BR2_PACKAGE_LIBICONV),y)
+ GD_DEPENDENCIES += libiconv
+-# not strictly needed for gd, but ensures -liconv ends up in
+-# gdlib-config --libs output
++# not strictly needed for gd, but ensures -liconv ends up in gdlib.pc
+ GD_CONF_ENV += LIBS="-liconv"
  endif
  
-+ifeq ($(BR2_PACKAGE_OPUSFILE),y)
-+VORBIS_TOOLS_DEPENDENCIES += opusfile
-+endif
-+
- ifeq ($(BR2_PACKAGE_SPEEX),y)
- VORBIS_TOOLS_DEPENDENCIES += speex
- endif
