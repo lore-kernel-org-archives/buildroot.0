@@ -1,79 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 23 Jan 2021 18:05:39 +0100
-Subject: [Buildroot] [git commit] package/zeromq: add websocket option
-Message-ID: <20210123164609.135FB8029F@busybox.osuosl.org>
+Date: Sat, 23 Jan 2021 18:05:36 +0100
+Subject: [Buildroot] [git commit] package/zeromq: drop AUTORECONF
+Message-ID: <20210123164609.053C7815FD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=85008cc8840d5b81a0e3ae8fcd70231e1d3a982d
+commit: https://git.buildroot.net/buildroot/commit/?id=aef744c13b5cfa6263b38ddf165e4d35e15620eb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-websocket support is available since version 4.3.3 and
-https://github.com/zeromq/libzmq/commit/9be833493877258af3bc6acdc65565db6674768d
-It is enabled if --enable-drafts is passed by the user.
-
-websocket can use libnss or gnutls instead of its builtin SHA1 since
-https://github.com/zeromq/libzmq/commit/7296fb5b151920a4a8d272da69196df8ca155aa1
+Commit 64ec0541d56cb05aa5898c42f26dd6b531d9b96a forgot to drop
+ZEROMQ_AUTORECONF
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/zeromq/Config.in |  5 +++++
- package/zeromq/zeromq.mk | 20 ++++++++++++++++++++
- 2 files changed, 25 insertions(+)
+ package/zeromq/zeromq.mk | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/package/zeromq/Config.in b/package/zeromq/Config.in
-index aeedff17b8..cf5c644c39 100644
---- a/package/zeromq/Config.in
-+++ b/package/zeromq/Config.in
-@@ -59,4 +59,9 @@ config BR2_PACKAGE_ZEROMQ_DRAFTS
- 
- 	  https://pyzmq.readthedocs.io/en/latest/draft.html
- 
-+config BR2_PACKAGE_ZEROMQ_WEBSOCKET
-+	bool "WebSocket support"
-+	help
-+	  Enable WebSocket transport
-+
- endif
 diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
-index 4eb6931f1d..fa72a41f23 100644
+index fbf2ca3f8c..4eb6931f1d 100644
 --- a/package/zeromq/zeromq.mk
 +++ b/package/zeromq/zeromq.mk
-@@ -53,6 +53,19 @@ else
- ZEROMQ_CONF_OPTS += --disable-drafts
- endif
+@@ -11,8 +11,6 @@ ZEROMQ_DEPENDENCIES = util-linux
+ ZEROMQ_CONF_OPTS = --disable-Werror --without-documentation
+ ZEROMQ_LICENSE = LGPL-3.0+ with exceptions
+ ZEROMQ_LICENSE_FILES = COPYING COPYING.LESSER
+-# We're patching configure.ac
+-ZEROMQ_AUTORECONF = YES
  
-+ifeq ($(BR2_PACKAGE_ZEROMQ_WEBSOCKET),y)
-+ZEROMQ_CONF_OPTS += --enable-ws
-+else
-+ZEROMQ_CONF_OPTS += --disable-ws
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GNUTLS),y)
-+ZEROMQ_DEPENDENCIES += host-pkgconf gnutls
-+ZEROMQ_CONF_OPTS += --with-tls
-+else
-+ZEROMQ_CONF_OPTS += --without-tls
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBBSD),y)
- ZEROMQ_DEPENDENCIES += host-pkgconf libbsd
- ZEROMQ_CONF_OPTS += --enable-libbsd
-@@ -60,6 +73,13 @@ else
- ZEROMQ_CONF_OPTS += --disable-libbsd
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBNSS),y)
-+ZEROMQ_DEPENDENCIES += host-pkgconf libnss
-+ZEROMQ_CONF_OPTS += --with-nss
-+else
-+ZEROMQ_CONF_OPTS += --without-nss
-+endif
-+
- # ZeroMQ uses libsodium if it's available.
- ifeq ($(BR2_PACKAGE_LIBSODIUM),y)
- ZEROMQ_DEPENDENCIES += libsodium
+ # Assume these flags are always available. It is true, at least for
+ # SOCK_CLOEXEC, since linux v2.6.27.
