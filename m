@@ -1,47 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sat, 23 Jan 2021 21:26:45 +0100
-Subject: [Buildroot] [git commit] package/perl-http-cookies: bump to version
- 6.10
-Message-ID: <20210123200715.B6BFF811F8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/perl-http-message: bump to version
+ 6.27
+Message-ID: <20210123200715.C3DC580296@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4c7d9bda77ba270a94231ef87d5647feff4aea99
+commit: https://git.buildroot.net/buildroot/commit/?id=e31601f6aa752230f399240e531e88629a92d2ea
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/perl-http-cookies/perl-http-cookies.hash | 4 ++--
- package/perl-http-cookies/perl-http-cookies.mk   | 2 +-
+ package/perl-http-message/perl-http-message.hash | 4 ++--
+ package/perl-http-message/perl-http-message.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-http-cookies/perl-http-cookies.hash b/package/perl-http-cookies/perl-http-cookies.hash
-index 0e812c6192..15d9e7a86f 100644
---- a/package/perl-http-cookies/perl-http-cookies.hash
-+++ b/package/perl-http-cookies/perl-http-cookies.hash
+diff --git a/package/perl-http-message/perl-http-message.hash b/package/perl-http-message/perl-http-message.hash
+index 989d7efd0e..4e406c9d46 100644
+--- a/package/perl-http-message/perl-http-message.hash
++++ b/package/perl-http-message/perl-http-message.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5  ac30af9aa9715f1d64826a7e99721613  HTTP-Cookies-6.09.tar.gz
--sha256  903f017afaa5b78599cc90efc14ecccc8cc2ebfb636eb8c02f8f16ba861d1fe0  HTTP-Cookies-6.09.tar.gz
-+md5  b4d7804231b1dfd10999d42283e0cf06  HTTP-Cookies-6.10.tar.gz
-+sha256  e36f36633c5ce6b5e4b876ffcf74787cc5efe0736dd7f487bdd73c14f0bd7007  HTTP-Cookies-6.10.tar.gz
+-md5  3b4b64fff4885429b997390564521db0  HTTP-Message-6.26.tar.gz
+-sha256  6ce6c359de75c3bb86696a390189b485ec93e3ffc55326b6d044fa900f1725e1  HTTP-Message-6.26.tar.gz
++md5  4b4038aef74f63c2b6baca189c6c6602  HTTP-Message-6.27.tar.gz
++sha256  0be0f720fbbbdbae8711f6eec9b2f0d34bd5ed5046fc66b80dc3b42017c1e699  HTTP-Message-6.27.tar.gz
  
  # computed by scancpan
- sha256  82902ce20c8ed71d7f4e7a6a5b2b26e43a7e2e90c78098fb49aa49e03ac808e0  LICENSE
-diff --git a/package/perl-http-cookies/perl-http-cookies.mk b/package/perl-http-cookies/perl-http-cookies.mk
-index 1e63779b15..745fd10a7c 100644
---- a/package/perl-http-cookies/perl-http-cookies.mk
-+++ b/package/perl-http-cookies/perl-http-cookies.mk
+ sha256  1379396dcd2291f17a741d2d6bf14d379f5f2ab91b3c7e7b92c5f82856e2d7ac  LICENSE
+diff --git a/package/perl-http-message/perl-http-message.mk b/package/perl-http-message/perl-http-message.mk
+index 114fc80008..72b94356be 100644
+--- a/package/perl-http-message/perl-http-message.mk
++++ b/package/perl-http-message/perl-http-message.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_HTTP_COOKIES_VERSION = 6.09
-+PERL_HTTP_COOKIES_VERSION = 6.10
- PERL_HTTP_COOKIES_SOURCE = HTTP-Cookies-$(PERL_HTTP_COOKIES_VERSION).tar.gz
- PERL_HTTP_COOKIES_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
- PERL_HTTP_COOKIES_LICENSE = Artistic or GPL-1.0+
+-PERL_HTTP_MESSAGE_VERSION = 6.26
++PERL_HTTP_MESSAGE_VERSION = 6.27
+ PERL_HTTP_MESSAGE_SOURCE = HTTP-Message-$(PERL_HTTP_MESSAGE_VERSION).tar.gz
+ PERL_HTTP_MESSAGE_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
+ PERL_HTTP_MESSAGE_LICENSE = Artistic or GPL-1.0+
