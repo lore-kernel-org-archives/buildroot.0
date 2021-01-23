@@ -1,65 +1,64 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Sat, 23 Jan 2021 14:55:53 -0300
-Subject: [Buildroot] [PATCH] configs/imx6-sabresd: bump U-Boot and kernel
- versions
-Message-ID: <20210123175553.3755668-1-festevam@gmail.com>
+From: Qais Yousef <qais.yousef@arm.com>
+Date: Sat, 23 Jan 2021 19:44:08 +0000
+Subject: [Buildroot] [PATCHv6 4/5] package/bpftrace: new package
+In-Reply-To: <20201221134549.nk4eu6qpto36ahpq@e107158-lin>
+References: <20201220151203.2206747-1-romain.naour@gmail.com>
+ <20201220151203.2206747-4-romain.naour@gmail.com>
+ <20201221134549.nk4eu6qpto36ahpq@e107158-lin>
+Message-ID: <20210123194408.3omcypashiq44le5@e107158-lin>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump to U-Boot 2021.01 and kernel 5.10.8 versions.
+On 12/21/20 13:45, Qais Yousef wrote:
+> On 12/20/20 16:12, Romain Naour wrote:
+> > From: Qais Yousef <qais.yousef@arm.com>
+> > 
+> > bpftrace is a high-level tracing language for Linux enhanced Berkeley
+> > Packet Filter (eBPF) available in recent Linux kernels (4.x).
+> > 
+> > Only tested on x86_64 and aarch64. The package doesn't support i386 and
+> > aarch32.
+> > 
+> > The libbpf dependency allow to enable the BTF support:
+> >  # bpftrace --info
+> >  System
+> >    OS: Linux 5.4.58 #1 SMP Sun Dec 20 15:56:56 CET 2020
+> >    Arch: aarch64
+> > 
+> >  Build
+> >    version: 2020.11-328-g019a9
+> >    LLVM: 9.0.1
+> >    foreach_sym: yes
+> >    unsafe uprobe: no
+> >    bfd: yes
+> >    bpf_attach_kfunc: yes
+> >    bcc_usdt_addsem: yes
+> >    bcc bpf_attach_uprobe refcount: yes
+> >    libbpf: yes
+> >    libbpf btf dump: yes
+> >    libbpf btf dump type decl: yes
+> > 
+> > bfptrace doesn't use the libbpf_bcc library provided by bcc package.
+> > 
+> > Signed-off-by: Qais Yousef <qais.yousef@arm.com>
+> > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> > Cc: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+> > ---
+> > v6: Update DEVELOPERS file
+> 
+> LGTM.
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
----
- configs/imx6-sabresd_defconfig     | 4 ++--
- configs/imx6-sabresd_qt5_defconfig | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Ping.
 
-diff --git a/configs/imx6-sabresd_defconfig b/configs/imx6-sabresd_defconfig
-index e2e676d70419..c0dce1ce6217 100644
---- a/configs/imx6-sabresd_defconfig
-+++ b/configs/imx6-sabresd_defconfig
-@@ -24,7 +24,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx6sabresd"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.07"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.01"
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="SPL"
-@@ -32,7 +32,7 @@ BR2_TARGET_UBOOT_SPL_NAME="SPL"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.9"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd imx6dl-sabresd imx6qp-sabresd"
-diff --git a/configs/imx6-sabresd_qt5_defconfig b/configs/imx6-sabresd_qt5_defconfig
-index f5a0766fcf15..b23dd90192d3 100644
---- a/configs/imx6-sabresd_qt5_defconfig
-+++ b/configs/imx6-sabresd_qt5_defconfig
-@@ -30,7 +30,7 @@ BR2_ROOTFS_OVERLAY="board/freescale/imx6-sabresd/rootfs_overlay"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx6sabresd"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.07"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.01"
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="SPL"
-@@ -38,7 +38,7 @@ BR2_TARGET_UBOOT_SPL_NAME="SPL"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.9"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd imx6dl-sabresd imx6qp-sabresd"
--- 
-2.25.1
+I had issues with building patch 5, but the rest of the series is in good shape
+IMO and can be merged independently at least.
+
+Is there anything more needs to be done to help get this support merged?
+
+Thanks
+
+--
+Qais Yousef
