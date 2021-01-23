@@ -1,50 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 23 Jan 2021 22:00:21 +0100
-Subject: [Buildroot] [PATCH] package/uhd: fix build with riscV
-In-Reply-To: <20210112063027.27344-1-gwenj@trabucayre.com>
-References: <20210112063027.27344-1-gwenj@trabucayre.com>
-Message-ID: <20210123220021.495e43e8@windsurf.home>
+Date: Sat, 23 Jan 2021 22:01:13 +0100
+Subject: [Buildroot] [PATCH 2/2] board/sifive: Update
+ hifive_unleashed_defconfig and genimage.cfg
+In-Reply-To: <CAEUhbmUa-bsPVaa-j19Hpt10uofqAPuXOZt6VY4sK_DYa+d=PQ@mail.gmail.com>
+References: <1610355672-3008-1-git-send-email-bmeng.cn@gmail.com>
+ <1610355672-3008-3-git-send-email-bmeng.cn@gmail.com>
+ <20210116224214.6f1ce3af@windsurf.home>
+ <CAEUhbmUa-bsPVaa-j19Hpt10uofqAPuXOZt6VY4sK_DYa+d=PQ@mail.gmail.com>
+Message-ID: <20210123220113.15481f0e@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 12 Jan 2021 07:30:27 +0100
-Gwenhael Goavec-Merou <gwenj@trabucayre.com> wrote:
+Hello,
 
-> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> 
-> When the target CPU is riscV, msgpack is unable to detect endianness with a list of errors like:
-> 
-> uhd/host/lib/deps/rpclib/include/rpc/msgpack/pack.hpp:190:2: error: #error msgpack-c supports only big endian and little endian
->   190 | #error msgpack-c supports only big endian and little endian
->       |  ^~~~~
-> 
-> and with subsequent errors:
-> 
-> uhd0/host/lib/deps/rpclib/include/rpc/msgpack/pack.hpp:236:46: error: there are no arguments to 'take8_8' that depend on a template parameter, so a declaration of 'take8_8' must be available [-fpermissive]
->   236 |     char buf[2] = {static_cast<char>(0xccu), take8_8(d)};
->       |
-> 
-> This is due to a missing support for this architecture in msgpack.
-> This patch adapt commit from https://github.com/boostorg/predef
-> 
-> [backported from https://github.com/EttusResearch/uhd/pull/400]
-> 
-> Fix:
-> - http://autobuild.buildroot.net/results/afacf5c5c2cd9dff6962523f1fdded9b474b9d66/
-> - http://autobuild.buildroot.net/results/91530538d630a7f09d85327e514f01b45253c1a6/
-> - http://autobuild.buildroot.net/results/91530538d630a7f09d85327e514f01b45253c1a6/
-> - and others
-> 
-> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> ---
->  .../0003-add-RISC-V-endian-detection.patch    | 113 ++++++++++++++++++
->  1 file changed, 113 insertions(+)
->  create mode 100644 package/uhd/0003-add-RISC-V-endian-detection.patch
+On Sun, 17 Jan 2021 18:28:11 +0800
+Bin Meng <bmeng.cn@gmail.com> wrote:
 
-Applied to master, thanks.
+> > > +     partition rootfs {
+> > > +             image = "rootfs.ext4"
+> > > +             partition-type-uuid = 0FC63DAF-8483-4772-8E79-3D69D8477DE4
+> > > +             bootable = true
+> > > +     }
+> > > +}  
+> >
+> > This looks strange. You really use a GPT partition table on SPI flash,
+> > and use an ext4 filesystem on a SPI flash ?
+> >  
+> 
+> When booting from SPI flash, the GPT partition is required by the ZSBL
+> on the board to load U-Boot SPL images. The kernel still uses ext4 on
+> the SD card as the rootfs. The SPI flash is just the backup for the
+> rootfs.
+
+Then why does your SPI flash image contains a root filesystem partition ?
 
 Thomas
 -- 
