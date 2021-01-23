@@ -1,41 +1,47 @@
 From: Joachim Wiberg <troglobit@gmail.com>
-Date: Sat, 23 Jan 2021 11:31:49 +0100
-Subject: [Buildroot] [PATCH 0/6] package/mrouted: bump version and improve
- integration
-Message-ID: <20210123103155.2599311-1-troglobit@gmail.com>
+Date: Sat, 23 Jan 2021 11:31:50 +0100
+Subject: [Buildroot] [PATCH 1/6] package/mrouted: bump to version 4.2
+In-Reply-To: <20210123103155.2599311-1-troglobit@gmail.com>
+References: <20210123103155.2599311-1-troglobit@gmail.com>
+Message-ID: <20210123103155.2599311-2-troglobit@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi! :)
+Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+---
+ package/mrouted/mrouted.hash | 6 +++---
+ package/mrouted/mrouted.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-This series updates mrouted to the latest version[1], verifies that the
-kernel config actually has multicast routing enabled, adds the missing
-SysV init script, and replaces the hard-coded enabling of RSRR support
-with a menuconfig option.  RSRR really is experimental and should not be
-enbled by default.
-
-Best regards
- /Joachim
-
-[1]: Release notes; https://github.com/troglobit/mrouted/releases/tag/4.2
-
-Joachim Wiberg (6):
-  package/mrouted: bump to version 4.2
-  package/mrouted: ensure multicast routing is enabled in kernel
-  package/mrouted: update description a bit, mention oper. requirement
-  package/mrouted: add sysv init script
-  package/mrouted: for merged usr, install to /usr by default, not /
-  package/mrouted: menuconfig support for enabling rsrr support
-
- package/mrouted/Config.in    | 18 +++++++++++
- package/mrouted/S41mrouted   | 62 ++++++++++++++++++++++++++++++++++++
- package/mrouted/mrouted.hash |  6 ++--
- package/mrouted/mrouted.mk   | 15 +++++++--
- 4 files changed, 96 insertions(+), 5 deletions(-)
- create mode 100755 package/mrouted/S41mrouted
-
+diff --git a/package/mrouted/mrouted.hash b/package/mrouted/mrouted.hash
+index 22eeb8cef8..188293025f 100644
+--- a/package/mrouted/mrouted.hash
++++ b/package/mrouted/mrouted.hash
+@@ -1,6 +1,6 @@
+-# From https://github.com/troglobit/mrouted/releases/download/4.1/mrouted-4.1.tar.gz.md5
+-md5  e1f9bc0a895a2accae511a44e2a4a6f7  mrouted-4.1.tar.gz
++# From https://github.com/troglobit/mrouted/releases/download/4.2/mrouted-4.2.tar.gz.md5
++md5  b921f9e152e039efdac745438ef8362c  mrouted-4.2.tar.gz
+ 
+ # Locally calculated
+-sha256  fd4735316f5510dfccfcbed441aa11619b261501dccf9e793a311d618c0843c5  mrouted-4.1.tar.gz
++sha256  689541334ea951286054b771640e9d0f26b6a3242ff7f3894a3ef1b680811b34  mrouted-4.2.tar.gz
+ sha256  834f45ed282fd010f354ecc0a50538af519a1cfcc4d2866de3be06982fa9ed29  LICENSE
+diff --git a/package/mrouted/mrouted.mk b/package/mrouted/mrouted.mk
+index 4e3715b445..6005066577 100644
+--- a/package/mrouted/mrouted.mk
++++ b/package/mrouted/mrouted.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MROUTED_VERSION = 4.1
++MROUTED_VERSION = 4.2
+ MROUTED_SITE = \
+ 	https://github.com/troglobit/mrouted/releases/download/$(MROUTED_VERSION)
+ MROUTED_DEPENDENCIES = host-bison
 -- 
 2.25.1
