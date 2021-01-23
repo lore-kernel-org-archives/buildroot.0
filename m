@@ -1,39 +1,44 @@
-From: Joachim Wiberg <troglobit@gmail.com>
-Date: Sat, 23 Jan 2021 23:02:09 +0100
-Subject: [Buildroot] [PATCH 6/6] package/mrouted: menuconfig support for
- enabling rsrr support
-In-Reply-To: <20210123205117.GC926565@scaer>
-References: <20210123103155.2599311-1-troglobit@gmail.com>
- <20210123103155.2599311-7-troglobit@gmail.com>
- <20210123205117.GC926565@scaer>
-Message-ID: <8735yrwbvi.fsf@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 23 Jan 2021 23:06:51 +0100
+Subject: [Buildroot] [PATCH 1/2] package/perl-gd: drop gdlib-config
+Message-ID: <20210123220652.236205-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Drop gdlib-config as it won't be available after the bump to version
+2.3.0. If gdlib-config is not available, perl-gd fallbacks on glibc.pc
+since version 2.57:
+https://github.com/lstein/Perl-GD/commit/069e6cfff61e10c71474d75ed20d2ca11abc8f0e
 
-Hi Yann!
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/perl-gd/perl-gd.mk | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-On Sat, Jan 23, 2021 at 21:51, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
-> On 2021-01-23 11:31 +0100, Joachim Wiberg spake thusly:
-> I've fixed some minor coding style issue:
->     package/mrouted/Config.in:20: help text: <tab><2 spaces><62 chars> (http://nightly.buildroot.org/#writing-rules-config-in)
->     package/mrouted/Config.in:23: help text: <tab><2 spaces><62 chars> (http://nightly.buildroot.org/#writing-rules-config-in)
->     [...]
-
-Oups, thank you!  I'll make sure to train my Emacs better :)
-
->> +MROUTED_CONF_OPTS += $(if $(BR2_PACKAGE_MROUTED_RSRR),--enable-rsrr,--disable-rsrr)
-> I've switched to using the more traditional ifeq-else-endif block.
-
-Thanks!  (Copied from another package .mk, felt wrong while doing it)
-
-> Applied to master, thanks.
-
-Awesome :)
-
-
-Best regards
- /Joachim
+diff --git a/package/perl-gd/perl-gd.mk b/package/perl-gd/perl-gd.mk
+index d34328f0de..b058672a23 100644
+--- a/package/perl-gd/perl-gd.mk
++++ b/package/perl-gd/perl-gd.mk
+@@ -7,7 +7,7 @@
+ PERL_GD_VERSION = 2.73
+ PERL_GD_SOURCE = GD-$(PERL_GD_VERSION).tar.gz
+ PERL_GD_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RU/RURBAN
+-PERL_GD_DEPENDENCIES = zlib libpng freetype gd
++PERL_GD_DEPENDENCIES = host-pkgconf zlib libpng freetype gd
+ PERL_GD_LICENSE = Artistic or GPL-1.0+
+ PERL_GD_LICENSE_FILES = LICENSE
+ PERL_GD_DISTNAME = GD
+@@ -16,7 +16,6 @@ PERL_GD_CONF_OPTS = \
+ 	-lib_gd_path=$(STAGING_DIR)/usr \
+ 	-lib_ft_path=$(STAGING_DIR)/usr \
+ 	-lib_png_path=$(STAGING_DIR)/usr \
+-	-lib_zlib_path=$(STAGING_DIR)/usr \
+-	-gdlib_config_path=$(STAGING_DIR)/usr/bin
++	-lib_zlib_path=$(STAGING_DIR)/usr
+ 
+ $(eval $(perl-package))
+-- 
+2.29.2
