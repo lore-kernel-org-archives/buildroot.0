@@ -1,35 +1,34 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 23 Jan 2021 18:34:33 +0100
-Subject: [Buildroot] [PATCH 1/1] package/python-bluezero: needs python3
-Message-ID: <20210123173433.3214-1-fontaine.fabrice@gmail.com>
+Date: Sat, 23 Jan 2021 18:38:25 +0100
+Subject: [Buildroot] [PATCH 1/1] package/zeromq: add CPE variables
+Message-ID: <20210123173825.3619-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-python3 is mandatory since version 0.4.0 and
-https://github.com/ukBaz/python-bluezero/commit/55dc0fbc2710a75c9e8f519428e6b10747bf6eb7
-https://github.com/ukBaz/python-bluezero/commit/66e1b726d060f3d2b500ba2ec8268cf6743d65e9
+cpe:2.3:a:zeromq:libzmq is a valid CPE identifier for this package:
 
-Fixes:
- - http://autobuild.buildroot.org/results/cb4d637f1b0ca02377c04d67e20c48784b65c13a
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Azeromq%3Alibzmq
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/python-bluezero/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/zeromq/zeromq.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/python-bluezero/Config.in b/package/python-bluezero/Config.in
-index ed2277dc31..9ea3686a2b 100644
---- a/package/python-bluezero/Config.in
-+++ b/package/python-bluezero/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_BLUEZERO
- 	bool "python-bluezero"
-+	depends on BR2_PACKAGE_PYTHON3
- 	help
- 	  Python library for Bluetooth Low Energy (BLE) on Linux.
+diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
+index fa72a41f23..182699403c 100644
+--- a/package/zeromq/zeromq.mk
++++ b/package/zeromq/zeromq.mk
+@@ -11,6 +11,8 @@ ZEROMQ_DEPENDENCIES = util-linux
+ ZEROMQ_CONF_OPTS = --disable-Werror --without-documentation
+ ZEROMQ_LICENSE = LGPL-3.0+ with exceptions
+ ZEROMQ_LICENSE_FILES = COPYING COPYING.LESSER
++ZEROMQ_CPE_ID_VENDOR = zeromq
++ZEROMQ_CPE_ID_PRODUCT = libzmq
  
+ # Assume these flags are always available. It is true, at least for
+ # SOCK_CLOEXEC, since linux v2.6.27.
 -- 
 2.29.2
