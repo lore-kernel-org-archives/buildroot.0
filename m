@@ -1,52 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sat, 23 Jan 2021 21:26:46 +0100
-Subject: [Buildroot] [git commit] package/perl-role-tiny: bump to version
- 2.002003
-Message-ID: <20210123200716.5FBA080296@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/perl-uri: bump to version 5.06
+Message-ID: <20210123200716.8D24880296@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=94ddf8605fce72a6c9d11584fd913260e70b762f
+commit: https://git.buildroot.net/buildroot/commit/?id=8ef5caae165d9e6604c2007a8b777ffebb0040c3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-diff LICENSE:
--This software is Copyright (c) 2019 by mst - Matt S. Trout (cpan:MSTROUT) <mst@shadowcat.co.uk>.
-+This software is Copyright (c) 2021 by mst - Matt S. Trout (cpan:MSTROUT) <mst@shadowcat.co.uk>.
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/perl-role-tiny/perl-role-tiny.hash | 6 +++---
- package/perl-role-tiny/perl-role-tiny.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/perl-uri/perl-uri.hash | 4 ++--
+ package/perl-uri/perl-uri.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-role-tiny/perl-role-tiny.hash b/package/perl-role-tiny/perl-role-tiny.hash
-index c05873e653..9de786800a 100644
---- a/package/perl-role-tiny/perl-role-tiny.hash
-+++ b/package/perl-role-tiny/perl-role-tiny.hash
+diff --git a/package/perl-uri/perl-uri.hash b/package/perl-uri/perl-uri.hash
+index 39f2f47653..c6cb7971f0 100644
+--- a/package/perl-uri/perl-uri.hash
++++ b/package/perl-uri/perl-uri.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    98446826608b1e943e65c1f6e35942fe Role-Tiny-2.001004.tar.gz
--sha256 92ba5712850a74102c93c942eb6e7f62f7a4f8f483734ed289d08b324c281687 Role-Tiny-2.001004.tar.gz
-+md5  065e459cdc3c6e163c6e8359baf69f45  Role-Tiny-2.002003.tar.gz
-+sha256  6981e5f2d0beded157840199d678da462b22a9a3753333cab322ab6efb0fbb89  Role-Tiny-2.002003.tar.gz
+-md5  978454ba823a6908bad1c3c1804945d3  URI-5.05.tar.gz
+-sha256  a5c113d2d02706d9fbdca6a86f290c5b05b2f86836d4e7fe1447f063261b79ec  URI-5.05.tar.gz
++md5  3dd176c522e9d39d88bcf1221fcd7ab2  URI-5.06.tar.gz
++sha256  68555c576763769be43340459b9db7e159378edcd7db6d7518e16efdabdeb0c1  URI-5.06.tar.gz
  
  # computed by scancpan
--sha256 88f4a8719c584d756dcfeebc7f35643066354188bfb57c672fbafcd44e044e9c LICENSE
-+sha256  a8a1595c2347f7d10e896809d4f3dea85ccc10ac5644b8073111233cd120b14a  LICENSE
-diff --git a/package/perl-role-tiny/perl-role-tiny.mk b/package/perl-role-tiny/perl-role-tiny.mk
-index 0e1974fa1f..5a6477f94c 100644
---- a/package/perl-role-tiny/perl-role-tiny.mk
-+++ b/package/perl-role-tiny/perl-role-tiny.mk
+ sha256  65cd6f88516a30f56fd4e0080fb78ea69424fc89067470dc994e4abfba08664e  LICENSE
+diff --git a/package/perl-uri/perl-uri.mk b/package/perl-uri/perl-uri.mk
+index 1a4886590c..6eccb1b9bc 100644
+--- a/package/perl-uri/perl-uri.mk
++++ b/package/perl-uri/perl-uri.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_ROLE_TINY_VERSION = 2.001004
-+PERL_ROLE_TINY_VERSION = 2.002003
- PERL_ROLE_TINY_SOURCE = Role-Tiny-$(PERL_ROLE_TINY_VERSION).tar.gz
- PERL_ROLE_TINY_SITE = $(BR2_CPAN_MIRROR)/authors/id/H/HA/HAARG
- PERL_ROLE_TINY_LICENSE = Artistic or GPL-1.0+
+-PERL_URI_VERSION = 5.05
++PERL_URI_VERSION = 5.06
+ PERL_URI_SOURCE = URI-$(PERL_URI_VERSION).tar.gz
+ PERL_URI_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
+ PERL_URI_LICENSE = Artistic or GPL-1.0+
