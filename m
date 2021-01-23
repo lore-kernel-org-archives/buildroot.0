@@ -1,26 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 23 Jan 2021 21:27:40 +0100
-Subject: [Buildroot] [PATCH 01/10] package/perl-http-cookies: bump to
- version 6.10
-In-Reply-To: <20210122183020.874889-1-francois.perrad@gadz.org>
-References: <20210122183020.874889-1-francois.perrad@gadz.org>
-Message-ID: <20210123212740.0e3c3986@windsurf.home>
+Date: Sat, 23 Jan 2021 21:27:46 +0100
+Subject: [Buildroot] [PATCH] linux: add support for Image.gz kernel
+ format
+In-Reply-To: <20210122103949.8867-1-peter@korsgaard.com>
+References: <20210122103949.8867-1-peter@korsgaard.com>
+Message-ID: <20210123212746.3fb6ec19@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 22 Jan 2021 19:30:11 +0100
-Francois Perrad <fperrad@gmail.com> wrote:
+On Fri, 22 Jan 2021 11:39:49 +0100
+Peter Korsgaard <peter@korsgaard.com> wrote:
 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> arm64 / riscv supports building a gzip compressed 'Image' format kernel,
+> which is sometimes useful. From arch/arm64/Makefile:
+> 
+> all:	Image.gz
+> 
+> Image: vmlinux
+> 	$(Q)$(MAKE) $(build)=$(boot) $(boot)/$@
+> 
+> Image.%: Image
+> 	$(Q)$(MAKE) $(build)=$(boot) $(boot)/$@
+> 
+> (and similar logic for riscv)
+> 
+> Future architectures may or may not copy this logic, so for robustness add
+> an explicit Image.gz format rather than copying both Image and Image.gz when
+> the Image format is used.
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 > ---
->  package/perl-http-cookies/perl-http-cookies.hash | 4 ++--
->  package/perl-http-cookies/perl-http-cookies.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  linux/Config.in | 4 ++++
+>  linux/linux.mk  | 2 ++
+>  2 files changed, 6 insertions(+)
 
-Thanks, series applied!
+Applied to master, thanks.
 
 Thomas
 -- 
