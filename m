@@ -1,44 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 23 Jan 2021 22:01:13 +0100
-Subject: [Buildroot] [PATCH 2/2] board/sifive: Update
- hifive_unleashed_defconfig and genimage.cfg
-In-Reply-To: <CAEUhbmUa-bsPVaa-j19Hpt10uofqAPuXOZt6VY4sK_DYa+d=PQ@mail.gmail.com>
-References: <1610355672-3008-1-git-send-email-bmeng.cn@gmail.com>
- <1610355672-3008-3-git-send-email-bmeng.cn@gmail.com>
- <20210116224214.6f1ce3af@windsurf.home>
- <CAEUhbmUa-bsPVaa-j19Hpt10uofqAPuXOZt6VY4sK_DYa+d=PQ@mail.gmail.com>
-Message-ID: <20210123220113.15481f0e@windsurf.home>
+Date: Sat, 23 Jan 2021 22:01:57 +0100
+Subject: [Buildroot] [git commit] package/brltty: add polkit optional
+ dependency
+Message-ID: <20210123204226.3199881469@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=74c6a7e4dba6e81f5403476344b852119d7a53d8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 17 Jan 2021 18:28:11 +0800
-Bin Meng <bmeng.cn@gmail.com> wrote:
+polkit is an optional dependency (enabled by default) since version 5.4:
+https://github.com/brltty/brltty/commit/e62b3c925d03239a372d425fb87b2cac65d8ef19
 
-> > > +     partition rootfs {
-> > > +             image = "rootfs.ext4"
-> > > +             partition-type-uuid = 0FC63DAF-8483-4772-8E79-3D69D8477DE4
-> > > +             bootable = true
-> > > +     }
-> > > +}  
-> >
-> > This looks strange. You really use a GPT partition table on SPI flash,
-> > and use an ext4 filesystem on a SPI flash ?
-> >  
-> 
-> When booting from SPI flash, the GPT partition is required by the ZSBL
-> on the board to load U-Boot SPL images. The kernel still uses ext4 on
-> the SD card as the rootfs. The SPI flash is just the backup for the
-> rootfs.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/brltty/brltty.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Then why does your SPI flash image contains a root filesystem partition ?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/brltty/brltty.mk b/package/brltty/brltty.mk
+index 4f40e65fc6..3924fa0c1a 100644
+--- a/package/brltty/brltty.mk
++++ b/package/brltty/brltty.mk
+@@ -96,6 +96,13 @@ else
+ BRLTTY_CONF_OPTS += --without-rgx-package
+ endif
+ 
++ifeq ($(BR2_PACKAGE_POLKIT),y)
++BRLTTY_DEPENDENCIES += polkit
++BRLTTY_CONF_OPTS += --enable-polkit
++else
++BRLTTY_CONF_OPTS += --disable-polkit
++endif
++
+ ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+ BRLTTY_DEPENDENCIES += systemd
+ BRLTTY_CONF_OPTS += --with-service-package
