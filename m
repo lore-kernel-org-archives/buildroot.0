@@ -1,82 +1,214 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 24 Jan 2021 22:42:25 +0100
-Subject: [Buildroot] [PATCH] configs/orangepi_r1_defconfig: bump kernel to
- 5.10.10, u-boot to 2020.10
-Message-ID: <20210124214226.29305-1-peter@korsgaard.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun, 24 Jan 2021 22:53:57 +0100
+Subject: [Buildroot] No rule to make target 'host-python !!
+In-Reply-To: <CAGshWo2TRnTguBc3inO23idP2kMjnXzXeBaOsx=s_jWmh3ddhg@mail.gmail.com>
+References: <CAGshWo02DNPmGa_Nj7aBjf5TrQgVz2ePTP8EkABRfGFSYBsU0A@mail.gmail.com>
+ <CAGshWo1eWoWDUd_0jD8xQbpZg7dGzOzhwNeNmhrc5ewh9z6TSQ@mail.gmail.com>
+ <20210123114813.0f7048c2@windsurf.home>
+ <CAGshWo2ngucacs+BJocUb36G4QX7Q7ssv2_M0R9kAiV+oick1Q@mail.gmail.com>
+ <20210124161440.52c2d7d6@gmx.net>
+ <CAGshWo31-JML-C6D+T+Bbp8QrsWKZhE2r4-N8HaOAp6z4rkhtQ@mail.gmail.com>
+ <20210124173940.29212b62@gmx.net>
+ <CAGshWo2TRnTguBc3inO23idP2kMjnXzXeBaOsx=s_jWmh3ddhg@mail.gmail.com>
+Message-ID: <20210124225357.12a7e17e@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The probing order of the two mmc controllers (sdcard and sdio wifi) has
-changed in kernel 5.10 since commit 21b2cec61c04bd1 (mmc: Set
-PROBE_PREFER_ASYNCHRONOUS for drivers that existed in v4.4), so change to
-root=PARTUUID=.. instead of hardcoding /dev/mmcblkXp2.
+Hello Emmanuel,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- board/orangepi/orangepi-r1/boot.cmd     | 2 +-
- board/orangepi/orangepi-r1/genimage.cfg | 2 ++
- configs/orangepi_r1_defconfig           | 7 ++++---
- 3 files changed, 7 insertions(+), 4 deletions(-)
+On Sun, 24 Jan 2021 22:27:06 +0100, manu f <e.fiancette@gmail.com> wrote:
 
-diff --git a/board/orangepi/orangepi-r1/boot.cmd b/board/orangepi/orangepi-r1/boot.cmd
-index e927b01e82..2e3a4bb679 100644
---- a/board/orangepi/orangepi-r1/boot.cmd
-+++ b/board/orangepi/orangepi-r1/boot.cmd
-@@ -1,6 +1,6 @@
- setenv fdt_high ffffffff
- 
--setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
-+setenv bootargs console=ttyS0,115200 earlyprintk root=PARTUUID=deadbeef-02 rootwait
- 
- fatload mmc 0 $kernel_addr_r zImage
- fatload mmc 0 $fdt_addr_r sun8i-h2-plus-orangepi-r1.dtb
-diff --git a/board/orangepi/orangepi-r1/genimage.cfg b/board/orangepi/orangepi-r1/genimage.cfg
-index 01e2c0adc4..e7b32c86ab 100644
---- a/board/orangepi/orangepi-r1/genimage.cfg
-+++ b/board/orangepi/orangepi-r1/genimage.cfg
-@@ -13,6 +13,8 @@ image boot.vfat {
- 
- image sdcard.img {
- 	hdimage {
-+		# for root=PARTUUID=deadbeef-02 support
-+		disk-signature = 0xdeadbeef
- 	}
- 
- 	partition u-boot {
-diff --git a/configs/orangepi_r1_defconfig b/configs/orangepi_r1_defconfig
-index 7c3ec637e5..bad1f9400c 100644
---- a/configs/orangepi_r1_defconfig
-+++ b/configs/orangepi_r1_defconfig
-@@ -1,13 +1,13 @@
- BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_FPU_VFPV4=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_3=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
- BR2_TARGET_GENERIC_HOSTNAME="OrangePi_R1"
- BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Orange Pi R1"
- BR2_SYSTEM_DHCP="eth0"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.3.12"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.10"
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h2-plus-orangepi-r1"
-@@ -19,9 +19,10 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.10"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.10"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_r1"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
--- 
-2.20.1
+> You are right Peter!
+> You will find my python pakage joined.
+> Like I told you I am noob in kernel compil, so sure I made bad thing, but I
+> am here to learn.
+> 
+> So if I well understood even if I didnt select the package in menu config,
+> config.in and .mk file interferes with the build..
+> I use some other config.in and .mk file as model to build these file for my
+> package, so I make a mistake, if you could look them ?
+
+Besides the point I did not understand why you try to install some python37
+binaries (or source?)....all vars in python37/python37.mk should be
+named PYTHON37_... (instead of PYTHON_...) and the one in python37/Config.in
+should be named BR2_PYTHON37...
+
+Why not just enable the buildroot python3 package (will be python-3.8.6
+when using buildroot-2020.02.8)?
+
+Regards,
+Peter
+
+> 
+> Regards
+> 
+> (I remove the tar file in files directory cause it is to heavy to send, but
+> it's just python37 archive)
+> 
+> Le dim. 24 janv. 2021 ? 17:39, Peter Seiderer <ps.report@gmx.net> a ?crit :
+> 
+> > Hello Emmanuel,
+> >
+> > On Sun, 24 Jan 2021 17:08:21 +0100, manu f <e.fiancette@gmail.com> wrote:
+> >  
+> > > Thanks peter.
+> > > What's mean Buildroot 2020.02.8-dirty?  
+> >
+> > This indicates normally a buildroot git repository at version
+> > 2020.02.8 (tag/branch) with local changes ('dirty')...
+> >  
+> > >
+> > > About python37, yes I add this custom package but like you see I didn't
+> > > select it.  
+> >
+> > But the line '+# BR2_PACKAGE_PYTHON is not set' indicates that
+> > there is no python package any longer with your build setup
+> > (and so no host-python available needed by libevdev)...
+> >
+> > Hard to judge without knowledge of your br-external but I would suspect
+> > it contains a package/python directory with a python.mk file without
+> > an '$(eval $(host-autotools-package))' line (or something like
+> > that) and a Config.in file with BR2_PACKAGE_PYTHON_37 instead of
+> > BR2_PACKAGE_PYTHON?
+> >
+> > If so try to move .../br-exteranl/package/python to
+> > .../br-exteranl/package/python-37
+> >
+> > Regards,
+> > Peter
+> >  
+> > > this config is without livdevdev and it compile right. but if I select  
+> > it I  
+> > > had th error I gave (do you think it could be a problem if I not set
+> > > libdevdev, I realy not sure I need it, sorry I didn't completly setupp  
+> > this  
+> > > buildroot jus modify some aspect and I am far to master all).
+> > >
+> > > But its is strange that I have BR2_PACKAGE_PYTHON not set.
+> > > I will look later (I am not on my linux computer), I think I even havent
+> > > pithon item in menu-config...
+> > > Is this mean I have a problem with python dependencies ? I will check the
+> > > dependencies logic.
+> > >
+> > > Peter, Its very strange that at your side you could compile with  
+> > libdevdev  
+> > > set and not me. Do you have an idea wher I could search?
+> > >
+> > > Many thanks for helping.
+> > >
+> > > Regards.
+> > >
+> > > Emmanuel
+> > >
+> > >
+> > >
+> > > Le dim. 24 janv. 2021 ? 16:14, Peter Seiderer <ps.report@gmx.net> a  
+> > ?crit :  
+> > >  
+> > > > Hello,
+> > > >
+> > > > On Sun, 24 Jan 2021 12:40:31 +0100, manu f <e.fiancette@gmail.com>  
+> > wrote:  
+> > > >  
+> > > > > here my complete .config  
+> > > >
+> > > > Importing your .config into a plain buildroot-2020.02.8 gives
+> > > > the following diff:
+> > > >
+> > > > @@ -1,9 +1,8 @@
+> > > >  #
+> > > >  # Automatically generated file; DO NOT EDIT.
+> > > > -# Buildroot 2020.02.8-dirty Configuration
+> > > > +# Buildroot 2020.02.8 Configuration
+> > > >  #
+> > > >  BR2_HAVE_DOT_CONFIG=y
+> > > > -BR2_EXTERNAL_ATOS_PATH="/home/user/cleta_buildroot/br-external"
+> > > >  BR2_HOST_GCC_AT_LEAST_4_9=y
+> > > >  BR2_HOST_GCC_AT_LEAST_5=y
+> > > >  BR2_HOST_GCC_AT_LEAST_6=y
+> > > > @@ -1446,6 +1445,7 @@
+> > > >  #
+> > > >  # BR2_PACKAGE_PERL is not set
+> > > >  # BR2_PACKAGE_PHP is not set
+> > > > +# BR2_PACKAGE_PYTHON is not set
+> > > >  BR2_PACKAGE_PYTHON3=y
+> > > >  # BR2_PACKAGE_PYTHON3_PY_ONLY is not set
+> > > >  BR2_PACKAGE_PYTHON3_PYC_ONLY=y
+> > > > @@ -4174,6 +4174,7 @@
+> > > >  # BR2_PACKAGE_HOST_PKGCONF is not set
+> > > >  # BR2_PACKAGE_HOST_PRU_SOFTWARE_SUPPORT is not set
+> > > >  # BR2_PACKAGE_HOST_PWGEN is not set
+> > > > +# BR2_PACKAGE_HOST_PYTHON is not set
+> > > >  # BR2_PACKAGE_HOST_PYTHON_CYTHON is not set
+> > > >  # BR2_PACKAGE_HOST_PYTHON_LXML is not set
+> > > >  # BR2_PACKAGE_HOST_PYTHON_SIX is not set
+> > > > @@ -4876,17 +4877,3 @@
+> > > >  # BR2_VFP_FLOAT is not set
+> > > >  # BR2_PACKAGE_GCC_TARGET is not set
+> > > >  # BR2_HAVE_DEVFILES is not set
+> > > > -
+> > > > -#
+> > > > -# External options
+> > > > -#
+> > > > -
+> > > > -#
+> > > > -# br2-external tree for atos projects (in
+> > > > /home/user/cleta_buildroot/br-external)
+> > > > -#
+> > > > -BR2_PACKAGE_BACKLIGHT_MONITORING=y
+> > > > -BR2_PACKAGE_TEST_UART=y
+> > > > -BR2_PACKAGE_APP_MOUNT=y
+> > > > -BR2_PACKAGE_APP_UPDATER=y
+> > > > -BR2_NODE_JS_14x=y
+> > > > -# BR2_PYTHON_37 is not set
+> > > >
+> > > >
+> > > > Note the lines with 'Buildroot 2020.02.8-dirty',
+> > > > '-BR2_EXTERNAL_ATOS_PATH="/home/user/cleta_buildroot/br-external"',
+> > > > '+# BR2_PACKAGE_PYTHON is not set' and '-# BR2_PYTHON_37 is not set',
+> > > > so most likely something with your local change and/or br-external
+> > > > changing the package python to python37?
+> > > >
+> > > > Otherwise the config compiles fine here (even with libevdev enabled)...
+> > > >
+> > > > Regards,
+> > > > Peter
+> > > >
+> > > >  
+> > > > >
+> > > > > Le sam. 23 janv. 2021 ? 11:48, Thomas Petazzoni <  
+> > > > > thomas.petazzoni at bootlin.com> a ?crit :  
+> > > > >  
+> > > > > > On Fri, 22 Jan 2021 23:53:30 +0100
+> > > > > > manu f <e.fiancette@gmail.com> wrote:
+> > > > > >  
+> > > > > > > ok, I remove libevdev in Target package =>libraries=>Other and  
+> > its  
+> > > > copile  
+> > > > > > > without error!
+> > > > > > >
+> > > > > > > (But I dont know if I realy need this lib... )
+> > > > > > >
+> > > > > > > Well why it no compile with libdevdev ?
+> > > > > > > @ Thomas Petazzoni I saw you already got problem and make patch  
+> > for  
+> > > > > > > host-python interpreter...is there something to see with ?  
+> > > > > >
+> > > > > > host-python is definitely part of Buildroot 2020.02, so I'm not  
+> > sure  
+> > > > > > how you can get this error. We would need more details, such as the
+> > > > > > complete .config that reproduces the issue.
+> > > > > >
+> > > > > > Thomas
+> > > > > > --
+> > > > > > Thomas Petazzoni, CTO, Bootlin
+> > > > > > Embedded Linux and Kernel engineering
+> > > > > > https://bootlin.com
+> > > > > >  
+> > > >
+> > > >  
+> >
+> >  
