@@ -1,64 +1,73 @@
-From: Titouan Christophe <titouanchristophe@gmail.com>
-Date: Sun, 24 Jan 2021 10:43:22 +0100
-Subject: [Buildroot] [PATCH 1/1] boot/uboot: introduce
- BR2_TARGET_UBOOT_NEEDS_XXD
-Message-ID: <20210124094322.153407-1-titouanchristophe@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 24 Jan 2021 10:51:08 +0100
+Subject: [Buildroot] [PATCH 1/1] package/ssdp-responder: new package
+In-Reply-To: <20210123231559.3036505-1-troglobit@gmail.com>
+References: <20210123231559.3036505-1-troglobit@gmail.com>
+Message-ID: <20210124095108.GL926565@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When compiling uboot with a default environment built from a
-text file [1], the build pipeline uses the xxd command [2].
+Joachim, All,
 
-xxd is distributed with vim [3], which might no be installed
-on the host, so we provide this "uboot needs xxd" option to
-install host-vim for such a case.
+On 2021-01-24 00:15 +0100, Joachim Wiberg spake thusly:
+> Small (35k), and stand-alone, SSDP responder with built-in web server
+> (on port 1901) for serving description.xml when Windows scans for any
+> network devices on the LAN.  Also includes ssdp-scan (31k), similar to
+> the mdns-scan tool, to probe for SSDP capable devices.
 
-[1] https://gitlab.denx.de/u-boot/u-boot/-/blob/v2021.01/env/Kconfig#L612-628
-[2] https://gitlab.denx.de/u-boot/u-boot/-/blob/v2021.01/Makefile#L1887-1893
-[3] https://github.com/vim/vim/tree/v8.2.0000/src/xxd
+This package uses pkg-config, so it should have:
 
-Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
----
- boot/uboot/Config.in | 8 ++++++++
- boot/uboot/uboot.mk  | 4 ++++
- 2 files changed, 12 insertions(+)
+    SSDP_RESPONDER_DEPENDENCIES = host-pkgconf
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index d43c85cce7..5b91d23a81 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -239,6 +239,14 @@ config BR2_TARGET_UBOOT_NEEDS_OPENSBI
- 	  and that the OpenSBI variable pointing to OpenSBI binary,
- 	  is passed during the Buildroot build.
- 
-+config BR2_TARGET_UBOOT_NEEDS_XXD
-+	bool "U-Boot needs xxd"
-+	help
-+	  Select this option if your U-Boot board configuration
-+	  requires xxd to be available on the host. This is typically
-+	  the case when the board configuration has USE_DEFAULT_ENV_FILE
-+	  enabled.
-+
- menu "U-Boot binary format"
- 
- config BR2_TARGET_UBOOT_FORMAT_AIS
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 2478a2a1e9..3afed94dbe 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -198,6 +198,10 @@ ifeq ($(BR2_TARGET_UBOOT_NEEDS_LZOP),y)
- UBOOT_DEPENDENCIES += host-lzop
- endif
- 
-+ifeq ($(BR2_TARGET_UBOOT_NEEDS_XXD),y)
-+UBOOT_DEPENDENCIES += host-vim
-+endif
-+
- # prior to u-boot 2013.10 the license info was in COPYING. Copy it so
- # legal-info finds it
- define UBOOT_COPY_OLD_LICENSE_FILE
+It also has an optional dependency on systemd, so maybe it needs:
+
+    ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+    SSDP_RESPONDER_DEPENDENCIES += systemd
+    SSDP_RESPONDER_CONF_OPTS += --with-systemd
+    else
+    SSDP_RESPONDER_CONF_OPTS += --without-systemd
+    endif
+
+And since it comes with its systemd service unit, it would be nice to
+install it with SSDP_RESPONDER_INSTALL_INIT_SYSTEMD.
+
+[--SNIP--]
+> diff --git a/package/ssdp-responder/Config.in b/package/ssdp-responder/Config.in
+> new file mode 100644
+> index 0000000000..d6d374256e
+> --- /dev/null
+> +++ b/package/ssdp-responder/Config.in
+> @@ -0,0 +1,20 @@
+> +config BR2_PACKAGE_SSDP_RESPONDER
+> +        bool "ssdp-responder"
+> +        depends on BR2_USE_MMU # fork()
+> +        help
+> +          Simple Service Discovery Protocol daemon (SSDP) for networked
+> +          Linux and UNIX devices. Useful in any setup, big or small, but
+> +          targeted more at embedded systems that need to announce
+> +          themselves to Windows systems.
+
+    $ make check-package
+    package/ssdp-responder/Config.in:2: should be indented with one tab (http://nightly.buildroot.org/#_config_files)
+    package/ssdp-responder/Config.in:3: should be indented with one tab (http://nightly.buildroot.org/#_config_files)
+    package/ssdp-responder/Config.in:4: should be indented with one tab (http://nightly.buildroot.org/#_config_files)
+    package/ssdp-responder/Config.in:5: help text: <tab><2 spaces><62 chars> (http://nightly.buildroot.org/#writing-rules-config-in)
+    package/ssdp-responder/Config.in:6: help text: <tab><2 spaces><62 chars> (http://nightly.buildroot.org/#writing-rules-config-in)
+    package/ssdp-responder/Config.in:7: help text: <tab><2 spaces><62 chars> (http://nightly.buildroot.org/#writing-rules-config-in)
+    package/ssdp-responder/Config.in:8: help text: <tab><2 spaces><62 chars> (http://nightly.buildroot.org/#writing-rules-config-in)
+
+Care to fixup and respin, please?
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.25.3
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
