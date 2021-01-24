@@ -1,164 +1,179 @@
-From: Joachim Wiberg <troglobit@gmail.com>
-Date: Sun, 24 Jan 2021 00:15:58 +0100
-Subject: [Buildroot] [PATCH 1/1] package/ssdp-responder: new package
-Message-ID: <20210123231559.3036505-1-troglobit@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 24 Jan 2021 10:36:41 +0100
+Subject: [Buildroot] [PATCH 1/3] package/sysklogd: bump to verson 2.2.0
+In-Reply-To: <20210122154333.1927190-2-troglobit@gmail.com>
+References: <20210122154333.1927190-1-troglobit@gmail.com>
+ <20210122154333.1927190-2-troglobit@gmail.com>
+Message-ID: <20210124093641.GJ926565@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Small (35k), and stand-alone, SSDP responder with built-in web server
-(on port 1901) for serving description.xml when Windows scans for any
-network devices on the LAN.  Also includes ssdp-scan (31k), similar to
-the mdns-scan tool, to probe for SSDP capable devices.
+Joachim, All,
 
-Verified with test-pkg, no-mmu builds disabled.
+On 2021-01-22 16:43 +0100, Joachim Wiberg spake thusly:
+> - Prefer maintainer provided package, not GitHub generated archive
+> - Local backport of O_CLOEXEC patch not needed anymore, in v2.2.0
+> - Install to /usr, with config in /etc and logs in /var
+> - Update systemd unit file
+>   - New daemon path, /usr/sbin
+>   - Add support for /etc/default/syslogd, same as SysV init script
 
-Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
----
- DEVELOPERS                                 |  1 +
- package/Config.in                          |  1 +
- package/ssdp-responder/Config.in           | 20 +++++++++++
- package/ssdp-responder/S50ssdpd            | 42 ++++++++++++++++++++++
- package/ssdp-responder/ssdp-responder.hash |  3 ++
- package/ssdp-responder/ssdp-responder.mk   | 18 ++++++++++
- 6 files changed, 85 insertions(+)
- create mode 100644 package/ssdp-responder/Config.in
- create mode 100755 package/ssdp-responder/S50ssdpd
- create mode 100644 package/ssdp-responder/ssdp-responder.hash
- create mode 100644 package/ssdp-responder/ssdp-responder.mk
+This patch does four different things;
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 687a9400e0..7af3081760 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1280,6 +1280,7 @@ F:	configs/globalscale_espressobin_defconfig
- F:	board/globalscale/espressobin/
- F:	package/mg/
- F:	package/netcalc/
-+F:	package/ssdp-responder/
- 
- N:	Joao Pinto <jpinto@synopsys.com>
- F:	board/synopsys/vdk/
-diff --git a/package/Config.in b/package/Config.in
-index f42cc01032..12bd0608e3 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2268,6 +2268,7 @@ endif
- 	source "package/spice/Config.in"
- 	source "package/spice-protocol/Config.in"
- 	source "package/squid/Config.in"
-+	source "package/ssdp-responder/Config.in"
- 	source "package/sshguard/Config.in"
- 	source "package/sshpass/Config.in"
- 	source "package/sslh/Config.in"
-diff --git a/package/ssdp-responder/Config.in b/package/ssdp-responder/Config.in
-new file mode 100644
-index 0000000000..d6d374256e
---- /dev/null
-+++ b/package/ssdp-responder/Config.in
-@@ -0,0 +1,20 @@
-+config BR2_PACKAGE_SSDP_RESPONDER
-+        bool "ssdp-responder"
-+        depends on BR2_USE_MMU # fork()
-+        help
-+          Simple Service Discovery Protocol daemon (SSDP) for networked
-+          Linux and UNIX devices. Useful in any setup, big or small, but
-+          targeted more at embedded systems that need to announce
-+          themselves to Windows systems.
-+
-+	  ssdpd is a stand-alone UNIX, no external dependencies but the
-+	  standard C library.  It has a built-in web server for serving
-+	  the UPnP XML description which Windows use to present the
-+	  icon, by default an InternetGatewayDevice is announced.
-+
-+	  Also included is ssdp-scan, a tool similar to mdns-scan, which
-+	  continuously scans for SSDP capable hosts on the network.
-+	  Take care only to use for debugging since it scans the network
-+	  quite aggressively.
-+
-+	  https://github.com/troglobit/ssdp-responder/
-diff --git a/package/ssdp-responder/S50ssdpd b/package/ssdp-responder/S50ssdpd
-new file mode 100755
-index 0000000000..e33992be91
---- /dev/null
-+++ b/package/ssdp-responder/S50ssdpd
-@@ -0,0 +1,42 @@
-+#!/bin/sh
-+
-+NAME=ssdpd
-+PIDFILE=/var/run/$NAME.pid
-+DAEMON=/usr/sbin/$NAME
-+CFGFILE=/etc/default/$NAME
-+
-+DAEMON_ARGS=""
-+
-+# Read configuration variable file if it is present
-+[ -f $CFGFILE ] && . $CFGFILE
-+
-+start() {
-+	printf 'Starting %s: ' "$NAME"
-+	start-stop-daemon -S -q -p $PIDFILE -x $DAEMON -- $DAEMON_ARGS
-+	[ $? = 0 ] && echo "OK" || echo "FAIL"
-+}
-+
-+stop() {
-+	printf 'Stopping %s: ' "$NAME"
-+	start-stop-daemon -K -q -p $PIDFILE -x $DAEMON
-+	[ $? = 0 ] && echo "OK" || echo "FAIL"
-+}
-+
-+restart() {
-+	stop
-+	start
-+}
-+
-+case "$1" in
-+    start|stop|restart)
-+	"$1"
-+	;;
-+    reload)
-+	restart
-+	;;
-+    *)
-+	echo "Usage: $0 {start|stop|restart|reload}"
-+	exit 1
-+esac
-+
-+exit $?
-diff --git a/package/ssdp-responder/ssdp-responder.hash b/package/ssdp-responder/ssdp-responder.hash
-new file mode 100644
-index 0000000000..e8cbbb4a1f
---- /dev/null
-+++ b/package/ssdp-responder/ssdp-responder.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  7ae49229e7c7a55fed9e36598b12e2173eecef0fffe0a386b6a10fad30f3c79f  ssdp-responder-1.8.tar.gz
-+sha256  e17dc0bc91bf499d8cca5e016c22c6d2a4770e3cc1a43756a7973375a83ddb90  LICENSE
-diff --git a/package/ssdp-responder/ssdp-responder.mk b/package/ssdp-responder/ssdp-responder.mk
-new file mode 100644
-index 0000000000..ce057ee593
---- /dev/null
-+++ b/package/ssdp-responder/ssdp-responder.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# ssdp-responder
-+#
-+################################################################################
-+
-+SSDP_RESPONDER_VERSION = 1.8
-+SSDP_RESPONDER_SITE = https://github.com/troglobit/ssdp-responder/releases/download/v$(SSDP_RESPONDER_VERSION)
-+SSDP_RESPONDER_LICENSE = ISC
-+SSDP_RESPONDER_LICENSE_FILES = LICENSE
-+SSDP_RESPONDER_CPE_ID_VENDOR = troglobit
-+
-+define SSDP_RESPONDER_INSTALL_INIT_SYSV
-+	$(INSTALL) -D -m 0755 package/ssdp-responder/S50ssdpd \
-+		$(TARGET_DIR)/etc/init.d/S50ssdpd
-+endef
-+
-+$(eval $(autotools-package))
+ 1. bumps the version, switching to maintainer's archive
+ 2. removes the --without-logger configure option
+ 3. changes the ./configure options for prefix et al. (more on that later)
+ 4. extends the systemd service unit to include the environment
+
+This should have been four patches.
+
+However, as already discussed in a review for mrouted, the --prefix,
+--sysconfdir, and --localstatedir are already the value passed by the
+autotools-package infra, so aer not needed. But wy do you want to switch
+the logger from / to /usr ?
+
+See commit 33642d8d959 (package/sysklogd: fix installation path of the
+daemons), where the installation path was changed:
+
+ 1. to match the paths tht are used in the init scripts
+ 2. to match the location where busybox would install its applet
+
+So your patch breaks that, because it does not update the two init
+scripts, and will let busybox install its applet in /sbin.
+
+Granted, there should have been a comment above the _CONF_OPTS line to
+explain that was intentional.
+
+Finally, why is the --without-logger option removed entirely in this
+patch, when your patch 2 makes it a configurable option?
+
+I've applied the version bump and the systemd stuff as two separate
+patches, and dropped the rest.
+
+Applied to master, thanks.
+
+Regards,
+Yann E. MORIN.
+
+> Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+> ---
+>  ...RCE_required_for_O_CLOEXEC_on_uClibc.patch | 44 -------------------
+>  package/sysklogd/sysklogd.hash                |  2 +-
+>  package/sysklogd/sysklogd.mk                  |  8 ++--
+>  package/sysklogd/syslogd.service              |  3 +-
+>  4 files changed, 6 insertions(+), 51 deletions(-)
+>  delete mode 100644 package/sysklogd/0001-Define-_GNU_SOURCE_required_for_O_CLOEXEC_on_uClibc.patch
+> 
+> diff --git a/package/sysklogd/0001-Define-_GNU_SOURCE_required_for_O_CLOEXEC_on_uClibc.patch b/package/sysklogd/0001-Define-_GNU_SOURCE_required_for_O_CLOEXEC_on_uClibc.patch
+> deleted file mode 100644
+> index 684b6b3e4c..0000000000
+> --- a/package/sysklogd/0001-Define-_GNU_SOURCE_required_for_O_CLOEXEC_on_uClibc.patch
+> +++ /dev/null
+> @@ -1,44 +0,0 @@
+> -From 93117e58016de6f604e67263b5135adbba032367 Mon Sep 17 00:00:00 2001
+> -From: Joachim Wiberg <troglobit@gmail.com>
+> -Date: Sun, 30 Aug 2020 11:41:45 +0200
+> -Subject: [PATCH] Define _GNU_SOURCE, required for O_CLOEXEC on uClibc
+> -
+> -When building sysklogd on a uClibc system we must define _GNU_SOURCE to
+> -get O_CLOEXEC.
+> -
+> -Since _GNU_SOURCE is also required for asprintf() with GLIBC, as used by
+> -the pidfile() replacement function, we drop it from there and rely on
+> -AM_CPPFLAGS for all sources.
+> -
+> -Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+> -Signed-off-by: Andreas Hilse <andreas.hilse@googlemail.com>
+> ----
+> - lib/pidfile.c   | 1 -
+> - src/Makefile.am | 2 +-
+> - 2 files changed, 1 insertion(+), 2 deletions(-)
+> -
+> -diff --git a/lib/pidfile.c b/lib/pidfile.c
+> -index a26de73..886a29c 100644
+> ---- a/lib/pidfile.c
+> -+++ b/lib/pidfile.c
+> -@@ -31,7 +31,6 @@
+> -  * POSSIBILITY OF SUCH DAMAGE.
+> -  */
+> - 
+> --#define _GNU_SOURCE		/* Needed with GLIBC to get asprintf() */
+> - #include <sys/stat.h>		/* utimensat() */
+> - #include <sys/time.h>		/* utimensat() on *BSD */
+> - #include <sys/types.h>
+> -diff --git a/src/Makefile.am b/src/Makefile.am
+> -index 9b80a02..1909ada 100644
+> ---- a/src/Makefile.am
+> -+++ b/src/Makefile.am
+> -@@ -36,7 +36,7 @@ endif
+> - AM_CFLAGS             = -W -Wall -Wextra
+> - AM_CFLAGS            += -Wno-unused-result -Wno-unused-parameter -fno-strict-aliasing
+> - AM_CPPFLAGS           = -DSYSCONFDIR=\"@sysconfdir@\" -DRUNSTATEDIR=\"@runstatedir@\"
+> --AM_CPPFLAGS          += -D_BSD_SOURCE -D_DEFAULT_SOURCE
+> -+AM_CPPFLAGS          += -D_BSD_SOURCE -D_DEFAULT_SOURCE -D_GNU_SOURCE
+> - 
+> - syslogd_SOURCES       = syslogd.c syslogd.h socket.c socket.h syslog.h
+> - syslogd_SOURCES      += timer.c timer.h queue.h compat.h
+> diff --git a/package/sysklogd/sysklogd.hash b/package/sysklogd/sysklogd.hash
+> index 978a670d30..91550aa0dc 100644
+> --- a/package/sysklogd/sysklogd.hash
+> +++ b/package/sysklogd/sysklogd.hash
+> @@ -1,3 +1,3 @@
+>  # Locally calculated
+> -sha256  09fe1edca882a9ae976cdbf516786edc1629347b9507d45dc005d9d969f94702  sysklogd-2.1.2.tar.gz
+> +sha256  60546ae50a9f30b31c19ed9a3ad788ce5798025b0f9a0d552c1a04d5eeac494d  sysklogd-2.2.0.tar.gz
+>  sha256  7a71d7603a7c4456df441463e54da35acf151c1be0879246de63544f1f34f477  LICENSE
+> diff --git a/package/sysklogd/sysklogd.mk b/package/sysklogd/sysklogd.mk
+> index 200738897d..fc54ab6936 100644
+> --- a/package/sysklogd/sysklogd.mk
+> +++ b/package/sysklogd/sysklogd.mk
+> @@ -4,14 +4,12 @@
+>  #
+>  ################################################################################
+>  
+> -SYSKLOGD_VERSION = 2.1.2
+> -SYSKLOGD_SITE = $(call github,troglobit,sysklogd,v$(SYSKLOGD_VERSION))
+> +SYSKLOGD_VERSION = 2.2.0
+> +SYSKLOGD_SITE = https://github.com/troglobit/sysklogd/releases/download/v$(SYSKLOGD_VERSION)
+>  SYSKLOGD_LICENSE = BSD-3-Clause
+>  SYSKLOGD_LICENSE_FILES = LICENSE
+>  SYSKLOGD_CPE_ID_VALID = YES
+> -# From git
+> -SYSKLOGD_AUTORECONF = YES
+> -SYSKLOGD_CONF_OPTS = --exec-prefix=/ --without-logger
+> +SYSKLOGD_CONF_OPTS =  --prefix=/usr --sysconfdir=/etc --localstatedir=/var
+>  
+>  define SYSKLOGD_INSTALL_SAMPLE_CONFIG
+>  	$(INSTALL) -D -m 0644 package/sysklogd/syslog.conf \
+> diff --git a/package/sysklogd/syslogd.service b/package/sysklogd/syslogd.service
+> index 1bf1bb3bd9..0e14369596 100644
+> --- a/package/sysklogd/syslogd.service
+> +++ b/package/sysklogd/syslogd.service
+> @@ -3,7 +3,8 @@ Description=System Logging Service
+>  Requires=syslog.socket
+>  
+>  [Service]
+> -ExecStart=/sbin/syslogd -m 0 -F
+> +EnvironmentFile=-/etc/default/syslogd
+> +ExecStart=/usr/sbin/syslogd -m 0 -F $SYSLOGD_ARGS
+>  StandardOutput=null
+>  Restart=on-failure
+>  
+> -- 
+> 2.25.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.25.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
