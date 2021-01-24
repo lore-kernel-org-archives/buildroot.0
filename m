@@ -1,48 +1,50 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 24 Jan 2021 20:09:55 +0100
-Subject: [Buildroot] [PATCH 1/1] package/mdevd: bump to version 0.1.3.0
-Message-ID: <20210124190955.1051112-1-fontaine.fabrice@gmail.com>
+Date: Sun, 24 Jan 2021 20:11:14 +0100
+Subject: [Buildroot] [PATCH 1/1] package/openldap: bump to version 2.4.57
+Message-ID: <20210124191114.1051458-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Update hash of COPYING, update in year:
-  https://github.com/skarnet/mdevd/commit/00b25940f6d0458f45ab36ddaff2a1c6d208b6fa
-  https://github.com/skarnet/mdevd/commit/05024f93d3cd75c86a89ed1ae6fea0c2b1f1c187
-- Update indentation in hash file (two spaces)
-
-https://github.com/skarnet/mdevd/blob/v0.1.3.0/NEWS
+https://www.openldap.org/software/release/changes.html
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/mdevd/mdevd.hash | 4 ++--
- package/mdevd/mdevd.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/openldap/openldap.hash | 10 +++++-----
+ package/openldap/openldap.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/mdevd/mdevd.hash b/package/mdevd/mdevd.hash
-index 6852e55f8e..c3b8fcc921 100644
---- a/package/mdevd/mdevd.hash
-+++ b/package/mdevd/mdevd.hash
-@@ -1,3 +1,3 @@
- # Locally generated
--sha256 c926b6f9f9f48a73733397f08b6c299a8a2f0eff3d729de7f9d0a763757dab2a  mdevd-0.1.1.2.tar.gz
--sha256 6e32cf6ae38bb82bb8462915ae72d55de59741c8227ae0a637b4012687d9a739  COPYING
-+sha256  be89ab072c4de822a06e26579dcca10e85ae5fd5be23ba903415b4de8fe0fb6a  mdevd-0.1.3.0.tar.gz
-+sha256  31b60c66aba1fa0a7f8847339ac35c28638e25ff96da700d995533ad810e3995  COPYING
-diff --git a/package/mdevd/mdevd.mk b/package/mdevd/mdevd.mk
-index 728c766643..e2924009f5 100644
---- a/package/mdevd/mdevd.mk
-+++ b/package/mdevd/mdevd.mk
+diff --git a/package/openldap/openldap.hash b/package/openldap/openldap.hash
+index 4908f6e69e..f2ffdf53bc 100644
+--- a/package/openldap/openldap.hash
++++ b/package/openldap/openldap.hash
+@@ -1,7 +1,7 @@
+-# From https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.56.md5
+-md5  82a7dcf7aeaf95fdad16017c0ed9983a  openldap-2.4.56.tgz
+-# From https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.56.sha1
+-sha1  4c617b87bd50ef8d071e7deb7525af79b08d4910  openldap-2.4.56.tgz
++# From https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.57.md5
++md5  e3349456c3a66e5e6155be7ddc3f042c  openldap-2.4.57.tgz
++# From https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.57.sha1
++sha1  1cffa70a3ea8545948041fd113f8f53bc24d6d87  openldap-2.4.57.tgz
+ # Locally computed
+-sha256  25520e0363c93f3bcb89802a4aa3db33046206039436e0c7c9262db5a61115e0  openldap-2.4.56.tgz
++sha256  c7ba47e1e6ecb5b436f3d43281df57abeffa99262141aec822628bc220f6b45a  openldap-2.4.57.tgz
+ sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
+diff --git a/package/openldap/openldap.mk b/package/openldap/openldap.mk
+index 1a7149320d..b4c06d8640 100644
+--- a/package/openldap/openldap.mk
++++ b/package/openldap/openldap.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MDEVD_VERSION = 0.1.1.2
-+MDEVD_VERSION = 0.1.3.0
- MDEVD_SITE = http://skarnet.org/software/mdevd
- MDEVD_LICENSE = ISC
- MDEVD_LICENSE_FILES = COPYING
+-OPENLDAP_VERSION = 2.4.56
++OPENLDAP_VERSION = 2.4.57
+ OPENLDAP_SOURCE = openldap-$(OPENLDAP_VERSION).tgz
+ OPENLDAP_SITE = https://www.openldap.org/software/download/OpenLDAP/openldap-release
+ OPENLDAP_LICENSE = OpenLDAP Public License
 -- 
 2.29.2
