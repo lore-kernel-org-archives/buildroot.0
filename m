@@ -1,168 +1,141 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 24 Jan 2021 17:39:40 +0100
-Subject: [Buildroot] No rule to make target 'host-python !!
-In-Reply-To: <CAGshWo31-JML-C6D+T+Bbp8QrsWKZhE2r4-N8HaOAp6z4rkhtQ@mail.gmail.com>
-References: <CAGshWo02DNPmGa_Nj7aBjf5TrQgVz2ePTP8EkABRfGFSYBsU0A@mail.gmail.com>
- <CAGshWo1eWoWDUd_0jD8xQbpZg7dGzOzhwNeNmhrc5ewh9z6TSQ@mail.gmail.com>
- <20210123114813.0f7048c2@windsurf.home>
- <CAGshWo2ngucacs+BJocUb36G4QX7Q7ssv2_M0R9kAiV+oick1Q@mail.gmail.com>
- <20210124161440.52c2d7d6@gmx.net>
- <CAGshWo31-JML-C6D+T+Bbp8QrsWKZhE2r4-N8HaOAp6z4rkhtQ@mail.gmail.com>
-Message-ID: <20210124173940.29212b62@gmx.net>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Sun, 24 Jan 2021 18:45:29 +0100
+Subject: [Buildroot] [PATCH] perl: bump to version 5.32.1
+Message-ID: <20210124174529.1562621-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Emmanuel,
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ ...the-generated-subdirectory-Makefiles.patch | 32 -------------------
+ package/perl/perl.hash                        | 14 ++++----
+ package/perl/perl.mk                          |  8 ++---
+ utils/scancpan                                |  8 ++---
+ 4 files changed, 15 insertions(+), 47 deletions(-)
+ delete mode 100644 package/perl/0001-fix-the-generated-subdirectory-Makefiles.patch
 
-On Sun, 24 Jan 2021 17:08:21 +0100, manu f <e.fiancette@gmail.com> wrote:
-
-> Thanks peter.
-> What's mean Buildroot 2020.02.8-dirty?
-
-This indicates normally a buildroot git repository at version
-2020.02.8 (tag/branch) with local changes ('dirty')...
-
-> 
-> About python37, yes I add this custom package but like you see I didn't
-> select it.
-
-But the line '+# BR2_PACKAGE_PYTHON is not set' indicates that
-there is no python package any longer with your build setup
-(and so no host-python available needed by libevdev)...
-
-Hard to judge without knowledge of your br-external but I would suspect
-it contains a package/python directory with a python.mk file without
-an '$(eval $(host-autotools-package))' line (or something like
-that) and a Config.in file with BR2_PACKAGE_PYTHON_37 instead of
-BR2_PACKAGE_PYTHON?
-
-If so try to move .../br-exteranl/package/python to .../br-exteranl/package/python-37
-
-Regards,
-Peter
-
-> this config is without livdevdev and it compile right. but if I select it I
-> had th error I gave (do you think it could be a problem if I not set
-> libdevdev, I realy not sure I need it, sorry I didn't completly setupp this
-> buildroot jus modify some aspect and I am far to master all).
-> 
-> But its is strange that I have BR2_PACKAGE_PYTHON not set.
-> I will look later (I am not on my linux computer), I think I even havent
-> pithon item in menu-config...
-> Is this mean I have a problem with python dependencies ? I will check the
-> dependencies logic.
-> 
-> Peter, Its very strange that at your side you could compile with libdevdev
-> set and not me. Do you have an idea wher I could search?
-> 
-> Many thanks for helping.
-> 
-> Regards.
-> 
-> Emmanuel
-> 
-> 
-> 
-> Le dim. 24 janv. 2021 ? 16:14, Peter Seiderer <ps.report@gmx.net> a ?crit :
-> 
-> > Hello,
-> >
-> > On Sun, 24 Jan 2021 12:40:31 +0100, manu f <e.fiancette@gmail.com> wrote:
-> >  
-> > > here my complete .config  
-> >
-> > Importing your .config into a plain buildroot-2020.02.8 gives
-> > the following diff:
-> >
-> > @@ -1,9 +1,8 @@
-> >  #
-> >  # Automatically generated file; DO NOT EDIT.
-> > -# Buildroot 2020.02.8-dirty Configuration
-> > +# Buildroot 2020.02.8 Configuration
-> >  #
-> >  BR2_HAVE_DOT_CONFIG=y
-> > -BR2_EXTERNAL_ATOS_PATH="/home/user/cleta_buildroot/br-external"
-> >  BR2_HOST_GCC_AT_LEAST_4_9=y
-> >  BR2_HOST_GCC_AT_LEAST_5=y
-> >  BR2_HOST_GCC_AT_LEAST_6=y
-> > @@ -1446,6 +1445,7 @@
-> >  #
-> >  # BR2_PACKAGE_PERL is not set
-> >  # BR2_PACKAGE_PHP is not set
-> > +# BR2_PACKAGE_PYTHON is not set
-> >  BR2_PACKAGE_PYTHON3=y
-> >  # BR2_PACKAGE_PYTHON3_PY_ONLY is not set
-> >  BR2_PACKAGE_PYTHON3_PYC_ONLY=y
-> > @@ -4174,6 +4174,7 @@
-> >  # BR2_PACKAGE_HOST_PKGCONF is not set
-> >  # BR2_PACKAGE_HOST_PRU_SOFTWARE_SUPPORT is not set
-> >  # BR2_PACKAGE_HOST_PWGEN is not set
-> > +# BR2_PACKAGE_HOST_PYTHON is not set
-> >  # BR2_PACKAGE_HOST_PYTHON_CYTHON is not set
-> >  # BR2_PACKAGE_HOST_PYTHON_LXML is not set
-> >  # BR2_PACKAGE_HOST_PYTHON_SIX is not set
-> > @@ -4876,17 +4877,3 @@
-> >  # BR2_VFP_FLOAT is not set
-> >  # BR2_PACKAGE_GCC_TARGET is not set
-> >  # BR2_HAVE_DEVFILES is not set
-> > -
-> > -#
-> > -# External options
-> > -#
-> > -
-> > -#
-> > -# br2-external tree for atos projects (in
-> > /home/user/cleta_buildroot/br-external)
-> > -#
-> > -BR2_PACKAGE_BACKLIGHT_MONITORING=y
-> > -BR2_PACKAGE_TEST_UART=y
-> > -BR2_PACKAGE_APP_MOUNT=y
-> > -BR2_PACKAGE_APP_UPDATER=y
-> > -BR2_NODE_JS_14x=y
-> > -# BR2_PYTHON_37 is not set
-> >
-> >
-> > Note the lines with 'Buildroot 2020.02.8-dirty',
-> > '-BR2_EXTERNAL_ATOS_PATH="/home/user/cleta_buildroot/br-external"',
-> > '+# BR2_PACKAGE_PYTHON is not set' and '-# BR2_PYTHON_37 is not set',
-> > so most likely something with your local change and/or br-external
-> > changing the package python to python37?
-> >
-> > Otherwise the config compiles fine here (even with libevdev enabled)...
-> >
-> > Regards,
-> > Peter
-> >
-> >  
-> > >
-> > > Le sam. 23 janv. 2021 ? 11:48, Thomas Petazzoni <  
-> > > thomas.petazzoni at bootlin.com> a ?crit :  
-> > >  
-> > > > On Fri, 22 Jan 2021 23:53:30 +0100
-> > > > manu f <e.fiancette@gmail.com> wrote:
-> > > >  
-> > > > > ok, I remove libevdev in Target package =>libraries=>Other and its  
-> > copile  
-> > > > > without error!
-> > > > >
-> > > > > (But I dont know if I realy need this lib... )
-> > > > >
-> > > > > Well why it no compile with libdevdev ?
-> > > > > @ Thomas Petazzoni I saw you already got problem and make patch for
-> > > > > host-python interpreter...is there something to see with ?  
-> > > >
-> > > > host-python is definitely part of Buildroot 2020.02, so I'm not sure
-> > > > how you can get this error. We would need more details, such as the
-> > > > complete .config that reproduces the issue.
-> > > >
-> > > > Thomas
-> > > > --
-> > > > Thomas Petazzoni, CTO, Bootlin
-> > > > Embedded Linux and Kernel engineering
-> > > > https://bootlin.com
-> > > >  
-> >
-> >  
+diff --git a/package/perl/0001-fix-the-generated-subdirectory-Makefiles.patch b/package/perl/0001-fix-the-generated-subdirectory-Makefiles.patch
+deleted file mode 100644
+index ae1ce0699..000000000
+--- a/package/perl/0001-fix-the-generated-subdirectory-Makefiles.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From 30ae4c9e2ac6cd27138ebf124cbda9232c56bdf7 Mon Sep 17 00:00:00 2001
+-From: Francois Perrad <francois.perrad@gadz.org>
+-Date: Tue, 16 Oct 2018 21:20:12 +0200
+-Subject: [PATCH] fix the generated subdirectory Makefiles
+-
+-all variables used by BR must be propagated
+-
+-similar to https://github.com/Perl-Toolchain-Gang/ExtUtils-MakeMaker/commit/98e8532fffe5afa8186329acc44fb957427f1823
+-
+-see https://github.com/Perl-Toolchain-Gang/ExtUtils-MakeMaker/pull/331, merged in EU-MM v7.35_08
+-
+-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+----
+- cpan/ExtUtils-MakeMaker/lib/ExtUtils/MakeMaker.pm | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MakeMaker.pm b/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MakeMaker.pm
+-index d579256e86..48642e98fa 100644
+---- a/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MakeMaker.pm
+-+++ b/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MakeMaker.pm
+-@@ -702,7 +702,7 @@ END
+-         }
+-         if ($self->{PARENT}) {
+-             $self->{PARENT}->{CHILDREN}->{$newclass} = $self;
+--            foreach my $opt (qw(POLLUTE PERL_CORE LINKTYPE LD OPTIMIZE)) {
+-+            foreach my $opt (qw(POLLUTE PERL_CORE LINKTYPE AR FULL_AR CC CCFLAGS OPTIMIZE LD LDDLFLAGS LDFLAGS PERL_ARCHLIB DESTDIR )) {
+-                 if (exists $self->{PARENT}->{$opt}
+-                     and not exists $self->{$opt})
+-                     {
+--- 
+-2.17.1
+-
+diff --git a/package/perl/perl.hash b/package/perl/perl.hash
+index ba3a39d43..42b7cc66c 100644
+--- a/package/perl/perl.hash
++++ b/package/perl/perl.hash
+@@ -1,12 +1,12 @@
+-# Hashes from: http://www.cpan.org/src/5.0/perl-5.30.3.tar.xz.{md5,sha1,sha256}.txt
+-md5  0af2ab0f01ec13e37cc13a27de930936  perl-5.30.3.tar.xz
+-sha1  1003c6aa71d8966501038178459a9fa4e9aba747  perl-5.30.3.tar.xz
+-sha256  6967595f2e3f3a94544c35152f9a25e0cb8ea24ae45f4bf1882f2e33f4a400f4  perl-5.30.3.tar.xz
++# Hashes from: https://www.cpan.org/src/5.0/perl-5.32.1.tar.xz.{md5,sha1,sha256}.txt
++md5  7f104064b906ad8c7329ca5e409a32d7  perl-5.32.1.tar.xz
++sha1  1fb4f710d139da1e1a3e1fa4eaba201fcaa8e18e  perl-5.32.1.tar.xz
++sha256  57cc47c735c8300a8ce2fa0643507b44c4ae59012bfdad0121313db639e02309  perl-5.32.1.tar.xz
+ 
+-# Hashes from: https://github.com/arsv/perl-cross/releases/download/1.3.4/perl-cross-1.3.4.hash
+-sha256  755aa0ca8141a942188a269564f86c3c82349f82c346ed5c992495d7f35138ba  perl-cross-1.3.4.tar.gz
++# Hashes from: https://github.com/arsv/perl-cross/releases/download/1.3.5/perl-cross-1.3.5.hash
++sha256  91c66f6b2b99fccfd4fee14660b677380b0c98f9456359e91449798c2ad2ef25  perl-cross-1.3.5.tar.gz
+ 
+ # Locally calculated
+ sha256  dd90d4f42e4dcadf5a7c09eea0189d93c7b37ae560c91f0f6d5233ed3b9292a2  Artistic
+ sha256  d77d235e41d54594865151f4751e835c5a82322b0e87ace266567c3391a4b912  Copying
+-sha256  4916e95d32b84e07c045d839646f74996f577e5f497bbba8177a94b31415cee7  README
++sha256  df6ad59aefea68676c38325f25f6707f026ddde6c71291b2ca231b6247859907  README
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index 5f6aa9767..ec1cfd4d0 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -5,15 +5,15 @@
+ ################################################################################
+ 
+ # When updating the version here, also update utils/scancpan
+-PERL_VERSION_MAJOR = 30
+-PERL_VERSION = 5.$(PERL_VERSION_MAJOR).3
+-PERL_SITE = http://www.cpan.org/src/5.0
++PERL_VERSION_MAJOR = 32
++PERL_VERSION = 5.$(PERL_VERSION_MAJOR).1
++PERL_SITE = https://www.cpan.org/src/5.0
+ PERL_SOURCE = perl-$(PERL_VERSION).tar.xz
+ PERL_LICENSE = Artistic or GPL-1.0+
+ PERL_LICENSE_FILES = Artistic Copying README
+ PERL_INSTALL_STAGING = YES
+ 
+-PERL_CROSS_VERSION = 1.3.4
++PERL_CROSS_VERSION = 1.3.5
+ # DO NOT refactor with the github helper (the result is not the same)
+ PERL_CROSS_SITE = https://github.com/arsv/perl-cross/releases/download/$(PERL_CROSS_VERSION)
+ PERL_CROSS_SOURCE = perl-cross-$(PERL_CROSS_VERSION).tar.gz
+diff --git a/utils/scancpan b/utils/scancpan
+index 3ce3203bd..075f19356 100755
+--- a/utils/scancpan
++++ b/utils/scancpan
+@@ -488,9 +488,9 @@ use Digest::SHA qw(sha256_hex);
+ use Text::Wrap;
+ $Text::Wrap::columns = 62;
+ 
+-# Below, 5.030 should be aligned with the version of perl actually
++# Below, 5.032 should be aligned with the version of perl actually
+ # bundled in Buildroot:
+-die <<"MSG" if $] < 5.030;
++die <<"MSG" if $] < 5.032;
+ This script needs a host perl with the same major version as Buildroot target perl.
+ 
+ Your current host perl is:
+@@ -498,7 +498,7 @@ Your current host perl is:
+     version $]
+ 
+ You may install a local one by running:
+-    perlbrew install perl-5.30.0
++    perlbrew install perl-5.32.0
+ MSG
+ 
+ my ($help, $man, $quiet, $force, $recommend, $test, $host);
+@@ -967,7 +967,7 @@ in order to work with the right CoreList data.
+ 
+ =head1 LICENSE
+ 
+-Copyright (C) 2013-2019 by Francois Perrad <francois.perrad@gadz.org>
++Copyright (C) 2013-2020 by Francois Perrad <francois.perrad@gadz.org>
+ 
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+-- 
+2.27.0
