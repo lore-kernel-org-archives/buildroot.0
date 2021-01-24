@@ -1,141 +1,196 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Sun, 24 Jan 2021 18:45:29 +0100
-Subject: [Buildroot] [PATCH] perl: bump to version 5.32.1
-Message-ID: <20210124174529.1562621-1-francois.perrad@gadz.org>
+From: Filip <fskoneczny@gmail.com>
+Date: Sun, 24 Jan 2021 18:50:45 +0100
+Subject: [Buildroot] [PATCH 1/1] configs/bananapi_m1_plus_defconfig: new
+ defconfig
+In-Reply-To: <20210123214036.720c3a3f@windsurf.home>
+References: <20210120172815.3395049-1-fskoneczny@gmail.com>
+ <20210123214036.720c3a3f@windsurf.home>
+Message-ID: <4f49c391-6275-cf49-6751-921f7484aa99@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- ...the-generated-subdirectory-Makefiles.patch | 32 -------------------
- package/perl/perl.hash                        | 14 ++++----
- package/perl/perl.mk                          |  8 ++---
- utils/scancpan                                |  8 ++---
- 4 files changed, 15 insertions(+), 47 deletions(-)
- delete mode 100644 package/perl/0001-fix-the-generated-subdirectory-Makefiles.patch
+Hi Thomas,
 
-diff --git a/package/perl/0001-fix-the-generated-subdirectory-Makefiles.patch b/package/perl/0001-fix-the-generated-subdirectory-Makefiles.patch
-deleted file mode 100644
-index ae1ce0699..000000000
---- a/package/perl/0001-fix-the-generated-subdirectory-Makefiles.patch
-+++ /dev/null
-@@ -1,32 +0,0 @@
--From 30ae4c9e2ac6cd27138ebf124cbda9232c56bdf7 Mon Sep 17 00:00:00 2001
--From: Francois Perrad <francois.perrad@gadz.org>
--Date: Tue, 16 Oct 2018 21:20:12 +0200
--Subject: [PATCH] fix the generated subdirectory Makefiles
--
--all variables used by BR must be propagated
--
--similar to https://github.com/Perl-Toolchain-Gang/ExtUtils-MakeMaker/commit/98e8532fffe5afa8186329acc44fb957427f1823
--
--see https://github.com/Perl-Toolchain-Gang/ExtUtils-MakeMaker/pull/331, merged in EU-MM v7.35_08
--
--Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-----
-- cpan/ExtUtils-MakeMaker/lib/ExtUtils/MakeMaker.pm | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MakeMaker.pm b/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MakeMaker.pm
--index d579256e86..48642e98fa 100644
----- a/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MakeMaker.pm
--+++ b/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MakeMaker.pm
--@@ -702,7 +702,7 @@ END
--         }
--         if ($self->{PARENT}) {
--             $self->{PARENT}->{CHILDREN}->{$newclass} = $self;
---            foreach my $opt (qw(POLLUTE PERL_CORE LINKTYPE LD OPTIMIZE)) {
--+            foreach my $opt (qw(POLLUTE PERL_CORE LINKTYPE AR FULL_AR CC CCFLAGS OPTIMIZE LD LDDLFLAGS LDFLAGS PERL_ARCHLIB DESTDIR )) {
--                 if (exists $self->{PARENT}->{$opt}
--                     and not exists $self->{$opt})
--                     {
---- 
--2.17.1
--
-diff --git a/package/perl/perl.hash b/package/perl/perl.hash
-index ba3a39d43..42b7cc66c 100644
---- a/package/perl/perl.hash
-+++ b/package/perl/perl.hash
-@@ -1,12 +1,12 @@
--# Hashes from: http://www.cpan.org/src/5.0/perl-5.30.3.tar.xz.{md5,sha1,sha256}.txt
--md5  0af2ab0f01ec13e37cc13a27de930936  perl-5.30.3.tar.xz
--sha1  1003c6aa71d8966501038178459a9fa4e9aba747  perl-5.30.3.tar.xz
--sha256  6967595f2e3f3a94544c35152f9a25e0cb8ea24ae45f4bf1882f2e33f4a400f4  perl-5.30.3.tar.xz
-+# Hashes from: https://www.cpan.org/src/5.0/perl-5.32.1.tar.xz.{md5,sha1,sha256}.txt
-+md5  7f104064b906ad8c7329ca5e409a32d7  perl-5.32.1.tar.xz
-+sha1  1fb4f710d139da1e1a3e1fa4eaba201fcaa8e18e  perl-5.32.1.tar.xz
-+sha256  57cc47c735c8300a8ce2fa0643507b44c4ae59012bfdad0121313db639e02309  perl-5.32.1.tar.xz
- 
--# Hashes from: https://github.com/arsv/perl-cross/releases/download/1.3.4/perl-cross-1.3.4.hash
--sha256  755aa0ca8141a942188a269564f86c3c82349f82c346ed5c992495d7f35138ba  perl-cross-1.3.4.tar.gz
-+# Hashes from: https://github.com/arsv/perl-cross/releases/download/1.3.5/perl-cross-1.3.5.hash
-+sha256  91c66f6b2b99fccfd4fee14660b677380b0c98f9456359e91449798c2ad2ef25  perl-cross-1.3.5.tar.gz
- 
- # Locally calculated
- sha256  dd90d4f42e4dcadf5a7c09eea0189d93c7b37ae560c91f0f6d5233ed3b9292a2  Artistic
- sha256  d77d235e41d54594865151f4751e835c5a82322b0e87ace266567c3391a4b912  Copying
--sha256  4916e95d32b84e07c045d839646f74996f577e5f497bbba8177a94b31415cee7  README
-+sha256  df6ad59aefea68676c38325f25f6707f026ddde6c71291b2ca231b6247859907  README
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index 5f6aa9767..ec1cfd4d0 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -5,15 +5,15 @@
- ################################################################################
- 
- # When updating the version here, also update utils/scancpan
--PERL_VERSION_MAJOR = 30
--PERL_VERSION = 5.$(PERL_VERSION_MAJOR).3
--PERL_SITE = http://www.cpan.org/src/5.0
-+PERL_VERSION_MAJOR = 32
-+PERL_VERSION = 5.$(PERL_VERSION_MAJOR).1
-+PERL_SITE = https://www.cpan.org/src/5.0
- PERL_SOURCE = perl-$(PERL_VERSION).tar.xz
- PERL_LICENSE = Artistic or GPL-1.0+
- PERL_LICENSE_FILES = Artistic Copying README
- PERL_INSTALL_STAGING = YES
- 
--PERL_CROSS_VERSION = 1.3.4
-+PERL_CROSS_VERSION = 1.3.5
- # DO NOT refactor with the github helper (the result is not the same)
- PERL_CROSS_SITE = https://github.com/arsv/perl-cross/releases/download/$(PERL_CROSS_VERSION)
- PERL_CROSS_SOURCE = perl-cross-$(PERL_CROSS_VERSION).tar.gz
-diff --git a/utils/scancpan b/utils/scancpan
-index 3ce3203bd..075f19356 100755
---- a/utils/scancpan
-+++ b/utils/scancpan
-@@ -488,9 +488,9 @@ use Digest::SHA qw(sha256_hex);
- use Text::Wrap;
- $Text::Wrap::columns = 62;
- 
--# Below, 5.030 should be aligned with the version of perl actually
-+# Below, 5.032 should be aligned with the version of perl actually
- # bundled in Buildroot:
--die <<"MSG" if $] < 5.030;
-+die <<"MSG" if $] < 5.032;
- This script needs a host perl with the same major version as Buildroot target perl.
- 
- Your current host perl is:
-@@ -498,7 +498,7 @@ Your current host perl is:
-     version $]
- 
- You may install a local one by running:
--    perlbrew install perl-5.30.0
-+    perlbrew install perl-5.32.0
- MSG
- 
- my ($help, $man, $quiet, $force, $recommend, $test, $host);
-@@ -967,7 +967,7 @@ in order to work with the right CoreList data.
- 
- =head1 LICENSE
- 
--Copyright (C) 2013-2019 by Francois Perrad <francois.perrad@gadz.org>
-+Copyright (C) 2013-2020 by Francois Perrad <francois.perrad@gadz.org>
- 
- This program is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
--- 
-2.27.0
+Thanks for the review! I think the config looks better now.
+Please check my answers below. I'm sending the new patch right away.
+
+On 23.01.2021 21:40, Thomas Petazzoni wrote:
+> Hello Filip,
+> 
+> Thanks a lot for this patch! Overall it looks very good, and I only
+> have a few comments, see below.
+> 
+> On Wed, 20 Jan 2021 18:28:15 +0100
+> Filip Skoneczny <fskoneczny@gmail.com> wrote:
+> 
+> 
+>> diff --git a/board/sinovoip/m1-plus/patches/linux/0001-ARM-dts-sun7i-bananapi-m1-plus-Disable-OOB-IRQ-for-b.patch b/board/sinovoip/m1-plus/patches/linux/0001-ARM-dts-sun7i-bananapi-m1-plus-Disable-OOB-IRQ-for-b.patch
+>> new file mode 100644
+>> index 0000000000..75a86f0357
+>> --- /dev/null
+>> +++ b/board/sinovoip/m1-plus/patches/linux/0001-ARM-dts-sun7i-bananapi-m1-plus-Disable-OOB-IRQ-for-b.patch
+>> @@ -0,0 +1,37 @@
+>> +From 58bae4096a7bf8d5d3bfbddb82cb37dd0561c938 Mon Sep 17 00:00:00 2001
+>> +From: Filip Skoneczny <fskoneczny@gmail.com>
+>> +Date: Sun, 10 Jan 2021 19:07:14 +0100
+>> +Subject: [PATCH] ARM: dts: sun7i: bananapi-m1-plus: Disable OOB IRQ for brcm
+>> + wifi module
+>> +
+>> +    Based on 23bc805.
+>> +    BugLink: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=908438
+> 
+> Could you add your Signed-off-by line to this patch ?
+
+Done.
+
+> 
+> 
+>> diff --git a/board/sinovoip/m1-plus/post-build.sh b/board/sinovoip/m1-plus/post-build.sh
+>> new file mode 100755
+>> index 0000000000..a335310dbc
+>> --- /dev/null
+>> +++ b/board/sinovoip/m1-plus/post-build.sh
+>> @@ -0,0 +1,12 @@
+>> +#!/bin/sh
+>> +
+>> +# Remove all but the brcmfmac43362 firmware files
+>> +find $TARGET_DIR/lib/firmware/brcm -type f -not -name "brcmfmac43362*" -delete
+>> +
+>> +BOARD_DIR="$(dirname $0)"
+>> +MKIMAGE=$HOST_DIR/bin/mkimage
+>> +BOOT_CMD=$BOARD_DIR/boot.cmd
+>> +BOOT_CMD_H=$BINARIES_DIR/boot.scr
+>> +
+>> +# U-Boot script
+>> +$MKIMAGE -C none -A arm -T script -d $BOOT_CMD $BOOT_CMD_H
+> 
+> Could you use BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT and
+> BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE instead ?
+
+Done.
+
+> 
+>> diff --git a/board/sinovoip/m1-plus/post-image.sh b/board/sinovoip/m1-plus/post-image.sh
+>> new file mode 100755
+>> index 0000000000..9cca1b1789
+>> --- /dev/null
+>> +++ b/board/sinovoip/m1-plus/post-image.sh
+>> @@ -0,0 +1,16 @@
+>> +#!/bin/sh
+>> +
+>> +BOARD_DIR="$(dirname $0)"
+>> +GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
+>> +GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
+>> +
+>> +rm -rf "${GENIMAGE_TMP}"
+>> +
+>> +genimage                           \
+>> +	--rootpath "${TARGET_DIR}"     \
+>> +	--tmppath "${GENIMAGE_TMP}"    \
+>> +	--inputpath "${BINARIES_DIR}"  \
+>> +	--outputpath "${BINARIES_DIR}" \
+>> +	--config "${GENIMAGE_CFG}"
+>> +
+>> +exit $?
+> 
+> Could you use support/scripts/genimage.sh instead ? See other
+> defconfigs that are doing this.
+
+Done, removed the now-unnecessary post-image.sh.
+
+> 
+> 
+>> diff --git a/configs/bananapi_m1_plus_defconfig b/configs/bananapi_m1_plus_defconfig
+>> new file mode 100644
+>> index 0000000000..cdc3e96515
+>> --- /dev/null
+>> +++ b/configs/bananapi_m1_plus_defconfig
+>> @@ -0,0 +1,47 @@
+>> +BR2_arm=y
+>> +BR2_cortex_a7=y
+>> +BR2_ARM_FPU_NEON_VFPV4=y
+>> +BR2_GLOBAL_PATCH_DIR="board/sinovoip/m1-plus/patches"
+>> +BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+> 
+> Why is wide-char supported needed ?
+
+Not needed, removed.
+
+> 
+>> +BR2_TARGET_GENERIC_HOSTNAME="bananapi"
+>> +BR2_TARGET_GENERIC_ISSUE="Welcome to Banana Pi!"
+>> +BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+> 
+> Is this needed for automatic loading of modules ?
+
+Yes, it was loading brcmfmac automatically, I'm not sure though if this is desired in defconfig.
+After comparing to other configs I decided to remove it and add "modprobe brcmfmac" to readme.txt in proper section instead.
+Let me know if it's OK, or better to leave it to load automatically or something else.
+
+> 
+>> +BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+>> +BR2_ROOTFS_OVERLAY="board/sinovoip/m1-plus/rootfs_overlay"
+>> +BR2_ROOTFS_POST_BUILD_SCRIPT="board/sinovoip/m1-plus/post-build.sh"
+>> +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/sinovoip/m1-plus/post-image.sh"
+>> +BR2_LINUX_KERNEL=y
+>> +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+>> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.3"
+>> +BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+>> +BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/sinovoip/m1-plus/linux-wifi.fragment"
+>> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
+>> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun7i-a20-bananapi-m1-plus"
+>> +BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+>> +BR2_PACKAGE_ALSA_UTILS=y
+>> +# BR2_PACKAGE_ALSA_UTILS_ALSAMIXER is not set
+>> +BR2_PACKAGE_ALSA_UTILS_AMIXER=y
+>> +BR2_PACKAGE_ALSA_UTILS_APLAY=y
+> 
+> We usually don't enable stuff such as alsa-utils in our defconfigs, to
+> keep them somewhat minimal.
+
+Removed.
+
+> 
+>> +BR2_PACKAGE_LINUX_FIRMWARE=y
+>> +BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XXX=y
+>> +BR2_PACKAGE_IW=y
+>> +BR2_PACKAGE_WPA_SUPPLICANT=y
+>> +BR2_PACKAGE_WPA_SUPPLICANT_CLI=y
+>> +BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE=y
+>> +BR2_TARGET_ROOTFS_EXT2=y
+>> +BR2_TARGET_ROOTFS_EXT2_4=y
+>> +# BR2_TARGET_ROOTFS_TAR is not set
+>> +BR2_TARGET_UBOOT=y
+>> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+>> +BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+>> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.10"
+>> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="bananapi_m1_plus"
+>> +BR2_TARGET_UBOOT_NEEDS_DTC=y
+>> +BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+>> +BR2_TARGET_UBOOT_SPL=y
+>> +BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
+>> +BR2_PACKAGE_HOST_DOSFSTOOLS=y
+>> +BR2_PACKAGE_HOST_GENIMAGE=y
+>> +BR2_PACKAGE_HOST_MKPASSWD=y
+> 
+> Why is this option needed ?
+
+Not needed, removed.
+
+> 
+>> +BR2_PACKAGE_HOST_MTOOLS=y
+>> +BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+> 
+> Could you adjust the above things, and send an updated version? It
+> should then be ready for merging.
+> 
+> Thanks a lot!
+> 
+> Thomas Petazzoni
+> 
+
+Thanks!
+Filip
