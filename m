@@ -1,70 +1,82 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 24 Jan 2021 22:29:35 +0100
-Subject: [Buildroot] [git commit] package/nano: fix tiny build
-Message-ID: <20210124211901.7C54B7FC23@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 24 Jan 2021 22:42:25 +0100
+Subject: [Buildroot] [PATCH] configs/orangepi_r1_defconfig: bump kernel to
+ 5.10.10, u-boot to 2020.10
+Message-ID: <20210124214226.29305-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3c4fa30f7abff344261f1faa3166577addb30b89
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The probing order of the two mmc controllers (sdcard and sdio wifi) has
+changed in kernel 5.10 since commit 21b2cec61c04bd1 (mmc: Set
+PROBE_PREFER_ASYNCHRONOUS for drivers that existed in v4.4), so change to
+root=PARTUUID=.. instead of hardcoding /dev/mmcblkXp2.
 
-Since upstream commit
-https://git.savannah.gnu.org/cgit/nano.git/commit/configure.ac?id=235f92ce093099cd81f14827ab842bd331132790
-
---enable-color --enable-nanorc are needed for libmagic support in tiny
-builds however as --enable-color needs fork() and tiny is selected when
-!BR2_USE_MMU, it is easier to just disable libmagic with tiny builds
-
-Add explicit options to enable tiny, libmagic, color, and nanorc, rather
-than relying on defaults.
-
-Fixes:
- - http://autobuild.buildroot.net/results/24894e62d6cf89d078959b12e67596c821d64696
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-[yann.morin.1998 at free.fr: add explicit options]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nano/nano.mk | 23 ++++++++++++++---------
- 1 file changed, 14 insertions(+), 9 deletions(-)
+ board/orangepi/orangepi-r1/boot.cmd     | 2 +-
+ board/orangepi/orangepi-r1/genimage.cfg | 2 ++
+ configs/orangepi_r1_defconfig           | 7 ++++---
+ 3 files changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-index c688ff216c..d47c749ef5 100644
---- a/package/nano/nano.mk
-+++ b/package/nano/nano.mk
-@@ -19,18 +19,23 @@ NANO_CONF_ENV += ac_cv_prog_NCURSESW_CONFIG=false
- NANO_MAKE_ENV += CURSES_LIB="-lncurses"
- endif
+diff --git a/board/orangepi/orangepi-r1/boot.cmd b/board/orangepi/orangepi-r1/boot.cmd
+index e927b01e82..2e3a4bb679 100644
+--- a/board/orangepi/orangepi-r1/boot.cmd
++++ b/board/orangepi/orangepi-r1/boot.cmd
+@@ -1,6 +1,6 @@
+ setenv fdt_high ffffffff
  
--ifeq ($(BR2_PACKAGE_FILE),y)
--NANO_DEPENDENCIES += file
--NANO_CONF_OPTS += --enable-libmagic
--else
--NANO_CONF_OPTS += --disable-libmagic
--endif
--
- ifeq ($(BR2_PACKAGE_NANO_TINY),y)
--NANO_CONF_OPTS += --enable-tiny
-+NANO_CONF_OPTS += \
-+	--enable-tiny \
-+	--disable-libmagic \
-+	--disable-color \
-+	--disable-nanorc
- define NANO_INSTALL_TARGET_CMDS
- 	$(INSTALL) -m 0755 $(@D)/src/nano $(TARGET_DIR)/usr/bin/nano
- endef
--endif
-+else
-+NANO_CONF_OPTS += --disable-tiny
-+ifeq ($(BR2_PACKAGE_FILE),y)
-+NANO_DEPENDENCIES += file
-+NANO_CONF_OPTS += --enable-libmagic --enable-color --enable-nanorc
-+else
-+NANO_CONF_OPTS += --disable-libmagic --disable-libmagic --disable-color
-+endif # BR2_PACKAGE_FILE
-+endif # BR2_PACKAGE_NANO_TINY
+-setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
++setenv bootargs console=ttyS0,115200 earlyprintk root=PARTUUID=deadbeef-02 rootwait
  
- $(eval $(autotools-package))
+ fatload mmc 0 $kernel_addr_r zImage
+ fatload mmc 0 $fdt_addr_r sun8i-h2-plus-orangepi-r1.dtb
+diff --git a/board/orangepi/orangepi-r1/genimage.cfg b/board/orangepi/orangepi-r1/genimage.cfg
+index 01e2c0adc4..e7b32c86ab 100644
+--- a/board/orangepi/orangepi-r1/genimage.cfg
++++ b/board/orangepi/orangepi-r1/genimage.cfg
+@@ -13,6 +13,8 @@ image boot.vfat {
+ 
+ image sdcard.img {
+ 	hdimage {
++		# for root=PARTUUID=deadbeef-02 support
++		disk-signature = 0xdeadbeef
+ 	}
+ 
+ 	partition u-boot {
+diff --git a/configs/orangepi_r1_defconfig b/configs/orangepi_r1_defconfig
+index 7c3ec637e5..bad1f9400c 100644
+--- a/configs/orangepi_r1_defconfig
++++ b/configs/orangepi_r1_defconfig
+@@ -1,13 +1,13 @@
+ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_FPU_VFPV4=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_3=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ BR2_TARGET_GENERIC_HOSTNAME="OrangePi_R1"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Orange Pi R1"
+ BR2_SYSTEM_DHCP="eth0"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.3.12"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.10"
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h2-plus-orangepi-r1"
+@@ -19,9 +19,10 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.10"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.10"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_r1"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
+-- 
+2.20.1
