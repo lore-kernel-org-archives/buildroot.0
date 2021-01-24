@@ -1,279 +1,207 @@
-From: =?UTF-8?Q?Geoffrey_Le_Gourri=C3=A9rec?= <geoffrey.legourrierec@gmail.com>
-Date: Sun, 24 Jan 2021 22:06:25 +0100
-Subject: [Buildroot] [PATCH 1/2] configs/qemu_*: bump kernel version to
- 5.10.7
-In-Reply-To: <CADFgU5CWfAQ2bgJeQYXeAkwO8Q8E3K9PVGz_tWCa_YZmMD_SEg@mail.gmail.com>
-References: <20210120195954.31797-1-geoffrey.legourrierec@gmail.com>
- <CACPK8XdWzEuu_4x5cWNx6EpatbSfn91FdQf42RzCyotGz9Hn6g@mail.gmail.com>
- <CADFgU5CWfAQ2bgJeQYXeAkwO8Q8E3K9PVGz_tWCa_YZmMD_SEg@mail.gmail.com>
-Message-ID: <CADFgU5DFc0FZWqD+Y-S5WN6a4U2aBmY0c+SLjZ-2RihXhK2woA@mail.gmail.com>
+From: manu f <e.fiancette@gmail.com>
+Date: Sun, 24 Jan 2021 22:27:06 +0100
+Subject: [Buildroot] No rule to make target 'host-python !!
+In-Reply-To: <20210124173940.29212b62@gmx.net>
+References: <CAGshWo02DNPmGa_Nj7aBjf5TrQgVz2ePTP8EkABRfGFSYBsU0A@mail.gmail.com>
+ <CAGshWo1eWoWDUd_0jD8xQbpZg7dGzOzhwNeNmhrc5ewh9z6TSQ@mail.gmail.com>
+ <20210123114813.0f7048c2@windsurf.home>
+ <CAGshWo2ngucacs+BJocUb36G4QX7Q7ssv2_M0R9kAiV+oick1Q@mail.gmail.com>
+ <20210124161440.52c2d7d6@gmx.net>
+ <CAGshWo31-JML-C6D+T+Bbp8QrsWKZhE2r4-N8HaOAp6z4rkhtQ@mail.gmail.com>
+ <20210124173940.29212b62@gmx.net>
+Message-ID: <CAGshWo2TRnTguBc3inO23idP2kMjnXzXeBaOsx=s_jWmh3ddhg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->> > Regarding the 64-bit time data structures, an upstream fix [3]
->> > had supposedly prepared for this situation where the libc has not
->> > moved to 64-bits data structures yet, but unfortunately we seem to
->> > slip into a crack here. Some quick header dependency analysis from
->> > the offending __kernel_time64_t type managed to "follow up" to
->> > linux/time_types.h (which is the one explicitly added in [3]) as
->> > expected; so no luck here.
->> > Any help on that matter would be appreciated.
->>
->> I saw your commit message for the sockios.h patch has cc Arnd. Did you
->> get a response from him on this issue?
->
->
-> Not yet, I've sent the patch to the SH maintainers CC Arnd Bergman, and am
-> waiting for a reply. I'll keep you up to date when I get one.
+You are right Peter!
+You will find my python pakage joined.
+Like I told you I am noob in kernel compil, so sure I made bad thing, but I
+am here to learn.
 
-Hi, here's an update.
+So if I well understood even if I didnt select the package in menu config,
+config.in and .mk file interferes with the build..
+I use some other config.in and .mk file as model to build these file for my
+package, so I make a mistake, if you could look them ?
 
-I had a short exchange with Arnd Bergmann (see the SuperH subsystem
-patchwork thread[1]) and looks like the real issue lies in uclibc. I
-have a patch idea (adding relevant types here [2]), so I'll go test it
-and bug the uclibc folks with it.
+Regards
 
-[1] https://patchwork.kernel.org/project/linux-sh/patch/20210123165652.10884-1-geoffrey.legourrierec at gmail.com/
-[2] https://repo.or.cz/uclibc-ng.git/blob/ab1dd83bec59c9e65c31efd6e887182948f627be:/libc/sysdeps/linux/sh/bits/kernel_types.h
+(I remove the tar file in files directory cause it is to heavy to send, but
+it's just python37 archive)
 
-Regards,
+Le dim. 24 janv. 2021 ? 17:39, Peter Seiderer <ps.report@gmx.net> a ?crit :
 
--- 
-Geoffrey
-
-
-Le sam. 23 janv. 2021 ? 21:35, Geoffrey Le Gourri?rec
-<geoffrey.legourrierec@gmail.com> a ?crit :
->>
->> Nice work.
->>
->> Reviewed-by: Joel Stanley <joel@jms.id.au>
->>
->> > ---
->> > Regarding the 64-bit time data structures, an upstream fix [3]
->> > had supposedly prepared for this situation where the libc has not
->> > moved to 64-bits data structures yet, but unfortunately we seem to
->> > slip into a crack here. Some quick header dependency analysis from
->> > the offending __kernel_time64_t type managed to "follow up" to
->> > linux/time_types.h (which is the one explicitly added in [3]) as
->> > expected; so no luck here.
->> > Any help on that matter would be appreciated.
->>
->> I saw your commit message for the sockios.h patch has cc Arnd. Did you
->> get a response from him on this issue?
+> Hello Emmanuel,
+>
+> On Sun, 24 Jan 2021 17:08:21 +0100, manu f <e.fiancette@gmail.com> wrote:
+>
+> > Thanks peter.
+> > What's mean Buildroot 2020.02.8-dirty?
+>
+> This indicates normally a buildroot git repository at version
+> 2020.02.8 (tag/branch) with local changes ('dirty')...
+>
+> >
+> > About python37, yes I add this custom package but like you see I didn't
+> > select it.
+>
+> But the line '+# BR2_PACKAGE_PYTHON is not set' indicates that
+> there is no python package any longer with your build setup
+> (and so no host-python available needed by libevdev)...
+>
+> Hard to judge without knowledge of your br-external but I would suspect
+> it contains a package/python directory with a python.mk file without
+> an '$(eval $(host-autotools-package))' line (or something like
+> that) and a Config.in file with BR2_PACKAGE_PYTHON_37 instead of
+> BR2_PACKAGE_PYTHON?
+>
+> If so try to move .../br-exteranl/package/python to
+> .../br-exteranl/package/python-37
+>
+> Regards,
+> Peter
+>
+> > this config is without livdevdev and it compile right. but if I select
+> it I
+> > had th error I gave (do you think it could be a problem if I not set
+> > libdevdev, I realy not sure I need it, sorry I didn't completly setupp
+> this
+> > buildroot jus modify some aspect and I am far to master all).
+> >
+> > But its is strange that I have BR2_PACKAGE_PYTHON not set.
+> > I will look later (I am not on my linux computer), I think I even havent
+> > pithon item in menu-config...
+> > Is this mean I have a problem with python dependencies ? I will check the
+> > dependencies logic.
+> >
+> > Peter, Its very strange that at your side you could compile with
+> libdevdev
+> > set and not me. Do you have an idea wher I could search?
+> >
+> > Many thanks for helping.
+> >
+> > Regards.
+> >
+> > Emmanuel
+> >
+> >
+> >
+> > Le dim. 24 janv. 2021 ? 16:14, Peter Seiderer <ps.report@gmx.net> a
+> ?crit :
+> >
+> > > Hello,
+> > >
+> > > On Sun, 24 Jan 2021 12:40:31 +0100, manu f <e.fiancette@gmail.com>
+> wrote:
+> > >
+> > > > here my complete .config
+> > >
+> > > Importing your .config into a plain buildroot-2020.02.8 gives
+> > > the following diff:
+> > >
+> > > @@ -1,9 +1,8 @@
+> > >  #
+> > >  # Automatically generated file; DO NOT EDIT.
+> > > -# Buildroot 2020.02.8-dirty Configuration
+> > > +# Buildroot 2020.02.8 Configuration
+> > >  #
+> > >  BR2_HAVE_DOT_CONFIG=y
+> > > -BR2_EXTERNAL_ATOS_PATH="/home/user/cleta_buildroot/br-external"
+> > >  BR2_HOST_GCC_AT_LEAST_4_9=y
+> > >  BR2_HOST_GCC_AT_LEAST_5=y
+> > >  BR2_HOST_GCC_AT_LEAST_6=y
+> > > @@ -1446,6 +1445,7 @@
+> > >  #
+> > >  # BR2_PACKAGE_PERL is not set
+> > >  # BR2_PACKAGE_PHP is not set
+> > > +# BR2_PACKAGE_PYTHON is not set
+> > >  BR2_PACKAGE_PYTHON3=y
+> > >  # BR2_PACKAGE_PYTHON3_PY_ONLY is not set
+> > >  BR2_PACKAGE_PYTHON3_PYC_ONLY=y
+> > > @@ -4174,6 +4174,7 @@
+> > >  # BR2_PACKAGE_HOST_PKGCONF is not set
+> > >  # BR2_PACKAGE_HOST_PRU_SOFTWARE_SUPPORT is not set
+> > >  # BR2_PACKAGE_HOST_PWGEN is not set
+> > > +# BR2_PACKAGE_HOST_PYTHON is not set
+> > >  # BR2_PACKAGE_HOST_PYTHON_CYTHON is not set
+> > >  # BR2_PACKAGE_HOST_PYTHON_LXML is not set
+> > >  # BR2_PACKAGE_HOST_PYTHON_SIX is not set
+> > > @@ -4876,17 +4877,3 @@
+> > >  # BR2_VFP_FLOAT is not set
+> > >  # BR2_PACKAGE_GCC_TARGET is not set
+> > >  # BR2_HAVE_DEVFILES is not set
+> > > -
+> > > -#
+> > > -# External options
+> > > -#
+> > > -
+> > > -#
+> > > -# br2-external tree for atos projects (in
+> > > /home/user/cleta_buildroot/br-external)
+> > > -#
+> > > -BR2_PACKAGE_BACKLIGHT_MONITORING=y
+> > > -BR2_PACKAGE_TEST_UART=y
+> > > -BR2_PACKAGE_APP_MOUNT=y
+> > > -BR2_PACKAGE_APP_UPDATER=y
+> > > -BR2_NODE_JS_14x=y
+> > > -# BR2_PYTHON_37 is not set
+> > >
+> > >
+> > > Note the lines with 'Buildroot 2020.02.8-dirty',
+> > > '-BR2_EXTERNAL_ATOS_PATH="/home/user/cleta_buildroot/br-external"',
+> > > '+# BR2_PACKAGE_PYTHON is not set' and '-# BR2_PYTHON_37 is not set',
+> > > so most likely something with your local change and/or br-external
+> > > changing the package python to python37?
+> > >
+> > > Otherwise the config compiles fine here (even with libevdev enabled)...
+> > >
+> > > Regards,
+> > > Peter
+> > >
+> > >
+> > > >
+> > > > Le sam. 23 janv. 2021 ? 11:48, Thomas Petazzoni <
+> > > > thomas.petazzoni at bootlin.com> a ?crit :
+> > > >
+> > > > > On Fri, 22 Jan 2021 23:53:30 +0100
+> > > > > manu f <e.fiancette@gmail.com> wrote:
+> > > > >
+> > > > > > ok, I remove libevdev in Target package =>libraries=>Other and
+> its
+> > > copile
+> > > > > > without error!
+> > > > > >
+> > > > > > (But I dont know if I realy need this lib... )
+> > > > > >
+> > > > > > Well why it no compile with libdevdev ?
+> > > > > > @ Thomas Petazzoni I saw you already got problem and make patch
+> for
+> > > > > > host-python interpreter...is there something to see with ?
+> > > > >
+> > > > > host-python is definitely part of Buildroot 2020.02, so I'm not
+> sure
+> > > > > how you can get this error. We would need more details, such as the
+> > > > > complete .config that reproduces the issue.
+> > > > >
+> > > > > Thomas
+> > > > > --
+> > > > > Thomas Petazzoni, CTO, Bootlin
+> > > > > Embedded Linux and Kernel engineering
+> > > > > https://bootlin.com
+> > > > >
+> > >
+> > >
 >
 >
-> Not yet, I've sent the patch to the SH maintainers CC Arnd Bergman, and am
-> waiting for a reply. I'll keep you up to date when I get one.
->
->> It looks like time_types.h needs a definition of __kernel_time64_t.
->> This appears to live in posix_types.h for uapi headers. Would this
->> patch to the kernel fix the problem?
->>
->> --- a/include/uapi/linux/time_types.h
->> +++ b/include/uapi/linux/time_types.h
->> @@ -3,6 +3,7 @@
->>  #define _UAPI_LINUX_TIME_TYPES_H
->>
->>  #include <linux/types.h>
->> +#include <linux/posix_types.h>
->>
->>  struct __kernel_timespec {
->>         __kernel_time64_t       tv_sec;                 /* seconds */
->
->
-> I just tried your suggestion with qemu_sh4eb_r2d_defconfig (after removing my
-> own patch, of course), but looks like compilation still breaks :( Did you have the
-> time to try it ?
->
-> /usr/bin/make -j5 -C /home/clumsyape/PROJETS/buildroot/buildroot_git/output/build/uclibc-1.0.37 ARCH="sh" CROSS_COMPILE="/home/clumsyape/PROJETS/buildroot/buildroot_git/output/host/bin/sh4eb-buildroot-linux-uclibc-" UCLIBC_EXTRA_CFLAGS="" HOSTCC="/usr/bin/gcc"
->   GEN libpthread/nptl/sysdeps/unix/sysv/linux/structsem.h
->   GEN libpthread/nptl/sysdeps/unix/sysv/linux/structsem.h
->   GEN libpthread/nptl/sysdeps/unix/sysv/linux/lowlevelrobustlock.h
->   GEN libpthread/nptl/sysdeps/unix/sysv/linux/lowlevelrobustlock.h
-> In file included from /home/clumsyape/PROJETS/buildroot/buildroot_git/output/build/linux-headers-5.10.7/usr/include/asm/sockios.h:5,
->                  from /home/clumsyape/PROJETS/buildroot/buildroot_git/output/build/linux-headers-5.10.7/usr/include/asm-generic/socket.h:6,
->                  from /home/clumsyape/PROJETS/buildroot/buildroot_git/output/build/linux-headers-5.10.7/usr/include/asm/socket.h:1,
->                  from ./include/bits/socket.h:360,
->                  from ./include/sys/socket.h:39,
->                  from ./include/netinet/in.h:24,
->                  from ./include/resolv.h:57,
->                  from ./libpthread/nptl/descr.h:36,
->                  from ./libpthread/nptl/pthreadP.h:25,
->                  from <stdin>:2:
-> /home/clumsyape/PROJETS/buildroot/buildroot_git/output/build/linux-headers-5.10.7/usr/include/linux/time_types.h:9:2: error: unknown type name '__kernel_time64_t'
->     9 |  __kernel_time64_t       tv_sec;                 /* seconds */
->       |  ^~~~~~~~~~~~~~~~~
-> /home/clumsyape/PROJETS/buildroot/buildroot_git/output/build/linux-headers-5.10.7/usr/include/linux/time_types.h:33:2: error: unknown type name '__kernel_old_time_t'
->    33 |  __kernel_old_time_t tv_sec;  /* seconds */
->       |  ^~~~~~~~~~~~~~~~~~~
-> libpthread/nptl/sysdeps/unix/sysv/linux/Makefile.commonarch:135: recipe for target 'libpthread/nptl/sysdeps/unix/sysv/linux/lowlevelrobustlock.h' failed
-> make[2]: *** [libpthread/nptl/sysdeps/unix/sysv/linux/lowlevelrobustlock.h] Error 1
-> package/pkg-generic.mk:247: recipe for target '/home/clumsyape/PROJETS/buildroot/buildroot_git/output/build/uclibc-1.0.37/.stamp_built' failed
-> make[1]: *** [/home/clumsyape/PROJETS/buildroot/buildroot_git/output/build/uclibc-1.0.37/.stamp_built] Error 2
-> Makefile:84: recipe for target '_all' failed
-> make: *** [_all] Error 2
->
->>
->> Cheers,
->>
->> Joel
->
->
-> Thanks for the review,
->
-> --
-> Geoffrey
->
-> Le mer. 20 janv. 2021 ? 23:29, Joel Stanley <joel@jms.id.au> a ?crit :
->>
->> On Wed, 20 Jan 2021 at 20:00, Geoffrey Le Gourri?rec
->> <geoffrey.legourrierec@gmail.com> wrote:
->> >
->> > Bump most QEMU defconfigs (every one that was previously on 5.4.y)
->> > to latest longterm kernel 5.10.7.
->> >
->> > Please note the following exceptions/modifications:
->> > - board/qemu/qemu_s390x_defconfig: ignored (already up to date)
->> > - board/qemu/sh4*-r2d:
->> >     - Remove the remaining kernel patch [1] provided by Alan Modra
->> >       fixing rodata alignment, carried here by Romain Naour [2] to
->> >       fix an issue preventing kernel from booting with binutils 2.23.
->> >       Patch is present in upstream Linux now.
->> >     - Fix compile-time error regarding 64-bit time data structures
->> >       from kernel headers when building with uclibc. Previous fix [3]
->> >       existed upstream; but see details below.
->> >     - board/qemu/ppc-mpc8544ds: Updated kernel patch
->> > - board/qemu/arm-versatile: Updated kernel patch
->> > - board/qemu/mips*r6*: Updated kernel patch
->> >
->> > Tested on all configs/qemu* configurations. [4]
->> >
->> > [1] https://www.sourceware.org/ml/binutils/2019-12/msg00112.html
->> > [2] https://git.busybox.net/buildroot/commit/?id=a2331c8a61bdd71c47492efc818fb0458a349219
->> > [3] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fc94cf2092c7c1267fa2deb8388d624f50eba808
->> > [4] https://gitlab.com/clumsyape/buildroot/-/pipelines/244024195
->> >
->> > Signed-off-by: Geoffrey Le Gourri?rec <geoffrey.legourrierec@gmail.com>
->>
->> Nice work.
->>
->> Reviewed-by: Joel Stanley <joel@jms.id.au>
->>
->> > ---
->> > Regarding the 64-bit time data structures, an upstream fix [3]
->> > had supposedly prepared for this situation where the libc has not
->> > moved to 64-bits data structures yet, but unfortunately we seem to
->> > slip into a crack here. Some quick header dependency analysis from
->> > the offending __kernel_time64_t type managed to "follow up" to
->> > linux/time_types.h (which is the one explicitly added in [3]) as
->> > expected; so no luck here.
->> > Any help on that matter would be appreciated.
->>
->> I saw your commit message for the sockios.h patch has cc Arnd. Did you
->> get a response from him on this issue?
->>
->> It looks like time_types.h needs a definition of __kernel_time64_t.
->> This appears to live in posix_types.h for uapi headers. Would this
->> patch to the kernel fix the problem?
->>
->> --- a/include/uapi/linux/time_types.h
->> +++ b/include/uapi/linux/time_types.h
->> @@ -3,6 +3,7 @@
->>  #define _UAPI_LINUX_TIME_TYPES_H
->>
->>  #include <linux/types.h>
->> +#include <linux/posix_types.h>
->>
->>  struct __kernel_timespec {
->>         __kernel_time64_t       tv_sec;                 /* seconds */
->>
->> Cheers,
->>
->> Joel
->>
->> > diff --git a/board/qemu/sh4eb-r2d/patches/linux-headers/0001-Use-types.h-and-not-time_types.h-in-sockios.h.patch b/board/qemu/sh4eb-r2d/patches/linux-headers/0001-Use-types.h-and-not-time_types.h-in-sockios.h.patch
->> > new file mode 100644
->> > index 0000000000..90bd4e8c6c
->> > --- /dev/null
->> > +++ b/board/qemu/sh4eb-r2d/patches/linux-headers/0001-Use-types.h-and-not-time_types.h-in-sockios.h.patch
->> > @@ -0,0 +1,76 @@
->> > +From 34c78b21878ae7b0471299d11a7e861125e31b2c Mon Sep 17 00:00:00 2001
->> > +From: =?UTF-8?q?Geoffrey=20Le=20Gourri=C3=A9rec?=
->> > + <geoffrey.legourrierec@gmail.com>
->> > +Date: Mon, 18 Jan 2021 23:40:28 +0100
->> > +Subject: [PATCH] Use types.h and not time_types.h in sockios.h
->> > +MIME-Version: 1.0
->> > +Content-Type: text/plain; charset=UTF-8
->> > +Content-Transfer-Encoding: 8bit
->> > +
->> > +This fixes builds for sh arch when libc is not using relevant
->> > +time data structures definitions for 32-bit machines. A previous
->> > +commit [1] provided a fix, that we seemed to slip through here.
->> > +
->> > +As of the time of this writing, the bug was found with non-
->> > +up to date uclibc 1.0.37 only (currently the only libc supporting
->> > +sh architecture).
->> > +
->> > +[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fc94cf2092c7c1267fa2deb8388d624f50eba808
->> > +
->> > +Signed-off-by: Geoffrey Le Gourri?rec <geoffrey.legourrierec@gmail.com>
->> > +Cc: Arnd Bergmann <arnd@arndb.de>
->> > +
->> > +---
->> > +
->> > +For the record, here's the build-time error:
->> > +
->> > +/usr/bin/make -j2 -C /builds/clumsyape/buildroot/output/build/uclibc-1.0.37 ARCH="sh" CROSS_COMPILE="/builds/clumsyape/buildroot/output/host/bin/sh4-buildroot-linux-uclibc-" UCLIBC_EXTRA_CFLAGS="" HOSTCC="/usr/bin/gcc"
->> > +make[1]: Entering directory '/builds/clumsyape/buildroot/output/build/uclibc-1.0.37'
->> > +  GEN libpthread/nptl/sysdeps/unix/sysv/linux/lowlevelcond.h
->> > +  GEN libpthread/nptl/sysdeps/unix/sysv/linux/lowlevelcond.h
->> > +  GEN libpthread/nptl/sysdeps/unix/sysv/linux/lowlevelrobustlock.h
->> > +  GEN libpthread/nptl/sysdeps/unix/sysv/linux/lowlevelrobustlock.h
->> > +In file included from /builds/clumsyape/buildroot/output/build/linux-headers-5.10.7/usr/include/asm/sockios.h:5,
->> > +                 from /builds/clumsyape/buildroot/output/build/linux-headers-5.10.7/usr/include/asm-generic/socket.h:6,
->> > +                 from /builds/clumsyape/buildroot/output/build/linux-headers-5.10.7/usr/include/asm/socket.h:1,
->> > +                 from ./include/bits/socket.h:360,
->> > +                 from ./include/sys/socket.h:39,
->> > +                 from ./include/netinet/in.h:24,
->> > +                 from ./include/resolv.h:57,
->> > +                 from ./libpthread/nptl/descr.h:36,
->> > +                 from ./libpthread/nptl/pthreadP.h:25,
->> > +                 from <stdin>:2:
->> > +/builds/clumsyape/buildroot/output/build/linux-headers-5.10.7/usr/include/linux/time_types.h:8:2: error: unknown type name '__kernel_time64_t'
->> > +    8 |  __kernel_time64_t       tv_sec;                 /* seconds */
->> > +      |  ^~~~~~~~~~~~~~~~~
->> > +/builds/clumsyape/buildroot/output/build/linux-headers-5.10.7/usr/include/linux/time_types.h:32:2: error: unknown type name '__kernel_old_time_t'
->> > +   32 |  __kernel_old_time_t tv_sec;  /* seconds */
->> > +      |  ^~~~~~~~~~~~~~~~~~~
->> > +libpthread/nptl/sysdeps/unix/sysv/linux/Makefile.commonarch:135: recipe for target 'libpthread/nptl/sysdeps/unix/sysv/linux/lowlevelrobustlock.h' failed
->> > +make[1]: *** [libpthread/nptl/sysdeps/unix/sysv/linux/lowlevelrobustlock.h] Error 1
->> > +make[1]: Leaving directory '/builds/clumsyape/buildroot/output/build/uclibc-1.0.37'
->> > +
->> > +I did a quick header dependency analysis starting from __kernel_time64_t
->> > +(one of the offending types), but could "follow up" to linux/time_types.h
->> > +as expected; so I fail to understand how this could break. What's even
->> > +more confusing is linux/time_types.h includes linux/types.h itself.
->> > +---
->> > + arch/sh/include/uapi/asm/sockios.h | 2 +-
->> > + 1 file changed, 1 insertion(+), 1 deletion(-)
->> > +
->> > +diff --git a/arch/sh/include/uapi/asm/sockios.h b/arch/sh/include/uapi/asm/sockios.h
->> > +index ef01ced9e169..d97d14685305 100644
->> > +--- a/arch/sh/include/uapi/asm/sockios.h
->> > ++++ b/arch/sh/include/uapi/asm/sockios.h
->> > +@@ -2,7 +2,7 @@
->> > + #ifndef __ASM_SH_SOCKIOS_H
->> > + #define __ASM_SH_SOCKIOS_H
->> > +
->> > +-#include <linux/time_types.h>
->> > ++#include <linux/types.h>
->> > +
->> > + /* Socket-level I/O control calls. */
->> > + #define FIOGETOWN     _IOR('f', 123, int)
->> > +--
->> > +2.17.1
->> > +
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210124/7566f12c/attachment-0001.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: python37.tar.xz
+Type: application/x-xz
+Size: 512 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210124/7566f12c/attachment-0001.xz>
