@@ -1,71 +1,43 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 24 Jan 2021 16:54:01 +0100
-Subject: [Buildroot] [PATCH 1/1] package/redis: bump to v6.0.10
-In-Reply-To: <20210124111044.49810-1-titouanchristophe@gmail.com>
-References: <20210124111044.49810-1-titouanchristophe@gmail.com>
-Message-ID: <20210124155401.GC2325@scaer>
+Date: Sun, 24 Jan 2021 17:04:22 +0100
+Subject: [Buildroot] [git commit] package/sysklogd: install syslogd to /sbin
+ and logger to /usr/bin
+Message-ID: <20210124154548.110AC815E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Titouan, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=d9707ca6dafe08a07e77782f5b53fe02f316df64
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-01-24 12:10 +0100, Titouan Christophe spake thusly:
-> Redis 6.0.10 fixes several bugs with moderate impact.
-> 
-> Read the full announcement:
-> https://github.com/redis/redis/blob/6.0.10/00-RELEASENOTES
-> 
-> Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
+Replace --exec-prefix, which applies to both sbin and bin, with the more
+granular --bindir for logger and --sbindir for syslogd.  This because
+BusyBox installs its syslgod in /sbin and its logger in /usr/bin.
 
-Applied to master, thanks.
+Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+[yann.morin.1998 at free.fr: add comment, split one-option-per-line]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/sysklogd/sysklogd.mk | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/redis/redis.hash | 2 +-
->  package/redis/redis.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/redis/redis.hash b/package/redis/redis.hash
-> index a16bf9dffb..b72605013e 100644
-> --- a/package/redis/redis.hash
-> +++ b/package/redis/redis.hash
-> @@ -1,5 +1,5 @@
->  # From https://github.com/redis/redis-hashes/blob/master/README
-> -sha256  dc2bdcf81c620e9f09cfd12e85d3bc631c897b2db7a55218fd8a65eaa37f86dd  redis-6.0.9.tar.gz
-> +sha256  79bbb894f9dceb33ca699ee3ca4a4e1228be7fb5547aeb2f99d921e86c1285bd  redis-6.0.10.tar.gz
->  
->  # Locally calculated
->  sha256  97f0a15b7bbae580d2609dad2e11f1956ae167be296ab60f4691ab9c30ee9828  COPYING
-> diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-> index b0d8e1cd51..0a6f7045c3 100644
-> --- a/package/redis/redis.mk
-> +++ b/package/redis/redis.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -REDIS_VERSION = 6.0.9
-> +REDIS_VERSION = 6.0.10
->  REDIS_SITE = http://download.redis.io/releases
->  REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
->  REDIS_LICENSE_FILES = COPYING
-> -- 
-> 2.25.3
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/sysklogd/sysklogd.mk b/package/sysklogd/sysklogd.mk
+index 18d30400e1..e68526d24c 100644
+--- a/package/sysklogd/sysklogd.mk
++++ b/package/sysklogd/sysklogd.mk
+@@ -9,8 +9,12 @@ SYSKLOGD_SITE = https://github.com/troglobit/sysklogd/releases/download/v$(SYSKL
+ SYSKLOGD_LICENSE = BSD-3-Clause
+ SYSKLOGD_LICENSE_FILES = LICENSE
+ SYSKLOGD_CPE_ID_VALID = YES
++
++# Busybox install logger in /usr/bin, and syslogd in /sbin, so install in
++# the same locations so that busybox does not install its applets in there.
+ SYSKLOGD_CONF_OPTS = \
+-	--exec-prefix=/ \
++	--bindir=/usr/bin \
++	--sbindir=/sbin \
+ 	--with-suspend-time=$(BR2_PACKAGE_SYSKLOGD_REMOTE_DELAY)
+ 
+ # Disable/Enable utilities
