@@ -1,71 +1,60 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 24 Jan 2021 10:37:42 +0100
-Subject: [Buildroot] [git commit] package/sysklogd: add option to enable
- native logger
-Message-ID: <20210124091901.127BD8344A@busybox.osuosl.org>
+Date: Sun, 24 Jan 2021 10:37:58 +0100
+Subject: [Buildroot] [git commit] package/sysklogd: add option for remote
+ syslog retry delay
+Message-ID: <20210124091901.22295835F8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=99cff5ef7405de5b587b05f3ca21a494e428cd1c
+commit: https://git.buildroot.net/buildroot/commit/?id=36bbd4265f92de0c0fe6934fee8c7710a40ef49e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Installs to /usr/bin and thus replaces the BusyBox logger if enabled.
-
 Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
-[yann.morin.1998 at free.fr: use usual ifeq-else-endif block]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/sysklogd/Config.in   | 16 ++++++++++++++++
- package/sysklogd/sysklogd.mk |  9 ++++++++-
- 2 files changed, 24 insertions(+), 1 deletion(-)
+ package/sysklogd/Config.in   | 13 +++++++++++++
+ package/sysklogd/sysklogd.mk |  4 +++-
+ 2 files changed, 16 insertions(+), 1 deletion(-)
 
 diff --git a/package/sysklogd/Config.in b/package/sysklogd/Config.in
-index 90649caa83..e9ee7f9321 100644
+index e9ee7f9321..3315a6ddc9 100644
 --- a/package/sysklogd/Config.in
 +++ b/package/sysklogd/Config.in
-@@ -13,6 +13,22 @@ config BR2_PACKAGE_SYSKLOGD
+@@ -15,6 +15,19 @@ config BR2_PACKAGE_SYSKLOGD
  
- 	  https://github.com/troglobit/sysklogd/
+ if BR2_PACKAGE_SYSKLOGD
  
-+if BR2_PACKAGE_SYSKLOGD
-+
-+config BR2_PACKAGE_SYSKLOGD_LOGGER
-+	bool "logger tool"
++config BR2_PACKAGE_SYSKLOGD_REMOTE_DELAY
++	int "Retry delay (sec)"
++	default "180"
 +	help
-+	  Generate log messages from scripts or from the command line.
++	  Retry delay (seconds) for sending to remote syslog servers.
 +
-+	  This version of logger is receommended for use with sysklogd.
-+	  It makes use of the new syslogp() API for RFC5424 style logs,
-+	  e.g. MSGID, strucutred data (SD), etc.
++	  When set up to forward logs to a remote syslog server, the
++	  network may not always be available. E.g., default interface
++	  down, or no route to the remote server. This setting controls
++	  the back-off time before retrying.
 +
-+	  The BusyBox, or util-linux, logger tools can also be used, but
-+	  are limited to RFC3164 style messages.
++	  Default: 180 seconds
 +
-+endif
-+
- comment "sysklogd needs a toolchain w/ threads"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
+ config BR2_PACKAGE_SYSKLOGD_LOGGER
+ 	bool "logger tool"
+ 	help
 diff --git a/package/sysklogd/sysklogd.mk b/package/sysklogd/sysklogd.mk
-index 417b5dc68e..a07af9e91e 100644
+index a07af9e91e..18d30400e1 100644
 --- a/package/sysklogd/sysklogd.mk
 +++ b/package/sysklogd/sysklogd.mk
-@@ -9,7 +9,14 @@ SYSKLOGD_SITE = https://github.com/troglobit/sysklogd/releases/download/v$(SYSKL
+@@ -9,7 +9,9 @@ SYSKLOGD_SITE = https://github.com/troglobit/sysklogd/releases/download/v$(SYSKL
  SYSKLOGD_LICENSE = BSD-3-Clause
  SYSKLOGD_LICENSE_FILES = LICENSE
  SYSKLOGD_CPE_ID_VALID = YES
--SYSKLOGD_CONF_OPTS = --exec-prefix=/ --without-logger
-+SYSKLOGD_CONF_OPTS = --exec-prefix=/
-+
-+# Disable/Enable utilities
-+ifeq ($(BR2_PACKAGE_SYSKLOGD_LOGGER),y)
-+SYSKLOGD_CONF_OPTS += --with-logger
-+else
-+SYSKLOGD_CONF_OPTS += --without-logger
-+endif
+-SYSKLOGD_CONF_OPTS = --exec-prefix=/
++SYSKLOGD_CONF_OPTS = \
++	--exec-prefix=/ \
++	--with-suspend-time=$(BR2_PACKAGE_SYSKLOGD_REMOTE_DELAY)
  
- define SYSKLOGD_INSTALL_SAMPLE_CONFIG
- 	$(INSTALL) -D -m 0644 package/sysklogd/syslog.conf \
+ # Disable/Enable utilities
+ ifeq ($(BR2_PACKAGE_SYSKLOGD_LOGGER),y)
