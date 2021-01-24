@@ -1,109 +1,75 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 24 Jan 2021 16:14:40 +0100
-Subject: [Buildroot] No rule to make target 'host-python !!
-In-Reply-To: <CAGshWo2ngucacs+BJocUb36G4QX7Q7ssv2_M0R9kAiV+oick1Q@mail.gmail.com>
-References: <CAGshWo02DNPmGa_Nj7aBjf5TrQgVz2ePTP8EkABRfGFSYBsU0A@mail.gmail.com>
- <CAGshWo1eWoWDUd_0jD8xQbpZg7dGzOzhwNeNmhrc5ewh9z6TSQ@mail.gmail.com>
- <20210123114813.0f7048c2@windsurf.home>
- <CAGshWo2ngucacs+BJocUb36G4QX7Q7ssv2_M0R9kAiV+oick1Q@mail.gmail.com>
-Message-ID: <20210124161440.52c2d7d6@gmx.net>
+From: Joachim Wiberg <troglobit@gmail.com>
+Date: Sun, 24 Jan 2021 16:22:17 +0100
+Subject: [Buildroot] [PATCH 1/3] package/sysklogd: bump to verson 2.2.0
+In-Reply-To: <20210124093641.GJ926565@scaer>
+References: <20210122154333.1927190-1-troglobit@gmail.com>
+ <20210122154333.1927190-2-troglobit@gmail.com>
+ <20210124093641.GJ926565@scaer>
+Message-ID: <87zh0yuzpy.fsf@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Yann,
 
-On Sun, 24 Jan 2021 12:40:31 +0100, manu f <e.fiancette@gmail.com> wrote:
+On Sun, Jan 24, 2021 at 10:36, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+> On 2021-01-22 16:43 +0100, Joachim Wiberg spake thusly:
+> This patch does four different things;
+>  1. bumps the version, switching to maintainer's archive
+>  2. removes the --without-logger configure option
+>  3. changes the ./configure options for prefix et al. (more on that later)
+>  4. extends the systemd service unit to include the environment
+> This should have been four patches.
 
-> here my complete .config
+Aha, splitting it up even furhter makes sense, thank you!
 
-Importing your .config into a plain buildroot-2020.02.8 gives
-the following diff:
+> However, as already discussed in a review for mrouted, the --prefix,
+> --sysconfdir, and --localstatedir are already the value passed by the
+> autotools-package infra, so aer not needed. But wy do you want to switch
+> the logger from / to /usr ?
 
-@@ -1,9 +1,8 @@
- #
- # Automatically generated file; DO NOT EDIT.
--# Buildroot 2020.02.8-dirty Configuration
-+# Buildroot 2020.02.8 Configuration
- #
- BR2_HAVE_DOT_CONFIG=y
--BR2_EXTERNAL_ATOS_PATH="/home/user/cleta_buildroot/br-external"
- BR2_HOST_GCC_AT_LEAST_4_9=y
- BR2_HOST_GCC_AT_LEAST_5=y
- BR2_HOST_GCC_AT_LEAST_6=y
-@@ -1446,6 +1445,7 @@
- #
- # BR2_PACKAGE_PERL is not set
- # BR2_PACKAGE_PHP is not set
-+# BR2_PACKAGE_PYTHON is not set
- BR2_PACKAGE_PYTHON3=y
- # BR2_PACKAGE_PYTHON3_PY_ONLY is not set
- BR2_PACKAGE_PYTHON3_PYC_ONLY=y
-@@ -4174,6 +4174,7 @@
- # BR2_PACKAGE_HOST_PKGCONF is not set
- # BR2_PACKAGE_HOST_PRU_SOFTWARE_SUPPORT is not set
- # BR2_PACKAGE_HOST_PWGEN is not set
-+# BR2_PACKAGE_HOST_PYTHON is not set
- # BR2_PACKAGE_HOST_PYTHON_CYTHON is not set
- # BR2_PACKAGE_HOST_PYTHON_LXML is not set
- # BR2_PACKAGE_HOST_PYTHON_SIX is not set
-@@ -4876,17 +4877,3 @@
- # BR2_VFP_FLOAT is not set
- # BR2_PACKAGE_GCC_TARGET is not set
- # BR2_HAVE_DEVFILES is not set
--
--#
--# External options
--#
--
--#
--# br2-external tree for atos projects (in /home/user/cleta_buildroot/br-external)
--#
--BR2_PACKAGE_BACKLIGHT_MONITORING=y
--BR2_PACKAGE_TEST_UART=y
--BR2_PACKAGE_APP_MOUNT=y
--BR2_PACKAGE_APP_UPDATER=y
--BR2_NODE_JS_14x=y
--# BR2_PYTHON_37 is not set
+Possibly I got confused by /sbin vs /usr/sbin for system daemons/tools,
+in particular with BR2_ROOTFS_MERGED_USR.  I went about it backwards and
+thought it applied to all non-BusyBox tools.  Sorry about that.
+
+I realize now that I was completely wrong and for tools/daemons that
+replece functionality that BusyBox provides the package must install
+each tool and daemon to the BusyBox path.
+
+I apologize for the confusion and head scratching this has caused!
+
+> See commit 33642d8d959 (package/sysklogd: fix installation path of the
+> daemons), where the installation path was changed:
+>  1. to match the paths tht are used in the init scripts
+>  2. to match the location where busybox would install its applet
+> So your patch breaks that, because it does not update the two init
+> scripts, and will let busybox install its applet in /sbin.
+
+I see, for past sysklogd that worked.  Now we provide the logger tool
+as well, and --exec-prefix=/ changes to /bin/logger and /sbin/syslogd.
+Since BusyBox logger is in /usr/bin, I believe we need to change the
+SYSKLOGD_CONF_OPTS to use --bindir and --sbindir instead.
+
+I'll post another patch shortly.
+
+> Granted, there should have been a comment above the _CONF_OPTS line to
+> explain that was intentional.
+
+I understand.  Thank yhou for explaining.
+
+> Finally, why is the --without-logger option removed entirely in this
+> patch, when your patch 2 makes it a configurable option?
+
+Yes, that was sloppy.
+
+> I've applied the version bump and the systemd stuff as two separate
+> patches, and dropped the rest.
+
+It looks great!
 
 
-Note the lines with 'Buildroot 2020.02.8-dirty',
-'-BR2_EXTERNAL_ATOS_PATH="/home/user/cleta_buildroot/br-external"',
-'+# BR2_PACKAGE_PYTHON is not set' and '-# BR2_PYTHON_37 is not set',
-so most likely something with your local change and/or br-external
-changing the package python to python37?
-
-Otherwise the config compiles fine here (even with libevdev enabled)...
-
-Regards,
-Peter
-
+Best regards
+ /Joachim
  
-> 
-> Le sam. 23 janv. 2021 ? 11:48, Thomas Petazzoni <
-> thomas.petazzoni at bootlin.com> a ?crit :  
-> 
-> > On Fri, 22 Jan 2021 23:53:30 +0100
-> > manu f <e.fiancette@gmail.com> wrote:
-> >  
-> > > ok, I remove libevdev in Target package =>libraries=>Other and its copile
-> > > without error!
-> > >
-> > > (But I dont know if I realy need this lib... )
-> > >
-> > > Well why it no compile with libdevdev ?
-> > > @ Thomas Petazzoni I saw you already got problem and make patch for
-> > > host-python interpreter...is there something to see with ?  
-> >
-> > host-python is definitely part of Buildroot 2020.02, so I'm not sure
-> > how you can get this error. We would need more details, such as the
-> > complete .config that reproduces the issue.
-> >
-> > Thomas
-> > --
-> > Thomas Petazzoni, CTO, Bootlin
-> > Embedded Linux and Kernel engineering
-> > https://bootlin.com
-> >  
