@@ -1,83 +1,168 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 24 Jan 2021 17:36:10 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libtorrent-rasterbar: add CPE
- variables
-In-Reply-To: <20210124163029.GH2325@scaer>
-References: <20210123221956.237522-1-fontaine.fabrice@gmail.com>
- <20210123234522.50b93592@windsurf.home>
- <20210124163029.GH2325@scaer>
-Message-ID: <20210124163610.GI2325@scaer>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun, 24 Jan 2021 17:39:40 +0100
+Subject: [Buildroot] No rule to make target 'host-python !!
+In-Reply-To: <CAGshWo31-JML-C6D+T+Bbp8QrsWKZhE2r4-N8HaOAp6z4rkhtQ@mail.gmail.com>
+References: <CAGshWo02DNPmGa_Nj7aBjf5TrQgVz2ePTP8EkABRfGFSYBsU0A@mail.gmail.com>
+ <CAGshWo1eWoWDUd_0jD8xQbpZg7dGzOzhwNeNmhrc5ewh9z6TSQ@mail.gmail.com>
+ <20210123114813.0f7048c2@windsurf.home>
+ <CAGshWo2ngucacs+BJocUb36G4QX7Q7ssv2_M0R9kAiV+oick1Q@mail.gmail.com>
+ <20210124161440.52c2d7d6@gmx.net>
+ <CAGshWo31-JML-C6D+T+Bbp8QrsWKZhE2r4-N8HaOAp6z4rkhtQ@mail.gmail.com>
+Message-ID: <20210124173940.29212b62@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hello Emmanuel,
 
-On 2021-01-24 17:30 +0100, Yann E. MORIN spake thusly:
-> On 2021-01-23 23:45 +0100, Thomas Petazzoni spake thusly:
-> > On Sat, 23 Jan 2021 23:19:56 +0100
-> > Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
-> > > cpe:2.3:a:libtorrent:libtorrent is a valid CPE identifier for this
-> > > package:
-> > >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alibtorrent%3Alibtorrent
-[--SNIP--]
-> > We also have package/libtorrent/ in Buildroot. How do we know for sure
-> > that the libtorrent:libtorrent CPE ID applies to
-> > package/libtorrent-rasterbar/ ? Yes indeed, the latest CPE ID known for
-> > libtorrent:libtorrent is 1.2.2, which is pretty close to the 1.2.12 we
-> > have in Buildroot for libtorrent-rasterbar. But other than that ?
-> libtorrent-rasterbar is the release archive of the libtorrent project;
->     https://github.com/arvidn/libtorrent/releases/tag/v1.2.12
+On Sun, 24 Jan 2021 17:08:21 +0100, manu f <e.fiancette@gmail.com> wrote:
 
-Oh, sorry, I misunderstood you...
+> Thanks peter.
+> What's mean Buildroot 2020.02.8-dirty?
 
-libtorrent-rasterbar references two CVEs:
+This indicates normally a buildroot git repository at version
+2020.02.8 (tag/branch) with local changes ('dirty')...
 
-    commit a4b2f636cc6146b85558777cdda59fd55312a0e2
-    Author: Arvid Norberg <arvid@cs.umu.se>
-    Date:   Mon Jul 29 17:45:26 2019 -0700
+> 
+> About python37, yes I add this custom package but like you see I didn't
+> select it.
 
-        update changelog to include CVE references
+But the line '+# BR2_PACKAGE_PYTHON is not set' indicates that
+there is no python package any longer with your build setup
+(and so no host-python available needed by libevdev)...
 
-    diff --git a/ChangeLog b/ChangeLog
-    index d301d9f1c..a9745286f 100644
-    --- a/ChangeLog
-    +++ b/ChangeLog
-    @@ -223,7 +223,7 @@
-            * fix IPv6 tracker support by performing the second announce in
-            * more cases
-            * fix utf-8 encoding check in torrent parser
-            * fix infinite loop when parsing maliciously crafted torrents
-    -       * fix invalid read in parse_int in bdecoder
-    +       * fix invalid read in parse_int in bdecoder (CVE-2017-9847)
-            * fix issue with very long tracker- and web seed URLs
-            * don't attempt to create empty files on startup, if they
-            * already exist
-            * fix force-recheck issue (new files would not be picked up)
-    @@ -312,7 +312,7 @@
+Hard to judge without knowledge of your br-external but I would suspect
+it contains a package/python directory with a python.mk file without
+an '$(eval $(host-autotools-package))' line (or something like
+that) and a Config.in file with BR2_PACKAGE_PYTHON_37 instead of
+BR2_PACKAGE_PYTHON?
 
-     1.1.1 release
-
-    -       * update puff.c for gzip inflation
-    +       * update puff.c for gzip inflation (CVE-2016-7164)
-            * add dht_bootstrap_node a setting in settings_pack (and add
-            * default)
-            * make pad-file and symlink support conform to BEP47
-            * fix piece picker bug that could result in division by zero
-
-And those two CVEs are attrobuted to libtorrent in the NIST DB:
-
-    https://nvd.nist.gov/vuln/search/results?form_type=Advanced&results_type=overview&seach_type=all&query=cpe:2.3:a:libtorrent:libtorrent:*:-:*:*:*:*:*:*
+If so try to move .../br-exteranl/package/python to .../br-exteranl/package/python-37
 
 Regards,
-Yann E. MORIN.
+Peter
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> this config is without livdevdev and it compile right. but if I select it I
+> had th error I gave (do you think it could be a problem if I not set
+> libdevdev, I realy not sure I need it, sorry I didn't completly setupp this
+> buildroot jus modify some aspect and I am far to master all).
+> 
+> But its is strange that I have BR2_PACKAGE_PYTHON not set.
+> I will look later (I am not on my linux computer), I think I even havent
+> pithon item in menu-config...
+> Is this mean I have a problem with python dependencies ? I will check the
+> dependencies logic.
+> 
+> Peter, Its very strange that at your side you could compile with libdevdev
+> set and not me. Do you have an idea wher I could search?
+> 
+> Many thanks for helping.
+> 
+> Regards.
+> 
+> Emmanuel
+> 
+> 
+> 
+> Le dim. 24 janv. 2021 ? 16:14, Peter Seiderer <ps.report@gmx.net> a ?crit :
+> 
+> > Hello,
+> >
+> > On Sun, 24 Jan 2021 12:40:31 +0100, manu f <e.fiancette@gmail.com> wrote:
+> >  
+> > > here my complete .config  
+> >
+> > Importing your .config into a plain buildroot-2020.02.8 gives
+> > the following diff:
+> >
+> > @@ -1,9 +1,8 @@
+> >  #
+> >  # Automatically generated file; DO NOT EDIT.
+> > -# Buildroot 2020.02.8-dirty Configuration
+> > +# Buildroot 2020.02.8 Configuration
+> >  #
+> >  BR2_HAVE_DOT_CONFIG=y
+> > -BR2_EXTERNAL_ATOS_PATH="/home/user/cleta_buildroot/br-external"
+> >  BR2_HOST_GCC_AT_LEAST_4_9=y
+> >  BR2_HOST_GCC_AT_LEAST_5=y
+> >  BR2_HOST_GCC_AT_LEAST_6=y
+> > @@ -1446,6 +1445,7 @@
+> >  #
+> >  # BR2_PACKAGE_PERL is not set
+> >  # BR2_PACKAGE_PHP is not set
+> > +# BR2_PACKAGE_PYTHON is not set
+> >  BR2_PACKAGE_PYTHON3=y
+> >  # BR2_PACKAGE_PYTHON3_PY_ONLY is not set
+> >  BR2_PACKAGE_PYTHON3_PYC_ONLY=y
+> > @@ -4174,6 +4174,7 @@
+> >  # BR2_PACKAGE_HOST_PKGCONF is not set
+> >  # BR2_PACKAGE_HOST_PRU_SOFTWARE_SUPPORT is not set
+> >  # BR2_PACKAGE_HOST_PWGEN is not set
+> > +# BR2_PACKAGE_HOST_PYTHON is not set
+> >  # BR2_PACKAGE_HOST_PYTHON_CYTHON is not set
+> >  # BR2_PACKAGE_HOST_PYTHON_LXML is not set
+> >  # BR2_PACKAGE_HOST_PYTHON_SIX is not set
+> > @@ -4876,17 +4877,3 @@
+> >  # BR2_VFP_FLOAT is not set
+> >  # BR2_PACKAGE_GCC_TARGET is not set
+> >  # BR2_HAVE_DEVFILES is not set
+> > -
+> > -#
+> > -# External options
+> > -#
+> > -
+> > -#
+> > -# br2-external tree for atos projects (in
+> > /home/user/cleta_buildroot/br-external)
+> > -#
+> > -BR2_PACKAGE_BACKLIGHT_MONITORING=y
+> > -BR2_PACKAGE_TEST_UART=y
+> > -BR2_PACKAGE_APP_MOUNT=y
+> > -BR2_PACKAGE_APP_UPDATER=y
+> > -BR2_NODE_JS_14x=y
+> > -# BR2_PYTHON_37 is not set
+> >
+> >
+> > Note the lines with 'Buildroot 2020.02.8-dirty',
+> > '-BR2_EXTERNAL_ATOS_PATH="/home/user/cleta_buildroot/br-external"',
+> > '+# BR2_PACKAGE_PYTHON is not set' and '-# BR2_PYTHON_37 is not set',
+> > so most likely something with your local change and/or br-external
+> > changing the package python to python37?
+> >
+> > Otherwise the config compiles fine here (even with libevdev enabled)...
+> >
+> > Regards,
+> > Peter
+> >
+> >  
+> > >
+> > > Le sam. 23 janv. 2021 ? 11:48, Thomas Petazzoni <  
+> > > thomas.petazzoni at bootlin.com> a ?crit :  
+> > >  
+> > > > On Fri, 22 Jan 2021 23:53:30 +0100
+> > > > manu f <e.fiancette@gmail.com> wrote:
+> > > >  
+> > > > > ok, I remove libevdev in Target package =>libraries=>Other and its  
+> > copile  
+> > > > > without error!
+> > > > >
+> > > > > (But I dont know if I realy need this lib... )
+> > > > >
+> > > > > Well why it no compile with libdevdev ?
+> > > > > @ Thomas Petazzoni I saw you already got problem and make patch for
+> > > > > host-python interpreter...is there something to see with ?  
+> > > >
+> > > > host-python is definitely part of Buildroot 2020.02, so I'm not sure
+> > > > how you can get this error. We would need more details, such as the
+> > > > complete .config that reproduces the issue.
+> > > >
+> > > > Thomas
+> > > > --
+> > > > Thomas Petazzoni, CTO, Bootlin
+> > > > Embedded Linux and Kernel engineering
+> > > > https://bootlin.com
+> > > >  
+> >
+> >  
