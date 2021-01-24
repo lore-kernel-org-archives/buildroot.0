@@ -1,47 +1,35 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 24 Jan 2021 16:28:31 +0100
-Subject: [Buildroot] [PATCH 1/3] package/sysklogd: bump to verson 2.2.0
-In-Reply-To: <87zh0yuzpy.fsf@gmail.com>
-References: <20210122154333.1927190-1-troglobit@gmail.com>
- <20210122154333.1927190-2-troglobit@gmail.com>
- <20210124093641.GJ926565@scaer> <87zh0yuzpy.fsf@gmail.com>
-Message-ID: <20210124152831.GA2325@scaer>
+From: Joachim Wiberg <troglobit@gmail.com>
+Date: Sun, 24 Jan 2021 16:34:10 +0100
+Subject: [Buildroot] [PATCH 1/1] package/sysklogd: install syslogd to /sbin
+ and logger to /usr/bin
+Message-ID: <20210124153409.4041717-1-troglobit@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Joachim, All
+Replace --exec-prefix, which applies to both sbin and bin, with the more
+granular --bindir for logger and --sbindir for syslogd.  This because
+BusyBox installs its syslgod in /sbin and its logger in /usr/bin.
 
-On 2021-01-24 16:22 +0100, Joachim Wiberg spake thusly:
-> I apologize for the confusion and head scratching this has caused!
+Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+---
+ package/sysklogd/sysklogd.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-No need for an apology ;-)
-
-> I see, for past sysklogd that worked.  Now we provide the logger tool
-> as well, and --exec-prefix=/ changes to /bin/logger and /sbin/syslogd.
-> Since BusyBox logger is in /usr/bin,
-
-Ah, this is the kind of explanations that should go in a commit message!
-
-Indeed, a commit message that just describes the changes is not very
-helpful. What is important in a commit message is to explain what the
-problem is and why the change fixes it.
-
-> I believe we need to change the
-> SYSKLOGD_CONF_OPTS to use --bindir and --sbindir instead.
-> I'll post another patch shortly.
-
-Thanks! :-)
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/sysklogd/sysklogd.mk b/package/sysklogd/sysklogd.mk
+index 18d30400e1..de5ae17227 100644
+--- a/package/sysklogd/sysklogd.mk
++++ b/package/sysklogd/sysklogd.mk
+@@ -10,7 +10,7 @@ SYSKLOGD_LICENSE = BSD-3-Clause
+ SYSKLOGD_LICENSE_FILES = LICENSE
+ SYSKLOGD_CPE_ID_VALID = YES
+ SYSKLOGD_CONF_OPTS = \
+-	--exec-prefix=/ \
++	--bindir=/usr/bin --sbindir=/sbin \
+ 	--with-suspend-time=$(BR2_PACKAGE_SYSKLOGD_REMOTE_DELAY)
+ 
+ # Disable/Enable utilities
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.25.1
