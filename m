@@ -1,47 +1,47 @@
 From: Titouan Christophe <titouanchristophe@gmail.com>
-Date: Sun, 24 Jan 2021 11:57:36 +0100
-Subject: [Buildroot] [PATCH 2/2] package/x11r7/libxcb: Use host-python3
- instead of host-python(2)
-In-Reply-To: <20210124105736.33533-1-titouanchristophe@gmail.com>
-References: <20210124105736.33533-1-titouanchristophe@gmail.com>
-Message-ID: <20210124105736.33533-3-titouanchristophe@gmail.com>
+Date: Sun, 24 Jan 2021 12:10:44 +0100
+Subject: [Buildroot] [PATCH 1/1] package/redis: bump to v6.0.10
+Message-ID: <20210124111044.49810-1-titouanchristophe@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Redis 6.0.10 fixes several bugs with moderate impact.
+
+Read the full announcement:
+https://github.com/redis/redis/blob/6.0.10/00-RELEASENOTES
+
 Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
 ---
- package/x11r7/libxcb/libxcb.mk | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ package/redis/redis.hash | 2 +-
+ package/redis/redis.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/libxcb/libxcb.mk b/package/x11r7/libxcb/libxcb.mk
-index fb691c2422..fc209a2a1a 100644
---- a/package/x11r7/libxcb/libxcb.mk
-+++ b/package/x11r7/libxcb/libxcb.mk
-@@ -14,17 +14,17 @@ LIBXCB_INSTALL_STAGING = YES
+diff --git a/package/redis/redis.hash b/package/redis/redis.hash
+index a16bf9dffb..b72605013e 100644
+--- a/package/redis/redis.hash
++++ b/package/redis/redis.hash
+@@ -1,5 +1,5 @@
+ # From https://github.com/redis/redis-hashes/blob/master/README
+-sha256  dc2bdcf81c620e9f09cfd12e85d3bc631c897b2db7a55218fd8a65eaa37f86dd  redis-6.0.9.tar.gz
++sha256  79bbb894f9dceb33ca699ee3ca4a4e1228be7fb5547aeb2f99d921e86c1285bd  redis-6.0.10.tar.gz
  
- LIBXCB_DEPENDENCIES = \
- 	host-libxslt xcb-proto xlib_libXdmcp xlib_libXau \
--	host-xcb-proto host-python host-pkgconf
-+	host-xcb-proto host-python3 host-pkgconf
- HOST_LIBXCB_DEPENDENCIES = \
- 	host-libxslt host-xcb-proto host-xlib_libXdmcp \
--	host-xlib_libXau host-python host-pkgconf
-+	host-xlib_libXau host-python3 host-pkgconf
+ # Locally calculated
+ sha256  97f0a15b7bbae580d2609dad2e11f1956ae167be296ab60f4691ab9c30ee9828  COPYING
+diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+index b0d8e1cd51..0a6f7045c3 100644
+--- a/package/redis/redis.mk
++++ b/package/redis/redis.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- LIBXCB_CONF_OPTS = --with-doxygen=no
- HOST_LIBXCB_CONF_OPTS = --with-doxygen=no
- 
--# libxcb is not python3 friendly, so force the python interpreter
--HOST_LIBXCB_CONF_OPTS += ac_cv_path_PYTHON=$(HOST_DIR)/bin/python2
--LIBXCB_CONF_OPTS += ac_cv_path_PYTHON=$(HOST_DIR)/bin/python2
-+# Force detection of Buildroot host-python3 over system python
-+HOST_LIBXCB_CONF_OPTS += ac_cv_path_PYTHON=$(HOST_DIR)/bin/python3
-+LIBXCB_CONF_OPTS += ac_cv_path_PYTHON=$(HOST_DIR)/bin/python3
- 
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+-REDIS_VERSION = 6.0.9
++REDIS_VERSION = 6.0.10
+ REDIS_SITE = http://download.redis.io/releases
+ REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
+ REDIS_LICENSE_FILES = COPYING
 -- 
 2.25.3
