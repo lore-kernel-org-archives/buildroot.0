@@ -1,51 +1,37 @@
-From: manu f <e.fiancette@gmail.com>
-Date: Sun, 24 Jan 2021 12:40:31 +0100
-Subject: [Buildroot] No rule to make target 'host-python !!
-In-Reply-To: <20210123114813.0f7048c2@windsurf.home>
-References: <CAGshWo02DNPmGa_Nj7aBjf5TrQgVz2ePTP8EkABRfGFSYBsU0A@mail.gmail.com>
- <CAGshWo1eWoWDUd_0jD8xQbpZg7dGzOzhwNeNmhrc5ewh9z6TSQ@mail.gmail.com>
- <20210123114813.0f7048c2@windsurf.home>
-Message-ID: <CAGshWo2ngucacs+BJocUb36G4QX7Q7ssv2_M0R9kAiV+oick1Q@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 24 Jan 2021 14:49:59 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libgeos: disable inlining on arm
+Message-ID: <20210124134959.894937-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-here my complete .config
+Disable inlining which raise build failures on arm.
+It should be noted that inlining is already disabled by usptream on
+arm64: https://github.com/libgeos/geos/issues/353
 
-Le sam. 23 janv. 2021 ? 11:48, Thomas Petazzoni <
-thomas.petazzoni@bootlin.com> a ?crit :
+Fixes:
+ - http://autobuild.buildroot.org/results/52024b2ccc5d17612731809a5dabcc29a4a1170b
 
-> On Fri, 22 Jan 2021 23:53:30 +0100
-> manu f <e.fiancette@gmail.com> wrote:
->
-> > ok, I remove libevdev in Target package =>libraries=>Other and its copile
-> > without error!
-> >
-> > (But I dont know if I realy need this lib... )
-> >
-> > Well why it no compile with libdevdev ?
-> > @ Thomas Petazzoni I saw you already got problem and make patch for
-> > host-python interpreter...is there something to see with ?
->
-> host-python is definitely part of Buildroot 2020.02, so I'm not sure
-> how you can get this error. We would need more details, such as the
-> complete .config that reproduces the issue.
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210124/1682bb37/attachment-0001.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: .config
-Type: application/octet-stream
-Size: 130473 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210124/1682bb37/attachment-0001.obj>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libgeos/libgeos.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/libgeos/libgeos.mk b/package/libgeos/libgeos.mk
+index 7b4ace122d..d7905cbb21 100644
+--- a/package/libgeos/libgeos.mk
++++ b/package/libgeos/libgeos.mk
+@@ -12,4 +12,8 @@ LIBGEOS_LICENSE_FILES = COPYING
+ LIBGEOS_INSTALL_STAGING = YES
+ LIBGEOS_CONFIG_SCRIPTS = geos-config
+ 
++ifeq ($(BR2_arm)$(BR2_armeb),y)
++LIBGEOS_CONF_OPTS += -DDISABLE_GEOS_INLINE=ON
++endif
++
+ $(eval $(cmake-package))
+-- 
+2.29.2
