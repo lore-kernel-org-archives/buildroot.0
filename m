@@ -1,61 +1,51 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 24 Jan 2021 12:22:14 +0100
-Subject: [Buildroot] [PATCH 3/3] package/perl-gd: provide gd options
-In-Reply-To: <20210124112214.480254-1-fontaine.fabrice@gmail.com>
-References: <20210124112214.480254-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210124112214.480254-3-fontaine.fabrice@gmail.com>
+From: manu f <e.fiancette@gmail.com>
+Date: Sun, 24 Jan 2021 12:40:31 +0100
+Subject: [Buildroot] No rule to make target 'host-python !!
+In-Reply-To: <20210123114813.0f7048c2@windsurf.home>
+References: <CAGshWo02DNPmGa_Nj7aBjf5TrQgVz2ePTP8EkABRfGFSYBsU0A@mail.gmail.com>
+ <CAGshWo1eWoWDUd_0jD8xQbpZg7dGzOzhwNeNmhrc5ewh9z6TSQ@mail.gmail.com>
+ <20210123114813.0f7048c2@windsurf.home>
+Message-ID: <CAGshWo2ngucacs+BJocUb36G4QX7Q7ssv2_M0R9kAiV+oick1Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that gdlib-config is gone, provide the GD options otherwise perl-gd
-will assume that everything is available:
+here my complete .config
 
-$features = 'GD_GIF GD_GIFANIM GD_OPENPOLYGON GD_ZLIB GD_PNG GD_FREETYPE GD_FONTCONFIG GD_JPEG GD_XPM GD_TIFF GD_WEBP';
+Le sam. 23 janv. 2021 ? 11:48, Thomas Petazzoni <
+thomas.petazzoni@bootlin.com> a ?crit :
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/perl-gd/perl-gd.mk | 23 ++++++++++++++++++++++-
- 1 file changed, 22 insertions(+), 1 deletion(-)
-
-diff --git a/package/perl-gd/perl-gd.mk b/package/perl-gd/perl-gd.mk
-index 1471cfb8bf..6872fd1ce1 100644
---- a/package/perl-gd/perl-gd.mk
-+++ b/package/perl-gd/perl-gd.mk
-@@ -17,10 +17,31 @@ PERL_GD_CONF_ENV = \
- 	PATH=$(BR_PATH) \
- 	PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig"
- 
-+ifeq ($(BR2_PACKAGE_FONTCONFIG),y)
-+PERL_GD_OPTIONS += FONTCONFIG
-+endif
-+
-+ifeq ($(BR2_PACKAGE_FREETYPE),y)
-+PERL_GD_OPTIONS += FT
-+endif
-+
-+ifeq ($(BR2_PACKAGE_JPEG),y)
-+PERL_GD_OPTIONS += JPEG
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBPNG),y)
-+PERL_GD_OPTIONS += PNG
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXPM),y)
-+PERL_GD_OPTIONS += XPM
-+endif
-+
- PERL_GD_CONF_OPTS = \
- 	-lib_gd_path=$(STAGING_DIR)/usr \
- 	-lib_ft_path=$(STAGING_DIR)/usr \
- 	-lib_png_path=$(STAGING_DIR)/usr \
--	-lib_zlib_path=$(STAGING_DIR)/usr
-+	-lib_zlib_path=$(STAGING_DIR)/usr \
-+	-options=$(subst $(space),$(comma),$(PERL_GD_OPTIONS))
- 
- $(eval $(perl-package))
--- 
-2.29.2
+> On Fri, 22 Jan 2021 23:53:30 +0100
+> manu f <e.fiancette@gmail.com> wrote:
+>
+> > ok, I remove libevdev in Target package =>libraries=>Other and its copile
+> > without error!
+> >
+> > (But I dont know if I realy need this lib... )
+> >
+> > Well why it no compile with libdevdev ?
+> > @ Thomas Petazzoni I saw you already got problem and make patch for
+> > host-python interpreter...is there something to see with ?
+>
+> host-python is definitely part of Buildroot 2020.02, so I'm not sure
+> how you can get this error. We would need more details, such as the
+> complete .config that reproduces the issue.
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210124/1682bb37/attachment-0001.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: .config
+Type: application/octet-stream
+Size: 130473 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210124/1682bb37/attachment-0001.obj>
