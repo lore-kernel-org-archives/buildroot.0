@@ -1,59 +1,39 @@
-From: Joachim Wiberg <troglobit@gmail.com>
-Date: Sun, 24 Jan 2021 16:36:55 +0100
-Subject: [Buildroot] [PATCH 1/1] package/ssdp-responder: new package
-In-Reply-To: <20210124095108.GL926565@scaer>
-References: <20210123231559.3036505-1-troglobit@gmail.com>
- <20210124095108.GL926565@scaer>
-Message-ID: <87sg6quz1k.fsf@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 24 Jan 2021 16:41:52 +0100
+Subject: [Buildroot] [git commit] package/libgeos: disable inlining on arm
+Message-ID: <20210124152345.B193B817B7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Jan 24, 2021 at 10:51, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
-> On 2021-01-24 00:15 +0100, Joachim Wiberg spake thusly:
->> Small (35k), and stand-alone, SSDP responder with built-in web server
->> (on port 1901) for serving description.xml when Windows scans for any
->> network devices on the LAN.  Also includes ssdp-scan (31k), similar to
->> the mdns-scan tool, to probe for SSDP capable devices.
-> This package uses pkg-config, so it should have:
->
->     SSDP_RESPONDER_DEPENDENCIES = host-pkgconf
+commit: https://git.buildroot.net/buildroot/commit/?id=fbd84d55ce32dbd8924f5e92902cde4d0a0bdf3f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Noted!
+Disable inlining which raise build failures on arm.
+It should be noted that inlining is already disabled by usptream on
+arm64: https://github.com/libgeos/geos/issues/353
 
-> It also has an optional dependency on systemd, so maybe it needs:
->     ifeq ($(BR2_PACKAGE_SYSTEMD),y)
->     SSDP_RESPONDER_DEPENDENCIES += systemd
->     SSDP_RESPONDER_CONF_OPTS += --with-systemd
->     else
->     SSDP_RESPONDER_CONF_OPTS += --without-systemd
->     endif
+Fixes:
+ - http://autobuild.buildroot.org/results/52024b2ccc5d17612731809a5dabcc29a4a1170b
 
-Thanks, I'll give it a whirl.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/libgeos/libgeos.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-> And since it comes with its systemd service unit, it would be nice to
-> install it with SSDP_RESPONDER_INSTALL_INIT_SYSTEMD.
-
-OK
-
-> [--SNIP--]
->     $ make check-package
-
-(This will be my new friend)
-
->     package/ssdp-responder/Config.in:2: should be indented with one tab (http://nightly.buildroot.org/#_config_files)
->     package/ssdp-responder/Config.in:3: should be indented with one tab (http://nightly.buildroot.org/#_config_files)
->     package/ssdp-responder/Config.in:4: should be indented with one tab (http://nightly.buildroot.org/#_config_files)
->     package/ssdp-responder/Config.in:5: help text: <tab><2 spaces><62 chars> (http://nightly.buildroot.org/#writing-rules-config-in)
->     package/ssdp-responder/Config.in:6: help text: <tab><2 spaces><62 chars> (http://nightly.buildroot.org/#writing-rules-config-in)
->     package/ssdp-responder/Config.in:7: help text: <tab><2 spaces><62 chars> (http://nightly.buildroot.org/#writing-rules-config-in)
->     package/ssdp-responder/Config.in:8: help text: <tab><2 spaces><62 chars> (http://nightly.buildroot.org/#writing-rules-config-in)
-> Care to fixup and respin, please?
-
-Yup, I'll post a v2 later tonight!
-
-Cheers
- /Joachim
+diff --git a/package/libgeos/libgeos.mk b/package/libgeos/libgeos.mk
+index 7b4ace122d..d7905cbb21 100644
+--- a/package/libgeos/libgeos.mk
++++ b/package/libgeos/libgeos.mk
+@@ -12,4 +12,8 @@ LIBGEOS_LICENSE_FILES = COPYING
+ LIBGEOS_INSTALL_STAGING = YES
+ LIBGEOS_CONFIG_SCRIPTS = geos-config
  
++ifeq ($(BR2_arm)$(BR2_armeb),y)
++LIBGEOS_CONF_OPTS += -DDISABLE_GEOS_INLINE=ON
++endif
++
+ $(eval $(cmake-package))
