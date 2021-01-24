@@ -1,44 +1,49 @@
-From: Joachim Wiberg <troglobit@gmail.com>
-Date: Sun, 24 Jan 2021 16:51:31 +0100
-Subject: [Buildroot] [PATCH 1/3] package/sysklogd: bump to verson 2.2.0
-In-Reply-To: <20210124152831.GA2325@scaer>
-References: <20210122154333.1927190-1-troglobit@gmail.com>
- <20210122154333.1927190-2-troglobit@gmail.com>
- <20210124093641.GJ926565@scaer> <87zh0yuzpy.fsf@gmail.com>
- <20210124152831.GA2325@scaer>
-Message-ID: <87pn1uuyd8.fsf@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 24 Jan 2021 16:52:54 +0100
+Subject: [Buildroot] [git commit] package/redis: bump to v6.0.10
+Message-ID: <20210124153351.45C2382B83@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=7ee49e48bdfdcc15bf77f04980685aca0b44b2b8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi Yann!
+Redis 6.0.10 fixes several bugs with moderate impact.
 
-On Sun, Jan 24, 2021 at 16:28, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
-> On 2021-01-24 16:22 +0100, Joachim Wiberg spake thusly:
->> I apologize for the confusion and head scratching this has caused!
-> No need for an apology ;-)
+Read the full announcement:
+https://github.com/redis/redis/blob/6.0.10/00-RELEASENOTES
 
-You're too kind :)
+Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/redis/redis.hash | 2 +-
+ package/redis/redis.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
->> I see, for past sysklogd that worked.  Now we provide the logger tool
->> as well, and --exec-prefix=/ changes to /bin/logger and /sbin/syslogd.
->> Since BusyBox logger is in /usr/bin,
-> Ah, this is the kind of explanations that should go in a commit message!
-
-Yup
-
-> Indeed, a commit message that just describes the changes is not very
-> helpful. What is important in a commit message is to explain what the
-> problem is and why the change fixes it.
-
-This is exactly what I'm preaching to our junior devs (sometimes on a
-daily basis) at $DAYJOB.  So it's a painful realization that when push
-comes to shove, I'm no better myself LOL :-)
-
-
-Best regards
- /Joachim
+diff --git a/package/redis/redis.hash b/package/redis/redis.hash
+index a16bf9dffb..b72605013e 100644
+--- a/package/redis/redis.hash
++++ b/package/redis/redis.hash
+@@ -1,5 +1,5 @@
+ # From https://github.com/redis/redis-hashes/blob/master/README
+-sha256  dc2bdcf81c620e9f09cfd12e85d3bc631c897b2db7a55218fd8a65eaa37f86dd  redis-6.0.9.tar.gz
++sha256  79bbb894f9dceb33ca699ee3ca4a4e1228be7fb5547aeb2f99d921e86c1285bd  redis-6.0.10.tar.gz
  
+ # Locally calculated
+ sha256  97f0a15b7bbae580d2609dad2e11f1956ae167be296ab60f4691ab9c30ee9828  COPYING
+diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+index b0d8e1cd51..0a6f7045c3 100644
+--- a/package/redis/redis.mk
++++ b/package/redis/redis.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-REDIS_VERSION = 6.0.9
++REDIS_VERSION = 6.0.10
+ REDIS_SITE = http://download.redis.io/releases
+ REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
+ REDIS_LICENSE_FILES = COPYING
