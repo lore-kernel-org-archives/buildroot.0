@@ -1,50 +1,85 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 24 Jan 2021 23:33:30 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/ssdp-responder: new package
-In-Reply-To: <20210124194908.1762833-2-troglobit@gmail.com>
-References: <20210124194908.1762833-1-troglobit@gmail.com>
- <20210124194908.1762833-2-troglobit@gmail.com>
-Message-ID: <20210124223330.GL2325@scaer>
+Date: Sun, 24 Jan 2021 23:42:33 +0100
+Subject: [Buildroot] [git commit] configs/orangepi_r1_defconfig: bump kernel
+ to 5.10.10, u-boot to 2020.10
+Message-ID: <20210124222329.A02E9817E9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Joachim, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=34cce93adb06608992023c44fa3245d1f1a3deb4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-01-24 20:49 +0100, Joachim Wiberg spake thusly:
-> Small (35k), and stand-alone, SSDP responder with built-in web server
-> (on port 1901) for serving description.xml when Windows scans for any
-> network devices on the LAN.  Also includes ssdp-scan (31k), similar to
-> the mdns-scan tool, to probe for SSDP capable devices.
-> 
-> Verified with check-package and test-pkg, no-mmu builds disabled.
+The probing order of the two mmc controllers (sdcard and sdio wifi) has
+changed in kernel 5.10 since commit 21b2cec61c04bd1 (mmc: Set
+PROBE_PREFER_ASYNCHRONOUS for drivers that existed in v4.4), so change to
+root=PARTUUID=.. instead of hardcoding /dev/mmcblkXp2.
 
-I've done a bit of research as to why noMMU builds were broken.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+[yann.morin.1998 at free.fr: use feedc0de as magic]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ board/orangepi/orangepi-r1/boot.cmd     | 2 +-
+ board/orangepi/orangepi-r1/genimage.cfg | 2 ++
+ configs/orangepi_r1_defconfig           | 7 ++++---
+ 3 files changed, 7 insertions(+), 4 deletions(-)
 
-Initially, you stated:
-> +	depends on BR2_USE_MMU # fork()
-
-However, ssdp-responder does not use fork().
-
-So I was a bit surprised, and spawned a test build, and indeed it fails,
-but for very obscur reasons. In that situation, a lot of functions, even
-very basic ones, like strdup(), do not get prototyped, and a lot of
-multicast-related structs, like struct ip_mreq, do not get defined.
-
-I tried to dig the root cause, but I lost too much hair, so I bailed out
-and comitted your patch as is, just with the fork() reference dropped.
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/board/orangepi/orangepi-r1/boot.cmd b/board/orangepi/orangepi-r1/boot.cmd
+index e927b01e82..e62e31a3e4 100644
+--- a/board/orangepi/orangepi-r1/boot.cmd
++++ b/board/orangepi/orangepi-r1/boot.cmd
+@@ -1,6 +1,6 @@
+ setenv fdt_high ffffffff
+ 
+-setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
++setenv bootargs console=ttyS0,115200 earlyprintk root=PARTUUID=feedc0de-02 rootwait
+ 
+ fatload mmc 0 $kernel_addr_r zImage
+ fatload mmc 0 $fdt_addr_r sun8i-h2-plus-orangepi-r1.dtb
+diff --git a/board/orangepi/orangepi-r1/genimage.cfg b/board/orangepi/orangepi-r1/genimage.cfg
+index 01e2c0adc4..3496383573 100644
+--- a/board/orangepi/orangepi-r1/genimage.cfg
++++ b/board/orangepi/orangepi-r1/genimage.cfg
+@@ -13,6 +13,8 @@ image boot.vfat {
+ 
+ image sdcard.img {
+ 	hdimage {
++		# for root=PARTUUID=feedc0de-02 support
++		disk-signature = 0xfeedc0de
+ 	}
+ 
+ 	partition u-boot {
+diff --git a/configs/orangepi_r1_defconfig b/configs/orangepi_r1_defconfig
+index 7c3ec637e5..bad1f9400c 100644
+--- a/configs/orangepi_r1_defconfig
++++ b/configs/orangepi_r1_defconfig
+@@ -1,13 +1,13 @@
+ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_FPU_VFPV4=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_3=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ BR2_TARGET_GENERIC_HOSTNAME="OrangePi_R1"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Orange Pi R1"
+ BR2_SYSTEM_DHCP="eth0"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.3.12"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.10"
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h2-plus-orangepi-r1"
+@@ -19,9 +19,10 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.10"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.10"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_r1"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
