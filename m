@@ -1,179 +1,279 @@
-From: Joachim Wiberg <troglobit@gmail.com>
-Date: Sun, 24 Jan 2021 20:49:08 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/ssdp-responder: new package
-In-Reply-To: <20210124194908.1762833-1-troglobit@gmail.com>
-References: <20210124194908.1762833-1-troglobit@gmail.com>
-Message-ID: <20210124194908.1762833-2-troglobit@gmail.com>
+From: =?UTF-8?Q?Geoffrey_Le_Gourri=C3=A9rec?= <geoffrey.legourrierec@gmail.com>
+Date: Sun, 24 Jan 2021 22:06:25 +0100
+Subject: [Buildroot] [PATCH 1/2] configs/qemu_*: bump kernel version to
+ 5.10.7
+In-Reply-To: <CADFgU5CWfAQ2bgJeQYXeAkwO8Q8E3K9PVGz_tWCa_YZmMD_SEg@mail.gmail.com>
+References: <20210120195954.31797-1-geoffrey.legourrierec@gmail.com>
+ <CACPK8XdWzEuu_4x5cWNx6EpatbSfn91FdQf42RzCyotGz9Hn6g@mail.gmail.com>
+ <CADFgU5CWfAQ2bgJeQYXeAkwO8Q8E3K9PVGz_tWCa_YZmMD_SEg@mail.gmail.com>
+Message-ID: <CADFgU5DFc0FZWqD+Y-S5WN6a4U2aBmY0c+SLjZ-2RihXhK2woA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Small (35k), and stand-alone, SSDP responder with built-in web server
-(on port 1901) for serving description.xml when Windows scans for any
-network devices on the LAN.  Also includes ssdp-scan (31k), similar to
-the mdns-scan tool, to probe for SSDP capable devices.
+>> > Regarding the 64-bit time data structures, an upstream fix [3]
+>> > had supposedly prepared for this situation where the libc has not
+>> > moved to 64-bits data structures yet, but unfortunately we seem to
+>> > slip into a crack here. Some quick header dependency analysis from
+>> > the offending __kernel_time64_t type managed to "follow up" to
+>> > linux/time_types.h (which is the one explicitly added in [3]) as
+>> > expected; so no luck here.
+>> > Any help on that matter would be appreciated.
+>>
+>> I saw your commit message for the sockios.h patch has cc Arnd. Did you
+>> get a response from him on this issue?
+>
+>
+> Not yet, I've sent the patch to the SH maintainers CC Arnd Bergman, and am
+> waiting for a reply. I'll keep you up to date when I get one.
 
-Verified with check-package and test-pkg, no-mmu builds disabled.
+Hi, here's an update.
 
-Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
----
- DEVELOPERS                                 |  1 +
- package/Config.in                          |  1 +
- package/ssdp-responder/Config.in           | 20 +++++++++++
- package/ssdp-responder/S50ssdpd            | 42 ++++++++++++++++++++++
- package/ssdp-responder/ssdp-responder.hash |  3 ++
- package/ssdp-responder/ssdp-responder.mk   | 31 ++++++++++++++++
- 6 files changed, 98 insertions(+)
- create mode 100644 package/ssdp-responder/Config.in
- create mode 100755 package/ssdp-responder/S50ssdpd
- create mode 100644 package/ssdp-responder/ssdp-responder.hash
- create mode 100644 package/ssdp-responder/ssdp-responder.mk
+I had a short exchange with Arnd Bergmann (see the SuperH subsystem
+patchwork thread[1]) and looks like the real issue lies in uclibc. I
+have a patch idea (adding relevant types here [2]), so I'll go test it
+and bug the uclibc folks with it.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 687a9400e0..7af3081760 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1280,6 +1280,7 @@ F:	configs/globalscale_espressobin_defconfig
- F:	board/globalscale/espressobin/
- F:	package/mg/
- F:	package/netcalc/
-+F:	package/ssdp-responder/
- 
- N:	Joao Pinto <jpinto@synopsys.com>
- F:	board/synopsys/vdk/
-diff --git a/package/Config.in b/package/Config.in
-index f42cc01032..12bd0608e3 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2268,6 +2268,7 @@ endif
- 	source "package/spice/Config.in"
- 	source "package/spice-protocol/Config.in"
- 	source "package/squid/Config.in"
-+	source "package/ssdp-responder/Config.in"
- 	source "package/sshguard/Config.in"
- 	source "package/sshpass/Config.in"
- 	source "package/sslh/Config.in"
-diff --git a/package/ssdp-responder/Config.in b/package/ssdp-responder/Config.in
-new file mode 100644
-index 0000000000..7e9cd640c7
---- /dev/null
-+++ b/package/ssdp-responder/Config.in
-@@ -0,0 +1,20 @@
-+config BR2_PACKAGE_SSDP_RESPONDER
-+	bool "ssdp-responder"
-+	depends on BR2_USE_MMU # fork()
-+	help
-+	  Simple Service Discovery Protocol daemon (SSDP) for networked
-+	  Linux and UNIX devices. Useful in any setup, big or small, but
-+	  targeted more at embedded systems that need to announce
-+	  themselves to Windows systems.
-+
-+	  ssdpd is a stand-alone UNIX, no external dependencies but the
-+	  standard C library.  It has a built-in web server for serving
-+	  the UPnP XML description which Windows use to present the
-+	  icon, by default an InternetGatewayDevice is announced.
-+
-+	  Also included is ssdp-scan, a tool similar to mdns-scan, which
-+	  continuously scans for SSDP capable hosts on the network.
-+	  Take care only to use for debugging since it scans the network
-+	  quite aggressively.
-+
-+	  https://github.com/troglobit/ssdp-responder/
-diff --git a/package/ssdp-responder/S50ssdpd b/package/ssdp-responder/S50ssdpd
-new file mode 100755
-index 0000000000..e33992be91
---- /dev/null
-+++ b/package/ssdp-responder/S50ssdpd
-@@ -0,0 +1,42 @@
-+#!/bin/sh
-+
-+NAME=ssdpd
-+PIDFILE=/var/run/$NAME.pid
-+DAEMON=/usr/sbin/$NAME
-+CFGFILE=/etc/default/$NAME
-+
-+DAEMON_ARGS=""
-+
-+# Read configuration variable file if it is present
-+[ -f $CFGFILE ] && . $CFGFILE
-+
-+start() {
-+	printf 'Starting %s: ' "$NAME"
-+	start-stop-daemon -S -q -p $PIDFILE -x $DAEMON -- $DAEMON_ARGS
-+	[ $? = 0 ] && echo "OK" || echo "FAIL"
-+}
-+
-+stop() {
-+	printf 'Stopping %s: ' "$NAME"
-+	start-stop-daemon -K -q -p $PIDFILE -x $DAEMON
-+	[ $? = 0 ] && echo "OK" || echo "FAIL"
-+}
-+
-+restart() {
-+	stop
-+	start
-+}
-+
-+case "$1" in
-+    start|stop|restart)
-+	"$1"
-+	;;
-+    reload)
-+	restart
-+	;;
-+    *)
-+	echo "Usage: $0 {start|stop|restart|reload}"
-+	exit 1
-+esac
-+
-+exit $?
-diff --git a/package/ssdp-responder/ssdp-responder.hash b/package/ssdp-responder/ssdp-responder.hash
-new file mode 100644
-index 0000000000..e8cbbb4a1f
---- /dev/null
-+++ b/package/ssdp-responder/ssdp-responder.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  7ae49229e7c7a55fed9e36598b12e2173eecef0fffe0a386b6a10fad30f3c79f  ssdp-responder-1.8.tar.gz
-+sha256  e17dc0bc91bf499d8cca5e016c22c6d2a4770e3cc1a43756a7973375a83ddb90  LICENSE
-diff --git a/package/ssdp-responder/ssdp-responder.mk b/package/ssdp-responder/ssdp-responder.mk
-new file mode 100644
-index 0000000000..f2478e99b1
---- /dev/null
-+++ b/package/ssdp-responder/ssdp-responder.mk
-@@ -0,0 +1,31 @@
-+################################################################################
-+#
-+# ssdp-responder
-+#
-+################################################################################
-+
-+SSDP_RESPONDER_VERSION = 1.8
-+SSDP_RESPONDER_SITE = https://github.com/troglobit/ssdp-responder/releases/download/v$(SSDP_RESPONDER_VERSION)
-+SSDP_RESPONDER_LICENSE = ISC
-+SSDP_RESPONDER_LICENSE_FILES = LICENSE
-+SSDP_RESPONDER_CPE_ID_VENDOR = troglobit
-+SSDP_RESPONDER_DEPENDENCIES = host-pkgconf
-+
-+ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-+SSDP_RESPONDER_DEPENDENCIES += systemd
-+SSDP_RESPONDER_CONF_OPTS += --with-systemd
-+else
-+SSDP_RESPONDER_CONF_OPTS += --without-systemd
-+endif
-+
-+define SSDP_RESPONDER_INSTALL_INIT_SYSV
-+	$(INSTALL) -D -m 0755 package/ssdp-responder/S50ssdpd \
-+		$(TARGET_DIR)/etc/init.d/S50ssdpd
-+endef
-+
-+define SSDP-RESPONDER_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 $(@D)/ssdp-responder.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/ssdp-responder.service
-+endef
-+
-+$(eval $(autotools-package))
+[1] https://patchwork.kernel.org/project/linux-sh/patch/20210123165652.10884-1-geoffrey.legourrierec at gmail.com/
+[2] https://repo.or.cz/uclibc-ng.git/blob/ab1dd83bec59c9e65c31efd6e887182948f627be:/libc/sysdeps/linux/sh/bits/kernel_types.h
+
+Regards,
+
 -- 
-2.25.1
+Geoffrey
+
+
+Le sam. 23 janv. 2021 ? 21:35, Geoffrey Le Gourri?rec
+<geoffrey.legourrierec@gmail.com> a ?crit :
+>>
+>> Nice work.
+>>
+>> Reviewed-by: Joel Stanley <joel@jms.id.au>
+>>
+>> > ---
+>> > Regarding the 64-bit time data structures, an upstream fix [3]
+>> > had supposedly prepared for this situation where the libc has not
+>> > moved to 64-bits data structures yet, but unfortunately we seem to
+>> > slip into a crack here. Some quick header dependency analysis from
+>> > the offending __kernel_time64_t type managed to "follow up" to
+>> > linux/time_types.h (which is the one explicitly added in [3]) as
+>> > expected; so no luck here.
+>> > Any help on that matter would be appreciated.
+>>
+>> I saw your commit message for the sockios.h patch has cc Arnd. Did you
+>> get a response from him on this issue?
+>
+>
+> Not yet, I've sent the patch to the SH maintainers CC Arnd Bergman, and am
+> waiting for a reply. I'll keep you up to date when I get one.
+>
+>> It looks like time_types.h needs a definition of __kernel_time64_t.
+>> This appears to live in posix_types.h for uapi headers. Would this
+>> patch to the kernel fix the problem?
+>>
+>> --- a/include/uapi/linux/time_types.h
+>> +++ b/include/uapi/linux/time_types.h
+>> @@ -3,6 +3,7 @@
+>>  #define _UAPI_LINUX_TIME_TYPES_H
+>>
+>>  #include <linux/types.h>
+>> +#include <linux/posix_types.h>
+>>
+>>  struct __kernel_timespec {
+>>         __kernel_time64_t       tv_sec;                 /* seconds */
+>
+>
+> I just tried your suggestion with qemu_sh4eb_r2d_defconfig (after removing my
+> own patch, of course), but looks like compilation still breaks :( Did you have the
+> time to try it ?
+>
+> /usr/bin/make -j5 -C /home/clumsyape/PROJETS/buildroot/buildroot_git/output/build/uclibc-1.0.37 ARCH="sh" CROSS_COMPILE="/home/clumsyape/PROJETS/buildroot/buildroot_git/output/host/bin/sh4eb-buildroot-linux-uclibc-" UCLIBC_EXTRA_CFLAGS="" HOSTCC="/usr/bin/gcc"
+>   GEN libpthread/nptl/sysdeps/unix/sysv/linux/structsem.h
+>   GEN libpthread/nptl/sysdeps/unix/sysv/linux/structsem.h
+>   GEN libpthread/nptl/sysdeps/unix/sysv/linux/lowlevelrobustlock.h
+>   GEN libpthread/nptl/sysdeps/unix/sysv/linux/lowlevelrobustlock.h
+> In file included from /home/clumsyape/PROJETS/buildroot/buildroot_git/output/build/linux-headers-5.10.7/usr/include/asm/sockios.h:5,
+>                  from /home/clumsyape/PROJETS/buildroot/buildroot_git/output/build/linux-headers-5.10.7/usr/include/asm-generic/socket.h:6,
+>                  from /home/clumsyape/PROJETS/buildroot/buildroot_git/output/build/linux-headers-5.10.7/usr/include/asm/socket.h:1,
+>                  from ./include/bits/socket.h:360,
+>                  from ./include/sys/socket.h:39,
+>                  from ./include/netinet/in.h:24,
+>                  from ./include/resolv.h:57,
+>                  from ./libpthread/nptl/descr.h:36,
+>                  from ./libpthread/nptl/pthreadP.h:25,
+>                  from <stdin>:2:
+> /home/clumsyape/PROJETS/buildroot/buildroot_git/output/build/linux-headers-5.10.7/usr/include/linux/time_types.h:9:2: error: unknown type name '__kernel_time64_t'
+>     9 |  __kernel_time64_t       tv_sec;                 /* seconds */
+>       |  ^~~~~~~~~~~~~~~~~
+> /home/clumsyape/PROJETS/buildroot/buildroot_git/output/build/linux-headers-5.10.7/usr/include/linux/time_types.h:33:2: error: unknown type name '__kernel_old_time_t'
+>    33 |  __kernel_old_time_t tv_sec;  /* seconds */
+>       |  ^~~~~~~~~~~~~~~~~~~
+> libpthread/nptl/sysdeps/unix/sysv/linux/Makefile.commonarch:135: recipe for target 'libpthread/nptl/sysdeps/unix/sysv/linux/lowlevelrobustlock.h' failed
+> make[2]: *** [libpthread/nptl/sysdeps/unix/sysv/linux/lowlevelrobustlock.h] Error 1
+> package/pkg-generic.mk:247: recipe for target '/home/clumsyape/PROJETS/buildroot/buildroot_git/output/build/uclibc-1.0.37/.stamp_built' failed
+> make[1]: *** [/home/clumsyape/PROJETS/buildroot/buildroot_git/output/build/uclibc-1.0.37/.stamp_built] Error 2
+> Makefile:84: recipe for target '_all' failed
+> make: *** [_all] Error 2
+>
+>>
+>> Cheers,
+>>
+>> Joel
+>
+>
+> Thanks for the review,
+>
+> --
+> Geoffrey
+>
+> Le mer. 20 janv. 2021 ? 23:29, Joel Stanley <joel@jms.id.au> a ?crit :
+>>
+>> On Wed, 20 Jan 2021 at 20:00, Geoffrey Le Gourri?rec
+>> <geoffrey.legourrierec@gmail.com> wrote:
+>> >
+>> > Bump most QEMU defconfigs (every one that was previously on 5.4.y)
+>> > to latest longterm kernel 5.10.7.
+>> >
+>> > Please note the following exceptions/modifications:
+>> > - board/qemu/qemu_s390x_defconfig: ignored (already up to date)
+>> > - board/qemu/sh4*-r2d:
+>> >     - Remove the remaining kernel patch [1] provided by Alan Modra
+>> >       fixing rodata alignment, carried here by Romain Naour [2] to
+>> >       fix an issue preventing kernel from booting with binutils 2.23.
+>> >       Patch is present in upstream Linux now.
+>> >     - Fix compile-time error regarding 64-bit time data structures
+>> >       from kernel headers when building with uclibc. Previous fix [3]
+>> >       existed upstream; but see details below.
+>> >     - board/qemu/ppc-mpc8544ds: Updated kernel patch
+>> > - board/qemu/arm-versatile: Updated kernel patch
+>> > - board/qemu/mips*r6*: Updated kernel patch
+>> >
+>> > Tested on all configs/qemu* configurations. [4]
+>> >
+>> > [1] https://www.sourceware.org/ml/binutils/2019-12/msg00112.html
+>> > [2] https://git.busybox.net/buildroot/commit/?id=a2331c8a61bdd71c47492efc818fb0458a349219
+>> > [3] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fc94cf2092c7c1267fa2deb8388d624f50eba808
+>> > [4] https://gitlab.com/clumsyape/buildroot/-/pipelines/244024195
+>> >
+>> > Signed-off-by: Geoffrey Le Gourri?rec <geoffrey.legourrierec@gmail.com>
+>>
+>> Nice work.
+>>
+>> Reviewed-by: Joel Stanley <joel@jms.id.au>
+>>
+>> > ---
+>> > Regarding the 64-bit time data structures, an upstream fix [3]
+>> > had supposedly prepared for this situation where the libc has not
+>> > moved to 64-bits data structures yet, but unfortunately we seem to
+>> > slip into a crack here. Some quick header dependency analysis from
+>> > the offending __kernel_time64_t type managed to "follow up" to
+>> > linux/time_types.h (which is the one explicitly added in [3]) as
+>> > expected; so no luck here.
+>> > Any help on that matter would be appreciated.
+>>
+>> I saw your commit message for the sockios.h patch has cc Arnd. Did you
+>> get a response from him on this issue?
+>>
+>> It looks like time_types.h needs a definition of __kernel_time64_t.
+>> This appears to live in posix_types.h for uapi headers. Would this
+>> patch to the kernel fix the problem?
+>>
+>> --- a/include/uapi/linux/time_types.h
+>> +++ b/include/uapi/linux/time_types.h
+>> @@ -3,6 +3,7 @@
+>>  #define _UAPI_LINUX_TIME_TYPES_H
+>>
+>>  #include <linux/types.h>
+>> +#include <linux/posix_types.h>
+>>
+>>  struct __kernel_timespec {
+>>         __kernel_time64_t       tv_sec;                 /* seconds */
+>>
+>> Cheers,
+>>
+>> Joel
+>>
+>> > diff --git a/board/qemu/sh4eb-r2d/patches/linux-headers/0001-Use-types.h-and-not-time_types.h-in-sockios.h.patch b/board/qemu/sh4eb-r2d/patches/linux-headers/0001-Use-types.h-and-not-time_types.h-in-sockios.h.patch
+>> > new file mode 100644
+>> > index 0000000000..90bd4e8c6c
+>> > --- /dev/null
+>> > +++ b/board/qemu/sh4eb-r2d/patches/linux-headers/0001-Use-types.h-and-not-time_types.h-in-sockios.h.patch
+>> > @@ -0,0 +1,76 @@
+>> > +From 34c78b21878ae7b0471299d11a7e861125e31b2c Mon Sep 17 00:00:00 2001
+>> > +From: =?UTF-8?q?Geoffrey=20Le=20Gourri=C3=A9rec?=
+>> > + <geoffrey.legourrierec@gmail.com>
+>> > +Date: Mon, 18 Jan 2021 23:40:28 +0100
+>> > +Subject: [PATCH] Use types.h and not time_types.h in sockios.h
+>> > +MIME-Version: 1.0
+>> > +Content-Type: text/plain; charset=UTF-8
+>> > +Content-Transfer-Encoding: 8bit
+>> > +
+>> > +This fixes builds for sh arch when libc is not using relevant
+>> > +time data structures definitions for 32-bit machines. A previous
+>> > +commit [1] provided a fix, that we seemed to slip through here.
+>> > +
+>> > +As of the time of this writing, the bug was found with non-
+>> > +up to date uclibc 1.0.37 only (currently the only libc supporting
+>> > +sh architecture).
+>> > +
+>> > +[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fc94cf2092c7c1267fa2deb8388d624f50eba808
+>> > +
+>> > +Signed-off-by: Geoffrey Le Gourri?rec <geoffrey.legourrierec@gmail.com>
+>> > +Cc: Arnd Bergmann <arnd@arndb.de>
+>> > +
+>> > +---
+>> > +
+>> > +For the record, here's the build-time error:
+>> > +
+>> > +/usr/bin/make -j2 -C /builds/clumsyape/buildroot/output/build/uclibc-1.0.37 ARCH="sh" CROSS_COMPILE="/builds/clumsyape/buildroot/output/host/bin/sh4-buildroot-linux-uclibc-" UCLIBC_EXTRA_CFLAGS="" HOSTCC="/usr/bin/gcc"
+>> > +make[1]: Entering directory '/builds/clumsyape/buildroot/output/build/uclibc-1.0.37'
+>> > +  GEN libpthread/nptl/sysdeps/unix/sysv/linux/lowlevelcond.h
+>> > +  GEN libpthread/nptl/sysdeps/unix/sysv/linux/lowlevelcond.h
+>> > +  GEN libpthread/nptl/sysdeps/unix/sysv/linux/lowlevelrobustlock.h
+>> > +  GEN libpthread/nptl/sysdeps/unix/sysv/linux/lowlevelrobustlock.h
+>> > +In file included from /builds/clumsyape/buildroot/output/build/linux-headers-5.10.7/usr/include/asm/sockios.h:5,
+>> > +                 from /builds/clumsyape/buildroot/output/build/linux-headers-5.10.7/usr/include/asm-generic/socket.h:6,
+>> > +                 from /builds/clumsyape/buildroot/output/build/linux-headers-5.10.7/usr/include/asm/socket.h:1,
+>> > +                 from ./include/bits/socket.h:360,
+>> > +                 from ./include/sys/socket.h:39,
+>> > +                 from ./include/netinet/in.h:24,
+>> > +                 from ./include/resolv.h:57,
+>> > +                 from ./libpthread/nptl/descr.h:36,
+>> > +                 from ./libpthread/nptl/pthreadP.h:25,
+>> > +                 from <stdin>:2:
+>> > +/builds/clumsyape/buildroot/output/build/linux-headers-5.10.7/usr/include/linux/time_types.h:8:2: error: unknown type name '__kernel_time64_t'
+>> > +    8 |  __kernel_time64_t       tv_sec;                 /* seconds */
+>> > +      |  ^~~~~~~~~~~~~~~~~
+>> > +/builds/clumsyape/buildroot/output/build/linux-headers-5.10.7/usr/include/linux/time_types.h:32:2: error: unknown type name '__kernel_old_time_t'
+>> > +   32 |  __kernel_old_time_t tv_sec;  /* seconds */
+>> > +      |  ^~~~~~~~~~~~~~~~~~~
+>> > +libpthread/nptl/sysdeps/unix/sysv/linux/Makefile.commonarch:135: recipe for target 'libpthread/nptl/sysdeps/unix/sysv/linux/lowlevelrobustlock.h' failed
+>> > +make[1]: *** [libpthread/nptl/sysdeps/unix/sysv/linux/lowlevelrobustlock.h] Error 1
+>> > +make[1]: Leaving directory '/builds/clumsyape/buildroot/output/build/uclibc-1.0.37'
+>> > +
+>> > +I did a quick header dependency analysis starting from __kernel_time64_t
+>> > +(one of the offending types), but could "follow up" to linux/time_types.h
+>> > +as expected; so I fail to understand how this could break. What's even
+>> > +more confusing is linux/time_types.h includes linux/types.h itself.
+>> > +---
+>> > + arch/sh/include/uapi/asm/sockios.h | 2 +-
+>> > + 1 file changed, 1 insertion(+), 1 deletion(-)
+>> > +
+>> > +diff --git a/arch/sh/include/uapi/asm/sockios.h b/arch/sh/include/uapi/asm/sockios.h
+>> > +index ef01ced9e169..d97d14685305 100644
+>> > +--- a/arch/sh/include/uapi/asm/sockios.h
+>> > ++++ b/arch/sh/include/uapi/asm/sockios.h
+>> > +@@ -2,7 +2,7 @@
+>> > + #ifndef __ASM_SH_SOCKIOS_H
+>> > + #define __ASM_SH_SOCKIOS_H
+>> > +
+>> > +-#include <linux/time_types.h>
+>> > ++#include <linux/types.h>
+>> > +
+>> > + /* Socket-level I/O control calls. */
+>> > + #define FIOGETOWN     _IOR('f', 123, int)
+>> > +--
+>> > +2.17.1
+>> > +
