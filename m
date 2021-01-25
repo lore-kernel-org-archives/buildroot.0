@@ -1,47 +1,36 @@
-From: Matthew Weber <matthew.weber@collins.com>
-Date: Mon, 25 Jan 2021 15:22:39 -0600
-Subject: [Buildroot] [PATCH 2/2] package/uboot-tools: env/script
- generation need BINARIES_DIR
-In-Reply-To: <20210125221651.10112779@windsurf.home>
-References: <20210125145742.42460-1-matthew.weber@rockwellcollins.com>
- <20210125145742.42460-2-matthew.weber@rockwellcollins.com>
- <20210125221651.10112779@windsurf.home>
-Message-ID: <CANQCQpZvXB_w=VjTrPM45CYcCtxmvCZB7thxB8v=E6yNaWdw2A@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 25 Jan 2021 22:23:02 +0100
+Subject: [Buildroot] [git commit] package/mpd: create directories used in
+ mpd.conf
+Message-ID: <20210125210322.12C2D836B2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas/Yann,
+commit: https://git.buildroot.net/buildroot/commit/?id=d0031c5621e302c659bec13dfcc62b55ac288462
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Fixes:
+ - https://bugs.buildroot.org/show_bug.cgi?id=13471
 
-On Mon, Jan 25, 2021 at 3:18 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> On Mon, 25 Jan 2021 08:57:42 -0600
-> Matt Weber <matthew.weber@rockwellcollins.com> wrote:
->
-> > From: Kalpesh Panchal <kalpesh.panchal@rockwellcollins.com>
-> >
-> > The host build of uboot-tools can occur early in the build process and may
-> > require the creation of BINARIES_DIR before generation of an enabled envimage
-> > and/or boot script binary.
-> >
-> > Signed-off-by: Kalpesh Panchal <kalpesh.panchal@rockwellcollins.com>
-> > Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
->
-> Hum, while this works, I'm in fact not too happy with the proposed
-> solution. I would prefer that we move the mkenvimage/$(MKIMAGE)
-> invocations to a BUILD_CMDS step, that produces its results in $(@D),
-> and then INSTALL_CMDS does a $(INSTALL) ... of that file, which with
-> the -D option would create $(BINARIES_DIR).
->
-> I know it's a bit bike-shedding, but it feels a little bit better. What
-> do you think ?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/mpd/mpd.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-I've added Yann to the discussion as he suggested the mkdir :-)
-
-Whatever is better to maintain.
-
--Matt
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index 6e8a3f36da..baabb6ff38 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -333,6 +333,8 @@ endif
+ 
+ define MPD_INSTALL_EXTRA_FILES
+ 	$(INSTALL) -m 0644 -D package/mpd/mpd.conf $(TARGET_DIR)/etc/mpd.conf
++	mkdir -p $(TARGET_DIR)/var/lib/mpd/music
++	mkdir -p $(TARGET_DIR)/var/lib/mpd/playlists
+ endef
+ 
+ MPD_POST_INSTALL_TARGET_HOOKS += MPD_INSTALL_EXTRA_FILES
