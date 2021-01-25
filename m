@@ -1,40 +1,63 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 25 Jan 2021 08:51:31 +0100
-Subject: [Buildroot] [PATCH 1/1] configs/bananapi_m1_plus_defconfig: new
- defconfig
-In-Reply-To: <4f49c391-6275-cf49-6751-921f7484aa99@gmail.com>
-References: <20210120172815.3395049-1-fskoneczny@gmail.com>
- <20210123214036.720c3a3f@windsurf.home>
- <4f49c391-6275-cf49-6751-921f7484aa99@gmail.com>
-Message-ID: <20210125085131.3829173f@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 25 Jan 2021 09:11:30 +0100
+Subject: [Buildroot] [PATCH] configs/orangepi_r1_defconfig: change to GPT
+ partitions for root=PARTLABEL support
+Message-ID: <20210125081131.9875-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Filip,
+GPT provides partition labels, which can be used to tell the kernel to find
+the rootfs based on it (root=PARTLABEL=rootfs) as a nicer/more extensible
+solution than the MBR disk signature / PARTUUID.
 
-On Sun, 24 Jan 2021 18:50:45 +0100
-Filip <fskoneczny@gmail.com> wrote:
+The default GPT partition table location unfortunately conflicts with the
+SPL location, so move the 16KB GPT table after it.
 
-> >> +BR2_TARGET_GENERIC_HOSTNAME="bananapi"
-> >> +BR2_TARGET_GENERIC_ISSUE="Welcome to Banana Pi!"
-> >> +BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y  
-> > 
-> > Is this needed for automatic loading of modules ?  
-> 
-> Yes, it was loading brcmfmac automatically, I'm not sure though if this is desired in defconfig.
-> After comparing to other configs I decided to remove it and add "modprobe brcmfmac" to readme.txt in proper section instead.
-> Let me know if it's OK, or better to leave it to load automatically or something else.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ board/orangepi/orangepi-r1/boot.cmd     | 2 +-
+ board/orangepi/orangepi-r1/genimage.cfg | 8 +++++---
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-I'd say let's keep mdev then, it's nice if the module gets loaded
-automatically.
-
-Thanks!
-
-Thomas
+diff --git a/board/orangepi/orangepi-r1/boot.cmd b/board/orangepi/orangepi-r1/boot.cmd
+index e62e31a3e4..50745f7e5e 100644
+--- a/board/orangepi/orangepi-r1/boot.cmd
++++ b/board/orangepi/orangepi-r1/boot.cmd
+@@ -1,6 +1,6 @@
+ setenv fdt_high ffffffff
+ 
+-setenv bootargs console=ttyS0,115200 earlyprintk root=PARTUUID=feedc0de-02 rootwait
++setenv bootargs console=ttyS0,115200 earlyprintk root=PARTLABEL=rootfs rootwait
+ 
+ fatload mmc 0 $kernel_addr_r zImage
+ fatload mmc 0 $fdt_addr_r sun8i-h2-plus-orangepi-r1.dtb
+diff --git a/board/orangepi/orangepi-r1/genimage.cfg b/board/orangepi/orangepi-r1/genimage.cfg
+index 3496383573..0f44b368f0 100644
+--- a/board/orangepi/orangepi-r1/genimage.cfg
++++ b/board/orangepi/orangepi-r1/genimage.cfg
+@@ -13,15 +13,17 @@ image boot.vfat {
+ 
+ image sdcard.img {
+ 	hdimage {
+-		# for root=PARTUUID=feedc0de-02 support
+-		disk-signature = 0xfeedc0de
++		# for root=PARTLABEL support
++		gpt = true
++		# default GPT location conflicts with spl, move it after
++		gpt-location = 1M
+ 	}
+ 
+ 	partition u-boot {
+ 		in-partition-table = "no"
+ 		image = "u-boot-sunxi-with-spl.bin"
+ 		offset = 8192
+-		size = 1040384 # 1MB - 8192
++		size = 1056768 # 1MB - 8192 + 16384 (GPT)
+ 	}
+ 
+ 	partition boot {
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
