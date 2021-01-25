@@ -1,50 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 25 Jan 2021 14:00:26 +0100
-Subject: [Buildroot] [PATCH] configs/orangepi_r1_defconfig: bump kernel
- to 5.10.10, u-boot to 2020.10
-In-Reply-To: <20210124224504.GM2325@scaer> (Yann E. MORIN's message of "Sun,
- 24 Jan 2021 23:45:04 +0100")
-References: <20210124214226.29305-1-peter@korsgaard.com>
- <20210124224504.GM2325@scaer>
-Message-ID: <87bldd6uj9.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 25 Jan 2021 15:05:24 +0100
+Subject: [Buildroot] No rule to make target 'host-python !!
+In-Reply-To: <CAGshWo2+Zq9DutPd27rbJbgs+5X=VrK-3_Wo72GXwc57QmyGpA@mail.gmail.com>
+References: <CAGshWo02DNPmGa_Nj7aBjf5TrQgVz2ePTP8EkABRfGFSYBsU0A@mail.gmail.com>
+ <CAGshWo1eWoWDUd_0jD8xQbpZg7dGzOzhwNeNmhrc5ewh9z6TSQ@mail.gmail.com>
+ <20210123114813.0f7048c2@windsurf.home>
+ <CAGshWo2ngucacs+BJocUb36G4QX7Q7ssv2_M0R9kAiV+oick1Q@mail.gmail.com>
+ <20210124161440.52c2d7d6@gmx.net>
+ <CAGshWo31-JML-C6D+T+Bbp8QrsWKZhE2r4-N8HaOAp6z4rkhtQ@mail.gmail.com>
+ <20210124173940.29212b62@gmx.net>
+ <CAGshWo2TRnTguBc3inO23idP2kMjnXzXeBaOsx=s_jWmh3ddhg@mail.gmail.com>
+ <20210124225357.12a7e17e@gmx.net>
+ <CAGshWo3WX8zmkfbCFTW-D+Q=LAYHm52W_qFOSQE+jw-NQsdEcA@mail.gmail.com>
+ <CAGshWo2+Zq9DutPd27rbJbgs+5X=VrK-3_Wo72GXwc57QmyGpA@mail.gmail.com>
+Message-ID: <20210125150524.2e40fd93@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Hello,
 
- > Peter, All,
- > On 2021-01-24 22:42 +0100, Peter Korsgaard spake thusly:
- >> The probing order of the two mmc controllers (sdcard and sdio wifi) has
- >> changed in kernel 5.10 since commit 21b2cec61c04bd1 (mmc: Set
- >> PROBE_PREFER_ASYNCHRONOUS for drivers that existed in v4.4), so change to
- >> root=PARTUUID=.. instead of hardcoding /dev/mmcblkXp2.
- >> 
- >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
- >> ---
- >> board/orangepi/orangepi-r1/boot.cmd     | 2 +-
- >> board/orangepi/orangepi-r1/genimage.cfg | 2 ++
- >> configs/orangepi_r1_defconfig           | 7 ++++---
- >> 3 files changed, 7 insertions(+), 4 deletions(-)
- >> 
- >> diff --git a/board/orangepi/orangepi-r1/boot.cmd b/board/orangepi/orangepi-r1/boot.cmd
- >> index e927b01e82..2e3a4bb679 100644
- >> --- a/board/orangepi/orangepi-r1/boot.cmd
- >> +++ b/board/orangepi/orangepi-r1/boot.cmd
- >> @@ -1,6 +1,6 @@
- >> setenv fdt_high ffffffff
- >> 
- >> -setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
- >> +setenv bootargs console=ttyS0,115200 earlyprintk root=PARTUUID=deadbeef-02 rootwait
+On Mon, 25 Jan 2021 13:40:13 +0100
+manu f <e.fiancette@gmail.com> wrote:
 
- > I found deadbeef to be too depressive... I switched it to a better
- > suited magic: feedc0de (after all, the rootfs will feed code to run).
+> Well, I remove my python37 package, delete my output directory, select
+> python3 package from buildroot and host python3 in host utilities  from
+> buildroot and ...
 
-Fine my me. Thinking about it a bit more, a nicer solution would be to
-move to GPT partitions and use root=PARTLABEL=rootfs instead of this
-somewhat obscure disk signature. I'll send a patch.
+Please stop using your custom BR2_EXTERNAL for the moment, and use plain
+Buildroot, and verify there if this works.
 
+If it does, then the problem is in your BR2_EXTERNAL tree. We cannot
+debug problems that are caused by your custom BR2_EXTERNAL, in which
+you're doing things that are very tricky and/or apparently unnecessary.
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
