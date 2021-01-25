@@ -1,281 +1,231 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 25 Jan 2021 20:49:46 +0100
+Date: Mon, 25 Jan 2021 20:49:47 +0100
 Subject: [Buildroot] [PATCH v3,
- 3/6] package/igd2-for-linux: security bump to version 2.0
+ 4/6] package/gmrender-resurrect: add libupnp 1.14.x support
 In-Reply-To: <20210125194949.1173139-1-fontaine.fabrice@gmail.com>
 References: <20210125194949.1173139-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210125194949.1173139-3-fontaine.fabrice@gmail.com>
+Message-ID: <20210125194949.1173139-4-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Move site to Orange-OpenSource
-- Drop patch (already in version)
-- This version is compatible with libupnp 1.14.x to fix
-  CallStranger a.k.a. CVE-2020-12695
-- Add threadutil license (BSD-3-Clause)
-- Update hash in license file (two spaces)
+Using libupnp 1.14.x is needed to fix CallStranger a.k.a. CVE-2020-12695
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- .../0001-fix-build-with-gcc-10.patch          | 199 ------------------
- package/igd2-for-linux/Config.in              |   2 +-
- package/igd2-for-linux/igd2-for-linux.hash    |   5 +-
- package/igd2-for-linux/igd2-for-linux.mk      |   9 +-
- 4 files changed, 9 insertions(+), 206 deletions(-)
- delete mode 100644 package/igd2-for-linux/0001-fix-build-with-gcc-10.patch
+ .../0001-Drop-UpnpInit.patch                  | 175 ++++++++++++++++++
+ package/gmrender-resurrect/Config.in          |   2 +-
+ .../gmrender-resurrect/gmrender-resurrect.mk  |   2 +-
+ 3 files changed, 177 insertions(+), 2 deletions(-)
+ create mode 100644 package/gmrender-resurrect/0001-Drop-UpnpInit.patch
 
-diff --git a/package/igd2-for-linux/0001-fix-build-with-gcc-10.patch b/package/igd2-for-linux/0001-fix-build-with-gcc-10.patch
-deleted file mode 100644
-index 32474a3adb..0000000000
---- a/package/igd2-for-linux/0001-fix-build-with-gcc-10.patch
-+++ /dev/null
-@@ -1,199 +0,0 @@
--From 23ed73623810a0894c8efd9eb79dd38483794a3b Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fabrice.fontaine@orange.com>
--Date: Thu, 20 Aug 2020 18:17:03 +0200
--Subject: [PATCH] fix build with gcc 10
--
--This will fix build failures with -fno-common which is enabled by
--default with gcc 10
--
--Fixes:
-- - http://autobuild.buildroot.org/results/f296984c3851fc28341210e36ef1b55b2edac209
--
--Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
--[Retrieved from:
--https://github.com/Orange-OpenSource/igd2-for-linux/commit/23ed73623810a0894c8efd9eb79dd38483794a3b]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- linuxigd2/src/gatedevice.c | 37 +++++++++++++++++++++++++++++++++
-- linuxigd2/src/gatedevice.h | 42 +++++++++-----------------------------
-- linuxigd2/src/pinholev6.c  |  2 ++
-- linuxigd2/src/pinholev6.h  |  2 +-
-- linuxigd2/src/pmlist.c     |  5 +++++
-- linuxigd2/src/pmlist.h     |  2 +-
-- linuxigd2/src/wanipv6fw.h  |  3 ---
-- 7 files changed, 56 insertions(+), 37 deletions(-)
--
--diff --git a/linuxigd2/src/gatedevice.c b/linuxigd2/src/gatedevice.c
--index 8be53e5..a50525d 100644
----- a/linuxigd2/src/gatedevice.c
--+++ b/linuxigd2/src/gatedevice.c
--@@ -41,6 +41,43 @@
-- #include "wanipv6fw.h"
-- #include "config.h"
-- 
--+// Thread which contains all kind of timers and threads used in gatedevice.c and deviceprotection.c
--+TimerThread gExpirationTimerThread;
--+
--+// IGD Device Globals
--+UpnpDevice_Handle deviceHandle;
--+UpnpDevice_Handle deviceHandleIPv6;
--+UpnpDevice_Handle deviceHandleIPv6UlaGua;
--+char *gateUDN;
--+char *wanUDN;
--+char *wanConnectionUDN;
--+char *lanUDN;
--+long int startup_time;
--+unsigned long connection_stats[STATS_LIMIT]; // this is used for defining if connection is in idling
--+long int idle_time;
--+
--+// State Variables
--+char ConnectionType[50];
--+char PossibleConnectionTypes[50];
--+char ConnectionStatus[20];
--+char LastConnectionError[35];
--+long int AutoDisconnectTime;
--+long int IdleDisconnectTime;
--+long int WarnDisconnectDelay;
--+int RSIPAvailable;
--+int NATEnabled;
--+char ExternalIPAddress[INET6_ADDRSTRLEN];
--+int PortMappingNumberOfEntries;
--+int PortMappingEnabled;
--+char RemoteHost[INET6_ADDRSTRLEN];    // updated IPv6 addrss length 16 -> 46
--+long int SystemUpdateID;
--+
--+// WANEthLinkConfig state variables
--+char EthernetLinkStatus[12];
--+
--+char FirewallEnabled[2];
--+char InboundPinholeAllowed[2];
--+
-- //Definitions for mapping expiration timer thread
-- static ThreadPool gExpirationThreadPool;
-- static ThreadPoolJob gEventUpdateJob;
--diff --git a/linuxigd2/src/gatedevice.h b/linuxigd2/src/gatedevice.h
--index 28d6b21..dbaa0c2 100644
----- a/linuxigd2/src/gatedevice.h
--+++ b/linuxigd2/src/gatedevice.h
--@@ -33,42 +33,20 @@
-- #include "util.h"
-- 
-- // Thread which contains all kind of timers and threads used in gatedevice.c and deviceprotection.c
---TimerThread gExpirationTimerThread;
--+extern TimerThread gExpirationTimerThread;
-- 
-- // IGD Device Globals
---UpnpDevice_Handle deviceHandle;
---UpnpDevice_Handle deviceHandleIPv6;
---UpnpDevice_Handle deviceHandleIPv6UlaGua;
---char *gateUDN;
---char *wanUDN;
---char *wanConnectionUDN;
---char *lanUDN;
---long int startup_time;
---unsigned long connection_stats[STATS_LIMIT]; // this is used for defining if connection is in idling
---long int idle_time;
---
---// State Variables
---char ConnectionType[50];
---char PossibleConnectionTypes[50];
---char ConnectionStatus[20];
---char LastConnectionError[35];
---long int AutoDisconnectTime;
---long int IdleDisconnectTime;
---long int WarnDisconnectDelay;
---int RSIPAvailable;
---int NATEnabled;
---char ExternalIPAddress[INET6_ADDRSTRLEN];
---int PortMappingNumberOfEntries;
---int PortMappingEnabled;
---char RemoteHost[INET6_ADDRSTRLEN];    // updated IPv6 addrss length 16 -> 46
---long int SystemUpdateID;
---
---// WANEthLinkConfig state variables
---char EthernetLinkStatus[12];
--+extern UpnpDevice_Handle deviceHandle;
--+extern UpnpDevice_Handle deviceHandleIPv6;
--+extern UpnpDevice_Handle deviceHandleIPv6UlaGua;
--+extern char *gateUDN;
--+extern char *wanUDN;
--+extern char *wanConnectionUDN;
--+extern char *lanUDN;
-- 
-- // Linked list for portmapping entries
---struct portMap *pmlist_Head;
---struct portMap *pmlist_Current;
--+extern struct portMap *pmlist_Head;
--+extern struct portMap *pmlist_Current;
-- 
-- // WanIPConnection Actions
-- int EventHandler(Upnp_EventType EventType, void *Event, void *Cookie);
--diff --git a/linuxigd2/src/pinholev6.c b/linuxigd2/src/pinholev6.c
--index 44e8a19..78f886d 100644
----- a/linuxigd2/src/pinholev6.c
--+++ b/linuxigd2/src/pinholev6.c
--@@ -41,6 +41,8 @@ extern "C" {
-- #include "gatedevice.h"
-- #include "pinholev6.h"
-- 
--+struct pinholev6 *ph_first;
--+
-- static const char * add_rule_str = "ip6tables -I %s " //upnp forward chain
--         "-i %s "        //input interface
--         "-o %s "        //output interface
--diff --git a/linuxigd2/src/pinholev6.h b/linuxigd2/src/pinholev6.h
--index 295b9f9..353ae27 100644
----- a/linuxigd2/src/pinholev6.h
--+++ b/linuxigd2/src/pinholev6.h
--@@ -37,7 +37,7 @@ struct pinholev6 {
-- 
--     struct pinholev6 *next;
-- 
---} *ph_first;
--+};
-- 
-- struct phv6_expirationEvent
-- {
--diff --git a/linuxigd2/src/pmlist.c b/linuxigd2/src/pmlist.c
--index 1b3fe05..95d0c61 100644
----- a/linuxigd2/src/pmlist.c
--+++ b/linuxigd2/src/pmlist.c
--@@ -41,6 +41,11 @@
-- #include "iptc.h"
-- #endif
-- 
--+// Linked list for portmapping entries
--+struct portMap *pmlist_Head;
--+struct portMap *pmlist_Current;
--+struct portMap *pmlist_Tail;
--+
-- /**
--  * Create new portMap struct of rule to add iptables. 
--  * portMap-struct is internal presentation of iptables rule in IGD. 
--diff --git a/linuxigd2/src/pmlist.h b/linuxigd2/src/pmlist.h
--index 436d228..017500d 100644
----- a/linuxigd2/src/pmlist.h
--+++ b/linuxigd2/src/pmlist.h
--@@ -57,7 +57,7 @@ struct portMap
-- 
--     struct portMap* next;
--     struct portMap* prev;
---} *pmlist_Head, *pmlist_Tail, *pmlist_Current;
--+};
-- 
-- //struct portMap* pmlist_NewNode(void);
-- struct portMap* pmlist_NewNode(int enabled, long int duration, char *remoteHost,
--diff --git a/linuxigd2/src/wanipv6fw.h b/linuxigd2/src/wanipv6fw.h
--index 55419fe..a50d267 100644
----- a/linuxigd2/src/wanipv6fw.h
--+++ b/linuxigd2/src/wanipv6fw.h
--@@ -46,9 +46,6 @@ extern "C" {
-- #define ERR_SRC_ADD_WILDCARD        708
-- #define ERR_NO_TRAFFIC              709
-- 
---char FirewallEnabled[2];
---char InboundPinholeAllowed[2];
---
-- //-----------------------------------------------------------------------------
-- 
-- int InitFirewallv6(void);
-diff --git a/package/igd2-for-linux/Config.in b/package/igd2-for-linux/Config.in
-index 157cc6f30b..f1658d3aa6 100644
---- a/package/igd2-for-linux/Config.in
-+++ b/package/igd2-for-linux/Config.in
-@@ -18,7 +18,7 @@ config BR2_PACKAGE_IGD2_FOR_LINUX
+diff --git a/package/gmrender-resurrect/0001-Drop-UpnpInit.patch b/package/gmrender-resurrect/0001-Drop-UpnpInit.patch
+new file mode 100644
+index 0000000000..18ec7bb515
+--- /dev/null
++++ b/package/gmrender-resurrect/0001-Drop-UpnpInit.patch
+@@ -0,0 +1,175 @@
++From dc8c4d4dc234311b3099e7f1efadf5d9733c81e9 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 21 Aug 2020 21:29:00 +0200
++Subject: [PATCH] Drop UpnpInit
++
++UpnpInit has been dropped from libupnp 1.14.x as it can't be fixed
++against CallStranger a.k.a. CVE-2020-12695 so replace it by UpnpInit2
++which is available since version 1.6.7 and
++https://github.com/pupnp/pupnp/commit/2bcbdffd89a70364147d345ec5e70a3fce5cbc29
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status:
++https://github.com/hzeller/gmrender-resurrect/pull/214]
++---
++ dist-scripts/centos7/README.md     |  2 +-
++ dist-scripts/debian/gmediarender.1 |  8 ++------
++ dist-scripts/fedora/README.md      |  2 +-
++ src/main.c                         | 13 ++++---------
++ src/upnp_device.c                  | 18 +++++++++---------
++ src/upnp_device.h                  |  2 +-
++ 6 files changed, 18 insertions(+), 27 deletions(-)
++
++diff --git a/dist-scripts/centos7/README.md b/dist-scripts/centos7/README.md
++index 278d777..ed82fb6 100644
++--- a/dist-scripts/centos7/README.md
+++++ b/dist-scripts/centos7/README.md
++@@ -45,7 +45,7 @@ Additional configuration is also recommended, sice there's no configuration file
++     # vi /etc/systemd/system/gmediarender.service.d/customize.conf   # or nano, or emacs, or whatever editor you like
++     [Service]
++     ExecStart=
++-    ExecStart=/usr/bin/gmediarender --port=49494 --ip-address=<your_IP_address> -f "DLNA Renderer GMediaRender"
+++    ExecStart=/usr/bin/gmediarender --port=49494 --interface-name=<your_interface_name> -f "DLNA Renderer GMediaRender"
++ 
++     # systemctl daemon-reload
++     # systemctl start gmediarender.service
++diff --git a/dist-scripts/debian/gmediarender.1 b/dist-scripts/debian/gmediarender.1
++index 96123ff..b2b1359 100644
++--- a/dist-scripts/debian/gmediarender.1
+++++ b/dist-scripts/debian/gmediarender.1
++@@ -50,12 +50,8 @@ Usually, it is desirable for the renderer
++ to show up on controllers under a recognisable and unique name. This is 
++ the option to set that name.
++ .TP
++-.B \-I, \-\-ip\-address \fI\<ip-address\>\fP
++-The local IP address the service is running and advertised on.  
++-
++-This can 
++-only be a single address, and must be explicitly specified (i.e. not 
++-0.0.0.0).
+++.B \-I, \-\-interface\-name \fI\<interface-name\>\fP
+++The local interface name the service is running and advertised on.
++ .TP
++ .B \-p, \-\-port \fI\<port>\fP
++ Port to listen to. [49152..65535].
++diff --git a/dist-scripts/fedora/README.md b/dist-scripts/fedora/README.md
++index 7b9ea4b..45aa536 100644
++--- a/dist-scripts/fedora/README.md
+++++ b/dist-scripts/fedora/README.md
++@@ -43,7 +43,7 @@ Additional configuration is also recommended, sice there's no configuration file
++     # vi /etc/systemd/system/gmediarender.service.d/customize.conf   # or nano, or emacs, or whatever editor you like
++     [Service]
++     ExecStart=
++-    ExecStart=/usr/bin/gmediarender --port=49494 --ip-address=<your_IP_address> -f "DLNA Renderer GMediaRender"
+++    ExecStart=/usr/bin/gmediarender --port=49494 --interface-name=<your_interface_name> -f "DLNA Renderer GMediaRender"
++ 
++     # systemctl daemon-reload
++     # systemctl start gmediarender.service
++diff --git a/src/main.c b/src/main.c
++index ef720e3..2030c49 100644
++--- a/src/main.c
+++++ b/src/main.c
++@@ -69,11 +69,7 @@ static gboolean show_transport_scpd = FALSE;
++ static gboolean show_outputs = FALSE;
++ static gboolean daemon_mode = FALSE;
++ 
++-// IP-address seems strange in libupnp: they actually don't bind to
++-// that address, but to INADDR_ANY (miniserver.c in upnp library).
++-// Apparently they just use this for the advertisement ? Anyway, 0.0.0.0 would
++-// not work.
++-static const gchar *ip_address = NULL;
+++static const gchar *interface_name = NULL;
++ static int listen_port = 49494;
++ 
++ #ifdef GMRENDER_UUID
++@@ -92,9 +88,8 @@ static const gchar *mime_filter = NULL;
++ static GOptionEntry option_entries[] = {
++ 	{ "version", 0, 0, G_OPTION_ARG_NONE, &show_version,
++ 	  "Output version information and exit", NULL },
++-	{ "ip-address", 'I', 0, G_OPTION_ARG_STRING, &ip_address,
++-	  "The local IP address the service is running and advertised "
++-	  "(only one, 0.0.0.0 won't work)", NULL },
+++	{ "interface-name", 'I', 0, G_OPTION_ARG_STRING, &interface_name,
+++	  "The local interface name the service is running and advertised", NULL },
++ 	// The following is not very reliable, as libupnp does not set
++ 	// SO_REUSEADDR by default, so it might increment (sending patch).
++ 	{ "port", 'p', 0, G_OPTION_ARG_INT, &listen_port,
++@@ -302,7 +297,7 @@ int main(int argc, char **argv)
++ 			  listen_port);
++ 		return EXIT_FAILURE;
++ 	}
++-	device = upnp_device_init(upnp_renderer, ip_address, listen_port);
+++	device = upnp_device_init(upnp_renderer, interface_name, listen_port);
++ 	if (device == NULL) {
++ 		Log_error("main", "ERROR: Failed to initialize UPnP device");
++ 		return EXIT_FAILURE;
++diff --git a/src/upnp_device.c b/src/upnp_device.c
++index db65e4f..3151238 100644
++--- a/src/upnp_device.c
+++++ b/src/upnp_device.c
++@@ -416,13 +416,13 @@ static UPNP_CALLBACK(event_handler, EventType, event, userdata)
++ 
++ static gboolean initialize_device(struct upnp_device_descriptor *device_def,
++ 				  struct upnp_device *result_device,
++-				  const char *ip_address,
+++				  const char *interface_name,
++ 				  unsigned short port)
++ {
++ 	int rc;
++ 	char *buf;
++ 
++-	rc = UpnpInit(ip_address, port);
+++	rc = UpnpInit2(interface_name, port);
++ 	/* There have been situations reported in which UPNP had issues
++ 	 * initializing right after network came up. #129
++ 	 */
++@@ -430,13 +430,13 @@ static gboolean initialize_device(struct upnp_device_descriptor *device_def,
++ 	static const int kRetryTimeMs = 1000;
++ 	while (rc != UPNP_E_SUCCESS && retries_left--) {
++ 		usleep(kRetryTimeMs * 1000);
++-		Log_error("upnp", "UpnpInit(ip=%s, port=%d) Error: %s (%d). Retrying... (%ds)",
++-			  ip_address, port, UpnpGetErrorMessage(rc), rc, retries_left);
++-		rc = UpnpInit(ip_address, port);
+++		Log_error("upnp", "UpnpInit2(interface=%s, port=%d) Error: %s (%d). Retrying... (%ds)",
+++			  interface_name, port, UpnpGetErrorMessage(rc), rc, retries_left);
+++		rc = UpnpInit2(interface_name, port);
++ 	}
++ 	if (UPNP_E_SUCCESS != rc) {
++-		Log_error("upnp", "UpnpInit(ip=%s, port=%d) Error: %s (%d). Giving up.",
++-			  ip_address, port, UpnpGetErrorMessage(rc), rc);
+++		Log_error("upnp", "UpnpInit2(interface=%s, port=%d) Error: %s (%d). Giving up.",
+++			  interface_name, port, UpnpGetErrorMessage(rc), rc);
++ 		return FALSE;
++ 	}
++ 	Log_info("upnp", "Registered IP=%s port=%d\n",
++@@ -483,7 +483,7 @@ static gboolean initialize_device(struct upnp_device_descriptor *device_def,
++ }
++ 
++ struct upnp_device *upnp_device_init(struct upnp_device_descriptor *device_def,
++-				     const char *ip_address,
+++				     const char *interface_name,
++ 				     unsigned short port)
++ {
++ 	int rc;
++@@ -516,7 +516,7 @@ struct upnp_device *upnp_device_init(struct upnp_device_descriptor *device_def,
++ 		webserver_register_buf(srv->scpd_url, buf, "text/xml");
++ 	}
++ 
++-	if (!initialize_device(device_def, result_device, ip_address, port)) {
+++	if (!initialize_device(device_def, result_device, interface_name, port)) {
++ 		UpnpFinish();
++ 		free(result_device);
++ 		return NULL;
++diff --git a/src/upnp_device.h b/src/upnp_device.h
++index 3e635e1..8c8e783 100644
++--- a/src/upnp_device.h
+++++ b/src/upnp_device.h
++@@ -49,7 +49,7 @@ struct upnp_device;
++ struct action_event;
++ 
++ struct upnp_device *upnp_device_init(struct upnp_device_descriptor *device_def,
++-				     const char *ip_address,
+++				     const char *interface_name,
++ 				     unsigned short port);
++ 
++ void upnp_device_shutdown(struct upnp_device *device);
+diff --git a/package/gmrender-resurrect/Config.in b/package/gmrender-resurrect/Config.in
+index e7424e3b22..db655ad7f4 100644
+--- a/package/gmrender-resurrect/Config.in
++++ b/package/gmrender-resurrect/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_GMRENDER_RESURRECT
+ 	depends on BR2_USE_MMU # gstreamer1
+ 	select BR2_PACKAGE_GSTREAMER1
+ 	select BR2_PACKAGE_GST1_PLUGINS_BASE # run-time only
+-	select BR2_PACKAGE_LIBUPNP18 if !BR2_PACKAGE_LIBUPNP
++	select BR2_PACKAGE_LIBUPNP
+ 	help
+ 	  UPnP (DLNA) media renderer based on gstreamer
  
- 	  Please edit /etc/upnpd.conf before using upnpd!
+diff --git a/package/gmrender-resurrect/gmrender-resurrect.mk b/package/gmrender-resurrect/gmrender-resurrect.mk
+index e25be39493..3500ab3760 100644
+--- a/package/gmrender-resurrect/gmrender-resurrect.mk
++++ b/package/gmrender-resurrect/gmrender-resurrect.mk
+@@ -13,6 +13,6 @@ GMRENDER_RESURRECT_LICENSE = GPL-2.0+
+ GMRENDER_RESURRECT_LICENSE_FILES = COPYING
+ GMRENDER_RESURRECT_DEPENDENCIES = \
+ 	gstreamer1 \
+-	$(if $(BR2_PACKAGE_LIBUPNP),libupnp,libupnp18)
++	libupnp
  
--	  https://github.com/ffontaine/igd2-for-linux
-+	  https://github.com/Orange-OpenSource/igd2-for-linux
- 
- comment "igd2-for-linux needs a toolchain w/ threads, wchar"
- 	depends on BR2_USE_MMU
-diff --git a/package/igd2-for-linux/igd2-for-linux.hash b/package/igd2-for-linux/igd2-for-linux.hash
-index ecde4b51c2..fc215727d7 100644
---- a/package/igd2-for-linux/igd2-for-linux.hash
-+++ b/package/igd2-for-linux/igd2-for-linux.hash
-@@ -1,3 +1,4 @@
- # Locally computed:
--sha256	523545a26b0d662e9f6913bec2518df6e70f4d497935d88983d994336a1b0ea9	igd2-for-linux-1.2.tar.gz
--sha256	204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994	linuxigd2/doc/LICENSE
-+sha256  e3fcc7c9da4ad1ca16227b3b1b3712bcfb3f6ec922685eee7ae4a76edfa32bb4  igd2-for-linux-2.0.tar.gz
-+sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  linuxigd2/doc/LICENSE
-+sha256  c8b99423cad48bb44e2cf52a496361404290865eac259a82da6d1e4331ececb3  linuxigd2/src/threadutil/COPYING
-diff --git a/package/igd2-for-linux/igd2-for-linux.mk b/package/igd2-for-linux/igd2-for-linux.mk
-index 478c353997..85119a14b5 100644
---- a/package/igd2-for-linux/igd2-for-linux.mk
-+++ b/package/igd2-for-linux/igd2-for-linux.mk
-@@ -4,11 +4,12 @@
- #
- ################################################################################
- 
--IGD2_FOR_LINUX_VERSION = 1.2
--IGD2_FOR_LINUX_SITE = $(call github,ffontaine,igd2-for-linux,v$(IGD2_FOR_LINUX_VERSION))
-+IGD2_FOR_LINUX_VERSION = 2.0
-+IGD2_FOR_LINUX_SITE = \
-+	$(call github,Orange-OpenSource,igd2-for-linux,v$(IGD2_FOR_LINUX_VERSION))
- 
--IGD2_FOR_LINUX_LICENSE = GPL-2.0
--IGD2_FOR_LINUX_LICENSE_FILES = linuxigd2/doc/LICENSE
-+IGD2_FOR_LINUX_LICENSE = GPL-2.0, BSD-3-Clause
-+IGD2_FOR_LINUX_LICENSE_FILES = linuxigd2/doc/LICENSE linuxigd2/src/threadutil/COPYING
- 
- IGD2_FOR_LINUX_DEPENDENCIES = libupnp
- 
+ $(eval $(autotools-package))
 -- 
 2.29.2
