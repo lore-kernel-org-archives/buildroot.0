@@ -1,231 +1,462 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 25 Jan 2021 20:49:47 +0100
+Date: Mon, 25 Jan 2021 20:49:48 +0100
 Subject: [Buildroot] [PATCH v3,
- 4/6] package/gmrender-resurrect: add libupnp 1.14.x support
+ 5/6] package/ushare: add libupnp 1.14.x support
 In-Reply-To: <20210125194949.1173139-1-fontaine.fabrice@gmail.com>
 References: <20210125194949.1173139-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210125194949.1173139-4-fontaine.fabrice@gmail.com>
+Message-ID: <20210125194949.1173139-5-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Using libupnp 1.14.x is needed to fix CallStranger a.k.a. CVE-2020-12695
+This switch is needed to fix CallStranger a.k.a. CVE-2020-12695
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- .../0001-Drop-UpnpInit.patch                  | 175 ++++++++++++++++++
- package/gmrender-resurrect/Config.in          |   2 +-
- .../gmrender-resurrect/gmrender-resurrect.mk  |   2 +-
- 3 files changed, 177 insertions(+), 2 deletions(-)
- create mode 100644 package/gmrender-resurrect/0001-Drop-UpnpInit.patch
+ .../0004-switch-to-libupnp-1.14.x-API.patch   | 433 ++++++++++++++++++
+ 1 file changed, 433 insertions(+)
+ create mode 100644 package/ushare/0004-switch-to-libupnp-1.14.x-API.patch
 
-diff --git a/package/gmrender-resurrect/0001-Drop-UpnpInit.patch b/package/gmrender-resurrect/0001-Drop-UpnpInit.patch
+diff --git a/package/ushare/0004-switch-to-libupnp-1.14.x-API.patch b/package/ushare/0004-switch-to-libupnp-1.14.x-API.patch
 new file mode 100644
-index 0000000000..18ec7bb515
+index 0000000000..e200bb1926
 --- /dev/null
-+++ b/package/gmrender-resurrect/0001-Drop-UpnpInit.patch
-@@ -0,0 +1,175 @@
-+From dc8c4d4dc234311b3099e7f1efadf5d9733c81e9 Mon Sep 17 00:00:00 2001
++++ b/package/ushare/0004-switch-to-libupnp-1.14.x-API.patch
+@@ -0,0 +1,433 @@
++From 4643b9cb9e6c0331fd663437a7ed8061b9edf971 Mon Sep 17 00:00:00 2001
 +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 21 Aug 2020 21:29:00 +0200
-+Subject: [PATCH] Drop UpnpInit
++Date: Mon, 24 Aug 2020 19:26:03 +0200
++Subject: [PATCH] switch to libupnp 1.14.x API
 +
-+UpnpInit has been dropped from libupnp 1.14.x as it can't be fixed
-+against CallStranger a.k.a. CVE-2020-12695 so replace it by UpnpInit2
-+which is available since version 1.6.7 and
-+https://github.com/pupnp/pupnp/commit/2bcbdffd89a70364147d345ec5e70a3fce5cbc29
++Use the new libupnp 1.14.x API (i.e. UpnpInit2) to allow ushare to be
++protected against CallStranger a.k.a. CVE-2020-12695
 +
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status:
-+https://github.com/hzeller/gmrender-resurrect/pull/214]
++[Retrieved from:
++https://github.com/ddugovic/uShare/commit/4643b9cb9e6c0331fd663437a7ed8061b9edf971]
 +---
-+ dist-scripts/centos7/README.md     |  2 +-
-+ dist-scripts/debian/gmediarender.1 |  8 ++------
-+ dist-scripts/fedora/README.md      |  2 +-
-+ src/main.c                         | 13 ++++---------
-+ src/upnp_device.c                  | 18 +++++++++---------
-+ src/upnp_device.h                  |  2 +-
-+ 6 files changed, 18 insertions(+), 27 deletions(-)
++ configure      |  2 --
++ src/http.c     | 50 +++++++++++++++++++++++++++++++-------------------
++ src/http.h     | 24 ++++++++++++++++++------
++ src/services.c | 28 ++++++++++++++++++----------
++ src/services.h |  6 +++---
++ src/ushare.c   | 36 ++++++++++++++++++------------------
++ src/ushare.h   |  2 +-
++ 7 files changed, 89 insertions(+), 59 deletions(-)
 +
-+diff --git a/dist-scripts/centos7/README.md b/dist-scripts/centos7/README.md
-+index 278d777..ed82fb6 100644
-+--- a/dist-scripts/centos7/README.md
-++++ b/dist-scripts/centos7/README.md
-+@@ -45,7 +45,7 @@ Additional configuration is also recommended, sice there's no configuration file
-+     # vi /etc/systemd/system/gmediarender.service.d/customize.conf   # or nano, or emacs, or whatever editor you like
-+     [Service]
-+     ExecStart=
-+-    ExecStart=/usr/bin/gmediarender --port=49494 --ip-address=<your_IP_address> -f "DLNA Renderer GMediaRender"
-++    ExecStart=/usr/bin/gmediarender --port=49494 --interface-name=<your_interface_name> -f "DLNA Renderer GMediaRender"
++diff --git a/configure b/configure
++index 20a08ed..4a3efe0 100755
++--- a/configure
+++++ b/configure
++@@ -638,8 +638,6 @@ fi
++ echolog "Checking for libixml ..."
++ check_lib upnp/ixml.h ixmlRelaxParser -lixml || die "Error, can't find libixml !"
 + 
-+     # systemctl daemon-reload
-+     # systemctl start gmediarender.service
-+diff --git a/dist-scripts/debian/gmediarender.1 b/dist-scripts/debian/gmediarender.1
-+index 96123ff..b2b1359 100644
-+--- a/dist-scripts/debian/gmediarender.1
-++++ b/dist-scripts/debian/gmediarender.1
-+@@ -50,12 +50,8 @@ Usually, it is desirable for the renderer
-+ to show up on controllers under a recognisable and unique name. This is 
-+ the option to set that name.
-+ .TP
-+-.B \-I, \-\-ip\-address \fI\<ip-address\>\fP
-+-The local IP address the service is running and advertised on.  
-+-
-+-This can 
-+-only be a single address, and must be explicitly specified (i.e. not 
-+-0.0.0.0).
-++.B \-I, \-\-interface\-name \fI\<interface-name\>\fP
-++The local interface name the service is running and advertised on.
-+ .TP
-+ .B \-p, \-\-port \fI\<port>\fP
-+ Port to listen to. [49152..65535].
-+diff --git a/dist-scripts/fedora/README.md b/dist-scripts/fedora/README.md
-+index 7b9ea4b..45aa536 100644
-+--- a/dist-scripts/fedora/README.md
-++++ b/dist-scripts/fedora/README.md
-+@@ -43,7 +43,7 @@ Additional configuration is also recommended, sice there's no configuration file
-+     # vi /etc/systemd/system/gmediarender.service.d/customize.conf   # or nano, or emacs, or whatever editor you like
-+     [Service]
-+     ExecStart=
-+-    ExecStart=/usr/bin/gmediarender --port=49494 --ip-address=<your_IP_address> -f "DLNA Renderer GMediaRender"
-++    ExecStart=/usr/bin/gmediarender --port=49494 --interface-name=<your_interface_name> -f "DLNA Renderer GMediaRender"
++-echolog "Checking for libthreadutil ..."
++-check_lib upnp/ThreadPool.h ThreadPoolAdd "-lthreadutil -lpthread" || die "Error, can't find libthreadutil !"
++ add_extralibs -lpthread
 + 
-+     # systemctl daemon-reload
-+     # systemctl start gmediarender.service
-+diff --git a/src/main.c b/src/main.c
-+index ef720e3..2030c49 100644
-+--- a/src/main.c
-++++ b/src/main.c
-+@@ -69,11 +69,7 @@ static gboolean show_transport_scpd = FALSE;
-+ static gboolean show_outputs = FALSE;
-+ static gboolean daemon_mode = FALSE;
++ libupnp_min_version="1.4.2"
++diff --git a/src/http.c b/src/http.c
++index 8a4e67d..1e5b350 100644
++--- a/src/http.c
+++++ b/src/http.c
++@@ -68,17 +68,19 @@ struct web_file_t {
 + 
-+-// IP-address seems strange in libupnp: they actually don't bind to
-+-// that address, but to INADDR_ANY (miniserver.c in upnp library).
-+-// Apparently they just use this for the advertisement ? Anyway, 0.0.0.0 would
-+-// not work.
-+-static const gchar *ip_address = NULL;
-++static const gchar *interface_name = NULL;
-+ static int listen_port = 49494;
 + 
-+ #ifdef GMRENDER_UUID
-+@@ -92,9 +88,8 @@ static const gchar *mime_filter = NULL;
-+ static GOptionEntry option_entries[] = {
-+ 	{ "version", 0, 0, G_OPTION_ARG_NONE, &show_version,
-+ 	  "Output version information and exit", NULL },
-+-	{ "ip-address", 'I', 0, G_OPTION_ARG_STRING, &ip_address,
-+-	  "The local IP address the service is running and advertised "
-+-	  "(only one, 0.0.0.0 won't work)", NULL },
-++	{ "interface-name", 'I', 0, G_OPTION_ARG_STRING, &interface_name,
-++	  "The local interface name the service is running and advertised", NULL },
-+ 	// The following is not very reliable, as libupnp does not set
-+ 	// SO_REUSEADDR by default, so it might increment (sending patch).
-+ 	{ "port", 'p', 0, G_OPTION_ARG_INT, &listen_port,
-+@@ -302,7 +297,7 @@ int main(int argc, char **argv)
-+ 			  listen_port);
-+ 		return EXIT_FAILURE;
-+ 	}
-+-	device = upnp_device_init(upnp_renderer, ip_address, listen_port);
-++	device = upnp_device_init(upnp_renderer, interface_name, listen_port);
-+ 	if (device == NULL) {
-+ 		Log_error("main", "ERROR: Failed to initialize UPnP device");
-+ 		return EXIT_FAILURE;
-+diff --git a/src/upnp_device.c b/src/upnp_device.c
-+index db65e4f..3151238 100644
-+--- a/src/upnp_device.c
-++++ b/src/upnp_device.c
-+@@ -416,13 +416,13 @@ static UPNP_CALLBACK(event_handler, EventType, event, userdata)
-+ 
-+ static gboolean initialize_device(struct upnp_device_descriptor *device_def,
-+ 				  struct upnp_device *result_device,
-+-				  const char *ip_address,
-++				  const char *interface_name,
-+ 				  unsigned short port)
++ static inline void
++-set_info_file (struct File_Info *info, const size_t length,
+++set_info_file (UpnpFileInfo *info, const size_t length,
++                const char *content_type)
 + {
-+ 	int rc;
-+ 	char *buf;
-+ 
-+-	rc = UpnpInit(ip_address, port);
-++	rc = UpnpInit2(interface_name, port);
-+ 	/* There have been situations reported in which UPNP had issues
-+ 	 * initializing right after network came up. #129
-+ 	 */
-+@@ -430,13 +430,13 @@ static gboolean initialize_device(struct upnp_device_descriptor *device_def,
-+ 	static const int kRetryTimeMs = 1000;
-+ 	while (rc != UPNP_E_SUCCESS && retries_left--) {
-+ 		usleep(kRetryTimeMs * 1000);
-+-		Log_error("upnp", "UpnpInit(ip=%s, port=%d) Error: %s (%d). Retrying... (%ds)",
-+-			  ip_address, port, UpnpGetErrorMessage(rc), rc, retries_left);
-+-		rc = UpnpInit(ip_address, port);
-++		Log_error("upnp", "UpnpInit2(interface=%s, port=%d) Error: %s (%d). Retrying... (%ds)",
-++			  interface_name, port, UpnpGetErrorMessage(rc), rc, retries_left);
-++		rc = UpnpInit2(interface_name, port);
-+ 	}
-+ 	if (UPNP_E_SUCCESS != rc) {
-+-		Log_error("upnp", "UpnpInit(ip=%s, port=%d) Error: %s (%d). Giving up.",
-+-			  ip_address, port, UpnpGetErrorMessage(rc), rc);
-++		Log_error("upnp", "UpnpInit2(interface=%s, port=%d) Error: %s (%d). Giving up.",
-++			  interface_name, port, UpnpGetErrorMessage(rc), rc);
-+ 		return FALSE;
-+ 	}
-+ 	Log_info("upnp", "Registered IP=%s port=%d\n",
-+@@ -483,7 +483,7 @@ static gboolean initialize_device(struct upnp_device_descriptor *device_def,
++-  info->file_length = length;
++-  info->last_modified = 0;
++-  info->is_directory = 0;
++-  info->is_readable = 1;
++-  info->content_type = ixmlCloneDOMString (content_type);
+++  UpnpFileInfo_set_FileLength(info, length);
+++  UpnpFileInfo_set_LastModified(info, 0);
+++  UpnpFileInfo_set_IsDirectory(info, 0);
+++  UpnpFileInfo_set_IsReadable(info, 1);
+++  UpnpFileInfo_set_ContentType(info, ixmlCloneDOMString (content_type));
 + }
 + 
-+ struct upnp_device *upnp_device_init(struct upnp_device_descriptor *device_def,
-+-				     const char *ip_address,
-++				     const char *interface_name,
-+ 				     unsigned short port)
++-int http_get_info (const char *filename, struct File_Info *info)
+++int http_get_info (const char *filename, UpnpFileInfo *info,
+++                   const void* cookie __attribute__((unused)),
+++                   const void** requestCookie __attribute__((unused)))
 + {
-+ 	int rc;
-+@@ -516,7 +516,7 @@ struct upnp_device *upnp_device_init(struct upnp_device_descriptor *device_def,
-+ 		webserver_register_buf(srv->scpd_url, buf, "text/xml");
-+ 	}
++   extern struct ushare_t *ut;
++   struct upnp_entry_t *entry = NULL;
++@@ -143,15 +145,15 @@ int http_get_info (const char *filename, struct File_Info *info)
++   {
++     if (errno != EACCES)
++       return -1;
++-    info->is_readable = 0;
+++    UpnpFileInfo_set_IsReadable(info, 0);
++   }
++   else
++-    info->is_readable = 1;
+++    UpnpFileInfo_set_IsReadable(info, 1);
 + 
-+-	if (!initialize_device(device_def, result_device, ip_address, port)) {
-++	if (!initialize_device(device_def, result_device, interface_name, port)) {
-+ 		UpnpFinish();
-+ 		free(result_device);
-+ 		return NULL;
-+diff --git a/src/upnp_device.h b/src/upnp_device.h
-+index 3e635e1..8c8e783 100644
-+--- a/src/upnp_device.h
-++++ b/src/upnp_device.h
-+@@ -49,7 +49,7 @@ struct upnp_device;
-+ struct action_event;
++   /* file exist and can be read */
++-  info->file_length = st.st_size;
++-  info->last_modified = st.st_mtime;
++-  info->is_directory = S_ISDIR (st.st_mode);
+++  UpnpFileInfo_set_FileLength(info, st.st_size);
+++  UpnpFileInfo_set_LastModified(info, st.st_mtime);
+++  UpnpFileInfo_set_IsDirectory(info, S_ISDIR (st.st_mode));
 + 
-+ struct upnp_device *upnp_device_init(struct upnp_device_descriptor *device_def,
-+-				     const char *ip_address,
-++				     const char *interface_name,
-+ 				     unsigned short port);
++   protocol = 
++ #ifdef HAVE_DLNA
++@@ -172,11 +174,11 @@ int http_get_info (const char *filename, struct File_Info *info)
 + 
-+ void upnp_device_shutdown(struct upnp_device *device);
-diff --git a/package/gmrender-resurrect/Config.in b/package/gmrender-resurrect/Config.in
-index e7424e3b22..db655ad7f4 100644
---- a/package/gmrender-resurrect/Config.in
-+++ b/package/gmrender-resurrect/Config.in
-@@ -5,7 +5,7 @@ config BR2_PACKAGE_GMRENDER_RESURRECT
- 	depends on BR2_USE_MMU # gstreamer1
- 	select BR2_PACKAGE_GSTREAMER1
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE # run-time only
--	select BR2_PACKAGE_LIBUPNP18 if !BR2_PACKAGE_LIBUPNP
-+	select BR2_PACKAGE_LIBUPNP
- 	help
- 	  UPnP (DLNA) media renderer based on gstreamer
- 
-diff --git a/package/gmrender-resurrect/gmrender-resurrect.mk b/package/gmrender-resurrect/gmrender-resurrect.mk
-index e25be39493..3500ab3760 100644
---- a/package/gmrender-resurrect/gmrender-resurrect.mk
-+++ b/package/gmrender-resurrect/gmrender-resurrect.mk
-@@ -13,6 +13,6 @@ GMRENDER_RESURRECT_LICENSE = GPL-2.0+
- GMRENDER_RESURRECT_LICENSE_FILES = COPYING
- GMRENDER_RESURRECT_DEPENDENCIES = \
- 	gstreamer1 \
--	$(if $(BR2_PACKAGE_LIBUPNP),libupnp,libupnp18)
-+	libupnp
- 
- $(eval $(autotools-package))
++   if (content_type)
++   {
++-    info->content_type = ixmlCloneDOMString (content_type);
+++    UpnpFileInfo_set_ContentType(info, ixmlCloneDOMString (content_type));
++     free (content_type);
++   }
++   else
++-    info->content_type = ixmlCloneDOMString ("");
+++    UpnpFileInfo_set_ContentType(info, ixmlCloneDOMString (""));
++ 
++   return 0;
++ }
++@@ -197,7 +199,9 @@ get_file_memory (const char *fullpath, const char *description,
++   return ((UpnpWebFileHandle) file);
++ }
++ 
++-UpnpWebFileHandle http_open (const char *filename, enum UpnpOpenFileMode mode)
+++UpnpWebFileHandle http_open (const char *filename, enum UpnpOpenFileMode mode,
+++                             const void* cookie __attribute__((unused)),
+++                             const void* requestCookie __attribute__((unused)))
++ {
++   extern struct ushare_t *ut;
++   struct upnp_entry_t *entry = NULL;
++@@ -250,7 +254,9 @@ UpnpWebFileHandle http_open (const char *filename, enum UpnpOpenFileMode mode)
++   return ((UpnpWebFileHandle) file);
++ }
++ 
++-int http_read (UpnpWebFileHandle fh, char *buf, size_t buflen)
+++int http_read (UpnpWebFileHandle fh, char *buf, size_t buflen,
+++               const void* cookie __attribute__((unused)),
+++               const void* requestCookie __attribute__((unused)))
++ {
++   struct web_file_t *file = (struct web_file_t *) fh;
++   ssize_t len = -1;
++@@ -285,14 +291,18 @@ int http_read (UpnpWebFileHandle fh, char *buf, size_t buflen)
++ 
++ int http_write (UpnpWebFileHandle fh __attribute__((unused)),
++             char *buf __attribute__((unused)),
++-            size_t buflen __attribute__((unused)))
+++            size_t buflen __attribute__((unused)),
+++            const void* cookie __attribute__((unused)),
+++            const void* requestCookie __attribute__((unused)))
++ {
++   log_verbose ("http write\n");
++ 
++   return 0;
++ }
++ 
++-int http_seek (UpnpWebFileHandle fh, off_t offset, int origin)
+++int http_seek (UpnpWebFileHandle fh, off_t offset, int origin,
+++               const void* cookie __attribute__((unused)),
+++               const void* requestCookie __attribute__((unused)))
++ {
++   struct web_file_t *file = (struct web_file_t *) fh;
++   off_t newpos = -1;
++@@ -366,7 +376,9 @@ int http_seek (UpnpWebFileHandle fh, off_t offset, int origin)
++   return 0;
++ }
++ 
++-int http_close (UpnpWebFileHandle fh)
+++int http_close (UpnpWebFileHandle fh,
+++                const void* cookie __attribute__((unused)),
+++                const void* requestCookie __attribute__((unused)))
++ {
++   struct web_file_t *file = (struct web_file_t *) fh;
++ 
++diff --git a/src/http.h b/src/http.h
++index 32d6bcc..c912a7b 100644
++--- a/src/http.h
+++++ b/src/http.h
++@@ -25,18 +25,30 @@
++ #include <upnp/upnp.h>
++ #include <upnp/upnptools.h>
++ 
++-int http_get_info (const char *filename, struct File_Info *info);
+++int http_get_info (const char *filename, UpnpFileInfo *info,
+++	const void* cookie __attribute__((unused)),
+++	const void** requestCookie __attribute__((unused)));
++ 
++-UpnpWebFileHandle http_open (const char *filename, enum UpnpOpenFileMode mode);
+++UpnpWebFileHandle http_open (const char *filename, enum UpnpOpenFileMode mode,
+++	const void* cookie __attribute__((unused)),
+++	const void* requestCookie __attribute__((unused)));
++ 
++-int http_read (UpnpWebFileHandle fh, char *buf, size_t buflen);
+++int http_read (UpnpWebFileHandle fh, char *buf, size_t buflen,
+++	const void* cookie __attribute__((unused)),
+++	const void* requestCookie __attribute__((unused)));
++ 
++-int http_seek (UpnpWebFileHandle fh, off_t offset, int origin);
+++int http_seek (UpnpWebFileHandle fh, off_t offset, int origin,
+++	const void* cookie __attribute__((unused)),
+++	const void* requestCookie __attribute__((unused)));
++ 
++ int http_write (UpnpWebFileHandle fh __attribute__((unused)),
++ 	char *buf __attribute__((unused)),
++-	size_t buflen __attribute__((unused)));
+++	size_t buflen __attribute__((unused)),
+++	const void* cookie __attribute__((unused)),
+++	const void* requestCookie __attribute__((unused)));
++ 
++-int http_close (UpnpWebFileHandle fh);
+++int http_close (UpnpWebFileHandle fh,
+++ 	const void* cookie __attribute__((unused)),
+++	const void* requestCookie __attribute__((unused)));
++ 
++ #endif /* _HTTP_H_ */
++diff --git a/src/services.c b/src/services.c
++index aec9cf8..287df55 100644
++--- a/src/services.c
+++++ b/src/services.c
++@@ -62,25 +62,28 @@ static struct service_t services[] = {
++ };
++ 
++ bool
++-find_service_action (struct Upnp_Action_Request *request,
+++find_service_action (UpnpActionRequest *request,
++                      struct service_t **service,
++                      struct service_action_t **action)
++ {
++   int c, d;
+++  const char *actionName = NULL;
++ 
++   *service = NULL;
++   *action = NULL;
+++  
+++  actionName = UpnpActionRequest_get_ActionName_cstr(request);
++ 
++-  if (!request || !request->ActionName)
+++  if (!request || !actionName)
++     return false;
++ 
++   for (c = 0; services[c].id != NULL; c++)
++-    if (!strcmp (services[c].id, request->ServiceID))
+++    if (!strcmp (services[c].id, UpnpActionRequest_get_ServiceID_cstr(request)))
++     {
++       *service = &services[c];
++       for (d = 0; services[c].actions[d].name; d++)
++       {
++-        if (!strcmp (services[c].actions[d].name, request->ActionName))
+++        if (!strcmp (services[c].actions[d].name, actionName))
++         {
++           *action = &services[c].actions[d];
++           return true;
++@@ -97,6 +100,7 @@ upnp_add_response (struct action_event_t *event, char *key, const char *value)
++ {
++   char *val;
++   int res;
+++  IXML_Document* actionResult = NULL;
++ 
++   if (!event || !event->status || !key || !value)
++     return false;
++@@ -105,8 +109,9 @@ upnp_add_response (struct action_event_t *event, char *key, const char *value)
++   if (!val)
++     return false;
++ 
++-  res = UpnpAddToActionResponse (&event->request->ActionResult,
++-                                 event->request->ActionName,
+++  actionResult = UpnpActionRequest_get_ActionResult(event->request);
+++  res = UpnpAddToActionResponse (&actionResult,
+++                                 UpnpActionRequest_get_ActionName_cstr(event->request),
++                                  event->service->type, key, val);
++ 
++   if (res != UPNP_E_SUCCESS)
++@@ -120,14 +125,17 @@ upnp_add_response (struct action_event_t *event, char *key, const char *value)
++ }
++ 
++ char *
++-upnp_get_string (struct Upnp_Action_Request *request, const char *key)
+++upnp_get_string (UpnpActionRequest *request, const char *key)
++ {
++   IXML_Node *node = NULL;
+++  IXML_Document *actionRequest = NULL;
++ 
++-  if (!request || !request->ActionRequest || !key)
+++  actionRequest = UpnpActionRequest_get_ActionRequest(request);
+++
+++  if (!request || !actionRequest || !key)
++     return NULL;
++ 
++-  node = (IXML_Node *) request->ActionRequest;
+++  node = (IXML_Node *) actionRequest;
++   if (!node)
++   {
++     log_verbose ("Invalid action request document\n");
++@@ -157,7 +165,7 @@ upnp_get_string (struct Upnp_Action_Request *request, const char *key)
++ }
++ 
++ int
++-upnp_get_ui4 (struct Upnp_Action_Request *request, const char *key)
+++upnp_get_ui4 (UpnpActionRequest *request, const char *key)
++ {
++   char *value;
++   int val;
++diff --git a/src/services.h b/src/services.h
++index 89c072e..d5726b4 100644
++--- a/src/services.h
+++++ b/src/services.h
++@@ -39,15 +39,15 @@ struct service_t {
++ 
++ #define SERVICE_CONTENT_TYPE "text/xml"
++ 
++-bool find_service_action (struct Upnp_Action_Request *request,
+++bool find_service_action (UpnpActionRequest *request,
++                           struct service_t **service,
++                           struct service_action_t **action);
++ 
++ bool upnp_add_response (struct action_event_t *event,
++                         char *key, const char *value);
++ 
++-char * upnp_get_string (struct Upnp_Action_Request *request, const char *key);
+++char * upnp_get_string (UpnpActionRequest *request, const char *key);
++ 
++-int upnp_get_ui4 (struct Upnp_Action_Request *request, const char *key);
+++int upnp_get_ui4 (UpnpActionRequest *request, const char *key);
++ 
++ #endif /* _SERVICES_H_ */
++diff --git a/src/ushare.c b/src/ushare.c
++index 28fd67e..92e2345 100644
++--- a/src/ushare.c
+++++ b/src/ushare.c
++@@ -177,7 +177,7 @@ ushare_signal_exit (void)
++ }
++ 
++ static void
++-handle_action_request (struct Upnp_Action_Request *request)
+++handle_action_request (UpnpActionRequest *request)
++ {
++   struct service_t *service;
++   struct service_action_t *action;
++@@ -187,25 +187,25 @@ handle_action_request (struct Upnp_Action_Request *request)
++   if (!request || !ut)
++     return;
++ 
++-  if (request->ErrCode != UPNP_E_SUCCESS)
+++  if (UpnpActionRequest_get_ErrCode(request) != UPNP_E_SUCCESS)
++     return;
++ 
++-  if (strcmp (request->DevUDN + 5, ut->udn))
+++  if (strcmp (UpnpActionRequest_get_DevUDN_cstr(request) + 5, ut->udn))
++     return;
++ 
++-  ip = (*(struct sockaddr_in *)&request->CtrlPtIPAddr).sin_addr.s_addr;
+++  ip = (*(struct sockaddr_in *)UpnpActionRequest_get_CtrlPtIPAddr(request)).sin_addr.s_addr;
++   ip = ntohl (ip);
++   sprintf (val, "%d.%d.%d.%d",
++            (ip >> 24) & 0xFF, (ip >> 16) & 0xFF, (ip >> 8) & 0xFF, ip & 0xFF);
++ 
++   if (ut->verbose)
++   {
++-    DOMString str = ixmlPrintDocument (request->ActionRequest);
+++    DOMString str = ixmlPrintDocument (UpnpActionRequest_get_ActionRequest(request));
++     log_verbose ("***************************************************\n");
++     log_verbose ("**             New Action Request                **\n");
++     log_verbose ("***************************************************\n");
++-    log_verbose ("ServiceID: %s\n", request->ServiceID);
++-    log_verbose ("ActionName: %s\n", request->ActionName);
+++    log_verbose ("ServiceID: %s\n", UpnpActionRequest_get_ServiceID_cstr(request));
+++    log_verbose ("ActionName: %s\n", UpnpActionRequest_get_ActionName_cstr(request));
++     log_verbose ("CtrlPtIP: %s\n", val);
++     log_verbose ("Action Request:\n%s\n", str);
++     ixmlFreeDOMString (str);
++@@ -220,11 +220,11 @@ handle_action_request (struct Upnp_Action_Request *request)
++       event.service = service;
++ 
++       if (action->function (&event) && event.status)
++-        request->ErrCode = UPNP_E_SUCCESS;
+++        UpnpActionRequest_set_ErrCode(request, UPNP_E_SUCCESS);
++ 
++       if (ut->verbose)
++       {
++-        DOMString str = ixmlPrintDocument (request->ActionResult);
+++        DOMString str = ixmlPrintDocument (UpnpActionRequest_get_ActionResult(request));
++         log_verbose ("Action Result:\n%s", str);
++         log_verbose ("***************************************************\n");
++         log_verbose ("\n");
++@@ -235,22 +235,22 @@ handle_action_request (struct Upnp_Action_Request *request)
++     }
++ 
++   if (service) /* Invalid Action name */
++-    strcpy (request->ErrStr, "Unknown Service Action");
+++    UpnpActionRequest_strcpy_ErrStr(request, "Unknown Service Action");
++   else /* Invalid Service name */
++-    strcpy (request->ErrStr, "Unknown Service ID");
+++    UpnpActionRequest_strcpy_ErrStr(request, "Unknown Service ID");
++ 
++-  request->ActionResult = NULL;
++-  request->ErrCode = UPNP_SOAP_E_INVALID_ACTION;
+++  UpnpActionRequest_set_ActionResult(request, NULL);
+++  UpnpActionRequest_set_ErrCode(request, UPNP_SOAP_E_INVALID_ACTION);
++ }
++ 
++ static int
++-device_callback_event_handler (Upnp_EventType type, void *event,
+++device_callback_event_handler (Upnp_EventType type, const void *event,
++                                void *cookie __attribute__((unused)))
++ {
++   switch (type)
++     {
++     case UPNP_CONTROL_ACTION_REQUEST:
++-      handle_action_request ((struct Upnp_Action_Request *) event);
+++      handle_action_request ((UpnpActionRequest *) event);
++       break;
++     case UPNP_CONTROL_ACTION_COMPLETE:
++     case UPNP_EVENT_SUBSCRIPTION_REQUEST:
++@@ -323,7 +323,7 @@ init_upnp (struct ushare_t *ut)
++ #endif /* HAVE_DLNA */
++ 
++   log_info (_("Initializing UPnP subsystem ...\n"));
++-  res = UpnpInit (ut->ip, ut->port);
+++  res = UpnpInit2 (ut->interface, ut->port);
++   if (res != UPNP_E_SUCCESS)
++   {
++     log_error (_("Cannot initialize UPnP subsystem\n"));
++@@ -351,7 +351,7 @@ init_upnp (struct ushare_t *ut)
++   log_info (_("UPnP MediaServer listening on %s:%d\n"),
++             UpnpGetServerIpAddress (), ut->port);
++ 
++-  UpnpEnableWebserver (TRUE);
+++  UpnpEnableWebserver (1);
++ 
++ #define upnp_set_callback(cb, func) \
++   do {                                                            \
++@@ -371,7 +371,7 @@ init_upnp (struct ushare_t *ut)
++   upnp_set_callback(Write,   http_write);
++   upnp_set_callback(Close,   http_close);
++ 
++-  res = UpnpAddVirtualDir (VIRTUAL_DIR);
+++  res = UpnpAddVirtualDir (VIRTUAL_DIR, NULL, NULL);
++   if (res != UPNP_E_SUCCESS)
++   {
++     log_error (_("Cannot add virtual directory for web server\n"));
++diff --git a/src/ushare.h b/src/ushare.h
++index a29da01..cd86cef 100644
++--- a/src/ushare.h
+++++ b/src/ushare.h
++@@ -125,7 +125,7 @@ struct ushare_t {
++ };
++ 
++ struct action_event_t {
++-  struct Upnp_Action_Request *request;
+++  UpnpActionRequest *request;
++   bool status;
++   struct service_t *service;
++ };
 -- 
 2.29.2
