@@ -1,35 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 25 Jan 2021 21:26:57 +0100
-Subject: [Buildroot] [git commit] package/libcdio: add LIBCDIO_CPE_ID_VENDOR
-Message-ID: <20210125201144.967B983844@busybox.osuosl.org>
+From: scd rjcom <scdrjcom@gmail.com>
+Date: Mon, 25 Jan 2021 12:33:02 -0800
+Subject: [Buildroot] Porting a vendor specific yocto layer to the
+ buildroot
+In-Reply-To: <877do07r4c.fsf@dell.be.48ers.dk>
+References: <1611562430908-0.post@n4.nabble.com>
+ <877do07r4c.fsf@dell.be.48ers.dk>
+Message-ID: <CAGF7ZoZ8MUBbEB=6gXOCCSPNFJcF_Kva=XQducEx_u+O0EeATg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fdce2261f75b697218a6d9f2a43b75ff0909f85f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thank you!  I understand that the vendor specific layers have their own
+packages and customizations.
 
-cpe:2.3:a:gnu:libcdio is a valid CPE identifier for this package:
+I was looking for some generic guidelines to perform this. (Assuming that
+all the packages are open source)
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Agnu%3Alibcdio
+It would be great if buildroot documentation will provide some guidelines
+to perform the porting of the Yocto layers to Buildroot.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libcdio/libcdio.mk | 1 +
- 1 file changed, 1 insertion(+)
+Thanks!
 
-diff --git a/package/libcdio/libcdio.mk b/package/libcdio/libcdio.mk
-index 4bf55d3344..df26d9a7ac 100644
---- a/package/libcdio/libcdio.mk
-+++ b/package/libcdio/libcdio.mk
-@@ -10,6 +10,7 @@ LIBCDIO_SITE = $(BR2_GNU_MIRROR)/libcdio
- LIBCDIO_INSTALL_STAGING = YES
- LIBCDIO_LICENSE = GPL-3.0+
- LIBCDIO_LICENSE_FILES = COPYING
-+LIBCDIO_CPE_ID_VENDOR = gnu
- LIBCDIO_CONF_OPTS = --disable-example-progs --disable-cddb
- 
- ifeq ($(BR2_ENABLE_LOCALE),)
+On Mon, Jan 25, 2021 at 11:28 AM Peter Korsgaard <peter@korsgaard.com>
+wrote:
+
+> >>>>> "scdrj" == scdrj  <scdrjcom@gmail.com> writes:
+>
+>  > How do I port a vendor specific yocto layer to the buildroot?
+>
+> One step at a time?
+>
+> No seriously, it is hard to know without knowing what that layer
+> does. You will need to have a look at everything it does and add
+> packages and rootfs overlays / post-build scripts to do the same thing
+> in Buildroot.
+>
+> --
+> Bye, Peter Korsgaard
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210125/9028d0dc/attachment.html>
