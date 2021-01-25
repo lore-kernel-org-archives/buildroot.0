@@ -1,48 +1,37 @@
-From: Filip <fskoneczny@gmail.com>
-Date: Mon, 25 Jan 2021 18:51:30 +0100
-Subject: [Buildroot] [PATCH 1/1] configs/bananapi_m1_plus_defconfig: new
- defconfig
-In-Reply-To: <20210125085131.3829173f@windsurf.home>
-References: <20210120172815.3395049-1-fskoneczny@gmail.com>
- <20210123214036.720c3a3f@windsurf.home>
- <4f49c391-6275-cf49-6751-921f7484aa99@gmail.com>
- <20210125085131.3829173f@windsurf.home>
-Message-ID: <e5767875-8465-49e9-a6f3-9025fc6750e8@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 25 Jan 2021 18:55:46 +0100
+Subject: [Buildroot] [PATCH 1/1] package/ssdp-responder: fix CPE variables
+Message-ID: <20210125175546.1159437-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi again Thomas. Corrected patch is now available:
+cpe:2.3:a:simple_service_discovery_protocol_responder_project:simple_service_discovery_protocol_responder
+is a valid CPE identifier for this package:
 
-	[v4] configs/bananapi_m1_plus_defconfig: new defconfig 
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Asimple_service_discovery_protocol_responder_project%3Asimple_service_discovery_protocol_responder
 
-Let me know in case you've noticed anything else to fix.
-Thanks again for guiding me through the first contribution :)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/ssdp-responder/ssdp-responder.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Filip
-
-On 25.01.2021 08:51, Thomas Petazzoni wrote:
-> Hello Filip,
-> 
-> On Sun, 24 Jan 2021 18:50:45 +0100
-> Filip <fskoneczny@gmail.com> wrote:
-> 
->>>> +BR2_TARGET_GENERIC_HOSTNAME="bananapi"
->>>> +BR2_TARGET_GENERIC_ISSUE="Welcome to Banana Pi!"
->>>> +BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y  
->>>
->>> Is this needed for automatic loading of modules ?  
->>
->> Yes, it was loading brcmfmac automatically, I'm not sure though if this is desired in defconfig.
->> After comparing to other configs I decided to remove it and add "modprobe brcmfmac" to readme.txt in proper section instead.
->> Let me know if it's OK, or better to leave it to load automatically or something else.
-> 
-> I'd say let's keep mdev then, it's nice if the module gets loaded
-> automatically.
-> 
-> Thanks!
-> 
-> Thomas
-> 
+diff --git a/package/ssdp-responder/ssdp-responder.mk b/package/ssdp-responder/ssdp-responder.mk
+index f2478e99b1..3fee4c2006 100644
+--- a/package/ssdp-responder/ssdp-responder.mk
++++ b/package/ssdp-responder/ssdp-responder.mk
+@@ -8,7 +8,9 @@ SSDP_RESPONDER_VERSION = 1.8
+ SSDP_RESPONDER_SITE = https://github.com/troglobit/ssdp-responder/releases/download/v$(SSDP_RESPONDER_VERSION)
+ SSDP_RESPONDER_LICENSE = ISC
+ SSDP_RESPONDER_LICENSE_FILES = LICENSE
+-SSDP_RESPONDER_CPE_ID_VENDOR = troglobit
++SSDP_RESPONDER_CPE_ID_VENDOR = \
++	simple_service_discovery_protocol_responder_project
++SSDP_RESPONDER_CPE_ID_PRODUCT = simple_service_discovery_protocol_responder
+ SSDP_RESPONDER_DEPENDENCIES = host-pkgconf
+ 
+ ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+-- 
+2.29.2
