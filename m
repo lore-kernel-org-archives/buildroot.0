@@ -1,90 +1,63 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 25 Jan 2021 21:57:13 +0100
-Subject: [Buildroot] [PATCH] configs/orangepi_r1_defconfig: change to
- GPT partitions for root=PARTLABEL support
-In-Reply-To: <20210125081131.9875-1-peter@korsgaard.com>
-References: <20210125081131.9875-1-peter@korsgaard.com>
-Message-ID: <20210125205713.GN2325@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 25 Jan 2021 22:00:59 +0100
+Subject: [Buildroot] [git commit] package/postgresql: add full build option
+Message-ID: <20210125204123.EDCA7813B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=199bacb7b1f7b2a55ce1c04b42091f0d799574a1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-01-25 09:11 +0100, Peter Korsgaard spake thusly:
-> GPT provides partition labels, which can be used to tell the kernel to find
-> the rootfs based on it (root=PARTLABEL=rootfs) as a nicer/more extensible
-> solution than the MBR disk signature / PARTUUID.
-> 
-> The default GPT partition table location unfortunately conflicts with the
-> SPL location, so move the 16KB GPT table after it.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Postgresql includes some extra additional loadable modules.
+We need just to pass "world/install-world" as make/install targets
+to build this modules.
 
-I added a small comment about where the 'rootfs' label comes from,
-amended the commit log accordingly.
+As a side effect documentation will also be built by "make world".
 
-Applied to master, thanks.
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/postgresql/Config.in     | 9 +++++++++
+ package/postgresql/postgresql.mk | 6 ++++++
+ 2 files changed, 15 insertions(+)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  board/orangepi/orangepi-r1/boot.cmd     | 2 +-
->  board/orangepi/orangepi-r1/genimage.cfg | 8 +++++---
->  2 files changed, 6 insertions(+), 4 deletions(-)
-> 
-> diff --git a/board/orangepi/orangepi-r1/boot.cmd b/board/orangepi/orangepi-r1/boot.cmd
-> index e62e31a3e4..50745f7e5e 100644
-> --- a/board/orangepi/orangepi-r1/boot.cmd
-> +++ b/board/orangepi/orangepi-r1/boot.cmd
-> @@ -1,6 +1,6 @@
->  setenv fdt_high ffffffff
->  
-> -setenv bootargs console=ttyS0,115200 earlyprintk root=PARTUUID=feedc0de-02 rootwait
-> +setenv bootargs console=ttyS0,115200 earlyprintk root=PARTLABEL=rootfs rootwait
->  
->  fatload mmc 0 $kernel_addr_r zImage
->  fatload mmc 0 $fdt_addr_r sun8i-h2-plus-orangepi-r1.dtb
-> diff --git a/board/orangepi/orangepi-r1/genimage.cfg b/board/orangepi/orangepi-r1/genimage.cfg
-> index 3496383573..0f44b368f0 100644
-> --- a/board/orangepi/orangepi-r1/genimage.cfg
-> +++ b/board/orangepi/orangepi-r1/genimage.cfg
-> @@ -13,15 +13,17 @@ image boot.vfat {
->  
->  image sdcard.img {
->  	hdimage {
-> -		# for root=PARTUUID=feedc0de-02 support
-> -		disk-signature = 0xfeedc0de
-> +		# for root=PARTLABEL support
-> +		gpt = true
-> +		# default GPT location conflicts with spl, move it after
-> +		gpt-location = 1M
->  	}
->  
->  	partition u-boot {
->  		in-partition-table = "no"
->  		image = "u-boot-sunxi-with-spl.bin"
->  		offset = 8192
-> -		size = 1040384 # 1MB - 8192
-> +		size = 1056768 # 1MB - 8192 + 16384 (GPT)
->  	}
->  
->  	partition boot {
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/postgresql/Config.in b/package/postgresql/Config.in
+index 2f677daf5b..2debdc24d7 100644
+--- a/package/postgresql/Config.in
++++ b/package/postgresql/Config.in
+@@ -19,6 +19,15 @@ config BR2_PACKAGE_POSTGRESQL
+ 
+ 	  http://www.postgresql.org
+ 
++if BR2_PACKAGE_POSTGRESQL
++
++config BR2_PACKAGE_POSTGRESQL_FULL
++	bool "postgresql-full"
++	help
++	  Build PostgreSQL, contrib, and documentation.
++
++endif
++
+ comment "postgresql needs a toolchain w/ dynamic library, wchar"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 6c0726e88b..76d1202de0 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -23,6 +23,12 @@ POSTGRESQL_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
+ # manually, you must unset MAKELEVEL or set it to zero"
+ POSTGRESQL_MAKE_OPTS = MAKELEVEL=0
+ 
++ifeq ($(BR2_PACKAGE_POSTGRESQL_FULL),y)
++POSTGRESQL_MAKE_OPTS += world
++POSTGRESQL_INSTALL_TARGET_OPTS += DESTDIR=$(TARGET_DIR) install-world
++POSTGRESQL_INSTALL_STAGING_OPTS += DESTDIR=$(STAGING_DIR) install-world
++endif
++
+ ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+ # PostgreSQL does not build against uClibc with locales
+ # enabled, due to an uClibc bug, see
