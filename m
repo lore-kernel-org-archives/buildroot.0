@@ -1,34 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 25 Jan 2021 08:50:34 +0100
-Subject: [Buildroot] [PATCH 1/2] configs/qemu_*: bump kernel version to
- 5.10.7
-In-Reply-To: <CADFgU5DFc0FZWqD+Y-S5WN6a4U2aBmY0c+SLjZ-2RihXhK2woA@mail.gmail.com>
-References: <20210120195954.31797-1-geoffrey.legourrierec@gmail.com>
- <CACPK8XdWzEuu_4x5cWNx6EpatbSfn91FdQf42RzCyotGz9Hn6g@mail.gmail.com>
- <CADFgU5CWfAQ2bgJeQYXeAkwO8Q8E3K9PVGz_tWCa_YZmMD_SEg@mail.gmail.com>
- <CADFgU5DFc0FZWqD+Y-S5WN6a4U2aBmY0c+SLjZ-2RihXhK2woA@mail.gmail.com>
-Message-ID: <20210125085034.3f5109a7@windsurf.home>
+Date: Mon, 25 Jan 2021 08:51:31 +0100
+Subject: [Buildroot] [PATCH 1/1] configs/bananapi_m1_plus_defconfig: new
+ defconfig
+In-Reply-To: <4f49c391-6275-cf49-6751-921f7484aa99@gmail.com>
+References: <20210120172815.3395049-1-fskoneczny@gmail.com>
+ <20210123214036.720c3a3f@windsurf.home>
+ <4f49c391-6275-cf49-6751-921f7484aa99@gmail.com>
+Message-ID: <20210125085131.3829173f@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 24 Jan 2021 22:06:25 +0100
-Geoffrey Le Gourri?rec <geoffrey.legourrierec@gmail.com> wrote:
+Hello Filip,
 
-> I had a short exchange with Arnd Bergmann (see the SuperH subsystem
-> patchwork thread[1]) and looks like the real issue lies in uclibc. I
-> have a patch idea (adding relevant types here [2]), so I'll go test it
-> and bug the uclibc folks with it.
+On Sun, 24 Jan 2021 18:50:45 +0100
+Filip <fskoneczny@gmail.com> wrote:
+
+> >> +BR2_TARGET_GENERIC_HOSTNAME="bananapi"
+> >> +BR2_TARGET_GENERIC_ISSUE="Welcome to Banana Pi!"
+> >> +BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y  
+> > 
+> > Is this needed for automatic loading of modules ?  
 > 
-> [1] https://patchwork.kernel.org/project/linux-sh/patch/20210123165652.10884-1-geoffrey.legourrierec at gmail.com/
-> [2] https://repo.or.cz/uclibc-ng.git/blob/ab1dd83bec59c9e65c31efd6e887182948f627be:/libc/sysdeps/linux/sh/bits/kernel_types.h
+> Yes, it was loading brcmfmac automatically, I'm not sure though if this is desired in defconfig.
+> After comparing to other configs I decided to remove it and add "modprobe brcmfmac" to readme.txt in proper section instead.
+> Let me know if it's OK, or better to leave it to load automatically or something else.
 
-Thanks for the follow-up, and the additional work you're doing on
-fixing this!
+I'd say let's keep mdev then, it's nice if the module gets loaded
+automatically.
 
-Thanks,
+Thanks!
 
 Thomas
 -- 
