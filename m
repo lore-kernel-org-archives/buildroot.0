@@ -1,34 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 25 Jan 2021 22:37:42 +0100
-Subject: [Buildroot] [PATCH 1/2] package/uboot-tools: resolve uboot env
- source file error
-In-Reply-To: <CANQCQpbmPKCP74bEZHfcAxL33j+ATmgOe6m4eMPQRKS=9A=3hA@mail.gmail.com>
-References: <20210125145742.42460-1-matthew.weber@rockwellcollins.com>
- <20210125221537.5cb4dbdd@windsurf.home>
- <CANQCQpbmPKCP74bEZHfcAxL33j+ATmgOe6m4eMPQRKS=9A=3hA@mail.gmail.com>
-Message-ID: <20210125223742.471561e7@windsurf.home>
+Date: Mon, 25 Jan 2021 22:38:52 +0100
+Subject: [Buildroot] [git commit] package/libssh: drop cmake workaround
+Message-ID: <20210125211911.9E95F83841@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 25 Jan 2021 15:30:42 -0600
-Matthew Weber <matthew.weber@collins.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=ed0094a6b24db1ce4f943958b0f79982026eb152
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> > Applied to master, thanks. I think this bug really shows we need some
-> > unit tests for this uboot-tools package functionality, in
-> > supporting/testing/.  
-> 
-> I did add autobuilder testing of this feature but it didn't do a case
-> for when the file isn't provided....
-> https://github.com/buildroot/buildroot/blob/master/utils/genrandconfig#L304
+Drop workaround for cmake < 3.10 (not needed since commit
+d4773b610a40be1d3ac7d793033abaf4eb2491ed)
 
-I think this sort of feature gets better tested by specific targeted
-tests in support/testing/.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libssh/libssh.mk | 3 ---
+ 1 file changed, 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libssh/libssh.mk b/package/libssh/libssh.mk
+index c8cb821616..eeb5d8489a 100644
+--- a/package/libssh/libssh.mk
++++ b/package/libssh/libssh.mk
+@@ -17,9 +17,6 @@ LIBSSH_CONF_OPTS = \
+ 	-DWITH_STACK_PROTECTOR=OFF \
+ 	-DWITH_EXAMPLES=OFF
+ 
+-# cmake older than 3.10 require this to avoid try_run() in FindThreads
+-LIBSSH_CONF_OPTS += -DTHREADS_PTHREAD_ARG=OFF
+-
+ ifeq ($(BR2_PACKAGE_LIBSSH_SERVER),y)
+ LIBSSH_CONF_OPTS += -DWITH_SERVER=ON
+ else
