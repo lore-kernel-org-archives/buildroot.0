@@ -1,105 +1,142 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 25 Jan 2021 22:26:35 +0100
-Subject: [Buildroot] [PATCH v3,
- 1/6] package/libupnp: security bump to version 1.14.0
-In-Reply-To: <20210125194949.1173139-1-fontaine.fabrice@gmail.com>
-References: <20210125194949.1173139-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210125212635.GO2325@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 25 Jan 2021 22:29:32 +0100
+Subject: [Buildroot] [git commit] package/perl: bump to version 5.32.1
+Message-ID: <20210125210953.9884583818@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=9e57d626c37acef6f3de29e03ebcba3885543517
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-01-25 20:49 +0100, Fabrice Fontaine spake thusly:
-> - Fix CallStranger a.k.a. CVE-2020-12695 as well as CVE-2020-13848
-> - Update indentation in hash file (two spaces)
-> - Backport all changes from libupnp18 to libupnp:
->   - Use COPYING instead of LICENSE (no license change)
->   - Add host-pkgconf dependency
->   - Add --enable-reuseaddr
->   - Add openssl optional dependency
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...-fix-the-generated-subdirectory-Makefiles.patch | 32 ----------------------
+ package/perl/perl.hash                             | 14 +++++-----
+ package/perl/perl.mk                               |  8 +++---
+ utils/scancpan                                     |  8 +++---
+ 4 files changed, 15 insertions(+), 47 deletions(-)
 
-Series of 6 applied to master, thanks!
-
-I'll further reply to some of those for additional details, but
-otherwise: great job, thanks a lot!
-
-Regards,
-Yann E. MORIN.
-
-> ---
-> Changes v2 -> v3:
->  - Rebase on current master
-> 
-> Changes v1 -> v2:
->  - Bump libupnp instead of libupnp18 and drop libupnp18
->  - Update ushare and igd2-for-linux
->  - Drop libupnp18
-> 
->  package/libupnp/libupnp.hash |  4 ++--
->  package/libupnp/libupnp.mk   | 18 +++++++++++++++---
->  2 files changed, 17 insertions(+), 5 deletions(-)
-> 
-> diff --git a/package/libupnp/libupnp.hash b/package/libupnp/libupnp.hash
-> index e52b7ea9d7..6b16eff3c8 100644
-> --- a/package/libupnp/libupnp.hash
-> +++ b/package/libupnp/libupnp.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed:
-> -sha256	c5a300b86775435c076d58a79cc0d5a977d76027d2a7d721590729b7f369fa43	libupnp-1.6.25.tar.bz2
-> -sha256	0375955c8a79d6e8fa0792d45d00fc4e7710d7ac95bcbd27f9225a83f5c946fd	LICENSE
-> +sha256  ecb23d4291968c8a7bdd4eb16fc2250dbacc16b354345a13342d67f571d35ceb  libupnp-1.14.0.tar.bz2
-> +sha256  c8b99423cad48bb44e2cf52a496361404290865eac259a82da6d1e4331ececb3  COPYING
-> diff --git a/package/libupnp/libupnp.mk b/package/libupnp/libupnp.mk
-> index b7836590c2..ebc5e83765 100644
-> --- a/package/libupnp/libupnp.mk
-> +++ b/package/libupnp/libupnp.mk
-> @@ -4,13 +4,25 @@
->  #
->  ################################################################################
->  
-> -LIBUPNP_VERSION = 1.6.25
-> +LIBUPNP_VERSION = 1.14.0
->  LIBUPNP_SOURCE = libupnp-$(LIBUPNP_VERSION).tar.bz2
-> -LIBUPNP_SITE = http://downloads.sourceforge.net/project/pupnp/pupnp/libUPnP%20$(LIBUPNP_VERSION)
-> +LIBUPNP_SITE = \
-> +	http://downloads.sourceforge.net/project/pupnp/pupnp/libupnp-$(LIBUPNP_VERSION)
->  LIBUPNP_CONF_ENV = ac_cv_lib_compat_ftime=no
->  LIBUPNP_INSTALL_STAGING = YES
->  LIBUPNP_LICENSE = BSD-3-Clause
-> -LIBUPNP_LICENSE_FILES = LICENSE
-> +LIBUPNP_LICENSE_FILES = COPYING
->  LIBUPNP_CPE_ID_VALID = YES
-> +LIBUPNP_DEPENDENCIES = host-pkgconf
-> +
-> +# Bind the internal miniserver socket with reuseaddr to allow clean restarts.
-> +LIBUPNP_CONF_OPTS += --enable-reuseaddr
-> +
-> +ifeq ($(BR2_PACKAGE_OPENSSL),y)
-> +LIBUPNP_CONF_OPTS += --enable-open-ssl
-> +LIBUPNP_DEPENDENCIES += openssl
-> +else
-> +LIBUPNP_CONF_OPTS += --disable-open-ssl
-> +endif
->  
->  $(eval $(autotools-package))
-> -- 
-> 2.29.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/perl/0001-fix-the-generated-subdirectory-Makefiles.patch b/package/perl/0001-fix-the-generated-subdirectory-Makefiles.patch
+deleted file mode 100644
+index ae1ce06994..0000000000
+--- a/package/perl/0001-fix-the-generated-subdirectory-Makefiles.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From 30ae4c9e2ac6cd27138ebf124cbda9232c56bdf7 Mon Sep 17 00:00:00 2001
+-From: Francois Perrad <francois.perrad@gadz.org>
+-Date: Tue, 16 Oct 2018 21:20:12 +0200
+-Subject: [PATCH] fix the generated subdirectory Makefiles
+-
+-all variables used by BR must be propagated
+-
+-similar to https://github.com/Perl-Toolchain-Gang/ExtUtils-MakeMaker/commit/98e8532fffe5afa8186329acc44fb957427f1823
+-
+-see https://github.com/Perl-Toolchain-Gang/ExtUtils-MakeMaker/pull/331, merged in EU-MM v7.35_08
+-
+-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+----
+- cpan/ExtUtils-MakeMaker/lib/ExtUtils/MakeMaker.pm | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MakeMaker.pm b/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MakeMaker.pm
+-index d579256e86..48642e98fa 100644
+---- a/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MakeMaker.pm
+-+++ b/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MakeMaker.pm
+-@@ -702,7 +702,7 @@ END
+-         }
+-         if ($self->{PARENT}) {
+-             $self->{PARENT}->{CHILDREN}->{$newclass} = $self;
+--            foreach my $opt (qw(POLLUTE PERL_CORE LINKTYPE LD OPTIMIZE)) {
+-+            foreach my $opt (qw(POLLUTE PERL_CORE LINKTYPE AR FULL_AR CC CCFLAGS OPTIMIZE LD LDDLFLAGS LDFLAGS PERL_ARCHLIB DESTDIR )) {
+-                 if (exists $self->{PARENT}->{$opt}
+-                     and not exists $self->{$opt})
+-                     {
+--- 
+-2.17.1
+-
+diff --git a/package/perl/perl.hash b/package/perl/perl.hash
+index ba3a39d433..42b7cc66c7 100644
+--- a/package/perl/perl.hash
++++ b/package/perl/perl.hash
+@@ -1,12 +1,12 @@
+-# Hashes from: http://www.cpan.org/src/5.0/perl-5.30.3.tar.xz.{md5,sha1,sha256}.txt
+-md5  0af2ab0f01ec13e37cc13a27de930936  perl-5.30.3.tar.xz
+-sha1  1003c6aa71d8966501038178459a9fa4e9aba747  perl-5.30.3.tar.xz
+-sha256  6967595f2e3f3a94544c35152f9a25e0cb8ea24ae45f4bf1882f2e33f4a400f4  perl-5.30.3.tar.xz
++# Hashes from: https://www.cpan.org/src/5.0/perl-5.32.1.tar.xz.{md5,sha1,sha256}.txt
++md5  7f104064b906ad8c7329ca5e409a32d7  perl-5.32.1.tar.xz
++sha1  1fb4f710d139da1e1a3e1fa4eaba201fcaa8e18e  perl-5.32.1.tar.xz
++sha256  57cc47c735c8300a8ce2fa0643507b44c4ae59012bfdad0121313db639e02309  perl-5.32.1.tar.xz
+ 
+-# Hashes from: https://github.com/arsv/perl-cross/releases/download/1.3.4/perl-cross-1.3.4.hash
+-sha256  755aa0ca8141a942188a269564f86c3c82349f82c346ed5c992495d7f35138ba  perl-cross-1.3.4.tar.gz
++# Hashes from: https://github.com/arsv/perl-cross/releases/download/1.3.5/perl-cross-1.3.5.hash
++sha256  91c66f6b2b99fccfd4fee14660b677380b0c98f9456359e91449798c2ad2ef25  perl-cross-1.3.5.tar.gz
+ 
+ # Locally calculated
+ sha256  dd90d4f42e4dcadf5a7c09eea0189d93c7b37ae560c91f0f6d5233ed3b9292a2  Artistic
+ sha256  d77d235e41d54594865151f4751e835c5a82322b0e87ace266567c3391a4b912  Copying
+-sha256  4916e95d32b84e07c045d839646f74996f577e5f497bbba8177a94b31415cee7  README
++sha256  df6ad59aefea68676c38325f25f6707f026ddde6c71291b2ca231b6247859907  README
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index 5f6aa97674..ec1cfd4d0a 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -5,15 +5,15 @@
+ ################################################################################
+ 
+ # When updating the version here, also update utils/scancpan
+-PERL_VERSION_MAJOR = 30
+-PERL_VERSION = 5.$(PERL_VERSION_MAJOR).3
+-PERL_SITE = http://www.cpan.org/src/5.0
++PERL_VERSION_MAJOR = 32
++PERL_VERSION = 5.$(PERL_VERSION_MAJOR).1
++PERL_SITE = https://www.cpan.org/src/5.0
+ PERL_SOURCE = perl-$(PERL_VERSION).tar.xz
+ PERL_LICENSE = Artistic or GPL-1.0+
+ PERL_LICENSE_FILES = Artistic Copying README
+ PERL_INSTALL_STAGING = YES
+ 
+-PERL_CROSS_VERSION = 1.3.4
++PERL_CROSS_VERSION = 1.3.5
+ # DO NOT refactor with the github helper (the result is not the same)
+ PERL_CROSS_SITE = https://github.com/arsv/perl-cross/releases/download/$(PERL_CROSS_VERSION)
+ PERL_CROSS_SOURCE = perl-cross-$(PERL_CROSS_VERSION).tar.gz
+diff --git a/utils/scancpan b/utils/scancpan
+index 3ce3203bd5..075f193563 100755
+--- a/utils/scancpan
++++ b/utils/scancpan
+@@ -488,9 +488,9 @@ use Digest::SHA qw(sha256_hex);
+ use Text::Wrap;
+ $Text::Wrap::columns = 62;
+ 
+-# Below, 5.030 should be aligned with the version of perl actually
++# Below, 5.032 should be aligned with the version of perl actually
+ # bundled in Buildroot:
+-die <<"MSG" if $] < 5.030;
++die <<"MSG" if $] < 5.032;
+ This script needs a host perl with the same major version as Buildroot target perl.
+ 
+ Your current host perl is:
+@@ -498,7 +498,7 @@ Your current host perl is:
+     version $]
+ 
+ You may install a local one by running:
+-    perlbrew install perl-5.30.0
++    perlbrew install perl-5.32.0
+ MSG
+ 
+ my ($help, $man, $quiet, $force, $recommend, $test, $host);
+@@ -967,7 +967,7 @@ in order to work with the right CoreList data.
+ 
+ =head1 LICENSE
+ 
+-Copyright (C) 2013-2019 by Francois Perrad <francois.perrad@gadz.org>
++Copyright (C) 2013-2020 by Francois Perrad <francois.perrad@gadz.org>
+ 
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
