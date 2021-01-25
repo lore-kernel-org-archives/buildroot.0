@@ -1,188 +1,39 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 25 Jan 2021 20:49:49 +0100
-Subject: [Buildroot] [PATCH v3,6/6] package/libupnp18: drop package
-In-Reply-To: <20210125194949.1173139-1-fontaine.fabrice@gmail.com>
-References: <20210125194949.1173139-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210125194949.1173139-6-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 25 Jan 2021 21:26:58 +0100
+Subject: [Buildroot] [git commit] package/ssdp-responder: fix CPE variables
+Message-ID: <20210125201144.A78A98384E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop libupnp18 as libupnp has been bumped to 1.14.x and 1.8.x will not
-been fixed against CallStranger a.k.a. CVE-2020-12695
+commit: https://git.buildroot.net/buildroot/commit/?id=8beee9309f3c02d4b073fb952746e86109a5df7b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-mpd and vlc are already compliant with libupnp 1.14.x (i.e those
-packages use UpnpInit2 instead of the deprecated UpnpInit)
+cpe:2.3:a:simple_service_discovery_protocol_responder_project:simple_service_discovery_protocol_responder
+is a valid CPE identifier for this package:
+
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Asimple_service_discovery_protocol_responder_project%3Asimple_service_discovery_protocol_responder
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- Config.in.legacy                 | 10 ++++++++++
- DEVELOPERS                       |  1 -
- package/Config.in                |  1 -
- package/libupnp18/Config.in      | 16 ----------------
- package/libupnp18/libupnp18.hash |  5 -----
- package/libupnp18/libupnp18.mk   | 26 --------------------------
- package/mpd/Config.in            |  2 +-
- package/mpd/mpd.mk               |  2 +-
- package/vlc/vlc.mk               |  4 ++--
- 9 files changed, 14 insertions(+), 53 deletions(-)
- delete mode 100644 package/libupnp18/Config.in
- delete mode 100644 package/libupnp18/libupnp18.hash
- delete mode 100644 package/libupnp18/libupnp18.mk
+ package/ssdp-responder/ssdp-responder.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index e30f678234..2bf39d7175 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,16 @@ endif
+diff --git a/package/ssdp-responder/ssdp-responder.mk b/package/ssdp-responder/ssdp-responder.mk
+index f2478e99b1..3fee4c2006 100644
+--- a/package/ssdp-responder/ssdp-responder.mk
++++ b/package/ssdp-responder/ssdp-responder.mk
+@@ -8,7 +8,9 @@ SSDP_RESPONDER_VERSION = 1.8
+ SSDP_RESPONDER_SITE = https://github.com/troglobit/ssdp-responder/releases/download/v$(SSDP_RESPONDER_VERSION)
+ SSDP_RESPONDER_LICENSE = ISC
+ SSDP_RESPONDER_LICENSE_FILES = LICENSE
+-SSDP_RESPONDER_CPE_ID_VENDOR = troglobit
++SSDP_RESPONDER_CPE_ID_VENDOR = \
++	simple_service_discovery_protocol_responder_project
++SSDP_RESPONDER_CPE_ID_PRODUCT = simple_service_discovery_protocol_responder
+ SSDP_RESPONDER_DEPENDENCIES = host-pkgconf
  
- comment "Legacy options removed in 2021.02"
- 
-+config BR2_PACKAGE_LIBUPNP18
-+	bool "libupnp18 package removed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_LIBUPNP
-+	help
-+	  Version 1.8.x of libupnp (i.e. libupnp18) has been removed
-+	  because it will never be fixed against CallStranger a.k.a.
-+	  CVE-2020-12695. The libupnp package (which has been updated to
-+	  version 1.14.x) has been selected instead.
-+
- config BR2_PACKAGE_BOA
- 	bool "boa package removed"
- 	select BR2_LEGACY
-diff --git a/DEVELOPERS b/DEVELOPERS
-index d3623fcec3..852d779a5b 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -862,7 +862,6 @@ F:	package/librsync/
- F:	package/libsoup/
- F:	package/libsoxr/
- F:	package/libupnp/
--F:	package/libupnp18/
- F:	package/libv4l/
- F:	package/libxslt/
- F:	package/mbedtls/
-diff --git a/package/Config.in b/package/Config.in
-index 494e077df5..57d77a7525 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1791,7 +1791,6 @@ menu "Networking"
- 	source "package/libuev/Config.in"
- 	source "package/libuhttpd/Config.in"
- 	source "package/libupnp/Config.in"
--	source "package/libupnp18/Config.in"
- 	source "package/libupnpp/Config.in"
- 	source "package/liburiparser/Config.in"
- 	source "package/libuwsc/Config.in"
-diff --git a/package/libupnp18/Config.in b/package/libupnp18/Config.in
-deleted file mode 100644
-index 58508e4e26..0000000000
---- a/package/libupnp18/Config.in
-+++ /dev/null
-@@ -1,16 +0,0 @@
--config BR2_PACKAGE_LIBUPNP18
--	bool "libupnp18"
--	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on !BR2_PACKAGE_LIBUPNP
--	help
--	  The portable SDK for UPnP(tm) Devices (libupnp) provides
--	  developers with an API and open source code for building
--	  control points, devices, and bridges that are compliant with
--	  Version 1.0 of the Universal Plug and Play Device Architecture
--	  Specification
--
--	  http://pupnp.sourceforge.net/
--
--comment "libupnp18 needs a toolchain w/ threads"
--	depends on !BR2_PACKAGE_LIBUPNP
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/libupnp18/libupnp18.hash b/package/libupnp18/libupnp18.hash
-deleted file mode 100644
-index ba9ce1bcdf..0000000000
---- a/package/libupnp18/libupnp18.hash
-+++ /dev/null
-@@ -1,5 +0,0 @@
--# From https://sourceforge.net/projects/pupnp/files/pupnp/libupnp-1.8.7/libupnp-1.8.7.tar.bz2.sha1
--sha1  2ea3011180c58b0584f0cb73cc8e685a0a1c4ec8  libupnp-1.8.7.tar.bz2
--# Locally computed:
--sha256  e38c69b2b67322e67cd53680db9b02c7c1f720a47a3cd626fd89d57d2dca93b8  libupnp-1.8.7.tar.bz2
--sha256  c8b99423cad48bb44e2cf52a496361404290865eac259a82da6d1e4331ececb3  COPYING
-diff --git a/package/libupnp18/libupnp18.mk b/package/libupnp18/libupnp18.mk
-deleted file mode 100644
-index f17a1a720d..0000000000
---- a/package/libupnp18/libupnp18.mk
-+++ /dev/null
-@@ -1,26 +0,0 @@
--################################################################################
--#
--# libupnp18
--#
--################################################################################
--
--LIBUPNP18_VERSION = 1.8.7
--LIBUPNP18_SOURCE = libupnp-$(LIBUPNP18_VERSION).tar.bz2
--LIBUPNP18_SITE = http://downloads.sourceforge.net/project/pupnp/pupnp/libupnp-$(LIBUPNP18_VERSION)
--LIBUPNP18_CONF_ENV = ac_cv_lib_compat_ftime=no
--LIBUPNP18_INSTALL_STAGING = YES
--LIBUPNP18_LICENSE = BSD-3-Clause
--LIBUPNP18_LICENSE_FILES = COPYING
--LIBUPNP18_DEPENDENCIES = host-pkgconf
--
--# Bind the internal miniserver socket with reuseaddr to allow clean restarts.
--LIBUPNP18_CONF_OPTS += --enable-reuseaddr
--
--ifeq ($(BR2_PACKAGE_OPENSSL),y)
--LIBUPNP18_CONF_OPTS += --enable-open-ssl
--LIBUPNP18_DEPENDENCIES += openssl
--else
--LIBUPNP18_CONF_OPTS += --disable-open-ssl
--endif
--
--$(eval $(autotools-package))
-diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-index 3343468f43..de97bbab60 100644
---- a/package/mpd/Config.in
-+++ b/package/mpd/Config.in
-@@ -404,7 +404,7 @@ config BR2_PACKAGE_MPD_TCP
- config BR2_PACKAGE_MPD_UPNP
- 	bool "UPnP"
- 	select BR2_PACKAGE_EXPAT
--	select BR2_PACKAGE_LIBUPNP18 if !BR2_PACKAGE_LIBUPNP
-+	select BR2_PACKAGE_LIBUPNP
- 	select BR2_PACKAGE_MPD_CURL
- 	help
- 	  Enable MPD UPnP client support.
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index 8a6f132ffb..5cdcc2c009 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -321,7 +321,7 @@ endif
- ifeq ($(BR2_PACKAGE_MPD_UPNP),y)
- MPD_DEPENDENCIES += \
- 	expat \
--	$(if $(BR2_PACKAGE_LIBUPNP),libupnp,libupnp18)
-+	libupnp
- MPD_CONF_OPTS += -Dupnp=enabled
- else
- MPD_CONF_OPTS += -Dupnp=disabled
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index 95eb7d39a2..020c37aa5d 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -378,9 +378,9 @@ else
- VLC_CONF_OPTS += --disable-theora
- endif
- 
--ifeq ($(BR2_PACKAGE_LIBUPNP)$(BR2_PACKAGE_LIBUPNP18),y)
-+ifeq ($(BR2_PACKAGE_LIBUPNP),y)
- VLC_CONF_OPTS += --enable-upnp
--VLC_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBUPNP),libupnp,libupnp18)
-+VLC_DEPENDENCIES += libupnp
- else
- VLC_CONF_OPTS += --disable-upnp
- endif
--- 
-2.29.2
+ ifeq ($(BR2_PACKAGE_SYSTEMD),y)
