@@ -1,33 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 25 Jan 2021 23:23:55 +0100
-Subject: [Buildroot] [PATCH 1/2] package/trace-cmd: fix build with musl
-In-Reply-To: <20210104073921.380824-1-fontaine.fabrice@gmail.com>
-References: <20210104073921.380824-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210125232355.018bc981@windsurf.home>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 25 Jan 2021 23:34:20 +0100
+Subject: [Buildroot] [PATCH 1/1] package/sslh: systemd needs libconfig
+Message-ID: <20210125223420.1357779-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon,  4 Jan 2021 08:39:20 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+systemd-sslh-generator unconditionally uses libconfig
 
-> Fixes:
->  - http://autobuild.buildroot.org/results/85ba0718f51eea348472dba89c566c136314a61e
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...01-trace-cmd-libtracecmd-API-cleanup.patch | 1486 +++++++++++++++++
->  ...make-it-build-against-musl-C-library.patch |  140 ++
->  2 files changed, 1626 insertions(+)
->  create mode 100644 package/trace-cmd/0001-trace-cmd-libtracecmd-API-cleanup.patch
->  create mode 100644 package/trace-cmd/0002-trace-cmd-make-it-build-against-musl-C-library.patch
+Fixes:
+ - http://autobuild.buildroot.org/results/d46581842906f7780f4a3a1ae21963e78e7f5276
 
-Both applied. Thanks!
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/sslh/sslh.mk | 18 ++++++++++--------
+ 1 file changed, 10 insertions(+), 8 deletions(-)
 
-Thomas
+diff --git a/package/sslh/sslh.mk b/package/sslh/sslh.mk
+index 4bde143cd8..c98f1a6675 100644
+--- a/package/sslh/sslh.mk
++++ b/package/sslh/sslh.mk
+@@ -29,8 +29,17 @@ endif
+ ifeq ($(BR2_PACKAGE_LIBCONFIG),y)
+ SSLH_DEPENDENCIES += libconfig
+ SSLH_MAKE_OPTS += USELIBCONFIG=1
++
++ifeq ($(BR2_PACKAGE_SYSTEMD),y)
++SSLH_DEPENDENCIES += systemd
++SSLH_MAKE_OPTS += USESYSTEMD=1
++else
++SSLH_MAKE_OPTS += USESYSTEMD=
++endif
+ else
+-SSLH_MAKE_OPTS += USELIBCONFIG=
++SSLH_MAKE_OPTS += \
++	USELIBCONFIG= \
++	USESYSTEMD=
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_PCRE),y)
+@@ -40,13 +49,6 @@ else
+ SSLH_MAKE_OPTS += USELIBPCRE=
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+-SSLH_DEPENDENCIES += systemd
+-SSLH_MAKE_OPTS += USESYSTEMD=1
+-else
+-SSLH_MAKE_OPTS += USESYSTEMD=
+-endif
+-
+ define SSLH_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) $(SSLH_MAKE_OPTS) -C $(@D)
+ endef
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.29.2
