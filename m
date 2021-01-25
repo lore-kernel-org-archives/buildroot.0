@@ -1,42 +1,79 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 25 Jan 2021 22:48:17 +0100
-Subject: [Buildroot] [PATCH 9/9] package/librtlsdr: drop cmake workaround
-In-Reply-To: <20210125214817.1177142-1-fontaine.fabrice@gmail.com>
-References: <20210125214817.1177142-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210125214817.1177142-9-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 25 Jan 2021 22:40:54 +0100
+Subject: [Buildroot] [git commit] package/trace-cmd: fix build without ptrace
+Message-ID: <20210125213049.A22098180B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop workaround for cmake < 3.10 (not needed since commit
-d4773b610a40be1d3ac7d793033abaf4eb2491ed)
+commit: https://git.buildroot.net/buildroot/commit/?id=931351630b58a08fca67507c2d0113a5428a0ec3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Fixes:
+ - http://autobuild.buildroot.org/results/4cf43a1ff70a2e2751e2a1a768940401c5583cdf
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/librtlsdr/librtlsdr.mk | 11 -----------
- 1 file changed, 11 deletions(-)
+ ...ove-add_event_pid-out-of-ifndef-NO_PTRACE.patch | 51 ++++++++++++++++++++++
+ 1 file changed, 51 insertions(+)
 
-diff --git a/package/librtlsdr/librtlsdr.mk b/package/librtlsdr/librtlsdr.mk
-index 47586bdfb2..7796d1096a 100644
---- a/package/librtlsdr/librtlsdr.mk
-+++ b/package/librtlsdr/librtlsdr.mk
-@@ -34,15 +34,4 @@ else
- LIBRTLSDR_CONF_OPTS += -DENABLE_ZEROCOPY=OFF
- endif
- 
--# In case of static-lib-only builds, CMake's FindThreads.cmake code tries to
--# get the right flags, checking first for -lpthreads, then -lpthread, and lastly
--# for -pthread.
--# The 2 first link checks fail because of undefined symbols: __libc_setup_tls.
--# In the later check, CMake successfully compiles and links the test program,
--# but it also tries to run it, which is wrong when cross-compiling.
--#
--# The following CMake variable only disables the TRY_RUN call in the -pthread
--# test.
--LIBRTLSDR_CONF_OPTS += -DTHREADS_PTHREAD_ARG=OFF
--
- $(eval $(cmake-package))
--- 
-2.29.2
+diff --git a/package/trace-cmd/0003-trace-cmd-Move-add_event_pid-out-of-ifndef-NO_PTRACE.patch b/package/trace-cmd/0003-trace-cmd-Move-add_event_pid-out-of-ifndef-NO_PTRACE.patch
+new file mode 100644
+index 0000000000..ca32e69ab1
+--- /dev/null
++++ b/package/trace-cmd/0003-trace-cmd-Move-add_event_pid-out-of-ifndef-NO_PTRACE.patch
+@@ -0,0 +1,51 @@
++From 2f55ded528cfd8ef468bdd1f8bb82dcf1cfae04a Mon Sep 17 00:00:00 2001
++From: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
++Date: Wed, 16 Dec 2020 18:19:43 -0500
++Subject: [PATCH] trace-cmd: Move add_event_pid() out of #ifndef NO_PTRACE
++
++When NO_PTRACE is defined, add_event_pid() is also not defined, but it is
++used outside of NO_PTRACE pre processor block. And this causes a
++"add_event_pid" not defined build failure.
++
++Link: https://lore.kernel.org/linux-trace-devel/20201216232145.010165486 at goodmis.org
++
++Fixes: 0844cff1c ("trace-cmd: Fix "trace-cmd reset" command to restore the default value of set_event_pid")
++Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
++[Retrieved from:
++https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/commit/?id=2f55ded528cfd8ef468bdd1f8bb82dcf1cfae04a]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ tracecmd/trace-record.c | 12 ++++++------
++ 1 file changed, 6 insertions(+), 6 deletions(-)
++
++diff --git a/tracecmd/trace-record.c b/tracecmd/trace-record.c
++index f8baed7d..e2d1cedf 100644
++--- a/tracecmd/trace-record.c
+++++ b/tracecmd/trace-record.c
++@@ -1312,8 +1312,13 @@ static int trace_wait_for_processes(struct buffer_instance *instance) {
++ 	free(pidfds);
++ 	return ret;
++ }
++-#ifndef NO_PTRACE
++ 
+++static void add_event_pid(struct buffer_instance *instance, const char *buf)
+++{
+++	tracefs_instance_file_write(instance->tracefs, "set_event_pid", buf);
+++}
+++
+++#ifndef NO_PTRACE
++ /**
++  * append_pid_filter - add a new pid to an existing filter
++  * @curr_filter: the filter to append to. If NULL, then allocate one
++@@ -1369,11 +1374,6 @@ static void update_sched_events(struct buffer_instance *instance, int pid)
++ static int open_instance_fd(struct buffer_instance *instance,
++ 			    const char *file, int flags);
++ 
++-static void add_event_pid(struct buffer_instance *instance, const char *buf)
++-{
++-	tracefs_instance_file_write(instance->tracefs, "set_event_pid", buf);
++-}
++-
++ static void add_new_filter_child_pid(int pid, int child)
++ {
++ 	struct buffer_instance *instance;
