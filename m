@@ -1,98 +1,37 @@
-From: Maxim Kochetkov <fido_max@inbox.ru>
-Date: Mon, 25 Jan 2021 10:40:58 +0300
-Subject: [Buildroot] [PATCH 1/1] package/timescaledb: Fix build with
- Postgresql 13
-Message-ID: <20210125074058.786498-1-fido_max@inbox.ru>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 25 Jan 2021 08:50:34 +0100
+Subject: [Buildroot] [PATCH 1/2] configs/qemu_*: bump kernel version to
+ 5.10.7
+In-Reply-To: <CADFgU5DFc0FZWqD+Y-S5WN6a4U2aBmY0c+SLjZ-2RihXhK2woA@mail.gmail.com>
+References: <20210120195954.31797-1-geoffrey.legourrierec@gmail.com>
+ <CACPK8XdWzEuu_4x5cWNx6EpatbSfn91FdQf42RzCyotGz9Hn6g@mail.gmail.com>
+ <CADFgU5CWfAQ2bgJeQYXeAkwO8Q8E3K9PVGz_tWCa_YZmMD_SEg@mail.gmail.com>
+ <CADFgU5DFc0FZWqD+Y-S5WN6a4U2aBmY0c+SLjZ-2RihXhK2woA@mail.gmail.com>
+Message-ID: <20210125085034.3f5109a7@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add missed patch for PG13 build.
+On Sun, 24 Jan 2021 22:06:25 +0100
+Geoffrey Le Gourri?rec <geoffrey.legourrierec@gmail.com> wrote:
 
-Fixes: 5cff0c8a2d1c ("package/timescaledb: bump to version 2.0.0")
-Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
----
- ...just-code-to-PG13-tuptoaster-changes.patch | 70 +++++++++++++++++++
- 1 file changed, 70 insertions(+)
- create mode 100644 package/timescaledb/0019-Adjust-code-to-PG13-tuptoaster-changes.patch
+> I had a short exchange with Arnd Bergmann (see the SuperH subsystem
+> patchwork thread[1]) and looks like the real issue lies in uclibc. I
+> have a patch idea (adding relevant types here [2]), so I'll go test it
+> and bug the uclibc folks with it.
+> 
+> [1] https://patchwork.kernel.org/project/linux-sh/patch/20210123165652.10884-1-geoffrey.legourrierec at gmail.com/
+> [2] https://repo.or.cz/uclibc-ng.git/blob/ab1dd83bec59c9e65c31efd6e887182948f627be:/libc/sysdeps/linux/sh/bits/kernel_types.h
 
-diff --git a/package/timescaledb/0019-Adjust-code-to-PG13-tuptoaster-changes.patch b/package/timescaledb/0019-Adjust-code-to-PG13-tuptoaster-changes.patch
-new file mode 100644
-index 0000000000..0793bf1d26
---- /dev/null
-+++ b/package/timescaledb/0019-Adjust-code-to-PG13-tuptoaster-changes.patch
-@@ -0,0 +1,70 @@
-+From 42ac10738119c7d31892d8c3f45d525ad5bda756 Mon Sep 17 00:00:00 2001
-+From: Sven Klemm <sven@timescale.com>
-+Date: Sat, 26 Sep 2020 02:19:56 +0200
-+Subject: [PATCH] Adjust code to PG13 tuptoaster changes
-+
-+PG13 split tuptoaster.c into three separate files. This patch also
-+removes unnecesary tuptoaster.h includes.
-+
-+https://github.com/postgres/postgres/commit/8b94dab066
-+
-+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
-+Fetch from: https://github.com/timescale/timescaledb/commit/2bef612c04435cdb5257d40373c4955a0d617c39.patch
-+---
-+ tsl/src/remote/async.c       | 1 -
-+ tsl/src/remote/stmt_params.c | 1 -
-+ tsl/src/reorder.c            | 7 ++++++-
-+ 3 files changed, 6 insertions(+), 3 deletions(-)
-+
-+diff --git a/tsl/src/remote/async.c b/tsl/src/remote/async.c
-+index f3462809..0d55deb7 100644
-+--- a/tsl/src/remote/async.c
-++++ b/tsl/src/remote/async.c
-+@@ -13,7 +13,6 @@
-+ #include <fmgr.h>
-+ #include <utils/lsyscache.h>
-+ #include <catalog/pg_type.h>
-+-#include <access/tuptoaster.h>
-+ 
-+ #include "compat.h"
-+ #if PG12_GE
-+diff --git a/tsl/src/remote/stmt_params.c b/tsl/src/remote/stmt_params.c
-+index 0f315f37..1682d476 100644
-+--- a/tsl/src/remote/stmt_params.c
-++++ b/tsl/src/remote/stmt_params.c
-+@@ -6,7 +6,6 @@
-+ #include <postgres.h>
-+ #include <catalog/pg_type.h>
-+ #include <access/htup_details.h>
-+-#include <access/tuptoaster.h>
-+ #include <utils/lsyscache.h>
-+ #include <utils/syscache.h>
-+ #include <utils/builtins.h>
-+diff --git a/tsl/src/reorder.c b/tsl/src/reorder.c
-+index c4b42c12..7f301b2b 100644
-+--- a/tsl/src/reorder.c
-++++ b/tsl/src/reorder.c
-+@@ -19,7 +19,6 @@
-+ #include <access/relscan.h>
-+ #include <access/rewriteheap.h>
-+ #include <access/transam.h>
-+-#include <access/tuptoaster.h>
-+ #include <access/xact.h>
-+ #include <access/xlog.h>
-+ #include <catalog/catalog.h>
-+@@ -58,6 +57,12 @@
-+ #include <utils/tqual.h>
-+ #endif
-+ 
-++#if PG13_LT
-++#include <access/tuptoaster.h>
-++#else
-++#include <access/toast_internals.h>
-++#endif
-++
-+ #include "chunk.h"
-+ #include "chunk_index.h"
-+ #include "hypertable_cache.h"
-+-- 
-+2.29.2
-+
+Thanks for the follow-up, and the additional work you're doing on
+fixing this!
+
+Thanks,
+
+Thomas
 -- 
-2.29.2
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
