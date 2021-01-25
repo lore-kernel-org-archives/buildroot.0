@@ -1,48 +1,68 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 25 Jan 2021 22:39:30 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libssh: drop cmake workaround
-In-Reply-To: <20210104171231.1621110-1-fontaine.fabrice@gmail.com>
-References: <20210104171231.1621110-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210125223930.0066b5e3@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 25 Jan 2021 22:42:55 +0100
+Subject: [Buildroot] [PATCH 2/2] package/uboot-tools: env/script
+ generation need BINARIES_DIR
+In-Reply-To: <CANQCQpZvXB_w=VjTrPM45CYcCtxmvCZB7thxB8v=E6yNaWdw2A@mail.gmail.com>
+References: <20210125145742.42460-1-matthew.weber@rockwellcollins.com>
+ <20210125145742.42460-2-matthew.weber@rockwellcollins.com>
+ <20210125221651.10112779@windsurf.home>
+ <CANQCQpZvXB_w=VjTrPM45CYcCtxmvCZB7thxB8v=E6yNaWdw2A@mail.gmail.com>
+Message-ID: <20210125214255.GS2325@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon,  4 Jan 2021 18:12:31 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Matthew, Thomas, All,
 
-> Drop workaround for cmake < 3.10 (not needed since commit
-> d4773b610a40be1d3ac7d793033abaf4eb2491ed)
+On 2021-01-25 15:22 -0600, Matthew Weber via buildroot spake thusly:
+> On Mon, Jan 25, 2021 at 3:18 PM Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> wrote:
+> > On Mon, 25 Jan 2021 08:57:42 -0600
+> > Matt Weber <matthew.weber@rockwellcollins.com> wrote:
+> > > From: Kalpesh Panchal <kalpesh.panchal@rockwellcollins.com>
+> > > The host build of uboot-tools can occur early in the build process and may
+> > > require the creation of BINARIES_DIR before generation of an enabled envimage
+> > > and/or boot script binary.
+> > >
+> > > Signed-off-by: Kalpesh Panchal <kalpesh.panchal@rockwellcollins.com>
+> > > Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+> >
+> > Hum, while this works, I'm in fact not too happy with the proposed
+> > solution. I would prefer that we move the mkenvimage/$(MKIMAGE)
+> > invocations to a BUILD_CMDS step, that produces its results in $(@D),
+> > and then INSTALL_CMDS does a $(INSTALL) ... of that file, which with
+> > the -D option would create $(BINARIES_DIR).
+> >
+> > I know it's a bit bike-shedding, but it feels a little bit better. What
+> > do you think ?
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/libssh/libssh.mk | 3 ---
->  1 file changed, 3 deletions(-)
+> I've added Yann to the discussion as he suggested the mkdir :-)
 
-Applied to master, thanks.
+On principle, I do agree with Thomas.
 
-However, a quick git grep shows:
+However, I would point out that this is way wider than just the script
+image. Indeed, we also have HOST_UBOOT_TOOLS_GENERATE_ENV_IMAGE which
+is only called at install time.
 
-package/exiv2/exiv2.mk:EXIV2_CONF_OPTS += -DTHREADS_PTHREAD_ARG=OFF
-package/i2pd/i2pd.mk:# Before CMake 3.10, passing THREADS_PTHREAD_ARG=OFF was needed to
-package/i2pd/i2pd.mk:I2PD_CONF_OPTS += -DTHREADS_PTHREAD_ARG=OFF
-package/librtlsdr/librtlsdr.mk:LIBRTLSDR_CONF_OPTS += -DTHREADS_PTHREAD_ARG=OFF
-package/paho-mqtt-cpp/paho-mqtt-cpp.mk:PAHO_MQTT_CPP_CONF_OPTS = -DTHREADS_PTHREAD_ARG=OFF
-package/poppler/poppler.mk:POPPLER_CONF_OPTS += -DTHREADS_PTHREAD_ARG=OFF
-package/rabbitmq-c/rabbitmq-c.mk:# Before CMake 3.10, passing THREADS_PTHREAD_ARG=OFF was needed to
-package/rabbitmq-c/rabbitmq-c.mk:RABBITMQ_C_CONF_OPTS += -DTHREADS_PTHREAD_ARG=OFF
-package/uvw/uvw.mk:UVW_CONF_OPTS = -DTHREADS_PTHREAD_ARG=OFF
-package/xerces/xerces.mk:# Before CMake 3.10, passing THREADS_PTHREAD_ARG=OFF was needed to
-package/xerces/xerces.mk:XERCES_CONF_OPTS += -DTHREADS_PTHREAD_ARG=OFF
-package/znc/znc.mk:# Before CMake 3.10, passing THREADS_PTHREAD_ARG=OFF was needed to
-package/znc/znc.mk:ZNC_CONF_OPTS += -DTHREADS_PTHREAD_ARG=OFF
+If we wanted to mandate clean, separate build and install steps for the
+script image generation, so would we want for the environment image too.
 
-So there's perhaps some more cleaning that is possible ?
+Which is a wider endeavour than just catering for the script image.
 
-Thomas
+Of course, if one would want to actually tackle the issue and actually
+separate the build and install steps, that would be awesome.
+
+Otherwise, I am fine with just the mkdir.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
