@@ -1,59 +1,34 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 25 Jan 2021 23:34:20 +0100
-Subject: [Buildroot] [PATCH 1/1] package/sslh: systemd needs libconfig
-Message-ID: <20210125223420.1357779-1-fontaine.fabrice@gmail.com>
+Date: Mon, 25 Jan 2021 23:42:19 +0100
+Subject: [Buildroot] [PATCH 1/1] package/beecrypt: set BEECRYPT_CPE_ID_VALID
+Message-ID: <20210125224219.1358226-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-systemd-sslh-generator unconditionally uses libconfig
+cpe:2.3:a:beecrypt_project:beecrypt is a valid CPE identifier for this
+package:
 
-Fixes:
- - http://autobuild.buildroot.org/results/d46581842906f7780f4a3a1ae21963e78e7f5276
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Abeecrypt_project%3Abeecrypt
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/sslh/sslh.mk | 18 ++++++++++--------
- 1 file changed, 10 insertions(+), 8 deletions(-)
+ package/beecrypt/beecrypt.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/sslh/sslh.mk b/package/sslh/sslh.mk
-index 4bde143cd8..c98f1a6675 100644
---- a/package/sslh/sslh.mk
-+++ b/package/sslh/sslh.mk
-@@ -29,8 +29,17 @@ endif
- ifeq ($(BR2_PACKAGE_LIBCONFIG),y)
- SSLH_DEPENDENCIES += libconfig
- SSLH_MAKE_OPTS += USELIBCONFIG=1
-+
-+ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-+SSLH_DEPENDENCIES += systemd
-+SSLH_MAKE_OPTS += USESYSTEMD=1
-+else
-+SSLH_MAKE_OPTS += USESYSTEMD=
-+endif
- else
--SSLH_MAKE_OPTS += USELIBCONFIG=
-+SSLH_MAKE_OPTS += \
-+	USELIBCONFIG= \
-+	USESYSTEMD=
- endif
+diff --git a/package/beecrypt/beecrypt.mk b/package/beecrypt/beecrypt.mk
+index f13f72c8ac..20e1a122d0 100644
+--- a/package/beecrypt/beecrypt.mk
++++ b/package/beecrypt/beecrypt.mk
+@@ -10,6 +10,7 @@ BEECRYPT_AUTORECONF = YES
+ BEECRYPT_INSTALL_STAGING = YES
+ BEECRYPT_LICENSE = LGPL-2.1+
+ BEECRYPT_LICENSE_FILES = COPYING.LIB
++BEECRYPT_CPE_ID_VALID = YES
  
- ifeq ($(BR2_PACKAGE_PCRE),y)
-@@ -40,13 +49,6 @@ else
- SSLH_MAKE_OPTS += USELIBPCRE=
- endif
- 
--ifeq ($(BR2_PACKAGE_SYSTEMD),y)
--SSLH_DEPENDENCIES += systemd
--SSLH_MAKE_OPTS += USESYSTEMD=1
--else
--SSLH_MAKE_OPTS += USESYSTEMD=
--endif
--
- define SSLH_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) $(SSLH_MAKE_OPTS) -C $(@D)
- endef
+ BEECRYPT_CONF_OPTS = \
+ 	--disable-expert-mode \
 -- 
 2.29.2
