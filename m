@@ -1,125 +1,66 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 25 Jan 2021 22:00:48 +0100
-Subject: [Buildroot] [git commit] package/postgresql: add some additional
- output to pg_config
-Message-ID: <20210125204123.E0E8583840@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 25 Jan 2021 22:04:19 +0100
+Subject: [Buildroot] [PATCH 2/3] package/perl-gd: needs
+ perl-extutils-pkgconfig
+In-Reply-To: <20210125214840.78cd755e@windsurf.home>
+References: <20210124112214.480254-1-fontaine.fabrice@gmail.com>
+ <20210124112214.480254-2-fontaine.fabrice@gmail.com>
+ <20210125214840.78cd755e@windsurf.home>
+Message-ID: <CAPi7W82JBBH6bRjH2L2-RvM-1V0kXGVZm8BFsijgT7aUOZ+gVA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e3ff618bd84f67992d354f0cc3343813b214b6a0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Some external packages call pg_config to determine the installed
-PostgreSQL options. Add this output to Buildroots own pg_config,
-so these packages correctly compile.
+Le lun. 25 janv. 2021 ? 21:48, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> a ?crit :
+>
+> Hello,
+>
+> +Fran?ois in Cc.
+>
+> On Sun, 24 Jan 2021 12:22:13 +0100
+> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+>
+> > +- at INC     = qw(-I/usr/include -I/usr/include/gd) unless @INC;
+> > ++#@INC     = qw(-I/usr/include -I/usr/include/gd) unless @INC;
+>
+> I'm certainly not very good with Perl, but doesn't the "unless @INC"
+> means "if INC is not already specified" ?
+I'm also not good with Perl but it seems to me that unless means
+"unless @INC is empty (i.e. not already specified or empty)"
+>
+> > + @LIBPATH = qw(-L/usr/lib/X11 -L/usr/X11R6/lib -L/usr/X11/lib -L/usr/lib) unless @LIBPATH;
+>
+> And isn't that a problem, too ? These library paths are pretty horrible
+> for cross-compilation.
+LIBPATH will be overriden with the -L value added by our pkg-config
+wrapper thanks to this piece of code:
 
-Added options:
-	--pkgincludedir
-	--pgxs
-	--cflags
-	--cc
-	--pkglibdir
-	--bindir
-	--sharedir
-	--localedir
-	--docdir
-	--mandir
+@LIBS = split /\s+/,$libs;
+if ($libdir) {
+  if ($config) {
+    @LIBPATH = map {s/^-L// && "-L$_"} split /\s+/,$ldflags;
+    ($lib_gd_path = $libdir) =~ s!/[^/]+$!!;
+  } else {
+    $lib_gd_path = $libdir;
+  }
+  push @LIBPATH,"-L$libdir";
+}
 
-Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/postgresql/pg_config     | 51 ++++++++++++++++++++++++++++++++++++++--
- package/postgresql/postgresql.mk |  2 ++
- 2 files changed, 51 insertions(+), 2 deletions(-)
+The issue is that INC will be empty because it is extracted from cflags:
+@INC = map {s/^-I// && "-I$_"} split /\s+/,$cflags;
 
-diff --git a/package/postgresql/pg_config b/package/postgresql/pg_config
-index 59a9e6cfad..3b0cb35f2c 100644
---- a/package/postgresql/pg_config
-+++ b/package/postgresql/pg_config
-@@ -2,7 +2,6 @@
- 
- #
- # Minimal pg_config implementation as replacement for the native pg_config application
--# Only implements --includedir and --libdir
- #
- 
- prefix=/usr
-@@ -11,6 +10,9 @@ case "$1" in
-   --includedir)
- 	echo "$prefix/include"
- 	;;
-+  --pkgincludedir)
-+	echo "$prefix/include/postgresql"
-+	;;
-   --includedir-server)
- 	echo "$prefix/include/postgresql/server"
- 	;;
-@@ -23,6 +25,51 @@ case "$1" in
-   --configure)
- 	echo "@POSTGRESQL_CONF_OPTIONS@"
- 	;;
-+  --pgxs)
-+	echo "$prefix/lib/postgresql/pgxs/src/makefiles/pgxs.mk"
-+	;;
-+  --cflags)
-+	echo "@TARGET_CFLAGS@"
-+	;;
-+  --cc)
-+	echo "@TARGET_CC@"
-+	;;
-+  --pkglibdir)
-+	echo "/usr/lib/postgresql"
-+	;;
-+  --bindir)
-+	echo "/usr/bin"
-+	;;
-+  --sharedir)
-+	echo "/usr/share/postgresql"
-+	;;
-+  --localedir)
-+	echo "/usr/share/locale"
-+	;;
-+  --docdir)
-+	echo "/usr/share/doc/postgresql"
-+	;;
-+  --mandir)
-+	echo "/usr/share/man"
-+	;;
-   *)
--	echo "Usage: $0 {--includedir|--includedir-server|--libdir|--version|--configure}"
-+	echo "Usage: $0 {OPTION}"
-+	echo
-+	echo "Options:"
-+	echo
-+	echo "	--includedir		show location of C header files of the client interfaces"
-+	echo "	--pkgincludedir		show location of other C header files"
-+	echo "	--includedir-server	show location of C header files for the server"
-+	echo "	--libdir		show location of object code libraries"
-+	echo "	--version		show the PostgreSQL version"
-+	echo "	--configure		show options given to configure script"
-+	echo "	--pgxs			show location of extension makefile"
-+	echo "	--cflags		show CFLAGS value used when PostgreSQL was built"
-+	echo "	--cc			show CC value used when PostgreSQL was built"
-+	echo "	--pkglibdir		show location of dynamically loadable modules"
-+	echo "	--bindir		show location of user executables"
-+	echo "	--sharedir		show location of architecture-independent support files"
-+	echo "	--localedir		show location of locale support files"
-+	echo "	--docdir		show location of documentation files"
-+	echo "	--mandir		show location of manual pages"
- esac
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 31c83d64c7..6c0726e88b 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -116,6 +116,8 @@ define POSTGRESQL_INSTALL_CUSTOM_PG_CONFIG
- 		$(STAGING_DIR)/usr/bin/pg_config
- 	$(SED) "s|@POSTGRESQL_CONF_OPTIONS@|$(POSTGRESQL_CONF_OPTS)|g" $(STAGING_DIR)/usr/bin/pg_config
- 	$(SED) "s|@POSTGRESQL_VERSION@|$(POSTGRESQL_VERSION)|g" $(STAGING_DIR)/usr/bin/pg_config
-+	$(SED) "s|@TARGET_CFLAGS@|$(TARGET_CFLAGS)|g" $(STAGING_DIR)/usr/bin/pg_config
-+	$(SED) "s|@TARGET_CC@|$(TARGET_CC)|g" $(STAGING_DIR)/usr/bin/pg_config
- endef
- 
- POSTGRESQL_POST_INSTALL_STAGING_HOOKS += POSTGRESQL_INSTALL_CUSTOM_PG_CONFIG
+But a review from a Perl would be nice as this solution is indeed a bit ugly.
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+Best Regards,
+
+Fabrice
