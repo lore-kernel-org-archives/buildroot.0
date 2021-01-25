@@ -1,9 +1,9 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 25 Jan 2021 22:48:13 +0100
-Subject: [Buildroot] [PATCH 5/9] package/xerces: drop cmake workaround
+Date: Mon, 25 Jan 2021 22:48:14 +0100
+Subject: [Buildroot] [PATCH 6/9] package/poppler: drop cmake workaround
 In-Reply-To: <20210125214817.1177142-1-fontaine.fabrice@gmail.com>
 References: <20210125214817.1177142-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210125214817.1177142-5-fontaine.fabrice@gmail.com>
+Message-ID: <20210125214817.1177142-6-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,24 +15,22 @@ d4773b610a40be1d3ac7d793033abaf4eb2491ed)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/xerces/xerces.mk | 5 -----
- 1 file changed, 5 deletions(-)
+ package/poppler/poppler.mk | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/package/xerces/xerces.mk b/package/xerces/xerces.mk
-index d9174b44c7..a3e5361b2e 100644
---- a/package/xerces/xerces.mk
-+++ b/package/xerces/xerces.mk
-@@ -19,11 +19,6 @@ endef
+diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
+index e779a7c9d3..aba8602e06 100644
+--- a/package/poppler/poppler.mk
++++ b/package/poppler/poppler.mk
+@@ -19,9 +19,6 @@ POPPLER_CONF_OPTS = \
+ 	-DBUILD_CPP_TESTS=OFF \
+ 	-DENABLE_GTK_DOC=OFF
  
- XERCES_POST_PATCH_HOOKS += XERCES_DISABLE_SAMPLES
- 
--# Before CMake 3.10, passing THREADS_PTHREAD_ARG=OFF was needed to
--# disable a try_run() call in the FindThreads tests, which caused a
--# build failure when cross-compiling.
--XERCES_CONF_OPTS += -DTHREADS_PTHREAD_ARG=OFF
+-# cmake older than 3.10 requires this to avoid try_run() in FindThreads
+-POPPLER_CONF_OPTS += -DTHREADS_PTHREAD_ARG=OFF
 -
- ifeq ($(BR2_PACKAGE_ICU),y)
- XERCES_DEPENDENCIES += icu
+ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+ POPPLER_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -latomic"
  endif
 -- 
 2.29.2
