@@ -1,80 +1,52 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 26 Jan 2021 19:42:50 +0100
-Subject: [Buildroot] [git commit] package/ltp-testsuite: simplify code to
+Date: Tue, 26 Jan 2021 19:43:48 +0100
+Subject: [Buildroot] [PATCH] package/ltp-testsuite: simplify code to
  exclude test-cases
-Message-ID: <20210126182316.682998130D@busybox.osuosl.org>
+In-Reply-To: <YBBYSkMrryKEr3yx@pevik>
+References: <20210126174741.1046950-1-yann.morin.1998@free.fr>
+ <YBBYSkMrryKEr3yx@pevik>
+Message-ID: <20210126184348.GY2325@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f729692c16454effe625a769231487ac4c9f9d7c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Petr, All,
 
-We have three conditions under which some tests may get removed:
-uClibc, musl, static libraries. All three use the same mechanism
-to exclude those test-cases: remove the files.
+On 2021-01-26 18:58 +0100, Petr Vorel spake thusly:
+> > We have three conditions under which some tests may get removed:
+> > uClibc, musl, static libraries. All three use the same mechanism
+> > to exclude those test-cases: remove the files.
+> 
+> > The first two use a common variable to list the affected files,
+> > and share the same hook of their own to iterate over that list,
+> > while the third has its own hook.
+> 
+> > This is not very clean, so switch to using a single variable and
+> > a single hook for all three conditions.
+> Nice cleanup, thank you!
 
-The first two use a common variable to list the affected files,
-and share the same hook of their own to iterate over that list,
-while the third has its own hook.
+:-)
 
-This is not very clean, so switch to using a single variable and
-a single hook for all three conditions.
+> Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Petr Vorel <petr.vorel@gmail.com>
-Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
----
- package/ltp-testsuite/ltp-testsuite.mk | 22 ++++++++--------------
- 1 file changed, 8 insertions(+), 14 deletions(-)
+Applied to master, thanks for the review.
 
-diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
-index 4d7aa451b5..43ee134d1c 100644
---- a/package/ltp-testsuite/ltp-testsuite.mk
-+++ b/package/ltp-testsuite/ltp-testsuite.mk
-@@ -65,12 +65,11 @@ LTP_TESTSUITE_CONF_ENV += \
- 	SYSROOT="$(STAGING_DIR)"
- 
- # uclibc: bessel support normally not enabled
--ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
--LTP_TESTSUITE_UNSUPPORTED_TEST_CASES = \
-+LTP_TESTSUITE_UNSUPPORTED_TEST_CASES_$(BR2_TOOLCHAIN_USES_UCLIBC) += \
- 	testcases/misc/math/float/bessel/ \
- 	testcases/misc/math/float/float_bessel.c
--else ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
--LTP_TESTSUITE_UNSUPPORTED_TEST_CASES = \
-+
-+LTP_TESTSUITE_UNSUPPORTED_TEST_CASES_$(BR2_TOOLCHAIN_USES_MUSL) += \
- 	testcases/kernel/sched/process_stress/process.c \
- 	testcases/kernel/syscalls/confstr/confstr01.c \
- 	testcases/kernel/syscalls/fmtmsg/fmtmsg01.c \
-@@ -79,22 +78,17 @@ LTP_TESTSUITE_UNSUPPORTED_TEST_CASES = \
- 	testcases/kernel/syscalls/timer_create/timer_create01.c \
- 	testcases/kernel/syscalls/timer_create/timer_create03.c \
- 	utils/benchmark/ebizzy-0.3
--endif
-+
-+# ldd command build system tries to build a shared library unconditionally.
-+LTP_TESTSUITE_UNSUPPORTED_TEST_CASES_$(BR2_STATIC_LIBS) += \
-+	testcases/commands/ldd
- 
- define LTP_TESTSUITE_REMOVE_UNSUPPORTED_TESTCASES
--	$(foreach f,$(LTP_TESTSUITE_UNSUPPORTED_TEST_CASES),
-+	$(foreach f,$(LTP_TESTSUITE_UNSUPPORTED_TEST_CASES_y),
- 		rm -rf $(@D)/$(f)
- 	)
- endef
- 
- LTP_TESTSUITE_POST_PATCH_HOOKS += LTP_TESTSUITE_REMOVE_UNSUPPORTED_TESTCASES
- 
--# ldd command build system tries to build a shared library unconditionally.
--ifeq ($(BR2_STATIC_LIBS),y)
--define LTP_TESTSUITE_REMOVE_LDD
--	rm -rf $(@D)/testcases/commands/ldd
--endef
--LTP_TESTSUITE_POST_PATCH_HOOKS += LTP_TESTSUITE_REMOVE_LDD
--endif
--
- $(eval $(autotools-package))
+Regards,
+Yann E. MORIN.
+
+> Kind regards,
+> Petr
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
