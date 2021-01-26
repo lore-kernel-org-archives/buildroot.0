@@ -1,49 +1,63 @@
-From: Bin Meng <bmeng.cn@gmail.com>
-Date: Tue, 26 Jan 2021 14:35:27 +0800
-Subject: [Buildroot] [PATCH 2/2] board/sifive: Update
- hifive_unleashed_defconfig and genimage.cfg
-In-Reply-To: <20210123220113.15481f0e@windsurf.home>
-References: <1610355672-3008-1-git-send-email-bmeng.cn@gmail.com>
- <1610355672-3008-3-git-send-email-bmeng.cn@gmail.com>
- <20210116224214.6f1ce3af@windsurf.home>
- <CAEUhbmUa-bsPVaa-j19Hpt10uofqAPuXOZt6VY4sK_DYa+d=PQ@mail.gmail.com>
- <20210123220113.15481f0e@windsurf.home>
-Message-ID: <CAEUhbmUPGYa=w6av=aXZGRwQcCpdTfrMknMPOnk1GvoMMWQGBw@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 26 Jan 2021 10:48:29 +0200
+Subject: [Buildroot] Porting a vendor specific yocto layer to the
+ buildroot
+In-Reply-To: <CAGF7ZoZ8MUBbEB=6gXOCCSPNFJcF_Kva=XQducEx_u+O0EeATg@mail.gmail.com>
+References: <1611562430908-0.post@n4.nabble.com>
+ <877do07r4c.fsf@dell.be.48ers.dk>
+ <CAGF7ZoZ8MUBbEB=6gXOCCSPNFJcF_Kva=XQducEx_u+O0EeATg@mail.gmail.com>
+Message-ID: <878s8gccde.fsf@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Jan 24, 2021 at 5:01 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> On Sun, 17 Jan 2021 18:28:11 +0800
-> Bin Meng <bmeng.cn@gmail.com> wrote:
->
-> > > > +     partition rootfs {
-> > > > +             image = "rootfs.ext4"
-> > > > +             partition-type-uuid = 0FC63DAF-8483-4772-8E79-3D69D8477DE4
-> > > > +             bootable = true
-> > > > +     }
-> > > > +}
-> > >
-> > > This looks strange. You really use a GPT partition table on SPI flash,
-> > > and use an ext4 filesystem on a SPI flash ?
-> > >
-> >
-> > When booting from SPI flash, the GPT partition is required by the ZSBL
-> > on the board to load U-Boot SPL images. The kernel still uses ext4 on
-> > the SD card as the rootfs. The SPI flash is just the backup for the
-> > rootfs.
->
-> Then why does your SPI flash image contains a root filesystem partition ?
+Hi scd,
 
-As I mentioned I meant to have a backup in SPI flash for recovery.
-Since this is causing confusion, I can remove this configuration
-completely in v2.
+On Mon, Jan 25 2021, scd rjcom wrote:
+> Thank you!  I understand that the vendor specific layers have their own
+> packages and customizations.
+>
+> I was looking for some generic guidelines to perform this. (Assuming that
+> all the packages are open source)
+>
+> It would be great if buildroot documentation will provide some guidelines
+> to perform the porting of the Yocto layers to Buildroot.
 
-Regards,
-Bin
+Not exactly what you are asking, but these might help you anyway:
+
+  https://elinux.org/images/9/9a/Buildroot-vs-Yocto-Differences-for-Your-Daily-Job-Luca-Ceresoli-AIM-Sportline.pdf
+  https://youtu.be/wCVYQWFIvBs
+
+Thanks to Luca.
+
+baruch
+
+> On Mon, Jan 25, 2021 at 11:28 AM Peter Korsgaard <peter@korsgaard.com>
+> wrote:
+>
+>> >>>>> "scdrj" == scdrj  <scdrjcom@gmail.com> writes:
+>>
+>>  > How do I port a vendor specific yocto layer to the buildroot?
+>>
+>> One step at a time?
+>>
+>> No seriously, it is hard to know without knowing what that layer
+>> does. You will need to have a look at everything it does and add
+>> packages and rootfs overlays / post-build scripts to do the same thing
+>> in Buildroot.
+>>
+>> --
+>> Bye, Peter Korsgaard
+>>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+
+-- 
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
