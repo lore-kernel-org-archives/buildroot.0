@@ -1,63 +1,38 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 26 Jan 2021 10:48:29 +0200
-Subject: [Buildroot] Porting a vendor specific yocto layer to the
- buildroot
-In-Reply-To: <CAGF7ZoZ8MUBbEB=6gXOCCSPNFJcF_Kva=XQducEx_u+O0EeATg@mail.gmail.com>
-References: <1611562430908-0.post@n4.nabble.com>
- <877do07r4c.fsf@dell.be.48ers.dk>
- <CAGF7ZoZ8MUBbEB=6gXOCCSPNFJcF_Kva=XQducEx_u+O0EeATg@mail.gmail.com>
-Message-ID: <878s8gccde.fsf@tarshish>
+From: Matthew Weber <matthew.weber@collins.com>
+Date: Tue, 26 Jan 2021 07:09:23 -0600
+Subject: [Buildroot] [External] Re: [PATCH 2/2] package/uboot-tools:
+ env/script generation need BINARIES_DIR
+In-Reply-To: <20210125232241.6f903f96@windsurf.home>
+References: <20210125145742.42460-1-matthew.weber@rockwellcollins.com>
+ <20210125145742.42460-2-matthew.weber@rockwellcollins.com>
+ <20210125221651.10112779@windsurf.home>
+ <CANQCQpZvXB_w=VjTrPM45CYcCtxmvCZB7thxB8v=E6yNaWdw2A@mail.gmail.com>
+ <20210125214255.GS2325@scaer> <20210125232241.6f903f96@windsurf.home>
+Message-ID: <CANQCQpa6f459ijuc+JihT43x_ZMeo1dG6OmA-UwOXMGbFM4mWw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi scd,
+All,
 
-On Mon, Jan 25 2021, scd rjcom wrote:
-> Thank you!  I understand that the vendor specific layers have their own
-> packages and customizations.
+On Mon, Jan 25, 2021 at 4:23 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
 >
-> I was looking for some generic guidelines to perform this. (Assuming that
-> all the packages are open source)
+> On Mon, 25 Jan 2021 22:42:55 +0100
+> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 >
-> It would be great if buildroot documentation will provide some guidelines
-> to perform the porting of the Yocto layers to Buildroot.
-
-Not exactly what you are asking, but these might help you anyway:
-
-  https://elinux.org/images/9/9a/Buildroot-vs-Yocto-Differences-for-Your-Daily-Job-Luca-Ceresoli-AIM-Sportline.pdf
-  https://youtu.be/wCVYQWFIvBs
-
-Thanks to Luca.
-
-baruch
-
-> On Mon, Jan 25, 2021 at 11:28 AM Peter Korsgaard <peter@korsgaard.com>
-> wrote:
+> > On principle, I do agree with Thomas.
+> >
+> > However, I would point out that this is way wider than just the script
+> > image. Indeed, we also have HOST_UBOOT_TOOLS_GENERATE_ENV_IMAGE which
+> > is only called at install time.
 >
->> >>>>> "scdrj" == scdrj  <scdrjcom@gmail.com> writes:
->>
->>  > How do I port a vendor specific yocto layer to the buildroot?
->>
->> One step at a time?
->>
->> No seriously, it is hard to know without knowing what that layer
->> does. You will need to have a look at everything it does and add
->> packages and rootfs overlays / post-build scripts to do the same thing
->> in Buildroot.
->>
->> --
->> Bye, Peter Korsgaard
->>
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Well, the patch is also adding a mkdir inside the code generating the
+> environment image.
 
+v2 will be out in a bit, i'll mark this one as superseded.
 
--- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Regards,
+Matt
