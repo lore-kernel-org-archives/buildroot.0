@@ -1,55 +1,34 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 26 Jan 2021 21:06:57 +0100
-Subject: [Buildroot] [PATCH 1/1] package/x264: bump version
-Message-ID: <20210126200657.308062-1-bernd.kuhls@t-online.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 26 Jan 2021 21:44:03 +0100
+Subject: [Buildroot] [PATCH 1/1] package/xapian: add CPE variables
+Message-ID: <20210126204403.2496291-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Reformatted hashes.
+cpe:2.3:a:xapian:xapian-core is a valid CPE identifier for this package:
 
-Switch _SITE according to
-http://download.videolan.org/x264/snapshots/x264-snapshot-20191218-README.txt
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Axapian%3Axapian-core
 
-"The snapshotting service is discontinued.
-
- Please use https://code.videolan.org/videolan/x264/ to get the
- tarballs."
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/x264/x264.hash | 4 ++--
- package/x264/x264.mk   | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/xapian/xapian.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/x264/x264.hash b/package/x264/x264.hash
-index 93242a46cc..cd9edb2bcb 100644
---- a/package/x264/x264.hash
-+++ b/package/x264/x264.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 0bb67d095513391e637b3b47e8efc3ba4603c3844f1b4c2690f4d36da7763055  x264-snapshot-20191217-2245.tar.bz2
--sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-+sha256  a8ba33e3621005ce10dc62c8e368abe6860dfbac4456af42f28c271c9ae1813e  x264-35417dcd65a57321fbadf98c9a4cff1cb741db4b.tar.gz
-+sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/x264/x264.mk b/package/x264/x264.mk
-index 9d217d1912..3ac8e68fc8 100644
---- a/package/x264/x264.mk
-+++ b/package/x264/x264.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/xapian/xapian.mk b/package/xapian/xapian.mk
+index 3ad816a36f..1a8557d603 100644
+--- a/package/xapian/xapian.mk
++++ b/package/xapian/xapian.mk
+@@ -9,6 +9,8 @@ XAPIAN_SOURCE = xapian-core-$(XAPIAN_VERSION).tar.xz
+ XAPIAN_SITE = https://oligarchy.co.uk/xapian/$(XAPIAN_VERSION)
+ XAPIAN_LICENSE = GPL-2.0+
+ XAPIAN_LICENSE_FILES = COPYING
++XAPIAN_CPE_ID_VENDOR = xapian
++XAPIAN_CPE_ID_PRODUCT = xapian-core
+ XAPIAN_INSTALL_STAGING = YES
+ XAPIAN_DEPENDENCIES = zlib
  
--X264_VERSION = 20191217-2245
--X264_SITE = http://download.videolan.org/x264/snapshots
--X264_SOURCE = x264-snapshot-$(X264_VERSION).tar.bz2
-+X264_VERSION = 35417dcd65a57321fbadf98c9a4cff1cb741db4b
-+X264_SITE = https://code.videolan.org/videolan/x264/-/archive/master
-+X264_SOURCE = x264-$(X264_VERSION).tar.gz
- X264_LICENSE = GPL-2.0+
- X264_DEPENDENCIES = host-pkgconf
- X264_LICENSE_FILES = COPYING
 -- 
 2.29.2
