@@ -1,37 +1,57 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 26 Jan 2021 17:35:08 +0100
-Subject: [Buildroot] [git commit] package/exiv2: drop cmake workaround
-Message-ID: <20210126164409.EE5657FAFF@busybox.osuosl.org>
+Date: Tue, 26 Jan 2021 18:04:22 +0100
+Subject: [Buildroot] [PATCH 1/9] package/uvw: drop cmake workaround
+In-Reply-To: <20210125214817.1177142-1-fontaine.fabrice@gmail.com>
+References: <20210125214817.1177142-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210126170422.GT2325@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=128e5e61c7dae04f99284508dc7885bcfba6bcdf
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fabrice, All,
 
-Drop workaround for cmake < 3.10 (not needed since commit
-d4773b610a40be1d3ac7d793033abaf4eb2491ed)
+On 2021-01-25 22:48 +0100, Fabrice Fontaine spake thusly:
+> Drop workaround for cmake < 3.10 (not needed since commit
+> d4773b610a40be1d3ac7d793033abaf4eb2491ed)
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/exiv2/exiv2.mk | 4 ----
- 1 file changed, 4 deletions(-)
+Series of 9 applied to master, thanks.
 
-diff --git a/package/exiv2/exiv2.mk b/package/exiv2/exiv2.mk
-index a898159a70..3d4cf41731 100644
---- a/package/exiv2/exiv2.mk
-+++ b/package/exiv2/exiv2.mk
-@@ -13,10 +13,6 @@ EXIV2_CPE_ID_VENDOR = exiv2
- 
- EXIV2_CONF_OPTS += -DEXIV2_BUILD_SAMPLES=OFF
- 
--# The following CMake variable disables a TRY_RUN call in the -pthread
--# test which is not allowed when cross-compiling.
--EXIV2_CONF_OPTS += -DTHREADS_PTHREAD_ARG=OFF
--
- ifeq ($(BR2_PACKAGE_EXIV2_LENSDATA),y)
- EXIV2_CONF_OPTS += -DEXIV2_ENABLE_LENSDATA=ON
- else
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/uvw/uvw.mk | 4 ----
+>  1 file changed, 4 deletions(-)
+> 
+> diff --git a/package/uvw/uvw.mk b/package/uvw/uvw.mk
+> index 39952caa11..f152d9f1cf 100644
+> --- a/package/uvw/uvw.mk
+> +++ b/package/uvw/uvw.mk
+> @@ -13,8 +13,4 @@ UVW_DEPENDENCIES = libuv
+>  UVW_LICENSE = MIT
+>  UVW_LICENSE_FILES = LICENSE
+>  
+> -# The following CMake variable disables a TRY_RUN call in the -pthread
+> -# test which is not allowed when cross-compiling (for cmake < 3.10)
+> -UVW_CONF_OPTS = -DTHREADS_PTHREAD_ARG=OFF
+> -
+>  $(eval $(cmake-package))
+> -- 
+> 2.29.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
