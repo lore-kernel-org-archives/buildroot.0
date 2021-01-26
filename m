@@ -1,10 +1,8 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 26 Jan 2021 21:04:51 +0100
-Subject: [Buildroot] [PATCH 2/2] package/x11r7/xlib_libXt: bump version to
- 1.2.1
-In-Reply-To: <20210126200451.285459-1-bernd.kuhls@t-online.de>
-References: <20210126200451.285459-1-bernd.kuhls@t-online.de>
-Message-ID: <20210126200451.285459-2-bernd.kuhls@t-online.de>
+Date: Tue, 26 Jan 2021 21:04:50 +0100
+Subject: [Buildroot] [PATCH 1/2] package/xutil_util-macros: bump version to
+ 1.19.3
+Message-ID: <20210126200451.285459-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,39 +13,37 @@ Reformatted hashes.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xlib_libXt/xlib_libXt.hash | 11 ++++-------
- package/x11r7/xlib_libXt/xlib_libXt.mk   |  2 +-
- 2 files changed, 5 insertions(+), 8 deletions(-)
+ package/xutil_util-macros/xutil_util-macros.hash | 8 +++-----
+ package/xutil_util-macros/xutil_util-macros.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXt/xlib_libXt.hash b/package/x11r7/xlib_libXt/xlib_libXt.hash
-index 7f457fb9bc..dcd4853d76 100644
---- a/package/x11r7/xlib_libXt/xlib_libXt.hash
-+++ b/package/x11r7/xlib_libXt/xlib_libXt.hash
-@@ -1,8 +1,5 @@
--# From https://lists.x.org/archives/xorg/2019-June/059825.html
--md5 a9019421d3ee8b4937b6afd9025f018a  libXt-1.2.0.tar.bz2
--sha1 f6b5ed799bc2e8d721e5407a09c2a8f570963f1b  libXt-1.2.0.tar.bz2
--sha256 b31df531dabed9f4611fc8980bc51d7782967e2aff44c4105251a1acb5a77831  libXt-1.2.0.tar.bz2
--sha512 06248508b6fe5dfba8ceb4518475f656162351d78136eeb5d65086d680dabe9aca7bba3c94347f9c13ef03f82dab3ac19d0952ee610bc8c51c14cee7cf65f0b1  libXt-1.2.0.tar.bz2
--
-+# From https://lists.x.org/archives/xorg-announce/2021-January/003070.html
-+sha256  679cc08f1646dbd27f5e48ffe8dd49406102937109130caab02ca32c083a3d60  libXt-1.2.1.tar.bz2
-+sha512  6877af61ba91eeed6b6f80471b84f354ad0ec0827249c7ee0a00c13508063fe8d2696dd400a4bdbc6ca2ff67cbe1317ad5ac24522fd96099dc56535e33ca052c  libXt-1.2.1.tar.bz2
- # Locally calculated
--sha256 a2866ccc0b1745149e4a2258d934314d40cbb43bd8318c6fa597f233995b0a81 COPYING
-+sha256  a2866ccc0b1745149e4a2258d934314d40cbb43bd8318c6fa597f233995b0a81 COPYING
-diff --git a/package/x11r7/xlib_libXt/xlib_libXt.mk b/package/x11r7/xlib_libXt/xlib_libXt.mk
-index 01251c091b..289cb5ac54 100644
---- a/package/x11r7/xlib_libXt/xlib_libXt.mk
-+++ b/package/x11r7/xlib_libXt/xlib_libXt.mk
+diff --git a/package/xutil_util-macros/xutil_util-macros.hash b/package/xutil_util-macros/xutil_util-macros.hash
+index 49c057fd21..3f28743e64 100644
+--- a/package/xutil_util-macros/xutil_util-macros.hash
++++ b/package/xutil_util-macros/xutil_util-macros.hash
+@@ -1,7 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2018-March/002845.html
+-md5 58edef899364f78fbde9479ded20211e  util-macros-1.19.2.tar.bz2
+-sha1 e8b3a6f2bfde22440fca0974da53da18821a4ee6  util-macros-1.19.2.tar.bz2
+-sha256 d7e43376ad220411499a79735020f9d145fdc159284867e99467e0d771f3e712  util-macros-1.19.2.tar.bz2
+-sha512 3f51504b27f0478c136126f15110cf3cdbba218c4d74a8e974cca1381c6e8364609bd0c444f2fb19aa86a7f4e848dfce4f4da940463b224036f75a60b3d88619  util-macros-1.19.2.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2021-January/003069.html
++sha256  0f812e6e9d2786ba8f54b960ee563c0663ddbe2434bf24ff193f5feab1f31971  util-macros-1.19.3.tar.bz2
++sha512  b9c7398a912c688a782eab5b1e0f6da2df11a430775c5c98fc3269f73a665de6eeb60d300a849e38d345714a6e51f74e9334cb6039767304cca4b93d823a53a2  util-macros-1.19.3.tar.bz2
+ # Locally computed
+ sha256 489b630a75e3255485732eae3d50ff4d29d3feb66760bb3acb04f897e4d9e375  COPYING
+diff --git a/package/xutil_util-macros/xutil_util-macros.mk b/package/xutil_util-macros/xutil_util-macros.mk
+index 6f66c76692..b0ce14ee5a 100644
+--- a/package/xutil_util-macros/xutil_util-macros.mk
++++ b/package/xutil_util-macros/xutil_util-macros.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XLIB_LIBXT_VERSION = 1.2.0
-+XLIB_LIBXT_VERSION = 1.2.1
- XLIB_LIBXT_SOURCE = libXt-$(XLIB_LIBXT_VERSION).tar.bz2
- XLIB_LIBXT_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXT_LICENSE = MIT
+-XUTIL_UTIL_MACROS_VERSION = 1.19.2
++XUTIL_UTIL_MACROS_VERSION = 1.19.3
+ XUTIL_UTIL_MACROS_SOURCE = util-macros-$(XUTIL_UTIL_MACROS_VERSION).tar.bz2
+ XUTIL_UTIL_MACROS_SITE = http://xorg.freedesktop.org/releases/individual/util
+ XUTIL_UTIL_MACROS_LICENSE = MIT
 -- 
 2.29.2
