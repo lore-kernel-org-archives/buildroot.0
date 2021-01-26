@@ -1,33 +1,88 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 26 Jan 2021 20:25:35 +0100
-Subject: [Buildroot] [PATCH 1/2] package/libiec61850: drop BUILD_EXAMPLES=OFF
-Message-ID: <20210126192536.2183792-1-fontaine.fabrice@gmail.com>
+Date: Tue, 26 Jan 2021 20:40:24 +0100
+Subject: [Buildroot] [PATCH 1/1] package/dhcpcd: bump to version 9.4.0
+Message-ID: <20210126194024.2307499-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-BUILD_EXAMPLES=OFF is already passed by cmake-infrastructure
+Drop patch (already in version)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libiec61850/libiec61850.mk | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ ...-src-dhcpcd.c-fix-build-without-fork.patch | 36 -------------------
+ package/dhcpcd/dhcpcd.hash                    |  4 +--
+ package/dhcpcd/dhcpcd.mk                      |  2 +-
+ 3 files changed, 3 insertions(+), 39 deletions(-)
+ delete mode 100644 package/dhcpcd/0001-src-dhcpcd.c-fix-build-without-fork.patch
 
-diff --git a/package/libiec61850/libiec61850.mk b/package/libiec61850/libiec61850.mk
-index 6413073805..c102feeac1 100644
---- a/package/libiec61850/libiec61850.mk
-+++ b/package/libiec61850/libiec61850.mk
-@@ -9,8 +9,7 @@ LIBIEC61850_SITE = $(call github,mz-automation,libiec61850,v$(LIBIEC61850_VERSIO
- LIBIEC61850_INSTALL_STAGING = YES
- LIBIEC61850_LICENSE = GPL-3.0+
- LIBIEC61850_LICENSE_FILES = COPYING
--LIBIEC61850_CONF_OPTS = -DBUILD_EXAMPLES=OFF \
--	-DBUILD_PYTHON_BINDINGS=OFF
-+LIBIEC61850_CONF_OPTS = -DBUILD_PYTHON_BINDINGS=OFF
+diff --git a/package/dhcpcd/0001-src-dhcpcd.c-fix-build-without-fork.patch b/package/dhcpcd/0001-src-dhcpcd.c-fix-build-without-fork.patch
+deleted file mode 100644
+index 07e6d642a7..0000000000
+--- a/package/dhcpcd/0001-src-dhcpcd.c-fix-build-without-fork.patch
++++ /dev/null
+@@ -1,36 +0,0 @@
+-From 13e475d9847bf7d6a6af62397f67eb269e27613e Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Mon, 13 Jul 2020 10:43:51 +0200
+-Subject: [PATCH] src/dhcpcd.c: fix build without fork
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/rsmarples/dhcpcd/pull/17]
+----
+- src/dhcpcd.c | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/src/dhcpcd.c b/src/dhcpcd.c
+-index ee585aa4..b597a5c0 100644
+---- a/src/dhcpcd.c
+-+++ b/src/dhcpcd.c
+-@@ -336,7 +336,7 @@ dhcpcd_daemonise(struct dhcpcd_ctx *ctx)
+- #ifdef THERE_IS_NO_FORK
+- 	eloop_timeout_delete(ctx->eloop, handle_exit_timeout, ctx);
+- 	errno = ENOSYS;
+--	return 0;
+-+	return;
+- #else
+- 	int i;
+- 	unsigned int logopts = loggetopts();
+-@@ -2211,7 +2211,7 @@ printpidfile:
+- 	ps_init(&ctx);
+- #endif
+- 
+--#ifdef USE_SIGNALS
+-+#if defined(USE_SIGNALS) && !defined(THERE_IS_NO_FORK)
+- 	if (pipe(sigpipe) == -1) {
+- 		logerr("pipe");
+- 		goto exit_failure;
+--- 
+-2.27.0
+-
+diff --git a/package/dhcpcd/dhcpcd.hash b/package/dhcpcd/dhcpcd.hash
+index 6991e73680..413f5c842b 100644
+--- a/package/dhcpcd/dhcpcd.hash
++++ b/package/dhcpcd/dhcpcd.hash
+@@ -1,4 +1,4 @@
+-# sha256 from ftp://roy.marples.name/pub/dhcpcd/dhcpcd-9.1.4.tar.xz.distinfo
+-sha256  5fe133e5497d8af6d26bd6e6b8dd48ab12d124d6cc4cefe6de6536ff97f76820  dhcpcd-9.1.4.tar.xz
++# sha256 from ftp://roy.marples.name/pub/dhcpcd/dhcpcd-9.4.0.tar.xz.distinfo
++sha256  41a69297f380bf15ee8f94f73154f8c2bca7157a087c0d5aca8de000ba1d4513  dhcpcd-9.4.0.tar.xz
+ # Locally calculated
+ sha256  9cce1077bad23544349788ec750ec6e5aee106fc437fd6b5d73c0d8510426578  LICENSE
+diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
+index 4900e0581f..ce1443eed0 100644
+--- a/package/dhcpcd/dhcpcd.mk
++++ b/package/dhcpcd/dhcpcd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # 0003-COTP-fixed-possible-heap-buffer-overflow-when-handling-message.patch
- LIBIEC61850_IGNORE_CVES += CVE-2020-15158
+-DHCPCD_VERSION = 9.1.4
++DHCPCD_VERSION = 9.4.0
+ DHCPCD_SOURCE = dhcpcd-$(DHCPCD_VERSION).tar.xz
+ DHCPCD_SITE = http://roy.marples.name/downloads/dhcpcd
+ DHCPCD_DEPENDENCIES = host-pkgconf
 -- 
 2.29.2
