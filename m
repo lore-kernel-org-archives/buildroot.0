@@ -1,83 +1,60 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 26 Jan 2021 18:47:20 +0100
-Subject: [Buildroot] [PATCH 1/1] package/igd2-for-linux: bump to version 2.1
-Message-ID: <20210126174720.2180660-1-fontaine.fabrice@gmail.com>
+Date: Tue, 26 Jan 2021 18:54:56 +0100
+Subject: [Buildroot] [PATCH 1/1] package/spdlog: support dynamic library
+Message-ID: <20210126175456.2181332-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Move to autotools which has been added to this version to fix static
-build failure with an openssl-enabled libupnp in version > 1.6
-
-Fixes:
- - http://autobuild.buildroot.org/results/86214570ac5093d4a5a31fadae59c3f47df16948
+spdlog can install a shared library since version 1.4.0 and
+https://github.com/gabime/spdlog/commit/45a18a61c633564311e51f5cbed2748e9cb70e2f
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/igd2-for-linux/igd2-for-linux.hash |  2 +-
- package/igd2-for-linux/igd2-for-linux.mk   | 27 ++++------------------
- 2 files changed, 6 insertions(+), 23 deletions(-)
+ package/spdlog/Config.in | 2 +-
+ package/spdlog/spdlog.mk | 9 ++++++---
+ 2 files changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/package/igd2-for-linux/igd2-for-linux.hash b/package/igd2-for-linux/igd2-for-linux.hash
-index fc215727d7..fe1272338a 100644
---- a/package/igd2-for-linux/igd2-for-linux.hash
-+++ b/package/igd2-for-linux/igd2-for-linux.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256  e3fcc7c9da4ad1ca16227b3b1b3712bcfb3f6ec922685eee7ae4a76edfa32bb4  igd2-for-linux-2.0.tar.gz
-+sha256  843f2b0a7597e6cc7af85da099a7cce3401a334cbb4a6ae9d38ce252311db9b9  igd2-for-linux-2.1.tar.gz
- sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  linuxigd2/doc/LICENSE
- sha256  c8b99423cad48bb44e2cf52a496361404290865eac259a82da6d1e4331ececb3  linuxigd2/src/threadutil/COPYING
-diff --git a/package/igd2-for-linux/igd2-for-linux.mk b/package/igd2-for-linux/igd2-for-linux.mk
-index 85119a14b5..8cc3c6ae18 100644
---- a/package/igd2-for-linux/igd2-for-linux.mk
-+++ b/package/igd2-for-linux/igd2-for-linux.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/spdlog/Config.in b/package/spdlog/Config.in
+index 4aee1f7dd1..877c1b6ab7 100644
+--- a/package/spdlog/Config.in
++++ b/package/spdlog/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_SPDLOG
+ 	depends on BR2_USE_WCHAR # fmt
+ 	select BR2_PACKAGE_FMT
+ 	help
+-	  Very fast, header only, C++ logging library.
++	  Very fast, header-only/compiled, C++ logging library.
  
--IGD2_FOR_LINUX_VERSION = 2.0
-+IGD2_FOR_LINUX_VERSION = 2.1
- IGD2_FOR_LINUX_SITE = \
- 	$(call github,Orange-OpenSource,igd2-for-linux,v$(IGD2_FOR_LINUX_VERSION))
+ 	  https://github.com/gabime/spdlog
  
-@@ -12,26 +12,9 @@ IGD2_FOR_LINUX_LICENSE = GPL-2.0, BSD-3-Clause
- IGD2_FOR_LINUX_LICENSE_FILES = linuxigd2/doc/LICENSE linuxigd2/src/threadutil/COPYING
+diff --git a/package/spdlog/spdlog.mk b/package/spdlog/spdlog.mk
+index 3c745f60ad..f5b331526a 100644
+--- a/package/spdlog/spdlog.mk
++++ b/package/spdlog/spdlog.mk
+@@ -8,6 +8,7 @@ SPDLOG_VERSION = 1.8.1
+ SPDLOG_SITE = $(call github,gabime,spdlog,v$(SPDLOG_VERSION))
+ SPDLOG_LICENSE = MIT
+ SPDLOG_LICENSE_FILES = LICENSE
++SPDLOG_INSTALL_STAGING = YES
+ SPDLOG_DEPENDENCIES = fmt
+ SPDLOG_CONF_OPTS += \
+ 	-DSPDLOG_BUILD_TESTS=OFF \
+@@ -15,8 +16,10 @@ SPDLOG_CONF_OPTS += \
+ 	-DSPDLOG_BUILD_BENCH=OFF \
+ 	-DSPDLOG_FMT_EXTERNAL=ON
  
- IGD2_FOR_LINUX_DEPENDENCIES = libupnp
--
--IGD2_FOR_LINUX_BUILD_DIR = $(@D)/linuxigd2
--IGD2_FOR_LINUX_CONF_DIR = $(IGD2_FOR_LINUX_BUILD_DIR)/configs
--
--define IGD2_FOR_LINUX_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(IGD2_FOR_LINUX_BUILD_DIR) \
--		$(TARGET_CONFIGURE_OPTS) \
--		LIBUPNP_PREFIX="$(STAGING_DIR)/usr" \
--		all
--endef
--
--define IGD2_FOR_LINUX_INSTALL_TARGET_CMDS
--	$(INSTALL) -D -m 0755 $(IGD2_FOR_LINUX_BUILD_DIR)/bin/upnpd \
--		$(TARGET_DIR)/usr/sbin/upnpd
--	$(INSTALL) -D -m 0644 $(IGD2_FOR_LINUX_CONF_DIR)/upnpd.conf \
--		$(TARGET_DIR)/etc/upnpd.conf
--	mkdir -p $(TARGET_DIR)/etc/linuxigd/
--	cp -dpfr $(IGD2_FOR_LINUX_CONF_DIR)/*.{xml,png} \
--		$(TARGET_DIR)/etc/linuxigd/
--endef
-+# From git
-+IGD2_FOR_LINUX_AUTORECONF = YES
-+IGD2_FOR_LINUX_SUBDIR = linuxigd2
+-# Header-only library
+-SPDLOG_INSTALL_STAGING = YES
+-SPDLOG_INSTALL_TARGET = NO
++ifeq ($(BR2_STATIC_LIBS),y)
++SPDLOG_CONF_OPTS += -DSPDLOG_BUILD_SHARED=OFF
++else
++SPDLOG_CONF_OPTS += -DSPDLOG_BUILD_SHARED=ON
++endif
  
- define IGD2_FOR_LINUX_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 0755 package/igd2-for-linux/S99upnpd \
-@@ -43,4 +26,4 @@ define IGD2_FOR_LINUX_INSTALL_INIT_SYSTEMD
- 		$(TARGET_DIR)/usr/lib/systemd/system/upnpd.service
- endef
- 
--$(eval $(generic-package))
-+$(eval $(autotools-package))
+ $(eval $(cmake-package))
 -- 
 2.29.2
