@@ -1,36 +1,36 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 26 Jan 2021 19:50:47 +0100
-Subject: [Buildroot] [git commit] package/sdl2: add CPE variables
-Message-ID: <20210126183304.88593817A2@busybox.osuosl.org>
+Date: Tue, 26 Jan 2021 19:50:51 +0100
+Subject: [Buildroot] [git commit] package/nettle: set NETTLE_CPE_ID_VALID
+Message-ID: <20210126183304.ACFB080367@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=38fd9b8448856567de57fac2f32deab52219511f
+commit: https://git.buildroot.net/buildroot/commit/?id=0cadd402becab9278d199cb6e626fe19287b7d29
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:libsdl:sdl is a valid CPE identifier for this package:
+cpe:2.3:a:nettle_project:nettle is a valid CPE identifier for this
+package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alibsdl%3Asdl
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Anettle_project%3Anettle
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/sdl2/sdl2.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/nettle/nettle.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
-index bf43d71f04..dfe5ec8802 100644
---- a/package/sdl2/sdl2.mk
-+++ b/package/sdl2/sdl2.mk
-@@ -9,6 +9,8 @@ SDL2_SOURCE = SDL2-$(SDL2_VERSION).tar.gz
- SDL2_SITE = http://www.libsdl.org/release
- SDL2_LICENSE = Zlib
- SDL2_LICENSE_FILES = COPYING.txt
-+SDL2_CPE_ID_VENDOR = libsdl
-+SDL2_CPE_ID_PRODUCT = sdl
- SDL2_INSTALL_STAGING = YES
- SDL2_CONFIG_SCRIPTS = sdl2-config
- 
+diff --git a/package/nettle/nettle.mk b/package/nettle/nettle.mk
+index 50ebdc706b..68844976ea 100644
+--- a/package/nettle/nettle.mk
++++ b/package/nettle/nettle.mk
+@@ -10,6 +10,7 @@ NETTLE_DEPENDENCIES = gmp
+ NETTLE_INSTALL_STAGING = YES
+ NETTLE_LICENSE = Dual GPL-2.0+/LGPL-3.0+
+ NETTLE_LICENSE_FILES = COPYING.LESSERv3 COPYINGv2
++NETTLE_CPE_ID_VALID = YES
+ # don't include openssl support for (unused) examples as it has problems
+ # with static linking
+ NETTLE_CONF_OPTS = --disable-openssl
