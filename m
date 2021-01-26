@@ -1,72 +1,125 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 26 Jan 2021 19:56:29 +0100
-Subject: [Buildroot] [PATCH 1/1] package/spdlog: support dynamic library
-In-Reply-To: <20210126175456.2181332-1-fontaine.fabrice@gmail.com>
-References: <20210126175456.2181332-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210126185629.GE2325@scaer>
+Date: Tue, 26 Jan 2021 20:00:43 +0100
+Subject: [Buildroot] [PATCH 1/1] package/timescaledb: Fix build with
+ Postgresql 13
+In-Reply-To: <20210125074058.786498-1-fido_max@inbox.ru>
+References: <20210125074058.786498-1-fido_max@inbox.ru>
+Message-ID: <20210126190043.GF2325@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Maxim, All,
 
-On 2021-01-26 18:54 +0100, Fabrice Fontaine spake thusly:
-> spdlog can install a shared library since version 1.4.0 and
-> https://github.com/gabime/spdlog/commit/45a18a61c633564311e51f5cbed2748e9cb70e2f
+On 2021-01-25 10:40 +0300, Maxim Kochetkov via buildroot spake thusly:
+> Add missed patch for PG13 build.
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Fixes: 5cff0c8a2d1c ("package/timescaledb: bump to version 2.0.0")
 
-Applied to master, thanks.
+Does that fix build failures like that:
+
+    http://autobuild.buildroot.org/results/480/480da8c6a13cc44f5ede9f754a4dfef8800d8e2a/build-end.log
+    http://autobuild.buildroot.org/results/0e5/0e534ed0a5206856fad7272008b12205811f098a/build-end.log
+
+Or any of the other autobuild failures:
+
+    http://autobuild.buildroot.org/?reason=timescaledb-%
+
+If so, then you can add such references in the commit log:
+
+    Fixes:
+        http://autobuild.buildroot.org/results/0e5/0e534ed0a5206856fad7272008b12205811f098a/build-end.log
+
+No need to resend this patch just for that, I can add those when
+aplying if need be.
 
 Regards,
 Yann E. MORIN.
 
+> Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
 > ---
->  package/spdlog/Config.in | 2 +-
->  package/spdlog/spdlog.mk | 9 ++++++---
->  2 files changed, 7 insertions(+), 4 deletions(-)
+>  ...just-code-to-PG13-tuptoaster-changes.patch | 70 +++++++++++++++++++
+>  1 file changed, 70 insertions(+)
+>  create mode 100644 package/timescaledb/0019-Adjust-code-to-PG13-tuptoaster-changes.patch
 > 
-> diff --git a/package/spdlog/Config.in b/package/spdlog/Config.in
-> index 4aee1f7dd1..877c1b6ab7 100644
-> --- a/package/spdlog/Config.in
-> +++ b/package/spdlog/Config.in
-> @@ -5,7 +5,7 @@ config BR2_PACKAGE_SPDLOG
->  	depends on BR2_USE_WCHAR # fmt
->  	select BR2_PACKAGE_FMT
->  	help
-> -	  Very fast, header only, C++ logging library.
-> +	  Very fast, header-only/compiled, C++ logging library.
->  
->  	  https://github.com/gabime/spdlog
->  
-> diff --git a/package/spdlog/spdlog.mk b/package/spdlog/spdlog.mk
-> index 3c745f60ad..f5b331526a 100644
-> --- a/package/spdlog/spdlog.mk
-> +++ b/package/spdlog/spdlog.mk
-> @@ -8,6 +8,7 @@ SPDLOG_VERSION = 1.8.1
->  SPDLOG_SITE = $(call github,gabime,spdlog,v$(SPDLOG_VERSION))
->  SPDLOG_LICENSE = MIT
->  SPDLOG_LICENSE_FILES = LICENSE
-> +SPDLOG_INSTALL_STAGING = YES
->  SPDLOG_DEPENDENCIES = fmt
->  SPDLOG_CONF_OPTS += \
->  	-DSPDLOG_BUILD_TESTS=OFF \
-> @@ -15,8 +16,10 @@ SPDLOG_CONF_OPTS += \
->  	-DSPDLOG_BUILD_BENCH=OFF \
->  	-DSPDLOG_FMT_EXTERNAL=ON
->  
-> -# Header-only library
-> -SPDLOG_INSTALL_STAGING = YES
-> -SPDLOG_INSTALL_TARGET = NO
-> +ifeq ($(BR2_STATIC_LIBS),y)
-> +SPDLOG_CONF_OPTS += -DSPDLOG_BUILD_SHARED=OFF
-> +else
-> +SPDLOG_CONF_OPTS += -DSPDLOG_BUILD_SHARED=ON
-> +endif
->  
->  $(eval $(cmake-package))
+> diff --git a/package/timescaledb/0019-Adjust-code-to-PG13-tuptoaster-changes.patch b/package/timescaledb/0019-Adjust-code-to-PG13-tuptoaster-changes.patch
+> new file mode 100644
+> index 0000000000..0793bf1d26
+> --- /dev/null
+> +++ b/package/timescaledb/0019-Adjust-code-to-PG13-tuptoaster-changes.patch
+> @@ -0,0 +1,70 @@
+> +From 42ac10738119c7d31892d8c3f45d525ad5bda756 Mon Sep 17 00:00:00 2001
+> +From: Sven Klemm <sven@timescale.com>
+> +Date: Sat, 26 Sep 2020 02:19:56 +0200
+> +Subject: [PATCH] Adjust code to PG13 tuptoaster changes
+> +
+> +PG13 split tuptoaster.c into three separate files. This patch also
+> +removes unnecesary tuptoaster.h includes.
+> +
+> +https://github.com/postgres/postgres/commit/8b94dab066
+> +
+> +Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+> +Fetch from: https://github.com/timescale/timescaledb/commit/2bef612c04435cdb5257d40373c4955a0d617c39.patch
+> +---
+> + tsl/src/remote/async.c       | 1 -
+> + tsl/src/remote/stmt_params.c | 1 -
+> + tsl/src/reorder.c            | 7 ++++++-
+> + 3 files changed, 6 insertions(+), 3 deletions(-)
+> +
+> +diff --git a/tsl/src/remote/async.c b/tsl/src/remote/async.c
+> +index f3462809..0d55deb7 100644
+> +--- a/tsl/src/remote/async.c
+> ++++ b/tsl/src/remote/async.c
+> +@@ -13,7 +13,6 @@
+> + #include <fmgr.h>
+> + #include <utils/lsyscache.h>
+> + #include <catalog/pg_type.h>
+> +-#include <access/tuptoaster.h>
+> + 
+> + #include "compat.h"
+> + #if PG12_GE
+> +diff --git a/tsl/src/remote/stmt_params.c b/tsl/src/remote/stmt_params.c
+> +index 0f315f37..1682d476 100644
+> +--- a/tsl/src/remote/stmt_params.c
+> ++++ b/tsl/src/remote/stmt_params.c
+> +@@ -6,7 +6,6 @@
+> + #include <postgres.h>
+> + #include <catalog/pg_type.h>
+> + #include <access/htup_details.h>
+> +-#include <access/tuptoaster.h>
+> + #include <utils/lsyscache.h>
+> + #include <utils/syscache.h>
+> + #include <utils/builtins.h>
+> +diff --git a/tsl/src/reorder.c b/tsl/src/reorder.c
+> +index c4b42c12..7f301b2b 100644
+> +--- a/tsl/src/reorder.c
+> ++++ b/tsl/src/reorder.c
+> +@@ -19,7 +19,6 @@
+> + #include <access/relscan.h>
+> + #include <access/rewriteheap.h>
+> + #include <access/transam.h>
+> +-#include <access/tuptoaster.h>
+> + #include <access/xact.h>
+> + #include <access/xlog.h>
+> + #include <catalog/catalog.h>
+> +@@ -58,6 +57,12 @@
+> + #include <utils/tqual.h>
+> + #endif
+> + 
+> ++#if PG13_LT
+> ++#include <access/tuptoaster.h>
+> ++#else
+> ++#include <access/toast_internals.h>
+> ++#endif
+> ++
+> + #include "chunk.h"
+> + #include "chunk_index.h"
+> + #include "hypertable_cache.h"
+> +-- 
+> +2.29.2
+> +
 > -- 
 > 2.29.2
 > 
