@@ -1,66 +1,80 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 26 Jan 2021 19:30:03 +0100
-Subject: [Buildroot] [PATCH 1/2] package/gerbera: fix linking with
- std::filesystem
-In-Reply-To: <20210126172526.2133034-1-fontaine.fabrice@gmail.com>
-References: <20210126172526.2133034-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210126183003.GX2325@scaer>
+Date: Tue, 26 Jan 2021 19:42:50 +0100
+Subject: [Buildroot] [git commit] package/ltp-testsuite: simplify code to
+ exclude test-cases
+Message-ID: <20210126182316.682998130D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=f729692c16454effe625a769231487ac4c9f9d7c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-01-26 18:25 +0100, Fabrice Fontaine spake thusly:
-> Do not force to CXX_FILESYSTEM_NO_LINK_NEEDED to ON to allow gerbera to
-> link with the approriate library for std::filesystem
-> 
-> It should be noted that check_cxx_source_runs has been dropped since
-> version 1.6.0 and
-> https://github.com/gerbera/gerbera/commit/a3a64bed1d78fc51c7ab298db019c89852acb80c
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/0fcd0ce167c04f788bf1b9414ae5e7677691c7cf
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+We have three conditions under which some tests may get removed:
+uClibc, musl, static libraries. All three use the same mechanism
+to exclude those test-cases: remove the files.
 
-Series of 2 applied to master, thanks.
+The first two use a common variable to list the affected files,
+and share the same hook of their own to iterate over that list,
+while the third has its own hook.
 
-Regards,
-Yann E. MORIN.
+This is not very clean, so switch to using a single variable and
+a single hook for all three conditions.
 
-> ---
->  package/gerbera/gerbera.mk | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/package/gerbera/gerbera.mk b/package/gerbera/gerbera.mk
-> index 9468def041..6e36377798 100644
-> --- a/package/gerbera/gerbera.mk
-> +++ b/package/gerbera/gerbera.mk
-> @@ -18,8 +18,7 @@ GERBERA_DEPENDENCIES = \
->  	zlib
->  GERBERA_CONF_OPTS = \
->  	-DWITH_DEBUG=OFF \
-> -	-DWITH_JS=OFF \
-> -	-DCXX_FILESYSTEM_NO_LINK_NEEDED=ON
-> +	-DWITH_JS=OFF
->  
->  # Uses __atomic_fetch_add_4
->  ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-> -- 
-> 2.29.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Petr Vorel <petr.vorel@gmail.com>
+Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
+---
+ package/ltp-testsuite/ltp-testsuite.mk | 22 ++++++++--------------
+ 1 file changed, 8 insertions(+), 14 deletions(-)
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
+index 4d7aa451b5..43ee134d1c 100644
+--- a/package/ltp-testsuite/ltp-testsuite.mk
++++ b/package/ltp-testsuite/ltp-testsuite.mk
+@@ -65,12 +65,11 @@ LTP_TESTSUITE_CONF_ENV += \
+ 	SYSROOT="$(STAGING_DIR)"
+ 
+ # uclibc: bessel support normally not enabled
+-ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+-LTP_TESTSUITE_UNSUPPORTED_TEST_CASES = \
++LTP_TESTSUITE_UNSUPPORTED_TEST_CASES_$(BR2_TOOLCHAIN_USES_UCLIBC) += \
+ 	testcases/misc/math/float/bessel/ \
+ 	testcases/misc/math/float/float_bessel.c
+-else ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
+-LTP_TESTSUITE_UNSUPPORTED_TEST_CASES = \
++
++LTP_TESTSUITE_UNSUPPORTED_TEST_CASES_$(BR2_TOOLCHAIN_USES_MUSL) += \
+ 	testcases/kernel/sched/process_stress/process.c \
+ 	testcases/kernel/syscalls/confstr/confstr01.c \
+ 	testcases/kernel/syscalls/fmtmsg/fmtmsg01.c \
+@@ -79,22 +78,17 @@ LTP_TESTSUITE_UNSUPPORTED_TEST_CASES = \
+ 	testcases/kernel/syscalls/timer_create/timer_create01.c \
+ 	testcases/kernel/syscalls/timer_create/timer_create03.c \
+ 	utils/benchmark/ebizzy-0.3
+-endif
++
++# ldd command build system tries to build a shared library unconditionally.
++LTP_TESTSUITE_UNSUPPORTED_TEST_CASES_$(BR2_STATIC_LIBS) += \
++	testcases/commands/ldd
+ 
+ define LTP_TESTSUITE_REMOVE_UNSUPPORTED_TESTCASES
+-	$(foreach f,$(LTP_TESTSUITE_UNSUPPORTED_TEST_CASES),
++	$(foreach f,$(LTP_TESTSUITE_UNSUPPORTED_TEST_CASES_y),
+ 		rm -rf $(@D)/$(f)
+ 	)
+ endef
+ 
+ LTP_TESTSUITE_POST_PATCH_HOOKS += LTP_TESTSUITE_REMOVE_UNSUPPORTED_TESTCASES
+ 
+-# ldd command build system tries to build a shared library unconditionally.
+-ifeq ($(BR2_STATIC_LIBS),y)
+-define LTP_TESTSUITE_REMOVE_LDD
+-	rm -rf $(@D)/testcases/commands/ldd
+-endef
+-LTP_TESTSUITE_POST_PATCH_HOOKS += LTP_TESTSUITE_REMOVE_LDD
+-endif
+-
+ $(eval $(autotools-package))
