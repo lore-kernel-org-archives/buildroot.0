@@ -1,34 +1,66 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 26 Jan 2021 19:21:10 +0100
-Subject: [Buildroot] [git commit] package/gerbera: needs xpath in pugixml
-Message-ID: <20210126180946.BD3168167F@busybox.osuosl.org>
+Date: Tue, 26 Jan 2021 19:30:03 +0100
+Subject: [Buildroot] [PATCH 1/2] package/gerbera: fix linking with
+ std::filesystem
+In-Reply-To: <20210126172526.2133034-1-fontaine.fabrice@gmail.com>
+References: <20210126172526.2133034-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210126183003.GX2325@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c7414ab12e57d67aee94a66913eabc88b2e3dd71
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fabrice, All,
 
-Fixes:
- - http://autobuild.buildroot.org/results/0fcd0ce167c04f788bf1b9414ae5e7677691c7cf
+On 2021-01-26 18:25 +0100, Fabrice Fontaine spake thusly:
+> Do not force to CXX_FILESYSTEM_NO_LINK_NEEDED to ON to allow gerbera to
+> link with the approriate library for std::filesystem
+> 
+> It should be noted that check_cxx_source_runs has been dropped since
+> version 1.6.0 and
+> https://github.com/gerbera/gerbera/commit/a3a64bed1d78fc51c7ab298db019c89852acb80c
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/0fcd0ce167c04f788bf1b9414ae5e7677691c7cf
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/gerbera/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+Series of 2 applied to master, thanks.
 
-diff --git a/package/gerbera/Config.in b/package/gerbera/Config.in
-index 5025b3753f..a07bcc5c57 100644
---- a/package/gerbera/Config.in
-+++ b/package/gerbera/Config.in
-@@ -10,6 +10,7 @@ config BR2_PACKAGE_GERBERA
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	select BR2_PACKAGE_LIBUPNP if !BR2_PACKAGE_LIBNPUPNP
- 	select BR2_PACKAGE_PUGIXML
-+	select BR2_PACKAGE_PUGIXML_XPATH_SUPPORT
- 	select BR2_PACKAGE_SPDLOG
- 	select BR2_PACKAGE_SQLITE
- 	select BR2_PACKAGE_UTIL_LINUX
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/gerbera/gerbera.mk | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/package/gerbera/gerbera.mk b/package/gerbera/gerbera.mk
+> index 9468def041..6e36377798 100644
+> --- a/package/gerbera/gerbera.mk
+> +++ b/package/gerbera/gerbera.mk
+> @@ -18,8 +18,7 @@ GERBERA_DEPENDENCIES = \
+>  	zlib
+>  GERBERA_CONF_OPTS = \
+>  	-DWITH_DEBUG=OFF \
+> -	-DWITH_JS=OFF \
+> -	-DCXX_FILESYSTEM_NO_LINK_NEEDED=ON
+> +	-DWITH_JS=OFF
+>  
+>  # Uses __atomic_fetch_add_4
+>  ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+> -- 
+> 2.29.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
