@@ -1,31 +1,44 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Tue, 26 Jan 2021 18:58:34 +0100
-Subject: [Buildroot] [PATCH] package/ltp-testsuite: simplify code to
- exclude test-cases
-In-Reply-To: <20210126174741.1046950-1-yann.morin.1998@free.fr>
-References: <20210126174741.1046950-1-yann.morin.1998@free.fr>
-Message-ID: <YBBYSkMrryKEr3yx@pevik>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 26 Jan 2021 18:50:57 +0100
+Subject: [Buildroot] [git commit] package/gerbera: fix linking with
+ std::filesystem
+Message-ID: <20210126180946.B5E8D83BC8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+commit: https://git.buildroot.net/buildroot/commit/?id=65f7b0d30d10f50dcdacdba6408f4e2597396f5e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> We have three conditions under which some tests may get removed:
-> uClibc, musl, static libraries. All three use the same mechanism
-> to exclude those test-cases: remove the files.
+Do not force to CXX_FILESYSTEM_NO_LINK_NEEDED to ON to allow gerbera to
+link with the approriate library for std::filesystem
 
-> The first two use a common variable to list the affected files,
-> and share the same hook of their own to iterate over that list,
-> while the third has its own hook.
+It should be noted that check_cxx_source_runs has been dropped since
+version 1.6.0 and
+https://github.com/gerbera/gerbera/commit/a3a64bed1d78fc51c7ab298db019c89852acb80c
 
-> This is not very clean, so switch to using a single variable and
-> a single hook for all three conditions.
-Nice cleanup, thank you!
+Fixes:
+ - http://autobuild.buildroot.org/results/0fcd0ce167c04f788bf1b9414ae5e7677691c7cf
 
-Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/gerbera/gerbera.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Kind regards,
-Petr
+diff --git a/package/gerbera/gerbera.mk b/package/gerbera/gerbera.mk
+index 9468def041..6e36377798 100644
+--- a/package/gerbera/gerbera.mk
++++ b/package/gerbera/gerbera.mk
+@@ -18,8 +18,7 @@ GERBERA_DEPENDENCIES = \
+ 	zlib
+ GERBERA_CONF_OPTS = \
+ 	-DWITH_DEBUG=OFF \
+-	-DWITH_JS=OFF \
+-	-DCXX_FILESYSTEM_NO_LINK_NEEDED=ON
++	-DWITH_JS=OFF
+ 
+ # Uses __atomic_fetch_add_4
+ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
