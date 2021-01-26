@@ -1,61 +1,78 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 26 Jan 2021 18:31:30 +0100
-Subject: [Buildroot] [PATCH 1/1] package/ltp-testsuite: update musl
- related cleanup
-In-Reply-To: <20210125013329.31989-1-petr.vorel@gmail.com>
-References: <20210125013329.31989-1-petr.vorel@gmail.com>
-Message-ID: <20210126173130.GW2325@scaer>
+Date: Tue, 26 Jan 2021 18:47:41 +0100
+Subject: [Buildroot] [PATCH] package/ltp-testsuite: simplify code to exclude
+ test-cases
+Message-ID: <20210126174741.1046950-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Petr, All,
+We have three conditions under which some tests may get removed:
+uClibc, musl, static libraries. All three use the same mechanism
+to exclude those test-cases: remove the files.
 
-On 2021-01-25 02:33 +0100, Petr Vorel spake thusly:
-> Compile getdents0{1,2}.c which has been fixed in upstream in commit
-> 8a85a2d61 ("getdents: update to the new api, don't mix libc and kernel
-> types").
-> 
-> Fixes: 84968aa495 ("package/ltp-testsuite: bump version to 20210121")
-> 
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+The first two use a common variable to list the affected files,
+and share the same hook of their own to iterate over that list,
+while the third has its own hook.
 
-Applied to master, thanks.
+This is not very clean, so switch to using a single variable and
+a single hook for all three conditions.
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Petr Vorel <petr.vorel@gmail.com>
+---
+ package/ltp-testsuite/ltp-testsuite.mk | 22 ++++++++--------------
+ 1 file changed, 8 insertions(+), 14 deletions(-)
 
-> ---
->  package/ltp-testsuite/ltp-testsuite.mk | 2 --
->  1 file changed, 2 deletions(-)
-> 
-> diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
-> index 577fdf1131..4d7aa451b5 100644
-> --- a/package/ltp-testsuite/ltp-testsuite.mk
-> +++ b/package/ltp-testsuite/ltp-testsuite.mk
-> @@ -75,8 +75,6 @@ LTP_TESTSUITE_UNSUPPORTED_TEST_CASES = \
->  	testcases/kernel/syscalls/confstr/confstr01.c \
->  	testcases/kernel/syscalls/fmtmsg/fmtmsg01.c \
->  	testcases/kernel/syscalls/getcontext/getcontext01.c \
-> -	testcases/kernel/syscalls/getdents/getdents01.c \
-> -	testcases/kernel/syscalls/getdents/getdents02.c \
->  	testcases/kernel/syscalls/rt_tgsigqueueinfo/rt_tgsigqueueinfo01.c \
->  	testcases/kernel/syscalls/timer_create/timer_create01.c \
->  	testcases/kernel/syscalls/timer_create/timer_create03.c \
-> -- 
-> 2.30.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
+index 4d7aa451b5..43ee134d1c 100644
+--- a/package/ltp-testsuite/ltp-testsuite.mk
++++ b/package/ltp-testsuite/ltp-testsuite.mk
+@@ -65,12 +65,11 @@ LTP_TESTSUITE_CONF_ENV += \
+ 	SYSROOT="$(STAGING_DIR)"
+ 
+ # uclibc: bessel support normally not enabled
+-ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+-LTP_TESTSUITE_UNSUPPORTED_TEST_CASES = \
++LTP_TESTSUITE_UNSUPPORTED_TEST_CASES_$(BR2_TOOLCHAIN_USES_UCLIBC) += \
+ 	testcases/misc/math/float/bessel/ \
+ 	testcases/misc/math/float/float_bessel.c
+-else ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
+-LTP_TESTSUITE_UNSUPPORTED_TEST_CASES = \
++
++LTP_TESTSUITE_UNSUPPORTED_TEST_CASES_$(BR2_TOOLCHAIN_USES_MUSL) += \
+ 	testcases/kernel/sched/process_stress/process.c \
+ 	testcases/kernel/syscalls/confstr/confstr01.c \
+ 	testcases/kernel/syscalls/fmtmsg/fmtmsg01.c \
+@@ -79,22 +78,17 @@ LTP_TESTSUITE_UNSUPPORTED_TEST_CASES = \
+ 	testcases/kernel/syscalls/timer_create/timer_create01.c \
+ 	testcases/kernel/syscalls/timer_create/timer_create03.c \
+ 	utils/benchmark/ebizzy-0.3
+-endif
++
++# ldd command build system tries to build a shared library unconditionally.
++LTP_TESTSUITE_UNSUPPORTED_TEST_CASES_$(BR2_STATIC_LIBS) += \
++	testcases/commands/ldd
+ 
+ define LTP_TESTSUITE_REMOVE_UNSUPPORTED_TESTCASES
+-	$(foreach f,$(LTP_TESTSUITE_UNSUPPORTED_TEST_CASES),
++	$(foreach f,$(LTP_TESTSUITE_UNSUPPORTED_TEST_CASES_y),
+ 		rm -rf $(@D)/$(f)
+ 	)
+ endef
+ 
+ LTP_TESTSUITE_POST_PATCH_HOOKS += LTP_TESTSUITE_REMOVE_UNSUPPORTED_TESTCASES
+ 
+-# ldd command build system tries to build a shared library unconditionally.
+-ifeq ($(BR2_STATIC_LIBS),y)
+-define LTP_TESTSUITE_REMOVE_LDD
+-	rm -rf $(@D)/testcases/commands/ldd
+-endef
+-LTP_TESTSUITE_POST_PATCH_HOOKS += LTP_TESTSUITE_REMOVE_LDD
+-endif
+-
+ $(eval $(autotools-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.25.1
