@@ -1,29 +1,36 @@
-From: Patzlaff, Marcel <m.patzlaff@pilz.de>
-Date: Wed, 27 Jan 2021 07:16:27 +0000
-Subject: [Buildroot] Question: What is the intention of BR2_LOCALVERSION?
-Message-ID: <AM0P194MB0612EAA1E850240102B16CF68BBB0@AM0P194MB0612.EURP194.PROD.OUTLOOK.COM>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 27 Jan 2021 09:07:45 +0100
+Subject: [Buildroot] [PATCH 1/1] package/luasyslog: needs host-luarocks
+Message-ID: <20210127080745.2893492-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+host-luarocks is needed since bump to version 2.2.0 as the package is
+now using autotools infrastructure instead of luarocks
 
-yesterday I stumbled upon the issue, that information about our version control (Git: tag, commit count and hash) is compiled into our cross-gcc (which we create with Buildroot).
-So I eventually found, that the cause for this is BR2_LOCALVERSION. Now the question: What is the intended purpose for this?
+Fixes:
+ - http://autobuild.buildroot.org/results/f6a9615e965905bdc0a1e62020e4b27d6653693f
 
-In our project we include Buildroot via release archive in a sub-folder below our version control. So it currently picks up tag information from our surrounding VCS where I would expect it to stay empty. Or to rephrase that: my expectation is, that BR2_VERSION_FULL contains the version information about Buildroot and not something about our VCS.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/luasyslog/luasyslog.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Kind regards,
-Marcel
-
-Gesch?ftsf?hrung: Susanne Kunschert, Thomas Pilz
-Pilz GmbH & Co. KG, Sitz: Ostfildern, HRA 210 893, Amtsgericht Stuttgart
-Kompl. Ges. Peter Pilz GmbH, Sitz: Ostfildern, HRB 210 612, Amtsgericht Stuttgart
-Umsatzsteuer: ID-Nr. DE 145 355 773, WEEE-Reg.-Nr. DE 71636849
-
-This email is intended solely for the use of the named address(es). Any unauthorised disclosure, copying or distribution of these confidential information contained therein, or the taking of any action based on it, is prohibited. The sender disclaims any liability for the integrity of this email. Legally binding declarations must be in written form.
-
-Umweltschutz liegt uns am Herzen! - Bitte denken Sie an unsere Umwelt, bevor Sie diese E-Mail drucken.
-We do care about the environment! - Please consider the environment before printing this e-mail.
+diff --git a/package/luasyslog/luasyslog.mk b/package/luasyslog/luasyslog.mk
+index e4fd4be91c..049e068a13 100644
+--- a/package/luasyslog/luasyslog.mk
++++ b/package/luasyslog/luasyslog.mk
+@@ -6,7 +6,7 @@
+ 
+ LUASYSLOG_VERSION = 2.2.0
+ LUASYSLOG_SITE = $(call github,ntd,luasyslog,$(LUASYSLOG_VERSION))
+-LUASYSLOG_DEPENDENCIES = luainterpreter
++LUASYSLOG_DEPENDENCIES = host-luarocks luainterpreter
+ LUASYSLOG_LICENSE = MIT
+ LUASYSLOG_LICENSE_FILES = COPYING
+ # fetching from github
+-- 
+2.29.2
