@@ -1,48 +1,53 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 27 Jan 2021 21:24:07 +0100
-Subject: [Buildroot] [PATCH 1/1] package/strongswan: bump to version 5.9.1
-Message-ID: <20210127202407.3370591-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 27 Jan 2021 21:42:48 +0100
+Subject: [Buildroot] [PATCH 1/1] package/sudo: security bump to version
+ 1.9.5p2
+In-Reply-To: <20210127142628.40494-1-christian@paral.in> (Christian Stewart's
+ message of "Wed, 27 Jan 2021 06:26:28 -0800")
+References: <20210127142628.40494-1-christian@paral.in>
+Message-ID: <87pn1q5cxj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://wiki.strongswan.org/versions/79
+>>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/strongswan/strongswan.hash | 6 +++---
- package/strongswan/strongswan.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ > Major changes between sudo 1.9.5p2 and 1.9.5p1
+ >  * Buildroot: dropped a patch that was included in the release.
 
-diff --git a/package/strongswan/strongswan.hash b/package/strongswan/strongswan.hash
-index aa25d81f46..a19b311458 100644
---- a/package/strongswan/strongswan.hash
-+++ b/package/strongswan/strongswan.hash
-@@ -1,7 +1,7 @@
--# From http://download.strongswan.org/strongswan-5.9.0.tar.bz2.md5
--md5  705628cddd5b7683ef8a688acd9514d8  strongswan-5.9.0.tar.bz2
-+# From http://download.strongswan.org/strongswan-5.9.1.tar.bz2.md5
-+md5  1f4db969d072e120dc12d1c116a0f658  strongswan-5.9.1.tar.bz2
- # Calculated based on the hash above
--sha256  72b47a385da5d1532b816d9fe04c50d074c29ed42ea3f0878fbd66335917bb66  strongswan-5.9.0.tar.bz2
-+sha256  a337c9fb63d973b8440827755c784031648bf423b7114a04918b0b00fd42cafb  strongswan-5.9.1.tar.bz2
- # Locally calculated
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  2292e21797754548dccdef9eef6aee7584e552fbd890fa914e1de8d3577d23f0  LICENSE
-diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
-index 03aa9e185e..322abfbd7b 100644
---- a/package/strongswan/strongswan.mk
-+++ b/package/strongswan/strongswan.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--STRONGSWAN_VERSION = 5.9.0
-+STRONGSWAN_VERSION = 5.9.1
- STRONGSWAN_SOURCE = strongswan-$(STRONGSWAN_VERSION).tar.bz2
- STRONGSWAN_SITE = http://download.strongswan.org
- STRONGSWAN_LICENSE = GPL-2.0+
+ >  * Fixed sudo's setprogname(3) emulation on systems that don't
+ >    provide it.
+
+ >  * Fixed a problem with the sudoers log server client where a partial
+ >    write to the server could result the sudo process consuming large
+ >    amounts of CPU time due to a cycle in the buffer queue. Bug #954.
+
+ >  * Added a missing dependency on libsudo_util in libsudo_eventlog.
+ >    Fixes a link error when building sudo statically.
+
+ >  * The user's KRB5CCNAME environment variable is now preserved when
+ >    performing PAM authentication.  This fixes GSSAPI authentication
+ >    when the user has a non-default ccache.
+
+ >  * When invoked as sudoedit, the same set of command line options
+ >    are now accepted as for "sudo -e".  The -H and -P options are
+ >    now rejected for sudoedit and "sudo -e" which matches the sudo
+ >    1.7 behavior.  This is part of the fix for CVE-2021-3156.
+
+ >  * Fixed a potential buffer overflow when unescaping backslashes
+ >    in the command's arguments.  Normally, sudo escapes special
+ >    characters when running a command via a shell (sudo -s or sudo
+ >    -i).  However, it was also possible to run sudoedit with the -s
+ >    or -i flags in which case no escaping had actually been done,
+ >    making a buffer overflow possible.  This fixes CVE-2021-3156.
+
+ > https://www.sudo.ws/stable.html#1.9.5p2
+
+ > Signed-off-by: Christian Stewart <christian@paral.in>
+
+Committed, thanks.
+
 -- 
-2.29.2
+Bye, Peter Korsgaard
