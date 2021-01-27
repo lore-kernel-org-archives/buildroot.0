@@ -1,50 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Wed, 27 Jan 2021 21:59:31 +0100
-Subject: [Buildroot] [git commit] package/libuhttpd: bump to version 3.9.0
-Message-ID: <20210127204010.11839812F7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/sudo: drop unneeded autoreconf
+Message-ID: <20210127204009.C0DB4815BB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e76d9868c940f2d19968077b97e79c49376aa464
+commit: https://git.buildroot.net/buildroot/commit/?id=84a8aac451906c30f79c123afe4a415573021dc5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix build without dlopen thanks to
-https://github.com/zhaojh329/libuhttpd/commit/117ae812a4eb114f46f4d9dfd395618c74836710
+Commit 4fea71ac785cc (package/sudo: security bump to version 1.9.5p2)
+removed the patch, but forgot to remove the now unneeded autoreconf.  Fix
+that.
 
-https://github.com/zhaojh329/libuhttpd/releases/tag/v3.9.0
-
-Fixes:
- - http://autobuild.buildroot.org/results/3d14502c87ecee5b1eeeec3f85b8d6b659d61bbc
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reported-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libuhttpd/libuhttpd.hash | 2 +-
- package/libuhttpd/libuhttpd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/sudo/sudo.mk | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/package/libuhttpd/libuhttpd.hash b/package/libuhttpd/libuhttpd.hash
-index 98ae64bf70..68f1f21733 100644
---- a/package/libuhttpd/libuhttpd.hash
-+++ b/package/libuhttpd/libuhttpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  cdf97020be8ef73e74f12e0703e0f871ebd26c641ce2cb31f67c90a79483c372  libuhttpd-3.8.0.tar.gz
-+sha256  9939cd5f9aaad2c118bc04417fb2d21994fb1cdca7fff475a0930a1374635af0  libuhttpd-3.9.0.tar.gz
- sha256  99efed4bbc0b62f96f999ef23399e38234fb91651af734fd389a52b033a85b55  LICENSE
-diff --git a/package/libuhttpd/libuhttpd.mk b/package/libuhttpd/libuhttpd.mk
-index 60f0455ddd..a90fe666a8 100644
---- a/package/libuhttpd/libuhttpd.mk
-+++ b/package/libuhttpd/libuhttpd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBUHTTPD_VERSION = 3.8.0
-+LIBUHTTPD_VERSION = 3.9.0
- LIBUHTTPD_SITE = https://github.com/zhaojh329/libuhttpd/releases/download/v$(LIBUHTTPD_VERSION)
- LIBUHTTPD_LICENSE = MIT
- LIBUHTTPD_LICENSE_FILES = LICENSE
+diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
+index 7a6320e7e4..ce18b9d965 100644
+--- a/package/sudo/sudo.mk
++++ b/package/sudo/sudo.mk
+@@ -11,8 +11,6 @@ SUDO_LICENSE_FILES = doc/LICENSE
+ SUDO_CPE_ID_VALID = YES
+ SUDO_CPE_ID_VERSION = 1.9.5
+ SUDO_CPE_ID_VERSION_MINOR = p2
+-# We're patching lib/eventlog/Makefile.in
+-SUDO_AUTORECONF = YES
+ # This is to avoid sudo's make install from chown()ing files which fails
+ SUDO_INSTALL_TARGET_OPTS = INSTALL_OWNER="" DESTDIR="$(TARGET_DIR)" install
+ SUDO_CONF_OPTS = \
