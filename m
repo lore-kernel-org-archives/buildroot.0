@@ -1,124 +1,59 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 27 Jan 2021 22:52:33 +0100
-Subject: [Buildroot] [PATCH] package/opkg-utils: add opkg-utils as
- target pkg
-In-Reply-To: <20210126192605.20002-1-matthew.weber@rockwellcollins.com>
-References: <20210126192605.20002-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20210127215233.GJ2325@scaer>
+Date: Wed, 27 Jan 2021 22:54:01 +0100
+Subject: [Buildroot] [git commit] package/collectd: add option to enable UBI
+ counters
+Message-ID: <20210127213442.ED88283E3E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2021-01-26 13:26 -0600, Matt Weber spake thusly:
-> From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-> 
-> Supports a use case of building container rootfs images where a matching
-> target version of the tools is required for online repackaging
-> of a installer archive.
-> 
-> Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
-> ---
->  DEVELOPERS                       | 1 +
->  package/Config.in                | 1 +
->  package/opkg-utils/Config.in     | 6 ++++++
->  package/opkg-utils/opkg-utils.mk | 9 +++++++++
->  4 files changed, 17 insertions(+)
->  create mode 100644 package/opkg-utils/Config.in
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 7af3081760..3638efe6d5 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1750,6 +1750,7 @@ F:	package/mtools/
->  F:	package/nginx-upload/
->  F:	package/omniorb/
->  F:	package/openresolv/
-> +F:	package/opkg-utils/
->  F:	package/paxtest/
->  F:	package/picocom/
->  F:	package/policycoreutils/
-> diff --git a/package/Config.in b/package/Config.in
-> index 12bd0608e3..18873c46c9 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -2334,6 +2334,7 @@ comment "See the manual:                                        "
->  comment "http://buildroot.org/manual.html#faq-no-binary-packages"
->  comment "-------------------------------------------------------"
->  	source "package/opkg/Config.in"
-> +	source "package/opkg-utils/Config.in"
->  	source "package/rpm/Config.in"
->  endmenu
->  
-> diff --git a/package/opkg-utils/Config.in b/package/opkg-utils/Config.in
-> new file mode 100644
-> index 0000000000..03172ea4da
-> --- /dev/null
-> +++ b/package/opkg-utils/Config.in
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_OPKG_UTILS
-> +	bool "opkg-utils"
+commit: https://git.buildroot.net/buildroot/commit/?id=261e6eebdd26a835c6067691ab131b9f1f70fcd3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It installs many python3 scripts, so it must depend on python3.
+The 'ubi' collectd plugin was added in 5.11.0.
+Add options in Buildroot to enable it.
 
-It also installs many bash scripts, so it must depend on bash.
+Based on code by Bart De Vos.
 
-> +	help
-> +	  Helper scripts for use with the opkg package manager.
-> +
-> +	  https://git.yoctoproject.org/cgit/cgit.cgi/opkg-utils/
-> diff --git a/package/opkg-utils/opkg-utils.mk b/package/opkg-utils/opkg-utils.mk
-> index a94a4cd5cd..ed4e73e7f0 100644
-> --- a/package/opkg-utils/opkg-utils.mk
-> +++ b/package/opkg-utils/opkg-utils.mk
-> @@ -12,6 +12,14 @@ OPKG_UTILS_LICENSE_FILES = COPYING
->  
->  HOST_OPKG_UTILS_DEPENDENCIES += $(BR2_PYTHON3_HOST_DEPENDENCY)
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/collectd/Config.in   | 10 ++++++++++
+ package/collectd/collectd.mk |  1 +
+ 2 files changed, 11 insertions(+)
 
-... see this dependency on host-python3 for the host variant.
-
-> +define OPKG_UTILS_BUILD_CMDS
-> +	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS)
-> +endef
-> +
-> +define OPKG_UTILS_INSTALL_TARGET_CMDS
-> +	$(MAKE) -C $(@D) PREFIX=$(TARGET_DIR) install
-> +endef
-
-I'm not quite sure why we need to call make at all, since all it instlls
-are scripts (sh, bash, or python3). All that make does is build the
-documentation, which requires pod2man, which is provided by... perl.
-
-Ah but the install step is unconditional. Meh...
-
-Can we patch it out?
-
-Regards,
-Yann E. MORIN.
-
->  define HOST_OPKG_UTILS_BUILD_CMDS
->  	$(MAKE) -C $(@D) $(HOST_CONFIGURE_OPTS)
->  endef
-> @@ -20,4 +28,5 @@ define HOST_OPKG_UTILS_INSTALL_CMDS
->  	$(MAKE) -C $(@D) PREFIX=$(HOST_DIR) install
->  endef
->  
-> +$(eval $(generic-package))
->  $(eval $(host-generic-package))
-> -- 
-> 2.17.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/collectd/Config.in b/package/collectd/Config.in
+index 3e854ba518..f02cedda49 100644
+--- a/package/collectd/Config.in
++++ b/package/collectd/Config.in
+@@ -525,6 +525,16 @@ config BR2_PACKAGE_COLLECTD_THERMAL
+ 	help
+ 	  Reads ACPI thermal zone information.
+ 
++config BR2_PACKAGE_COLLECTD_UBI
++	bool "ubi"
++	help
++	  UBI (Unsorted Block Images) is an erase block management layer
++	  for flash memory devices. UBI serves two purposes, tracking
++	  NAND flash bad blocks and providing wear leveling.
++	  This plugin collects some stats about UBI devices:
++	   * bad physical underlying blocks (bad_peb_count)
++	   * max erase counter value (max_ec)
++
+ config BR2_PACKAGE_COLLECTD_UPTIME
+ 	bool "uptime"
+ 	help
+diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+index 8fa278df7e..ccca9bf388 100644
+--- a/package/collectd/collectd.mk
++++ b/package/collectd/collectd.mk
+@@ -137,6 +137,7 @@ COLLECTD_CONF_OPTS += \
+ 	$(if $(BR2_PACKAGE_COLLECTD_THERMAL),--enable-thermal,--disable-thermal) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_THRESHOLD),--enable-threshold,--disable-threshold) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_TIMEDIFF),--enable-match_timediff,--disable-match_timediff) \
++	$(if $(BR2_PACKAGE_COLLECTD_UBI),--enable-ubi,--disable-ubi) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_UNIXSOCK),--enable-unixsock,--disable-unixsock) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_UPTIME),--enable-uptime,--disable-uptime) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_USERS),--enable-users,--disable-users) \
