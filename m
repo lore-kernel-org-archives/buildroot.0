@@ -1,60 +1,42 @@
-From: Maxime Chevallier <maxime.chevallier@bootlin.com>
-Date: Wed, 27 Jan 2021 15:40:27 +0100
-Subject: [Buildroot] [PATCH] package/refpolicy: Add option to disable
- "dontaudit" rules
-In-Reply-To: <161174367527.5198.14305094941308709573@kwain.local>
-References: <20210127095627.789080-1-maxime.chevallier@bootlin.com>
- <20210127110148.1e7ef518@windsurf.home>
- <161174367527.5198.14305094941308709573@kwain.local>
-Message-ID: <20210127154027.5ed6cb24@bootlin.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 27 Jan 2021 17:28:07 +0200
+Subject: [Buildroot] [PATCH 1/1] package/sudo: security bump to version
+ 1.9.5p2
+In-Reply-To: <20210127142628.40494-1-christian@paral.in>
+References: <20210127142628.40494-1-christian@paral.in>
+Message-ID: <87ft2mxuuw.fsf@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Antoine, Thomas,
+Hi Christian,
 
-Thanks for the reviews !
+On Wed, Jan 27 2021, Christian Stewart wrote:
 
-On Wed, 27 Jan 2021 11:34:35 +0100
-Antoine Tenart <atenart@kernel.org> wrote:
+[...]
 
->Quoting Thomas Petazzoni (2021-01-27 11:01:48)
->> On Wed, 27 Jan 2021 10:56:27 +0100
->> Maxime Chevallier <maxime.chevallier@bootlin.com> wrote:
->>   
->> >  define REFPOLICY_INSTALL_TARGET_CMDS
->> > -     $(REFPOLICY_MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
->> > +     $(REFPOLICY_MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) \
->> > +             $(REFPOLICY_EXTRA_MAKE_INSTALL_TARGETS) install  
->> 
->> That being said, I'm not clear between what the "policy" make target
->> does (invoked in BUILD_CMDS) and what the "enableaudit" make target
->> does.  
->
->The 'policy' target generates a policy.conf file (among other things)
->and 'enableaudit' removes lines from this file. While 'enableaudit'
->seems like a configuration step, it is in fact a fixup one.
->
->Maybe a POST_BUILD_HOOK would be better for that?
+> diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
+> index 88a1274b34..7a6320e7e4 100644
+> --- a/package/sudo/sudo.mk
+> +++ b/package/sudo/sudo.mk
+> @@ -10,7 +10,7 @@ SUDO_LICENSE = ISC, BSD-3-Clause
+>  SUDO_LICENSE_FILES = doc/LICENSE
+>  SUDO_CPE_ID_VALID = YES
+>  SUDO_CPE_ID_VERSION = 1.9.5
+> -SUDO_CPE_ID_VERSION_MINOR = p1
+> +SUDO_CPE_ID_VERSION_MINOR = p2
+>  # We're patching lib/eventlog/Makefile.in
+>  SUDO_AUTORECONF = YES
 
-You're correct, it seems to be a better way to go, I'll send a v2 with
-that solution :)
+Can we drop that now?
 
-Thanks,
+baruch
 
-Maxime
-
->On a side note, there is no dependency between 'enableaudit' and
->'install'. The above change only works because REFPOLICY_MAKE uses
->MAKE1. (We have the same construct in the configuration step).
->
->Antoine
-
-
+>  # This is to avoid sudo's make install from chown()ing files which fails
 
 -- 
-Maxime Chevallier, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
