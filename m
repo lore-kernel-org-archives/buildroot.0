@@ -1,37 +1,147 @@
-From: =?UTF-8?Q?Andr=c3=a9_Hentschel?= <nerv@dawncrow.de>
-Date: Wed, 27 Jan 2021 19:04:28 +0100
-Subject: [Buildroot] [PATCH 1/1] package/wine: add WINE_CPE_ID_VENDOR
-In-Reply-To: <20210126211539.2497979-1-fontaine.fabrice@gmail.com>
-References: <20210126211539.2497979-1-fontaine.fabrice@gmail.com>
-Message-ID: <a40e2500-88c6-2f12-928f-3a4945f38f27@dawncrow.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 27 Jan 2021 20:55:53 +0100
+Subject: [Buildroot] [PATCH 1/1] package/gdk-pixbuf: bump to version 2.42.2
+Message-ID: <20210127195553.3108287-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 26.01.21 um 22:15 schrieb Fabrice Fontaine:
-> cpe:2.3:a:winehq:wine is a valid CPE identifier for this package:
-> 
->   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Awinehq%3Awine
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/wine/wine.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/wine/wine.mk b/package/wine/wine.mk
-> index 7eafe9b06d..80c9d20d3d 100644
-> --- a/package/wine/wine.mk
-> +++ b/package/wine/wine.mk
-> @@ -9,6 +9,7 @@ WINE_SOURCE = wine-$(WINE_VERSION).tar.xz
->  WINE_SITE = https://dl.winehq.org/wine/source/5.x
->  WINE_LICENSE = LGPL-2.1+
->  WINE_LICENSE_FILES = COPYING.LIB LICENSE
-> +WINE_CPE_ID_VENDOR = winehq
->  WINE_DEPENDENCIES = host-bison host-flex host-wine
->  HOST_WINE_DEPENDENCIES = host-bison host-flex
->  
-> 
+- Switch to meson-package
+- Drop GDK_PIXBUF_DISABLE_TESTS as it is not needed anymore (meson
+  doesn't build tests when cross-commpiling)
 
-Acked-by: Andr? Hentschel <nerv@dawncrow.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/gdk-pixbuf/gdk-pixbuf.hash |  4 +-
+ package/gdk-pixbuf/gdk-pixbuf.mk   | 69 ++++++++++++++----------------
+ 2 files changed, 33 insertions(+), 40 deletions(-)
+
+diff --git a/package/gdk-pixbuf/gdk-pixbuf.hash b/package/gdk-pixbuf/gdk-pixbuf.hash
+index 8fa178b55c..580cf47602 100644
+--- a/package/gdk-pixbuf/gdk-pixbuf.hash
++++ b/package/gdk-pixbuf/gdk-pixbuf.hash
+@@ -1,4 +1,4 @@
+-# From http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/2.36/gdk-pixbuf-2.36.12.sha256sum
+-sha256  fff85cf48223ab60e3c3c8318e2087131b590fd6f1737e42cb3759a3b427a334  gdk-pixbuf-2.36.12.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/2.42/gdk-pixbuf-2.42.2.sha256sum
++sha256  83c66a1cfd591d7680c144d2922c5955d38b4db336d7cd3ee109f7bcf9afef15  gdk-pixbuf-2.42.2.tar.xz
+ # Locally calculated
+ sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
+diff --git a/package/gdk-pixbuf/gdk-pixbuf.mk b/package/gdk-pixbuf/gdk-pixbuf.mk
+index 27fc923214..743ce2caa9 100644
+--- a/package/gdk-pixbuf/gdk-pixbuf.mk
++++ b/package/gdk-pixbuf/gdk-pixbuf.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-GDK_PIXBUF_VERSION_MAJOR = 2.36
+-GDK_PIXBUF_VERSION = $(GDK_PIXBUF_VERSION_MAJOR).12
++GDK_PIXBUF_VERSION_MAJOR = 2.42
++GDK_PIXBUF_VERSION = $(GDK_PIXBUF_VERSION_MAJOR).2
+ GDK_PIXBUF_SOURCE = gdk-pixbuf-$(GDK_PIXBUF_VERSION).tar.xz
+ GDK_PIXBUF_SITE = http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/$(GDK_PIXBUF_VERSION_MAJOR)
+ GDK_PIXBUF_LICENSE = LGPL-2.0+
+@@ -17,50 +17,49 @@ GDK_PIXBUF_DEPENDENCIES = \
+ 	libglib2 $(if $(BR2_ENABLE_LOCALE),,libiconv)
+ HOST_GDK_PIXBUF_DEPENDENCIES = host-libpng host-pkgconf host-libglib2
+ 
+-GDK_PIXBUF_CONF_ENV = \
+-	ac_cv_path_GLIB_GENMARSHAL=$(LIBGLIB2_HOST_BINARY) \
+-	gio_can_sniff=no
++GDK_PIXBUF_CONF_OPTS = \
++	-Dgio_sniffing=false \
++	-Dinstalled_tests=false \
++	-Dman=false
+ 
+-HOST_GDK_PIXBUF_CONF_ENV = \
+-	gio_can_sniff=no
+-
+-GDK_PIXBUF_CONF_OPTS = --disable-glibtest
+-HOST_GDK_PIXBUF_CONF_OPTS = --disable-introspection
++HOST_GDK_PIXBUF_CONF_OPTS = \
++	-Dgio_sniffing=false \
++	-Dinstalled_tests=false \
++	-Dintrospection=disabled \
++	-Dman=false
+ 
+ ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
+-GDK_PIXBUF_CONF_OPTS += --enable-introspection
++GDK_PIXBUF_CONF_OPTS += -Dintrospection=enabled
+ GDK_PIXBUF_DEPENDENCIES += gobject-introspection
+ else
+-GDK_PIXBUF_CONF_OPTS += --disable-introspection
++GDK_PIXBUF_CONF_OPTS += -Dintrospection=disabled
+ endif
+ 
+-ifneq ($(BR2_PACKAGE_LIBPNG),y)
+-GDK_PIXBUF_CONF_OPTS += --without-libpng
+-else
++ifeq ($(BR2_PACKAGE_LIBPNG),y)
++GDK_PIXBUF_CONF_OPTS += -Dpng=true
+ GDK_PIXBUF_DEPENDENCIES += libpng
++else
++GDK_PIXBUF_CONF_OPTS += -Dpng=false
+ endif
+ 
+-ifneq ($(BR2_PACKAGE_JPEG),y)
+-HOST_GDK_PIXBUF_CONF_OPTS += --without-libjpeg
+-GDK_PIXBUF_CONF_OPTS += --without-libjpeg
+-else
++ifeq ($(BR2_PACKAGE_JPEG),y)
++GDK_PIXBUF_CONF_OPTS += -Djpeg=true
++HOST_GDK_PIXBUF_CONF_OPTS += -Djpeg=true
+ GDK_PIXBUF_DEPENDENCIES += jpeg
+ HOST_GDK_PIXBUF_DEPENDENCIES += host-libjpeg
++else
++GDK_PIXBUF_CONF_OPTS += -Djpeg=false
++HOST_GDK_PIXBUF_CONF_OPTS += -Djpeg=false
+ endif
+ 
+-ifneq ($(BR2_PACKAGE_TIFF),y)
+-GDK_PIXBUF_CONF_OPTS += --without-libtiff
+-HOST_GDK_PIXBUF_CONF_OPTS += --without-libtiff
+-else
++ifeq ($(BR2_PACKAGE_TIFF),y)
++GDK_PIXBUF_CONF_OPTS += -Dtiff=true
++HOST_GDK_PIXBUF_CONF_OPTS += -Dtiff=true
+ GDK_PIXBUF_DEPENDENCIES += tiff
+-GDK_PIXBUF_CONF_ENV += \
+-	LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs libtiff-4`"
+ HOST_GDK_PIXBUF_DEPENDENCIES += host-tiff
+-endif
+-
+-ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
+-GDK_PIXBUF_CONF_OPTS += --with-x11
+-GDK_PIXBUF_DEPENDENCIES += xlib_libX11
++else
++GDK_PIXBUF_CONF_OPTS += -Dtiff=false
++HOST_GDK_PIXBUF_CONF_OPTS += -Dtiff=false
+ endif
+ 
+ # gdk-pixbuf requires the loaders.cache file populated to work properly
+@@ -79,12 +78,6 @@ endef
+ GDK_PIXBUF_POST_INSTALL_TARGET_HOOKS += GDK_PIXBUF_UPDATE_CACHE
+ endif
+ 
+-# Tests don't build correctly with uClibc
+-define GDK_PIXBUF_DISABLE_TESTS
+-	$(SED) 's/ tests//' $(@D)/Makefile.in
+-endef
+-GDK_PIXBUF_POST_PATCH_HOOKS += GDK_PIXBUF_DISABLE_TESTS
+-
+ # Target gdk-pixbuf needs loaders.cache populated to build for the
+ # thumbnailer. Use the host-built since it matches the target options
+ # regarding mime types (which is the used information).
+@@ -94,5 +87,5 @@ define GDK_PIXBUF_COPY_LOADERS_CACHE
+ endef
+ GDK_PIXBUF_PRE_BUILD_HOOKS += GDK_PIXBUF_COPY_LOADERS_CACHE
+ 
+-$(eval $(autotools-package))
+-$(eval $(host-autotools-package))
++$(eval $(meson-package))
++$(eval $(host-meson-package))
+-- 
+2.29.2
