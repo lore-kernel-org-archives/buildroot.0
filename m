@@ -1,51 +1,47 @@
-From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Wed, 27 Jan 2021 09:05:19 +0300
-Subject: [Buildroot] [PATCH 2/3] configs/orangepi_zero_defconfig: bump BSP
- versions
-In-Reply-To: <20210127060520.616445-1-geomatsi@gmail.com>
-References: <20210127060520.616445-1-geomatsi@gmail.com>
-Message-ID: <20210127060520.616445-3-geomatsi@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 27 Jan 2021 07:33:42 +0100
+Subject: [Buildroot] [PATCH 1/1] package/gerbera: needs gcc >= 8
+Message-ID: <20210127063342.2754715-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump Linux to 5.10.10 and U-Boot to 2020.10.
+std::filesystem is required since version 1.5.0:
+https://github.com/gerbera/gerbera/issues/849
 
-Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/759c875ee8ab0447cd735c22f89fa127cb8c427c
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- configs/orangepi_zero_defconfig | 6 +++---
+ package/gerbera/Config.in | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/configs/orangepi_zero_defconfig b/configs/orangepi_zero_defconfig
-index 37d3d8dc72..b008523c84 100644
---- a/configs/orangepi_zero_defconfig
-+++ b/configs/orangepi_zero_defconfig
-@@ -3,13 +3,13 @@ BR2_cortex_a7=y
- BR2_ARM_FPU_VFPV4=y
- BR2_GLOBAL_PATCH_DIR="board/orangepi/orangepi-zero/patches"
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
- BR2_TARGET_GENERIC_HOSTNAME="OrangePi_Zero"
- BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Orange Pi Zero"
- BR2_SYSTEM_DHCP="eth0"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.6"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.10"
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h2-plus-orangepi-zero"
-@@ -21,7 +21,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.04"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.10"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_zero"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+diff --git a/package/gerbera/Config.in b/package/gerbera/Config.in
+index a07bcc5c57..b734de95de 100644
+--- a/package/gerbera/Config.in
++++ b/package/gerbera/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_GERBERA
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17 optional
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # C++17 filesystem
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR # fmt
+ 	select BR2_PACKAGE_FMT
+@@ -22,8 +22,8 @@ config BR2_PACKAGE_GERBERA
+ 
+ 	  https://gerbera.io
+ 
+-comment "gerbera needs a toolchain w/ C++, threads, wchar, gcc >= 7"
++comment "gerbera needs a toolchain w/ C++, threads, wchar, gcc >= 8"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+-		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_GCC_AT_LEAST_7
++		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_GCC_AT_LEAST_8
 -- 
-2.30.0
+2.29.2
