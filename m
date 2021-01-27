@@ -1,149 +1,73 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 27 Jan 2021 21:59:31 +0100
-Subject: [Buildroot] [git commit] package/gdk-pixbuf: bump to version 2.42.2
-Message-ID: <20210127204009.DE0737FD09@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 27 Jan 2021 22:24:13 +0100
+Subject: [Buildroot] [PATCH] package/linux-headers: with headers from kernel,
+ also override srcdir
+Message-ID: <20210127212413.2046623-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a7b51ed3013c919b293deb95299e33363fb9df70
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+When using the headers from the kernel to be built, with the kernel
+set to a custom version, and overriding the kernel sources with
+LINUX_OVERRIDE_SRCDIR, the linux-headers package is still trying to
+download an archive, and fails to validate its hash.
 
-- Switch to meson-package
-- Drop GDK_PIXBUF_DISABLE_TESTS as it is not needed anymore (meson
-  doesn't build tests when cross-commpiling)
+What is going on under the hood is that, with _OVERRIDE_SRCDIR, the
+_VERSION of a package is set to 'custom'. Furthermore, the variable
+BR_NO_CHECK_HASH_FOR is recursively expanded, so its value is only
+evaluated when it is needed.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+For linux-headers, we inherit the values from the linux package, and
+the LINUX_HEADERS_VERSION takes the value from the configuration.
+
+Thus we end up with the following situation:
+
+    LINUX_VERSION=custom
+    LINUX_HEADERS_VERSION=5.10   # For example
+    BR_NO_CHECK_HASH_FOR=... linux-custom.tar.gz ...
+
+And thus the archive downloaded by linux-headers will not match any
+exclusion, and since there will most probably not be a hash for it,
+the download will fail, as was noticed and reported by Jarkko.
+
+But in this case, what we really want is to really use the headers
+from the kernel that we build, we do not even want to attempt a
+download at all.
+
+So, when using the headers from the kernel to be built, we also
+propagate the LINUX_OVERRIDE_SRCDIR to linux-headers, so that we
+also use the headers from the overridden sources.
+
+Furthermore, in that configuration, we explicitly disallow
+overriding the linux-headers specifically, as it does not make sense
+(even though, if they were overridden to the same location, that'd
+be OK, but to simplify the condition, we do not even check for that).
+
+Reported-by: Jarkko Sakkinen <jjs@kapsi.fi>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/gdk-pixbuf/gdk-pixbuf.hash |  4 +--
- package/gdk-pixbuf/gdk-pixbuf.mk   | 69 +++++++++++++++++---------------------
- 2 files changed, 33 insertions(+), 40 deletions(-)
+ package/linux-headers/linux-headers.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/gdk-pixbuf/gdk-pixbuf.hash b/package/gdk-pixbuf/gdk-pixbuf.hash
-index 8fa178b55c..580cf47602 100644
---- a/package/gdk-pixbuf/gdk-pixbuf.hash
-+++ b/package/gdk-pixbuf/gdk-pixbuf.hash
-@@ -1,4 +1,4 @@
--# From http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/2.36/gdk-pixbuf-2.36.12.sha256sum
--sha256  fff85cf48223ab60e3c3c8318e2087131b590fd6f1737e42cb3759a3b427a334  gdk-pixbuf-2.36.12.tar.xz
-+# From http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/2.42/gdk-pixbuf-2.42.2.sha256sum
-+sha256  83c66a1cfd591d7680c144d2922c5955d38b4db336d7cd3ee109f7bcf9afef15  gdk-pixbuf-2.42.2.tar.xz
- # Locally calculated
- sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
-diff --git a/package/gdk-pixbuf/gdk-pixbuf.mk b/package/gdk-pixbuf/gdk-pixbuf.mk
-index 27fc923214..743ce2caa9 100644
---- a/package/gdk-pixbuf/gdk-pixbuf.mk
-+++ b/package/gdk-pixbuf/gdk-pixbuf.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--GDK_PIXBUF_VERSION_MAJOR = 2.36
--GDK_PIXBUF_VERSION = $(GDK_PIXBUF_VERSION_MAJOR).12
-+GDK_PIXBUF_VERSION_MAJOR = 2.42
-+GDK_PIXBUF_VERSION = $(GDK_PIXBUF_VERSION_MAJOR).2
- GDK_PIXBUF_SOURCE = gdk-pixbuf-$(GDK_PIXBUF_VERSION).tar.xz
- GDK_PIXBUF_SITE = http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/$(GDK_PIXBUF_VERSION_MAJOR)
- GDK_PIXBUF_LICENSE = LGPL-2.0+
-@@ -17,50 +17,49 @@ GDK_PIXBUF_DEPENDENCIES = \
- 	libglib2 $(if $(BR2_ENABLE_LOCALE),,libiconv)
- HOST_GDK_PIXBUF_DEPENDENCIES = host-libpng host-pkgconf host-libglib2
- 
--GDK_PIXBUF_CONF_ENV = \
--	ac_cv_path_GLIB_GENMARSHAL=$(LIBGLIB2_HOST_BINARY) \
--	gio_can_sniff=no
-+GDK_PIXBUF_CONF_OPTS = \
-+	-Dgio_sniffing=false \
-+	-Dinstalled_tests=false \
-+	-Dman=false
- 
--HOST_GDK_PIXBUF_CONF_ENV = \
--	gio_can_sniff=no
--
--GDK_PIXBUF_CONF_OPTS = --disable-glibtest
--HOST_GDK_PIXBUF_CONF_OPTS = --disable-introspection
-+HOST_GDK_PIXBUF_CONF_OPTS = \
-+	-Dgio_sniffing=false \
-+	-Dinstalled_tests=false \
-+	-Dintrospection=disabled \
-+	-Dman=false
- 
- ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
--GDK_PIXBUF_CONF_OPTS += --enable-introspection
-+GDK_PIXBUF_CONF_OPTS += -Dintrospection=enabled
- GDK_PIXBUF_DEPENDENCIES += gobject-introspection
- else
--GDK_PIXBUF_CONF_OPTS += --disable-introspection
-+GDK_PIXBUF_CONF_OPTS += -Dintrospection=disabled
- endif
- 
--ifneq ($(BR2_PACKAGE_LIBPNG),y)
--GDK_PIXBUF_CONF_OPTS += --without-libpng
--else
-+ifeq ($(BR2_PACKAGE_LIBPNG),y)
-+GDK_PIXBUF_CONF_OPTS += -Dpng=true
- GDK_PIXBUF_DEPENDENCIES += libpng
-+else
-+GDK_PIXBUF_CONF_OPTS += -Dpng=false
- endif
- 
--ifneq ($(BR2_PACKAGE_JPEG),y)
--HOST_GDK_PIXBUF_CONF_OPTS += --without-libjpeg
--GDK_PIXBUF_CONF_OPTS += --without-libjpeg
--else
-+ifeq ($(BR2_PACKAGE_JPEG),y)
-+GDK_PIXBUF_CONF_OPTS += -Djpeg=true
-+HOST_GDK_PIXBUF_CONF_OPTS += -Djpeg=true
- GDK_PIXBUF_DEPENDENCIES += jpeg
- HOST_GDK_PIXBUF_DEPENDENCIES += host-libjpeg
-+else
-+GDK_PIXBUF_CONF_OPTS += -Djpeg=false
-+HOST_GDK_PIXBUF_CONF_OPTS += -Djpeg=false
- endif
- 
--ifneq ($(BR2_PACKAGE_TIFF),y)
--GDK_PIXBUF_CONF_OPTS += --without-libtiff
--HOST_GDK_PIXBUF_CONF_OPTS += --without-libtiff
--else
-+ifeq ($(BR2_PACKAGE_TIFF),y)
-+GDK_PIXBUF_CONF_OPTS += -Dtiff=true
-+HOST_GDK_PIXBUF_CONF_OPTS += -Dtiff=true
- GDK_PIXBUF_DEPENDENCIES += tiff
--GDK_PIXBUF_CONF_ENV += \
--	LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs libtiff-4`"
- HOST_GDK_PIXBUF_DEPENDENCIES += host-tiff
--endif
--
--ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
--GDK_PIXBUF_CONF_OPTS += --with-x11
--GDK_PIXBUF_DEPENDENCIES += xlib_libX11
-+else
-+GDK_PIXBUF_CONF_OPTS += -Dtiff=false
-+HOST_GDK_PIXBUF_CONF_OPTS += -Dtiff=false
- endif
- 
- # gdk-pixbuf requires the loaders.cache file populated to work properly
-@@ -79,12 +78,6 @@ endef
- GDK_PIXBUF_POST_INSTALL_TARGET_HOOKS += GDK_PIXBUF_UPDATE_CACHE
- endif
- 
--# Tests don't build correctly with uClibc
--define GDK_PIXBUF_DISABLE_TESTS
--	$(SED) 's/ tests//' $(@D)/Makefile.in
--endef
--GDK_PIXBUF_POST_PATCH_HOOKS += GDK_PIXBUF_DISABLE_TESTS
--
- # Target gdk-pixbuf needs loaders.cache populated to build for the
- # thumbnailer. Use the host-built since it matches the target options
- # regarding mime types (which is the used information).
-@@ -94,5 +87,5 @@ define GDK_PIXBUF_COPY_LOADERS_CACHE
- endef
- GDK_PIXBUF_PRE_BUILD_HOOKS += GDK_PIXBUF_COPY_LOADERS_CACHE
- 
--$(eval $(autotools-package))
--$(eval $(host-autotools-package))
-+$(eval $(meson-package))
-+$(eval $(host-meson-package))
+diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
+index 807e574f4d..a8d1c2ccaf 100644
+--- a/package/linux-headers/linux-headers.mk
++++ b/package/linux-headers/linux-headers.mk
+@@ -18,6 +18,10 @@ LINUX_HEADERS_VERSION = $(call qstrip,$(BR2_LINUX_KERNEL_VERSION))
+ LINUX_HEADERS_CUSTOM_TARBALL_LOCATION = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION))
+ LINUX_HEADERS_REPO_URL = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
+ LINUX_HEADERS_CIP = $(BR2_LINUX_KERNEL_LATEST_CIP_VERSION)$(BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION)
++ifneq ($(LINUX_HEADERS_OVERRIDE_SRCDIR),)
++$(error LINUX_HEADERS_OVERRIDE_SRCDIR must not be set when BR2_KERNEL_HEADERS_AS_KERNEL=y)
++endif
++LINUX_HEADERS_OVERRIDE_SRCDIR = $(LINUX_OVERRIDE_SRCDIR)
+ else # ! BR2_KERNEL_HEADERS_AS_KERNEL
+ LINUX_HEADERS_CUSTOM_TARBALL = $(call qstrip,$(BR2_KERNEL_HEADERS_CUSTOM_TARBALL))
+ LINUX_HEADERS_CUSTOM_GIT = $(call qstrip,$(BR2_KERNEL_HEADERS_CUSTOM_GIT))
+-- 
+2.25.1
