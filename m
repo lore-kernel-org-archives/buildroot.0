@@ -1,50 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Wed, 27 Jan 2021 21:59:31 +0100
-Subject: [Buildroot] [git commit] package/strongswan: bump to version 5.9.1
-Message-ID: <20210127204010.050AD812F7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/xtables-addons: bump version to
+ 3.13
+Message-ID: <20210127204009.E9A19815BB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0e65a50baed6c3812f1636d14b584afd6a99335c
+commit: https://git.buildroot.net/buildroot/commit/?id=7ac567c1b91c3be7c878dd107ecbb78e4adc026d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://wiki.strongswan.org/versions/79
+Use https://inai.de/files/xtables-addons to download source code
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Eldar Gasanov <eldargasanov2@gmail.com>
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+[Peter: also update Config.in URL]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/strongswan/strongswan.hash | 6 +++---
- package/strongswan/strongswan.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/xtables-addons/Config.in           | 2 +-
+ package/xtables-addons/xtables-addons.hash | 2 +-
+ package/xtables-addons/xtables-addons.mk   | 4 ++--
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/strongswan/strongswan.hash b/package/strongswan/strongswan.hash
-index aa25d81f46..a19b311458 100644
---- a/package/strongswan/strongswan.hash
-+++ b/package/strongswan/strongswan.hash
-@@ -1,7 +1,7 @@
--# From http://download.strongswan.org/strongswan-5.9.0.tar.bz2.md5
--md5  705628cddd5b7683ef8a688acd9514d8  strongswan-5.9.0.tar.bz2
-+# From http://download.strongswan.org/strongswan-5.9.1.tar.bz2.md5
-+md5  1f4db969d072e120dc12d1c116a0f658  strongswan-5.9.1.tar.bz2
- # Calculated based on the hash above
--sha256  72b47a385da5d1532b816d9fe04c50d074c29ed42ea3f0878fbd66335917bb66  strongswan-5.9.0.tar.bz2
-+sha256  a337c9fb63d973b8440827755c784031648bf423b7114a04918b0b00fd42cafb  strongswan-5.9.1.tar.bz2
+diff --git a/package/xtables-addons/Config.in b/package/xtables-addons/Config.in
+index 39fafe72b7..36a42c7efc 100644
+--- a/package/xtables-addons/Config.in
++++ b/package/xtables-addons/Config.in
+@@ -16,4 +16,4 @@ config BR2_PACKAGE_XTABLES_ADDONS
+ 	  Likewise, it contains extensions that were not, or are not
+ 	  yet, accepted in the main kernel/iptables packages.
+ 
+-	  http://xtables-addons.sourceforge.net/
++	  https://inai.de/projects/xtables-addons/
+diff --git a/package/xtables-addons/xtables-addons.hash b/package/xtables-addons/xtables-addons.hash
+index 33cc139b36..2cfb91178e 100644
+--- a/package/xtables-addons/xtables-addons.hash
++++ b/package/xtables-addons/xtables-addons.hash
+@@ -1,3 +1,3 @@
  # Locally calculated
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  2292e21797754548dccdef9eef6aee7584e552fbd890fa914e1de8d3577d23f0  LICENSE
-diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
-index 03aa9e185e..322abfbd7b 100644
---- a/package/strongswan/strongswan.mk
-+++ b/package/strongswan/strongswan.mk
-@@ -4,7 +4,7 @@
+-sha256  064dd68937d98e6cfcbdf51ef459310d9810c17ab31b21285bc7a76cdcef7c49  xtables-addons-3.9.tar.xz
++sha256  893c0c4ea09759cda1ab7e68f1281d125e59270f7b59e446204ce686c6a76d65  xtables-addons-3.13.tar.xz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE
+diff --git a/package/xtables-addons/xtables-addons.mk b/package/xtables-addons/xtables-addons.mk
+index c9e5bfdde0..55e1a5d01b 100644
+--- a/package/xtables-addons/xtables-addons.mk
++++ b/package/xtables-addons/xtables-addons.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--STRONGSWAN_VERSION = 5.9.0
-+STRONGSWAN_VERSION = 5.9.1
- STRONGSWAN_SOURCE = strongswan-$(STRONGSWAN_VERSION).tar.bz2
- STRONGSWAN_SITE = http://download.strongswan.org
- STRONGSWAN_LICENSE = GPL-2.0+
+-XTABLES_ADDONS_VERSION = 3.9
++XTABLES_ADDONS_VERSION = 3.13
+ XTABLES_ADDONS_SOURCE = xtables-addons-$(XTABLES_ADDONS_VERSION).tar.xz
+-XTABLES_ADDONS_SITE = http://downloads.sourceforge.net/project/xtables-addons/Xtables-addons
++XTABLES_ADDONS_SITE = https://inai.de/files/xtables-addons
+ XTABLES_ADDONS_DEPENDENCIES = iptables linux host-pkgconf
+ XTABLES_ADDONS_LICENSE = GPL-2.0+
+ XTABLES_ADDONS_LICENSE_FILES = LICENSE
