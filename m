@@ -1,49 +1,37 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 27 Jan 2021 18:56:57 +0100
-Subject: [Buildroot] Issue with using PPL package for gcc 4.4.4
-In-Reply-To: <MN2PR07MB69429BBBD323EA4CC815FBD7EDBB9@MN2PR07MB6942.namprd07.prod.outlook.com>
-References: <MN2PR07MB69429BBBD323EA4CC815FBD7EDBB9@MN2PR07MB6942.namprd07.prod.outlook.com>
-Message-ID: <20210127185657.66ee7728@gmx.net>
+From: =?UTF-8?Q?Andr=c3=a9_Hentschel?= <nerv@dawncrow.de>
+Date: Wed, 27 Jan 2021 19:04:28 +0100
+Subject: [Buildroot] [PATCH 1/1] package/wine: add WINE_CPE_ID_VENDOR
+In-Reply-To: <20210126211539.2497979-1-fontaine.fabrice@gmail.com>
+References: <20210126211539.2497979-1-fontaine.fabrice@gmail.com>
+Message-ID: <a40e2500-88c6-2f12-928f-3a4945f38f27@dawncrow.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Ramesh,
+Am 26.01.21 um 22:15 schrieb Fabrice Fontaine:
+> cpe:2.3:a:winehq:wine is a valid CPE identifier for this package:
+> 
+>   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Awinehq%3Awine
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/wine/wine.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/wine/wine.mk b/package/wine/wine.mk
+> index 7eafe9b06d..80c9d20d3d 100644
+> --- a/package/wine/wine.mk
+> +++ b/package/wine/wine.mk
+> @@ -9,6 +9,7 @@ WINE_SOURCE = wine-$(WINE_VERSION).tar.xz
+>  WINE_SITE = https://dl.winehq.org/wine/source/5.x
+>  WINE_LICENSE = LGPL-2.1+
+>  WINE_LICENSE_FILES = COPYING.LIB LICENSE
+> +WINE_CPE_ID_VENDOR = winehq
+>  WINE_DEPENDENCIES = host-bison host-flex host-wine
+>  HOST_WINE_DEPENDENCIES = host-bison host-flex
+>  
+> 
 
-On Wed, 27 Jan 2021 03:46:46 +0000, Ramesh GK <ramesh.gk@hotmail.com> wrote:
-
-> Hi,
->
-> I have a need to use gcc 4.4.4 version for buildroot and trying to get the ppl package embedded within buildroot itself rather than using an external toolchain. I am facing this weird issue despite trying different options and looking for if anyone could help or have got success with setting up the ppl package within buildroot.
->
-> I am also attaching the full log from buildroot specific to the package.
->
-> Host Machine: gcc 4.9.2, gmp 6, mpfr 3.1.2, mpc 1.0.2, cloog 0.18.2, isl 0.12.2
->
-> Buildroot Specification for build: gcc 4.4.4, gmp 4.3.2, mpfr 2.4.2, mpc 0.8.2, cloog-ppl 0.15.11, ppl 0.10.2
->
-> Error:
-> checking for the GMP library version 4.1.3 or above... no
-> configure: error: Cannot find GMP version 4.1.3 or higher.
-> GMP is the GNU Multi-Precision library:
-> see http://www.swox.com/gmp/ for more information.
-> When compiling the GMP library, do not forget to enable the C++ interface:
-> add --enable-cxx to the configuration options.
-> package/pkg-generic.mk:221: recipe for target '/home/mht/disk/mht/obuilds/template-4.4.4-2.6/build/host-ppl-0.10.2/.stamp_configured' failed
-> make[1]: *** [/home/mht/disk/mht/obuilds/template-4.4.4-2.6/build/host-ppl-0.10.2/.stamp_configured] Error 1
-> Makefile:23: recipe for target '_all' failed
-> make: *** [_all] Error 2
-
-Maybe missing:
-
-	HOST_PPL_DEPENDENCIES += host-gmp
-
-Regards,
-Peter
-
->
-> Thanks
-> Ramesh GK
->
+Acked-by: Andr? Hentschel <nerv@dawncrow.de>
