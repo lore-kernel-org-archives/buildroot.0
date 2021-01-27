@@ -1,61 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Wed, 27 Jan 2021 21:59:31 +0100
-Subject: [Buildroot] [git commit] package/xtables-addons: bump version to
- 3.13
-Message-ID: <20210127204009.E9A19815BB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libuhttpd: bump to version 3.9.0
+Message-ID: <20210127204010.11839812F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7ac567c1b91c3be7c878dd107ecbb78e4adc026d
+commit: https://git.buildroot.net/buildroot/commit/?id=e76d9868c940f2d19968077b97e79c49376aa464
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Use https://inai.de/files/xtables-addons to download source code
+Fix build without dlopen thanks to
+https://github.com/zhaojh329/libuhttpd/commit/117ae812a4eb114f46f4d9dfd395618c74836710
 
-Signed-off-by: Eldar Gasanov <eldargasanov2@gmail.com>
-Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
-[Peter: also update Config.in URL]
+https://github.com/zhaojh329/libuhttpd/releases/tag/v3.9.0
+
+Fixes:
+ - http://autobuild.buildroot.org/results/3d14502c87ecee5b1eeeec3f85b8d6b659d61bbc
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/xtables-addons/Config.in           | 2 +-
- package/xtables-addons/xtables-addons.hash | 2 +-
- package/xtables-addons/xtables-addons.mk   | 4 ++--
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ package/libuhttpd/libuhttpd.hash | 2 +-
+ package/libuhttpd/libuhttpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/xtables-addons/Config.in b/package/xtables-addons/Config.in
-index 39fafe72b7..36a42c7efc 100644
---- a/package/xtables-addons/Config.in
-+++ b/package/xtables-addons/Config.in
-@@ -16,4 +16,4 @@ config BR2_PACKAGE_XTABLES_ADDONS
- 	  Likewise, it contains extensions that were not, or are not
- 	  yet, accepted in the main kernel/iptables packages.
- 
--	  http://xtables-addons.sourceforge.net/
-+	  https://inai.de/projects/xtables-addons/
-diff --git a/package/xtables-addons/xtables-addons.hash b/package/xtables-addons/xtables-addons.hash
-index 33cc139b36..2cfb91178e 100644
---- a/package/xtables-addons/xtables-addons.hash
-+++ b/package/xtables-addons/xtables-addons.hash
+diff --git a/package/libuhttpd/libuhttpd.hash b/package/libuhttpd/libuhttpd.hash
+index 98ae64bf70..68f1f21733 100644
+--- a/package/libuhttpd/libuhttpd.hash
++++ b/package/libuhttpd/libuhttpd.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256  064dd68937d98e6cfcbdf51ef459310d9810c17ab31b21285bc7a76cdcef7c49  xtables-addons-3.9.tar.xz
-+sha256  893c0c4ea09759cda1ab7e68f1281d125e59270f7b59e446204ce686c6a76d65  xtables-addons-3.13.tar.xz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE
-diff --git a/package/xtables-addons/xtables-addons.mk b/package/xtables-addons/xtables-addons.mk
-index c9e5bfdde0..55e1a5d01b 100644
---- a/package/xtables-addons/xtables-addons.mk
-+++ b/package/xtables-addons/xtables-addons.mk
-@@ -4,9 +4,9 @@
+-sha256  cdf97020be8ef73e74f12e0703e0f871ebd26c641ce2cb31f67c90a79483c372  libuhttpd-3.8.0.tar.gz
++sha256  9939cd5f9aaad2c118bc04417fb2d21994fb1cdca7fff475a0930a1374635af0  libuhttpd-3.9.0.tar.gz
+ sha256  99efed4bbc0b62f96f999ef23399e38234fb91651af734fd389a52b033a85b55  LICENSE
+diff --git a/package/libuhttpd/libuhttpd.mk b/package/libuhttpd/libuhttpd.mk
+index 60f0455ddd..a90fe666a8 100644
+--- a/package/libuhttpd/libuhttpd.mk
++++ b/package/libuhttpd/libuhttpd.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XTABLES_ADDONS_VERSION = 3.9
-+XTABLES_ADDONS_VERSION = 3.13
- XTABLES_ADDONS_SOURCE = xtables-addons-$(XTABLES_ADDONS_VERSION).tar.xz
--XTABLES_ADDONS_SITE = http://downloads.sourceforge.net/project/xtables-addons/Xtables-addons
-+XTABLES_ADDONS_SITE = https://inai.de/files/xtables-addons
- XTABLES_ADDONS_DEPENDENCIES = iptables linux host-pkgconf
- XTABLES_ADDONS_LICENSE = GPL-2.0+
- XTABLES_ADDONS_LICENSE_FILES = LICENSE
+-LIBUHTTPD_VERSION = 3.8.0
++LIBUHTTPD_VERSION = 3.9.0
+ LIBUHTTPD_SITE = https://github.com/zhaojh329/libuhttpd/releases/download/v$(LIBUHTTPD_VERSION)
+ LIBUHTTPD_LICENSE = MIT
+ LIBUHTTPD_LICENSE_FILES = LICENSE
