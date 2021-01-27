@@ -1,42 +1,33 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 27 Jan 2021 17:28:07 +0200
-Subject: [Buildroot] [PATCH 1/1] package/sudo: security bump to version
- 1.9.5p2
-In-Reply-To: <20210127142628.40494-1-christian@paral.in>
-References: <20210127142628.40494-1-christian@paral.in>
-Message-ID: <87ft2mxuuw.fsf@tarshish>
+From: daggs <daggs@gmx.com>
+Date: Wed, 27 Jan 2021 17:36:19 +0100
+Subject: [Buildroot] defining two repos for a pkg
+In-Reply-To: <87eei9chdv.fsf@tarshish>
+References: <trinity-9605111f-3dc9-4bd6-91f8-b125249edd32-1611578631798@3c-app-mailcom-bs07>
+ <87eei9chdv.fsf@tarshish>
+Message-ID: <trinity-8ab0c288-d60b-49a8-b3ff-8caecc4a759a-1611765379205@3c-app-mailcom-bs15>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Christian,
+Greetings Baruch,
 
-On Wed, Jan 27 2021, Christian Stewart wrote:
+> Sent: Monday, January 25, 2021 at 2:47 PM
+> From: "Baruch Siach" <baruch@tkos.co.il>
+> To: "daggs" <daggs@gmx.com>
+> Cc: buildroot at buildroot.org
+> Subject: Re: [Buildroot] defining two repos for a pkg
+>
+> Hi Dagg,
+>
+> On Mon, Jan 25 2021, daggs wrote:
+> > I have a pkg that requires files from two different git repos, is
+> > there such support for it in buildroot?
+>
+> Does <pkg>_EXTRA_DOWNLOADS help?
+>
+> baruch
+>
 
-[...]
-
-> diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
-> index 88a1274b34..7a6320e7e4 100644
-> --- a/package/sudo/sudo.mk
-> +++ b/package/sudo/sudo.mk
-> @@ -10,7 +10,7 @@ SUDO_LICENSE = ISC, BSD-3-Clause
->  SUDO_LICENSE_FILES = doc/LICENSE
->  SUDO_CPE_ID_VALID = YES
->  SUDO_CPE_ID_VERSION = 1.9.5
-> -SUDO_CPE_ID_VERSION_MINOR = p1
-> +SUDO_CPE_ID_VERSION_MINOR = p2
->  # We're patching lib/eventlog/Makefile.in
->  SUDO_AUTORECONF = YES
-
-Can we drop that now?
-
-baruch
-
->  # This is to avoid sudo's make install from chown()ing files which fails
-
--- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+that might work, thanks, I'll look into it.
