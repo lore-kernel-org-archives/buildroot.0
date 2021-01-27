@@ -1,7 +1,11 @@
-From: Ramesh GK <ramesh.gk@hotmail.com>
-Date: Wed, 27 Jan 2021 03:46:46 +0000
-Subject: [Buildroot] Issue with using PPL package for gcc 4.4.4
-Message-ID: <MN2PR07MB69429BBBD323EA4CC815FBD7EDBB9@MN2PR07MB6942.namprd07.prod.outlook.com>
+From: Maxim Kochetkov <fido_max@inbox.ru>
+Date: Wed, 27 Jan 2021 07:33:42 +0300
+Subject: [Buildroot] [PATCH 1/1] package/timescaledb: Fix build with
+ Postgresql 13
+In-Reply-To: <20210126190043.GF2325@scaer>
+References: <20210125074058.786498-1-fido_max@inbox.ru>
+ <20210126190043.GF2325@scaer>
+Message-ID: <7742c301-6192-fc3e-2ebf-19bf6b44a190@inbox.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,36 +14,36 @@ To: buildroot@busybox.net
 
 Hi,
 
-I have a need to use gcc 4.4.4 version for buildroot and trying to get the ppl package embedded within buildroot itself rather than using an external toolchain. I am facing this weird issue despite trying different options and looking for if anyone could help or have got success with setting up the ppl package within buildroot.
+26.01.2021 22:00, Yann E. MORIN wrote:
+> Maxim, All,
+> 
+> On 2021-01-25 10:40 +0300, Maxim Kochetkov via buildroot spake thusly:
+>> Add missed patch for PG13 build.
+>>
+>> Fixes: 5cff0c8a2d1c ("package/timescaledb: bump to version 2.0.0")
+> 
+> Does that fix build failures like that:
+> 
+>      http://autobuild.buildroot.org/results/480/480da8c6a13cc44f5ede9f754a4dfef8800d8e2a/build-end.log
+>      http://autobuild.buildroot.org/results/0e5/0e534ed0a5206856fad7272008b12205811f098a/build-end.log
+> 
+> Or any of the other autobuild failures:
+> 
+>      http://autobuild.buildroot.org/?reason=timescaledb-%
 
-I am also attaching the full log from buildroot specific to the package.
+Yes it is.
 
-Host Machine: gcc 4.9.2, gmp 6, mpfr 3.1.2, mpc 1.0.2, cloog 0.18.2, isl 0.12.2
+> 
+> If so, then you can add such references in the commit log:
+> 
+>      Fixes:
+>          http://autobuild.buildroot.org/results/0e5/0e534ed0a5206856fad7272008b12205811f098a/build-end.log
 
-Buildroot Specification for build: gcc 4.4.4, gmp 4.3.2, mpfr 2.4.2, mpc 0.8.2, cloog-ppl 0.15.11, ppl 0.10.2
+Ok. I will do next time.
 
-Error:
-checking for the GMP library version 4.1.3 or above... no
-configure: error: Cannot find GMP version 4.1.3 or higher.
-GMP is the GNU Multi-Precision library:
-see http://www.swox.com/gmp/ for more information.
-When compiling the GMP library, do not forget to enable the C++ interface:
-add --enable-cxx to the configuration options.
-package/pkg-generic.mk:221: recipe for target '/home/mht/disk/mht/obuilds/template-4.4.4-2.6/build/host-ppl-0.10.2/.stamp_configured' failed
-make[1]: *** [/home/mht/disk/mht/obuilds/template-4.4.4-2.6/build/host-ppl-0.10.2/.stamp_configured] Error 1
-Makefile:23: recipe for target '_all' failed
-make: *** [_all] Error 2
+> 
+> No need to resend this patch just for that, I can add those when
+> aplying if need be.
+> 
 
-Thanks
-Ramesh GK
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210127/2275243c/attachment.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: ppl_error.log
-Type: text/x-log
-Size: 8918 bytes
-Desc: ppl_error.log
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210127/2275243c/attachment.bin>
+That wold be great!
