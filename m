@@ -1,46 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 28 Jan 2021 16:42:21 +0100
-Subject: [Buildroot] Buildroot integration with eclipse issues
-In-Reply-To: <CAJ2YAHtbmHSSW992Z4vX7F+SfBjraG-cSri04pcuEqOr6UADSQ@mail.gmail.com>
-References: <CAJ2YAHtbmHSSW992Z4vX7F+SfBjraG-cSri04pcuEqOr6UADSQ@mail.gmail.com>
-Message-ID: <20210128164221.3efb5d5b@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 28 Jan 2021 17:32:11 +0100
+Subject: [Buildroot] [PATCH 1/1] package/poppler: add boost optional
+ dependency
+In-Reply-To: <20210119180542.497919-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 19 Jan 2021 19:05:42 +0100")
+References: <20210119180542.497919-1-fontaine.fabrice@gmail.com>
+Message-ID: <87v9bh3tv8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Alassane,
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-On Thu, 28 Jan 2021 12:00:22 +0100
-Alassane <alassaneg@gmail.com> wrote:
+ > boost is an optional dependency which is enabled by default since
+ > version 0.80.0 and
+ > https://github.com/freedesktop/poppler/commit/355fd8d58ca0209284fe568b3add28f207e995c1
 
-> I've tried to use Eclipse to develop my own application for my embedded
-> linux system but i'm having some issues.
-> To use the buildroot eclipse plugin, eclipse luna 4.4 is needed. Then, to
-> run this eclipse version, a java 7 JDK/JRE is needed. The problem is that
-> it doesn't seem to be possible to install that old java JDK/JRE version
-> (i'm using Ubuntu 18.04 on virtual box). I've tried to use java 11 JDK/JRE
-> but then, an error is displayed in the terminal when i try to run eclipse
-> luna 4.4 .
-> So, i'd like to know if there was an alternative to that, like using a more
-> recent version of eclipse that would be compatible with the buildroot
-> eclipse plugin.
+ > There is no cmake option to enable or disable this dependency
 
-The Eclipse plugin is pretty much unmaintained, and therefore not
-usable with recent Eclipse versions. Note that you can still use more
-recent Eclipse versions, it's just that you will have to configure
-Eclipse manually to point to the toolchain.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-It's not related to Eclipse, but you can for example see
-https://bootlin.com/blog/building-a-linux-system-for-the-stm32mp1-setting-up-a-qt5-application-development-environment/
-which explains how we configured Qt Creator to use the toolchain
-provided by Buildroot to build and debug applications.
+Committed to 2020.02.x and 2020.11.x, thanks.
 
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
