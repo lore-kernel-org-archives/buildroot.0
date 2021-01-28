@@ -1,55 +1,64 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Jan 2021 23:52:54 +0100
-Subject: [Buildroot] [PATCH-2020.02.x] package/glibc: security bump for
- additional post-2.30.x fixes
-Message-ID: <20210128225255.15309-1-peter@korsgaard.com>
+From: Alassane <alassaneg@gmail.com>
+Date: Fri, 29 Jan 2021 00:15:48 +0100
+Subject: [Buildroot] Buildroot integration with eclipse issues
+In-Reply-To: <20210128164221.3efb5d5b@windsurf.home>
+References: <CAJ2YAHtbmHSSW992Z4vX7F+SfBjraG-cSri04pcuEqOr6UADSQ@mail.gmail.com>
+ <20210128164221.3efb5d5b@windsurf.home>
+Message-ID: <CAJ2YAHse=bw8LbR0cy2ofx-PZ0hnPmQfPJ4Uoj5v566f2og2tw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issue:
+Thank you for your answer Thomas.
+That helps a lot. I'll try to use qt creator in this case.
 
-- CVE-2021-3326: Assertion failure in ISO-2022-JP-3 gconv module related to
-  combining characters
+Kind regards
 
-For details, see https://sourceware.org/bugzilla/show_bug.cgi?id=27256 and
-https://www.openwall.com/lists/oss-security/2021/01/27/3
+Alassane.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../glibc.hash                                                  | 2 +-
- package/glibc/glibc.mk                                          | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
- rename package/glibc/{2.30-73-gd59630f9959b0bb8991964758ab854ff4378b20d => 2.30-85-g79bf3c9774b0c2aa865b2ca397554ff425225d3c}/glibc.hash (70%)
+Le jeu. 28 janv. 2021 ? 16:42, Thomas Petazzoni <
+thomas.petazzoni@bootlin.com> a ?crit :
 
-diff --git a/package/glibc/2.30-73-gd59630f9959b0bb8991964758ab854ff4378b20d/glibc.hash b/package/glibc/2.30-85-g79bf3c9774b0c2aa865b2ca397554ff425225d3c/glibc.hash
-similarity index 70%
-rename from package/glibc/2.30-73-gd59630f9959b0bb8991964758ab854ff4378b20d/glibc.hash
-rename to package/glibc/2.30-85-g79bf3c9774b0c2aa865b2ca397554ff425225d3c/glibc.hash
-index 21ee1faeaf..9985f93ed8 100644
---- a/package/glibc/2.30-73-gd59630f9959b0bb8991964758ab854ff4378b20d/glibc.hash
-+++ b/package/glibc/2.30-85-g79bf3c9774b0c2aa865b2ca397554ff425225d3c/glibc.hash
-@@ -1,5 +1,5 @@
- # Locally calculated (fetched from Github)
--sha256  ce788d30851a215d58ff94c972d9cff5956725cc5ee906298711ddc63078c315  glibc-2.30-73-gd59630f9959b0bb8991964758ab854ff4378b20d.tar.gz
-+sha256  b07ce01d26094074912cf718eb8715386758776d4c050ecbfc5ac64d21d63001  glibc-2.30-85-g79bf3c9774b0c2aa865b2ca397554ff425225d3c.tar.gz
- 
- # Hashes for license files
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index 08170fbbcf..75d73f9c16 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -17,7 +17,7 @@ else
- # Generate version string using:
- #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
- # When updating the version, please also update localedef
--GLIBC_VERSION = 2.30-73-gd59630f9959b0bb8991964758ab854ff4378b20d
-+GLIBC_VERSION = 2.30-85-g79bf3c9774b0c2aa865b2ca397554ff425225d3c
- # Upstream doesn't officially provide an https download link.
- # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
- # sometimes the connection times out. So use an unofficial github mirror.
--- 
-2.20.1
+> Hello Alassane,
+>
+> On Thu, 28 Jan 2021 12:00:22 +0100
+> Alassane <alassaneg@gmail.com> wrote:
+>
+> > I've tried to use Eclipse to develop my own application for my embedded
+> > linux system but i'm having some issues.
+> > To use the buildroot eclipse plugin, eclipse luna 4.4 is needed. Then, to
+> > run this eclipse version, a java 7 JDK/JRE is needed. The problem is that
+> > it doesn't seem to be possible to install that old java JDK/JRE version
+> > (i'm using Ubuntu 18.04 on virtual box). I've tried to use java 11
+> JDK/JRE
+> > but then, an error is displayed in the terminal when i try to run eclipse
+> > luna 4.4 .
+> > So, i'd like to know if there was an alternative to that, like using a
+> more
+> > recent version of eclipse that would be compatible with the buildroot
+> > eclipse plugin.
+>
+> The Eclipse plugin is pretty much unmaintained, and therefore not
+> usable with recent Eclipse versions. Note that you can still use more
+> recent Eclipse versions, it's just that you will have to configure
+> Eclipse manually to point to the toolchain.
+>
+> It's not related to Eclipse, but you can for example see
+>
+> https://bootlin.com/blog/building-a-linux-system-for-the-stm32mp1-setting-up-a-qt5-application-development-environment/
+> which explains how we configured Qt Creator to use the toolchain
+> provided by Buildroot to build and debug applications.
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210129/51f34218/attachment.html>
