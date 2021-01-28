@@ -1,99 +1,73 @@
-From: Ramesh GK <ramesh.gk@hotmail.com>
-Date: Thu, 28 Jan 2021 07:01:21 +0000
-Subject: [Buildroot] Issue with using PPL package for gcc 4.4.4
-In-Reply-To: <MN2PR07MB6942108AB1EDC6F6739E6205EDBA9@MN2PR07MB6942.namprd07.prod.outlook.com>
-References: <MN2PR07MB69429BBBD323EA4CC815FBD7EDBB9@MN2PR07MB6942.namprd07.prod.outlook.com>,
- <20210127185657.66ee7728@gmx.net>,
- <MN2PR07MB6942108AB1EDC6F6739E6205EDBA9@MN2PR07MB6942.namprd07.prod.outlook.com>
-Message-ID: <MN2PR07MB6942DC1D3A0D296D8A2AEEA9EDBA9@MN2PR07MB6942.namprd07.prod.outlook.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 28 Jan 2021 08:04:35 +0100
+Subject: [Buildroot] [PATCH 1/1] package/gdk-pixbuf: link with lintl if
+ needed
+Message-ID: <20210128070435.3771751-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter et al,
+Fixes:
+ - http://autobuild.buildroot.org/results/4dc94dadbc17e06a214478644f29877fe205f93d
 
-Thought of updating this thread. I was able to resolve the issue. The issue was in fact reflecting on the configure log and I missed it as I was trying to add the same option in PPL by mistake.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...eson.build-link-with-lintl-if-needed.patch | 45 +++++++++++++++++++
+ 1 file changed, 45 insertions(+)
+ create mode 100644 package/gdk-pixbuf/0001-meson.build-link-with-lintl-if-needed.patch
 
-Following are the changes that had to be done for gcc 4.4 -
-
-GMP:
-HOST_GMP_CONF_OPTS += --enable-cxx
-
-PPL:
-For PPL, I had to merge some changes to patches for fpermissive and ptrdiff_t issue due to GCC being 4.9.x along with local gmp resolution.
-
-I still have to verify the authenticity of how things are working as I am on a buildroot-2018.02.12 version but at this point hoping that this should help me to get the path I was looking for.
-
-Thanks
-Ramesh GK
-
-
-________________________________
-From: Ramesh GK <ramesh.gk@hotmail.com>
-Sent: Wednesday, January 27, 2021 9:33 PM
-To: Peter Seiderer <ps.report@gmx.net>
-Cc: buildroot at busybox.net <buildroot@busybox.net>
-Subject: Re: [Buildroot] Issue with using PPL package for gcc 4.4.4
-
-Hi Peter,
-
-I tried that approach as you have suggested but it did not work. The problem looks to be something with how the linking is happening i believe but not sure.
-
-On the same host, I did try with crosstool-ng to verify and it worked successfully but is failing within buildroot.
-
-I am happy to explore further if there are more ideas on how to resolve this issue.
-
-Thanks
-Ramesh GK
-
-
-________________________________
-From: Peter Seiderer <ps.report@gmx.net>
-Sent: Wednesday, January 27, 2021 12:56 PM
-To: Ramesh GK <ramesh.gk@hotmail.com>
-Cc: buildroot at busybox.net <buildroot@busybox.net>
-Subject: Re: [Buildroot] Issue with using PPL package for gcc 4.4.4
-
-Hello Ramesh,
-
-On Wed, 27 Jan 2021 03:46:46 +0000, Ramesh GK <ramesh.gk@hotmail.com> wrote:
-
-> Hi,
->
-> I have a need to use gcc 4.4.4 version for buildroot and trying to get the ppl package embedded within buildroot itself rather than using an external toolchain. I am facing this weird issue despite trying different options and looking for if anyone could help or have got success with setting up the ppl package within buildroot.
->
-> I am also attaching the full log from buildroot specific to the package.
->
-> Host Machine: gcc 4.9.2, gmp 6, mpfr 3.1.2, mpc 1.0.2, cloog 0.18.2, isl 0.12.2
->
-> Buildroot Specification for build: gcc 4.4.4, gmp 4.3.2, mpfr 2.4.2, mpc 0.8.2, cloog-ppl 0.15.11, ppl 0.10.2
->
-> Error:
-> checking for the GMP library version 4.1.3 or above... no
-> configure: error: Cannot find GMP version 4.1.3 or higher.
-> GMP is the GNU Multi-Precision library:
-> see https://na01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fwww.swox.com%2Fgmp%2F&amp;data=04%7C01%7C%7Ca775b8c8aec348ea527608d8c2ecf22a%7C84df9e7fe9f640afb435aaaaaaaaaaaa%7C1%7C0%7C637473670213477536%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C1000&amp;sdata=YyGYvguNfZPj%2FgckM%2BX5wmDIr%2BnfxAgWoYAYkp5DneY%3D&amp;reserved=0 for more information.
-> When compiling the GMP library, do not forget to enable the C++ interface:
-> add --enable-cxx to the configuration options.
-> package/pkg-generic.mk:221: recipe for target '/home/mht/disk/mht/obuilds/template-4.4.4-2.6/build/host-ppl-0.10.2/.stamp_configured' failed
-> make[1]: *** [/home/mht/disk/mht/obuilds/template-4.4.4-2.6/build/host-ppl-0.10.2/.stamp_configured] Error 1
-> Makefile:23: recipe for target '_all' failed
-> make: *** [_all] Error 2
-
-Maybe missing:
-
-        HOST_PPL_DEPENDENCIES += host-gmp
-
-Regards,
-Peter
-
->
-> Thanks
-> Ramesh GK
->
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210128/634f50c4/attachment.html>
+diff --git a/package/gdk-pixbuf/0001-meson.build-link-with-lintl-if-needed.patch b/package/gdk-pixbuf/0001-meson.build-link-with-lintl-if-needed.patch
+new file mode 100644
+index 0000000000..08a3a681cf
+--- /dev/null
++++ b/package/gdk-pixbuf/0001-meson.build-link-with-lintl-if-needed.patch
+@@ -0,0 +1,45 @@
++From 65c8bc8ec4ae8dd140b0205a61d0d216fa45d819 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Thu, 28 Jan 2021 07:50:44 +0100
++Subject: [PATCH] meson.build: link with lintl if needed
++
++Link with -lintl to avoid the following build failure:
++
++/home/giuliobenetti/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/mips64el-buildroot-linux-uclibc/5.5.0/../../../../mips64el-buildroot-linux-uclibc/bin/ld: gdk-pixbuf/libgdk_pixbuf-2.0.so.0.4200.2.p/gdk-pixbuf-util.c.o: in function `_gdk_pixbuf_init_gettext':
++gdk-pixbuf-util.c:(.text+0xbc0): undefined reference to `libintl_bindtextdomain'
++/home/giuliobenetti/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/mips64el-buildroot-linux-uclibc/5.5.0/../../../../mips64el-buildroot-linux-uclibc/bin/ld: gdk-pixbuf-util.c:(.text+0xbc8): undefined reference to `libintl_bindtextdomain'
++
++Fixes:
++ - http://autobuild.buildroot.org/results/894359558100ea9637feba16deaf99923805d0f2
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status:
++https://gitlab.gnome.org/GNOME/gdk-pixbuf/-/merge_requests/101]
++---
++ meson.build | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/meson.build b/meson.build
++index 1cef125a3..973948108 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -93,6 +93,7 @@ if cc.has_function('lrint', dependencies: mathlib_dep)
++   gdk_pixbuf_conf.set('HAVE_LRINT', 1)
++ endif
++ 
+++intl_dep = cc.find_library('intl', required: false)
++ if cc.has_function('bind_textdomain_codeset', prefix: '#include <libintl.h>')
++   gdk_pixbuf_conf.set('HAVE_BIND_TEXTDOMAIN_CODESET', 1)
++ endif
++@@ -212,7 +213,7 @@ if medialib_dep.found()
++ endif
++ 
++ gdk_pixbuf_deps = [ mathlib_dep, glib_dep, gobject_dep, gmodule_dep, gio_dep,
++-                    shared_mime_dep, medialib_dep ]
+++                    shared_mime_dep, medialib_dep, intl_dep ]
++ 
++ # Check if we can build shared modules
++ if gmodule_dep.type_name() == 'pkgconfig'
++-- 
++2.29.2
++
+-- 
+2.29.2
