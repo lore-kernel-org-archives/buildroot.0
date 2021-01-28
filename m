@@ -1,127 +1,99 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Jan 2021 18:35:20 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/postgresql: add
- some additional output to pg_config
-Message-ID: <20210128200123.0A8EE843AF@busybox.osuosl.org>
+Date: Thu, 28 Jan 2021 19:38:42 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/openldap:
+ security bump to version 2.4.57
+Message-ID: <20210128200123.18A3F80415@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=749490e5f05352b4dcb0e766d98c69a61195a16c
+commit: https://git.buildroot.net/buildroot/commit/?id=3b0126258fa3ab27a6eca29d22ad3d4279ac29c6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Some external packages call pg_config to determine the installed
-PostgreSQL options. Add this output to Buildroots own pg_config,
-so these packages correctly compile.
+Fixes the following security issues:
 
-Added options:
-	--pkgincludedir
-	--pgxs
-	--cflags
-	--cc
-	--pkglibdir
-	--bindir
-	--sharedir
-	--localedir
-	--docdir
-	--mandir
+- CVE-2020-36221: An integer underflow was discovered in OpenLDAP before
+  2.4.57 leading to slapd crashes in the Certificate Exact Assertion
+  processing, resulting in denial of service (schema_init.c
+  serialNumberAndIssuerCheck).
 
-Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+- CVE-2020-36222: A flaw was discovered in OpenLDAP before 2.4.57 leading to
+  an assertion failure in slapd in the saslAuthzTo validation, resulting in
+  denial of service.
+
+- CVE-2020-36223: A flaw was discovered in OpenLDAP before 2.4.57 leading to
+  a slapd crash in the Values Return Filter control handling, resulting in
+  denial of service (double free and out-of-bounds read).
+
+- CVE-2020-36224: A flaw was discovered in OpenLDAP before 2.4.57 leading to
+  an invalid pointer free and slapd crash in the saslAuthzTo processing,
+  resulting in denial of service.
+
+- CVE-2020-36225: A flaw was discovered in OpenLDAP before 2.4.57 leading to
+  a double free and slapd crash in the saslAuthzTo processing, resulting in
+  denial of service.
+
+- CVE-2020-36226: A flaw was discovered in OpenLDAP before 2.4.57 leading to
+  a memch->bv_len miscalculation and slapd crash in the saslAuthzTo
+  processing, resulting in denial of service.
+
+- CVE-2020-36227: A flaw was discovered in OpenLDAP before 2.4.57 leading to
+  an infinite loop in slapd with the cancel_extop Cancel operation,
+  resulting in denial of service.
+
+- CVE-2020-36228: An integer underflow was discovered in OpenLDAP before
+  2.4.57 leading to a slapd crash in the Certificate List Exact Assertion
+  processing, resulting in denial of service.
+
+- CVE-2020-36229: A flaw was discovered in ldap_X509dn2bv in OpenLDAP before
+  2.4.57 leading to a slapd crash in the X.509 DN parsing in ad_keystring,
+  resulting in denial of service.
+
+- CVE-2020-36230: A flaw was discovered in OpenLDAP before 2.4.57 leading in
+  an assertion failure in slapd in the X.509 DN parsing in decode.c
+  ber_next_element, resulting in denial of service.
+
+https://www.openldap.org/software/release/changes.html
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit e3ff618bd84f67992d354f0cc3343813b214b6a0)
+(cherry picked from commit 46c4c9684d24109f60711d1adb65ff19965edf05)
+[Peter: mark as security bump, add CVE info]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/postgresql/pg_config     | 51 ++++++++++++++++++++++++++++++++++++++--
- package/postgresql/postgresql.mk |  2 ++
- 2 files changed, 51 insertions(+), 2 deletions(-)
+ package/openldap/openldap.hash | 10 +++++-----
+ package/openldap/openldap.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/postgresql/pg_config b/package/postgresql/pg_config
-index 59a9e6cfad..3b0cb35f2c 100644
---- a/package/postgresql/pg_config
-+++ b/package/postgresql/pg_config
-@@ -2,7 +2,6 @@
- 
+diff --git a/package/openldap/openldap.hash b/package/openldap/openldap.hash
+index 4908f6e69e..f2ffdf53bc 100644
+--- a/package/openldap/openldap.hash
++++ b/package/openldap/openldap.hash
+@@ -1,7 +1,7 @@
+-# From https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.56.md5
+-md5  82a7dcf7aeaf95fdad16017c0ed9983a  openldap-2.4.56.tgz
+-# From https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.56.sha1
+-sha1  4c617b87bd50ef8d071e7deb7525af79b08d4910  openldap-2.4.56.tgz
++# From https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.57.md5
++md5  e3349456c3a66e5e6155be7ddc3f042c  openldap-2.4.57.tgz
++# From https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.57.sha1
++sha1  1cffa70a3ea8545948041fd113f8f53bc24d6d87  openldap-2.4.57.tgz
+ # Locally computed
+-sha256  25520e0363c93f3bcb89802a4aa3db33046206039436e0c7c9262db5a61115e0  openldap-2.4.56.tgz
++sha256  c7ba47e1e6ecb5b436f3d43281df57abeffa99262141aec822628bc220f6b45a  openldap-2.4.57.tgz
+ sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
+diff --git a/package/openldap/openldap.mk b/package/openldap/openldap.mk
+index e44c958c41..e361fc420c 100644
+--- a/package/openldap/openldap.mk
++++ b/package/openldap/openldap.mk
+@@ -4,7 +4,7 @@
  #
- # Minimal pg_config implementation as replacement for the native pg_config application
--# Only implements --includedir and --libdir
- #
+ ################################################################################
  
- prefix=/usr
-@@ -11,6 +10,9 @@ case "$1" in
-   --includedir)
- 	echo "$prefix/include"
- 	;;
-+  --pkgincludedir)
-+	echo "$prefix/include/postgresql"
-+	;;
-   --includedir-server)
- 	echo "$prefix/include/postgresql/server"
- 	;;
-@@ -23,6 +25,51 @@ case "$1" in
-   --configure)
- 	echo "@POSTGRESQL_CONF_OPTIONS@"
- 	;;
-+  --pgxs)
-+	echo "$prefix/lib/postgresql/pgxs/src/makefiles/pgxs.mk"
-+	;;
-+  --cflags)
-+	echo "@TARGET_CFLAGS@"
-+	;;
-+  --cc)
-+	echo "@TARGET_CC@"
-+	;;
-+  --pkglibdir)
-+	echo "/usr/lib/postgresql"
-+	;;
-+  --bindir)
-+	echo "/usr/bin"
-+	;;
-+  --sharedir)
-+	echo "/usr/share/postgresql"
-+	;;
-+  --localedir)
-+	echo "/usr/share/locale"
-+	;;
-+  --docdir)
-+	echo "/usr/share/doc/postgresql"
-+	;;
-+  --mandir)
-+	echo "/usr/share/man"
-+	;;
-   *)
--	echo "Usage: $0 {--includedir|--includedir-server|--libdir|--version|--configure}"
-+	echo "Usage: $0 {OPTION}"
-+	echo
-+	echo "Options:"
-+	echo
-+	echo "	--includedir		show location of C header files of the client interfaces"
-+	echo "	--pkgincludedir		show location of other C header files"
-+	echo "	--includedir-server	show location of C header files for the server"
-+	echo "	--libdir		show location of object code libraries"
-+	echo "	--version		show the PostgreSQL version"
-+	echo "	--configure		show options given to configure script"
-+	echo "	--pgxs			show location of extension makefile"
-+	echo "	--cflags		show CFLAGS value used when PostgreSQL was built"
-+	echo "	--cc			show CC value used when PostgreSQL was built"
-+	echo "	--pkglibdir		show location of dynamically loadable modules"
-+	echo "	--bindir		show location of user executables"
-+	echo "	--sharedir		show location of architecture-independent support files"
-+	echo "	--localedir		show location of locale support files"
-+	echo "	--docdir		show location of documentation files"
-+	echo "	--mandir		show location of manual pages"
- esac
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 4c5f200bdf..85b767de72 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -117,6 +117,8 @@ define POSTGRESQL_INSTALL_CUSTOM_PG_CONFIG
- 		$(STAGING_DIR)/usr/bin/pg_config
- 	$(SED) "s|@POSTGRESQL_CONF_OPTIONS@|$(POSTGRESQL_CONF_OPTS)|g" $(STAGING_DIR)/usr/bin/pg_config
- 	$(SED) "s|@POSTGRESQL_VERSION@|$(POSTGRESQL_VERSION)|g" $(STAGING_DIR)/usr/bin/pg_config
-+	$(SED) "s|@TARGET_CFLAGS@|$(TARGET_CFLAGS)|g" $(STAGING_DIR)/usr/bin/pg_config
-+	$(SED) "s|@TARGET_CC@|$(TARGET_CC)|g" $(STAGING_DIR)/usr/bin/pg_config
- endef
- 
- POSTGRESQL_POST_INSTALL_STAGING_HOOKS += POSTGRESQL_INSTALL_CUSTOM_PG_CONFIG
+-OPENLDAP_VERSION = 2.4.56
++OPENLDAP_VERSION = 2.4.57
+ OPENLDAP_SOURCE = openldap-$(OPENLDAP_VERSION).tgz
+ OPENLDAP_SITE = https://www.openldap.org/software/download/OpenLDAP/openldap-release
+ OPENLDAP_LICENSE = OpenLDAP Public License
