@@ -1,33 +1,63 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Jan 2021 17:44:59 +0100
-Subject: [Buildroot] [git commit] utils: fix flake8 warning
-In-Reply-To: <20210123200520.1174581807@busybox.osuosl.org> (Yann E. MORIN's
- message of "Sat, 23 Jan 2021 21:24:48 +0100")
-References: <20210123200520.1174581807@busybox.osuosl.org>
-Message-ID: <87r1m53t9w.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 28 Jan 2021 17:45:09 +0100
+Subject: [Buildroot] [PATCH 1/1] package/wpewebkit: add CPE variables
+In-Reply-To: <20210126210845.2497502-1-fontaine.fabrice@gmail.com>
+References: <20210126210845.2497502-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210128164509.GO2325@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+On 2021-01-26 22:08 +0100, Fabrice Fontaine spake thusly:
+> cpe:2.3:a:wpewebkit:wpe_webkit is a valid CPE identifier for this
+> package:
+> 
+>   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Awpewebkit%3Awpe_webkit
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=9277978e28479449e517152105ae2e8a6d03151a
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Applied to master, thanks.
 
- > Commit 40bb37bd70d refactored get-developers, and now the 'os' module is
- > no longer needed, but still imported:
+But what about the other webkit-like packages we have:
 
- >     utils/get-developers:6:1: F401 'os' imported but unused
- >     1     F401 'os' imported but unused
+    package/qt5/qt5webkit
+    package/qt-webkit-kiosk
+    package/webkitgtk
 
- > Drop it now.
+Regards,
+Yann E. MORIN.
 
- > Reported-by: Arnout Vandecappelle <arnout@mind.be>
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-
-Committed to 2020.02.x and 2020.11.x, thanks.
+> ---
+>  package/wpewebkit/wpewebkit.mk | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
+> index d3afdf0094..91f137d96f 100644
+> --- a/package/wpewebkit/wpewebkit.mk
+> +++ b/package/wpewebkit/wpewebkit.mk
+> @@ -12,6 +12,8 @@ WPEWEBKIT_LICENSE = LGPL-2.1+, BSD-2-Clause
+>  WPEWEBKIT_LICENSE_FILES = \
+>  	Source/WebCore/LICENSE-APPLE \
+>  	Source/WebCore/LICENSE-LGPL-2.1
+> +WPEWEBKIT_CPE_ID_VENDOR = wpewebkit
+> +WPEWEBKIT_CPE_ID_PRODUCT = wpe_webkit
+>  WPEWEBKIT_DEPENDENCIES = host-gperf host-python host-ruby \
+>  	harfbuzz cairo icu jpeg libepoxy libgcrypt libgles libsoup libtasn1 \
+>  	libpng libxslt openjpeg wayland-protocols webp wpebackend-fdo
+> -- 
+> 2.29.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
