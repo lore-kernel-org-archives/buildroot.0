@@ -1,42 +1,35 @@
 From: Maxime Chevallier <maxime.chevallier@bootlin.com>
-Date: Thu, 28 Jan 2021 10:27:49 +0100
-Subject: [Buildroot] [PATCH 1/9] package/alsa-utils: add SELinux repolicy
+Date: Thu, 28 Jan 2021 10:27:50 +0100
+Subject: [Buildroot] [PATCH 2/9] package/bridge-utils: add SELinux refpolicy
  module
 In-Reply-To: <20210128092757.1016598-1-maxime.chevallier@bootlin.com>
 References: <20210128092757.1016598-1-maxime.chevallier@bootlin.com>
-Message-ID: <20210128092757.1016598-2-maxime.chevallier@bootlin.com>
+Message-ID: <20210128092757.1016598-3-maxime.chevallier@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The alsa-utils package adds some tools that needs the proper module in
-the SELinux refpolicy to work properly when SELinux is enabled on the
-system.
-
-Add support for the alsactl tool, through the use of the admin/alsa
-module.
+Bridge-utils's brctl tool is supported by the admin/brctl SELinux
+refpolicy module.
 
 Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
 ---
- package/alsa-utils/alsa-utils.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/bridge-utils/bridge-utils.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
-index d9f0fea7b4..2658c827a0 100644
---- a/package/alsa-utils/alsa-utils.mk
-+++ b/package/alsa-utils/alsa-utils.mk
-@@ -15,6 +15,10 @@ ALSA_UTILS_DEPENDENCIES = host-pkgconf alsa-lib \
- 	$(if $(BR2_PACKAGE_LIBSAMPLERATE),libsamplerate) \
- 	$(TARGET_NLS_DEPENDENCIES)
+diff --git a/package/bridge-utils/bridge-utils.mk b/package/bridge-utils/bridge-utils.mk
+index fa71c3a64e..2de5517fc5 100644
+--- a/package/bridge-utils/bridge-utils.mk
++++ b/package/bridge-utils/bridge-utils.mk
+@@ -11,6 +11,7 @@ BRIDGE_UTILS_AUTORECONF = YES
+ BRIDGE_UTILS_LICENSE = GPL-2.0+
+ BRIDGE_UTILS_LICENSE_FILES = COPYING
+ BRIDGE_UTILS_CPE_ID_VENDOR = kernel
++BRIDGE_UTILS_SELINUX_MODULES = brctl
  
-+ifeq ($(BR2_PACKAGE_ALSA_UTILS_ALSACTL),y)
-+ALSA_UTILS_SELINUX_MODULES += alsa
-+endif
-+
- ALSA_UTILS_CONF_ENV = \
- 	ac_cv_prog_ncurses5_config=$(STAGING_DIR)/usr/bin/$(NCURSES_CONFIG_SCRIPTS) \
- 	LIBS=$(TARGET_NLS_LIBS)
+ # Avoid using the host's headers. Location is not important as
+ # required headers will anyway be found from within the sysroot.
 -- 
 2.25.4
