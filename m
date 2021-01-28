@@ -1,45 +1,34 @@
 From: Antoine Tenart <atenart@kernel.org>
-Date: Thu, 28 Jan 2021 15:22:14 +0100
-Subject: [Buildroot] [PATCH 0/9] packages: Add more SELinux modules to
- some packages
-In-Reply-To: <20210128092757.1016598-1-maxime.chevallier@bootlin.com>
-References: <20210128092757.1016598-1-maxime.chevallier@bootlin.com>
-Message-ID: <161184373464.5198.1961212083736330725@kwain.local>
+Date: Thu, 28 Jan 2021 15:24:25 +0100
+Subject: [Buildroot] [PATCH v2] package/refpolicy: Add option to disable
+ "dontaudit" rules
+In-Reply-To: <20210128125256.1419587-1-maxime.chevallier@bootlin.com>
+References: <20210128125256.1419587-1-maxime.chevallier@bootlin.com>
+Message-ID: <161184386534.5198.15461432493524413541@kwain.local>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Maxime,
+Quoting Maxime Chevallier (2021-01-28 13:52:56)
+> --- a/package/refpolicy/refpolicy.mk
+> +++ b/package/refpolicy/refpolicy.mk
+> @@ -116,6 +116,14 @@ define REFPOLICY_BUILD_CMDS
+>         $(REFPOLICY_MAKE) -C $(@D) policy
+>  endef
+>  
+> +ifeq ($(BR2_REFPOLICY_DISABLE_DONTAUDIT),y)
+> +define REFPOLICY_DISABLE_DONTAUDIT_CMDS
+> +       $(REFPOLICY_MAKE) -C $(@D) enableaudit
+> +endef
+> +endif
+> +
+> +REFPOLICY_POST_BUILD_HOOKS += REFPOLICY_DISABLE_DONTAUDIT_CMDS
 
-Quoting Maxime Chevallier (2021-01-28 10:27:48)
-> 
-> This series is a second batch of patches adding a match between packages
-> and their corresponding module in the SELinux refpolicy.
-> 
-> This series focuses on the following packages : 
-> 
->  - alsa-utils (for alsa-ctl)
->  - bridge-utils (for brctl)
->  - dmidecode
->  - hwloc
->  - kexec and kexec-lite
->  - kismet
->  - logrotate
->  - mcelog
-> 
-> Maxime Chevallier (9):
->   package/alsa-utils: add SELinux repolicy module
->   package/bridge-utils: add SELinux refpolicy module
->   package/dmidecode: add SELinux refpolicy module
->   package/hwloc: add SELinux refpolicy module
->   package/kexec: add SELinux refpolicy module
->   package/kexec-lite: add SELinux refpolicy module
->   package/kismet: add SELinux refpolicy module
->   package/logrotate: add SELinux refpolicy module
->   package/mcelog: add SELinux refpolicy module
+I think this could be in the ifeq block as well.
 
-LGTM, thanks!
+Otherwise, LGTM.
 
+Thanks!
 Antoine
