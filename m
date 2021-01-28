@@ -1,72 +1,60 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Jan 2021 21:05:21 +0100
-Subject: [Buildroot] [PATCH] package/opentracing-cpp: fix build if
- clang-tidy is installed on the host
-In-Reply-To: <20210119171742.23245-1-patrickdepinguin@gmail.com> (Thomas De
- Schampheleire's message of "Tue, 19 Jan 2021 18:17:41 +0100")
-References: <20210119171742.23245-1-patrickdepinguin@gmail.com>
-Message-ID: <878s8c25fi.fsf@dell.be.48ers.dk>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 28 Jan 2021 21:04:34 +0100
+Subject: [Buildroot] [PATCH v2,
+ 2/4] Revert "package/assimp: fix static only build"
+In-Reply-To: <20210128200436.4162618-1-fontaine.fabrice@gmail.com>
+References: <20210128200436.4162618-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210128200436.4162618-2-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+This reverts commit b44b5cb265e3764169aa4856f40e8e2db55cba22.
 
- > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
- > opentracing-cpp fails to build if clang-tidy is installed:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...lib-disable-dynamic-library-building.patch | 31 -------------------
+ 1 file changed, 31 deletions(-)
+ delete mode 100644 package/assimp/0003-contrib-zlib-disable-dynamic-library-building.patch
 
- > ...
- > -- clang-tidy found: /usr/lib/llvm/11/bin/clang-tidy
- > -- Configuring done
- > -- Generating done
- > ...
-
- > [ 25%] Building CXX object CMakeFiles/opentracing.dir/src/propagation.cpp.o
- > .../buildroot/output/build/opentracing-cpp-1.5.1/include/opentracing/string_view.h:5:10: error: 'algorithm' file not found [clang-diagnostic-error]
- >          ^
- > .../buildroot/output/build/opentracing-cpp-1.5.1/src/propagation.cpp:3:11: warning: '__llvm_libc' needs to be the outermost namespace [llvmlibc-implementation-in-namespace]
- > namespace opentracing {
- >           ^
- > .../buildroot/output/build/opentracing-cpp-1.5.1/src/propagation.cpp:11:3: warning: use '= default' to define a trivial default constructor [hicpp-use-equals-default,modernize-use-equals-default]
- >   PropagationErrorCategory() {}
- >   ^                          ~~
- >                              = default;
- > .../buildroot/output/build/opentracing-cpp-1.5.1/src/propagation.cpp:13:15: warning: use a trailing return type for this function [modernize-use-trailing-return-type]
- >   const char* name() const noexcept override {
- >   ~~~~~~~~~~~ ^
- >   auto                              -> const char*
- > .../buildroot/output/build/opentracing-cpp-1.5.1/src/propagation.cpp:13:15: warning: method 'name' can be made static [readability-convert-member-functions-to-static]
- >   const char* name() const noexcept override {
- >               ^      ~~~~~~
- >   static
- > .../buildroot/output/build/opentracing-cpp-1.5.1/src/propagation.cpp:17:24: warning: use a trailing return type for this function [modernize-use-trailing-return-type]
- >   std::error_condition default_error_condition(int code) const
- >                        ^
- > .../buildroot/output/build/opentracing-cpp-1.5.1/src/propagation.cpp:37:15: warning: use a trailing return type for this function [modernize-use-trailing-return-type]
- >   std::string message(int code) const override {
- >               ^
- > .../buildroot/output/build/opentracing-cpp-1.5.1/src/propagation.cpp:58:28: warning: use a trailing return type for this function [modernize-use-trailing-return-type]
- > const std::error_category& propagation_error_category() {
- >                            ^
- > 226 warnings and 1 error generated.
- > Error while processing .../buildroot/output/build/opentracing-cpp-1.5.1/src/propagation.cpp.
- > Suppressed 218 warnings (218 in non-user code).
- > Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
- > Found compiler error(s).
- > make[3]: *** [CMakeFiles/opentracing.dir/build.make:83: CMakeFiles/opentracing.dir/src/propagation.cpp.o] Error 1
- > make[3]: *** Waiting for unfinished jobs....
- > .../buildroot/output/build/opentracing-cpp-1.5.1/include/opentracing/string_view.h:5:10: error: 'algorithm' file not found [clang-diagnostic-error]
- >          ^
- > .../buildroot/output/build/opentracing-cpp-1.5.1/src/dynamic_load.cpp:4:
-
- > Disable the 'ENABLE_LINTING' option to avoid this influence.
-
- > Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-
-
-Committed to 2020.02.x and 2020.11.x, thanks.
-
+diff --git a/package/assimp/0003-contrib-zlib-disable-dynamic-library-building.patch b/package/assimp/0003-contrib-zlib-disable-dynamic-library-building.patch
+deleted file mode 100644
+index 8661311be5..0000000000
+--- a/package/assimp/0003-contrib-zlib-disable-dynamic-library-building.patch
++++ /dev/null
+@@ -1,31 +0,0 @@
+-From 2b8684aded0c383be64bac0fa59e39870252963f Mon Sep 17 00:00:00 2001
+-From: Peter Seiderer <ps.report@gmx.net>
+-Date: Sun, 12 Apr 2020 18:19:13 +0200
+-Subject: [PATCH] contrib/zlib: disable dynamic library building
+-
+-Fixes compile failure for static only toolchains (and assimp
+-links against the static one).
+-
+-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+----
+- contrib/zlib/CMakeLists.txt | 3 ---
+- 1 file changed, 3 deletions(-)
+-
+-diff --git a/contrib/zlib/CMakeLists.txt b/contrib/zlib/CMakeLists.txt
+-index 9d1fcc94..78346233 100644
+---- a/contrib/zlib/CMakeLists.txt
+-+++ b/contrib/zlib/CMakeLists.txt
+-@@ -195,10 +195,7 @@ if(MINGW)
+-     set(ZLIB_DLL_SRCS ${CMAKE_CURRENT_BINARY_DIR}/zlib1rc.obj)
+- endif(MINGW)
+- 
+--add_library(zlib SHARED ${ZLIB_SRCS} ${ZLIB_ASMS} ${ZLIB_DLL_SRCS} ${ZLIB_PUBLIC_HDRS} ${ZLIB_PRIVATE_HDRS})
+- add_library(zlibstatic STATIC ${ZLIB_SRCS} ${ZLIB_ASMS} ${ZLIB_PUBLIC_HDRS} ${ZLIB_PRIVATE_HDRS})
+--set_target_properties(zlib PROPERTIES DEFINE_SYMBOL ZLIB_DLL)
+--set_target_properties(zlib PROPERTIES SOVERSION 1)
+- 
+- INSTALL( TARGETS zlibstatic
+-          LIBRARY DESTINATION ${ASSIMP_LIB_INSTALL_DIR}
+--- 
+-2.26.0
+-
 -- 
-Bye, Peter Korsgaard
+2.29.2
