@@ -1,57 +1,59 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 28 Jan 2021 07:29:39 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/x264: bump version
-Message-ID: <20210128062939.192717-1-bernd.kuhls@t-online.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 28 Jan 2021 07:56:31 +0100
+Subject: [Buildroot] [PATCH 1/1] package/gdk-pixbuf: fix license
+Message-ID: <20210128065631.3720247-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Reformatted hashes.
+Commit a7b51ed3013c919b293deb95299e33363fb9df70 forgot to update hash of
+COPYING which now contains LGPL-2.1+
 
-Switch _SITE* according to
-http://download.videolan.org/x264/snapshots/x264-snapshot-20191218-README.txt
+Here is an extract of
+https://gitlab.gnome.org/GNOME/gdk-pixbuf/-/commit/0a8882b1a1f5234f7de2177e41f9cb584b6d61f8:
 
-"The snapshotting service is discontinued.
+"The vast majority of GdkPixbuf is released under the terms of the GNU
+Lesser General Public License, version 2.1 or later.
 
- Please use https://code.videolan.org/videolan/x264/ to get the
- tarballs."
+The following files are released under the terms of the GNU Library
+General Public License, version 2 or later:
+[...]
+The aggregate license of the GdkPixbuf project is the Lesser GPL v2.1 or
+later."
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Fixes:
+ - http://autobuild.buildroot.org/results/292306061216471c258a89e61b54c0d05c757321
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-v2: switched _SITE_METHOD to git (Yann)
+ package/gdk-pixbuf/gdk-pixbuf.hash | 2 +-
+ package/gdk-pixbuf/gdk-pixbuf.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- package/x264/x264.hash | 4 ++--
- package/x264/x264.mk   | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/package/x264/x264.hash b/package/x264/x264.hash
-index 93242a46cc..f1396279f8 100644
---- a/package/x264/x264.hash
-+++ b/package/x264/x264.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 0bb67d095513391e637b3b47e8efc3ba4603c3844f1b4c2690f4d36da7763055  x264-snapshot-20191217-2245.tar.bz2
--sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-+sha256  58f39bf23a4e38ac3dd841a3f9ccf2aa16d2b0c35df9aecd9f3b5062780e5d74  x264-35417dcd65a57321fbadf98c9a4cff1cb741db4b-br1.tar.gz
-+sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/x264/x264.mk b/package/x264/x264.mk
-index 9d217d1912..9de618eb5e 100644
---- a/package/x264/x264.mk
-+++ b/package/x264/x264.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--X264_VERSION = 20191217-2245
--X264_SITE = http://download.videolan.org/x264/snapshots
--X264_SOURCE = x264-snapshot-$(X264_VERSION).tar.bz2
-+X264_VERSION = 35417dcd65a57321fbadf98c9a4cff1cb741db4b
-+X264_SITE = https://code.videolan.org/videolan/x264.git
-+X264_SITE_METHOD = git
- X264_LICENSE = GPL-2.0+
- X264_DEPENDENCIES = host-pkgconf
- X264_LICENSE_FILES = COPYING
+diff --git a/package/gdk-pixbuf/gdk-pixbuf.hash b/package/gdk-pixbuf/gdk-pixbuf.hash
+index 580cf47602..be7593aebf 100644
+--- a/package/gdk-pixbuf/gdk-pixbuf.hash
++++ b/package/gdk-pixbuf/gdk-pixbuf.hash
+@@ -1,4 +1,4 @@
+ # From http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/2.42/gdk-pixbuf-2.42.2.sha256sum
+ sha256  83c66a1cfd591d7680c144d2922c5955d38b4db336d7cd3ee109f7bcf9afef15  gdk-pixbuf-2.42.2.tar.xz
+ # Locally calculated
+-sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
++sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/gdk-pixbuf/gdk-pixbuf.mk b/package/gdk-pixbuf/gdk-pixbuf.mk
+index 743ce2caa9..3560734841 100644
+--- a/package/gdk-pixbuf/gdk-pixbuf.mk
++++ b/package/gdk-pixbuf/gdk-pixbuf.mk
+@@ -8,7 +8,7 @@ GDK_PIXBUF_VERSION_MAJOR = 2.42
+ GDK_PIXBUF_VERSION = $(GDK_PIXBUF_VERSION_MAJOR).2
+ GDK_PIXBUF_SOURCE = gdk-pixbuf-$(GDK_PIXBUF_VERSION).tar.xz
+ GDK_PIXBUF_SITE = http://ftp.gnome.org/pub/gnome/sources/gdk-pixbuf/$(GDK_PIXBUF_VERSION_MAJOR)
+-GDK_PIXBUF_LICENSE = LGPL-2.0+
++GDK_PIXBUF_LICENSE = LGPL-2.1+
+ GDK_PIXBUF_LICENSE_FILES = COPYING
+ GDK_PIXBUF_CPE_ID_VENDOR = gnome
+ GDK_PIXBUF_INSTALL_STAGING = YES
 -- 
 2.29.2
