@@ -1,48 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Jan 2021 18:06:08 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x]
- package/libtorrent-rasterbar: drop host gcc dependency
-Message-ID: <20210128200122.E3174843AF@busybox.osuosl.org>
+Date: Thu, 28 Jan 2021 17:28:32 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/poppler: add
+ boost optional dependency
+Message-ID: <20210128200122.BB47B83E2C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=23f5a5de30eff60596262ca0cf65a0d8672798ae
+commit: https://git.buildroot.net/buildroot/commit/?id=b53a60a664bf2fc46c25f136d05b717715a9f350
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Drop host gcc dependency which has wrongly been added by commit
-0393f5d34433e34e49ff7ce0fb998735453ed4fc
+boost is an optional dependency which is enabled by default since
+version 0.80.0 and
+https://github.com/freedesktop/poppler/commit/355fd8d58ca0209284fe568b3add28f207e995c1
+
+There is no cmake option to enable or disable this dependency
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit ab0af07ce2f37c36b2c79445140d5001367844a1)
+(cherry picked from commit 497f989d7595a1c801a587e77d508ec3fa6edf0f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libtorrent-rasterbar/Config.in | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ package/poppler/poppler.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/libtorrent-rasterbar/Config.in b/package/libtorrent-rasterbar/Config.in
-index b2508b8b70..fe9a9fc027 100644
---- a/package/libtorrent-rasterbar/Config.in
-+++ b/package/libtorrent-rasterbar/Config.in
-@@ -1,8 +1,8 @@
- comment "libtorrent-rasterbar needs a toolchain w/ C++, threads, wchar, gcc >= 4.9"
- 	depends on BR2_TOOLCHAIN_SUPPORTS_VARIADIC_MI_THUNK
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
--		!BR2_HOST_GCC_AT_LEAST_4_9 || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
+index 69a3bcace5..c5e1a800f2 100644
+--- a/package/poppler/poppler.mk
++++ b/package/poppler/poppler.mk
+@@ -27,6 +27,10 @@ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+ POPPLER_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -latomic"
+ endif
  
- comment "libtorrent-rasterbar needs exception_ptr"
- 	depends on BR2_TOOLCHAIN_SUPPORTS_VARIADIC_MI_THUNK
-@@ -11,7 +11,6 @@ comment "libtorrent-rasterbar needs exception_ptr"
- config BR2_PACKAGE_LIBTORRENT_RASTERBAR
- 	bool "libtorrent-rasterbar"
- 	depends on BR2_INSTALL_LIBSTDCPP # boost
--	depends on BR2_HOST_GCC_AT_LEAST_4_9 # C++11
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # boost
- 	depends on BR2_TOOLCHAIN_SUPPORTS_VARIADIC_MI_THUNK
++ifeq ($(BR2_PACKAGE_BOOST),y)
++POPPLER_DEPENDENCIES += boost
++endif
++
+ ifeq ($(BR2_PACKAGE_JPEG),y)
+ POPPLER_DEPENDENCIES += jpeg
+ POPPLER_CONF_OPTS += -DENABLE_DCTDECODER=libjpeg -DWITH_JPEG=ON
