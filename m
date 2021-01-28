@@ -1,30 +1,40 @@
-From: Alassane <alassaneg@gmail.com>
-Date: Thu, 28 Jan 2021 12:00:22 +0100
-Subject: [Buildroot] Buildroot integration with eclipse issues
-Message-ID: <CAJ2YAHtbmHSSW992Z4vX7F+SfBjraG-cSri04pcuEqOr6UADSQ@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 28 Jan 2021 14:33:38 +0200
+Subject: [Buildroot] [PATCH] package/uboot-tools: drop redundant parentheses
+Message-ID: <e66442f596117c0b73f9e43ee838688a1563164c.1611837218.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Commit d8db91fc6fa ("package/uboot-tools: resolve host uboot env/script
+error") introduced closing parentheses that is not matched and not
+needed.
 
-I've tried to use Eclipse to develop my own application for my embedded
-linux system but i'm having some issues.
-To use the buildroot eclipse plugin, eclipse luna 4.4 is needed. Then, to
-run this eclipse version, a java 7 JDK/JRE is needed. The problem is that
-it doesn't seem to be possible to install that old java JDK/JRE version
-(i'm using Ubuntu 18.04 on virtual box). I've tried to use java 11 JDK/JRE
-but then, an error is displayed in the terminal when i try to run eclipse
-luna 4.4 .
-So, i'd like to know if there was an alternative to that, like using a more
-recent version of eclipse that would be compatible with the buildroot
-eclipse plugin.
+Fixes:
+http://autobuild.buildroot.net/results/a65/a65fcc581f56ef70154f83e80f12d64f2e0f856a/
+http://autobuild.buildroot.net/results/39a/39aabb9d8afcdead1d620e081d2cd43ee2d61fbc/
 
-Kind regards
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+Cc: Kalpesh Panchal <kalpesh.panchal@rockwellcollins.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/uboot-tools/uboot-tools.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thank you.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210128/e44d505d/attachment.html>
+diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
+index f2bd627e927e..a0cdcafd4e7e 100644
+--- a/package/uboot-tools/uboot-tools.mk
++++ b/package/uboot-tools/uboot-tools.mk
+@@ -160,7 +160,7 @@ endif #BR_BUILDING
+ define HOST_UBOOT_TOOLS_GENERATE_BOOT_SCRIPT
+ 	$(@D)/tools/mkimage -C none -A $(MKIMAGE_ARCH) -T script \
+ 		-d $(call qstrip,$(BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE)) \
+-		$(@D)/tools/boot.scr)
++		$(@D)/tools/boot.scr
+ endef
+ define HOST_UBOOT_TOOLS_INSTALL_BOOT_SCRIPT
+ 	$(INSTALL) -m 0755 -D $(@D)/tools/boot.scr $(BINARIES_DIR)/boot.scr
+-- 
+2.29.2
