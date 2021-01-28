@@ -1,39 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Jan 2021 21:10:14 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/sudo: drop
- unneeded autoreconf
-Message-ID: <20210128200124.28425801C8@busybox.osuosl.org>
+Date: Thu, 28 Jan 2021 20:23:02 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/libupnpp: bump to
+ version 0.19.4
+Message-ID: <20210128200123.6DAD7813B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ce1f59f2e4ca1ce38cc2bf54f6419d2eee20d813
+commit: https://git.buildroot.net/buildroot/commit/?id=0631273b4c762693caf5ec8eaa2ae05f0d52c4d3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Commit 4fea71ac785cc (package/sudo: security bump to version 1.9.5p2)
-removed the patch, but forgot to remove the now unneeded autoreconf.  Fix
-that.
-
-Reported-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 84a8aac451906c30f79c123afe4a415573021dc5)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit d42e4187d7dab489bb22b54673ae1d337eed4aa5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sudo/sudo.mk | 2 --
- 1 file changed, 2 deletions(-)
+ package/libupnpp/libupnpp.hash | 4 ++--
+ package/libupnpp/libupnpp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
-index b727065abb..c08cf1c4a5 100644
---- a/package/sudo/sudo.mk
-+++ b/package/sudo/sudo.mk
-@@ -8,8 +8,6 @@ SUDO_VERSION = 1.9.5p2
- SUDO_SITE = https://www.sudo.ws/sudo/dist
- SUDO_LICENSE = ISC, BSD-3-Clause
- SUDO_LICENSE_FILES = doc/LICENSE
--# We're patching lib/eventlog/Makefile.in
--SUDO_AUTORECONF = YES
- # This is to avoid sudo's make install from chown()ing files which fails
- SUDO_INSTALL_TARGET_OPTS = INSTALL_OWNER="" DESTDIR="$(TARGET_DIR)" install
- SUDO_CONF_OPTS = \
+diff --git a/package/libupnpp/libupnpp.hash b/package/libupnpp/libupnpp.hash
+index dde0d970cb..029e33151d 100644
+--- a/package/libupnpp/libupnpp.hash
++++ b/package/libupnpp/libupnpp.hash
+@@ -1,5 +1,5 @@
+-# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/libupnpp-0.19.3.tar.gz.sha256
+-sha256  a16f35ef1ce3d687e9599422c09677c2c1591bfcf68e242931082d4561f66be4  libupnpp-0.19.3.tar.gz
++# Hash from: http://www.lesbonscomptes.com/upmpdcli/downloads/libupnpp-0.19.4.tar.gz.sha256
++sha256  29d1d07d44c8f79573e64e093ad8f0f883b11ef9eb3642a67aa703c1dde60576  libupnpp-0.19.4.tar.gz
+ 
+ # Hash for license file:
+ sha256  00a89b0d18aacd4114decf79122db87bf35bddaf2bc50e383c9c9f4c263390b2  COPYING
+diff --git a/package/libupnpp/libupnpp.mk b/package/libupnpp/libupnpp.mk
+index a8db575984..fc4599ebc8 100644
+--- a/package/libupnpp/libupnpp.mk
++++ b/package/libupnpp/libupnpp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBUPNPP_VERSION = 0.19.3
++LIBUPNPP_VERSION = 0.19.4
+ LIBUPNPP_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
+ LIBUPNPP_LICENSE = LGPL-2.1+
+ LIBUPNPP_LICENSE_FILES = COPYING
