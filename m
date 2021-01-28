@@ -1,123 +1,164 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Jan 2021 21:12:00 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/uboot-tools:
- resolve host uboot env/script error
-Message-ID: <20210128200059.0F05E812DF@busybox.osuosl.org>
+Date: Thu, 28 Jan 2021 18:00:46 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/uhd: fix build on
+ RISC-V
+Message-ID: <20210128200058.047EA843AE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9bec67f56dbb2b40c7a954cd1efb762e418f62b1
+commit: https://git.buildroot.net/buildroot/commit/?id=19aa4e9ee77dc75349fb8b101aaed4bcfbb21fb6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-The host build of uboot-tools can occur early in the build process and may
-require the creation of BINARIES_DIR before generation of an enabled envimage
-and/or boot script binary. So to resolve this in proper way, separated the
-build and installation part of uboot env/script in their respective commands.
+When the target CPU is riscV, msgpack is unable to detect endianness with a list of errors like:
 
-Signed-off-by: Kalpesh Panchal <kalpesh.panchal@rockwellcollins.com>
-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit d8db91fc6fa8d113bd8012302328cae2bf7f40c0)
+uhd/host/lib/deps/rpclib/include/rpc/msgpack/pack.hpp:190:2: error: #error msgpack-c supports only big endian and little endian
+  190 | #error msgpack-c supports only big endian and little endian
+      |  ^~~~~
+
+and with subsequent errors:
+
+uhd0/host/lib/deps/rpclib/include/rpc/msgpack/pack.hpp:236:46: error: there are no arguments to 'take8_8' that depend on a template parameter, so a declaration of 'take8_8' must be available [-fpermissive]
+  236 |     char buf[2] = {static_cast<char>(0xccu), take8_8(d)};
+      |
+
+This is due to a missing support for this architecture in msgpack.
+This patch adapt commit from https://github.com/boostorg/predef
+
+[backported from https://github.com/EttusResearch/uhd/pull/400]
+
+Fix:
+- http://autobuild.buildroot.net/results/afacf5c5c2cd9dff6962523f1fdded9b474b9d66/
+- http://autobuild.buildroot.net/results/91530538d630a7f09d85327e514f01b45253c1a6/
+- http://autobuild.buildroot.net/results/91530538d630a7f09d85327e514f01b45253c1a6/
+- and others
+
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 8692d8f38d7251cf6919902a3386aefcd503fedf)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/uboot-tools/uboot-tools.mk | 50 +++++++++++++++++++++++---------------
- 1 file changed, 31 insertions(+), 19 deletions(-)
+ package/uhd/0003-add-RISC-V-endian-detection.patch | 113 +++++++++++++++++++++
+ 1 file changed, 113 insertions(+)
 
-diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
-index db5da0b2a3..839f039f50 100644
---- a/package/uboot-tools/uboot-tools.mk
-+++ b/package/uboot-tools/uboot-tools.mk
-@@ -87,6 +87,8 @@ define UBOOT_TOOLS_INSTALL_TARGET_CMDS
- 	$(UBOOT_TOOLS_INSTALL_FIT_CHECK_SIGN)
- endef
- 
-+# host-uboot-tools
+diff --git a/package/uhd/0003-add-RISC-V-endian-detection.patch b/package/uhd/0003-add-RISC-V-endian-detection.patch
+new file mode 100644
+index 0000000000..fb1168ba3e
+--- /dev/null
++++ b/package/uhd/0003-add-RISC-V-endian-detection.patch
+@@ -0,0 +1,113 @@
++From d4717a38d2287c2f583fefb2a0ed273337a92bb6 Mon Sep 17 00:00:00 2001
++From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
++Date: Mon, 11 Jan 2021 18:18:26 +0100
++Subject: [PATCH] msgpack/predef: add riscV support
 +
- define HOST_UBOOT_TOOLS_CONFIGURE_CMDS
- 	mkdir -p $(@D)/include/config
- 	touch $(@D)/include/config/auto.conf
-@@ -106,10 +108,6 @@ HOST_UBOOT_TOOLS_MAKE_OPTS += CONFIG_FIT_SIGNATURE=y CONFIG_FIT_SIGNATURE_MAX_SI
- HOST_UBOOT_TOOLS_DEPENDENCIES += host-openssl
- endif
- 
--define HOST_UBOOT_TOOLS_BUILD_CMDS
--	$(BR2_MAKE1) -C $(@D) $(HOST_UBOOT_TOOLS_MAKE_OPTS) tools-only
--endef
--
- ifeq ($(BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE),y)
- 
- UBOOT_TOOLS_GENERATE_ENV_FILE = $(call qstrip,$(BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SOURCE))
-@@ -122,16 +120,7 @@ define HOST_UBOOT_TOOLS_GENERATE_ENV_DEFAULTS
- 		> $(UBOOT_TOOLS_GENERATE_ENV_FILE)
- endef
- HOST_UBOOT_TOOLS_DEPENDENCIES += uboot
--endif
--
--define HOST_UBOOT_TOOLS_GENERATE_ENV_IMAGE
--	$(HOST_UBOOT_TOOLS_GENERATE_ENV_DEFAULTS)
--	$(HOST_DIR)/bin/mkenvimage -s $(BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SIZE) \
--		$(if $(BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_REDUNDANT),-r) \
--		$(if $(filter "BIG",$(BR2_ENDIAN)),-b) \
--		-o $(BINARIES_DIR)/uboot-env.bin \
--		$(UBOOT_TOOLS_GENERATE_ENV_FILE)
--endef
-+endif #UBOOT_TOOLS_GENERATE_ENV_FILE:BR2_TARGET_UBOOT
- 
- ifeq ($(BR_BUILDING),y)
- ifeq ($(call qstrip,$(BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SIZE)),)
-@@ -146,6 +135,17 @@ endif
- endif #BR2_TARGET_UBOOT
- endif #BR_BUILDING
- 
-+define HOST_UBOOT_TOOLS_GENERATE_ENVIMAGE
-+	$(HOST_UBOOT_TOOLS_GENERATE_ENV_DEFAULTS)
-+	$(@D)/tools/mkenvimage -s $(BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SIZE) \
-+		$(if $(BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_REDUNDANT),-r) \
-+		$(if $(filter "BIG",$(BR2_ENDIAN)),-b) \
-+		-o $(@D)/tools/uboot-env.bin \
-+		$(UBOOT_TOOLS_GENERATE_ENV_FILE)
-+endef
-+define HOST_UBOOT_TOOLS_INSTALL_ENVIMAGE
-+	$(INSTALL) -m 0755 -D $(@D)/tools/uboot-env.bin $(BINARIES_DIR)/uboot-env.bin
-+endef
- endif #BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE
- 
- ifeq ($(BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT),y)
-@@ -154,17 +154,29 @@ ifeq ($(call qstrip,$(BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE)),)
- $(error Please define a source file for U-Boot boot script (BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE setting))
- endif
- endif #BR_BUILDING
++When the target CPU is riscV, msgpack is unable to detect endianness with a list of errors like:
 +
-+define HOST_UBOOT_TOOLS_GENERATE_BOOT_SCRIPT
-+	$(@D)/tools/mkimage -C none -A $(MKIMAGE_ARCH) -T script \
-+		-d $(call qstrip,$(BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE)) \
-+		$(@D)/tools/boot.scr)
-+endef
-+define HOST_UBOOT_TOOLS_INSTALL_BOOT_SCRIPT
-+	$(INSTALL) -m 0755 -D $(@D)/tools/boot.scr $(BINARIES_DIR)/boot.scr
-+endef
- endif #BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT
- 
-+define HOST_UBOOT_TOOLS_BUILD_CMDS
-+	$(BR2_MAKE1) -C $(@D) $(HOST_UBOOT_TOOLS_MAKE_OPTS) tools-only
-+	$(HOST_UBOOT_TOOLS_GENERATE_ENVIMAGE)
-+	$(HOST_UBOOT_TOOLS_GENERATE_BOOT_SCRIPT)
-+endef
++uhd/host/lib/deps/rpclib/include/rpc/msgpack/pack.hpp:190:2: error: #error msgpack-c supports only big endian and little endian
++  190 | #error msgpack-c supports only big endian and little endian
++      |  ^~~~~
 +
- define HOST_UBOOT_TOOLS_INSTALL_CMDS
- 	$(INSTALL) -m 0755 -D $(@D)/tools/mkimage $(HOST_DIR)/bin/mkimage
- 	$(INSTALL) -m 0755 -D $(@D)/tools/mkenvimage $(HOST_DIR)/bin/mkenvimage
- 	$(INSTALL) -m 0755 -D $(@D)/tools/dumpimage $(HOST_DIR)/bin/dumpimage
--	$(HOST_UBOOT_TOOLS_GENERATE_ENV_IMAGE)
--	$(if $(BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT),
--		$(MKIMAGE) -C none -A $(MKIMAGE_ARCH) -T script \
--			-d $(call qstrip,$(BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE)) \
--			$(BINARIES_DIR)/boot.scr)
-+	$(HOST_UBOOT_TOOLS_INSTALL_ENVIMAGE)
-+	$(HOST_UBOOT_TOOLS_INSTALL_BOOT_SCRIPT)
- endef
- 
- $(eval $(generic-package))
++and with subsequent errors:
++
++uhd0/host/lib/deps/rpclib/include/rpc/msgpack/pack.hpp:236:46: error: there are no arguments to 'take8_8' that depend on a template parameter, so a declaration of 'take8_8' must be available [-fpermissive]
++  236 |     char buf[2] = {static_cast<char>(0xccu), take8_8(d)};
++      |      
++
++This is due to a missing support for this architecture in msgpack.
++This patch adapt commit from https://github.com/boostorg/predef
++
++[backported from https://github.com/EttusResearch/uhd/pull/400]
++
++Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
++---
++ .../include/rpc/msgpack/predef/architecture.h |  1 +
++ .../rpc/msgpack/predef/architecture/riscv.h   | 48 +++++++++++++++++++
++ .../include/rpc/msgpack/predef/other/endian.h |  3 +-
++ 3 files changed, 51 insertions(+), 1 deletion(-)
++ create mode 100644 host/lib/deps/rpclib/include/rpc/msgpack/predef/architecture/riscv.h
++
++diff --git a/host/lib/deps/rpclib/include/rpc/msgpack/predef/architecture.h b/host/lib/deps/rpclib/include/rpc/msgpack/predef/architecture.h
++index 4a0ce2749..1bd998c59 100644
++--- a/host/lib/deps/rpclib/include/rpc/msgpack/predef/architecture.h
+++++ b/host/lib/deps/rpclib/include/rpc/msgpack/predef/architecture.h
++@@ -18,6 +18,7 @@ http://www.boost.org/LICENSE_1_0.txt)
++ #include <rpc/msgpack/predef/architecture/parisc.h>
++ #include <rpc/msgpack/predef/architecture/ppc.h>
++ #include <rpc/msgpack/predef/architecture/pyramid.h>
+++#include <rpc/msgpack/predef/architecture/riscv.h>
++ #include <rpc/msgpack/predef/architecture/rs6k.h>
++ #include <rpc/msgpack/predef/architecture/sparc.h>
++ #include <rpc/msgpack/predef/architecture/superh.h>
++diff --git a/host/lib/deps/rpclib/include/rpc/msgpack/predef/architecture/riscv.h b/host/lib/deps/rpclib/include/rpc/msgpack/predef/architecture/riscv.h
++new file mode 100644
++index 000000000..8b819d77e
++--- /dev/null
+++++ b/host/lib/deps/rpclib/include/rpc/msgpack/predef/architecture/riscv.h
++@@ -0,0 +1,48 @@
+++/*
+++Copyright Andreas Schwab 2019
+++Distributed under the Boost Software License, Version 1.0.
+++(See accompanying file LICENSE_1_0.txt or copy at
+++http://www.boost.org/LICENSE_1_0.txt)
+++*/
+++
+++#ifndef BOOST_PREDEF_ARCHITECTURE_RISCV_H
+++#define BOOST_PREDEF_ARCHITECTURE_RISCV_H
+++
+++#include <boost/predef/version_number.h>
+++#include <boost/predef/make.h>
+++
+++/* tag::reference[]
+++= `BOOST_ARCH_RISCV`
+++
+++http://en.wikipedia.org/wiki/RISC-V[RISC-V] architecture.
+++
+++[options="header"]
+++|===
+++| {predef_symbol} | {predef_version}
+++
+++| `+__riscv+` | {predef_detection}
+++|===
+++*/ // end::reference[]
+++
+++#define BOOST_ARCH_RISCV BOOST_VERSION_NUMBER_NOT_AVAILABLE
+++
+++#if defined(__riscv)
+++#   undef BOOST_ARCH_RISCV
+++#   define BOOST_ARCH_RISCV BOOST_VERSION_NUMBER_AVAILABLE
+++#endif
+++
+++#if BOOST_ARCH_RISCV
+++#   define BOOST_ARCH_RISCV_AVAILABLE
+++#endif
+++
+++#if BOOST_ARCH_RISCV
+++#   undef BOOST_ARCH_WORD_BITS_32
+++#   define BOOST_ARCH_WORD_BITS_32 BOOST_VERSION_NUMBER_AVAILABLE
+++#endif
+++
+++#define BOOST_ARCH_RISCV_NAME "RISC-V"
+++
+++#endif
+++
+++#include <boost/predef/detail/test.h>
+++BOOST_PREDEF_DECLARE_TEST(BOOST_ARCH_RISCV,BOOST_ARCH_RISCV_NAME)
++diff --git a/host/lib/deps/rpclib/include/rpc/msgpack/predef/other/endian.h b/host/lib/deps/rpclib/include/rpc/msgpack/predef/other/endian.h
++index 3f367b3d4..a7c1fb4dc 100644
++--- a/host/lib/deps/rpclib/include/rpc/msgpack/predef/other/endian.h
+++++ b/host/lib/deps/rpclib/include/rpc/msgpack/predef/other/endian.h
++@@ -127,7 +127,8 @@ information and acquired knowledge:
++         defined(__AARCH64EL__) || \
++         defined(_MIPSEL) || \
++         defined(__MIPSEL) || \
++-        defined(__MIPSEL__)
+++        defined(__MIPSEL__) || \
+++        defined(__riscv)
++ #       undef MSGPACK_ENDIAN_LITTLE_BYTE
++ #       define MSGPACK_ENDIAN_LITTLE_BYTE MSGPACK_VERSION_NUMBER_AVAILABLE
++ #   endif
++-- 
++2.26.2
++
