@@ -1,73 +1,81 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Jan 2021 19:51:30 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/libupnp: security
- bump to version 1.14.0
-Message-ID: <20210128200058.6D56781607@busybox.osuosl.org>
+Date: Thu, 28 Jan 2021 21:04:46 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/opentracing-cpp:
+ fix build if clang-tidy is installed on the host
+Message-ID: <20210128200058.E1E0F812DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e96410be8dfd845ea13e5a46dd8810490bcf5a24
+commit: https://git.buildroot.net/buildroot/commit/?id=30c6b17b4a153ea770970805ca285a35564b04bf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-- Fix CallStranger a.k.a. CVE-2020-12695 as well as CVE-2020-13848
-- Update indentation in hash file (two spaces)
-- Backport all changes from libupnp18 to libupnp:
-  - Use COPYING instead of LICENSE (no license change)
-  - Add host-pkgconf dependency
-  - Add --enable-reuseaddr
-  - Add openssl optional dependency
+opentracing-cpp fails to build if clang-tidy is installed:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+...
+-- clang-tidy found: /usr/lib/llvm/11/bin/clang-tidy
+-- Configuring done
+-- Generating done
+...
+
+[ 25%] Building CXX object CMakeFiles/opentracing.dir/src/propagation.cpp.o
+.../buildroot/output/build/opentracing-cpp-1.5.1/include/opentracing/string_view.h:5:10: error: 'algorithm' file not found [clang-diagnostic-error]
+         ^
+.../buildroot/output/build/opentracing-cpp-1.5.1/src/propagation.cpp:3:11: warning: '__llvm_libc' needs to be the outermost namespace [llvmlibc-implementation-in-namespace]
+namespace opentracing {
+          ^
+.../buildroot/output/build/opentracing-cpp-1.5.1/src/propagation.cpp:11:3: warning: use '= default' to define a trivial default constructor [hicpp-use-equals-default,modernize-use-equals-default]
+  PropagationErrorCategory() {}
+  ^                          ~~
+                             = default;
+.../buildroot/output/build/opentracing-cpp-1.5.1/src/propagation.cpp:13:15: warning: use a trailing return type for this function [modernize-use-trailing-return-type]
+  const char* name() const noexcept override {
+  ~~~~~~~~~~~ ^
+  auto                              -> const char*
+.../buildroot/output/build/opentracing-cpp-1.5.1/src/propagation.cpp:13:15: warning: method 'name' can be made static [readability-convert-member-functions-to-static]
+  const char* name() const noexcept override {
+              ^      ~~~~~~
+  static
+.../buildroot/output/build/opentracing-cpp-1.5.1/src/propagation.cpp:17:24: warning: use a trailing return type for this function [modernize-use-trailing-return-type]
+  std::error_condition default_error_condition(int code) const
+                       ^
+.../buildroot/output/build/opentracing-cpp-1.5.1/src/propagation.cpp:37:15: warning: use a trailing return type for this function [modernize-use-trailing-return-type]
+  std::string message(int code) const override {
+              ^
+.../buildroot/output/build/opentracing-cpp-1.5.1/src/propagation.cpp:58:28: warning: use a trailing return type for this function [modernize-use-trailing-return-type]
+const std::error_category& propagation_error_category() {
+                           ^
+226 warnings and 1 error generated.
+Error while processing .../buildroot/output/build/opentracing-cpp-1.5.1/src/propagation.cpp.
+Suppressed 218 warnings (218 in non-user code).
+Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+Found compiler error(s).
+make[3]: *** [CMakeFiles/opentracing.dir/build.make:83: CMakeFiles/opentracing.dir/src/propagation.cpp.o] Error 1
+make[3]: *** Waiting for unfinished jobs....
+.../buildroot/output/build/opentracing-cpp-1.5.1/include/opentracing/string_view.h:5:10: error: 'algorithm' file not found [clang-diagnostic-error]
+         ^
+.../buildroot/output/build/opentracing-cpp-1.5.1/src/dynamic_load.cpp:4:
+
+Disable the 'ENABLE_LINTING' option to avoid this influence.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 118648d161d504113d5ab278b09086e5d52c3b57)
+(cherry picked from commit aede6dd7b67a47ce8182cf04168506080e5ae33b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libupnp/libupnp.hash |  4 ++--
- package/libupnp/libupnp.mk   | 18 +++++++++++++++---
- 2 files changed, 17 insertions(+), 5 deletions(-)
+ package/opentracing-cpp/opentracing-cpp.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/libupnp/libupnp.hash b/package/libupnp/libupnp.hash
-index e52b7ea9d7..6b16eff3c8 100644
---- a/package/libupnp/libupnp.hash
-+++ b/package/libupnp/libupnp.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256	c5a300b86775435c076d58a79cc0d5a977d76027d2a7d721590729b7f369fa43	libupnp-1.6.25.tar.bz2
--sha256	0375955c8a79d6e8fa0792d45d00fc4e7710d7ac95bcbd27f9225a83f5c946fd	LICENSE
-+sha256  ecb23d4291968c8a7bdd4eb16fc2250dbacc16b354345a13342d67f571d35ceb  libupnp-1.14.0.tar.bz2
-+sha256  c8b99423cad48bb44e2cf52a496361404290865eac259a82da6d1e4331ececb3  COPYING
-diff --git a/package/libupnp/libupnp.mk b/package/libupnp/libupnp.mk
-index 8831885ba4..d44abe2794 100644
---- a/package/libupnp/libupnp.mk
-+++ b/package/libupnp/libupnp.mk
-@@ -4,12 +4,24 @@
- #
- ################################################################################
+diff --git a/package/opentracing-cpp/opentracing-cpp.mk b/package/opentracing-cpp/opentracing-cpp.mk
+index d466a80237..0605cd5d96 100644
+--- a/package/opentracing-cpp/opentracing-cpp.mk
++++ b/package/opentracing-cpp/opentracing-cpp.mk
+@@ -22,4 +22,6 @@ else ifeq ($(BR2_SHARED_LIBS),y)
+ OPENTRACING_CPP_CONF_OPTS += -DBUILD_STATIC_LIBS=OFF
+ endif
  
--LIBUPNP_VERSION = 1.6.25
-+LIBUPNP_VERSION = 1.14.0
- LIBUPNP_SOURCE = libupnp-$(LIBUPNP_VERSION).tar.bz2
--LIBUPNP_SITE = http://downloads.sourceforge.net/project/pupnp/pupnp/libUPnP%20$(LIBUPNP_VERSION)
-+LIBUPNP_SITE = \
-+	http://downloads.sourceforge.net/project/pupnp/pupnp/libupnp-$(LIBUPNP_VERSION)
- LIBUPNP_CONF_ENV = ac_cv_lib_compat_ftime=no
- LIBUPNP_INSTALL_STAGING = YES
- LIBUPNP_LICENSE = BSD-3-Clause
--LIBUPNP_LICENSE_FILES = LICENSE
-+LIBUPNP_LICENSE_FILES = COPYING
-+LIBUPNP_DEPENDENCIES = host-pkgconf
++OPENTRACING_CPP_CONF_OPTS += -DENABLE_LINTING=OFF
 +
-+# Bind the internal miniserver socket with reuseaddr to allow clean restarts.
-+LIBUPNP_CONF_OPTS += --enable-reuseaddr
-+
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+LIBUPNP_CONF_OPTS += --enable-open-ssl
-+LIBUPNP_DEPENDENCIES += openssl
-+else
-+LIBUPNP_CONF_OPTS += --disable-open-ssl
-+endif
- 
- $(eval $(autotools-package))
+ $(eval $(cmake-package))
