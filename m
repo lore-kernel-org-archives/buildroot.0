@@ -1,214 +1,282 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Thu, 28 Jan 2021 20:23:03 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/gerbera: bump to
- version 1.4.0
-Message-ID: <20210128200123.84D1C813B0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2020.02.x] package/igd2-for-linux:
+ security bump to version 2.0
+Message-ID: <20210128200123.B296580415@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fb0225ae436999ec6159018fbb7f01fd733d0a8c
+commit: https://git.buildroot.net/buildroot/commit/?id=a9c79f84e5495406c35fcf6639996bd2c5a98b03
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Also:
- * Drop patch 0001 (fix static linking of libmagic) applied upstream
- * Add optional dependency on libmatroska
- * Add upstream patch to fix building with libmatroska
- * Adjust spacing in hash file to 2 spaces
+- Move site to Orange-OpenSource
+- Drop patch (already in version)
+- This version is compatible with libupnp 1.14.x to fix
+  CallStranger a.k.a. CVE-2020-12695
+- Add threadutil license (BSD-3-Clause)
+- Update hash in license file (two spaces)
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 6976f312fa84d4a9c4bbf99ed3b173085780dcd9)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit a83073ac313d1fa31d470f9960cba9126944d1aa)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ake-FindLibMagic.cmake-fix-static-linking.patch | 60 ----------------------
- ...oska-build-without-js-taglib-or-atrailers.patch | 51 ++++++++++++++++++
- package/gerbera/config.xml                         |  4 ++
- package/gerbera/gerbera.hash                       |  4 +-
- package/gerbera/gerbera.mk                         |  9 +++-
- 5 files changed, 65 insertions(+), 63 deletions(-)
+ .../0001-fix-build-with-gcc-10.patch               | 199 ---------------------
+ package/igd2-for-linux/Config.in                   |   2 +-
+ package/igd2-for-linux/igd2-for-linux.hash         |   5 +-
+ package/igd2-for-linux/igd2-for-linux.mk           |   9 +-
+ 4 files changed, 9 insertions(+), 206 deletions(-)
 
-diff --git a/package/gerbera/0001-cmake-FindLibMagic.cmake-fix-static-linking.patch b/package/gerbera/0001-cmake-FindLibMagic.cmake-fix-static-linking.patch
+diff --git a/package/igd2-for-linux/0001-fix-build-with-gcc-10.patch b/package/igd2-for-linux/0001-fix-build-with-gcc-10.patch
 deleted file mode 100644
-index 5a189614f7..0000000000
---- a/package/gerbera/0001-cmake-FindLibMagic.cmake-fix-static-linking.patch
+index 32474a3adb..0000000000
+--- a/package/igd2-for-linux/0001-fix-build-with-gcc-10.patch
 +++ /dev/null
-@@ -1,60 +0,0 @@
--From 64f49c6131f4112e5efd8b69094235f13882ccf5 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Fri, 31 Jan 2020 17:14:11 +0100
--Subject: [PATCH] cmake/FindLibMagic.cmake: fix static linking
+@@ -1,199 +0,0 @@
+-From 23ed73623810a0894c8efd9eb79dd38483794a3b Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fabrice.fontaine@orange.com>
+-Date: Thu, 20 Aug 2020 18:17:03 +0200
+-Subject: [PATCH] fix build with gcc 10
 -
--libmagic can optionally depends on xz (for lzma) or bzip2 since version
--5.38 and
--https://github.com/file/file/commit/b259a07ea95827f565faa20f0316e5b2704064f7
--so use pkg-config to retrieve those static dependencies and avoid the
--following build failure:
--
--[100%] Linking CXX executable gerbera
--/home/br-user/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /home/br-user/autobuild/run/instance-0/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libmagic.a(compress.o): in function `uncompressbuf':
--compress.c:(.text+0x69c): undefined reference to `BZ2_bzDecompressInit'
--/home/br-user/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: compress.c:(.text+0x710): undefined reference to `BZ2_bzDecompress'
--/home/br-user/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: compress.c:(.text+0x730): undefined reference to `BZ2_bzDecompressEnd'
--/home/br-user/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: compress.c:(.text+0x7bc): undefined reference to `lzma_auto_decoder'
--/home/br-user/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: compress.c:(.text+0x828): undefined reference to `lzma_code'
--/home/br-user/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/8.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: compress.c:(.text+0x848): undefined reference to `lzma_end'
+-This will fix build failures with -fno-common which is enabled by
+-default with gcc 10
 -
 -Fixes:
-- - http://autobuild.buildroot.org/results/37b1ef54dc41100689f311fbc31fc9300dc6ae63
+- - http://autobuild.buildroot.org/results/f296984c3851fc28341210e36ef1b55b2edac209
 -
+-Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+-[Retrieved from:
+-https://github.com/Orange-OpenSource/igd2-for-linux/commit/23ed73623810a0894c8efd9eb79dd38483794a3b]
 -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ----
-- cmake/FindLibMagic.cmake | 15 +++++++++++++--
-- 1 file changed, 13 insertions(+), 2 deletions(-)
+- linuxigd2/src/gatedevice.c | 37 +++++++++++++++++++++++++++++++++
+- linuxigd2/src/gatedevice.h | 42 +++++++++-----------------------------
+- linuxigd2/src/pinholev6.c  |  2 ++
+- linuxigd2/src/pinholev6.h  |  2 +-
+- linuxigd2/src/pmlist.c     |  5 +++++
+- linuxigd2/src/pmlist.h     |  2 +-
+- linuxigd2/src/wanipv6fw.h  |  3 ---
+- 7 files changed, 56 insertions(+), 37 deletions(-)
 -
--diff --git a/cmake/FindLibMagic.cmake b/cmake/FindLibMagic.cmake
--index f68ab923..04995af4 100644
----- a/cmake/FindLibMagic.cmake
--+++ b/cmake/FindLibMagic.cmake
--@@ -1,11 +1,22 @@
-- INCLUDE (FindPackageHandleStandardArgs)
+-diff --git a/linuxigd2/src/gatedevice.c b/linuxigd2/src/gatedevice.c
+-index 8be53e5..a50525d 100644
+---- a/linuxigd2/src/gatedevice.c
+-+++ b/linuxigd2/src/gatedevice.c
+-@@ -41,6 +41,43 @@
+- #include "wanipv6fw.h"
+- #include "config.h"
 - 
---FIND_PATH(MAGIC_INCLUDE_DIR magic.h)
---FIND_LIBRARY(MAGIC_LIBRARIES NAMES magic)
--+find_package(PkgConfig QUIET)
+-+// Thread which contains all kind of timers and threads used in gatedevice.c and deviceprotection.c
+-+TimerThread gExpirationTimerThread;
 -+
--+pkg_check_modules(PC_MAGIC QUIET libmagic)
+-+// IGD Device Globals
+-+UpnpDevice_Handle deviceHandle;
+-+UpnpDevice_Handle deviceHandleIPv6;
+-+UpnpDevice_Handle deviceHandleIPv6UlaGua;
+-+char *gateUDN;
+-+char *wanUDN;
+-+char *wanConnectionUDN;
+-+char *lanUDN;
+-+long int startup_time;
+-+unsigned long connection_stats[STATS_LIMIT]; // this is used for defining if connection is in idling
+-+long int idle_time;
 -+
--+FIND_PATH(MAGIC_INCLUDE_DIR magic.h
--+    HINTS ${PC_MAGIC_INCLUDEDIR} ${PC_MAGIC_INCLUDE_DIRS})
--+FIND_LIBRARY(MAGIC_LIBRARIES NAMES magic
--+    HINTS ${PC_MAGIC_LIBDIR} ${PC_MAGIC_LIBRARY_DIRS})
+-+// State Variables
+-+char ConnectionType[50];
+-+char PossibleConnectionTypes[50];
+-+char ConnectionStatus[20];
+-+char LastConnectionError[35];
+-+long int AutoDisconnectTime;
+-+long int IdleDisconnectTime;
+-+long int WarnDisconnectDelay;
+-+int RSIPAvailable;
+-+int NATEnabled;
+-+char ExternalIPAddress[INET6_ADDRSTRLEN];
+-+int PortMappingNumberOfEntries;
+-+int PortMappingEnabled;
+-+char RemoteHost[INET6_ADDRSTRLEN];    // updated IPv6 addrss length 16 -> 46
+-+long int SystemUpdateID;
+-+
+-+// WANEthLinkConfig state variables
+-+char EthernetLinkStatus[12];
+-+
+-+char FirewallEnabled[2];
+-+char InboundPinholeAllowed[2];
+-+
+- //Definitions for mapping expiration timer thread
+- static ThreadPool gExpirationThreadPool;
+- static ThreadPoolJob gEventUpdateJob;
+-diff --git a/linuxigd2/src/gatedevice.h b/linuxigd2/src/gatedevice.h
+-index 28d6b21..dbaa0c2 100644
+---- a/linuxigd2/src/gatedevice.h
+-+++ b/linuxigd2/src/gatedevice.h
+-@@ -33,42 +33,20 @@
+- #include "util.h"
 - 
-- # handle the QUIETLY and REQUIRED arguments and set MAGIC_FOUND to TRUE
-- find_package_handle_standard_args(MAGIC DEFAULT_MSG MAGIC_LIBRARIES)
+- // Thread which contains all kind of timers and threads used in gatedevice.c and deviceprotection.c
+--TimerThread gExpirationTimerThread;
+-+extern TimerThread gExpirationTimerThread;
 - 
--+if (MAGIC_FOUND)
--+    set (MAGIC_LIBRARIES ${MAGIC_LIBRARY} ${PC_MAGIC_LIBRARIES})
--+    set (MAGIC_INCLUDE_DIRS ${MAGIC_INCLUDE_DIR} )
--+endif ()
+- // IGD Device Globals
+--UpnpDevice_Handle deviceHandle;
+--UpnpDevice_Handle deviceHandleIPv6;
+--UpnpDevice_Handle deviceHandleIPv6UlaGua;
+--char *gateUDN;
+--char *wanUDN;
+--char *wanConnectionUDN;
+--char *lanUDN;
+--long int startup_time;
+--unsigned long connection_stats[STATS_LIMIT]; // this is used for defining if connection is in idling
+--long int idle_time;
+--
+--// State Variables
+--char ConnectionType[50];
+--char PossibleConnectionTypes[50];
+--char ConnectionStatus[20];
+--char LastConnectionError[35];
+--long int AutoDisconnectTime;
+--long int IdleDisconnectTime;
+--long int WarnDisconnectDelay;
+--int RSIPAvailable;
+--int NATEnabled;
+--char ExternalIPAddress[INET6_ADDRSTRLEN];
+--int PortMappingNumberOfEntries;
+--int PortMappingEnabled;
+--char RemoteHost[INET6_ADDRSTRLEN];    // updated IPv6 addrss length 16 -> 46
+--long int SystemUpdateID;
+--
+--// WANEthLinkConfig state variables
+--char EthernetLinkStatus[12];
+-+extern UpnpDevice_Handle deviceHandle;
+-+extern UpnpDevice_Handle deviceHandleIPv6;
+-+extern UpnpDevice_Handle deviceHandleIPv6UlaGua;
+-+extern char *gateUDN;
+-+extern char *wanUDN;
+-+extern char *wanConnectionUDN;
+-+extern char *lanUDN;
+- 
+- // Linked list for portmapping entries
+--struct portMap *pmlist_Head;
+--struct portMap *pmlist_Current;
+-+extern struct portMap *pmlist_Head;
+-+extern struct portMap *pmlist_Current;
+- 
+- // WanIPConnection Actions
+- int EventHandler(Upnp_EventType EventType, void *Event, void *Cookie);
+-diff --git a/linuxigd2/src/pinholev6.c b/linuxigd2/src/pinholev6.c
+-index 44e8a19..78f886d 100644
+---- a/linuxigd2/src/pinholev6.c
+-+++ b/linuxigd2/src/pinholev6.c
+-@@ -41,6 +41,8 @@ extern "C" {
+- #include "gatedevice.h"
+- #include "pinholev6.h"
+- 
+-+struct pinholev6 *ph_first;
 -+
-- MARK_AS_ADVANCED(
--     MAGIC_LIBRARIES
--     MAGIC_INCLUDE_DIRS )
---- 
--2.24.1
--
-diff --git a/package/gerbera/0001-fix-matroska-build-without-js-taglib-or-atrailers.patch b/package/gerbera/0001-fix-matroska-build-without-js-taglib-or-atrailers.patch
-new file mode 100644
-index 0000000000..6898e8ebee
---- /dev/null
-+++ b/package/gerbera/0001-fix-matroska-build-without-js-taglib-or-atrailers.patch
-@@ -0,0 +1,51 @@
-+From 0ac781b0b0deef5c02c32a70ac484f882c3f4dd0 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 24 Dec 2019 18:55:57 +0100
-+Subject: [PATCH] fix matroska build without js, taglib or atrailers
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+i2i function is used in matroska_handler.cc but this function is defined
-+only if defined(HAVE_JS) || defined(HAVE_TAGLIB) || defined(ATRAILERS)
-+as a result compilation fails if HAVE_MATROSKA is set but HAVE_JS,
-+HAVE_TAGLIG or ATRAILERS are not.
-+
-+Backported from: 0ac781b0b0deef5c02c32a70ac484f882c3f4dd0
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-+---
-+ src/string_converter.cc | 2 +-
-+ src/string_converter.h  | 2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/string_converter.cc b/src/string_converter.cc
-+index f669c661..7a3c55d7 100644
-+--- a/src/string_converter.cc
-++++ b/src/string_converter.cc
-+@@ -218,7 +218,7 @@ Ref<StringConverter> StringConverter::p2i()
-+ }
-+ #endif
-+ 
-+-#if defined(HAVE_JS) || defined(HAVE_TAGLIB) || defined(ATRAILERS)
-++#if defined(HAVE_JS) || defined(HAVE_TAGLIB) || defined(ATRAILERS) || defined(HAVE_MATROSKA)
-+ 
-+ Ref<StringConverter> StringConverter::i2i()
-+ {
-+diff --git a/src/string_converter.h b/src/string_converter.h
-+index 58495430..f75bf833 100644
-+--- a/src/string_converter.h
-++++ b/src/string_converter.h
-+@@ -65,7 +65,7 @@ public:
-+     static zmm::Ref<StringConverter> p2i();
-+ 
-+ #endif
-+-#if defined(HAVE_JS) || defined(HAVE_TAGLIB) || defined(ATRAILERS)
-++#if defined(HAVE_JS) || defined(HAVE_TAGLIB) || defined(ATRAILERS) || defined(HAVE_MATROSKA)
-+     /// \brief safeguard - internal to internal - needed to catch some
-+     /// scenarious where the user may have forgotten to add proper conversion
-+     /// in the script.
-+-- 
-+2.26.1
-+
-diff --git a/package/gerbera/config.xml b/package/gerbera/config.xml
-index fa990d1502..ddaaa7f18f 100644
---- a/package/gerbera/config.xml
-+++ b/package/gerbera/config.xml
-@@ -79,6 +79,9 @@
-         <map from="flv" to="video/x-flv"/>
-         <map from="mkv" to="video/x-matroska"/>
-         <map from="mka" to="audio/x-matroska"/>
-+        <map from="dsf" to="audio/x-dsd"/>
-+        <map from="dff" to="audio/x-dsd"/>
-+        <map from="wv" to="audio/x-wavpack"/>
-         <!-- Uncomment the line below for PS3 divx support -->
-         <!-- <map from="avi" to="video/divx"/> -->
-         <!-- Uncomment the line below for D-Link DSM / ZyXEL DMA-1000 -->
-@@ -107,6 +110,7 @@
-         <treat mimetype="audio/mp4" as="mp4"/>
-         <treat mimetype="video/x-matroska" as="mkv"/>
-         <treat mimetype="audio/x-matroska" as="mka"/>
-+        <treat mimetype="audio/x-dsd" as="dsd"/>
-       </mimetype-contenttype>
-     </mappings>
-   </import>
-diff --git a/package/gerbera/gerbera.hash b/package/gerbera/gerbera.hash
-index 533a903882..b1fdcbf2d0 100644
---- a/package/gerbera/gerbera.hash
-+++ b/package/gerbera/gerbera.hash
-@@ -1,3 +1,3 @@
+- static const char * add_rule_str = "ip6tables -I %s " //upnp forward chain
+-         "-i %s "        //input interface
+-         "-o %s "        //output interface
+-diff --git a/linuxigd2/src/pinholev6.h b/linuxigd2/src/pinholev6.h
+-index 295b9f9..353ae27 100644
+---- a/linuxigd2/src/pinholev6.h
+-+++ b/linuxigd2/src/pinholev6.h
+-@@ -37,7 +37,7 @@ struct pinholev6 {
+- 
+-     struct pinholev6 *next;
+- 
+--} *ph_first;
+-+};
+- 
+- struct phv6_expirationEvent
+- {
+-diff --git a/linuxigd2/src/pmlist.c b/linuxigd2/src/pmlist.c
+-index 1b3fe05..95d0c61 100644
+---- a/linuxigd2/src/pmlist.c
+-+++ b/linuxigd2/src/pmlist.c
+-@@ -41,6 +41,11 @@
+- #include "iptc.h"
+- #endif
+- 
+-+// Linked list for portmapping entries
+-+struct portMap *pmlist_Head;
+-+struct portMap *pmlist_Current;
+-+struct portMap *pmlist_Tail;
+-+
+- /**
+-  * Create new portMap struct of rule to add iptables. 
+-  * portMap-struct is internal presentation of iptables rule in IGD. 
+-diff --git a/linuxigd2/src/pmlist.h b/linuxigd2/src/pmlist.h
+-index 436d228..017500d 100644
+---- a/linuxigd2/src/pmlist.h
+-+++ b/linuxigd2/src/pmlist.h
+-@@ -57,7 +57,7 @@ struct portMap
+- 
+-     struct portMap* next;
+-     struct portMap* prev;
+--} *pmlist_Head, *pmlist_Tail, *pmlist_Current;
+-+};
+- 
+- //struct portMap* pmlist_NewNode(void);
+- struct portMap* pmlist_NewNode(int enabled, long int duration, char *remoteHost,
+-diff --git a/linuxigd2/src/wanipv6fw.h b/linuxigd2/src/wanipv6fw.h
+-index 55419fe..a50d267 100644
+---- a/linuxigd2/src/wanipv6fw.h
+-+++ b/linuxigd2/src/wanipv6fw.h
+-@@ -46,9 +46,6 @@ extern "C" {
+- #define ERR_SRC_ADD_WILDCARD        708
+- #define ERR_NO_TRAFFIC              709
+- 
+--char FirewallEnabled[2];
+--char InboundPinholeAllowed[2];
+--
+- //-----------------------------------------------------------------------------
+- 
+- int InitFirewallv6(void);
+diff --git a/package/igd2-for-linux/Config.in b/package/igd2-for-linux/Config.in
+index 157cc6f30b..f1658d3aa6 100644
+--- a/package/igd2-for-linux/Config.in
++++ b/package/igd2-for-linux/Config.in
+@@ -18,7 +18,7 @@ config BR2_PACKAGE_IGD2_FOR_LINUX
+ 
+ 	  Please edit /etc/upnpd.conf before using upnpd!
+ 
+-	  https://github.com/ffontaine/igd2-for-linux
++	  https://github.com/Orange-OpenSource/igd2-for-linux
+ 
+ comment "igd2-for-linux needs a toolchain w/ threads, wchar"
+ 	depends on BR2_USE_MMU
+diff --git a/package/igd2-for-linux/igd2-for-linux.hash b/package/igd2-for-linux/igd2-for-linux.hash
+index ecde4b51c2..fc215727d7 100644
+--- a/package/igd2-for-linux/igd2-for-linux.hash
++++ b/package/igd2-for-linux/igd2-for-linux.hash
+@@ -1,3 +1,4 @@
  # Locally computed:
--sha256	c7fbb6104dd03ed22d114c7b1fbe95eb7f90893148630e16b0a4c23f1f631341	gerbera-1.3.4.tar.gz
--sha256	cae4138373be41fd2be75faf41ce7efbcf49fb17d0e05ad1c51cc01ac335b9b6	LICENSE.md
-+sha256	904a9031c85ac805e4c139f363510226952683d7257acd1dee25ba1e97fd7651  gerbera-1.4.0.tar.gz
-+sha256	cae4138373be41fd2be75faf41ce7efbcf49fb17d0e05ad1c51cc01ac335b9b6  LICENSE.md
-diff --git a/package/gerbera/gerbera.mk b/package/gerbera/gerbera.mk
-index 21c6836952..7f0ac664fe 100644
---- a/package/gerbera/gerbera.mk
-+++ b/package/gerbera/gerbera.mk
-@@ -4,7 +4,7 @@
+-sha256	523545a26b0d662e9f6913bec2518df6e70f4d497935d88983d994336a1b0ea9	igd2-for-linux-1.2.tar.gz
+-sha256	204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994	linuxigd2/doc/LICENSE
++sha256  e3fcc7c9da4ad1ca16227b3b1b3712bcfb3f6ec922685eee7ae4a76edfa32bb4  igd2-for-linux-2.0.tar.gz
++sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  linuxigd2/doc/LICENSE
++sha256  c8b99423cad48bb44e2cf52a496361404290865eac259a82da6d1e4331ececb3  linuxigd2/src/threadutil/COPYING
+diff --git a/package/igd2-for-linux/igd2-for-linux.mk b/package/igd2-for-linux/igd2-for-linux.mk
+index 478c353997..85119a14b5 100644
+--- a/package/igd2-for-linux/igd2-for-linux.mk
++++ b/package/igd2-for-linux/igd2-for-linux.mk
+@@ -4,11 +4,12 @@
  #
  ################################################################################
  
--GERBERA_VERSION = 1.3.4
-+GERBERA_VERSION = 1.4.0
- GERBERA_SITE = $(call github,gerbera,gerbera,v$(GERBERA_VERSION))
- GERBERA_LICENSE = GPL-2.0
- GERBERA_LICENSE_FILES = LICENSE.md
-@@ -63,6 +63,13 @@ ifeq ($(BR2_PACKAGE_LIBICONV),y)
- GERBERA_DEPENDENCIES += libiconv
- endif
+-IGD2_FOR_LINUX_VERSION = 1.2
+-IGD2_FOR_LINUX_SITE = $(call github,ffontaine,igd2-for-linux,v$(IGD2_FOR_LINUX_VERSION))
++IGD2_FOR_LINUX_VERSION = 2.0
++IGD2_FOR_LINUX_SITE = \
++	$(call github,Orange-OpenSource,igd2-for-linux,v$(IGD2_FOR_LINUX_VERSION))
  
-+ifeq ($(BR2_PACKAGE_LIBMATROSKA),y)
-+GERBERA_DEPENDENCIES += libmatroska
-+GERBERA_CONF_OPTS += -DWITH_MATROSKA=ON
-+else
-+GERBERA_CONF_OPTS += -DWITH_MATROSKA=OFF
-+endif
-+
- ifeq ($(BR2_PACKAGE_MYSQL),y)
- GERBERA_DEPENDENCIES += mysql
- GERBERA_CONF_OPTS += -DWITH_MYSQL=ON
+-IGD2_FOR_LINUX_LICENSE = GPL-2.0
+-IGD2_FOR_LINUX_LICENSE_FILES = linuxigd2/doc/LICENSE
++IGD2_FOR_LINUX_LICENSE = GPL-2.0, BSD-3-Clause
++IGD2_FOR_LINUX_LICENSE_FILES = linuxigd2/doc/LICENSE linuxigd2/src/threadutil/COPYING
+ 
+ IGD2_FOR_LINUX_DEPENDENCIES = libupnp
+ 
