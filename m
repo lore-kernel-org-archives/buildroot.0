@@ -1,43 +1,127 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Jan 2021 17:28:20 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/poppler: add
- boost optional dependency
-Message-ID: <20210128200057.D301F843AA@busybox.osuosl.org>
+Date: Thu, 28 Jan 2021 18:35:03 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/postgresql: add
+ some additional output to pg_config
+Message-ID: <20210128200058.41EB4812DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=831a862f64d6e0d66fca221150a95a47ebc8e049
+commit: https://git.buildroot.net/buildroot/commit/?id=89a47457a86a84f80ff02ae8072ddebf45de8239
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-boost is an optional dependency which is enabled by default since
-version 0.80.0 and
-https://github.com/freedesktop/poppler/commit/355fd8d58ca0209284fe568b3add28f207e995c1
+Some external packages call pg_config to determine the installed
+PostgreSQL options. Add this output to Buildroots own pg_config,
+so these packages correctly compile.
 
-There is no cmake option to enable or disable this dependency
+Added options:
+	--pkgincludedir
+	--pgxs
+	--cflags
+	--cc
+	--pkglibdir
+	--bindir
+	--sharedir
+	--localedir
+	--docdir
+	--mandir
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 497f989d7595a1c801a587e77d508ec3fa6edf0f)
+(cherry picked from commit e3ff618bd84f67992d354f0cc3343813b214b6a0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/poppler/poppler.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/postgresql/pg_config     | 51 ++++++++++++++++++++++++++++++++++++++--
+ package/postgresql/postgresql.mk |  2 ++
+ 2 files changed, 51 insertions(+), 2 deletions(-)
 
-diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
-index 69a3bcace5..c5e1a800f2 100644
---- a/package/poppler/poppler.mk
-+++ b/package/poppler/poppler.mk
-@@ -27,6 +27,10 @@ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
- POPPLER_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -latomic"
- endif
+diff --git a/package/postgresql/pg_config b/package/postgresql/pg_config
+index 59a9e6cfad..3b0cb35f2c 100644
+--- a/package/postgresql/pg_config
++++ b/package/postgresql/pg_config
+@@ -2,7 +2,6 @@
  
-+ifeq ($(BR2_PACKAGE_BOOST),y)
-+POPPLER_DEPENDENCIES += boost
-+endif
-+
- ifeq ($(BR2_PACKAGE_JPEG),y)
- POPPLER_DEPENDENCIES += jpeg
- POPPLER_CONF_OPTS += -DENABLE_DCTDECODER=libjpeg -DWITH_JPEG=ON
+ #
+ # Minimal pg_config implementation as replacement for the native pg_config application
+-# Only implements --includedir and --libdir
+ #
+ 
+ prefix=/usr
+@@ -11,6 +10,9 @@ case "$1" in
+   --includedir)
+ 	echo "$prefix/include"
+ 	;;
++  --pkgincludedir)
++	echo "$prefix/include/postgresql"
++	;;
+   --includedir-server)
+ 	echo "$prefix/include/postgresql/server"
+ 	;;
+@@ -23,6 +25,51 @@ case "$1" in
+   --configure)
+ 	echo "@POSTGRESQL_CONF_OPTIONS@"
+ 	;;
++  --pgxs)
++	echo "$prefix/lib/postgresql/pgxs/src/makefiles/pgxs.mk"
++	;;
++  --cflags)
++	echo "@TARGET_CFLAGS@"
++	;;
++  --cc)
++	echo "@TARGET_CC@"
++	;;
++  --pkglibdir)
++	echo "/usr/lib/postgresql"
++	;;
++  --bindir)
++	echo "/usr/bin"
++	;;
++  --sharedir)
++	echo "/usr/share/postgresql"
++	;;
++  --localedir)
++	echo "/usr/share/locale"
++	;;
++  --docdir)
++	echo "/usr/share/doc/postgresql"
++	;;
++  --mandir)
++	echo "/usr/share/man"
++	;;
+   *)
+-	echo "Usage: $0 {--includedir|--includedir-server|--libdir|--version|--configure}"
++	echo "Usage: $0 {OPTION}"
++	echo
++	echo "Options:"
++	echo
++	echo "	--includedir		show location of C header files of the client interfaces"
++	echo "	--pkgincludedir		show location of other C header files"
++	echo "	--includedir-server	show location of C header files for the server"
++	echo "	--libdir		show location of object code libraries"
++	echo "	--version		show the PostgreSQL version"
++	echo "	--configure		show options given to configure script"
++	echo "	--pgxs			show location of extension makefile"
++	echo "	--cflags		show CFLAGS value used when PostgreSQL was built"
++	echo "	--cc			show CC value used when PostgreSQL was built"
++	echo "	--pkglibdir		show location of dynamically loadable modules"
++	echo "	--bindir		show location of user executables"
++	echo "	--sharedir		show location of architecture-independent support files"
++	echo "	--localedir		show location of locale support files"
++	echo "	--docdir		show location of documentation files"
++	echo "	--mandir		show location of manual pages"
+ esac
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 4c5f200bdf..85b767de72 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -117,6 +117,8 @@ define POSTGRESQL_INSTALL_CUSTOM_PG_CONFIG
+ 		$(STAGING_DIR)/usr/bin/pg_config
+ 	$(SED) "s|@POSTGRESQL_CONF_OPTIONS@|$(POSTGRESQL_CONF_OPTS)|g" $(STAGING_DIR)/usr/bin/pg_config
+ 	$(SED) "s|@POSTGRESQL_VERSION@|$(POSTGRESQL_VERSION)|g" $(STAGING_DIR)/usr/bin/pg_config
++	$(SED) "s|@TARGET_CFLAGS@|$(TARGET_CFLAGS)|g" $(STAGING_DIR)/usr/bin/pg_config
++	$(SED) "s|@TARGET_CC@|$(TARGET_CC)|g" $(STAGING_DIR)/usr/bin/pg_config
+ endef
+ 
+ POSTGRESQL_POST_INSTALL_STAGING_HOOKS += POSTGRESQL_INSTALL_CUSTOM_PG_CONFIG
