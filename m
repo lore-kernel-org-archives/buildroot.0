@@ -1,43 +1,81 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Jan 2021 18:03:19 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/brltty: add
- polkit optional dependency
-Message-ID: <20210128200122.D9C52843AE@busybox.osuosl.org>
+Date: Thu, 28 Jan 2021 21:05:00 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/opentracing-cpp:
+ fix build if clang-tidy is installed on the host
+Message-ID: <20210128200124.0BE72843AE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=06e14c4b038897540bd9042ab9276dd01d1f2ebb
+commit: https://git.buildroot.net/buildroot/commit/?id=6fe2a2974347560214b39ec6c125864525f4fc33
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-polkit is an optional dependency (enabled by default) since version 5.4:
-https://github.com/brltty/brltty/commit/e62b3c925d03239a372d425fb87b2cac65d8ef19
+opentracing-cpp fails to build if clang-tidy is installed:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 74c6a7e4dba6e81f5403476344b852119d7a53d8)
+...
+-- clang-tidy found: /usr/lib/llvm/11/bin/clang-tidy
+-- Configuring done
+-- Generating done
+...
+
+[ 25%] Building CXX object CMakeFiles/opentracing.dir/src/propagation.cpp.o
+.../buildroot/output/build/opentracing-cpp-1.5.1/include/opentracing/string_view.h:5:10: error: 'algorithm' file not found [clang-diagnostic-error]
+         ^
+.../buildroot/output/build/opentracing-cpp-1.5.1/src/propagation.cpp:3:11: warning: '__llvm_libc' needs to be the outermost namespace [llvmlibc-implementation-in-namespace]
+namespace opentracing {
+          ^
+.../buildroot/output/build/opentracing-cpp-1.5.1/src/propagation.cpp:11:3: warning: use '= default' to define a trivial default constructor [hicpp-use-equals-default,modernize-use-equals-default]
+  PropagationErrorCategory() {}
+  ^                          ~~
+                             = default;
+.../buildroot/output/build/opentracing-cpp-1.5.1/src/propagation.cpp:13:15: warning: use a trailing return type for this function [modernize-use-trailing-return-type]
+  const char* name() const noexcept override {
+  ~~~~~~~~~~~ ^
+  auto                              -> const char*
+.../buildroot/output/build/opentracing-cpp-1.5.1/src/propagation.cpp:13:15: warning: method 'name' can be made static [readability-convert-member-functions-to-static]
+  const char* name() const noexcept override {
+              ^      ~~~~~~
+  static
+.../buildroot/output/build/opentracing-cpp-1.5.1/src/propagation.cpp:17:24: warning: use a trailing return type for this function [modernize-use-trailing-return-type]
+  std::error_condition default_error_condition(int code) const
+                       ^
+.../buildroot/output/build/opentracing-cpp-1.5.1/src/propagation.cpp:37:15: warning: use a trailing return type for this function [modernize-use-trailing-return-type]
+  std::string message(int code) const override {
+              ^
+.../buildroot/output/build/opentracing-cpp-1.5.1/src/propagation.cpp:58:28: warning: use a trailing return type for this function [modernize-use-trailing-return-type]
+const std::error_category& propagation_error_category() {
+                           ^
+226 warnings and 1 error generated.
+Error while processing .../buildroot/output/build/opentracing-cpp-1.5.1/src/propagation.cpp.
+Suppressed 218 warnings (218 in non-user code).
+Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
+Found compiler error(s).
+make[3]: *** [CMakeFiles/opentracing.dir/build.make:83: CMakeFiles/opentracing.dir/src/propagation.cpp.o] Error 1
+make[3]: *** Waiting for unfinished jobs....
+.../buildroot/output/build/opentracing-cpp-1.5.1/include/opentracing/string_view.h:5:10: error: 'algorithm' file not found [clang-diagnostic-error]
+         ^
+.../buildroot/output/build/opentracing-cpp-1.5.1/src/dynamic_load.cpp:4:
+
+Disable the 'ENABLE_LINTING' option to avoid this influence.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit aede6dd7b67a47ce8182cf04168506080e5ae33b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/brltty/brltty.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/opentracing-cpp/opentracing-cpp.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/brltty/brltty.mk b/package/brltty/brltty.mk
-index acc172fab0..9addcf13ea 100644
---- a/package/brltty/brltty.mk
-+++ b/package/brltty/brltty.mk
-@@ -92,6 +92,13 @@ else
- BRLTTY_CONF_OPTS += --without-rgx-package
+diff --git a/package/opentracing-cpp/opentracing-cpp.mk b/package/opentracing-cpp/opentracing-cpp.mk
+index d466a80237..0605cd5d96 100644
+--- a/package/opentracing-cpp/opentracing-cpp.mk
++++ b/package/opentracing-cpp/opentracing-cpp.mk
+@@ -22,4 +22,6 @@ else ifeq ($(BR2_SHARED_LIBS),y)
+ OPENTRACING_CPP_CONF_OPTS += -DBUILD_STATIC_LIBS=OFF
  endif
  
-+ifeq ($(BR2_PACKAGE_POLKIT),y)
-+BRLTTY_DEPENDENCIES += polkit
-+BRLTTY_CONF_OPTS += --enable-polkit
-+else
-+BRLTTY_CONF_OPTS += --disable-polkit
-+endif
++OPENTRACING_CPP_CONF_OPTS += -DENABLE_LINTING=OFF
 +
- ifeq ($(BR2_PACKAGE_SYSTEMD),y)
- BRLTTY_DEPENDENCIES += systemd
- BRLTTY_CONF_OPTS += --with-service-package
+ $(eval $(cmake-package))
