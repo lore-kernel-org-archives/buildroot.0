@@ -1,282 +1,189 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Thu, 28 Jan 2021 20:23:03 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/igd2-for-linux:
- security bump to version 2.0
-Message-ID: <20210128200123.B296580415@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2020.02.x] package/libupnp18: drop
+ package
+Message-ID: <20210128200123.D41D880415@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a9c79f84e5495406c35fcf6639996bd2c5a98b03
+commit: https://git.buildroot.net/buildroot/commit/?id=27817eb999240460d43cb3dc12e7bb6dfc9d5dc4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-- Move site to Orange-OpenSource
-- Drop patch (already in version)
-- This version is compatible with libupnp 1.14.x to fix
-  CallStranger a.k.a. CVE-2020-12695
-- Add threadutil license (BSD-3-Clause)
-- Update hash in license file (two spaces)
+Drop libupnp18 as libupnp has been bumped to 1.14.x and 1.8.x will not
+been fixed against CallStranger a.k.a. CVE-2020-12695
+
+mpd and vlc are already compliant with libupnp 1.14.x (i.e those
+packages use UpnpInit2 instead of the deprecated UpnpInit)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit a83073ac313d1fa31d470f9960cba9126944d1aa)
+(cherry picked from commit eddc9df972d0b13f451abc0be75f286a2fdb70f0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-fix-build-with-gcc-10.patch               | 199 ---------------------
- package/igd2-for-linux/Config.in                   |   2 +-
- package/igd2-for-linux/igd2-for-linux.hash         |   5 +-
- package/igd2-for-linux/igd2-for-linux.mk           |   9 +-
- 4 files changed, 9 insertions(+), 206 deletions(-)
+ Config.in.legacy                 | 11 +++++++++++
+ DEVELOPERS                       |  1 -
+ package/Config.in                |  1 -
+ package/libupnp18/Config.in      | 16 ----------------
+ package/libupnp18/libupnp18.hash |  5 -----
+ package/libupnp18/libupnp18.mk   | 26 --------------------------
+ package/mpd/Config.in            |  2 +-
+ package/mpd/mpd.mk               |  2 +-
+ package/vlc/vlc.mk               |  4 ++--
+ 9 files changed, 15 insertions(+), 53 deletions(-)
 
-diff --git a/package/igd2-for-linux/0001-fix-build-with-gcc-10.patch b/package/igd2-for-linux/0001-fix-build-with-gcc-10.patch
+diff --git a/Config.in.legacy b/Config.in.legacy
+index e04853aea4..59a37b708f 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,17 @@ endif
+ 
+ comment "Legacy options removed in 2020.02"
+ 
++config BR2_PACKAGE_LIBUPNP18
++	bool "libupnp18 package removed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_LIBUPNP
++	help
++	  Version 1.8.x of libupnp (i.e. libupnp18) has been removed
++	  because it will never be fixed against CallStranger a.k.a.
++	  CVE-2020-12695. The libupnp package (which has been updated to
++	  version 1.14.x) has been selected instead.
++
++
+ config BR2_PACKAGE_PYTHON_PYCRYPTO
+ 	bool "python-pycrypto package removed"
+ 	select BR2_LEGACY
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 9446ed00fb..e642a0d1db 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -847,7 +847,6 @@ F:	package/librsync/
+ F:	package/libsoup/
+ F:	package/libsoxr/
+ F:	package/libupnp/
+-F:	package/libupnp18/
+ F:	package/libv4l/
+ F:	package/libxslt/
+ F:	package/mbedtls/
+diff --git a/package/Config.in b/package/Config.in
+index 958b9fb08e..0a3cda65f2 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1694,7 +1694,6 @@ menu "Networking"
+ 	source "package/libtorrent/Config.in"
+ 	source "package/libtorrent-rasterbar/Config.in"
+ 	source "package/libupnp/Config.in"
+-	source "package/libupnp18/Config.in"
+ 	source "package/libupnpp/Config.in"
+ 	source "package/liburiparser/Config.in"
+ 	source "package/libvncserver/Config.in"
+diff --git a/package/libupnp18/Config.in b/package/libupnp18/Config.in
 deleted file mode 100644
-index 32474a3adb..0000000000
---- a/package/igd2-for-linux/0001-fix-build-with-gcc-10.patch
+index 58508e4e26..0000000000
+--- a/package/libupnp18/Config.in
 +++ /dev/null
-@@ -1,199 +0,0 @@
--From 23ed73623810a0894c8efd9eb79dd38483794a3b Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fabrice.fontaine@orange.com>
--Date: Thu, 20 Aug 2020 18:17:03 +0200
--Subject: [PATCH] fix build with gcc 10
+@@ -1,16 +0,0 @@
+-config BR2_PACKAGE_LIBUPNP18
+-	bool "libupnp18"
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	depends on !BR2_PACKAGE_LIBUPNP
+-	help
+-	  The portable SDK for UPnP(tm) Devices (libupnp) provides
+-	  developers with an API and open source code for building
+-	  control points, devices, and bridges that are compliant with
+-	  Version 1.0 of the Universal Plug and Play Device Architecture
+-	  Specification
 -
--This will fix build failures with -fno-common which is enabled by
--default with gcc 10
+-	  http://pupnp.sourceforge.net/
 -
--Fixes:
-- - http://autobuild.buildroot.org/results/f296984c3851fc28341210e36ef1b55b2edac209
+-comment "libupnp18 needs a toolchain w/ threads"
+-	depends on !BR2_PACKAGE_LIBUPNP
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libupnp18/libupnp18.hash b/package/libupnp18/libupnp18.hash
+deleted file mode 100644
+index 68aee9ba62..0000000000
+--- a/package/libupnp18/libupnp18.hash
++++ /dev/null
+@@ -1,5 +0,0 @@
+-# From https://sourceforge.net/projects/pupnp/files/pupnp/libupnp-1.8.6/libupnp-1.8.6.tar.bz2.sha1
+-sha1 6132a949d7536dac835172609d1def1e7f2bd232  libupnp-1.8.6.tar.bz2
+-# Locally computed:
+-sha256	65faf240f8ccee50cc0e7fe7fb21dcd79f743fc227a9b652b091f50f6956c2c7	libupnp-1.8.6.tar.bz2
+-sha256	c8b99423cad48bb44e2cf52a496361404290865eac259a82da6d1e4331ececb3	COPYING
+diff --git a/package/libupnp18/libupnp18.mk b/package/libupnp18/libupnp18.mk
+deleted file mode 100644
+index f73c656831..0000000000
+--- a/package/libupnp18/libupnp18.mk
++++ /dev/null
+@@ -1,26 +0,0 @@
+-################################################################################
+-#
+-# libupnp18
+-#
+-################################################################################
 -
--Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
--[Retrieved from:
--https://github.com/Orange-OpenSource/igd2-for-linux/commit/23ed73623810a0894c8efd9eb79dd38483794a3b]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- linuxigd2/src/gatedevice.c | 37 +++++++++++++++++++++++++++++++++
-- linuxigd2/src/gatedevice.h | 42 +++++++++-----------------------------
-- linuxigd2/src/pinholev6.c  |  2 ++
-- linuxigd2/src/pinholev6.h  |  2 +-
-- linuxigd2/src/pmlist.c     |  5 +++++
-- linuxigd2/src/pmlist.h     |  2 +-
-- linuxigd2/src/wanipv6fw.h  |  3 ---
-- 7 files changed, 56 insertions(+), 37 deletions(-)
+-LIBUPNP18_VERSION = 1.8.6
+-LIBUPNP18_SOURCE = libupnp-$(LIBUPNP18_VERSION).tar.bz2
+-LIBUPNP18_SITE = http://downloads.sourceforge.net/project/pupnp/pupnp/libupnp-$(LIBUPNP18_VERSION)
+-LIBUPNP18_CONF_ENV = ac_cv_lib_compat_ftime=no
+-LIBUPNP18_INSTALL_STAGING = YES
+-LIBUPNP18_LICENSE = BSD-3-Clause
+-LIBUPNP18_LICENSE_FILES = COPYING
+-LIBUPNP18_DEPENDENCIES = host-pkgconf
 -
--diff --git a/linuxigd2/src/gatedevice.c b/linuxigd2/src/gatedevice.c
--index 8be53e5..a50525d 100644
----- a/linuxigd2/src/gatedevice.c
--+++ b/linuxigd2/src/gatedevice.c
--@@ -41,6 +41,43 @@
-- #include "wanipv6fw.h"
-- #include "config.h"
-- 
--+// Thread which contains all kind of timers and threads used in gatedevice.c and deviceprotection.c
--+TimerThread gExpirationTimerThread;
--+
--+// IGD Device Globals
--+UpnpDevice_Handle deviceHandle;
--+UpnpDevice_Handle deviceHandleIPv6;
--+UpnpDevice_Handle deviceHandleIPv6UlaGua;
--+char *gateUDN;
--+char *wanUDN;
--+char *wanConnectionUDN;
--+char *lanUDN;
--+long int startup_time;
--+unsigned long connection_stats[STATS_LIMIT]; // this is used for defining if connection is in idling
--+long int idle_time;
--+
--+// State Variables
--+char ConnectionType[50];
--+char PossibleConnectionTypes[50];
--+char ConnectionStatus[20];
--+char LastConnectionError[35];
--+long int AutoDisconnectTime;
--+long int IdleDisconnectTime;
--+long int WarnDisconnectDelay;
--+int RSIPAvailable;
--+int NATEnabled;
--+char ExternalIPAddress[INET6_ADDRSTRLEN];
--+int PortMappingNumberOfEntries;
--+int PortMappingEnabled;
--+char RemoteHost[INET6_ADDRSTRLEN];    // updated IPv6 addrss length 16 -> 46
--+long int SystemUpdateID;
--+
--+// WANEthLinkConfig state variables
--+char EthernetLinkStatus[12];
--+
--+char FirewallEnabled[2];
--+char InboundPinholeAllowed[2];
--+
-- //Definitions for mapping expiration timer thread
-- static ThreadPool gExpirationThreadPool;
-- static ThreadPoolJob gEventUpdateJob;
--diff --git a/linuxigd2/src/gatedevice.h b/linuxigd2/src/gatedevice.h
--index 28d6b21..dbaa0c2 100644
----- a/linuxigd2/src/gatedevice.h
--+++ b/linuxigd2/src/gatedevice.h
--@@ -33,42 +33,20 @@
-- #include "util.h"
-- 
-- // Thread which contains all kind of timers and threads used in gatedevice.c and deviceprotection.c
---TimerThread gExpirationTimerThread;
--+extern TimerThread gExpirationTimerThread;
-- 
-- // IGD Device Globals
---UpnpDevice_Handle deviceHandle;
---UpnpDevice_Handle deviceHandleIPv6;
---UpnpDevice_Handle deviceHandleIPv6UlaGua;
---char *gateUDN;
---char *wanUDN;
---char *wanConnectionUDN;
---char *lanUDN;
---long int startup_time;
---unsigned long connection_stats[STATS_LIMIT]; // this is used for defining if connection is in idling
---long int idle_time;
---
---// State Variables
---char ConnectionType[50];
---char PossibleConnectionTypes[50];
---char ConnectionStatus[20];
---char LastConnectionError[35];
---long int AutoDisconnectTime;
---long int IdleDisconnectTime;
---long int WarnDisconnectDelay;
---int RSIPAvailable;
---int NATEnabled;
---char ExternalIPAddress[INET6_ADDRSTRLEN];
---int PortMappingNumberOfEntries;
---int PortMappingEnabled;
---char RemoteHost[INET6_ADDRSTRLEN];    // updated IPv6 addrss length 16 -> 46
---long int SystemUpdateID;
---
---// WANEthLinkConfig state variables
---char EthernetLinkStatus[12];
--+extern UpnpDevice_Handle deviceHandle;
--+extern UpnpDevice_Handle deviceHandleIPv6;
--+extern UpnpDevice_Handle deviceHandleIPv6UlaGua;
--+extern char *gateUDN;
--+extern char *wanUDN;
--+extern char *wanConnectionUDN;
--+extern char *lanUDN;
-- 
-- // Linked list for portmapping entries
---struct portMap *pmlist_Head;
---struct portMap *pmlist_Current;
--+extern struct portMap *pmlist_Head;
--+extern struct portMap *pmlist_Current;
-- 
-- // WanIPConnection Actions
-- int EventHandler(Upnp_EventType EventType, void *Event, void *Cookie);
--diff --git a/linuxigd2/src/pinholev6.c b/linuxigd2/src/pinholev6.c
--index 44e8a19..78f886d 100644
----- a/linuxigd2/src/pinholev6.c
--+++ b/linuxigd2/src/pinholev6.c
--@@ -41,6 +41,8 @@ extern "C" {
-- #include "gatedevice.h"
-- #include "pinholev6.h"
-- 
--+struct pinholev6 *ph_first;
--+
-- static const char * add_rule_str = "ip6tables -I %s " //upnp forward chain
--         "-i %s "        //input interface
--         "-o %s "        //output interface
--diff --git a/linuxigd2/src/pinholev6.h b/linuxigd2/src/pinholev6.h
--index 295b9f9..353ae27 100644
----- a/linuxigd2/src/pinholev6.h
--+++ b/linuxigd2/src/pinholev6.h
--@@ -37,7 +37,7 @@ struct pinholev6 {
-- 
--     struct pinholev6 *next;
-- 
---} *ph_first;
--+};
-- 
-- struct phv6_expirationEvent
-- {
--diff --git a/linuxigd2/src/pmlist.c b/linuxigd2/src/pmlist.c
--index 1b3fe05..95d0c61 100644
----- a/linuxigd2/src/pmlist.c
--+++ b/linuxigd2/src/pmlist.c
--@@ -41,6 +41,11 @@
-- #include "iptc.h"
-- #endif
-- 
--+// Linked list for portmapping entries
--+struct portMap *pmlist_Head;
--+struct portMap *pmlist_Current;
--+struct portMap *pmlist_Tail;
--+
-- /**
--  * Create new portMap struct of rule to add iptables. 
--  * portMap-struct is internal presentation of iptables rule in IGD. 
--diff --git a/linuxigd2/src/pmlist.h b/linuxigd2/src/pmlist.h
--index 436d228..017500d 100644
----- a/linuxigd2/src/pmlist.h
--+++ b/linuxigd2/src/pmlist.h
--@@ -57,7 +57,7 @@ struct portMap
-- 
--     struct portMap* next;
--     struct portMap* prev;
---} *pmlist_Head, *pmlist_Tail, *pmlist_Current;
--+};
-- 
-- //struct portMap* pmlist_NewNode(void);
-- struct portMap* pmlist_NewNode(int enabled, long int duration, char *remoteHost,
--diff --git a/linuxigd2/src/wanipv6fw.h b/linuxigd2/src/wanipv6fw.h
--index 55419fe..a50d267 100644
----- a/linuxigd2/src/wanipv6fw.h
--+++ b/linuxigd2/src/wanipv6fw.h
--@@ -46,9 +46,6 @@ extern "C" {
-- #define ERR_SRC_ADD_WILDCARD        708
-- #define ERR_NO_TRAFFIC              709
-- 
---char FirewallEnabled[2];
---char InboundPinholeAllowed[2];
---
-- //-----------------------------------------------------------------------------
-- 
-- int InitFirewallv6(void);
-diff --git a/package/igd2-for-linux/Config.in b/package/igd2-for-linux/Config.in
-index 157cc6f30b..f1658d3aa6 100644
---- a/package/igd2-for-linux/Config.in
-+++ b/package/igd2-for-linux/Config.in
-@@ -18,7 +18,7 @@ config BR2_PACKAGE_IGD2_FOR_LINUX
+-# Bind the internal miniserver socket with reuseaddr to allow clean restarts.
+-LIBUPNP18_CONF_OPTS += --enable-reuseaddr
+-
+-ifeq ($(BR2_PACKAGE_OPENSSL),y)
+-LIBUPNP18_CONF_OPTS += --enable-open-ssl
+-LIBUPNP18_DEPENDENCIES += openssl
+-else
+-LIBUPNP18_CONF_OPTS += --disable-open-ssl
+-endif
+-
+-$(eval $(autotools-package))
+diff --git a/package/mpd/Config.in b/package/mpd/Config.in
+index e9e7b83cbd..b61e7bd8c7 100644
+--- a/package/mpd/Config.in
++++ b/package/mpd/Config.in
+@@ -350,7 +350,7 @@ config BR2_PACKAGE_MPD_TCP
+ config BR2_PACKAGE_MPD_UPNP
+ 	bool "UPnP"
+ 	select BR2_PACKAGE_EXPAT
+-	select BR2_PACKAGE_LIBUPNP18 if !BR2_PACKAGE_LIBUPNP
++	select BR2_PACKAGE_LIBUPNP
+ 	select BR2_PACKAGE_MPD_CURL
+ 	help
+ 	  Enable MPD UPnP client support.
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index b14af30e15..ae933cac53 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -269,7 +269,7 @@ endif
+ ifeq ($(BR2_PACKAGE_MPD_UPNP),y)
+ MPD_DEPENDENCIES += \
+ 	expat \
+-	$(if $(BR2_PACKAGE_LIBUPNP),libupnp,libupnp18)
++	libupnp
+ MPD_CONF_OPTS += -Dupnp=enabled
+ else
+ MPD_CONF_OPTS += -Dupnp=disabled
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index 51c92f54c7..1dd64945a8 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -382,9 +382,9 @@ else
+ VLC_CONF_OPTS += --disable-theora
+ endif
  
- 	  Please edit /etc/upnpd.conf before using upnpd!
- 
--	  https://github.com/ffontaine/igd2-for-linux
-+	  https://github.com/Orange-OpenSource/igd2-for-linux
- 
- comment "igd2-for-linux needs a toolchain w/ threads, wchar"
- 	depends on BR2_USE_MMU
-diff --git a/package/igd2-for-linux/igd2-for-linux.hash b/package/igd2-for-linux/igd2-for-linux.hash
-index ecde4b51c2..fc215727d7 100644
---- a/package/igd2-for-linux/igd2-for-linux.hash
-+++ b/package/igd2-for-linux/igd2-for-linux.hash
-@@ -1,3 +1,4 @@
- # Locally computed:
--sha256	523545a26b0d662e9f6913bec2518df6e70f4d497935d88983d994336a1b0ea9	igd2-for-linux-1.2.tar.gz
--sha256	204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994	linuxigd2/doc/LICENSE
-+sha256  e3fcc7c9da4ad1ca16227b3b1b3712bcfb3f6ec922685eee7ae4a76edfa32bb4  igd2-for-linux-2.0.tar.gz
-+sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  linuxigd2/doc/LICENSE
-+sha256  c8b99423cad48bb44e2cf52a496361404290865eac259a82da6d1e4331ececb3  linuxigd2/src/threadutil/COPYING
-diff --git a/package/igd2-for-linux/igd2-for-linux.mk b/package/igd2-for-linux/igd2-for-linux.mk
-index 478c353997..85119a14b5 100644
---- a/package/igd2-for-linux/igd2-for-linux.mk
-+++ b/package/igd2-for-linux/igd2-for-linux.mk
-@@ -4,11 +4,12 @@
- #
- ################################################################################
- 
--IGD2_FOR_LINUX_VERSION = 1.2
--IGD2_FOR_LINUX_SITE = $(call github,ffontaine,igd2-for-linux,v$(IGD2_FOR_LINUX_VERSION))
-+IGD2_FOR_LINUX_VERSION = 2.0
-+IGD2_FOR_LINUX_SITE = \
-+	$(call github,Orange-OpenSource,igd2-for-linux,v$(IGD2_FOR_LINUX_VERSION))
- 
--IGD2_FOR_LINUX_LICENSE = GPL-2.0
--IGD2_FOR_LINUX_LICENSE_FILES = linuxigd2/doc/LICENSE
-+IGD2_FOR_LINUX_LICENSE = GPL-2.0, BSD-3-Clause
-+IGD2_FOR_LINUX_LICENSE_FILES = linuxigd2/doc/LICENSE linuxigd2/src/threadutil/COPYING
- 
- IGD2_FOR_LINUX_DEPENDENCIES = libupnp
- 
+-ifeq ($(BR2_PACKAGE_LIBUPNP)$(BR2_PACKAGE_LIBUPNP18),y)
++ifeq ($(BR2_PACKAGE_LIBUPNP),y)
+ VLC_CONF_OPTS += --enable-upnp
+-VLC_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBUPNP),libupnp,libupnp18)
++VLC_DEPENDENCIES += libupnp
+ else
+ VLC_CONF_OPTS += --disable-upnp
+ endif
