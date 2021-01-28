@@ -1,40 +1,170 @@
-From: Michael Nosthoff <buildroot@heine.tech>
-Date: Thu, 28 Jan 2021 15:48:25 +0100
-Subject: [Buildroot] [PATCH] package/grpc: bump to version 1.35.0
-Message-ID: <20210128144826.112381-1-buildroot@heine.tech>
+From: Vadym Kochan <vadym.kochan@plvision.eu>
+Date: Thu, 28 Jan 2021 17:24:19 +0200
+Subject: [Buildroot] [PATCH] package/frr: bump to 7.5 version
+Message-ID: <20210128152419.17262-1-vadym.kochan@plvision.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
----
- package/grpc/grpc.hash | 2 +-
- package/grpc/grpc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Major Behavior Changes
 
-diff --git a/package/grpc/grpc.hash b/package/grpc/grpc.hash
-index 68d0d27c65..52d25fc5ed 100644
---- a/package/grpc/grpc.hash
-+++ b/package/grpc/grpc.hash
+    - As a reminder for those upgrading from older releases, as of FRR 7.4
+    and beyond:
+
+    RFC 8212 is now enabled by default. BGP will not advertise or use
+    routes unless explicitly configured to do so with an export or import
+    policy.
+
+All daemons
+
+    Minimum libyang version is now 1.0.184
+
+bfdd
+
+    Profile support
+    Minimum TTL support
+
+bgpd
+
+    RPKI now has support for VRFs
+    Add wide option to route show commands
+    Add ability to count filtered prefixes when using maximum-prefix
+    with new force option
+    Add ability to show selected bestpath routes for a given neighbor
+    with bestpath-routes option to neighbor show command
+    Add ability to specify message when admin downing a session with bgp
+    shutdown message MSG... command
+    Add IPv6 support for Flowspec
+    Add ability to shut down neighbor if RTT is too high with neighbor
+    <neigh> shutdown rtt command
+    Allow update-delay to be applied globally
+    Graceful Restart fixes
+    Stability and performance fixes
+    EVPN
+    Beginning of MultiHoming support; stay tuned
+
+isisd
+
+    Add VRF support
+    Add support for Anycast-SIDs
+    Fix adjacency timer display overflow
+
+ospfd
+
+    Segment Routing support for ECMP
+    Prevent crash if transferring config amongst instances
+    Various LSA-related fixes
+
+pbrd
+
+    Add JSON support to commands
+    Add ability to match on DSCP/ECN fields
+
+pimd
+
+    Add more JSON support to commands
+    Add support for MSDP SA forwarding
+    (s,g,rpt) ifchannel is now cleared when (*, G) prune is received
+    Fix IGMP querier election and IP address mapping
+    Fix missing mesh-group commands
+    Fix crash when RP is removed
+
+staticd
+
+    Add support for Northbound API
+
+zebra
+
+    Nexthop group support for FPM
+    Netlink batching support
+    Northbound support for RIB model
+    Backup nexthop support
+    Allow upper level protocols to request ARP
+    Add json output for zebra ES, ES-EVI and access vlan dumps
+
+vtysh
+
+    Speed up output across daemons
+    Fix build-time errors for some --enable flags
+
+Northbound / YANG
+
+    Filter and route-map support
+    OSPF model definition
+    BGP model definition
+
+RPM Packaging
+
+    Moved RPKI to subpackage
+    Added SNMP subpackage
+
+Signed-off-by: Vadym Kochan <vadym.kochan@plvision.eu>
+---
+ ...all-future-minor-versions-of-python3.patch | 30 -------------------
+ package/frr/frr.hash                          |  2 +-
+ package/frr/frr.mk                            |  2 +-
+ 3 files changed, 2 insertions(+), 32 deletions(-)
+ delete mode 100644 package/frr/0001-build-find-all-future-minor-versions-of-python3.patch
+
+diff --git a/package/frr/0001-build-find-all-future-minor-versions-of-python3.patch b/package/frr/0001-build-find-all-future-minor-versions-of-python3.patch
+deleted file mode 100644
+index 1eb693703b48..000000000000
+--- a/package/frr/0001-build-find-all-future-minor-versions-of-python3.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-From 838cb35e08eb98acbc27637808162105ae2c4549 Mon Sep 17 00:00:00 2001
+-From: Michal Ruprich <michalruprich@gmail.com>
+-Date: Wed, 17 Jun 2020 13:47:30 +0200
+-Subject: [PATCH] build: find all future minor versions of python3
+-
+-This way we can find every python from 3.8 further
+-
+-Signed-off-by: Michal Ruprich <michalruprich@gmail.com>
+-
+-[Retrieved from:
+-https://github.com/FRRouting/frr/commit/838cb35e08eb98acbc27637808162105ae2c4549]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- m4/ax_python.m4 | 3 ++-
+- 1 file changed, 2 insertions(+), 1 deletion(-)
+-
+-diff --git a/m4/ax_python.m4 b/m4/ax_python.m4
+-index 9f43ea0ab12..91d12b99b43 100644
+---- a/m4/ax_python.m4
+-+++ b/m4/ax_python.m4
+-@@ -186,7 +186,8 @@ AC_REQUIRE([PKG_PROG_PKG_CONFIG])dnl
+-       AC_MSG_RESULT([yes])
+- 
+-       PYTHON_CFLAGS="`\"$pycfg\" --includes`"
+--      if test x"${py_ver}" = x"3.8" || test x"{py_ver}" = x"3.9"; then
+-+      minor_ver=${py_ver#*\.}
+-+      if test $((minor_ver)) -gt 7; then
+-         PYTHON_LIBS="`\"$pycfg\" --ldflags --embed`"
+-       else
+-         PYTHON_LIBS="`\"$pycfg\" --ldflags`"
+diff --git a/package/frr/frr.hash b/package/frr/frr.hash
+index 1c8c27ec4e69..942065f0f307 100644
+--- a/package/frr/frr.hash
++++ b/package/frr/frr.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  7372a881122cd85a7224435a1d58bc5e11c88d4fb98a64b83f36f3d1c2f16d39  grpc-1.34.0.tar.gz
-+sha256  27dd2fc5c9809ddcde8eb6fa1fa278a3486566dfc28335fca13eb8df8bd3b958  grpc-1.35.0.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
-index 8585b6bdc3..4474bf083d 100644
---- a/package/grpc/grpc.mk
-+++ b/package/grpc/grpc.mk
+ # Locally calculated
+-sha256 3c8204fda1c9b178d8446562579bbbc49d134b98f3ad02aa56f68724a2f9e40a  frr-7.4.tar.gz
++sha256 54066e82a82751ec5876d9b67aa0cb24fe94e19e7371af290ac25099eda9f136  frr-7.5.tar.gz
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/frr/frr.mk b/package/frr/frr.mk
+index 6beaf776ac69..3ae292874aaa 100644
+--- a/package/frr/frr.mk
++++ b/package/frr/frr.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GRPC_VERSION = 1.34.0
-+GRPC_VERSION = 1.35.0
- GRPC_SITE = $(call github,grpc,grpc,v$(GRPC_VERSION))
- GRPC_LICENSE = Apache-2.0
- GRPC_LICENSE_FILES = LICENSE
+-FRR_VERSION = 7.4
++FRR_VERSION = 7.5
+ FRR_SITE = $(call github,FRRouting,frr,frr-$(FRR_VERSION))
+ FRR_LICENSE = GPL-2.0
+ FRR_LICENSE_FILES = COPYING
 -- 
-2.25.1
+2.17.1
