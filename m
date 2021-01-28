@@ -1,75 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Jan 2021 20:23:02 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/libupnpp: bump to
- version 0.19.2
-Message-ID: <20210128200123.583DC83E2C@busybox.osuosl.org>
+Date: Thu, 28 Jan 2021 21:10:14 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/sudo: drop
+ unneeded autoreconf
+Message-ID: <20210128200124.28425801C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=47b05d1bcc2849f9818f49c0d43aa4eb617ce342
+commit: https://git.buildroot.net/buildroot/commit/?id=ce1f59f2e4ca1ce38cc2bf54f6419d2eee20d813
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Starting from this version libupnp has been replaced with libnpupnp
+Commit 4fea71ac785cc (package/sudo: security bump to version 1.9.5p2)
+removed the patch, but forgot to remove the now unneeded autoreconf.  Fix
+that.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 0b81bdac3a59d93fe34ea19eae09dbf23a4260c5)
+Reported-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 84a8aac451906c30f79c123afe4a415573021dc5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libupnpp/Config.in     | 4 ++--
- package/libupnpp/libupnpp.hash | 4 ++--
- package/libupnpp/libupnpp.mk   | 5 ++---
- 3 files changed, 6 insertions(+), 7 deletions(-)
+ package/sudo/sudo.mk | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/package/libupnpp/Config.in b/package/libupnpp/Config.in
-index a71eff5423..41afa9300f 100644
---- a/package/libupnpp/Config.in
-+++ b/package/libupnpp/Config.in
-@@ -1,11 +1,11 @@
- config BR2_PACKAGE_LIBUPNPP
- 	bool "libupnpp"
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libupnp
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libnpupnp
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 	select BR2_PACKAGE_EXPAT
- 	select BR2_PACKAGE_LIBCURL
--	select BR2_PACKAGE_LIBUPNP18 if !BR2_PACKAGE_LIBUPNP
-+	select BR2_PACKAGE_LIBNPUPNP
- 	help
- 	  The libupnpp C++ library wraps libupnp for easier use by
- 	  upmpdcli and upplay.
-diff --git a/package/libupnpp/libupnpp.hash b/package/libupnpp/libupnpp.hash
-index 993dbc89ae..fb510236a3 100644
---- a/package/libupnpp/libupnpp.hash
-+++ b/package/libupnpp/libupnpp.hash
-@@ -1,5 +1,5 @@
--# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/libupnpp-0.17.2.tar.gz.sha256
--sha256  5abaaf353a1e9c3482d61ef2627b650285d59f27c1ee60d35b8951952261374f  libupnpp-0.17.2.tar.gz
-+# Hashes from: http://www.lesbonscomptes.com/upmpdcli/downloads/libupnpp-0.19.2.tar.gz.sha256
-+sha256  c9623533271605c92dfa603f5fe0ab6d3d5b4384a0c9173800784f4aa643a190  libupnpp-0.19.2.tar.gz
- 
- # Hash for license file:
- sha256  00a89b0d18aacd4114decf79122db87bf35bddaf2bc50e383c9c9f4c263390b2  COPYING
-diff --git a/package/libupnpp/libupnpp.mk b/package/libupnpp/libupnpp.mk
-index c9c103d9b5..ef1816166e 100644
---- a/package/libupnpp/libupnpp.mk
-+++ b/package/libupnpp/libupnpp.mk
-@@ -4,12 +4,11 @@
- #
- ################################################################################
- 
--LIBUPNPP_VERSION = 0.17.2
-+LIBUPNPP_VERSION = 0.19.2
- LIBUPNPP_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
- LIBUPNPP_LICENSE = LGPL-2.1+
- LIBUPNPP_LICENSE_FILES = COPYING
- LIBUPNPP_INSTALL_STAGING = YES
--LIBUPNPP_DEPENDENCIES = host-pkgconf expat libcurl \
--	$(if $(BR2_PACKAGE_LIBUPNP),libupnp,libupnp18)
-+LIBUPNPP_DEPENDENCIES = host-pkgconf expat libcurl libnpupnp
- 
- $(eval $(autotools-package))
+diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
+index b727065abb..c08cf1c4a5 100644
+--- a/package/sudo/sudo.mk
++++ b/package/sudo/sudo.mk
+@@ -8,8 +8,6 @@ SUDO_VERSION = 1.9.5p2
+ SUDO_SITE = https://www.sudo.ws/sudo/dist
+ SUDO_LICENSE = ISC, BSD-3-Clause
+ SUDO_LICENSE_FILES = doc/LICENSE
+-# We're patching lib/eventlog/Makefile.in
+-SUDO_AUTORECONF = YES
+ # This is to avoid sudo's make install from chown()ing files which fails
+ SUDO_INSTALL_TARGET_OPTS = INSTALL_OWNER="" DESTDIR="$(TARGET_DIR)" install
+ SUDO_CONF_OPTS = \
