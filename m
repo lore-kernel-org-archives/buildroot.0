@@ -1,64 +1,46 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 28 Jan 2021 16:43:36 +0200
-Subject: [Buildroot] [PATCH] package/chrony: fix build with kernel headers
- older than 3.15
-Message-ID: <232b243f475d862a443c2095b5155c427f5f5be9.1611845016.git.baruch@tkos.co.il>
+Date: Thu, 28 Jan 2021 16:44:23 +0200
+Subject: [Buildroot] [PATCH] package/stress-ng: bump to version 0.12.02
+Message-ID: <70901dcc16ff80850079dc7e0a07af02e5022b03.1611845063.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a patch to make renameat2 system call reference conditional.
+Use https for download to save redirect.
 
-Fixes:
-http://autobuild.buildroot.net/results/bb6/bb638ed011aea379c7f780187dafe2615753e2ae/
-http://autobuild.buildroot.net/results/5ef/5ef11bace60950b35b4a593d734a20df088c79aa/
-
+Cc: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- ...-fix-build-with-older-kernel-headers.patch | 33 +++++++++++++++++++
- 1 file changed, 33 insertions(+)
- create mode 100644 package/chrony/0001-sys_linux-fix-build-with-older-kernel-headers.patch
+ package/stress-ng/stress-ng.hash | 2 +-
+ package/stress-ng/stress-ng.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/chrony/0001-sys_linux-fix-build-with-older-kernel-headers.patch b/package/chrony/0001-sys_linux-fix-build-with-older-kernel-headers.patch
-new file mode 100644
-index 000000000000..892664f494df
---- /dev/null
-+++ b/package/chrony/0001-sys_linux-fix-build-with-older-kernel-headers.patch
-@@ -0,0 +1,33 @@
-+From 5dab78341bd515692f1b9ff8716a911c3ebf9ee1 Mon Sep 17 00:00:00 2001
-+Message-Id: <5dab78341bd515692f1b9ff8716a911c3ebf9ee1.1611839550.git.baruch@tkos.co.il>
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Thu, 28 Jan 2021 15:02:40 +0200
-+Subject: [PATCH] sys_linux: fix build with older kernel headers
-+
-+The renameat2 system call was introduced in kernel version 3.15. Fix
-+build against older headers.
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: commit a2372b0c3abfc85d11c1684c0fb6370cc329e5c4
-+
-+ sys_linux.c | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/sys_linux.c b/sys_linux.c
-+index 0b24445e173d..202da845edac 100644
-+--- a/sys_linux.c
-++++ b/sys_linux.c
-+@@ -547,7 +547,9 @@ SYS_Linux_EnableSystemCallFilter(int level, SYS_ProcessContext context)
-+     SCMP_SYS(readlinkat),
-+     SCMP_SYS(rename),
-+     SCMP_SYS(renameat),
-++#ifdef __NR_renameat2
-+     SCMP_SYS(renameat2),
-++#endif
-+     SCMP_SYS(stat),
-+     SCMP_SYS(stat64),
-+     SCMP_SYS(statfs),
-+-- 
-+2.29.2
-+
+diff --git a/package/stress-ng/stress-ng.hash b/package/stress-ng/stress-ng.hash
+index 5250a224752d..41e280191574 100644
+--- a/package/stress-ng/stress-ng.hash
++++ b/package/stress-ng/stress-ng.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  860291dd3a18b985b3483190a627bbede2b5c52113766c1921001b3fb4b83af0  stress-ng-0.11.17.tar.xz
++sha256  f847be115f60d3ad7d37c806fd1bfb1412aa3c631fca581d6dc233322f50d6a5  stress-ng-0.12.02.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/stress-ng/stress-ng.mk b/package/stress-ng/stress-ng.mk
+index 4afdb0a329c6..c26206cd2ef0 100644
+--- a/package/stress-ng/stress-ng.mk
++++ b/package/stress-ng/stress-ng.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-STRESS_NG_VERSION = 0.11.17
++STRESS_NG_VERSION = 0.12.02
+ STRESS_NG_SOURCE = stress-ng-$(STRESS_NG_VERSION).tar.xz
+-STRESS_NG_SITE = http://kernel.ubuntu.com/~cking/tarballs/stress-ng
++STRESS_NG_SITE = https://kernel.ubuntu.com/~cking/tarballs/stress-ng
+ STRESS_NG_LICENSE = GPL-2.0+
+ STRESS_NG_LICENSE_FILES = COPYING
+ 
 -- 
 2.29.2
