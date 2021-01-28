@@ -1,8 +1,8 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Jan 2021 21:49:40 +0100
-Subject: [Buildroot] [PATCH v2] package/mutt: add security fixes from Ubuntu
- for CVE-2021-3181
-Message-ID: <20210128204940.19495-1-peter@korsgaard.com>
+Date: Thu, 28 Jan 2021 22:35:08 +0100
+Subject: [Buildroot] [PATCH] package/glibc: security bump for additional
+ post-2.32.x fixes
+Message-ID: <20210128213509.6056-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,180 +11,45 @@ To: buildroot@busybox.net
 
 Fixes the following security issue:
 
-- CVE-2021-3181: rfc822.c in Mutt through 2.0.4 allows remote attackers to
-  cause a denial of service (mailbox unavailability) by sending email
-  messages with sequences of semicolon characters in RFC822 address fields
-  (aka terminators of empty groups).  A small email message from the
-  attacker can cause large memory consumption, and the victim may then be
-  unable to see email messages from other persons.
+- CVE-2021-3326): Assertion failure in ISO-2022-JP-3 gconv module related to
+  combining characters
+
+For details, see https://sourceware.org/bugzilla/show_bug.cgi?id=27256 and
+https://www.openwall.com/lists/oss-security/2021/01/27/3
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mutt/0002-CVE-2021-3181-1.patch | 40 +++++++++++++++++++
- package/mutt/0003-CVE-2021-3181-2.patch | 53 +++++++++++++++++++++++++
- package/mutt/0004-CVE-2021-3181-3.patch | 30 ++++++++++++++
- package/mutt/mutt.mk                    |  5 +++
- 4 files changed, 128 insertions(+)
- create mode 100644 package/mutt/0002-CVE-2021-3181-1.patch
- create mode 100644 package/mutt/0003-CVE-2021-3181-2.patch
- create mode 100644 package/mutt/0004-CVE-2021-3181-3.patch
+ .../glibc.hash                                                  | 2 +-
+ package/glibc/glibc.mk                                          | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+ rename package/glibc/{2.32-23-g050022910be1d1f5c11cd5168f1685ad4f9580d2 => 2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2}/glibc.hash (72%)
 
-diff --git a/package/mutt/0002-CVE-2021-3181-1.patch b/package/mutt/0002-CVE-2021-3181-1.patch
-new file mode 100644
-index 0000000000..cbb12cf2f2
---- /dev/null
-+++ b/package/mutt/0002-CVE-2021-3181-1.patch
-@@ -0,0 +1,40 @@
-+From 4a2becbdb4422aaffe3ce314991b9d670b7adf17 Mon Sep 17 00:00:00 2001
-+From: Kevin McCarthy <kevin@8t8.us>
-+Date: Sun, 17 Jan 2021 10:40:37 -0800
-+Subject: [PATCH] Fix memory leak parsing group addresses without a display
-+ name.
-+
-+When there was a group address terminator with no previous
-+addresses (including the group display-name), an address would be
-+allocated but not attached to the address list.
-+
-+Change this to only allocate when last exists.
-+
-+It would be more correct to not allocate at all unless we are inside a
-+group list, but I will address that in a separate commit to master.
-+
-+[Retrieved from:
-+https://git.launchpad.net/ubuntu/+source/mutt/plain/debian/patches/CVE-2021-3181-1.patch?h=import/1.14.6-1ubuntu0.2]
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ rfc822.c | 5 ++---
-+ 1 file changed, 2 insertions(+), 3 deletions(-)
-+
-+Index: mutt-1.14.6/rfc822.c
-+===================================================================
-+--- mutt-1.14.6.orig/rfc822.c
-++++ mutt-1.14.6/rfc822.c
-+@@ -491,11 +491,10 @@ ADDRESS *rfc822_parse_adrlist (ADDRESS *
-+ #endif
-+ 
-+       /* add group terminator */
-+-      cur = rfc822_new_address ();
-+       if (last)
-+       {
-+-	last->next = cur;
-+-	last = cur;
-++	last->next = rfc822_new_address ();
-++	last = last->next;
-+       }
-+ 
-+       phraselen = 0;
-diff --git a/package/mutt/0003-CVE-2021-3181-2.patch b/package/mutt/0003-CVE-2021-3181-2.patch
-new file mode 100644
-index 0000000000..c3184a40ed
---- /dev/null
-+++ b/package/mutt/0003-CVE-2021-3181-2.patch
-@@ -0,0 +1,53 @@
-+From 939b02b33ae29bc0d642570c1dcfd4b339037d19 Mon Sep 17 00:00:00 2001
-+From: Kevin McCarthy <kevin@8t8.us>
-+Date: Sun, 17 Jan 2021 10:53:19 -0800
-+Subject: [PATCH] Don't allocate a group terminator unless we are in a
-+ group-list.
-+
-+This will reduce memory allocation for garbage/spam address lists.
-+
-+It also makes no sense to store a terminator when there wasn't a
-+display-name indicating the start of a group.
-+
-+[Retrieved from:
-+https://git.launchpad.net/ubuntu/+source/mutt/plain/debian/patches/CVE-2021-3181-2.patch?h=import/1.14.6-1ubuntu0.2]
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ rfc822.c | 6 ++++--
-+ 1 file changed, 4 insertions(+), 2 deletions(-)
-+
-+Index: mutt-1.14.6/rfc822.c
-+===================================================================
-+--- mutt-1.14.6.orig/rfc822.c
-++++ mutt-1.14.6/rfc822.c
-+@@ -378,7 +378,7 @@ add_addrspec (ADDRESS **top, ADDRESS **l
-+ 
-+ ADDRESS *rfc822_parse_adrlist (ADDRESS *top, const char *s)
-+ {
-+-  int ws_pending, nl;
-++  int ws_pending, nl, in_group = 0;
-+ #ifdef EXACT_ADDRESS
-+   const char *begin;
-+ #endif
-+@@ -455,6 +455,7 @@ ADDRESS *rfc822_parse_adrlist (ADDRESS *
-+       terminate_buffer (phrase, phraselen);
-+       cur->mailbox = safe_strdup (phrase);
-+       cur->group = 1;
-++      in_group = 1;
-+ 
-+       if (last)
-+ 	last->next = cur;
-+@@ -491,11 +492,12 @@ ADDRESS *rfc822_parse_adrlist (ADDRESS *
-+ #endif
-+ 
-+       /* add group terminator */
-+-      if (last)
-++      if (last && in_group)
-+       {
-+ 	last->next = rfc822_new_address ();
-+ 	last = last->next;
-+       }
-++      in_group = 0;
-+ 
-+       phraselen = 0;
-+       commentlen = 0;
-diff --git a/package/mutt/0004-CVE-2021-3181-3.patch b/package/mutt/0004-CVE-2021-3181-3.patch
-new file mode 100644
-index 0000000000..42d0cbaef5
---- /dev/null
-+++ b/package/mutt/0004-CVE-2021-3181-3.patch
-@@ -0,0 +1,30 @@
-+From d4305208955c5cdd9fe96dfa61e7c1e14e176a14 Mon Sep 17 00:00:00 2001
-+From: Kevin McCarthy <kevin@8t8.us>
-+Date: Sun, 17 Jan 2021 11:05:36 -0800
-+Subject: [PATCH] Add group terminator if it is left off.
-+
-+If there is no terminating ";" add one to the list, to make the text
-+re-rendering correct.
-+
-+[Retrieved from:
-+https://git.launchpad.net/ubuntu/+source/mutt/plain/debian/patches/CVE-2021-3181-3.patch?h=import/1.14.6-1ubuntu0.2]
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ rfc822.c | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+Index: mutt-1.14.6/rfc822.c
-+===================================================================
-+--- mutt-1.14.6.orig/rfc822.c
-++++ mutt-1.14.6/rfc822.c
-+@@ -560,6 +560,10 @@ ADDRESS *rfc822_parse_adrlist (ADDRESS *
-+     last->val = mutt_substrdup (begin, s - nl < begin ? begin : s - nl);
-+ #endif
-+ 
-++  /* add group terminator, if it was left off */
-++  if (last && in_group)
-++    last->next = rfc822_new_address ();
-++
-+   return top;
-+ }
-+ 
-diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
-index 0823e8afc0..c2188cebea 100644
---- a/package/mutt/mutt.mk
-+++ b/package/mutt/mutt.mk
-@@ -15,6 +15,11 @@ MUTT_CONF_OPTS = --disable-doc --disable-smtp
- # 0001-Ensure-IMAP-connection-is-closed-after-a-connection-error.patch
- MUTT_IGNORE_CVES += CVE-2020-28896
+diff --git a/package/glibc/2.32-23-g050022910be1d1f5c11cd5168f1685ad4f9580d2/glibc.hash b/package/glibc/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/glibc.hash
+similarity index 72%
+rename from package/glibc/2.32-23-g050022910be1d1f5c11cd5168f1685ad4f9580d2/glibc.hash
+rename to package/glibc/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/glibc.hash
+index 45ecc2895f..b1d5243fcc 100644
+--- a/package/glibc/2.32-23-g050022910be1d1f5c11cd5168f1685ad4f9580d2/glibc.hash
++++ b/package/glibc/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/glibc.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated (fetched from Github)
+-sha256  04946bb7cbaf4062bf5e727e0d6784e105b07611587d71f00d25ea896753c26d  glibc-2.32-23-g050022910be1d1f5c11cd5168f1685ad4f9580d2.tar.gz
++sha256  f4710e9a435a7b83e1d23dd75434f0d36b898eba9b4249c946c32b467d852fd4  glibc-2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2.tar.gz
  
-+# 0002-CVE-2021-3181-1.patch
-+# 0003-CVE-2021-3181-2.patch
-+# 0004-CVE-2021-3181-3.patch
-+MUTT_IGNORE_CVES += CVE-2021-3181
-+
- ifeq ($(BR2_PACKAGE_LIBICONV),y)
- MUTT_DEPENDENCIES += libiconv
- MUTT_CONF_OPTS += --enable-iconv
+ # Hashes for license files
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index b0a1318b04..f84f670fc0 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -16,7 +16,7 @@ ifeq ($(BR2_RISCV_32),y)
+ # Until 2.33 is released, just use master
+ GLIBC_VERSION = 2.32.9000-69-gbd394d131c10c9ec22c6424197b79410042eed99
+ else
+-GLIBC_VERSION = 2.32-23-g050022910be1d1f5c11cd5168f1685ad4f9580d2
++GLIBC_VERSION = 2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2
+ endif
+ # Upstream doesn't officially provide an https download link.
+ # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
 -- 
 2.20.1
