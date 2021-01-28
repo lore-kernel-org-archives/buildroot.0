@@ -1,35 +1,25 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 28 Jan 2021 18:21:22 +0100
-Subject: [Buildroot] [PATCH 1/1] package/sox: add CPE variables
-Message-ID: <20210128172122.4137998-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 28 Jan 2021 18:24:29 +0100
+Subject: [Buildroot] [PATCH 1/1] package/redis: bump to v6.0.10
+In-Reply-To: <20210124111044.49810-1-titouanchristophe@gmail.com> (Titouan
+ Christophe's message of "Sun, 24 Jan 2021 12:10:44 +0100")
+References: <20210124111044.49810-1-titouanchristophe@gmail.com>
+Message-ID: <87wnvx2cvm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:sound_exchange_project:sound_exchange is a valid CPE
-identifier for this package:
+>>>>> "Titouan" == Titouan Christophe <titouanchristophe@gmail.com> writes:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Asound_exchange_project%3Asound_exchange
+ > Redis 6.0.10 fixes several bugs with moderate impact.
+ > Read the full announcement:
+ > https://github.com/redis/redis/blob/6.0.10/00-RELEASENOTES
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/sox/sox.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ > Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
 
-diff --git a/package/sox/sox.mk b/package/sox/sox.mk
-index 013ccbbcf4..9abbc2f636 100644
---- a/package/sox/sox.mk
-+++ b/package/sox/sox.mk
-@@ -10,6 +10,8 @@ SOX_SOURCE = sox-$(SOX_VERSION).tar.bz2
- SOX_DEPENDENCIES = host-pkgconf
- SOX_LICENSE = GPL-2.0+ (sox binary), LGPL-2.1+ (libraries)
- SOX_LICENSE_FILES = LICENSE.GPL LICENSE.LGPL
-+SOX_CPE_ID_VENDOR = sound_exchange_project
-+SOX_CPE_ID_PRODUCT = sound_exchange
- 
- SOX_CONF_OPTS = \
- 	--with-distro="Buildroot" \
+Committed to 2020.11.x, thanks.
+
 -- 
-2.29.2
+Bye, Peter Korsgaard
