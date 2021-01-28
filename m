@@ -1,52 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Jan 2021 21:16:12 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/gerbera: needs
- gcc >= 8
-Message-ID: <20210128200059.20101812DF@busybox.osuosl.org>
+Date: Thu, 28 Jan 2021 21:18:26 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/uboot-tools: drop
+ redundant parentheses
+Message-ID: <20210128200059.29CFD812DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=379112c575d32027d9f99efcc289b655c19de7ee
+commit: https://git.buildroot.net/buildroot/commit/?id=9e2f21dff98507e4aad9bedbaf2a29001d1a5441
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-std::filesystem is required since version 1.5.0:
-https://github.com/gerbera/gerbera/issues/849
+Commit d8db91fc6fa ("package/uboot-tools: resolve host uboot env/script
+error") introduced closing parentheses that is not matched and not
+needed.
 
 Fixes:
- - http://autobuild.buildroot.org/results/759c875ee8ab0447cd735c22f89fa127cb8c427c
+http://autobuild.buildroot.net/results/a65/a65fcc581f56ef70154f83e80f12d64f2e0f856a/
+http://autobuild.buildroot.net/results/39a/39aabb9d8afcdead1d620e081d2cd43ee2d61fbc/
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+Cc: Kalpesh Panchal <kalpesh.panchal@rockwellcollins.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Reviewed-by: Bin Meng <bin.meng@windriver.com>
+Tested-by: Bin Meng <bin.meng@windriver.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 70db2351da182b1317c45ecd03947af555d5a703)
+(cherry picked from commit c1eb7229152831a312a84318d4a858edccab9ad3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gerbera/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/uboot-tools/uboot-tools.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/gerbera/Config.in b/package/gerbera/Config.in
-index a07bcc5c57..b734de95de 100644
---- a/package/gerbera/Config.in
-+++ b/package/gerbera/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_GERBERA
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17 optional
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # C++17 filesystem
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR # fmt
- 	select BR2_PACKAGE_FMT
-@@ -22,8 +22,8 @@ config BR2_PACKAGE_GERBERA
- 
- 	  https://gerbera.io
- 
--comment "gerbera needs a toolchain w/ C++, threads, wchar, gcc >= 7"
-+comment "gerbera needs a toolchain w/ C++, threads, wchar, gcc >= 8"
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_GCC_AT_LEAST_7
-+		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_GCC_AT_LEAST_8
+diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
+index 839f039f50..b240789286 100644
+--- a/package/uboot-tools/uboot-tools.mk
++++ b/package/uboot-tools/uboot-tools.mk
+@@ -158,7 +158,7 @@ endif #BR_BUILDING
+ define HOST_UBOOT_TOOLS_GENERATE_BOOT_SCRIPT
+ 	$(@D)/tools/mkimage -C none -A $(MKIMAGE_ARCH) -T script \
+ 		-d $(call qstrip,$(BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE)) \
+-		$(@D)/tools/boot.scr)
++		$(@D)/tools/boot.scr
+ endef
+ define HOST_UBOOT_TOOLS_INSTALL_BOOT_SCRIPT
+ 	$(INSTALL) -m 0755 -D $(@D)/tools/boot.scr $(BINARIES_DIR)/boot.scr
