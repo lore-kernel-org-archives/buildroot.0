@@ -1,230 +1,49 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Jan 2021 20:23:03 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/igd2-for-linux:
- fix build with gcc 10
-Message-ID: <20210128200123.A636D80415@busybox.osuosl.org>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Thu, 28 Jan 2021 22:24:08 +0200
+Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: add
+ WEBKITGTK_CPE_ID_VENDOR
+In-Reply-To: <20210128171947.4137710-1-fontaine.fabrice@gmail.com>
+References: <20210128171947.4137710-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210128222408.GB160606@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=48778b570d1c51e80807dbab6687cc8c6b878d85
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+On Thu, 28 Jan 2021 18:19:47 +0100 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+> cpe:2.3:a:webkitgtk:webkitgtk is a valid CPE identifier for this
+> package:
+> 
+>   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Awebkitgtk%3Awebkitgtk
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Fixes:
- - http://autobuild.buildroot.org/results/f296984c3851fc28341210e36ef1b55b2edac209
+Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 09e5e3dbdd4eade0190bb2bd303115dbb4336f9b)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../0001-fix-build-with-gcc-10.patch               | 199 +++++++++++++++++++++
- 1 file changed, 199 insertions(+)
-
-diff --git a/package/igd2-for-linux/0001-fix-build-with-gcc-10.patch b/package/igd2-for-linux/0001-fix-build-with-gcc-10.patch
-new file mode 100644
-index 0000000000..32474a3adb
---- /dev/null
-+++ b/package/igd2-for-linux/0001-fix-build-with-gcc-10.patch
-@@ -0,0 +1,199 @@
-+From 23ed73623810a0894c8efd9eb79dd38483794a3b Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fabrice.fontaine@orange.com>
-+Date: Thu, 20 Aug 2020 18:17:03 +0200
-+Subject: [PATCH] fix build with gcc 10
-+
-+This will fix build failures with -fno-common which is enabled by
-+default with gcc 10
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/f296984c3851fc28341210e36ef1b55b2edac209
-+
-+Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
-+[Retrieved from:
-+https://github.com/Orange-OpenSource/igd2-for-linux/commit/23ed73623810a0894c8efd9eb79dd38483794a3b]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ linuxigd2/src/gatedevice.c | 37 +++++++++++++++++++++++++++++++++
-+ linuxigd2/src/gatedevice.h | 42 +++++++++-----------------------------
-+ linuxigd2/src/pinholev6.c  |  2 ++
-+ linuxigd2/src/pinholev6.h  |  2 +-
-+ linuxigd2/src/pmlist.c     |  5 +++++
-+ linuxigd2/src/pmlist.h     |  2 +-
-+ linuxigd2/src/wanipv6fw.h  |  3 ---
-+ 7 files changed, 56 insertions(+), 37 deletions(-)
-+
-+diff --git a/linuxigd2/src/gatedevice.c b/linuxigd2/src/gatedevice.c
-+index 8be53e5..a50525d 100644
-+--- a/linuxigd2/src/gatedevice.c
-++++ b/linuxigd2/src/gatedevice.c
-+@@ -41,6 +41,43 @@
-+ #include "wanipv6fw.h"
-+ #include "config.h"
-+ 
-++// Thread which contains all kind of timers and threads used in gatedevice.c and deviceprotection.c
-++TimerThread gExpirationTimerThread;
-++
-++// IGD Device Globals
-++UpnpDevice_Handle deviceHandle;
-++UpnpDevice_Handle deviceHandleIPv6;
-++UpnpDevice_Handle deviceHandleIPv6UlaGua;
-++char *gateUDN;
-++char *wanUDN;
-++char *wanConnectionUDN;
-++char *lanUDN;
-++long int startup_time;
-++unsigned long connection_stats[STATS_LIMIT]; // this is used for defining if connection is in idling
-++long int idle_time;
-++
-++// State Variables
-++char ConnectionType[50];
-++char PossibleConnectionTypes[50];
-++char ConnectionStatus[20];
-++char LastConnectionError[35];
-++long int AutoDisconnectTime;
-++long int IdleDisconnectTime;
-++long int WarnDisconnectDelay;
-++int RSIPAvailable;
-++int NATEnabled;
-++char ExternalIPAddress[INET6_ADDRSTRLEN];
-++int PortMappingNumberOfEntries;
-++int PortMappingEnabled;
-++char RemoteHost[INET6_ADDRSTRLEN];    // updated IPv6 addrss length 16 -> 46
-++long int SystemUpdateID;
-++
-++// WANEthLinkConfig state variables
-++char EthernetLinkStatus[12];
-++
-++char FirewallEnabled[2];
-++char InboundPinholeAllowed[2];
-++
-+ //Definitions for mapping expiration timer thread
-+ static ThreadPool gExpirationThreadPool;
-+ static ThreadPoolJob gEventUpdateJob;
-+diff --git a/linuxigd2/src/gatedevice.h b/linuxigd2/src/gatedevice.h
-+index 28d6b21..dbaa0c2 100644
-+--- a/linuxigd2/src/gatedevice.h
-++++ b/linuxigd2/src/gatedevice.h
-+@@ -33,42 +33,20 @@
-+ #include "util.h"
-+ 
-+ // Thread which contains all kind of timers and threads used in gatedevice.c and deviceprotection.c
-+-TimerThread gExpirationTimerThread;
-++extern TimerThread gExpirationTimerThread;
-+ 
-+ // IGD Device Globals
-+-UpnpDevice_Handle deviceHandle;
-+-UpnpDevice_Handle deviceHandleIPv6;
-+-UpnpDevice_Handle deviceHandleIPv6UlaGua;
-+-char *gateUDN;
-+-char *wanUDN;
-+-char *wanConnectionUDN;
-+-char *lanUDN;
-+-long int startup_time;
-+-unsigned long connection_stats[STATS_LIMIT]; // this is used for defining if connection is in idling
-+-long int idle_time;
-+-
-+-// State Variables
-+-char ConnectionType[50];
-+-char PossibleConnectionTypes[50];
-+-char ConnectionStatus[20];
-+-char LastConnectionError[35];
-+-long int AutoDisconnectTime;
-+-long int IdleDisconnectTime;
-+-long int WarnDisconnectDelay;
-+-int RSIPAvailable;
-+-int NATEnabled;
-+-char ExternalIPAddress[INET6_ADDRSTRLEN];
-+-int PortMappingNumberOfEntries;
-+-int PortMappingEnabled;
-+-char RemoteHost[INET6_ADDRSTRLEN];    // updated IPv6 addrss length 16 -> 46
-+-long int SystemUpdateID;
-+-
-+-// WANEthLinkConfig state variables
-+-char EthernetLinkStatus[12];
-++extern UpnpDevice_Handle deviceHandle;
-++extern UpnpDevice_Handle deviceHandleIPv6;
-++extern UpnpDevice_Handle deviceHandleIPv6UlaGua;
-++extern char *gateUDN;
-++extern char *wanUDN;
-++extern char *wanConnectionUDN;
-++extern char *lanUDN;
-+ 
-+ // Linked list for portmapping entries
-+-struct portMap *pmlist_Head;
-+-struct portMap *pmlist_Current;
-++extern struct portMap *pmlist_Head;
-++extern struct portMap *pmlist_Current;
-+ 
-+ // WanIPConnection Actions
-+ int EventHandler(Upnp_EventType EventType, void *Event, void *Cookie);
-+diff --git a/linuxigd2/src/pinholev6.c b/linuxigd2/src/pinholev6.c
-+index 44e8a19..78f886d 100644
-+--- a/linuxigd2/src/pinholev6.c
-++++ b/linuxigd2/src/pinholev6.c
-+@@ -41,6 +41,8 @@ extern "C" {
-+ #include "gatedevice.h"
-+ #include "pinholev6.h"
-+ 
-++struct pinholev6 *ph_first;
-++
-+ static const char * add_rule_str = "ip6tables -I %s " //upnp forward chain
-+         "-i %s "        //input interface
-+         "-o %s "        //output interface
-+diff --git a/linuxigd2/src/pinholev6.h b/linuxigd2/src/pinholev6.h
-+index 295b9f9..353ae27 100644
-+--- a/linuxigd2/src/pinholev6.h
-++++ b/linuxigd2/src/pinholev6.h
-+@@ -37,7 +37,7 @@ struct pinholev6 {
-+ 
-+     struct pinholev6 *next;
-+ 
-+-} *ph_first;
-++};
-+ 
-+ struct phv6_expirationEvent
-+ {
-+diff --git a/linuxigd2/src/pmlist.c b/linuxigd2/src/pmlist.c
-+index 1b3fe05..95d0c61 100644
-+--- a/linuxigd2/src/pmlist.c
-++++ b/linuxigd2/src/pmlist.c
-+@@ -41,6 +41,11 @@
-+ #include "iptc.h"
-+ #endif
-+ 
-++// Linked list for portmapping entries
-++struct portMap *pmlist_Head;
-++struct portMap *pmlist_Current;
-++struct portMap *pmlist_Tail;
-++
-+ /**
-+  * Create new portMap struct of rule to add iptables. 
-+  * portMap-struct is internal presentation of iptables rule in IGD. 
-+diff --git a/linuxigd2/src/pmlist.h b/linuxigd2/src/pmlist.h
-+index 436d228..017500d 100644
-+--- a/linuxigd2/src/pmlist.h
-++++ b/linuxigd2/src/pmlist.h
-+@@ -57,7 +57,7 @@ struct portMap
-+ 
-+     struct portMap* next;
-+     struct portMap* prev;
-+-} *pmlist_Head, *pmlist_Tail, *pmlist_Current;
-++};
-+ 
-+ //struct portMap* pmlist_NewNode(void);
-+ struct portMap* pmlist_NewNode(int enabled, long int duration, char *remoteHost,
-+diff --git a/linuxigd2/src/wanipv6fw.h b/linuxigd2/src/wanipv6fw.h
-+index 55419fe..a50d267 100644
-+--- a/linuxigd2/src/wanipv6fw.h
-++++ b/linuxigd2/src/wanipv6fw.h
-+@@ -46,9 +46,6 @@ extern "C" {
-+ #define ERR_SRC_ADD_WILDCARD        708
-+ #define ERR_NO_TRAFFIC              709
-+ 
-+-char FirewallEnabled[2];
-+-char InboundPinholeAllowed[2];
-+-
-+ //-----------------------------------------------------------------------------
-+ 
-+ int InitFirewallv6(void);
+> ---
+>  package/webkitgtk/webkitgtk.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+> index 73111d383a..fbb082f51f 100644
+> --- a/package/webkitgtk/webkitgtk.mk
+> +++ b/package/webkitgtk/webkitgtk.mk
+> @@ -12,6 +12,7 @@ WEBKITGTK_LICENSE = LGPL-2.1+, BSD-2-Clause
+>  WEBKITGTK_LICENSE_FILES = \
+>  	Source/WebCore/LICENSE-APPLE \
+>  	Source/WebCore/LICENSE-LGPL-2.1
+> +WEBKITGTK_CPE_ID_VENDOR = webkitgtk
+>  WEBKITGTK_DEPENDENCIES = host-ruby host-python host-gperf \
+>  	enchant harfbuzz icu jpeg libgcrypt libgtk3 libsecret libsoup \
+>  	libtasn1 libxml2 libxslt openjpeg sqlite webp woff2
+> -- 
+> 2.29.2
+> 
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210128/b24e2279/attachment.asc>
