@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Jan 2021 19:39:19 +0100
-Subject: [Buildroot] [PATCH 1/1] package/openldap: bump to version 2.4.57
-In-Reply-To: <20210124191114.1051458-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 24 Jan 2021 20:11:14 +0100")
-References: <20210124191114.1051458-1-fontaine.fabrice@gmail.com>
-Message-ID: <87k0rw3nzc.fsf@dell.be.48ers.dk>
+Date: Thu, 28 Jan 2021 19:40:35 +0100
+Subject: [Buildroot] [PATCH 1/1] package/mpd: create directories used in
+ mpd.conf
+In-Reply-To: <20210124182605.1044277-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 24 Jan 2021 19:26:05 +0100")
+References: <20210124182605.1044277-1-fontaine.fabrice@gmail.com>
+Message-ID: <87ft2k3nx8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,11 +14,12 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > https://www.openldap.org/software/release/changes.html
+ > Fixes:
+ >  - https://bugs.buildroot.org/show_bug.cgi?id=13471
+
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-This fixes CVE-2020-36221..36230, so I've marked it as a security bump
-and committed to 2020.02.x and 2020.11.x, thanks.
+Committed to 2020.02.x and 2020.11.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
