@@ -1,43 +1,28 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 28 Jan 2021 20:46:19 +0100
-Subject: [Buildroot] [PATCH 1/1] package/open62541: force Release build
-Message-ID: <20210128194619.4160433-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 28 Jan 2021 20:54:21 +0100
+Subject: [Buildroot] [PATCH v3,6/6] package/libupnp18: drop package
+In-Reply-To: <20210125194949.1173139-6-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 25 Jan 2021 20:49:49 +0100")
+References: <20210125194949.1173139-1-fontaine.fabrice@gmail.com>
+ <20210125194949.1173139-6-fontaine.fabrice@gmail.com>
+Message-ID: <87pn1o25xu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Force Release build to remove -Werror and avoid the following build
-failure:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-/home/giuliobenetti/autobuild/run/instance-3/output-1/build/open62541-1.0/arch/network_tcp.c: At top level:
-cc1: error: unrecognized command line option '-Wno-static-in-inline' [-Werror]
-cc1: all warnings being treated as errors
+ > Drop libupnp18 as libupnp has been bumped to 1.14.x and 1.8.x will not
+ > been fixed against CallStranger a.k.a. CVE-2020-12695
 
-Fixes:
- - http://autobuild.buildroot.org/results/24b429ce0ae2b33e72bb6a0f523c3906e539a4fd
+ > mpd and vlc are already compliant with libupnp 1.14.x (i.e those
+ > packages use UpnpInit2 instead of the deprecated UpnpInit)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/open62541/open62541.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/open62541/open62541.mk b/package/open62541/open62541.mk
-index 71c14f78ba..5a9f27562a 100644
---- a/package/open62541/open62541.mk
-+++ b/package/open62541/open62541.mk
-@@ -13,9 +13,11 @@ OPEN62541_INSTALL_STAGING = YES
- OPEN62541_LICENSE = MPL-2.0
- OPEN62541_LICENSE_FILES = LICENSE
- 
-+# Force Release build to remove -Werror.
- # Don't use git describe to get the version number.
- # Disable hardening options to let Buildroot handle it.
- OPEN62541_CONF_OPTS = \
-+	-DCMAKE_BUILD_TYPE=Release \
- 	-DGIT_EXECUTABLE=NO \
- 	-DOPEN62541_VERSION=$(OPEN62541_VERSION) \
- 	-DUA_ENABLE_HARDENING=OFF
+Committed to 2020.02.x and 2020.11.x, thanks.
+
 -- 
-2.29.2
+Bye, Peter Korsgaard
