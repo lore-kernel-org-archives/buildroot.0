@@ -1,46 +1,40 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 28 Jan 2021 16:44:23 +0200
-Subject: [Buildroot] [PATCH] package/stress-ng: bump to version 0.12.02
-Message-ID: <70901dcc16ff80850079dc7e0a07af02e5022b03.1611845063.git.baruch@tkos.co.il>
+From: Michael Nosthoff <buildroot@heine.tech>
+Date: Thu, 28 Jan 2021 15:48:25 +0100
+Subject: [Buildroot] [PATCH] package/grpc: bump to version 1.35.0
+Message-ID: <20210128144826.112381-1-buildroot@heine.tech>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use https for download to save redirect.
-
-Cc: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 ---
- package/stress-ng/stress-ng.hash | 2 +-
- package/stress-ng/stress-ng.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/grpc/grpc.hash | 2 +-
+ package/grpc/grpc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/stress-ng/stress-ng.hash b/package/stress-ng/stress-ng.hash
-index 5250a224752d..41e280191574 100644
---- a/package/stress-ng/stress-ng.hash
-+++ b/package/stress-ng/stress-ng.hash
+diff --git a/package/grpc/grpc.hash b/package/grpc/grpc.hash
+index 68d0d27c65..52d25fc5ed 100644
+--- a/package/grpc/grpc.hash
++++ b/package/grpc/grpc.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  860291dd3a18b985b3483190a627bbede2b5c52113766c1921001b3fb4b83af0  stress-ng-0.11.17.tar.xz
-+sha256  f847be115f60d3ad7d37c806fd1bfb1412aa3c631fca581d6dc233322f50d6a5  stress-ng-0.12.02.tar.xz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/stress-ng/stress-ng.mk b/package/stress-ng/stress-ng.mk
-index 4afdb0a329c6..c26206cd2ef0 100644
---- a/package/stress-ng/stress-ng.mk
-+++ b/package/stress-ng/stress-ng.mk
-@@ -4,9 +4,9 @@
+ # Locally computed
+-sha256  7372a881122cd85a7224435a1d58bc5e11c88d4fb98a64b83f36f3d1c2f16d39  grpc-1.34.0.tar.gz
++sha256  27dd2fc5c9809ddcde8eb6fa1fa278a3486566dfc28335fca13eb8df8bd3b958  grpc-1.35.0.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
+index 8585b6bdc3..4474bf083d 100644
+--- a/package/grpc/grpc.mk
++++ b/package/grpc/grpc.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--STRESS_NG_VERSION = 0.11.17
-+STRESS_NG_VERSION = 0.12.02
- STRESS_NG_SOURCE = stress-ng-$(STRESS_NG_VERSION).tar.xz
--STRESS_NG_SITE = http://kernel.ubuntu.com/~cking/tarballs/stress-ng
-+STRESS_NG_SITE = https://kernel.ubuntu.com/~cking/tarballs/stress-ng
- STRESS_NG_LICENSE = GPL-2.0+
- STRESS_NG_LICENSE_FILES = COPYING
- 
+-GRPC_VERSION = 1.34.0
++GRPC_VERSION = 1.35.0
+ GRPC_SITE = $(call github,grpc,grpc,v$(GRPC_VERSION))
+ GRPC_LICENSE = Apache-2.0
+ GRPC_LICENSE_FILES = LICENSE
 -- 
-2.29.2
+2.25.1
