@@ -1,22 +1,21 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 28 Jan 2021 17:45:28 +0100
-Subject: [Buildroot] [PATCH 1/1] package/x265: add X265_CPE_ID_VENDOR
-In-Reply-To: <20210126205433.2497004-1-fontaine.fabrice@gmail.com>
-References: <20210126205433.2497004-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210128164528.GP2325@scaer>
+Date: Thu, 28 Jan 2021 17:45:44 +0100
+Subject: [Buildroot] [PATCH 1/1] package/xapian: add CPE variables
+In-Reply-To: <20210126204403.2496291-1-fontaine.fabrice@gmail.com>
+References: <20210126204403.2496291-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210128164544.GQ2325@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Fabrce, All,
 
-On 2021-01-26 21:54 +0100, Fabrice Fontaine spake thusly:
-> cpe:2.3:a:multicorewareinc:x265 is a valid CPE identifier for this
-> package:
+On 2021-01-26 21:44 +0100, Fabrice Fontaine spake thusly:
+> cpe:2.3:a:xapian:xapian-core is a valid CPE identifier for this package:
 > 
->   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Amulticorewareinc%3Ax265
+>   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Axapian%3Axapian-core
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
@@ -26,21 +25,22 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/x265/x265.mk | 1 +
->  1 file changed, 1 insertion(+)
+>  package/xapian/xapian.mk | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/package/x265/x265.mk b/package/x265/x265.mk
-> index ae9e0acb64..872753eea8 100644
-> --- a/package/x265/x265.mk
-> +++ b/package/x265/x265.mk
-> @@ -9,6 +9,7 @@ X265_SOURCE = x265_$(X265_VERSION).tar.gz
->  X265_SITE = https://bitbucket.org/multicoreware/x265/downloads
->  X265_LICENSE = GPL-2.0+
->  X265_LICENSE_FILES = COPYING
-> +X265_CPE_ID_VENDOR = multicorewareinc
->  X265_SUBDIR = source
->  X265_INSTALL_STAGING = YES
->  X265_MAKE = $(MAKE1)
+> diff --git a/package/xapian/xapian.mk b/package/xapian/xapian.mk
+> index 3ad816a36f..1a8557d603 100644
+> --- a/package/xapian/xapian.mk
+> +++ b/package/xapian/xapian.mk
+> @@ -9,6 +9,8 @@ XAPIAN_SOURCE = xapian-core-$(XAPIAN_VERSION).tar.xz
+>  XAPIAN_SITE = https://oligarchy.co.uk/xapian/$(XAPIAN_VERSION)
+>  XAPIAN_LICENSE = GPL-2.0+
+>  XAPIAN_LICENSE_FILES = COPYING
+> +XAPIAN_CPE_ID_VENDOR = xapian
+> +XAPIAN_CPE_ID_PRODUCT = xapian-core
+>  XAPIAN_INSTALL_STAGING = YES
+>  XAPIAN_DEPENDENCIES = zlib
+>  
 > -- 
 > 2.29.2
 > 
