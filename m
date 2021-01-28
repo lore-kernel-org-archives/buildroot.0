@@ -1,32 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Jan 2021 21:18:46 +0100
-Subject: [Buildroot] [PATCH] package/uboot-tools: drop redundant
- parentheses
-In-Reply-To: <e66442f596117c0b73f9e43ee838688a1563164c.1611837218.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Thu, 28 Jan 2021 14:33:38 +0200")
-References: <e66442f596117c0b73f9e43ee838688a1563164c.1611837218.git.baruch@tkos.co.il>
-Message-ID: <87mtwszuft.fsf@dell.be.48ers.dk>
+Date: Thu, 28 Jan 2021 17:43:56 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] utils: fix flake8 warning
+Message-ID: <20210128200057.ED20683846@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=a8f6453a55ed4ceff2dac61f9a6391053accfc45
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
- > Commit d8db91fc6fa ("package/uboot-tools: resolve host uboot env/script
- > error") introduced closing parentheses that is not matched and not
- > needed.
+Commit 40bb37bd70d refactored get-developers, and now the 'os' module is
+no longer needed, but still imported:
 
- > Fixes:
- > http://autobuild.buildroot.net/results/a65/a65fcc581f56ef70154f83e80f12d64f2e0f856a/
- > http://autobuild.buildroot.net/results/39a/39aabb9d8afcdead1d620e081d2cd43ee2d61fbc/
+    utils/get-developers:6:1: F401 'os' imported but unused
+    1     F401 'os' imported but unused
 
- > Cc: Matt Weber <matthew.weber@rockwellcollins.com>
- > Cc: Kalpesh Panchal <kalpesh.panchal@rockwellcollins.com>
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Drop it now.
 
-Committed to 2020.11.x, thanks.
+Reported-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 9277978e28479449e517152105ae2e8a6d03151a)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ utils/get-developers | 1 -
+ 1 file changed, 1 deletion(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/utils/get-developers b/utils/get-developers
+index e027c26562..9182b2d85f 100755
+--- a/utils/get-developers
++++ b/utils/get-developers
+@@ -3,7 +3,6 @@
+ import argparse
+ import getdeveloperlib
+ import sys
+-import os
+ 
+ 
+ def parse_args():
