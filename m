@@ -1,164 +1,463 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Jan 2021 18:00:46 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/uhd: fix build on
- RISC-V
-Message-ID: <20210128200058.047EA843AE@busybox.osuosl.org>
+Date: Thu, 28 Jan 2021 19:56:03 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/ushare: add
+ libupnp 1.14.x support
+Message-ID: <20210128200058.9F66383846@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=19aa4e9ee77dc75349fb8b101aaed4bcfbb21fb6
+commit: https://git.buildroot.net/buildroot/commit/?id=389d1524b4942267a94ddffaf5ba46dfadbb7bb0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-When the target CPU is riscV, msgpack is unable to detect endianness with a list of errors like:
+This switch is needed to fix CallStranger a.k.a. CVE-2020-12695
 
-uhd/host/lib/deps/rpclib/include/rpc/msgpack/pack.hpp:190:2: error: #error msgpack-c supports only big endian and little endian
-  190 | #error msgpack-c supports only big endian and little endian
-      |  ^~~~~
-
-and with subsequent errors:
-
-uhd0/host/lib/deps/rpclib/include/rpc/msgpack/pack.hpp:236:46: error: there are no arguments to 'take8_8' that depend on a template parameter, so a declaration of 'take8_8' must be available [-fpermissive]
-  236 |     char buf[2] = {static_cast<char>(0xccu), take8_8(d)};
-      |
-
-This is due to a missing support for this architecture in msgpack.
-This patch adapt commit from https://github.com/boostorg/predef
-
-[backported from https://github.com/EttusResearch/uhd/pull/400]
-
-Fix:
-- http://autobuild.buildroot.net/results/afacf5c5c2cd9dff6962523f1fdded9b474b9d66/
-- http://autobuild.buildroot.net/results/91530538d630a7f09d85327e514f01b45253c1a6/
-- http://autobuild.buildroot.net/results/91530538d630a7f09d85327e514f01b45253c1a6/
-- and others
-
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 8692d8f38d7251cf6919902a3386aefcd503fedf)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit f851b36371af0df6c4cf2f368005e80ad907c18b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/uhd/0003-add-RISC-V-endian-detection.patch | 113 +++++++++++++++++++++
- 1 file changed, 113 insertions(+)
+ .../ushare/0004-switch-to-libupnp-1.14.x-API.patch | 433 +++++++++++++++++++++
+ 1 file changed, 433 insertions(+)
 
-diff --git a/package/uhd/0003-add-RISC-V-endian-detection.patch b/package/uhd/0003-add-RISC-V-endian-detection.patch
+diff --git a/package/ushare/0004-switch-to-libupnp-1.14.x-API.patch b/package/ushare/0004-switch-to-libupnp-1.14.x-API.patch
 new file mode 100644
-index 0000000000..fb1168ba3e
+index 0000000000..e200bb1926
 --- /dev/null
-+++ b/package/uhd/0003-add-RISC-V-endian-detection.patch
-@@ -0,0 +1,113 @@
-+From d4717a38d2287c2f583fefb2a0ed273337a92bb6 Mon Sep 17 00:00:00 2001
-+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-+Date: Mon, 11 Jan 2021 18:18:26 +0100
-+Subject: [PATCH] msgpack/predef: add riscV support
++++ b/package/ushare/0004-switch-to-libupnp-1.14.x-API.patch
+@@ -0,0 +1,433 @@
++From 4643b9cb9e6c0331fd663437a7ed8061b9edf971 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 24 Aug 2020 19:26:03 +0200
++Subject: [PATCH] switch to libupnp 1.14.x API
 +
-+When the target CPU is riscV, msgpack is unable to detect endianness with a list of errors like:
++Use the new libupnp 1.14.x API (i.e. UpnpInit2) to allow ushare to be
++protected against CallStranger a.k.a. CVE-2020-12695
 +
-+uhd/host/lib/deps/rpclib/include/rpc/msgpack/pack.hpp:190:2: error: #error msgpack-c supports only big endian and little endian
-+  190 | #error msgpack-c supports only big endian and little endian
-+      |  ^~~~~
-+
-+and with subsequent errors:
-+
-+uhd0/host/lib/deps/rpclib/include/rpc/msgpack/pack.hpp:236:46: error: there are no arguments to 'take8_8' that depend on a template parameter, so a declaration of 'take8_8' must be available [-fpermissive]
-+  236 |     char buf[2] = {static_cast<char>(0xccu), take8_8(d)};
-+      |      
-+
-+This is due to a missing support for this architecture in msgpack.
-+This patch adapt commit from https://github.com/boostorg/predef
-+
-+[backported from https://github.com/EttusResearch/uhd/pull/400]
-+
-+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/ddugovic/uShare/commit/4643b9cb9e6c0331fd663437a7ed8061b9edf971]
 +---
-+ .../include/rpc/msgpack/predef/architecture.h |  1 +
-+ .../rpc/msgpack/predef/architecture/riscv.h   | 48 +++++++++++++++++++
-+ .../include/rpc/msgpack/predef/other/endian.h |  3 +-
-+ 3 files changed, 51 insertions(+), 1 deletion(-)
-+ create mode 100644 host/lib/deps/rpclib/include/rpc/msgpack/predef/architecture/riscv.h
++ configure      |  2 --
++ src/http.c     | 50 +++++++++++++++++++++++++++++++-------------------
++ src/http.h     | 24 ++++++++++++++++++------
++ src/services.c | 28 ++++++++++++++++++----------
++ src/services.h |  6 +++---
++ src/ushare.c   | 36 ++++++++++++++++++------------------
++ src/ushare.h   |  2 +-
++ 7 files changed, 89 insertions(+), 59 deletions(-)
 +
-+diff --git a/host/lib/deps/rpclib/include/rpc/msgpack/predef/architecture.h b/host/lib/deps/rpclib/include/rpc/msgpack/predef/architecture.h
-+index 4a0ce2749..1bd998c59 100644
-+--- a/host/lib/deps/rpclib/include/rpc/msgpack/predef/architecture.h
-++++ b/host/lib/deps/rpclib/include/rpc/msgpack/predef/architecture.h
-+@@ -18,6 +18,7 @@ http://www.boost.org/LICENSE_1_0.txt)
-+ #include <rpc/msgpack/predef/architecture/parisc.h>
-+ #include <rpc/msgpack/predef/architecture/ppc.h>
-+ #include <rpc/msgpack/predef/architecture/pyramid.h>
-++#include <rpc/msgpack/predef/architecture/riscv.h>
-+ #include <rpc/msgpack/predef/architecture/rs6k.h>
-+ #include <rpc/msgpack/predef/architecture/sparc.h>
-+ #include <rpc/msgpack/predef/architecture/superh.h>
-+diff --git a/host/lib/deps/rpclib/include/rpc/msgpack/predef/architecture/riscv.h b/host/lib/deps/rpclib/include/rpc/msgpack/predef/architecture/riscv.h
-+new file mode 100644
-+index 000000000..8b819d77e
-+--- /dev/null
-++++ b/host/lib/deps/rpclib/include/rpc/msgpack/predef/architecture/riscv.h
-+@@ -0,0 +1,48 @@
-++/*
-++Copyright Andreas Schwab 2019
-++Distributed under the Boost Software License, Version 1.0.
-++(See accompanying file LICENSE_1_0.txt or copy at
-++http://www.boost.org/LICENSE_1_0.txt)
-++*/
++diff --git a/configure b/configure
++index 20a08ed..4a3efe0 100755
++--- a/configure
+++++ b/configure
++@@ -638,8 +638,6 @@ fi
++ echolog "Checking for libixml ..."
++ check_lib upnp/ixml.h ixmlRelaxParser -lixml || die "Error, can't find libixml !"
++ 
++-echolog "Checking for libthreadutil ..."
++-check_lib upnp/ThreadPool.h ThreadPoolAdd "-lthreadutil -lpthread" || die "Error, can't find libthreadutil !"
++ add_extralibs -lpthread
++ 
++ libupnp_min_version="1.4.2"
++diff --git a/src/http.c b/src/http.c
++index 8a4e67d..1e5b350 100644
++--- a/src/http.c
+++++ b/src/http.c
++@@ -68,17 +68,19 @@ struct web_file_t {
++ 
++ 
++ static inline void
++-set_info_file (struct File_Info *info, const size_t length,
+++set_info_file (UpnpFileInfo *info, const size_t length,
++                const char *content_type)
++ {
++-  info->file_length = length;
++-  info->last_modified = 0;
++-  info->is_directory = 0;
++-  info->is_readable = 1;
++-  info->content_type = ixmlCloneDOMString (content_type);
+++  UpnpFileInfo_set_FileLength(info, length);
+++  UpnpFileInfo_set_LastModified(info, 0);
+++  UpnpFileInfo_set_IsDirectory(info, 0);
+++  UpnpFileInfo_set_IsReadable(info, 1);
+++  UpnpFileInfo_set_ContentType(info, ixmlCloneDOMString (content_type));
++ }
++ 
++-int http_get_info (const char *filename, struct File_Info *info)
+++int http_get_info (const char *filename, UpnpFileInfo *info,
+++                   const void* cookie __attribute__((unused)),
+++                   const void** requestCookie __attribute__((unused)))
++ {
++   extern struct ushare_t *ut;
++   struct upnp_entry_t *entry = NULL;
++@@ -143,15 +145,15 @@ int http_get_info (const char *filename, struct File_Info *info)
++   {
++     if (errno != EACCES)
++       return -1;
++-    info->is_readable = 0;
+++    UpnpFileInfo_set_IsReadable(info, 0);
++   }
++   else
++-    info->is_readable = 1;
+++    UpnpFileInfo_set_IsReadable(info, 1);
++ 
++   /* file exist and can be read */
++-  info->file_length = st.st_size;
++-  info->last_modified = st.st_mtime;
++-  info->is_directory = S_ISDIR (st.st_mode);
+++  UpnpFileInfo_set_FileLength(info, st.st_size);
+++  UpnpFileInfo_set_LastModified(info, st.st_mtime);
+++  UpnpFileInfo_set_IsDirectory(info, S_ISDIR (st.st_mode));
++ 
++   protocol = 
++ #ifdef HAVE_DLNA
++@@ -172,11 +174,11 @@ int http_get_info (const char *filename, struct File_Info *info)
++ 
++   if (content_type)
++   {
++-    info->content_type = ixmlCloneDOMString (content_type);
+++    UpnpFileInfo_set_ContentType(info, ixmlCloneDOMString (content_type));
++     free (content_type);
++   }
++   else
++-    info->content_type = ixmlCloneDOMString ("");
+++    UpnpFileInfo_set_ContentType(info, ixmlCloneDOMString (""));
++ 
++   return 0;
++ }
++@@ -197,7 +199,9 @@ get_file_memory (const char *fullpath, const char *description,
++   return ((UpnpWebFileHandle) file);
++ }
++ 
++-UpnpWebFileHandle http_open (const char *filename, enum UpnpOpenFileMode mode)
+++UpnpWebFileHandle http_open (const char *filename, enum UpnpOpenFileMode mode,
+++                             const void* cookie __attribute__((unused)),
+++                             const void* requestCookie __attribute__((unused)))
++ {
++   extern struct ushare_t *ut;
++   struct upnp_entry_t *entry = NULL;
++@@ -250,7 +254,9 @@ UpnpWebFileHandle http_open (const char *filename, enum UpnpOpenFileMode mode)
++   return ((UpnpWebFileHandle) file);
++ }
++ 
++-int http_read (UpnpWebFileHandle fh, char *buf, size_t buflen)
+++int http_read (UpnpWebFileHandle fh, char *buf, size_t buflen,
+++               const void* cookie __attribute__((unused)),
+++               const void* requestCookie __attribute__((unused)))
++ {
++   struct web_file_t *file = (struct web_file_t *) fh;
++   ssize_t len = -1;
++@@ -285,14 +291,18 @@ int http_read (UpnpWebFileHandle fh, char *buf, size_t buflen)
++ 
++ int http_write (UpnpWebFileHandle fh __attribute__((unused)),
++             char *buf __attribute__((unused)),
++-            size_t buflen __attribute__((unused)))
+++            size_t buflen __attribute__((unused)),
+++            const void* cookie __attribute__((unused)),
+++            const void* requestCookie __attribute__((unused)))
++ {
++   log_verbose ("http write\n");
++ 
++   return 0;
++ }
++ 
++-int http_seek (UpnpWebFileHandle fh, off_t offset, int origin)
+++int http_seek (UpnpWebFileHandle fh, off_t offset, int origin,
+++               const void* cookie __attribute__((unused)),
+++               const void* requestCookie __attribute__((unused)))
++ {
++   struct web_file_t *file = (struct web_file_t *) fh;
++   off_t newpos = -1;
++@@ -366,7 +376,9 @@ int http_seek (UpnpWebFileHandle fh, off_t offset, int origin)
++   return 0;
++ }
++ 
++-int http_close (UpnpWebFileHandle fh)
+++int http_close (UpnpWebFileHandle fh,
+++                const void* cookie __attribute__((unused)),
+++                const void* requestCookie __attribute__((unused)))
++ {
++   struct web_file_t *file = (struct web_file_t *) fh;
++ 
++diff --git a/src/http.h b/src/http.h
++index 32d6bcc..c912a7b 100644
++--- a/src/http.h
+++++ b/src/http.h
++@@ -25,18 +25,30 @@
++ #include <upnp/upnp.h>
++ #include <upnp/upnptools.h>
++ 
++-int http_get_info (const char *filename, struct File_Info *info);
+++int http_get_info (const char *filename, UpnpFileInfo *info,
+++	const void* cookie __attribute__((unused)),
+++	const void** requestCookie __attribute__((unused)));
++ 
++-UpnpWebFileHandle http_open (const char *filename, enum UpnpOpenFileMode mode);
+++UpnpWebFileHandle http_open (const char *filename, enum UpnpOpenFileMode mode,
+++	const void* cookie __attribute__((unused)),
+++	const void* requestCookie __attribute__((unused)));
++ 
++-int http_read (UpnpWebFileHandle fh, char *buf, size_t buflen);
+++int http_read (UpnpWebFileHandle fh, char *buf, size_t buflen,
+++	const void* cookie __attribute__((unused)),
+++	const void* requestCookie __attribute__((unused)));
++ 
++-int http_seek (UpnpWebFileHandle fh, off_t offset, int origin);
+++int http_seek (UpnpWebFileHandle fh, off_t offset, int origin,
+++	const void* cookie __attribute__((unused)),
+++	const void* requestCookie __attribute__((unused)));
++ 
++ int http_write (UpnpWebFileHandle fh __attribute__((unused)),
++ 	char *buf __attribute__((unused)),
++-	size_t buflen __attribute__((unused)));
+++	size_t buflen __attribute__((unused)),
+++	const void* cookie __attribute__((unused)),
+++	const void* requestCookie __attribute__((unused)));
++ 
++-int http_close (UpnpWebFileHandle fh);
+++int http_close (UpnpWebFileHandle fh,
+++ 	const void* cookie __attribute__((unused)),
+++	const void* requestCookie __attribute__((unused)));
++ 
++ #endif /* _HTTP_H_ */
++diff --git a/src/services.c b/src/services.c
++index aec9cf8..287df55 100644
++--- a/src/services.c
+++++ b/src/services.c
++@@ -62,25 +62,28 @@ static struct service_t services[] = {
++ };
++ 
++ bool
++-find_service_action (struct Upnp_Action_Request *request,
+++find_service_action (UpnpActionRequest *request,
++                      struct service_t **service,
++                      struct service_action_t **action)
++ {
++   int c, d;
+++  const char *actionName = NULL;
++ 
++   *service = NULL;
++   *action = NULL;
+++  
+++  actionName = UpnpActionRequest_get_ActionName_cstr(request);
++ 
++-  if (!request || !request->ActionName)
+++  if (!request || !actionName)
++     return false;
++ 
++   for (c = 0; services[c].id != NULL; c++)
++-    if (!strcmp (services[c].id, request->ServiceID))
+++    if (!strcmp (services[c].id, UpnpActionRequest_get_ServiceID_cstr(request)))
++     {
++       *service = &services[c];
++       for (d = 0; services[c].actions[d].name; d++)
++       {
++-        if (!strcmp (services[c].actions[d].name, request->ActionName))
+++        if (!strcmp (services[c].actions[d].name, actionName))
++         {
++           *action = &services[c].actions[d];
++           return true;
++@@ -97,6 +100,7 @@ upnp_add_response (struct action_event_t *event, char *key, const char *value)
++ {
++   char *val;
++   int res;
+++  IXML_Document* actionResult = NULL;
++ 
++   if (!event || !event->status || !key || !value)
++     return false;
++@@ -105,8 +109,9 @@ upnp_add_response (struct action_event_t *event, char *key, const char *value)
++   if (!val)
++     return false;
++ 
++-  res = UpnpAddToActionResponse (&event->request->ActionResult,
++-                                 event->request->ActionName,
+++  actionResult = UpnpActionRequest_get_ActionResult(event->request);
+++  res = UpnpAddToActionResponse (&actionResult,
+++                                 UpnpActionRequest_get_ActionName_cstr(event->request),
++                                  event->service->type, key, val);
++ 
++   if (res != UPNP_E_SUCCESS)
++@@ -120,14 +125,17 @@ upnp_add_response (struct action_event_t *event, char *key, const char *value)
++ }
++ 
++ char *
++-upnp_get_string (struct Upnp_Action_Request *request, const char *key)
+++upnp_get_string (UpnpActionRequest *request, const char *key)
++ {
++   IXML_Node *node = NULL;
+++  IXML_Document *actionRequest = NULL;
++ 
++-  if (!request || !request->ActionRequest || !key)
+++  actionRequest = UpnpActionRequest_get_ActionRequest(request);
 ++
-++#ifndef BOOST_PREDEF_ARCHITECTURE_RISCV_H
-++#define BOOST_PREDEF_ARCHITECTURE_RISCV_H
-++
-++#include <boost/predef/version_number.h>
-++#include <boost/predef/make.h>
-++
-++/* tag::reference[]
-++= `BOOST_ARCH_RISCV`
-++
-++http://en.wikipedia.org/wiki/RISC-V[RISC-V] architecture.
-++
-++[options="header"]
-++|===
-++| {predef_symbol} | {predef_version}
-++
-++| `+__riscv+` | {predef_detection}
-++|===
-++*/ // end::reference[]
-++
-++#define BOOST_ARCH_RISCV BOOST_VERSION_NUMBER_NOT_AVAILABLE
-++
-++#if defined(__riscv)
-++#   undef BOOST_ARCH_RISCV
-++#   define BOOST_ARCH_RISCV BOOST_VERSION_NUMBER_AVAILABLE
-++#endif
-++
-++#if BOOST_ARCH_RISCV
-++#   define BOOST_ARCH_RISCV_AVAILABLE
-++#endif
-++
-++#if BOOST_ARCH_RISCV
-++#   undef BOOST_ARCH_WORD_BITS_32
-++#   define BOOST_ARCH_WORD_BITS_32 BOOST_VERSION_NUMBER_AVAILABLE
-++#endif
-++
-++#define BOOST_ARCH_RISCV_NAME "RISC-V"
-++
-++#endif
-++
-++#include <boost/predef/detail/test.h>
-++BOOST_PREDEF_DECLARE_TEST(BOOST_ARCH_RISCV,BOOST_ARCH_RISCV_NAME)
-+diff --git a/host/lib/deps/rpclib/include/rpc/msgpack/predef/other/endian.h b/host/lib/deps/rpclib/include/rpc/msgpack/predef/other/endian.h
-+index 3f367b3d4..a7c1fb4dc 100644
-+--- a/host/lib/deps/rpclib/include/rpc/msgpack/predef/other/endian.h
-++++ b/host/lib/deps/rpclib/include/rpc/msgpack/predef/other/endian.h
-+@@ -127,7 +127,8 @@ information and acquired knowledge:
-+         defined(__AARCH64EL__) || \
-+         defined(_MIPSEL) || \
-+         defined(__MIPSEL) || \
-+-        defined(__MIPSEL__)
-++        defined(__MIPSEL__) || \
-++        defined(__riscv)
-+ #       undef MSGPACK_ENDIAN_LITTLE_BYTE
-+ #       define MSGPACK_ENDIAN_LITTLE_BYTE MSGPACK_VERSION_NUMBER_AVAILABLE
-+ #   endif
-+-- 
-+2.26.2
-+
+++  if (!request || !actionRequest || !key)
++     return NULL;
++ 
++-  node = (IXML_Node *) request->ActionRequest;
+++  node = (IXML_Node *) actionRequest;
++   if (!node)
++   {
++     log_verbose ("Invalid action request document\n");
++@@ -157,7 +165,7 @@ upnp_get_string (struct Upnp_Action_Request *request, const char *key)
++ }
++ 
++ int
++-upnp_get_ui4 (struct Upnp_Action_Request *request, const char *key)
+++upnp_get_ui4 (UpnpActionRequest *request, const char *key)
++ {
++   char *value;
++   int val;
++diff --git a/src/services.h b/src/services.h
++index 89c072e..d5726b4 100644
++--- a/src/services.h
+++++ b/src/services.h
++@@ -39,15 +39,15 @@ struct service_t {
++ 
++ #define SERVICE_CONTENT_TYPE "text/xml"
++ 
++-bool find_service_action (struct Upnp_Action_Request *request,
+++bool find_service_action (UpnpActionRequest *request,
++                           struct service_t **service,
++                           struct service_action_t **action);
++ 
++ bool upnp_add_response (struct action_event_t *event,
++                         char *key, const char *value);
++ 
++-char * upnp_get_string (struct Upnp_Action_Request *request, const char *key);
+++char * upnp_get_string (UpnpActionRequest *request, const char *key);
++ 
++-int upnp_get_ui4 (struct Upnp_Action_Request *request, const char *key);
+++int upnp_get_ui4 (UpnpActionRequest *request, const char *key);
++ 
++ #endif /* _SERVICES_H_ */
++diff --git a/src/ushare.c b/src/ushare.c
++index 28fd67e..92e2345 100644
++--- a/src/ushare.c
+++++ b/src/ushare.c
++@@ -177,7 +177,7 @@ ushare_signal_exit (void)
++ }
++ 
++ static void
++-handle_action_request (struct Upnp_Action_Request *request)
+++handle_action_request (UpnpActionRequest *request)
++ {
++   struct service_t *service;
++   struct service_action_t *action;
++@@ -187,25 +187,25 @@ handle_action_request (struct Upnp_Action_Request *request)
++   if (!request || !ut)
++     return;
++ 
++-  if (request->ErrCode != UPNP_E_SUCCESS)
+++  if (UpnpActionRequest_get_ErrCode(request) != UPNP_E_SUCCESS)
++     return;
++ 
++-  if (strcmp (request->DevUDN + 5, ut->udn))
+++  if (strcmp (UpnpActionRequest_get_DevUDN_cstr(request) + 5, ut->udn))
++     return;
++ 
++-  ip = (*(struct sockaddr_in *)&request->CtrlPtIPAddr).sin_addr.s_addr;
+++  ip = (*(struct sockaddr_in *)UpnpActionRequest_get_CtrlPtIPAddr(request)).sin_addr.s_addr;
++   ip = ntohl (ip);
++   sprintf (val, "%d.%d.%d.%d",
++            (ip >> 24) & 0xFF, (ip >> 16) & 0xFF, (ip >> 8) & 0xFF, ip & 0xFF);
++ 
++   if (ut->verbose)
++   {
++-    DOMString str = ixmlPrintDocument (request->ActionRequest);
+++    DOMString str = ixmlPrintDocument (UpnpActionRequest_get_ActionRequest(request));
++     log_verbose ("***************************************************\n");
++     log_verbose ("**             New Action Request                **\n");
++     log_verbose ("***************************************************\n");
++-    log_verbose ("ServiceID: %s\n", request->ServiceID);
++-    log_verbose ("ActionName: %s\n", request->ActionName);
+++    log_verbose ("ServiceID: %s\n", UpnpActionRequest_get_ServiceID_cstr(request));
+++    log_verbose ("ActionName: %s\n", UpnpActionRequest_get_ActionName_cstr(request));
++     log_verbose ("CtrlPtIP: %s\n", val);
++     log_verbose ("Action Request:\n%s\n", str);
++     ixmlFreeDOMString (str);
++@@ -220,11 +220,11 @@ handle_action_request (struct Upnp_Action_Request *request)
++       event.service = service;
++ 
++       if (action->function (&event) && event.status)
++-        request->ErrCode = UPNP_E_SUCCESS;
+++        UpnpActionRequest_set_ErrCode(request, UPNP_E_SUCCESS);
++ 
++       if (ut->verbose)
++       {
++-        DOMString str = ixmlPrintDocument (request->ActionResult);
+++        DOMString str = ixmlPrintDocument (UpnpActionRequest_get_ActionResult(request));
++         log_verbose ("Action Result:\n%s", str);
++         log_verbose ("***************************************************\n");
++         log_verbose ("\n");
++@@ -235,22 +235,22 @@ handle_action_request (struct Upnp_Action_Request *request)
++     }
++ 
++   if (service) /* Invalid Action name */
++-    strcpy (request->ErrStr, "Unknown Service Action");
+++    UpnpActionRequest_strcpy_ErrStr(request, "Unknown Service Action");
++   else /* Invalid Service name */
++-    strcpy (request->ErrStr, "Unknown Service ID");
+++    UpnpActionRequest_strcpy_ErrStr(request, "Unknown Service ID");
++ 
++-  request->ActionResult = NULL;
++-  request->ErrCode = UPNP_SOAP_E_INVALID_ACTION;
+++  UpnpActionRequest_set_ActionResult(request, NULL);
+++  UpnpActionRequest_set_ErrCode(request, UPNP_SOAP_E_INVALID_ACTION);
++ }
++ 
++ static int
++-device_callback_event_handler (Upnp_EventType type, void *event,
+++device_callback_event_handler (Upnp_EventType type, const void *event,
++                                void *cookie __attribute__((unused)))
++ {
++   switch (type)
++     {
++     case UPNP_CONTROL_ACTION_REQUEST:
++-      handle_action_request ((struct Upnp_Action_Request *) event);
+++      handle_action_request ((UpnpActionRequest *) event);
++       break;
++     case UPNP_CONTROL_ACTION_COMPLETE:
++     case UPNP_EVENT_SUBSCRIPTION_REQUEST:
++@@ -323,7 +323,7 @@ init_upnp (struct ushare_t *ut)
++ #endif /* HAVE_DLNA */
++ 
++   log_info (_("Initializing UPnP subsystem ...\n"));
++-  res = UpnpInit (ut->ip, ut->port);
+++  res = UpnpInit2 (ut->interface, ut->port);
++   if (res != UPNP_E_SUCCESS)
++   {
++     log_error (_("Cannot initialize UPnP subsystem\n"));
++@@ -351,7 +351,7 @@ init_upnp (struct ushare_t *ut)
++   log_info (_("UPnP MediaServer listening on %s:%d\n"),
++             UpnpGetServerIpAddress (), ut->port);
++ 
++-  UpnpEnableWebserver (TRUE);
+++  UpnpEnableWebserver (1);
++ 
++ #define upnp_set_callback(cb, func) \
++   do {                                                            \
++@@ -371,7 +371,7 @@ init_upnp (struct ushare_t *ut)
++   upnp_set_callback(Write,   http_write);
++   upnp_set_callback(Close,   http_close);
++ 
++-  res = UpnpAddVirtualDir (VIRTUAL_DIR);
+++  res = UpnpAddVirtualDir (VIRTUAL_DIR, NULL, NULL);
++   if (res != UPNP_E_SUCCESS)
++   {
++     log_error (_("Cannot add virtual directory for web server\n"));
++diff --git a/src/ushare.h b/src/ushare.h
++index a29da01..cd86cef 100644
++--- a/src/ushare.h
+++++ b/src/ushare.h
++@@ -125,7 +125,7 @@ struct ushare_t {
++ };
++ 
++ struct action_event_t {
++-  struct Upnp_Action_Request *request;
+++  UpnpActionRequest *request;
++   bool status;
++   struct service_t *service;
++ };
