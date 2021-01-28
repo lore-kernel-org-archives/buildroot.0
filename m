@@ -1,79 +1,127 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Jan 2021 18:10:29 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] {linux,
- linux-headers}: bump 5.{4, 10}.x 4.{4, 9, 14, 19} series
-Message-ID: <20210128200122.F0FB3843AF@busybox.osuosl.org>
+Date: Thu, 28 Jan 2021 18:35:20 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/postgresql: add
+ some additional output to pg_config
+Message-ID: <20210128200123.0A8EE843AF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=621867d6904d9810591c36c1ffaa0082ffe2fda4
+commit: https://git.buildroot.net/buildroot/commit/?id=749490e5f05352b4dcb0e766d98c69a61195a16c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 6943c84d9c27f6ac890ffb720a62932be0f4f358)
-[Peter: drop 5.10.x bump]
+Some external packages call pg_config to determine the installed
+PostgreSQL options. Add this output to Buildroots own pg_config,
+so these packages correctly compile.
+
+Added options:
+	--pkgincludedir
+	--pgxs
+	--cflags
+	--cc
+	--pkglibdir
+	--bindir
+	--sharedir
+	--localedir
+	--docdir
+	--mandir
+
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit e3ff618bd84f67992d354f0cc3343813b214b6a0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in                      |  2 +-
- linux/linux.hash                     | 10 +++++-----
- package/linux-headers/Config.in.host | 10 +++++-----
- 3 files changed, 11 insertions(+), 11 deletions(-)
+ package/postgresql/pg_config     | 51 ++++++++++++++++++++++++++++++++++++++--
+ package/postgresql/postgresql.mk |  2 ++
+ 2 files changed, 51 insertions(+), 2 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 4678bc752f..12f79a6616 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -128,7 +128,7 @@ endif
+diff --git a/package/postgresql/pg_config b/package/postgresql/pg_config
+index 59a9e6cfad..3b0cb35f2c 100644
+--- a/package/postgresql/pg_config
++++ b/package/postgresql/pg_config
+@@ -2,7 +2,6 @@
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "5.4.89" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "5.4.92" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "4.19.152-cip37" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "4.19.152-cip37-rt16" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index d3547f7cf2..3ccc63b426 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,10 +1,10 @@
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  268dd5177b6df1867d4ed2452ffb11a016d955c43aba5e07940886f347ab0aaf  linux-5.4.89.tar.xz
-+sha256  c0937ff98824c4b14cfea68a04340e0beb3c00f1cc02984daf2f3bdf542394fd  linux-5.4.92.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256  0679c8c31f40a35efd63d9c7a6a73dd2496c0cae5e3a4591c57e6dce38a7b68e  linux-4.4.251.tar.xz
--sha256  ef4dcbbeb118c02c704581314832dc2a6912622946766bcede7ca3edbf1f960d  linux-4.9.251.tar.xz
--sha256  9a844e290c61b39dd23df507ba1d9c2b2b4365e5993a978b19f1eb5610b926da  linux-4.14.215.tar.xz
--sha256  312c67677c75adc4324078c5afb11411df379d5573ad0a429b3f4919f26bed01  linux-4.19.167.tar.xz
-+sha256  661e98b9448cbac948c705fd44cd7d30200422ee1cb02950d142aa99a1b3985a  linux-4.4.253.tar.xz
-+sha256  9a5b51a8350201bd38e3ff13909323a6571b4572a7b3caed76e462b07619bc18  linux-4.9.253.tar.xz
-+sha256  62a36a25431016d98d0f1cff98be432086c51f86fd79042bd10a867b3a924d11  linux-4.14.217.tar.xz
-+sha256  dd0d0264f8ef4363d0080054fd344470a73f07aca2cd673e91bf6e77fbe25b4a  linux-4.19.170.tar.xz
- # Locally computed
- sha256  d2a06f52143deb929b8d513cf9afc9bd065951389a80fa70bc4d63025b5b3fb9  linux-cip-4.19.152-cip37.tar.gz
- sha256  bc1dacd3d0f526de3e8754a444e8e02a54521527af639ddb907cb35cda775a8c  linux-cip-4.19.152-cip37-rt16.tar.gz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index b646a2864b..3cc829a2a9 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -318,11 +318,11 @@ endchoice
+ #
+ # Minimal pg_config implementation as replacement for the native pg_config application
+-# Only implements --includedir and --libdir
+ #
  
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "4.4.251"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.251"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.215"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.167"	if BR2_KERNEL_HEADERS_4_19
--	default "5.4.89"	if BR2_KERNEL_HEADERS_5_4
-+	default "4.4.253"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.253"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.14.217"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.170"	if BR2_KERNEL_HEADERS_4_19
-+	default "5.4.92"	if BR2_KERNEL_HEADERS_5_4
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+ prefix=/usr
+@@ -11,6 +10,9 @@ case "$1" in
+   --includedir)
+ 	echo "$prefix/include"
+ 	;;
++  --pkgincludedir)
++	echo "$prefix/include/postgresql"
++	;;
+   --includedir-server)
+ 	echo "$prefix/include/postgresql/server"
+ 	;;
+@@ -23,6 +25,51 @@ case "$1" in
+   --configure)
+ 	echo "@POSTGRESQL_CONF_OPTIONS@"
+ 	;;
++  --pgxs)
++	echo "$prefix/lib/postgresql/pgxs/src/makefiles/pgxs.mk"
++	;;
++  --cflags)
++	echo "@TARGET_CFLAGS@"
++	;;
++  --cc)
++	echo "@TARGET_CC@"
++	;;
++  --pkglibdir)
++	echo "/usr/lib/postgresql"
++	;;
++  --bindir)
++	echo "/usr/bin"
++	;;
++  --sharedir)
++	echo "/usr/share/postgresql"
++	;;
++  --localedir)
++	echo "/usr/share/locale"
++	;;
++  --docdir)
++	echo "/usr/share/doc/postgresql"
++	;;
++  --mandir)
++	echo "/usr/share/man"
++	;;
+   *)
+-	echo "Usage: $0 {--includedir|--includedir-server|--libdir|--version|--configure}"
++	echo "Usage: $0 {OPTION}"
++	echo
++	echo "Options:"
++	echo
++	echo "	--includedir		show location of C header files of the client interfaces"
++	echo "	--pkgincludedir		show location of other C header files"
++	echo "	--includedir-server	show location of C header files for the server"
++	echo "	--libdir		show location of object code libraries"
++	echo "	--version		show the PostgreSQL version"
++	echo "	--configure		show options given to configure script"
++	echo "	--pgxs			show location of extension makefile"
++	echo "	--cflags		show CFLAGS value used when PostgreSQL was built"
++	echo "	--cc			show CC value used when PostgreSQL was built"
++	echo "	--pkglibdir		show location of dynamically loadable modules"
++	echo "	--bindir		show location of user executables"
++	echo "	--sharedir		show location of architecture-independent support files"
++	echo "	--localedir		show location of locale support files"
++	echo "	--docdir		show location of documentation files"
++	echo "	--mandir		show location of manual pages"
+ esac
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 4c5f200bdf..85b767de72 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -117,6 +117,8 @@ define POSTGRESQL_INSTALL_CUSTOM_PG_CONFIG
+ 		$(STAGING_DIR)/usr/bin/pg_config
+ 	$(SED) "s|@POSTGRESQL_CONF_OPTIONS@|$(POSTGRESQL_CONF_OPTS)|g" $(STAGING_DIR)/usr/bin/pg_config
+ 	$(SED) "s|@POSTGRESQL_VERSION@|$(POSTGRESQL_VERSION)|g" $(STAGING_DIR)/usr/bin/pg_config
++	$(SED) "s|@TARGET_CFLAGS@|$(TARGET_CFLAGS)|g" $(STAGING_DIR)/usr/bin/pg_config
++	$(SED) "s|@TARGET_CC@|$(TARGET_CC)|g" $(STAGING_DIR)/usr/bin/pg_config
+ endef
+ 
+ POSTGRESQL_POST_INSTALL_STAGING_HOOKS += POSTGRESQL_INSTALL_CUSTOM_PG_CONFIG
