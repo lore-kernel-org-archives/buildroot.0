@@ -1,40 +1,82 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 28 Jan 2021 14:33:38 +0200
-Subject: [Buildroot] [PATCH] package/uboot-tools: drop redundant parentheses
-Message-ID: <e66442f596117c0b73f9e43ee838688a1563164c.1611837218.git.baruch@tkos.co.il>
+From: Maxime Chevallier <maxime.chevallier@bootlin.com>
+Date: Thu, 28 Jan 2021 13:52:56 +0100
+Subject: [Buildroot] [PATCH v2] package/refpolicy: Add option to disable
+ "dontaudit" rules
+Message-ID: <20210128125256.1419587-1-maxime.chevallier@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit d8db91fc6fa ("package/uboot-tools: resolve host uboot env/script
-error") introduced closing parentheses that is not matched and not
-needed.
+Some rules in the refpolicy are declared with "dontaudit", effectively
+suppressing any AVC violation log, while still denying the actions.
 
-Fixes:
-http://autobuild.buildroot.net/results/a65/a65fcc581f56ef70154f83e80f12d64f2e0f856a/
-http://autobuild.buildroot.net/results/39a/39aabb9d8afcdead1d620e081d2cd43ee2d61fbc/
+This is useful in some cases, where denied actions are to be expected
+but won't prevent the system from operating.
 
-Cc: Matt Weber <matthew.weber@rockwellcollins.com>
-Cc: Kalpesh Panchal <kalpesh.panchal@rockwellcollins.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+However in some other cases, the suppressed logs are important to
+troubleshoot some issues.
+
+Disabling the "dontaudit" rules can be done either from the running
+system by rebuilding the policy with "semodules -DB", or when initialy
+building the policy by using the "enableaudit" make target.
+
+This commit allows building the refpolicy with the "enableaudit" target
+prior to installing it, thanks to a dedicated config option.
+
+Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
 ---
- package/uboot-tools/uboot-tools.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+v1 -> v2: Use POST_BUILD_HOOKS to summon make enableaudit, as per
+Antoine Tenart adnd Thomas petazzoni's reviews
 
-diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
-index f2bd627e927e..a0cdcafd4e7e 100644
---- a/package/uboot-tools/uboot-tools.mk
-+++ b/package/uboot-tools/uboot-tools.mk
-@@ -160,7 +160,7 @@ endif #BR_BUILDING
- define HOST_UBOOT_TOOLS_GENERATE_BOOT_SCRIPT
- 	$(@D)/tools/mkimage -C none -A $(MKIMAGE_ARCH) -T script \
- 		-d $(call qstrip,$(BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE)) \
--		$(@D)/tools/boot.scr)
-+		$(@D)/tools/boot.scr
+ package/refpolicy/Config.in    | 14 ++++++++++++++
+ package/refpolicy/refpolicy.mk |  8 ++++++++
+ 2 files changed, 22 insertions(+)
+
+diff --git a/package/refpolicy/Config.in b/package/refpolicy/Config.in
+index c529b85e1d..d6e195e8f8 100644
+--- a/package/refpolicy/Config.in
++++ b/package/refpolicy/Config.in
+@@ -111,6 +111,20 @@ config BR2_REFPOLICY_EXTRA_MODULES
+ 
+ endif
+ 
++config BR2_REFPOLICY_DISABLE_DONTAUDIT
++	bool "Disable dontaudit"
++	help
++	  Builds the refpolicy with the "dontaudit" rules disabled.
++	  This will trigger unseen, and probably unharmful audit logs that are
++	  explicitely silenced otherwise. This option can be helpful for
++	  debugging purposes, should a silenced message cause a real issue
++	  that would otherwise be hard to troubleshoot.
++
++	  This option should be used for debugging purposes only, due to
++	  the amount of avc logs it generates.
++
++	  If unsure, select n.
++
+ endif
+ 
+ comment "refpolicy needs a toolchain w/ threads"
+diff --git a/package/refpolicy/refpolicy.mk b/package/refpolicy/refpolicy.mk
+index 0194708b37..4dfa9e914a 100644
+--- a/package/refpolicy/refpolicy.mk
++++ b/package/refpolicy/refpolicy.mk
+@@ -116,6 +116,14 @@ define REFPOLICY_BUILD_CMDS
+ 	$(REFPOLICY_MAKE) -C $(@D) policy
  endef
- define HOST_UBOOT_TOOLS_INSTALL_BOOT_SCRIPT
- 	$(INSTALL) -m 0755 -D $(@D)/tools/boot.scr $(BINARIES_DIR)/boot.scr
+ 
++ifeq ($(BR2_REFPOLICY_DISABLE_DONTAUDIT),y)
++define REFPOLICY_DISABLE_DONTAUDIT_CMDS
++	$(REFPOLICY_MAKE) -C $(@D) enableaudit
++endef
++endif
++
++REFPOLICY_POST_BUILD_HOOKS += REFPOLICY_DISABLE_DONTAUDIT_CMDS
++
+ define REFPOLICY_INSTALL_STAGING_CMDS
+ 	$(REFPOLICY_MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) \
+ 		install-src install-headers
 -- 
-2.29.2
+2.25.4
