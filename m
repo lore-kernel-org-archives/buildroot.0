@@ -1,33 +1,25 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 28 Jan 2021 20:56:03 +0100
-Subject: [Buildroot] [PATCH 1/1] package/wayland: add WAYLAND_CPE_ID_VENDOR
-Message-ID: <20210128195603.4162109-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 28 Jan 2021 21:01:02 +0100
+Subject: [Buildroot] [PATCH 1/1] package/sslh: systemd needs libconfig
+In-Reply-To: <20210125223420.1357779-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 25 Jan 2021 23:34:20 +0100")
+References: <20210125223420.1357779-1-fontaine.fabrice@gmail.com>
+Message-ID: <87lfcc25mp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:wayland:wayland is a valid CPE identifier for this package:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Awayland%3Awayland
+ > systemd-sslh-generator unconditionally uses libconfig
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/d46581842906f7780f4a3a1ae21963e78e7f5276
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/wayland/wayland.mk | 1 +
- 1 file changed, 1 insertion(+)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/wayland/wayland.mk b/package/wayland/wayland.mk
-index 1b19272715..6cb4a50dbb 100644
---- a/package/wayland/wayland.mk
-+++ b/package/wayland/wayland.mk
-@@ -9,6 +9,7 @@ WAYLAND_SITE = https://wayland.freedesktop.org/releases
- WAYLAND_SOURCE = wayland-$(WAYLAND_VERSION).tar.xz
- WAYLAND_LICENSE = MIT
- WAYLAND_LICENSE_FILES = COPYING
-+WAYLAND_CPE_ID_VENDOR = wayland
- WAYLAND_INSTALL_STAGING = YES
- WAYLAND_DEPENDENCIES = host-pkgconf host-wayland expat libffi libxml2
- HOST_WAYLAND_DEPENDENCIES = host-pkgconf host-expat host-libffi host-libxml2
+Committed to 2020.11.x, thanks.
+
 -- 
-2.29.2
+Bye, Peter Korsgaard
