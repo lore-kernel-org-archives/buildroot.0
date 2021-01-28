@@ -1,43 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Jan 2021 17:28:32 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/poppler: add
- boost optional dependency
-Message-ID: <20210128200122.BB47B83E2C@busybox.osuosl.org>
+Date: Thu, 28 Jan 2021 17:44:28 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] utils: fix flake8 warning
+Message-ID: <20210128200122.C410F843AE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b53a60a664bf2fc46c25f136d05b717715a9f350
+commit: https://git.buildroot.net/buildroot/commit/?id=43d6e6036a7d4f2760220fedc3e4cd009a6bfddc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-boost is an optional dependency which is enabled by default since
-version 0.80.0 and
-https://github.com/freedesktop/poppler/commit/355fd8d58ca0209284fe568b3add28f207e995c1
+Commit 40bb37bd70d refactored get-developers, and now the 'os' module is
+no longer needed, but still imported:
 
-There is no cmake option to enable or disable this dependency
+    utils/get-developers:6:1: F401 'os' imported but unused
+    1     F401 'os' imported but unused
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 497f989d7595a1c801a587e77d508ec3fa6edf0f)
+Drop it now.
+
+Reported-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 9277978e28479449e517152105ae2e8a6d03151a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/poppler/poppler.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ utils/get-developers | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
-index 69a3bcace5..c5e1a800f2 100644
---- a/package/poppler/poppler.mk
-+++ b/package/poppler/poppler.mk
-@@ -27,6 +27,10 @@ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
- POPPLER_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -latomic"
- endif
+diff --git a/utils/get-developers b/utils/get-developers
+index e027c26562..9182b2d85f 100755
+--- a/utils/get-developers
++++ b/utils/get-developers
+@@ -3,7 +3,6 @@
+ import argparse
+ import getdeveloperlib
+ import sys
+-import os
  
-+ifeq ($(BR2_PACKAGE_BOOST),y)
-+POPPLER_DEPENDENCIES += boost
-+endif
-+
- ifeq ($(BR2_PACKAGE_JPEG),y)
- POPPLER_DEPENDENCIES += jpeg
- POPPLER_CONF_OPTS += -DENABLE_DCTDECODER=libjpeg -DWITH_JPEG=ON
+ 
+ def parse_args():
