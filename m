@@ -1,81 +1,140 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Jan 2021 21:04:46 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/opentracing-cpp:
- fix build if clang-tidy is installed on the host
-Message-ID: <20210128200058.E1E0F812DF@busybox.osuosl.org>
+Date: Thu, 28 Jan 2021 21:09:15 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/sudo: security
+ bump to version 1.9.5p2
+Message-ID: <20210128200058.EFB23812DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=30c6b17b4a153ea770970805ca285a35564b04bf
+commit: https://git.buildroot.net/buildroot/commit/?id=05983bbbe8621f40b5a361879a12351a9bdbf85d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-opentracing-cpp fails to build if clang-tidy is installed:
+Major changes between sudo 1.9.5p2 and 1.9.5p1
 
-...
--- clang-tidy found: /usr/lib/llvm/11/bin/clang-tidy
--- Configuring done
--- Generating done
-...
+ * Buildroot: dropped a patch that was included in the release.
 
-[ 25%] Building CXX object CMakeFiles/opentracing.dir/src/propagation.cpp.o
-.../buildroot/output/build/opentracing-cpp-1.5.1/include/opentracing/string_view.h:5:10: error: 'algorithm' file not found [clang-diagnostic-error]
-         ^
-.../buildroot/output/build/opentracing-cpp-1.5.1/src/propagation.cpp:3:11: warning: '__llvm_libc' needs to be the outermost namespace [llvmlibc-implementation-in-namespace]
-namespace opentracing {
-          ^
-.../buildroot/output/build/opentracing-cpp-1.5.1/src/propagation.cpp:11:3: warning: use '= default' to define a trivial default constructor [hicpp-use-equals-default,modernize-use-equals-default]
-  PropagationErrorCategory() {}
-  ^                          ~~
-                             = default;
-.../buildroot/output/build/opentracing-cpp-1.5.1/src/propagation.cpp:13:15: warning: use a trailing return type for this function [modernize-use-trailing-return-type]
-  const char* name() const noexcept override {
-  ~~~~~~~~~~~ ^
-  auto                              -> const char*
-.../buildroot/output/build/opentracing-cpp-1.5.1/src/propagation.cpp:13:15: warning: method 'name' can be made static [readability-convert-member-functions-to-static]
-  const char* name() const noexcept override {
-              ^      ~~~~~~
-  static
-.../buildroot/output/build/opentracing-cpp-1.5.1/src/propagation.cpp:17:24: warning: use a trailing return type for this function [modernize-use-trailing-return-type]
-  std::error_condition default_error_condition(int code) const
-                       ^
-.../buildroot/output/build/opentracing-cpp-1.5.1/src/propagation.cpp:37:15: warning: use a trailing return type for this function [modernize-use-trailing-return-type]
-  std::string message(int code) const override {
-              ^
-.../buildroot/output/build/opentracing-cpp-1.5.1/src/propagation.cpp:58:28: warning: use a trailing return type for this function [modernize-use-trailing-return-type]
-const std::error_category& propagation_error_category() {
-                           ^
-226 warnings and 1 error generated.
-Error while processing .../buildroot/output/build/opentracing-cpp-1.5.1/src/propagation.cpp.
-Suppressed 218 warnings (218 in non-user code).
-Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-Found compiler error(s).
-make[3]: *** [CMakeFiles/opentracing.dir/build.make:83: CMakeFiles/opentracing.dir/src/propagation.cpp.o] Error 1
-make[3]: *** Waiting for unfinished jobs....
-.../buildroot/output/build/opentracing-cpp-1.5.1/include/opentracing/string_view.h:5:10: error: 'algorithm' file not found [clang-diagnostic-error]
-         ^
-.../buildroot/output/build/opentracing-cpp-1.5.1/src/dynamic_load.cpp:4:
+ * Fixed sudo's setprogname(3) emulation on systems that don't
+   provide it.
 
-Disable the 'ENABLE_LINTING' option to avoid this influence.
+ * Fixed a problem with the sudoers log server client where a partial
+   write to the server could result the sudo process consuming large
+   amounts of CPU time due to a cycle in the buffer queue. Bug #954.
 
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit aede6dd7b67a47ce8182cf04168506080e5ae33b)
+ * Added a missing dependency on libsudo_util in libsudo_eventlog.
+   Fixes a link error when building sudo statically.
+
+ * The user's KRB5CCNAME environment variable is now preserved when
+   performing PAM authentication.  This fixes GSSAPI authentication
+   when the user has a non-default ccache.
+
+ * When invoked as sudoedit, the same set of command line options
+   are now accepted as for "sudo -e".  The -H and -P options are
+   now rejected for sudoedit and "sudo -e" which matches the sudo
+   1.7 behavior.  This is part of the fix for CVE-2021-3156.
+
+ * Fixed a potential buffer overflow when unescaping backslashes
+   in the command's arguments.  Normally, sudo escapes special
+   characters when running a command via a shell (sudo -s or sudo
+   -i).  However, it was also possible to run sudoedit with the -s
+   or -i flags in which case no escaping had actually been done,
+   making a buffer overflow possible.  This fixes CVE-2021-3156.
+
+https://www.sudo.ws/stable.html#1.9.5p2
+
+Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 4fea71ac785cc4a9c914aabfc5b8cd837b94b367)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/opentracing-cpp/opentracing-cpp.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ ...g-Makefile.in-fix-static-build-without-cl.patch | 55 ----------------------
+ package/sudo/sudo.hash                             |  2 +-
+ package/sudo/sudo.mk                               |  2 +-
+ 3 files changed, 2 insertions(+), 57 deletions(-)
 
-diff --git a/package/opentracing-cpp/opentracing-cpp.mk b/package/opentracing-cpp/opentracing-cpp.mk
-index d466a80237..0605cd5d96 100644
---- a/package/opentracing-cpp/opentracing-cpp.mk
-+++ b/package/opentracing-cpp/opentracing-cpp.mk
-@@ -22,4 +22,6 @@ else ifeq ($(BR2_SHARED_LIBS),y)
- OPENTRACING_CPP_CONF_OPTS += -DBUILD_STATIC_LIBS=OFF
- endif
+diff --git a/package/sudo/0001-lib-eventlog-Makefile.in-fix-static-build-without-cl.patch b/package/sudo/0001-lib-eventlog-Makefile.in-fix-static-build-without-cl.patch
+deleted file mode 100644
+index e4e27678d2..0000000000
+--- a/package/sudo/0001-lib-eventlog-Makefile.in-fix-static-build-without-cl.patch
++++ /dev/null
+@@ -1,55 +0,0 @@
+-From 80f86618db50fa5b55c7fdcdc83461a7d6d5f4ea Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Fri, 22 Jan 2021 07:33:47 +0100
+-Subject: [PATCH] lib/eventlog/Makefile.in: fix static build without closefrom
+-
+-Since version 1.9.4 and
+-https://github.com/sudo-project/sudo/commit/bd1ca79cca827a92e904f022e49df121931d4ff5,
+-when closefrom is not available, libsudo_eventlog.a depends on
+-libsudo_util.a. So reflect this dependency in the libtool file to avoid
+-the following static build failure of logsrvd:
+-
+-/bin/bash ../libtool --tag=disable-static --mode=link /home/buildroot/autobuild/instance-1/output-1/host/bin/powerpc-linux-gcc -o sudo_logsrvd logsrv_util.o iolog_writer.o logsrvd.o logsrvd_conf.o -static -Wl,--enable-new-dtags -Wl,-z,relro    ../lib/iolog/libsudo_iolog.la ../lib/eventlog/libsudo_eventlog.la ../lib/logsrv/liblogsrv.la
+-/bin/bash ../libtool --tag=disable-static --mode=link /home/buildroot/autobuild/instance-1/output-1/host/bin/powerpc-linux-gcc -o sudo_sendlog logsrv_util.o sendlog.o -static -Wl,--enable-new-dtags -Wl,-z,relro    ../lib/iolog/libsudo_iolog.la ../lib/eventlog/libsudo_eventlog.la ../lib/logsrv/liblogsrv.la
+-libtool: link: /home/buildroot/autobuild/instance-1/output-1/host/bin/powerpc-linux-gcc -o sudo_logsrvd logsrv_util.o iolog_writer.o logsrvd.o logsrvd_conf.o -static -Wl,--enable-new-dtags -Wl,-z -Wl,relro  ../lib/iolog/.libs/libsudo_iolog.a /home/buildroot/autobuild/instance-1/output-1/build/sudo-1.9.5p1/lib/util/.libs/libsudo_util.a -lpthread -lz ../lib/eventlog/.libs/libsudo_eventlog.a ../lib/logsrv/.libs/liblogsrv.a
+-/home/buildroot/autobuild/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/powerpc-buildroot-linux-uclibc/8.3.0/../../../../powerpc-buildroot-linux-uclibc/bin/ld: ../lib/eventlog/.libs/libsudo_eventlog.a(eventlog.o): in function `send_mail.constprop.1':
+-eventlog.c:(.text+0x149c): undefined reference to `sudo_closefrom'
+-collect2: error: ld returned 1 exit status
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/515b45f876fa9de03c9235f86017f4dc10eb3b54
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/sudo-project/sudo/commit/c05fe93669e60dba1e290d448254503bd84c8ca3]
+----
+- lib/eventlog/Makefile.in | 7 ++++---
+- 1 file changed, 4 insertions(+), 3 deletions(-)
+-
+-diff --git a/lib/eventlog/Makefile.in b/lib/eventlog/Makefile.in
+-index a9a279378..134a5d222 100644
+---- a/lib/eventlog/Makefile.in
+-+++ b/lib/eventlog/Makefile.in
+-@@ -46,8 +46,9 @@ LDFLAGS = @LDFLAGS@
+- # Flags to pass to libtool
+- LTFLAGS = @LT_STATIC@
+- 
+--# Libraries for test programs
+--LIBS = $(top_builddir)/lib/util/libsudo_util.la
+-+# Libraries
+-+LT_LIBS = $(top_builddir)/lib/util/libsudo_util.la
+-+LIBS = $(LT_LIBS)
+- 
+- # Address sanitizer flags
+- ASAN_CFLAGS = @ASAN_CFLAGS@
+-@@ -132,7 +133,7 @@ $(devdir)/log_server.pb-c.c: $(srcdir)/log_server.proto
+- 	fi
+- 
+- libsudo_eventlog.la: $(LIBEVENTLOG_OBJS)
+--	$(LIBTOOL) $(LTFLAGS) --mode=link $(CC) -o $@ $(LIBEVENTLOG_OBJS)
+-+	$(LIBTOOL) $(LTFLAGS) --mode=link $(CC) -o $@ $(LIBEVENTLOG_OBJS) $(LT_LIBS)
+- 
+- check_wrap: $(CHECK_WRAP_OBJS) $(LIBUTIL)
+- 	$(LIBTOOL) $(LTFLAGS) --mode=link $(CC) -o $@ $(CHECK_WRAP_OBJS) $(LDFLAGS) $(ASAN_LDFLAGS) $(PIE_LDFLAGS) $(SSP_LDFLAGS) $(LIBS)
+--- 
+-2.29.2
+-
+diff --git a/package/sudo/sudo.hash b/package/sudo/sudo.hash
+index 3a0ff46838..ee30b32265 100644
+--- a/package/sudo/sudo.hash
++++ b/package/sudo/sudo.hash
+@@ -1,4 +1,4 @@
+ # From: http://www.sudo.ws/download.html
+-sha256  4dddf37c22653defada299e5681e0daef54bb6f5fc950f63997bb8eb966b7882  sudo-1.9.5p1.tar.gz
++sha256  539e2ef43c8a55026697fb0474ab6a925a11206b5aa58710cb42a0e1c81f0978  sudo-1.9.5p2.tar.gz
+ # Locally calculated
+ sha256  505c5955c373514e2533a24a8346f44038e29cba874f5ca83beb171a7409089f  doc/LICENSE
+diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
+index 806d344737..b727065abb 100644
+--- a/package/sudo/sudo.mk
++++ b/package/sudo/sudo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+OPENTRACING_CPP_CONF_OPTS += -DENABLE_LINTING=OFF
-+
- $(eval $(cmake-package))
+-SUDO_VERSION = 1.9.5p1
++SUDO_VERSION = 1.9.5p2
+ SUDO_SITE = https://www.sudo.ws/sudo/dist
+ SUDO_LICENSE = ISC, BSD-3-Clause
+ SUDO_LICENSE_FILES = doc/LICENSE
