@@ -1,88 +1,92 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 28 Jan 2021 18:29:35 +0100
-Subject: [Buildroot] [PATCH 1/1] package/pugixml: drop
- BR2_PACKAGE_PUGIXML_HEADER_ONLY
-Message-ID: <20210128172935.4138671-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 28 Jan 2021 18:34:36 +0100
+Subject: [Buildroot] [PATCH 1/1] package/wine: add WINE_CPE_ID_VENDOR
+In-Reply-To: <CAPi7W82Vaa_Z2S6+BQ=BByJn277P7wFFuRAYp-jyTzF_bcup0A@mail.gmail.com>
+References: <20210126211539.2497979-1-fontaine.fabrice@gmail.com>
+ <20210128165807.GT2325@scaer>
+ <CAPi7W82Vaa_Z2S6+BQ=BByJn277P7wFFuRAYp-jyTzF_bcup0A@mail.gmail.com>
+Message-ID: <20210128173436.GU2325@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop BR2_PACKAGE_PUGIXML_HEADER_ONLY which raises a build failure with
-gerbera (the only package that is using pugixml). Indeed, there is two
-issues:
- - gerbera is not aware that it must define PUGIXML_HEADER_ONLY
- - pugixml.cpp is not available in the staging directory so gerbera
-   can't use it
+Fabrice, All,
 
-It should be noted that pugixml continues to install a (non working)
-library even when PUGIXML_HEADER_ONLY is enabled resulting in a build
-failure at linking stage instead of configure step:
+On 2021-01-28 18:07 +0100, Fabrice Fontaine spake thusly:
+> Le jeu. 28 janv. 2021 ? 17:58, Yann E. MORIN <yann.morin.1998@free.fr> a ?crit :
+> >
+> > Fabrice, All,
+> >
+> > On 2021-01-26 22:15 +0100, Fabrice Fontaine spake thusly:
+> > > cpe:2.3:a:winehq:wine is a valid CPE identifier for this package:
+> > >
+> > >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Awinehq%3Awine
+> > >
+> > > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> >
+> > Applied to master, thanks.
+> >
+> > However, the last CVE against wine was against version 3.13, while we're
+> > already using 5.12, and 6.0 is already out...
+> Indeed, but I'm not really motivated to send hundreds of requests to
+> update the NVD ...
+> Updating release-monitoring.org is easy and useful for every
+> opensource projects, updating the version in the NVD (when there is no
+> CVEs associated to this version) seems complicated and not very
+> useful.
 
-[100%] Linking CXX executable gerbera
-/home/buildroot/autobuild/run/instance-2/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-musleabihf/8.3.0/../../../../arm-buildroot-linux-musleabihf/bin/ld: liblibgerbera.a(config_manager.cc.o): in function `ConfigManager::getElement(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) const':
-config_manager.cc:(.text+0x4d8): undefined reference to `pugi::xml_document::document_element() const'
+Oh, no worries! I was just surprised not to see any CVE reported against
+versions more recent than 3.13...
 
-Fixes:
- - http://autobuild.buildroot.org/results/9c1919bacd23da0505a4eb828a806997a23b640f
+Regards,
+Yann E. MORIN.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- Config.in.legacy           | 5 +++++
- package/pugixml/Config.in  | 9 ---------
- package/pugixml/pugixml.mk | 3 ---
- 3 files changed, 5 insertions(+), 12 deletions(-)
+> But that's just my feeling, if someone wants to do it, fine.
+> >
+> > Regards,
+> > Yann E. MORIN.
+> >
+> > > ---
+> > >  package/wine/wine.mk | 1 +
+> > >  1 file changed, 1 insertion(+)
+> > >
+> > > diff --git a/package/wine/wine.mk b/package/wine/wine.mk
+> > > index 7eafe9b06d..80c9d20d3d 100644
+> > > --- a/package/wine/wine.mk
+> > > +++ b/package/wine/wine.mk
+> > > @@ -9,6 +9,7 @@ WINE_SOURCE = wine-$(WINE_VERSION).tar.xz
+> > >  WINE_SITE = https://dl.winehq.org/wine/source/5.x
+> > >  WINE_LICENSE = LGPL-2.1+
+> > >  WINE_LICENSE_FILES = COPYING.LIB LICENSE
+> > > +WINE_CPE_ID_VENDOR = winehq
+> > >  WINE_DEPENDENCIES = host-bison host-flex host-wine
+> > >  HOST_WINE_DEPENDENCIES = host-bison host-flex
+> > >
+> > > --
+> > > 2.29.2
+> > >
+> > > _______________________________________________
+> > > buildroot mailing list
+> > > buildroot at busybox.net
+> > > http://lists.busybox.net/mailman/listinfo/buildroot
+> >
+> > --
+> > .-----------------.--------------------.------------------.--------------------.
+> > |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> > | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> > | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> > '------------------------------^-------^------------------^--------------------'
+> Best Regards,
+> 
+> Fabrice
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 2bf39d7175..4607528a75 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,11 @@ endif
- 
- comment "Legacy options removed in 2021.02"
- 
-+config BR2_PACKAGE_PUGIXML_HEADER_ONLY
-+	bool "pugixml header-only support removed"
-+	help
-+	  The support for pugixml header-only mode has been removed.
-+
- config BR2_PACKAGE_LIBUPNP18
- 	bool "libupnp18 package removed"
- 	select BR2_LEGACY
-diff --git a/package/pugixml/Config.in b/package/pugixml/Config.in
-index 6b7d2e3259..d5a3cb3ebb 100644
---- a/package/pugixml/Config.in
-+++ b/package/pugixml/Config.in
-@@ -39,15 +39,6 @@ config BR2_PACKAGE_PUGIXML_COMPACT
- 
- 	  http://pugixml.org/docs/manual.html#dom.memory.compact
- 
--config BR2_PACKAGE_PUGIXML_HEADER_ONLY
--	bool "Enable header-only version"
--	help
--	  All source code for pugixml will be included in every
--	  translation unit that includes pugixml.hpp. This is how most
--	  of Boost and STL libraries work.
--
--	  http://pugixml.org/docs/manual.html#install.building.header
--
- endif
- 
- comment "pugixml needs a toolchain w/ C++"
-diff --git a/package/pugixml/pugixml.mk b/package/pugixml/pugixml.mk
-index 800a3836ce..14a3b7954d 100644
---- a/package/pugixml/pugixml.mk
-+++ b/package/pugixml/pugixml.mk
-@@ -23,9 +23,6 @@ endif
- ifeq ($(BR2_PACKAGE_PUGIXML_COMPACT),y)
- PUGIXML_BUILD_DEFINES += PUGIXML_COMPACT
- endif
--ifeq ($(BR2_PACKAGE_PUGIXML_HEADER_ONLY),y)
--PUGIXML_BUILD_DEFINES += PUGIXML_HEADER_ONLY
--endif
- 
- ifdef PUGIXML_BUILD_DEFINES
- PUGIXML_CONF_OPTS += -DBUILD_DEFINES="$(subst $(space),;,$(PUGIXML_BUILD_DEFINES))"
 -- 
-2.29.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
