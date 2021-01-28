@@ -1,43 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 28 Jan 2021 18:02:03 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/brltty: add
- polkit optional dependency
-Message-ID: <20210128200058.11D5F83846@busybox.osuosl.org>
+Date: Thu, 28 Jan 2021 17:49:53 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/syslog-ng: fix
+ build if net-snmp is installed on the host (again)
+Message-ID: <20210128200057.E414A812DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c0162e6c7ae231aeeb3aef03ff025d3fb9428032
+commit: https://git.buildroot.net/buildroot/commit/?id=8253f57ad804eed565d0d82098f0c6c9533f66c4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-polkit is an optional dependency (enabled by default) since version 5.4:
-https://github.com/brltty/brltty/commit/e62b3c925d03239a372d425fb87b2cac65d8ef19
+See also commit 4ff6e5239240a4e1bdf73c41d6e9bff9473ec62c which describes the
+problem in detail.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+The same problem now arises again, because syslog-ng renamed the
+--enable-snmp-dest option into --enable-afsnmp. See syslog-ng commit
+4537938474771673ef5bd4a9cad7c9a7dc20b7c1, first part of 3.27.1.
+
+Update the configure options passed from Buildroot accordingly.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 74c6a7e4dba6e81f5403476344b852119d7a53d8)
+(cherry picked from commit 40f4468e94e0c9885386b8a6ee105aed175f340f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/brltty/brltty.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/syslog-ng/syslog-ng.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/brltty/brltty.mk b/package/brltty/brltty.mk
-index 4f40e65fc6..3924fa0c1a 100644
---- a/package/brltty/brltty.mk
-+++ b/package/brltty/brltty.mk
-@@ -96,6 +96,13 @@ else
- BRLTTY_CONF_OPTS += --without-rgx-package
+diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
+index f7182ba311..31608f3a02 100644
+--- a/package/syslog-ng/syslog-ng.mk
++++ b/package/syslog-ng/syslog-ng.mk
+@@ -99,10 +99,10 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_NETSNMP),y)
+ SYSLOG_NG_DEPENDENCIES += netsnmp
+-SYSLOG_NG_CONF_OPTS += --enable-snmp-dest
++SYSLOG_NG_CONF_OPTS += --enable-afsnmp
+ SYSLOG_NG_CONF_OPTS += --with-net-snmp="$(STAGING_DIR)/usr/bin"
+ else
+-SYSLOG_NG_CONF_OPTS += --disable-snmp-dest
++SYSLOG_NG_CONF_OPTS += --disable-afsnmp
  endif
  
-+ifeq ($(BR2_PACKAGE_POLKIT),y)
-+BRLTTY_DEPENDENCIES += polkit
-+BRLTTY_CONF_OPTS += --enable-polkit
-+else
-+BRLTTY_CONF_OPTS += --disable-polkit
-+endif
-+
- ifeq ($(BR2_PACKAGE_SYSTEMD),y)
- BRLTTY_DEPENDENCIES += systemd
- BRLTTY_CONF_OPTS += --with-service-package
+ define SYSLOG_NG_INSTALL_INIT_SYSV
