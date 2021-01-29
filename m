@@ -1,27 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 29 Jan 2021 09:32:40 +0100
-Subject: [Buildroot] [PATCH] package/glibc: security bump for additional
- post-2.32.x fixes
-In-Reply-To: <20210128213509.6056-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Thu, 28 Jan 2021 22:35:08 +0100")
-References: <20210128213509.6056-1-peter@korsgaard.com>
-Message-ID: <87bld8xhw7.fsf@dell.be.48ers.dk>
+Date: Fri, 29 Jan 2021 09:34:06 +0100
+Subject: [Buildroot] [PATCH 1/1] package/open62541: force Release build
+In-Reply-To: <20210128194619.4160433-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 28 Jan 2021 20:46:19 +0100")
+References: <20210128194619.4160433-1-fontaine.fabrice@gmail.com>
+Message-ID: <877dnwxhtt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Fixes the following security issue:
- > - CVE-2021-3326): Assertion failure in ISO-2022-JP-3 gconv module related to
- >   combining characters
+ > Force Release build to remove -Werror and avoid the following build
+ > failure:
 
- > For details, see https://sourceware.org/bugzilla/show_bug.cgi?id=27256 and
- > https://www.openwall.com/lists/oss-security/2021/01/27/3
+ > /home/giuliobenetti/autobuild/run/instance-3/output-1/build/open62541-1.0/arch/network_tcp.c: At top level:
+ > cc1: error: unrecognized command line option '-Wno-static-in-inline' [-Werror]
+ > cc1: all warnings being treated as errors
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/24b429ce0ae2b33e72bb6a0f523c3906e539a4fd
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
 
