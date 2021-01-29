@@ -1,42 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 29 Jan 2021 09:27:36 +0100
-Subject: [Buildroot] [git commit] package/grpc: bump to version 1.35.0
-Message-ID: <20210129082032.A268D815DE@busybox.osuosl.org>
+Date: Fri, 29 Jan 2021 09:26:34 +0100
+Subject: [Buildroot] [git commit] package/logrotate: bump to 3.18.0 version
+Message-ID: <20210129082032.94EBA8152D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7c3df4fc497ce010a22ef9f0a4654794c97c5893
+commit: https://git.buildroot.net/buildroot/commit/?id=e0d4fbb2ed633b1840f55128a9ea378adb8b87e2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Main reason is to fix the issue when secure_getenv() is missing
+in older toolchain, but it was fixed in this version by using
+getenv() as alternative.
+
+Signed-off-by: Vadym Kochan <vadym.kochan@plvision.eu>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/grpc/grpc.hash | 2 +-
- package/grpc/grpc.mk   | 2 +-
+ package/logrotate/logrotate.hash | 2 +-
+ package/logrotate/logrotate.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/grpc/grpc.hash b/package/grpc/grpc.hash
-index 68d0d27c65..52d25fc5ed 100644
---- a/package/grpc/grpc.hash
-+++ b/package/grpc/grpc.hash
+diff --git a/package/logrotate/logrotate.hash b/package/logrotate/logrotate.hash
+index 704cbcabd6..b3628da7de 100644
+--- a/package/logrotate/logrotate.hash
++++ b/package/logrotate/logrotate.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  7372a881122cd85a7224435a1d58bc5e11c88d4fb98a64b83f36f3d1c2f16d39  grpc-1.34.0.tar.gz
-+sha256  27dd2fc5c9809ddcde8eb6fa1fa278a3486566dfc28335fca13eb8df8bd3b958  grpc-1.35.0.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
-index f7ddffd386..857064327d 100644
---- a/package/grpc/grpc.mk
-+++ b/package/grpc/grpc.mk
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+-sha256  c25ea219018b024988b791e91e9f6070c34d2056efa6ffed878067866c0ed765  logrotate-3.17.0.tar.gz
++sha256  66232111a2b02cce3c2436c141b7a2af78fa758aac326ab2b79f9a5b0d749142  logrotate-3.18.0.tar.gz
+diff --git a/package/logrotate/logrotate.mk b/package/logrotate/logrotate.mk
+index 747d8c2930..b765fff4ee 100644
+--- a/package/logrotate/logrotate.mk
++++ b/package/logrotate/logrotate.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GRPC_VERSION = 1.34.0
-+GRPC_VERSION = 1.35.0
- GRPC_SITE = $(call github,grpc,grpc,v$(GRPC_VERSION))
- GRPC_LICENSE = Apache-2.0
- GRPC_LICENSE_FILES = LICENSE
+-LOGROTATE_VERSION = 3.17.0
++LOGROTATE_VERSION = 3.18.0
+ LOGROTATE_SITE = $(call github,logrotate,logrotate,$(LOGROTATE_VERSION))
+ LOGROTATE_LICENSE = GPL-2.0+
+ LOGROTATE_LICENSE_FILES = COPYING
