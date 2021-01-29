@@ -1,51 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 29 Jan 2021 09:35:21 +0100
-Subject: [Buildroot] [git commit] package/sqlite: bump version to 3.34.1
-Message-ID: <20210129082033.0E7C681530@busybox.osuosl.org>
+Date: Fri, 29 Jan 2021 09:36:29 +0100
+Subject: [Buildroot] [git commit] package/x11r7/xlib_libXt: bump version to
+ 1.2.1
+Message-ID: <20210129082033.2461981530@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d4a48e1cb7614e4fae6af1ae1cbd823e461d17d7
+commit: https://git.buildroot.net/buildroot/commit/?id=d637d3cf060a0048ed2cf3a69b10402a4bb6fbe6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Updated SQLITE_SITE.
-
-Release notes: https://www.sqlite.org/releaselog/3_34_1.html
+Reformatted hashes.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sqlite/sqlite.hash | 2 +-
- package/sqlite/sqlite.mk   | 6 +++---
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/x11r7/xlib_libXt/xlib_libXt.hash | 11 ++++-------
+ package/x11r7/xlib_libXt/xlib_libXt.mk   |  2 +-
+ 2 files changed, 5 insertions(+), 8 deletions(-)
 
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index ecdd4d5cb4..02b0e7132a 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  bf6db7fae37d51754737747aaaf413b4d6b3b5fbacd52bdb2d0d6e5b2edd9aee  sqlite-autoconf-3340000.tar.gz
-+sha256  2a3bca581117b3b88e5361d0ef3803ba6d8da604b1c1a47d902ef785c1b53e89  sqlite-autoconf-3340100.tar.gz
- sha256  66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  tea/license.terms
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index fd0d84a023..2c2928f274 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -4,10 +4,10 @@
+diff --git a/package/x11r7/xlib_libXt/xlib_libXt.hash b/package/x11r7/xlib_libXt/xlib_libXt.hash
+index 7f457fb9bc..dcd4853d76 100644
+--- a/package/x11r7/xlib_libXt/xlib_libXt.hash
++++ b/package/x11r7/xlib_libXt/xlib_libXt.hash
+@@ -1,8 +1,5 @@
+-# From https://lists.x.org/archives/xorg/2019-June/059825.html
+-md5 a9019421d3ee8b4937b6afd9025f018a  libXt-1.2.0.tar.bz2
+-sha1 f6b5ed799bc2e8d721e5407a09c2a8f570963f1b  libXt-1.2.0.tar.bz2
+-sha256 b31df531dabed9f4611fc8980bc51d7782967e2aff44c4105251a1acb5a77831  libXt-1.2.0.tar.bz2
+-sha512 06248508b6fe5dfba8ceb4518475f656162351d78136eeb5d65086d680dabe9aca7bba3c94347f9c13ef03f82dab3ac19d0952ee610bc8c51c14cee7cf65f0b1  libXt-1.2.0.tar.bz2
+-
++# From https://lists.x.org/archives/xorg-announce/2021-January/003070.html
++sha256  679cc08f1646dbd27f5e48ffe8dd49406102937109130caab02ca32c083a3d60  libXt-1.2.1.tar.bz2
++sha512  6877af61ba91eeed6b6f80471b84f354ad0ec0827249c7ee0a00c13508063fe8d2696dd400a4bdbc6ca2ff67cbe1317ad5ac24522fd96099dc56535e33ca052c  libXt-1.2.1.tar.bz2
+ # Locally calculated
+-sha256 a2866ccc0b1745149e4a2258d934314d40cbb43bd8318c6fa597f233995b0a81 COPYING
++sha256  a2866ccc0b1745149e4a2258d934314d40cbb43bd8318c6fa597f233995b0a81 COPYING
+diff --git a/package/x11r7/xlib_libXt/xlib_libXt.mk b/package/x11r7/xlib_libXt/xlib_libXt.mk
+index 01251c091b..289cb5ac54 100644
+--- a/package/x11r7/xlib_libXt/xlib_libXt.mk
++++ b/package/x11r7/xlib_libXt/xlib_libXt.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SQLITE_VERSION = 3340000
--SQLITE_CPE_ID_VERSION = 3.34.0
-+SQLITE_VERSION = 3340100
-+SQLITE_CPE_ID_VERSION = 3.34.1
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
--SQLITE_SITE = https://www.sqlite.org/2020
-+SQLITE_SITE = https://www.sqlite.org/2021
- SQLITE_LICENSE = Public domain
- SQLITE_LICENSE_FILES = tea/license.terms
- SQLITE_CPE_ID_VENDOR = sqlite
+-XLIB_LIBXT_VERSION = 1.2.0
++XLIB_LIBXT_VERSION = 1.2.1
+ XLIB_LIBXT_SOURCE = libXt-$(XLIB_LIBXT_VERSION).tar.bz2
+ XLIB_LIBXT_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXT_LICENSE = MIT
