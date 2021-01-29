@@ -1,42 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 29 Jan 2021 08:49:40 +0100
+Date: Fri, 29 Jan 2021 08:49:53 +0100
 Subject: [Buildroot] [git commit branch/2020.02.x] package/mediastreamer:
- portaudio needs speexdsp
-Message-ID: <20210129075004.58F7D803BA@busybox.osuosl.org>
+ resample needs speex and speexdsp
+Message-ID: <20210129075004.630D183E5D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dc0d1d63a0d9c27130ea81dbf1098b0d8a0b7989
+commit: https://git.buildroot.net/buildroot/commit/?id=0bdb0ea0130f41413b2982bf9c554a9fd94a367c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Commit 8f5562ed7c227f29dbfa6897f54dccda0dfbf656 wrongly removed speexdsp
-dependency from portaudio
+resample needs speex and speexdsp as spotted by Thomas Petazzoni during
+review of https://patchwork.ozlabs.org/patch/1252391/
 
 Fixes:
- - http://autobuild.buildroot.org/results/e6adf151141ae56f5194165fd5b74b52164bfb17
+ - http://autobuild.buildroot.org/results/32d06517a5470f71d9b7dc99139f6c3071e7d77d
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 242811a5473624d6d2139901aa6a8739aed54bc5)
+(cherry picked from commit fda55709d245e948b80e57c2179790326967cdb8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mediastreamer/mediastreamer.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/mediastreamer/mediastreamer.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
 diff --git a/package/mediastreamer/mediastreamer.mk b/package/mediastreamer/mediastreamer.mk
-index dcec66dfcd..691eaddb52 100644
+index 691eaddb52..982eadf099 100644
 --- a/package/mediastreamer/mediastreamer.mk
 +++ b/package/mediastreamer/mediastreamer.mk
-@@ -80,7 +80,8 @@ else
- MEDIASTREAMER_CONF_OPTS += -DENABLE_OPUS=OFF
+@@ -113,6 +113,12 @@ else
+ MEDIASTREAMER_CONF_OPTS += -DENABLE_SPEEX_DSP=OFF
  endif
  
--ifeq ($(BR2_PACKAGE_PORTAUDIO),y)
-+# portaudio backend needs speexdsp as well
-+ifeq ($(BR2_PACKAGE_PORTAUDIO)$(BR2_PACKAGE_SPEEXDSP),yy)
- MEDIASTREAMER_CONF_OPTS += \
- 	-DENABLE_PORTAUDIO=ON \
- 	-DENABLE_SOUND=ON
++ifeq ($(BR2_PACKAGE_SPEEX)$(BR2_PACKAGE_SPEEXDSP),yy)
++MEDIASTREAMER_CONF_OPTS += -DENABLE_RESAMPLE=ON
++else
++MEDIASTREAMER_CONF_OPTS += -DENABLE_RESAMPLE=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_FFMPEG_SWSCALE),y)
+ MEDIASTREAMER_CONF_OPTS += -DENABLE_FFMPEG=ON
+ MEDIASTREAMER_DEPENDENCIES += ffmpeg
