@@ -1,37 +1,71 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 29 Jan 2021 08:50:01 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/mediastreamer:
- fix comment
-Message-ID: <20210129075004.6FAC0803BA@busybox.osuosl.org>
+Date: Fri, 29 Jan 2021 08:44:52 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/ortp: bump to
+ version 4.3.1
+Message-ID: <20210129075004.38C15803BA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1e3485cad80e0373949a449afe19f4a3101becfc
+commit: https://git.buildroot.net/buildroot/commit/?id=d5feb27b075fcac9ceb196c8ed3d96a7796d10eb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Fix inversed logic, comment should be shown for static-only toolchains.
+- License is GPL-3.0+ since version 4.3.0 and
+  https://gitlab.linphone.org/BC/public/ortp/commit/6b925368588ce0fc64a9762dbe86041151e8450a
+- Switch to cmake-package
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 0ca6b41f8a9c19c414e25147d99482aec8dd6dcd)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit d84aa91ae5851d10d64ff561884710cbbedcf0ac)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mediastreamer/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/ortp/ortp.hash |  4 ++--
+ package/ortp/ortp.mk   | 23 ++++++++++++++++-------
+ 2 files changed, 18 insertions(+), 9 deletions(-)
 
-diff --git a/package/mediastreamer/Config.in b/package/mediastreamer/Config.in
-index b3ba5a0cb0..b12535e82c 100644
---- a/package/mediastreamer/Config.in
-+++ b/package/mediastreamer/Config.in
-@@ -18,7 +18,7 @@ config BR2_PACKAGE_MEDIASTREAMER
+diff --git a/package/ortp/ortp.hash b/package/ortp/ortp.hash
+index 93ec39297f..65a5141609 100644
+--- a/package/ortp/ortp.hash
++++ b/package/ortp/ortp.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  eb61a833ab3ad80978d7007411240f46e9b2d1034373b9d9dfaac88c1b6ec0af  ortp-0.27.0.tar.gz
+-sha256  a190dc9c8043755d90f8b0a75fa66b9e42d4af4c980bf5ddc633f0124db3cee7  COPYING
++sha256  55d12b71ed7c3958abb8d892105e616499d66c88200c46e3ec3cfbbe79771b2e  ortp-4.3.1.tar.gz
++sha256  1b3782ccad7b8614100cda30d3faf42fc39f2e97932908c543005053b654ca68  LICENSE.txt
+diff --git a/package/ortp/ortp.mk b/package/ortp/ortp.mk
+index 0bd61e88d9..436e04c14d 100644
+--- a/package/ortp/ortp.mk
++++ b/package/ortp/ortp.mk
+@@ -4,13 +4,22 @@
+ #
+ ################################################################################
  
- comment "mediastreamer needs a toolchain w/ threads, C++, dynamic library"
- 	depends on !BR2_INSTALL_LIBSTDCPP || \
--		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_STATIC_LIBS
-+		!BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+-ORTP_VERSION = 0.27.0
+-ORTP_SITE = http://download.savannah.nongnu.org/releases/linphone/ortp/sources
+-
+-ORTP_CONF_OPTS = --disable-strict
++ORTP_VERSION = 4.3.1
++ORTP_SITE = https://gitlab.linphone.org/BC/public/ortp/-/archive/$(ORTP_VERSION)
++ORTP_LICENSE = GPL-3.0+
++ORTP_LICENSE_FILES = LICENSE.txt
+ ORTP_INSTALL_STAGING = YES
+-ORTP_LICENSE = LGPL-2.1+
+-ORTP_LICENSE_FILES = COPYING
+ ORTP_DEPENDENCIES = bctoolbox
++ORTP_CONF_OPTS = \
++	-DENABLE_DOC=OFF \
++	-DENABLE_STRICT=OFF
++
++ifeq ($(BR2_STATIC_LIBS),y)
++ORTP_CONF_OPTS += -DENABLE_STATIC=ON -DENABLE_SHARED=OFF
++else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
++ORTP_CONF_OPTS += -DENABLE_STATIC=ON -DENABLE_SHARED=ON
++else ifeq ($(BR2_SHARED_LIBS),y)
++ORTP_CONF_OPTS += -DENABLE_STATIC=OFF -DENABLE_SHARED=ON
++endif
  
- comment "mediastreamer needs a toolchain not affected by GCC bug 64735"
- 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+-$(eval $(autotools-package))
++$(eval $(cmake-package))
