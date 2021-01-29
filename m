@@ -1,71 +1,66 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 29 Jan 2021 08:44:52 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/ortp: bump to
- version 4.3.1
-Message-ID: <20210129075004.38C15803BA@busybox.osuosl.org>
+Date: Fri, 29 Jan 2021 08:50:30 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/linphone: fix
+ powerpc build
+Message-ID: <20210129075004.84AEE803BA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d5feb27b075fcac9ceb196c8ed3d96a7796d10eb
+commit: https://git.buildroot.net/buildroot/commit/?id=390fe636ba007921059b3001c05cd77c8f3d3344
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-- License is GPL-3.0+ since version 4.3.0 and
-  https://gitlab.linphone.org/BC/public/ortp/commit/6b925368588ce0fc64a9762dbe86041151e8450a
-- Switch to cmake-package
+Fixes:
+ - http://autobuild.buildroot.org/results/d90bca02c2771df8dfbf39892d529fb5f9069656
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit d84aa91ae5851d10d64ff561884710cbbedcf0ac)
+(cherry picked from commit d81b4433de12c238c65692c8207d427fd051c457)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ortp/ortp.hash |  4 ++--
- package/ortp/ortp.mk   | 23 ++++++++++++++++-------
- 2 files changed, 18 insertions(+), 9 deletions(-)
+ ...rc-core-paths-paths.cpp-fix-powerpc-build.patch | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/package/ortp/ortp.hash b/package/ortp/ortp.hash
-index 93ec39297f..65a5141609 100644
---- a/package/ortp/ortp.hash
-+++ b/package/ortp/ortp.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  eb61a833ab3ad80978d7007411240f46e9b2d1034373b9d9dfaac88c1b6ec0af  ortp-0.27.0.tar.gz
--sha256  a190dc9c8043755d90f8b0a75fa66b9e42d4af4c980bf5ddc633f0124db3cee7  COPYING
-+sha256  55d12b71ed7c3958abb8d892105e616499d66c88200c46e3ec3cfbbe79771b2e  ortp-4.3.1.tar.gz
-+sha256  1b3782ccad7b8614100cda30d3faf42fc39f2e97932908c543005053b654ca68  LICENSE.txt
-diff --git a/package/ortp/ortp.mk b/package/ortp/ortp.mk
-index 0bd61e88d9..436e04c14d 100644
---- a/package/ortp/ortp.mk
-+++ b/package/ortp/ortp.mk
-@@ -4,13 +4,22 @@
- #
- ################################################################################
- 
--ORTP_VERSION = 0.27.0
--ORTP_SITE = http://download.savannah.nongnu.org/releases/linphone/ortp/sources
--
--ORTP_CONF_OPTS = --disable-strict
-+ORTP_VERSION = 4.3.1
-+ORTP_SITE = https://gitlab.linphone.org/BC/public/ortp/-/archive/$(ORTP_VERSION)
-+ORTP_LICENSE = GPL-3.0+
-+ORTP_LICENSE_FILES = LICENSE.txt
- ORTP_INSTALL_STAGING = YES
--ORTP_LICENSE = LGPL-2.1+
--ORTP_LICENSE_FILES = COPYING
- ORTP_DEPENDENCIES = bctoolbox
-+ORTP_CONF_OPTS = \
-+	-DENABLE_DOC=OFF \
-+	-DENABLE_STRICT=OFF
+diff --git a/package/linphone/0001-src-core-paths-paths.cpp-fix-powerpc-build.patch b/package/linphone/0001-src-core-paths-paths.cpp-fix-powerpc-build.patch
+new file mode 100644
+index 0000000000..1655fa59a1
+--- /dev/null
++++ b/package/linphone/0001-src-core-paths-paths.cpp-fix-powerpc-build.patch
+@@ -0,0 +1,35 @@
++From d5d528e7562f358b9564e64cea0678020c51479a Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 15 Mar 2020 18:56:19 +0100
++Subject: [PATCH] src/core/paths/paths.cpp: fix powerpc build
 +
-+ifeq ($(BR2_STATIC_LIBS),y)
-+ORTP_CONF_OPTS += -DENABLE_STATIC=ON -DENABLE_SHARED=OFF
-+else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
-+ORTP_CONF_OPTS += -DENABLE_STATIC=ON -DENABLE_SHARED=ON
-+else ifeq ($(BR2_SHARED_LIBS),y)
-+ORTP_CONF_OPTS += -DENABLE_STATIC=OFF -DENABLE_SHARED=ON
-+endif
- 
--$(eval $(autotools-package))
-+$(eval $(cmake-package))
++Fix the following build failure on powerpc:
++
++/home/test/autobuild/run/instance-2/output-1/build/linphone-4.3.1/src/core/paths/paths.cpp:32:3: error: #error "Unsupported system."
++  #error "Unsupported system."
++   ^~~~~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/d90bca02c2771df8dfbf39892d529fb5f9069656
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/core/paths/paths.cpp | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/core/paths/paths.cpp b/src/core/paths/paths.cpp
++index 0442282fe..2c6508a51 100644
++--- a/src/core/paths/paths.cpp
+++++ b/src/core/paths/paths.cpp
++@@ -26,7 +26,7 @@
++ 	#include "paths-android.h"
++ #elif defined(_WIN32)
++ 	#include "paths-windows.h"
++-#elif defined(__linux)
+++#elif defined(__linux) || defined(__linux__)
++ 	#include "paths-linux.h"
++ #else
++ 	#error "Unsupported system."
++-- 
++2.25.1
++
