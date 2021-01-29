@@ -1,28 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 29 Jan 2021 09:30:18 +0100
-Subject: [Buildroot] [PATCH v2] package/mutt: add security fixes from
- Ubuntu for CVE-2021-3181
-In-Reply-To: <20210128204940.19495-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Thu, 28 Jan 2021 21:49:40 +0100")
-References: <20210128204940.19495-1-peter@korsgaard.com>
-Message-ID: <87k0rwxi05.fsf@dell.be.48ers.dk>
+Date: Fri, 29 Jan 2021 09:32:00 +0100
+Subject: [Buildroot] [PATCH 1/1] package/runc: add CPE variables
+In-Reply-To: <20210128195324.4161809-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 28 Jan 2021 20:53:24 +0100")
+References: <20210128195324.4161809-1-fontaine.fabrice@gmail.com>
+Message-ID: <87ft2kxhxb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Fixes the following security issue:
- > - CVE-2021-3181: rfc822.c in Mutt through 2.0.4 allows remote attackers to
- >   cause a denial of service (mailbox unavailability) by sending email
- >   messages with sequences of semicolon characters in RFC822 address fields
- >   (aka terminators of empty groups).  A small email message from the
- >   attacker can cause large memory consumption, and the victim may then be
- >   unable to see email messages from other persons.
+ > cpe:2.3:a:linuxfoundation:runc is a valid CPE identifier for this
+ > package:
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alinuxfoundation%3Arunc
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
 
