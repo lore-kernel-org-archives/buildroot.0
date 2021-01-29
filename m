@@ -1,23 +1,19 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 29 Jan 2021 09:27:16 +0100
-Subject: [Buildroot] [PATCH] package/logrotate: bump to 3.18.0 version
-In-Reply-To: <20210128152634.20492-1-vadym.kochan@plvision.eu> (Vadym Kochan's
- message of "Thu, 28 Jan 2021 17:26:34 +0200")
-References: <20210128152634.20492-1-vadym.kochan@plvision.eu>
-Message-ID: <871re4ywpn.fsf@dell.be.48ers.dk>
+Date: Fri, 29 Jan 2021 09:27:44 +0100
+Subject: [Buildroot] [PATCH] package/grpc: bump to version 1.35.0
+In-Reply-To: <20210128144826.112381-1-buildroot@heine.tech> (Michael Nosthoff
+ via buildroot's message of "Thu, 28 Jan 2021 15:48:25 +0100")
+References: <20210128144826.112381-1-buildroot@heine.tech>
+Message-ID: <87wnvwxi4f.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vadym" == Vadym Kochan <vadym.kochan@plvision.eu> writes:
+>>>>> "Michael" == Michael Nosthoff via buildroot <buildroot@busybox.net> writes:
 
- > Main reason is to fix the issue when secure_getenv() is missing
- > in older toolchain, but it was fixed in this version by using
- > getenv() as alternative.
-
- > Signed-off-by: Vadym Kochan <vadym.kochan@plvision.eu>
+ > Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 
 Committed, thanks.
 
