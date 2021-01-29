@@ -1,38 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 29 Jan 2021 09:09:57 +0100
-Subject: [Buildroot] [PATCH v3,
- 1/6] package/libupnp: security bump to version 1.14.0
-In-Reply-To: <87bld83me1.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Thu, 28 Jan 2021 20:13:42 +0100")
-References: <20210125194949.1173139-1-fontaine.fabrice@gmail.com>
- <87bld83me1.fsf@dell.be.48ers.dk>
-Message-ID: <87eei4yxii.fsf@dell.be.48ers.dk>
+Date: Fri, 29 Jan 2021 08:50:01 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/mediastreamer:
+ fix comment
+Message-ID: <20210129075004.6FAC0803BA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=1e3485cad80e0373949a449afe19f4a3101becfc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
- >> - Fix CallStranger a.k.a. CVE-2020-12695 as well as CVE-2020-13848
- >> - Update indentation in hash file (two spaces)
- >> - Backport all changes from libupnp18 to libupnp:
- >> - Use COPYING instead of LICENSE (no license change)
- >> - Add host-pkgconf dependency
- >> - Add --enable-reuseaddr
- >> - Add openssl optional dependency
+Fix inversed logic, comment should be shown for static-only toolchains.
 
- >> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- >> ---
- >> Changes v2 -> v3:
- >> - Rebase on current master
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 0ca6b41f8a9c19c414e25147d99482aec8dd6dcd)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mediastreamer/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > Committed to 2020.02.x and 2020.11.x, thanks.
-
-This unfortunately breaks the old linphone stack on 2020.02.x, so I will
-bump bctoolbox/ortp/mediastreamer/linphone.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/mediastreamer/Config.in b/package/mediastreamer/Config.in
+index b3ba5a0cb0..b12535e82c 100644
+--- a/package/mediastreamer/Config.in
++++ b/package/mediastreamer/Config.in
+@@ -18,7 +18,7 @@ config BR2_PACKAGE_MEDIASTREAMER
+ 
+ comment "mediastreamer needs a toolchain w/ threads, C++, dynamic library"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_STATIC_LIBS
++		!BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+ 
+ comment "mediastreamer needs a toolchain not affected by GCC bug 64735"
+ 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
