@@ -1,45 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 29 Jan 2021 09:33:53 +0100
-Subject: [Buildroot] [git commit] package/open62541: force Release build
-Message-ID: <20210129082033.021D481530@busybox.osuosl.org>
+Date: Fri, 29 Jan 2021 09:32:24 +0100
+Subject: [Buildroot] [git commit] package/glibc: security bump for
+ additional post-2.32.x fixes
+Message-ID: <20210129082032.E973981530@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=033f81c31745bc4a51f562528adcc32015c386d7
+commit: https://git.buildroot.net/buildroot/commit/?id=8a6b0b5696ff6c7cdad69e857df09fc3bcbc91d8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Force Release build to remove -Werror and avoid the following build
-failure:
+Fixes the following security issue:
 
-/home/giuliobenetti/autobuild/run/instance-3/output-1/build/open62541-1.0/arch/network_tcp.c: At top level:
-cc1: error: unrecognized command line option '-Wno-static-in-inline' [-Werror]
-cc1: all warnings being treated as errors
+- CVE-2021-3326: Assertion failure in ISO-2022-JP-3 gconv module related to
+  combining characters
 
-Fixes:
- - http://autobuild.buildroot.org/results/24b429ce0ae2b33e72bb6a0f523c3906e539a4fd
+For details, see https://sourceware.org/bugzilla/show_bug.cgi?id=27256 and
+https://www.openwall.com/lists/oss-security/2021/01/27/3
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/open62541/open62541.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ .../glibc.hash                                                          | 2 +-
+ package/glibc/glibc.mk                                                  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/open62541/open62541.mk b/package/open62541/open62541.mk
-index 71c14f78ba..5a9f27562a 100644
---- a/package/open62541/open62541.mk
-+++ b/package/open62541/open62541.mk
-@@ -13,9 +13,11 @@ OPEN62541_INSTALL_STAGING = YES
- OPEN62541_LICENSE = MPL-2.0
- OPEN62541_LICENSE_FILES = LICENSE
+diff --git a/package/glibc/2.32-23-g050022910be1d1f5c11cd5168f1685ad4f9580d2/glibc.hash b/package/glibc/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/glibc.hash
+similarity index 72%
+rename from package/glibc/2.32-23-g050022910be1d1f5c11cd5168f1685ad4f9580d2/glibc.hash
+rename to package/glibc/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/glibc.hash
+index 45ecc2895f..b1d5243fcc 100644
+--- a/package/glibc/2.32-23-g050022910be1d1f5c11cd5168f1685ad4f9580d2/glibc.hash
++++ b/package/glibc/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/glibc.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated (fetched from Github)
+-sha256  04946bb7cbaf4062bf5e727e0d6784e105b07611587d71f00d25ea896753c26d  glibc-2.32-23-g050022910be1d1f5c11cd5168f1685ad4f9580d2.tar.gz
++sha256  f4710e9a435a7b83e1d23dd75434f0d36b898eba9b4249c946c32b467d852fd4  glibc-2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2.tar.gz
  
-+# Force Release build to remove -Werror.
- # Don't use git describe to get the version number.
- # Disable hardening options to let Buildroot handle it.
- OPEN62541_CONF_OPTS = \
-+	-DCMAKE_BUILD_TYPE=Release \
- 	-DGIT_EXECUTABLE=NO \
- 	-DOPEN62541_VERSION=$(OPEN62541_VERSION) \
- 	-DUA_ENABLE_HARDENING=OFF
+ # Hashes for license files
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index b0a1318b04..f84f670fc0 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -16,7 +16,7 @@ ifeq ($(BR2_RISCV_32),y)
+ # Until 2.33 is released, just use master
+ GLIBC_VERSION = 2.32.9000-69-gbd394d131c10c9ec22c6424197b79410042eed99
+ else
+-GLIBC_VERSION = 2.32-23-g050022910be1d1f5c11cd5168f1685ad4f9580d2
++GLIBC_VERSION = 2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2
+ endif
+ # Upstream doesn't officially provide an https download link.
+ # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
