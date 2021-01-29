@@ -1,25 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 29 Jan 2021 09:28:21 +0100
-Subject: [Buildroot] [PATCH] package/chrony: fix build with kernel
- headers older than 3.15
-In-Reply-To: <232b243f475d862a443c2095b5155c427f5f5be9.1611845016.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Thu, 28 Jan 2021 16:43:36 +0200")
-References: <232b243f475d862a443c2095b5155c427f5f5be9.1611845016.git.baruch@tkos.co.il>
-Message-ID: <87sg6kxi3e.fsf@dell.be.48ers.dk>
+Date: Fri, 29 Jan 2021 09:29:41 +0100
+Subject: [Buildroot] [PATCH 1/1] package/gdk-pixbuf: fix license
+In-Reply-To: <20210128065631.3720247-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 28 Jan 2021 07:56:31 +0100")
+References: <20210128065631.3720247-1-fontaine.fabrice@gmail.com>
+Message-ID: <87o8h8xi16.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Add a patch to make renameat2 system call reference conditional.
+ > Commit a7b51ed3013c919b293deb95299e33363fb9df70 forgot to update hash of
+ > COPYING which now contains LGPL-2.1+
+
+ > Here is an extract of
+ > https://gitlab.gnome.org/GNOME/gdk-pixbuf/-/commit/0a8882b1a1f5234f7de2177e41f9cb584b6d61f8:
+
+ > "The vast majority of GdkPixbuf is released under the terms of the GNU
+ > Lesser General Public License, version 2.1 or later.
+
+ > The following files are released under the terms of the GNU Library
+ > General Public License, version 2 or later:
+ > [...]
+ > The aggregate license of the GdkPixbuf project is the Lesser GPL v2.1 or
+ > later."
+
  > Fixes:
- > http://autobuild.buildroot.net/results/bb6/bb638ed011aea379c7f780187dafe2615753e2ae/
- > http://autobuild.buildroot.net/results/5ef/5ef11bace60950b35b4a593d734a20df088c79aa/
+ >  - http://autobuild.buildroot.org/results/292306061216471c258a89e61b54c0d05c757321
 
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
 
