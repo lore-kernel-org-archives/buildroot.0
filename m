@@ -1,55 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 29 Jan 2021 09:59:57 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/glibc: security
- bump for additional post-2.30.x fixes
-Message-ID: <20210129084029.1E7F3816C9@busybox.osuosl.org>
+Date: Fri, 29 Jan 2021 10:06:05 +0100
+Subject: [Buildroot] [PATCH v3,
+ 2/6] package/gerbera: security bump to version 1.6.4
+In-Reply-To: <CAPi7W80A9r5UuUQFuh5nLMKkgifP_KHFLEf0J749aNRouhmgtw@mail.gmail.com>
+ (Fabrice Fontaine's message of "Fri, 29 Jan 2021 09:56:50 +0100")
+References: <20210125194949.1173139-1-fontaine.fabrice@gmail.com>
+ <20210125194949.1173139-2-fontaine.fabrice@gmail.com>
+ <877dnw3mbn.fsf@dell.be.48ers.dk> <87a6ssywv9.fsf@dell.be.48ers.dk>
+ <CAPi7W80A9r5UuUQFuh5nLMKkgifP_KHFLEf0J749aNRouhmgtw@mail.gmail.com>
+Message-ID: <874kj0w1s2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3d7f510cc1b0c5fb21cdad0d9395005d9a74b5b3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Fixes the following security issue:
+Hi,
 
-- CVE-2021-3326: Assertion failure in ISO-2022-JP-3 gconv module related to
-  combining characters
+ >> > Committed to 2020.02.x and 2020.11.x, thanks.
+ >> 
+ >> > I've also pulled the addition of the libnpupnp package for 2020.02.x.
+ >> 
+ >> Gerbera now unfortunately needs cmake 3.14+:
+ >> 
+ >> CMake Error at CMakeLists.txt:1 (cmake_minimum_required):
+ >> CMake 3.14 or higher is required.  You are running version 3.13.4
+ >> 
+ >> http://autobuild.buildroot.net/results/871/8717612ae32cc491b868f37fbbc960c16b562877/build-end.log
+ >> 
+ >> And we only require 3.10 on 2020.02.x / 2020.11.x. Any idea how to fix?
+ > Unfortunately, I don't think there is an easy fix to remove this requirement.
+ > gerbera requires cmake 3.14 since version 1.6.0 and
+ > https://github.com/gerbera/gerbera/commit/0120e20cf4ae514de429e7f08d99a0a377f50553
 
-For details, see https://sourceware.org/bugzilla/show_bug.cgi?id=27256 and
-https://www.openwall.com/lists/oss-security/2021/01/27/3
+ > The commit log specifies that they bumped CMake minimum to have
+ > proper support for properties on imported targets as well as some Find modules.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../glibc.hash                                                          | 2 +-
- package/glibc/glibc.mk                                                  | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > We could retrieve upstream commit e5d582588904f6cacc7e4bf25104326e7b917e4d
+ > to lower the dependency on cmake 3.13 but that won't help much.
 
-diff --git a/package/glibc/2.30-73-gd59630f9959b0bb8991964758ab854ff4378b20d/glibc.hash b/package/glibc/2.30-85-g79bf3c9774b0c2aa865b2ca397554ff425225d3c/glibc.hash
-similarity index 70%
-rename from package/glibc/2.30-73-gd59630f9959b0bb8991964758ab854ff4378b20d/glibc.hash
-rename to package/glibc/2.30-85-g79bf3c9774b0c2aa865b2ca397554ff425225d3c/glibc.hash
-index 21ee1faeaf..9985f93ed8 100644
---- a/package/glibc/2.30-73-gd59630f9959b0bb8991964758ab854ff4378b20d/glibc.hash
-+++ b/package/glibc/2.30-85-g79bf3c9774b0c2aa865b2ca397554ff425225d3c/glibc.hash
-@@ -1,5 +1,5 @@
- # Locally calculated (fetched from Github)
--sha256  ce788d30851a215d58ff94c972d9cff5956725cc5ee906298711ddc63078c315  glibc-2.30-73-gd59630f9959b0bb8991964758ab854ff4378b20d.tar.gz
-+sha256  b07ce01d26094074912cf718eb8715386758776d4c050ecbfc5ac64d21d63001  glibc-2.30-85-g79bf3c9774b0c2aa865b2ca397554ff425225d3c.tar.gz
- 
- # Hashes for license files
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index 08170fbbcf..75d73f9c16 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -17,7 +17,7 @@ else
- # Generate version string using:
- #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
- # When updating the version, please also update localedef
--GLIBC_VERSION = 2.30-73-gd59630f9959b0bb8991964758ab854ff4378b20d
-+GLIBC_VERSION = 2.30-85-g79bf3c9774b0c2aa865b2ca397554ff425225d3c
- # Upstream doesn't officially provide an https download link.
- # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
- # sometimes the connection times out. So use an unofficial github mirror.
+Thanks for investigating. I guess the only pragmatic solution then is
+the add a dependency for gerbera on host-cmake (3.15), and figure out a
+way to use that for the build.
+
+-- 
+Bye, Peter Korsgaard
