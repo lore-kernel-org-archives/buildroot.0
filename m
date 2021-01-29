@@ -1,39 +1,59 @@
-From: Jianhui Zhao <zhaojh329@gmail.com>
-Date: Sat, 30 Jan 2021 00:23:46 +0800
-Subject: [Buildroot] [PATCH 1/1] package/rtty: bump version to 7.3.0
-Message-ID: <20210129162346.129236-1-zhaojh329@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 29 Jan 2021 18:43:37 +0100
+Subject: [Buildroot] [PATCH 1/1] package/efl: drop dependency on gcc >= 4.8
+Message-ID: <20210129174337.1015111-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
----
- package/rtty/rtty.hash | 2 +-
- package/rtty/rtty.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Drop dependency on gcc >= 4.8 for efl options as it is guaranted since
+commit dbe2d2e686281c19739824d4d4faec62187d1779 which added a dependency
+on gcc >= 4.9 for efl
 
-diff --git a/package/rtty/rtty.hash b/package/rtty/rtty.hash
-index f4fef5243f..a60bbd8b7e 100644
---- a/package/rtty/rtty.hash
-+++ b/package/rtty/rtty.hash
-@@ -1,2 +1,2 @@
--sha256  067a2e0df9abb6d4419271ce6ecc47435824bc82205ad75bbf166e4259a7f9e2  rtty-7.2.3.tar.gz
-+sha256  b0037d6af9f52fdc843b3463eefd52a40a091560d6a33e1abb3bb02fe68d349b  rtty-7.3.0.tar.gz
- sha256  99efed4bbc0b62f96f999ef23399e38234fb91651af734fd389a52b033a85b55  LICENSE
-diff --git a/package/rtty/rtty.mk b/package/rtty/rtty.mk
-index a78375297f..7fc0803239 100644
---- a/package/rtty/rtty.mk
-+++ b/package/rtty/rtty.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/efl/Config.in | 10 ----------
+ 1 file changed, 10 deletions(-)
+
+diff --git a/package/efl/Config.in b/package/efl/Config.in
+index d4a8762de0..305d1469a7 100644
+--- a/package/efl/Config.in
++++ b/package/efl/Config.in
+@@ -143,15 +143,11 @@ comment "Warning: one of the recommended option for EFL is not enabled"
  
--RTTY_VERSION = 7.2.3
-+RTTY_VERSION = 7.3.0
- RTTY_SITE = https://github.com/zhaojh329/rtty/releases/download/v$(RTTY_VERSION)
- RTTY_LICENSE = MIT
- RTTY_LICENSE_FILES = LICENSE
+ config BR2_PACKAGE_EFL_EOLIAN_CPP
+ 	bool "Enable Eolian C++ bindings"
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # Eolian needs C++11
+ 	help
+ 	  Eolian is an EO object parser and code generator.
+ 	  With this option enabled Eolian will handle automatic
+ 	  generation of EFL bindings for the C++11 language.
+ 
+-comment "Eolian needs gcc >= 4.8"
+-	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+-
+ comment "libecore video support"
+ 
+ config BR2_PACKAGE_EFL_FB
+@@ -270,17 +266,11 @@ config BR2_PACKAGE_EFL_SVG
+ 	bool "SVG loader"
+ 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # librsvg
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # librsvg -> pango -> harfbuzz
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # librsvg -> pango -> harfbuzz
+ 	select BR2_PACKAGE_LIBRSVG
+ 	select BR2_PACKAGE_CAIRO
+ 	help
+ 	  This option enables the Evas generic SVG loader
+ 
+-comment "SVG loader needs a toolchain w/ gcc >= 4.8"
+-	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+-	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+-	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+-
+ endif # BR2_PACKAGE_EFL
+ 
+ comment "efl needs a toolchain w/ C++, dynamic library, gcc >= 4.9, host gcc >= 4.9, threads, wchar"
 -- 
-2.25.1
+2.29.2
