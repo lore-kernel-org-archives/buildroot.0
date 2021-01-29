@@ -1,43 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 29 Jan 2021 09:31:04 +0100
-Subject: [Buildroot] [git commit] package/runc: add CPE variables
-Message-ID: <20210129082032.DAC4881530@busybox.osuosl.org>
+Date: Fri, 29 Jan 2021 09:36:20 +0100
+Subject: [Buildroot] [git commit] package/xutil_util-macros: bump version to
+ 1.19.3
+Message-ID: <20210129082033.1A21D81530@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1181d6f42239603ab27f17d837e59b439d0ba7a1
+commit: https://git.buildroot.net/buildroot/commit/?id=d5a7158e121a498a0d2dd5c1f17ec2b87dabd17f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:linuxfoundation:runc is a valid CPE identifier for this
-package:
+Reformatted hashes.
 
-https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alinuxfoundation%3Arunc
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/runc/runc.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ package/xutil_util-macros/xutil_util-macros.hash | 8 +++-----
+ package/xutil_util-macros/xutil_util-macros.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/package/runc/runc.mk b/package/runc/runc.mk
-index 45fe1442ad..0fec360d5f 100644
---- a/package/runc/runc.mk
-+++ b/package/runc/runc.mk
-@@ -4,10 +4,13 @@
+diff --git a/package/xutil_util-macros/xutil_util-macros.hash b/package/xutil_util-macros/xutil_util-macros.hash
+index 49c057fd21..3f28743e64 100644
+--- a/package/xutil_util-macros/xutil_util-macros.hash
++++ b/package/xutil_util-macros/xutil_util-macros.hash
+@@ -1,7 +1,5 @@
+-# From https://lists.x.org/archives/xorg-announce/2018-March/002845.html
+-md5 58edef899364f78fbde9479ded20211e  util-macros-1.19.2.tar.bz2
+-sha1 e8b3a6f2bfde22440fca0974da53da18821a4ee6  util-macros-1.19.2.tar.bz2
+-sha256 d7e43376ad220411499a79735020f9d145fdc159284867e99467e0d771f3e712  util-macros-1.19.2.tar.bz2
+-sha512 3f51504b27f0478c136126f15110cf3cdbba218c4d74a8e974cca1381c6e8364609bd0c444f2fb19aa86a7f4e848dfce4f4da940463b224036f75a60b3d88619  util-macros-1.19.2.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2021-January/003069.html
++sha256  0f812e6e9d2786ba8f54b960ee563c0663ddbe2434bf24ff193f5feab1f31971  util-macros-1.19.3.tar.bz2
++sha512  b9c7398a912c688a782eab5b1e0f6da2df11a430775c5c98fc3269f73a665de6eeb60d300a849e38d345714a6e51f74e9334cb6039767304cca4b93d823a53a2  util-macros-1.19.3.tar.bz2
+ # Locally computed
+ sha256 489b630a75e3255485732eae3d50ff4d29d3feb66760bb3acb04f897e4d9e375  COPYING
+diff --git a/package/xutil_util-macros/xutil_util-macros.mk b/package/xutil_util-macros/xutil_util-macros.mk
+index 6f66c76692..b0ce14ee5a 100644
+--- a/package/xutil_util-macros/xutil_util-macros.mk
++++ b/package/xutil_util-macros/xutil_util-macros.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RUNC_VERSION = 1.0.0-rc92
-+RUNC_VERSION = $(RUNC_CPE_ID_VERSION)-$(RUNC_CPE_ID_VERSION_MINOR)
- RUNC_SITE = $(call github,opencontainers,runc,v$(RUNC_VERSION))
- RUNC_LICENSE = Apache-2.0
- RUNC_LICENSE_FILES = LICENSE
-+RUNC_CPE_ID_VENDOR = linuxfoundation
-+RUNC_CPE_ID_VERSION = 1.0.0
-+RUNC_CPE_ID_VERSION_MINOR = rc92
- 
- RUNC_LDFLAGS = -X main.version=$(RUNC_VERSION)
- RUNC_TAGS = cgo static_build
+-XUTIL_UTIL_MACROS_VERSION = 1.19.2
++XUTIL_UTIL_MACROS_VERSION = 1.19.3
+ XUTIL_UTIL_MACROS_SOURCE = util-macros-$(XUTIL_UTIL_MACROS_VERSION).tar.bz2
+ XUTIL_UTIL_MACROS_SITE = http://xorg.freedesktop.org/releases/individual/util
+ XUTIL_UTIL_MACROS_LICENSE = MIT
