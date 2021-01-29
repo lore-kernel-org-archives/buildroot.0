@@ -1,73 +1,55 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 29 Jan 2021 09:56:50 +0100
-Subject: [Buildroot] [PATCH v3,
- 2/6] package/gerbera: security bump to version 1.6.4
-In-Reply-To: <87a6ssywv9.fsf@dell.be.48ers.dk>
-References: <20210125194949.1173139-1-fontaine.fabrice@gmail.com>
- <20210125194949.1173139-2-fontaine.fabrice@gmail.com>
- <877dnw3mbn.fsf@dell.be.48ers.dk> <87a6ssywv9.fsf@dell.be.48ers.dk>
-Message-ID: <CAPi7W80A9r5UuUQFuh5nLMKkgifP_KHFLEf0J749aNRouhmgtw@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 29 Jan 2021 09:59:40 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/glibc: security
+ bump for additional post-2.31.x fixes
+Message-ID: <20210129083950.1F10D812BA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+commit: https://git.buildroot.net/buildroot/commit/?id=6b8e73d6a1958fcf441d91338c64c73aadcc43e4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-Le ven. 29 janv. 2021 ? 09:23, Peter Korsgaard <peter@korsgaard.com> a ?crit :
->
-> >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
->
-> >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
->  >> - This version is compatible with libupnp 1.14.x which fix
->  >> CallStranger a.k.a. CVE-2020-12695
->  >> - Drop all patches (already in version)
->  >> - expat is not needed since version 1.5.0 and
->  >> https://github.com/gerbera/gerbera/commit/a4f0cccd6a1f741c55ca69b06cff3a964eebc1f3
->  >> - fmt is a mandatory dependency since version 1.5.0 and
->  >> https://github.com/gerbera/gerbera/commit/fe81e5fc8898d6e3a53ce30ddaafb8439683f46f
->  >> - spdlog is a mandatory dependency since version 1.5.0 and
->  >> https://github.com/gerbera/gerbera/commit/615d698fe4dce9d7462022a00c74af1fac7a1003
->  >> - pugixml is a mandatory dependency since version 1.5.0 and
->  >> https://github.com/gerbera/gerbera/commit/c244006aa04ab2e4c5f3e7003ca727e05440238d
->  >> - libnpupnp can be used instead of libupnp since version 1.6.2 and
->  >> https://github.com/gerbera/gerbera/commit/e648763626e3c2512801bd127a0a3b96c8716faf
->  >> - Set CXX_FILESYSTEM_NO_LINK_NEEDED to ON to avoid a build failure
->  >> due to check_cxx_source_runs which has been added with
->  >> https://github.com/gerbera/gerbera/commit/8ea0fce24ce9b1cf870837c3be984fed50581dfb
->  >> - Update indentation in hash file (two spaces)
->
->  >> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->  >> ---
->  >> Changes v2 -> v3:
->  >> - Bump to version 1.6.4 and add libnpupnp dependency
->
->  > Committed to 2020.02.x and 2020.11.x, thanks.
->
->  > I've also pulled the addition of the libnpupnp package for 2020.02.x.
->
-> Gerbera now unfortunately needs cmake 3.14+:
->
-> CMake Error at CMakeLists.txt:1 (cmake_minimum_required):
->   CMake 3.14 or higher is required.  You are running version 3.13.4
->
-> http://autobuild.buildroot.net/results/871/8717612ae32cc491b868f37fbbc960c16b562877/build-end.log
->
-> And we only require 3.10 on 2020.02.x / 2020.11.x. Any idea how to fix?
-Unfortunately, I don't think there is an easy fix to remove this requirement.
-gerbera requires cmake 3.14 since version 1.6.0 and
-https://github.com/gerbera/gerbera/commit/0120e20cf4ae514de429e7f08d99a0a377f50553
+Fixes the following security issue:
 
-The commit log specifies that they bumped CMake minimum to have
-proper support for properties on imported targets as well as some Find modules.
+- CVE-2021-3326: Assertion failure in ISO-2022-JP-3 gconv module related to
+  combining characters
 
-We could retrieve upstream commit e5d582588904f6cacc7e4bf25104326e7b917e4d
-to lower the dependency on cmake 3.13 but that won't help much.
->
-> --
-> Bye, Peter Korsgaard
+For details, see https://sourceware.org/bugzilla/show_bug.cgi?id=27256 and
+https://www.openwall.com/lists/oss-security/2021/01/27/3
 
-Best Regards,
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../glibc.hash                                                          | 2 +-
+ package/glibc/glibc.mk                                                  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Fabrice
+diff --git a/package/glibc/2.31-70-gc4f5e32aae3094491641025a42fe2d55222c8f16/glibc.hash b/package/glibc/2.31-74-gd0c84d22b6a67f85a1eed3b93aef30e6953294b5/glibc.hash
+similarity index 70%
+rename from package/glibc/2.31-70-gc4f5e32aae3094491641025a42fe2d55222c8f16/glibc.hash
+rename to package/glibc/2.31-74-gd0c84d22b6a67f85a1eed3b93aef30e6953294b5/glibc.hash
+index e7aaeab07c..df58d6f47a 100644
+--- a/package/glibc/2.31-70-gc4f5e32aae3094491641025a42fe2d55222c8f16/glibc.hash
++++ b/package/glibc/2.31-74-gd0c84d22b6a67f85a1eed3b93aef30e6953294b5/glibc.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated (fetched from Github)
+-sha256  9897155423ea50bfa255b0130d13608b7d11129e79848a52cf82670bb206439a  glibc-2.31-70-gc4f5e32aae3094491641025a42fe2d55222c8f16.tar.gz
++sha256  d7495fb929497bedff9827d01091a4df681cfcbe5204de1d47fc5dab1ba7457c  glibc-2.31-74-gd0c84d22b6a67f85a1eed3b93aef30e6953294b5.tar.gz
+ 
+ # Hashes for license files
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index f4bba24ca0..b068a006a4 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -20,7 +20,7 @@ else ifeq ($(BR2_RISCV_32),y)
+ # Until 2.33 is released, just use master
+ GLIBC_VERSION = 2.32.9000-69-gbd394d131c10c9ec22c6424197b79410042eed99
+ else
+-GLIBC_VERSION = 2.31-70-gc4f5e32aae3094491641025a42fe2d55222c8f16
++GLIBC_VERSION = 2.31-74-gd0c84d22b6a67f85a1eed3b93aef30e6953294b5
+ endif
+ # Upstream doesn't officially provide an https download link.
+ # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
