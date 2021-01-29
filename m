@@ -1,188 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 29 Jan 2021 09:30:02 +0100
-Subject: [Buildroot] [git commit] package/mutt: add security fixes from
- Ubuntu for CVE-2021-3181
-Message-ID: <20210129082032.C8D6981530@busybox.osuosl.org>
+Date: Fri, 29 Jan 2021 09:31:04 +0100
+Subject: [Buildroot] [git commit] package/runc: add CPE variables
+Message-ID: <20210129082032.DAC4881530@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c1413cd94c9bc953613b8d2578202240c234f34c
+commit: https://git.buildroot.net/buildroot/commit/?id=1181d6f42239603ab27f17d837e59b439d0ba7a1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following security issue:
+cpe:2.3:a:linuxfoundation:runc is a valid CPE identifier for this
+package:
 
-- CVE-2021-3181: rfc822.c in Mutt through 2.0.4 allows remote attackers to
-  cause a denial of service (mailbox unavailability) by sending email
-  messages with sequences of semicolon characters in RFC822 address fields
-  (aka terminators of empty groups).  A small email message from the
-  attacker can cause large memory consumption, and the victim may then be
-  unable to see email messages from other persons.
+https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alinuxfoundation%3Arunc
 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mutt/0002-CVE-2021-3181-1.patch | 40 +++++++++++++++++++++++++
- package/mutt/0003-CVE-2021-3181-2.patch | 53 +++++++++++++++++++++++++++++++++
- package/mutt/0004-CVE-2021-3181-3.patch | 30 +++++++++++++++++++
- package/mutt/mutt.mk                    |  5 ++++
- 4 files changed, 128 insertions(+)
+ package/runc/runc.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/package/mutt/0002-CVE-2021-3181-1.patch b/package/mutt/0002-CVE-2021-3181-1.patch
-new file mode 100644
-index 0000000000..cbb12cf2f2
---- /dev/null
-+++ b/package/mutt/0002-CVE-2021-3181-1.patch
-@@ -0,0 +1,40 @@
-+From 4a2becbdb4422aaffe3ce314991b9d670b7adf17 Mon Sep 17 00:00:00 2001
-+From: Kevin McCarthy <kevin@8t8.us>
-+Date: Sun, 17 Jan 2021 10:40:37 -0800
-+Subject: [PATCH] Fix memory leak parsing group addresses without a display
-+ name.
-+
-+When there was a group address terminator with no previous
-+addresses (including the group display-name), an address would be
-+allocated but not attached to the address list.
-+
-+Change this to only allocate when last exists.
-+
-+It would be more correct to not allocate at all unless we are inside a
-+group list, but I will address that in a separate commit to master.
-+
-+[Retrieved from:
-+https://git.launchpad.net/ubuntu/+source/mutt/plain/debian/patches/CVE-2021-3181-1.patch?h=import/1.14.6-1ubuntu0.2]
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ rfc822.c | 5 ++---
-+ 1 file changed, 2 insertions(+), 3 deletions(-)
-+
-+Index: mutt-1.14.6/rfc822.c
-+===================================================================
-+--- mutt-1.14.6.orig/rfc822.c
-++++ mutt-1.14.6/rfc822.c
-+@@ -491,11 +491,10 @@ ADDRESS *rfc822_parse_adrlist (ADDRESS *
-+ #endif
-+ 
-+       /* add group terminator */
-+-      cur = rfc822_new_address ();
-+       if (last)
-+       {
-+-	last->next = cur;
-+-	last = cur;
-++	last->next = rfc822_new_address ();
-++	last = last->next;
-+       }
-+ 
-+       phraselen = 0;
-diff --git a/package/mutt/0003-CVE-2021-3181-2.patch b/package/mutt/0003-CVE-2021-3181-2.patch
-new file mode 100644
-index 0000000000..c3184a40ed
---- /dev/null
-+++ b/package/mutt/0003-CVE-2021-3181-2.patch
-@@ -0,0 +1,53 @@
-+From 939b02b33ae29bc0d642570c1dcfd4b339037d19 Mon Sep 17 00:00:00 2001
-+From: Kevin McCarthy <kevin@8t8.us>
-+Date: Sun, 17 Jan 2021 10:53:19 -0800
-+Subject: [PATCH] Don't allocate a group terminator unless we are in a
-+ group-list.
-+
-+This will reduce memory allocation for garbage/spam address lists.
-+
-+It also makes no sense to store a terminator when there wasn't a
-+display-name indicating the start of a group.
-+
-+[Retrieved from:
-+https://git.launchpad.net/ubuntu/+source/mutt/plain/debian/patches/CVE-2021-3181-2.patch?h=import/1.14.6-1ubuntu0.2]
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ rfc822.c | 6 ++++--
-+ 1 file changed, 4 insertions(+), 2 deletions(-)
-+
-+Index: mutt-1.14.6/rfc822.c
-+===================================================================
-+--- mutt-1.14.6.orig/rfc822.c
-++++ mutt-1.14.6/rfc822.c
-+@@ -378,7 +378,7 @@ add_addrspec (ADDRESS **top, ADDRESS **l
-+ 
-+ ADDRESS *rfc822_parse_adrlist (ADDRESS *top, const char *s)
-+ {
-+-  int ws_pending, nl;
-++  int ws_pending, nl, in_group = 0;
-+ #ifdef EXACT_ADDRESS
-+   const char *begin;
-+ #endif
-+@@ -455,6 +455,7 @@ ADDRESS *rfc822_parse_adrlist (ADDRESS *
-+       terminate_buffer (phrase, phraselen);
-+       cur->mailbox = safe_strdup (phrase);
-+       cur->group = 1;
-++      in_group = 1;
-+ 
-+       if (last)
-+ 	last->next = cur;
-+@@ -491,11 +492,12 @@ ADDRESS *rfc822_parse_adrlist (ADDRESS *
-+ #endif
-+ 
-+       /* add group terminator */
-+-      if (last)
-++      if (last && in_group)
-+       {
-+ 	last->next = rfc822_new_address ();
-+ 	last = last->next;
-+       }
-++      in_group = 0;
-+ 
-+       phraselen = 0;
-+       commentlen = 0;
-diff --git a/package/mutt/0004-CVE-2021-3181-3.patch b/package/mutt/0004-CVE-2021-3181-3.patch
-new file mode 100644
-index 0000000000..42d0cbaef5
---- /dev/null
-+++ b/package/mutt/0004-CVE-2021-3181-3.patch
-@@ -0,0 +1,30 @@
-+From d4305208955c5cdd9fe96dfa61e7c1e14e176a14 Mon Sep 17 00:00:00 2001
-+From: Kevin McCarthy <kevin@8t8.us>
-+Date: Sun, 17 Jan 2021 11:05:36 -0800
-+Subject: [PATCH] Add group terminator if it is left off.
-+
-+If there is no terminating ";" add one to the list, to make the text
-+re-rendering correct.
-+
-+[Retrieved from:
-+https://git.launchpad.net/ubuntu/+source/mutt/plain/debian/patches/CVE-2021-3181-3.patch?h=import/1.14.6-1ubuntu0.2]
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ rfc822.c | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+Index: mutt-1.14.6/rfc822.c
-+===================================================================
-+--- mutt-1.14.6.orig/rfc822.c
-++++ mutt-1.14.6/rfc822.c
-+@@ -560,6 +560,10 @@ ADDRESS *rfc822_parse_adrlist (ADDRESS *
-+     last->val = mutt_substrdup (begin, s - nl < begin ? begin : s - nl);
-+ #endif
-+ 
-++  /* add group terminator, if it was left off */
-++  if (last && in_group)
-++    last->next = rfc822_new_address ();
-++
-+   return top;
-+ }
-+ 
-diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
-index 0823e8afc0..c2188cebea 100644
---- a/package/mutt/mutt.mk
-+++ b/package/mutt/mutt.mk
-@@ -15,6 +15,11 @@ MUTT_CONF_OPTS = --disable-doc --disable-smtp
- # 0001-Ensure-IMAP-connection-is-closed-after-a-connection-error.patch
- MUTT_IGNORE_CVES += CVE-2020-28896
+diff --git a/package/runc/runc.mk b/package/runc/runc.mk
+index 45fe1442ad..0fec360d5f 100644
+--- a/package/runc/runc.mk
++++ b/package/runc/runc.mk
+@@ -4,10 +4,13 @@
+ #
+ ################################################################################
  
-+# 0002-CVE-2021-3181-1.patch
-+# 0003-CVE-2021-3181-2.patch
-+# 0004-CVE-2021-3181-3.patch
-+MUTT_IGNORE_CVES += CVE-2021-3181
-+
- ifeq ($(BR2_PACKAGE_LIBICONV),y)
- MUTT_DEPENDENCIES += libiconv
- MUTT_CONF_OPTS += --enable-iconv
+-RUNC_VERSION = 1.0.0-rc92
++RUNC_VERSION = $(RUNC_CPE_ID_VERSION)-$(RUNC_CPE_ID_VERSION_MINOR)
+ RUNC_SITE = $(call github,opencontainers,runc,v$(RUNC_VERSION))
+ RUNC_LICENSE = Apache-2.0
+ RUNC_LICENSE_FILES = LICENSE
++RUNC_CPE_ID_VENDOR = linuxfoundation
++RUNC_CPE_ID_VERSION = 1.0.0
++RUNC_CPE_ID_VERSION_MINOR = rc92
+ 
+ RUNC_LDFLAGS = -X main.version=$(RUNC_VERSION)
+ RUNC_TAGS = cgo static_build
