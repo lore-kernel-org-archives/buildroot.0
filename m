@@ -1,59 +1,88 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 29 Jan 2021 18:43:37 +0100
-Subject: [Buildroot] [PATCH 1/1] package/efl: drop dependency on gcc >= 4.8
-Message-ID: <20210129174337.1015111-1-fontaine.fabrice@gmail.com>
+Date: Fri, 29 Jan 2021 18:44:54 +0100
+Subject: [Buildroot] [PATCH 1/1] package/pinentry: bump to version 1.1.1
+Message-ID: <20210129174454.1015240-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop dependency on gcc >= 4.8 for efl options as it is guaranted since
-commit dbe2d2e686281c19739824d4d4faec62187d1779 which added a dependency
-on gcc >= 4.9 for efl
+- add efl optional dependency which is available since
+  http://git.gnupg.org/cgi-bin/gitweb.cgi?p=pinentry.git;a=commit;h=948105b7a34ec9a9e5479d376b7c86bafee50a01
+- Update indentation in hash file (two spaces)
+
+http://git.gnupg.org/cgi-bin/gitweb.cgi?p=pinentry.git;a=blob;f=NEWS;h=c8b5195ace7bb3ffb1420ae479ac39d65b0fa17c
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/efl/Config.in | 10 ----------
- 1 file changed, 10 deletions(-)
+ package/pinentry/Config.in     | 11 +++++++++++
+ package/pinentry/pinentry.hash |  6 +++---
+ package/pinentry/pinentry.mk   | 10 +++++++++-
+ 3 files changed, 23 insertions(+), 4 deletions(-)
 
-diff --git a/package/efl/Config.in b/package/efl/Config.in
-index d4a8762de0..305d1469a7 100644
---- a/package/efl/Config.in
-+++ b/package/efl/Config.in
-@@ -143,15 +143,11 @@ comment "Warning: one of the recommended option for EFL is not enabled"
+diff --git a/package/pinentry/Config.in b/package/pinentry/Config.in
+index 586ffea295..684e4eed4a 100644
+--- a/package/pinentry/Config.in
++++ b/package/pinentry/Config.in
+@@ -15,6 +15,17 @@ menuconfig BR2_PACKAGE_PINENTRY
  
- config BR2_PACKAGE_EFL_EOLIAN_CPP
- 	bool "Enable Eolian C++ bindings"
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # Eolian needs C++11
- 	help
- 	  Eolian is an EO object parser and code generator.
- 	  With this option enabled Eolian will handle automatic
- 	  generation of EFL bindings for the C++11 language.
+ if BR2_PACKAGE_PINENTRY
  
--comment "Eolian needs gcc >= 4.8"
--	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
--
- comment "libecore video support"
++config BR2_PACKAGE_PINENTRY_EFL
++	bool "pinentry-efl"
++	depends on BR2_PACKAGE_EFL
++	depends on BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_EFL_X_XLIB
++	help
++	  The pinentry-efl tool
++
++comment "pinentry-efl needs efl and X"
++	depends on !BR2_PACKAGE_EFL || !BR2_PACKAGE_XORG7
++
+ config BR2_PACKAGE_PINENTRY_FLTK
+ 	bool "pinentry-fltk"
+ 	depends on BR2_USE_MMU # fltk
+diff --git a/package/pinentry/pinentry.hash b/package/pinentry/pinentry.hash
+index c9610d6eb1..e5f3d90652 100644
+--- a/package/pinentry/pinentry.hash
++++ b/package/pinentry/pinentry.hash
+@@ -1,5 +1,5 @@
+ # From https://www.gnupg.org/download/integrity_check.html
+-sha1  693bdf9f48dfb3e040d92f50b1bb464e268b9fb0  pinentry-1.1.0.tar.bz2
++sha1  b8b88cab4fd844e3616d55aeba8f084f2b98fb0f  pinentry-1.1.1.tar.bz2
+ # Locally computed
+-sha256 68076686fa724a290ea49cdf0d1c0c1500907d1b759a3bcbfbec0293e8f56570  pinentry-1.1.0.tar.bz2
+-sha256 67f82e045cf7acfef853ea0f426575a8359161a0a325e19f02b529a87c4b6c34  COPYING
++sha256  cd12a064013ed18e2ee8475e669b9f58db1b225a0144debdb85a68cecddba57f  pinentry-1.1.1.tar.bz2
++sha256  67f82e045cf7acfef853ea0f426575a8359161a0a325e19f02b529a87c4b6c34  COPYING
+diff --git a/package/pinentry/pinentry.mk b/package/pinentry/pinentry.mk
+index e7bd31d40e..8ebd35cfab 100644
+--- a/package/pinentry/pinentry.mk
++++ b/package/pinentry/pinentry.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_EFL_FB
-@@ -270,17 +266,11 @@ config BR2_PACKAGE_EFL_SVG
- 	bool "SVG loader"
- 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # librsvg
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # librsvg -> pango -> harfbuzz
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # librsvg -> pango -> harfbuzz
- 	select BR2_PACKAGE_LIBRSVG
- 	select BR2_PACKAGE_CAIRO
- 	help
- 	  This option enables the Evas generic SVG loader
+-PINENTRY_VERSION = 1.1.0
++PINENTRY_VERSION = 1.1.1
+ PINENTRY_SOURCE = pinentry-$(PINENTRY_VERSION).tar.bz2
+ PINENTRY_SITE = https://www.gnupg.org/ftp/gcrypt/pinentry
+ PINENTRY_LICENSE = GPL-2.0+
+@@ -29,6 +29,14 @@ else
+ PINENTRY_CONF_OPTS += --disable-libsecret
+ endif
  
--comment "SVG loader needs a toolchain w/ gcc >= 4.8"
--	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
--	depends on BR2_TOOLCHAIN_HAS_SYNC_4
--	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
--
- endif # BR2_PACKAGE_EFL
- 
- comment "efl needs a toolchain w/ C++, dynamic library, gcc >= 4.9, host gcc >= 4.9, threads, wchar"
++# pinentry-efl backend
++ifeq ($(BR2_PACKAGE_PINENTRY_EFL),y)
++PINENTRY_CONF_OPTS += --enable-pinentry-efl
++PINENTRY_DEPENDENCIES += efl
++else
++PINENTRY_CONF_OPTS += --disable-pinentry-efl
++endif
++
+ # pinentry-fltk backend
+ ifeq ($(BR2_PACKAGE_PINENTRY_FLTK),y)
+ PINENTRY_CONF_ENV += ac_cv_path_FLTK_CONFIG=$(STAGING_DIR)/usr/bin/fltk-config
 -- 
 2.29.2
