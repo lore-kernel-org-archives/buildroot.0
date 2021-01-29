@@ -1,55 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 29 Jan 2021 09:32:24 +0100
-Subject: [Buildroot] [git commit] package/glibc: security bump for
- additional post-2.32.x fixes
-Message-ID: <20210129082032.E973981530@busybox.osuosl.org>
+Date: Fri, 29 Jan 2021 09:37:51 +0100
+Subject: [Buildroot] [git commit] package/ttyd: bump to version 1.6.3
+Message-ID: <20210129082033.3E09281530@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8a6b0b5696ff6c7cdad69e857df09fc3bcbc91d8
+commit: https://git.buildroot.net/buildroot/commit/?id=12a30d8014c0b459e5a8fa23a42e0e3cd7daab51
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following security issue:
-
-- CVE-2021-3326: Assertion failure in ISO-2022-JP-3 gconv module related to
-  combining characters
-
-For details, see https://sourceware.org/bugzilla/show_bug.cgi?id=27256 and
-https://www.openwall.com/lists/oss-security/2021/01/27/3
-
+Signed-off-by: Tian Yuanhao <tianyuanhao@aliyun.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../glibc.hash                                                          | 2 +-
- package/glibc/glibc.mk                                                  | 2 +-
+ package/ttyd/ttyd.hash | 2 +-
+ package/ttyd/ttyd.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/glibc/2.32-23-g050022910be1d1f5c11cd5168f1685ad4f9580d2/glibc.hash b/package/glibc/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/glibc.hash
-similarity index 72%
-rename from package/glibc/2.32-23-g050022910be1d1f5c11cd5168f1685ad4f9580d2/glibc.hash
-rename to package/glibc/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/glibc.hash
-index 45ecc2895f..b1d5243fcc 100644
---- a/package/glibc/2.32-23-g050022910be1d1f5c11cd5168f1685ad4f9580d2/glibc.hash
-+++ b/package/glibc/2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2/glibc.hash
-@@ -1,5 +1,5 @@
- # Locally calculated (fetched from Github)
--sha256  04946bb7cbaf4062bf5e727e0d6784e105b07611587d71f00d25ea896753c26d  glibc-2.32-23-g050022910be1d1f5c11cd5168f1685ad4f9580d2.tar.gz
-+sha256  f4710e9a435a7b83e1d23dd75434f0d36b898eba9b4249c946c32b467d852fd4  glibc-2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2.tar.gz
+diff --git a/package/ttyd/ttyd.hash b/package/ttyd/ttyd.hash
+index 8448c978a4..c4263d6e94 100644
+--- a/package/ttyd/ttyd.hash
++++ b/package/ttyd/ttyd.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  fd3256099e1cc5c470220cbfbb3ab2c7fa1f92232c503f583556a8965aa83bac  ttyd-1.6.2.tar.gz
++sha256  1116419527edfe73717b71407fb6e06f46098fc8a8e6b0bb778c4c75dc9f64b9  ttyd-1.6.3.tar.gz
+ sha256  711762f081c180ade3d09d7b0b7537eaf35eca8d1671e47bc66eaa39376edb12  LICENSE
+diff --git a/package/ttyd/ttyd.mk b/package/ttyd/ttyd.mk
+index 9c456d16cd..856270a88d 100644
+--- a/package/ttyd/ttyd.mk
++++ b/package/ttyd/ttyd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Hashes for license files
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index b0a1318b04..f84f670fc0 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -16,7 +16,7 @@ ifeq ($(BR2_RISCV_32),y)
- # Until 2.33 is released, just use master
- GLIBC_VERSION = 2.32.9000-69-gbd394d131c10c9ec22c6424197b79410042eed99
- else
--GLIBC_VERSION = 2.32-23-g050022910be1d1f5c11cd5168f1685ad4f9580d2
-+GLIBC_VERSION = 2.32-37-g760e1d287825fa91d4d5a0cc921340c740d803e2
- endif
- # Upstream doesn't officially provide an https download link.
- # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
+-TTYD_VERSION = 1.6.2
++TTYD_VERSION = 1.6.3
+ TTYD_SITE = $(call github,tsl0922,ttyd,$(TTYD_VERSION))
+ TTYD_LICENSE = MIT
+ TTYD_LICENSE_FILES = LICENSE
