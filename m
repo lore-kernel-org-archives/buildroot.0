@@ -1,36 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 30 Jan 2021 22:16:22 +0100
-Subject: [Buildroot] [git commit] package/vde2: add CPE variables
-Message-ID: <20210130205927.AEFB0856A7@busybox.osuosl.org>
+Date: Sat, 30 Jan 2021 22:18:53 +0100
+Subject: [Buildroot] [git commit] package/mutt: add gpgme optional dependency
+Message-ID: <20210130205927.BDFEE7FD45@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b96a732c76d0e12ca57da82d7c3737ad83a7ff56
+commit: https://git.buildroot.net/buildroot/commit/?id=2312e99499af0e432dedd87b0edd8a137c6a7e73
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:vde_project:vde is a valid CPE identifier for this package:
-
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Avde_project%3Avde
+gpgme is supported since 2005 and
+https://gitlab.com/muttmua/mutt/-/commit/4bb5db92a89158cc45c3480f2be62d0b435c9a4e
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/vde2/vde2.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/mutt/mutt.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/package/vde2/vde2.mk b/package/vde2/vde2.mk
-index 29337601c4..76d6f352b7 100644
---- a/package/vde2/vde2.mk
-+++ b/package/vde2/vde2.mk
-@@ -9,6 +9,8 @@ VDE2_SOURCE = vde2-$(VDE2_VERSION).tar.bz2
- VDE2_SITE = http://downloads.sourceforge.net/project/vde/vde2/$(VDE2_VERSION)
- VDE2_LICENSE = GPL-2.0+, LGPL-2.1+, BSD-3-Clause
- VDE2_LICENSE_FILES = COPYING COPYING.libvdeplug COPYING.slirpvde
-+VDE2_CPE_ID_VENDOR = vde_project
-+VDE2_CPE_ID_PRODUCT = vde
- VDE2_INSTALL_STAGING = YES
+diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
+index c2188cebea..9557983a07 100644
+--- a/package/mutt/mutt.mk
++++ b/package/mutt/mutt.mk
+@@ -36,6 +36,15 @@ else
+ MUTT_CONF_OPTS += --without-idn --without-idn2
+ endif
  
- # We touch configure.ac, so we need to autoreconf
++ifeq ($(BR2_PACKAGE_LIBGPGME),y)
++MUTT_DEPENDENCIES += libgpgme
++MUTT_CONF_OPTS += \
++	--enable-gpgme \
++	--with-gpgme-prefix=$(STAGING_DIR)/usr
++else
++MUTT_CONF_OPTS += --disable-gpgme
++endif
++
+ ifeq ($(BR2_PACKAGE_MUTT_IMAP),y)
+ MUTT_CONF_OPTS += --enable-imap
+ else
