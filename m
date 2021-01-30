@@ -1,37 +1,44 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 30 Jan 2021 14:31:15 +0100
-Subject: [Buildroot] [PATCH 2/2] package/bitcoin: add CPE variables
-In-Reply-To: <20210130133115.2334485-1-fontaine.fabrice@gmail.com>
-References: <20210130133115.2334485-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210130133115.2334485-2-fontaine.fabrice@gmail.com>
+Date: Sat, 30 Jan 2021 14:32:01 +0100
+Subject: [Buildroot] [PATCH 1/1] package/zeromq: disable libbsd on static
+ build
+Message-ID: <20210130133201.2334604-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:bitcoin:bitcoin_core is a valid CPE identifier for this
-package:
+Static linking with libbsd fails because of multiple definition of the
+strlcpy symbol. uClibc optionally provides these symbols.
 
-https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Abitcoin%3Abitcoin_core
+So disable libbsd on zeromq when linking statically to avoid the
+following build failure with bitcoin and zeromq:
+
+  CXXLD    bitcoind
+/tmp/instance-1/output-1/host/lib/gcc/powerpc-buildroot-linux-uclibc/9.3.0/../../../../powerpc-buildroot-linux-uclibc/bin/ld: /tmp/instance-1/output-1/host/powerpc-buildroot-linux-uclibc/sysroot/usr/lib//libc.a(strlcpy.os): in function `__GI_strlcpy':
+strlcpy.c:(.text+0x0): multiple definition of `strlcpy'; /tmp/instance-1/output-1/host/powerpc-buildroot-linux-uclibc/sysroot/usr/lib/libbsd.a(strlcpy.o):strlcpy.c:(.text+0x0): first defined here
+
+Fixes:
+ - http://autobuild.buildroot.org/results/ba87544d42ad5e77a27a7a504bc6336a06f6e291
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/bitcoin/bitcoin.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/zeromq/zeromq.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/bitcoin/bitcoin.mk b/package/bitcoin/bitcoin.mk
-index cd127127b6..5f1684879c 100644
---- a/package/bitcoin/bitcoin.mk
-+++ b/package/bitcoin/bitcoin.mk
-@@ -9,6 +9,8 @@ BITCOIN_SITE = https://bitcoincore.org/bin/bitcoin-core-$(BITCOIN_VERSION)
- BITCOIN_AUTORECONF = YES
- BITCOIN_LICENSE = MIT
- BITCOIN_LICENSE_FILES = COPYING
-+BITCOIN_CPE_ID_VENDOR = bitcoin
-+BITCOIN_CPE_ID_PRODUCT = bitcoin_core
- BITCOIN_DEPENDENCIES = host-pkgconf boost libevent
- BITCOIN_MAKE_ENV = BITCOIN_GENBUILD_NO_GIT=1
- BITCOIN_CONF_OPTS = \
+diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
+index 182699403c..495f1aa5a3 100644
+--- a/package/zeromq/zeromq.mk
++++ b/package/zeromq/zeromq.mk
+@@ -68,7 +68,7 @@ else
+ ZEROMQ_CONF_OPTS += --without-tls
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LIBBSD),y)
++ifeq ($(BR2_PACKAGE_LIBBSD):$(BR2_STATIC_LIBS),y:)
+ ZEROMQ_DEPENDENCIES += host-pkgconf libbsd
+ ZEROMQ_CONF_OPTS += --enable-libbsd
+ else
 -- 
 2.29.2
