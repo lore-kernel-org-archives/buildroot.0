@@ -1,89 +1,70 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 30 Jan 2021 11:41:58 +0100
-Subject: [Buildroot] [git commit] package/dhcpcd: fix build with nds32
-Message-ID: <20210130102238.7F9D683610@busybox.osuosl.org>
+Date: Sat, 30 Jan 2021 11:31:09 +0100
+Subject: [Buildroot] [git commit] {linux, linux-headers}: bump 4.19.x / 5.{4,
+ 10}.x series
+Message-ID: <20210130102238.03EC881414@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8713001aadb7dd8334f1e3aa0eaf64abedf908aa
+commit: https://git.buildroot.net/buildroot/commit/?id=1c61297ec0fa4a1fbdb4507216b1da46a3b6909b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix build failure with dhcpcd due to SECCOMP_AUDIT_ARCH which is used
-since version 9.3.0 and
-https://github.com/rsmarples/dhcpcd/commit/a926ee6d8f4eb2f04e01d72664893e3cb95fceca
-
-Fixes:
- - http://autobuild.buildroot.org/results/af8ba07ea0c12ab8cd24d528ef98db05521f3d36
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...src-privsep-linux.c-add-support-for-nds32.patch | 40 ++++++++++++++++++++++
- package/dhcpcd/dhcpcd.mk                           |  5 +++
- 2 files changed, 45 insertions(+)
+ linux/Config.in                      | 2 +-
+ linux/linux.hash                     | 6 +++---
+ package/linux-headers/Config.in.host | 6 +++---
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/dhcpcd/0001-src-privsep-linux.c-add-support-for-nds32.patch b/package/dhcpcd/0001-src-privsep-linux.c-add-support-for-nds32.patch
-new file mode 100644
-index 0000000000..89dd3c7637
---- /dev/null
-+++ b/package/dhcpcd/0001-src-privsep-linux.c-add-support-for-nds32.patch
-@@ -0,0 +1,40 @@
-+From bc59536c202ba134422a42fe4dfdfe0643806c8f Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 29 Jan 2021 22:21:00 +0100
-+Subject: [PATCH] src/privsep-linux.c: add support for nds32
-+
-+Fix the following build failure:
-+
-+privsep-linux.c:206:4: error: #error "Platform does not support seccomp filter yet"
-+ #  error "Platform does not support seccomp filter yet"
-+    ^~~~~
-+In file included from privsep-linux.c:36:
-+privsep-linux.c:213:38: error: 'SECCOMP_AUDIT_ARCH' undeclared here (not in a function); did you mean 'SECCOMP_ALLOW_ARG'?
-+  BPF_JUMP(BPF_JMP + BPF_JEQ + BPF_K, SECCOMP_AUDIT_ARCH, 1, 0),
-+                                      ^~~~~~~~~~~~~~~~~~
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/af8ba07ea0c12ab8cd24d528ef98db05521f3d36
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/rsmarples/dhcpcd/pull/21]
-+---
-+ src/privsep-linux.c | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/src/privsep-linux.c b/src/privsep-linux.c
-+index 2226659b..e81689bb 100644
-+--- a/src/privsep-linux.c
-++++ b/src/privsep-linux.c
-+@@ -182,6 +182,8 @@ ps_root_sendnetlink(struct dhcpcd_ctx *ctx, int protocol, struct msghdr *msg)
-+ #  else
-+ #    define SECCOMP_AUDIT_ARCH AUDIT_ARCH_MIPS
-+ #  endif
-++#elif defined(__nds32__)
-++#  define SECCOMP_AUDIT_ARCH AUDIT_ARCH_NDS32
-+ #elif defined(__powerpc64__)
-+ #  define SECCOMP_AUDIT_ARCH AUDIT_ARCH_PPC64
-+ #elif defined(__powerpc__)
-+-- 
-+2.29.2
-+
-diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
-index ce1443eed0..cb269f1138 100644
---- a/package/dhcpcd/dhcpcd.mk
-+++ b/package/dhcpcd/dhcpcd.mk
-@@ -16,6 +16,11 @@ DHCPCD_CONFIG_OPTS = \
- 	--os=linux \
- 	--privsepuser=dhcpcd
+diff --git a/linux/Config.in b/linux/Config.in
+index 91d33cb5cb..267b113532 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -125,7 +125,7 @@ endif
  
-+# AUDIT_ARCH_NDS32 is only available since kernel >= 5.2
-+ifeq ($(BR2_nds32):$(BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2),y:)
-+DHCPCD_CONFIG_OPTS += --disable-privsep
-+endif
-+
- ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
- DHCPCD_CONFIG_OPTS += --with-udev
- DHCPCD_DEPENDENCIES += udev
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "5.10.10" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "5.10.11" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "4.19.152-cip37" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "4.19.152-cip37-rt16" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index e9b6825c2b..52d2066081 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,11 +1,11 @@
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  60ed866fa951522a5255ea37ec3ac2006d3f3427d4783a13ef478464f37cdb19  linux-5.10.10.tar.xz
+-sha256  c0937ff98824c4b14cfea68a04340e0beb3c00f1cc02984daf2f3bdf542394fd  linux-5.4.92.tar.xz
++sha256  02ef2b56b00fc5145701c603a5235e1265772e40d488a936b27ba65fe78e710f  linux-5.10.11.tar.xz
++sha256  d37449403664cc3b1bac96d0d9a199dbe619885cd899c0ae3108843f42e3d522  linux-5.4.93.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+ sha256  661e98b9448cbac948c705fd44cd7d30200422ee1cb02950d142aa99a1b3985a  linux-4.4.253.tar.xz
+ sha256  9a5b51a8350201bd38e3ff13909323a6571b4572a7b3caed76e462b07619bc18  linux-4.9.253.tar.xz
+ sha256  62a36a25431016d98d0f1cff98be432086c51f86fd79042bd10a867b3a924d11  linux-4.14.217.tar.xz
+-sha256  dd0d0264f8ef4363d0080054fd344470a73f07aca2cd673e91bf6e77fbe25b4a  linux-4.19.170.tar.xz
++sha256  f4e352fe0eb986e5b532b99d9b0725a67046cbb3e5f53fcd5b098cbaeb2ac60a  linux-4.19.171.tar.xz
+ # Locally computed
+ sha256  d2a06f52143deb929b8d513cf9afc9bd065951389a80fa70bc4d63025b5b3fb9  linux-cip-4.19.152-cip37.tar.gz
+ sha256  bc1dacd3d0f526de3e8754a444e8e02a54521527af639ddb907cb35cda775a8c  linux-cip-4.19.152-cip37-rt16.tar.gz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 311999e7fa..b47ac8bb44 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -349,9 +349,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "4.4.253"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.9.253"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.14.217"	if BR2_KERNEL_HEADERS_4_14
+-	default "4.19.170"	if BR2_KERNEL_HEADERS_4_19
+-	default "5.4.92"	if BR2_KERNEL_HEADERS_5_4
+-	default "5.10.10"	if BR2_KERNEL_HEADERS_5_10
++	default "4.19.171"	if BR2_KERNEL_HEADERS_4_19
++	default "5.4.93"	if BR2_KERNEL_HEADERS_5_4
++	default "5.10.11"	if BR2_KERNEL_HEADERS_5_10
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
