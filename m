@@ -1,25 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 30 Jan 2021 22:19:06 +0100
-Subject: [Buildroot] [PATCH 1/1] package/mutt: add gpgme optional
- dependency
-In-Reply-To: <20210130134244.2367892-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 30 Jan 2021 14:42:44 +0100")
-References: <20210130134244.2367892-1-fontaine.fabrice@gmail.com>
-Message-ID: <874kiyrulx.fsf@dell.be.48ers.dk>
+Date: Sat, 30 Jan 2021 22:16:22 +0100
+Subject: [Buildroot] [git commit] package/vde2: add CPE variables
+Message-ID: <20210130205927.AEFB0856A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=b96a732c76d0e12ca57da82d7c3737ad83a7ff56
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > gpgme is supported since 2005 and
- > https://gitlab.com/muttmua/mutt/-/commit/4bb5db92a89158cc45c3480f2be62d0b435c9a4e
+cpe:2.3:a:vde_project:vde is a valid CPE identifier for this package:
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Avde_project%3Avde
 
-Committed, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/vde2/vde2.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/vde2/vde2.mk b/package/vde2/vde2.mk
+index 29337601c4..76d6f352b7 100644
+--- a/package/vde2/vde2.mk
++++ b/package/vde2/vde2.mk
+@@ -9,6 +9,8 @@ VDE2_SOURCE = vde2-$(VDE2_VERSION).tar.bz2
+ VDE2_SITE = http://downloads.sourceforge.net/project/vde/vde2/$(VDE2_VERSION)
+ VDE2_LICENSE = GPL-2.0+, LGPL-2.1+, BSD-3-Clause
+ VDE2_LICENSE_FILES = COPYING COPYING.libvdeplug COPYING.slirpvde
++VDE2_CPE_ID_VENDOR = vde_project
++VDE2_CPE_ID_PRODUCT = vde
+ VDE2_INSTALL_STAGING = YES
+ 
+ # We touch configure.ac, so we need to autoreconf
