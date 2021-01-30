@@ -1,36 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 30 Jan 2021 22:19:45 +0100
-Subject: [Buildroot] [git commit] package/libgpgme: add CPE variables
-Message-ID: <20210130210021.7C64C813F4@busybox.osuosl.org>
+Date: Sat, 30 Jan 2021 22:19:52 +0100
+Subject: [Buildroot] [git commit] package/libgpgme: bump to version 1.15.1
+Message-ID: <20210130210021.8A858813F4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6b79c8fb05bf1ae569d8b8e8c9f6f516e97c9ae0
+commit: https://git.buildroot.net/buildroot/commit/?id=e35cacf05070edcad33a4192c3f288441add543d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:gnupg:gpgme is a valid CPE identifier for this package:
+Update indentation in hash file (two spaces)
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Agnupg%3Agpgme
+http://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;a=blob;f=NEWS;h=f6c2b0d3c53b3a62ca71a2a85b2d9764cda359c0
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libgpgme/libgpgme.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/libgpgme/libgpgme.hash | 6 +++---
+ package/libgpgme/libgpgme.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
+diff --git a/package/libgpgme/libgpgme.hash b/package/libgpgme/libgpgme.hash
+index 6ed6a3625d..35767a27fe 100644
+--- a/package/libgpgme/libgpgme.hash
++++ b/package/libgpgme/libgpgme.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://gnupg.org/ftp/gcrypt/gpgme/gpgme-1.13.1.tar.bz2.sig
++# https://gnupg.org/ftp/gcrypt/gpgme/gpgme-1.15.1.tar.bz2.sig
+ # using key D8692123C4065DEA5E0F3AB5249B39D24F25E3B6
+-sha256 c4e30b227682374c23cddc7fdb9324a99694d907e79242a25a4deeedb393be46  gpgme-1.13.1.tar.bz2
++sha256  eebc3c1b27f1c8979896ff361ba9bb4778b508b2496c2fc10e3775a40b1de1ad  gpgme-1.15.1.tar.bz2
+ # Locally calculated
+-sha256 ca0061fc1381a3ab242310e4b3f56389f28e3d460eb2fd822ed7a21c6f030532  COPYING.LESSER
++sha256  ca0061fc1381a3ab242310e4b3f56389f28e3d460eb2fd822ed7a21c6f030532  COPYING.LESSER
 diff --git a/package/libgpgme/libgpgme.mk b/package/libgpgme/libgpgme.mk
-index 1951cc6675..0e6f6906ed 100644
+index 0e6f6906ed..95a419258b 100644
 --- a/package/libgpgme/libgpgme.mk
 +++ b/package/libgpgme/libgpgme.mk
-@@ -9,6 +9,8 @@ LIBGPGME_SITE = https://gnupg.org/ftp/gcrypt/gpgme
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBGPGME_VERSION = 1.13.1
++LIBGPGME_VERSION = 1.15.1
+ LIBGPGME_SITE = https://gnupg.org/ftp/gcrypt/gpgme
  LIBGPGME_SOURCE = gpgme-$(LIBGPGME_VERSION).tar.bz2
  LIBGPGME_LICENSE = LGPL-2.1+
- LIBGPGME_LICENSE_FILES = COPYING.LESSER
-+LIBGPGME_CPE_ID_VENDOR = gnupg
-+LIBGPGME_CPE_ID_PRODUCT = gpgpme
- LIBGPGME_INSTALL_STAGING = YES
- LIBGPGME_DEPENDENCIES = libassuan libgpg-error
- LIBGPGME_CONFIG_SCRIPTS = gpgme-config
