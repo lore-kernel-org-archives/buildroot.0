@@ -1,33 +1,32 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 30 Jan 2021 14:49:37 +0100
-Subject: [Buildroot] [PATCH 1/1] package/squid: add SQUID_CPE_ID_VENDOR
-Message-ID: <20210130134937.2368713-1-fontaine.fabrice@gmail.com>
+From: Joachim Wiberg <troglobit@gmail.com>
+Date: Sat, 30 Jan 2021 14:52:02 +0100
+Subject: [Buildroot] [RFC PATCH 0/1] package/sysklogd: proposal to update
+ default syslog.conf
+Message-ID: <20210130135203.159451-1-troglobit@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:squid-cache:squid is a valid CPE identifier for this package:
+Hi everyone!
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Asquid-cache%3Asquid
+I'm posting this as an RFC patch to see what you think about updating
+the default syslog.conf for the sysklogd package to match upstream.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/squid/squid.mk | 1 +
- 1 file changed, 1 insertion(+)
+The updated file changes the default log file from messages to syslog,
+as is common on most modern systems today.  The messages remains but
+only for less critical messages.  The update also adds more examples
+for how to enable remote logging as well as different new log formats.
 
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index 1ba375e547..473af2ac12 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -9,6 +9,7 @@ SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
- SQUID_SITE = http://www.squid-cache.org/Versions/v4
- SQUID_LICENSE = GPL-2.0+
- SQUID_LICENSE_FILES = COPYING
-+SQUID_CPE_ID_VENDOR = squid-cache
- SQUID_DEPENDENCIES = libcap host-libcap libxml2 host-pkgconf \
- 	$(if $(BR2_PACKAGE_LIBNETFILTER_CONNTRACK),libnetfilter_conntrack)
- SQUID_CONF_ENV = \
+Best regards
+ /Joachim
+
+Joachim Wiberg (1):
+  package/sysklogd: update default syslog.conf to match upstream
+
+ package/sysklogd/syslog.conf | 69 +++++++++++++++++++++++++++++++++---
+ 1 file changed, 64 insertions(+), 5 deletions(-)
+
 -- 
-2.29.2
+2.25.1
