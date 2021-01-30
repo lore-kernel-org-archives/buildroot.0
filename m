@@ -1,40 +1,34 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 30 Jan 2021 14:42:44 +0100
-Subject: [Buildroot] [PATCH 1/1] package/mutt: add gpgme optional dependency
-Message-ID: <20210130134244.2367892-1-fontaine.fabrice@gmail.com>
+Date: Sat, 30 Jan 2021 14:48:35 +0100
+Subject: [Buildroot] [PATCH 1/1] package/vde2: add CPE variables
+Message-ID: <20210130134835.2368583-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-gpgme is supported since 2005 and
-https://gitlab.com/muttmua/mutt/-/commit/4bb5db92a89158cc45c3480f2be62d0b435c9a4e
+cpe:2.3:a:vde_project:vde is a valid CPE identifier for this package:
+
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Avde_project%3Avde
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/mutt/mutt.mk | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ package/vde2/vde2.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
-index c2188cebea..9557983a07 100644
---- a/package/mutt/mutt.mk
-+++ b/package/mutt/mutt.mk
-@@ -36,6 +36,15 @@ else
- MUTT_CONF_OPTS += --without-idn --without-idn2
- endif
+diff --git a/package/vde2/vde2.mk b/package/vde2/vde2.mk
+index 29337601c4..76d6f352b7 100644
+--- a/package/vde2/vde2.mk
++++ b/package/vde2/vde2.mk
+@@ -9,6 +9,8 @@ VDE2_SOURCE = vde2-$(VDE2_VERSION).tar.bz2
+ VDE2_SITE = http://downloads.sourceforge.net/project/vde/vde2/$(VDE2_VERSION)
+ VDE2_LICENSE = GPL-2.0+, LGPL-2.1+, BSD-3-Clause
+ VDE2_LICENSE_FILES = COPYING COPYING.libvdeplug COPYING.slirpvde
++VDE2_CPE_ID_VENDOR = vde_project
++VDE2_CPE_ID_PRODUCT = vde
+ VDE2_INSTALL_STAGING = YES
  
-+ifeq ($(BR2_PACKAGE_LIBGPGME),y)
-+MUTT_DEPENDENCIES += libgpgme
-+MUTT_CONF_OPTS += \
-+	--enable-gpgme \
-+	--with-gpgme-prefix=$(STAGING_DIR)/usr
-+else
-+MUTT_CONF_OPTS += --disable-gpgme
-+endif
-+
- ifeq ($(BR2_PACKAGE_MUTT_IMAP),y)
- MUTT_CONF_OPTS += --enable-imap
- else
+ # We touch configure.ac, so we need to autoreconf
 -- 
 2.29.2
