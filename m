@@ -1,27 +1,32 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 30 Jan 2021 11:52:30 +0100
-Subject: [Buildroot] [PATCH-2020.02.x 2/2] package/belr: new package
-In-Reply-To: <20210130093036.1245404-2-fontaine.fabrice@gmail.com>
-References: <20210130093036.1245404-1-fontaine.fabrice@gmail.com>
- <20210130093036.1245404-2-fontaine.fabrice@gmail.com>
-Message-ID: <79c80f16-be39-39a3-5c88-ac4953437a65@korsgaard.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 30 Jan 2021 12:26:46 +0100
+Subject: [Buildroot] [PATCH 1/2] package/mpd: disable documentation
+Message-ID: <20210130112647.1835553-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 30/01/2021 10.30, Fabrice Fontaine wrote:
-> Belr is Belledonne Communications' language recognition library, written
-> in C++11. It parses text inputs formatted according to a language
-> defined by an ABNF grammar, such as the protocols standardized at IETF.
-> 
-> https://gitlab.linphone.org/BC/public/belr
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Disable documentation which is enabled by default since version 0.22 and
+https://github.com/MusicPlayerDaemon/MPD/commit/2e73e605f78d2e6488e34465a8bfa9e4989a057f
 
-Committed to 2020.02.x, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/mpd/mpd.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index f7a3347b84..76b3a1fa56 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -11,6 +11,7 @@ MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
+ MPD_DEPENDENCIES = host-pkgconf boost
+ MPD_LICENSE = GPL-2.0+
+ MPD_LICENSE_FILES = COPYING
++MPD_CONF_OPTS = -Ddocumentation=disabled
+ 
+ ifeq ($(BR2_USE_MMU),y)
+ MPD_CONF_OPTS += \
 -- 
-Bye, Peter Korsgaard
+2.29.2
