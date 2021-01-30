@@ -1,33 +1,34 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 30 Jan 2021 14:50:38 +0100
-Subject: [Buildroot] [PATCH 1/1] package/vdr: add VDR_CPE_ID_VENDOR
-Message-ID: <20210130135038.2368863-1-fontaine.fabrice@gmail.com>
+Date: Sat, 30 Jan 2021 14:51:54 +0100
+Subject: [Buildroot] [PATCH 1/1] package/vsftpd: set VSFTPD_CPE_ID_VALID
+Message-ID: <20210130135154.2368987-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:tvdr:vdr is a valid CPE identifier for this package:
+cpe:2.3:a:vsftpd_project:vsftpd is a valid CPE identifier for this
+package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Atvdr%3Avdr
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Avsftpd_project%3Avsftpd
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/vdr/vdr.mk | 1 +
+ package/vsftpd/vsftpd.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/vdr/vdr.mk b/package/vdr/vdr.mk
-index fc456c2a30..eac13bfff4 100644
---- a/package/vdr/vdr.mk
-+++ b/package/vdr/vdr.mk
-@@ -9,6 +9,7 @@ VDR_SOURCE = vdr-$(VDR_VERSION).tar.bz2
- VDR_SITE = ftp://ftp.tvdr.de/vdr
- VDR_LICENSE = GPL-2.0+
- VDR_LICENSE_FILES = COPYING
-+VDR_CPE_ID_VENDOR = tvdr
- VDR_INSTALL_STAGING = YES
- VDR_DEPENDENCIES = \
- 	host-pkgconf \
+diff --git a/package/vsftpd/vsftpd.mk b/package/vsftpd/vsftpd.mk
+index 8a9aac2d29..2804a3a39d 100644
+--- a/package/vsftpd/vsftpd.mk
++++ b/package/vsftpd/vsftpd.mk
+@@ -9,6 +9,7 @@ VSFTPD_SITE = https://security.appspot.com/downloads
+ VSFTPD_LIBS = -lcrypt
+ VSFTPD_LICENSE = GPL-2.0
+ VSFTPD_LICENSE_FILES = COPYING
++VSFTPD_CPE_ID_VALID = YES
+ 
+ define VSFTPD_DISABLE_UTMPX
+ 	$(SED) 's/.*VSF_BUILD_UTMPX/#undef VSF_BUILD_UTMPX/' $(@D)/builddefs.h
 -- 
 2.29.2
