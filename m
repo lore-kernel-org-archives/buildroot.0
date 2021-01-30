@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 30 Jan 2021 17:02:56 +0100
-Subject: [Buildroot] [PATCH 1/2] package/bitcoin: security bump to
- version 0.21.0
-In-Reply-To: <20210130133115.2334485-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 30 Jan 2021 14:31:14 +0100")
+Date: Sat, 30 Jan 2021 17:03:01 +0100
+Subject: [Buildroot] [PATCH 2/2] package/bitcoin: add CPE variables
+In-Reply-To: <20210130133115.2334485-2-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 30 Jan 2021 14:31:15 +0100")
 References: <20210130133115.2334485-1-fontaine.fabrice@gmail.com>
-Message-ID: <87pn1ms98v.fsf@dell.be.48ers.dk>
+ <20210130133115.2334485-2-fontaine.fabrice@gmail.com>
+Message-ID: <87lfcas98q.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,10 +14,10 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Tag as a security bump as having an up to date bitcoin is important:
- > https://patchwork.ozlabs.org/project/buildroot/patch/20200202085526.35742-1-james.hilliard1 at gmail.com
+ > cpe:2.3:a:bitcoin:bitcoin_core is a valid CPE identifier for this
+ > package:
 
- > https://github.com/bitcoin/bitcoin/blob/master/doc/release-notes/release-notes-0.21.0.md
+ > https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Abitcoin%3Abitcoin_core
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
