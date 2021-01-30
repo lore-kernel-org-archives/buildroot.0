@@ -1,50 +1,27 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 30 Jan 2021 16:48:14 +0100
-Subject: [Buildroot] [PATCH v2, 1/1] package/logrotate: use official tarball
-Message-ID: <20210130154814.2386086-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 30 Jan 2021 17:02:56 +0100
+Subject: [Buildroot] [PATCH 1/2] package/bitcoin: security bump to
+ version 0.21.0
+In-Reply-To: <20210130133115.2334485-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 30 Jan 2021 14:31:14 +0100")
+References: <20210130133115.2334485-1-fontaine.fabrice@gmail.com>
+Message-ID: <87pn1ms98v.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2 (after review of Yann E. Morin):
- - Drop LOGROTATE_AUTORECONF
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- package/logrotate/logrotate.hash | 2 +-
- package/logrotate/logrotate.mk   | 5 ++---
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ > Tag as a security bump as having an up to date bitcoin is important:
+ > https://patchwork.ozlabs.org/project/buildroot/patch/20200202085526.35742-1-james.hilliard1 at gmail.com
 
-diff --git a/package/logrotate/logrotate.hash b/package/logrotate/logrotate.hash
-index b3628da7de..2af46d60b7 100644
---- a/package/logrotate/logrotate.hash
-+++ b/package/logrotate/logrotate.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
--sha256  66232111a2b02cce3c2436c141b7a2af78fa758aac326ab2b79f9a5b0d749142  logrotate-3.18.0.tar.gz
-+sha256  841f81bf09d0014e4a2e11af166bb33fcd8429cc0c2d4a7d3d9ceb3858cfccc5  logrotate-3.18.0.tar.xz
-diff --git a/package/logrotate/logrotate.mk b/package/logrotate/logrotate.mk
-index b765fff4ee..ee2ab75095 100644
---- a/package/logrotate/logrotate.mk
-+++ b/package/logrotate/logrotate.mk
-@@ -5,13 +5,12 @@
- ################################################################################
- 
- LOGROTATE_VERSION = 3.18.0
--LOGROTATE_SITE = $(call github,logrotate,logrotate,$(LOGROTATE_VERSION))
-+LOGROTATE_SOURCE = logrotate-3.18.0.tar.xz
-+LOGROTATE_SITE = https://github.com/logrotate/logrotate/releases/download/$(LOGROTATE_VERSION)
- LOGROTATE_LICENSE = GPL-2.0+
- LOGROTATE_LICENSE_FILES = COPYING
- LOGROTATE_CPE_ID_VALID = YES
- LOGROTATE_DEPENDENCIES = popt host-pkgconf
--# tarball does not have a generated configure script
--LOGROTATE_AUTORECONF = YES
- LOGROTATE_CONF_ENV = LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs popt`"
- 
- ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
+ > https://github.com/bitcoin/bitcoin/blob/master/doc/release-notes/release-notes-0.21.0.md
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed, thanks.
+
 -- 
-2.29.2
+Bye, Peter Korsgaard
