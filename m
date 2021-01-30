@@ -1,47 +1,39 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 30 Jan 2021 10:43:02 +0100
-Subject: [Buildroot] [PATCH-2020.02.x 1/1] package/upmpdcli: bump to version
- 1.4.6
-Message-ID: <20210130094302.1345077-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 30 Jan 2021 11:18:33 +0100
+Subject: [Buildroot] [PATCH] package/xserver_xorg-server: don't install init
+ script if nodm is enabled
+Message-ID: <20210130101834.18086-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 0ef6ed667238a13c1a4a6c691a0a8f33824bba02)
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/upmpdcli/upmpdcli.hash | 4 ++--
- package/upmpdcli/upmpdcli.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Both S40xorg and S90nodm tries to run an Xserver on vt1, causing the nodm
+one to fail.  If nodm is enabled, then that is likely what the user wants to
+run, so skip installing S40xorg.
 
-diff --git a/package/upmpdcli/upmpdcli.hash b/package/upmpdcli/upmpdcli.hash
-index 33003a406e..fe1d82202d 100644
---- a/package/upmpdcli/upmpdcli.hash
-+++ b/package/upmpdcli/upmpdcli.hash
-@@ -1,5 +1,5 @@
--# From http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.4.5.tar.gz.sha256:
--sha256  af0c13b6ab8720d98451307010c33462e9a3f50178bae82c593fd2dd12e31b0e  upmpdcli-1.4.5.tar.gz
-+# From http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.4.6.tar.gz.sha256:
-+sha256  80ed85a323a1721a9e2ceb64923cedbf69c45f22fb9bc6853c9c11b46dc83a1d  upmpdcli-1.4.6.tar.gz
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.mk | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 8ac2d17b24..fa8ae13b8c 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -216,9 +216,12 @@ define XSERVER_XORG_SERVER_INSTALL_INIT_SYSTEMD
+ 		$(TARGET_DIR)/usr/lib/systemd/system/xorg.service
+ endef
  
- # Hash for license file:
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
-index 290cdcb1f2..67d805f0cc 100644
---- a/package/upmpdcli/upmpdcli.mk
-+++ b/package/upmpdcli/upmpdcli.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
++# init script conflicts with S90nodm
++ifneq ($(BR2_PACKAGE_NODM),y)
+ define XSERVER_XORG_SERVER_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D -m 755 package/x11r7/xserver_xorg-server/S40xorg \
+ 		$(TARGET_DIR)/etc/init.d/S40xorg
+ endef
++endif
  
--UPMPDCLI_VERSION = 1.4.5
-+UPMPDCLI_VERSION = 1.4.6
- UPMPDCLI_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
- UPMPDCLI_LICENSE = LGPL-2.1+
- UPMPDCLI_LICENSE_FILES = COPYING
+ $(eval $(autotools-package))
 -- 
-2.29.2
+2.20.1
