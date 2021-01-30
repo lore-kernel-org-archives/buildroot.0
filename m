@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 30 Jan 2021 11:44:07 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x]
+Date: Sat, 30 Jan 2021 11:43:55 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x]
  support/dependencies/check-host-cmake.mk: gerbera needs cmake 3.14+
-Message-ID: <20210130102409.3F0EE83B8D@busybox.osuosl.org>
+Message-ID: <20210130102415.A135081426@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d65cdf4aeabffcc56f05d90b4b3a138d3b11bf44
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=47afc80adf0902332089e8824cc293e34100f159
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
 Fixes:
 http://autobuild.buildroot.net/results/871/8717612ae32cc491b868f37fbbc960c16b562877/
