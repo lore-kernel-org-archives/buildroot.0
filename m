@@ -1,31 +1,47 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 30 Jan 2021 10:37:37 +0100
-Subject: [Buildroot] [PATCH v3,
- 1/6] package/libupnp: security bump to version 1.14.0
-In-Reply-To: <CAPi7W80xSxO48N_Wa6=W81H8G6S_XU6trfMEOwS3Pc4d_JgfTQ@mail.gmail.com>
- (Fabrice Fontaine's message of "Sat, 30 Jan 2021 10:28:43 +0100")
-References: <20210125194949.1173139-1-fontaine.fabrice@gmail.com>
- <87bld83me1.fsf@dell.be.48ers.dk> <87eei4yxii.fsf@dell.be.48ers.dk>
- <CAPi7W80xSxO48N_Wa6=W81H8G6S_XU6trfMEOwS3Pc4d_JgfTQ@mail.gmail.com>
-Message-ID: <87zh0qvk7y.fsf@dell.be.48ers.dk>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 30 Jan 2021 10:43:02 +0100
+Subject: [Buildroot] [PATCH-2020.02.x 1/1] package/upmpdcli: bump to version
+ 1.4.6
+Message-ID: <20210130094302.1345077-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 0ef6ed667238a13c1a4a6c691a0a8f33824bba02)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/upmpdcli/upmpdcli.hash | 4 ++--
+ package/upmpdcli/upmpdcli.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Hi,
-
- >> > Committed to 2020.02.x and 2020.11.x, thanks.
- >> 
- >> This unfortunately breaks the old linphone stack on 2020.02.x, so I will
- >> bump bctoolbox/ortp/mediastreamer/linphone.
- > linphone also needs belle-sip and belr, I'll send a patch to add them
- > in 2020.02.x.
-
-Ahh, thanks.
-
+diff --git a/package/upmpdcli/upmpdcli.hash b/package/upmpdcli/upmpdcli.hash
+index 33003a406e..fe1d82202d 100644
+--- a/package/upmpdcli/upmpdcli.hash
++++ b/package/upmpdcli/upmpdcli.hash
+@@ -1,5 +1,5 @@
+-# From http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.4.5.tar.gz.sha256:
+-sha256  af0c13b6ab8720d98451307010c33462e9a3f50178bae82c593fd2dd12e31b0e  upmpdcli-1.4.5.tar.gz
++# From http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.4.6.tar.gz.sha256:
++sha256  80ed85a323a1721a9e2ceb64923cedbf69c45f22fb9bc6853c9c11b46dc83a1d  upmpdcli-1.4.6.tar.gz
+ 
+ # Hash for license file:
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
+index 290cdcb1f2..67d805f0cc 100644
+--- a/package/upmpdcli/upmpdcli.mk
++++ b/package/upmpdcli/upmpdcli.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UPMPDCLI_VERSION = 1.4.5
++UPMPDCLI_VERSION = 1.4.6
+ UPMPDCLI_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
+ UPMPDCLI_LICENSE = LGPL-2.1+
+ UPMPDCLI_LICENSE_FILES = COPYING
 -- 
-Bye, Peter Korsgaard
+2.29.2
