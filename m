@@ -1,48 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 30 Jan 2021 22:15:10 +0100
-Subject: [Buildroot] [git commit] package/haproxy: bump to version 2.2.8
-Message-ID: <20210130205927.A70267FD45@busybox.osuosl.org>
+Date: Sat, 30 Jan 2021 22:14:57 +0100
+Subject: [Buildroot] [git commit] package/logrotate: use official tarball
+Message-ID: <20210130205927.9D8E985F37@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a2a165eb49ce9708d2575443de168ff9abbc60f4
+commit: https://git.buildroot.net/buildroot/commit/?id=11fc8ce9f32047a9e8e12b8468163004c973a92d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-https://www.mail-archive.com/haproxy at formilux.org/msg39408.html
-https://www.mail-archive.com/haproxy at formilux.org/msg39470.html
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/haproxy/haproxy.hash | 4 ++--
- package/haproxy/haproxy.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/logrotate/logrotate.hash | 2 +-
+ package/logrotate/logrotate.mk   | 5 ++---
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
-index fbbd2e4bab..0e293e8545 100644
---- a/package/haproxy/haproxy.hash
-+++ b/package/haproxy/haproxy.hash
-@@ -1,5 +1,5 @@
--# From: http://www.haproxy.org/download/2.2/src/haproxy-2.2.6.tar.gz.sha256
--sha256  be1c6754cbaceafc4837e0c6036c7f81027a3992516435cbbbc5dc749bf5a087  haproxy-2.2.6.tar.gz
-+# From: http://www.haproxy.org/download/2.2/src/haproxy-2.2.8.tar.gz.sha256
-+sha256  61f90e3e2a36bd8800a5bee31cba7eef37c9aa8a353b6c741edaa411510b14be  haproxy-2.2.8.tar.gz
- # Locally computed:
- sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
- sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
-diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
-index 42943effbc..7c05decf2f 100644
---- a/package/haproxy/haproxy.mk
-+++ b/package/haproxy/haproxy.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/logrotate/logrotate.hash b/package/logrotate/logrotate.hash
+index b3628da7de..2af46d60b7 100644
+--- a/package/logrotate/logrotate.hash
++++ b/package/logrotate/logrotate.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+-sha256  66232111a2b02cce3c2436c141b7a2af78fa758aac326ab2b79f9a5b0d749142  logrotate-3.18.0.tar.gz
++sha256  841f81bf09d0014e4a2e11af166bb33fcd8429cc0c2d4a7d3d9ceb3858cfccc5  logrotate-3.18.0.tar.xz
+diff --git a/package/logrotate/logrotate.mk b/package/logrotate/logrotate.mk
+index b765fff4ee..ee2ab75095 100644
+--- a/package/logrotate/logrotate.mk
++++ b/package/logrotate/logrotate.mk
+@@ -5,13 +5,12 @@
  ################################################################################
  
- HAPROXY_VERSION_MAJOR = 2.2
--HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).6
-+HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).8
- HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
- HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
- HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
+ LOGROTATE_VERSION = 3.18.0
+-LOGROTATE_SITE = $(call github,logrotate,logrotate,$(LOGROTATE_VERSION))
++LOGROTATE_SOURCE = logrotate-3.18.0.tar.xz
++LOGROTATE_SITE = https://github.com/logrotate/logrotate/releases/download/$(LOGROTATE_VERSION)
+ LOGROTATE_LICENSE = GPL-2.0+
+ LOGROTATE_LICENSE_FILES = COPYING
+ LOGROTATE_CPE_ID_VALID = YES
+ LOGROTATE_DEPENDENCIES = popt host-pkgconf
+-# tarball does not have a generated configure script
+-LOGROTATE_AUTORECONF = YES
+ LOGROTATE_CONF_ENV = LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs popt`"
+ 
+ ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
