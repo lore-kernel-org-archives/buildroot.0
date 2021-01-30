@@ -1,123 +1,31 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 30 Jan 2021 10:30:36 +0100
-Subject: [Buildroot] [PATCH-2020.02.x 2/2] package/belr: new package
-In-Reply-To: <20210130093036.1245404-1-fontaine.fabrice@gmail.com>
-References: <20210130093036.1245404-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210130093036.1245404-2-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 30 Jan 2021 10:37:37 +0100
+Subject: [Buildroot] [PATCH v3,
+ 1/6] package/libupnp: security bump to version 1.14.0
+In-Reply-To: <CAPi7W80xSxO48N_Wa6=W81H8G6S_XU6trfMEOwS3Pc4d_JgfTQ@mail.gmail.com>
+ (Fabrice Fontaine's message of "Sat, 30 Jan 2021 10:28:43 +0100")
+References: <20210125194949.1173139-1-fontaine.fabrice@gmail.com>
+ <87bld83me1.fsf@dell.be.48ers.dk> <87eei4yxii.fsf@dell.be.48ers.dk>
+ <CAPi7W80xSxO48N_Wa6=W81H8G6S_XU6trfMEOwS3Pc4d_JgfTQ@mail.gmail.com>
+Message-ID: <87zh0qvk7y.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Belr is Belledonne Communications' language recognition library, written
-in C++11. It parses text inputs formatted according to a language
-defined by an ABNF grammar, such as the protocols standardized at IETF.
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-https://gitlab.linphone.org/BC/public/belr
+Hi,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS             |  1 +
- package/Config.in      |  1 +
- package/belr/Config.in | 19 +++++++++++++++++++
- package/belr/belr.hash |  3 +++
- package/belr/belr.mk   | 26 ++++++++++++++++++++++++++
- 5 files changed, 50 insertions(+)
- create mode 100644 package/belr/Config.in
- create mode 100644 package/belr/belr.hash
- create mode 100644 package/belr/belr.mk
+ >> > Committed to 2020.02.x and 2020.11.x, thanks.
+ >> 
+ >> This unfortunately breaks the old linphone stack on 2020.02.x, so I will
+ >> bump bctoolbox/ortp/mediastreamer/linphone.
+ > linphone also needs belle-sip and belr, I'll send a patch to add them
+ > in 2020.02.x.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 96055b3912..c31fcd2ce6 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -800,6 +800,7 @@ F:	package/openzwave/
- 
- N:	Fabrice Fontaine <fontaine.fabrice@gmail.com>
- F:	package/belle-sip/
-+F:	package/belr/
- F:	package/boinc/
- F:	package/cairo/
- F:	package/duktape/
-diff --git a/package/Config.in b/package/Config.in
-index 78da6a8142..3deafedb0d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1745,6 +1745,7 @@ menu "Other"
- 	source "package/avro-c/Config.in"
- 	source "package/bctoolbox/Config.in"
- 	source "package/bdwgc/Config.in"
-+	source "package/belr/Config.in"
- 	source "package/boost/Config.in"
- 	source "package/c-capnproto/Config.in"
- 	source "package/capnproto/Config.in"
-diff --git a/package/belr/Config.in b/package/belr/Config.in
-new file mode 100644
-index 0000000000..f3f742ad28
---- /dev/null
-+++ b/package/belr/Config.in
-@@ -0,0 +1,19 @@
-+config BR2_PACKAGE_BELR
-+	bool "belr"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # bctoolbox
-+	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # bctoolbox
-+	select BR2_PACKAGE_BCTOOLBOX
-+	help
-+	  Belr is Belledonne Communications' language recognition
-+	  library, written in C++11. It parses text inputs formatted
-+	  according to a language defined by an ABNF grammar, such as
-+	  the protocols standardized at IETF.
-+
-+	  https://gitlab.linphone.org/BC/public/belr
-+
-+comment "belr needs a toolchain w/ threads, C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-+
-+comment "belr needs a toolchain not affected by GCC bug 64735"
-+	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-diff --git a/package/belr/belr.hash b/package/belr/belr.hash
-new file mode 100644
-index 0000000000..42cf506972
---- /dev/null
-+++ b/package/belr/belr.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  d6575c36c32828edcaf39df2775070b187019b21fe5fe274e7a85caf54284f05  belr-4.3.1.tar.gz
-+sha256  1b3782ccad7b8614100cda30d3faf42fc39f2e97932908c543005053b654ca68  LICENSE.txt
-diff --git a/package/belr/belr.mk b/package/belr/belr.mk
-new file mode 100644
-index 0000000000..8855f94fda
---- /dev/null
-+++ b/package/belr/belr.mk
-@@ -0,0 +1,26 @@
-+################################################################################
-+#
-+# belr
-+#
-+################################################################################
-+
-+BELR_VERSION = 4.3.1
-+BELR_SITE = https://gitlab.linphone.org/BC/public/belr/-/archive/$(BELR_VERSION)
-+BELR_LICENSE = GPL-3.0+
-+BELR_LICENSE_FILES = LICENSE.txt
-+BELR_INSTALL_STAGING = YES
-+BELR_DEPENDENCIES = bctoolbox
-+BELR_CONF_OPTS = \
-+	-DENABLE_STRICT=OFF \
-+	-DENABLE_TESTS=OFF \
-+	-DENABLE_TOOLS=OFF
-+
-+ifeq ($(BR2_STATIC_LIBS),y)
-+BELR_CONF_OPTS += -DENABLE_SHARED=OFF -DENABLE_STATIC=ON
-+else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
-+BELR_CONF_OPTS += -DENABLE_SHARED=ON -DENABLE_STATIC=ON
-+else ifeq ($(BR2_SHARED_LIBS),y)
-+BELR_CONF_OPTS += -DENABLE_SHARED=ON -DENABLE_STATIC=OFF
-+endif
-+
-+$(eval $(cmake-package))
+Ahh, thanks.
+
 -- 
-2.29.2
+Bye, Peter Korsgaard
