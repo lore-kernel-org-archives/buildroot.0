@@ -1,133 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 30 Jan 2021 11:46:38 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/belle-sip: new
- package
-Message-ID: <20210130103323.B564783508@busybox.osuosl.org>
+Date: Sat, 30 Jan 2021 11:47:46 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/upmpdcli: bump to
+ version 1.4.6
+Message-ID: <20210130103323.CCAE2856A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=415dfcf03bfa6c2201c8f7e3c505ff49cd5818ec
+commit: https://git.buildroot.net/buildroot/commit/?id=2a3d563595530fe096f2292cb5063d9485d87aae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Belle-sip is a modern library implementing SIP (RFC 3261) transport,
-transaction and dialog layers.
-
-http://www.linphone.org/technical-corner/belle-sip
-
-[Thomas: select mbedtls as support for crypto is needed in bctoolbox]
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 0ef6ed667238a13c1a4a6c691a0a8f33824bba02)
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS                       |  1 +
- package/Config.in                |  1 +
- package/belle-sip/Config.in      | 22 ++++++++++++++++++++++
- package/belle-sip/belle-sip.hash |  3 +++
- package/belle-sip/belle-sip.mk   | 35 +++++++++++++++++++++++++++++++++++
- 5 files changed, 62 insertions(+)
+ package/upmpdcli/upmpdcli.hash | 4 ++--
+ package/upmpdcli/upmpdcli.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index e642a0d1db..96055b3912 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -799,6 +799,7 @@ F:	package/libmaxminddb/
- F:	package/openzwave/
+diff --git a/package/upmpdcli/upmpdcli.hash b/package/upmpdcli/upmpdcli.hash
+index 33003a406e..fe1d82202d 100644
+--- a/package/upmpdcli/upmpdcli.hash
++++ b/package/upmpdcli/upmpdcli.hash
+@@ -1,5 +1,5 @@
+-# From http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.4.5.tar.gz.sha256:
+-sha256  af0c13b6ab8720d98451307010c33462e9a3f50178bae82c593fd2dd12e31b0e  upmpdcli-1.4.5.tar.gz
++# From http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.4.6.tar.gz.sha256:
++sha256  80ed85a323a1721a9e2ceb64923cedbf69c45f22fb9bc6853c9c11b46dc83a1d  upmpdcli-1.4.6.tar.gz
  
- N:	Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+F:	package/belle-sip/
- F:	package/boinc/
- F:	package/cairo/
- F:	package/duktape/
-diff --git a/package/Config.in b/package/Config.in
-index 0a3cda65f2..78da6a8142 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1612,6 +1612,7 @@ menu "Networking"
- 	source "package/azmq/Config.in"
- 	source "package/azure-iot-sdk-c/Config.in"
- 	source "package/batman-adv/Config.in"
-+	source "package/belle-sip/Config.in"
- 	source "package/bluez5_utils-headers/Config.in"
- 	source "package/c-ares/Config.in"
- 	source "package/canfestival/Config.in"
-diff --git a/package/belle-sip/Config.in b/package/belle-sip/Config.in
-new file mode 100644
-index 0000000000..8e4de366e4
---- /dev/null
-+++ b/package/belle-sip/Config.in
-@@ -0,0 +1,22 @@
-+config BR2_PACKAGE_BELLE_SIP
-+	bool "belle-sip"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_STATIC_LIBS # dlfcn.h
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # bctoolbox
-+	depends on BR2_USE_WCHAR
-+	select BR2_PACKAGE_BCTOOLBOX
-+	# needs crypto support in bctoolbox
-+	select BR2_PACKAGE_MBEDTLS
-+	help
-+	  Belle-sip is a modern library implementing SIP (RFC 3261)
-+	  transport, transaction and dialog layers.
-+
-+	  http://www.linphone.org/technical-corner/belle-sip
-+
-+comment "belle-sip needs a toolchain w/ threads, C++, dynamic library, wchar"
-+	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
-+		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
-+
-+comment "belle-sip needs a toolchain not affected by GCC bug 64735"
-+	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-diff --git a/package/belle-sip/belle-sip.hash b/package/belle-sip/belle-sip.hash
-new file mode 100644
-index 0000000000..889ad2be70
---- /dev/null
-+++ b/package/belle-sip/belle-sip.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  3ac7051ea6ac758cccbf1483a5dd6cda4293b5cde1370a3f0d298e3a6f0ee032  belle-sip-4.3.1.tar.gz
-+sha256  1b3782ccad7b8614100cda30d3faf42fc39f2e97932908c543005053b654ca68  LICENSE.txt
-diff --git a/package/belle-sip/belle-sip.mk b/package/belle-sip/belle-sip.mk
-new file mode 100644
-index 0000000000..1daef1d2df
---- /dev/null
-+++ b/package/belle-sip/belle-sip.mk
-@@ -0,0 +1,35 @@
-+################################################################################
-+#
-+# belle-sip
-+#
-+################################################################################
-+
-+BELLE_SIP_VERSION = 4.3.1
-+BELLE_SIP_SITE = \
-+	https://gitlab.linphone.org/BC/public/belle-sip/-/archive/$(BELLE_SIP_VERSION)
-+BELLE_SIP_LICENSE = GPL-3.0+
-+BELLE_SIP_LICENSE_FILES = LICENSE.txt
-+BELLE_SIP_INSTALL_STAGING = YES
-+BELLE_SIP_DEPENDENCIES = \
-+	bctoolbox \
-+	$(if $(BR2_PACKAGE_ZLIB),zlib)
-+BELLE_SIP_CONF_OPTS = \
-+	-DENABLE_STRICT=OFF \
-+	-DENABLE_TESTS=OFF
-+
-+ifeq ($(BR2_PACKAGE_AVAHI_LIBDNSSD_COMPATIBILITY),y)
-+BELLE_SIP_CONF_OPTS += -DENABLE_MDNS=ON
-+BELLE_SIP_DEPENDENCIES += avahi
-+else
-+BELLE_SIP_CONF_OPTS += -DENABLE_MDNS=OFF
-+endif
-+
-+ifeq ($(BR2_STATIC_LIBS),y)
-+BELLE_SIP_CONF_OPTS += -DENABLE_SHARED=OFF -DENABLE_STATIC=ON
-+else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
-+BELLE_SIP_CONF_OPTS += -DENABLE_SHARED=ON -DENABLE_STATIC=ON
-+else ifeq ($(BR2_SHARED_LIBS),y)
-+BELLE_SIP_CONF_OPTS += -DENABLE_SHARED=ON -DENABLE_STATIC=OFF
-+endif
-+
-+$(eval $(cmake-package))
+ # Hash for license file:
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
+index 290cdcb1f2..67d805f0cc 100644
+--- a/package/upmpdcli/upmpdcli.mk
++++ b/package/upmpdcli/upmpdcli.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UPMPDCLI_VERSION = 1.4.5
++UPMPDCLI_VERSION = 1.4.6
+ UPMPDCLI_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
+ UPMPDCLI_LICENSE = LGPL-2.1+
+ UPMPDCLI_LICENSE_FILES = COPYING
