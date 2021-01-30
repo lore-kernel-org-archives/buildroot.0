@@ -1,44 +1,42 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 30 Jan 2021 14:32:01 +0100
-Subject: [Buildroot] [PATCH 1/1] package/zeromq: disable libbsd on static
- build
-Message-ID: <20210130133201.2334604-1-fontaine.fabrice@gmail.com>
+From: Joachim Wiberg <troglobit@gmail.com>
+Date: Sat, 30 Jan 2021 14:39:18 +0100
+Subject: [Buildroot] [PATCH 1/1] package/sysklogd: bump to version 2.2.1
+Message-ID: <20210130133918.158831-1-troglobit@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Static linking with libbsd fails because of multiple definition of the
-strlcpy symbol. uClibc optionally provides these symbols.
+https://github.com/troglobit/sysklogd/releases/tag/v2.2.1
 
-So disable libbsd on zeromq when linking statically to avoid the
-following build failure with bitcoin and zeromq:
-
-  CXXLD    bitcoind
-/tmp/instance-1/output-1/host/lib/gcc/powerpc-buildroot-linux-uclibc/9.3.0/../../../../powerpc-buildroot-linux-uclibc/bin/ld: /tmp/instance-1/output-1/host/powerpc-buildroot-linux-uclibc/sysroot/usr/lib//libc.a(strlcpy.os): in function `__GI_strlcpy':
-strlcpy.c:(.text+0x0): multiple definition of `strlcpy'; /tmp/instance-1/output-1/host/powerpc-buildroot-linux-uclibc/sysroot/usr/lib/libbsd.a(strlcpy.o):strlcpy.c:(.text+0x0): first defined here
-
-Fixes:
- - http://autobuild.buildroot.org/results/ba87544d42ad5e77a27a7a504bc6336a06f6e291
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
 ---
- package/zeromq/zeromq.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/sysklogd/sysklogd.hash | 2 +-
+ package/sysklogd/sysklogd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
-index 182699403c..495f1aa5a3 100644
---- a/package/zeromq/zeromq.mk
-+++ b/package/zeromq/zeromq.mk
-@@ -68,7 +68,7 @@ else
- ZEROMQ_CONF_OPTS += --without-tls
- endif
+diff --git a/package/sysklogd/sysklogd.hash b/package/sysklogd/sysklogd.hash
+index 91550aa0dc..ec14363d9f 100644
+--- a/package/sysklogd/sysklogd.hash
++++ b/package/sysklogd/sysklogd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  60546ae50a9f30b31c19ed9a3ad788ce5798025b0f9a0d552c1a04d5eeac494d  sysklogd-2.2.0.tar.gz
++sha256  a93b7ad6a615336f030d8a3257544cff1644908af6a12c65f65482f27bd39ca9  sysklogd-2.2.1.tar.gz
+ sha256  7a71d7603a7c4456df441463e54da35acf151c1be0879246de63544f1f34f477  LICENSE
+diff --git a/package/sysklogd/sysklogd.mk b/package/sysklogd/sysklogd.mk
+index e68526d24c..c6c59da69f 100644
+--- a/package/sysklogd/sysklogd.mk
++++ b/package/sysklogd/sysklogd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--ifeq ($(BR2_PACKAGE_LIBBSD),y)
-+ifeq ($(BR2_PACKAGE_LIBBSD):$(BR2_STATIC_LIBS),y:)
- ZEROMQ_DEPENDENCIES += host-pkgconf libbsd
- ZEROMQ_CONF_OPTS += --enable-libbsd
- else
+-SYSKLOGD_VERSION = 2.2.0
++SYSKLOGD_VERSION = 2.2.1
+ SYSKLOGD_SITE = https://github.com/troglobit/sysklogd/releases/download/v$(SYSKLOGD_VERSION)
+ SYSKLOGD_LICENSE = BSD-3-Clause
+ SYSKLOGD_LICENSE_FILES = LICENSE
 -- 
-2.29.2
+2.25.1
