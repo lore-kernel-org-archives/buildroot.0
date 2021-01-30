@@ -1,22 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 30 Jan 2021 11:31:02 +0100
-Subject: [Buildroot] [PATCH] {linux, linux-headers}: bump 4.19.x / 5.{4,
- 10}.x series
-In-Reply-To: <20210129101240.618-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Fri, 29 Jan 2021 11:12:39 +0100")
-References: <20210129101240.618-1-peter@korsgaard.com>
-Message-ID: <87mtwqvhqx.fsf@dell.be.48ers.dk>
+Date: Sat, 30 Jan 2021 11:37:19 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libgcrypt: security bump
+ version to 1.9.1
+In-Reply-To: <20210129121831.973764-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Fri, 29 Jan 2021 13:18:31 +0100")
+References: <20210129121831.973764-1-bernd.kuhls@t-online.de>
+Message-ID: <87im7evhgg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Removed patch which was applied upstream.
+ > Release notes:
+ > https://lists.gnupg.org/pipermail/gnupg-announce/2021q1/000456.html
+
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Committed, thanks.
+
+I see a notice that it fails to build with --disable-asm (which we pass
+for m68k coldfire), but I just did a test and it builds here:
+
+https://dev.gnupg.org/T5277
 
 -- 
 Bye, Peter Korsgaard
