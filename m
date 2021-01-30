@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 30 Jan 2021 13:28:49 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libgeos: disable benchmarks
-In-Reply-To: <20210130102348.1360301-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 30 Jan 2021 11:23:48 +0100")
-References: <20210130102348.1360301-1-fontaine.fabrice@gmail.com>
-Message-ID: <87wnvutxq6.fsf@dell.be.48ers.dk>
+Date: Sat, 30 Jan 2021 13:29:33 +0100
+Subject: [Buildroot] [PATCH 1/1] package/sox: add CPE variables
+In-Reply-To: <20210128172122.4137998-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 28 Jan 2021 18:21:22 +0100")
+References: <20210128172122.4137998-1-fontaine.fabrice@gmail.com>
+Message-ID: <87sg6itxoy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,8 +13,10 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/790450f7541d690cdef3917d7056759cb9b403c5
+ > cpe:2.3:a:sound_exchange_project:sound_exchange is a valid CPE
+ > identifier for this package:
+
+ >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Asound_exchange_project%3Asound_exchange
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
