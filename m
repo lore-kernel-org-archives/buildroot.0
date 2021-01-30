@@ -1,99 +1,89 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 30 Jan 2021 11:31:20 +0100
-Subject: [Buildroot] [git commit] package/libgcrypt: security bump version
- to 1.9.1
-Message-ID: <20210130102238.0F06D83CEC@busybox.osuosl.org>
+Date: Sat, 30 Jan 2021 11:41:58 +0100
+Subject: [Buildroot] [git commit] package/dhcpcd: fix build with nds32
+Message-ID: <20210130102238.7F9D683610@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a55a3f27f1c76e32ed2a8ed3beef79fa3a1183af
+commit: https://git.buildroot.net/buildroot/commit/?id=8713001aadb7dd8334f1e3aa0eaf64abedf908aa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Removed patch which was applied upstream.
+Fix build failure with dhcpcd due to SECCOMP_AUDIT_ARCH which is used
+since version 9.3.0 and
+https://github.com/rsmarples/dhcpcd/commit/a926ee6d8f4eb2f04e01d72664893e3cb95fceca
 
-Release notes:
-https://lists.gnupg.org/pipermail/gnupg-announce/2021q1/000456.html
+Fixes:
+ - http://autobuild.buildroot.org/results/af8ba07ea0c12ab8cd24d528ef98db05521f3d36
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...12-Fix-non-NEON-ARM-assembly-implementati.patch | 38 ----------------------
- package/libgcrypt/libgcrypt.hash                   |  6 ++--
- package/libgcrypt/libgcrypt.mk                     |  2 +-
- 3 files changed, 4 insertions(+), 42 deletions(-)
+ ...src-privsep-linux.c-add-support-for-nds32.patch | 40 ++++++++++++++++++++++
+ package/dhcpcd/dhcpcd.mk                           |  5 +++
+ 2 files changed, 45 insertions(+)
 
-diff --git a/package/libgcrypt/0002-cipher-sha512-Fix-non-NEON-ARM-assembly-implementati.patch b/package/libgcrypt/0002-cipher-sha512-Fix-non-NEON-ARM-assembly-implementati.patch
-deleted file mode 100644
-index b83abcf956..0000000000
---- a/package/libgcrypt/0002-cipher-sha512-Fix-non-NEON-ARM-assembly-implementati.patch
-+++ /dev/null
-@@ -1,38 +0,0 @@
--From 187a67e0cd24c210b3b4a60b09db011d295b9877 Mon Sep 17 00:00:00 2001
--From: David Michael <fedora.dm0@gmail.com>
--Date: Fri, 22 Jan 2021 22:02:06 +0100
--Subject: [PATCH] cipher/sha512: Fix non-NEON ARM assembly implementation
--
--* cipher/sha512.c (do_transform_generic)
--[USE_ARM_ASM]: Switch to the non-NEON assembly implementation.
--
----
--
--When building for ARM CPUs that don't support NEON, linking fails
--with an "undefined reference to _gcry_sha512_transform_armv7_neon"
--error.  Switching to the non-NEON assembly function corrects this.
--
--[yann.morin.1998 at free.fr:
--  - grab from the mailing list: https://lists.gnupg.org/pipermail/gcrypt-devel/2021-January/005059.html
--]
--Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-----
-- cipher/sha512.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/cipher/sha512.c b/cipher/sha512.c
--index f70cdf42..0f4c304f 100644
----- a/cipher/sha512.c
--+++ b/cipher/sha512.c
--@@ -291,7 +291,7 @@ static unsigned int
-- do_transform_generic (void *context, const unsigned char *data, size_t nblks)
-- {
--   SHA512_CONTEXT *hd = context;
---  return _gcry_sha512_transform_armv7_neon (&hd->state, data, k, nblks);
--+  return _gcry_sha512_transform_arm (&hd->state, data, k, nblks);
-- }
-- #else
-- static unsigned int
---- 
--2.25.1
--
-diff --git a/package/libgcrypt/libgcrypt.hash b/package/libgcrypt/libgcrypt.hash
-index 55d6c29695..c9a8bac9cb 100644
---- a/package/libgcrypt/libgcrypt.hash
-+++ b/package/libgcrypt/libgcrypt.hash
-@@ -1,7 +1,7 @@
- # From https://www.gnupg.org/download/integrity_check.html
--sha1  459383a8b6200673cfc31f7b265c4961c0850031  libgcrypt-1.9.0.tar.bz2
-+sha1  a15ce7355b028f28a33428eaa0147154861b29d4  libgcrypt-1.9.1.tar.bz2
- # Locally calculated after checking signature
--# https://gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.9.0.tar.bz2.sig
-+# https://gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.9.1.tar.bz2.sig
- # using key D8692123C4065DEA5E0F3AB5249B39D24F25E3B6
--sha256  4d9ccaa5f99db59ebcb64d73f62825b05ce8a6b7f86d19178559ef84de1381cb  libgcrypt-1.9.0.tar.bz2
-+sha256  c5a67a8b9b2bd370fb415ed1ee31c7172e5683076493cf4a3678a0fbdf0265d9  libgcrypt-1.9.1.tar.bz2
- sha256  ca0061fc1381a3ab242310e4b3f56389f28e3d460eb2fd822ed7a21c6f030532  COPYING.LIB
-diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
-index a2dcdb5fee..7c105058a3 100644
---- a/package/libgcrypt/libgcrypt.mk
-+++ b/package/libgcrypt/libgcrypt.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/dhcpcd/0001-src-privsep-linux.c-add-support-for-nds32.patch b/package/dhcpcd/0001-src-privsep-linux.c-add-support-for-nds32.patch
+new file mode 100644
+index 0000000000..89dd3c7637
+--- /dev/null
++++ b/package/dhcpcd/0001-src-privsep-linux.c-add-support-for-nds32.patch
+@@ -0,0 +1,40 @@
++From bc59536c202ba134422a42fe4dfdfe0643806c8f Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 29 Jan 2021 22:21:00 +0100
++Subject: [PATCH] src/privsep-linux.c: add support for nds32
++
++Fix the following build failure:
++
++privsep-linux.c:206:4: error: #error "Platform does not support seccomp filter yet"
++ #  error "Platform does not support seccomp filter yet"
++    ^~~~~
++In file included from privsep-linux.c:36:
++privsep-linux.c:213:38: error: 'SECCOMP_AUDIT_ARCH' undeclared here (not in a function); did you mean 'SECCOMP_ALLOW_ARG'?
++  BPF_JUMP(BPF_JMP + BPF_JEQ + BPF_K, SECCOMP_AUDIT_ARCH, 1, 0),
++                                      ^~~~~~~~~~~~~~~~~~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/af8ba07ea0c12ab8cd24d528ef98db05521f3d36
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/rsmarples/dhcpcd/pull/21]
++---
++ src/privsep-linux.c | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/src/privsep-linux.c b/src/privsep-linux.c
++index 2226659b..e81689bb 100644
++--- a/src/privsep-linux.c
+++++ b/src/privsep-linux.c
++@@ -182,6 +182,8 @@ ps_root_sendnetlink(struct dhcpcd_ctx *ctx, int protocol, struct msghdr *msg)
++ #  else
++ #    define SECCOMP_AUDIT_ARCH AUDIT_ARCH_MIPS
++ #  endif
+++#elif defined(__nds32__)
+++#  define SECCOMP_AUDIT_ARCH AUDIT_ARCH_NDS32
++ #elif defined(__powerpc64__)
++ #  define SECCOMP_AUDIT_ARCH AUDIT_ARCH_PPC64
++ #elif defined(__powerpc__)
++-- 
++2.29.2
++
+diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
+index ce1443eed0..cb269f1138 100644
+--- a/package/dhcpcd/dhcpcd.mk
++++ b/package/dhcpcd/dhcpcd.mk
+@@ -16,6 +16,11 @@ DHCPCD_CONFIG_OPTS = \
+ 	--os=linux \
+ 	--privsepuser=dhcpcd
  
--LIBGCRYPT_VERSION = 1.9.0
-+LIBGCRYPT_VERSION = 1.9.1
- LIBGCRYPT_SOURCE = libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
- LIBGCRYPT_LICENSE = LGPL-2.1+
- LIBGCRYPT_LICENSE_FILES = COPYING.LIB
++# AUDIT_ARCH_NDS32 is only available since kernel >= 5.2
++ifeq ($(BR2_nds32):$(BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2),y:)
++DHCPCD_CONFIG_OPTS += --disable-privsep
++endif
++
+ ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
+ DHCPCD_CONFIG_OPTS += --with-udev
+ DHCPCD_DEPENDENCIES += udev
