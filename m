@@ -1,51 +1,38 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 30 Jan 2021 22:19:52 +0100
-Subject: [Buildroot] [git commit] package/libgpgme: bump to version 1.15.1
-Message-ID: <20210130210021.8A858813F4@busybox.osuosl.org>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Sat, 30 Jan 2021 22:40:24 +0100
+Subject: [Buildroot] [PATCH 0/4] version bump of netopeer2 and related
+ dependencies
+Message-ID: <20210130214028.26398-1-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e35cacf05070edcad33a4192c3f288441add543d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+For the bump of netopeer2 the bump of the dependencies is required:
 
-Update indentation in hash file (two spaces)
+From the releae summary [1]: "This release depends on libyang (v1.0.215),
+libnetconf2 (v1.1.36) and sysrepo (v1.4.104)."
 
-http://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;a=blob;f=NEWS;h=f6c2b0d3c53b3a62ca71a2a85b2d9764cda359c0
+[1] https://github.com/CESNET/netopeer2/releases/tag/v1.1.53
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libgpgme/libgpgme.hash | 6 +++---
- package/libgpgme/libgpgme.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Heiko Thiery (4):
+  package/libyang: bump to version 1.0.215
+  package/libnetconf2: bump version to 1.1.36
+  package/sysrepo: bump version to 1.4.104
+  package/netopeer2: bump version to 1.1.53
 
-diff --git a/package/libgpgme/libgpgme.hash b/package/libgpgme/libgpgme.hash
-index 6ed6a3625d..35767a27fe 100644
---- a/package/libgpgme/libgpgme.hash
-+++ b/package/libgpgme/libgpgme.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--# https://gnupg.org/ftp/gcrypt/gpgme/gpgme-1.13.1.tar.bz2.sig
-+# https://gnupg.org/ftp/gcrypt/gpgme/gpgme-1.15.1.tar.bz2.sig
- # using key D8692123C4065DEA5E0F3AB5249B39D24F25E3B6
--sha256 c4e30b227682374c23cddc7fdb9324a99694d907e79242a25a4deeedb393be46  gpgme-1.13.1.tar.bz2
-+sha256  eebc3c1b27f1c8979896ff361ba9bb4778b508b2496c2fc10e3775a40b1de1ad  gpgme-1.15.1.tar.bz2
- # Locally calculated
--sha256 ca0061fc1381a3ab242310e4b3f56389f28e3d460eb2fd822ed7a21c6f030532  COPYING.LESSER
-+sha256  ca0061fc1381a3ab242310e4b3f56389f28e3d460eb2fd822ed7a21c6f030532  COPYING.LESSER
-diff --git a/package/libgpgme/libgpgme.mk b/package/libgpgme/libgpgme.mk
-index 0e6f6906ed..95a419258b 100644
---- a/package/libgpgme/libgpgme.mk
-+++ b/package/libgpgme/libgpgme.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBGPGME_VERSION = 1.13.1
-+LIBGPGME_VERSION = 1.15.1
- LIBGPGME_SITE = https://gnupg.org/ftp/gcrypt/gpgme
- LIBGPGME_SOURCE = gpgme-$(LIBGPGME_VERSION).tar.bz2
- LIBGPGME_LICENSE = LGPL-2.1+
+ package/libnetconf2/libnetconf2.hash          |  2 +-
+ package/libnetconf2/libnetconf2.mk            |  2 +-
+ package/libyang/libyang.hash                  |  2 +-
+ package/libyang/libyang.mk                    |  2 +-
+ ...support-using-current-user-for-SR-mo.patch | 93 -------------------
+ package/netopeer2/netopeer2.hash              |  2 +-
+ package/netopeer2/netopeer2.mk                |  2 +-
+ package/sysrepo/sysrepo.hash                  |  2 +-
+ package/sysrepo/sysrepo.mk                    |  2 +-
+ 9 files changed, 8 insertions(+), 101 deletions(-)
+ delete mode 100644 package/netopeer2/0001-scripts-FEATURE-support-using-current-user-for-SR-mo.patch
+
+-- 
+2.20.1
