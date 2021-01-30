@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 30 Jan 2021 11:41:09 +0100
-Subject: [Buildroot] [PATCH 1/1] package/spice: set SPICE_CPE_ID_VALID
-In-Reply-To: <20210129214848.1030844-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 29 Jan 2021 22:48:48 +0100")
-References: <20210129214848.1030844-1-fontaine.fabrice@gmail.com>
-Message-ID: <87a6sqvha2.fsf@dell.be.48ers.dk>
+Date: Sat, 30 Jan 2021 11:42:11 +0100
+Subject: [Buildroot] [PATCH 1/1] package/dhcpcd: fix build with nds32
+In-Reply-To: <20210129213608.1030271-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 29 Jan 2021 22:36:08 +0100")
+References: <20210129213608.1030271-1-fontaine.fabrice@gmail.com>
+Message-ID: <875z3evh8c.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,10 +13,12 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > cpe:2.3:a:spice_project:spice is a valid CPE identifier for this
- > package:
+ > Fix build failure with dhcpcd due to SECCOMP_AUDIT_ARCH which is used
+ > since version 9.3.0 and
+ > https://github.com/rsmarples/dhcpcd/commit/a926ee6d8f4eb2f04e01d72664893e3cb95fceca
 
- >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aspice_project%3Aspice
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/af8ba07ea0c12ab8cd24d528ef98db05521f3d36
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
