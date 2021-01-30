@@ -1,25 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 30 Jan 2021 22:20:12 +0100
-Subject: [Buildroot] [PATCH 2/2] package/libgpgme: bump to version 1.15.1
-In-Reply-To: <20210128221507.49685-2-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 28 Jan 2021 23:15:07 +0100")
-References: <20210128221507.49685-1-fontaine.fabrice@gmail.com>
- <20210128221507.49685-2-fontaine.fabrice@gmail.com>
-Message-ID: <87v9beqfzn.fsf@dell.be.48ers.dk>
+Date: Sat, 30 Jan 2021 22:19:45 +0100
+Subject: [Buildroot] [git commit] package/libgpgme: add CPE variables
+Message-ID: <20210130210021.7C64C813F4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=6b79c8fb05bf1ae569d8b8e8c9f6f516e97c9ae0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Update indentation in hash file (two spaces)
- > http://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;a=blob;f=NEWS;h=f6c2b0d3c53b3a62ca71a2a85b2d9764cda359c0
+cpe:2.3:a:gnupg:gpgme is a valid CPE identifier for this package:
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Agnupg%3Agpgme
 
-Committed, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libgpgme/libgpgme.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libgpgme/libgpgme.mk b/package/libgpgme/libgpgme.mk
+index 1951cc6675..0e6f6906ed 100644
+--- a/package/libgpgme/libgpgme.mk
++++ b/package/libgpgme/libgpgme.mk
+@@ -9,6 +9,8 @@ LIBGPGME_SITE = https://gnupg.org/ftp/gcrypt/gpgme
+ LIBGPGME_SOURCE = gpgme-$(LIBGPGME_VERSION).tar.bz2
+ LIBGPGME_LICENSE = LGPL-2.1+
+ LIBGPGME_LICENSE_FILES = COPYING.LESSER
++LIBGPGME_CPE_ID_VENDOR = gnupg
++LIBGPGME_CPE_ID_PRODUCT = gpgpme
+ LIBGPGME_INSTALL_STAGING = YES
+ LIBGPGME_DEPENDENCIES = libassuan libgpg-error
+ LIBGPGME_CONFIG_SCRIPTS = gpgme-config
