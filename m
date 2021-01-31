@@ -1,34 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 31 Jan 2021 21:32:38 +0100
-Subject: [Buildroot] [git commit] board/minnowboard: grub.cfg: disable eudev
- network interface renaming
-Message-ID: <20210131201228.B7F2186150@busybox.osuosl.org>
+Date: Sun, 31 Jan 2021 21:32:51 +0100
+Subject: [Buildroot] [PATCH 1/3] configs/minnowboard_max_defconfig: bump
+ kernel to 5.10.11
+In-Reply-To: <20210130101915.18423-1-peter@korsgaard.com>
+References: <20210130101915.18423-1-peter@korsgaard.com>
+Message-ID: <20210131213251.29949f5f@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=03c817553a2aa710b0c50d0497d78135b0db859e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, 30 Jan 2021 11:19:13 +0100
+Peter Korsgaard <peter@korsgaard.com> wrote:
 
-So the normal DHCP-on-eth0 logic works for the graphical defconfig where
-eudev is used.
+> Explicitly enable PCI support in the kernel after commit eb01d42a77785 (PCI:
+> consolidate PCI config entry in drivers/pci) and change to GPT partitions /
+> root=PARTLABEL to find the rootfs instead of hardcoding /dev/mmcblk2p2 as
+> the mmc probing order has changed since commit 21b2cec61c04bd1 (mmc: Set
+> PROBE_PREFER_ASYNCHRONOUS for drivers that existed in v4.4).
+> 
+> This has the additional advantage that the same image will work when written
+> to a USB drive instead of a microsd.
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  board/minnowboard/genimage.cfg    | 5 +++--
+>  board/minnowboard/grub.cfg        | 2 +-
+>  board/minnowboard/linux.config    | 1 +
+>  configs/minnowboard_max_defconfig | 6 +++---
+>  4 files changed, 8 insertions(+), 6 deletions(-)
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- board/minnowboard/grub.cfg | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Series applied, thanks!
 
-diff --git a/board/minnowboard/grub.cfg b/board/minnowboard/grub.cfg
-index 206f734f13..1f75f4d7ca 100644
---- a/board/minnowboard/grub.cfg
-+++ b/board/minnowboard/grub.cfg
-@@ -2,5 +2,5 @@ set default="0"
- set timeout="5"
- 
- menuentry "Buildroot" {
--	linux /bzImage root=PARTLABEL=rootfs rootwait console=tty0 console=ttyS0,115200
-+	linux /bzImage root=PARTLABEL=rootfs rootwait console=tty0 console=ttyS0,115200 net.ifnames=0
- }
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
