@@ -1,100 +1,120 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 31 Jan 2021 14:38:16 +0100
-Subject: [Buildroot] [PATCH v2 4/7] support/scripts/pkg-stats: check CPE
- existence in CPE dictionnary
+Date: Sun, 31 Jan 2021 14:38:17 +0100
+Subject: [Buildroot] [PATCH v2 5/7] support/scripts/gen-missing-cpe: add new
+ script
 In-Reply-To: <20210131133819.1818537-1-thomas.petazzoni@bootlin.com>
 References: <20210131133819.1818537-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20210131133819.1818537-5-thomas.petazzoni@bootlin.com>
+Message-ID: <20210131133819.1818537-6-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit extends pkg-stats to leverage the recently introduced
-CPEDB class to verify that the CPEs provided by Buildroot packages are
-indeed known in the official CPE dictionnary provided by NVD.
+From: Matt Weber <matthew.weber@rockwellcollins.com>
 
-Co-Developed-by: Gr?gory Clement <gregory.clement@bootlin.com>
+This script queries the list of CPE IDs for the packages of the
+current configuration (based on the "make show-info" output), and:
+
+ - for CPE IDs that do not have any matching entry in the CPE
+   database, it emits a warning
+
+ - for CPE IDs that do have a matching entry, but not with the same
+   version, it generates a snippet of XML that can be used to propose
+   an updated version to NIST.
+
+Ref: NIST has a group email (cpe_dictionary at nist.gov) used to
+recieve these version update and new entry xml files.  They do
+process the XML and provide feedback. In some cases they will
+propose back something different where the vendor or version is
+slightly different.
+
+Limitations
+ - Currently any use of non-number version identifiers isn't
+   supported by NIST as they use ranges to determine impact
+   of a CVE
+ - Any Linux version from a non-upstream is also not supported
+   without manually adjusting the information as the custom
+   kernel will more then likely not match the upstream version
+   used in the dictionary
+
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/scripts/pkg-stats | 30 +++++++++++++++++++++---------
- 1 file changed, 21 insertions(+), 9 deletions(-)
+ support/scripts/gen-missing-cpe | 65 +++++++++++++++++++++++++++++++++
+ 1 file changed, 65 insertions(+)
+ create mode 100755 support/scripts/gen-missing-cpe
 
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index 0d4e781e3b..f595026336 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -32,7 +32,7 @@ brpath = os.path.normpath(os.path.join(os.path.dirname(__file__), "..", ".."))
- 
- sys.path.append(os.path.join(brpath, "utils"))
- from getdeveloperlib import parse_developers  # noqa: E402
--
-+from cpedb import CPEDB  # noqa: E402
- 
- INFRA_RE = re.compile(r"\$\(eval \$\(([a-z-]*)-package\)\)")
- URL_RE = re.compile(r"\s*https?://\S*\s*$")
-@@ -225,7 +225,8 @@ class Package:
- 
-         if var in self.all_cpeids:
-             self.cpeid = self.all_cpeids[var]
--            self.status['cpe'] = ("ok", "verified CPE identifier")
-+            # Set a preliminary status, it might be overridden by check_package_cpes()
-+            self.status['cpe'] = ("warning", "not checked against CPE dictionnary")
-         else:
-             self.status['cpe'] = ("error", "no verified CPE identifier")
- 
-@@ -600,6 +601,18 @@ def check_package_cves(nvd_path, packages):
-                 pkg.status['cve'] = ("ok", "not affected by CVEs")
- 
- 
-+def check_package_cpes(nvd_path, packages):
-+    cpedb = CPEDB(nvd_path)
+diff --git a/support/scripts/gen-missing-cpe b/support/scripts/gen-missing-cpe
+new file mode 100755
+index 0000000000..ed7747295a
+--- /dev/null
++++ b/support/scripts/gen-missing-cpe
+@@ -0,0 +1,65 @@
++#!/usr/bin/env python3
++
++import argparse
++import sys
++import json
++import subprocess
++import os
++from cpedb import CPEDB, CPE
++
++
++def gen_update_xml_reports(cpes, cpedb, output):
++    cpe_need_update = []
++
++    for cpe in cpes:
++        result = cpedb.find(cpe)
++        if not result:
++            result = cpedb.find_partial(CPE.no_version(cpe))
++            if result:
++                cpe_need_update.append(cpe)
++            else:
++                print("WARNING: no match found for '%s'" % cpe)
++
++    for cpe in cpe_need_update:
++        xml = cpedb.gen_update_xml(cpe)
++        fname = CPE.product(cpe) + '-' + CPE.version(cpe) + '.xml'
++        print("Generating %s" % fname)
++        fp = open(os.path.join(output, fname), 'w+')
++        fp.write(xml)
++        fp.close()
++
++    print("Generated %d update files out of %d CPEs" % (len(cpe_need_update), len(cpes)))
++
++
++def get_cpe_ids():
++    print("Getting list of CPE for enabled packages")
++    cmd = ["make", "--no-print-directory", "show-info"]
++    js = json.loads(subprocess.check_output(cmd).decode("utf-8"))
++    return set([v["cpe-id"] for k, v in js.items() if "cpe-id" in v])
++
++
++def resolvepath(path):
++    return os.path.abspath(os.path.expanduser(path))
++
++
++def parse_args():
++    parser = argparse.ArgumentParser()
++    parser.add_argument('--output', dest='output',
++                        help='Path to the output CPE update files', type=resolvepath, required=True)
++    parser.add_argument('--nvd-path', dest='nvd_path',
++                        help='Path to the local NVD database', type=resolvepath, required=True)
++    return parser.parse_args()
++
++
++def __main__():
++    args = parse_args()
++    if not os.path.isdir(args.output):
++        print("ERROR: output directory %s does not exist" % args.output)
++        sys.exit(1)
++    cpedb = CPEDB(args.nvd_path)
 +    cpedb.get_xml_dict()
-+    for p in packages:
-+        if not p.cpeid:
-+            continue
-+        if cpedb.find(p.cpeid):
-+            p.status['cpe'] = ("ok", "verified CPE identifier")
-+        else:
-+            p.status['cpe'] = ("error", "CPE identifier unknown in CPE database")
++    cpes = get_cpe_ids()
++    gen_update_xml_reports(cpes, cpedb, args.output)
 +
 +
- def calculate_stats(packages):
-     stats = defaultdict(int)
-     stats['packages'] = len(packages)
-@@ -898,19 +911,17 @@ def dump_html_pkg(f, pkg):
- 
-     # CPE ID
-     td_class = ["left"]
--    if pkg.status['cpe'][0] == "ok":
-+    if pkg.is_status_ok("cpe"):
-         td_class.append("cpe-ok")
--    elif pkg.status['cpe'][0] == "error":
-+    elif pkg.is_status_error("cpe"):
-         td_class.append("cpe-nok")
-     else:
-         td_class.append("cpe-unknown")
-     f.write("  <td class=\"%s\">\n" % " ".join(td_class))
--    if pkg.status['cpe'][0] == "ok":
-+    if pkg.cpeid:
-         f.write("  <code>%s</code>\n" % pkg.cpeid)
--    elif pkg.status['cpe'][0] == "error":
--        f.write("  N/A\n")
--    else:
--        f.write("  %s\n" % pkg.status['cpe'][1])
-+    if not pkg.is_status_ok("cpe"):
-+        f.write("  %s%s\n" % ("<br/>" if pkg.cpeid else "", pkg.status['cpe'][1]))
-     f.write("  </td>\n")
- 
-     f.write(" </tr>\n")
-@@ -1106,6 +1117,7 @@ def __main__():
-     if args.nvd_path:
-         print("Checking packages CVEs")
-         check_package_cves(args.nvd_path, packages)
-+        check_package_cpes(args.nvd_path, packages)
-     print("Calculate stats")
-     stats = calculate_stats(packages)
-     if args.html:
++__main__()
 -- 
 2.29.2
