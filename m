@@ -1,42 +1,171 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 31 Jan 2021 23:30:21 +0100
-Subject: [Buildroot] [PATCH 1/1] package/pugixml: drop
- BR2_PACKAGE_PUGIXML_HEADER_ONLY
-In-Reply-To: <20210128172935.4138671-1-fontaine.fabrice@gmail.com>
-References: <20210128172935.4138671-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210131233021.605e67b0@windsurf.home>
+Date: Sun, 31 Jan 2021 23:30:56 +0100
+Subject: [Buildroot] [git commit] package/frr: bump to 7.5
+Message-ID: <20210131221119.CE34986338@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 28 Jan 2021 18:29:35 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=8023a8814b0a57a8e4c1cf820729c0879baabcc3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Drop BR2_PACKAGE_PUGIXML_HEADER_ONLY which raises a build failure with
-> gerbera (the only package that is using pugixml). Indeed, there is two
-> issues:
->  - gerbera is not aware that it must define PUGIXML_HEADER_ONLY
->  - pugixml.cpp is not available in the staging directory so gerbera
->    can't use it
-> 
-> It should be noted that pugixml continues to install a (non working)
-> library even when PUGIXML_HEADER_ONLY is enabled resulting in a build
-> failure at linking stage instead of configure step:
-> 
-> [100%] Linking CXX executable gerbera
-> /home/buildroot/autobuild/run/instance-2/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-musleabihf/8.3.0/../../../../arm-buildroot-linux-musleabihf/bin/ld: liblibgerbera.a(config_manager.cc.o): in function `ConfigManager::getElement(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) const':
-> config_manager.cc:(.text+0x4d8): undefined reference to `pugi::xml_document::document_element() const'
+Major Behavior Changes
 
-This looks like an upstream bug in pugixml, isn't it ? We're using
-pugixml 1.10, but a 1.11 has been released since then. Have you tried
-that ? Did you ask upstream pugixml about this issue ?
+    - As a reminder for those upgrading from older releases, as of FRR 7.4
+    and beyond:
 
-Thanks!
+    RFC 8212 is now enabled by default. BGP will not advertise or use
+    routes unless explicitly configured to do so with an export or import
+    policy.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+All daemons
+
+    Minimum libyang version is now 1.0.184
+
+bfdd
+
+    Profile support
+    Minimum TTL support
+
+bgpd
+
+    RPKI now has support for VRFs
+    Add wide option to route show commands
+    Add ability to count filtered prefixes when using maximum-prefix
+    with new force option
+    Add ability to show selected bestpath routes for a given neighbor
+    with bestpath-routes option to neighbor show command
+    Add ability to specify message when admin downing a session with bgp
+    shutdown message MSG... command
+    Add IPv6 support for Flowspec
+    Add ability to shut down neighbor if RTT is too high with neighbor
+    <neigh> shutdown rtt command
+    Allow update-delay to be applied globally
+    Graceful Restart fixes
+    Stability and performance fixes
+    EVPN
+    Beginning of MultiHoming support; stay tuned
+
+isisd
+
+    Add VRF support
+    Add support for Anycast-SIDs
+    Fix adjacency timer display overflow
+
+ospfd
+
+    Segment Routing support for ECMP
+    Prevent crash if transferring config amongst instances
+    Various LSA-related fixes
+
+pbrd
+
+    Add JSON support to commands
+    Add ability to match on DSCP/ECN fields
+
+pimd
+
+    Add more JSON support to commands
+    Add support for MSDP SA forwarding
+    (s,g,rpt) ifchannel is now cleared when (*, G) prune is received
+    Fix IGMP querier election and IP address mapping
+    Fix missing mesh-group commands
+    Fix crash when RP is removed
+
+staticd
+
+    Add support for Northbound API
+
+zebra
+
+    Nexthop group support for FPM
+    Netlink batching support
+    Northbound support for RIB model
+    Backup nexthop support
+    Allow upper level protocols to request ARP
+    Add json output for zebra ES, ES-EVI and access vlan dumps
+
+vtysh
+
+    Speed up output across daemons
+    Fix build-time errors for some --enable flags
+
+Northbound / YANG
+
+    Filter and route-map support
+    OSPF model definition
+    BGP model definition
+
+RPM Packaging
+
+    Moved RPKI to subpackage
+    Added SNMP subpackage
+
+Signed-off-by: Vadym Kochan <vadym.kochan@plvision.eu>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...find-all-future-minor-versions-of-python3.patch | 30 ----------------------
+ package/frr/frr.hash                               |  2 +-
+ package/frr/frr.mk                                 |  2 +-
+ 3 files changed, 2 insertions(+), 32 deletions(-)
+
+diff --git a/package/frr/0001-build-find-all-future-minor-versions-of-python3.patch b/package/frr/0001-build-find-all-future-minor-versions-of-python3.patch
+deleted file mode 100644
+index 1eb693703b..0000000000
+--- a/package/frr/0001-build-find-all-future-minor-versions-of-python3.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-From 838cb35e08eb98acbc27637808162105ae2c4549 Mon Sep 17 00:00:00 2001
+-From: Michal Ruprich <michalruprich@gmail.com>
+-Date: Wed, 17 Jun 2020 13:47:30 +0200
+-Subject: [PATCH] build: find all future minor versions of python3
+-
+-This way we can find every python from 3.8 further
+-
+-Signed-off-by: Michal Ruprich <michalruprich@gmail.com>
+-
+-[Retrieved from:
+-https://github.com/FRRouting/frr/commit/838cb35e08eb98acbc27637808162105ae2c4549]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- m4/ax_python.m4 | 3 ++-
+- 1 file changed, 2 insertions(+), 1 deletion(-)
+-
+-diff --git a/m4/ax_python.m4 b/m4/ax_python.m4
+-index 9f43ea0ab12..91d12b99b43 100644
+---- a/m4/ax_python.m4
+-+++ b/m4/ax_python.m4
+-@@ -186,7 +186,8 @@ AC_REQUIRE([PKG_PROG_PKG_CONFIG])dnl
+-       AC_MSG_RESULT([yes])
+- 
+-       PYTHON_CFLAGS="`\"$pycfg\" --includes`"
+--      if test x"${py_ver}" = x"3.8" || test x"{py_ver}" = x"3.9"; then
+-+      minor_ver=${py_ver#*\.}
+-+      if test $((minor_ver)) -gt 7; then
+-         PYTHON_LIBS="`\"$pycfg\" --ldflags --embed`"
+-       else
+-         PYTHON_LIBS="`\"$pycfg\" --ldflags`"
+diff --git a/package/frr/frr.hash b/package/frr/frr.hash
+index 1c8c27ec4e..942065f0f3 100644
+--- a/package/frr/frr.hash
++++ b/package/frr/frr.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 3c8204fda1c9b178d8446562579bbbc49d134b98f3ad02aa56f68724a2f9e40a  frr-7.4.tar.gz
++sha256 54066e82a82751ec5876d9b67aa0cb24fe94e19e7371af290ac25099eda9f136  frr-7.5.tar.gz
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/frr/frr.mk b/package/frr/frr.mk
+index 6beaf776ac..3ae292874a 100644
+--- a/package/frr/frr.mk
++++ b/package/frr/frr.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FRR_VERSION = 7.4
++FRR_VERSION = 7.5
+ FRR_SITE = $(call github,FRRouting,frr,frr-$(FRR_VERSION))
+ FRR_LICENSE = GPL-2.0
+ FRR_LICENSE_FILES = COPYING
