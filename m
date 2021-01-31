@@ -1,49 +1,42 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 31 Jan 2021 21:16:21 +0100
-Subject: [Buildroot] qt5 "Could not find DRM device"
-In-Reply-To: <CAOMZO5AUFXJhy2Q7mh5OwtVu4PgLfU2KAMDMemDckq4VjDcK2w@mail.gmail.com>
-References: <CAGshWo2DDqef=WG6MatpYHTxyNx=p4j+XxR-iEXSiE76anz4pw@mail.gmail.com>
- <CAOMZO5AUFXJhy2Q7mh5OwtVu4PgLfU2KAMDMemDckq4VjDcK2w@mail.gmail.com>
-Message-ID: <20210131211621.3ca2c713@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 31 Jan 2021 21:21:55 +0100
+Subject: [Buildroot] [git commit] package/libyang: bump to version 1.0.215
+Message-ID: <20210131200219.679F5861C0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Emmanuel,
+commit: https://git.buildroot.net/buildroot/commit/?id=1b8ba471c9476c19d6d1e66f8858f9c497fe7081
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 31 Jan 2021 16:03:57 -0300, Fabio Estevam <festevam@gmail.com> wrote:
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libyang/libyang.hash | 2 +-
+ package/libyang/libyang.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> Hi Emmanuel,
-> 
-> On Sun, Jan 31, 2021 at 3:15 PM manu f <e.fiancette@gmail.com> wrote:
-> >
-> > Hello all,
-> >
-> > I build a kernel for imx6 board. imx6 boot correctly, but  I got this error  "Could not find DRM device" when I try to launch a qt web browser ( this app working on an other context).
-> >
-> > I search google and mailing list. I find something about qt5 configuration and -device flag..
-> > Could I have some help about ?
-> >
-> > (qt app depend on qt5 webengine, so I set mesa3d and perhaps I made a mistake when setting drivers, because I use direct frame buffer.. perhaps I forgot something)  
-> 
-> I suggest you take a look at configs/imx6-sabresd_qt5_defconfig. This
-> target uses the mainline kernel and the Etnaviv stack.
-
-Think this points to your problem, you must decide between mainline/actual kernel using
-mesa3d/etnaviv configuration or freescale/nxp kernel using the vivante graphics stack...
-
-From your provided config it is hard to judge which way your try...some etnaviv
-options enabled some IMX/Vivante ones enabled... but the main point is
-the selected kernel and kernel options, but your config points to private repo and
-private config...., but from the selected/used kernel header version (4.9) I would
-suspect an freescale/nxp kernel?
-
-Regards,
-Peter
-
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/libyang/libyang.hash b/package/libyang/libyang.hash
+index d318ecb9d6..bc9e948c03 100644
+--- a/package/libyang/libyang.hash
++++ b/package/libyang/libyang.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  1a5637451b73c4c5683837eb4c51371bb084795f653bc1a5fc20fed5541b58bc  libyang-1.0.184.tar.gz
++sha256  c4498a77a7c12a28c9911f993eeafbf2badd2ecea58bb74781bd61cfc635e4c9  libyang-1.0.215.tar.gz
+ sha256  f942fe693e03e4e3ff67a351c00dc8f468a042e0d7273b0aa6bc53060b568112  LICENSE
+diff --git a/package/libyang/libyang.mk b/package/libyang/libyang.mk
+index b4b82a9df7..ee24256bed 100644
+--- a/package/libyang/libyang.mk
++++ b/package/libyang/libyang.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBYANG_VERSION = 1.0.184
++LIBYANG_VERSION = 1.0.215
+ LIBYANG_SITE = $(call github,CESNET,libyang,v$(LIBYANG_VERSION))
+ LIBYANG_LICENSE = BSD-3-Clause
+ LIBYANG_LICENSE_FILES = LICENSE
