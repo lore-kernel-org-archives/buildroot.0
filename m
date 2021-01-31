@@ -1,64 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 31 Jan 2021 21:23:18 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] CHANGES: update with
- recent changes
-Message-ID: <20210131200420.2666083817@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 31 Jan 2021 21:25:28 +0100
+Subject: [Buildroot] [git commit] package/faad2: add CPE variables
+Message-ID: <20210131200523.577A682B3A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=82684abc06c974ab86063b0e1906a3b4325fcb06
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=02815955d3243e51b73ce52562c931f8760e83b7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+cpe:2.3:a:audiocoding:freeware_advanced_audio_decoder_2 is a valid CPE
+identifier for this package:
+
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aaudiocoding%3Afreeware_advanced_audio_decoder_2
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- CHANGES | 37 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
+ package/faad2/faad2.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/CHANGES b/CHANGES
-index dfb3c5447b..8f1dc8e295 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,40 @@
-+2020.02.10, not yet released
-+
-+	Important / security related fixes.
-+
-+	Download: Ensure git submodules are correctly fetched if
-+	enabled for a package with <pkg>_GIT_SUBMODULES = YES and the
-+	host variant is downloaded first.
-+
-+	Toolchain: Mark CodeSourcery Aarch64 2014.11 toolchain as not
-+	having libatomic.
-+
-+	pkg-stats: Fix python 3.8+ deprecation warning.
-+
-+	meson: Ensure ccache is not detected and used, as it may
-+	conflict with the ccache handling in Buildroot.
-+
-+	New packages: libnupnp
-+
-+	Updated/fixed packages: bctoolbox, brltty, dbus, dovecot,
-+	dovecot-pigeonhole, gcc, gerbera, gmrender-resurrect, gst-omx,
-+	gst1-plugins-bad, gst1-plugins-base, gst1-plugins-good,
-+	gst1-plugins-ugly, gst1-rtsp-server, gst1-vaapi,
-+	gst1-validate, gstreamer1, gstreamer1-editing-services,
-+	igd2-for-linux, libclc, libllcp, libtorrent-rasterbar,
-+	libupnp, libupnpp, lpc32xxcdl, luarocks, mpd, nfs-utils,
-+	nodejs, openjpeg, openldap, opentracing-cpp, openvpn, p11-kit,
-+	paho-mqtt-c, php, poppler, postgresql, python3, runc, sudo,
-+	syslog-ng, systemd, tini, trace-cmd, tzdata, ushare, vlc,
-+	wavpack, wireguard-linux-compat, wolfssl, xapp_xload, xorriso,
-+	zic
-+
-+	Removed packages: libupnp18
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#13471: package/mpd/mpd.conf make use of path not created
-+
- 2020.02.9, released December 27th, 2020
- 
- 	Important / security related fixes.
+diff --git a/package/faad2/faad2.mk b/package/faad2/faad2.mk
+index 575abad17e..d085c814bd 100644
+--- a/package/faad2/faad2.mk
++++ b/package/faad2/faad2.mk
+@@ -8,6 +8,8 @@ FAAD2_VERSION = 2.10.0
+ FAAD2_SITE = $(call github,knik0,faad2,$(subst .,_,$(FAAD2_VERSION)))
+ FAAD2_LICENSE = GPL-2.0
+ FAAD2_LICENSE_FILES = COPYING
++FAAD2_CPE_ID_VENDOR = audiocoding
++FAAD2_CPE_ID_PRODUCT = freeware_advanced_audio_decoder_2
+ # frontend/faad calls frexp()
+ FAAD2_CONF_ENV = LIBS=-lm
+ FAAD2_INSTALL_STAGING = YES
