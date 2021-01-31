@@ -1,95 +1,74 @@
-From: general at librehash.com <general@librehash.com>
-Date: Sun, 31 Jan 2021 11:58:13 -0500
-Subject: [Buildroot] Question About the Rational Limitations on Buildroot as
- a Tool
-Message-ID: <d116a0687c2af6f6356332e7854f053a@librehash.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 31 Jan 2021 18:04:36 +0100
+Subject: [Buildroot] [git commit] package/gdk-pixbuf: link with lintl if
+ needed
+Message-ID: <20210131164427.B88228404A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-First, I want to start this e-mail off by giving a huge thanks to those
-that created and maintain(ed) this tool. Folks like yourselves are what
-enable people like me to convince even less experienced people that
-they're anywhere close to the genius that you all actually are. I know
-you all may not see your contributions as particularly 'noble', but I do
-- and before I ask anything (take) from you all, I want to at least give
-you all your just due for a job well do. 
+commit: https://git.buildroot.net/buildroot/commit/?id=55957998126ce4c97a29c253aaadab866e3fafb1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I know there's a chance that this question was asked before - _but I
-legitimately looked for the answer to it online and in other resources
-and did not find a satisfactory one. _ 
+Fixes:
+ - http://autobuild.buildroot.org/results/4dc94dadbc17e06a214478644f29877fe205f93d
 
-If there is an answer roaming out there somewhere, I'm just an idiot and
-I missed it - please forgive me. 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...001-meson.build-link-with-lintl-if-needed.patch | 45 ++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
 
-Question About Limitations of 'Buildroot' 
-
-I stumbled across buildroot through Fabrice Bellard's tool (JSLinux).
-Being fascinated with 'JSLinux' (client-side terminal that executes in
-javascript in one's browser), I wanted to know more about how to build
-this for myself (and eventually host my own version that expends
-slightly more resources since I have a smaller audience). 
-
-Long story, short - after downloading the modules from his site, I got
-into the buildroot tool and started going through the wealth of options
-provided in the ncurses interface for the creation of this kernel / root
-and I started to get really curious about how viable this can be as a
-legitimate system ran on commercial laptops - let's say a device with
-16GB RAM, modern chip processor (nothing crazy), good graphics card, and
-other modern specs (2019 or later). 
-
-All over the site, I've read that this is a great way to build an OS for
-'embedded devices', which I understand to be tools like routers perhaps,
-Raspberry Pi's, Arduinos etc. 
-
-Cool. But given the wealth of features, libraries, kernel packages,
-audio packages, etc., that are available for compilation in the TUI, it
-appeared to me like one could make a very legitimate customized OS with
-this 'buildroot' tool. 
-
-To be clear, I'm sure that there are others that have asked this
-question before but I either cannot find them or the few that I have
-found that have asked this question received some fairly inadequate
-answers. So I wanted to come straight to the source. 
-
-_To be more specific in my questions: _ 
-
-1. Why is 'buildroot' pivoted toward creating kernels / OSes geared for
-embedded devices (almost exclusively, it seems)? I'm not saying that
-this is a flaw or an oversight at all. On the contrary, I'm assuming
-that there is an obviously sound reason for doing this that I simply
-cannot find and was hoping to understand more about the nature of this
-project through the answer that I receive to this question. 
-
-and 
-
-2. From what I saw, it seems that one can build a pretty damn robust OS
-with this tool (not including all of the bells & whistles that are just
-aesthetic dloads or creature comforts). I saw it allows for the
-inclusion of the latest kernel version by Linux, relevant graphics
-libraries, libraries for building, X11 related downloads, Interpreter
-languages and scripting, networking applications, security tools,
-various filesystems, available shells, the support of other concurrently
-running applications as well (the computer that I'm using has decent
-specs). 
-
-Would it be naive to believe that perhaps when buildroot started out, it
-did not have the capability but now, in the project's maturity, the tool
-is so full featured that it can essentially serve as a pathway for one
-creating their own custom OS? Obviously not something as extensive as
-Debian / Ubuntu / PCLinux etc., but maybe an Arch Linux? (putting aside
-their considerable expertise and mastery) 
-
-And, if not, what is there that this project is lacking that it would
-need before it could sufficiently serve that role? 
-
-Thank you in advance for taking the time to field my query, 
-
-James Edwards - Lead Organizer 
-
-Librehash
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210131/e1ae8589/attachment.html>
+diff --git a/package/gdk-pixbuf/0001-meson.build-link-with-lintl-if-needed.patch b/package/gdk-pixbuf/0001-meson.build-link-with-lintl-if-needed.patch
+new file mode 100644
+index 0000000000..08a3a681cf
+--- /dev/null
++++ b/package/gdk-pixbuf/0001-meson.build-link-with-lintl-if-needed.patch
+@@ -0,0 +1,45 @@
++From 65c8bc8ec4ae8dd140b0205a61d0d216fa45d819 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Thu, 28 Jan 2021 07:50:44 +0100
++Subject: [PATCH] meson.build: link with lintl if needed
++
++Link with -lintl to avoid the following build failure:
++
++/home/giuliobenetti/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/mips64el-buildroot-linux-uclibc/5.5.0/../../../../mips64el-buildroot-linux-uclibc/bin/ld: gdk-pixbuf/libgdk_pixbuf-2.0.so.0.4200.2.p/gdk-pixbuf-util.c.o: in function `_gdk_pixbuf_init_gettext':
++gdk-pixbuf-util.c:(.text+0xbc0): undefined reference to `libintl_bindtextdomain'
++/home/giuliobenetti/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/mips64el-buildroot-linux-uclibc/5.5.0/../../../../mips64el-buildroot-linux-uclibc/bin/ld: gdk-pixbuf-util.c:(.text+0xbc8): undefined reference to `libintl_bindtextdomain'
++
++Fixes:
++ - http://autobuild.buildroot.org/results/894359558100ea9637feba16deaf99923805d0f2
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status:
++https://gitlab.gnome.org/GNOME/gdk-pixbuf/-/merge_requests/101]
++---
++ meson.build | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/meson.build b/meson.build
++index 1cef125a3..973948108 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -93,6 +93,7 @@ if cc.has_function('lrint', dependencies: mathlib_dep)
++   gdk_pixbuf_conf.set('HAVE_LRINT', 1)
++ endif
++ 
+++intl_dep = cc.find_library('intl', required: false)
++ if cc.has_function('bind_textdomain_codeset', prefix: '#include <libintl.h>')
++   gdk_pixbuf_conf.set('HAVE_BIND_TEXTDOMAIN_CODESET', 1)
++ endif
++@@ -212,7 +213,7 @@ if medialib_dep.found()
++ endif
++ 
++ gdk_pixbuf_deps = [ mathlib_dep, glib_dep, gobject_dep, gmodule_dep, gio_dep,
++-                    shared_mime_dep, medialib_dep ]
+++                    shared_mime_dep, medialib_dep, intl_dep ]
++ 
++ # Check if we can build shared modules
++ if gmodule_dep.type_name() == 'pkgconfig'
++-- 
++2.29.2
++
