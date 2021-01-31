@@ -1,49 +1,49 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 31 Jan 2021 20:47:22 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libgeos: depends on wchar
-Message-ID: <20210131194722.4032192-1-fontaine.fabrice@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun, 31 Jan 2021 21:16:21 +0100
+Subject: [Buildroot] qt5 "Could not find DRM device"
+In-Reply-To: <CAOMZO5AUFXJhy2Q7mh5OwtVu4PgLfU2KAMDMemDckq4VjDcK2w@mail.gmail.com>
+References: <CAGshWo2DDqef=WG6MatpYHTxyNx=p4j+XxR-iEXSiE76anz4pw@mail.gmail.com>
+ <CAOMZO5AUFXJhy2Q7mh5OwtVu4PgLfU2KAMDMemDckq4VjDcK2w@mail.gmail.com>
+Message-ID: <20210131211621.3ca2c713@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libgeos unconditionally uses wstring which raises the following build
-failure:
+Hello Emmanuel,
 
-In file included from /srv/storage/autobuild/run/instance-3/output-1/build/libgeos-3.9.0/tools/astyle/ASLocalizer.cpp:40:
-/srv/storage/autobuild/run/instance-3/output-1/build/libgeos-3.9.0/tools/astyle/ASLocalizer.h:72:34: error: 'wstring' does not name a type; did you mean 'stdin'?
-  string convertToMultiByte(const wstring& wideStr) const;
-                                  ^~~~~~~
-                                  stdin
+On Sun, 31 Jan 2021 16:03:57 -0300, Fabio Estevam <festevam@gmail.com> wrote:
 
-Fixes:
- - http://autobuild.buildroot.org/results/e97d03848d9bbf1845b994f391679a1dbf49f61e
+> Hi Emmanuel,
+> 
+> On Sun, Jan 31, 2021 at 3:15 PM manu f <e.fiancette@gmail.com> wrote:
+> >
+> > Hello all,
+> >
+> > I build a kernel for imx6 board. imx6 boot correctly, but  I got this error  "Could not find DRM device" when I try to launch a qt web browser ( this app working on an other context).
+> >
+> > I search google and mailing list. I find something about qt5 configuration and -device flag..
+> > Could I have some help about ?
+> >
+> > (qt app depend on qt5 webengine, so I set mesa3d and perhaps I made a mistake when setting drivers, because I use direct frame buffer.. perhaps I forgot something)  
+> 
+> I suggest you take a look at configs/imx6-sabresd_qt5_defconfig. This
+> target uses the mainline kernel and the Etnaviv stack.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libgeos/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Think this points to your problem, you must decide between mainline/actual kernel using
+mesa3d/etnaviv configuration or freescale/nxp kernel using the vivante graphics stack...
 
-diff --git a/package/libgeos/Config.in b/package/libgeos/Config.in
-index 224c30c2ad..9f02c8b13f 100644
---- a/package/libgeos/Config.in
-+++ b/package/libgeos/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_LIBGEOS
- 	bool "libgeos"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_USE_WCHAR
- 	help
- 	  GEOS (Geometry Engine - Open Source) is a C++ port of the
- 	  JTS Topology Suite (JTS). It aims to contain the complete
-@@ -10,5 +11,5 @@ config BR2_PACKAGE_LIBGEOS
- 
- 	  https://trac.osgeo.org/geos
- 
--comment "libgeos needs a toolchain w/ C++"
--	depends on !BR2_INSTALL_LIBSTDCPP
-+comment "libgeos needs a toolchain w/ C++, wchar"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
--- 
-2.29.2
+From your provided config it is hard to judge which way your try...some etnaviv
+options enabled some IMX/Vivante ones enabled... but the main point is
+the selected kernel and kernel options, but your config points to private repo and
+private config...., but from the selected/used kernel header version (4.9) I would
+suspect an freescale/nxp kernel?
+
+Regards,
+Peter
+
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
