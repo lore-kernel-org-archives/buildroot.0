@@ -1,77 +1,190 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 31 Jan 2021 14:11:40 +0100
-Subject: [Buildroot] [PATCH 08/10] support/scripts/gen-missing-cpe: add
- new script
-In-Reply-To: <CANQCQpaHbXUWm46wZsErXpPw84vi5XO-vw0MpTwx8RQCE3AihQ@mail.gmail.com>
-References: <20210107133948.2997849-1-thomas.petazzoni@bootlin.com>
- <20210107133948.2997849-9-thomas.petazzoni@bootlin.com>
- <CANQCQpaHbXUWm46wZsErXpPw84vi5XO-vw0MpTwx8RQCE3AihQ@mail.gmail.com>
-Message-ID: <20210131141140.5e15fe7b@windsurf.home>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 31 Jan 2021 14:31:58 +0100
+Subject: [Buildroot] [PATCH 1/3] package/intel-mediadriver: fix build with
+ gcc 10
+Message-ID: <20210131133200.3976386-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Fixes:
+ - http://autobuild.buildroot.org/results/d5ab36026a66a4f371fb6ef6c9ecf43e9617d119
 
-On Thu, 7 Jan 2021 13:33:18 -0600
-Matthew Weber via buildroot <buildroot@busybox.net> wrote:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...-Werror=format-overflow-under-gcc-10.patch | 162 ++++++++++++++++++
+ 1 file changed, 162 insertions(+)
+ create mode 100644 package/intel-mediadriver/0002-build-fix-Werror=format-overflow-under-gcc-10.patch
 
-> I've tested with the following defconfig and I get the following
-> output.  I know for sure that some of these are missing/need
-> update/match. i.e. busybox has a exact match and kmod is pending
-> update and at 25.
-> 
-> BR2_aarch64=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_LINUX_KERNEL=y
-> BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
-> BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-> BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
-> BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-> BR2_TARGET_ROOTFS_EXT2=y
-> # BR2_TARGET_ROOTFS_TAR is not set
-> 
-> 
-> make missing-cpe
-> mkdir -p /accts/mlweber1/tmp.G9papvL0Eg-buildroot/output/cpe-updates
-> CPE: Setting up NIST dictionary
-> CPE: Loading CACHED dictionary
-> Getting list of CPE for enabled packages
-> WARNING: no match found for 'cpe:2.3:a:kernel:util-linux:2.36.1:*:*:*:*:*:*:*'
-> WARNING: no match found for 'cpe:2.3:a:busybox:busybox:1.32.0:*:*:*:*:*:*:*'
-> WARNING: no match found for 'cpe:2.3:a:kernel:kmod:27:*:*:*:*:*:*:*'
-> WARNING: no match found for 'cpe:2.3:a:gnu:zlib:1.2.11:*:*:*:*:*:*:*'
-> WARNING: no match found for 'cpe:2.3:a:linux:linux_kernel:4.16.7:*:*:*:*:*:*:*'
-> WARNING: no match found for 'cpe:2.3:a:openssl:openssl:1.1.1i:*:*:*:*:*:*:*'
-> Generated 0 update files out of 6 CPEs
-
-So here as well, the issue was that your .pkl cache was empty, due to
-parsing issue. This should be resolved in v2.
-
-> Also  I noticed in this build that I get a list of 6 CPEs but pkgstats
-> doesn't list the same ones.  it looks like the kernel dependencies of
-> kmod / openssl / zlib don't get reflected in the per defconfig
-> pkgstats.  Just checking if that was a known  bug.
-
-gen-missing-cpe simply gets the CPE IDs visible in the "make show-info"
-output, without caring whether things are a target or a host package,
-so it captures all packages that have a CPE ID.
-
-On the other hand, "make pkg-stats" looks at the package names in the
-"show-info" output and these contain "host-" prefixes for host packages
-which prevents those names from matching actual package names. I
-proposed a patch at
-http://lists.busybox.net/pipermail/buildroot/2021-January/300286.html,
-but Yann/Arnout made some suggestions on how to better handle this.
-It'll be part of my v2 of this series.
-
-Thanks!
-
-Thomas
+diff --git a/package/intel-mediadriver/0002-build-fix-Werror=format-overflow-under-gcc-10.patch b/package/intel-mediadriver/0002-build-fix-Werror=format-overflow-under-gcc-10.patch
+new file mode 100644
+index 0000000000..46775e9347
+--- /dev/null
++++ b/package/intel-mediadriver/0002-build-fix-Werror=format-overflow-under-gcc-10.patch
+@@ -0,0 +1,162 @@
++From da966a2ab1f5161cc0a21a4cd7e07edf732ebee9 Mon Sep 17 00:00:00 2001
++From: Dmitry Rogozhkin <dmitry.v.rogozhkin@intel.com>
++Date: Thu, 19 Mar 2020 20:59:12 -0700
++Subject: [PATCH] build: fix Werror=format-overflow under gcc-10
++
++Fixes: #870
++
++With upcoming gcc-10 we start to see Werror=format-overflow reporting
++that we attempt to printf %s null strings.
++
++Change-Id: I7a62bc98bf7dd6bcd61d475d7650a06aa1a70932
++Signed-off-by: Dmitry Rogozhkin <dmitry.v.rogozhkin@intel.com>
++[Retrieved from:
++https://github.com/intel/media-driver/commit/da966a2ab1f5161cc0a21a4cd7e07edf732ebee9]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ media_driver/linux/common/os/i915/xf86drm.c   | 57 ++++++++++---------
++ .../linux/ult/libdrm_mock/xf86drm_mock.c      | 57 ++++++++++---------
++ 2 files changed, 58 insertions(+), 56 deletions(-)
++
++diff --git a/media_driver/linux/common/os/i915/xf86drm.c b/media_driver/linux/common/os/i915/xf86drm.c
++index 7594bde99..d0fc1b7ac 100644
++--- a/media_driver/linux/common/os/i915/xf86drm.c
+++++ b/media_driver/linux/common/os/i915/xf86drm.c
++@@ -581,37 +581,38 @@ static int drmOpenByBusid(const char *busid, int type)
++ 
++     drmMsg("drmOpenByBusid: Searching for BusID %s\n", busid);
++     for (i = base; i < base + DRM_MAX_MINOR; i++) {
++-    fd = drmOpenMinor(i, 1, type);
++-    drmMsg("drmOpenByBusid: drmOpenMinor returns %d\n", fd);
++-    if (fd >= 0) {
++-        /* We need to try for 1.4 first for proper PCI domain support
++-         * and if that fails, we know the kernel is busted
++-         */
++-        sv.drm_di_major = 1;
++-        sv.drm_di_minor = 4;
++-        sv.drm_dd_major = -1;    /* Don't care */
++-        sv.drm_dd_minor = -1;    /* Don't care */
++-        if (drmSetInterfaceVersion(fd, &sv)) {
+++        fd = drmOpenMinor(i, 1, type);
+++        drmMsg("drmOpenByBusid: drmOpenMinor returns %d\n", fd);
+++        if (fd >= 0) {
+++            /* We need to try for 1.4 first for proper PCI domain support
+++             * and if that fails, we know the kernel is busted
+++             */
+++            sv.drm_di_major = 1;
+++            sv.drm_di_minor = 4;
+++            sv.drm_dd_major = -1;    /* Don't care */
+++            sv.drm_dd_minor = -1;    /* Don't care */
+++            if (drmSetInterfaceVersion(fd, &sv)) {
++ #ifndef __alpha__
++-        pci_domain_ok = 0;
+++                pci_domain_ok = 0;
++ #endif
++-        sv.drm_di_major = 1;
++-        sv.drm_di_minor = 1;
++-        sv.drm_dd_major = -1;       /* Don't care */
++-        sv.drm_dd_minor = -1;       /* Don't care */
++-        drmMsg("drmOpenByBusid: Interface 1.4 failed, trying 1.1\n");
++-        drmSetInterfaceVersion(fd, &sv);
++-        }
++-        buf = drmGetBusid(fd);
++-        drmMsg("drmOpenByBusid: drmGetBusid reports %s\n", buf);
++-        if (buf && drmMatchBusID(buf, busid, pci_domain_ok)) {
++-        drmFreeBusid(buf);
++-        return fd;
+++                sv.drm_di_major = 1;
+++                sv.drm_di_minor = 1;
+++                sv.drm_dd_major = -1;       /* Don't care */
+++                sv.drm_dd_minor = -1;       /* Don't care */
+++                drmMsg("drmOpenByBusid: Interface 1.4 failed, trying 1.1\n");
+++                drmSetInterfaceVersion(fd, &sv);
+++            }
+++            buf = drmGetBusid(fd);
+++            if (buf) {
+++                drmMsg("drmOpenByBusid: drmGetBusid reports %s\n", buf);
+++                if (drmMatchBusID(buf, busid, pci_domain_ok)) {
+++                    drmFreeBusid(buf);
+++                    return fd;
+++                }
+++                drmFreeBusid(buf);
+++            }
+++            close(fd);
++         }
++-        if (buf)
++-        drmFreeBusid(buf);
++-        close(fd);
++-    }
++     }
++     return -1;
++ }
++diff --git a/media_driver/linux/ult/libdrm_mock/xf86drm_mock.c b/media_driver/linux/ult/libdrm_mock/xf86drm_mock.c
++index 7e5246295..2e5863798 100644
++--- a/media_driver/linux/ult/libdrm_mock/xf86drm_mock.c
+++++ b/media_driver/linux/ult/libdrm_mock/xf86drm_mock.c
++@@ -790,37 +790,38 @@ static int drmOpenByBusid(const char *busid, int type)
++ 
++     drmMsg("drmOpenByBusid: Searching for BusID %s\n", busid);
++     for (i = base; i < base + DRM_MAX_MINOR; i++) {
++-    fd = drmOpenMinor(i, 1, type);
++-    drmMsg("drmOpenByBusid: drmOpenMinor returns %d\n", fd);
++-    if (fd >= 0) {
++-        /* We need to try for 1.4 first for proper PCI domain support
++-         * and if that fails, we know the kernel is busted
++-         */
++-        sv.drm_di_major = 1;
++-        sv.drm_di_minor = 4;
++-        sv.drm_dd_major = -1;    /* Don't care */
++-        sv.drm_dd_minor = -1;    /* Don't care */
++-        if (drmSetInterfaceVersion(fd, &sv)) {
+++        fd = drmOpenMinor(i, 1, type);
+++        drmMsg("drmOpenByBusid: drmOpenMinor returns %d\n", fd);
+++        if (fd >= 0) {
+++            /* We need to try for 1.4 first for proper PCI domain support
+++             * and if that fails, we know the kernel is busted
+++             */
+++            sv.drm_di_major = 1;
+++            sv.drm_di_minor = 4;
+++            sv.drm_dd_major = -1;    /* Don't care */
+++            sv.drm_dd_minor = -1;    /* Don't care */
+++            if (drmSetInterfaceVersion(fd, &sv)) {
++ #ifndef __alpha__
++-        pci_domain_ok = 0;
+++                pci_domain_ok = 0;
++ #endif
++-        sv.drm_di_major = 1;
++-        sv.drm_di_minor = 1;
++-        sv.drm_dd_major = -1;       /* Don't care */
++-        sv.drm_dd_minor = -1;       /* Don't care */
++-        drmMsg("drmOpenByBusid: Interface 1.4 failed, trying 1.1\n");
++-        drmSetInterfaceVersion(fd, &sv);
++-        }
++-        buf = drmGetBusid(fd);
++-        drmMsg("drmOpenByBusid: drmGetBusid reports %s\n", buf);
++-        if (buf && drmMatchBusID(buf, busid, pci_domain_ok)) {
++-        drmFreeBusid(buf);
++-        return fd;
+++                sv.drm_di_major = 1;
+++                sv.drm_di_minor = 1;
+++                sv.drm_dd_major = -1;       /* Don't care */
+++                sv.drm_dd_minor = -1;       /* Don't care */
+++                drmMsg("drmOpenByBusid: Interface 1.4 failed, trying 1.1\n");
+++                drmSetInterfaceVersion(fd, &sv);
+++            }
+++            buf = drmGetBusid(fd);
+++            if (buf) {
+++                drmMsg("drmOpenByBusid: drmGetBusid reports %s\n", buf);
+++                if (drmMatchBusID(buf, busid, pci_domain_ok)) {
+++                    drmFreeBusid(buf);
+++                    return fd;
+++                }
+++                drmFreeBusid(buf);
+++            }
+++            close(fd);
++         }
++-        if (buf)
++-        drmFreeBusid(buf);
++-        close(fd);
++-    }
++     }
++     return -1;
++ }
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.29.2
