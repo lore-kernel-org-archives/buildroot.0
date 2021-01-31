@@ -1,45 +1,45 @@
 From: Gilles Talis <gilles.talis@gmail.com>
-Date: Sun, 31 Jan 2021 10:50:55 +0100
-Subject: [Buildroot] [PATCH] package/leptonica: bump to version 1.80.0
+Date: Sun, 31 Jan 2021 10:50:57 +0100
+Subject: [Buildroot] [PATCH] package/xapian: bump to version 1.4.18
 In-Reply-To: <20210131095057.945946-1-gilles.talis@gmail.com>
 References: <20210131095057.945946-1-gilles.talis@gmail.com>
-Message-ID: <20210131095057.945946-4-gilles.talis@gmail.com>
+Message-ID: <20210131095057.945946-6-gilles.talis@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also added 2 spaces indentation in hash file
-
 Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 ---
- package/leptonica/leptonica.hash | 4 ++--
- package/leptonica/leptonica.mk   | 2 +-
+ package/xapian/xapian.hash | 4 ++--
+ package/xapian/xapian.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/leptonica/leptonica.hash b/package/leptonica/leptonica.hash
-index 56f8643355..213716705b 100644
---- a/package/leptonica/leptonica.hash
-+++ b/package/leptonica/leptonica.hash
-@@ -1,3 +1,3 @@
- # locally computed hash
--sha256 e2ed2e81e7a22ddf45d2c05f0bc8b9ae7450545d995bfe28517ba408d14a5a88  leptonica-1.78.0.tar.gz
--sha256 ca0ac11c7c0acad9599d54990942cc11c9f6d9b569f1a360d774a628819c3518  leptonica-license.txt
-+sha256  ec9c46c2aefbb960fb6a6b7f800fe39de48343437b6ce08e30a8d9688ed14ba4  leptonica-1.80.0.tar.gz
-+sha256  ca0ac11c7c0acad9599d54990942cc11c9f6d9b569f1a360d774a628819c3518  leptonica-license.txt
-diff --git a/package/leptonica/leptonica.mk b/package/leptonica/leptonica.mk
-index 309c65052b..06eda6acca 100644
---- a/package/leptonica/leptonica.mk
-+++ b/package/leptonica/leptonica.mk
+diff --git a/package/xapian/xapian.hash b/package/xapian/xapian.hash
+index 7105fbe7da..192032e6db 100644
+--- a/package/xapian/xapian.hash
++++ b/package/xapian/xapian.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.xapian.org/pipermail/xapian-discuss/2020-August/009814.html
+-sha256  b5eb8556dea1b0cad4167a66223522e66d670ec1eba16c7fdc844ed6b652572e  xapian-core-1.4.17.tar.xz
++# From https://lists.xapian.org/pipermail/xapian-discuss/2021-January/009856.html
++sha256  196ddbb4ad10450100f0991a599e4ed944cbad92e4a6fe813be6dce160244b77  xapian-core-1.4.18.tar.xz
+ 
+ # locally computed
+ sha256  c38aee9e3c8c4d5d594ff548a1be05453023016d6286931f6512db215ec1fd42  COPYING
+diff --git a/package/xapian/xapian.mk b/package/xapian/xapian.mk
+index 1a8557d603..4f40babcf9 100644
+--- a/package/xapian/xapian.mk
++++ b/package/xapian/xapian.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LEPTONICA_VERSION = 1.78.0
-+LEPTONICA_VERSION = 1.80.0
- LEPTONICA_SITE = http://www.leptonica.org/source
- LEPTONICA_LICENSE = BSD-2-Clause
- LEPTONICA_LICENSE_FILES = leptonica-license.txt
+-XAPIAN_VERSION = 1.4.17
++XAPIAN_VERSION = 1.4.18
+ XAPIAN_SOURCE = xapian-core-$(XAPIAN_VERSION).tar.xz
+ XAPIAN_SITE = https://oligarchy.co.uk/xapian/$(XAPIAN_VERSION)
+ XAPIAN_LICENSE = GPL-2.0+
 -- 
 2.25.1
