@@ -1,47 +1,38 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 31 Jan 2021 23:51:27 +0100
-Subject: [Buildroot] [PATCH v2 3/7] support/scripts/cpedb.py: new CPE
- XML helper
-In-Reply-To: <20210131224702.GA2384@scaer>
-References: <20210131133819.1818537-1-thomas.petazzoni@bootlin.com>
- <20210131133819.1818537-4-thomas.petazzoni@bootlin.com>
- <20210131224702.GA2384@scaer>
-Message-ID: <20210131225127.GB2384@scaer>
+From: Joachim Wiberg <troglobit@gmail.com>
+Date: Sun, 31 Jan 2021 23:58:26 +0100
+Subject: [Buildroot] [RFC PATCH 0/1] package/sysklogd: proposal to
+ update default syslog.conf
+In-Reply-To: <20210131231346.6bce24e3@windsurf.home>
+References: <20210130135203.159451-1-troglobit@gmail.com>
+ <20210131231346.6bce24e3@windsurf.home>
+Message-ID: <87sg6gg1d9.fsf@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gr?gory, All,
+On Sun, Jan 31, 2021 at 23:13, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+> On Sat, 30 Jan 2021 14:52:02 +0100 Joachim Wiberg <troglobit@gmail.com> wrote:
+>> The updated file changes the default log file from messages to syslog,
+>> as is common on most modern systems today.  The messages remains but
+>> only for less critical messages.  The update also adds more examples
+>> for how to enable remote logging as well as different new log formats.
+> Well, if the syslog.conf that we have in package/sysklogd/ is exactly
+> the one contained in the sysklogd sources, then what is the point of
+> having a copy in package/sysklogd/ ? We could just as well install the
+> configuration file provided by upstream.
 
-On 2021-01-31 23:47 +0100, Yann E. MORIN spake thusly:
-> On 2021-01-31 14:38 +0100, Thomas Petazzoni spake thusly:
-> > From: Matt Weber <matthew.weber@rockwellcollins.com>
-> > 
-> > Python class which consumes a NIST CPE XML and provides helper
-> > functions to access and search the db's data.
-> > 
-> >  - Defines the CPE as a object with operations / formats
-> >  - Processing of CPE dictionary
-> > 
-> > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> > Co-Developed-by: Gr?gory Clement <gregory.clement@bootlin.com>
-> 
-> Gr?gory, you need to add your SOB line right after your CDB line.
-> 
-> Ditto for the following patch.
+True, no point in having a local copy.
 
-No need to resend the series, just reply to each patch with your SoB
-line, I'll add them when applying.
+My main question was if there was any specific reason to sticking with
+the old habits of only using /var/log/messages, as BusyBox syslogd does,
+or if every logging package is free to have its own defalts?  Within
+reason, of course.  I'm just a bit concerned with breaking peoples
+defaults, even though they can just provide their own.
 
-Regards,
-Yann E. MORIN.
+If it's OK to change for sysklogd, I can post a new patch that drops
+the locallay maintained .conf and instead installs the sysklogd one.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Best regards
+ /Joachim
