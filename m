@@ -1,80 +1,100 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 31 Jan 2021 22:44:08 +0100
-Subject: [Buildroot] [git commit] Update for 2020.11.2
-Message-ID: <20210131213104.4FD0D812BE@busybox.osuosl.org>
+Date: Sun, 31 Jan 2021 22:47:02 +0100
+Subject: [Buildroot] [git commit] docs/website: update for 2020.11.2
+Message-ID: <20210131213104.5FA507FBB0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a93208ccec836de5178ca6ba54ca8c30cec1108c
+commit: https://git.buildroot.net/buildroot/commit/?id=19a3ae79fe9298f04ba1c8300deac152baa7a789
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 551cb630079316efe928d7c2eb0358a19e38fc48)
-[Peter: drop Makefile changes]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- CHANGES                  | 37 +++++++++++++++++++++++++++++++++++++
- support/misc/Vagrantfile |  2 +-
- 2 files changed, 38 insertions(+), 1 deletion(-)
+ docs/website/download.html | 18 +++++++++---------
+ docs/website/news.html     | 19 +++++++++++++++++++
+ 2 files changed, 28 insertions(+), 9 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 51710d03ea..ba88b3f57f 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,40 @@
-+2020.11.2, released January 31st, 2021
-+
-+	Important / security related fixes.
-+
-+	Download: Ensure git submodules are correctly fetched if
-+	enabled for a package with <pkg>_GIT_SUBMODULES = YES and the
-+	host variant is downloaded first.
-+
-+	Toolchain: Mark CodeSourcery Aarch64 2014.11 toolchain as not
-+	having libatomic. Bootlin PowerPC-440 FP toolchain updated for
-+	SecurePLT fix.
-+
-+	pkg-stats: Fix python 3.8+ deprecation warning.
-+
-+	meson: Ensure ccache is not detected and used, as it may
-+	conflict with the ccache handling in Buildroot.
-+
-+	Updated/fixed packages: barebox, boost, brltty, dbus,
-+	docker-containerd, dovecot, dovecot-pigeonhole,
-+	environment-setup, firmware-imx, gcc, gerbera, glibc,
-+	gmrender-resurrect, igd2-for-linux, kodi-pvr-zattoo, libclc,
-+	libfuse3, libllcp, libodb-mysql, libtorrent-rasterbar,
-+	libupnp, lpc32xxcdl, luarocks, mpd, multipath-tools, mutt,
-+	nfs-utils, nodejs, openjpeg, openldap, opentracing-cpp,
-+	openvpn, p11-kit, paho-mqtt-c, php, poppler, postgresql,
-+	python3, redis, resiprocate, rpm, runc, socat, sslh, sudo,
-+	sunxi-mali-mainline-driver, syslog-ng, systemd, tini,
-+	tpm2-tss, trace-cmd, tzdata, uboot-tools, uhd, ushare,
-+	util-linux, vlc, wavpack, wireguard-linux-compat, wolfssl,
-+	xapp_xload, xorriso, zic
-+
-+	Removed packages: libupnp18
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#13471: package/mpd/mpd.conf make use of path not created
-+
- 2020.11.1, released December 27th, 2020
+diff --git a/docs/website/download.html b/docs/website/download.html
+index db7cd991ba..9f08c8e504 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -42,37 +42,37 @@
+ 	</div>
+       </div>
  
- 	Important / security related fixes.
-diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
-index 753a9bdcdc..ed12abd2f0 100644
---- a/support/misc/Vagrantfile
-+++ b/support/misc/Vagrantfile
-@@ -5,7 +5,7 @@
- ################################################################################
+-      <h3 style="text-align: center;">Latest stable release: <b>2020.11.1</b></h3>
++      <h3 style="text-align: center;">Latest stable release: <b>2020.11.2</b></h3>
  
- # Buildroot version to use
--RELEASE='2020.11.1'
-+RELEASE='2020.11.2'
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2020.11.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2020.11.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2020.11.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2020.11.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+-	  <h3><a href="/downloads/buildroot-2020.11.1.tar.gz">buildroot-2020.11.1.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2020.11.1.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2020.11.2.tar.gz">buildroot-2020.11.2.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2020.11.2.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2020.11.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2020.11.2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2020.11.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2020.11.2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
  
- ### Change here for more memory/cores ###
- VM_MEMORY=2048
+-	  <h3><a href="/downloads/buildroot-2020.11.1.tar.bz2">buildroot-2020.11.1.tar.bz2</a></h3>
+-	  <p><a href="/downloads/buildroot-2020.11.1.tar.bz2.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2020.11.2.tar.bz2">buildroot-2020.11.2.tar.bz2</a></h3>
++	  <p><a href="/downloads/buildroot-2020.11.2.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+ <!--
+diff --git a/docs/website/news.html b/docs/website/news.html
+index 0d463473c4..03c541364e 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,25 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li class="timeline-inverted">
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2020.11.2 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>31 January 2021</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>The 2020.11.2 bugfix release is out, fixing a number of important /
++	  security related issues discovered since the 2020.11.1 release. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2020.11.2">CHANGES</a>
++	  file for more details, read the
++	  <a href="http://lists.busybox.net/pipermail/buildroot/2021-January/302574.html">announcement</a>
++	  and go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2020.11.2.tar.bz2">2020.11.2 release</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li>
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
