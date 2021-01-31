@@ -1,32 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 31 Jan 2021 12:05:05 +0100
-Subject: [Buildroot] [PATCH 00/10] CPE validation
-In-Reply-To: <20210107133948.2997849-1-thomas.petazzoni@bootlin.com>
-References: <20210107133948.2997849-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20210131120505.70a3ca6b@windsurf.home>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 31 Jan 2021 14:33:27 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gdk-pixbuf: link with lintl if
+ needed
+In-Reply-To: <87k0rutxla.fsf@dell.be.48ers.dk>
+References: <20210128070435.3771751-1-fontaine.fabrice@gmail.com>
+ <87k0rutxla.fsf@dell.be.48ers.dk>
+Message-ID: <87czxlffqg.fsf@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Peter,
 
-On Thu,  7 Jan 2021 14:39:37 +0100
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+On Sat, Jan 30 2021, Peter Korsgaard wrote:
+>>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>
+>  > Fixes:
+>  >  - http://autobuild.buildroot.org/results/4dc94dadbc17e06a214478644f29877fe205f93d
+>
+>  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>
+> Committed, thanks.
 
->  - PATCHes 1 to 5 are just fixes/improvements to pkg-stats.
+Not in master as of commit 70acf563aa29 ("package/bitcoin: add CPE
+variables").
 
-I have applied patches 1 to 5 which are small fixes/improvements to
-pkg-stats.
+baruch
 
-For the remainder of the patches, I will soon be posting an updated
-version of the patch series.
-
-Best regards,
-
-Thomas Petazzoni
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
