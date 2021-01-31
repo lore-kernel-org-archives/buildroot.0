@@ -1,100 +1,50 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 31 Jan 2021 22:47:02 +0100
-Subject: [Buildroot] [git commit] docs/website: update for 2020.11.2
-Message-ID: <20210131213104.5FA507FBB0@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 31 Jan 2021 23:01:21 +0100
+Subject: [Buildroot] [git commit] support/scripts/pkg-stats: properly handle
+ host packages with -c option
+Message-ID: <20210131214120.170C981562@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=19a3ae79fe9298f04ba1c8300deac152baa7a789
+commit: https://git.buildroot.net/buildroot/commit/?id=c9a1a1eb91420e8718185e8e1d076639e552472b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+), 9 deletions(-)
+In commit 7a607dab336e7f78ab069cff1b503d0688950583
+("support/scripts/pkg-stats: support generating stats based on
+configured packages"), we added a -c option to pkg-stats to generate a
+report based on the list of packages enabled in the configuration,
+rather than for all packages.
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index db7cd991ba..9f08c8e504 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -42,37 +42,37 @@
- 	</div>
-       </div>
+This is done based on the list of packages returned in JSON format by
+"make show-info". However, we use the keys of the JSON dict returned
+by "make show-info", which include the host- prefix of host
+packages. Due to this, none of the host packages are currently
+matching and therefore they are not reported in the pkg-stats -c
+output.
+
+This commit fixes that by using the recently introduced "name"
+property in the "make show-info" JSON dict.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[yann.morin.1998 at free.fr: use anonymous '_' for unused variable]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ support/scripts/pkg-stats | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index d222ba37c3..f58afc02ae 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -358,7 +358,7 @@ def get_pkglist(npackages, package_list):
+ def get_config_packages():
+     cmd = ["make", "--no-print-directory", "show-info"]
+     js = json.loads(subprocess.check_output(cmd))
+-    return js.keys()
++    return set([v["name"] for _, v in js.items()])
  
--      <h3 style="text-align: center;">Latest stable release: <b>2020.11.1</b></h3>
-+      <h3 style="text-align: center;">Latest stable release: <b>2020.11.2</b></h3>
  
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2020.11.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.11.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2020.11.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.11.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2020.11.1.tar.gz">buildroot-2020.11.1.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2020.11.1.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2020.11.2.tar.gz">buildroot-2020.11.2.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2020.11.2.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2020.11.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.11.2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2020.11.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.11.2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2020.11.1.tar.bz2">buildroot-2020.11.1.tar.bz2</a></h3>
--	  <p><a href="/downloads/buildroot-2020.11.1.tar.bz2.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2020.11.2.tar.bz2">buildroot-2020.11.2.tar.bz2</a></h3>
-+	  <p><a href="/downloads/buildroot-2020.11.2.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
- <!--
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 0d463473c4..03c541364e 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li class="timeline-inverted">
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2020.11.2 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>31 January 2021</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2020.11.2 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2020.11.1 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2020.11.2">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2021-January/302574.html">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2020.11.2.tar.bz2">2020.11.2 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
-+
-   <li>
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
+ def package_init_make_info():
