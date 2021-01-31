@@ -1,42 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 31 Jan 2021 11:29:20 +0100
-Subject: [Buildroot] [git commit] package/faad2: bump to version 2.10.0
-Message-ID: <20210131101051.E9478813B5@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 31 Jan 2021 12:02:41 +0100
+Subject: [Buildroot] [git commit] support/scripts/pkg-stats: improvements in
+ is_status_*() methods
+Message-ID: <20210131104322.839D485F35@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c126bb9c7dd373d8f801accd07af6154f7a3559c
+commit: https://git.buildroot.net/buildroot/commit/?id=7f83ad74675161abeb7ad4a47d2a30a4f4f7510b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/faad2/faad2.hash | 2 +-
- package/faad2/faad2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Make is_status_ok() work when the given status name is not even listed
+in the status dict. This will be necessary for following commits.
 
-diff --git a/package/faad2/faad2.hash b/package/faad2/faad2.hash
-index e9aa78051f..2eb11d73aa 100644
---- a/package/faad2/faad2.hash
-+++ b/package/faad2/faad2.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  9728b2b94f94ab49363cd229e7377fbe6ef3c311c5cd80da662d53ddb0ee091d  faad2-2.9.2.tar.gz
-+sha256  0c6d9636c96f95c7d736f097d418829ced8ec6dbd899cc6cc82b728480a84bfb  faad2-2.10.0.tar.gz
- sha256  d3baf3a54943cf12a994c85867a18dec84f810901b2f2878ddfd77efcc3c150f  COPYING
-diff --git a/package/faad2/faad2.mk b/package/faad2/faad2.mk
-index 69c44461f2..575abad17e 100644
---- a/package/faad2/faad2.mk
-+++ b/package/faad2/faad2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Introduced similar methods for the error and na status, which will be
+used in following commits.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ support/scripts/pkg-stats | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index b66064f143..099aacc8d2 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -275,7 +275,13 @@ class Package:
+             self.status['developers'] = ("warning", "no developers")
  
--FAAD2_VERSION = 2.9.2
-+FAAD2_VERSION = 2.10.0
- FAAD2_SITE = $(call github,knik0,faad2,$(subst .,_,$(FAAD2_VERSION)))
- FAAD2_LICENSE = GPL-2.0
- FAAD2_LICENSE_FILES = COPYING
+     def is_status_ok(self, name):
+-        return self.status[name][0] == 'ok'
++        return name in self.status and self.status[name][0] == 'ok'
++
++    def is_status_error(self, name):
++        return name in self.status and self.status[name][0] == 'error'
++
++    def is_status_na(self, name):
++        return name in self.status and self.status[name][0] == 'na'
+ 
+     def __eq__(self, other):
+         return self.path == other.path
