@@ -1,48 +1,77 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 31 Jan 2021 22:27:40 +0100
-Subject: [Buildroot] [PATCH] package/xenomai: set 'custom' as version in
- case of tarball
-Message-ID: <20210131212741.16880-1-patrickdepinguin@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 31 Jan 2021 22:39:27 +0100
+Subject: [Buildroot] Buildroot 2020.02.10 released
+Message-ID: <87pn1kpz00.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Hi,
 
-When BR2_PACKAGE_XENOMAI_CUSTOM_TARBALL is selected, the xenomai package
-declared an empty version, which among others means that the build directory
-becomes output/build/xenomai without any version specification, and empty
-version information in 'xenomai-show-info'.
+Buildroot is a simple tool for creating complete embedded Linux systems
+(http://buildroot.org).
 
-Other packages that allow a custom tarball, like 'linux' and
-'arm-trusted-firmware', specify 'custom' as version in this case.
+Buildroot 2020.02.10 is released - Go download it at:
 
-Adapt the xenomai package accordingly.
+http://buildroot.org/downloads/buildroot-2020.02.10.tar.gz
 
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
----
- package/xenomai/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+or
 
-diff --git a/package/xenomai/Config.in b/package/xenomai/Config.in
-index 452b452039..b655733528 100644
---- a/package/xenomai/Config.in
-+++ b/package/xenomai/Config.in
-@@ -69,9 +69,11 @@ config BR2_PACKAGE_XENOMAI_REPOSITORY
- 	depends on BR2_PACKAGE_XENOMAI_CUSTOM_GIT
- 
- config BR2_PACKAGE_XENOMAI_VERSION
--	string "Custom Xenomai version" if !BR2_PACKAGE_XENOMAI_LATEST_VERSION
-+	string "Custom Xenomai version" if \
-+		!BR2_PACKAGE_XENOMAI_LATEST_VERSION && \
-+		!BR2_PACKAGE_XENOMAI_CUSTOM_TARBALL
- 	default "3.0.10" if BR2_PACKAGE_XENOMAI_LATEST_VERSION
--	depends on !BR2_PACKAGE_XENOMAI_CUSTOM_TARBALL
-+	default "custom" if BR2_PACKAGE_XENOMAI_CUSTOM_TARBALL
- 
- config BR2_PACKAGE_XENOMAI_CUSTOM_TARBALL_URL
- 	string "URL of custom tarball"
+http://buildroot.org/downloads/buildroot-2020.02.10.tar.bz2
+
+Or get it from Git:
+
+git://git.buildroot.org/buildroot
+
+Buildroot 2020.02.10 is a bugfix release on the current long term
+release, fixing a number of important / security related issues
+discovered since the 2020.02.9 release. The 2020.02.x series is
+supported until April 2021.
+
+- Security fixes for dbus, dovecot, dovecot-pigeonhole, gerbera, glibc,
+  gst1-plugins-bad, mutt, nodejs, openjpeg, openldap, p11-kit, python3,
+  socat, sudo, vlc, wavpack, wolfssl
+
+- Fixes for download/compilation/runtime/license issues in brltty, gcc,
+  gst-omx, gst1-plugins-bad, gst1-plugins-base, gst1-plugins-good,
+  gst1-plugins-ugly, gst1-rtsp-server, gst1-vaapi, gst1-validate,
+  gstreamer1, gstreamer1-editing-services, libclc, lpc32xxcdl, luarocks,
+  mpd, nfs-utils, opentracing-cpp, openvpn, p11-kit, paho-mqtt-c, php,
+  poppler, runc, syslog-ng, systemd, tini, trace-cmd,
+  wireguard-linux-compat, xapp_xload, xorriso
+
+- Removed libupnp18 / added belle-sip, belr and libnpupnp packages
+  (because of CallStranger security issue)
+
+For more details, see the CHANGES file:
+
+https://git.buildroot.net/buildroot/plain/CHANGES?id=2020.02.10
+
+Users of the affected packages are strongly encouraged to upgrade.
+
+Many thanks to all the people contributing to this release:
+
+git shortlog -sn 2020.02.9..
+
+    48  Fabrice Fontaine
+    22  Peter Korsgaard
+    14  Bernd Kuhls
+     7  Yann E. MORIN
+     5  Thomas Petazzoni
+     3  Bartosz Bilas
+     3  Christian Stewart
+     3  Peter Seiderer
+     2  Petr Vorel
+     2  Romain Naour
+     2  Thomas De Schampheleire
+     1  Angelo Compagnucci
+     1  Edmundo Ferreira
+     1  Francois Perrad
+     1  J?rg Krause
+     1  Maxim Kochetkov
+     1  Titouan Christophe
+
 -- 
-2.26.2
+Bye, Peter Korsgaard
