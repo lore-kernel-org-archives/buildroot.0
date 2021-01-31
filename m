@@ -1,26 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 31 Jan 2021 21:28:44 +0100
-Subject: [Buildroot] [PATCH 1/1] package/vdr: add VDR_CPE_ID_VENDOR
-In-Reply-To: <20210130135038.2368863-1-fontaine.fabrice@gmail.com>
-References: <20210130135038.2368863-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210131212844.5e7cfa07@windsurf.home>
+Date: Sun, 31 Jan 2021 21:30:00 +0100
+Subject: [Buildroot] [PATCH] package/sunxi-mali-mainline-driver: bump
+ version
+In-Reply-To: <20210131175812.1567783-1-giulio.benetti@benettiengineering.com>
+References: <20210131175812.1567783-1-giulio.benetti@benettiengineering.com>
+Message-ID: <20210131213000.21632cae@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 30 Jan 2021 14:50:38 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Sun, 31 Jan 2021 18:58:12 +0100
+Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
 
-> cpe:2.3:a:tvdr:vdr is a valid CPE identifier for this package:
+> Bump version and drop local patches already merged upstream. Add Linux
+> option needed by Linux version >= 4.20 package documentation and to .mk
+> file that automatically adds it to Linux config when building.
 > 
->   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Atvdr%3Avdr
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 > ---
->  package/vdr/vdr.mk | 1 +
->  1 file changed, 1 insertion(+)
+>  ...01-mali-support-building-against-5.9.patch | 269 ------------------
+>  ...2-mali-support-building-against-5.10.patch |  98 -------
+>  package/sunxi-mali-mainline-driver/Config.in  |   4 +
+>  .../sunxi-mali-mainline-driver.hash           |   2 +-
+>  .../sunxi-mali-mainline-driver.mk             |   3 +-
+>  5 files changed, 7 insertions(+), 369 deletions(-)
+>  delete mode 100644 package/sunxi-mali-mainline-driver/0001-mali-support-building-against-5.9.patch
+>  delete mode 100644 package/sunxi-mali-mainline-driver/0002-mali-support-building-against-5.10.patch
 
 Applied to master, thanks.
 
