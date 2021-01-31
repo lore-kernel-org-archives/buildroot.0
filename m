@@ -1,7 +1,9 @@
 From: Gilles Talis <gilles.talis@gmail.com>
-Date: Sun, 31 Jan 2021 10:50:52 +0100
-Subject: [Buildroot] [PATCH] DEVELOPERS: Add Gilles Talis for faad2
-Message-ID: <20210131095057.945946-1-gilles.talis@gmail.com>
+Date: Sun, 31 Jan 2021 10:50:53 +0100
+Subject: [Buildroot] [PATCH] DEVELOPERS: add Gilles Talis for opusfile
+In-Reply-To: <20210131095057.945946-1-gilles.talis@gmail.com>
+References: <20210131095057.945946-1-gilles.talis@gmail.com>
+Message-ID: <20210131095057.945946-2-gilles.talis@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,16 +16,16 @@ Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
  1 file changed, 1 insertion(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index c750105623..17c2f09847 100644
+index 17c2f09847..64d770e9fc 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1000,6 +1000,7 @@ N:	Gilles Talis <gilles.talis@gmail.com>
- F:	board/freescale/imx8mmevk/
- F:	configs/freescale_imx8mmevk_defconfig
- F:	package/cctz/
-+F:	package/faad2/
- F:	package/fdk-aac/
- F:	package/httping/
- F:	package/iozone/
+@@ -1009,6 +1009,7 @@ F:	package/libeXosip2/
+ F:	package/libolm/
+ F:	package/libosip2/
+ F:	package/ocrad/
++F:	package/opusfile/
+ F:	package/restclient-cpp/
+ F:	package/tesseract-ocr/
+ F:	package/webp/
 -- 
 2.25.1
