@@ -1,40 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 31 Jan 2021 21:32:51 +0100
-Subject: [Buildroot] [PATCH 1/3] configs/minnowboard_max_defconfig: bump
- kernel to 5.10.11
-In-Reply-To: <20210130101915.18423-1-peter@korsgaard.com>
-References: <20210130101915.18423-1-peter@korsgaard.com>
-Message-ID: <20210131213251.29949f5f@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 31 Jan 2021 21:34:30 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] Update for 2020.11.2
+Message-ID: <20210131201523.C43B481503@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 30 Jan 2021 11:19:13 +0100
-Peter Korsgaard <peter@korsgaard.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=551cb630079316efe928d7c2eb0358a19e38fc48
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-> Explicitly enable PCI support in the kernel after commit eb01d42a77785 (PCI:
-> consolidate PCI config entry in drivers/pci) and change to GPT partitions /
-> root=PARTLABEL to find the rootfs instead of hardcoding /dev/mmcblk2p2 as
-> the mmc probing order has changed since commit 21b2cec61c04bd1 (mmc: Set
-> PROBE_PREFER_ASYNCHRONOUS for drivers that existed in v4.4).
-> 
-> This has the additional advantage that the same image will work when written
-> to a USB drive instead of a microsd.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  board/minnowboard/genimage.cfg    | 5 +++--
->  board/minnowboard/grub.cfg        | 2 +-
->  board/minnowboard/linux.config    | 1 +
->  configs/minnowboard_max_defconfig | 6 +++---
->  4 files changed, 8 insertions(+), 6 deletions(-)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ CHANGES                  | 2 +-
+ Makefile                 | 4 ++--
+ support/misc/Vagrantfile | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-Series applied, thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/CHANGES b/CHANGES
+index 731d3f61c7..7e1e5a58ce 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,4 +1,4 @@
+-2020.11.2, not yet released
++2020.11.2, released January 31st, 2021
+ 
+ 	Important / security related fixes.
+ 
+diff --git a/Makefile b/Makefile
+index 06f1ef6aea..293b5880f5 100644
+--- a/Makefile
++++ b/Makefile
+@@ -92,9 +92,9 @@ all:
+ .PHONY: all
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2020.11.1
++export BR2_VERSION := 2020.11.2
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1609079000
++BR2_VERSION_EPOCH = 1612125000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
+index 753a9bdcdc..ed12abd2f0 100644
+--- a/support/misc/Vagrantfile
++++ b/support/misc/Vagrantfile
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # Buildroot version to use
+-RELEASE='2020.11.1'
++RELEASE='2020.11.2'
+ 
+ ### Change here for more memory/cores ###
+ VM_MEMORY=2048
