@@ -1,40 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 31 Jan 2021 23:14:46 +0100
-Subject: [Buildroot] [PATCH 1/1] package/brltty: bump to version 6.3
-In-Reply-To: <20210130170827.2720867-1-fontaine.fabrice@gmail.com>
-References: <20210130170827.2720867-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210131231446.2ef1b2e2@windsurf.home>
+Date: Sun, 31 Jan 2021 23:15:10 +0100
+Subject: [Buildroot] [git commit] package/xserver_xorg-server: don't install
+ init script if nodm is enabled
+Message-ID: <20210131215501.8C571862F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 30 Jan 2021 18:08:27 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=735581122aea7b3f2adec69c771121146ebbe0d0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> - Drop second patch (already in version)
-> - Update hash of README, FrankAudiodata added and update in year:
->   https://github.com/brltty/brltty/commit/76852b0214edea71ce36a1f8a905294a164e7f34
->   https://github.com/brltty/brltty/commit/fdf19475c9b13125c2b7cb09e7d4c18bdf308e97
->   https://github.com/brltty/brltty/commit/8f040b2ab8913b182fb87e3bcfa1f315235120cd
->   https://github.com/brltty/brltty/commit/90fd84da90e2354d27a12fbe47728a5491fe8e72
-> - Update indentation in hash file (two spaces)
-> 
-> https://brltty.app/doc/ChangeLog.txt
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...nput_event-time-related-compile-fail.patch | 52 -------------------
->  package/brltty/brltty.hash                    |  6 +--
->  package/brltty/brltty.mk                      |  2 +-
->  3 files changed, 4 insertions(+), 56 deletions(-)
->  delete mode 100644 package/brltty/0002-fix-input_event-time-related-compile-fail.patch
+Both S40xorg and S90nodm tries to run an Xserver on vt1, causing the nodm
+one to fail.  If nodm is enabled, then that is likely what the user wants to
+run, so skip installing S40xorg.
 
-Applied to master, thanks.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 8ac2d17b24..fa8ae13b8c 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -216,9 +216,12 @@ define XSERVER_XORG_SERVER_INSTALL_INIT_SYSTEMD
+ 		$(TARGET_DIR)/usr/lib/systemd/system/xorg.service
+ endef
+ 
++# init script conflicts with S90nodm
++ifneq ($(BR2_PACKAGE_NODM),y)
+ define XSERVER_XORG_SERVER_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D -m 755 package/x11r7/xserver_xorg-server/S40xorg \
+ 		$(TARGET_DIR)/etc/init.d/S40xorg
+ endef
++endif
+ 
+ $(eval $(autotools-package))
