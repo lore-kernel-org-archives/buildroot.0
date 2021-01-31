@@ -1,69 +1,100 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 31 Jan 2021 22:48:51 +0100
-Subject: [Buildroot] [git commit] Update for 2020.02.10
-Message-ID: <20210131213104.74E4F7FBB0@busybox.osuosl.org>
+Date: Sun, 31 Jan 2021 22:50:57 +0100
+Subject: [Buildroot] [git commit] docs/website: update for 2020.02.10
+Message-ID: <20210131213104.8569E7FBB0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0518eee5753779f021b2c6497d2d6f53c5951d98
+commit: https://git.buildroot.net/buildroot/commit/?id=9ce5314f5ba12f0386960540a42da729a3643ede
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit e5d3fc5a53ec4dabfa25e6b7478e8dc9cb0c9588)
-[Peter: drop Makefile changes]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- CHANGES | 37 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
+ docs/website/download.html | 18 +++++++++---------
+ docs/website/news.html     | 19 +++++++++++++++++++
+ 2 files changed, 28 insertions(+), 9 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index ba88b3f57f..733951d6eb 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -775,6 +775,43 @@
- 	#12796: Update OpenSSL to Version 1.1.1g to patch  CVE-2020-1967
- 	#12811: bootstrap stuck and no login prompt
+diff --git a/docs/website/download.html b/docs/website/download.html
+index 9f08c8e504..cfde15e760 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -8,37 +8,37 @@
+     <div class="panel-heading">Download</div>
+     <div class="panel-body">
  
-+2020.02.10, released January 31st, 2021
-+
-+	Important / security related fixes.
-+
-+	Download: Ensure git submodules are correctly fetched if
-+	enabled for a package with <pkg>_GIT_SUBMODULES = YES and the
-+	host variant is downloaded first.
-+
-+	Toolchain: Mark CodeSourcery Aarch64 2014.11 toolchain as not
-+	having libatomic.
-+
-+	pkg-stats: Fix python 3.8+ deprecation warning.
-+
-+	meson: Ensure ccache is not detected and used, as it may
-+	conflict with the ccache handling in Buildroot.
-+
-+	New packages: libnpupnp
-+
-+	Updated/fixed packages: bctoolbox, brltty, dbus, dovecot,
-+	dovecot-pigeonhole, gcc, gerbera, gmrender-resurrect, gst-omx,
-+	gst1-plugins-bad, gst1-plugins-base, gst1-plugins-good,
-+	gst1-plugins-ugly, gst1-rtsp-server, gst1-vaapi,
-+	gst1-validate, gstreamer1, gstreamer1-editing-services,
-+	igd2-for-linux, libclc, libllcp, libtorrent-rasterbar,
-+	libupnp, libupnpp, lpc32xxcdl, luarocks, mpd, nfs-utils,
-+	nodejs, openjpeg, openldap, opentracing-cpp, openvpn, p11-kit,
-+	paho-mqtt-c, php, poppler, postgresql, python3, runc, sudo,
-+	syslog-ng, systemd, tini, trace-cmd, tzdata, ushare, vlc,
-+	wavpack, wireguard-linux-compat, wolfssl, xapp_xload, xorriso,
-+	zic
-+
-+	Removed packages: libupnp18
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#13471: package/mpd/mpd.conf make use of path not created
-+
- 2020.02.9, released December 27th, 2020
+-      <h3 style="text-align: center;">Latest long term support release: <b>2020.02.9</b></h3>
++      <h3 style="text-align: center;">Latest long term support release: <b>2020.02.10</b></h3>
  
- 	Important / security related fixes.
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2020.02.9.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2020.02.10.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2020.02.9.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2020.02.10.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+-	  <h3><a href="/downloads/buildroot-2020.02.9.tar.gz">buildroot-2020.02.9.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2020.02.9.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2020.02.10.tar.gz">buildroot-2020.02.10.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2020.02.10.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2020.02.9.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2020.02.10.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2020.02.9.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2020.02.10.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2020.02.9.tar.bz2">buildroot-2020.02.9.tar.bz2</a></h3>
+-	  <p><a href="/downloads/buildroot-2020.02.9.tar.bz2.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2020.02.10.tar.bz2">buildroot-2020.02.10.tar.bz2</a></h3>
++	  <p><a href="/downloads/buildroot-2020.02.10.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+ 
+diff --git a/docs/website/news.html b/docs/website/news.html
+index 03c541364e..e4e9d9a7db 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,25 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li>
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2020.02.10 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>31 January 2021</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>The 2020.02.10 bugfix release is out, fixing a number of important /
++	  security related issues discovered since the 2020.02.9 release. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2020.02.10">CHANGES</a>
++	  file for more details, read the
++	  <a href="http://lists.busybox.net/pipermail/buildroot/2021-January/302578.html">announcement</a>
++	  and go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2020.02.10.tar.bz2">2020.02.10 release</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li class="timeline-inverted">
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
