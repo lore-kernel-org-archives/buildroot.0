@@ -1,220 +1,262 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 31 Jan 2021 23:33:03 +0100
-Subject: [Buildroot] [PATCH 5/5] package/musl: bump to version 1.2.2
-In-Reply-To: <20210131223304.1857838-1-thomas.petazzoni@bootlin.com>
-References: <20210131223304.1857838-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20210131223304.1857838-5-thomas.petazzoni@bootlin.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 31 Jan 2021 23:47:02 +0100
+Subject: [Buildroot] [PATCH v2 3/7] support/scripts/cpedb.py: new CPE
+ XML helper
+In-Reply-To: <20210131133819.1818537-4-thomas.petazzoni@bootlin.com>
+References: <20210131133819.1818537-1-thomas.petazzoni@bootlin.com>
+ <20210131133819.1818537-4-thomas.petazzoni@bootlin.com>
+Message-ID: <20210131224702.GA2384@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop 0003-rewrite-wcsnrtombs-to-fix-buffer-overflow-and-other-.patch
-as it is a backport of upstream commit
-3ab2a4e02682df1382955071919d8aa3c3ec40d4 which is part of the 1.2.2
-release.
+Gr?gory, All,
 
-1.2.2 release notes
+On 2021-01-31 14:38 +0100, Thomas Petazzoni spake thusly:
+> From: Matt Weber <matthew.weber@rockwellcollins.com>
+> 
+> Python class which consumes a NIST CPE XML and provides helper
+> functions to access and search the db's data.
+> 
+>  - Defines the CPE as a object with operations / formats
+>  - Processing of CPE dictionary
+> 
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> Co-Developed-by: Gr?gory Clement <gregory.clement@bootlin.com>
 
-major changes:
-- child restrictions lifted after fork of multithreaded parent
+Gr?gory, you need to add your SOB line right after your CDB line.
 
-new features:
-- _Fork function (POSIX-future)
-- reallocarray function (extension from OpenBSD, now widespread)
-- gettid function (kernel tid as supported concept)
-- SIGEV_THREAD_ID sigevent API (Linux extension)
-- tcgetwinsize and tcsetwinsize functions (POSIX-future)
+Ditto for the following patch.
 
-performance:
-- faster software sqrt on archs without native sqrt instruction
+Regards,
+Yann E. MORIN.
 
-compatibility:
-- realpath no longer depends on procfs availability & accuracy
-- time zone parser now always prefers 64-bit tables if present
-- crypt_blowfish now supports $2b$ prefix
-- res_query now reports errors via h_errno
-- set*id and setrlimit are now safe in vforked/cloned child
-- setgroups now applies to all threads
-- dlopen debugger notification is improved, should work with lldb
-- setrlimit no longer needs __synccall broadcast on linux 2.6.36+
-- faccessat with AT_EACCESS no longer needs child process on linux 5.8+
+> Co-Developed-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  support/scripts/cpedb.py | 203 +++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 203 insertions(+)
+>  create mode 100644 support/scripts/cpedb.py
+> 
+> diff --git a/support/scripts/cpedb.py b/support/scripts/cpedb.py
+> new file mode 100644
+> index 0000000000..825ed6cb1e
+> --- /dev/null
+> +++ b/support/scripts/cpedb.py
+> @@ -0,0 +1,203 @@
+> +#!/usr/bin/env python3
+> +
+> +import xml.etree.ElementTree as ET
+> +from xml.etree.ElementTree import Element, SubElement
+> +import gzip
+> +import os
+> +import pickle
+> +import requests
+> +import time
+> +from xml.dom import minidom
+> +
+> +VALID_REFS = ['VENDOR', 'VERSION', 'CHANGE_LOG', 'PRODUCT', 'PROJECT', 'ADVISORY']
+> +
+> +CPEDB_URL = "https://static.nvd.nist.gov/feeds/xml/cpe/dictionary/official-cpe-dictionary_v2.3.xml.gz"
+> +
+> +ns = {
+> +    '': 'http://cpe.mitre.org/dictionary/2.0',
+> +    'cpe-23': 'http://scap.nist.gov/schema/cpe-extension/2.3',
+> +    'xml': 'http://www.w3.org/XML/1998/namespace'
+> +}
+> +
+> +
+> +class CPE:
+> +    def __init__(self, cpe_str, titles, refs):
+> +        self.cpe_str = cpe_str
+> +        self.titles = titles
+> +        self.references = refs
+> +        self.cpe_cur_ver = "".join(self.cpe_str.split(":")[5:6])
+> +
+> +    def update_xml_dict(self):
+> +        ET.register_namespace('', 'http://cpe.mitre.org/dictionary/2.0')
+> +        cpes = Element('cpe-list')
+> +        cpes.set('xmlns:cpe-23', "http://scap.nist.gov/schema/cpe-extension/2.3")
+> +        cpes.set('xmlns:ns6', "http://scap.nist.gov/schema/scap-core/0.1")
+> +        cpes.set('xmlns:scap-core', "http://scap.nist.gov/schema/scap-core/0.3")
+> +        cpes.set('xmlns:config', "http://scap.nist.gov/schema/configuration/0.1")
+> +        cpes.set('xmlns:xsi', "http://www.w3.org/2001/XMLSchema-instance")
+> +        cpes.set('xmlns:meta', "http://scap.nist.gov/schema/cpe-dictionary-metadata/0.2")
+> +        cpes.set('xsi:schemaLocation', " ".join(["http://scap.nist.gov/schema/cpe-extension/2.3",
+> +                                                 "https://scap.nist.gov/schema/cpe/2.3/cpe-dictionary-extension_2.3.xsd",
+> +                                                 "http://cpe.mitre.org/dictionary/2.0",
+> +                                                 "https://scap.nist.gov/schema/cpe/2.3/cpe-dictionary_2.3.xsd",
+> +                                                 "http://scap.nist.gov/schema/cpe-dictionary-metadata/0.2",
+> +                                                 "https://scap.nist.gov/schema/cpe/2.1/cpe-dictionary-metadata_0.2.xsd",
+> +                                                 "http://scap.nist.gov/schema/scap-core/0.3",
+> +                                                 "https://scap.nist.gov/schema/nvd/scap-core_0.3.xsd",
+> +                                                 "http://scap.nist.gov/schema/configuration/0.1",
+> +                                                 "https://scap.nist.gov/schema/nvd/configuration_0.1.xsd",
+> +                                                 "http://scap.nist.gov/schema/scap-core/0.1",
+> +                                                 "https://scap.nist.gov/schema/nvd/scap-core_0.1.xsd"]))
+> +        item = SubElement(cpes, 'cpe-item')
+> +        cpe_short_name = CPE.short_name(self.cpe_str)
+> +        cpe_new_ver = CPE.version_update(self.cpe_str)
+> +
+> +        item.set('name', 'cpe:/' + cpe_short_name)
+> +        self.titles[0].text.replace(self.cpe_cur_ver, cpe_new_ver)
+> +        for title in self.titles:
+> +            item.append(title)
+> +        if self.references:
+> +            item.append(self.references)
+> +        cpe23item = SubElement(item, 'cpe-23:cpe23-item')
+> +        cpe23item.set('name', self.cpe_str)
+> +
+> +        # Generate the XML as a string
+> +        xmlstr = ET.tostring(cpes)
+> +
+> +        # And use minidom to pretty print the XML
+> +        return minidom.parseString(xmlstr).toprettyxml(encoding="utf-8").decode("utf-8")
+> +
+> +    @staticmethod
+> +    def version(cpe):
+> +        return cpe.split(":")[5]
+> +
+> +    @staticmethod
+> +    def product(cpe):
+> +        return cpe.split(":")[4]
+> +
+> +    @staticmethod
+> +    def short_name(cpe):
+> +        return ":".join(cpe.split(":")[2:6])
+> +
+> +    @staticmethod
+> +    def version_update(cpe):
+> +        return ":".join(cpe.split(":")[5:6])
+> +
+> +    @staticmethod
+> +    def no_version(cpe):
+> +        return ":".join(cpe.split(":")[:5])
+> +
+> +
+> +class CPEDB:
+> +    def __init__(self, nvd_path):
+> +        self.all_cpes = dict()
+> +        self.all_cpes_no_version = dict()
+> +        self.nvd_path = nvd_path
+> +
+> +    def gen_cached_cpedb(self, cpedb, cache_all_cpes, cache_all_cpes_no_version):
+> +        print("CPE: Unzipping xml manifest...")
+> +        nist_cpe_file = gzip.GzipFile(fileobj=open(cpedb, 'rb'))
+> +        print("CPE: Converting xml manifest to dict...")
+> +        tree = ET.parse(nist_cpe_file)
+> +        all_cpedb = tree.getroot()
+> +        self.parse_dict(all_cpedb)
+> +
+> +        print("CPE: Caching dictionary")
+> +        cpes_file = open(cache_all_cpes, 'wb')
+> +        pickle.dump(self.all_cpes, cpes_file)
+> +        cpes_file.close()
+> +        cpes_file = open(cache_all_cpes_no_version, 'wb')
+> +        pickle.dump(self.all_cpes_no_version, cpes_file)
+> +        cpes_file.close()
+> +
+> +    def get_xml_dict(self):
+> +        print("CPE: Setting up NIST dictionary")
+> +        if not os.path.exists(os.path.join(self.nvd_path, "cpe")):
+> +            os.makedirs(os.path.join(self.nvd_path, "cpe"))
+> +
+> +        cpe_dict_local = os.path.join(self.nvd_path, "cpe", os.path.basename(CPEDB_URL))
+> +        if not os.path.exists(cpe_dict_local) or os.stat(cpe_dict_local).st_mtime < time.time() - 86400:
+> +            print("CPE: Fetching xml manifest from [" + CPEDB_URL + "]")
+> +            cpe_dict = requests.get(CPEDB_URL)
+> +            open(cpe_dict_local, "wb").write(cpe_dict.content)
+> +
+> +        cache_all_cpes = os.path.join(self.nvd_path, "cpe", "all_cpes.pkl")
+> +        cache_all_cpes_no_version = os.path.join(self.nvd_path, "cpe", "all_cpes_no_version.pkl")
+> +
+> +        if not os.path.exists(cache_all_cpes) or \
+> +           not os.path.exists(cache_all_cpes_no_version) or \
+> +           os.stat(cache_all_cpes).st_mtime < os.stat(cpe_dict_local).st_mtime or \
+> +           os.stat(cache_all_cpes_no_version).st_mtime < os.stat(cpe_dict_local).st_mtime:
+> +            self.gen_cached_cpedb(cpe_dict_local,
+> +                                  cache_all_cpes,
+> +                                  cache_all_cpes_no_version)
+> +
+> +        print("CPE: Loading CACHED dictionary")
+> +        cpe_file = open(cache_all_cpes, 'rb')
+> +        self.all_cpes = pickle.load(cpe_file)
+> +        cpe_file.close()
+> +        cpe_file = open(cache_all_cpes_no_version, 'rb')
+> +        self.all_cpes_no_version = pickle.load(cpe_file)
+> +        cpe_file.close()
+> +
+> +    def parse_dict(self, all_cpedb):
+> +        # Cycle through the dict and build two dict to be used for custom
+> +        # lookups of partial and complete CPE objects
+> +        # The objects are then used to create new proposed XML updates if
+> +        # if is determined one is required
+> +        # Out of the different language titles, select English
+> +        for cpe in all_cpedb.findall(".//{http://cpe.mitre.org/dictionary/2.0}cpe-item"):
+> +            cpe_titles = []
+> +            for title in cpe.findall('.//{http://cpe.mitre.org/dictionary/2.0}title[@xml:lang="en-US"]', ns):
+> +                title.tail = None
+> +                cpe_titles.append(title)
+> +
+> +            # Some older CPE don't include references, if they do, make
+> +            # sure we handle the case of one ref needing to be packed
+> +            # in a list
+> +            cpe_ref = cpe.find(".//{http://cpe.mitre.org/dictionary/2.0}references")
+> +            if cpe_ref:
+> +                for ref in cpe_ref.findall(".//{http://cpe.mitre.org/dictionary/2.0}reference"):
+> +                    ref.tail = None
+> +                    ref.text = ref.text.upper()
+> +                    if ref.text not in VALID_REFS:
+> +                        ref.text = ref.text + "-- UPDATE this entry, here are some examples and just one word should be used -- " + ' '.join(VALID_REFS) # noqa E501
+> +                cpe_ref.tail = None
+> +                cpe_ref.text = None
+> +
+> +            cpe_str = cpe.find(".//{http://scap.nist.gov/schema/cpe-extension/2.3}cpe23-item").get('name')
+> +            item = CPE(cpe_str, cpe_titles, cpe_ref)
+> +            cpe_str_no_version = CPE.no_version(cpe_str)
+> +            # This dict must have a unique key for every CPE version
+> +            # which allows matching to the specific obj data of that
+> +            # NIST dict entry
+> +            self.all_cpes.update({cpe_str: item})
+> +            # This dict has one entry for every CPE (w/o version) to allow
+> +            # partial match (no valid version) check (the obj is saved and
+> +            # used as seed for suggested xml updates. By updating the same
+> +            # non-version'd entry, it assumes the last update here is the
+> +            # latest version in the NIST dict)
+> +            self.all_cpes_no_version.update({cpe_str_no_version: item})
+> +
+> +    def find_partial(self, cpe_str):
+> +        cpe_str_no_version = CPE.no_version(cpe_str)
+> +        if cpe_str_no_version in self.all_cpes_no_version:
+> +            return cpe_str_no_version
+> +
+> +    def find_partial_obj(self, cpe_str):
+> +        cpe_str_no_version = CPE.no_version(cpe_str)
+> +        if cpe_str_no_version in self.all_cpes_no_version:
+> +            return self.all_cpes_no_version[cpe_str_no_version]
+> +
+> +    def find_partial_latest_version(self, cpe_str_partial):
+> +        cpe_obj = self.find_partial_obj(cpe_str_partial)
+> +        return cpe_obj.cpe_cur_ver
+> +
+> +    def find(self, cpe_str):
+> +        if self.find_partial(cpe_str):
+> +            if cpe_str in self.all_cpes:
+> +                return cpe_str
+> +
+> +    def gen_update_xml(self, cpe_str):
+> +        cpe = self.find_partial_obj(cpe_str)
+> +        return cpe.update_xml_dict()
+> -- 
+> 2.29.2
+> 
 
-bugs fixed:
-- buffer overflow and infinite loop errors in wcsnrtombs (CVE-2020-28928)
-- sem_close unmapped still-referenced semaphores
-- fork of process with active aio could deadlock or crash paren
-- pthread_cond_wait was broken with priority-inheritance mutex
-- getgrouplist wrongly failed when nscd reported an empty list
-- abort could leak modified SIGABRT disposition to fork or posix_spawn child
-- regression with mallocng: malloc_usable_size(0) crashed
-- readlink wrongly gave EINVAL on zero length dest buffer
-- sqrtl was severely inaccurate (not correctly rounded) on ldquad archs
-- assert failure wrongly flushed stdio (possible deadlock)
-- MUSL_LOCPATH search was broken with multiple components
-- missing newline in herror output
-- possible deadlock in pthread_exit with pshared mutex or barrier usage
-- pthread_mutexattr_getprotocol didn't read back protocol
-- v4l2 ioctl translation for pre-time64 kernels didn't work
-
-arch-specific bugs fixed:
-- x86_64 longjmp failed to handle 0 argument reliably
-- i386 __set_thread_area fallback for pre-2.6 kernels didn't work
-- missing O_LARGEFILE macro value on x86_64, x32, mips64
-- unpredictable s390x breakage from failure to preserve call-saved registers
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...bs-to-fix-buffer-overflow-and-other-.patch | 114 ------------------
- package/musl/musl.hash                        |   4 +-
- package/musl/musl.mk                          |   2 +-
- 3 files changed, 3 insertions(+), 117 deletions(-)
- delete mode 100644 package/musl/0003-rewrite-wcsnrtombs-to-fix-buffer-overflow-and-other-.patch
-
-diff --git a/package/musl/0003-rewrite-wcsnrtombs-to-fix-buffer-overflow-and-other-.patch b/package/musl/0003-rewrite-wcsnrtombs-to-fix-buffer-overflow-and-other-.patch
-deleted file mode 100644
-index 2fb29940a9..0000000000
---- a/package/musl/0003-rewrite-wcsnrtombs-to-fix-buffer-overflow-and-other-.patch
-+++ /dev/null
-@@ -1,114 +0,0 @@
--From 3ab2a4e02682df1382955071919d8aa3c3ec40d4 Mon Sep 17 00:00:00 2001
--From: Rich Felker <dalias@aerifal.cx>
--Date: Thu, 19 Nov 2020 17:12:43 -0500
--Subject: [PATCH] rewrite wcsnrtombs to fix buffer overflow and other bugs
--
--the original wcsnrtombs implementation, which has been largely
--untouched since 0.5.0, attempted to build input-length-limiting
--conversion on top of wcsrtombs, which only limits output length. as
--best I recall, this choice was made out of a mix of disdain over
--having yet another variant function to implement (added in POSIX 2008;
--not standard C) and preference not to switch things around and
--implement the wcsrtombs in terms of the more general new function,
--probably over namespace issues. the strategy employed was to impose
--output limits that would ensure the input limit wasn't exceeded, then
--finish up the tail character-at-a-time. unfortunately, none of that
--worked correctly.
--
--first, the logic in the wcsrtombs loop was wrong in that it could
--easily get stuck making no forward progress, by imposing an output
--limit too small to convert even one character.
--
--the character-at-a-time loop that followed was even worse. it made no
--effort to ensure that the converted multibyte character would fit in
--the remaining output space, only that there was a nonzero amount of
--output space remaining. it also employed an incorrect interpretation
--of wcrtomb's interface contract for converting the null character,
--thereby failing to act on end of input, and remaining space accounting
--was subject to unsigned wrap-around. together these errors allow
--unbounded overflow of the destination buffer, controlled by input
--length limit and input wchar_t string contents.
--
--given the extent to which this function was broken, it's plausible
--that most applications that would have been rendered exploitable were
--sufficiently broken not to be usable in the first place. however, it's
--also plausible that common (especially ASCII-only) inputs succeeded in
--the wcsrtombs loop, which mostly worked, while leaving the wildly
--erroneous code in the second loop exposed to particular non-ASCII
--inputs.
--
--CVE-2020-28928 has been assigned for this issue.
--
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- src/multibyte/wcsnrtombs.c | 46 ++++++++++++++++----------------------
-- 1 file changed, 19 insertions(+), 27 deletions(-)
--
--diff --git a/src/multibyte/wcsnrtombs.c b/src/multibyte/wcsnrtombs.c
--index 676932b5..95e25e70 100644
----- a/src/multibyte/wcsnrtombs.c
--+++ b/src/multibyte/wcsnrtombs.c
--@@ -1,41 +1,33 @@
-- #include <wchar.h>
--+#include <limits.h>
--+#include <string.h>
-- 
-- size_t wcsnrtombs(char *restrict dst, const wchar_t **restrict wcs, size_t wn, size_t n, mbstate_t *restrict st)
-- {
---	size_t l, cnt=0, n2;
---	char *s, buf[256];
-- 	const wchar_t *ws = *wcs;
---	const wchar_t *tmp_ws;
---
---	if (!dst) s = buf, n = sizeof buf;
---	else s = dst;
---
---	while ( ws && n && ( (n2=wn)>=n || n2>32 ) ) {
---		if (n2>=n) n2=n;
---		tmp_ws = ws;
---		l = wcsrtombs(s, &ws, n2, 0);
---		if (!(l+1)) {
---			cnt = l;
---			n = 0;
--+	size_t cnt = 0;
--+	if (!dst) n=0;
--+	while (ws && wn) {
--+		char tmp[MB_LEN_MAX];
--+		size_t l = wcrtomb(n<MB_LEN_MAX ? tmp : dst, *ws, 0);
--+		if (l==-1) {
--+			cnt = -1;
-- 			break;
-- 		}
---		if (s != buf) {
---			s += l;
--+		if (dst) {
--+			if (n<MB_LEN_MAX) {
--+				if (l>n) break;
--+				memcpy(dst, tmp, l);
--+			}
--+			dst += l;
-- 			n -= l;
-- 		}
---		wn = ws ? wn - (ws - tmp_ws) : 0;
---		cnt += l;
---	}
---	if (ws) while (n && wn) {
---		l = wcrtomb(s, *ws, 0);
---		if ((l+1)<=1) {
---			if (!l) ws = 0;
---			else cnt = l;
--+		if (!*ws) {
--+			ws = 0;
-- 			break;
-- 		}
---		ws++; wn--;
---		/* safe - this loop runs fewer than sizeof(buf) times */
---		s+=l; n-=l;
--+		ws++;
--+		wn--;
-- 		cnt += l;
-- 	}
-- 	if (dst) *wcs = ws;
---- 
--2.20.1
--
-diff --git a/package/musl/musl.hash b/package/musl/musl.hash
-index 39f1057961..4ab18cebd8 100644
---- a/package/musl/musl.hash
-+++ b/package/musl/musl.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature from
--# https://musl.libc.org/releases/musl-1.2.1.tar.gz.asc
--sha256  68af6e18539f646f9c41a3a2bb25be4a5cfa5a8f65f0bb647fd2bbfdf877e84b  musl-1.2.1.tar.gz
-+# https://musl.libc.org/releases/musl-1.2.2.tar.gz.asc
-+sha256  9b969322012d796dc23dda27a35866034fa67d8fb67e0e2c45c913c3d43219dd  musl-1.2.2.tar.gz
- sha256  f9bc4423732350eb0b3f7ed7e91d530298476f8fec0c6c427a1c04ade22655af  COPYRIGHT
-diff --git a/package/musl/musl.mk b/package/musl/musl.mk
-index bc4237968d..82b3eeaf52 100644
---- a/package/musl/musl.mk
-+++ b/package/musl/musl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MUSL_VERSION = 1.2.1
-+MUSL_VERSION = 1.2.2
- MUSL_SITE = http://www.musl-libc.org/releases
- MUSL_LICENSE = MIT
- MUSL_LICENSE_FILES = COPYRIGHT
 -- 
-2.29.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
