@@ -1,47 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 31 Jan 2021 13:55:57 +0100
-Subject: [Buildroot] [PATCH 07/10] support/scripts/pkg-stats: check CPE
- existence in CPE dictionnary
-In-Reply-To: <CANQCQpb1HyQ=LmJNm5J2jAmNJuJuKE+_RteKAMucQMAanb-MUg@mail.gmail.com>
-References: <20210107133948.2997849-1-thomas.petazzoni@bootlin.com>
- <20210107133948.2997849-8-thomas.petazzoni@bootlin.com>
- <CANQCQpb1HyQ=LmJNm5J2jAmNJuJuKE+_RteKAMucQMAanb-MUg@mail.gmail.com>
-Message-ID: <20210131135557.3d2102c1@windsurf.home>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 31 Jan 2021 13:54:56 +0100
+Subject: [Buildroot] [PATCH 1/2] package/leptonica: add
+ LEPTONICA_CPE_ID_VENDOR
+Message-ID: <20210131125457.3810589-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 7 Jan 2021 13:37:59 -0600
-Matthew Weber via buildroot <buildroot@busybox.net> wrote:
+cpe:2.3:a:leptonica:leptonica is a valid CPE identifier for this
+package:
 
-> > +def check_package_cpes(nvd_path, packages):
-> > +    cpedb = CPEDB(nvd_path)
-> > +    cpedb.get_xml_dict()
-> > +    for p in packages:
-> > +        if not p.cpeid:
-> > +            continue
-> > +        if cpedb.find(p.cpeid):
-> > +            p.status['cpe'] = ("ok", "verified CPE identifier")
-> > +        else:
-> > +            p.status['cpe'] = ("error", "CPE identifier unknown in CPE database")  
-> 
-> I noticed in the pkgstats output that busybox which has an exact match
-> was coming up as the following.
-> 
-> cpe:2.3:a:busybox:busybox:1.32.0:*:*:*:*:*:*:*
-> CPE identifier unknown in CPE database
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aleptonica%3Aleptonica
 
-As discussed on IRC, I think this was due to the .pkl being empty to
-due XML parsing issue with an older Python version. Gr?gory has worked
-on this, and solved the problem. This will be in the v2 of the patch
-series.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/leptonica/leptonica.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Best regards,
-
-Thomas
+diff --git a/package/leptonica/leptonica.mk b/package/leptonica/leptonica.mk
+index 06eda6acca..fd122fb15b 100644
+--- a/package/leptonica/leptonica.mk
++++ b/package/leptonica/leptonica.mk
+@@ -8,6 +8,7 @@ LEPTONICA_VERSION = 1.80.0
+ LEPTONICA_SITE = http://www.leptonica.org/source
+ LEPTONICA_LICENSE = BSD-2-Clause
+ LEPTONICA_LICENSE_FILES = leptonica-license.txt
++LEPTONICA_CPE_ID_VENDOR = leptonica
+ LEPTONICA_INSTALL_STAGING = YES
+ LEPTONICA_DEPENDENCIES = host-pkgconf
+ 
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.29.2
