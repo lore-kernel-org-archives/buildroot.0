@@ -1,22 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 31 Jan 2021 11:30:31 +0100
-Subject: [Buildroot] [PATCH] package/xapian: bump to version 1.4.18
-In-Reply-To: <20210131095057.945946-6-gilles.talis@gmail.com> (Gilles Talis's
- message of "Sun, 31 Jan 2021 10:50:57 +0100")
-References: <20210131095057.945946-1-gilles.talis@gmail.com>
- <20210131095057.945946-6-gilles.talis@gmail.com>
-Message-ID: <87mtwpqtyw.fsf@dell.be.48ers.dk>
+Date: Sun, 31 Jan 2021 11:27:49 +0100
+Subject: [Buildroot] [git commit] DEVELOPERS: add Gilles Talis for opusfile
+Message-ID: <20210131101051.D472F815B4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gilles" == Gilles Talis <gilles.talis@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=3af209f74da211b7dd5f48ee33c278571b400b2c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 17c2f09847..64d770e9fc 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1009,6 +1009,7 @@ F:	package/libeXosip2/
+ F:	package/libolm/
+ F:	package/libosip2/
+ F:	package/ocrad/
++F:	package/opusfile/
+ F:	package/restclient-cpp/
+ F:	package/tesseract-ocr/
+ F:	package/webp/
