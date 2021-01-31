@@ -1,68 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 31 Jan 2021 22:22:50 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] Update for 2020.02.10
-Message-ID: <20210131210253.4798A861C3@busybox.osuosl.org>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Sun, 31 Jan 2021 22:27:40 +0100
+Subject: [Buildroot] [PATCH] package/xenomai: set 'custom' as version in
+ case of tarball
+Message-ID: <20210131212741.16880-1-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e5d3fc5a53ec4dabfa25e6b7478e8dc9cb0c9588
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+When BR2_PACKAGE_XENOMAI_CUSTOM_TARBALL is selected, the xenomai package
+declared an empty version, which among others means that the build directory
+becomes output/build/xenomai without any version specification, and empty
+version information in 'xenomai-show-info'.
+
+Other packages that allow a custom tarball, like 'linux' and
+'arm-trusted-firmware', specify 'custom' as version in this case.
+
+Adapt the xenomai package accordingly.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- CHANGES                  | 4 ++--
- Makefile                 | 4 ++--
- support/misc/Vagrantfile | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/xenomai/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 8f1dc8e295..2236bfb5ef 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,4 +1,4 @@
--2020.02.10, not yet released
-+2020.02.10, released January 31st, 2021
+diff --git a/package/xenomai/Config.in b/package/xenomai/Config.in
+index 452b452039..b655733528 100644
+--- a/package/xenomai/Config.in
++++ b/package/xenomai/Config.in
+@@ -69,9 +69,11 @@ config BR2_PACKAGE_XENOMAI_REPOSITORY
+ 	depends on BR2_PACKAGE_XENOMAI_CUSTOM_GIT
  
- 	Important / security related fixes.
+ config BR2_PACKAGE_XENOMAI_VERSION
+-	string "Custom Xenomai version" if !BR2_PACKAGE_XENOMAI_LATEST_VERSION
++	string "Custom Xenomai version" if \
++		!BR2_PACKAGE_XENOMAI_LATEST_VERSION && \
++		!BR2_PACKAGE_XENOMAI_CUSTOM_TARBALL
+ 	default "3.0.10" if BR2_PACKAGE_XENOMAI_LATEST_VERSION
+-	depends on !BR2_PACKAGE_XENOMAI_CUSTOM_TARBALL
++	default "custom" if BR2_PACKAGE_XENOMAI_CUSTOM_TARBALL
  
-@@ -14,7 +14,7 @@
- 	meson: Ensure ccache is not detected and used, as it may
- 	conflict with the ccache handling in Buildroot.
- 
--	New packages: libnupnp
-+	New packages: libnpupnp
- 
- 	Updated/fixed packages: bctoolbox, brltty, dbus, dovecot,
- 	dovecot-pigeonhole, gcc, gerbera, gmrender-resurrect, gst-omx,
-diff --git a/Makefile b/Makefile
-index 514816978a..0b897a8e44 100644
---- a/Makefile
-+++ b/Makefile
-@@ -92,9 +92,9 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2020.02.9
-+export BR2_VERSION := 2020.02.10
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1609088000
-+BR2_VERSION_EPOCH = 1612128000
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
-diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
-index b0c9ade199..e76752e14d 100644
---- a/support/misc/Vagrantfile
-+++ b/support/misc/Vagrantfile
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # Buildroot version to use
--RELEASE='2020.02.9'
-+RELEASE='2020.02.10'
- 
- ### Change here for more memory/cores ###
- VM_MEMORY=2048
+ config BR2_PACKAGE_XENOMAI_CUSTOM_TARBALL_URL
+ 	string "URL of custom tarball"
+-- 
+2.26.2
