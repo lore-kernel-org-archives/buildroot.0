@@ -1,74 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 31 Jan 2021 18:04:36 +0100
-Subject: [Buildroot] [git commit] package/gdk-pixbuf: link with lintl if
+Date: Sun, 31 Jan 2021 18:04:50 +0100
+Subject: [Buildroot] [PATCH 1/1] package/gdk-pixbuf: link with lintl if
  needed
-Message-ID: <20210131164427.B88228404A@busybox.osuosl.org>
+In-Reply-To: <87czxlffqg.fsf@tarshish> (Baruch Siach's message of "Sun, 31 Jan
+ 2021 14:33:27 +0200")
+References: <20210128070435.3771751-1-fontaine.fabrice@gmail.com>
+ <87k0rutxla.fsf@dell.be.48ers.dk> <87czxlffqg.fsf@tarshish>
+Message-ID: <87im7dqbpp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=55957998126ce4c97a29c253aaadab866e3fafb1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-Fixes:
- - http://autobuild.buildroot.org/results/4dc94dadbc17e06a214478644f29877fe205f93d
+ > Hi Peter,
+ > On Sat, Jan 30 2021, Peter Korsgaard wrote:
+ >>>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+ >> 
+ >> > Fixes:
+ >> >  - http://autobuild.buildroot.org/results/4dc94dadbc17e06a214478644f29877fe205f93d
+ >> 
+ >> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ >> 
+ >> Committed, thanks.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...001-meson.build-link-with-lintl-if-needed.patch | 45 ++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
+ > Not in master as of commit 70acf563aa29 ("package/bitcoin: add CPE
+ > variables").
 
-diff --git a/package/gdk-pixbuf/0001-meson.build-link-with-lintl-if-needed.patch b/package/gdk-pixbuf/0001-meson.build-link-with-lintl-if-needed.patch
-new file mode 100644
-index 0000000000..08a3a681cf
---- /dev/null
-+++ b/package/gdk-pixbuf/0001-meson.build-link-with-lintl-if-needed.patch
-@@ -0,0 +1,45 @@
-+From 65c8bc8ec4ae8dd140b0205a61d0d216fa45d819 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 28 Jan 2021 07:50:44 +0100
-+Subject: [PATCH] meson.build: link with lintl if needed
-+
-+Link with -lintl to avoid the following build failure:
-+
-+/home/giuliobenetti/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/mips64el-buildroot-linux-uclibc/5.5.0/../../../../mips64el-buildroot-linux-uclibc/bin/ld: gdk-pixbuf/libgdk_pixbuf-2.0.so.0.4200.2.p/gdk-pixbuf-util.c.o: in function `_gdk_pixbuf_init_gettext':
-+gdk-pixbuf-util.c:(.text+0xbc0): undefined reference to `libintl_bindtextdomain'
-+/home/giuliobenetti/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/mips64el-buildroot-linux-uclibc/5.5.0/../../../../mips64el-buildroot-linux-uclibc/bin/ld: gdk-pixbuf-util.c:(.text+0xbc8): undefined reference to `libintl_bindtextdomain'
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/894359558100ea9637feba16deaf99923805d0f2
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status:
-+https://gitlab.gnome.org/GNOME/gdk-pixbuf/-/merge_requests/101]
-+---
-+ meson.build | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/meson.build b/meson.build
-+index 1cef125a3..973948108 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -93,6 +93,7 @@ if cc.has_function('lrint', dependencies: mathlib_dep)
-+   gdk_pixbuf_conf.set('HAVE_LRINT', 1)
-+ endif
-+ 
-++intl_dep = cc.find_library('intl', required: false)
-+ if cc.has_function('bind_textdomain_codeset', prefix: '#include <libintl.h>')
-+   gdk_pixbuf_conf.set('HAVE_BIND_TEXTDOMAIN_CODESET', 1)
-+ endif
-+@@ -212,7 +213,7 @@ if medialib_dep.found()
-+ endif
-+ 
-+ gdk_pixbuf_deps = [ mathlib_dep, glib_dep, gobject_dep, gmodule_dep, gio_dep,
-+-                    shared_mime_dep, medialib_dep ]
-++                    shared_mime_dep, medialib_dep, intl_dep ]
-+ 
-+ # Check if we can build shared modules
-+ if gmodule_dep.type_name() == 'pkgconfig'
-+-- 
-+2.29.2
-+
+Ups, fixed now - Thanks!
+
+-- 
+Bye, Peter Korsgaard
