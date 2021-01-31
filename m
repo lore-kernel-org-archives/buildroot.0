@@ -1,45 +1,42 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Sun, 31 Jan 2021 23:22:46 +0100
-Subject: [Buildroot] [PATCH] package/libnss: bump version to 3.61
-Message-ID: <20210131222246.25408-1-giulio.benetti@benettiengineering.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 31 Jan 2021 23:30:21 +0100
+Subject: [Buildroot] [PATCH 1/1] package/pugixml: drop
+ BR2_PACKAGE_PUGIXML_HEADER_ONLY
+In-Reply-To: <20210128172935.4138671-1-fontaine.fabrice@gmail.com>
+References: <20210128172935.4138671-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210131233021.605e67b0@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release Notes:
-https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.61_release_notes
+On Thu, 28 Jan 2021 18:29:35 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- package/libnss/libnss.hash | 4 ++--
- package/libnss/libnss.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+> Drop BR2_PACKAGE_PUGIXML_HEADER_ONLY which raises a build failure with
+> gerbera (the only package that is using pugixml). Indeed, there is two
+> issues:
+>  - gerbera is not aware that it must define PUGIXML_HEADER_ONLY
+>  - pugixml.cpp is not available in the staging directory so gerbera
+>    can't use it
+> 
+> It should be noted that pugixml continues to install a (non working)
+> library even when PUGIXML_HEADER_ONLY is enabled resulting in a build
+> failure at linking stage instead of configure step:
+> 
+> [100%] Linking CXX executable gerbera
+> /home/buildroot/autobuild/run/instance-2/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-musleabihf/8.3.0/../../../../arm-buildroot-linux-musleabihf/bin/ld: liblibgerbera.a(config_manager.cc.o): in function `ConfigManager::getElement(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) const':
+> config_manager.cc:(.text+0x4d8): undefined reference to `pugi::xml_document::document_element() const'
 
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index f93fa5ad03..ad632f724a 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_60_1_RTM/src/SHA256SUMS
--sha256  2051c20b61112df24bad533ac37f6c66c1bc0d6ea70bb9d9cad102d20324279d  nss-3.60.1.tar.gz
-+# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_61_RTM/src/SHA256SUMS
-+sha256  312e2d804b34ccf0fec70b57cf8cd6ac853f8ced60df53e30ebb0a7bcd0e1370  nss-3.61.tar.gz
- # Locally calculated
- sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index fc1be6f603..3bc3197e34 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBNSS_VERSION = 3.60.1
-+LIBNSS_VERSION = 3.61
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
+This looks like an upstream bug in pugixml, isn't it ? We're using
+pugixml 1.10, but a 1.11 has been released since then. Have you tried
+that ? Did you ask upstream pugixml about this issue ?
+
+Thanks!
+
+Thomas
 -- 
-2.25.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
