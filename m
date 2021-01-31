@@ -1,171 +1,70 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 31 Jan 2021 23:30:56 +0100
-Subject: [Buildroot] [git commit] package/frr: bump to 7.5
-Message-ID: <20210131221119.CE34986338@busybox.osuosl.org>
+Date: Sun, 31 Jan 2021 23:32:59 +0100
+Subject: [Buildroot] [PATCH 1/5] package/binutils: bump 2.35.x series to
+ 2.35.2
+Message-ID: <20210131223304.1857838-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8023a8814b0a57a8e4c1cf820729c0879baabcc3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Release notes:
 
-Major Behavior Changes
+  https://sourceware.org/pipermail/binutils/2021-January/115150.html
 
-    - As a reminder for those upgrading from older releases, as of FRR 7.4
-    and beyond:
-
-    RFC 8212 is now enabled by default. BGP will not advertise or use
-    routes unless explicitly configured to do so with an export or import
-    policy.
-
-All daemons
-
-    Minimum libyang version is now 1.0.184
-
-bfdd
-
-    Profile support
-    Minimum TTL support
-
-bgpd
-
-    RPKI now has support for VRFs
-    Add wide option to route show commands
-    Add ability to count filtered prefixes when using maximum-prefix
-    with new force option
-    Add ability to show selected bestpath routes for a given neighbor
-    with bestpath-routes option to neighbor show command
-    Add ability to specify message when admin downing a session with bgp
-    shutdown message MSG... command
-    Add IPv6 support for Flowspec
-    Add ability to shut down neighbor if RTT is too high with neighbor
-    <neigh> shutdown rtt command
-    Allow update-delay to be applied globally
-    Graceful Restart fixes
-    Stability and performance fixes
-    EVPN
-    Beginning of MultiHoming support; stay tuned
-
-isisd
-
-    Add VRF support
-    Add support for Anycast-SIDs
-    Fix adjacency timer display overflow
-
-ospfd
-
-    Segment Routing support for ECMP
-    Prevent crash if transferring config amongst instances
-    Various LSA-related fixes
-
-pbrd
-
-    Add JSON support to commands
-    Add ability to match on DSCP/ECN fields
-
-pimd
-
-    Add more JSON support to commands
-    Add support for MSDP SA forwarding
-    (s,g,rpt) ifchannel is now cleared when (*, G) prune is received
-    Fix IGMP querier election and IP address mapping
-    Fix missing mesh-group commands
-    Fix crash when RP is removed
-
-staticd
-
-    Add support for Northbound API
-
-zebra
-
-    Nexthop group support for FPM
-    Netlink batching support
-    Northbound support for RIB model
-    Backup nexthop support
-    Allow upper level protocols to request ARP
-    Add json output for zebra ES, ES-EVI and access vlan dumps
-
-vtysh
-
-    Speed up output across daemons
-    Fix build-time errors for some --enable flags
-
-Northbound / YANG
-
-    Filter and route-map support
-    OSPF model definition
-    BGP model definition
-
-RPM Packaging
-
-    Moved RPKI to subpackage
-    Added SNMP subpackage
-
-Signed-off-by: Vadym Kochan <vadym.kochan@plvision.eu>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...find-all-future-minor-versions-of-python3.patch | 30 ----------------------
- package/frr/frr.hash                               |  2 +-
- package/frr/frr.mk                                 |  2 +-
- 3 files changed, 2 insertions(+), 32 deletions(-)
+ package/binutils/{2.35.1 => 2.35.2}/0001-sh-conf.patch        | 0
+ .../{2.35.1 => 2.35.2}/0002-poison-system-directories.patch   | 0
+ package/binutils/Config.in.host                               | 4 ++--
+ package/binutils/binutils.hash                                | 2 +-
+ 4 files changed, 3 insertions(+), 3 deletions(-)
+ rename package/binutils/{2.35.1 => 2.35.2}/0001-sh-conf.patch (100%)
+ rename package/binutils/{2.35.1 => 2.35.2}/0002-poison-system-directories.patch (100%)
 
-diff --git a/package/frr/0001-build-find-all-future-minor-versions-of-python3.patch b/package/frr/0001-build-find-all-future-minor-versions-of-python3.patch
-deleted file mode 100644
-index 1eb693703b..0000000000
---- a/package/frr/0001-build-find-all-future-minor-versions-of-python3.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--From 838cb35e08eb98acbc27637808162105ae2c4549 Mon Sep 17 00:00:00 2001
--From: Michal Ruprich <michalruprich@gmail.com>
--Date: Wed, 17 Jun 2020 13:47:30 +0200
--Subject: [PATCH] build: find all future minor versions of python3
--
--This way we can find every python from 3.8 further
--
--Signed-off-by: Michal Ruprich <michalruprich@gmail.com>
--
--[Retrieved from:
--https://github.com/FRRouting/frr/commit/838cb35e08eb98acbc27637808162105ae2c4549]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- m4/ax_python.m4 | 3 ++-
-- 1 file changed, 2 insertions(+), 1 deletion(-)
--
--diff --git a/m4/ax_python.m4 b/m4/ax_python.m4
--index 9f43ea0ab12..91d12b99b43 100644
----- a/m4/ax_python.m4
--+++ b/m4/ax_python.m4
--@@ -186,7 +186,8 @@ AC_REQUIRE([PKG_PROG_PKG_CONFIG])dnl
--       AC_MSG_RESULT([yes])
-- 
--       PYTHON_CFLAGS="`\"$pycfg\" --includes`"
---      if test x"${py_ver}" = x"3.8" || test x"{py_ver}" = x"3.9"; then
--+      minor_ver=${py_ver#*\.}
--+      if test $((minor_ver)) -gt 7; then
--         PYTHON_LIBS="`\"$pycfg\" --ldflags --embed`"
--       else
--         PYTHON_LIBS="`\"$pycfg\" --ldflags`"
-diff --git a/package/frr/frr.hash b/package/frr/frr.hash
-index 1c8c27ec4e..942065f0f3 100644
---- a/package/frr/frr.hash
-+++ b/package/frr/frr.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 3c8204fda1c9b178d8446562579bbbc49d134b98f3ad02aa56f68724a2f9e40a  frr-7.4.tar.gz
-+sha256 54066e82a82751ec5876d9b67aa0cb24fe94e19e7371af290ac25099eda9f136  frr-7.5.tar.gz
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/frr/frr.mk b/package/frr/frr.mk
-index 6beaf776ac..3ae292874a 100644
---- a/package/frr/frr.mk
-+++ b/package/frr/frr.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/binutils/2.35.1/0001-sh-conf.patch b/package/binutils/2.35.2/0001-sh-conf.patch
+similarity index 100%
+rename from package/binutils/2.35.1/0001-sh-conf.patch
+rename to package/binutils/2.35.2/0001-sh-conf.patch
+diff --git a/package/binutils/2.35.1/0002-poison-system-directories.patch b/package/binutils/2.35.2/0002-poison-system-directories.patch
+similarity index 100%
+rename from package/binutils/2.35.1/0002-poison-system-directories.patch
+rename to package/binutils/2.35.2/0002-poison-system-directories.patch
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index 89c6894a1f..49daf3b70a 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -32,7 +32,7 @@ config BR2_BINUTILS_VERSION_2_34_X
+ 	depends on !BR2_BINFMT_FLAT
  
--FRR_VERSION = 7.4
-+FRR_VERSION = 7.5
- FRR_SITE = $(call github,FRRouting,frr,frr-$(FRR_VERSION))
- FRR_LICENSE = GPL-2.0
- FRR_LICENSE_FILES = COPYING
+ config BR2_BINUTILS_VERSION_2_35_X
+-	bool "binutils 2.35.1"
++	bool "binutils 2.35.2"
+ 	depends on !BR2_csky
+ 	# https://github.com/uclinux-dev/elf2flt/pull/16
+ 	# https://github.com/uclinux-dev/elf2flt/issues/12
+@@ -55,7 +55,7 @@ config BR2_BINUTILS_VERSION
+ 	default "2.32"		if BR2_BINUTILS_VERSION_2_32_X
+ 	default "2.33.1"	if BR2_BINUTILS_VERSION_2_33_X
+ 	default "2.34"		if BR2_BINUTILS_VERSION_2_34_X
+-	default "2.35.1"	if BR2_BINUTILS_VERSION_2_35_X
++	default "2.35.2"	if BR2_BINUTILS_VERSION_2_35_X
+ 
+ config BR2_BINUTILS_ENABLE_LTO
+ 	bool
+diff --git a/package/binutils/binutils.hash b/package/binutils/binutils.hash
+index ce5b0cdca8..ff91e802cc 100644
+--- a/package/binutils/binutils.hash
++++ b/package/binutils/binutils.hash
+@@ -2,7 +2,7 @@
+ sha512  d326408f12a03d9a61a9de56584c2af12f81c2e50d2d7e835d51565df8314df01575724afa1e43bd0db45cfc9916b41519b67dfce03232aa4978704492a6994a  binutils-2.32.tar.xz
+ sha512  b7a6767c6c7ca6b5cafa7080e6820b7bb3a53b7148348c438d99905defbdf0d30c9744a484ee01c9441a8153901808513366b15ba9533e20c9673c262ade36ac  binutils-2.33.1.tar.xz
+ sha512  2c7976939dcf5e8c5b7374cccd39bfe803b1bec73c6abfa0eb17c24e1942574c6bdb874c66a092a82adc443182eacd8a5a8001c19a76101f0c7ba40c27de0bbd  binutils-2.34.tar.xz
+-sha512  94ff72708403413b70b247f3af4099ebaa882b6659249869f1ed9941a0f1912e313f08357d470f9fd2359e7f5e5b0eb86285e5eaf883fa8187789d6b1bd304eb  binutils-2.35.1.tar.xz
++sha512  9974ede5978d32e0d68fef23da48fa00bd06b0bff7ec45b00ca075c126d6bbe0cf2defc03ecc3f17bc6cc85b64271a13009c4049d7ba17de26e84e3a6e2c0348  binutils-2.35.2.tar.xz
+ 
+ # Locally calculated (fetched from Github)
+ sha512  76a8227a19218435319c660e4983ea17985194b7f496f163e97543e7f6fd3e9249241fdc05a16ba512fba96a1d846c1f7b080983404d821d6215f10e7f11e238  binutils-gdb-arc-2020.09-release.tar.gz
+-- 
+2.29.2
