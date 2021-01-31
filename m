@@ -1,35 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 31 Jan 2021 21:30:00 +0100
-Subject: [Buildroot] [PATCH] package/sunxi-mali-mainline-driver: bump
- version
-In-Reply-To: <20210131175812.1567783-1-giulio.benetti@benettiengineering.com>
-References: <20210131175812.1567783-1-giulio.benetti@benettiengineering.com>
-Message-ID: <20210131213000.21632cae@windsurf.home>
+Date: Sun, 31 Jan 2021 21:31:14 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libgeos: depends on wchar
+In-Reply-To: <20210131194722.4032192-1-fontaine.fabrice@gmail.com>
+References: <20210131194722.4032192-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210131213114.26f46038@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 31 Jan 2021 18:58:12 +0100
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+Hello Fabrice,
 
-> Bump version and drop local patches already merged upstream. Add Linux
-> option needed by Linux version >= 4.20 package documentation and to .mk
-> file that automatically adds it to Linux config when building.
+On Sun, 31 Jan 2021 20:47:22 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+
+> libgeos unconditionally uses wstring which raises the following build
+> failure:
 > 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> In file included from /srv/storage/autobuild/run/instance-3/output-1/build/libgeos-3.9.0/tools/astyle/ASLocalizer.cpp:40:
+> /srv/storage/autobuild/run/instance-3/output-1/build/libgeos-3.9.0/tools/astyle/ASLocalizer.h:72:34: error: 'wstring' does not name a type; did you mean 'stdin'?
+>   string convertToMultiByte(const wstring& wideStr) const;
+>                                   ^~~~~~~
+>                                   stdin
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/e97d03848d9bbf1845b994f391679a1dbf49f61e
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  ...01-mali-support-building-against-5.9.patch | 269 ------------------
->  ...2-mali-support-building-against-5.10.patch |  98 -------
->  package/sunxi-mali-mainline-driver/Config.in  |   4 +
->  .../sunxi-mali-mainline-driver.hash           |   2 +-
->  .../sunxi-mali-mainline-driver.mk             |   3 +-
->  5 files changed, 7 insertions(+), 369 deletions(-)
->  delete mode 100644 package/sunxi-mali-mainline-driver/0001-mali-support-building-against-5.9.patch
->  delete mode 100644 package/sunxi-mali-mainline-driver/0002-mali-support-building-against-5.10.patch
+>  package/libgeos/Config.in | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
+Applied to master, thanks. However, as usual it would be good to
+provide more details about since when the problem occurs. Is it since
+the package has been introduced ? Since a version bump ?
+
+Of course, in this case, the package has been recently introduced so
+you can say "it's trivial". But it means that the maintainer reviewing
+your patch has to look this up, and once again Peter will have to look
+it up when he looks at your commit and considers it for the LTS/stable
+branches.
+
+Thanks!
 
 Thomas
 -- 
