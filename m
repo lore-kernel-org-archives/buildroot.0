@@ -1,40 +1,63 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Mon,  1 Feb 2021 07:28:27 +0100
-Subject: [Buildroot] [PATCH] package/moarvm: bump to version 2020.12
-Message-ID: <20210201062827.1624244-1-francois.perrad@gadz.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon,  1 Feb 2021 19:26:44 +0100
+Subject: [Buildroot] [PATCH 1/1] package/python-iso8601: bump to version
+ 0.1.13
+Message-ID: <20210201182644.994331-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/moarvm/moarvm.hash | 2 +-
- package/moarvm/moarvm.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Update indentation in hash file (two spaces)
 
-diff --git a/package/moarvm/moarvm.hash b/package/moarvm/moarvm.hash
-index 36f0a81f3..abe96c3d4 100644
---- a/package/moarvm/moarvm.hash
-+++ b/package/moarvm/moarvm.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  637883083f16c4398ffd3685ea6411daa605dd0862e1f59cce632bb2b994f2c4  MoarVM-2020.10.tar.gz
-+sha256  08914f1c464151ebc678cf0d360c9e479a036178fa7c9ddfd34aa4d556d03ea2  MoarVM-2020.12.tar.gz
- sha256  c53c6b96081b0a5b9b2fb4d0133d55c20e5e00e4c127ade62f03434ee7b3d2de  Artistic2.txt
-diff --git a/package/moarvm/moarvm.mk b/package/moarvm/moarvm.mk
-index 9fe5f4c07..1f4140441 100644
---- a/package/moarvm/moarvm.mk
-+++ b/package/moarvm/moarvm.mk
-@@ -4,7 +4,7 @@
+https://github.com/micktwomey/pyiso8601/releases/tag/0.1.13
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/python-iso8601/Config.in           | 2 +-
+ package/python-iso8601/python-iso8601.hash | 7 ++++---
+ package/python-iso8601/python-iso8601.mk   | 4 ++--
+ 3 files changed, 7 insertions(+), 6 deletions(-)
+
+diff --git a/package/python-iso8601/Config.in b/package/python-iso8601/Config.in
+index 9e4610cf61..9d61b1d426 100644
+--- a/package/python-iso8601/Config.in
++++ b/package/python-iso8601/Config.in
+@@ -3,4 +3,4 @@ config BR2_PACKAGE_PYTHON_ISO8601
+ 	help
+ 	  Simple module to parse ISO 8601 dates.
+ 
+-	  https://bitbucket.org/micktwomey/pyiso8601
++	  https://github.com/micktwomey/pyiso8601
+diff --git a/package/python-iso8601/python-iso8601.hash b/package/python-iso8601/python-iso8601.hash
+index 57604cc97b..18cf3958da 100644
+--- a/package/python-iso8601/python-iso8601.hash
++++ b/package/python-iso8601/python-iso8601.hash
+@@ -1,4 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/iso8601/json, sha256 locally computed
+-md5	4de940f691c5ea759fb254384c8ddcf6  iso8601-0.1.12.tar.gz
+-sha256	49c4b20e1f38aa5cf109ddcd39647ac419f928512c869dc01d5c7098eddede82  iso8601-0.1.12.tar.gz
++# md5, sha256 from https://pypi.org/pypi/iso8601/json
++md5  df6e924305fd799d90be63336b2ab8b3  iso8601-0.1.13.tar.gz
++sha256  f7dec22af52025d4526be94cc1303c7d8f5379b746a3f54a8c8446384392eeb1  iso8601-0.1.13.tar.gz
++# Locally computed sha256 checksums
+ sha256  116d368d14a8cf0061027c944c60ee20b476ce42814818a7d627396906761f16  LICENSE
+diff --git a/package/python-iso8601/python-iso8601.mk b/package/python-iso8601/python-iso8601.mk
+index 7fc171d603..3620255db4 100644
+--- a/package/python-iso8601/python-iso8601.mk
++++ b/package/python-iso8601/python-iso8601.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--MOARVM_VERSION = 2020.10
-+MOARVM_VERSION = 2020.12
- MOARVM_SITE = http://moarvm.com/releases
- MOARVM_SOURCE = MoarVM-$(MOARVM_VERSION).tar.gz
- MOARVM_LICENSE = Artistic-2.0
+-PYTHON_ISO8601_VERSION = 0.1.12
++PYTHON_ISO8601_VERSION = 0.1.13
+ PYTHON_ISO8601_SOURCE = iso8601-$(PYTHON_ISO8601_VERSION).tar.gz
+-PYTHON_ISO8601_SITE = https://pypi.python.org/packages/45/13/3db24895497345fb44c4248c08b16da34a9eb02643cea2754b21b5ed08b0
++PYTHON_ISO8601_SITE = https://files.pythonhosted.org/packages/05/90/2d9927dc2d33192f58fe39d2d216313a8380625cd4b062efb93f1afd7a29
+ PYTHON_ISO8601_SETUP_TYPE = setuptools
+ PYTHON_ISO8601_LICENSE = MIT
+ PYTHON_ISO8601_LICENSE_FILES = LICENSE
 -- 
-2.27.0
+2.29.2
