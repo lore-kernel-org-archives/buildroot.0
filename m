@@ -1,70 +1,219 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Feb 2021 18:25:46 +0100
-Subject: [Buildroot] [git commit] package/binutils: bump 2.35.x series to
- 2.35.2
-Message-ID: <20210201170854.49CC5814AA@busybox.osuosl.org>
+Date: Mon, 1 Feb 2021 18:27:22 +0100
+Subject: [Buildroot] [git commit] package/musl: bump to version 1.2.2
+Message-ID: <20210201170854.80014814AA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=98267eb8740085f7e5104a6cf62b0b8d3c5dd377
+commit: https://git.buildroot.net/buildroot/commit/?id=53e40a2cad7a021311e987af644d8662896d3352
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
+Drop 0003-rewrite-wcsnrtombs-to-fix-buffer-overflow-and-other-.patch
+as it is a backport of upstream commit
+3ab2a4e02682df1382955071919d8aa3c3ec40d4 which is part of the 1.2.2
+release.
 
-  https://sourceware.org/pipermail/binutils/2021-January/115150.html
+1.2.2 release notes
+
+major changes:
+- child restrictions lifted after fork of multithreaded parent
+
+new features:
+- _Fork function (POSIX-future)
+- reallocarray function (extension from OpenBSD, now widespread)
+- gettid function (kernel tid as supported concept)
+- SIGEV_THREAD_ID sigevent API (Linux extension)
+- tcgetwinsize and tcsetwinsize functions (POSIX-future)
+
+performance:
+- faster software sqrt on archs without native sqrt instruction
+
+compatibility:
+- realpath no longer depends on procfs availability & accuracy
+- time zone parser now always prefers 64-bit tables if present
+- crypt_blowfish now supports $2b$ prefix
+- res_query now reports errors via h_errno
+- set*id and setrlimit are now safe in vforked/cloned child
+- setgroups now applies to all threads
+- dlopen debugger notification is improved, should work with lldb
+- setrlimit no longer needs __synccall broadcast on linux 2.6.36+
+- faccessat with AT_EACCESS no longer needs child process on linux 5.8+
+
+bugs fixed:
+- buffer overflow and infinite loop errors in wcsnrtombs (CVE-2020-28928)
+- sem_close unmapped still-referenced semaphores
+- fork of process with active aio could deadlock or crash paren
+- pthread_cond_wait was broken with priority-inheritance mutex
+- getgrouplist wrongly failed when nscd reported an empty list
+- abort could leak modified SIGABRT disposition to fork or posix_spawn child
+- regression with mallocng: malloc_usable_size(0) crashed
+- readlink wrongly gave EINVAL on zero length dest buffer
+- sqrtl was severely inaccurate (not correctly rounded) on ldquad archs
+- assert failure wrongly flushed stdio (possible deadlock)
+- MUSL_LOCPATH search was broken with multiple components
+- missing newline in herror output
+- possible deadlock in pthread_exit with pshared mutex or barrier usage
+- pthread_mutexattr_getprotocol didn't read back protocol
+- v4l2 ioctl translation for pre-time64 kernels didn't work
+
+arch-specific bugs fixed:
+- x86_64 longjmp failed to handle 0 argument reliably
+- i386 __set_thread_area fallback for pre-2.6 kernels didn't work
+- missing O_LARGEFILE macro value on x86_64, x32, mips64
+- unpredictable s390x breakage from failure to preserve call-saved registers
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/binutils/{2.35.1 => 2.35.2}/0001-sh-conf.patch                | 0
- .../binutils/{2.35.1 => 2.35.2}/0002-poison-system-directories.patch  | 0
- package/binutils/Config.in.host                                       | 4 ++--
- package/binutils/binutils.hash                                        | 2 +-
- 4 files changed, 3 insertions(+), 3 deletions(-)
+ ...nrtombs-to-fix-buffer-overflow-and-other-.patch | 114 ---------------------
+ package/musl/musl.hash                             |   4 +-
+ package/musl/musl.mk                               |   2 +-
+ 3 files changed, 3 insertions(+), 117 deletions(-)
 
-diff --git a/package/binutils/2.35.1/0001-sh-conf.patch b/package/binutils/2.35.2/0001-sh-conf.patch
-similarity index 100%
-rename from package/binutils/2.35.1/0001-sh-conf.patch
-rename to package/binutils/2.35.2/0001-sh-conf.patch
-diff --git a/package/binutils/2.35.1/0002-poison-system-directories.patch b/package/binutils/2.35.2/0002-poison-system-directories.patch
-similarity index 100%
-rename from package/binutils/2.35.1/0002-poison-system-directories.patch
-rename to package/binutils/2.35.2/0002-poison-system-directories.patch
-diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-index 89c6894a1f..49daf3b70a 100644
---- a/package/binutils/Config.in.host
-+++ b/package/binutils/Config.in.host
-@@ -32,7 +32,7 @@ config BR2_BINUTILS_VERSION_2_34_X
- 	depends on !BR2_BINFMT_FLAT
+diff --git a/package/musl/0003-rewrite-wcsnrtombs-to-fix-buffer-overflow-and-other-.patch b/package/musl/0003-rewrite-wcsnrtombs-to-fix-buffer-overflow-and-other-.patch
+deleted file mode 100644
+index 2fb29940a9..0000000000
+--- a/package/musl/0003-rewrite-wcsnrtombs-to-fix-buffer-overflow-and-other-.patch
++++ /dev/null
+@@ -1,114 +0,0 @@
+-From 3ab2a4e02682df1382955071919d8aa3c3ec40d4 Mon Sep 17 00:00:00 2001
+-From: Rich Felker <dalias@aerifal.cx>
+-Date: Thu, 19 Nov 2020 17:12:43 -0500
+-Subject: [PATCH] rewrite wcsnrtombs to fix buffer overflow and other bugs
+-
+-the original wcsnrtombs implementation, which has been largely
+-untouched since 0.5.0, attempted to build input-length-limiting
+-conversion on top of wcsrtombs, which only limits output length. as
+-best I recall, this choice was made out of a mix of disdain over
+-having yet another variant function to implement (added in POSIX 2008;
+-not standard C) and preference not to switch things around and
+-implement the wcsrtombs in terms of the more general new function,
+-probably over namespace issues. the strategy employed was to impose
+-output limits that would ensure the input limit wasn't exceeded, then
+-finish up the tail character-at-a-time. unfortunately, none of that
+-worked correctly.
+-
+-first, the logic in the wcsrtombs loop was wrong in that it could
+-easily get stuck making no forward progress, by imposing an output
+-limit too small to convert even one character.
+-
+-the character-at-a-time loop that followed was even worse. it made no
+-effort to ensure that the converted multibyte character would fit in
+-the remaining output space, only that there was a nonzero amount of
+-output space remaining. it also employed an incorrect interpretation
+-of wcrtomb's interface contract for converting the null character,
+-thereby failing to act on end of input, and remaining space accounting
+-was subject to unsigned wrap-around. together these errors allow
+-unbounded overflow of the destination buffer, controlled by input
+-length limit and input wchar_t string contents.
+-
+-given the extent to which this function was broken, it's plausible
+-that most applications that would have been rendered exploitable were
+-sufficiently broken not to be usable in the first place. however, it's
+-also plausible that common (especially ASCII-only) inputs succeeded in
+-the wcsrtombs loop, which mostly worked, while leaving the wildly
+-erroneous code in the second loop exposed to particular non-ASCII
+-inputs.
+-
+-CVE-2020-28928 has been assigned for this issue.
+-
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- src/multibyte/wcsnrtombs.c | 46 ++++++++++++++++----------------------
+- 1 file changed, 19 insertions(+), 27 deletions(-)
+-
+-diff --git a/src/multibyte/wcsnrtombs.c b/src/multibyte/wcsnrtombs.c
+-index 676932b5..95e25e70 100644
+---- a/src/multibyte/wcsnrtombs.c
+-+++ b/src/multibyte/wcsnrtombs.c
+-@@ -1,41 +1,33 @@
+- #include <wchar.h>
+-+#include <limits.h>
+-+#include <string.h>
+- 
+- size_t wcsnrtombs(char *restrict dst, const wchar_t **restrict wcs, size_t wn, size_t n, mbstate_t *restrict st)
+- {
+--	size_t l, cnt=0, n2;
+--	char *s, buf[256];
+- 	const wchar_t *ws = *wcs;
+--	const wchar_t *tmp_ws;
+--
+--	if (!dst) s = buf, n = sizeof buf;
+--	else s = dst;
+--
+--	while ( ws && n && ( (n2=wn)>=n || n2>32 ) ) {
+--		if (n2>=n) n2=n;
+--		tmp_ws = ws;
+--		l = wcsrtombs(s, &ws, n2, 0);
+--		if (!(l+1)) {
+--			cnt = l;
+--			n = 0;
+-+	size_t cnt = 0;
+-+	if (!dst) n=0;
+-+	while (ws && wn) {
+-+		char tmp[MB_LEN_MAX];
+-+		size_t l = wcrtomb(n<MB_LEN_MAX ? tmp : dst, *ws, 0);
+-+		if (l==-1) {
+-+			cnt = -1;
+- 			break;
+- 		}
+--		if (s != buf) {
+--			s += l;
+-+		if (dst) {
+-+			if (n<MB_LEN_MAX) {
+-+				if (l>n) break;
+-+				memcpy(dst, tmp, l);
+-+			}
+-+			dst += l;
+- 			n -= l;
+- 		}
+--		wn = ws ? wn - (ws - tmp_ws) : 0;
+--		cnt += l;
+--	}
+--	if (ws) while (n && wn) {
+--		l = wcrtomb(s, *ws, 0);
+--		if ((l+1)<=1) {
+--			if (!l) ws = 0;
+--			else cnt = l;
+-+		if (!*ws) {
+-+			ws = 0;
+- 			break;
+- 		}
+--		ws++; wn--;
+--		/* safe - this loop runs fewer than sizeof(buf) times */
+--		s+=l; n-=l;
+-+		ws++;
+-+		wn--;
+- 		cnt += l;
+- 	}
+- 	if (dst) *wcs = ws;
+--- 
+-2.20.1
+-
+diff --git a/package/musl/musl.hash b/package/musl/musl.hash
+index 39f1057961..4ab18cebd8 100644
+--- a/package/musl/musl.hash
++++ b/package/musl/musl.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature from
+-# https://musl.libc.org/releases/musl-1.2.1.tar.gz.asc
+-sha256  68af6e18539f646f9c41a3a2bb25be4a5cfa5a8f65f0bb647fd2bbfdf877e84b  musl-1.2.1.tar.gz
++# https://musl.libc.org/releases/musl-1.2.2.tar.gz.asc
++sha256  9b969322012d796dc23dda27a35866034fa67d8fb67e0e2c45c913c3d43219dd  musl-1.2.2.tar.gz
+ sha256  f9bc4423732350eb0b3f7ed7e91d530298476f8fec0c6c427a1c04ade22655af  COPYRIGHT
+diff --git a/package/musl/musl.mk b/package/musl/musl.mk
+index bc4237968d..82b3eeaf52 100644
+--- a/package/musl/musl.mk
++++ b/package/musl/musl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_BINUTILS_VERSION_2_35_X
--	bool "binutils 2.35.1"
-+	bool "binutils 2.35.2"
- 	depends on !BR2_csky
- 	# https://github.com/uclinux-dev/elf2flt/pull/16
- 	# https://github.com/uclinux-dev/elf2flt/issues/12
-@@ -55,7 +55,7 @@ config BR2_BINUTILS_VERSION
- 	default "2.32"		if BR2_BINUTILS_VERSION_2_32_X
- 	default "2.33.1"	if BR2_BINUTILS_VERSION_2_33_X
- 	default "2.34"		if BR2_BINUTILS_VERSION_2_34_X
--	default "2.35.1"	if BR2_BINUTILS_VERSION_2_35_X
-+	default "2.35.2"	if BR2_BINUTILS_VERSION_2_35_X
- 
- config BR2_BINUTILS_ENABLE_LTO
- 	bool
-diff --git a/package/binutils/binutils.hash b/package/binutils/binutils.hash
-index ce5b0cdca8..ff91e802cc 100644
---- a/package/binutils/binutils.hash
-+++ b/package/binutils/binutils.hash
-@@ -2,7 +2,7 @@
- sha512  d326408f12a03d9a61a9de56584c2af12f81c2e50d2d7e835d51565df8314df01575724afa1e43bd0db45cfc9916b41519b67dfce03232aa4978704492a6994a  binutils-2.32.tar.xz
- sha512  b7a6767c6c7ca6b5cafa7080e6820b7bb3a53b7148348c438d99905defbdf0d30c9744a484ee01c9441a8153901808513366b15ba9533e20c9673c262ade36ac  binutils-2.33.1.tar.xz
- sha512  2c7976939dcf5e8c5b7374cccd39bfe803b1bec73c6abfa0eb17c24e1942574c6bdb874c66a092a82adc443182eacd8a5a8001c19a76101f0c7ba40c27de0bbd  binutils-2.34.tar.xz
--sha512  94ff72708403413b70b247f3af4099ebaa882b6659249869f1ed9941a0f1912e313f08357d470f9fd2359e7f5e5b0eb86285e5eaf883fa8187789d6b1bd304eb  binutils-2.35.1.tar.xz
-+sha512  9974ede5978d32e0d68fef23da48fa00bd06b0bff7ec45b00ca075c126d6bbe0cf2defc03ecc3f17bc6cc85b64271a13009c4049d7ba17de26e84e3a6e2c0348  binutils-2.35.2.tar.xz
- 
- # Locally calculated (fetched from Github)
- sha512  76a8227a19218435319c660e4983ea17985194b7f496f163e97543e7f6fd3e9249241fdc05a16ba512fba96a1d846c1f7b080983404d821d6215f10e7f11e238  binutils-gdb-arc-2020.09-release.tar.gz
+-MUSL_VERSION = 1.2.1
++MUSL_VERSION = 1.2.2
+ MUSL_SITE = http://www.musl-libc.org/releases
+ MUSL_LICENSE = MIT
+ MUSL_LICENSE_FILES = COPYRIGHT
