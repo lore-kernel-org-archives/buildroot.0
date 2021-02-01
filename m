@@ -1,23 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 01 Feb 2021 18:24:07 +0100
-Subject: [Buildroot] [PATCH 1/1] package/inadyn: bump to version 2.8.1
-In-Reply-To: <20210131224745.414558-1-troglobit@gmail.com> (Joachim Wiberg's
- message of "Sun, 31 Jan 2021 23:47:46 +0100")
-References: <20210131224745.414558-1-troglobit@gmail.com>
-Message-ID: <87wnvrn1l4.fsf@dell.be.48ers.dk>
+Date: Mon, 01 Feb 2021 18:25:27 +0100
+Subject: [Buildroot] [PATCH] package/xenomai: set 'custom' as version in
+ case of tarball
+In-Reply-To: <20210131212741.16880-1-patrickdepinguin@gmail.com> (Thomas De
+ Schampheleire's message of "Sun, 31 Jan 2021 22:27:40 +0100")
+References: <20210131212741.16880-1-patrickdepinguin@gmail.com>
+Message-ID: <87sg6fn1iw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Joachim" == Joachim Wiberg <troglobit@gmail.com> writes:
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
- > ChangeLog:
- > - https://github.com/troglobit/inadyn/releases/tag/v2.8
- > - https://github.com/troglobit/inadyn/releases/tag/v2.8.1
+ > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+ > When BR2_PACKAGE_XENOMAI_CUSTOM_TARBALL is selected, the xenomai package
+ > declared an empty version, which among others means that the build directory
+ > becomes output/build/xenomai without any version specification, and empty
+ > version information in 'xenomai-show-info'.
 
- > Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+ > Other packages that allow a custom tarball, like 'linux' and
+ > 'arm-trusted-firmware', specify 'custom' as version in this case.
+
+ > Adapt the xenomai package accordingly.
+
+ > Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
 Committed, thanks.
 
