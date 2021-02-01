@@ -1,193 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Feb 2021 10:53:32 +0100
+Date: Mon, 1 Feb 2021 10:53:59 +0100
 Subject: [Buildroot] [git commit branch/2020.11.x]
- package/intel-mediadriver: fix build with gcc 10
-Message-ID: <20210201094924.826AB813DC@busybox.osuosl.org>
+ package/intel-mediadriver: fix option
+Message-ID: <20210201094924.9D51D844E4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=10ee253027065ccb75c3661bc7d871657ffcbdd6
+commit: https://git.buildroot.net/buildroot/commit/?id=2f11b344d9cfdcf236a6b34cb11c8ebbbfdc7a15
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-Fixes:
- - http://autobuild.buildroot.org/results/d5ab36026a66a4f371fb6ef6c9ecf43e9617d119
+Replace INSTALL_DRIVERS_SYSCONF by INSTALL_DRIVER_SYSCONF which is the
+correct name since version 18.2.0 and
+https://github.com/intel/media-driver/commit/81796c8a9e44b878e26064c898e0f4730e8220cf
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 6a0d2bb9453dd5bd61ad8f92908d9b7c13562130)
+(cherry picked from commit 9d41e98d6f8245f0ff3e077d876d9f451debd7b0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...d-fix-Werror=format-overflow-under-gcc-10.patch | 162 +++++++++++++++++++++
- 1 file changed, 162 insertions(+)
+ package/intel-mediadriver/intel-mediadriver.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/intel-mediadriver/0002-build-fix-Werror=format-overflow-under-gcc-10.patch b/package/intel-mediadriver/0002-build-fix-Werror=format-overflow-under-gcc-10.patch
-new file mode 100644
-index 0000000000..46775e9347
---- /dev/null
-+++ b/package/intel-mediadriver/0002-build-fix-Werror=format-overflow-under-gcc-10.patch
-@@ -0,0 +1,162 @@
-+From da966a2ab1f5161cc0a21a4cd7e07edf732ebee9 Mon Sep 17 00:00:00 2001
-+From: Dmitry Rogozhkin <dmitry.v.rogozhkin@intel.com>
-+Date: Thu, 19 Mar 2020 20:59:12 -0700
-+Subject: [PATCH] build: fix Werror=format-overflow under gcc-10
-+
-+Fixes: #870
-+
-+With upcoming gcc-10 we start to see Werror=format-overflow reporting
-+that we attempt to printf %s null strings.
-+
-+Change-Id: I7a62bc98bf7dd6bcd61d475d7650a06aa1a70932
-+Signed-off-by: Dmitry Rogozhkin <dmitry.v.rogozhkin@intel.com>
-+[Retrieved from:
-+https://github.com/intel/media-driver/commit/da966a2ab1f5161cc0a21a4cd7e07edf732ebee9]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ media_driver/linux/common/os/i915/xf86drm.c   | 57 ++++++++++---------
-+ .../linux/ult/libdrm_mock/xf86drm_mock.c      | 57 ++++++++++---------
-+ 2 files changed, 58 insertions(+), 56 deletions(-)
-+
-+diff --git a/media_driver/linux/common/os/i915/xf86drm.c b/media_driver/linux/common/os/i915/xf86drm.c
-+index 7594bde99..d0fc1b7ac 100644
-+--- a/media_driver/linux/common/os/i915/xf86drm.c
-++++ b/media_driver/linux/common/os/i915/xf86drm.c
-+@@ -581,37 +581,38 @@ static int drmOpenByBusid(const char *busid, int type)
-+ 
-+     drmMsg("drmOpenByBusid: Searching for BusID %s\n", busid);
-+     for (i = base; i < base + DRM_MAX_MINOR; i++) {
-+-    fd = drmOpenMinor(i, 1, type);
-+-    drmMsg("drmOpenByBusid: drmOpenMinor returns %d\n", fd);
-+-    if (fd >= 0) {
-+-        /* We need to try for 1.4 first for proper PCI domain support
-+-         * and if that fails, we know the kernel is busted
-+-         */
-+-        sv.drm_di_major = 1;
-+-        sv.drm_di_minor = 4;
-+-        sv.drm_dd_major = -1;    /* Don't care */
-+-        sv.drm_dd_minor = -1;    /* Don't care */
-+-        if (drmSetInterfaceVersion(fd, &sv)) {
-++        fd = drmOpenMinor(i, 1, type);
-++        drmMsg("drmOpenByBusid: drmOpenMinor returns %d\n", fd);
-++        if (fd >= 0) {
-++            /* We need to try for 1.4 first for proper PCI domain support
-++             * and if that fails, we know the kernel is busted
-++             */
-++            sv.drm_di_major = 1;
-++            sv.drm_di_minor = 4;
-++            sv.drm_dd_major = -1;    /* Don't care */
-++            sv.drm_dd_minor = -1;    /* Don't care */
-++            if (drmSetInterfaceVersion(fd, &sv)) {
-+ #ifndef __alpha__
-+-        pci_domain_ok = 0;
-++                pci_domain_ok = 0;
-+ #endif
-+-        sv.drm_di_major = 1;
-+-        sv.drm_di_minor = 1;
-+-        sv.drm_dd_major = -1;       /* Don't care */
-+-        sv.drm_dd_minor = -1;       /* Don't care */
-+-        drmMsg("drmOpenByBusid: Interface 1.4 failed, trying 1.1\n");
-+-        drmSetInterfaceVersion(fd, &sv);
-+-        }
-+-        buf = drmGetBusid(fd);
-+-        drmMsg("drmOpenByBusid: drmGetBusid reports %s\n", buf);
-+-        if (buf && drmMatchBusID(buf, busid, pci_domain_ok)) {
-+-        drmFreeBusid(buf);
-+-        return fd;
-++                sv.drm_di_major = 1;
-++                sv.drm_di_minor = 1;
-++                sv.drm_dd_major = -1;       /* Don't care */
-++                sv.drm_dd_minor = -1;       /* Don't care */
-++                drmMsg("drmOpenByBusid: Interface 1.4 failed, trying 1.1\n");
-++                drmSetInterfaceVersion(fd, &sv);
-++            }
-++            buf = drmGetBusid(fd);
-++            if (buf) {
-++                drmMsg("drmOpenByBusid: drmGetBusid reports %s\n", buf);
-++                if (drmMatchBusID(buf, busid, pci_domain_ok)) {
-++                    drmFreeBusid(buf);
-++                    return fd;
-++                }
-++                drmFreeBusid(buf);
-++            }
-++            close(fd);
-+         }
-+-        if (buf)
-+-        drmFreeBusid(buf);
-+-        close(fd);
-+-    }
-+     }
-+     return -1;
-+ }
-+diff --git a/media_driver/linux/ult/libdrm_mock/xf86drm_mock.c b/media_driver/linux/ult/libdrm_mock/xf86drm_mock.c
-+index 7e5246295..2e5863798 100644
-+--- a/media_driver/linux/ult/libdrm_mock/xf86drm_mock.c
-++++ b/media_driver/linux/ult/libdrm_mock/xf86drm_mock.c
-+@@ -790,37 +790,38 @@ static int drmOpenByBusid(const char *busid, int type)
-+ 
-+     drmMsg("drmOpenByBusid: Searching for BusID %s\n", busid);
-+     for (i = base; i < base + DRM_MAX_MINOR; i++) {
-+-    fd = drmOpenMinor(i, 1, type);
-+-    drmMsg("drmOpenByBusid: drmOpenMinor returns %d\n", fd);
-+-    if (fd >= 0) {
-+-        /* We need to try for 1.4 first for proper PCI domain support
-+-         * and if that fails, we know the kernel is busted
-+-         */
-+-        sv.drm_di_major = 1;
-+-        sv.drm_di_minor = 4;
-+-        sv.drm_dd_major = -1;    /* Don't care */
-+-        sv.drm_dd_minor = -1;    /* Don't care */
-+-        if (drmSetInterfaceVersion(fd, &sv)) {
-++        fd = drmOpenMinor(i, 1, type);
-++        drmMsg("drmOpenByBusid: drmOpenMinor returns %d\n", fd);
-++        if (fd >= 0) {
-++            /* We need to try for 1.4 first for proper PCI domain support
-++             * and if that fails, we know the kernel is busted
-++             */
-++            sv.drm_di_major = 1;
-++            sv.drm_di_minor = 4;
-++            sv.drm_dd_major = -1;    /* Don't care */
-++            sv.drm_dd_minor = -1;    /* Don't care */
-++            if (drmSetInterfaceVersion(fd, &sv)) {
-+ #ifndef __alpha__
-+-        pci_domain_ok = 0;
-++                pci_domain_ok = 0;
-+ #endif
-+-        sv.drm_di_major = 1;
-+-        sv.drm_di_minor = 1;
-+-        sv.drm_dd_major = -1;       /* Don't care */
-+-        sv.drm_dd_minor = -1;       /* Don't care */
-+-        drmMsg("drmOpenByBusid: Interface 1.4 failed, trying 1.1\n");
-+-        drmSetInterfaceVersion(fd, &sv);
-+-        }
-+-        buf = drmGetBusid(fd);
-+-        drmMsg("drmOpenByBusid: drmGetBusid reports %s\n", buf);
-+-        if (buf && drmMatchBusID(buf, busid, pci_domain_ok)) {
-+-        drmFreeBusid(buf);
-+-        return fd;
-++                sv.drm_di_major = 1;
-++                sv.drm_di_minor = 1;
-++                sv.drm_dd_major = -1;       /* Don't care */
-++                sv.drm_dd_minor = -1;       /* Don't care */
-++                drmMsg("drmOpenByBusid: Interface 1.4 failed, trying 1.1\n");
-++                drmSetInterfaceVersion(fd, &sv);
-++            }
-++            buf = drmGetBusid(fd);
-++            if (buf) {
-++                drmMsg("drmOpenByBusid: drmGetBusid reports %s\n", buf);
-++                if (drmMatchBusID(buf, busid, pci_domain_ok)) {
-++                    drmFreeBusid(buf);
-++                    return fd;
-++                }
-++                drmFreeBusid(buf);
-++            }
-++            close(fd);
-+         }
-+-        if (buf)
-+-        drmFreeBusid(buf);
-+-        close(fd);
-+-    }
-+     }
-+     return -1;
-+ }
+diff --git a/package/intel-mediadriver/intel-mediadriver.mk b/package/intel-mediadriver/intel-mediadriver.mk
+index 49bf85e092..963e4b8f9c 100644
+--- a/package/intel-mediadriver/intel-mediadriver.mk
++++ b/package/intel-mediadriver/intel-mediadriver.mk
+@@ -22,7 +22,7 @@ INTEL_MEDIADRIVER_DEPENDENCIES = \
+ INTEL_MEDIADRIVER_SUPPORTS_IN_SOURCE_BUILD = NO
+ 
+ INTEL_MEDIADRIVER_CONF_OPTS = \
+-	-DINSTALL_DRIVERS_SYSCONF=OFF \
++	-DINSTALL_DRIVER_SYSCONF=OFF \
+ 	-DMEDIA_RUN_TEST_SUITE=OFF
+ 
+ $(eval $(cmake-package))
