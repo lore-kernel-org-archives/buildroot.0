@@ -1,43 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Feb 2021 10:53:41 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x]
- package/intel-mediadriver: drop unrecognized options
-Message-ID: <20210201094924.8F44181201@busybox.osuosl.org>
+From: Joachim Wiberg <troglobit@gmail.com>
+Date: Mon, 01 Feb 2021 11:16:33 +0100
+Subject: [Buildroot] [RFC PATCH 0/1] package/sysklogd: proposal to
+ update default syslog.conf
+In-Reply-To: <87bld4p1gm.fsf@dell.be.48ers.dk>
+References: <20210130135203.159451-1-troglobit@gmail.com>
+ <20210131231346.6bce24e3@windsurf.home> <87sg6gg1d9.fsf@gmail.com>
+ <20210201090431.48d3508e@windsurf.home> <87bld4p1gm.fsf@dell.be.48ers.dk>
+Message-ID: <87pn1kf5z2.fsf@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=230f80d156dd3cc424aff7d04a5ccfecf8ff604b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+On Mon, Feb 01, 2021 at 10:43, Peter Korsgaard <peter@korsgaard.com> wrote:
+> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>  > On Sun, 31 Jan 2021 23:58:26 +0100
+>  > Joachim Wiberg <troglobit@gmail.com> wrote:
+>  >> My main question was if there was any specific reason to sticking with
+>  >> the old habits of only using /var/log/messages, as BusyBox syslogd does,
+>  >> or if every logging package is free to have its own defalts?  Within
+>  >> reason, of course.  I'm just a bit concerned with breaking peoples
+>  >> defaults, even though they can just provide their own.
+>  >> 
+>  >> If it's OK to change for sysklogd, I can post a new patch that drops
+>  >> the locallay maintained .conf and instead installs the sysklogd one.
+>  > I don't have a strong opinion on what should be our default
+>  > configuration for sysklogd. Peter, do you have any comments ?
+> Not really. People can still use a custom configuration file in their
+> rootfs overlay, so I don't have a problem with changing the default
+> configuration to be more "normal", E.G. what upstream suggests.
 
-BUILD_ALONG_WITH_CMRTLIB has been dropped since version 18.2.0 and
-https://github.com/intel/media-driver/commit/c3e13c175d12790ab70c4de3521e47f62be780de
+All right, thank you so much to both of you for your time!
 
-RUN_TEST_SUITE is also unrecognized (only MEDIA_RUN_TEST_SUITE is
-recognized)
+I'll prepare a patch to drop the local syslog.conf and use the one
+shipped with sysklod.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 8a0cbe94747a83790a6d97e3e479c97ff5771dee)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/intel-mediadriver/intel-mediadriver.mk | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/package/intel-mediadriver/intel-mediadriver.mk b/package/intel-mediadriver/intel-mediadriver.mk
-index c3157867ed..49bf85e092 100644
---- a/package/intel-mediadriver/intel-mediadriver.mk
-+++ b/package/intel-mediadriver/intel-mediadriver.mk
-@@ -22,9 +22,7 @@ INTEL_MEDIADRIVER_DEPENDENCIES = \
- INTEL_MEDIADRIVER_SUPPORTS_IN_SOURCE_BUILD = NO
- 
- INTEL_MEDIADRIVER_CONF_OPTS = \
--	-DBUILD_ALONG_WITH_CMRTLIB=1 \
- 	-DINSTALL_DRIVERS_SYSCONF=OFF \
--	-DMEDIA_RUN_TEST_SUITE=OFF \
--	-DRUN_TEST_SUITE=OFF
-+	-DMEDIA_RUN_TEST_SUITE=OFF
- 
- $(eval $(cmake-package))
+Best regards
+ /Joachim
