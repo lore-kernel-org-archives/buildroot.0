@@ -1,36 +1,22 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 1 Feb 2021 19:23:52 +0100
-Subject: [Buildroot] [PATCH 1/1] package/pugixml: bump to version 1.11.4
-In-Reply-To: <87im7blkcm.fsf@dell.be.48ers.dk>
-References: <20210201174818.936752-1-fontaine.fabrice@gmail.com>
- <87im7blkcm.fsf@dell.be.48ers.dk>
-Message-ID: <CAPi7W83ftPo1VBrG1JiLTdNv=Euv51YpTp5_iQ0ORnW3ZTOTWw@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 01 Feb 2021 19:27:24 +0100
+Subject: [Buildroot] friendlyarm nanopi r4s
+In-Reply-To: <6BA4D77663DEF04382ACCED529D3AC93076AB898F76A@MSHK01.mshk.kirchbichl.lokal>
+ (MS Handelskontor GmbH's message of "Mon, 1 Feb 2021 15:55:48 +0100")
+References: <6BA4D77663DEF04382ACCED529D3AC93076AB898F76A@MSHK01.mshk.kirchbichl.lokal>
+Message-ID: <87a6snlk37.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter,
+>>>>> "Handelskontor" == Handelskontor GmbH <mshk@snw.at> writes:
 
-Le lun. 1 f?vr. 2021 ? 19:21, Peter Korsgaard <peter@korsgaard.com> a ?crit :
->
-> >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
->
->  > - Use LICENSE.md which has been added in the release tarball since
->  >   version 1.11 and
->  >   https://github.com/zeux/pugixml/commit/ccb63a91865b59d3a4c1dde61fecf12ec085c089
->  > - Fix a build failure with gerbera >= 1.5.0 when building pugixml in
->  >   header-only mode
->
-> So that means that this needs to be backported to 2020.02.x / 2020.11.x
-> as well?
-Yes.
->
-> Committed, thanks.
->
-> --
-> Bye, Peter Korsgaard
-Best Regards,
+ > Is it planned to support friendlyarm nanopi r4s by a defconfig ?
 
-Fabrice
+I don't have a r4s, but patches are always welcome! We do have a
+defconfig for the nanopi-m4, which is afaik quite similar.
+
+-- 
+Bye, Peter Korsgaard
