@@ -1,25 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Feb 2021 19:06:28 +0100
-Subject: [Buildroot] [PATCH 1/1] package/websocketpp: add
- WEBSOCKETPP_CPE_ID_VENDOR
-In-Reply-To: <20210128195458.4161975-1-fontaine.fabrice@gmail.com>
-References: <20210128195458.4161975-1-fontaine.fabrice@gmail.com>
-Message-ID: <CACXmViayeBNce+KjXE6__t890PJqqJPE8y=D0Bfts_xZsVqJ_w@mail.gmail.com>
+Date: Mon, 01 Feb 2021 19:08:14 +0100
+Subject: [Buildroot] [PATCH 1/1] package/luasyslog: needs host-luarocks
+In-Reply-To: <20210127080745.2893492-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 27 Jan 2021 09:07:45 +0100")
+References: <20210127080745.2893492-1-fontaine.fabrice@gmail.com>
+Message-ID: <87zh0nlkz5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Jan 28, 2021 at 9:02 PM Fabrice Fontaine
-<fontaine.fabrice@gmail.com> wrote:
->
-> cpe:2.3:a:zaphoyd:websocketpp is a valid CPE identifier for this
-> package:
->
->   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Azaphoyd%3Awebsocketpp
->
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+
+ > host-luarocks is needed since bump to version 2.2.0 as the package is
+ > now using autotools infrastructure instead of luarocks
+
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/f6a9615e965905bdc0a1e62020e4b27d6653693f
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
 
