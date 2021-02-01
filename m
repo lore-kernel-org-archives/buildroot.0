@@ -1,44 +1,66 @@
-From: Bhattiprolu RaviKumar <ravikumar.bhattiprolu@gmail.com>
-Date: Mon, 1 Feb 2021 18:50:30 +0530
-Subject: [Buildroot] Question on udhcpc script
-In-Reply-To: <87a6sonfgu.fsf@dell.be.48ers.dk>
-References: <CAL2JCb_UdG5-PpWbz3Yd84mSM47pGJHsjyUOn7Tzm6r_=Q4Dkg@mail.gmail.com>
- <87a6sonfgu.fsf@dell.be.48ers.dk>
-Message-ID: <CAL2JCb8RWKzBciDr6mGs3gUy1onKAnm3SQj04Ti3MzBG_wHG-w@mail.gmail.com>
+From: Michael Nosthoff <buildroot@heine.tech>
+Date: Mon, 01 Feb 2021 14:39:34 +0100
+Subject: [Buildroot] 
+ =?utf-8?q?=5BPATCH=5D_package/libgpiod=3A_bump_to_ve?=
+ =?utf-8?q?rsion_1=2E6=2E2?=
+In-Reply-To: <6b1-6017d800-5-32d73800@194734800>
+Message-ID: <39b-60180480-3-547e1400@130070482>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter,
-  The script in yocto seems to be derived from
-package/busybox/udhcpc.script in buildroot. It also had the same
-"wait_for_ipv6_default_route" function and same check.
-regards,
-Ravi
+Bartosz,
 
-On Mon, Feb 1, 2021 at 5:54 PM Peter Korsgaard <peter@korsgaard.com> wrote:
+I just noticed there is another build issue with the 1.6.2 release and I'm trying to get my head around how to best fix it.
 
-> >>>>> "Bhattiprolu" == Bhattiprolu RaviKumar <
-> ravikumar.bhattiprolu at gmail.com> writes:
->
->  >  All,
->  >   We are using busybox to get DHCPv6  address. However, I am bit
-> confused
->  > on the part of the script /etc/udhcpc.d/50default:
->
-> We don't have have such a script in Buildroot? It looks like yocto does
-> though:
->
->
-> https://git.yoctoproject.org/cgit.cgi/poky/commit/?id=763b11d0fd6b804c73f0f645a3025c8f82f5aaf1&context=6
->
-> Please direct yocto questions to yocto.
->
-> --
-> Bye, Peter Korsgaard
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210201/afb928a1/attachment-0001.html>
+When I make a clean build with C++ enabled the Buildroot build fails with this messages:
+
+make[5]: Entering directory '/build/output/build/libgpiod-1.6.2/bindings/cxx/examples'
+/build/output/host/bin/arm-none-linux-gnueabihf-g++ -DHAVE_CONFIG_H -I. -I../../..  -I../../../bindings/cxx/ -I../../../include -Wall -Wextra -g -std=gnu++11 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -D_LARGEFILE_SOURCE -D
+_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -c -o gpiodetectcxx.o gpiodetectcxx.cpp
+/build/output/host/bin/arm-none-linux-gnueabihf-g++ -DHAVE_CONFIG_H -I. -I../../..  -I../../../bindings/cxx/ -I../../../include -Wall -Wextra -g -std=gnu++11 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -D_LARGEFILE_SOURCE -D
+_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -c -o gpiofindcxx.o gpiofindcxx.cpp
+/build/output/host/bin/arm-none-linux-gnueabihf-g++ -DHAVE_CONFIG_H -I. -I../../..  -I../../../bindings/cxx/ -I../../../include -Wall -Wextra -g -std=gnu++11 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -D_LARGEFILE_SOURCE -D
+_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -c -o gpiogetcxx.o gpiogetcxx.cpp
+/build/output/host/bin/arm-none-linux-gnueabihf-g++ -DHAVE_CONFIG_H -I. -I../../..  -I../../../bindings/cxx/ -I../../../include -Wall -Wextra -g -std=gnu++11 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -D_LARGEFILE_SOURCE -D
+_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -c -o gpioinfocxx.o gpioinfocxx.cpp
+/build/output/host/bin/arm-none-linux-gnueabihf-g++ -DHAVE_CONFIG_H -I. -I../../..  -I../../../bindings/cxx/ -I../../../include -Wall -Wextra -g -std=gnu++11 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -D_LARGEFILE_SOURCE -D
+_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -c -o gpiomoncxx.o gpiomoncxx.cpp
+/build/output/host/bin/arm-none-linux-gnueabihf-g++ -DHAVE_CONFIG_H -I. -I../../..  -I../../../bindings/cxx/ -I../../../include -Wall -Wextra -g -std=gnu++11 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -D_LARGEFILE_SOURCE -D
+_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -c -o gpiosetcxx.o gpiosetcxx.cpp
+/bin/bash ../../../libtool  --tag=CXX   --mode=link /build/output/host/bin/arm-none-linux-gnueabihf-g++  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -lgpiodcxx -L../../../bindings/cxx/  -o gpiofindcxx gpiofindcxx.o
+/bin/bash ../../../libtool  --tag=CXX   --mode=link /build/output/host/bin/arm-none-linux-gnueabihf-g++  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -lgpiodcxx -L../../../bindings/cxx/  -o gpiodetectcxx gpiodetectcxx.o
+
+libtool: link: /build/output/host/bin/arm-none-linux-gnueabihf-g++ -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -o gpiofindcxx gpiofindcxx.o  /build/output/build/libgpiod-1.6.2/bindings/cxx/.libs/li
+bgpiodcxx.so -L../../../bindings/cxx/ -Wl,-rpath -Wl,/build/output/build/libgpiod-1.6.2/bindings/cxx/.libs
+/bin/bash ../../../libtool  --tag=CXX   --mode=link /build/output/host/bin/arm-none-linux-gnueabihf-g++  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -lgpiodcxx -L../../../bindings/cxx/  -o gpioinfocxx gpioinfocxx.o
+libtool: link: /build/output/host/bin/arm-none-linux-gnueabihf-g++ -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -o gpiodetectcxx gpiodetectcxx.o  /build/output/build/libgpiod-1.6.2/bindings/cxx/.lib
+s/libgpiodcxx.so -L../../../bindings/cxx/ -Wl,-rpath -Wl,/build/output/build/libgpiod-1.6.2/bindings/cxx/.libs
+/build/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabihf/9.2.1/../../../../arm-none-linux-gnueabihf/bin/ld: /build/output/build/libgpiod-1.6.2/bindings/cxx/.libs/libgpiodcxx.so: undefined reference to `
+gpiod_line_bias'
+/build/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabihf/9.2.1/../../../../arm-none-linux-gnueabihf/bin/ld: /build/output/build/libgpiod-1.6.2/bindings/cxx/.libs/libgpiodcxx.so: undefined reference to `
+gpiod_line_set_direction_output_bulk'
+/build/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabihf/9.2.1/../../../../arm-none-linux-gnueabihf/bin/ld: /build/output/build/libgpiod-1.6.2/bindings/cxx/.libs/libgpiodcxx.so: undefined reference to `
+gpiod_line_set_config_bulk'
+/build/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabihf/9.2.1/../../../../arm-none-linux-gnueabihf/bin/ld: /build/output/build/libgpiod-1.6.2/bindings/cxx/.libs/libgpiodcxx.so: undefined reference to `
+gpiod_line_set_direction_input_bulk'
+/build/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabihf/9.2.1/../../../../arm-none-linux-gnueabihf/bin/ld: /build/output/build/libgpiod-1.6.2/bindings/cxx/.libs/libgpiodcxx.so: undefined reference to `
+gpiod_line_event_read_multiple'
+/build/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabihf/9.2.1/../../../../arm-none-linux-gnueabihf/bin/ld: /build/output/build/libgpiod-1.6.2/bindings/cxx/.libs/libgpiodcxx.so: undefined reference to `
+gpiod_line_set_flags_bulk'
+collect2: error: ld returned 1 exit status
+
+
+When building regularly on a clean Linux system I don't have any troubles. 
+If I build on a Buildroot target which already has some version of libgpiod built it works. (e.g. when bumping the version without make clean).
+So it seems that the build doesn't find the libgpiod.so that was just built inside the build directory. My guess is it has something to do with the libtools workarounds for cross-compiling (My knowledge of autotools/libtool is limited here.).
+
+
+But before I dig deeper into why this fails my question would be: does the bindings/cpp/examples directory really need to be build? In the 1.4.x branch it was not built by default. Now it is changed to a "noinst" target. So it gets build but won't be deployed to the target anyways.
+
+Maybe you have an Idea how this could be easily fixed. My (not so nice) solution for now would be to patch out the examples directory. But this is really a last ressort...
+
+Regards,
+Michael
