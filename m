@@ -1,51 +1,42 @@
-From: Michael Nosthoff <buildroot@heine.tech>
-Date: Mon, 01 Feb 2021 11:29:09 +0100
-Subject: [Buildroot] 
- =?utf-8?q?=5BPATCH=5D_package/libgpiod=3A_bump_to_ve?=
- =?utf-8?q?rsion_1=2E6=2E2?=
-In-Reply-To: <CAMRc=MfcP2OHngNzwM+L3YbmhhcvSGcmuGdau2dH_wG5pgQZqQ@mail.gmail.com>
-Message-ID: <6b1-6017d800-5-32d73800@194734800>
+From: Bhattiprolu RaviKumar <ravikumar.bhattiprolu@gmail.com>
+Date: Mon, 1 Feb 2021 16:00:41 +0530
+Subject: [Buildroot] Question on udhcpc script
+Message-ID: <CAL2JCb_UdG5-PpWbz3Yd84mSM47pGJHsjyUOn7Tzm6r_=Q4Dkg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bartosz,
- 
-On Monday, February 01, 2021 10:55 CET, Bartosz Golaszewski <brgl@bgdev.pl> wrote: 
- 
-> On Mon, Feb 1, 2021 at 10:13 AM Michael Nosthoff <buildroot@heine.tech> wrote:
-> >
+ All,
+  We are using busybox to get DHCPv6  address. However, I am bit confused
+on the part of the script /etc/udhcpc.d/50default:
 
-> > -LIBGPIOD_VERSION = 1.4.5
-> > +# Be careful when bumping versions.
-> > +# Dependency on kernel header versions may change.
-> 
-> You can remove this comment - for v1.6.x I won't change the headers
-> version requirement anymore and vor v2.x we'll start bundling the
-> kernel header with the library. I also don't plan on making any new
-> feature releases for the v1.x series.
-> 
+wait_for_ipv6_default_route() {
+*        printf "Waiting for IPv6 default route to appear"*
+        while [ $IF_WAIT_DELAY -gt 0 ]; do
+*                if [ -z "$(ip -6 route list | grep default)" ]; then*
+                        printf "\n"
+                        return
+                fi
+                sleep 1
+                printf "."
+                : $((IF_WAIT_DELAY -= 1))
+        done
+        printf " timeout!\n"
+}
 
-perfect, then I'll drop that.
+The print says "Waiting for IPv6 default route to appear". However the if
+statement is checking for "$(ip -6 route list | grep default)"to be null
+(-z check) which means default route is not present.
 
-> > +LIBGPIOD_VERSION = 1.6.2
-> >  LIBGPIOD_SOURCE = libgpiod-$(LIBGPIOD_VERSION).tar.xz
-> >  LIBGPIOD_SITE = https://www.kernel.org/pub/software/libs/libgpiod
-> >  LIBGPIOD_LICENSE = LGPL-2.1+
-> >  LIBGPIOD_LICENSE_FILES = COPYING
-> >  LIBGPIOD_INSTALL_STAGING = YES
-> >  LIBGPIOD_DEPENDENCIES = host-pkgconf
-> > +LIBGPIOD_CONF_OPTS = --disable-tests
-> >
-> 
-> Maybe add an option to build them conditionally? Like yocto's ptest
-> distro feature?
-> 
+In our case, after DHCP, default route gets setup and "$(ip -6 route list |
+grep default)"returns an entry starting with default and since check is -z,
+it continues in the loop and finally prints "timeout".
 
-I'm not sure if this fits into buildroot's scope. What would be the benefit for the user? Maybe Thomas has an opinion on that?
-From the dependencies I see we currently don't have catch2 in BR. So this might be the showstopper atm.
-
-Regards,
-Michael
+I am confused here. Am I missing something here?
+regards,
+Ravi
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210201/a7aa2cbc/attachment-0001.html>
