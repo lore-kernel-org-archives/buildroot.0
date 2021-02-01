@@ -1,76 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 01 Feb 2021 18:28:50 +0100
-Subject: [Buildroot] [PATCH 5/5] package/musl: bump to version 1.2.2
-In-Reply-To: <20210131223304.1857838-5-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Sun, 31 Jan 2021 23:33:03 +0100")
-References: <20210131223304.1857838-1-thomas.petazzoni@bootlin.com>
- <20210131223304.1857838-5-thomas.petazzoni@bootlin.com>
-Message-ID: <877dnrn1d9.fsf@dell.be.48ers.dk>
+Date: Mon, 1 Feb 2021 18:21:00 +0100
+Subject: [Buildroot] [git commit] package/libgpiod: bump to version 1.6.2
+Message-ID: <20210201170854.1A1ED864F4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=32ac09f01f367780518df7c430ab89fbe112c1d4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Drop 0003-rewrite-wcsnrtombs-to-fix-buffer-overflow-and-other-.patch
- > as it is a backport of upstream commit
- > 3ab2a4e02682df1382955071919d8aa3c3ec40d4 which is part of the 1.2.2
- > release.
+Version 1.6.2 now builds against headers >= 4.8.x. (Previously 5.5 was
+required). Functionality might still be limited depending on the kernel version.
 
- > 1.2.2 release notes
+* altered note on updating
+* disable building of tests
 
- > major changes:
- > - child restrictions lifted after fork of multithreaded parent
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libgpiod/libgpiod.hash | 2 +-
+ package/libgpiod/libgpiod.mk   | 7 ++++---
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
- > new features:
- > - _Fork function (POSIX-future)
- > - reallocarray function (extension from OpenBSD, now widespread)
- > - gettid function (kernel tid as supported concept)
- > - SIGEV_THREAD_ID sigevent API (Linux extension)
- > - tcgetwinsize and tcsetwinsize functions (POSIX-future)
-
- > performance:
- > - faster software sqrt on archs without native sqrt instruction
-
- > compatibility:
- > - realpath no longer depends on procfs availability & accuracy
- > - time zone parser now always prefers 64-bit tables if present
- > - crypt_blowfish now supports $2b$ prefix
- > - res_query now reports errors via h_errno
- > - set*id and setrlimit are now safe in vforked/cloned child
- > - setgroups now applies to all threads
- > - dlopen debugger notification is improved, should work with lldb
- > - setrlimit no longer needs __synccall broadcast on linux 2.6.36+
- > - faccessat with AT_EACCESS no longer needs child process on linux 5.8+
-
- > bugs fixed:
- > - buffer overflow and infinite loop errors in wcsnrtombs (CVE-2020-28928)
- > - sem_close unmapped still-referenced semaphores
- > - fork of process with active aio could deadlock or crash paren
- > - pthread_cond_wait was broken with priority-inheritance mutex
- > - getgrouplist wrongly failed when nscd reported an empty list
- > - abort could leak modified SIGABRT disposition to fork or posix_spawn child
- > - regression with mallocng: malloc_usable_size(0) crashed
- > - readlink wrongly gave EINVAL on zero length dest buffer
- > - sqrtl was severely inaccurate (not correctly rounded) on ldquad archs
- > - assert failure wrongly flushed stdio (possible deadlock)
- > - MUSL_LOCPATH search was broken with multiple components
- > - missing newline in herror output
- > - possible deadlock in pthread_exit with pshared mutex or barrier usage
- > - pthread_mutexattr_getprotocol didn't read back protocol
- > - v4l2 ioctl translation for pre-time64 kernels didn't work
-
- > arch-specific bugs fixed:
- > - x86_64 longjmp failed to handle 0 argument reliably
- > - i386 __set_thread_area fallback for pre-2.6 kernels didn't work
- > - missing O_LARGEFILE macro value on x86_64, x32, mips64
- > - unpredictable s390x breakage from failure to preserve call-saved registers
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libgpiod/libgpiod.hash b/package/libgpiod/libgpiod.hash
+index 0ea15869b0..7b691aaf5e 100644
+--- a/package/libgpiod/libgpiod.hash
++++ b/package/libgpiod/libgpiod.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/software/libs/libgpiod/sha256sums.asc
+-sha256  a041b06907c956dd1c77836cccf4d392af29b9fe09c8ad18449a6da707b5ba2d  libgpiod-1.4.5.tar.xz
++sha256  c601e71846f5ab140c83bc757fdd62a4fda24a9cee39cc5e99c96ec2bf1b06a9  libgpiod-1.6.2.tar.xz
+ # Hash for license file
+ sha256  ce64d5f7b49ea6d80fdb6d4cdee6839d1a94274f7493dc797c3b55b65ec8e9ed  COPYING
+diff --git a/package/libgpiod/libgpiod.mk b/package/libgpiod/libgpiod.mk
+index 83d5abb002..72f8ae772c 100644
+--- a/package/libgpiod/libgpiod.mk
++++ b/package/libgpiod/libgpiod.mk
+@@ -4,15 +4,16 @@
+ #
+ ################################################################################
+ 
+-# be careful when bumping versions, newer branches (e.g. >= 1.6)
+-# depend on pretty recent kernel headers
+-LIBGPIOD_VERSION = 1.4.5
++# Be careful when bumping versions.
++# Dependency on kernel header versions may change.
++LIBGPIOD_VERSION = 1.6.2
+ LIBGPIOD_SOURCE = libgpiod-$(LIBGPIOD_VERSION).tar.xz
+ LIBGPIOD_SITE = https://www.kernel.org/pub/software/libs/libgpiod
+ LIBGPIOD_LICENSE = LGPL-2.1+
+ LIBGPIOD_LICENSE_FILES = COPYING
+ LIBGPIOD_INSTALL_STAGING = YES
+ LIBGPIOD_DEPENDENCIES = host-pkgconf
++LIBGPIOD_CONF_OPTS = --disable-tests
+ 
+ ifeq ($(BR2_PACKAGE_LIBGPIOD_TOOLS),y)
+ LIBGPIOD_CONF_OPTS += --enable-tools
