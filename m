@@ -1,54 +1,46 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon,  1 Feb 2021 18:48:18 +0100
-Subject: [Buildroot] [PATCH 1/1] package/pugixml: bump to version 1.11.4
-Message-ID: <20210201174818.936752-1-fontaine.fabrice@gmail.com>
+Date: Mon,  1 Feb 2021 18:51:12 +0100
+Subject: [Buildroot] [PATCH 1/2] Revert "package/stress-ng: disable libbsd
+ on static build"
+Message-ID: <20210201175113.937333-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Use LICENSE.md which has been added in the release tarball since
-  version 1.11 and
-  https://github.com/zeux/pugixml/commit/ccb63a91865b59d3a4c1dde61fecf12ec085c089
-- Fix a build failure with gerbera >= 1.5.0 when building pugixml in
-  header-only mode
-
-Fixes:
- - http://autobuild.buildroot.org/results/9c1919bacd23da0505a4eb828a806997a23b640f
+This reverts commit f2d6c5ff9092aa7735c7a739d15180910ae734df.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/pugixml/pugixml.hash | 4 ++--
- package/pugixml/pugixml.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/stress-ng/stress-ng.mk | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/package/pugixml/pugixml.hash b/package/pugixml/pugixml.hash
-index 79ae75e83b..5c629ac66f 100644
---- a/package/pugixml/pugixml.hash
-+++ b/package/pugixml/pugixml.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  55f399fbb470942410d348584dc953bcaec926415d3462f471ef350f29b5870a  pugixml-1.10.tar.gz
--sha256  16582559c91ecf831d6289d472a903032e7d7994a86521c5c39513568d6ad208  readme.txt
-+sha256  8ddf57b65fb860416979a3f0640c2ad45ddddbbafa82508ef0a0af3ce7061716  pugixml-1.11.4.tar.gz
-+sha256  ee495f34aeff0c578a99f3350a2050d4e5860d27b2004c03c384a594fa2b0a7a  LICENSE.md
-diff --git a/package/pugixml/pugixml.mk b/package/pugixml/pugixml.mk
-index 800a3836ce..5d7fc63017 100644
---- a/package/pugixml/pugixml.mk
-+++ b/package/pugixml/pugixml.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
+diff --git a/package/stress-ng/stress-ng.mk b/package/stress-ng/stress-ng.mk
+index c26206cd2e..53d7b7e5b7 100644
+--- a/package/stress-ng/stress-ng.mk
++++ b/package/stress-ng/stress-ng.mk
+@@ -10,11 +10,8 @@ STRESS_NG_SITE = https://kernel.ubuntu.com/~cking/tarballs/stress-ng
+ STRESS_NG_LICENSE = GPL-2.0+
+ STRESS_NG_LICENSE_FILES = COPYING
  
--PUGIXML_VERSION = 1.10
-+PUGIXML_VERSION = 1.11.4
- PUGIXML_SITE = http://github.com/zeux/pugixml/releases/download/v$(PUGIXML_VERSION)
- PUGIXML_LICENSE = MIT
--PUGIXML_LICENSE_FILES = readme.txt
-+PUGIXML_LICENSE_FILES = LICENSE.md
- PUGIXML_INSTALL_STAGING = YES
+-ifeq ($(BR2_PACKAGE_LIBBSD):$(BR2_STATIC_LIBS),y:)
++ifeq ($(BR2_PACKAGE_LIBBSD),y)
+ STRESS_NG_DEPENDENCIES += libbsd
+-else
+-STRESS_NG_MAKE_OPTS += HAVE_LIB_BSD=0 HAVE_WCSLCAT=0 \
+-	HAVE_WCSLCPY=0 HAVE_SETPROCTITLE=0
+ endif
  
- # Pugixml will automatically enable 'long long' support on C++11 compilers,
+ ifeq ($(BR2_PACKAGE_KEYUTILS),y)
+@@ -22,7 +19,7 @@ STRESS_NG_DEPENDENCIES += keyutils
+ endif
+ 
+ define STRESS_NG_BUILD_CMDS
+-	$(TARGET_CONFIGURE_OPTS) $(MAKE) $(STRESS_NG_MAKE_OPTS) -C $(@D)
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
+ endef
+ 
+ # Don't use make install otherwise stress-ng will be rebuild without
 -- 
 2.29.2
