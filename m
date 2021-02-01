@@ -1,71 +1,59 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon,  1 Feb 2021 08:41:01 +0100
-Subject: [Buildroot] [PATCH v2,1/1] package/mpd: fix build of GenParseName
-Message-ID: <20210201074101.457193-1-fontaine.fabrice@gmail.com>
+Date: Mon, 1 Feb 2021 08:57:30 +0100
+Subject: [Buildroot] [PATCH 1/1] package/pugixml: drop
+ BR2_PACKAGE_PUGIXML_HEADER_ONLY
+In-Reply-To: <20210131233021.605e67b0@windsurf.home>
+References: <20210128172935.4138671-1-fontaine.fabrice@gmail.com>
+ <20210131233021.605e67b0@windsurf.home>
+Message-ID: <CAPi7W814FRkN6PY21kChgSVhCv3oLidX3hpzj-5DADxDXuVr3Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix build of GenParseName which has been added in version 0.22:
-https://github.com/MusicPlayerDaemon/MPD/commit/fa45a8adfa44f6bc815ae7428770112c15c76d73
+Hi Thomas,
 
-Fixes:
- - http://autobuild.buildroot.org/results/871e1362c44e5b68a149e6a5dd3caf99ea0d904a
+Le dim. 31 janv. 2021 ? 23:30, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> a ?crit :
+>
+> On Thu, 28 Jan 2021 18:29:35 +0100
+> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+>
+> > Drop BR2_PACKAGE_PUGIXML_HEADER_ONLY which raises a build failure with
+> > gerbera (the only package that is using pugixml). Indeed, there is two
+> > issues:
+> >  - gerbera is not aware that it must define PUGIXML_HEADER_ONLY
+> >  - pugixml.cpp is not available in the staging directory so gerbera
+> >    can't use it
+> >
+> > It should be noted that pugixml continues to install a (non working)
+> > library even when PUGIXML_HEADER_ONLY is enabled resulting in a build
+> > failure at linking stage instead of configure step:
+> >
+> > [100%] Linking CXX executable gerbera
+> > /home/buildroot/autobuild/run/instance-2/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-musleabihf/8.3.0/../../../../arm-buildroot-linux-musleabihf/bin/ld: liblibgerbera.a(config_manager.cc.o): in function `ConfigManager::getElement(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) const':
+> > config_manager.cc:(.text+0x4d8): undefined reference to `pugi::xml_document::document_element() const'
+>
+> This looks like an upstream bug in pugixml, isn't it ? We're using
+> pugixml 1.10, but a 1.11 has been released since then. Have you tried
+> that ? Did you ask upstream pugixml about this issue ?
+It also fails with 1.11. Following your advice, I found that this
+issue has already been reported:
+https://github.com/zeux/pugixml/issues/200
+The answer was: "wontfix" with "Since I don't maintain pugixml
+packages and the packaging
+for Ubuntu seems appropriate (even though it doesn't support
+header-only builds, if you
+need them you should bundle pugixml with your app), I'm closing this."
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+Best Regards,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2 (after review of Thomas Petazzoni):
- - Use link_language instead of linking with -lstdc++
-
- ...meson.build-fix-GenParseName-linking.patch | 38 +++++++++++++++++++
- 1 file changed, 38 insertions(+)
- create mode 100644 package/mpd/0002-src-tag-meson.build-fix-GenParseName-linking.patch
-
-diff --git a/package/mpd/0002-src-tag-meson.build-fix-GenParseName-linking.patch b/package/mpd/0002-src-tag-meson.build-fix-GenParseName-linking.patch
-new file mode 100644
-index 0000000000..e120b3e4ea
---- /dev/null
-+++ b/package/mpd/0002-src-tag-meson.build-fix-GenParseName-linking.patch
-@@ -0,0 +1,38 @@
-+From 4c37d0b316a15213381bd7e07c5dee7526471fc8 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 1 Feb 2021 08:10:45 +0100
-+Subject: [PATCH] src/tag/meson.build: fix GenParseName linking
-+
-+Set link_language to cpp for GenParseName to avoid the following build
-+failure due to gcc being used to link a C and C++ source file:
-+
-+FAILED: src/tag/GenParseName
-+/usr/bin/gcc  -o src/tag/GenParseName src/tag/GenParseName.p/GenParseName.cxx.o src/tag/GenParseName.p/Names.c.o -Wl,--as-needed -Wl,--no-undefined -Wl,-O1
-+/usr/bin/ld: src/tag/GenParseName.p/GenParseName.cxx.o: in function `std::_Rb_tree<std::basic_string_view<char, std::char_traits<char> >, std::pair<std::basic_string_view<char, std::char_traits<char> > const, TagType>, std::_Select1st<std::pair<std::basic_string_view<char, std::char_traits<char> > const, TagType> >, std::less<std::basic_string_view<char, std::char_traits<char> > >, std::allocator<std::pair<std::basic_string_view<char, std::char_traits<char> > const, TagType> > >::_M_erase(std::_Rb_tree_node<std::pair<std::basic_string_view<char, std::char_traits<char> > const, TagType> >*)':
-+GenParseName.cxx:
-+(.text._ZNSt8_Rb_treeISt17basic_string_viewIcSt11char_traitsIcEESt4pairIKS3_7TagTypeESt10_Select1stIS7_ESt4lessIS3_ESaIS7_EE8_M_eraseEPSt13_Rb_tree_nodeIS7_E[_ZNSt8_Rb_treeISt17basic_string_viewIcSt11char_traitsIcEESt4pairIKS3_7TagTypeESt10_Select1stIS7_ESt4lessIS3_ESaIS7_EE8_M_eraseEPSt13_Rb_tree_nodeIS7_E]+0x23): undefined reference to `operator delete(void*)'
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/871e1362c44e5b68a149e6a5dd3caf99ea0d904a
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/MusicPlayerDaemon/MPD/pull/1068]
-+---
-+ src/tag/meson.build | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/tag/meson.build b/src/tag/meson.build
-+index 064eada18..4fda35e52 100644
-+--- a/src/tag/meson.build
-++++ b/src/tag/meson.build
-+@@ -2,6 +2,7 @@ generate_parse_name = executable(
-+   'GenParseName',
-+   'GenParseName.cxx',
-+   'Names.c',
-++  link_language: 'cpp',
-+   native: true,
-+ )
-+ 
-+-- 
-+2.29.2
-+
--- 
-2.29.2
+Fabrice
