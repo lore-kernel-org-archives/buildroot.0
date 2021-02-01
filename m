@@ -1,11 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 01 Feb 2021 11:08:52 +0100
-Subject: [Buildroot] [PATCH 1/3] package/intel-mediadriver: fix build
- with gcc 10
-In-Reply-To: <20210131133200.3976386-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 31 Jan 2021 14:31:58 +0100")
+Date: Mon, 01 Feb 2021 11:08:57 +0100
+Subject: [Buildroot] [PATCH 2/3] package/intel-mediadriver: drop
+ unrecognized options
+In-Reply-To: <20210131133200.3976386-2-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 31 Jan 2021 14:31:59 +0100")
 References: <20210131133200.3976386-1-fontaine.fabrice@gmail.com>
-Message-ID: <87zh0onlqj.fsf@dell.be.48ers.dk>
+ <20210131133200.3976386-2-fontaine.fabrice@gmail.com>
+Message-ID: <87v9bcnlqe.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,12 +15,15 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/d5ab36026a66a4f371fb6ef6c9ecf43e9617d119
+ > BUILD_ALONG_WITH_CMRTLIB has been dropped since version 18.2.0 and
+ > https://github.com/intel/media-driver/commit/c3e13c175d12790ab70c4de3521e47f62be780de
+
+ > RUN_TEST_SUITE is also unrecognized (only MEDIA_RUN_TEST_SUITE is
+ > recognized)
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Committed to 2020.11.x, thanks.
+Committed to 2020.02.x and 2020.11.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
