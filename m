@@ -1,70 +1,48 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 1 Feb 2021 18:34:40 +0100
-Subject: [Buildroot] [PATCH 1/1] package/pugixml: drop
- BR2_PACKAGE_PUGIXML_HEADER_ONLY
-In-Reply-To: <CAPi7W814FRkN6PY21kChgSVhCv3oLidX3hpzj-5DADxDXuVr3Q@mail.gmail.com>
-References: <20210128172935.4138671-1-fontaine.fabrice@gmail.com>
- <20210131233021.605e67b0@windsurf.home>
- <CAPi7W814FRkN6PY21kChgSVhCv3oLidX3hpzj-5DADxDXuVr3Q@mail.gmail.com>
-Message-ID: <CAPi7W82mgrDGJvSdrJQygo9o0zuAsjk2RHHXR0YTWR52VTjsJQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon,  1 Feb 2021 18:48:24 +0100
+Subject: [Buildroot] [PATCH] package/wireguard-linux-compat: bump version to
+ 1.0.20210124
+Message-ID: <20210201174824.14410-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le lun. 1 f?vr. 2021 ? 08:57, Fabrice Fontaine
-<fontaine.fabrice@gmail.com> a ?crit :
->
-> Hi Thomas,
->
-> Le dim. 31 janv. 2021 ? 23:30, Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> a ?crit :
-> >
-> > On Thu, 28 Jan 2021 18:29:35 +0100
-> > Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
-> >
-> > > Drop BR2_PACKAGE_PUGIXML_HEADER_ONLY which raises a build failure with
-> > > gerbera (the only package that is using pugixml). Indeed, there is two
-> > > issues:
-> > >  - gerbera is not aware that it must define PUGIXML_HEADER_ONLY
-> > >  - pugixml.cpp is not available in the staging directory so gerbera
-> > >    can't use it
-> > >
-> > > It should be noted that pugixml continues to install a (non working)
-> > > library even when PUGIXML_HEADER_ONLY is enabled resulting in a build
-> > > failure at linking stage instead of configure step:
-> > >
-> > > [100%] Linking CXX executable gerbera
-> > > /home/buildroot/autobuild/run/instance-2/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-musleabihf/8.3.0/../../../../arm-buildroot-linux-musleabihf/bin/ld: liblibgerbera.a(config_manager.cc.o): in function `ConfigManager::getElement(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) const':
-> > > config_manager.cc:(.text+0x4d8): undefined reference to `pugi::xml_document::document_element() const'
-> >
-> > This looks like an upstream bug in pugixml, isn't it ? We're using
-> > pugixml 1.10, but a 1.11 has been released since then. Have you tried
-> > that ? Did you ask upstream pugixml about this issue ?
-> It also fails with 1.11. Following your advice, I found that this
-> issue has already been reported:
-> https://github.com/zeux/pugixml/issues/200
-> The answer was: "wontfix" with "Since I don't maintain pugixml
-> packages and the packaging
-> for Ubuntu seems appropriate (even though it doesn't support
-> header-only builds, if you
-> need them you should bundle pugixml with your app), I'm closing this."
-Finally, after more investigation, it seems that the latest version of
-pugixml installs a working library even if the option is still
-"broken".
-I'll send a v2.
-> >
-> > Thanks!
-> >
-> > Thomas
-> > --
-> > Thomas Petazzoni, CTO, Bootlin
-> > Embedded Linux and Kernel engineering
-> > https://bootlin.com
-> Best Regards,
->
-> Fabrice
-Best Regards,
+Fixes a build issue with recent 1.14.x stable kernels.  For details, see the
+announcement:
 
-Fabrice
+https://lists.zx2c4.com/pipermail/wireguard/2021-January/006349.html
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/wireguard-linux-compat/wireguard-linux-compat.hash | 4 ++--
+ package/wireguard-linux-compat/wireguard-linux-compat.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.hash b/package/wireguard-linux-compat/wireguard-linux-compat.hash
+index 194c798570..f4f94cfd2e 100644
+--- a/package/wireguard-linux-compat/wireguard-linux-compat.hash
++++ b/package/wireguard-linux-compat/wireguard-linux-compat.hash
+@@ -1,4 +1,4 @@
+-# https://lists.zx2c4.com/pipermail/wireguard/2020-December/006210.html
+-sha256  6e5289a8b602eaaf1383aebefcbc41b8ad2721269055858b150363076c1c2132  wireguard-linux-compat-1.0.20201221.tar.xz
++# https://lists.zx2c4.com/pipermail/wireguard/2021-January/006349.html
++sha256  dac6e68cd4c3db441499850dfa8a70706384a3295f37fda1b839a50b79faef54  wireguard-linux-compat-1.0.20210124.tar.xz
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.mk b/package/wireguard-linux-compat/wireguard-linux-compat.mk
+index ef21e2e114..2f36ec8bfb 100644
+--- a/package/wireguard-linux-compat/wireguard-linux-compat.mk
++++ b/package/wireguard-linux-compat/wireguard-linux-compat.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIREGUARD_LINUX_COMPAT_VERSION = 1.0.20201221
++WIREGUARD_LINUX_COMPAT_VERSION = 1.0.20210124
+ WIREGUARD_LINUX_COMPAT_SITE = https://git.zx2c4.com/wireguard-linux-compat/snapshot
+ WIREGUARD_LINUX_COMPAT_SOURCE = wireguard-linux-compat-$(WIREGUARD_LINUX_COMPAT_VERSION).tar.xz
+ WIREGUARD_LINUX_COMPAT_LICENSE = GPL-2.0
+-- 
+2.20.1
