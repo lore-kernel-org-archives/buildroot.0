@@ -1,50 +1,1068 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Feb 2021 18:26:48 +0100
-Subject: [Buildroot] [git commit] package/binutils: switch to 2.35.x as the
- default version
-Message-ID: <20210201170854.624088104C@busybox.osuosl.org>
+Date: Mon, 1 Feb 2021 18:27:03 +0100
+Subject: [Buildroot] [git commit] package/binutils: drop 2.33.x series
+Message-ID: <20210201170854.72BF38104C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eb2143dcecfe67290808f2223d90a7b20cc47c2e
+commit: https://git.buildroot.net/buildroot/commit/?id=ade5f503aef09a0758b99f2b6bbc90920c1e4d97
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Now that 2.36 has been released, let's use 2.35.x as the default
-binutils version.
+Now that 2.36.x has been added, that 2.35.x is the default version,
+drop support for 2.33.x.
+
+Note that we keep binutils 2.32.x as it is the latest version that
+works for FLAT binaries (used on noMMU platforms).
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/binutils/Config.in.host | 2 +-
- package/binutils/binutils.mk    | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ Config.in.legacy                                   |   7 +
+ package/binutils/2.33.1/0001-sh-conf.patch         |  48 ---
+ .../2.33.1/0002-poison-system-directories.patch    | 306 ---------------
+ .../2.33.1/0004-bfd-xtensa-fix-PR-ld-25630.patch   |  37 --
+ .../2.33.1/0005-xtensa-fix-PR-ld-25861.patch       | 432 ---------------------
+ ...fix-XTENSA_NDIFF-handling-for-PR-ld-25861.patch | 128 ------
+ package/binutils/Config.in.host                    |   8 -
+ package/binutils/binutils.hash                     |   1 -
+ 8 files changed, 7 insertions(+), 960 deletions(-)
 
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 2bf39d7175..18f9bc5478 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,13 @@ endif
+ 
+ comment "Legacy options removed in 2021.02"
+ 
++config BR2_BINUTILS_VERSION_2_33_X
++	bool "binutils 2.33.x has been removed"
++	select BR2_LEGACY
++	help
++	  binutils 2.33.x has been removed, use a newer version.
++
++
+ config BR2_PACKAGE_LIBUPNP18
+ 	bool "libupnp18 package removed"
+ 	select BR2_LEGACY
+diff --git a/package/binutils/2.33.1/0001-sh-conf.patch b/package/binutils/2.33.1/0001-sh-conf.patch
+deleted file mode 100644
+index 035100db82..0000000000
+--- a/package/binutils/2.33.1/0001-sh-conf.patch
++++ /dev/null
+@@ -1,48 +0,0 @@
+-From 3220c7e65ccfe41eceaaa6f1707f7f5775d9a4b0 Mon Sep 17 00:00:00 2001
+-From: Romain Naour <romain.naour@gmail.com>
+-Date: Fri, 25 Dec 2015 11:38:13 +0100
+-Subject: [PATCH] sh-conf
+-
+-Likewise, binutils has no idea about any of these new targets either, so we
+-fix that up too.. now we're able to actually build a real toolchain for
+-sh2a_nofpu- and other more ineptly named toolchains (and yes, there are more
+-inept targets than that one, really. Go look, I promise).
+-
+-[Romain: rebase on top of 2.32]
+-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+-[Thomas: rebase on top of 2.29, in which sh64 support was removed.]
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- configure    | 2 +-
+- configure.ac | 2 +-
+- 2 files changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/configure b/configure
+-index 6a9719f6091..796641b6aa3 100755
+---- a/configure
+-+++ b/configure
+-@@ -3865,7 +3865,7 @@ case "${target}" in
+-   nvptx*-*-*)
+-     noconfigdirs="$noconfigdirs target-libssp target-libstdc++-v3 target-libobjc"
+-     ;;
+--  sh-*-*)
+-+  sh*-*-*)
+-     case "${target}" in
+-       sh*-*-elf)
+-          ;;
+-diff --git a/configure.ac b/configure.ac
+-index 7433badc217..dce082fb58e 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -1158,7 +1158,7 @@ case "${target}" in
+-   nvptx*-*-*)
+-     noconfigdirs="$noconfigdirs target-libssp target-libstdc++-v3 target-libobjc"
+-     ;;
+--  sh-*-*)
+-+  sh*-*-*)
+-     case "${target}" in
+-       sh*-*-elf)
+-          ;;
+--- 
+-2.23.0
+-
+diff --git a/package/binutils/2.33.1/0002-poison-system-directories.patch b/package/binutils/2.33.1/0002-poison-system-directories.patch
+deleted file mode 100644
+index 9eafcbe18c..0000000000
+--- a/package/binutils/2.33.1/0002-poison-system-directories.patch
++++ /dev/null
+@@ -1,306 +0,0 @@
+-From 276cba370773e8f12dc8b186b71827a01d5c9097 Mon Sep 17 00:00:00 2001
+-From: Romain Naour <romain.naour@gmail.com>
+-Date: Fri, 25 Dec 2015 11:45:38 +0100
+-Subject: [PATCH] poison-system-directories
+-
+-Patch adapted to binutils 2.23.2 and extended to use
+-BR_COMPILER_PARANOID_UNSAFE_PATH by Thomas Petazzoni.
+-
+-[Romain: rebase on top of 2.33.1]
+-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+-[Gustavo: adapt to binutils 2.25]
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-
+-Upstream-Status: Inappropriate [distribution: codesourcery]
+-
+-Patch originally created by Mark Hatle, forward-ported to
+-binutils 2.21 by Scott Garman.
+-
+-purpose:  warn for uses of system directories when cross linking
+-
+-Code Merged from Sourcery G++ binutils 2.19 - 4.4-277
+-
+-2008-07-02  Joseph Myers  <joseph@codesourcery.com>
+-
+-    ld/
+-    * ld.h (args_type): Add error_poison_system_directories.
+-    * ld.texinfo (--error-poison-system-directories): Document.
+-    * ldfile.c (ldfile_add_library_path): Check
+-    command_line.error_poison_system_directories.
+-    * ldmain.c (main): Initialize
+-    command_line.error_poison_system_directories.
+-    * lexsup.c (enum option_values): Add
+-    OPTION_ERROR_POISON_SYSTEM_DIRECTORIES.
+-    (ld_options): Add --error-poison-system-directories.
+-    (parse_args): Handle new option.
+-
+-2007-06-13  Joseph Myers  <joseph@codesourcery.com>
+-
+-    ld/
+-    * config.in: Regenerate.
+-    * ld.h (args_type): Add poison_system_directories.
+-    * ld.texinfo (--no-poison-system-directories): Document.
+-    * ldfile.c (ldfile_add_library_path): Check
+-    command_line.poison_system_directories.
+-    * ldmain.c (main): Initialize
+-    command_line.poison_system_directories.
+-    * lexsup.c (enum option_values): Add
+-    OPTION_NO_POISON_SYSTEM_DIRECTORIES.
+-    (ld_options): Add --no-poison-system-directories.
+-    (parse_args): Handle new option.
+-
+-2007-04-20  Joseph Myers  <joseph@codesourcery.com>
+-
+-    Merge from Sourcery G++ binutils 2.17:
+-
+-    2007-03-20  Joseph Myers  <joseph@codesourcery.com>
+-    Based on patch by Mark Hatle <mark.hatle@windriver.com>.
+-    ld/
+-    * configure.ac (--enable-poison-system-directories): New option.
+-    * configure, config.in: Regenerate.
+-    * ldfile.c (ldfile_add_library_path): If
+-    ENABLE_POISON_SYSTEM_DIRECTORIES defined, warn for use of /lib,
+-    /usr/lib, /usr/local/lib or /usr/X11R6/lib.
+-
+-Signed-off-by: Mark Hatle <mark.hatle@windriver.com>
+-Signed-off-by: Scott Garman <scott.a.garman@intel.com>
+----
+- ld/config.in    |  3 +++
+- ld/configure    | 14 ++++++++++++++
+- ld/configure.ac | 10 ++++++++++
+- ld/ld.h         |  8 ++++++++
+- ld/ld.texi      | 12 ++++++++++++
+- ld/ldfile.c     | 17 +++++++++++++++++
+- ld/ldlex.h      |  2 ++
+- ld/ldmain.c     |  2 ++
+- ld/lexsup.c     | 21 +++++++++++++++++++++
+- 9 files changed, 89 insertions(+)
+-
+-diff --git a/ld/config.in b/ld/config.in
+-index d93c9b08300..5da2742beac 100644
+---- a/ld/config.in
+-+++ b/ld/config.in
+-@@ -31,6 +31,9 @@
+-    language is requested. */
+- #undef ENABLE_NLS
+- 
+-+/* Define to warn for use of native system library directories */
+-+#undef ENABLE_POISON_SYSTEM_DIRECTORIES
+-+
+- /* Additional extension a shared object might have. */
+- #undef EXTRA_SHLIB_EXTENSION
+- 
+-diff --git a/ld/configure b/ld/configure
+-index b532ef94fa2..65d12cbf883 100755
+---- a/ld/configure
+-+++ b/ld/configure
+-@@ -823,6 +823,7 @@ with_lib_path
+- enable_targets
+- enable_64_bit_bfd
+- with_sysroot
+-+enable_poison_system_directories
+- enable_gold
+- enable_got
+- enable_compressed_debug_sections
+-@@ -1487,6 +1488,8 @@ Optional Features:
+-   --disable-largefile     omit support for large files
+-   --enable-targets        alternative target configurations
+-   --enable-64-bit-bfd     64-bit support (on hosts with narrower word sizes)
+-+  --enable-poison-system-directories
+-+                          warn for use of native system library directories
+-   --enable-gold[=ARG]     build gold [ARG={default,yes,no}]
+-   --enable-got=<type>     GOT handling scheme (target, single, negative,
+-                           multigot)
+-@@ -15804,7 +15807,18 @@ else
+- fi
+- 
+- 
+-+# Check whether --enable-poison-system-directories was given.
+-+if test "${enable_poison_system_directories+set}" = set; then :
+-+  enableval=$enable_poison_system_directories;
+-+else
+-+  enable_poison_system_directories=no
+-+fi
+-+
+-+if test "x${enable_poison_system_directories}" = "xyes"; then
+- 
+-+$as_echo "#define ENABLE_POISON_SYSTEM_DIRECTORIES 1" >>confdefs.h
+-+
+-+fi
+- 
+- # Check whether --enable-got was given.
+- if test "${enable_got+set}" = set; then :
+-diff --git a/ld/configure.ac b/ld/configure.ac
+-index ee62d10ac58..bc3e14e729d 100644
+---- a/ld/configure.ac
+-+++ b/ld/configure.ac
+-@@ -94,6 +94,16 @@ AC_SUBST(use_sysroot)
+- AC_SUBST(TARGET_SYSTEM_ROOT)
+- AC_SUBST(TARGET_SYSTEM_ROOT_DEFINE)
+- 
+-+AC_ARG_ENABLE([poison-system-directories],
+-+         AS_HELP_STRING([--enable-poison-system-directories],
+-+                [warn for use of native system library directories]),,
+-+         [enable_poison_system_directories=no])
+-+if test "x${enable_poison_system_directories}" = "xyes"; then
+-+  AC_DEFINE([ENABLE_POISON_SYSTEM_DIRECTORIES],
+-+       [1],
+-+       [Define to warn for use of native system library directories])
+-+fi
+-+
+- dnl Use --enable-gold to decide if this linker should be the default.
+- dnl "install_as_default" is set to false if gold is the default linker.
+- dnl "installed_linker" is the installed BFD linker name.
+-diff --git a/ld/ld.h b/ld/ld.h
+-index 55078a9637b..511e9bc34b7 100644
+---- a/ld/ld.h
+-+++ b/ld/ld.h
+-@@ -180,6 +180,14 @@ typedef struct
+-      in the linker script.  */
+-   bfd_boolean force_group_allocation;
+- 
+-+  /* If TRUE (the default) warn for uses of system directories when
+-+     cross linking.  */
+-+  bfd_boolean poison_system_directories;
+-+
+-+  /* If TRUE (default FALSE) give an error for uses of system
+-+     directories when cross linking instead of a warning.  */
+-+  bfd_boolean error_poison_system_directories;
+-+
+-   /* Big or little endian as set on command line.  */
+-   enum endian_enum endian;
+- 
+-diff --git a/ld/ld.texi b/ld/ld.texi
+-index b3447050ed2..efd50edd85c 100644
+---- a/ld/ld.texi
+-+++ b/ld/ld.texi
+-@@ -2557,6 +2557,18 @@ string identifying the original linked file does not change.
+- 
+- Passing @code{none} for @var{style} disables the setting from any
+- @code{--build-id} options earlier on the command line.
+-+
+-+ at kindex --no-poison-system-directories
+-+ at item --no-poison-system-directories
+-+Do not warn for @option{-L} options using system directories such as
+-+ at file{/usr/lib} when cross linking.  This option is intended for use
+-+in chroot environments when such directories contain the correct
+-+libraries for the target system rather than the host.
+-+
+-+ at kindex --error-poison-system-directories
+-+ at item --error-poison-system-directories
+-+Give an error instead of a warning for @option{-L} options using
+-+system directories when cross linking.
+- @end table
+- 
+- @c man end
+-diff --git a/ld/ldfile.c b/ld/ldfile.c
+-index 7f60319390e..0bcc06db964 100644
+---- a/ld/ldfile.c
+-+++ b/ld/ldfile.c
+-@@ -116,6 +116,23 @@ ldfile_add_library_path (const char *name, bfd_boolean cmdline)
+-     new_dirs->name = concat (ld_sysroot, name + strlen ("$SYSROOT"), (const char *) NULL);
+-   else
+-     new_dirs->name = xstrdup (name);
+-+
+-+#ifdef ENABLE_POISON_SYSTEM_DIRECTORIES
+-+  if (command_line.poison_system_directories
+-+  && ((!strncmp (name, "/lib", 4))
+-+      || (!strncmp (name, "/usr/lib", 8))
+-+      || (!strncmp (name, "/usr/local/lib", 14))
+-+      || (!strncmp (name, "/usr/X11R6/lib", 14))))
+-+   {
+-+     if (command_line.error_poison_system_directories)
+-+       einfo (_("%X%P: error: library search path \"%s\" is unsafe for "
+-+            "cross-compilation\n"), name);
+-+     else
+-+       einfo (_("%P: warning: library search path \"%s\" is unsafe for "
+-+            "cross-compilation\n"), name);
+-+   }
+-+#endif
+-+
+- }
+- 
+- /* Try to open a BFD for a lang_input_statement.  */
+-diff --git a/ld/ldlex.h b/ld/ldlex.h
+-index 32a7a6409e8..c02b64bf92f 100644
+---- a/ld/ldlex.h
+-+++ b/ld/ldlex.h
+-@@ -150,6 +150,8 @@ enum option_values
+-   OPTION_FORCE_GROUP_ALLOCATION,
+-   OPTION_PRINT_MAP_DISCARDED,
+-   OPTION_NO_PRINT_MAP_DISCARDED,
+-+  OPTION_NO_POISON_SYSTEM_DIRECTORIES,
+-+  OPTION_ERROR_POISON_SYSTEM_DIRECTORIES,
+- };
+- 
+- /* The initial parser states.  */
+-diff --git a/ld/ldmain.c b/ld/ldmain.c
+-index e24194ef87d..2d683cb6c5a 100644
+---- a/ld/ldmain.c
+-+++ b/ld/ldmain.c
+-@@ -270,6 +270,8 @@ main (int argc, char **argv)
+-   command_line.warn_mismatch = TRUE;
+-   command_line.warn_search_mismatch = TRUE;
+-   command_line.check_section_addresses = -1;
+-+  command_line.poison_system_directories = TRUE;
+-+  command_line.error_poison_system_directories = FALSE;
+- 
+-   /* We initialize DEMANGLING based on the environment variable
+-      COLLECT_NO_DEMANGLE.  The gcc collect2 program will demangle the
+-diff --git a/ld/lexsup.c b/ld/lexsup.c
+-index 1c15ac29c0c..8b714e10a40 100644
+---- a/ld/lexsup.c
+-+++ b/ld/lexsup.c
+-@@ -549,6 +549,14 @@ static const struct ld_option ld_options[] =
+-   { {"no-print-map-discarded", no_argument, NULL, OPTION_NO_PRINT_MAP_DISCARDED},
+-     '\0', NULL, N_("Do not show discarded sections in map file output"),
+-     TWO_DASHES },
+-+  { {"no-poison-system-directories", no_argument, NULL,
+-+    OPTION_NO_POISON_SYSTEM_DIRECTORIES},
+-+    '\0', NULL, N_("Do not warn for -L options using system directories"),
+-+    TWO_DASHES },
+-+  { {"error-poison-system-directories", no_argument, NULL,
+-+    OPTION_ERROR_POISON_SYSTEM_DIRECTORIES},
+-+    '\0', NULL, N_("Give an error for -L options using system directories"),
+-+    TWO_DASHES },
+- };
+- 
+- #define OPTION_COUNT ARRAY_SIZE (ld_options)
+-@@ -561,6 +569,7 @@ parse_args (unsigned argc, char **argv)
+-   int ingroup = 0;
+-   char *default_dirlist = NULL;
+-   char *shortopts;
+-+  char *BR_paranoid_env;
+-   struct option *longopts;
+-   struct option *really_longopts;
+-   int last_optind;
+-@@ -1549,6 +1558,14 @@ parse_args (unsigned argc, char **argv)
+- 	  }
+- 	  break;
+- 
+-+	case OPTION_NO_POISON_SYSTEM_DIRECTORIES:
+-+	  command_line.poison_system_directories = FALSE;
+-+	  break;
+-+
+-+	case OPTION_ERROR_POISON_SYSTEM_DIRECTORIES:
+-+	  command_line.error_poison_system_directories = TRUE;
+-+	  break;
+-+
+- 	case OPTION_PUSH_STATE:
+- 	  input_flags.pushed = xmemdup (&input_flags,
+- 					sizeof (input_flags),
+-@@ -1600,6 +1617,10 @@ parse_args (unsigned argc, char **argv)
+-       command_line.soname = NULL;
+-     }
+- 
+-+  BR_paranoid_env = getenv("BR_COMPILER_PARANOID_UNSAFE_PATH");
+-+  if (BR_paranoid_env && strlen(BR_paranoid_env) > 0)
+-+    command_line.error_poison_system_directories = TRUE;
+-+
+-   while (ingroup)
+-     {
+-       einfo (_("%P: missing --end-group; added as last command line option\n"));
+--- 
+-2.23.0
+-
+diff --git a/package/binutils/2.33.1/0004-bfd-xtensa-fix-PR-ld-25630.patch b/package/binutils/2.33.1/0004-bfd-xtensa-fix-PR-ld-25630.patch
+deleted file mode 100644
+index f499426b70..0000000000
+--- a/package/binutils/2.33.1/0004-bfd-xtensa-fix-PR-ld-25630.patch
++++ /dev/null
+@@ -1,37 +0,0 @@
+-From 85dcca5997cf3822d6456a5c9c59c46b56adfbb8 Mon Sep 17 00:00:00 2001
+-From: Max Filippov <jcmvbkbc@gmail.com>
+-Date: Wed, 4 Mar 2020 14:54:27 -0800
+-Subject: [PATCH] bfd: xtensa: fix PR ld/25630
+-
+-bfd/
+-2020-03-05  Max Filippov  <jcmvbkbc@gmail.com>
+-
+-	* elf32-xtensa.c (shrink_dynamic_reloc_sections): Shrink dynamic
+-	relocation sections for any removed reference to a dynamic symbol.
+-
+-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+----
+- bfd/elf32-xtensa.c | 7 +++----
+- 1 file changed, 3 insertions(+), 4 deletions(-)
+-
+-diff --git a/bfd/elf32-xtensa.c b/bfd/elf32-xtensa.c
+-index 12ff9f772aaf..65e14d87940c 100644
+---- a/bfd/elf32-xtensa.c
+-+++ b/bfd/elf32-xtensa.c
+-@@ -10148,10 +10148,9 @@ shrink_dynamic_reloc_sections (struct bfd_link_info *info,
+- 
+-   if ((r_type == R_XTENSA_32 || r_type == R_XTENSA_PLT)
+-       && (input_section->flags & SEC_ALLOC) != 0
+--      && (dynamic_symbol || bfd_link_pic (info))
+--      && (!h || h->root.type != bfd_link_hash_undefweak
+--	  || (dynamic_symbol
+--	      && (bfd_link_dll (info) || info->export_dynamic))))
+-+      && (dynamic_symbol
+-+	  || (bfd_link_pic (info)
+-+	      && (!h || h->root.type != bfd_link_hash_undefweak))))
+-     {
+-       asection *srel;
+-       bfd_boolean is_plt = FALSE;
+--- 
+-2.20.1
+-
+diff --git a/package/binutils/2.33.1/0005-xtensa-fix-PR-ld-25861.patch b/package/binutils/2.33.1/0005-xtensa-fix-PR-ld-25861.patch
+deleted file mode 100644
+index 2df46c6526..0000000000
+--- a/package/binutils/2.33.1/0005-xtensa-fix-PR-ld-25861.patch
++++ /dev/null
+@@ -1,432 +0,0 @@
+-From c7a1d1f656c717394937a92cb970f0f4cecce128 Mon Sep 17 00:00:00 2001
+-From: Max Filippov <jcmvbkbc@gmail.com>
+-Date: Sun, 19 Apr 2020 19:04:41 -0700
+-Subject: [PATCH] xtensa: fix PR ld/25861
+-
+-Introduce new relaxations XTENSA_PDIFF{8,16,32} for positive differences
+-(subtracted symbol precedes diminished symbol) and XTENSA_NDIFF{8,16,32}
+-for negative differences (subtracted symbol follows diminished symbol).
+-Don't generate XTENSA_DIFF relocations in the assembler, generate
+-XTENSA_PDIFF or XTENSA_NDIFF based on relative symbol position.
+-
+-Handle XTENSA_DIFF in BFD for compatibility with old object files.
+-Handle XTENSA_PDIFF and XTENSA_NDIFF in BFD, treating difference value
+-as unsigned.
+-
+-2020-04-22  Max Filippov  <jcmvbkbc@gmail.com>
+-bfd/
+-	* bfd-in2.h: Regenerated.
+-	* elf32-xtensa.c (elf_howto_table): New entries for
+-	R_XTENSA_PDIFF{8,16,32} and R_XTENSA_NDIFF{8,16,32}.
+-	(elf_xtensa_reloc_type_lookup, elf_xtensa_do_reloc)
+-	(relax_section): Add cases for R_XTENSA_PDIFF{8,16,32} and
+-	R_XTENSA_NDIFF{8,16,32}.
+-	* libbfd.h (bfd_reloc_code_real_names): Add names for
+-	BFD_RELOC_XTENSA_PDIFF{8,16,32} and
+-	BFD_RELOC_XTENSA_NDIFF{8,16,32}.
+-	* reloc.c: Add documentation for BFD_RELOC_XTENSA_PDIFF{8,16,32}
+-	and BFD_RELOC_XTENSA_NDIFF{8,16,32}.
+-
+-binutils/
+-	* readelf.c (is_none_reloc): Recognize
+-	BFD_RELOC_XTENSA_PDIFF{8,16,32} and
+-	BFD_RELOC_XTENSA_NDIFF{8,16,32}.
+-
+-gas/
+-	* config/tc-xtensa.c (md_apply_fix): Replace
+-	BFD_RELOC_XTENSA_DIFF{8,16,32} generation with
+-	BFD_RELOC_XTENSA_PDIFF{8,16,32} and
+-	BFD_RELOC_XTENSA_NDIFF{8,16,32} generation.
+-	* testsuite/gas/xtensa/loc.d: Replace BFD_RELOC_XTENSA_DIFF16
+-	with BFD_RELOC_XTENSA_PDIFF16 in the expected output.
+-
+-include/
+-	* elf/xtensa.h (elf_xtensa_reloc_type): New entries for
+-	R_XTENSA_PDIFF{8,16,32} and R_XTENSA_NDIFF{8,16,32}.
+-
+-ld/
+-	* testsuite/ld-xtensa/relax-loc.d: New test definition.
+-	* testsuite/ld-xtensa/relax-loc.s: New test source.
+-	* testsuite/ld-xtensa/xtensa.exp (relax-loc): New test.
+-
+-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+----
+-Backported from: 30ce8e47fad9b057b6d7af9e1d43061126d34d20
+-
+- bfd/bfd-in2.h                      | 20 ++++++-
+- bfd/elf32-xtensa.c                 | 89 +++++++++++++++++++++++++++++-
+- bfd/libbfd.h                       |  6 ++
+- bfd/reloc.c                        | 24 ++++++++
+- binutils/readelf.c                 |  8 ++-
+- gas/config/tc-xtensa.c             | 12 +++-
+- gas/testsuite/gas/xtensa/loc.d     |  2 +-
+- include/elf/xtensa.h               |  6 ++
+- ld/testsuite/ld-xtensa/relax-loc.d |  7 +++
+- ld/testsuite/ld-xtensa/relax-loc.s | 15 +++++
+- ld/testsuite/ld-xtensa/xtensa.exp  |  1 +
+- 11 files changed, 183 insertions(+), 7 deletions(-)
+- create mode 100644 ld/testsuite/ld-xtensa/relax-loc.d
+- create mode 100644 ld/testsuite/ld-xtensa/relax-loc.s
+-
+-diff --git a/bfd/bfd-in2.h b/bfd/bfd-in2.h
+-index 37114607b515..be6a30f57955 100644
+---- a/bfd/bfd-in2.h
+-+++ b/bfd/bfd-in2.h
+-@@ -5217,7 +5217,9 @@ to one of its own internal functions or data structures.  */
+- PLT entries.  Otherwise, this is just a generic 32-bit relocation.  */
+-   BFD_RELOC_XTENSA_PLT,
+- 
+--/* Xtensa relocations to mark the difference of two local symbols.
+-+/* Xtensa relocations for backward compatibility.  These have been replaced
+-+by BFD_RELOC_XTENSA_PDIFF and BFD_RELOC_XTENSA_NDIFF.
+-+Xtensa relocations to mark the difference of two local symbols.
+- These are only needed to support linker relaxation and can be ignored
+- when not relaxing.  The field is set to the value of the difference
+- assuming no relaxation.  The relocation encodes the position of the
+-@@ -5291,6 +5293,22 @@ BFD_RELOC_XTENSA_ASM_EXPAND.  */
+-   BFD_RELOC_XTENSA_TLS_ARG,
+-   BFD_RELOC_XTENSA_TLS_CALL,
+- 
+-+/* Xtensa relocations to mark the difference of two local symbols.
+-+These are only needed to support linker relaxation and can be ignored
+-+when not relaxing.  The field is set to the value of the difference
+-+assuming no relaxation.  The relocation encodes the position of the
+-+subtracted symbol so the linker can determine whether to adjust the field
+-+value.  PDIFF relocations are used for positive differences, NDIFF
+-+relocations are used for negative differences.  The difference value
+-+is treated as unsigned with these relocation types, giving full
+-+8/16 value ranges.  */
+-+  BFD_RELOC_XTENSA_PDIFF8,
+-+  BFD_RELOC_XTENSA_PDIFF16,
+-+  BFD_RELOC_XTENSA_PDIFF32,
+-+  BFD_RELOC_XTENSA_NDIFF8,
+-+  BFD_RELOC_XTENSA_NDIFF16,
+-+  BFD_RELOC_XTENSA_NDIFF32,
+-+
+- /* 8 bit signed offset in (ix+d) or (iy+d).  */
+-   BFD_RELOC_Z80_DISP8,
+- 
+-diff --git a/bfd/elf32-xtensa.c b/bfd/elf32-xtensa.c
+-index 473a9d76f289..fded42d52a9a 100644
+---- a/bfd/elf32-xtensa.c
+-+++ b/bfd/elf32-xtensa.c
+-@@ -325,6 +325,20 @@ static reloc_howto_type elf_howto_table[] =
+-   HOWTO (R_XTENSA_TLS_CALL, 0, 0, 0, FALSE, 0, complain_overflow_dont,
+- 	 bfd_elf_xtensa_reloc, "R_XTENSA_TLS_CALL",
+- 	 FALSE, 0, 0, FALSE),
+-+
+-+  HOWTO (R_XTENSA_PDIFF8, 0, 0, 8, FALSE, 0, complain_overflow_bitfield,
+-+	 bfd_elf_xtensa_reloc, "R_XTENSA_PDIFF8", FALSE, 0, 0xff, FALSE),
+-+  HOWTO (R_XTENSA_PDIFF16, 0, 1, 16, FALSE, 0, complain_overflow_bitfield,
+-+	 bfd_elf_xtensa_reloc, "R_XTENSA_PDIFF16", FALSE, 0, 0xffff, FALSE),
+-+  HOWTO (R_XTENSA_PDIFF32, 0, 2, 32, FALSE, 0, complain_overflow_bitfield,
+-+	 bfd_elf_xtensa_reloc, "R_XTENSA_PDIFF32", FALSE, 0, 0xffffffff, FALSE),
+-+
+-+  HOWTO (R_XTENSA_NDIFF8, 0, 0, 8, FALSE, 0, complain_overflow_bitfield,
+-+	 bfd_elf_xtensa_reloc, "R_XTENSA_NDIFF8", FALSE, 0, 0xff, FALSE),
+-+  HOWTO (R_XTENSA_NDIFF16, 0, 1, 16, FALSE, 0, complain_overflow_bitfield,
+-+	 bfd_elf_xtensa_reloc, "R_XTENSA_NDIFF16", FALSE, 0, 0xffff, FALSE),
+-+  HOWTO (R_XTENSA_NDIFF32, 0, 2, 32, FALSE, 0, complain_overflow_bitfield,
+-+	 bfd_elf_xtensa_reloc, "R_XTENSA_NDIFF32", FALSE, 0, 0xffffffff, FALSE),
+- };
+- 
+- #if DEBUG_GEN_RELOC
+-@@ -364,6 +378,30 @@ elf_xtensa_reloc_type_lookup (bfd *abfd ATTRIBUTE_UNUSED,
+-       TRACE ("BFD_RELOC_XTENSA_DIFF32");
+-       return &elf_howto_table[(unsigned) R_XTENSA_DIFF32 ];
+- 
+-+    case BFD_RELOC_XTENSA_PDIFF8:
+-+      TRACE ("BFD_RELOC_XTENSA_PDIFF8");
+-+      return &elf_howto_table[(unsigned) R_XTENSA_PDIFF8 ];
+-+
+-+    case BFD_RELOC_XTENSA_PDIFF16:
+-+      TRACE ("BFD_RELOC_XTENSA_PDIFF16");
+-+      return &elf_howto_table[(unsigned) R_XTENSA_PDIFF16 ];
+-+
+-+    case BFD_RELOC_XTENSA_PDIFF32:
+-+      TRACE ("BFD_RELOC_XTENSA_PDIFF32");
+-+      return &elf_howto_table[(unsigned) R_XTENSA_PDIFF32 ];
+-+
+-+    case BFD_RELOC_XTENSA_NDIFF8:
+-+      TRACE ("BFD_RELOC_XTENSA_NDIFF8");
+-+      return &elf_howto_table[(unsigned) R_XTENSA_NDIFF8 ];
+-+
+-+    case BFD_RELOC_XTENSA_NDIFF16:
+-+      TRACE ("BFD_RELOC_XTENSA_NDIFF16");
+-+      return &elf_howto_table[(unsigned) R_XTENSA_NDIFF16 ];
+-+
+-+    case BFD_RELOC_XTENSA_NDIFF32:
+-+      TRACE ("BFD_RELOC_XTENSA_NDIFF32");
+-+      return &elf_howto_table[(unsigned) R_XTENSA_NDIFF32 ];
+-+
+-     case BFD_RELOC_XTENSA_RTLD:
+-       TRACE ("BFD_RELOC_XTENSA_RTLD");
+-       return &elf_howto_table[(unsigned) R_XTENSA_RTLD ];
+-@@ -1851,6 +1889,12 @@ elf_xtensa_do_reloc (reloc_howto_type *howto,
+-     case R_XTENSA_DIFF8:
+-     case R_XTENSA_DIFF16:
+-     case R_XTENSA_DIFF32:
+-+    case R_XTENSA_PDIFF8:
+-+    case R_XTENSA_PDIFF16:
+-+    case R_XTENSA_PDIFF32:
+-+    case R_XTENSA_NDIFF8:
+-+    case R_XTENSA_NDIFF16:
+-+    case R_XTENSA_NDIFF32:
+-     case R_XTENSA_TLS_FUNC:
+-     case R_XTENSA_TLS_ARG:
+-     case R_XTENSA_TLS_CALL:
+-@@ -9604,7 +9648,13 @@ relax_section (bfd *abfd, asection *sec, struct bfd_link_info *link_info)
+- 
+- 	      if (r_type == R_XTENSA_DIFF8
+- 		  || r_type == R_XTENSA_DIFF16
+--		  || r_type == R_XTENSA_DIFF32)
+-+		  || r_type == R_XTENSA_DIFF32
+-+		  || r_type == R_XTENSA_PDIFF8
+-+		  || r_type == R_XTENSA_PDIFF16
+-+		  || r_type == R_XTENSA_PDIFF32
+-+		  || r_type == R_XTENSA_NDIFF8
+-+		  || r_type == R_XTENSA_NDIFF16
+-+		  || r_type == R_XTENSA_NDIFF32)
+- 		{
+- 		  bfd_signed_vma diff_value = 0;
+- 		  bfd_vma new_end_offset, diff_mask = 0;
+-@@ -9631,8 +9681,27 @@ relax_section (bfd *abfd, asection *sec, struct bfd_link_info *link_info)
+- 		      diff_value =
+- 			bfd_get_signed_32 (abfd, &contents[old_source_offset]);
+- 		      break;
+-+		    case R_XTENSA_PDIFF8:
+-+		    case R_XTENSA_NDIFF8:
+-+		      diff_value =
+-+			bfd_get_8 (abfd, &contents[old_source_offset]);
+-+		      break;
+-+		    case R_XTENSA_PDIFF16:
+-+		    case R_XTENSA_NDIFF16:
+-+		      diff_value =
+-+			bfd_get_16 (abfd, &contents[old_source_offset]);
+-+		      break;
+-+		    case R_XTENSA_PDIFF32:
+-+		    case R_XTENSA_NDIFF32:
+-+		      diff_value =
+-+			bfd_get_32 (abfd, &contents[old_source_offset]);
+-+		      break;
+- 		    }
+- 
+-+		  if (r_type >= R_XTENSA_NDIFF8
+-+		      && r_type <= R_XTENSA_NDIFF32)
+-+		    diff_value = -diff_value;
+-+
+- 		  new_end_offset = offset_with_removed_text_map
+- 		    (&target_relax_info->action_list,
+- 		     r_rel.target_offset + diff_value);
+-@@ -9655,6 +9724,24 @@ relax_section (bfd *abfd, asection *sec, struct bfd_link_info *link_info)
+- 		      bfd_put_signed_32 (abfd, diff_value,
+- 				  &contents[old_source_offset]);
+- 		      break;
+-+		    case R_XTENSA_PDIFF8:
+-+		    case R_XTENSA_NDIFF8:
+-+		      diff_mask = 0xff;
+-+		      bfd_put_8 (abfd, diff_value,
+-+				 &contents[old_source_offset]);
+-+		      break;
+-+		    case R_XTENSA_PDIFF16:
+-+		    case R_XTENSA_NDIFF16:
+-+		      diff_mask = 0xffff;
+-+		      bfd_put_16 (abfd, diff_value,
+-+				  &contents[old_source_offset]);
+-+		      break;
+-+		    case R_XTENSA_PDIFF32:
+-+		    case R_XTENSA_NDIFF32:
+-+		      diff_mask = 0xffffffff;
+-+		      bfd_put_32 (abfd, diff_value,
+-+				  &contents[old_source_offset]);
+-+		      break;
+- 		    }
+- 
+- 		  /* Check for overflow. Sign bits must be all zeroes or all ones */
+-diff --git a/bfd/libbfd.h b/bfd/libbfd.h
+-index 3c184fcadadf..989f4bc0b595 100644
+---- a/bfd/libbfd.h
+-+++ b/bfd/libbfd.h
+-@@ -2919,6 +2919,12 @@ static const char *const bfd_reloc_code_real_names[] = { "@@uninitialized@@",
+-   "BFD_RELOC_XTENSA_TLS_FUNC",
+-   "BFD_RELOC_XTENSA_TLS_ARG",
+-   "BFD_RELOC_XTENSA_TLS_CALL",
+-+  "BFD_RELOC_XTENSA_PDIFF8",
+-+  "BFD_RELOC_XTENSA_PDIFF16",
+-+  "BFD_RELOC_XTENSA_PDIFF32",
+-+  "BFD_RELOC_XTENSA_NDIFF8",
+-+  "BFD_RELOC_XTENSA_NDIFF16",
+-+  "BFD_RELOC_XTENSA_NDIFF32",
+-   "BFD_RELOC_Z80_DISP8",
+-   "BFD_RELOC_Z80_BYTE0",
+-   "BFD_RELOC_Z80_BYTE1",
+-diff --git a/bfd/reloc.c b/bfd/reloc.c
+-index c4dec86d1d46..f5df8e2ab3eb 100644
+---- a/bfd/reloc.c
+-+++ b/bfd/reloc.c
+-@@ -6556,6 +6556,8 @@ ENUMX
+- ENUMX
+-   BFD_RELOC_XTENSA_DIFF32
+- ENUMDOC
+-+  Xtensa relocations for backward compatibility.  These have been replaced
+-+  by BFD_RELOC_XTENSA_PDIFF and BFD_RELOC_XTENSA_NDIFF.
+-   Xtensa relocations to mark the difference of two local symbols.
+-   These are only needed to support linker relaxation and can be ignored
+-   when not relaxing.  The field is set to the value of the difference
+-@@ -6668,6 +6670,28 @@ ENUMX
+-   BFD_RELOC_XTENSA_TLS_CALL
+- ENUMDOC
+-   Xtensa TLS relocations.
+-+ENUM
+-+  BFD_RELOC_XTENSA_PDIFF8
+-+ENUMX
+-+  BFD_RELOC_XTENSA_PDIFF16
+-+ENUMX
+-+  BFD_RELOC_XTENSA_PDIFF32
+-+ENUMX
+-+  BFD_RELOC_XTENSA_NDIFF8
+-+ENUMX
+-+  BFD_RELOC_XTENSA_NDIFF16
+-+ENUMX
+-+  BFD_RELOC_XTENSA_NDIFF32
+-+ENUMDOC
+-+  Xtensa relocations to mark the difference of two local symbols.
+-+  These are only needed to support linker relaxation and can be ignored
+-+  when not relaxing.  The field is set to the value of the difference
+-+  assuming no relaxation.  The relocation encodes the position of the
+-+  subtracted symbol so the linker can determine whether to adjust the field
+-+  value.  PDIFF relocations are used for positive differences, NDIFF
+-+  relocations are used for negative differences.  The difference value
+-+  is treated as unsigned with these relocation types, giving full
+-+  8/16 value ranges.
+- 
+- ENUM
+-   BFD_RELOC_Z80_DISP8
+-diff --git a/binutils/readelf.c b/binutils/readelf.c
+-index d4756c93b345..800918f901c8 100644
+---- a/binutils/readelf.c
+-+++ b/binutils/readelf.c
+-@@ -13262,7 +13262,13 @@ is_none_reloc (Filedata * filedata, unsigned int reloc_type)
+-       return (reloc_type == 0      /* R_XTENSA_NONE.  */
+- 	      || reloc_type == 17  /* R_XTENSA_DIFF8.  */
+- 	      || reloc_type == 18  /* R_XTENSA_DIFF16.  */
+--	      || reloc_type == 19  /* R_XTENSA_DIFF32.  */);
+-+	      || reloc_type == 19  /* R_XTENSA_DIFF32.  */
+-+	      || reloc_type == 57  /* R_XTENSA_PDIFF8.  */
+-+	      || reloc_type == 58  /* R_XTENSA_PDIFF16.  */
+-+	      || reloc_type == 59  /* R_XTENSA_PDIFF32.  */
+-+	      || reloc_type == 60  /* R_XTENSA_NDIFF8.  */
+-+	      || reloc_type == 61  /* R_XTENSA_NDIFF16.  */
+-+	      || reloc_type == 62  /* R_XTENSA_NDIFF32.  */);
+-     }
+-   return FALSE;
+- }
+-diff --git a/gas/config/tc-xtensa.c b/gas/config/tc-xtensa.c
+-index 71d4d94a8d7d..ee75c13548ff 100644
+---- a/gas/config/tc-xtensa.c
+-+++ b/gas/config/tc-xtensa.c
+-@@ -5974,18 +5974,24 @@ md_apply_fix (fixS *fixP, valueT *valP, segT seg)
+-     case BFD_RELOC_8:
+-       if (fixP->fx_subsy)
+- 	{
+-+	  bfd_boolean neg = S_GET_VALUE (fixP->fx_addsy) + fixP->fx_offset
+-+	    < S_GET_VALUE (fixP->fx_subsy);
+-+
+- 	  switch (fixP->fx_r_type)
+- 	    {
+- 	    case BFD_RELOC_8:
+--	      fixP->fx_r_type = BFD_RELOC_XTENSA_DIFF8;
+-+	      fixP->fx_r_type = neg
+-+		? BFD_RELOC_XTENSA_NDIFF8 : BFD_RELOC_XTENSA_PDIFF8;
+- 	      fixP->fx_signed = 0;
+- 	      break;
+- 	    case BFD_RELOC_16:
+--	      fixP->fx_r_type = BFD_RELOC_XTENSA_DIFF16;
+-+	      fixP->fx_r_type = neg
+-+		? BFD_RELOC_XTENSA_NDIFF16 : BFD_RELOC_XTENSA_PDIFF16;
+- 	      fixP->fx_signed = 0;
+- 	      break;
+- 	    case BFD_RELOC_32:
+--	      fixP->fx_r_type = BFD_RELOC_XTENSA_DIFF32;
+-+	      fixP->fx_r_type = neg
+-+		? BFD_RELOC_XTENSA_NDIFF32 : BFD_RELOC_XTENSA_PDIFF32;
+- 	      fixP->fx_signed = 0;
+- 	      break;
+- 	    default:
+-diff --git a/gas/testsuite/gas/xtensa/loc.d b/gas/testsuite/gas/xtensa/loc.d
+-index 71983cc90055..8fb3425999d5 100644
+---- a/gas/testsuite/gas/xtensa/loc.d
+-+++ b/gas/testsuite/gas/xtensa/loc.d
+-@@ -6,5 +6,5 @@
+- 
+- RELOCATION RECORDS FOR \[\.debug_line\]:
+- #...
+--.*R_XTENSA_DIFF16.*\.text\+0x00009c42
+-+.*R_XTENSA_PDIFF16.*\.text\+0x00009c42
+- #...
+-diff --git a/include/elf/xtensa.h b/include/elf/xtensa.h
+-index 2eb5e4e52941..bd5c80d13777 100644
+---- a/include/elf/xtensa.h
+-+++ b/include/elf/xtensa.h
+-@@ -87,6 +87,12 @@ START_RELOC_NUMBERS (elf_xtensa_reloc_type)
+-      RELOC_NUMBER (R_XTENSA_TLS_FUNC, 54)
+-      RELOC_NUMBER (R_XTENSA_TLS_ARG, 55)
+-      RELOC_NUMBER (R_XTENSA_TLS_CALL, 56)
+-+     RELOC_NUMBER (R_XTENSA_PDIFF8, 57)
+-+     RELOC_NUMBER (R_XTENSA_PDIFF16, 58)
+-+     RELOC_NUMBER (R_XTENSA_PDIFF32, 59)
+-+     RELOC_NUMBER (R_XTENSA_NDIFF8, 60)
+-+     RELOC_NUMBER (R_XTENSA_NDIFF16, 61)
+-+     RELOC_NUMBER (R_XTENSA_NDIFF32, 62)
+- END_RELOC_NUMBERS (R_XTENSA_max)
+- 
+- /* Processor-specific flags for the ELF header e_flags field.  */
+-diff --git a/ld/testsuite/ld-xtensa/relax-loc.d b/ld/testsuite/ld-xtensa/relax-loc.d
+-new file mode 100644
+-index 000000000000..3c8d673732ff
+---- /dev/null
+-+++ b/ld/testsuite/ld-xtensa/relax-loc.d
+-@@ -0,0 +1,7 @@
+-+#as: --text-section-literals
+-+#ld:
+-+#objdump: --dwarf=decodedline
+-+#...
+-+relax-loc.s[ 	]+1[ 	]+0x400054[ 	]+.*
+-+relax-loc.s[ 	]+2[ 	]+0x40005c[ 	]+.*
+-+#...
+-diff --git a/ld/testsuite/ld-xtensa/relax-loc.s b/ld/testsuite/ld-xtensa/relax-loc.s
+-new file mode 100644
+-index 000000000000..d768470e287a
+---- /dev/null
+-+++ b/ld/testsuite/ld-xtensa/relax-loc.s
+-@@ -0,0 +1,15 @@
+-+	.file	1 "relax-loc.s"
+-+	.globl	_start
+-+	.globl	_ResetVector
+-+	.text
+-+_ResetVector:
+-+_start:
+-+	.loc	1 1
+-+	j	1f
+-+	.literal_position
+-+1:
+-+	.loc	1 2
+-+
+-+	.rep	10000
+-+	movi	a2, 0x12345678
+-+	.endr
+-diff --git a/ld/testsuite/ld-xtensa/xtensa.exp b/ld/testsuite/ld-xtensa/xtensa.exp
+-index 9b2235b2151b..de39887936ad 100644
+---- a/ld/testsuite/ld-xtensa/xtensa.exp
+-+++ b/ld/testsuite/ld-xtensa/xtensa.exp
+-@@ -27,6 +27,7 @@ run_dump_test "call_overflow"
+- run_dump_test "coalesce"
+- run_dump_test "diff_overflow"
+- run_dump_test "lcall"
+-+run_dump_test "relax-loc"
+- 
+- run_dump_test "relax-static-pie"
+- run_dump_test "relax-static-local-pie"
+--- 
+-2.20.1
+-
+diff --git a/package/binutils/2.33.1/0006-xtensa-fix-XTENSA_NDIFF-handling-for-PR-ld-25861.patch b/package/binutils/2.33.1/0006-xtensa-fix-XTENSA_NDIFF-handling-for-PR-ld-25861.patch
+deleted file mode 100644
+index 28f17d7c56..0000000000
+--- a/package/binutils/2.33.1/0006-xtensa-fix-XTENSA_NDIFF-handling-for-PR-ld-25861.patch
++++ /dev/null
+@@ -1,128 +0,0 @@
+-From 735321812435ae278d3766a3371f55937dc776d6 Mon Sep 17 00:00:00 2001
+-From: Max Filippov <jcmvbkbc@gmail.com>
+-Date: Sat, 25 Apr 2020 00:40:25 -0700
+-Subject: [PATCH] xtensa: fix XTENSA_NDIFF handling for PR ld/25861
+-
+-Fields marked with XTENSA_NDIFF relocations are not negated, they only
+-have sign bits removed. Don't negate their values when relaxation is
+-performed. Don't add sign bits when the value is zero. Report overflow
+-when the result has negative sign but all significant bits are zero.
+-
+-2020-04-29  Max Filippov  <jcmvbkbc@gmail.com>
+-bfd/
+-	* elf32-xtensa.c (relax_section): Don't negate diff_value for
+-	XTENSA_NDIFF relocations. Don't add sign bits whe diff_value
+-	equals 0. Report overflow when the result has negative sign but
+-	all significant bits are zero.
+-
+-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+-Backported from: d548f47df4d2e3d117d504a4c9977982c78a0556
+----
+-
+- bfd/elf32-xtensa.c                   | 26 +++++++++++++++-----------
+- 1 file changed, 15 insertions(+), 11 deletions(-)
+-
+-diff --git a/bfd/elf32-xtensa.c b/bfd/elf32-xtensa.c
+-index fded42d52a9a..4327b027911f 100644
+---- a/bfd/elf32-xtensa.c
+-+++ b/bfd/elf32-xtensa.c
+-@@ -9670,37 +9670,44 @@ relax_section (bfd *abfd, asection *sec, struct bfd_link_info *link_info)
+- 		  switch (r_type)
+- 		    {
+- 		    case R_XTENSA_DIFF8:
+-+		      diff_mask = 0x7f;
+- 		      diff_value =
+- 			bfd_get_signed_8 (abfd, &contents[old_source_offset]);
+- 		      break;
+- 		    case R_XTENSA_DIFF16:
+-+		      diff_mask = 0x7fff;
+- 		      diff_value =
+- 			bfd_get_signed_16 (abfd, &contents[old_source_offset]);
+- 		      break;
+- 		    case R_XTENSA_DIFF32:
+-+		      diff_mask = 0x7fffffff;
+- 		      diff_value =
+- 			bfd_get_signed_32 (abfd, &contents[old_source_offset]);
+- 		      break;
+- 		    case R_XTENSA_PDIFF8:
+- 		    case R_XTENSA_NDIFF8:
+-+		      diff_mask = 0xff;
+- 		      diff_value =
+- 			bfd_get_8 (abfd, &contents[old_source_offset]);
+- 		      break;
+- 		    case R_XTENSA_PDIFF16:
+- 		    case R_XTENSA_NDIFF16:
+-+		      diff_mask = 0xffff;
+- 		      diff_value =
+- 			bfd_get_16 (abfd, &contents[old_source_offset]);
+- 		      break;
+- 		    case R_XTENSA_PDIFF32:
+- 		    case R_XTENSA_NDIFF32:
+-+		      diff_mask = 0xffffffff;
+- 		      diff_value =
+- 			bfd_get_32 (abfd, &contents[old_source_offset]);
+- 		      break;
+- 		    }
+- 
+- 		  if (r_type >= R_XTENSA_NDIFF8
+--		      && r_type <= R_XTENSA_NDIFF32)
+--		    diff_value = -diff_value;
+-+		      && r_type <= R_XTENSA_NDIFF32
+-+		      && diff_value)
+-+		    diff_value |= ~diff_mask;
+- 
+- 		  new_end_offset = offset_with_removed_text_map
+- 		    (&target_relax_info->action_list,
+-@@ -9710,43 +9717,40 @@ relax_section (bfd *abfd, asection *sec, struct bfd_link_info *link_info)
+- 		  switch (r_type)
+- 		    {
+- 		    case R_XTENSA_DIFF8:
+--		      diff_mask = 0x7f;
+- 		      bfd_put_signed_8 (abfd, diff_value,
+- 				 &contents[old_source_offset]);
+- 		      break;
+- 		    case R_XTENSA_DIFF16:
+--		      diff_mask = 0x7fff;
+- 		      bfd_put_signed_16 (abfd, diff_value,
+- 				  &contents[old_source_offset]);
+- 		      break;
+- 		    case R_XTENSA_DIFF32:
+--		      diff_mask = 0x7fffffff;
+- 		      bfd_put_signed_32 (abfd, diff_value,
+- 				  &contents[old_source_offset]);
+- 		      break;
+- 		    case R_XTENSA_PDIFF8:
+- 		    case R_XTENSA_NDIFF8:
+--		      diff_mask = 0xff;
+- 		      bfd_put_8 (abfd, diff_value,
+- 				 &contents[old_source_offset]);
+- 		      break;
+- 		    case R_XTENSA_PDIFF16:
+- 		    case R_XTENSA_NDIFF16:
+--		      diff_mask = 0xffff;
+- 		      bfd_put_16 (abfd, diff_value,
+- 				  &contents[old_source_offset]);
+- 		      break;
+- 		    case R_XTENSA_PDIFF32:
+- 		    case R_XTENSA_NDIFF32:
+--		      diff_mask = 0xffffffff;
+- 		      bfd_put_32 (abfd, diff_value,
+- 				  &contents[old_source_offset]);
+- 		      break;
+- 		    }
+- 
+--		  /* Check for overflow. Sign bits must be all zeroes or all ones */
+--		  if ((diff_value & ~diff_mask) != 0 &&
+--		      (diff_value & ~diff_mask) != (-1 & ~diff_mask))
+-+		  /* Check for overflow. Sign bits must be all zeroes or
+-+		     all ones.  When sign bits are all ones diff_value
+-+		     may not be zero.  */
+-+		  if (((diff_value & ~diff_mask) != 0
+-+		       && (diff_value & ~diff_mask) != ~diff_mask)
+-+		      || (diff_value && (bfd_vma) diff_value == ~diff_mask))
+- 		    {
+- 		      (*link_info->callbacks->reloc_dangerous)
+- 			(link_info, _("overflow after relaxation"),
+--- 
+-2.20.1
+-
 diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-index 237aafc136..d857c485d3 100644
+index d857c485d3..8622ebf3f3 100644
 --- a/package/binutils/Config.in.host
 +++ b/package/binutils/Config.in.host
-@@ -7,7 +7,7 @@ config BR2_PACKAGE_HOST_BINUTILS_SUPPORTS_CFI
+@@ -17,13 +17,6 @@ config BR2_BINUTILS_VERSION_2_32_X
+ 	bool "binutils 2.32"
+ 	depends on !BR2_csky
  
- choice
- 	prompt "Binutils Version"
--	default BR2_BINUTILS_VERSION_2_34_X if !BR2_arc && !BR2_csky
-+	default BR2_BINUTILS_VERSION_2_35_X if !BR2_arc && !BR2_csky
- 	default BR2_BINUTILS_VERSION_ARC if BR2_arc
- 	default BR2_BINUTILS_VERSION_CSKY if BR2_csky
- 	help
-diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-index aff7f4ba86..e469febbb4 100644
---- a/package/binutils/binutils.mk
-+++ b/package/binutils/binutils.mk
-@@ -11,7 +11,7 @@ ifeq ($(BINUTILS_VERSION),)
- ifeq ($(BR2_arc),y)
- BINUTILS_VERSION = arc-2020.09-release
- else
--BINUTILS_VERSION = 2.34
-+BINUTILS_VERSION = 2.35.2
- endif
- endif # BINUTILS_VERSION
- 
+-config BR2_BINUTILS_VERSION_2_33_X
+-	bool "binutils 2.33.1"
+-	depends on !BR2_csky
+-	# https://github.com/uclinux-dev/elf2flt/pull/16
+-	# https://github.com/uclinux-dev/elf2flt/issues/12
+-	depends on !BR2_BINFMT_FLAT
+-
+ config BR2_BINUTILS_VERSION_2_34_X
+ 	bool "binutils 2.34"
+ 	depends on !BR2_csky
+@@ -60,7 +53,6 @@ config BR2_BINUTILS_VERSION
+ 	default "arc-2020.09-release"	if BR2_BINUTILS_VERSION_ARC
+ 	default "c66d8bbcebfddf713b2b436e1b135e6b125a55a5" if BR2_BINUTILS_VERSION_CSKY
+ 	default "2.32"		if BR2_BINUTILS_VERSION_2_32_X
+-	default "2.33.1"	if BR2_BINUTILS_VERSION_2_33_X
+ 	default "2.34"		if BR2_BINUTILS_VERSION_2_34_X
+ 	default "2.35.2"	if BR2_BINUTILS_VERSION_2_35_X
+ 	default "2.36"		if BR2_BINUTILS_VERSION_2_36_X
+diff --git a/package/binutils/binutils.hash b/package/binutils/binutils.hash
+index 35e688a21e..9d48581712 100644
+--- a/package/binutils/binutils.hash
++++ b/package/binutils/binutils.hash
+@@ -1,6 +1,5 @@
+ # From ftp://gcc.gnu.org/pub/binutils/releases/sha512.sum
+ sha512  d326408f12a03d9a61a9de56584c2af12f81c2e50d2d7e835d51565df8314df01575724afa1e43bd0db45cfc9916b41519b67dfce03232aa4978704492a6994a  binutils-2.32.tar.xz
+-sha512  b7a6767c6c7ca6b5cafa7080e6820b7bb3a53b7148348c438d99905defbdf0d30c9744a484ee01c9441a8153901808513366b15ba9533e20c9673c262ade36ac  binutils-2.33.1.tar.xz
+ sha512  2c7976939dcf5e8c5b7374cccd39bfe803b1bec73c6abfa0eb17c24e1942574c6bdb874c66a092a82adc443182eacd8a5a8001c19a76101f0c7ba40c27de0bbd  binutils-2.34.tar.xz
+ sha512  9974ede5978d32e0d68fef23da48fa00bd06b0bff7ec45b00ca075c126d6bbe0cf2defc03ecc3f17bc6cc85b64271a13009c4049d7ba17de26e84e3a6e2c0348  binutils-2.35.2.tar.xz
+ sha512  0b89b70d4ad5cfe5bd0011dc7e342ae9de96efdbfc3442a0d6b5f7660e38bbcad36f2c72ba8f074323f02bde022ff1cd723ae99f0ea55cf94ee2dbbc0e4efdb2  binutils-2.36.tar.xz
