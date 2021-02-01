@@ -1,54 +1,65 @@
-From: Joachim Wiberg <troglobit@gmail.com>
-Date: Mon,  1 Feb 2021 13:52:36 +0100
-Subject: [Buildroot] [PATCH 1/1] package/sysklogd: replace local syslog.conf
- sample with upstream
-Message-ID: <20210201125236.451176-1-troglobit@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon,  1 Feb 2021 13:55:57 +0100
+Subject: [Buildroot] [PATCH] package/python-django: security bump to version
+ 3.0.12
+Message-ID: <20210201125557.11169-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch drops the local syslog.conf in favor of the one shipped with
-sysklogd.  The upstream syslog.conf sample differs from the Buildroot
-one primarily in shifting to /var/log/syslog as the default for log
-messages.  It also comes with a dedicated /var/log/kern.log and some
-commented-out filtering examples.
+Fixes the following security issues:
 
-Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+CVE-2021-3281: Potential directory-traversal via archive.extract()
+
+The django.utils.archive.extract() function, used by startapp --template and
+startproject --template, allowed directory-traversal via an archive with
+absolute paths or relative paths with dot segments.
+
+For details, see the advisory:
+https://www.djangoproject.com/weblog/2021/feb/01/security-releases/
+
+Additionally, 3.0.11 fixed a regression:
+https://docs.djangoproject.com/en/3.1/releases/3.0.11/
+
+Update indentation in hash file (two spaces).
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sysklogd/sysklogd.mk | 2 +-
- package/sysklogd/syslog.conf | 9 ---------
- 2 files changed, 1 insertion(+), 10 deletions(-)
- delete mode 100644 package/sysklogd/syslog.conf
+ package/python-django/python-django.hash | 6 +++---
+ package/python-django/python-django.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/sysklogd/sysklogd.mk b/package/sysklogd/sysklogd.mk
-index c6c59da69f..ff181372b6 100644
---- a/package/sysklogd/sysklogd.mk
-+++ b/package/sysklogd/sysklogd.mk
-@@ -25,7 +25,7 @@ SYSKLOGD_CONF_OPTS += --without-logger
- endif
+diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
+index 8aebe62161..53f718ea0a 100644
+--- a/package/python-django/python-django.hash
++++ b/package/python-django/python-django.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/django/json
+-md5	deec48e8713727e443a7cee6b54baaeb  Django-3.0.10.tar.gz
+-sha256	2d14be521c3ae24960e5e83d4575e156a8c479a75c935224b671b1c6e66eddaf  Django-3.0.10.tar.gz
++md5  55291777e25bd9e0a286c6f64751246a  Django-3.0.12.tar.gz
++sha256  fd63e2c7acca5f2e7ad93dfb53d566e040d871404fc0f684a3e720006d221f9a  Django-3.0.12.tar.gz
+ # Locally computed sha256 checksums
+-sha256	b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
++sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
+index 97bf75320d..512f2cd89c 100644
+--- a/package/python-django/python-django.mk
++++ b/package/python-django/python-django.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
  
- define SYSKLOGD_INSTALL_SAMPLE_CONFIG
--	$(INSTALL) -D -m 0644 package/sysklogd/syslog.conf \
-+	$(INSTALL) -D -m 0644 $(@D)/syslog.conf \
- 		$(TARGET_DIR)/etc/syslog.conf
- endef
- 
-diff --git a/package/sysklogd/syslog.conf b/package/sysklogd/syslog.conf
-deleted file mode 100644
-index 411bd645ff..0000000000
---- a/package/sysklogd/syslog.conf
-+++ /dev/null
-@@ -1,9 +0,0 @@
--# /etc/syslog.conf - Configuration file for syslogd
--
--auth,authpriv.*		/var/log/auth.log
--*.*;auth,authpriv.none	/var/log/messages
--user.*			/var/log/user.log
--
--*.emerg			*
--
--include /etc/syslog.d/*.conf
+-PYTHON_DJANGO_VERSION = 3.0.10
++PYTHON_DJANGO_VERSION = 3.0.12
+ PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
+ # The official Django site has an unpractical URL
+-PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/f4/09/d7c995b128bec61233cfea0e5fa40e442cae54c127b4b2b0881e1fdd0023
++PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/32/e3/e7e9a9378321fdfc3eb55de151911dce968fa245d1f16d8c480c63ea4ed1
+ PYTHON_DJANGO_LICENSE = BSD-3-Clause
+ PYTHON_DJANGO_LICENSE_FILES = LICENSE
+ PYTHON_DJANGO_SETUP_TYPE = setuptools
 -- 
-2.25.1
+2.20.1
