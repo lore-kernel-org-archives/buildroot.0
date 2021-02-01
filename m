@@ -1,39 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Feb 2021 10:54:46 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x]
- package/intel-mediadriver: fix option
-Message-ID: <20210201094917.6AFB9811FE@busybox.osuosl.org>
+Date: Mon, 1 Feb 2021 10:53:41 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x]
+ package/intel-mediadriver: drop unrecognized options
+Message-ID: <20210201094924.8F44181201@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2ffc8e7b0afeef7aa067a0a40181c0f0e008aaa7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=230f80d156dd3cc424aff7d04a5ccfecf8ff604b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-Replace INSTALL_DRIVERS_SYSCONF by INSTALL_DRIVER_SYSCONF which is the
-correct name since version 18.2.0 and
-https://github.com/intel/media-driver/commit/81796c8a9e44b878e26064c898e0f4730e8220cf
+BUILD_ALONG_WITH_CMRTLIB has been dropped since version 18.2.0 and
+https://github.com/intel/media-driver/commit/c3e13c175d12790ab70c4de3521e47f62be780de
+
+RUN_TEST_SUITE is also unrecognized (only MEDIA_RUN_TEST_SUITE is
+recognized)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 9d41e98d6f8245f0ff3e077d876d9f451debd7b0)
+(cherry picked from commit 8a0cbe94747a83790a6d97e3e479c97ff5771dee)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/intel-mediadriver/intel-mediadriver.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/intel-mediadriver/intel-mediadriver.mk | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
 diff --git a/package/intel-mediadriver/intel-mediadriver.mk b/package/intel-mediadriver/intel-mediadriver.mk
-index 094aca7985..0e60b33927 100644
+index c3157867ed..49bf85e092 100644
 --- a/package/intel-mediadriver/intel-mediadriver.mk
 +++ b/package/intel-mediadriver/intel-mediadriver.mk
-@@ -22,7 +22,7 @@ INTEL_MEDIADRIVER_DEPENDENCIES = \
+@@ -22,9 +22,7 @@ INTEL_MEDIADRIVER_DEPENDENCIES = \
  INTEL_MEDIADRIVER_SUPPORTS_IN_SOURCE_BUILD = NO
  
  INTEL_MEDIADRIVER_CONF_OPTS = \
--	-DINSTALL_DRIVERS_SYSCONF=OFF \
-+	-DINSTALL_DRIVER_SYSCONF=OFF \
- 	-DMEDIA_RUN_TEST_SUITE=OFF
+-	-DBUILD_ALONG_WITH_CMRTLIB=1 \
+ 	-DINSTALL_DRIVERS_SYSCONF=OFF \
+-	-DMEDIA_RUN_TEST_SUITE=OFF \
+-	-DRUN_TEST_SUITE=OFF
++	-DMEDIA_RUN_TEST_SUITE=OFF
  
  $(eval $(cmake-package))
