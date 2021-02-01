@@ -1,219 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Feb 2021 18:27:22 +0100
-Subject: [Buildroot] [git commit] package/musl: bump to version 1.2.2
-Message-ID: <20210201170854.80014814AA@busybox.osuosl.org>
+Date: Mon, 1 Feb 2021 18:23:55 +0100
+Subject: [Buildroot] [git commit] package/inadyn: bump to version 2.8.1
+Message-ID: <20210201170854.2E7AD814AA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=53e40a2cad7a021311e987af644d8662896d3352
+commit: https://git.buildroot.net/buildroot/commit/?id=6e0efeec7c28ed1653cc1d6cea61e7d6ca4da790
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop 0003-rewrite-wcsnrtombs-to-fix-buffer-overflow-and-other-.patch
-as it is a backport of upstream commit
-3ab2a4e02682df1382955071919d8aa3c3ec40d4 which is part of the 1.2.2
-release.
+ChangeLog:
+- https://github.com/troglobit/inadyn/releases/tag/v2.8
+- https://github.com/troglobit/inadyn/releases/tag/v2.8.1
 
-1.2.2 release notes
-
-major changes:
-- child restrictions lifted after fork of multithreaded parent
-
-new features:
-- _Fork function (POSIX-future)
-- reallocarray function (extension from OpenBSD, now widespread)
-- gettid function (kernel tid as supported concept)
-- SIGEV_THREAD_ID sigevent API (Linux extension)
-- tcgetwinsize and tcsetwinsize functions (POSIX-future)
-
-performance:
-- faster software sqrt on archs without native sqrt instruction
-
-compatibility:
-- realpath no longer depends on procfs availability & accuracy
-- time zone parser now always prefers 64-bit tables if present
-- crypt_blowfish now supports $2b$ prefix
-- res_query now reports errors via h_errno
-- set*id and setrlimit are now safe in vforked/cloned child
-- setgroups now applies to all threads
-- dlopen debugger notification is improved, should work with lldb
-- setrlimit no longer needs __synccall broadcast on linux 2.6.36+
-- faccessat with AT_EACCESS no longer needs child process on linux 5.8+
-
-bugs fixed:
-- buffer overflow and infinite loop errors in wcsnrtombs (CVE-2020-28928)
-- sem_close unmapped still-referenced semaphores
-- fork of process with active aio could deadlock or crash paren
-- pthread_cond_wait was broken with priority-inheritance mutex
-- getgrouplist wrongly failed when nscd reported an empty list
-- abort could leak modified SIGABRT disposition to fork or posix_spawn child
-- regression with mallocng: malloc_usable_size(0) crashed
-- readlink wrongly gave EINVAL on zero length dest buffer
-- sqrtl was severely inaccurate (not correctly rounded) on ldquad archs
-- assert failure wrongly flushed stdio (possible deadlock)
-- MUSL_LOCPATH search was broken with multiple components
-- missing newline in herror output
-- possible deadlock in pthread_exit with pshared mutex or barrier usage
-- pthread_mutexattr_getprotocol didn't read back protocol
-- v4l2 ioctl translation for pre-time64 kernels didn't work
-
-arch-specific bugs fixed:
-- x86_64 longjmp failed to handle 0 argument reliably
-- i386 __set_thread_area fallback for pre-2.6 kernels didn't work
-- missing O_LARGEFILE macro value on x86_64, x32, mips64
-- unpredictable s390x breakage from failure to preserve call-saved registers
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...nrtombs-to-fix-buffer-overflow-and-other-.patch | 114 ---------------------
- package/musl/musl.hash                             |   4 +-
- package/musl/musl.mk                               |   2 +-
- 3 files changed, 3 insertions(+), 117 deletions(-)
+ package/inadyn/inadyn.hash | 5 ++---
+ package/inadyn/inadyn.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/musl/0003-rewrite-wcsnrtombs-to-fix-buffer-overflow-and-other-.patch b/package/musl/0003-rewrite-wcsnrtombs-to-fix-buffer-overflow-and-other-.patch
-deleted file mode 100644
-index 2fb29940a9..0000000000
---- a/package/musl/0003-rewrite-wcsnrtombs-to-fix-buffer-overflow-and-other-.patch
-+++ /dev/null
-@@ -1,114 +0,0 @@
--From 3ab2a4e02682df1382955071919d8aa3c3ec40d4 Mon Sep 17 00:00:00 2001
--From: Rich Felker <dalias@aerifal.cx>
--Date: Thu, 19 Nov 2020 17:12:43 -0500
--Subject: [PATCH] rewrite wcsnrtombs to fix buffer overflow and other bugs
--
--the original wcsnrtombs implementation, which has been largely
--untouched since 0.5.0, attempted to build input-length-limiting
--conversion on top of wcsrtombs, which only limits output length. as
--best I recall, this choice was made out of a mix of disdain over
--having yet another variant function to implement (added in POSIX 2008;
--not standard C) and preference not to switch things around and
--implement the wcsrtombs in terms of the more general new function,
--probably over namespace issues. the strategy employed was to impose
--output limits that would ensure the input limit wasn't exceeded, then
--finish up the tail character-at-a-time. unfortunately, none of that
--worked correctly.
--
--first, the logic in the wcsrtombs loop was wrong in that it could
--easily get stuck making no forward progress, by imposing an output
--limit too small to convert even one character.
--
--the character-at-a-time loop that followed was even worse. it made no
--effort to ensure that the converted multibyte character would fit in
--the remaining output space, only that there was a nonzero amount of
--output space remaining. it also employed an incorrect interpretation
--of wcrtomb's interface contract for converting the null character,
--thereby failing to act on end of input, and remaining space accounting
--was subject to unsigned wrap-around. together these errors allow
--unbounded overflow of the destination buffer, controlled by input
--length limit and input wchar_t string contents.
--
--given the extent to which this function was broken, it's plausible
--that most applications that would have been rendered exploitable were
--sufficiently broken not to be usable in the first place. however, it's
--also plausible that common (especially ASCII-only) inputs succeeded in
--the wcsrtombs loop, which mostly worked, while leaving the wildly
--erroneous code in the second loop exposed to particular non-ASCII
--inputs.
--
--CVE-2020-28928 has been assigned for this issue.
--
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- src/multibyte/wcsnrtombs.c | 46 ++++++++++++++++----------------------
-- 1 file changed, 19 insertions(+), 27 deletions(-)
--
--diff --git a/src/multibyte/wcsnrtombs.c b/src/multibyte/wcsnrtombs.c
--index 676932b5..95e25e70 100644
----- a/src/multibyte/wcsnrtombs.c
--+++ b/src/multibyte/wcsnrtombs.c
--@@ -1,41 +1,33 @@
-- #include <wchar.h>
--+#include <limits.h>
--+#include <string.h>
-- 
-- size_t wcsnrtombs(char *restrict dst, const wchar_t **restrict wcs, size_t wn, size_t n, mbstate_t *restrict st)
-- {
---	size_t l, cnt=0, n2;
---	char *s, buf[256];
-- 	const wchar_t *ws = *wcs;
---	const wchar_t *tmp_ws;
---
---	if (!dst) s = buf, n = sizeof buf;
---	else s = dst;
---
---	while ( ws && n && ( (n2=wn)>=n || n2>32 ) ) {
---		if (n2>=n) n2=n;
---		tmp_ws = ws;
---		l = wcsrtombs(s, &ws, n2, 0);
---		if (!(l+1)) {
---			cnt = l;
---			n = 0;
--+	size_t cnt = 0;
--+	if (!dst) n=0;
--+	while (ws && wn) {
--+		char tmp[MB_LEN_MAX];
--+		size_t l = wcrtomb(n<MB_LEN_MAX ? tmp : dst, *ws, 0);
--+		if (l==-1) {
--+			cnt = -1;
-- 			break;
-- 		}
---		if (s != buf) {
---			s += l;
--+		if (dst) {
--+			if (n<MB_LEN_MAX) {
--+				if (l>n) break;
--+				memcpy(dst, tmp, l);
--+			}
--+			dst += l;
-- 			n -= l;
-- 		}
---		wn = ws ? wn - (ws - tmp_ws) : 0;
---		cnt += l;
---	}
---	if (ws) while (n && wn) {
---		l = wcrtomb(s, *ws, 0);
---		if ((l+1)<=1) {
---			if (!l) ws = 0;
---			else cnt = l;
--+		if (!*ws) {
--+			ws = 0;
-- 			break;
-- 		}
---		ws++; wn--;
---		/* safe - this loop runs fewer than sizeof(buf) times */
---		s+=l; n-=l;
--+		ws++;
--+		wn--;
-- 		cnt += l;
-- 	}
-- 	if (dst) *wcs = ws;
---- 
--2.20.1
--
-diff --git a/package/musl/musl.hash b/package/musl/musl.hash
-index 39f1057961..4ab18cebd8 100644
---- a/package/musl/musl.hash
-+++ b/package/musl/musl.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature from
--# https://musl.libc.org/releases/musl-1.2.1.tar.gz.asc
--sha256  68af6e18539f646f9c41a3a2bb25be4a5cfa5a8f65f0bb647fd2bbfdf877e84b  musl-1.2.1.tar.gz
-+# https://musl.libc.org/releases/musl-1.2.2.tar.gz.asc
-+sha256  9b969322012d796dc23dda27a35866034fa67d8fb67e0e2c45c913c3d43219dd  musl-1.2.2.tar.gz
- sha256  f9bc4423732350eb0b3f7ed7e91d530298476f8fec0c6c427a1c04ade22655af  COPYRIGHT
-diff --git a/package/musl/musl.mk b/package/musl/musl.mk
-index bc4237968d..82b3eeaf52 100644
---- a/package/musl/musl.mk
-+++ b/package/musl/musl.mk
+diff --git a/package/inadyn/inadyn.hash b/package/inadyn/inadyn.hash
+index 8480e449ca..638f92d119 100644
+--- a/package/inadyn/inadyn.hash
++++ b/package/inadyn/inadyn.hash
+@@ -1,6 +1,5 @@
+-# From https://github.com/troglobit/inadyn/releases/download/v2.7/inadyn-2.7.tar.xz.md5
+-md5  3ab125df504a9755264a9ebeedbfa4de  inadyn-2.7.tar.xz
++# From https://github.com/troglobit/inadyn/releases/download/v2.8.1/inadyn-2.8.1.tar.xz.sha256
++sha256  1185a9fb165bfc5f5b5f66f0dd8a695c9bd78d4b20cd162273eeea77f2d2e685  inadyn-2.8.1.tar.xz
+ 
+ # Locally computed
+-sha256  eb03bc9d9c09dfbbc651b43a2eb5a967d0454a8293576df23784710dac50c6a4  inadyn-2.7.tar.xz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/inadyn/inadyn.mk b/package/inadyn/inadyn.mk
+index 7888f5a360..c115e8926d 100644
+--- a/package/inadyn/inadyn.mk
++++ b/package/inadyn/inadyn.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MUSL_VERSION = 1.2.1
-+MUSL_VERSION = 1.2.2
- MUSL_SITE = http://www.musl-libc.org/releases
- MUSL_LICENSE = MIT
- MUSL_LICENSE_FILES = COPYRIGHT
+-INADYN_VERSION = 2.7
++INADYN_VERSION = 2.8.1
+ INADYN_SITE = https://github.com/troglobit/inadyn/releases/download/v$(INADYN_VERSION)
+ INADYN_SOURCE = inadyn-$(INADYN_VERSION).tar.xz
+ INADYN_LICENSE = GPL-2.0+
