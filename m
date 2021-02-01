@@ -1,66 +1,80 @@
-From: Michael Nosthoff <buildroot@heine.tech>
-Date: Mon, 01 Feb 2021 14:39:34 +0100
-Subject: [Buildroot] 
- =?utf-8?q?=5BPATCH=5D_package/libgpiod=3A_bump_to_ve?=
- =?utf-8?q?rsion_1=2E6=2E2?=
-In-Reply-To: <6b1-6017d800-5-32d73800@194734800>
-Message-ID: <39b-60180480-3-547e1400@130070482>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 01 Feb 2021 14:56:57 +0100
+Subject: [Buildroot] Question on udhcpc script
+In-Reply-To: <CAL2JCb8RWKzBciDr6mGs3gUy1onKAnm3SQj04Ti3MzBG_wHG-w@mail.gmail.com>
+ (Bhattiprolu RaviKumar's message of "Mon, 1 Feb 2021 18:50:30 +0530")
+References: <CAL2JCb_UdG5-PpWbz3Yd84mSM47pGJHsjyUOn7Tzm6r_=Q4Dkg@mail.gmail.com>
+ <87a6sonfgu.fsf@dell.be.48ers.dk>
+ <CAL2JCb8RWKzBciDr6mGs3gUy1onKAnm3SQj04Ti3MzBG_wHG-w@mail.gmail.com>
+Message-ID: <875z3bopqu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bartosz,
+>>>>> "Bhattiprolu" == Bhattiprolu RaviKumar <ravikumar.bhattiprolu@gmail.com> writes:
 
-I just noticed there is another build issue with the 1.6.2 release and I'm trying to get my head around how to best fix it.
+ > Peter,
 
-When I make a clean build with C++ enabled the Buildroot build fails with this messages:
+ >  All,
+ >   We are using busybox to get DHCPv6  address. However, I am bit confused
+ > on the part of the script /etc/udhcpc.d/50default:
 
-make[5]: Entering directory '/build/output/build/libgpiod-1.6.2/bindings/cxx/examples'
-/build/output/host/bin/arm-none-linux-gnueabihf-g++ -DHAVE_CONFIG_H -I. -I../../..  -I../../../bindings/cxx/ -I../../../include -Wall -Wextra -g -std=gnu++11 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -D_LARGEFILE_SOURCE -D
-_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -c -o gpiodetectcxx.o gpiodetectcxx.cpp
-/build/output/host/bin/arm-none-linux-gnueabihf-g++ -DHAVE_CONFIG_H -I. -I../../..  -I../../../bindings/cxx/ -I../../../include -Wall -Wextra -g -std=gnu++11 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -D_LARGEFILE_SOURCE -D
-_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -c -o gpiofindcxx.o gpiofindcxx.cpp
-/build/output/host/bin/arm-none-linux-gnueabihf-g++ -DHAVE_CONFIG_H -I. -I../../..  -I../../../bindings/cxx/ -I../../../include -Wall -Wextra -g -std=gnu++11 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -D_LARGEFILE_SOURCE -D
-_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -c -o gpiogetcxx.o gpiogetcxx.cpp
-/build/output/host/bin/arm-none-linux-gnueabihf-g++ -DHAVE_CONFIG_H -I. -I../../..  -I../../../bindings/cxx/ -I../../../include -Wall -Wextra -g -std=gnu++11 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -D_LARGEFILE_SOURCE -D
-_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -c -o gpioinfocxx.o gpioinfocxx.cpp
-/build/output/host/bin/arm-none-linux-gnueabihf-g++ -DHAVE_CONFIG_H -I. -I../../..  -I../../../bindings/cxx/ -I../../../include -Wall -Wextra -g -std=gnu++11 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -D_LARGEFILE_SOURCE -D
-_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -c -o gpiomoncxx.o gpiomoncxx.cpp
-/build/output/host/bin/arm-none-linux-gnueabihf-g++ -DHAVE_CONFIG_H -I. -I../../..  -I../../../bindings/cxx/ -I../../../include -Wall -Wextra -g -std=gnu++11 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -D_LARGEFILE_SOURCE -D
-_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -c -o gpiosetcxx.o gpiosetcxx.cpp
-/bin/bash ../../../libtool  --tag=CXX   --mode=link /build/output/host/bin/arm-none-linux-gnueabihf-g++  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -lgpiodcxx -L../../../bindings/cxx/  -o gpiofindcxx gpiofindcxx.o
-/bin/bash ../../../libtool  --tag=CXX   --mode=link /build/output/host/bin/arm-none-linux-gnueabihf-g++  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -lgpiodcxx -L../../../bindings/cxx/  -o gpiodetectcxx gpiodetectcxx.o
+ > wait_for_ipv6_default_route() {
+ > *        printf "Waiting for IPv6 default route to appear"*
+ >         while [ $IF_WAIT_DELAY -gt 0 ]; do
+ > *                if [ -z "$(ip -6 route list | grep default)" ]; then*
+ >                         printf "\n"
+ >                         return
+ >                 fi
+ >                 sleep 1
+ >                 printf "."
+ >                 : $((IF_WAIT_DELAY -= 1))
+ >         done
+ >         printf " timeout!\n"
+ > }
 
-libtool: link: /build/output/host/bin/arm-none-linux-gnueabihf-g++ -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -o gpiofindcxx gpiofindcxx.o  /build/output/build/libgpiod-1.6.2/bindings/cxx/.libs/li
-bgpiodcxx.so -L../../../bindings/cxx/ -Wl,-rpath -Wl,/build/output/build/libgpiod-1.6.2/bindings/cxx/.libs
-/bin/bash ../../../libtool  --tag=CXX   --mode=link /build/output/host/bin/arm-none-linux-gnueabihf-g++  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -lgpiodcxx -L../../../bindings/cxx/  -o gpioinfocxx gpioinfocxx.o
-libtool: link: /build/output/host/bin/arm-none-linux-gnueabihf-g++ -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -o gpiodetectcxx gpiodetectcxx.o  /build/output/build/libgpiod-1.6.2/bindings/cxx/.lib
-s/libgpiodcxx.so -L../../../bindings/cxx/ -Wl,-rpath -Wl,/build/output/build/libgpiod-1.6.2/bindings/cxx/.libs
-/build/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabihf/9.2.1/../../../../arm-none-linux-gnueabihf/bin/ld: /build/output/build/libgpiod-1.6.2/bindings/cxx/.libs/libgpiodcxx.so: undefined reference to `
-gpiod_line_bias'
-/build/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabihf/9.2.1/../../../../arm-none-linux-gnueabihf/bin/ld: /build/output/build/libgpiod-1.6.2/bindings/cxx/.libs/libgpiodcxx.so: undefined reference to `
-gpiod_line_set_direction_output_bulk'
-/build/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabihf/9.2.1/../../../../arm-none-linux-gnueabihf/bin/ld: /build/output/build/libgpiod-1.6.2/bindings/cxx/.libs/libgpiodcxx.so: undefined reference to `
-gpiod_line_set_config_bulk'
-/build/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabihf/9.2.1/../../../../arm-none-linux-gnueabihf/bin/ld: /build/output/build/libgpiod-1.6.2/bindings/cxx/.libs/libgpiodcxx.so: undefined reference to `
-gpiod_line_set_direction_input_bulk'
-/build/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabihf/9.2.1/../../../../arm-none-linux-gnueabihf/bin/ld: /build/output/build/libgpiod-1.6.2/bindings/cxx/.libs/libgpiodcxx.so: undefined reference to `
-gpiod_line_event_read_multiple'
-/build/output/host/opt/ext-toolchain/bin/../lib/gcc/arm-none-linux-gnueabihf/9.2.1/../../../../arm-none-linux-gnueabihf/bin/ld: /build/output/build/libgpiod-1.6.2/bindings/cxx/.libs/libgpiodcxx.so: undefined reference to `
-gpiod_line_set_flags_bulk'
-collect2: error: ld returned 1 exit status
+ > The print says "Waiting for IPv6 default route to appear". However the if
+ > statement is checking for "$(ip -6 route list | grep default)"to be null
+ > (-z check) which means default route is not present.
+
+ > In our case, after DHCP, default route gets setup and "$(ip -6 route list |
+ > grep default)"returns an entry starting with default and since check is -z,
+ > it continues in the loop and finally prints "timeout".
+
+ > I am confused here. Am I missing something here?
+
+ >   The script in yocto seems to be derived from
+ > package/busybox/udhcpc.script in buildroot. It also had the same
+ > "wait_for_ipv6_default_route" function and same check.
+
+Ok, but please be specific when you ask questions. So your question is
+really about the code in package/busybox/udhcpc.script which got added
+by:
+
+commit 2d458a2d7c7f3418242aae52464306ef9f4a407f
+Author: Samuel Mendoza-Jonas <sam@mendozajonas.com>
+Date:   Tue May 21 12:54:28 2019 +1000
+
+   package/busybox: udhcpc.script: wait for ipv6 default route from RA for stateful DHCPv6
+
+   udhcpc6 implements "stateful" DHCPv6 for explicitly requesting an address
+   and other configuration information. A major difference between DHCPv4
+   and DHCPv6 is that DHCPv6 does *not* advertise a default route; this is
+   determined by normal IPv6 autoconfiguration.
+
+   Add logic to wait up to IF_WAIT_DELAY seconds for the IPv6 route to be
+   configured; as above this doesn't come from DHCPv6 but rather the IPv6
+   Router Advertisement (RA) which happens independently from udhcpc6.  The
+   intent here is to try and ensure that the interface is route-able upon the
+   script's completion as it would be if called from udhcpc.
+
+   Signed-off-by: Samuel Mendoza-Jonas <sam@mendozajonas.com>
+   Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 
-When building regularly on a clean Linux system I don't have any troubles. 
-If I build on a Buildroot target which already has some version of libgpiod built it works. (e.g. when bumping the version without make clean).
-So it seems that the build doesn't find the libgpiod.so that was just built inside the build directory. My guess is it has something to do with the libtools workarounds for cross-compiling (My knowledge of autotools/libtool is limited here.).
+The test indeed seems to be inverted. Samuel, any comments?
 
-
-But before I dig deeper into why this fails my question would be: does the bindings/cpp/examples directory really need to be build? In the 1.4.x branch it was not built by default. Now it is changed to a "noinst" target. So it gets build but won't be deployed to the target anyways.
-
-Maybe you have an Idea how this could be easily fixed. My (not so nice) solution for now would be to patch out the examples directory. But this is really a last ressort...
-
-Regards,
-Michael
+-- 
+Bye, Peter Korsgaard
