@@ -1,57 +1,71 @@
-From: Dan Raymond <draymond@foxvalley.net>
-Date: Sun, 28 Feb 2021 19:40:42 -0700
-Subject: [Buildroot] [PATCH 1/1] fix failure during 'make linux-menuconfig'
- when PATH env var has spaces
-Message-ID: <16100eb6-bac8-2e4d-65f2-26333179f3b8@foxvalley.net>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon,  1 Feb 2021 08:41:01 +0100
+Subject: [Buildroot] [PATCH v2,1/1] package/mpd: fix build of GenParseName
+Message-ID: <20210201074101.457193-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- From 4db6db355723bedb5918be214fbd6c6eb4a39257 Mon Sep 17 00:00:00 2001
-From: Dan Raymond <draymond@foxvalley.net>
-Date: Sun, 28 Feb 2021 18:27:18 -0700
-Subject: [PATCH 1/1] fix failure during 'make linux-menuconfig' when 
-PATH env var has spaces
+Fix build of GenParseName which has been added in version 0.22:
+https://github.com/MusicPlayerDaemon/MPD/commit/fa45a8adfa44f6bc815ae7428770112c15c76d73
 
-Signed-off-by: Dan Raymond <draymond@foxvalley.net>
+Fixes:
+ - http://autobuild.buildroot.org/results/871e1362c44e5b68a149e6a5dd3caf99ea0d904a
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ?package/pkg-kconfig.mk | 6 +++---
- ?support/misc/utils.mk? | 6 ++++++
- ?2 files changed, 9 insertions(+), 3 deletions(-)
+Changes v1 -> v2 (after review of Thomas Petazzoni):
+ - Use link_language instead of linking with -lstdc++
 
-diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
-index 2aecf2e203..6bf87fbead 100644
---- a/package/pkg-kconfig.mk
-+++ b/package/pkg-kconfig.mk
-@@ -205,9 +205,9 @@ endif
- ?# nconfig, gconfig, xconfig).
- ?# So we simply remove our PATH and PKG_CONFIG_* variables.
- ?$(2)_CONFIGURATOR_MAKE_ENV = \
--??? $$(filter-out PATH=% PKG_CONFIG=% PKG_CONFIG_SYSROOT_DIR=% \
--??? ?? PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=% PKG_CONFIG_ALLOW_SYSTEM_LIBS=% \
--??? ?? PKG_CONFIG_LIBDIR=%,$$($(2)_MAKE_ENV)) \
-+??? $$(call strip_env,PATH PKG_CONFIG PKG_CONFIG_SYSROOT_DIR \
-+??? ?? PKG_CONFIG_ALLOW_SYSTEM_CFLAGS PKG_CONFIG_ALLOW_SYSTEM_LIBS \
-+??? ?? PKG_CONFIG_LIBDIR,$$($(2)_MAKE_ENV)) \
- ???? PKG_CONFIG_PATH="$(HOST_PKG_CONFIG_PATH)"
+ ...meson.build-fix-GenParseName-linking.patch | 38 +++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+ create mode 100644 package/mpd/0002-src-tag-meson.build-fix-GenParseName-linking.patch
 
- ?# Configuration editors (menuconfig, ...)
-diff --git a/support/misc/utils.mk b/support/misc/utils.mk
-index dc60cad979..640e56c775 100644
---- a/support/misc/utils.mk
-+++ b/support/misc/utils.mk
-@@ -135,3 +135,9 @@ define PRINTF
- ???? ??? ??? $(subst $(QUOTE),$(QUOTE)\$(QUOTE)$(QUOTE),\
- ???? ??? ??? ??? $(subst \,\\,$(1)))))\n'
- ?endef
+diff --git a/package/mpd/0002-src-tag-meson.build-fix-GenParseName-linking.patch b/package/mpd/0002-src-tag-meson.build-fix-GenParseName-linking.patch
+new file mode 100644
+index 0000000000..e120b3e4ea
+--- /dev/null
++++ b/package/mpd/0002-src-tag-meson.build-fix-GenParseName-linking.patch
+@@ -0,0 +1,38 @@
++From 4c37d0b316a15213381bd7e07c5dee7526471fc8 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 1 Feb 2021 08:10:45 +0100
++Subject: [PATCH] src/tag/meson.build: fix GenParseName linking
 +
-+# strip variables (quoted or unquoted) from an environment string:
-+# MYENV = PATH="/bin:/dir with spaces" USER=root SHELL=/bin/sh
-+# $(call strip_env,PATH SHELL,$(MYENV)) --> USER=root
-+sed_cmds=$(foreach var,$(1),-e 's/$(var)="[^"]*" *//' -e 's/$(var)=[^ 
-]* *//')
-+strip_env=$(shell echo "$(subst ",\",$(2))" | sed $(call sed_cmds,$(1)))
++Set link_language to cpp for GenParseName to avoid the following build
++failure due to gcc being used to link a C and C++ source file:
++
++FAILED: src/tag/GenParseName
++/usr/bin/gcc  -o src/tag/GenParseName src/tag/GenParseName.p/GenParseName.cxx.o src/tag/GenParseName.p/Names.c.o -Wl,--as-needed -Wl,--no-undefined -Wl,-O1
++/usr/bin/ld: src/tag/GenParseName.p/GenParseName.cxx.o: in function `std::_Rb_tree<std::basic_string_view<char, std::char_traits<char> >, std::pair<std::basic_string_view<char, std::char_traits<char> > const, TagType>, std::_Select1st<std::pair<std::basic_string_view<char, std::char_traits<char> > const, TagType> >, std::less<std::basic_string_view<char, std::char_traits<char> > >, std::allocator<std::pair<std::basic_string_view<char, std::char_traits<char> > const, TagType> > >::_M_erase(std::_Rb_tree_node<std::pair<std::basic_string_view<char, std::char_traits<char> > const, TagType> >*)':
++GenParseName.cxx:
++(.text._ZNSt8_Rb_treeISt17basic_string_viewIcSt11char_traitsIcEESt4pairIKS3_7TagTypeESt10_Select1stIS7_ESt4lessIS3_ESaIS7_EE8_M_eraseEPSt13_Rb_tree_nodeIS7_E[_ZNSt8_Rb_treeISt17basic_string_viewIcSt11char_traitsIcEESt4pairIKS3_7TagTypeESt10_Select1stIS7_ESt4lessIS3_ESaIS7_EE8_M_eraseEPSt13_Rb_tree_nodeIS7_E]+0x23): undefined reference to `operator delete(void*)'
++
++Fixes:
++ - http://autobuild.buildroot.org/results/871e1362c44e5b68a149e6a5dd3caf99ea0d904a
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/MusicPlayerDaemon/MPD/pull/1068]
++---
++ src/tag/meson.build | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/tag/meson.build b/src/tag/meson.build
++index 064eada18..4fda35e52 100644
++--- a/src/tag/meson.build
+++++ b/src/tag/meson.build
++@@ -2,6 +2,7 @@ generate_parse_name = executable(
++   'GenParseName',
++   'GenParseName.cxx',
++   'Names.c',
+++  link_language: 'cpp',
++   native: true,
++ )
++ 
++-- 
++2.29.2
++
 -- 
-2.25.1
+2.29.2
