@@ -1,43 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 1 Feb 2021 09:03:47 +0100
-Subject: [Buildroot] [PATCH v1 2/2] package/libcamera-apps: new package
-In-Reply-To: <20210131234844.537ed0c1@gmx.net>
-References: <20210129230418.26359-1-ps.report@gmx.net>
- <20210129230418.26359-3-ps.report@gmx.net>
- <20210131232048.1bfc2944@windsurf.home>
- <20210131234844.537ed0c1@gmx.net>
-Message-ID: <20210201090347.668500e9@windsurf.home>
+Date: Mon, 1 Feb 2021 09:04:31 +0100
+Subject: [Buildroot] [RFC PATCH 0/1] package/sysklogd: proposal to
+ update default syslog.conf
+In-Reply-To: <87sg6gg1d9.fsf@gmail.com>
+References: <20210130135203.159451-1-troglobit@gmail.com>
+ <20210131231346.6bce24e3@windsurf.home> <87sg6gg1d9.fsf@gmail.com>
+Message-ID: <20210201090431.48d3508e@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
+On Sun, 31 Jan 2021 23:58:26 +0100
+Joachim Wiberg <troglobit@gmail.com> wrote:
 
-On Sun, 31 Jan 2021 23:48:44 +0100
-Peter Seiderer <ps.report@gmx.net> wrote:
-
-> > Loooots of patches. I suppose you submitted them upstream already ?  
+> True, no point in having a local copy.
 > 
-> Yes, see [1]...., and more patches to come to fix test-pkg failures...
-
-Great!
-
-> > To be honest, I am wondering if we shouldn't do a "depends on
-> > BR2_PACKAGE_LIBCAMERA" to simplify this a bit. Indeed, if you want
-> > libcamera-apps, most likely you know you should enable libcamera as
-> > well.  
+> My main question was if there was any specific reason to sticking with
+> the old habits of only using /var/log/messages, as BusyBox syslogd does,
+> or if every logging package is free to have its own defalts?  Within
+> reason, of course.  I'm just a bit concerned with breaking peoples
+> defaults, even though they can just provide their own.
 > 
-> The experienced buildroot user will do...., but the average RPi user?
+> If it's OK to change for sysklogd, I can post a new patch that drops
+> the locallay maintained .conf and instead installs the sysklogd one.
 
-Ah, but I now realize this libcamera-apps stuff is from the raspberrypi
-project, not from the libcamera project.
-
-Fair enough, my comment was not a very strong one, so I'm fine with a
-select of libcamera + propagation of dependencies, as you did.
-
-Thanks a lot!
+I don't have a strong opinion on what should be our default
+configuration for sysklogd. Peter, do you have any comments ?
 
 Thomas
 -- 
