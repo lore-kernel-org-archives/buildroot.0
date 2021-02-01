@@ -1,100 +1,34 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon,  1 Feb 2021 18:51:13 +0100
-Subject: [Buildroot] [PATCH 2/2] package/libbsd: needs dynamic library
-In-Reply-To: <20210201175113.937333-1-fontaine.fabrice@gmail.com>
-References: <20210201175113.937333-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210201175113.937333-2-fontaine.fabrice@gmail.com>
+Date: Mon,  1 Feb 2021 18:53:23 +0100
+Subject: [Buildroot] [PATCH 1/1] package/bdwgc: set BDWGC_CPE_ID_VALID
+Message-ID: <20210201175323.959125-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Static linking with libbsd fails because of multiple definition of the
-strlcpy symbol. uClibc optionally provides these symbols.
+cpe:2.3:a:bdwgc_project:bdwgc is a valid CPE identifier for this
+package:
 
-So add a dependency on dynamic library to avoid a build failure with a
-zeromq-enabled bitcoin or with stress-ng.
-
-Fixes:
- - http://autobuild.buildroot.org/results/ba87544d42ad5e77a27a7a504bc6336a06f6e291
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Abdwgc_project%3Abdwgc
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/fwts/Config.in           | 5 +++--
- package/libbsd/Config.in         | 6 ++++--
- package/netcat-openbsd/Config.in | 6 ++++--
- 3 files changed, 11 insertions(+), 6 deletions(-)
+ package/bdwgc/bdwgc.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/fwts/Config.in b/package/fwts/Config.in
-index ff28a4a403..ac9a2e3909 100644
---- a/package/fwts/Config.in
-+++ b/package/fwts/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_FWTS
- 	depends on BR2_USE_MMU # libglib2
- 	depends on BR2_USE_WCHAR # libglib2, libbsd
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2, libbsd
-+	depends on !BR2_STATIC_LIBS # libbsd
- 	depends on BR2_TOOLCHAIN_USES_GLIBC # execinfo.h
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_LIBBSD
-@@ -31,9 +32,9 @@ comment "efi_runtime module needs a Linux kernel to be built"
- 	depends on !BR2_LINUX_KERNEL
- endif
+diff --git a/package/bdwgc/bdwgc.mk b/package/bdwgc/bdwgc.mk
+index 6ae9627a60..4a720dbfd8 100644
+--- a/package/bdwgc/bdwgc.mk
++++ b/package/bdwgc/bdwgc.mk
+@@ -10,6 +10,7 @@ BDWGC_SITE = http://www.hboehm.info/gc/gc_source
+ BDWGC_INSTALL_STAGING = YES
+ BDWGC_LICENSE = bdwgc license
+ BDWGC_LICENSE_FILES = README.QUICK
++BDWGC_CPE_ID_VALID = YES
+ BDWGC_DEPENDENCIES = libatomic_ops host-pkgconf
+ HOST_BDWGC_DEPENDENCIES = host-libatomic_ops host-pkgconf
  
--comment "fwts needs a glibc toolchain w/ wchar, threads"
-+comment "fwts needs a glibc toolchain w/ wchar, threads, dynamic library"
- 	depends on BR2_i386 || BR2_x86_64 || BR2_aarch64
- 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS # libbsd
- 	depends on BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_TOOLCHAIN_USES_GLIBC
-+		!BR2_TOOLCHAIN_USES_GLIBC || BR2_STATIC_LIBS
-diff --git a/package/libbsd/Config.in b/package/libbsd/Config.in
-index e54f5e6f23..845a22162b 100644
---- a/package/libbsd/Config.in
-+++ b/package/libbsd/Config.in
-@@ -10,6 +10,7 @@ config BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
- config BR2_PACKAGE_LIBBSD
- 	bool "libbsd"
- 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
-+	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_WCHAR
- 	help
-@@ -21,6 +22,7 @@ config BR2_PACKAGE_LIBBSD
- 
- 	  http://libbsd.freedesktop.org/
- 
--comment "libbsd needs a toolchain w/ threads, wchar"
-+comment "libbsd needs a toolchain w/ dynamic library, threads, wchar"
- 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_USE_WCHAR
-diff --git a/package/netcat-openbsd/Config.in b/package/netcat-openbsd/Config.in
-index 4734ff9901..beaa8ed451 100644
---- a/package/netcat-openbsd/Config.in
-+++ b/package/netcat-openbsd/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_NETCAT_OPENBSD
- 	bool "netcat-openbsd"
- 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
-+	depends on !BR2_STATIC_LIBS # libbsd
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-@@ -21,8 +22,9 @@ config BR2_PACKAGE_NETCAT_OPENBSD
- 
- 	  https://packages.debian.org/sid/netcat-openbsd
- 
--comment "netcat-openbsd needs a glibc toolchain w/ threads, headers >= 3.12"
-+comment "netcat-openbsd needs a glibc toolchain w/ dynamic library, threads, headers >= 3.12"
- 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_USES_GLIBC || \
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_TOOLCHAIN_USES_GLIBC || \
- 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
- 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
 -- 
 2.29.2
