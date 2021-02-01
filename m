@@ -1,42 +1,28 @@
-From: Bhattiprolu RaviKumar <ravikumar.bhattiprolu@gmail.com>
-Date: Mon, 1 Feb 2021 16:00:41 +0530
-Subject: [Buildroot] Question on udhcpc script
-Message-ID: <CAL2JCb_UdG5-PpWbz3Yd84mSM47pGJHsjyUOn7Tzm6r_=Q4Dkg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 1 Feb 2021 11:55:21 +0100
+Subject: [Buildroot] [git commit] support/scripts/pkg-stats: properly
+ handle host packages with -c option
+In-Reply-To: <87mtwonl2n.fsf@dell.be.48ers.dk>
+References: <20210131214120.170C981562@busybox.osuosl.org>
+ <87mtwonl2n.fsf@dell.be.48ers.dk>
+Message-ID: <20210201115521.0cba330a@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- All,
-  We are using busybox to get DHCPv6  address. However, I am bit confused
-on the part of the script /etc/udhcpc.d/50default:
+On Mon, 01 Feb 2021 11:23:12 +0100
+Peter Korsgaard <peter@korsgaard.com> wrote:
 
-wait_for_ipv6_default_route() {
-*        printf "Waiting for IPv6 default route to appear"*
-        while [ $IF_WAIT_DELAY -gt 0 ]; do
-*                if [ -z "$(ip -6 route list | grep default)" ]; then*
-                        printf "\n"
-                        return
-                fi
-                sleep 1
-                printf "."
-                : $((IF_WAIT_DELAY -= 1))
-        done
-        printf " timeout!\n"
-}
+>  > +    return set([v["name"] for _, v in js.items()])  
+> 
+> If we don't care about the key at all, why not just use js.values()?
 
-The print says "Waiting for IPv6 default route to appear". However the if
-statement is checking for "$(ip -6 route list | grep default)"to be null
-(-z check) which means default route is not present.
+'cause I didn't know about <dict>.values() :-)
 
-In our case, after DHCP, default route gets setup and "$(ip -6 route list |
-grep default)"returns an entry starting with default and since check is -z,
-it continues in the loop and finally prints "timeout".
-
-I am confused here. Am I missing something here?
-regards,
-Ravi
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210201/a7aa2cbc/attachment-0001.html>
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
