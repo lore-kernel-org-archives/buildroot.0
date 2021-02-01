@@ -1,48 +1,70 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Feb 2021 18:25:24 +0100
-Subject: [Buildroot] [git commit] package/xenomai: set 'custom' as version
- in case of tarball
-Message-ID: <20210201170854.39FA386554@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 1 Feb 2021 18:34:40 +0100
+Subject: [Buildroot] [PATCH 1/1] package/pugixml: drop
+ BR2_PACKAGE_PUGIXML_HEADER_ONLY
+In-Reply-To: <CAPi7W814FRkN6PY21kChgSVhCv3oLidX3hpzj-5DADxDXuVr3Q@mail.gmail.com>
+References: <20210128172935.4138671-1-fontaine.fabrice@gmail.com>
+ <20210131233021.605e67b0@windsurf.home>
+ <CAPi7W814FRkN6PY21kChgSVhCv3oLidX3hpzj-5DADxDXuVr3Q@mail.gmail.com>
+Message-ID: <CAPi7W82mgrDGJvSdrJQygo9o0zuAsjk2RHHXR0YTWR52VTjsJQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=603bfafa97ed148fb7774cac7f644eb575535a05
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Le lun. 1 f?vr. 2021 ? 08:57, Fabrice Fontaine
+<fontaine.fabrice@gmail.com> a ?crit :
+>
+> Hi Thomas,
+>
+> Le dim. 31 janv. 2021 ? 23:30, Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> a ?crit :
+> >
+> > On Thu, 28 Jan 2021 18:29:35 +0100
+> > Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+> >
+> > > Drop BR2_PACKAGE_PUGIXML_HEADER_ONLY which raises a build failure with
+> > > gerbera (the only package that is using pugixml). Indeed, there is two
+> > > issues:
+> > >  - gerbera is not aware that it must define PUGIXML_HEADER_ONLY
+> > >  - pugixml.cpp is not available in the staging directory so gerbera
+> > >    can't use it
+> > >
+> > > It should be noted that pugixml continues to install a (non working)
+> > > library even when PUGIXML_HEADER_ONLY is enabled resulting in a build
+> > > failure at linking stage instead of configure step:
+> > >
+> > > [100%] Linking CXX executable gerbera
+> > > /home/buildroot/autobuild/run/instance-2/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-musleabihf/8.3.0/../../../../arm-buildroot-linux-musleabihf/bin/ld: liblibgerbera.a(config_manager.cc.o): in function `ConfigManager::getElement(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >) const':
+> > > config_manager.cc:(.text+0x4d8): undefined reference to `pugi::xml_document::document_element() const'
+> >
+> > This looks like an upstream bug in pugixml, isn't it ? We're using
+> > pugixml 1.10, but a 1.11 has been released since then. Have you tried
+> > that ? Did you ask upstream pugixml about this issue ?
+> It also fails with 1.11. Following your advice, I found that this
+> issue has already been reported:
+> https://github.com/zeux/pugixml/issues/200
+> The answer was: "wontfix" with "Since I don't maintain pugixml
+> packages and the packaging
+> for Ubuntu seems appropriate (even though it doesn't support
+> header-only builds, if you
+> need them you should bundle pugixml with your app), I'm closing this."
+Finally, after more investigation, it seems that the latest version of
+pugixml installs a working library even if the option is still
+"broken".
+I'll send a v2.
+> >
+> > Thanks!
+> >
+> > Thomas
+> > --
+> > Thomas Petazzoni, CTO, Bootlin
+> > Embedded Linux and Kernel engineering
+> > https://bootlin.com
+> Best Regards,
+>
+> Fabrice
+Best Regards,
 
-When BR2_PACKAGE_XENOMAI_CUSTOM_TARBALL is selected, the xenomai package
-declared an empty version, which among others means that the build directory
-becomes output/build/xenomai without any version specification, and empty
-version information in 'xenomai-show-info'.
-
-Other packages that allow a custom tarball, like 'linux' and
-'arm-trusted-firmware', specify 'custom' as version in this case.
-
-Adapt the xenomai package accordingly.
-
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/xenomai/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/package/xenomai/Config.in b/package/xenomai/Config.in
-index 452b452039..b655733528 100644
---- a/package/xenomai/Config.in
-+++ b/package/xenomai/Config.in
-@@ -69,9 +69,11 @@ config BR2_PACKAGE_XENOMAI_REPOSITORY
- 	depends on BR2_PACKAGE_XENOMAI_CUSTOM_GIT
- 
- config BR2_PACKAGE_XENOMAI_VERSION
--	string "Custom Xenomai version" if !BR2_PACKAGE_XENOMAI_LATEST_VERSION
-+	string "Custom Xenomai version" if \
-+		!BR2_PACKAGE_XENOMAI_LATEST_VERSION && \
-+		!BR2_PACKAGE_XENOMAI_CUSTOM_TARBALL
- 	default "3.0.10" if BR2_PACKAGE_XENOMAI_LATEST_VERSION
--	depends on !BR2_PACKAGE_XENOMAI_CUSTOM_TARBALL
-+	default "custom" if BR2_PACKAGE_XENOMAI_CUSTOM_TARBALL
- 
- config BR2_PACKAGE_XENOMAI_CUSTOM_TARBALL_URL
- 	string "URL of custom tarball"
+Fabrice
