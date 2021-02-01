@@ -1,32 +1,36 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon,  1 Feb 2021 19:22:27 +0100
-Subject: [Buildroot] [PATCH 1/1] package/privoxy: add PRIVOXY_CPE_ID_VENDOR
-Message-ID: <20210201182227.993194-1-fontaine.fabrice@gmail.com>
+Date: Mon, 1 Feb 2021 19:23:52 +0100
+Subject: [Buildroot] [PATCH 1/1] package/pugixml: bump to version 1.11.4
+In-Reply-To: <87im7blkcm.fsf@dell.be.48ers.dk>
+References: <20210201174818.936752-1-fontaine.fabrice@gmail.com>
+ <87im7blkcm.fsf@dell.be.48ers.dk>
+Message-ID: <CAPi7W83ftPo1VBrG1JiLTdNv=Euv51YpTp5_iQ0ORnW3ZTOTWw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:privoxy:privoxy is a valid CPE identifier for this package:
+Dear Peter,
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aprivoxy%3Aprivoxy
+Le lun. 1 f?vr. 2021 ? 19:21, Peter Korsgaard <peter@korsgaard.com> a ?crit :
+>
+> >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>
+>  > - Use LICENSE.md which has been added in the release tarball since
+>  >   version 1.11 and
+>  >   https://github.com/zeux/pugixml/commit/ccb63a91865b59d3a4c1dde61fecf12ec085c089
+>  > - Fix a build failure with gerbera >= 1.5.0 when building pugixml in
+>  >   header-only mode
+>
+> So that means that this needs to be backported to 2020.02.x / 2020.11.x
+> as well?
+Yes.
+>
+> Committed, thanks.
+>
+> --
+> Bye, Peter Korsgaard
+Best Regards,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/privoxy/privoxy.mk | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/privoxy/privoxy.mk b/package/privoxy/privoxy.mk
-index 3cf1dc9754..6f10d5d32e 100644
---- a/package/privoxy/privoxy.mk
-+++ b/package/privoxy/privoxy.mk
-@@ -12,5 +12,6 @@ PRIVOXY_AUTORECONF = YES
- PRIVOXY_DEPENDENCIES = pcre zlib
- PRIVOXY_LICENSE = GPL-2.0+
- PRIVOXY_LICENSE_FILES = LICENSE
-+PRIVOXY_CPE_ID_VENDOR = privoxy
- 
- $(eval $(autotools-package))
--- 
-2.29.2
+Fabrice
