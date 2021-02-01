@@ -1,30 +1,28 @@
-From: MS Handelskontor GmbH <mshk@snw.at>
-Date: Mon, 1 Feb 2021 15:55:48 +0100
-Subject: [Buildroot] friendlyarm nanopi r4s
-Message-ID: <6BA4D77663DEF04382ACCED529D3AC93076AB898F76A@MSHK01.mshk.kirchbichl.lokal>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 01 Feb 2021 18:23:32 +0100
+Subject: [Buildroot] [PATCH] package/libevdev: bump to version 1.11.0
+In-Reply-To: <20210201115028.9913-1-post@lespocky.de> (Alexander Dahl's
+ message of "Mon, 1 Feb 2021 12:50:28 +0100")
+References: <20210201115028.9913-1-post@lespocky.de>
+Message-ID: <871rdzog6j.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Is it planned to support friendlyarm nanopi r4s by a defconfig ?
+>>>>> "Alexander" == Alexander Dahl <post@lespocky.de> writes:
 
+ > With this version libevdev sets the license to MIT license.  Actually
+ > that has always been the intended license before.  Upstream made some
+ > effort to have all contributors acknowledge that over the past months.
 
-[cid:image001.jpg at 01D6F8B2.B533B420]
+ > Link: https://lists.freedesktop.org/archives/input-tools/2021-February/001557.html
+ > Link: https://gitlab.freedesktop.org/libevdev/libevdev/-/issues/9
+ > Link: https://gitlab.freedesktop.org/libevdev/libevdev/-/merge_requests/69
+ > Signed-off-by: Alexander Dahl <post@lespocky.de>
 
-Mit freundlichen Gr??en
+Committed, thanks.
 
-Stephan von Michael
-
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210201/34e9b150/attachment-0001.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: image001.jpg
-Type: image/jpeg
-Size: 6671 bytes
-Desc: image001.jpg
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210201/34e9b150/attachment-0001.jpg>
+-- 
+Bye, Peter Korsgaard
