@@ -1,48 +1,54 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon,  1 Feb 2021 18:48:24 +0100
-Subject: [Buildroot] [PATCH] package/wireguard-linux-compat: bump version to
- 1.0.20210124
-Message-ID: <20210201174824.14410-1-peter@korsgaard.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon,  1 Feb 2021 18:48:18 +0100
+Subject: [Buildroot] [PATCH 1/1] package/pugixml: bump to version 1.11.4
+Message-ID: <20210201174818.936752-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes a build issue with recent 1.14.x stable kernels.  For details, see the
-announcement:
+- Use LICENSE.md which has been added in the release tarball since
+  version 1.11 and
+  https://github.com/zeux/pugixml/commit/ccb63a91865b59d3a4c1dde61fecf12ec085c089
+- Fix a build failure with gerbera >= 1.5.0 when building pugixml in
+  header-only mode
 
-https://lists.zx2c4.com/pipermail/wireguard/2021-January/006349.html
+Fixes:
+ - http://autobuild.buildroot.org/results/9c1919bacd23da0505a4eb828a806997a23b640f
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/wireguard-linux-compat/wireguard-linux-compat.hash | 4 ++--
- package/wireguard-linux-compat/wireguard-linux-compat.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/pugixml/pugixml.hash | 4 ++--
+ package/pugixml/pugixml.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.hash b/package/wireguard-linux-compat/wireguard-linux-compat.hash
-index 194c798570..f4f94cfd2e 100644
---- a/package/wireguard-linux-compat/wireguard-linux-compat.hash
-+++ b/package/wireguard-linux-compat/wireguard-linux-compat.hash
-@@ -1,4 +1,4 @@
--# https://lists.zx2c4.com/pipermail/wireguard/2020-December/006210.html
--sha256  6e5289a8b602eaaf1383aebefcbc41b8ad2721269055858b150363076c1c2132  wireguard-linux-compat-1.0.20201221.tar.xz
-+# https://lists.zx2c4.com/pipermail/wireguard/2021-January/006349.html
-+sha256  dac6e68cd4c3db441499850dfa8a70706384a3295f37fda1b839a50b79faef54  wireguard-linux-compat-1.0.20210124.tar.xz
- # Locally calculated
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.mk b/package/wireguard-linux-compat/wireguard-linux-compat.mk
-index ef21e2e114..2f36ec8bfb 100644
---- a/package/wireguard-linux-compat/wireguard-linux-compat.mk
-+++ b/package/wireguard-linux-compat/wireguard-linux-compat.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/pugixml/pugixml.hash b/package/pugixml/pugixml.hash
+index 79ae75e83b..5c629ac66f 100644
+--- a/package/pugixml/pugixml.hash
++++ b/package/pugixml/pugixml.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  55f399fbb470942410d348584dc953bcaec926415d3462f471ef350f29b5870a  pugixml-1.10.tar.gz
+-sha256  16582559c91ecf831d6289d472a903032e7d7994a86521c5c39513568d6ad208  readme.txt
++sha256  8ddf57b65fb860416979a3f0640c2ad45ddddbbafa82508ef0a0af3ce7061716  pugixml-1.11.4.tar.gz
++sha256  ee495f34aeff0c578a99f3350a2050d4e5860d27b2004c03c384a594fa2b0a7a  LICENSE.md
+diff --git a/package/pugixml/pugixml.mk b/package/pugixml/pugixml.mk
+index 800a3836ce..5d7fc63017 100644
+--- a/package/pugixml/pugixml.mk
++++ b/package/pugixml/pugixml.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--WIREGUARD_LINUX_COMPAT_VERSION = 1.0.20201221
-+WIREGUARD_LINUX_COMPAT_VERSION = 1.0.20210124
- WIREGUARD_LINUX_COMPAT_SITE = https://git.zx2c4.com/wireguard-linux-compat/snapshot
- WIREGUARD_LINUX_COMPAT_SOURCE = wireguard-linux-compat-$(WIREGUARD_LINUX_COMPAT_VERSION).tar.xz
- WIREGUARD_LINUX_COMPAT_LICENSE = GPL-2.0
+-PUGIXML_VERSION = 1.10
++PUGIXML_VERSION = 1.11.4
+ PUGIXML_SITE = http://github.com/zeux/pugixml/releases/download/v$(PUGIXML_VERSION)
+ PUGIXML_LICENSE = MIT
+-PUGIXML_LICENSE_FILES = readme.txt
++PUGIXML_LICENSE_FILES = LICENSE.md
+ PUGIXML_INSTALL_STAGING = YES
+ 
+ # Pugixml will automatically enable 'long long' support on C++11 compilers,
 -- 
-2.20.1
+2.29.2
