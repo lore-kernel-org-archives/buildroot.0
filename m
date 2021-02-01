@@ -1,116 +1,59 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 01 Feb 2021 12:00:14 +0100
-Subject: [Buildroot] Question About the Rational Limitations on
- Buildroot as a Tool
-In-Reply-To: <d116a0687c2af6f6356332e7854f053a@librehash.com> (buck winston
- via buildroot's message of "Sun, 31 Jan 2021 11:58:13 -0500")
-References: <d116a0687c2af6f6356332e7854f053a@librehash.com>
-Message-ID: <87im7cnjcx.fsf@dell.be.48ers.dk>
+From: Alexander Dahl <post@lespocky.de>
+Date: Mon,  1 Feb 2021 12:50:28 +0100
+Subject: [Buildroot] [PATCH] package/libevdev: bump to version 1.11.0
+Message-ID: <20210201115028.9913-1-post@lespocky.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "buck" == buck winston via buildroot <buildroot@busybox.net> writes:
+With this version libevdev sets the license to MIT license.  Actually
+that has always been the intended license before.  Upstream made some
+effort to have all contributors acknowledge that over the past months.
 
-Hi,
+Link: https://lists.freedesktop.org/archives/input-tools/2021-February/001557.html
+Link: https://gitlab.freedesktop.org/libevdev/libevdev/-/issues/9
+Link: https://gitlab.freedesktop.org/libevdev/libevdev/-/merge_requests/69
+Signed-off-by: Alexander Dahl <post@lespocky.de>
+---
+ package/libevdev/libevdev.hash | 8 ++++----
+ package/libevdev/libevdev.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
- > First, I want to start this e-mail off by giving a huge thanks to those
- > that created and maintain(ed) this tool. Folks like yourselves are what
- > enable people like me to convince even less experienced people that
- > they're anywhere close to the genius that you all actually are. I know
- > you all may not see your contributions as particularly 'noble', but I do
- > - and before I ask anything (take) from you all, I want to at least give
- > you all your just due for a job well do. 
+diff --git a/package/libevdev/libevdev.hash b/package/libevdev/libevdev.hash
+index 4376f863a3..584a9941c5 100644
+--- a/package/libevdev/libevdev.hash
++++ b/package/libevdev/libevdev.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.freedesktop.org/archives/input-tools/2021-January/001555.html
+-sha256  0330fe8357ece915db9366c1b9a6648941aea6f724b73ad6e71401127aa08932  libevdev-1.10.1.tar.xz
+-sha512  6b42cd1920f6b5ef4c40e1c0db9623cabf634d87202fd98730f861e5dc4ffc30a26500ec48213a459ec18b761e2cd2f4cf47c0ab8752e6b6baa5c4fa47893964  libevdev-1.10.1.tar.xz
++# From https://lists.freedesktop.org/archives/input-tools/2021-February/001557.html
++sha256  63f4ea1489858a109080e0b40bd43e4e0903a1e12ea888d581db8c495747c2d0  libevdev-1.11.0.tar.xz
++sha512  b3c6b4a1532c5142f3684b920dcdd497a5368aec516e8c389e2c8f9d1eaba16c907b2a7f2c82a3c3ff89bb4d0ae5503c736098c095f9f1bc98f0668e99bf639d  libevdev-1.11.0.tar.xz
+ 
+ # Hash for license files:
+-sha256  f063d1279b31e73007e1c54493391818b4cb5f9162d590120397e0347b932137  COPYING
++sha256  6f13de7ce28e4948ba95170e0723ee1254c1978ce1f127af82aeca597b567cb9  COPYING
+diff --git a/package/libevdev/libevdev.mk b/package/libevdev/libevdev.mk
+index 45116332a5..f6172809fd 100644
+--- a/package/libevdev/libevdev.mk
++++ b/package/libevdev/libevdev.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-LIBEVDEV_VERSION = 1.10.1
++LIBEVDEV_VERSION = 1.11.0
+ LIBEVDEV_SITE = http://www.freedesktop.org/software/libevdev
+ LIBEVDEV_SOURCE = libevdev-$(LIBEVDEV_VERSION).tar.xz
+-LIBEVDEV_LICENSE = X11
++LIBEVDEV_LICENSE = MIT
+ LIBEVDEV_LICENSE_FILES = COPYING
+ 
+ LIBEVDEV_DEPENDENCIES = $(BR2_PYTHON3_HOST_DEPENDENCY)
 
- > I know there's a chance that this question was asked before - _but I
- > legitimately looked for the answer to it online and in other resources
- > and did not find a satisfactory one. _ 
-
- > If there is an answer roaming out there somewhere, I'm just an idiot and
- > I missed it - please forgive me. 
-
- > Question About Limitations of 'Buildroot' 
-
- > I stumbled across buildroot through Fabrice Bellard's tool (JSLinux).
- > Being fascinated with 'JSLinux' (client-side terminal that executes in
- > javascript in one's browser), I wanted to know more about how to build
- > this for myself (and eventually host my own version that expends
- > slightly more resources since I have a smaller audience). 
-
- > Long story, short - after downloading the modules from his site, I got
- > into the buildroot tool and started going through the wealth of options
- > provided in the ncurses interface for the creation of this kernel / root
- > and I started to get really curious about how viable this can be as a
- > legitimate system ran on commercial laptops - let's say a device with
- > 16GB RAM, modern chip processor (nothing crazy), good graphics card, and
- > other modern specs (2019 or later). 
-
- > All over the site, I've read that this is a great way to build an OS for
- > 'embedded devices', which I understand to be tools like routers perhaps,
- > Raspberry Pi's, Arduinos etc. 
-
- > Cool. But given the wealth of features, libraries, kernel packages,
- > audio packages, etc., that are available for compilation in the TUI, it
- > appeared to me like one could make a very legitimate customized OS with
- > this 'buildroot' tool. 
-
- > To be clear, I'm sure that there are others that have asked this
- > question before but I either cannot find them or the few that I have
- > found that have asked this question received some fairly inadequate
- > answers. So I wanted to come straight to the source. 
-
- > _To be more specific in my questions: _ 
-
- > 1. Why is 'buildroot' pivoted toward creating kernels / OSes geared for
- > embedded devices (almost exclusively, it seems)? I'm not saying that
- > this is a flaw or an oversight at all. On the contrary, I'm assuming
- > that there is an obviously sound reason for doing this that I simply
- > cannot find and was hoping to understand more about the nature of this
- > project through the answer that I receive to this question. 
-
- > and 
-
- > 2. From what I saw, it seems that one can build a pretty damn robust OS
- > with this tool (not including all of the bells & whistles that are just
- > aesthetic dloads or creature comforts). I saw it allows for the
- > inclusion of the latest kernel version by Linux, relevant graphics
- > libraries, libraries for building, X11 related downloads, Interpreter
- > languages and scripting, networking applications, security tools,
- > various filesystems, available shells, the support of other concurrently
- > running applications as well (the computer that I'm using has decent
- > specs). 
-
- > Would it be naive to believe that perhaps when buildroot started out, it
- > did not have the capability but now, in the project's maturity, the tool
- > is so full featured that it can essentially serve as a pathway for one
- > creating their own custom OS? Obviously not something as extensive as
- > Debian / Ubuntu / PCLinux etc., but maybe an Arch Linux? (putting aside
- > their considerable expertise and mastery) 
-
- > And, if not, what is there that this project is lacking that it would
- > need before it could sufficiently serve that role? 
-
- > Thank you in advance for taking the time to field my query, 
-
-Yes, you _COULD_ conceptually build such a system with Buildroot, but I
-would not recommend it as Buildroot:
-
-- Requires you to configure all parts of the system up front (and
-  understand what parts you need), and any configuration changes
-  requires a full rebuild. There is no package manager or prebuilt
-  packages available
-
-- Only provides a limited selection of "desktop-style" packages
-
-Buildroot is optimized for creating a fixed function build, and has a
-number of features to ensure that this can happen in an optimized
-way, independently of if this fixed function build needs to run on a x86
-machine or some other architecture.
-
-A general purpose / open "PC" desktop solution is quite different from
-that.
-
+base-commit: 8023a8814b0a57a8e4c1cf820729c0879baabcc3
 -- 
-Bye, Peter Korsgaard
+2.20.1
