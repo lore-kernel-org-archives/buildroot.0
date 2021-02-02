@@ -1,27 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 02 Feb 2021 16:35:39 +0100
-Subject: [Buildroot] [PATCH] package/wireguard-linux-compat: bump
- version to 1.0.20210124
-In-Reply-To: <20210201174824.14410-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Mon, 1 Feb 2021 18:48:24 +0100")
-References: <20210201174824.14410-1-peter@korsgaard.com>
-Message-ID: <87h7mujxdg.fsf@dell.be.48ers.dk>
+Date: Tue, 02 Feb 2021 16:36:09 +0100
+Subject: [Buildroot] [PATCH] package/busybox: Fix check for IPv6 default
+ route in udhcpc
+In-Reply-To: <20210202015452.98002-1-sam@mendozajonas.com> (Samuel
+ Mendoza-Jonas's message of "Mon, 1 Feb 2021 17:54:52 -0800")
+References: <20210202015452.98002-1-sam@mendozajonas.com>
+Message-ID: <87czxijxcm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Samuel" == Samuel Mendoza-Jonas <sam@mendozajonas.com> writes:
 
- > Fixes a build issue with recent 1.14.x stable kernels.  For details, see the
- > announcement:
+ > The check for a default route is inverted, causing the script to wait
+ > for the timeout even when a default IPv6 route is available. Fix this up
+ > so that it exits early as expected.
 
- > https://lists.zx2c4.com/pipermail/wireguard/2021-January/006349.html
+ > Reported-by: Bhattiprolu RaviKumar <ravikumar.bhattiprolu@gmail.com>
+ > Signed-off-by: Samuel Mendoza-Jonas <sam@mendozajonas.com>
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed after fixing the commit message to mention 4.14.x kernels, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
