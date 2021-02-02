@@ -1,57 +1,36 @@
-From: manu f <e.fiancette@gmail.com>
-Date: Tue, 2 Feb 2021 23:22:27 +0100
-Subject: [Buildroot] [BuildRoot] qt error : QEGLPlatformContext: Failed to
- create context: 3005
-Message-ID: <CAGshWo3wmQN=zA27dWczEP4Tr9pSenpNR-icy8FOSuYjxQ78vA@mail.gmail.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Tue, 2 Feb 2021 23:02:43 +0100
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/qpid-proton: bump to version 0.33.0
+In-Reply-To: <20210202172705.1515638-1-fontaine.fabrice@gmail.com>
+References: <20210202172705.1515638-1-fontaine.fabrice@gmail.com>
+Message-ID: <2cfb91ab-c78a-42f5-0deb-89076355abf9@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
+Hi Fabrice,
 
-I compile buildroot 2020.02.9 with nxp kernel 4.9 for imx.6.
-I have a qt web browser app (working in another context) and when I launch
-it I get:
+On 02/02/21 18:27, Fabrice Fontaine wrote:
+> - Update site to get latest version
+> - Remove all patches (already in version)
+> - License file has been renamed and slightly updated to change paths
+>   since version 0.23.0 and
+>   https://github.com/apache/qpid-proton/commit/37136940e3077f25ce58c94775f48c66f666f4a8
+> - Remove BUILD_{JAVA,JAVASCRIPT,PERL,PHP} as those bindings don't exist
+>   anymore
+> - Disable go binding
+> - Disable fuzz testing
+> - Add new optional libuv and jsoncpp dependencies
+> - Update QPID_PROTON_REMOVE_USELESS_FILES
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-# light_web_browser --no-sandbox
-Version
-QStandardPaths: XDG_RUNTIME_DIR not set, defaulting to '/tmp/runtime-root'
-QEglFSVivIntegration will set environment variable FB_MULTI_BUFFER=2 to
-enable double bufferi
-ng and vsync.
- If this is not desired, you can override this via: export
-QT_EGLFS_IMX6_NO_FB_MULTI_BUFFER=1
-Unable to query physical screen size, defaulting to 100 dpi.
-To override, set QT_QPA_EGLFS_PHYSICAL_WIDTH and
-QT_QPA_EGLFS_PHYSICAL_HEIGHT (in millimeters
-                        ).
-QEGLPlatformContext: Failed to create context: 3005
-Attribute Qt::AA_ShareOpenGLContexts must be set before QCoreApplication is
-created.
-WebEngineContext used before QtWebEngine::initialize() or OpenGL context
-creation failed.
-Segmentation fault
+Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
 
-I read on google that qt5.12 is not compatible with nxp kernel version 4.9
-.. is somebody could confirm (I didnt find support table for qt vs nxp
-kernel) ?
-or could it be another problem?
-I dont know exactly where to search.
-
-Thanks for helping.
-
-Regards
-
-Emmanuel
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210202/72986472/attachment-0001.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: .config
-Type: application/octet-stream
-Size: 134795 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210202/72986472/attachment-0001.obj>
+Thanks!
+-- 
+Luca
