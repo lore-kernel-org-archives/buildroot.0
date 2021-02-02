@@ -1,58 +1,39 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue,  2 Feb 2021 21:56:14 +0100
-Subject: [Buildroot] [PATCH 2/2] package/xenomai: disable cobalt for armv8
-In-Reply-To: <20210202205614.59303-1-romain.naour@gmail.com>
-References: <20210202205614.59303-1-romain.naour@gmail.com>
-Message-ID: <20210202205614.59303-2-romain.naour@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 2 Feb 2021 21:53:30 +0100
+Subject: [Buildroot] [git commit] package/sox: drop unrecognized options
+Message-ID: <20210202203714.8F0208164F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When a armv8 target is used in 32bits mode, xenomai fail to
-detect the ARM architecture and abord the build.
-(__ARM_ARCH_7A__ is not defined for armv8 cpus).
+commit: https://git.buildroot.net/buildroot/commit/?id=98298134276e00232afc3433418cebf5f809ddd6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-There are no autobuilder failures for this issue since cobalt
-is never selected, but the following defconfig:
+ffmpeg has been dropped since version 14.4.2 (back in 2013) and
+https://sourceforge.net/p/sox/code/ci/5ae4049727d4f29036ad541bde5863c850aa7755
 
-BR2_arm=y
-BR2_cortex_a53=y
-BR2_ARM_FPU_NEON_VFPV4=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_PACKAGE_XENOMAI=y
-BR2_PACKAGE_XENOMAI_COBALT=y
+--disable-gomp has also been removed since version 14.4.1 (back in 2012)
+and
+https://sourceforge.net/p/sox/code/ci/84eaacb54fd2e61154ccd95328d8a8ec5096eae1
 
-This was initialy reproduced using the raspberrypi3_defconfig
-with Xenomai package with cobalt selected.
-
-In order to use Xenomai on raspberrypi3 in 32 bits mode,
-you have to select BR2_cortex_a7. This partially revert the
-commit a13a388dd444ee047f0e7b8c10f5e6c235ec5004.
-
-See:
-https://gitlab.denx.de/Xenomai/xenomai/-/blob/v3.1/lib/cobalt/arch/arm/include/asm/xenomai/features.h#L52
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/xenomai/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/sox/sox.mk | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/package/xenomai/Config.in b/package/xenomai/Config.in
-index b1b02373c3..e060bcc46f 100644
---- a/package/xenomai/Config.in
-+++ b/package/xenomai/Config.in
-@@ -1,8 +1,8 @@
- config BR2_PACKAGE_XENOMAI_COBALT_ARCH_SUPPORTS
- 	bool
- 	default y
--	depends on BR2_i386 || BR2_x86_64 || (BR2_arm && !BR2_ARM_CPU_ARMV7M) || \
--		BR2_powerpc
-+	depends on BR2_i386 || BR2_x86_64 || BR2_powerpc || \
-+		(BR2_arm && !BR2_ARM_CPU_ARMV7M && !BR2_ARM_CPU_ARMV8A)
+diff --git a/package/sox/sox.mk b/package/sox/sox.mk
+index 9abbc2f636..8a1d87b230 100644
+--- a/package/sox/sox.mk
++++ b/package/sox/sox.mk
+@@ -15,8 +15,6 @@ SOX_CPE_ID_PRODUCT = sound_exchange
  
- comment "xenomai needs a glibc or uClibc toolchain w/ threads"
- 	depends on BR2_USE_MMU
--- 
-2.29.2
+ SOX_CONF_OPTS = \
+ 	--with-distro="Buildroot" \
+-	--without-ffmpeg \
+-	--disable-gomp \
+ 	--disable-stack-protector
+ 
+ ifeq ($(BR2_PACKAGE_ALSA_LIB_PCM),y)
