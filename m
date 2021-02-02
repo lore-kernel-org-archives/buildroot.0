@@ -1,34 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 2 Feb 2021 16:36:37 +0100
-Subject: [Buildroot] [git commit] package/privoxy: add PRIVOXY_CPE_ID_VENDOR
-Message-ID: <20210202152051.273E1864D9@busybox.osuosl.org>
+Date: Tue, 2 Feb 2021 16:35:08 +0100
+Subject: [Buildroot] [git commit] package/wireguard-linux-compat: bump
+ version to 1.0.20210124
+Message-ID: <20210202152051.07C55864D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9b1d9675ba4c25eb4606986bf7b72fd9221529f7
+commit: https://git.buildroot.net/buildroot/commit/?id=ff852b0de406b3e88af3ea282ba470c68b7c8d8d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:privoxy:privoxy is a valid CPE identifier for this package:
+Fixes a build issue with recent 4.14.x stable kernels.  For details, see the
+announcement:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aprivoxy%3Aprivoxy
+https://lists.zx2c4.com/pipermail/wireguard/2021-January/006349.html
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/privoxy/privoxy.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/wireguard-linux-compat/wireguard-linux-compat.hash | 4 ++--
+ package/wireguard-linux-compat/wireguard-linux-compat.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/privoxy/privoxy.mk b/package/privoxy/privoxy.mk
-index 5c1f862bfd..7f0e5bb3a1 100644
---- a/package/privoxy/privoxy.mk
-+++ b/package/privoxy/privoxy.mk
-@@ -12,5 +12,6 @@ PRIVOXY_AUTORECONF = YES
- PRIVOXY_DEPENDENCIES = pcre zlib
- PRIVOXY_LICENSE = GPL-2.0+
- PRIVOXY_LICENSE_FILES = LICENSE
-+PRIVOXY_CPE_ID_VENDOR = privoxy
+diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.hash b/package/wireguard-linux-compat/wireguard-linux-compat.hash
+index 194c798570..f4f94cfd2e 100644
+--- a/package/wireguard-linux-compat/wireguard-linux-compat.hash
++++ b/package/wireguard-linux-compat/wireguard-linux-compat.hash
+@@ -1,4 +1,4 @@
+-# https://lists.zx2c4.com/pipermail/wireguard/2020-December/006210.html
+-sha256  6e5289a8b602eaaf1383aebefcbc41b8ad2721269055858b150363076c1c2132  wireguard-linux-compat-1.0.20201221.tar.xz
++# https://lists.zx2c4.com/pipermail/wireguard/2021-January/006349.html
++sha256  dac6e68cd4c3db441499850dfa8a70706384a3295f37fda1b839a50b79faef54  wireguard-linux-compat-1.0.20210124.tar.xz
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.mk b/package/wireguard-linux-compat/wireguard-linux-compat.mk
+index ef21e2e114..2f36ec8bfb 100644
+--- a/package/wireguard-linux-compat/wireguard-linux-compat.mk
++++ b/package/wireguard-linux-compat/wireguard-linux-compat.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- $(eval $(autotools-package))
+-WIREGUARD_LINUX_COMPAT_VERSION = 1.0.20201221
++WIREGUARD_LINUX_COMPAT_VERSION = 1.0.20210124
+ WIREGUARD_LINUX_COMPAT_SITE = https://git.zx2c4.com/wireguard-linux-compat/snapshot
+ WIREGUARD_LINUX_COMPAT_SOURCE = wireguard-linux-compat-$(WIREGUARD_LINUX_COMPAT_VERSION).tar.xz
+ WIREGUARD_LINUX_COMPAT_LICENSE = GPL-2.0
