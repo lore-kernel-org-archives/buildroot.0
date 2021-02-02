@@ -1,35 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 2 Feb 2021 16:38:17 +0100
-Subject: [Buildroot] [git commit] package/snort: add SNORT_CPE_ID_VENDOR
-Message-ID: <20210202152051.62D8C812A6@busybox.osuosl.org>
+Date: Tue, 2 Feb 2021 16:37:06 +0100
+Subject: [Buildroot] [git commit] package/libcpprestsdk: bump to version
+ 2.0.18
+Message-ID: <20210202152051.3B9C4864D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b0c84eb0a3d27d710c5b69ded4d0dd8a7c62bc30
+commit: https://git.buildroot.net/buildroot/commit/?id=5e427cfcaa7504f4a405ea700b4dc5791f39bd3a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:snort:snort is a valid CPE identifier for this package:
-
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Asnort%3Asnort
+https://github.com/microsoft/cpprestsdk/releases/tag/2.10.18
+https://github.com/microsoft/cpprestsdk/releases/tag/2.10.17
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/snort/snort.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/libcpprestsdk/libcpprestsdk.hash | 2 +-
+ package/libcpprestsdk/libcpprestsdk.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/snort/snort.mk b/package/snort/snort.mk
-index c618b4a6af..412c69f838 100644
---- a/package/snort/snort.mk
-+++ b/package/snort/snort.mk
-@@ -8,6 +8,7 @@ SNORT_VERSION = 2.9.17
- SNORT_SITE = https://www.snort.org/downloads/snort
- SNORT_LICENSE = GPL-2.0
- SNORT_LICENSE_FILES = LICENSE COPYING
-+SNORT_CPE_ID_VENDOR = snort
+diff --git a/package/libcpprestsdk/libcpprestsdk.hash b/package/libcpprestsdk/libcpprestsdk.hash
+index e76522f6ee..8e398d0c54 100644
+--- a/package/libcpprestsdk/libcpprestsdk.hash
++++ b/package/libcpprestsdk/libcpprestsdk.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  3d75e17c7d79131320438f2a15331f7ca6281c38c0e2daa27f051e290eeb8681  libcpprestsdk-2.10.16.tar.gz
++sha256  6bd74a637ff182144b6a4271227ea8b6b3ea92389f88b25b215e6f94fd4d41cb  libcpprestsdk-2.10.18.tar.gz
+ sha256  5c191789f502ac87df83b57008d2fc3e47fbf31315381b5bc4309f6602d0fe97  license.txt
+diff --git a/package/libcpprestsdk/libcpprestsdk.mk b/package/libcpprestsdk/libcpprestsdk.mk
+index d8525cfe1b..68d4cf68c1 100644
+--- a/package/libcpprestsdk/libcpprestsdk.mk
++++ b/package/libcpprestsdk/libcpprestsdk.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
- SNORT_DEPENDENCIES = libpcap libdnet daq pcre zlib host-pkgconf
- 
+-LIBCPPRESTSDK_VERSION = 2.10.16
+-LIBCPPRESTSDK_SITE = $(call github,Microsoft,cpprestsdk,v$(LIBCPPRESTSDK_VERSION))
++LIBCPPRESTSDK_VERSION = 2.10.18
++LIBCPPRESTSDK_SITE = $(call github,Microsoft,cpprestsdk,$(LIBCPPRESTSDK_VERSION))
+ LIBCPPRESTSDK_LICENSE = MIT
+ LIBCPPRESTSDK_LICENSE_FILES = license.txt
+ LIBCPPRESTSDK_SUBDIR = Release
