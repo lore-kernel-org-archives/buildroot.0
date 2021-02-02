@@ -1,39 +1,74 @@
-From: Michael Nosthoff <buildroot@heine.tech>
-Date: Tue, 02 Feb 2021 10:44:49 +0100
-Subject: [Buildroot] 
- =?utf-8?q?=5BPATCH=5D_package/grpc=3A_remove_obsolet?=
- =?utf-8?q?e_patch_to_support_cross-compiling?=
-In-Reply-To: <20210201205710.12357-1-patrickdepinguin@gmail.com>
-Message-ID: <4f-60191f00-3-51a19d00@100914362>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue,  2 Feb 2021 11:05:08 +0100
+Subject: [Buildroot] [PATCH v2] configs/nexbox_a95x_defconfig: bump to
+ kernel 5.10.12
+Message-ID: <20210202100508.30949-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+The mmc probing order has changed since commit 21b2cec61c04bd1 (mmc: Set
+PROBE_PREFER_ASYNCHRONOUS for drivers that existed in v4.4), so get rid of
+the hardcoded root=/dev/mmcblk1p2.  The old vendor U-Boot unfortunately does
+not have GPT support, so stick to MBR and use the legacy
+root=PARTUUID=<disksignature>-<partition> format and set a fixed disk
+signature, similar to how it was done for orangepi-r1 in commit 34cce93adb
+(configs/orangepi_r1_defconfig: bump kernel to 5.10.10, u-boot to 2020.10).
 
-Nice catch!
- 
-On Monday, February 01, 2021 21:57 CET, Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote: 
- 
-> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> 
-> When cross-compiling grpc, a native tool 'grpc_cpp_plugin' is needed.
-> Patch '0001-target-build-using-host-plugin.patch' in Buildroot provides a
-> way to pass the path to this tool via a configure option
-> 'gRPC_NATIVE_CPP_PLUGIN'.
-> 
-> In version 1.20.0, the upstream grpc project added better support for
-> cross-compiling via commit 0d7a0ded [1], searching for the native
-> grpc_cpp_plugin via PATH (rather than specifying it as configure option as
-> our patch was doing).
-> 
-> This change renders the mentioned Buildroot patch obsolete, so remove it.
-> 
-> [1] https://github.com/grpc/grpc/commit/0d7a0ded1cc93bb7f4d69a156b0a69829557cbf2
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+Changes since v1:
+- Keep MBR format, somehow ended up testing wrong image in v1.
 
-Reviewed-by: Michael Nosthoff <buildroot@heine.tech> 
-Tested-by: Michael Nosthoff <buildroot@heine.tech>
+ board/nexbox/a95x/boot.txt     | 2 +-
+ board/nexbox/a95x/genimage.cfg | 2 ++
+ configs/nexbox_a95x_defconfig  | 4 ++--
+ 3 files changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/board/nexbox/a95x/boot.txt b/board/nexbox/a95x/boot.txt
+index f388ba814a..eef1c8ca55 100644
+--- a/board/nexbox/a95x/boot.txt
++++ b/board/nexbox/a95x/boot.txt
+@@ -1,4 +1,4 @@
+-setenv bootargs console=ttyAML0,115200 earlyprintk root=/dev/mmcblk1p2 rootwait
++setenv bootargs console=ttyAML0,115200 earlyprintk root=PARTUUID=feedc0de-02 rootwait
+ 
+ fatload mmc 0:1 0x01080000 uImage
+ 
+diff --git a/board/nexbox/a95x/genimage.cfg b/board/nexbox/a95x/genimage.cfg
+index 74e2d3a6f9..63b96107c9 100644
+--- a/board/nexbox/a95x/genimage.cfg
++++ b/board/nexbox/a95x/genimage.cfg
+@@ -12,6 +12,8 @@ image boot.vfat {
+ 
+ image sdcard.img {
+ 	hdimage {
++		# for root=PARTUUID support
++		disk-signature = 0xfeedc0de
+ 	}
+ 
+ 	partition boot {
+diff --git a/configs/nexbox_a95x_defconfig b/configs/nexbox_a95x_defconfig
+index 4820d47d52..69f8b9078f 100644
+--- a/configs/nexbox_a95x_defconfig
++++ b/configs/nexbox_a95x_defconfig
+@@ -1,13 +1,13 @@
+ BR2_aarch64=y
+ BR2_cortex_a53=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+ BR2_SYSTEM_DHCP="eth0"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/nexbox/a95x/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/nexbox/a95x/post-image.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.8"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.12"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="amlogic/meson-gxbb-nexbox-a95x amlogic/meson-gxl-s905x-nexbox-a95x"
+-- 
+2.20.1
