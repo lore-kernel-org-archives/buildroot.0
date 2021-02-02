@@ -1,59 +1,46 @@
-From: Bhattiprolu RaviKumar <ravikumar.bhattiprolu@gmail.com>
-Date: Tue, 2 Feb 2021 10:20:40 +0530
-Subject: [Buildroot] Question on udhcpc script
-In-Reply-To: <0cd4ec1ee046132583141d8c76a954340ad85a18.camel@mendozajonas.com>
-References: <CAL2JCb_UdG5-PpWbz3Yd84mSM47pGJHsjyUOn7Tzm6r_=Q4Dkg@mail.gmail.com>
- <87a6sonfgu.fsf@dell.be.48ers.dk>
- <CAL2JCb8RWKzBciDr6mGs3gUy1onKAnm3SQj04Ti3MzBG_wHG-w@mail.gmail.com>
- <875z3bopqu.fsf@dell.be.48ers.dk>
- <5ec8ee6f2b5f99e2ce21598bb282f9fd013e68ed.camel@mendozajonas.com>
- <0cd4ec1ee046132583141d8c76a954340ad85a18.camel@mendozajonas.com>
-Message-ID: <CAL2JCb-rXCBXSgUmEeQCTLF-Rxfa-Bo4rPEX4gk+q6V1z3YO1A@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue,  2 Feb 2021 08:03:31 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libcpprestsdk: bump to version
+ 2.0.18
+Message-ID: <20210202070331.1276691-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks Sam,Peter for quick closure.
-regards,
-Ravi
+https://github.com/microsoft/cpprestsdk/releases/tag/2.10.18
+https://github.com/microsoft/cpprestsdk/releases/tag/2.10.17
 
-On Tue, Feb 2, 2021 at 7:26 AM Samuel Mendoza-Jonas <sam@mendozajonas.com>
-wrote:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libcpprestsdk/libcpprestsdk.hash | 2 +-
+ package/libcpprestsdk/libcpprestsdk.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> On Mon, 2021-02-01 at 17:33 -0800, Samuel Mendoza-Jonas wrote:
-> > On Mon, 2021-02-01 at 14:56 +0100, Peter Korsgaard wrote:
-> > > > > > >
-> > > The test indeed seems to be inverted. Samuel, any comments?
-> >
-> > Only that I'm curious to know how this happened! I agree, that logic
-> > looks inverted, the line could be simplified to something like
-> >
-> > diff --git a/package/busybox/udhcpc.script
-> > b/package/busybox/udhcpc.script
-> > index ec4d9f6185..c73ad6c2ef 100755
-> > --- a/package/busybox/udhcpc.script
-> > +++ b/package/busybox/udhcpc.script
-> > @@ -18,7 +18,7 @@ fi
-> >  wait_for_ipv6_default_route() {
-> >         printf "Waiting for IPv6 default route to appear"
-> >         while [ $IF_WAIT_DELAY -gt 0 ]; do
-> > -               if [ -z "$(ip -6 route list | grep default)" ]; then
-> > +               if ip -6 route list | grep -q default; then
-> >                         printf "\n"
-> >                         return
-> >                 fi
-> >
-> > I can send a quick proper patch if you'd like.
-> >
-> > Sam
->
-> In fact, here we go:
->
-> https://patchwork.ozlabs.org/project/buildroot/patch/20210202015452.98002-1-sam at mendozajonas.com/
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210202/3792c609/attachment-0001.html>
+diff --git a/package/libcpprestsdk/libcpprestsdk.hash b/package/libcpprestsdk/libcpprestsdk.hash
+index e76522f6ee..8e398d0c54 100644
+--- a/package/libcpprestsdk/libcpprestsdk.hash
++++ b/package/libcpprestsdk/libcpprestsdk.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  3d75e17c7d79131320438f2a15331f7ca6281c38c0e2daa27f051e290eeb8681  libcpprestsdk-2.10.16.tar.gz
++sha256  6bd74a637ff182144b6a4271227ea8b6b3ea92389f88b25b215e6f94fd4d41cb  libcpprestsdk-2.10.18.tar.gz
+ sha256  5c191789f502ac87df83b57008d2fc3e47fbf31315381b5bc4309f6602d0fe97  license.txt
+diff --git a/package/libcpprestsdk/libcpprestsdk.mk b/package/libcpprestsdk/libcpprestsdk.mk
+index d8525cfe1b..68d4cf68c1 100644
+--- a/package/libcpprestsdk/libcpprestsdk.mk
++++ b/package/libcpprestsdk/libcpprestsdk.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-LIBCPPRESTSDK_VERSION = 2.10.16
+-LIBCPPRESTSDK_SITE = $(call github,Microsoft,cpprestsdk,v$(LIBCPPRESTSDK_VERSION))
++LIBCPPRESTSDK_VERSION = 2.10.18
++LIBCPPRESTSDK_SITE = $(call github,Microsoft,cpprestsdk,$(LIBCPPRESTSDK_VERSION))
+ LIBCPPRESTSDK_LICENSE = MIT
+ LIBCPPRESTSDK_LICENSE_FILES = license.txt
+ LIBCPPRESTSDK_SUBDIR = Release
+-- 
+2.29.2
