@@ -1,49 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 2 Feb 2021 16:35:08 +0100
-Subject: [Buildroot] [git commit] package/wireguard-linux-compat: bump
- version to 1.0.20210124
-Message-ID: <20210202152051.07C55864D9@busybox.osuosl.org>
+Date: Tue, 2 Feb 2021 16:33:40 +0100
+Subject: [Buildroot] [git commit] package/moarvm: bump to version 2020.12
+Message-ID: <20210202152050.C1BDA864D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ff852b0de406b3e88af3ea282ba470c68b7c8d8d
+commit: https://git.buildroot.net/buildroot/commit/?id=b3894932b84aa3d00404b10f914da1de69ac0e74
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes a build issue with recent 4.14.x stable kernels.  For details, see the
-announcement:
-
-https://lists.zx2c4.com/pipermail/wireguard/2021-January/006349.html
-
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wireguard-linux-compat/wireguard-linux-compat.hash | 4 ++--
- package/wireguard-linux-compat/wireguard-linux-compat.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/moarvm/moarvm.hash | 2 +-
+ package/moarvm/moarvm.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.hash b/package/wireguard-linux-compat/wireguard-linux-compat.hash
-index 194c798570..f4f94cfd2e 100644
---- a/package/wireguard-linux-compat/wireguard-linux-compat.hash
-+++ b/package/wireguard-linux-compat/wireguard-linux-compat.hash
-@@ -1,4 +1,4 @@
--# https://lists.zx2c4.com/pipermail/wireguard/2020-December/006210.html
--sha256  6e5289a8b602eaaf1383aebefcbc41b8ad2721269055858b150363076c1c2132  wireguard-linux-compat-1.0.20201221.tar.xz
-+# https://lists.zx2c4.com/pipermail/wireguard/2021-January/006349.html
-+sha256  dac6e68cd4c3db441499850dfa8a70706384a3295f37fda1b839a50b79faef54  wireguard-linux-compat-1.0.20210124.tar.xz
- # Locally calculated
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.mk b/package/wireguard-linux-compat/wireguard-linux-compat.mk
-index ef21e2e114..2f36ec8bfb 100644
---- a/package/wireguard-linux-compat/wireguard-linux-compat.mk
-+++ b/package/wireguard-linux-compat/wireguard-linux-compat.mk
+diff --git a/package/moarvm/moarvm.hash b/package/moarvm/moarvm.hash
+index 36f0a81f31..abe96c3d4b 100644
+--- a/package/moarvm/moarvm.hash
++++ b/package/moarvm/moarvm.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  637883083f16c4398ffd3685ea6411daa605dd0862e1f59cce632bb2b994f2c4  MoarVM-2020.10.tar.gz
++sha256  08914f1c464151ebc678cf0d360c9e479a036178fa7c9ddfd34aa4d556d03ea2  MoarVM-2020.12.tar.gz
+ sha256  c53c6b96081b0a5b9b2fb4d0133d55c20e5e00e4c127ade62f03434ee7b3d2de  Artistic2.txt
+diff --git a/package/moarvm/moarvm.mk b/package/moarvm/moarvm.mk
+index 9fe5f4c077..1f41404415 100644
+--- a/package/moarvm/moarvm.mk
++++ b/package/moarvm/moarvm.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WIREGUARD_LINUX_COMPAT_VERSION = 1.0.20201221
-+WIREGUARD_LINUX_COMPAT_VERSION = 1.0.20210124
- WIREGUARD_LINUX_COMPAT_SITE = https://git.zx2c4.com/wireguard-linux-compat/snapshot
- WIREGUARD_LINUX_COMPAT_SOURCE = wireguard-linux-compat-$(WIREGUARD_LINUX_COMPAT_VERSION).tar.xz
- WIREGUARD_LINUX_COMPAT_LICENSE = GPL-2.0
+-MOARVM_VERSION = 2020.10
++MOARVM_VERSION = 2020.12
+ MOARVM_SITE = http://moarvm.com/releases
+ MOARVM_SOURCE = MoarVM-$(MOARVM_VERSION).tar.gz
+ MOARVM_LICENSE = Artistic-2.0
