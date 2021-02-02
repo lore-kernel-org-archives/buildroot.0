@@ -1,37 +1,30 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue,  2 Feb 2021 21:46:26 +0100
-Subject: [Buildroot] [PATCH 1/1] package/sox: drop unrecognized options
-Message-ID: <20210202204626.402946-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 2 Feb 2021 21:49:33 +0100
+Subject: [Buildroot] [PATCH v2 4/7] support/scripts/pkg-stats: check CPE
+ existence in CPE dictionnary
+In-Reply-To: <20210131133819.1818537-5-thomas.petazzoni@bootlin.com>
+References: <20210131133819.1818537-1-thomas.petazzoni@bootlin.com>
+ <20210131133819.1818537-5-thomas.petazzoni@bootlin.com>
+Message-ID: <375edae0-5aa4-ef8f-ae42-ab8dc4ffb76b@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ffmpeg has been dropped since version 14.4.2 (back in 2013) and
-https://sourceforge.net/p/sox/code/ci/5ae4049727d4f29036ad541bde5863c850aa7755
 
---disable-gomp has also been removed since version 14.4.1 (back in 2012)
-and
-https://sourceforge.net/p/sox/code/ci/84eaacb54fd2e61154ccd95328d8a8ec5096eae1
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/sox/sox.mk | 2 --
- 1 file changed, 2 deletions(-)
+On 31/01/2021 14:38, Thomas Petazzoni wrote:
+> This commit extends pkg-stats to leverage the recently introduced
+> CPEDB class to verify that the CPEs provided by Buildroot packages are
+> indeed known in the official CPE dictionnary provided by NVD.
+> 
+> Co-Developed-by: Gr?gory Clement <gregory.clement@bootlin.com>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-diff --git a/package/sox/sox.mk b/package/sox/sox.mk
-index 9abbc2f636..8a1d87b230 100644
---- a/package/sox/sox.mk
-+++ b/package/sox/sox.mk
-@@ -15,8 +15,6 @@ SOX_CPE_ID_PRODUCT = sound_exchange
- 
- SOX_CONF_OPTS = \
- 	--with-distro="Buildroot" \
--	--without-ffmpeg \
--	--disable-gomp \
- 	--disable-stack-protector
- 
- ifeq ($(BR2_PACKAGE_ALSA_LIB_PCM),y)
--- 
-2.29.2
+ This one was accidentally applied to master without Gre?gory's SoB as well.
+
+ I didn't have any further comments on the patch. Imagine that!
+
+ Regards,
+ Arnout
