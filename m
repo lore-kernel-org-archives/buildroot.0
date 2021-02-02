@@ -1,51 +1,100 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 2 Feb 2021 22:26:16 +0100
-Subject: [Buildroot] [git commit] Revert "package/stress-ng: disable libbsd
- on static build"
-Message-ID: <20210202212822.265A88125A@busybox.osuosl.org>
+Date: Tue, 2 Feb 2021 22:26:02 +0100
+Subject: [Buildroot] [git commit] package/libbsd: needs dynamic library
+Message-ID: <20210202212822.1858F862F8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=53213e762daa6e3e5ae11a27950d0c4cab2eff47
+commit: https://git.buildroot.net/buildroot/commit/?id=1edd0ac66a28e975610abdd60e02ad147c6c97e4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This reverts commit f2d6c5ff9092aa7735c7a739d15180910ae734df.
+Static linking with libbsd fails because of multiple definition of the
+strlcpy symbol. uClibc optionally provides these symbols.
 
-Now that libbsd can't be enabled for static builds, we can drop the
-workaround specific to stress-ng.
+So add a dependency on dynamic library to avoid a build failure with a
+zeromq-enabled bitcoin or with stress-ng.
+
+Fixes:
+ - http://autobuild.buildroot.org/results/ba87544d42ad5e77a27a7a504bc6336a06f6e291
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/stress-ng/stress-ng.mk | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ package/fwts/Config.in           | 5 +++--
+ package/libbsd/Config.in         | 6 ++++--
+ package/netcat-openbsd/Config.in | 6 ++++--
+ 3 files changed, 11 insertions(+), 6 deletions(-)
 
-diff --git a/package/stress-ng/stress-ng.mk b/package/stress-ng/stress-ng.mk
-index c26206cd2e..53d7b7e5b7 100644
---- a/package/stress-ng/stress-ng.mk
-+++ b/package/stress-ng/stress-ng.mk
-@@ -10,11 +10,8 @@ STRESS_NG_SITE = https://kernel.ubuntu.com/~cking/tarballs/stress-ng
- STRESS_NG_LICENSE = GPL-2.0+
- STRESS_NG_LICENSE_FILES = COPYING
- 
--ifeq ($(BR2_PACKAGE_LIBBSD):$(BR2_STATIC_LIBS),y:)
-+ifeq ($(BR2_PACKAGE_LIBBSD),y)
- STRESS_NG_DEPENDENCIES += libbsd
--else
--STRESS_NG_MAKE_OPTS += HAVE_LIB_BSD=0 HAVE_WCSLCAT=0 \
--	HAVE_WCSLCPY=0 HAVE_SETPROCTITLE=0
+diff --git a/package/fwts/Config.in b/package/fwts/Config.in
+index ff28a4a403..ac9a2e3909 100644
+--- a/package/fwts/Config.in
++++ b/package/fwts/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_FWTS
+ 	depends on BR2_USE_MMU # libglib2
+ 	depends on BR2_USE_WCHAR # libglib2, libbsd
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2, libbsd
++	depends on !BR2_STATIC_LIBS # libbsd
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC # execinfo.h
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_LIBBSD
+@@ -31,9 +32,9 @@ comment "efi_runtime module needs a Linux kernel to be built"
+ 	depends on !BR2_LINUX_KERNEL
  endif
  
- ifeq ($(BR2_PACKAGE_KEYUTILS),y)
-@@ -22,7 +19,7 @@ STRESS_NG_DEPENDENCIES += keyutils
- endif
+-comment "fwts needs a glibc toolchain w/ wchar, threads"
++comment "fwts needs a glibc toolchain w/ wchar, threads, dynamic library"
+ 	depends on BR2_i386 || BR2_x86_64 || BR2_aarch64
+ 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS # libbsd
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+-		!BR2_TOOLCHAIN_USES_GLIBC
++		!BR2_TOOLCHAIN_USES_GLIBC || BR2_STATIC_LIBS
+diff --git a/package/libbsd/Config.in b/package/libbsd/Config.in
+index e54f5e6f23..845a22162b 100644
+--- a/package/libbsd/Config.in
++++ b/package/libbsd/Config.in
+@@ -10,6 +10,7 @@ config BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
+ config BR2_PACKAGE_LIBBSD
+ 	bool "libbsd"
+ 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
++	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_WCHAR
+ 	help
+@@ -21,6 +22,7 @@ config BR2_PACKAGE_LIBBSD
  
- define STRESS_NG_BUILD_CMDS
--	$(TARGET_CONFIGURE_OPTS) $(MAKE) $(STRESS_NG_MAKE_OPTS) -C $(@D)
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
- endef
+ 	  http://libbsd.freedesktop.org/
  
- # Don't use make install otherwise stress-ng will be rebuild without
+-comment "libbsd needs a toolchain w/ threads, wchar"
++comment "libbsd needs a toolchain w/ dynamic library, threads, wchar"
+ 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_USE_WCHAR
+diff --git a/package/netcat-openbsd/Config.in b/package/netcat-openbsd/Config.in
+index 4734ff9901..beaa8ed451 100644
+--- a/package/netcat-openbsd/Config.in
++++ b/package/netcat-openbsd/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_NETCAT_OPENBSD
+ 	bool "netcat-openbsd"
+ 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
++	depends on !BR2_STATIC_LIBS # libbsd
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
+ 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+@@ -21,8 +22,9 @@ config BR2_PACKAGE_NETCAT_OPENBSD
+ 
+ 	  https://packages.debian.org/sid/netcat-openbsd
+ 
+-comment "netcat-openbsd needs a glibc toolchain w/ threads, headers >= 3.12"
++comment "netcat-openbsd needs a glibc toolchain w/ dynamic library, threads, headers >= 3.12"
+ 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_USES_GLIBC || \
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_TOOLCHAIN_USES_GLIBC || \
+ 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
+ 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
