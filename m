@@ -1,70 +1,85 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue,  2 Feb 2021 23:53:36 +0100
-Subject: [Buildroot] [PATCH 23/25] support/config-fragments/autobuild: use
- Bootlin toolchain for x86-64 musl
-In-Reply-To: <20210202225339.2157480-1-thomas.petazzoni@bootlin.com>
-References: <20210202225339.2157480-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20210202225339.2157480-24-thomas.petazzoni@bootlin.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Wed,  3 Feb 2021 00:13:08 +0100
+Subject: [Buildroot] [PATCH 1/3] toolchain/toolchain-external: update Arm
+ ARM toolchain 10.2-2020.11
+Message-ID: <20210202231310.617842-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Instead of using an external toolchain built specifically for the
-autobuilders to test x86-64/musl, use a pre-built Bootlin toolchain.
+Update to gcc 10.2, gdb 10.1, binutils 2.35.1.
 
-The previous configuration was for an Atom platform, but the Bootlin
-toolchains only provide a Core i7 configuration. Since this is close
-enough, we change to use this Core i7 configuration.
+See "Release Note":
+https://developer.arm.com/open-source/gnu-toolchain/gnu-a/downloads#
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Tested with qemu_arm_vexpress_defconfig.
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- .../autobuild/bootlin-x86-64-musl.config               |  4 ++++
- .../config-fragments/autobuild/br-x86-64-musl.config   | 10 ----------
- .../config-fragments/autobuild/toolchain-configs.csv   |  2 +-
- 3 files changed, 5 insertions(+), 11 deletions(-)
- create mode 100644 support/config-fragments/autobuild/bootlin-x86-64-musl.config
- delete mode 100644 support/config-fragments/autobuild/br-x86-64-musl.config
+ .../toolchain-external-arm-arm/Config.in                  | 8 ++++----
+ .../toolchain-external-arm-arm.hash                       | 6 +++---
+ .../toolchain-external-arm-arm.mk                         | 6 +++---
+ 3 files changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/support/config-fragments/autobuild/bootlin-x86-64-musl.config b/support/config-fragments/autobuild/bootlin-x86-64-musl.config
-new file mode 100644
-index 0000000000..9763d8a6a8
---- /dev/null
-+++ b/support/config-fragments/autobuild/bootlin-x86-64-musl.config
-@@ -0,0 +1,4 @@
-+BR2_x86_64=y
-+BR2_x86_corei7=y
-+BR2_TOOLCHAIN_EXTERNAL=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_CORE_I7_MUSL_STABLE=y
-diff --git a/support/config-fragments/autobuild/br-x86-64-musl.config b/support/config-fragments/autobuild/br-x86-64-musl.config
-deleted file mode 100644
-index 03de24d354..0000000000
---- a/support/config-fragments/autobuild/br-x86-64-musl.config
-+++ /dev/null
-@@ -1,10 +0,0 @@
--BR2_x86_64=y
--BR2_x86_atom=y
--BR2_TOOLCHAIN_EXTERNAL=y
--BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
--BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-x86-64-musl-2020.02.tar.bz2"
--BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
--BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_4=y
--BR2_TOOLCHAIN_EXTERNAL_CUSTOM_MUSL=y
--BR2_TOOLCHAIN_EXTERNAL_CXX=y
-diff --git a/support/config-fragments/autobuild/toolchain-configs.csv b/support/config-fragments/autobuild/toolchain-configs.csv
-index 6223c9e992..f7a9c7dd59 100644
---- a/support/config-fragments/autobuild/toolchain-configs.csv
-+++ b/support/config-fragments/autobuild/toolchain-configs.csv
-@@ -13,7 +13,7 @@ support/config-fragments/autobuild/bootlin-armv7-glibc.config,x86_64
- support/config-fragments/autobuild/bootlin-armv7m-uclibc.config,x86_64
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in b/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
+index 29509635a3..e3bac38baa 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
+@@ -4,7 +4,7 @@ comment "Arm toolchains available for Cortex-A with NEON + EABIhf"
+ 	depends on !BR2_STATIC_LIBS
  
- # Test a musl toolchain
--support/config-fragments/autobuild/br-x86-64-musl.config,x86_64
-+support/config-fragments/autobuild/bootlin-x86-64-musl.config,x86_64
+ config BR2_TOOLCHAIN_EXTERNAL_ARM_ARM
+-	bool "Arm ARM 2019.12"
++	bool "Arm ARM 2020.11"
+ 	depends on BR2_arm
+ 	depends on BR2_ARM_CPU_ARMV7A || BR2_ARM_CPU_ARMV8A
+ 	depends on BR2_ARM_CPU_HAS_NEON
+@@ -16,12 +16,12 @@ config BR2_TOOLCHAIN_EXTERNAL_ARM_ARM
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_20
+-	select BR2_TOOLCHAIN_GCC_AT_LEAST_9
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_10
+ 	select BR2_TOOLCHAIN_HAS_FORTRAN
+ 	select BR2_TOOLCHAIN_HAS_OPENMP
+ 	help
+-	  Arm toolchain for the ARM architecture. It uses GCC 9.2.1,
+-	  GDB 8.3.0, glibc 2.30, Binutils 2.33.1. It generates code
++	  Arm toolchain for the ARM architecture. It uses GCC 10.2,
++	  GDB 10.1, glibc 2.31, Binutils 2.35.1. It generates code
+ 	  that runs on all Cortex-A profile devices. The code
+ 	  generated uses the hard floating point calling convention,
+ 	  and uses the NEON FPU instructions.
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.hash b/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.hash
+index 0a28cf0d59..a46ed4e40c 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.hash
++++ b/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.hash
+@@ -1,4 +1,4 @@
+-# From https://developer.arm.com/-/media/Files/downloads/gnu-a/9.2-2019.12/binrel/gcc-arm-9.2-2019.12-x86_64-arm-none-linux-gnueabihf.tar.xz.asc
+-md5 ae539d09dadacf7f22fcd6f54870e5ad gcc-arm-9.2-2019.12-x86_64-arm-none-linux-gnueabihf.tar.xz
++# From https://developer.arm.com/-/media/Files/downloads/gnu-a/10.2-2020.11/binrel/gcc-arm-10.2-2020.11-x86_64-arm-none-linux-gnueabihf.tar.xz.asc
++md5  14f706db78cfb43aafed9056174572b0  gcc-arm-10.2-2020.11-x86_64-arm-none-linux-gnueabihf.tar.xz
+ # locally calculated
+-sha256 51bbaf22a4d3e7a393264c4ef1e45566701c516274dde19c4892c911caa85617 gcc-arm-9.2-2019.12-x86_64-arm-none-linux-gnueabihf.tar.xz
++sha256  102825ae56c9e00142d06f35d2bdd3299edb6060e84a275a25b095e66fd3fc2a  gcc-arm-10.2-2020.11-x86_64-arm-none-linux-gnueabihf.tar.xz
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.mk b/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.mk
+index 798573a474..88b6ae3403 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.mk
++++ b/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- # Test a MMU toolchain without dynamic library support
- support/config-fragments/autobuild/br-arm-full-static.config,x86_64
+-TOOLCHAIN_EXTERNAL_ARM_ARM_VERSION = 2019.12
+-TOOLCHAIN_EXTERNAL_ARM_ARM_SITE = https://developer.arm.com/-/media/Files/downloads/gnu-a/9.2-$(TOOLCHAIN_EXTERNAL_ARM_ARM_VERSION)/binrel
++TOOLCHAIN_EXTERNAL_ARM_ARM_VERSION = 2020.11
++TOOLCHAIN_EXTERNAL_ARM_ARM_SITE = https://developer.arm.com/-/media/Files/downloads/gnu-a/10.2-$(TOOLCHAIN_EXTERNAL_ARM_ARM_VERSION)/binrel
+ 
+-TOOLCHAIN_EXTERNAL_ARM_ARM_SOURCE = gcc-arm-9.2-$(TOOLCHAIN_EXTERNAL_ARM_ARM_VERSION)-x86_64-arm-none-linux-gnueabihf.tar.xz
++TOOLCHAIN_EXTERNAL_ARM_ARM_SOURCE = gcc-arm-10.2-$(TOOLCHAIN_EXTERNAL_ARM_ARM_VERSION)-x86_64-arm-none-linux-gnueabihf.tar.xz
+ 
+ $(eval $(toolchain-external-package))
 -- 
 2.29.2
