@@ -1,42 +1,66 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 2 Feb 2021 16:33:40 +0100
-Subject: [Buildroot] [git commit] package/moarvm: bump to version 2020.12
-Message-ID: <20210202152050.C1BDA864D9@busybox.osuosl.org>
+Date: Tue, 2 Feb 2021 16:34:15 +0100
+Subject: [Buildroot] [git commit] package/privoxy: security bump to version
+ 3.0.31
+Message-ID: <20210202152050.D58A6867CB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b3894932b84aa3d00404b10f914da1de69ac0e74
+commit: https://git.buildroot.net/buildroot/commit/?id=3a6fde69e1ccd250ea2bace34deaaf2140428f63
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+From the announcement:
+
+ChangeLog for Privoxy 3.0.31
+--------------------------------------------------------------------
+- Security/Reliability:
+  - Prevent an assertion from getting triggered by a crafted CGI request.
+    Commit 5bba5b89193fa. OVE-20210130-0001.
+    Reported by: Joshua Rogers (Opera)
+  - Fixed a memory leak when decompression fails "unexpectedly".
+    Commit f431d61740cc0. OVE-20210128-0001.
+
+- Bug fixes:
+  - Fixed detection of insufficient data for decompression.
+    Previously Privoxy could try to decompress a partly
+    uninitialized buffer.
+
+https://www.privoxy.org/announce.txt
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/moarvm/moarvm.hash | 2 +-
- package/moarvm/moarvm.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/privoxy/privoxy.hash | 8 ++++----
+ package/privoxy/privoxy.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/moarvm/moarvm.hash b/package/moarvm/moarvm.hash
-index 36f0a81f31..abe96c3d4b 100644
---- a/package/moarvm/moarvm.hash
-+++ b/package/moarvm/moarvm.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/privoxy/privoxy.hash b/package/privoxy/privoxy.hash
+index 850208dd9f..00c0f33bdb 100644
+--- a/package/privoxy/privoxy.hash
++++ b/package/privoxy/privoxy.hash
+@@ -1,6 +1,6 @@
+-# From http://sourceforge.net/projects/ijbswa/files/Sources/3.0.28%20%29stable%29/
+-md5  493a3a643247e6c8bc60725e9993d4ee  privoxy-3.0.29-stable-src.tar.gz
+-sha1  59873a122729b1b03e1d202d663036d2b5fa1120  privoxy-3.0.29-stable-src.tar.gz
++# From https://sourceforge.net/projects/ijbswa/files/Sources/3.0.31%20%28stable%29/
++md5  014cc371d00e84b2db34d0e2b05c77d4  privoxy-3.0.31-stable-src.tar.gz
++sha1  4f0e0c36d55f72f6b33e4c645a9c5d4f40026abd  privoxy-3.0.31-stable-src.tar.gz
  # Locally computed
--sha256  637883083f16c4398ffd3685ea6411daa605dd0862e1f59cce632bb2b994f2c4  MoarVM-2020.10.tar.gz
-+sha256  08914f1c464151ebc678cf0d360c9e479a036178fa7c9ddfd34aa4d556d03ea2  MoarVM-2020.12.tar.gz
- sha256  c53c6b96081b0a5b9b2fb4d0133d55c20e5e00e4c127ade62f03434ee7b3d2de  Artistic2.txt
-diff --git a/package/moarvm/moarvm.mk b/package/moarvm/moarvm.mk
-index 9fe5f4c077..1f41404415 100644
---- a/package/moarvm/moarvm.mk
-+++ b/package/moarvm/moarvm.mk
+-sha256  25c6069efdaf577d47c257da63b03cd6d063fb790e19cc39603d82e5db72489d  privoxy-3.0.29-stable-src.tar.gz
++sha256  077729a3aac79222a4e8d88a650d9028d16fd4b0d6038da8f5f5e47120d004eb  privoxy-3.0.31-stable-src.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
+diff --git a/package/privoxy/privoxy.mk b/package/privoxy/privoxy.mk
+index 3cf1dc9754..5c1f862bfd 100644
+--- a/package/privoxy/privoxy.mk
++++ b/package/privoxy/privoxy.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MOARVM_VERSION = 2020.10
-+MOARVM_VERSION = 2020.12
- MOARVM_SITE = http://moarvm.com/releases
- MOARVM_SOURCE = MoarVM-$(MOARVM_VERSION).tar.gz
- MOARVM_LICENSE = Artistic-2.0
+-PRIVOXY_VERSION = 3.0.29
++PRIVOXY_VERSION = 3.0.31
+ PRIVOXY_SITE = http://downloads.sourceforge.net/project/ijbswa/Sources/$(PRIVOXY_VERSION)%20%28stable%29
+ PRIVOXY_SOURCE = privoxy-$(PRIVOXY_VERSION)-stable-src.tar.gz
+ # configure not shipped
