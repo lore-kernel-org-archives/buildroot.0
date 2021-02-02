@@ -1,92 +1,137 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 2 Feb 2021 20:10:40 +0100
-Subject: [Buildroot] [PATCH] package/linux-headers: with headers from
- kernel, also override srcdir
-In-Reply-To: <20210127212413.2046623-1-yann.morin.1998@free.fr>
-References: <20210127212413.2046623-1-yann.morin.1998@free.fr>
-Message-ID: <890285e2-7d6a-3343-e8a0-772417b266f0@mind.be>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue,  2 Feb 2021 20:27:03 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libgpiod: disable examples
+Message-ID: <20210202192703.123317-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This will fix a build failure with libgpiod in version 1.6.2
 
+Fixes:
+ - http://autobuild.buildroot.org/results/321004b185213099c7c5633b5ec35ceadd0293bc
 
-On 27/01/2021 22:24, Yann E. MORIN wrote:
-> When using the headers from the kernel to be built, with the kernel
-> set to a custom version, and overriding the kernel sources with
-> LINUX_OVERRIDE_SRCDIR, the linux-headers package is still trying to
-> download an archive, and fails to validate its hash.
-> 
-> What is going on under the hood is that, with _OVERRIDE_SRCDIR, the
-> _VERSION of a package is set to 'custom'. Furthermore, the variable
-> BR_NO_CHECK_HASH_FOR is recursively expanded, so its value is only
-> evaluated when it is needed.
-> 
-> For linux-headers, we inherit the values from the linux package, and
-> the LINUX_HEADERS_VERSION takes the value from the configuration.
-> 
-> Thus we end up with the following situation:
-> 
->     LINUX_VERSION=custom
->     LINUX_HEADERS_VERSION=5.10   # For example
->     BR_NO_CHECK_HASH_FOR=... linux-custom.tar.gz ...
-> 
-> And thus the archive downloaded by linux-headers will not match any
-> exclusion, and since there will most probably not be a hash for it,
-> the download will fail, as was noticed and reported by Jarkko.
-> 
-> But in this case, what we really want is to really use the headers
-> from the kernel that we build, we do not even want to attempt a
-> download at all.
-> 
-> So, when using the headers from the kernel to be built, we also
-> propagate the LINUX_OVERRIDE_SRCDIR to linux-headers, so that we
-> also use the headers from the overridden sources.
-> 
-> Furthermore, in that configuration, we explicitly disallow
-> overriding the linux-headers specifically, as it does not make sense
-> (even though, if they were overridden to the same location, that'd
-> be OK, but to simplify the condition, we do not even check for that).
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...nfigure-switch-for-building-examples.patch | 91 +++++++++++++++++++
+ package/libgpiod/libgpiod.mk                  |  5 +-
+ 2 files changed, 95 insertions(+), 1 deletion(-)
+ create mode 100644 package/libgpiod/0001-build-add-a-configure-switch-for-building-examples.patch
 
- It's likely that some people that are currently using this configuration will
-have explicitly set LINUX_HEADERS_OVERRIDE_SRCDIR as well to overcome this
-problem, so this error will cause a regression for them.
-
- That said, it's easy enough to fix and the error message is clear, so I guess
-it's OK.
-
- Applied to master, thanks.
-
- Regards,
- Arnout
-
- PS: No spelling errors, congratulations! :-)
-
-> 
-> Reported-by: Jarkko Sakkinen <jjs@kapsi.fi>
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> ---
->  package/linux-headers/linux-headers.mk | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
-> index 807e574f4d..a8d1c2ccaf 100644
-> --- a/package/linux-headers/linux-headers.mk
-> +++ b/package/linux-headers/linux-headers.mk
-> @@ -18,6 +18,10 @@ LINUX_HEADERS_VERSION = $(call qstrip,$(BR2_LINUX_KERNEL_VERSION))
->  LINUX_HEADERS_CUSTOM_TARBALL_LOCATION = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION))
->  LINUX_HEADERS_REPO_URL = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
->  LINUX_HEADERS_CIP = $(BR2_LINUX_KERNEL_LATEST_CIP_VERSION)$(BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION)
-> +ifneq ($(LINUX_HEADERS_OVERRIDE_SRCDIR),)
-> +$(error LINUX_HEADERS_OVERRIDE_SRCDIR must not be set when BR2_KERNEL_HEADERS_AS_KERNEL=y)
-> +endif
-> +LINUX_HEADERS_OVERRIDE_SRCDIR = $(LINUX_OVERRIDE_SRCDIR)
->  else # ! BR2_KERNEL_HEADERS_AS_KERNEL
->  LINUX_HEADERS_CUSTOM_TARBALL = $(call qstrip,$(BR2_KERNEL_HEADERS_CUSTOM_TARBALL))
->  LINUX_HEADERS_CUSTOM_GIT = $(call qstrip,$(BR2_KERNEL_HEADERS_CUSTOM_GIT))
-> 
+diff --git a/package/libgpiod/0001-build-add-a-configure-switch-for-building-examples.patch b/package/libgpiod/0001-build-add-a-configure-switch-for-building-examples.patch
+new file mode 100644
+index 0000000000..a21c767006
+--- /dev/null
++++ b/package/libgpiod/0001-build-add-a-configure-switch-for-building-examples.patch
+@@ -0,0 +1,91 @@
++From 5e9e7223a3633ee82b557d21b1f18aa15becd450 Mon Sep 17 00:00:00 2001
++From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
++Date: Mon, 7 Dec 2020 20:38:30 +0100
++Subject: build: add a configure switch for building examples
++
++Example code for bindings is currently always built if bindings are
++enabled. Make it conditional with a new configure switch.
++
++Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
++Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
++[Retrieved from:
++https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/commit/?id=5e9e7223a3633ee82b557d21b1f18aa15becd450]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ bindings/cxx/Makefile.am    |  8 +++++++-
++ bindings/python/Makefile.am | 10 ++++++++--
++ configure.ac                |  6 ++++++
++ 3 files changed, 21 insertions(+), 3 deletions(-)
++
++diff --git a/bindings/cxx/Makefile.am b/bindings/cxx/Makefile.am
++index 5c40ceb..87463b0 100644
++--- a/bindings/cxx/Makefile.am
+++++ b/bindings/cxx/Makefile.am
++@@ -18,10 +18,16 @@ include_HEADERS = gpiod.hpp
++ pkgconfigdir = $(libdir)/pkgconfig
++ pkgconfig_DATA = libgpiodcxx.pc
++ 
++-SUBDIRS = . examples
+++SUBDIRS = .
++ 
++ if WITH_TESTS
++ 
++ SUBDIRS += tests
++ 
++ endif
+++
+++if WITH_EXAMPLES
+++
+++SUBDIRS += examples
+++
+++endif
++diff --git a/bindings/python/Makefile.am b/bindings/python/Makefile.am
++index 124f152..5403bcb 100644
++--- a/bindings/python/Makefile.am
+++++ b/bindings/python/Makefile.am
++@@ -6,8 +6,6 @@
++ # Copyright (C) 2017-2018 Bartosz Golaszewski <bartekgola@gmail.com>
++ #
++ 
++-SUBDIRS = . examples
++-
++ pyexec_LTLIBRARIES = gpiod.la
++ 
++ gpiod_la_SOURCES = gpiodmodule.c
++@@ -17,8 +15,16 @@ gpiod_la_CFLAGS += -Wall -Wextra -g -std=gnu89 $(PYTHON_CPPFLAGS)
++ gpiod_la_LDFLAGS = -module -avoid-version
++ gpiod_la_LIBADD = $(top_builddir)/lib/libgpiod.la $(PYTHON_LIBS)
++ 
+++SUBDIRS = .
+++
++ if WITH_TESTS
++ 
++ SUBDIRS += tests
++ 
++ endif
+++
+++if WITH_EXAMPLES
+++
+++SUBDIRS += examples
+++
+++endif
++diff --git a/configure.ac b/configure.ac
++index 57c99a8..90a6324 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -155,6 +155,12 @@ then
++ 	fi
++ fi
++ 
+++AC_ARG_ENABLE([examples],
+++	[AS_HELP_STRING([--enable-examples], [enable building code examples[default=no]])],
+++	[if test "x$enableval" = xyes; then with_examples=true; fi],
+++	[with_examples=false])
+++AM_CONDITIONAL([WITH_EXAMPLES], [test "x$with_examples" = xtrue])
+++
++ AC_ARG_ENABLE([bindings-cxx],
++ 	[AS_HELP_STRING([--enable-bindings-cxx],[enable C++ bindings [default=no]])],
++ 	[if test "x$enableval" = xyes; then with_bindings_cxx=true; fi],
++-- 
++cgit 1.2.3-1.el7
++
+diff --git a/package/libgpiod/libgpiod.mk b/package/libgpiod/libgpiod.mk
+index 72f8ae772c..f78d69158b 100644
+--- a/package/libgpiod/libgpiod.mk
++++ b/package/libgpiod/libgpiod.mk
+@@ -12,7 +12,10 @@ LIBGPIOD_SITE = https://www.kernel.org/pub/software/libs/libgpiod
+ LIBGPIOD_LICENSE = LGPL-2.1+
+ LIBGPIOD_LICENSE_FILES = COPYING
+ LIBGPIOD_INSTALL_STAGING = YES
+-LIBGPIOD_DEPENDENCIES = host-pkgconf
++# We're patching configure.ac
++LIBGPIOD_AUTORECONF = YES
++LIBGPIOD_AUTORECONF_OPTS = --include=$(HOST_DIR)/share/autoconf-archive
++LIBGPIOD_DEPENDENCIES = host-pkgconf host-autoconf-archive
+ LIBGPIOD_CONF_OPTS = --disable-tests
+ 
+ ifeq ($(BR2_PACKAGE_LIBGPIOD_TOOLS),y)
+-- 
+2.29.2
