@@ -1,44 +1,47 @@
-From: Yann Sionneau <ysionneau@kalray.eu>
-Date: Tue,  2 Feb 2021 17:53:21 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libopenssl: fix issue when
- compiling with BR2_OPTIMIZE_G=y
-Message-ID: <20210202165321.27243-1-ysionneau@kalray.eu>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 2 Feb 2021 18:03:15 +0100
+Subject: [Buildroot] [PATCH 1/1] package/dhcpcd: create /var/db/dhcpcd
+In-Reply-To: <87r1lyiikr.fsf@dell.be.48ers.dk>
+References: <20210201192420.1028680-1-fontaine.fabrice@gmail.com>
+ <87r1lyiikr.fsf@dell.be.48ers.dk>
+Message-ID: <CAPi7W82+Mq6STtt8N+U_HKmFU8f9zZbZof5DSseQ-Jk2Q5bbFw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For instance on risc-v 64 arch the build would otherwise fail because
-of undefined ucontext_t because "-DOPENSSL_NO_ASYNC" would not propagate
-through to CFLAGS in the Makefile.
+Le mar. 2 f?vr. 2021 ? 16:40, Peter Korsgaard <peter@korsgaard.com> a ?crit :
+>
+> >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>
+>  > Fixes:
+>  >  - https://bugs.buildroot.org/show_bug.cgi?id=13506
+>
+>  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>  > ---
+>  >  package/dhcpcd/dhcpcd.mk | 1 +
+>  >  1 file changed, 1 insertion(+)
+>
+>  > diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
+>  > index cb269f1138..81e87369ad 100644
+>  > --- a/package/dhcpcd/dhcpcd.mk
+>  > +++ b/package/dhcpcd/dhcpcd.mk
+>  > @@ -46,6 +46,7 @@ endef
+>
+>  >  define DHCPCD_INSTALL_TARGET_CMDS
+>  >      $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install DESTDIR=$(TARGET_DIR)
+>  > +    mkdir -p $(TARGET_DIR)/var/db/dhcpcd
+>
+> What is stored here? Does it need to persist over reboots? How should a
+> readonly rootfs be handled? Could we perhaps make it a symlink to /run
+> or similar?
+I'll set this patch as "not applicable" as dhcpcd installs back this
+directory since version 9.2.0 and
+https://github.com/rsmarples/dhcpcd/commit/4d695e1ca3b87b45d5e5fa5119ddcb8a086ca9a0
+>
+> --
+> Bye, Peter Korsgaard
+Best Regards,
 
-Signed-off-by: Yann Sionneau <ysionneau@kalray.eu>
----
- package/libopenssl/libopenssl.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-index f4bb62911c..972ed534ba 100644
---- a/package/libopenssl/libopenssl.mk
-+++ b/package/libopenssl/libopenssl.mk
-@@ -67,7 +67,7 @@ define HOST_LIBOPENSSL_CONFIGURE_CMDS
- 		shared \
- 		zlib-dynamic \
- 	)
--	$(SED) "s#-O[0-9s]#$(HOST_CFLAGS)#" $(@D)/Makefile
-+	$(SED) "s#-O[0-9sg]#$(HOST_CFLAGS)#" $(@D)/Makefile
- endef
- 
- define LIBOPENSSL_CONFIGURE_CMDS
-@@ -91,7 +91,7 @@ define LIBOPENSSL_CONFIGURE_CMDS
- 			$(if $(BR2_STATIC_LIBS),zlib,zlib-dynamic) \
- 	)
- 	$(SED) "s#-march=[-a-z0-9] ##" -e "s#-mcpu=[-a-z0-9] ##g" $(@D)/Makefile
--	$(SED) "s#-O[0-9s]#$(LIBOPENSSL_CFLAGS)#" $(@D)/Makefile
-+	$(SED) "s#-O[0-9sg]#$(LIBOPENSSL_CFLAGS)#" $(@D)/Makefile
- 	$(SED) "s# build_tests##" $(@D)/Makefile
- endef
- 
--- 
-2.17.1
+Fabrice
