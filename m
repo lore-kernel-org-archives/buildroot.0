@@ -1,51 +1,37 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 2 Feb 2021 21:42:39 +0100
-Subject: [Buildroot] [git commit] package/pkg-meson.mk: fix ccache
- auto-detection avoidance
-Message-ID: <20210202202232.438A3864F6@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue,  2 Feb 2021 21:46:26 +0100
+Subject: [Buildroot] [PATCH 1/1] package/sox: drop unrecognized options
+Message-ID: <20210202204626.402946-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=548b8c541285cedc390c4c95bd9d80dbad7d2a73
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ffmpeg has been dropped since version 14.4.2 (back in 2013) and
+https://sourceforge.net/p/sox/code/ci/5ae4049727d4f29036ad541bde5863c850aa7755
 
-Commit f4a61d1ae23e (package/pkg-meson.mk avoid host ccache detection)
-forced the host C and C++ compilers so that meson does not try to
-autodetect ccache, and instead relies on what we provide.
+--disable-gomp has also been removed since version 14.4.1 (back in 2012)
+and
+https://sourceforge.net/p/sox/code/ci/84eaacb54fd2e61154ccd95328d8a8ec5096eae1
 
-However, this incorrectly used single-expansion of variables in a
-package infra.
-
-For traditional builds, this is OK, because the value does not change
-across packages.
-
-However, for builds with per-package directories, this value only refers
-to the generic path, which ill not exist until the end of the build when
-all packages are aggregated in the host-finalize step.
-
-Fix that by postponing the variable evaluation like all the others.
-
-Reported-by: Xogium on IRC
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/pkg-meson.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/sox/sox.mk | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-index de0e6e8ea3..aafb441fae 100644
---- a/package/pkg-meson.mk
-+++ b/package/pkg-meson.mk
-@@ -82,8 +82,8 @@ define $(2)_CONFIGURE_CMDS
- 	    package/meson/cross-compilation.conf.in \
- 	    > $$($$(PKG)_SRCDIR)/build/cross-compilation.conf
- 	PATH=$$(BR_PATH) \
--	CC_FOR_BUILD="$(HOSTCC)" \
--	CXX_FOR_BUILD="$(HOSTCC)" \
-+	CC_FOR_BUILD="$$(HOSTCC)" \
-+	CXX_FOR_BUILD="$$(HOSTCC)" \
- 	$$($$(PKG)_CONF_ENV) \
- 	$$(MESON) \
- 		--prefix=/usr \
+diff --git a/package/sox/sox.mk b/package/sox/sox.mk
+index 9abbc2f636..8a1d87b230 100644
+--- a/package/sox/sox.mk
++++ b/package/sox/sox.mk
+@@ -15,8 +15,6 @@ SOX_CPE_ID_PRODUCT = sound_exchange
+ 
+ SOX_CONF_OPTS = \
+ 	--with-distro="Buildroot" \
+-	--without-ffmpeg \
+-	--disable-gomp \
+ 	--disable-stack-protector
+ 
+ ifeq ($(BR2_PACKAGE_ALSA_LIB_PCM),y)
+-- 
+2.29.2
