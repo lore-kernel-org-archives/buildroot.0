@@ -1,39 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 02 Feb 2021 16:40:36 +0100
-Subject: [Buildroot] [PATCH 1/1] package/dhcpcd: create /var/db/dhcpcd
-In-Reply-To: <20210201192420.1028680-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 1 Feb 2021 20:24:20 +0100")
-References: <20210201192420.1028680-1-fontaine.fabrice@gmail.com>
-Message-ID: <87r1lyiikr.fsf@dell.be.48ers.dk>
+Date: Tue, 2 Feb 2021 16:35:56 +0100
+Subject: [Buildroot] [git commit] package/busybox: Fix check for IPv6
+ default route in udhcpc
+Message-ID: <20210202152051.15BD4864D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=09ad6f392fca86dc220f0ba3129512ab4f3469e1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes:
- >  - https://bugs.buildroot.org/show_bug.cgi?id=13506
+The check for a default route is inverted, causing the script to wait
+for the timeout even when a default IPv6 route is available. Fix this up
+so that it exits early as expected.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > ---
- >  package/dhcpcd/dhcpcd.mk | 1 +
- >  1 file changed, 1 insertion(+)
+Reported-by: Bhattiprolu RaviKumar <ravikumar.bhattiprolu@gmail.com>
+Signed-off-by: Samuel Mendoza-Jonas <sam@mendozajonas.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/busybox/udhcpc.script | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
- > index cb269f1138..81e87369ad 100644
- > --- a/package/dhcpcd/dhcpcd.mk
- > +++ b/package/dhcpcd/dhcpcd.mk
- > @@ -46,6 +46,7 @@ endef
- 
- >  define DHCPCD_INSTALL_TARGET_CMDS
- >  	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install DESTDIR=$(TARGET_DIR)
- > +	mkdir -p $(TARGET_DIR)/var/db/dhcpcd
-
-What is stored here? Does it need to persist over reboots? How should a
-readonly rootfs be handled? Could we perhaps make it a symlink to /run
-or similar?
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/busybox/udhcpc.script b/package/busybox/udhcpc.script
+index ec4d9f6185..c73ad6c2ef 100755
+--- a/package/busybox/udhcpc.script
++++ b/package/busybox/udhcpc.script
+@@ -18,7 +18,7 @@ fi
+ wait_for_ipv6_default_route() {
+ 	printf "Waiting for IPv6 default route to appear"
+ 	while [ $IF_WAIT_DELAY -gt 0 ]; do
+-		if [ -z "$(ip -6 route list | grep default)" ]; then
++		if ip -6 route list | grep -q default; then
+ 			printf "\n"
+ 			return
+ 		fi
