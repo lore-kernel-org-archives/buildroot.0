@@ -1,53 +1,27 @@
-From: Adrian Sweet <asweet@thegoodpenguin.co.uk>
-Date: Tue,  2 Feb 2021 11:57:21 +0000
-Subject: [Buildroot] [PATCH 1/1] package/cog: add
- BR2_PACKAGE_COG_USE_SYSTEM_DBUS
-Message-ID: <20210202115721.4136447-1-asweet@thegoodpenguin.co.uk>
+From: Mauricio Litinow <mauricio.penteado@litinow.com>
+Date: Tue, 2 Feb 2021 15:25:43 +0000
+Subject: [Buildroot] Books and/or courses for beginners - ARM devices
+Message-ID: <01fc8d58-7572-fc45-8d52-0f553ba0dc98@litinow.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added config option to expose browser remote control on the D-Bus system bus
+Hi folks,
 
-Signed-off-by: Adrian Sweet <asweet@thegoodpenguin.co.uk>
----
- package/cog/Config.in | 6 ++++++
- package/cog/cog.mk    | 6 ++++++
- 2 files changed, 12 insertions(+)
 
-diff --git a/package/cog/Config.in b/package/cog/Config.in
-index a9ca7473a9..c19f1c200e 100644
---- a/package/cog/Config.in
-+++ b/package/cog/Config.in
-@@ -47,6 +47,12 @@ config BR2_PACKAGE_COG_PLATFORM_DRM
- 	  with video drivers that support kernel mode-setting (KMS)
- 	  via the DRM user-space API.
- 
-+config BR2_PACKAGE_COG_USE_SYSTEM_DBUS
-+	bool "Use D-Bus system bus"
-+	default n
-+	help
-+	  Expose remote control interface on system bus
-+
- comment "DRM platform needs mesa3d w/ EGL driver and GBM"
- 	depends on !BR2_PACKAGE_MESA3D_OPENGL_EGL
- 
-diff --git a/package/cog/cog.mk b/package/cog/cog.mk
-index 47a5573dda..c5a1cc0df2 100644
---- a/package/cog/cog.mk
-+++ b/package/cog/cog.mk
-@@ -31,4 +31,10 @@ else
- COG_CONF_OPTS += -DCOG_PLATFORM_DRM=OFF
- endif
- 
-+ifeq ($(BR2_PACKAGE_COG_USE_SYSTEM_DBUS),y)
-+COG_CONF_OPTS += -DCOG_DBUS_SYSTEM_BUS=ON
-+else
-+COG_CONF_OPTS += -DCOG_DBUS_SYSTEM_BUS=OFF
-+endif
-+
- $(eval $(cmake-package))
--- 
-2.25.1
+It has been difficult for me to absorb the nedded knowledge to compile 
+and build Buildroot for ARM devices.
+
+I have never done anything like this before.
+
+Please, is the book "Mastering Embedded Linux-2nd-Ed" a good starting 
+point? Is there book more up to date?
+
+Are there any online courses explaining details about this process?
+
+
+Yours sincerely,
+
+Mauricio
