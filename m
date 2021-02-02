@@ -1,39 +1,40 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 2 Feb 2021 21:53:30 +0100
-Subject: [Buildroot] [git commit] package/sox: drop unrecognized options
-Message-ID: <20210202203714.8F0208164F@busybox.osuosl.org>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Tue, 2 Feb 2021 22:16:18 +0100
+Subject: [Buildroot] [PATCH 4/5] package/binutils: drop 2.33.x series
+In-Reply-To: <87ft2fn1dr.fsf@dell.be.48ers.dk>
+References: <20210131223304.1857838-1-thomas.petazzoni@bootlin.com>
+ <20210131223304.1857838-4-thomas.petazzoni@bootlin.com>
+ <87ft2fn1dr.fsf@dell.be.48ers.dk>
+Message-ID: <b8776d72-712d-1743-8027-07032e04d774@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=98298134276e00232afc3433418cebf5f809ddd6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Peter,
 
-ffmpeg has been dropped since version 14.4.2 (back in 2013) and
-https://sourceforge.net/p/sox/code/ci/5ae4049727d4f29036ad541bde5863c850aa7755
+Le 01/02/2021 ? 18:28, Peter Korsgaard a ?crit?:
+>>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+> 
+>  > Now that 2.36.x has been added, that 2.35.x is the default version,
+>  > drop support for 2.33.x.
+> 
+>  > Note that we keep binutils 2.32.x as it is the latest version that
+>  > works for FLAT binaries (used on noMMU platforms).
+> 
+> :/ Does upstream know about this? Do they not care?
 
---disable-gomp has also been removed since version 14.4.1 (back in 2012)
-and
-https://sourceforge.net/p/sox/code/ci/84eaacb54fd2e61154ccd95328d8a8ec5096eae1
+It's not really an issue with Binutils but elf2flt tool:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/sox/sox.mk | 2 --
- 1 file changed, 2 deletions(-)
+https://github.com/uclinux-dev/elf2flt/issues/12
 
-diff --git a/package/sox/sox.mk b/package/sox/sox.mk
-index 9abbc2f636..8a1d87b230 100644
---- a/package/sox/sox.mk
-+++ b/package/sox/sox.mk
-@@ -15,8 +15,6 @@ SOX_CPE_ID_PRODUCT = sound_exchange
- 
- SOX_CONF_OPTS = \
- 	--with-distro="Buildroot" \
--	--without-ffmpeg \
--	--disable-gomp \
- 	--disable-stack-protector
- 
- ifeq ($(BR2_PACKAGE_ALSA_LIB_PCM),y)
+I just noticed a new PR that is interesting to fix the issue:
+https://github.com/uclinux-dev/elf2flt/pull/20
+
+Best regards,
+Romain
+
+> 
+> Committed, thanks.
+> 
