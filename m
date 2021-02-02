@@ -1,35 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 02 Feb 2021 18:59:55 +0100
-Subject: [Buildroot] [PATCH 1/1] package/dhcpcd: create /var/db/dhcpcd
-In-Reply-To: <8cb5000b-fbc0-6230-a12c-4dd974b6e074@green-communications.fr>
- (Nicolas Cavallari's message of "Tue, 2 Feb 2021 18:40:22 +0100")
-References: <20210201192420.1028680-1-fontaine.fabrice@gmail.com>
- <87r1lyiikr.fsf@dell.be.48ers.dk>
- <8cb5000b-fbc0-6230-a12c-4dd974b6e074@green-communications.fr>
-Message-ID: <875z3aic4k.fsf@dell.be.48ers.dk>
+Date: Tue, 2 Feb 2021 18:59:24 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/dhcpcd: create
+ /var/db/dhcpcd
+Message-ID: <20210202173941.BE3B98690A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Nicolas" == Nicolas Cavallari <nicolas.cavallari@green-communications.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=f3f28f98e0da2ab7a6d52d487169ad43e0988643
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
- >> > +	mkdir -p $(TARGET_DIR)/var/db/dhcpcd
- >> 
- >> What is stored here? Does it need to persist over reboots? How should a
- >> readonly rootfs be handled? Could we perhaps make it a symlink to /run
- >> or similar?
- >> 
+Fixes:
+ - https://bugs.buildroot.org/show_bug.cgi?id=13506
 
- > It stores DHCP DUID and IPv6 stable privacy secrets.  It must persist
- > over reboots, or the features that need them must be disabled or
- > configured not to.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/dhcpcd/dhcpcd.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
- > Apparently, dhcpcd is smart enough to detect read only systems and
- > plan accordingly, but i did not test it.
-
-OK, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
+index 8c0069775f..63da9a879f 100644
+--- a/package/dhcpcd/dhcpcd.mk
++++ b/package/dhcpcd/dhcpcd.mk
+@@ -40,6 +40,7 @@ endef
+ 
+ define DHCPCD_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install DESTDIR=$(TARGET_DIR)
++	mkdir -p $(TARGET_DIR)/var/db/dhcpcd
+ endef
+ 
+ # When network-manager is enabled together with dhcpcd, it will use
