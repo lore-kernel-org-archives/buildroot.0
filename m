@@ -1,62 +1,61 @@
 From: Federico Pellegrin <fede@evolware.org>
-Date: Wed,  3 Feb 2021 11:09:39 +0100
-Subject: [Buildroot] [PATCH 1/1] package/kexec: fix build on pre 4.4 kernels
-Message-ID: <20210203100939.17390-1-fede@evolware.org>
+Date: Wed, 3 Feb 2021 11:15:12 +0100
+Subject: [Buildroot] [PATCH 1/1] package/kexec: fix build on pre 4.4
+ kernels
+In-Reply-To: <20210131232413.15c9ae9a@windsurf.home>
+References: <20210129050312.12247-1-fede@evolware.org>
+ <20210131232413.15c9ae9a@windsurf.home>
+Message-ID: <CAM6O0ZhoTAtjiFm1NhwWiUkfXnO=m0v0gVTb1=2C-Q3hwcnG8g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-kexec build will fail on older kernels (pre 4.4) as the define VIDEO_CAPABILITY_64BIT_BASE was not present at that time.
+Hi Thomas,
+I apologize for the very bad patch I sent last time, very sorry I
+missed a level of patch indirection :-)
 
-This patch adds it, as per linux/include/uapi/linux/screen_info.h, if not present.
+I've just resubmitted a few moments ago, I hope it is fine this time.
 
-Signed-off-by: Federico Pellegrin <fede@evolware.org>
----
- ...c-tools-fix-build-on-pre-4.4-kernels.patch | 34 +++++++++++++++++++
- 1 file changed, 34 insertions(+)
- create mode 100644 package/kexec/0003-kexec-tools-fix-build-on-pre-4.4-kernels.patch
+As for upstream: I contacted them on the kexec mailing list
+(describing the problem, proposing informally the solution and asking
+if a patch would be welcome) but got no response as of now. I will
+wait a bit more and ping in case. I'm not really sure if they are
+interested to support very old kernels (which may be somehow also true
+for Buildroot, but I guess given that Buildroot proposes as of now
+also that versions in the configuration stage, we should try to keep
+all the tooling working with them as well)
 
-diff --git a/package/kexec/0003-kexec-tools-fix-build-on-pre-4.4-kernels.patch b/package/kexec/0003-kexec-tools-fix-build-on-pre-4.4-kernels.patch
-new file mode 100644
-index 0000000000..fcac604dfd
---- /dev/null
-+++ b/package/kexec/0003-kexec-tools-fix-build-on-pre-4.4-kernels.patch
-@@ -0,0 +1,34 @@
-+From cbbe4c47cb2acae04083c510dbe0efc5f48f5bb6 Mon Sep 17 00:00:00 2001
-+From: Federico Pellegrin <fede@evolware.org>
-+Date: Wed, 3 Feb 2021 11:00:17 +0100
-+Subject: [PATCH] kexec-tools: fix build on pre 4.4 kernels
-+
-+kexec build will fail on older kernels (pre 4.4) as the define
-+VIDEO_CAPABILITY_64BIT_BASE was not present at that time.
-+
-+This patch adds it, as per linux/include/uapi/linux/screen_info.h,
-+if not present.
-+
-+Signed-off-by: Federico Pellegrin <fede@evolware.org>
-+---
-+ kexec/arch/i386/x86-linux-setup.c | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/kexec/arch/i386/x86-linux-setup.c b/kexec/arch/i386/x86-linux-setup.c
-+index 76e1185..ab54a4a 100644
-+--- a/kexec/arch/i386/x86-linux-setup.c
-++++ b/kexec/arch/i386/x86-linux-setup.c
-+@@ -37,6 +37,10 @@
-+ #include "x86-linux-setup.h"
-+ #include "../../kexec/kexec-syscall.h"
-+ 
-++#ifndef VIDEO_CAPABILITY_64BIT_BASE
-++#define VIDEO_CAPABILITY_64BIT_BASE (1 << 1)	/* Frame buffer base is 64-bit */
-++#endif
-++
-+ void init_linux_parameters(struct x86_linux_param_header *real_mode)
-+ {
-+ 	/* Fill in the values that are usually provided by the kernel. */
-+-- 
-+2.26.2
-+
--- 
-2.26.2
+Many thanks!
+Federico
+
+
+Il giorno dom 31 gen 2021 alle ore 23:24 Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> ha scritto:
+>
+> Hello Federico,
+>
+> On Fri, 29 Jan 2021 06:03:12 +0100
+> Federico Pellegrin <fede@evolware.org> wrote:
+>
+> > kexec build will fail on older kernels (pre 4.4) as the define VIDEO_CAPABILITY_64BIT_BASE was not present at that time.
+> >
+> > This patch adds it, as per linux/include/uapi/linux/screen_info.h, if not present.
+> >
+> > Signed-off-by: Federico Pellegrin <fede@evolware.org>
+>
+> Thanks a lot for your contribution! However, we need all patches added
+> to packages to have a proper commit log and Signed-off-by line, and be
+> generated using git format-patch. Could you adjust your patch
+> accordingly ?
+>
+> Also, did you submit this change to upstream kexec ?
+>
+> Thanks a lot!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
