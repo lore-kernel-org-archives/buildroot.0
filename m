@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 3 Feb 2021 20:20:38 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/pugixml: bump to
+Date: Wed, 3 Feb 2021 20:20:03 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/pugixml: bump to
  version 1.11.4
-Message-ID: <20210203190017.C69E3864E3@busybox.osuosl.org>
+Message-ID: <20210203190025.7B28E83601@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e4ef815ebfe1cbf247a501c869edbae980073c03
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=fa17e077abc37801b75b0dfcebdbc1ff83194514
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
 - Use LICENSE.md which has been added in the release tarball since
   version 1.11 and
