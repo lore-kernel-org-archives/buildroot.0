@@ -1,7 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed,  3 Feb 2021 13:43:21 +0100
-Subject: [Buildroot] [PATCH 0/3] grpc-related fixes
-Message-ID: <20210203124325.18843-1-patrickdepinguin@gmail.com>
+Date: Wed,  3 Feb 2021 13:43:22 +0100
+Subject: [Buildroot] [PATCH 1/3] package/collectd: stop passing
+ '--with-libgrpc++'
+In-Reply-To: <20210203124325.18843-1-patrickdepinguin@gmail.com>
+References: <20210203124325.18843-1-patrickdepinguin@gmail.com>
+Message-ID: <20210203124325.18843-2-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,24 +13,51 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-Commit fedf3318e3fd3c9ba57389ed2b36472f1a772b9e removed an obsolete patch on
-grpc, but this had the side effect that building collectd after grpc no longer
-succeeded, because grpc_cpp_plugin from the target was executed.
+Commit 903de16f5fd586a32a7aed7a792a43dce16365eb added passing
+'--with-libgrpc++' with the explanation:
 
-During investigation of this issue, a number of related problems were found.
-This series addresses these problems.
+    "Use --with-libgrpc++ option as otherwise collectd will try to find
+    grpc++.pc which is not available."
 
-Thomas De Schampheleire (3):
-  package/collectd: stop passing '--with-libgrpc++'
-  package/grpc: fix cross-compilation with
-    gRPC_BUILD_GRPC_CPP_PLUGIN=OFF
-  package/grpc: disable unnecessary build plugins
+At the time of above commit, grpc version in Buildroot was 1.23.0.
+Since grpc 1.25.0, a grpc++.pc file _is_ generated from cmake builds.
+Hence, remove passing --with-libgrpc++.
 
- package/collectd/collectd.mk                  |  3 --
- ...ix-cross-compilation-with-gRPC_BUILD.patch | 43 +++++++++++++++++++
- package/grpc/grpc.mk                          |  9 +++-
- 3 files changed, 51 insertions(+), 4 deletions(-)
- create mode 100644 package/grpc/0001-CMakeLists.txt-fix-cross-compilation-with-gRPC_BUILD.patch
+This change fixes a problem introduced by commit
+fedf3318e3fd3c9ba57389ed2b36472f1a772b9e. As a side effect of that change, a
+target version of 'grpc_cpp_plugin' was now created. When collectd was built
+after grpc, even without grpc support in collectd enabled, the collectd
+configure script would find this target grpc_cpp_plugin and try to use it
+(which is not possible because it is built for target).
+When not passing '--with-libgrpc++', collectd will instead find the host
+version of grpc_cpp_plugin, which works fine.
 
+There are still two underlying problems:
+1. the target version of grpc_cpp_plugin is not actually needed. This will
+   be disabled in a subsequent commit.
+
+2. collectd should not execute any grpc-related action if grpc support for
+   collectd is disabled. This problem has been reported upstream:
+   https://github.com/collectd/collectd/issues/3836
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+---
+ package/collectd/collectd.mk | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+index ccca9bf388..3fcca12a45 100644
+--- a/package/collectd/collectd.mk
++++ b/package/collectd/collectd.mk
+@@ -193,9 +193,6 @@ COLLECTD_DEPENDENCIES = \
+ 	$(if $(BR2_PACKAGE_COLLECTD_WRITEREDIS),hiredis)
+ 
+ # include/library fixups
+-ifeq ($(BR2_PACKAGE_GRPC),y)
+-COLLECTD_CONF_OPTS += --with-libgrpc++=$(STAGING_DIR)/usr
+-endif
+ ifeq ($(BR2_PACKAGE_JANSSON),y)
+ COLLECTD_CONF_OPTS += --with-libjansson=$(STAGING_DIR)/usr
+ endif
 -- 
 2.26.2
