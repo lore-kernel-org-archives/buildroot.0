@@ -1,15 +1,15 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 3 Feb 2021 22:52:55 +0100
+Date: Wed, 3 Feb 2021 22:52:56 +0100
 Subject: [Buildroot] [git commit] toolchain/toolchain-external: update Arm
- ARM toolchain 10.2-2020.11
-Message-ID: <20210203213251.C298D80AD5@busybox.osuosl.org>
+ AArch64 toolchain 10.2-2020.11
+Message-ID: <20210203213251.CE94E809A8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=36c6037f1d9d0cd58636c4f9d83bb553466fb0d0
+commit: https://git.buildroot.net/buildroot/commit/?id=89aeb972b5908ecca8978c3a8a9d9ad6609a22db
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Update to gcc 10.2, gdb 10.1, binutils 2.35.1.
@@ -17,71 +17,62 @@ Update to gcc 10.2, gdb 10.1, binutils 2.35.1.
 See "Release Note":
 https://developer.arm.com/open-source/gnu-toolchain/gnu-a/downloads#
 
-Tested with qemu_arm_vexpress_defconfig.
+Tested with qemu_aarch64_virt_defconfig.
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- toolchain/toolchain-external/toolchain-external-arm-arm/Config.in | 8 ++++----
- .../toolchain-external-arm-arm/toolchain-external-arm-arm.hash    | 6 +++---
- .../toolchain-external-arm-arm/toolchain-external-arm-arm.mk      | 6 +++---
- 3 files changed, 10 insertions(+), 10 deletions(-)
+ .../toolchain-external/toolchain-external-arm-aarch64/Config.in     | 4 ++--
+ .../toolchain-external-arm-aarch64.hash                             | 6 +++---
+ .../toolchain-external-arm-aarch64.mk                               | 6 +++---
+ 3 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in b/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
-index 29509635a3..e3bac38baa 100644
---- a/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
-+++ b/toolchain/toolchain-external/toolchain-external-arm-arm/Config.in
-@@ -4,7 +4,7 @@ comment "Arm toolchains available for Cortex-A with NEON + EABIhf"
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in b/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in
+index 52dcb2825e..b6062846a4 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64/Config.in
+@@ -1,5 +1,5 @@
+ config BR2_TOOLCHAIN_EXTERNAL_ARM_AARCH64
+-	bool "Arm AArch64 2019.12"
++	bool "Arm AArch64 2020.11"
+ 	depends on BR2_aarch64
+ 	depends on BR2_HOSTARCH = "x86_64"
  	depends on !BR2_STATIC_LIBS
- 
- config BR2_TOOLCHAIN_EXTERNAL_ARM_ARM
--	bool "Arm ARM 2019.12"
-+	bool "Arm ARM 2020.11"
- 	depends on BR2_arm
- 	depends on BR2_ARM_CPU_ARMV7A || BR2_ARM_CPU_ARMV8A
- 	depends on BR2_ARM_CPU_HAS_NEON
-@@ -16,12 +16,12 @@ config BR2_TOOLCHAIN_EXTERNAL_ARM_ARM
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+@@ -8,7 +8,7 @@ config BR2_TOOLCHAIN_EXTERNAL_ARM_AARCH64
  	select BR2_INSTALL_LIBSTDCPP
+ 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
  	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_20
 -	select BR2_TOOLCHAIN_GCC_AT_LEAST_9
 +	select BR2_TOOLCHAIN_GCC_AT_LEAST_10
  	select BR2_TOOLCHAIN_HAS_FORTRAN
  	select BR2_TOOLCHAIN_HAS_OPENMP
  	help
--	  Arm toolchain for the ARM architecture. It uses GCC 9.2.1,
--	  GDB 8.3.0, glibc 2.30, Binutils 2.33.1. It generates code
-+	  Arm toolchain for the ARM architecture. It uses GCC 10.2,
-+	  GDB 10.1, glibc 2.31, Binutils 2.35.1. It generates code
- 	  that runs on all Cortex-A profile devices. The code
- 	  generated uses the hard floating point calling convention,
- 	  and uses the NEON FPU instructions.
-diff --git a/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.hash b/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.hash
-index 0a28cf0d59..a46ed4e40c 100644
---- a/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.hash
-+++ b/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.hash
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.hash b/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.hash
+index edc30a2805..90abe56d64 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.hash
++++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.hash
 @@ -1,4 +1,4 @@
--# From https://developer.arm.com/-/media/Files/downloads/gnu-a/9.2-2019.12/binrel/gcc-arm-9.2-2019.12-x86_64-arm-none-linux-gnueabihf.tar.xz.asc
--md5 ae539d09dadacf7f22fcd6f54870e5ad gcc-arm-9.2-2019.12-x86_64-arm-none-linux-gnueabihf.tar.xz
-+# From https://developer.arm.com/-/media/Files/downloads/gnu-a/10.2-2020.11/binrel/gcc-arm-10.2-2020.11-x86_64-arm-none-linux-gnueabihf.tar.xz.asc
-+md5  14f706db78cfb43aafed9056174572b0  gcc-arm-10.2-2020.11-x86_64-arm-none-linux-gnueabihf.tar.xz
+-# From https://developer.arm.com/-/media/Files/downloads/gnu-a/9.2-2019.12/binrel/gcc-arm-9.2-2019.12-x86_64-aarch64-none-linux-gnu.tar.xz.asc
+-md5 23ecc1dc528253c43e43365c6d923ec3 gcc-arm-9.2-2019.12-x86_64-aarch64-none-linux-gnu.tar.xz
++# From https://developer.arm.com/-/media/Files/downloads/gnu-a/10.2-2020.11/binrel/gcc-arm-10.2-2020.11-x86_64-aarch64-none-linux-gnu.tar.xz.asc
++md5  d6e6676d31c51405ae0fc7687ef0a224  gcc-arm-10.2-2020.11-x86_64-aarch64-none-linux-gnu.tar.xz
  # locally calculated
--sha256 51bbaf22a4d3e7a393264c4ef1e45566701c516274dde19c4892c911caa85617 gcc-arm-9.2-2019.12-x86_64-arm-none-linux-gnueabihf.tar.xz
-+sha256  102825ae56c9e00142d06f35d2bdd3299edb6060e84a275a25b095e66fd3fc2a  gcc-arm-10.2-2020.11-x86_64-arm-none-linux-gnueabihf.tar.xz
-diff --git a/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.mk b/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.mk
-index 798573a474..88b6ae3403 100644
---- a/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.mk
-+++ b/toolchain/toolchain-external/toolchain-external-arm-arm/toolchain-external-arm-arm.mk
+-sha256 8dfe681531f0bd04fb9c53cf3c0a3368c616aa85d48938eebe2b516376e06a66 gcc-arm-9.2-2019.12-x86_64-aarch64-none-linux-gnu.tar.xz
++sha256  fe7f72330216612de44891ebe5e228eed7c0c051ac090c395b2b33115c6f5408  gcc-arm-10.2-2020.11-x86_64-aarch64-none-linux-gnu.tar.xz
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.mk b/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.mk
+index 51a81ec982..583e4a763d 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.mk
++++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64/toolchain-external-arm-aarch64.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--TOOLCHAIN_EXTERNAL_ARM_ARM_VERSION = 2019.12
--TOOLCHAIN_EXTERNAL_ARM_ARM_SITE = https://developer.arm.com/-/media/Files/downloads/gnu-a/9.2-$(TOOLCHAIN_EXTERNAL_ARM_ARM_VERSION)/binrel
-+TOOLCHAIN_EXTERNAL_ARM_ARM_VERSION = 2020.11
-+TOOLCHAIN_EXTERNAL_ARM_ARM_SITE = https://developer.arm.com/-/media/Files/downloads/gnu-a/10.2-$(TOOLCHAIN_EXTERNAL_ARM_ARM_VERSION)/binrel
+-TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION = 2019.12
+-TOOLCHAIN_EXTERNAL_ARM_AARCH64_SITE = https://developer.arm.com/-/media/Files/downloads/gnu-a/9.2-$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION)/binrel
++TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION = 2020.11
++TOOLCHAIN_EXTERNAL_ARM_AARCH64_SITE = https://developer.arm.com/-/media/Files/downloads/gnu-a/10.2-$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION)/binrel
  
--TOOLCHAIN_EXTERNAL_ARM_ARM_SOURCE = gcc-arm-9.2-$(TOOLCHAIN_EXTERNAL_ARM_ARM_VERSION)-x86_64-arm-none-linux-gnueabihf.tar.xz
-+TOOLCHAIN_EXTERNAL_ARM_ARM_SOURCE = gcc-arm-10.2-$(TOOLCHAIN_EXTERNAL_ARM_ARM_VERSION)-x86_64-arm-none-linux-gnueabihf.tar.xz
+-TOOLCHAIN_EXTERNAL_ARM_AARCH64_SOURCE = gcc-arm-9.2-$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION)-x86_64-aarch64-none-linux-gnu.tar.xz
++TOOLCHAIN_EXTERNAL_ARM_AARCH64_SOURCE = gcc-arm-10.2-$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_VERSION)-x86_64-aarch64-none-linux-gnu.tar.xz
  
  $(eval $(toolchain-external-package))
