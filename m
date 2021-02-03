@@ -1,59 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 3 Feb 2021 20:20:03 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/pugixml: bump to
- version 1.11.4
-Message-ID: <20210203190025.7B28E83601@busybox.osuosl.org>
+Date: Wed, 03 Feb 2021 20:21:04 +0100
+Subject: [Buildroot] [PATCH 1/1] package/pugixml: bump to version 1.11.4
+In-Reply-To: <CAPi7W83ftPo1VBrG1JiLTdNv=Euv51YpTp5_iQ0ORnW3ZTOTWw@mail.gmail.com>
+ (Fabrice Fontaine's message of "Mon, 1 Feb 2021 19:23:52 +0100")
+References: <20210201174818.936752-1-fontaine.fabrice@gmail.com>
+ <87im7blkcm.fsf@dell.be.48ers.dk>
+ <CAPi7W83ftPo1VBrG1JiLTdNv=Euv51YpTp5_iQ0ORnW3ZTOTWw@mail.gmail.com>
+Message-ID: <877dnpgdpb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fa17e077abc37801b75b0dfcebdbc1ff83194514
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-- Use LICENSE.md which has been added in the release tarball since
-  version 1.11 and
-  https://github.com/zeux/pugixml/commit/ccb63a91865b59d3a4c1dde61fecf12ec085c089
-- Fix a build failure with gerbera >= 1.5.0 when building pugixml in
-  header-only mode
+ > Dear Peter,
+ > Le lun. 1 f?vr. 2021 ? 19:21, Peter Korsgaard <peter@korsgaard.com> a ?crit :
+ >> 
+ >> >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+ >> 
+ >> > - Use LICENSE.md which has been added in the release tarball since
+ >> >   version 1.11 and
+ >> >   https://github.com/zeux/pugixml/commit/ccb63a91865b59d3a4c1dde61fecf12ec085c089
+ >> > - Fix a build failure with gerbera >= 1.5.0 when building pugixml in
+ >> >   header-only mode
+ >> 
+ >> So that means that this needs to be backported to 2020.02.x / 2020.11.x
+ >> as well?
+ > Yes.
 
-Fixes:
- - http://autobuild.buildroot.org/results/9c1919bacd23da0505a4eb828a806997a23b640f
+Committed to 2020.02.x and 2020.11.x, thanks.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 451fed96f973655004f43a6ca5412b79a4471b0d)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/pugixml/pugixml.hash | 4 ++--
- package/pugixml/pugixml.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/pugixml/pugixml.hash b/package/pugixml/pugixml.hash
-index 79ae75e83b..5c629ac66f 100644
---- a/package/pugixml/pugixml.hash
-+++ b/package/pugixml/pugixml.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  55f399fbb470942410d348584dc953bcaec926415d3462f471ef350f29b5870a  pugixml-1.10.tar.gz
--sha256  16582559c91ecf831d6289d472a903032e7d7994a86521c5c39513568d6ad208  readme.txt
-+sha256  8ddf57b65fb860416979a3f0640c2ad45ddddbbafa82508ef0a0af3ce7061716  pugixml-1.11.4.tar.gz
-+sha256  ee495f34aeff0c578a99f3350a2050d4e5860d27b2004c03c384a594fa2b0a7a  LICENSE.md
-diff --git a/package/pugixml/pugixml.mk b/package/pugixml/pugixml.mk
-index 800a3836ce..5d7fc63017 100644
---- a/package/pugixml/pugixml.mk
-+++ b/package/pugixml/pugixml.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--PUGIXML_VERSION = 1.10
-+PUGIXML_VERSION = 1.11.4
- PUGIXML_SITE = http://github.com/zeux/pugixml/releases/download/v$(PUGIXML_VERSION)
- PUGIXML_LICENSE = MIT
--PUGIXML_LICENSE_FILES = readme.txt
-+PUGIXML_LICENSE_FILES = LICENSE.md
- PUGIXML_INSTALL_STAGING = YES
- 
- # Pugixml will automatically enable 'long long' support on C++11 compilers,
+-- 
+Bye, Peter Korsgaard
