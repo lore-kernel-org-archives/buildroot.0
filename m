@@ -1,10 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed,  3 Feb 2021 13:43:23 +0100
-Subject: [Buildroot] [PATCH 2/3] package/grpc: fix cross-compilation with
- gRPC_BUILD_GRPC_CPP_PLUGIN=OFF
+Date: Wed,  3 Feb 2021 13:43:24 +0100
+Subject: [Buildroot] [PATCH 3/3] package/grpc: disable unnecessary build
+ plugins
 In-Reply-To: <20210203124325.18843-1-patrickdepinguin@gmail.com>
 References: <20210203124325.18843-1-patrickdepinguin@gmail.com>
-Message-ID: <20210203124325.18843-3-patrickdepinguin@gmail.com>
+Message-ID: <20210203124325.18843-4-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,75 +13,41 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-In commit fedf3318e3fd3c9ba57389ed2b36472f1a772b9e, an obsolete patch to
-support cross-compilation was removed, in favor of the upstream solution.
+grpc has plugins for multiple programming languages, which are needed on
+development machines only. Examples are grpc_cpp_plugin, grpc_ruby_plugin,
+etc.
 
-However, this caused a small change in behavior: for the target grpc, the
-tool 'grpc_cpp_plugin' is now also built, while before it was not.
+Even though before commit fedf3318e3fd3c9ba57389ed2b36472f1a772b9e,
+grpc_cpp_plugin was not installed for target, all other plugins still were.
+This causes additional build time and rootfs space.
 
-This tool is only really needed on development machines. Since Buildroot
-does not support compilers and such on target itself, the tool is not
-needed.
-
-There exists an option gRPC_BUILD_GRPC_CPP_PLUGIN which can be set to 'OFF',
-but disabling it in a cross-compilation context yields build failures.
-
-Add a patch to fix that. This patch is intended to be upstreamed to grpc.
+As Buildroot does not support building a development environment for target,
+these tools can be disabled.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- ...ix-cross-compilation-with-gRPC_BUILD.patch | 43 +++++++++++++++++++
- 1 file changed, 43 insertions(+)
- create mode 100644 package/grpc/0001-CMakeLists.txt-fix-cross-compilation-with-gRPC_BUILD.patch
+ package/grpc/grpc.mk | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/package/grpc/0001-CMakeLists.txt-fix-cross-compilation-with-gRPC_BUILD.patch b/package/grpc/0001-CMakeLists.txt-fix-cross-compilation-with-gRPC_BUILD.patch
-new file mode 100644
-index 0000000000..553be8cb99
---- /dev/null
-+++ b/package/grpc/0001-CMakeLists.txt-fix-cross-compilation-with-gRPC_BUILD.patch
-@@ -0,0 +1,43 @@
-+From 268815d74ea34856c686dce9e9c23106b51f2782 Mon Sep 17 00:00:00 2001
-+From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-+Date: Tue, 2 Feb 2021 21:46:29 +0100
-+Subject: [PATCH] CMakeLists.txt: fix cross-compilation with
-+ gRPC_BUILD_GRPC_CPP_PLUGIN=OFF
-+
-+When cross-compiling gRPC, a native version of 'grpc_cpp_plugin' is searched
-+in the environment. For most use cases, a cross version of this file is not
-+needed.
-+
-+However, when cross-building with -DgRPC_BUILD_GRPC_CPP_PLUGIN=OFF, there
-+are some build errors, for example:
-+
-+make[3]: *** No rule to make target 'grpc_cpp_plugin', needed by 'gens/src/proto/grpc/reflection/v1alpha/reflection.grpc.pb.cc'.  Stop.
-+
-+This is because there is still a hard dependency on 'grpc_cpp_plugin' for
-+these targets, not taking into account the cross-compilation case.
-+
-+Fix by depending on the variable gRPC_CPP_PLUGIN, which is set correctly for
-+either cross or native case.
-+
-+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-+
-+---
-+ CMakeLists.txt | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 6bdae22083..08aea609f7 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -317,7 +317,7 @@ function(protobuf_generate_grpc_cpp)
-+            --plugin=protoc-gen-grpc=${_gRPC_CPP_PLUGIN}
-+            ${_protobuf_include_path}
-+            ${REL_FIL}
-+-      DEPENDS ${ABS_FIL} ${_gRPC_PROTOBUF_PROTOC} grpc_cpp_plugin
-++      DEPENDS ${ABS_FIL} ${_gRPC_PROTOBUF_PROTOC} ${_gRPC_CPP_PLUGIN}
-+       WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-+       COMMENT "Running gRPC C++ protocol buffer compiler on ${FIL}"
-+       VERBATIM)
-+-- 
-+2.26.2
-+
+diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
+index a8a3af89ef..27b28deff3 100644
+--- a/package/grpc/grpc.mk
++++ b/package/grpc/grpc.mk
+@@ -27,7 +27,14 @@ GRPC_CONF_OPTS = \
+ 	-DgRPC_PROTOBUF_PROVIDER=package \
+ 	-DgRPC_RE2_PROVIDER=package \
+ 	-DgRPC_SSL_PROVIDER=package \
+-	-DgRPC_ZLIB_PROVIDER=package
++	-DgRPC_ZLIB_PROVIDER=package \
++	-DgRPC_BUILD_GRPC_CPP_PLUGIN=OFF \
++	-DgRPC_BUILD_GRPC_CSHARP_PLUGIN=OFF \
++	-DgRPC_BUILD_GRPC_NODE_PLUGIN=OFF \
++	-DgRPC_BUILD_GRPC_OBJECTIVE_C_PLUGIN=OFF \
++	-DgRPC_BUILD_GRPC_PHP_PLUGIN=OFF \
++	-DgRPC_BUILD_GRPC_PYTHON_PLUGIN=OFF \
++	-DgRPC_BUILD_GRPC_RUBY_PLUGIN=OFF
+ 
+ # grpc can use __atomic builtins, so we need to link with
+ # libatomic when available
 -- 
 2.26.2
