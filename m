@@ -1,51 +1,61 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 3 Feb 2021 23:00:03 +0100
-Subject: [Buildroot] [git commit] package/grpc: disable unnecessary build
- plugins
-Message-ID: <20210203214040.53C3580845@busybox.osuosl.org>
+Date: Wed, 3 Feb 2021 23:00:01 +0100
+Subject: [Buildroot] [git commit] package/collectd: stop passing
+ '--with-libgrpc++'
+Message-ID: <20210203214040.3DCB98111E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f1d268cf7de1d0cf3d4ce662cc2ff4a7c8bec845
+commit: https://git.buildroot.net/buildroot/commit/?id=326236649dfbf65d76d49f472aaa5293e182c90a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-grpc has plugins for multiple programming languages, which are needed on
-development machines only. Examples are grpc_cpp_plugin, grpc_ruby_plugin,
-etc.
+Commit 903de16f5fd586a32a7aed7a792a43dce16365eb added passing
+'--with-libgrpc++' with the explanation:
 
-Even though before commit fedf3318e3fd3c9ba57389ed2b36472f1a772b9e,
-grpc_cpp_plugin was not installed for target, all other plugins still were.
-This causes additional build time and rootfs space.
+    "Use --with-libgrpc++ option as otherwise collectd will try to find
+    grpc++.pc which is not available."
 
-As Buildroot does not support building a development environment for target,
-these tools can be disabled.
+At the time of above commit, grpc version in Buildroot was 1.23.0.
+Since grpc 1.25.0, a grpc++.pc file _is_ generated from cmake builds.
+Hence, remove passing --with-libgrpc++.
+
+This change fixes a problem introduced by commit
+fedf3318e3fd3c9ba57389ed2b36472f1a772b9e. As a side effect of that change, a
+target version of 'grpc_cpp_plugin' was now created. When collectd was built
+after grpc, even without grpc support in collectd enabled, the collectd
+configure script would find this target grpc_cpp_plugin and try to use it
+(which is not possible because it is built for target).
+When not passing '--with-libgrpc++', collectd will instead find the host
+version of grpc_cpp_plugin, which works fine.
+
+There are still two underlying problems:
+1. the target version of grpc_cpp_plugin is not actually needed. This will
+   be disabled in a subsequent commit.
+
+2. collectd should not execute any grpc-related action if grpc support for
+   collectd is disabled. This problem has been reported upstream:
+   https://github.com/collectd/collectd/issues/3836
 
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/grpc/grpc.mk | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ package/collectd/collectd.mk | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
-index a8a3af89ef..27b28deff3 100644
---- a/package/grpc/grpc.mk
-+++ b/package/grpc/grpc.mk
-@@ -27,7 +27,14 @@ GRPC_CONF_OPTS = \
- 	-DgRPC_PROTOBUF_PROVIDER=package \
- 	-DgRPC_RE2_PROVIDER=package \
- 	-DgRPC_SSL_PROVIDER=package \
--	-DgRPC_ZLIB_PROVIDER=package
-+	-DgRPC_ZLIB_PROVIDER=package \
-+	-DgRPC_BUILD_GRPC_CPP_PLUGIN=OFF \
-+	-DgRPC_BUILD_GRPC_CSHARP_PLUGIN=OFF \
-+	-DgRPC_BUILD_GRPC_NODE_PLUGIN=OFF \
-+	-DgRPC_BUILD_GRPC_OBJECTIVE_C_PLUGIN=OFF \
-+	-DgRPC_BUILD_GRPC_PHP_PLUGIN=OFF \
-+	-DgRPC_BUILD_GRPC_PYTHON_PLUGIN=OFF \
-+	-DgRPC_BUILD_GRPC_RUBY_PLUGIN=OFF
+diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+index ccca9bf388..3fcca12a45 100644
+--- a/package/collectd/collectd.mk
++++ b/package/collectd/collectd.mk
+@@ -193,9 +193,6 @@ COLLECTD_DEPENDENCIES = \
+ 	$(if $(BR2_PACKAGE_COLLECTD_WRITEREDIS),hiredis)
  
- # grpc can use __atomic builtins, so we need to link with
- # libatomic when available
+ # include/library fixups
+-ifeq ($(BR2_PACKAGE_GRPC),y)
+-COLLECTD_CONF_OPTS += --with-libgrpc++=$(STAGING_DIR)/usr
+-endif
+ ifeq ($(BR2_PACKAGE_JANSSON),y)
+ COLLECTD_CONF_OPTS += --with-libjansson=$(STAGING_DIR)/usr
+ endif
