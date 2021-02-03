@@ -1,53 +1,26 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed,  3 Feb 2021 13:43:24 +0100
-Subject: [Buildroot] [PATCH 3/3] package/grpc: disable unnecessary build
- plugins
-In-Reply-To: <20210203124325.18843-1-patrickdepinguin@gmail.com>
-References: <20210203124325.18843-1-patrickdepinguin@gmail.com>
-Message-ID: <20210203124325.18843-4-patrickdepinguin@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 03 Feb 2021 18:43:41 +0100
+Subject: [Buildroot] [PATCH] package/xserver_xorg-server: don't install
+ init script if nodm is enabled
+In-Reply-To: <20210130101834.18086-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sat, 30 Jan 2021 11:18:33 +0100")
+References: <20210130101834.18086-1-peter@korsgaard.com>
+Message-ID: <87k0rpgi7m.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-grpc has plugins for multiple programming languages, which are needed on
-development machines only. Examples are grpc_cpp_plugin, grpc_ruby_plugin,
-etc.
+ > Both S40xorg and S90nodm tries to run an Xserver on vt1, causing the nodm
+ > one to fail.  If nodm is enabled, then that is likely what the user wants to
+ > run, so skip installing S40xorg.
 
-Even though before commit fedf3318e3fd3c9ba57389ed2b36472f1a772b9e,
-grpc_cpp_plugin was not installed for target, all other plugins still were.
-This causes additional build time and rootfs space.
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-As Buildroot does not support building a development environment for target,
-these tools can be disabled.
+Committed to 2020.11.x, thanks.
 
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
----
- package/grpc/grpc.mk | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
-
-diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
-index a8a3af89ef..27b28deff3 100644
---- a/package/grpc/grpc.mk
-+++ b/package/grpc/grpc.mk
-@@ -27,7 +27,14 @@ GRPC_CONF_OPTS = \
- 	-DgRPC_PROTOBUF_PROVIDER=package \
- 	-DgRPC_RE2_PROVIDER=package \
- 	-DgRPC_SSL_PROVIDER=package \
--	-DgRPC_ZLIB_PROVIDER=package
-+	-DgRPC_ZLIB_PROVIDER=package \
-+	-DgRPC_BUILD_GRPC_CPP_PLUGIN=OFF \
-+	-DgRPC_BUILD_GRPC_CSHARP_PLUGIN=OFF \
-+	-DgRPC_BUILD_GRPC_NODE_PLUGIN=OFF \
-+	-DgRPC_BUILD_GRPC_OBJECTIVE_C_PLUGIN=OFF \
-+	-DgRPC_BUILD_GRPC_PHP_PLUGIN=OFF \
-+	-DgRPC_BUILD_GRPC_PYTHON_PLUGIN=OFF \
-+	-DgRPC_BUILD_GRPC_RUBY_PLUGIN=OFF
- 
- # grpc can use __atomic builtins, so we need to link with
- # libatomic when available
 -- 
-2.26.2
+Bye, Peter Korsgaard
