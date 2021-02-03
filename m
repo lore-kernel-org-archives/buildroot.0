@@ -1,72 +1,72 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 3 Feb 2021 22:37:09 +0100
+Date: Wed, 3 Feb 2021 22:36:59 +0100
 Subject: [Buildroot] [git commit] support/config-fragments/autobuild: use
- Bootlin toolchain for RISC-V 32 glibc
-Message-ID: <20210203212739.DEB9C86C4C@busybox.osuosl.org>
+ Bootlin toolchain for m68k 68040 uclibc
+Message-ID: <20210203212739.785668635A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fc266b1c1a9e1b217893a320becda2afb50e17db
+commit: https://git.buildroot.net/buildroot/commit/?id=f0ab9611a0e99175647b260f5fdf8bdbb3e8bcfa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Instead of using an external toolchain built specifically for the
-autobuilders to test RISC-V 32/glibc, use a pre-built Bootlin
+autobuilders to test m68k 68040/uclibc, use a pre-built Bootlin
 toolchain.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- support/config-fragments/autobuild/bootlin-riscv32-glibc.config | 5 +++++
- support/config-fragments/autobuild/br-riscv32.config            | 9 ---------
- support/config-fragments/autobuild/toolchain-configs.csv        | 2 +-
- 3 files changed, 6 insertions(+), 10 deletions(-)
+ .../autobuild/bootlin-m68k-68040-uclibc.config                 |  4 ++++
+ support/config-fragments/autobuild/br-m68k-68040-full.config   | 10 ----------
+ support/config-fragments/autobuild/toolchain-configs.csv       |  2 +-
+ 3 files changed, 5 insertions(+), 11 deletions(-)
 
-diff --git a/support/config-fragments/autobuild/bootlin-riscv32-glibc.config b/support/config-fragments/autobuild/bootlin-riscv32-glibc.config
+diff --git a/support/config-fragments/autobuild/bootlin-m68k-68040-uclibc.config b/support/config-fragments/autobuild/bootlin-m68k-68040-uclibc.config
 new file mode 100644
-index 0000000000..cc45d01824
+index 0000000000..f2c59e9de7
 --- /dev/null
-+++ b/support/config-fragments/autobuild/bootlin-riscv32-glibc.config
-@@ -0,0 +1,5 @@
-+BR2_riscv=y
-+BR2_RISCV_32=y
++++ b/support/config-fragments/autobuild/bootlin-m68k-68040-uclibc.config
+@@ -0,0 +1,4 @@
++BR2_m68k=y
++BR2_m68k_68040=y
 +BR2_TOOLCHAIN_EXTERNAL=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_RISCV32_ILP32D_GLIBC_BLEEDING_EDGE=y
-diff --git a/support/config-fragments/autobuild/br-riscv32.config b/support/config-fragments/autobuild/br-riscv32.config
++BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_M68K_68XXX_UCLIBC_STABLE=y
+diff --git a/support/config-fragments/autobuild/br-m68k-68040-full.config b/support/config-fragments/autobuild/br-m68k-68040-full.config
 deleted file mode 100644
-index d9110a6a86..0000000000
---- a/support/config-fragments/autobuild/br-riscv32.config
+index 9f600acf46..0000000000
+--- a/support/config-fragments/autobuild/br-m68k-68040-full.config
 +++ /dev/null
-@@ -1,9 +0,0 @@
--BR2_riscv=y
--BR2_RISCV_32=y
+@@ -1,10 +0,0 @@
+-BR2_m68k=y
 -BR2_TOOLCHAIN_EXTERNAL=y
 -BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/br-riscv32-glibc-2020.02.tar.bz2"
+-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/br-m68k-68040-full-2020.02.tar.bz2"
 -BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
--BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_19=y
--BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+-BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_4=y
+-BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+-# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+-# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_NPTL is not set
 -BR2_TOOLCHAIN_EXTERNAL_CXX=y
 diff --git a/support/config-fragments/autobuild/toolchain-configs.csv b/support/config-fragments/autobuild/toolchain-configs.csv
-index fba8489c3c..72b7a344c6 100644
+index bdc43ae2c9..4078181485 100644
 --- a/support/config-fragments/autobuild/toolchain-configs.csv
 +++ b/support/config-fragments/autobuild/toolchain-configs.csv
-@@ -36,6 +36,7 @@ support/config-fragments/autobuild/bootlin-nios2-glibc.config,x86_64
- support/config-fragments/autobuild/bootlin-openrisc-uclibc.config,x86_64
- support/config-fragments/autobuild/bootlin-powerpc64le-power8-glibc.config,x86_64
- support/config-fragments/autobuild/bootlin-powerpc-e500mc-uclibc.config,x86_64
-+support/config-fragments/autobuild/bootlin-riscv32-glibc.config,x86_64
+@@ -27,6 +27,7 @@ support/config-fragments/autobuild/arm-aarch64.config,x86_64
+ support/config-fragments/autobuild/bootlin-aarch64-glibc.config,x86_64
+ support/config-fragments/autobuild/bootlin-arcle-hs38-uclibc.config,x86_64
+ support/config-fragments/autobuild/bootlin-armv7-musl.config,x86_64
++support/config-fragments/autobuild/bootlin-m68k-68040-uclibc.config,x86_64
  support/config-fragments/autobuild/bootlin-x86-64-glibc.config,x86_64
  support/config-fragments/autobuild/br-arc-full-internal.config,any
  support/config-fragments/autobuild/br-arc-internal-glibc.config,any
-@@ -52,7 +53,6 @@ support/config-fragments/autobuild/br-mips64r6-el-hf-glibc.config,x86_64
- support/config-fragments/autobuild/br-powerpc-603e-basic-cpp.config,x86_64
- support/config-fragments/autobuild/br-powerpc64-power7-glibc.config,x86_64
- support/config-fragments/autobuild/br-powerpc-internal-full.config,any
--support/config-fragments/autobuild/br-riscv32.config,x86_64
- support/config-fragments/autobuild/br-riscv64.config,x86_64
- support/config-fragments/autobuild/br-riscv64-full-internal.config,any
- support/config-fragments/autobuild/br-riscv64-musl.config,x86_64
+@@ -38,7 +39,6 @@ support/config-fragments/autobuild/br-arm-internal-musl.config,any
+ support/config-fragments/autobuild/br-i386-pentium4-full.config,x86_64
+ support/config-fragments/autobuild/br-i386-pentium-mmx-musl.config,x86_64
+ support/config-fragments/autobuild/br-m68k-5208-full.config,x86_64
+-support/config-fragments/autobuild/br-m68k-68040-full.config,x86_64
+ support/config-fragments/autobuild/br-microblazeel-full.config,x86_64
+ support/config-fragments/autobuild/br-microblazeel-full-internal.config,any
+ support/config-fragments/autobuild/br-mips64-n64-full.config,x86_64
