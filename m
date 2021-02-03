@@ -1,262 +1,114 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  3 Feb 2021 21:00:49 +0100
-Subject: [Buildroot] [PATCH 1/1] package/sox: security bump to latest git
- commit
-Message-ID: <20210203200049.1151409-1-fontaine.fabrice@gmail.com>
+Date: Wed,  3 Feb 2021 21:11:00 +0100
+Subject: [Buildroot] [PATCH 1/1] package/cereal: fix CVE-2020-11105
+Message-ID: <20210203201100.1153600-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump to the latest git commit as this will fix the following CVEs:
-
-git log|grep CVE
-  sox-fmt: validate comments_bytes before use (CVE-2019-13590) [bug #325]
-  fix possible null pointer deref in lsx_make_lpf() (CVE-2019-8357)
-  fft4g: bail if size too large (CVE-2019-8356)
-  fix possible overflow in lsx_(re)valloc() size calculation (CVE-2019-8355)
-  fix possible buffer size overflow in lsx_make_lpf() (CVE-2019-8354)
-  xa: validate channel count (CVE-2017-18189)
-  aiff: fix crash on empty comment chunk (CVE-2017-15642)
-  adpcm: fix stack overflow with >4 channels (CVE-2017-15372)
-  flac: fix crash on corrupt metadata (CVE-2017-15371)
-  wav: ima_adpcm: fix buffer overflow on corrupt input (CVE-2017-15370)
-  wav: fix crash writing header when channel count >64k (CVE-2017-11359)
-  hcom: fix crash on input with corrupt dictionary (CVE-2017-11358)
-  wav: fix crash if channel count is zero (CVE-2017-11332)
-
-- Tweak configuration options due to
-  https://sourceforge.net/p/sox/code/ci/6ff0e9322f9891f5a6ac6c9b3bceffbfca16bec3
-- libgsm is now an optional dependency since
-  https://sourceforge.net/p/sox/code/ci/e548827ffcf4dffa7f21709b8e96b04b481c09b8
-- Add patch to put back --disable-stack-protector
+Fix CVE-2020-11105: An issue was discovered in USC iLab cereal through
+1.3.0. It employs caching of std::shared_ptr values, using the raw
+pointer address as a unique identifier. This becomes problematic if an
+std::shared_ptr variable goes out of scope and is freed, and a new
+std::shared_ptr is allocated at the same address. Serialization fidelity
+thereby becomes dependent upon memory layout. In short, serialized
+std::shared_ptr variables cannot always be expected to serialize back
+into their original values. This can have any number of consequences,
+depending on the context within which this manifests.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ....ac-put-back-disable-stack-protector.patch | 45 +++++++++++++++
- package/sox/sox.hash                          |  4 +-
- package/sox/sox.mk                            | 56 ++++++++++++++-----
- 3 files changed, 89 insertions(+), 16 deletions(-)
- create mode 100644 package/sox/0002-configure.ac-put-back-disable-stack-protector.patch
+ ...alized-shared_ptr-within-the-archive.patch | 67 +++++++++++++++++++
+ package/cereal/cereal.mk                      |  3 +
+ 2 files changed, 70 insertions(+)
+ create mode 100644 package/cereal/0001-Store-a-copy-of-each-serialized-shared_ptr-within-the-archive.patch
 
-diff --git a/package/sox/0002-configure.ac-put-back-disable-stack-protector.patch b/package/sox/0002-configure.ac-put-back-disable-stack-protector.patch
+diff --git a/package/cereal/0001-Store-a-copy-of-each-serialized-shared_ptr-within-the-archive.patch b/package/cereal/0001-Store-a-copy-of-each-serialized-shared_ptr-within-the-archive.patch
 new file mode 100644
-index 0000000000..28e2871f54
+index 0000000000..3458ec1b59
 --- /dev/null
-+++ b/package/sox/0002-configure.ac-put-back-disable-stack-protector.patch
-@@ -0,0 +1,45 @@
-+From 18ace560a15207503805d4df25b90c7a756bcbf6 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 2 Feb 2021 23:53:39 +0100
-+Subject: [PATCH] configure.ac: put back --disable-stack-protector
++++ b/package/cereal/0001-Store-a-copy-of-each-serialized-shared_ptr-within-the-archive.patch
+@@ -0,0 +1,67 @@
++From f27c12d491955c94583512603bf32c4568f20929 Mon Sep 17 00:00:00 2001
++From: Michael Walz <code@serpedon.de>
++Date: Tue, 2 Feb 2021 00:50:29 +0100
++Subject: [PATCH] Store a copy of each serialized shared_ptr within the archive
++ to prevent the shared_ptr to be freed to early. (#667)
 +
-+Put back --disable-stack-protector which has been removed by commit
-+70c85915eace83142b84e4f65f5db421cf0c09e3. This will allow the user to
-+disable it or to let a higher buildsystem such as buildroot to finely
-+configure it.
++The archives use the memory address pointed by the shared_ptr as a
++unique id which must not be reused during lifetime of the archive.
++Therefore, the archives stores a copy of it.
++This problem was also reported as CVE-2020-11105.
 +
-+Indeed, without this patch, build can fail as some compilers (such as
-+uclibc) could missed the needed library (-lssp or -lssp_nonshared) at
-+linking step:
-+
-+  CCLD     libsox.la
-+/home/fabrice/br-test-pkg/br-arm-full/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/5.5.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: cannot find -lssp_nonshared
-+/home/fabrice/br-test-pkg/br-arm-full/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/5.5.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: cannot find -lssp
-+
++[Retrieved from:
++https://github.com/USCiLab/cereal/commit/f27c12d491955c94583512603bf32c4568f20929]
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://sourceforge.net/p/sox/patches/122/]
 +---
-+ configure.ac | 7 ++++++-
-+ 1 file changed, 6 insertions(+), 1 deletion(-)
++ include/cereal/cereal.hpp       | 13 +++++++++++--
++ include/cereal/types/memory.hpp |  2 +-
++ 2 files changed, 12 insertions(+), 3 deletions(-)
 +
-+diff --git a/configure.ac b/configure.ac
-+index 39306398..a1665467 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -32,7 +32,12 @@ AC_PROG_LN_S
-+ PKG_PROG_PKG_CONFIG
-+ PKG_INSTALLDIR
++diff --git a/include/cereal/cereal.hpp b/include/cereal/cereal.hpp
++index 99bed9d6..f0d15e8b 100644
++--- a/include/cereal/cereal.hpp
+++++ b/include/cereal/cereal.hpp
++@@ -369,12 +369,17 @@ namespace cereal
++           point to the same data.
 + 
-+-AX_APPEND_COMPILE_FLAGS([-fstack-protector-strong])
-++AC_ARG_ENABLE([stack-protector],
-++    AS_HELP_STRING([--disable-stack-protector], [Disable -fstack-protector-strong]),
-++    [enable_stack_protector=$enableval], [enable_stack_protector=yes])
-++AS_IF([test x"$enable_stack_protector" = "xyes"],
-++    [AX_APPEND_COMPILE_FLAGS([-fstack-protector-strong])])
++           @internal
++-          @param addr The address (see shared_ptr get()) pointed to by the shared pointer
+++          @param sharedPointer The shared pointer itself (the adress is taked via get()).
+++                               The archive takes a copy to prevent the memory location to be freed
+++                               as long as the address is used as id. This is needed to prevent CVE-2020-11105.
++           @return A key that uniquely identifies the pointer */
++-      inline std::uint32_t registerSharedPointer( void const * addr )
+++      inline std::uint32_t registerSharedPointer(const std::shared_ptr<const void>& sharedPointer)
++       {
+++        void const * addr = sharedPointer.get();
 ++
-+ AX_APPEND_COMPILE_FLAGS([-Wall -Wmissing-prototypes -Wstrict-prototypes])
-+ AX_APPEND_LINK_FLAGS([-Wl,--as-needed])
++         // Handle null pointers by just returning 0
++         if(addr == 0) return 0;
+++        itsSharedPointerStorage.push_back(sharedPointer);
 + 
-+-- 
-+2.29.2
++         auto id = itsSharedPointerMap.find( addr );
++         if( id == itsSharedPointerMap.end() )
++@@ -645,6 +650,10 @@ namespace cereal
++       //! Maps from addresses to pointer ids
++       std::unordered_map<void const *, std::uint32_t> itsSharedPointerMap;
++ 
+++      //! Copy of shared pointers used in #itsSharedPointerMap to make sure they are kept alive
+++      //  during lifetime of itsSharedPointerMap to prevent CVE-2020-11105.
+++      std::vector<std::shared_ptr<const void>> itsSharedPointerStorage;
+++
++       //! The id to be given to the next pointer
++       std::uint32_t itsCurrentPointerId;
++ 
++diff --git a/include/cereal/types/memory.hpp b/include/cereal/types/memory.hpp
++index 59e9da9b..cac1f334 100644
++--- a/include/cereal/types/memory.hpp
+++++ b/include/cereal/types/memory.hpp
++@@ -263,7 +263,7 @@ namespace cereal
++   {
++     auto & ptr = wrapper.ptr;
++ 
++-    uint32_t id = ar.registerSharedPointer( ptr.get() );
+++    uint32_t id = ar.registerSharedPointer( ptr );
++     ar( CEREAL_NVP_("id", id) );
++ 
++     if( id & detail::msb_32bit )
+diff --git a/package/cereal/cereal.mk b/package/cereal/cereal.mk
+index c9ce9976bf..19faa2ac4e 100644
+--- a/package/cereal/cereal.mk
++++ b/package/cereal/cereal.mk
+@@ -16,4 +16,7 @@ CEREAL_CONF_OPTS = \
+ 	-DTHREAD_SAFE=ON \
+ 	-DJUST_INSTALL_CEREAL=ON
+ 
++# 0001-Store-a-copy-of-each-serialized-shared_ptr-within-the-archive.patch
++CEREAL_IGNORE_CVES += CVE-2020-11105
 +
-diff --git a/package/sox/sox.hash b/package/sox/sox.hash
-index 1a4a7dbf7f..d2006e0291 100644
---- a/package/sox/sox.hash
-+++ b/package/sox/sox.hash
-@@ -1,6 +1,4 @@
--# From http://sourceforge.net/projects/sox/files/sox/14.4.2/
--md5	ba804bb1ce5c71dd484a102a5b27d0dd	sox-14.4.2.tar.bz2
--sha1	dc9668256b9d81ef25d672f14f12ec026b0b4087	sox-14.4.2.tar.bz2
- # Locally computed
-+sha256  3d06ba8fc39ac92f16da73593be48afe0a704fe4dc4f6eca2e5137ef77cd5115  sox-7524160b29a476f7e87bc14fddf12d349f9a3c5e-br1.tar.gz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL
- sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  LICENSE.LGPL
-diff --git a/package/sox/sox.mk b/package/sox/sox.mk
-index 8a1d87b230..4334355a91 100644
---- a/package/sox/sox.mk
-+++ b/package/sox/sox.mk
-@@ -4,14 +4,22 @@
- #
- ################################################################################
- 
--SOX_VERSION = 14.4.2
--SOX_SITE = http://downloads.sourceforge.net/project/sox/sox/$(SOX_VERSION)
--SOX_SOURCE = sox-$(SOX_VERSION).tar.bz2
--SOX_DEPENDENCIES = host-pkgconf
-+SOX_VERSION = 7524160b29a476f7e87bc14fddf12d349f9a3c5e 
-+SOX_SITE = git://git.code.sf.net/p/sox/code
-+SOX_SITE_METHOD = git
-+SOX_DEPENDENCIES = host-autoconf-archive host-pkgconf
- SOX_LICENSE = GPL-2.0+ (sox binary), LGPL-2.1+ (libraries)
- SOX_LICENSE_FILES = LICENSE.GPL LICENSE.LGPL
- SOX_CPE_ID_VENDOR = sound_exchange_project
- SOX_CPE_ID_PRODUCT = sound_exchange
-+# From git and we're patching configure.ac
-+SOX_AUTORECONF = YES
-+SOX_AUTORECONF_OPTS = --include=$(HOST_DIR)/share/autoconf-archive
-+
-+SOX_IGNORE_CVES += CVE-2017-11332 CVE-2017-11358 CVE-2017-11359 \
-+	CVE-2017-15370 CVE-2017-15371 CVE-2017-15372 CVE-2017-15642 \
-+	CVE-2017-18189 CVE-2019-8354 CVE-2019-8355 CVE-2019-8356 \
-+	CVE-2019-8357 CVE-2019-13590
- 
- SOX_CONF_OPTS = \
- 	--with-distro="Buildroot" \
-@@ -19,92 +27,114 @@ SOX_CONF_OPTS = \
- 
- ifeq ($(BR2_PACKAGE_ALSA_LIB_PCM),y)
- SOX_DEPENDENCIES += alsa-lib
-+SOX_CONF_OPTS += --enable-alsa
- else
--SOX_CONF_OPTS += --without-alsa
-+SOX_CONF_OPTS += --disable-alsa
- endif
- 
- ifeq ($(BR2_PACKAGE_FILE),y)
- SOX_DEPENDENCIES += file
-+SOX_CONF_OPTS += --with-magic
- else
- SOX_CONF_OPTS += --without-magic
- endif
- 
- ifeq ($(BR2_PACKAGE_FLAC),y)
- SOX_DEPENDENCIES += flac
-+SOX_CONF_OPTS += --enable-flac
- else
--SOX_CONF_OPTS += --without-flac
-+SOX_CONF_OPTS += --disable-flac
- endif
- 
- ifeq ($(BR2_PACKAGE_LAME),y)
- SOX_DEPENDENCIES += lame
-+SOX_CONF_OPTS += --with-lame
- else
- SOX_CONF_OPTS += --without-lame
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBAO),y)
- SOX_DEPENDENCIES += libao
-+SOX_CONF_OPTS += --enable-ao
-+else
-+SOX_CONF_OPTS += --disable-ao
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBGSM),y)
-+SOX_DEPENDENCIES += libgsm
-+SOX_CONF_OPTS += --enable-gsm
- else
--SOX_CONF_OPTS += --without-ao
-+SOX_CONF_OPTS += --disable-gsm
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBID3TAG),y)
- SOX_DEPENDENCIES += libid3tag
-+SOX_CONF_OPTS += --with-id3tag
- else
- SOX_CONF_OPTS += --without-id3tag
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBMAD),y)
- SOX_DEPENDENCIES += libmad
-+SOX_CONF_OPTS += --with-mad
- else
- SOX_CONF_OPTS += --without-mad
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBPNG),y)
- SOX_DEPENDENCIES += libpng
-+SOX_CONF_OPTS += --with-png
- else
- SOX_CONF_OPTS += --without-png
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBSNDFILE),y)
- SOX_DEPENDENCIES += libsndfile
-+SOX_CONF_OPTS += --enable-sndfile
- else
--SOX_CONF_OPTS += --without-sndfile
-+SOX_CONF_OPTS += --disable-sndfile
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBVORBIS),y)
- SOX_DEPENDENCIES += libvorbis
-+SOX_CONF_OPTS += --enable-oggvorbis
- else
--SOX_CONF_OPTS += --without-oggvorbis
-+SOX_CONF_OPTS += --disable-oggvorbis
- endif
- 
- ifeq ($(BR2_PACKAGE_OPENCORE_AMR),y)
- SOX_DEPENDENCIES += opencore-amr
-+SOX_CONF_OPTS += --enable-amrwb --enable-amrnb
- else
--SOX_CONF_OPTS += --without-amrwb --without-amrnb
-+SOX_CONF_OPTS += --disable-amrwb --disable-amrnb
- endif
- 
- ifeq ($(BR2_PACKAGE_OPUSFILE),y)
- SOX_DEPENDENCIES += opusfile
-+SOX_CONF_OPTS += --enable-opus
- else
--SOX_CONF_OPTS += --without-opus
-+SOX_CONF_OPTS += --disable-opus
- endif
- 
- ifeq ($(BR2_PACKAGE_PULSEAUDIO),y)
- SOX_DEPENDENCIES += pulseaudio
-+SOX_CONF_OPTS += --enable-pulseaudio
- else
--SOX_CONF_OPTS += --without-pulseaudio
-+SOX_CONF_OPTS += --disable-pulseaudio
- endif
- 
- ifeq ($(BR2_PACKAGE_TWOLAME),y)
- SOX_DEPENDENCIES += twolame
-+SOX_CONF_OPTS += --with-twolame
- else
- SOX_CONF_OPTS += --without-twolame
- endif
- 
- ifeq ($(BR2_PACKAGE_WAVPACK),y)
- SOX_DEPENDENCIES += wavpack
-+SOX_CONF_OPTS += --enable-wavpack
- else
--SOX_CONF_OPTS += --without-wavpack
-+SOX_CONF_OPTS += --disable-wavpack
- endif
- 
- $(eval $(autotools-package))
+ $(eval $(cmake-package))
 -- 
 2.29.2
