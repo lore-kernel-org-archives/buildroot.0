@@ -1,68 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 3 Feb 2021 20:23:30 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/privoxy: security
- bump to version 3.0.31
-Message-ID: <20210203191016.6562C81292@busybox.osuosl.org>
+Date: Wed, 3 Feb 2021 20:27:53 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x]
+ package/wireguard-linux-compat: bump version to 1.0.20210124
+Message-ID: <20210203191016.9409F7FBDB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3e8d678be2bcfe868b4d81930b5ef7b3891c7e2e
+commit: https://git.buildroot.net/buildroot/commit/?id=8f0312d967af43d26cec5012c08c1f14c0f6d679
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-From the announcement:
+Fixes a build issue with recent 4.14.x stable kernels.  For details, see the
+announcement:
 
-ChangeLog for Privoxy 3.0.31
---------------------------------------------------------------------
-- Security/Reliability:
-  - Prevent an assertion from getting triggered by a crafted CGI request.
-    Commit 5bba5b89193fa. OVE-20210130-0001.
-    Reported by: Joshua Rogers (Opera)
-  - Fixed a memory leak when decompression fails "unexpectedly".
-    Commit f431d61740cc0. OVE-20210128-0001.
-
-- Bug fixes:
-  - Fixed detection of insufficient data for decompression.
-    Previously Privoxy could try to decompress a partly
-    uninitialized buffer.
-
-https://www.privoxy.org/announce.txt
+https://lists.zx2c4.com/pipermail/wireguard/2021-January/006349.html
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 3a6fde69e1ccd250ea2bace34deaaf2140428f63)
+(cherry picked from commit ff852b0de406b3e88af3ea282ba470c68b7c8d8d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/privoxy/privoxy.hash | 8 ++++----
- package/privoxy/privoxy.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/wireguard-linux-compat/wireguard-linux-compat.hash | 4 ++--
+ package/wireguard-linux-compat/wireguard-linux-compat.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/privoxy/privoxy.hash b/package/privoxy/privoxy.hash
-index 850208dd9f..00c0f33bdb 100644
---- a/package/privoxy/privoxy.hash
-+++ b/package/privoxy/privoxy.hash
-@@ -1,6 +1,6 @@
--# From http://sourceforge.net/projects/ijbswa/files/Sources/3.0.28%20%29stable%29/
--md5  493a3a643247e6c8bc60725e9993d4ee  privoxy-3.0.29-stable-src.tar.gz
--sha1  59873a122729b1b03e1d202d663036d2b5fa1120  privoxy-3.0.29-stable-src.tar.gz
-+# From https://sourceforge.net/projects/ijbswa/files/Sources/3.0.31%20%28stable%29/
-+md5  014cc371d00e84b2db34d0e2b05c77d4  privoxy-3.0.31-stable-src.tar.gz
-+sha1  4f0e0c36d55f72f6b33e4c645a9c5d4f40026abd  privoxy-3.0.31-stable-src.tar.gz
- # Locally computed
--sha256  25c6069efdaf577d47c257da63b03cd6d063fb790e19cc39603d82e5db72489d  privoxy-3.0.29-stable-src.tar.gz
-+sha256  077729a3aac79222a4e8d88a650d9028d16fd4b0d6038da8f5f5e47120d004eb  privoxy-3.0.31-stable-src.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/privoxy/privoxy.mk b/package/privoxy/privoxy.mk
-index 3cf1dc9754..5c1f862bfd 100644
---- a/package/privoxy/privoxy.mk
-+++ b/package/privoxy/privoxy.mk
+diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.hash b/package/wireguard-linux-compat/wireguard-linux-compat.hash
+index 194c798570..f4f94cfd2e 100644
+--- a/package/wireguard-linux-compat/wireguard-linux-compat.hash
++++ b/package/wireguard-linux-compat/wireguard-linux-compat.hash
+@@ -1,4 +1,4 @@
+-# https://lists.zx2c4.com/pipermail/wireguard/2020-December/006210.html
+-sha256  6e5289a8b602eaaf1383aebefcbc41b8ad2721269055858b150363076c1c2132  wireguard-linux-compat-1.0.20201221.tar.xz
++# https://lists.zx2c4.com/pipermail/wireguard/2021-January/006349.html
++sha256  dac6e68cd4c3db441499850dfa8a70706384a3295f37fda1b839a50b79faef54  wireguard-linux-compat-1.0.20210124.tar.xz
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.mk b/package/wireguard-linux-compat/wireguard-linux-compat.mk
+index ef21e2e114..2f36ec8bfb 100644
+--- a/package/wireguard-linux-compat/wireguard-linux-compat.mk
++++ b/package/wireguard-linux-compat/wireguard-linux-compat.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PRIVOXY_VERSION = 3.0.29
-+PRIVOXY_VERSION = 3.0.31
- PRIVOXY_SITE = http://downloads.sourceforge.net/project/ijbswa/Sources/$(PRIVOXY_VERSION)%20%28stable%29
- PRIVOXY_SOURCE = privoxy-$(PRIVOXY_VERSION)-stable-src.tar.gz
- # configure not shipped
+-WIREGUARD_LINUX_COMPAT_VERSION = 1.0.20201221
++WIREGUARD_LINUX_COMPAT_VERSION = 1.0.20210124
+ WIREGUARD_LINUX_COMPAT_SITE = https://git.zx2c4.com/wireguard-linux-compat/snapshot
+ WIREGUARD_LINUX_COMPAT_SOURCE = wireguard-linux-compat-$(WIREGUARD_LINUX_COMPAT_VERSION).tar.xz
+ WIREGUARD_LINUX_COMPAT_LICENSE = GPL-2.0
