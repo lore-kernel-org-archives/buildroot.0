@@ -1,114 +1,95 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  3 Feb 2021 21:11:00 +0100
-Subject: [Buildroot] [PATCH 1/1] package/cereal: fix CVE-2020-11105
-Message-ID: <20210203201100.1153600-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 3 Feb 2021 22:24:19 +0100
+Subject: [Buildroot] [PATCH 17/25] support/config-fragments/autobuild:
+ use Bootlin toolchain for RISC-V 64 glibc
+In-Reply-To: <20210202225339.2157480-18-thomas.petazzoni@bootlin.com>
+References: <20210202225339.2157480-1-thomas.petazzoni@bootlin.com>
+ <20210202225339.2157480-18-thomas.petazzoni@bootlin.com>
+Message-ID: <20210203212419.GH2384@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix CVE-2020-11105: An issue was discovered in USC iLab cereal through
-1.3.0. It employs caching of std::shared_ptr values, using the raw
-pointer address as a unique identifier. This becomes problematic if an
-std::shared_ptr variable goes out of scope and is freed, and a new
-std::shared_ptr is allocated at the same address. Serialization fidelity
-thereby becomes dependent upon memory layout. In short, serialized
-std::shared_ptr variables cannot always be expected to serialize back
-into their original values. This can have any number of consequences,
-depending on the context within which this manifests.
+Thomas, All,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...alized-shared_ptr-within-the-archive.patch | 67 +++++++++++++++++++
- package/cereal/cereal.mk                      |  3 +
- 2 files changed, 70 insertions(+)
- create mode 100644 package/cereal/0001-Store-a-copy-of-each-serialized-shared_ptr-within-the-archive.patch
+On 2021-02-02 23:53 +0100, Thomas Petazzoni spake thusly:
+> Instead of using an external toolchain built specifically for the
+> autobuilders to test RISC-V 64/glibc, use a pre-built Bootlin
+> toolchain.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  .../autobuild/bootlin-riscv64-glibc.config                | 5 +++++
+>  support/config-fragments/autobuild/br-riscv64.config      | 8 --------
+>  support/config-fragments/autobuild/toolchain-configs.csv  | 2 +-
+>  3 files changed, 6 insertions(+), 9 deletions(-)
+>  create mode 100644 support/config-fragments/autobuild/bootlin-riscv64-glibc.config
+>  delete mode 100644 support/config-fragments/autobuild/br-riscv64.config
+> 
+> diff --git a/support/config-fragments/autobuild/bootlin-riscv64-glibc.config b/support/config-fragments/autobuild/bootlin-riscv64-glibc.config
+> new file mode 100644
+> index 0000000000..f6c6fcaa36
+> --- /dev/null
+> +++ b/support/config-fragments/autobuild/bootlin-riscv64-glibc.config
+> @@ -0,0 +1,5 @@
+> +BR2_riscv=y
+> +BR2_RISCV_ABI_LP64=y
 
-diff --git a/package/cereal/0001-Store-a-copy-of-each-serialized-shared_ptr-within-the-archive.patch b/package/cereal/0001-Store-a-copy-of-each-serialized-shared_ptr-within-the-archive.patch
-new file mode 100644
-index 0000000000..3458ec1b59
---- /dev/null
-+++ b/package/cereal/0001-Store-a-copy-of-each-serialized-shared_ptr-within-the-archive.patch
-@@ -0,0 +1,67 @@
-+From f27c12d491955c94583512603bf32c4568f20929 Mon Sep 17 00:00:00 2001
-+From: Michael Walz <code@serpedon.de>
-+Date: Tue, 2 Feb 2021 00:50:29 +0100
-+Subject: [PATCH] Store a copy of each serialized shared_ptr within the archive
-+ to prevent the shared_ptr to be freed to early. (#667)
-+
-+The archives use the memory address pointed by the shared_ptr as a
-+unique id which must not be reused during lifetime of the archive.
-+Therefore, the archives stores a copy of it.
-+This problem was also reported as CVE-2020-11105.
-+
-+[Retrieved from:
-+https://github.com/USCiLab/cereal/commit/f27c12d491955c94583512603bf32c4568f20929]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ include/cereal/cereal.hpp       | 13 +++++++++++--
-+ include/cereal/types/memory.hpp |  2 +-
-+ 2 files changed, 12 insertions(+), 3 deletions(-)
-+
-+diff --git a/include/cereal/cereal.hpp b/include/cereal/cereal.hpp
-+index 99bed9d6..f0d15e8b 100644
-+--- a/include/cereal/cereal.hpp
-++++ b/include/cereal/cereal.hpp
-+@@ -369,12 +369,17 @@ namespace cereal
-+           point to the same data.
-+ 
-+           @internal
-+-          @param addr The address (see shared_ptr get()) pointed to by the shared pointer
-++          @param sharedPointer The shared pointer itself (the adress is taked via get()).
-++                               The archive takes a copy to prevent the memory location to be freed
-++                               as long as the address is used as id. This is needed to prevent CVE-2020-11105.
-+           @return A key that uniquely identifies the pointer */
-+-      inline std::uint32_t registerSharedPointer( void const * addr )
-++      inline std::uint32_t registerSharedPointer(const std::shared_ptr<const void>& sharedPointer)
-+       {
-++        void const * addr = sharedPointer.get();
-++
-+         // Handle null pointers by just returning 0
-+         if(addr == 0) return 0;
-++        itsSharedPointerStorage.push_back(sharedPointer);
-+ 
-+         auto id = itsSharedPointerMap.find( addr );
-+         if( id == itsSharedPointerMap.end() )
-+@@ -645,6 +650,10 @@ namespace cereal
-+       //! Maps from addresses to pointer ids
-+       std::unordered_map<void const *, std::uint32_t> itsSharedPointerMap;
-+ 
-++      //! Copy of shared pointers used in #itsSharedPointerMap to make sure they are kept alive
-++      //  during lifetime of itsSharedPointerMap to prevent CVE-2020-11105.
-++      std::vector<std::shared_ptr<const void>> itsSharedPointerStorage;
-++
-+       //! The id to be given to the next pointer
-+       std::uint32_t itsCurrentPointerId;
-+ 
-+diff --git a/include/cereal/types/memory.hpp b/include/cereal/types/memory.hpp
-+index 59e9da9b..cac1f334 100644
-+--- a/include/cereal/types/memory.hpp
-++++ b/include/cereal/types/memory.hpp
-+@@ -263,7 +263,7 @@ namespace cereal
-+   {
-+     auto & ptr = wrapper.ptr;
-+ 
-+-    uint32_t id = ar.registerSharedPointer( ptr.get() );
-++    uint32_t id = ar.registerSharedPointer( ptr );
-+     ar( CEREAL_NVP_("id", id) );
-+ 
-+     if( id & detail::msb_32bit )
-diff --git a/package/cereal/cereal.mk b/package/cereal/cereal.mk
-index c9ce9976bf..19faa2ac4e 100644
---- a/package/cereal/cereal.mk
-+++ b/package/cereal/cereal.mk
-@@ -16,4 +16,7 @@ CEREAL_CONF_OPTS = \
- 	-DTHREAD_SAFE=ON \
- 	-DJUST_INSTALL_CEREAL=ON
- 
-+# 0001-Store-a-copy-of-each-serialized-shared_ptr-within-the-archive.patch
-+CEREAL_IGNORE_CVES += CVE-2020-11105
-+
- $(eval $(cmake-package))
+The previous fragment would not specify the ABI, so that would use the
+default, lp64d.
+
+So, why are you switching over to the lp64 ABI?
+
+Regards,
+Yann E. MORIN.
+
+> +BR2_TOOLCHAIN_EXTERNAL=y
+> +BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+> +BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_RISCV64_GLIBC_BLEEDING_EDGE=y
+> diff --git a/support/config-fragments/autobuild/br-riscv64.config b/support/config-fragments/autobuild/br-riscv64.config
+> deleted file mode 100644
+> index c5df86392c..0000000000
+> --- a/support/config-fragments/autobuild/br-riscv64.config
+> +++ /dev/null
+> @@ -1,8 +0,0 @@
+> -BR2_riscv=y
+> -BR2_TOOLCHAIN_EXTERNAL=y
+> -BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> -BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/br-riscv64-glibc-2020.02.tar.bz2"
+> -BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
+> -BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_4=y
+> -BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+> -BR2_TOOLCHAIN_EXTERNAL_CXX=y
+> diff --git a/support/config-fragments/autobuild/toolchain-configs.csv b/support/config-fragments/autobuild/toolchain-configs.csv
+> index 72b7a344c6..04a248e03d 100644
+> --- a/support/config-fragments/autobuild/toolchain-configs.csv
+> +++ b/support/config-fragments/autobuild/toolchain-configs.csv
+> @@ -37,6 +37,7 @@ support/config-fragments/autobuild/bootlin-openrisc-uclibc.config,x86_64
+>  support/config-fragments/autobuild/bootlin-powerpc64le-power8-glibc.config,x86_64
+>  support/config-fragments/autobuild/bootlin-powerpc-e500mc-uclibc.config,x86_64
+>  support/config-fragments/autobuild/bootlin-riscv32-glibc.config,x86_64
+> +support/config-fragments/autobuild/bootlin-riscv64-glibc.config,x86_64
+>  support/config-fragments/autobuild/bootlin-x86-64-glibc.config,x86_64
+>  support/config-fragments/autobuild/br-arc-full-internal.config,any
+>  support/config-fragments/autobuild/br-arc-internal-glibc.config,any
+> @@ -53,7 +54,6 @@ support/config-fragments/autobuild/br-mips64r6-el-hf-glibc.config,x86_64
+>  support/config-fragments/autobuild/br-powerpc-603e-basic-cpp.config,x86_64
+>  support/config-fragments/autobuild/br-powerpc64-power7-glibc.config,x86_64
+>  support/config-fragments/autobuild/br-powerpc-internal-full.config,any
+> -support/config-fragments/autobuild/br-riscv64.config,x86_64
+>  support/config-fragments/autobuild/br-riscv64-full-internal.config,any
+>  support/config-fragments/autobuild/br-riscv64-musl.config,x86_64
+>  support/config-fragments/autobuild/br-s390x-z13-internal-glibc.config,any
+> -- 
+> 2.29.2
+> 
+
 -- 
-2.29.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
