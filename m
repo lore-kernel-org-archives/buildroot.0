@@ -1,53 +1,38 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 3 Feb 2021 23:15:11 +0100
-Subject: [Buildroot] [PATCH 1/1] board/orangepi-zero-plus2: switch to
- GPT for PARTLABEL support
-In-Reply-To: <20210203195719.519992-1-geomatsi@gmail.com>
-References: <20210203195719.519992-1-geomatsi@gmail.com>
-Message-ID: <20210203221511.GO2384@scaer>
+Date: Wed, 3 Feb 2021 23:16:09 +0100
+Subject: [Buildroot] [git commit] configs/orangepi_r1_defconfig: fix typo in
+ comment
+Message-ID: <20210203215739.08F20816CA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sergey, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=6e4f081d0c60a5662d401fb87cdd9b66ec397466
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-02-03 22:57 +0300, Sergey Matyukevich spake thusly:
-> Patch that pins mmc indexes was not accepted to mainline kernel. Drop that
-> patch and switch to GPT to use partition labels. For GPT the name of the
-> partition in genimage.cfg is used as the label for that partition. Note
-> that the default GPT partition table location conflicts with the SPL
-> location, so move GPT table after bootloaders.
+In commit 38d04e6b1341, I did a last-minute change by adding the comment
+to explain where the PARTLABEL was coming from, and introduced a typo in
+that comment.
 
-Applied to master, thanks, but see a very minor not, below...
+Fix it.
 
-> Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
-> ---
-[--SNIP--]
-> diff --git a/board/orangepi/orangepi-zero-plus2/genimage.cfg b/board/orangepi/orangepi-zero-plus2/genimage.cfg
-> index 8091edad6f..29377bf149 100644
-> --- a/board/orangepi/orangepi-zero-plus2/genimage.cfg
-> +++ b/board/orangepi/orangepi-zero-plus2/genimage.cfg
-[--SNIP--]
-> @@ -32,8 +36,11 @@ image sdcard.img {
->  		image = "boot.vfat"
->  	}
->  
-> +	# 'rootfs' will be used as the partition label, used
-> +	# with root=PARTLABEL=rootfs kernel commadn line
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ board/orangepi/orangepi-r1/genimage.cfg | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Aha! You even copied my typo! ;-)
-
-Fixed when applying.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/board/orangepi/orangepi-r1/genimage.cfg b/board/orangepi/orangepi-r1/genimage.cfg
+index 46097cd2e5..edda03b3ef 100644
+--- a/board/orangepi/orangepi-r1/genimage.cfg
++++ b/board/orangepi/orangepi-r1/genimage.cfg
+@@ -33,7 +33,7 @@ image sdcard.img {
+ 	}
+ 
+ 	# 'rootfs' will be used as the partition label, used
+-	# with root=PARTLABEL=rootfs kernel commadn line
++	# with root=PARTLABEL=rootfs kernel command line
+ 	partition rootfs {
+ 		partition-type = 0x83
+ 		image = "rootfs.ext4"
