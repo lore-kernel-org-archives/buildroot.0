@@ -1,96 +1,126 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 3 Feb 2021 23:09:26 +0100
-Subject: [Buildroot] [PATCH 3/3] package/grpc: disable unnecessary build
- plugins
-In-Reply-To: <20210203124325.18843-4-patrickdepinguin@gmail.com>
-References: <20210203124325.18843-1-patrickdepinguin@gmail.com>
- <20210203124325.18843-4-patrickdepinguin@gmail.com>
-Message-ID: <20210203220926.GN2384@scaer>
+Date: Wed, 3 Feb 2021 23:13:34 +0100
+Subject: [Buildroot] [git commit] board/orangepi-zero-plus2: switch to GPT
+ for PARTLABEL support
+Message-ID: <20210203215317.EC253815FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=194dbbfc92072e9d4d5a6dcb0ac79ccbdc8cc48b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-02-03 13:43 +0100, Thomas De Schampheleire spake thusly:
-> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> 
-> grpc has plugins for multiple programming languages, which are needed on
-> development machines only. Examples are grpc_cpp_plugin, grpc_ruby_plugin,
-> etc.
-> 
-> Even though before commit fedf3318e3fd3c9ba57389ed2b36472f1a772b9e,
-> grpc_cpp_plugin was not installed for target, all other plugins still were.
-> This causes additional build time and rootfs space.
-> 
-> As Buildroot does not support building a development environment for target,
-> these tools can be disabled.
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> ---
->  package/grpc/grpc.mk | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
-> index a8a3af89ef..27b28deff3 100644
-> --- a/package/grpc/grpc.mk
-> +++ b/package/grpc/grpc.mk
-> @@ -27,7 +27,14 @@ GRPC_CONF_OPTS = \
->  	-DgRPC_PROTOBUF_PROVIDER=package \
->  	-DgRPC_RE2_PROVIDER=package \
->  	-DgRPC_SSL_PROVIDER=package \
-> -	-DgRPC_ZLIB_PROVIDER=package
-> +	-DgRPC_ZLIB_PROVIDER=package \
-> +	-DgRPC_BUILD_GRPC_CPP_PLUGIN=OFF \
-> +	-DgRPC_BUILD_GRPC_CSHARP_PLUGIN=OFF \
-> +	-DgRPC_BUILD_GRPC_NODE_PLUGIN=OFF \
-> +	-DgRPC_BUILD_GRPC_OBJECTIVE_C_PLUGIN=OFF \
-> +	-DgRPC_BUILD_GRPC_PHP_PLUGIN=OFF \
-> +	-DgRPC_BUILD_GRPC_PYTHON_PLUGIN=OFF \
-> +	-DgRPC_BUILD_GRPC_RUBY_PLUGIN=OFF
+Patch that pins mmc indexes was not accepted to mainline kernel. Drop that
+patch and switch to GPT to use partition labels. For GPT the name of the
+partition in genimage.cfg is used as the label for that partition. Note
+that the default GPT partition table location conflicts with the SPL
+location, so move GPT table after bootloaders.
 
-So I am OK with applying this patch in bulk, because it makes sense.
+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ board/orangepi/orangepi-zero-plus2/boot.cmd        |  2 +-
+ board/orangepi/orangepi-zero-plus2/genimage.cfg    |  9 +++++-
+ ...range-pi-zero-plus2-use-fixed-mmc-indexes.patch | 33 ----------------------
+ configs/orangepi_zero_plus2_defconfig              |  1 -
+ 4 files changed, 9 insertions(+), 36 deletions(-)
 
-IIUC, the grpc_cpp_plugin will generate C++ code, and so the
-grpc_node_plugin will generate JS code, and so on... Right?
-
-If so, would it make sense to also trim the host variant further, too?
-
-I.e. if there is no nodejs on the target, then no need for the node
-plugin. Ditto, if there is no C++, then no need to build the cpp plugin,
-right?
-
-Oh, except those may also be used to build host packages, too... And we
-do not have a good way to know what languages the host packages would
-need... So in the end, we do not want to disable any plugin for the host
-variant...
-
-(Yeah, I'm thinking aloud, sorry for the noise...))
-
-Damn, I already pushed, or I'd have added as a comment and to the
-commit.
-
-`nyway... Thanks for the fixes! :-)
-
-Regards,
-Yann E. MORIN.
-
->  # grpc can use __atomic builtins, so we need to link with
->  # libatomic when available
-> -- 
-> 2.26.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/board/orangepi/orangepi-zero-plus2/boot.cmd b/board/orangepi/orangepi-zero-plus2/boot.cmd
+index 4772a9be31..aa5162004b 100644
+--- a/board/orangepi/orangepi-zero-plus2/boot.cmd
++++ b/board/orangepi/orangepi-zero-plus2/boot.cmd
+@@ -1,4 +1,4 @@
+-setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
++setenv bootargs console=ttyS0,115200 earlyprintk root=PARTLABEL=rootfs rootwait
+ 
+ fatload mmc 0 $kernel_addr_r Image
+ fatload mmc 0 $fdt_addr_r sun50i-h5-orangepi-zero-plus2.dtb
+diff --git a/board/orangepi/orangepi-zero-plus2/genimage.cfg b/board/orangepi/orangepi-zero-plus2/genimage.cfg
+index 8091edad6f..98ebf5b475 100644
+--- a/board/orangepi/orangepi-zero-plus2/genimage.cfg
++++ b/board/orangepi/orangepi-zero-plus2/genimage.cfg
+@@ -11,6 +11,10 @@ image boot.vfat {
+ 
+ image sdcard.img {
+ 	hdimage {
++		# for root=PARTLABEL support
++		gpt = true
++		# default GPT location conflicts with bootloaders, move it after
++		gpt-location = 1M
+ 	}
+ 
+ 	partition spl {
+@@ -23,7 +27,7 @@ image sdcard.img {
+ 		in-partition-table = "no"
+ 		image = "u-boot.itb"
+ 		offset = 40K
+-		size = 1M # 1MB - 40K
++		size = 1024000 # 1MB - 40K + 16K(GPT)
+ 	}
+ 
+ 	partition boot {
+@@ -32,8 +36,11 @@ image sdcard.img {
+ 		image = "boot.vfat"
+ 	}
+ 
++	# 'rootfs' will be used as the partition label, used
++	# with root=PARTLABEL=rootfs kernel command line
+ 	partition rootfs {
+ 		partition-type = 0x83
+ 		image = "rootfs.ext4"
++		size = 256M
+ 	}
+ }
+diff --git a/board/orangepi/orangepi-zero-plus2/patches/linux/0001-ARM-dts-orange-pi-zero-plus2-use-fixed-mmc-indexes.patch b/board/orangepi/orangepi-zero-plus2/patches/linux/0001-ARM-dts-orange-pi-zero-plus2-use-fixed-mmc-indexes.patch
+deleted file mode 100644
+index 8c4e19500c..0000000000
+--- a/board/orangepi/orangepi-zero-plus2/patches/linux/0001-ARM-dts-orange-pi-zero-plus2-use-fixed-mmc-indexes.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-From f780fee2dc7d4a7bcfb2297342f7bfec2c0d1c28 Mon Sep 17 00:00:00 2001
+-From: Sergey Matyukevich <geomatsi@gmail.com>
+-Date: Tue, 26 Jan 2021 23:19:13 +0300
+-Subject: [PATCH 1/1] ARM: dts: orange-pi-zero-plus2: use fixed mmc indexes
+-
+-Driver sunxi-mmc has recently been switched to asynchronous probe.
+-As a result, mmc indexes can be shuffled breaking existing setups
+-where UUIDs are not used for boot devices. Pin mmc indexes to keep
+-running the systems where fixed MMC or eMMC are specified,
+-e.g. root=/dev/mmcblk0p2.
+-
+-Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+----
+- .../arm64/boot/dts/allwinner/sun50i-h5-orangepi-zero-plus2.dts | 3 +++
+- 1 file changed, 3 insertions(+)
+-
+-diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h5-orangepi-zero-plus2.dts b/arch/arm64/boot/dts/allwinner/sun50i-h5-orangepi-zero-plus2.dts
+-index de19e68eb84e..c4854d3ba524 100644
+---- a/arch/arm64/boot/dts/allwinner/sun50i-h5-orangepi-zero-plus2.dts
+-+++ b/arch/arm64/boot/dts/allwinner/sun50i-h5-orangepi-zero-plus2.dts
+-@@ -13,6 +13,9 @@ / {
+- 
+- 	aliases {
+- 		serial0 = &uart0;
+-+		mmc0 = &mmc0;
+-+		mmc1 = &mmc1;
+-+		mmc2 = &mmc2;
+- 	};
+- 
+- 	chosen {
+--- 
+-2.30.0
+-
+diff --git a/configs/orangepi_zero_plus2_defconfig b/configs/orangepi_zero_plus2_defconfig
+index 9273a8e3a8..aa4c5c9413 100644
+--- a/configs/orangepi_zero_plus2_defconfig
++++ b/configs/orangepi_zero_plus2_defconfig
+@@ -5,7 +5,6 @@ BR2_ARM_FPU_VFPV4=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+ BR2_ROOTFS_OVERLAY="board/orangepi/orangepi-zero-plus2/rootfs_overlay"
+-BR2_GLOBAL_PATCH_DIR="board/orangepi/orangepi-zero-plus2/patches"
+ 
+ # Firmware
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
