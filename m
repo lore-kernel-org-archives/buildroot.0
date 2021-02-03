@@ -1,125 +1,262 @@
-From: Sergey Matyukevich <geomatsi@gmail.com>
-Date: Wed,  3 Feb 2021 22:57:19 +0300
-Subject: [Buildroot] [PATCH 1/1] board/orangepi-zero-plus2: switch to GPT
- for PARTLABEL support
-Message-ID: <20210203195719.519992-1-geomatsi@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed,  3 Feb 2021 21:00:49 +0100
+Subject: [Buildroot] [PATCH 1/1] package/sox: security bump to latest git
+ commit
+Message-ID: <20210203200049.1151409-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Patch that pins mmc indexes was not accepted to mainline kernel. Drop that
-patch and switch to GPT to use partition labels. For GPT the name of the
-partition in genimage.cfg is used as the label for that partition. Note
-that the default GPT partition table location conflicts with the SPL
-location, so move GPT table after bootloaders.
+Bump to the latest git commit as this will fix the following CVEs:
 
-Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+git log|grep CVE
+  sox-fmt: validate comments_bytes before use (CVE-2019-13590) [bug #325]
+  fix possible null pointer deref in lsx_make_lpf() (CVE-2019-8357)
+  fft4g: bail if size too large (CVE-2019-8356)
+  fix possible overflow in lsx_(re)valloc() size calculation (CVE-2019-8355)
+  fix possible buffer size overflow in lsx_make_lpf() (CVE-2019-8354)
+  xa: validate channel count (CVE-2017-18189)
+  aiff: fix crash on empty comment chunk (CVE-2017-15642)
+  adpcm: fix stack overflow with >4 channels (CVE-2017-15372)
+  flac: fix crash on corrupt metadata (CVE-2017-15371)
+  wav: ima_adpcm: fix buffer overflow on corrupt input (CVE-2017-15370)
+  wav: fix crash writing header when channel count >64k (CVE-2017-11359)
+  hcom: fix crash on input with corrupt dictionary (CVE-2017-11358)
+  wav: fix crash if channel count is zero (CVE-2017-11332)
+
+- Tweak configuration options due to
+  https://sourceforge.net/p/sox/code/ci/6ff0e9322f9891f5a6ac6c9b3bceffbfca16bec3
+- libgsm is now an optional dependency since
+  https://sourceforge.net/p/sox/code/ci/e548827ffcf4dffa7f21709b8e96b04b481c09b8
+- Add patch to put back --disable-stack-protector
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- board/orangepi/orangepi-zero-plus2/boot.cmd   |  2 +-
- .../orangepi/orangepi-zero-plus2/genimage.cfg |  9 ++++-
- ...-pi-zero-plus2-use-fixed-mmc-indexes.patch | 33 -------------------
- configs/orangepi_zero_plus2_defconfig         |  1 -
- 4 files changed, 9 insertions(+), 36 deletions(-)
- delete mode 100644 board/orangepi/orangepi-zero-plus2/patches/linux/0001-ARM-dts-orange-pi-zero-plus2-use-fixed-mmc-indexes.patch
+ ....ac-put-back-disable-stack-protector.patch | 45 +++++++++++++++
+ package/sox/sox.hash                          |  4 +-
+ package/sox/sox.mk                            | 56 ++++++++++++++-----
+ 3 files changed, 89 insertions(+), 16 deletions(-)
+ create mode 100644 package/sox/0002-configure.ac-put-back-disable-stack-protector.patch
 
-diff --git a/board/orangepi/orangepi-zero-plus2/boot.cmd b/board/orangepi/orangepi-zero-plus2/boot.cmd
-index 4772a9be31..aa5162004b 100644
---- a/board/orangepi/orangepi-zero-plus2/boot.cmd
-+++ b/board/orangepi/orangepi-zero-plus2/boot.cmd
-@@ -1,4 +1,4 @@
--setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
-+setenv bootargs console=ttyS0,115200 earlyprintk root=PARTLABEL=rootfs rootwait
+diff --git a/package/sox/0002-configure.ac-put-back-disable-stack-protector.patch b/package/sox/0002-configure.ac-put-back-disable-stack-protector.patch
+new file mode 100644
+index 0000000000..28e2871f54
+--- /dev/null
++++ b/package/sox/0002-configure.ac-put-back-disable-stack-protector.patch
+@@ -0,0 +1,45 @@
++From 18ace560a15207503805d4df25b90c7a756bcbf6 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 2 Feb 2021 23:53:39 +0100
++Subject: [PATCH] configure.ac: put back --disable-stack-protector
++
++Put back --disable-stack-protector which has been removed by commit
++70c85915eace83142b84e4f65f5db421cf0c09e3. This will allow the user to
++disable it or to let a higher buildsystem such as buildroot to finely
++configure it.
++
++Indeed, without this patch, build can fail as some compilers (such as
++uclibc) could missed the needed library (-lssp or -lssp_nonshared) at
++linking step:
++
++  CCLD     libsox.la
++/home/fabrice/br-test-pkg/br-arm-full/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/5.5.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: cannot find -lssp_nonshared
++/home/fabrice/br-test-pkg/br-arm-full/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/5.5.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: cannot find -lssp
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://sourceforge.net/p/sox/patches/122/]
++---
++ configure.ac | 7 ++++++-
++ 1 file changed, 6 insertions(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 39306398..a1665467 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -32,7 +32,12 @@ AC_PROG_LN_S
++ PKG_PROG_PKG_CONFIG
++ PKG_INSTALLDIR
++ 
++-AX_APPEND_COMPILE_FLAGS([-fstack-protector-strong])
+++AC_ARG_ENABLE([stack-protector],
+++    AS_HELP_STRING([--disable-stack-protector], [Disable -fstack-protector-strong]),
+++    [enable_stack_protector=$enableval], [enable_stack_protector=yes])
+++AS_IF([test x"$enable_stack_protector" = "xyes"],
+++    [AX_APPEND_COMPILE_FLAGS([-fstack-protector-strong])])
+++
++ AX_APPEND_COMPILE_FLAGS([-Wall -Wmissing-prototypes -Wstrict-prototypes])
++ AX_APPEND_LINK_FLAGS([-Wl,--as-needed])
++ 
++-- 
++2.29.2
++
+diff --git a/package/sox/sox.hash b/package/sox/sox.hash
+index 1a4a7dbf7f..d2006e0291 100644
+--- a/package/sox/sox.hash
++++ b/package/sox/sox.hash
+@@ -1,6 +1,4 @@
+-# From http://sourceforge.net/projects/sox/files/sox/14.4.2/
+-md5	ba804bb1ce5c71dd484a102a5b27d0dd	sox-14.4.2.tar.bz2
+-sha1	dc9668256b9d81ef25d672f14f12ec026b0b4087	sox-14.4.2.tar.bz2
+ # Locally computed
++sha256  3d06ba8fc39ac92f16da73593be48afe0a704fe4dc4f6eca2e5137ef77cd5115  sox-7524160b29a476f7e87bc14fddf12d349f9a3c5e-br1.tar.gz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL
+ sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  LICENSE.LGPL
+diff --git a/package/sox/sox.mk b/package/sox/sox.mk
+index 8a1d87b230..4334355a91 100644
+--- a/package/sox/sox.mk
++++ b/package/sox/sox.mk
+@@ -4,14 +4,22 @@
+ #
+ ################################################################################
  
- fatload mmc 0 $kernel_addr_r Image
- fatload mmc 0 $fdt_addr_r sun50i-h5-orangepi-zero-plus2.dtb
-diff --git a/board/orangepi/orangepi-zero-plus2/genimage.cfg b/board/orangepi/orangepi-zero-plus2/genimage.cfg
-index 8091edad6f..29377bf149 100644
---- a/board/orangepi/orangepi-zero-plus2/genimage.cfg
-+++ b/board/orangepi/orangepi-zero-plus2/genimage.cfg
-@@ -11,6 +11,10 @@ image boot.vfat {
+-SOX_VERSION = 14.4.2
+-SOX_SITE = http://downloads.sourceforge.net/project/sox/sox/$(SOX_VERSION)
+-SOX_SOURCE = sox-$(SOX_VERSION).tar.bz2
+-SOX_DEPENDENCIES = host-pkgconf
++SOX_VERSION = 7524160b29a476f7e87bc14fddf12d349f9a3c5e 
++SOX_SITE = git://git.code.sf.net/p/sox/code
++SOX_SITE_METHOD = git
++SOX_DEPENDENCIES = host-autoconf-archive host-pkgconf
+ SOX_LICENSE = GPL-2.0+ (sox binary), LGPL-2.1+ (libraries)
+ SOX_LICENSE_FILES = LICENSE.GPL LICENSE.LGPL
+ SOX_CPE_ID_VENDOR = sound_exchange_project
+ SOX_CPE_ID_PRODUCT = sound_exchange
++# From git and we're patching configure.ac
++SOX_AUTORECONF = YES
++SOX_AUTORECONF_OPTS = --include=$(HOST_DIR)/share/autoconf-archive
++
++SOX_IGNORE_CVES += CVE-2017-11332 CVE-2017-11358 CVE-2017-11359 \
++	CVE-2017-15370 CVE-2017-15371 CVE-2017-15372 CVE-2017-15642 \
++	CVE-2017-18189 CVE-2019-8354 CVE-2019-8355 CVE-2019-8356 \
++	CVE-2019-8357 CVE-2019-13590
  
- image sdcard.img {
- 	hdimage {
-+		# for root=PARTLABEL support
-+		gpt = true
-+		# default GPT location conflicts with bootloaders, move it after
-+		gpt-location = 1M
- 	}
+ SOX_CONF_OPTS = \
+ 	--with-distro="Buildroot" \
+@@ -19,92 +27,114 @@ SOX_CONF_OPTS = \
  
- 	partition spl {
-@@ -23,7 +27,7 @@ image sdcard.img {
- 		in-partition-table = "no"
- 		image = "u-boot.itb"
- 		offset = 40K
--		size = 1M # 1MB - 40K
-+		size = 1024000 # 1MB - 40K + 16K(GPT)
- 	}
+ ifeq ($(BR2_PACKAGE_ALSA_LIB_PCM),y)
+ SOX_DEPENDENCIES += alsa-lib
++SOX_CONF_OPTS += --enable-alsa
+ else
+-SOX_CONF_OPTS += --without-alsa
++SOX_CONF_OPTS += --disable-alsa
+ endif
  
- 	partition boot {
-@@ -32,8 +36,11 @@ image sdcard.img {
- 		image = "boot.vfat"
- 	}
+ ifeq ($(BR2_PACKAGE_FILE),y)
+ SOX_DEPENDENCIES += file
++SOX_CONF_OPTS += --with-magic
+ else
+ SOX_CONF_OPTS += --without-magic
+ endif
  
-+	# 'rootfs' will be used as the partition label, used
-+	# with root=PARTLABEL=rootfs kernel commadn line
- 	partition rootfs {
- 		partition-type = 0x83
- 		image = "rootfs.ext4"
-+		size = 256M
- 	}
- }
-diff --git a/board/orangepi/orangepi-zero-plus2/patches/linux/0001-ARM-dts-orange-pi-zero-plus2-use-fixed-mmc-indexes.patch b/board/orangepi/orangepi-zero-plus2/patches/linux/0001-ARM-dts-orange-pi-zero-plus2-use-fixed-mmc-indexes.patch
-deleted file mode 100644
-index 8c4e19500c..0000000000
---- a/board/orangepi/orangepi-zero-plus2/patches/linux/0001-ARM-dts-orange-pi-zero-plus2-use-fixed-mmc-indexes.patch
-+++ /dev/null
-@@ -1,33 +0,0 @@
--From f780fee2dc7d4a7bcfb2297342f7bfec2c0d1c28 Mon Sep 17 00:00:00 2001
--From: Sergey Matyukevich <geomatsi@gmail.com>
--Date: Tue, 26 Jan 2021 23:19:13 +0300
--Subject: [PATCH 1/1] ARM: dts: orange-pi-zero-plus2: use fixed mmc indexes
--
--Driver sunxi-mmc has recently been switched to asynchronous probe.
--As a result, mmc indexes can be shuffled breaking existing setups
--where UUIDs are not used for boot devices. Pin mmc indexes to keep
--running the systems where fixed MMC or eMMC are specified,
--e.g. root=/dev/mmcblk0p2.
--
--Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
-----
-- .../arm64/boot/dts/allwinner/sun50i-h5-orangepi-zero-plus2.dts | 3 +++
-- 1 file changed, 3 insertions(+)
--
--diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h5-orangepi-zero-plus2.dts b/arch/arm64/boot/dts/allwinner/sun50i-h5-orangepi-zero-plus2.dts
--index de19e68eb84e..c4854d3ba524 100644
----- a/arch/arm64/boot/dts/allwinner/sun50i-h5-orangepi-zero-plus2.dts
--+++ b/arch/arm64/boot/dts/allwinner/sun50i-h5-orangepi-zero-plus2.dts
--@@ -13,6 +13,9 @@ / {
-- 
-- 	aliases {
-- 		serial0 = &uart0;
--+		mmc0 = &mmc0;
--+		mmc1 = &mmc1;
--+		mmc2 = &mmc2;
-- 	};
-- 
-- 	chosen {
---- 
--2.30.0
--
-diff --git a/configs/orangepi_zero_plus2_defconfig b/configs/orangepi_zero_plus2_defconfig
-index 9273a8e3a8..aa4c5c9413 100644
---- a/configs/orangepi_zero_plus2_defconfig
-+++ b/configs/orangepi_zero_plus2_defconfig
-@@ -5,7 +5,6 @@ BR2_ARM_FPU_VFPV4=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
- BR2_ROOTFS_OVERLAY="board/orangepi/orangepi-zero-plus2/rootfs_overlay"
--BR2_GLOBAL_PATCH_DIR="board/orangepi/orangepi-zero-plus2/patches"
+ ifeq ($(BR2_PACKAGE_FLAC),y)
+ SOX_DEPENDENCIES += flac
++SOX_CONF_OPTS += --enable-flac
+ else
+-SOX_CONF_OPTS += --without-flac
++SOX_CONF_OPTS += --disable-flac
+ endif
  
- # Firmware
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ ifeq ($(BR2_PACKAGE_LAME),y)
+ SOX_DEPENDENCIES += lame
++SOX_CONF_OPTS += --with-lame
+ else
+ SOX_CONF_OPTS += --without-lame
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBAO),y)
+ SOX_DEPENDENCIES += libao
++SOX_CONF_OPTS += --enable-ao
++else
++SOX_CONF_OPTS += --disable-ao
++endif
++
++ifeq ($(BR2_PACKAGE_LIBGSM),y)
++SOX_DEPENDENCIES += libgsm
++SOX_CONF_OPTS += --enable-gsm
+ else
+-SOX_CONF_OPTS += --without-ao
++SOX_CONF_OPTS += --disable-gsm
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBID3TAG),y)
+ SOX_DEPENDENCIES += libid3tag
++SOX_CONF_OPTS += --with-id3tag
+ else
+ SOX_CONF_OPTS += --without-id3tag
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBMAD),y)
+ SOX_DEPENDENCIES += libmad
++SOX_CONF_OPTS += --with-mad
+ else
+ SOX_CONF_OPTS += --without-mad
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBPNG),y)
+ SOX_DEPENDENCIES += libpng
++SOX_CONF_OPTS += --with-png
+ else
+ SOX_CONF_OPTS += --without-png
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBSNDFILE),y)
+ SOX_DEPENDENCIES += libsndfile
++SOX_CONF_OPTS += --enable-sndfile
+ else
+-SOX_CONF_OPTS += --without-sndfile
++SOX_CONF_OPTS += --disable-sndfile
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBVORBIS),y)
+ SOX_DEPENDENCIES += libvorbis
++SOX_CONF_OPTS += --enable-oggvorbis
+ else
+-SOX_CONF_OPTS += --without-oggvorbis
++SOX_CONF_OPTS += --disable-oggvorbis
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_OPENCORE_AMR),y)
+ SOX_DEPENDENCIES += opencore-amr
++SOX_CONF_OPTS += --enable-amrwb --enable-amrnb
+ else
+-SOX_CONF_OPTS += --without-amrwb --without-amrnb
++SOX_CONF_OPTS += --disable-amrwb --disable-amrnb
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_OPUSFILE),y)
+ SOX_DEPENDENCIES += opusfile
++SOX_CONF_OPTS += --enable-opus
+ else
+-SOX_CONF_OPTS += --without-opus
++SOX_CONF_OPTS += --disable-opus
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_PULSEAUDIO),y)
+ SOX_DEPENDENCIES += pulseaudio
++SOX_CONF_OPTS += --enable-pulseaudio
+ else
+-SOX_CONF_OPTS += --without-pulseaudio
++SOX_CONF_OPTS += --disable-pulseaudio
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_TWOLAME),y)
+ SOX_DEPENDENCIES += twolame
++SOX_CONF_OPTS += --with-twolame
+ else
+ SOX_CONF_OPTS += --without-twolame
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_WAVPACK),y)
+ SOX_DEPENDENCIES += wavpack
++SOX_CONF_OPTS += --enable-wavpack
+ else
+-SOX_CONF_OPTS += --without-wavpack
++SOX_CONF_OPTS += --disable-wavpack
+ endif
+ 
+ $(eval $(autotools-package))
 -- 
-2.30.0
+2.29.2
