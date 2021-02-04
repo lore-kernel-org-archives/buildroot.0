@@ -1,108 +1,115 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 4 Feb 2021 18:17:58 +0100
-Subject: [Buildroot] [git commit] package/systemd: bump to version 247.3
-Message-ID: <20210204170218.EEDCA811D4@busybox.osuosl.org>
+Date: Thu, 4 Feb 2021 18:20:41 +0100
+Subject: [Buildroot] [git commit] package/cereal: fix CVE-2020-11105
+Message-ID: <20210204170219.0E4A3811D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=697180b5ac343c7723836ab8910ca920959e998e
+commit: https://git.buildroot.net/buildroot/commit/?id=26a46564f395e08cf8c4514c62e38a7d637d8cec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop upstream patch.
+Fix CVE-2020-11105: An issue was discovered in USC iLab cereal through
+1.3.0. It employs caching of std::shared_ptr values, using the raw
+pointer address as a unique identifier. This becomes problematic if an
+std::shared_ptr variable goes out of scope and is freed, and a new
+std::shared_ptr is allocated at the same address. Serialization fidelity
+thereby becomes dependent upon memory layout. In short, serialized
+std::shared_ptr variables cannot always be expected to serialize back
+into their original values. This can have any number of consequences,
+depending on the context within which this manifests.
 
-Use the new mode=release switch, this should automatically
-disable features deemed not ready for use.
-
-Signed-off-by: Norbert Lange <nolange79@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...one-Do-not-fail-with-read-only-etc-or-var.patch | 34 ----------------------
- package/systemd/systemd.hash                       |  4 +--
- package/systemd/systemd.mk                         |  4 ++-
- 3 files changed, 5 insertions(+), 37 deletions(-)
+ ...-serialized-shared_ptr-within-the-archive.patch | 67 ++++++++++++++++++++++
+ package/cereal/cereal.mk                           |  3 +
+ 2 files changed, 70 insertions(+)
 
-diff --git a/package/systemd/0001-update-done-Do-not-fail-with-read-only-etc-or-var.patch b/package/systemd/0001-update-done-Do-not-fail-with-read-only-etc-or-var.patch
-deleted file mode 100644
-index 01e7f1e906..0000000000
---- a/package/systemd/0001-update-done-Do-not-fail-with-read-only-etc-or-var.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--From e2a23672a1bbf4d3411dce0289051b5a72bd4a67 Mon Sep 17 00:00:00 2001
--From: Felix Riemann <felix.riemann@sma.de>
--Date: Mon, 19 Oct 2020 18:54:53 +0200
--Subject: [PATCH] update-done: Do not fail with read-only /etc or /var
--
--With the switch from log_debug() to log_debug_errno() in commit c413bb28df
--systemd-update-done would fail without any error message if /etc
--or /var were read-only. This restores the previous behaviour to
--silently ignore these directories again.
--
--[Romain: backport from 1eee15c3885fcc9f6a40df7e42347cb8fca71280]
--Signed-off-by: Romain Naour <romain.naour@gmail.com>
-----
-- src/update-done/update-done.c | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/src/update-done/update-done.c b/src/update-done/update-done.c
--index e9d589e0e5..92c348d83b 100644
----- a/src/update-done/update-done.c
--+++ b/src/update-done/update-done.c
--@@ -31,8 +31,8 @@ static int apply_timestamp(const char *path, struct timespec *ts) {
-- 
--         r = write_string_file_atomic_label_ts(path, message, ts);
--         if (r == -EROFS)
---                return log_debug_errno(r, "Cannot create \"%s\", file system is read-only.", path);
---        if (r < 0)
--+                log_debug_errno(r, "Cannot create \"%s\", file system is read-only.", path);
--+        else if (r < 0)
--                 return log_error_errno(r, "Failed to write \"%s\": %m", path);
--         return 0;
-- }
---- 
--2.25.4
--
-diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
-index cad249199c..20cd922259 100644
---- a/package/systemd/systemd.hash
-+++ b/package/systemd/systemd.hash
-@@ -1,6 +1,6 @@
- # sha256 locally computed
--sha256  f45c5a98d3be7dd05ed7f1e1a0ab00c7ba52602aa2dc42615bf74be61fcbe178  systemd-246.5.tar.gz
-+sha256  2869986e219a8dfc96cc0dffac66e0c13bb70a89e16b85a3948876c146cfa3e0  systemd-247.3.tar.gz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
--sha256  b142af99a3d950fb465326d6fd5a49d348523dc0d216682880527264d0a011e9  README
-+sha256  6f22d19d35b00f35e0444e0bc9139e6d3bdf7277978f89c4e175e37b18c43f3d  README
- sha256  83bb6bd9ccd2cf5230cb1807ed16258289768dc4d9cb80069a814e04415a1275  tools/chromiumos/LICENSE
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 51d0a7b558..64f23c38a9 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/cereal/0001-Store-a-copy-of-each-serialized-shared_ptr-within-the-archive.patch b/package/cereal/0001-Store-a-copy-of-each-serialized-shared_ptr-within-the-archive.patch
+new file mode 100644
+index 0000000000..3458ec1b59
+--- /dev/null
++++ b/package/cereal/0001-Store-a-copy-of-each-serialized-shared_ptr-within-the-archive.patch
+@@ -0,0 +1,67 @@
++From f27c12d491955c94583512603bf32c4568f20929 Mon Sep 17 00:00:00 2001
++From: Michael Walz <code@serpedon.de>
++Date: Tue, 2 Feb 2021 00:50:29 +0100
++Subject: [PATCH] Store a copy of each serialized shared_ptr within the archive
++ to prevent the shared_ptr to be freed to early. (#667)
++
++The archives use the memory address pointed by the shared_ptr as a
++unique id which must not be reused during lifetime of the archive.
++Therefore, the archives stores a copy of it.
++This problem was also reported as CVE-2020-11105.
++
++[Retrieved from:
++https://github.com/USCiLab/cereal/commit/f27c12d491955c94583512603bf32c4568f20929]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ include/cereal/cereal.hpp       | 13 +++++++++++--
++ include/cereal/types/memory.hpp |  2 +-
++ 2 files changed, 12 insertions(+), 3 deletions(-)
++
++diff --git a/include/cereal/cereal.hpp b/include/cereal/cereal.hpp
++index 99bed9d6..f0d15e8b 100644
++--- a/include/cereal/cereal.hpp
+++++ b/include/cereal/cereal.hpp
++@@ -369,12 +369,17 @@ namespace cereal
++           point to the same data.
++ 
++           @internal
++-          @param addr The address (see shared_ptr get()) pointed to by the shared pointer
+++          @param sharedPointer The shared pointer itself (the adress is taked via get()).
+++                               The archive takes a copy to prevent the memory location to be freed
+++                               as long as the address is used as id. This is needed to prevent CVE-2020-11105.
++           @return A key that uniquely identifies the pointer */
++-      inline std::uint32_t registerSharedPointer( void const * addr )
+++      inline std::uint32_t registerSharedPointer(const std::shared_ptr<const void>& sharedPointer)
++       {
+++        void const * addr = sharedPointer.get();
+++
++         // Handle null pointers by just returning 0
++         if(addr == 0) return 0;
+++        itsSharedPointerStorage.push_back(sharedPointer);
++ 
++         auto id = itsSharedPointerMap.find( addr );
++         if( id == itsSharedPointerMap.end() )
++@@ -645,6 +650,10 @@ namespace cereal
++       //! Maps from addresses to pointer ids
++       std::unordered_map<void const *, std::uint32_t> itsSharedPointerMap;
++ 
+++      //! Copy of shared pointers used in #itsSharedPointerMap to make sure they are kept alive
+++      //  during lifetime of itsSharedPointerMap to prevent CVE-2020-11105.
+++      std::vector<std::shared_ptr<const void>> itsSharedPointerStorage;
+++
++       //! The id to be given to the next pointer
++       std::uint32_t itsCurrentPointerId;
++ 
++diff --git a/include/cereal/types/memory.hpp b/include/cereal/types/memory.hpp
++index 59e9da9b..cac1f334 100644
++--- a/include/cereal/types/memory.hpp
+++++ b/include/cereal/types/memory.hpp
++@@ -263,7 +263,7 @@ namespace cereal
++   {
++     auto & ptr = wrapper.ptr;
++ 
++-    uint32_t id = ar.registerSharedPointer( ptr.get() );
+++    uint32_t id = ar.registerSharedPointer( ptr );
++     ar( CEREAL_NVP_("id", id) );
++ 
++     if( id & detail::msb_32bit )
+diff --git a/package/cereal/cereal.mk b/package/cereal/cereal.mk
+index c9ce9976bf..19faa2ac4e 100644
+--- a/package/cereal/cereal.mk
++++ b/package/cereal/cereal.mk
+@@ -16,4 +16,7 @@ CEREAL_CONF_OPTS = \
+ 	-DTHREAD_SAFE=ON \
+ 	-DJUST_INSTALL_CEREAL=ON
  
--SYSTEMD_VERSION = 246.5
-+SYSTEMD_VERSION = 247.3
- SYSTEMD_SITE = $(call github,systemd,systemd-stable,v$(SYSTEMD_VERSION))
- SYSTEMD_LICENSE = LGPL-2.1+, GPL-2.0+ (udev), Public Domain (few source files, see README), BSD-3-Clause (tools/chromiumos)
- SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README tools/chromiumos/LICENSE
-@@ -32,6 +32,7 @@ SYSTEMD_CONF_OPTS += \
- 	-Dloadkeys-path=/usr/bin/loadkeys \
- 	-Dman=false \
- 	-Dmount-path=/usr/bin/mount \
-+	-Dmode=release \
- 	-Dnss-systemd=true \
- 	-Dquotacheck-path=/usr/sbin/quotacheck \
- 	-Dquotaon-path=/usr/sbin/quotaon \
-@@ -648,6 +649,7 @@ HOST_SYSTEMD_CONF_OPTS = \
- 	--libdir=lib \
- 	--sysconfdir=/etc \
- 	--localstatedir=/var \
-+	-Dmode=release \
- 	-Dutmp=false \
- 	-Dhibernate=false \
- 	-Dldconfig=false \
++# 0001-Store-a-copy-of-each-serialized-shared_ptr-within-the-archive.patch
++CEREAL_IGNORE_CVES += CVE-2020-11105
++
+ $(eval $(cmake-package))
