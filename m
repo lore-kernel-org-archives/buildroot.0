@@ -1,46 +1,42 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu,  4 Feb 2021 20:49:57 +0100
-Subject: [Buildroot] [PATCH 1/1] package/php: security bump version to 7.4.15
-Message-ID: <20210204194957.498674-1-bernd.kuhls@t-online.de>
+Date: Thu,  4 Feb 2021 20:50:38 +0100
+Subject: [Buildroot] [PATCH 1/1] package/tor: bump version to 0.4.4.7
+Message-ID: <20210204195038.498800-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog: https://www.php.net/ChangeLog-7.php#7.4.15
-
-Fixes CVE-2021-21702: http://bugs.php.net/80672
+Release notes: https://blog.torproject.org/node/1990
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
+ package/tor/tor.hash | 2 +-
+ package/tor/tor.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 46c589661d..d60164d96f 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256  f9f3c37969fcd9006c1dbb1dd76ab53f28c698a1646fa2dde8547c3f45e02886  php-7.4.14.tar.xz
-+sha256  9b859c65f0cf7b3eff9d4a28cfab719fb3d36a1db3c20d874a79b5ec44d43cb8  php-7.4.15.tar.xz
- 
- # License file
- sha256  0967ad6cf4b7fe81d38709d7aaef3fecb3bd685be7eebb37b864aa34c991baa7  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 7a5b7bae04..5ae2467a78 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
+diff --git a/package/tor/tor.hash b/package/tor/tor.hash
+index 7aa7280f2b..4dd86e51f5 100644
+--- a/package/tor/tor.hash
++++ b/package/tor/tor.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  5f154c155803adf5c89e87cab53017b6908c5ebe50c65839e8cf4fbd2abe1fdc  tor-0.4.4.6.tar.gz
++sha256  326d2926177f0c7838cac213456d0056817d57f3f2e46714a2911c7d7a9b05ee  tor-0.4.4.7.tar.gz
+ sha256  ae2afe6cd3fd9d512afbaa1ef218757eb00aa6b6aa5e2dfc2774b6837e373fa1  LICENSE
+diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+index 098c517aa7..8ad4a7a825 100644
+--- a/package/tor/tor.mk
++++ b/package/tor/tor.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PHP_VERSION = 7.4.14
-+PHP_VERSION = 7.4.15
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+-TOR_VERSION = 0.4.4.6
++TOR_VERSION = 0.4.4.7
+ TOR_SITE = https://dist.torproject.org
+ TOR_LICENSE = BSD-3-Clause
+ TOR_LICENSE_FILES = LICENSE
 -- 
 2.29.2
