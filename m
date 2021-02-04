@@ -1,42 +1,75 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu,  4 Feb 2021 20:50:38 +0100
-Subject: [Buildroot] [PATCH 1/1] package/tor: bump version to 0.4.4.7
-Message-ID: <20210204195038.498800-1-bernd.kuhls@t-online.de>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Thu, 4 Feb 2021 22:33:23 +0200
+Subject: [Buildroot] [PATCH 1/1] package/cog: add
+ BR2_PACKAGE_COG_USE_SYSTEM_DBUS
+In-Reply-To: <20210202115721.4136447-1-asweet@thegoodpenguin.co.uk>
+References: <20210202115721.4136447-1-asweet@thegoodpenguin.co.uk>
+Message-ID: <20210204223323.GB441747@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes: https://blog.torproject.org/node/1990
+Hi Adrian,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/tor/tor.hash | 2 +-
- package/tor/tor.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Thanks for the patch, I think adding the option is fine given that there
+are people around who would use it?which seems to be the case.
 
-diff --git a/package/tor/tor.hash b/package/tor/tor.hash
-index 7aa7280f2b..4dd86e51f5 100644
---- a/package/tor/tor.hash
-+++ b/package/tor/tor.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  5f154c155803adf5c89e87cab53017b6908c5ebe50c65839e8cf4fbd2abe1fdc  tor-0.4.4.6.tar.gz
-+sha256  326d2926177f0c7838cac213456d0056817d57f3f2e46714a2911c7d7a9b05ee  tor-0.4.4.7.tar.gz
- sha256  ae2afe6cd3fd9d512afbaa1ef218757eb00aa6b6aa5e2dfc2774b6837e373fa1  LICENSE
-diff --git a/package/tor/tor.mk b/package/tor/tor.mk
-index 098c517aa7..8ad4a7a825 100644
---- a/package/tor/tor.mk
-+++ b/package/tor/tor.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TOR_VERSION = 0.4.4.6
-+TOR_VERSION = 0.4.4.7
- TOR_SITE = https://dist.torproject.org
- TOR_LICENSE = BSD-3-Clause
- TOR_LICENSE_FILES = LICENSE
--- 
-2.29.2
+Unless somebody else has an opinion against, I think we could merge this
+change =]
+
+On Tue, 02 Feb 2021 11:57:21 +0000 Adrian Sweet <asweet@thegoodpenguin.co.uk> wrote:
+> Added config option to expose browser remote control on the D-Bus system bus
+> 
+> Signed-off-by: Adrian Sweet <asweet@thegoodpenguin.co.uk>
+
+Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
+
+> ---
+>  package/cog/Config.in | 6 ++++++
+>  package/cog/cog.mk    | 6 ++++++
+>  2 files changed, 12 insertions(+)
+> 
+> diff --git a/package/cog/Config.in b/package/cog/Config.in
+> index a9ca7473a9..c19f1c200e 100644
+> --- a/package/cog/Config.in
+> +++ b/package/cog/Config.in
+> @@ -47,6 +47,12 @@ config BR2_PACKAGE_COG_PLATFORM_DRM
+>  	  with video drivers that support kernel mode-setting (KMS)
+>  	  via the DRM user-space API.
+>  
+> +config BR2_PACKAGE_COG_USE_SYSTEM_DBUS
+> +	bool "Use D-Bus system bus"
+> +	default n
+> +	help
+> +	  Expose remote control interface on system bus
+> +
+>  comment "DRM platform needs mesa3d w/ EGL driver and GBM"
+>  	depends on !BR2_PACKAGE_MESA3D_OPENGL_EGL
+>  
+> diff --git a/package/cog/cog.mk b/package/cog/cog.mk
+> index 47a5573dda..c5a1cc0df2 100644
+> --- a/package/cog/cog.mk
+> +++ b/package/cog/cog.mk
+> @@ -31,4 +31,10 @@ else
+>  COG_CONF_OPTS += -DCOG_PLATFORM_DRM=OFF
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_COG_USE_SYSTEM_DBUS),y)
+> +COG_CONF_OPTS += -DCOG_DBUS_SYSTEM_BUS=ON
+> +else
+> +COG_CONF_OPTS += -DCOG_DBUS_SYSTEM_BUS=OFF
+> +endif
+> +
+>  $(eval $(cmake-package))
+> -- 
+> 2.25.1
+> 
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210204/7d0f72a4/attachment.asc>
