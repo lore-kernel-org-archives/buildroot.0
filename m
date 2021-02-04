@@ -1,36 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 4 Feb 2021 22:09:53 +0100
-Subject: [Buildroot] [git commit] package/valijson: set VALIJSON_CPE_ID_VALID
-Message-ID: <20210204205101.5A29B82641@busybox.osuosl.org>
+Date: Thu, 4 Feb 2021 22:10:58 +0100
+Subject: [Buildroot] [git commit] package/php: security bump version to
+ 7.4.15
+Message-ID: <20210204205101.782AD83A79@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=befb0105956dca0fd7d84b4098164b894e5a789b
+commit: https://git.buildroot.net/buildroot/commit/?id=c0ed274ffa6bb1373bd5004a7fe4b2cf8b30d0d7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:valijson_project:valijson is a valid CPE identifier for this
-package:
+Changelog: https://www.php.net/ChangeLog-7.php#7.4.15
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Avalijson_project%3Avalijson
+Fixes CVE-2021-21702: http://bugs.php.net/80672
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/valijson/valijson.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/valijson/valijson.mk b/package/valijson/valijson.mk
-index b38c6319a6..29e6342a68 100644
---- a/package/valijson/valijson.mk
-+++ b/package/valijson/valijson.mk
-@@ -8,6 +8,7 @@ VALIJSON_VERSION = 0.3
- VALIJSON_SITE = $(call github,tristanpenman,valijson,v$(VALIJSON_VERSION))
- VALIJSON_LICENSE = BSD-2-Clause
- VALIJSON_LICENSE_FILES = LICENSE
-+VALIJSON_CPE_ID_VALID = YES
- VALIJSON_INSTALL_STAGING = YES
- VALIJSON_INSTALL_TARGET = NO
- VALIJSON_DEPENDENCIES = boost
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 46c589661d..d60164d96f 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From https://www.php.net/downloads.php
+-sha256  f9f3c37969fcd9006c1dbb1dd76ab53f28c698a1646fa2dde8547c3f45e02886  php-7.4.14.tar.xz
++sha256  9b859c65f0cf7b3eff9d4a28cfab719fb3d36a1db3c20d874a79b5ec44d43cb8  php-7.4.15.tar.xz
+ 
+ # License file
+ sha256  0967ad6cf4b7fe81d38709d7aaef3fecb3bd685be7eebb37b864aa34c991baa7  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 7a5b7bae04..5ae2467a78 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PHP_VERSION = 7.4.14
++PHP_VERSION = 7.4.15
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
