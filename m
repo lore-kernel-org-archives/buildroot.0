@@ -1,35 +1,46 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu,  4 Feb 2021 20:46:52 +0100
-Subject: [Buildroot] [PATCH 1/1] package/ghostscript: add
- GHOSTSCRIPT_CPE_ID_VENDOR
-Message-ID: <20210204194652.1347776-1-fontaine.fabrice@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu,  4 Feb 2021 20:49:57 +0100
+Subject: [Buildroot] [PATCH 1/1] package/php: security bump version to 7.4.15
+Message-ID: <20210204194957.498674-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:artifex:ghostscript is a valid CPE identifier for this
-package:
+Changelog: https://www.php.net/ChangeLog-7.php#7.4.15
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aartifex%3Aghostscript
+Fixes CVE-2021-21702: http://bugs.php.net/80672
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/ghostscript/ghostscript.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
-index e6842631f2..5b50c94405 100644
---- a/package/ghostscript/ghostscript.mk
-+++ b/package/ghostscript/ghostscript.mk
-@@ -8,6 +8,7 @@ GHOSTSCRIPT_VERSION = 9.53.3
- GHOSTSCRIPT_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs$(subst .,,$(GHOSTSCRIPT_VERSION))
- GHOSTSCRIPT_LICENSE = AGPL-3.0
- GHOSTSCRIPT_LICENSE_FILES = LICENSE
-+GHOSTSCRIPT_CPE_ID_VENDOR = artifex
- GHOSTSCRIPT_DEPENDENCIES = \
- 	host-lcms2 \
- 	host-libjpeg \
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 46c589661d..d60164d96f 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From https://www.php.net/downloads.php
+-sha256  f9f3c37969fcd9006c1dbb1dd76ab53f28c698a1646fa2dde8547c3f45e02886  php-7.4.14.tar.xz
++sha256  9b859c65f0cf7b3eff9d4a28cfab719fb3d36a1db3c20d874a79b5ec44d43cb8  php-7.4.15.tar.xz
+ 
+ # License file
+ sha256  0967ad6cf4b7fe81d38709d7aaef3fecb3bd685be7eebb37b864aa34c991baa7  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 7a5b7bae04..5ae2467a78 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PHP_VERSION = 7.4.14
++PHP_VERSION = 7.4.15
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
 -- 
 2.29.2
