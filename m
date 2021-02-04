@@ -1,53 +1,58 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 4 Feb 2021 16:33:37 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/chartjs: security
- bump to 2.9.4
-Message-ID: <20210204152021.CE33881E06@busybox.osuosl.org>
+Date: Thu, 04 Feb 2021 17:33:39 +0100
+Subject: [Buildroot] [PATCH] package/linux-headers: with headers from
+ kernel, also override srcdir
+In-Reply-To: <890285e2-7d6a-3343-e8a0-772417b266f0@mind.be> (Arnout
+ Vandecappelle's message of "Tue, 2 Feb 2021 20:10:40 +0100")
+References: <20210127212413.2046623-1-yann.morin.1998@free.fr>
+ <890285e2-7d6a-3343-e8a0-772417b266f0@mind.be>
+Message-ID: <875z37eqsc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7a7442c85c3a21b284a27db3d623db02a10e7538
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-CVE-2020-7746 (https://nvd.nist.gov/vuln/detail/CVE-2020-7746)
+ > On 27/01/2021 22:24, Yann E. MORIN wrote:
+ >> When using the headers from the kernel to be built, with the kernel
+ >> set to a custom version, and overriding the kernel sources with
+ >> LINUX_OVERRIDE_SRCDIR, the linux-headers package is still trying to
+ >> download an archive, and fails to validate its hash.
+ >> 
+ >> What is going on under the hood is that, with _OVERRIDE_SRCDIR, the
+ >> _VERSION of a package is set to 'custom'. Furthermore, the variable
+ >> BR_NO_CHECK_HASH_FOR is recursively expanded, so its value is only
+ >> evaluated when it is needed.
+ >> 
+ >> For linux-headers, we inherit the values from the linux package, and
+ >> the LINUX_HEADERS_VERSION takes the value from the configuration.
+ >> 
+ >> Thus we end up with the following situation:
+ >> 
+ >> LINUX_VERSION=custom
+ >> LINUX_HEADERS_VERSION=5.10   # For example
+ >> BR_NO_CHECK_HASH_FOR=... linux-custom.tar.gz ...
+ >> 
+ >> And thus the archive downloaded by linux-headers will not match any
+ >> exclusion, and since there will most probably not be a hash for it,
+ >> the download will fail, as was noticed and reported by Jarkko.
+ >> 
+ >> But in this case, what we really want is to really use the headers
+ >> from the kernel that we build, we do not even want to attempt a
+ >> download at all.
+ >> 
+ >> So, when using the headers from the kernel to be built, we also
+ >> propagate the LINUX_OVERRIDE_SRCDIR to linux-headers, so that we
+ >> also use the headers from the overridden sources.
+ >> 
+ >> Furthermore, in that configuration, we explicitly disallow
+ >> overriding the linux-headers specifically, as it does not make sense
+ >> (even though, if they were overridden to the same location, that'd
+ >> be OK, but to simplify the condition, we do not even check for that).
 
-    The options parameter is not properly sanitized when it is processed.
-    When the options are processed, the existing options (or the defaults
-    options) are deeply merged with provided options. However, during this
-    operation, the keys of the object being set are not checked, leading to
-    a prototype pollution.
+Committed to 2020.02.x and 2020.11.x, thanks.
 
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit a20a86d7f6571849419f8920f0d1c56bcc4ec9c2)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/chartjs/chartjs.hash | 2 +-
- package/chartjs/chartjs.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/chartjs/chartjs.hash b/package/chartjs/chartjs.hash
-index a029d16ab1..de4d6d4ebf 100644
---- a/package/chartjs/chartjs.hash
-+++ b/package/chartjs/chartjs.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256	8079d8fd39131fcfaec33f1c7799412bcf8e051e25b10bd6e37fc16159417aa1  chartjs-2.9.3.tar.gz
-+sha256	9ef3697e279a585c79730f35dba16ad4e24ddeed49a150adb341c31f191fb78e  chartjs-2.9.4.tar.gz
- sha256	7b43caae91f31b18dc81fae6e0f7aa1acbecaa6d84e3249905cbe15308307d67  LICENSE.md
-diff --git a/package/chartjs/chartjs.mk b/package/chartjs/chartjs.mk
-index 960b3e24af..82c86dc6cc 100644
---- a/package/chartjs/chartjs.mk
-+++ b/package/chartjs/chartjs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CHARTJS_VERSION = 2.9.3
-+CHARTJS_VERSION = 2.9.4
- CHARTJS_SITE = $(call github,chartjs,Chart.js,v$(CHARTJS_VERSION))
- CHARTJS_LICENSE = MIT
- CHARTJS_LICENSE_FILES = LICENSE.md
+-- 
+Bye, Peter Korsgaard
