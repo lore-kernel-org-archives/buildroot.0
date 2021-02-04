@@ -1,25 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 04 Feb 2021 18:17:37 +0100
-Subject: [Buildroot] [PATCH 1/1] package/squashfs: set
- SQUASHFS_CPE_ID_VALID
-In-Reply-To: <20210202173123.1517731-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 2 Feb 2021 18:31:23 +0100")
-References: <20210202173123.1517731-1-fontaine.fabrice@gmail.com>
-Message-ID: <87blczbvm6.fsf@dell.be.48ers.dk>
+Date: Thu, 04 Feb 2021 18:18:53 +0100
+Subject: [Buildroot] [PATCH] package/systemd: bump to version 247.3
+In-Reply-To: <20210203111416.239560-1-nolange79@gmail.com> (Norbert Lange's
+ message of "Wed, 3 Feb 2021 12:14:15 +0100")
+References: <20210203111416.239560-1-nolange79@gmail.com>
+Message-ID: <877dnnbvk2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Norbert" == Norbert Lange <nolange79@gmail.com> writes:
 
- > cpe:2.3:a:squashfs_project:squashfs is a valid CPE identifier for this
- > package:
+ > Drop upstream patch.
+ > Use the new mode=release switch, this should automatically
+ > disable features deemed not ready for use.
 
- >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Asquashfs_project%3Asquashfs
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: Norbert Lange <nolange79@gmail.com>
 
 Committed, thanks.
 
