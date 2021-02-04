@@ -1,72 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 4 Feb 2021 18:15:09 +0100
-Subject: [Buildroot] [git commit] configs/nexbox_a95x_defconfig: bump to
- kernel 5.10.12
-Message-ID: <20210204170218.9D2DD81839@busybox.osuosl.org>
+Date: Thu, 4 Feb 2021 18:15:52 +0100
+Subject: [Buildroot] [git commit] package/iputils: bump version to 20210202
+Message-ID: <20210204170218.CAE2381839@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=850a6ae1ed007b0c071f2c3d414de3b7ef400dee
+commit: https://git.buildroot.net/buildroot/commit/?id=ea422f99508f85665c421d3de9c7a1ceb9f99f19
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The mmc probing order has changed since commit 21b2cec61c04bd1 (mmc: Set
-PROBE_PREFER_ASYNCHRONOUS for drivers that existed in v4.4), so get rid of
-the hardcoded root=/dev/mmcblk1p2.  The old vendor U-Boot unfortunately does
-not have GPT support, so stick to MBR and use the legacy
-root=PARTUUID=<disksignature>-<partition> format and set a fixed disk
-signature, similar to how it was done for orangepi-r1 in commit 34cce93adb
-(configs/orangepi_r1_defconfig: bump kernel to 5.10.10, u-boot to 2020.10).
+Upstream changed version scheme: dropped leading 's', reflect it.
 
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/nexbox/a95x/boot.txt     | 2 +-
- board/nexbox/a95x/genimage.cfg | 2 ++
- configs/nexbox_a95x_defconfig  | 4 ++--
- 3 files changed, 5 insertions(+), 3 deletions(-)
+ package/iputils/iputils.hash | 4 ++--
+ package/iputils/iputils.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/board/nexbox/a95x/boot.txt b/board/nexbox/a95x/boot.txt
-index f388ba814a..eef1c8ca55 100644
---- a/board/nexbox/a95x/boot.txt
-+++ b/board/nexbox/a95x/boot.txt
-@@ -1,4 +1,4 @@
--setenv bootargs console=ttyAML0,115200 earlyprintk root=/dev/mmcblk1p2 rootwait
-+setenv bootargs console=ttyAML0,115200 earlyprintk root=PARTUUID=feedc0de-02 rootwait
+diff --git a/package/iputils/iputils.hash b/package/iputils/iputils.hash
+index 11f46bac28..3e30ca9383 100644
+--- a/package/iputils/iputils.hash
++++ b/package/iputils/iputils.hash
+@@ -1,5 +1,5 @@
+-# https://github.com/iputils/iputils/releases/download/s20200821/sha256sum.asc
+-sha256 f265da0d02dd2259efd8c57a9c2e0c8bb3361abb14639fcffb26707be5783a5b  iputils-20200821.tar.gz
++# https://github.com/iputils/iputils/releases/download/20210202/sha256sum.asc
++sha256 3f557ecfd2ace873801231d2c1f42de73ced9fbc1ef3a438d847688b5fb0e8ab  iputils-20210202.tar.gz
+ # Locally computed
+ sha256 b8ea785d12fa6a44916601104dd746216957e93f13a26d3eb858b3b5a4ad66ab  LICENSE
+ sha256 9acc4bc871a4742550158e3696dcb381953172ef808d04ca248184f9f6322712  Documentation/LICENSE.BSD3
+diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
+index 92974592a6..0273e295d6 100644
+--- a/package/iputils/iputils.mk
++++ b/package/iputils/iputils.mk
+@@ -11,8 +11,8 @@
+ # and IPv6 updates.
+ # http://www.spinics.net/lists/netdev/msg279881.html
  
- fatload mmc 0:1 0x01080000 uImage
- 
-diff --git a/board/nexbox/a95x/genimage.cfg b/board/nexbox/a95x/genimage.cfg
-index 74e2d3a6f9..63b96107c9 100644
---- a/board/nexbox/a95x/genimage.cfg
-+++ b/board/nexbox/a95x/genimage.cfg
-@@ -12,6 +12,8 @@ image boot.vfat {
- 
- image sdcard.img {
- 	hdimage {
-+		# for root=PARTUUID support
-+		disk-signature = 0xfeedc0de
- 	}
- 
- 	partition boot {
-diff --git a/configs/nexbox_a95x_defconfig b/configs/nexbox_a95x_defconfig
-index 4820d47d52..69f8b9078f 100644
---- a/configs/nexbox_a95x_defconfig
-+++ b/configs/nexbox_a95x_defconfig
-@@ -1,13 +1,13 @@
- BR2_aarch64=y
- BR2_cortex_a53=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
- BR2_SYSTEM_DHCP="eth0"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/nexbox/a95x/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/nexbox/a95x/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.8"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.12"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="amlogic/meson-gxbb-nexbox-a95x amlogic/meson-gxl-s905x-nexbox-a95x"
+-IPUTILS_VERSION = 20200821
+-IPUTILS_SITE = $(call github,iputils,iputils,s$(IPUTILS_VERSION))
++IPUTILS_VERSION = 20210202
++IPUTILS_SITE = $(call github,iputils,iputils,$(IPUTILS_VERSION))
+ IPUTILS_LICENSE = GPL-2.0+, BSD-3-Clause
+ IPUTILS_LICENSE_FILES = LICENSE Documentation/LICENSE.BSD3 Documentation/LICENSE.GPL2
+ IPUTILS_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
