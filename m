@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 04 Feb 2021 18:10:38 +0100
-Subject: [Buildroot] [PATCH] package/python-bottle: security bump to
- version 0.12.19
-In-Reply-To: <20210202153319.11644-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Tue, 2 Feb 2021 16:33:19 +0100")
-References: <20210202153319.11644-1-peter@korsgaard.com>
-Message-ID: <87wnvnbvxt.fsf@dell.be.48ers.dk>
+Date: Thu, 04 Feb 2021 18:10:47 +0100
+Subject: [Buildroot] [PATCH v2] configs/nexbox_a95x_defconfig: bump to
+ kernel 5.10.12
+In-Reply-To: <20210202100508.30949-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 2 Feb 2021 11:05:08 +0100")
+References: <20210202100508.30949-1-peter@korsgaard.com>
+Message-ID: <87sg6bbvxk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,21 +14,18 @@ To: buildroot@busybox.net
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Fixes the following security issue:
- > CVE-2020-28473: The package bottle from 0 and before 0.12.19 are vulnerable
- > to Web Cache Poisoning by using a vector called parameter cloaking.  When
- > the attacker can separate query parameters using a semicolon (;), they can
- > cause a difference in the interpretation of the request between the proxy
- > (running with default configuration) and the server.  This can result in
- > malicious requests being cached as completely safe ones, as the proxy would
- > usually not see the semicolon as a separator, and therefore would not
- > include it in a cache key of an unkeyed parameter.
-
- > In addition, bottle 0.12.18 fixed a compatibility issue with python 3.8+:
-
- > https://github.com/bottlepy/bottle/issues/1181
+ > The mmc probing order has changed since commit 21b2cec61c04bd1 (mmc: Set
+ > PROBE_PREFER_ASYNCHRONOUS for drivers that existed in v4.4), so get rid of
+ > the hardcoded root=/dev/mmcblk1p2.  The old vendor U-Boot unfortunately does
+ > not have GPT support, so stick to MBR and use the legacy
+ > root=PARTUUID=<disksignature>-<partition> format and set a fixed disk
+ > signature, similar to how it was done for orangepi-r1 in commit 34cce93adb
+ > (configs/orangepi_r1_defconfig: bump kernel to 5.10.10, u-boot to 2020.10).
 
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > ---
+ > Changes since v1:
+ > - Keep MBR format, somehow ended up testing wrong image in v1.
 
 Committed, thanks.
 
