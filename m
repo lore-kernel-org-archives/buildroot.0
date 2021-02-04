@@ -1,103 +1,63 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 4 Feb 2021 17:54:38 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/libbsd: needs
- dynamic library
-Message-ID: <20210204164022.B74387FE3E@busybox.osuosl.org>
+From: Kory Maincent <kory.maincent@bootlin.com>
+Date: Thu,  4 Feb 2021 18:04:46 +0100
+Subject: [Buildroot] [PATCH] boot/uboot: fix uboot build
+Message-ID: <20210204170446.15188-1-kory.maincent@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d712141cc5144348754240a6b35c69a9fc61975a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+The make all command run the tools/makefile on the process.
+This makefile use "pkg-config" command to support static link.
+The issue is the use of pkg-config configured for crosscompiling
+to build binaries tools for host architecture.
+To fix it, I copied the behavior of QtWebengine by using a pkg-config
+executable preconfigured for host.
 
-Static linking with libbsd fails because of multiple definition of the
-strlcpy symbol. uClibc optionally provides these symbols.
-
-So add a dependency on dynamic library to avoid a build failure with a
-zeromq-enabled bitcoin or with stress-ng.
-
-Fixes:
- - http://autobuild.buildroot.org/results/ba87544d42ad5e77a27a7a504bc6336a06f6e291
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 1edd0ac66a28e975610abdd60e02ad147c6c97e4)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
 ---
- package/fwts/Config.in           | 5 +++--
- package/libbsd/Config.in         | 6 ++++--
- package/netcat-openbsd/Config.in | 6 ++++--
- 3 files changed, 11 insertions(+), 6 deletions(-)
+ boot/uboot/host-pkg-config.in |  6 ++++++
+ boot/uboot/uboot.mk           | 10 +++++++++-
+ 2 files changed, 15 insertions(+), 1 deletion(-)
+ create mode 100644 boot/uboot/host-pkg-config.in
 
-diff --git a/package/fwts/Config.in b/package/fwts/Config.in
-index ff28a4a403..ac9a2e3909 100644
---- a/package/fwts/Config.in
-+++ b/package/fwts/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_FWTS
- 	depends on BR2_USE_MMU # libglib2
- 	depends on BR2_USE_WCHAR # libglib2, libbsd
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2, libbsd
-+	depends on !BR2_STATIC_LIBS # libbsd
- 	depends on BR2_TOOLCHAIN_USES_GLIBC # execinfo.h
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_LIBBSD
-@@ -31,9 +32,9 @@ comment "efi_runtime module needs a Linux kernel to be built"
- 	depends on !BR2_LINUX_KERNEL
- endif
+diff --git a/boot/uboot/host-pkg-config.in b/boot/uboot/host-pkg-config.in
+new file mode 100644
+index 0000000000..86a980648b
+--- /dev/null
++++ b/boot/uboot/host-pkg-config.in
+@@ -0,0 +1,6 @@
++#!/bin/sh
++PKG_CONFIG_SYSROOT_DIR="/" \
++PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
++PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
++PKG_CONFIG_LIBDIR="@HOST_DIR@/lib/pkgconfig:@HOST_DIR@/share/pkgconfig" \
++exec @HOST_DIR@/bin/pkgconf "$@"
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 2478a2a1e9..0bcc1ac9a9 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -302,11 +302,19 @@ endif # BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY
  
--comment "fwts needs a glibc toolchain w/ wchar, threads"
-+comment "fwts needs a glibc toolchain w/ wchar, threads, dynamic library"
- 	depends on BR2_i386 || BR2_x86_64 || BR2_aarch64
- 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS # libbsd
- 	depends on BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_TOOLCHAIN_USES_GLIBC
-+		!BR2_TOOLCHAIN_USES_GLIBC || BR2_STATIC_LIBS
-diff --git a/package/libbsd/Config.in b/package/libbsd/Config.in
-index e54f5e6f23..845a22162b 100644
---- a/package/libbsd/Config.in
-+++ b/package/libbsd/Config.in
-@@ -10,6 +10,7 @@ config BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
- config BR2_PACKAGE_LIBBSD
- 	bool "libbsd"
- 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
-+	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_WCHAR
- 	help
-@@ -21,6 +22,7 @@ config BR2_PACKAGE_LIBBSD
+ UBOOT_CUSTOM_DTS_PATH = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_DTS_PATH))
  
- 	  http://libbsd.freedesktop.org/
- 
--comment "libbsd needs a toolchain w/ threads, wchar"
-+comment "libbsd needs a toolchain w/ dynamic library, threads, wchar"
- 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_USE_WCHAR
-diff --git a/package/netcat-openbsd/Config.in b/package/netcat-openbsd/Config.in
-index 4734ff9901..beaa8ed451 100644
---- a/package/netcat-openbsd/Config.in
-+++ b/package/netcat-openbsd/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_NETCAT_OPENBSD
- 	bool "netcat-openbsd"
- 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
-+	depends on !BR2_STATIC_LIBS # libbsd
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-@@ -21,8 +22,9 @@ config BR2_PACKAGE_NETCAT_OPENBSD
- 
- 	  https://packages.debian.org/sid/netcat-openbsd
- 
--comment "netcat-openbsd needs a glibc toolchain w/ threads, headers >= 3.12"
-+comment "netcat-openbsd needs a glibc toolchain w/ dynamic library, threads, headers >= 3.12"
- 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_USES_GLIBC || \
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_TOOLCHAIN_USES_GLIBC || \
- 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
- 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
++define UBOOT_CREATE_HOST_PKG_CONFIG
++	mkdir -p $(@D)/host-bin
++	sed s%@HOST_DIR@%$(HOST_DIR)%g $(UBOOT_PKGDIR)/host-pkg-config.in > $(@D)/host-bin/pkg-config
++	chmod +x $(@D)/host-bin/pkg-config
++endef
++UBOOT_PRE_CONFIGURE_HOOKS = UBOOT_CREATE_HOST_PKG_CONFIG
++UBOOT_ENV = PATH=$(@D)/host-bin:$(BR_PATH)
++
+ define UBOOT_BUILD_CMDS
+ 	$(if $(UBOOT_CUSTOM_DTS_PATH),
+ 		cp -f $(UBOOT_CUSTOM_DTS_PATH) $(@D)/arch/$(UBOOT_ARCH)/dts/
+ 	)
+-	$(TARGET_CONFIGURE_OPTS) \
++	$(TARGET_CONFIGURE_OPTS) $(UBOOT_ENV) \
+ 		$(UBOOT_MAKE) -C $(@D) $(UBOOT_MAKE_OPTS) \
+ 		$(UBOOT_MAKE_TARGET)
+ 	$(if $(BR2_TARGET_UBOOT_FORMAT_SD),
+-- 
+2.17.1
