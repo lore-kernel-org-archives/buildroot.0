@@ -1,63 +1,108 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 4 Feb 2021 18:15:16 +0100
-Subject: [Buildroot] [git commit] package/python-bottle: security bump to
- version 0.12.19
-Message-ID: <20210204170218.AD7F681839@busybox.osuosl.org>
+Date: Thu, 4 Feb 2021 18:17:58 +0100
+Subject: [Buildroot] [git commit] package/systemd: bump to version 247.3
+Message-ID: <20210204170218.EEDCA811D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=14cc349d267c61a4c2e29a3dc307ae5309b6fc6f
+commit: https://git.buildroot.net/buildroot/commit/?id=697180b5ac343c7723836ab8910ca920959e998e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following security issue:
+Drop upstream patch.
 
-CVE-2020-28473: The package bottle from 0 and before 0.12.19 are vulnerable
-to Web Cache Poisoning by using a vector called parameter cloaking.  When
-the attacker can separate query parameters using a semicolon (;), they can
-cause a difference in the interpretation of the request between the proxy
-(running with default configuration) and the server.  This can result in
-malicious requests being cached as completely safe ones, as the proxy would
-usually not see the semicolon as a separator, and therefore would not
-include it in a cache key of an unkeyed parameter.
+Use the new mode=release switch, this should automatically
+disable features deemed not ready for use.
 
-In addition, bottle 0.12.18 fixed a compatibility issue with python 3.8+:
-
-https://github.com/bottlepy/bottle/issues/1181
-
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-bottle/python-bottle.hash | 4 ++--
- package/python-bottle/python-bottle.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...one-Do-not-fail-with-read-only-etc-or-var.patch | 34 ----------------------
+ package/systemd/systemd.hash                       |  4 +--
+ package/systemd/systemd.mk                         |  4 ++-
+ 3 files changed, 5 insertions(+), 37 deletions(-)
 
-diff --git a/package/python-bottle/python-bottle.hash b/package/python-bottle/python-bottle.hash
-index 03558c1abc..7dcaac8dc6 100644
---- a/package/python-bottle/python-bottle.hash
-+++ b/package/python-bottle/python-bottle.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/bottle/json
--md5	c7d8a42dbc6955593e5b9f957e650a60  bottle-0.12.17.tar.gz
--sha256	e9eaa412a60cc3d42ceb42f58d15864d9ed1b92e9d630b8130c871c5bb16107c  bottle-0.12.17.tar.gz
-+md5  50075544706b5e662a3fbd9a98e24b07  bottle-0.12.19.tar.gz
-+sha256	a9d73ffcbc6a1345ca2d7949638db46349f5b2b77dac65d6494d45c23628da2c  bottle-0.12.19.tar.gz
- # Locally computed sha256 checksums
- sha256	d0e7211f1c3c1a1c56f39d18bcb07f27f480c8a9552617756dda3a335933b8a6  LICENSE
-diff --git a/package/python-bottle/python-bottle.mk b/package/python-bottle/python-bottle.mk
-index a8879010e8..18f1507a97 100644
---- a/package/python-bottle/python-bottle.mk
-+++ b/package/python-bottle/python-bottle.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/systemd/0001-update-done-Do-not-fail-with-read-only-etc-or-var.patch b/package/systemd/0001-update-done-Do-not-fail-with-read-only-etc-or-var.patch
+deleted file mode 100644
+index 01e7f1e906..0000000000
+--- a/package/systemd/0001-update-done-Do-not-fail-with-read-only-etc-or-var.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-From e2a23672a1bbf4d3411dce0289051b5a72bd4a67 Mon Sep 17 00:00:00 2001
+-From: Felix Riemann <felix.riemann@sma.de>
+-Date: Mon, 19 Oct 2020 18:54:53 +0200
+-Subject: [PATCH] update-done: Do not fail with read-only /etc or /var
+-
+-With the switch from log_debug() to log_debug_errno() in commit c413bb28df
+-systemd-update-done would fail without any error message if /etc
+-or /var were read-only. This restores the previous behaviour to
+-silently ignore these directories again.
+-
+-[Romain: backport from 1eee15c3885fcc9f6a40df7e42347cb8fca71280]
+-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+----
+- src/update-done/update-done.c | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/src/update-done/update-done.c b/src/update-done/update-done.c
+-index e9d589e0e5..92c348d83b 100644
+---- a/src/update-done/update-done.c
+-+++ b/src/update-done/update-done.c
+-@@ -31,8 +31,8 @@ static int apply_timestamp(const char *path, struct timespec *ts) {
+- 
+-         r = write_string_file_atomic_label_ts(path, message, ts);
+-         if (r == -EROFS)
+--                return log_debug_errno(r, "Cannot create \"%s\", file system is read-only.", path);
+--        if (r < 0)
+-+                log_debug_errno(r, "Cannot create \"%s\", file system is read-only.", path);
+-+        else if (r < 0)
+-                 return log_error_errno(r, "Failed to write \"%s\": %m", path);
+-         return 0;
+- }
+--- 
+-2.25.4
+-
+diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
+index cad249199c..20cd922259 100644
+--- a/package/systemd/systemd.hash
++++ b/package/systemd/systemd.hash
+@@ -1,6 +1,6 @@
+ # sha256 locally computed
+-sha256  f45c5a98d3be7dd05ed7f1e1a0ab00c7ba52602aa2dc42615bf74be61fcbe178  systemd-246.5.tar.gz
++sha256  2869986e219a8dfc96cc0dffac66e0c13bb70a89e16b85a3948876c146cfa3e0  systemd-247.3.tar.gz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
+-sha256  b142af99a3d950fb465326d6fd5a49d348523dc0d216682880527264d0a011e9  README
++sha256  6f22d19d35b00f35e0444e0bc9139e6d3bdf7277978f89c4e175e37b18c43f3d  README
+ sha256  83bb6bd9ccd2cf5230cb1807ed16258289768dc4d9cb80069a814e04415a1275  tools/chromiumos/LICENSE
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 51d0a7b558..64f23c38a9 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_BOTTLE_VERSION = 0.12.17
-+PYTHON_BOTTLE_VERSION = 0.12.19
- PYTHON_BOTTLE_SOURCE = bottle-$(PYTHON_BOTTLE_VERSION).tar.gz
--PYTHON_BOTTLE_SITE = https://files.pythonhosted.org/packages/c4/a5/6bf41779860e9b526772e1b3b31a65a22bd97535572988d16028c5ab617d
-+PYTHON_BOTTLE_SITE = https://files.pythonhosted.org/packages/ea/80/3d2dca1562ffa1929017c74635b4cb3645a352588de89e90d0bb53af3317
- PYTHON_BOTTLE_LICENSE = MIT
- PYTHON_BOTTLE_LICENSE_FILES = LICENSE
- PYTHON_BOTTLE_SETUP_TYPE = setuptools
+-SYSTEMD_VERSION = 246.5
++SYSTEMD_VERSION = 247.3
+ SYSTEMD_SITE = $(call github,systemd,systemd-stable,v$(SYSTEMD_VERSION))
+ SYSTEMD_LICENSE = LGPL-2.1+, GPL-2.0+ (udev), Public Domain (few source files, see README), BSD-3-Clause (tools/chromiumos)
+ SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README tools/chromiumos/LICENSE
+@@ -32,6 +32,7 @@ SYSTEMD_CONF_OPTS += \
+ 	-Dloadkeys-path=/usr/bin/loadkeys \
+ 	-Dman=false \
+ 	-Dmount-path=/usr/bin/mount \
++	-Dmode=release \
+ 	-Dnss-systemd=true \
+ 	-Dquotacheck-path=/usr/sbin/quotacheck \
+ 	-Dquotaon-path=/usr/sbin/quotaon \
+@@ -648,6 +649,7 @@ HOST_SYSTEMD_CONF_OPTS = \
+ 	--libdir=lib \
+ 	--sysconfdir=/etc \
+ 	--localstatedir=/var \
++	-Dmode=release \
+ 	-Dutmp=false \
+ 	-Dhibernate=false \
+ 	-Dldconfig=false \
