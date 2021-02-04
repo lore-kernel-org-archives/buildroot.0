@@ -1,35 +1,28 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu,  4 Feb 2021 20:03:22 +0100
-Subject: [Buildroot] [PATCH 1/1] package/capnproto: add
- CAPNPROTO_CPE_ID_VENDOR
-Message-ID: <20210204190322.1270491-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 04 Feb 2021 20:29:16 +0100
+Subject: [Buildroot] [PATCH 1/1] package/sysklogd: replace local
+ syslog.conf sample with upstream
+In-Reply-To: <20210201125236.451176-1-troglobit@gmail.com> (Joachim Wiberg's
+ message of "Mon, 1 Feb 2021 13:52:36 +0100")
+References: <20210201125236.451176-1-troglobit@gmail.com>
+Message-ID: <87pn1faayb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:capnproto:capnproto is a valid CPE identifier for this
-package:
+>>>>> "Joachim" == Joachim Wiberg <troglobit@gmail.com> writes:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Acapnproto%3Acapnproto
+ > This patch drops the local syslog.conf in favor of the one shipped with
+ > sysklogd.  The upstream syslog.conf sample differs from the Buildroot
+ > one primarily in shifting to /var/log/syslog as the default for log
+ > messages.  It also comes with a dedicated /var/log/kern.log and some
+ > commented-out filtering examples.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/capnproto/capnproto.mk | 1 +
- 1 file changed, 1 insertion(+)
+ > Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
 
-diff --git a/package/capnproto/capnproto.mk b/package/capnproto/capnproto.mk
-index 2e7b095cbf..901b57ecda 100644
---- a/package/capnproto/capnproto.mk
-+++ b/package/capnproto/capnproto.mk
-@@ -8,6 +8,7 @@ CAPNPROTO_VERSION = 0.8.0
- CAPNPROTO_SITE = $(call github,capnproto,capnproto,v$(CAPNPROTO_VERSION))
- CAPNPROTO_LICENSE = MIT
- CAPNPROTO_LICENSE_FILES = LICENSE
-+CAPNPROTO_CPE_ID_VENDOR = capnproto
- CAPNPROTO_INSTALL_STAGING = YES
- # Fetched from Github with no configure script
- CAPNPROTO_AUTORECONF = YES
+Committed, thanks.
+
 -- 
-2.29.2
+Bye, Peter Korsgaard
