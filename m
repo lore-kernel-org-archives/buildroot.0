@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 04 Feb 2021 18:17:06 +0100
-Subject: [Buildroot] [PATCH 1/1] package/smartmontools: add
- SMARTMONTOOLS_CPE_ID_VENDOR
-In-Reply-To: <20210202172915.1517445-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 2 Feb 2021 18:29:15 +0100")
-References: <20210202172915.1517445-1-fontaine.fabrice@gmail.com>
-Message-ID: <87ft2bbvn1.fsf@dell.be.48ers.dk>
+Date: Thu, 04 Feb 2021 18:17:37 +0100
+Subject: [Buildroot] [PATCH 1/1] package/squashfs: set
+ SQUASHFS_CPE_ID_VALID
+In-Reply-To: <20210202173123.1517731-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 2 Feb 2021 18:31:23 +0100")
+References: <20210202173123.1517731-1-fontaine.fabrice@gmail.com>
+Message-ID: <87blczbvm6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,10 +14,10 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > cpe:2.3:a:smartmontools:smartmontools is a valid CPE identifier for this
+ > cpe:2.3:a:squashfs_project:squashfs is a valid CPE identifier for this
  > package:
 
- >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Asmartmontools%3Asmartmontools
+ >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Asquashfs_project%3Asquashfs
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
