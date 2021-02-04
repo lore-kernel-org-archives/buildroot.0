@@ -1,53 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 4 Feb 2021 17:52:06 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/pkg-meson.mk: fix
- ccache auto-detection avoidance
-Message-ID: <20210204164022.963A981592@busybox.osuosl.org>
+Date: Thu, 4 Feb 2021 17:56:08 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] Revert
+ "package/stress-ng: disable libbsd on static build"
+Message-ID: <20210204164022.C7B538199C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=31b3bf6200b686bf0f5dd09312f3fe2ac272aff7
+commit: https://git.buildroot.net/buildroot/commit/?id=7f4a11e2f84a96fca23d9f2f25597e959110491e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-Commit f4a61d1ae23e (package/pkg-meson.mk avoid host ccache detection)
-forced the host C and C++ compilers so that meson does not try to
-autodetect ccache, and instead relies on what we provide.
+This reverts commit f2d6c5ff9092aa7735c7a739d15180910ae734df.
 
-However, this incorrectly used single-expansion of variables in a
-package infra.
+Now that libbsd can't be enabled for static builds, we can drop the
+workaround specific to stress-ng.
 
-For traditional builds, this is OK, because the value does not change
-across packages.
-
-However, for builds with per-package directories, this value only refers
-to the generic path, which ill not exist until the end of the build when
-all packages are aggregated in the host-finalize step.
-
-Fix that by postponing the variable evaluation like all the others.
-
-Reported-by: Xogium on IRC
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 548b8c541285cedc390c4c95bd9d80dbad7d2a73)
+(cherry picked from commit 53213e762daa6e3e5ae11a27950d0c4cab2eff47)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-meson.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/stress-ng/stress-ng.mk | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-index de0e6e8ea3..aafb441fae 100644
---- a/package/pkg-meson.mk
-+++ b/package/pkg-meson.mk
-@@ -82,8 +82,8 @@ define $(2)_CONFIGURE_CMDS
- 	    package/meson/cross-compilation.conf.in \
- 	    > $$($$(PKG)_SRCDIR)/build/cross-compilation.conf
- 	PATH=$$(BR_PATH) \
--	CC_FOR_BUILD="$(HOSTCC)" \
--	CXX_FOR_BUILD="$(HOSTCC)" \
-+	CC_FOR_BUILD="$$(HOSTCC)" \
-+	CXX_FOR_BUILD="$$(HOSTCC)" \
- 	$$($$(PKG)_CONF_ENV) \
- 	$$(MESON) \
- 		--prefix=/usr \
+diff --git a/package/stress-ng/stress-ng.mk b/package/stress-ng/stress-ng.mk
+index 4afdb0a329..57464e9bbf 100644
+--- a/package/stress-ng/stress-ng.mk
++++ b/package/stress-ng/stress-ng.mk
+@@ -10,11 +10,8 @@ STRESS_NG_SITE = http://kernel.ubuntu.com/~cking/tarballs/stress-ng
+ STRESS_NG_LICENSE = GPL-2.0+
+ STRESS_NG_LICENSE_FILES = COPYING
+ 
+-ifeq ($(BR2_PACKAGE_LIBBSD):$(BR2_STATIC_LIBS),y:)
++ifeq ($(BR2_PACKAGE_LIBBSD),y)
+ STRESS_NG_DEPENDENCIES += libbsd
+-else
+-STRESS_NG_MAKE_OPTS += HAVE_LIB_BSD=0 HAVE_WCSLCAT=0 \
+-	HAVE_WCSLCPY=0 HAVE_SETPROCTITLE=0
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_KEYUTILS),y)
+@@ -22,7 +19,7 @@ STRESS_NG_DEPENDENCIES += keyutils
+ endif
+ 
+ define STRESS_NG_BUILD_CMDS
+-	$(TARGET_CONFIGURE_OPTS) $(MAKE) $(STRESS_NG_MAKE_OPTS) -C $(@D)
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
+ endef
+ 
+ # Don't use make install otherwise stress-ng will be rebuild without
