@@ -1,49 +1,45 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 4 Feb 2021 20:30:49 +0100
-Subject: [Buildroot] [git commit] package/python-bluezero: bump to version
- 0.5.0
-Message-ID: <20210204191930.04D3C8122F@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu,  4 Feb 2021 20:43:20 +0100
+Subject: [Buildroot] [PATCH 1/1] package/clamav: bump version to 0.103.1
+Message-ID: <20210204194320.347542-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8dea50533a52e8ce4ae8bc79dbef56784ce820c7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Release notes:
+https://blog.clamav.net/2021/02/clamav-01031-patch-release.html
 
-Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/python-bluezero/python-bluezero.hash | 4 ++--
- package/python-bluezero/python-bluezero.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/clamav/clamav.hash | 2 +-
+ package/clamav/clamav.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-bluezero/python-bluezero.hash b/package/python-bluezero/python-bluezero.hash
-index d21fefe6e4..d0df83c4c6 100644
---- a/package/python-bluezero/python-bluezero.hash
-+++ b/package/python-bluezero/python-bluezero.hash
+diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
+index bc1bf3bf90..1b2325870d 100644
+--- a/package/clamav/clamav.hash
++++ b/package/clamav/clamav.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/bluezero/json
--md5  342718365dbb0df9aa1fb7ea5e405320  bluezero-0.4.0.tar.gz
--sha256  38bc608d26b4381ac3bb2a1d1cf039f1a9891f933b45cf296dbd606557332fad  bluezero-0.4.0.tar.gz
-+md5  4004c165f762029c2139f31c269a7531  bluezero-0.5.0.tar.gz
-+sha256  d9562a2d107abc918ffdabd4646039c15c54ca1fca0cec91aa45ba6135d2d0b1  bluezero-0.5.0.tar.gz
- # Locally computed sha256 checksums
- sha256  59319e80b4caa94ace4817c9f84aa16abc9d4d2b5f7866251b5fda92e87ccdef  LICENSE
-diff --git a/package/python-bluezero/python-bluezero.mk b/package/python-bluezero/python-bluezero.mk
-index cce45b6bdc..27e11efc14 100644
---- a/package/python-bluezero/python-bluezero.mk
-+++ b/package/python-bluezero/python-bluezero.mk
-@@ -4,9 +4,9 @@
+ # Locally calculated
+-sha256  32a9745277bfdda80e77ac9ca2f5990897418e9416880f3c31553ca673e80546  clamav-0.103.0.tar.gz
++sha256  7308c47b89b268af3b9f36140528927a49ff3e633a9c9c0aac2712d81056e257  clamav-0.103.1.tar.gz
+ sha256  0c4fd2fa9733fc9122503797648710851e4ee6d9e4969dd33fcbd8c63cd2f584  COPYING
+ sha256  d72a145c90918184a05ef65a04c9e6f7466faa59bc1b82c8f6a8ddc7ddcb9bed  COPYING.bzip2
+ sha256  dfb818a0d41411c6fb1c193c68b73018ceadd1994bda41ad541cbff292894bc6  COPYING.file
+diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
+index 1d90073084..4cd13fb827 100644
+--- a/package/clamav/clamav.mk
++++ b/package/clamav/clamav.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_BLUEZERO_VERSION = 0.4.0
-+PYTHON_BLUEZERO_VERSION = 0.5.0
- PYTHON_BLUEZERO_SOURCE = bluezero-$(PYTHON_BLUEZERO_VERSION).tar.gz
--PYTHON_BLUEZERO_SITE = https://files.pythonhosted.org/packages/14/ee/ac038391cf41838ff724e8a11d939e86329043724a7cfd03152f13688bd7
-+PYTHON_BLUEZERO_SITE = https://files.pythonhosted.org/packages/90/63/67c56cebe6f741b190f047531810911cfb528e9c0ec6db8d4c911808ba32
- PYTHON_BLUEZERO_SETUP_TYPE = setuptools
- PYTHON_BLUEZERO_LICENSE = MIT
- PYTHON_BLUEZERO_LICENSE_FILES = LICENSE
+-CLAMAV_VERSION = 0.103.0
++CLAMAV_VERSION = 0.103.1
+ CLAMAV_SITE = https://www.clamav.net/downloads/production
+ CLAMAV_LICENSE = GPL-2.0
+ CLAMAV_LICENSE_FILES = COPYING COPYING.bzip2 COPYING.file COPYING.getopt \
+-- 
+2.29.2
