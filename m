@@ -1,53 +1,67 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 4 Feb 2021 16:33:26 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/chartjs: move 'v'
- version prefix out of CHARTJS_VERSION
-Message-ID: <20210204152021.BD05581E06@busybox.osuosl.org>
+Date: Thu, 4 Feb 2021 16:38:52 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/dnsmasq: bump to
+ version 2.82
+Message-ID: <20210204152021.E16C781880@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=810926dffef7a54be08ddbc64cf2666e42542fe3
+commit: https://git.buildroot.net/buildroot/commit/?id=4d390fc5dd429691b2a6545c07b6948883e612e8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-chartjs 2.9.3 has a security vulnerability (CVE-2020-7746) which is not
-detected by the CVE scripts, presumably because our version variable starts
-with a 'v'.
+Drop Makefile modification for pkg-config. Build time PATH ensures that
+the Buildroot pkg-config is used.
 
-Move that 'v' prefix out of the version variable to fix that.
-
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 0244b11597461919d4240f9ee93dcb61a27e47d4)
+(cherry picked from commit 62257b3247d253639354a5519ac51ca1e4daff05)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/chartjs/chartjs.hash | 2 +-
- package/chartjs/chartjs.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/dnsmasq/dnsmasq.hash | 4 ++--
+ package/dnsmasq/dnsmasq.mk   | 8 +-------
+ 2 files changed, 3 insertions(+), 9 deletions(-)
 
-diff --git a/package/chartjs/chartjs.hash b/package/chartjs/chartjs.hash
-index d2426ea614..a029d16ab1 100644
---- a/package/chartjs/chartjs.hash
-+++ b/package/chartjs/chartjs.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256	8079d8fd39131fcfaec33f1c7799412bcf8e051e25b10bd6e37fc16159417aa1  chartjs-v2.9.3.tar.gz
-+sha256	8079d8fd39131fcfaec33f1c7799412bcf8e051e25b10bd6e37fc16159417aa1  chartjs-2.9.3.tar.gz
- sha256	7b43caae91f31b18dc81fae6e0f7aa1acbecaa6d84e3249905cbe15308307d67  LICENSE.md
-diff --git a/package/chartjs/chartjs.mk b/package/chartjs/chartjs.mk
-index 171e0a4a7c..960b3e24af 100644
---- a/package/chartjs/chartjs.mk
-+++ b/package/chartjs/chartjs.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/dnsmasq/dnsmasq.hash b/package/dnsmasq/dnsmasq.hash
+index 99e417f069..401f930baf 100644
+--- a/package/dnsmasq/dnsmasq.hash
++++ b/package/dnsmasq/dnsmasq.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# http://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.81.tar.xz.asc
+-sha256  749ca903537c5197c26444ac24b0dce242cf42595fdfe6b9a5b9e4c7ad32f8fb  dnsmasq-2.81.tar.xz
++# http://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.82.tar.xz.asc
++sha256  84523646f3116bb5e1151efb66e645030f6e6a8256f29aab444777a343ebc132  dnsmasq-2.82.tar.xz
+ # Locally calculated
+ sha256  dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa  COPYING
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING-v3
+diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
+index 4a7218a2b7..117be38d4b 100644
+--- a/package/dnsmasq/dnsmasq.mk
++++ b/package/dnsmasq/dnsmasq.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CHARTJS_VERSION = v2.9.3
--CHARTJS_SITE = $(call github,chartjs,Chart.js,$(CHARTJS_VERSION))
-+CHARTJS_VERSION = 2.9.3
-+CHARTJS_SITE = $(call github,chartjs,Chart.js,v$(CHARTJS_VERSION))
- CHARTJS_LICENSE = MIT
- CHARTJS_LICENSE_FILES = LICENSE.md
+-DNSMASQ_VERSION = 2.81
++DNSMASQ_VERSION = 2.82
+ DNSMASQ_SOURCE = dnsmasq-$(DNSMASQ_VERSION).tar.xz
+ DNSMASQ_SITE = http://thekelleys.org.uk/dnsmasq
+ DNSMASQ_MAKE_ENV = $(TARGET_MAKE_ENV) CC="$(TARGET_CC)"
+@@ -77,13 +77,7 @@ DNSMASQ_DEPENDENCIES += ubus
+ DNSMASQ_COPTS += -DHAVE_UBUS
+ endif
  
+-define DNSMASQ_FIX_PKGCONFIG
+-	$(SED) 's^PKG_CONFIG = pkg-config^PKG_CONFIG = $(PKG_CONFIG_HOST_BINARY)^' \
+-		$(DNSMASQ_DIR)/Makefile
+-endef
+-
+ define DNSMASQ_BUILD_CMDS
+-	$(DNSMASQ_FIX_PKGCONFIG)
+ 	$(DNSMASQ_TWEAK_LIBLUA)
+ 	$(DNSMASQ_MAKE_ENV) $(MAKE) -C $(@D) $(DNSMASQ_MAKE_OPTS) all$(DNSMASQ_I18N)
+ endef
