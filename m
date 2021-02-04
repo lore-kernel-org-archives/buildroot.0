@@ -1,49 +1,63 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 4 Feb 2021 18:15:52 +0100
-Subject: [Buildroot] [git commit] package/iputils: bump version to 20210202
-Message-ID: <20210204170218.CAE2381839@busybox.osuosl.org>
+Date: Thu, 4 Feb 2021 18:15:16 +0100
+Subject: [Buildroot] [git commit] package/python-bottle: security bump to
+ version 0.12.19
+Message-ID: <20210204170218.AD7F681839@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ea422f99508f85665c421d3de9c7a1ceb9f99f19
+commit: https://git.buildroot.net/buildroot/commit/?id=14cc349d267c61a4c2e29a3dc307ae5309b6fc6f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Upstream changed version scheme: dropped leading 's', reflect it.
+Fixes the following security issue:
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+CVE-2020-28473: The package bottle from 0 and before 0.12.19 are vulnerable
+to Web Cache Poisoning by using a vector called parameter cloaking.  When
+the attacker can separate query parameters using a semicolon (;), they can
+cause a difference in the interpretation of the request between the proxy
+(running with default configuration) and the server.  This can result in
+malicious requests being cached as completely safe ones, as the proxy would
+usually not see the semicolon as a separator, and therefore would not
+include it in a cache key of an unkeyed parameter.
+
+In addition, bottle 0.12.18 fixed a compatibility issue with python 3.8+:
+
+https://github.com/bottlepy/bottle/issues/1181
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/iputils/iputils.hash | 4 ++--
- package/iputils/iputils.mk   | 4 ++--
+ package/python-bottle/python-bottle.hash | 4 ++--
+ package/python-bottle/python-bottle.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/iputils/iputils.hash b/package/iputils/iputils.hash
-index 11f46bac28..3e30ca9383 100644
---- a/package/iputils/iputils.hash
-+++ b/package/iputils/iputils.hash
+diff --git a/package/python-bottle/python-bottle.hash b/package/python-bottle/python-bottle.hash
+index 03558c1abc..7dcaac8dc6 100644
+--- a/package/python-bottle/python-bottle.hash
++++ b/package/python-bottle/python-bottle.hash
 @@ -1,5 +1,5 @@
--# https://github.com/iputils/iputils/releases/download/s20200821/sha256sum.asc
--sha256 f265da0d02dd2259efd8c57a9c2e0c8bb3361abb14639fcffb26707be5783a5b  iputils-20200821.tar.gz
-+# https://github.com/iputils/iputils/releases/download/20210202/sha256sum.asc
-+sha256 3f557ecfd2ace873801231d2c1f42de73ced9fbc1ef3a438d847688b5fb0e8ab  iputils-20210202.tar.gz
- # Locally computed
- sha256 b8ea785d12fa6a44916601104dd746216957e93f13a26d3eb858b3b5a4ad66ab  LICENSE
- sha256 9acc4bc871a4742550158e3696dcb381953172ef808d04ca248184f9f6322712  Documentation/LICENSE.BSD3
-diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-index 92974592a6..0273e295d6 100644
---- a/package/iputils/iputils.mk
-+++ b/package/iputils/iputils.mk
-@@ -11,8 +11,8 @@
- # and IPv6 updates.
- # http://www.spinics.net/lists/netdev/msg279881.html
+ # md5, sha256 from https://pypi.org/pypi/bottle/json
+-md5	c7d8a42dbc6955593e5b9f957e650a60  bottle-0.12.17.tar.gz
+-sha256	e9eaa412a60cc3d42ceb42f58d15864d9ed1b92e9d630b8130c871c5bb16107c  bottle-0.12.17.tar.gz
++md5  50075544706b5e662a3fbd9a98e24b07  bottle-0.12.19.tar.gz
++sha256	a9d73ffcbc6a1345ca2d7949638db46349f5b2b77dac65d6494d45c23628da2c  bottle-0.12.19.tar.gz
+ # Locally computed sha256 checksums
+ sha256	d0e7211f1c3c1a1c56f39d18bcb07f27f480c8a9552617756dda3a335933b8a6  LICENSE
+diff --git a/package/python-bottle/python-bottle.mk b/package/python-bottle/python-bottle.mk
+index a8879010e8..18f1507a97 100644
+--- a/package/python-bottle/python-bottle.mk
++++ b/package/python-bottle/python-bottle.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
--IPUTILS_VERSION = 20200821
--IPUTILS_SITE = $(call github,iputils,iputils,s$(IPUTILS_VERSION))
-+IPUTILS_VERSION = 20210202
-+IPUTILS_SITE = $(call github,iputils,iputils,$(IPUTILS_VERSION))
- IPUTILS_LICENSE = GPL-2.0+, BSD-3-Clause
- IPUTILS_LICENSE_FILES = LICENSE Documentation/LICENSE.BSD3 Documentation/LICENSE.GPL2
- IPUTILS_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
+-PYTHON_BOTTLE_VERSION = 0.12.17
++PYTHON_BOTTLE_VERSION = 0.12.19
+ PYTHON_BOTTLE_SOURCE = bottle-$(PYTHON_BOTTLE_VERSION).tar.gz
+-PYTHON_BOTTLE_SITE = https://files.pythonhosted.org/packages/c4/a5/6bf41779860e9b526772e1b3b31a65a22bd97535572988d16028c5ab617d
++PYTHON_BOTTLE_SITE = https://files.pythonhosted.org/packages/ea/80/3d2dca1562ffa1929017c74635b4cb3645a352588de89e90d0bb53af3317
+ PYTHON_BOTTLE_LICENSE = MIT
+ PYTHON_BOTTLE_LICENSE_FILES = LICENSE
+ PYTHON_BOTTLE_SETUP_TYPE = setuptools
