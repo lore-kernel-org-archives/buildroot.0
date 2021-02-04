@@ -1,41 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 04 Feb 2021 17:51:08 +0100
-Subject: [Buildroot] [PATCH 4/5] package/binutils: drop 2.33.x series
-In-Reply-To: <b8776d72-712d-1743-8027-07032e04d774@gmail.com> (Romain Naour's
- message of "Tue, 2 Feb 2021 22:16:18 +0100")
-References: <20210131223304.1857838-1-thomas.petazzoni@bootlin.com>
- <20210131223304.1857838-4-thomas.petazzoni@bootlin.com>
- <87ft2fn1dr.fsf@dell.be.48ers.dk>
- <b8776d72-712d-1743-8027-07032e04d774@gmail.com>
-Message-ID: <87tuqrdber.fsf@dell.be.48ers.dk>
+Date: Thu, 04 Feb 2021 17:52:11 +0100
+Subject: [Buildroot] [git commit] package/pkg-meson.mk: fix ccache
+ auto-detection avoidance
+In-Reply-To: <20210202202232.438A3864F6@busybox.osuosl.org> (Yann E. MORIN's
+ message of "Tue, 2 Feb 2021 21:42:39 +0100")
+References: <20210202202232.438A3864F6@busybox.osuosl.org>
+Message-ID: <87pn1fdbd0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Hello Peter,
- > Le 01/02/2021 ? 18:28, Peter Korsgaard a ?crit?:
- >>>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
- >> 
- >> > Now that 2.36.x has been added, that 2.35.x is the default version,
- >> > drop support for 2.33.x.
- >> 
- >> > Note that we keep binutils 2.32.x as it is the latest version that
- >> > works for FLAT binaries (used on noMMU platforms).
- >> 
- >> :/ Does upstream know about this? Do they not care?
+ > commit: https://git.buildroot.net/buildroot/commit/?id=548b8c541285cedc390c4c95bd9d80dbad7d2a73
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > It's not really an issue with Binutils but elf2flt tool:
+ > Commit f4a61d1ae23e (package/pkg-meson.mk avoid host ccache detection)
+ > forced the host C and C++ compilers so that meson does not try to
+ > autodetect ccache, and instead relies on what we provide.
 
- > https://github.com/uclinux-dev/elf2flt/issues/12
+ > However, this incorrectly used single-expansion of variables in a
+ > package infra.
 
- > I just noticed a new PR that is interesting to fix the issue:
- > https://github.com/uclinux-dev/elf2flt/pull/20
+ > For traditional builds, this is OK, because the value does not change
+ > across packages.
 
-Ok, thanks - Hopefully that indeed fixes the issues.
+ > However, for builds with per-package directories, this value only refers
+ > to the generic path, which ill not exist until the end of the build when
+ > all packages are aggregated in the host-finalize step.
+
+ > Fix that by postponing the variable evaluation like all the others.
+
+ > Reported-by: Xogium on IRC
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+
+Committed to 2020.02.x and 2020.11.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
