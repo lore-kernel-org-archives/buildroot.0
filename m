@@ -1,44 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 4 Feb 2021 22:11:14 +0100
-Subject: [Buildroot] [git commit] package/tor: bump version to 0.4.4.7
-Message-ID: <20210204205101.8843881DAE@busybox.osuosl.org>
+Date: Thu, 4 Feb 2021 22:10:20 +0100
+Subject: [Buildroot] [git commit] package/capnproto: add
+ CAPNPROTO_CPE_ID_VENDOR
+Message-ID: <20210204205101.64D13814AE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e1f17e24228ccdf238758ec9a4844b5c1847d23e
+commit: https://git.buildroot.net/buildroot/commit/?id=cd9330e7d75dd320263a1aee5f8dba5e96ea4996
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes: https://blog.torproject.org/node/1990
+cpe:2.3:a:capnproto:capnproto is a valid CPE identifier for this
+package:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Acapnproto%3Acapnproto
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tor/tor.hash | 2 +-
- package/tor/tor.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/capnproto/capnproto.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/tor/tor.hash b/package/tor/tor.hash
-index 7aa7280f2b..4dd86e51f5 100644
---- a/package/tor/tor.hash
-+++ b/package/tor/tor.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  5f154c155803adf5c89e87cab53017b6908c5ebe50c65839e8cf4fbd2abe1fdc  tor-0.4.4.6.tar.gz
-+sha256  326d2926177f0c7838cac213456d0056817d57f3f2e46714a2911c7d7a9b05ee  tor-0.4.4.7.tar.gz
- sha256  ae2afe6cd3fd9d512afbaa1ef218757eb00aa6b6aa5e2dfc2774b6837e373fa1  LICENSE
-diff --git a/package/tor/tor.mk b/package/tor/tor.mk
-index 098c517aa7..8ad4a7a825 100644
---- a/package/tor/tor.mk
-+++ b/package/tor/tor.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TOR_VERSION = 0.4.4.6
-+TOR_VERSION = 0.4.4.7
- TOR_SITE = https://dist.torproject.org
- TOR_LICENSE = BSD-3-Clause
- TOR_LICENSE_FILES = LICENSE
+diff --git a/package/capnproto/capnproto.mk b/package/capnproto/capnproto.mk
+index 2e7b095cbf..901b57ecda 100644
+--- a/package/capnproto/capnproto.mk
++++ b/package/capnproto/capnproto.mk
+@@ -8,6 +8,7 @@ CAPNPROTO_VERSION = 0.8.0
+ CAPNPROTO_SITE = $(call github,capnproto,capnproto,v$(CAPNPROTO_VERSION))
+ CAPNPROTO_LICENSE = MIT
+ CAPNPROTO_LICENSE_FILES = LICENSE
++CAPNPROTO_CPE_ID_VENDOR = capnproto
+ CAPNPROTO_INSTALL_STAGING = YES
+ # Fetched from Github with no configure script
+ CAPNPROTO_AUTORECONF = YES
