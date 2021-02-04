@@ -1,11 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 04 Feb 2021 18:20:28 +0100
-Subject: [Buildroot] [PATCH 1/1] package/sox: security bump to latest
- git commit
-In-Reply-To: <20210203200049.1151409-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Wed, 3 Feb 2021 21:00:49 +0100")
-References: <20210203200049.1151409-1-fontaine.fabrice@gmail.com>
-Message-ID: <8735ybbvhf.fsf@dell.be.48ers.dk>
+Date: Thu, 04 Feb 2021 18:22:31 +0100
+Subject: [Buildroot] [PATCH 1/1] package/cereal: fix CVE-2020-11105
+In-Reply-To: <20210203201100.1153600-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 3 Feb 2021 21:11:00 +0100")
+References: <20210203201100.1153600-1-fontaine.fabrice@gmail.com>
+Message-ID: <87y2g3agtk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,29 +13,17 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Bump to the latest git commit as this will fix the following CVEs:
- > git log|grep CVE
- >   sox-fmt: validate comments_bytes before use (CVE-2019-13590) [bug #325]
- >   fix possible null pointer deref in lsx_make_lpf() (CVE-2019-8357)
- >   fft4g: bail if size too large (CVE-2019-8356)
- >   fix possible overflow in lsx_(re)valloc() size calculation (CVE-2019-8355)
- >   fix possible buffer size overflow in lsx_make_lpf() (CVE-2019-8354)
- >   xa: validate channel count (CVE-2017-18189)
- >   aiff: fix crash on empty comment chunk (CVE-2017-15642)
- >   adpcm: fix stack overflow with >4 channels (CVE-2017-15372)
- >   flac: fix crash on corrupt metadata (CVE-2017-15371)
- >   wav: ima_adpcm: fix buffer overflow on corrupt input (CVE-2017-15370)
- >   wav: fix crash writing header when channel count >64k (CVE-2017-11359)
- >   hcom: fix crash on input with corrupt dictionary (CVE-2017-11358)
- >   wav: fix crash if channel count is zero (CVE-2017-11332)
+ > Fix CVE-2020-11105: An issue was discovered in USC iLab cereal through
+ > 1.3.0. It employs caching of std::shared_ptr values, using the raw
+ > pointer address as a unique identifier. This becomes problematic if an
+ > std::shared_ptr variable goes out of scope and is freed, and a new
+ > std::shared_ptr is allocated at the same address. Serialization fidelity
+ > thereby becomes dependent upon memory layout. In short, serialized
+ > std::shared_ptr variables cannot always be expected to serialize back
+ > into their original values. This can have any number of consequences,
+ > depending on the context within which this manifests.
 
- > - Tweak configuration options due to
- >   https://sourceforge.net/p/sox/code/ci/6ff0e9322f9891f5a6ac6c9b3bceffbfca16bec3
- > - libgsm is now an optional dependency since
- >   https://sourceforge.net/p/sox/code/ci/e548827ffcf4dffa7f21709b8e96b04b481c09b8
- > - Add patch to put back --disable-stack-protector
-
-It would be good if you could bring up this issue with upstream.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
 
