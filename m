@@ -1,75 +1,51 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Thu, 4 Feb 2021 22:33:23 +0200
-Subject: [Buildroot] [PATCH 1/1] package/cog: add
- BR2_PACKAGE_COG_USE_SYSTEM_DBUS
-In-Reply-To: <20210202115721.4136447-1-asweet@thegoodpenguin.co.uk>
-References: <20210202115721.4136447-1-asweet@thegoodpenguin.co.uk>
-Message-ID: <20210204223323.GB441747@momiji>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 04 Feb 2021 22:10:04 +0100
+Subject: [Buildroot] [PATCH 1/1] package/valijson: set
+ VALIJSON_CPE_ID_VALID
+In-Reply-To: <20210204190134.1270217-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 4 Feb 2021 20:01:34 +0100")
+References: <20210204190134.1270217-1-fontaine.fabrice@gmail.com>
+Message-ID: <87h7mra6ab.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Adrian,
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Thanks for the patch, I think adding the option is fine given that there
-are people around who would use it?which seems to be the case.
+ > cpe:2.3:a:valijson_project:valijson is a valid CPE identifier for this
+ > package:
 
-Unless somebody else has an opinion against, I think we could merge this
-change =]
+ >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Avalijson_project%3Avalijson
 
-On Tue, 02 Feb 2021 11:57:21 +0000 Adrian Sweet <asweet@thegoodpenguin.co.uk> wrote:
-> Added config option to expose browser remote control on the D-Bus system bus
-> 
-> Signed-off-by: Adrian Sweet <asweet@thegoodpenguin.co.uk>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
+Committed, thanks.
 
-> ---
->  package/cog/Config.in | 6 ++++++
->  package/cog/cog.mk    | 6 ++++++
->  2 files changed, 12 insertions(+)
-> 
-> diff --git a/package/cog/Config.in b/package/cog/Config.in
-> index a9ca7473a9..c19f1c200e 100644
-> --- a/package/cog/Config.in
-> +++ b/package/cog/Config.in
-> @@ -47,6 +47,12 @@ config BR2_PACKAGE_COG_PLATFORM_DRM
->  	  with video drivers that support kernel mode-setting (KMS)
->  	  via the DRM user-space API.
->  
-> +config BR2_PACKAGE_COG_USE_SYSTEM_DBUS
-> +	bool "Use D-Bus system bus"
-> +	default n
-> +	help
-> +	  Expose remote control interface on system bus
-> +
->  comment "DRM platform needs mesa3d w/ EGL driver and GBM"
->  	depends on !BR2_PACKAGE_MESA3D_OPENGL_EGL
->  
-> diff --git a/package/cog/cog.mk b/package/cog/cog.mk
-> index 47a5573dda..c5a1cc0df2 100644
-> --- a/package/cog/cog.mk
-> +++ b/package/cog/cog.mk
-> @@ -31,4 +31,10 @@ else
->  COG_CONF_OPTS += -DCOG_PLATFORM_DRM=OFF
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_COG_USE_SYSTEM_DBUS),y)
-> +COG_CONF_OPTS += -DCOG_DBUS_SYSTEM_BUS=ON
-> +else
-> +COG_CONF_OPTS += -DCOG_DBUS_SYSTEM_BUS=OFF
-> +endif
-> +
->  $(eval $(cmake-package))
-> -- 
-> 2.25.1
-> 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 195 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210204/7d0f72a4/attachment.asc>
+ > ---
+ >  package/valijson/valijson.mk | 1 +
+ >  1 file changed, 1 insertion(+)
+
+ > diff --git a/package/valijson/valijson.mk b/package/valijson/valijson.mk
+ > index b38c6319a6..29e6342a68 100644
+ > --- a/package/valijson/valijson.mk
+ > +++ b/package/valijson/valijson.mk
+ > @@ -8,6 +8,7 @@ VALIJSON_VERSION = 0.3
+ >  VALIJSON_SITE = $(call github,tristanpenman,valijson,v$(VALIJSON_VERSION))
+ >  VALIJSON_LICENSE = BSD-2-Clause
+ >  VALIJSON_LICENSE_FILES = LICENSE
+ > +VALIJSON_CPE_ID_VALID = YES
+ >  VALIJSON_INSTALL_STAGING = YES
+ >  VALIJSON_INSTALL_TARGET = NO
+ >  VALIJSON_DEPENDENCIES = boost
+ > -- 
+ > 2.29.2
+
+ > _______________________________________________
+ > buildroot mailing list
+ > buildroot at busybox.net
+ > http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+Bye, Peter Korsgaard
