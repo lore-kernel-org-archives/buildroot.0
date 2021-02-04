@@ -1,104 +1,77 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 4 Feb 2021 17:57:59 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/libbsd: needs
- dynamic library
-Message-ID: <20210204164015.7C7FD802AB@busybox.osuosl.org>
+Date: Thu, 4 Feb 2021 17:26:42 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/linux-headers:
+ with headers from kernel, also override srcdir
+Message-ID: <20210204164022.7CC1A81592@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=89fffe2d773003a7a06fc6aa25bf54e7a74f1d96
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=f0157044f941caa393945409c96d3249dce1bbb5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-Static linking with libbsd fails because of multiple definition of the
-strlcpy symbol. uClibc optionally provides these symbols.
+When using the headers from the kernel to be built, with the kernel
+set to a custom version, and overriding the kernel sources with
+LINUX_OVERRIDE_SRCDIR, the linux-headers package is still trying to
+download an archive, and fails to validate its hash.
 
-So add a dependency on dynamic library to avoid a build failure with a
-zeromq-enabled bitcoin or with stress-ng.
+What is going on under the hood is that, with _OVERRIDE_SRCDIR, the
+_VERSION of a package is set to 'custom'. Furthermore, the variable
+BR_NO_CHECK_HASH_FOR is recursively expanded, so its value is only
+evaluated when it is needed.
 
-Fixes:
- - http://autobuild.buildroot.org/results/ba87544d42ad5e77a27a7a504bc6336a06f6e291
+For linux-headers, we inherit the values from the linux package, and
+the LINUX_HEADERS_VERSION takes the value from the configuration.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Thus we end up with the following situation:
+
+    LINUX_VERSION=custom
+    LINUX_HEADERS_VERSION=5.10   # For example
+    BR_NO_CHECK_HASH_FOR=... linux-custom.tar.gz ...
+
+And thus the archive downloaded by linux-headers will not match any
+exclusion, and since there will most probably not be a hash for it,
+the download will fail, as was noticed and reported by Jarkko.
+
+But in this case, what we really want is to really use the headers
+from the kernel that we build, we do not even want to attempt a
+download at all.
+
+So, when using the headers from the kernel to be built, we also
+propagate the LINUX_OVERRIDE_SRCDIR to linux-headers, so that we
+also use the headers from the overridden sources.
+
+Furthermore, in that configuration, we explicitly disallow
+overriding the linux-headers specifically, as it does not make sense
+(even though, if they were overridden to the same location, that'd
+be OK, but to simplify the condition, we do not even check for that).
+
+Reported-by: Jarkko Sakkinen <jjs@kapsi.fi>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 1edd0ac66a28e975610abdd60e02ad147c6c97e4)
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit b9e7adc152b5811b20724d8c05f0f2117254919c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/fwts/Config.in           | 5 +++--
- package/libbsd/Config.in         | 6 ++++--
- package/netcat-openbsd/Config.in | 6 ++++--
- 3 files changed, 11 insertions(+), 6 deletions(-)
+ package/linux-headers/linux-headers.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/fwts/Config.in b/package/fwts/Config.in
-index 269f065fd5..a700da0eba 100644
---- a/package/fwts/Config.in
-+++ b/package/fwts/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_FWTS
- 	depends on BR2_USE_MMU # libglib2
- 	depends on BR2_USE_WCHAR # libglib2, libbsd
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2, libbsd
-+	depends on !BR2_STATIC_LIBS # libbsd
- 	depends on BR2_TOOLCHAIN_USES_GLIBC # execinfo.h
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_JSON_C
-@@ -33,10 +34,10 @@ comment "efi_runtime module needs a Linux kernel to be built"
- 	depends on !BR2_LINUX_KERNEL
- endif
- 
--comment "fwts needs a glibc toolchain w/ wchar, threads"
-+comment "fwts needs a glibc toolchain w/ wchar, threads, dynamic library"
- 	depends on BR2_i386 || BR2_x86_64 || BR2_aarch64
- 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS # libbsd
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_TOOLCHAIN_USES_GLIBC
-+		!BR2_TOOLCHAIN_USES_GLIBC || BR2_STATIC_LIBS
-diff --git a/package/libbsd/Config.in b/package/libbsd/Config.in
-index e54f5e6f23..845a22162b 100644
---- a/package/libbsd/Config.in
-+++ b/package/libbsd/Config.in
-@@ -10,6 +10,7 @@ config BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
- config BR2_PACKAGE_LIBBSD
- 	bool "libbsd"
- 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
-+	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_WCHAR
- 	help
-@@ -21,6 +22,7 @@ config BR2_PACKAGE_LIBBSD
- 
- 	  http://libbsd.freedesktop.org/
- 
--comment "libbsd needs a toolchain w/ threads, wchar"
-+comment "libbsd needs a toolchain w/ dynamic library, threads, wchar"
- 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_USE_WCHAR
-diff --git a/package/netcat-openbsd/Config.in b/package/netcat-openbsd/Config.in
-index 4734ff9901..beaa8ed451 100644
---- a/package/netcat-openbsd/Config.in
-+++ b/package/netcat-openbsd/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_NETCAT_OPENBSD
- 	bool "netcat-openbsd"
- 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
-+	depends on !BR2_STATIC_LIBS # libbsd
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-@@ -21,8 +22,9 @@ config BR2_PACKAGE_NETCAT_OPENBSD
- 
- 	  https://packages.debian.org/sid/netcat-openbsd
- 
--comment "netcat-openbsd needs a glibc toolchain w/ threads, headers >= 3.12"
-+comment "netcat-openbsd needs a glibc toolchain w/ dynamic library, threads, headers >= 3.12"
- 	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_USES_GLIBC || \
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_TOOLCHAIN_USES_GLIBC || \
- 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
- 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
+index 4c3cb716b3..2e30a8ff45 100644
+--- a/package/linux-headers/linux-headers.mk
++++ b/package/linux-headers/linux-headers.mk
+@@ -18,6 +18,10 @@ LINUX_HEADERS_VERSION = $(call qstrip,$(BR2_LINUX_KERNEL_VERSION))
+ LINUX_HEADERS_CUSTOM_TARBALL_LOCATION = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION))
+ LINUX_HEADERS_REPO_URL = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
+ LINUX_HEADERS_CIP = $(BR2_LINUX_KERNEL_LATEST_CIP_VERSION)$(BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION)
++ifneq ($(LINUX_HEADERS_OVERRIDE_SRCDIR),)
++$(error LINUX_HEADERS_OVERRIDE_SRCDIR must not be set when BR2_KERNEL_HEADERS_AS_KERNEL=y)
++endif
++LINUX_HEADERS_OVERRIDE_SRCDIR = $(LINUX_OVERRIDE_SRCDIR)
+ else # ! BR2_KERNEL_HEADERS_AS_KERNEL
+ LINUX_HEADERS_CUSTOM_TARBALL = $(call qstrip,$(BR2_KERNEL_HEADERS_CUSTOM_TARBALL))
+ LINUX_HEADERS_CUSTOM_GIT = $(call qstrip,$(BR2_KERNEL_HEADERS_CUSTOM_GIT))
