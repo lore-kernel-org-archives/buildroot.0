@@ -1,23 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 04 Feb 2021 17:59:39 +0100
-Subject: [Buildroot] [PATCH 1/2] Revert "package/stress-ng: disable
- libbsd on static build"
-In-Reply-To: <20210201175113.937333-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 1 Feb 2021 18:51:12 +0100")
-References: <20210201175113.937333-1-fontaine.fabrice@gmail.com>
-Message-ID: <871rdvdb0k.fsf@dell.be.48ers.dk>
+Date: Thu, 4 Feb 2021 17:52:59 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/libopenssl: fix
+ issue when compiling with BR2_OPTIMIZE_G=y
+Message-ID: <20210204164015.655E88131A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=d9e2f5ad183468e92b23de1d4b7f9099f3e1fe26
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
- > This reverts commit f2d6c5ff9092aa7735c7a739d15180910ae734df.
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+For instance on risc-v 64 arch the build would otherwise fail because
+of undefined ucontext_t because "-DOPENSSL_NO_ASYNC" would not propagate
+through to CFLAGS in the Makefile.
 
-Committed to 2020.11.x, thanks.
+Signed-off-by: Yann Sionneau <ysionneau@kalray.eu>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit a00b6354a20e46f0623ed4dd25b8cc47b9ab3d44)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libopenssl/libopenssl.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
+index ac12d17016..5c47927b08 100644
+--- a/package/libopenssl/libopenssl.mk
++++ b/package/libopenssl/libopenssl.mk
+@@ -65,7 +65,7 @@ define HOST_LIBOPENSSL_CONFIGURE_CMDS
+ 		shared \
+ 		zlib-dynamic \
+ 	)
+-	$(SED) "s#-O[0-9s]#$(HOST_CFLAGS)#" $(@D)/Makefile
++	$(SED) "s#-O[0-9sg]#$(HOST_CFLAGS)#" $(@D)/Makefile
+ endef
+ 
+ define LIBOPENSSL_CONFIGURE_CMDS
+@@ -89,7 +89,7 @@ define LIBOPENSSL_CONFIGURE_CMDS
+ 			$(if $(BR2_STATIC_LIBS),zlib,zlib-dynamic) \
+ 	)
+ 	$(SED) "s#-march=[-a-z0-9] ##" -e "s#-mcpu=[-a-z0-9] ##g" $(@D)/Makefile
+-	$(SED) "s#-O[0-9s]#$(LIBOPENSSL_CFLAGS)#" $(@D)/Makefile
++	$(SED) "s#-O[0-9sg]#$(LIBOPENSSL_CFLAGS)#" $(@D)/Makefile
+ 	$(SED) "s# build_tests##" $(@D)/Makefile
+ endef
+ 
