@@ -1,71 +1,85 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Feb 2021 19:38:20 +0100
-Subject: [Buildroot] [git commit] package/makedumpfile: fix build on sparc64
-Message-ID: <20210205181826.5CB178045A@busybox.osuosl.org>
+Date: Fri, 5 Feb 2021 19:36:48 +0100
+Subject: [Buildroot] [git commit] package/libfuse3: bump version to 3.10.2
+Message-ID: <20210205181826.563C784394@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=28df31e8dc3b878b4c0b12aaf4106bb0a95292ff
+commit: https://git.buildroot.net/buildroot/commit/?id=5e2422d12a21c027d53f57886a4544116c00e177
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix the following build failure on sparc64:
+Remove patch (already on upstream).
 
-/home/giuliobenetti/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc64-buildroot-linux-gnu/9.3.0/../../../../sparc64-buildroot-linux-gnu/bin/ld: /tmp/ccylTux8.o: in function `find_kaslr_offsets':
-/home/giuliobenetti/autobuild/run/instance-0/output-1/build/makedumpfile-1.6.8/makedumpfile.c:4017: undefined reference to `get_kaslr_offset'
-
-Even if this build failure is only raised with version 1.6.8,
-get_kaslr_offset was also undeclared on sparc64 in version 1.6.7
-
-Fixes:
- - http://autobuild.buildroot.org/results/1421f54f7599bba62c0a4bd5c65ce21c8cc7ee1a
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0002-makedumpfile.h-fix-build-on-sparc64.patch | 35 ++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+ package/libfuse3/0001-remove-old-uclibc-hack.patch | 34 ----------------------
+ package/libfuse3/libfuse3.hash                     |  2 +-
+ package/libfuse3/libfuse3.mk                       |  2 +-
+ 3 files changed, 2 insertions(+), 36 deletions(-)
 
-diff --git a/package/makedumpfile/0002-makedumpfile.h-fix-build-on-sparc64.patch b/package/makedumpfile/0002-makedumpfile.h-fix-build-on-sparc64.patch
-new file mode 100644
-index 0000000000..defc101949
---- /dev/null
-+++ b/package/makedumpfile/0002-makedumpfile.h-fix-build-on-sparc64.patch
-@@ -0,0 +1,35 @@
-+From 2c132ac5e6656723821acdb0ee57b34c42851fed Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 4 Feb 2021 20:15:56 +0100
-+Subject: [PATCH] makedumpfile.h: fix build on sparc64
-+
-+Fix the following build failure on sparc64:
-+
-+/home/giuliobenetti/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc64-buildroot-linux-gnu/9.3.0/../../../../sparc64-buildroot-linux-gnu/bin/ld: /tmp/ccylTux8.o: in function `find_kaslr_offsets':
-+/home/giuliobenetti/autobuild/run/instance-0/output-1/build/makedumpfile-1.6.8/makedumpfile.c:4017: undefined reference to `get_kaslr_offset'
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/1421f54f7599bba62c0a4bd5c65ce21c8cc7ee1a
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status:
-+http://lists.infradead.org/pipermail/kexec/2021-February/021996.html]
-+---
-+ makedumpfile.h | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/makedumpfile.h b/makedumpfile.h
-+index 97a5554..dfc1a77 100644
-+--- a/makedumpfile.h
-++++ b/makedumpfile.h
-+@@ -1139,6 +1139,7 @@ unsigned long long vaddr_to_paddr_sparc64(unsigned long vaddr);
-+ #define get_machdep_info()      TRUE
-+ #define get_phys_base()         get_phys_base_sparc64()
-+ #define get_versiondep_info()   get_versiondep_info_sparc64()
-++#define get_kaslr_offset(X)     stub_false()
-+ #define vaddr_to_paddr(X)       vaddr_to_paddr_sparc64(X)
-+ #define paddr_to_vaddr(X)	paddr_to_vaddr_general(X)
-+ #define is_phys_addr(X)		stub_true_ul(X)
-+-- 
-+2.29.2
-+
+diff --git a/package/libfuse3/0001-remove-old-uclibc-hack.patch b/package/libfuse3/0001-remove-old-uclibc-hack.patch
+deleted file mode 100644
+index 79b2f8c65e..0000000000
+--- a/package/libfuse3/0001-remove-old-uclibc-hack.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-From 4ebb018e78b53a8afe0368e7cd7a17a67c52e3df Mon Sep 17 00:00:00 2001
+-From: Rosen Penev <rosenp@gmail.com>
+-Date: Wed, 28 Oct 2020 19:20:35 -0700
+-Subject: [PATCH] remove old uclibc hack
+-
+-This actually prevents sshfs linking to it as fuse_new becomes
+-unavailable.
+-
+-According to the git history, this seems to predate 2006.
+-
+-Signed-off-by: Rosen Penev <rosenp@gmail.com>
+-[Retrieved from:
+-https://github.com/libfuse/libfuse/commit/4ebb018e78b53a8afe0368e7cd7a17a67c52e3df]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- lib/fuse_misc.h | 3 +--
+- 1 file changed, 1 insertion(+), 2 deletions(-)
+-
+-diff --git a/lib/fuse_misc.h b/lib/fuse_misc.h
+-index a8b59617..f384aeab 100644
+---- a/lib/fuse_misc.h
+-+++ b/lib/fuse_misc.h
+-@@ -10,10 +10,9 @@
+- 
+- /*
+-   Versioned symbols cannot be used in some cases because it
+--    - confuse the dynamic linker in uClibc
+-     - not supported on MacOSX (in MachO binary format)
+- */
+--#if (!defined(__UCLIBC__) && !defined(__APPLE__))
+-+#ifndef __APPLE__
+- # if HAVE_SYMVER_ATTRIBUTE
+- #  define FUSE_SYMVER(sym1, sym2) __attribute__ ((symver (sym2)))
+- # else
+diff --git a/package/libfuse3/libfuse3.hash b/package/libfuse3/libfuse3.hash
+index 4e03ba4a87..9b2f8cc144 100644
+--- a/package/libfuse3/libfuse3.hash
++++ b/package/libfuse3/libfuse3.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated sha256 checksums
+-sha256  52bbb52035f7eeaa54d139e21805d357f848f6e02ac956831d04988165a92c7b  libfuse3-3.10.0.tar.gz
++sha256  a16f93cc083264afd0d2958a0dc88f24c6c5d40a9f3842c645b1909e13edb75f  libfuse3-3.10.2.tar.gz
+ sha256  b8832d9caaa075bbbd2aef24efa09f8b7ab66a832812d88c602da0c7b4397fad  LICENSE
+diff --git a/package/libfuse3/libfuse3.mk b/package/libfuse3/libfuse3.mk
+index 0a896d8dad..f805eda506 100644
+--- a/package/libfuse3/libfuse3.mk
++++ b/package/libfuse3/libfuse3.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBFUSE3_VERSION = 3.10.0
++LIBFUSE3_VERSION = 3.10.2
+ LIBFUSE3_SITE = $(call github,libfuse,libfuse,fuse-$(LIBFUSE3_VERSION))
+ LIBFUSE3_LICENSE = LGPL-2.1
+ LIBFUSE3_LICENSE_FILES = LICENSE
