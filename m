@@ -1,33 +1,35 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Fri, 5 Feb 2021 09:01:14 +0100
-Subject: [Buildroot] [git commit] package/sox: remove EOL whitespace
-Message-ID: <20210205074124.2536881809@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri,  5 Feb 2021 09:03:31 +0100
+Subject: [Buildroot] [PATCH 1/1] package/python-django: add CPE variables
+Message-ID: <20210205080331.1453704-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c7eefe19cc0499ec3b7404dc378029d20df65c41
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+cpe:2.3:a:djangoproject:django is a valid CPE identifier for this
+package:
 
-Fixes https://gitlab.com/buildroot.org/buildroot/-/jobs/1010083301
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Adjangoproject%3Adjango
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/sox/sox.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/python-django/python-django.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/sox/sox.mk b/package/sox/sox.mk
-index 4334355a91..99ba20ac9c 100644
---- a/package/sox/sox.mk
-+++ b/package/sox/sox.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
+index 512f2cd89c..a88aa6274a 100644
+--- a/package/python-django/python-django.mk
++++ b/package/python-django/python-django.mk
+@@ -10,6 +10,8 @@ PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
+ PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/32/e3/e7e9a9378321fdfc3eb55de151911dce968fa245d1f16d8c480c63ea4ed1
+ PYTHON_DJANGO_LICENSE = BSD-3-Clause
+ PYTHON_DJANGO_LICENSE_FILES = LICENSE
++PYTHON_DJANGO_CPE_ID_VENDOR = djangoproject
++PYTHON_DJANGO_CPE_ID_PRODUCT = django
+ PYTHON_DJANGO_SETUP_TYPE = setuptools
  
--SOX_VERSION = 7524160b29a476f7e87bc14fddf12d349f9a3c5e 
-+SOX_VERSION = 7524160b29a476f7e87bc14fddf12d349f9a3c5e
- SOX_SITE = git://git.code.sf.net/p/sox/code
- SOX_SITE_METHOD = git
- SOX_DEPENDENCIES = host-autoconf-archive host-pkgconf
+ $(eval $(python-package))
+-- 
+2.29.2
