@@ -1,34 +1,54 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  5 Feb 2021 19:18:30 +0100
-Subject: [Buildroot] [PATCH 1/1] package/python-flask-cors: add CPE variables
-Message-ID: <20210205181830.1658122-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 05 Feb 2021 19:35:43 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
+ 2021-02-04
+In-Reply-To: <CAEyMn7YCuUkYKdd-6gaH85NQcSpg5EMWJKstGtFZTmu65kDbUQ@mail.gmail.com>
+ (Heiko Thiery's message of "Fri, 5 Feb 2021 15:42:46 +0100")
+References: <601cff45.1c69fb81.945af.db28SMTPIN_ADDED_MISSING@mx.google.com>
+ <CAEyMn7YCuUkYKdd-6gaH85NQcSpg5EMWJKstGtFZTmu65kDbUQ@mail.gmail.com>
+Message-ID: <87lfc27474.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:flask-cors_project:flask-cors is a valid CPE identifier for
-this package:
+>>>>> "Heiko" == Heiko Thiery <heiko.thiery@gmail.com> writes:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aflask-cors_project%3Aflask-cors
+Hi,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/python-flask-cors/python-flask-cors.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ >> mipsel    |        netopeer2-1.1.53        | http://autobuild.buildroot.net/results/da0e36543cf68e4e9bbe819945a884193f33819a
 
-diff --git a/package/python-flask-cors/python-flask-cors.mk b/package/python-flask-cors/python-flask-cors.mk
-index d712109002..a057cd458e 100644
---- a/package/python-flask-cors/python-flask-cors.mk
-+++ b/package/python-flask-cors/python-flask-cors.mk
-@@ -10,5 +10,7 @@ PYTHON_FLASK_CORS_SITE = https://files.pythonhosted.org/packages/99/fc/cd117ea12
- PYTHON_FLASK_CORS_SETUP_TYPE = setuptools
- PYTHON_FLASK_CORS_LICENSE = MIT
- PYTHON_FLASK_CORS_LICENSE_FILES = LICENSE
-+PYTHON_FLASK_CORS_CPE_ID_VENDOR = flask-cors_project
-+PYTHON_FLASK_CORS_CPE_ID_PRODUCT = flask-cors
- 
- $(eval $(python-package))
+ > I checked the reason for the build failure on the netopeer2 package.
+ > It is caused by some files that are created in /dev/shm/sr_* during
+ > the installation process.
+
+ > I tried to find a solution for that. My first intention was to do a
+ > PRE_INSTALL_HOOK that deletes these files before the installation. But
+ > YANN disclaimed that because we should never delete files in
+ > /dev/shm/. This could lead to failures when doing concurrent parallel
+ > builds.
+
+ > To be more detailed what is going on:
+ > The netopeer2 package can install the required yang models for runtime
+ > during installation. Therefore an additional script (setup.sh) is
+ > invoked. There the sysrepocfg host tool is used to do the installation
+ > of these yang models. sysrepo will then create this /dev/shm files and
+ > leave them. But with the updated netopeer2 package the shm files are
+ > incompatible and the build errors appear.
+
+ > So I see here 3 possible solutions:
+ > 1. do the PRE_INSTALL_HOOK to remove the files every time (disclaimed by Yann).
+ > 2. remove this files by hand (no long term solution).
+ > 3. disable the installation of the yang modules .. but then we have a
+ > non functional installation available and we leave the installation of
+ > the yang modules to the user.
+
+Ideally the package should be fixed to create those files in
+$DESTDIR/dev/shm rather than mess around with the host /dev/shm.
+
+But as /dev/shm is not persistent, how does this work at runtime? What
+do those files do exactly?
+
 -- 
-2.29.2
+Bye, Peter Korsgaard
