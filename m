@@ -1,51 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 05 Feb 2021 14:09:50 +0100
-Subject: [Buildroot] [PATCH] package/wpa_supplicant: add upstream 2020-2
- security fix
-In-Reply-To: <20210205124530.GT2384@scaer> (Yann E. MORIN's message of "Fri, 5
- Feb 2021 13:45:30 +0100")
-References: <20210205121329.31131-1-peter@korsgaard.com>
- <20210205124530.GT2384@scaer>
-Message-ID: <87sg6a7ja9.fsf@dell.be.48ers.dk>
+From: =?UTF-8?Q?Stefan_S=C3=B8rensen?= <stefan@astylos.dk>
+Date: Fri, 5 Feb 2021 15:00:48 +0100
+Subject: [Buildroot] [PATCH] package/netsnmp: bump version to 5.9
+In-Reply-To: <20210205130547.GX2384@scaer>
+References: <20210205100021.3110944-1-stefan.sorensen@spectralink.com>
+ <20210205100021.3110944-2-stefan.sorensen@spectralink.com>
+ <20210205130211.GV2384@scaer> <20210205130547.GX2384@scaer>
+Message-ID: <CAFF=tqVX8X9_ZQWtq4zqBz7Tao_LnG7oQC_G7tcB9v8y+AmYQg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+On Fri, 5 Feb 2021 at 14:05, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
 
- > Peter, All,
- > On 2021-02-05 13:13 +0100, Peter Korsgaard spake thusly:
- >> Fixes the following security issue:
- >> 
- >> - wpa_supplicant P2P group information processing vulnerability (no CVE yet)
- >> 
- >> A vulnerability was discovered in how wpa_supplicant processing P2P
- >> (Wi-Fi Direct) group information from active group owners.  The actual
- >> parsing of that information validates field lengths appropriately, but
- >> processing of the parsed information misses a length check when storing a
- >> copy of the secondary device types.  This can result in writing attacker
- >> controlled data into the peer entry after the area assigned for the
- >> secondary device type.  The overflow can result in corrupting pointers
- >> for heap allocations.  This can result in an attacker within radio range
- >> of the device running P2P discovery being able to cause unexpected
- >> behavior, including termination of the wpa_supplicant process and
- >> potentially arbitrary code execution.
- >> 
- >> For more details, see the advisory:
- >> https://w1.fi/security/2020-2/wpa_supplicant-p2p-group-info-processing-vulnerability.txt
- >> 
- >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> Stefan, All,
+>
+> On 2021-02-05 14:02 +0100, Yann E. MORIN spake thusly:
+> > On 2021-02-05 11:00 +0100, stefan at astylos.dk spake thusly:
+> > > From: Stefan S?rensen <stefan.sorensen@spectralink.com>
+> > > - Rebased patches 1 and 4
+> > I know you are only rebasing existing patches, but something isfishy
+> > with patches 1 and: they both touch the file 'configure', but we do have
+>
+> *is fishy
+> *patches 1 and 2
+>
 
- > Applied to master, thanks.
+Yes those parts are useless, but patches 1 and 2 are in upstream master
+([1], [2]), so I opted to just rebase the original content.
 
-Thanks.
+But I can respin and remove those parts if wanted?
 
- > (I just moved the _PATCH near _VERSION and _SITE to keep similar things
- > together)
+Stefan
 
-Fine. I did it like this for consistency with hostapd.
-
--- 
-Bye, Peter Korsgaard
+[1]
+https://sourceforge.net/p/net-snmp/code/ci/bd59be8e4e339870a1400f6866a7b73ca11f6460/
+[2]
+https://sourceforge.net/p/net-snmp/code/ci/13da2bcde8e22dd0127a668374fdf79bed04d353/
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210205/0202abfe/attachment.html>
