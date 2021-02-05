@@ -1,55 +1,93 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Feb 2021 08:05:06 +0100
-Subject: [Buildroot] [git commit] package/libcurl: bump version to 7.75.0
-Message-ID: <20210205064641.986CC83C7B@busybox.osuosl.org>
+Date: Fri, 5 Feb 2021 08:05:19 +0100
+Subject: [Buildroot] [git commit] package/autofs: bump to version 5.1.7
+Message-ID: <20210205064641.A871083C7D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=87f8356a2be1fe73c19e20ba63319f2cc29e42b6
+commit: https://git.buildroot.net/buildroot/commit/?id=1b1cf2db07a571ae4679d45bac5c01115b008435
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Updated license hash due to copyright year bump:
-https://github.com/curl/curl/commit/275c28e6502e1ded6c62b5bf22a409de16b4a04e
+- Drop patch (already in version)
+- Update hash of license files (correction in FSF address):
+  https://git.kernel.org/pub/scm/linux/storage/autofs/autofs.git/commit/?id=b74dcdd3f6b05522388729141c29286829c302fc
+- Update indentation in hash file (two spaces)
 
-Changelog: https://curl.se/changes.html
+https://git.kernel.org/pub/scm/linux/storage/autofs/autofs.git/tree/CHANGELOG?h=release_5_1_7
 
-Release notes:
-https://daniel.haxx.se/blog/2021/02/03/curl-7-75-0-is-smaller/
-"No new security advisories this time!"
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libcurl/libcurl.hash | 6 +++---
- package/libcurl/libcurl.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...1-include-linux-nfs.h-directly-in-rpc_sub.patch | 32 ----------------------
+ package/autofs/autofs.hash                         |  6 ++--
+ package/autofs/autofs.mk                           |  2 +-
+ 3 files changed, 4 insertions(+), 36 deletions(-)
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index 8e851bb90a..368b8f67f1 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://curl.haxx.se/download/curl-7.74.0.tar.xz.asc
-+# https://curl.haxx.se/download/curl-7.75.0.tar.xz.asc
- # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
--sha256  999d5f2c403cf6e25d58319fdd596611e455dd195208746bc6e6d197a77e878b  curl-7.74.0.tar.xz
--sha256  db3c4a3b3695a0f317a0c5176acd2f656d18abc45b3ee78e50935a78eb1e132e  COPYING
-+sha256  fe0c49d8468249000bda75bcfdf9e30ff7e9a86d35f1a21f428d79c389d55675  curl-7.75.0.tar.xz
-+sha256  6fd1a1c008b5ef4c4741dd188c3f8af6944c14c25afa881eb064f98fb98358e7  COPYING
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 4d75d05f27..6a9a5a3d3e 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
+diff --git a/package/autofs/0001-include-linux-nfs.h-directly-in-rpc_sub.patch b/package/autofs/0001-include-linux-nfs.h-directly-in-rpc_sub.patch
+deleted file mode 100644
+index 26f22653cf..0000000000
+--- a/package/autofs/0001-include-linux-nfs.h-directly-in-rpc_sub.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From 44bdce8c6ed9b30c1643e5981172a4f9025f013c Mon Sep 17 00:00:00 2001
+-From: Andreas Oberritter <obi@opendreambox.org>
+-Date: Wed, 13 Mar 2013 16:17:08 +0100
+-Subject: [PATCH] autofs-5.0.7: include linux/nfs.h directly in rpc_subs.h
+-
+-Fixes compile error with uclibc. Glibc's nfs/nfs.h contains
+-nothing but "#include linux/nfs.h". rpc_subs.h already includes
+-other linux/nfs*.h files directly.
+-
+-Signed-off-by: Andreas Oberritter <obi@opendreambox.org>
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Upstream-Status: Pending
+----
+- include/rpc_subs.h |    2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/include/rpc_subs.h b/include/rpc_subs.h
+-index b6d59f9..a2d9648 100644
+---- a/include/rpc_subs.h
+-+++ b/include/rpc_subs.h
+-@@ -18,7 +18,7 @@
+- 
+- #include <rpc/rpc.h>
+- #include <rpc/pmap_prot.h>
+--#include <nfs/nfs.h>
+-+#include <linux/nfs.h>
+- #include <linux/nfs2.h>
+- #include <linux/nfs3.h>
+- 
+--- 
+-1.7.10.4
+-
+diff --git a/package/autofs/autofs.hash b/package/autofs/autofs.hash
+index 07432bf769..10ca42ebed 100644
+--- a/package/autofs/autofs.hash
++++ b/package/autofs/autofs.hash
+@@ -1,6 +1,6 @@
+ # From https://www.kernel.org/pub/linux/daemons/autofs/v5/sha256sums.asc
+-sha256 dddee3d9b7388ce6cb7432832dfade25b07ef68ad48dcce01cf247b26a10caef  autofs-5.1.6.tar.xz
++sha256  a36b268611b79b07051749870ba540b139938efc84bc0293244c483e94f9ced7  autofs-5.1.7.tar.xz
+ 
+ # Hash for license files
+-sha256 dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa  COPYING
+-sha256 2ac2e352a92629e3abcdddbd3eeec64e7c2f5b58b6e819ff2c1444fb6e249fa3  COPYRIGHT
++sha256  458028929f712b4795bc5adc31a1d6a2151364ce1b372ac43f613f56c8448fed  COPYING
++sha256  26c826658dfa9e5ce5f182fbfbadf3fda2d184e78dba3d99da34c60113b2ce54  COPYRIGHT
+diff --git a/package/autofs/autofs.mk b/package/autofs/autofs.mk
+index e9b374ec07..4c5200584f 100644
+--- a/package/autofs/autofs.mk
++++ b/package/autofs/autofs.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBCURL_VERSION = 7.74.0
-+LIBCURL_VERSION = 7.75.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
- LIBCURL_SITE = https://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
+-AUTOFS_VERSION = 5.1.6
++AUTOFS_VERSION = 5.1.7
+ AUTOFS_SOURCE = autofs-$(AUTOFS_VERSION).tar.xz
+ AUTOFS_SITE = $(BR2_KERNEL_MIRROR)/linux/daemons/autofs/v5
+ AUTOFS_LICENSE = GPL-2.0+
