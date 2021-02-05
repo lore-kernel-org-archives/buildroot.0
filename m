@@ -1,76 +1,84 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Fri, 5 Feb 2021 15:42:46 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2021-02-04
-In-Reply-To: <601cff45.1c69fb81.945af.db28SMTPIN_ADDED_MISSING@mx.google.com>
-References: <601cff45.1c69fb81.945af.db28SMTPIN_ADDED_MISSING@mx.google.com>
-Message-ID: <CAEyMn7YCuUkYKdd-6gaH85NQcSpg5EMWJKstGtFZTmu65kDbUQ@mail.gmail.com>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Fri,  5 Feb 2021 18:36:39 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libfuse3: bump version to 3.10.2
+Message-ID: <20210205163639.74025-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Remove patch (already on upstream).
 
-Am Fr., 5. Feb. 2021 um 09:18 Uhr schrieb Thomas Petazzoni
-<thomas.petazzoni@bootlin.com>:
->
-> Hello,
->
-> Autobuilder failures
-> ====================
->
-> Below is a list of build failures reported by the Buildroot
-> autobuilders in relation to packages or CPU
-> architectures you are in charge of. Please help us
-> improving the quality of Buildroot by investigating
-> those build failures and sending patches to fix
-> them.Thanks!
->
-> Results for the 'master' branch
-> -------------------------------
->
-> Build failures related to your packages:
->
->     arch     |             reason             |                                       url
-> -------------+--------------------------------+---------------------------------------------------------------------------------
->    xtensa    |        netopeer2-1.1.53        | http://autobuild.buildroot.net/results/e21834d4d2ee580f00f0fdcbd3728787148c0da9
->    nios2     |        netopeer2-1.1.53        | http://autobuild.buildroot.net/results/e9bfe730da3faec5884e8950855a34541c3408a9
-> microblazeel |        netopeer2-1.1.53        | http://autobuild.buildroot.net/results/99ca5aa18074b19f2e6a311c2d38addb697f552b
->   powerpc    |        netopeer2-1.1.53        | http://autobuild.buildroot.net/results/2b9ad4626a1b6918a8e8d586521626306f5f8133
-> microblazeel |        netopeer2-1.1.53        | http://autobuild.buildroot.net/results/65108399fb6d7b02d812bc15d5074bfd404764c5
->    nios2     |        netopeer2-1.1.53        | http://autobuild.buildroot.net/results/6730e1e6ceebec94a9ad27deac0a4d1bf4661536
->   powerpc    |        netopeer2-1.1.53        | http://autobuild.buildroot.net/results/16bf1c3b4059a159480d23e6e132dcff05bd9b96
-> powerpc64le  |        netopeer2-1.1.53        | http://autobuild.buildroot.net/results/985aac8fd746c64e4ad0e093028164d8ae637409
->    mipsel    |        netopeer2-1.1.53        | http://autobuild.buildroot.net/results/da0e36543cf68e4e9bbe819945a884193f33819a
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+---
+ .../0001-remove-old-uclibc-hack.patch         | 34 -------------------
+ package/libfuse3/libfuse3.hash                |  2 +-
+ package/libfuse3/libfuse3.mk                  |  2 +-
+ 3 files changed, 2 insertions(+), 36 deletions(-)
+ delete mode 100644 package/libfuse3/0001-remove-old-uclibc-hack.patch
 
-I checked the reason for the build failure on the netopeer2 package.
-It is caused by some files that are created in /dev/shm/sr_* during
-the installation process.
-
-I tried to find a solution for that. My first intention was to do a
-PRE_INSTALL_HOOK that deletes these files before the installation. But
-YANN disclaimed that because we should never delete files in
-/dev/shm/. This could lead to failures when doing concurrent parallel
-builds.
-
-To be more detailed what is going on:
-The netopeer2 package can install the required yang models for runtime
-during installation. Therefore an additional script (setup.sh) is
-invoked. There the sysrepocfg host tool is used to do the installation
-of these yang models. sysrepo will then create this /dev/shm files and
-leave them. But with the updated netopeer2 package the shm files are
-incompatible and the build errors appear.
-
-So I see here 3 possible solutions:
-1. do the PRE_INSTALL_HOOK to remove the files every time (disclaimed by Yann).
-2. remove this files by hand (no long term solution).
-3. disable the installation of the yang modules .. but then we have a
-non functional installation available and we leave the installation of
-the yang modules to the user.
-
-What do you think?
-
+diff --git a/package/libfuse3/0001-remove-old-uclibc-hack.patch b/package/libfuse3/0001-remove-old-uclibc-hack.patch
+deleted file mode 100644
+index 79b2f8c65e..0000000000
+--- a/package/libfuse3/0001-remove-old-uclibc-hack.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-From 4ebb018e78b53a8afe0368e7cd7a17a67c52e3df Mon Sep 17 00:00:00 2001
+-From: Rosen Penev <rosenp@gmail.com>
+-Date: Wed, 28 Oct 2020 19:20:35 -0700
+-Subject: [PATCH] remove old uclibc hack
+-
+-This actually prevents sshfs linking to it as fuse_new becomes
+-unavailable.
+-
+-According to the git history, this seems to predate 2006.
+-
+-Signed-off-by: Rosen Penev <rosenp@gmail.com>
+-[Retrieved from:
+-https://github.com/libfuse/libfuse/commit/4ebb018e78b53a8afe0368e7cd7a17a67c52e3df]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- lib/fuse_misc.h | 3 +--
+- 1 file changed, 1 insertion(+), 2 deletions(-)
+-
+-diff --git a/lib/fuse_misc.h b/lib/fuse_misc.h
+-index a8b59617..f384aeab 100644
+---- a/lib/fuse_misc.h
+-+++ b/lib/fuse_misc.h
+-@@ -10,10 +10,9 @@
+- 
+- /*
+-   Versioned symbols cannot be used in some cases because it
+--    - confuse the dynamic linker in uClibc
+-     - not supported on MacOSX (in MachO binary format)
+- */
+--#if (!defined(__UCLIBC__) && !defined(__APPLE__))
+-+#ifndef __APPLE__
+- # if HAVE_SYMVER_ATTRIBUTE
+- #  define FUSE_SYMVER(sym1, sym2) __attribute__ ((symver (sym2)))
+- # else
+diff --git a/package/libfuse3/libfuse3.hash b/package/libfuse3/libfuse3.hash
+index 4e03ba4a87..9b2f8cc144 100644
+--- a/package/libfuse3/libfuse3.hash
++++ b/package/libfuse3/libfuse3.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated sha256 checksums
+-sha256  52bbb52035f7eeaa54d139e21805d357f848f6e02ac956831d04988165a92c7b  libfuse3-3.10.0.tar.gz
++sha256  a16f93cc083264afd0d2958a0dc88f24c6c5d40a9f3842c645b1909e13edb75f  libfuse3-3.10.2.tar.gz
+ sha256  b8832d9caaa075bbbd2aef24efa09f8b7ab66a832812d88c602da0c7b4397fad  LICENSE
+diff --git a/package/libfuse3/libfuse3.mk b/package/libfuse3/libfuse3.mk
+index 0a896d8dad..f805eda506 100644
+--- a/package/libfuse3/libfuse3.mk
++++ b/package/libfuse3/libfuse3.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBFUSE3_VERSION = 3.10.0
++LIBFUSE3_VERSION = 3.10.2
+ LIBFUSE3_SITE = $(call github,libfuse,libfuse,fuse-$(LIBFUSE3_VERSION))
+ LIBFUSE3_LICENSE = LGPL-2.1
+ LIBFUSE3_LICENSE_FILES = LICENSE
 -- 
-Heiko
+2.27.0
