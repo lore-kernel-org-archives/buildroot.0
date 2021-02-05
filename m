@@ -1,25 +1,20 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 05 Feb 2021 19:35:55 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libtirpc: set
- LIBTIRPC_CPE_ID_VALID
-In-Reply-To: <20210205074217.1451820-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 5 Feb 2021 08:42:17 +0100")
-References: <20210205074217.1451820-1-fontaine.fabrice@gmail.com>
-Message-ID: <87h7mq746s.fsf@dell.be.48ers.dk>
+Date: Fri, 05 Feb 2021 19:37:39 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libfuse3: bump version to 3.10.2
+In-Reply-To: <20210205163639.74025-1-asafka7@gmail.com> (Asaf Kahlon's message
+ of "Fri, 5 Feb 2021 18:36:39 +0200")
+References: <20210205163639.74025-1-asafka7@gmail.com>
+Message-ID: <87czxe743w.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Asaf" == Asaf Kahlon <asafka7@gmail.com> writes:
 
- > cpe:2.3:a:libtirpc_project:libtirpc is a valid CPE identifier for this
- > package:
-
- >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alibtirpc_project%3Alibtirpc
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Remove patch (already on upstream).
+ > Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 
 Committed, thanks.
 
