@@ -1,231 +1,241 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 5 Feb 2021 14:05:47 +0100
-Subject: [Buildroot] [PATCH] package/netsnmp: bump version to 5.9
-In-Reply-To: <20210205130211.GV2384@scaer>
-References: <20210205100021.3110944-1-stefan.sorensen@spectralink.com>
- <20210205100021.3110944-2-stefan.sorensen@spectralink.com>
- <20210205130211.GV2384@scaer>
-Message-ID: <20210205130547.GX2384@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri,  5 Feb 2021 14:07:56 +0100
+Subject: [Buildroot] [PATCH] package/python3: add upstream security fix for
+ CVE-2021-3177
+Message-ID: <20210205130756.17142-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Stefan, All,
+Fixes the following security issue:
 
-On 2021-02-05 14:02 +0100, Yann E. MORIN spake thusly:
-> On 2021-02-05 11:00 +0100, stefan at astylos.dk spake thusly:
-> > From: Stefan S?rensen <stefan.sorensen@spectralink.com>
-> > - Rebased patches 1 and 4
-> I know you are only rebasing existing patches, but something isfishy
-> with patches 1 and: they both touch the file 'configure', but we do have
+- CVE-2021-3177: Python 3.x through 3.9.1 has a buffer overflow in
+  PyCArg_repr in _ctypes/callproc.c, which may lead to remote code execution
+  in certain Python applications that accept floating-point numbers as
+  untrusted input, as demonstrated by a 1e300 argument to
+  c_double.from_param.  This occurs because sprintf is used unsafely.
 
-*is fishy
-*patches 1 and 2
+For details, see the advisory:
+https://python-security.readthedocs.io/vuln/ctypes-buffer-overflow-pycarg_repr.html
 
-Damn... ;-)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...-Replace-snprintf-with-Python-unicod.patch | 190 ++++++++++++++++++
+ package/python3/python3.mk                    |   3 +
+ 2 files changed, 193 insertions(+)
+ create mode 100644 package/python3/0035-closes-bpo-42938-Replace-snprintf-with-Python-unicod.patch
 
-Regards,
-Yann E. MORIN.
-
-> NETSNMP_AUTORECONF = YES
-> 
-> But the hunk in configure seems to really only be the expansion of the
-> hunk in configure.d/config_os_libs2
-> 
-> So, the hunk about configure is useless and should be dropped, I
-> believe...
-> 
-> Could please look into that and respin?
-> 
-> Regards,
-> Yann E. MORIN.
-> 
-> > - Dropped upstreamed patches 5 and 6
-> > 
-> > Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
-> > ---
-> >  ...figure-static-linking-Fix-SSL-checks.patch |  6 +--
-> >  ..._CHECK_FUNCS-TLS_method-TLSv1_method.patch |  4 +-
-> >  ...once-that-opening-proc-net-if_inet6-.patch | 30 ---------------
-> >  ...x-Fix-a-memory-leak-in-an-error-path.patch | 37 -------------------
-> >  package/netsnmp/netsnmp.hash                  | 10 ++---
-> >  package/netsnmp/netsnmp.mk                    |  2 +-
-> >  6 files changed, 10 insertions(+), 79 deletions(-)
-> >  delete mode 100644 package/netsnmp/0005-MIB-II-Only-log-once-that-opening-proc-net-if_inet6-.patch
-> >  delete mode 100644 package/netsnmp/0006-IP-MIB-Linux-Fix-a-memory-leak-in-an-error-path.patch
-> > 
-> > diff --git a/package/netsnmp/0001-configure-static-linking-Fix-SSL-checks.patch b/package/netsnmp/0001-configure-static-linking-Fix-SSL-checks.patch
-> > index 8431d46868..7334e609e3 100644
-> > --- a/package/netsnmp/0001-configure-static-linking-Fix-SSL-checks.patch
-> > +++ b/package/netsnmp/0001-configure-static-linking-Fix-SSL-checks.patch
-> > @@ -98,7 +98,7 @@ index 6504a8e58..1116cecaa 100755
-> >           netsnmp_save_LIBS="$LIBS"
-> >  -        LIBS="-lssl"
-> >  +        LIBS="-lssl $LIBCRYPTO"
-> > -         for ac_func in TLS_method TLSv1_method DTLS_method DTLSv1_method                       SSL_library_init SSL_load_error_strings
-> > +         for ac_func in TLS_method TLSv1_method DTLS_method DTLSv1_method                       SSL_library_init SSL_load_error_strings		       ERR_get_error_all
-> >   do :
-> >     as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
-> >  diff --git a/configure.d/config_os_libs2 b/configure.d/config_os_libs2
-> > @@ -135,8 +135,8 @@ index 4a1ad1551..75214cfff 100644
-> >  -        LIBS="-lssl"
-> >  +        LIBS="-lssl $LIBCRYPTO"
-> >           AC_CHECK_FUNCS([TLS_method TLSv1_method DTLS_method DTLSv1_method]dnl
-> > -                        [SSL_library_init SSL_load_error_strings])
-> > -         LIBS="$netsnmp_save_LIBS"
-> > +                        [SSL_library_init SSL_load_error_strings]dnl
-> > + 		       [ERR_get_error_all])
-> >  -- 
-> >  2.17.1
-> >  
-> > diff --git a/package/netsnmp/0004-configure-fix-AC_CHECK_FUNCS-TLS_method-TLSv1_method.patch b/package/netsnmp/0004-configure-fix-AC_CHECK_FUNCS-TLS_method-TLSv1_method.patch
-> > index a731f25761..2618cbee74 100644
-> > --- a/package/netsnmp/0004-configure-fix-AC_CHECK_FUNCS-TLS_method-TLSv1_method.patch
-> > +++ b/package/netsnmp/0004-configure-fix-AC_CHECK_FUNCS-TLS_method-TLSv1_method.patch
-> > @@ -32,8 +32,8 @@ index 93044000b..c811c63ec 100644
-> >  -        LIBS="-lssl $LIBCRYPTO"
-> >  +        LIBS="-lssl $LIBCRYPTO $LIBS"
-> >           AC_CHECK_FUNCS([TLS_method TLSv1_method DTLS_method DTLSv1_method]dnl
-> > -                        [SSL_library_init SSL_load_error_strings])
-> > -         LIBS="$netsnmp_save_LIBS"
-> > +                        [SSL_library_init SSL_load_error_strings]dnl
-> > + 		       [ERR_get_error_all])
-> >  -- 
-> >  2.17.1
-> >  
-> > diff --git a/package/netsnmp/0005-MIB-II-Only-log-once-that-opening-proc-net-if_inet6-.patch b/package/netsnmp/0005-MIB-II-Only-log-once-that-opening-proc-net-if_inet6-.patch
-> > deleted file mode 100644
-> > index 2d5b38eb32..0000000000
-> > --- a/package/netsnmp/0005-MIB-II-Only-log-once-that-opening-proc-net-if_inet6-.patch
-> > +++ /dev/null
-> > @@ -1,30 +0,0 @@
-> > -From cd09fd82522861830aaf9d237b26eef5f9ba50d2 Mon Sep 17 00:00:00 2001
-> > -From: Bart Van Assche <bvanassche@acm.org>
-> > -Date: Wed, 21 Nov 2018 20:47:42 -0800
-> > -Subject: [PATCH] MIB-II: Only log once that opening /proc/net/if_inet6 failed
-> > -
-> > -If IPv6 has been disabled (ipv6.disable=1) then opening /proc/net/if_inet6
-> > -fails. Only log this once instead of thousand of times a day.
-> > -
-> > -Reported-by: Fif <lefif@users.sourceforge.net>
-> > -Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> > ----
-> > - agent/mibgroup/ip-mib/data_access/ipaddress_linux.c | 2 +-
-> > - 1 file changed, 1 insertion(+), 1 deletion(-)
-> > -
-> > -diff --git a/agent/mibgroup/ip-mib/data_access/ipaddress_linux.c b/agent/mibgroup/ip-mib/data_access/ipaddress_linux.c
-> > -index 5ddead3e0c..280575ce39 100644
-> > ---- a/agent/mibgroup/ip-mib/data_access/ipaddress_linux.c
-> > -+++ b/agent/mibgroup/ip-mib/data_access/ipaddress_linux.c
-> > -@@ -234,7 +234,7 @@ _load_v6(netsnmp_container *container, int idx_offset)
-> > - 
-> > - #define PROCFILE "/proc/net/if_inet6"
-> > -     if (!(in = fopen(PROCFILE, "r"))) {
-> > --        snmp_log_perror("ipaddress_linux: could not open " PROCFILE);
-> > -+        NETSNMP_LOGONCE((LOG_ERR, "ipaddress_linux: could not open " PROCFILE));
-> > -         return -2;
-> > -     }
-> > - 
-> > --- 
-> > -2.20.1
-> > -
-> > diff --git a/package/netsnmp/0006-IP-MIB-Linux-Fix-a-memory-leak-in-an-error-path.patch b/package/netsnmp/0006-IP-MIB-Linux-Fix-a-memory-leak-in-an-error-path.patch
-> > deleted file mode 100644
-> > index fb68e175e5..0000000000
-> > --- a/package/netsnmp/0006-IP-MIB-Linux-Fix-a-memory-leak-in-an-error-path.patch
-> > +++ /dev/null
-> > @@ -1,37 +0,0 @@
-> > -From 7c073e3a1b736689135fd2ed44ede5b83790bd37 Mon Sep 17 00:00:00 2001
-> > -From: Bart Van Assche <bvanassche@acm.org>
-> > -Date: Mon, 26 Aug 2019 18:32:08 -0700
-> > -Subject: IP-MIB, Linux: Fix a memory leak in an error path
-> > -
-> > -When a Linux system is booted with "ipv6.disable=1" in the kernel command
-> > -line, the file "/proc/net/snmp6" is not created. Fix the memory leak in
-> > -_systemstats_v6_load_systemstats() that is triggered with IPv6 disabled.
-> > -
-> > -See also https://sourceforge.net/p/net-snmp/bugs/2976/.
-> > -
-> > -Reported-by: Mark E Rusk <marker55@users.sourceforge.net>
-> > ----
-> > - agent/mibgroup/ip-mib/data_access/systemstats_linux.c | 4 +++-
-> > - 1 file changed, 3 insertions(+), 1 deletion(-)
-> > -
-> > -diff --git a/agent/mibgroup/ip-mib/data_access/systemstats_linux.c b/agent/mibgroup/ip-mib/data_access/systemstats_linux.c
-> > -index e28ff93..f68d122 100644
-> > ---- a/agent/mibgroup/ip-mib/data_access/systemstats_linux.c
-> > -+++ b/agent/mibgroup/ip-mib/data_access/systemstats_linux.c
-> > -@@ -560,10 +560,12 @@ _systemstats_v6_load_systemstats(netsnmp_container* container, u_int load_flags)
-> > -      * try to open file. If we can't, that's ok - maybe the module hasn't
-> > -      * been loaded yet.
-> > -      */
-> > --    if (!(devin = fopen(filename, "r"))) {
-> > -+    devin = fopen(filename, "r");
-> > -+    if (!devin) {
-> > -         DEBUGMSGTL(("access:systemstats",
-> > -                 "Failed to load Systemstats Table (linux1), cannot open %s\n",
-> > -                 filename));
-> > -+        netsnmp_access_systemstats_entry_free(entry);
-> > -         return 0;
-> > -     }
-> > -     
-> > --- 
-> > -2.7.4
-> > -
-> > diff --git a/package/netsnmp/netsnmp.hash b/package/netsnmp/netsnmp.hash
-> > index d05a7de9da..e3adb28c6d 100644
-> > --- a/package/netsnmp/netsnmp.hash
-> > +++ b/package/netsnmp/netsnmp.hash
-> > @@ -1,6 +1,4 @@
-> > -# From http://sourceforge.net/projects/net-snmp/files/net-snmp/5.8/
-> > -md5	63bfc65fbb86cdb616598df1aff6458a		net-snmp-5.8.tar.gz
-> > -sha1	78f70731df9dcdb13fe8f60eb7d80d7583da4d2c	net-snmp-5.8.tar.gz
-> > -# Locally computed
-> > -sha256 b2fc3500840ebe532734c4786b0da4ef0a5f67e51ef4c86b3345d697e4976adf  net-snmp-5.8.tar.gz
-> > -sha256 ed869ea395a1f125819a56676385ab0557a21507764bf56f2943302011381e59  COPYING
-> > +# Locally calculated after checking pgp signature at
-> > +# https://sourceforge.net/projects/net-snmp/files/net-snmp/5.9/net-snmp-5.9.tar.gz.asc
-> > +# using key D0F8F495DA6160C44EFFBF10F07B9D2DACB19FD6
-> > +sha256  04303a66f85d6d8b16d3cc53bde50428877c82ab524e17591dfceaeb94df6071  net-snmp-5.9.tar.gz
-> > diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
-> > index d8deaaf1b8..5b22d1a063 100644
-> > --- a/package/netsnmp/netsnmp.mk
-> > +++ b/package/netsnmp/netsnmp.mk
-> > @@ -4,7 +4,7 @@
-> >  #
-> >  ################################################################################
-> >  
-> > -NETSNMP_VERSION = 5.8
-> > +NETSNMP_VERSION = 5.9
-> >  NETSNMP_SITE = https://downloads.sourceforge.net/project/net-snmp/net-snmp/$(NETSNMP_VERSION)
-> >  NETSNMP_SOURCE = net-snmp-$(NETSNMP_VERSION).tar.gz
-> >  NETSNMP_LICENSE = Various BSD-like
-> > -- 
-> > 2.29.2
-> > 
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> -- 
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/python3/0035-closes-bpo-42938-Replace-snprintf-with-Python-unicod.patch b/package/python3/0035-closes-bpo-42938-Replace-snprintf-with-Python-unicod.patch
+new file mode 100644
+index 0000000000..5f20265a23
+--- /dev/null
++++ b/package/python3/0035-closes-bpo-42938-Replace-snprintf-with-Python-unicod.patch
+@@ -0,0 +1,190 @@
++From c347cbe694743cee120457aa6626712f7799a932 Mon Sep 17 00:00:00 2001
++From: "Miss Islington (bot)"
++ <31488909+miss-islington@users.noreply.github.com>
++Date: Mon, 18 Jan 2021 13:29:31 -0800
++Subject: [PATCH] closes bpo-42938: Replace snprintf with Python unicode
++ formatting in ctypes param reprs. (GH-24247)
++
++(cherry picked from commit 916610ef90a0d0761f08747f7b0905541f0977c7)
++
++Co-authored-by: Benjamin Peterson <benjamin@python.org>
++
++Co-authored-by: Benjamin Peterson <benjamin@python.org>
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ Lib/ctypes/test/test_parameters.py            | 43 ++++++++++++++++
++ .../2021-01-18-09-27-31.bpo-42938.4Zn4Mp.rst  |  2 +
++ Modules/_ctypes/callproc.c                    | 51 +++++++------------
++ 3 files changed, 64 insertions(+), 32 deletions(-)
++ create mode 100644 Misc/NEWS.d/next/Security/2021-01-18-09-27-31.bpo-42938.4Zn4Mp.rst
++
++diff --git a/Lib/ctypes/test/test_parameters.py b/Lib/ctypes/test/test_parameters.py
++index e4c25fd880..531894fdec 100644
++--- a/Lib/ctypes/test/test_parameters.py
+++++ b/Lib/ctypes/test/test_parameters.py
++@@ -201,6 +201,49 @@ class SimpleTypesTestCase(unittest.TestCase):
++         with self.assertRaises(ZeroDivisionError):
++             WorseStruct().__setstate__({}, b'foo')
++ 
+++    def test_parameter_repr(self):
+++        from ctypes import (
+++            c_bool,
+++            c_char,
+++            c_wchar,
+++            c_byte,
+++            c_ubyte,
+++            c_short,
+++            c_ushort,
+++            c_int,
+++            c_uint,
+++            c_long,
+++            c_ulong,
+++            c_longlong,
+++            c_ulonglong,
+++            c_float,
+++            c_double,
+++            c_longdouble,
+++            c_char_p,
+++            c_wchar_p,
+++            c_void_p,
+++        )
+++        self.assertRegex(repr(c_bool.from_param(True)), r"^<cparam '\?'@0x[A-Fa-f0-9]+>$")
+++        self.assertEqual(repr(c_char.from_param(97)), "<cparam 'c' ('a')>")
+++        self.assertRegex(repr(c_wchar.from_param('a')), r"^<cparam 'u'@0x[A-Fa-f0-9]+>$")
+++        self.assertEqual(repr(c_byte.from_param(98)), "<cparam 'b' (98)>")
+++        self.assertEqual(repr(c_ubyte.from_param(98)), "<cparam 'B' (98)>")
+++        self.assertEqual(repr(c_short.from_param(511)), "<cparam 'h' (511)>")
+++        self.assertEqual(repr(c_ushort.from_param(511)), "<cparam 'H' (511)>")
+++        self.assertRegex(repr(c_int.from_param(20000)), r"^<cparam '[li]' \(20000\)>$")
+++        self.assertRegex(repr(c_uint.from_param(20000)), r"^<cparam '[LI]' \(20000\)>$")
+++        self.assertRegex(repr(c_long.from_param(20000)), r"^<cparam '[li]' \(20000\)>$")
+++        self.assertRegex(repr(c_ulong.from_param(20000)), r"^<cparam '[LI]' \(20000\)>$")
+++        self.assertRegex(repr(c_longlong.from_param(20000)), r"^<cparam '[liq]' \(20000\)>$")
+++        self.assertRegex(repr(c_ulonglong.from_param(20000)), r"^<cparam '[LIQ]' \(20000\)>$")
+++        self.assertEqual(repr(c_float.from_param(1.5)), "<cparam 'f' (1.5)>")
+++        self.assertEqual(repr(c_double.from_param(1.5)), "<cparam 'd' (1.5)>")
+++        self.assertEqual(repr(c_double.from_param(1e300)), "<cparam 'd' (1e+300)>")
+++        self.assertRegex(repr(c_longdouble.from_param(1.5)), r"^<cparam ('d' \(1.5\)|'g'@0x[A-Fa-f0-9]+)>$")
+++        self.assertRegex(repr(c_char_p.from_param(b'hihi')), "^<cparam 'z' \(0x[A-Fa-f0-9]+\)>$")
+++        self.assertRegex(repr(c_wchar_p.from_param('hihi')), "^<cparam 'Z' \(0x[A-Fa-f0-9]+\)>$")
+++        self.assertRegex(repr(c_void_p.from_param(0x12)), r"^<cparam 'P' \(0x0*12\)>$")
+++
++ ################################################################
++ 
++ if __name__ == '__main__':
++diff --git a/Misc/NEWS.d/next/Security/2021-01-18-09-27-31.bpo-42938.4Zn4Mp.rst b/Misc/NEWS.d/next/Security/2021-01-18-09-27-31.bpo-42938.4Zn4Mp.rst
++new file mode 100644
++index 0000000000..7df65a156f
++--- /dev/null
+++++ b/Misc/NEWS.d/next/Security/2021-01-18-09-27-31.bpo-42938.4Zn4Mp.rst
++@@ -0,0 +1,2 @@
+++Avoid static buffers when computing the repr of :class:`ctypes.c_double` and
+++:class:`ctypes.c_longdouble` values.
++diff --git a/Modules/_ctypes/callproc.c b/Modules/_ctypes/callproc.c
++index b0a36a3024..f2506de544 100644
++--- a/Modules/_ctypes/callproc.c
+++++ b/Modules/_ctypes/callproc.c
++@@ -489,58 +489,47 @@ is_literal_char(unsigned char c)
++ static PyObject *
++ PyCArg_repr(PyCArgObject *self)
++ {
++-    char buffer[256];
++     switch(self->tag) {
++     case 'b':
++     case 'B':
++-        sprintf(buffer, "<cparam '%c' (%d)>",
+++        return PyUnicode_FromFormat("<cparam '%c' (%d)>",
++             self->tag, self->value.b);
++-        break;
++     case 'h':
++     case 'H':
++-        sprintf(buffer, "<cparam '%c' (%d)>",
+++        return PyUnicode_FromFormat("<cparam '%c' (%d)>",
++             self->tag, self->value.h);
++-        break;
++     case 'i':
++     case 'I':
++-        sprintf(buffer, "<cparam '%c' (%d)>",
+++        return PyUnicode_FromFormat("<cparam '%c' (%d)>",
++             self->tag, self->value.i);
++-        break;
++     case 'l':
++     case 'L':
++-        sprintf(buffer, "<cparam '%c' (%ld)>",
+++        return PyUnicode_FromFormat("<cparam '%c' (%ld)>",
++             self->tag, self->value.l);
++-        break;
++ 
++     case 'q':
++     case 'Q':
++-        sprintf(buffer,
++-#ifdef MS_WIN32
++-            "<cparam '%c' (%I64d)>",
++-#else
++-            "<cparam '%c' (%lld)>",
++-#endif
+++        return PyUnicode_FromFormat("<cparam '%c' (%lld)>",
++             self->tag, self->value.q);
++-        break;
++     case 'd':
++-        sprintf(buffer, "<cparam '%c' (%f)>",
++-            self->tag, self->value.d);
++-        break;
++-    case 'f':
++-        sprintf(buffer, "<cparam '%c' (%f)>",
++-            self->tag, self->value.f);
++-        break;
++-
+++    case 'f': {
+++        PyObject *f = PyFloat_FromDouble((self->tag == 'f') ? self->value.f : self->value.d);
+++        if (f == NULL) {
+++            return NULL;
+++        }
+++        PyObject *result = PyUnicode_FromFormat("<cparam '%c' (%R)>", self->tag, f);
+++        Py_DECREF(f);
+++        return result;
+++    }
++     case 'c':
++         if (is_literal_char((unsigned char)self->value.c)) {
++-            sprintf(buffer, "<cparam '%c' ('%c')>",
+++            return PyUnicode_FromFormat("<cparam '%c' ('%c')>",
++                 self->tag, self->value.c);
++         }
++         else {
++-            sprintf(buffer, "<cparam '%c' ('\\x%02x')>",
+++            return PyUnicode_FromFormat("<cparam '%c' ('\\x%02x')>",
++                 self->tag, (unsigned char)self->value.c);
++         }
++-        break;
++ 
++ /* Hm, are these 'z' and 'Z' codes useful at all?
++    Shouldn't they be replaced by the functionality of c_string
++@@ -549,22 +538,20 @@ PyCArg_repr(PyCArgObject *self)
++     case 'z':
++     case 'Z':
++     case 'P':
++-        sprintf(buffer, "<cparam '%c' (%p)>",
+++        return PyUnicode_FromFormat("<cparam '%c' (%p)>",
++             self->tag, self->value.p);
++         break;
++ 
++     default:
++         if (is_literal_char((unsigned char)self->tag)) {
++-            sprintf(buffer, "<cparam '%c'@%p>",
+++            return PyUnicode_FromFormat("<cparam '%c'@%p>",
++                 (unsigned char)self->tag, (void *)self);
++         }
++         else {
++-            sprintf(buffer, "<cparam 0x%02x@%p>",
+++            return PyUnicode_FromFormat("<cparam 0x%02x@%p>",
++                 (unsigned char)self->tag, (void *)self);
++         }
++-        break;
++     }
++-    return PyUnicode_FromString(buffer);
++ }
++ 
++ static PyMemberDef PyCArgType_members[] = {
++-- 
++2.20.1
++
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 8dbd0bab66..e85e704626 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -11,6 +11,9 @@ PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
+ PYTHON3_LICENSE = Python-2.0, others
+ PYTHON3_LICENSE_FILES = LICENSE
+ 
++# 0035-closes-bpo-42938-Replace-snprintf-with-Python-unicod.patch
++PYTHON3_IGNORE_CVES += CVE-2021-3177
++
+ # This host Python is installed in $(HOST_DIR), as it is needed when
+ # cross-compiling third-party Python modules.
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
