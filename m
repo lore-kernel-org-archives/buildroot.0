@@ -1,222 +1,232 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Fri,  5 Feb 2021 12:43:42 -0600
-Subject: [Buildroot] [PATCH v10 3/4] package/compiler-rt: new package
+Date: Fri,  5 Feb 2021 12:43:43 -0600
+Subject: [Buildroot] [PATCH v10 4/4] testing/tests: CLANG compiler-rt
+ runtime test
 In-Reply-To: <20210205184343.57068-1-matthew.weber@rockwellcollins.com>
 References: <20210205184343.57068-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20210205184343.57068-3-matthew.weber@rockwellcollins.com>
+Message-ID: <20210205184343.57068-4-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds support for the compiler-rt (CLANG runtime) library.
-It builds a set of static libraries and installs them into the
-CLANG/LLVM toolchain resource folder. These libraries can then be
-used by developers in the SDK for building target applications for
-analysis.
+This patch adds a test case that
+ 1) Builds the complete LLVM and CLANG set of host tools
+ 2) Cross-compiles the compiler-rt runtime using CLANG
+ 3) Builds a cross-compiled application using CLANG and the libfuzzer
+    compiler-rt library.
+ 4) Executes the fuzz application (part of the libfuzzer package) on
+    target and checks expected output for a heap-buffer-overflow.
 
-What is fuzzing and why libfuzzer?
-https://www.moritz.systems/blog/an-introduction-to-llvm-libfuzzer/
+Note: The libfuzzer package is just a tutorial example of how to use
+      the toolkit provided by llvm (Thus not adding it as a full
+      Buildroot package).
 
-The compiler-rt fuzzer and address sanitizer tools require additional
-LLVM binary tools installed to allow stack trace decoding actively during
-executable analysis.  This patch conditionally enables these tools.
-https://github.com/google/sanitizers/wiki/AddressSanitizerCallStack
+Parts of the following Clang cross-compiler series would clean up the
+need to set a -B and sysroot when compiling.
+http://patchwork.ozlabs.org/project/buildroot/list/?series=129565&state=*
 
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-Cc: Romain Naour <romain.naour@smile.fr>
 Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Valentin Korenblit <valentinkorenblit@gmail.com>
-Cc: Michael Drake <michael.drake@codethink.co.uk>
+Cc: Romain Naour <romain.naour@smile.fr>
 
 ---
 Changes
 v1 -> v2
-[Romain
- - Removed unnecessary host-cmake dependency
+[Ricardo
+ - updated yml with test case
+ - moved emulator launch cmd to test case from infra
+ - defconfig in the order provided by savedefconfig
+ - indent defconfig
+ - add full package for test code to the test br2-external
+ - consolidated to one class only
 
 v2 -> v3
-[Romain
- - Update to use COMPILER_RT_INSTALL_PATH for library install
-[Ricardo
- - Fixed check-package extra line
- - Spelling in commit message
+ - Added Review/tested by Ricardo's
+   [with the entire series applied on next branch:
+    https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/121908178
+    NOTE: this test case takes longer than test_rust, ~2 hours in my host
+    machine with all tarballs previously downloaded]
 
-v3 -> v4
-[Valentin
- - Pointed out that non-glibc libraries won't build. Further
-   investigation shows that the lib asan support in compiler-rt
-   doesn't have the libc checks yet to support multiple libraries.
-   (https://patchwork.ozlabs.org/patch/339938/ was the best example
-    I could find and it doesn't look like anything has changed in the
-    recent codebase)
+v4
+ - None
 
-v4 -> v5
-[Thomas P
- - Revisited staging install step and found a cleaner way to use the
-   default and then a hook to setup the runtime library path
+v5
+ - Rebased post 2018.11 on master
 
 v6
- - Bumped to 7.0.1 to match current LLVM/Clang version
+ - Testing of LLVM/Clang bump
 
 v7
- - Rebased on master for 8.0 LLVM/Clang version
- - Added comment about bumping verions of LLVM/Clang and Compiler-rt
-   together
-[Romain
- - Disabled test cases (-DCOMPILER_RT_INCLUDE_TESTS=OFF)
+ - Rebase on master and testing of LLVM/Clang bump to 8.0
+ - Updated hashes for archive and legal info (legal info changed
+   because of spelling cleanup)
 
 v8
- - Rebased and updated version to 9.x to match llvm/clang
+ - Cleaned up wording the 4th item of the message above.
 
 [Romain
- - Squashed "[v7,1/5]package/llvm: install target binary/debug tools" to
-   be included in this patch
-
-[Michael D
- - compiler-rt symlink creation to include shared folder such
-   that control flow lists work
+ - Removes a hardcoded toolchain/sysroot path "b option" for libfuzzer
+   pkg build, however requires this series applied.
+   http://patchwork.ozlabs.org/project/buildroot/list/?series=129565
+ - updated test case to check for heap overflow string to keep arch
+   generic
+ - Removed the fixed mcpu arg from clang++ build and dropped --sysroot
+   as cross compiler wrapper now provides this for libfuzzer build
 
 v9
  - Rebased post 2020.05
 
 v10
- - Switched compiler-rt site to point towards new github project
- - Updated compiler-rt version to 11.0.0
- - Tested against master[8640e8ffde3f61c5838] using
+ - Updated site for libfuzzer test case and bumped version
+ - Switched back to have no dependency on clang as cross compiler series
+   - Fixed a libfuzzer link time gcc ld error by adding sysroot and -B
+     to the BUILD_CMDS since we don't depend on the cross wrapper.
+ - Tested against master[8640e8ffde3f61c583] using
    support/testing/run-tests -o runtest -k \
-      tests.package.test_clang.TestClangCompilerRT
+        tests.package.test_clang.TestClangCompilerRT
 ---
- DEVELOPERS                           |  1 +
- package/Config.in                    |  1 +
- package/compiler-rt/Config.in        | 14 +++++++++++
- package/compiler-rt/compiler-rt.hash |  3 +++
- package/compiler-rt/compiler-rt.mk   | 37 ++++++++++++++++++++++++++++
- package/llvm/llvm.mk                 | 11 ++++++++-
- 6 files changed, 66 insertions(+), 1 deletion(-)
- create mode 100644 package/compiler-rt/Config.in
- create mode 100644 package/compiler-rt/compiler-rt.hash
- create mode 100644 package/compiler-rt/compiler-rt.mk
+ .../br2-external/clang-compiler-rt/Config.in  |  1 +
+ .../clang-compiler-rt/external.desc           |  1 +
+ .../clang-compiler-rt/external.mk             |  1 +
+ .../package/libfuzzer/Config.in               |  8 ++++
+ .../package/libfuzzer/libfuzzer.hash          |  2 +
+ .../package/libfuzzer/libfuzzer.mk            | 24 ++++++++++
+ support/testing/tests/package/test_clang.py   | 46 +++++++++++++++++++
+ 7 files changed, 83 insertions(+)
+ create mode 100644 support/testing/tests/package/br2-external/clang-compiler-rt/Config.in
+ create mode 100644 support/testing/tests/package/br2-external/clang-compiler-rt/external.desc
+ create mode 100644 support/testing/tests/package/br2-external/clang-compiler-rt/external.mk
+ create mode 100644 support/testing/tests/package/br2-external/clang-compiler-rt/package/libfuzzer/Config.in
+ create mode 100644 support/testing/tests/package/br2-external/clang-compiler-rt/package/libfuzzer/libfuzzer.hash
+ create mode 100644 support/testing/tests/package/br2-external/clang-compiler-rt/package/libfuzzer/libfuzzer.mk
+ create mode 100644 support/testing/tests/package/test_clang.py
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index c750105623..cc365c42ed 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1709,6 +1709,7 @@ F:	package/bridge-utils/
- F:	package/checkpolicy/
- F:	package/checksec/
- F:	package/cgroupfs-mount/
-+F:	package/compiler-rt/
- F:	package/crda/
- F:	package/cunit/
- F:	package/dacapo/
-diff --git a/package/Config.in b/package/Config.in
-index 06dfc32cc6..61ec54fd38 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1856,6 +1856,7 @@ menu "Other"
- 	source "package/clang/Config.in"
- 	source "package/clapack/Config.in"
- 	source "package/cmocka/Config.in"
-+	source "package/compiler-rt/Config.in"
- 	source "package/cppcms/Config.in"
- 	source "package/cracklib/Config.in"
- 	source "package/dawgdic/Config.in"
-diff --git a/package/compiler-rt/Config.in b/package/compiler-rt/Config.in
+diff --git a/support/testing/tests/package/br2-external/clang-compiler-rt/Config.in b/support/testing/tests/package/br2-external/clang-compiler-rt/Config.in
 new file mode 100644
-index 0000000000..9afc0d9d60
+index 0000000000..e1f9f8c598
 --- /dev/null
-+++ b/package/compiler-rt/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_COMPILER_RT
-+	bool "compiler-rt"
-+	depends on BR2_PACKAGE_LLVM
-+	depends on BR2_TOOLCHAIN_USES_GLIBC # asan lib requires
++++ b/support/testing/tests/package/br2-external/clang-compiler-rt/Config.in
+@@ -0,0 +1 @@
++source "$BR2_EXTERNAL_CLANG_COMPILER_RT_PATH/package/libfuzzer/Config.in"
+diff --git a/support/testing/tests/package/br2-external/clang-compiler-rt/external.desc b/support/testing/tests/package/br2-external/clang-compiler-rt/external.desc
+new file mode 100644
+index 0000000000..92df85911d
+--- /dev/null
++++ b/support/testing/tests/package/br2-external/clang-compiler-rt/external.desc
+@@ -0,0 +1 @@
++name: CLANG_COMPILER_RT
+diff --git a/support/testing/tests/package/br2-external/clang-compiler-rt/external.mk b/support/testing/tests/package/br2-external/clang-compiler-rt/external.mk
+new file mode 100644
+index 0000000000..6fa55c1211
+--- /dev/null
++++ b/support/testing/tests/package/br2-external/clang-compiler-rt/external.mk
+@@ -0,0 +1 @@
++include $(sort $(wildcard $(BR2_EXTERNAL_CLANG_COMPILER_RT_PATH)/package/*/*.mk))
+diff --git a/support/testing/tests/package/br2-external/clang-compiler-rt/package/libfuzzer/Config.in b/support/testing/tests/package/br2-external/clang-compiler-rt/package/libfuzzer/Config.in
+new file mode 100644
+index 0000000000..2d335fd3c7
+--- /dev/null
++++ b/support/testing/tests/package/br2-external/clang-compiler-rt/package/libfuzzer/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_LIBFUZZER
++	bool "libfuzzer"
 +	help
-+	  A collection of runtime libraries primarily used by clang and
-+	  llvm to provide builtins, sanitizer runtimes, and profiling
-+	  at runtime.
++	  This project aims at hosting tutorials,
++	  examples, discussions, research proposals,
++	  and other resources related to fuzzing.
 +
-+	  https://compiler-rt.llvm.org/
-+
-+comment "compiler-rt requires llvm to be enabled and a glibc toolchain"
-+	depends on !BR2_PACKAGE_LLVM
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC
-diff --git a/package/compiler-rt/compiler-rt.hash b/package/compiler-rt/compiler-rt.hash
++	  https://github.com/google/fuzzing
+diff --git a/support/testing/tests/package/br2-external/clang-compiler-rt/package/libfuzzer/libfuzzer.hash b/support/testing/tests/package/br2-external/clang-compiler-rt/package/libfuzzer/libfuzzer.hash
 new file mode 100644
-index 0000000000..dfdad8cddc
+index 0000000000..9287005ed9
 --- /dev/null
-+++ b/package/compiler-rt/compiler-rt.hash
-@@ -0,0 +1,3 @@
-+# Locally computed:
-+sha256 374aff82ff573a449f9aabbd330a5d0a441181c535a3599996127378112db234  compiler-rt-11.0.0.src.tar.xz
-+sha256 1a8f1058753f1ba890de984e48f0242a3a5c29a6a8f2ed9fd813f36985387e8d  LICENSE.TXT
-diff --git a/package/compiler-rt/compiler-rt.mk b/package/compiler-rt/compiler-rt.mk
++++ b/support/testing/tests/package/br2-external/clang-compiler-rt/package/libfuzzer/libfuzzer.hash
+@@ -0,0 +1,2 @@
++sha256 c71360c3b1ba1d88b28b0b3cb3a1744d251b87a12f2881224cc53ec26eb7a2db  libfuzzer-cec02db916d21baa4db5b8d262d78848b3a35f4b.tar.gz
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/support/testing/tests/package/br2-external/clang-compiler-rt/package/libfuzzer/libfuzzer.mk b/support/testing/tests/package/br2-external/clang-compiler-rt/package/libfuzzer/libfuzzer.mk
 new file mode 100644
-index 0000000000..0652717f3f
+index 0000000000..6c6371bea7
 --- /dev/null
-+++ b/package/compiler-rt/compiler-rt.mk
-@@ -0,0 +1,37 @@
++++ b/support/testing/tests/package/br2-external/clang-compiler-rt/package/libfuzzer/libfuzzer.mk
+@@ -0,0 +1,24 @@
 +################################################################################
 +#
-+# compiler-rt
++# libfuzzer
 +#
 +################################################################################
 +
-+# Compiler-RT should be bumped together with LLVM and Clang as the run-time is
-+# tied to the version of those tools
-+COMPILER_RT_VERSION = 11.0.0
-+COMPILER_RT_SOURCE = compiler-rt-$(COMPILER_RT_VERSION).src.tar.xz
-+COMPILER_RT_SITE = https://github.com/llvm/llvm-project/releases/download/llvmorg-$(COMPILER_RT_VERSION)
-+COMPILER_RT_LICENSE = NCSA MIT
-+COMPILER_RT_LICENSE_FILES = LICENSE.TXT
-+COMPILER_RT_DEPENDENCIES = host-clang llvm
++LIBFUZZER_VERSION = cec02db916d21baa4db5b8d262d78848b3a35f4b
++LIBFUZZER_SITE = $(call github,google,fuzzing,$(LIBFUZZER_VERSION))
++LIBFUZZER_LICENSE = Apache-2.0
++LIBFUZZER_LICENSE_FILES = LICENSE
++LIBFUZZER_DEPENDENCIES = compiler-rt
 +
-+COMPILER_RT_INSTALL_STAGING = YES
-+COMPILER_RT_INSTALL_TARGET = NO
-+
-+COMPILER_RT_CONF_OPTS=-DCOMPILER_RT_STANDALONE_BUILD=OFF \
-+	-DCOMPILER_RT_STANDALONE_BUILD=ON \
-+	-DCOMPILER_RT_DEFAULT_TARGET_TRIPLE=$(GNU_TARGET_NAME) \
-+	-DLLVM_CONFIG_PATH=$(HOST_DIR)/usr/bin/llvm-config
-+
-+# The installation of the target runtime libraries defaults to DESTDIR, however
-+# host-clang resources directory needs a link so Clang can find the runtime
-+# libraries in the same location they would be if built as part of the Clang
-+# build. The "resources" directory is loosely documented and seems to be
-+# assumed, as compiler-rt is usually build at the same time as Clang and not
-+# standalone.
-+define COMPILER_RT_SETUP_RUNTIME_LIBS
-+	mkdir -p $(HOST_DIR)/lib/clang/$(HOST_CLANG_VERSION)/lib
-+	ln -sf ../../../../$(GNU_TARGET_NAME)/sysroot/usr/lib/linux $(HOST_DIR)/lib/clang/$(HOST_CLANG_VERSION)/lib/linux
-+	ln -sf ../../../../$(GNU_TARGET_NAME)/sysroot/usr/share $(HOST_DIR)/lib/clang/$(HOST_CLANG_VERSION)/share
++define LIBFUZZER_BUILD_CMDS
++	$(HOST_DIR)/bin/clang++ --sysroot=$(STAGING_DIR) \
++		-B $(HOST_DIR)/opt/ext-toolchain -fsanitize=address,fuzzer \
++		$(@D)/tutorial/libFuzzer/fuzz_me.cc \
++		-o $(@D)/fuzz_me
 +endef
-+COMPILER_RT_POST_INSTALL_STAGING_HOOKS += COMPILER_RT_SETUP_RUNTIME_LIBS
 +
-+$(eval $(cmake-package))
-diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
-index 069312bb3f..6efdebdde4 100644
---- a/package/llvm/llvm.mk
-+++ b/package/llvm/llvm.mk
-@@ -215,8 +215,17 @@ HOST_LLVM_CONF_OPTS += \
- # We need to activate LLVM_INCLUDE_TOOLS, otherwise it does not generate
- # libLLVM.so
- LLVM_CONF_OPTS += \
--	-DLLVM_INCLUDE_TOOLS=ON \
-+	-DLLVM_INCLUDE_TOOLS=ON
++define LIBFUZZER_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 755 $(@D)/fuzz_me $(TARGET_DIR)/usr/bin/fuzz_me
++endef
 +
-+# The llvm-symbolizer binary is used by the Compiler-RT Fuzzer
-+# and AddressSanitizer tools for stack traces.
-+ifeq ($(BR2_PACKAGE_COMPILER_RT),y)
-+LLVM_CONF_OPTS += \
-+	-DLLVM_BUILD_TOOLS=ON
-+else
-+LLVM_CONF_OPTS += \
- 	-DLLVM_BUILD_TOOLS=OFF
-+endif
- 
- ifeq ($(BR2_PACKAGE_LLVM_RTTI),y)
- HOST_LLVM_CONF_OPTS += -DLLVM_ENABLE_RTTI=ON
++$(eval $(generic-package))
+diff --git a/support/testing/tests/package/test_clang.py b/support/testing/tests/package/test_clang.py
+new file mode 100644
+index 0000000000..df3990c6be
+--- /dev/null
++++ b/support/testing/tests/package/test_clang.py
+@@ -0,0 +1,46 @@
++import os
++
++import infra.basetest
++
++FUZZ_TIMEOUT = 120
++
++
++class TestClangCompilerRT(infra.basetest.BRTest):
++    br2_external = [infra.filepath("tests/package/br2-external/clang-compiler-rt")]
++    config = \
++        """
++        BR2_aarch64=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
++        BR2_LINUX_KERNEL=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
++        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
++        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++        BR2_PACKAGE_COMPILER_RT=y
++        BR2_PACKAGE_LLVM=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        BR2_TARGET_ROOTFS_CPIO_GZIP=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        BR2_PACKAGE_LIBFUZZER=y
++        """
++
++    def login(self):
++        img = os.path.join(self.builddir, "images", "rootfs.cpio.gz")
++        kern = os.path.join(self.builddir, "images", "Image")
++        # Sanitizers overallocate memory and the minimum that seemed to work was 512MB
++        self.emulator.boot(arch="aarch64",
++                           kernel=kern,
++                           kernel_cmdline=["console=ttyAMA0"],
++                           options=["-M", "virt", "-cpu", "cortex-a53", "-m", "512", "-initrd", img])
++        self.emulator.login()
++
++    def test_run(self):
++        self.login()
++
++        # The test case verifies the application executes and that
++        # the symbolizer is working to decode the stack trace.
++        cmd = "fuzz_me 2>&1 | grep heap-buffer-overflow"
++        _, exit_code = self.emulator.run(cmd, FUZZ_TIMEOUT)
++        self.assertEqual(exit_code, 0)
 -- 
 2.17.1
