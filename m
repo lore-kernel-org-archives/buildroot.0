@@ -1,37 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Feb 2021 08:05:33 +0100
-Subject: [Buildroot] [git commit] package/ghostscript: add
- GHOSTSCRIPT_CPE_ID_VENDOR
-Message-ID: <20210205064641.AAF478267E@busybox.osuosl.org>
+Date: Fri, 5 Feb 2021 08:06:33 +0100
+Subject: [Buildroot] [git commit] package/libksba: set LIBKSBA_CPE_ID_VALID
+Message-ID: <20210205064641.A2BB08138F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d89ea3313d21ceeb5944d7d95185b754e2cf912a
+commit: https://git.buildroot.net/buildroot/commit/?id=76e8a357113d43eaafb2eb6454eaf8c19440ab34
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:artifex:ghostscript is a valid CPE identifier for this
+cpe:2.3:a:libksba_project:libksba is a valid CPE identifier for this
 package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aartifex%3Aghostscript
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alibksba_project%3Alibksba
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ghostscript/ghostscript.mk | 1 +
+ package/libksba/libksba.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
-index e6842631f2..5b50c94405 100644
---- a/package/ghostscript/ghostscript.mk
-+++ b/package/ghostscript/ghostscript.mk
-@@ -8,6 +8,7 @@ GHOSTSCRIPT_VERSION = 9.53.3
- GHOSTSCRIPT_SITE = https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs$(subst .,,$(GHOSTSCRIPT_VERSION))
- GHOSTSCRIPT_LICENSE = AGPL-3.0
- GHOSTSCRIPT_LICENSE_FILES = LICENSE
-+GHOSTSCRIPT_CPE_ID_VENDOR = artifex
- GHOSTSCRIPT_DEPENDENCIES = \
- 	host-lcms2 \
- 	host-libjpeg \
+diff --git a/package/libksba/libksba.mk b/package/libksba/libksba.mk
+index b2f4db6b62..2ad9bee06d 100644
+--- a/package/libksba/libksba.mk
++++ b/package/libksba/libksba.mk
+@@ -9,6 +9,7 @@ LIBKSBA_SOURCE = libksba-$(LIBKSBA_VERSION).tar.bz2
+ LIBKSBA_SITE = ftp://ftp.gnupg.org/gcrypt/libksba
+ LIBKSBA_LICENSE = LGPL-3.0+ or GPL-2.0+ (library, headers), GPL-3.0+ (manual, tests, build system)
+ LIBKSBA_LICENSE_FILES = AUTHORS COPYING COPYING.GPLv2 COPYING.GPLv3 COPYING.LGPLv3
++LIBKSBA_CPE_ID_VALID = YES
+ LIBKSBA_INSTALL_STAGING = YES
+ LIBKSBA_DEPENDENCIES = libgpg-error
+ LIBKSBA_CONF_OPTS = --with-gpg-error-prefix=$(STAGING_DIR)/usr
