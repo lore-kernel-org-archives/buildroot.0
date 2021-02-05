@@ -1,42 +1,30 @@
-From: Maxim Kochetkov <fido_max@inbox.ru>
-Date: Fri,  5 Feb 2021 08:57:45 +0300
-Subject: [Buildroot] [PATCH 1/1] package/timescaledb: bump version to 2.0.1
-Message-ID: <20210205055745.14708-1-fido_max@inbox.ru>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 05 Feb 2021 08:05:45 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libcurl: bump version to 7.75.0
+In-Reply-To: <20210204222525.954529-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Thu, 4 Feb 2021 23:25:25 +0100")
+References: <20210204222525.954529-1-bernd.kuhls@t-online.de>
+Message-ID: <87r1lv8052.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes: https://github.com/timescale/timescaledb/releases/tag/2.0.1
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
----
- package/timescaledb/timescaledb.hash | 2 +-
- package/timescaledb/timescaledb.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > Updated license hash due to copyright year bump:
+ > https://github.com/curl/curl/commit/275c28e6502e1ded6c62b5bf22a409de16b4a04e
 
-diff --git a/package/timescaledb/timescaledb.hash b/package/timescaledb/timescaledb.hash
-index afadf637e2..f275c3d4b0 100644
---- a/package/timescaledb/timescaledb.hash
-+++ b/package/timescaledb/timescaledb.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  f74ebebb4461e4e77273615551ccf9250fac0bdef7bdacf5c92ee3a6884d7782  timescaledb-2.0.0.tar.gz
-+sha256  96e51d5240547f0223c34b91263f6fffca46927710764bf450aa61e9756189bd  timescaledb-2.0.1.tar.gz
- sha256  0378e0948feefd85f579319c74d6e2b671194037f550c7176ef26649d94c895b  LICENSE
-diff --git a/package/timescaledb/timescaledb.mk b/package/timescaledb/timescaledb.mk
-index 94c925932f..0d5dc12d9d 100644
---- a/package/timescaledb/timescaledb.mk
-+++ b/package/timescaledb/timescaledb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TIMESCALEDB_VERSION = 2.0.0
-+TIMESCALEDB_VERSION = 2.0.1
- TIMESCALEDB_SITE = $(call github,timescale,timescaledb,$(TIMESCALEDB_VERSION))
- TIMESCALEDB_LICENSE = Apache-2.0
- TIMESCALEDB_LICENSE_FILES = LICENSE
+ > Changelog: https://curl.se/changes.html
+
+ > Release notes:
+ > https://daniel.haxx.se/blog/2021/02/03/curl-7-75-0-is-smaller/
+ > "No new security advisories this time!"
+
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+Committed, thanks.
+
 -- 
-2.29.2
+Bye, Peter Korsgaard
