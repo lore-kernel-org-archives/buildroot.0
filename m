@@ -1,71 +1,63 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 5 Feb 2021 09:25:23 +0100
-Subject: [Buildroot] [git commit] support/config-fragments/autobuild: use
- Bootlin toolchain for RISC-V 64 glibc
-Message-ID: <20210205080943.7A9E1815C0@busybox.osuosl.org>
+Date: Fri, 5 Feb 2021 09:42:16 +0100
+Subject: [Buildroot] [git commit] package/xenomai: disable cobalt for armv8
+Message-ID: <20210205082838.66C2781566@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=63485a6c1ec887c6e59e4b9141d1af5f39cc044e
+commit: https://git.buildroot.net/buildroot/commit/?id=6490a11018e71d8200f74af581c0a65b1612085a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Instead of using an external toolchain built specifically for the
-autobuilders to test RISC-V 64/glibc, use a pre-built Bootlin
-toolchain.
+When a armv8 target is used in 32bits mode, xenomai fail to detect the
+ARM architecture and abord the build. (__ARM_ARCH_7A__ is not defined
+for armv8 cpus).
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+There are no autobuilder failures for this issue since cobalt is never
+selected, but the following defconfig:
+
+BR2_arm=y
+BR2_cortex_a53=y
+BR2_ARM_FPU_NEON_VFPV4=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_PACKAGE_XENOMAI=y
+BR2_PACKAGE_XENOMAI_COBALT=y
+
+This was initialy reproduced using the raspberrypi3_defconfig with
+Xenomai package with cobalt selected.
+
+In order to use Xenomai on raspberrypi3 in 32 bits mode, one has to
+select BR2_cortex_a7 instead of BR2_cortex_a53 (see a13a388dd444).
+
+See:
+https://gitlab.denx.de/Xenomai/xenomai/-/blob/v3.1/lib/cobalt/arch/arm/include/asm/xenomai/features.h#L52
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+[yann.morin.1998 at free.fr:
+  - switch to independent conditional 'default y'
+  - slightly reword the commit log
+]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- support/config-fragments/autobuild/bootlin-riscv64-glibc.config | 5 +++++
- support/config-fragments/autobuild/br-riscv64.config            | 8 --------
- support/config-fragments/autobuild/toolchain-configs.csv        | 2 +-
- 3 files changed, 6 insertions(+), 9 deletions(-)
+ package/xenomai/Config.in | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/support/config-fragments/autobuild/bootlin-riscv64-glibc.config b/support/config-fragments/autobuild/bootlin-riscv64-glibc.config
-new file mode 100644
-index 0000000000..f6c6fcaa36
---- /dev/null
-+++ b/support/config-fragments/autobuild/bootlin-riscv64-glibc.config
-@@ -0,0 +1,5 @@
-+BR2_riscv=y
-+BR2_RISCV_ABI_LP64=y
-+BR2_TOOLCHAIN_EXTERNAL=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_RISCV64_GLIBC_BLEEDING_EDGE=y
-diff --git a/support/config-fragments/autobuild/br-riscv64.config b/support/config-fragments/autobuild/br-riscv64.config
-deleted file mode 100644
-index c5df86392c..0000000000
---- a/support/config-fragments/autobuild/br-riscv64.config
-+++ /dev/null
-@@ -1,8 +0,0 @@
--BR2_riscv=y
--BR2_TOOLCHAIN_EXTERNAL=y
--BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/br-riscv64-glibc-2020.02.tar.bz2"
--BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
--BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_4=y
--BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
--BR2_TOOLCHAIN_EXTERNAL_CXX=y
-diff --git a/support/config-fragments/autobuild/toolchain-configs.csv b/support/config-fragments/autobuild/toolchain-configs.csv
-index c0b10e3e03..75393c381d 100644
---- a/support/config-fragments/autobuild/toolchain-configs.csv
-+++ b/support/config-fragments/autobuild/toolchain-configs.csv
-@@ -37,6 +37,7 @@ support/config-fragments/autobuild/bootlin-openrisc-uclibc.config,x86_64
- support/config-fragments/autobuild/bootlin-powerpc64le-power8-glibc.config,x86_64
- support/config-fragments/autobuild/bootlin-powerpc-e500mc-uclibc.config,x86_64
- support/config-fragments/autobuild/bootlin-riscv32-glibc.config,x86_64
-+support/config-fragments/autobuild/bootlin-riscv64-glibc.config,x86_64
- support/config-fragments/autobuild/bootlin-sh4-uclibc.config,x86_64
- support/config-fragments/autobuild/bootlin-sparc-uclibc.config,x86_64
- support/config-fragments/autobuild/bootlin-sparc64-glibc.config,x86_64
-@@ -58,7 +59,6 @@ support/config-fragments/autobuild/br-mips64r6-el-hf-glibc.config,x86_64
- support/config-fragments/autobuild/br-powerpc-603e-basic-cpp.config,x86_64
- support/config-fragments/autobuild/br-powerpc64-power7-glibc.config,x86_64
- support/config-fragments/autobuild/br-powerpc-internal-full.config,any
--support/config-fragments/autobuild/br-riscv64.config,x86_64
- support/config-fragments/autobuild/br-riscv64-full-internal.config,any
- support/config-fragments/autobuild/br-riscv64-musl.config,x86_64
- support/config-fragments/autobuild/br-s390x-z13-internal-glibc.config,any
+diff --git a/package/xenomai/Config.in b/package/xenomai/Config.in
+index e39a550416..ec6d9e5d29 100644
+--- a/package/xenomai/Config.in
++++ b/package/xenomai/Config.in
+@@ -1,8 +1,9 @@
+ config BR2_PACKAGE_XENOMAI_COBALT_ARCH_SUPPORTS
+ 	bool
+-	default y
+-	depends on BR2_i386 || BR2_x86_64 || (BR2_arm && !BR2_ARM_CPU_ARMV7M) || \
+-		BR2_powerpc
++	default y if BR2_i386
++	default y if BR2_x86_64
++	default y if BR2_powerpc
++	default y if BR2_arm && !BR2_ARM_CPU_ARMV7M && !BR2_ARM_CPU_ARMV8A
+ 
+ comment "xenomai needs a glibc or uClibc toolchain w/ threads"
+ 	depends on BR2_USE_MMU
