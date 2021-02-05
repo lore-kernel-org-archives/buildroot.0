@@ -1,36 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Feb 2021 22:42:23 +0100
-Subject: [Buildroot] [git commit] package/python-bottle: add CPE variables
-Message-ID: <20210205212202.855737FC16@busybox.osuosl.org>
+From: Leonid Yuriev <leo@yuriev.ru>
+Date: Sat,  6 Feb 2021 00:29:49 +0300
+Subject: [Buildroot] [PATCH 1/1] package/libmdbx: bump version to 0.9.3
+Message-ID: <20210205212949.1172475-1-leo@yuriev.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=55565f18e1e876f3565d96c5d1371c99463eb2b7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Release notes: https://github.com/erthink/libmdbx/releases/tag/v0.9.3
 
-cpe:2.3:a:bottlepy:bottle is a valid CPE identifier for this package:
-
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Abottlepy%3Abottle
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Leonid Yuriev <leo@yuriev.ru>
 ---
- package/python-bottle/python-bottle.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/libmdbx/libmdbx.hash | 2 +-
+ package/libmdbx/libmdbx.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-bottle/python-bottle.mk b/package/python-bottle/python-bottle.mk
-index 18f1507a97..d19a439f8c 100644
---- a/package/python-bottle/python-bottle.mk
-+++ b/package/python-bottle/python-bottle.mk
-@@ -9,6 +9,8 @@ PYTHON_BOTTLE_SOURCE = bottle-$(PYTHON_BOTTLE_VERSION).tar.gz
- PYTHON_BOTTLE_SITE = https://files.pythonhosted.org/packages/ea/80/3d2dca1562ffa1929017c74635b4cb3645a352588de89e90d0bb53af3317
- PYTHON_BOTTLE_LICENSE = MIT
- PYTHON_BOTTLE_LICENSE_FILES = LICENSE
-+PYTHON_BOTTLE_CPE_ID_VENDOR = bottlepy
-+PYTHON_BOTTLE_CPE_ID_PRODUCT = bottle
- PYTHON_BOTTLE_SETUP_TYPE = setuptools
+diff --git a/package/libmdbx/libmdbx.hash b/package/libmdbx/libmdbx.hash
+index 0d3501f1d9..fcfb4a673f 100644
+--- a/package/libmdbx/libmdbx.hash
++++ b/package/libmdbx/libmdbx.hash
+@@ -1,5 +1,5 @@
+ # Hashes from: https://github.com/erthink/libmdbx/releases/
+-sha256  c35cc53d66d74ebfc86e39441ba26276541ac7892bf91dba1e70c83665a02767  libmdbx-amalgamated-0.9.2.tar.gz
++sha256  d12bc7189b746beaa85514fcd1fcf26b957bb8feadb11662a0e20c4e79410d3f  libmdbx-amalgamated-0.9.3.tar.gz
  
- $(eval $(python-package))
+ # Locally calculated
+ sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
+diff --git a/package/libmdbx/libmdbx.mk b/package/libmdbx/libmdbx.mk
+index 370df2eaa3..baf5193eb6 100644
+--- a/package/libmdbx/libmdbx.mk
++++ b/package/libmdbx/libmdbx.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBMDBX_VERSION = 0.9.2
++LIBMDBX_VERSION = 0.9.3
+ LIBMDBX_SOURCE = libmdbx-amalgamated-$(LIBMDBX_VERSION).tar.gz
+ LIBMDBX_SITE = https://github.com/erthink/libmdbx/releases/download/v$(LIBMDBX_VERSION)
+ LIBMDBX_SUPPORTS_IN_SOURCE_BUILD = NO
+-- 
+2.30.0
