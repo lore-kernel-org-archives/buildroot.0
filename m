@@ -1,37 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Fri, 5 Feb 2021 13:47:18 +0100
-Subject: [Buildroot] [git commit] package/cryptodev-linux: set
- CRYPTODEV_LINUX_CPE_ID_VENDOR
-Message-ID: <20210205122651.C42F07FE04@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/vala: add VALA_CPE_ID_VENDOR
+Message-ID: <20210205122651.D1AD67FE04@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=66acd81108e054828f2e768840defa1237982601
+commit: https://git.buildroot.net/buildroot/commit/?id=6d6b7f0e6c30f0fa0a2b8642044c053bad5dbf5b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:cryptodev-linux:cryptodev-linux is a valid CPE identifier for
-this package:
+cpe:2.3:a:gnome:vala is a valid CPE identifier for this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Acryptodev-linux%3Acryptodev-linux
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Agnome%3Avala
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cryptodev-linux/cryptodev-linux.mk | 1 +
+ package/vala/vala.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/cryptodev-linux/cryptodev-linux.mk b/package/cryptodev-linux/cryptodev-linux.mk
-index 5b882b284e..2a65755aa2 100644
---- a/package/cryptodev-linux/cryptodev-linux.mk
-+++ b/package/cryptodev-linux/cryptodev-linux.mk
-@@ -9,6 +9,7 @@ CRYPTODEV_LINUX_SITE = $(call github,cryptodev-linux,cryptodev-linux,$(CRYPTODEV
- CRYPTODEV_LINUX_INSTALL_STAGING = YES
- CRYPTODEV_LINUX_LICENSE = GPL-2.0+
- CRYPTODEV_LINUX_LICENSE_FILES = COPYING
-+CRYPTODEV_LINUX_CPE_ID_VENDOR = cryptodev-linux
+diff --git a/package/vala/vala.mk b/package/vala/vala.mk
+index 95365faf18..93a304f19c 100644
+--- a/package/vala/vala.mk
++++ b/package/vala/vala.mk
+@@ -10,6 +10,7 @@ VALA_SITE = http://download.gnome.org/sources/vala/$(VALA_VERSION_MAJOR)
+ VALA_SOURCE = vala-$(VALA_VERSION).tar.xz
+ VALA_LICENSE = LGPL-2.1+
+ VALA_LICENSE_FILES = COPYING
++VALA_CPE_ID_VENDOR = gnome
  
- CRYPTODEV_LINUX_PROVIDES = cryptodev
- 
+ HOST_VALA_DEPENDENCIES = host-bison host-flex host-libglib2
+ # Yes, the autoconf script understands ':' as "xsltproc is not
