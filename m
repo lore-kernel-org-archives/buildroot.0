@@ -1,63 +1,45 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 5 Feb 2021 09:42:16 +0100
-Subject: [Buildroot] [git commit] package/xenomai: disable cobalt for armv8
-Message-ID: <20210205082838.66C2781566@busybox.osuosl.org>
+Date: Fri, 5 Feb 2021 09:39:51 +0100
+Subject: [Buildroot] [git commit] package/xenomai: smp support needs at
+ least armv6
+Message-ID: <20210205082838.570E281566@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6490a11018e71d8200f74af581c0a65b1612085a
+commit: https://git.buildroot.net/buildroot/commit/?id=cb380c2e1155a295919aec122788d046b34e45f0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When a armv8 target is used in 32bits mode, xenomai fail to detect the
-ARM architecture and abord the build. (__ARM_ARCH_7A__ is not defined
-for armv8 cpus).
-
-There are no autobuilder failures for this issue since cobalt is never
-selected, but the following defconfig:
+There are no autobuilder failures for this issue, but the following
+defconfig:
 
 BR2_arm=y
-BR2_cortex_a53=y
-BR2_ARM_FPU_NEON_VFPV4=y
 BR2_TOOLCHAIN_EXTERNAL=y
 BR2_PACKAGE_XENOMAI=y
 BR2_PACKAGE_XENOMAI_COBALT=y
 
-This was initialy reproduced using the raspberrypi3_defconfig with
-Xenomai package with cobalt selected.
-
-In order to use Xenomai on raspberrypi3 in 32 bits mode, one has to
-select BR2_cortex_a7 instead of BR2_cortex_a53 (see a13a388dd444).
-
 See:
-https://gitlab.denx.de/Xenomai/xenomai/-/blob/v3.1/lib/cobalt/arch/arm/include/asm/xenomai/features.h#L52
+https://gitlab.denx.de/Xenomai/xenomai/-/blob/v3.1/lib/cobalt/arch/arm/include/asm/xenomai/features.h#L56
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
-[yann.morin.1998 at free.fr:
-  - switch to independent conditional 'default y'
-  - slightly reword the commit log
-]
+[yann.morin.1998 at free.fr: fix the condition]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/xenomai/Config.in | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ package/xenomai/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/package/xenomai/Config.in b/package/xenomai/Config.in
-index e39a550416..ec6d9e5d29 100644
+index b655733528..e39a550416 100644
 --- a/package/xenomai/Config.in
 +++ b/package/xenomai/Config.in
-@@ -1,8 +1,9 @@
- config BR2_PACKAGE_XENOMAI_COBALT_ARCH_SUPPORTS
- 	bool
--	default y
--	depends on BR2_i386 || BR2_x86_64 || (BR2_arm && !BR2_ARM_CPU_ARMV7M) || \
--		BR2_powerpc
-+	default y if BR2_i386
-+	default y if BR2_x86_64
-+	default y if BR2_powerpc
-+	default y if BR2_arm && !BR2_ARM_CPU_ARMV7M && !BR2_ARM_CPU_ARMV8A
+@@ -110,6 +110,8 @@ endchoice
+ config BR2_PACKAGE_XENOMAI_ENABLE_SMP
+ 	bool "Enable SMP support"
+ 	default y
++	# SMP not supported below armv6
++	depends on !BR2_ARM_CPU_ARMV4 && !BR2_ARM_CPU_ARMV5
+ 	help
+ 	  This option enables SMP support in Xenomai userspace.
  
- comment "xenomai needs a glibc or uClibc toolchain w/ threads"
- 	depends on BR2_USE_MMU
