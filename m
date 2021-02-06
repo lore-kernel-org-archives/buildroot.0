@@ -1,51 +1,45 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Sat,  6 Feb 2021 18:56:40 +0000
-Subject: [Buildroot] [PATCH 1/1] package/iputils: update path for tftpd
-Message-ID: <20210206185640.140214-1-petr.vorel@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat,  6 Feb 2021 20:03:59 +0100
+Subject: [Buildroot] [PATCH 2/2] package/libblockdev: bump version to 2.25
+In-Reply-To: <20210206190359.3152733-1-bernd.kuhls@t-online.de>
+References: <20210206190359.3152733-1-bernd.kuhls@t-online.de>
+Message-ID: <20210206190359.3152733-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-tftpd has been installed into /usr/sbin in 20210202
-(in upstream commit 8d1420f tftpd: install into sbindir).
+Release notes:
+https://github.com/storaged-project/libblockdev/blob/2.x-branch/NEWS.rst
 
-Thus remove hook which expected it in /usr/bin and tried to move it into
-/usr/sbin.
-
-Fixes:
- - http://autobuild.buildroot.net/results/3d142a705f07d496b1342e04094cd03ce7d92994
- - http://autobuild.buildroot.net/results/dae643b2d23d74b5f91225d00e85c350861a0e8a
- - http://autobuild.buildroot.net/results/dcfcb082bc188e7f990e280c3fd5d971f32cc048
-
-Fixes: ea422f9950 ("package/iputils: bump version to 20210202")
-
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-Sorry for introducing regression.
+ package/libblockdev/libblockdev.hash | 2 +-
+ package/libblockdev/libblockdev.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Kind regards,
-Petr
-
- package/iputils/iputils.mk | 5 -----
- 1 file changed, 5 deletions(-)
-
-diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-index 0273e295d6..1ee64dabe4 100644
---- a/package/iputils/iputils.mk
-+++ b/package/iputils/iputils.mk
-@@ -84,11 +84,6 @@ endif
- ifeq ($(BR2_PACKAGE_IPUTILS_TFTPD),y)
- IPUTILS_CONF_OPTS += -DBUILD_TFTPD=true
+diff --git a/package/libblockdev/libblockdev.hash b/package/libblockdev/libblockdev.hash
+index 1c4b1ec7bf..101b99f1a8 100644
+--- a/package/libblockdev/libblockdev.hash
++++ b/package/libblockdev/libblockdev.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  dc207c70dbef52c818a8abbcb6b8e298a6b63c0b78a5e1f2773b5f7b89300773  libblockdev-2.24.tar.gz
++sha256  555aa42a2db39649ad83253bdc902ab5bd63d39c123e0c8055c4de7fe7571668  libblockdev-2.25.tar.gz
+ sha256  97bdc721d875501b6243a456333fdfdb1ab64d31c4da2554de845caf4674b946  LICENSE
+diff --git a/package/libblockdev/libblockdev.mk b/package/libblockdev/libblockdev.mk
+index a38912514c..39ae9230d9 100644
+--- a/package/libblockdev/libblockdev.mk
++++ b/package/libblockdev/libblockdev.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--define IPUTILS_MOVE_TFTPD_BINARY
--	mv $(TARGET_DIR)/usr/bin/tftpd $(TARGET_DIR)/usr/sbin/tftpd
--endef
--IPUTILS_POST_INSTALL_TARGET_HOOKS += IPUTILS_MOVE_TFTPD_BINARY
--
- else
- IPUTILS_CONF_OPTS += -DBUILD_TFTPD=false
- endif
+-LIBBLOCKDEV_VERSION = 2.24
++LIBBLOCKDEV_VERSION = 2.25
+ LIBBLOCKDEV_SITE = https://github.com/storaged-project/libblockdev/releases/download/$(LIBBLOCKDEV_VERSION)-1
+ LIBBLOCKDEV_LICENSE = LGPL-2.1
+ LIBBLOCKDEV_LICENSE_FILES = LICENSE
 -- 
-2.30.0
+2.29.2
