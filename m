@@ -1,36 +1,37 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 6 Feb 2021 14:51:29 +0100
-Subject: [Buildroot] [git commit] package/p11-kit: set P11_KIT_CPE_ID_VALID
-Message-ID: <20210206133111.ADC3A802E0@busybox.osuosl.org>
+Date: Sat, 6 Feb 2021 14:51:24 +0100
+Subject: [Buildroot] [git commit] package/raptor: add CPE variables
+Message-ID: <20210206133111.73113802E0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=76c53c8877e0c41a323f936b586570b422fac1a8
+commit: https://git.buildroot.net/buildroot/commit/?id=53e7998deed7cf4d330afa336e5c78a889a8f669
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:p11-kit_project:p11-kit is a valid CPE identifier for this
-package:
+cpe:2.3:a:librdf:raptor_rdf_syntax_library is a valid CPE identifier for
+this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ap11-kit_project%3Ap11-kit
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alibrdf%3Araptor_rdf_syntax_library
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/p11-kit/p11-kit.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/raptor/raptor.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/p11-kit/p11-kit.mk b/package/p11-kit/p11-kit.mk
-index 81972f811b..977150f571 100644
---- a/package/p11-kit/p11-kit.mk
-+++ b/package/p11-kit/p11-kit.mk
-@@ -13,6 +13,7 @@ P11_KIT_CONF_ENV = ac_cv_have_decl_program_invocation_short_name=yes \
- 	ac_cv_have_decl___progname=no
- P11_KIT_LICENSE = BSD-3-Clause
- P11_KIT_LICENSE_FILES = COPYING
-+P11_KIT_CPE_ID_VALID = YES
+diff --git a/package/raptor/raptor.mk b/package/raptor/raptor.mk
+index d674627f90..6d21fad58e 100644
+--- a/package/raptor/raptor.mk
++++ b/package/raptor/raptor.mk
+@@ -10,6 +10,8 @@ RAPTOR_SITE = http://download.librdf.org/source
+ RAPTOR_DEPENDENCIES = libxml2 libxslt
+ RAPTOR_LICENSE = GPL-2.0+ or LGPL-2.1+ or Apache-2.0+
+ RAPTOR_LICENSE_FILES = LICENSE.txt
++RAPTOR_CPE_ID_VENDOR = librdf
++RAPTOR_CPE_ID_PRODUCT = raptor_rdf_syntax_library
+ RAPTOR_INSTALL_STAGING = YES
  
- ifeq ($(BR2_PACKAGE_LIBFFI),y)
- P11_KIT_DEPENDENCIES += host-pkgconf libffi
+ # Flag is added to make sure the patch is applied for the configure.ac of raptor.
