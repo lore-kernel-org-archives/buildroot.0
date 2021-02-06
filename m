@@ -1,78 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat,  6 Feb 2021 21:11:19 +0100
-Subject: [Buildroot] [PATCH] package/binutils: bump 2.36.x series to 2.36.1
-Message-ID: <20210206201120.2526054-1-thomas.petazzoni@bootlin.com>
+From: Sergey Matyukevich <geomatsi@gmail.com>
+Date: Sat, 6 Feb 2021 23:16:04 +0300
+Subject: [Buildroot] [RFC PATCH] stm32mp1: modify gpt partitions to fix
+ BSP update
+In-Reply-To: <87eeht5bnx.fsf@dell.be.48ers.dk>
+References: <20210130204456.793098-1-geomatsi@gmail.com>
+ <87eeht5bnx.fsf@dell.be.48ers.dk>
+Message-ID: <YB75BHzVtUdwxWLv@curiosity>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes:
+Hello,
 
-  We are very sorry to have to report that a problem was found with the
-  GNU Binutils 2.36 release.  It turns out that it contained a small
-  portion of code that was not covered by an FSF copyright assignment.
-  So we have created a replacement release - 2.36.1 - with that code
-  removed.
+>  > NOTICE:  CPU: STM32MP157CAC Rev.B
+>  > NOTICE:  Model: STMicroelectronics STM32MP157C-DK2 Discovery Board
+>  > NOTICE:  Board: MB1272 Var2.0 Rev.C-01
+>  > NOTICE:  BL2: v2.4(release):2020.11-1087-g8fac193e6d-dirty
+>  > NOTICE:  BL2: Built : 20:58:09, Jan 27 2021
+>  > ERROR:   Checksum: 0x5023a37 (awaited: 0x5046ea4)
+>  > ERROR:   Header check failed
+>  > ERROR:   BL2: Failed to load image id 5 (-12)
+> 
+>  > The root cause is in changes for stm32mp1 trusted defconfig in updated
+>  > U-Boot: see U-Boot commit 76db1681da52 ("stm32mp1: use a specific SD/eMMC
+>  > partition for U-Boot enviromnent"). Starting from that commit, U-Boot
+>  > environment is stored at the end of the U-Boot partition. As a result,
+>  > saving environment changes GPT partition checksum verified by ATF.
+> 
+>  > IIUC at least the following two approaches can be implemented to make
+>  > updated BSP work smoothly.
+> 
+>  > The first approach is to modify U-Boot config fragment for stm32mp1 boards
+>  > and to re-enable saving U-Boot environment on ext4. However this choice
+>  > implies certain restriction on rootfs ext4 features since it should be
+>  > writable by U-Boot. See the mentioned U-Boot commit message for details.
+> 
+>  > Another approach is implemented by the attached patch: keep U-Boot
+>  > environment on a dedicated GPT partition.
+> 
+>  > Thoughts ? Comments ?
+> 
+> If upstream wants to use a separate partition for the environment, then
+> that is fine by me - But I would prefer to not patch u-boot and just
+> name the environment partition ssbl.
 
-  In addition we found that a fix for a theoretical security
-  vulnerability[1] was itself broken and could result in the archiver
-  program "ar" misbehaving.  So we have chosen to revert the fix from
-  the 2.36.1 release whilst the problem is properly resolved.
+Sure, I would also prerfer not to patch u-boot. However on stm32mp1
+platform, ATF attempts to load BL33 bootloader from 'ssbl' partition.
+So using this name for environment partition does not work.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/binutils/{2.36 => 2.36.1}/0001-sh-conf.patch          | 0
- .../{2.36 => 2.36.1}/0002-poison-system-directories.patch     | 0
- package/binutils/Config.in.host                               | 4 ++--
- package/binutils/binutils.hash                                | 2 +-
- 4 files changed, 3 insertions(+), 3 deletions(-)
- rename package/binutils/{2.36 => 2.36.1}/0001-sh-conf.patch (100%)
- rename package/binutils/{2.36 => 2.36.1}/0002-poison-system-directories.patch (100%)
-
-diff --git a/package/binutils/2.36/0001-sh-conf.patch b/package/binutils/2.36.1/0001-sh-conf.patch
-similarity index 100%
-rename from package/binutils/2.36/0001-sh-conf.patch
-rename to package/binutils/2.36.1/0001-sh-conf.patch
-diff --git a/package/binutils/2.36/0002-poison-system-directories.patch b/package/binutils/2.36.1/0002-poison-system-directories.patch
-similarity index 100%
-rename from package/binutils/2.36/0002-poison-system-directories.patch
-rename to package/binutils/2.36.1/0002-poison-system-directories.patch
-diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-index 8622ebf3f3..d6909617c7 100644
---- a/package/binutils/Config.in.host
-+++ b/package/binutils/Config.in.host
-@@ -32,7 +32,7 @@ config BR2_BINUTILS_VERSION_2_35_X
- 	depends on !BR2_BINFMT_FLAT
- 
- config BR2_BINUTILS_VERSION_2_36_X
--	bool "binutils 2.36"
-+	bool "binutils 2.36.1"
- 	depends on !BR2_csky
- 	# https://github.com/uclinux-dev/elf2flt/pull/16
- 	# https://github.com/uclinux-dev/elf2flt/issues/12
-@@ -55,7 +55,7 @@ config BR2_BINUTILS_VERSION
- 	default "2.32"		if BR2_BINUTILS_VERSION_2_32_X
- 	default "2.34"		if BR2_BINUTILS_VERSION_2_34_X
- 	default "2.35.2"	if BR2_BINUTILS_VERSION_2_35_X
--	default "2.36"		if BR2_BINUTILS_VERSION_2_36_X
-+	default "2.36.1"	if BR2_BINUTILS_VERSION_2_36_X
- 
- config BR2_BINUTILS_ENABLE_LTO
- 	bool
-diff --git a/package/binutils/binutils.hash b/package/binutils/binutils.hash
-index 9d48581712..20462b3809 100644
---- a/package/binutils/binutils.hash
-+++ b/package/binutils/binutils.hash
-@@ -2,7 +2,7 @@
- sha512  d326408f12a03d9a61a9de56584c2af12f81c2e50d2d7e835d51565df8314df01575724afa1e43bd0db45cfc9916b41519b67dfce03232aa4978704492a6994a  binutils-2.32.tar.xz
- sha512  2c7976939dcf5e8c5b7374cccd39bfe803b1bec73c6abfa0eb17c24e1942574c6bdb874c66a092a82adc443182eacd8a5a8001c19a76101f0c7ba40c27de0bbd  binutils-2.34.tar.xz
- sha512  9974ede5978d32e0d68fef23da48fa00bd06b0bff7ec45b00ca075c126d6bbe0cf2defc03ecc3f17bc6cc85b64271a13009c4049d7ba17de26e84e3a6e2c0348  binutils-2.35.2.tar.xz
--sha512  0b89b70d4ad5cfe5bd0011dc7e342ae9de96efdbfc3442a0d6b5f7660e38bbcad36f2c72ba8f074323f02bde022ff1cd723ae99f0ea55cf94ee2dbbc0e4efdb2  binutils-2.36.tar.xz
-+sha512  cc24590bcead10b90763386b6f96bb027d7594c659c2d95174a6352e8b98465a50ec3e4088d0da038428abe059bbc4ae5f37b269f31a40fc048072c8a234f4e9  binutils-2.36.1.tar.xz
- 
- # Locally calculated (fetched from Github)
- sha512  76a8227a19218435319c660e4983ea17985194b7f496f163e97543e7f6fd3e9249241fdc05a16ba512fba96a1d846c1f7b080983404d821d6215f10e7f11e238  binutils-gdb-arc-2020.09-release.tar.gz
--- 
-2.29.2
+Regards,
+Sergey
