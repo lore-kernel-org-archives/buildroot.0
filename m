@@ -1,34 +1,33 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  6 Feb 2021 17:20:05 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libkrb5: add CPE variables
-Message-ID: <20210206162005.2006429-1-fontaine.fabrice@gmail.com>
+Date: Sat,  6 Feb 2021 17:29:37 +0100
+Subject: [Buildroot] [PATCH 1/1] package/redis: add REDIS_CPE_ID_VENDOR
+Message-ID: <20210206162937.2006960-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:mit:kerberos_5 is a valid CPE identifier for this package:
+cpe:2.3:a:redislabs:redis is a valid CPE identifier for this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Amit%3Akerberos_5
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aredislabs%3Aredis
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libkrb5/libkrb5.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/redis/redis.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libkrb5/libkrb5.mk b/package/libkrb5/libkrb5.mk
-index b46e7c6c50..e4f3fa4186 100644
---- a/package/libkrb5/libkrb5.mk
-+++ b/package/libkrb5/libkrb5.mk
-@@ -11,6 +11,8 @@ LIBKRB5_SOURCE = krb5-$(LIBKRB5_VERSION).tar.gz
- LIBKRB5_SUBDIR = src
- LIBKRB5_LICENSE = MIT
- LIBKRB5_LICENSE_FILES = NOTICE
-+LIBKRB5_CPE_ID_VENDOR = mit
-+LIBKRB5_CPE_ID_PRODUCT = kerberos_5
- LIBKRB5_DEPENDENCIES = host-bison $(TARGET_NLS_DEPENDENCIES)
- LIBKRB5_INSTALL_STAGING = YES
+diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+index 0a6f7045c3..96132ae962 100644
+--- a/package/redis/redis.mk
++++ b/package/redis/redis.mk
+@@ -8,6 +8,7 @@ REDIS_VERSION = 6.0.10
+ REDIS_SITE = http://download.redis.io/releases
+ REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
+ REDIS_LICENSE_FILES = COPYING
++REDIS_CPE_ID_VENDOR = redislabs
  
+ define REDIS_USERS
+ 	redis -1 redis -1 * /var/lib/redis /bin/false - Redis Server
 -- 
 2.29.2
