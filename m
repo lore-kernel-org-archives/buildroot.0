@@ -1,53 +1,63 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  6 Feb 2021 09:51:02 +0100
-Subject: [Buildroot] [PATCH] package/plg-utils: escape \ in generated
- legal-info
-Message-ID: <20210206085102.1017439-1-yann.morin.1998@free.fr>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Sat, 6 Feb 2021 10:32:27 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
+ 2021-02-04
+In-Reply-To: <20210205234304.768f8a73@gmx.net>
+References: <601cff45.1c69fb81.945af.db28SMTPIN_ADDED_MISSING@mx.google.com>
+ <CAEyMn7YCuUkYKdd-6gaH85NQcSpg5EMWJKstGtFZTmu65kDbUQ@mail.gmail.com>
+ <87lfc27474.fsf@dell.be.48ers.dk> <20210205213453.GZ2384@scaer>
+ <20210205234304.768f8a73@gmx.net>
+Message-ID: <CAEyMn7bAqLaJz0Z=uUxN+bGzd26RenDoRCFMW4tyfU3mtqUEZQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In the output of legal-info, which is JSON-formatted, we include the
-CPI_ID (when it is valid).
+Hi Peter,
 
-For xerces, the CPE_IS contains two sequences aof \+ (which is exactly
-what is present in the NIST DB, [0]).
+Am Fr., 5. Feb. 2021 um 23:43 Uhr schrieb Peter Seiderer <ps.report@gmx.net>:
+>
+> On Fri, 5 Feb 2021 22:34:53 +0100, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+>
+> > Peter, All,
+> >
+> > On 2021-02-05 19:35 +0100, Peter Korsgaard spake thusly:
+> > > >>>>> "Heiko" == Heiko Thiery <heiko.thiery@gmail.com> writes:
+> > >  >> mipsel    |        netopeer2-1.1.53        | http://autobuild.buildroot.net/results/da0e36543cf68e4e9bbe819945a884193f33819a
+> > [--SNIP--]
+> > >  > So I see here 3 possible solutions:
+> > >  > 1. do the PRE_INSTALL_HOOK to remove the files every time (disclaimed by Yann).
+> > >  > 2. remove this files by hand (no long term solution).
+> > >  > 3. disable the installation of the yang modules .. but then we have a
+> > >  > non functional installation available and we leave the installation of
+> > >  > the yang modules to the user.
+> > >
+> > > Ideally the package should be fixed to create those files in
+> > > $DESTDIR/dev/shm rather than mess around with the host /dev/shm.
+> > >
+> > > But as /dev/shm is not persistent, how does this work at runtime? What
+> > > do those files do exactly?
+> >
+> > They are shared memory.
+> >
+> > From shm_overview(7):
+> >
+> >     On Linux, shared memory objects are created in a (tmpfs(5)) virtual
+> >     filesystem, normally mounted under /dev/shm. [...]
+> >
+> > There is in fact nothing wrong in creating such shm objects during the
+> > build.
+> >
+> > What is wrong, is leaving them lingering about...
+>
+> What happens with two independent buildroot builds both doing netopeer2 install
+> at the same time? Compete/interfere on the same files in /dev/shm/sh_*? Think
+> the only proper solution is to avoid the shm files or create them inside the
+> buildroot working directory (and cleanup afterwards)...
 
-However, in JSON, like in C, \ escapes the following character; only a
-very limited set of characters are valid to escape: " \ / b f n r t u.
-Escaping any other character is invalid. Conformant JSON parser will
-choke on invalid sequences, and so does not the json python module:
+This is what Yann also mentioned and this should be fixed with the
+proposed fix/workaround from Yann.
 
-      File "/usr/lib/python2.7/json/decoder.py", line 380, in raw_decode
-        obj, end = self.scan_once(s, idx)
-    ValueError: Invalid \escape: line 1 column 608554 (char 608553)
-
-We fix that be globally escaping \ in our json output, in the generic
-sanitsing macro.
-
-[0] https://nvd.nist.gov/products/cpe/detail/645?namingFormat=2.3&orderBy=CPEURI&keyword=xerces&status=FINAL
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/pkg-utils.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-index b50d459075..ae3c7f9da9 100644
---- a/package/pkg-utils.mk
-+++ b/package/pkg-utils.mk
-@@ -171,8 +171,9 @@ endef
- clean-json = $(strip \
- 	$(subst $(comma)},}, $(subst $(comma)$(space)},$(space)}, \
- 	$(subst $(comma)],], $(subst $(comma)$(space)],$(space)], \
-+	$(subst \,\\, \
- 		$(strip $(1)) \
--	)))) \
-+	))))) \
- )
- 
- ifeq ($(BR2_PER_PACKAGE_DIRECTORIES),y)
--- 
-2.25.1
+Thank you,
+Heiko
