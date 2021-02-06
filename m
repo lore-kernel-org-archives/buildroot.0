@@ -1,47 +1,33 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat,  6 Feb 2021 17:31:39 +0100
-Subject: [Buildroot] [PATCH] package/mosquitto: bump version to 2.0.7
-Message-ID: <20210206163139.21972-1-peter@korsgaard.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat,  6 Feb 2021 17:51:15 +0100
+Subject: [Buildroot] [PATCH 1/1] package/freetype: add FREETYPE_CPE_ID_VENDOR
+Message-ID: <20210206165115.2007687-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Includes a number of bugfixes.  For details, see the announcement:
-https://mosquitto.org/blog/2021/02/version-2-0-7-released/
+cpe:2.3:a:freetype:freetype is a valid CPE identifier for this package:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Afreetype%3Afreetype
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/mosquitto/mosquitto.hash | 4 ++--
- package/mosquitto/mosquitto.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/freetype/freetype.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
-index e57a036b4a..225d4f2b36 100644
---- a/package/mosquitto/mosquitto.hash
-+++ b/package/mosquitto/mosquitto.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking gpg signature
--# from https://mosquitto.org/files/source/mosquitto-2.0.4.tar.gz.asc
--sha256  ba3126d82533fe40a18cf1a989e61eaea887e81829cd93518149e73553d20f10  mosquitto-2.0.4.tar.gz
-+# from https://mosquitto.org/files/source/mosquitto-2.0.7.tar.gz.asc
-+sha256  a98054f0b8161588975ef24e1d467550d3935f4c16ccee63ecb623248a28356e  mosquitto-2.0.7.tar.gz
+diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
+index e543aee0b2..59d6dc0eb8 100644
+--- a/package/freetype/freetype.mk
++++ b/package/freetype/freetype.mk
+@@ -11,6 +11,7 @@ FREETYPE_INSTALL_STAGING = YES
+ FREETYPE_MAKE_OPTS = CCexe="$(HOSTCC)"
+ FREETYPE_LICENSE = Dual FTL/GPL-2.0+
+ FREETYPE_LICENSE_FILES = docs/LICENSE.TXT docs/FTL.TXT docs/GPLv2.TXT
++FREETYPE_CPE_ID_VENDOR = freetype
+ FREETYPE_DEPENDENCIES = host-pkgconf
+ FREETYPE_CONFIG_SCRIPTS = freetype-config
  
- # License files
- sha256  d3c4ccace4e5d3cc89d34cf2a0bc85b8596bfc0a32b815d0d77f9b7c41b5350c  LICENSE.txt
-diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index 6842ee4e49..d5fe6de3b1 100644
---- a/package/mosquitto/mosquitto.mk
-+++ b/package/mosquitto/mosquitto.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MOSQUITTO_VERSION = 2.0.4
-+MOSQUITTO_VERSION = 2.0.7
- MOSQUITTO_SITE = https://mosquitto.org/files/source
- MOSQUITTO_LICENSE = EPL-2.0 or EDLv1.0
- MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v20 edl-v10
 -- 
-2.20.1
+2.29.2
