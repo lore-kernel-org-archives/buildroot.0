@@ -1,36 +1,33 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  6 Feb 2021 12:05:54 +0100
-Subject: [Buildroot] [PATCH 1/1] package/asterisk: add CPE variables
-Message-ID: <20210206110554.2000553-1-fontaine.fabrice@gmail.com>
+Date: Sat,  6 Feb 2021 12:07:50 +0100
+Subject: [Buildroot] [PATCH v2,1/2] package/tmux: set TMUX_CPE_ID_VALID
+Message-ID: <20210206110751.2000832-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:asterisk:open_source is a valid CPE identifier for this
-package:
+cpe:2.3:a:tmux_project:tmux is a valid CPE identifier for this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aasterisk%3Aopen_source
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Atmux_project%3Atmux
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/asterisk/asterisk.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/tmux/tmux.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index fb3eb6ec8a..b220b54189 100644
---- a/package/asterisk/asterisk.mk
-+++ b/package/asterisk/asterisk.mk
-@@ -21,6 +21,9 @@ ASTERISK_LICENSE_FILES = \
- 	codecs/speex/speex_resampler.h \
- 	utils/db1-ast/include/db.h
+diff --git a/package/tmux/tmux.mk b/package/tmux/tmux.mk
+index 00e77ad762..17e1da5607 100644
+--- a/package/tmux/tmux.mk
++++ b/package/tmux/tmux.mk
+@@ -8,6 +8,7 @@ TMUX_VERSION = 2.9a
+ TMUX_SITE = https://github.com/tmux/tmux/releases/download/$(TMUX_VERSION)
+ TMUX_LICENSE = ISC
+ TMUX_LICENSE_FILES = COPYING
++TMUX_CPE_ID_VALID = YES
+ TMUX_DEPENDENCIES = libevent ncurses host-pkgconf
  
-+ASTERISK_CPE_ID_VENDOR = asterisk
-+ASTERISK_CPE_ID_PRODUCT = open_source
-+
- # For patches 0002, 0003 and 0005
- ASTERISK_AUTORECONF = YES
- ASTERISK_AUTORECONF_OPTS = -Iautoconf -Ithird-party -Ithird-party/pjproject -Ithird-party/jansson
+ # 0001-Do-not-write-after-the-end-of-the-array-and-overwrit.patch
 -- 
 2.29.2
