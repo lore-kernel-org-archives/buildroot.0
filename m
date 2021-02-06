@@ -1,59 +1,39 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 6 Feb 2021 15:00:06 +0100
-Subject: [Buildroot] [PATCH 1/1] package/p11-kit: set
- P11_KIT_CPE_ID_VALID
-In-Reply-To: <20210206112244.2002144-1-fontaine.fabrice@gmail.com>
-References: <20210206112244.2002144-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210206140006.GJ2384@scaer>
+From: Jianhui Zhao <zhaojh329@gmail.com>
+Date: Sat,  6 Feb 2021 22:33:59 +0800
+Subject: [Buildroot] [PATCH 1/1] package/rtty: bump version to 7.3.2
+Message-ID: <20210206143359.9365-1-zhaojh329@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
+---
+ package/rtty/rtty.hash | 2 +-
+ package/rtty/rtty.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On 2021-02-06 12:22 +0100, Fabrice Fontaine spake thusly:
-> cpe:2.3:a:p11-kit_project:p11-kit is a valid CPE identifier for this
-> package:
-> 
->   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ap11-kit_project%3Ap11-kit
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/p11-kit/p11-kit.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/p11-kit/p11-kit.mk b/package/p11-kit/p11-kit.mk
-> index 81972f811b..977150f571 100644
-> --- a/package/p11-kit/p11-kit.mk
-> +++ b/package/p11-kit/p11-kit.mk
-> @@ -13,6 +13,7 @@ P11_KIT_CONF_ENV = ac_cv_have_decl_program_invocation_short_name=yes \
->  	ac_cv_have_decl___progname=no
->  P11_KIT_LICENSE = BSD-3-Clause
->  P11_KIT_LICENSE_FILES = COPYING
-> +P11_KIT_CPE_ID_VALID = YES
->  
->  ifeq ($(BR2_PACKAGE_LIBFFI),y)
->  P11_KIT_DEPENDENCIES += host-pkgconf libffi
-> -- 
-> 2.29.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/rtty/rtty.hash b/package/rtty/rtty.hash
+index baae45ed4e..283a5d1da5 100644
+--- a/package/rtty/rtty.hash
++++ b/package/rtty/rtty.hash
+@@ -1,2 +1,2 @@
+-sha256  38bf042421c3d5e1ff862a64bd299d4b8b1e193faf4e56f8f8beb55e88cb7924  rtty-7.3.1.tar.gz
++sha256  4c60eacd7a653988a1907284de2ecf360c74f55ef9e21c40b9ebd87af6570908  rtty-7.3.2.tar.gz
+ sha256  99efed4bbc0b62f96f999ef23399e38234fb91651af734fd389a52b033a85b55  LICENSE
+diff --git a/package/rtty/rtty.mk b/package/rtty/rtty.mk
+index 343daef53c..dc91445287 100644
+--- a/package/rtty/rtty.mk
++++ b/package/rtty/rtty.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RTTY_VERSION = 7.3.1
++RTTY_VERSION = 7.3.2
+ RTTY_SITE = https://github.com/zhaojh329/rtty/releases/download/v$(RTTY_VERSION)
+ RTTY_LICENSE = MIT
+ RTTY_LICENSE_FILES = LICENSE
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.25.1
