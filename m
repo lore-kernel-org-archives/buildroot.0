@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 6 Feb 2021 14:59:31 +0100
-Subject: [Buildroot] [PATCH 1/1] package/asterisk: add CPE variables
-In-Reply-To: <20210206110554.2000553-1-fontaine.fabrice@gmail.com>
-References: <20210206110554.2000553-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210206135931.GH2384@scaer>
+Date: Sat, 6 Feb 2021 14:59:49 +0100
+Subject: [Buildroot] [PATCH 1/1] package/nodejs: add CPE variables
+In-Reply-To: <20210206111614.2001774-1-fontaine.fabrice@gmail.com>
+References: <20210206111614.2001774-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210206135949.GI2384@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,11 +12,10 @@ To: buildroot@busybox.net
 
 Fabrice, All,
 
-On 2021-02-06 12:05 +0100, Fabrice Fontaine spake thusly:
-> cpe:2.3:a:asterisk:open_source is a valid CPE identifier for this
-> package:
+On 2021-02-06 12:16 +0100, Fabrice Fontaine spake thusly:
+> cpe:2.3:a:nodejs:node.js is a valid CPE identifier for this package:
 > 
->   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aasterisk%3Aopen_source
+>   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Anodejs%3Anode.js
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
@@ -26,23 +25,22 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/asterisk/asterisk.mk | 3 +++
->  1 file changed, 3 insertions(+)
+>  package/nodejs/nodejs.mk | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-> index fb3eb6ec8a..b220b54189 100644
-> --- a/package/asterisk/asterisk.mk
-> +++ b/package/asterisk/asterisk.mk
-> @@ -21,6 +21,9 @@ ASTERISK_LICENSE_FILES = \
->  	codecs/speex/speex_resampler.h \
->  	utils/db1-ast/include/db.h
+> diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+> index 8916d47940..31ef499716 100644
+> --- a/package/nodejs/nodejs.mk
+> +++ b/package/nodejs/nodejs.mk
+> @@ -14,6 +14,8 @@ HOST_NODEJS_DEPENDENCIES = host-icu host-libopenssl host-python host-zlib
+>  NODEJS_INSTALL_STAGING = YES
+>  NODEJS_LICENSE = MIT (core code); MIT, Apache and BSD family licenses (Bundled components)
+>  NODEJS_LICENSE_FILES = LICENSE
+> +NODEJS_CPE_ID_VENDOR = nodejs
+> +NODEJS_CPE_ID_PRODUCT = node.js
 >  
-> +ASTERISK_CPE_ID_VENDOR = asterisk
-> +ASTERISK_CPE_ID_PRODUCT = open_source
-> +
->  # For patches 0002, 0003 and 0005
->  ASTERISK_AUTORECONF = YES
->  ASTERISK_AUTORECONF_OPTS = -Iautoconf -Ithird-party -Ithird-party/pjproject -Ithird-party/jansson
+>  NODEJS_CONF_OPTS = \
+>  	--without-snapshot \
 > -- 
 > 2.29.2
 > 
