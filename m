@@ -1,50 +1,36 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Sat,  6 Feb 2021 11:57:37 +0100
-Subject: [Buildroot] [PATCH 2/2] package/netopeer2: add dependency to
- host-sysrepo
-In-Reply-To: <20210206105736.29429-1-heiko.thiery@gmail.com>
-References: <20210206105736.29429-1-heiko.thiery@gmail.com>
-Message-ID: <20210206105736.29429-2-heiko.thiery@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat,  6 Feb 2021 12:05:54 +0100
+Subject: [Buildroot] [PATCH 1/1] package/asterisk: add CPE variables
+Message-ID: <20210206110554.2000553-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The sysrepoctl executable from the host-sysrepo package is used to
-install YANG modules during installation. So add the dependency here.
-Also make sure we use this executable by setting the make environment
-variable SYSREPOCTL_EXECUTABLE. Otherwise a system wide installed
-sysrepoctl would be used that is not what we want.
+cpe:2.3:a:asterisk:open_source is a valid CPE identifier for this
+package:
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aasterisk%3Aopen_source
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/netopeer2/netopeer2.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/asterisk/asterisk.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/netopeer2/netopeer2.mk b/package/netopeer2/netopeer2.mk
-index af30d8417a..a6022db155 100644
---- a/package/netopeer2/netopeer2.mk
-+++ b/package/netopeer2/netopeer2.mk
-@@ -9,7 +9,7 @@ NETOPEER2_SITE = $(call github,CESNET,Netopeer2,v$(NETOPEER2_VERSION))
- NETOPEER2_DL_SUBDIR = netopeer2
- NETOPEER2_LICENSE = BSD-3-Clause
- NETOPEER2_LICENSE_FILES = LICENSE
--NETOPEER2_DEPENDENCIES = libnetconf2 libyang sysrepo
-+NETOPEER2_DEPENDENCIES = libnetconf2 libyang sysrepo host-sysrepo
+diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
+index fb3eb6ec8a..b220b54189 100644
+--- a/package/asterisk/asterisk.mk
++++ b/package/asterisk/asterisk.mk
+@@ -21,6 +21,9 @@ ASTERISK_LICENSE_FILES = \
+ 	codecs/speex/speex_resampler.h \
+ 	utils/db1-ast/include/db.h
  
- NETOPEER2_CONF_OPTS = -DBUILD_CLI=$(if $(BR2_PACKAGE_NETOPEER2_CLI),ON,OFF)
- 
-@@ -17,7 +17,9 @@ NETOPEER2_CONF_OPTS = -DBUILD_CLI=$(if $(BR2_PACKAGE_NETOPEER2_CLI),ON,OFF)
- # files. This also ensures that concurrent parallel builds will not be
- # affected mutualy.
- SYSREPO_SHM_PREFIX = sr_buildroot$(subst /,_,$(CONFIG_DIR))
--NETOPEER2_MAKE_ENV = SYSREPO_SHM_PREFIX=$(SYSREPO_SHM_PREFIX)
-+NETOPEER2_MAKE_ENV = \
-+	SYSREPO_SHM_PREFIX=$(SYSREPO_SHM_PREFIX) \
-+	SYSREPOCTL_EXECUTABLE=$(HOST_DIR)/bin/sysrepoctl
- 
- define NETOPEER2_INSTALL_INIT_SYSV
- 	$(INSTALL) -m 755 -D package/netopeer2/S52netopeer2 \
++ASTERISK_CPE_ID_VENDOR = asterisk
++ASTERISK_CPE_ID_PRODUCT = open_source
++
+ # For patches 0002, 0003 and 0005
+ ASTERISK_AUTORECONF = YES
+ ASTERISK_AUTORECONF_OPTS = -Iautoconf -Ithird-party -Ithird-party/pjproject -Ithird-party/jansson
 -- 
-2.20.1
+2.29.2
