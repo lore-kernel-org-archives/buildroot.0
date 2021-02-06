@@ -1,34 +1,33 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  6 Feb 2021 16:59:52 +0100
-Subject: [Buildroot] [PATCH 1/1] package/gnuplot: set GNUPLOT_CPE_ID_VALID
-Message-ID: <20210206155952.2004876-1-fontaine.fabrice@gmail.com>
+Date: Sat,  6 Feb 2021 17:04:30 +0100
+Subject: [Buildroot] [PATCH 1/1] package/mariadb: set MARIADB_CPE_ID_VENDOR
+Message-ID: <20210206160430.2005378-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:gnuplot_project:gnuplot is a valid CPE identifier for this
-package:
+cpe:2.3:a:mariadb:mariadb is a valid CPE identifier for this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Agnuplot_project%3Agnuplot
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Amariadb%3Amariadb
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/gnuplot/gnuplot.mk | 1 +
+ package/mariadb/mariadb.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/gnuplot/gnuplot.mk b/package/gnuplot/gnuplot.mk
-index bebaf1fa76..8d096c6102 100644
---- a/package/gnuplot/gnuplot.mk
-+++ b/package/gnuplot/gnuplot.mk
-@@ -8,6 +8,7 @@ GNUPLOT_VERSION = 5.4.1
- GNUPLOT_SITE = http://downloads.sourceforge.net/project/gnuplot/gnuplot/$(GNUPLOT_VERSION)
- GNUPLOT_LICENSE = gnuplot license (open source)
- GNUPLOT_LICENSE_FILES = Copyright
-+GNUPLOT_CPE_ID_VALID = YES
- 
- GNUPLOT_AUTORECONF = YES
+diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
+index 83965d0437..252c3079e0 100644
+--- a/package/mariadb/mariadb.mk
++++ b/package/mariadb/mariadb.mk
+@@ -10,6 +10,7 @@ MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client lib
+ # Tarball no longer contains LGPL license text
+ # https://jira.mariadb.org/browse/MDEV-12297
+ MARIADB_LICENSE_FILES = README.md COPYING
++MARIADB_CPE_ID_VENDOR = mariadb
+ MARIADB_INSTALL_STAGING = YES
+ MARIADB_PROVIDES = mysql
  
 -- 
 2.29.2
