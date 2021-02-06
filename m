@@ -1,34 +1,35 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  6 Feb 2021 17:54:53 +0100
-Subject: [Buildroot] [PATCH 1/1] package/jsoncpp: set JSONCPP_CPE_ID_VALID
-Message-ID: <20210206165453.2008035-1-fontaine.fabrice@gmail.com>
+Date: Sat,  6 Feb 2021 17:58:07 +0100
+Subject: [Buildroot] [PATCH 1/1] package/oniguruma: set
+ ONIGURUMA_CPE_ID_VALID
+Message-ID: <20210206165807.2008353-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:jsoncpp_project:jsoncpp is a valid CPE identifier for this
+cpe:2.3:a:oniguruma_project:oniguruma is a valid CPE identifier for this
 package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ajsoncpp_project%3Ajsoncpp
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aoniguruma_project%3Aoniguruma
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/jsoncpp/jsoncpp.mk | 1 +
+ package/oniguruma/oniguruma.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/jsoncpp/jsoncpp.mk b/package/jsoncpp/jsoncpp.mk
-index cfded2bf07..a8d863a3ed 100644
---- a/package/jsoncpp/jsoncpp.mk
-+++ b/package/jsoncpp/jsoncpp.mk
-@@ -8,6 +8,7 @@ JSONCPP_VERSION = 1.9.4
- JSONCPP_SITE = $(call github,open-source-parsers,jsoncpp,$(JSONCPP_VERSION))
- JSONCPP_LICENSE = Public Domain or MIT
- JSONCPP_LICENSE_FILES = LICENSE
-+JSONCPP_CPE_ID_VALID = YES
- JSONCPP_INSTALL_STAGING = YES
- JSONCPP_CONF_OPTS = -Dtests=false
+diff --git a/package/oniguruma/oniguruma.mk b/package/oniguruma/oniguruma.mk
+index e7aaa43c2f..ef63a5e8a7 100644
+--- a/package/oniguruma/oniguruma.mk
++++ b/package/oniguruma/oniguruma.mk
+@@ -10,6 +10,7 @@ ONIGURUMA_SITE = \
+ ONIGURUMA_SOURCE = onig-$(ONIGURUMA_VERSION).tar.gz
+ ONIGURUMA_LICENSE = BSD-2-Clause
+ ONIGURUMA_LICENSE_FILES = COPYING
++ONIGURUMA_CPE_ID_VALID = YES
+ ONIGURUMA_INSTALL_STAGING = YES
  
+ $(eval $(autotools-package))
 -- 
 2.29.2
