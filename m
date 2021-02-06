@@ -1,39 +1,35 @@
-From: Jianhui Zhao <zhaojh329@gmail.com>
-Date: Sat,  6 Feb 2021 22:33:59 +0800
-Subject: [Buildroot] [PATCH 1/1] package/rtty: bump version to 7.3.2
-Message-ID: <20210206143359.9365-1-zhaojh329@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat,  6 Feb 2021 16:43:48 +0100
+Subject: [Buildroot] [PATCH 1/1] package/cryptopp: add CPE variables
+Message-ID: <20210206154348.2003364-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
----
- package/rtty/rtty.hash | 2 +-
- package/rtty/rtty.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+cpe:2.3:a:cryptopp:crypto\+\+ is a valid CPE identifier for this
+package:
 
-diff --git a/package/rtty/rtty.hash b/package/rtty/rtty.hash
-index baae45ed4e..283a5d1da5 100644
---- a/package/rtty/rtty.hash
-+++ b/package/rtty/rtty.hash
-@@ -1,2 +1,2 @@
--sha256  38bf042421c3d5e1ff862a64bd299d4b8b1e193faf4e56f8f8beb55e88cb7924  rtty-7.3.1.tar.gz
-+sha256  4c60eacd7a653988a1907284de2ecf360c74f55ef9e21c40b9ebd87af6570908  rtty-7.3.2.tar.gz
- sha256  99efed4bbc0b62f96f999ef23399e38234fb91651af734fd389a52b033a85b55  LICENSE
-diff --git a/package/rtty/rtty.mk b/package/rtty/rtty.mk
-index 343daef53c..dc91445287 100644
---- a/package/rtty/rtty.mk
-+++ b/package/rtty/rtty.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&orderBy=2.3&keyword=cpe%3A2.3%3Aa%3Acryptopp%3Acrypto%5C%2B%5C%2B
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/cryptopp/cryptopp.mk | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/package/cryptopp/cryptopp.mk b/package/cryptopp/cryptopp.mk
+index c1b8aaa44c..1706108454 100644
+--- a/package/cryptopp/cryptopp.mk
++++ b/package/cryptopp/cryptopp.mk
+@@ -9,6 +9,8 @@ CRYPTOPP_SOURCE = cryptopp$(subst .,,$(CRYPTOPP_VERSION)).zip
+ CRYPTOPP_SITE = https://cryptopp.com
+ CRYPTOPP_LICENSE = BSL-1.0, BSD-3-Clause (CRYPTOGAMS), Public domain (ChaCha SSE2 and AVX)
+ CRYPTOPP_LICENSE_FILES = License.txt
++CRYPTOPP_CPE_ID_VENDOR = cryptopp
++CRYPTOPP_CPE_ID_PRODUCT = crypto\+\+
+ CRYPTOPP_INSTALL_STAGING = YES
  
--RTTY_VERSION = 7.3.1
-+RTTY_VERSION = 7.3.2
- RTTY_SITE = https://github.com/zhaojh329/rtty/releases/download/v$(RTTY_VERSION)
- RTTY_LICENSE = MIT
- RTTY_LICENSE_FILES = LICENSE
+ define HOST_CRYPTOPP_EXTRACT_CMDS
 -- 
-2.25.1
+2.29.2
