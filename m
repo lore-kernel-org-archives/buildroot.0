@@ -1,35 +1,41 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 6 Feb 2021 14:51:26 +0100
-Subject: [Buildroot] [git commit] package/tmux: set TMUX_CPE_ID_VALID
-Message-ID: <20210206133111.92C52802E0@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 06 Feb 2021 14:51:08 +0100
+Subject: [Buildroot] [PATCH 24/25] support/config-fragments/autobuild:
+ use Bootlin toolchain for Xtensa uclibc
+References: <20210202225339.2157480-1-thomas.petazzoni@bootlin.com>
+ <20210202225339.2157480-25-thomas.petazzoni@bootlin.com>
+Message-ID: <cfj2fhx195.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6710d6e3ca55c114fdd1446d11331969b44038ac
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Am Tue, 02 Feb 2021 23:53:37 +0100 schrieb Thomas Petazzoni:
 
-cpe:2.3:a:tmux_project:tmux is a valid CPE identifier for this package:
+> --- /dev/null
+> +++ b/support/config-fragments/autobuild/bootlin-xtensa-uclibc.config
+> @@ -0,0 +1,3 @@
+> +BR2_xtensa=y
+> +BR2_TOOLCHAIN_EXTERNAL=y
+> +BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_XTENSA_LX60_UCLIBC_STABLE=y
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Atmux_project%3Atmux
+Hi Thomas,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/tmux/tmux.mk | 1 +
- 1 file changed, 1 insertion(+)
+this toolchains breaks building libmicrohttpd:
+http://autobuild.buildroot.net/?reason=libmicrohttpd-0.9.72
 
-diff --git a/package/tmux/tmux.mk b/package/tmux/tmux.mk
-index 00e77ad762..17e1da5607 100644
---- a/package/tmux/tmux.mk
-+++ b/package/tmux/tmux.mk
-@@ -8,6 +8,7 @@ TMUX_VERSION = 2.9a
- TMUX_SITE = https://github.com/tmux/tmux/releases/download/$(TMUX_VERSION)
- TMUX_LICENSE = ISC
- TMUX_LICENSE_FILES = COPYING
-+TMUX_CPE_ID_VALID = YES
- TMUX_DEPENDENCIES = libevent ncurses host-pkgconf
- 
- # 0001-Do-not-write-after-the-end-of-the-array-and-overwrit.patch
+"mhd_byteorder.h:161:2: error: #error Configure detected big endian byte 
+order but headers specify different byte order"
+
+because gcc describes itself as little endian:
+
+$ output/host/bin/xtensa-linux-gcc -E -dD -xc /dev/null | grep BYTE
+#define __BYTE_ORDER__ __ORDER_LITTLE_ENDIAN__
+
+although the defconfig is big endian
+
+$ grep ENDIAN .config
+BR2_ENDIAN="BIG"
+
+Regards, Bernd
