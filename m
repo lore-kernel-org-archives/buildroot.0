@@ -1,91 +1,78 @@
-From: manu f <e.fiancette@gmail.com>
-Date: Sat, 6 Feb 2021 21:01:18 +0100
-Subject: [Buildroot] BR2_HOST_GCC_AT_LEAST_4_8 not set but toolchain
- linaro-7.3-2018.05 !?
-In-Reply-To: <CAGshWo2d2hWBWQ-02Eb89YpdnR7Ck6cezX=+grKu91sRf1ObQw@mail.gmail.com>
-References: <CAGshWo2d2hWBWQ-02Eb89YpdnR7Ck6cezX=+grKu91sRf1ObQw@mail.gmail.com>
-Message-ID: <CAGshWo370thRRZK2-cT5We1vb-toq-0+=d=0H38srfvcr_wB=A@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat,  6 Feb 2021 21:11:19 +0100
+Subject: [Buildroot] [PATCH] package/binutils: bump 2.36.x series to 2.36.1
+Message-ID: <20210206201120.2526054-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-OK, I think I understand what's happened... my linux computer is an ubuntu
-20.04 with host gcc 9.
-but in the version 2018.11.4, there are no case in ../buildroot/config.in
-for version 9, so the gcc host identification is broken.
+Release notes:
 
-Could somebody confirm ?
+  We are very sorry to have to report that a problem was found with the
+  GNU Binutils 2.36 release.  It turns out that it contained a small
+  portion of code that was not covered by an FSF copyright assignment.
+  So we have created a replacement release - 2.36.1 - with that code
+  removed.
 
-Le ven. 5 f?vr. 2021 ? 20:07, manu f <e.fiancette@gmail.com> a ?crit :
+  In addition we found that a fix for a theoretical security
+  vulnerability[1] was itself broken and could result in the archiver
+  program "ar" misbehaving.  So we have chosen to revert the fix from
+  the 2.36.1 release whilst the problem is properly resolved.
 
-> Hello all,
->
-> I am the wink link! :-/
-> I build buildroot 2018.11.4 with external toolchain linaro-7.3-2018.05.
-> I could not activate the QT5WEBENGINE because I have
-> BR2_HOST_GCC_AT_LEAST_4_8 [=n]
-> I check in /output/host/opt/ext-toolchain/bin$ :
->
-> user at LinuxDev:~/lmn6_kernel/lmn6_system/output/host/opt/ext-toolchain/bin$
-> ls
-> arm-linux-gnueabihf-addr2line  arm-linux-gnueabihf-g++
-> arm-linux-gnueabihf-gcov-tool  arm-linux-gnueabihf-objcopy
-> arm-linux-gnueabihf-ar         arm-linux-gnueabihf-gcc
-> arm-linux-gnueabihf-gdb        arm-linux-gnueabihf-objdump
-> arm-linux-gnueabihf-as         arm-linux-gnueabihf-gcc-7.3.1
-> arm-linux-gnueabihf-gfortran   arm-linux-gnueabihf-ranlib
-> arm-linux-gnueabihf-c++        arm-linux-gnueabihf-gcc-ar
->  arm-linux-gnueabihf-gprof      arm-linux-gnueabihf-readelf
-> arm-linux-gnueabihf-c++filt    arm-linux-gnueabihf-gcc-nm
->  arm-linux-gnueabihf-ld         arm-linux-gnueabihf-size
-> arm-linux-gnueabihf-cpp        arm-linux-gnueabihf-gcc-ranlib
->  arm-linux-gnueabihf-ld.bfd     arm-linux-gnueabihf-strings
-> arm-linux-gnueabihf-dwp        arm-linux-gnueabihf-gcov
->  arm-linux-gnueabihf-ld.gold    arm-linux-gnueabihf-strip
-> arm-linux-gnueabihf-elfedit    arm-linux-gnueabihf-gcov-dump
-> arm-linux-gnueabihf-nm
-> user at LinuxDev:~/lmn6_kernel_mod/lmn6_system/output/host/opt/ext-toolchain/bin$
-> ./arm-linux-gnueabihf-gcc -v
-> Using built-in specs.
-> COLLECT_GCC=./arm-linux-gnueabihf-gcc
->
-> COLLECT_LTO_WRAPPER=/home/user/lmn6_kernel_mod/lmn6_system/output/host/opt/ext-toolchain/bin/../libexec/gcc/arm-linux-gnueabihf/7.3.1/lto-wrapper
-> Target: arm-linux-gnueabihf
-> Configured with:
-> '/home/tcwg-buildslave/workspace/tcwg-make-release/builder_arch/amd64/label/tcwg-x86_64-build/target/arm-linux-gnueabihf/snapshots/gcc.git~linaro-7.3-2018.05/configure'
-> SHELL=/bin/bash
-> --with-mpc=/home/tcwg-buildslave/workspace/tcwg-make-release/builder_arch/amd64/label/tcwg-x86_64-build/target/arm-linux-gnueabihf/_build/builds/destdir/x86_64-unknown-linux-gnu
-> --with-mpfr=/home/tcwg-buildslave/workspace/tcwg-make-release/builder_arch/amd64/label/tcwg-x86_64-build/target/arm-linux-gnueabihf/_build/builds/destdir/x86_64-unknown-linux-gnu
-> --with-gmp=/home/tcwg-buildslave/workspace/tcwg-make-release/builder_arch/amd64/label/tcwg-x86_64-build/target/arm-linux-gnueabihf/_build/builds/destdir/x86_64-unknown-linux-gnu
-> --with-gnu-as --with-gnu-ld --disable-libmudflap --enable-lto
-> --enable-shared --without-included-gettext --enable-nls --with-system-zlib
-> --disable-sjlj-exceptions --enable-gnu-unique-object
-> --enable-linker-build-id --disable-libstdcxx-pch --enable-c99
-> --enable-clocale=gnu --enable-libstdcxx-debug --enable-long-long
-> --with-cloog=no --with-ppl=no --with-isl=no --disable-multilib
-> --with-float=hard --with-fpu=vfpv3-d16 --with-mode=thumb
-> --with-tune=cortex-a9 --with-arch=armv7-a --enable-threads=posix
-> --enable-multiarch --enable-libstdcxx-time=yes
-> --enable-gnu-indirect-function
-> --with-build-sysroot=/home/tcwg-buildslave/workspace/tcwg-make-release/builder_arch/amd64/label/tcwg-x86_64-build/target/arm-linux-gnueabihf/_build/sysroots/arm-linux-gnueabihf
-> --with-sysroot=/home/tcwg-buildslave/workspace/tcwg-make-release/builder_arch/amd64/label/tcwg-x86_64-build/target/arm-linux-gnueabihf/_build/builds/destdir/x86_64-unknown-linux-gnu/arm-linux-gnueabihf/libc
-> --enable-checking=release --disable-bootstrap
-> --enable-languages=c,c++,fortran,lto --build=x86_64-unknown-linux-gnu
-> --host=x86_64-unknown-linux-gnu --target=arm-linux-gnueabihf
-> --prefix=/home/tcwg-buildslave/workspace/tcwg-make-release/builder_arch/amd64/label/tcwg-x86_64-build/target/arm-linux-gnueabihf/_build/builds/destdir/x86_64-unknown-linux-gnu
-> Thread model: posix
-> gcc version 7.3.1 20180425 [linaro-7.3-2018.05 revision
-> d29120a424ecfbc167ef90065c0eeb7f91977701] (Linaro GCC 7.3-2018.05)
->
-> So what's wrong?
->
-> Thanks for help.
->
-> Emmanuel
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210206/0ea134be/attachment.html>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/binutils/{2.36 => 2.36.1}/0001-sh-conf.patch          | 0
+ .../{2.36 => 2.36.1}/0002-poison-system-directories.patch     | 0
+ package/binutils/Config.in.host                               | 4 ++--
+ package/binutils/binutils.hash                                | 2 +-
+ 4 files changed, 3 insertions(+), 3 deletions(-)
+ rename package/binutils/{2.36 => 2.36.1}/0001-sh-conf.patch (100%)
+ rename package/binutils/{2.36 => 2.36.1}/0002-poison-system-directories.patch (100%)
+
+diff --git a/package/binutils/2.36/0001-sh-conf.patch b/package/binutils/2.36.1/0001-sh-conf.patch
+similarity index 100%
+rename from package/binutils/2.36/0001-sh-conf.patch
+rename to package/binutils/2.36.1/0001-sh-conf.patch
+diff --git a/package/binutils/2.36/0002-poison-system-directories.patch b/package/binutils/2.36.1/0002-poison-system-directories.patch
+similarity index 100%
+rename from package/binutils/2.36/0002-poison-system-directories.patch
+rename to package/binutils/2.36.1/0002-poison-system-directories.patch
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index 8622ebf3f3..d6909617c7 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -32,7 +32,7 @@ config BR2_BINUTILS_VERSION_2_35_X
+ 	depends on !BR2_BINFMT_FLAT
+ 
+ config BR2_BINUTILS_VERSION_2_36_X
+-	bool "binutils 2.36"
++	bool "binutils 2.36.1"
+ 	depends on !BR2_csky
+ 	# https://github.com/uclinux-dev/elf2flt/pull/16
+ 	# https://github.com/uclinux-dev/elf2flt/issues/12
+@@ -55,7 +55,7 @@ config BR2_BINUTILS_VERSION
+ 	default "2.32"		if BR2_BINUTILS_VERSION_2_32_X
+ 	default "2.34"		if BR2_BINUTILS_VERSION_2_34_X
+ 	default "2.35.2"	if BR2_BINUTILS_VERSION_2_35_X
+-	default "2.36"		if BR2_BINUTILS_VERSION_2_36_X
++	default "2.36.1"	if BR2_BINUTILS_VERSION_2_36_X
+ 
+ config BR2_BINUTILS_ENABLE_LTO
+ 	bool
+diff --git a/package/binutils/binutils.hash b/package/binutils/binutils.hash
+index 9d48581712..20462b3809 100644
+--- a/package/binutils/binutils.hash
++++ b/package/binutils/binutils.hash
+@@ -2,7 +2,7 @@
+ sha512  d326408f12a03d9a61a9de56584c2af12f81c2e50d2d7e835d51565df8314df01575724afa1e43bd0db45cfc9916b41519b67dfce03232aa4978704492a6994a  binutils-2.32.tar.xz
+ sha512  2c7976939dcf5e8c5b7374cccd39bfe803b1bec73c6abfa0eb17c24e1942574c6bdb874c66a092a82adc443182eacd8a5a8001c19a76101f0c7ba40c27de0bbd  binutils-2.34.tar.xz
+ sha512  9974ede5978d32e0d68fef23da48fa00bd06b0bff7ec45b00ca075c126d6bbe0cf2defc03ecc3f17bc6cc85b64271a13009c4049d7ba17de26e84e3a6e2c0348  binutils-2.35.2.tar.xz
+-sha512  0b89b70d4ad5cfe5bd0011dc7e342ae9de96efdbfc3442a0d6b5f7660e38bbcad36f2c72ba8f074323f02bde022ff1cd723ae99f0ea55cf94ee2dbbc0e4efdb2  binutils-2.36.tar.xz
++sha512  cc24590bcead10b90763386b6f96bb027d7594c659c2d95174a6352e8b98465a50ec3e4088d0da038428abe059bbc4ae5f37b269f31a40fc048072c8a234f4e9  binutils-2.36.1.tar.xz
+ 
+ # Locally calculated (fetched from Github)
+ sha512  76a8227a19218435319c660e4983ea17985194b7f496f163e97543e7f6fd3e9249241fdc05a16ba512fba96a1d846c1f7b080983404d821d6215f10e7f11e238  binutils-gdb-arc-2020.09-release.tar.gz
+-- 
+2.29.2
