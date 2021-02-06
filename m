@@ -1,33 +1,52 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  6 Feb 2021 17:04:30 +0100
-Subject: [Buildroot] [PATCH 1/1] package/mariadb: set MARIADB_CPE_ID_VENDOR
-Message-ID: <20210206160430.2005378-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 6 Feb 2021 17:12:29 +0100
+Subject: [Buildroot] [PATCH 24/25] support/config-fragments/autobuild:
+ use Bootlin toolchain for Xtensa uclibc
+In-Reply-To: <cfj2fhx195.ln2@ID-313208.user.individual.net>
+References: <20210202225339.2157480-1-thomas.petazzoni@bootlin.com>
+ <20210202225339.2157480-25-thomas.petazzoni@bootlin.com>
+ <cfj2fhx195.ln2@ID-313208.user.individual.net>
+Message-ID: <20210206171229.6d045307@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:mariadb:mariadb is a valid CPE identifier for this package:
+On Sat, 06 Feb 2021 14:51:08 +0100
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Amariadb%3Amariadb
+> > --- /dev/null
+> > +++ b/support/config-fragments/autobuild/bootlin-xtensa-uclibc.config
+> > @@ -0,0 +1,3 @@
+> > +BR2_xtensa=y
+> > +BR2_TOOLCHAIN_EXTERNAL=y
+> > +BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_XTENSA_LX60_UCLIBC_STABLE=y  
+> 
+> Hi Thomas,
+> 
+> this toolchains breaks building libmicrohttpd:
+> http://autobuild.buildroot.net/?reason=libmicrohttpd-0.9.72
+> 
+> "mhd_byteorder.h:161:2: error: #error Configure detected big endian byte 
+> order but headers specify different byte order"
+> 
+> because gcc describes itself as little endian:
+> 
+> $ output/host/bin/xtensa-linux-gcc -E -dD -xc /dev/null | grep BYTE
+> #define __BYTE_ORDER__ __ORDER_LITTLE_ENDIAN__
+> 
+> although the defconfig is big endian
+> 
+> $ grep ENDIAN .config
+> BR2_ENDIAN="BIG"
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/mariadb/mariadb.mk | 1 +
- 1 file changed, 1 insertion(+)
+Thanks for reporting, I'll have a look at that!
 
-diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
-index 83965d0437..252c3079e0 100644
---- a/package/mariadb/mariadb.mk
-+++ b/package/mariadb/mariadb.mk
-@@ -10,6 +10,7 @@ MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client lib
- # Tarball no longer contains LGPL license text
- # https://jira.mariadb.org/browse/MDEV-12297
- MARIADB_LICENSE_FILES = README.md COPYING
-+MARIADB_CPE_ID_VENDOR = mariadb
- MARIADB_INSTALL_STAGING = YES
- MARIADB_PROVIDES = mysql
- 
+Best regards,
+
+Thomas
 -- 
-2.29.2
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
