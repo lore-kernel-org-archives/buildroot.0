@@ -1,49 +1,77 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  6 Feb 2021 10:59:39 +0100
-Subject: [Buildroot] [PATCH 1/1] package/python-flask-cors: bump to version
- 3.0.10
-Message-ID: <20210206095939.1789045-1-fontaine.fabrice@gmail.com>
+Date: Sat,  6 Feb 2021 11:30:56 +0100
+Subject: [Buildroot] [PATCH 1/1] package/sox: fix static build with id3tag
+Message-ID: <20210206103056.1962190-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://github.com/corydolphin/flask-cors/releases/tag/3.0.10
+This build failure is raised since bump to
+7524160b29a476f7e87bc14fddf12d349f9a3c5e
+
+Fixes:
+ - http://autobuild.buildroot.org/results/73efdacf237e3d567fa66f3b3f68e624f5e35bc7
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/python-flask-cors/python-flask-cors.hash | 5 +++--
- package/python-flask-cors/python-flask-cors.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ ...re.ac-fix-static-linking-with-id3tag.patch | 47 +++++++++++++++++++
+ 1 file changed, 47 insertions(+)
+ create mode 100644 package/sox/0003-configure.ac-fix-static-linking-with-id3tag.patch
 
-diff --git a/package/python-flask-cors/python-flask-cors.hash b/package/python-flask-cors/python-flask-cors.hash
-index 15b7d41a32..94ec262db8 100644
---- a/package/python-flask-cors/python-flask-cors.hash
-+++ b/package/python-flask-cors/python-flask-cors.hash
-@@ -1,4 +1,5 @@
--# sha256 from https://pypi.org/pypi/flask-cors/json
--sha256  6bcfc100288c5d1bcb1dbb854babd59beee622ffd321e444b05f24d6d58466b8  Flask-Cors-3.0.9.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/flask-cors/json
-+md5  647ff0632b960ba063a077fb4063077e  Flask-Cors-3.0.10.tar.gz
-+sha256  b60839393f3b84a0f3746f6cdca56c1ad7426aa738b70d6c61375857823181de  Flask-Cors-3.0.10.tar.gz
- # Locally computed sha256 checksums
- sha256  6e1a1bdc54834c1e0740cbce5d5f6f2cae1c846fd2a7f482b11649594fafbd5d  LICENSE
-diff --git a/package/python-flask-cors/python-flask-cors.mk b/package/python-flask-cors/python-flask-cors.mk
-index a057cd458e..d600157263 100644
---- a/package/python-flask-cors/python-flask-cors.mk
-+++ b/package/python-flask-cors/python-flask-cors.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_FLASK_CORS_VERSION = 3.0.9
-+PYTHON_FLASK_CORS_VERSION = 3.0.10
- PYTHON_FLASK_CORS_SOURCE = Flask-Cors-$(PYTHON_FLASK_CORS_VERSION).tar.gz
--PYTHON_FLASK_CORS_SITE = https://files.pythonhosted.org/packages/99/fc/cd117ea122e28037a5ec60356a7ffae8b77af527713f7b5e4eb63089f669
-+PYTHON_FLASK_CORS_SITE = https://files.pythonhosted.org/packages/cf/25/e3b2553d22ed542be807739556c69621ad2ab276ae8d5d2560f4ed20f652
- PYTHON_FLASK_CORS_SETUP_TYPE = setuptools
- PYTHON_FLASK_CORS_LICENSE = MIT
- PYTHON_FLASK_CORS_LICENSE_FILES = LICENSE
+diff --git a/package/sox/0003-configure.ac-fix-static-linking-with-id3tag.patch b/package/sox/0003-configure.ac-fix-static-linking-with-id3tag.patch
+new file mode 100644
+index 0000000000..32d6f83b0c
+--- /dev/null
++++ b/package/sox/0003-configure.ac-fix-static-linking-with-id3tag.patch
+@@ -0,0 +1,47 @@
++From 8df3a56cfb104c84d4701562ae2e3c9dc4686798 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 6 Feb 2021 11:08:45 +0100
++Subject: [PATCH] configure.ac: fix static linking with id3tag
++
++Put back -lz (i.e. ZLIB_LIBS) when searching for id3tag which was
++wrongly removed by commit 6ff0e9322f9891f5a6ac6c9b3bceffbfca16bec3. This
++will fix the following static build failure:
++
++configure:15290: checking for id3_file_open in -lid3tag
++configure:15315: /home/buildroot/autobuild/instance-0/output-1/host/bin/arm-linux-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2   -static -Wall -Wmissing-prototypes -Wstrict-prototypes  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -static -Wl,--as-needed conftest.c -lid3tag    >&5
++conftest.c:60:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
++   60 | char id3_file_open ();
++      | ^~~~
++conftest.c:62:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
++   62 | main ()
++      | ^~~~
++/home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/9.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /home/buildroot/autobuild/instance-0/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libid3tag.a(util.o): in function `id3_util_compress':
++util.c:(.text+0x1ac): undefined reference to `compress2'
++/home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/9.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /home/buildroot/autobuild/instance-0/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libid3tag.a(util.o): in function `id3_util_decompress':
++util.c:(.text+0x240): undefined reference to `uncompress'
++
++Fixes:
++ - http://autobuild.buildroot.org/results/73efdacf237e3d567fa66f3b3f68e624f5e35bc7
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://sourceforge.net/p/sox/patches/123]
++---
++ configure.ac | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 39306398..896714f5 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -83,7 +83,7 @@ dnl Various libraries
++ SOX_WITH_LIB([magic], [magic.h], [magic], [magic_open])
++ SOX_CHECK_LIB([ZLIB], [zlib.h], [z], [uncompress])
++ SOX_WITH_LIB([png], [png.h], [png], [png_set_rows], [], [], [], [$ZLIB_LIBS])
++-SOX_WITH_LIB([id3tag], [id3tag.h], [id3tag], [id3_file_open])
+++SOX_WITH_LIB([id3tag], [id3tag.h], [id3tag], [id3_file_open], [], [], [], [$ZLIB_LIBS])
++ SOX_WITH_LIB([libgsm], [gsm/gsm.h gsm.h], [gsm], [gsm_create])
++ 
++ dnl Optional formats
++-- 
++2.29.2
++
 -- 
 2.29.2
