@@ -1,7 +1,7 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  6 Feb 2021 20:03:58 +0100
-Subject: [Buildroot] [PATCH 1/2] package/libbytesize: bump version to 2.5
-Message-ID: <20210206190359.3152733-1-bernd.kuhls@t-online.de>
+Date: Sat,  6 Feb 2021 20:07:21 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libcap: bump version to 2.48
+Message-ID: <20210206190721.3156008-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,91 +9,37 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Release notes:
-https://github.com/storaged-project/libbytesize/releases/tag/2.4
-https://github.com/storaged-project/libbytesize/releases/tag/2.5
-
-Removed patch which was applied upstream:
-https://github.com/storaged-project/libbytesize/commit/f2b6600f5483fc68c46d596d578be10546f5ac43
+https://sites.google.com/site/fullycapable/release-notes-for-libcap
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../0001-remove-msgcat-dependency.patch       | 36 -------------------
- package/libbytesize/libbytesize.hash          |  2 +-
- package/libbytesize/libbytesize.mk            |  5 +--
- 3 files changed, 2 insertions(+), 41 deletions(-)
- delete mode 100644 package/libbytesize/0001-remove-msgcat-dependency.patch
+ package/libcap/libcap.hash | 2 +-
+ package/libcap/libcap.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libbytesize/0001-remove-msgcat-dependency.patch b/package/libbytesize/0001-remove-msgcat-dependency.patch
-deleted file mode 100644
-index 4c9b96020e..0000000000
---- a/package/libbytesize/0001-remove-msgcat-dependency.patch
-+++ /dev/null
-@@ -1,36 +0,0 @@
--From ac16b1a905dbdb06ac7bba6ac105686aa7958093 Mon Sep 17 00:00:00 2001
--From: Adam Duskett <Aduskett@gmail.com>
--Date: Fri, 24 Jul 2020 11:49:14 -0700
--Subject: [PATCH] remove msgcat dependency
--
--Gettext-tiny does not include the msgcat utility, which causes issues when
--building libbytesize for embedded systems, as many embedded systems do not
--build the full gettext, but instead use the gettext-tiny library.
--
--Because msgcat is not needed to build libbytesize, it's safe to remove the
--dependency.
--
--Upstream-status: pending
--https://github.com/storaged-project/libbytesize/pull/76
--Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-----
-- configure.ac | 3 +--
-- 1 file changed, 1 insertion(+), 2 deletions(-)
--
--diff --git a/configure.ac b/configure.ac
--index 2ec4062..7d7f218 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -13,8 +13,7 @@ AC_CONFIG_MACRO_DIR([m4])
-- AC_PATH_PROG([XGETTEXT], [xgettext])
-- AC_PATH_PROG([MSGFMT], [msgfmt])
-- AC_PATH_PROG([MSGMERGE], [msgmerge])
---AC_PATH_PROG([MSGCAT], [msgcat])
---AS_IF([test -z "$XGETTEXT" -o -z "$MSGFMT" -o -z "$MSGMERGE" -o -z "$MSGCAT"],
--+AS_IF([test -z "$XGETTEXT" -o -z "$MSGFMT" -o -z "$MSGMERGE"],
--       [AC_MSG_FAILURE([gettext not found])])
-- 
-- # Define this so gettext.h works without requiring the whole gettext macro
---- 
--2.26.2
--
-diff --git a/package/libbytesize/libbytesize.hash b/package/libbytesize/libbytesize.hash
-index 34cb3b210f..51fa43aef1 100644
---- a/package/libbytesize/libbytesize.hash
-+++ b/package/libbytesize/libbytesize.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  3c74113fc8cd1a2fbd8870fa0ed7cef2ef24d60ef91e7145fbc041f9aa144479  libbytesize-2.3.tar.gz
-+sha256  6305addae2b7be313dbfc36b96094ec0544d5144859ab4a5685ca6d314d6fdda  libbytesize-2.5.tar.gz
- sha256  97bdc721d875501b6243a456333fdfdb1ab64d31c4da2554de845caf4674b946  LICENSE
-diff --git a/package/libbytesize/libbytesize.mk b/package/libbytesize/libbytesize.mk
-index b1309c1731..0ba380dc74 100644
---- a/package/libbytesize/libbytesize.mk
-+++ b/package/libbytesize/libbytesize.mk
-@@ -4,15 +4,12 @@
+diff --git a/package/libcap/libcap.hash b/package/libcap/libcap.hash
+index b9beece902..7499f2468c 100644
+--- a/package/libcap/libcap.hash
++++ b/package/libcap/libcap.hash
+@@ -1,5 +1,5 @@
+ # https://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2/sha256sums.asc
+-sha256  4ed3d11413fa6c9667e49f819808fbb581cd8864b839f87d7c2a02c70f21d8b4  libcap-2.46.tar.xz
++sha256  4de9590ee09a87c282d558737ffb5b6175ccbfd26d580add10df44d0f047f6c2  libcap-2.48.tar.xz
+ 
+ # Hash for license file:
+ sha256  088cabde4662b4121258d298b0b2967bc1abffa134457ed9bc4a359685ab92bc  License
+diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
+index 27a295cad7..d3a069e82a 100644
+--- a/package/libcap/libcap.mk
++++ b/package/libcap/libcap.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBBYTESIZE_VERSION = 2.3
-+LIBBYTESIZE_VERSION = 2.5
- LIBBYTESIZE_SITE = https://github.com/storaged-project/libbytesize/releases/download/$(LIBBYTESIZE_VERSION)
- LIBBYTESIZE_LICENSE = LGPL-2.1+
- LIBBYTESIZE_LICENSE_FILES = LICENSE
- LIBBYTESIZE_INSTALL_STAGING = YES
- 
--# 0001-remove-msgcat-dependency.patch
--LIBBYTESIZE_AUTORECONF = YES
--
- LIBBYTESIZE_DEPENDENCIES = \
- 	host-pkgconf \
- 	host-gettext \
+-LIBCAP_VERSION = 2.46
++LIBCAP_VERSION = 2.48
+ LIBCAP_SITE = https://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2
+ LIBCAP_SOURCE = libcap-$(LIBCAP_VERSION).tar.xz
+ LIBCAP_LICENSE = GPL-2.0 or BSD-3-Clause
 -- 
 2.29.2
