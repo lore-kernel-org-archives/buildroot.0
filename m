@@ -1,24 +1,20 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 06 Feb 2021 18:50:32 +0100
-Subject: [Buildroot] [PATCH 1/1] package/htop: add lm-sensors optional
- dependency
-In-Reply-To: <20210130171455.2735295-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 30 Jan 2021 18:14:55 +0100")
-References: <20210130171455.2735295-1-fontaine.fabrice@gmail.com>
-Message-ID: <87a6sh5bmf.fsf@dell.be.48ers.dk>
+Date: Sat, 06 Feb 2021 18:51:29 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libmdbx: bump version to 0.9.3
+In-Reply-To: <20210205212949.1172475-1-leo@yuriev.ru> (Leonid Yuriev's message
+ of "Sat, 6 Feb 2021 00:29:49 +0300")
+References: <20210205212949.1172475-1-leo@yuriev.ru>
+Message-ID: <875z355bku.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Leonid" == Leonid Yuriev <leo@yuriev.ru> writes:
 
- > lm-sensors is an optional dependency (enabled by default) since version
- > 3.0.3 and
- > https://github.com/htop-dev/htop/commit/1b225cd7a0af03a6349c48326118a287fc36acd0
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Release notes: https://github.com/erthink/libmdbx/releases/tag/v0.9.3
+ > Signed-off-by: Leonid Yuriev <leo@yuriev.ru>
 
 Committed, thanks.
 
