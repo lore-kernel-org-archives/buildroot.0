@@ -1,48 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 7 Feb 2021 10:29:45 +0100
-Subject: [Buildroot] [git commit] package/mosquitto: bump version to 2.0.7
-Message-ID: <20210207091616.008328122F@busybox.osuosl.org>
+Date: Sun, 7 Feb 2021 10:29:14 +0100
+Subject: [Buildroot] [git commit] package/python-flask-cors: bump to version
+ 3.0.10
+Message-ID: <20210207091615.E8F68807E9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0886898da2df75810490d9b99f2e55e30cf131dc
+commit: https://git.buildroot.net/buildroot/commit/?id=023644d19378190d7e845278d4e716d4e65736f7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Includes a number of bugfixes.  For details, see the announcement:
-https://mosquitto.org/blog/2021/02/version-2-0-7-released/
+https://github.com/corydolphin/flask-cors/releases/tag/3.0.10
 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mosquitto/mosquitto.hash | 4 ++--
- package/mosquitto/mosquitto.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-flask-cors/python-flask-cors.hash | 5 +++--
+ package/python-flask-cors/python-flask-cors.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
-index e57a036b4a..225d4f2b36 100644
---- a/package/mosquitto/mosquitto.hash
-+++ b/package/mosquitto/mosquitto.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking gpg signature
--# from https://mosquitto.org/files/source/mosquitto-2.0.4.tar.gz.asc
--sha256  ba3126d82533fe40a18cf1a989e61eaea887e81829cd93518149e73553d20f10  mosquitto-2.0.4.tar.gz
-+# from https://mosquitto.org/files/source/mosquitto-2.0.7.tar.gz.asc
-+sha256  a98054f0b8161588975ef24e1d467550d3935f4c16ccee63ecb623248a28356e  mosquitto-2.0.7.tar.gz
- 
- # License files
- sha256  d3c4ccace4e5d3cc89d34cf2a0bc85b8596bfc0a32b815d0d77f9b7c41b5350c  LICENSE.txt
-diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index 6842ee4e49..d5fe6de3b1 100644
---- a/package/mosquitto/mosquitto.mk
-+++ b/package/mosquitto/mosquitto.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-flask-cors/python-flask-cors.hash b/package/python-flask-cors/python-flask-cors.hash
+index 15b7d41a32..94ec262db8 100644
+--- a/package/python-flask-cors/python-flask-cors.hash
++++ b/package/python-flask-cors/python-flask-cors.hash
+@@ -1,4 +1,5 @@
+-# sha256 from https://pypi.org/pypi/flask-cors/json
+-sha256  6bcfc100288c5d1bcb1dbb854babd59beee622ffd321e444b05f24d6d58466b8  Flask-Cors-3.0.9.tar.gz
++# md5, sha256 from https://pypi.org/pypi/flask-cors/json
++md5  647ff0632b960ba063a077fb4063077e  Flask-Cors-3.0.10.tar.gz
++sha256  b60839393f3b84a0f3746f6cdca56c1ad7426aa738b70d6c61375857823181de  Flask-Cors-3.0.10.tar.gz
+ # Locally computed sha256 checksums
+ sha256  6e1a1bdc54834c1e0740cbce5d5f6f2cae1c846fd2a7f482b11649594fafbd5d  LICENSE
+diff --git a/package/python-flask-cors/python-flask-cors.mk b/package/python-flask-cors/python-flask-cors.mk
+index a057cd458e..d600157263 100644
+--- a/package/python-flask-cors/python-flask-cors.mk
++++ b/package/python-flask-cors/python-flask-cors.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--MOSQUITTO_VERSION = 2.0.4
-+MOSQUITTO_VERSION = 2.0.7
- MOSQUITTO_SITE = https://mosquitto.org/files/source
- MOSQUITTO_LICENSE = EPL-2.0 or EDLv1.0
- MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v20 edl-v10
+-PYTHON_FLASK_CORS_VERSION = 3.0.9
++PYTHON_FLASK_CORS_VERSION = 3.0.10
+ PYTHON_FLASK_CORS_SOURCE = Flask-Cors-$(PYTHON_FLASK_CORS_VERSION).tar.gz
+-PYTHON_FLASK_CORS_SITE = https://files.pythonhosted.org/packages/99/fc/cd117ea122e28037a5ec60356a7ffae8b77af527713f7b5e4eb63089f669
++PYTHON_FLASK_CORS_SITE = https://files.pythonhosted.org/packages/cf/25/e3b2553d22ed542be807739556c69621ad2ab276ae8d5d2560f4ed20f652
+ PYTHON_FLASK_CORS_SETUP_TYPE = setuptools
+ PYTHON_FLASK_CORS_LICENSE = MIT
+ PYTHON_FLASK_CORS_LICENSE_FILES = LICENSE
