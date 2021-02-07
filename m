@@ -1,37 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 7 Feb 2021 23:06:14 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xlib_libXrender: add CPE
- variables
-Message-ID: <20210207214541.0FB14816C9@busybox.osuosl.org>
+Date: Sun, 7 Feb 2021 23:04:18 +0100
+Subject: [Buildroot] [git commit] package/webp: bump to version 1.2.0
+Message-ID: <20210207214540.B76B881964@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8d25106c80992754d99dbc34b6c8a4ed8cfbacf7
+commit: https://git.buildroot.net/buildroot/commit/?id=a67fbb0c98682c1f972285d7d4a2d99b1b349a62
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:x.org:libxrender is a valid CPE identifier for this package:
+Also fixed indentation in hash file
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ax.org%3Alibxrender
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xlib_libXrender/xlib_libXrender.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/webp/webp.hash | 4 ++--
+ package/webp/webp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXrender/xlib_libXrender.mk b/package/x11r7/xlib_libXrender/xlib_libXrender.mk
-index 870f94386e..0ef0ec48d9 100644
---- a/package/x11r7/xlib_libXrender/xlib_libXrender.mk
-+++ b/package/x11r7/xlib_libXrender/xlib_libXrender.mk
-@@ -9,6 +9,8 @@ XLIB_LIBXRENDER_SOURCE = libXrender-$(XLIB_LIBXRENDER_VERSION).tar.bz2
- XLIB_LIBXRENDER_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXRENDER_LICENSE = MIT
- XLIB_LIBXRENDER_LICENSE_FILES = COPYING
-+XLIB_LIBXRENDER_CPE_ID_VENDOR = x.org
-+XLIB_LIBXRENDER_CPE_ID_PRODUCT = libxrender
- XLIB_LIBXRENDER_INSTALL_STAGING = YES
- XLIB_LIBXRENDER_DEPENDENCIES = xlib_libX11 xorgproto
- HOST_XLIB_LIBXRENDER_DEPENDENCIES = \
+diff --git a/package/webp/webp.hash b/package/webp/webp.hash
+index a2d0000266..24cec6dfa3 100644
+--- a/package/webp/webp.hash
++++ b/package/webp/webp.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	98a052268cc4d5ece27f76572a7f50293f439c17a98e67c4ea0c7ed6f50ef043	libwebp-1.1.0.tar.gz
+-sha256	5aec868f669e384a22372a4e8a1a6cd7d44c64cd451f960ca69cc170d1e13acf	COPYING
++sha256  2fc8bbde9f97f2ab403c0224fb9ca62b2e6852cbc519e91ceaa7c153ffd88a0c  libwebp-1.2.0.tar.gz
++sha256  5aec868f669e384a22372a4e8a1a6cd7d44c64cd451f960ca69cc170d1e13acf  COPYING
+diff --git a/package/webp/webp.mk b/package/webp/webp.mk
+index 5047965894..ecf26faa31 100644
+--- a/package/webp/webp.mk
++++ b/package/webp/webp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WEBP_VERSION = 1.1.0
++WEBP_VERSION = 1.2.0
+ WEBP_SOURCE = libwebp-$(WEBP_VERSION).tar.gz
+ WEBP_SITE = http://downloads.webmproject.org/releases/webp
+ WEBP_LICENSE = BSD-3-Clause
