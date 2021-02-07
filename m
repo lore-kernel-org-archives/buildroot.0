@@ -1,45 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 7 Feb 2021 23:04:18 +0100
-Subject: [Buildroot] [git commit] package/webp: bump to version 1.2.0
-Message-ID: <20210207214540.B76B881964@busybox.osuosl.org>
+Date: Sun, 7 Feb 2021 23:05:08 +0100
+Subject: [Buildroot] [git commit] package/libfastjson: bump version to 0.99.9
+Message-ID: <20210207214540.D584C82ADE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a67fbb0c98682c1f972285d7d4a2d99b1b349a62
+commit: https://git.buildroot.net/buildroot/commit/?id=0567c8a4290e784e3cbfdceaff1aac8986329426
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also fixed indentation in hash file
+Changelog: https://github.com/rsyslog/libfastjson/blob/master/ChangeLog
 
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/webp/webp.hash | 4 ++--
- package/webp/webp.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libfastjson/libfastjson.hash | 2 +-
+ package/libfastjson/libfastjson.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/webp/webp.hash b/package/webp/webp.hash
-index a2d0000266..24cec6dfa3 100644
---- a/package/webp/webp.hash
-+++ b/package/webp/webp.hash
+diff --git a/package/libfastjson/libfastjson.hash b/package/libfastjson/libfastjson.hash
+index 07ea88f11e..218a738b37 100644
+--- a/package/libfastjson/libfastjson.hash
++++ b/package/libfastjson/libfastjson.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256	98a052268cc4d5ece27f76572a7f50293f439c17a98e67c4ea0c7ed6f50ef043	libwebp-1.1.0.tar.gz
--sha256	5aec868f669e384a22372a4e8a1a6cd7d44c64cd451f960ca69cc170d1e13acf	COPYING
-+sha256  2fc8bbde9f97f2ab403c0224fb9ca62b2e6852cbc519e91ceaa7c153ffd88a0c  libwebp-1.2.0.tar.gz
-+sha256  5aec868f669e384a22372a4e8a1a6cd7d44c64cd451f960ca69cc170d1e13acf  COPYING
-diff --git a/package/webp/webp.mk b/package/webp/webp.mk
-index 5047965894..ecf26faa31 100644
---- a/package/webp/webp.mk
-+++ b/package/webp/webp.mk
+-sha256  7e49057b26a5a9e3c6623e024f95f9fd9a14b571b9150aeb89d6d475fc3633e3  libfastjson-0.99.8.tar.gz
++sha256  881f954633aa76931e4c756ece0bda6fd8a673c6e66955a3db3b2bb9d6bbff72  libfastjson-0.99.9.tar.gz
+ sha256  b29370bbfa98816e1fca0901f18149d920736771bfd68b4ee0eb00c78b38d245  COPYING
+diff --git a/package/libfastjson/libfastjson.mk b/package/libfastjson/libfastjson.mk
+index 37dbd7e03e..7ab978dc67 100644
+--- a/package/libfastjson/libfastjson.mk
++++ b/package/libfastjson/libfastjson.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WEBP_VERSION = 1.1.0
-+WEBP_VERSION = 1.2.0
- WEBP_SOURCE = libwebp-$(WEBP_VERSION).tar.gz
- WEBP_SITE = http://downloads.webmproject.org/releases/webp
- WEBP_LICENSE = BSD-3-Clause
+-LIBFASTJSON_VERSION = 0.99.8
++LIBFASTJSON_VERSION = 0.99.9
+ LIBFASTJSON_SITE = $(call github,rsyslog,libfastjson,v$(LIBFASTJSON_VERSION))
+ LIBFASTJSON_INSTALL_STAGING = YES
+ LIBFASTJSON_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
