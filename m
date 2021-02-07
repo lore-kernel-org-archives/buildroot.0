@@ -1,52 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 07 Feb 2021 13:18:02 +0100
-Subject: [Buildroot] [PATCH] package/plg-utils: escape \ in generated
- legal-info
-In-Reply-To: <20210207112831.GK2384@scaer> (Yann E. MORIN's message of "Sun, 7
- Feb 2021 12:28:31 +0100")
-References: <20210206085102.1017439-1-yann.morin.1998@free.fr>
- <87sg681aq7.fsf@dell.be.48ers.dk> <20210207112831.GK2384@scaer>
-Message-ID: <87czxcysud.fsf@dell.be.48ers.dk>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  7 Feb 2021 13:21:06 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libfastjson: bump version to 0.99.9
+Message-ID: <20210207122106.1274638-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Changelog: https://github.com/rsyslog/libfastjson/blob/master/ChangeLog
 
- > Peter, All,
- > On 2021-02-07 10:35 +0100, Peter Korsgaard spake thusly:
- >> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
- >> I still wonder if it wouldn't be better to not have the backslashes in
- >> the variable and do whatever escaping is needed inside the CVE logic,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/libfastjson/libfastjson.hash | 2 +-
+ package/libfastjson/libfastjson.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > I think quite the opposite, in fact: we want the CPE_ID value to be
- > exactly what is in the NVD database without any mangling on our side.
-
- > The rules to encode the CPE stuff are non-trivial at least to me),
- > requiring some escaping/de-escaping in the various formats, and with
- > different rules for the attributes and their representation
-
- > All is defined in NISTIR 7695 [0], in the following chapters:
- >     5.3.2 - Restrictions on attribute-value strings
- >     6.2.1 - Syntax for Formatted String Binding
-
- > [0] https://doi.org/10.6028/NIST.IR.7695
-
-Ok.
-
- >> but OK - We need a quick fix and this solves it.
- >> 
- >> Perhaps we should add a gitlab test to verify that we generate valid
- >> json, E.G. by piping it to jq (or similar).
-
- > Yeah, I'm working on it... But we can't do that in gitlab, because the
- > output of show-info depends on the selected packages, so it would have
- > to be done in the autobuilders.
-
-But that then requires jq on the autobuilder. Can't we just do a 'make
-allyespackageconfig' in gitlab?
-
+diff --git a/package/libfastjson/libfastjson.hash b/package/libfastjson/libfastjson.hash
+index 07ea88f11e..218a738b37 100644
+--- a/package/libfastjson/libfastjson.hash
++++ b/package/libfastjson/libfastjson.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  7e49057b26a5a9e3c6623e024f95f9fd9a14b571b9150aeb89d6d475fc3633e3  libfastjson-0.99.8.tar.gz
++sha256  881f954633aa76931e4c756ece0bda6fd8a673c6e66955a3db3b2bb9d6bbff72  libfastjson-0.99.9.tar.gz
+ sha256  b29370bbfa98816e1fca0901f18149d920736771bfd68b4ee0eb00c78b38d245  COPYING
+diff --git a/package/libfastjson/libfastjson.mk b/package/libfastjson/libfastjson.mk
+index 37dbd7e03e..7ab978dc67 100644
+--- a/package/libfastjson/libfastjson.mk
++++ b/package/libfastjson/libfastjson.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBFASTJSON_VERSION = 0.99.8
++LIBFASTJSON_VERSION = 0.99.9
+ LIBFASTJSON_SITE = $(call github,rsyslog,libfastjson,v$(LIBFASTJSON_VERSION))
+ LIBFASTJSON_INSTALL_STAGING = YES
+ LIBFASTJSON_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
 -- 
-Bye, Peter Korsgaard
+2.29.2
