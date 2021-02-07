@@ -1,46 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 7 Feb 2021 23:14:21 +0100
-Subject: [Buildroot] [git commit] package/pigz: bump version to 2.6
-Message-ID: <20210207215411.0997F81481@busybox.osuosl.org>
+Date: Sun, 7 Feb 2021 23:14:36 +0100
+Subject: [Buildroot] [git commit] package/ccid: bump version to 1.4.34
+Message-ID: <20210207215411.1E6727F8A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ef6778f2e466096a864169b3dd9675c60c80018b
+commit: https://git.buildroot.net/buildroot/commit/?id=75db1845cd6a4ff240f116f5a62086553957004b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Updated license hash due to various commits bumping the version number:
-https://github.com/madler/pigz/commits/master/README
+Release notes:
+http://lists.infradead.org/pipermail/pcsclite-muscle/2021-January/001170.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pigz/pigz.hash | 4 ++--
- package/pigz/pigz.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/ccid/ccid.hash | 2 +-
+ package/ccid/ccid.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/pigz/pigz.hash b/package/pigz/pigz.hash
-index ec75b4e530..512bf785c7 100644
---- a/package/pigz/pigz.hash
-+++ b/package/pigz/pigz.hash
+diff --git a/package/ccid/ccid.hash b/package/ccid/ccid.hash
+index f129d2ae90..4ef7aff3d4 100644
+--- a/package/ccid/ccid.hash
++++ b/package/ccid/ccid.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  e228e7d18b34c4ece8d596eb6eee97bde533c6beedbb728d07d3abe90b4b1b52  pigz-2.4.tar.gz
--sha256	dc8f78258cdb4478b5922f4c00eb63d3cbac06c171dc829648fd414bb0cf4493  README
-+sha256  577673676cd5c7219f94b236075451220bae3e1ca451cf849947a2998fbf5820  pigz-2.6.tar.gz
-+sha256  830b3e1b05cc20f443d89d7d8703a3c63fd64c57ab716f5e81fd178517df1e11  README
-diff --git a/package/pigz/pigz.mk b/package/pigz/pigz.mk
-index 23df0f5fcb..fdf5fa40e8 100644
---- a/package/pigz/pigz.mk
-+++ b/package/pigz/pigz.mk
+ # Locally computed
+-sha256  5256da939711deb42b74d05d2bd6bd0c73c4d564feb0c1a50212609eb680e424  ccid-1.4.33.tar.bz2
++sha256  e6f7645b59a9a2844eb4b1a7eff512960d7f04a4654af02f7fd2f8aded5db40a  ccid-1.4.34.tar.bz2
+ sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING
+diff --git a/package/ccid/ccid.mk b/package/ccid/ccid.mk
+index 570c3907e8..3cb599d566 100644
+--- a/package/ccid/ccid.mk
++++ b/package/ccid/ccid.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PIGZ_VERSION = 2.4
-+PIGZ_VERSION = 2.6
- PIGZ_SITE = $(call github,madler,pigz,v$(PIGZ_VERSION))
- PIGZ_DEPENDENCIES = zlib
- HOST_PIGZ_DEPENDENCIES = host-zlib
+-CCID_VERSION = 1.4.33
++CCID_VERSION = 1.4.34
+ CCID_SOURCE = ccid-$(CCID_VERSION).tar.bz2
+ CCID_SITE = https://ccid.apdu.fr/files
+ CCID_LICENSE = LGPL-2.1+
