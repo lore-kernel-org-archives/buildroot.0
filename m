@@ -1,23 +1,20 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 07 Feb 2021 23:06:48 +0100
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xlib_libX11: add CPE
- variables
-In-Reply-To: <20210207131302.2936881-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 7 Feb 2021 14:13:02 +0100")
-References: <20210207131302.2936881-1-fontaine.fabrice@gmail.com>
-Message-ID: <87a6sfy1l3.fsf@dell.be.48ers.dk>
+Date: Sun, 07 Feb 2021 23:07:46 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libdvbsi: bump version to 0.3.9
+In-Reply-To: <20210207120931.1209966-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sun, 7 Feb 2021 13:09:31 +0100")
+References: <20210207120931.1209966-1-bernd.kuhls@t-online.de>
+Message-ID: <875z33y1jh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > cpe:2.3:a:x.org:libx11 is a valid CPE identifier for this package:
- >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ax.org%3Alibx11
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Switched _SITE to github, removed md5 hash, reformatted hashes.
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Committed, thanks.
 
