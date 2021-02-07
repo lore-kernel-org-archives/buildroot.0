@@ -1,35 +1,35 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  7 Feb 2021 14:52:26 +0100
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xlib_libXvMC: add CPE
- variables
-Message-ID: <20210207135226.2944158-1-fontaine.fabrice@gmail.com>
+Date: Sun,  7 Feb 2021 14:58:21 +0100
+Subject: [Buildroot] [PATCH 1/1] package/shadowsocks-libev: add
+ SHADOWSOCKS_LIBEV_CPE_ID_VENDOR
+Message-ID: <20210207135821.2944528-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:x.org:libxvmc is a valid CPE identifier for this package:
+cpe:2.3:a:shadowsocks:shadowsocks-libev is a valid CPE identifier for
+this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ax.org%3Alibxvmc
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ashadowsocks%3Ashadowsocks-libev
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/x11r7/xlib_libXvMC/xlib_libXvMC.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/shadowsocks-libev/shadowsocks-libev.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/x11r7/xlib_libXvMC/xlib_libXvMC.mk b/package/x11r7/xlib_libXvMC/xlib_libXvMC.mk
-index 02959c2305..7980f17493 100644
---- a/package/x11r7/xlib_libXvMC/xlib_libXvMC.mk
-+++ b/package/x11r7/xlib_libXvMC/xlib_libXvMC.mk
-@@ -9,6 +9,8 @@ XLIB_LIBXVMC_SOURCE = libXvMC-$(XLIB_LIBXVMC_VERSION).tar.bz2
- XLIB_LIBXVMC_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXVMC_LICENSE = MIT
- XLIB_LIBXVMC_LICENSE_FILES = COPYING
-+XLIB_LIBXVMC_CPE_ID_VENDOR = x.org
-+XLIB_LIBXVMC_CPE_ID_PRODUCT = libxvmc
- XLIB_LIBXVMC_INSTALL_STAGING = YES
- XLIB_LIBXVMC_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXv xorgproto
- XLIB_LIBXVMC_CONF_OPTS = --disable-malloc0returnsnull
+diff --git a/package/shadowsocks-libev/shadowsocks-libev.mk b/package/shadowsocks-libev/shadowsocks-libev.mk
+index 988e708d11..c76983ce5e 100644
+--- a/package/shadowsocks-libev/shadowsocks-libev.mk
++++ b/package/shadowsocks-libev/shadowsocks-libev.mk
+@@ -8,6 +8,7 @@ SHADOWSOCKS_LIBEV_VERSION = 3.3.5
+ SHADOWSOCKS_LIBEV_SITE = https://github.com/shadowsocks/shadowsocks-libev/releases/download/v$(SHADOWSOCKS_LIBEV_VERSION)
+ SHADOWSOCKS_LIBEV_LICENSE = GPL-3.0+, BSD-2-Clause (libbloom), BSD-3-Clause (libcork, libipset)
+ SHADOWSOCKS_LIBEV_LICENSE_FILES = COPYING libbloom/LICENSE libcork/COPYING
++SHADOWSOCKS_LIBEV_CPE_ID_VENDOR = shadowsocks
+ SHADOWSOCKS_LIBEV_DEPENDENCIES = host-pkgconf c-ares libev libsodium mbedtls pcre
+ SHADOWSOCKS_LIBEV_INSTALL_STAGING = YES
+ # We're patching configure.ac
 -- 
 2.29.2
