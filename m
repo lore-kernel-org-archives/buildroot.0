@@ -1,36 +1,24 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  7 Feb 2021 10:19:29 +0100
-Subject: [Buildroot] [PATCH 1/1] package/tpm2-pkcs11: add p11-kit optional
- dependency
-Message-ID: <20210207091929.2233349-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 07 Feb 2021 10:23:49 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libcap: bump version to 2.48
+In-Reply-To: <20210206190721.3156008-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sat, 6 Feb 2021 20:07:21 +0100")
+References: <20210206190721.3156008-1-bernd.kuhls@t-online.de>
+Message-ID: <87o8gw44ey.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/fee607da7226a92cceab2bbfd4c5d031016dfa3d
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/tpm2-pkcs11/tpm2-pkcs11.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ > Release notes:
+ > https://sites.google.com/site/fullycapable/release-notes-for-libcap
 
-diff --git a/package/tpm2-pkcs11/tpm2-pkcs11.mk b/package/tpm2-pkcs11/tpm2-pkcs11.mk
-index fb3846f056..3acce07745 100644
---- a/package/tpm2-pkcs11/tpm2-pkcs11.mk
-+++ b/package/tpm2-pkcs11/tpm2-pkcs11.mk
-@@ -37,4 +37,10 @@ TPM2_PKCS11_CONF_ENV += \
- 	ac_cv_prog_tpm2_import=yes \
- 	ac_cv_prog_tpm2_changeauth=yes
- 
-+ifeq ($(BR2_PACKAGE_P11_KIT),y)
-+TPM2_PKCS11_DEPENDENCIES += p11-kit
-+TPM2_PKCS11_CONF_OPTS += \
-+	--with-p11kitconfigdir=/usr/share/p11-kit/modules
-+endif
-+
- $(eval $(autotools-package))
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+Committed, thanks.
+
 -- 
-2.29.2
+Bye, Peter Korsgaard
