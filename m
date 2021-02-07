@@ -1,44 +1,80 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 07 Feb 2021 18:09:26 +0200
-Subject: [Buildroot] [PATCH] configs/avenger96_defconfig: add support
- for Arrow Avenger96 board
-In-Reply-To: <20210207155534.7211-1-peter@korsgaard.com>
-References: <20210207155534.7211-1-peter@korsgaard.com>
-Message-ID: <87h7mnyi4p.fsf@tarshish>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 7 Feb 2021 17:45:51 +0100
+Subject: [Buildroot] [PATCH 1/2] package/wlroots: change mesa3d
+ dependency to virtual libegl/libgles
+In-Reply-To: <20210207105155.516654-1-gilles.talis@gmail.com>
+References: <20210207105155.516654-1-gilles.talis@gmail.com>
+Message-ID: <20210207164551.GN2384@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Gilles, All,
 
-On Sun, Feb 07 2021, Peter Korsgaard wrote:
-> +How to write the microSD card
-> +=============================
-> +
-> +Once the build process is finished you will have an image called
-> +"sdcard.img" in the output/images/ directory.
-> +
-> +Copy the bootable "sdcard.img" onto an microSD card with "dd":
-> +
-> +  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
+On 2021-02-07 11:51 +0100, Gilles Talis spake thusly:
+> From: Julien Olivain <ju.o@free.fr>
+> 
+> Since commits:
+> https://github.com/swaywm/wlroots/commit/c2288a7b88240e4377bfc1c67b44efb58f704a42
+> https://github.com/swaywm/wlroots/commit/e18599b05e0f0cbeba11adbd489e801285470eab
+> 
+> Mesa dependency is no longer required. Wlroots is able to run on drivers
+> that provide EGL and GLES2.0 support (with specific EGL wayland extensions)
 
-Maybe warn that this overwrites data on the SD card.
+HEre, you said "with specific EGL wayland extensions", so...
 
-> +
-> +Boot the board
-> +==============
-> +
-> + (1) Configure the boot switches for boot from microsd: 1-0-1
-> +
-> + (2) Insert the microSD card in the slow
+[--SNIP--]
+> @@ -12,11 +12,8 @@ config BR2_PACKAGE_WLROOTS
+>  	depends on !BR2_STATIC_LIBS # wayland
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm, wayland
+>  	depends on BR2_PACKAGE_HAS_UDEV # libinput
+> -	# Technically wlroots should work with any OpenGL implementation
+> -	# which provides EGL, GLES2, and libgbm; but in practice only
+> -	# Mesa ships an usable libgbm.
+> -	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL
+> -	depends on BR2_PACKAGE_MESA3D_OPENGL_ES
+> +	depends on BR2_PACKAGE_HAS_LIBEGL
 
-Slot?
+... should not that be also depend on BR2_PACKAGE_HAS_LIBEGL_WAYLAND ?
 
-baruch
+Note that BR2_PACKAGE_HAS_LIBEGL_WAYLAND is a sub-option of
+BR2_PACKAGE_HAS_LIBEGL, so both should be added as dependency, but...
+
+[--SNIP--]
+> diff --git a/package/wlroots/wlroots.mk b/package/wlroots/wlroots.mk
+> index 5665d5a956..0160b1aedb 100644
+> --- a/package/wlroots/wlroots.mk
+> +++ b/package/wlroots/wlroots.mk
+> @@ -15,7 +15,8 @@ WLROOTS_DEPENDENCIES = \
+>  	host-wayland \
+>  	libinput \
+>  	libxkbcommon \
+> -	mesa3d \
+> +	libegl \
+
+... indeed only libegl needs to be added to _DEPENDENCIES.
+
+Regards,
+Yann E. MORIN.
+
+> +	libgles \
+>  	pixman \
+>  	udev \
+>  	wayland \
+> -- 
+> 2.25.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
