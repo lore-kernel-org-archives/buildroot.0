@@ -1,54 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 7 Feb 2021 23:22:14 +0100
-Subject: [Buildroot] [git commit] package/libgpg-error: bump version to 1.41
-Message-ID: <20210207220146.E027A818A0@busybox.osuosl.org>
+Date: Sun, 7 Feb 2021 23:21:20 +0100
+Subject: [Buildroot] [git commit] package/liberation: bump version to 2.1.2
+Message-ID: <20210207220146.C3261800E1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4f83d83a0082c55115de05bc2954ce8de2e1fc30
+commit: https://git.buildroot.net/buildroot/commit/?id=d35b99292b1dd60cca9e148f52d5ba6e97bc8c5a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgpg-error.git;a=blob;f=NEWS;
+Changelog:
+https://github.com/liberationfonts/liberation-fonts/blob/master/ChangeLog
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libgpg-error/libgpg-error.hash | 6 +++---
- package/libgpg-error/libgpg-error.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/liberation/liberation.hash | 2 +-
+ package/liberation/liberation.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libgpg-error/libgpg-error.hash b/package/libgpg-error/libgpg-error.hash
-index 70aa3a01d8..315c0965cf 100644
---- a/package/libgpg-error/libgpg-error.hash
-+++ b/package/libgpg-error/libgpg-error.hash
-@@ -1,10 +1,10 @@
- # From https://www.gnupg.org/download/integrity_check.html
--sha1  991a7a53e778a3de5ba8aad711e0bc9453101f4b  libgpg-error-1.39.tar.bz2
-+sha1  66d6270511a48bac0bf347330e7a12c62f3a1ab4  libgpg-error-1.41.tar.bz2
- 
- # Locally calculated after checking pgp signature
--# https://gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.39.tar.bz2.sig
-+# https://gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.41.tar.bz2.sig
- # using key D8692123C4065DEA5E0F3AB5249B39D24F25E3B6
--sha256  4a836edcae592094ef1c5a4834908f44986ab2b82e0824a0344b49df8cdb298f  libgpg-error-1.39.tar.bz2
-+sha256  64b078b45ac3c3003d7e352a5e05318880a5778c42331ce1ef33d1a0d9922742  libgpg-error-1.41.tar.bz2
+diff --git a/package/liberation/liberation.hash b/package/liberation/liberation.hash
+index f8b0bdac5d..6606142d86 100644
+--- a/package/liberation/liberation.hash
++++ b/package/liberation/liberation.hash
+@@ -1,3 +1,3 @@
  # Locally calculated
- sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
- sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LIB
-diff --git a/package/libgpg-error/libgpg-error.mk b/package/libgpg-error/libgpg-error.mk
-index a8b6c7ec02..78ed3e5464 100644
---- a/package/libgpg-error/libgpg-error.mk
-+++ b/package/libgpg-error/libgpg-error.mk
-@@ -4,7 +4,7 @@
+-sha256  8ee2c16fe0f055e60dd8375449aff72d25dd623b9cc6f24790ce9d2e91446fca  liberation-fonts-ttf-2.1.1.tar.gz
++sha256  14694930f28391675008c67b18889d1a7dfea74b16adf50394f8057b57eaf8e0  liberation-fonts-ttf-2.1.2.tar.gz
+ sha256  93fed46019c38bbe566b479d22148e2e8a1e85ada614accb0211c37b2c61c19b  LICENSE
+diff --git a/package/liberation/liberation.mk b/package/liberation/liberation.mk
+index 061830a92f..522a038ddd 100644
+--- a/package/liberation/liberation.mk
++++ b/package/liberation/liberation.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--LIBGPG_ERROR_VERSION = 1.39
-+LIBGPG_ERROR_VERSION = 1.41
- LIBGPG_ERROR_SITE = https://www.gnupg.org/ftp/gcrypt/libgpg-error
- LIBGPG_ERROR_SOURCE = libgpg-error-$(LIBGPG_ERROR_VERSION).tar.bz2
- LIBGPG_ERROR_LICENSE = GPL-2.0+, LGPL-2.1+
+-LIBERATION_VERSION = 2.1.1
+-LIBERATION_SITE = https://github.com/liberationfonts/liberation-fonts/files/4743886
++LIBERATION_VERSION = 2.1.2
++LIBERATION_SITE = https://github.com/liberationfonts/liberation-fonts/files/5722233
+ LIBERATION_SOURCE = liberation-fonts-ttf-$(LIBERATION_VERSION).tar.gz
+ LIBERATION_TARGET_DIR = $(TARGET_DIR)/usr/share/fonts/liberation
+ LIBERATION_LICENSE = OFL-1.1
