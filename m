@@ -1,88 +1,86 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 7 Feb 2021 21:44:41 +0100
-Subject: [Buildroot] [PATCH] configs/avenger96_defconfig: add support
- for Arrow Avenger96 board
-In-Reply-To: <87blcvy715.fsf@tarshish>
-References: <20210207155534.7211-1-peter@korsgaard.com>
- <87h7mnyi4p.fsf@tarshish> <20210207165237.GP2384@scaer>
- <87eehryfr8.fsf@tarshish>
- <a86ec3d8-17d5-bd4d-d6e9-f0d29071eeb4@grinn-global.com>
- <87blcvy715.fsf@tarshish>
-Message-ID: <20210207204441.GQ2384@scaer>
+Date: Sun,  7 Feb 2021 22:21:01 +0100
+Subject: [Buildroot] [PATCH] utils/test-pkg: add check that show-info is
+ proper json
+Message-ID: <20210207212101.1527766-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2021-02-07 22:09 +0200, Baruch Siach spake thusly:
-> Hi Bartosz,
-> 
-> On Sun, Feb 07 2021, Bartosz Bilas wrote:
-> > On 2/7/21 6:00 PM, Baruch Siach wrote:
-> >> On Sun, Feb 07 2021, Yann E. MORIN wrote:
-> >>> On 2021-02-07 18:09 +0200, Baruch Siach spake thusly:
-> >>>> On Sun, Feb 07 2021, Peter Korsgaard wrote:
-> >>>>> +  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
-> >>>> Maybe warn that this overwrites data on the SD card.
-> >>> As far as I could see, we don't do that in any of the 72 readme.txt we
-> >>> already have...
-> >> $ git grep WARNING -- board/
-> >> ...
-> >> board/chromebook/elm/readme.txt:WARNING: make sure there is nothing important on that card,
-> >> board/chromebook/snow/readme.txt:WARNING: make sure there is nothing important on that card,
-> >> board/engicam/geam6ul/readme.txt:*** WARNING! This will destroy all the card content. Use with care! ***
-[--SNIP--]
+JSON parser are usually rather strict when parsing their input. Both
+jq and the python json module choke on non-conformant inputs.
 
-OK, that's for sure not a small list, indeed...
+Commit e4c284e6b9 (package/pkg-utils: escape \ in generated legal-info)
+fixed the \-escaping case, but we want to ensure that we do not have
+other data that would be improperly encoded.
 
-I just had a look at a few readmes, and it seems my sampling was not
-that fortunate:
+To more easily catch issues, also run show-info and send its output
+through jq, to try and validate the output.
 
-    board/acmesystems/aria-g25/readme.txt
-    board/acmesystems/arietta-g25/readme.txt
-    board/amarula/vyasa/readme.txt
-    board/asus/tinker/readme.txt
-    board/csky/readme.txt
-    board/orangepi/orangepi-plus/readme.txt
-    board/raspberrypi/readme.txt
-    board/warp7/readme.txt
+Reported-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ utils/test-pkg | 22 +++++++++++++++++++---
+ 1 file changed, 19 insertions(+), 3 deletions(-)
 
-And surely, we do not have that warning in all the readmes we have a
-"sudo dd":
-
-    $ git grep 'sudo dd ' |wc -l
-    72
-
-> > Is not that obvious that dd will overwrite the data? Imo it's superfluous
-> > information at all.
-> It might be obvious to you. Many newcomers don't know what dd is, or how
-> filesystem works. A warning can't hurt.
-
-I too believe that such a warning is superfluous. Working with things
-like Buildroot really requires a bit of preliminary knowledge; we can't
-take everyone by the hand and we should probably require quite some
-prerequisites...
-
-Yeah, the might sound haughty or elitist, but we have to draw the line
-somewhere, and I believe usage of 'dd' and its consequences are below
-that line...
-
-Regards,
-Yann E. MORIN.
-
-> 
-> baruch
-> 
-> -- 
->                                                      ~. .~   Tk Open Systems
-> =}------------------------------------------------ooO--U--Ooo------------{=
->    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
-
+diff --git a/utils/test-pkg b/utils/test-pkg
+index a317d8c17a..5e00b589b8 100755
+--- a/utils/test-pkg
++++ b/utils/test-pkg
+@@ -13,7 +13,7 @@ do_clean() {
+ main() {
+     local o O opts
+     local cfg dir pkg random toolchains_csv toolchain all number mode
+-    local ret nb nb_skip nb_fail nb_legal nb_tc build_dir keep
++    local ret nb nb_skip nb_fail nb_legal nb_show nb_tc build_dir keep
+     local -a toolchains
+     local pkg_br_name
+ 
+@@ -122,6 +122,7 @@ main() {
+     nb_skip=0
+     nb_fail=0
+     nb_legal=0
++    nb_show=0
+     for toolchainconfig in "${toolchains[@]}"; do
+         : $((nb++))
+         toolchain="$(basename "${toolchainconfig}" .config)"
+@@ -133,11 +134,12 @@ main() {
+         (1) : $((nb_skip++)); printf "SKIPPED\n";;
+         (2) : $((nb_fail++)); printf "FAILED\n";;
+         (3) : $((nb_legal++)); printf "FAILED\n";;
++        (4) : $((nb_show++)); printf "FAILED\n";;
+         esac
+     done
+ 
+-    printf "%d builds, %d skipped, %d build failed, %d legal-info failed\n" \
+-        ${nb} ${nb_skip} ${nb_fail} ${nb_legal}
++    printf "%d builds, %d skipped, %d build failed, %d legal-info failed, %d show-info failed\n" \
++        ${nb} ${nb_skip} ${nb_fail} ${nb_legal} ${nb_show}
+ 
+     return $((nb_fail + nb_legal))
+ }
+@@ -183,6 +185,20 @@ build_one() {
+         return 3
+     fi
+ 
++    # Validate that we generate proper json as show-info
++    { tput smso; printf '>>> Running show-info\n'; tput rmso; } >> "${dir}/logfile" 2> /dev/null;
++    JQ="$(which jq)"
++    if [ -z "${JQ}" ]; then
++        make O="${dir}" host-jq >> "${dir}/logfile" 2>&1
++        JQ="${dir}/host/bin/jq"
++    fi
++    if ! make O="${dir}" "${pkg:+${pkg}-}show-info" > "${dir}/info.json" 2>> "${dir}/logfile"; then
++        return 4
++    fi
++    if ! "${JQ}" . < "${dir}/info.json" >> "${dir}/logfile" 2>&1; then
++        return 4
++    fi
++
+     # If we get here, the build was successful. Clean up the build/host
+     # directories to save disk space, unless 'keep' was set.
+     if [ ${keep} -ne 1 ]; then
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.25.1
