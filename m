@@ -1,47 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 07 Feb 2021 10:35:44 +0100
-Subject: [Buildroot] [PATCH] package/plg-utils: escape \ in generated
- legal-info
-In-Reply-To: <20210206085102.1017439-1-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Sat, 6 Feb 2021 09:51:02 +0100")
-References: <20210206085102.1017439-1-yann.morin.1998@free.fr>
-Message-ID: <87sg681aq7.fsf@dell.be.48ers.dk>
+Date: Sun, 7 Feb 2021 10:23:33 +0100
+Subject: [Buildroot] [git commit] package/libcap: bump version to 2.48
+Message-ID: <20210207091615.7F1AE807E9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=dec9741a8fdae42136372f484c02515eed016f83
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > In the output of legal-info, which is JSON-formatted, we include the
- > CPI_ID (when it is valid).
+Release notes:
+https://sites.google.com/site/fullycapable/release-notes-for-libcap
 
- > For xerces, the CPE_IS contains two sequences aof \+ (which is exactly
- > what is present in the NIST DB, [0]).
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libcap/libcap.hash | 2 +-
+ package/libcap/libcap.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > However, in JSON, like in C, \ escapes the following character; only a
- > very limited set of characters are valid to escape: " \ / b f n r t u.
- > Escaping any other character is invalid. Conformant JSON parser will
- > choke on invalid sequences, and so does not the json python module:
-
- >       File "/usr/lib/python2.7/json/decoder.py", line 380, in raw_decode
- >         obj, end = self.scan_once(s, idx)
- >     ValueError: Invalid \escape: line 1 column 608554 (char 608553)
-
- > We fix that be globally escaping \ in our json output, in the generic
- > sanitsing macro.
-
- > [0] https://nvd.nist.gov/products/cpe/detail/645?namingFormat=2.3&orderBy=CPEURI&keyword=xerces&status=FINAL
-
-I still wonder if it wouldn't be better to not have the backslashes in
-the variable and do whatever escaping is needed inside the CVE logic,
-but OK - We need a quick fix and this solves it.
-
-Perhaps we should add a gitlab test to verify that we generate valid
-json, E.G. by piping it to jq (or similar).
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libcap/libcap.hash b/package/libcap/libcap.hash
+index b9beece902..7499f2468c 100644
+--- a/package/libcap/libcap.hash
++++ b/package/libcap/libcap.hash
+@@ -1,5 +1,5 @@
+ # https://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2/sha256sums.asc
+-sha256  4ed3d11413fa6c9667e49f819808fbb581cd8864b839f87d7c2a02c70f21d8b4  libcap-2.46.tar.xz
++sha256  4de9590ee09a87c282d558737ffb5b6175ccbfd26d580add10df44d0f047f6c2  libcap-2.48.tar.xz
+ 
+ # Hash for license file:
+ sha256  088cabde4662b4121258d298b0b2967bc1abffa134457ed9bc4a359685ab92bc  License
+diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
+index 27a295cad7..d3a069e82a 100644
+--- a/package/libcap/libcap.mk
++++ b/package/libcap/libcap.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBCAP_VERSION = 2.46
++LIBCAP_VERSION = 2.48
+ LIBCAP_SITE = https://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2
+ LIBCAP_SOURCE = libcap-$(LIBCAP_VERSION).tar.xz
+ LIBCAP_LICENSE = GPL-2.0 or BSD-3-Clause
