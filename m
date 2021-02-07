@@ -1,22 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 07 Feb 2021 10:29:39 +0100
-Subject: [Buildroot] [PATCH] package/mosquitto: bump version to 2.0.7
-In-Reply-To: <20210206163139.21972-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sat, 6 Feb 2021 17:31:39 +0100")
-References: <20210206163139.21972-1-peter@korsgaard.com>
-Message-ID: <87lfc02pks.fsf@dell.be.48ers.dk>
+Date: Sun, 07 Feb 2021 10:30:06 +0100
+Subject: [Buildroot] [PATCH 1/1] package/redis: add REDIS_CPE_ID_VENDOR
+In-Reply-To: <20210206162937.2006960-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 6 Feb 2021 17:29:37 +0100")
+References: <20210206162937.2006960-1-fontaine.fabrice@gmail.com>
+Message-ID: <87h7mo2pk1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Includes a number of bugfixes.  For details, see the announcement:
- > https://mosquitto.org/blog/2021/02/version-2-0-7-released/
+ > cpe:2.3:a:redislabs:redis is a valid CPE identifier for this package:
+ >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aredislabs%3Aredis
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
 
