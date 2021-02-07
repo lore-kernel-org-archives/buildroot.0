@@ -1,37 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 7 Feb 2021 10:30:27 +0100
-Subject: [Buildroot] [git commit] package/slirp: add CPE variables
-Message-ID: <20210207091616.27558807E9@busybox.osuosl.org>
+Date: Sun, 7 Feb 2021 10:30:43 +0100
+Subject: [Buildroot] [git commit] package/cryptopp: add CPE variables
+Message-ID: <20210207091616.3338A807E9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2bf6bbc180f56287493258ed70411e83b7520e6c
+commit: https://git.buildroot.net/buildroot/commit/?id=3658c1362b3c7423f23d6c7fd1c4874e21e1d64c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:libslirp_project:libslirp is a valid CPE identifier for this
+cpe:2.3:a:cryptopp:crypto\+\+ is a valid CPE identifier for this
 package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alibslirp_project%3Alibslirp
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&orderBy=2.3&keyword=cpe%3A2.3%3Aa%3Acryptopp%3Acrypto%5C%2B%5C%2B
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/slirp/slirp.mk | 2 ++
+ package/cryptopp/cryptopp.mk | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/slirp/slirp.mk b/package/slirp/slirp.mk
-index 33c568c058..ff92c60517 100644
---- a/package/slirp/slirp.mk
-+++ b/package/slirp/slirp.mk
-@@ -11,6 +11,8 @@ SLIRP_SOURCE = libslirp-$(SLIRP_VERSION).tar.xz
- SLIRP_SITE = https://elmarco.fedorapeople.org
- SLIRP_LICENSE = BSD-3-Clause
- SLIRP_LICENSE_FILES = COPYRIGHT
-+SLIRP_CPE_ID_VENDOR = libslirp_project
-+SLIRP_CPE_ID_PRODUCT = libslirp
- SLIRP_INSTALL_STAGING = YES
- SLIRP_DEPENDENCIES = libglib2
+diff --git a/package/cryptopp/cryptopp.mk b/package/cryptopp/cryptopp.mk
+index c1b8aaa44c..1706108454 100644
+--- a/package/cryptopp/cryptopp.mk
++++ b/package/cryptopp/cryptopp.mk
+@@ -9,6 +9,8 @@ CRYPTOPP_SOURCE = cryptopp$(subst .,,$(CRYPTOPP_VERSION)).zip
+ CRYPTOPP_SITE = https://cryptopp.com
+ CRYPTOPP_LICENSE = BSL-1.0, BSD-3-Clause (CRYPTOGAMS), Public domain (ChaCha SSE2 and AVX)
+ CRYPTOPP_LICENSE_FILES = License.txt
++CRYPTOPP_CPE_ID_VENDOR = cryptopp
++CRYPTOPP_CPE_ID_PRODUCT = crypto\+\+
+ CRYPTOPP_INSTALL_STAGING = YES
  
+ define HOST_CRYPTOPP_EXTRACT_CMDS
