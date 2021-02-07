@@ -1,36 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 7 Feb 2021 10:40:21 +0100
-Subject: [Buildroot] [git commit] package/jsoncpp: set JSONCPP_CPE_ID_VALID
-Message-ID: <20210207092050.5CC347FAC7@busybox.osuosl.org>
+Date: Sun, 7 Feb 2021 10:42:50 +0100
+Subject: [Buildroot] [git commit] package/libabseil-cpp: bump version to
+ 20200923.3
+Message-ID: <20210207092212.0A1AB8198B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=483fc9dbd95f70bd1d86e125f13c0731ae0bd6ae
+commit: https://git.buildroot.net/buildroot/commit/?id=3e6469f1f9661b60bdf20c3547e8e76a301f3d18
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:jsoncpp_project:jsoncpp is a valid CPE identifier for this
-package:
+Release notes:
+https://github.com/abseil/abseil-cpp/releases/tag/20200923.3
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ajsoncpp_project%3Ajsoncpp
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/jsoncpp/jsoncpp.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/libabseil-cpp/libabseil-cpp.hash | 2 +-
+ package/libabseil-cpp/libabseil-cpp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/jsoncpp/jsoncpp.mk b/package/jsoncpp/jsoncpp.mk
-index cfded2bf07..a8d863a3ed 100644
---- a/package/jsoncpp/jsoncpp.mk
-+++ b/package/jsoncpp/jsoncpp.mk
-@@ -8,6 +8,7 @@ JSONCPP_VERSION = 1.9.4
- JSONCPP_SITE = $(call github,open-source-parsers,jsoncpp,$(JSONCPP_VERSION))
- JSONCPP_LICENSE = Public Domain or MIT
- JSONCPP_LICENSE_FILES = LICENSE
-+JSONCPP_CPE_ID_VALID = YES
- JSONCPP_INSTALL_STAGING = YES
- JSONCPP_CONF_OPTS = -Dtests=false
+diff --git a/package/libabseil-cpp/libabseil-cpp.hash b/package/libabseil-cpp/libabseil-cpp.hash
+index 63c4b86d3e..b176043566 100644
+--- a/package/libabseil-cpp/libabseil-cpp.hash
++++ b/package/libabseil-cpp/libabseil-cpp.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  bf3f13b13a0095d926b25640e060f7e13881bd8a792705dd9e161f3c2b9aa976  libabseil-cpp-20200923.2.tar.gz
++sha256  ebe2ad1480d27383e4bf4211e2ca2ef312d5e6a09eba869fd2e8a5c5d553ded2  libabseil-cpp-20200923.3.tar.gz
+ sha256  c79a7fea0e3cac04cd43f20e7b648e5a0ff8fa5344e644b0ee09ca1162b62747  LICENSE
+diff --git a/package/libabseil-cpp/libabseil-cpp.mk b/package/libabseil-cpp/libabseil-cpp.mk
+index 9cff8f0ff4..d614a5e5fc 100644
+--- a/package/libabseil-cpp/libabseil-cpp.mk
++++ b/package/libabseil-cpp/libabseil-cpp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
+-LIBABSEIL_CPP_VERSION = 20200923.2
++LIBABSEIL_CPP_VERSION = 20200923.3
+ LIBABSEIL_CPP_SITE = $(call github,abseil,abseil-cpp,$(LIBABSEIL_CPP_VERSION))
+ LIBABSEIL_CPP_LICENSE = Apache-2.0
+ LIBABSEIL_CPP_LICENSE_FILES = LICENSE
