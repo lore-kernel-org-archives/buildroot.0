@@ -1,37 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 7 Feb 2021 23:06:43 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xlib_libX11: add CPE
- variables
-Message-ID: <20210207214705.6EE99815D0@busybox.osuosl.org>
+Date: Sun, 07 Feb 2021 23:12:50 +0100
+Subject: [Buildroot] [PATCH] configs/avenger96_defconfig: add support
+ for Arrow Avenger96 board
+In-Reply-To: <87blcvy715.fsf@tarshish> (Baruch Siach's message of "Sun, 07 Feb
+ 2021 22:09:10 +0200")
+References: <20210207155534.7211-1-peter@korsgaard.com>
+ <87h7mnyi4p.fsf@tarshish> <20210207165237.GP2384@scaer>
+ <87eehryfr8.fsf@tarshish>
+ <a86ec3d8-17d5-bd4d-d6e9-f0d29071eeb4@grinn-global.com>
+ <87blcvy715.fsf@tarshish>
+Message-ID: <871rdry1b1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ec587440deadec12c56c445887d63098dad95c9c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-cpe:2.3:a:x.org:libx11 is a valid CPE identifier for this package:
+ > Hi Bartosz,
+ > On Sun, Feb 07 2021, Bartosz Bilas wrote:
+ >> On 2/7/21 6:00 PM, Baruch Siach wrote:
+ >>> On Sun, Feb 07 2021, Yann E. MORIN wrote:
+ >>>> On 2021-02-07 18:09 +0200, Baruch Siach spake thusly:
+ >>>>> On Sun, Feb 07 2021, Peter Korsgaard wrote:
+>>>>> +  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
+ >>>>> Maybe warn that this overwrites data on the SD card.
+ >>>> As far as I could see, we don't do that in any of the 72 readme.txt we
+ >>>> already have...
+ >>> $ git grep WARNING -- board/
+ >>> ...
+ >>> board/chromebook/elm/readme.txt:WARNING: make sure there is nothing important on that card,
+ >>> board/chromebook/snow/readme.txt:WARNING: make sure there is nothing important on that card,
+ >>> board/engicam/geam6ul/readme.txt:*** WARNING! This will destroy all the card content. Use with care! ***
+ >>> ...
+ >>> 
+ >> Is not that obvious that dd will overwrite the data? Imo it's superfluous
+ >> information at all.
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ax.org%3Alibx11
+ > It might be obvious to you. Many newcomers don't know what dd is, or how
+ > filesystem works. A warning can't hurt.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/x11r7/xlib_libX11/xlib_libX11.mk | 2 ++
- 1 file changed, 2 insertions(+)
+Indeed. I don't have a problem adding a oneliner warning. It doesn't
+hurt, and it might indeed help stop someone from losing data.
 
-diff --git a/package/x11r7/xlib_libX11/xlib_libX11.mk b/package/x11r7/xlib_libX11/xlib_libX11.mk
-index f36b5e6ffa..8fefbc492a 100644
---- a/package/x11r7/xlib_libX11/xlib_libX11.mk
-+++ b/package/x11r7/xlib_libX11/xlib_libX11.mk
-@@ -9,6 +9,8 @@ XLIB_LIBX11_SOURCE = libX11-$(XLIB_LIBX11_VERSION).tar.bz2
- XLIB_LIBX11_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XLIB_LIBX11_LICENSE = MIT
- XLIB_LIBX11_LICENSE_FILES = COPYING
-+XLIB_LIBX11_CPE_ID_VENDOR = x.org
-+XLIB_LIBX11_CPE_ID_PRODUCT = libx11
- XLIB_LIBX11_INSTALL_STAGING = YES
- XLIB_LIBX11_DEPENDENCIES = \
- 	libxcb \
+-- 
+Bye, Peter Korsgaard
