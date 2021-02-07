@@ -1,50 +1,49 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun,  7 Feb 2021 11:50:28 +0100
-Subject: [Buildroot] [PATCH v1] package/postgis: fix configure in case of
- host installed libxml2
-Message-ID: <20210207105028.24251-1-ps.report@gmx.net>
+From: Gilles Talis <gilles.talis@gmail.com>
+Date: Sun,  7 Feb 2021 11:51:55 +0100
+Subject: [Buildroot] [PATCH 2/2] package/cage: update dependencies to match
+ wlroot's
+In-Reply-To: <20210207105155.516654-1-gilles.talis@gmail.com>
+References: <20210207105155.516654-1-gilles.talis@gmail.com>
+Message-ID: <20210207105155.516654-2-gilles.talis@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Explicit set cross-compile xml2-config path to fix configure failure
-in case of host installed libxml2 package, otherwise postgis configure
-finds the wrong/host xml2-config first.
+From: Julien Olivain <ju.o@free.fr>
 
-Fixes:
-
-  checking for xml2-config... /usr/bin/xml2-config
-  checking libxml/tree.h usability... no
-  checking libxml/tree.h presence... no
-  checking for libxml/tree.h... no
-  configure: error: could not find headers include related to libxml2
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 ---
-Notes:
-  - depends on
-    http://patchwork.ozlabs.org/project/buildroot/patch/20210126133908.680621-1-fido_max at inbox.ru/
----
- package/postgis/postgis.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ package/cage/Config.in | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/postgis/postgis.mk b/package/postgis/postgis.mk
-index 85102d323a..b2e51b15eb 100644
---- a/package/postgis/postgis.mk
-+++ b/package/postgis/postgis.mk
-@@ -14,7 +14,10 @@ POSTGIS_AUTORECONF = YES
+diff --git a/package/cage/Config.in b/package/cage/Config.in
+index 3bef08f037..4f823c768c 100644
+--- a/package/cage/Config.in
++++ b/package/cage/Config.in
+@@ -1,6 +1,6 @@
+-comment "cage needs udev, mesa3d w/ EGL and GLES support"
+-	depends on !BR2_PACKAGE_MESA3D_OPENGL_EGL || \
+-		!BR2_PACKAGE_MESA3D_OPENGL_ES || \
++comment "cage needs udev, EGL and OpenGL ES support"
++	depends on !BR2_PACKAGE_HAS_LIBEGL || \
++		!BR2_PACKAGE_HAS_LIBGLES || \
+ 		!BR2_PACKAGE_HAS_UDEV
  
- POSTGIS_DEPENDENCIES = postgresql libgeos proj libxml2
- 
--POSTGIS_CONF_OPTS += --with-pgconfig=$(STAGING_DIR)/usr/bin/pg_config --with-geosconfig=$(STAGING_DIR)/usr/bin/geos-config
-+POSTGIS_CONF_OPTS += \
-+	--with-pgconfig=$(STAGING_DIR)/usr/bin/pg_config \
-+	--with-geosconfig=$(STAGING_DIR)/usr/bin/geos-config \
-+	--with-xml2config=$(STAGING_DIR)/usr/bin/xml2-config
- 
- ifeq ($(BR2_PACKAGE_LIBGDAL),y)
- POSTGIS_DEPENDENCIES += libgdal
+ comment "cage needs a toolchain w/ threads, dynamic library"
+@@ -11,9 +11,9 @@ config BR2_PACKAGE_CAGE
+ 	bool "cage"
+ 	depends on !BR2_STATIC_LIBS # wlroots
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # wlroots
++	depends on BR2_PACKAGE_HAS_LIBEGL # wlroots
++	depends on BR2_PACKAGE_HAS_LIBGLES # wlroots
+ 	depends on BR2_PACKAGE_HAS_UDEV # wlroots
+-	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL # wlroots
+-	depends on BR2_PACKAGE_MESA3D_OPENGL_ES # wlroots
+ 	select BR2_PACKAGE_WLROOTS
+ 	help
+ 	  Kiosk compositor for Wayland, which displays a single
 -- 
-2.30.0
+2.25.1
