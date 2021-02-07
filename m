@@ -1,52 +1,34 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 7 Feb 2021 14:33:10 +0100
-Subject: [Buildroot] [PATCH] package/plg-utils: escape \ in generated
- legal-info
-In-Reply-To: <87czxcysud.fsf@dell.be.48ers.dk>
-References: <20210206085102.1017439-1-yann.morin.1998@free.fr>
- <87sg681aq7.fsf@dell.be.48ers.dk> <20210207112831.GK2384@scaer>
- <87czxcysud.fsf@dell.be.48ers.dk>
-Message-ID: <20210207133310.GM2384@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  7 Feb 2021 14:34:37 +0100
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xlib_libXi: add CPE variables
+Message-ID: <20210207133437.2942961-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+cpe:2.3:a:x.org:libxi is a valid CPE identifier for this package:
 
-On 2021-02-07 13:18 +0100, Peter Korsgaard spake thusly:
-> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
->  > Peter, All,
->  > On 2021-02-07 10:35 +0100, Peter Korsgaard spake thusly:
->  >> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
->  >> Perhaps we should add a gitlab test to verify that we generate valid
->  >> json, E.G. by piping it to jq (or similar).
->  > Yeah, I'm working on it... But we can't do that in gitlab, because the
->  > output of show-info depends on the selected packages, so it would have
->  > to be done in the autobuilders.
-> But that then requires jq on the autobuilder. Can't we just do a 'make
-> allyespackageconfig' in gitlab?
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ax.org%3Alibxi
 
-So, allyespackageconfig is not buildable:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/x11r7/xlib_libXi/xlib_libXi.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-    package/luajit/luajit.mk:77: *** Configuration error: both "luajit" and
-    "lua" are selected as providers for virtual package "luainterpreter".
-    Only one provider can be selected at a time. Please fix your
-    configuration.  Stop.
-
-Solving this means reimplementing parts of the logic in the
-autobuilders... So I still think it would be better to augment the
-autobuilder script to run and validate show-info against a valid
-configuration...
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/x11r7/xlib_libXi/xlib_libXi.mk b/package/x11r7/xlib_libXi/xlib_libXi.mk
+index de7f3a7d3c..ad4cf5f96f 100644
+--- a/package/x11r7/xlib_libXi/xlib_libXi.mk
++++ b/package/x11r7/xlib_libXi/xlib_libXi.mk
+@@ -9,6 +9,8 @@ XLIB_LIBXI_SOURCE = libXi-$(XLIB_LIBXI_VERSION).tar.bz2
+ XLIB_LIBXI_SITE = https://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXI_LICENSE = MIT
+ XLIB_LIBXI_LICENSE_FILES = COPYING
++XLIB_LIBXI_CPE_ID_VENDOR = x.org
++XLIB_LIBXI_CPE_ID_PRODUCT = libxi
+ XLIB_LIBXI_INSTALL_STAGING = YES
+ XLIB_LIBXI_DEPENDENCIES = \
+ 	host-pkgconf \
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.29.2
