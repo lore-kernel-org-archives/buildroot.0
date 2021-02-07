@@ -1,41 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 07 Feb 2021 10:32:04 +0100
-Subject: [Buildroot] [PATCH 1/1] package/cryptopp: add CPE variables
-In-Reply-To: <20210206154348.2003364-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 6 Feb 2021 16:43:48 +0100")
-References: <20210206154348.2003364-1-fontaine.fabrice@gmail.com>
-Message-ID: <874kio2pgr.fsf@dell.be.48ers.dk>
+Date: Sun, 07 Feb 2021 10:35:44 +0100
+Subject: [Buildroot] [PATCH] package/plg-utils: escape \ in generated
+ legal-info
+In-Reply-To: <20210206085102.1017439-1-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Sat, 6 Feb 2021 09:51:02 +0100")
+References: <20210206085102.1017439-1-yann.morin.1998@free.fr>
+Message-ID: <87sg681aq7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > cpe:2.3:a:cryptopp:crypto\+\+ is a valid CPE identifier for this
- > package:
+ > In the output of legal-info, which is JSON-formatted, we include the
+ > CPI_ID (when it is valid).
 
- >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&orderBy=2.3&keyword=cpe%3A2.3%3Aa%3Acryptopp%3Acrypto%5C%2B%5C%2B
+ > For xerces, the CPE_IS contains two sequences aof \+ (which is exactly
+ > what is present in the NIST DB, [0]).
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > ---
- >  package/cryptopp/cryptopp.mk | 2 ++
- >  1 file changed, 2 insertions(+)
+ > However, in JSON, like in C, \ escapes the following character; only a
+ > very limited set of characters are valid to escape: " \ / b f n r t u.
+ > Escaping any other character is invalid. Conformant JSON parser will
+ > choke on invalid sequences, and so does not the json python module:
 
- > diff --git a/package/cryptopp/cryptopp.mk b/package/cryptopp/cryptopp.mk
- > index c1b8aaa44c..1706108454 100644
- > --- a/package/cryptopp/cryptopp.mk
- > +++ b/package/cryptopp/cryptopp.mk
- > @@ -9,6 +9,8 @@ CRYPTOPP_SOURCE = cryptopp$(subst .,,$(CRYPTOPP_VERSION)).zip
- >  CRYPTOPP_SITE = https://cryptopp.com
- >  CRYPTOPP_LICENSE = BSL-1.0, BSD-3-Clause (CRYPTOGAMS), Public domain (ChaCha SSE2 and AVX)
- >  CRYPTOPP_LICENSE_FILES = License.txt
- > +CRYPTOPP_CPE_ID_VENDOR = cryptopp
- > +CRYPTOPP_CPE_ID_PRODUCT = crypto\+\+
+ >       File "/usr/lib/python2.7/json/decoder.py", line 380, in raw_decode
+ >         obj, end = self.scan_once(s, idx)
+ >     ValueError: Invalid \escape: line 1 column 608554 (char 608553)
 
-I still find it odd that we have to escape the plus'es, but OK - This
-matches xerces at least.
+ > We fix that be globally escaping \ in our json output, in the generic
+ > sanitsing macro.
+
+ > [0] https://nvd.nist.gov/products/cpe/detail/645?namingFormat=2.3&orderBy=CPEURI&keyword=xerces&status=FINAL
+
+I still wonder if it wouldn't be better to not have the backslashes in
+the variable and do whatever escaping is needed inside the CVE logic,
+but OK - We need a quick fix and this solves it.
+
+Perhaps we should add a gitlab test to verify that we generate valid
+json, E.G. by piping it to jq (or similar).
 
 Committed, thanks.
 
