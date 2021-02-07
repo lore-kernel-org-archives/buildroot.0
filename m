@@ -1,44 +1,45 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  7 Feb 2021 13:14:08 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libedit: bump version to
- 20191231-3.1
-Message-ID: <20210207121408.1250094-1-bernd.kuhls@t-online.de>
+Date: Sun,  7 Feb 2021 13:17:53 +0100
+Subject: [Buildroot] [PATCH 1/1] package/liberation: bump version to 2.1.2
+Message-ID: <20210207121753.1263191-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Reformatted hashes.
+Changelog:
+https://github.com/liberationfonts/liberation-fonts/blob/master/ChangeLog
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libedit/libedit.hash | 4 ++--
- package/libedit/libedit.mk   | 2 +-
+ package/liberation/liberation.hash | 2 +-
+ package/liberation/liberation.mk   | 4 ++--
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libedit/libedit.hash b/package/libedit/libedit.hash
-index 7b84909d8b..d405e47b42 100644
---- a/package/libedit/libedit.hash
-+++ b/package/libedit/libedit.hash
+diff --git a/package/liberation/liberation.hash b/package/liberation/liberation.hash
+index f8b0bdac5d..6606142d86 100644
+--- a/package/liberation/liberation.hash
++++ b/package/liberation/liberation.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256 ac8f0f51c1cf65492e4d1e3ed2be360bda41e54633444666422fbf393bba1bae libedit-20190324-3.1.tar.gz
--sha256 9da6c9c74987a36c84302982799d17d2f748ba1c1c0c471425716173c1d07649 COPYING
-+sha256  dbb82cb7e116a5f8025d35ef5b4f7d4a3cdd0a3909a146a39112095a2d229071  libedit-20191231-3.1.tar.gz
-+sha256  9da6c9c74987a36c84302982799d17d2f748ba1c1c0c471425716173c1d07649  COPYING
-diff --git a/package/libedit/libedit.mk b/package/libedit/libedit.mk
-index 0a9b28afa7..cb18b97f6d 100644
---- a/package/libedit/libedit.mk
-+++ b/package/libedit/libedit.mk
-@@ -4,7 +4,7 @@
+ # Locally calculated
+-sha256  8ee2c16fe0f055e60dd8375449aff72d25dd623b9cc6f24790ce9d2e91446fca  liberation-fonts-ttf-2.1.1.tar.gz
++sha256  14694930f28391675008c67b18889d1a7dfea74b16adf50394f8057b57eaf8e0  liberation-fonts-ttf-2.1.2.tar.gz
+ sha256  93fed46019c38bbe566b479d22148e2e8a1e85ada614accb0211c37b2c61c19b  LICENSE
+diff --git a/package/liberation/liberation.mk b/package/liberation/liberation.mk
+index 061830a92f..522a038ddd 100644
+--- a/package/liberation/liberation.mk
++++ b/package/liberation/liberation.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--LIBEDIT_VERSION = 20190324-3.1
-+LIBEDIT_VERSION = 20191231-3.1
- LIBEDIT_SITE = http://www.thrysoee.dk/editline
- LIBEDIT_INSTALL_STAGING = YES
- LIBEDIT_DEPENDENCIES = ncurses
+-LIBERATION_VERSION = 2.1.1
+-LIBERATION_SITE = https://github.com/liberationfonts/liberation-fonts/files/4743886
++LIBERATION_VERSION = 2.1.2
++LIBERATION_SITE = https://github.com/liberationfonts/liberation-fonts/files/5722233
+ LIBERATION_SOURCE = liberation-fonts-ttf-$(LIBERATION_VERSION).tar.gz
+ LIBERATION_TARGET_DIR = $(TARGET_DIR)/usr/share/fonts/liberation
+ LIBERATION_LICENSE = OFL-1.1
 -- 
 2.29.2
