@@ -1,35 +1,50 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  7 Feb 2021 14:58:21 +0100
-Subject: [Buildroot] [PATCH 1/1] package/shadowsocks-libev: add
- SHADOWSOCKS_LIBEV_CPE_ID_VENDOR
-Message-ID: <20210207135821.2944528-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 07 Feb 2021 15:21:07 +0100
+Subject: [Buildroot] [PATCH] package/plg-utils: escape \ in generated
+ legal-info
+In-Reply-To: <20210207133310.GM2384@scaer> (Yann E. MORIN's message of "Sun, 7
+ Feb 2021 14:33:10 +0100")
+References: <20210206085102.1017439-1-yann.morin.1998@free.fr>
+ <87sg681aq7.fsf@dell.be.48ers.dk> <20210207112831.GK2384@scaer>
+ <87czxcysud.fsf@dell.be.48ers.dk> <20210207133310.GM2384@scaer>
+Message-ID: <878s80yn58.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:shadowsocks:shadowsocks-libev is a valid CPE identifier for
-this package:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ashadowsocks%3Ashadowsocks-libev
+ > Peter, All,
+ > On 2021-02-07 13:18 +0100, Peter Korsgaard spake thusly:
+ >> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+ >> > Peter, All,
+ >> > On 2021-02-07 10:35 +0100, Peter Korsgaard spake thusly:
+ >> >> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+ >> >> Perhaps we should add a gitlab test to verify that we generate valid
+ >> >> json, E.G. by piping it to jq (or similar).
+ >> > Yeah, I'm working on it... But we can't do that in gitlab, because the
+ >> > output of show-info depends on the selected packages, so it would have
+ >> > to be done in the autobuilders.
+ >> But that then requires jq on the autobuilder. Can't we just do a 'make
+ >> allyespackageconfig' in gitlab?
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/shadowsocks-libev/shadowsocks-libev.mk | 1 +
- 1 file changed, 1 insertion(+)
+ > So, allyespackageconfig is not buildable:
 
-diff --git a/package/shadowsocks-libev/shadowsocks-libev.mk b/package/shadowsocks-libev/shadowsocks-libev.mk
-index 988e708d11..c76983ce5e 100644
---- a/package/shadowsocks-libev/shadowsocks-libev.mk
-+++ b/package/shadowsocks-libev/shadowsocks-libev.mk
-@@ -8,6 +8,7 @@ SHADOWSOCKS_LIBEV_VERSION = 3.3.5
- SHADOWSOCKS_LIBEV_SITE = https://github.com/shadowsocks/shadowsocks-libev/releases/download/v$(SHADOWSOCKS_LIBEV_VERSION)
- SHADOWSOCKS_LIBEV_LICENSE = GPL-3.0+, BSD-2-Clause (libbloom), BSD-3-Clause (libcork, libipset)
- SHADOWSOCKS_LIBEV_LICENSE_FILES = COPYING libbloom/LICENSE libcork/COPYING
-+SHADOWSOCKS_LIBEV_CPE_ID_VENDOR = shadowsocks
- SHADOWSOCKS_LIBEV_DEPENDENCIES = host-pkgconf c-ares libev libsodium mbedtls pcre
- SHADOWSOCKS_LIBEV_INSTALL_STAGING = YES
- # We're patching configure.ac
+ >     package/luajit/luajit.mk:77: *** Configuration error: both "luajit" and
+ >     "lua" are selected as providers for virtual package "luainterpreter".
+ >     Only one provider can be selected at a time. Please fix your
+ >     configuration.  Stop.
+
+:/
+
+ > Solving this means reimplementing parts of the logic in the
+ > autobuilders... So I still think it would be better to augment the
+ > autobuilder script to run and validate show-info against a valid
+ > configuration...
+
+That is also fine by me.
+
 -- 
-2.29.2
+Bye, Peter Korsgaard
