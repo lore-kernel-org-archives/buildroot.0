@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 07 Feb 2021 23:06:05 +0100
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xlib_libXv: add CPE
+Date: Sun, 07 Feb 2021 23:06:24 +0100
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xlib_libXrender: add CPE
  variables
-In-Reply-To: <20210207134750.2943790-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 7 Feb 2021 14:47:50 +0100")
-References: <20210207134750.2943790-1-fontaine.fabrice@gmail.com>
-Message-ID: <87im73y1ma.fsf@dell.be.48ers.dk>
+In-Reply-To: <20210207134510.2943565-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 7 Feb 2021 14:45:10 +0100")
+References: <20210207134510.2943565-1-fontaine.fabrice@gmail.com>
+Message-ID: <87eehry1lr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,8 +14,8 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > cpe:2.3:a:x.org:libxv is a valid CPE identifier for this package:
- >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ax.org%3Alibxv
+ > cpe:2.3:a:x.org:libxrender is a valid CPE identifier for this package:
+ >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ax.org%3Alibxrender
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
