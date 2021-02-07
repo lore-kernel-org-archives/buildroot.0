@@ -1,66 +1,56 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  7 Feb 2021 13:43:04 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libgphoto2: bump version to 2.5.26
-Message-ID: <20210207124304.1400992-1-bernd.kuhls@t-online.de>
+Date: Sun,  7 Feb 2021 13:52:44 +0100
+Subject: [Buildroot] [PATCH 1/2] package/libgsasl: bump version to 1.10.0
+Message-ID: <20210207125245.1428105-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Removed md5 hash, reformatted remaining hashes.
-Added optional support for libcurl available since version 2.5.24.
+Added hashes provided by upstream, updated license hash due to various
+upstream commits:
+https://git.savannah.gnu.org/gitweb/?p=gsasl.git;a=history;f=README
 
-Release notes: https://github.com/gphoto/libgphoto2/blob/master/NEWS
+Release notes:
+https://lists.gnu.org/archive/html/help-gsasl/2021-01/msg00007.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libgphoto2/libgphoto2.hash | 9 ++++-----
- package/libgphoto2/libgphoto2.mk   | 9 ++++++++-
- 2 files changed, 12 insertions(+), 6 deletions(-)
+ package/libgsasl/libgsasl.hash | 8 ++++++--
+ package/libgsasl/libgsasl.mk   | 2 +-
+ 2 files changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/package/libgphoto2/libgphoto2.hash b/package/libgphoto2/libgphoto2.hash
-index 0d965da0f1..e405735c8b 100644
---- a/package/libgphoto2/libgphoto2.hash
-+++ b/package/libgphoto2/libgphoto2.hash
-@@ -1,7 +1,6 @@
--# https://sourceforge.net/projects/gphoto/files/libgphoto/2.5.23/
--md5 bf052ce815e607dc781c5b0f3c5ca5c0 libgphoto2-2.5.23.tar.bz2
--sha1 01f91d2b5d2aef7e80ab846fea4d5eb5cc67ed79 libgphoto2-2.5.23.tar.bz2
-+# https://sourceforge.net/projects/gphoto/files/libgphoto/2.5.26/
-+sha1  38373ef7f76e90492ffca309094487fb1474f3fe  libgphoto2-2.5.26.tar.bz2
+diff --git a/package/libgsasl/libgsasl.hash b/package/libgsasl/libgsasl.hash
+index 57fd98fc95..75e5a317fa 100644
+--- a/package/libgsasl/libgsasl.hash
++++ b/package/libgsasl/libgsasl.hash
+@@ -1,7 +1,11 @@
++# From https://lists.gnu.org/archive/html/help-gsasl/2021-01/msg00007.html
++sha1  a16ff428bbf28fcfa681c7edd2cd2bb087bcc4e7  libgsasl-1.10.0.tar.gz
++sha224  20b37757fccb6a0f8b4c6fcb28f51a3b4b8a4b1fdb4736da07707a0b  libgsasl-1.10.0.tar.gz
++
+ # Locally calculated after checking pgp signature
+-sha256  19e2f90525c531010918c50bb1febef0d7115d620150cc66153b9ce73ff814e6  libgsasl-1.8.1.tar.gz
++sha256  f1b553384dedbd87478449775546a358d6f5140c15cccc8fb574136fdc77329f  libgsasl-1.10.0.tar.gz
  
- # Locally calculated hash
--sha256 d8af23364aa40fd8607f7e073df74e7ace05582f4ba13f1724d12d3c97e8852d libgphoto2-2.5.23.tar.bz2
--sha256 ebc385a0b1d477be5177ed6d9129557aa59a3ad0f26ebe7dd97ee942a0fb68ee COPYING
-+sha256  7740fea3cbb78489071cdfec06c07fab528e69e27ac82734eae6a73eaeeabcd4  libgphoto2-2.5.26.tar.bz2
-+sha256  ebc385a0b1d477be5177ed6d9129557aa59a3ad0f26ebe7dd97ee942a0fb68ee  COPYING
-diff --git a/package/libgphoto2/libgphoto2.mk b/package/libgphoto2/libgphoto2.mk
-index 63e6a8775f..1d42ba862f 100644
---- a/package/libgphoto2/libgphoto2.mk
-+++ b/package/libgphoto2/libgphoto2.mk
+ # Hash for license files:
+-sha256  185b5b29a3febbfe1ab0b1ec6b1a26df630be97a17a99b5d305fdfff3344c117  README
++sha256  26e99818ca6ce79d8b2c461fabc72dc6e03483e6b0fd9692dcb07ab1b09bbac7  README
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/libgsasl/libgsasl.mk b/package/libgsasl/libgsasl.mk
+index 40e7c4c918..e813a354a1 100644
+--- a/package/libgsasl/libgsasl.mk
++++ b/package/libgsasl/libgsasl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBGPHOTO2_VERSION = 2.5.23
-+LIBGPHOTO2_VERSION = 2.5.26
- LIBGPHOTO2_SOURCE = libgphoto2-$(LIBGPHOTO2_VERSION).tar.bz2
- # Project is maintained on github but github tarball doesn't have
- # configure, so use tarballs from SourceForge
-@@ -27,6 +27,13 @@ ifeq ($(BR2_PACKAGE_LIBUSB_COMPAT),y)
- LIBGPHOTO2_DEPENDENCIES += libusb-compat
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBCURL),y)
-+LIBGPHOTO2_DEPENDENCIES += libcurl
-+LIBGPHOTO2_CONF_OPTS += --with-libcurl=auto
-+else
-+LIBGPHOTO2_CONF_OPTS += --with-libcurl=no
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBEXIF),y)
- LIBGPHOTO2_DEPENDENCIES += libexif
- LIBGPHOTO2_CONF_OPTS += --with-libexif=auto
+-LIBGSASL_VERSION = 1.8.1
++LIBGSASL_VERSION = 1.10.0
+ LIBGSASL_SITE = $(BR2_GNU_MIRROR)/gsasl
+ LIBGSASL_LICENSE = LGPL-2.1+ (library), GPL-3.0+ (programs)
+ LIBGSASL_LICENSE_FILES = README COPYING.LIB COPYING
 -- 
 2.29.2
