@@ -1,25 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 07 Feb 2021 23:06:24 +0100
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xlib_libXrender: add CPE
- variables
-In-Reply-To: <20210207134510.2943565-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 7 Feb 2021 14:45:10 +0100")
-References: <20210207134510.2943565-1-fontaine.fabrice@gmail.com>
-Message-ID: <87eehry1lr.fsf@dell.be.48ers.dk>
+Date: Sun, 7 Feb 2021 23:05:39 +0100
+Subject: [Buildroot] [git commit] package/cryptsetup: set
+ CRYPTSETUP_CPE_ID_VALID
+Message-ID: <20210207214540.E5FF6816C9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=e7061feda089771f185f760065a463862653b10b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > cpe:2.3:a:x.org:libxrender is a valid CPE identifier for this package:
- >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ax.org%3Alibxrender
+cpe:2.3:a:cryptsetup_project:cryptsetup is a valid CPE identifier for
+this package:
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Acryptsetup_project%3Acryptsetup
 
-Committed, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/cryptsetup/cryptsetup.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
+index a59a0c7570..34981282b2 100644
+--- a/package/cryptsetup/cryptsetup.mk
++++ b/package/cryptsetup/cryptsetup.mk
+@@ -15,6 +15,7 @@ CRYPTSETUP_DEPENDENCIES = \
+ 	$(TARGET_NLS_DEPENDENCIES)
+ CRYPTSETUP_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (library)
+ CRYPTSETUP_LICENSE_FILES = COPYING COPYING.LGPL
++CRYPTSETUP_CPE_ID_VALID = YES
+ CRYPTSETUP_INSTALL_STAGING = YES
+ CRYPTSETUP_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)"
+ CRYPTSETUP_CONF_OPTS += --enable-blkid --enable-libargon2
