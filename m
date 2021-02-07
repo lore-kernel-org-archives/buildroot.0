@@ -1,52 +1,34 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  7 Feb 2021 14:06:01 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libshout: bump version to 2.4.5
-Message-ID: <20210207130601.1460390-1-bernd.kuhls@t-online.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  7 Feb 2021 14:07:46 +0100
+Subject: [Buildroot] [PATCH 1/1] package/mosquitto: add
+ MOSQUITTO_CPE_ID_VENDOR
+Message-ID: <20210207130746.2934924-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added sha512 hash provided by upstream, reformatted hashes.
+cpe:2.3:a:eclipse:mosquitto is a valid CPE identifier for this package:
 
-Changelog:
-https://gitlab.xiph.org/xiph/icecast-libshout/-/blob/master/NEWS
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aeclipse%3Amosquitto
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libshout/libshout.hash | 9 ++++++---
- package/libshout/libshout.mk   | 2 +-
- 2 files changed, 7 insertions(+), 4 deletions(-)
+ package/mosquitto/mosquitto.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libshout/libshout.hash b/package/libshout/libshout.hash
-index 06702891c0..ae43e0a9c8 100644
---- a/package/libshout/libshout.hash
-+++ b/package/libshout/libshout.hash
-@@ -1,5 +1,8 @@
--# From https://downloads.xiph.org/releases/libshout/SHA256SUMS
--sha256	0d8af55d1141bf90710bcd41a768c9cc5adb251502a0af1dd22c8da215d40dfe	libshout-2.4.3.tar.gz
-+# From https://ftp.osuosl.org/pub/xiph/releases/libshout/SHA512SUMS
-+sha512  290844185da16961f03434d3e341573dd6cb0139e5fa81902903021b641382d2629302d7c356bc591b35656754e07f4e44a8d9e782e092b17a051b9ae8f54341  libshout-2.4.5.tar.gz
-+
-+# From https://ftp.osuosl.org/pub/xiph/releases/libshout/SHA256SUMS
-+sha256  d9e568668a673994ebe3f1eb5f2bee06e3236a5db92b8d0c487e1c0f886a6890  libshout-2.4.5.tar.gz
+diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
+index d5fe6de3b1..7dfdf59451 100644
+--- a/package/mosquitto/mosquitto.mk
++++ b/package/mosquitto/mosquitto.mk
+@@ -8,6 +8,7 @@ MOSQUITTO_VERSION = 2.0.7
+ MOSQUITTO_SITE = https://mosquitto.org/files/source
+ MOSQUITTO_LICENSE = EPL-2.0 or EDLv1.0
+ MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v20 edl-v10
++MOSQUITTO_CPE_ID_VENDOR = eclipse
+ MOSQUITTO_INSTALL_STAGING = YES
  
- # Hash for license file
--sha256	7a4436f9ec37603356791c87de3bc444989befd2682d29efb3d97604e04c1852	COPYING
-+sha256  7a4436f9ec37603356791c87de3bc444989befd2682d29efb3d97604e04c1852  COPYING
-diff --git a/package/libshout/libshout.mk b/package/libshout/libshout.mk
-index 6537a1fea3..01ccf22e23 100644
---- a/package/libshout/libshout.mk
-+++ b/package/libshout/libshout.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBSHOUT_VERSION = 2.4.3
-+LIBSHOUT_VERSION = 2.4.5
- LIBSHOUT_SITE = https://downloads.xiph.org/releases/libshout
- LIBSHOUT_LICENSE = LGPL-2.0+
- LIBSHOUT_LICENSE_FILES = COPYING
+ MOSQUITTO_MAKE_OPTS = \
 -- 
 2.29.2
