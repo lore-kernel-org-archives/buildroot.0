@@ -1,50 +1,93 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 07 Feb 2021 15:21:07 +0100
-Subject: [Buildroot] [PATCH] package/plg-utils: escape \ in generated
- legal-info
-In-Reply-To: <20210207133310.GM2384@scaer> (Yann E. MORIN's message of "Sun, 7
- Feb 2021 14:33:10 +0100")
-References: <20210206085102.1017439-1-yann.morin.1998@free.fr>
- <87sg681aq7.fsf@dell.be.48ers.dk> <20210207112831.GK2384@scaer>
- <87czxcysud.fsf@dell.be.48ers.dk> <20210207133310.GM2384@scaer>
-Message-ID: <878s80yn58.fsf@dell.be.48ers.dk>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 7 Feb 2021 15:35:57 +0100
+Subject: [Buildroot] [PATCH v10 1/4] package/llvm: bump to version 11.0.0
+In-Reply-To: <CANQCQpZV1bd=COVcHKrxw6GbQqea_kVgEx6n_j=fFKKpe5W_UQ@mail.gmail.com>
+References: <20210205184343.57068-1-matthew.weber@rockwellcollins.com>
+ <CANQCQpaZPMTnquYfUhsvfguLd3MkpvGgJ-U+gz3azrrz7sGSkQ@mail.gmail.com>
+ <CANQCQpZV1bd=COVcHKrxw6GbQqea_kVgEx6n_j=fFKKpe5W_UQ@mail.gmail.com>
+Message-ID: <700a6200-8311-656a-79c1-9d0eb8b6dc2c@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Le 05/02/2021 ? 19:53, Matthew Weber a ?crit?:
+> On Fri, Feb 5, 2021 at 12:52 PM Matthew Weber
+> <matthew.weber@rockwellcollins.com> wrote:
+>>
+>> Romain,
+>>
+>>
+>> On Fri, Feb 5, 2021 at 12:43 PM Matt Weber
+>> <matthew.weber@rockwellcollins.com> wrote:
+>>>
+>>> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+>>> ---
+>>>  package/llvm/llvm.hash | 2 +-
+>>>  package/llvm/llvm.mk   | 2 +-
+>>>  2 files changed, 2 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/package/llvm/llvm.hash b/package/llvm/llvm.hash
+>>> index 6bf2755777..055219a94c 100644
+>>> --- a/package/llvm/llvm.hash
+>>> +++ b/package/llvm/llvm.hash
+>>> @@ -1,3 +1,3 @@
+>>>  # locally calculated
+>>> -sha256 00a1ee1f389f81e9979f3a640a01c431b3021de0d42278f6508391a2f0b81c9a llvm-9.0.1.src.tar.xz
+>>> +sha256 913f68c898dfb4a03b397c5e11c6a2f39d0f22ed7665c9cefa87a34423a72469 llvm-11.0.0.src.tar.xz
+>>>  sha256 8d85c1057d742e597985c7d4e6320b015a9139385cff4cbae06ffc0ebe89afee LICENSE.TXT
+>>> diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
+>>> index 7d60fe7f8c..069312bb3f 100644
+>>> --- a/package/llvm/llvm.mk
+>>> +++ b/package/llvm/llvm.mk
+>>> @@ -5,7 +5,7 @@
+>>>  ################################################################################
+>>>
+>>>  # LLVM, Clang and lld should be version bumped together
+>>> -LLVM_VERSION = 9.0.1
+>>> +LLVM_VERSION = 11.0.0
+>>
+>> I'm not sure if the bump to 10.x would have had a similar behavior but
+>> I enabled mesa32 llvmpipe and got a build failure related to the
+>> config wrapper not being present.
+>> https://paste.ack.tf/9858ff
 
- > Peter, All,
- > On 2021-02-07 13:18 +0100, Peter Korsgaard spake thusly:
- >> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
- >> > Peter, All,
- >> > On 2021-02-07 10:35 +0100, Peter Korsgaard spake thusly:
- >> >> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
- >> >> Perhaps we should add a gitlab test to verify that we generate valid
- >> >> json, E.G. by piping it to jq (or similar).
- >> > Yeah, I'm working on it... But we can't do that in gitlab, because the
- >> > output of show-info depends on the selected packages, so it would have
- >> > to be done in the autobuilders.
- >> But that then requires jq on the autobuilder. Can't we just do a 'make
- >> allyespackageconfig' in gitlab?
+Michael Opdenacker is also working on llvm/clang version bump, he had a similar
+issue with libclc build due to new Cmake build system (I guess):
 
- > So, allyespackageconfig is not buildable:
+http://lists.busybox.net/pipermail/buildroot/2021-January/thread.html
 
- >     package/luajit/luajit.mk:77: *** Configuration error: both "luajit" and
- >     "lua" are selected as providers for virtual package "luainterpreter".
- >     Only one provider can be selected at a time. Please fix your
- >     configuration.  Stop.
+I didn't tested llvmpipe with the current mesa version (20.3.3) maybe you have
+to check with the current Buildroot master.
 
-:/
+I'll try to take a look.
 
- > Solving this means reimplementing parts of the logic in the
- > autobuilders... So I still think it would be better to augment the
- > autobuilder script to run and validate show-info against a valid
- > configuration...
+Best regards,
+Romain
 
-That is also fine by me.
+>>
+> 
+> I should have included this as well.
+> 
+>> find . -name llvm-config
+> ./build/llvm-11.0.0/test/tools/llvm-config
+> ./build/llvm-11.0.0/utils/gn/secondary/llvm/tools/llvm-config
+> ./build/llvm-11.0.0/buildroot-build/bin/llvm-config
+> ./build/llvm-11.0.0/buildroot-build/tools/llvm-config
+> ./build/llvm-11.0.0/tools/llvm-config
+> ./build/host-llvm-11.0.0/test/tools/llvm-config
+> ./build/host-llvm-11.0.0/utils/gn/secondary/llvm/tools/llvm-config
+> ./build/host-llvm-11.0.0/buildroot-build/bin/llvm-config
+> ./build/host-llvm-11.0.0/buildroot-build/tools/llvm-config
+> ./build/host-llvm-11.0.0/tools/llvm-config
+> ./target/usr/bin/llvm-config
+> ./host/aarch64-buildroot-linux-gnu/sysroot/usr/bin/llvm-config
+> ./host/bin/llvm-config
 
--- 
-Bye, Peter Korsgaard
+
+
+> 
+> 
+> -Matt
+> 
