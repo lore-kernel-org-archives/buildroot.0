@@ -1,57 +1,90 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 7 Feb 2021 12:28:31 +0100
-Subject: [Buildroot] [PATCH] package/plg-utils: escape \ in generated
- legal-info
-In-Reply-To: <87sg681aq7.fsf@dell.be.48ers.dk>
-References: <20210206085102.1017439-1-yann.morin.1998@free.fr>
- <87sg681aq7.fsf@dell.be.48ers.dk>
-Message-ID: <20210207112831.GK2384@scaer>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun, 7 Feb 2021 12:39:46 +0100
+Subject: [Buildroot] [PATCH 1/2] package/netopeer2: set
+ SYSREPO_SHM_PREFIX and cleanup shm files after installation
+In-Reply-To: <20210206105736.29429-1-heiko.thiery@gmail.com>
+References: <20210206105736.29429-1-heiko.thiery@gmail.com>
+Message-ID: <20210207123946.14105766@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Hello Heiko, Yann,
 
-On 2021-02-07 10:35 +0100, Peter Korsgaard spake thusly:
-> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
-> I still wonder if it wouldn't be better to not have the backslashes in
-> the variable and do whatever escaping is needed inside the CVE logic,
+On Sat,  6 Feb 2021 11:57:35 +0100, Heiko Thiery <heiko.thiery@gmail.com> wrote:
 
-I think quite the opposite, in fact: we want the CPE_ID value to be
-exactly what is in the NVD database without any mangling on our side.
+> On install step the host tool syrepoctl is used to install some YANG
+> modules. Unfortunatly syrepoctl creates some files in /dev/shm folder and
 
-The rules to encode the CPE stuff are non-trivial at least to me),
-requiring some escaping/de-escaping in the various formats, and with
-different rules for the attributes and their representation
+Really install? The make log shows:
 
-All is defined in NISTIR 7695 [0], in the following chapters:
-    5.3.2 - Restrictions on attribute-value strings
-    6.2.1 - Syntax for Formatted String Binding
+	-- Installing: .../target/usr/share/yang/modules/netopeer2/notifications at 2008-07-14.yang
 
-[0] https://doi.org/10.6028/NIST.IR.7695
+is installed already before the setup.sh/sysrepoctl step
 
-> but OK - We need a quick fix and this solves it.
-> 
-> Perhaps we should add a gitlab test to verify that we generate valid
-> json, E.G. by piping it to jq (or similar).
+> does not cleanup afterwards. This files can be incompatible depending on
+> the used sysrepo version. This causes autobuilder failures when updating
+> the package [1].
+>
+> To make sure we can remove this leftovers of sysrepoctl we specify a
+> build specific SYSREPO_SHM_PREFIX. With this the files can deleted safely
+> after installation is completed. This also ensures that concurrent
+> parallel builds will not affected mutualy.
 
-Yeah, I'm working on it... But we can't do that in gitlab, because the
-output of show-info depends on the selected packages, so it would have
-to be done in the autobuilders.
+Still the question, are the shm files needed at runtime? If so they should
+belong in the target directory (or created by a startup script), of not why
+create them at first (why not skip the setup.sh/sysrepoctl step)? Are there
+any other products/output of the setup.sh/sysrepoctl step?
 
-> Committed, thanks.
+The setup.sh is called with the following environment variables:
 
-Thanks.
+	NP2_MODULE_DIR /usr/share/yang/modules/netopeer2
+	NP2_MODULE_PERMS 600
+	NP2_MODULE_OWNER seiderer
+	NP2_MODULE_GROUP users
+
+A (quick) strace check of setup.sh run shows no other output than the shm files...
 
 Regards,
-Yann E. MORIN.
+Peter
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+>
+> Fixes:
+>  [1] http://autobuild.buildroot.net/results/6e559c4f98b7ed93d7b5af638264e907492a6532/
+>
+> Co-Developed-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+> ---
+>  package/netopeer2/netopeer2.mk | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
+>
+> diff --git a/package/netopeer2/netopeer2.mk b/package/netopeer2/netopeer2.mk
+> index bc02e0dc93..af30d8417a 100644
+> --- a/package/netopeer2/netopeer2.mk
+> +++ b/package/netopeer2/netopeer2.mk
+> @@ -13,9 +13,23 @@ NETOPEER2_DEPENDENCIES = libnetconf2 libyang sysrepo
+>
+>  NETOPEER2_CONF_OPTS = -DBUILD_CLI=$(if $(BR2_PACKAGE_NETOPEER2_CLI),ON,OFF)
+>
+> +# Set a build specific SYSREPO_SHM_PREFIX to ensure we can safely delete the
+> +# files. This also ensures that concurrent parallel builds will not be
+> +# affected mutualy.
+> +SYSREPO_SHM_PREFIX = sr_buildroot$(subst /,_,$(CONFIG_DIR))
+> +NETOPEER2_MAKE_ENV = SYSREPO_SHM_PREFIX=$(SYSREPO_SHM_PREFIX)
+> +
+>  define NETOPEER2_INSTALL_INIT_SYSV
+>  	$(INSTALL) -m 755 -D package/netopeer2/S52netopeer2 \
+>  		$(TARGET_DIR)/etc/init.d/S52netopeer2
+>  endef
+>
+> +# The host sysrepo used to install the netopeer2 modules will leave
+> +# its shared memory files lingering about. Clean up in it's stead...
+> +define NETOPEER2_CLEANUP
+> +   rm -f /dev/shm/$(SYSREPO_SHM_PREFIX)*
+> +endef
+> +NETOPEER2_PRE_INSTALL_TARGET_HOOKS += NETOPEER2_CLEANUP
+> +NETOPEER2_POST_INSTALL_TARGET_HOOKS += NETOPEER2_CLEANUP
+> +
+>  $(eval $(cmake-package))
