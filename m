@@ -1,42 +1,34 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  7 Feb 2021 13:21:06 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libfastjson: bump version to 0.99.9
-Message-ID: <20210207122106.1274638-1-bernd.kuhls@t-online.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  7 Feb 2021 13:26:55 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libass: set LIBASS_CPE_ID_VALID
+Message-ID: <20210207122655.2465163-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog: https://github.com/rsyslog/libfastjson/blob/master/ChangeLog
+cpe:2.3:a:libass_project:libass is a valid CPE identifier for this
+package:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alibass_project%3Alibass
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libfastjson/libfastjson.hash | 2 +-
- package/libfastjson/libfastjson.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libass/libass.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libfastjson/libfastjson.hash b/package/libfastjson/libfastjson.hash
-index 07ea88f11e..218a738b37 100644
---- a/package/libfastjson/libfastjson.hash
-+++ b/package/libfastjson/libfastjson.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  7e49057b26a5a9e3c6623e024f95f9fd9a14b571b9150aeb89d6d475fc3633e3  libfastjson-0.99.8.tar.gz
-+sha256  881f954633aa76931e4c756ece0bda6fd8a673c6e66955a3db3b2bb9d6bbff72  libfastjson-0.99.9.tar.gz
- sha256  b29370bbfa98816e1fca0901f18149d920736771bfd68b4ee0eb00c78b38d245  COPYING
-diff --git a/package/libfastjson/libfastjson.mk b/package/libfastjson/libfastjson.mk
-index 37dbd7e03e..7ab978dc67 100644
---- a/package/libfastjson/libfastjson.mk
-+++ b/package/libfastjson/libfastjson.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBFASTJSON_VERSION = 0.99.8
-+LIBFASTJSON_VERSION = 0.99.9
- LIBFASTJSON_SITE = $(call github,rsyslog,libfastjson,v$(LIBFASTJSON_VERSION))
- LIBFASTJSON_INSTALL_STAGING = YES
- LIBFASTJSON_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+diff --git a/package/libass/libass.mk b/package/libass/libass.mk
+index 818bff234e..8bdfd9dd40 100644
+--- a/package/libass/libass.mk
++++ b/package/libass/libass.mk
+@@ -12,6 +12,7 @@ LIBASS_SITE = https://github.com/libass/libass/releases/download/$(LIBASS_VERSIO
+ LIBASS_INSTALL_STAGING = YES
+ LIBASS_LICENSE = ISC
+ LIBASS_LICENSE_FILES = COPYING
++LIBASS_CPE_ID_VALID = YES
+ LIBASS_DEPENDENCIES = \
+ 	host-pkgconf \
+ 	freetype \
 -- 
 2.29.2
