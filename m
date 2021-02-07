@@ -1,28 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 07 Feb 2021 10:56:19 +0100
-Subject: [Buildroot] [PATCH 1/1] package/sox: fix static build with
- id3tag
-In-Reply-To: <20210206103056.1962190-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 6 Feb 2021 11:30:56 +0100")
-References: <20210206103056.1962190-1-fontaine.fabrice@gmail.com>
-Message-ID: <87h7moyzek.fsf@dell.be.48ers.dk>
+Date: Sun, 7 Feb 2021 10:55:09 +0100
+Subject: [Buildroot] [git commit] package/tpm2-pkcs11: add p11-kit optional
+ dependency
+Message-ID: <20210207093542.B259C813E4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=5a0315f7d48cef96618ce1add1fb8c0ddd60e487
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > This build failure is raised since bump to
- > 7524160b29a476f7e87bc14fddf12d349f9a3c5e
+Fixes:
+ - http://autobuild.buildroot.org/results/fee607da7226a92cceab2bbfd4c5d031016dfa3d
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/73efdacf237e3d567fa66f3b3f68e624f5e35bc7
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/tpm2-pkcs11/tpm2-pkcs11.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/tpm2-pkcs11/tpm2-pkcs11.mk b/package/tpm2-pkcs11/tpm2-pkcs11.mk
+index fb3846f056..3acce07745 100644
+--- a/package/tpm2-pkcs11/tpm2-pkcs11.mk
++++ b/package/tpm2-pkcs11/tpm2-pkcs11.mk
+@@ -37,4 +37,10 @@ TPM2_PKCS11_CONF_ENV += \
+ 	ac_cv_prog_tpm2_import=yes \
+ 	ac_cv_prog_tpm2_changeauth=yes
+ 
++ifeq ($(BR2_PACKAGE_P11_KIT),y)
++TPM2_PKCS11_DEPENDENCIES += p11-kit
++TPM2_PKCS11_CONF_OPTS += \
++	--with-p11kitconfigdir=/usr/share/p11-kit/modules
++endif
++
+ $(eval $(autotools-package))
