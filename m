@@ -1,61 +1,78 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 7 Feb 2021 10:53:10 +0100
-Subject: [Buildroot] [git commit] package/lua-http: bump to version 0.4
-Message-ID: <20210207093542.AA0928188C@busybox.osuosl.org>
+Date: Sun, 7 Feb 2021 10:56:05 +0100
+Subject: [Buildroot] [git commit] package/sox: fix static build with id3tag
+Message-ID: <20210207093542.C29D6813E4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=78ad95ae4b069474efdbee04db95e08e160c7034
+commit: https://git.buildroot.net/buildroot/commit/?id=58fc4b5085763cf1837cab22e98b0eaa7fefaac5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff LICENSE.md
-- Copyright (c) 2015-2019 Daurnimator
-+ Copyright (c) 2015-2021 Daurnimator
+This build failure is raised since bump to
+7524160b29a476f7e87bc14fddf12d349f9a3c5e
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Fixes:
+ - http://autobuild.buildroot.org/results/73efdacf237e3d567fa66f3b3f68e624f5e35bc7
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lua-http/Config.in     | 2 +-
- package/lua-http/lua-http.hash | 4 ++--
- package/lua-http/lua-http.mk   | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ ...nfigure.ac-fix-static-linking-with-id3tag.patch | 47 ++++++++++++++++++++++
+ 1 file changed, 47 insertions(+)
 
-diff --git a/package/lua-http/Config.in b/package/lua-http/Config.in
-index 8eefd481b5..e4d359ad3f 100644
---- a/package/lua-http/Config.in
-+++ b/package/lua-http/Config.in
-@@ -13,7 +13,7 @@ config BR2_PACKAGE_LUA_HTTP
- 	help
- 	  HTTP library for Lua.
- 
--	  https://daurnimator.github.io/lua-http/
-+	  https://github.com/daurnimator/lua-http
- 
- comment "lua-http needs a toolchain w/ threads"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/lua-http/lua-http.hash b/package/lua-http/lua-http.hash
-index d41b494e98..491167eeda 100644
---- a/package/lua-http/lua-http.hash
-+++ b/package/lua-http/lua-http.hash
-@@ -1,3 +1,3 @@
- # computed by luarocks/buildroot
--sha256 98318213be7b5ca60780c39f4736d5a3328631bc2c5dbfb8949b0db80e32746f  http-0.3-0.src.rock
--sha256 817cdf831c9d7cd1a2706b4b99dcc6f61a7a2345b7c9d39ed99e87d36338f4c8  lua-http-0.3/LICENSE.md
-+sha256 dbe1b29ff89fb937059e4398c9a628361d97d856acc87fd8cd85cb9340cde328  http-0.4-0.src.rock
-+sha256 1b486781068bcfd373f8c54f8d78eeab76d900bdf32e589e8330a4c563c2874b  lua-http-0.4/LICENSE.md
-diff --git a/package/lua-http/lua-http.mk b/package/lua-http/lua-http.mk
-index 00dcefa0d0..7fbb09038e 100644
---- a/package/lua-http/lua-http.mk
-+++ b/package/lua-http/lua-http.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LUA_HTTP_VERSION_UPSTREAM = 0.3
-+LUA_HTTP_VERSION_UPSTREAM = 0.4
- LUA_HTTP_VERSION = $(LUA_HTTP_VERSION_UPSTREAM)-0
- LUA_HTTP_NAME_UPSTREAM = http
- LUA_HTTP_SUBDIR = lua-http-$(LUA_HTTP_VERSION_UPSTREAM)
+diff --git a/package/sox/0003-configure.ac-fix-static-linking-with-id3tag.patch b/package/sox/0003-configure.ac-fix-static-linking-with-id3tag.patch
+new file mode 100644
+index 0000000000..32d6f83b0c
+--- /dev/null
++++ b/package/sox/0003-configure.ac-fix-static-linking-with-id3tag.patch
+@@ -0,0 +1,47 @@
++From 8df3a56cfb104c84d4701562ae2e3c9dc4686798 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 6 Feb 2021 11:08:45 +0100
++Subject: [PATCH] configure.ac: fix static linking with id3tag
++
++Put back -lz (i.e. ZLIB_LIBS) when searching for id3tag which was
++wrongly removed by commit 6ff0e9322f9891f5a6ac6c9b3bceffbfca16bec3. This
++will fix the following static build failure:
++
++configure:15290: checking for id3_file_open in -lid3tag
++configure:15315: /home/buildroot/autobuild/instance-0/output-1/host/bin/arm-linux-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2   -static -Wall -Wmissing-prototypes -Wstrict-prototypes  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -static -Wl,--as-needed conftest.c -lid3tag    >&5
++conftest.c:60:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
++   60 | char id3_file_open ();
++      | ^~~~
++conftest.c:62:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
++   62 | main ()
++      | ^~~~
++/home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/9.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /home/buildroot/autobuild/instance-0/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libid3tag.a(util.o): in function `id3_util_compress':
++util.c:(.text+0x1ac): undefined reference to `compress2'
++/home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/9.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /home/buildroot/autobuild/instance-0/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libid3tag.a(util.o): in function `id3_util_decompress':
++util.c:(.text+0x240): undefined reference to `uncompress'
++
++Fixes:
++ - http://autobuild.buildroot.org/results/73efdacf237e3d567fa66f3b3f68e624f5e35bc7
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://sourceforge.net/p/sox/patches/123]
++---
++ configure.ac | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 39306398..896714f5 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -83,7 +83,7 @@ dnl Various libraries
++ SOX_WITH_LIB([magic], [magic.h], [magic], [magic_open])
++ SOX_CHECK_LIB([ZLIB], [zlib.h], [z], [uncompress])
++ SOX_WITH_LIB([png], [png.h], [png], [png_set_rows], [], [], [], [$ZLIB_LIBS])
++-SOX_WITH_LIB([id3tag], [id3tag.h], [id3tag], [id3_file_open])
+++SOX_WITH_LIB([id3tag], [id3tag.h], [id3tag], [id3_file_open], [], [], [], [$ZLIB_LIBS])
++ SOX_WITH_LIB([libgsm], [gsm/gsm.h gsm.h], [gsm], [gsm_create])
++ 
++ dnl Optional formats
++-- 
++2.29.2
++
