@@ -1,27 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 08 Feb 2021 16:24:49 +0100
-Subject: [Buildroot] [PATCH] package/memtester: fix compile and link
- flags
-In-Reply-To: <f9ae74a3f5657230a29cb3133d747a77a58ae435.1612775074.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Mon, 8 Feb 2021 11:04:34 +0200")
-References: <f9ae74a3f5657230a29cb3133d747a77a58ae435.1612775074.git.baruch@tkos.co.il>
-Message-ID: <875z32twe6.fsf@dell.be.48ers.dk>
+Date: Mon, 08 Feb 2021 16:26:52 +0100
+Subject: [Buildroot] [PATCH v2] configs/avenger96_defconfig: add support
+ for Arrow Avenger96 board
+In-Reply-To: <20210207215227.27637-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sun, 7 Feb 2021 22:52:27 +0100")
+References: <20210207215227.27637-1-peter@korsgaard.com>
+Message-ID: <871rdqtwar.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > The memtester build system does not use CFLAGS/LDFLAGS variables.
- > Everything should be written to conf-cc and conf-ld.
+ > Very similar to the other stm32mp157-based boards, except that we use the
+ > multi_v7 defconfig for ease of maintenance.
 
- > Use '%' as sed expression delimiter because comma might appear in
- > LDFLAGS.
-
- > Cc: Matt Weber <matthew.weber@rockwellcollins.com>
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > ---
+ > Changes since v1:
+ > - Fix slow/slot/ typo in readme.txt
+ > - Add warning about overwriting sd card content
 
 Committed, thanks.
 
