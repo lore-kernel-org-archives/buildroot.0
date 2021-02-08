@@ -1,11 +1,11 @@
 From: Gilles Talis <gilles.talis@gmail.com>
-Date: Mon, 8 Feb 2021 22:33:53 +0100
-Subject: [Buildroot] [PATCH 1/2] package/wlroots: change mesa3d
- dependency to virtual libegl/libgles
-In-Reply-To: <20210207164551.GN2384@scaer>
+Date: Mon, 8 Feb 2021 22:36:00 +0100
+Subject: [Buildroot] [PATCH 2/2] package/cage: update dependencies to
+ match wlroot's
+In-Reply-To: <20210207164923.GO2384@scaer>
 References: <20210207105155.516654-1-gilles.talis@gmail.com>
- <20210207164551.GN2384@scaer>
-Message-ID: <CAKcgs2xX7Ay0ZV0tnvHq_8cJZAa-zB+Nzj7S0CXnLb9nBCi1AA@mail.gmail.com>
+ <20210207105155.516654-2-gilles.talis@gmail.com> <20210207164923.GO2384@scaer>
+Message-ID: <CAKcgs2z_d8PptEyAKY3DFHauRR=YSch-=PUupGrLeYfckESvuQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,64 +14,70 @@ To: buildroot@busybox.net
 
 Hello Yann,
 
-
-Le dim. 7 f?vr. 2021 ? 17:46, Yann E. MORIN <yann.morin.1998@free.fr> a ?crit :
+Le dim. 7 f?vr. 2021 ? 17:49, Yann E. MORIN <yann.morin.1998@free.fr> a ?crit :
 >
 > Gilles, All,
 >
 > On 2021-02-07 11:51 +0100, Gilles Talis spake thusly:
 > > From: Julien Olivain <ju.o@free.fr>
 > >
-> > Since commits:
-> > https://github.com/swaywm/wlroots/commit/c2288a7b88240e4377bfc1c67b44efb58f704a42
-> > https://github.com/swaywm/wlroots/commit/e18599b05e0f0cbeba11adbd489e801285470eab
+> > Signed-off-by: Julien Olivain <ju.o@free.fr>
+> > Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+> > ---
+> >  package/cage/Config.in | 10 +++++-----
+> >  1 file changed, 5 insertions(+), 5 deletions(-)
 > >
-> > Mesa dependency is no longer required. Wlroots is able to run on drivers
-> > that provide EGL and GLES2.0 support (with specific EGL wayland extensions)
+> > diff --git a/package/cage/Config.in b/package/cage/Config.in
+> > index 3bef08f037..4f823c768c 100644
+> > --- a/package/cage/Config.in
+> > +++ b/package/cage/Config.in
+> > @@ -1,6 +1,6 @@
+> > -comment "cage needs udev, mesa3d w/ EGL and GLES support"
+> > -     depends on !BR2_PACKAGE_MESA3D_OPENGL_EGL || \
+> > -             !BR2_PACKAGE_MESA3D_OPENGL_ES || \
+> > +comment "cage needs udev, EGL and OpenGL ES support"
+> > +     depends on !BR2_PACKAGE_HAS_LIBEGL || \
+> > +             !BR2_PACKAGE_HAS_LIBGLES || \
+> >               !BR2_PACKAGE_HAS_UDEV
+> >
+> >  comment "cage needs a toolchain w/ threads, dynamic library"
+> > @@ -11,9 +11,9 @@ config BR2_PACKAGE_CAGE
+> >       bool "cage"
+> >       depends on !BR2_STATIC_LIBS # wlroots
+> >       depends on BR2_TOOLCHAIN_HAS_THREADS # wlroots
+> > +     depends on BR2_PACKAGE_HAS_LIBEGL # wlroots
+> > +     depends on BR2_PACKAGE_HAS_LIBGLES # wlroots
+> >       depends on BR2_PACKAGE_HAS_UDEV # wlroots
+> > -     depends on BR2_PACKAGE_MESA3D_OPENGL_EGL # wlroots
+> > -     depends on BR2_PACKAGE_MESA3D_OPENGL_ES # wlroots
 >
-> HEre, you said "with specific EGL wayland extensions", so...
+> Although indeed we try to keep changes to different packages in
+> different patches, this one change really should be in the previous
+> patch.
 >
-> [--SNIP--]
-> > @@ -12,11 +12,8 @@ config BR2_PACKAGE_WLROOTS
-> >       depends on !BR2_STATIC_LIBS # wayland
-> >       depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm, wayland
-> >       depends on BR2_PACKAGE_HAS_UDEV # libinput
-> > -     # Technically wlroots should work with any OpenGL implementation
-> > -     # which provides EGL, GLES2, and libgbm; but in practice only
-> > -     # Mesa ships an usable libgbm.
-> > -     depends on BR2_PACKAGE_MESA3D_OPENGL_EGL
-> > -     depends on BR2_PACKAGE_MESA3D_OPENGL_ES
-> > +     depends on BR2_PACKAGE_HAS_LIBEGL
+> Indeed, it is a single semantic change: updating the dependencies of
+> wlroots, and as a consequence, propagatign these new dependencies to the
+> dependees of wlroots.
 >
-> ... should not that be also depend on BR2_PACKAGE_HAS_LIBEGL_WAYLAND ?
+> Otherwise:
 >
-> Note that BR2_PACKAGE_HAS_LIBEGL_WAYLAND is a sub-option of
-> BR2_PACKAGE_HAS_LIBEGL, so both should be added as dependency, but...
-You're correct. Thanks for spotting that one.
+>   - if we only apply patch 1, then the dependencies of cage would be
+>     incorrect and the comments misleading;
+>
+>   - if we apply both, and later find an issue and revert only the first,
+>     then the dependences of cage would also be incorrect and the
+>     comments misleading.
+>
+> So, to me, these two patches should be squashed together.
+Your comment makes sense. I'll squash the patches in the v2.
 
-
->
-> [--SNIP--]
-> > diff --git a/package/wlroots/wlroots.mk b/package/wlroots/wlroots.mk
-> > index 5665d5a956..0160b1aedb 100644
-> > --- a/package/wlroots/wlroots.mk
-> > +++ b/package/wlroots/wlroots.mk
-> > @@ -15,7 +15,8 @@ WLROOTS_DEPENDENCIES = \
-> >       host-wayland \
-> >       libinput \
-> >       libxkbcommon \
-> > -     mesa3d \
-> > +     libegl \
->
-> ... indeed only libegl needs to be added to _DEPENDENCIES.
 >
 > Regards,
 > Yann E. MORIN.
 >
-> > +     libgles \
-> >       pixman \
-> >       udev \
-> >       wayland \
+> >       select BR2_PACKAGE_WLROOTS
+> >       help
+> >         Kiosk compositor for Wayland, which displays a single
 > > --
 > > 2.25.1
 > >
@@ -87,7 +93,5 @@ You're correct. Thanks for spotting that one.
 > | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
 > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
 > '------------------------------^-------^------------------^--------------------'
-
-thanks for the review. I'll prepare and send a v2.
-thanks
+thanks for the review!
 Gilles.
