@@ -1,42 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 8 Feb 2021 08:32:26 +0100
-Subject: [Buildroot] [git commit] package/libgsm: bump version to 1.0.19
-Message-ID: <20210208071901.4D42281332@busybox.osuosl.org>
+Date: Mon, 8 Feb 2021 08:28:50 +0100
+Subject: [Buildroot] [git commit] package/memcached: add
+ MEMCACHED_CPE_ID_VENDOR
+Message-ID: <20210208071901.1CBCE81730@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a3fc78e5a6b1f724b4a35e7d67a8d950bc7f8fdf
+commit: https://git.buildroot.net/buildroot/commit/?id=5276b2f924ceda7a3b69fa565286af243810eacf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+cpe:2.3:a:memcached:memcached is a valid CPE identifier for this
+package:
+
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Amemcached%3Amemcached
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libgsm/libgsm.hash | 2 +-
- package/libgsm/libgsm.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/memcached/memcached.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libgsm/libgsm.hash b/package/libgsm/libgsm.hash
-index 32e20c8f48..88d2573f56 100644
---- a/package/libgsm/libgsm.hash
-+++ b/package/libgsm/libgsm.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  04f68087c3348bf156b78d59f4d8aff545da7f6e14f33be8f47d33f4efae2a10  gsm-1.0.18.tar.gz
-+sha256  4903652f68a8c04d0041f0d19b1eb713ddcd2aa011c5e595b3b8bca2755270f6  gsm-1.0.19.tar.gz
- sha256  81c68a3374937ed9b5e4929c709e81a2c4b35b5d1f450ecf8c473e2daea46ff6  COPYRIGHT
-diff --git a/package/libgsm/libgsm.mk b/package/libgsm/libgsm.mk
-index b9ae7d3eeb..e3ebee4b11 100644
---- a/package/libgsm/libgsm.mk
-+++ b/package/libgsm/libgsm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/memcached/memcached.mk b/package/memcached/memcached.mk
+index 049e3409f0..1c695411cd 100644
+--- a/package/memcached/memcached.mk
++++ b/package/memcached/memcached.mk
+@@ -11,6 +11,7 @@ MEMCACHED_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+ MEMCACHED_CONF_OPTS = --disable-coverage
+ MEMCACHED_LICENSE = BSD-3-Clause
+ MEMCACHED_LICENSE_FILES = COPYING
++MEMCACHED_CPE_ID_VENDOR = memcached
  
--LIBGSM_VERSION = 1.0.18
-+LIBGSM_VERSION = 1.0.19
- LIBGSM_SOURCE = gsm-$(LIBGSM_VERSION).tar.gz
- LIBGSM_SITE = http://www.quut.com/gsm
- LIBGSM_LICENSE = gsm
+ ifeq ($(BR2_ENDIAN),"BIG")
+ MEMCACHED_CONF_ENV += ac_cv_c_endian=big
