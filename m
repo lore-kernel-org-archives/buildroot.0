@@ -1,97 +1,78 @@
-From: Gilles Talis <gilles.talis@gmail.com>
-Date: Mon, 8 Feb 2021 22:36:00 +0100
-Subject: [Buildroot] [PATCH 2/2] package/cage: update dependencies to
- match wlroot's
-In-Reply-To: <20210207164923.GO2384@scaer>
-References: <20210207105155.516654-1-gilles.talis@gmail.com>
- <20210207105155.516654-2-gilles.talis@gmail.com> <20210207164923.GO2384@scaer>
-Message-ID: <CAKcgs2z_d8PptEyAKY3DFHauRR=YSch-=PUupGrLeYfckESvuQ@mail.gmail.com>
+From: Matthew Weber <matthew.weber@collins.com>
+Date: Mon, 8 Feb 2021 17:48:09 -0600
+Subject: [Buildroot] [External] Re: [PATCH v10 1/4] package/llvm: bump
+ to version 11.0.0
+In-Reply-To: <700a6200-8311-656a-79c1-9d0eb8b6dc2c@gmail.com>
+References: <20210205184343.57068-1-matthew.weber@rockwellcollins.com>
+ <CANQCQpaZPMTnquYfUhsvfguLd3MkpvGgJ-U+gz3azrrz7sGSkQ@mail.gmail.com>
+ <CANQCQpZV1bd=COVcHKrxw6GbQqea_kVgEx6n_j=fFKKpe5W_UQ@mail.gmail.com>
+ <700a6200-8311-656a-79c1-9d0eb8b6dc2c@gmail.com>
+Message-ID: <CANQCQpZsvbNi-LVMji47mV8fa6K-c6zeZ=LDEGgAL0Vs=A6y=Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann,
+Romain,
 
-Le dim. 7 f?vr. 2021 ? 17:49, Yann E. MORIN <yann.morin.1998@free.fr> a ?crit :
+On Sun, Feb 7, 2021 at 8:36 AM Romain Naour <romain.naour@gmail.com> wrote:
 >
-> Gilles, All,
+> Le 05/02/2021 ? 19:53, Matthew Weber a ?crit :
+> > On Fri, Feb 5, 2021 at 12:52 PM Matthew Weber
+> > <matthew.weber@rockwellcollins.com> wrote:
+> >>
+> >> Romain,
+> >>
+> >>
+> >> On Fri, Feb 5, 2021 at 12:43 PM Matt Weber
+> >> <matthew.weber@rockwellcollins.com> wrote:
+> >>>
+> >>> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> >>> ---
+> >>>  package/llvm/llvm.hash | 2 +-
+> >>>  package/llvm/llvm.mk   | 2 +-
+> >>>  2 files changed, 2 insertions(+), 2 deletions(-)
+> >>>
+> >>> diff --git a/package/llvm/llvm.hash b/package/llvm/llvm.hash
+> >>> index 6bf2755777..055219a94c 100644
+> >>> --- a/package/llvm/llvm.hash
+> >>> +++ b/package/llvm/llvm.hash
+> >>> @@ -1,3 +1,3 @@
+> >>>  # locally calculated
+> >>> -sha256 00a1ee1f389f81e9979f3a640a01c431b3021de0d42278f6508391a2f0b81c9a llvm-9.0.1.src.tar.xz
+> >>> +sha256 913f68c898dfb4a03b397c5e11c6a2f39d0f22ed7665c9cefa87a34423a72469 llvm-11.0.0.src.tar.xz
+> >>>  sha256 8d85c1057d742e597985c7d4e6320b015a9139385cff4cbae06ffc0ebe89afee LICENSE.TXT
+> >>> diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
+> >>> index 7d60fe7f8c..069312bb3f 100644
+> >>> --- a/package/llvm/llvm.mk
+> >>> +++ b/package/llvm/llvm.mk
+> >>> @@ -5,7 +5,7 @@
+> >>>  ################################################################################
+> >>>
+> >>>  # LLVM, Clang and lld should be version bumped together
+> >>> -LLVM_VERSION = 9.0.1
+> >>> +LLVM_VERSION = 11.0.0
+> >>
+> >> I'm not sure if the bump to 10.x would have had a similar behavior but
+> >> I enabled mesa32 llvmpipe and got a build failure related to the
+> >> config wrapper not being present.
+> >> https://urldefense.com/v3/__https://paste.ack.tf/9858ff__;!!MvWE!QoNoAWacp64SQYehF6CWitDX8KoF1Og3NFr2Zp6DLppPMYoC0FGByGQxwQXIKckXB5jt$
 >
-> On 2021-02-07 11:51 +0100, Gilles Talis spake thusly:
-> > From: Julien Olivain <ju.o@free.fr>
-> >
-> > Signed-off-by: Julien Olivain <ju.o@free.fr>
-> > Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
-> > ---
-> >  package/cage/Config.in | 10 +++++-----
-> >  1 file changed, 5 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/package/cage/Config.in b/package/cage/Config.in
-> > index 3bef08f037..4f823c768c 100644
-> > --- a/package/cage/Config.in
-> > +++ b/package/cage/Config.in
-> > @@ -1,6 +1,6 @@
-> > -comment "cage needs udev, mesa3d w/ EGL and GLES support"
-> > -     depends on !BR2_PACKAGE_MESA3D_OPENGL_EGL || \
-> > -             !BR2_PACKAGE_MESA3D_OPENGL_ES || \
-> > +comment "cage needs udev, EGL and OpenGL ES support"
-> > +     depends on !BR2_PACKAGE_HAS_LIBEGL || \
-> > +             !BR2_PACKAGE_HAS_LIBGLES || \
-> >               !BR2_PACKAGE_HAS_UDEV
-> >
-> >  comment "cage needs a toolchain w/ threads, dynamic library"
-> > @@ -11,9 +11,9 @@ config BR2_PACKAGE_CAGE
-> >       bool "cage"
-> >       depends on !BR2_STATIC_LIBS # wlroots
-> >       depends on BR2_TOOLCHAIN_HAS_THREADS # wlroots
-> > +     depends on BR2_PACKAGE_HAS_LIBEGL # wlroots
-> > +     depends on BR2_PACKAGE_HAS_LIBGLES # wlroots
-> >       depends on BR2_PACKAGE_HAS_UDEV # wlroots
-> > -     depends on BR2_PACKAGE_MESA3D_OPENGL_EGL # wlroots
-> > -     depends on BR2_PACKAGE_MESA3D_OPENGL_ES # wlroots
+> Michael Opdenacker is also working on llvm/clang version bump, he had a similar
+> issue with libclc build due to new Cmake build system (I guess):
 >
-> Although indeed we try to keep changes to different packages in
-> different patches, this one change really should be in the previous
-> patch.
+> https://urldefense.com/v3/__http://lists.busybox.net/pipermail/buildroot/2021-January/thread.html__;!!MvWE!QoNoAWacp64SQYehF6CWitDX8KoF1Og3NFr2Zp6DLppPMYoC0FGByGQxwQXIKTT_TgEp$
 >
-> Indeed, it is a single semantic change: updating the dependencies of
-> wlroots, and as a consequence, propagatign these new dependencies to the
-> dependees of wlroots.
+> I didn't tested llvmpipe with the current mesa version (20.3.3) maybe you have
+> to check with the current Buildroot master.
 >
-> Otherwise:
->
->   - if we only apply patch 1, then the dependencies of cage would be
->     incorrect and the comments misleading;
->
->   - if we apply both, and later find an issue and revert only the first,
->     then the dependences of cage would also be incorrect and the
->     comments misleading.
->
-> So, to me, these two patches should be squashed together.
-Your comment makes sense. I'll squash the patches in the v2.
 
->
-> Regards,
-> Yann E. MORIN.
->
-> >       select BR2_PACKAGE_WLROOTS
-> >       help
-> >         Kiosk compositor for Wayland, which displays a single
-> > --
-> > 2.25.1
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
-thanks for the review!
-Gilles.
+I went back and did a completely clean build (vs adding mesa3d on as a
+new package to my compiler-rt testing) and llvmpipe built ok
+(https://paste.ack.tf/a56ce8 ).....  So I'll switch gears to look at
+the libclc but it looks like llvm version bump is generally working OK
+(good to merge if we want to let auto-builders find the rest of the
+issues).
+
+-Matt
