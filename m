@@ -1,54 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 8 Feb 2021 08:32:43 +0100
-Subject: [Buildroot] [git commit] package/libshout: bump version to 2.4.5
-Message-ID: <20210208071901.59421815AF@busybox.osuosl.org>
+Date: Mon, 8 Feb 2021 08:34:40 +0100
+Subject: [Buildroot] [git commit] package/gnupg: add CPE variables
+Message-ID: <20210208071901.63FF4815AF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c32cbb9392d3f089dda205c018890d2303b8fdd4
+commit: https://git.buildroot.net/buildroot/commit/?id=5b126c4b538af1964cf7fbc218bc3b20881017ab
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Added sha512 hash provided by upstream, reformatted hashes.
+cpe:2.3:a:gnupg:gnupg is a valid CPE identifier for this package:
 
-Changelog:
-https://gitlab.xiph.org/xiph/icecast-libshout/-/blob/master/NEWS
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Agnupg%3Agnupg
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libshout/libshout.hash | 9 ++++++---
- package/libshout/libshout.mk   | 2 +-
- 2 files changed, 7 insertions(+), 4 deletions(-)
+ package/gnupg2/gnupg2.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/libshout/libshout.hash b/package/libshout/libshout.hash
-index 06702891c0..ae43e0a9c8 100644
---- a/package/libshout/libshout.hash
-+++ b/package/libshout/libshout.hash
-@@ -1,5 +1,8 @@
--# From https://downloads.xiph.org/releases/libshout/SHA256SUMS
--sha256	0d8af55d1141bf90710bcd41a768c9cc5adb251502a0af1dd22c8da215d40dfe	libshout-2.4.3.tar.gz
-+# From https://ftp.osuosl.org/pub/xiph/releases/libshout/SHA512SUMS
-+sha512  290844185da16961f03434d3e341573dd6cb0139e5fa81902903021b641382d2629302d7c356bc591b35656754e07f4e44a8d9e782e092b17a051b9ae8f54341  libshout-2.4.5.tar.gz
-+
-+# From https://ftp.osuosl.org/pub/xiph/releases/libshout/SHA256SUMS
-+sha256  d9e568668a673994ebe3f1eb5f2bee06e3236a5db92b8d0c487e1c0f886a6890  libshout-2.4.5.tar.gz
+diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
+index 0cbb99629b..2f62890db6 100644
+--- a/package/gnupg2/gnupg2.mk
++++ b/package/gnupg2/gnupg2.mk
+@@ -9,6 +9,8 @@ GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
+ GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
+ GNUPG2_LICENSE = GPL-3.0+
+ GNUPG2_LICENSE_FILES = COPYING
++GNUPG2_CPE_ID_VENDOR = gnupg
++GNUPG2_CPE_ID_PRODUCT = gnupg
+ GNUPG2_DEPENDENCIES = zlib libgpg-error libgcrypt libassuan libksba libnpth \
+ 	$(if $(BR2_PACKAGE_LIBICONV),libiconv) host-pkgconf
  
- # Hash for license file
--sha256	7a4436f9ec37603356791c87de3bc444989befd2682d29efb3d97604e04c1852	COPYING
-+sha256  7a4436f9ec37603356791c87de3bc444989befd2682d29efb3d97604e04c1852  COPYING
-diff --git a/package/libshout/libshout.mk b/package/libshout/libshout.mk
-index 6537a1fea3..01ccf22e23 100644
---- a/package/libshout/libshout.mk
-+++ b/package/libshout/libshout.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBSHOUT_VERSION = 2.4.3
-+LIBSHOUT_VERSION = 2.4.5
- LIBSHOUT_SITE = https://downloads.xiph.org/releases/libshout
- LIBSHOUT_LICENSE = LGPL-2.0+
- LIBSHOUT_LICENSE_FILES = COPYING
