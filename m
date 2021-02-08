@@ -1,23 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 08 Feb 2021 16:23:38 +0100
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xlib_libXrandr: add CPE
- variables
-In-Reply-To: <20210208074635.3858866-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 8 Feb 2021 08:46:35 +0100")
-References: <20210208074635.3858866-1-fontaine.fabrice@gmail.com>
-Message-ID: <87a6setwg5.fsf@dell.be.48ers.dk>
+Date: Mon, 08 Feb 2021 16:24:49 +0100
+Subject: [Buildroot] [PATCH] package/memtester: fix compile and link
+ flags
+In-Reply-To: <f9ae74a3f5657230a29cb3133d747a77a58ae435.1612775074.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Mon, 8 Feb 2021 11:04:34 +0200")
+References: <f9ae74a3f5657230a29cb3133d747a77a58ae435.1612775074.git.baruch@tkos.co.il>
+Message-ID: <875z32twe6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > cpe:2.3:a:x.org:libxrandr is a valid CPE identifier for this package:
- >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ax.org%3Alibxrandr
+ > The memtester build system does not use CFLAGS/LDFLAGS variables.
+ > Everything should be written to conf-cc and conf-ld.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Use '%' as sed expression delimiter because comma might appear in
+ > LDFLAGS.
+
+ > Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed, thanks.
 
