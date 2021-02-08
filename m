@@ -1,24 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 08 Feb 2021 16:21:50 +0100
-Subject: [Buildroot] [PATCH 1/1] package/audiofile: drop package
-In-Reply-To: <20210207202718.3154069-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 7 Feb 2021 21:27:18 +0100")
-References: <20210207202718.3154069-1-fontaine.fabrice@gmail.com>
-Message-ID: <87im72twj5.fsf@dell.be.48ers.dk>
+Date: Mon, 08 Feb 2021 16:22:54 +0100
+Subject: [Buildroot] [PATCH 1/1] configs/kontron_smarc_sal28_defconfig:
+ use Python 3.x for U-Boot build
+In-Reply-To: <20210208080450.30547-1-heiko.thiery@gmail.com> (Heiko Thiery's
+ message of "Mon, 8 Feb 2021 09:04:50 +0100")
+References: <20210208080450.30547-1-heiko.thiery@gmail.com>
+Message-ID: <87eehqtwhd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Heiko" == Heiko Thiery <heiko.thiery@gmail.com> writes:
 
- > The audiofile package is affected by multiple CVEs and is not maintained
- > anymore (no release since 2013):
+ > New U-Boot versions need Python 3.x for pylibfdt.
+ > Fixes:
+ >  - https://gitlab.com/buildroot.org/buildroot/-/jobs/1006924823
 
- >   https://nvd.nist.gov/vuln/search/results?form_type=Advanced&results_type=overview&seach_type=all&query=cpe:2.3:a:audio_file_library_project:audio_file_library:0.3.6:*:*:*:*:*:*:*
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Cc: Michael Walle <michael@walle.cc>
+ > Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 
 Committed, thanks.
 
