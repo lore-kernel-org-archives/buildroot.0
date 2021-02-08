@@ -1,99 +1,116 @@
 From: Kamel Bouhara <kamel.bouhara@bootlin.com>
-Date: Mon,  8 Feb 2021 16:11:05 +0100
-Subject: [Buildroot] [PATCH 1/2] package/libqb: new package
+Date: Mon,  8 Feb 2021 16:11:06 +0100
+Subject: [Buildroot] [PATCH 2/2] package/usbguard: new package
 In-Reply-To: <20210208151106.196836-1-kamel.bouhara@bootlin.com>
 References: <20210208151106.196836-1-kamel.bouhara@bootlin.com>
-Message-ID: <20210208151106.196836-2-kamel.bouhara@bootlin.com>
+Message-ID: <20210208151106.196836-3-kamel.bouhara@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libqb is a library providing features for client-server architecture,
-such as logging, tracing, inter-process communication (IPC) and polling.
-
-see: https://github.com/ClusterLabs/libqb
-
 Signed-off-by: Kamel Bouhara <kamel.bouhara@bootlin.com>
 ---
- DEVELOPERS               |  3 +++
- package/Config.in        |  1 +
- package/libqb/Config.in  |  7 +++++++
- package/libqb/libqb.hash |  3 +++
- package/libqb/libqb.mk   | 15 +++++++++++++++
- 5 files changed, 29 insertions(+)
- create mode 100644 package/libqb/Config.in
- create mode 100644 package/libqb/libqb.hash
- create mode 100644 package/libqb/libqb.mk
+ package/Config.in              |  1 +
+ package/usbguard/Config.in     | 19 +++++++++++++++++++
+ package/usbguard/usbguard.hash |  3 +++
+ package/usbguard/usbguard.mk   | 40 ++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 63 insertions(+)
+ create mode 100644 package/usbguard/Config.in
+ create mode 100644 package/usbguard/usbguard.hash
+ create mode 100644 package/usbguard/usbguard.mk
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index dd44331b85..edf616118e 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1405,6 +1405,9 @@ F:	package/easy-rsa/
- N:	Justin Maggard <jmaggard@netgear.com>
- F:	package/dtach/
- 
-+N:	Kamel Bouhara <kamel.bouhara@bootlin.com>
-+F:	package/libqb/
-+
- N:	Karoly Kasza <kaszak@gmail.com>
- F:	package/irqbalance/
- F:	package/openvmtools/
 diff --git a/package/Config.in b/package/Config.in
-index edf7687ab7..fd06b9eeaa 100644
+index fd06b9eeaa..6a8cb1e58b 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1810,6 +1810,7 @@ menu "Other"
- 	source "package/libpthread-stubs/Config.in"
- 	source "package/libpthsem/Config.in"
- 	source "package/libpwquality/Config.in"
-+	source "package/libqb/Config.in"
- 	source "package/libseccomp/Config.in"
- 	source "package/libsigc/Config.in"
- 	source "package/libsigsegv/Config.in"
-diff --git a/package/libqb/Config.in b/package/libqb/Config.in
+@@ -561,6 +561,7 @@ endmenu
+ 	source "package/upower/Config.in"
+ 	source "package/usb_modeswitch/Config.in"
+ 	source "package/usb_modeswitch_data/Config.in"
++	source "package/usbguard/Config.in"
+ 	source "package/usbmount/Config.in"
+ 	source "package/usbutils/Config.in"
+ 	source "package/w_scan/Config.in"
+diff --git a/package/usbguard/Config.in b/package/usbguard/Config.in
 new file mode 100644
-index 0000000000..4ab010ca50
+index 0000000000..921ff99aca
 --- /dev/null
-+++ b/package/libqb/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_LIBQB
-+	bool "libqb"
-+	select BR2_PACKAGE_LIBXML2
++++ b/package/usbguard/Config.in
+@@ -0,0 +1,19 @@
++config BR2_PACKAGE_USBGUARD
++	bool "usbguard"
++	depends on BR2_USE_MMU # glib2
++	depends on BR2_USE_WCHAR # glib2
++	depends on BR2_PACKAGE_SYSTEMD
++	depends on BR2_PACKAGE_PROTOBUF
++	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
++	select BR2_PACKAGE_LIBQB
 +	help
-+	  Library for client-server applications
++	  The USBGuard software framework.
 +
-+	  https://github.com/ClusterLabs/libqb
-diff --git a/package/libqb/libqb.hash b/package/libqb/libqb.hash
++	  https://usbguard.github.io/
++
++comment "usbguard needs a toolchain w/ wchar, threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_USE_WCHAR || \
++	!BR2_TOOLCHAIN_HAS_THREADS || \
++	!BR2_INSTALL_LIBSDTCPP || \
++	!BR2_PACKAGE_SYSTEMD
+diff --git a/package/usbguard/usbguard.hash b/package/usbguard/usbguard.hash
 new file mode 100644
-index 0000000000..0a01a9bbb5
+index 0000000000..fd77acc75a
 --- /dev/null
-+++ b/package/libqb/libqb.hash
++++ b/package/usbguard/usbguard.hash
 @@ -0,0 +1,3 @@
 +# Locally calculated
-+sha256  f72769c66479c51ac176b56837637b29d200f9dad40d23c5fdcb10f3a53ab1e4  libqb-2.0.2.tar.gz
-+sha256  00a89b0d18aacd4114decf79122db87bf35bddaf2bc50e383c9c9f4c263390b2  COPYING
-diff --git a/package/libqb/libqb.mk b/package/libqb/libqb.mk
++sha256  5617986cd5dd1a2d311041648a1977d836cf4e33a4121d7f82599f21496abc42  usbguard-1.0.0.tar.gz
++sha256  a45d0bb572ed792ed34627a72621834b3ba92aab6e2cc4e04301dee7a728d753  LICENSE
+diff --git a/package/usbguard/usbguard.mk b/package/usbguard/usbguard.mk
 new file mode 100644
-index 0000000000..9da6d7f900
+index 0000000000..1fa255d7a7
 --- /dev/null
-+++ b/package/libqb/libqb.mk
-@@ -0,0 +1,15 @@
++++ b/package/usbguard/usbguard.mk
+@@ -0,0 +1,40 @@
 +################################################################################
 +#
-+# libqb
++## usbguard
 +#
 +################################################################################
 +
-+LIBQB_VERSION = 2.0.2
-+LIBQB_SITE = $(call github,ClusterLabs,libqb,v$(LIBQB_VERSION))
-+LIBQB_LICENSE = LGPL-2.1+
-+LIBQB_LICENSE_FILES = COPYING
-+LIBQB_INSTALL_STAGING = YES
-+LIBQB_AUTORECONF = YES
-+LIBQB_DEPENDENCIES = libxml2
++USBGUARD_VERSION = 1.0.0
++USBGUARD_SITE = https://github.com/USBGuard/usbguard/releases/download/usbguard-$(USBGUARD_VERSION)
++USBGUARD_LICENSE = GPL-2.0+
++USBGUARD_LICENSE_FILES = LICENSE
++USBGUARD_CONF_OPTS = --with-bundled-catch --with-bundled-pegtl \
++		    --disable-debug-build --without-dbus --without-polkit \
++		    --disable-seccomp --disable-umockdev --enable-systemd
++
++USBGUARD_DEPENDENCIES = systemd libqb protobuf
++
++ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
++USBGUARD_CONF_OPTS += --with-crypto-library=openssl
++USBGUARD_DEPENDENCIES += libopenssl
++endif
++ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
++USBGUARD_CONF_OPTS += --with-crypto-library=gcrypt
++USBGUARD_DEPENDENCIES += libgcrypt
++endif
++ifeq ($(BR2_PACKAGE_LIBSODIUM),y)
++USBGUARD_CONF_OPTS += --with-crypto-library=sodium
++USBGUARD_DEPENDENCIES += libsodium
++endif
++
++ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
++USBGUARD_CONF_OPTS += --enable-seccomp
++USBGUARD_DEPENDENCIES += libseccomp
++endif
++
++ifeq ($(BR2_PACKAGE_LIBCAP_NG),y)
++USBGUARD_CONF_OPTS += --enable-libcapng
++USBGUARD_DEPENDENCIES += libcap-ng
++endif
 +
 +$(eval $(autotools-package))
 -- 
