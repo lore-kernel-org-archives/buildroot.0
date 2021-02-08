@@ -1,25 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 08 Feb 2021 22:16:41 +0100
-Subject: [Buildroot] [PATCH 1/1] package/fetchmail: bump version to
- 6.4.16
-In-Reply-To: <20210208185321.404044-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Mon, 8 Feb 2021 19:53:21 +0100")
-References: <20210208185321.404044-1-bernd.kuhls@t-online.de>
-Message-ID: <87v9b2qmyu.fsf@dell.be.48ers.dk>
+Date: Mon, 8 Feb 2021 22:10:41 +0100
+Subject: [Buildroot] [git commit] package/python: clarify that this refers
+ to the deprecated 2.7 series
+Message-ID: <20210208205603.5BAFB8183D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=c699ad14744423011793a62d9401da4a48ce7c0d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Release notes:
- > https://sourceforge.net/p/fetchmail/mailman/message/37215482/
+Python 2.7 is EOL, so people should use the python3 package instead if
+possible.  Make it a bit more obvious that 'python' is not the right package
+to use by explicitly mentioning that this is about python 2.7 and that it is
+deprecated.
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/python/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/python/Config.in b/package/python/Config.in
+index bded00c9e8..ab6950cae8 100644
+--- a/package/python/Config.in
++++ b/package/python/Config.in
+@@ -3,7 +3,7 @@ comment "python needs a toolchain w/ wchar, threads, dynamic library"
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+ 
+ config BR2_PACKAGE_PYTHON
+-	bool "python"
++	bool "python2.7 (deprecated)"
+ 	depends on BR2_USE_WCHAR
+ 	# uses fork()
+ 	depends on BR2_USE_MMU
