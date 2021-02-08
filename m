@@ -1,35 +1,36 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon,  8 Feb 2021 08:46:35 +0100
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xlib_libXrandr: add CPE
- variables
-Message-ID: <20210208074635.3858866-1-fontaine.fabrice@gmail.com>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Mon,  8 Feb 2021 09:04:50 +0100
+Subject: [Buildroot] [PATCH 1/1] configs/kontron_smarc_sal28_defconfig: use
+ Python 3.x for U-Boot build
+Message-ID: <20210208080450.30547-1-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:x.org:libxrandr is a valid CPE identifier for this package:
+New U-Boot versions need Python 3.x for pylibfdt.
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ax.org%3Alibxrandr
+Fixes:
+ - https://gitlab.com/buildroot.org/buildroot/-/jobs/1006924823
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Michael Walle <michael@walle.cc>
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 ---
- package/x11r7/xlib_libXrandr/xlib_libXrandr.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ configs/kontron_smarc_sal28_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/x11r7/xlib_libXrandr/xlib_libXrandr.mk b/package/x11r7/xlib_libXrandr/xlib_libXrandr.mk
-index 23a0d974d0..aa2761330a 100644
---- a/package/x11r7/xlib_libXrandr/xlib_libXrandr.mk
-+++ b/package/x11r7/xlib_libXrandr/xlib_libXrandr.mk
-@@ -9,6 +9,8 @@ XLIB_LIBXRANDR_SOURCE = libXrandr-$(XLIB_LIBXRANDR_VERSION).tar.bz2
- XLIB_LIBXRANDR_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXRANDR_LICENSE = MIT
- XLIB_LIBXRANDR_LICENSE_FILES = COPYING
-+XLIB_LIBXRANDR_CPE_ID_VENDOR = x.org
-+XLIB_LIBXRANDR_CPE_ID_PRODUCT = libxrandr
- XLIB_LIBXRANDR_INSTALL_STAGING = YES
- XLIB_LIBXRANDR_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXrender xorgproto
- XLIB_LIBXRANDR_CONF_OPTS = --disable-malloc0returnsnull
+diff --git a/configs/kontron_smarc_sal28_defconfig b/configs/kontron_smarc_sal28_defconfig
+index fd001614f4..4a72bf3ec1 100644
+--- a/configs/kontron_smarc_sal28_defconfig
++++ b/configs/kontron_smarc_sal28_defconfig
+@@ -26,6 +26,7 @@ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.01"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="kontron_sl28"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+ # BR2_TARGET_UBOOT_FORMAT_BIN is not set
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
 -- 
-2.29.2
+2.30.0
