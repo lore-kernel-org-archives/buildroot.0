@@ -1,36 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 8 Feb 2021 16:23:20 +0100
-Subject: [Buildroot] [git commit] package/connman: set CONNMAN_CPE_ID_VENDOR
-Message-ID: <20210208150703.A2FE28167A@busybox.osuosl.org>
+Date: Mon, 8 Feb 2021 16:22:34 +0100
+Subject: [Buildroot] [git commit] configs/kontron_smarc_sal28_defconfig: use
+ Python 3.x for U-Boot build
+Message-ID: <20210208150703.8CEBF81535@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dc1b3bed17e89448723705ce565838983f88b0da
+commit: https://git.buildroot.net/buildroot/commit/?id=ff727b6124003c5102b037ae5e552d6d2e96efde
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:intel:connman is a valid CPE identifier for this package:
+New U-Boot versions need Python 3.x for pylibfdt.
 
-  https://nvd.nist.gov/products/cpe/detail/702658?namingFormat=2.3&orderBy=CPEURI&keyword=connman&status=FINAL
+Fixes:
+ - https://gitlab.com/buildroot.org/buildroot/-/jobs/1006924823
 
-Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Michael Walle <michael@walle.cc>
 Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/connman/connman.mk | 1 +
+ configs/kontron_smarc_sal28_defconfig | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/connman/connman.mk b/package/connman/connman.mk
-index 23e7cb7797..e1ef49fa7c 100644
---- a/package/connman/connman.mk
-+++ b/package/connman/connman.mk
-@@ -11,6 +11,7 @@ CONNMAN_DEPENDENCIES = libglib2 dbus iptables
- CONNMAN_INSTALL_STAGING = YES
- CONNMAN_LICENSE = GPL-2.0
- CONNMAN_LICENSE_FILES = COPYING
-+CONNMAN_CPE_ID_VENDOR = intel
- 
- CONNMAN_CONF_OPTS = --with-dbusconfdir=/etc
- 
+diff --git a/configs/kontron_smarc_sal28_defconfig b/configs/kontron_smarc_sal28_defconfig
+index fd001614f4..4a72bf3ec1 100644
+--- a/configs/kontron_smarc_sal28_defconfig
++++ b/configs/kontron_smarc_sal28_defconfig
+@@ -26,6 +26,7 @@ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.01"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="kontron_sl28"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+ # BR2_TARGET_UBOOT_FORMAT_BIN is not set
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
