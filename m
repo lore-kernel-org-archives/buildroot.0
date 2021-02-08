@@ -1,25 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 08 Feb 2021 08:30:32 +0100
-Subject: [Buildroot] [PATCH 1/1] package/memcached: add
- MEMCACHED_CPE_ID_VENDOR
-In-Reply-To: <20210207123154.2550157-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 7 Feb 2021 13:31:54 +0100")
-References: <20210207123154.2550157-1-fontaine.fabrice@gmail.com>
-Message-ID: <877dnjvwx3.fsf@dell.be.48ers.dk>
+Date: Mon, 08 Feb 2021 08:30:37 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libgphoto2: bump version to
+ 2.5.26
+In-Reply-To: <20210207124304.1400992-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sun, 7 Feb 2021 13:43:04 +0100")
+References: <20210207124304.1400992-1-bernd.kuhls@t-online.de>
+Message-ID: <8735y7vwwy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > cpe:2.3:a:memcached:memcached is a valid CPE identifier for this
- > package:
+ > Removed md5 hash, reformatted remaining hashes.
+ > Added optional support for libcurl available since version 2.5.24.
 
- >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Amemcached%3Amemcached
+ > Release notes: https://github.com/gphoto/libgphoto2/blob/master/NEWS
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Committed, thanks.
 
