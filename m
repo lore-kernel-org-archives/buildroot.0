@@ -1,48 +1,68 @@
-From: Grzegorz Blach <grzegorz@blach.pl>
-Date: Mon,  8 Feb 2021 01:55:43 +0100
-Subject: [Buildroot] [PATCH 2/3] package/python-pyjwt: bump to version 2.0.1
-In-Reply-To: <20210208005546.482866-1-grzegorz@blach.pl>
-References: <20210208005546.482866-1-grzegorz@blach.pl>
-Message-ID: <20210208005546.482866-2-grzegorz@blach.pl>
+From: Maxim Kochetkov <fido_max@inbox.ru>
+Date: Mon, 8 Feb 2021 07:30:01 +0300
+Subject: [Buildroot] [PATCH 1/1] package/postgis: new package
+In-Reply-To: <20210207115757.65aa48fa@gmx.net>
+References: <20210126133908.680621-1-fido_max@inbox.ru>
+ <20210207115757.65aa48fa@gmx.net>
+Message-ID: <958ce0a5-1f35-a958-7b27-3c7a5ad4635c@inbox.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
----
- package/python-pyjwt/python-pyjwt.hash | 4 ++--
- package/python-pyjwt/python-pyjwt.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Should I resend it?
 
-diff --git a/package/python-pyjwt/python-pyjwt.hash b/package/python-pyjwt/python-pyjwt.hash
-index 10875510f0..e3408a4eb5 100644
---- a/package/python-pyjwt/python-pyjwt.hash
-+++ b/package/python-pyjwt/python-pyjwt.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/PyJWT/json
--md5  7a1b1c8bfeb67c31ee4fdadefe5ff4b8  PyJWT-2.0.0.tar.gz
--sha256  7a2b271c6dac2fda9e0c33d176c4253faba2c6c6b3a99c7f28a32c3c97522779  PyJWT-2.0.0.tar.gz
-+md5  93b74f59d08be8c852a3c259da2ea121  PyJWT-2.0.1.tar.gz
-+sha256  a5c70a06e1f33d81ef25eecd50d50bd30e34de1ca8b2b9fa3fe0daaabcf69bf7  PyJWT-2.0.1.tar.gz
- # Locally computed sha256 checksums
- sha256  ec82af815b5f9da8685afb300cc5beb7949e1c22b79b6c1c054796cefdf6cac6  LICENSE
-diff --git a/package/python-pyjwt/python-pyjwt.mk b/package/python-pyjwt/python-pyjwt.mk
-index 9215911389..dd20e0efcb 100644
---- a/package/python-pyjwt/python-pyjwt.mk
-+++ b/package/python-pyjwt/python-pyjwt.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PYJWT_VERSION = 2.0.0
-+PYTHON_PYJWT_VERSION = 2.0.1
- PYTHON_PYJWT_SOURCE = PyJWT-$(PYTHON_PYJWT_VERSION).tar.gz
--PYTHON_PYJWT_SITE = https://files.pythonhosted.org/packages/14/6d/096dc269d105ba374d6bfd3ecb22b516795ca0572499820dadc8178d9ae1
-+PYTHON_PYJWT_SITE = https://files.pythonhosted.org/packages/ef/68/d610e2e10bc8336a033a6e0f0401341106ee9ed9cb0c1571b0d1a8eacf39
- PYTHON_PYJWT_SETUP_TYPE = setuptools
- PYTHON_PYJWT_LICENSE = MIT
- PYTHON_PYJWT_LICENSE_FILES = LICENSE
--- 
-2.27.0
+07.02.2021 13:57, Peter Seiderer ?????:
+> And some minor check-package warnings to improve, see below...
+> 
+> On Tue, 26 Jan 2021 16:39:08 +0300, Maxim Kochetkov via buildroot<buildroot@busybox.net>  wrote:
+> 
+>> PostGIS is a spatial database extender for PostgreSQL object-relational database.
+>> It adds support for geographic objects allowing location queries to be run in SQL.
+>>
+>> https://postgis.net/
+>>
+>> Signed-off-by: Maxim Kochetkov<fido_max@inbox.ru>
+>> ---
+>>   package/Config.in                             |  1 +
+>>   ...VE_VASPRINTF-HAVE_ASPRINTF-templates.patch | 32 +++++++++++++++++
+>>   ...fig-to-get-PROJ-version-if-available.patch | 36 +++++++++++++++++++
+>>   ...S_DEBUG_LEVEL-define-to-configure.ac.patch | 29 +++++++++++++++
+>>   ...e-forced-static-linking-of-liblwgeom.patch | 31 ++++++++++++++++
+>>   package/postgis/Config.in                     | 12 +++++++
+>>   package/postgis/postgis.hash                  |  3 ++
+>>   package/postgis/postgis.mk                    | 31 ++++++++++++++++
+>>   8 files changed, 175 insertions(+)
+>>   create mode 100644 package/postgis/0001-Add-HAVE_VASPRINTF-HAVE_ASPRINTF-templates.patch
+>>   create mode 100644 package/postgis/0002-Use-pkg-config-to-get-PROJ-version-if-available.patch
+>>   create mode 100644 package/postgis/0003-Add-POSTGIS_DEBUG_LEVEL-define-to-configure.ac.patch
+>>   create mode 100644 package/postgis/0004-Disable-forced-static-linking-of-liblwgeom.patch
+>>   create mode 100644 package/postgis/Config.in
+>>   create mode 100644 package/postgis/postgis.hash
+>>   create mode 100644 package/postgis/postgis.mk
+>>
+>> diff --git a/package/Config.in b/package/Config.in
+>> index 06dfc32cc6..5ed3f5df8f 100644
+>> --- a/package/Config.in
+>> +++ b/package/Config.in
+>> @@ -1401,6 +1401,7 @@ menu "Database"
+>>   	source "package/mongodb/Config.in"
+>>   	source "package/mysql/Config.in"
+>>   	source "package/postgresql/Config.in"
+>> +	source "package/postgis/Config.in"
+>>   	source "package/redis/Config.in"
+>>   	source "package/rocksdb/Config.in"
+>>   	source "package/sqlcipher/Config.in"
+>> diff --git a/package/postgis/0001-Add-HAVE_VASPRINTF-HAVE_ASPRINTF-templates.patch b/package/postgis/0001-Add-HAVE_VASPRINTF-HAVE_ASPRINTF-templates.patch
+>> new file mode 100644
+>> index 0000000000..7c9e46b7af
+>> --- /dev/null
+>> +++ b/package/postgis/0001-Add-HAVE_VASPRINTF-HAVE_ASPRINTF-templates.patch
+>> @@ -0,0 +1,32 @@
+>> +From 1bbc5b921d6b444cbeb505e67e4a4edcc696f592 Mon Sep 17 00:00:00 2001
+>> +From: fidomax<adobegitler@gmail.com>
+>> +Date: Tue, 26 Jan 2021 07:33:17 +0300
+>> +Subject: [PATCH 1/4] Add HAVE_VASPRINTF HAVE_ASPRINTF templates
+> package/postgis/0001-Add-HAVE_VASPRINTF-HAVE_ASPRINTF-templates.patch:4: generate your patches with 'git format-patch -N'
+> 
