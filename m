@@ -1,37 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 8 Feb 2021 16:23:35 +0100
-Subject: [Buildroot] [git commit] package/x11r7/xlib_libXrandr: add CPE
- variables
-Message-ID: <20210208150703.ACE757FE85@busybox.osuosl.org>
+Date: Mon, 8 Feb 2021 16:24:38 +0100
+Subject: [Buildroot] [git commit] package/memtester: fix compile and link
+ flags
+Message-ID: <20210208150703.B9DDC81535@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f39b2b3d75299b57b57ba80260230dd296526980
+commit: https://git.buildroot.net/buildroot/commit/?id=25e09fdb9e4aa1e940dbdfcdad8dedca42814fcc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:x.org:libxrandr is a valid CPE identifier for this package:
+The memtester build system does not use CFLAGS/LDFLAGS variables.
+Everything should be written to conf-cc and conf-ld.
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ax.org%3Alibxrandr
+Use '%' as sed expression delimiter because comma might appear in
+LDFLAGS.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xlib_libXrandr/xlib_libXrandr.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/memtester/memtester.mk | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXrandr/xlib_libXrandr.mk b/package/x11r7/xlib_libXrandr/xlib_libXrandr.mk
-index 23a0d974d0..aa2761330a 100644
---- a/package/x11r7/xlib_libXrandr/xlib_libXrandr.mk
-+++ b/package/x11r7/xlib_libXrandr/xlib_libXrandr.mk
-@@ -9,6 +9,8 @@ XLIB_LIBXRANDR_SOURCE = libXrandr-$(XLIB_LIBXRANDR_VERSION).tar.bz2
- XLIB_LIBXRANDR_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXRANDR_LICENSE = MIT
- XLIB_LIBXRANDR_LICENSE_FILES = COPYING
-+XLIB_LIBXRANDR_CPE_ID_VENDOR = x.org
-+XLIB_LIBXRANDR_CPE_ID_PRODUCT = libxrandr
- XLIB_LIBXRANDR_INSTALL_STAGING = YES
- XLIB_LIBXRANDR_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXrender xorgproto
- XLIB_LIBXRANDR_CONF_OPTS = --disable-malloc0returnsnull
+diff --git a/package/memtester/memtester.mk b/package/memtester/memtester.mk
+index 49cc935f39..ec515f6392 100644
+--- a/package/memtester/memtester.mk
++++ b/package/memtester/memtester.mk
+@@ -13,8 +13,9 @@ MEMTESTER_CPE_ID_VENDOR = pryopus
+ MEMTESTER_TARGET_INSTALL_OPTS = INSTALLPATH=$(TARGET_DIR)/usr
+ 
+ define MEMTESTER_BUILD_CMDS
+-	$(SED) "s,^cc,$(TARGET_CC)," $(@D)/conf-*
+-	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
++	$(SED) "s%^cc%$(TARGET_CC) $(TARGET_CFLAGS)%" $(@D)/conf-cc
++	$(SED) "s%^cc%$(TARGET_CC) $(TARGET_LDFLAGS)%" $(@D)/conf-ld
++	$(MAKE) -C $(@D)
+ endef
+ 
+ define MEMTESTER_INSTALL_TARGET_CMDS
