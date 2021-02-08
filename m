@@ -1,36 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 8 Feb 2021 22:11:57 +0100
-Subject: [Buildroot] [git commit] package/berkeleydb: add CPE variables
-Message-ID: <20210208205603.677E38183D@busybox.osuosl.org>
+Date: Mon, 8 Feb 2021 22:14:49 +0100
+Subject: [Buildroot] [git commit] package/c-icap: bump to version 0.5.7
+Message-ID: <20210208205603.8E93A8183D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7d9dde68b33bbabdaaa3e2a42e1d7cad68245270
+commit: https://git.buildroot.net/buildroot/commit/?id=2133651ddd9542cb5d2ca00d4312cae3756cb3f5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:oracle:berkeley_db is a valid CPE identifier for this package:
-
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aoracle%3Aberkeley_db
+https://sourceforge.net/p/c-icap/news/2020/10/the-c-icap-057-is-released
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/berkeleydb/berkeleydb.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/c-icap/c-icap.hash | 6 +++---
+ package/c-icap/c-icap.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/berkeleydb/berkeleydb.mk b/package/berkeleydb/berkeleydb.mk
-index e077eb4640..36b1894f34 100644
---- a/package/berkeleydb/berkeleydb.mk
-+++ b/package/berkeleydb/berkeleydb.mk
-@@ -15,6 +15,8 @@ BERKELEYDB_SOURCE = db-$(BERKELEYDB_VERSION).NC.tar.gz
- BERKELEYDB_SUBDIR = build_unix
- BERKELEYDB_LICENSE = BerkeleyDB License
- BERKELEYDB_LICENSE_FILES = LICENSE
-+BERKELEYDB_CPE_ID_VENDOR = oracle
-+BERKELEYDB_CPE_ID_PRODUCT = berkeley_db
- BERKELEYDB_INSTALL_STAGING = YES
- BERKELEYDB_BINARIES = db_archive db_checkpoint db_deadlock db_dump \
- 	db_hotbackup db_load db_log_verify db_printlog db_recover db_replicate \
+diff --git a/package/c-icap/c-icap.hash b/package/c-icap/c-icap.hash
+index 8c70d75589..6aa81c2641 100644
+--- a/package/c-icap/c-icap.hash
++++ b/package/c-icap/c-icap.hash
+@@ -1,6 +1,6 @@
+ # Retrieved from https://sourceforge.net/projects/c-icap/files/c-icap/0.5.x/
+-md5  d59e767ee3733cd81cea02819f13ac72  c_icap-0.5.6.tar.gz
+-sha1  361e36b63f895bd72bdd18aac5fe4192d4eff530  c_icap-0.5.6.tar.gz
++md5  82fd2fba1a08a8a0cf3567fe24aa035d  c_icap-0.5.7.tar.gz
++sha1  3b2470e00abd1418bec3a440d3073d7a6231c4c1  c_icap-0.5.7.tar.gz
+ # Locally calculated
+-sha256  9826c50fc34f8fd4a3115844b27c9816dd3fcc3e7e2a3b6bcc7094ec307802b7  c_icap-0.5.6.tar.gz
++sha256  01ef17d7999d3476fe705abc56d0da562c2f180aafe08fc1269f419cad8521a9  c_icap-0.5.7.tar.gz
+ sha256  36b6d3fa47916943fd5fec313c584784946047ec1337a78b440e5992cb595f89  COPYING
+diff --git a/package/c-icap/c-icap.mk b/package/c-icap/c-icap.mk
+index 1a68674a67..79e317fb29 100644
+--- a/package/c-icap/c-icap.mk
++++ b/package/c-icap/c-icap.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-C_ICAP_VERSION = 0.5.6
++C_ICAP_VERSION = 0.5.7
+ C_ICAP_SOURCE = c_icap-$(C_ICAP_VERSION).tar.gz
+ C_ICAP_SITE = http://downloads.sourceforge.net/c-icap
+ C_ICAP_LICENSE = LGPL-2.1+
