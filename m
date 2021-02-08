@@ -1,42 +1,80 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Mon, 8 Feb 2021 16:53:07 +0100
-Subject: [Buildroot] [PATCH] package/connman: add upstream security
- fixes for CVE-2021-2667{5, 6}
-In-Reply-To: <20210208093921.3216-1-peter@korsgaard.com>
-References: <20210208093921.3216-1-peter@korsgaard.com>
-Message-ID: <CAEyMn7aqMeyjFmJcymQfDkhy6t4YJmeSPXYLAqj+KMdCfJ55yQ@mail.gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 8 Feb 2021 18:43:25 +0100
+Subject: [Buildroot] [PATCH 1/1] package/postgis: new package
+In-Reply-To: <958ce0a5-1f35-a958-7b27-3c7a5ad4635c@inbox.ru>
+References: <20210126133908.680621-1-fido_max@inbox.ru>
+ <20210207115757.65aa48fa@gmx.net>
+ <958ce0a5-1f35-a958-7b27-3c7a5ad4635c@inbox.ru>
+Message-ID: <20210208184325.6267e7c9@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Hello Maxim,
 
-Am Mo., 8. Feb. 2021 um 10:39 Uhr schrieb Peter Korsgaard <peter@korsgaard.com>:
->
-> Fixes the following security issues:
->
-> - CVE-2021-26675: Remote (adjacent network) code execution flaw
-> - CVE-2021-26676: Remote stack information leak
->
-> For details, see the advisory:
-> https://www.openwall.com/lists/oss-security/2021/02/08/2
->
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  ...ding-invalid-data-in-dhcp_get_option.patch | 226 ++++++++++++++++++
->  ...ing-stack-data-via-unitiialized-vari.patch |  27 +++
->  ...gth-checks-to-prevent-buffer-overflo.patch |  56 +++++
->  3 files changed, 309 insertions(+)
->  create mode 100644 package/connman/0001-gdhcp-Avoid-reading-invalid-data-in-dhcp_get_option.patch
->  create mode 100644 package/connman/0002-gdhcp-Avoid-leaking-stack-data-via-unitiialized-vari.patch
->  create mode 100644 package/connman/0003-dnsproxy-Add-length-checks-to-prevent-buffer-overflo.patch
+On Mon, 8 Feb 2021 07:30:01 +0300, Maxim Kochetkov <fido_max@inbox.ru> wrote:
 
-A new version [1] was released today that has these patches
-integrated. Maybe we should bump to that.
+> Should I resend it?
 
-[1] https://git.kernel.org/pub/scm/network/connman/connman.git/commit/?id=47bd7ab21bfbe115ca4a10b9b96bdbfeb6c35bff
+I am no maintainer, but I think it is enough stuff to justify a v2 (and feel
+free to squash with my follow-up patch)...
 
--- 
-Heiko
+Regards,
+Peter
+
+> 
+> 07.02.2021 13:57, Peter Seiderer ?????:
+> > And some minor check-package warnings to improve, see below...
+> > 
+> > On Tue, 26 Jan 2021 16:39:08 +0300, Maxim Kochetkov via buildroot<buildroot@busybox.net>  wrote:
+> >   
+> >> PostGIS is a spatial database extender for PostgreSQL object-relational database.
+> >> It adds support for geographic objects allowing location queries to be run in SQL.
+> >>
+> >> https://postgis.net/
+> >>
+> >> Signed-off-by: Maxim Kochetkov<fido_max@inbox.ru>
+> >> ---
+> >>   package/Config.in                             |  1 +
+> >>   ...VE_VASPRINTF-HAVE_ASPRINTF-templates.patch | 32 +++++++++++++++++
+> >>   ...fig-to-get-PROJ-version-if-available.patch | 36 +++++++++++++++++++
+> >>   ...S_DEBUG_LEVEL-define-to-configure.ac.patch | 29 +++++++++++++++
+> >>   ...e-forced-static-linking-of-liblwgeom.patch | 31 ++++++++++++++++
+> >>   package/postgis/Config.in                     | 12 +++++++
+> >>   package/postgis/postgis.hash                  |  3 ++
+> >>   package/postgis/postgis.mk                    | 31 ++++++++++++++++
+> >>   8 files changed, 175 insertions(+)
+> >>   create mode 100644 package/postgis/0001-Add-HAVE_VASPRINTF-HAVE_ASPRINTF-templates.patch
+> >>   create mode 100644 package/postgis/0002-Use-pkg-config-to-get-PROJ-version-if-available.patch
+> >>   create mode 100644 package/postgis/0003-Add-POSTGIS_DEBUG_LEVEL-define-to-configure.ac.patch
+> >>   create mode 100644 package/postgis/0004-Disable-forced-static-linking-of-liblwgeom.patch
+> >>   create mode 100644 package/postgis/Config.in
+> >>   create mode 100644 package/postgis/postgis.hash
+> >>   create mode 100644 package/postgis/postgis.mk
+> >>
+> >> diff --git a/package/Config.in b/package/Config.in
+> >> index 06dfc32cc6..5ed3f5df8f 100644
+> >> --- a/package/Config.in
+> >> +++ b/package/Config.in
+> >> @@ -1401,6 +1401,7 @@ menu "Database"
+> >>   	source "package/mongodb/Config.in"
+> >>   	source "package/mysql/Config.in"
+> >>   	source "package/postgresql/Config.in"
+> >> +	source "package/postgis/Config.in"
+> >>   	source "package/redis/Config.in"
+> >>   	source "package/rocksdb/Config.in"
+> >>   	source "package/sqlcipher/Config.in"
+> >> diff --git a/package/postgis/0001-Add-HAVE_VASPRINTF-HAVE_ASPRINTF-templates.patch b/package/postgis/0001-Add-HAVE_VASPRINTF-HAVE_ASPRINTF-templates.patch
+> >> new file mode 100644
+> >> index 0000000000..7c9e46b7af
+> >> --- /dev/null
+> >> +++ b/package/postgis/0001-Add-HAVE_VASPRINTF-HAVE_ASPRINTF-templates.patch
+> >> @@ -0,0 +1,32 @@
+> >> +From 1bbc5b921d6b444cbeb505e67e4a4edcc696f592 Mon Sep 17 00:00:00 2001
+> >> +From: fidomax<adobegitler@gmail.com>
+> >> +Date: Tue, 26 Jan 2021 07:33:17 +0300
+> >> +Subject: [PATCH 1/4] Add HAVE_VASPRINTF HAVE_ASPRINTF templates  
+> > package/postgis/0001-Add-HAVE_VASPRINTF-HAVE_ASPRINTF-templates.patch:4: generate your patches with 'git format-patch -N'
+> >   
