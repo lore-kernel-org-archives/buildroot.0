@@ -1,130 +1,61 @@
-From: Kamel Bouhara <kamel.bouhara@bootlin.com>
-Date: Mon, 8 Feb 2021 16:34:43 +0100
-Subject: [Buildroot] [PATCH 2/2] package/usbguard: new package
-In-Reply-To: <20210208151106.196836-3-kamel.bouhara@bootlin.com>
-References: <20210208151106.196836-1-kamel.bouhara@bootlin.com>
- <20210208151106.196836-3-kamel.bouhara@bootlin.com>
-Message-ID: <YCFaE7MP/35VgwGV@kb-xps>
+From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+Date: Mon,  8 Feb 2021 16:19:15 +0100
+Subject: [Buildroot] [RESEND PATCH 2/2] package/gnuradio: add gr-uhd option
+In-Reply-To: <1612797555-14782-1-git-send-email-gwenj@trabucayre.com>
+References: <1612797555-14782-1-git-send-email-gwenj@trabucayre.com>
+Message-ID: <1612797555-14782-2-git-send-email-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Feb 08, 2021 at 04:11:06PM +0100, Kamel Bouhara wrote:
+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-Sorry, I forgot the DEVELOPERS change, shall be fixed in v2.
+GNURadio has a block to use USRP, through UHD, to receive or transmit RF
+signals.
 
-Kamel
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+---
+ package/gnuradio/Config.in   | 9 +++++++++
+ package/gnuradio/gnuradio.mk | 7 +++++++
+ 2 files changed, 16 insertions(+)
 
-> Signed-off-by: Kamel Bouhara <kamel.bouhara@bootlin.com>
-> ---
->  package/Config.in              |  1 +
->  package/usbguard/Config.in     | 19 +++++++++++++++++++
->  package/usbguard/usbguard.hash |  3 +++
->  package/usbguard/usbguard.mk   | 40 ++++++++++++++++++++++++++++++++++++++++
->  4 files changed, 63 insertions(+)
->  create mode 100644 package/usbguard/Config.in
->  create mode 100644 package/usbguard/usbguard.hash
->  create mode 100644 package/usbguard/usbguard.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index fd06b9eeaa..6a8cb1e58b 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -561,6 +561,7 @@ endmenu
->  	source "package/upower/Config.in"
->  	source "package/usb_modeswitch/Config.in"
->  	source "package/usb_modeswitch_data/Config.in"
-> +	source "package/usbguard/Config.in"
->  	source "package/usbmount/Config.in"
->  	source "package/usbutils/Config.in"
->  	source "package/w_scan/Config.in"
-> diff --git a/package/usbguard/Config.in b/package/usbguard/Config.in
-> new file mode 100644
-> index 0000000000..921ff99aca
-> --- /dev/null
-> +++ b/package/usbguard/Config.in
-> @@ -0,0 +1,19 @@
-> +config BR2_PACKAGE_USBGUARD
-> +	bool "usbguard"
-> +	depends on BR2_USE_MMU # glib2
-> +	depends on BR2_USE_WCHAR # glib2
-> +	depends on BR2_PACKAGE_SYSTEMD
-> +	depends on BR2_PACKAGE_PROTOBUF
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
-> +	select BR2_PACKAGE_LIBQB
-> +	help
-> +	  The USBGuard software framework.
-> +
-> +	  https://usbguard.github.io/
-> +
-> +comment "usbguard needs a toolchain w/ wchar, threads"
-> +	depends on BR2_USE_MMU
-> +	depends on !BR2_USE_WCHAR || \
-> +	!BR2_TOOLCHAIN_HAS_THREADS || \
-> +	!BR2_INSTALL_LIBSDTCPP || \
-> +	!BR2_PACKAGE_SYSTEMD
-> diff --git a/package/usbguard/usbguard.hash b/package/usbguard/usbguard.hash
-> new file mode 100644
-> index 0000000000..fd77acc75a
-> --- /dev/null
-> +++ b/package/usbguard/usbguard.hash
-> @@ -0,0 +1,3 @@
-> +# Locally calculated
-> +sha256  5617986cd5dd1a2d311041648a1977d836cf4e33a4121d7f82599f21496abc42  usbguard-1.0.0.tar.gz
-> +sha256  a45d0bb572ed792ed34627a72621834b3ba92aab6e2cc4e04301dee7a728d753  LICENSE
-> diff --git a/package/usbguard/usbguard.mk b/package/usbguard/usbguard.mk
-> new file mode 100644
-> index 0000000000..1fa255d7a7
-> --- /dev/null
-> +++ b/package/usbguard/usbguard.mk
-> @@ -0,0 +1,40 @@
-> +################################################################################
-> +#
-> +## usbguard
-> +#
-> +################################################################################
-> +
-> +USBGUARD_VERSION = 1.0.0
-> +USBGUARD_SITE = https://github.com/USBGuard/usbguard/releases/download/usbguard-$(USBGUARD_VERSION)
-> +USBGUARD_LICENSE = GPL-2.0+
-> +USBGUARD_LICENSE_FILES = LICENSE
-> +USBGUARD_CONF_OPTS = --with-bundled-catch --with-bundled-pegtl \
-> +		    --disable-debug-build --without-dbus --without-polkit \
-> +		    --disable-seccomp --disable-umockdev --enable-systemd
-> +
-> +USBGUARD_DEPENDENCIES = systemd libqb protobuf
-> +
-> +ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
-> +USBGUARD_CONF_OPTS += --with-crypto-library=openssl
-> +USBGUARD_DEPENDENCIES += libopenssl
-> +endif
-> +ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
-> +USBGUARD_CONF_OPTS += --with-crypto-library=gcrypt
-> +USBGUARD_DEPENDENCIES += libgcrypt
-> +endif
-> +ifeq ($(BR2_PACKAGE_LIBSODIUM),y)
-> +USBGUARD_CONF_OPTS += --with-crypto-library=sodium
-> +USBGUARD_DEPENDENCIES += libsodium
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
-> +USBGUARD_CONF_OPTS += --enable-seccomp
-> +USBGUARD_DEPENDENCIES += libseccomp
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_LIBCAP_NG),y)
-> +USBGUARD_CONF_OPTS += --enable-libcapng
-> +USBGUARD_DEPENDENCIES += libcap-ng
-> +endif
-> +
-> +$(eval $(autotools-package))
-> --
-> 2.11.0
->
-
---
-Kamel Bouhara, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
+diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
+index c7b01b454b..738088802e 100644
+--- a/package/gnuradio/Config.in
++++ b/package/gnuradio/Config.in
+@@ -156,4 +156,13 @@ config BR2_PACKAGE_GNURADIO_TRELLIS
+ 	help
+ 	  Trellis coded modulation blocks
+ 
++config BR2_PACKAGE_GNURADIO_UHD
++	bool "gr-uhd support"
++	select BR2_PACKAGE_UHD
++	select BR2_PACKAGE_GNURADIO_ANALOG
++	select BR2_PACKAGE_GNURADIO_BLOCKS
++	select BR2_PACKAGE_GNURADIO_FILTER
++	help
++	  UHD support
++
+ endif
+diff --git a/package/gnuradio/gnuradio.mk b/package/gnuradio/gnuradio.mk
+index 0a818cfc24..1f4458db92 100644
+--- a/package/gnuradio/gnuradio.mk
++++ b/package/gnuradio/gnuradio.mk
+@@ -149,6 +149,13 @@ else
+ GNURADIO_CONF_OPTS += -DENABLE_GR_TRELLIS=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GNURADIO_UHD),y)
++GNURADIO_DEPENDENCIES += uhd
++GNURADIO_CONF_OPTS += -DENABLE_GR_UHD=ON
++else
++GNURADIO_CONF_OPTS += -DENABLE_GR_UHD=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_GNURADIO_UTILS),y)
+ GNURADIO_CONF_OPTS += -DENABLE_GR_UTILS=ON
+ else
+-- 
+2.20.1
