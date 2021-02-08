@@ -1,36 +1,40 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Mon,  8 Feb 2021 09:04:50 +0100
-Subject: [Buildroot] [PATCH 1/1] configs/kontron_smarc_sal28_defconfig: use
- Python 3.x for U-Boot build
-Message-ID: <20210208080450.30547-1-heiko.thiery@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon,  8 Feb 2021 11:04:34 +0200
+Subject: [Buildroot] [PATCH] package/memtester: fix compile and link flags
+Message-ID: <f9ae74a3f5657230a29cb3133d747a77a58ae435.1612775074.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-New U-Boot versions need Python 3.x for pylibfdt.
+The memtester build system does not use CFLAGS/LDFLAGS variables.
+Everything should be written to conf-cc and conf-ld.
 
-Fixes:
- - https://gitlab.com/buildroot.org/buildroot/-/jobs/1006924823
+Use '%' as sed expression delimiter because comma might appear in
+LDFLAGS.
 
-Cc: Michael Walle <michael@walle.cc>
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- configs/kontron_smarc_sal28_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ package/memtester/memtester.mk | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/configs/kontron_smarc_sal28_defconfig b/configs/kontron_smarc_sal28_defconfig
-index fd001614f4..4a72bf3ec1 100644
---- a/configs/kontron_smarc_sal28_defconfig
-+++ b/configs/kontron_smarc_sal28_defconfig
-@@ -26,6 +26,7 @@ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.01"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="kontron_sl28"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- # BR2_TARGET_UBOOT_FORMAT_BIN is not set
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+diff --git a/package/memtester/memtester.mk b/package/memtester/memtester.mk
+index 49cc935f3966..ec515f63927f 100644
+--- a/package/memtester/memtester.mk
++++ b/package/memtester/memtester.mk
+@@ -13,8 +13,9 @@ MEMTESTER_CPE_ID_VENDOR = pryopus
+ MEMTESTER_TARGET_INSTALL_OPTS = INSTALLPATH=$(TARGET_DIR)/usr
+ 
+ define MEMTESTER_BUILD_CMDS
+-	$(SED) "s,^cc,$(TARGET_CC)," $(@D)/conf-*
+-	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
++	$(SED) "s%^cc%$(TARGET_CC) $(TARGET_CFLAGS)%" $(@D)/conf-cc
++	$(SED) "s%^cc%$(TARGET_CC) $(TARGET_LDFLAGS)%" $(@D)/conf-ld
++	$(MAKE) -C $(@D)
+ endef
+ 
+ define MEMTESTER_INSTALL_TARGET_CMDS
 -- 
 2.30.0
