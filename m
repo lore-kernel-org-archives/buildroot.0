@@ -1,22 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 08 Feb 2021 08:30:48 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libraw: add LIBRAW_CPE_ID_VENDOR
-In-Reply-To: <20210207123919.2637343-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 7 Feb 2021 13:39:19 +0100")
-References: <20210207123919.2637343-1-fontaine.fabrice@gmail.com>
-Message-ID: <87y2fzuic7.fsf@dell.be.48ers.dk>
+Date: Mon, 08 Feb 2021 08:31:59 +0100
+Subject: [Buildroot] [PATCH 1/2] package/libgsasl: bump version to 1.10.0
+In-Reply-To: <20210207125245.1428105-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sun, 7 Feb 2021 13:52:44 +0100")
+References: <20210207125245.1428105-1-bernd.kuhls@t-online.de>
+Message-ID: <87tuqnuia8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > cpe:2.3:a:libraw:libraw is a valid CPE identifier for this package:
- >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alibraw%3Alibraw
+ > Added hashes provided by upstream, updated license hash due to various
+ > upstream commits:
+ > https://git.savannah.gnu.org/gitweb/?p=gsasl.git;a=history;f=README
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Release notes:
+ > https://lists.gnu.org/archive/html/help-gsasl/2021-01/msg00007.html
+
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Committed, thanks.
 
