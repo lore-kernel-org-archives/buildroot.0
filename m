@@ -1,38 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 8 Feb 2021 16:22:34 +0100
-Subject: [Buildroot] [git commit] configs/kontron_smarc_sal28_defconfig: use
- Python 3.x for U-Boot build
-Message-ID: <20210208150703.8CEBF81535@busybox.osuosl.org>
+Date: Mon, 8 Feb 2021 16:14:59 +0100
+Subject: [Buildroot] [git commit] package/avahi: add AVAHI_CPE_ID_VENDOR
+Message-ID: <20210208150703.693D87FE85@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ff727b6124003c5102b037ae5e552d6d2e96efde
+commit: https://git.buildroot.net/buildroot/commit/?id=4c69951791f75a0bc9d071f671ccbbcf70a8560c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-New U-Boot versions need Python 3.x for pylibfdt.
+cpe:2.3:a:avahi:avahi is a valid CPE identifier for this package:
 
-Fixes:
- - https://gitlab.com/buildroot.org/buildroot/-/jobs/1006924823
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aavahi%3Aavahi
 
-Cc: Michael Walle <michael@walle.cc>
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/kontron_smarc_sal28_defconfig | 1 +
+ package/avahi/avahi.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/configs/kontron_smarc_sal28_defconfig b/configs/kontron_smarc_sal28_defconfig
-index fd001614f4..4a72bf3ec1 100644
---- a/configs/kontron_smarc_sal28_defconfig
-+++ b/configs/kontron_smarc_sal28_defconfig
-@@ -26,6 +26,7 @@ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.01"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="kontron_sl28"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- # BR2_TARGET_UBOOT_FORMAT_BIN is not set
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+diff --git a/package/avahi/avahi.mk b/package/avahi/avahi.mk
+index eef05f0d2f..e2b27328cd 100644
+--- a/package/avahi/avahi.mk
++++ b/package/avahi/avahi.mk
+@@ -8,6 +8,7 @@ AVAHI_VERSION = 0.8
+ AVAHI_SITE = https://github.com/lathiat/avahi/releases/download/v$(AVAHI_VERSION)
+ AVAHI_LICENSE = LGPL-2.1+
+ AVAHI_LICENSE_FILES = LICENSE
++AVAHI_CPE_ID_VENDOR = avahi
+ AVAHI_INSTALL_STAGING = YES
+ 
+ AVAHI_CONF_ENV = \
