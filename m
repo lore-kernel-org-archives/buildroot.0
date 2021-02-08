@@ -1,200 +1,42 @@
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Mon,  8 Feb 2021 16:19:14 +0100
-Subject: [Buildroot] [RESEND PATCH 1/2] package/uhd: add missing support
-Message-ID: <1612797555-14782-1-git-send-email-gwenj@trabucayre.com>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Mon, 8 Feb 2021 16:53:07 +0100
+Subject: [Buildroot] [PATCH] package/connman: add upstream security
+ fixes for CVE-2021-2667{5, 6}
+In-Reply-To: <20210208093921.3216-1-peter@korsgaard.com>
+References: <20210208093921.3216-1-peter@korsgaard.com>
+Message-ID: <CAEyMn7aqMeyjFmJcymQfDkhy6t4YJmeSPXYLAqj+KMdCfJ55yQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Hi Peter,
 
-Complete uhd package with the rest of USRP, octoclock and python support.
+Am Mo., 8. Feb. 2021 um 10:39 Uhr schrieb Peter Korsgaard <peter@korsgaard.com>:
+>
+> Fixes the following security issues:
+>
+> - CVE-2021-26675: Remote (adjacent network) code execution flaw
+> - CVE-2021-26676: Remote stack information leak
+>
+> For details, see the advisory:
+> https://www.openwall.com/lists/oss-security/2021/02/08/2
+>
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  ...ding-invalid-data-in-dhcp_get_option.patch | 226 ++++++++++++++++++
+>  ...ing-stack-data-via-unitiialized-vari.patch |  27 +++
+>  ...gth-checks-to-prevent-buffer-overflo.patch |  56 +++++
+>  3 files changed, 309 insertions(+)
+>  create mode 100644 package/connman/0001-gdhcp-Avoid-reading-invalid-data-in-dhcp_get_option.patch
+>  create mode 100644 package/connman/0002-gdhcp-Avoid-leaking-stack-data-via-unitiialized-vari.patch
+>  create mode 100644 package/connman/0003-dnsproxy-Add-length-checks-to-prevent-buffer-overflo.patch
 
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
----
- package/uhd/Config.in | 63 +++++++++++++++++++++++++++++++++++++++
- package/uhd/uhd.mk    | 68 ++++++++++++++++++++++++++++++++++++-------
- 2 files changed, 121 insertions(+), 10 deletions(-)
+A new version [1] was released today that has these patches
+integrated. Maybe we should bump to that.
 
-diff --git a/package/uhd/Config.in b/package/uhd/Config.in
-index 6715f1f10b..fae0887509 100644
---- a/package/uhd/Config.in
-+++ b/package/uhd/Config.in
-@@ -75,6 +75,43 @@ config BR2_PACKAGE_UHD_MPMD
- 	help
- 	  enable MPMD support
- 
-+config BR2_PACKAGE_UHD_N230
-+	bool "N230 support"
-+	help
-+	  enable N230 support
-+
-+config BR2_PACKAGE_UHD_N300
-+	bool "N300 support"
-+	select BR2_PACKAGE_UHD_MPMD
-+	help
-+	  enable N300 support
-+
-+config BR2_PACKAGE_UHD_N320
-+	bool "N320 support"
-+	select BR2_PACKAGE_UHD_MPMD
-+	help
-+	  enable N320 support
-+
-+config BR2_PACKAGE_UHD_OCTOCLOCK
-+	bool "OctoClock support"
-+	help
-+	  enable OctoClock support
-+
-+comment "uhd python API needs python3 and a toolchain w/ glibc or musl"
-+	depends on !BR2_PACKAGE_PYTHON3
-+	depends on !BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
-+	depends on !(BR2_TOOLCHAIN_USES_GLIBC && BR2_TOOLCHAIN_USES_MUSL) # python-numpy
-+
-+config BR2_PACKAGE_UHD_PYTHON
-+	bool "python API support"
-+	depends on BR2_PACKAGE_PYTHON3
-+	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # python-numpy
-+	select BR2_PACKAGE_PYTHON_NUMPY
-+	select BR2_PACKAGE_PYTHON_REQUESTS
-+	help
-+	  enable python API support
-+
- config BR2_PACKAGE_UHD_RFNOC
- 	bool "RFNoC support"
- 	help
-@@ -90,4 +127,30 @@ config BR2_PACKAGE_UHD_USB
- comment "USB support needs a toolchain w/ gcc >= 4.9"
- 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 
-+config BR2_PACKAGE_UHD_USRP1
-+	bool "USRP1 support"
-+	select BR2_PACKAGE_UHD_USB
-+	help
-+	  enable USRP1 support
-+
-+config BR2_PACKAGE_UHD_USRP2
-+	bool "USRP2 support"
-+	help
-+	  enable USRP2 support
-+
-+comment "uhd utils depends on python API support"
-+	depends on !BR2_PACKAGE_UHD_PYTHON
-+
-+config BR2_PACKAGE_UHD_UTILS
-+	bool "uhd-utils"
-+	depends on BR2_PACKAGE_UHD_PYTHON
-+	select BR2_PACKAGE_PYTHON_SIX
-+	help
-+	  uhd-utils
-+
-+config BR2_PACKAGE_UHD_X300
-+	bool "X300 support"
-+	help
-+	  enable X300 support
-+
- endif
-diff --git a/package/uhd/uhd.mk b/package/uhd/uhd.mk
-index 2a40efdd23..a8001dfd74 100644
---- a/package/uhd/uhd.mk
-+++ b/package/uhd/uhd.mk
-@@ -25,18 +25,9 @@ UHD_CONF_OPTS = \
- 	-DENABLE_DOXYGEN=OFF \
- 	-DENABLE_DPDK=OFF \
- 	-DENABLE_LIBUHD=ON \
--	-DENABLE_N230=OFF \
--	-DENABLE_N300=OFF \
--	-DENABLE_N320=OFF \
- 	-DENABLE_MANUAL=OFF \
- 	-DENABLE_MAN_PAGES=OFF \
--	-DENABLE_OCTOCLOCK=OFF \
--	-DENABLE_PYTHON_API=OFF \
--	-DENABLE_TESTS=OFF \
--	-DENABLE_USRP1=OFF \
--	-DENABLE_USRP2=OFF \
--	-DENABLE_UTILS=OFF \
--	-DENABLE_X300=OFF
-+	-DENABLE_TESTS=OFF
- 
- # As soon as architecture is ARM, uhd will try to use NEON.
- # But not all ARM cores have NEON support.
-@@ -89,12 +80,44 @@ else
- UHD_CONF_OPTS += -DENABLE_MPMD=OFF
- endif
- 
-+ifeq ($(BR2_PACKAGE_UHD_N230),y)
-+UHD_CONF_OPTS += -DENABLE_N230=ON
-+else
-+UHD_CONF_OPTS += -DENABLE_N230=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_UHD_N300),y)
-+UHD_CONF_OPTS += -DENABLE_N300=ON
-+else
-+UHD_CONF_OPTS += -DENABLE_N300=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_UHD_N320),y)
-+UHD_CONF_OPTS += -DENABLE_N320=ON
-+else
-+UHD_CONF_OPTS += -DENABLE_N320=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_UHD_OCTOCLOCK),y)
-+UHD_CONF_OPTS += -DENABLE_OCTOCLOCK=ON
-+else
-+UHD_CONF_OPTS += -DENABLE_OCTOCLOCK=OFF
-+endif
-+
- ifeq ($(BR2_PACKAGE_UHD_RFNOC),y)
- UHD_CONF_OPTS += -DENABLE_RFNOC=ON
- else
- UHD_CONF_OPTS += -DENABLE_RFNOC=OFF
- endif
- 
-+ifeq ($(BR2_PACKAGE_UHD_PYTHON),y)
-+UHD_DEPENDENCIES += host-python-numpy host-python3-requests \
-+	python-numpy python-requests
-+UHD_CONF_OPTS += -DENABLE_PYTHON_API=ON
-+else
-+UHD_CONF_OPTS += -DENABLE_PYTHON_API=OFF
-+endif
-+
- ifeq ($(BR2_PACKAGE_UHD_USB),y)
- UHD_DEPENDENCIES += libusb
- UHD_CONF_OPTS += -DENABLE_USB=ON
-@@ -102,4 +125,29 @@ else
- UHD_CONF_OPTS += -DENABLE_USB=OFF
- endif
- 
-+ifeq ($(BR2_PACKAGE_UHD_USRP1),y)
-+UHD_CONF_OPTS += -DENABLE_USRP1=ON
-+else
-+UHD_CONF_OPTS += -DENABLE_USRP1=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_UHD_USRP2),y)
-+UHD_CONF_OPTS += -DENABLE_USRP2=ON
-+else
-+UHD_CONF_OPTS += -DENABLE_USRP2=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_UHD_UTILS),y)
-+UHD_DEPENDENCIES += python-six
-+UHD_CONF_OPTS += -DENABLE_UTILS=ON
-+else
-+UHD_CONF_OPTS += -DENABLE_UTILS=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_UHD_X300),y)
-+UHD_CONF_OPTS += -DENABLE_X300=ON
-+else
-+UHD_CONF_OPTS += -DENABLE_X300=OFF
-+endif
-+
- $(eval $(cmake-package))
+[1] https://git.kernel.org/pub/scm/network/connman/connman.git/commit/?id=47bd7ab21bfbe115ca4a10b9b96bdbfeb6c35bff
+
 -- 
-2.20.1
+Heiko
