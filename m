@@ -1,48 +1,47 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  8 Feb 2021 19:53:21 +0100
-Subject: [Buildroot] [PATCH 1/1] package/fetchmail: bump version to 6.4.16
-Message-ID: <20210208185321.404044-1-bernd.kuhls@t-online.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon,  8 Feb 2021 21:05:18 +0100
+Subject: [Buildroot] [PATCH 1/2] package/c-icap: bump to version 0.5.7
+Message-ID: <20210208200519.325110-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes:
-https://sourceforge.net/p/fetchmail/mailman/message/37215482/
+https://sourceforge.net/p/c-icap/news/2020/10/the-c-icap-057-is-released
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/fetchmail/fetchmail.hash | 6 +++---
- package/fetchmail/fetchmail.mk   | 2 +-
+ package/c-icap/c-icap.hash | 6 +++---
+ package/c-icap/c-icap.mk   | 2 +-
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/fetchmail/fetchmail.hash b/package/fetchmail/fetchmail.hash
-index 5b9049814d..b526163849 100644
---- a/package/fetchmail/fetchmail.hash
-+++ b/package/fetchmail/fetchmail.hash
+diff --git a/package/c-icap/c-icap.hash b/package/c-icap/c-icap.hash
+index 8c70d75589..6aa81c2641 100644
+--- a/package/c-icap/c-icap.hash
++++ b/package/c-icap/c-icap.hash
 @@ -1,6 +1,6 @@
--# From https://sourceforge.net/p/fetchmail/mailman/message/37189309/
--sha256  735b217474937e13cfcdea2d42a346bf68487e0d61efebe4d0d9eddcb3a26b96  fetchmail-6.4.15.tar.xz
-+# From https://sourceforge.net/p/fetchmail/mailman/message/37215482/
-+sha256  044b9a0ac03afbae7744979defe3e2e32e39141bca68fd0c8deda2ed40884fb9  fetchmail-6.4.16.tar.xz
- # From https://sourceforge.net/projects/fetchmail/files/branch_6.4/
--sha1  6491de7e4d2ef1aef6808127e8ca9d803bbdc220  fetchmail-6.4.15.tar.xz
-+sha1  ec910eed3db4d8c44469aabaf33f529334a2fdb5  fetchmail-6.4.16.tar.xz
- # Locally computed:
- sha256  8e3ec4863456a26fcd1cf84fadd4146efcb2fd8515bcec482e0f2b7060108895  COPYING
-diff --git a/package/fetchmail/fetchmail.mk b/package/fetchmail/fetchmail.mk
-index d1ba95891b..788560510f 100644
---- a/package/fetchmail/fetchmail.mk
-+++ b/package/fetchmail/fetchmail.mk
-@@ -5,7 +5,7 @@
+ # Retrieved from https://sourceforge.net/projects/c-icap/files/c-icap/0.5.x/
+-md5  d59e767ee3733cd81cea02819f13ac72  c_icap-0.5.6.tar.gz
+-sha1  361e36b63f895bd72bdd18aac5fe4192d4eff530  c_icap-0.5.6.tar.gz
++md5  82fd2fba1a08a8a0cf3567fe24aa035d  c_icap-0.5.7.tar.gz
++sha1  3b2470e00abd1418bec3a440d3073d7a6231c4c1  c_icap-0.5.7.tar.gz
+ # Locally calculated
+-sha256  9826c50fc34f8fd4a3115844b27c9816dd3fcc3e7e2a3b6bcc7094ec307802b7  c_icap-0.5.6.tar.gz
++sha256  01ef17d7999d3476fe705abc56d0da562c2f180aafe08fc1269f419cad8521a9  c_icap-0.5.7.tar.gz
+ sha256  36b6d3fa47916943fd5fec313c584784946047ec1337a78b440e5992cb595f89  COPYING
+diff --git a/package/c-icap/c-icap.mk b/package/c-icap/c-icap.mk
+index 1a68674a67..79e317fb29 100644
+--- a/package/c-icap/c-icap.mk
++++ b/package/c-icap/c-icap.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- FETCHMAIL_VERSION_MAJOR = 6.4
--FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).15
-+FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).16
- FETCHMAIL_SOURCE = fetchmail-$(FETCHMAIL_VERSION).tar.xz
- FETCHMAIL_SITE = http://downloads.sourceforge.net/project/fetchmail/branch_$(FETCHMAIL_VERSION_MAJOR)
- FETCHMAIL_LICENSE = GPL-2.0; some exceptions are mentioned in COPYING
+-C_ICAP_VERSION = 0.5.6
++C_ICAP_VERSION = 0.5.7
+ C_ICAP_SOURCE = c_icap-$(C_ICAP_VERSION).tar.gz
+ C_ICAP_SITE = http://downloads.sourceforge.net/c-icap
+ C_ICAP_LICENSE = LGPL-2.1+
 -- 
 2.29.2
