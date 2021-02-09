@@ -1,25 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 09 Feb 2021 22:32:30 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libostree: libfuse is optional,
- not mandatory
-In-Reply-To: <20210209200757.1219912-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 9 Feb 2021 21:07:57 +0100")
-References: <20210209200757.1219912-1-fontaine.fabrice@gmail.com>
-Message-ID: <871rdpq64x.fsf@dell.be.48ers.dk>
+Date: Tue, 9 Feb 2021 22:28:27 +0100
+Subject: [Buildroot] [git commit] package/attr: set ATTR_CPE_ID_VALID
+Message-ID: <20210209211311.B4DC58131F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=c2b532af15e2417fb434521a1c7b61f4c0d19c08
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > libfuse is optional since its addition in version 2016.2 with
- > https://github.com/ostreedev/ostree/commit/e9ccdd2d007801ef25cc7283188942d791889c27
+cpe:2.3:a:attr_project:attr is a valid CPE identifier for this package:
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aattr_project%3Aattr
 
-Committed, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/attr/attr.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/attr/attr.mk b/package/attr/attr.mk
+index ba77e802d2..13f3f0db3d 100644
+--- a/package/attr/attr.mk
++++ b/package/attr/attr.mk
+@@ -8,6 +8,7 @@ ATTR_VERSION = 2.4.48
+ ATTR_SITE = http://download.savannah.gnu.org/releases/attr
+ ATTR_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
+ ATTR_LICENSE_FILES = doc/COPYING doc/COPYING.LGPL
++ATTR_CPE_ID_VALID = YES
+ 
+ ATTR_INSTALL_STAGING = YES
+ 
