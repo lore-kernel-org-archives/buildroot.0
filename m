@@ -1,233 +1,401 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 09 Feb 2021 23:08:12 +0100
-Subject: [Buildroot] Buildroot 2021.02-rc1 released
-Message-ID: <87k0rgq4hf.fsf@dell.be.48ers.dk>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 9 Feb 2021 23:33:18 +0100
+Subject: [Buildroot] [PATCH 1/1] package/postgis: new package
+In-Reply-To: <20210209210453.42073e66@gmx.net>
+References: <20210126133908.680621-1-fido_max@inbox.ru>
+ <20210207115757.65aa48fa@gmx.net> <20210209210453.42073e66@gmx.net>
+Message-ID: <20210209233318.7f2538aa@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello Maxim,
 
-Buildroot 2021.02-rc1 is released - Go download it at:
+and one last task (hopefully)...
 
-http://buildroot.net/downloads/buildroot-2021.02-rc1.tar.gz
+On Tue, 9 Feb 2021 21:04:53 +0100, Peter Seiderer <ps.report@gmx.net> wrote:
 
-or
+> Hello Maxim,
+>
+> some more review comments, see inline...
+>
+> On Sun, 7 Feb 2021 11:57:57 +0100, Peter Seiderer <ps.report@gmx.net> wrote:
+>
+> > Hello Maxim,
+> >
+> > thanks for the patch, did a (compile) test of the package, found one
+> > major problem, fixed by [1]...
+> >
+> > And some minor check-package warnings to improve, see below...
+> >
+> > On Tue, 26 Jan 2021 16:39:08 +0300, Maxim Kochetkov via buildroot <buildroot@busybox.net> wrote:
+> >
+> > > PostGIS is a spatial database extender for PostgreSQL object-relational database.
+> > > It adds support for geographic objects allowing location queries to be run in SQL.
+> > >
+> > > https://postgis.net/
+> > >
+> > > Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+> > > ---
+> > >  package/Config.in                             |  1 +
+> > >  ...VE_VASPRINTF-HAVE_ASPRINTF-templates.patch | 32 +++++++++++++++++
+> > >  ...fig-to-get-PROJ-version-if-available.patch | 36 +++++++++++++++++++
+> > >  ...S_DEBUG_LEVEL-define-to-configure.ac.patch | 29 +++++++++++++++
+> > >  ...e-forced-static-linking-of-liblwgeom.patch | 31 ++++++++++++++++
+> > >  package/postgis/Config.in                     | 12 +++++++
+> > >  package/postgis/postgis.hash                  |  3 ++
+> > >  package/postgis/postgis.mk                    | 31 ++++++++++++++++
+> > >  8 files changed, 175 insertions(+)
+> > >  create mode 100644 package/postgis/0001-Add-HAVE_VASPRINTF-HAVE_ASPRINTF-templates.patch
+> > >  create mode 100644 package/postgis/0002-Use-pkg-config-to-get-PROJ-version-if-available.patch
+> > >  create mode 100644 package/postgis/0003-Add-POSTGIS_DEBUG_LEVEL-define-to-configure.ac.patch
+> > >  create mode 100644 package/postgis/0004-Disable-forced-static-linking-of-liblwgeom.patch
+> > >  create mode 100644 package/postgis/Config.in
+> > >  create mode 100644 package/postgis/postgis.hash
+> > >  create mode 100644 package/postgis/postgis.mk
+> > >
+> > > diff --git a/package/Config.in b/package/Config.in
+> > > index 06dfc32cc6..5ed3f5df8f 100644
+> > > --- a/package/Config.in
+> > > +++ b/package/Config.in
+> > > @@ -1401,6 +1401,7 @@ menu "Database"
+> > >  	source "package/mongodb/Config.in"
+> > >  	source "package/mysql/Config.in"
+> > >  	source "package/postgresql/Config.in"
+> > > +	source "package/postgis/Config.in"
+> > >  	source "package/redis/Config.in"
+> > >  	source "package/rocksdb/Config.in"
+> > >  	source "package/sqlcipher/Config.in"
+> > > diff --git a/package/postgis/0001-Add-HAVE_VASPRINTF-HAVE_ASPRINTF-templates.patch b/package/postgis/0001-Add-HAVE_VASPRINTF-HAVE_ASPRINTF-templates.patch
+> > > new file mode 100644
+> > > index 0000000000..7c9e46b7af
+> > > --- /dev/null
+> > > +++ b/package/postgis/0001-Add-HAVE_VASPRINTF-HAVE_ASPRINTF-templates.patch
+> > > @@ -0,0 +1,32 @@
+> > > +From 1bbc5b921d6b444cbeb505e67e4a4edcc696f592 Mon Sep 17 00:00:00 2001
+> > > +From: fidomax <adobegitler@gmail.com>
+> > > +Date: Tue, 26 Jan 2021 07:33:17 +0300
+> > > +Subject: [PATCH 1/4] Add HAVE_VASPRINTF HAVE_ASPRINTF templates
+> >
+> > package/postgis/0001-Add-HAVE_VASPRINTF-HAVE_ASPRINTF-templates.patch:4: generate your patches with 'git format-patch -N'
+> >
+> > > +
+> > > +It fixes autoreconf error:
+> > > +autoheader: warning: missing template: HAVE_ASPRINTF
+> > > +autoheader: Use AC_DEFINE([HAVE_ASPRINTF], [], [Description])
+> > > +autoheader: warning: missing template: HAVE_VASPRINTF
+> > > +
+> > > +Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+> > > +Fetch from: https://github.com/postgis/postgis/commit/d0ac5df49961d1d1a74b894f9941b973c0695c11.patch
+> > > +---
+> > > + configure.ac | 2 ++
+> > > + 1 file changed, 2 insertions(+)
+> > > +
+> > > +diff --git a/configure.ac b/configure.ac
+> > > +index 9ac7051bb..dddb3aef7 100644
+> > > +--- a/configure.ac
+> > > ++++ b/configure.ac
+> > > +@@ -11,6 +11,8 @@ dnl **********************************************************************
+> > > +
+> > > + AC_INIT()
+> > > + AC_CONFIG_HEADERS([postgis_config.h])
+> > > ++AH_TEMPLATE([HAVE_VASPRINTF])
+> > > ++AH_TEMPLATE([HAVE_ASPRINTF])
+> > > + AC_CONFIG_MACRO_DIR([macros])
+> > > + AC_CONFIG_AUX_DIR([build-aux])
+> > > + AC_PROG_INSTALL
+> > > +--
+> > > +2.29.2
+> > > +
+> > > diff --git a/package/postgis/0002-Use-pkg-config-to-get-PROJ-version-if-available.patch b/package/postgis/0002-Use-pkg-config-to-get-PROJ-version-if-available.patch
+> > > new file mode 100644
+> > > index 0000000000..cfb58853b5
+> > > --- /dev/null
+> > > +++ b/package/postgis/0002-Use-pkg-config-to-get-PROJ-version-if-available.patch
+> > > @@ -0,0 +1,36 @@
+> > > +From 6d78c4d09858af136ba7b3b1cbb73f82f4cc1864 Mon Sep 17 00:00:00 2001
+> > > +From: fidomax <adobegitler@gmail.com>
+> > > +Date: Tue, 26 Jan 2021 08:48:17 +0300
+> > > +Subject: [PATCH 2/4] Use pkg-config to get PROJ version if available
+> >
+> > package/postgis/0002-Use-pkg-config-to-get-PROJ-version-if-available.patch:4: generate your patches with 'git format-patch -N'
+> >
+> > > +
+> > > +In case of cross-compile AC_PROJ_VERSION([POSTGIS_PROJ_VERSION]) fails.
+> > > +So try to get version by pkg-config first
+> > > +
+> > > +Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+> > > +Fetch from: https://github.com/postgis/postgis/commit/b40c456d51bbd5cb4c15ffd1694a9a7266fe5bcf.patch
+> > > +---
+> > > + configure.ac | 8 +++++++-
+> > > + 1 file changed, 7 insertions(+), 1 deletion(-)
+> > > +
+> > > +diff --git a/configure.ac b/configure.ac
+> > > +index dddb3aef7..bee78800a 100644
+> > > +--- a/configure.ac
+> > > ++++ b/configure.ac
+> > > +@@ -888,7 +888,13 @@ AC_CHECK_HEADER([proj_api.h],
+> > > + 	)
+> > > +
+> > > + dnl Return the PROJ.4 version number
+> > > +-AC_PROJ_VERSION([POSTGIS_PROJ_VERSION])
+> > > ++if test ! -z "$PKG_CONFIG"; then
+> > > ++	PKG_CHECK_MODULES([PROJ], [proj], [
+> > > ++		POSTGIS_PROJ_VERSION=`$PKG_CONFIG proj --modversion | sed 's/\([[0-9]]\).*\([[0-9]]\).*\([[0-9]]\)/\1\2/'`
+> > > ++	], [])
+> > > ++else
+> > > ++	AC_PROJ_VERSION([POSTGIS_PROJ_VERSION])
+> > > ++fi
+> > > + AC_DEFINE_UNQUOTED([POSTGIS_PROJ_VERSION], [$POSTGIS_PROJ_VERSION], [PROJ library version])
+> > > + AC_SUBST([POSTGIS_PROJ_VERSION])
+> > > + CPPFLAGS="$CPPFLAGS_SAVE"
+> > > +--
+> > > +2.29.2
+> > > +
+> > > diff --git a/package/postgis/0003-Add-POSTGIS_DEBUG_LEVEL-define-to-configure.ac.patch b/package/postgis/0003-Add-POSTGIS_DEBUG_LEVEL-define-to-configure.ac.patch
+> > > new file mode 100644
+> > > index 0000000000..b883106609
+> > > --- /dev/null
+> > > +++ b/package/postgis/0003-Add-POSTGIS_DEBUG_LEVEL-define-to-configure.ac.patch
+> > > @@ -0,0 +1,29 @@
+> > > +From b9a9518c5cf34189524d6b63c069d383c468d2a1 Mon Sep 17 00:00:00 2001
+> > > +From: fidomax <adobegitler@gmail.com>
+> > > +Date: Tue, 26 Jan 2021 09:17:17 +0300
+> > > +Subject: [PATCH 3/4] Add POSTGIS_DEBUG_LEVEL define to configure.ac
+> >
+> > package/postgis/0003-Add-POSTGIS_DEBUG_LEVEL-define-to-configure.ac.patch:4: generate your patches with 'git format-patch -N'
+> >
+> > > +
+> > > +In case of using autoreconf "#define POSTGIS_DEBUG_LEVEL 0" is removed from postgis_config.h.in so build failed with undefined POSTGIS_DEBUG_LEVEL.
+> > > +
+> > > +Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+> > > +Fetch from: https://github.com/postgis/postgis/commit/2b2c2cb159cfcaacb75a4e74f17bd2834d61acd0.patch
+> > > +---
+> > > + configure.ac | 2 ++
+> > > + 1 file changed, 2 insertions(+)
+> > > +
+> > > +diff --git a/configure.ac b/configure.ac
+> > > +index bee78800a..3dbd6f525 100644
+> > > +--- a/configure.ac
+> > > ++++ b/configure.ac
+> > > +@@ -1137,6 +1137,8 @@ else
+> > > +     CPPFLAGS="-DNDEBUG $CPPFLAGS"
+> > > + fi
+> > > +
+> > > ++AC_DEFINE([POSTGIS_DEBUG_LEVEL], [0], [Define debug level. Default 0])
+> > > ++
+> > > + dnl ===========================================================================
+> > > + dnl Allow the developer to disable the automatic updates of postgis_revision.h
+> > > + dnl with --without-phony-revision
+> > > +--
+> > > +2.29.2
+> > > +
+> > > diff --git a/package/postgis/0004-Disable-forced-static-linking-of-liblwgeom.patch b/package/postgis/0004-Disable-forced-static-linking-of-liblwgeom.patch
+> > > new file mode 100644
+> > > index 0000000000..3507f57d31
+> > > --- /dev/null
+> > > +++ b/package/postgis/0004-Disable-forced-static-linking-of-liblwgeom.patch
+> > > @@ -0,0 +1,31 @@
+> > > +From 50a6dd09d1c6c1911e4c1a7515d71f07effe4a50 Mon Sep 17 00:00:00 2001
+> > > +From: fidomax <adobegitler@gmail.com>
+> > > +Date: Tue, 26 Jan 2021 09:49:19 +0300
+> > > +Subject: [PATCH 4/4] Disable forced static linking of liblwgeom
+> >
+> > package/postgis/0004-Disable-forced-static-linking-of-liblwgeom.patch:4: generate your patches with 'git format-patch -N'
+> >
+> > > +
+> > > +In case of shared libs build fails:
+> > > +ld: cannot find -lgeos_c
+> > > +ld: attempted static link of dynamic object `/usr/lib/libproj.so'
+> > > +
+> > > +Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+> > > +Fetch from: https://github.com/postgis/postgis/commit/98070faad220e12fcaed9a583a70a37c510b7c6b.patch
+> > > +---
+> > > + loader/Makefile.in | 2 +-
+> > > + 1 file changed, 1 insertion(+), 1 deletion(-)
+> > > +
+> > > +diff --git a/loader/Makefile.in b/loader/Makefile.in
+> > > +index 9aebfe07f..9a0c90d3a 100644
+> > > +--- a/loader/Makefile.in
+> > > ++++ b/loader/Makefile.in
+> > > +@@ -44,7 +44,7 @@ ICONV_CFLAGS=@ICONV_CFLAGS@
+> > > +
+> > > + # liblwgeom
+> > > + LIBLWGEOM=../liblwgeom/liblwgeom.la
+> > > +-LDFLAGS += -static $(LIBLWGEOM)
+> > > ++LDFLAGS += $(LIBLWGEOM)
+> > > +
+> > > + # GTK includes and libraries
+> > > + GTK_CFLAGS = @GTK_CFLAGS@ @IGE_MAC_CFLAGS@
+> > > +--
+> > > +2.29.2
+> > > +
+> > > diff --git a/package/postgis/Config.in b/package/postgis/Config.in
+> > > new file mode 100644
+> > > index 0000000000..b04de3f5db
+> > > --- /dev/null
+> > > +++ b/package/postgis/Config.in
+> > > @@ -0,0 +1,12 @@
+> > > +config BR2_PACKAGE_POSTGIS
+> > > +	bool "postgis"
+> > > +	depends on BR2_PACKAGE_POSTGRESQL_FULL
+> > > +	depends on BR2_INSTALL_LIBSTDCPP
+> > > +	select BR2_PACKAGE_LIBGEOS
 
-http://buildroot.net/downloads/buildroot-2021.02-rc1.tar.bz2
+LIBGEOS depends on BR2_USE_WCHAR, needs to propagated here...
 
-Or get it from Git:
+> > > +	select BR2_PACKAGE_PROJ
 
-git://git.buildroot.net/buildroot
+Depends on:
 
-Please give it a spin and report any problems to the mailing list or
-bug tracker.
+        depends on BR2_INSTALL_LIBSTDCPP
+        depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
+        depends on BR2_TOOLCHAIN_HAS_THREADS
+        depends on BR2_USE_WCHAR
 
-Once more a busy development cycle with almost 1400 changes and
-contributions from 119 unique contributors!
+needs to propagated here...
 
-Of noteworthy new features/changes we have:
+Regards,
+Peter
 
-- Toolchain: Default to binutils 2.35.2, add 2.36.1, drop 2.33.x. Fix
-  GCC 10.x ARC adc/sbc pattern handling, Update ARM toolchains to
-  10.2-2020.11 release.
-
-- Vulnerability scanning: The CVE checking logic has been extended to
-  match packages based on CPE (Common Platform Enumeration) IDs for more
-  accurate matching, and CPE identifiers have been added for a large
-  amount of packages.
-
-- Download: Rework the tarball creation logic (E.G. when a package is
-  fetched from a git/svn repo) to no longer require a host-tar <=
-  1.29. To differ between the old and the new format, the new tarballs
-  have gained a -br1 suffix (<pkg>-<version>-br1.tar.gz).
-
-- SELinux support: A significant number of packages now pull in the
-  relevant refpolicy modules when enabled.
-
-- New defconfigs: arrow avenger96, bananapi M1+, microchip sam9x60ek,
-  pine64 rock64
-
-- New packages: balena-engine, casync, coremark, coremark-pro,
-  datatables, datatables-buttons, datatables-fixedcolumns,
-  datatables-responsive, delve, frotz, gkrellm, inih, jszip, libgeos,
-  libiec61850, libmdbx, lualdap, neofetch, nvidia-modprobe, open62541,
-  perl-devel-cycle, perl-devel-size, perl-math-int64, ply, popperjs,
-  python-bleak, python-defusedxml, python-pycups, python-pytest-asyncio,
-  python-typing-extensions, qcom-db410c-firmware, qt5coap, qt5knx,
-  qt5mqtt, quickjs, rcw-smarc-sal28, screenfetch, ssdp-responder,
-  tpm2-pkcs11, wqy-zenhei, xorcurses
-
-
-And the usual package version updates and bug fixes. See the CHANGES
-file for details:
-
-http://git.buildroot.net/buildroot/plain/CHANGES?id=2021.02-rc1
-
-
-Many thanks to the people contributing to this release:
-
-git shortlog -s -n 2020.11..
-
-   463	Fabrice Fontaine
-   125	Bernd Kuhls
-   106	Peter Seiderer
-    68	Thomas Petazzoni
-    59	Peter Korsgaard
-    55	Francois Perrad
-    33	Yann E. MORIN
-    28	Heiko Thiery
-    27	Romain Naour
-    23	Stephane Viau
-    19	Johan Oudinet
-    18	Marcin Niestroj
-    15	Thomas De Schampheleire
-    14	Joachim Wiberg
-    14	Maxime Chevallier
-    13	Angelo Compagnucci
-    13	James Hilliard
-    12	Baruch Siach
-    12	Petr Vorel
-    11	Christian Stewart
-    10	Gilles Talis
-    10	Joeri Barbarien
-     9	Giulio Benetti
-     8	Asaf Kahlon
-     8	Michael Walle
-     8	Sergey Matyukevich
-     8	Titouan Christophe
-     7	Bartosz Bilas
-     7	Fabio Estevam
-     7	Gary Bisson
-     7	J?rg Krause
-     7	Michael Nosthoff
-     6	Jianhui Zhao
-     6	Maxim Kochetkov
-     5	Geoffrey Le Gourri?rec
-     5	Gwenhael Goavec-Merou
-     5	Tian Yuanhao
-     5	Vincent Stehl?
-     5	Vineet Gupta
-     4	Adrian Perez de Castro
-     4	Chris Packham
-     4	Grzegorz Blach
-     4	Julien Olivain
-     4	Matt Weber
-     4	Rapha?l M?lotte
-     3	Adam Duskett
-     3	Alexander Egorenkov
-     3	Arnout Vandecappelle (Essensium/Mind)
-     3	Gleb Mazovetskiy
-     3	Norbert Lange
-     3	Pascal Vizeli
-     3	Pierre-Jean Texier
-     3	Sergio Prado
-     3	Yair Ben-Avraham
-     2	Andreas Klinger
-     2	Bin Meng
-     2	D. Olsson
-     2	David Barbion
-     2	Gao Xiang
-     2	Jeff Zignego
-     2	Joseph Kogut
-     2	Kalpesh Panchal
-     2	Leonid Yuriev
-     2	Michael Baudino
-     2	Michael Fischer
-     2	Michael Vetter
-     2	Mike Frampton
-     2	Min Xu
-     2	Stefan Agner
-     2	Stefan S?rensen
-     2	Thomas Huth
-     2	Vadym Kochan
-     2	V?clav Kubern?t
-     2	Waldemar Brodkorb
-     2	Zoltan Gyarmati
-     1	Adam Wujek
-     1	Alexander Dahl
-     1	Andreas Hilse
-     1	Antoine Tenart
-     1	Bernd Amend
-     1	Changming Huang
-     1	Christoph M?llner
-     1	David GOUARIN
-     1	Edmundo Ferreira
-     1	Eldar Gasanov
-     1	Eugen Hristev
-     1	Filip Skoneczny
-     1	Florian La Roche
-     1	Francois Gervais
-     1	Gregory CLEMENT
-     1	Guillaume W. Bres
-     1	Hector Kesari
-     1	Heiko Stuebner
-     1	Ignacy Gaw?dzki
-     1	Ismael Luceno
-     1	Joel Stanley
-     1	Jos? Luis Salvador Rufo
-     1	Jules Maselbas
-     1	Julien Grossholtz
-     1	Klaus Heinrich Kiwi
-     1	Konrad Schwarz
-     1	Laurent Hartanerot
-     1	Marcus Folkesson
-     1	Mark Corbin
-     1	Maxime Brunelle
-     1	Mircea GLIGA
-     1	Nicolas Cavallari
-     1	Pascal de Bruijn
-     1	Pieter Ronsijn
-     1	Rob Mellor
-     1	Ryan Barnett
-     1	Samuel Mendoza-Jonas
-     1	Simon Rowe
-     1	Thomas Claveirole
-     1	Timo Ketola
-     1	Veronika Kremneva
-     1	Yann CARDAILLAC
-     1	Yann Sionneau
-     1	Yegor Yefremov
-
-And a special thanks to our patch reviewers:
-
-git log 2020.11.. | grep -Ei '(reviewed|acked)-by:' | \
-    sed 's/.*by: //' | sort | uniq -c | sort -n -r
-
-      9 Matt Weber <matthew.weber@rockwellcollins.com>
-      8 Vincent Fazio <vfazio@xes-inc.com>
-      8 Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-      6 Peter Seiderer <ps.report@gmx.net>
-      6 Matthew Weber <matthew.weber@rockwellcollins.com>
-      5 Gary Bisson <gary.bisson@boundarydevices.com>
-      3 Petr Vorel <petr.vorel@gmail.com>
-      3 Joel Stanley <joel@jms.id.au>
-      2 Yegor Yefremov <yegorslists@googlemail.com>
-      2 Romain Naour <romain.naour@gmail.com>
-      2 Marcin Niestroj <m.niestroj@grinn-global.com>
-      2 Jan Kundr?t <jan.kundrat@cesnet.cz>
-      2 Heiko Thiery <heiko.thiery@gmail.com>
-      2 Gilles Talis <gilles.talis@gmail.com>
-      2 Alistair Francis <alistair.francis@wdc.com>
-      2 Adrian Perez de Castro <aperez@igalia.com>
-      1 Zoltan Gyarmati <zgyarmati@zgyarmati.de>
-      1 Norbert Lange <nolange79@gmail.com>
-      1 Michael Nosthoff <buildroot@heine.tech>
-      1 Matthew Weber >matthew.weber at rockwellcollins.com
-      1 Marcus Folkesson <marcus.folkesson@gmail.com>
-      1 Leonid Yuriev <leo@yuriev.ru>
-      1 Joachim Wiberg <troglobit@gmail.com>
-      1 Giulio Benetti <giulio.benetti@benettiengineering.com>
-      1 Christian Stewart <christian@paral.in>
-      1 Bin Meng <bin.meng@windriver.com>
-      1 Baruch Siach <baruch@tkos.co.il>
-      1 Andr? Hentschel <nerv@dawncrow.de>
-      1 Alexey Brodkin <abrodkin@synopsys.com>
-
-I will now create a next branch and start merging new features for
-2021.05 already in parallel with the 2021.02 stabilization.
-
--- 
-Bye, Peter Korsgaard
+> > > +	select BR2_PACKAGE_LIBXML2
+> > > +	help
+> > > +	  PostGIS is a spatial database extender for PostgreSQL object-relational database.
+> > > +	  It adds support for geographic objects allowing location queries to be run in SQL.
+> >
+> > package/postgis/Config.in:9: help text: <tab><2 spaces><62 chars> (http://nightly.buildroot.org/#writing-rules-config-in)
+> > package/postgis/Config.in:10: help text: <tab><2 spaces><62 chars> (http://nightly.buildroot.org/#writing-rules-config-in)
+> >
+> > > +
+> > > +	  https://postgis.net/
+> > > diff --git a/package/postgis/postgis.hash b/package/postgis/postgis.hash
+> > > new file mode 100644
+> > > index 0000000000..0abf2f7297
+> > > --- /dev/null
+> > > +++ b/package/postgis/postgis.hash
+> > > @@ -0,0 +1,3 @@
+> > > +# Locally calculated
+> > > +sha256  da06e2456876cd0c6a9bee0636ff700982e900c597d1e4cb80a99a2623400201  postgis-3.1.0.tar.gz
+> > > +sha256  55b69f22e1752830dd565852dc7ff242daf289dbd3a6bfede5db43f90d2e28c9  LICENSE.TXT
+> > > diff --git a/package/postgis/postgis.mk b/package/postgis/postgis.mk
+> > > new file mode 100644
+> > > index 0000000000..85102d323a
+> > > --- /dev/null
+> > > +++ b/package/postgis/postgis.mk
+> > > @@ -0,0 +1,31 @@
+> > > +################################################################################
+> > > +#
+> > > +# postgis
+> > > +#
+> > > +################################################################################
+> > > +
+> > > +POSTGIS_VERSION = 3.1.0
+> > > +POSTGIS_SITE = https://download.osgeo.org/postgis/source
+> > > +# parallel build issues
+> > > +POSTGIS_MAKE = $(MAKE1)
+> > > +POSTGIS_LICENSE = GPL
+>
+> Main license is GPLv2 and later, the correct SPDX identifier is GPL-2.0+
+>
+> The full text from LICENSE.TXT mentions some more licenses:
+>
+>   In general PostGIS may be distributed and/or modified under the conditions
+>   of the GNU General Public License, either version 2 or (at your option) any
+>   later version. Please refer to the COPYING file for details.
+>
+>   PostGIS has dependencies on other libraries which are not under GPL and
+>   that are commonly distributed with PostGIS core libraries.  In general
+>   these are dynamically linked libraries.  Libraries are as follows:
+>
+>   Proj4 - http://proj.osgeo.org -- X/MIT License
+>   GEOS - http://geos.osgeo.org -- LGPL License
+>   LibXML - http://xmlsoft.org/ -- X/MIT License
+>   GDAL - http://gdal.osgeo.org/ -- X/MIT Style License
+>
+>   Source files included with PostGIS not under GPL
+>   ------------------------------------------------
+>
+>   -- The following loader/dumper files are derivative works or direct ports
+>   of ShapeLib which is under an X/MIT License: loader/dbfopen, safileio.*,
+>   shapefil.h, shpopen.c (copyrighted by Frank Warmerdam and Even Rouault).
+>
+>   -- loader/getopt.* are under AT&T public domain (Copyright (c) 1984, 1985 AT&T).
+>
+>   -- Doc/xsl files
+>   These are under a BSD Style license
+>
+>   -- liblwgeom/lookup3.c is released under Public Domain by Bob Jenkins, May 2006.
+>
+>   -- deps/ryu (see LICENSE in folder) is released under the Apache 2.0 license;
+>   alternatively, in can be used under the Boost 1.0 license. Copyrighted by Ulf
+>   Adams and contributors.
+>
+>   -- deps/uthash (see LICENSE in folder) is released under a simplified BSD
+>   license. Copyright (c) 2005-2018, Troy D. Hanson.
+>
+>   -- deps/wagyu (see LICENSE.README in folder) includes code released under the
+>   ISC license (copyrighted by Mapbox) and the Boost Software License (copyrighted
+>   by Angus Johnson and Mapbox). Copyright for "almost_equal.hpp" file is held by
+>   Google Inc and its license is listed at the top of that file.
+>
+>   The documentation for PostGIS is under a creative commons share-alike
+>   3.0 license.  http://creativecommons.org/licenses/by-sa/3.0/
+>
+>   Data used in documentation falls in one of the following categories
+>   - Many of the examples in the topology and tiger geocoder section utilize
+>     data from US Census Tiger data 2010
+>     http://www.census.gov/geo/www/tiger/tgrshp2010/tgrshp2010.html
+>   - data or snapshots generated by community
+>   - many images autogenerated by PostGIS documentation generator (which
+>     utilizes ImageMagick) as described
+>     http://trac.osgeo.org/postgis/wiki/DevWikiDocNewFeature
+>   - PostGIS raster output functions such as the ST_AsPNG etc.
+>   - raster/vector data from MassGIS: http://www.mass.gov/mgis/laylist.htm
+>
+> So the POSTGIS_LICENSE entry needs some more info added...
+>
+> > > +POSTGIS_LICENSE_FILES = LICENSE
+>
+> The file is called LICENSE.TXT (as your did in the postgis.hash file)...
+>
+> > > +POSTGIS_AUTORECONF = YES
+>
+> Should be prefixed by a comment like '# patch touching configure.ac'...
+>
+> Regards,
+> Peter
+>
+> > > +
+> > > +POSTGIS_DEPENDENCIES = postgresql libgeos proj libxml2
+> > > +
+> > > +POSTGIS_CONF_OPTS += --with-pgconfig=$(STAGING_DIR)/usr/bin/pg_config --with-geosconfig=$(STAGING_DIR)/usr/bin/geos-config
+> > > +
+> > > +ifeq ($(BR2_PACKAGE_LIBGDAL),y)
+> > > +POSTGIS_DEPENDENCIES += libgdal
+> > > +else
+> > > +POSTGIS_CONF_OPTS += --without-raster
+> > > +endif
+> > > +
+> > > +ifeq ($(BR2_PACKAGE_PROTOBUF),y)
+> > > +POSTGIS_DEPENDENCIES += protobuf
+> > > +else
+> > > +POSTGIS_CONF_OPTS += --without-protobuf
+> > > +endif
+> > > +
+> > > +$(eval $(autotools-package))
+> >
+> > Regards,
+> > Peter
+> >
+> > [1] http://patchwork.ozlabs.org/project/buildroot/patch/20210207105028.24251-1-ps.report at gmx.net/
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
