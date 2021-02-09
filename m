@@ -1,46 +1,72 @@
-From: Titouan Christophe <titouanchristophe@gmail.com>
-Date: Tue,  9 Feb 2021 11:05:46 +0100
-Subject: [Buildroot] [PATCH 1/1] package/waf: bump to v2.0.22
-Message-ID: <20210209100546.216140-1-titouanchristophe@gmail.com>
+From: Veronika Kremneva <Veronika.Kremneva@synopsys.com>
+Date: Tue,  9 Feb 2021 13:47:26 +0300
+Subject: [Buildroot] [PATCH] package/dmalloc: Fix for ARC with enabled
+ BR2_SSP_ALL
+Message-ID: <20210209104726.20132-1-kremneva@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
----
- package/waf/waf.hash | 6 +++---
- package/waf/waf.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+When building dmalloc for ARC while having "-fstack-protector-all" option on,
+we are getting the following error:
+------------------------------->8---------------------------
+>>> dmalloc 5.5.2 Installing to target
+cp -dpf $HOME/buildroot/output/host/arc-buildroot-linux-gnu/sysroot/usr/lib/libdmalloc*.so
+$HOME/buildroot/output/target/usr/lib
+cp -dpf $HOME/buildroot/output/host/arc-buildroot-linux-gnu/sysroot/usr/bin/dmalloc
+$HOME/buildroot/output/target/usr/bin/dmalloc
+ERROR: architecture for "/usr/lib/libdmallocthcxx.so" is "ARCompact", should be "ARCv2"
+ERROR: architecture for "/usr/lib/libdmallocth.so" is "ARCompact", should be "ARCv2"
+ERROR: architecture for "/usr/lib/libdmalloc.so" is "ARCompact", should be "ARCv2"
+ERROR: architecture for "/usr/lib/libdmallocxx.so" is "ARCompact", should be "ARCv2"
+make: *** [$HOME/buildroot/output/build/dmalloc-5.5.2/.stamp_installed] Error 1
+------------------------------->8---------------------------
 
-diff --git a/package/waf/waf.hash b/package/waf/waf.hash
-index 1e74b74d63..e9d387e7d0 100644
---- a/package/waf/waf.hash
-+++ b/package/waf/waf.hash
-@@ -1,7 +1,7 @@
- # Locally computed
--sha1  b7f38d2987433ee6e0f4a75ecec8807575176e1e  waf-2.0.21
--sha256  7cebf2c5efe53cbb9a4b5bdc4b49ae90ecd64a8fce7a3222d58e591b58215306  waf-2.0.21
-+sha1  494ada411468129ed229f946ecec3048400e320b  waf-2.0.22
-+sha256  0a09ad26a2cfc69fa26ab871cb558165b60374b5a653ff556a0c6aca63a00df1  waf-2.0.22
+You can observe this error in following builds:
+http://autobuild.buildroot.net/results/57f/57fc51cee4ec9339ea3be23f8c8c9f7ecca1a857/
+http://autobuild.buildroot.net/results/b4d/b4d457369f35e1942c294b0ea3b3cab4cae0d7a3/
+http://autobuild.buildroot.net/results/cfc/cfc111076c955dd5c1125c6e34a161121ea11200/
+http://autobuild.buildroot.net/results/1d0/1d0ffcefbf545d1748e928603fd07c0a8de98eb5/
+
+In all of those builds architecture "ARCv2" was explicitly chosen during configuration
+yet we are getting this error. As we go deeper we find that the object file that linker
+is trying to process contains no target code thus the default "ARCompact" is being used.
+But why the object file is empty? Went to check link args:
+------------------------------->8---------------------------
+$HOME/buildroot/output/host/bin/arc-buildroot-linux-gnu-ld: conftest.a(conftest.o):
+relocation R_ARC_32_ME against `__stack_chk_guard' can not be used when making a shared
+object; recompile with -fPIC
+$HOME/buildrootc/output/host/bin/arc-buildroot-linux-gnu-ld: BFD (GNU Binutils) 2.34.50.20200611
+assertion fail elf32-arc.c:1802
+$HOME/buildroot/output/host/bin/arc-buildroot-linux-gnu-ld: unrecognized option '-all'
+$HOME/buildroot/output/host/bin/arc-buildroot-linux-gnu-ld: use the --help option for usage information
+configure:4475: result: $HOME/buildroot/output/host/bin/arc-buildroot-linux-gnu-ld -G -o $@.t
+------------------------------->8---------------------------
+
+Looks like we are missing the -fPIC flag in DMALLOC_CFLAGS. As shared libraries should always
+be compiled with "-fPIC" following patch adds this flag to the dmalloc.mk.
+
+Signed-off-by: Veronika Kremneva <kremneva@synopsys.com>
+---
+ package/dmalloc/dmalloc.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/dmalloc/dmalloc.mk b/package/dmalloc/dmalloc.mk
+index 38b2c02027..638fe0fcda 100644
+--- a/package/dmalloc/dmalloc.mk
++++ b/package/dmalloc/dmalloc.mk
+@@ -16,6 +16,10 @@ DMALLOC_INSTALL_STAGING = YES
+ DMALLOC_CONF_OPTS = --enable-shlib
+ DMALLOC_CFLAGS = $(TARGET_CFLAGS)
  
- # The waf script also contains its license, but is renamed `waf` in the extract
- # step, so this is a synonym for the above, to check WAF_LICENSE
--sha256  7cebf2c5efe53cbb9a4b5bdc4b49ae90ecd64a8fce7a3222d58e591b58215306  waf
-+sha256  0a09ad26a2cfc69fa26ab871cb558165b60374b5a653ff556a0c6aca63a00df1  waf
-diff --git a/package/waf/waf.mk b/package/waf/waf.mk
-index dd97519b57..5cc0dc3714 100644
---- a/package/waf/waf.mk
-+++ b/package/waf/waf.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WAF_VERSION = 2.0.21
-+WAF_VERSION = 2.0.22
- WAF_SOURCE = waf-$(WAF_VERSION)
- WAF_SITE = https://waf.io
- WAF_LICENSE = BSD-3-Clause
++ifeq ($(BR2_STATIC_LIBS),)
++DMALLOC_CFLAGS += -fPIC
++endif
++
+ ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
+ DMALLOC_CONF_OPTS += --enable-cxx
+ else
 -- 
-2.25.3
+2.16.2
