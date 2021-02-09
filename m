@@ -1,59 +1,200 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 9 Feb 2021 22:39:07 +0100
-Subject: [Buildroot] [git commit] package/gnuradio: add gr-uhd option
-Message-ID: <20210209212147.8563281240@busybox.osuosl.org>
+Date: Tue, 9 Feb 2021 22:36:17 +0100
+Subject: [Buildroot] [git commit] package/uhd: add missing support
+Message-ID: <20210209212147.78A38817A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3572b30250788f25df974d7e108389c349e79da4
+commit: https://git.buildroot.net/buildroot/commit/?id=c577eac16eaae515973faf3013da197516bfd391
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-GNURadio has a block to use USRP, through UHD, to receive or transmit RF
-signals.
+Complete uhd package with the rest of USRP, octoclock and python support.
 
 Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gnuradio/Config.in   | 9 +++++++++
- package/gnuradio/gnuradio.mk | 7 +++++++
- 2 files changed, 16 insertions(+)
+ package/uhd/Config.in | 63 +++++++++++++++++++++++++++++++++++++++++++++++
+ package/uhd/uhd.mk    | 68 +++++++++++++++++++++++++++++++++++++++++++--------
+ 2 files changed, 121 insertions(+), 10 deletions(-)
 
-diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
-index c7b01b454b..738088802e 100644
---- a/package/gnuradio/Config.in
-+++ b/package/gnuradio/Config.in
-@@ -156,4 +156,13 @@ config BR2_PACKAGE_GNURADIO_TRELLIS
+diff --git a/package/uhd/Config.in b/package/uhd/Config.in
+index 6715f1f10b..fae0887509 100644
+--- a/package/uhd/Config.in
++++ b/package/uhd/Config.in
+@@ -75,6 +75,43 @@ config BR2_PACKAGE_UHD_MPMD
  	help
- 	  Trellis coded modulation blocks
+ 	  enable MPMD support
  
-+config BR2_PACKAGE_GNURADIO_UHD
-+	bool "gr-uhd support"
-+	select BR2_PACKAGE_UHD
-+	select BR2_PACKAGE_GNURADIO_ANALOG
-+	select BR2_PACKAGE_GNURADIO_BLOCKS
-+	select BR2_PACKAGE_GNURADIO_FILTER
++config BR2_PACKAGE_UHD_N230
++	bool "N230 support"
 +	help
-+	  UHD support
++	  enable N230 support
++
++config BR2_PACKAGE_UHD_N300
++	bool "N300 support"
++	select BR2_PACKAGE_UHD_MPMD
++	help
++	  enable N300 support
++
++config BR2_PACKAGE_UHD_N320
++	bool "N320 support"
++	select BR2_PACKAGE_UHD_MPMD
++	help
++	  enable N320 support
++
++config BR2_PACKAGE_UHD_OCTOCLOCK
++	bool "OctoClock support"
++	help
++	  enable OctoClock support
++
++comment "uhd python API needs python3 and a toolchain w/ glibc or musl"
++	depends on !BR2_PACKAGE_PYTHON3
++	depends on !BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
++	depends on !(BR2_TOOLCHAIN_USES_GLIBC && BR2_TOOLCHAIN_USES_MUSL) # python-numpy
++
++config BR2_PACKAGE_UHD_PYTHON
++	bool "python API support"
++	depends on BR2_PACKAGE_PYTHON3
++	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # python-numpy
++	select BR2_PACKAGE_PYTHON_NUMPY
++	select BR2_PACKAGE_PYTHON_REQUESTS
++	help
++	  enable python API support
++
+ config BR2_PACKAGE_UHD_RFNOC
+ 	bool "RFNoC support"
+ 	help
+@@ -90,4 +127,30 @@ config BR2_PACKAGE_UHD_USB
+ comment "USB support needs a toolchain w/ gcc >= 4.9"
+ 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 
++config BR2_PACKAGE_UHD_USRP1
++	bool "USRP1 support"
++	select BR2_PACKAGE_UHD_USB
++	help
++	  enable USRP1 support
++
++config BR2_PACKAGE_UHD_USRP2
++	bool "USRP2 support"
++	help
++	  enable USRP2 support
++
++comment "uhd utils depends on python API support"
++	depends on !BR2_PACKAGE_UHD_PYTHON
++
++config BR2_PACKAGE_UHD_UTILS
++	bool "uhd-utils"
++	depends on BR2_PACKAGE_UHD_PYTHON
++	select BR2_PACKAGE_PYTHON_SIX
++	help
++	  uhd-utils
++
++config BR2_PACKAGE_UHD_X300
++	bool "X300 support"
++	help
++	  enable X300 support
 +
  endif
-diff --git a/package/gnuradio/gnuradio.mk b/package/gnuradio/gnuradio.mk
-index 0a818cfc24..1f4458db92 100644
---- a/package/gnuradio/gnuradio.mk
-+++ b/package/gnuradio/gnuradio.mk
-@@ -149,6 +149,13 @@ else
- GNURADIO_CONF_OPTS += -DENABLE_GR_TRELLIS=OFF
+diff --git a/package/uhd/uhd.mk b/package/uhd/uhd.mk
+index 2a40efdd23..a8001dfd74 100644
+--- a/package/uhd/uhd.mk
++++ b/package/uhd/uhd.mk
+@@ -25,18 +25,9 @@ UHD_CONF_OPTS = \
+ 	-DENABLE_DOXYGEN=OFF \
+ 	-DENABLE_DPDK=OFF \
+ 	-DENABLE_LIBUHD=ON \
+-	-DENABLE_N230=OFF \
+-	-DENABLE_N300=OFF \
+-	-DENABLE_N320=OFF \
+ 	-DENABLE_MANUAL=OFF \
+ 	-DENABLE_MAN_PAGES=OFF \
+-	-DENABLE_OCTOCLOCK=OFF \
+-	-DENABLE_PYTHON_API=OFF \
+-	-DENABLE_TESTS=OFF \
+-	-DENABLE_USRP1=OFF \
+-	-DENABLE_USRP2=OFF \
+-	-DENABLE_UTILS=OFF \
+-	-DENABLE_X300=OFF
++	-DENABLE_TESTS=OFF
+ 
+ # As soon as architecture is ARM, uhd will try to use NEON.
+ # But not all ARM cores have NEON support.
+@@ -89,12 +80,44 @@ else
+ UHD_CONF_OPTS += -DENABLE_MPMD=OFF
  endif
  
-+ifeq ($(BR2_PACKAGE_GNURADIO_UHD),y)
-+GNURADIO_DEPENDENCIES += uhd
-+GNURADIO_CONF_OPTS += -DENABLE_GR_UHD=ON
++ifeq ($(BR2_PACKAGE_UHD_N230),y)
++UHD_CONF_OPTS += -DENABLE_N230=ON
 +else
-+GNURADIO_CONF_OPTS += -DENABLE_GR_UHD=OFF
++UHD_CONF_OPTS += -DENABLE_N230=OFF
 +endif
 +
- ifeq ($(BR2_PACKAGE_GNURADIO_UTILS),y)
- GNURADIO_CONF_OPTS += -DENABLE_GR_UTILS=ON
++ifeq ($(BR2_PACKAGE_UHD_N300),y)
++UHD_CONF_OPTS += -DENABLE_N300=ON
++else
++UHD_CONF_OPTS += -DENABLE_N300=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_UHD_N320),y)
++UHD_CONF_OPTS += -DENABLE_N320=ON
++else
++UHD_CONF_OPTS += -DENABLE_N320=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_UHD_OCTOCLOCK),y)
++UHD_CONF_OPTS += -DENABLE_OCTOCLOCK=ON
++else
++UHD_CONF_OPTS += -DENABLE_OCTOCLOCK=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_UHD_RFNOC),y)
+ UHD_CONF_OPTS += -DENABLE_RFNOC=ON
  else
+ UHD_CONF_OPTS += -DENABLE_RFNOC=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_UHD_PYTHON),y)
++UHD_DEPENDENCIES += host-python-numpy host-python3-requests \
++	python-numpy python-requests
++UHD_CONF_OPTS += -DENABLE_PYTHON_API=ON
++else
++UHD_CONF_OPTS += -DENABLE_PYTHON_API=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_UHD_USB),y)
+ UHD_DEPENDENCIES += libusb
+ UHD_CONF_OPTS += -DENABLE_USB=ON
+@@ -102,4 +125,29 @@ else
+ UHD_CONF_OPTS += -DENABLE_USB=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_UHD_USRP1),y)
++UHD_CONF_OPTS += -DENABLE_USRP1=ON
++else
++UHD_CONF_OPTS += -DENABLE_USRP1=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_UHD_USRP2),y)
++UHD_CONF_OPTS += -DENABLE_USRP2=ON
++else
++UHD_CONF_OPTS += -DENABLE_USRP2=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_UHD_UTILS),y)
++UHD_DEPENDENCIES += python-six
++UHD_CONF_OPTS += -DENABLE_UTILS=ON
++else
++UHD_CONF_OPTS += -DENABLE_UTILS=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_UHD_X300),y)
++UHD_CONF_OPTS += -DENABLE_X300=ON
++else
++UHD_CONF_OPTS += -DENABLE_X300=OFF
++endif
++
+ $(eval $(cmake-package))
