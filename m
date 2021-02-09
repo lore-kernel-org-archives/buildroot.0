@@ -1,22 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 09 Feb 2021 12:06:16 +0100
-Subject: [Buildroot] [PATCH 1/1] package/connman: bump version to 1.39
-In-Reply-To: <20210209074524.16936-1-heiko.thiery@gmail.com> (Heiko Thiery's
- message of "Tue, 9 Feb 2021 08:45:24 +0100")
-References: <20210209074524.16936-1-heiko.thiery@gmail.com>
-Message-ID: <87eehpqz4n.fsf@dell.be.48ers.dk>
+Date: Tue, 9 Feb 2021 10:54:33 +0100
+Subject: [Buildroot] [git commit] package/bison: add BISON_CPE_ID_VENDOR
+Message-ID: <20210209104539.269F381556@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Heiko" == Heiko Thiery <heiko.thiery@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=24401221d25f251802c36aa8d819f36556e5fa71
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Drop patches that are upstream now and fix hash file indentation.
- > Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+cpe:2.3:a:gnu:bison is a valid CPE identifier for this package:
 
-Committed, thanks.
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Agnu%3Abison
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/bison/bison.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/bison/bison.mk b/package/bison/bison.mk
+index 70111a8d62..efd75afd66 100644
+--- a/package/bison/bison.mk
++++ b/package/bison/bison.mk
+@@ -9,6 +9,7 @@ BISON_SOURCE = bison-$(BISON_VERSION).tar.xz
+ BISON_SITE = $(BR2_GNU_MIRROR)/bison
+ BISON_LICENSE = GPL-3.0+
+ BISON_LICENSE_FILES = COPYING
++BISON_CPE_ID_VENDOR = gnu
+ # parallel build issue in examples/c/reccalc/
+ BISON_MAKE = $(MAKE1)
+ HOST_BISON_DEPENDENCIES = host-m4
