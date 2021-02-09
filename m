@@ -1,24 +1,34 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 09 Feb 2021 18:38:55 +0000
-Subject: [Buildroot] [Bug 13526] how does the gig economy work
-In-Reply-To: <bug-13526-163@https.bugs.busybox.net/>
-References: <bug-13526-163@https.bugs.busybox.net/>
-Message-ID: <bug-13526-163-LuMzjEgW9j@https.bugs.busybox.net/>
+From: =?UTF-8?Q?Sebasti=C3=A1n_Conti?= <sebaconti1911@gmail.com>
+Date: Tue, 9 Feb 2021 12:57:42 -0600 (CST)
+Subject: [Buildroot] Buildroot Touchscreen goes to coordinates 0 0
+In-Reply-To: <20210121222226.279be2e9@gmx.net>
+References: <CAONQdNmac47XOqi2kec20PbdohXW4jYov-sM3hDvDTsKZZmXTw@mail.gmail.com>
+ <20210121222226.279be2e9@gmx.net>
+Message-ID: <1612897062438-0.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13526
+Peter Seiderer wrote
+>  did you test the exact same
+> touchscreen hardware on the same board with an different distro
+> (which kernel versions)?
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+Yes, I tested with ubuntu raspberry pi, because I am running on a rpi4b, and
+the touchscreen worked. 
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |INVALID
-             Status|NEW                         |RESOLVED
+I tried using a different kernel version, 5.4-raspi, but it didn't work.
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Also I'm building with linux mint but when I was building with ubuntu it
+worked fine except for the 3000 errors that give me on building qt and qt
+did not worked fine.
+
+I do not know what else I could change...
+
+
+
+
+--
+Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
