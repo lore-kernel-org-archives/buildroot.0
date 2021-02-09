@@ -1,39 +1,33 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Tue,  9 Feb 2021 21:13:03 +0100
-Subject: [Buildroot] [PATCH] boot/uboot: fix uboot build failure with
- UBOOT_CUSTOM_DTS_PATH on uboot version >= 2020.x
-Message-ID: <20210209201303.195093-1-giulio.benetti@benettiengineering.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue,  9 Feb 2021 21:27:19 +0100
+Subject: [Buildroot] [PATCH 1/1] package/freerdp: add FREERDP_CPE_ID_VENDOR
+Message-ID: <20210209202719.1221322-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Starting from version 2020.x uboot can't build .dts files not listed in
-dts/Makefile leading to a build failure when trying to pass a .dts file to
-UBOOT_CUSTOM_DTS_PATH. So let's prepend that file(s) to dts/Makefile if
-UBOOT_CUSTOM_DTS_PATH is used.
+cpe:2.3:a:freerdp:freerdp is a valid CPE identifier for this package:
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Afreerdp%3Afreerdp
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- boot/uboot/uboot.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/freerdp/freerdp.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 2478a2a1e9..a5ad101d68 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -303,6 +303,11 @@ endif # BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY
- UBOOT_CUSTOM_DTS_PATH = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_DTS_PATH))
+diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+index 4c804c136f..16d58b5aa0 100644
+--- a/package/freerdp/freerdp.mk
++++ b/package/freerdp/freerdp.mk
+@@ -9,6 +9,7 @@ FREERDP_SITE = https://pub.freerdp.com/releases
+ FREERDP_DEPENDENCIES = libglib2 openssl zlib
+ FREERDP_LICENSE = Apache-2.0
+ FREERDP_LICENSE_FILES = LICENSE
++FREERDP_CPE_ID_VENDOR = freerdp
  
- define UBOOT_BUILD_CMDS
-+	$(if $(UBOOT_CUSTOM_DTS_PATH),
-+		$(Q)$(SED) \
-+		'1s;^;dtb-y += $(subst .dts,.dtb,$(call notdir,$(UBOOT_CUSTOM_DTS_PATH)))\n;' \
-+		$(@D)/arch/$(UBOOT_ARCH)/dts/Makefile
-+	)
- 	$(if $(UBOOT_CUSTOM_DTS_PATH),
- 		cp -f $(UBOOT_CUSTOM_DTS_PATH) $(@D)/arch/$(UBOOT_ARCH)/dts/
- 	)
+ FREERDP_INSTALL_STAGING = YES
+ 
 -- 
-2.25.1
+2.29.2
