@@ -1,48 +1,34 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 9 Feb 2021 19:31:03 +0100
-Subject: [Buildroot] [git commit] package/waf: bump to v2.0.22
-Message-ID: <20210209181229.0918C83852@busybox.osuosl.org>
+From: Andreas Ziegler <br015@umbiko.net>
+Date: Tue, 09 Feb 2021 18:38:10 +0000
+Subject: [Buildroot] BR2_HOST_GCC_AT_LEAST_4_8 not set but toolchain >
+ linaro-7.3-2018.05 !?
+In-Reply-To: <CAGshWo3jVrhCNEetBj=xmOJ_PsbEDna7biGaCjVORoSqW7xXeg@mail.gmail.com>
+References: <mailman.2252.1612552067.250548.buildroot@busybox.net>
+ <acc14f9c1a468562ab695cb5b68edd97@umbiko.net>
+ <CAGshWo1TDiuuYmRWOF-=jbxdMkbDeuK6Ukp3fnzvx6PKtbad5A@mail.gmail.com>
+ <c65a774ad24c28353560af07596f1a8f@umbiko.net>
+ <CAGshWo3jVrhCNEetBj=xmOJ_PsbEDna7biGaCjVORoSqW7xXeg@mail.gmail.com>
+Message-ID: <98dbd368a6abb0d4f96754d6f429448f@umbiko.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ccfb9e87f8feb14e65e52e0eda4a959f760832db
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Emmanuel
 
-Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/waf/waf.hash | 6 +++---
- package/waf/waf.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+On 2021-02-09 17:38, manu f wrote:
 
-diff --git a/package/waf/waf.hash b/package/waf/waf.hash
-index 1e74b74d63..e9d387e7d0 100644
---- a/package/waf/waf.hash
-+++ b/package/waf/waf.hash
-@@ -1,7 +1,7 @@
- # Locally computed
--sha1  b7f38d2987433ee6e0f4a75ecec8807575176e1e  waf-2.0.21
--sha256  7cebf2c5efe53cbb9a4b5bdc4b49ae90ecd64a8fce7a3222d58e591b58215306  waf-2.0.21
-+sha1  494ada411468129ed229f946ecec3048400e320b  waf-2.0.22
-+sha256  0a09ad26a2cfc69fa26ab871cb558165b60374b5a653ff556a0c6aca63a00df1  waf-2.0.22
- 
- # The waf script also contains its license, but is renamed `waf` in the extract
- # step, so this is a synonym for the above, to check WAF_LICENSE
--sha256  7cebf2c5efe53cbb9a4b5bdc4b49ae90ecd64a8fce7a3222d58e591b58215306  waf
-+sha256  0a09ad26a2cfc69fa26ab871cb558165b60374b5a653ff556a0c6aca63a00df1  waf
-diff --git a/package/waf/waf.mk b/package/waf/waf.mk
-index dd97519b57..5cc0dc3714 100644
---- a/package/waf/waf.mk
-+++ b/package/waf/waf.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WAF_VERSION = 2.0.21
-+WAF_VERSION = 2.0.22
- WAF_SOURCE = waf-$(WAF_VERSION)
- WAF_SITE = https://waf.io
- WAF_LICENSE = BSD-3-Clause
+> Sorry Andreas ..
+
+No problem.
+
+> Reason is the initial project was with this version.
+
+You could try a quick port. Export /import your defconfig into a more 
+recent Buildroot version. If this builds with less problems, stick with 
+the new version, otherwise recreate the original build environment, 
+starting with the Linux distribution.
+
+Kind regards,
+Andreas
