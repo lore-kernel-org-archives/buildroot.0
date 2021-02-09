@@ -1,78 +1,63 @@
-From: Matthew Weber <matthew.weber@collins.com>
-Date: Mon, 8 Feb 2021 17:48:09 -0600
-Subject: [Buildroot] [External] Re: [PATCH v10 1/4] package/llvm: bump
- to version 11.0.0
-In-Reply-To: <700a6200-8311-656a-79c1-9d0eb8b6dc2c@gmail.com>
-References: <20210205184343.57068-1-matthew.weber@rockwellcollins.com>
- <CANQCQpaZPMTnquYfUhsvfguLd3MkpvGgJ-U+gz3azrrz7sGSkQ@mail.gmail.com>
- <CANQCQpZV1bd=COVcHKrxw6GbQqea_kVgEx6n_j=fFKKpe5W_UQ@mail.gmail.com>
- <700a6200-8311-656a-79c1-9d0eb8b6dc2c@gmail.com>
-Message-ID: <CANQCQpZsvbNi-LVMji47mV8fa6K-c6zeZ=LDEGgAL0Vs=A6y=Q@mail.gmail.com>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Tue, 9 Feb 2021 08:06:18 +0100
+Subject: [Buildroot] [PATCH] package/connman: add upstream security
+ fixes for CVE-2021-2667{5, 6}
+In-Reply-To: <87sg66s1u5.fsf@dell.be.48ers.dk>
+References: <20210208093921.3216-1-peter@korsgaard.com>
+ <CAEyMn7aqMeyjFmJcymQfDkhy6t4YJmeSPXYLAqj+KMdCfJ55yQ@mail.gmail.com>
+ <87sg66s1u5.fsf@dell.be.48ers.dk>
+Message-ID: <CAEyMn7aKi4oj-mjDVmRrfHMLNW=TwkX0Lq1myytpBUGw6RQftg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain,
+Hi Peter,
 
-On Sun, Feb 7, 2021 at 8:36 AM Romain Naour <romain.naour@gmail.com> wrote:
+Am Mo., 8. Feb. 2021 um 22:10 Uhr schrieb Peter Korsgaard <peter@korsgaard.com>:
 >
-> Le 05/02/2021 ? 19:53, Matthew Weber a ?crit :
-> > On Fri, Feb 5, 2021 at 12:52 PM Matthew Weber
-> > <matthew.weber@rockwellcollins.com> wrote:
-> >>
-> >> Romain,
-> >>
-> >>
-> >> On Fri, Feb 5, 2021 at 12:43 PM Matt Weber
-> >> <matthew.weber@rockwellcollins.com> wrote:
-> >>>
-> >>> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> >>> ---
-> >>>  package/llvm/llvm.hash | 2 +-
-> >>>  package/llvm/llvm.mk   | 2 +-
-> >>>  2 files changed, 2 insertions(+), 2 deletions(-)
-> >>>
-> >>> diff --git a/package/llvm/llvm.hash b/package/llvm/llvm.hash
-> >>> index 6bf2755777..055219a94c 100644
-> >>> --- a/package/llvm/llvm.hash
-> >>> +++ b/package/llvm/llvm.hash
-> >>> @@ -1,3 +1,3 @@
-> >>>  # locally calculated
-> >>> -sha256 00a1ee1f389f81e9979f3a640a01c431b3021de0d42278f6508391a2f0b81c9a llvm-9.0.1.src.tar.xz
-> >>> +sha256 913f68c898dfb4a03b397c5e11c6a2f39d0f22ed7665c9cefa87a34423a72469 llvm-11.0.0.src.tar.xz
-> >>>  sha256 8d85c1057d742e597985c7d4e6320b015a9139385cff4cbae06ffc0ebe89afee LICENSE.TXT
-> >>> diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
-> >>> index 7d60fe7f8c..069312bb3f 100644
-> >>> --- a/package/llvm/llvm.mk
-> >>> +++ b/package/llvm/llvm.mk
-> >>> @@ -5,7 +5,7 @@
-> >>>  ################################################################################
-> >>>
-> >>>  # LLVM, Clang and lld should be version bumped together
-> >>> -LLVM_VERSION = 9.0.1
-> >>> +LLVM_VERSION = 11.0.0
-> >>
-> >> I'm not sure if the bump to 10.x would have had a similar behavior but
-> >> I enabled mesa32 llvmpipe and got a build failure related to the
-> >> config wrapper not being present.
-> >> https://urldefense.com/v3/__https://paste.ack.tf/9858ff__;!!MvWE!QoNoAWacp64SQYehF6CWitDX8KoF1Og3NFr2Zp6DLppPMYoC0FGByGQxwQXIKckXB5jt$
+> >>>>> "Heiko" == Heiko Thiery <heiko.thiery@gmail.com> writes:
 >
-> Michael Opdenacker is also working on llvm/clang version bump, he had a similar
-> issue with libclc build due to new Cmake build system (I guess):
+>  > Hi Peter,
+>  > Am Mo., 8. Feb. 2021 um 10:39 Uhr schrieb Peter Korsgaard <peter@korsgaard.com>:
+>  >>
+>  >> Fixes the following security issues:
+>  >>
+>  >> - CVE-2021-26675: Remote (adjacent network) code execution flaw
+>  >> - CVE-2021-26676: Remote stack information leak
+>  >>
+>  >> For details, see the advisory:
+>  >> https://www.openwall.com/lists/oss-security/2021/02/08/2
+>  >>
+>  >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+>  >> ---
+>  >> ...ding-invalid-data-in-dhcp_get_option.patch | 226 ++++++++++++++++++
+>  >> ...ing-stack-data-via-unitiialized-vari.patch |  27 +++
+>  >> ...gth-checks-to-prevent-buffer-overflo.patch |  56 +++++
+>  >> 3 files changed, 309 insertions(+)
+>  >> create mode 100644
+>  >> package/connman/0001-gdhcp-Avoid-reading-invalid-data-in-dhcp_get_option.patch
+>  >> create mode 100644
+>  >> package/connman/0002-gdhcp-Avoid-leaking-stack-data-via-unitiialized-vari.patch
+>  >> create mode 100644
+>  >> package/connman/0003-dnsproxy-Add-length-checks-to-prevent-buffer-overflo.patch
 >
-> https://urldefense.com/v3/__http://lists.busybox.net/pipermail/buildroot/2021-January/thread.html__;!!MvWE!QoNoAWacp64SQYehF6CWitDX8KoF1Og3NFr2Zp6DLppPMYoC0FGByGQxwQXIKTT_TgEp$
+>  > A new version [1] was released today that has these patches
+>  > integrated. Maybe we should bump to that.
 >
-> I didn't tested llvmpipe with the current mesa version (20.3.3) maybe you have
-> to check with the current Buildroot master.
+>  > [1]
+>  > https://git.kernel.org/pub/scm/network/connman/connman.git/commit/?id=47bd7ab21bfbe115ca4a10b9b96bdbfeb6c35bff
 >
+> I would prefer to add the security patches now, as they are lower risk
+> to backport to 2020.02.x (1.39 has ~100 changes on top of 1.38).
 
-I went back and did a completely clean build (vs adding mesa3d on as a
-new package to my compiler-rt testing) and llvmpipe built ok
-(https://paste.ack.tf/a56ce8 ).....  So I'll switch gears to look at
-the libclc but it looks like llvm version bump is generally working OK
-(good to merge if we want to let auto-builders find the rest of the
-issues).
+Ah ok .. that makes sense.
 
--Matt
+
+> But we can certainly bump to 1.39 on master, care to send a patch?
+
+I will do it.
+
+-- 
+Heiko
