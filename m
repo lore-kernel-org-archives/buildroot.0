@@ -1,85 +1,48 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 9 Feb 2021 19:22:42 +0100
-Subject: [Buildroot] [PATCH] package/intel-microcode: security bump to
- version 20201118
-In-Reply-To: <20210209163641.26115-1-peter@korsgaard.com>
-References: <20210209163641.26115-1-peter@korsgaard.com>
-Message-ID: <20210209182242.GB1679218@scaer>
+Date: Tue, 9 Feb 2021 19:31:03 +0100
+Subject: [Buildroot] [git commit] package/waf: bump to v2.0.22
+Message-ID: <20210209181229.0918C83852@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Pter, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=ccfb9e87f8feb14e65e52e0eda4a959f760832db
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-02-09 17:36 +0100, Peter Korsgaard spake thusly:
-> Fixes the following security issues:
-> 
-> - CVE-2020-8694: Insufficient access control in the Linux kernel driver for
->   some Intel(R) Processors may allow an authenticated user to potentially
->   enable information disclosure via local access.
-> 
->   https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00389.html
-> 
-> - CVE-2020-8695: Observable discrepancy in the RAPL interface for some
->   Intel(R) Processors may allow a privileged user to potentially enable
->   information disclosure via local access.
-> 
->   https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00389.html
-> 
-> - CVE-2020-8698: Improper removal of sensitive information before storage or
->   transfer in some Intel(R) Processors may allow an authenticated user to
->   potentially enable information disclosure via local access.
-> 
->   https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00381.html
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/waf/waf.hash | 6 +++---
+ package/waf/waf.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/intel-microcode/intel-microcode.hash | 2 +-
->  package/intel-microcode/intel-microcode.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/intel-microcode/intel-microcode.hash b/package/intel-microcode/intel-microcode.hash
-> index e8005bcff6..289428b4b3 100644
-> --- a/package/intel-microcode/intel-microcode.hash
-> +++ b/package/intel-microcode/intel-microcode.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed
-> -sha256  eb4f939421ac6cdea3c586c9d984ec518320f00c07eb2b3d6754309c83c93371  intel-microcode-20200616.tar.gz
-> +sha256  e42a264b7b86e80d013d6d00062467352c1f37e0aaea10fe5b51e4d8687921ab  intel-microcode-20201118.tar.gz
->  sha256  d9e989e1a7747f3ce93cb749aceca67a430d36c9bebc6e3205e0b3af3ca6304b  license
-> diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
-> index 043367770b..5a13ca2cbe 100644
-> --- a/package/intel-microcode/intel-microcode.mk
-> +++ b/package/intel-microcode/intel-microcode.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -INTEL_MICROCODE_VERSION = 20200616
-> +INTEL_MICROCODE_VERSION = 20201118
->  INTEL_MICROCODE_SITE = $(call github,intel,Intel-Linux-Processor-Microcode-Data-Files,microcode-$(INTEL_MICROCODE_VERSION))
->  INTEL_MICROCODE_LICENSE = PROPRIETARY
->  INTEL_MICROCODE_LICENSE_FILES = license
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/waf/waf.hash b/package/waf/waf.hash
+index 1e74b74d63..e9d387e7d0 100644
+--- a/package/waf/waf.hash
++++ b/package/waf/waf.hash
+@@ -1,7 +1,7 @@
+ # Locally computed
+-sha1  b7f38d2987433ee6e0f4a75ecec8807575176e1e  waf-2.0.21
+-sha256  7cebf2c5efe53cbb9a4b5bdc4b49ae90ecd64a8fce7a3222d58e591b58215306  waf-2.0.21
++sha1  494ada411468129ed229f946ecec3048400e320b  waf-2.0.22
++sha256  0a09ad26a2cfc69fa26ab871cb558165b60374b5a653ff556a0c6aca63a00df1  waf-2.0.22
+ 
+ # The waf script also contains its license, but is renamed `waf` in the extract
+ # step, so this is a synonym for the above, to check WAF_LICENSE
+-sha256  7cebf2c5efe53cbb9a4b5bdc4b49ae90ecd64a8fce7a3222d58e591b58215306  waf
++sha256  0a09ad26a2cfc69fa26ab871cb558165b60374b5a653ff556a0c6aca63a00df1  waf
+diff --git a/package/waf/waf.mk b/package/waf/waf.mk
+index dd97519b57..5cc0dc3714 100644
+--- a/package/waf/waf.mk
++++ b/package/waf/waf.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WAF_VERSION = 2.0.21
++WAF_VERSION = 2.0.22
+ WAF_SOURCE = waf-$(WAF_VERSION)
+ WAF_SITE = https://waf.io
+ WAF_LICENSE = BSD-3-Clause
