@@ -1,34 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 10 Feb 2021 09:57:45 +0100
-Subject: [Buildroot] [PATCH] package/python-bottle: security bump to
- version 0.12.19
-In-Reply-To: <20210202153319.11644-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Tue, 2 Feb 2021 16:33:19 +0100")
-References: <20210202153319.11644-1-peter@korsgaard.com>
-Message-ID: <878s7wpaeu.fsf@dell.be.48ers.dk>
+Date: Wed, 10 Feb 2021 10:04:35 +0100
+Subject: [Buildroot] [PATCH 1/1] package/sox: drop unrecognized options
+In-Reply-To: <20210202204626.402946-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 2 Feb 2021 21:46:26 +0100")
+References: <20210202204626.402946-1-fontaine.fabrice@gmail.com>
+Message-ID: <874kikpa3g.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Fixes the following security issue:
- > CVE-2020-28473: The package bottle from 0 and before 0.12.19 are vulnerable
- > to Web Cache Poisoning by using a vector called parameter cloaking.  When
- > the attacker can separate query parameters using a semicolon (;), they can
- > cause a difference in the interpretation of the request between the proxy
- > (running with default configuration) and the server.  This can result in
- > malicious requests being cached as completely safe ones, as the proxy would
- > usually not see the semicolon as a separator, and therefore would not
- > include it in a cache key of an unkeyed parameter.
+ > ffmpeg has been dropped since version 14.4.2 (back in 2013) and
+ > https://sourceforge.net/p/sox/code/ci/5ae4049727d4f29036ad541bde5863c850aa7755
 
- > In addition, bottle 0.12.18 fixed a compatibility issue with python 3.8+:
+ > --disable-gomp has also been removed since version 14.4.1 (back in 2012)
+ > and
+ > https://sourceforge.net/p/sox/code/ci/84eaacb54fd2e61154ccd95328d8a8ec5096eae1
 
- > https://github.com/bottlepy/bottle/issues/1181
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed to 2020.02.x and 2020.11.x, thanks.
 
