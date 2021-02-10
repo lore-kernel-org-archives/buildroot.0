@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 10 Feb 2021 20:57:36 +0100
-Subject: [Buildroot] [PATCH] package/connman: add upstream security
- fixes for CVE-2021-2667{5, 6}
-In-Reply-To: <20210208093921.3216-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Mon, 8 Feb 2021 10:39:21 +0100")
-References: <20210208093921.3216-1-peter@korsgaard.com>
-Message-ID: <87k0rfk85r.fsf@dell.be.48ers.dk>
+Date: Wed, 10 Feb 2021 20:58:23 +0100
+Subject: [Buildroot] [PATCH] package/intel-microcode: security bump to
+ version 20201118
+In-Reply-To: <20210209163641.26115-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 9 Feb 2021 17:36:40 +0100")
+References: <20210209163641.26115-1-peter@korsgaard.com>
+Message-ID: <87ft23k84g.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,11 +15,23 @@ To: buildroot@busybox.net
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
  > Fixes the following security issues:
- > - CVE-2021-26675: Remote (adjacent network) code execution flaw
- > - CVE-2021-26676: Remote stack information leak
+ > - CVE-2020-8694: Insufficient access control in the Linux kernel driver for
+ >   some Intel(R) Processors may allow an authenticated user to potentially
+ >   enable information disclosure via local access.
 
- > For details, see the advisory:
- > https://www.openwall.com/lists/oss-security/2021/02/08/2
+ >   https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00389.html
+
+ > - CVE-2020-8695: Observable discrepancy in the RAPL interface for some
+ >   Intel(R) Processors may allow a privileged user to potentially enable
+ >   information disclosure via local access.
+
+ >   https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00389.html
+
+ > - CVE-2020-8698: Improper removal of sensitive information before storage or
+ >   transfer in some Intel(R) Processors may allow an authenticated user to
+ >   potentially enable information disclosure via local access.
+
+ >   https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00381.html
 
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
