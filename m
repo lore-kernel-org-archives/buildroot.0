@@ -1,10 +1,10 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 11 Feb 2021 00:16:39 +0100
-Subject: [Buildroot] [PATCH/next v1 6/7] package/uhttpd: bump version to
- f53a639
+Date: Thu, 11 Feb 2021 00:16:38 +0100
+Subject: [Buildroot] [PATCH/next v1 5/7] package/ustream-ssl: bump version
+ to 68d0924
 In-Reply-To: <20210210231640.5262-1-ps.report@gmx.net>
 References: <20210210231640.5262-1-ps.report@gmx.net>
-Message-ID: <20210210231640.5262-6-ps.report@gmx.net>
+Message-ID: <20210210231640.5262-5-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,39 +13,36 @@ To: buildroot@busybox.net
 
 - change download url to https
 
-- update license file hash (uhttpd.h - license unrelated source
-  code changes only)
-
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/uhttpd/uhttpd.hash | 4 ++--
- package/uhttpd/uhttpd.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/ustream-ssl/ustream-ssl.hash | 2 +-
+ package/ustream-ssl/ustream-ssl.mk   | 5 +++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/uhttpd/uhttpd.hash b/package/uhttpd/uhttpd.hash
-index 389a0ef636..6f8b4a60f8 100644
---- a/package/uhttpd/uhttpd.hash
-+++ b/package/uhttpd/uhttpd.hash
+diff --git a/package/ustream-ssl/ustream-ssl.hash b/package/ustream-ssl/ustream-ssl.hash
+index 60672b38b3..ecf6124fe1 100644
+--- a/package/ustream-ssl/ustream-ssl.hash
++++ b/package/ustream-ssl/ustream-ssl.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  5b81ebf9e419c668de4181cce7b9f5fa358cabb2a4a0d1f1a3a24190eeb21f25  uhttpd-a8bf9c00842224edb394e79909053f7628ee6a82-br1.tar.gz
--sha256  2a61a8a690e7646a4bfe4261bf77c49f47588db5fc234b3cc66809dcc0cb3985  uhttpd.h
-+sha256  8a537a377c8dc1abda147a1e3feb3fe3e3633a9d30e4e37d378cc6309dace2f0  uhttpd-f53a63999784bcb7dc513e221f3f25dd3de2f35e-br1.tar.gz
-+sha256  ce1803f83f776cc88661e303fede0e5ff52faf1d9f74508fadbecf7705b4c84d  uhttpd.h
-diff --git a/package/uhttpd/uhttpd.mk b/package/uhttpd/uhttpd.mk
-index cc7649d0ec..355a266d6b 100644
---- a/package/uhttpd/uhttpd.mk
-+++ b/package/uhttpd/uhttpd.mk
-@@ -4,8 +4,8 @@
+ # Locally computed
+-sha256  f09474dbe4680b51cc0c6a088807102d64954764ef58c2a1e3231e3a77c4b01f  ustream-ssl-23a3f2830341acd1db149175baf7315a33bd0edb-br1.tar.gz
++sha256  e77e579b718085c1447339e0fcd5385b85a783d5c92544e48a6b37b1695a7f39  ustream-ssl-68d09243b6fd4473004b27ff6483352e76e6af1a-br1.tar.gz
+ sha256  90dd1590cf400a548438e2575e1ff46d8fb8cebae7d09f544aae7e059e30b6c5  ustream-ssl.h
+diff --git a/package/ustream-ssl/ustream-ssl.mk b/package/ustream-ssl/ustream-ssl.mk
+index 7804eb5d38..bee8d7de15 100644
+--- a/package/ustream-ssl/ustream-ssl.mk
++++ b/package/ustream-ssl/ustream-ssl.mk
+@@ -4,8 +4,9 @@
  #
  ################################################################################
  
--UHTTPD_VERSION = a8bf9c00842224edb394e79909053f7628ee6a82
--UHTTPD_SITE = http://git.openwrt.org/project/uhttpd.git
-+UHTTPD_VERSION = f53a63999784bcb7dc513e221f3f25dd3de2f35e
-+UHTTPD_SITE = https://git.openwrt.org/project/uhttpd.git
- UHTTPD_SITE_METHOD = git
- UHTTPD_LICENSE = ISC
- UHTTPD_LICENSE_FILES = uhttpd.h
+-USTREAM_SSL_VERSION = 23a3f2830341acd1db149175baf7315a33bd0edb
+-USTREAM_SSL_SITE = git://git.openwrt.org/project/ustream-ssl.git
++USTREAM_SSL_VERSION = 68d09243b6fd4473004b27ff6483352e76e6af1a
++USTREAM_SSL_SITE = https://git.openwrt.org/project/ustream-ssl.git
++USTREAM_SSL_SITE_METHOD = git
+ USTREAM_SSL_LICENSE = ISC
+ USTREAM_SSL_LICENSE_FILES = ustream-ssl.h
+ USTREAM_SSL_INSTALL_STAGING = YES
 -- 
 2.30.0
