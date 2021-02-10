@@ -1,41 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 10 Feb 2021 20:58:23 +0100
-Subject: [Buildroot] [PATCH] package/intel-microcode: security bump to
- version 20201118
-In-Reply-To: <20210209163641.26115-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Tue, 9 Feb 2021 17:36:40 +0100")
-References: <20210209163641.26115-1-peter@korsgaard.com>
-Message-ID: <87ft23k84g.fsf@dell.be.48ers.dk>
+Date: Wed, 10 Feb 2021 20:53:53 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/memtester: fix
+ compile and link flags
+Message-ID: <20210210193755.E088481E42@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=9b456d104eef4b5ba6add719b348b71357ded13e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
- > Fixes the following security issues:
- > - CVE-2020-8694: Insufficient access control in the Linux kernel driver for
- >   some Intel(R) Processors may allow an authenticated user to potentially
- >   enable information disclosure via local access.
+The memtester build system does not use CFLAGS/LDFLAGS variables.
+Everything should be written to conf-cc and conf-ld.
 
- >   https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00389.html
+Use '%' as sed expression delimiter because comma might appear in
+LDFLAGS.
 
- > - CVE-2020-8695: Observable discrepancy in the RAPL interface for some
- >   Intel(R) Processors may allow a privileged user to potentially enable
- >   information disclosure via local access.
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 25e09fdb9e4aa1e940dbdfcdad8dedca42814fcc)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/memtester/memtester.mk | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
- >   https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00389.html
-
- > - CVE-2020-8698: Improper removal of sensitive information before storage or
- >   transfer in some Intel(R) Processors may allow an authenticated user to
- >   potentially enable information disclosure via local access.
-
- >   https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00381.html
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed to 2020.02.x and 2020.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/memtester/memtester.mk b/package/memtester/memtester.mk
+index 1a319462a5..05118754f8 100644
+--- a/package/memtester/memtester.mk
++++ b/package/memtester/memtester.mk
+@@ -12,8 +12,9 @@ MEMTESTER_LICENSE_FILES = COPYING
+ MEMTESTER_TARGET_INSTALL_OPTS = INSTALLPATH=$(TARGET_DIR)/usr
+ 
+ define MEMTESTER_BUILD_CMDS
+-	$(SED) "s,^cc,$(TARGET_CC)," $(@D)/conf-*
+-	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
++	$(SED) "s%^cc%$(TARGET_CC) $(TARGET_CFLAGS)%" $(@D)/conf-cc
++	$(SED) "s%^cc%$(TARGET_CC) $(TARGET_LDFLAGS)%" $(@D)/conf-ld
++	$(MAKE) -C $(@D)
+ endef
+ 
+ define MEMTESTER_INSTALL_TARGET_CMDS
