@@ -1,51 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 10 Feb 2021 10:11:30 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/php: security
- bump version to 7.4.15
-Message-ID: <20210210085149.28AC380DB3@busybox.osuosl.org>
+Date: Wed, 10 Feb 2021 10:03:22 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/sox: drop
+ unrecognized options
+Message-ID: <20210210085148.CFA8A80DB3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e834979197490cce39fb295ad7f03eada207ec5d
+commit: https://git.buildroot.net/buildroot/commit/?id=abd0acf4af7489ab8c96915c1c49b1198b565d8a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Changelog: https://www.php.net/ChangeLog-7.php#7.4.15
+ffmpeg has been dropped since version 14.4.2 (back in 2013) and
+https://sourceforge.net/p/sox/code/ci/5ae4049727d4f29036ad541bde5863c850aa7755
 
-Fixes CVE-2021-21702: http://bugs.php.net/80672
+--disable-gomp has also been removed since version 14.4.1 (back in 2012)
+and
+https://sourceforge.net/p/sox/code/ci/84eaacb54fd2e61154ccd95328d8a8ec5096eae1
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit c0ed274ffa6bb1373bd5004a7fe4b2cf8b30d0d7)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 98298134276e00232afc3433418cebf5f809ddd6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/sox/sox.mk | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 46c589661d..d60164d96f 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256  f9f3c37969fcd9006c1dbb1dd76ab53f28c698a1646fa2dde8547c3f45e02886  php-7.4.14.tar.xz
-+sha256  9b859c65f0cf7b3eff9d4a28cfab719fb3d36a1db3c20d874a79b5ec44d43cb8  php-7.4.15.tar.xz
+diff --git a/package/sox/sox.mk b/package/sox/sox.mk
+index 013ccbbcf4..e2e8d1da94 100644
+--- a/package/sox/sox.mk
++++ b/package/sox/sox.mk
+@@ -13,8 +13,6 @@ SOX_LICENSE_FILES = LICENSE.GPL LICENSE.LGPL
  
- # License file
- sha256  0967ad6cf4b7fe81d38709d7aaef3fecb3bd685be7eebb37b864aa34c991baa7  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 29d63a34d5..0004432216 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ SOX_CONF_OPTS = \
+ 	--with-distro="Buildroot" \
+-	--without-ffmpeg \
+-	--disable-gomp \
+ 	--disable-stack-protector
  
--PHP_VERSION = 7.4.14
-+PHP_VERSION = 7.4.15
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+ ifeq ($(BR2_PACKAGE_ALSA_LIB_PCM),y)
