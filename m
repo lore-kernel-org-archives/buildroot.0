@@ -1,45 +1,40 @@
 From: Christian Stewart <christian@paral.in>
-Date: Wed, 10 Feb 2021 15:25:46 -0800
-Subject: [Buildroot] [PATCH 1/1] package/go: bump to version 1.15.8
-Message-ID: <20210210232546.2131127-1-christian@paral.in>
+Date: Wed, 10 Feb 2021 15:39:02 -0800
+Subject: [Buildroot] [PATCH v1 1/1] package/runc: bump to version 1.0.0-rc93
+Message-ID: <20210210233902.2582441-1-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-go1.15.8 (released 2021/02/04) includes fixes to the compiler, linker, runtime,
-the go command, and the net/http package.
-
-https://golang.org/doc/go1.15
-
 Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
+ package/runc/runc.hash | 2 +-
+ package/runc/runc.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index 1bd7ab7ca9..cbc82a9b64 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
+diff --git a/package/runc/runc.hash b/package/runc/runc.hash
+index d792947d5f..afe396368d 100644
+--- a/package/runc/runc.hash
++++ b/package/runc/runc.hash
 @@ -1,3 +1,3 @@
- # From https://golang.org/dl/
--sha256  8631b3aafd8ecb9244ec2ffb8a2a8b4983cf4ad15572b9801f7c5b167c1a2abc  go1.15.7.src.tar.gz
-+sha256  540c0ab7781084d124991321ed1458e479982de94454a98afab6acadf38497c2  go1.15.8.src.tar.gz
- sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 21a33d215c..7b7f173706 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ # Locally computed
+-sha256	28378df983a3c586ed3ec8c76a774a9b10f36a0c323590a284b801cce95cc61f  runc-1.0.0-rc92.tar.gz
++sha256  e42456078d2f76c925cdd656e4f423b918525d8188521de05e893b6bb473a6f8  runc-1.0.0-rc93.tar.gz
+ sha256  552a739c3b25792263f731542238b92f6f8d07e9a488eae27e6c4690038a8243  LICENSE
+diff --git a/package/runc/runc.mk b/package/runc/runc.mk
+index c0de2783e4..ba2ab3081a 100644
+--- a/package/runc/runc.mk
++++ b/package/runc/runc.mk
+@@ -10,7 +10,7 @@ RUNC_LICENSE = Apache-2.0
+ RUNC_LICENSE_FILES = LICENSE
+ RUNC_CPE_ID_VENDOR = linuxfoundation
+ RUNC_CPE_ID_VERSION = 1.0.0
+-RUNC_CPE_ID_UPDATE = rc92
++RUNC_CPE_ID_UPDATE = rc93
  
--GO_VERSION = 1.15.7
-+GO_VERSION = 1.15.8
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
+ RUNC_LDFLAGS = -X main.version=$(RUNC_VERSION)
+ RUNC_TAGS = cgo static_build
 -- 
 2.30.0
