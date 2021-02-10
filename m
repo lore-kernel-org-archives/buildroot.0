@@ -1,46 +1,38 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 10 Feb 2021 20:56:51 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/connman: bump to
- 1.38
-Message-ID: <20210210193801.5792483977@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 10 Feb 2021 21:39:32 +0100
+Subject: [Buildroot] [PATCH 1/1] {linux, linux-headers}: bump 5.{4,
+ 10}.x 4.{4, 9, 14, 19} series
+In-Reply-To: <87sg6844vt.fsf@dell.be.48ers.dk>
+References: <20210206115319.1442990-1-bernd.kuhls@t-online.de>
+ <87sg6844vt.fsf@dell.be.48ers.dk>
+Message-ID: <20210210203932.GC1679218@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4791f77c4b775602e967cfa7e572a3614b78ceef
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+Bernd, Peter, All,
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit c121114ad2844007b0dc2ea3783f2a65ad44dd7e)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/connman/connman.hash | 2 +-
- package/connman/connman.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On 2021-02-07 10:13 +0100, Peter Korsgaard spake thusly:
+> >>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>  > Please note that the bump of kernel 4.4 and 4.9 to 4.x.256 can cause
+>  > problems:
+>  > https://lkml.org/lkml/2021/2/5/747
+>  > https://lkml.org/lkml/2021/2/5/862
+> Given the risk of issues and how close we are to 2021.02-rc1, I decided
+> to stick to 4.{4,9}.255 instead.
 
-diff --git a/package/connman/connman.hash b/package/connman/connman.hash
-index ff5b4d48f0..3039105027 100644
---- a/package/connman/connman.hash
-+++ b/package/connman/connman.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/linux/network/connman/sha256sums.asc
--sha256 6ce29b3eb0bb16a7387bc609c39455fd13064bdcde5a4d185fab3a0c71946e16  connman-1.37.tar.xz
-+sha256 cb30aca97c2f79ccaed8802aa2909ac5100a3969de74c0af8a9d73b85fc4932b  connman-1.38.tar.xz
- # Locally computed
- sha256 b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
-diff --git a/package/connman/connman.mk b/package/connman/connman.mk
-index 8403237c28..7ea52f012a 100644
---- a/package/connman/connman.mk
-+++ b/package/connman/connman.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CONNMAN_VERSION = 1.37
-+CONNMAN_VERSION = 1.38
- CONNMAN_SOURCE = connman-$(CONNMAN_VERSION).tar.xz
- CONNMAN_SITE = $(BR2_KERNEL_MIRROR)/linux/network/connman
- CONNMAN_DEPENDENCIES = libglib2 dbus iptables
+.257 of both series has now been released, which clamp the version to
+.255 internally, so it should now be safe to bump to .257
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
