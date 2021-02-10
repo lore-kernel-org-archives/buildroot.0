@@ -1,133 +1,35 @@
-From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-Date: Wed, 10 Feb 2021 19:50:16 +0100
-Subject: [Buildroot] [PATCH 2/3] package/wpa_supplicant: Add options to
- disable more features.
-In-Reply-To: <20210210185017.6133-1-nicolas.cavallari@green-communications.fr>
-References: <20210210185017.6133-1-nicolas.cavallari@green-communications.fr>
-Message-ID: <20210210185017.6133-2-nicolas.cavallari@green-communications.fr>
+From: Antoine Tenart <atenart@kernel.org>
+Date: Wed, 10 Feb 2021 19:51:58 +0100
+Subject: [Buildroot] [PATCH] package/refpolicy: do not use the bare target
+ in the configuration step
+Message-ID: <20210210185158.1254415-1-atenart@kernel.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Together, they increase the size of the binary by a bit less than a
-megabyte.
+The 'bare' target is a clean target, removing generated files from
+previous builds. Here in Buildroot we'll only build the refpolicy from a
+clean state and we don't need to execute this target. Remove it.
 
-As a result, make the wpa_supplicant option a menuconfig.
-
-Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Signed-off-by: Antoine Tenart <atenart@kernel.org>
 ---
- package/wpa_supplicant/Config.in         | 35 +++++++++++++++++++++++-
- package/wpa_supplicant/wpa_supplicant.mk | 18 ++++++++++++
- 2 files changed, 52 insertions(+), 1 deletion(-)
+ package/refpolicy/refpolicy.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
-index 8057c0b7be..9553dcf7df 100644
---- a/package/wpa_supplicant/Config.in
-+++ b/package/wpa_supplicant/Config.in
-@@ -1,4 +1,4 @@
--config BR2_PACKAGE_WPA_SUPPLICANT
-+menuconfig BR2_PACKAGE_WPA_SUPPLICANT
- 	bool "wpa_supplicant"
- 	depends on BR2_USE_MMU # fork()
- 	help
-@@ -29,6 +29,33 @@ config BR2_PACKAGE_WPA_SUPPLICANT_NL80211
- comment "nl80211 support needs a toolchain w/ threads"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/refpolicy/refpolicy.mk b/package/refpolicy/refpolicy.mk
+index 0194708b378d..62d96e68043c 100644
+--- a/package/refpolicy/refpolicy.mk
++++ b/package/refpolicy/refpolicy.mk
+@@ -108,7 +108,7 @@ define REFPOLICY_CONFIGURE_CMDS
+ 	$(if $(REFPOLICY_EXTRA_MODULES_DIRS), \
+ 		$(REFPOLICY_COPY_EXTRA_MODULES)
+ 	)
+-	$(REFPOLICY_MAKE) -C $(@D) bare conf
++	$(REFPOLICY_MAKE) -C $(@D) conf
+ 	$(REFPOLICY_CONFIGURE_MODULES)
+ endef
  
-+config BR2_PACKAGE_WPA_SUPPLICANT_WEXT
-+	bool "Enable wext (deprecated)"
-+	default y if !BR2_TOOLCHAIN_HAS_THREADS
-+	help
-+	  Enable support for wext.  This is the historic wireless API
-+	  for Linux, which is now deprecated and in maintenance-only in
-+	  the kernel.  It may still be required by out-of-tree drivers.
-+
-+config BR2_PACKAGE_WPA_SUPPLICANT_WIRED
-+	bool "Enable wired support"
-+	select BR2_PACKAGE_WPA_SUPPLICANT_EAP
-+	help
-+	  Include the "wired" driver, so the internal IEEE 802.1x
-+	  supplicant can be used with Ethernet.  This also enables
-+	  support for MACSEC.
-+
-+comment "wpa_supplicant will be useless without at least one driver"
-+	depends on !BR2_PACKAGE_WPA_SUPPLICANT_NL80211 && \
-+		!BR2_PACKAGE_WPA_SUPPLICANT_WEXT && \
-+		!BR2_PACKAGE_WPA_SUPPLICANT_WIRED
-+
-+config BR2_PACKAGE_WPA_SUPPLICANT_IBSS_RSN
-+	bool "Enable IBSS RSN"
-+	depends on BR2_PACKAGE_WPA_SUPPLICANT_NL80211
-+	help
-+	  Enable support for RSN/WPA2 in Ad-Hoc mode.
-+
- config BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT
- 	bool "Enable AP mode"
- 	depends on BR2_PACKAGE_WPA_SUPPLICANT_NL80211
-@@ -90,6 +117,7 @@ config BR2_PACKAGE_WPA_SUPPLICANT_WPA3
- 
- config BR2_PACKAGE_WPA_SUPPLICANT_CLI
- 	bool "Install wpa_cli binary"
-+	select BR2_PACKAGE_WPA_SUPPLICANT_CTRL_IFACE
- 	help
- 	  Install wpa_cli command line utility
- 
-@@ -107,6 +135,11 @@ config BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE
- 	help
- 	  Install wpa_passphrase command line utility.
- 
-+config BR2_PACKAGE_WPA_SUPPLICANT_CTRL_IFACE
-+	bool "Enable the Unix-socket control interface"
-+	help
-+	  Enable support for the Unix-socket-based API.
-+
- config BR2_PACKAGE_WPA_SUPPLICANT_DBUS
- 	bool "Enable support for the DBus control interface"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
-diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-index cc259eb9c6..6ed135571e 100644
---- a/package/wpa_supplicant/wpa_supplicant.mk
-+++ b/package/wpa_supplicant/wpa_supplicant.mk
-@@ -47,6 +47,14 @@ else
- WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_DRIVER_NL80211
- endif
- 
-+ifneq ($(BR2_PACKAGE_WPA_SUPPLICANT_WEXT),y)
-+WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_DRIVER_WEXT
-+endif
-+
-+ifneq ($(BR2_PACKAGE_WPA_SUPPLICANT_IBSS_RSN), y)
-+WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_IBSS_RSN
-+endif
-+
- # Trailing underscore on purpose to not enable CONFIG_EAPOL_TEST
- ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_EAP),y)
- WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_EAP_
-@@ -60,6 +68,12 @@ WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_EAP \
- 	CONFIG_FILS
- endif
- 
-+ifneq ($(BR2_PACKAGE_WPA_SUPPLICANT_WIRED),y)
-+WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_DRIVER_WIRED \
-+	CONFIG_MACSEC \
-+	CONFIG_DRIVER_MACSEC
-+endif
-+
- ifneq ($(BR2_PACKAGE_WPA_SUPPLICANT_HOTSPOT),y)
- WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_HS20 \
- 	CONFIG_INTERWORKING
-@@ -117,6 +131,10 @@ WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_EAP_PWD CONFIG_EAP_TEAP
- WPA_SUPPLICANT_CONFIG_EDITS += 's/\#\(CONFIG_TLS=\).*/\1internal/'
- endif
- 
-+ifneq ($(BR2_PACKAGE_WPA_SUPPLICANT_CTRL_IFACE),y)
-+WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_CTRL_IFACE
-+endif
-+
- ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DBUS),y)
- WPA_SUPPLICANT_DEPENDENCIES += host-pkgconf dbus
- WPA_SUPPLICANT_MAKE_ENV = \
 -- 
-2.30.0
+2.29.2
