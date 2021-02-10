@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 10 Feb 2021 20:55:43 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/connman: add
+Date: Wed, 10 Feb 2021 20:57:22 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/connman: add
  upstream security fixes for CVE-2021-2667{5, 6}
-Message-ID: <20210210193755.EED4A81E42@busybox.osuosl.org>
+Message-ID: <20210210193801.742A483977@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3f52fe670ba29e8166d14e0e3b2c782e26de93f6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=0cc44d01a325f600dbbdaa470041d928d2fab6f1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 Fixes the following security issues:
 
