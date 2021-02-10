@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 10 Feb 2021 20:34:29 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/rauc:
+Date: Wed, 10 Feb 2021 20:34:25 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/rauc:
  package/rauc: bump version to 1.5.1
-Message-ID: <20210210191435.3FC367FD9D@busybox.osuosl.org>
+Message-ID: <20210210191444.2055783978@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=38b229167c44ba592e84ccf4040bd9af23f2996e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=311c830ffa79b60dd0d7cdcdd912344d9df7138c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 Removed patch applied upstream.
 
