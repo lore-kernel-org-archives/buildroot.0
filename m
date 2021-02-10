@@ -1,64 +1,45 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 11 Feb 2021 00:16:36 +0100
-Subject: [Buildroot] [PATCH/next v1 3/7] package/libuci: bump version to
- 52bbc99
-In-Reply-To: <20210210231640.5262-1-ps.report@gmx.net>
-References: <20210210231640.5262-1-ps.report@gmx.net>
-Message-ID: <20210210231640.5262-3-ps.report@gmx.net>
+From: Christian Stewart <christian@paral.in>
+Date: Wed, 10 Feb 2021 15:25:46 -0800
+Subject: [Buildroot] [PATCH 1/1] package/go: bump to version 1.15.8
+Message-ID: <20210210232546.2131127-1-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- change download url to https
+go1.15.8 (released 2021/02/04) includes fixes to the compiler, linker, runtime,
+the go command, and the net/http package.
 
-- update homepage url (the old one redirects to legacy read only
-  OpenWrt wiki system)
+https://golang.org/doc/go1.15
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/libuci/Config.in   | 2 +-
- package/libuci/libuci.hash | 2 +-
- package/libuci/libuci.mk   | 5 +++--
- 3 files changed, 5 insertions(+), 4 deletions(-)
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libuci/Config.in b/package/libuci/Config.in
-index 2f4ad40487..f94d7dc391 100644
---- a/package/libuci/Config.in
-+++ b/package/libuci/Config.in
-@@ -10,7 +10,7 @@ config BR2_PACKAGE_LIBUCI
- 
- 	  This package will also install CLI tool uci.
- 
--	  http://wiki.openwrt.org/doc/techref/uci
-+	  https://openwrt.org/docs/techref/uci
- 
- comment "libuci needs a toolchain w/ dynamic library"
- 	depends on BR2_STATIC_LIBS
-diff --git a/package/libuci/libuci.hash b/package/libuci/libuci.hash
-index b808810ccf..b6962c2541 100644
---- a/package/libuci/libuci.hash
-+++ b/package/libuci/libuci.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256  1ee875910bdf751807f10d44f6b6b7f9ec71c12d4c407a80bae5cb654d2ba4cc  libuci-49ec6efbdac4819033d34f08927d795f83a3932d-br1.tar.gz
-+sha256  76ef826df2961420cd7a4f1702bef06c37563d9807a2d8e84557963aab21ac80  libuci-52bbc99f69ea6f67b6fe264f424dac91bde5016c-br1.tar.gz
-diff --git a/package/libuci/libuci.mk b/package/libuci/libuci.mk
-index 55afd53c10..fcfda95b3a 100644
---- a/package/libuci/libuci.mk
-+++ b/package/libuci/libuci.mk
-@@ -4,8 +4,9 @@
+diff --git a/package/go/go.hash b/package/go/go.hash
+index 1bd7ab7ca9..cbc82a9b64 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,3 +1,3 @@
+ # From https://golang.org/dl/
+-sha256  8631b3aafd8ecb9244ec2ffb8a2a8b4983cf4ad15572b9801f7c5b167c1a2abc  go1.15.7.src.tar.gz
++sha256  540c0ab7781084d124991321ed1458e479982de94454a98afab6acadf38497c2  go1.15.8.src.tar.gz
+ sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 21a33d215c..7b7f173706 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBUCI_VERSION = 49ec6efbdac4819033d34f08927d795f83a3932d
--LIBUCI_SITE = git://git.openwrt.org/project/uci.git
-+LIBUCI_VERSION = 52bbc99f69ea6f67b6fe264f424dac91bde5016c
-+LIBUCI_SITE = https://git.openwrt.org/project/uci.git
-+LIBUCI_SITE_METHOD = git
- LIBUCI_LICENSE = LGPL-2.1, GPL-2.0 (tools)
- LIBUCI_INSTALL_STAGING = YES
- LIBUCI_DEPENDENCIES = libubox
+-GO_VERSION = 1.15.7
++GO_VERSION = 1.15.8
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
 -- 
 2.30.0
