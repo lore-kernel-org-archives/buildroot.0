@@ -1,66 +1,65 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 10 Feb 2021 11:25:37 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/xenomai: disable
- cobalt for armv8
-Message-ID: <20210210183739.64AD880F69@busybox.osuosl.org>
+Date: Wed, 10 Feb 2021 19:54:27 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/wpa_supplicant:
+ add upstream 2020-2 security fix
+Message-ID: <20210210183739.70CCE83980@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b74c28ab89a02bfbe710db6f9b31d466858aa1e8
+commit: https://git.buildroot.net/buildroot/commit/?id=ef12ec2f6c78966335238b6bc582c32e7d9aaee3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-When a armv8 target is used in 32bits mode, xenomai fail to detect the
-ARM architecture and abord the build. (__ARM_ARCH_7A__ is not defined
-for armv8 cpus).
+Fixes the following security issue:
 
-There are no autobuilder failures for this issue since cobalt is never
-selected, but the following defconfig:
+ - wpa_supplicant P2P group information processing vulnerability (no CVE yet)
 
-BR2_arm=y
-BR2_cortex_a53=y
-BR2_ARM_FPU_NEON_VFPV4=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_PACKAGE_XENOMAI=y
-BR2_PACKAGE_XENOMAI_COBALT=y
+   A vulnerability was discovered in how wpa_supplicant processing P2P
+   (Wi-Fi Direct) group information from active group owners.  The actual
+   parsing of that information validates field lengths appropriately, but
+   processing of the parsed information misses a length check when storing a
+   copy of the secondary device types.  This can result in writing attacker
+   controlled data into the peer entry after the area assigned for the
+   secondary device type.  The overflow can result in corrupting pointers
+   for heap allocations.  This can result in an attacker within radio range
+   of the device running P2P discovery being able to cause unexpected
+   behavior, including termination of the wpa_supplicant process and
+   potentially arbitrary code execution.
 
-This was initialy reproduced using the raspberrypi3_defconfig with
-Xenomai package with cobalt selected.
+For more details, see the advisory:
+https://w1.fi/security/2020-2/wpa_supplicant-p2p-group-info-processing-vulnerability.txt
 
-In order to use Xenomai on raspberrypi3 in 32 bits mode, one has to
-select BR2_cortex_a7 instead of BR2_cortex_a53 (see a13a388dd444).
-
-See:
-https://gitlab.denx.de/Xenomai/xenomai/-/blob/v3.1/lib/cobalt/arch/arm/include/asm/xenomai/features.h#L52
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-[yann.morin.1998 at free.fr:
-  - switch to independent conditional 'default y'
-  - slightly reword the commit log
-]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+[yann.morin.1998 at free.fr: keep _PATCH near _VERSION and _SITE]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 6490a11018e71d8200f74af581c0a65b1612085a)
+(cherry picked from commit 74c854bd518be67719872a9ceb2336a149458deb)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/xenomai/Config.in | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ package/wpa_supplicant/wpa_supplicant.hash | 1 +
+ package/wpa_supplicant/wpa_supplicant.mk   | 2 ++
+ 2 files changed, 3 insertions(+)
 
-diff --git a/package/xenomai/Config.in b/package/xenomai/Config.in
-index e39a550416..ec6d9e5d29 100644
---- a/package/xenomai/Config.in
-+++ b/package/xenomai/Config.in
-@@ -1,8 +1,9 @@
- config BR2_PACKAGE_XENOMAI_COBALT_ARCH_SUPPORTS
- 	bool
--	default y
--	depends on BR2_i386 || BR2_x86_64 || (BR2_arm && !BR2_ARM_CPU_ARMV7M) || \
--		BR2_powerpc
-+	default y if BR2_i386
-+	default y if BR2_x86_64
-+	default y if BR2_powerpc
-+	default y if BR2_arm && !BR2_ARM_CPU_ARMV7M && !BR2_ARM_CPU_ARMV8A
+diff --git a/package/wpa_supplicant/wpa_supplicant.hash b/package/wpa_supplicant/wpa_supplicant.hash
+index ff5a2edb34..cce465d849 100644
+--- a/package/wpa_supplicant/wpa_supplicant.hash
++++ b/package/wpa_supplicant/wpa_supplicant.hash
+@@ -1,3 +1,4 @@
+ # Locally calculated
+ sha256  fcbdee7b4a64bea8177973299c8c824419c413ec2e3a95db63dd6a5dc3541f17  wpa_supplicant-2.9.tar.gz
+ sha256  9da5dd0776da266b180b915e460ff75c6ff729aca1196ab396529510f24f3761  README
++sha256  c4d65cc13863e0237d0644198558e2c47b4ed91e2b2be4516ff590724187c4a5  0001-P2P-Fix-copying-of-secondary-device-types-for-P2P-gr.patch
+diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+index 7170db0d07..eaa43302d6 100644
+--- a/package/wpa_supplicant/wpa_supplicant.mk
++++ b/package/wpa_supplicant/wpa_supplicant.mk
+@@ -6,6 +6,8 @@
  
- comment "xenomai needs a glibc or uClibc toolchain w/ threads"
- 	depends on BR2_USE_MMU
+ WPA_SUPPLICANT_VERSION = 2.9
+ WPA_SUPPLICANT_SITE = http://w1.fi/releases
++WPA_SUPPLICANT_PATCH = \
++	https://w1.fi/security/2020-2/0001-P2P-Fix-copying-of-secondary-device-types-for-P2P-gr.patch
+ WPA_SUPPLICANT_LICENSE = BSD-3-Clause
+ WPA_SUPPLICANT_LICENSE_FILES = README
+ WPA_SUPPLICANT_CONFIG = $(WPA_SUPPLICANT_DIR)/wpa_supplicant/.config
