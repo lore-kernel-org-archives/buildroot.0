@@ -1,34 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 10 Feb 2021 19:57:16 +0100
-Subject: [Buildroot] [PATCH 1/1] package/makedumpfile: fix build on
- sparc64
-In-Reply-To: <20210204193111.1318198-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 4 Feb 2021 20:31:11 +0100")
-References: <20210204193111.1318198-1-fontaine.fabrice@gmail.com>
-Message-ID: <87czx7n437.fsf@dell.be.48ers.dk>
+Date: Wed, 10 Feb 2021 19:58:27 +0100
+Subject: [Buildroot] [PATCH] package/python3: add upstream security fix
+ for CVE-2021-3177
+In-Reply-To: <20210205130756.17142-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Fri, 5 Feb 2021 14:07:56 +0100")
+References: <20210205130756.17142-1-peter@korsgaard.com>
+Message-ID: <878s7vn418.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Fix the following build failure on sparc64:
- > /home/giuliobenetti/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc64-buildroot-linux-gnu/9.3.0/../../../../sparc64-buildroot-linux-gnu/bin/ld:
- > /tmp/ccylTux8.o: in function `find_kaslr_offsets':
- > /home/giuliobenetti/autobuild/run/instance-0/output-1/build/makedumpfile-1.6.8/makedumpfile.c:4017:
- > undefined reference to `get_kaslr_offset'
+ > Fixes the following security issue:
+ > - CVE-2021-3177: Python 3.x through 3.9.1 has a buffer overflow in
+ >   PyCArg_repr in _ctypes/callproc.c, which may lead to remote code execution
+ >   in certain Python applications that accept floating-point numbers as
+ >   untrusted input, as demonstrated by a 1e300 argument to
+ >   c_double.from_param.  This occurs because sprintf is used unsafely.
 
- > Even if this build failure is only raised with version 1.6.8,
- > get_kaslr_offset was also undeclared on sparc64 in version 1.6.7
+ > For details, see the advisory:
+ > https://python-security.readthedocs.io/vuln/ctypes-buffer-overflow-pycarg_repr.html
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/1421f54f7599bba62c0a4bd5c65ce21c8cc7ee1a
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed to 2020.11.x, thanks.
+
+I'll backport a similar patch for 3.8 for 2020.02.x.
 
 -- 
 Bye, Peter Korsgaard
