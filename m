@@ -1,116 +1,46 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 10 Feb 2021 22:45:15 +0100
-Subject: [Buildroot] [PATCH] package/dmalloc: Fix for ARC with enabled
- BR2_SSP_ALL
-In-Reply-To: <20210209104726.20132-1-kremneva@synopsys.com>
-References: <20210209104726.20132-1-kremneva@synopsys.com>
-Message-ID: <20210210214514.GF1679218@scaer>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 11 Feb 2021 00:16:40 +0100
+Subject: [Buildroot] [PATCH/next v1 7/7] package/dnsmasq: bump version to
+ 2.84
+In-Reply-To: <20210210231640.5262-1-ps.report@gmx.net>
+References: <20210210231640.5262-1-ps.report@gmx.net>
+Message-ID: <20210210231640.5262-7-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Veronika, All,
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/dnsmasq/dnsmasq.hash | 2 +-
+ package/dnsmasq/dnsmasq.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-+Fabrice, see below...
-
-On 2021-02-09 13:47 +0300, Veronika Kremneva spake thusly:
-> When building dmalloc for ARC while having "-fstack-protector-all" option on,
-> we are getting the following error:
-> ------------------------------->8---------------------------
-> >>> dmalloc 5.5.2 Installing to target
-> cp -dpf $HOME/buildroot/output/host/arc-buildroot-linux-gnu/sysroot/usr/lib/libdmalloc*.so
-> $HOME/buildroot/output/target/usr/lib
-> cp -dpf $HOME/buildroot/output/host/arc-buildroot-linux-gnu/sysroot/usr/bin/dmalloc
-> $HOME/buildroot/output/target/usr/bin/dmalloc
-> ERROR: architecture for "/usr/lib/libdmallocthcxx.so" is "ARCompact", should be "ARCv2"
-> ERROR: architecture for "/usr/lib/libdmallocth.so" is "ARCompact", should be "ARCv2"
-> ERROR: architecture for "/usr/lib/libdmalloc.so" is "ARCompact", should be "ARCv2"
-> ERROR: architecture for "/usr/lib/libdmallocxx.so" is "ARCompact", should be "ARCv2"
-> make: *** [$HOME/buildroot/output/build/dmalloc-5.5.2/.stamp_installed] Error 1
-> ------------------------------->8---------------------------
-> 
-> You can observe this error in following builds:
-> http://autobuild.buildroot.net/results/57f/57fc51cee4ec9339ea3be23f8c8c9f7ecca1a857/
-> http://autobuild.buildroot.net/results/b4d/b4d457369f35e1942c294b0ea3b3cab4cae0d7a3/
-> http://autobuild.buildroot.net/results/cfc/cfc111076c955dd5c1125c6e34a161121ea11200/
-> http://autobuild.buildroot.net/results/1d0/1d0ffcefbf545d1748e928603fd07c0a8de98eb5/
-> 
-> In all of those builds architecture "ARCv2" was explicitly chosen during configuration
-> yet we are getting this error. As we go deeper we find that the object file that linker
-> is trying to process contains no target code thus the default "ARCompact" is being used.
-> But why the object file is empty? Went to check link args:
-> ------------------------------->8---------------------------
-> $HOME/buildroot/output/host/bin/arc-buildroot-linux-gnu-ld: conftest.a(conftest.o):
-> relocation R_ARC_32_ME against `__stack_chk_guard' can not be used when making a shared
-> object; recompile with -fPIC
-> $HOME/buildrootc/output/host/bin/arc-buildroot-linux-gnu-ld: BFD (GNU Binutils) 2.34.50.20200611
-> assertion fail elf32-arc.c:1802
-> $HOME/buildroot/output/host/bin/arc-buildroot-linux-gnu-ld: unrecognized option '-all'
-> $HOME/buildroot/output/host/bin/arc-buildroot-linux-gnu-ld: use the --help option for usage information
-> configure:4475: result: $HOME/buildroot/output/host/bin/arc-buildroot-linux-gnu-ld -G -o $@.t
-> ------------------------------->8---------------------------
-> 
-> Looks like we are missing the -fPIC flag in DMALLOC_CFLAGS. As shared libraries should always
-> be compiled with "-fPIC" following patch adds this flag to the dmalloc.mk.
-
-While reviewing that patch, I see that Fabrice already sent a similar
-patch quite some time ago now:
-
-    https://patchwork.ozlabs.org/project/buildroot/patch/20200601092104.830051-1-fontaine.fabrice at gmail.com/
-
-> Signed-off-by: Veronika Kremneva <kremneva@synopsys.com>
-> ---
->  package/dmalloc/dmalloc.mk | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/package/dmalloc/dmalloc.mk b/package/dmalloc/dmalloc.mk
-> index 38b2c02027..638fe0fcda 100644
-> --- a/package/dmalloc/dmalloc.mk
-> +++ b/package/dmalloc/dmalloc.mk
-> @@ -16,6 +16,10 @@ DMALLOC_INSTALL_STAGING = YES
->  DMALLOC_CONF_OPTS = --enable-shlib
->  DMALLOC_CFLAGS = $(TARGET_CFLAGS)
->  
-> +ifeq ($(BR2_STATIC_LIBS),)
-> +DMALLOC_CFLAGS += -fPIC
-
-So, it seems that both of you arrived to a similar conclusion, with a
-similar analysis.
-
-I think the change from Fabrice would in the end be better, if it at
-least because it drops a bundled patch.
-
-Except for that, I wonder if we care about not adding -fPIC for static
-libs. Indeed, the current patch unconditionally adds -fPIC to all
-builds, shared and static alike...
-
-Besides, -fPIC is almost innocuous for static builds (maybe a very
-slight overhead to resolve or jump to some symbols)...
-
-What's your thoughts, both Veronika and Fabrice?
-
-Regards,
-Yann E. MORIN.
-
-> +endif
-> +
->  ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
->  DMALLOC_CONF_OPTS += --enable-cxx
->  else
-> -- 
-> 2.16.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/dnsmasq/dnsmasq.hash b/package/dnsmasq/dnsmasq.hash
+index 6c19dad791..d141fb0c83 100644
+--- a/package/dnsmasq/dnsmasq.hash
++++ b/package/dnsmasq/dnsmasq.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+ # https://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.83.tar.xz.asc
+-sha256  ffc1f7e8b05e22d910b9a71d09f1128197292766dc7c54cb7018a1b2c3af4aea  dnsmasq-2.83.tar.xz
++sha256  603195c64b73137609b07e1024ae0b37f652b2f5fe467dce66985b3d1850050c  dnsmasq-2.84.tar.xz
+ # Locally calculated
+ sha256  dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa  COPYING
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING-v3
+diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
+index fb21dc7ad0..76b48f952a 100644
+--- a/package/dnsmasq/dnsmasq.mk
++++ b/package/dnsmasq/dnsmasq.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DNSMASQ_VERSION = 2.83
++DNSMASQ_VERSION = 2.84
+ DNSMASQ_SOURCE = dnsmasq-$(DNSMASQ_VERSION).tar.xz
+ DNSMASQ_SITE = http://thekelleys.org.uk/dnsmasq
+ DNSMASQ_MAKE_ENV = $(TARGET_MAKE_ENV) CC="$(TARGET_CC)"
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.30.0
