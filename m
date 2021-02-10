@@ -1,118 +1,81 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 10 Feb 2021 10:07:48 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/cereal: fix
- CVE-2020-11105
-Message-ID: <20210210085149.1DA7A80DB3@busybox.osuosl.org>
+Date: Wed, 10 Feb 2021 10:04:23 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/sox: fix static
+ build with id3tag
+Message-ID: <20210210085149.0FF6080DB3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0735f1fc4e0a05d95d066aa7552859d9f83278a7
+commit: https://git.buildroot.net/buildroot/commit/?id=bdf5eb3c67177b138ce5d0bd9c303dcc452af429
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Fix CVE-2020-11105: An issue was discovered in USC iLab cereal through
-1.3.0. It employs caching of std::shared_ptr values, using the raw
-pointer address as a unique identifier. This becomes problematic if an
-std::shared_ptr variable goes out of scope and is freed, and a new
-std::shared_ptr is allocated at the same address. Serialization fidelity
-thereby becomes dependent upon memory layout. In short, serialized
-std::shared_ptr variables cannot always be expected to serialize back
-into their original values. This can have any number of consequences,
-depending on the context within which this manifests.
+This build failure is raised since bump to
+7524160b29a476f7e87bc14fddf12d349f9a3c5e
+
+Fixes:
+ - http://autobuild.buildroot.org/results/73efdacf237e3d567fa66f3b3f68e624f5e35bc7
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 26a46564f395e08cf8c4514c62e38a7d637d8cec)
+(cherry picked from commit 58fc4b5085763cf1837cab22e98b0eaa7fefaac5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-serialized-shared_ptr-within-the-archive.patch | 67 ++++++++++++++++++++++
- package/cereal/cereal.mk                           |  3 +
- 2 files changed, 70 insertions(+)
+ ...nfigure.ac-fix-static-linking-with-id3tag.patch | 47 ++++++++++++++++++++++
+ 1 file changed, 47 insertions(+)
 
-diff --git a/package/cereal/0001-Store-a-copy-of-each-serialized-shared_ptr-within-the-archive.patch b/package/cereal/0001-Store-a-copy-of-each-serialized-shared_ptr-within-the-archive.patch
+diff --git a/package/sox/0003-configure.ac-fix-static-linking-with-id3tag.patch b/package/sox/0003-configure.ac-fix-static-linking-with-id3tag.patch
 new file mode 100644
-index 0000000000..3458ec1b59
+index 0000000000..32d6f83b0c
 --- /dev/null
-+++ b/package/cereal/0001-Store-a-copy-of-each-serialized-shared_ptr-within-the-archive.patch
-@@ -0,0 +1,67 @@
-+From f27c12d491955c94583512603bf32c4568f20929 Mon Sep 17 00:00:00 2001
-+From: Michael Walz <code@serpedon.de>
-+Date: Tue, 2 Feb 2021 00:50:29 +0100
-+Subject: [PATCH] Store a copy of each serialized shared_ptr within the archive
-+ to prevent the shared_ptr to be freed to early. (#667)
++++ b/package/sox/0003-configure.ac-fix-static-linking-with-id3tag.patch
+@@ -0,0 +1,47 @@
++From 8df3a56cfb104c84d4701562ae2e3c9dc4686798 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 6 Feb 2021 11:08:45 +0100
++Subject: [PATCH] configure.ac: fix static linking with id3tag
 +
-+The archives use the memory address pointed by the shared_ptr as a
-+unique id which must not be reused during lifetime of the archive.
-+Therefore, the archives stores a copy of it.
-+This problem was also reported as CVE-2020-11105.
++Put back -lz (i.e. ZLIB_LIBS) when searching for id3tag which was
++wrongly removed by commit 6ff0e9322f9891f5a6ac6c9b3bceffbfca16bec3. This
++will fix the following static build failure:
 +
-+[Retrieved from:
-+https://github.com/USCiLab/cereal/commit/f27c12d491955c94583512603bf32c4568f20929]
++configure:15290: checking for id3_file_open in -lid3tag
++configure:15315: /home/buildroot/autobuild/instance-0/output-1/host/bin/arm-linux-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2   -static -Wall -Wmissing-prototypes -Wstrict-prototypes  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -static -Wl,--as-needed conftest.c -lid3tag    >&5
++conftest.c:60:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
++   60 | char id3_file_open ();
++      | ^~~~
++conftest.c:62:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
++   62 | main ()
++      | ^~~~
++/home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/9.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /home/buildroot/autobuild/instance-0/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libid3tag.a(util.o): in function `id3_util_compress':
++util.c:(.text+0x1ac): undefined reference to `compress2'
++/home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/9.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /home/buildroot/autobuild/instance-0/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libid3tag.a(util.o): in function `id3_util_decompress':
++util.c:(.text+0x240): undefined reference to `uncompress'
++
++Fixes:
++ - http://autobuild.buildroot.org/results/73efdacf237e3d567fa66f3b3f68e624f5e35bc7
++
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://sourceforge.net/p/sox/patches/123]
 +---
-+ include/cereal/cereal.hpp       | 13 +++++++++++--
-+ include/cereal/types/memory.hpp |  2 +-
-+ 2 files changed, 12 insertions(+), 3 deletions(-)
++ configure.ac | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/include/cereal/cereal.hpp b/include/cereal/cereal.hpp
-+index 99bed9d6..f0d15e8b 100644
-+--- a/include/cereal/cereal.hpp
-++++ b/include/cereal/cereal.hpp
-+@@ -369,12 +369,17 @@ namespace cereal
-+           point to the same data.
++diff --git a/configure.ac b/configure.ac
++index 39306398..896714f5 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -83,7 +83,7 @@ dnl Various libraries
++ SOX_WITH_LIB([magic], [magic.h], [magic], [magic_open])
++ SOX_CHECK_LIB([ZLIB], [zlib.h], [z], [uncompress])
++ SOX_WITH_LIB([png], [png.h], [png], [png_set_rows], [], [], [], [$ZLIB_LIBS])
++-SOX_WITH_LIB([id3tag], [id3tag.h], [id3tag], [id3_file_open])
+++SOX_WITH_LIB([id3tag], [id3tag.h], [id3tag], [id3_file_open], [], [], [], [$ZLIB_LIBS])
++ SOX_WITH_LIB([libgsm], [gsm/gsm.h gsm.h], [gsm], [gsm_create])
 + 
-+           @internal
-+-          @param addr The address (see shared_ptr get()) pointed to by the shared pointer
-++          @param sharedPointer The shared pointer itself (the adress is taked via get()).
-++                               The archive takes a copy to prevent the memory location to be freed
-++                               as long as the address is used as id. This is needed to prevent CVE-2020-11105.
-+           @return A key that uniquely identifies the pointer */
-+-      inline std::uint32_t registerSharedPointer( void const * addr )
-++      inline std::uint32_t registerSharedPointer(const std::shared_ptr<const void>& sharedPointer)
-+       {
-++        void const * addr = sharedPointer.get();
-++
-+         // Handle null pointers by just returning 0
-+         if(addr == 0) return 0;
-++        itsSharedPointerStorage.push_back(sharedPointer);
-+ 
-+         auto id = itsSharedPointerMap.find( addr );
-+         if( id == itsSharedPointerMap.end() )
-+@@ -645,6 +650,10 @@ namespace cereal
-+       //! Maps from addresses to pointer ids
-+       std::unordered_map<void const *, std::uint32_t> itsSharedPointerMap;
-+ 
-++      //! Copy of shared pointers used in #itsSharedPointerMap to make sure they are kept alive
-++      //  during lifetime of itsSharedPointerMap to prevent CVE-2020-11105.
-++      std::vector<std::shared_ptr<const void>> itsSharedPointerStorage;
-++
-+       //! The id to be given to the next pointer
-+       std::uint32_t itsCurrentPointerId;
-+ 
-+diff --git a/include/cereal/types/memory.hpp b/include/cereal/types/memory.hpp
-+index 59e9da9b..cac1f334 100644
-+--- a/include/cereal/types/memory.hpp
-++++ b/include/cereal/types/memory.hpp
-+@@ -263,7 +263,7 @@ namespace cereal
-+   {
-+     auto & ptr = wrapper.ptr;
-+ 
-+-    uint32_t id = ar.registerSharedPointer( ptr.get() );
-++    uint32_t id = ar.registerSharedPointer( ptr );
-+     ar( CEREAL_NVP_("id", id) );
-+ 
-+     if( id & detail::msb_32bit )
-diff --git a/package/cereal/cereal.mk b/package/cereal/cereal.mk
-index 3811fdf32f..c31c3b1adb 100644
---- a/package/cereal/cereal.mk
-+++ b/package/cereal/cereal.mk
-@@ -15,4 +15,7 @@ CEREAL_CONF_OPTS = \
- 	-DTHREAD_SAFE=ON \
- 	-DJUST_INSTALL_CEREAL=ON
- 
-+# 0001-Store-a-copy-of-each-serialized-shared_ptr-within-the-archive.patch
-+CEREAL_IGNORE_CVES += CVE-2020-11105
++ dnl Optional formats
++-- 
++2.29.2
 +
- $(eval $(cmake-package))
