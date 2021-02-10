@@ -1,49 +1,42 @@
 From: Christian Stewart <christian@paral.in>
-Date: Wed, 10 Feb 2021 15:52:02 -0800
-Subject: [Buildroot] [PATCH v1 2/3] package/docker-engine: security bump to
- version 20.10.3
-In-Reply-To: <20210210235203.2819535-1-christian@paral.in>
-References: <20210210235203.2819535-1-christian@paral.in>
-Message-ID: <20210210235203.2819535-2-christian@paral.in>
+Date: Wed, 10 Feb 2021 15:52:01 -0800
+Subject: [Buildroot] [PATCH v1 1/3] package/runc: bump to version 1.0.0-rc93
+Message-ID: <20210210235203.2819535-1-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Security fixes:
-
- - CVE-2021-21285 Prevent an invalid image from crashing docker daemon
- - CVE-2021-21284 Lock down file permissions to prevent remapped root from accessing docker state
- - Ensure AppArmor and SELinux profiles are applied when building with BuildKit
+https://github.com/opencontainers/runc/releases/tag/v1.0.0-rc93
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/docker-engine/docker-engine.hash | 2 +-
- package/docker-engine/docker-engine.mk   | 2 +-
+ package/runc/runc.hash | 2 +-
+ package/runc/runc.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
-index 2519ddaecd..69ebd113ea 100644
---- a/package/docker-engine/docker-engine.hash
-+++ b/package/docker-engine/docker-engine.hash
+diff --git a/package/runc/runc.hash b/package/runc/runc.hash
+index d792947d5f..afe396368d 100644
+--- a/package/runc/runc.hash
++++ b/package/runc/runc.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  f0fda46a82bf8f624eb349370358891d3bc65ef3e320675226f17dba8f62566d  docker-engine-20.10.1.tar.gz
-+sha256  62bb03f197b8a064da568e62639f6834f91c8cfc9273126a978847becc214c31  docker-engine-20.10.3.tar.gz
- sha256  7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index 058960119a..bbc97af8b5 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ # Locally computed
+-sha256	28378df983a3c586ed3ec8c76a774a9b10f36a0c323590a284b801cce95cc61f  runc-1.0.0-rc92.tar.gz
++sha256  e42456078d2f76c925cdd656e4f423b918525d8188521de05e893b6bb473a6f8  runc-1.0.0-rc93.tar.gz
+ sha256  552a739c3b25792263f731542238b92f6f8d07e9a488eae27e6c4690038a8243  LICENSE
+diff --git a/package/runc/runc.mk b/package/runc/runc.mk
+index c0de2783e4..ba2ab3081a 100644
+--- a/package/runc/runc.mk
++++ b/package/runc/runc.mk
+@@ -10,7 +10,7 @@ RUNC_LICENSE = Apache-2.0
+ RUNC_LICENSE_FILES = LICENSE
+ RUNC_CPE_ID_VENDOR = linuxfoundation
+ RUNC_CPE_ID_VERSION = 1.0.0
+-RUNC_CPE_ID_UPDATE = rc92
++RUNC_CPE_ID_UPDATE = rc93
  
--DOCKER_ENGINE_VERSION = 20.10.1
-+DOCKER_ENGINE_VERSION = 20.10.3
- DOCKER_ENGINE_SITE = $(call github,moby,moby,v$(DOCKER_ENGINE_VERSION))
- 
- DOCKER_ENGINE_LICENSE = Apache-2.0
+ RUNC_LDFLAGS = -X main.version=$(RUNC_VERSION)
+ RUNC_TAGS = cgo static_build
 -- 
 2.30.0
