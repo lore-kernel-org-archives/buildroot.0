@@ -1,109 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 10 Feb 2021 20:56:40 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/connman:
- re-organize configure options and dependencies
-Message-ID: <20210210193801.49D6C83984@busybox.osuosl.org>
+Date: Wed, 10 Feb 2021 20:50:53 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/mosquitto: bump
+ version to 1.6.13
+Message-ID: <20210210193801.3A7E483977@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=63401117068cfd956c0f3b3397117b85ca8c9215
+commit: https://git.buildroot.net/buildroot/commit/?id=ab7bd882828b8bcda09163e0db859c9d04cebb23
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Use style typical for Buildroot.
+Includes a number of bugfixes.  For details, see the announcement:
+https://mosquitto.org/blog/2021/02/version-2-0-7-released/
 
-Suggested-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 69aa5c5d695c64f75bd079d968a3d622f916045c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/connman/connman.mk | 73 ++++++++++++++++++++++++++++++++++++----------
- 1 file changed, 57 insertions(+), 16 deletions(-)
+ package/mosquitto/mosquitto.hash | 4 ++--
+ package/mosquitto/mosquitto.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/connman/connman.mk b/package/connman/connman.mk
-index 2cbf3fe752..8403237c28 100644
---- a/package/connman/connman.mk
-+++ b/package/connman/connman.mk
-@@ -11,22 +11,63 @@ CONNMAN_DEPENDENCIES = libglib2 dbus iptables
- CONNMAN_INSTALL_STAGING = YES
- CONNMAN_LICENSE = GPL-2.0
- CONNMAN_LICENSE_FILES = COPYING
--CONNMAN_CONF_OPTS += \
--	--with-dbusconfdir=/etc \
--	$(if $(BR2_PACKAGE_CONNMAN_DEBUG),--enable-debug,--disable-debug) \
--	$(if $(BR2_PACKAGE_CONNMAN_ETHERNET),--enable-ethernet,--disable-ethernet) \
--	$(if $(BR2_PACKAGE_CONNMAN_WIFI),--enable-wifi,--disable-wifi) \
--	$(if $(BR2_PACKAGE_CONNMAN_WISPR),--enable-wispr,--disable-wispr) \
--	$(if $(BR2_PACKAGE_CONNMAN_BLUETOOTH),--enable-bluetooth,--disable-bluetooth) \
--	$(if $(BR2_PACKAGE_CONNMAN_LOOPBACK),--enable-loopback,--disable-loopback) \
--	$(if $(BR2_PACKAGE_CONNMAN_NEARD),--enable-neard,--disable-neard) \
--	$(if $(BR2_PACKAGE_CONNMAN_OFONO),--enable-ofono,--disable-ofono) \
--	$(if $(BR2_INIT_SYSTEMD),--with-systemdunitdir=/usr/lib/systemd/system)
--
--CONNMAN_DEPENDENCIES += \
--	$(if $(BR2_PACKAGE_CONNMAN_NEARD),neard) \
--	$(if $(BR2_PACKAGE_CONNMAN_OFONO),ofono) \
--	$(if $(BR2_PACKAGE_CONNMAN_WISPR),gnutls)
-+
-+CONNMAN_CONF_OPTS = --with-dbusconfdir=/etc
-+
-+ifeq ($(BR2_INIT_SYSTEMD),y)
-+CONNMAN_CONF_OPTS += --with-systemdunitdir=/usr/lib/systemd/system
-+endif
-+
-+ifeq ($(BR2_PACKAGE_CONNMAN_BLUETOOTH),y)
-+CONNMAN_CONF_OPTS += --enable-bluetooth
-+else
-+CONNMAN_CONF_OPTS += --disable-bluetooth
-+endif
-+
-+ifeq ($(BR2_PACKAGE_CONNMAN_DEBUG),y)
-+CONNMAN_CONF_OPTS += --enable-debug
-+else
-+CONNMAN_CONF_OPTS += --disable-debug
-+endif
-+
-+ifeq ($(BR2_PACKAGE_CONNMAN_ETHERNET),y)
-+CONNMAN_CONF_OPTS += --enable-ethernet
-+else
-+CONNMAN_CONF_OPTS += --disable-ethernet
-+endif
-+
-+ifeq ($(BR2_PACKAGE_CONNMAN_LOOPBACK),y)
-+CONNMAN_CONF_OPTS += --enable-loopback
-+else
-+CONNMAN_CONF_OPTS += --disable-loopback
-+endif
-+
-+ifeq ($(BR2_PACKAGE_CONNMAN_NEARD),y)
-+CONNMAN_CONF_OPTS += --enable-neard
-+CONNMAN_DEPENDENCIES += neard
-+else
-+CONNMAN_CONF_OPTS += --disable-neard
-+endif
-+
-+ifeq ($(BR2_PACKAGE_CONNMAN_OFONO),y)
-+CONNMAN_CONF_OPTS += --enable-ofono
-+CONNMAN_DEPENDENCIES += ofono
-+else
-+CONNMAN_CONF_OPTS += --disable-ofono
-+endif
-+
-+ifeq ($(BR2_PACKAGE_CONNMAN_WIFI),y)
-+CONNMAN_CONF_OPTS += --enable-wifi
-+else
-+CONNMAN_CONF_OPTS += --disable-wifi
-+endif
-+
-+ifeq ($(BR2_PACKAGE_CONNMAN_WISPR),y)
-+CONNMAN_CONF_OPTS += --enable-wispr
-+CONNMAN_DEPENDENCIES += gnutls
-+else
-+CONNMAN_CONF_OPTS += --disable-wispr
-+endif
+diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
+index 13f0c8de23..731a6ad80f 100644
+--- a/package/mosquitto/mosquitto.hash
++++ b/package/mosquitto/mosquitto.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking gpg signature
+-# from https://mosquitto.org/files/source/mosquitto-1.6.12.tar.gz.asc
+-sha256  548d73d19fb787dd0530334e398fd256ef3a581181678488a741a995c4f007fb  mosquitto-1.6.12.tar.gz
++# from https://mosquitto.org/files/source/mosquitto-1.6.13.tar.gz.asc
++sha256  ce205248dd323e4e562ff83e9e84d0f9a16f4bda87183c367c66a7163c0fc287  mosquitto-1.6.13.tar.gz
  
- define CONNMAN_INSTALL_INIT_SYSV
- 	$(INSTALL) -m 0755 -D package/connman/S45connman $(TARGET_DIR)/etc/init.d/S45connman
+ # License files
+ sha256  cc77e25bafd40637b7084f04086d606f0a200051b61806f97c93405926670bc1  LICENSE.txt
+diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
+index 8cee0d7b0b..11e94ea7b0 100644
+--- a/package/mosquitto/mosquitto.mk
++++ b/package/mosquitto/mosquitto.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MOSQUITTO_VERSION = 1.6.12
++MOSQUITTO_VERSION = 1.6.13
+ MOSQUITTO_SITE = https://mosquitto.org/files/source
+ MOSQUITTO_LICENSE = EPL-1.0 or EDLv1.0
+ MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v10 edl-v10
