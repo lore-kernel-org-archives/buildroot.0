@@ -1,31 +1,28 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 10 Feb 2021 10:08:14 +0100
-Subject: [Buildroot] [PATCH 1/1] package/cereal: fix CVE-2020-11105
-In-Reply-To: <20210203201100.1153600-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Wed, 3 Feb 2021 21:11:00 +0100")
-References: <20210203201100.1153600-1-fontaine.fabrice@gmail.com>
-Message-ID: <87ft24nvcx.fsf@dell.be.48ers.dk>
+From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Date: Wed, 10 Feb 2021 10:05:21 +0100
+Subject: [Buildroot] wpa_supplicant-2.9 - very large static binary size
+In-Reply-To: <FAE5A8B9-E109-4BCE-B77C-BE519870E2D4@hxcore.ol>
+References: <FAE5A8B9-E109-4BCE-B77C-BE519870E2D4@hxcore.ol>
+Message-ID: <ef87e65d-9b0a-c193-7ff0-a6960c9fc14f@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+On 09/02/2021 20:55, Reuven Wachtfogel wrote:
+> Enabling a static wpa_supplicant-2.9 without debug and without any 
+> sub-options generates a 2MB+ binary.? From various sources, I was 
+> expecting something closer to 600KB. Any ideas?
 
- > Fix CVE-2020-11105: An issue was discovered in USC iLab cereal through
- > 1.3.0. It employs caching of std::shared_ptr values, using the raw
- > pointer address as a unique identifier. This becomes problematic if an
- > std::shared_ptr variable goes out of scope and is freed, and a new
- > std::shared_ptr is allocated at the same address. Serialization fidelity
- > thereby becomes dependent upon memory layout. In short, serialized
- > std::shared_ptr variables cannot always be expected to serialize back
- > into their original values. This can have any number of consequences,
- > depending on the context within which this manifests.
+The 802.11 and Wi-Fi standard aren't getting any lighter...
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Since wpa_supplicant 2.8, most features started being enabled by default 
+because Linux distribution were tired to manually enable support for them.
 
-Committed to 2020.02.x and 2020.11.x, thanks.
+Even my shared-libs wpa_supplicant binary is over 2M with a few options 
+now...  but i can debloat it to 800K by toggling a few options.
 
--- 
-Bye, Peter Korsgaard
+I already have many local modifications to enable/disable things, maybe 
+I should just improve/clean them and send it as a patch.  Testing the 
+various configurations will take time, however.
