@@ -1,60 +1,109 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 10 Feb 2021 20:57:04 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/connman: remove
- _GNU_SOURCE patch
-Message-ID: <20210210193801.6799B83984@busybox.osuosl.org>
+Date: Wed, 10 Feb 2021 20:56:40 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/connman:
+ re-organize configure options and dependencies
+Message-ID: <20210210193801.49D6C83984@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=40712566fc764239eaa8e6e56117c2bd8b9d20f8
+commit: https://git.buildroot.net/buildroot/commit/?id=63401117068cfd956c0f3b3397117b85ca8c9215
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Not needed any more.
+Use style typical for Buildroot.
 
+Suggested-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 14191cd119d2366cb0ecb2f8f363e500bb02cbed)
+(cherry picked from commit 69aa5c5d695c64f75bd079d968a3d622f916045c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/connman/0001-nat-build-failure.patch | 30 ----------------------------
- 1 file changed, 30 deletions(-)
+ package/connman/connman.mk | 73 ++++++++++++++++++++++++++++++++++++----------
+ 1 file changed, 57 insertions(+), 16 deletions(-)
 
-diff --git a/package/connman/0001-nat-build-failure.patch b/package/connman/0001-nat-build-failure.patch
-deleted file mode 100644
-index 0ab58501d0..0000000000
---- a/package/connman/0001-nat-build-failure.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--From 68f4b4f5b220f256b17ad2f084d61fe89f3632ae Mon Sep 17 00:00:00 2001
--From: Gustavo Zacarias <gustavo@zacarias.com.ar>
--Date: Tue, 19 Apr 2016 08:38:38 -0300
--Subject: [PATCH] nat: fix build failure
+diff --git a/package/connman/connman.mk b/package/connman/connman.mk
+index 2cbf3fe752..8403237c28 100644
+--- a/package/connman/connman.mk
++++ b/package/connman/connman.mk
+@@ -11,22 +11,63 @@ CONNMAN_DEPENDENCIES = libglib2 dbus iptables
+ CONNMAN_INSTALL_STAGING = YES
+ CONNMAN_LICENSE = GPL-2.0
+ CONNMAN_LICENSE_FILES = COPYING
+-CONNMAN_CONF_OPTS += \
+-	--with-dbusconfdir=/etc \
+-	$(if $(BR2_PACKAGE_CONNMAN_DEBUG),--enable-debug,--disable-debug) \
+-	$(if $(BR2_PACKAGE_CONNMAN_ETHERNET),--enable-ethernet,--disable-ethernet) \
+-	$(if $(BR2_PACKAGE_CONNMAN_WIFI),--enable-wifi,--disable-wifi) \
+-	$(if $(BR2_PACKAGE_CONNMAN_WISPR),--enable-wispr,--disable-wispr) \
+-	$(if $(BR2_PACKAGE_CONNMAN_BLUETOOTH),--enable-bluetooth,--disable-bluetooth) \
+-	$(if $(BR2_PACKAGE_CONNMAN_LOOPBACK),--enable-loopback,--disable-loopback) \
+-	$(if $(BR2_PACKAGE_CONNMAN_NEARD),--enable-neard,--disable-neard) \
+-	$(if $(BR2_PACKAGE_CONNMAN_OFONO),--enable-ofono,--disable-ofono) \
+-	$(if $(BR2_INIT_SYSTEMD),--with-systemdunitdir=/usr/lib/systemd/system)
 -
--_GNU_SOURCE needs to be defined so that O_CLOEXEC symbols can be found in
--system header files.
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-----
--Status: submitted upstream
--
-- src/nat.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/src/nat.c b/src/nat.c
--index 33ae6df..62e21d4 100644
----- a/src/nat.c
--+++ b/src/nat.c
--@@ -24,6 +24,7 @@
-- #include <config.h>
-- #endif
-- 
--+#define _GNU_SOURCE
-- #include <errno.h>
-- #include <sys/types.h>
-- #include <sys/stat.h>
---- 
--2.7.3
--
+-CONNMAN_DEPENDENCIES += \
+-	$(if $(BR2_PACKAGE_CONNMAN_NEARD),neard) \
+-	$(if $(BR2_PACKAGE_CONNMAN_OFONO),ofono) \
+-	$(if $(BR2_PACKAGE_CONNMAN_WISPR),gnutls)
++
++CONNMAN_CONF_OPTS = --with-dbusconfdir=/etc
++
++ifeq ($(BR2_INIT_SYSTEMD),y)
++CONNMAN_CONF_OPTS += --with-systemdunitdir=/usr/lib/systemd/system
++endif
++
++ifeq ($(BR2_PACKAGE_CONNMAN_BLUETOOTH),y)
++CONNMAN_CONF_OPTS += --enable-bluetooth
++else
++CONNMAN_CONF_OPTS += --disable-bluetooth
++endif
++
++ifeq ($(BR2_PACKAGE_CONNMAN_DEBUG),y)
++CONNMAN_CONF_OPTS += --enable-debug
++else
++CONNMAN_CONF_OPTS += --disable-debug
++endif
++
++ifeq ($(BR2_PACKAGE_CONNMAN_ETHERNET),y)
++CONNMAN_CONF_OPTS += --enable-ethernet
++else
++CONNMAN_CONF_OPTS += --disable-ethernet
++endif
++
++ifeq ($(BR2_PACKAGE_CONNMAN_LOOPBACK),y)
++CONNMAN_CONF_OPTS += --enable-loopback
++else
++CONNMAN_CONF_OPTS += --disable-loopback
++endif
++
++ifeq ($(BR2_PACKAGE_CONNMAN_NEARD),y)
++CONNMAN_CONF_OPTS += --enable-neard
++CONNMAN_DEPENDENCIES += neard
++else
++CONNMAN_CONF_OPTS += --disable-neard
++endif
++
++ifeq ($(BR2_PACKAGE_CONNMAN_OFONO),y)
++CONNMAN_CONF_OPTS += --enable-ofono
++CONNMAN_DEPENDENCIES += ofono
++else
++CONNMAN_CONF_OPTS += --disable-ofono
++endif
++
++ifeq ($(BR2_PACKAGE_CONNMAN_WIFI),y)
++CONNMAN_CONF_OPTS += --enable-wifi
++else
++CONNMAN_CONF_OPTS += --disable-wifi
++endif
++
++ifeq ($(BR2_PACKAGE_CONNMAN_WISPR),y)
++CONNMAN_CONF_OPTS += --enable-wispr
++CONNMAN_DEPENDENCIES += gnutls
++else
++CONNMAN_CONF_OPTS += --disable-wispr
++endif
+ 
+ define CONNMAN_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 0755 -D package/connman/S45connman $(TARGET_DIR)/etc/init.d/S45connman
