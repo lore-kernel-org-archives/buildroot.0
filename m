@@ -1,92 +1,111 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 10 Feb 2021 22:11:54 +0100
-Subject: [Buildroot] [PATCH] utils/getdeveloperlib.py: reduce Cc: list
- based on package infras
-In-Reply-To: <20210210080136.2709779-1-thomas.petazzoni@bootlin.com>
-References: <20210210080136.2709779-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20210210211154.GE1679218@scaer>
+Date: Wed, 10 Feb 2021 22:45:15 +0100
+Subject: [Buildroot] [PATCH] package/dmalloc: Fix for ARC with enabled
+ BR2_SSP_ALL
+In-Reply-To: <20210209104726.20132-1-kremneva@synopsys.com>
+References: <20210209104726.20132-1-kremneva@synopsys.com>
+Message-ID: <20210210214514.GF1679218@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Veronika, All,
 
-On 2021-02-10 09:01 +0100, Thomas Petazzoni spake thusly:
-> When a developer has package/pkg-<infra>.mk assigned to him/her in the
-> DEVELOPERS file, this has 3 implications:
-> 
->  (1) Patches adding new packages using this infrastructure are Cc'ed
->      to this developer. This is done by the analyze_patch() function,
->      which matches the regexp r"^\+\$\(eval
->      \$\((host-)?([^-]*)-package\)\)$" in the patch, i.e where an
->      added line contains a reference to the infra maintained by the
->      developer.
-> 
->  (2) Patches touching the package/pkg-<infra>.mk file itself are Cc'ed
->      to this developer.
-> 
->  (3) Any patch touching a package using this infra are also Cc'ed to
->      this developer.
-> 
-> Point (3) causes a significant amount of patches to be sent to
-> developers who have package/pkg-generic.mk and
-> package/pkg-autotools.mk assigned to them in the DEVELOPERS
-> file. Basically, all patches touching generic or autotools packages
-> get CC'ed to such developers, which causes a massive amount of patches
-> to be received.
-> 
-> So this patch adjusts the getdeveloperlib.py to drop point (3), but
-> preserves point (1) and (2). Indeed, it makes sense to be Cc'ed on new
-> package additions (to make a review that they use the package
-> infrastructure correctly), and it makes sense to be Cc'ed on patches
-> that touch the infrastructure code itself.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Fabrice, see below...
 
-I considered that to be an actual fix, so I applied to master. Thanks.
+On 2021-02-09 13:47 +0300, Veronika Kremneva spake thusly:
+> When building dmalloc for ARC while having "-fstack-protector-all" option on,
+> we are getting the following error:
+> ------------------------------->8---------------------------
+> >>> dmalloc 5.5.2 Installing to target
+> cp -dpf $HOME/buildroot/output/host/arc-buildroot-linux-gnu/sysroot/usr/lib/libdmalloc*.so
+> $HOME/buildroot/output/target/usr/lib
+> cp -dpf $HOME/buildroot/output/host/arc-buildroot-linux-gnu/sysroot/usr/bin/dmalloc
+> $HOME/buildroot/output/target/usr/bin/dmalloc
+> ERROR: architecture for "/usr/lib/libdmallocthcxx.so" is "ARCompact", should be "ARCv2"
+> ERROR: architecture for "/usr/lib/libdmallocth.so" is "ARCompact", should be "ARCv2"
+> ERROR: architecture for "/usr/lib/libdmalloc.so" is "ARCompact", should be "ARCv2"
+> ERROR: architecture for "/usr/lib/libdmallocxx.so" is "ARCompact", should be "ARCv2"
+> make: *** [$HOME/buildroot/output/build/dmalloc-5.5.2/.stamp_installed] Error 1
+> ------------------------------->8---------------------------
+> 
+> You can observe this error in following builds:
+> http://autobuild.buildroot.net/results/57f/57fc51cee4ec9339ea3be23f8c8c9f7ecca1a857/
+> http://autobuild.buildroot.net/results/b4d/b4d457369f35e1942c294b0ea3b3cab4cae0d7a3/
+> http://autobuild.buildroot.net/results/cfc/cfc111076c955dd5c1125c6e34a161121ea11200/
+> http://autobuild.buildroot.net/results/1d0/1d0ffcefbf545d1748e928603fd07c0a8de98eb5/
+> 
+> In all of those builds architecture "ARCv2" was explicitly chosen during configuration
+> yet we are getting this error. As we go deeper we find that the object file that linker
+> is trying to process contains no target code thus the default "ARCompact" is being used.
+> But why the object file is empty? Went to check link args:
+> ------------------------------->8---------------------------
+> $HOME/buildroot/output/host/bin/arc-buildroot-linux-gnu-ld: conftest.a(conftest.o):
+> relocation R_ARC_32_ME against `__stack_chk_guard' can not be used when making a shared
+> object; recompile with -fPIC
+> $HOME/buildrootc/output/host/bin/arc-buildroot-linux-gnu-ld: BFD (GNU Binutils) 2.34.50.20200611
+> assertion fail elf32-arc.c:1802
+> $HOME/buildroot/output/host/bin/arc-buildroot-linux-gnu-ld: unrecognized option '-all'
+> $HOME/buildroot/output/host/bin/arc-buildroot-linux-gnu-ld: use the --help option for usage information
+> configure:4475: result: $HOME/buildroot/output/host/bin/arc-buildroot-linux-gnu-ld -G -o $@.t
+> ------------------------------->8---------------------------
+> 
+> Looks like we are missing the -fPIC flag in DMALLOC_CFLAGS. As shared libraries should always
+> be compiled with "-fPIC" following patch adds this flag to the dmalloc.mk.
+
+While reviewing that patch, I see that Fabrice already sent a similar
+patch quite some time ago now:
+
+    https://patchwork.ozlabs.org/project/buildroot/patch/20200601092104.830051-1-fontaine.fabrice at gmail.com/
+
+> Signed-off-by: Veronika Kremneva <kremneva@synopsys.com>
+> ---
+>  package/dmalloc/dmalloc.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/package/dmalloc/dmalloc.mk b/package/dmalloc/dmalloc.mk
+> index 38b2c02027..638fe0fcda 100644
+> --- a/package/dmalloc/dmalloc.mk
+> +++ b/package/dmalloc/dmalloc.mk
+> @@ -16,6 +16,10 @@ DMALLOC_INSTALL_STAGING = YES
+>  DMALLOC_CONF_OPTS = --enable-shlib
+>  DMALLOC_CFLAGS = $(TARGET_CFLAGS)
+>  
+> +ifeq ($(BR2_STATIC_LIBS),)
+> +DMALLOC_CFLAGS += -fPIC
+
+So, it seems that both of you arrived to a similar conclusion, with a
+similar analysis.
+
+I think the change from Fabrice would in the end be better, if it at
+least because it drops a bundled patch.
+
+Except for that, I wonder if we care about not adding -fPIC for static
+libs. Indeed, the current patch unconditionally adds -fPIC to all
+builds, shared and static alike...
+
+Besides, -fPIC is almost innocuous for static builds (maybe a very
+slight overhead to resolve or jump to some symbols)...
+
+What's your thoughts, both Veronika and Fabrice?
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  utils/getdeveloperlib.py | 12 ------------
->  1 file changed, 12 deletions(-)
-> 
-> diff --git a/utils/getdeveloperlib.py b/utils/getdeveloperlib.py
-> index d7a90457ed..b205817033 100644
-> --- a/utils/getdeveloperlib.py
-> +++ b/utils/getdeveloperlib.py
-> @@ -56,17 +56,6 @@ def fname_get_package_infra(fname):
->      return None
->  
->  
-> -def get_infras(files):
-> -    """Search in the list of files for .mk files, and collect the package
-> -    infrastructures used by those .mk files."""
-> -    infras = set()
-> -    for fname in files:
-> -        infra = fname_get_package_infra(fname)
-> -        if infra:
-> -            infras.add(infra)
-> -    return infras
-> -
-> -
->  def analyze_patches(patches):
->      """Parse a list of patches and returns the list of files modified,
->      added or removed by the patches, as well as the list of package
-> @@ -77,7 +66,6 @@ def analyze_patches(patches):
->          (files, infras) = analyze_patch(patch)
->          allfiles = allfiles | files
->          allinfras = allinfras | infras
-> -    allinfras = allinfras | get_infras(allfiles)
->      return (allfiles, allinfras)
->  
->  
+> +endif
+> +
+>  ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
+>  DMALLOC_CONF_OPTS += --enable-cxx
+>  else
 > -- 
-> 2.29.2
+> 2.16.2
 > 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
