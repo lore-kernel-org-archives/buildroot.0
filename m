@@ -1,158 +1,243 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 10 Feb 2021 19:55:11 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/atftp: add
- security fix for CVE-2020-6097
-Message-ID: <20210210183739.7A63183980@busybox.osuosl.org>
+Date: Wed, 10 Feb 2021 19:57:42 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/python3: add
+ upstream security fix for CVE-2021-3177
+Message-ID: <20210210183739.91CC183980@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3a042904f1758d216be4a7a714f649a77bca4eb3
+commit: https://git.buildroot.net/buildroot/commit/?id=c8273b48b9ce264759cfcd88bcf0d9694ab5e4bc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-Fixed the following security issue:
+Fixes the following security issue:
 
-- CVE-2020-6097: An exploitable denial of service vulnerability exists in
-  the atftpd daemon functionality of atftp 0.7.git20120829-3.1+b1.  A
-  specially crafted sequence of RRQ-Multicast requests trigger an assert()
-  call resulting in denial-of-service.  An attacker can send a sequence of
-  malicious packets to trigger this vulnerability.
+- CVE-2021-3177: Python 3.x through 3.9.1 has a buffer overflow in
+  PyCArg_repr in _ctypes/callproc.c, which may lead to remote code execution
+  in certain Python applications that accept floating-point numbers as
+  untrusted input, as demonstrated by a 1e300 argument to
+  c_double.from_param.  This occurs because sprintf is used unsafely.
 
-For more details, see the report:
-https://talosintelligence.com/vulnerability_reports/TALOS-2020-1029
+For details, see the advisory:
+https://python-security.readthedocs.io/vuln/ctypes-buffer-overflow-pycarg_repr.html
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 5b36e91fda95de313120ab530a07329a1c5d41db)
+(cherry picked from commit 5405b295703055c9ea030e67279b5f6c37f6a51a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0004-Fix-for-DoS-issue-CVE-2020-6097.patch     | 104 +++++++++++++++++++++
- package/atftp/atftp.mk                             |   3 +
- 2 files changed, 107 insertions(+)
+ ...42938-Replace-snprintf-with-Python-unicod.patch | 190 +++++++++++++++++++++
+ package/python3/python3.mk                         |   3 +
+ 2 files changed, 193 insertions(+)
 
-diff --git a/package/atftp/0004-Fix-for-DoS-issue-CVE-2020-6097.patch b/package/atftp/0004-Fix-for-DoS-issue-CVE-2020-6097.patch
+diff --git a/package/python3/0035-closes-bpo-42938-Replace-snprintf-with-Python-unicod.patch b/package/python3/0035-closes-bpo-42938-Replace-snprintf-with-Python-unicod.patch
 new file mode 100644
-index 0000000000..fe59325e57
+index 0000000000..5f20265a23
 --- /dev/null
-+++ b/package/atftp/0004-Fix-for-DoS-issue-CVE-2020-6097.patch
-@@ -0,0 +1,104 @@
-+From 96409ef3b9ca061f9527cfaafa778105cf15d994 Mon Sep 17 00:00:00 2001
-+From: Peter Kaestle <peter.kaestle@nokia.com>
-+Date: Wed, 14 Oct 2020 14:02:41 +0200
-+Subject: [PATCH] Fix for DoS issue CVE-2020-6097
++++ b/package/python3/0035-closes-bpo-42938-Replace-snprintf-with-Python-unicod.patch
+@@ -0,0 +1,190 @@
++From c347cbe694743cee120457aa6626712f7799a932 Mon Sep 17 00:00:00 2001
++From: "Miss Islington (bot)"
++ <31488909+miss-islington@users.noreply.github.com>
++Date: Mon, 18 Jan 2021 13:29:31 -0800
++Subject: [PATCH] closes bpo-42938: Replace snprintf with Python unicode
++ formatting in ctypes param reprs. (GH-24247)
 +
-+"sockaddr_print_addr" of tftpd can be triggered remotely to call
-+assert(), which will crash the tftpd daemon.  See:
-+https://talosintelligence.com/vulnerability_reports/TALOS-2020-1029
++(cherry picked from commit 916610ef90a0d0761f08747f7b0905541f0977c7)
 +
-+"sockaddr_print_addr" originaly had two features:
-+1) returning pointer to string of the incoming ip address
-+2) checking whether ss_family of the connection is supported
++Co-authored-by: Benjamin Peterson <benjamin@python.org>
 +
-+To fix the issue, a separate function "sockaddr_family_supported" is
-+used to take care of 2) and "sockaddr_print_addr" returns an error
-+message string for unsupported cases when using 1) insert of calling
-+assert().
-+
-+[Upstream:
-+ https://sourceforge.net/u/peterkaestle/atftp/ci/96409ef3b9ca061f9527cfaafa778105cf15d994/]
++Co-authored-by: Benjamin Peterson <benjamin@python.org>
 +Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 +---
-+ tftp_def.c    | 11 ++++++++++-
-+ tftp_def.h    |  1 +
-+ tftpd.c       |  5 +++++
-+ tftpd_mtftp.c |  5 +++++
-+ 4 files changed, 21 insertions(+), 1 deletion(-)
++ Lib/ctypes/test/test_parameters.py            | 43 ++++++++++++++++
++ .../2021-01-18-09-27-31.bpo-42938.4Zn4Mp.rst  |  2 +
++ Modules/_ctypes/callproc.c                    | 51 +++++++------------
++ 3 files changed, 64 insertions(+), 32 deletions(-)
++ create mode 100644 Misc/NEWS.d/next/Security/2021-01-18-09-27-31.bpo-42938.4Zn4Mp.rst
 +
-+diff --git a/tftp_def.c b/tftp_def.c
-+index d457c2a..428a930 100644
-+--- a/tftp_def.c
-++++ b/tftp_def.c
-+@@ -180,6 +180,15 @@ int Gethostbyname(char *addr, struct hostent *host)
-+      return OK;
-+ }
++diff --git a/Lib/ctypes/test/test_parameters.py b/Lib/ctypes/test/test_parameters.py
++index e4c25fd880..531894fdec 100644
++--- a/Lib/ctypes/test/test_parameters.py
+++++ b/Lib/ctypes/test/test_parameters.py
++@@ -201,6 +201,49 @@ class SimpleTypesTestCase(unittest.TestCase):
++         with self.assertRaises(ZeroDivisionError):
++             WorseStruct().__setstate__({}, b'foo')
 + 
-++int
-++sockaddr_family_supported(const struct sockaddr_storage *ss)
-++{
-++     if (ss->ss_family == AF_INET || ss->ss_family == AF_INET6)
-++          return 1;
-++     else
-++          return 0;
-++}
+++    def test_parameter_repr(self):
+++        from ctypes import (
+++            c_bool,
+++            c_char,
+++            c_wchar,
+++            c_byte,
+++            c_ubyte,
+++            c_short,
+++            c_ushort,
+++            c_int,
+++            c_uint,
+++            c_long,
+++            c_ulong,
+++            c_longlong,
+++            c_ulonglong,
+++            c_float,
+++            c_double,
+++            c_longdouble,
+++            c_char_p,
+++            c_wchar_p,
+++            c_void_p,
+++        )
+++        self.assertRegex(repr(c_bool.from_param(True)), r"^<cparam '\?'@0x[A-Fa-f0-9]+>$")
+++        self.assertEqual(repr(c_char.from_param(97)), "<cparam 'c' ('a')>")
+++        self.assertRegex(repr(c_wchar.from_param('a')), r"^<cparam 'u'@0x[A-Fa-f0-9]+>$")
+++        self.assertEqual(repr(c_byte.from_param(98)), "<cparam 'b' (98)>")
+++        self.assertEqual(repr(c_ubyte.from_param(98)), "<cparam 'B' (98)>")
+++        self.assertEqual(repr(c_short.from_param(511)), "<cparam 'h' (511)>")
+++        self.assertEqual(repr(c_ushort.from_param(511)), "<cparam 'H' (511)>")
+++        self.assertRegex(repr(c_int.from_param(20000)), r"^<cparam '[li]' \(20000\)>$")
+++        self.assertRegex(repr(c_uint.from_param(20000)), r"^<cparam '[LI]' \(20000\)>$")
+++        self.assertRegex(repr(c_long.from_param(20000)), r"^<cparam '[li]' \(20000\)>$")
+++        self.assertRegex(repr(c_ulong.from_param(20000)), r"^<cparam '[LI]' \(20000\)>$")
+++        self.assertRegex(repr(c_longlong.from_param(20000)), r"^<cparam '[liq]' \(20000\)>$")
+++        self.assertRegex(repr(c_ulonglong.from_param(20000)), r"^<cparam '[LIQ]' \(20000\)>$")
+++        self.assertEqual(repr(c_float.from_param(1.5)), "<cparam 'f' (1.5)>")
+++        self.assertEqual(repr(c_double.from_param(1.5)), "<cparam 'd' (1.5)>")
+++        self.assertEqual(repr(c_double.from_param(1e300)), "<cparam 'd' (1e+300)>")
+++        self.assertRegex(repr(c_longdouble.from_param(1.5)), r"^<cparam ('d' \(1.5\)|'g'@0x[A-Fa-f0-9]+)>$")
+++        self.assertRegex(repr(c_char_p.from_param(b'hihi')), "^<cparam 'z' \(0x[A-Fa-f0-9]+\)>$")
+++        self.assertRegex(repr(c_wchar_p.from_param('hihi')), "^<cparam 'Z' \(0x[A-Fa-f0-9]+\)>$")
+++        self.assertRegex(repr(c_void_p.from_param(0x12)), r"^<cparam 'P' \(0x0*12\)>$")
 ++
-+ char *
-+ sockaddr_print_addr(const struct sockaddr_storage *ss, char *buf, size_t len)
++ ################################################################
++ 
++ if __name__ == '__main__':
++diff --git a/Misc/NEWS.d/next/Security/2021-01-18-09-27-31.bpo-42938.4Zn4Mp.rst b/Misc/NEWS.d/next/Security/2021-01-18-09-27-31.bpo-42938.4Zn4Mp.rst
++new file mode 100644
++index 0000000000..7df65a156f
++--- /dev/null
+++++ b/Misc/NEWS.d/next/Security/2021-01-18-09-27-31.bpo-42938.4Zn4Mp.rst
++@@ -0,0 +1,2 @@
+++Avoid static buffers when computing the repr of :class:`ctypes.c_double` and
+++:class:`ctypes.c_longdouble` values.
++diff --git a/Modules/_ctypes/callproc.c b/Modules/_ctypes/callproc.c
++index b0a36a3024..f2506de544 100644
++--- a/Modules/_ctypes/callproc.c
+++++ b/Modules/_ctypes/callproc.c
++@@ -489,58 +489,47 @@ is_literal_char(unsigned char c)
++ static PyObject *
++ PyCArg_repr(PyCArgObject *self)
 + {
-+@@ -189,7 +198,7 @@ sockaddr_print_addr(const struct sockaddr_storage *ss, char *buf, size_t len)
-+      else if (ss->ss_family == AF_INET6)
-+           addr = &((const struct sockaddr_in6 *)ss)->sin6_addr;
-+      else
-+-          assert(!"sockaddr_print: unsupported address family");
-++          return "sockaddr_print: unsupported address family";
-+      return (char *)inet_ntop(ss->ss_family, addr, buf, len);
++-    char buffer[256];
++     switch(self->tag) {
++     case 'b':
++     case 'B':
++-        sprintf(buffer, "<cparam '%c' (%d)>",
+++        return PyUnicode_FromFormat("<cparam '%c' (%d)>",
++             self->tag, self->value.b);
++-        break;
++     case 'h':
++     case 'H':
++-        sprintf(buffer, "<cparam '%c' (%d)>",
+++        return PyUnicode_FromFormat("<cparam '%c' (%d)>",
++             self->tag, self->value.h);
++-        break;
++     case 'i':
++     case 'I':
++-        sprintf(buffer, "<cparam '%c' (%d)>",
+++        return PyUnicode_FromFormat("<cparam '%c' (%d)>",
++             self->tag, self->value.i);
++-        break;
++     case 'l':
++     case 'L':
++-        sprintf(buffer, "<cparam '%c' (%ld)>",
+++        return PyUnicode_FromFormat("<cparam '%c' (%ld)>",
++             self->tag, self->value.l);
++-        break;
++ 
++     case 'q':
++     case 'Q':
++-        sprintf(buffer,
++-#ifdef MS_WIN32
++-            "<cparam '%c' (%I64d)>",
++-#else
++-            "<cparam '%c' (%lld)>",
++-#endif
+++        return PyUnicode_FromFormat("<cparam '%c' (%lld)>",
++             self->tag, self->value.q);
++-        break;
++     case 'd':
++-        sprintf(buffer, "<cparam '%c' (%f)>",
++-            self->tag, self->value.d);
++-        break;
++-    case 'f':
++-        sprintf(buffer, "<cparam '%c' (%f)>",
++-            self->tag, self->value.f);
++-        break;
++-
+++    case 'f': {
+++        PyObject *f = PyFloat_FromDouble((self->tag == 'f') ? self->value.f : self->value.d);
+++        if (f == NULL) {
+++            return NULL;
+++        }
+++        PyObject *result = PyUnicode_FromFormat("<cparam '%c' (%R)>", self->tag, f);
+++        Py_DECREF(f);
+++        return result;
+++    }
++     case 'c':
++         if (is_literal_char((unsigned char)self->value.c)) {
++-            sprintf(buffer, "<cparam '%c' ('%c')>",
+++            return PyUnicode_FromFormat("<cparam '%c' ('%c')>",
++                 self->tag, self->value.c);
++         }
++         else {
++-            sprintf(buffer, "<cparam '%c' ('\\x%02x')>",
+++            return PyUnicode_FromFormat("<cparam '%c' ('\\x%02x')>",
++                 self->tag, (unsigned char)self->value.c);
++         }
++-        break;
++ 
++ /* Hm, are these 'z' and 'Z' codes useful at all?
++    Shouldn't they be replaced by the functionality of c_string
++@@ -549,22 +538,20 @@ PyCArg_repr(PyCArgObject *self)
++     case 'z':
++     case 'Z':
++     case 'P':
++-        sprintf(buffer, "<cparam '%c' (%p)>",
+++        return PyUnicode_FromFormat("<cparam '%c' (%p)>",
++             self->tag, self->value.p);
++         break;
++ 
++     default:
++         if (is_literal_char((unsigned char)self->tag)) {
++-            sprintf(buffer, "<cparam '%c'@%p>",
+++            return PyUnicode_FromFormat("<cparam '%c'@%p>",
++                 (unsigned char)self->tag, (void *)self);
++         }
++         else {
++-            sprintf(buffer, "<cparam 0x%02x@%p>",
+++            return PyUnicode_FromFormat("<cparam 0x%02x@%p>",
++                 (unsigned char)self->tag, (void *)self);
++         }
++-        break;
++     }
++-    return PyUnicode_FromString(buffer);
 + }
 + 
-+diff --git a/tftp_def.h b/tftp_def.h
-+index 0841746..458e310 100644
-+--- a/tftp_def.h
-++++ b/tftp_def.h
-+@@ -54,6 +54,7 @@ int print_eng(double value, char *string, int size, char *format);
-+ inline char *Strncpy(char *to, const char *from, size_t size);
-+ int Gethostbyname(char *addr, struct hostent *host);
-+ 
-++int sockaddr_family_supported(const struct sockaddr_storage *ss);
-+ char *sockaddr_print_addr(const struct sockaddr_storage *, char *, size_t);
-+ #define SOCKADDR_PRINT_ADDR_LEN INET6_ADDRSTRLEN
-+ uint16_t sockaddr_get_port(const struct sockaddr_storage *);
-+diff --git a/tftpd.c b/tftpd.c
-+index 0b6f6a5..a7561a5 100644
-+--- a/tftpd.c
-++++ b/tftpd.c
-+@@ -644,6 +644,11 @@ void *tftpd_receive_request(void *arg)
-+      }
-+ 
-+ #ifdef HAVE_WRAP
-++     if (!abort && !sockaddr_family_supported(&data->client_info->client))
-++     {
-++          logger(LOG_ERR, "Connection from unsupported network address family refused");
-++          abort = 1;
-++     }
-+      if (!abort)
-+      {
-+           /* Verify the client has access. We don't look for the name but
-+diff --git a/tftpd_mtftp.c b/tftpd_mtftp.c
-+index d420d10..0032905 100644
-+--- a/tftpd_mtftp.c
-++++ b/tftpd_mtftp.c
-+@@ -393,6 +393,11 @@ void *tftpd_mtftp_server(void *arg)
-+                                         &data_size, data->data_buffer);
-+ 
-+ #ifdef HAVE_WRAP
-++               if (!sockaddr_family_supported(&sa))
-++               {
-++                    logger(LOG_ERR, "mtftp: Connection from unsupported network address family refused");
-++                    continue;
-++               }
-+                /* Verify the client has access. We don't look for the name but
-+                   rely only on the IP address for that. */
-+                sockaddr_print_addr(&sa, addr_str, sizeof(addr_str));
++ static PyMemberDef PyCArgType_members[] = {
 +-- 
 +2.20.1
 +
-diff --git a/package/atftp/atftp.mk b/package/atftp/atftp.mk
-index cbe05ba7e0..a4b461fda5 100644
---- a/package/atftp/atftp.mk
-+++ b/package/atftp/atftp.mk
-@@ -18,6 +18,9 @@ ATFTP_LIBS = -lpthread
- ATFTP_CONF_ENV = LIBS="$(ATFTP_LIBS)" \
- 	CFLAGS="$(TARGET_CFLAGS) -fgnu89-inline"
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index f2516dee90..36f2deb8dd 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -11,6 +11,9 @@ PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
+ PYTHON3_LICENSE = Python-2.0, others
+ PYTHON3_LICENSE_FILES = LICENSE
  
-+# 0004-Fix-for-DoS-issue-CVE-2020-6097.patch
-+ATFTP_IGNORE_CVES += CVE-2020-6097
++# 0035-closes-bpo-42938-Replace-snprintf-with-Python-unicod.patch
++PYTHON3_IGNORE_CVES += CVE-2021-3177
 +
- ifeq ($(BR2_PACKAGE_READLINE),y)
- ATFTP_DEPENDENCIES += readline
- ATFTP_CONF_OPTS += --enable-libreadline
+ # This host Python is installed in $(HOST_DIR), as it is needed when
+ # cross-compiling third-party Python modules.
+ 
