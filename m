@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 10 Feb 2021 19:54:37 +0100
-Subject: [Buildroot] [PATCH] package/wpa_supplicant: add upstream 2020-2
- security fix
-In-Reply-To: <20210205121329.31131-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Fri, 5 Feb 2021 13:13:29 +0100")
-References: <20210205121329.31131-1-peter@korsgaard.com>
-Message-ID: <87lfbvn47m.fsf@dell.be.48ers.dk>
+Date: Wed, 10 Feb 2021 19:55:31 +0100
+Subject: [Buildroot] [PATCH] package/atftp: add security fix for
+ CVE-2020-6097
+In-Reply-To: <20210205090101.17220-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Fri, 5 Feb 2021 10:01:01 +0100")
+References: <20210205090101.17220-1-peter@korsgaard.com>
+Message-ID: <87h7mjn464.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,23 +14,15 @@ To: buildroot@busybox.net
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Fixes the following security issue:
- >  - wpa_supplicant P2P group information processing vulnerability (no CVE yet)
+ > Fixed the following security issue:
+ > - CVE-2020-6097: An exploitable denial of service vulnerability exists in
+ >   the atftpd daemon functionality of atftp 0.7.git20120829-3.1+b1.  A
+ >   specially crafted sequence of RRQ-Multicast requests trigger an assert()
+ >   call resulting in denial-of-service.  An attacker can send a sequence of
+ >   malicious packets to trigger this vulnerability.
 
- >    A vulnerability was discovered in how wpa_supplicant processing P2P
- >    (Wi-Fi Direct) group information from active group owners.  The actual
- >    parsing of that information validates field lengths appropriately, but
- >    processing of the parsed information misses a length check when storing a
- >    copy of the secondary device types.  This can result in writing attacker
- >    controlled data into the peer entry after the area assigned for the
- >    secondary device type.  The overflow can result in corrupting pointers
- >    for heap allocations.  This can result in an attacker within radio range
- >    of the device running P2P discovery being able to cause unexpected
- >    behavior, including termination of the wpa_supplicant process and
- >    potentially arbitrary code execution.
-
- > For more details, see the advisory:
- > https://w1.fi/security/2020-2/wpa_supplicant-p2p-group-info-processing-vulnerability.txt
+ > For more details, see the report:
+ > https://talosintelligence.com/vulnerability_reports/TALOS-2020-1029
 
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
