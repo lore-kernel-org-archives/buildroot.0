@@ -1,34 +1,66 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 10 Feb 2021 19:58:27 +0100
-Subject: [Buildroot] [PATCH] package/python3: add upstream security fix
- for CVE-2021-3177
-In-Reply-To: <20210205130756.17142-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Fri, 5 Feb 2021 14:07:56 +0100")
-References: <20210205130756.17142-1-peter@korsgaard.com>
-Message-ID: <878s7vn418.fsf@dell.be.48ers.dk>
+Date: Wed, 10 Feb 2021 19:53:23 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/xenomai: disable
+ cobalt for armv8
+Message-ID: <20210210183732.13C17807E9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=ee6ae5e7328887dd1c56e5bec5091438dd86b977
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
- > Fixes the following security issue:
- > - CVE-2021-3177: Python 3.x through 3.9.1 has a buffer overflow in
- >   PyCArg_repr in _ctypes/callproc.c, which may lead to remote code execution
- >   in certain Python applications that accept floating-point numbers as
- >   untrusted input, as demonstrated by a 1e300 argument to
- >   c_double.from_param.  This occurs because sprintf is used unsafely.
+When a armv8 target is used in 32bits mode, xenomai fail to detect the
+ARM architecture and abord the build. (__ARM_ARCH_7A__ is not defined
+for armv8 cpus).
 
- > For details, see the advisory:
- > https://python-security.readthedocs.io/vuln/ctypes-buffer-overflow-pycarg_repr.html
+There are no autobuilder failures for this issue since cobalt is never
+selected, but the following defconfig:
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+BR2_arm=y
+BR2_cortex_a53=y
+BR2_ARM_FPU_NEON_VFPV4=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_PACKAGE_XENOMAI=y
+BR2_PACKAGE_XENOMAI_COBALT=y
 
-Committed to 2020.11.x, thanks.
+This was initialy reproduced using the raspberrypi3_defconfig with
+Xenomai package with cobalt selected.
 
-I'll backport a similar patch for 3.8 for 2020.02.x.
+In order to use Xenomai on raspberrypi3 in 32 bits mode, one has to
+select BR2_cortex_a7 instead of BR2_cortex_a53 (see a13a388dd444).
 
--- 
-Bye, Peter Korsgaard
+See:
+https://gitlab.denx.de/Xenomai/xenomai/-/blob/v3.1/lib/cobalt/arch/arm/include/asm/xenomai/features.h#L52
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+[yann.morin.1998 at free.fr:
+  - switch to independent conditional 'default y'
+  - slightly reword the commit log
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 6490a11018e71d8200f74af581c0a65b1612085a)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/xenomai/Config.in | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/package/xenomai/Config.in b/package/xenomai/Config.in
+index 634288b62b..69b014c140 100644
+--- a/package/xenomai/Config.in
++++ b/package/xenomai/Config.in
+@@ -1,8 +1,9 @@
+ config BR2_PACKAGE_XENOMAI_COBALT_ARCH_SUPPORTS
+ 	bool
+-	default y
+-	depends on BR2_i386 || BR2_x86_64 || (BR2_arm && !BR2_ARM_CPU_ARMV7M) || \
+-		BR2_powerpc
++	default y if BR2_i386
++	default y if BR2_x86_64
++	default y if BR2_powerpc
++	default y if BR2_arm && !BR2_ARM_CPU_ARMV7M && !BR2_ARM_CPU_ARMV8A
+ 
+ comment "xenomai needs a glibc or uClibc toolchain w/ threads"
+ 	depends on BR2_USE_MMU
