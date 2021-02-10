@@ -1,119 +1,69 @@
 From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-Date: Wed, 10 Feb 2021 19:50:15 +0100
-Subject: [Buildroot] [PATCH 1/3] package/wpa_supplicant: Fix options to
- actually disable features.
-Message-ID: <20210210185017.6133-1-nicolas.cavallari@green-communications.fr>
+Date: Wed, 10 Feb 2021 19:50:17 +0100
+Subject: [Buildroot] [PATCH 3/3] package/wpa_supplicant: Simplify D-Bus
+ support.
+In-Reply-To: <20210210185017.6133-1-nicolas.cavallari@green-communications.fr>
+References: <20210210185017.6133-1-nicolas.cavallari@green-communications.fr>
+Message-ID: <20210210185017.6133-3-nicolas.cavallari@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since wpa_supplicant 2.8, most features are now enabled by default,
-instead of being disabled by default.  Update wpa_supplicant.mk
-accordingly.
-
-This also make the existing options disable more features, otherwise,
-it would still include dead code or even fail to compile.
+wpa_supplicant 2.8 dropped support for the old D-Bus interface, so
+remove mentions of it and rename DBUS_NEW variables to just DBUS.
 
 Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
 ---
- package/wpa_supplicant/Config.in         |  4 ++--
- package/wpa_supplicant/wpa_supplicant.mk | 28 ++++++++++--------------
- 2 files changed, 13 insertions(+), 19 deletions(-)
+ package/wpa_supplicant/Config.in         | 2 +-
+ package/wpa_supplicant/wpa_supplicant.mk | 8 +++-----
+ 2 files changed, 4 insertions(+), 6 deletions(-)
 
 diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
-index cba7fa07e1..8057c0b7be 100644
+index 9553dcf7df..3c986ff4ba 100644
 --- a/package/wpa_supplicant/Config.in
 +++ b/package/wpa_supplicant/Config.in
-@@ -38,7 +38,7 @@ config BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT
- 	  set.  This links in parts of hostapd functionality into
- 	  wpa_supplicant, making it bigger but dispensing the need for
- 	  a separate hostapd binary in some applications hence being
--	  smaller overall.
-+	  smaller overall.  It also enables support for Wi-Fi Direct.
- 
- config BR2_PACKAGE_WPA_SUPPLICANT_WIFI_DISPLAY
- 	bool "Enable Wi-Fi Display"
-@@ -63,7 +63,7 @@ config BR2_PACKAGE_WPA_SUPPLICANT_AUTOSCAN
- config BR2_PACKAGE_WPA_SUPPLICANT_EAP
- 	bool "Enable EAP"
+@@ -154,6 +154,6 @@ config BR2_PACKAGE_WPA_SUPPLICANT_DBUS_INTROSPECTION
+ 	bool "Introspection support"
+ 	depends on BR2_PACKAGE_WPA_SUPPLICANT_DBUS
  	help
--	  Enable support for EAP.
-+	  Enable support for EAP, 802.1x/WPA-Enterprise and FILS.
+-	  Add introspection support for new DBus control interface.
++	  Add introspection support for the DBus control interface.
  
- config BR2_PACKAGE_WPA_SUPPLICANT_HOTSPOT
- 	bool "Enable HS20"
+ endif
 diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-index 940a821746..cc259eb9c6 100644
+index 6ed135571e..28e71a6c43 100644
 --- a/package/wpa_supplicant/wpa_supplicant.mk
 +++ b/package/wpa_supplicant/wpa_supplicant.mk
-@@ -27,15 +27,8 @@ WPA_SUPPLICANT_INSTALL_STAGING = YES
+@@ -13,8 +13,7 @@ WPA_SUPPLICANT_LICENSE_FILES = README
+ WPA_SUPPLICANT_CPE_ID_VENDOR = w1.fi
+ WPA_SUPPLICANT_CONFIG = $(WPA_SUPPLICANT_DIR)/wpa_supplicant/.config
+ WPA_SUPPLICANT_SUBDIR = wpa_supplicant
+-WPA_SUPPLICANT_DBUS_OLD_SERVICE = fi.epitest.hostap.WPASupplicant
+-WPA_SUPPLICANT_DBUS_NEW_SERVICE = fi.w1.wpa_supplicant1
++WPA_SUPPLICANT_DBUS_SERVICE = fi.w1.wpa_supplicant1
+ WPA_SUPPLICANT_CFLAGS = $(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/libnl3/
+ WPA_SUPPLICANT_LDFLAGS = $(TARGET_LDFLAGS)
+ WPA_SUPPLICANT_SELINUX_MODULES = networkmanager
+@@ -143,8 +142,8 @@ WPA_SUPPLICANT_MAKE_ENV = \
+ WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_CTRL_IFACE_DBUS_NEW
+ define WPA_SUPPLICANT_INSTALL_DBUS_NEW
+ 	$(INSTALL) -m 0644 -D \
+-		$(@D)/wpa_supplicant/dbus/$(WPA_SUPPLICANT_DBUS_NEW_SERVICE).service \
+-		$(TARGET_DIR)/usr/share/dbus-1/system-services/$(WPA_SUPPLICANT_DBUS_NEW_SERVICE).service
++		$(@D)/wpa_supplicant/dbus/$(WPA_SUPPLICANT_DBUS_SERVICE).service \
++		$(TARGET_DIR)/usr/share/dbus-1/system-services/$(WPA_SUPPLICANT_DBUS_SERVICE).service
+ endef
  
- WPA_SUPPLICANT_CONFIG_EDITS =
- 
--# Add support for simple background scan
--WPA_SUPPLICANT_CONFIG_SET = CONFIG_BGSCAN_SIMPLE
--
- WPA_SUPPLICANT_CONFIG_ENABLE = \
--	CONFIG_IEEE80211AC \
--	CONFIG_IEEE80211N \
--	CONFIG_IEEE80211R \
- 	CONFIG_INTERNAL_LIBTOMMATH \
--	CONFIG_DEBUG_FILE \
- 	CONFIG_MATCH_IFACE
- 
- WPA_SUPPLICANT_CONFIG_DISABLE = \
-@@ -62,11 +55,13 @@ ifeq ($(BR2_STATIC_LIBS),y)
- WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_EAP_TNC
+ ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DBUS_INTROSPECTION),y)
+@@ -217,7 +216,6 @@ define WPA_SUPPLICANT_INSTALL_DBUS
+ 	$(INSTALL) -m 0644 -D \
+ 		$(@D)/wpa_supplicant/dbus/dbus-wpa_supplicant.conf \
+ 		$(TARGET_DIR)/etc/dbus-1/system.d/wpa_supplicant.conf
+-	$(WPA_SUPPLICANT_INSTALL_DBUS_OLD)
+ 	$(WPA_SUPPLICANT_INSTALL_DBUS_NEW)
+ endef
  endif
- else
--WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_EAP
-+WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_EAP \
-+	CONFIG_IEEE8021X_EAPOL \
-+	CONFIG_FILS
- endif
- 
--ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_HOTSPOT),y)
--WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_HS20 \
-+ifneq ($(BR2_PACKAGE_WPA_SUPPLICANT_HOTSPOT),y)
-+WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_HS20 \
- 	CONFIG_INTERWORKING
- endif
- 
-@@ -86,9 +81,8 @@ else
- WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_WIFI_DISPLAY
- endif
- 
--ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_MESH_NETWORKING),y)
--WPA_SUPPLICANT_CONFIG_SET += CONFIG_MESH
--WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_IEEE80211W
-+ifneq ($(BR2_PACKAGE_WPA_SUPPLICANT_MESH_NETWORKING),y)
-+WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_MESH
- endif
- 
- ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_AUTOSCAN),y)
-@@ -97,8 +91,8 @@ WPA_SUPPLICANT_CONFIG_ENABLE += \
- 	CONFIG_AUTOSCAN_PERIODIC
- endif
- 
--ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_WPS),y)
--WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_WPS
-+ifneq ($(BR2_PACKAGE_WPA_SUPPLICANT_WPS),y)
-+WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_WPS
- endif
- 
- ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_WPA3),y)
-@@ -143,8 +137,8 @@ else
- WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_CTRL_IFACE_DBUS_NEW
- endif
- 
--ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DEBUG_SYSLOG),y)
--WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_DEBUG_SYSLOG
-+ifneq ($(BR2_PACKAGE_WPA_SUPPLICANT_DEBUG_SYSLOG),y)
-+WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_DEBUG_SYSLOG
- endif
- 
- ifeq ($(BR2_PACKAGE_READLINE),y)
 -- 
 2.30.0
