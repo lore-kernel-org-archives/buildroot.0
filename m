@@ -1,47 +1,58 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 11 Feb 2021 16:46:22 +0100
-Subject: [Buildroot] [git commit] package/go: bump to version 1.15.8
-Message-ID: <20210211153153.E158683C8A@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 11 Feb 2021 18:31:18 +0100
+Subject: [Buildroot] [PATCH] package/refpolicy: do not use the bare
+ target in the configuration step
+In-Reply-To: <161303350302.4159.3930376903227751717@kwain.local>
+References: <20210210185158.1254415-1-atenart@kernel.org>
+ <20210210204759.GD1679218@scaer>
+ <161303350302.4159.3930376903227751717@kwain.local>
+Message-ID: <20210211173118.GG1679218@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ccbbcca9b288380b8f33a34a7ed6fe3e0c85be5c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Antoine, All,
 
-go1.15.8 (released 2021/02/04) includes fixes to the compiler, linker, runtime,
-the go command, and the net/http package.
+On 2021-02-11 09:51 +0100, Antoine Tenart spake thusly:
+> Quoting Yann E. MORIN (2021-02-10 21:47:59)
+> > On 2021-02-10 19:51 +0100, Antoine Tenart spake thusly:
+> > > The 'bare' target is a clean target, removing generated files from
+> > > previous builds. Here in Buildroot we'll only build the refpolicy from a
+> > > clean state and we don't need to execute this target. Remove it.
+> > 
+> > Will that still do correct builds with 'make refpolicy-rebuild' ?
+> 
+> I think you meant refpolicy-reconfigure, as I don't think rebuild will
+> call the configuration step again.
 
-https://golang.org/doc/go1.15
+Yes, of course. ;-)
 
-Signed-off-by: Christian Stewart <christian@paral.in>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> I double checked and there's an issue with an use case; the list of
+> modules to compile is not updated if a module is deleted (if added,
+> yes...). While we shouldn't expect much when deleting something from a
+> package (as the installation step will not clean what was installed
+> before),
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index 1bd7ab7ca9..cbc82a9b64 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,3 +1,3 @@
- # From https://golang.org/dl/
--sha256  8631b3aafd8ecb9244ec2ffb8a2a8b4983cf4ad15572b9801f7c5b167c1a2abc  go1.15.7.src.tar.gz
-+sha256  540c0ab7781084d124991321ed1458e479982de94454a98afab6acadf38497c2  go1.15.8.src.tar.gz
- sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 21a33d215c..7b7f173706 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GO_VERSION = 1.15.7
-+GO_VERSION = 1.15.8
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
+Well, it can happen if one is using on a custom policy and working on it
+with REFPOLICY_OVERRIDE_SRCDIR: the source files may change, appear, or
+disappear between two builds...
+
+> here, as we're explicitly using the monolithic build, removing
+> a module and reconfiguring should work. So let's be safe and keep this
+> as is.
+
+So I've marked this patch as rejected in patchwork, then. Thanks for the
+prompt feedback!
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
