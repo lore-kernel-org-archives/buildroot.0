@@ -1,39 +1,32 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 11 Feb 2021 13:02:32 +0100
-Subject: [Buildroot] Fwd: Failed pipeline for 2021.02-rc1 | buildroot |
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 11 Feb 2021 13:21:35 +0100
+Subject: [Buildroot] Failed pipeline for 2021.02-rc1 | buildroot |
  92237c45
-In-Reply-To: <6594f32e-a013-2622-20a8-91cf6edf568a@essensium.com> (Arnout
- Vandecappelle's message of "Thu, 11 Feb 2021 08:36:54 +0100")
+In-Reply-To: <87blcqke1z.fsf@dell.be.48ers.dk>
 References: <602456474c4eb_b2ab5a703162be@gitlab-sidekiq-catchall-v1-6d55b89d66-6zn9h.mail>
  <6594f32e-a013-2622-20a8-91cf6edf568a@essensium.com>
-Message-ID: <87blcqke1z.fsf@dell.be.48ers.dk>
+ <87blcqke1z.fsf@dell.be.48ers.dk>
+Message-ID: <20210211132135.5e39993c@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout.vandecappelle@essensium.com> writes:
+On Thu, 11 Feb 2021 13:02:32 +0100
+Peter Korsgaard <peter@korsgaard.com> wrote:
 
- > ?Hi all,
- > ?I'm not sure to what extent you automatically get warned about these failures,
- > so I'm forwarding this to you.
+>  > ?2021.02-rc1 has been released, but 9 tests are failing on it. Could we get them
+>  > fixed before the final release?  
+> 
+> Thanks, I indeed don't receive such notifications.
 
- > ?2021.02-rc1 has been released, but 9 tests are failing on it. Could we get them
- > fixed before the final release?
+Such failures are normally notified (1) to the maintainers of the
+failing defconfigs and (2) in the global e-mail sent every day to the
+mailing list.
 
-Thanks, I indeed don't receive such notifications.
-
-
- > Job #1019385566 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/1019385566/raw )
-
- > Stage: test
- > Name: avenger96_defconfig
-
-Hmm, that log isn't very helpful. Any idea what is going on? I just did
-a test build here without issues.
-
-Is it perhaps a case of missing BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL?
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
