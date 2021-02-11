@@ -1,76 +1,81 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 11 Feb 2021 21:58:18 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] packago/go: security bump
- to version 1.15.7
-Message-ID: <20210211203802.84D0280070@busybox.osuosl.org>
+Date: Thu, 11 Feb 2021 21:56:23 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] utils/getdeveloperlib.py:
+ reduce Cc: list based on package infras
+Message-ID: <20210211203809.8A7A683C5E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d6f0a981f96073a9ef2d893183ae48350993d438
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=f265cea4d8457d5696720d654c30853db447dcf8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Fixes the following security issues:
+When a developer has package/pkg-<infra>.mk assigned to him/her in the
+DEVELOPERS file, this has 3 implications:
 
-- cmd/go: packages using cgo can cause arbitrary code execution at build time
+ (1) Patches adding new packages using this infrastructure are Cc'ed
+     to this developer. This is done by the analyze_patch() function,
+     which matches the regexp r"^\+\$\(eval
+     \$\((host-)?([^-]*)-package\)\)$" in the patch, i.e where an
+     added line contains a reference to the infra maintained by the
+     developer.
 
-  The go command may execute arbitrary code at build time when cgo is in use
-  on Windows.  This may occur when running ???go get???, or any other command
-  that builds code.  Only users who build untrusted code (and don???t execute
-  it) are affected.
+ (2) Patches touching the package/pkg-<infra>.mk file itself are Cc'ed
+     to this developer.
 
-  In addition to Windows users, this can also affect Unix users who have ???.???
-  listed explicitly in their PATH and are running ???go get??? or build commands
-  outside of a module or with module mode disabled.
+ (3) Any patch touching a package using this infra are also Cc'ed to
+     this developer.
 
-  Thanks to RyotaK (https://twitter.com/ryotkak) for reporting this issue.
+Point (3) causes a significant amount of patches to be sent to
+developers who have package/pkg-generic.mk and
+package/pkg-autotools.mk assigned to them in the DEVELOPERS
+file. Basically, all patches touching generic or autotools packages
+get CC'ed to such developers, which causes a massive amount of patches
+to be received.
 
-  This issue is CVE-2021-3115 and Go issue golang.org/issue/43783.
+So this patch adjusts the getdeveloperlib.py to drop point (3), but
+preserves point (1) and (2). Indeed, it makes sense to be Cc'ed on new
+package additions (to make a review that they use the package
+infrastructure correctly), and it makes sense to be Cc'ed on patches
+that touch the infrastructure code itself.
 
-- crypto/elliptic: incorrect operations on the P-224 curve
-
-  The P224() Curve implementation can in rare circumstances generate
-  incorrect outputs, including returning invalid points from ScalarMult.
-
-  The crypto/x509 and golang.org/x/crypto/ocsp (but not crypto/tls) packages
-  support P-224 ECDSA keys, but they are not supported by publicly trusted
-  certificate authorities.  No other standard library or golang.org/x/crypto
-  package supports or uses the P-224 curve.
-
-  The incorrect output was found by the elliptic-curve-differential-fuzzer
-  project running on OSS-Fuzz and reported by Philippe Antoine (Catena cyber).
-
-  This issue is CVE-2021-3114 and Go issue golang.org/issue/43786.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 0e1b5aa57273465ea10b9c99808282b017a4f05d)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 38b0560f4ee1f113e32ce2cf59a08c37a967150d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ utils/getdeveloperlib.py | 12 ------------
+ 1 file changed, 12 deletions(-)
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index de2cf74cbb..1bd7ab7ca9 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,3 +1,3 @@
- # From https://golang.org/dl/
--sha256  890bba73c5e2b19ffb1180e385ea225059eb008eb91b694875dd86ea48675817  go1.15.6.src.tar.gz
-+sha256  8631b3aafd8ecb9244ec2ffb8a2a8b4983cf4ad15572b9801f7c5b167c1a2abc  go1.15.7.src.tar.gz
- sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index e9f8be7783..3928c8b708 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/utils/getdeveloperlib.py b/utils/getdeveloperlib.py
+index d7a90457ed..b205817033 100644
+--- a/utils/getdeveloperlib.py
++++ b/utils/getdeveloperlib.py
+@@ -56,17 +56,6 @@ def fname_get_package_infra(fname):
+     return None
  
--GO_VERSION = 1.15.6
-+GO_VERSION = 1.15.7
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
+-def get_infras(files):
+-    """Search in the list of files for .mk files, and collect the package
+-    infrastructures used by those .mk files."""
+-    infras = set()
+-    for fname in files:
+-        infra = fname_get_package_infra(fname)
+-        if infra:
+-            infras.add(infra)
+-    return infras
+-
+-
+ def analyze_patches(patches):
+     """Parse a list of patches and returns the list of files modified,
+     added or removed by the patches, as well as the list of package
+@@ -77,7 +66,6 @@ def analyze_patches(patches):
+         (files, infras) = analyze_patch(patch)
+         allfiles = allfiles | files
+         allinfras = allinfras | infras
+-    allinfras = allinfras | get_infras(allfiles)
+     return (allfiles, allinfras)
+ 
  
