@@ -1,47 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 11 Feb 2021 14:17:09 +0100
-Subject: [Buildroot] Fwd: Failed pipeline for 2021.02-rc1 | buildroot |
- 92237c45
-In-Reply-To: <a96729fe-e872-02a3-592e-8adc379d809a@mind.be> (Arnout
- Vandecappelle's message of "Thu, 11 Feb 2021 13:48:15 +0100")
-References: <602456474c4eb_b2ab5a703162be@gitlab-sidekiq-catchall-v1-6d55b89d66-6zn9h.mail>
- <6594f32e-a013-2622-20a8-91cf6edf568a@essensium.com>
- <87blcqke1z.fsf@dell.be.48ers.dk>
- <a96729fe-e872-02a3-592e-8adc379d809a@mind.be>
-Message-ID: <877dnekalm.fsf@dell.be.48ers.dk>
+Date: Thu, 11 Feb 2021 14:23:11 +0100
+Subject: [Buildroot] [PATCH] configs/avenger96_defconfig: linux build needs
+ host-openssl
+Message-ID: <20210211132311.22508-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+Fixes the gitlab build:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/1019385566/
 
- >> > Job #1019385566 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/1019385566/raw )
- >> 
- >> > Stage: test
- >> > Name: avenger96_defconfig
- >> 
- >> Hmm, that log isn't very helpful. Any idea what is going on? I just did
- >> a test build here without issues.
+  HOSTCC  scripts/extract-cert
+scripts/extract-cert.c:21:25: fatal error: openssl/bio.h: No such file or directory
 
- >  Ah, I forgot that the text version of that mail appends /raw at the end of the
- > URLs. You have to go to the job page, then go to the artifacts, and there you
- > find the full log.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ configs/avenger96_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
- > There you find:
-
- > scripts/extract-cert.c:21:25: fatal error: openssl/bio.h: No such file or directory
- >  #include <openssl/bio.h>
- >                          ^
-
-Ahh, ok.
-
- >> Is it perhaps a case of missing BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL?
-
- >  Looks like it :-)
-
-Great, I'll send a patch.
-
+diff --git a/configs/avenger96_defconfig b/configs/avenger96_defconfig
+index 6fea029bf8..d2c1b9013e 100644
+--- a/configs/avenger96_defconfig
++++ b/configs/avenger96_defconfig
+@@ -10,6 +10,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="multi_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="stm32mp157a-dhcor-avenger96"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
 -- 
-Bye, Peter Korsgaard
+2.20.1
