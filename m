@@ -1,37 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 11 Feb 2021 23:13:14 +0100
-Subject: [Buildroot] [git commit] configs/avenger96_defconfig: linux build
- needs host-openssl
-Message-ID: <20210211215503.B90D17FD62@busybox.osuosl.org>
+Date: Thu, 11 Feb 2021 23:14:11 +0100
+Subject: [Buildroot] [git commit] package/protobuf: remove target version of
+ 'protoc'
+Message-ID: <20210211215503.C698B7FD62@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1fabbd387d2e623cfa6bba81b39bfc96933573d2
+commit: https://git.buildroot.net/buildroot/commit/?id=df6de52bd4eafb2aeedf8a7935601feff86dcf9f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the gitlab build:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/1019385566/
+The tool 'protoc' and its associated library libprotoc.so are only
+needed during development, to convert a protocol buffer definition in the
+associated code for a specific code language.
 
-  HOSTCC  scripts/extract-cert
-scripts/extract-cert.c:21:25: fatal error: openssl/bio.h: No such file or directory
+Buildroot does not officially support creating a development environment on
+target, so remove these files to reduce disk usage by more than 1.5 MB
+(stripped, uncompressed).
 
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/avenger96_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ package/protobuf/protobuf.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/configs/avenger96_defconfig b/configs/avenger96_defconfig
-index 6fea029bf8..d2c1b9013e 100644
---- a/configs/avenger96_defconfig
-+++ b/configs/avenger96_defconfig
-@@ -10,6 +10,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="multi_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="stm32mp157a-dhcor-avenger96"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
+index 661b7a6b81..df708819cb 100644
+--- a/package/protobuf/protobuf.mk
++++ b/package/protobuf/protobuf.mk
+@@ -36,5 +36,12 @@ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ PROTOBUF_DEPENDENCIES += zlib
+ endif
+ 
++define PROTOBUF_REMOVE_UNNECESSARY_TARGET_FILES
++	rm -rf $(TARGET_DIR)/usr/bin/protoc
++	rm -rf $(TARGET_DIR)/usr/lib/libprotoc.so*
++endef
++
++PROTOBUF_POST_INSTALL_TARGET_HOOKS += PROTOBUF_REMOVE_UNNECESSARY_TARGET_FILES
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
