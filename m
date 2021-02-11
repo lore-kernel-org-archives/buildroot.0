@@ -1,44 +1,37 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 11 Feb 2021 20:43:56 +0100
-Subject: [Buildroot] [PATCH 1/1] package/kodi-inputstream-adaptive: update
- project URL
-Message-ID: <20210211194356.591508-1-bernd.kuhls@t-online.de>
+From: Michael Walle <michael@walle.cc>
+Date: Thu, 11 Feb 2021 20:52:58 +0100
+Subject: [Buildroot] Fwd: Failed pipeline for 2021.02-rc1 | buildroot |
+ 92237c45
+In-Reply-To: <6594f32e-a013-2622-20a8-91cf6edf568a@essensium.com>
+References: <602456474c4eb_b2ab5a703162be@gitlab-sidekiq-catchall-v1-6d55b89d66-6zn9h.mail>
+ <6594f32e-a013-2622-20a8-91cf6edf568a@essensium.com>
+Message-ID: <0fa7a4966a0b844d915713747fb69901@walle.cc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Reference: https://github.com/xbmc/repo-binary-addons/pull/143
+Hi,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/kodi-inputstream-adaptive/Config.in                    | 2 +-
- package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Am 2021-02-11 08:36, schrieb Arnout Vandecappelle:
+> ?I'm not sure to what extent you automatically get warned about these 
+> failures,
+> so I'm forwarding this to you.
+> 
+> ?2021.02-rc1 has been released, but 9 tests are failing on it. Could we 
+> get them
+> fixed before the final release?
 
-diff --git a/package/kodi-inputstream-adaptive/Config.in b/package/kodi-inputstream-adaptive/Config.in
-index f9ba20adcf..21f1cff171 100644
---- a/package/kodi-inputstream-adaptive/Config.in
-+++ b/package/kodi-inputstream-adaptive/Config.in
-@@ -6,4 +6,4 @@ config BR2_PACKAGE_KODI_INPUTSTREAM_ADAPTIVE
- 	help
- 	  Kodi inputstream addon for several manifest types
- 
--	  https://github.com/peak3d/inputstream.adaptive
-+	  https://github.com/xbmc/inputstream.adaptive
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-index 30fbaf5251..a8024951d4 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- KODI_INPUTSTREAM_ADAPTIVE_VERSION = 2.4.6-Leia
--KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,peak3d,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
-+KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,xbmc,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPL-2.0+
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = LICENSE.GPL
- KODI_INPUTSTREAM_ADAPTIVE_DEPENDENCIES = kodi
--- 
-2.29.2
+[..]
+
+> Job #1019385674 (
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/1019385674/raw )
+> 
+> Stage: test
+> Name: kontron_smarc_sal28_defconfig
+
+This should be fixed by the following patch:
+http://lists.busybox.net/pipermail/buildroot/2021-January/300901.html
+
+-michael
