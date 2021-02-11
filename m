@@ -1,157 +1,50 @@
 From: =?iso-8859-1?Q?Jan_Kundr=E1t?= <jan.kundrat@cesnet.cz>
-Date: Thu, 11 Feb 2021 14:56:17 +0100
+Date: Thu, 11 Feb 2021 15:16:31 +0100
 Subject: [Buildroot] 
- =?iso-8859-1?q?=5BPATCH_1/2=5D_package/netopeer2=3A_?=
- =?iso-8859-1?q?set_SYSREPO=5FSHM=5FPREFIX_and_cleanup_shm_files_after_ins?=
- =?iso-8859-1?q?tallation?=
-In-Reply-To: <20210207123946.14105766@gmx.net>
-References: <20210206105736.29429-1-heiko.thiery@gmail.com>
- <20210207123946.14105766@gmx.net>
-Message-ID: <e3a208c6-a577-4057-8c42-fbdf9f0c2196@cesnet.cz>
+ =?iso-8859-1?q?=5BPATCH_7/7=5D_package/sysrepo=3A_re?=
+ =?iso-8859-1?q?move_explicit_setting_of_CMAKE=5FBUILD=5FTYPE?=
+In-Reply-To: <20210210141256.6438-8-patrickdepinguin@gmail.com>
+References: <20210210141256.6438-1-patrickdepinguin@gmail.com>
+ <20210210141256.6438-8-patrickdepinguin@gmail.com>
+Message-ID: <c3e0dbe6-8fc8-4285-8196-8463d22e403f@cesnet.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On ned?le 7. ?nora 2021 12:39:46 CET, Peter Seiderer wrote:
-> Still the question, are the shm files needed at runtime? If so they should
-> belong in the target directory (or created by a startup script), of not why
-> create them at first (why not skip the setup.sh/sysrepoctl step)? Are there
-> any other products/output of the setup.sh/sysrepoctl step?
+On st?eda 10. ?nora 2021 15:12:56 CET, Thomas De Schampheleire wrote:
+> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 >
-> The setup.sh is called with the following environment variables:
+> sysrepo explicitly set CMAKE_BUILD_TYPE=Release, ignoring any possible
+> value of BR2_ENABLE_DEBUG (previously) or BR2_ENABLE_RUNTIME_DEBUG (now).
 >
-> 	NP2_MODULE_DIR /usr/share/yang/modules/netopeer2
-> 	NP2_MODULE_PERMS 600
-> 	NP2_MODULE_OWNER seiderer
-> 	NP2_MODULE_GROUP users
+> With the introduction of BR2_ENABLE_RUNTIME_DEBUG, this change should no
+> longer be necessary. Users that do not wish to have additional runtime
+> debugging just keep BR2_ENABLE_RUNTIME_DEBUG disabled (default value).
 >
-> A (quick) strace check of setup.sh run shows no other output 
-> than the shm files...
+> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> ---
+>  package/sysrepo/sysrepo.mk | 2 --
+>  1 file changed, 2 deletions(-)
+>
+> diff --git a/package/sysrepo/sysrepo.mk b/package/sysrepo/sysrepo.mk
+> index e4d553cdbd..e0ac4cd245 100644
+> --- a/package/sysrepo/sysrepo.mk
+> +++ b/package/sysrepo/sysrepo.mk
+> @@ -13,7 +13,6 @@ SYSREPO_DEPENDENCIES = libyang pcre host-sysrepo
+>  HOST_SYSREPO_DEPENDENCIES = host-libyang host-pcre
+>  
+>  SYSREPO_CONF_OPTS = \
+> -	-DCMAKE_BUILD_TYPE=Release \
+>  	-DBUILD_EXAMPLES=$(if $(BR2_PACKAGE_SYSREPO_EXAMPLES),ON,OFF)
 
-Disclaimer: While I work for the same company as the sysrepo+netopeer2 
-maintainers, I'm not upstream. On the other hand, we've been using 
-sysrepo+netopeer2 on ARM via Buildroot for a few years. Here's what we're 
-doing. Our use case is having a common buildroot build image for several 
-appliances that each use a slightly different set of YANG modules. We also 
-have a read-only rootfs, with a separate partitions for stateful data, and 
-we're using the A/B boot slots via RAUC.
+You'll need to pass -DREPO_PATH=/etc/sysrepo here so that sysrepo on the 
+target does not accidentally try to use a path that only exists on the 
+build host. See 
+https://github.com/sysrepo/sysrepo/blob/v1.4.104/CMakeLists.txt#L138-L144 
+for details.
 
-Our first attempt was persisting the /etc/sysrepo directory across system 
-updates. That did not work well because of some version bumps of internal 
-modules. Also, the current build scripts upstream can cope with partial 
-state in /etc/sysrepo, but that does not help for buildroot because the 
-state at the build time is very different from the state at the boot time. 
-In my experience the errors were not intuitive, and the fact that 
-/etc/sysrepo contains binary LYB files does not help here.
+After that, feel free to add my Reviewed-by.
 
-In our current approach, we do not install any YANG modules at build time 
--- not even for Netopeer2-server. Instead, we're using a series of systemd 
-units:
-
-- The first one prepares a tmpfs for /run/sysrepo that we're using instead 
-of /dev/shm. This is important for us because the SHM code in sysrpeo has 
-been (so far) showing rather serious bugs, and it occasionally helps to 
-just start from scratch without a reboot. We're using also addiing a few 
-stanzas to any service which uses sysrepo: BindsTo=run-sysrepo.mount, 
-After=run-sysrepo.mount, PartOf=run-sysrepo.mount, and a PartOf=$${UNIT} 
-for each of this unit in a drop-in file for the run-sysrepo.mount unit 
-file.
-
-- Then we call netopeer2's shell script for installing the required YANG 
-modules. That's the same shell script which upstream would regularly use at 
-the install time. This only installs some models, there's no configuration.
-
-- Then we call our internal shell script which decides what 
-application-specififc YANG modules should be installed, and installs them. 
-Some of these modules require initial "factory" data (and they would not 
-pass validation if they were left empty), so these are installed as well. 
-It is critical that nothing runs in parallel to these.
-
-- The we restore configuration from the previous reboot, if any. That's a 
-simple `sysrepocfg -d startup -f json --import=/cfg/sysrepo/startup.json` 
-followed by `sysrepocfg -C startup`.
-
-- Then we apply the NACM rule set -- we have some systemwide YANG modules 
-and an app that processes them for authentication, FW updates, etc, which 
-have to be ACL-limited.
-
-- The we check if the Netopeer2 server already has a listening endpoint 
-configured via the sysrepo database content. There are essentially three 
-possible scenarios:
-
-  1) There's been no persistent configuration to restore from the last 
-boot. In that case, a new configuration should be provisioned.
-
-  2) There's been some configuration that we restored earlier, and it 
-contains a <listen> endpoint or a <call-home> endpoint. If that's the case, 
-good, we're done here.
-
-  3) Otherwise, there's been some config, but the NETCONF service has no 
-listening endpoints configured. In that case, run the configuration scripts 
-from upstream.
-
-  In options 1) and 3), we run upstream's merge_hostkey.sh and 
-merge_config.sh scripts. These actually generate an SSH server host key, so 
-they cannot possibly run during buildroot build time.
-
-- Everything is configured, so we can start launching various services 
-which use sysrepo.
-
-- Finally, there's a horribly inotify script which snapshots the 
-configuration for the next boot: `while true; do inotifywait -e CLOSE_WRITE 
-/etc/sysrepo/data/*.startup && mkdir -p /cfg/sysrepo/ && sysrepocfg -d 
-startup -f json -X > /cfg/sysrepo/startup.json; done`
-
-Our buildroot config for Netopeer2 is available here: 
-https://gerrit.cesnet.cz/plugins/gitiles/github/buildroot/buildroot/+/refs/heads/cesnet/2021-01-11/package/netopeer2/ 
-. The scaffolding around that is, unfortunately, not public at this point, 
-but I'll see if I can contribute the key parts over the next months 
-(realistically, April is the soonest one).
-
-Now, to the question asked in this thread about what "installing a YANG 
-file" actually performs in sysrepo, and what the SHM files are. The SHM 
-files serve two purposes, hte first one is synchronizing access when 
-multiple processes are accessing sysrepo. In the past sysrpeo versions, 
-this would be the `sysrepod` process which is long gone. The second purpose 
-of the SHM files are keeping track of data in the "running datastore". 
-That's a term from the YANG/NETCONF/RESTCONF/NMDA series of RFCs, the TL;DR 
-version is that when the system boots, the content of the persistent 
-configuration is copied to the "running configuration". Often, the system 
-would react to changes in "running" imemdiately, while changes to "startup" 
-are only applied later, but it can be more complex, see RFC 8342 and enjoy 
-the list of optional features and conditional behavior if you're bored.
-
-Based on our experience, we've decided that installing YANG modules at 
-build time is *not* a feasible path forward. If you insist on getting this 
-working, then I strongly suggest using a single location outside of build/ 
-and per-package/ directories -- introduce a new one, build host-sysrepo 
-with the repo path pointing there, and in the rootfs-finalize hook, copy 
-its content to target/etc/sysrepo. There will still be races, and having 
-per-package SHM directories would open a whole new can of worms.
-
-The drawbacks of our current approach is that we're matinaining a single 
-shell script that contains a list of modules to install, and these modules 
-often belong to different packages, so it's inelegant. I can imagine 
-improving this via agreeing on a single location where packages would drop 
-their installation scripts in. Still, to support the R/O rootfs + 
-perisstent-config-somewhere-else scenario, one will need at least two 
-directories. It might work like this:
-
-- /usr/share/sysrepo/install-yang/*.sh , these files provided by packages 
-invoke `sysrepoctl` and `sysrepocfg` to install various YANG files, enable 
-YANG-level features in them, and provide the initial "factory" data
-
-- /usr/share/sysrepo/configure-yang/*.sh, these hooks are once again 
-provided by packages, and they perorm some sanity checks to make sure 
-there's a viable configuration. This is where the netopeer2-server would 
-create its SSH key. Another candidate are NACM rules from extra packages.
-
-In between these two hooks that's the time where the configuration could be 
-restored for those users like me who have a r/o rootfs.
-
-Hope this helps at least a bit.
-
-With kind regards,
 Jan
