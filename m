@@ -1,48 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 11 Feb 2021 19:09:43 +0100
-Subject: [Buildroot] [PATCH] package/xterm: security bump to version 366
-Message-ID: <20210211180944.14218-1-peter@korsgaard.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 11 Feb 2021 18:40:22 +0100
+Subject: [Buildroot] [git commit] package/netopeer2: add dependency to
+ host-sysrepo
+Message-ID: <20210211180759.7E88483CD0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issue:
+commit: https://git.buildroot.net/buildroot/commit/?id=b2eb7a1fbc78b6ac3825abee7ce46f2b3746507a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-CVE-2021-27135: xterm through Patch #365 allows remote attackers to cause a
-denial of service (segmentation fault) or possibly have unspecified other
-impact via a crafted UTF-8 character sequence.
+The sysrepoctl executable from the host-sysrepo package is used to
+install YANG modules during installation. So add the dependency here.
+Also make sure we use this executable by setting the make environment
+variable SYSREPOCTL_EXECUTABLE. Otherwise a system wide installed
+sysrepoctl would be used that is not what we want.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/xterm/xterm.hash | 4 ++--
- package/xterm/xterm.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/netopeer2/netopeer2.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/xterm/xterm.hash b/package/xterm/xterm.hash
-index 8e2d2c5309..588b7fca51 100644
---- a/package/xterm/xterm.hash
-+++ b/package/xterm/xterm.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256  d81a3639e26552b6765bdcf28be1ecdb8acabf907955708e830ad6397ea10b48  xterm-363.tgz
-+sha256  858b2885963fe97e712739066aadc1baeba2b33a0016303a7fec7d38bc73bf6e  xterm-366.tgz
- # Locally calculated
--sha256  c655a5fa3dec936543e02f863b8c1343d08522a2821cb484df6c5f62afa7354d  COPYING
-+sha256  dfb668cc977e24649500f3cc54de3e2b793928d210715a445ab1227930b07ba6  COPYING
-diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
-index 0984ef4dc8..f0c497e5e9 100644
---- a/package/xterm/xterm.mk
-+++ b/package/xterm/xterm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/netopeer2/netopeer2.mk b/package/netopeer2/netopeer2.mk
+index bc02e0dc93..10a13dfda9 100644
+--- a/package/netopeer2/netopeer2.mk
++++ b/package/netopeer2/netopeer2.mk
+@@ -9,10 +9,12 @@ NETOPEER2_SITE = $(call github,CESNET,Netopeer2,v$(NETOPEER2_VERSION))
+ NETOPEER2_DL_SUBDIR = netopeer2
+ NETOPEER2_LICENSE = BSD-3-Clause
+ NETOPEER2_LICENSE_FILES = LICENSE
+-NETOPEER2_DEPENDENCIES = libnetconf2 libyang sysrepo
++NETOPEER2_DEPENDENCIES = libnetconf2 libyang sysrepo host-sysrepo
  
--XTERM_VERSION = 363
-+XTERM_VERSION = 366
- XTERM_SOURCE = xterm-$(XTERM_VERSION).tgz
- XTERM_SITE = http://invisible-mirror.net/archives/xterm
- XTERM_DEPENDENCIES = ncurses xlib_libXaw host-pkgconf
--- 
-2.20.1
+ NETOPEER2_CONF_OPTS = -DBUILD_CLI=$(if $(BR2_PACKAGE_NETOPEER2_CLI),ON,OFF)
+ 
++NETOPEER2_MAKE_ENV = SYSREPOCTL_EXECUTABLE=$(HOST_DIR)/bin/sysrepoctl
++
+ define NETOPEER2_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 755 -D package/netopeer2/S52netopeer2 \
+ 		$(TARGET_DIR)/etc/init.d/S52netopeer2
