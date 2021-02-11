@@ -1,46 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 11 Feb 2021 23:12:06 +0100
-Subject: [Buildroot] [git commit] package/kodi-inputstream-adaptive: update
- project URL
-Message-ID: <20210211215503.AC9DD8379A@busybox.osuosl.org>
+Date: Thu, 11 Feb 2021 23:16:48 +0100
+Subject: [Buildroot] [PATCH 1/1] package/kodi: remove dependency to
+ libsamplerate
+In-Reply-To: <20210210174023.962225-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Wed, 10 Feb 2021 18:40:23 +0100")
+References: <20210210174023.962225-1-bernd.kuhls@t-online.de>
+Message-ID: <87y2fugshb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fd72673d91a4b3326640bfb799d1af1926acd3ad
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-Reference: https://github.com/xbmc/repo-binary-addons/pull/143
+ > This package is not needed anymore since 2014:
+ > https://github.com/xbmc/xbmc/commit/e36e4f0e2a46764d0c4341a5caf50cae6f772504
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/kodi-inputstream-adaptive/Config.in                    | 2 +-
- package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-diff --git a/package/kodi-inputstream-adaptive/Config.in b/package/kodi-inputstream-adaptive/Config.in
-index f9ba20adcf..21f1cff171 100644
---- a/package/kodi-inputstream-adaptive/Config.in
-+++ b/package/kodi-inputstream-adaptive/Config.in
-@@ -6,4 +6,4 @@ config BR2_PACKAGE_KODI_INPUTSTREAM_ADAPTIVE
- 	help
- 	  Kodi inputstream addon for several manifest types
- 
--	  https://github.com/peak3d/inputstream.adaptive
-+	  https://github.com/xbmc/inputstream.adaptive
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-index 30fbaf5251..a8024951d4 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- KODI_INPUTSTREAM_ADAPTIVE_VERSION = 2.4.6-Leia
--KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,peak3d,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
-+KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,xbmc,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPL-2.0+
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = LICENSE.GPL
- KODI_INPUTSTREAM_ADAPTIVE_DEPENDENCIES = kodi
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
