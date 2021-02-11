@@ -1,46 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 11 Feb 2021 16:52:00 +0100
-Subject: [Buildroot] [git commit] package/docker-cli: bump to version 20.10.3
-Message-ID: <20210211153153.EDECF83C80@busybox.osuosl.org>
+Date: Thu, 11 Feb 2021 16:51:37 +0100
+Subject: [Buildroot] [git commit] package/docker-engine: security bump to
+ version 20.10.3
+Message-ID: <20210211153153.ED157813B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a73e158f02c1f1421b8e9308ce59b6d2bc331f63
+commit: https://git.buildroot.net/buildroot/commit/?id=e2a85ec4a0466634ac4c50b0acf051a03d5955af
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Client fixes:
+Security fixes:
 
- - Check contexts before importing them to reduce risk of extracted files escaping context store
+ - CVE-2021-21285 Prevent an invalid image from crashing docker daemon
+ - CVE-2021-21284 Lock down file permissions to prevent remapped root from accessing docker state
+ - Ensure AppArmor and SELinux profiles are applied when building with BuildKit
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/docker-cli/docker-cli.hash | 2 +-
- package/docker-cli/docker-cli.mk   | 2 +-
+ package/docker-engine/docker-engine.hash | 2 +-
+ package/docker-engine/docker-engine.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
-index cf5e80825f..95b15b539b 100644
---- a/package/docker-cli/docker-cli.hash
-+++ b/package/docker-cli/docker-cli.hash
+diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
+index 2519ddaecd..69ebd113ea 100644
+--- a/package/docker-engine/docker-engine.hash
++++ b/package/docker-engine/docker-engine.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256  4ee7cc9c3f6287ca834166aaa1a945790c54d9a8345a1b449a193d9c739f2a7d  docker-cli-20.10.1.tar.gz
-+sha256  aafba3765d9013cb75810b4f4334525f0e74e82ef073b4df9e8b524f3794e60a  docker-cli-20.10.3.tar.gz
- sha256  2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
-diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
-index 0d1ec02ad7..d90c3b7d10 100644
---- a/package/docker-cli/docker-cli.mk
-+++ b/package/docker-cli/docker-cli.mk
+-sha256  f0fda46a82bf8f624eb349370358891d3bc65ef3e320675226f17dba8f62566d  docker-engine-20.10.1.tar.gz
++sha256  62bb03f197b8a064da568e62639f6834f91c8cfc9273126a978847becc214c31  docker-engine-20.10.3.tar.gz
+ sha256  7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index 058960119a..bbc97af8b5 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DOCKER_CLI_VERSION = 20.10.1
-+DOCKER_CLI_VERSION = 20.10.3
- DOCKER_CLI_SITE = $(call github,docker,cli,v$(DOCKER_CLI_VERSION))
+-DOCKER_ENGINE_VERSION = 20.10.1
++DOCKER_ENGINE_VERSION = 20.10.3
+ DOCKER_ENGINE_SITE = $(call github,moby,moby,v$(DOCKER_ENGINE_VERSION))
  
- DOCKER_CLI_LICENSE = Apache-2.0
+ DOCKER_ENGINE_LICENSE = Apache-2.0
