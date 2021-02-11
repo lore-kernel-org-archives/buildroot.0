@@ -1,49 +1,51 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 11 Feb 2021 23:20:53 +0100
-Subject: [Buildroot] [git commit] package/can-utils: enable build using musl
- libc
-Message-ID: <20210211220022.E6F4783C8F@busybox.osuosl.org>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Fri, 12 Feb 2021 00:35:55 +0200
+Subject: [Buildroot] [PATCH 1/1] package/brotli: add BROTLI_CPE_ID_VENDOR
+In-Reply-To: <20210207125737.2805368-1-fontaine.fabrice@gmail.com>
+References: <20210207125737.2805368-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210212003555.GB21392@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aa1ed2fc07c8e49905fd1cb1752556be55f05ba1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun, 07 Feb 2021 13:57:37 +0100 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+> cpe:2.3:a:google:brotli is a valid CPE identifier for this package:
+> 
+>   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Agoogle%3Abrotli
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-From commit 20fb6d3288f3c9aac7975e505d9a25f21f64bdf9 this package was
-disabled for musl because can-utils used the error() glibc extension
-at that time.
+Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
 
-Since then, can-utils fixed compilation on musl by replacing this
-error() calls with err().
-https://github.com/linux-can/can-utils/pull/163/commits/791b6de78673f005e9748983231f7260f6b69e99
-
-This commit disables the musl check.
-
-Signed-off-by: Diego Hurtado de Mendoza <diego.hdmp@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/can-utils/Config.in | 5 -----
- 1 file changed, 5 deletions(-)
-
-diff --git a/package/can-utils/Config.in b/package/can-utils/Config.in
-index da56378866..bdc84b461a 100644
---- a/package/can-utils/Config.in
-+++ b/package/can-utils/Config.in
-@@ -1,14 +1,9 @@
- config BR2_PACKAGE_CAN_UTILS
- 	bool "can-utils"
- 	depends on BR2_USE_MMU # fork()
--	depends on !BR2_TOOLCHAIN_USES_MUSL # error()
- 	help
- 	  SocketCAN is a set of open source CAN drivers and a
- 	  networking stack.
- 	  This package provides various tools for this stack.
- 
- 	  https://github.com/linux-can/can-utils
--
--comment "can-utils needs a glibc or uClibc toolchain"
--	depends on BR2_TOOLCHAIN_USES_MUSL
--	depends on BR2_USE_MMU
+> ---
+>  package/brotli/brotli.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/brotli/brotli.mk b/package/brotli/brotli.mk
+> index 5209d3186b..43c8524c0b 100644
+> --- a/package/brotli/brotli.mk
+> +++ b/package/brotli/brotli.mk
+> @@ -9,6 +9,7 @@ BROTLI_SOURCE = v$(BROTLI_VERSION).tar.gz
+>  BROTLI_SITE = https://github.com/google/brotli/archive
+>  BROTLI_LICENSE = MIT
+>  BROTLI_LICENSE_FILES = LICENSE
+> +BROTLI_CPE_ID_VENDOR = google
+>  BROTLI_INSTALL_STAGING = YES
+>  BROTLI_CONF_OPTS = \
+>  	-DBROTLI_DISABLE_TESTS=ON \
+> -- 
+> 2.29.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210212/11907e5e/attachment.asc>
