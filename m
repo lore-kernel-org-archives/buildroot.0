@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 11 Feb 2021 22:16:33 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/docker-engine:
+Date: Thu, 11 Feb 2021 23:06:06 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/docker-engine:
  security bump to version 19.03.15
-Message-ID: <20210211214512.2BAE6815F4@busybox.osuosl.org>
+Message-ID: <20210211214506.E2A2283C69@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bcdb238f60c87cdfa1cc224cc6dac2d8de774cce
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=301cba0ea2d755214b7255b3618d433b6ab80f2c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
 Fixes the following security issues:
 
@@ -37,7 +37,7 @@ index e7d5932687..a2e6d772ba 100644
 +sha256	ef5cd0bdd3e06102dcdae72ffba7f89e663c680d9dc17b811f51aad8ff5b0405  docker-engine-19.03.15.tar.gz
  sha256	7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
 diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index 261deed505..b7b9f5e538 100644
+index 8cedf307ba..9278e770f4 100644
 --- a/package/docker-engine/docker-engine.mk
 +++ b/package/docker-engine/docker-engine.mk
 @@ -4,7 +4,7 @@
