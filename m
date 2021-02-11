@@ -1,108 +1,47 @@
-From: guillaume.bressaix at gmail.com <guillaume.bressaix@gmail.com>
-Date: Thu, 11 Feb 2021 22:37:29 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/libxcrypt: new package
-Message-ID: <20210211213729.32230-1-guillaume.bresaix@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 11 Feb 2021 23:06:08 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/docker-cli: bump
+ version to 19.03.15
+Message-ID: <20210211214507.01BE1815F4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=4aa20c27bcbd413346feca8cb2233844ba7a372c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+Bugfix release, fixing the following issue:
+
+- Check contexts before importing them to reduce risk of extracted files
+  escaping context store
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
+ package/docker-cli/docker-cli.hash | 2 +-
+ package/docker-cli/docker-cli.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-libxcrypt is a modern library for one-way hashing of passwords.
-It supports a wide variety of both modern and historical
-hashing methods:
-yescrypt, gost-yescrypt, scrypt, bcrypt,
-sha512crypt, sha256crypt, md5crypt, SunMD5, sha1crypt, NT.
-
-Please discard my previous submission which contained
-a couple trailing whitespaces.
-
-Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
----
- DEVELOPERS                       |  1 +
- package/Config.in                |  1 +
- package/libxcrypt/Config.in      | 11 +++++++++++
- package/libxcrypt/libxcrypt.hash |  4 ++++
- package/libxcrypt/libxcrypt.mk   | 13 +++++++++++++
- 5 files changed, 30 insertions(+)
- create mode 100644 package/libxcrypt/Config.in
- create mode 100644 package/libxcrypt/libxcrypt.hash
- create mode 100644 package/libxcrypt/libxcrypt.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 361ee2f35a..a01047e596 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1059,6 +1059,7 @@ F:	package/sdl2/
+diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
+index 66abfe5224..e1daa73035 100644
+--- a/package/docker-cli/docker-cli.hash
++++ b/package/docker-cli/docker-cli.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	21b88a00e8f7a3194c0ae1de5a31e3e1728ef6aa2804158dcb502a8b5fd6ae2b  docker-cli-19.03.13.tar.gz
++sha256	1b577057daf269fabab93b7035d1685aa690118ca7c84e1d772a770a021da883  docker-cli-19.03.15.tar.gz
+ sha256	2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
+diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
+index 86fffafdb8..ab705075cf 100644
+--- a/package/docker-cli/docker-cli.mk
++++ b/package/docker-cli/docker-cli.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- N:	Guillaume William Brs <guillaume.bressaix@gmail.com>
- F:	package/libnids/
-+F:	package/libxcrypt/
- F:	package/liquid-dsp/
- F:	package/pixiewps/
- F:	package/python-pybind/
-diff --git a/package/Config.in b/package/Config.in
-index 5304ab141c..1b9d7a4846 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1371,6 +1371,7 @@ menu "Crypto"
- 	source "package/libssh2/Config.in"
- 	source "package/libtomcrypt/Config.in"
- 	source "package/libuecc/Config.in"
-+	source "package/libxcrypt/Config.in"
- 	source "package/mbedtls/Config.in"
- 	source "package/nettle/Config.in"
- 	source "package/openssl/Config.in"
-diff --git a/package/libxcrypt/Config.in b/package/libxcrypt/Config.in
-new file mode 100644
-index 0000000000..57ae8f67a3
---- /dev/null
-+++ b/package/libxcrypt/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_LIBXCRYPT
-+	bool "libxcrypt"
-+	help
-+	  libxcrypt is a modern library for one-way hashing
-+	  of passwords. It supports a wide variety of both
-+	  modern and historical hashing methods:
-+	  yescrypt, gost-yescrypt, scrypt, bcrypt, sha512crypt,
-+	  sha256crypt, md5crypt, SunMD5, sha1crypt, NT,
-+	  bsdicrypt, bigcrypt, and descrypt.
-+
-+	  https://github.com/besser82/libxcrypt
-diff --git a/package/libxcrypt/libxcrypt.hash b/package/libxcrypt/libxcrypt.hash
-new file mode 100644
-index 0000000000..b56ab6beaf
---- /dev/null
-+++ b/package/libxcrypt/libxcrypt.hash
-@@ -0,0 +1,4 @@
-+# Locally calculated
-+sha256 7665168d0409574a03f7b484682e68334764c29c21ca5df438955a381384ca07  libxcrypt-4.4.17.tar.gz
-+sha256 f8198fcc4f002bf54512bac2e68e1e3f04af7d105f4f4f98d7d22cb110e04715  LICENSING
-+sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/libxcrypt/libxcrypt.mk b/package/libxcrypt/libxcrypt.mk
-new file mode 100644
-index 0000000000..f9799ac006
---- /dev/null
-+++ b/package/libxcrypt/libxcrypt.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# libxcrypt
-+#
-+################################################################################
-+
-+LIBXCRYPT_VERSION = 4.4.17
-+LIBXCRYPT_SITE = $(call github,besser82,libxcrypt,v$(LIBXCRYPT_VERSION))
-+LIBXCRYPT_LICENSE = LGPL-2.1+
-+LIBXCRYPT_LICENSE_FILES = LICENSING COPYING.LIB
-+LIBXCRYPT_AUTORECONF = YES
-+
-+$(eval $(autotools-package))
--- 
-2.20.1
+-DOCKER_CLI_VERSION = 19.03.13
++DOCKER_CLI_VERSION = 19.03.15
+ DOCKER_CLI_SITE = $(call github,docker,cli,v$(DOCKER_CLI_VERSION))
+ 
+ DOCKER_CLI_LICENSE = Apache-2.0
