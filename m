@@ -1,81 +1,105 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 11 Feb 2021 21:56:23 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] utils/getdeveloperlib.py:
- reduce Cc: list based on package infras
-Message-ID: <20210211203809.8A7A683C5E@busybox.osuosl.org>
+From: guillaume.bressaix at gmail.com <guillaume.bressaix@gmail.com>
+Date: Thu, 11 Feb 2021 22:12:51 +0100
+Subject: [Buildroot] [PATCH 1/1] libxcrypt: new package
+Message-ID: <20210211211251.17129-1-guillaume.bresaix@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f265cea4d8457d5696720d654c30853db447dcf8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+From: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
 
-When a developer has package/pkg-<infra>.mk assigned to him/her in the
-DEVELOPERS file, this has 3 implications:
-
- (1) Patches adding new packages using this infrastructure are Cc'ed
-     to this developer. This is done by the analyze_patch() function,
-     which matches the regexp r"^\+\$\(eval
-     \$\((host-)?([^-]*)-package\)\)$" in the patch, i.e where an
-     added line contains a reference to the infra maintained by the
-     developer.
-
- (2) Patches touching the package/pkg-<infra>.mk file itself are Cc'ed
-     to this developer.
-
- (3) Any patch touching a package using this infra are also Cc'ed to
-     this developer.
-
-Point (3) causes a significant amount of patches to be sent to
-developers who have package/pkg-generic.mk and
-package/pkg-autotools.mk assigned to them in the DEVELOPERS
-file. Basically, all patches touching generic or autotools packages
-get CC'ed to such developers, which causes a massive amount of patches
-to be received.
-
-So this patch adjusts the getdeveloperlib.py to drop point (3), but
-preserves point (1) and (2). Indeed, it makes sense to be Cc'ed on new
-package additions (to make a review that they use the package
-infrastructure correctly), and it makes sense to be Cc'ed on patches
-that touch the infrastructure code itself.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 38b0560f4ee1f113e32ce2cf59a08c37a967150d)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
 ---
- utils/getdeveloperlib.py | 12 ------------
- 1 file changed, 12 deletions(-)
 
-diff --git a/utils/getdeveloperlib.py b/utils/getdeveloperlib.py
-index d7a90457ed..b205817033 100644
---- a/utils/getdeveloperlib.py
-+++ b/utils/getdeveloperlib.py
-@@ -56,17 +56,6 @@ def fname_get_package_infra(fname):
-     return None
+libxcrypt is a modern library for one-way hashing of passwords.
+It supports a wide variety of both modern and historical
+hashing methods:
+yescrypt, gost-yescrypt, scrypt, bcrypt,
+sha512crypt, sha256crypt, md5crypt, SunMD5, sha1crypt, NT.
+
+Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+---
+ DEVELOPERS                       |  1 +
+ package/Config.in                |  1 +
+ package/libxcrypt/Config.in      | 11 +++++++++++
+ package/libxcrypt/libxcrypt.hash |  4 ++++
+ package/libxcrypt/libxcrypt.mk   | 13 +++++++++++++
+ 5 files changed, 30 insertions(+)
+ create mode 100644 package/libxcrypt/Config.in
+ create mode 100644 package/libxcrypt/libxcrypt.hash
+ create mode 100644 package/libxcrypt/libxcrypt.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 361ee2f35a..5937b5040f 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1059,6 +1059,7 @@ F:	package/sdl2/
  
- 
--def get_infras(files):
--    """Search in the list of files for .mk files, and collect the package
--    infrastructures used by those .mk files."""
--    infras = set()
--    for fname in files:
--        infra = fname_get_package_infra(fname)
--        if infra:
--            infras.add(infra)
--    return infras
--
--
- def analyze_patches(patches):
-     """Parse a list of patches and returns the list of files modified,
-     added or removed by the patches, as well as the list of package
-@@ -77,7 +66,6 @@ def analyze_patches(patches):
-         (files, infras) = analyze_patch(patch)
-         allfiles = allfiles | files
-         allinfras = allinfras | infras
--    allinfras = allinfras | get_infras(allfiles)
-     return (allfiles, allinfras)
- 
- 
+ N:	Guillaume William Brs <guillaume.bressaix@gmail.com>
+ F:	package/libnids/
++F:  package/libxcrypt/
+ F:	package/liquid-dsp/
+ F:	package/pixiewps/
+ F:	package/python-pybind/
+diff --git a/package/Config.in b/package/Config.in
+index 5304ab141c..1b9d7a4846 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1371,6 +1371,7 @@ menu "Crypto"
+ 	source "package/libssh2/Config.in"
+ 	source "package/libtomcrypt/Config.in"
+ 	source "package/libuecc/Config.in"
++	source "package/libxcrypt/Config.in"
+ 	source "package/mbedtls/Config.in"
+ 	source "package/nettle/Config.in"
+ 	source "package/openssl/Config.in"
+diff --git a/package/libxcrypt/Config.in b/package/libxcrypt/Config.in
+new file mode 100644
+index 0000000000..0c9e5c5869
+--- /dev/null
++++ b/package/libxcrypt/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_LIBXCRYPT
++	bool "libxcrypt"
++	help
++	  libxcrypt is a modern library for one-way hashing
++	  of passwords. It supports a wide variety of both
++	  modern and historical hashing methods:
++	  yescrypt, gost-yescrypt, scrypt, bcrypt, sha512crypt,
++	  sha256crypt, md5crypt, SunMD5, sha1crypt, NT,
++	  bsdicrypt, bigcrypt, and descrypt.
++
++      https://github.com/besser82/libxcrypt
+diff --git a/package/libxcrypt/libxcrypt.hash b/package/libxcrypt/libxcrypt.hash
+new file mode 100644
+index 0000000000..b56ab6beaf
+--- /dev/null
++++ b/package/libxcrypt/libxcrypt.hash
+@@ -0,0 +1,4 @@
++# Locally calculated
++sha256 7665168d0409574a03f7b484682e68334764c29c21ca5df438955a381384ca07  libxcrypt-4.4.17.tar.gz
++sha256 f8198fcc4f002bf54512bac2e68e1e3f04af7d105f4f4f98d7d22cb110e04715  LICENSING
++sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/libxcrypt/libxcrypt.mk b/package/libxcrypt/libxcrypt.mk
+new file mode 100644
+index 0000000000..f9799ac006
+--- /dev/null
++++ b/package/libxcrypt/libxcrypt.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# libxcrypt
++#
++################################################################################
++
++LIBXCRYPT_VERSION = 4.4.17
++LIBXCRYPT_SITE = $(call github,besser82,libxcrypt,v$(LIBXCRYPT_VERSION))
++LIBXCRYPT_LICENSE = LGPL-2.1+
++LIBXCRYPT_LICENSE_FILES = LICENSING COPYING.LIB
++LIBXCRYPT_AUTORECONF = YES
++
++$(eval $(autotools-package))
+-- 
+2.20.1
