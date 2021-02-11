@@ -1,32 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 11 Feb 2021 23:21:21 +0100
-Subject: [Buildroot] [PATCH 1/1] package/can-utils: enable build using
- musl libc
-In-Reply-To: <20210210091319.1392836-1-diego.hdmp@gmail.com> (Diego Hurtado de
- Mendoza's message of "Wed, 10 Feb 2021 10:13:19 +0100")
-References: <20210210091319.1392836-1-diego.hdmp@gmail.com>
-Message-ID: <87pn16gs9q.fsf@dell.be.48ers.dk>
+Date: Thu, 11 Feb 2021 23:20:53 +0100
+Subject: [Buildroot] [git commit] package/can-utils: enable build using musl
+ libc
+Message-ID: <20210211220022.E6F4783C8F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Diego" == Diego Hurtado de Mendoza <diego.hdmp@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=aa1ed2fc07c8e49905fd1cb1752556be55f05ba1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > From commit 20fb6d3288f3c9aac7975e505d9a25f21f64bdf9 this package was
- > disabled for musl because can-utils used the error() glibc extension
- > at that time.
+From commit 20fb6d3288f3c9aac7975e505d9a25f21f64bdf9 this package was
+disabled for musl because can-utils used the error() glibc extension
+at that time.
 
- > Since then, can-utils fixed compilation on musl by replacing this
- > error() calls with err().
- > https://github.com/linux-can/can-utils/pull/163/commits/791b6de78673f005e9748983231f7260f6b69e99
+Since then, can-utils fixed compilation on musl by replacing this
+error() calls with err().
+https://github.com/linux-can/can-utils/pull/163/commits/791b6de78673f005e9748983231f7260f6b69e99
 
- > This commit disables the musl check.
+This commit disables the musl check.
 
- > Signed-off-by: Diego Hurtado de Mendoza <diego.hdmp@gmail.com>
+Signed-off-by: Diego Hurtado de Mendoza <diego.hdmp@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/can-utils/Config.in | 5 -----
+ 1 file changed, 5 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/can-utils/Config.in b/package/can-utils/Config.in
+index da56378866..bdc84b461a 100644
+--- a/package/can-utils/Config.in
++++ b/package/can-utils/Config.in
+@@ -1,14 +1,9 @@
+ config BR2_PACKAGE_CAN_UTILS
+ 	bool "can-utils"
+ 	depends on BR2_USE_MMU # fork()
+-	depends on !BR2_TOOLCHAIN_USES_MUSL # error()
+ 	help
+ 	  SocketCAN is a set of open source CAN drivers and a
+ 	  networking stack.
+ 	  This package provides various tools for this stack.
+ 
+ 	  https://github.com/linux-can/can-utils
+-
+-comment "can-utils needs a glibc or uClibc toolchain"
+-	depends on BR2_TOOLCHAIN_USES_MUSL
+-	depends on BR2_USE_MMU
