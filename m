@@ -1,56 +1,49 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 11 Feb 2021 15:18:37 +0100
-Subject: [Buildroot] [PATCH] package/subversion: security bump to version
- 1.14.1
-Message-ID: <20210211141838.15911-1-peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 11 Feb 2021 16:05:01 +0100
+Subject: [Buildroot] [PATCH] docs/website: mention Bootlin Buildroot
+ training courses
+Message-ID: <20210211150502.2784827-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issue:
+Our documentation page already mentions the open-source and freely
+available training materials from Bootlin on Buildroot.
 
-CVE-2020-17525: Remote unauthenticated denial-of-service in Subversion
-mod_authz_svn
+It turns out that we now have online training courses accessible to
+public registration, which makes them accessible to a wider
+audience. It probably makes sense to mention them alongside the
+training materials.
 
-Subversion's mod_authz_svn module will crash if the server is using
-in-repository authz rules with the AuthzSVNReposRelativeAccessFile option
-and a client sends a request for a non-existing repository URL.
-
-For more details, see the advisory:
-https://subversion.apache.org/security/CVE-2020-17525-advisory.txt
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/subversion/subversion.hash | 4 ++--
- package/subversion/subversion.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ docs/website/docs.html | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/package/subversion/subversion.hash b/package/subversion/subversion.hash
-index da0fe91184..534d596514 100644
---- a/package/subversion/subversion.hash
-+++ b/package/subversion/subversion.hash
-@@ -1,5 +1,5 @@
--# From https://www.apache.org/dist/subversion/subversion-1.14.0.tar.bz2.sha512
--sha512  af6b706fdc91f7ab292fce9d9de582da306fd11e92767dc852687e71a6a8b65bb867fa70d5afd7f76a46005acb1b3c2d3193e690def48cd26875b3a7851cd13b  subversion-1.14.0.tar.bz2
-+# From https://www.apache.org/dist/subversion/subversion-1.14.1.tar.bz2.sha512
-+sha512  0a70c7152b77cdbcb810a029263e4b3240b6ef41d1c19714e793594088d3cca758d40dfbc05622a806b06463becb73207df249393924ce591026b749b875fcdd  subversion-1.14.1.tar.bz2
- 
- # Locally calculated
- sha256  484aff0cfbb81155a10f903ed756e27e9fc65578c245a295bae295c4bb51eaad  LICENSE
-diff --git a/package/subversion/subversion.mk b/package/subversion/subversion.mk
-index 34ae7bc5e1..d4cc717536 100644
---- a/package/subversion/subversion.mk
-+++ b/package/subversion/subversion.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SUBVERSION_VERSION = 1.14.0
-+SUBVERSION_VERSION = 1.14.1
- SUBVERSION_SOURCE = subversion-$(SUBVERSION_VERSION).tar.bz2
- SUBVERSION_SITE = https://downloads.apache.org/subversion
- SUBVERSION_LICENSE = Apache-2.0
+diff --git a/docs/website/docs.html b/docs/website/docs.html
+index 9ef202ff9d..c619c16fa6 100644
+--- a/docs/website/docs.html
++++ b/docs/website/docs.html
+@@ -106,6 +106,18 @@
+ 	      </ul>
+ 	    </div>
+ 	  </div>
++
++	  <div class="panel panel-default">
++	    <div class="panel-heading">Public training course</div>
++	    <div class="panel-body">
++	      The next online public training course on Buildroot
++	      organized
++	      by <a href="https://www.bootlin.com">Bootlin</a> will
++	      take place on March 8-11, 2021, with Thomas Petazzoni as
++	      trainer. <a href="https://bootlin.com/training/buildroot/">Infos</a>
++	      and <a href="https://www.eventbrite.fr/e/bootlin-embedded-linux-development-with-buildroot-training-seminar-tickets-108855638144">registration</a>.
++	    </div>
++	  </div>
+ 	</div>
+       </div>
+     </div>
 -- 
-2.20.1
+2.29.2
