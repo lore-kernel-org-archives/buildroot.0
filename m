@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 11 Feb 2021 16:46:47 +0100
-Subject: [Buildroot] [PATCH 1/1] package/go: bump to version 1.15.8
-In-Reply-To: <20210210232546.2131127-1-christian@paral.in> (Christian
- Stewart's message of "Wed, 10 Feb 2021 15:25:46 -0800")
-References: <20210210232546.2131127-1-christian@paral.in>
-Message-ID: <8735y2k3o8.fsf@dell.be.48ers.dk>
+Date: Thu, 11 Feb 2021 16:49:34 +0100
+Subject: [Buildroot] [PATCH v1 1/3] package/runc: bump to version
+ 1.0.0-rc93
+In-Reply-To: <20210210235203.2819535-1-christian@paral.in> (Christian
+ Stewart's message of "Wed, 10 Feb 2021 15:52:01 -0800")
+References: <20210210235203.2819535-1-christian@paral.in>
+Message-ID: <87y2fuioz5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,14 +14,23 @@ To: buildroot@busybox.net
 
 >>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
 
- > go1.15.8 (released 2021/02/04) includes fixes to the compiler, linker, runtime,
- > the go command, and the net/http package.
+ > https://github.com/opencontainers/runc/releases/tag/v1.0.0-rc93
 
- > https://golang.org/doc/go1.15
+Is this meant for master or next?
 
- > Signed-off-by: Christian Stewart <christian@paral.in>
+It is in the same series as security bumps, but I see the release notes
+talks about a feature-rich release?
 
-Committed to master given the fixes, thanks.
+It also mentions the following:
+
+For packagers the following changes have been made which will have impact on
+your packaging of runc:
+
+    The "selinux" and "apparmor" buildtags have been removed, and now all runc
+    builds will have SELinux and AppArmor support enabled. Note that "seccomp"
+    is still optional (though we very highly recommend you enable it).
+
+But I see no changes related to this?
 
 -- 
 Bye, Peter Korsgaard
