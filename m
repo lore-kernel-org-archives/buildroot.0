@@ -1,23 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 11 Feb 2021 23:16:48 +0100
-Subject: [Buildroot] [PATCH 1/1] package/kodi: remove dependency to
- libsamplerate
-In-Reply-To: <20210210174023.962225-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Wed, 10 Feb 2021 18:40:23 +0100")
-References: <20210210174023.962225-1-bernd.kuhls@t-online.de>
-Message-ID: <87y2fugshb.fsf@dell.be.48ers.dk>
+Date: Thu, 11 Feb 2021 23:18:05 +0100
+Subject: [Buildroot] [PATCH 1/1] package/guile: link with libatomic if
+ needed
+In-Reply-To: <20210208064626.3516076-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 8 Feb 2021 07:46:26 +0100")
+References: <20210208064626.3516076-1-fontaine.fabrice@gmail.com>
+Message-ID: <87tuqigsf6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > This package is not needed anymore since 2014:
- > https://github.com/xbmc/xbmc/commit/e36e4f0e2a46764d0c4341a5caf50cae6f772504
+ > Fix build of guile 3.0.4 with Bootlin SPARC uclibc toolchain added with
+ > commit 1348c569d0cb7f67eca30f170b782aa8b51cc259
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/a72d8e14854f9c6c9632e856019a3eb8ec4818b6
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
 
