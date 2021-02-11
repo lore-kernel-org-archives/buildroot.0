@@ -1,41 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 11 Feb 2021 23:17:24 +0100
-Subject: [Buildroot] [git commit] package/guile: link with libatomic if
- needed
-Message-ID: <20210211215752.DD83183D29@busybox.osuosl.org>
+Date: Thu, 11 Feb 2021 23:21:21 +0100
+Subject: [Buildroot] [PATCH 1/1] package/can-utils: enable build using
+ musl libc
+In-Reply-To: <20210210091319.1392836-1-diego.hdmp@gmail.com> (Diego Hurtado de
+ Mendoza's message of "Wed, 10 Feb 2021 10:13:19 +0100")
+References: <20210210091319.1392836-1-diego.hdmp@gmail.com>
+Message-ID: <87pn16gs9q.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=19dda90ae727c2d1e3522a10be128b1f836e4fcd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Diego" == Diego Hurtado de Mendoza <diego.hdmp@gmail.com> writes:
 
-Fix build of guile 3.0.4 with Bootlin SPARC uclibc toolchain added with
-commit 1348c569d0cb7f67eca30f170b782aa8b51cc259
+ > From commit 20fb6d3288f3c9aac7975e505d9a25f21f64bdf9 this package was
+ > disabled for musl because can-utils used the error() glibc extension
+ > at that time.
 
-Fixes:
- - http://autobuild.buildroot.org/results/a72d8e14854f9c6c9632e856019a3eb8ec4818b6
+ > Since then, can-utils fixed compilation on musl by replacing this
+ > error() calls with err().
+ > https://github.com/linux-can/can-utils/pull/163/commits/791b6de78673f005e9748983231f7260f6b69e99
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/guile/guile.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ > This commit disables the musl check.
 
-diff --git a/package/guile/guile.mk b/package/guile/guile.mk
-index 0e7328f199..44f4d1c85e 100644
---- a/package/guile/guile.mk
-+++ b/package/guile/guile.mk
-@@ -29,6 +29,10 @@ GUILE_CFLAGS = \
- 	-DHAVE_GC_GET_FREE_SPACE_DIVISOR \
- 	-DHAVE_GC_SET_FINALIZE_ON_DEMAND
- 
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+GUILE_CONF_ENV += LIBS=-latomic
-+endif
-+
- ifeq ($(BR2_STATIC_LIBS),y)
- GUILE_CFLAGS += -DGC_NO_DLOPEN
- endif
+ > Signed-off-by: Diego Hurtado de Mendoza <diego.hdmp@gmail.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
