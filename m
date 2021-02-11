@@ -1,50 +1,81 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 11 Feb 2021 21:58:25 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/go: bump to
- version 1.15.8
-Message-ID: <20210211203802.8DB018124F@busybox.osuosl.org>
+Date: Thu, 11 Feb 2021 21:56:28 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] utils/getdeveloperlib.py:
+ reduce Cc: list based on package infras
+Message-ID: <20210211203802.7907783CDD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a4b407d9e1ac652f2b6e21f34722158111d7053a
+commit: https://git.buildroot.net/buildroot/commit/?id=94aeb4712c7698758b721955641ea3ad114008be
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-go1.15.8 (released 2021/02/04) includes fixes to the compiler, linker, runtime,
-the go command, and the net/http package.
+When a developer has package/pkg-<infra>.mk assigned to him/her in the
+DEVELOPERS file, this has 3 implications:
 
-https://golang.org/doc/go1.15
+ (1) Patches adding new packages using this infrastructure are Cc'ed
+     to this developer. This is done by the analyze_patch() function,
+     which matches the regexp r"^\+\$\(eval
+     \$\((host-)?([^-]*)-package\)\)$" in the patch, i.e where an
+     added line contains a reference to the infra maintained by the
+     developer.
 
-Signed-off-by: Christian Stewart <christian@paral.in>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit ccbbcca9b288380b8f33a34a7ed6fe3e0c85be5c)
+ (2) Patches touching the package/pkg-<infra>.mk file itself are Cc'ed
+     to this developer.
+
+ (3) Any patch touching a package using this infra are also Cc'ed to
+     this developer.
+
+Point (3) causes a significant amount of patches to be sent to
+developers who have package/pkg-generic.mk and
+package/pkg-autotools.mk assigned to them in the DEVELOPERS
+file. Basically, all patches touching generic or autotools packages
+get CC'ed to such developers, which causes a massive amount of patches
+to be received.
+
+So this patch adjusts the getdeveloperlib.py to drop point (3), but
+preserves point (1) and (2). Indeed, it makes sense to be Cc'ed on new
+package additions (to make a review that they use the package
+infrastructure correctly), and it makes sense to be Cc'ed on patches
+that touch the infrastructure code itself.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 38b0560f4ee1f113e32ce2cf59a08c37a967150d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ utils/getdeveloperlib.py | 12 ------------
+ 1 file changed, 12 deletions(-)
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index 1bd7ab7ca9..cbc82a9b64 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,3 +1,3 @@
- # From https://golang.org/dl/
--sha256  8631b3aafd8ecb9244ec2ffb8a2a8b4983cf4ad15572b9801f7c5b167c1a2abc  go1.15.7.src.tar.gz
-+sha256  540c0ab7781084d124991321ed1458e479982de94454a98afab6acadf38497c2  go1.15.8.src.tar.gz
- sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 3928c8b708..b269cb3527 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/utils/getdeveloperlib.py b/utils/getdeveloperlib.py
+index d7a90457ed..b205817033 100644
+--- a/utils/getdeveloperlib.py
++++ b/utils/getdeveloperlib.py
+@@ -56,17 +56,6 @@ def fname_get_package_infra(fname):
+     return None
  
--GO_VERSION = 1.15.7
-+GO_VERSION = 1.15.8
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
+-def get_infras(files):
+-    """Search in the list of files for .mk files, and collect the package
+-    infrastructures used by those .mk files."""
+-    infras = set()
+-    for fname in files:
+-        infra = fname_get_package_infra(fname)
+-        if infra:
+-            infras.add(infra)
+-    return infras
+-
+-
+ def analyze_patches(patches):
+     """Parse a list of patches and returns the list of files modified,
+     added or removed by the patches, as well as the list of package
+@@ -77,7 +66,6 @@ def analyze_patches(patches):
+         (files, infras) = analyze_patch(patch)
+         allfiles = allfiles | files
+         allinfras = allinfras | infras
+-    allinfras = allinfras | get_infras(allfiles)
+     return (allfiles, allinfras)
+ 
  
