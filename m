@@ -1,45 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 11 Feb 2021 23:14:11 +0100
-Subject: [Buildroot] [git commit] package/protobuf: remove target version of
- 'protoc'
-Message-ID: <20210211215503.C698B7FD62@busybox.osuosl.org>
+Date: Thu, 11 Feb 2021 23:12:06 +0100
+Subject: [Buildroot] [git commit] package/kodi-inputstream-adaptive: update
+ project URL
+Message-ID: <20210211215503.AC9DD8379A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=df6de52bd4eafb2aeedf8a7935601feff86dcf9f
+commit: https://git.buildroot.net/buildroot/commit/?id=fd72673d91a4b3326640bfb799d1af1926acd3ad
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The tool 'protoc' and its associated library libprotoc.so are only
-needed during development, to convert a protocol buffer definition in the
-associated code for a specific code language.
+Reference: https://github.com/xbmc/repo-binary-addons/pull/143
 
-Buildroot does not officially support creating a development environment on
-target, so remove these files to reduce disk usage by more than 1.5 MB
-(stripped, uncompressed).
-
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/protobuf/protobuf.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/kodi-inputstream-adaptive/Config.in                    | 2 +-
+ package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
-index 661b7a6b81..df708819cb 100644
---- a/package/protobuf/protobuf.mk
-+++ b/package/protobuf/protobuf.mk
-@@ -36,5 +36,12 @@ ifeq ($(BR2_PACKAGE_ZLIB),y)
- PROTOBUF_DEPENDENCIES += zlib
- endif
+diff --git a/package/kodi-inputstream-adaptive/Config.in b/package/kodi-inputstream-adaptive/Config.in
+index f9ba20adcf..21f1cff171 100644
+--- a/package/kodi-inputstream-adaptive/Config.in
++++ b/package/kodi-inputstream-adaptive/Config.in
+@@ -6,4 +6,4 @@ config BR2_PACKAGE_KODI_INPUTSTREAM_ADAPTIVE
+ 	help
+ 	  Kodi inputstream addon for several manifest types
  
-+define PROTOBUF_REMOVE_UNNECESSARY_TARGET_FILES
-+	rm -rf $(TARGET_DIR)/usr/bin/protoc
-+	rm -rf $(TARGET_DIR)/usr/lib/libprotoc.so*
-+endef
-+
-+PROTOBUF_POST_INSTALL_TARGET_HOOKS += PROTOBUF_REMOVE_UNNECESSARY_TARGET_FILES
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+-	  https://github.com/peak3d/inputstream.adaptive
++	  https://github.com/xbmc/inputstream.adaptive
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+index 30fbaf5251..a8024951d4 100644
+--- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ KODI_INPUTSTREAM_ADAPTIVE_VERSION = 2.4.6-Leia
+-KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,peak3d,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
++KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,xbmc,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
+ KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPL-2.0+
+ KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = LICENSE.GPL
+ KODI_INPUTSTREAM_ADAPTIVE_DEPENDENCIES = kodi
