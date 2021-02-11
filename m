@@ -1,50 +1,56 @@
-From: =?iso-8859-1?Q?Jan_Kundr=E1t?= <jan.kundrat@cesnet.cz>
-Date: Thu, 11 Feb 2021 15:16:31 +0100
-Subject: [Buildroot] 
- =?iso-8859-1?q?=5BPATCH_7/7=5D_package/sysrepo=3A_re?=
- =?iso-8859-1?q?move_explicit_setting_of_CMAKE=5FBUILD=5FTYPE?=
-In-Reply-To: <20210210141256.6438-8-patrickdepinguin@gmail.com>
-References: <20210210141256.6438-1-patrickdepinguin@gmail.com>
- <20210210141256.6438-8-patrickdepinguin@gmail.com>
-Message-ID: <c3e0dbe6-8fc8-4285-8196-8463d22e403f@cesnet.cz>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 11 Feb 2021 15:18:37 +0100
+Subject: [Buildroot] [PATCH] package/subversion: security bump to version
+ 1.14.1
+Message-ID: <20210211141838.15911-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On st?eda 10. ?nora 2021 15:12:56 CET, Thomas De Schampheleire wrote:
-> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
->
-> sysrepo explicitly set CMAKE_BUILD_TYPE=Release, ignoring any possible
-> value of BR2_ENABLE_DEBUG (previously) or BR2_ENABLE_RUNTIME_DEBUG (now).
->
-> With the introduction of BR2_ENABLE_RUNTIME_DEBUG, this change should no
-> longer be necessary. Users that do not wish to have additional runtime
-> debugging just keep BR2_ENABLE_RUNTIME_DEBUG disabled (default value).
->
-> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> ---
->  package/sysrepo/sysrepo.mk | 2 --
->  1 file changed, 2 deletions(-)
->
-> diff --git a/package/sysrepo/sysrepo.mk b/package/sysrepo/sysrepo.mk
-> index e4d553cdbd..e0ac4cd245 100644
-> --- a/package/sysrepo/sysrepo.mk
-> +++ b/package/sysrepo/sysrepo.mk
-> @@ -13,7 +13,6 @@ SYSREPO_DEPENDENCIES = libyang pcre host-sysrepo
->  HOST_SYSREPO_DEPENDENCIES = host-libyang host-pcre
->  
->  SYSREPO_CONF_OPTS = \
-> -	-DCMAKE_BUILD_TYPE=Release \
->  	-DBUILD_EXAMPLES=$(if $(BR2_PACKAGE_SYSREPO_EXAMPLES),ON,OFF)
+Fixes the following security issue:
 
-You'll need to pass -DREPO_PATH=/etc/sysrepo here so that sysrepo on the 
-target does not accidentally try to use a path that only exists on the 
-build host. See 
-https://github.com/sysrepo/sysrepo/blob/v1.4.104/CMakeLists.txt#L138-L144 
-for details.
+CVE-2020-17525: Remote unauthenticated denial-of-service in Subversion
+mod_authz_svn
 
-After that, feel free to add my Reviewed-by.
+Subversion's mod_authz_svn module will crash if the server is using
+in-repository authz rules with the AuthzSVNReposRelativeAccessFile option
+and a client sends a request for a non-existing repository URL.
 
-Jan
+For more details, see the advisory:
+https://subversion.apache.org/security/CVE-2020-17525-advisory.txt
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/subversion/subversion.hash | 4 ++--
+ package/subversion/subversion.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/subversion/subversion.hash b/package/subversion/subversion.hash
+index da0fe91184..534d596514 100644
+--- a/package/subversion/subversion.hash
++++ b/package/subversion/subversion.hash
+@@ -1,5 +1,5 @@
+-# From https://www.apache.org/dist/subversion/subversion-1.14.0.tar.bz2.sha512
+-sha512  af6b706fdc91f7ab292fce9d9de582da306fd11e92767dc852687e71a6a8b65bb867fa70d5afd7f76a46005acb1b3c2d3193e690def48cd26875b3a7851cd13b  subversion-1.14.0.tar.bz2
++# From https://www.apache.org/dist/subversion/subversion-1.14.1.tar.bz2.sha512
++sha512  0a70c7152b77cdbcb810a029263e4b3240b6ef41d1c19714e793594088d3cca758d40dfbc05622a806b06463becb73207df249393924ce591026b749b875fcdd  subversion-1.14.1.tar.bz2
+ 
+ # Locally calculated
+ sha256  484aff0cfbb81155a10f903ed756e27e9fc65578c245a295bae295c4bb51eaad  LICENSE
+diff --git a/package/subversion/subversion.mk b/package/subversion/subversion.mk
+index 34ae7bc5e1..d4cc717536 100644
+--- a/package/subversion/subversion.mk
++++ b/package/subversion/subversion.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SUBVERSION_VERSION = 1.14.0
++SUBVERSION_VERSION = 1.14.1
+ SUBVERSION_SOURCE = subversion-$(SUBVERSION_VERSION).tar.bz2
+ SUBVERSION_SITE = https://downloads.apache.org/subversion
+ SUBVERSION_LICENSE = Apache-2.0
+-- 
+2.20.1
