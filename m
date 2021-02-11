@@ -1,45 +1,39 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Thu, 11 Feb 2021 11:40:01 +0100
-Subject: [Buildroot] [PATCH] package/protobuf: remove target version of
- 'protoc'
-Message-ID: <20210211104002.31978-1-patrickdepinguin@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 11 Feb 2021 13:02:32 +0100
+Subject: [Buildroot] Fwd: Failed pipeline for 2021.02-rc1 | buildroot |
+ 92237c45
+In-Reply-To: <6594f32e-a013-2622-20a8-91cf6edf568a@essensium.com> (Arnout
+ Vandecappelle's message of "Thu, 11 Feb 2021 08:36:54 +0100")
+References: <602456474c4eb_b2ab5a703162be@gitlab-sidekiq-catchall-v1-6d55b89d66-6zn9h.mail>
+ <6594f32e-a013-2622-20a8-91cf6edf568a@essensium.com>
+Message-ID: <87blcqke1z.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+>>>>> "Arnout" == Arnout Vandecappelle <arnout.vandecappelle@essensium.com> writes:
 
-The tool 'protoc' and its associated library libprotoc.so are only
-needed during development, to convert a protocol buffer definition in the
-associated code for a specific code language.
+ > ?Hi all,
+ > ?I'm not sure to what extent you automatically get warned about these failures,
+ > so I'm forwarding this to you.
 
-Buildroot does not officially support creating a development environment on
-target, so remove these files to reduce disk usage by more than 1.5 MB
-(stripped, uncompressed).
+ > ?2021.02-rc1 has been released, but 9 tests are failing on it. Could we get them
+ > fixed before the final release?
 
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
----
- package/protobuf/protobuf.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+Thanks, I indeed don't receive such notifications.
 
-diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
-index 661b7a6b81..df708819cb 100644
---- a/package/protobuf/protobuf.mk
-+++ b/package/protobuf/protobuf.mk
-@@ -36,5 +36,12 @@ ifeq ($(BR2_PACKAGE_ZLIB),y)
- PROTOBUF_DEPENDENCIES += zlib
- endif
- 
-+define PROTOBUF_REMOVE_UNNECESSARY_TARGET_FILES
-+	rm -rf $(TARGET_DIR)/usr/bin/protoc
-+	rm -rf $(TARGET_DIR)/usr/lib/libprotoc.so*
-+endef
-+
-+PROTOBUF_POST_INSTALL_TARGET_HOOKS += PROTOBUF_REMOVE_UNNECESSARY_TARGET_FILES
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+
+ > Job #1019385566 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/1019385566/raw )
+
+ > Stage: test
+ > Name: avenger96_defconfig
+
+Hmm, that log isn't very helpful. Any idea what is going on? I just did
+a test build here without issues.
+
+Is it perhaps a case of missing BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL?
+
 -- 
-2.26.2
+Bye, Peter Korsgaard
