@@ -1,12 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 11 Feb 2021 13:48:15 +0100
-Subject: [Buildroot] Fwd: Failed pipeline for 2021.02-rc1 | buildroot |
+Date: Thu, 11 Feb 2021 13:49:28 +0100
+Subject: [Buildroot] Failed pipeline for 2021.02-rc1 | buildroot |
  92237c45
-In-Reply-To: <87blcqke1z.fsf@dell.be.48ers.dk>
+In-Reply-To: <20210211132135.5e39993c@windsurf.home>
 References: <602456474c4eb_b2ab5a703162be@gitlab-sidekiq-catchall-v1-6d55b89d66-6zn9h.mail>
  <6594f32e-a013-2622-20a8-91cf6edf568a@essensium.com>
- <87blcqke1z.fsf@dell.be.48ers.dk>
-Message-ID: <a96729fe-e872-02a3-592e-8adc379d809a@mind.be>
+ <87blcqke1z.fsf@dell.be.48ers.dk> <20210211132135.5e39993c@windsurf.home>
+Message-ID: <52768bbb-e4a1-b389-dff0-2e85bf954f1e@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,41 +15,23 @@ To: buildroot@busybox.net
 
 
 
-On 11/02/2021 13:02, Peter Korsgaard wrote:
->>>>>> "Arnout" == Arnout Vandecappelle <arnout.vandecappelle@essensium.com> writes:
+On 11/02/2021 13:21, Thomas Petazzoni wrote:
+> On Thu, 11 Feb 2021 13:02:32 +0100
+> Peter Korsgaard <peter@korsgaard.com> wrote:
 > 
->  > ?Hi all,
->  > ?I'm not sure to what extent you automatically get warned about these failures,
->  > so I'm forwarding this to you.
+>>  > ?2021.02-rc1 has been released, but 9 tests are failing on it. Could we get them
+>>  > fixed before the final release?  
+>>
+>> Thanks, I indeed don't receive such notifications.
 > 
->  > ?2021.02-rc1 has been released, but 9 tests are failing on it. Could we get them
->  > fixed before the final release?
-> 
-> Thanks, I indeed don't receive such notifications.
-> 
-> 
->  > Job #1019385566 ( https://gitlab.com/buildroot.org/buildroot/-/jobs/1019385566/raw )
-> 
->  > Stage: test
->  > Name: avenger96_defconfig
-> 
-> Hmm, that log isn't very helpful. Any idea what is going on? I just did
-> a test build here without issues.
+> Such failures are normally notified (1) to the maintainers of the
+> failing defconfigs and (2) in the global e-mail sent every day to the
+> mailing list.
 
- Ah, I forgot that the text version of that mail appends /raw at the end of the
-URLs. You have to go to the job page, then go to the artifacts, and there you
-find the full log.
+ Ah, yes, it's all the way at the bottom, I didn't see it there.
 
-There you find:
-
-scripts/extract-cert.c:21:25: fatal error: openssl/bio.h: No such file or directory
- #include <openssl/bio.h>
-                         ^
-
-> 
-> Is it perhaps a case of missing BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL?
-
- Looks like it :-)
+ However, for the tests, I added the developers of the package that is tested to
+Cc here, so that might help.
 
  Regards,
  Arnout
