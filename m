@@ -1,57 +1,45 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Thu, 11 Feb 2021 10:29:10 +0100
-Subject: [Buildroot] [PATCH 1/1] support/scripts/pkg-stats: add ignored_cves
- to json output
-Message-ID: <20210211092910.2108-1-heiko.thiery@gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu, 11 Feb 2021 11:40:01 +0100
+Subject: [Buildroot] [PATCH] package/protobuf: remove target version of
+ 'protoc'
+Message-ID: <20210211104002.31978-1-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add the list of <pkg>_IGNORE_CVES to the json output to show that we have a
-known cause (available patch or the CVE is not valid for our package
-configuration) that a affected CVE is not reported.
+From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+The tool 'protoc' and its associated library libprotoc.so are only
+needed during development, to convert a protocol buffer definition in the
+associated code for a specific code language.
+
+Buildroot does not officially support creating a development environment on
+target, so remove these files to reduce disk usage by more than 1.5 MB
+(stripped, uncompressed).
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- support/scripts/pkg-stats | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ package/protobuf/protobuf.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index 404903e48f..6f3ddc561f 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -100,6 +100,7 @@ class Package:
-         self.url_worker = None
-         self.cpeid = None
-         self.cves = list()
-+        self.ignored_cves = list()
-         self.latest_version = {'status': RM_API_STATUS_ERROR, 'version': None, 'id': None}
-         self.status = {}
+diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
+index 661b7a6b81..df708819cb 100644
+--- a/package/protobuf/protobuf.mk
++++ b/package/protobuf/protobuf.mk
+@@ -36,5 +36,12 @@ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ PROTOBUF_DEPENDENCIES += zlib
+ endif
  
-@@ -253,12 +254,11 @@ class Package:
-                     self.status['pkg-check'] = ("error", "{} warnings".format(self.warnings))
-                 return
- 
--    @property
--    def ignored_cves(self):
-+    def set_ignored_cves(self):
-         """
-         Give the list of CVEs ignored by the package
-         """
--        return list(self.all_ignored_cves.get(self.pkgvar(), []))
-+        self.ignored_cves = list(self.all_ignored_cves.get(self.pkgvar(), []))
- 
-     def set_developers(self, developers):
-         """
-@@ -1107,6 +1107,7 @@ def __main__():
-         pkg.set_current_version()
-         pkg.set_cpeid()
-         pkg.set_url()
-+        pkg.set_ignored_cves()
-         pkg.set_developers(developers)
-     print("Checking URL status")
-     loop = asyncio.get_event_loop()
++define PROTOBUF_REMOVE_UNNECESSARY_TARGET_FILES
++	rm -rf $(TARGET_DIR)/usr/bin/protoc
++	rm -rf $(TARGET_DIR)/usr/lib/libprotoc.so*
++endef
++
++PROTOBUF_POST_INSTALL_TARGET_HOOKS += PROTOBUF_REMOVE_UNNECESSARY_TARGET_FILES
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
-2.30.0
+2.26.2
