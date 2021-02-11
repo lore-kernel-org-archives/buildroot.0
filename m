@@ -1,105 +1,56 @@
-From: guillaume.bressaix at gmail.com <guillaume.bressaix@gmail.com>
-Date: Thu, 11 Feb 2021 22:12:51 +0100
-Subject: [Buildroot] [PATCH 1/1] libxcrypt: new package
-Message-ID: <20210211211251.17129-1-guillaume.bresaix@gmail.com>
+From: Christian Stewart <christian@paral.in>
+Date: Thu, 11 Feb 2021 13:11:06 -0800
+Subject: [Buildroot] [PATCH v1 1/3] package/runc: bump to version
+ 1.0.0-rc93
+In-Reply-To: <87y2fuioz5.fsf@dell.be.48ers.dk>
+References: <20210210235203.2819535-1-christian@paral.in>
+ <87y2fuioz5.fsf@dell.be.48ers.dk>
+Message-ID: <CA+h8R2pVwUCSAZKmfZdZdoTRQnXxdP-SkBb=PxjhcbhpMEEc_A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
+Hi Peter,
 
-Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
----
+On Thu, Feb 11, 2021 at 7:49 AM Peter Korsgaard <peter@korsgaard.com> wrote:
+>
+> >>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
+>
+>  > https://github.com/opencontainers/runc/releases/tag/v1.0.0-rc93
+>
+> Is this meant for master or next?
 
-libxcrypt is a modern library for one-way hashing of passwords.
-It supports a wide variety of both modern and historical
-hashing methods:
-yescrypt, gost-yescrypt, scrypt, bcrypt,
-sha512crypt, sha256crypt, md5crypt, SunMD5, sha1crypt, NT.
+Master.
 
-Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
----
- DEVELOPERS                       |  1 +
- package/Config.in                |  1 +
- package/libxcrypt/Config.in      | 11 +++++++++++
- package/libxcrypt/libxcrypt.hash |  4 ++++
- package/libxcrypt/libxcrypt.mk   | 13 +++++++++++++
- 5 files changed, 30 insertions(+)
- create mode 100644 package/libxcrypt/Config.in
- create mode 100644 package/libxcrypt/libxcrypt.hash
- create mode 100644 package/libxcrypt/libxcrypt.mk
+> It is in the same series as security bumps, but I see the release notes
+> talks about a feature-rich release?
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 361ee2f35a..5937b5040f 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1059,6 +1059,7 @@ F:	package/sdl2/
- 
- N:	Guillaume William Brs <guillaume.bressaix@gmail.com>
- F:	package/libnids/
-+F:  package/libxcrypt/
- F:	package/liquid-dsp/
- F:	package/pixiewps/
- F:	package/python-pybind/
-diff --git a/package/Config.in b/package/Config.in
-index 5304ab141c..1b9d7a4846 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1371,6 +1371,7 @@ menu "Crypto"
- 	source "package/libssh2/Config.in"
- 	source "package/libtomcrypt/Config.in"
- 	source "package/libuecc/Config.in"
-+	source "package/libxcrypt/Config.in"
- 	source "package/mbedtls/Config.in"
- 	source "package/nettle/Config.in"
- 	source "package/openssl/Config.in"
-diff --git a/package/libxcrypt/Config.in b/package/libxcrypt/Config.in
-new file mode 100644
-index 0000000000..0c9e5c5869
---- /dev/null
-+++ b/package/libxcrypt/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_LIBXCRYPT
-+	bool "libxcrypt"
-+	help
-+	  libxcrypt is a modern library for one-way hashing
-+	  of passwords. It supports a wide variety of both
-+	  modern and historical hashing methods:
-+	  yescrypt, gost-yescrypt, scrypt, bcrypt, sha512crypt,
-+	  sha256crypt, md5crypt, SunMD5, sha1crypt, NT,
-+	  bsdicrypt, bigcrypt, and descrypt.
-+
-+      https://github.com/besser82/libxcrypt
-diff --git a/package/libxcrypt/libxcrypt.hash b/package/libxcrypt/libxcrypt.hash
-new file mode 100644
-index 0000000000..b56ab6beaf
---- /dev/null
-+++ b/package/libxcrypt/libxcrypt.hash
-@@ -0,0 +1,4 @@
-+# Locally calculated
-+sha256 7665168d0409574a03f7b484682e68334764c29c21ca5df438955a381384ca07  libxcrypt-4.4.17.tar.gz
-+sha256 f8198fcc4f002bf54512bac2e68e1e3f04af7d105f4f4f98d7d22cb110e04715  LICENSING
-+sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/libxcrypt/libxcrypt.mk b/package/libxcrypt/libxcrypt.mk
-new file mode 100644
-index 0000000000..f9799ac006
---- /dev/null
-+++ b/package/libxcrypt/libxcrypt.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# libxcrypt
-+#
-+################################################################################
-+
-+LIBXCRYPT_VERSION = 4.4.17
-+LIBXCRYPT_SITE = $(call github,besser82,libxcrypt,v$(LIBXCRYPT_VERSION))
-+LIBXCRYPT_LICENSE = LGPL-2.1+
-+LIBXCRYPT_LICENSE_FILES = LICENSING COPYING.LIB
-+LIBXCRYPT_AUTORECONF = YES
-+
-+$(eval $(autotools-package))
--- 
-2.20.1
+Runc is now on their 93rd release candidate. Now is not the time to
+decide to stop at #92.
+
+> It also mentions the following:
+>
+> For packagers the following changes have been made which will have impact on
+> your packaging of runc:
+>
+>     The "selinux" and "apparmor" buildtags have been removed, and now all runc
+>     builds will have SELinux and AppArmor support enabled. Note that "seccomp"
+>     is still optional (though we very highly recommend you enable it).
+>
+> But I see no changes related to this?
+
+I don't have seccomp enabled on my systems, and docker + runc is still
+working as per this series.
+
+Additionally, I see that there are still conditional build tags
+"linux,cgo,seccomp" in the code, which exclude seccomp unless the
+seccomp build tag is set. So I don't think that the note in the
+release notes is accurate - you still need the "seccomp" build tag for
+runc to have seccomp support.
+
+So everything is fine to merge this to master as-is. (Tested as well).
+
+Best regards,
+Christian Stewart
