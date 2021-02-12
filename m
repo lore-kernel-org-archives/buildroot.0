@@ -1,43 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 12 Feb 2021 19:40:47 +0100
-Subject: [Buildroot] [PATCH-NEXT 2/4] package/linux-firmware.mk: get rid of
- temporary tarball for file installation
+Date: Fri, 12 Feb 2021 19:40:48 +0100
+Subject: [Buildroot] [PATCH-NEXT 3/4] package/linux-firmware: also install
+ into images for early loading support
 In-Reply-To: <20210212184049.13202-1-peter@korsgaard.com>
 References: <20210212184049.13202-1-peter@korsgaard.com>
-Message-ID: <20210212184049.13202-3-peter@korsgaard.com>
+Message-ID: <20210212184049.13202-4-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With the upcoming addition of the images-install step,
-LINUX_FIRMWARE_INSTALl_FILES is called twice, for installing to the target
-and to the images directory - Which may race with each other and cause
-problems with the temporary install.tar tarball.
+Some drivers request their firmware very early when built into the kernel,
+even before the initramfs is mounted - So the only way to provide firmware
+for those drivers is to include them directly in the kernel with the
+CONFIG_EXTRA_FIRMWARE option.
 
-There is no specific reason to use a temporary file, we can just as well
-pipe the two tar invocations together, so do that instead.
+An example of this is the uC firmware for modern Intel GPUs.
+
+Conceptually you can point CONFIG_EXTRA_FIRMWARE to
+${TARGET_DIR}/lib/firmware, but then you cannot remove the firmware from the
+initramfs and pay the size twice (inside the kernel + in initramfs), so
+instead also install linux-firmware to the image dir, similar to how we do
+it for intel-microcode.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-firmware/linux-firmware.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/linux-firmware/linux-firmware.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
 diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 3420266335..b6549ad371 100644
+index b6549ad371..a08d9ccfda 100644
 --- a/package/linux-firmware/linux-firmware.mk
 +++ b/package/linux-firmware/linux-firmware.mk
-@@ -641,8 +641,8 @@ endif
- ifneq ($(LINUX_FIRMWARE_FILES),)
- define LINUX_FIRMWARE_INSTALL_FILES
- 	cd $(@D) && \
--		$(TAR) cf install.tar $(sort $(LINUX_FIRMWARE_FILES)) && \
--		$(TAR) xf install.tar -C $(1)
-+		$(TAR) c $(sort $(LINUX_FIRMWARE_FILES)) | \
-+		$(TAR) x -C $(1)
- endef
- endif
+@@ -7,6 +7,7 @@
+ LINUX_FIRMWARE_VERSION = 20201022
+ LINUX_FIRMWARE_SITE = http://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
+ LINUX_FIRMWARE_SITE_METHOD = git
++LINUX_FIRMWARE_INSTALL_IMAGES = YES
  
+ LINUX_FIRMWARE_CPE_ID_VENDOR = kernel
+ 
+@@ -704,4 +705,11 @@ define LINUX_FIRMWARE_INSTALL_TARGET_CMDS
+ 	$(call LINUX_FIRMWARE_CREATE_SYMLINKS,$(TARGET_DIR)/lib/firmware)
+ endef
+ 
++define LINUX_FIRMWARE_INSTALL_IMAGES_CMDS
++	mkdir -p $(BINARIES_DIR)
++	$(call LINUX_FIRMWARE_INSTALL_FILES,$(BINARIES_DIR))
++	$(call LINUX_FIRMWARE_INSTALL_DIRS,$(BINARIES_DIR))
++	$(call LINUX_FIRMWARE_CREATE_SYMLINKS,$(BINARIES_DIR))
++endef
++
+ $(eval $(generic-package))
 -- 
 2.20.1
