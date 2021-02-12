@@ -1,85 +1,33 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Fri, 12 Feb 2021 20:47:50 +0100
-Subject: [Buildroot] [PATCH] configs/olimex_a20_olinuxino_lime*: bump Linux
- and U-Boot versions
-Message-ID: <20210212194750.3264371-1-francois.perrad@gadz.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 12 Feb 2021 21:06:59 +0100
+Subject: [Buildroot] [PATCH 1/1] package/axel: set AXEL_CPE_ID_VALID
+Message-ID: <20210212200659.2394910-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- configs/olimex_a20_olinuxino_lime2_defconfig | 8 ++++----
- configs/olimex_a20_olinuxino_lime_defconfig  | 8 ++++----
- 2 files changed, 8 insertions(+), 8 deletions(-)
+cpe:2.3:a:axel_project:axel is a valid CPE identifier for this package:
 
-diff --git a/configs/olimex_a20_olinuxino_lime2_defconfig b/configs/olimex_a20_olinuxino_lime2_defconfig
-index ca8a319e6..8b10502de 100644
---- a/configs/olimex_a20_olinuxino_lime2_defconfig
-+++ b/configs/olimex_a20_olinuxino_lime2_defconfig
-@@ -3,8 +3,8 @@ BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_EABIHF=y
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aaxel_project%3Aaxel
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/axel/axel.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/axel/axel.mk b/package/axel/axel.mk
+index 2118a3438e..8dbf277b88 100644
+--- a/package/axel/axel.mk
++++ b/package/axel/axel.mk
+@@ -9,6 +9,7 @@ AXEL_SITE = https://github.com/axel-download-accelerator/axel/releases/download/
+ AXEL_SOURCE = axel-$(AXEL_VERSION).tar.xz
+ AXEL_LICENSE = GPL-2.0+
+ AXEL_LICENSE_FILES = COPYING
++AXEL_CPE_ID_VALID = YES
+ AXEL_DEPENDENCIES = host-pkgconf $(TARGET_NLS_DEPENDENCIES)
  
--# Linux headers same as kernel, a 5.4 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
-+# Linux headers same as kernel, a 5.10 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
- 
- # Toolchain
- # glibc is needed for sunxi-mali-mainline-package.
-@@ -22,7 +22,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.69"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.6"
- BR2_LINUX_KERNEL_USE_DEFCONFIG=y
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -43,7 +43,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.10"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.01"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime2"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
-diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
-index 9de6de77f..9ae713569 100644
---- a/configs/olimex_a20_olinuxino_lime_defconfig
-+++ b/configs/olimex_a20_olinuxino_lime_defconfig
-@@ -3,8 +3,8 @@ BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_EABIHF=y
- 
--# Linux headers same as kernel, a 5.4 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
-+# Linux headers same as kernel, a 5.10 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
- 
- # Toolchain
- # glibc is needed for sunxi-mali-mainline-package.
-@@ -22,7 +22,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.69"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.6"
- BR2_LINUX_KERNEL_USE_DEFCONFIG=y
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -43,7 +43,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.10"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.01"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+ # ac_cv_prog_cc_c99 is required for BR2_USE_WCHAR=n because the C99 test
 -- 
-2.27.0
+2.29.2
