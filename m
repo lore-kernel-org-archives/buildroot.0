@@ -1,70 +1,50 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 12 Feb 2021 19:40:46 +0100
-Subject: [Buildroot] [PATCH-NEXT 1/4] package/linux-firmware: make target
- install macros accept a destination parameter
-In-Reply-To: <20210212184049.13202-1-peter@korsgaard.com>
-References: <20210212184049.13202-1-peter@korsgaard.com>
-Message-ID: <20210212184049.13202-2-peter@korsgaard.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Fri, 12 Feb 2021 19:49:51 +0100
+Subject: [Buildroot] [PATCH] configs/mx6cubox: bump Linux and U-Boot versions
+Message-ID: <20210212184952.3049289-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-So we can reuse them for also installing into the images directory
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/linux-firmware/linux-firmware.mk | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ configs/mx6cubox_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index f23da171c6..3420266335 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -642,7 +642,7 @@ ifneq ($(LINUX_FIRMWARE_FILES),)
- define LINUX_FIRMWARE_INSTALL_FILES
- 	cd $(@D) && \
- 		$(TAR) cf install.tar $(sort $(LINUX_FIRMWARE_FILES)) && \
--		$(TAR) xf install.tar -C $(TARGET_DIR)/lib/firmware
-+		$(TAR) xf install.tar -C $(1)
- endef
- endif
+diff --git a/configs/mx6cubox_defconfig b/configs/mx6cubox_defconfig
+index 5ed28e53c..30a64f05f 100644
+--- a/configs/mx6cubox_defconfig
++++ b/configs/mx6cubox_defconfig
+@@ -6,8 +6,8 @@ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_FPU_VFPV3=y
  
-@@ -651,9 +651,9 @@ ifneq ($(LINUX_FIRMWARE_DIRS),)
- # into it in itself, should we re-install the package.
- define LINUX_FIRMWARE_INSTALL_DIRS
- 	$(foreach d,$(LINUX_FIRMWARE_DIRS), \
--		rm -rf $(TARGET_DIR)/lib/firmware/$(d); \
--		mkdir -p $(dir $(TARGET_DIR)/lib/firmware/$(d)); \
--		cp -a $(@D)/$(d) $(TARGET_DIR)/lib/firmware/$(d)$(sep))
-+		rm -rf $(1)/$(d); \
-+		mkdir -p $(dir $(1)/$(d)); \
-+		cp -a $(@D)/$(d) $(1)/$(d)$(sep))
- endef
- endif
+ # Toolchain
+-# Linux headers same as kernel, a 5.4 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
++# Linux headers same as kernel, a 5.10 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
  
-@@ -687,7 +687,7 @@ endif
- # a/foo -> ../b/foo  where a/ (the directory where to put the symlink) does
- # not yet exist.
- define LINUX_FIRMWARE_CREATE_SYMLINKS
--	cd $(TARGET_DIR)/lib/firmware/ ; \
-+	cd $(1) ; \
- 	sed -r -e '/^Link: (.+) -> (.+)$$/!d; s//\1 \2/' $(@D)/WHENCE | \
- 	while read f d; do \
- 		if test -f $$(readlink -m $$(dirname $$f)/$$d); then \
-@@ -699,9 +699,9 @@ endef
- 
- define LINUX_FIRMWARE_INSTALL_TARGET_CMDS
- 	mkdir -p $(TARGET_DIR)/lib/firmware
--	$(LINUX_FIRMWARE_INSTALL_FILES)
--	$(LINUX_FIRMWARE_INSTALL_DIRS)
--	$(LINUX_FIRMWARE_CREATE_SYMLINKS)
-+	$(call LINUX_FIRMWARE_INSTALL_FILES,$(TARGET_DIR)/lib/firmware)
-+	$(call LINUX_FIRMWARE_INSTALL_DIRS,$(TARGET_DIR)/lib/firmware)
-+	$(call LINUX_FIRMWARE_CREATE_SYMLINKS,$(TARGET_DIR)/lib/firmware)
- endef
- 
- $(eval $(generic-package))
+ # System configuration
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+@@ -17,7 +17,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/solidrun/mx6cubox/post-image.sh"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.69"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.6"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-cubox-i imx6dl-cubox-i-emmc-som-v15 imx6dl-cubox-i-som-v15 imx6dl-hummingboard imx6dl-hummingboard-emmc-som-v15 imx6dl-hummingboard-som-v15 imx6q-cubox-i imx6q-cubox-i-emmc-som-v15 imx6q-cubox-i-som-v15 imx6q-hummingboard imx6q-hummingboard-emmc-som-v15 imx6q-hummingboard-som-v15"
+@@ -32,7 +32,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.10"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.01"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="mx6cuboxi"
+ BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
 -- 
-2.20.1
+2.27.0
