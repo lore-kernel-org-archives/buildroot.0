@@ -1,9 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 12 Feb 2021 14:54:47 +0100
-Subject: [Buildroot] [PATCHv2 4/7] package/libjson: drop explicit '-DNDEBUG'
+Date: Fri, 12 Feb 2021 14:54:49 +0100
+Subject: [Buildroot] [PATCHv2 6/7] package/supertux: remove explicit setting
+ of CMAKE_BUILD_TYPE
 In-Reply-To: <20210212135451.22786-1-patrickdepinguin@gmail.com>
 References: <20210212135451.22786-1-patrickdepinguin@gmail.com>
-Message-ID: <20210212135451.22786-5-patrickdepinguin@gmail.com>
+Message-ID: <20210212135451.22786-7-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,26 +13,38 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-The passing of 'NDEBUG' is now steered by BR2_ENABLE_RUNTIME_DEBUG and
-commonly set from package/Makefile.in.
+supertux explicitly set CMAKE_BUILD_TYPE=Release, ignoring any possible
+value of BR2_ENABLE_DEBUG (previously) or BR2_ENABLE_RUNTIME_DEBUG (now).
+
+With the introduction of BR2_ENABLE_RUNTIME_DEBUG, this change should no
+longer be necessary. Users that do not wish to have profiling information,
+just keep BR2_ENABLE_RUNTIME_DEBUG disabled (default value), and those that
+enable BR2_ENABLE_RUNTIME_DEBUG will get profiling.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- package/libjson/libjson.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/supertux/supertux.mk | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/package/libjson/libjson.mk b/package/libjson/libjson.mk
-index d04ddc40f3..9d064e53c3 100644
---- a/package/libjson/libjson.mk
-+++ b/package/libjson/libjson.mk
-@@ -11,7 +11,7 @@ LIBJSON_INSTALL_STAGING = YES
- LIBJSON_LICENSE = BSD-2-Clause
- LIBJSON_LICENSE_FILES = License.txt
+diff --git a/package/supertux/supertux.mk b/package/supertux/supertux.mk
+index e4a4630918..a339c42e42 100644
+--- a/package/supertux/supertux.mk
++++ b/package/supertux/supertux.mk
+@@ -18,7 +18,6 @@ SUPERTUX_LICENSE_FILES = LICENSE.txt data/AUTHORS
+ SUPERTUX_DEPENDENCIES = host-pkgconf boost freetype libcurl libgl libglew \
+ 	libogg libpng libvorbis openal physfs sdl2 sdl2_image
  
--LIBJSON_CXXFLAGS = $(TARGET_CFLAGS) -DNDEBUG
-+LIBJSON_CXXFLAGS = $(TARGET_CFLAGS)
- 
- ifeq ($(BR2_STATIC_LIBS),y)
- LIBJSON_MAKE_OPTS += SHARED=0
+-# CMAKE_BUILD_TYPE=Release: disable profiling code (-pg)
+ # ENABLE_BOOST_STATIC_LIBS=OFF: use boost shared libraries since supertux
+ # depends on !BR2_STATIC_LIBS and boost provide only shared libraries with
+ # BR2_SHARED_LIBS.
+@@ -29,7 +28,6 @@ SUPERTUX_DEPENDENCIES = host-pkgconf boost freetype libcurl libgl libglew \
+ # in physfs.h (CHECK_SYMBOL_EXISTS) doesn't work.
+ # ENABLE_OPENGLES2=OFF: Disable opengles2 for now.
+ SUPERTUX_CONF_OPTS += \
+-	-DCMAKE_BUILD_TYPE=Release \
+ 	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -DGLEW_NO_GLU" \
+ 	-DENABLE_BOOST_STATIC_LIBS=OFF \
+ 	-DBUILD_DOCUMENTATION=OFF \
 -- 
 2.26.2
