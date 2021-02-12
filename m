@@ -1,71 +1,51 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 12 Feb 2021 10:15:10 +0100
-Subject: [Buildroot] [PATCH 2/2] package/openblas: fix detection of gfortran
- compiler
-In-Reply-To: <20210212091511.9905-1-patrickdepinguin@gmail.com>
-References: <20210212091511.9905-1-patrickdepinguin@gmail.com>
-Message-ID: <20210212091511.9905-2-patrickdepinguin@gmail.com>
+From: Sven Klomp <mail@klomp.eu>
+Date: Fri, 12 Feb 2021 10:18:32 +0100
+Subject: [Buildroot] GOLANG Compilation Issue: build constraints exclude all
+ Go files
+Message-ID: <499ade29-7cfb-99d7-280b-46b58359a7f9@klomp.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Hello,
 
-The compiler detection since openblas 0.3.8 added support for gcc 10, but
-this broke detection of compilers created with crosstool-ng, or other
-toolchains that have a package version containing a version like x.y.z where
-at least one of x, y or z have more than one digit, for example
-"Crosstool-NG 1.24.0".
+I created package description to compile Syncthing (see attached files). 
+However, compilation always fails with the following error message:
 
-See the reported issue for more details [1].
+can't load package: package github.com/syncthing/syncthing: build 
+constraints exclude all Go files in 
+/[...]/build/syncthing-1.13.1/_gopath/src/github.com/syncthing/syncthing
 
-Backport the upstream patch that fixes it.
+In my initial research I came to the conclusion that it might be related 
+to CGO: https://github.com/golang/go/issues/24068
 
-[1] https://github.com/xianyi/OpenBLAS/issues/3099
+However, activating CGO as mentioned in the buildroot documentation 
+(https://buildroot.org/downloads/manual/manual.html#_infrastructure_for_go_packages) 
+does not solve my problem.
 
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
----
- .../0001-fix-gfortran-detection.patch         | 30 +++++++++++++++++++
- 1 file changed, 30 insertions(+)
- create mode 100644 package/openblas/0001-fix-gfortran-detection.patch
+Any hint would be appreciated.
 
-diff --git a/package/openblas/0001-fix-gfortran-detection.patch b/package/openblas/0001-fix-gfortran-detection.patch
-new file mode 100644
-index 0000000000..1fecdac3e5
---- /dev/null
-+++ b/package/openblas/0001-fix-gfortran-detection.patch
-@@ -0,0 +1,30 @@
-+From ece3ce581e3ec530eaccfe7f284c52e115ec7aa9 Mon Sep 17 00:00:00 2001
-+From: Martin Kroeker <martin@ruby.chemie.uni-freiburg.de>
-+Date: Wed, 10 Feb 2021 14:22:59 +0100
-+Subject: [PATCH] Strip parenthesized (pkgversion) data from GCC version string
-+ to avoid misinterpretation
-+
-+See https://github.com/xianyi/OpenBLAS/issues/3099 for details.
-+
-+Upstream-status: backport
-+
-+[for import into Buildroot]
-+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-+
-+
-+---
-+ f_check | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/f_check b/f_check
-+index e9aca4ff9..ffe9c6b46 100644
-+--- a/f_check
-++++ b/f_check
-+@@ -75,6 +75,7 @@ if ($compiler eq "") {
-+ 
-+ 	} elsif ($data =~ /GNU/ || $data =~ /GCC/ ) {
-+ 
-++            $data =~ s/\(+.*?\)+//g;
-+ 	    $data =~ /(\d+)\.(\d+).(\d+)/;
-+ 	    $major = $1;
-+ 	    $minor = $2;
--- 
-2.26.2
+Sven
+-------------- next part --------------
+config BR2_PACKAGE_SYNCTHING
+	bool "syncthing"
+	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
+    depends on BR2_TOOLCHAIN_HAS_THREADS
+
+    help
+	  Syncthing is a continuous file synchronization program.
+
+	  https://syncthing.net
+-------------- next part --------------
+# Locally computed:
+sha256 f4632a062f75d01629e625ccef9625313f5d371c5f9bee744b0b811d47b92e25 v1.13.1.tar.gz
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: syncthing.mk
+Type: text/x-makefile
+Size: 427 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210212/d9f5c924/attachment.bin>
