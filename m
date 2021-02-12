@@ -1,55 +1,35 @@
-From: =?UTF-8?q?S=C3=A9bastien=20Szymanski?= <sebastien.szymanski@armadeus.com>
-Date: Fri, 12 Feb 2021 10:11:38 +0100
-Subject: [Buildroot] [PATCH 1/1] package/x265: update project URL
-Message-ID: <20210212091138.27649-1-sebastien.szymanski@armadeus.com>
+From: =?iso-8859-1?Q?Jan_Kundr=E1t?= <jan.kundrat@cesnet.cz>
+Date: Fri, 12 Feb 2021 16:20:02 +0100
+Subject: [Buildroot] 
+ =?iso-8859-1?q?=5BPATCHv2_7/7=5D_package/sysrepo=3A_?=
+ =?iso-8859-1?q?remove_explicit_setting_of_CMAKE=5FBUILD=5FTYPE?=
+In-Reply-To: <20210212135451.22786-8-patrickdepinguin@gmail.com>
+References: <20210212135451.22786-1-patrickdepinguin@gmail.com>
+ <20210212135451.22786-8-patrickdepinguin@gmail.com>
+Message-ID: <aa713a1f-7239-4517-acac-e69d51b92fe8@cesnet.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The project moved to https://bitbucket.org/multicoreware/x265_git
+On p?tek 12. ?nora 2021 14:54:50 CET, Thomas De Schampheleire wrote:
+> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+>
+> sysrepo explicitly set CMAKE_BUILD_TYPE=Release, ignoring any possible
+> value of BR2_ENABLE_DEBUG (previously) or BR2_ENABLE_RUNTIME_DEBUG (now).
+>
+> With the introduction of BR2_ENABLE_RUNTIME_DEBUG, this change should no
+> longer be necessary. Users that do not wish to have additional runtime
+> debugging just keep BR2_ENABLE_RUNTIME_DEBUG disabled (default value).
+>
+> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> ---
+> v2: Jan Kundr?t:
+> - explicitly set REPO_PATH, which is set to a host path in case of
+>   CMAKE_BUILD_TYPE=Debug (see e.g.
+>   https://github.com/sysrepo/sysrepo/blob/v1.4.104/CMakeLists.txt#L138-L144)
 
-Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
----
- package/x265/Config.in | 2 +-
- package/x265/x265.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Reviewed-by: Jan Kundr?t <jan.kundrat@cesnet.cz>
 
-diff --git a/package/x265/Config.in b/package/x265/Config.in
-index 180931db66..1067505d31 100644
---- a/package/x265/Config.in
-+++ b/package/x265/Config.in
-@@ -11,7 +11,7 @@ config BR2_PACKAGE_X265
- 	  General Public License (GPL) 2 license or a commercial
- 	  license, similar to the x264 project.
- 
--	  https://bitbucket.org/multicoreware/x265/wiki/Home
-+	  https://bitbucket.org/multicoreware/x265_git/wiki/Home
- 
- if BR2_PACKAGE_X265
- 
-diff --git a/package/x265/x265.mk b/package/x265/x265.mk
-index 872753eea8..7bc1d11e19 100644
---- a/package/x265/x265.mk
-+++ b/package/x265/x265.mk
-@@ -6,7 +6,7 @@
- 
- X265_VERSION = 3.3
- X265_SOURCE = x265_$(X265_VERSION).tar.gz
--X265_SITE = https://bitbucket.org/multicoreware/x265/downloads
-+X265_SITE = https://bitbucket.org/multicoreware/x265_git/downloads
- X265_LICENSE = GPL-2.0+
- X265_LICENSE_FILES = COPYING
- X265_CPE_ID_VENDOR = multicorewareinc
-@@ -19,7 +19,7 @@ X265_DEPENDENCIES += host-nasm
- endif
- 
- # disable altivec, it has build issues
--# https://bitbucket.org/multicoreware/x265/issues/320/
-+# https://bitbucket.org/multicoreware/x265_git/issues/320/
- ifeq ($(BR2_powerpc64)$(BR2_powerpc64le),y)
- X265_CONF_OPTS += -DENABLE_ALTIVEC=OFF
- endif
--- 
-2.26.2
+Jan
