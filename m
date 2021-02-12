@@ -1,55 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 12 Feb 2021 22:59:17 +0100
-Subject: [Buildroot] [git commit] package/postgresql: security bump version
- to 13.2
-Message-ID: <20210212215302.917E083F0A@busybox.osuosl.org>
+Date: Fri, 12 Feb 2021 22:59:58 +0100
+Subject: [Buildroot] [git commit] package/axel: set AXEL_CPE_ID_VALID
+Message-ID: <20210212215302.9E6FD81371@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f19fad39995427afa18ff6198f4392db123d1b92
+commit: https://git.buildroot.net/buildroot/commit/?id=de2d473dce9cf9b5de9a50febf948e9d953fbff2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://www.postgresql.org/about/news/postgresql-132-126-1111-1016-9621-and-9525-released-2165/
+cpe:2.3:a:axel_project:axel is a valid CPE identifier for this package:
 
-Fixes CVE-2021-3393 & CVE-2021-20229.
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aaxel_project%3Aaxel
 
-Updated license hash due to copyright year bump:
-https://git.postgresql.org/gitweb/?p=postgresql.git;a=commitdiff;h=c09f6882d6f78bde26fcc1e1a3da11c274de596a
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/postgresql/postgresql.hash | 6 +++---
- package/postgresql/postgresql.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/axel/axel.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-index ef676cccc4..7dfe194837 100644
---- a/package/postgresql/postgresql.hash
-+++ b/package/postgresql/postgresql.hash
-@@ -1,5 +1,5 @@
--# From https://ftp.postgresql.org/pub/source/v13.1/postgresql-13.1.tar.bz2.sha256
--sha256  12345c83b89aa29808568977f5200d6da00f88a035517f925293355432ffe61f  postgresql-13.1.tar.bz2
-+# From https://ftp.postgresql.org/pub/source/v13.2/postgresql-13.2.tar.bz2.sha256
-+sha256  5fd7fcd08db86f5b2aed28fcfaf9ae0aca8e9428561ac547764c2a2b0f41adfc  postgresql-13.2.tar.bz2
+diff --git a/package/axel/axel.mk b/package/axel/axel.mk
+index 2118a3438e..8dbf277b88 100644
+--- a/package/axel/axel.mk
++++ b/package/axel/axel.mk
+@@ -9,6 +9,7 @@ AXEL_SITE = https://github.com/axel-download-accelerator/axel/releases/download/
+ AXEL_SOURCE = axel-$(AXEL_VERSION).tar.xz
+ AXEL_LICENSE = GPL-2.0+
+ AXEL_LICENSE_FILES = COPYING
++AXEL_CPE_ID_VALID = YES
+ AXEL_DEPENDENCIES = host-pkgconf $(TARGET_NLS_DEPENDENCIES)
  
- # License file, Locally calculated
--sha256  739e5d454d81d31a482469338b7c856f1f5c6b4cdda1551cea6f0f6d18eef62c  COPYRIGHT
-+sha256  31ccadc0a70e8e0e8a35c5833567b64388dfe34987d962e1911554e271294105  COPYRIGHT
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 76d1202de0..9206c62462 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--POSTGRESQL_VERSION = 13.1
-+POSTGRESQL_VERSION = 13.2
- POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
- POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
- POSTGRESQL_LICENSE = PostgreSQL
+ # ac_cv_prog_cc_c99 is required for BR2_USE_WCHAR=n because the C99 test
