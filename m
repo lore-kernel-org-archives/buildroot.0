@@ -1,91 +1,85 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 12 Feb 2021 21:00:06 +0100
-Subject: [Buildroot] [PATCH 1/1] package/lcms2: fix static building with tiff
-Message-ID: <20210212200006.2394292-1-fontaine.fabrice@gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Fri, 12 Feb 2021 20:47:50 +0100
+Subject: [Buildroot] [PATCH] configs/olimex_a20_olinuxino_lime*: bump Linux
+ and U-Boot versions
+Message-ID: <20210212194750.3264371-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Strangely enough, we have only one build failure on the autobuilder even
-if lcms2 never used pkg-config to retrieve static dependencies of tiff
-(which also depends on xz since 2016)
-
-Fixes:
- - http://autobuild.buildroot.org/results/07c5ca780bcdbfcd7cad6502345f1553ce17bdc3
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- ...gure.ac-fix-static-linking-with-tiff.patch | 37 +++++++++++++++++++
- package/lcms2/lcms2.mk                        |  4 +-
- 2 files changed, 40 insertions(+), 1 deletion(-)
- create mode 100644 package/lcms2/0001-configure.ac-fix-static-linking-with-tiff.patch
+ configs/olimex_a20_olinuxino_lime2_defconfig | 8 ++++----
+ configs/olimex_a20_olinuxino_lime_defconfig  | 8 ++++----
+ 2 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/package/lcms2/0001-configure.ac-fix-static-linking-with-tiff.patch b/package/lcms2/0001-configure.ac-fix-static-linking-with-tiff.patch
-new file mode 100644
-index 0000000000..9b7ad7c506
---- /dev/null
-+++ b/package/lcms2/0001-configure.ac-fix-static-linking-with-tiff.patch
-@@ -0,0 +1,37 @@
-+From 49eed94b8a1d3fda2d00f0120e14c4d78cc5e840 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 12 Feb 2021 09:28:39 +0100
-+Subject: [PATCH] configure.ac: fix static linking with tiff
-+
-+Use pkg-config to retrieve the dependencies of tiff (e.g. xz) to fix
-+the following static build failure:
-+
-+libtool: link: /home/buildroot/autobuild/run/instance-2/output-1/host/bin/xtensa-linux-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -mlongcalls -mauto-litpools -Os -static -fvisibility=hidden -static -static -o tificc tificc.o ../common/xgetopt.o ../common/vprf.o  ../../src/.libs/liblcms2.a -ltiff -ljpeg -lz -lm -lpthread
-+/home/buildroot/autobuild/run/instance-2/output-1/host/opt/ext-toolchain/bin/../lib/gcc/xtensa-buildroot-linux-uclibc/9.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: /home/buildroot/autobuild/run/instance-2/output-1/host/xtensa-buildroot-linux-uclibc/sysroot/usr/lib/libtiff.a(tif_lzma.o): in function `LZMAEncode':
-+tif_lzma.c:(.text+0x168): undefined reference to `lzma_code'
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/07c5ca780bcdbfcd7cad6502345f1553ce17bdc3
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/mm2/Little-CMS/pull/244]
-+---
-+ configure.ac | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index b3c8f2b..96440fe 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -330,7 +330,7 @@ then
-+ 	AC_MSG_RESULT(no -- some components failed test)
-+ 	have_tiff='no (failed tests)'
-+     else
-+-	LIB_TIFF='-ltiff'
-++	PKG_CHECK_MODULES(PC_TIFF,libtiff-4,LIB_TIFF=$PC_TIFF_LIBS,LIB_TIFF='-ltiff')
-+ 	LIBS="$LIB_TIFF $LIBS"
-+ 	AC_DEFINE(HasTIFF,1,Define if you have TIFF library)
-+ 	AC_MSG_RESULT(yes)
-+-- 
-+2.29.2
-+
-diff --git a/package/lcms2/lcms2.mk b/package/lcms2/lcms2.mk
-index 862fdd5896..3797c857cb 100644
---- a/package/lcms2/lcms2.mk
-+++ b/package/lcms2/lcms2.mk
-@@ -11,6 +11,8 @@ LCMS2_LICENSE_FILES = COPYING
- LCMS2_CPE_ID_VENDOR = littlecms
- LCMS2_CPE_ID_PRODUCT = little_cms
- LCMS2_INSTALL_STAGING = YES
-+# We're patching configure.ac
-+LCMS2_AUTORECONF = YES
+diff --git a/configs/olimex_a20_olinuxino_lime2_defconfig b/configs/olimex_a20_olinuxino_lime2_defconfig
+index ca8a319e6..8b10502de 100644
+--- a/configs/olimex_a20_olinuxino_lime2_defconfig
++++ b/configs/olimex_a20_olinuxino_lime2_defconfig
+@@ -3,8 +3,8 @@ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_EABIHF=y
  
- ifeq ($(BR2_PACKAGE_JPEG),y)
- LCMS2_CONF_OPTS += --with-jpeg
-@@ -21,7 +23,7 @@ endif
+-# Linux headers same as kernel, a 5.4 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
++# Linux headers same as kernel, a 5.10 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
  
- ifeq ($(BR2_PACKAGE_TIFF),y)
- LCMS2_CONF_OPTS += --with-tiff
--LCMS2_DEPENDENCIES += tiff
-+LCMS2_DEPENDENCIES += host-pkgconf tiff
- else
- LCMS2_CONF_OPTS += --without-tiff
- endif
+ # Toolchain
+ # glibc is needed for sunxi-mali-mainline-package.
+@@ -22,7 +22,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.69"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.6"
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -43,7 +43,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.10"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.01"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime2"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
+index 9de6de77f..9ae713569 100644
+--- a/configs/olimex_a20_olinuxino_lime_defconfig
++++ b/configs/olimex_a20_olinuxino_lime_defconfig
+@@ -3,8 +3,8 @@ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_EABIHF=y
+ 
+-# Linux headers same as kernel, a 5.4 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
++# Linux headers same as kernel, a 5.10 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ 
+ # Toolchain
+ # glibc is needed for sunxi-mali-mainline-package.
+@@ -22,7 +22,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.69"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.6"
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -43,7 +43,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.10"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.01"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
 -- 
-2.29.2
+2.27.0
