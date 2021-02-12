@@ -1,77 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 12 Feb 2021 23:13:57 +0100
-Subject: [Buildroot] [PATCH 1/1] package/x265: update project URL
-In-Reply-To: <20210212091138.27649-1-sebastien.szymanski@armadeus.com>
- (=?utf-8?Q?=22S=C3=A9bastien?= Szymanski"'s message of "Fri, 12 Feb 2021
- 10:11:38 +0100")
-References: <20210212091138.27649-1-sebastien.szymanski@armadeus.com>
-Message-ID: <87v9axdjdm.fsf@dell.be.48ers.dk>
+Date: Fri, 12 Feb 2021 22:59:17 +0100
+Subject: [Buildroot] [git commit] package/postgresql: security bump version
+ to 13.2
+Message-ID: <20210212215302.917E083F0A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "S?bastien" == S?bastien Szymanski <sebastien.szymanski@armadeus.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=f19fad39995427afa18ff6198f4392db123d1b92
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > The project moved to https://bitbucket.org/multicoreware/x265_git
- > Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
- > ---
- >  package/x265/Config.in | 2 +-
- >  package/x265/x265.mk   | 4 ++--
- >  2 files changed, 3 insertions(+), 3 deletions(-)
+Release notes:
+https://www.postgresql.org/about/news/postgresql-132-126-1111-1016-9621-and-9525-released-2165/
 
- > diff --git a/package/x265/Config.in b/package/x265/Config.in
- > index 180931db66..1067505d31 100644
- > --- a/package/x265/Config.in
- > +++ b/package/x265/Config.in
- > @@ -11,7 +11,7 @@ config BR2_PACKAGE_X265
- >  	  General Public License (GPL) 2 license or a commercial
- >  	  license, similar to the x264 project.
+Fixes CVE-2021-3393 & CVE-2021-20229.
+
+Updated license hash due to copyright year bump:
+https://git.postgresql.org/gitweb/?p=postgresql.git;a=commitdiff;h=c09f6882d6f78bde26fcc1e1a3da11c274de596a
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/postgresql/postgresql.hash | 6 +++---
+ package/postgresql/postgresql.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index ef676cccc4..7dfe194837 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,5 +1,5 @@
+-# From https://ftp.postgresql.org/pub/source/v13.1/postgresql-13.1.tar.bz2.sha256
+-sha256  12345c83b89aa29808568977f5200d6da00f88a035517f925293355432ffe61f  postgresql-13.1.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v13.2/postgresql-13.2.tar.bz2.sha256
++sha256  5fd7fcd08db86f5b2aed28fcfaf9ae0aca8e9428561ac547764c2a2b0f41adfc  postgresql-13.2.tar.bz2
  
- > -	  https://bitbucket.org/multicoreware/x265/wiki/Home
- > +	  https://bitbucket.org/multicoreware/x265_git/wiki/Home
+ # License file, Locally calculated
+-sha256  739e5d454d81d31a482469338b7c856f1f5c6b4cdda1551cea6f0f6d18eef62c  COPYRIGHT
++sha256  31ccadc0a70e8e0e8a35c5833567b64388dfe34987d962e1911554e271294105  COPYRIGHT
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 76d1202de0..9206c62462 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- >  if BR2_PACKAGE_X265
- 
- > diff --git a/package/x265/x265.mk b/package/x265/x265.mk
- > index 872753eea8..7bc1d11e19 100644
- > --- a/package/x265/x265.mk
- > +++ b/package/x265/x265.mk
- > @@ -6,7 +6,7 @@
- 
- >  X265_VERSION = 3.3
- >  X265_SOURCE = x265_$(X265_VERSION).tar.gz
- > -X265_SITE = https://bitbucket.org/multicoreware/x265/downloads
- > +X265_SITE = https://bitbucket.org/multicoreware/x265_git/downloads
-
-That's no good:
-
-make x265-legal-info
->>> x265 3.3 Downloading
---2021-02-12 23:11:53--  https://bitbucket.org/multicoreware/x265_git/downloads/x265_3.3.tar.gz
-Resolving bitbucket.org (bitbucket.org)... 104.192.141.1, 2406:da00:ff00::22c5:2ef4, 2406:da00:ff00::34cc:ea4a, ...
-Connecting to bitbucket.org (bitbucket.org)|104.192.141.1|:443... connected.
-HTTP request sent, awaiting response... 302 Found
-Location: https://bbuseruploads.s3.amazonaws.com/c105f477-2003-4e12-80e5-06858cf7e40b/downloads/4247de9f-1484-4e31-b9b8-f69a505230de/x265_3.3.tar.gz?Signature=db4jq18NjpWhN69UKLdeNlmLUto%3D&Expires=1613169568&AWSAccessKeyId=AKIA6KOSE3BNJRRFUUX6&versionId=s9fflFgseT2OEPm_eT1G33eu3G8q_RJ5&response-content-disposition=attachment%3B%20filename%3D%22x265_3.3.tar.gz%22&response-content-encoding=None [following]
---2021-02-12 23:11:54--  https://bbuseruploads.s3.amazonaws.com/c105f477-2003-4e12-80e5-06858cf7e40b/downloads/4247de9f-1484-4e31-b9b8-f69a505230de/x265_3.3.tar.gz?Signature=db4jq18NjpWhN69UKLdeNlmLUto%3D&Expires=1613169568&AWSAccessKeyId=AKIA6KOSE3BNJRRFUUX6&versionId=s9fflFgseT2OEPm_eT1G33eu3G8q_RJ5&response-content-disposition=attachment%3B%20filename%3D%22x265_3.3.tar.gz%22&response-content-encoding=None
-Resolving bbuseruploads.s3.amazonaws.com (bbuseruploads.s3.amazonaws.com)... 52.217.48.92
-Connecting to bbuseruploads.s3.amazonaws.com (bbuseruploads.s3.amazonaws.com)|52.217.48.92|:443... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 1508513 (1,4M) [application/x-gzip]
-Saving to: ?/home/peko/source/buildroot/output/build/.x265_3.3.tar.gz.fsI64y/output?
-
-/home/peko/source/buildroot/output/build/.x265_3.3.tar.gz.fsI64 100%[======================================================================================================================================================>]   1,44M   697KB/s    in 2,1s
-
-2021-02-12 23:11:57 (697 KB/s) - ?/home/peko/source/buildroot/output/build/.x265_3.3.tar.gz.fsI64y/output? saved [1508513/1508513]
-
-ERROR: x265_3.3.tar.gz has wrong md5 hash:
-ERROR: expected: 0c8c747b59b5411dea8cf557554636c1
-ERROR: got     : be6ea7a139b01fa6f2614d5c1197492d
-ERROR: Incomplete download, or man-in-the-middle (MITM) attack
-
-Either we need to change the hashes (and update the copy on
-sources.buildroot.org) or keep it as is until we bump the version.
-
--- 
-Bye, Peter Korsgaard
+-POSTGRESQL_VERSION = 13.1
++POSTGRESQL_VERSION = 13.2
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
