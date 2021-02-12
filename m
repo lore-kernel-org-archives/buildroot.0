@@ -1,35 +1,33 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 12 Feb 2021 22:45:24 +0100
-Subject: [Buildroot] [PATCH 1/1] package/fetchmail: set
- FETCHMAIL_CPE_ID_VENDOR
-Message-ID: <20210212214524.168150-1-fontaine.fabrice@gmail.com>
+Date: Fri, 12 Feb 2021 22:52:35 +0100
+Subject: [Buildroot] [PATCH 1/1] package/file: set FILE_CPE_ID_VALID
+Message-ID: <20210212215235.342913-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:fetchmail:fetchmail is a valid CPE identifier for this
-package:
+cpe:2.3:a:file_project:file is a valid CPE identifier for this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Afetchmail%3Afetchmail
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Afile_project%3Afile
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/fetchmail/fetchmail.mk | 1 +
+ package/file/file.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/fetchmail/fetchmail.mk b/package/fetchmail/fetchmail.mk
-index 788560510f..2db635ec66 100644
---- a/package/fetchmail/fetchmail.mk
-+++ b/package/fetchmail/fetchmail.mk
-@@ -10,6 +10,7 @@ FETCHMAIL_SOURCE = fetchmail-$(FETCHMAIL_VERSION).tar.xz
- FETCHMAIL_SITE = http://downloads.sourceforge.net/project/fetchmail/branch_$(FETCHMAIL_VERSION_MAJOR)
- FETCHMAIL_LICENSE = GPL-2.0; some exceptions are mentioned in COPYING
- FETCHMAIL_LICENSE_FILES = COPYING
-+FETCHMAIL_CPE_ID_VENDOR = fetchmail
- 
- FETCHMAIL_CONF_OPTS = \
- 	--with-ssl=$(STAGING_DIR)/usr
+diff --git a/package/file/file.mk b/package/file/file.mk
+index 42f9524ed1..fa7daa8e07 100644
+--- a/package/file/file.mk
++++ b/package/file/file.mk
+@@ -12,6 +12,7 @@ FILE_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+ FILE_INSTALL_STAGING = YES
+ FILE_LICENSE = BSD-2-Clause, BSD-4-Clause (one file), BSD-3-Clause (one file)
+ FILE_LICENSE_FILES = COPYING src/mygetopt.h src/vasprintf.c
++FILE_CPE_ID_VALID = YES
+ # We're patching configure.ac
+ FILE_AUTORECONF = YES
+ HOST_FILE_CONF_OPTS = --disable-libseccomp
 -- 
 2.30.0
