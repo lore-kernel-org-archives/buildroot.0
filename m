@@ -1,50 +1,91 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Fri, 12 Feb 2021 19:49:51 +0100
-Subject: [Buildroot] [PATCH] configs/mx6cubox: bump Linux and U-Boot versions
-Message-ID: <20210212184952.3049289-1-francois.perrad@gadz.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 12 Feb 2021 21:00:06 +0100
+Subject: [Buildroot] [PATCH 1/1] package/lcms2: fix static building with tiff
+Message-ID: <20210212200006.2394292-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- configs/mx6cubox_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Strangely enough, we have only one build failure on the autobuilder even
+if lcms2 never used pkg-config to retrieve static dependencies of tiff
+(which also depends on xz since 2016)
 
-diff --git a/configs/mx6cubox_defconfig b/configs/mx6cubox_defconfig
-index 5ed28e53c..30a64f05f 100644
---- a/configs/mx6cubox_defconfig
-+++ b/configs/mx6cubox_defconfig
-@@ -6,8 +6,8 @@ BR2_ARM_ENABLE_VFP=y
- BR2_ARM_FPU_VFPV3=y
+Fixes:
+ - http://autobuild.buildroot.org/results/07c5ca780bcdbfcd7cad6502345f1553ce17bdc3
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...gure.ac-fix-static-linking-with-tiff.patch | 37 +++++++++++++++++++
+ package/lcms2/lcms2.mk                        |  4 +-
+ 2 files changed, 40 insertions(+), 1 deletion(-)
+ create mode 100644 package/lcms2/0001-configure.ac-fix-static-linking-with-tiff.patch
+
+diff --git a/package/lcms2/0001-configure.ac-fix-static-linking-with-tiff.patch b/package/lcms2/0001-configure.ac-fix-static-linking-with-tiff.patch
+new file mode 100644
+index 0000000000..9b7ad7c506
+--- /dev/null
++++ b/package/lcms2/0001-configure.ac-fix-static-linking-with-tiff.patch
+@@ -0,0 +1,37 @@
++From 49eed94b8a1d3fda2d00f0120e14c4d78cc5e840 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 12 Feb 2021 09:28:39 +0100
++Subject: [PATCH] configure.ac: fix static linking with tiff
++
++Use pkg-config to retrieve the dependencies of tiff (e.g. xz) to fix
++the following static build failure:
++
++libtool: link: /home/buildroot/autobuild/run/instance-2/output-1/host/bin/xtensa-linux-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -mlongcalls -mauto-litpools -Os -static -fvisibility=hidden -static -static -o tificc tificc.o ../common/xgetopt.o ../common/vprf.o  ../../src/.libs/liblcms2.a -ltiff -ljpeg -lz -lm -lpthread
++/home/buildroot/autobuild/run/instance-2/output-1/host/opt/ext-toolchain/bin/../lib/gcc/xtensa-buildroot-linux-uclibc/9.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: /home/buildroot/autobuild/run/instance-2/output-1/host/xtensa-buildroot-linux-uclibc/sysroot/usr/lib/libtiff.a(tif_lzma.o): in function `LZMAEncode':
++tif_lzma.c:(.text+0x168): undefined reference to `lzma_code'
++
++Fixes:
++ - http://autobuild.buildroot.org/results/07c5ca780bcdbfcd7cad6502345f1553ce17bdc3
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/mm2/Little-CMS/pull/244]
++---
++ configure.ac | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index b3c8f2b..96440fe 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -330,7 +330,7 @@ then
++ 	AC_MSG_RESULT(no -- some components failed test)
++ 	have_tiff='no (failed tests)'
++     else
++-	LIB_TIFF='-ltiff'
+++	PKG_CHECK_MODULES(PC_TIFF,libtiff-4,LIB_TIFF=$PC_TIFF_LIBS,LIB_TIFF='-ltiff')
++ 	LIBS="$LIB_TIFF $LIBS"
++ 	AC_DEFINE(HasTIFF,1,Define if you have TIFF library)
++ 	AC_MSG_RESULT(yes)
++-- 
++2.29.2
++
+diff --git a/package/lcms2/lcms2.mk b/package/lcms2/lcms2.mk
+index 862fdd5896..3797c857cb 100644
+--- a/package/lcms2/lcms2.mk
++++ b/package/lcms2/lcms2.mk
+@@ -11,6 +11,8 @@ LCMS2_LICENSE_FILES = COPYING
+ LCMS2_CPE_ID_VENDOR = littlecms
+ LCMS2_CPE_ID_PRODUCT = little_cms
+ LCMS2_INSTALL_STAGING = YES
++# We're patching configure.ac
++LCMS2_AUTORECONF = YES
  
- # Toolchain
--# Linux headers same as kernel, a 5.4 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
-+# Linux headers same as kernel, a 5.10 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ ifeq ($(BR2_PACKAGE_JPEG),y)
+ LCMS2_CONF_OPTS += --with-jpeg
+@@ -21,7 +23,7 @@ endif
  
- # System configuration
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-@@ -17,7 +17,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/solidrun/mx6cubox/post-image.sh"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.69"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.6"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-cubox-i imx6dl-cubox-i-emmc-som-v15 imx6dl-cubox-i-som-v15 imx6dl-hummingboard imx6dl-hummingboard-emmc-som-v15 imx6dl-hummingboard-som-v15 imx6q-cubox-i imx6q-cubox-i-emmc-som-v15 imx6q-cubox-i-som-v15 imx6q-hummingboard imx6q-hummingboard-emmc-som-v15 imx6q-hummingboard-som-v15"
-@@ -32,7 +32,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.10"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.01"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="mx6cuboxi"
- BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+ ifeq ($(BR2_PACKAGE_TIFF),y)
+ LCMS2_CONF_OPTS += --with-tiff
+-LCMS2_DEPENDENCIES += tiff
++LCMS2_DEPENDENCIES += host-pkgconf tiff
+ else
+ LCMS2_CONF_OPTS += --without-tiff
+ endif
 -- 
-2.27.0
+2.29.2
