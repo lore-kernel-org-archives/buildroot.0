@@ -1,57 +1,55 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 12 Feb 2021 14:54:50 +0100
-Subject: [Buildroot] [PATCHv2 7/7] package/sysrepo: remove explicit setting
- of CMAKE_BUILD_TYPE
-In-Reply-To: <20210212135451.22786-1-patrickdepinguin@gmail.com>
-References: <20210212135451.22786-1-patrickdepinguin@gmail.com>
-Message-ID: <20210212135451.22786-8-patrickdepinguin@gmail.com>
+From: =?UTF-8?q?S=C3=A9bastien=20Szymanski?= <sebastien.szymanski@armadeus.com>
+Date: Fri, 12 Feb 2021 10:11:38 +0100
+Subject: [Buildroot] [PATCH 1/1] package/x265: update project URL
+Message-ID: <20210212091138.27649-1-sebastien.szymanski@armadeus.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+The project moved to https://bitbucket.org/multicoreware/x265_git
 
-sysrepo explicitly set CMAKE_BUILD_TYPE=Release, ignoring any possible
-value of BR2_ENABLE_DEBUG (previously) or BR2_ENABLE_RUNTIME_DEBUG (now).
-
-With the introduction of BR2_ENABLE_RUNTIME_DEBUG, this change should no
-longer be necessary. Users that do not wish to have additional runtime
-debugging just keep BR2_ENABLE_RUNTIME_DEBUG disabled (default value).
-
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
 ---
-v2: Jan Kundr?t:
-- explicitly set REPO_PATH, which is set to a host path in case of
-  CMAKE_BUILD_TYPE=Debug (see e.g.
-  https://github.com/sysrepo/sysrepo/blob/v1.4.104/CMakeLists.txt#L138-L144)
+ package/x265/Config.in | 2 +-
+ package/x265/x265.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- package/sysrepo/sysrepo.mk | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
-
-diff --git a/package/sysrepo/sysrepo.mk b/package/sysrepo/sysrepo.mk
-index e4d553cdbd..768cde8d35 100644
---- a/package/sysrepo/sysrepo.mk
-+++ b/package/sysrepo/sysrepo.mk
-@@ -13,8 +13,8 @@ SYSREPO_DEPENDENCIES = libyang pcre host-sysrepo
- HOST_SYSREPO_DEPENDENCIES = host-libyang host-pcre
+diff --git a/package/x265/Config.in b/package/x265/Config.in
+index 180931db66..1067505d31 100644
+--- a/package/x265/Config.in
++++ b/package/x265/Config.in
+@@ -11,7 +11,7 @@ config BR2_PACKAGE_X265
+ 	  General Public License (GPL) 2 license or a commercial
+ 	  license, similar to the x264 project.
  
- SYSREPO_CONF_OPTS = \
--	-DCMAKE_BUILD_TYPE=Release \
--	-DBUILD_EXAMPLES=$(if $(BR2_PACKAGE_SYSREPO_EXAMPLES),ON,OFF)
-+	-DBUILD_EXAMPLES=$(if $(BR2_PACKAGE_SYSREPO_EXAMPLES),ON,OFF) \
-+	-DREPO_PATH=/etc/sysrepo
+-	  https://bitbucket.org/multicoreware/x265/wiki/Home
++	  https://bitbucket.org/multicoreware/x265_git/wiki/Home
  
- ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
- SYSREPO_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
-@@ -26,7 +26,6 @@ define SYSREPO_INSTALL_INIT_SYSV
- endef
+ if BR2_PACKAGE_X265
  
- HOST_SYSREPO_CONF_OPTS = \
--	-DCMAKE_BUILD_TYPE=Release \
- 	-DBUILD_EXAMPLES=OFF \
- 	-DREPO_PATH=$(TARGET_DIR)/etc/sysrepo
+diff --git a/package/x265/x265.mk b/package/x265/x265.mk
+index 872753eea8..7bc1d11e19 100644
+--- a/package/x265/x265.mk
++++ b/package/x265/x265.mk
+@@ -6,7 +6,7 @@
  
+ X265_VERSION = 3.3
+ X265_SOURCE = x265_$(X265_VERSION).tar.gz
+-X265_SITE = https://bitbucket.org/multicoreware/x265/downloads
++X265_SITE = https://bitbucket.org/multicoreware/x265_git/downloads
+ X265_LICENSE = GPL-2.0+
+ X265_LICENSE_FILES = COPYING
+ X265_CPE_ID_VENDOR = multicorewareinc
+@@ -19,7 +19,7 @@ X265_DEPENDENCIES += host-nasm
+ endif
+ 
+ # disable altivec, it has build issues
+-# https://bitbucket.org/multicoreware/x265/issues/320/
++# https://bitbucket.org/multicoreware/x265_git/issues/320/
+ ifeq ($(BR2_powerpc64)$(BR2_powerpc64le),y)
+ X265_CONF_OPTS += -DENABLE_ALTIVEC=OFF
+ endif
 -- 
 2.26.2
