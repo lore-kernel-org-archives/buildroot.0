@@ -1,53 +1,90 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 12 Feb 2021 18:34:16 +0100
-Subject: [Buildroot] [PATCH 1/1] package/postgresql: security bump version
- to 13.2
-Message-ID: <20210212173416.40398-1-bernd.kuhls@t-online.de>
+Date: Fri, 12 Feb 2021 18:39:26 +0100
+Subject: [Buildroot] [PATCH/next 1/1] package/eudev: bump version to 3.2.10
+Message-ID: <20210212173926.41684-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes:
-https://www.postgresql.org/about/news/postgresql-132-126-1111-1016-9621-and-9525-released-2165/
+Removed patch which was applied upstream:
+https://github.com/gentoo/eudev/commit/799591c57368bbe47667f5b696050247a766b117
 
-Fixes CVE-2021-3393 & CVE-2021-20229.
-
-Updated license hash due to copyright year bump:
-https://git.postgresql.org/gitweb/?p=postgresql.git;a=commitdiff;h=c09f6882d6f78bde26fcc1e1a3da11c274de596a
+Reformatted hashes.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/postgresql/postgresql.hash | 6 +++---
- package/postgresql/postgresql.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...dev-monitor.c-do-not-check-if-dev-is.patch | 33 -------------------
+ package/eudev/eudev.hash                      |  6 ++--
+ package/eudev/eudev.mk                        |  2 +-
+ 3 files changed, 4 insertions(+), 37 deletions(-)
+ delete mode 100644 package/eudev/0001-src-libudev-libudev-monitor.c-do-not-check-if-dev-is.patch
 
-diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-index ef676cccc4..7dfe194837 100644
---- a/package/postgresql/postgresql.hash
-+++ b/package/postgresql/postgresql.hash
+diff --git a/package/eudev/0001-src-libudev-libudev-monitor.c-do-not-check-if-dev-is.patch b/package/eudev/0001-src-libudev-libudev-monitor.c-do-not-check-if-dev-is.patch
+deleted file mode 100644
+index 3027ad7f17..0000000000
+--- a/package/eudev/0001-src-libudev-libudev-monitor.c-do-not-check-if-dev-is.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-From 799591c57368bbe47667f5b696050247a766b117 Mon Sep 17 00:00:00 2001
+-From: "Anthony G. Basile" <blueness@gentoo.org>
+-Date: Mon, 6 Jan 2020 11:14:47 -0500
+-Subject: [PATCH] src/libudev/libudev-monitor.c: do not check if /dev is tmpfs
+-
+-This check fails for buildroot systems where /dev is not mounted
+-as a tmpfs filesystem.  Dropping this check should be safe even
+-on regular systems.
+-
+-This solves issue #172.
+-
+-Signed-off-by: Anthony G. Basile <blueness@gentoo.org>
+-Signed-off-by: Joel Stanley <joel@jms.id.au>
+----
+- src/libudev/libudev-monitor.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/src/libudev/libudev-monitor.c b/src/libudev/libudev-monitor.c
+-index 614149c6243c..060ba733f33b 100644
+---- a/src/libudev/libudev-monitor.c
+-+++ b/src/libudev/libudev-monitor.c
+-@@ -186,7 +186,7 @@ struct udev_monitor *udev_monitor_new_from_netlink_fd(struct udev *udev, const c
+-                  * We do not set a netlink multicast group here, so the socket
+-                  * will not receive any messages.
+-                  */
+--                if (access(UDEV_ROOT_RUN "/udev/control", F_OK) < 0 || !udev_has_devtmpfs(udev)) {
+-+                if (access(UDEV_ROOT_RUN "/udev/control", F_OK) < 0) {
+-                         log_debug("the udev service seems not to be active, disable the monitor");
+-                         group = UDEV_MONITOR_NONE;
+-                 } else
+--- 
+-2.25.0
+-
+diff --git a/package/eudev/eudev.hash b/package/eudev/eudev.hash
+index e6a319ac44..fda0481351 100644
+--- a/package/eudev/eudev.hash
++++ b/package/eudev/eudev.hash
 @@ -1,5 +1,5 @@
--# From https://ftp.postgresql.org/pub/source/v13.1/postgresql-13.1.tar.bz2.sha256
--sha256  12345c83b89aa29808568977f5200d6da00f88a035517f925293355432ffe61f  postgresql-13.1.tar.bz2
-+# From https://ftp.postgresql.org/pub/source/v13.2/postgresql-13.2.tar.bz2.sha256
-+sha256  5fd7fcd08db86f5b2aed28fcfaf9ae0aca8e9428561ac547764c2a2b0f41adfc  postgresql-13.2.tar.bz2
- 
- # License file, Locally calculated
--sha256  739e5d454d81d31a482469338b7c856f1f5c6b4cdda1551cea6f0f6d18eef62c  COPYRIGHT
-+sha256  31ccadc0a70e8e0e8a35c5833567b64388dfe34987d962e1911554e271294105  COPYRIGHT
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 76d1202de0..9206c62462 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
+ # From http://dev.gentoo.org/~blueness/eudev/
+-md5 dedfb1964f6098fe9320de827957331f  eudev-3.2.9.tar.gz
++md5  60b135a189523f333cea5f71a3345c8d  eudev-3.2.10.tar.gz
+ # Locally calculated
+-sha256 89618619084a19e1451d373c43f141b469c9fd09767973d73dd268b92074d4fc  eudev-3.2.9.tar.gz
+-sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
++sha256  87bb028d470fd1b85169349b44c55d5b733733dc2d50ddf1196e026725ead034  eudev-3.2.10.tar.gz
++sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
+index d4133a5ace..5d18b388c7 100644
+--- a/package/eudev/eudev.mk
++++ b/package/eudev/eudev.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--POSTGRESQL_VERSION = 13.1
-+POSTGRESQL_VERSION = 13.2
- POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
- POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
- POSTGRESQL_LICENSE = PostgreSQL
+-EUDEV_VERSION = 3.2.9
++EUDEV_VERSION = 3.2.10
+ EUDEV_SITE = http://dev.gentoo.org/~blueness/eudev
+ EUDEV_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
+ EUDEV_LICENSE_FILES = COPYING
 -- 
 2.29.2
