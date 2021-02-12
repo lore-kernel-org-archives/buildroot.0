@@ -1,69 +1,50 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 12 Feb 2021 22:24:29 +0100
-Subject: [Buildroot] [PATCH] docs/website: mention Bootlin Buildroot
- training courses
-In-Reply-To: <20210211150502.2784827-1-thomas.petazzoni@bootlin.com>
-References: <20210211150502.2784827-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20210212212429.GM1679218@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 12 Feb 2021 22:37:27 +0100
+Subject: [Buildroot] [PATCH-NEXT 2/4] package/linux-firmware.mk: get rid
+ of temporary tarball for file installation
+In-Reply-To: <20210212203939.GK1679218@scaer> (Yann E. MORIN's message of
+ "Fri, 12 Feb 2021 21:39:39 +0100")
+References: <20210212184049.13202-1-peter@korsgaard.com>
+ <20210212184049.13202-3-peter@korsgaard.com>
+ <20210212203939.GK1679218@scaer>
+Message-ID: <87blcpezmw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-On 2021-02-11 16:05 +0100, Thomas Petazzoni spake thusly:
-> Our documentation page already mentions the open-source and freely
-> available training materials from Bootlin on Buildroot.
-> 
-> It turns out that we now have online training courses accessible to
-> public registration, which makes them accessible to a wider
-> audience. It probably makes sense to mention them alongside the
-> training materials.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > Peter, All,
+ > On 2021-02-12 19:40 +0100, Peter Korsgaard spake thusly:
+ >> With the upcoming addition of the images-install step,
+ >> LINUX_FIRMWARE_INSTALl_FILES is called twice, for installing to the target
+ >> and to the images directory - Which may race with each other and cause
+ >> problems with the temporary install.tar tarball.
+ >> 
+ >> There is no specific reason to use a temporary file, we can just as well
+ >> pipe the two tar invocations together, so do that instead.
 
-Applied to master, thanks.
+ > Actually, there *is* a reason why an intermediate tarball is used, see
+ > commit 21a283ffb0d (linux-firmware: fail build for missing file).
 
-Regards,
-Yann E. MORIN.
+ > The idea is that, when we bump the version a firmware file may get
+ > removed, and we may not notice right when updating (because of the 
+ > many sub-options), and that file is still isted.
 
-> ---
->  docs/website/docs.html | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
-> 
-> diff --git a/docs/website/docs.html b/docs/website/docs.html
-> index 9ef202ff9d..c619c16fa6 100644
-> --- a/docs/website/docs.html
-> +++ b/docs/website/docs.html
-> @@ -106,6 +106,18 @@
->  	      </ul>
->  	    </div>
->  	  </div>
-> +
-> +	  <div class="panel panel-default">
-> +	    <div class="panel-heading">Public training course</div>
-> +	    <div class="panel-body">
-> +	      The next online public training course on Buildroot
-> +	      organized
-> +	      by <a href="https://www.bootlin.com">Bootlin</a> will
-> +	      take place on March 8-11, 2021, with Thomas Petazzoni as
-> +	      trainer. <a href="https://bootlin.com/training/buildroot/">Infos</a>
-> +	      and <a href="https://www.eventbrite.fr/e/bootlin-embedded-linux-development-with-buildroot-training-seminar-tickets-108855638144">registration</a>.
-> +	    </div>
-> +	  </div>
->  	</div>
->        </div>
->      </div>
-> -- 
-> 2.29.2
-> 
+ > If that is the case, then the first tar will bail out on that missing
+ > file, and stop right away, thus not including the followign files. But
+ > because it is on the LHS of a pipe, its return code is ignored.
+
+ > Then the second tar is still happy with what it gets, because it is a
+ > proper tar archive (if the last file in a tarball was extracted
+ > successfully, there is no way to know if the tarball was truncated or
+ > not).
+
+ > As a consequence, the copy is only partial, and the build does not fail.
+
+Ok, so we need to stick a set -o pipefail before?
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
