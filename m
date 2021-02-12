@@ -1,10 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri, 12 Feb 2021 14:54:45 +0100
-Subject: [Buildroot] [PATCHv2 2/7] core: enable 'NDEBUG' unless
- BR2_ENABLE_RUNTIME_DEBUG is set
+Date: Fri, 12 Feb 2021 14:54:46 +0100
+Subject: [Buildroot] [PATCHv2 3/7] package/pkg-cmake.mk: determine
+ CMAKE_BUILD_TYPE depending on BR2_ENABLE_RUNTIME_DEBUG
 In-Reply-To: <20210212135451.22786-1-patrickdepinguin@gmail.com>
 References: <20210212135451.22786-1-patrickdepinguin@gmail.com>
-Message-ID: <20210212135451.22786-3-patrickdepinguin@gmail.com>
+Message-ID: <20210212135451.22786-4-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,28 +13,84 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-A common way to disable runtime assertions is by honoring the 'NDEBUG'
-preprocessor flag. Set it when BR2_ENABLE_RUNTIME_DEBUG is disabled (the
-default case).
+The CMAKE_BUILD_TYPE is currently set as 'Debug' in case BR2_ENABLE_DEBUG is
+set, and as 'Release' in other cases. However, while the description of
+BR2_ENABLE_DEBUG is to enable debug symbols (no runtime impact), the 'Debug'
+build type in CMake can actually have runtime impact. For one, because it
+does not set -DNDEBUG like is done for 'Release', but also because packages
+may do custom things based on it.
+
+The question of which CMAKE_BUILD_TYPE Buildroot should set, be it 'Debug',
+'Release', 'RelWithDebInfo' or others, has come up several times in the
+past. See some references below:
+
+- July 2016: switch from Debug to RelWithDebInfo:
+  https://git.buildroot.org/buildroot/commit/?id=4b0120183404913f7f7788ef4f0f6b51498ef363
+
+- October 2016: switch from RelWithDebInfo back to Debug:
+  https://git.buildroot.org/buildroot/commit/?id=104bb29e0490bfb487e2e665448dd3ca07fcc2b5
+  and changes to make sure Buildroot's flags are respected:
+  https://git.buildroot.org/buildroot/commit/?id=12494ef48f893684d0800e7f6fe39a2ceaed0451
+
+- August 2017: bug #10246 - "BR2_ENABLE_DEBUG does not have the expected
+  effect for cmake packages"
+  https://bugs.busybox.net/show_bug.cgi?id=10246
+
+- August 2017: mail thread following bug #10246:
+  http://lists.busybox.net/pipermail/buildroot/2017-August/200778.html
+
+In the last mail thread, Samuel Martin confirmed that the 'Release' build
+type could be used in all cases, because Buildroot is actually making sure
+that the optimization flags are those determined by Buildroot, not the
+defaults of cmake, thanks to commit 12494ef48f.
+But Arnout Vandecappelle objected to using always 'Release', stating that
+users may actually want the extra assertions.
+
+With the introduction of BR2_ENABLE_RUNTIME_DEBUG, Buildroot can now cater
+for all cases:
+
+- use CMAKE_BUILD_TYPE=Release by default. This makes sure that there is no
+  unexpected performance degradation triggered by enabling BR2_ENABLE_DEBUG.
+
+- users can optionally enable BR2_ENABLE_RUNTIME_DEBUG if they want runtime
+  debug info like assertions, at the risk of introducing performance
+  degradation. In this case, we switch to CMAKE_BUILD_TYPE=Debug.
+
+- orthogonally to the above, BR2_ENABLE_DEBUG still determines passing the
+  '-g' flag to enable debug symbols, and BR2_OPTIMIZE_X still determines the
+  used optimization flags.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- package/Makefile.in | 3 +++
- 1 file changed, 3 insertions(+)
+ docs/manual/adding-packages-cmake.txt | 2 +-
+ package/pkg-cmake.mk                  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 51f5cbce4f..9a18c05c6f 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -145,6 +145,9 @@ endif
- ifeq ($(BR2_DEBUG_3),y)
- TARGET_DEBUGGING = -g3
- endif
-+ifeq ($(BR2_ENABLE_RUNTIME_DEBUG),)
-+TARGET_DEBUGGING += -DNDEBUG
-+endif
+diff --git a/docs/manual/adding-packages-cmake.txt b/docs/manual/adding-packages-cmake.txt
+index 73f0943024..541d7422cf 100644
+--- a/docs/manual/adding-packages-cmake.txt
++++ b/docs/manual/adding-packages-cmake.txt
+@@ -100,7 +100,7 @@ typical packages will therefore only use a few of them.
+   necessary to set them in the package's +*.mk+ file unless you want
+   to override them:
  
- TARGET_LDFLAGS = $(call qstrip,$(BR2_TARGET_LDFLAGS))
- 
+-** +CMAKE_BUILD_TYPE+ is driven by +BR2_ENABLE_DEBUG+;
++** +CMAKE_BUILD_TYPE+ is driven by +BR2_ENABLE_RUNTIME_DEBUG+;
+ ** +CMAKE_INSTALL_PREFIX+;
+ ** +BUILD_SHARED_LIBS+ is driven by +BR2_STATIC_LIBS+;
+ ** +BUILD_DOC+, +BUILD_DOCS+ are disabled;
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index c001051002..07b8091117 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -265,7 +265,7 @@ define TOOLCHAIN_CMAKE_INSTALL_FILES
+ 		-e 's#@@TARGET_FC@@#$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_FC)))#' \
+ 		-e 's#@@CMAKE_SYSTEM_PROCESSOR@@#$(call qstrip,$(CMAKE_SYSTEM_PROCESSOR))#' \
+ 		-e 's#@@TOOLCHAIN_HAS_FORTRAN@@#$(if $(BR2_TOOLCHAIN_HAS_FORTRAN),1,0)#' \
+-		-e 's#@@CMAKE_BUILD_TYPE@@#$(if $(BR2_ENABLE_DEBUG),Debug,Release)#' \
++		-e 's#@@CMAKE_BUILD_TYPE@@#$(if $(BR2_ENABLE_RUNTIME_DEBUG),Debug,Release)#' \
+ 		$(TOPDIR)/support/misc/toolchainfile.cmake.in \
+ 		> $(HOST_DIR)/share/buildroot/toolchainfile.cmake
+ 	$(Q)$(INSTALL) -D -m 0644 support/misc/Buildroot.cmake \
 -- 
 2.26.2
