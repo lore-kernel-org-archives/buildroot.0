@@ -1,115 +1,72 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Sat, 13 Feb 2021 08:27:40 +0000
-Subject: [Buildroot] [PATCH] package/dmalloc: Fix for ARC with enabled
- BR2_SSP_ALL
-In-Reply-To: <CAPi7W82a7VoXvCjiy_A=i69XzBV+SV1-Ca5PigWgtKneWb6-Dg@mail.gmail.com>
-References: <20210209104726.20132-1-kremneva@synopsys.com>
- <20210210214514.GF1679218@scaer>,
- <CAPi7W82a7VoXvCjiy_A=i69XzBV+SV1-Ca5PigWgtKneWb6-Dg@mail.gmail.com>
-Message-ID: <BN8PR12MB333092855272691D7C9F776FA18A9@BN8PR12MB3330.namprd12.prod.outlook.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 13 Feb 2021 09:35:38 +0100
+Subject: [Buildroot] [PATCH-NEXT 2/4] package/linux-firmware.mk: get rid
+ of temporary tarball for file installation
+In-Reply-To: <20210212210725.GL1679218@scaer>
+References: <20210212184049.13202-1-peter@korsgaard.com>
+ <20210212184049.13202-3-peter@korsgaard.com>
+ <20210212203939.GK1679218@scaer> <20210212210725.GL1679218@scaer>
+Message-ID: <20210213083538.GN1679218@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, Fabrice, Veronika, all,
+Peter, All,
 
-> >
-> > Veronika, All,
-> >
-> > +Fabrice, see below...
-> >
-> > On 2021-02-09 13:47 +0300, Veronika Kremneva spake thusly:
-> > > When building dmalloc for ARC while having "-fstack-protector-all" option on,
-> > > we are getting the following error:
-> > > ------------------------------->8---------------------------
-> > > >>> dmalloc 5.5.2 Installing to target
-> > > cp -dpf $HOME/buildroot/output/host/arc-buildroot-linux-gnu/sysroot/usr/lib/libdmalloc*.so
-> > > $HOME/buildroot/output/target/usr/lib
-> > > cp -dpf $HOME/buildroot/output/host/arc-buildroot-linux-gnu/sysroot/usr/bin/dmalloc
-> > > $HOME/buildroot/output/target/usr/bin/dmalloc
-> > > ERROR: architecture for "/usr/lib/libdmallocthcxx.so" is "ARCompact", should be "ARCv2"
-> > > ERROR: architecture for "/usr/lib/libdmallocth.so" is "ARCompact", should be "ARCv2"
-> > > ERROR: architecture for "/usr/lib/libdmalloc.so" is "ARCompact", should be "ARCv2"
-> > > ERROR: architecture for "/usr/lib/libdmallocxx.so" is "ARCompact", should be "ARCv2"
-> > > make: *** [$HOME/buildroot/output/build/dmalloc-5.5.2/.stamp_installed] Error 1
-> > > ------------------------------->8---------------------------
-> > >
-> > > You can observe this error in following builds:
-> > > https://urldefense.com/v3/__http://autobuild.buildroot.net/results/57f/57fc51cee4ec9339ea3be23f8c8c9f7ecca1a857/__;!!A4F2R9G_pg!PHGtF8S30pSJyoPZQMVqH0kXGTbKzHEJjoQjJBl0QfYZsIsvjySA8l4aebUi2jb0DCT50oA$
-> > > https://urldefense.com/v3/__http://autobuild.buildroot.net/results/b4d/b4d457369f35e1942c294b0ea3b3cab4cae0d7a3/__;!!A4F2R9G_pg!PHGtF8S30pSJyoPZQMVqH0kXGTbKzHEJjoQjJBl0QfYZsIsvjySA8l4aebUi2jb0TIQeXfo$
-> > > https://urldefense.com/v3/__http://autobuild.buildroot.net/results/cfc/cfc111076c955dd5c1125c6e34a161121ea11200/__;!!A4F2R9G_pg!PHGtF8S30pSJyoPZQMVqH0kXGTbKzHEJjoQjJBl0QfYZsIsvjySA8l4aebUi2jb0Zou_QLI$
-> > > https://urldefense.com/v3/__http://autobuild.buildroot.net/results/1d0/1d0ffcefbf545d1748e928603fd07c0a8de98eb5/__;!!A4F2R9G_pg!PHGtF8S30pSJyoPZQMVqH0kXGTbKzHEJjoQjJBl0QfYZsIsvjySA8l4aebUi2jb0sWpt_q8$
-> > >
-> > > In all of those builds architecture "ARCv2" was explicitly chosen during configuration
-> > > yet we are getting this error. As we go deeper we find that the object file that linker
-> > > is trying to process contains no target code thus the default "ARCompact" is being used.
-> > > But why the object file is empty? Went to check link args:
-> > > ------------------------------->8---------------------------
-> > > $HOME/buildroot/output/host/bin/arc-buildroot-linux-gnu-ld: conftest.a(conftest.o):
-> > > relocation R_ARC_32_ME against `__stack_chk_guard' can not be used when making a shared
-> > > object; recompile with -fPIC
-> > > $HOME/buildrootc/output/host/bin/arc-buildroot-linux-gnu-ld: BFD (GNU Binutils) 2.34.50.20200611
-> > > assertion fail elf32-arc.c:1802
-> > > $HOME/buildroot/output/host/bin/arc-buildroot-linux-gnu-ld: unrecognized option '-all'
-> > > $HOME/buildroot/output/host/bin/arc-buildroot-linux-gnu-ld: use the --help option for usage information
-> > > configure:4475: result: $HOME/buildroot/output/host/bin/arc-buildroot-linux-gnu-ld -G -o $@.t
-> > > ------------------------------->8---------------------------
-> > >
-> > > Looks like we are missing the -fPIC flag in DMALLOC_CFLAGS. As shared libraries should always
-> > > be compiled with "-fPIC" following patch adds this flag to the dmalloc.mk.
-> >
-> > While reviewing that patch, I see that Fabrice already sent a similar
-> > patch quite some time ago now:
-> >
-> >     https://urldefense.com/v3/__https://patchwork.ozlabs.org/project/buildroot/patch/20200601092104.830051-1-fontaine.fabrice at gmail.com/__;!!A4F2R9G_pg!PHGtF8S30pSJyoPZQMVqH0kXGTbKzHEJjoQjJBl0QfYZsIsvjySA8l4aebUi2jb0HTmC8VI$
-> >
-> > > Signed-off-by: Veronika Kremneva <kremneva@synopsys.com>
+On 2021-02-12 22:07 +0100, Yann E. MORIN spake thusly:
+> On 2021-02-12 21:39 +0100, Yann E. MORIN spake thusly:
+> > On 2021-02-12 19:40 +0100, Peter Korsgaard spake thusly:
+> > > There is no specific reason to use a temporary file, we can just as well
+> > > pipe the two tar invocations together, so do that instead.
+> > Actually, there *is* a reason why an intermediate tarball is used, see
+> > commit 21a283ffb0d (linux-firmware: fail build for missing file).
+> 
+> Of course, I missed providing a suggestion, so here it is, see below...
+> 
+> [--SNIP--]
+> > > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 > > > ---
-> > >  package/dmalloc/dmalloc.mk | 4 ++++
-> > >  1 file changed, 4 insertions(+)
-> > >
-> > > diff --git a/package/dmalloc/dmalloc.mk b/package/dmalloc/dmalloc.mk
-> > > index 38b2c02027..638fe0fcda 100644
-> > > --- a/package/dmalloc/dmalloc.mk
-> > > +++ b/package/dmalloc/dmalloc.mk
-> > > @@ -16,6 +16,10 @@ DMALLOC_INSTALL_STAGING = YES
-> > >  DMALLOC_CONF_OPTS = --enable-shlib
-> > >  DMALLOC_CFLAGS = $(TARGET_CFLAGS)
-> > >
-> > > +ifeq ($(BR2_STATIC_LIBS),)
-> > > +DMALLOC_CFLAGS += -fPIC
-> >
-> > So, it seems that both of you arrived to a similar conclusion, with a
-> > similar analysis.
-> >
-> > I think the change from Fabrice would in the end be better, if it at
-> > least because it drops a bundled patch.
-> >
-> > Except for that, I wonder if we care about not adding -fPIC for static
-> > libs. Indeed, the current patch unconditionally adds -fPIC to all
-> > builds, shared and static alike...
-> >
-> > Besides, -fPIC is almost innocuous for static builds (maybe a very
-> > slight overhead to resolve or jump to some symbols)...
-> >
-> > What's your thoughts, both Veronika and Fabrice?
-> It seems that we're not always consistent with -fPIC handling:
->  - most of the packages only set -fPIC if BR2_STATIC_LIBS is not set
->  - but some packages (e.g. argp-standalone, ficl, jimtcl, lbase64 ...)
-> set it unconditionally
-> So I have no strong opinion on both options.
+> > >  package/linux-firmware/linux-firmware.mk | 4 ++--
+> > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+> > > index 3420266335..b6549ad371 100644
+> > > --- a/package/linux-firmware/linux-firmware.mk
+> > > +++ b/package/linux-firmware/linux-firmware.mk
+> > > @@ -641,8 +641,8 @@ endif
+> > >  ifneq ($(LINUX_FIRMWARE_FILES),)
+> > >  define LINUX_FIRMWARE_INSTALL_FILES
+> > >  	cd $(@D) && \
+> > > -		$(TAR) cf install.tar $(sort $(LINUX_FIRMWARE_FILES)) && \
+> > > -		$(TAR) xf install.tar -C $(1)
+> > > +		$(TAR) c $(sort $(LINUX_FIRMWARE_FILES)) | \
+> > > +		$(TAR) x -C $(1)
+> 
+> First, I think we should merge INSTALL_FILES and INSTALL_DIRS together
+> in a single command; there is no reason why we could not put directories
+> in a tarball...
+> 
+> Seconf, we should =create the archive once in _BUILD_CMDS. Then we can
+> extract it in _INSTALL_TARGET_CMDS and _INSTALL_IMAGES_CMDS.
 
-Since I'm not a compiler person I don't have any strong opinion here,
-except maybe for some common sense idea of not using option typically used
-for shared libs (-fPIC) for statically linked stuff.
+I whipped up something quick during my morning coffee:
 
-Thus it would be good to hear our GCC expert how appropriate and/or safe
-is could be to compile object files with "-fPIC" if we're going to build
-a statically-linked application?
+https://git.buildroot.org/~ymorin/git/buildroot/commit/?h=yem/linux-fw-rework&id=8dd299681fdf80c284680833175387ac6a428a11
 
-Claudiu, could you please chime in and share your thoughts in general and
-if applied to ARC in particular.
+Lightly tested by enabling a random set of firmwares, and comparing the
+lists of installed files before/after are identical. Then tested by
+enabling all firmwares. No delta in either case: it installed the same
+set of files, and there was no missing/extra ones.
 
--Alexey
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
