@@ -1,24 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 13 Feb 2021 16:35:04 +0100
-Subject: [Buildroot] [PATCH 1/1] package/axel: set AXEL_CPE_ID_VALID
-In-Reply-To: <20210212200659.2394910-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 12 Feb 2021 21:06:59 +0100")
-References: <20210212200659.2394910-1-fontaine.fabrice@gmail.com>
-Message-ID: <87k0rcc76f.fsf@dell.be.48ers.dk>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sat, 13 Feb 2021 16:44:22 +0100
+Subject: [Buildroot] Buildroot Touchscreen goes to coordinates 0 0
+In-Reply-To: <1612900064366-0.post@n4.nabble.com>
+References: <CAONQdNmac47XOqi2kec20PbdohXW4jYov-sM3hDvDTsKZZmXTw@mail.gmail.com>
+ <20210121222226.279be2e9@gmx.net>
+ <1612900064366-0.post@n4.nabble.com>
+Message-ID: <20210213164423.5ca7bbba@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+Hello Sebasti?n,
 
- > cpe:2.3:a:axel_project:axel is a valid CPE identifier for this package:
- >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aaxel_project%3Aaxel
+On Tue, 9 Feb 2021 13:47:44 -0600 (CST), Sebasti?n Conti <sebaconti1911@gmail.com> wrote:
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> I was wrong, I tried libinput and it worked,
+> 
+> thanks
 
-Committed, thanks.
+Thanks for the feedback...., seems the extra libinput layer/handling
+is doing the right thing...
 
--- 
-Bye, Peter Korsgaard
+Regards,
+Peter
+
+> 
+> 
+> 
+> --
+> Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
