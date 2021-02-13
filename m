@@ -1,46 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 14 Feb 2021 00:08:57 +0100
-Subject: [Buildroot] PATCH package/gettext-tiny install file
- host-cpu-c-abi.m4, needed by gettextsize
-In-Reply-To: <CABJxTWFQKOGik+G-nOExfdVm_9+Y0GCcn1Amca0WHOhZrqArBg@mail.gmail.com>
-References: <CABJxTWFQKOGik+G-nOExfdVm_9+Y0GCcn1Amca0WHOhZrqArBg@mail.gmail.com>
-Message-ID: <20210214000857.627712fd@windsurf.home>
+Date: Sun, 14 Feb 2021 00:16:00 +0100
+Subject: [Buildroot] [git commit] package/mpd: fix build of GenParseName
+Message-ID: <20210213225448.62611818A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Kiril,
+commit: https://git.buildroot.net/buildroot/commit/?id=9783c04aaf5e4fc94099772f1dc699a974ee6538
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 10 Feb 2021 19:18:26 +0100
-Kiril Maler <kiril.maler@gmail.com> wrote:
+Fix build of GenParseName which has been added in version 0.22:
+https://github.com/MusicPlayerDaemon/MPD/commit/fa45a8adfa44f6bc815ae7428770112c15c76d73
 
-> gettext-gnu tool 'gettextsize' included in gettext-tiny, searches
-> for file host-cpu-c-abi.m4, as shown in gettext-gnu ChangeLog
-> 
-> But gettext-tiny will install only files found in its m4 dir
-> A workaround: add a link to gettext-gnu file, so it is installed
+Fixes:
+ - http://autobuild.buildroot.org/results/871e1362c44e5b68a149e6a5dd3caf99ea0d904a
 
-Here as well, thanks for this patch. Could you send it with your
-Signed-off-by-line in the commit log, and with git send-email so that
-it doesn't get line wrapped by your e-mail client ?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...-tag-meson.build-fix-GenParseName-linking.patch | 38 ++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
 
-> + # In gettext-gnu ChangeLog:
-> + # 2018-11-11  Bruno Haible  <bruno@clisp.org>
-> + # gettextize: Install also host-cpu-c-abi.m4 (needed since 2018-03-24)
-> + [ -e $(@D)/m4/host-cpu-c-abi.m4 ] || ln -fs
-> ../gettext-gnu/gettext-tools/gnulib-m4/host-cpu-c-abi.m4 $(@D)/m4
-
-I think we'd prefer to use the existing
-GETTEXT_TINY_EXTRA_GETTEXT_FILES logic, which is precisely there to
-borrow some files from gettext-gnu when building/installing
-gettext-tiny. Could you look into this ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/mpd/0002-src-tag-meson.build-fix-GenParseName-linking.patch b/package/mpd/0002-src-tag-meson.build-fix-GenParseName-linking.patch
+new file mode 100644
+index 0000000000..e120b3e4ea
+--- /dev/null
++++ b/package/mpd/0002-src-tag-meson.build-fix-GenParseName-linking.patch
+@@ -0,0 +1,38 @@
++From 4c37d0b316a15213381bd7e07c5dee7526471fc8 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 1 Feb 2021 08:10:45 +0100
++Subject: [PATCH] src/tag/meson.build: fix GenParseName linking
++
++Set link_language to cpp for GenParseName to avoid the following build
++failure due to gcc being used to link a C and C++ source file:
++
++FAILED: src/tag/GenParseName
++/usr/bin/gcc  -o src/tag/GenParseName src/tag/GenParseName.p/GenParseName.cxx.o src/tag/GenParseName.p/Names.c.o -Wl,--as-needed -Wl,--no-undefined -Wl,-O1
++/usr/bin/ld: src/tag/GenParseName.p/GenParseName.cxx.o: in function `std::_Rb_tree<std::basic_string_view<char, std::char_traits<char> >, std::pair<std::basic_string_view<char, std::char_traits<char> > const, TagType>, std::_Select1st<std::pair<std::basic_string_view<char, std::char_traits<char> > const, TagType> >, std::less<std::basic_string_view<char, std::char_traits<char> > >, std::allocator<std::pair<std::basic_string_view<char, std::char_traits<char> > const, TagType> > >::_M_erase(std::_Rb_tree_node<std::pair<std::basic_string_view<char, std::char_traits<char> > const, TagType> >*)':
++GenParseName.cxx:
++(.text._ZNSt8_Rb_treeISt17basic_string_viewIcSt11char_traitsIcEESt4pairIKS3_7TagTypeESt10_Select1stIS7_ESt4lessIS3_ESaIS7_EE8_M_eraseEPSt13_Rb_tree_nodeIS7_E[_ZNSt8_Rb_treeISt17basic_string_viewIcSt11char_traitsIcEESt4pairIKS3_7TagTypeESt10_Select1stIS7_ESt4lessIS3_ESaIS7_EE8_M_eraseEPSt13_Rb_tree_nodeIS7_E]+0x23): undefined reference to `operator delete(void*)'
++
++Fixes:
++ - http://autobuild.buildroot.org/results/871e1362c44e5b68a149e6a5dd3caf99ea0d904a
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/MusicPlayerDaemon/MPD/pull/1068]
++---
++ src/tag/meson.build | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/tag/meson.build b/src/tag/meson.build
++index 064eada18..4fda35e52 100644
++--- a/src/tag/meson.build
+++++ b/src/tag/meson.build
++@@ -2,6 +2,7 @@ generate_parse_name = executable(
++   'GenParseName',
++   'GenParseName.cxx',
++   'Names.c',
+++  link_language: 'cpp',
++   native: true,
++ )
++ 
++-- 
++2.29.2
++
