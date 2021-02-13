@@ -1,134 +1,69 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 13 Feb 2021 13:41:44 +0100
-Subject: [Buildroot] [git commit branch/next] package/wpa_supplicant: Add
- options to disable more features.
-Message-ID: <20210213122129.E7402815C1@busybox.osuosl.org>
+Date: Sat, 13 Feb 2021 13:42:00 +0100
+Subject: [Buildroot] [git commit branch/next] package/wpa_supplicant:
+ Simplify D-Bus support.
+Message-ID: <20210213122130.1354883799@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1f24dcf4801dd5a345978b26dabdf103970cbf17
+commit: https://git.buildroot.net/buildroot/commit/?id=f3dcb2012522505b1dba0f39da6987b8882252d9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Together, they increase the size of the binary by a bit less than a
-megabyte.
-
-As a result, make the wpa_supplicant option a menuconfig.
+wpa_supplicant 2.8 dropped support for the old D-Bus interface, so
+remove mentions of it and rename DBUS_NEW variables to just DBUS.
 
 Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/wpa_supplicant/Config.in         | 35 +++++++++++++++++++++++++++++++-
- package/wpa_supplicant/wpa_supplicant.mk | 19 +++++++++++++++++
- 2 files changed, 53 insertions(+), 1 deletion(-)
+ package/wpa_supplicant/Config.in         | 2 +-
+ package/wpa_supplicant/wpa_supplicant.mk | 8 +++-----
+ 2 files changed, 4 insertions(+), 6 deletions(-)
 
 diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
-index 8057c0b7be..9553dcf7df 100644
+index 9553dcf7df..3c986ff4ba 100644
 --- a/package/wpa_supplicant/Config.in
 +++ b/package/wpa_supplicant/Config.in
-@@ -1,4 +1,4 @@
--config BR2_PACKAGE_WPA_SUPPLICANT
-+menuconfig BR2_PACKAGE_WPA_SUPPLICANT
- 	bool "wpa_supplicant"
- 	depends on BR2_USE_MMU # fork()
+@@ -154,6 +154,6 @@ config BR2_PACKAGE_WPA_SUPPLICANT_DBUS_INTROSPECTION
+ 	bool "Introspection support"
+ 	depends on BR2_PACKAGE_WPA_SUPPLICANT_DBUS
  	help
-@@ -29,6 +29,33 @@ config BR2_PACKAGE_WPA_SUPPLICANT_NL80211
- comment "nl80211 support needs a toolchain w/ threads"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
+-	  Add introspection support for new DBus control interface.
++	  Add introspection support for the DBus control interface.
  
-+config BR2_PACKAGE_WPA_SUPPLICANT_WEXT
-+	bool "Enable wext (deprecated)"
-+	default y if !BR2_TOOLCHAIN_HAS_THREADS
-+	help
-+	  Enable support for wext.  This is the historic wireless API
-+	  for Linux, which is now deprecated and in maintenance-only in
-+	  the kernel.  It may still be required by out-of-tree drivers.
-+
-+config BR2_PACKAGE_WPA_SUPPLICANT_WIRED
-+	bool "Enable wired support"
-+	select BR2_PACKAGE_WPA_SUPPLICANT_EAP
-+	help
-+	  Include the "wired" driver, so the internal IEEE 802.1x
-+	  supplicant can be used with Ethernet.  This also enables
-+	  support for MACSEC.
-+
-+comment "wpa_supplicant will be useless without at least one driver"
-+	depends on !BR2_PACKAGE_WPA_SUPPLICANT_NL80211 && \
-+		!BR2_PACKAGE_WPA_SUPPLICANT_WEXT && \
-+		!BR2_PACKAGE_WPA_SUPPLICANT_WIRED
-+
-+config BR2_PACKAGE_WPA_SUPPLICANT_IBSS_RSN
-+	bool "Enable IBSS RSN"
-+	depends on BR2_PACKAGE_WPA_SUPPLICANT_NL80211
-+	help
-+	  Enable support for RSN/WPA2 in Ad-Hoc mode.
-+
- config BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT
- 	bool "Enable AP mode"
- 	depends on BR2_PACKAGE_WPA_SUPPLICANT_NL80211
-@@ -90,6 +117,7 @@ config BR2_PACKAGE_WPA_SUPPLICANT_WPA3
- 
- config BR2_PACKAGE_WPA_SUPPLICANT_CLI
- 	bool "Install wpa_cli binary"
-+	select BR2_PACKAGE_WPA_SUPPLICANT_CTRL_IFACE
- 	help
- 	  Install wpa_cli command line utility
- 
-@@ -107,6 +135,11 @@ config BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE
- 	help
- 	  Install wpa_passphrase command line utility.
- 
-+config BR2_PACKAGE_WPA_SUPPLICANT_CTRL_IFACE
-+	bool "Enable the Unix-socket control interface"
-+	help
-+	  Enable support for the Unix-socket-based API.
-+
- config BR2_PACKAGE_WPA_SUPPLICANT_DBUS
- 	bool "Enable support for the DBus control interface"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
+ endif
 diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-index 295f368d78..f4ed74abc3 100644
+index f4ed74abc3..b7bdc4e0af 100644
 --- a/package/wpa_supplicant/wpa_supplicant.mk
 +++ b/package/wpa_supplicant/wpa_supplicant.mk
-@@ -47,6 +47,14 @@ else
- WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_DRIVER_NL80211
- endif
+@@ -13,8 +13,7 @@ WPA_SUPPLICANT_LICENSE_FILES = README
+ WPA_SUPPLICANT_CPE_ID_VENDOR = w1.fi
+ WPA_SUPPLICANT_CONFIG = $(WPA_SUPPLICANT_DIR)/wpa_supplicant/.config
+ WPA_SUPPLICANT_SUBDIR = wpa_supplicant
+-WPA_SUPPLICANT_DBUS_OLD_SERVICE = fi.epitest.hostap.WPASupplicant
+-WPA_SUPPLICANT_DBUS_NEW_SERVICE = fi.w1.wpa_supplicant1
++WPA_SUPPLICANT_DBUS_SERVICE = fi.w1.wpa_supplicant1
+ WPA_SUPPLICANT_CFLAGS = $(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/libnl3/
+ WPA_SUPPLICANT_LDFLAGS = $(TARGET_LDFLAGS)
+ WPA_SUPPLICANT_SELINUX_MODULES = networkmanager
+@@ -146,8 +145,8 @@ WPA_SUPPLICANT_MAKE_ENV = \
+ WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_CTRL_IFACE_DBUS_NEW
+ define WPA_SUPPLICANT_INSTALL_DBUS_NEW
+ 	$(INSTALL) -m 0644 -D \
+-		$(@D)/wpa_supplicant/dbus/$(WPA_SUPPLICANT_DBUS_NEW_SERVICE).service \
+-		$(TARGET_DIR)/usr/share/dbus-1/system-services/$(WPA_SUPPLICANT_DBUS_NEW_SERVICE).service
++		$(@D)/wpa_supplicant/dbus/$(WPA_SUPPLICANT_DBUS_SERVICE).service \
++		$(TARGET_DIR)/usr/share/dbus-1/system-services/$(WPA_SUPPLICANT_DBUS_SERVICE).service
+ endef
  
-+ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_WEXT),)
-+WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_DRIVER_WEXT
-+endif
-+
-+ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_IBSS_RSN), )
-+WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_IBSS_RSN
-+endif
-+
- # Trailing underscore on purpose to not enable CONFIG_EAPOL_TEST
- ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_EAP),y)
- WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_EAP_
-@@ -61,6 +69,13 @@ WPA_SUPPLICANT_CONFIG_DISABLE += \
- 	CONFIG_FILS
+ ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DBUS_INTROSPECTION),y)
+@@ -220,7 +219,6 @@ define WPA_SUPPLICANT_INSTALL_DBUS
+ 	$(INSTALL) -m 0644 -D \
+ 		$(@D)/wpa_supplicant/dbus/dbus-wpa_supplicant.conf \
+ 		$(TARGET_DIR)/etc/dbus-1/system.d/wpa_supplicant.conf
+-	$(WPA_SUPPLICANT_INSTALL_DBUS_OLD)
+ 	$(WPA_SUPPLICANT_INSTALL_DBUS_NEW)
+ endef
  endif
- 
-+ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_WIRED),)
-+WPA_SUPPLICANT_CONFIG_DISABLE += \
-+	CONFIG_DRIVER_WIRED \
-+	CONFIG_MACSEC \
-+	CONFIG_DRIVER_MACSEC
-+endif
-+
- ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_HOTSPOT),)
- WPA_SUPPLICANT_CONFIG_DISABLE += \
- 	CONFIG_HS20 \
-@@ -119,6 +134,10 @@ WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_EAP_PWD CONFIG_EAP_TEAP
- WPA_SUPPLICANT_CONFIG_EDITS += 's/\#\(CONFIG_TLS=\).*/\1internal/'
- endif
- 
-+ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_CTRL_IFACE),)
-+WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_CTRL_IFACE
-+endif
-+
- ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DBUS),y)
- WPA_SUPPLICANT_DEPENDENCIES += host-pkgconf dbus
- WPA_SUPPLICANT_MAKE_ENV = \
