@@ -1,14 +1,14 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 13 Feb 2021 10:46:16 +0100
+Date: Sat, 13 Feb 2021 10:47:01 +0100
 Subject: [Buildroot] [PATCH-NEXT 2/4] package/linux-firmware.mk: get rid
  of temporary tarball for file installation
-In-Reply-To: <20210213083538.GN1679218@scaer> (Yann E. MORIN's message of
- "Sat, 13 Feb 2021 09:35:38 +0100")
+In-Reply-To: <20210213083705.GO1679218@scaer> (Yann E. MORIN's message of
+ "Sat, 13 Feb 2021 09:37:05 +0100")
 References: <20210212184049.13202-1-peter@korsgaard.com>
  <20210212184049.13202-3-peter@korsgaard.com>
- <20210212203939.GK1679218@scaer> <20210212210725.GL1679218@scaer>
- <20210213083538.GN1679218@scaer>
-Message-ID: <87a6s8e1w7.fsf@dell.be.48ers.dk>
+ <20210212203939.GK1679218@scaer> <87blcpezmw.fsf@dell.be.48ers.dk>
+ <20210213083705.GO1679218@scaer>
+Message-ID: <875z2we1uy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,20 +17,24 @@ To: buildroot@busybox.net
 
 >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Hi,
+ > Peter, All,
+ > On 2021-02-12 22:37 +0100, Peter Korsgaard spake thusly:
+ >> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+ >> > Peter, All,
+ >> > On 2021-02-12 19:40 +0100, Peter Korsgaard spake thusly:
+ >> >> There is no specific reason to use a temporary file, we can just as well
+ >> >> pipe the two tar invocations together, so do that instead.
+ >> > Actually, there *is* a reason why an intermediate tarball is used, see
+ >> > commit 21a283ffb0d (linux-firmware: fail build for missing file).
+ >> Ok, so we need to stick a set -o pipefail before?
 
- > I whipped up something quick during my morning coffee:
+ > That wqe'd have to use set -o pipefail is ugly ;-)
 
- > https://git.buildroot.org/~ymorin/git/buildroot/commit/?h=yem/linux-fw-rework&id=8dd299681fdf80c284680833175387ac6a428a11
+ > I prefer if we could cleanup the install sequence, as I suggested and
+ > proposed in another reply.
 
- > Lightly tested by enabling a random set of firmwares, and comparing the
- > lists of installed files before/after are identical. Then tested by
- > enabling all firmwares. No delta in either case: it installed the same
- > set of files, and there was no missing/extra ones.
-
-Ok, that looks good. I see that you dropped the installation macros, so
-how do you suggest to handle the installation to $BINARIES_DIR? Copy the
-entire installation logic?
+Well, having our temporary tarball in the build directory is also kind
+of ugly, but ok - Fine by me.
 
 -- 
 Bye, Peter Korsgaard
