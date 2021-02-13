@@ -1,50 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 13 Feb 2021 22:51:14 +0100
-Subject: [Buildroot] [git commit] package/libgeos: fix build failure due to
+Date: Sat, 13 Feb 2021 22:51:55 +0100
+Subject: [Buildroot] [PATCH] package/libgeos: fix build failure due to
  Gcc Bug 68485
-Message-ID: <20210213213003.BECC084184@busybox.osuosl.org>
+In-Reply-To: <20210212224238.1938197-1-giulio.benetti@benettiengineering.com>
+References: <20210212224238.1938197-1-giulio.benetti@benettiengineering.com>
+Message-ID: <20210213225155.6b83e879@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=847b441b1ca2230c4f26a49aaede69eca5e7e7ad
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Giulio,
 
-Package libgeos manifests Microblaze Gcc Bug 68485 resulting in a build
-failure due to an Internal Compiler Error.
+On Fri, 12 Feb 2021 23:42:38 +0100
+Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
 
-As done for other packages in Buildroot work around this Gcc Bug by
-setting optimization to -O0 if BR2_TOOLCHAIN_HAS_GCC_BUG_68485=y.
+> Package libgeos manifests Microblaze Gcc Bug 68485 resulting in a build
+> failure due to an Internal Compiler Error.
+> 
+> As done for other packages in Buildroot work around this Gcc Bug by
+> setting optimization to -O0 if BR2_TOOLCHAIN_HAS_GCC_BUG_68485=y.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/0da/0daa6b259aea5381fad86d01e6dd026b1c8ad073/
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> ---
+>  package/libgeos/libgeos.mk | 8 ++++++++
+>  1 file changed, 8 insertions(+)
 
-Fixes:
-http://autobuild.buildroot.net/results/0da/0daa6b259aea5381fad86d01e6dd026b1c8ad073/
+Applied to master, thanks. Could you check if this bug still exists
+with gcc 10.x, and if it does, ping on the gcc bug report ?
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libgeos/libgeos.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Thanks a lot!
 
-diff --git a/package/libgeos/libgeos.mk b/package/libgeos/libgeos.mk
-index 50c3832c01..a355732af8 100644
---- a/package/libgeos/libgeos.mk
-+++ b/package/libgeos/libgeos.mk
-@@ -13,8 +13,16 @@ LIBGEOS_INSTALL_STAGING = YES
- LIBGEOS_CONFIG_SCRIPTS = geos-config
- LIBGEOS_CONF_OPTS = -DBUILD_BENCHMARKS=OFF
- 
-+LIBGEOS_CXXFLAGS = $(TARGET_CXXCFLAGS)
-+
-+ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_68485),y)
-+LIBGEOS_CXXFLAGS += -O0
-+endif
-+
- ifeq ($(BR2_arm)$(BR2_armeb),y)
- LIBGEOS_CONF_OPTS += -DDISABLE_GEOS_INLINE=ON
- endif
- 
-+LIBGEOS_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(LIBGEOS_CXXFLAGS)"
-+
- $(eval $(cmake-package))
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
