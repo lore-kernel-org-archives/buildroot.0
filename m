@@ -1,138 +1,108 @@
-From: Alexander Dahl <post@lespocky.de>
-Date: Sat, 13 Feb 2021 16:56:27 +0100
-Subject: [Buildroot] [PATCHv2 3/7] package/pkg-cmake.mk: determine
- CMAKE_BUILD_TYPE depending on BR2_ENABLE_RUNTIME_DEBUG
-In-Reply-To: <20210212135451.22786-4-patrickdepinguin@gmail.com>
-References: <20210212135451.22786-1-patrickdepinguin@gmail.com>
- <20210212135451.22786-4-patrickdepinguin@gmail.com>
-Message-ID: <20210213155627.tzvlickemz5apzpt@falbala.internal.home.lespocky.de>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sat, 13 Feb 2021 18:05:13 +0100
+Subject: [Buildroot] [RFC] package/rpi-firmware: Allow to deploy
+ multiple firmware files
+In-Reply-To: <fa3866259e9e3e908e8c92dbaa37e1f9e10886f4.1612789783.git.stefan@agner.ch>
+References: <fa3866259e9e3e908e8c92dbaa37e1f9e10886f4.1612789783.git.stefan@agner.ch>
+Message-ID: <20210213180513.08a4d844@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hei hei,
+Hello Stefan,
 
-disclaimer: I'm no heavy buildroot user, but I have some experience
-with CMake and embedded builds for real world products built with a
-competing build system.
+On Mon,  8 Feb 2021 14:13:49 +0100, Stefan Agner <stefan@agner.ch> wrote:
 
-On Fri, Feb 12, 2021 at 02:54:46PM +0100, Thomas De Schampheleire wrote:
-> The CMAKE_BUILD_TYPE is currently set as 'Debug' in case BR2_ENABLE_DEBUG is
-> set, and as 'Release' in other cases. However, while the description of
-> BR2_ENABLE_DEBUG is to enable debug symbols (no runtime impact), the 'Debug'
-> build type in CMake can actually have runtime impact. For one, because it
-> does not set -DNDEBUG like is done for 'Release', but also because packages
-> may do custom things based on it.
-
-For that description I would consider "RelWithDebInfo" the correct
-option.
-
-> The question of which CMAKE_BUILD_TYPE Buildroot should set, be it 'Debug',
-> 'Release', 'RelWithDebInfo' or others, has come up several times in the
-> past. See some references below:
-> 
-> - July 2016: switch from Debug to RelWithDebInfo:
->   https://git.buildroot.org/buildroot/commit/?id=4b0120183404913f7f7788ef4f0f6b51498ef363
-> 
-> - October 2016: switch from RelWithDebInfo back to Debug:
->   https://git.buildroot.org/buildroot/commit/?id=104bb29e0490bfb487e2e665448dd3ca07fcc2b5
->   and changes to make sure Buildroot's flags are respected:
->   https://git.buildroot.org/buildroot/commit/?id=12494ef48f893684d0800e7f6fe39a2ceaed0451
-> 
-> - August 2017: bug #10246 - "BR2_ENABLE_DEBUG does not have the expected
->   effect for cmake packages"
->   https://bugs.busybox.net/show_bug.cgi?id=10246
-> 
-> - August 2017: mail thread following bug #10246:
->   http://lists.busybox.net/pipermail/buildroot/2017-August/200778.html
-> 
-> In the last mail thread, Samuel Martin confirmed that the 'Release' build
-> type could be used in all cases, because Buildroot is actually making sure
-> that the optimization flags are those determined by Buildroot, not the
-> defaults of cmake, thanks to commit 12494ef48f.
-> But Arnout Vandecappelle objected to using always 'Release', stating that
-> users may actually want the extra assertions.
-> 
-> With the introduction of BR2_ENABLE_RUNTIME_DEBUG, Buildroot can now cater
-> for all cases:
-> 
-> - use CMAKE_BUILD_TYPE=Release by default. This makes sure that there is no
->   unexpected performance degradation triggered by enabling BR2_ENABLE_DEBUG.
-> 
-> - users can optionally enable BR2_ENABLE_RUNTIME_DEBUG if they want runtime
->   debug info like assertions, at the risk of introducing performance
->   degradation. In this case, we switch to CMAKE_BUILD_TYPE=Debug.
-
-Why? What we want for devices in the field: no performance penalty,
-but being able to analyze core dumps or even use gdb/gdbserver (which
-is not ideal if you have optimization _and_ debug flags on at the same
-time, but better than nothing).
-
-Since you can have all the debug symbols detached (in general, don't
-know if buildroot allows this), you don't need to copy them to the
-target and we store it with our release builds and can access them
-later for debugging.
-
-> - orthogonally to the above, BR2_ENABLE_DEBUG still determines passing the
->   '-g' flag to enable debug symbols, and BR2_OPTIMIZE_X still determines the
->   used optimization flags.
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> Add a new config option to allow a specific list of firmware files to be
+> deployed. This is useful if the system needs to decide at runtime which
+> firmware to use.
+>
+> Signed-off-by: Stefan Agner <stefan@agner.ch>
 > ---
->  docs/manual/adding-packages-cmake.txt | 2 +-
->  package/pkg-cmake.mk                  | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/docs/manual/adding-packages-cmake.txt b/docs/manual/adding-packages-cmake.txt
-> index 73f0943024..541d7422cf 100644
-> --- a/docs/manual/adding-packages-cmake.txt
-> +++ b/docs/manual/adding-packages-cmake.txt
-> @@ -100,7 +100,7 @@ typical packages will therefore only use a few of them.
->    necessary to set them in the package's +*.mk+ file unless you want
->    to override them:
->  
-> -** +CMAKE_BUILD_TYPE+ is driven by +BR2_ENABLE_DEBUG+;
-> +** +CMAKE_BUILD_TYPE+ is driven by +BR2_ENABLE_RUNTIME_DEBUG+;
->  ** +CMAKE_INSTALL_PREFIX+;
->  ** +BUILD_SHARED_LIBS+ is driven by +BR2_STATIC_LIBS+;
->  ** +BUILD_DOC+, +BUILD_DOCS+ are disabled;
-> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-> index c001051002..07b8091117 100644
-> --- a/package/pkg-cmake.mk
-> +++ b/package/pkg-cmake.mk
-> @@ -265,7 +265,7 @@ define TOOLCHAIN_CMAKE_INSTALL_FILES
->  		-e 's#@@TARGET_FC@@#$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_FC)))#' \
->  		-e 's#@@CMAKE_SYSTEM_PROCESSOR@@#$(call qstrip,$(CMAKE_SYSTEM_PROCESSOR))#' \
->  		-e 's#@@TOOLCHAIN_HAS_FORTRAN@@#$(if $(BR2_TOOLCHAIN_HAS_FORTRAN),1,0)#' \
-> -		-e 's#@@CMAKE_BUILD_TYPE@@#$(if $(BR2_ENABLE_DEBUG),Debug,Release)#' \
-> +		-e 's#@@CMAKE_BUILD_TYPE@@#$(if $(BR2_ENABLE_RUNTIME_DEBUG),Debug,Release)#' \
->  		$(TOPDIR)/support/misc/toolchainfile.cmake.in \
->  		> $(HOST_DIR)/share/buildroot/toolchainfile.cmake
->  	$(Q)$(INSTALL) -D -m 0644 support/misc/Buildroot.cmake \
+> We need this in Home Assistant OS since depending on configuration users want to
+> use a different firmware. Would something like this be acceptable upstream?
+>
+>  package/rpi-firmware/Config.in       | 10 ++++++++++
+>  package/rpi-firmware/rpi-firmware.mk | 19 +++++++++++++++++--
+>  2 files changed, 27 insertions(+), 2 deletions(-)
+>
+> diff --git a/package/rpi-firmware/Config.in b/package/rpi-firmware/Config.in
+> index f5a25c5680..ce31ad46de 100644
+> --- a/package/rpi-firmware/Config.in
+> +++ b/package/rpi-firmware/Config.in
+> @@ -58,8 +58,18 @@ config BR2_PACKAGE_RPI_FIRMWARE_CD
+>  	  The cut-down firmware, for emergency situations, with only
+>  	  features required to boot a Linux kernel.
+>
+> +config BR2_PACKAGE_RPI_FIRMWARE_CUSTOM_LIST
+> +	bool "deploy firmware files from list"
+> +	help
+> +	  Deploy firmware files as listed.
+> +
+>  endchoice
+>
+> +config BR2_PACKAGE_RPI_FIRMWARE_LIST
+> +	string
+> +	default "start.elf start_x.elf start_cd.elf fixup.dat fixup_x.dat fixup_cd.dat" if BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI
+> +	default "start4.elf start4x.elf start4cd.elf fixup4.dat fixup4x.dat fixup4cd.dat" if BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4
+> +
+>  config BR2_PACKAGE_RPI_FIRMWARE_BOOT
+>  	string
+>  	default ""      if BR2_PACKAGE_RPI_FIRMWARE_DEFAULT && BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI
+> diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+> index fe7a099407..d7d432d866 100644
+> --- a/package/rpi-firmware/rpi-firmware.mk
+> +++ b/package/rpi-firmware/rpi-firmware.mk
+> @@ -48,11 +48,26 @@ define RPI_FIRMWARE_INSTALL_BOOTCODE_BIN
+>  endef
+>  endif
+>
+> +ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_CUSTOM_LIST),y)
+> +define RPI_FIRMWARE_INSTALL_FIRMWARE
+> +	$(foreach firmware,$(call qstrip,$(BR2_PACKAGE_RPI_FIRMWARE_LIST)), \
+> +		$(INSTALL) -D -m 0644 $(@D)/boot/$(firmware) $(BINARIES_DIR)/rpi-firmware/$(firmware)
+> +	)
+> +	$(INSTALL) -D -m 0644 $(@D)/boot/start$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/gaga
+> +endef
+> +else
+> +define RPI_FIRMWARE_INSTALL_FIRMWARE
+> +	$(INSTALL) -D -m 0644 $(@D)/boot/start$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/start.elf
+> +	$(INSTALL) -D -m 0644 $(@D)/boot/fixup$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).dat $(BINARIES_DIR)/rpi-firmware/fixup.dat
+> +	$(INSTALL) -D -m 0644 $(@D)/boot/start$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/gugus
+> +endef
+> +endif
+> +
+> +
+>  define RPI_FIRMWARE_INSTALL_IMAGES_CMDS
+>  	$(INSTALL) -D -m 0644 package/rpi-firmware/config.txt $(BINARIES_DIR)/rpi-firmware/config.txt
+>  	$(INSTALL) -D -m 0644 package/rpi-firmware/cmdline.txt $(BINARIES_DIR)/rpi-firmware/cmdline.txt
+> -	$(INSTALL) -D -m 0644 $(@D)/boot/start$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/start.elf
+> -	$(INSTALL) -D -m 0644 $(@D)/boot/fixup$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).dat $(BINARIES_DIR)/rpi-firmware/fixup.dat
+> +	$(RPI_FIRMWARE_INSTALL_FIRMWARE)
+>  	$(RPI_FIRMWARE_INSTALL_BOOTCODE_BIN)
+>  	$(RPI_FIRMWARE_INSTALL_DTB)
+>  	$(RPI_FIRMWARE_INSTALL_DTB_OVERLAYS)
 
-That said, I see no use anymore in using "Release" at all.
-"RelWithDebInfo" in combination with detached debug symbols works as
-well. This means, NDEBUG is set for both of those builds, so no real
-difference. (Yes of course, it might affect build time and those
-symbols take space.)
+Seems the rpi-firmware package tries to be too smart here and to workaround
+the smart logic is getting more and more complicated (and your patch is
+something orthogonal to the latest changes applied, see [1] for resulting
+commit and [2] ff. for discussion) and the package logic is to much focused
+to do the right thing for exactly one determined target platform...,
+neglecting the multi-target enabled SD card use case (or other custom
+use cases)...
 
-And for "real" debug you can turn on "Debug" with all the stuff
-masked by NDEBUG before.
+Maybe the best would be to reduce the rpi-firmware package to a selectable
+list of (verbatim) installed firmware files and an editable/customized
+config.txt (as already via the post-image.sh script) or go another step
+further and provide customized config.txt files per raspberry pi defconfig
+(as most buildroot/rpi user will need a customized version anyway e.g.
+to enable custom dtoverlays as vc4-kms-v3d-pi4) and drop the post-image.sh
+script?
 
-Greets
-Alex
+Regards,
+Peter
 
--- 
-/"\ ASCII RIBBON | ?With the first link, the chain is forged. The first
-\ / CAMPAIGN     | speech censured, the first thought forbidden, the
- X  AGAINST      | first freedom denied, chains us all irrevocably.?
-/ \ HTML MAIL    | (Jean-Luc Picard, quoting Judge Aaron Satie)
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 833 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210213/13f55777/attachment.asc>
+[1] https://git.buildroot.net/buildroot/commit/?id=1bdc0334ff6273761b2e7fda730cdcc7e1f46862
+[2] http://lists.busybox.net/pipermail/buildroot/2020-June/285566.html
