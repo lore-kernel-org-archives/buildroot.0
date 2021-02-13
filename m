@@ -1,107 +1,134 @@
-From: Gilles Talis <gilles.talis@gmail.com>
-Date: Sat, 13 Feb 2021 13:33:53 +0100
-Subject: [Buildroot] [PATCH v2] package/wlroots,
- package/cage: change mesa3d dependency to virtual libegl/libgles
-Message-ID: <20210213123353.4146-1-gilles.talis@gmail.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sat, 13 Feb 2021 13:41:44 +0100
+Subject: [Buildroot] [git commit branch/next] package/wpa_supplicant: Add
+ options to disable more features.
+Message-ID: <20210213122129.E7402815C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since commits:
-https://github.com/swaywm/wlroots/commit/c2288a7b88240e4377bfc1c67b44efb58f704a42
-https://github.com/swaywm/wlroots/commit/e18599b05e0f0cbeba11adbd489e801285470eab
+commit: https://git.buildroot.net/buildroot/commit/?id=1f24dcf4801dd5a345978b26dabdf103970cbf17
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Mesa dependency is no longer required. Wlroots is able to run on drivers
-that provide EGL and GLES2.0 support, and with specific EGL wayland extensions.
-(thus the BR2_PACKAGE_HAS_LIBEGL_WAYLAND dependency)
+Together, they increase the size of the binary by a bit less than a
+megabyte.
 
-This was verified on NXP's i.MX8MMini using imx-gpu-viv driver.
+As a result, make the wpa_supplicant option a menuconfig.
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
-Changes v1 -> v2:
- - Added BR2_PACKAGE_HAS_LIBEGL_WAYLAND dependency
- - Squashed wlroots and cage patches in one single patch
+ package/wpa_supplicant/Config.in         | 35 +++++++++++++++++++++++++++++++-
+ package/wpa_supplicant/wpa_supplicant.mk | 19 +++++++++++++++++
+ 2 files changed, 53 insertions(+), 1 deletion(-)
 
- package/cage/Config.in     | 12 +++++++-----
- package/wlroots/Config.in  | 15 +++++++--------
- package/wlroots/wlroots.mk |  3 ++-
- 3 files changed, 16 insertions(+), 14 deletions(-)
-
-diff --git a/package/cage/Config.in b/package/cage/Config.in
-index 3bef08f037..0844d6ff62 100644
---- a/package/cage/Config.in
-+++ b/package/cage/Config.in
-@@ -1,6 +1,7 @@
--comment "cage needs udev, mesa3d w/ EGL and GLES support"
--	depends on !BR2_PACKAGE_MESA3D_OPENGL_EGL || \
--		!BR2_PACKAGE_MESA3D_OPENGL_ES || \
-+comment "cage needs udev, EGL w/ Wayland backend and OpenGL ES support"
-+	depends on !BR2_PACKAGE_HAS_LIBEGL || \
-+		!BR2_PACKAGE_HAS_LIBEGL_WAYLAND || \
-+		!BR2_PACKAGE_HAS_LIBGLES || \
- 		!BR2_PACKAGE_HAS_UDEV
- 
- comment "cage needs a toolchain w/ threads, dynamic library"
-@@ -11,9 +12,10 @@ config BR2_PACKAGE_CAGE
- 	bool "cage"
- 	depends on !BR2_STATIC_LIBS # wlroots
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # wlroots
-+	depends on BR2_PACKAGE_HAS_LIBEGL # wlroots
-+	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND # wlroots
-+	depends on BR2_PACKAGE_HAS_LIBGLES # wlroots
- 	depends on BR2_PACKAGE_HAS_UDEV # wlroots
--	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL # wlroots
--	depends on BR2_PACKAGE_MESA3D_OPENGL_ES # wlroots
- 	select BR2_PACKAGE_WLROOTS
+diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
+index 8057c0b7be..9553dcf7df 100644
+--- a/package/wpa_supplicant/Config.in
++++ b/package/wpa_supplicant/Config.in
+@@ -1,4 +1,4 @@
+-config BR2_PACKAGE_WPA_SUPPLICANT
++menuconfig BR2_PACKAGE_WPA_SUPPLICANT
+ 	bool "wpa_supplicant"
+ 	depends on BR2_USE_MMU # fork()
  	help
- 	  Kiosk compositor for Wayland, which displays a single
-diff --git a/package/wlroots/Config.in b/package/wlroots/Config.in
-index 2f72fd4945..694aa79de4 100644
---- a/package/wlroots/Config.in
-+++ b/package/wlroots/Config.in
-@@ -1,6 +1,7 @@
--comment "wlroots needs udev, mesa3d w/ EGL and GLES support"
--	depends on !BR2_PACKAGE_MESA3D_OPENGL_EGL || \
--		!BR2_PACKAGE_MESA3D_OPENGL_ES || \
-+comment "wlroots needs udev, EGL w/ Wayland backend and OpenGL ES support"
-+	depends on !BR2_PACKAGE_HAS_LIBEGL || \
-+		!BR2_PACKAGE_HAS_LIBEGL_WAYLAND || \
-+		!BR2_PACKAGE_HAS_LIBGLES || \
- 		!BR2_PACKAGE_HAS_UDEV
+@@ -29,6 +29,33 @@ config BR2_PACKAGE_WPA_SUPPLICANT_NL80211
+ comment "nl80211 support needs a toolchain w/ threads"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
  
- comment "wlroots needs a toolchain w/ threads, dynamic library"
-@@ -12,11 +13,9 @@ config BR2_PACKAGE_WLROOTS
- 	depends on !BR2_STATIC_LIBS # wayland
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm, wayland
- 	depends on BR2_PACKAGE_HAS_UDEV # libinput
--	# Technically wlroots should work with any OpenGL implementation
--	# which provides EGL, GLES2, and libgbm; but in practice only
--	# Mesa ships an usable libgbm.
--	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL
--	depends on BR2_PACKAGE_MESA3D_OPENGL_ES
-+	depends on BR2_PACKAGE_HAS_LIBEGL
-+	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND
-+	depends on BR2_PACKAGE_HAS_LIBGLES
- 	select BR2_PACKAGE_LIBDRM
- 	select BR2_PACKAGE_LIBINPUT
- 	select BR2_PACKAGE_LIBXKBCOMMON
-diff --git a/package/wlroots/wlroots.mk b/package/wlroots/wlroots.mk
-index 5665d5a956..0160b1aedb 100644
---- a/package/wlroots/wlroots.mk
-+++ b/package/wlroots/wlroots.mk
-@@ -15,7 +15,8 @@ WLROOTS_DEPENDENCIES = \
- 	host-wayland \
- 	libinput \
- 	libxkbcommon \
--	mesa3d \
-+	libegl \
-+	libgles \
- 	pixman \
- 	udev \
- 	wayland \
--- 
-2.27.0
++config BR2_PACKAGE_WPA_SUPPLICANT_WEXT
++	bool "Enable wext (deprecated)"
++	default y if !BR2_TOOLCHAIN_HAS_THREADS
++	help
++	  Enable support for wext.  This is the historic wireless API
++	  for Linux, which is now deprecated and in maintenance-only in
++	  the kernel.  It may still be required by out-of-tree drivers.
++
++config BR2_PACKAGE_WPA_SUPPLICANT_WIRED
++	bool "Enable wired support"
++	select BR2_PACKAGE_WPA_SUPPLICANT_EAP
++	help
++	  Include the "wired" driver, so the internal IEEE 802.1x
++	  supplicant can be used with Ethernet.  This also enables
++	  support for MACSEC.
++
++comment "wpa_supplicant will be useless without at least one driver"
++	depends on !BR2_PACKAGE_WPA_SUPPLICANT_NL80211 && \
++		!BR2_PACKAGE_WPA_SUPPLICANT_WEXT && \
++		!BR2_PACKAGE_WPA_SUPPLICANT_WIRED
++
++config BR2_PACKAGE_WPA_SUPPLICANT_IBSS_RSN
++	bool "Enable IBSS RSN"
++	depends on BR2_PACKAGE_WPA_SUPPLICANT_NL80211
++	help
++	  Enable support for RSN/WPA2 in Ad-Hoc mode.
++
+ config BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT
+ 	bool "Enable AP mode"
+ 	depends on BR2_PACKAGE_WPA_SUPPLICANT_NL80211
+@@ -90,6 +117,7 @@ config BR2_PACKAGE_WPA_SUPPLICANT_WPA3
+ 
+ config BR2_PACKAGE_WPA_SUPPLICANT_CLI
+ 	bool "Install wpa_cli binary"
++	select BR2_PACKAGE_WPA_SUPPLICANT_CTRL_IFACE
+ 	help
+ 	  Install wpa_cli command line utility
+ 
+@@ -107,6 +135,11 @@ config BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE
+ 	help
+ 	  Install wpa_passphrase command line utility.
+ 
++config BR2_PACKAGE_WPA_SUPPLICANT_CTRL_IFACE
++	bool "Enable the Unix-socket control interface"
++	help
++	  Enable support for the Unix-socket-based API.
++
+ config BR2_PACKAGE_WPA_SUPPLICANT_DBUS
+ 	bool "Enable support for the DBus control interface"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
+diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+index 295f368d78..f4ed74abc3 100644
+--- a/package/wpa_supplicant/wpa_supplicant.mk
++++ b/package/wpa_supplicant/wpa_supplicant.mk
+@@ -47,6 +47,14 @@ else
+ WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_DRIVER_NL80211
+ endif
+ 
++ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_WEXT),)
++WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_DRIVER_WEXT
++endif
++
++ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_IBSS_RSN), )
++WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_IBSS_RSN
++endif
++
+ # Trailing underscore on purpose to not enable CONFIG_EAPOL_TEST
+ ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_EAP),y)
+ WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_EAP_
+@@ -61,6 +69,13 @@ WPA_SUPPLICANT_CONFIG_DISABLE += \
+ 	CONFIG_FILS
+ endif
+ 
++ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_WIRED),)
++WPA_SUPPLICANT_CONFIG_DISABLE += \
++	CONFIG_DRIVER_WIRED \
++	CONFIG_MACSEC \
++	CONFIG_DRIVER_MACSEC
++endif
++
+ ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_HOTSPOT),)
+ WPA_SUPPLICANT_CONFIG_DISABLE += \
+ 	CONFIG_HS20 \
+@@ -119,6 +134,10 @@ WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_EAP_PWD CONFIG_EAP_TEAP
+ WPA_SUPPLICANT_CONFIG_EDITS += 's/\#\(CONFIG_TLS=\).*/\1internal/'
+ endif
+ 
++ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_CTRL_IFACE),)
++WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_CTRL_IFACE
++endif
++
+ ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DBUS),y)
+ WPA_SUPPLICANT_DEPENDENCIES += host-pkgconf dbus
+ WPA_SUPPLICANT_MAKE_ENV = \
