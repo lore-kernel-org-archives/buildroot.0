@@ -1,51 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 13 Feb 2021 23:27:53 +0100
-Subject: [Buildroot] [git commit branch/next] package/uhttpd: bump version
- to f53a639
-Message-ID: <20210213221553.E476681358@busybox.osuosl.org>
+Date: Sat, 13 Feb 2021 23:24:23 +0100
+Subject: [Buildroot] [git commit branch/next] package/odhcp6c: bump version
+ to 53f07e9
+Message-ID: <20210213221553.C853B8417C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2854c31aceac89f8b397fd456229802e3837d3e7
+commit: https://git.buildroot.net/buildroot/commit/?id=74515d8e582bcff88ff28cb30f49aa9fe5adc2ac
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-- change download url to https
-
-- update license file hash (uhttpd.h - license unrelated source
-  code changes only)
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/uhttpd/uhttpd.hash | 4 ++--
- package/uhttpd/uhttpd.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/odhcp6c/odhcp6c.hash | 2 +-
+ package/odhcp6c/odhcp6c.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/uhttpd/uhttpd.hash b/package/uhttpd/uhttpd.hash
-index 389a0ef636..6f8b4a60f8 100644
---- a/package/uhttpd/uhttpd.hash
-+++ b/package/uhttpd/uhttpd.hash
+diff --git a/package/odhcp6c/odhcp6c.hash b/package/odhcp6c/odhcp6c.hash
+index 26ee711684..84d1fc4527 100644
+--- a/package/odhcp6c/odhcp6c.hash
++++ b/package/odhcp6c/odhcp6c.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  5b81ebf9e419c668de4181cce7b9f5fa358cabb2a4a0d1f1a3a24190eeb21f25  uhttpd-a8bf9c00842224edb394e79909053f7628ee6a82-br1.tar.gz
--sha256  2a61a8a690e7646a4bfe4261bf77c49f47588db5fc234b3cc66809dcc0cb3985  uhttpd.h
-+sha256  8a537a377c8dc1abda147a1e3feb3fe3e3633a9d30e4e37d378cc6309dace2f0  uhttpd-f53a63999784bcb7dc513e221f3f25dd3de2f35e-br1.tar.gz
-+sha256  ce1803f83f776cc88661e303fede0e5ff52faf1d9f74508fadbecf7705b4c84d  uhttpd.h
-diff --git a/package/uhttpd/uhttpd.mk b/package/uhttpd/uhttpd.mk
-index cc7649d0ec..355a266d6b 100644
---- a/package/uhttpd/uhttpd.mk
-+++ b/package/uhttpd/uhttpd.mk
-@@ -4,8 +4,8 @@
+ # Locally computed
+-sha256  c3622120b5209d1c14d5ac92884240bf0e4f652633562355e70dbf482f6c37b4  odhcp6c-f575351cbb3defc0bf52680c9082912a6c264374-br1.tar.gz
++sha256  7274a304016838483e2da48193309e5f84ca0a8a407647033283d1249eebe986  odhcp6c-53f07e90b7f1da6977143a488dd5cb73a33b233b-br1.tar.gz
+ sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING
+diff --git a/package/odhcp6c/odhcp6c.mk b/package/odhcp6c/odhcp6c.mk
+index c7f214ff7a..dd3a9d3e28 100644
+--- a/package/odhcp6c/odhcp6c.mk
++++ b/package/odhcp6c/odhcp6c.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--UHTTPD_VERSION = a8bf9c00842224edb394e79909053f7628ee6a82
--UHTTPD_SITE = http://git.openwrt.org/project/uhttpd.git
-+UHTTPD_VERSION = f53a63999784bcb7dc513e221f3f25dd3de2f35e
-+UHTTPD_SITE = https://git.openwrt.org/project/uhttpd.git
- UHTTPD_SITE_METHOD = git
- UHTTPD_LICENSE = ISC
- UHTTPD_LICENSE_FILES = uhttpd.h
+-ODHCP6C_VERSION = f575351cbb3defc0bf52680c9082912a6c264374
++ODHCP6C_VERSION = 53f07e90b7f1da6977143a488dd5cb73a33b233b
+ ODHCP6C_SITE = https://git.openwrt.org/project/odhcp6c.git
+ ODHCP6C_SITE_METHOD = git
+ ODHCP6C_LICENSE = GPL-2.0
