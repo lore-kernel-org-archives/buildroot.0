@@ -1,31 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 13 Feb 2021 22:50:20 +0100
-Subject: [Buildroot] [PATCH v1] package/util-linux: bump version to
- 2.36.2
-In-Reply-To: <20210213135313.8069-1-ps.report@gmx.net>
-References: <20210213135313.8069-1-ps.report@gmx.net>
-Message-ID: <20210213225020.4a323a19@windsurf.home>
+Date: Sat, 13 Feb 2021 22:51:14 +0100
+Subject: [Buildroot] [git commit] package/libgeos: fix build failure due to
+ Gcc Bug 68485
+Message-ID: <20210213213003.BECC084184@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 13 Feb 2021 14:53:13 +0100
-Peter Seiderer <ps.report@gmx.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=847b441b1ca2230c4f26a49aaede69eca5e7e7ad
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> For details see [1].
-> 
-> [1] http://lkml.iu.edu/hypermail/linux/kernel/2102.1/07236.html
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
-> Notes:
+Package libgeos manifests Microblaze Gcc Bug 68485 resulting in a build
+failure due to an Internal Compiler Error.
 
-Applied to next, thanks.
+As done for other packages in Buildroot work around this Gcc Bug by
+setting optimization to -O0 if BR2_TOOLCHAIN_HAS_GCC_BUG_68485=y.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fixes:
+http://autobuild.buildroot.net/results/0da/0daa6b259aea5381fad86d01e6dd026b1c8ad073/
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libgeos/libgeos.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/package/libgeos/libgeos.mk b/package/libgeos/libgeos.mk
+index 50c3832c01..a355732af8 100644
+--- a/package/libgeos/libgeos.mk
++++ b/package/libgeos/libgeos.mk
+@@ -13,8 +13,16 @@ LIBGEOS_INSTALL_STAGING = YES
+ LIBGEOS_CONFIG_SCRIPTS = geos-config
+ LIBGEOS_CONF_OPTS = -DBUILD_BENCHMARKS=OFF
+ 
++LIBGEOS_CXXFLAGS = $(TARGET_CXXCFLAGS)
++
++ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_68485),y)
++LIBGEOS_CXXFLAGS += -O0
++endif
++
+ ifeq ($(BR2_arm)$(BR2_armeb),y)
+ LIBGEOS_CONF_OPTS += -DDISABLE_GEOS_INLINE=ON
+ endif
+ 
++LIBGEOS_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(LIBGEOS_CXXFLAGS)"
++
+ $(eval $(cmake-package))
