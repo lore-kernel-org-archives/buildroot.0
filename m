@@ -1,43 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 13 Feb 2021 23:24:23 +0100
-Subject: [Buildroot] [git commit branch/next] package/odhcp6c: bump version
- to 53f07e9
-Message-ID: <20210213221553.C853B8417C@busybox.osuosl.org>
+Date: Sat, 13 Feb 2021 23:24:22 +0100
+Subject: [Buildroot] [git commit branch/next] package/libuci: bump version
+ to 52bbc99
+Message-ID: <20210213221553.BC49881358@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=74515d8e582bcff88ff28cb30f49aa9fe5adc2ac
+commit: https://git.buildroot.net/buildroot/commit/?id=351e6a9bce11ced9e75a5aca0ada6dcf9de2e113
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+- change download url to https
+
+- update homepage url (the old one redirects to legacy read only
+  OpenWrt wiki system)
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/odhcp6c/odhcp6c.hash | 2 +-
- package/odhcp6c/odhcp6c.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libuci/Config.in   | 2 +-
+ package/libuci/libuci.hash | 2 +-
+ package/libuci/libuci.mk   | 5 +++--
+ 3 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/odhcp6c/odhcp6c.hash b/package/odhcp6c/odhcp6c.hash
-index 26ee711684..84d1fc4527 100644
---- a/package/odhcp6c/odhcp6c.hash
-+++ b/package/odhcp6c/odhcp6c.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/libuci/Config.in b/package/libuci/Config.in
+index 2f4ad40487..f94d7dc391 100644
+--- a/package/libuci/Config.in
++++ b/package/libuci/Config.in
+@@ -10,7 +10,7 @@ config BR2_PACKAGE_LIBUCI
+ 
+ 	  This package will also install CLI tool uci.
+ 
+-	  http://wiki.openwrt.org/doc/techref/uci
++	  https://openwrt.org/docs/techref/uci
+ 
+ comment "libuci needs a toolchain w/ dynamic library"
+ 	depends on BR2_STATIC_LIBS
+diff --git a/package/libuci/libuci.hash b/package/libuci/libuci.hash
+index b808810ccf..b6962c2541 100644
+--- a/package/libuci/libuci.hash
++++ b/package/libuci/libuci.hash
+@@ -1,2 +1,2 @@
  # Locally computed
--sha256  c3622120b5209d1c14d5ac92884240bf0e4f652633562355e70dbf482f6c37b4  odhcp6c-f575351cbb3defc0bf52680c9082912a6c264374-br1.tar.gz
-+sha256  7274a304016838483e2da48193309e5f84ca0a8a407647033283d1249eebe986  odhcp6c-53f07e90b7f1da6977143a488dd5cb73a33b233b-br1.tar.gz
- sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING
-diff --git a/package/odhcp6c/odhcp6c.mk b/package/odhcp6c/odhcp6c.mk
-index c7f214ff7a..dd3a9d3e28 100644
---- a/package/odhcp6c/odhcp6c.mk
-+++ b/package/odhcp6c/odhcp6c.mk
-@@ -4,7 +4,7 @@
+-sha256  1ee875910bdf751807f10d44f6b6b7f9ec71c12d4c407a80bae5cb654d2ba4cc  libuci-49ec6efbdac4819033d34f08927d795f83a3932d-br1.tar.gz
++sha256  76ef826df2961420cd7a4f1702bef06c37563d9807a2d8e84557963aab21ac80  libuci-52bbc99f69ea6f67b6fe264f424dac91bde5016c-br1.tar.gz
+diff --git a/package/libuci/libuci.mk b/package/libuci/libuci.mk
+index 55afd53c10..fcfda95b3a 100644
+--- a/package/libuci/libuci.mk
++++ b/package/libuci/libuci.mk
+@@ -4,8 +4,9 @@
  #
  ################################################################################
  
--ODHCP6C_VERSION = f575351cbb3defc0bf52680c9082912a6c264374
-+ODHCP6C_VERSION = 53f07e90b7f1da6977143a488dd5cb73a33b233b
- ODHCP6C_SITE = https://git.openwrt.org/project/odhcp6c.git
- ODHCP6C_SITE_METHOD = git
- ODHCP6C_LICENSE = GPL-2.0
+-LIBUCI_VERSION = 49ec6efbdac4819033d34f08927d795f83a3932d
+-LIBUCI_SITE = git://git.openwrt.org/project/uci.git
++LIBUCI_VERSION = 52bbc99f69ea6f67b6fe264f424dac91bde5016c
++LIBUCI_SITE = https://git.openwrt.org/project/uci.git
++LIBUCI_SITE_METHOD = git
+ LIBUCI_LICENSE = LGPL-2.1, GPL-2.0 (tools)
+ LIBUCI_INSTALL_STAGING = YES
+ LIBUCI_DEPENDENCIES = libubox
