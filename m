@@ -1,99 +1,373 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 13 Feb 2021 14:26:50 +0100
-Subject: [Buildroot] [PATCH-NEXT 4/4] linux: build after linux-firmware
- if enabled for early loading support
-In-Reply-To: <87sg60cl73.fsf@dell.be.48ers.dk>
-References: <20210212184049.13202-1-peter@korsgaard.com>
- <20210212184049.13202-5-peter@korsgaard.com>
- <20210213101326.GR1679218@scaer> <87sg60cl73.fsf@dell.be.48ers.dk>
-Message-ID: <20210213132650.GT1679218@scaer>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sat, 13 Feb 2021 14:42:15 +0100
+Subject: [Buildroot] [PATCH v3 1/1] package/postgis: new package
+In-Reply-To: <20210212043706.7336-1-fido_max@inbox.ru>
+References: <20210212043706.7336-1-fido_max@inbox.ru>
+Message-ID: <20210213144215.1200ddc0@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2021-02-13 11:32 +0100, Peter Korsgaard spake thusly:
-> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Hello Maxim,
+
+On Fri, 12 Feb 2021 07:37:06 +0300, Maxim Kochetkov via buildroot <buildroot@busybox.net> wrote:
+
+> PostGIS is a spatial database extender for PostgreSQL object-relational database.
+> It adds support for geographic objects allowing location queries to be run in SQL.
 > 
->  > On 2021-02-12 19:40 +0100, Peter Korsgaard spake thusly:
->  >> To support building in (a subset of) the linux-firmware files into the
->  >> kernel using the CONFIG_EXTRA_FIRMWARE option, we need to ensure that the
->  >> firmware files are installed before the Linux kernel is built, similar to
->  >> how it is done for intel-microcode.
->  >> 
->  >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
->  >> ---
->  >> linux/linux.mk | 3 ++-
->  >> 1 file changed, 2 insertions(+), 1 deletion(-)
->  >> 
->  >> diff --git a/linux/linux.mk b/linux/linux.mk
->  >> index a212f42c28..5e4b319cf1 100644
->  >> --- a/linux/linux.mk
->  >> +++ b/linux/linux.mk
->  >> @@ -78,7 +78,8 @@ LINUX_MAKE_ENV = \
->  >> 
->  >> LINUX_INSTALL_IMAGES = YES
->  >> LINUX_DEPENDENCIES = host-kmod \
->  >> -	$(if $(BR2_PACKAGE_INTEL_MICROCODE),intel-microcode)
->  >> +	$(if $(BR2_PACKAGE_INTEL_MICROCODE),intel-microcode) \
->  >> +	$(if $(BR2_PACKAGE_LINUX_FIRMWARE),linux-firmware)
+> https://postgis.net/
 > 
->  > You also need to tell the kernel where to find those firmware files,
->  > with CONFIG_EXTRA_FIRMWARE_DIR, otherwise it will look in /lib/firmware.
-> 
-> Yes, but that you can take care of in linux config file/fragment. We
-> already expose BR2_BINARIES_DIR in the environment for this, E.G. you
-> can do:
-> 
-> CONFIG_EXTRA_FIRMWARE_DIR="${BR_BINARIES_DIR}"
-> CONFIG_EXTRA_FIRMWARE="intel-ucode/06-5e-03 i915/kbl_dmc_ver1_04.bin"
-> 
-> (or whatever files you want to include).
+> Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-But don't we want to make that seamless for the user? If they don't have
-CONFIG_EXTRA_FIRMWARE=y, then setting CONFIG_EXTRA_FIRMWARE_DIR is a
-no-op.
+Thanks for the patch iteration, tested with test-pkg and the
+following config:
 
-I think it is not obvious for a user to know that they can use
-${BR_BINARIES_DIR} in their kernel defconfig/fragment: this is
-documented nowhere. Also, with the BR_ (not BR2_) prefix, it is in
-that namespace which we intedned to be reserved (but that we never
-enforced) for internal, non-public variables...
+  BR2_PACKAGE_LIBGEOS=y
+  BR2_PACKAGE_PROJ=y
+  BR2_PACKAGE_LIBXML2=y
+  BR2_PACKAGE_POSTGRESQL=y
+  BR2_PACKAGE_POSTGRESQL_FULL=y
+  BR2_PACKAGE_POSTGIS=y
 
->  > So we'd need something like:
->  >     $(if $(BR2_PACKAGE_LINUX_FIRMWARE),
->  >         $(call KCONFIG_SET_OPT,CONFIG_EXTRA_FIRMWARE_DIR,"$${BR_BINARIES_DIR}/linux-firmware"))
-> 
-> NIT: Only ${BR_BINARIES_DIR}, not a linux-firmware subdir, otherwise you
-> cannot include both microcode and linux-firmware files.
+Result:
+                             andes-nds32 [ 1/45]: SKIPPED
+                             arm-aarch64 [ 2/45]: OK
+                   bootlin-aarch64-glibc [ 3/45]: OK
+               bootlin-arcle-hs38-uclibc [ 4/45]: OK
+                    bootlin-armv5-uclibc [ 5/45]: OK
+                     bootlin-armv7-glibc [ 6/45]: OK
+                   bootlin-armv7m-uclibc [ 7/45]: SKIPPED
+                      bootlin-armv7-musl [ 8/45]: OK
+                bootlin-m68k-5208-uclibc [ 9/45]: SKIPPED
+               bootlin-m68k-68040-uclibc [10/45]: OK
+             bootlin-microblazeel-uclibc [11/45]: FAILED
+                bootlin-mipsel32r6-glibc [12/45]: OK
+                   bootlin-mipsel-uclibc [13/45]: OK
+                     bootlin-nios2-glibc [14/45]: OK
+                 bootlin-openrisc-uclibc [15/45]: OK
+        bootlin-powerpc64le-power8-glibc [16/45]: OK
+           bootlin-powerpc-e500mc-uclibc [17/45]: OK
+                   bootlin-riscv32-glibc [18/45]: OK
+                   bootlin-riscv64-glibc [19/45]: OK
+                    bootlin-riscv64-musl [20/45]: OK
+                      bootlin-sh4-uclibc [21/45]: OK
+                   bootlin-sparc64-glibc [22/45]: OK
+                    bootlin-sparc-uclibc [23/45]: OK
+                    bootlin-x86-64-glibc [24/45]: OK
+                     bootlin-x86-64-musl [25/45]: OK
+                   bootlin-x86-64-uclibc [26/45]: OK
+                   bootlin-xtensa-uclibc [27/45]: OK
+                            br-arm-basic [28/45]: SKIPPED
+                    br-arm-full-nothread [29/45]: SKIPPED
+                      br-arm-full-static [30/45]: SKIPPED
+                   br-i386-pentium4-full [31/45]: OK
+                br-i386-pentium-mmx-musl [32/45]: OK
+                      br-mips64-n64-full [33/45]: OK
+                 br-mips64r6-el-hf-glibc [34/45]: OK
+               br-powerpc-603e-basic-cpp [35/45]: SKIPPED
+               br-powerpc64-power7-glibc [36/45]: OK
+                       linaro-aarch64-be [37/45]: OK
+                          linaro-aarch64 [38/45]: OK
+                              linaro-arm [39/45]: OK
+                     sourcery-arm-armv4t [40/45]: OK
+                            sourcery-arm [41/45]: OK
+                     sourcery-arm-thumb2 [42/45]: OK
+                         sourcery-mips64 [43/45]: OK
+                           sourcery-mips [44/45]: OK
+                          sourcery-nios2 [45/45]: OK
+45 builds, 7 skipped, 1 build failed, 0 legal-info failed
 
-Meh.. That's not nice, because then it means BINARIES_DIR is clutterred
-by all those firmware files.
+The bootlin-microblazeel-uclibc failure is due to an
+internal compiler error:
 
-Also, intel-microcode is in a sub-directory, and will make it less easy
-for users to find the file(s) they will actually have to flash on their
-devices...
+  during RTL pass: reload
+  .../bootlin-microblazeel-uclibc/build/libgeos-3.9.0/src/geom/util/Densifier.cpp: In static member function ?static std::unique_ptr<std::vector<geos::geom::Coordinate> > geos::geom::util::Densifier::densifyPoints(geos::geom::Coordinate::Vect, double, const geos::geom::PrecisionModel*)?:
+  .../bootlin-microblazeel-uclibc/build/libgeos-3.9.0/src/geom/util/Densifier.cpp:128:1: internal compiler error: in gen_reg_rtx, at emit-rtl.c:1155
+  128 | }
+      | ^
 
-Can we move those so that we can use: CONFIG_EXTRA_FIRMWARE_DIR="$(BINARIES_DIR)/firmware/"
-(for example)?
 
->  > (note the $$ escaping and the use of a shell-level variable, like is
->  > done for CONFIG_INITRAMFS_SOURCE).
-> Given that the user already has to use a custom kernel config
-> file/fragment to specify what files to include, I don't think it makes
-> sense to override the CONFIG_EXTRA_FIRMWARE_DIR setting. We don't do it
-> for intel-microcode either.
+Otherwise looks good for me ;-), but someone else should double-check
+the POSTGIS_LICENSE entries...
 
-I think we should, too.
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
 
 Regards,
-Yann E. MORIN.
+Peter
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> ---
+> Changes v2 -> v3 (after review of Peter Seiderer):
+> 
+>  - Add dependencies description
+> 
+> Changes v1 -> v2 (after review of Peter Seiderer):
+> 
+>  - Bump version to 3.1.1
+>  - Explicit set cross-compile xml2-config path
+>  - Fixed check-package warnings
+>  - Fix POSTGIS_LICENSE
+> 
+> 
+>  package/Config.in                             |  1 +
+>  ...VE_VASPRINTF-HAVE_ASPRINTF-templates.patch | 32 ++++++++++++++
+>  ...S_DEBUG_LEVEL-define-to-configure.ac.patch | 29 +++++++++++++
+>  ...e-forced-static-linking-of-liblwgeom.patch | 31 ++++++++++++++
+>  ...fig-to-get-PROJ-version-if-available.patch | 42 +++++++++++++++++++
+>  package/postgis/Config.in                     | 17 ++++++++
+>  package/postgis/postgis.hash                  |  3 ++
+>  package/postgis/postgis.mk                    | 35 ++++++++++++++++
+>  8 files changed, 190 insertions(+)
+>  create mode 100644 package/postgis/0001-Add-HAVE_VASPRINTF-HAVE_ASPRINTF-templates.patch
+>  create mode 100644 package/postgis/0002-Add-POSTGIS_DEBUG_LEVEL-define-to-configure.ac.patch
+>  create mode 100644 package/postgis/0003-Disable-forced-static-linking-of-liblwgeom.patch
+>  create mode 100644 package/postgis/0004-Use-pkg-config-to-get-PROJ-version-if-available.patch
+>  create mode 100644 package/postgis/Config.in
+>  create mode 100644 package/postgis/postgis.hash
+>  create mode 100644 package/postgis/postgis.mk
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index 5304ab141c..cc37f572b6 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1401,6 +1401,7 @@ menu "Database"
+>  	source "package/mongodb/Config.in"
+>  	source "package/mysql/Config.in"
+>  	source "package/postgresql/Config.in"
+> +	source "package/postgis/Config.in"
+>  	source "package/redis/Config.in"
+>  	source "package/rocksdb/Config.in"
+>  	source "package/sqlcipher/Config.in"
+> diff --git a/package/postgis/0001-Add-HAVE_VASPRINTF-HAVE_ASPRINTF-templates.patch b/package/postgis/0001-Add-HAVE_VASPRINTF-HAVE_ASPRINTF-templates.patch
+> new file mode 100644
+> index 0000000000..3a40afddb2
+> --- /dev/null
+> +++ b/package/postgis/0001-Add-HAVE_VASPRINTF-HAVE_ASPRINTF-templates.patch
+> @@ -0,0 +1,32 @@
+> +From 7bf2fc388df10bc1760cd06594f50da0c78ee3a2 Mon Sep 17 00:00:00 2001
+> +From: fidomax <adobegitler@gmail.com>
+> +Date: Tue, 26 Jan 2021 07:33:17 +0300
+> +Subject: [PATCH] Add HAVE_VASPRINTF HAVE_ASPRINTF templates
+> +
+> +It fixes autoreconf error:
+> +autoheader: warning: missing template: HAVE_ASPRINTF
+> +autoheader: Use AC_DEFINE([HAVE_ASPRINTF], [], [Description])
+> +autoheader: warning: missing template: HAVE_VASPRINTF
+> +
+> +Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+> +Fetch from: https://github.com/postgis/postgis/commit/d0ac5df49961d1d1a74b894f9941b973c0695c11.patch
+> +---
+> + configure.ac | 2 ++
+> + 1 file changed, 2 insertions(+)
+> +
+> +diff --git a/configure.ac b/configure.ac
+> +index 9ac7051bb..dddb3aef7 100644
+> +--- a/configure.ac
+> ++++ b/configure.ac
+> +@@ -11,6 +11,8 @@ dnl **********************************************************************
+> + 
+> + AC_INIT()
+> + AC_CONFIG_HEADERS([postgis_config.h])
+> ++AH_TEMPLATE([HAVE_VASPRINTF])
+> ++AH_TEMPLATE([HAVE_ASPRINTF])
+> + AC_CONFIG_MACRO_DIR([macros])
+> + AC_CONFIG_AUX_DIR([build-aux])
+> + AC_PROG_INSTALL
+> +-- 
+> +2.30.0
+> +
+> diff --git a/package/postgis/0002-Add-POSTGIS_DEBUG_LEVEL-define-to-configure.ac.patch b/package/postgis/0002-Add-POSTGIS_DEBUG_LEVEL-define-to-configure.ac.patch
+> new file mode 100644
+> index 0000000000..71409ca599
+> --- /dev/null
+> +++ b/package/postgis/0002-Add-POSTGIS_DEBUG_LEVEL-define-to-configure.ac.patch
+> @@ -0,0 +1,29 @@
+> +From 97d0cb4f4a6f3bec50729e3f896d4a84b796c5c6 Mon Sep 17 00:00:00 2001
+> +From: fidomax <adobegitler@gmail.com>
+> +Date: Tue, 26 Jan 2021 09:17:17 +0300
+> +Subject: [PATCH] Add POSTGIS_DEBUG_LEVEL define to configure.ac
+> +
+> +In case of using autoreconf "#define POSTGIS_DEBUG_LEVEL 0" is removed from postgis_config.h.in so build failed with undefined POSTGIS_DEBUG_LEVEL.
+> +
+> +Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+> +Fetch from: https://github.com/postgis/postgis/commit/2b2c2cb159cfcaacb75a4e74f17bd2834d61acd0.patch
+> +---
+> + configure.ac | 2 ++
+> + 1 file changed, 2 insertions(+)
+> +
+> +diff --git a/configure.ac b/configure.ac
+> +index dddb3aef7..86e1597ee 100644
+> +--- a/configure.ac
+> ++++ b/configure.ac
+> +@@ -1131,6 +1131,8 @@ else
+> +     CPPFLAGS="-DNDEBUG $CPPFLAGS"
+> + fi
+> + 
+> ++AC_DEFINE([POSTGIS_DEBUG_LEVEL], [0], [Define debug level. Default 0])
+> ++
+> + dnl ===========================================================================
+> + dnl Allow the developer to disable the automatic updates of postgis_revision.h
+> + dnl with --without-phony-revision
+> +-- 
+> +2.30.0
+> +
+> diff --git a/package/postgis/0003-Disable-forced-static-linking-of-liblwgeom.patch b/package/postgis/0003-Disable-forced-static-linking-of-liblwgeom.patch
+> new file mode 100644
+> index 0000000000..4329c9cd80
+> --- /dev/null
+> +++ b/package/postgis/0003-Disable-forced-static-linking-of-liblwgeom.patch
+> @@ -0,0 +1,31 @@
+> +From 845c18c1288b7a96592901baadb198f96dd71c46 Mon Sep 17 00:00:00 2001
+> +From: fidomax <adobegitler@gmail.com>
+> +Date: Tue, 26 Jan 2021 09:49:19 +0300
+> +Subject: [PATCH] Disable forced static linking of liblwgeom
+> +
+> +In case of shared libs build fails:
+> +ld: cannot find -lgeos_c
+> +ld: attempted static link of dynamic object `/usr/lib/libproj.so'
+> +
+> +Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+> +Fetch from: https://github.com/postgis/postgis/commit/98070faad220e12fcaed9a583a70a37c510b7c6b.patch
+> +---
+> + loader/Makefile.in | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/loader/Makefile.in b/loader/Makefile.in
+> +index 9aebfe07f..9a0c90d3a 100644
+> +--- a/loader/Makefile.in
+> ++++ b/loader/Makefile.in
+> +@@ -44,7 +44,7 @@ ICONV_CFLAGS=@ICONV_CFLAGS@
+> + 
+> + # liblwgeom
+> + LIBLWGEOM=../liblwgeom/liblwgeom.la
+> +-LDFLAGS += -static $(LIBLWGEOM)
+> ++LDFLAGS += $(LIBLWGEOM)
+> + 
+> + # GTK includes and libraries
+> + GTK_CFLAGS = @GTK_CFLAGS@ @IGE_MAC_CFLAGS@
+> +-- 
+> +2.30.0
+> +
+> diff --git a/package/postgis/0004-Use-pkg-config-to-get-PROJ-version-if-available.patch b/package/postgis/0004-Use-pkg-config-to-get-PROJ-version-if-available.patch
+> new file mode 100644
+> index 0000000000..1e65b98d3e
+> --- /dev/null
+> +++ b/package/postgis/0004-Use-pkg-config-to-get-PROJ-version-if-available.patch
+> @@ -0,0 +1,42 @@
+> +From 876a04a795fcb179e0dc802e260353012c4890f9 Mon Sep 17 00:00:00 2001
+> +From: Maxim Kochetkov <adobegitler@gmail.com>
+> +Date: Thu, 28 Jan 2021 08:12:57 +0300
+> +Subject: [PATCH] Use pkg-config to get PROJ version if available
+> +
+> +In case of cross-compile AC_PROJ_VERSION([POSTGIS_PROJ_VERSION]) fails.
+> +So try to get version by pkg-config first
+> +
+> +Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+> +Fetch from: https://github.com/postgis/postgis/commit/671a878982550e3c590d642620a6621b52c230c7.patch
+> +---
+> + configure.ac | 7 +++++--
+> + 1 file changed, 5 insertions(+), 2 deletions(-)
+> +
+> +diff --git a/configure.ac b/configure.ac
+> +index 86e1597ee..016f81c7d 100644
+> +--- a/configure.ac
+> ++++ b/configure.ac
+> +@@ -866,6 +866,7 @@ elif test ! -z "$PKG_CONFIG"; then
+> + 		[
+> + 			PROJ_CPPFLAGS="$PROJ_CFLAGS"
+> + 			PROJ_LDFLAGS="$PROJ_LIBS"
+> ++			POSTGIS_PROJ_VERSION=`$PKG_CONFIG proj --modversion | sed 's/\([[0-9]]\).*\([[0-9]]\).*\([[0-9]]\)/\1\2/'`
+> + 		],
+> + 		[
+> + 			PROJ_LDFLAGS="-lproj"
+> +@@ -887,8 +888,10 @@ AC_CHECK_HEADER([proj_api.h],
+> + 		)]
+> + 	)
+> + 
+> +-dnl Return the PROJ.4 version number
+> +-AC_PROJ_VERSION([POSTGIS_PROJ_VERSION])
+> ++dnl Return the PROJ.4 version number if not detected by pkg-config
+> ++if test "x$POSTGIS_PROJ_VERSION" = "x"; then
+> ++	AC_PROJ_VERSION([POSTGIS_PROJ_VERSION])
+> ++fi
+> + AC_DEFINE_UNQUOTED([POSTGIS_PROJ_VERSION], [$POSTGIS_PROJ_VERSION], [PROJ library version])
+> + AC_SUBST([POSTGIS_PROJ_VERSION])
+> + CPPFLAGS="$CPPFLAGS_SAVE"
+> +-- 
+> +2.30.0
+> +
+> diff --git a/package/postgis/Config.in b/package/postgis/Config.in
+> new file mode 100644
+> index 0000000000..5a68059a51
+> --- /dev/null
+> +++ b/package/postgis/Config.in
+> @@ -0,0 +1,17 @@
+> +config BR2_PACKAGE_POSTGIS
+> +	bool "postgis"
+> +	depends on BR2_PACKAGE_POSTGRESQL_FULL
+> +	depends on BR2_INSTALL_LIBSTDCPP # proj
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11, proj
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # proj
+> +	depends on BR2_USE_WCHAR # libgeos, proj
+> +	select BR2_PACKAGE_LIBGEOS
+> +	select BR2_PACKAGE_PROJ
+> +	select BR2_PACKAGE_LIBXML2
+> +	help
+> +	  PostGIS is a spatial database extender for PostgreSQL
+> +	  object-relational database. It adds support for
+> +	  geographic objects allowing location queries
+> +	  to be run in SQL.
+> +
+> +	  https://postgis.net/
+> diff --git a/package/postgis/postgis.hash b/package/postgis/postgis.hash
+> new file mode 100644
+> index 0000000000..2f0d62728f
+> --- /dev/null
+> +++ b/package/postgis/postgis.hash
+> @@ -0,0 +1,3 @@
+> +# Locally calculated
+> +sha256  0e96afef586db6939d48fb22fbfbc9d0de5e6bc1722d6d553d63bb41441a2a7d  postgis-3.1.1.tar.gz
+> +sha256  55b69f22e1752830dd565852dc7ff242daf289dbd3a6bfede5db43f90d2e28c9  LICENSE.TXT
+> diff --git a/package/postgis/postgis.mk b/package/postgis/postgis.mk
+> new file mode 100644
+> index 0000000000..4ab1590302
+> --- /dev/null
+> +++ b/package/postgis/postgis.mk
+> @@ -0,0 +1,35 @@
+> +################################################################################
+> +#
+> +# postgis
+> +#
+> +################################################################################
+> +
+> +POSTGIS_VERSION = 3.1.1
+> +POSTGIS_SITE = https://download.osgeo.org/postgis/source
+> +# parallel build issues
+> +POSTGIS_MAKE = $(MAKE1)
+> +POSTGIS_LICENSE = GPL-2.0+ (PostGIS), BSD, MIT, Apache-2.0, ISC, BSL-1.0, CC-BY-SA-3.0
+> +POSTGIS_LICENSE_FILES = LICENSE.TXT
+> +# configure.ac is patched so need to run autoreconf
+> +POSTGIS_AUTORECONF = YES
+> +
+> +POSTGIS_DEPENDENCIES = postgresql libgeos proj libxml2
+> +
+> +POSTGIS_CONF_OPTS += \
+> +	--with-pgconfig=$(STAGING_DIR)/usr/bin/pg_config \
+> +	--with-geosconfig=$(STAGING_DIR)/usr/bin/geos-config \
+> +	--with-xml2config=$(STAGING_DIR)/usr/bin/xml2-config
+> +
+> +ifeq ($(BR2_PACKAGE_LIBGDAL),y)
+> +POSTGIS_DEPENDENCIES += libgdal
+> +else
+> +POSTGIS_CONF_OPTS += --without-raster
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_PROTOBUF),y)
+> +POSTGIS_DEPENDENCIES += protobuf
+> +else
+> +POSTGIS_CONF_OPTS += --without-protobuf
+> +endif
+> +
+> +$(eval $(autotools-package))
