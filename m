@@ -1,71 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 13 Feb 2021 22:35:32 +0100
-Subject: [Buildroot] [PATCH] package/ply: needs dynamic library
-In-Reply-To: <20210213190522.GA490@arbad>
-References: <20210213190522.GA490@arbad>
-Message-ID: <20210213213532.GB2740149@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 13 Feb 2021 22:35:29 +0100
+Subject: [Buildroot] [PATCH 1/1] package/fail2ban: add
+ FAIL2BAN_CPE_ID_VENDOR
+In-Reply-To: <20210212213902.12139-1-fontaine.fabrice@gmail.com>
+References: <20210212213902.12139-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210213223529.2e09d596@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Andres, All,
+On Fri, 12 Feb 2021 22:39:02 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-On 2021-02-13 20:05 +0100, Andreas Klinger spake thusly:
-> ply is not compiling with static libraries.
+> cpe:2.3:a:fail2ban:fail2ban is a valid CPE identifier for this package:
 > 
-> Fixes:
->  - http://autobuild.buildroot.net/results/3a586241d37614b644ff6c4674ae28df2b22fdf8
-
-I found this build to be puzzling, so I dug deeper, and then found this
-commit log to be lacking the interesting explanations, so I expanded the
-commit log. Please review what I wrote if it makes sense...
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: Andreas Klinger <ak@it-klinger.de>
+>   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Afail2ban%3Afail2ban
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/ply/Config.in | 7 +++++++
->  1 file changed, 7 insertions(+)
+>  package/fail2ban/fail2ban.mk | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/package/ply/Config.in b/package/ply/Config.in
-> index 35c2dc9bfc..16f5f8a267 100644
-> --- a/package/ply/Config.in
-> +++ b/package/ply/Config.in
-> @@ -5,11 +5,18 @@ config BR2_PACKAGE_PLY_ARCH_SUPPORTS
->  	default y if BR2_powerpc
->  	default y if BR2_x86_64
+> diff --git a/package/fail2ban/fail2ban.mk b/package/fail2ban/fail2ban.mk
+> index a4ee0852cc..d2fe19d11e 100644
+> --- a/package/fail2ban/fail2ban.mk
+> +++ b/package/fail2ban/fail2ban.mk
+> @@ -8,6 +8,7 @@ FAIL2BAN_VERSION = 0.11.1
+>  FAIL2BAN_SITE = $(call github,fail2ban,fail2ban,$(FAIL2BAN_VERSION))
+>  FAIL2BAN_LICENSE = GPL-2.0+
+>  FAIL2BAN_LICENSE_FILES = COPYING
+> +FAIL2BAN_CPE_ID_VENDOR = fail2ban
+>  FAIL2BAN_SETUP_TYPE = distutils
 >  
-> +comment "ply needs a toolchain w/ dynamic library"
-> +	depends on BR2_PACKAGE_PLY_ARCH_SUPPORTS
-> +	depends on BR2_USE_MMU
-> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14 # BPF_JLT
-> +	depends on BR2_STATIC_LIBS
-> +
->  config BR2_PACKAGE_PLY
->  	bool "ply"
->  	depends on BR2_PACKAGE_PLY_ARCH_SUPPORTS
->  	depends on BR2_USE_MMU # fork()
->  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14 # BPF_JLT
-> +	depends on !BR2_STATIC_LIBS
->  	help
->  	  ply is a light-weight dynamic tracer for Linux. By means of
->  	  using the BPF it can attach probes to the linux kernel
-> -- 
-> 2.20.1
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+>  ifeq ($(BR2_PACKAGE_PYTHON3),y)
+
+
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
