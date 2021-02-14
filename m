@@ -1,48 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Feb 2021 17:43:53 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x]
- package/kodi-inputstream-adaptive: update project URL
-Message-ID: <20210214162640.C1BCF83DF3@busybox.osuosl.org>
+Date: Sun, 14 Feb 2021 17:49:07 +0100
+Subject: [Buildroot] [PATCH 1/1] package/guile: link with libatomic if
+ needed
+In-Reply-To: <20210208064626.3516076-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 8 Feb 2021 07:46:26 +0100")
+References: <20210208064626.3516076-1-fontaine.fabrice@gmail.com>
+Message-ID: <87tuqebnng.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=564f7117331a87e3c285d7f6501f9ab0c15d057f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Reference: https://github.com/xbmc/repo-binary-addons/pull/143
+ > Fix build of guile 3.0.4 with Bootlin SPARC uclibc toolchain added with
+ > commit 1348c569d0cb7f67eca30f170b782aa8b51cc259
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit fd72673d91a4b3326640bfb799d1af1926acd3ad)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/kodi-inputstream-adaptive/Config.in                    | 2 +-
- package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/a72d8e14854f9c6c9632e856019a3eb8ec4818b6
 
-diff --git a/package/kodi-inputstream-adaptive/Config.in b/package/kodi-inputstream-adaptive/Config.in
-index f9ba20adcf..21f1cff171 100644
---- a/package/kodi-inputstream-adaptive/Config.in
-+++ b/package/kodi-inputstream-adaptive/Config.in
-@@ -6,4 +6,4 @@ config BR2_PACKAGE_KODI_INPUTSTREAM_ADAPTIVE
- 	help
- 	  Kodi inputstream addon for several manifest types
- 
--	  https://github.com/peak3d/inputstream.adaptive
-+	  https://github.com/xbmc/inputstream.adaptive
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-index 30fbaf5251..a8024951d4 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- KODI_INPUTSTREAM_ADAPTIVE_VERSION = 2.4.6-Leia
--KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,peak3d,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
-+KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,xbmc,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPL-2.0+
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = LICENSE.GPL
- KODI_INPUTSTREAM_ADAPTIVE_DEPENDENCIES = kodi
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed to 2020.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
