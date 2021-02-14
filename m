@@ -1,64 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Feb 2021 17:51:47 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/subversion: drop
- first patch
-Message-ID: <20210214163455.87BBE80057@busybox.osuosl.org>
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Date: Sun, 14 Feb 2021 19:21:45 +0100
+Subject: [Buildroot] [PATCH 2/2] package/tzdata: bump version to 2020f
+In-Reply-To: <8735xyd2vs.fsf@dell.be.48ers.dk>
+References: <20210110164711.1708062-1-bernd.kuhls@t-online.de>
+ <20210110164711.1708062-2-bernd.kuhls@t-online.de>
+ <87zh1ekq9r.fsf@dell.be.48ers.dk>
+ <19dff490-6537-bc7d-7035-e4bd99f97452@gmail.com>
+ <877dnad5ux.fsf@dell.be.48ers.dk>
+ <602ba0f2-503c-7175-c4fb-7dcac246631c@gmail.com>
+ <8735xyd2vs.fsf@dell.be.48ers.dk>
+Message-ID: <20210214182145.GH6798@piout.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6df7b9c7b8d946ddc1282386803c35a8db4817a2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+On 14/02/2021 17:34:47+0100, Peter Korsgaard wrote:
+> >>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+> 
+> Hi,
+> 
+>  >> > This patch has been backported to stable version 2020.11.2 and 2020.02.10.
+>  >> > Can you have a look?
+>  >> 
+>  >> Are you able to reproduce it? When I gave it a quick test here I got
+>  >> sensible output from date.
+>  >> 
+>  >> But maybe I missed something?
+> 
+>  > Yes, I tried on master, 2020.02.x, 2020.11.x and 2020.02.9 and 2020.11.1 (before
+>  > the version bump).
+> 
+>  > I'm looking at it but I don't have a patch yet.
+> 
+> Ok, thanks. There was a report on IRC that timezones on uClibc were
+> broken as well because of an incompatibility between the new tzdata
+> files and tzdump.
 
-First patch is not needed since version 1.8.0 and
-https://github.com/apache/subversion/commit/f071ec0c26cdf47e89fa90b31d2233ee1a2b00c2
+No, the issue is with zic that is not generating proper Tzif2 files (the
+tzif2 header is there twice).
 
-Indeed, as spotted by upstream when sending them this patch, the
-original expressions will not mangle '-mfloat-gprs=double' because the
-patterns contain a trailing space.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 9670aa285250e1ee4fc44fa0134137961494cdeb)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/subversion/0001-dont-mangle-cflags.patch   | 24 ----------------------
- ...e.patch => 0001-workaround-ac-run-ifelse.patch} |  0
- 2 files changed, 24 deletions(-)
-
-diff --git a/package/subversion/0001-dont-mangle-cflags.patch b/package/subversion/0001-dont-mangle-cflags.patch
-deleted file mode 100644
-index adb8b8e933..0000000000
---- a/package/subversion/0001-dont-mangle-cflags.patch
-+++ /dev/null
-@@ -1,24 +0,0 @@
--[PATCH] configure.ac: don't mangle CFLAGS
--
--Ensure that the sed expression to strip debugging options from CFLAGS
--doesn't mangle flags like -mfloat-gprs=double, breaking the build.
--
--[Vincent: adapt to 1.9.2 and patch configure.ac instead of configure]
--
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
--Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
--
--diff -Nrup a/configure.ac b/configure.ac
----- a/configure.ac	2015-07-27 00:03:10.000000000 +0100
--+++ b/configure.ac	2015-09-28 10:33:39.175048493 +0100
--@@ -1110,8 +1110,8 @@ if test "$enable_debugging" = "yes" ; th
--   CXXFLAGS="$CXXFLAGS -DSVN_DEBUG -DAP_DEBUG"
-- elif test "$enable_debugging" = "no" ; then
--   AC_MSG_NOTICE([Disabling debugging])
---  CFLAGS=["`echo $CFLAGS' ' | $SED -e 's/-g[0-9] //g' -e 's/-g //g'`"]
---  CXXFLAGS=["`echo $CXXFLAGS' ' | $SED -e 's/-g[0-9] //g' -e 's/-g //g'`"]
--+  CFLAGS=["`echo $CFLAGS' ' | $SED -e 's/-g[0-9]* //g'`"]
--+  CXXFLAGS=["`echo $CXXFLAGS' ' | $SED -e 's/-g[0-9]* //g'`"]
--   dnl Compile with NDEBUG to get rid of assertions
--   CFLAGS="$CFLAGS -DNDEBUG"
--   CXXFLAGS="$CXXFLAGS -DNDEBUG"
-diff --git a/package/subversion/0002-workaround-ac-run-ifelse.patch b/package/subversion/0001-workaround-ac-run-ifelse.patch
-similarity index 100%
-rename from package/subversion/0002-workaround-ac-run-ifelse.patch
-rename to package/subversion/0001-workaround-ac-run-ifelse.patch
+-- 
+Alexandre Belloni, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
