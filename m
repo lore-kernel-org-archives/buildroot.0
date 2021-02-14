@@ -1,28 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Feb 2021 17:49:07 +0100
-Subject: [Buildroot] [PATCH 1/1] package/guile: link with libatomic if
- needed
-In-Reply-To: <20210208064626.3516076-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 8 Feb 2021 07:46:26 +0100")
-References: <20210208064626.3516076-1-fontaine.fabrice@gmail.com>
-Message-ID: <87tuqebnng.fsf@dell.be.48ers.dk>
+Date: Sun, 14 Feb 2021 17:52:01 +0100
+Subject: [Buildroot] [PATCH] package/subversion: security bump to
+ version 1.14.1
+In-Reply-To: <20210211141838.15911-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Thu, 11 Feb 2021 15:18:37 +0100")
+References: <20210211141838.15911-1-peter@korsgaard.com>
+Message-ID: <87pn12bnim.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Fix build of guile 3.0.4 with Bootlin SPARC uclibc toolchain added with
- > commit 1348c569d0cb7f67eca30f170b782aa8b51cc259
+ > Fixes the following security issue:
+ > CVE-2020-17525: Remote unauthenticated denial-of-service in Subversion
+ > mod_authz_svn
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/a72d8e14854f9c6c9632e856019a3eb8ec4818b6
+ > Subversion's mod_authz_svn module will crash if the server is using
+ > in-repository authz rules with the AuthzSVNReposRelativeAccessFile option
+ > and a client sends a request for a non-existing repository URL.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > For more details, see the advisory:
+ > https://subversion.apache.org/security/CVE-2020-17525-advisory.txt
 
-Committed to 2020.11.x, thanks.
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed to 2020.02.x and 2020.11.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
