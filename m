@@ -1,43 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Feb 2021 17:48:48 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/guile: link with
- libatomic if needed
-Message-ID: <20210214163443.AA732815F1@busybox.osuosl.org>
+Date: Sun, 14 Feb 2021 17:50:16 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/subversion:
+ security bump to version 1.14.1
+Message-ID: <20210214163443.B89EC815F1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c7ae8b7e44aa7b6f01a4fb8bb7a17ed4bb292023
+commit: https://git.buildroot.net/buildroot/commit/?id=952c3d364aa8e6f823c1a44d6c47e435f4fc0e12
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-Fix build of guile 3.0.4 with Bootlin SPARC uclibc toolchain added with
-commit 1348c569d0cb7f67eca30f170b782aa8b51cc259
+Fixes the following security issue:
 
-Fixes:
- - http://autobuild.buildroot.org/results/a72d8e14854f9c6c9632e856019a3eb8ec4818b6
+CVE-2020-17525: Remote unauthenticated denial-of-service in Subversion
+mod_authz_svn
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Subversion's mod_authz_svn module will crash if the server is using
+in-repository authz rules with the AuthzSVNReposRelativeAccessFile option
+and a client sends a request for a non-existing repository URL.
+
+For more details, see the advisory:
+https://subversion.apache.org/security/CVE-2020-17525-advisory.txt
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 19dda90ae727c2d1e3522a10be128b1f836e4fcd)
+(cherry picked from commit 4109401acdb195d16c3f32219492ed53f83206b7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/guile/guile.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/subversion/subversion.hash | 4 ++--
+ package/subversion/subversion.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/guile/guile.mk b/package/guile/guile.mk
-index 0e7328f199..44f4d1c85e 100644
---- a/package/guile/guile.mk
-+++ b/package/guile/guile.mk
-@@ -29,6 +29,10 @@ GUILE_CFLAGS = \
- 	-DHAVE_GC_GET_FREE_SPACE_DIVISOR \
- 	-DHAVE_GC_SET_FINALIZE_ON_DEMAND
+diff --git a/package/subversion/subversion.hash b/package/subversion/subversion.hash
+index da0fe91184..534d596514 100644
+--- a/package/subversion/subversion.hash
++++ b/package/subversion/subversion.hash
+@@ -1,5 +1,5 @@
+-# From https://www.apache.org/dist/subversion/subversion-1.14.0.tar.bz2.sha512
+-sha512  af6b706fdc91f7ab292fce9d9de582da306fd11e92767dc852687e71a6a8b65bb867fa70d5afd7f76a46005acb1b3c2d3193e690def48cd26875b3a7851cd13b  subversion-1.14.0.tar.bz2
++# From https://www.apache.org/dist/subversion/subversion-1.14.1.tar.bz2.sha512
++sha512  0a70c7152b77cdbcb810a029263e4b3240b6ef41d1c19714e793594088d3cca758d40dfbc05622a806b06463becb73207df249393924ce591026b749b875fcdd  subversion-1.14.1.tar.bz2
  
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+GUILE_CONF_ENV += LIBS=-latomic
-+endif
-+
- ifeq ($(BR2_STATIC_LIBS),y)
- GUILE_CFLAGS += -DGC_NO_DLOPEN
- endif
+ # Locally calculated
+ sha256  484aff0cfbb81155a10f903ed756e27e9fc65578c245a295bae295c4bb51eaad  LICENSE
+diff --git a/package/subversion/subversion.mk b/package/subversion/subversion.mk
+index 83a359b966..b434221151 100644
+--- a/package/subversion/subversion.mk
++++ b/package/subversion/subversion.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SUBVERSION_VERSION = 1.14.0
++SUBVERSION_VERSION = 1.14.1
+ SUBVERSION_SOURCE = subversion-$(SUBVERSION_VERSION).tar.bz2
+ SUBVERSION_SITE = https://downloads.apache.org/subversion
+ SUBVERSION_LICENSE = Apache-2.0
