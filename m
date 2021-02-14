@@ -1,60 +1,39 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 14 Feb 2021 16:06:12 +0100
-Subject: [Buildroot] [PATCH 2/2] package/tzdata: bump version to 2020f
-In-Reply-To: <87zh1ekq9r.fsf@dell.be.48ers.dk>
-References: <20210110164711.1708062-1-bernd.kuhls@t-online.de>
- <20210110164711.1708062-2-bernd.kuhls@t-online.de>
- <87zh1ekq9r.fsf@dell.be.48ers.dk>
-Message-ID: <19dff490-6537-bc7d-7035-e4bd99f97452@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 14 Feb 2021 16:27:22 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/sox: use
+ old-format tarball hash
+Message-ID: <20210214150627.C95C383A03@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=e1babab6e77c34216bee045eb1e59dda70490d38
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-Le 12/01/2021 ? 18:40, Peter Korsgaard a ?crit?:
->>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
-> 
->  > Release notes:
->  > https://mm.icann.org/pipermail/tz-announce/2020-December/000064.html
-> 
->  > Upstream removed timezones pacificnew and systemv:
->  > https://mm.icann.org/pipermail/tz-announce/2020-October/000059.html
-> 
->  > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> 
-> Committed to 2020.02.x and 2020.11.x, thanks.
-> 
+Fixes:
+http://autobuild.buildroot.net/results/8185a765ba246f51e8b24b5bf2058b25b9b0c05c/
+http://autobuild.buildroot.net/results/50fdcb3cff40249c2656caf3eb627b2e68a76a87/
 
-This version bump seems introduce a regression in the Buildroot testsuite for
-timezone tests TestGlibcAllTimezone and TestGlibcNonDefaultLimitedTimezone.
+Commit 6406e08e4e25dd (package/sox: security bump to latest git commit)
+bumped the version of sox to a recent git hash, but added the tarball hash
+using the new "br1" format, which has only been added post-2020.11.
 
-See:
-https://gitlab.com/buildroot.org/buildroot/-/pipelines/253940390/failures
+Add the old-format hash to fix the build.
 
-The Buildroot configuration was:
-        BR2_TARGET_TZ_INFO=y
-        BR2_TARGET_TZ_ZONELIST="northamerica"
-        BR2_TARGET_LOCALTIME="America/New_York"
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/sox/sox.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-And the test is checking "date" output:
-
-        tz, _ = self.emulator.run("date +%Z")
-        self.assertEqual(tz[0].strip(), "EST")
-
-        tz, _ = self.emulator.run("TZ=UTC date +%Z")
-        self.assertEqual(tz[0].strip(), "UTC")
-
-        tz, _ = self.emulator.run("TZ=America/Los_Angeles date +%Z")
-        self.assertEqual(tz[0].strip(), "PST")
-
-        tz, _ = self.emulator.run("TZ=Europe/Paris date +%Z")
-        self.assertEqual(tz[0].strip(), "Europe")
-
-This patch has been backported to stable version 2020.11.2 and 2020.02.10.
-Can you have a look?
-
-Best regards,
-Romain
+diff --git a/package/sox/sox.hash b/package/sox/sox.hash
+index d2006e0291..719a7ca982 100644
+--- a/package/sox/sox.hash
++++ b/package/sox/sox.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  3d06ba8fc39ac92f16da73593be48afe0a704fe4dc4f6eca2e5137ef77cd5115  sox-7524160b29a476f7e87bc14fddf12d349f9a3c5e-br1.tar.gz
++sha256  ece6f43bcf3eafde29024087597a1aa3a346e77cef64f01497f167512e62e0ef  sox-7524160b29a476f7e87bc14fddf12d349f9a3c5e.tar.gz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL
+ sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  LICENSE.LGPL
