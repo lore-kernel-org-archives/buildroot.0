@@ -1,49 +1,94 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Feb 2021 09:36:39 +0100
-Subject: [Buildroot] [git commit] package/ply: fix dependencies of comment
- for dependencies
-Message-ID: <20210214081618.35DE3838AE@busybox.osuosl.org>
+Date: Sun, 14 Feb 2021 10:03:52 +0100
+Subject: [Buildroot] [git commit branch/next] support/scripts/cpedb.py: drop
+ CPE XML database caching
+Message-ID: <20210214084249.BDB52815E7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=21ef97df91143eb191e565d5250527148e53b660
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=f81b0998eadc8aa8a4f8f205f5fa4d68438fb68d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Commits ca1afcb2171f (package/ply: needs headers >= 4.14) and
-debe9eb13ebd (package/ply: needs dynamic library) added restrictions
-on the availability of ply. The first forgot to add a comment, and
-the second mis-handled the dependency on the headers version.
+Currently, the CPE XML database is parsed into a Python dict, which is
+then pickled into a local file, to speed up the processing of further
+invocations.
 
-Indeed, we want the comment to show the requirement on the headers
-version (since that is not a hardware dependency).
+However, it turns out that since the initial implementation, we have
+switched the XML parsing from the out of tree xmltodict module to the
+standard ElementTree one, which has made the parsing much faster. The
+pickle caching only saves 6 seconds, on something that takes more than
+13 minutes total.
 
-Fix this comment to include the headers version, and fix the condition
-accordingly.
+In addition, this pickle caching consumes a significant amount of RAM,
+causing the Python process to be OOM-killed on a server with 4 GB of
+RAM.
 
+So let's just drop this caching entirely.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Andreas Klinger <ak@it-klinger.de>
 ---
- package/ply/Config.in | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ support/scripts/cpedb.py | 40 ++++++----------------------------------
+ 1 file changed, 6 insertions(+), 34 deletions(-)
 
-diff --git a/package/ply/Config.in b/package/ply/Config.in
-index 16f5f8a267..0500e7883f 100644
---- a/package/ply/Config.in
-+++ b/package/ply/Config.in
-@@ -5,11 +5,10 @@ config BR2_PACKAGE_PLY_ARCH_SUPPORTS
- 	default y if BR2_powerpc
- 	default y if BR2_x86_64
+diff --git a/support/scripts/cpedb.py b/support/scripts/cpedb.py
+index 825ed6cb1e..b1e7e7012c 100644
+--- a/support/scripts/cpedb.py
++++ b/support/scripts/cpedb.py
+@@ -94,22 +94,6 @@ class CPEDB:
+         self.all_cpes_no_version = dict()
+         self.nvd_path = nvd_path
  
--comment "ply needs a toolchain w/ dynamic library"
-+comment "ply needs a toolchain w/ dynamic library, headers >= 4.14"
- 	depends on BR2_PACKAGE_PLY_ARCH_SUPPORTS
- 	depends on BR2_USE_MMU
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14 # BPF_JLT
--	depends on BR2_STATIC_LIBS
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14 || BR2_STATIC_LIBS
+-    def gen_cached_cpedb(self, cpedb, cache_all_cpes, cache_all_cpes_no_version):
+-        print("CPE: Unzipping xml manifest...")
+-        nist_cpe_file = gzip.GzipFile(fileobj=open(cpedb, 'rb'))
+-        print("CPE: Converting xml manifest to dict...")
+-        tree = ET.parse(nist_cpe_file)
+-        all_cpedb = tree.getroot()
+-        self.parse_dict(all_cpedb)
+-
+-        print("CPE: Caching dictionary")
+-        cpes_file = open(cache_all_cpes, 'wb')
+-        pickle.dump(self.all_cpes, cpes_file)
+-        cpes_file.close()
+-        cpes_file = open(cache_all_cpes_no_version, 'wb')
+-        pickle.dump(self.all_cpes_no_version, cpes_file)
+-        cpes_file.close()
+-
+     def get_xml_dict(self):
+         print("CPE: Setting up NIST dictionary")
+         if not os.path.exists(os.path.join(self.nvd_path, "cpe")):
+@@ -121,24 +105,12 @@ class CPEDB:
+             cpe_dict = requests.get(CPEDB_URL)
+             open(cpe_dict_local, "wb").write(cpe_dict.content)
  
- config BR2_PACKAGE_PLY
- 	bool "ply"
+-        cache_all_cpes = os.path.join(self.nvd_path, "cpe", "all_cpes.pkl")
+-        cache_all_cpes_no_version = os.path.join(self.nvd_path, "cpe", "all_cpes_no_version.pkl")
+-
+-        if not os.path.exists(cache_all_cpes) or \
+-           not os.path.exists(cache_all_cpes_no_version) or \
+-           os.stat(cache_all_cpes).st_mtime < os.stat(cpe_dict_local).st_mtime or \
+-           os.stat(cache_all_cpes_no_version).st_mtime < os.stat(cpe_dict_local).st_mtime:
+-            self.gen_cached_cpedb(cpe_dict_local,
+-                                  cache_all_cpes,
+-                                  cache_all_cpes_no_version)
+-
+-        print("CPE: Loading CACHED dictionary")
+-        cpe_file = open(cache_all_cpes, 'rb')
+-        self.all_cpes = pickle.load(cpe_file)
+-        cpe_file.close()
+-        cpe_file = open(cache_all_cpes_no_version, 'rb')
+-        self.all_cpes_no_version = pickle.load(cpe_file)
+-        cpe_file.close()
++        print("CPE: Unzipping xml manifest...")
++        nist_cpe_file = gzip.GzipFile(fileobj=open(cpe_dict_local, 'rb'))
++        print("CPE: Converting xml manifest to dict...")
++        tree = ET.parse(nist_cpe_file)
++        all_cpedb = tree.getroot()
++        self.parse_dict(all_cpedb)
+ 
+     def parse_dict(self, all_cpedb):
+         # Cycle through the dict and build two dict to be used for custom
