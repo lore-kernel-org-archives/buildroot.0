@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Feb 2021 16:27:22 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/sox: use
+Date: Sun, 14 Feb 2021 16:24:55 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/sox: use
  old-format tarball hash
-Message-ID: <20210214150627.C95C383A03@busybox.osuosl.org>
+Message-ID: <20210214150639.B566D83A03@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e1babab6e77c34216bee045eb1e59dda70490d38
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=0a40753e50cb1a4ebe3ee562ba51a774f621a9d7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 Fixes:
 http://autobuild.buildroot.net/results/8185a765ba246f51e8b24b5bf2058b25b9b0c05c/
