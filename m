@@ -1,25 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Feb 2021 17:53:18 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/xterm: bump
- version to 358
-Message-ID: <20210214163455.A4A7580057@busybox.osuosl.org>
+Date: Sun, 14 Feb 2021 17:53:27 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/xterm: security
+ bump to version 366
+Message-ID: <20210214163455.B7E6E815B4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dba7f4612f50a78d1713f6f9cdf85c3c0898ea28
+commit: https://git.buildroot.net/buildroot/commit/?id=edc47a8341c72f9bac487a3ec0172a95ee17af91
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Separate the fields in the hash file by two spaces.
+Fixes the following security issue:
 
-Change the hash of the license:
-- Copyright message changed from 2018,2019 to 2019,2020
+CVE-2021-27135: xterm through Patch #365 allows remote attackers to cause a
+denial of service (segmentation fault) or possibly have unspecified other
+impact via a crafted UTF-8 character sequence.
 
-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 650f0aa3e27e4c950fa9216d806fc39cdf11eada)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit fd6f7061ca6ef8a2d1bfc67451ee3535c3814f00)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  package/xterm/xterm.hash | 4 ++--
@@ -27,26 +27,26 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  2 files changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/package/xterm/xterm.hash b/package/xterm/xterm.hash
-index 57d5a72b9a..7f2ff2c301 100644
+index 8e2d2c5309..588b7fca51 100644
 --- a/package/xterm/xterm.hash
 +++ b/package/xterm/xterm.hash
 @@ -1,4 +1,4 @@
  # Locally calculated after checking pgp signature
--sha256 39a6a3d3724f9a0a068f8cc353ab0c82831f0a43abb24470d933af299658475f xterm-349.tgz
-+sha256  7cdb106962910a99700b3c45fa1a1493e46e97a5aa3785093a786e07196fbf7b  xterm-358.tgz
+-sha256  d81a3639e26552b6765bdcf28be1ecdb8acabf907955708e830ad6397ea10b48  xterm-363.tgz
++sha256  858b2885963fe97e712739066aadc1baeba2b33a0016303a7fec7d38bc73bf6e  xterm-366.tgz
  # Locally calculated
--sha256 b0d302c6d67f63122bbe8d622dd8a66cfadccc32853f606b7558103609201993 COPYING
-+sha256  c655a5fa3dec936543e02f863b8c1343d08522a2821cb484df6c5f62afa7354d  COPYING
+-sha256  c655a5fa3dec936543e02f863b8c1343d08522a2821cb484df6c5f62afa7354d  COPYING
++sha256  dfb668cc977e24649500f3cc54de3e2b793928d210715a445ab1227930b07ba6  COPYING
 diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
-index 8cbfa070e2..5e3e64fff4 100644
+index 0984ef4dc8..f0c497e5e9 100644
 --- a/package/xterm/xterm.mk
 +++ b/package/xterm/xterm.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XTERM_VERSION = 349
-+XTERM_VERSION = 358
+-XTERM_VERSION = 363
++XTERM_VERSION = 366
  XTERM_SOURCE = xterm-$(XTERM_VERSION).tgz
  XTERM_SITE = http://invisible-mirror.net/archives/xterm
  XTERM_DEPENDENCIES = ncurses xlib_libXaw host-pkgconf
