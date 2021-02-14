@@ -1,56 +1,67 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Feb 2021 16:17:54 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/connman: add
- option to enable wireguard support
-Message-ID: <20210214150639.A36AC83A03@busybox.osuosl.org>
+Date: Sun, 14 Feb 2021 16:30:30 +0100
+Subject: [Buildroot] [PATCH 2/2] package/tzdata: bump version to 2020f
+In-Reply-To: <19dff490-6537-bc7d-7035-e4bd99f97452@gmail.com> (Romain Naour's
+ message of "Sun, 14 Feb 2021 16:06:12 +0100")
+References: <20210110164711.1708062-1-bernd.kuhls@t-online.de>
+ <20210110164711.1708062-2-bernd.kuhls@t-online.de>
+ <87zh1ekq9r.fsf@dell.be.48ers.dk>
+ <19dff490-6537-bc7d-7035-e4bd99f97452@gmail.com>
+Message-ID: <877dnad5ux.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=47fb01118eb77f4832694ed470180d2bf010bb34
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 2cb778612565e8395c8814a047fc58cc5d746722)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/connman/Config.in  | 4 ++++
- package/connman/connman.mk | 7 +++++++
- 2 files changed, 11 insertions(+)
+ > Hello,
+ > Le 12/01/2021 ? 18:40, Peter Korsgaard a ?crit?:
+ >>>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+ >> 
+ >> > Release notes:
+ >> > https://mm.icann.org/pipermail/tz-announce/2020-December/000064.html
+ >> 
+ >> > Upstream removed timezones pacificnew and systemv:
+ >> > https://mm.icann.org/pipermail/tz-announce/2020-October/000059.html
+ >> 
+ >> > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ >> 
+ >> Committed to 2020.02.x and 2020.11.x, thanks.
+ >> 
 
-diff --git a/package/connman/Config.in b/package/connman/Config.in
-index 30eae23c96..9b68a4f425 100644
---- a/package/connman/Config.in
-+++ b/package/connman/Config.in
-@@ -31,6 +31,10 @@ config BR2_PACKAGE_CONNMAN_WIFI
- 	  setup). ConnMan detects the start of wpa_supplicant
- 	  automatically.
- 
-+config BR2_PACKAGE_CONNMAN_WIREGUARD
-+	bool "enable wireguard support"
-+	select BR2_PACKAGE_LIBMNL
-+
- config BR2_PACKAGE_CONNMAN_WISPR
- 	bool "enable WISPr support"
- 	depends on !BR2_STATIC_LIBS # gnutls
-diff --git a/package/connman/connman.mk b/package/connman/connman.mk
-index 7ea52f012a..0142d07c1e 100644
---- a/package/connman/connman.mk
-+++ b/package/connman/connman.mk
-@@ -62,6 +62,13 @@ else
- CONNMAN_CONF_OPTS += --disable-wifi
- endif
- 
-+ifeq ($(BR2_PACKAGE_CONNMAN_WIREGUARD),y)
-+CONNMAN_CONF_OPTS += --enable-wireguard
-+CONNMAN_DEPENDENCIES += libmnl
-+else
-+CONNMAN_CONF_OPTS += --disable-wireguard
-+endif
-+
- ifeq ($(BR2_PACKAGE_CONNMAN_WISPR),y)
- CONNMAN_CONF_OPTS += --enable-wispr
- CONNMAN_DEPENDENCIES += gnutls
+ > This version bump seems introduce a regression in the Buildroot testsuite for
+ > timezone tests TestGlibcAllTimezone and TestGlibcNonDefaultLimitedTimezone.
+
+ > See:
+ > https://gitlab.com/buildroot.org/buildroot/-/pipelines/253940390/failures
+
+ > The Buildroot configuration was:
+ >         BR2_TARGET_TZ_INFO=y
+ >         BR2_TARGET_TZ_ZONELIST="northamerica"
+ >         BR2_TARGET_LOCALTIME="America/New_York"
+
+ > And the test is checking "date" output:
+
+ >         tz, _ = self.emulator.run("date +%Z")
+ >         self.assertEqual(tz[0].strip(), "EST")
+
+ >         tz, _ = self.emulator.run("TZ=UTC date +%Z")
+ >         self.assertEqual(tz[0].strip(), "UTC")
+
+ >         tz, _ = self.emulator.run("TZ=America/Los_Angeles date +%Z")
+ >         self.assertEqual(tz[0].strip(), "PST")
+
+ >         tz, _ = self.emulator.run("TZ=Europe/Paris date +%Z")
+ >         self.assertEqual(tz[0].strip(), "Europe")
+
+ > This patch has been backported to stable version 2020.11.2 and 2020.02.10.
+ > Can you have a look?
+
+Are you able to reproduce it? When I gave it a quick test here I got
+sensible output from date.
+
+But maybe I missed something?
+-- 
+Bye, Peter Korsgaard
