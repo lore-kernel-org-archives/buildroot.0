@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Feb 2021 17:45:16 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x]
+Date: Sun, 14 Feb 2021 17:43:53 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x]
  package/kodi-inputstream-adaptive: update project URL
-Message-ID: <20210214162623.3BC4383DF3@busybox.osuosl.org>
+Message-ID: <20210214162640.C1BCF83DF3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8d865ac2e4443e3b5992eda912db408ecc8041d0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=564f7117331a87e3c285d7f6501f9ab0c15d057f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
 Reference: https://github.com/xbmc/repo-binary-addons/pull/143
 
@@ -34,13 +34,13 @@ index f9ba20adcf..21f1cff171 100644
 -	  https://github.com/peak3d/inputstream.adaptive
 +	  https://github.com/xbmc/inputstream.adaptive
 diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-index 1a083b188b..78cbfe92a5 100644
+index 30fbaf5251..a8024951d4 100644
 --- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
 +++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
 @@ -5,7 +5,7 @@
  ################################################################################
  
- KODI_INPUTSTREAM_ADAPTIVE_VERSION = 2.4.2-Leia
+ KODI_INPUTSTREAM_ADAPTIVE_VERSION = 2.4.6-Leia
 -KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,peak3d,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
 +KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,xbmc,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
  KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPL-2.0+
