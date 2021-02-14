@@ -1,53 +1,77 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 14 Feb 2021 10:48:14 +0100
-Subject: [Buildroot] [PATCH/next v1 1/7] package/libubox: bump version
- to 5bc0146a
-In-Reply-To: <20210213234021.0b3b8bc1@windsurf.home>
-References: <20210210231640.5262-1-ps.report@gmx.net>
- <20210213234021.0b3b8bc1@windsurf.home>
-Message-ID: <20210214104814.3252493c@gmx.net>
+From: Sergey Matyukevich <geomatsi@gmail.com>
+Date: Sun, 14 Feb 2021 17:54:04 +0300
+Subject: [Buildroot] [PATCH v2 1/1] package/dhcp: add host-gawk to
+ dependencies and build environment
+Message-ID: <20210214145404.2587820-1-geomatsi@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+DHCP package may silently fail to install binaries to the target image.
+The problem occurs when buildroot configuration and build host provide
+different flavors of awk. For instance, mawk on build host and gawk in
+buildroot output/host. In this case isc-dhcp configure script detects
+gawk in output/host and generates Makefiles specifying gawk without
+absolute path. During Buildroot installation phase, those Makefiles
+are used to install dhcp binaries. They attempt to use gawk without
+absolute path. However build host does not have gawk.
 
-On Sat, 13 Feb 2021 23:40:21 +0100, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+To resolve the issue add host-gawk to the list of dhcp dependencies
+and explicitely specify absolute path to host-gawk.
 
-> On Thu, 11 Feb 2021 00:16:34 +0100
-> Peter Seiderer <ps.report@gmx.net> wrote:
->
-> > - change download url to https
-> >
-> > - update homepage url (the old one returns 404 - No projects found)
-> >
-> > - add hash file
-> >
-> > - delete 0001-blobmsg-fix-array-out-of-bounds-GCC-10-warning.patch
-> >   (from upstream [1])
-> >
-> > [1] https://git.openwrt.org/?p=project/libubox.git;a=commit;h=eb7eb6393d47a918c420f5b287946dbd6c0d5f57
-> >
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > ---
-> >  ...x-array-out-of-bounds-GCC-10-warning.patch | 47 -------------------
-> >  package/libubox/Config.in                     |  2 +-
-> >  package/libubox/libubox.hash                  |  2 +
-> >  package/libubox/libubox.mk                    |  5 +-
-> >  4 files changed, 6 insertions(+), 50 deletions(-)
-> >  delete mode 100644 package/libubox/0001-blobmsg-fix-array-out-of-bounds-GCC-10-warning.patch
-> >  create mode 100644 package/libubox/libubox.hash
->
-> Thanks, series applied to next. There was an issue on ustream-ssl
-> though: the license file had changed, and you had not updated the hash.
-> I fixed that up when applying. Thanks!
+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+---
 
-Thanks for noticing and fixing it (and shame on me for missing it ;-))....
+Changes v1 -> v2 (after review and tests by Thomas Petazzoni):
+ - suggested change is the same
+ - root cause is figured out and commit message updated
+
+The root cause is explained in commit message. Here are the steps
+to reproduce the issue.
+
+Buildroot Docker image at support/docker/Dockerfile provides a way to
+reproduce the issue. This docker image includes mawk. Each of the
+following cases starts from default qemu_x86_defconfig:
+
+1. Keep using uclibc, enable isc-dhcp server and client
+Buildroot does not have any awk flavor installed in output/host, so
+mawk from build host is used. Build dhcp. The result is ok: both
+dhclient and dhcpd are installed on the target.
+
+2. Switch to glibc, enable isc-dhcp server and client
+Note that glibc package has host-gawk among its dependencies. So in
+this case build host awk (mawk) differs from buildroot host awk (gawk).
+Build dhcp. The result is not ok: neither dhclient nor dhcpd are
+installed to the target.
 
 Regards,
-Peter
+Sergey
 
->
-> Thomas
+ package/dhcp/dhcp.mk | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
+index 988c7792dc..4a9e98485c 100644
+--- a/package/dhcp/dhcp.mk
++++ b/package/dhcp/dhcp.mk
+@@ -10,6 +10,7 @@ DHCP_INSTALL_STAGING = YES
+ DHCP_LICENSE = MPL-2.0
+ DHCP_LICENSE_FILES = LICENSE
+ DHCP_DEPENDENCIES = bind
++DHCP_DEPENDENCIES = bind host-gawk
+ DHCP_CPE_ID_VENDOR = isc
+ 
+ # use libtool-enabled configure.ac
+@@ -22,6 +23,8 @@ DHCP_CONF_ENV = \
+ 		-D_PATH_DHCLIENT_CONF=\"/etc/dhcp/dhclient.conf\"' \
+ 	CFLAGS='$(TARGET_CFLAGS) -DISC_CHECK_NONE=1'
+ 
++DHCP_CONF_ENV += ac_cv_prog_AWK=$(HOST_DIR)/bin/gawk
++
+ DHCP_CONF_OPTS = \
+ 	--with-libbind=$(STAGING_DIR)/usr \
+ 	--with-randomdev=/dev/random \
+-- 
+2.30.1
