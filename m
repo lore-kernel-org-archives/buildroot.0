@@ -1,52 +1,54 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Feb 2021 08:57:34 +0100
-Subject: [Buildroot] [git commit] package/dnsmasq: bump version to 2.84
-Message-ID: <20210214073722.97758843C2@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 14 Feb 2021 09:31:03 +0100
+Subject: [Buildroot] [PATCH/next 1/1]
+ package/x11r7/xdriver_xf86-video-nouveau: bump version to 1.0.17
+Message-ID: <20210214083103.479062-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2dada92a307382b7de4df6469734027d1c5a0f50
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Release notes:
+https://lists.freedesktop.org/archives/nouveau/2021-January/037766.html
 
-Bugfix release, fixing a regression introduced in 2.83.  For more details,
-see the announcement:
+Reformatted hashes.
 
-http://lists.thekelleys.org.uk/pipermail/dnsmasq-discuss/2021q1/014640.html
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 8fcdd2023ee6bc2efd96a3b43fec103f2afa0e2f)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/dnsmasq/dnsmasq.hash | 2 +-
- package/dnsmasq/dnsmasq.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../xdriver_xf86-video-nouveau.hash                   | 11 +++++------
+ .../xdriver_xf86-video-nouveau.mk                     |  2 +-
+ 2 files changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/package/dnsmasq/dnsmasq.hash b/package/dnsmasq/dnsmasq.hash
-index 6c19dad791..d141fb0c83 100644
---- a/package/dnsmasq/dnsmasq.hash
-+++ b/package/dnsmasq/dnsmasq.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
- # https://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.83.tar.xz.asc
--sha256  ffc1f7e8b05e22d910b9a71d09f1128197292766dc7c54cb7018a1b2c3af4aea  dnsmasq-2.83.tar.xz
-+sha256  603195c64b73137609b07e1024ae0b37f652b2f5fe467dce66985b3d1850050c  dnsmasq-2.84.tar.xz
- # Locally calculated
- sha256  dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa  COPYING
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING-v3
-diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
-index fb21dc7ad0..76b48f952a 100644
---- a/package/dnsmasq/dnsmasq.mk
-+++ b/package/dnsmasq/dnsmasq.mk
+diff --git a/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.hash b/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.hash
+index b70728f9b7..336f29be46 100644
+--- a/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.hash
++++ b/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.hash
+@@ -1,7 +1,6 @@
+-# From https://lists.freedesktop.org/archives/nouveau/2019-January/032053.html
+-md5 ecd9be89d853301167e3d564c49f7a8e  xf86-video-nouveau-1.0.16.tar.bz2
+-sha1 a2d19439ceed315079207a62c6888a12e8489995  xf86-video-nouveau-1.0.16.tar.bz2
+-sha256 304060806415579cdb5c1f71f1c54d11cacb431b5552b170decbc883ed43bf06  xf86-video-nouveau-1.0.16.tar.bz2
+-sha512 41b7839c37372660968ab7da2bc3d9feef3cab4e994d05d4ba6e59071f0d1b1f8d7dcdbcb15a42a375a556d28dc067f9ffe45d73c1d121ad307d199107ade3e0  xf86-video-nouveau-1.0.16.tar.bz2
++# From https://lists.freedesktop.org/archives/nouveau/2021-January/037766.html
++sha256  499322e27a55c8183166bf2dd1e47d085eb834143e0d7036baba8427b90c156b  xf86-video-nouveau-1.0.17.tar.bz2
++sha512  adba58ba5298d1a5b3f9f8540f9ef2cb2e10e47bba8e374103ec2e1f92e915f5f4393ed0021168cd649646e12315135a1efcdf77e8fb1648e1295914d87279b2  xf86-video-nouveau-1.0.17.tar.bz2
++
+ # Locally computed
+-sha256 27d8cbdcde7a0bd062ce49cdf8c672201452a64e3e6823f09b1beffe2c4b8eff  COPYING
++sha256  27d8cbdcde7a0bd062ce49cdf8c672201452a64e3e6823f09b1beffe2c4b8eff  COPYING
+diff --git a/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.mk b/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.mk
+index d85cbfe4a4..e63bc611bf 100644
+--- a/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.mk
++++ b/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DNSMASQ_VERSION = 2.83
-+DNSMASQ_VERSION = 2.84
- DNSMASQ_SOURCE = dnsmasq-$(DNSMASQ_VERSION).tar.xz
- DNSMASQ_SITE = http://thekelleys.org.uk/dnsmasq
- DNSMASQ_MAKE_ENV = $(TARGET_MAKE_ENV) CC="$(TARGET_CC)"
+-XDRIVER_XF86_VIDEO_NOUVEAU_VERSION = 1.0.16
++XDRIVER_XF86_VIDEO_NOUVEAU_VERSION = 1.0.17
+ XDRIVER_XF86_VIDEO_NOUVEAU_SOURCE = xf86-video-nouveau-$(XDRIVER_XF86_VIDEO_NOUVEAU_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_NOUVEAU_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_NOUVEAU_LICENSE = MIT
+-- 
+2.29.2
