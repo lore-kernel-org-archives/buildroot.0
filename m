@@ -1,16 +1,16 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Feb 2021 10:03:52 +0100
-Subject: [Buildroot] [git commit branch/next] support/scripts/cpedb.py: drop
- CPE XML database caching
-Message-ID: <20210214084249.BDB52815E7@busybox.osuosl.org>
+Date: Sun, 14 Feb 2021 10:05:00 +0100
+Subject: [Buildroot] [git commit] support/scripts/cpedb.py: drop CPE XML
+ database caching
+Message-ID: <20210214084358.A54FB8379D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f81b0998eadc8aa8a4f8f205f5fa4d68438fb68d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+commit: https://git.buildroot.net/buildroot/commit/?id=09a71e6a756360f2cd96938af9c719391adfb950
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Currently, the CPE XML database is parsed into a Python dict, which is
 then pickled into a local file, to speed up the processing of further
