@@ -1,11 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Feb 2021 17:52:01 +0100
-Subject: [Buildroot] [PATCH] package/subversion: security bump to
- version 1.14.1
-In-Reply-To: <20210211141838.15911-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Thu, 11 Feb 2021 15:18:37 +0100")
-References: <20210211141838.15911-1-peter@korsgaard.com>
-Message-ID: <87pn12bnim.fsf@dell.be.48ers.dk>
+Date: Sun, 14 Feb 2021 17:53:39 +0100
+Subject: [Buildroot] [PATCH] package/xterm: security bump to version 366
+In-Reply-To: <20210211180944.14218-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Thu, 11 Feb 2021 19:09:43 +0100")
+References: <20210211180944.14218-1-peter@korsgaard.com>
+Message-ID: <87lfbqbnfw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,15 +14,9 @@ To: buildroot@busybox.net
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
  > Fixes the following security issue:
- > CVE-2020-17525: Remote unauthenticated denial-of-service in Subversion
- > mod_authz_svn
-
- > Subversion's mod_authz_svn module will crash if the server is using
- > in-repository authz rules with the AuthzSVNReposRelativeAccessFile option
- > and a client sends a request for a non-existing repository URL.
-
- > For more details, see the advisory:
- > https://subversion.apache.org/security/CVE-2020-17525-advisory.txt
+ > CVE-2021-27135: xterm through Patch #365 allows remote attackers to cause a
+ > denial of service (segmentation fault) or possibly have unspecified other
+ > impact via a crafted UTF-8 character sequence.
 
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
