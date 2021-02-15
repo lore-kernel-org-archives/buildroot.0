@@ -1,104 +1,666 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 15 Feb 2021 23:04:35 +0100
-Subject: [Buildroot] [git commit] package/libgpg-error: fix build without
- threads
-Message-ID: <20210215215557.6903C8469B@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 15 Feb 2021 23:55:51 +0100
+Subject: [Buildroot] [RFC/next v1] package/rpi-firmware: rework boot/config
+ file handling
+Message-ID: <20210215225551.6738-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f9596e50ece8f3ba290953b596280f976e23ec67
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Try to be less smart (focused on the one target/one use-case),
+instead reduce the rpi-firmware package to a selectable list
+of (verbatim) installed firmware files.
 
-Fix build without threads of libgpg-error in version >= 1.40
+- change rpi-firmware config handling from rpi-variant/rpi-flavour
+  choices to bootcode.bin, pi-default/-extended/-cut-down and
+  pi4-/default/-extended/-cut-down selection
 
-Fixes:
- - http://autobuild.buildroot.org/results/3344c96e5627a9327b0eabe0b27f34490bbabc0d
+- add BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE option to select installable
+  config.txt file
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+- remove config.txt modify code/handling from raspberry post-image.sh
+  script
+
+- add different customized config.txt files to the raspberry board
+  section
+
+- change raspberry defconfigs to select appropiate rpi-firmware
+  and config.txt files
+
+With this changes a better support for custom use-cases should
+be possible, specially multi-target SD cards as suggested by
+Stefan Agner ([1]).
+
+[1] http://lists.busybox.net/pipermail/buildroot/2021-February/303318.html
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- ...01-configure.ac-fix-build-without-threads.patch | 54 ++++++++++++++++++++++
- package/libgpg-error/libgpg-error.mk               |  8 ++++
- 2 files changed, 62 insertions(+)
+ .../raspberrypi/config_0w.txt                 |  7 +-
+ board/raspberrypi/config_3.txt                | 26 +++++++
+ board/raspberrypi/config_3_64bit.txt          | 30 +++++++
+ board/raspberrypi/config_3_qt5we.txt          | 26 +++++++
+ board/raspberrypi/config_4.txt                | 26 +++++++
+ board/raspberrypi/config_4_64bit.txt          | 30 +++++++
+ board/raspberrypi/config_default.txt          | 23 ++++++
+ board/raspberrypi/post-image.sh               | 33 --------
+ configs/raspberrypi0_defconfig                |  3 +
+ configs/raspberrypi0w_defconfig               |  4 +-
+ configs/raspberrypi2_defconfig                |  3 +
+ configs/raspberrypi3_64_defconfig             |  4 +-
+ configs/raspberrypi3_defconfig                |  4 +-
+ configs/raspberrypi3_qt5we_defconfig          |  4 +-
+ configs/raspberrypi4_64_defconfig             |  4 +-
+ configs/raspberrypi4_defconfig                |  2 +-
+ configs/raspberrypi_defconfig                 |  3 +
+ package/rpi-firmware/Config.in                | 78 ++++++++-----------
+ package/rpi-firmware/rpi-firmware.mk          | 53 ++++++++++---
+ 19 files changed, 266 insertions(+), 97 deletions(-)
+ rename package/rpi-firmware/config.txt => board/raspberrypi/config_0w.txt (79%)
+ create mode 100644 board/raspberrypi/config_3.txt
+ create mode 100644 board/raspberrypi/config_3_64bit.txt
+ create mode 100644 board/raspberrypi/config_3_qt5we.txt
+ create mode 100644 board/raspberrypi/config_4.txt
+ create mode 100644 board/raspberrypi/config_4_64bit.txt
+ create mode 100644 board/raspberrypi/config_default.txt
 
-diff --git a/package/libgpg-error/0001-configure.ac-fix-build-without-threads.patch b/package/libgpg-error/0001-configure.ac-fix-build-without-threads.patch
-new file mode 100644
-index 0000000000..5f5147e0df
---- /dev/null
-+++ b/package/libgpg-error/0001-configure.ac-fix-build-without-threads.patch
-@@ -0,0 +1,54 @@
-+From 77c89f62f106d88ef2b5963f4a13755c337c793d Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 15 Feb 2021 07:56:29 +0100
-+Subject: [PATCH] configure.ac: fix build without threads
-+
-+Cross-compilation of libgpg-error fails on toolchain without threads
-+since commit 988211d3d4c1f3d5cfa6b460210f65ab636763b5,
-+9ee011259f819a3cf50fe7019fa4366dbc437e0e and
-+50e62b36ea01ed25d12c443088b85d4f41a2b3e1
-+
-+Indeed, since that time, libgpg-error assumes that pthread.h is always
-+available resulting in the following error at configure time:
-+
-+checking for arm-unknown-linux-gnueabi-objdump... (cached) /tmp/instance-1/output-1/host/bin/arm-linux-objdump
-+conftest.c:1:10: fatal error: pthread.h: No such file or directory
-+    1 | #include <pthread.h>
-+      |          ^~~~~~~~~~~
-+compilation terminated.
-+configure: generated src/lock-obj-pub.native.h using arm-unknown-linux-gnueabi-objdump and gawk
-+checking whether to enable log_clock... no
-+
-+This error will in turn results in a build failure because
-+"Can't determine mutex size" is echoed by gen-lock-obj.sh:
-+
-+In file included from strsource-sym.c:27:
-+./gpg-error.h:1115:4: warning: missing terminating ' character
-+ 1115 | Can't determine mutex size
-+      |    ^
-+
-+Full build log:
-+http://autobuild.buildroot.org/results/334/3344c96e5627a9327b0eabe0b27f34490bbabc0d/build-end.log
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://dev.gnupg.org/T5296]
-+---
-+ configure.ac | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index b9a2a3e..15d9fdc 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -599,7 +599,7 @@ if test x$cross_compiling = xyes; then
-+   case $host in
-+     *-*-linux*)
-+     AC_CHECK_TOOL(OBJDUMP, [objdump])
-+-    if test -n "$OBJDUMP"; then
-++    if test -n "$OBJDUMP" -a x"$gl_use_threads" != xno; then
-+       lock_obj_h_generated=yes
-+       if test ! -d src; then mkdir src; fi
-+       LOCK_ABI_VERSION=1 host=$host host_alias=$host_alias \
-+-- 
-+2.30.0
-+
-diff --git a/package/libgpg-error/libgpg-error.mk b/package/libgpg-error/libgpg-error.mk
-index 78ed3e5464..1b35e5c8f0 100644
---- a/package/libgpg-error/libgpg-error.mk
-+++ b/package/libgpg-error/libgpg-error.mk
-@@ -15,5 +15,13 @@ LIBGPG_ERROR_CONFIG_SCRIPTS = gpg-error-config
- LIBGPG_ERROR_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
- LIBGPG_ERROR_CONF_OPTS = --disable-tests \
- 		--host=$(BR2_PACKAGE_LIBGPG_ERROR_SYSCFG)
-+# We're patching configure.ac
-+LIBGPG_ERROR_AUTORECONF= YES
-+
-+ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-+LIBGPG_ERROR_CONF_OPTS += --enable-threads
-+else
-+LIBGPG_ERROR_CONF_OPTS += --disable-threads
-+endif
+diff --git a/package/rpi-firmware/config.txt b/board/raspberrypi/config_0w.txt
+similarity index 79%
+rename from package/rpi-firmware/config.txt
+rename to board/raspberrypi/config_0w.txt
+index 4a92a4dd95..771b975046 100644
+--- a/package/rpi-firmware/config.txt
++++ b/board/raspberrypi/config_0w.txt
+@@ -1,11 +1,9 @@
+ # Please note that this is only a sample, we recommend you to change it to fit
+ # your needs.
+-# You should override this file using a post-build script.
++# You should override this file using BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE.
+ # See http://buildroot.org/manual.html#rootfs-custom
+ # and http://elinux.org/RPiconfig for a description of config.txt syntax
  
- $(eval $(autotools-package))
+-# We always use the same names, the real used variant is selected by
+-# BR2_PACKAGE_RPI_FIRMWARE_{DEFAULT,X,CD} choice
+ start_file=start.elf
+ fixup_file=fixup.dat
+ 
+@@ -23,3 +21,6 @@ disable_overscan=1
+ gpu_mem_256=100
+ gpu_mem_512=100
+ gpu_mem_1024=100
++
++# fixes rpi (3B, 3B+, 3A+, 4B and Zero W) ttyAMA0 serial console
++dtoverlay=miniuart-bt
+diff --git a/board/raspberrypi/config_3.txt b/board/raspberrypi/config_3.txt
+new file mode 100644
+index 0000000000..771b975046
+--- /dev/null
++++ b/board/raspberrypi/config_3.txt
+@@ -0,0 +1,26 @@
++# Please note that this is only a sample, we recommend you to change it to fit
++# your needs.
++# You should override this file using BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE.
++# See http://buildroot.org/manual.html#rootfs-custom
++# and http://elinux.org/RPiconfig for a description of config.txt syntax
++
++start_file=start.elf
++fixup_file=fixup.dat
++
++kernel=zImage
++
++# To use an external initramfs file
++#initramfs rootfs.cpio.gz
++
++# Disable overscan assuming the display supports displaying the full resolution
++# If the text shown on the screen disappears off the edge, comment this out
++disable_overscan=1
++
++# How much memory in MB to assign to the GPU on Pi models having
++# 256, 512 or 1024 MB total memory
++gpu_mem_256=100
++gpu_mem_512=100
++gpu_mem_1024=100
++
++# fixes rpi (3B, 3B+, 3A+, 4B and Zero W) ttyAMA0 serial console
++dtoverlay=miniuart-bt
+diff --git a/board/raspberrypi/config_3_64bit.txt b/board/raspberrypi/config_3_64bit.txt
+new file mode 100644
+index 0000000000..965f63cc80
+--- /dev/null
++++ b/board/raspberrypi/config_3_64bit.txt
+@@ -0,0 +1,30 @@
++# Please note that this is only a sample, we recommend you to change it to fit
++# your needs.
++# You should override this file using BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE.
++# See http://buildroot.org/manual.html#rootfs-custom
++# and http://elinux.org/RPiconfig for a description of config.txt syntax
++
++start_file=start.elf
++fixup_file=fixup.dat
++
++kernel=zImage
++
++# To use an external initramfs file
++#initramfs rootfs.cpio.gz
++
++# Disable overscan assuming the display supports displaying the full resolution
++# If the text shown on the screen disappears off the edge, comment this out
++disable_overscan=1
++
++# How much memory in MB to assign to the GPU on Pi models having
++# 256, 512 or 1024 MB total memory
++gpu_mem_256=100
++gpu_mem_512=100
++gpu_mem_1024=100
++
++# fixes rpi (3B, 3B+, 3A+, 4B and Zero W) ttyAMA0 serial console
++dtoverlay=miniuart-bt
++
++# enable 64bits support
++arm_64bit=1
++
+diff --git a/board/raspberrypi/config_3_qt5we.txt b/board/raspberrypi/config_3_qt5we.txt
+new file mode 100644
+index 0000000000..752310b179
+--- /dev/null
++++ b/board/raspberrypi/config_3_qt5we.txt
+@@ -0,0 +1,26 @@
++# Please note that this is only a sample, we recommend you to change it to fit
++# your needs.
++# You should override this file using BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE.
++# See http://buildroot.org/manual.html#rootfs-custom
++# and http://elinux.org/RPiconfig for a description of config.txt syntax
++
++start_file=start.elf
++fixup_file=fixup.dat
++
++kernel=zImage
++
++# To use an external initramfs file
++#initramfs rootfs.cpio.gz
++
++# Disable overscan assuming the display supports displaying the full resolution
++# If the text shown on the screen disappears off the edge, comment this out
++disable_overscan=1
++
++# How much memory in MB to assign to the GPU on Pi models having
++# 256, 512 or 1024 MB total memory
++gpu_mem_256=100
++gpu_mem_512=100
++gpu_mem_1024=200
++
++# fixes rpi (3B, 3B+, 3A+, 4B and Zero W) ttyAMA0 serial console
++dtoverlay=miniuart-bt
+diff --git a/board/raspberrypi/config_4.txt b/board/raspberrypi/config_4.txt
+new file mode 100644
+index 0000000000..01f60395b3
+--- /dev/null
++++ b/board/raspberrypi/config_4.txt
+@@ -0,0 +1,26 @@
++# Please note that this is only a sample, we recommend you to change it to fit
++# your needs.
++# You should override this file using BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE.
++# See http://buildroot.org/manual.html#rootfs-custom
++# and http://elinux.org/RPiconfig for a description of config.txt syntax
++
++start_file=start4.elf
++fixup_file=fixup4.dat
++
++kernel=zImage
++
++# To use an external initramfs file
++#initramfs rootfs.cpio.gz
++
++# Disable overscan assuming the display supports displaying the full resolution
++# If the text shown on the screen disappears off the edge, comment this out
++disable_overscan=1
++
++# How much memory in MB to assign to the GPU on Pi models having
++# 256, 512 or 1024 MB total memory
++gpu_mem_256=100
++gpu_mem_512=100
++gpu_mem_1024=100
++
++# fixes rpi (3B, 3B+, 3A+, 4B and Zero W) ttyAMA0 serial console
++dtoverlay=miniuart-bt
+diff --git a/board/raspberrypi/config_4_64bit.txt b/board/raspberrypi/config_4_64bit.txt
+new file mode 100644
+index 0000000000..704efebe96
+--- /dev/null
++++ b/board/raspberrypi/config_4_64bit.txt
+@@ -0,0 +1,30 @@
++# Please note that this is only a sample, we recommend you to change it to fit
++# your needs.
++# You should override this file using BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE.
++# See http://buildroot.org/manual.html#rootfs-custom
++# and http://elinux.org/RPiconfig for a description of config.txt syntax
++
++start_file=start4.elf
++fixup_file=fixup4.dat
++
++kernel=zImage
++
++# To use an external initramfs file
++#initramfs rootfs.cpio.gz
++
++# Disable overscan assuming the display supports displaying the full resolution
++# If the text shown on the screen disappears off the edge, comment this out
++disable_overscan=1
++
++# How much memory in MB to assign to the GPU on Pi models having
++# 256, 512 or 1024 MB total memory
++gpu_mem_256=100
++gpu_mem_512=100
++gpu_mem_1024=100
++
++# fixes rpi (3B, 3B+, 3A+, 4B and Zero W) ttyAMA0 serial console
++dtoverlay=miniuart-bt
++
++# enable 64bits support
++arm_64bit=1
++
+diff --git a/board/raspberrypi/config_default.txt b/board/raspberrypi/config_default.txt
+new file mode 100644
+index 0000000000..c09ecca1a9
+--- /dev/null
++++ b/board/raspberrypi/config_default.txt
+@@ -0,0 +1,23 @@
++# Please note that this is only a sample, we recommend you to change it to fit
++# your needs.
++# You should override this file using BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE.
++# See http://buildroot.org/manual.html#rootfs-custom
++# and http://elinux.org/RPiconfig for a description of config.txt syntax
++
++start_file=start.elf
++fixup_file=fixup.dat
++
++kernel=zImage
++
++# To use an external initramfs file
++#initramfs rootfs.cpio.gz
++
++# Disable overscan assuming the display supports displaying the full resolution
++# If the text shown on the screen disappears off the edge, comment this out
++disable_overscan=1
++
++# How much memory in MB to assign to the GPU on Pi models having
++# 256, 512 or 1024 MB total memory
++gpu_mem_256=100
++gpu_mem_512=100
++gpu_mem_1024=100
+diff --git a/board/raspberrypi/post-image.sh b/board/raspberrypi/post-image.sh
+index 9dbd98ef9b..6cad20fb9e 100755
+--- a/board/raspberrypi/post-image.sh
++++ b/board/raspberrypi/post-image.sh
+@@ -7,39 +7,6 @@ BOARD_NAME="$(basename ${BOARD_DIR})"
+ GENIMAGE_CFG="${BOARD_DIR}/genimage-${BOARD_NAME}.cfg"
+ GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
+ 
+-for arg in "$@"
+-do
+-	case "${arg}" in
+-		--add-miniuart-bt-overlay)
+-		if ! grep -qE '^dtoverlay=' "${BINARIES_DIR}/rpi-firmware/config.txt"; then
+-			echo "Adding 'dtoverlay=miniuart-bt' to config.txt (fixes ttyAMA0 serial console)."
+-			cat << __EOF__ >> "${BINARIES_DIR}/rpi-firmware/config.txt"
+-
+-# fixes rpi (3B, 3B+, 3A+, 4B and Zero W) ttyAMA0 serial console
+-dtoverlay=miniuart-bt
+-__EOF__
+-		fi
+-		;;
+-		--aarch64)
+-		# Run a 64bits kernel (armv8)
+-		sed -e '/^kernel=/s,=.*,=Image,' -i "${BINARIES_DIR}/rpi-firmware/config.txt"
+-		if ! grep -qE '^arm_64bit=1' "${BINARIES_DIR}/rpi-firmware/config.txt"; then
+-			cat << __EOF__ >> "${BINARIES_DIR}/rpi-firmware/config.txt"
+-
+-# enable 64bits support
+-arm_64bit=1
+-__EOF__
+-		fi
+-		;;
+-		--gpu_mem_256=*|--gpu_mem_512=*|--gpu_mem_1024=*)
+-		# Set GPU memory
+-		gpu_mem="${arg:2}"
+-		sed -e "/^${gpu_mem%=*}=/s,=.*,=${gpu_mem##*=}," -i "${BINARIES_DIR}/rpi-firmware/config.txt"
+-		;;
+-	esac
+-
+-done
+-
+ # Pass an empty rootpath. genimage makes a full copy of the given rootpath to
+ # ${GENIMAGE_TMP}/root so passing TARGET_DIR would be a waste of time and disk
+ # space. We don't rely on genimage to build the rootfs image, just to insert a
+diff --git a/configs/raspberrypi0_defconfig b/configs/raspberrypi0_defconfig
+index c06d6dfcb5..3f6fbbf176 100644
+--- a/configs/raspberrypi0_defconfig
++++ b/configs/raspberrypi0_defconfig
+@@ -20,6 +20,9 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2708-rpi-zero"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ 
+ BR2_PACKAGE_RPI_FIRMWARE=y
++BR2_PACKAGE_RPI_FIRMWARE_BOOTCODE_BIN=y
++BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI=y
++BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE="board/raspberrypi0/config_default.txt"
+ # BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS is not set
+ 
+ # Required tools to create the SD image
+diff --git a/configs/raspberrypi0w_defconfig b/configs/raspberrypi0w_defconfig
+index b54bb34ad9..82413ef327 100644
+--- a/configs/raspberrypi0w_defconfig
++++ b/configs/raspberrypi0w_defconfig
+@@ -16,6 +16,9 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2708-rpi-zero-w"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ 
+ BR2_PACKAGE_RPI_FIRMWARE=y
++BR2_PACKAGE_RPI_FIRMWARE_BOOTCODE_BIN=y
++BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI=y
++BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE="board/raspberrypi0w/config_0w.txt"
+ 
+ # Required tools to create the SD image
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+@@ -29,4 +32,3 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi0w/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi0w/post-image.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="--add-miniuart-bt-overlay"
+diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
+index 5104422cb1..9a56e15f0a 100644
+--- a/configs/raspberrypi2_defconfig
++++ b/configs/raspberrypi2_defconfig
+@@ -22,6 +22,9 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2709-rpi-2-b"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ 
+ BR2_PACKAGE_RPI_FIRMWARE=y
++BR2_PACKAGE_RPI_FIRMWARE_BOOTCODE_BIN=y
++BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI=y
++BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE="board/raspberrypi/config_default.txt"
+ # BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS is not set
+ 
+ # Required tools to create the SD image
+diff --git a/configs/raspberrypi3_64_defconfig b/configs/raspberrypi3_64_defconfig
+index 65c1291e6a..d964058c96 100644
+--- a/configs/raspberrypi3_64_defconfig
++++ b/configs/raspberrypi3_64_defconfig
+@@ -21,6 +21,9 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2710-rpi-3-b broadcom/bcm2710-rpi-
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ 
+ BR2_PACKAGE_RPI_FIRMWARE=y
++BR2_PACKAGE_RPI_FIRMWARE_BOOTCODE_BIN=y
++BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI=y
++BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE="board/raspberrypi3-64/config_3_64bit.txt"
+ 
+ # Required tools to create the SD image
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+@@ -34,4 +37,3 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3-64/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3-64/post-image.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="--aarch64 --add-miniuart-bt-overlay"
+diff --git a/configs/raspberrypi3_defconfig b/configs/raspberrypi3_defconfig
+index 96eca54f0d..b5fa794d5c 100644
+--- a/configs/raspberrypi3_defconfig
++++ b/configs/raspberrypi3_defconfig
+@@ -21,6 +21,9 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2710-rpi-3-b bcm2710-rpi-3-b-plus bcm2710-r
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ 
+ BR2_PACKAGE_RPI_FIRMWARE=y
++BR2_PACKAGE_RPI_FIRMWARE_BOOTCODE_BIN=y
++BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI=y
++BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE="board/raspberrypi3/config_3.txt"
+ 
+ # Required tools to create the SD image
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+@@ -34,4 +37,3 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3/post-image.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="--add-miniuart-bt-overlay"
+diff --git a/configs/raspberrypi3_qt5we_defconfig b/configs/raspberrypi3_qt5we_defconfig
+index 8015288acb..ffdc258534 100644
+--- a/configs/raspberrypi3_qt5we_defconfig
++++ b/configs/raspberrypi3_qt5we_defconfig
+@@ -31,6 +31,9 @@ BR2_PACKAGE_QT5BASE_PNG=y
+ BR2_PACKAGE_QT5WEBENGINE=y
+ BR2_PACKAGE_QT5WEBENGINE_PROPRIETARY_CODECS=y
+ BR2_PACKAGE_RPI_FIRMWARE=y
++BR2_PACKAGE_RPI_FIRMWARE_BOOTCODE_BIN=y
++BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI=y
++BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE="board/raspberrypi3/config_3_qt5we.txt"
+ BR2_PACKAGE_RPI_USERLAND=y
+ BR2_PACKAGE_CA_CERTIFICATES=y
+ BR2_PACKAGE_NTP=y
+@@ -48,4 +51,3 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="400M"
+ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3/post-image.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="--add-miniuart-bt-overlay --gpu_mem_1024=200"
+diff --git a/configs/raspberrypi4_64_defconfig b/configs/raspberrypi4_64_defconfig
+index 94ac5cf5ec..ffc34fff1a 100644
+--- a/configs/raspberrypi4_64_defconfig
++++ b/configs/raspberrypi4_64_defconfig
+@@ -21,6 +21,9 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2711-rpi-4-b"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ 
+ BR2_PACKAGE_RPI_FIRMWARE=y
++BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4=y
++BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE="board/raspberrypi4-64/config_4.txt"
++
+ BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4=y
+ 
+ # Required tools to create the SD image
+@@ -35,4 +38,3 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi4-64/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi4-64/post-image.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="--add-miniuart-bt-overlay --aarch64"
+diff --git a/configs/raspberrypi4_defconfig b/configs/raspberrypi4_defconfig
+index c2ed5e73c5..f9a90eb1cb 100644
+--- a/configs/raspberrypi4_defconfig
++++ b/configs/raspberrypi4_defconfig
+@@ -22,6 +22,7 @@ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ 
+ BR2_PACKAGE_RPI_FIRMWARE=y
+ BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4=y
++BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE="board/raspberrypi4/config_4.txt"
+ 
+ # Required tools to create the SD image
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+@@ -35,4 +36,3 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi4/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi4/post-image.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="--add-miniuart-bt-overlay"
+diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
+index 2d3bb536bf..9c9513277b 100644
+--- a/configs/raspberrypi_defconfig
++++ b/configs/raspberrypi_defconfig
+@@ -21,6 +21,9 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2708-rpi-b bcm2708-rpi-b-plus bcm2708-rpi-c
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ 
+ BR2_PACKAGE_RPI_FIRMWARE=y
++BR2_PACKAGE_RPI_FIRMWARE_BOOTCODE_BIN=y
++BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI=y
++BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE="board/raspberrypi/config_default.txt"
+ # BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS is not set
+ 
+ # Required tools to create the SD image
+diff --git a/package/rpi-firmware/Config.in b/package/rpi-firmware/Config.in
+index f5a25c5680..424122d654 100644
+--- a/package/rpi-firmware/Config.in
++++ b/package/rpi-firmware/Config.in
+@@ -11,63 +11,53 @@ config BR2_PACKAGE_RPI_FIRMWARE
+ 
+ if BR2_PACKAGE_RPI_FIRMWARE
+ 
+-choice
+-	bool "rpi variant"
++config BR2_PACKAGE_RPI_FIRMWARE_BOOTCODE_BIN
++	bool "rpi 0/1/2/3 bootcode.bin"
+ 	help
+-	  The Raspberry Pi 4 introduced a slightly different naming
+-	  convention and set of boot files. This option controls which
+-	  format to use.
++	  The bootcode.bin for versions Zero/1/2/3 (not needed on rpi4,
++	  because it has been replaced by boot code in the onboard
++	  EEPROM).
+ 
+ config BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI
+-	bool "rpi 0/1/2/3"
++	bool "rpi 0/1/2/3 (default)"
+ 	help
+-	  The default set of files, for versions pre-4
++	  The default set of files for versions Zero/1/2/3.
+ 
+-config BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4
+-	bool "rpi 4"
++config BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI_X
++	bool "rpi 0/1/2/3 (extended)"
+ 	help
+-	  The Raspberry Pi 4 files
+-endchoice
++	  The extended set of files for versions Zero/1/2/3 (additional
++	  GPU features, eg. more audio/video codecs).
+ 
+-choice
+-	bool "Firmware to boot"
+-	default BR2_PACKAGE_RPI_FIRMWARE_DEFAULT
++config BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI_CD
++	bool "rpi 0/1/2/3 (cut-down)"
+ 	help
+-	  There are three different firmware files:
+-	    - the default firmware, that enables standard GPU
+-	      features;
+-	    - the extended firmware, that enables additional GPU
+-	      features (eg. more audio/video codecs);
+-	    - the cut-down firmware, for emergency situations, with
+-	      only features required to boot a Linux kernel.
+-
+-config BR2_PACKAGE_RPI_FIRMWARE_DEFAULT
+-	bool "default"
++	  The cut-down set of files for versions Zero/1/2/3 (only
++	  features required to boot a Linux kernel).
++
++config BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4
++	bool "rpi 4 (default)"
++	help
++	  The default set of files for versions 4 (standard GPU
++	  features).
++
++config BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4_X
++	bool "rpi 4 (extended)"
+ 	help
+-	  The default firmware, that enables standard GPU features.
++	  The extended set of files for versions 4 (additional GPU
++	  features, eg. more audio/video codecs).
+ 
+-config BR2_PACKAGE_RPI_FIRMWARE_X
+-	bool "extended ('x', more codecs)"
++config BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4_CD
++	bool "rpi 4 (cut-down)"
+ 	help
+-	  The extended firmware, that enables additional GPU features
+-	  (eg. more audio/video codecs).
++	  The cut-down set of files for versions 4 (only features
++	  required to boot a Linux kernel).
+ 
+-config BR2_PACKAGE_RPI_FIRMWARE_CD
+-	bool "cut-down ('cd', emergency)"
++config BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE
++	string "Patch to a file stored as boot/config.txt"
+ 	help
+-	  The cut-down firmware, for emergency situations, with only
+-	  features required to boot a Linux kernel.
+-
+-endchoice
+-
+-config BR2_PACKAGE_RPI_FIRMWARE_BOOT
+-	string
+-	default ""      if BR2_PACKAGE_RPI_FIRMWARE_DEFAULT && BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI
+-	default "4"     if BR2_PACKAGE_RPI_FIRMWARE_DEFAULT && BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4
+-	default "_x"    if BR2_PACKAGE_RPI_FIRMWARE_X && BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI
+-	default "4x"    if BR2_PACKAGE_RPI_FIRMWARE_X && BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4
+-	default "_cd"   if BR2_PACKAGE_RPI_FIRMWARE_CD && BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI
+-	default "4cd"   if BR2_PACKAGE_RPI_FIRMWARE_CD && BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4
++	  Path to a file stored as config.txt in the boot partiton
++	  of the generated SD card image.
+ 
+ config BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS
+ 	bool "Install Device Tree Blobs (DTBs)"
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index f3d28ef825..a7ab8f0f14 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
+@@ -10,6 +10,46 @@ RPI_FIRMWARE_LICENSE = BSD-3-Clause
+ RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
+ RPI_FIRMWARE_INSTALL_IMAGES = YES
+ 
++ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_BOOTCODE_BIN),y)
++RPI_FIRMWARE_FILES += bootcode.bin
++endif
++
++ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI),y)
++RPI_FIRMWARE_FILES += start.elf fixup.dat
++endif
++
++ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI_X),y)
++RPI_FIRMWARE_FILES += startx.elf fixupx.dat
++endif
++
++ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI_CD),y)
++RPI_FIRMWARE_FILES += start_cd.elf fixup_cd.dat
++endif
++
++ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4),y)
++RPI_FIRMWARE_FILES += start4.elf fixup4.dat
++endif
++
++ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4_X),y)
++RPI_FIRMWARE_FILES += start4x.elf fixup4x.dat
++endif
++
++ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4_CD),y)
++RPI_FIRMWARE_FILES += start4cd.elf fixup4cd.dat
++endif
++
++define RPI_FIRMWARE_INSTALL_BIN
++	for firmwbin in  $(RPI_FIRMWARE_FILES); do \
++		$(INSTALL) -D -m 0644 $(@D)/boot/$${firmwbin} $(BINARIES_DIR)/rpi-firmware/$${firmwbin} || exit 1; \
++	done
++endef
++
++ifneq ($(BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE),)
++define RPI_FIRMWARE_INSTALL_CONFIG
++	$(INSTALL) -D -m 0644 $(BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE) $(BINARIES_DIR)/rpi-firmware/config.txt
++endef
++endif
++
+ ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS),y)
+ define RPI_FIRMWARE_INSTALL_DTB
+ 	$(foreach dtb,$(wildcard $(@D)/boot/*.dtb), \
+@@ -41,19 +81,10 @@ define RPI_FIRMWARE_INSTALL_TARGET_CMDS
+ endef
+ endif # INSTALL_VCDBG
+ 
+-ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI),y)
+-# bootcode.bin is not used on rpi4, because it has been replaced by boot code in the onboard EEPROM
+-define RPI_FIRMWARE_INSTALL_BOOTCODE_BIN
+-	$(INSTALL) -D -m 0644 $(@D)/boot/bootcode.bin $(BINARIES_DIR)/rpi-firmware/bootcode.bin
+-endef
+-endif
+-
+ define RPI_FIRMWARE_INSTALL_IMAGES_CMDS
+-	$(INSTALL) -D -m 0644 package/rpi-firmware/config.txt $(BINARIES_DIR)/rpi-firmware/config.txt
+ 	$(INSTALL) -D -m 0644 package/rpi-firmware/cmdline.txt $(BINARIES_DIR)/rpi-firmware/cmdline.txt
+-	$(INSTALL) -D -m 0644 $(@D)/boot/start$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/start.elf
+-	$(INSTALL) -D -m 0644 $(@D)/boot/fixup$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).dat $(BINARIES_DIR)/rpi-firmware/fixup.dat
+-	$(RPI_FIRMWARE_INSTALL_BOOTCODE_BIN)
++	$(RPI_FIRMWARE_INSTALL_BIN)
++	$(RPI_FIRMWARE_INSTALL_CONFIG)
+ 	$(RPI_FIRMWARE_INSTALL_DTB)
+ 	$(RPI_FIRMWARE_INSTALL_DTB_OVERLAYS)
+ endef
+-- 
+2.30.0
