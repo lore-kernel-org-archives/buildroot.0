@@ -1,53 +1,62 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon, 15 Feb 2021 10:11:50 +0100
-Subject: [Buildroot] [PATCHv2 2/7] core: enable 'NDEBUG' unless
- BR2_ENABLE_RUNTIME_DEBUG is set
-In-Reply-To: <20210213225610.3f1839af@windsurf.home>
-References: <20210212135451.22786-1-patrickdepinguin@gmail.com>
- <20210212135451.22786-3-patrickdepinguin@gmail.com>
- <20210213225610.3f1839af@windsurf.home>
-Message-ID: <CAAXf6LWYt05UAWcg1Hnyg0rSxvhHHD6NG73BC3-9k8NvGTJqLQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 15 Feb 2021 10:12:34 +0100
+Subject: [Buildroot] [PATCH 2/2] package/tzdata: bump version to 2020f
+In-Reply-To: <20210214203543.GA2945341@scaer> (Yann E. MORIN's message of
+ "Sun, 14 Feb 2021 21:35:43 +0100")
+References: <20210110164711.1708062-1-bernd.kuhls@t-online.de>
+ <20210110164711.1708062-2-bernd.kuhls@t-online.de>
+ <87zh1ekq9r.fsf@dell.be.48ers.dk>
+ <19dff490-6537-bc7d-7035-e4bd99f97452@gmail.com>
+ <877dnad5ux.fsf@dell.be.48ers.dk>
+ <602ba0f2-503c-7175-c4fb-7dcac246631c@gmail.com>
+ <8735xyd2vs.fsf@dell.be.48ers.dk> <20210214182145.GH6798@piout.net>
+ <8c8b3bb9-0179-b194-1ad3-98cdd55ff4b3@gmail.com>
+ <20210214203543.GA2945341@scaer>
+Message-ID: <87h7mdbsot.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-El s?b, 13 feb 2021 a las 22:56, Thomas Petazzoni
-(<thomas.petazzoni@bootlin.com>) escribi?:
->
-> On Fri, 12 Feb 2021 14:54:45 +0100
-> Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote:
->
-> > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> >
-> > A common way to disable runtime assertions is by honoring the 'NDEBUG'
-> > preprocessor flag. Set it when BR2_ENABLE_RUNTIME_DEBUG is disabled (the
-> > default case).
->
-> How "common" is that? It feels a pretty "random" definition to me. I'm
-> not sure we want to randomly pass -DNDEBUG to all our packages, without
-> knowing what the meaning of NDEBUG is for all those packages.
+Hi,
 
-'Originally', NDEBUG is the macro used by assert() to decide whether
-or not assertions actually do anything.
-See https://www.man7.org/linux/man-pages/man3/assert.3.html
+ > So it looks like the duplicated header is causing issues everywhere...
 
-cmake links this parameter to the CMAKE_BUILD_TYPE, setting NDEBUG for
-'Release', and not setting it for 'Debug'.
+ >> I added back the previous default zic format "fat" instead of "slim" [1] to pass
+ >> the test. The default format has been changed in 2020b release.
+ >> I'm not sure if we should keep the "fat" format...
+ >> [1] https://github.com/eggert/tz/commit/6ba6f2117b95eab345a7ed9159cef939e30c4cd3
 
-Based on these two elements, I find NDEBUG a fairly standard mechanism.
+https://github.com/eggert/tz/commit/7879a3fba1310da0ccc1c336515b5b4a409c3ccb
+(the commit adding the slim variant) gives more info.
 
-But it is indeed possible that some package uses this in an unexpected
-way. For this reason I would not merge this series for 2021.02 but
-instead opt for -next so we have some more time to catch any problems.
+ > To be noted: the glibc version used in thoses tests is 2.18, released in
+ > August 2013...
 
-For the severe performance degradation we observed in gRPC/libabseil,
-the patch changing the cmake build system would be sufficient.
-But since the problem is generic, I opted to also make this patch for
-other packages.
+ > It seems the support for the slim format was only introduced with glibc
+ > 2.32. 2.31 has no mention of either slim or fat, while 2.32 mention
+ > both, as it synced with upstream tz 2020a; the previous sync was with
+ > 2018i...
 
-Best regards,
-Thomas
+It is also not clear to me exactly when the slim format support was
+added to glibc, but as additional datapoints, I have it working with a
+2.30 based toolchain built by 2020.02.x and a 2.31 based one built by
+2020.11.x.
+
+
+ > So, what I suggest we do:
+
+ >   - for master (and next): revert to fat for external glibc, use slim
+ >     for internal glibc (check for c-sky)
+
+ >   - for maintenance branches: unconditionally revert to fat.
+
+Sounds sensible. Please do it in 2 patches, E.G. first use fat
+everywhere, and then as a followup patch change to slim for internal
+glibc.
+
+-- 
+Bye, Peter Korsgaard
