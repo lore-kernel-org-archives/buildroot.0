@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 15 Feb 2021 14:58:37 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/postgresql:
+Date: Mon, 15 Feb 2021 15:00:42 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/postgresql:
  security bump to version 12.6
-Message-ID: <20210215133908.74E3A8379F@busybox.osuosl.org>
+Message-ID: <20210215133919.98F218379F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f5ee0a2ab7330de695815cbee689fb23f3fc638c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=9863d41ab3c532704a21bab080345aef2a320015
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
 Fixes the following security issue:
 
