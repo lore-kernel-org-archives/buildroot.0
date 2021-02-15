@@ -1,52 +1,101 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 15 Feb 2021 19:57:09 +0100
-Subject: [Buildroot] [PATCH] package/tzdate: use classic 'fat' format for
- uClibc/glibc compatibility
-Message-ID: <20210215185709.27648-1-peter@korsgaard.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 15 Feb 2021 20:27:56 +0100
+Subject: [Buildroot] [PATCH 1/1] package/orc: fix powerpc build with headers
+ < 4.11
+Message-ID: <20210215192756.1145129-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Autobuilder failures are raised with bootlin toolchains but it affects
+orc since version 0.4.30
+
 Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/1019385940
+ - http://autobuild.buildroot.org/results/0821e96cba3e455edd47b87485501d892fc7ac6a
 
-FAIL: test_run (tests.core.test_timezone.TestGlibcNonDefaultLimitedTimezone)
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "/builds/buildroot.org/buildroot/support/testing/tests/core/test_timezone.py", line 66, in test_run
-    self.assertEqual(tz[0].strip(), "EST")
-AssertionError: '' != 'EST'
-
-Commit 7868289fd5348 (package/zic: bump version to 2020f) bumped the zic
-version to 2020f, which changed the default output format from the classic
-"fat" format to the new "slim" format:
-
-https://github.com/eggert/tz/commit/6ba6f2117b95eab345a7ed9159cef939e30c4cd3
-
-The slim format is unfortunately not supported by glibc < 2.28 or uClibc, so
-explicitly request the classic "fat" format.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/tzdata/tzdata.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ ...powerpc.c-fix-build-with-kernel-4.11.patch | 70 +++++++++++++++++++
+ 1 file changed, 70 insertions(+)
+ create mode 100644 package/orc/0001-orc-orccpu-powerpc.c-fix-build-with-kernel-4.11.patch
 
-diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
-index 04f5d84bf0..8201dc1201 100644
---- a/package/tzdata/tzdata.mk
-+++ b/package/tzdata/tzdata.mk
-@@ -51,8 +51,8 @@ endef
- define HOST_TZDATA_BUILD_CMDS
- 	(cd $(@D); \
- 		for zone in $(TZDATA_ZONELIST); do \
--			$(ZIC) -d _output/posix $$zone || exit 1; \
--			$(ZIC) -d _output/right -L leapseconds $$zone || exit 1; \
-+			$(ZIC) -b fat -d _output/posix $$zone || exit 1; \
-+			$(ZIC) -b fat -d _output/right -L leapseconds $$zone || exit 1; \
- 		done; \
- 	)
- endef
+diff --git a/package/orc/0001-orc-orccpu-powerpc.c-fix-build-with-kernel-4.11.patch b/package/orc/0001-orc-orccpu-powerpc.c-fix-build-with-kernel-4.11.patch
+new file mode 100644
+index 0000000000..0a4e7010f2
+--- /dev/null
++++ b/package/orc/0001-orc-orccpu-powerpc.c-fix-build-with-kernel-4.11.patch
+@@ -0,0 +1,70 @@
++From a45f6d49ec090ad94333c0865c378d2d96ab2af4 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 15 Feb 2021 20:17:43 +0100
++Subject: [PATCH] orc/orccpu-powerpc.c: fix build with kernel < 4.11
++
++Build with powerpc and kernel < 4.11 is broken since version 0.4.30 and
++https://gitlab.freedesktop.org/gstreamer/orc/-/commit/a999325abea6a5549d60d99ddeb0271d2aa00235:
++
++FAILED: orc/liborc-0.4.so.0.32.0.p/orccpu-powerpc.c.o
++/home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/powerpc-linux-gcc -Iorc/liborc-0.4.so.0.32.0.p -Iorc -I../orc -I. -I.. -fdiagnostics-color=always -pipe -Wall -Winvalid-pch -std=gnu99 -O3 -DHAVE_CONFIG_H -fvisibility=hidden -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -O2 -fPIC -pthread -DORC_ENABLE_UNSTABLE_API -D_GNU_SOURCE -DBUILDING_ORC -MD -MQ orc/liborc-0.4.so.0.32.0.p/orccpu-powerpc.c.o -MF orc/liborc-0.4.so.0.32.0.p/orccpu-powerpc.c.o.d -o orc/liborc-0.4.so.0.32.0.p/orccpu-powerpc.c.o -c ../orc/orccpu-powerpc.c
++../orc/orccpu-powerpc.c: In function 'orc_check_powerpc_proc_auxv':
++../orc/orccpu-powerpc.c:164:21: error: 'AT_L1D_CACHESIZE' undeclared (first use in this function); did you mean 'AT_DCACHEBSIZE'?
++  164 |       if (buf[i] == AT_L1D_CACHESIZE) {
++      |                     ^~~~~~~~~~~~~~~~
++      |                     AT_DCACHEBSIZE
++../orc/orccpu-powerpc.c:164:21: note: each undeclared identifier is reported only once for each function it appears in
++../orc/orccpu-powerpc.c:168:21: error: 'AT_L2_CACHESIZE' undeclared (first use in this function); did you mean 'AT_ICACHEBSIZE'?
++  168 |       if (buf[i] == AT_L2_CACHESIZE) {
++      |                     ^~~~~~~~~~~~~~~
++      |                     AT_ICACHEBSIZE
++../orc/orccpu-powerpc.c:172:21: error: 'AT_L3_CACHESIZE' undeclared (first use in this function); did you mean 'AT_ICACHEBSIZE'?
++  172 |       if (buf[i] == AT_L3_CACHESIZE) {
++      |                     ^~~~~~~~~~~~~~~
++      |                     AT_ICACHEBSIZE
++
++Indeed, AT_{L1D,L2,L3}_CACHESIZE is only defined since kernel 4.11 and
++https://github.com/torvalds/linux/commit/98a5f361b8625c6f4841d6ba013bbf0e80d08147
++
++Fixes:
++ - http://autobuild.buildroot.org/results/0821e96cba3e455edd47b87485501d892fc7ac6a
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status:
++https://gitlab.freedesktop.org/gstreamer/orc/-/merge_requests/56]
++---
++ orc/orccpu-powerpc.c | 6 ++++++
++ 1 file changed, 6 insertions(+)
++
++diff --git a/orc/orccpu-powerpc.c b/orc/orccpu-powerpc.c
++index 6796f17..340cf05 100644
++--- a/orc/orccpu-powerpc.c
+++++ b/orc/orccpu-powerpc.c
++@@ -161,18 +161,24 @@ orc_check_powerpc_proc_auxv (void)
++         _orc_cpu_name = (char*)buf[i + 1];
++         found++;
++       }
+++#ifdef AT_L1D_CACHESIZE
++       if (buf[i] == AT_L1D_CACHESIZE) {
++         _orc_data_cache_size_level1 = buf[i + 1];
++         found++;
++       }
+++#endif
+++#ifdef AT_L2_CACHESIZE
++       if (buf[i] == AT_L2_CACHESIZE) {
++         _orc_data_cache_size_level2 = buf[i + 1];
++         found++;
++       }
+++#endif
+++#ifdef AT_L3_CACHESIZE
++       if (buf[i] == AT_L3_CACHESIZE) {
++         _orc_data_cache_size_level3 = buf[i + 1];
++         found++;
++       }
+++#endif
++       if (found == 6)
++         break;
++     }
++-- 
++2.30.0
++
 -- 
-2.20.1
+2.30.0
