@@ -1,33 +1,103 @@
-From: Ivo Grondman <buildroot@grondman.net>
-Date: Mon, 15 Feb 2021 17:34:14 +0100
-Subject: [Buildroot] Handling delays in network interface visibility in
- Raspberry Pi 3
-Message-ID: <0A92E09A-3361-429E-AE65-E12223E0E62B@grondman.net>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 15 Feb 2021 18:26:36 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libgpg-error: fix build without
+ threads
+Message-ID: <20210215172636.1084469-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Fix build without threads of libgpg-error in version >= 1.40
 
-Today I?ve been trying to debug the following issue. Using Buildroot 2020.11.2 and the Vagrantfile that comes with it, I tried to build a ?vanilla? Buildroot image in the vagrant VM for my Raspberry Pi 3 Model B+ in the following way:
+Fixes:
+ - http://autobuild.buildroot.org/results/3344c96e5627a9327b0eabe0b27f34490bbabc0d
 
-$ make raspberrypi3_defconfig
-$ make
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...nfigure.ac-fix-build-without-threads.patch | 54 +++++++++++++++++++
+ package/libgpg-error/libgpg-error.mk          |  8 +++
+ 2 files changed, 62 insertions(+)
+ create mode 100644 package/libgpg-error/0001-configure.ac-fix-build-without-threads.patch
 
-i.e. without any customisation. The image builds fine and the Pi boots without errors or warnings, but the network interface eth0 (configured with DHCP) will not have an IPv4 address and I manually have to perform an `ifup -a` or `ifup eth0` to get it going. So I went through all the initialisation files that have a part in bringing up the network interface and soon came to conclude that the script in /etc/network/if-pre-up.d/wait_iface has the right intentions, but still doesn?t solve the slow-to-appear interface issue.
-
-It looks as if that particular script still needs to wait just that bit longer when it sees that /sys/class/net/eth0 exists before actually exiting. Using the file as is will not make eth0 retrieve an address from the DHCP server, but if I add a bit of extra sleep in the if-statement where it detects the presence of /sys/class/net/eth0 then it *will* work.
-
-Now my problem with this approach is that it feels like a hack. Moreover, I?d like to know if something else could be the issue here. So:
-
-1) Did anyone of you experience similar issues with a Raspberry Pi?
-2) Are there any alternative, better solutions to this problem?
-3) If the answer to 2) is a ?no?, should I submit a patch for this particular script? I?m a bit hesitant to put in a patch with an extra delay on detection of the interface, as this is obviously not something you want to do for *all* possible platforms?
-
-Any help is greatly appreciated.
-
-Best regards,
-
-Ivo Grondman
+diff --git a/package/libgpg-error/0001-configure.ac-fix-build-without-threads.patch b/package/libgpg-error/0001-configure.ac-fix-build-without-threads.patch
+new file mode 100644
+index 0000000000..5f5147e0df
+--- /dev/null
++++ b/package/libgpg-error/0001-configure.ac-fix-build-without-threads.patch
+@@ -0,0 +1,54 @@
++From 77c89f62f106d88ef2b5963f4a13755c337c793d Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 15 Feb 2021 07:56:29 +0100
++Subject: [PATCH] configure.ac: fix build without threads
++
++Cross-compilation of libgpg-error fails on toolchain without threads
++since commit 988211d3d4c1f3d5cfa6b460210f65ab636763b5,
++9ee011259f819a3cf50fe7019fa4366dbc437e0e and
++50e62b36ea01ed25d12c443088b85d4f41a2b3e1
++
++Indeed, since that time, libgpg-error assumes that pthread.h is always
++available resulting in the following error at configure time:
++
++checking for arm-unknown-linux-gnueabi-objdump... (cached) /tmp/instance-1/output-1/host/bin/arm-linux-objdump
++conftest.c:1:10: fatal error: pthread.h: No such file or directory
++    1 | #include <pthread.h>
++      |          ^~~~~~~~~~~
++compilation terminated.
++configure: generated src/lock-obj-pub.native.h using arm-unknown-linux-gnueabi-objdump and gawk
++checking whether to enable log_clock... no
++
++This error will in turn results in a build failure because
++"Can't determine mutex size" is echoed by gen-lock-obj.sh:
++
++In file included from strsource-sym.c:27:
++./gpg-error.h:1115:4: warning: missing terminating ' character
++ 1115 | Can't determine mutex size
++      |    ^
++
++Full build log:
++http://autobuild.buildroot.org/results/334/3344c96e5627a9327b0eabe0b27f34490bbabc0d/build-end.log
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://dev.gnupg.org/T5296]
++---
++ configure.ac | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index b9a2a3e..15d9fdc 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -599,7 +599,7 @@ if test x$cross_compiling = xyes; then
++   case $host in
++     *-*-linux*)
++     AC_CHECK_TOOL(OBJDUMP, [objdump])
++-    if test -n "$OBJDUMP"; then
+++    if test -n "$OBJDUMP" -a x"$gl_use_threads" != xno; then
++       lock_obj_h_generated=yes
++       if test ! -d src; then mkdir src; fi
++       LOCK_ABI_VERSION=1 host=$host host_alias=$host_alias \
++-- 
++2.30.0
++
+diff --git a/package/libgpg-error/libgpg-error.mk b/package/libgpg-error/libgpg-error.mk
+index 78ed3e5464..1b35e5c8f0 100644
+--- a/package/libgpg-error/libgpg-error.mk
++++ b/package/libgpg-error/libgpg-error.mk
+@@ -15,5 +15,13 @@ LIBGPG_ERROR_CONFIG_SCRIPTS = gpg-error-config
+ LIBGPG_ERROR_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
+ LIBGPG_ERROR_CONF_OPTS = --disable-tests \
+ 		--host=$(BR2_PACKAGE_LIBGPG_ERROR_SYSCFG)
++# We're patching configure.ac
++LIBGPG_ERROR_AUTORECONF= YES
++
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
++LIBGPG_ERROR_CONF_OPTS += --enable-threads
++else
++LIBGPG_ERROR_CONF_OPTS += --disable-threads
++endif
+ 
+ $(eval $(autotools-package))
+-- 
+2.30.0
