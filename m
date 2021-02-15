@@ -1,35 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 15 Feb 2021 09:58:28 +0100
-Subject: [Buildroot] [PATCH] package/libgeos: fix build failure due to
- Gcc Bug 68485
-In-Reply-To: <4164497f-c16c-99c9-e6e7-70e77c16c368@benettiengineering.com>
-References: <20210212224238.1938197-1-giulio.benetti@benettiengineering.com>
- <20210213225155.6b83e879@windsurf.home>
- <4164497f-c16c-99c9-e6e7-70e77c16c368@benettiengineering.com>
-Message-ID: <20210215095828.5584167d@windsurf.home>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Mon, 15 Feb 2021 10:11:50 +0100
+Subject: [Buildroot] [PATCHv2 2/7] core: enable 'NDEBUG' unless
+ BR2_ENABLE_RUNTIME_DEBUG is set
+In-Reply-To: <20210213225610.3f1839af@windsurf.home>
+References: <20210212135451.22786-1-patrickdepinguin@gmail.com>
+ <20210212135451.22786-3-patrickdepinguin@gmail.com>
+ <20210213225610.3f1839af@windsurf.home>
+Message-ID: <CAAXf6LWYt05UAWcg1Hnyg0rSxvhHHD6NG73BC3-9k8NvGTJqLQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 15 Feb 2021 00:46:35 +0100
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+Hi Thomas,
 
-> > Applied to master, thanks. Could you check if this bug still exists
-> > with gcc 10.x, and if it does, ping on the gcc bug report ?  
-> 
-> I've just tried to build with gcc 10.2 and unfortunately it still have 
-> that bug. So I've just pinged gcc bug report:
-> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68485#add_comment
+El s?b, 13 feb 2021 a las 22:56, Thomas Petazzoni
+(<thomas.petazzoni@bootlin.com>) escribi?:
+>
+> On Fri, 12 Feb 2021 14:54:45 +0100
+> Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote:
+>
+> > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> >
+> > A common way to disable runtime assertions is by honoring the 'NDEBUG'
+> > preprocessor flag. Set it when BR2_ENABLE_RUNTIME_DEBUG is disabled (the
+> > default case).
+>
+> How "common" is that? It feels a pretty "random" definition to me. I'm
+> not sure we want to randomly pass -DNDEBUG to all our packages, without
+> knowing what the meaning of NDEBUG is for all those packages.
 
-Thanks for having done the extra research and following up with the gcc
-developers!
+'Originally', NDEBUG is the macro used by assert() to decide whether
+or not assertions actually do anything.
+See https://www.man7.org/linux/man-pages/man3/assert.3.html
+
+cmake links this parameter to the CMAKE_BUILD_TYPE, setting NDEBUG for
+'Release', and not setting it for 'Debug'.
+
+Based on these two elements, I find NDEBUG a fairly standard mechanism.
+
+But it is indeed possible that some package uses this in an unexpected
+way. For this reason I would not merge this series for 2021.02 but
+instead opt for -next so we have some more time to catch any problems.
+
+For the severe performance degradation we observed in gRPC/libabseil,
+the patch changing the cmake build system would be sufficient.
+But since the problem is generic, I opted to also make this patch for
+other packages.
 
 Best regards,
-
 Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
