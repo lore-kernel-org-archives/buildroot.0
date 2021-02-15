@@ -1,74 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 15 Feb 2021 22:43:19 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/x265: update project URL
-In-Reply-To: <20210215094134.2250-1-sebastien.szymanski@armadeus.com>
- (=?utf-8?Q?=22S=C3=A9bastien?= Szymanski"'s message of "Mon, 15 Feb 2021
- 10:41:34 +0100")
-References: <20210215094134.2250-1-sebastien.szymanski@armadeus.com>
-Message-ID: <874kidatxk.fsf@dell.be.48ers.dk>
+Date: Mon, 15 Feb 2021 22:34:43 +0100
+Subject: [Buildroot] [git commit] package/jasper: security bump version to
+ 2.0.25
+Message-ID: <20210215212210.698BA846D2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "S?bastien" == S?bastien Szymanski <sebastien.szymanski@armadeus.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=72b801010c867b2a222603e3951a012e57a6f2c8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > The project moved to https://bitbucket.org/multicoreware/x265_git
- > The archive file has changed (but not its content) so update the hashes
- > too.
+Changes:
 
- > Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
- > ---
+* Fix memory-related bugs in the JPEG-2000 codec resulting from
+  attempting to decode invalid code streams. (#264, #265)
+  This fix is associated with CVE-2021-26926 and CVE-2021-26927.
+* Fix wrong return value under some compilers (#260)
+* Fix CVE-2021-3272 heap buffer overflow in jp2_decode (#259)
 
- > Changes for v2:
- >  - update hashes
+Signed-off-by: Michael Vetter <jubalh@iodoru.org>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/jasper/jasper.hash | 2 +-
+ package/jasper/jasper.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Sorry, but this is still not good. If I apply this, then the tarball on
-sources.buildroot.net no longer has the right sha256sum, and if we
-change the tarball then this breaks x265 download for all releases since
-March 2020.
-
-How about moving to the 3.4 release instead together with the change of
-URL?
-
-As we already have a copy on sources.buildroot.net of the 3.3 release it
-isn't so bad that the upstream location failed as we automatically fall
-back to sources.buildroot.net:
-
-make x265-legal-info
->>> x265 3.3 Downloading
---2021-02-15 22:39:21--  https://bitbucket.org/multicoreware/x265/downloads/x265_3.3.tar.gz
-Resolving bitbucket.org (bitbucket.org)... 104.192.141.1, 2406:da00:ff00::34cc:ea4a, 2406:da00:ff00::22c5:2ef4, ...
-Connecting to bitbucket.org (bitbucket.org)|104.192.141.1|:443... connected.
-HTTP request sent, awaiting response... 404 Not Found
-2021-02-15 22:39:22 ERROR 404: Not Found.
-
---2021-02-15 22:39:22--  http://sources.buildroot.net/x265/x265_3.3.tar.gz
-Resolving sources.buildroot.net (sources.buildroot.net)... 104.26.0.37, 172.67.72.56, 104.26.1.37, ...
-Connecting to sources.buildroot.net (sources.buildroot.net)|104.26.0.37|:80... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 1438685 (1,4M) [application/x-gtar-compressed]
-Saving to: ?/home/peko/source/buildroot/output/build/.x265_3.3.tar.gz.qy2qSJ/output?
-
-/home/peko/source/buildroot/out 100%[======================================================>]   1,37M  --.-KB/s    in 0,1s
-
-2021-02-15 22:39:25 (9,66 MB/s) - ?/home/peko/source/buildroot/output/build/.x265_3.3.tar.gz.qy2qSJ/output? saved [1438685/1438685]
-
-x265_3.3.tar.gz: OK (md5: 0c8c747b59b5411dea8cf557554636c1)
-x265_3.3.tar.gz: OK (sha256: f26e148ed1f4dfb33fd1eb3ff5e60e08078d1b2017e88bcbb045b3fb58300b9c)
->>> x265 3.3 Extracting
-gzip -d -c /var/lib/downloads/x265/x265_3.3.tar.gz | tar --strip-components=1 -C /home/peko/source/buildroot/output/build/x265-3.3   -xf -
->>> x265 3.3 Patching
-
-Applying 0001-fix-gcc-options.patch using patch:
-patching file source/CMakeLists.txt
-Hunk #1 succeeded at 217 (offset 23 lines).
-
-Applying 0002-arm-asm-primitives.patch using patch:
-patching file source/common/arm/asm-primitives.cpp
->>> x265 3.3 Collecting legal info
-COPYING: OK (sha256: d8afb1bcc7a2cfc603683b168d6987ef0a48e59e0da3693bf55c5d33b67e2b49)
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/jasper/jasper.hash b/package/jasper/jasper.hash
+index 7386c2179f..d4ed191f91 100644
+--- a/package/jasper/jasper.hash
++++ b/package/jasper/jasper.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  d2d28e115968d38499163cf8086179503668ce0d71b90dd33855b3de96a1ca1d  jasper-2.0.24.tar.gz
++sha256  f5bc48e2884bcabd2aca1737baff4ca962ec665b6eb673966ced1f7adea07edb  jasper-2.0.25.tar.gz
+ sha256  4ad1bb42aff888c4403d792e6e2c5f1716d6c279fea70b296333c9d577d30b81  LICENSE
+diff --git a/package/jasper/jasper.mk b/package/jasper/jasper.mk
+index d8110082c9..d487e8e2d6 100644
+--- a/package/jasper/jasper.mk
++++ b/package/jasper/jasper.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-JASPER_VERSION = 2.0.24
++JASPER_VERSION = 2.0.25
+ JASPER_SITE = $(call github,jasper-software,jasper,version-$(JASPER_VERSION))
+ JASPER_INSTALL_STAGING = YES
+ JASPER_LICENSE = JasPer-2.0
