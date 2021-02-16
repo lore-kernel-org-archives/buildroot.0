@@ -1,18 +1,18 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 16 Feb 2021 20:56:03 +0100
+Date: Tue, 16 Feb 2021 20:56:02 +0100
 Subject: [Buildroot] [git commit branch/next] package/collectd: add
- 'synproxy' option
-Message-ID: <20210216193457.BF3BB8157B@busybox.osuosl.org>
+ 'logparser' option
+Message-ID: <20210216193457.B3AC88157B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=312cf8e1206aa991f55e16648c0bd813cf43f283
+commit: https://git.buildroot.net/buildroot/commit/?id=fe74c2b846ec19c7964a24ce81ee28a37aba5366
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The synproxy plugin exists since 5.8.0 and is enabled by default in
+The logparser plugin is new since 5.11.0 and enabled by default in
 collectd.
 
 Add an option in Buildroot, disabled by default.
@@ -25,30 +25,30 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
  2 files changed, 6 insertions(+)
 
 diff --git a/package/collectd/Config.in b/package/collectd/Config.in
-index 679285d997..82c24fdbc3 100644
+index 11136f98ef..679285d997 100644
 --- a/package/collectd/Config.in
 +++ b/package/collectd/Config.in
-@@ -513,6 +513,11 @@ config BR2_PACKAGE_COLLECTD_SWAP
+@@ -326,6 +326,11 @@ config BR2_PACKAGE_COLLECTD_LOAD
  	help
- 	  Collects the amount of memory currently written to disk.
+ 	  Collects the system load.
  
-+config BR2_PACKAGE_COLLECTD_SYNPROXY
-+	bool "synproxy"
++config BR2_PACKAGE_COLLECTD_LOGPARSER
++	bool "logparser"
 +	help
-+	  Synproxy stats plugin.
++	  Plugin for filtering and parsing log messages.
 +
- config BR2_PACKAGE_COLLECTD_TABLE
- 	bool "table"
+ config BR2_PACKAGE_COLLECTD_MD
+ 	bool "md"
  	help
 diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
-index d57e6b8c1d..7db753b342 100644
+index 792eb9c355..d57e6b8c1d 100644
 --- a/package/collectd/collectd.mk
 +++ b/package/collectd/collectd.mk
-@@ -132,6 +132,7 @@ COLLECTD_CONF_OPTS += \
- 	$(if $(BR2_PACKAGE_COLLECTD_SMART),--enable-smart,--disable-smart) \
- 	$(if $(BR2_PACKAGE_COLLECTD_SNMP),--enable-snmp,--disable-snmp) \
- 	$(if $(BR2_PACKAGE_COLLECTD_SWAP),--enable-swap,--disable-swap) \
-+	$(if $(BR2_PACKAGE_COLLECTD_SYNPROXY),--enable-synproxy,--disable-synproxy) \
- 	$(if $(BR2_PACKAGE_COLLECTD_SYSLOG),--enable-syslog,--disable-syslog) \
- 	$(if $(BR2_PACKAGE_COLLECTD_TABLE),--enable-table,--disable-table) \
- 	$(if $(BR2_PACKAGE_COLLECTD_TAIL),--enable-tail,--disable-tail) \
+@@ -91,6 +91,7 @@ COLLECTD_CONF_OPTS += \
+ 	$(if $(BR2_PACKAGE_COLLECTD_IRQ),--enable-irq,--disable-irq) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_LOAD),--enable-load,--disable-load) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_LOGFILE),--enable-logfile,--disable-logfile) \
++	$(if $(BR2_PACKAGE_COLLECTD_LOGPARSER),--enable-logparser,--disable-logparser) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_LOGSTASH),--enable-log_logstash,--disable-log_logstash) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_LUA),--enable-lua,--disable-lua) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_MD),--enable-md,--disable-md) \
