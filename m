@@ -1,89 +1,131 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 16 Feb 2021 23:01:10 +0100
-Subject: [Buildroot] [git commit] package/gdk-pixbuf: fix static build
-Message-ID: <20210216214050.3184A8074E@busybox.osuosl.org>
+Date: Tue, 16 Feb 2021 23:02:37 +0100
+Subject: [Buildroot] [git commit] package/flashrom: fix build on riscv
+Message-ID: <20210216214220.034D882286@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7ecf22a2fe012b038dc0bdad4cabc91f6b720699
+commit: https://git.buildroot.net/buildroot/commit/?id=7d73bc52164afbb283d0d8723ed4cf0cbca38521
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix static build failure which is raised since the switch to
-meson-package in commit a7b51ed3013c919b293deb95299e33363fb9df70
+Retrieve an upstream patch to fix build with riscv as it fails to
+retrieve architecture due to "Use sigaction with SA_RESTART instead"
+being caught before riscv:
+
+exec: export LC_ALL=C ; { /home/fabrice/buildroot/output/host/bin/riscv32-linux-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -E archtest.c 2>/dev/null | grep -v ^# | grep ' | cut -f 2 -d' ; }
+Use sigaction with SA_RESTART instead
+riscv
 
 Fixes:
- - http://autobuild.buildroot.org/results/6cd54c497f5d19342ec94ece713547b887e4c02d
+ - http://autobuild.buildroot.org/results/61ac6c9bfcd3bd9306aa49faf47b9f16e5abe846
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-[Arnout: add link to upstream MR]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...gdk-pixbuf-io.c-fix-build-without-gmodule.patch | 41 ++++++++++++++++++++++
- package/gdk-pixbuf/gdk-pixbuf.mk                   |  4 +++
- 2 files changed, 45 insertions(+)
+ ...01-Makefile-Fix-building-on-AArch64-NixOS.patch | 95 ++++++++++++++++++++++
+ 1 file changed, 95 insertions(+)
 
-diff --git a/package/gdk-pixbuf/0002-gdk-pixbuf-gdk-pixbuf-io.c-fix-build-without-gmodule.patch b/package/gdk-pixbuf/0002-gdk-pixbuf-gdk-pixbuf-io.c-fix-build-without-gmodule.patch
+diff --git a/package/flashrom/0001-Makefile-Fix-building-on-AArch64-NixOS.patch b/package/flashrom/0001-Makefile-Fix-building-on-AArch64-NixOS.patch
 new file mode 100644
-index 0000000000..74bc967a68
+index 0000000000..f835172e61
 --- /dev/null
-+++ b/package/gdk-pixbuf/0002-gdk-pixbuf-gdk-pixbuf-io.c-fix-build-without-gmodule.patch
-@@ -0,0 +1,41 @@
-+From 46c7fe11bd0ed8595c3f920d42a9914fa864d893 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 7 Feb 2021 18:51:14 +0100
-+Subject: [PATCH] gdk-pixbuf/gdk-pixbuf-io.c: fix build without gmodule
++++ b/package/flashrom/0001-Makefile-Fix-building-on-AArch64-NixOS.patch
+@@ -0,0 +1,95 @@
++From da6b3b70cb852dd8e9f9e21aef95fa83e7f7ab0d Mon Sep 17 00:00:00 2001
++From: Pyry Kontio <pyry.kontio@drasa.eu>
++Date: Mon, 6 Jul 2020 12:57:35 +0900
++Subject: [PATCH] Makefile: Fix building on AArch64 NixOS
 +
-+Fix the following build failure:
++The parsing of the output of archtest.c produced an unexpected
++value on AArch64 NixOS. For example, the make variable ARCH was set to:
 +
-+../gdk-pixbuf/gdk-pixbuf-io.c: In function 'gdk_pixbuf_io_init':
-+../gdk-pixbuf/gdk-pixbuf-io.c:681:16: error: implicit declaration of function 'gdk_pixbuf_get_module_file'; did you mean '_gdk_pixbuf_get_module'? [-Werror=implicit-function-declaration]
-+  681 |  module_file = gdk_pixbuf_get_module_file ();
-+      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~
-+      |                _gdk_pixbuf_get_module
++```
++bit outside of fd_set selected
++arm
++```
 +
-+Fixes:
-+ - http://autobuild.buildroot.org/results/6cd54c497f5d19342ec94ece713547b887e4c02d
++This made the arch and OS checks fail.
 +
-+Upstream status: Accepted
-+https://gitlab.gnome.org/GNOME/gdk-pixbuf/-/merge_requests/103
++This commit simplifies the parsing, making it more robust.
 +
++The C files archtest.c, endiantest.c and os.h used to set the
++TARGET_OS, ARCH and ENDIAN variables, respectively, output
++the result of the test as the final line, so just extracting
++the final line and removing double quoting is enough.
++
++This commit also fixes a bug with debug_shell lacking escaping
++single quotes, which prevented using the single quote in the
++debug_shell calls. It used to work by accident before this fix;
++the line in the call happened to contain a balanced pair of double
++quotes and lacked other characters that needed escaping, which
++didn't break the debug_shell, but this was accidental and very
++brittle.
++
++Signed-off-by: Pyry Kontio <pyry.kontio@drasa.eu>
++Change-Id: Iaa4477a71e758cf9ecad2c22f3b77bc6508a3510
++Reviewed-on: https://review.coreboot.org/c/flashrom/+/43140
++Tested-by: build bot (Jenkins) <no-reply@coreboot.org>
++Reviewed-by: Angel Pons <th3fanbus@gmail.com>
++
++[Retrieved from:
++https://github.com/flashrom/flashrom/commit/da6b3b70cb852dd8e9f9e21aef95fa83e7f7ab0d]
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
-+ gdk-pixbuf/gdk-pixbuf-io.c | 2 ++
-+ 1 file changed, 2 insertions(+)
++ Makefile | 16 ++++++++++------
++ 1 file changed, 10 insertions(+), 6 deletions(-)
 +
-+diff --git a/gdk-pixbuf/gdk-pixbuf-io.c b/gdk-pixbuf/gdk-pixbuf-io.c
-+index 40eb920c8..2dc2ea6da 100644
-+--- a/gdk-pixbuf/gdk-pixbuf-io.c
-++++ b/gdk-pixbuf/gdk-pixbuf-io.c
-+@@ -678,7 +678,9 @@ gdk_pixbuf_io_init (void)
-+ 	gboolean ret;
++diff --git a/Makefile b/Makefile
++index f3f7717e2..e475cbdbd 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -83,7 +83,8 @@ dummy_for_make_3_80:=$(shell printf "Build started on %s\n\n" "$$(date)" >$(BUIL
 + 
-+ 	gdk_pixbuf_io_init_builtin ();
-++#ifdef USE_GMODULE
-+ 	module_file = gdk_pixbuf_get_module_file ();
-++#endif
-+ 	ret = gdk_pixbuf_io_init_modules (module_file, NULL);
-+ 	g_free (module_file);
-+ 	return ret;
-+-- 
-+2.29.2
-+
-diff --git a/package/gdk-pixbuf/gdk-pixbuf.mk b/package/gdk-pixbuf/gdk-pixbuf.mk
-index 3560734841..1bd422c0a1 100644
---- a/package/gdk-pixbuf/gdk-pixbuf.mk
-+++ b/package/gdk-pixbuf/gdk-pixbuf.mk
-@@ -28,6 +28,10 @@ HOST_GDK_PIXBUF_CONF_OPTS = \
- 	-Dintrospection=disabled \
- 	-Dman=false
- 
-+ifeq ($(BR2_STATIC_LIBS),y)
-+GDK_PIXBUF_CONF_OPTS += -Dbuiltin_loaders=all
-+endif
-+
- ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
- GDK_PIXBUF_CONF_OPTS += -Dintrospection=enabled
- GDK_PIXBUF_DEPENDENCIES += gobject-introspection
++ # Provide an easy way to execute a command, print its output to stdout and capture any error message on stderr
++ # in the build details file together with the original stdout output.
++-debug_shell = $(shell export LC_ALL=C ; { echo 'exec: export LC_ALL=C ; { $(1) ; }' >&2;  { $(1) ; } | tee -a $(BUILD_DETAILS_FILE) ; echo >&2 ; } 2>>$(BUILD_DETAILS_FILE))
+++debug_shell = $(shell export LC_ALL=C ; { echo 'exec: export LC_ALL=C ; { $(subst ','\'',$(1)) ; }' >&2; \
+++    { $(1) ; } | tee -a $(BUILD_DETAILS_FILE) ; echo >&2 ; } 2>>$(BUILD_DETAILS_FILE))
++ 
++ ###############################################################################
++ # General OS-specific settings.
++@@ -106,7 +107,8 @@ endif
++ # IMPORTANT: The following line must be placed before TARGET_OS is ever used
++ # (of course), but should come after any lines setting CC because the line
++ # below uses CC itself.
++-override TARGET_OS := $(strip $(call debug_shell,$(CC) $(CPPFLAGS) -E os.h 2>/dev/null | grep -v '^\#' | grep '"' | cut -f 2 -d'"'))
+++override TARGET_OS := $(strip $(call debug_shell,$(CC) $(CPPFLAGS) -E os.h 2>/dev/null \
+++    | tail -1 | cut -f 2 -d'"'))
++ 
++ ifeq ($(TARGET_OS), Darwin)
++ override CPPFLAGS += -I/opt/local/include -I/usr/local/include
++@@ -490,8 +492,10 @@ endif
++ # IMPORTANT: The following line must be placed before ARCH is ever used
++ # (of course), but should come after any lines setting CC because the line
++ # below uses CC itself.
++-override ARCH := $(strip $(call debug_shell,$(CC) $(CPPFLAGS) -E archtest.c 2>/dev/null | grep -v '^\#' | grep '"' | cut -f 2 -d'"'))
++-override ENDIAN := $(strip $(call debug_shell,$(CC) $(CPPFLAGS) -E endiantest.c 2>/dev/null | grep -v '^\#'))
+++override ARCH := $(strip $(call debug_shell,$(CC) $(CPPFLAGS) -E archtest.c 2>/dev/null \
+++    | tail -1 | cut -f 2 -d'"'))
+++override ENDIAN := $(strip $(call debug_shell,$(CC) $(CPPFLAGS) -E endiantest.c 2>/dev/null \
+++    | tail -1))
++ 
++ # Disable the internal programmer on unsupported architectures (everything but x86 and mipsel)
++ ifneq ($(ARCH)-little, $(filter $(ARCH),x86 mips)-$(ENDIAN))
++@@ -1299,12 +1303,12 @@ compiler: featuresavailable
++ 	@printf "Target arch is "
++ 	@# FreeBSD wc will output extraneous whitespace.
++ 	@echo $(ARCH)|wc -w|grep -q '^[[:blank:]]*1[[:blank:]]*$$' ||	\
++-		( echo "unknown. Aborting."; exit 1)
+++		( echo "unknown (\"$(ARCH)\"). Aborting."; exit 1)
++ 	@printf "%s\n" '$(ARCH)'
++ 	@printf "Target OS is "
++ 	@# FreeBSD wc will output extraneous whitespace.
++ 	@echo $(TARGET_OS)|wc -w|grep -q '^[[:blank:]]*1[[:blank:]]*$$' ||	\
++-		( echo "unknown. Aborting."; exit 1)
+++		( echo "unknown (\"$(TARGET_OS)\"). Aborting."; exit 1)
++ 	@printf "%s\n" '$(TARGET_OS)'
++ ifeq ($(TARGET_OS), libpayload)
++ 	@$(CC) --version 2>&1 | grep -q coreboot || \
