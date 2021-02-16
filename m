@@ -1,33 +1,28 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 16 Feb 2021 21:51:28 +0100
-Subject: [Buildroot] [PATCH v2,3/3] package/perl-gd: provide gd options
-In-Reply-To: <20210212063944.2202888-3-fontaine.fabrice@gmail.com>
-References: <20210212063944.2202888-1-fontaine.fabrice@gmail.com>
- <20210212063944.2202888-3-fontaine.fabrice@gmail.com>
-Message-ID: <de3fad50-3290-8826-031f-90ec3cdc8791@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 16 Feb 2021 21:51:38 +0100
+Subject: [Buildroot] [PATCH 2/2] package/wpewebkit: bump version to
+ 2.30.5
+In-Reply-To: <20210216191651.23256-2-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 16 Feb 2021 20:16:50 +0100")
+References: <20210216191651.23256-1-peter@korsgaard.com>
+ <20210216191651.23256-2-peter@korsgaard.com>
+Message-ID: <871rdf7n39.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
+ > Bugfix release, fixing a number of issues:
+ > - Fix RunLoop objects leaked in worker threads.
+ > - Fix JavaScriptCore AArch64 LLInt build with JIT disabled.
+ > - Use Internet Explorer quirk for Google Docs.
 
-On 12/02/2021 07:39, Fabrice Fontaine wrote:
-> Now that gdlib-config is gone, provide the GD options otherwise perl-gd
-> will assume that everything is available:
-> 
-> $features = 'GD_GIF GD_GIFANIM GD_OPENPOLYGON GD_ZLIB GD_PNG GD_FREETYPE GD_FONTCONFIG GD_JPEG GD_XPM GD_TIFF GD_WEBP';
-> 
-> Also, while at it, also make some of the dependencies as optional as
-> suggested by Fran?ois Perrad
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
+Committed, thanks.
 
- Applied to master, thanks.
-
- Regards,
- Arnout
-
-[snip]
+-- 
+Bye, Peter Korsgaard
