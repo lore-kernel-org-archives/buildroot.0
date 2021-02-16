@@ -1,50 +1,88 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 16 Feb 2021 21:05:13 +0100
-Subject: [Buildroot] [git commit] package/lcms2: disable tiff
-Message-ID: <20210216194344.8D6C6815BB@busybox.osuosl.org>
+Date: Tue, 16 Feb 2021 21:05:10 +0100
+Subject: [Buildroot] [git commit] Revert "package/lcms2: fix static building
+ with tiff"
+Message-ID: <20210216194344.810B0815BB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d4da2e2083a2d56bc7d7d41a4c8baf2b2fb8fd26
+commit: https://git.buildroot.net/buildroot/commit/?id=86dcd3ed03ce0af0b8173f1ef57877c277be6708
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-tiff is only used by tificc sample and upstream rejected the patch to
-fix the static build failure because "adding pkg-config dependency for a
-sample is an overkill": https://github.com/mm2/Little-CMS/pull/244
+This reverts commit 7e4f054d2347708c9e22fe84c1d5f374d5b343cd.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/lcms2/lcms2.mk | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+ ...configure.ac-fix-static-linking-with-tiff.patch | 37 ----------------------
+ package/lcms2/lcms2.mk                             |  4 +--
+ 2 files changed, 1 insertion(+), 40 deletions(-)
 
+diff --git a/package/lcms2/0001-configure.ac-fix-static-linking-with-tiff.patch b/package/lcms2/0001-configure.ac-fix-static-linking-with-tiff.patch
+deleted file mode 100644
+index 9b7ad7c506..0000000000
+--- a/package/lcms2/0001-configure.ac-fix-static-linking-with-tiff.patch
++++ /dev/null
+@@ -1,37 +0,0 @@
+-From 49eed94b8a1d3fda2d00f0120e14c4d78cc5e840 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Fri, 12 Feb 2021 09:28:39 +0100
+-Subject: [PATCH] configure.ac: fix static linking with tiff
+-
+-Use pkg-config to retrieve the dependencies of tiff (e.g. xz) to fix
+-the following static build failure:
+-
+-libtool: link: /home/buildroot/autobuild/run/instance-2/output-1/host/bin/xtensa-linux-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -mlongcalls -mauto-litpools -Os -static -fvisibility=hidden -static -static -o tificc tificc.o ../common/xgetopt.o ../common/vprf.o  ../../src/.libs/liblcms2.a -ltiff -ljpeg -lz -lm -lpthread
+-/home/buildroot/autobuild/run/instance-2/output-1/host/opt/ext-toolchain/bin/../lib/gcc/xtensa-buildroot-linux-uclibc/9.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: /home/buildroot/autobuild/run/instance-2/output-1/host/xtensa-buildroot-linux-uclibc/sysroot/usr/lib/libtiff.a(tif_lzma.o): in function `LZMAEncode':
+-tif_lzma.c:(.text+0x168): undefined reference to `lzma_code'
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/07c5ca780bcdbfcd7cad6502345f1553ce17bdc3
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/mm2/Little-CMS/pull/244]
+----
+- configure.ac | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index b3c8f2b..96440fe 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -330,7 +330,7 @@ then
+- 	AC_MSG_RESULT(no -- some components failed test)
+- 	have_tiff='no (failed tests)'
+-     else
+--	LIB_TIFF='-ltiff'
+-+	PKG_CHECK_MODULES(PC_TIFF,libtiff-4,LIB_TIFF=$PC_TIFF_LIBS,LIB_TIFF='-ltiff')
+- 	LIBS="$LIB_TIFF $LIBS"
+- 	AC_DEFINE(HasTIFF,1,Define if you have TIFF library)
+- 	AC_MSG_RESULT(yes)
+--- 
+-2.29.2
+-
 diff --git a/package/lcms2/lcms2.mk b/package/lcms2/lcms2.mk
-index 862fdd5896..44b9965a80 100644
+index 3797c857cb..862fdd5896 100644
 --- a/package/lcms2/lcms2.mk
 +++ b/package/lcms2/lcms2.mk
-@@ -11,6 +11,8 @@ LCMS2_LICENSE_FILES = COPYING
+@@ -11,8 +11,6 @@ LCMS2_LICENSE_FILES = COPYING
  LCMS2_CPE_ID_VENDOR = littlecms
  LCMS2_CPE_ID_PRODUCT = little_cms
  LCMS2_INSTALL_STAGING = YES
-+# tiff is only used by tificc sample
-+LCMS2_CONF_OPTS = --without-tiff
+-# We're patching configure.ac
+-LCMS2_AUTORECONF = YES
  
  ifeq ($(BR2_PACKAGE_JPEG),y)
  LCMS2_CONF_OPTS += --with-jpeg
-@@ -19,13 +21,6 @@ else
- LCMS2_CONF_OPTS += --without-jpeg
- endif
+@@ -23,7 +21,7 @@ endif
  
--ifeq ($(BR2_PACKAGE_TIFF),y)
--LCMS2_CONF_OPTS += --with-tiff
--LCMS2_DEPENDENCIES += tiff
--else
--LCMS2_CONF_OPTS += --without-tiff
--endif
--
- ifeq ($(BR2_PACKAGE_ZLIB),y)
- LCMS2_CONF_OPTS += --with-zlib
- LCMS2_DEPENDENCIES += zlib
+ ifeq ($(BR2_PACKAGE_TIFF),y)
+ LCMS2_CONF_OPTS += --with-tiff
+-LCMS2_DEPENDENCIES += host-pkgconf tiff
++LCMS2_DEPENDENCIES += tiff
+ else
+ LCMS2_CONF_OPTS += --without-tiff
+ endif
