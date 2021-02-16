@@ -1,51 +1,102 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 16 Feb 2021 22:10:37 +0100
-Subject: [Buildroot] [PATCH 1/1] support/scripts/size-stats: increase
- number of files that can be linked to a source
-In-Reply-To: <CAAXf6LXXEV3PZ1rQ58nJhR7g-Jgra71wtkWmbo8t9ihAruum9Q@mail.gmail.com>
-References: <20210210110518.24817-1-daniel.crowe@resolution.systems>
- <CAAXf6LXXEV3PZ1rQ58nJhR7g-Jgra71wtkWmbo8t9ihAruum9Q@mail.gmail.com>
-Message-ID: <20210216221037.36b7e48c@windsurf.home>
+Date: Tue, 16 Feb 2021 22:10:52 +0100
+Subject: [Buildroot] [git commit branch/next] package/janet: new package
+Message-ID: <20210216204923.80CDA819E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 16 Feb 2021 15:06:39 +0100
-Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=9a5c9c058cbb250cfb9519347507a030e157ed16
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> Please extend your commit message with more information: what is the
-> problem you're fixing, and how are you fixing it.
-> Right now, we can only guess what it is doing based on the code.
-> 
-> It looks like the change is extending the size information to
-> rootfs-overlays, while today only real packages are considered.
-> But if that is correct, then the title "increase number of files that
-> can be linked to a source" is confusing to me.
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS               |  1 +
+ package/Config.in        |  1 +
+ package/janet/Config.in  | 10 ++++++++++
+ package/janet/janet.hash |  5 +++++
+ package/janet/janet.mk   | 22 ++++++++++++++++++++++
+ 5 files changed, 39 insertions(+)
 
-The change is not just about the rootfs overlay, but also about taking
-into account .pyc files compiled from .py files:
-
-+            # account for python file compilation
-+            if fpath.endswith('.py'):
-+                add_file(filesdict, fpath + 'c', fullpath + 'c', pkg)
-
-This should at least be separated in another patch. I'm not a huge fan
-of this approach, but I don't really have a good suggestion. Ideally,
-we should byte-compile each package independently, so that it's part of
-the install step of the package. But that would be vastly less
-efficient than just byte-compiling everything in one go at the end of
-the build, like we're doing.
-
-Daniel: could you rework your patch a bit, splitting it into several
-patches, with a slightly improved commit log ? I think it makes a lot
-of sense to have these improvements to size-stats.
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 7666493ddc..cee62ddca8 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -920,6 +920,7 @@ F:	package/copas/
+ F:	package/coxpcall/
+ F:	package/dado/
+ F:	package/ficl/
++F:	package/janet/
+ F:	package/libtomcrypt/
+ F:	package/libtommath/
+ F:	package/libwpe/
+diff --git a/package/Config.in b/package/Config.in
+index 5304ab141c..8fb173540f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -624,6 +624,7 @@ endif
+ 	source "package/gauche/Config.in"
+ 	source "package/guile/Config.in"
+ 	source "package/haserl/Config.in"
++	source "package/janet/Config.in"
+ 	source "package/jimtcl/Config.in"
+ 	source "package/lua/Config.in"
+ 	source "package/luainterpreter/Config.in"
+diff --git a/package/janet/Config.in b/package/janet/Config.in
+new file mode 100644
+index 0000000000..0e25ce34e3
+--- /dev/null
++++ b/package/janet/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_JANET
++	bool "janet"
++	help
++	  Janet is a functional and imperative programming language.
++	  The entire language (core library, interpreter, compiler,
++	  assembler, PEG) is less than 1MB. You can also add Janet
++	  scripting to an application by embedding a single C file
++	  and two headers.
++
++	  https://janet-lang.org/
+diff --git a/package/janet/janet.hash b/package/janet/janet.hash
+new file mode 100644
+index 0000000000..4a1167f8e7
+--- /dev/null
++++ b/package/janet/janet.hash
+@@ -0,0 +1,5 @@
++# Locally calculated
++sha256  e2cf16b330e47c858a675ac79b5a0af83727ff041efcb133a80f36bedfae57c4  janet-1.15.0.tar.gz
++
++# Locally calculated
++sha256  1114e280d850605ae71b656dfc88115ab06081e8157720a2497f50edf50b110e  LICENSE
+diff --git a/package/janet/janet.mk b/package/janet/janet.mk
+new file mode 100644
+index 0000000000..7243d60c01
+--- /dev/null
++++ b/package/janet/janet.mk
+@@ -0,0 +1,22 @@
++################################################################################
++#
++# janet
++#
++################################################################################
++
++JANET_VERSION = 1.15.0
++JANET_SITE = $(call github,janet-lang,janet,v$(JANET_VERSION))
++JANET_LICENSE = MIT
++JANET_LICENSE_FILES = LICENSE
++
++JANET_INSTALL_STAGING = YES
++
++ifeq ($(BR2_STATIC_LIBS),y)
++JANET_CONF_OPTS += -Ddynamic_modules=false
++endif
++
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
++JANET_CONF_OPTS += -Dsingle_threaded=true
++endif
++
++$(eval $(meson-package))
