@@ -1,8 +1,7 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 16 Feb 2021 12:58:01 +0100
-Subject: [Buildroot] [PATCH] package/ebtables: install symlink to
- ebtables-legacy
-Message-ID: <20210216115802.32317-1-patrickdepinguin@gmail.com>
+Date: Tue, 16 Feb 2021 13:50:30 +0100
+Subject: [Buildroot] [PATCH] package/tcpdump: remove duplicated binary
+Message-ID: <20210216125031.2244-1-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,42 +10,30 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-Since the upgrade of ebtables from 2.0.10-4 to 2.0.11, there no longer is an
-'ebtables' binary. It has been renamed to 'ebtables-legacy' and moved from
-'/sbin' to '/usr/sbin'. This change is part of the upstream change to
-integrate the functionality of ebtables (and arptables) in the iptables
-package, using the nf_tables kernel backend [1].
+Since tcpdump 4.99.0, the 'tcpdump' binary is no longer installed in
+/usr/sbin but in /usr/bin. This change invalidates the Buildroot hook
+'TCPDUMP_REMOVE_DUPLICATED_BINARY', causing a fairly large rootfs size
+increase as a result.
 
-Unfortunately, the renaming (and move) of the original 'ebtables' binary
-breaks existing scripts that are calling 'ebtables' or '/sbin/ebtables'.
-Therefore, add a symlink from the original path to 'ebtables-legacy'.
-
-However, do not provide this symlink if BR2_PACKAGE_IPTABLES_NFTABLES is
-enabled. In this case, the iptables package will build the new equivalent
-of ebtables -- a symlink to ebtables-legacy would cause conflicts.
-
-[1] https://wiki.nftables.org/wiki-nftables/index.php/Legacy_xtables_tools
+Update the path inside this hook.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- package/ebtables/ebtables.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/tcpdump/tcpdump.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/ebtables/ebtables.mk b/package/ebtables/ebtables.mk
-index 998f06f5f6..54932334c2 100644
---- a/package/ebtables/ebtables.mk
-+++ b/package/ebtables/ebtables.mk
-@@ -33,4 +33,11 @@ endef
- EBTABLES_POST_INSTALL_TARGET_HOOKS += EBTABLES_REMOVE_UTILS_RESTORE
- endif
+diff --git a/package/tcpdump/tcpdump.mk b/package/tcpdump/tcpdump.mk
+index f8ea6576ee..c562034a4e 100644
+--- a/package/tcpdump/tcpdump.mk
++++ b/package/tcpdump/tcpdump.mk
+@@ -22,7 +22,7 @@ TCPDUMP_SELINUX_MODULES = netutils
  
-+ifeq ($(BR2_PACKAGE_IPTABLES_NFTABLES),)
-+define EBTABLES_INSTALL_LEGACY_SYMLINK
-+	ln -sf /usr/sbin/ebtables-legacy $(TARGET_DIR)/sbin/ebtables
-+endef
-+EBTABLES_POST_INSTALL_TARGET_HOOKS += EBTABLES_INSTALL_LEGACY_SYMLINK
-+endif
-+
- $(eval $(autotools-package))
+ # make install installs an unneeded extra copy of the tcpdump binary
+ define TCPDUMP_REMOVE_DUPLICATED_BINARY
+-	rm -f $(TARGET_DIR)/usr/sbin/tcpdump.$(TCPDUMP_VERSION)
++	rm -f $(TARGET_DIR)/usr/bin/tcpdump.$(TCPDUMP_VERSION)
+ endef
+ 
+ TCPDUMP_POST_INSTALL_TARGET_HOOKS += TCPDUMP_REMOVE_DUPLICATED_BINARY
 -- 
 2.26.2
