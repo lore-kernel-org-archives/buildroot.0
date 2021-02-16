@@ -1,43 +1,96 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 16 Feb 2021 21:23:47 +0100
-Subject: [Buildroot] [git commit branch/next] package/kodi-pvr-zattoo: bump
- version to 18.1.23-Leia
-Message-ID: <20210216200510.89B7A813E1@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 16 Feb 2021 21:30:22 +0100
+Subject: [Buildroot] Handling delays in network interface visibility in
+ Raspberry Pi 3
+In-Reply-To: <CALURroSp5ujNLUWY7PdggHv4bsA+gEkC6LHi-xYD59OrpGaFGw@mail.gmail.com>
+References: <0A92E09A-3361-429E-AE65-E12223E0E62B@grondman.net>
+ <CALURroSp5ujNLUWY7PdggHv4bsA+gEkC6LHi-xYD59OrpGaFGw@mail.gmail.com>
+Message-ID: <20210216213022.7f3c7df1@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5f5ed4159831708168244c09c32f67cea0443f3c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello *,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash | 2 +-
- package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Mon, 15 Feb 2021 15:33:57 -0800, Christopher McCrory <chrismcc@gmail.com> wrote:
 
-diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
-index 13201a4292..a9e2cd996c 100644
---- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
-+++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  19de7bc58bcf37bbcff5ad2cb2f095cb15a4217f9abec5c9ff30d0489dab89d2  kodi-pvr-zattoo-18.1.21-Leia.tar.gz
-+sha256  9c3dc2ed9f8c39bcc4f5798439b85f2bdae1a427ffeb1b9d18aa5e2caca29f4e  kodi-pvr-zattoo-18.1.23-Leia.tar.gz
- sha256  d3670aef89085fd6b97665967a8422c89324afbc4720daa0975696a2ee92e236  debian/copyright
-diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
-index 78fc01f195..cb995c9c78 100644
---- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
-+++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_PVR_ZATTOO_VERSION = 18.1.21-Leia
-+KODI_PVR_ZATTOO_VERSION = 18.1.23-Leia
- KODI_PVR_ZATTOO_SITE = $(call github,rbuehlma,pvr.zattoo,$(KODI_PVR_ZATTOO_VERSION))
- KODI_PVR_ZATTOO_LICENSE = GPL-2.0+
- KODI_PVR_ZATTOO_LICENSE_FILES = debian/copyright
+> On phone so please excuse typos and brevity.
+> 
+> This is probably due to spanning tree (stp) on your switch. STP will delay
+> forwarding traffic from 30 to 55 ish seconds. In this case the pi is just
+> booting too fast. PCs have enough delays that you probably wouldn't notice
+> this happening.  Add a sleep 56 before the ifup bit, if that solves
+> the problem, stp it is.  If so, solved and done. Or if possible enable
+> portfast on the swichport, this will speed up the stp convergence.
+> 
+> For buildroot, on my raspberry pi builds, I only did wifi. But IIRC, the
+> dhcp client should have some options to adjust the number of requests
+> and/or the time between requests. If so the time it waits to receive a
+> response should be over 55 ish seconds in total to account for stp.
+> Preferably, the last request should happen after stp has converged.
+
+Reminds me of patch already lingering around some time in my private
+repo to adjust the udhcpc start with the '-b' ('background if lease is not
+obtained') option, see [1]...
+
+Fixed dhcp lease for me in case the RPi is connected to a switch at startup
+with no dhcp server available but connected later...
+
+Regards,
+Peter
+
+[1] https://patchwork.ozlabs.org/project/buildroot/patch/20210216202022.27264-1-ps.report at gmx.net/
+
+> 
+> 
+> 
+> On Mon, Feb 15, 2021, 9:08 AM Ivo Grondman <buildroot@grondman.net> wrote:
+> 
+> > Hi all,
+> >
+> > Today I?ve been trying to debug the following issue. Using Buildroot
+> > 2020.11.2 and the Vagrantfile that comes with it, I tried to build a
+> > ?vanilla? Buildroot image in the vagrant VM for my Raspberry Pi 3 Model B+
+> > in the following way:
+> >
+> > $ make raspberrypi3_defconfig
+> > $ make
+> >
+> > i.e. without any customisation. The image builds fine and the Pi boots
+> > without errors or warnings, but the network interface eth0 (configured with
+> > DHCP) will not have an IPv4 address and I manually have to perform an `ifup
+> > -a` or `ifup eth0` to get it going. So I went through all the
+> > initialisation files that have a part in bringing up the network interface
+> > and soon came to conclude that the script in
+> > /etc/network/if-pre-up.d/wait_iface has the right intentions, but still
+> > doesn?t solve the slow-to-appear interface issue.
+> >
+> > It looks as if that particular script still needs to wait just that bit
+> > longer when it sees that /sys/class/net/eth0 exists before actually
+> > exiting. Using the file as is will not make eth0 retrieve an address from
+> > the DHCP server, but if I add a bit of extra sleep in the if-statement
+> > where it detects the presence of /sys/class/net/eth0 then it *will* work.
+> >
+> > Now my problem with this approach is that it feels like a hack. Moreover,
+> > I?d like to know if something else could be the issue here. So:
+> >
+> > 1) Did anyone of you experience similar issues with a Raspberry Pi?
+> > 2) Are there any alternative, better solutions to this problem?
+> > 3) If the answer to 2) is a ?no?, should I submit a patch for this
+> > particular script? I?m a bit hesitant to put in a patch with an extra delay
+> > on detection of the interface, as this is obviously not something you want
+> > to do for *all* possible platforms?
+> >
+> > Any help is greatly appreciated.
+> >
+> > Best regards,
+> >
+> > Ivo Grondman
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+> >  
