@@ -1,44 +1,59 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 16 Feb 2021 09:07:54 +0100
-Subject: [Buildroot] [PATCH 1/3] package/mongoose: fix activation of
- openssl/mbedtls
-Message-ID: <20210216080756.1635858-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 16 Feb 2021 09:17:51 +0100
+Subject: [Buildroot] [git commit] package/ply: needs dynamic library
+In-Reply-To: <20210213211246.51E7D8157B@busybox.osuosl.org> (Yann E. MORIN's
+ message of "Sat, 13 Feb 2021 22:33:40 +0100")
+References: <20210213211246.51E7D8157B@busybox.osuosl.org>
+Message-ID: <875z2sa0k0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-MG_ENABLE_SSL and MG_SSL_IF have been dropped since version 7.0 and
-https://github.com/cesanta/mongoose/commit/f2fba1d2004c5ddf2fc0a7ca8dc75b5f78feed85
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-So use the new MG_ENABLE_OPENSSL and MG_ENABLE_MBEDTLS variables
+ > commit: https://git.buildroot.net/buildroot/commit/?id=debe9eb13ebd8b8d5596832030ec61032bdc99b3
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/mongoose/mongoose.mk | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+ > ply builds and installs a library. Some objects that go in that library
+ > are tagged with a 'section' attribute (excerpt):
 
-diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
-index ae20965be4..996cbff757 100644
---- a/package/mongoose/mongoose.mk
-+++ b/package/mongoose/mongoose.mk
-@@ -16,14 +16,10 @@ MONGOOSE_CFLAGS = $(TARGET_CFLAGS)
- 
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- MONGOOSE_DEPENDENCIES += openssl
--MONGOOSE_CFLAGS += \
--	-DMG_ENABLE_SSL \
--	-DMG_SSL_IF=MG_SSL_IF_OPENSSL
-+MONGOOSE_CFLAGS += -DMG_ENABLE_OPENSSL=1
- else ifeq ($(BR2_PACKAGE_MBEDTLS),y)
- MONGOOSE_DEPENDENCIES += mbedtls
--MONGOOSE_CFLAGS += \
--	-DMG_ENABLE_SSL \
--	-DMG_SSL_IF=MG_SSL_IF_MBEDTLS
-+MONGOOSE_CFLAGS += -DMG_ENABLE_MBEDTLS=1
- endif
- 
- define MONGOOSE_BUILD_CMDS
+ >     __attribute__((section("providers")))
+
+ > Later on, it references the bounds of that section, with the canonical
+ > __start and __stop markers, which will eventually be created by the
+ > linker:
+
+ >     extern struct provider __start_providers;
+ >     extern struct provider __stop_providers;
+
+ > Sections only exists in an ELF file, and a static library id not an ELF.
+ > So, when creating a static library, the markers are not created. Thus,
+ > when linking the final executable, the link fails because of missing
+ > symbols:
+
+ >     .../powerpc-buildroot-linux-uclibc/bin/ld: ../libply/.libs/libply.a(libply_la-provider.o): in function `provider_get':
+ >     provider.c:(.text+0xe): undefined reference to `__start_providers'
+ >     .../powerpc-buildroot-linux-uclibc/bin/ld: provider.c:(.text+0x12): undefined reference to `__stop_providers'
+ >     .../powerpc-buildroot-linux-uclibc/bin/ld: provider.c:(.text+0x2a): undefined reference to `__start_providers'
+ >     .../powerpc-buildroot-linux-uclibc/bin/ld: provider.c:(.text+0x32): undefined reference to `__stop_providers'
+
+ > So, conceptually, ply can not build in static-only.
+
+ > Fixes:
+ >  - http://autobuild.buildroot.net/results/3a586241d37614b644ff6c4674ae28df2b22fdf8
+
+Is that true? Aren't those symbols created by the linker when the final
+application is linked? If not, how does custom sections work with U-Boot
+and the Linux kernel that also do static linking?
+
+Hacking a bit around, I see that linking does work if I explicitly pass
+the libply/provider/*.o files to the linker and not just the .a
+file.
+
+Perhaps it is because nothing directly references those symbols, so the
+linker thinks it can drop them? Maybe it just needs to be told not to do that?
+
 -- 
-2.30.0
+Bye, Peter Korsgaard
