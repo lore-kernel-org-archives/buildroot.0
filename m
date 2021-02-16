@@ -1,36 +1,35 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 16 Feb 2021 21:16:55 +0100
-Subject: [Buildroot] [git commit] support/scripts/cpedb.py: remove import
- pickle
-Message-ID: <20210216195532.BE2BA8107C@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 16 Feb 2021 21:20:22 +0100
+Subject: [Buildroot] [PATCH/next v1] package/ifupdown-scripts: send udhcpc
+ to background in case lease is not obtained
+Message-ID: <20210216202022.27264-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bcef4a03e722dce29cd8a679a4d74178a2127f56
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+- Add the 'udhcpc_opts -b' option to /etc/network/interfaces for the
+  system dhcp configured interface. With this option ('-b: background if
+  lease is not obtained') the udhcpc keeps running in case the initial
+  dhcp requests are not answered immediately.
 
-pickle is no longer used since 09a71e6a75636
-
-Fixes:
-support/scripts/cpedb.py:7:1: F401 'pickle' imported but unused
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- support/scripts/cpedb.py | 1 -
- 1 file changed, 1 deletion(-)
+ package/ifupdown-scripts/ifupdown-scripts.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/support/scripts/cpedb.py b/support/scripts/cpedb.py
-index b1e7e7012c..f4daf56124 100644
---- a/support/scripts/cpedb.py
-+++ b/support/scripts/cpedb.py
-@@ -4,7 +4,6 @@ import xml.etree.ElementTree as ET
- from xml.etree.ElementTree import Element, SubElement
- import gzip
- import os
--import pickle
- import requests
- import time
- from xml.dom import minidom
+diff --git a/package/ifupdown-scripts/ifupdown-scripts.mk b/package/ifupdown-scripts/ifupdown-scripts.mk
+index 5ef032142c..d3135b18b6 100644
+--- a/package/ifupdown-scripts/ifupdown-scripts.mk
++++ b/package/ifupdown-scripts/ifupdown-scripts.mk
+@@ -28,6 +28,7 @@ define IFUPDOWN_SCRIPTS_DHCP
+ 		echo "  pre-up /etc/network/nfs_check"; \
+ 		echo "  wait-delay 15"; \
+ 		echo "  hostname \$$(hostname)"; \
++		echo "  udhcpc_opts -b"; \
+ 	) >> $(TARGET_DIR)/etc/network/interfaces
+ endef
+ define IFUPDOWN_SCRIPTS_DHCP_OPENRC
+-- 
+2.30.0
