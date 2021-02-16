@@ -1,53 +1,50 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Feb 2021 21:01:28 +0100
-Subject: [Buildroot] [git commit] package/collectd: add 'synproxy' option
-Message-ID: <20210216194300.C1911853AC@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 16 Feb 2021 21:05:13 +0100
+Subject: [Buildroot] [git commit] package/lcms2: disable tiff
+Message-ID: <20210216194344.8D6C6815BB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=45a6cdaf5876c0e4605eec32e528f13ee77f1136
+commit: https://git.buildroot.net/buildroot/commit/?id=d4da2e2083a2d56bc7d7d41a4c8baf2b2fb8fd26
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The synproxy plugin exists since 5.8.0 and is enabled by default in
-collectd.
+tiff is only used by tificc sample and upstream rejected the patch to
+fix the static build failure because "adding pkg-config dependency for a
+sample is an overkill": https://github.com/mm2/Little-CMS/pull/244
 
-Add an option in Buildroot, disabled by default.
-
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/collectd/Config.in   | 5 +++++
- package/collectd/collectd.mk | 1 +
- 2 files changed, 6 insertions(+)
+ package/lcms2/lcms2.mk | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/package/collectd/Config.in b/package/collectd/Config.in
-index 679285d997..82c24fdbc3 100644
---- a/package/collectd/Config.in
-+++ b/package/collectd/Config.in
-@@ -513,6 +513,11 @@ config BR2_PACKAGE_COLLECTD_SWAP
- 	help
- 	  Collects the amount of memory currently written to disk.
+diff --git a/package/lcms2/lcms2.mk b/package/lcms2/lcms2.mk
+index 862fdd5896..44b9965a80 100644
+--- a/package/lcms2/lcms2.mk
++++ b/package/lcms2/lcms2.mk
+@@ -11,6 +11,8 @@ LCMS2_LICENSE_FILES = COPYING
+ LCMS2_CPE_ID_VENDOR = littlecms
+ LCMS2_CPE_ID_PRODUCT = little_cms
+ LCMS2_INSTALL_STAGING = YES
++# tiff is only used by tificc sample
++LCMS2_CONF_OPTS = --without-tiff
  
-+config BR2_PACKAGE_COLLECTD_SYNPROXY
-+	bool "synproxy"
-+	help
-+	  Synproxy stats plugin.
-+
- config BR2_PACKAGE_COLLECTD_TABLE
- 	bool "table"
- 	help
-diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
-index d57e6b8c1d..7db753b342 100644
---- a/package/collectd/collectd.mk
-+++ b/package/collectd/collectd.mk
-@@ -132,6 +132,7 @@ COLLECTD_CONF_OPTS += \
- 	$(if $(BR2_PACKAGE_COLLECTD_SMART),--enable-smart,--disable-smart) \
- 	$(if $(BR2_PACKAGE_COLLECTD_SNMP),--enable-snmp,--disable-snmp) \
- 	$(if $(BR2_PACKAGE_COLLECTD_SWAP),--enable-swap,--disable-swap) \
-+	$(if $(BR2_PACKAGE_COLLECTD_SYNPROXY),--enable-synproxy,--disable-synproxy) \
- 	$(if $(BR2_PACKAGE_COLLECTD_SYSLOG),--enable-syslog,--disable-syslog) \
- 	$(if $(BR2_PACKAGE_COLLECTD_TABLE),--enable-table,--disable-table) \
- 	$(if $(BR2_PACKAGE_COLLECTD_TAIL),--enable-tail,--disable-tail) \
+ ifeq ($(BR2_PACKAGE_JPEG),y)
+ LCMS2_CONF_OPTS += --with-jpeg
+@@ -19,13 +21,6 @@ else
+ LCMS2_CONF_OPTS += --without-jpeg
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_TIFF),y)
+-LCMS2_CONF_OPTS += --with-tiff
+-LCMS2_DEPENDENCIES += tiff
+-else
+-LCMS2_CONF_OPTS += --without-tiff
+-endif
+-
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ LCMS2_CONF_OPTS += --with-zlib
+ LCMS2_DEPENDENCIES += zlib
