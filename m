@@ -1,16 +1,16 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 16 Feb 2021 09:44:16 +0100
-Subject: [Buildroot] [git commit] DEVELOPERS: drop Rahul Jain,
+Date: Tue, 16 Feb 2021 09:45:44 +0100
+Subject: [Buildroot] [git commit branch/next] DEVELOPERS: drop Rahul Jain,
  user no longer exists
-Message-ID: <20210216082311.D9AE781534@busybox.osuosl.org>
+Message-ID: <20210216082426.34D677F93D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=be7be1a086453dd5bcae92d8c600523566947a7b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=e792b4d22d318173619a02ebc515a422bfc133ea
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 <rahul.jain@imgtec.com>: host mxa-00376f01.gslb.pphosted.com[185.132.180.163]
     said: 550 5.1.1 User Unknown (in reply to RCPT TO command)
