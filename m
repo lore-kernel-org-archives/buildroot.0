@@ -1,35 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 16 Feb 2021 22:45:12 +0100
-Subject: [Buildroot] [PATCH] utils/scanpypi: use python3 explicitly
-Message-ID: <20210216214513.273743-1-thomas.petazzoni@bootlin.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 16 Feb 2021 21:48:06 +0000
+Subject: [Buildroot] [Bug 11706] binman (U-boot tool) cannot find libfdt
+ "binman: No module named _libfdt" if python3 selected
+In-Reply-To: <bug-11706-163@https.bugs.busybox.net/>
+References: <bug-11706-163@https.bugs.busybox.net/>
+Message-ID: <bug-11706-163-OdxVbhSjR0@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-scanpypi is python3 compatible. In addition, it executes the setup.py
-of Python modules to extract the relevant information. Since these are
-more and more commonly using python3 constructs, using "python" to run
-scanpypi causes problems on systems that have python2 installed as
-python, when trying to parse setup.py scripts with python3 constructs.
+https://bugs.busybox.net/show_bug.cgi?id=11706
 
-Fixes part of #13516.
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> changed:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- utils/scanpypi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |FIXED
+             Status|ASSIGNED                    |RESOLVED
 
-diff --git a/utils/scanpypi b/utils/scanpypi
-index 51bc249f9e..47c7c00c60 100755
---- a/utils/scanpypi
-+++ b/utils/scanpypi
-@@ -1,4 +1,4 @@
--#!/usr/bin/env python
-+#!/usr/bin/env python3
- """
- 
- Utility for building Buildroot packages for existing PyPI packages
+--- Comment #4 from Thomas Petazzoni <thomas.petazzoni@bootlin.com> ---
+I indeed think this issue is resolved now that binman uses python3 in more
+recent versions of U-Boot. Also Buildroot has been enhanced to be able to
+describe U-Boot configurations that depend on python2 or python3.
+
+Let's assume this is fixed.
+
 -- 
-2.29.2
+You are receiving this mail because:
+You are on the CC list for the bug.
