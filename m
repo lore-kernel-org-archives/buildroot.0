@@ -1,40 +1,31 @@
-From: Michael Walle <michael@walle.cc>
-Date: Tue, 16 Feb 2021 11:47:23 +0100
-Subject: [Buildroot] [PATCH 2/2] configs/kontron_smarc_sal28: use kernel 5.11
-In-Reply-To: <20210216104723.17538-1-michael@walle.cc>
-References: <20210216104723.17538-1-michael@walle.cc>
-Message-ID: <20210216104723.17538-2-michael@walle.cc>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 16 Feb 2021 12:23:59 +0100
+Subject: [Buildroot] Handling delays in network interface visibility in
+ Raspberry Pi 3
+In-Reply-To: <3FF68F6E-0A60-4171-94ED-640214A6F0EF@grondman.net> (Ivo
+ Grondman's message of "Tue, 16 Feb 2021 11:37:26 +0100")
+References: <0A92E09A-3361-429E-AE65-E12223E0E62B@grondman.net>
+ <87r1lh9eiz.fsf@dell.be.48ers.dk>
+ <3FF68F6E-0A60-4171-94ED-640214A6F0EF@grondman.net>
+Message-ID: <87wnv88ddc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Michael Walle <michael@walle.cc>
----
- configs/kontron_smarc_sal28_defconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+>>>>> "Ivo" == Ivo Grondman <buildroot@grondman.net> writes:
 
-diff --git a/configs/kontron_smarc_sal28_defconfig b/configs/kontron_smarc_sal28_defconfig
-index 4a72bf3ec1..d09ba0a2fc 100644
---- a/configs/kontron_smarc_sal28_defconfig
-+++ b/configs/kontron_smarc_sal28_defconfig
-@@ -1,6 +1,6 @@
- BR2_aarch64=y
- BR2_cortex_a72=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_11=y
- BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
- BR2_ROOTFS_OVERLAY="board/kontron/smarc-sal28/rootfs_overlay"
-@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c $(BINARIES_DIR)/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.11"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/fsl-ls1028a-kontron-sl28 freescale/fsl-ls1028a-kontron-sl28-var2 freescale/fsl-ls1028a-kontron-sl28-var3-ads2 freescale/fsl-ls1028a-kontron-sl28-var4 freescale/fsl-ls1028a-kontron-kbox-a-230-ls"
+Hi,
+
+ > Turned out I was using an old cable only capable of 100BASE-TX
+ > (i.e. it only had 2 wire pairs). Replacing it with a cable with all 4
+ > wire pairs in it did the trick, even when still behind the switch and
+ > the power line adapter. Never had problems with that cable before
+ > (didn?t care about the speed difference), but apparently in this case
+ > it was the culprit of slow link negotiation.
+
+Ok, good to hear that you solved it!
+
 -- 
-2.20.1
+Bye, Peter Korsgaard
