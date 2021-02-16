@@ -1,36 +1,57 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 16 Feb 2021 15:06:39 +0100
-Subject: [Buildroot] [PATCH 1/1] support/scripts/size-stats: increase
- number of files that can be linked to a source
-In-Reply-To: <20210210110518.24817-1-daniel.crowe@resolution.systems>
-References: <20210210110518.24817-1-daniel.crowe@resolution.systems>
-Message-ID: <CAAXf6LXXEV3PZ1rQ58nJhR7g-Jgra71wtkWmbo8t9ihAruum9Q@mail.gmail.com>
+Date: Tue, 16 Feb 2021 15:20:07 +0100
+Subject: [Buildroot] [PATCH] package/uboot-tools: depend on u-boot when
+ selected
+Message-ID: <20210216142007.24983-1-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Daniel,
+From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-El mi?, 10 feb 2021 a las 12:13, Daniel Crowe
-(<daniel.crowe@resolution.systems>) escribi?:
->
-> Signed-off-by: Daniel Crowe <daniel.crowe@resolution.systems>
-> ---
->  Makefile                   |  1 +
->  support/scripts/size-stats | 76 +++++++++++++++++++++++++++-----------
->  2 files changed, 56 insertions(+), 21 deletions(-)
->
+The envimage creation logic only depended on u-boot when the user did not
+specify a custom envimage source via
+BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SOURCE . This assumes that a
+user-provided envimage source is never coming from the u-boot source
+tree.
 
-Please extend your commit message with more information: what is the
-problem you're fixing, and how are you fixing it.
-Right now, we can only guess what it is doing based on the code.
+But especially given the fact that the envimage creation logic used to be
+part of the u-boot package, this is a realistic scenario: users may have
+provided a value of BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SOURCE based on
+$(UBOOT_DIR), e.g.:
 
-It looks like the change is extending the size information to
-rootfs-overlays, while today only real packages are considered.
-But if that is correct, then the title "increase number of files that
-can be linked to a source" is confusing to me.
+    $(UBOOT_DIR)/board/foo-vendor/bar-board/env.txt
 
-Thanks,
-Thomas
+Therefore, always add the u-boot dependency if u-boot is selected, for
+either case of custom or default envimage source.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+---
+ package/uboot-tools/uboot-tools.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
+index a0cdcafd4e..8d902863b4 100644
+--- a/package/uboot-tools/uboot-tools.mk
++++ b/package/uboot-tools/uboot-tools.mk
+@@ -121,9 +121,15 @@ define HOST_UBOOT_TOOLS_GENERATE_ENV_DEFAULTS
+ 		$(UBOOT_SRCDIR) \
+ 		> $(UBOOT_TOOLS_GENERATE_ENV_FILE)
+ endef
+-HOST_UBOOT_TOOLS_DEPENDENCIES += uboot
+ endif #UBOOT_TOOLS_GENERATE_ENV_FILE:BR2_TARGET_UBOOT
+ 
++ifeq ($(BR2_TARGET_UBOOT),y)
++# a user provided BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SOURCE may be located in
++# the u-boot sources, via $(UBOOT_DIR), so we need this dependency in either
++# case.
++HOST_UBOOT_TOOLS_DEPENDENCIES += uboot
++endif #BR2_TARGET_UBOOT
++
+ ifeq ($(BR_BUILDING),y)
+ ifeq ($(call qstrip,$(BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SIZE)),)
+ $(error Please provide U-Boot environment size (BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SIZE setting))
+-- 
+2.26.2
