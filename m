@@ -1,96 +1,93 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 16 Feb 2021 21:30:22 +0100
-Subject: [Buildroot] Handling delays in network interface visibility in
- Raspberry Pi 3
-In-Reply-To: <CALURroSp5ujNLUWY7PdggHv4bsA+gEkC6LHi-xYD59OrpGaFGw@mail.gmail.com>
-References: <0A92E09A-3361-429E-AE65-E12223E0E62B@grondman.net>
- <CALURroSp5ujNLUWY7PdggHv4bsA+gEkC6LHi-xYD59OrpGaFGw@mail.gmail.com>
-Message-ID: <20210216213022.7f3c7df1@gmx.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 16 Feb 2021 21:35:48 +0100
+Subject: [Buildroot] [PATCH v2,
+ 1/3] package/perl-extutils-pkgconfig: new package
+In-Reply-To: <20210212063944.2202888-1-fontaine.fabrice@gmail.com>
+References: <20210212063944.2202888-1-fontaine.fabrice@gmail.com>
+Message-ID: <edf5059f-caf2-a9e2-6317-a1b5e962915f@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello *,
 
-On Mon, 15 Feb 2021 15:33:57 -0800, Christopher McCrory <chrismcc@gmail.com> wrote:
 
-> On phone so please excuse typos and brevity.
+On 12/02/2021 07:39, Fabrice Fontaine wrote:
+> host-perl-extutils-pkgconfig is needed by perl-gd to find gd in version
+> 2.3.0
 > 
-> This is probably due to spanning tree (stp) on your switch. STP will delay
-> forwarding traffic from 30 to 55 ish seconds. In this case the pi is just
-> booting too fast. PCs have enough delays that you probably wouldn't notice
-> this happening.  Add a sleep 56 before the ifup bit, if that solves
-> the problem, stp it is.  If so, solved and done. Or if possible enable
-> portfast on the swichport, this will speed up the stp convergence.
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+> Changes v1 -> v2 (after review of Fran?ois Perrad):
+>  - Add host-pkgconf dependency
 > 
-> For buildroot, on my raspberry pi builds, I only did wifi. But IIRC, the
-> dhcp client should have some options to adjust the number of requests
-> and/or the time between requests. If so the time it waits to receive a
-> response should be over 55 ish seconds in total to account for stp.
-> Preferably, the last request should happen after stp has converged.
-
-Reminds me of patch already lingering around some time in my private
-repo to adjust the udhcpc start with the '-b' ('background if lease is not
-obtained') option, see [1]...
-
-Fixed dhcp lease for me in case the RPi is connected to a switch at startup
-with no dhcp server available but connected later...
-
-Regards,
-Peter
-
-[1] https://patchwork.ozlabs.org/project/buildroot/patch/20210216202022.27264-1-ps.report at gmx.net/
-
+>  package/perl-extutils-pkgconfig/Config.in         |  6 ++++++
+>  .../perl-extutils-pkgconfig.hash                  |  6 ++++++
+>  .../perl-extutils-pkgconfig.mk                    | 15 +++++++++++++++
+>  3 files changed, 27 insertions(+)
+>  create mode 100644 package/perl-extutils-pkgconfig/Config.in
+>  create mode 100644 package/perl-extutils-pkgconfig/perl-extutils-pkgconfig.hash
+>  create mode 100644 package/perl-extutils-pkgconfig/perl-extutils-pkgconfig.mk
 > 
+> diff --git a/package/perl-extutils-pkgconfig/Config.in b/package/perl-extutils-pkgconfig/Config.in
+> new file mode 100644
+> index 0000000000..f3c4966fe1
+> --- /dev/null
+> +++ b/package/perl-extutils-pkgconfig/Config.in
+> @@ -0,0 +1,6 @@
+> +config BR2_PACKAGE_PERL_EXTUTILS_PKGCONFIG
+> +	bool "perl-extutils-pkgconfig"
+
+ Since this is a host-only package, Config.in is useless. And anyway it was not
+sourced from package/Config.in.
+
+> +	help
+> +	  simplistic interface to pkg-config.
+> +
+> +	  http://gtk2-perl.sourceforge.net
+> diff --git a/package/perl-extutils-pkgconfig/perl-extutils-pkgconfig.hash b/package/perl-extutils-pkgconfig/perl-extutils-pkgconfig.hash
+> new file mode 100644
+> index 0000000000..7028b96be5
+> --- /dev/null
+> +++ b/package/perl-extutils-pkgconfig/perl-extutils-pkgconfig.hash
+> @@ -0,0 +1,6 @@
+> +# retrieved by scancpan from http://cpan.metacpan.org/
+> +md5  b86318f2b6ac6af3ee985299e1e38fe5  ExtUtils-PkgConfig-1.16.tar.gz
+> +sha256  bbeaced995d7d8d10cfc51a3a5a66da41ceb2bc04fedcab50e10e6300e801c6e  ExtUtils-PkgConfig-1.16.tar.gz
+> +
+> +# computed by scancpan
+> +sha256  1ca66d6d9d2e14426825889848f0b5b4d4e153afcd74b8f42a1f2937c3a9973d  README
+> diff --git a/package/perl-extutils-pkgconfig/perl-extutils-pkgconfig.mk b/package/perl-extutils-pkgconfig/perl-extutils-pkgconfig.mk
+> new file mode 100644
+> index 0000000000..21b1af2025
+> --- /dev/null
+> +++ b/package/perl-extutils-pkgconfig/perl-extutils-pkgconfig.mk
+> @@ -0,0 +1,15 @@
+> +################################################################################
+> +#
+> +# perl-extutils-pkgconfig
+> +#
+> +################################################################################
+> +
+> +PERL_EXTUTILS_PKGCONFIG_VERSION = 1.16
+> +PERL_EXTUTILS_PKGCONFIG_SOURCE = ExtUtils-PkgConfig-$(PERL_EXTUTILS_PKGCONFIG_VERSION).tar.gz
+> +PERL_EXTUTILS_PKGCONFIG_SITE = $(BR2_CPAN_MIRROR)/authors/id/X/XA/XAOC
+> +PERL_EXTUTILS_PKGCONFIG_LICENSE = LGPL-2.1
+> +PERL_EXTUTILS_PKGCONFIG_LICENSE_FILES = README
+> +PERL_EXTUTILS_PKGCONFIG_DISTNAME = ExtUtils-PkgConfig
+> +PERL_EXTUTILS_PKGCONFIG_DEPENDENCIES = host-pkgconf
+
+ This doesn't work for the host package, should be HOST_PERL_..._DEPENDENCIES.
+
+ Also, you forgot to add to DEVELOPERS.
+
+ Fixed all that and applied to master, thanks.
+
+ Regards,
+ Arnout
+
+
+> +
+> +$(eval $(host-perl-package))
 > 
-> 
-> On Mon, Feb 15, 2021, 9:08 AM Ivo Grondman <buildroot@grondman.net> wrote:
-> 
-> > Hi all,
-> >
-> > Today I?ve been trying to debug the following issue. Using Buildroot
-> > 2020.11.2 and the Vagrantfile that comes with it, I tried to build a
-> > ?vanilla? Buildroot image in the vagrant VM for my Raspberry Pi 3 Model B+
-> > in the following way:
-> >
-> > $ make raspberrypi3_defconfig
-> > $ make
-> >
-> > i.e. without any customisation. The image builds fine and the Pi boots
-> > without errors or warnings, but the network interface eth0 (configured with
-> > DHCP) will not have an IPv4 address and I manually have to perform an `ifup
-> > -a` or `ifup eth0` to get it going. So I went through all the
-> > initialisation files that have a part in bringing up the network interface
-> > and soon came to conclude that the script in
-> > /etc/network/if-pre-up.d/wait_iface has the right intentions, but still
-> > doesn?t solve the slow-to-appear interface issue.
-> >
-> > It looks as if that particular script still needs to wait just that bit
-> > longer when it sees that /sys/class/net/eth0 exists before actually
-> > exiting. Using the file as is will not make eth0 retrieve an address from
-> > the DHCP server, but if I add a bit of extra sleep in the if-statement
-> > where it detects the presence of /sys/class/net/eth0 then it *will* work.
-> >
-> > Now my problem with this approach is that it feels like a hack. Moreover,
-> > I?d like to know if something else could be the issue here. So:
-> >
-> > 1) Did anyone of you experience similar issues with a Raspberry Pi?
-> > 2) Are there any alternative, better solutions to this problem?
-> > 3) If the answer to 2) is a ?no?, should I submit a patch for this
-> > particular script? I?m a bit hesitant to put in a patch with an extra delay
-> > on detection of the interface, as this is obviously not something you want
-> > to do for *all* possible platforms?
-> >
-> > Any help is greatly appreciated.
-> >
-> > Best regards,
-> >
-> > Ivo Grondman
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> >  
