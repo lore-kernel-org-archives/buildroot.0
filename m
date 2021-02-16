@@ -1,55 +1,103 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Feb 2021 20:16:50 +0100
-Subject: [Buildroot] [PATCH 2/2] package/wpewebkit: bump version to 2.30.5
-In-Reply-To: <20210216191651.23256-1-peter@korsgaard.com>
-References: <20210216191651.23256-1-peter@korsgaard.com>
-Message-ID: <20210216191651.23256-2-peter@korsgaard.com>
+Date: Tue, 16 Feb 2021 20:31:34 +0100
+Subject: [Buildroot] [PATCH] package/libopenssl: security bump to version
+ 1.1.1j
+Message-ID: <20210216193134.5920-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bugfix release, fixing a number of issues:
+Fixes the following security issues:
 
-- Fix RunLoop objects leaked in worker threads.
-- Fix JavaScriptCore AArch64 LLInt build with JIT disabled.
-- Use Internet Explorer quirk for Google Docs.
+- CVE-2021-23841: Null pointer deref in X509_issuer_and_serial_hash()
+
+  The OpenSSL public API function X509_issuer_and_serial_hash() attempts to
+  create a unique hash value based on the issuer and serial number data
+  contained within an X509 certificate.  However it fails to correctly
+  handle any errors that may occur while parsing the issuer field (which
+  might occur if the issuer field is maliciously constructed).  This may
+  subsequently result in a NULL pointer deref and a crash leading to a
+  potential denial of service attack.
+
+  The function X509_issuer_and_serial_hash() is never directly called by
+  OpenSSL itself so applications are only vulnerable if they use this
+  function directly and they use it on certificates that may have been
+  obtained from untrusted sources.
+
+- CVE-2021-23839: Incorrect SSLv2 rollback protection
+
+  OpenSSL 1.0.2 supports SSLv2.  If a client attempts to negotiate SSLv2
+  with a server that is configured to support both SSLv2 and more recent SSL
+  and TLS versions then a check is made for a version rollback attack when
+  unpadding an RSA signature.  Clients that support SSL or TLS versions
+  greater than SSLv2 are supposed to use a special form of padding.  A
+  server that supports greater than SSLv2 is supposed to reject connection
+  attempts from a client where this special form of padding is present,
+  because this indicates that a version rollback has occurred (i.e.  both
+  client and server support greater than SSLv2, and yet this is the version
+  that is being requested).
+
+  The implementation of this padding check inverted the logic so that the
+  connection attempt is accepted if the padding is present, and rejected if
+  it is absent.  This means that such as server will accept a connection if
+  a version rollback attack has occurred.  Further the server will
+  erroneously reject a connection if a normal SSLv2 connection attempt is
+  made.
+
+  OpenSSL 1.1.1 does not have SSLv2 support and therefore is not vulnerable
+  to this issue.  The underlying error is in the implementation of the
+  RSA_padding_check_SSLv23() function.  This also affects the
+  RSA_SSLV23_PADDING padding mode used by various other functions.  Although
+  1.1.1 does not support SSLv2 the RSA_padding_check_SSLv23() function still
+  exists, as does the RSA_SSLV23_PADDING padding mode.  Applications that
+  directly call that function or use that padding mode will encounter this
+  issue.  However since there is no support for the SSLv2 protocol in 1.1.1
+  this is considered a bug and not a security issue in that version.
+
+- CVE-2021-23840: Integer overflow in CipherUpdate
+
+  Calls to EVP_CipherUpdate, EVP_EncryptUpdate and EVP_DecryptUpdate may
+  overflow the output length argument in some cases where the input length
+  is close to the maximum permissable length for an integer on the platform.
+  In such cases the return value from the function call will be 1
+  (indicating success), but the output length value will be negative.  This
+  could cause applications to behave incorrectly or crash.
+
+For more details, see the advisory:
+https://www.openssl.org/news/secadv/20210216.txt
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wpewebkit/wpewebkit.hash | 8 ++++----
- package/wpewebkit/wpewebkit.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/libopenssl/libopenssl.hash | 4 ++--
+ package/libopenssl/libopenssl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
-index 42bd27f11d..df8ac547b0 100644
---- a/package/wpewebkit/wpewebkit.hash
-+++ b/package/wpewebkit/wpewebkit.hash
-@@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/wpewebkit-2.30.4.tar.xz.sums
--md5  d423a01ffb5be44e6ad59b2cfb9d6eb3  wpewebkit-2.30.4.tar.xz
--sha1  2fdca7b888966ad2ed7d998bef52c9024dae063f  wpewebkit-2.30.4.tar.xz
--sha256  1e521d85cf8cf344b9fd08eabad7a1d18a330fb7862a77eaf78d7d7b10d5f6ef  wpewebkit-2.30.4.tar.xz
-+# From https://wpewebkit.org/releases/wpewebkit-2.30.5.tar.xz.sums
-+md5  63a9a7b7f29862ec827a730ba6542e80  wpewebkit-2.30.5.tar.xz
-+sha1  33136493672882d56617007d7ce65268cb79bda7  wpewebkit-2.30.5.tar.xz
-+sha256  4b577f4f07c34bb5d453d62b7a41d9e937bd3a2827a92dcd6f47c35f27c8359a  wpewebkit-2.30.5.tar.xz
+diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
+index 5e24ca17ae..854f8a03f7 100644
+--- a/package/libopenssl/libopenssl.hash
++++ b/package/libopenssl/libopenssl.hash
+@@ -1,5 +1,5 @@
+-# From https://www.openssl.org/source/openssl-1.1.1i.tar.gz.sha256
+-sha256  e8be6a35fe41d10603c3cc635e93289ed00bf34b79671a3a4de64fcee00d5242  openssl-1.1.1i.tar.gz
++# From https://www.openssl.org/source/openssl-1.1.1j.tar.gz.sha256
++sha256  aaf2fcb575cdf6491b98ab4829abf78a3dec8402b8b81efc8f23c00d443981bf  openssl-1.1.1j.tar.gz
  
- # Hashes for license files:
- sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
-index 91f137d96f..78f729f824 100644
---- a/package/wpewebkit/wpewebkit.mk
-+++ b/package/wpewebkit/wpewebkit.mk
+ # License files
+ sha256  c32913b33252e71190af2066f08115c69bc9fddadf3bf29296e20c835389841c  LICENSE
+diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
+index 972ed534ba..19f1c89f06 100644
+--- a/package/libopenssl/libopenssl.mk
++++ b/package/libopenssl/libopenssl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WPEWEBKIT_VERSION = 2.30.4
-+WPEWEBKIT_VERSION = 2.30.5
- WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
- WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
- WPEWEBKIT_INSTALL_STAGING = YES
+-LIBOPENSSL_VERSION = 1.1.1i
++LIBOPENSSL_VERSION = 1.1.1j
+ LIBOPENSSL_SITE = https://www.openssl.org/source
+ LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
+ LIBOPENSSL_LICENSE = OpenSSL or SSLeay
 -- 
 2.20.1
