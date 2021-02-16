@@ -1,93 +1,70 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 16 Feb 2021 21:35:48 +0100
-Subject: [Buildroot] [PATCH v2,
- 1/3] package/perl-extutils-pkgconfig: new package
-In-Reply-To: <20210212063944.2202888-1-fontaine.fabrice@gmail.com>
-References: <20210212063944.2202888-1-fontaine.fabrice@gmail.com>
-Message-ID: <edf5059f-caf2-a9e2-6317-a1b5e962915f@mind.be>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue, 16 Feb 2021 21:45:38 +0100
+Subject: [Buildroot] [PATCH] package/uboot-tools: depend on u-boot when
+ selected
+In-Reply-To: <20210216212321.0da56ad2@windsurf.home>
+References: <20210216142007.24983-1-patrickdepinguin@gmail.com>
+ <20210216212321.0da56ad2@windsurf.home>
+Message-ID: <CAAXf6LW2FGLwN48D_AswkF2jQm1QRRmvRW3UV=bqnh=3e5rKtw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Tue, Feb 16, 2021, 21:23 Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+wrote:
+
+> On Tue, 16 Feb 2021 15:20:07 +0100
+> Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote:
+>
+> > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> >
+> > The envimage creation logic only depended on u-boot when the user did not
+> > specify a custom envimage source via
+> > BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SOURCE . This assumes that a
+> > user-provided envimage source is never coming from the u-boot source
+> > tree.
+> >
+> > But especially given the fact that the envimage creation logic used to be
+> > part of the u-boot package, this is a realistic scenario: users may have
+> > provided a value of BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SOURCE based on
+> > $(UBOOT_DIR), e.g.:
+> >
+> >     $(UBOOT_DIR)/board/foo-vendor/bar-board/env.txt
+> >
+> > Therefore, always add the u-boot dependency if u-boot is selected, for
+> > either case of custom or default envimage source.
+> >
+> > Signed-off-by: Thomas De Schampheleire <
+> thomas.de_schampheleire at nokia.com>
+> > ---
+> >  package/uboot-tools/uboot-tools.mk | 8 +++++++-
+> >  1 file changed, 7 insertions(+), 1 deletion(-)
+>
+> I've applied to master, after slightly reworking the logic. Indeed you
+> had this:
+>
+> ifeq ($(env):$(uboot),:y)
+> ...
+> endif
+>
+> ifeq ($(uboot),y)
+> ...
+> endif
+>
+> Which I modified to:
+>
+> ifeq ($(uboot),y)
+> ...
+>
+> ifeq ($env),)
+> ...
+> endif
+> endif
 
 
-On 12/02/2021 07:39, Fabrice Fontaine wrote:
-> host-perl-extutils-pkgconfig is needed by perl-gd to find gd in version
-> 2.3.0
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
-> Changes v1 -> v2 (after review of Fran?ois Perrad):
->  - Add host-pkgconf dependency
-> 
->  package/perl-extutils-pkgconfig/Config.in         |  6 ++++++
->  .../perl-extutils-pkgconfig.hash                  |  6 ++++++
->  .../perl-extutils-pkgconfig.mk                    | 15 +++++++++++++++
->  3 files changed, 27 insertions(+)
->  create mode 100644 package/perl-extutils-pkgconfig/Config.in
->  create mode 100644 package/perl-extutils-pkgconfig/perl-extutils-pkgconfig.hash
->  create mode 100644 package/perl-extutils-pkgconfig/perl-extutils-pkgconfig.mk
-> 
-> diff --git a/package/perl-extutils-pkgconfig/Config.in b/package/perl-extutils-pkgconfig/Config.in
-> new file mode 100644
-> index 0000000000..f3c4966fe1
-> --- /dev/null
-> +++ b/package/perl-extutils-pkgconfig/Config.in
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_PERL_EXTUTILS_PKGCONFIG
-> +	bool "perl-extutils-pkgconfig"
-
- Since this is a host-only package, Config.in is useless. And anyway it was not
-sourced from package/Config.in.
-
-> +	help
-> +	  simplistic interface to pkg-config.
-> +
-> +	  http://gtk2-perl.sourceforge.net
-> diff --git a/package/perl-extutils-pkgconfig/perl-extutils-pkgconfig.hash b/package/perl-extutils-pkgconfig/perl-extutils-pkgconfig.hash
-> new file mode 100644
-> index 0000000000..7028b96be5
-> --- /dev/null
-> +++ b/package/perl-extutils-pkgconfig/perl-extutils-pkgconfig.hash
-> @@ -0,0 +1,6 @@
-> +# retrieved by scancpan from http://cpan.metacpan.org/
-> +md5  b86318f2b6ac6af3ee985299e1e38fe5  ExtUtils-PkgConfig-1.16.tar.gz
-> +sha256  bbeaced995d7d8d10cfc51a3a5a66da41ceb2bc04fedcab50e10e6300e801c6e  ExtUtils-PkgConfig-1.16.tar.gz
-> +
-> +# computed by scancpan
-> +sha256  1ca66d6d9d2e14426825889848f0b5b4d4e153afcd74b8f42a1f2937c3a9973d  README
-> diff --git a/package/perl-extutils-pkgconfig/perl-extutils-pkgconfig.mk b/package/perl-extutils-pkgconfig/perl-extutils-pkgconfig.mk
-> new file mode 100644
-> index 0000000000..21b1af2025
-> --- /dev/null
-> +++ b/package/perl-extutils-pkgconfig/perl-extutils-pkgconfig.mk
-> @@ -0,0 +1,15 @@
-> +################################################################################
-> +#
-> +# perl-extutils-pkgconfig
-> +#
-> +################################################################################
-> +
-> +PERL_EXTUTILS_PKGCONFIG_VERSION = 1.16
-> +PERL_EXTUTILS_PKGCONFIG_SOURCE = ExtUtils-PkgConfig-$(PERL_EXTUTILS_PKGCONFIG_VERSION).tar.gz
-> +PERL_EXTUTILS_PKGCONFIG_SITE = $(BR2_CPAN_MIRROR)/authors/id/X/XA/XAOC
-> +PERL_EXTUTILS_PKGCONFIG_LICENSE = LGPL-2.1
-> +PERL_EXTUTILS_PKGCONFIG_LICENSE_FILES = README
-> +PERL_EXTUTILS_PKGCONFIG_DISTNAME = ExtUtils-PkgConfig
-> +PERL_EXTUTILS_PKGCONFIG_DEPENDENCIES = host-pkgconf
-
- This doesn't work for the host package, should be HOST_PERL_..._DEPENDENCIES.
-
- Also, you forgot to add to DEVELOPERS.
-
- Fixed all that and applied to master, thanks.
-
- Regards,
- Arnout
-
-
-> +
-> +$(eval $(host-perl-package))
-> 
+Ok, perfect, thanks!
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210216/a4e40095/attachment.html>
