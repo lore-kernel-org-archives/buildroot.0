@@ -1,56 +1,56 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Feb 2021 08:34:31 +0100
-Subject: [Buildroot] [git commit branch/next]
- package/x11r7/xdriver_xf86-video-nouveau: bump version to 1.0.17
-Message-ID: <20210216071622.92B8081ED1@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 16 Feb 2021 09:07:55 +0100
+Subject: [Buildroot] [PATCH 2/3] package/mongoose: security bump to version
+ 7.1
+In-Reply-To: <20210216080756.1635858-1-fontaine.fabrice@gmail.com>
+References: <20210216080756.1635858-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210216080756.1635858-2-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f0b41307a336b4d3eee383e913019e39067459d0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+- Fix CVE-2021-26528: The mg_http_serve_file function in Cesanta
+  Mongoose HTTP server 7.0 is vulnerable to remote OOB write attack via
+  connection request after exhausting memory pool.
+- Fix CVE-2021-26529: The mg_tls_init function in Cesanta Mongoose HTTPS
+  server 7.0 and 6.7-6.18 (compiled with mbedTLS support) is vulnerable
+  to remote OOB write attack via connection request after exhausting
+  memory pool.
+- Fix CVE-2021-26530: The mg_tls_init function in Cesanta Mongoose HTTPS
+  server 7.0 (compiled with OpenSSL support) is vulnerable to remote OOB
+  write attack via connection request after exhausting memory pool.
 
-Release notes:
-https://lists.freedesktop.org/archives/nouveau/2021-January/037766.html
+https://github.com/cesanta/mongoose/releases/tag/7.1
 
-Reformatted hashes.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- .../xdriver_xf86-video-nouveau.hash                           | 11 +++++------
- .../xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.mk  |  2 +-
- 2 files changed, 6 insertions(+), 7 deletions(-)
+ package/mongoose/mongoose.hash | 2 +-
+ package/mongoose/mongoose.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.hash b/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.hash
-index b70728f9b7..336f29be46 100644
---- a/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.hash
-+++ b/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.hash
-@@ -1,7 +1,6 @@
--# From https://lists.freedesktop.org/archives/nouveau/2019-January/032053.html
--md5 ecd9be89d853301167e3d564c49f7a8e  xf86-video-nouveau-1.0.16.tar.bz2
--sha1 a2d19439ceed315079207a62c6888a12e8489995  xf86-video-nouveau-1.0.16.tar.bz2
--sha256 304060806415579cdb5c1f71f1c54d11cacb431b5552b170decbc883ed43bf06  xf86-video-nouveau-1.0.16.tar.bz2
--sha512 41b7839c37372660968ab7da2bc3d9feef3cab4e994d05d4ba6e59071f0d1b1f8d7dcdbcb15a42a375a556d28dc067f9ffe45d73c1d121ad307d199107ade3e0  xf86-video-nouveau-1.0.16.tar.bz2
-+# From https://lists.freedesktop.org/archives/nouveau/2021-January/037766.html
-+sha256  499322e27a55c8183166bf2dd1e47d085eb834143e0d7036baba8427b90c156b  xf86-video-nouveau-1.0.17.tar.bz2
-+sha512  adba58ba5298d1a5b3f9f8540f9ef2cb2e10e47bba8e374103ec2e1f92e915f5f4393ed0021168cd649646e12315135a1efcdf77e8fb1648e1295914d87279b2  xf86-video-nouveau-1.0.17.tar.bz2
-+
- # Locally computed
--sha256 27d8cbdcde7a0bd062ce49cdf8c672201452a64e3e6823f09b1beffe2c4b8eff  COPYING
-+sha256  27d8cbdcde7a0bd062ce49cdf8c672201452a64e3e6823f09b1beffe2c4b8eff  COPYING
-diff --git a/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.mk b/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.mk
-index d85cbfe4a4..e63bc611bf 100644
---- a/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.mk
-+++ b/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.mk
+diff --git a/package/mongoose/mongoose.hash b/package/mongoose/mongoose.hash
+index 149c0f5866..d9ed76c4ac 100644
+--- a/package/mongoose/mongoose.hash
++++ b/package/mongoose/mongoose.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  28206185873b5c448765f56e54d86a7af5a856b0b5f241aa44ac94bf34af7eee  mongoose-7.0.tar.gz
++sha256  f099bf7223c527e1a0b7fc8888136a3992e8b5c7123839639213b9483bb4f95b  mongoose-7.1.tar.gz
+ sha256  9553d057f2ba980642f2c18d87ed38896cff1c9612d77d684a73a11fe1443b05  LICENSE
+diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
+index 996cbff757..5c331cf48e 100644
+--- a/package/mongoose/mongoose.mk
++++ b/package/mongoose/mongoose.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_VIDEO_NOUVEAU_VERSION = 1.0.16
-+XDRIVER_XF86_VIDEO_NOUVEAU_VERSION = 1.0.17
- XDRIVER_XF86_VIDEO_NOUVEAU_SOURCE = xf86-video-nouveau-$(XDRIVER_XF86_VIDEO_NOUVEAU_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_NOUVEAU_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_NOUVEAU_LICENSE = MIT
+-MONGOOSE_VERSION = 7.0
++MONGOOSE_VERSION = 7.1
+ MONGOOSE_SITE = $(call github,cesanta,mongoose,$(MONGOOSE_VERSION))
+ MONGOOSE_LICENSE = GPL-2.0
+ MONGOOSE_LICENSE_FILES = LICENSE
+-- 
+2.30.0
