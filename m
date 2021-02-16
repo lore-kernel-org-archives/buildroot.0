@@ -1,54 +1,43 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 16 Feb 2021 21:23:38 +0100
-Subject: [Buildroot] [git commit] package/tzdate: use classic 'fat' format
- for uClibc/glibc compatibility
-Message-ID: <20210216200216.20B4B84AB7@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 16 Feb 2021 21:23:44 +0100
+Subject: [Buildroot] [git commit branch/next] package/kodi-pvr-iptvsimple:
+ bump version to 3.10.0-Leia
+Message-ID: <20210216200510.7D54180DE6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1efb7b9618f4aee4e1614b7aa942c16a1052f768
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=10f785f9d2c2bb92da52514f9f49e11149408e32
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/1019385940
-
-FAIL: test_run (tests.core.test_timezone.TestGlibcNonDefaultLimitedTimezone)
-----------------------------------------------------------------------
-Traceback (most recent call last):
-  File "/builds/buildroot.org/buildroot/support/testing/tests/core/test_timezone.py", line 66, in test_run
-    self.assertEqual(tz[0].strip(), "EST")
-AssertionError: '' != 'EST'
-
-Commit 7868289fd5348 (package/zic: bump version to 2020f) bumped the zic
-version to 2020f, which changed the default output format from the classic
-"fat" format to the new "slim" format:
-
-https://github.com/eggert/tz/commit/6ba6f2117b95eab345a7ed9159cef939e30c4cd3
-
-The slim format is unfortunately not supported by glibc < 2.28 or uClibc, so
-explicitly request the classic "fat" format.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/tzdata/tzdata.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash | 2 +-
+ package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
-index 04f5d84bf0..8201dc1201 100644
---- a/package/tzdata/tzdata.mk
-+++ b/package/tzdata/tzdata.mk
-@@ -51,8 +51,8 @@ endef
- define HOST_TZDATA_BUILD_CMDS
- 	(cd $(@D); \
- 		for zone in $(TZDATA_ZONELIST); do \
--			$(ZIC) -d _output/posix $$zone || exit 1; \
--			$(ZIC) -d _output/right -L leapseconds $$zone || exit 1; \
-+			$(ZIC) -b fat -d _output/posix $$zone || exit 1; \
-+			$(ZIC) -b fat -d _output/right -L leapseconds $$zone || exit 1; \
- 		done; \
- 	)
- endef
+diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
+index 2de9a4a15b..f90ff8b737 100644
+--- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
++++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  0812e359a943f4ffb763b47fc0440768a8aa09f12172ef8dff4440b0a48f9c96  kodi-pvr-iptvsimple-3.9.8-Leia.tar.gz
++sha256  906d023b4713be558445902ff703ae65e03733d47dd7d0e1b16d02c05679c7ed  kodi-pvr-iptvsimple-3.10.0-Leia.tar.gz
+ sha256  50e33ec3cddb75e6c5c5eb1b3d38cc0adee7dec71d7244925106d4a2c4d5e31d  debian/copyright
+diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
+index f1a087100c..0b31024556 100644
+--- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
++++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_PVR_IPTVSIMPLE_VERSION = 3.9.8-Leia
++KODI_PVR_IPTVSIMPLE_VERSION = 3.10.0-Leia
+ KODI_PVR_IPTVSIMPLE_SITE = $(call github,kodi-pvr,pvr.iptvsimple,$(KODI_PVR_IPTVSIMPLE_VERSION))
+ KODI_PVR_IPTVSIMPLE_LICENSE = GPL-2.0+
+ KODI_PVR_IPTVSIMPLE_LICENSE_FILES = debian/copyright
