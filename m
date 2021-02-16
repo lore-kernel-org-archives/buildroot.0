@@ -1,68 +1,101 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 16 Feb 2021 23:10:57 +0100
-Subject: [Buildroot] [git commit] package/openblas: fix detection of
- gfortran compiler
-Message-ID: <20210216214932.4F043801C8@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 16 Feb 2021 23:16:07 +0100
+Subject: [Buildroot] [RFC v1 5/6] package/pkg-cmake: add
+ _INSTALL_STAGING_ENV/_INSTALL_TARGET_ENV
+In-Reply-To: <20210213174013.32584-6-ps.report@gmx.net>
+References: <20210213174013.32584-1-ps.report@gmx.net>
+ <20210213174013.32584-6-ps.report@gmx.net>
+Message-ID: <b9f6c0df-6ad5-7a7f-40de-7eb4f7409c19@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8efa82a41d7c345d59fcd8113a679aaacd8043a7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The compiler detection since openblas 0.3.8 added support for gcc 10, but
-this broke detection of compilers created with crosstool-ng, or other
-toolchains that have a package version containing a version like x.y.z where
-at least one of x, y or z have more than one digit, for example
-"Crosstool-NG 1.24.0".
 
-See the reported issue for more details [1].
+On 13/02/2021 18:40, Peter Seiderer wrote:
+> Add _INSTALL_STAGING_ENV/_INSTALL_TARGET_ENV as needed for ninja
+> make/install as ninja expects the DESDIR as eviornment var instead
+> of parameter.
+> 
+> This one makes ninja unhappy:
+> 
+> 	$ ninja install DESTDIR=...
+> 
+> This one makes ninja happy:
+> 
+> 	$ DESTDIR=... ninja install
 
-Backport the upstream patch that fixes it.
+ We can use the same for make as well, so we don't need the additional ?= below.
 
-[1] https://github.com/xianyi/OpenBLAS/issues/3099
+ And with that, we can actually remove _INSTALL_STAGING_OPTS and
+_INSTALL_TARGET_OPTS completely...
 
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/openblas/0001-fix-gfortran-detection.patch | 30 ++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+> ToDo:
+>   - add documentation
+> 
+> Notes:
+>   - alternative to explicit make/ninja calls maybe common
+>     'cmake --build'/'cmake --install' calls are a feasible
+>     solution (yet untested) - pro: more common code, con:
+>     less customizable, needs to take a look at the current
+>     users of _MAKE/_INSTALL_STAGING_OPTS/_INSTALL_TARGET_OPTS
+>     options
+> ---
+>  package/pkg-cmake.mk | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+> index c001051002..b758e50b76 100644
+> --- a/package/pkg-cmake.mk
+> +++ b/package/pkg-cmake.mk
+> @@ -58,7 +58,10 @@ $(2)_MAKE_ENV			?=
+>  $(2)_MAKE_OPTS			?=
+>  $(2)_INSTALL_OPTS		?= install
+>  $(2)_INSTALL_STAGING_OPTS	?= DESTDIR=$$(STAGING_DIR) install/fast
+> +$(2)_INSTALL_STAGING_ENV	?=
+>  $(2)_INSTALL_TARGET_OPTS	?= DESTDIR=$$(TARGET_DIR) install/fast
+> +$(2)_INSTALL_TARGET_ENV		?=
+> +
+>  
+>  $(3)_SUPPORTS_IN_SOURCE_BUILD ?= YES
+>  
+> @@ -192,7 +195,7 @@ endif
+>  #
+>  ifndef $(2)_INSTALL_STAGING_CMDS
+>  define $(2)_INSTALL_STAGING_CMDS
+> -	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) $$($$(PKG)_INSTALL_STAGING_OPTS) -C $$($$(PKG)_BUILDDIR)
+> +	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_INSTALL_STAGING_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) $$($$(PKG)_INSTALL_STAGING_OPTS) -C $$($$(PKG)_BUILDDIR)
 
-diff --git a/package/openblas/0001-fix-gfortran-detection.patch b/package/openblas/0001-fix-gfortran-detection.patch
-new file mode 100644
-index 0000000000..1fecdac3e5
---- /dev/null
-+++ b/package/openblas/0001-fix-gfortran-detection.patch
-@@ -0,0 +1,30 @@
-+From ece3ce581e3ec530eaccfe7f284c52e115ec7aa9 Mon Sep 17 00:00:00 2001
-+From: Martin Kroeker <martin@ruby.chemie.uni-freiburg.de>
-+Date: Wed, 10 Feb 2021 14:22:59 +0100
-+Subject: [PATCH] Strip parenthesized (pkgversion) data from GCC version string
-+ to avoid misinterpretation
-+
-+See https://github.com/xianyi/OpenBLAS/issues/3099 for details.
-+
-+Upstream-status: backport
-+
-+[for import into Buildroot]
-+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-+
-+
-+---
-+ f_check | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/f_check b/f_check
-+index e9aca4ff9..ffe9c6b46 100644
-+--- a/f_check
-++++ b/f_check
-+@@ -75,6 +75,7 @@ if ($compiler eq "") {
-+ 
-+ 	} elsif ($data =~ /GNU/ || $data =~ /GCC/ ) {
-+ 
-++            $data =~ s/\(+.*?\)+//g;
-+ 	    $data =~ /(\d+)\.(\d+).(\d+)/;
-+ 	    $major = $1;
-+ 	    $minor = $2;
+ I.e.
+
+	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) DESTDIR=$(STAGING_DIR) \
+		$$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) -C $$($$(PKG)_BUILDDIR)
+
+
+
+ Note that I think it's useful to add a $(2)_USE_NINJA option for cmake
+packages. We could default that one to YES after some testing, and any package
+that really doesn't want ninja can set it to NO.
+
+ Regards,
+ Arnout
+
+
+>  endef
+>  endif
+>  
+> @@ -202,7 +205,7 @@ endif
+>  #
+>  ifndef $(2)_INSTALL_TARGET_CMDS
+>  define $(2)_INSTALL_TARGET_CMDS
+> -	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) $$($$(PKG)_INSTALL_TARGET_OPTS) -C $$($$(PKG)_BUILDDIR)
+> +	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV)  $$($$(PKG)_INSTALL_TARGET_ENV) $$($$(PKG)_MAKE) $$($$(PKG)_MAKE_OPTS) $$($$(PKG)_INSTALL_TARGET_OPTS) -C $$($$(PKG)_BUILDDIR)
+>  endef
+>  endif
+>  
+> 
