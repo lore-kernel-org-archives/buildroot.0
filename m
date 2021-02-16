@@ -1,8 +1,8 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 16 Feb 2021 12:56:08 +0100
-Subject: [Buildroot] [PATCH] utils/size-stats-compare: add package name in
- detail output
-Message-ID: <20210216115609.24656-1-patrickdepinguin@gmail.com>
+Date: Tue, 16 Feb 2021 12:58:01 +0100
+Subject: [Buildroot] [PATCH] package/ebtables: install symlink to
+ ebtables-legacy
+Message-ID: <20210216115802.32317-1-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,98 +11,42 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-size-stats-compare gives an overview of the size increase/decrease between
-two cases, based on packages-file-list.txt. The 'detail' mode gives info per
-file, otherwise per package.
+Since the upgrade of ebtables from 2.0.10-4 to 2.0.11, there no longer is an
+'ebtables' binary. It has been renamed to 'ebtables-legacy' and moved from
+'/sbin' to '/usr/sbin'. This change is part of the upstream change to
+integrate the functionality of ebtables (and arptables) in the iptables
+package, using the nf_tables kernel backend [1].
 
-But sometimes, you want the detailed per-file info, but only for a specific
-package. Since the detailed output no longer lists the package name, you
-cannot simply grep for it. A workaround was to filter the input
-packages-file-list.txt's first, and then pass these filtered versions to
-size-stats-compare.
+Unfortunately, the renaming (and move) of the original 'ebtables' binary
+breaks existing scripts that are calling 'ebtables' or '/sbin/ebtables'.
+Therefore, add a symlink from the original path to 'ebtables-legacy'.
 
-Make this easier by adding the package name next to the filename in detailed
-output. This allows grep'ing normally.
-For example:
+However, do not provide this symlink if BR2_PACKAGE_IPTABLES_NFTABLES is
+enabled. In this case, the iptables package will build the new equivalent
+of ebtables -- a symlink to ebtables-legacy would cause conflicts.
 
-  $ utils/size-stats-compare orig new  -t 100 -d | grep ebtables
-      -67712 removed lib/ebtables/libebtc.so (ebtables)
-      -66764 removed lib/ebtables/libebt_nat.so (ebtables)
-      -66752 removed sbin/ebtables (ebtables)
-      -66704 removed lib/ebtables/libebt_arp.so (ebtables)
-      -66700 removed lib/ebtables/libebt_stp.so (ebtables)
-      -66700 removed lib/ebtables/libebt_among.so (ebtables)
-      -66684 removed lib/ebtables/libebt_ip.so (ebtables)
-      -66676 removed lib/ebtables/libebt_limit.so (ebtables)
-      -66656 removed lib/ebtables/libebt_log.so (ebtables)
-      -66648 removed lib/ebtables/libebt_mark.so (ebtables)
-      -66636 removed lib/ebtables/libebt_pkttype.so (ebtables)
-      -66604 removed lib/ebtables/libebt_vlan.so (ebtables)
-      -66588 removed lib/ebtables/libebt_ulog.so (ebtables)
-      -66588 removed lib/ebtables/libebt_nflog.so (ebtables)
-      -66584 removed lib/ebtables/libebt_arpreply.so (ebtables)
-      -66544 removed lib/ebtables/libebt_ip6.so (ebtables)
-      -66540 removed lib/ebtables/libebt_802_3.so (ebtables)
-      -66536 removed lib/ebtables/libebt_standard.so (ebtables)
-      -66524 removed lib/ebtables/libebt_mark_m.so (ebtables)
-      -66524 removed lib/ebtables/libebt_redirect.so (ebtables)
-      -66452 removed lib/ebtables/libebtable_broute.so (ebtables)
-      -66452 removed lib/ebtables/libebtable_filter.so (ebtables)
-      -66452 removed lib/ebtables/libebtable_nat.so (ebtables)
-       66752   added usr/sbin/ebtablesd (ebtables)
-       66752   added usr/sbin/ebtables-legacy (ebtables)
-       66752   added usr/sbin/ebtablesu (ebtables)
-      200840   added usr/lib/libebtc.so.0.0.0 (ebtables)
+[1] https://wiki.nftables.org/wiki-nftables/index.php/Legacy_xtables_tools
 
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- utils/size-stats-compare | 17 +++++++++++------
- 1 file changed, 11 insertions(+), 6 deletions(-)
+ package/ebtables/ebtables.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/utils/size-stats-compare b/utils/size-stats-compare
-index a3d7f250c6..7a6cb9d258 100755
---- a/utils/size-stats-compare
-+++ b/utils/size-stats-compare
-@@ -40,9 +40,9 @@ def read_file_size_csv(inputf, detail=None):
+diff --git a/package/ebtables/ebtables.mk b/package/ebtables/ebtables.mk
+index 998f06f5f6..54932334c2 100644
+--- a/package/ebtables/ebtables.mk
++++ b/package/ebtables/ebtables.mk
+@@ -33,4 +33,11 @@ endef
+ EBTABLES_POST_INSTALL_TARGET_HOOKS += EBTABLES_REMOVE_UTILS_RESTORE
+ endif
  
-     for row in reader:
-         if detail:
--            sizes[row[0]] = int(row[2])
-+            sizes[(row[0], row[1])] = int(row[2])
-         else:
--            sizes[row[1]] = int(row[3])
-+            sizes[(None, row[1])] = int(row[3])
- 
-     return sizes
- 
-@@ -73,13 +73,18 @@ def print_results(result, threshold):
- 
-     from six import iteritems
-     list_result = list(iteritems(result))
--    # result is a dictionary: name -> (flag, size difference)
--    # list_result is a list of tuples: (name, (flag, size difference))
-+    # result is a dictionary: (filename, pkgname) -> (flag, size difference)
-+    # list_result is a list of tuples: ((filename, pkgname), (flag, size difference))
-+    # filename may be None if no detail is requested.
- 
-     for entry in sorted(list_result, key=lambda entry: entry[1][1]):
-         if threshold is not None and abs(entry[1][1]) <= threshold:
-             continue
--        print('%12s %7s %s' % (entry[1][1], entry[1][0], entry[0]))
-+        if entry[0][0]:
-+            name = '%s (%s)' % (entry[0][0], entry[0][1])
-+        else:
-+            name = '%s' % entry[0][1]
-+        print('%12s %7s %s' % (entry[1][1], entry[1][0], name))
- 
- 
- # main #########################################################################
-@@ -126,5 +131,5 @@ print('Size difference per %s (bytes), threshold = %s' % (keyword, args.threshol
- print(80*'-')
- print_results(delta, args.threshold)
- print(80*'-')
--print_results({'TOTAL': ('', sum(new_sizes.values()) - sum(old_sizes.values()))},
-+print_results({(None, 'TOTAL'): ('', sum(new_sizes.values()) - sum(old_sizes.values()))},
-               threshold=None)
++ifeq ($(BR2_PACKAGE_IPTABLES_NFTABLES),)
++define EBTABLES_INSTALL_LEGACY_SYMLINK
++	ln -sf /usr/sbin/ebtables-legacy $(TARGET_DIR)/sbin/ebtables
++endef
++EBTABLES_POST_INSTALL_TARGET_HOOKS += EBTABLES_INSTALL_LEGACY_SYMLINK
++endif
++
+ $(eval $(autotools-package))
 -- 
 2.26.2
