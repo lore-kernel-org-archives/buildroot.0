@@ -1,9 +1,9 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 16 Feb 2021 14:54:30 +0100
-Subject: [Buildroot] [PATCH 2/4] package/collectd: add 'mdevents' option
+Date: Tue, 16 Feb 2021 14:54:31 +0100
+Subject: [Buildroot] [PATCH 3/4] package/collectd: add 'logparser' option
 In-Reply-To: <20210216135432.4830-1-patrickdepinguin@gmail.com>
 References: <20210216135432.4830-1-patrickdepinguin@gmail.com>
-Message-ID: <20210216135432.4830-3-patrickdepinguin@gmail.com>
+Message-ID: <20210216135432.4830-4-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,7 +12,7 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-The mdevents plugin is new since 5.12.0 and enabled by default in
+The logparser plugin is new since 5.11.0 and enabled by default in
 collectd.
 
 Add an option in Buildroot, disabled by default.
@@ -24,32 +24,32 @@ Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
  2 files changed, 6 insertions(+)
 
 diff --git a/package/collectd/Config.in b/package/collectd/Config.in
-index ae69482608..11136f98ef 100644
+index 11136f98ef..679285d997 100644
 --- a/package/collectd/Config.in
 +++ b/package/collectd/Config.in
-@@ -331,6 +331,11 @@ config BR2_PACKAGE_COLLECTD_MD
+@@ -326,6 +326,11 @@ config BR2_PACKAGE_COLLECTD_LOAD
  	help
- 	  Collects software-RAID device information.
+ 	  Collects the system load.
  
-+config BR2_PACKAGE_COLLECTD_MDEVENTS
-+	bool "mdevents"
++config BR2_PACKAGE_COLLECTD_LOGPARSER
++	bool "logparser"
 +	help
-+	  Events from md (Linux Software RAID) devices.
++	  Plugin for filtering and parsing log messages.
 +
- config BR2_PACKAGE_COLLECTD_MEMCACHEC
- 	bool "memcachec"
- 	depends on BR2_INSTALL_LIBSTDCPP
+ config BR2_PACKAGE_COLLECTD_MD
+ 	bool "md"
+ 	help
 diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
-index 4a4e313224..792eb9c355 100644
+index 792eb9c355..d57e6b8c1d 100644
 --- a/package/collectd/collectd.mk
 +++ b/package/collectd/collectd.mk
-@@ -94,6 +94,7 @@ COLLECTD_CONF_OPTS += \
+@@ -91,6 +91,7 @@ COLLECTD_CONF_OPTS += \
+ 	$(if $(BR2_PACKAGE_COLLECTD_IRQ),--enable-irq,--disable-irq) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_LOAD),--enable-load,--disable-load) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_LOGFILE),--enable-logfile,--disable-logfile) \
++	$(if $(BR2_PACKAGE_COLLECTD_LOGPARSER),--enable-logparser,--disable-logparser) \
  	$(if $(BR2_PACKAGE_COLLECTD_LOGSTASH),--enable-log_logstash,--disable-log_logstash) \
  	$(if $(BR2_PACKAGE_COLLECTD_LUA),--enable-lua,--disable-lua) \
  	$(if $(BR2_PACKAGE_COLLECTD_MD),--enable-md,--disable-md) \
-+	$(if $(BR2_PACKAGE_COLLECTD_MDEVENTS),--enable-mdevents,--disable-mdevents) \
- 	$(if $(BR2_PACKAGE_COLLECTD_MEMCACHEC),--enable-memcachec,--disable-memcachec) \
- 	$(if $(BR2_PACKAGE_COLLECTD_MEMCACHED),--enable-memcached,--disable-memcached) \
- 	$(if $(BR2_PACKAGE_COLLECTD_MEMORY),--enable-memory,--disable-memory) \
 -- 
 2.26.2
