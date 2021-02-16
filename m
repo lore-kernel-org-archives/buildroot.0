@@ -1,29 +1,55 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Feb 2021 20:46:39 +0100
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 16 Feb 2021 21:46:41 +0200
 Subject: [Buildroot] [PATCH] package/tcpdump: remove duplicated binary
-In-Reply-To: <20210216125031.2244-1-patrickdepinguin@gmail.com> (Thomas De
- Schampheleire's message of "Tue, 16 Feb 2021 13:50:30 +0100")
+In-Reply-To: <20210216125031.2244-1-patrickdepinguin@gmail.com>
 References: <20210216125031.2244-1-patrickdepinguin@gmail.com>
-Message-ID: <87czwz94o0.fsf@dell.be.48ers.dk>
+Message-ID: <87wnv77q3i.fsf@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+Hi Thomas,
 
- > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
- > Since tcpdump 4.99.0, the 'tcpdump' binary is no longer installed in
- > /usr/sbin but in /usr/bin. This change invalidates the Buildroot hook
- > 'TCPDUMP_REMOVE_DUPLICATED_BINARY', causing a fairly large rootfs size
- > increase as a result.
+On Tue, Feb 16 2021, Thomas De Schampheleire wrote:
 
- > Update the path inside this hook.
+> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+>
+> Since tcpdump 4.99.0, the 'tcpdump' binary is no longer installed in
+> /usr/sbin but in /usr/bin. This change invalidates the Buildroot hook
+> 'TCPDUMP_REMOVE_DUPLICATED_BINARY', causing a fairly large rootfs size
+> increase as a result.
+>
+> Update the path inside this hook.
+>
+> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
- > Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Acked-by: Baruch Siach <baruch@tkos.co.il>
 
-Committed, thanks.
+Thanks,
+baruch
+
+> ---
+>  package/tcpdump/tcpdump.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/package/tcpdump/tcpdump.mk b/package/tcpdump/tcpdump.mk
+> index f8ea6576ee..c562034a4e 100644
+> --- a/package/tcpdump/tcpdump.mk
+> +++ b/package/tcpdump/tcpdump.mk
+> @@ -22,7 +22,7 @@ TCPDUMP_SELINUX_MODULES = netutils
+>  
+>  # make install installs an unneeded extra copy of the tcpdump binary
+>  define TCPDUMP_REMOVE_DUPLICATED_BINARY
+> -	rm -f $(TARGET_DIR)/usr/sbin/tcpdump.$(TCPDUMP_VERSION)
+> +	rm -f $(TARGET_DIR)/usr/bin/tcpdump.$(TCPDUMP_VERSION)
+>  endef
+>  
+>  TCPDUMP_POST_INSTALL_TARGET_HOOKS += TCPDUMP_REMOVE_DUPLICATED_BINARY
+
 
 -- 
-Bye, Peter Korsgaard
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
