@@ -1,78 +1,72 @@
-From: Guillaume Bres <guillaume.bressaix@gmail.com>
-Date: Tue, 16 Feb 2021 23:17:19 +0100
-Subject: [Buildroot] package/python-pybind: we need to discuss this package
-Message-ID: <CAJe0E3eQxAZHAe2DN4Qp9k_0czYGsR639+=bSUaEdyaKm0Keuw@mail.gmail.com>
+From: Daniel Crowe <daniel.crowe@resolution.systems>
+Date: Wed, 17 Feb 2021 09:27:15 +1030
+Subject: [Buildroot] [PATCH 1/1] support/scripts/size-stats: increase
+ number of files that can be linked to a source
+In-Reply-To: <20210216221037.36b7e48c@windsurf.home>
+References: <20210210110518.24817-1-daniel.crowe@resolution.systems>
+ <CAAXf6LXXEV3PZ1rQ58nJhR7g-Jgra71wtkWmbo8t9ihAruum9Q@mail.gmail.com>
+ <20210216221037.36b7e48c@windsurf.home>
+Message-ID: <CA+dVm3OwQ=S6GW5KL_YyX5SwxZ7s9BBfT9XgZDoXQpfx7+XUAw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear BR developers,
+Thanks for the feedback. Happy to rework it as suggested.
 
-we need to have a discussion about "python-pybind"
 
-The main problem being the package fails to build since it's been upgraded
-to v2.6.1. It's currently stuck in *next.*
+On Wed, 17 Feb 2021 at 07:40, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+wrote:
 
-Pybind is a dual C++11 / Python package.
+> On Tue, 16 Feb 2021 15:06:39 +0100
+> Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote:
+>
+> > Please extend your commit message with more information: what is the
+> > problem you're fixing, and how are you fixing it.
+> > Right now, we can only guess what it is doing based on the code.
+> >
+> > It looks like the change is extending the size information to
+> > rootfs-overlays, while today only real packages are considered.
+> > But if that is correct, then the title "increase number of files that
+> > can be linked to a source" is confusing to me.
+>
+> The change is not just about the rootfs overlay, but also about taking
+> into account .pyc files compiled from .py files:
+>
+> +            # account for python file compilation
+> +            if fpath.endswith('.py'):
+> +                add_file(filesdict, fpath + 'c', fullpath + 'c', pkg)
+>
+> This should at least be separated in another patch. I'm not a huge fan
+> of this approach, but I don't really have a good suggestion. Ideally,
+> we should byte-compile each package independently, so that it's part of
+> the install step of the package. But that would be vastly less
+> efficient than just byte-compiling everything in one go at the end of
+> the build, like we're doing.
+>
+> Daniel: could you rework your patch a bit, splitting it into several
+> patches, with a slightly improved commit log ? I think it makes a lot
+> of sense to have these improvements to size-stats.
+>
+> Thanks a lot!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
 
-I introduced this package as python-pybind because I only needed this
-aspect of the package at the time, I think introducing it only as a
-python-pkg was a mistake:
 
-* some people may need the C++11 side of this package
-* it's named "python-pybind" and the current BR naming convention forbids
-the cmake side to ever be activated
-* and now the python build requires cmake by itself, so we're kind of
-screwed
+-- 
+*Daniel Crowe | Senior Embedded Developer*
 
-Indeed, if we run python setup.py like we used to, it's now broken because
-it misses some files that are installed by the Cmake build.
-
-These are the steps I manually take to cross-compile pybind on my machine
-since v2.6.1:
-
-* always run the cmake build first
-* never run cmake in a sub folder ("cmake .")
-* have the build results installed in $pybind11/pybind11
-  -> this creates $pybind11/pybind11/include & $pybind11/pybind11/share
-      needed by the setup.py script (current failure)
-* run python setup.py normally
-
-Rather than submitting patches, I think we need to talk about it first.
-
-Personally, I don't see any other option than moving the package to a
-cmake-package, because the python step needs it. But I don't even know if
-we can combine a cmake-package *and* a python-package feature at the same
-time. No package does that in BR at the moment.
-
-Another option would be to create a new package "pybind11" for instance,
-declared as a cmake-package. But even in that scenario, I am not able to
-propose a valid solution. If you followed my path, I need to call "python
-setup.py"  where the cmake build results were previously installed. Which
-must happen inside the build directory by itself ($(@D)), not towards
-staging or target, which I think is against BR conventions.
-
-There might be a third option: when one runs "python setup.py" it actually
-calls cmake. But I am not able to pass any of the known cmake arguments in
-this scenario (like -DBUILD_DOC=Yes for instance) because they get dropped
-out. But I also did not have much time to investigate that option.
-
-It might also be a good idea to rename this package to *pybind11* instead
-of *python-pybind*
-* it's not a python-only package (well.. that depends on the decisions we
-make)
-* it's the real name of the package
-* it emphasizes the C++11 side of this package
-
-Any thoughts & input appreciated,
-
-yours,
-
-Guillaume W. Bres
-Software engineer
-<guillaume.bressaix@gmail.com>
+Resolution Systems Pty Ltd | L1 214 Greenhill Road, Eastwood South
+Australia, 5063, Australia
+m. +61 400 014 688
+e. daniel.crowe at resolution.systems | www.resolution.systems
+[image: Resolution Systems]
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210216/85007fa3/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210217/80cfd2ed/attachment.html>
