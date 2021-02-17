@@ -1,19 +1,20 @@
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Wed, 17 Feb 2021 08:39:12 +0100
-Subject: [Buildroot] [PATCH 1/1] package/taglib: drop config options to
+Date: Wed, 17 Feb 2021 08:44:02 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/taglib: drop config options to
  enable MP4/ASF support
-Message-ID: <20210217073912.19314-1-joerg.krause@embedded.rocks>
+Message-ID: <20210217074402.20849-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Both options where removed in TagLib in [1] back in year 2011.
-
-[1] https://github.com/taglib/taglib/commit/dd846904cbc1ef3ee628d77f0c9df88ef8967816 
+Both options where removed in git commit dd846904cbc1ef3ee628d77f0c9df88ef8967816
+back in year 2011.
 
 Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+v2: fix missing bool in Config.in.legacy (Oops!)
 ---
  Config.in.legacy         | 12 ++++++++++++
  package/taglib/Config.in | 10 ----------
@@ -21,7 +22,7 @@ Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
  3 files changed, 12 insertions(+), 18 deletions(-)
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 9deb67b31f..9c794877d4 100644
+index 9deb67b31f..eeb9738e0a 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -146,6 +146,18 @@ endif
@@ -35,7 +36,7 @@ index 9deb67b31f..9c794877d4 100644
 +	  mp4 support is enabled in TagLib by default since 2011.
 +
 +config BR2_PACKAGE_TAGLIB_ASF
-+	"taglib wma support"
++	bool "taglib wma support"
 +	select BR2_LEGACY
 +	help
 +	  asf/wma support is enabled in TagLib by default since 2011.
