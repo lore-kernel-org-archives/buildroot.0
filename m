@@ -1,53 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 17 Feb 2021 11:23:02 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/lcms2: disable
- tiff
-Message-ID: <20210217100227.E934A85FF1@busybox.osuosl.org>
+Date: Wed, 17 Feb 2021 11:24:50 +0100
+Subject: [Buildroot] [PATCH 1/1] package/gstreamer1/gst1-python: needs
+ gst1-plugins-base
+In-Reply-To: <87im6r7p11.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Tue, 16 Feb 2021 21:09:46 +0100")
+References: <20210110190616.1023612-1-fontaine.fabrice@gmail.com>
+ <87im6r7p11.fsf@dell.be.48ers.dk>
+Message-ID: <87lfbn3sb1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=db859a4fef218fd27457be3cc2e050dd8249ff46
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-tiff is only used by tificc sample and upstream rejected the patch to
-fix the static build failure because "adding pkg-config dependency for a
-sample is an overkill": https://github.com/mm2/Little-CMS/pull/244
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+ >> gst1-plugins-base is a mandatory dependency since at least version
+ >> 1.9.90 and
+ >> https://github.com/GStreamer/gst-python/commit/16f971226df1980b58ebde330123debaaf3b53d0
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit d4da2e2083a2d56bc7d7d41a4c8baf2b2fb8fd26)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/lcms2/lcms2.mk | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+ >> Fixes:
+ >> - http://autobuild.buildroot.org/results/48b22c66c3a610d70931b9adfd6e5082bb3ff3d1
 
-diff --git a/package/lcms2/lcms2.mk b/package/lcms2/lcms2.mk
-index d42c8c9a1f..1e73f6ba82 100644
---- a/package/lcms2/lcms2.mk
-+++ b/package/lcms2/lcms2.mk
-@@ -9,6 +9,8 @@ LCMS2_SITE = http://downloads.sourceforge.net/project/lcms/lcms/$(LCMS2_VERSION)
- LCMS2_LICENSE = MIT
- LCMS2_LICENSE_FILES = COPYING
- LCMS2_INSTALL_STAGING = YES
-+# tiff is only used by tificc sample
-+LCMS2_CONF_OPTS = --without-tiff
- 
- ifeq ($(BR2_PACKAGE_JPEG),y)
- LCMS2_CONF_OPTS += --with-jpeg
-@@ -17,13 +19,6 @@ else
- LCMS2_CONF_OPTS += --without-jpeg
- endif
- 
--ifeq ($(BR2_PACKAGE_TIFF),y)
--LCMS2_CONF_OPTS += --with-tiff
--LCMS2_DEPENDENCIES += tiff
--else
--LCMS2_CONF_OPTS += --without-tiff
--endif
--
- ifeq ($(BR2_PACKAGE_ZLIB),y)
- LCMS2_CONF_OPTS += --with-zlib
- LCMS2_DEPENDENCIES += zlib
+ >> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+ > Committed, thanks.
+
+Committed to 2020.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
