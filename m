@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 17 Feb 2021 08:13:53 +0100
-Subject: [Buildroot] [git commit] DEVELOPERS: drop Rahul Jain,
- user no longer exists
-In-Reply-To: <20210216082311.D9AE781534@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Tue, 16 Feb 2021 09:44:16 +0100")
-References: <20210216082311.D9AE781534@busybox.osuosl.org>
-Message-ID: <87blcj5fpq.fsf@dell.be.48ers.dk>
+Date: Wed, 17 Feb 2021 08:14:00 +0100
+Subject: [Buildroot] [git commit] DEVELOPERS: drop Guillaume Gardet,
+ domain no longer exists
+In-Reply-To: <20210216082311.D26428480D@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Tue, 16 Feb 2021 09:30:21 +0100")
+References: <20210216082311.D26428480D@busybox.osuosl.org>
+Message-ID: <877dn75fpj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,11 +14,15 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=be7be1a086453dd5bcae92d8c600523566947a7b
+ > commit: https://git.buildroot.net/buildroot/commit/?id=e79c34a5214d574558406b96601273227a1b133d
  > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > <rahul.jain@imgtec.com>: host mxa-00376f01.gslb.pphosted.com[185.132.180.163]
- >     said: 550 5.1.1 User Unknown (in reply to RCPT TO command)
+ > The oliseo.fr domain no longer responds to SMTP requests:
+
+ > smtplib.SMTPRecipientsRefused: {'Guillaume Gardet
+ > <guillaume.gardet@oliseo.fr>': (550, b'5.1.2
+ > <guillaume.gardet@oliseo.fr>: Recipient address rejected: Domain not
+ > found')}
 
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
