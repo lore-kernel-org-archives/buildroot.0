@@ -1,89 +1,78 @@
-From: Ismael Luceno <ismael@iodev.co.uk>
-Date: Wed, 17 Feb 2021 20:30:00 +0100
-Subject: [Buildroot] [PATCH] package/mawk: new package
-Message-ID: <20210217193000.22733-1-ismael@iodev.co.uk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 17 Feb 2021 20:36:28 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] Update for 2020.02.11
+Message-ID: <20210217191536.4C3B386126@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Interpreter for the AWK Programming Language.
+commit: https://git.buildroot.net/buildroot/commit/?id=08e03785d3812c085c438a6040ccedc3e9f5809d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Signed-off-by: Ismael Luceno <ismael@iodev.co.uk>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS             |  1 +
- package/Config.in      |  1 +
- package/mawk/Config.in |  6 ++++++
- package/mawk/mawk.hash |  2 ++
- package/mawk/mawk.mk   | 13 +++++++++++++
- 5 files changed, 23 insertions(+)
- create mode 100644 package/mawk/Config.in
- create mode 100644 package/mawk/mawk.hash
- create mode 100644 package/mawk/mawk.mk
+ CHANGES                  | 21 +++++++++++++++++++++
+ Makefile                 |  4 ++--
+ support/misc/Vagrantfile |  2 +-
+ 3 files changed, 24 insertions(+), 3 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 12e1f83cf73d..1e25c96376c3 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1122,6 +1122,7 @@ F:	package/exempi/
+diff --git a/CHANGES b/CHANGES
+index 2236bfb5ef..441af3c9f6 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,24 @@
++2020.02.11, released January 31st, 2021
++
++	Important / security related fixes.
++
++	meson: Fix ccache detection handling when per-package builds
++	are used.
++
++	Fakeroot: Fix compatibility issue with glibc 2.33
++
++	Updated/fixed packages: atftp, busybox, cereal, connman,
++	dhcpcd, dnsmasq, docker-cli, docker-engine, fakeroot,
++	intel-mediadriver, intel-microcode, jasper,
++	kodi-inputstream-adaptive, libbsd, libopenssl, linux-headers,
++	mosquitto, orc, php, postgresql, privoxy, pugixml,
++	python-bottle, python-django, python3, rauc, sox, subversion,
++	tzdata, wireguard-linux-compat, wpa_supplicant, xenomai, xterm
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#13506: BR2_PACKAGE_DHCPCD missing directory creation
++
+ 2020.02.10, released January 31st, 2021
  
- N:	Ismael Luceno <ismael@iodev.co.uk>
- F:	package/axel/
-+F:	package/mawk/
+ 	Important / security related fixes.
+diff --git a/Makefile b/Makefile
+index 0b897a8e44..2feaf20ac8 100644
+--- a/Makefile
++++ b/Makefile
+@@ -92,9 +92,9 @@ all:
+ .PHONY: all
  
- N:	Jagan Teki <jagan@amarulasolutions.com>
- F:	board/amarula/
-diff --git a/package/Config.in b/package/Config.in
-index 5304ab141c0f..ddfa671c2a46 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -178,6 +178,7 @@ menu "Development tools"
- 	source "package/jq/Config.in"
- 	source "package/libtool/Config.in"
- 	source "package/make/Config.in"
-+	source "package/mawk/Config.in"
- 	source "package/patch/Config.in"
- 	source "package/pkgconf/Config.in"
- 	source "package/ripgrep/Config.in"
-diff --git a/package/mawk/Config.in b/package/mawk/Config.in
-new file mode 100644
-index 000000000000..80118b3f6d52
---- /dev/null
-+++ b/package/mawk/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_MAWK
-+	bool "mawk"
-+	help
-+	  Interpreter for the AWK Programming Language.
-+
-+	  http://invisible-island.net/mawk/mawk.html
-diff --git a/package/mawk/mawk.hash b/package/mawk/mawk.hash
-new file mode 100644
-index 000000000000..69761f77df57
---- /dev/null
-+++ b/package/mawk/mawk.hash
-@@ -0,0 +1,2 @@
-+sha256  7fd4cd1e1fae9290fe089171181bbc6291dfd9bca939ca804f0ddb851c8b8237  mawk-1.3.4-20200120.tgz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/mawk/mawk.mk b/package/mawk/mawk.mk
-new file mode 100644
-index 000000000000..c4a486215d5d
---- /dev/null
-+++ b/package/mawk/mawk.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# mawk
-+#
-+################################################################################
-+
-+MAWK_VERSION = 1.3.4-20200120
-+MAWK_SITE = https://invisible-mirror.net/archives/mawk
-+MAWK_SOURCE = mawk-$(MAWK_VERSION).tgz
-+MAWK_LICENSE = GPL-2.0
-+MAWK_LICENSE_FILES = COPYING
-+
-+$(eval $(autotools-package))
--- 
-2.30.1
+ # Set and export the version string
+-export BR2_VERSION := 2020.02.10
++export BR2_VERSION := 2020.02.11
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1612128000
++BR2_VERSION_EPOCH = 1613590000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
+index e76752e14d..a3c5adcca5 100644
+--- a/support/misc/Vagrantfile
++++ b/support/misc/Vagrantfile
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # Buildroot version to use
+-RELEASE='2020.02.10'
++RELEASE='2020.02.11'
+ 
+ ### Change here for more memory/cores ###
+ VM_MEMORY=2048
