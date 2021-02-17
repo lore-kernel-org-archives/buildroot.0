@@ -1,48 +1,45 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 17 Feb 2021 16:26:55 +0000
-Subject: [Buildroot] [Bug 13466] creation of bridge interface via interfaces
- does not work
-In-Reply-To: <bug-13466-163@https.bugs.busybox.net/>
-References: <bug-13466-163@https.bugs.busybox.net/>
-Message-ID: <bug-13466-163-n1pmDXSrZM@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 17 Feb 2021 17:33:46 +0100
+Subject: [Buildroot] [PATCH/next v1] package/ifupdown-scripts: send
+ udhcpc to background in case lease is not obtained
+In-Reply-To: <20210216202022.27264-1-ps.report@gmx.net> (Peter Seiderer's
+ message of "Tue, 16 Feb 2021 21:20:22 +0100")
+References: <20210216202022.27264-1-ps.report@gmx.net>
+Message-ID: <87eehe3b85.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13466
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
---- Comment #1 from Ryan Barnett <ryan.barnett@rockwellcollins.com> ---
-Hello,
+ > - Add the 'udhcpc_opts -b' option to /etc/network/interfaces for the
+ >   system dhcp configured interface. With this option ('-b: background if
+ >   lease is not obtained') the udhcpc keeps running in case the initial
+ >   dhcp requests are not answered immediately.
 
-The supports for bridges in the /etc/network/interfaces file is provide by
-Debian through the combination of having two packages installed: bridge-utils
-and ifupdown. Debian has customized bridge-utils package to provide support for
-bridge syntax in the /etc/network/interfaces file with the ifupdown package.
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ > ---
+ >  package/ifupdown-scripts/ifupdown-scripts.mk | 1 +
+ >  1 file changed, 1 insertion(+)
 
-On Debian based distributions, the syntax for bridge in /etc/network/interfaces
-is accomplished utilizing if-pre-up.d/bridge and if-post-down.d/bridge hooks as
-seen from the list of the Debian package files [1].
+ > diff --git a/package/ifupdown-scripts/ifupdown-scripts.mk b/package/ifupdown-scripts/ifupdown-scripts.mk
+ > index 5ef032142c..d3135b18b6 100644
+ > --- a/package/ifupdown-scripts/ifupdown-scripts.mk
+ > +++ b/package/ifupdown-scripts/ifupdown-scripts.mk
+ > @@ -28,6 +28,7 @@ define IFUPDOWN_SCRIPTS_DHCP
+ >  		echo "  pre-up /etc/network/nfs_check"; \
+ >  		echo "  wait-delay 15"; \
+ >  		echo "  hostname \$$(hostname)"; \
+ > +		echo "  udhcpc_opts -b"; \
 
-Buildroot utilizes the official bridge-utils source from kernel.org which does
-not contain any of these ifupdown hooks [2]. 
+Wouldn't it make more sense to change the value of
+CONFIG_IFUPDOWN_UDHCPC_CMD_OPTIONS in our default busybox.config instead
+of hardcoding it here?
 
-In order to support this syntax utilizing buildroot, I'd recommend that the
-full version of ifupdown be built. Support for the bridge hooks could be added
-by utilizing a BR2_ROOTFS_OVERLAY [3] which installs the hooks for bridge
-support in the /etc/network/if-pre-up.d/ and fi-post-down.d/ hook locations
-utilizing the Debian source [4]
-
-Thanks,
--Ryan
-
-[1] - https://packages.debian.org/stretch/amd64/bridge-utils/filelist
-[2] -
-https://git.busybox.net/buildroot/tree/package/bridge-utils/bridge-utils.mk#n9
-[3] - https://buildroot.org/downloads/manual/manual.html#rootfs-custom
-[4] - https://sources.debian.org/src/bridge-utils/1.6-2/debian/ifupdown.sh/
+Does this still do the right thing for the fallback to IPv4LL addressing
+if avahi-autoipd is enabled?
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
