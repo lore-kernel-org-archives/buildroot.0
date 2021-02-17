@@ -1,59 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 17 Feb 2021 11:29:13 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/wpewebkit: bump
- version to 2.30.5
-Message-ID: <20210217100851.90FAB80073@busybox.osuosl.org>
+Date: Wed, 17 Feb 2021 11:27:03 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/tzdate: use
+ classic 'fat' format for uClibc/glibc compatibility
+Message-ID: <20210217100556.A6C27814F8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e7310026e9d84beca1b01aa29773330a117c6df8
+commit: https://git.buildroot.net/buildroot/commit/?id=913acb2b519d3601b74e9ddde90ed17911fcf901
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-Bugfix release, fixing a number of issues:
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/1019385940
 
-- Fix RunLoop objects leaked in worker threads.
-- Fix JavaScriptCore AArch64 LLInt build with JIT disabled.
-- Use Internet Explorer quirk for Google Docs.
+FAIL: test_run (tests.core.test_timezone.TestGlibcNonDefaultLimitedTimezone)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/builds/buildroot.org/buildroot/support/testing/tests/core/test_timezone.py", line 66, in test_run
+    self.assertEqual(tz[0].strip(), "EST")
+AssertionError: '' != 'EST'
+
+Commit 7868289fd5348 (package/zic: bump version to 2020f) bumped the zic
+version to 2020f, which changed the default output format from the classic
+"fat" format to the new "slim" format:
+
+https://github.com/eggert/tz/commit/6ba6f2117b95eab345a7ed9159cef939e30c4cd3
+
+The slim format is unfortunately not supported by glibc < 2.28 or uClibc, so
+explicitly request the classic "fat" format.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Acked-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 824473576e00fda52fec843ecc397d39cb82a6d4)
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit 1efb7b9618f4aee4e1614b7aa942c16a1052f768)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wpewebkit/wpewebkit.hash | 8 ++++----
- package/wpewebkit/wpewebkit.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/tzdata/tzdata.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
-index 42bd27f11d..df8ac547b0 100644
---- a/package/wpewebkit/wpewebkit.hash
-+++ b/package/wpewebkit/wpewebkit.hash
-@@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/wpewebkit-2.30.4.tar.xz.sums
--md5  d423a01ffb5be44e6ad59b2cfb9d6eb3  wpewebkit-2.30.4.tar.xz
--sha1  2fdca7b888966ad2ed7d998bef52c9024dae063f  wpewebkit-2.30.4.tar.xz
--sha256  1e521d85cf8cf344b9fd08eabad7a1d18a330fb7862a77eaf78d7d7b10d5f6ef  wpewebkit-2.30.4.tar.xz
-+# From https://wpewebkit.org/releases/wpewebkit-2.30.5.tar.xz.sums
-+md5  63a9a7b7f29862ec827a730ba6542e80  wpewebkit-2.30.5.tar.xz
-+sha1  33136493672882d56617007d7ce65268cb79bda7  wpewebkit-2.30.5.tar.xz
-+sha256  4b577f4f07c34bb5d453d62b7a41d9e937bd3a2827a92dcd6f47c35f27c8359a  wpewebkit-2.30.5.tar.xz
- 
- # Hashes for license files:
- sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
-index d3afdf0094..a15bec5679 100644
---- a/package/wpewebkit/wpewebkit.mk
-+++ b/package/wpewebkit/wpewebkit.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WPEWEBKIT_VERSION = 2.30.4
-+WPEWEBKIT_VERSION = 2.30.5
- WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
- WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
- WPEWEBKIT_INSTALL_STAGING = YES
+diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
+index 04f5d84bf0..8201dc1201 100644
+--- a/package/tzdata/tzdata.mk
++++ b/package/tzdata/tzdata.mk
+@@ -51,8 +51,8 @@ endef
+ define HOST_TZDATA_BUILD_CMDS
+ 	(cd $(@D); \
+ 		for zone in $(TZDATA_ZONELIST); do \
+-			$(ZIC) -d _output/posix $$zone || exit 1; \
+-			$(ZIC) -d _output/right -L leapseconds $$zone || exit 1; \
++			$(ZIC) -b fat -d _output/posix $$zone || exit 1; \
++			$(ZIC) -b fat -d _output/right -L leapseconds $$zone || exit 1; \
+ 		done; \
+ 	)
+ endef
