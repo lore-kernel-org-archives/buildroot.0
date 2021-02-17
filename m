@@ -1,33 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 17 Feb 2021 11:24:50 +0100
-Subject: [Buildroot] [PATCH 1/1] package/gstreamer1/gst1-python: needs
- gst1-plugins-base
-In-Reply-To: <87im6r7p11.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Tue, 16 Feb 2021 21:09:46 +0100")
-References: <20210110190616.1023612-1-fontaine.fabrice@gmail.com>
- <87im6r7p11.fsf@dell.be.48ers.dk>
-Message-ID: <87lfbn3sb1.fsf@dell.be.48ers.dk>
+Date: Wed, 17 Feb 2021 11:24:12 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x]
+ package/gstreamer1/gst1-python: needs gst1-plugins-base
+Message-ID: <20210217100332.B5ABA815C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=0eb74525751b1d8c721bc42d202fbe5273ca65c1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
- >> gst1-plugins-base is a mandatory dependency since at least version
- >> 1.9.90 and
- >> https://github.com/GStreamer/gst-python/commit/16f971226df1980b58ebde330123debaaf3b53d0
+gst1-plugins-base is a mandatory dependency since at least version
+1.9.90 and
+https://github.com/GStreamer/gst-python/commit/16f971226df1980b58ebde330123debaaf3b53d0
 
- >> Fixes:
- >> - http://autobuild.buildroot.org/results/48b22c66c3a610d70931b9adfd6e5082bb3ff3d1
+Fixes:
+ - http://autobuild.buildroot.org/results/48b22c66c3a610d70931b9adfd6e5082bb3ff3d1
 
- >> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit e52e145d913225e510f4e77d9f3e230367208ad9)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gstreamer1/gst1-python/Config.in      | 1 +
+ package/gstreamer1/gst1-python/gst1-python.mk | 1 +
+ 2 files changed, 2 insertions(+)
 
- > Committed, thanks.
-
-Committed to 2020.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/gstreamer1/gst1-python/Config.in b/package/gstreamer1/gst1-python/Config.in
+index 791562fea8..2f34984020 100644
+--- a/package/gstreamer1/gst1-python/Config.in
++++ b/package/gstreamer1/gst1-python/Config.in
+@@ -6,6 +6,7 @@ config BR2_PACKAGE_GST1_PYTHON
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC # gobject-introspection
+ 	depends on BR2_PACKAGE_PYTHON3 # gobject-introspection
+ 	select BR2_PACKAGE_GOBJECT_INTROSPECTION
++	select BR2_PACKAGE_GST1_PLUGINS_BASE
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_PYTHON_GOBJECT
+ 	help
+diff --git a/package/gstreamer1/gst1-python/gst1-python.mk b/package/gstreamer1/gst1-python/gst1-python.mk
+index 122c3dd997..e27729a691 100644
+--- a/package/gstreamer1/gst1-python/gst1-python.mk
++++ b/package/gstreamer1/gst1-python/gst1-python.mk
+@@ -12,6 +12,7 @@ GST1_PYTHON_LICENSE_FILES = COPYING
+ GST1_PYTHON_LICENSE = LGPL-2.1+
+ 
+ GST1_PYTHON_DEPENDENCIES = \
++	gst1-plugins-base \
+ 	gstreamer1 \
+ 	python-gobject
+ 
