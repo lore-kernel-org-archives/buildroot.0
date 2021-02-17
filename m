@@ -1,41 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 17 Feb 2021 08:08:59 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] DEVELOPERS: drop
- Guillaume Gardet, domain no longer exists
-Message-ID: <20210217065257.804A581440@busybox.osuosl.org>
+Date: Wed, 17 Feb 2021 08:09:06 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] DEVELOPERS: drop Rahul
+ Jain, user no longer exists
+Message-ID: <20210217065257.8CB0481440@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=50d8628f9cd690e9b57222e3578b06f469ee3bc1
+commit: https://git.buildroot.net/buildroot/commit/?id=4f0837c29b2c08fcf921003d54186a63383308bb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-The oliseo.fr domain no longer responds to SMTP requests:
-
-smtplib.SMTPRecipientsRefused: {'Guillaume Gardet <guillaume.gardet@oliseo.fr>': (550, b'5.1.2 <guillaume.gardet@oliseo.fr>: Recipient address rejected: Domain not found')}
+<rahul.jain@imgtec.com>: host mxa-00376f01.gslb.pphosted.com[185.132.180.163]
+    said: 550 5.1.1 User Unknown (in reply to RCPT TO command)
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit e79c34a5214d574558406b96601273227a1b133d)
+(cherry picked from commit be7be1a086453dd5bcae92d8c600523566947a7b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 5 -----
- 1 file changed, 5 deletions(-)
+ DEVELOPERS | 4 ----
+ 1 file changed, 4 deletions(-)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index ec29a76ed8..e15592f0f6 100644
+index e15592f0f6..8a1b5c6705 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1033,11 +1033,6 @@ F:	package/python-redis/
- F:	package/python-rpi-ws281x/
- F:	package/python-wtforms/
+@@ -2160,10 +2160,6 @@ F:	package/gupnp-av/
+ F:	package/let-me-create/
+ F:	package/nanomsg/
  
--N:	Guillaume Gardet <guillaume.gardet@oliseo.fr>
--F:	package/c-icap/
--F:	package/c-icap-modules/
--F:	package/sdl2/
+-N:	Rahul Jain <rahul.jain@imgtec.com>
+-F:	package/uhttpd/
+-F:	package/ustream-ssl/
 -
- N:	Guillaume William Brs <guillaume.bressaix@gmail.com>
- F:	package/libnids/
- F:	package/liquid-dsp/
+ N:	Ramon Fried <rfried.dev@gmail.com>
+ F:	package/bitwise/
+ 
