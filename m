@@ -1,67 +1,81 @@
-From: Alexander Dahl <post@lespocky.de>
-Date: Wed, 17 Feb 2021 19:16:28 +0100
-Subject: [Buildroot] CMake package requires out of source build
-In-Reply-To: <CADjezmY7i+rYoKf2=zUQX2r0j14McNjbZba9D+-WOgRQhjYGxw@mail.gmail.com>
-References: <CADjezmadzNatvC8E3ybVjcv-HmOAUb8zO09jnVfRosSxu1Gokw@mail.gmail.com>
- <20210216000715.2d81f552@gmx.net>
- <CADjezma+0Oav4kZzYnuwdsbruCFuBG3ZLqRPQ2EF7uHyHXg4Cw@mail.gmail.com>
- <20210217155233.3yf2tjemg3mygcm7@falbala.internal.home.lespocky.de>
- <CADjezmY7i+rYoKf2=zUQX2r0j14McNjbZba9D+-WOgRQhjYGxw@mail.gmail.com>
-Message-ID: <20210217181627.kba2lo2fskbvvx3l@falbala.internal.home.lespocky.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 17 Feb 2021 19:24:35 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] Update for 2020.11.3
+Message-ID: <20210217180409.206D3860CD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Matt,
+commit: https://git.buildroot.net/buildroot/commit/?id=610e67b1fc4ac44e0c4a7ba437c917ad6d63f481
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-On Wed, Feb 17, 2021 at 11:59:36AM -0500, mattwood2000 at gmail.com wrote:
-> On Wed, Feb 17, 2021 at 10:52 AM Alexander Dahl <post@lespocky.de> wrote:
-> > Just out of curiousity: why would you want to build in source anyways?
-> > Why not build out of source as usually recommended and first class
-> > supported by CMake?
-> 
-> I would prefer to build the source like a normal cmake package,
-> however Amazon disallows building their SDK anywhere within the
-> original source directory.  Normally, there should not be any issue
-> with:
-> 
-> ./cmake_pkg_src
-> ./cmake_pkg_src/buildroot-build // PKG_SUPPORTS_IN_SOURCE_BUILD = NO
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ CHANGES                  | 24 ++++++++++++++++++++++++
+ Makefile                 |  4 ++--
+ support/misc/Vagrantfile |  2 +-
+ 3 files changed, 27 insertions(+), 3 deletions(-)
 
-Oh, my bad. Of course building in a subfolder "build" (or with another name like above) is
-quite common with CMake. I usually don't do this, but that's of course
-only my personal preference.
-
-> But in this case there is a cmake rule that iterates over the entire
-> source directory to check if the build directory is present:
-> https://github.com/alexa/avs-device-sdk/blob/master/build/cmake/DisallowOutOfSourceBuilds.cmake
-
-That makes no sense to me. In that script they link to
-https://gitlab.kitware.com/cmake/community/-/wikis/FAQ#cmake-does-not-generate-a-make-distclean-target-why
-but that only covers in source builds.
-
-> Removing the rule from BuildDefaults.cmake gets around this issue.
-> Also, the source builds perfectly fine this way.  I'm not sure why
-> Amazon forces this.
-
-Agreed. So why not patch 'build/BuildDefaults.cmake' like that and add
-the patch to the buildroot package for that avs-device-sdk instead of
-changing buildroot core?
-
-Greets
-Alex
-
--- 
-/"\ ASCII RIBBON | ?With the first link, the chain is forged. The first
-\ / CAMPAIGN     | speech censured, the first thought forbidden, the
- X  AGAINST      | first freedom denied, chains us all irrevocably.?
-/ \ HTML MAIL    | (Jean-Luc Picard, quoting Judge Aaron Satie)
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 833 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210217/9f8c4a0e/attachment.asc>
+diff --git a/CHANGES b/CHANGES
+index 7e1e5a58ce..c42e658cd6 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,27 @@
++2020.11.3, released February 17th, 2021
++
++	meson: Fix ccache detection handling when per-package builds
++	are used.
++
++	Fakeroot: Fix compatibility issue with glibc 2.33
++
++	Updated/fixed packages: atftp, binutils, busybox, cereal,
++	chartjs, connman, dhcpcd, dnsmasq, docker-cli, docker-engine,
++	ebtables, fakeroot, flashrom, go, gst1-python, guile,
++	intel-mediadriver, intel-microcode, jasper,
++	kodi-inputstream-adaptive, lcms2, libbsd, libopenssl,
++	makedumpfile, memtester, mosquitto, ne10, openblas, orc, php,
++	postgresql, privoxy, pugixml, python-bottle, python-django,
++	python3, rauc, sox, stress-ng, subversion, tzdate,
++	uboot-tools, uclibc, webkitgtk, wireguard-linux-compat,
++	wireshark, wpa_supplicant, wpewebkit, xenomai,
++	xserver_xorg-server, xterm
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#11706: binman (U-boot tool) cannot find libfdt "binman: No mod..
++	#13506: BR2_PACKAGE_DHCPCD missing directory creation
++
+ 2020.11.2, released January 31st, 2021
+ 
+ 	Important / security related fixes.
+diff --git a/Makefile b/Makefile
+index 293b5880f5..c7e7ca4bc5 100644
+--- a/Makefile
++++ b/Makefile
+@@ -92,9 +92,9 @@ all:
+ .PHONY: all
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2020.11.2
++export BR2_VERSION := 2020.11.3
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1612125000
++BR2_VERSION_EPOCH = 1613586000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
+index ed12abd2f0..28a74b9929 100644
+--- a/support/misc/Vagrantfile
++++ b/support/misc/Vagrantfile
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # Buildroot version to use
+-RELEASE='2020.11.2'
++RELEASE='2020.11.3'
+ 
+ ### Change here for more memory/cores ###
+ VM_MEMORY=2048
