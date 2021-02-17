@@ -1,104 +1,84 @@
-From: goran.radni at gmail.com <goran.radni@gmail.com>
-Date: Wed, 17 Feb 2021 17:09:58 +0100
-Subject: [Buildroot] [PATCH 1/1] qt5doc: Add package with qt quick demos
-Message-ID: <20210217160958.18825-1-goranradni@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 17 Feb 2021 17:23:02 +0100
+Subject: [Buildroot] [PATCH] package/libopenssl: security bump to
+ version 1.1.1j
+In-Reply-To: <20210216193134.5920-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 16 Feb 2021 20:31:34 +0100")
+References: <20210216193134.5920-1-peter@korsgaard.com>
+Message-ID: <87mtw23bq1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Goran Ra?enovi? <gradenovic@ultratronik.de>
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Since qt 5.12, quick demos are moved in the qt5doc package.
-In order to use quick demos, qt5doc has to be built.
-qt5doc is a bit misleading name for the package, while it's
-basic content are the quick demos. qdoc tool itself is a part
-of qt5tools.
+ > Fixes the following security issues:
+ > - CVE-2021-23841: Null pointer deref in X509_issuer_and_serial_hash()
 
-Signed-off-by: Goran Ra?enovi? <gradenovic@ultratronik.de>
----
- package/qt5/Config.in          |  1 +
- package/qt5/qt5doc/Config.in   | 13 +++++++++++++
- package/qt5/qt5doc/qt5doc.hash |  2 ++
- package/qt5/qt5doc/qt5doc.mk   | 28 ++++++++++++++++++++++++++++
- 4 files changed, 44 insertions(+)
- create mode 100644 package/qt5/qt5doc/Config.in
- create mode 100644 package/qt5/qt5doc/qt5doc.hash
- create mode 100644 package/qt5/qt5doc/qt5doc.mk
+ >   The OpenSSL public API function X509_issuer_and_serial_hash() attempts to
+ >   create a unique hash value based on the issuer and serial number data
+ >   contained within an X509 certificate.  However it fails to correctly
+ >   handle any errors that may occur while parsing the issuer field (which
+ >   might occur if the issuer field is maliciously constructed).  This may
+ >   subsequently result in a NULL pointer deref and a crash leading to a
+ >   potential denial of service attack.
 
-diff --git a/package/qt5/Config.in b/package/qt5/Config.in
-index 6714c6271d..a66b6a3e24 100644
---- a/package/qt5/Config.in
-+++ b/package/qt5/Config.in
-@@ -43,6 +43,7 @@ source "package/qt5/qt5charts/Config.in"
- source "package/qt5/qt5coap/Config.in"
- source "package/qt5/qt5connectivity/Config.in"
- source "package/qt5/qt5declarative/Config.in"
-+source "package/qt5/qt5doc/Config.in"
- source "package/qt5/qt5enginio/Config.in"
- source "package/qt5/qt5graphicaleffects/Config.in"
- source "package/qt5/qt5imageformats/Config.in"
-diff --git a/package/qt5/qt5doc/Config.in b/package/qt5/qt5doc/Config.in
-new file mode 100644
-index 0000000000..7ff68d585b
---- /dev/null
-+++ b/package/qt5/qt5doc/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_QT5DOC
-+	bool "qt5doc (includes quick demos)"
-+	select BR2_PACKAGE_QT5DECLARATIVE
-+	select BR2_PACKAGE_QT5DECLARATIVE_QUICK
-+	help
-+	  Qt is a cross-platform application and UI framework for
-+	  developers using C++.
-+
-+	  Qtdoc contains the main Qt Reference Documentation, which includes
-+	  overviews, Qt topics, and examples not specific to any Qt module.The
-+	  configuration files are located in qtdoc/doc/config and the articles in
-+	  qtdoc/doc/src. Note that QDoc is located in qtbase.
-+
-diff --git a/package/qt5/qt5doc/qt5doc.hash b/package/qt5/qt5doc/qt5doc.hash
-new file mode 100644
-index 0000000000..a26e7e37cb
---- /dev/null
-+++ b/package/qt5/qt5doc/qt5doc.hash
-@@ -0,0 +1,2 @@
-+# Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.7/submodules/qtdoc-everywhere-src-5.15.2.tar.xz
-+sha256 a47809f00f1bd690ca4e699cb32ffe7717d43da84e0167d1f562210da7714ce4 qtdoc-everywhere-src-5.15.2.tar.xz
-diff --git a/package/qt5/qt5doc/qt5doc.mk b/package/qt5/qt5doc/qt5doc.mk
-new file mode 100644
-index 0000000000..106711ee56
---- /dev/null
-+++ b/package/qt5/qt5doc/qt5doc.mk
-@@ -0,0 +1,28 @@
-+################################################################################
-+#
-+# qt5doc
-+#
-+################################################################################
-+
-+QT5DOC_VERSION = $(QT5_VERSION)
-+QT5DOC_SITE = $(QT5_SITE)
-+QT5DOC_SOURCE = qtdoc-$(QT5_SOURCE_TARBALL_PREFIX)-$(QT5DOC_VERSION).tar.xz
-+QT5DOC_DEPENDENCIES = qt5declarative
-+QT5DOC_INSTALL_STAGING = YES
-+
-+ifeq ($(BR2_PACKAGE_QT5QUICKCONTROLS),y)
-+QT5DOC_DEPENDENCIES += qt5quickcontrols
-+endif
-+
-+ifeq ($(BR2_PACKAGE_QT5QUICKCONTROLS2),y)
-+QT5DOC_DEPENDENCIES += qt5quickcontrols2
-+endif
-+
-+ifeq ($(BR2_PACKAGE_QT5XMLPATTERNS),y)
-+QT5DOC_DEPENDENCIES += qt5xmlpatterns
-+endif
-+
-+QT5DOC_LICENSE = GFDL-1.3
-+QT5DOC_LICENSE_FILES = LICENSE.FDL
-+
-+$(eval $(qmake-package))
+ >   The function X509_issuer_and_serial_hash() is never directly called by
+ >   OpenSSL itself so applications are only vulnerable if they use this
+ >   function directly and they use it on certificates that may have been
+ >   obtained from untrusted sources.
+
+ > - CVE-2021-23839: Incorrect SSLv2 rollback protection
+
+ >   OpenSSL 1.0.2 supports SSLv2.  If a client attempts to negotiate SSLv2
+ >   with a server that is configured to support both SSLv2 and more recent SSL
+ >   and TLS versions then a check is made for a version rollback attack when
+ >   unpadding an RSA signature.  Clients that support SSL or TLS versions
+ >   greater than SSLv2 are supposed to use a special form of padding.  A
+ >   server that supports greater than SSLv2 is supposed to reject connection
+ >   attempts from a client where this special form of padding is present,
+ >   because this indicates that a version rollback has occurred (i.e.  both
+ >   client and server support greater than SSLv2, and yet this is the version
+ >   that is being requested).
+
+ >   The implementation of this padding check inverted the logic so that the
+ >   connection attempt is accepted if the padding is present, and rejected if
+ >   it is absent.  This means that such as server will accept a connection if
+ >   a version rollback attack has occurred.  Further the server will
+ >   erroneously reject a connection if a normal SSLv2 connection attempt is
+ >   made.
+
+ >   OpenSSL 1.1.1 does not have SSLv2 support and therefore is not vulnerable
+ >   to this issue.  The underlying error is in the implementation of the
+ >   RSA_padding_check_SSLv23() function.  This also affects the
+ >   RSA_SSLV23_PADDING padding mode used by various other functions.  Although
+ >   1.1.1 does not support SSLv2 the RSA_padding_check_SSLv23() function still
+ >   exists, as does the RSA_SSLV23_PADDING padding mode.  Applications that
+ >   directly call that function or use that padding mode will encounter this
+ >   issue.  However since there is no support for the SSLv2 protocol in 1.1.1
+ >   this is considered a bug and not a security issue in that version.
+
+ > - CVE-2021-23840: Integer overflow in CipherUpdate
+
+ >   Calls to EVP_CipherUpdate, EVP_EncryptUpdate and EVP_DecryptUpdate may
+ >   overflow the output length argument in some cases where the input length
+ >   is close to the maximum permissable length for an integer on the platform.
+ >   In such cases the return value from the function call will be 1
+ >   (indicating success), but the output length value will be negative.  This
+ >   could cause applications to behave incorrectly or crash.
+
+ > For more details, see the advisory:
+ > https://www.openssl.org/news/secadv/20210216.txt
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > ---
+ >  package/libopenssl/libopenssl.hash | 4 ++--
+ >  package/libopenssl/libopenssl.mk   | 2 +-
+ >  2 files changed, 3 insertions(+), 3 deletions(-)
+
+Committed to 2020.02.x and 2020.11.x, thanks.
+
 -- 
-2.17.1
+Bye, Peter Korsgaard
