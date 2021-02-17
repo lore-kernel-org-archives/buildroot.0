@@ -1,61 +1,33 @@
-From: mattwood2000 at gmail.com <mattwood2000@gmail.com>
-Date: Wed, 17 Feb 2021 16:17:56 -0500
-Subject: [Buildroot] CMake package requires out of source build
-In-Reply-To: <20210217181627.kba2lo2fskbvvx3l@falbala.internal.home.lespocky.de>
-References: <CADjezmadzNatvC8E3ybVjcv-HmOAUb8zO09jnVfRosSxu1Gokw@mail.gmail.com>
- <20210216000715.2d81f552@gmx.net>
- <CADjezma+0Oav4kZzYnuwdsbruCFuBG3ZLqRPQ2EF7uHyHXg4Cw@mail.gmail.com>
- <20210217155233.3yf2tjemg3mygcm7@falbala.internal.home.lespocky.de>
- <CADjezmY7i+rYoKf2=zUQX2r0j14McNjbZba9D+-WOgRQhjYGxw@mail.gmail.com>
- <20210217181627.kba2lo2fskbvvx3l@falbala.internal.home.lespocky.de>
-Message-ID: <CADjezmZhfR4mVdDGF-YjAeOf+AasWLmoPbctaGSZyaWfGkf95w@mail.gmail.com>
+From: Markus Mayer <mmayer@broadcom.com>
+Date: Wed, 17 Feb 2021 13:57:00 -0800
+Subject: [Buildroot] Host tar 1.32 build issues
+In-Reply-To: <CAGt4E5tquWH5mqSW2vdj7Gx7OcMo+38JOtwTSUDF8odjKi7DDg@mail.gmail.com>
+References: <CAGt4E5srq1hg4T1YoKX9UUCTJ96DdnNL1XFrYvsgpWjM_KM1EA@mail.gmail.com>
+ <95c3b23f-6805-e526-8bc2-a0d48a66895c@mind.be> <20210112091905.GA382149@scaer>
+ <dad432a5-a41c-efed-ef6c-1b41fcee8819@mind.be>
+ <CAGt4E5uAjxt=oPGqzqN7OEGbGbv68DqKq+xE2KntB_wQoeo2Ew@mail.gmail.com>
+ <20210112210443.GZ3044608@scaer>
+ <CAGt4E5tquWH5mqSW2vdj7Gx7OcMo+38JOtwTSUDF8odjKi7DDg@mail.gmail.com>
+Message-ID: <CAGt4E5tsyaB1-DOVLMZC1XBOgUPUGwKLXxCZXdHjvXc-YxJSwA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Alex,
+On Tue, 12 Jan 2021 at 15:26, Markus Mayer <mmayer@broadcom.com> wrote:
+>
+> On Tue, 12 Jan 2021 at 13:04, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> >
+> > Now, tar 1.33 is out, care to send an update? ;-]
+>
+[...]
+>
+> Still, I am wondering if we do want to go ahead with 1.33 or if we
+> should hold off and see whether 1.34 is released in the not too
+> distant future.
 
-On Wed, Feb 17, 2021 at 1:16 PM Alexander Dahl <post@lespocky.de> wrote:
->
->
-> Oh, my bad. Of course building in a subfolder "build" (or with another name like above) is
-> quite common with CMake. I usually don't do this, but that's of course
-> only my personal preference.
+tar 1.34 is now out. The patch to update the package is forthcoming.
 
-No problem at all!
-
->
-> > But in this case there is a cmake rule that iterates over the entire
-> > source directory to check if the build directory is present:
-> > https://github.com/alexa/avs-device-sdk/blob/master/build/cmake/DisallowOutOfSourceBuilds.cmake
->
-> That makes no sense to me. In that script they link to
-> https://gitlab.kitware.com/cmake/community/-/wikis/FAQ#cmake-does-not-generate-a-make-distclean-target-why
-> but that only covers in source builds.
->
-Agreed, very strange indeed.  And, like I said it builds perfectly
-fine overriding their rule.
-
-> > Removing the rule from BuildDefaults.cmake gets around this issue.
-> > Also, the source builds perfectly fine this way.  I'm not sure why
-> > Amazon forces this.
->
-> Agreed. So why not patch 'build/BuildDefaults.cmake' like that and add
-> the patch to the buildroot package for that avs-device-sdk instead of
-> changing buildroot core?
-
-Yup, thats exactly what I did, I reverted my patch against the core
-and all works now
-
-Thanks, Matt.
->
-> Greets
-> Alex
->
-> --
-> /"\ ASCII RIBBON | ?With the first link, the chain is forged. The first
-> \ / CAMPAIGN     | speech censured, the first thought forbidden, the
->  X  AGAINST      | first freedom denied, chains us all irrevocably.?
-> / \ HTML MAIL    | (Jean-Luc Picard, quoting Judge Aaron Satie)
+Regards,
+-Markus
