@@ -1,39 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 17 Feb 2021 08:09:06 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] DEVELOPERS: drop Rahul
- Jain, user no longer exists
-Message-ID: <20210217065257.8CB0481440@busybox.osuosl.org>
+Date: Wed, 17 Feb 2021 08:15:34 +0100
+Subject: [Buildroot] [PATCH] package/ebtables: install symlink to
+ ebtables-legacy
+In-Reply-To: <20210216115802.32317-1-patrickdepinguin@gmail.com> (Thomas De
+ Schampheleire's message of "Tue, 16 Feb 2021 12:58:01 +0100")
+References: <20210216115802.32317-1-patrickdepinguin@gmail.com>
+Message-ID: <8735xv5fmx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4f0837c29b2c08fcf921003d54186a63383308bb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
-<rahul.jain@imgtec.com>: host mxa-00376f01.gslb.pphosted.com[185.132.180.163]
-    said: 550 5.1.1 User Unknown (in reply to RCPT TO command)
+ > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+ > Since the upgrade of ebtables from 2.0.10-4 to 2.0.11, there no longer is an
+ > 'ebtables' binary. It has been renamed to 'ebtables-legacy' and moved from
+ > '/sbin' to '/usr/sbin'. This change is part of the upstream change to
+ > integrate the functionality of ebtables (and arptables) in the iptables
+ > package, using the nf_tables kernel backend [1].
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit be7be1a086453dd5bcae92d8c600523566947a7b)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- DEVELOPERS | 4 ----
- 1 file changed, 4 deletions(-)
+ > Unfortunately, the renaming (and move) of the original 'ebtables' binary
+ > breaks existing scripts that are calling 'ebtables' or '/sbin/ebtables'.
+ > Therefore, add a symlink from the original path to 'ebtables-legacy'.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index e15592f0f6..8a1b5c6705 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2160,10 +2160,6 @@ F:	package/gupnp-av/
- F:	package/let-me-create/
- F:	package/nanomsg/
- 
--N:	Rahul Jain <rahul.jain@imgtec.com>
--F:	package/uhttpd/
--F:	package/ustream-ssl/
--
- N:	Ramon Fried <rfried.dev@gmail.com>
- F:	package/bitwise/
- 
+ > However, do not provide this symlink if BR2_PACKAGE_IPTABLES_NFTABLES is
+ > enabled. In this case, the iptables package will build the new equivalent
+ > of ebtables -- a symlink to ebtables-legacy would cause conflicts.
+
+ > [1] https://wiki.nftables.org/wiki-nftables/index.php/Legacy_xtables_tools
+
+ > Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+
+Committed to 2020.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
