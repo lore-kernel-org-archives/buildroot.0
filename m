@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 17 Feb 2021 17:21:39 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/libopenssl:
+Date: Wed, 17 Feb 2021 17:21:34 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/libopenssl:
  security bump to version 1.1.1j
-Message-ID: <20210217160133.B08FC84C26@busybox.osuosl.org>
+Message-ID: <20210217160137.DFB6A84C26@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ceea377cca6ec7d332f294203446fc53ac7f5845
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=107e86220067cec6354d612b1d66d147ff1ecab0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
 Fixes the following security issues:
 
