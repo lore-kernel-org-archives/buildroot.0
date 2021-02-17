@@ -1,100 +1,83 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 17 Feb 2021 19:44:35 +0100
-Subject: [Buildroot] [git commit] docs/website: update for 2020.11.3
-Message-ID: <20210217182321.1FD35803D0@busybox.osuosl.org>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+Date: Wed, 17 Feb 2021 19:56:09 +0100
+Subject: [Buildroot] [PATCH] package/dt-utils: add patch to fix
+ barebox-state lock file
+Message-ID: <20210217185609.1120677-1-b.bilas@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b284c1a4f3e713fd121b8a03bb39b412a1852779
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Add patch from the upstream mailing list [1] that fixes
+the following error when we try to execute barebox-state command:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+# barebox-state
+Failed to open lock-file /var/lock/barebox-state
+
+[1] https://www.mail-archive.com/oss-tools at pengutronix.de/msg00063.html
+
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 ---
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+), 9 deletions(-)
+ ...0001-state-use-run-to-store-lockfile.patch | 50 +++++++++++++++++++
+ 1 file changed, 50 insertions(+)
+ create mode 100644 package/dt-utils/0001-state-use-run-to-store-lockfile.patch
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index c4c6e419d0..1a90013f91 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -42,37 +42,37 @@
- 	</div>
-       </div>
- 
--      <h3 style="text-align: center;">Latest stable release: <b>2020.11.2</b></h3>
-+      <h3 style="text-align: center;">Latest stable release: <b>2020.11.3</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2020.11.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.11.3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2020.11.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.11.3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2020.11.2.tar.gz">buildroot-2020.11.2.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2020.11.2.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2020.11.3.tar.gz">buildroot-2020.11.3.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2020.11.3.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2020.11.2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.11.3.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2020.11.2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2020.11.3.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2020.11.2.tar.bz2">buildroot-2020.11.2.tar.bz2</a></h3>
--	  <p><a href="/downloads/buildroot-2020.11.2.tar.bz2.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2020.11.3.tar.bz2">buildroot-2020.11.3.tar.bz2</a></h3>
-+	  <p><a href="/downloads/buildroot-2020.11.3.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
- 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index a635b5557a..a767e70bf7 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li class="timeline-inverted">
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2020.11.3 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>17 February 2021</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2020.11.3 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2020.11.2 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2020.11.3">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2021-February/304041.html">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2020.11.3.tar.bz2">2020.11.3 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
+diff --git a/package/dt-utils/0001-state-use-run-to-store-lockfile.patch b/package/dt-utils/0001-state-use-run-to-store-lockfile.patch
+new file mode 100644
+index 0000000000..a0b8067601
+--- /dev/null
++++ b/package/dt-utils/0001-state-use-run-to-store-lockfile.patch
+@@ -0,0 +1,50 @@
++From a3dfc81f886a40ebc624143cf64193ffa2619476 Mon Sep 17 00:00:00 2001
++From: Bartosz Bilas <b.bilas@grinn-global.com>
++Date: Wed, 17 Feb 2021 19:29:47 +0100
++Subject: [PATCH] state: use /run to store lockfile
 +
-   <li>
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
++The current location /var/lock is considered legacy (at least by
++systemd). Just use /run to store the lockfile and append the usual .lock
++suffix.
++
++Signed-off-by: Stefan Agner <ste...@agner.ch>
++Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
++---
++ src/barebox-state.c | 8 +++++---
++ 1 file changed, 5 insertions(+), 3 deletions(-)
++
++diff --git a/src/barebox-state.c b/src/barebox-state.c
++index f8b8df6..5c05c5b 100644
++--- a/src/barebox-state.c
+++++ b/src/barebox-state.c
++@@ -38,6 +38,8 @@
++ #include <dt/dt.h>
++ #include <state.h>
++ 
+++#define BAREBOX_STATE_LOCKFILE "/run/barebox-state.lock"
+++
++ struct state_variable;
++ 
++ static int __state_uint8_set(struct state_variable *var, const char *val);
++@@ -501,15 +503,15 @@ int main(int argc, char *argv[])
++ 		++nr_states;
++ 	}
++ 
++-	lock_fd = open("/var/lock/barebox-state", O_CREAT | O_RDWR, 0600);
+++	lock_fd = open(BAREBOX_STATE_LOCKFILE, O_CREAT | O_RDWR, 0600);
++ 	if (lock_fd < 0) {
++-		pr_err("Failed to open lock-file /var/lock/barebox-state\n");
+++		pr_err("Failed to open lock-file " BAREBOX_STATE_LOCKFILE "\n");
++ 		exit(1);
++ 	}
++ 
++ 	ret = flock(lock_fd, LOCK_EX);
++ 	if (ret < 0) {
++-		pr_err("Failed to lock /var/lock/barebox-state: %m\n");
+++		pr_err("Failed to lock " BAREBOX_STATE_LOCKFILE ": %m\n");
++ 		close(lock_fd);
++ 		exit(1);
++ 	}
++-- 
++2.30.1
++
+-- 
+2.30.1
