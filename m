@@ -1,83 +1,89 @@
-From: Bartosz Bilas <b.bilas@grinn-global.com>
-Date: Wed, 17 Feb 2021 19:56:09 +0100
-Subject: [Buildroot] [PATCH] package/dt-utils: add patch to fix
- barebox-state lock file
-Message-ID: <20210217185609.1120677-1-b.bilas@grinn-global.com>
+From: Ismael Luceno <ismael@iodev.co.uk>
+Date: Wed, 17 Feb 2021 20:30:00 +0100
+Subject: [Buildroot] [PATCH] package/mawk: new package
+Message-ID: <20210217193000.22733-1-ismael@iodev.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add patch from the upstream mailing list [1] that fixes
-the following error when we try to execute barebox-state command:
+Interpreter for the AWK Programming Language.
 
-# barebox-state
-Failed to open lock-file /var/lock/barebox-state
-
-[1] https://www.mail-archive.com/oss-tools at pengutronix.de/msg00063.html
-
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+Signed-off-by: Ismael Luceno <ismael@iodev.co.uk>
 ---
- ...0001-state-use-run-to-store-lockfile.patch | 50 +++++++++++++++++++
- 1 file changed, 50 insertions(+)
- create mode 100644 package/dt-utils/0001-state-use-run-to-store-lockfile.patch
+ DEVELOPERS             |  1 +
+ package/Config.in      |  1 +
+ package/mawk/Config.in |  6 ++++++
+ package/mawk/mawk.hash |  2 ++
+ package/mawk/mawk.mk   | 13 +++++++++++++
+ 5 files changed, 23 insertions(+)
+ create mode 100644 package/mawk/Config.in
+ create mode 100644 package/mawk/mawk.hash
+ create mode 100644 package/mawk/mawk.mk
 
-diff --git a/package/dt-utils/0001-state-use-run-to-store-lockfile.patch b/package/dt-utils/0001-state-use-run-to-store-lockfile.patch
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 12e1f83cf73d..1e25c96376c3 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1122,6 +1122,7 @@ F:	package/exempi/
+ 
+ N:	Ismael Luceno <ismael@iodev.co.uk>
+ F:	package/axel/
++F:	package/mawk/
+ 
+ N:	Jagan Teki <jagan@amarulasolutions.com>
+ F:	board/amarula/
+diff --git a/package/Config.in b/package/Config.in
+index 5304ab141c0f..ddfa671c2a46 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -178,6 +178,7 @@ menu "Development tools"
+ 	source "package/jq/Config.in"
+ 	source "package/libtool/Config.in"
+ 	source "package/make/Config.in"
++	source "package/mawk/Config.in"
+ 	source "package/patch/Config.in"
+ 	source "package/pkgconf/Config.in"
+ 	source "package/ripgrep/Config.in"
+diff --git a/package/mawk/Config.in b/package/mawk/Config.in
 new file mode 100644
-index 0000000000..a0b8067601
+index 000000000000..80118b3f6d52
 --- /dev/null
-+++ b/package/dt-utils/0001-state-use-run-to-store-lockfile.patch
-@@ -0,0 +1,50 @@
-+From a3dfc81f886a40ebc624143cf64193ffa2619476 Mon Sep 17 00:00:00 2001
-+From: Bartosz Bilas <b.bilas@grinn-global.com>
-+Date: Wed, 17 Feb 2021 19:29:47 +0100
-+Subject: [PATCH] state: use /run to store lockfile
++++ b/package/mawk/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_MAWK
++	bool "mawk"
++	help
++	  Interpreter for the AWK Programming Language.
 +
-+The current location /var/lock is considered legacy (at least by
-+systemd). Just use /run to store the lockfile and append the usual .lock
-+suffix.
++	  http://invisible-island.net/mawk/mawk.html
+diff --git a/package/mawk/mawk.hash b/package/mawk/mawk.hash
+new file mode 100644
+index 000000000000..69761f77df57
+--- /dev/null
++++ b/package/mawk/mawk.hash
+@@ -0,0 +1,2 @@
++sha256  7fd4cd1e1fae9290fe089171181bbc6291dfd9bca939ca804f0ddb851c8b8237  mawk-1.3.4-20200120.tgz
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/mawk/mawk.mk b/package/mawk/mawk.mk
+new file mode 100644
+index 000000000000..c4a486215d5d
+--- /dev/null
++++ b/package/mawk/mawk.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# mawk
++#
++################################################################################
 +
-+Signed-off-by: Stefan Agner <ste...@agner.ch>
-+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
-+---
-+ src/barebox-state.c | 8 +++++---
-+ 1 file changed, 5 insertions(+), 3 deletions(-)
++MAWK_VERSION = 1.3.4-20200120
++MAWK_SITE = https://invisible-mirror.net/archives/mawk
++MAWK_SOURCE = mawk-$(MAWK_VERSION).tgz
++MAWK_LICENSE = GPL-2.0
++MAWK_LICENSE_FILES = COPYING
 +
-+diff --git a/src/barebox-state.c b/src/barebox-state.c
-+index f8b8df6..5c05c5b 100644
-+--- a/src/barebox-state.c
-++++ b/src/barebox-state.c
-+@@ -38,6 +38,8 @@
-+ #include <dt/dt.h>
-+ #include <state.h>
-+ 
-++#define BAREBOX_STATE_LOCKFILE "/run/barebox-state.lock"
-++
-+ struct state_variable;
-+ 
-+ static int __state_uint8_set(struct state_variable *var, const char *val);
-+@@ -501,15 +503,15 @@ int main(int argc, char *argv[])
-+ 		++nr_states;
-+ 	}
-+ 
-+-	lock_fd = open("/var/lock/barebox-state", O_CREAT | O_RDWR, 0600);
-++	lock_fd = open(BAREBOX_STATE_LOCKFILE, O_CREAT | O_RDWR, 0600);
-+ 	if (lock_fd < 0) {
-+-		pr_err("Failed to open lock-file /var/lock/barebox-state\n");
-++		pr_err("Failed to open lock-file " BAREBOX_STATE_LOCKFILE "\n");
-+ 		exit(1);
-+ 	}
-+ 
-+ 	ret = flock(lock_fd, LOCK_EX);
-+ 	if (ret < 0) {
-+-		pr_err("Failed to lock /var/lock/barebox-state: %m\n");
-++		pr_err("Failed to lock " BAREBOX_STATE_LOCKFILE ": %m\n");
-+ 		close(lock_fd);
-+ 		exit(1);
-+ 	}
-+-- 
-+2.30.1
-+
++$(eval $(autotools-package))
 -- 
 2.30.1
