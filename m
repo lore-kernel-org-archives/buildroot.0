@@ -1,32 +1,35 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 17 Feb 2021 07:37:30 +0100
-Subject: [Buildroot] [PATCH 1/1] package/ne10: disable unit tests and
- examples
-In-Reply-To: <20210215174543.1096976-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 15 Feb 2021 18:45:43 +0100")
-References: <20210215174543.1096976-1-fontaine.fabrice@gmail.com>
-Message-ID: <87k0r75hed.fsf@dell.be.48ers.dk>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 17 Feb 2021 07:49:49 +0100
+Subject: [Buildroot] [PATCH 1/1] package/perl-extutils-pkgconfig: set PATH
+ to BR_PATH
+Message-ID: <20210217064949.1787888-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+Set PATH to BR_PATH to allow perl-extutils-pkgconfig to find pkg-config
+binary
 
- > Unit tests fail to build with gcc 10 on:
- > [100%] Linking C executable NE10_dsp_unit_test_smoke
- > /home/buildroot/autobuild/instance-2/output-1/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-none-linux-gnu/10.2.1/../../../../aarch64-none-linux-gnu/bin/ld: CMakeFiles/NE10_dsp_unit_test_static.dir/__/modules/dsp/test/test_suite_fft_float32.c.o:(.bss+0x0): multiple definition of `seatest_simple_test_result'; CMakeFiles/NE10_dsp_unit_test_static.dir/__/modules/dsp/test/test_main.c.o:(.bss+0x0): first defined here
+Fixes:
+ - http://autobuild.buildroot.org/results/d87787fbf2a8cb9bbaa3b59d1e8004ad1459536a
 
- > So just disable them and, while at it, also disable examples which are
- > also enabled by default
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/perl-extutils-pkgconfig/perl-extutils-pkgconfig.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/c658d52668825c26a15d6ac3ca538472cad5cd78
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Committed to 2020.11.x, thanks.
-
+diff --git a/package/perl-extutils-pkgconfig/perl-extutils-pkgconfig.mk b/package/perl-extutils-pkgconfig/perl-extutils-pkgconfig.mk
+index ba85b36187..cb11e9f588 100644
+--- a/package/perl-extutils-pkgconfig/perl-extutils-pkgconfig.mk
++++ b/package/perl-extutils-pkgconfig/perl-extutils-pkgconfig.mk
+@@ -13,4 +13,6 @@ PERL_EXTUTILS_PKGCONFIG_DISTNAME = ExtUtils-PkgConfig
+ 
+ HOST_PERL_EXTUTILS_PKGCONFIG_DEPENDENCIES = host-pkgconf
+ 
++HOST_PERL_EXTUTILS_PKGCONFIG_CONF_ENV = PATH=$(BR_PATH)
++
+ $(eval $(host-perl-package))
 -- 
-Bye, Peter Korsgaard
+2.30.0
