@@ -1,53 +1,78 @@
-From: Ludovic.Desroches at microchip.com <Ludovic.Desroches@microchip.com>
-Date: Wed, 17 Feb 2021 13:58:35 +0000
-Subject: [Buildroot] Buildroot defconfig issues
-In-Reply-To: <e957b8a1-b7aa-67e1-cbd6-784a784c11b5@mind.be>
-References: <6025e87c3e3ce_c6a70d4128370@gitlab-sidekiq-catchall-v1-bb68c6455-8rbvh.mail>
- <20210212091348.75f9cd17@windsurf.home>
- <582a548d-b9e3-39dc-f234-10a31e0a355d@mind.be>
- <20210212092458.165a3ec7@windsurf.home>
- <e957b8a1-b7aa-67e1-cbd6-784a784c11b5@mind.be>
-Message-ID: <20210217135835.cujzg3cdsqntwb7h@sekiro>
+From: mattwood2000 at gmail.com <mattwood2000@gmail.com>
+Date: Wed, 17 Feb 2021 09:20:03 -0500
+Subject: [Buildroot] CMake package requires out of source build
+In-Reply-To: <20210216000715.2d81f552@gmx.net>
+References: <CADjezmadzNatvC8E3ybVjcv-HmOAUb8zO09jnVfRosSxu1Gokw@mail.gmail.com>
+ <20210216000715.2d81f552@gmx.net>
+Message-ID: <CADjezma+0Oav4kZzYnuwdsbruCFuBG3ZLqRPQ2EF7uHyHXg4Cw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+Hi Peter,
 
-On Fri, 12 Feb 2021 10:41:26 +0100
-Arnout Vandecappelle <arnout@mind.be> wrote:
-
-> > But Arnout, I thought you were inclined to having "demo" defconfigs in
-> > Buildroot upstream. Have you changed your mind ?
+On Mon, Feb 15, 2021 at 6:07 PM Peter Seiderer <ps.report@gmx.net> wrote:
 >
-> "demo", yes. Like qt5we. It's good to have one defconfig which adds qt5we
-> because otherwise that package hardly ever gets tested (it has so many
-> dependencies that it's very unlikely to get built in the autobuilders). Also the
-> other _qt5_ configs make sense, because it can be quite hard to select the
-> correct graphical stuff for a specific board - the qt5 part is not really
-> needed, but it's a nice way of showing something actually working rather than
-> simply building.
+> Hello Matt,
 >
->  But the _dev_ things simply select a bunch of packages that are useful for
-> development. It's not at all necessarily the set of tools that any particular
-> developer will actually use, and it's not very helpful for testing some specific
-> package, and there's nothing specific for that platform in it.
+> On Mon, 15 Feb 2021 16:28:28 -0500, mattwood2000 at gmail.com wrote:
 >
->  It's possible that I'm a bit changing my mind here, because I didn't realize
-> that last bit before. And for sure: if such a config is giving us pain (e.g., it
-> doesn't build :-) then rather than spend time on investigating, I'd want to just
-> remove it!
+> > Hi,
+> >
+> > I've found myself in a bit of a dilemma with a piece of software I'm
+> > trying to integrate into a custom cmake package.
+> >
+> > The software is the amazon avs-device-sdk:
+> > https://github.com/alexa/avs-device-sdk
+> >
+> > For whatever reason, it does not support building within the source
+> > tree.  Under normal circumstances one would set
+> > <PKG>_SUPPORTS_IN_SOURCE_BUILD=NO, but in this case the sdk will not
+> > support a build directory in the source SDK whatsoever, so that config
+> > option is useless.
+> >
+> > The only way I can see to get around this short of Amazon fixing their
+> > weird build requirement is to do a dirty hack like below.
+> >
+> > Does anyone have any other suggestions?
+>
+> You can try it the other way round, overwrite the extract step
+> via <PKG>_EXTRACT_CMDS to extract into build/<package>-<version>/some_sub_dir
+> and use <PKGC>_SUBDIR=some_sub_dir then (did not test the solution)....
+>
+> If it works it would have the advantage to not touch pkg-cmake.mk and keep
+> all files in the package build directory...
 
-I agree that these "dev" defconfigs simply have a somewhat "random"
-selection of tools that are not aimed at providing any particular demo.
-So I'm fine with the choice of dropping them.
+Well, that sounded like a great solution but unfortunately the
+buildroot still tries to build within the <PKG>_SUBDIR.  The main
+issue is Amazon's rule to disallow in-source building, even within a
+separate directory.  I worked around this by not including their
+iterate function to detect an in-source build and using
+SUPPORTS_IN_SOURCE_BUILD=NO.
 
-Best regards,
+Thanks for the suggestion though.
 
-Thomas
---
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+
+>
+> Regards,
+> Peter
+>
+> >
+> > Thanks, Matt.
+> >
+> > --- a/package/pkg-cmake.mk
+> > +++ b/package/pkg-cmake.mk
+> > @@ -66,7 +66,8 @@ $(3)_SUPPORTS_IN_SOURCE_BUILD ?= YES
+> >  ifeq ($$($(3)_SUPPORTS_IN_SOURCE_BUILD),YES)
+> >  $(2)_BUILDDIR                  = $$($(2)_SRCDIR)
+> >  else
+> > -$(2)_BUILDDIR                  = $$($(2)_SRCDIR)/buildroot-build
+> > +$(2)_BUILDDIR                  = $$($(2)_SRCDIR)/../$(1)_buildroot-build
+> >  endif
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+>
