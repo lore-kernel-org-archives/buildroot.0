@@ -1,134 +1,63 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 17 Feb 2021 11:31:04 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/flashrom: fix
- build on riscv
-Message-ID: <20210217101007.2CF87816D1@busybox.osuosl.org>
+Date: Wed, 17 Feb 2021 11:29:07 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/webkitgtk:
+ security bump to version 2.30.5
+Message-ID: <20210217100851.841818152C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ed9a391b66f306ecaadb990c7bd05a6a0416d0a0
+commit: https://git.buildroot.net/buildroot/commit/?id=223f1f8695994d1e62b3effcb71c9bbc4ef126b6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-Retrieve an upstream patch to fix build with riscv as it fails to
-retrieve architecture due to "Use sigaction with SA_RESTART instead"
-being caught before riscv:
+Fixes the following security issue:
 
-exec: export LC_ALL=C ; { /home/fabrice/buildroot/output/host/bin/riscv32-linux-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -E archtest.c 2>/dev/null | grep -v ^# | grep ' | cut -f 2 -d' ; }
-Use sigaction with SA_RESTART instead
-riscv
+- CVE-2020-13558: Processing maliciously crafted web content may lead to
+  arbitrary code execution.  Description: A use after free issue in the
+  AudioSourceProviderGStreamer class was addressed with improved memory
+  management
 
-Fixes:
- - http://autobuild.buildroot.org/results/61ac6c9bfcd3bd9306aa49faf47b9f16e5abe846
+For more details, see the advisory:
+https://webkitgtk.org/security/WSA-2021-0001.html
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 7d73bc52164afbb283d0d8723ed4cf0cbca38521)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Acked-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 157dc4e3cfe763d6cc82e8ca75a36e203f24ab70)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...01-Makefile-Fix-building-on-AArch64-NixOS.patch | 95 ++++++++++++++++++++++
- 1 file changed, 95 insertions(+)
+ package/webkitgtk/webkitgtk.hash | 8 ++++----
+ package/webkitgtk/webkitgtk.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/flashrom/0001-Makefile-Fix-building-on-AArch64-NixOS.patch b/package/flashrom/0001-Makefile-Fix-building-on-AArch64-NixOS.patch
-new file mode 100644
-index 0000000000..f835172e61
---- /dev/null
-+++ b/package/flashrom/0001-Makefile-Fix-building-on-AArch64-NixOS.patch
-@@ -0,0 +1,95 @@
-+From da6b3b70cb852dd8e9f9e21aef95fa83e7f7ab0d Mon Sep 17 00:00:00 2001
-+From: Pyry Kontio <pyry.kontio@drasa.eu>
-+Date: Mon, 6 Jul 2020 12:57:35 +0900
-+Subject: [PATCH] Makefile: Fix building on AArch64 NixOS
-+
-+The parsing of the output of archtest.c produced an unexpected
-+value on AArch64 NixOS. For example, the make variable ARCH was set to:
-+
-+```
-+bit outside of fd_set selected
-+arm
-+```
-+
-+This made the arch and OS checks fail.
-+
-+This commit simplifies the parsing, making it more robust.
-+
-+The C files archtest.c, endiantest.c and os.h used to set the
-+TARGET_OS, ARCH and ENDIAN variables, respectively, output
-+the result of the test as the final line, so just extracting
-+the final line and removing double quoting is enough.
-+
-+This commit also fixes a bug with debug_shell lacking escaping
-+single quotes, which prevented using the single quote in the
-+debug_shell calls. It used to work by accident before this fix;
-+the line in the call happened to contain a balanced pair of double
-+quotes and lacked other characters that needed escaping, which
-+didn't break the debug_shell, but this was accidental and very
-+brittle.
-+
-+Signed-off-by: Pyry Kontio <pyry.kontio@drasa.eu>
-+Change-Id: Iaa4477a71e758cf9ecad2c22f3b77bc6508a3510
-+Reviewed-on: https://review.coreboot.org/c/flashrom/+/43140
-+Tested-by: build bot (Jenkins) <no-reply@coreboot.org>
-+Reviewed-by: Angel Pons <th3fanbus@gmail.com>
-+
-+[Retrieved from:
-+https://github.com/flashrom/flashrom/commit/da6b3b70cb852dd8e9f9e21aef95fa83e7f7ab0d]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ Makefile | 16 ++++++++++------
-+ 1 file changed, 10 insertions(+), 6 deletions(-)
-+
-+diff --git a/Makefile b/Makefile
-+index f3f7717e2..e475cbdbd 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -83,7 +83,8 @@ dummy_for_make_3_80:=$(shell printf "Build started on %s\n\n" "$$(date)" >$(BUIL
-+ 
-+ # Provide an easy way to execute a command, print its output to stdout and capture any error message on stderr
-+ # in the build details file together with the original stdout output.
-+-debug_shell = $(shell export LC_ALL=C ; { echo 'exec: export LC_ALL=C ; { $(1) ; }' >&2;  { $(1) ; } | tee -a $(BUILD_DETAILS_FILE) ; echo >&2 ; } 2>>$(BUILD_DETAILS_FILE))
-++debug_shell = $(shell export LC_ALL=C ; { echo 'exec: export LC_ALL=C ; { $(subst ','\'',$(1)) ; }' >&2; \
-++    { $(1) ; } | tee -a $(BUILD_DETAILS_FILE) ; echo >&2 ; } 2>>$(BUILD_DETAILS_FILE))
-+ 
-+ ###############################################################################
-+ # General OS-specific settings.
-+@@ -106,7 +107,8 @@ endif
-+ # IMPORTANT: The following line must be placed before TARGET_OS is ever used
-+ # (of course), but should come after any lines setting CC because the line
-+ # below uses CC itself.
-+-override TARGET_OS := $(strip $(call debug_shell,$(CC) $(CPPFLAGS) -E os.h 2>/dev/null | grep -v '^\#' | grep '"' | cut -f 2 -d'"'))
-++override TARGET_OS := $(strip $(call debug_shell,$(CC) $(CPPFLAGS) -E os.h 2>/dev/null \
-++    | tail -1 | cut -f 2 -d'"'))
-+ 
-+ ifeq ($(TARGET_OS), Darwin)
-+ override CPPFLAGS += -I/opt/local/include -I/usr/local/include
-+@@ -490,8 +492,10 @@ endif
-+ # IMPORTANT: The following line must be placed before ARCH is ever used
-+ # (of course), but should come after any lines setting CC because the line
-+ # below uses CC itself.
-+-override ARCH := $(strip $(call debug_shell,$(CC) $(CPPFLAGS) -E archtest.c 2>/dev/null | grep -v '^\#' | grep '"' | cut -f 2 -d'"'))
-+-override ENDIAN := $(strip $(call debug_shell,$(CC) $(CPPFLAGS) -E endiantest.c 2>/dev/null | grep -v '^\#'))
-++override ARCH := $(strip $(call debug_shell,$(CC) $(CPPFLAGS) -E archtest.c 2>/dev/null \
-++    | tail -1 | cut -f 2 -d'"'))
-++override ENDIAN := $(strip $(call debug_shell,$(CC) $(CPPFLAGS) -E endiantest.c 2>/dev/null \
-++    | tail -1))
-+ 
-+ # Disable the internal programmer on unsupported architectures (everything but x86 and mipsel)
-+ ifneq ($(ARCH)-little, $(filter $(ARCH),x86 mips)-$(ENDIAN))
-+@@ -1299,12 +1303,12 @@ compiler: featuresavailable
-+ 	@printf "Target arch is "
-+ 	@# FreeBSD wc will output extraneous whitespace.
-+ 	@echo $(ARCH)|wc -w|grep -q '^[[:blank:]]*1[[:blank:]]*$$' ||	\
-+-		( echo "unknown. Aborting."; exit 1)
-++		( echo "unknown (\"$(ARCH)\"). Aborting."; exit 1)
-+ 	@printf "%s\n" '$(ARCH)'
-+ 	@printf "Target OS is "
-+ 	@# FreeBSD wc will output extraneous whitespace.
-+ 	@echo $(TARGET_OS)|wc -w|grep -q '^[[:blank:]]*1[[:blank:]]*$$' ||	\
-+-		( echo "unknown. Aborting."; exit 1)
-++		( echo "unknown (\"$(TARGET_OS)\"). Aborting."; exit 1)
-+ 	@printf "%s\n" '$(TARGET_OS)'
-+ ifeq ($(TARGET_OS), libpayload)
-+ 	@$(CC) --version 2>&1 | grep -q coreboot || \
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index 27f0e5a69d..3869058d75 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,7 +1,7 @@
+-# From https://webkitgtk.org/releases/webkitgtk-2.30.4.tar.xz.sums
+-md5  81c813d77a7b52ef655922f9b387f3a1  webkitgtk-2.30.4.tar.xz
+-sha1  330f45d7badf944fb01a3238ebb2ceaad8c2a91f  webkitgtk-2.30.4.tar.xz
+-sha256  d595a37c5001ff787266b155e303a5f2e5b48a6d466f2714c2f30c11392f7b24  webkitgtk-2.30.4.tar.xz
++# From https://webkitgtk.org/releases/webkitgtk-2.30.5.tar.xz.sums
++md5  c8291af0c5102fff1f73e67f0bff6c87  webkitgtk-2.30.5.tar.xz
++sha1  4fc8753786d7762a3c4ecdc7ea11fc38b5468d6f  webkitgtk-2.30.5.tar.xz
++sha256  7d0dab08e3c5ae07bec80b2822ef42e952765d5724cac86eb23999bfed5a7f1f  webkitgtk-2.30.5.tar.xz
+ 
+ # Hashes for license files:
+ sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index 73111d383a..5cfef6b079 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WEBKITGTK_VERSION = 2.30.4
++WEBKITGTK_VERSION = 2.30.5
+ WEBKITGTK_SITE = https://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
