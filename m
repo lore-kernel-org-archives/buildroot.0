@@ -1,104 +1,86 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 17 Feb 2021 08:17:44 +0100
-Subject: [Buildroot] [git commit] package/libopenssl: security bump to
- version 1.1.1j
-Message-ID: <20210217065622.9210A81609@busybox.osuosl.org>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Wed, 17 Feb 2021 08:39:12 +0100
+Subject: [Buildroot] [PATCH 1/1] package/taglib: drop config options to
+ enable MP4/ASF support
+Message-ID: <20210217073912.19314-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4745a484a6dd72e6aa7b56952535504b8252d6a6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Both options where removed in TagLib in [1] back in year 2011.
 
-Fixes the following security issues:
+[1] https://github.com/taglib/taglib/commit/dd846904cbc1ef3ee628d77f0c9df88ef8967816 
 
-- CVE-2021-23841: Null pointer deref in X509_issuer_and_serial_hash()
-
-  The OpenSSL public API function X509_issuer_and_serial_hash() attempts to
-  create a unique hash value based on the issuer and serial number data
-  contained within an X509 certificate.  However it fails to correctly
-  handle any errors that may occur while parsing the issuer field (which
-  might occur if the issuer field is maliciously constructed).  This may
-  subsequently result in a NULL pointer deref and a crash leading to a
-  potential denial of service attack.
-
-  The function X509_issuer_and_serial_hash() is never directly called by
-  OpenSSL itself so applications are only vulnerable if they use this
-  function directly and they use it on certificates that may have been
-  obtained from untrusted sources.
-
-- CVE-2021-23839: Incorrect SSLv2 rollback protection
-
-  OpenSSL 1.0.2 supports SSLv2.  If a client attempts to negotiate SSLv2
-  with a server that is configured to support both SSLv2 and more recent SSL
-  and TLS versions then a check is made for a version rollback attack when
-  unpadding an RSA signature.  Clients that support SSL or TLS versions
-  greater than SSLv2 are supposed to use a special form of padding.  A
-  server that supports greater than SSLv2 is supposed to reject connection
-  attempts from a client where this special form of padding is present,
-  because this indicates that a version rollback has occurred (i.e.  both
-  client and server support greater than SSLv2, and yet this is the version
-  that is being requested).
-
-  The implementation of this padding check inverted the logic so that the
-  connection attempt is accepted if the padding is present, and rejected if
-  it is absent.  This means that such as server will accept a connection if
-  a version rollback attack has occurred.  Further the server will
-  erroneously reject a connection if a normal SSLv2 connection attempt is
-  made.
-
-  OpenSSL 1.1.1 does not have SSLv2 support and therefore is not vulnerable
-  to this issue.  The underlying error is in the implementation of the
-  RSA_padding_check_SSLv23() function.  This also affects the
-  RSA_SSLV23_PADDING padding mode used by various other functions.  Although
-  1.1.1 does not support SSLv2 the RSA_padding_check_SSLv23() function still
-  exists, as does the RSA_SSLV23_PADDING padding mode.  Applications that
-  directly call that function or use that padding mode will encounter this
-  issue.  However since there is no support for the SSLv2 protocol in 1.1.1
-  this is considered a bug and not a security issue in that version.
-
-- CVE-2021-23840: Integer overflow in CipherUpdate
-
-  Calls to EVP_CipherUpdate, EVP_EncryptUpdate and EVP_DecryptUpdate may
-  overflow the output length argument in some cases where the input length
-  is close to the maximum permissable length for an integer on the platform.
-  In such cases the return value from the function call will be 1
-  (indicating success), but the output length value will be negative.  This
-  could cause applications to behave incorrectly or crash.
-
-For more details, see the advisory:
-https://www.openssl.org/news/secadv/20210216.txt
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- package/libopenssl/libopenssl.hash | 4 ++--
- package/libopenssl/libopenssl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ Config.in.legacy         | 12 ++++++++++++
+ package/taglib/Config.in | 10 ----------
+ package/taglib/taglib.mk |  8 --------
+ 3 files changed, 12 insertions(+), 18 deletions(-)
 
-diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
-index 5e24ca17ae..854f8a03f7 100644
---- a/package/libopenssl/libopenssl.hash
-+++ b/package/libopenssl/libopenssl.hash
-@@ -1,5 +1,5 @@
--# From https://www.openssl.org/source/openssl-1.1.1i.tar.gz.sha256
--sha256  e8be6a35fe41d10603c3cc635e93289ed00bf34b79671a3a4de64fcee00d5242  openssl-1.1.1i.tar.gz
-+# From https://www.openssl.org/source/openssl-1.1.1j.tar.gz.sha256
-+sha256  aaf2fcb575cdf6491b98ab4829abf78a3dec8402b8b81efc8f23c00d443981bf  openssl-1.1.1j.tar.gz
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 9deb67b31f..9c794877d4 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,18 @@ endif
  
- # License files
- sha256  c32913b33252e71190af2066f08115c69bc9fddadf3bf29296e20c835389841c  LICENSE
-diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-index 972ed534ba..19f1c89f06 100644
---- a/package/libopenssl/libopenssl.mk
-+++ b/package/libopenssl/libopenssl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ comment "Legacy options removed in 2021.02"
  
--LIBOPENSSL_VERSION = 1.1.1i
-+LIBOPENSSL_VERSION = 1.1.1j
- LIBOPENSSL_SITE = https://www.openssl.org/source
- LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
- LIBOPENSSL_LICENSE = OpenSSL or SSLeay
++config BR2_PACKAGE_TAGLIB_MP4
++	bool "taglib mp4 support"
++	select BR2_LEGACY
++	help
++	  mp4 support is enabled in TagLib by default since 2011.
++
++config BR2_PACKAGE_TAGLIB_ASF
++	"taglib wma support"
++	select BR2_LEGACY
++	help
++	  asf/wma support is enabled in TagLib by default since 2011.
++
+ config BR2_PACKAGE_MPD_AUDIOFILE
+ 	bool "mpd audiofile support removed"
+ 	select BR2_LEGACY
+diff --git a/package/taglib/Config.in b/package/taglib/Config.in
+index 9e6bb707fc..6a87a13215 100644
+--- a/package/taglib/Config.in
++++ b/package/taglib/Config.in
+@@ -11,15 +11,5 @@ config BR2_PACKAGE_TAGLIB
+ 
+ 	  http://taglib.org/
+ 
+-if BR2_PACKAGE_TAGLIB
+-
+-config BR2_PACKAGE_TAGLIB_MP4
+-	bool "taglib mp4 support"
+-
+-config BR2_PACKAGE_TAGLIB_ASF
+-	bool "taglib wma support"
+-
+-endif
+-
+ comment "taglib needs a toolchain w/ C++, wchar"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
+diff --git a/package/taglib/taglib.mk b/package/taglib/taglib.mk
+index 9381e16672..738be35756 100644
+--- a/package/taglib/taglib.mk
++++ b/package/taglib/taglib.mk
+@@ -20,14 +20,6 @@ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ TAGLIB_DEPENDENCIES += zlib
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_TAGLIB_ASF),y)
+-TAGLIB_CONF_OPTS += -DWITH_ASF=ON
+-endif
+-
+-ifeq ($(BR2_PACKAGE_TAGLIB_MP4),y)
+-TAGLIB_CONF_OPTS += -DWITH_MP4=ON
+-endif
+-
+ define TAGLIB_REMOVE_DEVFILE
+ 	rm -f $(TARGET_DIR)/usr/bin/taglib-config
+ endef
+-- 
+2.30.1
