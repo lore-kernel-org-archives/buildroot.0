@@ -1,55 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 17 Feb 2021 17:55:31 +0100
-Subject: [Buildroot] Buildroot 2021.02-rc2 released
-Message-ID: <87a6s23a7w.fsf@dell.be.48ers.dk>
+From: mattwood2000 at gmail.com <mattwood2000@gmail.com>
+Date: Wed, 17 Feb 2021 11:59:36 -0500
+Subject: [Buildroot] CMake package requires out of source build
+In-Reply-To: <20210217155233.3yf2tjemg3mygcm7@falbala.internal.home.lespocky.de>
+References: <CADjezmadzNatvC8E3ybVjcv-HmOAUb8zO09jnVfRosSxu1Gokw@mail.gmail.com>
+ <20210216000715.2d81f552@gmx.net>
+ <CADjezma+0Oav4kZzYnuwdsbruCFuBG3ZLqRPQ2EF7uHyHXg4Cw@mail.gmail.com>
+ <20210217155233.3yf2tjemg3mygcm7@falbala.internal.home.lespocky.de>
+Message-ID: <CADjezmY7i+rYoKf2=zUQX2r0j14McNjbZba9D+-WOgRQhjYGxw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi Alex,
 
-Buildroot 2021.02-rc2 is released - Go download it at:
+On Wed, Feb 17, 2021 at 10:52 AM Alexander Dahl <post@lespocky.de> wrote:
+> Just out of curiousity: why would you want to build in source anyways?
+> Why not build out of source as usually recommended and first class
+> supported by CMake?
 
-http://buildroot.net/downloads/buildroot-2021.02-rc2.tar.gz
+I would prefer to build the source like a normal cmake package,
+however Amazon disallows building their SDK anywhere within the
+original source directory.  Normally, there should not be any issue
+with:
 
-or
+./cmake_pkg_src
+./cmake_pkg_src/buildroot-build // PKG_SUPPORTS_IN_SOURCE_BUILD = NO
 
-http://buildroot.net/downloads/buildroot-2021.02-rc2.tar.bz2
+But in this case there is a cmake rule that iterates over the entire
+source directory to check if the build directory is present:
+https://github.com/alexa/avs-device-sdk/blob/master/build/cmake/DisallowOutOfSourceBuilds.cmake
 
-Or get it from Git:
+Removing the rule from BuildDefaults.cmake gets around this issue.
+Also, the source builds perfectly fine this way.  I'm not sure why
+Amazon forces this.
 
-git://git.buildroot.net/buildroot
-
-Another week, another release candidate.
-
-Please give it a spin and report any problems to the mailing list or
-bug tracker. Many thanks to the people contributing to this release:
-
-git shortlog -sn 2021.02-rc1..
-
-    32  Fabrice Fontaine
-    10  Thomas De Schampheleire
-     8  Peter Korsgaard
-     5  Thomas Petazzoni
-     3  Bernd Kuhls
-     3  Christian Stewart
-     3  Heiko Thiery
-     1  Andreas Klinger
-     1  Arnout Vandecappelle (Essensium/Mind)
-     1  Diego Hurtado de Mendoza
-     1  Francois Perrad
-     1  Giulio Benetti
-     1  J?rg Krause
-     1  Michael Vetter
-     1  Peter Seiderer
-     1  Sergey Matyukevich
-     1  Yann E. MORIN
-
-For more details, see the CHANGES file:
-
-http://git.buildroot.net/buildroot/plain/CHANGES?id=2021.02-rc2
-
--- 
-Bye, Peter Korsgaard
+Thanks, Matt.
+>
+> Greets
+> Alex
+>
+> --
+> /"\ ASCII RIBBON | ?With the first link, the chain is forged. The first
+> \ / CAMPAIGN     | speech censured, the first thought forbidden, the
+>  X  AGAINST      | first freedom denied, chains us all irrevocably.?
+> / \ HTML MAIL    | (Jean-Luc Picard, quoting Judge Aaron Satie)
