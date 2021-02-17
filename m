@@ -1,51 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 17 Feb 2021 08:08:37 +0100
-Subject: [Buildroot] [PATCH 2020.02.x] package/fakeroot: add upstream
- patches to fix glibc 2.33 compatibility
-In-Reply-To: <20210215185541.111347-1-joerg.krause@embedded.rocks>
- (=?utf-8?Q?=22J=C3=B6rg?=
- Krause"'s message of "Mon, 15 Feb 2021 19:55:41 +0100")
-References: <20210215185541.111347-1-joerg.krause@embedded.rocks>
-Message-ID: <87ft1v5fyi.fsf@dell.be.48ers.dk>
+Date: Wed, 17 Feb 2021 07:36:18 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/jasper: Bump to
+ 2.0.24
+Message-ID: <20210217064713.E6528814B4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=53c8748095be6a868a081e25d5c52f20bcec8615
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
- > Glibc 2.33 removed `_STAT_VER`. On host systems, which updated to glibc
- > 2.33, building host-fakeroot breaks:
+Changes:
+* Add JAS_VERSION_MAJOR, JAS_VERSION_MINOR, JAS_VERSION_PATCH for
+  easier access to the JasPer version.
+* Fixes stack overflow bug on Windows, where variable-length
+  arrays are not available. (#256)
 
- > ```
- > In file included from communicate.h:20,
- >              from libfakeroot.c:60:
- > libfakeroot.c: In function ?chown?:
- > libfakeroot.c:99:40: error: ?_STAT_VER? undeclared (first use in this function)
- > 99 | #define INT_NEXT_STAT(a,b) NEXT_STAT64(_STAT_VER,a,b)
- > ```
+Signed-off-by: Michael Vetter <jubalh@iodoru.org>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 7a5c61d59be35c059e96730cd70a92d47cb4e8e0)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/jasper/jasper.hash | 2 +-
+ package/jasper/jasper.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > The issue has been discussed on some system package threads, e.g.:
- > https://bugs.archlinux.org/task/69572
- > https://bugzilla.redhat.com/show_bug.cgi?id=1889862#c13
-
- > A patch set was prepared by Ilya Lipnitskiy which included two other
- > patches not related to the glibc 2.33 compatibility and prepared as
- > merge request for upstream:
- > https://www.mail-archive.com/openwrt-devel at lists.openwrt.org/msg57280.html
-
- > Upstream accepted the merge request:
- > https://salsa.debian.org/clint/fakeroot/-/merge_requests/10
-
- > Note, that this patch series only contains the necessay patches for glibc
- > 2.33 compatibility.
-
- > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-
-Committed to 2020.02.x, thanks.
-
-For 2020.11.x I have backported the commit from master instead.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/jasper/jasper.hash b/package/jasper/jasper.hash
+index 2a0a4fdff0..7386c2179f 100644
+--- a/package/jasper/jasper.hash
++++ b/package/jasper/jasper.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  20facc904bd9d38c20e0c090b1be3ae02ae5b2703b803013be2ecad586a18927  jasper-2.0.23.tar.gz
++sha256  d2d28e115968d38499163cf8086179503668ce0d71b90dd33855b3de96a1ca1d  jasper-2.0.24.tar.gz
+ sha256  4ad1bb42aff888c4403d792e6e2c5f1716d6c279fea70b296333c9d577d30b81  LICENSE
+diff --git a/package/jasper/jasper.mk b/package/jasper/jasper.mk
+index 3386108323..bb50168d67 100644
+--- a/package/jasper/jasper.mk
++++ b/package/jasper/jasper.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-JASPER_VERSION = 2.0.23
++JASPER_VERSION = 2.0.24
+ JASPER_SITE = $(call github,jasper-software,jasper,version-$(JASPER_VERSION))
+ JASPER_INSTALL_STAGING = YES
+ JASPER_LICENSE = JasPer-2.0
