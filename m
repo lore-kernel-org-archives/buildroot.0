@@ -1,63 +1,70 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 17 Feb 2021 11:29:07 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/webkitgtk:
- security bump to version 2.30.5
-Message-ID: <20210217100851.841818152C@busybox.osuosl.org>
+Date: Wed, 17 Feb 2021 11:36:21 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/openblas: fix
+ detection of gfortran compiler
+Message-ID: <20210217101519.BCA04815D5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=223f1f8695994d1e62b3effcb71c9bbc4ef126b6
+commit: https://git.buildroot.net/buildroot/commit/?id=4f193d5603c86045161f18ed0a4dfd4d3ad0686f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-Fixes the following security issue:
+The compiler detection since openblas 0.3.8 added support for gcc 10, but
+this broke detection of compilers created with crosstool-ng, or other
+toolchains that have a package version containing a version like x.y.z where
+at least one of x, y or z have more than one digit, for example
+"Crosstool-NG 1.24.0".
 
-- CVE-2020-13558: Processing maliciously crafted web content may lead to
-  arbitrary code execution.  Description: A use after free issue in the
-  AudioSourceProviderGStreamer class was addressed with improved memory
-  management
+See the reported issue for more details [1].
 
-For more details, see the advisory:
-https://webkitgtk.org/security/WSA-2021-0001.html
+Backport the upstream patch that fixes it.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Acked-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 157dc4e3cfe763d6cc82e8ca75a36e203f24ab70)
+[1] https://github.com/xianyi/OpenBLAS/issues/3099
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 8efa82a41d7c345d59fcd8113a679aaacd8043a7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/webkitgtk/webkitgtk.hash | 8 ++++----
- package/webkitgtk/webkitgtk.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/openblas/0001-fix-gfortran-detection.patch | 30 ++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index 27f0e5a69d..3869058d75 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,7 +1,7 @@
--# From https://webkitgtk.org/releases/webkitgtk-2.30.4.tar.xz.sums
--md5  81c813d77a7b52ef655922f9b387f3a1  webkitgtk-2.30.4.tar.xz
--sha1  330f45d7badf944fb01a3238ebb2ceaad8c2a91f  webkitgtk-2.30.4.tar.xz
--sha256  d595a37c5001ff787266b155e303a5f2e5b48a6d466f2714c2f30c11392f7b24  webkitgtk-2.30.4.tar.xz
-+# From https://webkitgtk.org/releases/webkitgtk-2.30.5.tar.xz.sums
-+md5  c8291af0c5102fff1f73e67f0bff6c87  webkitgtk-2.30.5.tar.xz
-+sha1  4fc8753786d7762a3c4ecdc7ea11fc38b5468d6f  webkitgtk-2.30.5.tar.xz
-+sha256  7d0dab08e3c5ae07bec80b2822ef42e952765d5724cac86eb23999bfed5a7f1f  webkitgtk-2.30.5.tar.xz
- 
- # Hashes for license files:
- sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index 73111d383a..5cfef6b079 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WEBKITGTK_VERSION = 2.30.4
-+WEBKITGTK_VERSION = 2.30.5
- WEBKITGTK_SITE = https://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
+diff --git a/package/openblas/0001-fix-gfortran-detection.patch b/package/openblas/0001-fix-gfortran-detection.patch
+new file mode 100644
+index 0000000000..1fecdac3e5
+--- /dev/null
++++ b/package/openblas/0001-fix-gfortran-detection.patch
+@@ -0,0 +1,30 @@
++From ece3ce581e3ec530eaccfe7f284c52e115ec7aa9 Mon Sep 17 00:00:00 2001
++From: Martin Kroeker <martin@ruby.chemie.uni-freiburg.de>
++Date: Wed, 10 Feb 2021 14:22:59 +0100
++Subject: [PATCH] Strip parenthesized (pkgversion) data from GCC version string
++ to avoid misinterpretation
++
++See https://github.com/xianyi/OpenBLAS/issues/3099 for details.
++
++Upstream-status: backport
++
++[for import into Buildroot]
++Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
++
++
++---
++ f_check | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/f_check b/f_check
++index e9aca4ff9..ffe9c6b46 100644
++--- a/f_check
+++++ b/f_check
++@@ -75,6 +75,7 @@ if ($compiler eq "") {
++ 
++ 	} elsif ($data =~ /GNU/ || $data =~ /GCC/ ) {
++ 
+++            $data =~ s/\(+.*?\)+//g;
++ 	    $data =~ /(\d+)\.(\d+).(\d+)/;
++ 	    $major = $1;
++ 	    $minor = $2;
