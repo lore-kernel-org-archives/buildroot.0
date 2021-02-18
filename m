@@ -1,64 +1,82 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 18 Feb 2021 20:08:11 +0100
-Subject: [Buildroot] GOLANG Compilation Issue: build constraints exclude
- all Go files
-In-Reply-To: <665eb34c-a700-a00a-dd02-bd958ac120ea@klomp.eu>
-References: <499ade29-7cfb-99d7-280b-46b58359a7f9@klomp.eu>
- <665eb34c-a700-a00a-dd02-bd958ac120ea@klomp.eu>
-Message-ID: <3c664bae-5c1b-36cc-4c8b-e65d9af20cab@mind.be>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Thu, 18 Feb 2021 21:32:42 +0100
+Subject: [Buildroot] [PATCH] package/rust: disable ninja
+In-Reply-To: <ba18df82-1dd9-1e48-e42d-9524ad6c5591@mind.be>
+References: <20210217232411.290242-1-romain.naour@gmail.com>
+ <ba18df82-1dd9-1e48-e42d-9524ad6c5591@mind.be>
+Message-ID: <f36ed50b-06ea-947b-272c-ace0daf53ca7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello Arnout,
 
-
-On 18/02/2021 14:29, Sven Klomp wrote:
-> Hello
+Le 18/02/2021 ? 20:00, Arnout Vandecappelle a ?crit?:
 > 
-> On 12.02.21 10:18, Sven Klomp wrote:
->> can't load package: package github.com/syncthing/syncthing: build constraints
->> exclude all Go files in
->> /[...]/build/syncthing-1.13.1/_gopath/src/github.com/syncthing/syncthing
 > 
-> With some help from the Syncthing forum I came to the conclusion, that
-> "golang-package" tries to compile the source with "go build" whereas Syncthing
-> requires "go run build.do -arch arm build".
+> On 18/02/2021 00:24, Romain Naour wrote:
+>> Ninja has recently be enabled as the default build system to build
+>> llvm fork for rust compiler [1]. But we can still use Make if
+>> "ninja = false" is provided in config.toml.
+>>
+>> Ninja support can be enabled by a following patch.
+>>
+>> [1] https://github.com/rust-lang/rust/commit/30b7dac745b1555cd96f41977f7d24435cbe7fa2
 > 
-> Thus, I define SYNCTHING_BUILD_CMDS
-> ??? define SYNCTHING_BUILD_CMDS
-> ??? ??? cd $(SYNCTHING_SRC_PATH); \
-> ??? ??? $(GO_TARGET_ENV) \
-> ??? ??? $(GO_BIN) run build.go build
-> ??? endef
-> 
-> However, this fails with:
-> ??? fork/exec /tmp/go-build567270573/b001/exe/build: exec format error
+>  That commit reports a speedup of about 2 minutes in build time (on a highly
+> parallel system). I guess that on a lowlier system, the build time will still
+> improve by more than the 10 seconds it takes to build ninja...
 
- Without looking at the details, I suspect that this attempts to build a Go
-binary for the host, and then run it to start the build for the target. That
-makes it impossible to pass in environment variables meant for the target.
-
- If this is just for yourself, you can probably get away with just using
-HOST_GO_COMMON_ENV or HOST_GO_CROSS_ENV instead of HOST_GO_TARGET_ENV - at
-least, if it doesn't need cgo.
-
- For upstream, however, we would want a proper solution. That probably means
-building the host executable with HOST_GO_HOST_ENV, then "manually" running the
-generated executable with HOST_GO_TARGET_ENV.
-
- Regards,
- Arnout
-
+Yes, but the rust package was using Make build system until recently. I'm not
+sure if we should switch to ninja for 2021.02 release.
 
 > 
-> This error is somehow related to the environment variable "GOARCH=arm"
-> introduced by $(GO_TARGET_ENV).
+>  So I'd propose to instead just add
 > 
-> Best regards
+> HOST_RUST_DEPENDENCIES += ninja
+
+You mean host-ninja
+
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+>  (Note that long-term, I'd like to switch to ninja build for CMake packages in
+> general. Not that rust is a cmake package, but llvm is.)
+
+That was already suggested long time ago but the benefit was rather small at
+that time:
+
+http://patchwork.ozlabs.org/project/buildroot/patch/20170106223748.2203-1-cedric.marie at openmailbox.org/
+
+Best regards,
+Romain
+
+
+> 
+>  Regards,
+>  Arnout
+> 
+>>
+>> Fixes:
+>> https://gitlab.com/buildroot.org/buildroot/-/jobs/1019386205
+>>
+>> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+>> Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+>> ---
+>>  package/rust/rust.mk | 2 ++
+>>  1 file changed, 2 insertions(+)
+>>
+>> diff --git a/package/rust/rust.mk b/package/rust/rust.mk
+>> index 798450e04e..a38a3d64f5 100644
+>> --- a/package/rust/rust.mk
+>> +++ b/package/rust/rust.mk
+>> @@ -65,6 +65,8 @@ define HOST_RUST_CONFIGURE_CMDS
+>>  		echo 'channel = "stable"'; \
+>>  		echo '[target.$(RUSTC_TARGET_NAME)]'; \
+>>  		echo 'cc = "$(TARGET_CROSS)gcc"'; \
+>> +		echo '[llvm]'; \
+>> +		echo 'ninja = false'; \
+>>  	) > $(@D)/config.toml
+>>  endef
+>>  
+>>
