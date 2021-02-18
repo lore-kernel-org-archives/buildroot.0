@@ -1,56 +1,61 @@
-From: Bartosz Bilas <b.bilas@grinn-global.com>
-Date: Thu, 18 Feb 2021 19:51:35 +0100
-Subject: [Buildroot] [PATCH] boot/barebox: bump version to 2021.01.0
-Message-ID: <20210218185135.411975-1-b.bilas@grinn-global.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 18 Feb 2021 20:00:12 +0100
+Subject: [Buildroot] [PATCH] package/rust: disable ninja
+In-Reply-To: <20210217232411.290242-1-romain.naour@gmail.com>
+References: <20210217232411.290242-1-romain.naour@gmail.com>
+Message-ID: <ba18df82-1dd9-1e48-e42d-9524ad6c5591@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
----
- boot/barebox/Config.in    | 4 ++--
- boot/barebox/barebox.hash | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index 239c95bf90..03d9a272d0 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -12,7 +12,7 @@ choice
- 	  Select the specific Barebox version you want to use
- 
- config BR2_TARGET_BAREBOX_LATEST_VERSION
--	bool "2020.11.0"
-+	bool "2021.01.0"
- 
- config BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -40,7 +40,7 @@ endif
- 
- config BR2_TARGET_BAREBOX_VERSION
- 	string
--	default "2020.11.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
-+	default "2021.01.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
- 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
-diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
-index 3644601bbc..e6f8234a4d 100644
---- a/boot/barebox/barebox.hash
-+++ b/boot/barebox/barebox.hash
-@@ -1,8 +1,8 @@
--# From https://www.barebox.org/download/barebox-2020.11.0.tar.bz2.md5
--md5  1fc2c1a03d7b44dc12fbf4cf1fc6ffe0  barebox-2020.11.0.tar.bz2
-+# From https://www.barebox.org/download/barebox-2021.01.0.tar.bz2.md5
-+md5  e81e7cd6bc2629e7fcdeaddf59c324c3  barebox-2021.01.0.tar.bz2
- 
- # Locally calculated
--sha256  049d2b1b887d0397f4b5390255459fb0240200b06a3276ffaefdeab7fb243554  barebox-2020.11.0.tar.bz2
-+sha256  b39501db1c701b05f862973d8aed628cab0e611421cbaadae8b5262311551ff9  barebox-2021.01.0.tar.bz2
- 
- # License files, locally computed
- sha256  ab1122aa9f9073ad1ec824edcd970b16a6a7881a34a18fd56c080debb2dca5d4  COPYING
--- 
-2.30.1
+
+On 18/02/2021 00:24, Romain Naour wrote:
+> Ninja has recently be enabled as the default build system to build
+> llvm fork for rust compiler [1]. But we can still use Make if
+> "ninja = false" is provided in config.toml.
+> 
+> Ninja support can be enabled by a following patch.
+> 
+> [1] https://github.com/rust-lang/rust/commit/30b7dac745b1555cd96f41977f7d24435cbe7fa2
+
+ That commit reports a speedup of about 2 minutes in build time (on a highly
+parallel system). I guess that on a lowlier system, the build time will still
+improve by more than the 10 seconds it takes to build ninja...
+
+ So I'd propose to instead just add
+
+HOST_RUST_DEPENDENCIES += ninja
+
+ (Note that long-term, I'd like to switch to ninja build for CMake packages in
+general. Not that rust is a cmake package, but llvm is.)
+
+ Regards,
+ Arnout
+
+> 
+> Fixes:
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/1019386205
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> ---
+>  package/rust/rust.mk | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/package/rust/rust.mk b/package/rust/rust.mk
+> index 798450e04e..a38a3d64f5 100644
+> --- a/package/rust/rust.mk
+> +++ b/package/rust/rust.mk
+> @@ -65,6 +65,8 @@ define HOST_RUST_CONFIGURE_CMDS
+>  		echo 'channel = "stable"'; \
+>  		echo '[target.$(RUSTC_TARGET_NAME)]'; \
+>  		echo 'cc = "$(TARGET_CROSS)gcc"'; \
+> +		echo '[llvm]'; \
+> +		echo 'ninja = false'; \
+>  	) > $(@D)/config.toml
+>  endef
+>  
+> 
