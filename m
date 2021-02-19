@@ -1,54 +1,61 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 19 Feb 2021 21:19:30 +0100
+Date: Fri, 19 Feb 2021 21:34:31 +0100
 Subject: [Buildroot] buildroot packages from svn repo fail
-In-Reply-To: <AS8PR06MB7686BDC4D80BA193BE5E486384859@AS8PR06MB7686.eurprd06.prod.outlook.com>
+In-Reply-To: <5a1ad4cf-f72f-6fc4-da80-7d5c24d45661@xes-inc.com>
 References: <AS8PR06MB7686BDC4D80BA193BE5E486384859@AS8PR06MB7686.eurprd06.prod.outlook.com>
-Message-ID: <20210219201930.GA2276@scaer>
+ <AS8PR06MB768671E2EF5E7F63A1D6441884859@AS8PR06MB7686.eurprd06.prod.outlook.com>
+ <361e9dd7-604b-bf45-e4ce-7b0dc937b06f@xes-inc.com>
+ <6abbffd80d7d80062d25b08ed09a3f8c65ac621a.camel@ginzinger.com>
+ <5a1ad4cf-f72f-6fc4-da80-7d5c24d45661@xes-inc.com>
+Message-ID: <20210219203431.GC2276@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Henri, All,
+Vincent, All,
 
-Thanks for the reporton this svn issue.
+(sorry for the duplicate, IO forgot to re-add the list in this reply)
 
-On 2021-02-18 12:19 +0000, Roosen Henri spake thusly:
-> Hi Yann,
-
-Please do not write to individual contributors directly. Write to the
-mailing list, so that everyon has a chance to learn about the issue,
-provide feedback, suggest ways to resolve the issue, and so that
-everyone can benefit from this.
-
-By writing to the list, you also stand better chance that someone spots
-the mail, in case the contributor is not available (like me this week, I
-was unable to work on Buldroot dur to familly concerns).
-
-> We use a custom kernel which is available using our internal svn-repo.
-> The download now fails with the following:
+On 2021-02-18 21:04 -0600, Vincent Fazio spake thusly:
+> The fix may be as simple as:
 > 
-> tar: Time stamp is out of allowed range
-> tar: Exiting with failure status due to previous errors
+> diff --git a/support/download/svn b/support/download/svn
+> index 839dccaf62..386507ecb5 100755
+> --- a/support/download/svn
+> +++ b/support/download/svn
+> @@ -52,6 +52,9 @@ _svn export ${verbose} "${@}" "'${uri}@${rev}'" "'${basename}'"
+>  # last line (svn outputs everything on stdout)
+>  date="$( _svn info --show-item last-changed-date "'${uri}@${rev}'" |tail -n 1 )"
 > 
-> Reverting commit c043ecb20ce6ac316fe31da6d2db5b13a34dc414 fixes the problem.
+> +# Drop sub-second precision to play nice with tar's valid_timespec check
+> +date="$(date -d "${date}" -uIseconds)"
 
-As has been discovered by Vincent in the rest of this private thread,
-the root cause seems to be the svn client you are using, that reports
-sub-second timestamps, which are not supported by the PAX format we are
-now using.
+This looks nice, but do you know how long 'date' has supported
+sub-second precision in the input timestamp?
 
-I'll be waiting for the patch from Vincent (or anyone else) to fix the
-issue.
+I think a more robust solution would be to sed-out the sub-second part,
+and do that as a single command:
 
-Also, as Arnout suggested, it would be nice to have a runtime test, like
-we have for git;
-    support/testing/tests/download/test_git.py
+    date="$( _svn info --show-item last-changed-date "'${uri}@${rev}'" \
+             |tail -n 1 \
+             |sed -r -e 's/\.[[:digit:]]+//'
+           )" 
 
-I don't think we need somethign totally exhaustive, but even just a
-basic test would be enough (e.g. tests with svn:external are not a
-requirement).
+Also, while testing this, I noticed that not all svn version support the
+--show-item option. For example, the version I have on my autobuilder
+does not support it:
+
+    $ svn --version
+    svn, version 1.8.8 (r1568071)
+    [...]
+
+    $ svn info --show-item last-changed-date svn://localhost:3690/foo
+    svn: invalid option: --show-item
+
+Maybe we should drop it, and revert to sed-ing the required field out
+from the whole 'info output... Thoughts?
 
 Regards,
 Yann E. MORIN.
