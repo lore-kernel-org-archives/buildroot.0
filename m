@@ -1,123 +1,128 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 19 Feb 2021 22:32:12 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libselinux: fix build with musl
- 1.2.2
-In-Reply-To: <20210219193030.2394184-1-fontaine.fabrice@gmail.com>
-References: <20210219193030.2394184-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210219213212.GE2276@scaer>
+Date: Fri, 19 Feb 2021 22:33:45 +0100
+Subject: [Buildroot] [git commit] package/botan: fix build with -latomic
+Message-ID: <20210219211235.09A1A81628@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=d71de4143d7a8554929f2a1e9731f83a4cf85fd3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-02-19 20:30 +0100, Fabrice Fontaine spake thusly:
-> Fixes:
->  - http://autobuild.buildroot.org/results/34b010e76d65cf1d79ef53207cbc00a86674e17a
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Static build with toolchains needing -latomic (e.g sparc) is broken
+since version 2.17.0 and
+https://github.com/randombit/botan/commit/88af81b88976d9a1293280f68df597220ab42767
 
-Applied to master, thanks.
+Fixes:
+ - http://autobuild.buildroot.org/results/5c03ee53a34a3cdb409cffcda76e5cc2c723778b
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ ...and-group-l-flags-from-LDFLAGS-to-the-end.patch | 75 ++++++++++++++++++++++
+ package/botan/botan.mk                             |  5 +-
+ 2 files changed, 76 insertions(+), 4 deletions(-)
 
-> ---
->  ...d-to-something-which-never-conflicts.patch | 71 +++++++++++++++++++
->  1 file changed, 71 insertions(+)
->  create mode 100644 package/libselinux/0003-libselinux-rename-gettid-to-something-which-never-conflicts.patch
-> 
-> diff --git a/package/libselinux/0003-libselinux-rename-gettid-to-something-which-never-conflicts.patch b/package/libselinux/0003-libselinux-rename-gettid-to-something-which-never-conflicts.patch
-> new file mode 100644
-> index 0000000000..2a23e98f9b
-> --- /dev/null
-> +++ b/package/libselinux/0003-libselinux-rename-gettid-to-something-which-never-conflicts.patch
-> @@ -0,0 +1,71 @@
-> +From 398d2ceef92cb1baac18e6b34a1a8e1bf41296cd Mon Sep 17 00:00:00 2001
-> +From: Nicolas Iooss <nicolas.iooss@m4x.org>
-> +Date: Tue, 16 Feb 2021 22:13:28 +0100
-> +Subject: [PATCH] libselinux: rename gettid() to something which never
-> + conflicts with the libc
-> +
-> +Musl recently added a wrapper for gettid() syscall. There is no way to
-> +detect this new version in a reliable way, so rename our gettid()
-> +wrapper to a non-conflicting name.
-> +
-> +Introduce a new function which, when using a libc known to provide a
-> +wrapper for gettid(), calls it, and which, otherwise, performs the
-> +syscall directly.
-> +
-> +Anyway this function is only used on systems where /proc/thread-self
-> +does not exist, which are therefore running Linux<3.17.
-> +
-> +Fixes: https://github.com/SELinuxProject/selinux/issues/282
-> +Signed-off-by: Nicolas Iooss <nicolas.iooss@m4x.org>
-> +Acked-by: Petr Lautrbach <plautrba@redhat.com>
-> +[Retrieved from:
-> +https://github.com/SELinuxProject/selinux/commit/398d2ceef92cb1baac18e6b34a1a8e1bf41296cd]
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + src/procattr.c | 18 ++++++++++--------
-> + 1 file changed, 10 insertions(+), 8 deletions(-)
-> +
-> +diff --git a/src/procattr.c b/src/procattr.c
-> +index 1aa67ac53..840570525 100644
-> +--- a/src/procattr.c
-> ++++ b/src/procattr.c
-> +@@ -25,21 +25,23 @@ static __thread char destructor_initialized;
-> + /* Bionic and glibc >= 2.30 declare gettid() system call wrapper in unistd.h and
-> +  * has a definition for it */
-> + #ifdef __BIONIC__
-> +-  #define OVERRIDE_GETTID 0
-> ++  #define HAVE_GETTID 1
-> + #elif !defined(__GLIBC_PREREQ)
-> +-  #define OVERRIDE_GETTID 1
-> ++  #define HAVE_GETTID 0
-> + #elif !__GLIBC_PREREQ(2,30)
-> +-  #define OVERRIDE_GETTID 1
-> ++  #define HAVE_GETTID 0
-> + #else
-> +-  #define OVERRIDE_GETTID 0
-> ++  #define HAVE_GETTID 1
-> + #endif
-> + 
-> +-#if OVERRIDE_GETTID
-> +-static pid_t gettid(void)
-> ++static pid_t selinux_gettid(void)
-> + {
-> ++#if HAVE_GETTID
-> ++	return gettid();
-> ++#else
-> + 	return syscall(__NR_gettid);
-> +-}
-> + #endif
-> ++}
-> + 
-> + static void procattr_thread_destructor(void __attribute__((unused)) *unused)
-> + {
-> +@@ -94,7 +96,7 @@ static int openattr(pid_t pid, const char *attr, int flags)
-> + 		if (fd >= 0 || errno != ENOENT)
-> + 			goto out;
-> + 		free(path);
-> +-		tid = gettid();
-> ++		tid = selinux_gettid();
-> + 		rc = asprintf(&path, "/proc/self/task/%d/attr/%s", tid, attr);
-> + 	} else {
-> + 		errno = EINVAL;
-> -- 
-> 2.30.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/botan/0001-Add--extra-libs-option-and-group-l-flags-from-LDFLAGS-to-the-end.patch b/package/botan/0001-Add--extra-libs-option-and-group-l-flags-from-LDFLAGS-to-the-end.patch
+new file mode 100644
+index 0000000000..8aa5c68652
+--- /dev/null
++++ b/package/botan/0001-Add--extra-libs-option-and-group-l-flags-from-LDFLAGS-to-the-end.patch
+@@ -0,0 +1,75 @@
++From af63fe89228172e5a395f7e6491fae3bfa9da4b1 Mon Sep 17 00:00:00 2001
++From: Jack Lloyd <jack@randombit.net>
++Date: Mon, 15 Feb 2021 15:01:38 -0500
++Subject: [PATCH] Add --extra-libs option and group -l flags from LDFLAGS to
++ the end
++
++Ref #2622
++
++[Retrieved from:
++https://github.com/randombit/botan/commit/af63fe89228172e5a395f7e6491fae3bfa9da4b1]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ configure.py               | 14 ++++++++++++++
++ src/build-data/makefile.in |  2 +-
++ 2 files changed, 15 insertions(+), 1 deletion(-)
++
++diff --git a/configure.py b/configure.py
++index 73fc0271e9..865a6c8e62 100755
++--- a/configure.py
+++++ b/configure.py
++@@ -333,6 +333,9 @@ def process_command_line(args): # pylint: disable=too-many-locals,too-many-state
++     target_group.add_option('--ldflags', metavar='FLAGS',
++                             help='set linker flags', default=None)
++ 
+++    target_group.add_option('--extra-libs', metavar='LIBS',
+++                            help='specify extra libraries to link against', default='')
+++
++     target_group.add_option('--ar-command', dest='ar_command', metavar='AR', default=None,
++                             help='set path to static archive creator')
++ 
++@@ -2020,6 +2023,12 @@ def choose_cxx_exe():
++         else:
++             return '%s %s' % (options.compiler_cache, cxx)
++ 
+++    def extra_libs(libs, cc):
+++        if libs is None:
+++            return ''
+++
+++        return ' '.join([(cc.add_lib_option % lib) for lib in libs.split(',')])
+++
++     variables = {
++         'version_major':  Version.major(),
++         'version_minor':  Version.minor(),
++@@ -2149,6 +2158,7 @@ def choose_cxx_exe():
++         'cc_sysroot': sysroot_option(),
++         'cc_compile_flags': options.cxxflags or cc.cc_compile_flags(options),
++         'ldflags': options.ldflags or '',
+++        'extra_libs': extra_libs(options.extra_libs, cc),
++         'cc_warning_flags': cc.cc_warning_flags(options),
++         'output_to_exe': cc.output_to_exe,
++         'cc_macro': cc.macro_name,
++@@ -3029,6 +3039,10 @@ def canonicalize_build_targets(options):
++     if options.build_fuzzers == 'libfuzzer' and options.fuzzer_lib is None:
++         options.fuzzer_lib = 'Fuzzer'
++ 
+++    if options.ldflags is not None:
+++        libs = [m.group(1) for m in re.finditer(r'-l([a-z0-9]+)', options.ldflags)]
+++        options.extra_libs += ','.join(libs)
+++
++ # Checks user options for consistency
++ # This method DOES NOT change options on behalf of the user but explains
++ # why the given configuration does not work.
++diff --git a/src/build-data/makefile.in b/src/build-data/makefile.in
++index 4692d00f71..82f6576650 100644
++--- a/src/build-data/makefile.in
+++++ b/src/build-data/makefile.in
++@@ -20,7 +20,7 @@ LDFLAGS        = %{ldflags}
++ EXE_LINK_CMD   = %{exe_link_cmd}
++ 
++ LIB_LINKS_TO   = %{external_link_cmd} %{link_to}
++-EXE_LINKS_TO   = %{link_to_botan} $(LIB_LINKS_TO)
+++EXE_LINKS_TO   = %{link_to_botan} $(LIB_LINKS_TO) %{extra_libs}
++ 
++ BUILD_FLAGS    = $(ABI_FLAGS) $(LANG_FLAGS) $(CXXFLAGS) $(WARN_FLAGS)
++ 
+diff --git a/package/botan/botan.mk b/package/botan/botan.mk
+index f809aa2e0d..c3af4a45d8 100644
+--- a/package/botan/botan.mk
++++ b/package/botan/botan.mk
+@@ -18,14 +18,11 @@ BOTAN_CONF_OPTS = \
+ 	--os=linux \
+ 	--cc=gcc \
+ 	--cc-bin="$(TARGET_CXX)" \
+-	--ldflags="$(BOTAN_LDFLAGS)" \
+ 	--prefix=/usr \
+ 	--without-documentation
+ 
+-BOTAN_LDFLAGS = $(TARGET_LDFLAGS)
+-
+ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+-BOTAN_LDFLAGS += -latomic
++BOTAN_CONF_OPTS += --extra-libs=atomic
+ endif
+ 
+ ifeq ($(BR2_SHARED_LIBS),y)
