@@ -1,151 +1,63 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 19 Feb 2021 22:35:48 +0100
-Subject: [Buildroot] [PATCH 1/1] package/botan: fix build with -latomic
-In-Reply-To: <20210219193824.2573501-1-fontaine.fabrice@gmail.com>
-References: <20210219193824.2573501-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210219213548.GF2276@scaer>
+Date: Fri, 19 Feb 2021 22:36:22 +0100
+Subject: [Buildroot] [git commit] package/python-django: security bump to
+ version 3.0.13
+Message-ID: <20210219211620.D5D8E81620@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=82abd78a01fc832f758fc2b2d7326879500fb786
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-02-19 20:38 +0100, Fabrice Fontaine spake thusly:
-> Static build with toolchains needing -latomic (e.g sparc) is broken
-> since version 2.17.0 and
-> https://github.com/randombit/botan/commit/88af81b88976d9a1293280f68df597220ab42767
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/5c03ee53a34a3cdb409cffcda76e5cc2c723778b
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes the following security issue:
 
-Applied to master, thanks.
+- CVE-2021-23336: Web cache poisoning via django.utils.http.limited_parse_qsl()
 
-Regards,
-Yann E. MORIN.
+  Django contains a copy of urllib.parse.parse_qsl() which was added to
+  backport some security fixes.  A further security fix has been issued
+  recently such that parse_qsl() no longer allows using ; as a query
+  parameter separator by default.  Django now includes this fix.  See
+  bpo-42967 for further details.
 
-> ---
->  ...roup-l-flags-from-LDFLAGS-to-the-end.patch | 75 +++++++++++++++++++
->  package/botan/botan.mk                        |  5 +-
->  2 files changed, 76 insertions(+), 4 deletions(-)
->  create mode 100644 package/botan/0001-Add--extra-libs-option-and-group-l-flags-from-LDFLAGS-to-the-end.patch
-> 
-> diff --git a/package/botan/0001-Add--extra-libs-option-and-group-l-flags-from-LDFLAGS-to-the-end.patch b/package/botan/0001-Add--extra-libs-option-and-group-l-flags-from-LDFLAGS-to-the-end.patch
-> new file mode 100644
-> index 0000000000..8aa5c68652
-> --- /dev/null
-> +++ b/package/botan/0001-Add--extra-libs-option-and-group-l-flags-from-LDFLAGS-to-the-end.patch
-> @@ -0,0 +1,75 @@
-> +From af63fe89228172e5a395f7e6491fae3bfa9da4b1 Mon Sep 17 00:00:00 2001
-> +From: Jack Lloyd <jack@randombit.net>
-> +Date: Mon, 15 Feb 2021 15:01:38 -0500
-> +Subject: [PATCH] Add --extra-libs option and group -l flags from LDFLAGS to
-> + the end
-> +
-> +Ref #2622
-> +
-> +[Retrieved from:
-> +https://github.com/randombit/botan/commit/af63fe89228172e5a395f7e6491fae3bfa9da4b1]
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + configure.py               | 14 ++++++++++++++
-> + src/build-data/makefile.in |  2 +-
-> + 2 files changed, 15 insertions(+), 1 deletion(-)
-> +
-> +diff --git a/configure.py b/configure.py
-> +index 73fc0271e9..865a6c8e62 100755
-> +--- a/configure.py
-> ++++ b/configure.py
-> +@@ -333,6 +333,9 @@ def process_command_line(args): # pylint: disable=too-many-locals,too-many-state
-> +     target_group.add_option('--ldflags', metavar='FLAGS',
-> +                             help='set linker flags', default=None)
-> + 
-> ++    target_group.add_option('--extra-libs', metavar='LIBS',
-> ++                            help='specify extra libraries to link against', default='')
-> ++
-> +     target_group.add_option('--ar-command', dest='ar_command', metavar='AR', default=None,
-> +                             help='set path to static archive creator')
-> + 
-> +@@ -2020,6 +2023,12 @@ def choose_cxx_exe():
-> +         else:
-> +             return '%s %s' % (options.compiler_cache, cxx)
-> + 
-> ++    def extra_libs(libs, cc):
-> ++        if libs is None:
-> ++            return ''
-> ++
-> ++        return ' '.join([(cc.add_lib_option % lib) for lib in libs.split(',')])
-> ++
-> +     variables = {
-> +         'version_major':  Version.major(),
-> +         'version_minor':  Version.minor(),
-> +@@ -2149,6 +2158,7 @@ def choose_cxx_exe():
-> +         'cc_sysroot': sysroot_option(),
-> +         'cc_compile_flags': options.cxxflags or cc.cc_compile_flags(options),
-> +         'ldflags': options.ldflags or '',
-> ++        'extra_libs': extra_libs(options.extra_libs, cc),
-> +         'cc_warning_flags': cc.cc_warning_flags(options),
-> +         'output_to_exe': cc.output_to_exe,
-> +         'cc_macro': cc.macro_name,
-> +@@ -3029,6 +3039,10 @@ def canonicalize_build_targets(options):
-> +     if options.build_fuzzers == 'libfuzzer' and options.fuzzer_lib is None:
-> +         options.fuzzer_lib = 'Fuzzer'
-> + 
-> ++    if options.ldflags is not None:
-> ++        libs = [m.group(1) for m in re.finditer(r'-l([a-z0-9]+)', options.ldflags)]
-> ++        options.extra_libs += ','.join(libs)
-> ++
-> + # Checks user options for consistency
-> + # This method DOES NOT change options on behalf of the user but explains
-> + # why the given configuration does not work.
-> +diff --git a/src/build-data/makefile.in b/src/build-data/makefile.in
-> +index 4692d00f71..82f6576650 100644
-> +--- a/src/build-data/makefile.in
-> ++++ b/src/build-data/makefile.in
-> +@@ -20,7 +20,7 @@ LDFLAGS        = %{ldflags}
-> + EXE_LINK_CMD   = %{exe_link_cmd}
-> + 
-> + LIB_LINKS_TO   = %{external_link_cmd} %{link_to}
-> +-EXE_LINKS_TO   = %{link_to_botan} $(LIB_LINKS_TO)
-> ++EXE_LINKS_TO   = %{link_to_botan} $(LIB_LINKS_TO) %{extra_libs}
-> + 
-> + BUILD_FLAGS    = $(ABI_FLAGS) $(LANG_FLAGS) $(CXXFLAGS) $(WARN_FLAGS)
-> + 
-> diff --git a/package/botan/botan.mk b/package/botan/botan.mk
-> index f809aa2e0d..c3af4a45d8 100644
-> --- a/package/botan/botan.mk
-> +++ b/package/botan/botan.mk
-> @@ -18,14 +18,11 @@ BOTAN_CONF_OPTS = \
->  	--os=linux \
->  	--cc=gcc \
->  	--cc-bin="$(TARGET_CXX)" \
-> -	--ldflags="$(BOTAN_LDFLAGS)" \
->  	--prefix=/usr \
->  	--without-documentation
->  
-> -BOTAN_LDFLAGS = $(TARGET_LDFLAGS)
-> -
->  ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-> -BOTAN_LDFLAGS += -latomic
-> +BOTAN_CONF_OPTS += --extra-libs=atomic
->  endif
->  
->  ifeq ($(BR2_SHARED_LIBS),y)
-> -- 
-> 2.30.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+For more details, see the advisory:
+https://www.djangoproject.com/weblog/2021/feb/19/security-releases/
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/python-django/python-django.hash | 4 ++--
+ package/python-django/python-django.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
+index 53f718ea0a..f40cfa8f3c 100644
+--- a/package/python-django/python-django.hash
++++ b/package/python-django/python-django.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/django/json
+-md5  55291777e25bd9e0a286c6f64751246a  Django-3.0.12.tar.gz
+-sha256  fd63e2c7acca5f2e7ad93dfb53d566e040d871404fc0f684a3e720006d221f9a  Django-3.0.12.tar.gz
++md5  7020810fb65b17e82d22001883b63a12  Django-3.0.13.tar.gz
++sha256  6f13c3e8109236129c49d65a42fbf30c928e66b05ca6862246061b9343ecbaf2  Django-3.0.13.tar.gz
+ # Locally computed sha256 checksums
+ sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
+index a88aa6274a..593b0c6043 100644
+--- a/package/python-django/python-django.mk
++++ b/package/python-django/python-django.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-PYTHON_DJANGO_VERSION = 3.0.12
++PYTHON_DJANGO_VERSION = 3.0.13
+ PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
+ # The official Django site has an unpractical URL
+-PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/32/e3/e7e9a9378321fdfc3eb55de151911dce968fa245d1f16d8c480c63ea4ed1
++PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/3b/fe/11ec9b4cbae447e7b90d551be035d55c1293973592b491540334452f1f1f
+ PYTHON_DJANGO_LICENSE = BSD-3-Clause
+ PYTHON_DJANGO_LICENSE_FILES = LICENSE
+ PYTHON_DJANGO_CPE_ID_VENDOR = djangoproject
