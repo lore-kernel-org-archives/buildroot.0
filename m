@@ -1,50 +1,33 @@
-From: Titouan Christophe <titouanchristophe@gmail.com>
-Date: Fri, 19 Feb 2021 11:03:44 +0100
-Subject: [Buildroot] [PATCH 1/1] package/micropython: bump to v1.14
-Message-ID: <20210219100344.130136-1-titouanchristophe@gmail.com>
+From: Christian Stewart <christian@paral.in>
+Date: Fri, 19 Feb 2021 03:52:12 -0800
+Subject: [Buildroot] [PATCH 1/1] package/go: bump version to 1.16
+In-Reply-To: <87o8ghy83l.fsf@dell.be.48ers.dk>
+References: <20210217222154.2144796-1-christian@paral.in>
+ <87o8ghy83l.fsf@dell.be.48ers.dk>
+Message-ID: <CA+h8R2qMgxTZUnmqb1T3XeifcXzjm4b+U=vQ49GKhQHmw40s0g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Micropython 1.4 brings many changes, see the release notes:
-https://github.com/micropython/micropython/releases/tag/v1.14
+On Thu, Feb 18, 2021 at 2:37 AM Peter Korsgaard <peter@korsgaard.com> wrote:
+>
+> >>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
+>
+>  > Release notes: https://golang.org/doc/go1.16
+>
+> The release notes mention changes for i386 machines without SSE support,
+> but you don't seem to be handling that?
 
-Amongst these changes, Micropython can now produce reproducible
-builds, using the standard SOURCE_DATE_EPOCH.
+I guess you're talking about this section:
 
-The LICENSE hash changed because the copyright year range was extended
-to 2021.
+ As announced in the Go 1.15 release notes, Go 1.16 drops support for
+x87 mode compilation (GO386=387). Support for non-SSE2 processors is
+now available using soft float mode (GO386=softfloat). Users running
+on non-SSE2 processors should replace GO386=387 with GO386=softfloat.
 
-Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
----
- package/micropython/micropython.hash | 4 ++--
- package/micropython/micropython.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+We don't set GO386 so it doesn't apply.
 
-diff --git a/package/micropython/micropython.hash b/package/micropython/micropython.hash
-index 5dfbb74522..fe47ee09c4 100644
---- a/package/micropython/micropython.hash
-+++ b/package/micropython/micropython.hash
-@@ -1,3 +1,3 @@
- #locally computed
--sha256  31466dacebeb3af60dc80a071a07c3e15b657219a826e0b6ac741f9f22472f23  micropython-1.13.tar.gz
--sha256  4b8a8884a60cd72749f9ef40328b85b40d13c22594c01352e0a55392141e0f89  LICENSE
-+sha256  542eb120df8d9eb6f200bcd856294e143813adea9dda0d7189405c218d4b16f7  micropython-1.14.tar.gz
-+sha256  9c6089e26c8638a0645bcb0db2c85051f82de8022dcd07fb22baa0c5f9362085  LICENSE
-diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
-index a126b3eeae..80d086f3c8 100644
---- a/package/micropython/micropython.mk
-+++ b/package/micropython/micropython.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MICROPYTHON_VERSION = 1.13
-+MICROPYTHON_VERSION = 1.14
- MICROPYTHON_SITE = $(call github,micropython,micropython,v$(MICROPYTHON_VERSION))
- MICROPYTHON_LICENSE = MIT
- MICROPYTHON_LICENSE_FILES = LICENSE
--- 
-2.25.3
+Best,
+Christian
