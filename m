@@ -1,65 +1,79 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 20 Feb 2021 09:59:11 +0100
-Subject: [Buildroot] [PATCH/next 52/54] package/kodi-visualisation-waveform:
- bump version to 4.4.0-Matrix
+Date: Sat, 20 Feb 2021 09:59:12 +0100
+Subject: [Buildroot] [PATCH/next 53/54] package/kodi-visualisation-matrix:
+ new package
 In-Reply-To: <20210220085913.888324-1-bernd.kuhls@t-online.de>
 References: <20210220085913.888324-1-bernd.kuhls@t-online.de>
-Message-ID: <20210220085913.888324-53-bernd.kuhls@t-online.de>
+Message-ID: <20210220085913.888324-54-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add dependency to glm due to upstream commit:
-https://github.com/xbmc/visualization.waveform/commit/18e32dd2416fc58e91c977d3c3a4c27b6ca59c3b
-
-Switch license file to LICENSE.md.
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-visualisation-waveform/Config.in               | 1 +
- .../kodi-visualisation-waveform.hash                        | 2 +-
- .../kodi-visualisation-waveform.mk                          | 6 +++---
- 3 files changed, 5 insertions(+), 4 deletions(-)
+ package/kodi-visualisation-matrix/Config.in         |  7 +++++++
+ .../kodi-visualisation-matrix.hash                  |  3 +++
+ .../kodi-visualisation-matrix.mk                    | 13 +++++++++++++
+ package/kodi/Config.in                              |  1 +
+ 4 files changed, 24 insertions(+)
+ create mode 100644 package/kodi-visualisation-matrix/Config.in
+ create mode 100644 package/kodi-visualisation-matrix/kodi-visualisation-matrix.hash
+ create mode 100644 package/kodi-visualisation-matrix/kodi-visualisation-matrix.mk
 
-diff --git a/package/kodi-visualisation-waveform/Config.in b/package/kodi-visualisation-waveform/Config.in
-index 56f25096f5..24a5f7f365 100644
---- a/package/kodi-visualisation-waveform/Config.in
-+++ b/package/kodi-visualisation-waveform/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_KODI_VISUALISATION_WAVEFORM
- 	bool "kodi-visualisation-waveform"
+diff --git a/package/kodi-visualisation-matrix/Config.in b/package/kodi-visualisation-matrix/Config.in
+new file mode 100644
+index 0000000000..db01f15231
+--- /dev/null
++++ b/package/kodi-visualisation-matrix/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_KODI_VISUALISATION_MATRIX
++	bool "kodi-visualisation-matrix"
 +	select BR2_PACKAGE_GLM
- 	help
- 	  Waveform visualiser for Kodi
- 
-diff --git a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash
-index 578b2ea8a4..44e5ea5169 100644
---- a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash
-+++ b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  d734cbe9d7e661e8d4e61ff2bada423fd8dba33c5148b5044f4b1a1997c51376  kodi-visualisation-waveform-3.1.2-Leia.tar.gz
-+sha256  d9acf0a3758bfc4ee6fa492bcdcf8764519bbf0f1b6a3b10807b65a0d031e55e  kodi-visualisation-waveform-4.4.0-Matrix.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk
-index 64a4db4fce..6c0ec3ac70 100644
---- a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk
-+++ b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--KODI_VISUALISATION_WAVEFORM_VERSION = 3.1.2-Leia
-+KODI_VISUALISATION_WAVEFORM_VERSION = 4.4.0-Matrix
- KODI_VISUALISATION_WAVEFORM_SITE = $(call github,xbmc,visualization.waveform,$(KODI_VISUALISATION_WAVEFORM_VERSION))
- KODI_VISUALISATION_WAVEFORM_LICENSE = GPL-2.0+
--KODI_VISUALISATION_WAVEFORM_LICENSE_FILES = COPYING
--KODI_VISUALISATION_WAVEFORM_DEPENDENCIES = kodi
-+KODI_VISUALISATION_WAVEFORM_LICENSE_FILES = LICENSE.md
-+KODI_VISUALISATION_WAVEFORM_DEPENDENCIES = glm kodi
- 
- $(eval $(cmake-package))
++	help
++	  Matrix themed visualization addon for Kodi
++
++	  https://github.com/xbmc/visualization.matrix
+diff --git a/package/kodi-visualisation-matrix/kodi-visualisation-matrix.hash b/package/kodi-visualisation-matrix/kodi-visualisation-matrix.hash
+new file mode 100644
+index 0000000000..38b9311d6e
+--- /dev/null
++++ b/package/kodi-visualisation-matrix/kodi-visualisation-matrix.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  fc5c4790cbf957dbf8d504ae7c43eaeca122fde6423f1135029ff053135f8fd0  kodi-visualisation-matrix-1.0.0-Matrix.tar.gz
++sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-visualisation-matrix/kodi-visualisation-matrix.mk b/package/kodi-visualisation-matrix/kodi-visualisation-matrix.mk
+new file mode 100644
+index 0000000000..153c1c15b1
+--- /dev/null
++++ b/package/kodi-visualisation-matrix/kodi-visualisation-matrix.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# kodi-visualisation-matrix
++#
++################################################################################
++
++KODI_VISUALISATION_MATRIX_VERSION = 1.0.0-Matrix
++KODI_VISUALISATION_MATRIX_SITE = $(call github,xbmc,visualization.matrix,$(KODI_VISUALISATION_MATRIX_VERSION))
++KODI_VISUALISATION_MATRIX_LICENSE = GPL-2.0+
++KODI_VISUALISATION_MATRIX_LICENSE_FILES = LICENSE.md
++KODI_VISUALISATION_MATRIX_DEPENDENCIES = glm kodi
++
++$(eval $(cmake-package))
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index a104ba53c3..01d068da44 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -355,6 +355,7 @@ endmenu
+ menu "Visualisations"
+ 	source "package/kodi-visualisation-fishbmc/Config.in"
+ 	source "package/kodi-visualisation-goom/Config.in"
++	source "package/kodi-visualisation-matrix/Config.in"
+ 	source "package/kodi-visualisation-shadertoy/Config.in"
+ 	source "package/kodi-visualisation-spectrum/Config.in"
+ 	source "package/kodi-visualisation-starburst/Config.in"
 -- 
 2.29.2
