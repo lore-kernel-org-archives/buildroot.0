@@ -1,50 +1,34 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 20 Feb 2021 17:47:34 +0100
-Subject: [Buildroot] [PATCH v1 2/2] package/irqbalance: fix systemd
- startup script (add RuntimeDirectory)
-In-Reply-To: <20210220163349.25244-2-ps.report@gmx.net>
-References: <20210220163349.25244-1-ps.report@gmx.net>
- <20210220163349.25244-2-ps.report@gmx.net>
-Message-ID: <20210220174734.0c93291f@gmx.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 20 Feb 2021 17:48:10 +0100
+Subject: [Buildroot] [git commit] DEVELOPERS: remove Scott Fan
+Message-ID: <20210220162629.B622386098@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 20 Feb 2021 17:33:49 +0100, Peter Seiderer <ps.report@gmx.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=d1054e851cb17a73cd2a94292a8acddbf530751a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> - add RuntimeDirectory=irqbalance to create /run/irqbalanace needed to
->   create socket /run/irqbalance/irqbalance<pid>.sock
->
-> Fixes:
->
->   - Bug 13541 [1]
->
->   /usr/sbin/irqbalance[158]: Daemon couldn't be bound to the file-based socket.
->
-> [1] https://bugs.busybox.net/show_bug.cgi?id=13541
->
+Signed-off-by: Scott Fan <fancp2007@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ DEVELOPERS | 4 ----
+ 1 file changed, 4 deletions(-)
 
-Reported-by: Alfredo Pons Menargues <alfredo.pons@gmail.com>
-
-Regards,
-Peter
-
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  package/irqbalance/irqbalance.service | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/package/irqbalance/irqbalance.service b/package/irqbalance/irqbalance.service
-> index 9ba3be43bb..39574877fb 100644
-> --- a/package/irqbalance/irqbalance.service
-> +++ b/package/irqbalance/irqbalance.service
-> @@ -3,6 +3,7 @@ Description=irqbalance daemon
->  After=syslog.target
->
->  [Service]
-> +RuntimeDirectory=irqbalance
->  ExecStart=/usr/sbin/irqbalance --foreground
->
->  [Install]
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 12e1f83cf7..b019fe04d5 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2343,10 +2343,6 @@ F:	package/ripgrep/
+ N:	Santosh Multhalli <santosh.multhalli@rockwellcollins.com>
+ F:	package/valijson/
+ 
+-N:	Scott Fan <fancp2007@gmail.com>
+-F:	package/libssh/
+-F:	package/x11r7/xdriver_xf86-video-fbturbo/
+-
+ N:	S??bastien Szymanski <sebastien.szymanski@armadeus.com>
+ F:	package/mmc-utils/
+ F:	package/python-flask-jsonrpc/
