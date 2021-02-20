@@ -1,11 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 20 Feb 2021 23:13:32 +0100
-Subject: [Buildroot] [PATCH 2/3] package/open62541: fix library version
- definition
-In-Reply-To: <20210220162715.283519-2-fancp2007@gmail.com>
+Date: Sat, 20 Feb 2021 23:20:54 +0100
+Subject: [Buildroot] [PATCH 1/3] package/open62541: remove unneeded files
+In-Reply-To: <20210220162715.283519-1-fancp2007@gmail.com>
 References: <20210220162715.283519-1-fancp2007@gmail.com>
- <20210220162715.283519-2-fancp2007@gmail.com>
-Message-ID: <20210220221332.GT2276@scaer>
+Message-ID: <20210220222054.GU2276@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,40 +13,46 @@ To: buildroot@busybox.net
 Scott, All,
 
 On 2021-02-21 00:27 +0800, Scott Fan spake thusly:
-> Manually specified version must start with letter 'v',
-> otherwise, the generated version macro will be zero
-> in the <build_dir>/src_generated/open62541/config.h file:
->   #define UA_OPEN62541_VER_MAJOR 0
->   #define UA_OPEN62541_VER_MINOR 0
->   #define UA_OPEN62541_VER_PATCH 0
-> 
-> Reference from the following link:
-> https://open62541.org/doc/current/building.html
-> 
 > Signed-off-by: Scott Fan <fancp2007@gmail.com>
+> ---
+>  package/open62541/open62541.mk | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/package/open62541/open62541.mk b/package/open62541/open62541.mk
+> index 5a9f27562a..65742e83a1 100644
+> --- a/package/open62541/open62541.mk
+> +++ b/package/open62541/open62541.mk
+> @@ -54,4 +54,11 @@ else
+>  OPEN62541_CONF_OPTS += -DUA_ENABLE_PUBSUB_INFORMATIONMODEL=OFF
+>  endif
+>  
+> +# Remove unneeded files
+> +define OPEN62541_REMOVE_UNNEEDED_FILES
+> +	$(RM) -r $(TARGET_DIR)/usr/share/open62541
 
-Applied to master, thanks.
+Are you sure that we want to remove the whole dorectory? There are some
+tools in there that look like they might be useful.
+
+But hte whole directory is indeed 52MiB, with 51 for the 'ua-nodeset'
+alone (whatever that is), so maybe we do indeed need to do some cleanup.
+
+So, could you please respin this patch:
+
+  - if really nothing is needed in that directory, then remove
+    everything liek you did, but extend the commit log to explain why
+    nothing in there is required,
+
+  - if there are stuff that can be useful at runtime, then rework the
+    hook to be a bit more selective in what it removes.
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  package/open62541/open62541.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/open62541/open62541.mk b/package/open62541/open62541.mk
-> index 65742e83a1..3f75196817 100644
-> --- a/package/open62541/open62541.mk
-> +++ b/package/open62541/open62541.mk
-> @@ -19,7 +19,7 @@ OPEN62541_LICENSE_FILES = LICENSE
->  OPEN62541_CONF_OPTS = \
->  	-DCMAKE_BUILD_TYPE=Release \
->  	-DGIT_EXECUTABLE=NO \
-> -	-DOPEN62541_VERSION=$(OPEN62541_VERSION) \
-> +	-DOPEN62541_VERSION=v$(OPEN62541_VERSION) \
->  	-DUA_ENABLE_HARDENING=OFF
->  
->  ifeq ($(BR2_PACKAGE_OPEN62541_UA_NAMESPACE_ZERO_MINIMAL),y)
+> +endef
+> +
+> +OPEN62541_POST_INSTALL_TARGET_HOOKS += OPEN62541_REMOVE_UNNEEDED_FILES
+> +
+>  $(eval $(cmake-package))
 > -- 
 > 2.25.1
 > 
