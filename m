@@ -1,75 +1,75 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 20 Feb 2021 09:58:57 +0100
-Subject: [Buildroot] [PATCH/next 38/54]
- package/kodi-screensaver-matrixtrails: bump version to 2.6.0-Matrix
+Date: Sat, 20 Feb 2021 09:58:48 +0100
+Subject: [Buildroot] [PATCH/next 29/54] package/kodi-pvr-vdr-vnsi: bump
+ version to 8.2.1-Matrix
 In-Reply-To: <20210220085913.888324-1-bernd.kuhls@t-online.de>
 References: <20210220085913.888324-1-bernd.kuhls@t-online.de>
-Message-ID: <20210220085913.888324-39-bernd.kuhls@t-online.de>
+Message-ID: <20210220085913.888324-30-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove dependency to libsoil:
-https://github.com/xbmc/screensaver.matrixtrails/commit/92a0d44e9151cfce3be74e81a3e39f0688d69b7a
+Switch dependency to kodi after upstream removed the dependency to
+kodi-platform:
+https://github.com/kodi-pvr/pvr.vdr.vnsi/commit/d8af242ba923590330c65fded9034c1ac9b6157c
+https://github.com/kodi-pvr/pvr.vdr.vnsi/commit/49cc728f18bbe8df1d1779eb5e42e060fa9f78ed
 
-Remove dependency to opengl, opengles support was fixed upstream:
-https://github.com/xbmc/screensaver.matrixtrails/commit/ea6408ee391c75ae7ee4cb9f948df2ff8c0c87c5
+Added dependency to gcc >= 7 due to c++17 code added by
+https://github.com/kodi-pvr/pvr.vdr.vnsi/commit/8a3f3c8fe378a4aae4ac381db45d0ce980f44761
+
+Switch license file to LICENSE.md.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-screensaver-matrixtrails/Config.in        |  5 -----
- .../kodi-screensaver-matrixtrails.hash                 |  4 ++--
- .../kodi-screensaver-matrixtrails.mk                   | 10 +++++++---
- 3 files changed, 9 insertions(+), 10 deletions(-)
+ package/kodi-pvr-vdr-vnsi/Config.in              | 5 ++++-
+ package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash | 4 ++--
+ package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk   | 6 +++---
+ 3 files changed, 9 insertions(+), 6 deletions(-)
 
-diff --git a/package/kodi-screensaver-matrixtrails/Config.in b/package/kodi-screensaver-matrixtrails/Config.in
-index 270a51c9f4..9f031ba10d 100644
---- a/package/kodi-screensaver-matrixtrails/Config.in
-+++ b/package/kodi-screensaver-matrixtrails/Config.in
-@@ -1,11 +1,6 @@
- config BR2_PACKAGE_KODI_SCREENSAVER_MATRIXTRAILS
- 	bool "kodi-screensaver-matrixtrails"
--	depends on BR2_PACKAGE_HAS_LIBGL # libsoil
--	select BR2_PACKAGE_LIBSOIL
+diff --git a/package/kodi-pvr-vdr-vnsi/Config.in b/package/kodi-pvr-vdr-vnsi/Config.in
+index 768dec88fd..6b57900b29 100644
+--- a/package/kodi-pvr-vdr-vnsi/Config.in
++++ b/package/kodi-pvr-vdr-vnsi/Config.in
+@@ -1,7 +1,10 @@
+ config BR2_PACKAGE_KODI_PVR_VDR_VNSI
+ 	bool "kodi-pvr-vdr-vnsi"
+-	select BR2_PACKAGE_KODI_PLATFORM
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17
  	help
- 	  Matrix trails screensaver for Kodi
+ 	  Kodi PVR addon VNSI
  
- 	  https://github.com/xbmc/screensaver.matrixtrails
--
--comment "kodi-screensaver-matrixtrails needs OpenGL"
--	depends on !BR2_PACKAGE_HAS_LIBGL
-diff --git a/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.hash b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.hash
-index 26b95cbc77..1f35f11b7d 100644
---- a/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.hash
-+++ b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.hash
+ 	  https://github.com/kodi-pvr/pvr.vdr.vnsi
++
++comment "kodi-pvr-vdr-vnsi needs a toolchain w/ gcc >= 7"
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_7
+diff --git a/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash b/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash
+index f7043b58a0..8b6548de9a 100644
+--- a/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash
++++ b/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  5a2f5bca0c197eea87f06376941c6d0ddbc81cf144d8c3854ac148fdec3400ec  kodi-screensaver-matrixtrails-2.2.3-Leia.tar.gz
--sha256  385a17599b44aaea10537374c1991c21a5e06153878917b12f96fc1cf8bbc118  debian/copyright
-+sha256  49986b82e7319e25ef2b3ec84b3892bbf1cb0b5253bd541da730c5cf5dd1940b  kodi-screensaver-matrixtrails-2.6.0-Matrix.tar.gz
+-sha256  f0ea8907e77ca014429bbe73d07c3410cc7be25a6db0df157863b87d2684affb  kodi-pvr-vdr-vnsi-3.6.4-Leia.tar.gz
+-sha256  28266596fdf4162d4f15985e0108cd9ddb42531ddad2297011649c1af49f7fe2  debian/copyright
++sha256  aebb00f433b93256760960149e41647d65c84fdf6a78d7467df304f26c8bc4b2  kodi-pvr-vdr-vnsi-8.2.2-Matrix.tar.gz
 +sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk
-index 10d3d45e08..a89ea72d5d 100644
---- a/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk
-+++ b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk
-@@ -4,10 +4,14 @@
+diff --git a/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk b/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk
+index f467fa98f5..4eff02f264 100644
+--- a/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk
++++ b/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--KODI_SCREENSAVER_MATRIXTRAILS_VERSION = 2.2.3-Leia
-+KODI_SCREENSAVER_MATRIXTRAILS_VERSION = 2.6.0-Matrix
- KODI_SCREENSAVER_MATRIXTRAILS_SITE = $(call github,xbmc,screensaver.matrixtrails,$(KODI_SCREENSAVER_MATRIXTRAILS_VERSION))
- KODI_SCREENSAVER_MATRIXTRAILS_LICENSE = GPL-2.0+
--KODI_SCREENSAVER_MATRIXTRAILS_LICENSE_FILES = debian/copyright
--KODI_SCREENSAVER_MATRIXTRAILS_DEPENDENCIES = kodi libsoil
-+KODI_SCREENSAVER_MATRIXTRAILS_LICENSE_FILES = LICENSE.md
-+KODI_SCREENSAVER_MATRIXTRAILS_DEPENDENCIES = kodi
-+
-+KODI_SCREENSAVER_MATRIXTRAILS_CONF_OPTS += \
-+	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) $(shell $(PKG_CONFIG_HOST_BINARY) --cflags egl)" \
-+	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) $(shell $(PKG_CONFIG_HOST_BINARY) --cflags egl)"
+-KODI_PVR_VDR_VNSI_VERSION = 3.6.4-Leia
++KODI_PVR_VDR_VNSI_VERSION = 8.2.2-Matrix
+ KODI_PVR_VDR_VNSI_SITE = $(call github,kodi-pvr,pvr.vdr.vnsi,$(KODI_PVR_VDR_VNSI_VERSION))
+ KODI_PVR_VDR_VNSI_LICENSE = GPL-2.0+
+-KODI_PVR_VDR_VNSI_LICENSE_FILES = debian/copyright
+-KODI_PVR_VDR_VNSI_DEPENDENCIES = kodi-platform
++KODI_PVR_VDR_VNSI_LICENSE_FILES = LICENSE.md
++KODI_PVR_VDR_VNSI_DEPENDENCIES = kodi
  
  $(eval $(cmake-package))
 -- 
