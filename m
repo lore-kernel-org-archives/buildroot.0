@@ -1,69 +1,42 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 20 Feb 2021 09:58:36 +0100
-Subject: [Buildroot] [PATCH/next 17/54] package/kodi-pvr-filmon: bump
- version to 6.1.0-Matrix
+Date: Sat, 20 Feb 2021 09:58:23 +0100
+Subject: [Buildroot] [PATCH/next 04/54] package/libcec: bump version to 6.0.2
 In-Reply-To: <20210220085913.888324-1-bernd.kuhls@t-online.de>
 References: <20210220085913.888324-1-bernd.kuhls@t-online.de>
-Message-ID: <20210220085913.888324-18-bernd.kuhls@t-online.de>
+Message-ID: <20210220085913.888324-5-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Switch dependency to kodi after upstream removed the dependency to
-kodi-platform:
-https://github.com/kodi-pvr/pvr.filmon/commit/b0ea8036274480245b5a7aa48d2ba18cc37b6b88
-https://github.com/kodi-pvr/pvr.filmon/commit/b8f249fcb50a27168f8b96ca9b4b8075d8c42b4a
-
-Switch license file to LICENSE.md.
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-pvr-filmon/Config.in            | 1 -
- package/kodi-pvr-filmon/kodi-pvr-filmon.hash | 4 ++--
- package/kodi-pvr-filmon/kodi-pvr-filmon.mk   | 6 +++---
- 3 files changed, 5 insertions(+), 6 deletions(-)
+ package/libcec/libcec.hash | 2 +-
+ package/libcec/libcec.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-pvr-filmon/Config.in b/package/kodi-pvr-filmon/Config.in
-index 0b662df176..d10002912a 100644
---- a/package/kodi-pvr-filmon/Config.in
-+++ b/package/kodi-pvr-filmon/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_KODI_PVR_FILMON
- 	bool "kodi-pvr-filmon"
- 	select BR2_PACKAGE_JSONCPP
--	select BR2_PACKAGE_KODI_PLATFORM
- 	help
- 	  Filmon PVR client addon for Kodi
- 
-diff --git a/package/kodi-pvr-filmon/kodi-pvr-filmon.hash b/package/kodi-pvr-filmon/kodi-pvr-filmon.hash
-index e89ce6359b..277adb4087 100644
---- a/package/kodi-pvr-filmon/kodi-pvr-filmon.hash
-+++ b/package/kodi-pvr-filmon/kodi-pvr-filmon.hash
+diff --git a/package/libcec/libcec.hash b/package/libcec/libcec.hash
+index 36b6bad861..3e5a443057 100644
+--- a/package/libcec/libcec.hash
++++ b/package/libcec/libcec.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  90988e4833c0f84ab08e08be3cd08b84e4ba2baf2ebc1545c62e5dbd6708d749  kodi-pvr-filmon-2.4.6-Leia.tar.gz
--sha256  081907693b03f27cb1b17e0a440ae05fd8c8b4631be6fe6fdba4e18a5d40fdc5  debian/copyright
-+sha256  7c2998bdde04acee5c147cb9f82939cfb13af57e5ecf46a4343dcfee15eb02e2  kodi-pvr-filmon-6.1.0-Matrix.tar.gz
-+sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-filmon/kodi-pvr-filmon.mk b/package/kodi-pvr-filmon/kodi-pvr-filmon.mk
-index 078eae176a..2612f9aead 100644
---- a/package/kodi-pvr-filmon/kodi-pvr-filmon.mk
-+++ b/package/kodi-pvr-filmon/kodi-pvr-filmon.mk
-@@ -4,10 +4,10 @@
+-sha256  bcd92c376993a5721d346edcc09eb17289451f9156b1d1d113c9663c2046315a  libcec-4.0.7.tar.gz
++sha256  090696d7a4fb772d7acebbb06f91ab92e025531c7c91824046b9e4e71ecb3377  libcec-6.0.2.tar.gz
+ sha256  0137261d24ce001fc5237aacddd267533e0f150ac23cf21acffea599f7358f7a  COPYING
+diff --git a/package/libcec/libcec.mk b/package/libcec/libcec.mk
+index 7c37d05c7f..6591bc009a 100644
+--- a/package/libcec/libcec.mk
++++ b/package/libcec/libcec.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_PVR_FILMON_VERSION = 2.4.6-Leia
-+KODI_PVR_FILMON_VERSION = 6.1.0-Matrix
- KODI_PVR_FILMON_SITE = $(call github,kodi-pvr,pvr.filmon,$(KODI_PVR_FILMON_VERSION))
- KODI_PVR_FILMON_LICENSE = GPL-2.0+
--KODI_PVR_FILMON_LICENSE_FILES = debian/copyright
--KODI_PVR_FILMON_DEPENDENCIES = jsoncpp kodi-platform
-+KODI_PVR_FILMON_LICENSE_FILES = LICENSE.md
-+KODI_PVR_FILMON_DEPENDENCIES = jsoncpp kodi
- 
- $(eval $(cmake-package))
+-LIBCEC_VERSION = 4.0.7
++LIBCEC_VERSION = 6.0.2
+ LIBCEC_SITE = $(call github,Pulse-Eight,libcec,libcec-$(LIBCEC_VERSION))
+ LIBCEC_LICENSE = GPL-2.0+
+ LIBCEC_LICENSE_FILES = COPYING
 -- 
 2.29.2
