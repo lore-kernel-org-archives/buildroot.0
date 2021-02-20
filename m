@@ -1,70 +1,138 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 20 Feb 2021 23:20:54 +0100
-Subject: [Buildroot] [PATCH 1/3] package/open62541: remove unneeded files
-In-Reply-To: <20210220162715.283519-1-fancp2007@gmail.com>
-References: <20210220162715.283519-1-fancp2007@gmail.com>
-Message-ID: <20210220222054.GU2276@scaer>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun, 21 Feb 2021 00:12:24 +0100
+Subject: [Buildroot] [PATCH v1] package/irqbalance: fix
+ irqbalance/irqbalance-ui socket communication
+Message-ID: <20210220231224.16680-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Scott, All,
+Add patch to fix irqbalance/irqbalance-ui socket communication by
+fixing uint64_t printf format usage.
 
-On 2021-02-21 00:27 +0800, Scott Fan spake thusly:
-> Signed-off-by: Scott Fan <fancp2007@gmail.com>
-> ---
->  package/open62541/open62541.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/package/open62541/open62541.mk b/package/open62541/open62541.mk
-> index 5a9f27562a..65742e83a1 100644
-> --- a/package/open62541/open62541.mk
-> +++ b/package/open62541/open62541.mk
-> @@ -54,4 +54,11 @@ else
->  OPEN62541_CONF_OPTS += -DUA_ENABLE_PUBSUB_INFORMATIONMODEL=OFF
->  endif
->  
-> +# Remove unneeded files
-> +define OPEN62541_REMOVE_UNNEEDED_FILES
-> +	$(RM) -r $(TARGET_DIR)/usr/share/open62541
+Fixes:
 
-Are you sure that we want to remove the whole dorectory? There are some
-tools in there that look like they might be useful.
+  $ irqbalance-ui
+  Invalid data sent.  Unexpected token: (null)TYPE
 
-But hte whole directory is indeed 52MiB, with 51 for the 'ua-nodeset'
-alone (whatever that is), so maybe we do indeed need to do some cleanup.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ ...ix-uint64_t-printf-format-use-PRIu64.patch | 105 ++++++++++++++++++
+ 1 file changed, 105 insertions(+)
+ create mode 100644 package/irqbalance/0001-fix-uint64_t-printf-format-use-PRIu64.patch
 
-So, could you please respin this patch:
-
-  - if really nothing is needed in that directory, then remove
-    everything liek you did, but extend the commit log to explain why
-    nothing in there is required,
-
-  - if there are stuff that can be useful at runtime, then rework the
-    hook to be a bit more selective in what it removes.
-
-Regards,
-Yann E. MORIN.
-
-> +endef
-> +
-> +OPEN62541_POST_INSTALL_TARGET_HOOKS += OPEN62541_REMOVE_UNNEEDED_FILES
-> +
->  $(eval $(cmake-package))
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/irqbalance/0001-fix-uint64_t-printf-format-use-PRIu64.patch b/package/irqbalance/0001-fix-uint64_t-printf-format-use-PRIu64.patch
+new file mode 100644
+index 0000000000..50524a6468
+--- /dev/null
++++ b/package/irqbalance/0001-fix-uint64_t-printf-format-use-PRIu64.patch
+@@ -0,0 +1,105 @@
++From 1897aceb1f2a81c0fa0e0c62c524787b2ccfb241 Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Sat, 20 Feb 2021 23:38:56 +0100
++Subject: [PATCH] fix uint64_t printf format (use PRIu64)
++
++Fixes (on arm 32-bit):
++
++  $ irqbalance-ui
++  Invalid data sent.  Unexpected token: (null)TYPE
++
++And strace showed the following:
++
++  237   sendmsg(3, {msg_name=NULL, msg_namelen=0, msg_iov=[{iov_base="stats", iov_len=5}], msg_iovlen=1, msg_control=[{cmsg_len=24, cmsg_level=SOL_SOCKET, cmsg_type=SCM_CREDENTIALS, cmsg_data={pid=237, uid=0, gid=0}}], msg_controllen=24, msg_flags=0}, 0) = 5
++  237   recv(3, "TYPE 3 NUMBER -1 LOAD 0 SAVE_MODE 0 (null)TYPE 2 NUMBER 0 LOAD 0 SAVE_MODE 0 (null)TYPE 1 NUMBER 0 LOAD 0 SAVE_MODE 0 (null)TYPE 0 NUMBER 3 LOAD 0 SAVE_MODE 0 (null)TYPE 1 NUMBER 1 LOAD 0 SAVE_MODE 0 (null)TYPE 0 NUMBER 1 LOAD 0 SAVE_MODE 0 (null)TYPE 1 NUMBER 2 LOAD 0 SAVE_MODE 0 (null)TYPE 0 NUMBER 2 LOAD 0 SAVE_MODE 0 (null)TYPE 1 NUMBER 3 LOAD 0 SAVE_MODE 0 (null)TYPE 0 NUMBER 0 LOAD 0 SAVE_MODE 0 (null)", 8192, 0) = 411
++
++[Upstream: https://github.com/Irqbalance/irqbalance/pull/173]
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ cputree.c    | 3 ++-
++ irqbalance.c | 5 +++--
++ ui/ui.c      | 5 +++--
++ 3 files changed, 8 insertions(+), 5 deletions(-)
++
++diff --git a/cputree.c b/cputree.c
++index 5551784..dd99bf8 100644
++--- a/cputree.c
+++++ b/cputree.c
++@@ -33,6 +33,7 @@
++ #include <sys/types.h>
++ #include <sys/stat.h>
++ #include <dirent.h>
+++#include <inttypes.h>
++ 
++ #include <glib.h>
++ 
++@@ -431,7 +432,7 @@ static void dump_irq(struct irq_info *info, void *data)
++ 		indent[i] = log_indent[0];
++ 
++ 	indent[i] = '\0';
++-	log(TO_CONSOLE, LOG_INFO, "%sInterrupt %i node_num is %d (%s/%lu:%lu) \n", indent,
+++	log(TO_CONSOLE, LOG_INFO, "%sInterrupt %i node_num is %d (%s/%" PRIu64 ":%" PRIu64 ") \n", indent,
++ 	    info->irq, irq_numa_node(info)->number, classes[info->class], info->load, (info->irq_count - info->last_irq_count));
++ 	free(indent);
++ }
++diff --git a/irqbalance.c b/irqbalance.c
++index c1a0e15..82435e5 100644
++--- a/irqbalance.c
+++++ b/irqbalance.c
++@@ -34,6 +34,7 @@
++ #include <sys/socket.h>
++ #include <sys/un.h>
++ #include <fcntl.h>
+++#include <inttypes.h>
++ #ifdef HAVE_GETOPT_LONG 
++ #include <getopt.h>
++ #endif
++@@ -312,7 +313,7 @@ void get_irq_data(struct irq_info *irq, void *data)
++ 		*irqdata = realloc(*irqdata, strlen(*irqdata) + 24 + 1 + 11 + 20 + 20 + 11);
++ 
++ 	sprintf(*irqdata + strlen(*irqdata),
++-			"IRQ %d LOAD %lu DIFF %lu CLASS %d ", irq->irq, irq->load,
+++			"IRQ %d LOAD %" PRIu64 " DIFF %" PRIu64 " CLASS %d ", irq->irq, irq->load,
++ 			(irq->irq_count - irq->last_irq_count), irq->class);
++ }
++ 
++@@ -342,7 +343,7 @@ void get_object_stat(struct topo_obj *object, void *data)
++ 		*stats = realloc(*stats, strlen(*stats) + irqdlen + 31 + 11 + 20 + 11 + 1);
++ 	}
++ 
++-	sprintf(*stats + strlen(*stats), "TYPE %d NUMBER %d LOAD %lu SAVE_MODE %d %s",
+++	sprintf(*stats + strlen(*stats), "TYPE %d NUMBER %d LOAD %" PRIu64 " SAVE_MODE %d %s",
++ 			object->obj_type, object->number, object->load,
++ 			object->powersave_mode, irq_data ? irq_data : "");
++ 	free(irq_data);
++diff --git a/ui/ui.c b/ui/ui.c
++index 06ec472..4cf68bf 100644
++--- a/ui/ui.c
+++++ b/ui/ui.c
++@@ -1,4 +1,5 @@
++ 
+++#include <inttypes.h>
++ #include <string.h>
++ #include "ui.h"
++ 
++@@ -563,7 +564,7 @@ void settings()
++ 
++ 	char info[128] = "Current sleep interval between rebalancing: \0";
++ 	uint8_t sleep_input_offset = strlen(info) + 3;
++-	snprintf(info + strlen(info), 128 - strlen(info), "%lu\n", setup.sleep);
+++	snprintf(info + strlen(info), 128 - strlen(info), "%" PRIu64 "\n", setup.sleep);
++ 	attrset(COLOR_PAIR(1));
++ 	mvprintw(2, 3, info);
++ 	print_all_cpus();
++@@ -588,7 +589,7 @@ void settings()
++ 			if(new_sleep != setup.sleep) {
++ 				setup.sleep = new_sleep;
++ 				char settings_data[128];
++-				snprintf(settings_data, 128, "%s %lu", SET_SLEEP, new_sleep);
+++				snprintf(settings_data, 128, "%s %" PRIu64, SET_SLEEP, new_sleep);
++ 				send_settings(settings_data);
++ 			}
++ 			break;
++-- 
++2.30.1
++
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.30.1
