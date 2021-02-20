@@ -1,49 +1,68 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 20 Feb 2021 09:59:06 +0100
-Subject: [Buildroot] [PATCH/next 47/54] package/kodi-visualisation-fishbmc:
- bump version to 6.3.0-Matrix
+Date: Sat, 20 Feb 2021 09:59:05 +0100
+Subject: [Buildroot] [PATCH/next 46/54] package/kodi-vfs-sftp: bump version
+ to 2.0.0-Matrix
 In-Reply-To: <20210220085913.888324-1-bernd.kuhls@t-online.de>
 References: <20210220085913.888324-1-bernd.kuhls@t-online.de>
-Message-ID: <20210220085913.888324-48-bernd.kuhls@t-online.de>
+Message-ID: <20210220085913.888324-47-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Switch license file to LICENSE.md.
+Upstream removed usage of libplatform
+https://github.com/xbmc/vfs.sftp/commit/a4fb0019a6b20c2e9b44ff80dd084002df6052a9
+
+Added remaining dependencies and removed unused kodi-platform:
+https://github.com/xbmc/vfs.sftp/blob/Matrix/CMakeLists.txt#L6
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../kodi-visualisation-fishbmc.hash                           | 4 ++--
- .../kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk  | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/kodi-vfs-sftp/Config.in          | 4 ++--
+ package/kodi-vfs-sftp/kodi-vfs-sftp.hash | 2 +-
+ package/kodi-vfs-sftp/kodi-vfs-sftp.mk   | 4 ++--
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash b/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash
-index 4e215f331c..f03602c003 100644
---- a/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash
-+++ b/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash
+diff --git a/package/kodi-vfs-sftp/Config.in b/package/kodi-vfs-sftp/Config.in
+index a939bd927d..b742777ff0 100644
+--- a/package/kodi-vfs-sftp/Config.in
++++ b/package/kodi-vfs-sftp/Config.in
+@@ -1,8 +1,8 @@
+ config BR2_PACKAGE_KODI_VFS_SFTP
+ 	bool "kodi-vfs-sftp"
+-	select BR2_PACKAGE_KODI_PLATFORM
+-	select BR2_PACKAGE_LIBPLATFORM
+ 	select BR2_PACKAGE_LIBSSH
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  SFTP VFS addon for Kodi
+ 
+diff --git a/package/kodi-vfs-sftp/kodi-vfs-sftp.hash b/package/kodi-vfs-sftp/kodi-vfs-sftp.hash
+index a17c2d32c6..d12a85437b 100644
+--- a/package/kodi-vfs-sftp/kodi-vfs-sftp.hash
++++ b/package/kodi-vfs-sftp/kodi-vfs-sftp.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  a03d4f64a6d44625d6936fd3abd359a0a08d11252663cae9fc5d061bd489c006  kodi-visualisation-fishbmc-5.1.3-Leia.tar.gz
--sha256  684792cea796ea39d086ffd6cf5cb7c70ab8188dcf493707ba90d081d28f787e  visualization.fishbmc/LICENSE
-+sha256  fd6a4383e36ed67590d40eb945d11bc5eae0c83e0ea56bfcadbc0ff03de0b2a4  kodi-visualisation-fishbmc-6.3.0-Matrix.tar.gz
-+sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk b/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk
-index defc183ff9..ecb118e52b 100644
---- a/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk
-+++ b/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk
+-sha256  dc3db18b6cef90cd518b741e5c9bc7b3f4412774ee60bf70b451a8d2fc88a091  kodi-vfs-sftp-1.0.6-Leia.tar.gz
++sha256  b15c5dde7b3aadb3e82e61cb9b0440812b6c2f65b38c6c25aef726f97e746f68  kodi-vfs-sftp-2.0.0-Matrix.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-vfs-sftp/kodi-vfs-sftp.mk b/package/kodi-vfs-sftp/kodi-vfs-sftp.mk
+index 3870ff9b5b..b1b0bef36d 100644
+--- a/package/kodi-vfs-sftp/kodi-vfs-sftp.mk
++++ b/package/kodi-vfs-sftp/kodi-vfs-sftp.mk
 @@ -4,10 +4,10 @@
  #
  ################################################################################
  
--KODI_VISUALISATION_FISHBMC_VERSION = 5.1.3-Leia
-+KODI_VISUALISATION_FISHBMC_VERSION = 6.3.0-Matrix
- KODI_VISUALISATION_FISHBMC_SITE = $(call github,xbmc,visualization.fishbmc,$(KODI_VISUALISATION_FISHBMC_VERSION))
- KODI_VISUALISATION_FISHBMC_LICENSE = GPL-2.0+
--KODI_VISUALISATION_FISHBMC_LICENSE_FILES = visualization.fishbmc/LICENSE
-+KODI_VISUALISATION_FISHBMC_LICENSE_FILES = LICENSE.md
- KODI_VISUALISATION_FISHBMC_DEPENDENCIES = kodi
+-KODI_VFS_SFTP_VERSION = 1.0.6-Leia
++KODI_VFS_SFTP_VERSION = 2.0.0-Matrix
+ KODI_VFS_SFTP_SITE = $(call github,xbmc,vfs.sftp,$(KODI_VFS_SFTP_VERSION))
+ KODI_VFS_SFTP_LICENSE = GPL-2.0+
+ KODI_VFS_SFTP_LICENSE_FILES = LICENSE.md
+-KODI_VFS_SFTP_DEPENDENCIES = kodi-platform libplatform libssh
++KODI_VFS_SFTP_DEPENDENCIES = kodi libssh openssl zlib
  
  $(eval $(cmake-package))
 -- 
