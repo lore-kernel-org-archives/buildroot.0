@@ -1,45 +1,69 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 20 Feb 2021 09:59:04 +0100
-Subject: [Buildroot] [PATCH/next 45/54] package/kodi-vfs-rar: bump version
- to 4.0.0-Matrix
+Date: Sat, 20 Feb 2021 09:58:54 +0100
+Subject: [Buildroot] [PATCH/next 35/54] package/kodi-screensaver-biogenesis:
+ bump version to 2.5.0-Matrix
 In-Reply-To: <20210220085913.888324-1-bernd.kuhls@t-online.de>
 References: <20210220085913.888324-1-bernd.kuhls@t-online.de>
-Message-ID: <20210220085913.888324-46-bernd.kuhls@t-online.de>
+Message-ID: <20210220085913.888324-36-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Remove dependency to opengl, opengles support was fixed upstream:
+https://github.com/xbmc/screensaver.biogenesis/commit/2de1b7eb5897001f7bdf72ec4e390be749ccac13
+
+Switch license file to LICENSE.md.
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-vfs-rar/kodi-vfs-rar.hash | 2 +-
- package/kodi-vfs-rar/kodi-vfs-rar.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/kodi-screensaver-biogenesis/Config.in                 | 4 ----
+ .../kodi-screensaver-biogenesis.hash                          | 4 ++--
+ .../kodi-screensaver-biogenesis.mk                            | 4 ++--
+ 3 files changed, 4 insertions(+), 8 deletions(-)
 
-diff --git a/package/kodi-vfs-rar/kodi-vfs-rar.hash b/package/kodi-vfs-rar/kodi-vfs-rar.hash
-index 22ad584fb8..e4d0f7fe63 100644
---- a/package/kodi-vfs-rar/kodi-vfs-rar.hash
-+++ b/package/kodi-vfs-rar/kodi-vfs-rar.hash
-@@ -1,5 +1,5 @@
+diff --git a/package/kodi-screensaver-biogenesis/Config.in b/package/kodi-screensaver-biogenesis/Config.in
+index 9703e9091b..26f134d0bb 100644
+--- a/package/kodi-screensaver-biogenesis/Config.in
++++ b/package/kodi-screensaver-biogenesis/Config.in
+@@ -1,10 +1,6 @@
+ config BR2_PACKAGE_KODI_SCREENSAVER_BIOGENESIS
+ 	bool "kodi-screensaver-biogenesis"
+-	depends on BR2_PACKAGE_HAS_LIBGL
+ 	help
+ 	  BioGenesis screensaver for Kodi
+ 
+ 	  https://github.com/xbmc/screensaver.biogenesis
+-
+-comment "kodi-screensaver-biogenesis needs OpenGL"
+-	depends on !BR2_PACKAGE_HAS_LIBGL
+diff --git a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash
+index df07f9fbc5..1f2c5e6305 100644
+--- a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash
++++ b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash
+@@ -1,3 +1,3 @@
  # Locally computed
--sha256  5275c09eed7e8354849caa17c3d9699abcfa2437a7c7af3833bffd10fc1c577f  kodi-vfs-rar-2.3.2-Leia.tar.gz
-+sha256  1111d1f90cc4addc2adb0884b779f4b47e30abb2766ba1708053e5f100b514bf  kodi-vfs-rar-4.0.0-Matrix.tar.gz
- # License files
- sha256  6ecc1687808b7d66b24f874755abfed7464d9751ed0001cd4e8e5d9bf397ff8a  lib/UnrarXLib/license.txt
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-vfs-rar/kodi-vfs-rar.mk b/package/kodi-vfs-rar/kodi-vfs-rar.mk
-index c0d52a1d25..001bd7c61c 100644
---- a/package/kodi-vfs-rar/kodi-vfs-rar.mk
-+++ b/package/kodi-vfs-rar/kodi-vfs-rar.mk
-@@ -4,7 +4,7 @@
+-sha256  b0f721d112282f633a769e7b077c5dd52e5045a8f1ae32c4e602b0e2e937acb0  kodi-screensaver-biogenesis-2.2.3-Leia.tar.gz
+-sha256  d38b9e2768b49acdedcb21a202d12753c8f1d7e85e5ee24ff1e4aee3c7601a65  debian/copyright
++sha256  bf56384e6956674cd911c52b2807993d0a6e0ffa9623b5a1981a3153911e135a  kodi-screensaver-biogenesis-2.5.0-Matrix.tar.gz
++sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk
+index 562c279ec6..8b2d6b2ee5 100644
+--- a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk
++++ b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--KODI_VFS_RAR_VERSION = 2.3.2-Leia
-+KODI_VFS_RAR_VERSION = 4.0.0-Matrix
- KODI_VFS_RAR_SITE = $(call github,xbmc,vfs.rar,$(KODI_VFS_RAR_VERSION))
- KODI_VFS_RAR_LICENSE = unrar, GPL-2.0+
- KODI_VFS_RAR_LICENSE_FILES = lib/UnrarXLib/license.txt LICENSE.md
+-KODI_SCREENSAVER_BIOGENESIS_VERSION = 2.2.3-Leia
++KODI_SCREENSAVER_BIOGENESIS_VERSION = 2.5.0-Matrix
+ KODI_SCREENSAVER_BIOGENESIS_SITE = $(call github,xbmc,screensaver.biogenesis,$(KODI_SCREENSAVER_BIOGENESIS_VERSION))
+ KODI_SCREENSAVER_BIOGENESIS_LICENSE = GPL-2.0+
+-KODI_SCREENSAVER_BIOGENESIS_LICENSE_FILES = debian/copyright
++KODI_SCREENSAVER_BIOGENESIS_LICENSE_FILES = LICENSE.md
+ KODI_SCREENSAVER_BIOGENESIS_DEPENDENCIES = kodi
+ 
+ $(eval $(cmake-package))
 -- 
 2.29.2
