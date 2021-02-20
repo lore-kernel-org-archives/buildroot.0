@@ -1,66 +1,69 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 20 Feb 2021 09:58:41 +0100
-Subject: [Buildroot] [PATCH/next 22/54] package/kodi-pvr-mythtv: bump
- version to 7.3.0-Matrix
+Date: Sat, 20 Feb 2021 09:58:52 +0100
+Subject: [Buildroot] [PATCH/next 33/54] package/kodi-screensaver-asteroids:
+ bump version to 2.6.0-Matrix
 In-Reply-To: <20210220085913.888324-1-bernd.kuhls@t-online.de>
 References: <20210220085913.888324-1-bernd.kuhls@t-online.de>
-Message-ID: <20210220085913.888324-23-bernd.kuhls@t-online.de>
+Message-ID: <20210220085913.888324-34-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Switch dependency to kodi after upstream removed the dependency to
-kodi-platform:
-https://github.com/janbar/pvr.mythtv/commit/b847285c33ce4e469d29f8ada643c69d4360af62
+Remove dependency to opengl, opengles support was fixed upstream:
+https://github.com/xbmc/screensaver.asteroids/commit/360a02fc20925fa17179f3298dd4515b4354e266
 
 Switch license file to LICENSE.md.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-pvr-mythtv/Config.in            | 1 -
- package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash | 4 ++--
- package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk   | 6 +++---
- 3 files changed, 5 insertions(+), 6 deletions(-)
+ package/kodi-screensaver-asteroids/Config.in                  | 4 ----
+ .../kodi-screensaver-asteroids.hash                           | 4 ++--
+ .../kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk  | 4 ++--
+ 3 files changed, 4 insertions(+), 8 deletions(-)
 
-diff --git a/package/kodi-pvr-mythtv/Config.in b/package/kodi-pvr-mythtv/Config.in
-index 798ff3e911..ebdbc00487 100644
---- a/package/kodi-pvr-mythtv/Config.in
-+++ b/package/kodi-pvr-mythtv/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_KODI_PVR_MYTHTV
- 	bool "kodi-pvr-mythtv"
--	select BR2_PACKAGE_KODI_PLATFORM
+diff --git a/package/kodi-screensaver-asteroids/Config.in b/package/kodi-screensaver-asteroids/Config.in
+index 3d66c3dcc3..833e065dfa 100644
+--- a/package/kodi-screensaver-asteroids/Config.in
++++ b/package/kodi-screensaver-asteroids/Config.in
+@@ -1,11 +1,7 @@
+ config BR2_PACKAGE_KODI_SCREENSAVER_ASTEROIDS
+ 	bool "kodi-screensaver-asteroids"
+-	depends on BR2_PACKAGE_HAS_LIBGL
+ 	select BR2_PACKAGE_GLM
  	help
- 	  MythTV PVR for Kodi
+ 	  Asteroids screensaver for Kodi
  
-diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
-index 1896592cf5..30a7ec841c 100644
---- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
-+++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
+ 	  https://github.com/xbmc/screensaver.asteroids
+-
+-comment "kodi-screensaver-asteroids needs OpenGL"
+-	depends on !BR2_PACKAGE_HAS_LIBGL
+diff --git a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash
+index e6855a3bc6..a8886d2733 100644
+--- a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash
++++ b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  b2048db252966d5f78828cacd41e85d00a522c03fe7f24a0f000f720fe7aff0a  kodi-pvr-mythtv-5.10.19-Leia.tar.gz
--sha256  0efb11009d447b39ec35d77dc265db3d1c3d261730bbc33b267587254d973ec8  debian/copyright
-+sha256  fa741677fc2d58689111d18c8eb1114115f4c33bc99267bb761f225e82fdc588  kodi-pvr-mythtv-7.3.0-Matrix.tar.gz
+-sha256  f4b54ed79eedd1a39e24dcbe8d372dbfc9edbc9358499ea9ab28777dd9082ee3  kodi-screensaver-asteroids-2.3.3-Leia.tar.gz
+-sha256  297a1d34e6000f1b1a924f5ab75c16c2270968bfa47357dd8fa3799c9dfc47d8  debian/copyright
++sha256  b60d0123dd2ad2326a03b2a66a3cdba3ac17f0a109c4ecedc3216699ca28cae2  kodi-screensaver-asteroids-2.6.0-Matrix.tar.gz
 +sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
-index e902bab148..98e83e2035 100644
---- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
-+++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
+diff --git a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
+index dcd0a3d34c..add0ca5b9b 100644
+--- a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
++++ b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
 @@ -4,10 +4,10 @@
  #
  ################################################################################
  
--KODI_PVR_MYTHTV_VERSION = 5.10.19-Leia
-+KODI_PVR_MYTHTV_VERSION = 7.3.0-Matrix
- KODI_PVR_MYTHTV_SITE = $(call github,janbar,pvr.mythtv,$(KODI_PVR_MYTHTV_VERSION))
- KODI_PVR_MYTHTV_LICENSE = GPL-2.0+
--KODI_PVR_MYTHTV_LICENSE_FILES = debian/copyright
--KODI_PVR_MYTHTV_DEPENDENCIES = kodi-platform
-+KODI_PVR_MYTHTV_LICENSE_FILES = LICENSE.md
-+KODI_PVR_MYTHTV_DEPENDENCIES = kodi
+-KODI_SCREENSAVER_ASTEROIDS_VERSION = 2.3.3-Leia
++KODI_SCREENSAVER_ASTEROIDS_VERSION = 2.6.0-Matrix
+ KODI_SCREENSAVER_ASTEROIDS_SITE = $(call github,xbmc,screensaver.asteroids,$(KODI_SCREENSAVER_ASTEROIDS_VERSION))
+ KODI_SCREENSAVER_ASTEROIDS_LICENSE = GPL-2.0+
+-KODI_SCREENSAVER_ASTEROIDS_LICENSE_FILES = debian/copyright
++KODI_SCREENSAVER_ASTEROIDS_LICENSE_FILES = LICENSE.md
+ KODI_SCREENSAVER_ASTEROIDS_DEPENDENCIES = glm kodi
  
  $(eval $(cmake-package))
 -- 
