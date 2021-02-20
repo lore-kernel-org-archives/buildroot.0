@@ -1,68 +1,106 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 20 Feb 2021 09:58:54 +0100
-Subject: [Buildroot] [PATCH/next 35/54] package/kodi-screensaver-biogenesis:
- bump version to 2.5.0-Matrix
+Date: Sat, 20 Feb 2021 09:59:09 +0100
+Subject: [Buildroot] [PATCH/next 50/54] package/kodi-visualisation-spectrum:
+ bump version to 3.4.0-Matrix
 In-Reply-To: <20210220085913.888324-1-bernd.kuhls@t-online.de>
 References: <20210220085913.888324-1-bernd.kuhls@t-online.de>
-Message-ID: <20210220085913.888324-36-bernd.kuhls@t-online.de>
+Message-ID: <20210220085913.888324-51-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove dependency to opengl, opengles support was fixed upstream:
-https://github.com/xbmc/screensaver.biogenesis/commit/2de1b7eb5897001f7bdf72ec4e390be749ccac13
+Removed patch applied upstream:
+https://github.com/xbmc/visualization.spectrum/commit/46b605516b057823855c7f76dbc3f622dcf5983b
+
+Add dependency to glm due to upstream commit:
+https://github.com/xbmc/visualization.spectrum/commit/0a3e3885b87f61e9a511ec942b3c01679e4b3414
 
 Switch license file to LICENSE.md.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-screensaver-biogenesis/Config.in                 | 4 ----
- .../kodi-screensaver-biogenesis.hash                          | 4 ++--
- .../kodi-screensaver-biogenesis.mk                            | 4 ++--
- 3 files changed, 4 insertions(+), 8 deletions(-)
+ ...Backport-Add-missing-cstddef-include.patch | 30 -------------------
+ package/kodi-visualisation-spectrum/Config.in |  1 +
+ .../kodi-visualisation-spectrum.hash          |  4 +--
+ .../kodi-visualisation-spectrum.mk            |  6 ++--
+ 4 files changed, 6 insertions(+), 35 deletions(-)
+ delete mode 100644 package/kodi-visualisation-spectrum/0001-Backport-Add-missing-cstddef-include.patch
 
-diff --git a/package/kodi-screensaver-biogenesis/Config.in b/package/kodi-screensaver-biogenesis/Config.in
-index 9703e9091b..26f134d0bb 100644
---- a/package/kodi-screensaver-biogenesis/Config.in
-+++ b/package/kodi-screensaver-biogenesis/Config.in
-@@ -1,10 +1,6 @@
- config BR2_PACKAGE_KODI_SCREENSAVER_BIOGENESIS
- 	bool "kodi-screensaver-biogenesis"
--	depends on BR2_PACKAGE_HAS_LIBGL
- 	help
- 	  BioGenesis screensaver for Kodi
- 
- 	  https://github.com/xbmc/screensaver.biogenesis
+diff --git a/package/kodi-visualisation-spectrum/0001-Backport-Add-missing-cstddef-include.patch b/package/kodi-visualisation-spectrum/0001-Backport-Add-missing-cstddef-include.patch
+deleted file mode 100644
+index 5b1bb0c47c..0000000000
+--- a/package/kodi-visualisation-spectrum/0001-Backport-Add-missing-cstddef-include.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-From b2c54c1043c2396678005b578e85db30bdf5ccb9 Mon Sep 17 00:00:00 2001
+-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+-Date: Sat, 18 Jan 2020 20:22:41 +0100
+-Subject: [PATCH] [Backport] Add missing cstddef include
 -
--comment "kodi-screensaver-biogenesis needs OpenGL"
--	depends on !BR2_PACKAGE_HAS_LIBGL
-diff --git a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash
-index df07f9fbc5..1f2c5e6305 100644
---- a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash
-+++ b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash
+-Backported from https://github.com/xbmc/visualization.spectrum/pull/37
+-
+-Patch sent upstream:
+-https://github.com/xbmc/visualization.spectrum/pull/38
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- src/opengl_spectrum.cpp | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/src/opengl_spectrum.cpp b/src/opengl_spectrum.cpp
+-index 05409ea..2441fd6 100644
+---- a/src/opengl_spectrum.cpp
+-+++ b/src/opengl_spectrum.cpp
+-@@ -38,6 +38,7 @@
+- #include <string.h>
+- #include <math.h>
+- #include <stdint.h>
+-+#include <cstddef>
+- 
+- #include <glm/glm.hpp>
+- #include <glm/gtc/type_ptr.hpp>
+--- 
+-2.20.1
+-
+diff --git a/package/kodi-visualisation-spectrum/Config.in b/package/kodi-visualisation-spectrum/Config.in
+index 3b2b0a25e2..deb623087f 100644
+--- a/package/kodi-visualisation-spectrum/Config.in
++++ b/package/kodi-visualisation-spectrum/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_KODI_VISUALISATION_SPECTRUM
+ 	bool "kodi-visualisation-spectrum"
++	select BR2_PACKAGE_GLM
+ 	help
+ 	  Spectrum visualiser for Kodi
+ 
+diff --git a/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.hash b/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.hash
+index ae78fbd355..e6473ab0a1 100644
+--- a/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.hash
++++ b/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  b0f721d112282f633a769e7b077c5dd52e5045a8f1ae32c4e602b0e2e937acb0  kodi-screensaver-biogenesis-2.2.3-Leia.tar.gz
--sha256  d38b9e2768b49acdedcb21a202d12753c8f1d7e85e5ee24ff1e4aee3c7601a65  debian/copyright
-+sha256  bf56384e6956674cd911c52b2807993d0a6e0ffa9623b5a1981a3153911e135a  kodi-screensaver-biogenesis-2.5.0-Matrix.tar.gz
+-sha256  ec88defbb90fdb03f075abdba39c436906a8fbad8f034da3e3b31f75842206cc  kodi-visualisation-spectrum-3.0.2-Leia.tar.gz
+-sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
++sha256  0b08b99c0289a421425a5d3b39eafdf6262021e213bd3093e98704efb410d348  kodi-visualisation-spectrum-3.4.0-Matrix.tar.gz
 +sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk
-index 562c279ec6..8b2d6b2ee5 100644
---- a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk
-+++ b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk
+diff --git a/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk b/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk
+index c3d61c1ef4..42abc156cd 100644
+--- a/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk
++++ b/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk
 @@ -4,10 +4,10 @@
  #
  ################################################################################
  
--KODI_SCREENSAVER_BIOGENESIS_VERSION = 2.2.3-Leia
-+KODI_SCREENSAVER_BIOGENESIS_VERSION = 2.5.0-Matrix
- KODI_SCREENSAVER_BIOGENESIS_SITE = $(call github,xbmc,screensaver.biogenesis,$(KODI_SCREENSAVER_BIOGENESIS_VERSION))
- KODI_SCREENSAVER_BIOGENESIS_LICENSE = GPL-2.0+
--KODI_SCREENSAVER_BIOGENESIS_LICENSE_FILES = debian/copyright
-+KODI_SCREENSAVER_BIOGENESIS_LICENSE_FILES = LICENSE.md
- KODI_SCREENSAVER_BIOGENESIS_DEPENDENCIES = kodi
+-KODI_VISUALISATION_SPECTRUM_VERSION = 3.0.2-Leia
++KODI_VISUALISATION_SPECTRUM_VERSION = 3.4.0-Matrix
+ KODI_VISUALISATION_SPECTRUM_SITE = $(call github,xbmc,visualization.spectrum,$(KODI_VISUALISATION_SPECTRUM_VERSION))
+ KODI_VISUALISATION_SPECTRUM_LICENSE = GPL-2.0+
+-KODI_VISUALISATION_SPECTRUM_LICENSE_FILES = COPYING
+-KODI_VISUALISATION_SPECTRUM_DEPENDENCIES = kodi
++KODI_VISUALISATION_SPECTRUM_LICENSE_FILES = LICENSE.md
++KODI_VISUALISATION_SPECTRUM_DEPENDENCIES = glm kodi
  
  $(eval $(cmake-package))
 -- 
