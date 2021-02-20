@@ -1,49 +1,68 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 20 Feb 2021 09:59:10 +0100
-Subject: [Buildroot] [PATCH/next 51/54]
- package/kodi-visualisation-starburst: bump version to 2.4.0-Matrix
+Date: Sat, 20 Feb 2021 09:58:45 +0100
+Subject: [Buildroot] [PATCH/next 26/54] package/kodi-pvr-pctv: bump version
+ to 6.1.0-Matrix
 In-Reply-To: <20210220085913.888324-1-bernd.kuhls@t-online.de>
 References: <20210220085913.888324-1-bernd.kuhls@t-online.de>
-Message-ID: <20210220085913.888324-52-bernd.kuhls@t-online.de>
+Message-ID: <20210220085913.888324-27-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Switch dependency to kodi after upstream removed the dependency to
+kodi-platform:
+https://github.com/kodi-pvr/pvr.pctv/commit/b6cebce2c9579a2bcce619dbba586eafd2cf2701
+https://github.com/kodi-pvr/pvr.pctv/commit/db2eca67995017c7b3b4755e5bf674faaebe77ea
+
 Switch license file to LICENSE.md.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../kodi-visualisation-starburst.hash                         | 4 ++--
- .../kodi-visualisation-starburst.mk                           | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/kodi-pvr-pctv/Config.in          | 1 -
+ package/kodi-pvr-pctv/kodi-pvr-pctv.hash | 4 ++--
+ package/kodi-pvr-pctv/kodi-pvr-pctv.mk   | 6 +++---
+ 3 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/kodi-visualisation-starburst/kodi-visualisation-starburst.hash b/package/kodi-visualisation-starburst/kodi-visualisation-starburst.hash
-index 834d71ae5c..b08da9788e 100644
---- a/package/kodi-visualisation-starburst/kodi-visualisation-starburst.hash
-+++ b/package/kodi-visualisation-starburst/kodi-visualisation-starburst.hash
+diff --git a/package/kodi-pvr-pctv/Config.in b/package/kodi-pvr-pctv/Config.in
+index 255cd4a5f0..11fe09b2f1 100644
+--- a/package/kodi-pvr-pctv/Config.in
++++ b/package/kodi-pvr-pctv/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_KODI_PVR_PCTV
+ 	bool "kodi-pvr-pctv"
+ 	select BR2_PACKAGE_JSONCPP
+-	select BR2_PACKAGE_KODI_PLATFORM
+ 	help
+ 	  PCTV PVR client addon for Kodi
+ 
+diff --git a/package/kodi-pvr-pctv/kodi-pvr-pctv.hash b/package/kodi-pvr-pctv/kodi-pvr-pctv.hash
+index 30fb81a906..0e3f464cff 100644
+--- a/package/kodi-pvr-pctv/kodi-pvr-pctv.hash
++++ b/package/kodi-pvr-pctv/kodi-pvr-pctv.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  5a06385dd4824373a00fe4e2139b3d851c51ed001f68671acf99d17ce348f5e2  kodi-visualisation-starburst-2.0.3-Leia.tar.gz
--sha256  2e668b3da2f061a6d6ecc3cb96bdfb0f8fc9cc98c9e9f95454bc45b88708690f  debian/copyright
-+sha256  fb991924b8f9a4f86d81b28ec629c131d36364f82914098356184c9ef03e753e  kodi-visualisation-starburst-2.4.0-Matrix.tar.gz
+-sha256  10124e5444c6cfb0c77bad1d1122f6ba5fc233248d6b33066ba799f4dedceeee  kodi-pvr-pctv-2.4.7-Leia.tar.gz
+-sha256  43376e70ae80133530c8ce71a3b0dcde8529a8162d3b3956009eb8fc0f5c559c  debian/copyright
++sha256  94b8be4988cb6d8c61f6bdf237ddabb04d77fe4900f61411f5abf918eb5a078c  kodi-pvr-pctv-6.1.0-Matrix.tar.gz
 +sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-visualisation-starburst/kodi-visualisation-starburst.mk b/package/kodi-visualisation-starburst/kodi-visualisation-starburst.mk
-index 8d736f08e9..f19a82bf81 100644
---- a/package/kodi-visualisation-starburst/kodi-visualisation-starburst.mk
-+++ b/package/kodi-visualisation-starburst/kodi-visualisation-starburst.mk
+diff --git a/package/kodi-pvr-pctv/kodi-pvr-pctv.mk b/package/kodi-pvr-pctv/kodi-pvr-pctv.mk
+index 851788c96b..78d500e3e8 100644
+--- a/package/kodi-pvr-pctv/kodi-pvr-pctv.mk
++++ b/package/kodi-pvr-pctv/kodi-pvr-pctv.mk
 @@ -4,10 +4,10 @@
  #
  ################################################################################
  
--KODI_VISUALISATION_STARBURST_VERSION = 2.0.3-Leia
-+KODI_VISUALISATION_STARBURST_VERSION = 2.4.0-Matrix
- KODI_VISUALISATION_STARBURST_SITE = $(call github,xbmc,visualization.starburst,$(KODI_VISUALISATION_STARBURST_VERSION))
- KODI_VISUALISATION_STARBURST_LICENSE = GPL-2.0+
--KODI_VISUALISATION_STARBURST_LICENSE_FILES = debian/copyright
-+KODI_VISUALISATION_STARBURST_LICENSE_FILES = LICENSE.md
- KODI_VISUALISATION_STARBURST_DEPENDENCIES = glm kodi
+-KODI_PVR_PCTV_VERSION = 2.4.7-Leia
++KODI_PVR_PCTV_VERSION = 6.1.0-Matrix
+ KODI_PVR_PCTV_SITE = $(call github,kodi-pvr,pvr.pctv,$(KODI_PVR_PCTV_VERSION))
+ KODI_PVR_PCTV_LICENSE = GPL-2.0+
+-KODI_PVR_PCTV_LICENSE_FILES = debian/copyright
+-KODI_PVR_PCTV_DEPENDENCIES = jsoncpp kodi-platform
++KODI_PVR_PCTV_LICENSE_FILES = LICENSE.md
++KODI_PVR_PCTV_DEPENDENCIES = jsoncpp kodi
  
  $(eval $(cmake-package))
 -- 
