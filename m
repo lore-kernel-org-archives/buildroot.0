@@ -1,32 +1,43 @@
-From: guillaume.bressaix at gmail.com <guillaume.bressaix@gmail.com>
-Date: Sat, 20 Feb 2021 17:32:15 +0100
-Subject: [Buildroot] [PATCH/next] package/libxcrypt: install to staging
- instead of target
-Message-ID: <20210220163215.5529-1-guillaume.bressaix@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sat, 20 Feb 2021 17:33:48 +0100
+Subject: [Buildroot] [PATCH v1 1/2] package/irqbalance: fix sysv startup
+ script (add mkdir /run/irqbalance)
+Message-ID: <20210220163349.25244-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
+- add mkdir -p /run/irqbalance to sysv startup script needed to
+  create socket /run/irqbalance/irqbalance<pid>.sock
 
-Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+Fixes:
+
+  - Bug 13541 [1]
+
+  daemon.warn /usr/sbin/irqbalance: Daemon couldn't be bound to the file-based socket.
+
+[1] https://bugs.busybox.net/show_bug.cgi?id=13541
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/libxcrypt/libxcrypt.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/irqbalance/S13irqbalance | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/libxcrypt/libxcrypt.mk b/package/libxcrypt/libxcrypt.mk
-index f9799ac006..63132edd9d 100644
---- a/package/libxcrypt/libxcrypt.mk
-+++ b/package/libxcrypt/libxcrypt.mk
-@@ -8,6 +8,7 @@ LIBXCRYPT_VERSION = 4.4.17
- LIBXCRYPT_SITE = $(call github,besser82,libxcrypt,v$(LIBXCRYPT_VERSION))
- LIBXCRYPT_LICENSE = LGPL-2.1+
- LIBXCRYPT_LICENSE_FILES = LICENSING COPYING.LIB
-+LIBXCRYPT_INSTALL_STAGING = YES
- LIBXCRYPT_AUTORECONF = YES
+diff --git a/package/irqbalance/S13irqbalance b/package/irqbalance/S13irqbalance
+index b06a3372e9..d0f6adda71 100644
+--- a/package/irqbalance/S13irqbalance
++++ b/package/irqbalance/S13irqbalance
+@@ -7,6 +7,9 @@ EXEC="/usr/sbin/irqbalance"
+ ARGS=""
+ PID="/var/run/irqbalance.pid"
  
- $(eval $(autotools-package))
++# for irqbalance socket /run/irqbalance/irqbalance<pid>.sock
++mkdir -p /run/irqbalance
++
+ case "$1" in
+     start)
+ 	printf "Starting irqbalance: "
 -- 
-2.20.1
+2.30.1
