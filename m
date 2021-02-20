@@ -1,44 +1,41 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 20 Feb 2021 18:36:28 +0100
-Subject: [Buildroot] [git commit] package/irqbalance: fix systemd startup
- script (add RuntimeDirectory)
-Message-ID: <20210220171505.36A2F815D3@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 20 Feb 2021 17:38:15 +0000
+Subject: [Buildroot] [Bug 13541] 2021.02.rc2: irqbalance: Daemon couldn't be
+ bound to the file-based socket
+In-Reply-To: <bug-13541-163@https.bugs.busybox.net/>
+References: <bug-13541-163@https.bugs.busybox.net/>
+Message-ID: <bug-13541-163-VZ5t4lEKIr@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=60518c1d7680bff5efe879ee86f48e6092239c03
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=13541
 
-- add RuntimeDirectory=irqbalance to create /run/irqbalanace needed to
-  create socket /run/irqbalance/irqbalance<pid>.sock
+Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
-Fixes:
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+                 CC|                            |yann.morin.1998 at free.fr
+         Resolution|---                         |FIXED
 
-  - Bug 13541 [1]
+--- Comment #2 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+Alfredo, All,
 
-  /usr/sbin/irqbalance[158]: Daemon couldn't be bound to the file-based socket.
+This is now supposedly fixed with commits 60518c1d7680 and 4a95f38f3064 from
+Peter:
+   
+https://git.buildroot.org/buildroot/commit/?id=60518c1d7680bff5efe879ee86f48e6092239c03
+   
+https://git.buildroot.org/buildroot/commit/?id=4a95f38f306411ca750a676b81326dc7ec67bcaa
 
-[1] https://bugs.busybox.net/show_bug.cgi?id=13541
+Thanks for the report!
 
-Reported-by: Alfredo Pons Menargues <alfredo.pons@gmail.com>
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/irqbalance/irqbalance.service | 1 +
- 1 file changed, 1 insertion(+)
+Regards,
+Yann E. MORIN.
 
-diff --git a/package/irqbalance/irqbalance.service b/package/irqbalance/irqbalance.service
-index 9ba3be43bb..39574877fb 100644
---- a/package/irqbalance/irqbalance.service
-+++ b/package/irqbalance/irqbalance.service
-@@ -3,6 +3,7 @@ Description=irqbalance daemon
- After=syslog.target
- 
- [Service]
-+RuntimeDirectory=irqbalance
- ExecStart=/usr/sbin/irqbalance --foreground
- 
- [Install]
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
