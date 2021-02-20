@@ -1,42 +1,76 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 20 Feb 2021 09:58:23 +0100
-Subject: [Buildroot] [PATCH/next 04/54] package/libcec: bump version to 6.0.2
+Date: Sat, 20 Feb 2021 09:58:38 +0100
+Subject: [Buildroot] [PATCH/next 19/54] package/kodi-pvr-hts: bump version
+ to 8.2.1-Matrix
 In-Reply-To: <20210220085913.888324-1-bernd.kuhls@t-online.de>
 References: <20210220085913.888324-1-bernd.kuhls@t-online.de>
-Message-ID: <20210220085913.888324-5-bernd.kuhls@t-online.de>
+Message-ID: <20210220085913.888324-20-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Switch dependency to kodi after upstream removed the dependency to
+kodi-platform:
+https://github.com/kodi-pvr/pvr.hts/commit/9943d05ce52b6ddcd63a3faa094f7ee9b2671c86
+https://github.com/kodi-pvr/pvr.hts/commit/d6b71de38b1c522a6f2716a7e4a90528ae06e992
+
+Added dependency to gcc >= 7 due to c++17 code added by
+https://github.com/kodi-pvr/pvr.hts/commit/954f25d39652098b5fb1a55d44e2d410de78902b
+
+Switch license file to LICENSE.md.
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libcec/libcec.hash | 2 +-
- package/libcec/libcec.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/kodi-pvr-hts/Config.in         | 5 ++++-
+ package/kodi-pvr-hts/kodi-pvr-hts.hash | 4 ++--
+ package/kodi-pvr-hts/kodi-pvr-hts.mk   | 6 +++---
+ 3 files changed, 9 insertions(+), 6 deletions(-)
 
-diff --git a/package/libcec/libcec.hash b/package/libcec/libcec.hash
-index 36b6bad861..3e5a443057 100644
---- a/package/libcec/libcec.hash
-+++ b/package/libcec/libcec.hash
+diff --git a/package/kodi-pvr-hts/Config.in b/package/kodi-pvr-hts/Config.in
+index c4c4497bd3..a352457f31 100644
+--- a/package/kodi-pvr-hts/Config.in
++++ b/package/kodi-pvr-hts/Config.in
+@@ -1,7 +1,10 @@
+ config BR2_PACKAGE_KODI_PVR_HTS
+ 	bool "kodi-pvr-hts"
+-	select BR2_PACKAGE_KODI_PLATFORM
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17
+ 	help
+ 	  Tvheadend HTSP PVR client addon for Kodi
+ 
+ 	  https://github.com/kodi-pvr/pvr.hts
++
++comment "kodi-pvr-hts needs a toolchain w/ gcc >= 7"
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_7
+diff --git a/package/kodi-pvr-hts/kodi-pvr-hts.hash b/package/kodi-pvr-hts/kodi-pvr-hts.hash
+index c9724404b5..275712df49 100644
+--- a/package/kodi-pvr-hts/kodi-pvr-hts.hash
++++ b/package/kodi-pvr-hts/kodi-pvr-hts.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  bcd92c376993a5721d346edcc09eb17289451f9156b1d1d113c9663c2046315a  libcec-4.0.7.tar.gz
-+sha256  090696d7a4fb772d7acebbb06f91ab92e025531c7c91824046b9e4e71ecb3377  libcec-6.0.2.tar.gz
- sha256  0137261d24ce001fc5237aacddd267533e0f150ac23cf21acffea599f7358f7a  COPYING
-diff --git a/package/libcec/libcec.mk b/package/libcec/libcec.mk
-index 7c37d05c7f..6591bc009a 100644
---- a/package/libcec/libcec.mk
-+++ b/package/libcec/libcec.mk
-@@ -4,7 +4,7 @@
+-sha256  6958b91ca616554e4c068bc303c66388e9a2c3a68b5979d8918b4e0d7b6bb95c  kodi-pvr-hts-4.4.21-Leia.tar.gz
+-sha256  6d97c3d608a5d59565b567313bd3e53a1d0066ed59f4ae8e474c895d0c20e746  debian/copyright
++sha256  ec291b5717c19dfd639131d195c64043746043d4f85189accaf29e9b1547fbba  kodi-pvr-hts-8.2.2-Matrix.tar.gz
++sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-hts/kodi-pvr-hts.mk b/package/kodi-pvr-hts/kodi-pvr-hts.mk
+index 6a25cda003..a4a14cdd6e 100644
+--- a/package/kodi-pvr-hts/kodi-pvr-hts.mk
++++ b/package/kodi-pvr-hts/kodi-pvr-hts.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--LIBCEC_VERSION = 4.0.7
-+LIBCEC_VERSION = 6.0.2
- LIBCEC_SITE = $(call github,Pulse-Eight,libcec,libcec-$(LIBCEC_VERSION))
- LIBCEC_LICENSE = GPL-2.0+
- LIBCEC_LICENSE_FILES = COPYING
+-KODI_PVR_HTS_VERSION = 4.4.21-Leia
++KODI_PVR_HTS_VERSION = 8.2.2-Matrix
+ KODI_PVR_HTS_SITE = $(call github,kodi-pvr,pvr.hts,$(KODI_PVR_HTS_VERSION))
+ KODI_PVR_HTS_LICENSE = GPL-2.0+
+-KODI_PVR_HTS_LICENSE_FILES = debian/copyright
+-KODI_PVR_HTS_DEPENDENCIES = kodi-platform
++KODI_PVR_HTS_LICENSE_FILES = LICENSE.md
++KODI_PVR_HTS_DEPENDENCIES = kodi
+ 
+ $(eval $(cmake-package))
 -- 
 2.29.2
