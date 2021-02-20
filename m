@@ -1,36 +1,67 @@
-From: guillaume.bressaix at gmail.com <guillaume.bressaix@gmail.com>
-Date: Sat, 20 Feb 2021 18:38:15 +0100
-Subject: [Buildroot] [PATCH] package/libxcrypt: --disable-werror to fix
- problem with sensitive compilers
-Message-ID: <20210220173815.28154-1-guillaume.bressaix@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 20 Feb 2021 18:38:56 +0100
+Subject: [Buildroot] [PATCH v1 1/2] package/irqbalance: fix sysv startup
+ script (add mkdir /run/irqbalance)
+In-Reply-To: <20210220163349.25244-1-ps.report@gmx.net>
+References: <20210220163349.25244-1-ps.report@gmx.net>
+Message-ID: <20210220173856.GQ2276@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
+Peter, All,
 
-Fixes: http://autobuild.buildroot.net/results/e9a058a8c98daf197cd9d7ac632e0cb5707d524f
+On 2021-02-20 17:33 +0100, Peter Seiderer spake thusly:
+> - add mkdir -p /run/irqbalance to sysv startup script needed to
+>   create socket /run/irqbalance/irqbalance<pid>.sock
+> 
+> Fixes:
+> 
+>   - Bug 13541 [1]
+> 
+>   daemon.warn /usr/sbin/irqbalance: Daemon couldn't be bound to the file-based socket.
+> 
+> [1] https://bugs.busybox.net/show_bug.cgi?id=13541
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-Some sensitive compilers may raise warnings that turn into errors.
+Series of 2 applied to master, thanks.
 
-Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
----
- package/libxcrypt/libxcrypt.mk | 3 +++
- 1 file changed, 3 insertions(+)
+Regards,
+Yann E. MORIN.
 
-diff --git a/package/libxcrypt/libxcrypt.mk b/package/libxcrypt/libxcrypt.mk
-index 63132edd9d..ccbb1a282c 100644
---- a/package/libxcrypt/libxcrypt.mk
-+++ b/package/libxcrypt/libxcrypt.mk
-@@ -11,4 +11,7 @@ LIBXCRYPT_LICENSE_FILES = LICENSING COPYING.LIB
- LIBXCRYPT_INSTALL_STAGING = YES
- LIBXCRYPT_AUTORECONF = YES
- 
-+# Some warnings turn into errors with some sensitive compilers
-+LIBXCRYPT_CONF_OPTS = --disable-werror
-+
- $(eval $(autotools-package))
+> ---
+>  package/irqbalance/S13irqbalance | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/package/irqbalance/S13irqbalance b/package/irqbalance/S13irqbalance
+> index b06a3372e9..d0f6adda71 100644
+> --- a/package/irqbalance/S13irqbalance
+> +++ b/package/irqbalance/S13irqbalance
+> @@ -7,6 +7,9 @@ EXEC="/usr/sbin/irqbalance"
+>  ARGS=""
+>  PID="/var/run/irqbalance.pid"
+>  
+> +# for irqbalance socket /run/irqbalance/irqbalance<pid>.sock
+> +mkdir -p /run/irqbalance
+> +
+>  case "$1" in
+>      start)
+>  	printf "Starting irqbalance: "
+> -- 
+> 2.30.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.20.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
