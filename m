@@ -1,27 +1,51 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 20 Feb 2021 16:45:34 +0000
-Subject: [Buildroot] [Bug 13541] 2021.02.rc2: irqbalance: Daemon couldn't be
- bound to the file-based socket
-In-Reply-To: <bug-13541-163@https.bugs.busybox.net/>
-References: <bug-13541-163@https.bugs.busybox.net/>
-Message-ID: <bug-13541-163-RyWiFSWgck@https.bugs.busybox.net/>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sat, 20 Feb 2021 17:47:14 +0100
+Subject: [Buildroot] [PATCH v1 1/2] package/irqbalance: fix sysv startup
+ script (add mkdir /run/irqbalance)
+In-Reply-To: <20210220163349.25244-1-ps.report@gmx.net>
+References: <20210220163349.25244-1-ps.report@gmx.net>
+Message-ID: <20210220174714.2f08e952@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13541
+On Sat, 20 Feb 2021 17:33:48 +0100, Peter Seiderer <ps.report@gmx.net> wrote:
 
---- Comment #1 from Peter Seiderer <ps.report@gmx.net> ---
-Thanks for the bug report and suggested fix, suggested patches can
-be found here [1] (sysv) and [2] (systemd).
+> - add mkdir -p /run/irqbalance to sysv startup script needed to
+>   create socket /run/irqbalance/irqbalance<pid>.sock
+>
+> Fixes:
+>
+>   - Bug 13541 [1]
+>
+>   daemon.warn /usr/sbin/irqbalance: Daemon couldn't be bound to the file-based socket.
+>
+> [1] https://bugs.busybox.net/show_bug.cgi?id=13541
+>
 
-[1]
-https://patchwork.ozlabs.org/project/buildroot/patch/20210220163349.25244-1-ps.report at gmx.net/
-[2]
-https://patchwork.ozlabs.org/project/buildroot/patch/20210220163349.25244-2-ps.report at gmx.net/
+Reported-by: Alfredo Pons Menargues <alfredo.pons@gmail.com>
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Regards,
+Peter
+
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+>  package/irqbalance/S13irqbalance | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/package/irqbalance/S13irqbalance b/package/irqbalance/S13irqbalance
+> index b06a3372e9..d0f6adda71 100644
+> --- a/package/irqbalance/S13irqbalance
+> +++ b/package/irqbalance/S13irqbalance
+> @@ -7,6 +7,9 @@ EXEC="/usr/sbin/irqbalance"
+>  ARGS=""
+>  PID="/var/run/irqbalance.pid"
+>
+> +# for irqbalance socket /run/irqbalance/irqbalance<pid>.sock
+> +mkdir -p /run/irqbalance
+> +
+>  case "$1" in
+>      start)
+>  	printf "Starting irqbalance: "
