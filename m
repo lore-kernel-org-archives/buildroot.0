@@ -1,62 +1,43 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 20 Feb 2021 09:59:01 +0100
-Subject: [Buildroot] [PATCH/next 42/54] package/kodi-screensaver-stars: bump
- version to 2.4.0-Matrix
+Date: Sat, 20 Feb 2021 09:59:02 +0100
+Subject: [Buildroot] [PATCH/next 43/54] package/kodi-skin-confluence: bump
+ version
 In-Reply-To: <20210220085913.888324-1-bernd.kuhls@t-online.de>
 References: <20210220085913.888324-1-bernd.kuhls@t-online.de>
-Message-ID: <20210220085913.888324-43-bernd.kuhls@t-online.de>
+Message-ID: <20210220085913.888324-44-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove dependency to opengl, opengles support was added upstream:
-https://github.com/xbmc/screensaver.stars/commit/b0cb93b21888a5808f7701a794c5795f55e641d4
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-screensaver-stars/Config.in                   | 4 ----
- package/kodi-screensaver-stars/kodi-screensaver-stars.hash | 2 +-
- package/kodi-screensaver-stars/kodi-screensaver-stars.mk   | 2 +-
- 3 files changed, 2 insertions(+), 6 deletions(-)
+ package/kodi-skin-confluence/kodi-skin-confluence.hash | 2 +-
+ package/kodi-skin-confluence/kodi-skin-confluence.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-screensaver-stars/Config.in b/package/kodi-screensaver-stars/Config.in
-index a2e435c0f6..3a8713a56e 100644
---- a/package/kodi-screensaver-stars/Config.in
-+++ b/package/kodi-screensaver-stars/Config.in
-@@ -1,10 +1,6 @@
- config BR2_PACKAGE_KODI_SCREENSAVER_STARS
- 	bool "kodi-screensaver-stars"
--	depends on BR2_PACKAGE_HAS_LIBGL
- 	help
- 	  Starfield screensaver for Kodi
- 
- 	  https://github.com/xbmc/screensaver.stars
--
--comment "kodi-screensaver-stars needs OpenGL"
--	depends on !BR2_PACKAGE_HAS_LIBGL
-diff --git a/package/kodi-screensaver-stars/kodi-screensaver-stars.hash b/package/kodi-screensaver-stars/kodi-screensaver-stars.hash
-index b658517300..b98c4baaef 100644
---- a/package/kodi-screensaver-stars/kodi-screensaver-stars.hash
-+++ b/package/kodi-screensaver-stars/kodi-screensaver-stars.hash
+diff --git a/package/kodi-skin-confluence/kodi-skin-confluence.hash b/package/kodi-skin-confluence/kodi-skin-confluence.hash
+index fdd4e828f6..005f99cf73 100644
+--- a/package/kodi-skin-confluence/kodi-skin-confluence.hash
++++ b/package/kodi-skin-confluence/kodi-skin-confluence.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  98972a9af45015d902ade50db822dbded52d4473acde6bc4b01a5ab8c4af4269  kodi-screensaver-stars-2.1.4-Leia.tar.gz
-+sha256  868105f6381bf5439f8c67d54dda00f2108a4363f4b25dfb12787ed65b602f0d  kodi-screensaver-stars-2.4.0-Matrix.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-screensaver-stars/kodi-screensaver-stars.mk b/package/kodi-screensaver-stars/kodi-screensaver-stars.mk
-index ca51921b50..c062de9488 100644
---- a/package/kodi-screensaver-stars/kodi-screensaver-stars.mk
-+++ b/package/kodi-screensaver-stars/kodi-screensaver-stars.mk
+-sha256  dc4a0abf05db50caf8e70e4904b8c2c445008ec3d6d23381c9c31dedaf6109de  kodi-skin-confluence-cffcb8320003e6048abe4b26316e5d5f3d50eac9.tar.gz
++sha256  549f158dd25c59ec39b787fdbf03f43e47dbdb950cc9f2fba83dea7f68953c26  kodi-skin-confluence-c06ce9eaaecad238bf3dfde23d65415c29be5b7d.tar.gz
+ sha256  89931c1fb1f3716694175763cf3221cfcd63d6935031cf6b4512d17ffe5d9860  LICENSE.txt
+diff --git a/package/kodi-skin-confluence/kodi-skin-confluence.mk b/package/kodi-skin-confluence/kodi-skin-confluence.mk
+index d9bd10bdfa..df62c26c1a 100644
+--- a/package/kodi-skin-confluence/kodi-skin-confluence.mk
++++ b/package/kodi-skin-confluence/kodi-skin-confluence.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_SCREENSAVER_STARS_VERSION = 2.1.4-Leia
-+KODI_SCREENSAVER_STARS_VERSION = 2.4.0-Matrix
- KODI_SCREENSAVER_STARS_SITE = $(call github,xbmc,screensaver.stars,$(KODI_SCREENSAVER_STARS_VERSION))
- KODI_SCREENSAVER_STARS_LICENSE = GPL-2.0+
- KODI_SCREENSAVER_STARS_LICENSE_FILES = LICENSE.md
+-KODI_SKIN_CONFLUENCE_VERSION = cffcb8320003e6048abe4b26316e5d5f3d50eac9
++KODI_SKIN_CONFLUENCE_VERSION = c06ce9eaaecad238bf3dfde23d65415c29be5b7d
+ KODI_SKIN_CONFLUENCE_SITE = $(call github,xbmc,skin.confluence,$(KODI_SKIN_CONFLUENCE_VERSION))
+ KODI_SKIN_CONFLUENCE_LICENSE = GPL-2.0
+ KODI_SKIN_CONFLUENCE_LICENSE_FILES = LICENSE.txt
 -- 
 2.29.2
