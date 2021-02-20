@@ -1,69 +1,64 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 20 Feb 2021 17:03:59 +0100
-Subject: [Buildroot] [PATCH] package/rust: disable ninja
-In-Reply-To: <20210217232411.290242-1-romain.naour@gmail.com>
-References: <20210217232411.290242-1-romain.naour@gmail.com>
-Message-ID: <20210220160359.GK2276@scaer>
+Date: Sat, 20 Feb 2021 17:16:05 +0100
+Subject: [Buildroot] [git commit] package/taglib: drop config options to
+ enable MP4/ASF support
+Message-ID: <20210220155911.B1AD88396F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=3590ebec28d4f46b1396c8f840d3adf80eba52f1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-02-18 00:24 +0100, Romain Naour spake thusly:
-> Ninja has recently be enabled as the default build system to build
-> llvm fork for rust compiler [1]. But we can still use Make if
-> "ninja = false" is provided in config.toml.
-> 
-> Ninja support can be enabled by a following patch.
-> 
-> [1] https://github.com/rust-lang/rust/commit/30b7dac745b1555cd96f41977f7d24435cbe7fa2
-> 
-> Fixes:
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/1019386205
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Both options where removed in git commit dd846904cbc1ef3ee628d77f0c9df88ef8967816
+back in year 2011.
 
-Applied to master, thanks.
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+[yann.morin.1998 at free.fr: drop the legacy handling]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/taglib/Config.in | 10 ----------
+ package/taglib/taglib.mk |  8 --------
+ 2 files changed, 18 deletions(-)
 
-If you have time, it would be great to investigate switching the cmake
-backend to ninja.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/rust/rust.mk | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/rust/rust.mk b/package/rust/rust.mk
-> index 798450e04e..a38a3d64f5 100644
-> --- a/package/rust/rust.mk
-> +++ b/package/rust/rust.mk
-> @@ -65,6 +65,8 @@ define HOST_RUST_CONFIGURE_CMDS
->  		echo 'channel = "stable"'; \
->  		echo '[target.$(RUSTC_TARGET_NAME)]'; \
->  		echo 'cc = "$(TARGET_CROSS)gcc"'; \
-> +		echo '[llvm]'; \
-> +		echo 'ninja = false'; \
->  	) > $(@D)/config.toml
->  endef
->  
-> -- 
-> 2.29.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/taglib/Config.in b/package/taglib/Config.in
+index 9e6bb707fc..6a87a13215 100644
+--- a/package/taglib/Config.in
++++ b/package/taglib/Config.in
+@@ -11,15 +11,5 @@ config BR2_PACKAGE_TAGLIB
+ 
+ 	  http://taglib.org/
+ 
+-if BR2_PACKAGE_TAGLIB
+-
+-config BR2_PACKAGE_TAGLIB_MP4
+-	bool "taglib mp4 support"
+-
+-config BR2_PACKAGE_TAGLIB_ASF
+-	bool "taglib wma support"
+-
+-endif
+-
+ comment "taglib needs a toolchain w/ C++, wchar"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
+diff --git a/package/taglib/taglib.mk b/package/taglib/taglib.mk
+index 9381e16672..738be35756 100644
+--- a/package/taglib/taglib.mk
++++ b/package/taglib/taglib.mk
+@@ -20,14 +20,6 @@ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ TAGLIB_DEPENDENCIES += zlib
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_TAGLIB_ASF),y)
+-TAGLIB_CONF_OPTS += -DWITH_ASF=ON
+-endif
+-
+-ifeq ($(BR2_PACKAGE_TAGLIB_MP4),y)
+-TAGLIB_CONF_OPTS += -DWITH_MP4=ON
+-endif
+-
+ define TAGLIB_REMOVE_DEVFILE
+ 	rm -f $(TARGET_DIR)/usr/bin/taglib-config
+ endef
