@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 20 Feb 2021 09:59:08 +0100
-Subject: [Buildroot] [PATCH/next 49/54]
- package/kodi-visualisation-shadertoy: bump version to 2.3.0-Matrix
+Date: Sat, 20 Feb 2021 09:58:35 +0100
+Subject: [Buildroot] [PATCH/next 16/54] package/kodi-pvr-dvbviewer: bump
+ version to 7.2.0-Matrix
 In-Reply-To: <20210220085913.888324-1-bernd.kuhls@t-online.de>
 References: <20210220085913.888324-1-bernd.kuhls@t-online.de>
-Message-ID: <20210220085913.888324-50-bernd.kuhls@t-online.de>
+Message-ID: <20210220085913.888324-17-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,55 +13,58 @@ To: buildroot@busybox.net
 
 Switch dependency to kodi after upstream removed the dependency to
 kodi-platform:
-https://github.com/xbmc/visualization.shadertoy/commit/3fa4d118dcee2025620eb342d1a22a956beb06e5
+https://github.com/kodi-pvr/pvr.dvbviewer/commit/838efac4e46ad249d066437b96633c2e0b9dda1a
+https://github.com/kodi-pvr/pvr.dvbviewer/commit/7ca7ca3ab05f67606d7cdae15fcfab292ad00b37
+
+Add missing dependency to tinyxml.
 
 Switch license file to LICENSE.md.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-visualisation-shadertoy/Config.in              | 1 -
- .../kodi-visualisation-shadertoy.hash                       | 4 ++--
- .../kodi-visualisation-shadertoy.mk                         | 6 +++---
- 3 files changed, 5 insertions(+), 6 deletions(-)
+ package/kodi-pvr-dvbviewer/Config.in               | 2 +-
+ package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash | 4 ++--
+ package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk   | 6 +++---
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/kodi-visualisation-shadertoy/Config.in b/package/kodi-visualisation-shadertoy/Config.in
-index 1fabba5ef5..aa671aae13 100644
---- a/package/kodi-visualisation-shadertoy/Config.in
-+++ b/package/kodi-visualisation-shadertoy/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_KODI_VISUALISATION_SHADERTOY
- 	bool "kodi-visualisation-shadertoy"
- 	select BR2_PACKAGE_GLM
--	select BR2_PACKAGE_LIBPLATFORM
+diff --git a/package/kodi-pvr-dvbviewer/Config.in b/package/kodi-pvr-dvbviewer/Config.in
+index e7dd7b3eb6..6a47d154fc 100644
+--- a/package/kodi-pvr-dvbviewer/Config.in
++++ b/package/kodi-pvr-dvbviewer/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_KODI_PVR_DVBVIEWER
+ 	bool "kodi-pvr-dvbviewer"
+-	select BR2_PACKAGE_KODI_PLATFORM
++	select BR2_PACKAGE_TINYXML
  	help
- 	  Shadertoy visualiser for Kodi
+ 	  Kodi's DVBViewer client addon
  
-diff --git a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.hash b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.hash
-index 67ab8867e6..8ecdfb6d50 100644
---- a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.hash
-+++ b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.hash
+diff --git a/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash b/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash
+index ec2013412f..a2aac32bf3 100644
+--- a/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash
++++ b/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  07724fc59cc5f960a941b8255af326e87fa9fbc8234498c7e21d8a46050e0dd4  kodi-visualisation-shadertoy-1.2.4-Leia.tar.gz
--sha256  e33ac3ac6ca1bdd4a4a411481d43579d855622e7ecc207809b5f49ea617db480  debian/copyright
-+sha256  fbee4d8d4a41013705848eb89d4dcd55fe915a1ff997a60c800aa1bdd157530b  kodi-visualisation-shadertoy-2.3.0-Matrix.tar.gz
+-sha256  8a3d167e652574caf30ba0ce9c22d278715e0237774b817e37826f1b2d647bff  kodi-pvr-dvbviewer-3.7.11-Leia.tar.gz
+-sha256  5757dbd6a8731e9395508cd7ab9ca0ea0c2863a7aac7136299d40549c88c9c2c  debian/copyright
++sha256  aa81c0a59c00aa13bc1ea3adc078e2910fde42bc86ad3a78ecefc6e4c3d5de59  kodi-pvr-dvbviewer-7.2.0-Matrix.tar.gz
 +sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk
-index 865abf02cc..f5ad505fe7 100644
---- a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk
-+++ b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk
+diff --git a/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk b/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk
+index b88d3d86cd..cbc12ed9e5 100644
+--- a/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk
++++ b/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk
 @@ -4,10 +4,10 @@
  #
  ################################################################################
  
--KODI_VISUALISATION_SHADERTOY_VERSION = 1.2.4-Leia
-+KODI_VISUALISATION_SHADERTOY_VERSION = 2.3.0-Matrix
- KODI_VISUALISATION_SHADERTOY_SITE = $(call github,xbmc,visualization.shadertoy,$(KODI_VISUALISATION_SHADERTOY_VERSION))
- KODI_VISUALISATION_SHADERTOY_LICENSE = GPL-2.0+
--KODI_VISUALISATION_SHADERTOY_LICENSE_FILES = debian/copyright
--KODI_VISUALISATION_SHADERTOY_DEPENDENCIES = glm kodi libplatform
-+KODI_VISUALISATION_SHADERTOY_LICENSE_FILES = LICENSE.md
-+KODI_VISUALISATION_SHADERTOY_DEPENDENCIES = glm kodi
+-KODI_PVR_DVBVIEWER_VERSION = 3.7.11-Leia
++KODI_PVR_DVBVIEWER_VERSION = 7.2.0-Matrix
+ KODI_PVR_DVBVIEWER_SITE = $(call github,kodi-pvr,pvr.dvbviewer,$(KODI_PVR_DVBVIEWER_VERSION))
+ KODI_PVR_DVBVIEWER_LICENSE = GPL-2.0+
+-KODI_PVR_DVBVIEWER_LICENSE_FILES = debian/copyright
+-KODI_PVR_DVBVIEWER_DEPENDENCIES = kodi-platform
++KODI_PVR_DVBVIEWER_LICENSE_FILES = LICENSE.md
++KODI_PVR_DVBVIEWER_DEPENDENCIES = kodi tinyxml
  
  $(eval $(cmake-package))
 -- 
