@@ -1,63 +1,69 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 20 Feb 2021 09:58:24 +0100
-Subject: [Buildroot] [PATCH/next 05/54] package/libplatform: bump version
+Date: Sat, 20 Feb 2021 09:58:51 +0100
+Subject: [Buildroot] [PATCH/next 32/54] package/kodi-pvr-zattoo: bump
+ version to 19.7.2-Matrix
 In-Reply-To: <20210220085913.888324-1-bernd.kuhls@t-online.de>
 References: <20210220085913.888324-1-bernd.kuhls@t-online.de>
-Message-ID: <20210220085913.888324-6-bernd.kuhls@t-online.de>
+Message-ID: <20210220085913.888324-33-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add -std=c++11 to CXXFLAGS to fix build with gcc < 5.x:
+Switch dependency to kodi after upstream removed the dependency to
+kodi-platform and libplatform:
+https://github.com/rbuehlma/pvr.zattoo/commit/382c83d0cadcfb3152c577291ee0a2d1015a128c
+https://github.com/rbuehlma/pvr.zattoo/commit/a813b2c9f0510d2b9cd23d57b659ae5346c63065
 
-buildroot/output/build/libplatform-a7cd0d5780ed80a4e70480d1650749f29e8a1fb2/src/util/StringUtils.cpp:
- In static member function 'static std::string& StringUtils::TrimLeft(std::string&)':
-buildroot/output/build/libplatform-a7cd0d5780ed80a4e70480d1650749f29e8a1fb2/src/util/StringUtils.cpp:456:99:
- warning: lambda expressions only available with -std=c++11 or -std=gnu++11 [enabled by default]
-   str.erase(str.begin(), ::find_if(str.begin(), str.end(), [](char s) { return isspace_c(s) == 0; }));
-                                                                                                   ^
-buildroot/output/build/libplatform-a7cd0d5780ed80a4e70480d1650749f29e8a1fb2/src/util/StringUtils.cpp:456:100:
- error: no matching function for call to 'find_if(std::basic_string<char>::iterator, std::basic_string<char>::iterator,
-  StringUtils::TrimLeft(std::string&)::__lambda0)'
-   str.erase(str.begin(), ::find_if(str.begin(), str.end(), [](char s) { return isspace_c(s) == 0; }));
-                                                                                                    ^
+Switch license file to LICENSE.md.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libplatform/libplatform.hash | 2 +-
- package/libplatform/libplatform.mk   | 6 +++++-
- 2 files changed, 6 insertions(+), 2 deletions(-)
+ package/kodi-pvr-zattoo/Config.in            | 2 --
+ package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash | 4 ++--
+ package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk   | 6 +++---
+ 3 files changed, 5 insertions(+), 7 deletions(-)
 
-diff --git a/package/libplatform/libplatform.hash b/package/libplatform/libplatform.hash
-index f08435da12..283b435b7c 100644
---- a/package/libplatform/libplatform.hash
-+++ b/package/libplatform/libplatform.hash
+diff --git a/package/kodi-pvr-zattoo/Config.in b/package/kodi-pvr-zattoo/Config.in
+index 5dfadcadd1..9a6eb3fec5 100644
+--- a/package/kodi-pvr-zattoo/Config.in
++++ b/package/kodi-pvr-zattoo/Config.in
+@@ -1,7 +1,5 @@
+ config BR2_PACKAGE_KODI_PVR_ZATTOO
+ 	bool "kodi-pvr-zattoo"
+-	select BR2_PACKAGE_KODI_PLATFORM
+-	select BR2_PACKAGE_LIBPLATFORM
+ 	select BR2_PACKAGE_RAPIDJSON
+ 	select BR2_PACKAGE_TINYXML2
+ 	help
+diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
+index a9e2cd996c..55644e2d98 100644
+--- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
++++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  209daeb87af4ca92199887eb151b2a459bb81566cdaa092644e0889afb64bf6a  libplatform-1c9d14fa996af33760a2c700caebd2bd9ae527c9.tar.gz
-+sha256  ebee46c76b86b40b703fa913465f5004fa3166eeb6a4794c58fc8a5c25702931  libplatform-a7cd0d5780ed80a4e70480d1650749f29e8a1fb2.tar.gz
- sha256  80fc66febbb2393c9d518e3eefa4ad9aae15a9b6a84174c0e443ea79eeea5131  src/os.h
-diff --git a/package/libplatform/libplatform.mk b/package/libplatform/libplatform.mk
-index ca57a07d15..5d909f784c 100644
---- a/package/libplatform/libplatform.mk
-+++ b/package/libplatform/libplatform.mk
-@@ -4,10 +4,14 @@
+-sha256  9c3dc2ed9f8c39bcc4f5798439b85f2bdae1a427ffeb1b9d18aa5e2caca29f4e  kodi-pvr-zattoo-18.1.23-Leia.tar.gz
+-sha256  d3670aef89085fd6b97665967a8422c89324afbc4720daa0975696a2ee92e236  debian/copyright
++sha256  f241e46432018d618ad89f7bbe0da3f83c4d0e466c807b5b705a1d34491072d4  kodi-pvr-zattoo-19.7.2-Matrix.tar.gz
++sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
+index cb995c9c78..3622436bad 100644
+--- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
++++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--LIBPLATFORM_VERSION = 1c9d14fa996af33760a2c700caebd2bd9ae527c9
-+LIBPLATFORM_VERSION = a7cd0d5780ed80a4e70480d1650749f29e8a1fb2
- LIBPLATFORM_SITE = $(call github,Pulse-Eight,platform,$(LIBPLATFORM_VERSION))
- LIBPLATFORM_LICENSE = GPL-2.0+
- LIBPLATFORM_LICENSE_FILES = src/os.h
- LIBPLATFORM_INSTALL_STAGING = YES
+-KODI_PVR_ZATTOO_VERSION = 18.1.23-Leia
++KODI_PVR_ZATTOO_VERSION = 19.7.2-Matrix
+ KODI_PVR_ZATTOO_SITE = $(call github,rbuehlma,pvr.zattoo,$(KODI_PVR_ZATTOO_VERSION))
+ KODI_PVR_ZATTOO_LICENSE = GPL-2.0+
+-KODI_PVR_ZATTOO_LICENSE_FILES = debian/copyright
+-KODI_PVR_ZATTOO_DEPENDENCIES = kodi-platform libplatform rapidjson tinyxml2
++KODI_PVR_ZATTOO_LICENSE_FILES = LICENSE.md
++KODI_PVR_ZATTOO_DEPENDENCIES = kodi rapidjson tinyxml2
  
-+ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_5),)
-+LIBPLATFORM_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -std=c++11"
-+endif
-+
  $(eval $(cmake-package))
 -- 
 2.29.2
