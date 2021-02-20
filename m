@@ -1,69 +1,49 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 20 Feb 2021 09:58:43 +0100
-Subject: [Buildroot] [PATCH/next 24/54] package/kodi-pvr-njoy: bump version
- to 7.1.0-Matrix
+Date: Sat, 20 Feb 2021 09:59:10 +0100
+Subject: [Buildroot] [PATCH/next 51/54]
+ package/kodi-visualisation-starburst: bump version to 2.4.0-Matrix
 In-Reply-To: <20210220085913.888324-1-bernd.kuhls@t-online.de>
 References: <20210220085913.888324-1-bernd.kuhls@t-online.de>
-Message-ID: <20210220085913.888324-25-bernd.kuhls@t-online.de>
+Message-ID: <20210220085913.888324-52-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Switch dependency to kodi after upstream removed the dependency to
-kodi-platform:
-https://github.com/kodi-pvr/pvr.njoy/commit/eb5613fb8bbf45643e211147f39f106ea9ff573d
-
-Added missing dependency to tinyxml.
-
 Switch license file to LICENSE.md.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-pvr-njoy/Config.in          | 2 +-
- package/kodi-pvr-njoy/kodi-pvr-njoy.hash | 4 ++--
- package/kodi-pvr-njoy/kodi-pvr-njoy.mk   | 6 +++---
- 3 files changed, 6 insertions(+), 6 deletions(-)
+ .../kodi-visualisation-starburst.hash                         | 4 ++--
+ .../kodi-visualisation-starburst.mk                           | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/kodi-pvr-njoy/Config.in b/package/kodi-pvr-njoy/Config.in
-index 33c493cb8b..bb84ea3a66 100644
---- a/package/kodi-pvr-njoy/Config.in
-+++ b/package/kodi-pvr-njoy/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_KODI_PVR_NJOY
- 	bool "kodi-pvr-njoy"
--	select BR2_PACKAGE_KODI_PLATFORM
-+	select BR2_PACKAGE_TINYXML
- 	help
- 	  Kodi's Njoy N7 client addon
- 
-diff --git a/package/kodi-pvr-njoy/kodi-pvr-njoy.hash b/package/kodi-pvr-njoy/kodi-pvr-njoy.hash
-index 3071dfac67..76e5e988db 100644
---- a/package/kodi-pvr-njoy/kodi-pvr-njoy.hash
-+++ b/package/kodi-pvr-njoy/kodi-pvr-njoy.hash
+diff --git a/package/kodi-visualisation-starburst/kodi-visualisation-starburst.hash b/package/kodi-visualisation-starburst/kodi-visualisation-starburst.hash
+index 834d71ae5c..b08da9788e 100644
+--- a/package/kodi-visualisation-starburst/kodi-visualisation-starburst.hash
++++ b/package/kodi-visualisation-starburst/kodi-visualisation-starburst.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  8c42a3c3754d7a07de9682504c4883a584eb21a92b9af70f0129ffc2707c1554  kodi-pvr-njoy-3.4.2-Leia.tar.gz
--sha256  9d42154eabd84ae131cc6384a3ea0fc622c3551595564bec7a6bec8df4a57fbd  debian/copyright
-+sha256  26134e815efd38fa09507a6119e6463c4785a78a417e253558d23a94a9989613  kodi-pvr-njoy-7.1.0-Matrix.tar.gz
+-sha256  5a06385dd4824373a00fe4e2139b3d851c51ed001f68671acf99d17ce348f5e2  kodi-visualisation-starburst-2.0.3-Leia.tar.gz
+-sha256  2e668b3da2f061a6d6ecc3cb96bdfb0f8fc9cc98c9e9f95454bc45b88708690f  debian/copyright
++sha256  fb991924b8f9a4f86d81b28ec629c131d36364f82914098356184c9ef03e753e  kodi-visualisation-starburst-2.4.0-Matrix.tar.gz
 +sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-njoy/kodi-pvr-njoy.mk b/package/kodi-pvr-njoy/kodi-pvr-njoy.mk
-index ca86d46d85..17a69af73b 100644
---- a/package/kodi-pvr-njoy/kodi-pvr-njoy.mk
-+++ b/package/kodi-pvr-njoy/kodi-pvr-njoy.mk
+diff --git a/package/kodi-visualisation-starburst/kodi-visualisation-starburst.mk b/package/kodi-visualisation-starburst/kodi-visualisation-starburst.mk
+index 8d736f08e9..f19a82bf81 100644
+--- a/package/kodi-visualisation-starburst/kodi-visualisation-starburst.mk
++++ b/package/kodi-visualisation-starburst/kodi-visualisation-starburst.mk
 @@ -4,10 +4,10 @@
  #
  ################################################################################
  
--KODI_PVR_NJOY_VERSION = 3.4.2-Leia
-+KODI_PVR_NJOY_VERSION = 7.1.0-Matrix
- KODI_PVR_NJOY_SITE = $(call github,kodi-pvr,pvr.njoy,$(KODI_PVR_NJOY_VERSION))
- KODI_PVR_NJOY_LICENSE = GPL-2.0+
--KODI_PVR_NJOY_LICENSE_FILES = debian/copyright
--KODI_PVR_NJOY_DEPENDENCIES = kodi-platform
-+KODI_PVR_NJOY_LICENSE_FILES = LICENSE.md
-+KODI_PVR_NJOY_DEPENDENCIES = kodi tinyxml
+-KODI_VISUALISATION_STARBURST_VERSION = 2.0.3-Leia
++KODI_VISUALISATION_STARBURST_VERSION = 2.4.0-Matrix
+ KODI_VISUALISATION_STARBURST_SITE = $(call github,xbmc,visualization.starburst,$(KODI_VISUALISATION_STARBURST_VERSION))
+ KODI_VISUALISATION_STARBURST_LICENSE = GPL-2.0+
+-KODI_VISUALISATION_STARBURST_LICENSE_FILES = debian/copyright
++KODI_VISUALISATION_STARBURST_LICENSE_FILES = LICENSE.md
+ KODI_VISUALISATION_STARBURST_DEPENDENCIES = glm kodi
  
  $(eval $(cmake-package))
 -- 
