@@ -1,87 +1,44 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 20 Feb 2021 12:00:51 +0100
-Subject: [Buildroot] [PATCH/next 06/54] package/kodi: bump version to
- 19.0-Matrix
-In-Reply-To: <20210220085913.888324-7-bernd.kuhls@t-online.de>
-References: <20210220085913.888324-1-bernd.kuhls@t-online.de>
- <20210220085913.888324-7-bernd.kuhls@t-online.de>
-Message-ID: <20210220110051.GJ2276@scaer>
+Date: Sat, 20 Feb 2021 17:02:51 +0100
+Subject: [Buildroot] [git commit] package/rust: disable ninja
+Message-ID: <20210220154212.9C05B81400@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=f826a944ae54561ad71838329232dcca4e734ef9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Here's a very quick, very superficial, and very incomplete review...
+Ninja has recently be enabled as the default build system to build
+llvm fork for rust compiler [1]. But we can still use Make if
+"ninja = false" is provided in config.toml.
 
-On 2021-02-20 09:58 +0100, Bernd Kuhls spake thusly:
-> Rebased patch 0001.
-> 
-> Removed patch 0002, not needed anymore due to use of system ffmpeg
-> package.
-> 
-> Added patch 0002 which fixes an issue with wayland detection.
-> 
-> Added patch 0003 to fix build with gcc-4.9, gcc-4.8 stays broken.
-> 
-> Switch from python2 to python3, reworked dependencies.
+Ninja support can be enabled by a following patch.
 
-Yeah, at long last! Woot! :-)
+[1] https://github.com/rust-lang/rust/commit/30b7dac745b1555cd96f41977f7d24435cbe7fa2
 
-> diff --git a/package/kodi/0001-kodi-config.cmake-use-CMAKE_FIND_ROOT_PATH-to-fix-cr.patch b/package/kodi/0001-kodi-config.cmake-use-CMAKE_FIND_ROOT_PATH-to-fix-cr.patch
-> index 5abb77e777..cbfb97e4f3 100644
-> --- a/package/kodi/0001-kodi-config.cmake-use-CMAKE_FIND_ROOT_PATH-to-fix-cr.patch
-> +++ b/package/kodi/0001-kodi-config.cmake-use-CMAKE_FIND_ROOT_PATH-to-fix-cr.patch
-> @@ -8,18 +8,21 @@ When cross-compiling, the location at build time of the libraries is
->  not the same as the one at run-time. The CMAKE_FIND_ROOT_PATH variable
->  is here to handle this difference, so use it in kodi-config.cmake.
->  
-> +Upstream status: Rejected (PR 17616)
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/1019386205
 
-It's not that they rejeted it: they even applied it nitially. However,
-it breaks the build, so they reverted it. So, stating "rejected
-upstream" is misleading.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/rust/rust.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-So, it would be nice that we eventualyl get a patch that is
-upstreamable...
-
-[--SNIP--]
-> diff --git a/package/kodi/0002-Revert-cmake-FindWaylandpp-bail-out-if-we-cannot-fin.patch b/package/kodi/0002-Revert-cmake-FindWaylandpp-bail-out-if-we-cannot-fin.patch
-> new file mode 100644
-> index 0000000000..0482d60d12
-> --- /dev/null
-> +++ b/package/kodi/0002-Revert-cmake-FindWaylandpp-bail-out-if-we-cannot-fin.patch
-> @@ -0,0 +1,41 @@
-> +From 99bc697c3849f3a093fcf6673f48d0ea3eeb3bf0 Mon Sep 17 00:00:00 2001
-> +From: Bernd Kuhls <bernd.kuhls@t-online.de>
-> +Date: Sun, 1 Nov 2020 18:05:00 +0100
-> +Subject: [PATCH] Revert "[cmake] FindWaylandpp: bail out if we cannot find
-> + waylandpp via pkg-config"
-> +
-> +This reverts commit 767ff84dd222ff19996889942abf239d93fd940b.
-
-Why? Please be mopre explicit: we'll have to maintain that patch, so we
-must now what breaks and why.
-
-[--SNIP--]
-> +ifeq ($(BR2_PACKAGE_LIBUDFREAD),y)
-> +KODI_DEPENDENCIES += libudfread
-> +endif
-
-There's no configure option to drive this feature?
-
-At least, I think we should unconditionally disable using the internal
-copy, as it will be downloaded at build time: -DENABLE_INTERNAL_UDFREAD=OFF
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/rust/rust.mk b/package/rust/rust.mk
+index 798450e04e..a38a3d64f5 100644
+--- a/package/rust/rust.mk
++++ b/package/rust/rust.mk
+@@ -65,6 +65,8 @@ define HOST_RUST_CONFIGURE_CMDS
+ 		echo 'channel = "stable"'; \
+ 		echo '[target.$(RUSTC_TARGET_NAME)]'; \
+ 		echo 'cc = "$(TARGET_CROSS)gcc"'; \
++		echo '[llvm]'; \
++		echo 'ninja = false'; \
+ 	) > $(@D)/config.toml
+ endef
+ 
