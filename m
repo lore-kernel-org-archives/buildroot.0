@@ -1,48 +1,87 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 20 Feb 2021 09:58:26 +0000
-Subject: [Buildroot] [Bug 13541] New: 2021.02.rc2: irqbalance: Daemon
- couldn't be bound to the file-based socket
-Message-ID: <bug-13541-163@https.bugs.busybox.net/>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 20 Feb 2021 12:00:51 +0100
+Subject: [Buildroot] [PATCH/next 06/54] package/kodi: bump version to
+ 19.0-Matrix
+In-Reply-To: <20210220085913.888324-7-bernd.kuhls@t-online.de>
+References: <20210220085913.888324-1-bernd.kuhls@t-online.de>
+ <20210220085913.888324-7-bernd.kuhls@t-online.de>
+Message-ID: <20210220110051.GJ2276@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13541
+Bernd, All,
 
-            Bug ID: 13541
-           Summary: 2021.02.rc2: irqbalance: Daemon couldn't be bound to
-                    the file-based socket
-           Product: buildroot
-           Version: unspecified
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: major
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: alfredo.pons at gmail.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+Here's a very quick, very superficial, and very incomplete review...
 
-Created attachment 8771
-  --> https://bugs.busybox.net/attachment.cgi?id=8771&action=edit
-My S13irqbalance file
+On 2021-02-20 09:58 +0100, Bernd Kuhls spake thusly:
+> Rebased patch 0001.
+> 
+> Removed patch 0002, not needed anymore due to use of system ffmpeg
+> package.
+> 
+> Added patch 0002 which fixes an issue with wayland detection.
+> 
+> Added patch 0003 to fix build with gcc-4.9, gcc-4.8 stays broken.
+> 
+> Switch from python2 to python3, reworked dependencies.
 
-Tested on RPI3defconf
+Yeah, at long last! Woot! :-)
 
-You can see this log in /var/log/messages: /usr/sbin/irqbalance: Daemon
-couldn't be bound to the file-based socket.
+> diff --git a/package/kodi/0001-kodi-config.cmake-use-CMAKE_FIND_ROOT_PATH-to-fix-cr.patch b/package/kodi/0001-kodi-config.cmake-use-CMAKE_FIND_ROOT_PATH-to-fix-cr.patch
+> index 5abb77e777..cbfb97e4f3 100644
+> --- a/package/kodi/0001-kodi-config.cmake-use-CMAKE_FIND_ROOT_PATH-to-fix-cr.patch
+> +++ b/package/kodi/0001-kodi-config.cmake-use-CMAKE_FIND_ROOT_PATH-to-fix-cr.patch
+> @@ -8,18 +8,21 @@ When cross-compiling, the location at build time of the libraries is
+>  not the same as the one at run-time. The CMAKE_FIND_ROOT_PATH variable
+>  is here to handle this difference, so use it in kodi-config.cmake.
+>  
+> +Upstream status: Rejected (PR 17616)
 
-The bug is this: https://gitlab.alpinelinux.org/alpine/aports/-/issues/10671
+It's not that they rejeted it: they even applied it nitially. However,
+it breaks the build, so they reverted it. So, stating "rejected
+upstream" is misleading.
 
-One solution could be add 'mkdir -p /var/run/irqbalance'  on start section in 
-"/etc/init.d/S13irqbalance"
+So, it would be nice that we eventualyl get a patch that is
+upstreamable...
 
-Thanks.
+[--SNIP--]
+> diff --git a/package/kodi/0002-Revert-cmake-FindWaylandpp-bail-out-if-we-cannot-fin.patch b/package/kodi/0002-Revert-cmake-FindWaylandpp-bail-out-if-we-cannot-fin.patch
+> new file mode 100644
+> index 0000000000..0482d60d12
+> --- /dev/null
+> +++ b/package/kodi/0002-Revert-cmake-FindWaylandpp-bail-out-if-we-cannot-fin.patch
+> @@ -0,0 +1,41 @@
+> +From 99bc697c3849f3a093fcf6673f48d0ea3eeb3bf0 Mon Sep 17 00:00:00 2001
+> +From: Bernd Kuhls <bernd.kuhls@t-online.de>
+> +Date: Sun, 1 Nov 2020 18:05:00 +0100
+> +Subject: [PATCH] Revert "[cmake] FindWaylandpp: bail out if we cannot find
+> + waylandpp via pkg-config"
+> +
+> +This reverts commit 767ff84dd222ff19996889942abf239d93fd940b.
+
+Why? Please be mopre explicit: we'll have to maintain that patch, so we
+must now what breaks and why.
+
+[--SNIP--]
+> +ifeq ($(BR2_PACKAGE_LIBUDFREAD),y)
+> +KODI_DEPENDENCIES += libudfread
+> +endif
+
+There's no configure option to drive this feature?
+
+At least, I think we should unconditionally disable using the internal
+copy, as it will be downloaded at build time: -DENABLE_INTERNAL_UDFREAD=OFF
+
+Regards,
+Yann E. MORIN.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
