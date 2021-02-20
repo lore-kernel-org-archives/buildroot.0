@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 20 Feb 2021 09:58:51 +0100
-Subject: [Buildroot] [PATCH/next 32/54] package/kodi-pvr-zattoo: bump
- version to 19.7.2-Matrix
+Date: Sat, 20 Feb 2021 09:59:08 +0100
+Subject: [Buildroot] [PATCH/next 49/54]
+ package/kodi-visualisation-shadertoy: bump version to 2.3.0-Matrix
 In-Reply-To: <20210220085913.888324-1-bernd.kuhls@t-online.de>
 References: <20210220085913.888324-1-bernd.kuhls@t-online.de>
-Message-ID: <20210220085913.888324-33-bernd.kuhls@t-online.de>
+Message-ID: <20210220085913.888324-50-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,57 +12,56 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Switch dependency to kodi after upstream removed the dependency to
-kodi-platform and libplatform:
-https://github.com/rbuehlma/pvr.zattoo/commit/382c83d0cadcfb3152c577291ee0a2d1015a128c
-https://github.com/rbuehlma/pvr.zattoo/commit/a813b2c9f0510d2b9cd23d57b659ae5346c63065
+kodi-platform:
+https://github.com/xbmc/visualization.shadertoy/commit/3fa4d118dcee2025620eb342d1a22a956beb06e5
 
 Switch license file to LICENSE.md.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-pvr-zattoo/Config.in            | 2 --
- package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash | 4 ++--
- package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk   | 6 +++---
- 3 files changed, 5 insertions(+), 7 deletions(-)
+ package/kodi-visualisation-shadertoy/Config.in              | 1 -
+ .../kodi-visualisation-shadertoy.hash                       | 4 ++--
+ .../kodi-visualisation-shadertoy.mk                         | 6 +++---
+ 3 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/kodi-pvr-zattoo/Config.in b/package/kodi-pvr-zattoo/Config.in
-index 5dfadcadd1..9a6eb3fec5 100644
---- a/package/kodi-pvr-zattoo/Config.in
-+++ b/package/kodi-pvr-zattoo/Config.in
-@@ -1,7 +1,5 @@
- config BR2_PACKAGE_KODI_PVR_ZATTOO
- 	bool "kodi-pvr-zattoo"
--	select BR2_PACKAGE_KODI_PLATFORM
+diff --git a/package/kodi-visualisation-shadertoy/Config.in b/package/kodi-visualisation-shadertoy/Config.in
+index 1fabba5ef5..aa671aae13 100644
+--- a/package/kodi-visualisation-shadertoy/Config.in
++++ b/package/kodi-visualisation-shadertoy/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_KODI_VISUALISATION_SHADERTOY
+ 	bool "kodi-visualisation-shadertoy"
+ 	select BR2_PACKAGE_GLM
 -	select BR2_PACKAGE_LIBPLATFORM
- 	select BR2_PACKAGE_RAPIDJSON
- 	select BR2_PACKAGE_TINYXML2
  	help
-diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
-index a9e2cd996c..55644e2d98 100644
---- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
-+++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
+ 	  Shadertoy visualiser for Kodi
+ 
+diff --git a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.hash b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.hash
+index 67ab8867e6..8ecdfb6d50 100644
+--- a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.hash
++++ b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  9c3dc2ed9f8c39bcc4f5798439b85f2bdae1a427ffeb1b9d18aa5e2caca29f4e  kodi-pvr-zattoo-18.1.23-Leia.tar.gz
--sha256  d3670aef89085fd6b97665967a8422c89324afbc4720daa0975696a2ee92e236  debian/copyright
-+sha256  f241e46432018d618ad89f7bbe0da3f83c4d0e466c807b5b705a1d34491072d4  kodi-pvr-zattoo-19.7.2-Matrix.tar.gz
+-sha256  07724fc59cc5f960a941b8255af326e87fa9fbc8234498c7e21d8a46050e0dd4  kodi-visualisation-shadertoy-1.2.4-Leia.tar.gz
+-sha256  e33ac3ac6ca1bdd4a4a411481d43579d855622e7ecc207809b5f49ea617db480  debian/copyright
++sha256  fbee4d8d4a41013705848eb89d4dcd55fe915a1ff997a60c800aa1bdd157530b  kodi-visualisation-shadertoy-2.3.0-Matrix.tar.gz
 +sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
-index cb995c9c78..3622436bad 100644
---- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
-+++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
+diff --git a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk
+index 865abf02cc..f5ad505fe7 100644
+--- a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk
++++ b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk
 @@ -4,10 +4,10 @@
  #
  ################################################################################
  
--KODI_PVR_ZATTOO_VERSION = 18.1.23-Leia
-+KODI_PVR_ZATTOO_VERSION = 19.7.2-Matrix
- KODI_PVR_ZATTOO_SITE = $(call github,rbuehlma,pvr.zattoo,$(KODI_PVR_ZATTOO_VERSION))
- KODI_PVR_ZATTOO_LICENSE = GPL-2.0+
--KODI_PVR_ZATTOO_LICENSE_FILES = debian/copyright
--KODI_PVR_ZATTOO_DEPENDENCIES = kodi-platform libplatform rapidjson tinyxml2
-+KODI_PVR_ZATTOO_LICENSE_FILES = LICENSE.md
-+KODI_PVR_ZATTOO_DEPENDENCIES = kodi rapidjson tinyxml2
+-KODI_VISUALISATION_SHADERTOY_VERSION = 1.2.4-Leia
++KODI_VISUALISATION_SHADERTOY_VERSION = 2.3.0-Matrix
+ KODI_VISUALISATION_SHADERTOY_SITE = $(call github,xbmc,visualization.shadertoy,$(KODI_VISUALISATION_SHADERTOY_VERSION))
+ KODI_VISUALISATION_SHADERTOY_LICENSE = GPL-2.0+
+-KODI_VISUALISATION_SHADERTOY_LICENSE_FILES = debian/copyright
+-KODI_VISUALISATION_SHADERTOY_DEPENDENCIES = glm kodi libplatform
++KODI_VISUALISATION_SHADERTOY_LICENSE_FILES = LICENSE.md
++KODI_VISUALISATION_SHADERTOY_DEPENDENCIES = glm kodi
  
  $(eval $(cmake-package))
 -- 
