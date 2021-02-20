@@ -1,70 +1,79 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 20 Feb 2021 09:58:35 +0100
-Subject: [Buildroot] [PATCH/next 16/54] package/kodi-pvr-dvbviewer: bump
- version to 7.2.0-Matrix
+Date: Sat, 20 Feb 2021 09:58:55 +0100
+Subject: [Buildroot] [PATCH/next 36/54] package/kodi-screensaver-cpblobs:
+ bump version to 3.4.0-Matrix
 In-Reply-To: <20210220085913.888324-1-bernd.kuhls@t-online.de>
 References: <20210220085913.888324-1-bernd.kuhls@t-online.de>
-Message-ID: <20210220085913.888324-17-bernd.kuhls@t-online.de>
+Message-ID: <20210220085913.888324-37-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Switch dependency to kodi after upstream removed the dependency to
-kodi-platform:
-https://github.com/kodi-pvr/pvr.dvbviewer/commit/838efac4e46ad249d066437b96633c2e0b9dda1a
-https://github.com/kodi-pvr/pvr.dvbviewer/commit/7ca7ca3ab05f67606d7cdae15fcfab292ad00b37
+Remove dependency to libsoil:
+https://github.com/xbmc/screensaver.cpblobs/commit/c505105f277b7e4bae0797e1c3cf89a0515ff3a5
 
-Add missing dependency to tinyxml.
+Add dependency to glm and remove dependency to opengl, opengles support
+was added upstream:
+https://github.com/xbmc/screensaver.cpblobs/commit/cab48fbc8a7b288b758eb10c1c27caa99cc33f06
 
 Switch license file to LICENSE.md.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-pvr-dvbviewer/Config.in               | 2 +-
- package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash | 4 ++--
- package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk   | 6 +++---
- 3 files changed, 6 insertions(+), 6 deletions(-)
+ package/kodi-screensaver-cpblobs/Config.in             |  6 +-----
+ .../kodi-screensaver-cpblobs.hash                      |  4 ++--
+ .../kodi-screensaver-cpblobs.mk                        | 10 +++++++---
+ 3 files changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/package/kodi-pvr-dvbviewer/Config.in b/package/kodi-pvr-dvbviewer/Config.in
-index e7dd7b3eb6..6a47d154fc 100644
---- a/package/kodi-pvr-dvbviewer/Config.in
-+++ b/package/kodi-pvr-dvbviewer/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_KODI_PVR_DVBVIEWER
- 	bool "kodi-pvr-dvbviewer"
--	select BR2_PACKAGE_KODI_PLATFORM
-+	select BR2_PACKAGE_TINYXML
+diff --git a/package/kodi-screensaver-cpblobs/Config.in b/package/kodi-screensaver-cpblobs/Config.in
+index 4e0003bddc..7f9a591418 100644
+--- a/package/kodi-screensaver-cpblobs/Config.in
++++ b/package/kodi-screensaver-cpblobs/Config.in
+@@ -1,11 +1,7 @@
+ config BR2_PACKAGE_KODI_SCREENSAVER_CPBLOBS
+ 	bool "kodi-screensaver-cpblobs"
+-	depends on BR2_PACKAGE_HAS_LIBGL # libsoil
+-	select BR2_PACKAGE_LIBSOIL
++	select BR2_PACKAGE_GLM
  	help
- 	  Kodi's DVBViewer client addon
+ 	  CpBlobs screensaver for Kodi
  
-diff --git a/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash b/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash
-index ec2013412f..a2aac32bf3 100644
---- a/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash
-+++ b/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash
+ 	  https://github.com/xbmc/screensaver.cpblobs
+-
+-comment "kodi-screensaver-cpblobs needs OpenGL"
+-	depends on !BR2_PACKAGE_HAS_LIBGL
+diff --git a/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash
+index 4ff614a995..bc77c36248 100644
+--- a/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash
++++ b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  8a3d167e652574caf30ba0ce9c22d278715e0237774b817e37826f1b2d647bff  kodi-pvr-dvbviewer-3.7.11-Leia.tar.gz
--sha256  5757dbd6a8731e9395508cd7ab9ca0ea0c2863a7aac7136299d40549c88c9c2c  debian/copyright
-+sha256  aa81c0a59c00aa13bc1ea3adc078e2910fde42bc86ad3a78ecefc6e4c3d5de59  kodi-pvr-dvbviewer-7.2.0-Matrix.tar.gz
+-sha256  afab934a2c93f73334943775f45f5a1d065e74714528bc700459d110e88e43a4  kodi-screensaver-cpblobs-3.0.5-Leia.tar.gz
+-sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
++sha256  eda36572da291d870dacbf3ad596e4ff3daed96350d9585583c279b55cfdc34a  kodi-screensaver-cpblobs-3.4.0-Matrix.tar.gz
 +sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk b/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk
-index b88d3d86cd..cbc12ed9e5 100644
---- a/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk
-+++ b/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk
-@@ -4,10 +4,10 @@
+diff --git a/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk
+index 01f6bdf3d3..628f254a42 100644
+--- a/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk
++++ b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk
+@@ -4,10 +4,14 @@
  #
  ################################################################################
  
--KODI_PVR_DVBVIEWER_VERSION = 3.7.11-Leia
-+KODI_PVR_DVBVIEWER_VERSION = 7.2.0-Matrix
- KODI_PVR_DVBVIEWER_SITE = $(call github,kodi-pvr,pvr.dvbviewer,$(KODI_PVR_DVBVIEWER_VERSION))
- KODI_PVR_DVBVIEWER_LICENSE = GPL-2.0+
--KODI_PVR_DVBVIEWER_LICENSE_FILES = debian/copyright
--KODI_PVR_DVBVIEWER_DEPENDENCIES = kodi-platform
-+KODI_PVR_DVBVIEWER_LICENSE_FILES = LICENSE.md
-+KODI_PVR_DVBVIEWER_DEPENDENCIES = kodi tinyxml
+-KODI_SCREENSAVER_CPBLOBS_VERSION = 3.0.5-Leia
++KODI_SCREENSAVER_CPBLOBS_VERSION = 3.4.0-Matrix
+ KODI_SCREENSAVER_CPBLOBS_SITE = $(call github,xbmc,screensaver.cpblobs,$(KODI_SCREENSAVER_CPBLOBS_VERSION))
+ KODI_SCREENSAVER_CPBLOBS_LICENSE = GPL-2.0
+-KODI_SCREENSAVER_CPBLOBS_LICENSE_FILES = LICENSE
+-KODI_SCREENSAVER_CPBLOBS_DEPENDENCIES = kodi libsoil
++KODI_SCREENSAVER_CPBLOBS_LICENSE_FILES = LICENSE.md
++KODI_SCREENSAVER_CPBLOBS_DEPENDENCIES = glm kodi
++
++KODI_SCREENSAVER_CPBLOBS_CONF_OPTS += \
++	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) $(shell $(PKG_CONFIG_HOST_BINARY) --cflags egl)" \
++	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) $(shell $(PKG_CONFIG_HOST_BINARY) --cflags egl)"
  
  $(eval $(cmake-package))
 -- 
