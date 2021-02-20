@@ -1,81 +1,85 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 20 Feb 2021 09:58:53 +0100
-Subject: [Buildroot] [PATCH/next 34/54] package/kodi-screensaver-asterwave:
- bump version to 3.3.0-Matrix
+Date: Sat, 20 Feb 2021 09:58:22 +0100
+Subject: [Buildroot] [PATCH/next 03/54]
+ package/kodi-screensaver-crystalmorph: remove package
 In-Reply-To: <20210220085913.888324-1-bernd.kuhls@t-online.de>
 References: <20210220085913.888324-1-bernd.kuhls@t-online.de>
-Message-ID: <20210220085913.888324-35-bernd.kuhls@t-online.de>
+Message-ID: <20210220085913.888324-4-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove dependency to libsoil:
-https://github.com/xbmc/screensaver.asterwave/commit/8a778873754de09c93031408c71b3c40d198f3bc
-
-Add dependency to glm and remove dependency to opengl and libglu,
-opengles support was added upstream:
-https://github.com/xbmc/screensaver.asterwave/commit/fb1d7ca8bf45b278afdb7a0dd2be4117c0fe3508
-
-Switch license file to LICENSE.md.
+The package received its last updates in 2017, is not part of the
+official Kodi github repo and its build is broken with Kodi 19.x.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-screensaver-asterwave/Config.in           |  7 +------
- .../kodi-screensaver-asterwave.hash                    |  4 ++--
- .../kodi-screensaver-asterwave.mk                      | 10 +++++++---
- 3 files changed, 10 insertions(+), 11 deletions(-)
+ package/kodi-screensaver-crystalmorph/Config.in     | 10 ----------
+ .../kodi-screensaver-crystalmorph.hash              |  3 ---
+ .../kodi-screensaver-crystalmorph.mk                | 13 -------------
+ package/kodi/Config.in                              |  1 -
+ 4 files changed, 27 deletions(-)
+ delete mode 100644 package/kodi-screensaver-crystalmorph/Config.in
+ delete mode 100644 package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.hash
+ delete mode 100644 package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.mk
 
-diff --git a/package/kodi-screensaver-asterwave/Config.in b/package/kodi-screensaver-asterwave/Config.in
-index b5e80cc535..ffb5caadd7 100644
---- a/package/kodi-screensaver-asterwave/Config.in
-+++ b/package/kodi-screensaver-asterwave/Config.in
-@@ -1,12 +1,7 @@
- config BR2_PACKAGE_KODI_SCREENSAVER_ASTERWAVE
- 	bool "kodi-screensaver-asterwave"
--	depends on BR2_PACKAGE_HAS_LIBGL # libglu, libsoil
--	select BR2_PACKAGE_LIBGLU
--	select BR2_PACKAGE_LIBSOIL
-+	select BR2_PACKAGE_GLM
- 	help
- 	  AsterWave screensaver for Kodi
- 
- 	  https://github.com/xbmc/screensaver.asterwave
+diff --git a/package/kodi-screensaver-crystalmorph/Config.in b/package/kodi-screensaver-crystalmorph/Config.in
+deleted file mode 100644
+index 1303d229fd..0000000000
+--- a/package/kodi-screensaver-crystalmorph/Config.in
++++ /dev/null
+@@ -1,10 +0,0 @@
+-config BR2_PACKAGE_KODI_SCREENSAVER_CRYSTALMORPH
+-	bool "kodi-screensaver-crystalmorph"
+-	depends on BR2_PACKAGE_HAS_LIBGL # libglu
+-	help
+-	  CrystalMorph screensaver for Kodi
 -
--comment "kodi-screensaver-asterwave needs OpenGL"
+-	  https://github.com/notspiff/screensaver.crystalmorph
+-
+-comment "kodi-screensaver-crystalmorph needs OpenGL"
 -	depends on !BR2_PACKAGE_HAS_LIBGL
-diff --git a/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.hash b/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.hash
-index a7fc05789c..8b47070194 100644
---- a/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.hash
-+++ b/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  d61bcdd8b74b50a26eab1597718b12ec260f6c6cdde0f143dbc1ce958ca86c69  kodi-screensaver-asterwave-3.0.5-Leia.tar.gz
--sha256  a0268e081014f3a555be39f7eb0fff759424963324915ad2ea56bf26668685e7  debian/copyright
-+sha256  4645ea5923df5a2cae84887b743c3963940344439c37ca2e18896d082ac76b1d  kodi-screensaver-asterwave-3.3.0-Matrix.tar.gz
-+sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk b/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk
-index b982395ead..9e768fce85 100644
---- a/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk
-+++ b/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk
-@@ -4,10 +4,14 @@
- #
- ################################################################################
- 
--KODI_SCREENSAVER_ASTERWAVE_VERSION = 3.0.5-Leia
-+KODI_SCREENSAVER_ASTERWAVE_VERSION = 3.3.0-Matrix
- KODI_SCREENSAVER_ASTERWAVE_SITE = $(call github,xbmc,screensaver.asterwave,$(KODI_SCREENSAVER_ASTERWAVE_VERSION))
- KODI_SCREENSAVER_ASTERWAVE_LICENSE = GPL-2.0+
--KODI_SCREENSAVER_ASTERWAVE_LICENSE_FILES = debian/copyright
--KODI_SCREENSAVER_ASTERWAVE_DEPENDENCIES = kodi libglu libsoil
-+KODI_SCREENSAVER_ASTERWAVE_LICENSE_FILES = LICENSE.md
-+KODI_SCREENSAVER_ASTERWAVE_DEPENDENCIES = glm kodi
-+
-+KODI_SCREENSAVER_ASTERWAVE_CONF_OPTS += \
-+	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) $(shell $(PKG_CONFIG_HOST_BINARY) --cflags egl)" \
-+	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) $(shell $(PKG_CONFIG_HOST_BINARY) --cflags egl)"
- 
- $(eval $(cmake-package))
+diff --git a/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.hash b/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.hash
+deleted file mode 100644
+index 59e0703255..0000000000
+--- a/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# Locally computed
+-sha256  d8ed548222f1118964104fefc8ac3056dfe6c9d2ee35cd7c8355c9ea9fcaffc5  kodi-screensaver-crystalmorph-4439c84c38abf889e19a1863e745942c0d7f8203.tar.gz
+-sha256  febce1924ed772f22ec3fabec646b1401aad4f4a81a7f1baeb858f27ae4f5241  src/Fractal.cpp
+diff --git a/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.mk b/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.mk
+deleted file mode 100644
+index 35642d5580..0000000000
+--- a/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.mk
++++ /dev/null
+@@ -1,13 +0,0 @@
+-################################################################################
+-#
+-# kodi-screensaver-crystalmorph
+-#
+-################################################################################
+-
+-KODI_SCREENSAVER_CRYSTALMORPH_VERSION = 4439c84c38abf889e19a1863e745942c0d7f8203
+-KODI_SCREENSAVER_CRYSTALMORPH_SITE = $(call github,notspiff,screensaver.crystalmorph,$(KODI_SCREENSAVER_CRYSTALMORPH_VERSION))
+-KODI_SCREENSAVER_CRYSTALMORPH_LICENSE = GPL-2.0+
+-KODI_SCREENSAVER_CRYSTALMORPH_LICENSE_FILES = src/Fractal.cpp
+-KODI_SCREENSAVER_CRYSTALMORPH_DEPENDENCIES = kodi
+-
+-$(eval $(cmake-package))
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index ecc5a05324..745df41e20 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -356,7 +356,6 @@ menu "Screensavers"
+ 	source "package/kodi-screensaver-asterwave/Config.in"
+ 	source "package/kodi-screensaver-biogenesis/Config.in"
+ 	source "package/kodi-screensaver-cpblobs/Config.in"
+-	source "package/kodi-screensaver-crystalmorph/Config.in"
+ 	source "package/kodi-screensaver-greynetic/Config.in"
+ 	source "package/kodi-screensaver-matrixtrails/Config.in"
+ 	source "package/kodi-screensaver-pingpong/Config.in"
 -- 
 2.29.2
