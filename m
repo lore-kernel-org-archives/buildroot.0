@@ -1,43 +1,43 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 20 Feb 2021 17:33:48 +0100
-Subject: [Buildroot] [PATCH v1 1/2] package/irqbalance: fix sysv startup
- script (add mkdir /run/irqbalance)
-Message-ID: <20210220163349.25244-1-ps.report@gmx.net>
+Date: Sat, 20 Feb 2021 17:33:49 +0100
+Subject: [Buildroot] [PATCH v1 2/2] package/irqbalance: fix systemd startup
+ script (add RuntimeDirectory)
+In-Reply-To: <20210220163349.25244-1-ps.report@gmx.net>
+References: <20210220163349.25244-1-ps.report@gmx.net>
+Message-ID: <20210220163349.25244-2-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- add mkdir -p /run/irqbalance to sysv startup script needed to
+- add RuntimeDirectory=irqbalance to create /run/irqbalanace needed to
   create socket /run/irqbalance/irqbalance<pid>.sock
 
 Fixes:
 
   - Bug 13541 [1]
 
-  daemon.warn /usr/sbin/irqbalance: Daemon couldn't be bound to the file-based socket.
+  /usr/sbin/irqbalance[158]: Daemon couldn't be bound to the file-based socket.
 
 [1] https://bugs.busybox.net/show_bug.cgi?id=13541
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/irqbalance/S13irqbalance | 3 +++
- 1 file changed, 3 insertions(+)
+ package/irqbalance/irqbalance.service | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/irqbalance/S13irqbalance b/package/irqbalance/S13irqbalance
-index b06a3372e9..d0f6adda71 100644
---- a/package/irqbalance/S13irqbalance
-+++ b/package/irqbalance/S13irqbalance
-@@ -7,6 +7,9 @@ EXEC="/usr/sbin/irqbalance"
- ARGS=""
- PID="/var/run/irqbalance.pid"
+diff --git a/package/irqbalance/irqbalance.service b/package/irqbalance/irqbalance.service
+index 9ba3be43bb..39574877fb 100644
+--- a/package/irqbalance/irqbalance.service
++++ b/package/irqbalance/irqbalance.service
+@@ -3,6 +3,7 @@ Description=irqbalance daemon
+ After=syslog.target
  
-+# for irqbalance socket /run/irqbalance/irqbalance<pid>.sock
-+mkdir -p /run/irqbalance
-+
- case "$1" in
-     start)
- 	printf "Starting irqbalance: "
+ [Service]
++RuntimeDirectory=irqbalance
+ ExecStart=/usr/sbin/irqbalance --foreground
+ 
+ [Install]
 -- 
 2.30.1
