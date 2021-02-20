@@ -1,69 +1,68 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 20 Feb 2021 09:58:30 +0100
-Subject: [Buildroot] [PATCH/next 11/54] package/kodi-inputstream-rtmp: bump
- version to 3.4.0-Matrix
+Date: Sat, 20 Feb 2021 09:58:36 +0100
+Subject: [Buildroot] [PATCH/next 17/54] package/kodi-pvr-filmon: bump
+ version to 6.1.0-Matrix
 In-Reply-To: <20210220085913.888324-1-bernd.kuhls@t-online.de>
 References: <20210220085913.888324-1-bernd.kuhls@t-online.de>
-Message-ID: <20210220085913.888324-12-bernd.kuhls@t-online.de>
+Message-ID: <20210220085913.888324-18-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Openssl and zlib are built as hard-dependencies of Kodi already. For the
-case that Kodi drops these dependencies we need to make sure that this
-package still finds its dependencies:
-https://github.com/xbmc/inputstream.rtmp/blob/Matrix/CMakeLists.txt#L8
+Switch dependency to kodi after upstream removed the dependency to
+kodi-platform:
+https://github.com/kodi-pvr/pvr.filmon/commit/b0ea8036274480245b5a7aa48d2ba18cc37b6b88
+https://github.com/kodi-pvr/pvr.filmon/commit/b8f249fcb50a27168f8b96ca9b4b8075d8c42b4a
 
 Switch license file to LICENSE.md.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-inputstream-rtmp/Config.in                  | 2 ++
- package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash | 4 ++--
- package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk   | 6 +++---
- 3 files changed, 7 insertions(+), 5 deletions(-)
+ package/kodi-pvr-filmon/Config.in            | 1 -
+ package/kodi-pvr-filmon/kodi-pvr-filmon.hash | 4 ++--
+ package/kodi-pvr-filmon/kodi-pvr-filmon.mk   | 6 +++---
+ 3 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/kodi-inputstream-rtmp/Config.in b/package/kodi-inputstream-rtmp/Config.in
-index fa83926301..c4bd2e1380 100644
---- a/package/kodi-inputstream-rtmp/Config.in
-+++ b/package/kodi-inputstream-rtmp/Config.in
-@@ -1,6 +1,8 @@
- config BR2_PACKAGE_KODI_INPUTSTREAM_RTMP
- 	bool "kodi-inputstream-rtmp"
-+	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_RTMPDUMP
-+	select BR2_PACKAGE_ZLIB
+diff --git a/package/kodi-pvr-filmon/Config.in b/package/kodi-pvr-filmon/Config.in
+index 0b662df176..d10002912a 100644
+--- a/package/kodi-pvr-filmon/Config.in
++++ b/package/kodi-pvr-filmon/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_KODI_PVR_FILMON
+ 	bool "kodi-pvr-filmon"
+ 	select BR2_PACKAGE_JSONCPP
+-	select BR2_PACKAGE_KODI_PLATFORM
  	help
- 	  RTMP input stream add-on for Kodi
+ 	  Filmon PVR client addon for Kodi
  
-diff --git a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
-index d472b89ba9..e645fb14bb 100644
---- a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
-+++ b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
+diff --git a/package/kodi-pvr-filmon/kodi-pvr-filmon.hash b/package/kodi-pvr-filmon/kodi-pvr-filmon.hash
+index e89ce6359b..277adb4087 100644
+--- a/package/kodi-pvr-filmon/kodi-pvr-filmon.hash
++++ b/package/kodi-pvr-filmon/kodi-pvr-filmon.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  56dac63262fa736620863900d903616d4827d735992e6d8beda84e377a5599e5  kodi-inputstream-rtmp-2.0.9-Leia.tar.gz
--sha256  ddba7d22c2586f13de40786c21f3b87c6913c9937f4862dc828d33cfff0395eb  debian/copyright
-+sha256  efaaa9b07c18810582a3826df476fc36a2aac82be7512271545073c3f6cc0212  kodi-inputstream-rtmp-3.4.0-Matrix.tar.gz
+-sha256  90988e4833c0f84ab08e08be3cd08b84e4ba2baf2ebc1545c62e5dbd6708d749  kodi-pvr-filmon-2.4.6-Leia.tar.gz
+-sha256  081907693b03f27cb1b17e0a440ae05fd8c8b4631be6fe6fdba4e18a5d40fdc5  debian/copyright
++sha256  7c2998bdde04acee5c147cb9f82939cfb13af57e5ecf46a4343dcfee15eb02e2  kodi-pvr-filmon-6.1.0-Matrix.tar.gz
 +sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
-index e850be40ff..6029b7d35c 100644
---- a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
-+++ b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
+diff --git a/package/kodi-pvr-filmon/kodi-pvr-filmon.mk b/package/kodi-pvr-filmon/kodi-pvr-filmon.mk
+index 078eae176a..2612f9aead 100644
+--- a/package/kodi-pvr-filmon/kodi-pvr-filmon.mk
++++ b/package/kodi-pvr-filmon/kodi-pvr-filmon.mk
 @@ -4,10 +4,10 @@
  #
  ################################################################################
  
--KODI_INPUTSTREAM_RTMP_VERSION = 2.0.9-Leia
-+KODI_INPUTSTREAM_RTMP_VERSION = 3.4.0-Matrix
- KODI_INPUTSTREAM_RTMP_SITE = $(call github,xbmc,inputstream.rtmp,$(KODI_INPUTSTREAM_RTMP_VERSION))
- KODI_INPUTSTREAM_RTMP_LICENSE = GPL-2.0+
--KODI_INPUTSTREAM_RTMP_LICENSE_FILES = debian/copyright
--KODI_INPUTSTREAM_RTMP_DEPENDENCIES = kodi rtmpdump
-+KODI_INPUTSTREAM_RTMP_LICENSE_FILES = LICENSE.md
-+KODI_INPUTSTREAM_RTMP_DEPENDENCIES = kodi openssl rtmpdump zlib
+-KODI_PVR_FILMON_VERSION = 2.4.6-Leia
++KODI_PVR_FILMON_VERSION = 6.1.0-Matrix
+ KODI_PVR_FILMON_SITE = $(call github,kodi-pvr,pvr.filmon,$(KODI_PVR_FILMON_VERSION))
+ KODI_PVR_FILMON_LICENSE = GPL-2.0+
+-KODI_PVR_FILMON_LICENSE_FILES = debian/copyright
+-KODI_PVR_FILMON_DEPENDENCIES = jsoncpp kodi-platform
++KODI_PVR_FILMON_LICENSE_FILES = LICENSE.md
++KODI_PVR_FILMON_DEPENDENCIES = jsoncpp kodi
  
  $(eval $(cmake-package))
 -- 
