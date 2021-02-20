@@ -1,43 +1,69 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 20 Feb 2021 09:59:02 +0100
-Subject: [Buildroot] [PATCH/next 43/54] package/kodi-skin-confluence: bump
- version
+Date: Sat, 20 Feb 2021 09:58:59 +0100
+Subject: [Buildroot] [PATCH/next 40/54] package/kodi-screensaver-pyro: bump
+ version to 3.3.0-Matrix
 In-Reply-To: <20210220085913.888324-1-bernd.kuhls@t-online.de>
 References: <20210220085913.888324-1-bernd.kuhls@t-online.de>
-Message-ID: <20210220085913.888324-44-bernd.kuhls@t-online.de>
+Message-ID: <20210220085913.888324-41-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Remove dependency to opengl, opengles support was added upstream:
+https://github.com/xbmc/screensaver.pyro/commit/d052f9997bcc0efc1c5dfb974a4bd24654e715fb
+
+Switch license file to LICENSE.md.
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-skin-confluence/kodi-skin-confluence.hash | 2 +-
- package/kodi-skin-confluence/kodi-skin-confluence.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/kodi-screensaver-pyro/Config.in                  | 4 ----
+ package/kodi-screensaver-pyro/kodi-screensaver-pyro.hash | 4 ++--
+ package/kodi-screensaver-pyro/kodi-screensaver-pyro.mk   | 4 ++--
+ 3 files changed, 4 insertions(+), 8 deletions(-)
 
-diff --git a/package/kodi-skin-confluence/kodi-skin-confluence.hash b/package/kodi-skin-confluence/kodi-skin-confluence.hash
-index fdd4e828f6..005f99cf73 100644
---- a/package/kodi-skin-confluence/kodi-skin-confluence.hash
-+++ b/package/kodi-skin-confluence/kodi-skin-confluence.hash
+diff --git a/package/kodi-screensaver-pyro/Config.in b/package/kodi-screensaver-pyro/Config.in
+index e2d1988ec5..9ee99883b4 100644
+--- a/package/kodi-screensaver-pyro/Config.in
++++ b/package/kodi-screensaver-pyro/Config.in
+@@ -1,10 +1,6 @@
+ config BR2_PACKAGE_KODI_SCREENSAVER_PYRO
+ 	bool "kodi-screensaver-pyro"
+-	depends on BR2_PACKAGE_HAS_LIBGL
+ 	help
+ 	  Pyro screensaver for Kodi
+ 
+ 	  https://github.com/xbmc/screensaver.pyro
+-
+-comment "kodi-screensaver-pyro needs OpenGL"
+-	depends on !BR2_PACKAGE_HAS_LIBGL
+diff --git a/package/kodi-screensaver-pyro/kodi-screensaver-pyro.hash b/package/kodi-screensaver-pyro/kodi-screensaver-pyro.hash
+index fd51a7c1d3..db4244e8fa 100644
+--- a/package/kodi-screensaver-pyro/kodi-screensaver-pyro.hash
++++ b/package/kodi-screensaver-pyro/kodi-screensaver-pyro.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  dc4a0abf05db50caf8e70e4904b8c2c445008ec3d6d23381c9c31dedaf6109de  kodi-skin-confluence-cffcb8320003e6048abe4b26316e5d5f3d50eac9.tar.gz
-+sha256  549f158dd25c59ec39b787fdbf03f43e47dbdb950cc9f2fba83dea7f68953c26  kodi-skin-confluence-c06ce9eaaecad238bf3dfde23d65415c29be5b7d.tar.gz
- sha256  89931c1fb1f3716694175763cf3221cfcd63d6935031cf6b4512d17ffe5d9860  LICENSE.txt
-diff --git a/package/kodi-skin-confluence/kodi-skin-confluence.mk b/package/kodi-skin-confluence/kodi-skin-confluence.mk
-index d9bd10bdfa..df62c26c1a 100644
---- a/package/kodi-skin-confluence/kodi-skin-confluence.mk
-+++ b/package/kodi-skin-confluence/kodi-skin-confluence.mk
-@@ -4,7 +4,7 @@
+-sha256  cf9ed582b70460682175366641e6a00eaea085a1d3477a02710ba8398a1d17bd  kodi-screensaver-pyro-3.0.1-Leia.tar.gz
+-sha256  24354cf1e6058ba0a95c7652eab9f1be2224c835ce36d14e82c0f401f65a53b7  debian/copyright
++sha256  83a3375166d6aaed01939bc370981ad46909fe1f1365fe7af22d4614fa6d06e6  kodi-screensaver-pyro-3.3.0-Matrix.tar.gz
++sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-screensaver-pyro/kodi-screensaver-pyro.mk b/package/kodi-screensaver-pyro/kodi-screensaver-pyro.mk
+index 8a6ea93e83..dac03c6347 100644
+--- a/package/kodi-screensaver-pyro/kodi-screensaver-pyro.mk
++++ b/package/kodi-screensaver-pyro/kodi-screensaver-pyro.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--KODI_SKIN_CONFLUENCE_VERSION = cffcb8320003e6048abe4b26316e5d5f3d50eac9
-+KODI_SKIN_CONFLUENCE_VERSION = c06ce9eaaecad238bf3dfde23d65415c29be5b7d
- KODI_SKIN_CONFLUENCE_SITE = $(call github,xbmc,skin.confluence,$(KODI_SKIN_CONFLUENCE_VERSION))
- KODI_SKIN_CONFLUENCE_LICENSE = GPL-2.0
- KODI_SKIN_CONFLUENCE_LICENSE_FILES = LICENSE.txt
+-KODI_SCREENSAVER_PYRO_VERSION = 3.0.1-Leia
++KODI_SCREENSAVER_PYRO_VERSION = 3.3.0-Matrix
+ KODI_SCREENSAVER_PYRO_SITE = $(call github,xbmc,screensaver.pyro,$(KODI_SCREENSAVER_PYRO_VERSION))
+ KODI_SCREENSAVER_PYRO_LICENSE = GPL-2.0+
+-KODI_SCREENSAVER_PYRO_LICENSE_FILES = debian/copyright
++KODI_SCREENSAVER_PYRO_LICENSE_FILES = LICENSE.md
+ KODI_SCREENSAVER_PYRO_DEPENDENCIES = kodi
+ 
+ $(eval $(cmake-package))
 -- 
 2.29.2
