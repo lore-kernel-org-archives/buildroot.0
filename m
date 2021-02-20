@@ -1,41 +1,36 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 20 Feb 2021 17:38:15 +0000
-Subject: [Buildroot] [Bug 13541] 2021.02.rc2: irqbalance: Daemon couldn't be
- bound to the file-based socket
-In-Reply-To: <bug-13541-163@https.bugs.busybox.net/>
-References: <bug-13541-163@https.bugs.busybox.net/>
-Message-ID: <bug-13541-163-VZ5t4lEKIr@https.bugs.busybox.net/>
+From: guillaume.bressaix at gmail.com <guillaume.bressaix@gmail.com>
+Date: Sat, 20 Feb 2021 18:38:15 +0100
+Subject: [Buildroot] [PATCH] package/libxcrypt: --disable-werror to fix
+ problem with sensitive compilers
+Message-ID: <20210220173815.28154-1-guillaume.bressaix@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13541
+From: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
 
-Yann E. MORIN <yann.morin.1998@free.fr> changed:
+Fixes: http://autobuild.buildroot.net/results/e9a058a8c98daf197cd9d7ac632e0cb5707d524f
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-                 CC|                            |yann.morin.1998 at free.fr
-         Resolution|---                         |FIXED
+Some sensitive compilers may raise warnings that turn into errors.
 
---- Comment #2 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-Alfredo, All,
+Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+---
+ package/libxcrypt/libxcrypt.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-This is now supposedly fixed with commits 60518c1d7680 and 4a95f38f3064 from
-Peter:
-   
-https://git.buildroot.org/buildroot/commit/?id=60518c1d7680bff5efe879ee86f48e6092239c03
-   
-https://git.buildroot.org/buildroot/commit/?id=4a95f38f306411ca750a676b81326dc7ec67bcaa
-
-Thanks for the report!
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/libxcrypt/libxcrypt.mk b/package/libxcrypt/libxcrypt.mk
+index 63132edd9d..ccbb1a282c 100644
+--- a/package/libxcrypt/libxcrypt.mk
++++ b/package/libxcrypt/libxcrypt.mk
+@@ -11,4 +11,7 @@ LIBXCRYPT_LICENSE_FILES = LICENSING COPYING.LIB
+ LIBXCRYPT_INSTALL_STAGING = YES
+ LIBXCRYPT_AUTORECONF = YES
+ 
++# Some warnings turn into errors with some sensitive compilers
++LIBXCRYPT_CONF_OPTS = --disable-werror
++
+ $(eval $(autotools-package))
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.20.1
