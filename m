@@ -1,85 +1,72 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 20 Feb 2021 09:58:22 +0100
-Subject: [Buildroot] [PATCH/next 03/54]
- package/kodi-screensaver-crystalmorph: remove package
+Date: Sat, 20 Feb 2021 09:58:58 +0100
+Subject: [Buildroot] [PATCH/next 39/54] package/kodi-screensaver-pingpong:
+ bump version to 2.4.0-Matrix
 In-Reply-To: <20210220085913.888324-1-bernd.kuhls@t-online.de>
 References: <20210220085913.888324-1-bernd.kuhls@t-online.de>
-Message-ID: <20210220085913.888324-4-bernd.kuhls@t-online.de>
+Message-ID: <20210220085913.888324-40-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The package received its last updates in 2017, is not part of the
-official Kodi github repo and its build is broken with Kodi 19.x.
+Remove dependency to opengl, add dependency to glm, opengles support
+was added upstream:
+https://github.com/xbmc/screensaver.pingpong/commit/39ccbf75e6a7a56781329aeb508ae4f2ce210e4f
+
+Switch license file to LICENSE.md.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-screensaver-crystalmorph/Config.in     | 10 ----------
- .../kodi-screensaver-crystalmorph.hash              |  3 ---
- .../kodi-screensaver-crystalmorph.mk                | 13 -------------
- package/kodi/Config.in                              |  1 -
- 4 files changed, 27 deletions(-)
- delete mode 100644 package/kodi-screensaver-crystalmorph/Config.in
- delete mode 100644 package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.hash
- delete mode 100644 package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.mk
+ package/kodi-screensaver-pingpong/Config.in                 | 5 +----
+ .../kodi-screensaver-pingpong.hash                          | 4 ++--
+ .../kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk  | 6 +++---
+ 3 files changed, 6 insertions(+), 9 deletions(-)
 
-diff --git a/package/kodi-screensaver-crystalmorph/Config.in b/package/kodi-screensaver-crystalmorph/Config.in
-deleted file mode 100644
-index 1303d229fd..0000000000
---- a/package/kodi-screensaver-crystalmorph/Config.in
-+++ /dev/null
-@@ -1,10 +0,0 @@
--config BR2_PACKAGE_KODI_SCREENSAVER_CRYSTALMORPH
--	bool "kodi-screensaver-crystalmorph"
--	depends on BR2_PACKAGE_HAS_LIBGL # libglu
--	help
--	  CrystalMorph screensaver for Kodi
+diff --git a/package/kodi-screensaver-pingpong/Config.in b/package/kodi-screensaver-pingpong/Config.in
+index bc76fffd6e..2983f7c2ea 100644
+--- a/package/kodi-screensaver-pingpong/Config.in
++++ b/package/kodi-screensaver-pingpong/Config.in
+@@ -1,10 +1,7 @@
+ config BR2_PACKAGE_KODI_SCREENSAVER_PINGPONG
+ 	bool "kodi-screensaver-pingpong"
+-	depends on BR2_PACKAGE_HAS_LIBGL
++	select BR2_PACKAGE_GLM
+ 	help
+ 	  Ping-pong screensaver for Kodi
+ 
+ 	  https://github.com/xbmc/screensaver.pingpong
 -
--	  https://github.com/notspiff/screensaver.crystalmorph
--
--comment "kodi-screensaver-crystalmorph needs OpenGL"
+-comment "kodi-screensaver-pingpong needs OpenGL"
 -	depends on !BR2_PACKAGE_HAS_LIBGL
-diff --git a/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.hash b/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.hash
-deleted file mode 100644
-index 59e0703255..0000000000
---- a/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# Locally computed
--sha256  d8ed548222f1118964104fefc8ac3056dfe6c9d2ee35cd7c8355c9ea9fcaffc5  kodi-screensaver-crystalmorph-4439c84c38abf889e19a1863e745942c0d7f8203.tar.gz
--sha256  febce1924ed772f22ec3fabec646b1401aad4f4a81a7f1baeb858f27ae4f5241  src/Fractal.cpp
-diff --git a/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.mk b/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.mk
-deleted file mode 100644
-index 35642d5580..0000000000
---- a/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.mk
-+++ /dev/null
-@@ -1,13 +0,0 @@
--################################################################################
--#
--# kodi-screensaver-crystalmorph
--#
--################################################################################
--
--KODI_SCREENSAVER_CRYSTALMORPH_VERSION = 4439c84c38abf889e19a1863e745942c0d7f8203
--KODI_SCREENSAVER_CRYSTALMORPH_SITE = $(call github,notspiff,screensaver.crystalmorph,$(KODI_SCREENSAVER_CRYSTALMORPH_VERSION))
--KODI_SCREENSAVER_CRYSTALMORPH_LICENSE = GPL-2.0+
--KODI_SCREENSAVER_CRYSTALMORPH_LICENSE_FILES = src/Fractal.cpp
--KODI_SCREENSAVER_CRYSTALMORPH_DEPENDENCIES = kodi
--
--$(eval $(cmake-package))
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index ecc5a05324..745df41e20 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -356,7 +356,6 @@ menu "Screensavers"
- 	source "package/kodi-screensaver-asterwave/Config.in"
- 	source "package/kodi-screensaver-biogenesis/Config.in"
- 	source "package/kodi-screensaver-cpblobs/Config.in"
--	source "package/kodi-screensaver-crystalmorph/Config.in"
- 	source "package/kodi-screensaver-greynetic/Config.in"
- 	source "package/kodi-screensaver-matrixtrails/Config.in"
- 	source "package/kodi-screensaver-pingpong/Config.in"
+diff --git a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash
+index 4b6114fd16..245fdfdbe9 100644
+--- a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash
++++ b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  b87e65d2e3c290de7167e1098899d5816103958a99769d84e930ffd2cbfa7d00  kodi-screensaver-pingpong-2.1.3-Leia.tar.gz
+-sha256  96e9b817ea6384e3d2c5241c8a0504df11d6f8bd0a2f58f25df7152da64f263c  debian/copyright
++sha256  c38cda571b345d61882b43cea839536fa6fbfbb08e07231e8d8bc8adb8d28c08  kodi-screensaver-pingpong-2.4.0-Matrix.tar.gz
++sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk
+index 929539f044..cd794128f3 100644
+--- a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk
++++ b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-KODI_SCREENSAVER_PINGPONG_VERSION = 2.1.3-Leia
++KODI_SCREENSAVER_PINGPONG_VERSION = 2.4.0-Matrix
+ KODI_SCREENSAVER_PINGPONG_SITE = $(call github,xbmc,screensaver.pingpong,$(KODI_SCREENSAVER_PINGPONG_VERSION))
+ KODI_SCREENSAVER_PINGPONG_LICENSE = GPL-2.0+
+-KODI_SCREENSAVER_PINGPONG_LICENSE_FILES = debian/copyright
+-KODI_SCREENSAVER_PINGPONG_DEPENDENCIES = kodi
++KODI_SCREENSAVER_PINGPONG_LICENSE_FILES = LICENSE.md
++KODI_SCREENSAVER_PINGPONG_DEPENDENCIES = glm kodi
+ 
+ $(eval $(cmake-package))
 -- 
 2.29.2
