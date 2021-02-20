@@ -1,37 +1,32 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 20 Feb 2021 17:42:46 +0100
-Subject: [Buildroot] [git commit] utils/scanpypi: use python3 explicitly
-Message-ID: <20210220162127.342B68140F@busybox.osuosl.org>
+From: Scott Fan <fancp2007@gmail.com>
+Date: Sun, 21 Feb 2021 00:43:31 +0800
+Subject: [Buildroot] [PATCH] DEVELOPERS: remove Scott Fan
+Message-ID: <20210220164332.284149-1-fancp2007@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ee8b6808169e1e61b4318b44fbc706ec888c605d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-scanpypi is python3 compatible. In addition, it executes the setup.py
-of Python modules to extract the relevant information. Since these are
-more and more commonly using python3 constructs, using "python" to run
-scanpypi causes problems on systems that have python2 installed as
-python, when trying to parse setup.py scripts with python3 constructs.
-
-Fixes part of #13516.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Scott Fan <fancp2007@gmail.com>
 ---
- utils/scanpypi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ DEVELOPERS | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/utils/scanpypi b/utils/scanpypi
-index 51bc249f9e..47c7c00c60 100755
---- a/utils/scanpypi
-+++ b/utils/scanpypi
-@@ -1,4 +1,4 @@
--#!/usr/bin/env python
-+#!/usr/bin/env python3
- """
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 12e1f83cf7..b019fe04d5 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2343,10 +2343,6 @@ F:	package/ripgrep/
+ N:	Santosh Multhalli <santosh.multhalli@rockwellcollins.com>
+ F:	package/valijson/
  
- Utility for building Buildroot packages for existing PyPI packages
+-N:	Scott Fan <fancp2007@gmail.com>
+-F:	package/libssh/
+-F:	package/x11r7/xdriver_xf86-video-fbturbo/
+-
+ N:	S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+ F:	package/mmc-utils/
+ F:	package/python-flask-jsonrpc/
+-- 
+2.25.1
