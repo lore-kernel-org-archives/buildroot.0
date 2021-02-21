@@ -1,13 +1,16 @@
-From: Ryan Barnett <ryanbarnett3@gmail.com>
-Date: Sun, 21 Feb 2021 16:38:27 -0600
-Subject: [Buildroot] [PATCH v2] package/fakeroot: fix glibc detection on
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 21 Feb 2021 23:55:38 +0100
+Subject: [Buildroot] [git commit] package/fakeroot: fix glibc detection on
  patch for new wrappers
-Message-ID: <20210221223828.2750676-1-ryanbarnett3@gmail.com>
+Message-ID: <20210221223358.12F01862BB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+commit: https://git.buildroot.net/buildroot/commit/?id=e41b170b328cc086334948ff3b8038075e2c09ce
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Commit f45925a951318e9e53bead80b363e004301adc6f add the patch:
 
@@ -25,29 +28,25 @@ https://salsa.debian.org/clint/fakeroot/-/commit/8090dffdad8fda86dccd47ce7a7db88
 
 CC: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
-v1 -> v2:
- - added patch as standalone patch (suggested by Yann)
----
- .../0005-fix-build-regression-on-macOS.patch  | 64 +++++++++++++++++++
- 1 file changed, 64 insertions(+)
- create mode 100644 package/fakeroot/0005-fix-build-regression-on-macOS.patch
+ .../0005-fix-build-regression-on-macOS.patch       | 63 ++++++++++++++++++++++
+ 1 file changed, 63 insertions(+)
 
 diff --git a/package/fakeroot/0005-fix-build-regression-on-macOS.patch b/package/fakeroot/0005-fix-build-regression-on-macOS.patch
 new file mode 100644
-index 0000000000..71152b850d
+index 0000000000..d5589a79f5
 --- /dev/null
 +++ b/package/fakeroot/0005-fix-build-regression-on-macOS.patch
-@@ -0,0 +1,64 @@
+@@ -0,0 +1,63 @@
 +From 3590b817df703a256f2c1de9a5f5469eaa1c86e9 Mon Sep 17 00:00:00 2001
 +From: Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
 +Date: Mon, 15 Feb 2021 11:07:56 -0800
 +Subject: [PATCH] fix build regression on macOS
 +
-+Backported from: 8090dffdad8fda86dccd47ce7a7db8840bdf7d7b
-+
 +Signed-off-by: Felix Fietkau <nbd@nbd.name>
 +Signed-off-by: Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
++[Ryan: backported from 8090dffdad8fda86dccd47ce7a7db8840bdf7d7b]
 +Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
 +---
 + configure.ac  | 6 ++++++
@@ -103,5 +102,3 @@ index 0000000000..71152b850d
 +-- 
 +2.25.1
 +
--- 
-2.25.1
