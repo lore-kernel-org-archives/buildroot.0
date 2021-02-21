@@ -1,98 +1,93 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 21 Feb 2021 09:20:35 +0100
-Subject: [Buildroot] [PATCH] package/rustc: allow cargo sub packages to
- download using 'git'
-In-Reply-To: <20210221075134.11739-1-guillaume.bressaix@gmail.com>
-References: <20210221075134.11739-1-guillaume.bressaix@gmail.com>
-Message-ID: <20210221082035.GX2276@scaer>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 21 Feb 2021 10:02:25 +0100
+Subject: [Buildroot] [PATCH/next 1/1] package/ffmpeg: bump version to 4.3.2
+Message-ID: <20210221090225.136522-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Guillaume, All,
+Removed patch which was applied upstream.
 
-+Thomas for reference to his series
-+Thomas +Arnout +Peter for their insight, toward the end
+Changelog:
+http://git.videolan.org/?p=ffmpeg.git;a=blob;f=Changelog;h=28d79ea1aed0a59f43ee922f5b6efa82dc7e2b18;hb=refs/heads/release/4.3
 
-On 2021-02-21 08:51 +0100, guillaume.bressaix at gmail.com spake thusly:
-> From: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
-> 
-> Adding this simple command to the general cargo configuration
-> will allow sub packages (with their own cargo.toml file)
-> to resolve dependencies using 'git'. Without this,
-> we only support builtin packages or manually downloaded
-> packages refered to with a local full path.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ ...-make-sure-mpegts-read-header-always.patch | 38 -------------------
+ package/ffmpeg/ffmpeg.hash                    |  2 +-
+ package/ffmpeg/ffmpeg.mk                      |  2 +-
+ 3 files changed, 2 insertions(+), 40 deletions(-)
+ delete mode 100644 package/ffmpeg/0004-avformat-mpegts-make-sure-mpegts-read-header-always.patch
 
-In fact, we explicitly do not want that to happen, because this means
-that downloads happen during the build, not during the actual download
-step. This prevents reproducible archives and thus reproducible builds,
-and means that the output of legal-info is missing pieces.
-
-There is a work in progress to support vendoring in the various
-language-specific package managers like cargo, see this series from
-Thomas:
-
-    http://lists.busybox.net/pipermail/buildroot/2020-December/298802.html
-
-The idea is that we manage the vendoring as part of the download step,
-so that we can get totally off-line builds, and so that we can have
-(slightly more) reproducible builds (as long as the archive is cached
-locally or on a site-local mirror), and so that we can do a exhaustive
-legal-info.
-
-However, we have found a major roadblock for this, and we still have no
-clear idea how to solve it.
-
-The aforementioned series works pretty well, if one does not use primary
-or backup mirrors. This is because the archive is (most probably) named
-after the package and its version, but its content will be different when
-we download it from the mirrors, compared to when we download it from
-upstream: the upstream one will not be vendored, while the mirrored one
-will.
-
-This would cause quite a conflict, and we still do not see how to fix
-that. Yet. I have a few ideas floating around in my head for now, but
-that's not ready for primetime yet...
-
-Of course, until this is solved, I don't know how to workaround the
-vendoring problem imposed on us by those damn language-specific package
-managers...
-
-Maybe we could allow such a hack as yours for now, but really I have
-little sympathy for those language-specific package managers. :-(
-
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
-> ---
->  package/rustc/cargo-config.in | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/package/rustc/cargo-config.in b/package/rustc/cargo-config.in
-> index 47fad026be..be4c401f97 100644
-> --- a/package/rustc/cargo-config.in
-> +++ b/package/rustc/cargo-config.in
-> @@ -1,2 +1,5 @@
->  [target. at RUSTC_TARGET_NAME@]
->  linker = "@CROSS_PREFIX at gcc"
-> +
-> +[net]
-> +git-fetch-with-cli = true
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/ffmpeg/0004-avformat-mpegts-make-sure-mpegts-read-header-always.patch b/package/ffmpeg/0004-avformat-mpegts-make-sure-mpegts-read-header-always.patch
+deleted file mode 100644
+index 75a39d16fa..0000000000
+--- a/package/ffmpeg/0004-avformat-mpegts-make-sure-mpegts-read-header-always.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+-From 3136f41e6db8189994a8e4f72eacc92b669776d1 Mon Sep 17 00:00:00 2001
+-From: Marton Balint <cus@passwd.hu>
+-Date: Sun, 15 Nov 2020 00:39:41 +0100
+-Subject: [PATCH] avformat/mpegts: make sure mpegts_read_header always stops at
+- the first pmt
+-
+-mpegts_read_header stops parsing the file at the first PMT. However the check
+-that ensured this was wrong because streams can also be added before the first
+-PMT is received (e.g. EIT).
+-
+-So let's make sure we are in the header reading phase by checking if ts->pkt is
+-unset instead of checking if the number of streams found so far is 0.
+-
+-Downloaded from Kodi ffmpeg repo:
+-https://github.com/xbmc/FFmpeg/commit/3136f41e6db8189994a8e4f72eacc92b669776d1
+-
+-Patch was committed upstream:
+-http://git.videolan.org/?p=ffmpeg.git;a=patch;h=ca55240b8c1fd4cfdb61f88fd2cb378d475d910a
+-
+-Signed-off-by: Marton Balint <cus@passwd.hu>
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- libavformat/mpegts.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/libavformat/mpegts.c b/libavformat/mpegts.c
+-index c6fd3e1cef63..1da81a0fe62a 100644
+---- a/libavformat/mpegts.c
+-+++ b/libavformat/mpegts.c
+-@@ -2352,7 +2352,7 @@ static void pmt_cb(MpegTSFilter *filter, const uint8_t *section, int section_len
+-         goto out;
+- 
+-     // stop parsing after pmt, we found header
+--    if (!ts->stream->nb_streams)
+-+    if (!ts->pkt)
+-         ts->stop_parse = 2;
+- 
+-     set_pmt_found(ts, h->id);
+diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
+index 959a562b8d..81dc0d3e6b 100644
+--- a/package/ffmpeg/ffmpeg.hash
++++ b/package/ffmpeg/ffmpeg.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  ad009240d46e307b4e03a213a0f49c11b650e445b1f8be0dda2a9212b34d2ffb  ffmpeg-4.3.1.tar.xz
++sha256  46e4e64f1dd0233cbc0934b9f1c0da676008cad34725113fb7f802cfa84ccddb  ffmpeg-4.3.2.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPLv2
+ sha256  b634ab5640e258563c536e658cad87080553df6f34f62269a21d554844e58bfe  COPYING.LGPLv2.1
+ sha256  cb48bf09a11f5fb576cddb0431c8f5ed0a60157a9ec942adffc13907cbe083f2  LICENSE.md
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 6d28bfbed7..9b79dff48e 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FFMPEG_VERSION = 4.3.1
++FFMPEG_VERSION = 4.3.2
+ FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
+ FFMPEG_SITE = http://ffmpeg.org/releases
+ FFMPEG_INSTALL_STAGING = YES
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.29.2
