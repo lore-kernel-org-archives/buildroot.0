@@ -1,51 +1,56 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 21 Feb 2021 18:45:49 +0100
-Subject: [Buildroot] [PATCH 1/1] package/perl: link with -lintl if needed
-Message-ID: <20210221174549.3764415-1-fontaine.fabrice@gmail.com>
+Date: Sun, 21 Feb 2021 18:59:02 +0100
+Subject: [Buildroot] [PATCH 1/1] package/botan: avoid empty -l
+Message-ID: <20210221175902.3938257-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Link with TARGET_NLS_LIBS if needed to avoid the following build failure
-with perl in version 5.32:
-
-/home/buildroot/autobuild/instance-3/output-1/host/bin/arm-linux-gcc -lm -Wl,-E -o perl perlmain.o libperl.a  -lm -lcrypt -lpthread -ldl
-/home/buildroot/autobuild/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/9.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: libperl.a(locale.o): in function `S_emulate_setlocale':
-/home/buildroot/autobuild/instance-3/output-1/build/perl-5.32.1/locale.c:1182: undefined reference to `libintl_textdomain'
-
-An upstream issue has been opened in:
-https://github.com/Perl/perl5/issues/18467
+Add upstream patch to fix upstream commit
+af63fe89228172e5a395f7e6491fae3bfa9da4b1 which was added to buildroot in
+commit d71de4143d7a8554929f2a1e9731f83a4cf85fd3
 
 Fixes:
- - http://autobuild.buildroot.org/results/9df8d8d28006845b4f927548f8856dfa8f79802b
+ - http://autobuild.buildroot.org/results/801007860b7787b28b2b2e3611b59350034a3694
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/perl/perl.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/botan/0002-Avoid-empty-l.patch | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
+ create mode 100644 package/botan/0002-Avoid-empty-l.patch
 
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index ec1cfd4d0a..0ff288db0e 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -11,6 +11,7 @@ PERL_SITE = https://www.cpan.org/src/5.0
- PERL_SOURCE = perl-$(PERL_VERSION).tar.xz
- PERL_LICENSE = Artistic or GPL-1.0+
- PERL_LICENSE_FILES = Artistic Copying README
-+PERL_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
- PERL_INSTALL_STAGING = YES
- 
- PERL_CROSS_VERSION = 1.3.5
-@@ -50,7 +51,7 @@ PERL_CONF_OPTS = \
- 	--prefix=/usr \
- 	-Dld="$(TARGET_CC)" \
- 	-Dccflags="$(TARGET_CFLAGS)" \
--	-Dldflags="$(TARGET_LDFLAGS) -lm" \
-+	-Dldflags="$(TARGET_LDFLAGS) -lm $(TARGET_NLS_LIBS)" \
- 	-Dmydomain="" \
- 	-Dmyhostname="noname" \
- 	-Dmyuname="Buildroot $(BR2_VERSION_FULL)" \
+diff --git a/package/botan/0002-Avoid-empty-l.patch b/package/botan/0002-Avoid-empty-l.patch
+new file mode 100644
+index 0000000000..9102360244
+--- /dev/null
++++ b/package/botan/0002-Avoid-empty-l.patch
+@@ -0,0 +1,25 @@
++From 4b2225ea54988e09b649768848b3c14b43e064de Mon Sep 17 00:00:00 2001
++From: Jack Lloyd <jack@randombit.net>
++Date: Mon, 15 Feb 2021 15:11:12 -0500
++Subject: [PATCH] Avoid empty -l
++
++[Retrieved from:
++https://github.com/randombit/botan/commit/4b2225ea54988e09b649768848b3c14b43e064de]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ configure.py | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure.py b/configure.py
++index 865a6c8e62..a79f672eca 100755
++--- a/configure.py
+++++ b/configure.py
++@@ -2027,7 +2027,7 @@ def extra_libs(libs, cc):
++         if libs is None:
++             return ''
++ 
++-        return ' '.join([(cc.add_lib_option % lib) for lib in libs.split(',')])
+++        return ' '.join([(cc.add_lib_option % lib) for lib in libs.split(',') if lib != ''])
++ 
++     variables = {
++         'version_major':  Version.major(),
 -- 
 2.30.0
