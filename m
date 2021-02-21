@@ -1,73 +1,109 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 21 Feb 2021 22:56:49 +0100
-Subject: [Buildroot] [PATCH/next] package/libxcrypt: fix conversion error
-In-Reply-To: <20210220162916.3424-1-guillaume.bressaix@gmail.com>
-References: <20210220162916.3424-1-guillaume.bressaix@gmail.com>
-Message-ID: <20210221215649.GA2276@scaer>
+Date: Sun, 21 Feb 2021 23:11:07 +0100
+Subject: [Buildroot] [PATCH] package/fakeroot: fix glibc detection on
+ patch for new wrappers
+In-Reply-To: <20210221183844.845822-1-ryanbarnett3@gmail.com>
+References: <20210221183844.845822-1-ryanbarnett3@gmail.com>
+Message-ID: <20210221221107.GB2276@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Guillaume, All,
+Ryan, All,
 
-On 2021-02-20 17:29 +0100, guillaume.bressaix at gmail.com spake thusly:
-> From: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
+On 2021-02-21 12:38 -0600, Ryan Barnett spake thusly:
+> Commit f45925a951318e9e53bead80b363e004301adc6f add the patch:
 > 
-> Fixes: http://autobuild.buildroot.net/results/e9a058a8c98daf197cd9d7ac632e0cb5707d524f
+> 0003-libfakeroot.c-add-wrappers-for-new-glibc-2.33-symbol.patch
 > 
-> Some sensitive compilers may raise a warning that turns into an error on this line.
+> which allowed fakeroot to be compiled with GLIBC 2.33 or above.
+> However, this introduce a bug for building with a non-GLIBC based
+> toolchain as a GLIBC macro - __GLIBC_PREREQ - is used on the same line
+> as the detection of GLIBC.
 > 
-> Patch submitted to mainline, waiting for approval, see:
-> https://github.com/besser82/libxcrypt/pull/119
+> Fix this by backporting the fix to this incorrect macro from upstream
+> commit:
 > 
-> Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+> https://salsa.debian.org/clint/fakeroot/-/commit/8090dffdad8fda86dccd47ce7a7db8840bdf7d7b
 
-Upstream has now applied it, so: applied to master, thanks.
+Why are you mangling an existing patch, instead of simply backporting
+the upstream commit into a new patch?
+
+We want each patch that we carry to be individual patches, not a mix of
+squashed patches...
 
 Regards,
 Yann E. MORIN.
 
+> Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
 > ---
->  ...gost3411-core.c-fix-conversion-error.patch | 26 +++++++++++++++++++
->  1 file changed, 26 insertions(+)
->  create mode 100644 package/libxcrypt/0001-lib-alg-gost3411-core.c-fix-conversion-error.patch
+>  ...d-wrappers-for-new-glibc-2.33-symbol.patch | 22 +++++++++++++------
+>  1 file changed, 15 insertions(+), 7 deletions(-)
 > 
-> diff --git a/package/libxcrypt/0001-lib-alg-gost3411-core.c-fix-conversion-error.patch b/package/libxcrypt/0001-lib-alg-gost3411-core.c-fix-conversion-error.patch
-> new file mode 100644
-> index 0000000000..5488d15a3d
-> --- /dev/null
-> +++ b/package/libxcrypt/0001-lib-alg-gost3411-core.c-fix-conversion-error.patch
-> @@ -0,0 +1,26 @@
-> +From c7bf2cf8e610bb26bece7f3a2bc5b47d7c659c7d Mon Sep 17 00:00:00 2001
-> +From: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
-> +Date: Sat, 20 Feb 2021 16:51:04 +0100
-> +Subject: [PATCH] lib/alg-gost3411-core.c: fix conversion error
-> +
-> +Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+> diff --git a/package/fakeroot/0003-libfakeroot.c-add-wrappers-for-new-glibc-2.33-symbol.patch b/package/fakeroot/0003-libfakeroot.c-add-wrappers-for-new-glibc-2.33-symbol.patch
+> index 8115598d64..fbbf16b4f4 100644
+> --- a/package/fakeroot/0003-libfakeroot.c-add-wrappers-for-new-glibc-2.33-symbol.patch
+> +++ b/package/fakeroot/0003-libfakeroot.c-add-wrappers-for-new-glibc-2.33-symbol.patch
+> @@ -1,4 +1,4 @@
+> -From feda578ca3608b7fc9a28a3a91293611c0ef47b7 Mon Sep 17 00:00:00 2001
+> +From 2c15ff6dda7ad3ea45590e262288569862fb3b90 Mon Sep 17 00:00:00 2001
+>  From: Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
+>  Date: Thu, 11 Feb 2021 21:00:04 -0800
+>  Subject: [PATCH] libfakeroot.c: add wrappers for new glibc 2.33+ symbols
+> @@ -9,22 +9,29 @@ Content-Transfer-Encoding: 8bit
+>  This patch add wrappers for newly exported symbols in glibc 2.33.
+>  
+>  Backported from: feda578ca3608b7fc9a28a3a91293611c0ef47b7
+> +Backported from: 8090dffdad8fda86dccd47ce7a7db8840bdf7d7b
+>  
+>  Signed-off-by: Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
+>  Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+> +Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
+>  ---
+> - libfakeroot.c | 48 ++++++++++++++++++++++++++++++++++++++++++++++++
+> - 1 file changed, 48 insertions(+)
+> +v1 -> v2
+> + - [ryan] incorporated fix to allow libfakeroot to compile on non
+> +   GLIBC hosts since __GLIBC_PREREQ macro is not defined
 > +---
-> + lib/alg-gost3411-2012-core.c | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/lib/alg-gost3411-2012-core.c b/lib/alg-gost3411-2012-core.c
-> +index 13bb493..af3a36e 100644
-> +--- a/lib/alg-gost3411-2012-core.c
-> ++++ b/lib/alg-gost3411-2012-core.c
-> +@@ -92,7 +92,7 @@ add512(const uint512_u *x, const uint512_u *y, uint512_u *r)
-> +     for (i = 0; i < 64; i++)
-> +     {
-> +         buf = xp[i] + yp[i] + (buf >> 8);
-> +-        rp[i] = (unsigned char) buf & 0xFF;
-> ++        rp[i] = (unsigned char) (buf & 0xFF);
-> +     }
-> + #endif
-> + }
-> +--
-> +2.20.1
-> +
+> + libfakeroot.c | 50 ++++++++++++++++++++++++++++++++++++++++++++++++++
+> + 1 file changed, 50 insertions(+)
+>  
+>  diff --git a/libfakeroot.c b/libfakeroot.c
+> -index 14cdbc4..d75c51f 100644
+> +index 14cdbc4..ec4e577 100644
+>  --- a/libfakeroot.c
+>  +++ b/libfakeroot.c
+> -@@ -1352,6 +1352,54 @@ int renameat(int olddir_fd, const char *oldpath,
+> +@@ -1352,6 +1352,56 @@ int renameat(int olddir_fd, const char *oldpath,
+>   #endif /* HAVE_FSTATAT */
+>   
+>   
+> -+#if defined(__GLIBC__) && __GLIBC_PREREQ(2,33)
+> ++#if defined(__GLIBC__)
+> ++#if __GLIBC_PREREQ(2,33)
+>  +/* Glibc 2.33 exports symbols for these functions in the shared lib */
+>  +  int lstat(const char *file_name, struct stat *statbuf) {
+>  +     return WRAP_LSTAT LSTAT_ARG(_STAT_VER, file_name, statbuf);
+> @@ -69,6 +76,7 @@ index 14cdbc4..d75c51f 100644
+>  +       return WRAP_MKNODAT MKNODAT_ARG(_STAT_VER, dir_fd, pathname, mode, &dev);
+>  +    }
+>  +  #endif
+> ++#endif /* __GLIBC__ */
+>  +#endif /* GLIBC_PREREQ */
+>  +
+>  +
+> @@ -76,5 +84,5 @@ index 14cdbc4..d75c51f 100644
+>   pid_t fork(void)
+>   {
+>  -- 
+> -2.30.1
+> +2.25.1
+>  
 > -- 
-> 2.20.1
+> 2.25.1
 > 
 > _______________________________________________
 > buildroot mailing list
