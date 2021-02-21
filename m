@@ -1,56 +1,34 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 21 Feb 2021 18:59:02 +0100
-Subject: [Buildroot] [PATCH 1/1] package/botan: avoid empty -l
-Message-ID: <20210221175902.3938257-1-fontaine.fabrice@gmail.com>
+Date: Sun, 21 Feb 2021 19:11:31 +0100
+Subject: [Buildroot] [PATCH 1/1] package/xterm: add XTERM_CPE_ID_VENDOR
+Message-ID: <20210221181131.3939059-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add upstream patch to fix upstream commit
-af63fe89228172e5a395f7e6491fae3bfa9da4b1 which was added to buildroot in
-commit d71de4143d7a8554929f2a1e9731f83a4cf85fd3
+cpe:2.3:a:invisible-island:xterm is a valid CPE identifier for this
+package:
 
-Fixes:
- - http://autobuild.buildroot.org/results/801007860b7787b28b2b2e3611b59350034a3694
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ainvisible-island%3Axterm
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/botan/0002-Avoid-empty-l.patch | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
- create mode 100644 package/botan/0002-Avoid-empty-l.patch
+ package/xterm/xterm.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/botan/0002-Avoid-empty-l.patch b/package/botan/0002-Avoid-empty-l.patch
-new file mode 100644
-index 0000000000..9102360244
---- /dev/null
-+++ b/package/botan/0002-Avoid-empty-l.patch
-@@ -0,0 +1,25 @@
-+From 4b2225ea54988e09b649768848b3c14b43e064de Mon Sep 17 00:00:00 2001
-+From: Jack Lloyd <jack@randombit.net>
-+Date: Mon, 15 Feb 2021 15:11:12 -0500
-+Subject: [PATCH] Avoid empty -l
-+
-+[Retrieved from:
-+https://github.com/randombit/botan/commit/4b2225ea54988e09b649768848b3c14b43e064de]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ configure.py | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/configure.py b/configure.py
-+index 865a6c8e62..a79f672eca 100755
-+--- a/configure.py
-++++ b/configure.py
-+@@ -2027,7 +2027,7 @@ def extra_libs(libs, cc):
-+         if libs is None:
-+             return ''
-+ 
-+-        return ' '.join([(cc.add_lib_option % lib) for lib in libs.split(',')])
-++        return ' '.join([(cc.add_lib_option % lib) for lib in libs.split(',') if lib != ''])
-+ 
-+     variables = {
-+         'version_major':  Version.major(),
+diff --git a/package/xterm/xterm.mk b/package/xterm/xterm.mk
+index f0c497e5e9..6f142a0b56 100644
+--- a/package/xterm/xterm.mk
++++ b/package/xterm/xterm.mk
+@@ -10,6 +10,7 @@ XTERM_SITE = http://invisible-mirror.net/archives/xterm
+ XTERM_DEPENDENCIES = ncurses xlib_libXaw host-pkgconf
+ XTERM_LICENSE = MIT
+ XTERM_LICENSE_FILES = COPYING
++XTERM_CPE_ID_VENDOR = invisible-island
+ XTERM_CONF_OPTS = --enable-256-color \
+ 	--x-includes=$(STAGING_DIR)/usr/include \
+ 	--x-libraries=$(STAGING_DIR)/usr/lib
 -- 
 2.30.0
