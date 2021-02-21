@@ -1,164 +1,56 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 21 Feb 2021 08:51:45 +0100
-Subject: [Buildroot] [PATCH v1] package/irqbalance: fix
- irqbalance/irqbalance-ui socket communication
-In-Reply-To: <20210220231224.16680-1-ps.report@gmx.net>
-References: <20210220231224.16680-1-ps.report@gmx.net>
-Message-ID: <20210221075145.GV2276@scaer>
+Date: Sun, 21 Feb 2021 08:55:37 +0100
+Subject: [Buildroot] [git commit] package/unbound: bump to version 1.13.1
+Message-ID: <20210221073351.9796D81DEE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=048f7723543a8d6b8f24942c0e6eab7e2a3c87ce
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-02-21 00:12 +0100, Peter Seiderer spake thusly:
-> Add patch to fix irqbalance/irqbalance-ui socket communication by
-> fixing uint64_t printf format usage.
-> 
-> Fixes:
-> 
->   $ irqbalance-ui
->   Invalid data sent.  Unexpected token: (null)TYPE
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+This release contains a number of bug fixes. There is added support
+for the EDNS Padding option (RFC7830 and RFC8467), and the EDNS NSID
+option (RFC 5001). Unbound control has added commands to enable and
+disable rpz processing. Reply callbacks have a start time passed to
+them that can be used to calculate time, these are callbacks for
+response processing. With the option serve-original-ttl the TTL served
+in responses is the original, not counted down, value, for when in
+front of authority service.
 
-Upstream has now applied your patch, so I tdid an actual backport.
+https://github.com/NLnetLabs/unbound/releases/tag/release-1.13.1
 
-Applied to master, thanks.
+Signed-off-by: Stefan Ott <stefan@ott.net>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/unbound/unbound.hash | 4 ++--
+ package/unbound/unbound.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  ...ix-uint64_t-printf-format-use-PRIu64.patch | 105 ++++++++++++++++++
->  1 file changed, 105 insertions(+)
->  create mode 100644 package/irqbalance/0001-fix-uint64_t-printf-format-use-PRIu64.patch
-> 
-> diff --git a/package/irqbalance/0001-fix-uint64_t-printf-format-use-PRIu64.patch b/package/irqbalance/0001-fix-uint64_t-printf-format-use-PRIu64.patch
-> new file mode 100644
-> index 0000000000..50524a6468
-> --- /dev/null
-> +++ b/package/irqbalance/0001-fix-uint64_t-printf-format-use-PRIu64.patch
-> @@ -0,0 +1,105 @@
-> +From 1897aceb1f2a81c0fa0e0c62c524787b2ccfb241 Mon Sep 17 00:00:00 2001
-> +From: Peter Seiderer <ps.report@gmx.net>
-> +Date: Sat, 20 Feb 2021 23:38:56 +0100
-> +Subject: [PATCH] fix uint64_t printf format (use PRIu64)
-> +
-> +Fixes (on arm 32-bit):
-> +
-> +  $ irqbalance-ui
-> +  Invalid data sent.  Unexpected token: (null)TYPE
-> +
-> +And strace showed the following:
-> +
-> +  237   sendmsg(3, {msg_name=NULL, msg_namelen=0, msg_iov=[{iov_base="stats", iov_len=5}], msg_iovlen=1, msg_control=[{cmsg_len=24, cmsg_level=SOL_SOCKET, cmsg_type=SCM_CREDENTIALS, cmsg_data={pid=237, uid=0, gid=0}}], msg_controllen=24, msg_flags=0}, 0) = 5
-> +  237   recv(3, "TYPE 3 NUMBER -1 LOAD 0 SAVE_MODE 0 (null)TYPE 2 NUMBER 0 LOAD 0 SAVE_MODE 0 (null)TYPE 1 NUMBER 0 LOAD 0 SAVE_MODE 0 (null)TYPE 0 NUMBER 3 LOAD 0 SAVE_MODE 0 (null)TYPE 1 NUMBER 1 LOAD 0 SAVE_MODE 0 (null)TYPE 0 NUMBER 1 LOAD 0 SAVE_MODE 0 (null)TYPE 1 NUMBER 2 LOAD 0 SAVE_MODE 0 (null)TYPE 0 NUMBER 2 LOAD 0 SAVE_MODE 0 (null)TYPE 1 NUMBER 3 LOAD 0 SAVE_MODE 0 (null)TYPE 0 NUMBER 0 LOAD 0 SAVE_MODE 0 (null)", 8192, 0) = 411
-> +
-> +[Upstream: https://github.com/Irqbalance/irqbalance/pull/173]
-> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> +---
-> + cputree.c    | 3 ++-
-> + irqbalance.c | 5 +++--
-> + ui/ui.c      | 5 +++--
-> + 3 files changed, 8 insertions(+), 5 deletions(-)
-> +
-> +diff --git a/cputree.c b/cputree.c
-> +index 5551784..dd99bf8 100644
-> +--- a/cputree.c
-> ++++ b/cputree.c
-> +@@ -33,6 +33,7 @@
-> + #include <sys/types.h>
-> + #include <sys/stat.h>
-> + #include <dirent.h>
-> ++#include <inttypes.h>
-> + 
-> + #include <glib.h>
-> + 
-> +@@ -431,7 +432,7 @@ static void dump_irq(struct irq_info *info, void *data)
-> + 		indent[i] = log_indent[0];
-> + 
-> + 	indent[i] = '\0';
-> +-	log(TO_CONSOLE, LOG_INFO, "%sInterrupt %i node_num is %d (%s/%lu:%lu) \n", indent,
-> ++	log(TO_CONSOLE, LOG_INFO, "%sInterrupt %i node_num is %d (%s/%" PRIu64 ":%" PRIu64 ") \n", indent,
-> + 	    info->irq, irq_numa_node(info)->number, classes[info->class], info->load, (info->irq_count - info->last_irq_count));
-> + 	free(indent);
-> + }
-> +diff --git a/irqbalance.c b/irqbalance.c
-> +index c1a0e15..82435e5 100644
-> +--- a/irqbalance.c
-> ++++ b/irqbalance.c
-> +@@ -34,6 +34,7 @@
-> + #include <sys/socket.h>
-> + #include <sys/un.h>
-> + #include <fcntl.h>
-> ++#include <inttypes.h>
-> + #ifdef HAVE_GETOPT_LONG 
-> + #include <getopt.h>
-> + #endif
-> +@@ -312,7 +313,7 @@ void get_irq_data(struct irq_info *irq, void *data)
-> + 		*irqdata = realloc(*irqdata, strlen(*irqdata) + 24 + 1 + 11 + 20 + 20 + 11);
-> + 
-> + 	sprintf(*irqdata + strlen(*irqdata),
-> +-			"IRQ %d LOAD %lu DIFF %lu CLASS %d ", irq->irq, irq->load,
-> ++			"IRQ %d LOAD %" PRIu64 " DIFF %" PRIu64 " CLASS %d ", irq->irq, irq->load,
-> + 			(irq->irq_count - irq->last_irq_count), irq->class);
-> + }
-> + 
-> +@@ -342,7 +343,7 @@ void get_object_stat(struct topo_obj *object, void *data)
-> + 		*stats = realloc(*stats, strlen(*stats) + irqdlen + 31 + 11 + 20 + 11 + 1);
-> + 	}
-> + 
-> +-	sprintf(*stats + strlen(*stats), "TYPE %d NUMBER %d LOAD %lu SAVE_MODE %d %s",
-> ++	sprintf(*stats + strlen(*stats), "TYPE %d NUMBER %d LOAD %" PRIu64 " SAVE_MODE %d %s",
-> + 			object->obj_type, object->number, object->load,
-> + 			object->powersave_mode, irq_data ? irq_data : "");
-> + 	free(irq_data);
-> +diff --git a/ui/ui.c b/ui/ui.c
-> +index 06ec472..4cf68bf 100644
-> +--- a/ui/ui.c
-> ++++ b/ui/ui.c
-> +@@ -1,4 +1,5 @@
-> + 
-> ++#include <inttypes.h>
-> + #include <string.h>
-> + #include "ui.h"
-> + 
-> +@@ -563,7 +564,7 @@ void settings()
-> + 
-> + 	char info[128] = "Current sleep interval between rebalancing: \0";
-> + 	uint8_t sleep_input_offset = strlen(info) + 3;
-> +-	snprintf(info + strlen(info), 128 - strlen(info), "%lu\n", setup.sleep);
-> ++	snprintf(info + strlen(info), 128 - strlen(info), "%" PRIu64 "\n", setup.sleep);
-> + 	attrset(COLOR_PAIR(1));
-> + 	mvprintw(2, 3, info);
-> + 	print_all_cpus();
-> +@@ -588,7 +589,7 @@ void settings()
-> + 			if(new_sleep != setup.sleep) {
-> + 				setup.sleep = new_sleep;
-> + 				char settings_data[128];
-> +-				snprintf(settings_data, 128, "%s %lu", SET_SLEEP, new_sleep);
-> ++				snprintf(settings_data, 128, "%s %" PRIu64, SET_SLEEP, new_sleep);
-> + 				send_settings(settings_data);
-> + 			}
-> + 			break;
-> +-- 
-> +2.30.1
-> +
-> -- 
-> 2.30.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/unbound/unbound.hash b/package/unbound/unbound.hash
+index 9ccea6eb88..ec7e940791 100644
+--- a/package/unbound/unbound.hash
++++ b/package/unbound/unbound.hash
+@@ -1,5 +1,5 @@
+-# From https://nlnetlabs.nl/downloads/unbound/unbound-1.13.0.tar.gz.sha256
+-sha256  a954043a95b0326ca4037e50dace1f3a207a0a19e9a4a22f4c6718fc623db2a1  unbound-1.13.0.tar.gz
++# From https://nlnetlabs.nl/downloads/unbound/unbound-1.13.1.tar.gz.sha256
++sha256  8504d97b8fc5bd897345c95d116e0ee0ddf8c8ff99590ab2b4bd13278c9f50b8  unbound-1.13.1.tar.gz
+ 
+ # Locally calculated
+ sha256  8eb9a16cbfb8703090bbfa3a2028fd46bb351509a2f90dc1001e51fbe6fd45db  LICENSE
+diff --git a/package/unbound/unbound.mk b/package/unbound/unbound.mk
+index faed60ccb9..140b7d278b 100644
+--- a/package/unbound/unbound.mk
++++ b/package/unbound/unbound.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UNBOUND_VERSION = 1.13.0
++UNBOUND_VERSION = 1.13.1
+ UNBOUND_SITE = https://www.unbound.net/downloads
+ UNBOUND_DEPENDENCIES = host-pkgconf expat libevent openssl
+ UNBOUND_LICENSE = BSD-3-Clause
