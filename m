@@ -1,105 +1,67 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 21 Feb 2021 10:58:35 +0100
-Subject: [Buildroot] [PATCH/next 1/1] package/libbluray: add optional
- support for libudfread
-In-Reply-To: <20210221093502.13991-1-bernd.kuhls@t-online.de>
-References: <20210221093502.13991-1-bernd.kuhls@t-online.de>
-Message-ID: <20210221095835.GY2276@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 21 Feb 2021 11:51:58 +0100
+Subject: [Buildroot] [PATCH 1/1] package/gstreamer1/gst1-plugins-bad: add
+ sctp option
+Message-ID: <20210221105158.3461858-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+sctp unconditionnally uses __sync_*_4 intrisics in
+https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/-/blob/master/ext/sctp/usrsctp/usrsctplib/user_atomic.h
 
-On 2021-02-21 10:35 +0100, Bernd Kuhls spake thusly:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+As a result, this will raise the following build failure with bootlin
+sparc toolchain:
 
-This patch looks like a feature patch. It is indeed a backport from
-upstream, which is good, but your commit log should explain why we need
-to do that backport.
+/srv/storage/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/9.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: ext/sctp/usrsctp/libusrsctp-static.a(usrsctplib_user_socket.c.o): in function `usrsctp_conninput':
+user_socket.c:(.text+0x3004): undefined reference to `__sync_fetch_and_add_4'
 
-Regards,
-Yann E. MORIN.
+sctp uses an internal version of usrsctp (which is not available in
+buildroot) and is available since version 1.15.1:
+https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/-/commit/e2f06326eac7c3c7fa9c0d5baf4bf9673fc93376
 
-> ---
->  package/libbluray/0001-libudfread.patch | 29 +++++++++++++++++++++++++
->  package/libbluray/libbluray.mk          |  6 +++++
->  2 files changed, 35 insertions(+)
->  create mode 100644 package/libbluray/0001-libudfread.patch
-> 
-> diff --git a/package/libbluray/0001-libudfread.patch b/package/libbluray/0001-libudfread.patch
-> new file mode 100644
-> index 0000000000..5cd9ab8111
-> --- /dev/null
-> +++ b/package/libbluray/0001-libudfread.patch
-> @@ -0,0 +1,29 @@
-> +From 24d38b8ec371d89b51f8b65f3085672db12334ff Mon Sep 17 00:00:00 2001
-> +From: Sebastian Ramacher <sramacher@debian.org>
-> +Date: Sun, 20 Dec 2020 13:32:33 +0100
-> +Subject: [PATCH] Update check for new libudfread pkg-config file name
-> +
-> +Downloaded from upstream commit:
-> +https://code.videolan.org/videolan/libbluray/-/commit/24d38b8ec371d89b51f8b65f3085672db12334ff
-> +
-> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> +---
-> + configure.ac | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/configure.ac b/configure.ac
-> +index e0e80cce..250db73b 100644
-> +--- a/configure.ac
-> ++++ b/configure.ac
-> +@@ -279,7 +279,7 @@ AM_CONDITIONAL([BDJ_J2SE], [ test x"$BDJ_TYPE" != x"j2me" ])
-> + dnl bootclasspath
-> + AC_SUBST(BDJ_BOOTCLASSPATH)
-> + 
-> +-PKG_CHECK_MODULES([LIBUDFREAD], [udfread >= 1.1.0],
-> ++PKG_CHECK_MODULES([LIBUDFREAD], [libudfread >= 1.1.0],
-> +     [with_libudfread=yes
-> +      AC_DEFINE([HAVE_LIBUDFREAD], [1], [Define to 1 if external libudfread is to be used])
-> +      PACKAGES="$PACKAGES libudfread >= 1.1.0"
-> +-- 
-> +GitLab
-> +
-> diff --git a/package/libbluray/libbluray.mk b/package/libbluray/libbluray.mk
-> index 36f59190b1..e4fca5204f 100644
-> --- a/package/libbluray/libbluray.mk
-> +++ b/package/libbluray/libbluray.mk
-> @@ -12,6 +12,8 @@ LIBBLURAY_LICENSE = LGPL-2.1+
->  LIBBLURAY_LICENSE_FILES = COPYING
->  LIBBLURAY_CPE_ID_VENDOR = videolan
->  LIBBLURAY_DEPENDENCIES = host-pkgconf
-> +# 0001-libudfread.patch
-> +LIBBLURAY_AUTORECONF = YES
->  
->  LIBBLURAY_CONF_OPTS = --disable-bdjava-jar
->  
-> @@ -19,6 +21,10 @@ ifeq ($(BR2_PACKAGE_LIBICONV),y)
->  LIBBLURAY_DEPENDENCIES += libiconv
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_LIBUDFREAD),y)
-> +LIBBLURAY_DEPENDENCIES += libudfread
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_FREETYPE),y)
->  LIBBLURAY_DEPENDENCIES += freetype
->  LIBBLURAY_CONF_OPTS += --with-freetype
-> -- 
-> 2.29.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Fixes:
+ - http://autobuild.buildroot.org/results/981b11ae9746d1eef40c1797398c4f6c16f005bd
 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/gstreamer1/gst1-plugins-bad/Config.in           | 4 ++++
+ package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 6 ++++++
+ 2 files changed, 10 insertions(+)
+
+diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+index 191820df1d..3a9fc02745 100644
+--- a/package/gstreamer1/gst1-plugins-bad/Config.in
++++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+@@ -577,6 +577,10 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SBC
+ 	bool "sbc"
+ 	select BR2_PACKAGE_SBC
+ 
++config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SCTP
++	bool "sctp"
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # __sync_*_4 intrisics
++
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SHM
+ 	bool "shm"
+ 	help
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+index 83abc7fab8..96f757ba77 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+@@ -691,6 +691,12 @@ else
+ GST1_PLUGINS_BAD_CONF_OPTS += -Dsbc=disabled
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SCTP),y)
++GST1_PLUGINS_BAD_CONF_OPTS += -Dsctp=enabled
++else
++GST1_PLUGINS_BAD_CONF_OPTS += -Dsctp=disabled
++endif
++
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SHM),y)
+ GST1_PLUGINS_BAD_CONF_OPTS += -Dshm=enabled
+ else
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.30.0
