@@ -1,67 +1,57 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 21 Feb 2021 11:51:58 +0100
-Subject: [Buildroot] [PATCH 1/1] package/gstreamer1/gst1-plugins-bad: add
- sctp option
-Message-ID: <20210221105158.3461858-1-fontaine.fabrice@gmail.com>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Sun, 21 Feb 2021 09:21:05 -0300
+Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
+ 2021-02-20
+In-Reply-To: <60321660.1c69fb81.bc4b6.afb3SMTPIN_ADDED_MISSING@mx.google.com>
+References: <60321660.1c69fb81.bc4b6.afb3SMTPIN_ADDED_MISSING@mx.google.com>
+Message-ID: <CANu7NGu8vr6H=9Bv=c6iH4qdFewfyjd25zwdUeKR1K8eB=HLpQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-sctp unconditionnally uses __sync_*_4 intrisics in
-https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/-/blob/master/ext/sctp/usrsctp/usrsctplib/user_atomic.h
+Hello,
 
-As a result, this will raise the following build failure with bootlin
-sparc toolchain:
+Em dom., 21 de fev. de 2021 ?s 05:14, Thomas Petazzoni <
+thomas.petazzoni@bootlin.com> escreveu:
+>
+> Hello,
+>
+> Autobuilder failures
+> ====================
+>
+> Below is a list of build failures reported by the Buildroot
+> autobuilders in relation to packages or CPU
+> architectures you are in charge of. Please help us
+> improving the quality of Buildroot by investigating
+> those build failures and sending patches to fix
+> them.Thanks!
+>
+> Results for the 'next' branch
+> -----------------------------
+>
+> Build failures related to your packages:
+>
+>     arch     |             reason             |
+            url
+>
+-------------+--------------------------------+---------------------------------------------------------------------------------
+>    sparc     |            tio-1.32            |
+http://autobuild.buildroot.net/results/fc0e038df55b8992d8d4efdcbb2eb218fe61b747
 
-/srv/storage/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/9.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: ext/sctp/usrsctp/libusrsctp-static.a(usrsctplib_user_socket.c.o): in function `usrsctp_conninput':
-user_socket.c:(.text+0x3004): undefined reference to `__sync_fetch_and_add_4'
+This should be fixed by
+http://patchwork.ozlabs.org/project/buildroot/patch/20201025163457.30460-1-sergio.prado at e-labworks.com/
+.
 
-sctp uses an internal version of usrsctp (which is not available in
-buildroot) and is available since version 1.15.1:
-https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/-/commit/e2f06326eac7c3c7fa9c0d5baf4bf9673fc93376
+Best regards,
 
-Fixes:
- - http://autobuild.buildroot.org/results/981b11ae9746d1eef40c1797398c4f6c16f005bd
+Sergio Prado
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/gstreamer1/gst1-plugins-bad/Config.in           | 4 ++++
- package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 6 ++++++
- 2 files changed, 10 insertions(+)
-
-diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-index 191820df1d..3a9fc02745 100644
---- a/package/gstreamer1/gst1-plugins-bad/Config.in
-+++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-@@ -577,6 +577,10 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SBC
- 	bool "sbc"
- 	select BR2_PACKAGE_SBC
- 
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SCTP
-+	bool "sctp"
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # __sync_*_4 intrisics
-+
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SHM
- 	bool "shm"
- 	help
-diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-index 83abc7fab8..96f757ba77 100644
---- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-+++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-@@ -691,6 +691,12 @@ else
- GST1_PLUGINS_BAD_CONF_OPTS += -Dsbc=disabled
- endif
- 
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SCTP),y)
-+GST1_PLUGINS_BAD_CONF_OPTS += -Dsctp=enabled
-+else
-+GST1_PLUGINS_BAD_CONF_OPTS += -Dsctp=disabled
-+endif
-+
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SHM),y)
- GST1_PLUGINS_BAD_CONF_OPTS += -Dshm=enabled
- else
--- 
-2.30.0
+>
+>
+> --
+> http://autobuild.buildroot.net
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210221/651c0549/attachment.html>
