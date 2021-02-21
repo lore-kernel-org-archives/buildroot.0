@@ -1,84 +1,51 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 21 Feb 2021 18:23:07 +0100
-Subject: [Buildroot] [PATCH/next v2 1/1] package/libbluray: add optional
- support for libudfread
-Message-ID: <20210221172307.289368-1-bernd.kuhls@t-online.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 21 Feb 2021 18:45:49 +0100
+Subject: [Buildroot] [PATCH 1/1] package/perl: link with -lintl if needed
+Message-ID: <20210221174549.3764415-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Link with TARGET_NLS_LIBS if needed to avoid the following build failure
+with perl in version 5.32:
+
+/home/buildroot/autobuild/instance-3/output-1/host/bin/arm-linux-gcc -lm -Wl,-E -o perl perlmain.o libperl.a  -lm -lcrypt -lpthread -ldl
+/home/buildroot/autobuild/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/9.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: libperl.a(locale.o): in function `S_emulate_setlocale':
+/home/buildroot/autobuild/instance-3/output-1/build/perl-5.32.1/locale.c:1182: undefined reference to `libintl_textdomain'
+
+An upstream issue has been opened in:
+https://github.com/Perl/perl5/issues/18467
+
+Fixes:
+ - http://autobuild.buildroot.org/results/9df8d8d28006845b4f927548f8856dfa8f79802b
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-v2: added note that the patch fixes a bug (Yann)
+ package/perl/perl.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
- package/libbluray/0001-libudfread.patch | 32 +++++++++++++++++++++++++
- package/libbluray/libbluray.mk          |  6 +++++
- 2 files changed, 38 insertions(+)
- create mode 100644 package/libbluray/0001-libudfread.patch
-
-diff --git a/package/libbluray/0001-libudfread.patch b/package/libbluray/0001-libudfread.patch
-new file mode 100644
-index 0000000000..7e00069d47
---- /dev/null
-+++ b/package/libbluray/0001-libudfread.patch
-@@ -0,0 +1,32 @@
-+From 24d38b8ec371d89b51f8b65f3085672db12334ff Mon Sep 17 00:00:00 2001
-+From: Sebastian Ramacher <sramacher@debian.org>
-+Date: Sun, 20 Dec 2020 13:32:33 +0100
-+Subject: [PATCH] Update check for new libudfread pkg-config file name
-+
-+Fixes detection of libudfread due to upstream commit:
-+https://code.videolan.org/videolan/libudfread/-/commit/76294a7449e068c527e31aec1a22076bf87c6302
-+
-+Downloaded from upstream commit:
-+https://code.videolan.org/videolan/libbluray/-/commit/24d38b8ec371d89b51f8b65f3085672db12334ff
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ configure.ac | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index e0e80cce..250db73b 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -279,7 +279,7 @@ AM_CONDITIONAL([BDJ_J2SE], [ test x"$BDJ_TYPE" != x"j2me" ])
-+ dnl bootclasspath
-+ AC_SUBST(BDJ_BOOTCLASSPATH)
-+ 
-+-PKG_CHECK_MODULES([LIBUDFREAD], [udfread >= 1.1.0],
-++PKG_CHECK_MODULES([LIBUDFREAD], [libudfread >= 1.1.0],
-+     [with_libudfread=yes
-+      AC_DEFINE([HAVE_LIBUDFREAD], [1], [Define to 1 if external libudfread is to be used])
-+      PACKAGES="$PACKAGES libudfread >= 1.1.0"
-+-- 
-+GitLab
-+
-diff --git a/package/libbluray/libbluray.mk b/package/libbluray/libbluray.mk
-index 36f59190b1..e4fca5204f 100644
---- a/package/libbluray/libbluray.mk
-+++ b/package/libbluray/libbluray.mk
-@@ -12,6 +12,8 @@ LIBBLURAY_LICENSE = LGPL-2.1+
- LIBBLURAY_LICENSE_FILES = COPYING
- LIBBLURAY_CPE_ID_VENDOR = videolan
- LIBBLURAY_DEPENDENCIES = host-pkgconf
-+# 0001-libudfread.patch
-+LIBBLURAY_AUTORECONF = YES
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index ec1cfd4d0a..0ff288db0e 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -11,6 +11,7 @@ PERL_SITE = https://www.cpan.org/src/5.0
+ PERL_SOURCE = perl-$(PERL_VERSION).tar.xz
+ PERL_LICENSE = Artistic or GPL-1.0+
+ PERL_LICENSE_FILES = Artistic Copying README
++PERL_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
+ PERL_INSTALL_STAGING = YES
  
- LIBBLURAY_CONF_OPTS = --disable-bdjava-jar
- 
-@@ -19,6 +21,10 @@ ifeq ($(BR2_PACKAGE_LIBICONV),y)
- LIBBLURAY_DEPENDENCIES += libiconv
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBUDFREAD),y)
-+LIBBLURAY_DEPENDENCIES += libudfread
-+endif
-+
- ifeq ($(BR2_PACKAGE_FREETYPE),y)
- LIBBLURAY_DEPENDENCIES += freetype
- LIBBLURAY_CONF_OPTS += --with-freetype
+ PERL_CROSS_VERSION = 1.3.5
+@@ -50,7 +51,7 @@ PERL_CONF_OPTS = \
+ 	--prefix=/usr \
+ 	-Dld="$(TARGET_CC)" \
+ 	-Dccflags="$(TARGET_CFLAGS)" \
+-	-Dldflags="$(TARGET_LDFLAGS) -lm" \
++	-Dldflags="$(TARGET_LDFLAGS) -lm $(TARGET_NLS_LIBS)" \
+ 	-Dmydomain="" \
+ 	-Dmyhostname="noname" \
+ 	-Dmyuname="Buildroot $(BR2_VERSION_FULL)" \
 -- 
-2.29.2
+2.30.0
