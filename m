@@ -1,75 +1,140 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 22 Feb 2021 23:06:01 +0100
-Subject: [Buildroot] [PATCH] support/download/svn: fix date format for
- archive creation
-In-Reply-To: <20210219212154.27107-1-vfazio@xes-inc.com>
-References: <20210219212154.27107-1-vfazio@xes-inc.com>
-Message-ID: <20210222220601.GH2276@scaer>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 22 Feb 2021 23:08:01 +0100
+Subject: [Buildroot] [PATCH/next v1 1/2] package/ell: bump version to 0.38
+Message-ID: <20210222220802.20322-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Vincent, All,
+- remove 0001-build-Add-rawmemchr-to-missing.h.patch
+  (upstream [1])
 
-On 2021-02-19 15:21 -0600, Vincent Fazio spake thusly:
-> Previously we would use the date provided by:
-> `svn info --show-item last-changed-date ...`
-> 
-> The date returned from this command could include sub-second precision
-> which is not compatible with the PAX options we specify to GNU tar.
-> 
-> Now the returned date is massaged to drop the sub-seconds.
-> 
-> Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
+- remove 0002-ell-add-missing-include-in-dhcp-server.patch
+  (upstream [2])
 
-In the end, I did move it to the helper, because:
+[1] https://git.kernel.org/pub/scm/libs/ell/ell.git/commit/?id=3916c1cc32be205e185a8a56de5cde1b9ec60e81
+[2] https://git.kernel.org/pub/scm/libs/ell/ell.git/commit/?id=6dfff19d4716ba216de1a3298ed0f667d7782810
 
-  - this really is an internal detail on a limitation of the PAX format,
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ ...001-build-Add-rawmemchr-to-missing.h.patch | 47 -------------------
+ ...l-add-missing-include-in-dhcp-server.patch | 26 ----------
+ package/ell/ell.hash                          |  2 +-
+ package/ell/ell.mk                            |  2 +-
+ 4 files changed, 2 insertions(+), 75 deletions(-)
+ delete mode 100644 package/ell/0001-build-Add-rawmemchr-to-missing.h.patch
+ delete mode 100644 package/ell/0002-ell-add-missing-include-in-dhcp-server.patch
 
-  - we do not really mind what exact timestamp goes in the archive, as
-    long as it is reproducible.
-
-Also, as suggested by Arnout, I switched to usig an explicit date-time
-POSIX-compliant format string, rather than rely on -Iseconds, which is
-a GNU extension.
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  support/download/svn | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/support/download/svn b/support/download/svn
-> index 839dccaf62..ea1032267f 100755
-> --- a/support/download/svn
-> +++ b/support/download/svn
-> @@ -52,6 +52,9 @@ _svn export ${verbose} "${@}" "'${uri}@${rev}'" "'${basename}'"
->  # last line (svn outputs everything on stdout)
->  date="$( _svn info --show-item last-changed-date "'${uri}@${rev}'" |tail -n 1 )"
->  
-> +# Drop sub-second precision to play nice with GNU tar's valid_timespec check
-> +date="$( date -d "${date}" -uIseconds )"
-> +
->  # Generate the archive.
->  # We did a 'svn export' above, so it's not a working copy (there is no .svn
->  # directory or file to ignore).
-> -- 
-> 2.30.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/ell/0001-build-Add-rawmemchr-to-missing.h.patch b/package/ell/0001-build-Add-rawmemchr-to-missing.h.patch
+deleted file mode 100644
+index 3e00023001..0000000000
+--- a/package/ell/0001-build-Add-rawmemchr-to-missing.h.patch
++++ /dev/null
+@@ -1,47 +0,0 @@
+-From 3916c1cc32be205e185a8a56de5cde1b9ec60e81 Mon Sep 17 00:00:00 2001
+-From: Denis Kenzior <denkenz@gmail.com>
+-Date: Mon, 30 Nov 2020 13:00:11 -0600
+-Subject: [PATCH] build: Add rawmemchr to missing.h
+-
+-For those systems (i.e. musl) that do not support this
+-
+-[Upstream: https://git.kernel.org/pub/scm/libs/ell/ell.git/patch/?id=3916c1cc32be205e185a8a56de5cde1b9ec60e81]
+-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+----
+- configure.ac  |  1 +
+- ell/missing.h | 10 ++++++++++
+- 2 files changed, 11 insertions(+)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 1e5ead9..f34add1 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -98,6 +98,7 @@ AC_ARG_ENABLE(ubsan, AC_HELP_STRING([--enable-ubsan],
+- ])
+- 
+- AC_CHECK_FUNCS(explicit_bzero)
+-+AC_CHECK_FUNCS(rawmemchr)
+- 
+- AC_CHECK_FUNC(signalfd, dummy=yes,
+- 			AC_MSG_ERROR(signalfd support is required))
+-diff --git a/ell/missing.h b/ell/missing.h
+-index 6b9b0fd..2a3e647 100644
+---- a/ell/missing.h
+-+++ b/ell/missing.h
+-@@ -67,3 +67,13 @@ static inline void explicit_bzero(void *s, size_t n)
+- #ifndef SO_BINDTOIFINDEX
+- #define SO_BINDTOIFINDEX 62
+- #endif
+-+
+-+#ifndef HAVE_RAWMEMCHR
+-+static inline void *rawmemchr(const void *s, int c)
+-+{
+-+_Pragma("GCC diagnostic push")
+-+_Pragma("GCC diagnostic ignored \"-Wstringop-overflow=\"")
+-+	return memchr(s, c, (size_t) -1);
+-+_Pragma("GCC diagnostic pop")
+-+}
+-+#endif
+--- 
+-2.29.2
+-
+diff --git a/package/ell/0002-ell-add-missing-include-in-dhcp-server.patch b/package/ell/0002-ell-add-missing-include-in-dhcp-server.patch
+deleted file mode 100644
+index a2ac7b0965..0000000000
+--- a/package/ell/0002-ell-add-missing-include-in-dhcp-server.patch
++++ /dev/null
+@@ -1,26 +0,0 @@
+-From 6dfff19d4716ba216de1a3298ed0f667d7782810 Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?=C3=89rico=20Nogueira?= <ericonr@disroot.org>
+-Date: Mon, 30 Nov 2020 18:40:33 -0300
+-Subject: [PATCH] ell: add missing include in dhcp-server.
+-
+-[Upstream: https://git.kernel.org/pub/scm/libs/ell/ell.git/patch/?id=6dfff19d4716ba216de1a3298ed0f667d7782810]
+-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+----
+- ell/dhcp-server.c | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/ell/dhcp-server.c b/ell/dhcp-server.c
+-index c983ed4..144e83e 100644
+---- a/ell/dhcp-server.c
+-+++ b/ell/dhcp-server.c
+-@@ -24,6 +24,7 @@
+- #include <config.h>
+- #endif
+- 
+-+#include <linux/types.h>
+- #include <net/ethernet.h>
+- #include <sys/socket.h>
+- #include <arpa/inet.h>
+--- 
+-2.29.2
+-
+diff --git a/package/ell/ell.hash b/package/ell/ell.hash
+index efd39b31db..cbefd79bb8 100644
+--- a/package/ell/ell.hash
++++ b/package/ell/ell.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  c2b3848568c75bcf5a0e7d1f2efce4fdb2733d28226ed21c6a6542f0be05d784  ell-0.35-br1.tar.gz
++sha256  7767306f20db41c28b3138b5323bca05fef92238b6b61f81f66c2af684a13886  ell-0.38-br1.tar.gz
+ 
+ # License files
+ sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING
+diff --git a/package/ell/ell.mk b/package/ell/ell.mk
+index 8aec067bc0..18f1cf2aac 100644
+--- a/package/ell/ell.mk
++++ b/package/ell/ell.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ELL_VERSION = 0.35
++ELL_VERSION = 0.38
+ ELL_SITE = https://git.kernel.org/pub/scm/libs/ell/ell.git
+ ELL_SITE_METHOD = git
+ ELL_LICENSE = LGPL-2.1+
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.30.1
