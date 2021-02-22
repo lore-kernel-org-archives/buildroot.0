@@ -1,40 +1,48 @@
-From: Christian Stewart <christian@paral.in>
-Date: Mon, 22 Feb 2021 03:44:07 -0800
-Subject: [Buildroot] [PATCH 1/1] package/delve: bump to version 1.6.0
-Message-ID: <20210222114407.2530937-1-christian@paral.in>
+From: Antoine Tenart <atenart@kernel.org>
+Date: Mon, 22 Feb 2021 13:47:58 +0100
+Subject: [Buildroot] [PATCH] package/refpolicy: bump to 2.20210203
+Message-ID: <20210222124758.2546796-1-atenart@kernel.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Christian Stewart <christian@paral.in>
----
- package/delve/delve.hash | 2 +-
- package/delve/delve.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Changelog:
+https://github.com/SELinuxProject/refpolicy/releases/tag/RELEASE_2_20210203
 
-diff --git a/package/delve/delve.hash b/package/delve/delve.hash
-index e8bb9c37ad..fa1d586dc9 100644
---- a/package/delve/delve.hash
-+++ b/package/delve/delve.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  f8bbaecdfc9d1ff6148900d3dea44b6dd06a7f0197be4e9a75c289b7f62682ab  delve-1.5.0.tar.gz
-+sha256  a10a6fc40d87572c6d3f3becdb1a289269e17526d038749f2fa04dd9f591f26a  delve-1.6.0.tar.gz
- sha256	778864b990007e8cef6633f8c372dd05bac1fada6cf67b008afb1483f83b38f5  LICENSE
-diff --git a/package/delve/delve.mk b/package/delve/delve.mk
-index f574bc5c08..fe47319b46 100644
---- a/package/delve/delve.mk
-+++ b/package/delve/delve.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Signed-off-by: Antoine Tenart <atenart@kernel.org>
+---
+ package/refpolicy/refpolicy.hash | 2 +-
+ package/refpolicy/refpolicy.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/refpolicy/refpolicy.hash b/package/refpolicy/refpolicy.hash
+index 7e258c4e04d9..6c33a4d97479 100644
+--- a/package/refpolicy/refpolicy.hash
++++ b/package/refpolicy/refpolicy.hash
+@@ -1,5 +1,5 @@
+ # From https://github.com/SELinuxProject/refpolicy/releases
+-sha256 1488f9b94060de28addbcb29fb8437ee0d75cba15e11280dd9dfa3e09986f57b  refpolicy-2.20200818.tar.bz2
++sha256 48cbf2c63ff9003bef05e03c8d3cdddb4e8f63fef2a072ae51c987301f0b874d  refpolicy-2.20210203.tar.bz2
  
--DELVE_VERSION = 1.5.0
-+DELVE_VERSION = 1.6.0
- DELVE_SITE = $(call github,go-delve,delve,v$(DELVE_VERSION))
- DELVE_LICENSE = MIT
- DELVE_LICENSE_FILES = LICENSE
+ # Locally computed
+ sha256 204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994 COPYING
+diff --git a/package/refpolicy/refpolicy.mk b/package/refpolicy/refpolicy.mk
+index 0194708b378d..0e7dfd86f807 100644
+--- a/package/refpolicy/refpolicy.mk
++++ b/package/refpolicy/refpolicy.mk
+@@ -22,9 +22,9 @@ REFPOLICY_SITE = $(call qstrip,$(BR2_PACKAGE_REFPOLICY_CUSTOM_REPO_URL))
+ REFPOLICY_SITE_METHOD = git
+ BR_NO_CHECK_HASH_FOR += $(REFPOLICY_SOURCE)
+ else
+-REFPOLICY_VERSION = 2.20200818
++REFPOLICY_VERSION = 2.20210203
+ REFPOLICY_SOURCE = refpolicy-$(REFPOLICY_VERSION).tar.bz2
+-REFPOLICY_SITE = https://github.com/SELinuxProject/refpolicy/releases/download/RELEASE_2_20200818
++REFPOLICY_SITE = https://github.com/SELinuxProject/refpolicy/releases/download/RELEASE_2_20210203
+ endif
+ 
+ # Cannot use multiple threads to build the reference policy
 -- 
-2.30.1
+2.29.2
