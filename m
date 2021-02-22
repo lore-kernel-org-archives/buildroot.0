@@ -1,44 +1,86 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 22 Feb 2021 21:14:07 +0100
-Subject: [Buildroot] [PATCH] support/download/svn: fix date format for
- archive creation
-In-Reply-To: <20210222182801.GD2276@scaer>
-References: <20210219212154.27107-1-vfazio@xes-inc.com>
- <20210220095148.GI2276@scaer>
- <4cba7ba3-06c7-b45b-81c8-4746bcee2bcf@mind.be>
- <20210222182801.GD2276@scaer>
-Message-ID: <20210222201407.GE2276@scaer>
+Date: Mon, 22 Feb 2021 22:15:35 +0100
+Subject: [Buildroot] [PATCH] package/avrdude: Switch to upstream
+In-Reply-To: <20210222022606.491102-1-alexander.sverdlin@gmail.com>
+References: <20210222022606.491102-1-alexander.sverdlin@gmail.com>
+Message-ID: <20210222211535.GF2276@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,All,
+Alexander, All,
 
-I was rushing for dinner, so forgot to properly complete my mail before
-sending it; here's a complement...
+On 2021-02-22 03:26 +0100, Alexander Sverdlin spake thusly:
+> In the meanwhile "linuxspi" programmer was merged upstream, therefore it's
+> possible to switch to latest upstream tree instead of the old fork without
+> losing any functionality.
+> 
+> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+> ---
+>  package/avrdude/avrdude.hash | 2 +-
+>  package/avrdude/avrdude.mk   | 9 +++++----
+>  2 files changed, 6 insertions(+), 5 deletions(-)
+> 
+> diff --git a/package/avrdude/avrdude.hash b/package/avrdude/avrdude.hash
+> index 888668ae44..9c56dacd60 100644
+> --- a/package/avrdude/avrdude.hash
+> +++ b/package/avrdude/avrdude.hash
+> @@ -1,3 +1,3 @@
+>  # Locally computed
+> -sha256  cfa97af7badc713c62306ab85d0e7a288b064bf72e698494f73cb16c5b2c659e  avrdude-f8893ccf0aceeff67c45f95ae4e86bc7fbe342aa.tar.gz
+> +sha256  39d77cec4064b03bfc0ff942d36c41df7eea9b56b89a3f991078b68caddd3c77  avrdude-r1450.tar.gz
 
-On 2021-02-22 19:28 +0100, Yann E. MORIN spake thusly:
-> On 2021-02-22 11:58 +0100, Arnout Vandecappelle spake thusly:
-> > On 20/02/2021 10:51, Yann E. MORIN wrote:
-> > > On 2021-02-19 15:21 -0600, Vincent Fazio spake thusly:
-> > >> Now the returned date is massaged to drop the sub-seconds.
-> [--SNIP--]
-> > A much simpler solution is
-> > date="$( date -d "${date}" -u +%Y-%m-%dT%T%:z )"
-> > which is fully portable over any POSIX-compliant version of date.
-[--SNIP--]
-> Eventually, I've settled for: 
+Since 2021-01-10, we changed the format of tarballs generated from
+subversion, and the tarballs now include a '-br1' suffix after the
+version, e.g.: avrdude-r1450-br1.tar.gz
 
-... for: +%Y-%m-%dT%H:%M:%S+00:00
+Also, see below...
 
-> Actually, sub-second precision *is* allowed by ISO8601. [...]
+>  sha256  201babc7da198873304a77a30dbfc7ca449c9bba52df2dffa4cca0009dbdfcb2  avrdude/COPYING
+> diff --git a/package/avrdude/avrdude.mk b/package/avrdude/avrdude.mk
+> index ae378dfbac..b6754684e1 100644
+> --- a/package/avrdude/avrdude.mk
+> +++ b/package/avrdude/avrdude.mk
+> @@ -4,15 +4,16 @@
+>  #
+>  ################################################################################
+>  
+> -AVRDUDE_VERSION = f8893ccf0aceeff67c45f95ae4e86bc7fbe342aa
+> -AVRDUDE_SITE = $(call github,kcuzner,avrdude,$(AVRDUDE_VERSION))
+> +AVRDUDE_VERSION = r1450
+> +AVRDUDE_SITE_METHOD = svn
+> +AVRDUDE_SITE = http://svn.savannah.nongnu.org/svn/avrdude/trunk
 
-And so, I still think it is better to have that clamping in the helper.
+I am wondering what version of Buildroot you've been testing this with,
+because downloading via svn is currently broken in master.
+
+No need to reend for now, until we fix the svn download (imminent,
+anytime soon, almost done, etc...)
 
 Regards,
 Yann E. MORIN.
+
+>  AVRDUDE_LICENSE = GPL-2.0+
+>  AVRDUDE_LICENSE_FILES = avrdude/COPYING
+>  AVRDUDE_SUBDIR = avrdude
+> -# Sources coming from git, without generated configure and Makefile.in
+> +# Sources coming from svn, without generated configure and Makefile.in
+>  # files.
+>  AVRDUDE_AUTORECONF = YES
+> -AVRDUDE_CONF_OPTS = --enable-linuxgpio
+> +AVRDUDE_CONF_OPTS = --enable-linuxgpio --enable-linuxspi
+>  AVRDUDE_DEPENDENCIES = elfutils libusb libusb-compat ncurses \
+>  	host-flex host-bison
+>  
+> -- 
+> 2.29.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
