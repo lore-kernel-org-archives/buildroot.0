@@ -1,118 +1,47 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 22 Feb 2021 23:08:02 +0100
-Subject: [Buildroot] [PATCH/next v1 2/2] package/iwd: bump version to 1.12
-In-Reply-To: <20210222220802.20322-1-ps.report@gmx.net>
-References: <20210222220802.20322-1-ps.report@gmx.net>
-Message-ID: <20210222220802.20322-2-ps.report@gmx.net>
+Date: Mon, 22 Feb 2021 23:23:08 +0100
+Subject: [Buildroot] [PATCH/next v1] package/libuev: bump version to 2.3.2
+Message-ID: <20210222222308.10516-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- remove 0001-configure.ac-fix-static-build-with-readline.patch
-  (upstream [1])
+- update license hash (copyright year, maintainer surname, see [1])
 
-[1] https://git.kernel.org/pub/scm/network/wireless/iwd.git/commit/?id=62d31539d6e31a40d7d33c73637e37b50c59ef40
+[1] https://github.com/troglobit/libuev/commit/86e01be26ebe51824e6574ef186a532823bc085c#diff-c693279643b8cd5d248172d9c22cb7cf4ed163a3c98c8a3f69c2717edd3eacb7
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- ...re.ac-fix-static-build-with-readline.patch | 61 -------------------
- package/iwd/iwd.hash                          |  2 +-
- package/iwd/iwd.mk                            |  2 +-
- 3 files changed, 2 insertions(+), 63 deletions(-)
- delete mode 100644 package/iwd/0001-configure.ac-fix-static-build-with-readline.patch
+ package/libuev/libuev.hash | 6 +++---
+ package/libuev/libuev.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/iwd/0001-configure.ac-fix-static-build-with-readline.patch b/package/iwd/0001-configure.ac-fix-static-build-with-readline.patch
-deleted file mode 100644
-index 37dbdb18e5..0000000000
---- a/package/iwd/0001-configure.ac-fix-static-build-with-readline.patch
-+++ /dev/null
-@@ -1,61 +0,0 @@
--From 358e0755c3a434d7a815519b8c10ae5d347caad0 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Wed, 16 Dec 2020 07:51:04 +0100
--Subject: [PATCH] configure.ac: fix static build with readline
--
--Retrieve the dependencies of readline through pkg-config (and fallback
--to -lreadline) to avoid the following build failure:
--
--/nvme/rc-buildroot-test/scripts/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-uclibc/8.3.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: /nvme/rc-buildroot-test/scripts/instance-0/output-1/host/bin/../x86_64-buildroot-linux-uclibc/sysroot/usr/lib/libreadline.a(display.o): in function `cr':
--display.c:(.text+0x1ab): undefined reference to `tputs'
--
--Fixes:
-- - http://autobuild.buildroot.org/results/8fb1341f2f5094c346456b43b4fc04996c2e1485
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status:
--https://lists.01.org/hyperkitty/list/iwd at lists.01.org/thread/NFI4P52Y65T6XX7S7DGIVDMZISNQWUUC/]
-----
-- Makefile.am  | 4 ++--
-- configure.ac | 3 +++
-- 2 files changed, 5 insertions(+), 2 deletions(-)
--
--diff --git a/Makefile.am b/Makefile.am
--index 3cd7eaa6..493d06cc 100644
----- a/Makefile.am
--+++ b/Makefile.am
--@@ -288,7 +288,7 @@ client_iwctl_SOURCES = client/main.c \
-- 			client/network.h client/network.c \
-- 			client/properties.h client/properties.c \
-- 			client/wsc.c client/station.c
---client_iwctl_LDADD = $(ell_ldadd) -lreadline
--+client_iwctl_LDADD = $(ell_ldadd) $(READLINE_LIBS)
-- 
-- if MANUAL_PAGES
-- man_MANS += client/iwctl.1
--@@ -504,7 +504,7 @@ unit_test_client_SOURCES = unit/test-client.c \
-- 				client/display.h client/display.c \
-- 				client/network.h client/network.c \
-- 				client/properties.h client/properties.c
---unit_test_client_LDADD = $(ell_ldadd) -lreadline
--+unit_test_client_LDADD = $(ell_ldadd) $(READLINE_LIBS)
-- endif
-- 
-- unit_test_sae_SOURCES = unit/test-sae.c \
--diff --git a/configure.ac b/configure.ac
--index 7bd917a4..52f27ed9 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -154,6 +154,9 @@ AC_ARG_ENABLE([client], AC_HELP_STRING([--disable-client],
-- if (test "${enable_client}" != "no"); then
-- 	AC_CHECK_HEADERS(readline/readline.h, enable_readline=yes,
-- 			AC_MSG_ERROR(readline header files are required))
--+	PKG_CHECK_MODULES(READLINE, readline, dummy=yes, READLINE_LIBS=-lreadline)
--+	AC_SUBST(READLINE_CFLAGS)
--+	AC_SUBST(READLINE_LIBS)
-- fi
-- AM_CONDITIONAL(CLIENT, test "${enable_client}" != "no")
-- 
---- 
--2.29.2
--
-diff --git a/package/iwd/iwd.hash b/package/iwd/iwd.hash
-index f1ee23dc5d..b043af745d 100644
---- a/package/iwd/iwd.hash
-+++ b/package/iwd/iwd.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  c3ea43eccf27bb92d4e4482ff407cdabd2d1a1e4647d646241de87f2774e9a20  iwd-1.10-br1.tar.gz
-+sha256  c0d827f446012cd14e63d174d52b69b0806ae23f0708933d50c57fea64af9c8a  iwd-1.12-br1.tar.gz
- 
+diff --git a/package/libuev/libuev.hash b/package/libuev/libuev.hash
+index fece0e9b65..d52d210d10 100644
+--- a/package/libuev/libuev.hash
++++ b/package/libuev/libuev.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/troglobit/libuev/releases/download/v2.3.1/libuev-2.3.1.tar.xz.md5
+-md5  ec601f69f69477858fa023a75da23793  libuev-2.3.1.tar.xz
++# From https://github.com/troglobit/libuev/releases/download/v2.3.2/libuev-2.3.2.tar.xz.sha256
++sha256  af31ffe1058a2ff6c56fee26ec8749688704d297189b6a898380a601efefbec9  libuev-2.3.2.tar.xz
  # License files
- sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING
-diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
-index 652beb838f..f38552de99 100644
---- a/package/iwd/iwd.mk
-+++ b/package/iwd/iwd.mk
+-sha256  3c2bf3fdd85687242ba6f2b02b6ce5176aba15b5e1a2ccb8b608439197ec4641  LICENSE
++sha256  694a734d9c1b46ae203314ed1c744a1acebd4fe5fc964b761703772546f0d3ab  LICENSE
+diff --git a/package/libuev/libuev.mk b/package/libuev/libuev.mk
+index c7b73b4221..8a6759a2d7 100644
+--- a/package/libuev/libuev.mk
++++ b/package/libuev/libuev.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IWD_VERSION = 1.10
-+IWD_VERSION = 1.12
- IWD_SITE = https://git.kernel.org/pub/scm/network/wireless/iwd.git
- IWD_SITE_METHOD = git
- IWD_LICENSE = LGPL-2.1+
+-LIBUEV_VERSION = 2.3.1
++LIBUEV_VERSION = 2.3.2
+ LIBUEV_SOURCE = libuev-$(LIBUEV_VERSION).tar.xz
+ LIBUEV_SITE = https://github.com/troglobit/libuev/releases/download/v$(LIBUEV_VERSION)
+ LIBUEV_LICENSE = MIT
 -- 
 2.30.1
