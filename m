@@ -1,60 +1,44 @@
-From: guillaume.bressaix at gmail.com <guillaume.bressaix@gmail.com>
-Date: Mon, 22 Feb 2021 19:35:14 +0100
-Subject: [Buildroot] [PATCH/next] package/libxcrypt: this patch has been
- merged into mainline
-Message-ID: <20210222183514.1878-1-guillaume.bressaix@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 22 Feb 2021 19:06:20 +0000
+Subject: [Buildroot] [Bug 13551] 2021.02.rc2: Unicode not work on qt 5.15.2
+In-Reply-To: <bug-13551-163@https.bugs.busybox.net/>
+References: <bug-13551-163@https.bugs.busybox.net/>
+Message-ID: <bug-13551-163-CNHicZHUon@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
+https://bugs.busybox.net/show_bug.cgi?id=13551
 
-Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
----
+--- Comment #1 from Peter Seiderer <ps.report@gmx.net> ---
+A very brief description...., please describe exactly what (and how) did you
+test, which result did you expect and which result did you get?
 
-Sorry guys, forgot the 'PATCH/next' on my previous submission title
+I suspect you did test something like the following:
 
- ...gost3411-core.c-fix-conversion-error.patch | 30 -------------------
- 1 file changed, 30 deletions(-)
- delete mode 100644 package/libxcrypt/0001-lib-alg-gost3411-core.c-fix-conversion-error.patch
+  #include <QDebug>
+  int main(int argc, char* argv[]) {
+      qInfo() << "\u25C0";
+      return 0;
+  }
 
-diff --git a/package/libxcrypt/0001-lib-alg-gost3411-core.c-fix-conversion-error.patch b/package/libxcrypt/0001-lib-alg-gost3411-core.c-fix-conversion-error.patch
-deleted file mode 100644
-index 1245216aad..0000000000
---- a/package/libxcrypt/0001-lib-alg-gost3411-core.c-fix-conversion-error.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--From c7bf2cf8e610bb26bece7f3a2bc5b47d7c659c7d Mon Sep 17 00:00:00 2001
--From: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
--Date: Sat, 20 Feb 2021 16:51:04 +0100
--Subject: [PATCH] lib/alg-gost3411-core.c: fix conversion error seen by
-- sensitive compilers
--
--Some compiler might be sensitive and raise an Warning/error on this line.
--
--Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
--[backported from upstream]
-----
-- lib/alg-gost3411-2012-core.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/lib/alg-gost3411-2012-core.c b/lib/alg-gost3411-2012-core.c
--index 13bb493..af3a36e 100644
----- a/lib/alg-gost3411-2012-core.c
--+++ b/lib/alg-gost3411-2012-core.c
--@@ -92,7 +92,7 @@ add512(const uint512_u *x, const uint512_u *y, uint512_u *r)
--     for (i = 0; i < 64; i++)
--     {
--         buf = xp[i] + yp[i] + (buf >> 8);
---        rp[i] = (unsigned char) buf & 0xFF;
--+        rp[i] = (unsigned char) (buf & 0xFF);
--     }
-- #endif
-- }
----
--2.20.1
--
+Please compile and run on the target and provide the output of the following
+call:
+
+  $ ./test 2>&1 | hexdump -C
+
+On my desktop system I get:
+
+  00000000  e2 97 80 0a                                       |....|
+  00000004
+
+Which is the expected UTF-8 output for the Unicode/UTF-16
+Black-Left-Pointing-Triangle ([1])...
+
+[1] https://codepoints.net/U+25C0?lang=en
+
 -- 
-2.20.1
+You are receiving this mail because:
+You are on the CC list for the bug.
