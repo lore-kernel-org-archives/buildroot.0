@@ -1,8 +1,8 @@
 From: guillaume.bressaix at gmail.com <guillaume.bressaix@gmail.com>
-Date: Mon, 22 Feb 2021 19:33:07 +0100
-Subject: [Buildroot] [PATCH] package/libxcrypt: this patch has been merged
- into mainline
-Message-ID: <20210222183307.1131-1-guillaume.bressaix@gmail.com>
+Date: Mon, 22 Feb 2021 19:35:14 +0100
+Subject: [Buildroot] [PATCH/next] package/libxcrypt: this patch has been
+ merged into mainline
+Message-ID: <20210222183514.1878-1-guillaume.bressaix@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,6 +13,9 @@ From: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
 
 Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
 ---
+
+Sorry guys, forgot the 'PATCH/next' on my previous submission title
+
  ...gost3411-core.c-fix-conversion-error.patch | 30 -------------------
  1 file changed, 30 deletions(-)
  delete mode 100644 package/libxcrypt/0001-lib-alg-gost3411-core.c-fix-conversion-error.patch
