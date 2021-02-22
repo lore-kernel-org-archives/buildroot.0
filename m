@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 22 Feb 2021 22:15:35 +0100
+Date: Mon, 22 Feb 2021 22:38:04 +0100
 Subject: [Buildroot] [PATCH] package/avrdude: Switch to upstream
 In-Reply-To: <20210222022606.491102-1-alexander.sverdlin@gmail.com>
 References: <20210222022606.491102-1-alexander.sverdlin@gmail.com>
-Message-ID: <20210222211535.GF2276@scaer>
+Message-ID: <20210222213804.GG2276@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,6 +11,8 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Alexander, All,
+
+My previous review focused on the download part, here is a bit more...
 
 On 2021-02-22 03:26 +0100, Alexander Sverdlin spake thusly:
 > In the meanwhile "linuxspi" programmer was merged upstream, therefore it's
@@ -31,13 +33,6 @@ On 2021-02-22 03:26 +0100, Alexander Sverdlin spake thusly:
 >  # Locally computed
 > -sha256  cfa97af7badc713c62306ab85d0e7a288b064bf72e698494f73cb16c5b2c659e  avrdude-f8893ccf0aceeff67c45f95ae4e86bc7fbe342aa.tar.gz
 > +sha256  39d77cec4064b03bfc0ff942d36c41df7eea9b56b89a3f991078b68caddd3c77  avrdude-r1450.tar.gz
-
-Since 2021-01-10, we changed the format of tarballs generated from
-subversion, and the tarballs now include a '-br1' suffix after the
-version, e.g.: avrdude-r1450-br1.tar.gz
-
-Also, see below...
-
 >  sha256  201babc7da198873304a77a30dbfc7ca449c9bba52df2dffa4cca0009dbdfcb2  avrdude/COPYING
 > diff --git a/package/avrdude/avrdude.mk b/package/avrdude/avrdude.mk
 > index ae378dfbac..b6754684e1 100644
@@ -52,16 +47,6 @@ Also, see below...
 > +AVRDUDE_VERSION = r1450
 > +AVRDUDE_SITE_METHOD = svn
 > +AVRDUDE_SITE = http://svn.savannah.nongnu.org/svn/avrdude/trunk
-
-I am wondering what version of Buildroot you've been testing this with,
-because downloading via svn is currently broken in master.
-
-No need to reend for now, until we fix the svn download (imminent,
-anytime soon, almost done, etc...)
-
-Regards,
-Yann E. MORIN.
-
 >  AVRDUDE_LICENSE = GPL-2.0+
 >  AVRDUDE_LICENSE_FILES = avrdude/COPYING
 >  AVRDUDE_SUBDIR = avrdude
@@ -71,6 +56,29 @@ Yann E. MORIN.
 >  AVRDUDE_AUTORECONF = YES
 > -AVRDUDE_CONF_OPTS = --enable-linuxgpio
 > +AVRDUDE_CONF_OPTS = --enable-linuxgpio --enable-linuxspi
+
+So I was wondering why we would enable a new feature at the same time we
+do the bump.
+
+So the fork we were using did auto-detection of kernel headers to detect
+whether spidev.h was present or not, and thuse whether to enable or
+disable its linuxspi 'driver'.
+
+But upstream went a slightly diffferent route, and added a configure
+option (and they do no validity check). Since spidev.h has been present
+since linux-2.6.22, we can quite easily conclude that spidev support was
+always enabled in the fork, and thus that we should keep it enabled now
+that we switch back to the upstream.
+
+That would have been good to have this explanations (or at least a
+trimmed-down vesion) in the commit log, because it is a bit ambiguous as
+it is now...
+
+No need to respin, I can fix when applying...
+
+Regards,
+Yann E. MORIN.
+
 >  AVRDUDE_DEPENDENCIES = elfutils libusb libusb-compat ncurses \
 >  	host-flex host-bison
 >  
