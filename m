@@ -1,32 +1,43 @@
-From: Guy Ka <guyarkam@gmail.com>
-Date: Mon, 22 Feb 2021 13:07:43 -0500
-Subject: [Buildroot] /bin/ld: skipping incompatible //lib/libpam.so when
- searching for -lpam
-Message-ID: <CAEYXRPmmUFFCzSudFX3qqKTRq4=QSBe-eijKvB92HTXJYaNfZw@mail.gmail.com>
+From: guillaume.bressaix at gmail.com <guillaume.bressaix@gmail.com>
+Date: Mon, 22 Feb 2021 19:26:17 +0100
+Subject: [Buildroot] [PATCH/next] package/libxcrypt: bump version to 4.4.18
+Message-ID: <20210222182617.19667-1-guillaume.bressaix@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
-On a first system (64-bit Centos7), I configured and successfully built
-Buildroot (released December 27th, 2020) for RISCV and then did
-make source
-I then moved the entire directory to another system (64-bit CentOs7)
-without internet access. I then did
-make clean
-and
-make
-However, while building uuidgen of host-util-linux-2.36, I get the
-following error:
+From: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
 
-/bin/ld: skipping  incompatible //lib/libpam.so when searching for -lpam
+Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+---
+ package/libxcrypt/libxcrypt.hash | 2 +-
+ package/libxcrypt/libxcrypt.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-I guess there is an issue with the way pam on my second system is
-configured but I have no clue where to start digging. I have no root
-privilege on this second system.
-Thanks for any clue.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210222/2e41fcf5/attachment.html>
+diff --git a/package/libxcrypt/libxcrypt.hash b/package/libxcrypt/libxcrypt.hash
+index b56ab6beaf..617bf55b46 100644
+--- a/package/libxcrypt/libxcrypt.hash
++++ b/package/libxcrypt/libxcrypt.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256 7665168d0409574a03f7b484682e68334764c29c21ca5df438955a381384ca07  libxcrypt-4.4.17.tar.gz
++sha256 3801f0263a8596b15ec466343fc1fdc4ad4ec7416c51e038a3528fd47f3be01a  libxcrypt-4.4.18.tar.gz
+ sha256 f8198fcc4f002bf54512bac2e68e1e3f04af7d105f4f4f98d7d22cb110e04715  LICENSING
+ sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/libxcrypt/libxcrypt.mk b/package/libxcrypt/libxcrypt.mk
+index ccbb1a282c..fd33fb7ab5 100644
+--- a/package/libxcrypt/libxcrypt.mk
++++ b/package/libxcrypt/libxcrypt.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBXCRYPT_VERSION = 4.4.17
++LIBXCRYPT_VERSION = 4.4.18
+ LIBXCRYPT_SITE = $(call github,besser82,libxcrypt,v$(LIBXCRYPT_VERSION))
+ LIBXCRYPT_LICENSE = LGPL-2.1+
+ LIBXCRYPT_LICENSE_FILES = LICENSING COPYING.LIB
+-- 
+2.20.1
