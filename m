@@ -1,52 +1,43 @@
-From: Scott Fan <fancp2007@gmail.com>
-Date: Mon, 22 Feb 2021 13:39:52 +0800
-Subject: [Buildroot] [PATCH] package/open62541: cleanup tools files after
- installation
-In-Reply-To: <20210220162715.283519-1-fancp2007@gmail.com>
-References: <20210220162715.283519-1-fancp2007@gmail.com>
-Message-ID: <20210222053953.583102-1-fancp2007@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 22 Feb 2021 08:13:01 +0100
+Subject: [Buildroot] [PATCH 1/1] package/ushare: bump to version 2.1
+Message-ID: <20210222071301.220417-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The open62541 tools directory is indeed 52 MiB, which built as a standalone package
-named 'libopen62541-1-tools' in launchpad. Nothing is required at runtime.
+Fix SOAP action responses which are broken since the switch to latest
+version of libupnp (1.14.x) in version 2.0
 
-See the official debian control file template:
-https://raw.githubusercontent.com/open62541/open62541/master/debian/control-template
-
-See https://launchpad.net/~open62541-team/+archive/ubuntu/ppa/+packages
-libopen62541-1       Open source implementation of OPC UA - shared library
-libopen62541-1-dev   Open source implementation of OPC UA - development files
-libopen62541-1-tools Open source implementation of OPC UA - tools
-open62541-doc        Open source implementation of OPC UA - documentation
-
-Signed-off-by: Scott Fan <fancp2007@gmail.com>
-
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v1 -> v2:
-  - extend the commit log to explain why nothing in there is required.
----
- package/open62541/open62541.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/ushare/ushare.hash | 2 +-
+ package/ushare/ushare.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/open62541/open62541.mk b/package/open62541/open62541.mk
-index 102e09a429..3f75196817 100644
---- a/package/open62541/open62541.mk
-+++ b/package/open62541/open62541.mk
-@@ -54,4 +54,11 @@ else
- OPEN62541_CONF_OPTS += -DUA_ENABLE_PUBSUB_INFORMATIONMODEL=OFF
- endif
+diff --git a/package/ushare/ushare.hash b/package/ushare/ushare.hash
+index 4d009dd99f..013b247951 100644
+--- a/package/ushare/ushare.hash
++++ b/package/ushare/ushare.hash
+@@ -1,3 +1,3 @@
+ # locally computed hash
+-sha256  3bfc2eecdbbbf3c1778f70e8e8a8fc4638fbf52081c4b047a59204f079a4a580  ushare-2.0.tar.gz
++sha256  e4563141a171138900540cc979f205cf666e820f709d47a98521bc77f53a99e6  ushare-2.1.tar.gz
+ sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
+diff --git a/package/ushare/ushare.mk b/package/ushare/ushare.mk
+index 59dddb4bf1..a4c9711600 100644
+--- a/package/ushare/ushare.mk
++++ b/package/ushare/ushare.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# Remove unneeded files
-+define OPEN62541_REMOVE_UNNEEDED_FILES
-+	$(RM) -r $(TARGET_DIR)/usr/share/open62541
-+endef
-+
-+OPEN62541_POST_INSTALL_TARGET_HOOKS += OPEN62541_REMOVE_UNNEEDED_FILES
-+
- $(eval $(cmake-package))
+-USHARE_VERSION = 2.0
++USHARE_VERSION = 2.1
+ USHARE_SITE = $(call github,ddugovic,uShare,v$(USHARE_VERSION))
+ USHARE_DEPENDENCIES = host-pkgconf libupnp $(TARGET_NLS_DEPENDENCIES)
+ USHARE_LICENSE = GPL-2.0+
 -- 
-2.25.1
+2.30.0
