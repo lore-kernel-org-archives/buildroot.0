@@ -1,131 +1,56 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 21 Feb 2021 23:56:17 +0100
-Subject: [Buildroot] [PATCH v2] package/fakeroot: fix glibc detection on
- patch for new wrappers
-In-Reply-To: <20210221223828.2750676-1-ryanbarnett3@gmail.com>
-References: <20210221223828.2750676-1-ryanbarnett3@gmail.com>
-Message-ID: <20210221225617.GC2276@scaer>
+From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+Date: Mon, 22 Feb 2021 03:26:06 +0100
+Subject: [Buildroot] [PATCH] package/avrdude: Switch to upstream
+Message-ID: <20210222022606.491102-1-alexander.sverdlin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ryan, All,
+In the meanwhile "linuxspi" programmer was merged upstream, therefore it's
+possible to switch to latest upstream tree instead of the old fork without
+losing any functionality.
 
-On 2021-02-21 16:38 -0600, Ryan Barnett spake thusly:
-> Commit f45925a951318e9e53bead80b363e004301adc6f add the patch:
-> 
-> 0003-libfakeroot.c-add-wrappers-for-new-glibc-2.33-symbol.patch
-> 
-> which allowed fakeroot to be compiled with GLIBC 2.33 or above.
-> However, this introduce a bug for building with a non-GLIBC based
-> toolchain as a GLIBC macro - __GLIBC_PREREQ - is used on the same line
-> as the detection of GLIBC.
-> 
-> Fix this by backporting the fix to this incorrect macro from upstream
-> commit:
-> 
-> https://salsa.debian.org/clint/fakeroot/-/commit/8090dffdad8fda86dccd47ce7a7db8840bdf7d7b
-> 
-> CC: Yann E. MORIN <yann.morin.1998@free.fr>
-> Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
+Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+---
+ package/avrdude/avrdude.hash | 2 +-
+ package/avrdude/avrdude.mk   | 9 +++++----
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
-> v1 -> v2:
->  - added patch as standalone patch (suggested by Yann)
-> ---
->  .../0005-fix-build-regression-on-macOS.patch  | 64 +++++++++++++++++++
->  1 file changed, 64 insertions(+)
->  create mode 100644 package/fakeroot/0005-fix-build-regression-on-macOS.patch
-> 
-> diff --git a/package/fakeroot/0005-fix-build-regression-on-macOS.patch b/package/fakeroot/0005-fix-build-regression-on-macOS.patch
-> new file mode 100644
-> index 0000000000..71152b850d
-> --- /dev/null
-> +++ b/package/fakeroot/0005-fix-build-regression-on-macOS.patch
-> @@ -0,0 +1,64 @@
-> +From 3590b817df703a256f2c1de9a5f5469eaa1c86e9 Mon Sep 17 00:00:00 2001
-> +From: Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
-> +Date: Mon, 15 Feb 2021 11:07:56 -0800
-> +Subject: [PATCH] fix build regression on macOS
-> +
-> +Backported from: 8090dffdad8fda86dccd47ce7a7db8840bdf7d7b
-> +
-> +Signed-off-by: Felix Fietkau <nbd@nbd.name>
-> +Signed-off-by: Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
-> +Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
-> +---
-> + configure.ac  | 6 ++++++
-> + libfakeroot.c | 4 +++-
-> + 2 files changed, 9 insertions(+), 1 deletion(-)
-> +
-> +diff --git a/configure.ac b/configure.ac
-> +index d85566f..d635df1 100644
-> +--- a/configure.ac
-> ++++ b/configure.ac
-> +@@ -181,6 +181,9 @@ AC_MSG_CHECKING([for type of arg of __xmknod])
-> +        #include <fcntl.h>
-> +        #include <unistd.h>
-> +   ]], [[
-> ++#ifndef __GLIBC__
-> ++#error no extra *
-> ++#endif
-> +        int __xmknod  ( int ver,
-> +                        const char *pathname ,
-> +                        mode_t  mode ,  dev_t *dev);
-> +@@ -207,6 +210,9 @@ AC_MSG_CHECKING([for type of arg of __xmknodat])
-> +        #include <fcntl.h>
-> +        #include <unistd.h>
-> +   ]], [[
-> ++#ifndef __GLIBC__
-> ++#error no extra *
-> ++#endif
-> +        int __xmknodat  ( int ver,
-> +                          int dirfd,
-> +                          const char *pathname ,
-> +diff --git a/libfakeroot.c b/libfakeroot.c
-> +index d75c51f..ec4e577 100644
-> +--- a/libfakeroot.c
-> ++++ b/libfakeroot.c
-> +@@ -1352,7 +1352,8 @@ int renameat(int olddir_fd, const char *oldpath,
-> + #endif /* HAVE_FSTATAT */
-> + 
-> + 
-> +-#if defined(__GLIBC__) && __GLIBC_PREREQ(2,33)
-> ++#if defined(__GLIBC__)
-> ++#if __GLIBC_PREREQ(2,33)
-> + /* Glibc 2.33 exports symbols for these functions in the shared lib */
-> +   int lstat(const char *file_name, struct stat *statbuf) {
-> +      return WRAP_LSTAT LSTAT_ARG(_STAT_VER, file_name, statbuf);
-> +@@ -1397,6 +1398,7 @@ int renameat(int olddir_fd, const char *oldpath,
-> +        return WRAP_MKNODAT MKNODAT_ARG(_STAT_VER, dir_fd, pathname, mode, &dev);
-> +     }
-> +   #endif
-> ++#endif /* __GLIBC__ */
-> + #endif /* GLIBC_PREREQ */
-> + 
-> + 
-> +-- 
-> +2.25.1
-> +
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/avrdude/avrdude.hash b/package/avrdude/avrdude.hash
+index 888668ae44..9c56dacd60 100644
+--- a/package/avrdude/avrdude.hash
++++ b/package/avrdude/avrdude.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  cfa97af7badc713c62306ab85d0e7a288b064bf72e698494f73cb16c5b2c659e  avrdude-f8893ccf0aceeff67c45f95ae4e86bc7fbe342aa.tar.gz
++sha256  39d77cec4064b03bfc0ff942d36c41df7eea9b56b89a3f991078b68caddd3c77  avrdude-r1450.tar.gz
+ sha256  201babc7da198873304a77a30dbfc7ca449c9bba52df2dffa4cca0009dbdfcb2  avrdude/COPYING
+diff --git a/package/avrdude/avrdude.mk b/package/avrdude/avrdude.mk
+index ae378dfbac..b6754684e1 100644
+--- a/package/avrdude/avrdude.mk
++++ b/package/avrdude/avrdude.mk
+@@ -4,15 +4,16 @@
+ #
+ ################################################################################
+ 
+-AVRDUDE_VERSION = f8893ccf0aceeff67c45f95ae4e86bc7fbe342aa
+-AVRDUDE_SITE = $(call github,kcuzner,avrdude,$(AVRDUDE_VERSION))
++AVRDUDE_VERSION = r1450
++AVRDUDE_SITE_METHOD = svn
++AVRDUDE_SITE = http://svn.savannah.nongnu.org/svn/avrdude/trunk
+ AVRDUDE_LICENSE = GPL-2.0+
+ AVRDUDE_LICENSE_FILES = avrdude/COPYING
+ AVRDUDE_SUBDIR = avrdude
+-# Sources coming from git, without generated configure and Makefile.in
++# Sources coming from svn, without generated configure and Makefile.in
+ # files.
+ AVRDUDE_AUTORECONF = YES
+-AVRDUDE_CONF_OPTS = --enable-linuxgpio
++AVRDUDE_CONF_OPTS = --enable-linuxgpio --enable-linuxspi
+ AVRDUDE_DEPENDENCIES = elfutils libusb libusb-compat ncurses \
+ 	host-flex host-bison
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.29.2
