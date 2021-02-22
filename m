@@ -1,70 +1,75 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 22 Feb 2021 23:01:27 +0100
-Subject: [Buildroot] [git commit] support/download: drop sub-second
- precision in tarball creation
-Message-ID: <20210222213950.8796C8624F@busybox.osuosl.org>
+Date: Mon, 22 Feb 2021 23:06:01 +0100
+Subject: [Buildroot] [PATCH] support/download/svn: fix date format for
+ archive creation
+In-Reply-To: <20210219212154.27107-1-vfazio@xes-inc.com>
+References: <20210219212154.27107-1-vfazio@xes-inc.com>
+Message-ID: <20210222220601.GH2276@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b50eef1dfd9018bb6eec7bed1d7f20d4264621e6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Vincent, All,
 
-Some download backends, like svn, will provide timestamps with a
-sub-second precision, e.g.
+On 2021-02-19 15:21 -0600, Vincent Fazio spake thusly:
+> Previously we would use the date provided by:
+> `svn info --show-item last-changed-date ...`
+> 
+> The date returned from this command could include sub-second precision
+> which is not compatible with the PAX options we specify to GNU tar.
+> 
+> Now the returned date is massaged to drop the sub-seconds.
+> 
+> Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
 
-    $ svn info --show-item last-changed-date [...]
-    2021-02-19T20:22:34.889717Z
+In the end, I did move it to the helper, because:
 
-However, the PAX headers do not accept sub-second precision, leading to
-failure to download from subversion:
+  - this really is an internal detail on a limitation of the PAX format,
 
-    tar: Time stamp is out of allowed range
-    tar: Exiting with failure status due to previous errors
-    make[1]: *** [package/pkg-generic.mk:148: [...]/build/subversion-1886712/.stamp_downloaded] Error 1
+  - we do not really mind what exact timestamp goes in the archive, as
+    long as it is reproducible.
 
-Fix that by massaging the timestamp to drop the sub-second part. We
-do that in the generic helper, rather than the svn backend, so that
-all callers to the generic helper benefit from this, as this is more
-an internal details of the tarball limitations, than of the backends
-themselves.
+Also, as suggested by Arnout, I switched to usig an explicit date-time
+POSIX-compliant format string, rather than rely on -Iseconds, which is
+a GNU extension.
 
-Reported-by: Roosen Henri <Henri.Roosen@ginzinger.com>
-Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
-[yann.morin.1998 at free.fr:
-  - add Henri as reporter
-  - move it out of the svn backend, and to the generic helper
-  - reword the commit log accordingly
-  - use an explicit time format rather than -Iseconds
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- support/download/helpers | 6 ++++++
- 1 file changed, 6 insertions(+)
+Applied to master, thanks.
 
-diff --git a/support/download/helpers b/support/download/helpers
-index 0e0432c884..57cc9fef44 100755
---- a/support/download/helpers
-+++ b/support/download/helpers
-@@ -8,6 +8,9 @@
- #         find's -path option, and relative to the input directory $1
- #
- # Notes :
-+#   - the timestamp is internally rounded to the highest entire second
-+#     less than or equal to the timestamp (i.e. any sub-second fractional
-+#     part is ignored)
- #   - must not be called with CWD as, or below, the input directory
- #   - some temporary files are created in CWD, and removed at the end
- #
-@@ -41,6 +44,9 @@ mk_tar_gz() {
-         find_opts+=( -or -path "./${glob#./}" )
-     done
- 
-+    # Drop sub-second precision to play nice with GNU tar's valid_timespec check
-+    date="$(date -d "${date}" -u +%Y-%m-%dT%H:%M:%S+00:00)"
-+
-     pax_options="delete=atime,delete=ctime,delete=mtime"
-     pax_options+=",exthdr.name=%d/PaxHeaders/%f,exthdr.mtime={${date}}"
- 
+Regards,
+Yann E. MORIN.
+
+> ---
+>  support/download/svn | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/support/download/svn b/support/download/svn
+> index 839dccaf62..ea1032267f 100755
+> --- a/support/download/svn
+> +++ b/support/download/svn
+> @@ -52,6 +52,9 @@ _svn export ${verbose} "${@}" "'${uri}@${rev}'" "'${basename}'"
+>  # last line (svn outputs everything on stdout)
+>  date="$( _svn info --show-item last-changed-date "'${uri}@${rev}'" |tail -n 1 )"
+>  
+> +# Drop sub-second precision to play nice with GNU tar's valid_timespec check
+> +date="$( date -d "${date}" -uIseconds )"
+> +
+>  # Generate the archive.
+>  # We did a 'svn export' above, so it's not a working copy (there is no .svn
+>  # directory or file to ignore).
+> -- 
+> 2.30.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
