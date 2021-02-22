@@ -1,75 +1,40 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Mon, 22 Feb 2021 16:00:23 +0100
-Subject: [Buildroot] [PATCH] package/python-pyusb: bump to version 1.1.1
-Message-ID: <20210222150023.21814-1-yegorslists@googlemail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 22 Feb 2021 18:00:48 +0100
+Subject: [Buildroot] [PATCH 1/1] package/intel-mediasdk: disable samples and
+ tutorials
+Message-ID: <20210222170048.409719-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Disable samples and tutorials which are enabled by default and fail to
+build with gcc 10 without upstream commit:
+https://github.com/Intel-Media-SDK/MediaSDK/commit/c7d40371eb0c2042261fe1f91a364f69a1457235
 
-Along with the version bump the following changes were
-needed to get the package built:
+Fixes:
+ - http://autobuild.buildroot.org/results/9ee28e5dc0b2ba854766d9bc82b95c28be2722d3
 
-- since 1.1.1 PyUSB supports only Python3
-- change download file name to lowercase
-- the package now requires setuptools and setuptools_scm
-- change LICENSE checksum as the copyright year changed to 2021
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/python-pyusb/Config.in         |  1 +
- package/python-pyusb/python-pyusb.hash |  6 +++---
- package/python-pyusb/python-pyusb.mk   | 10 +++++-----
- 3 files changed, 9 insertions(+), 8 deletions(-)
+ package/intel-mediasdk/intel-mediasdk.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/package/python-pyusb/Config.in b/package/python-pyusb/Config.in
-index bba3480a1b..13080a9fde 100644
---- a/package/python-pyusb/Config.in
-+++ b/package/python-pyusb/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_PYUSB
- 	bool "python-pyusb"
-+	depends on BR2_PACKAGE_PYTHON3
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libusb
- 	select BR2_PACKAGE_LIBUSB
-diff --git a/package/python-pyusb/python-pyusb.hash b/package/python-pyusb/python-pyusb.hash
-index c5006c8184..9c634ef722 100644
---- a/package/python-pyusb/python-pyusb.hash
-+++ b/package/python-pyusb/python-pyusb.hash
-@@ -1,5 +1,5 @@
- # md5 from https://pypi.python.org/pypi/pyusb/json
--md5     c8a571bfdba778555156af3facaea6fc PyUSB-1.0.0.tar.gz
-+md5     a9db479f1fb914e91d3106e67a13ae09 pyusb-1.1.1.tar.gz
- # Locally computed
--sha256  5b34ffa74ac34f330bff949c94ee00ec4a9d147234db17ee2eed2a67c0275368  PyUSB-1.0.0.tar.gz
--sha256  de177fb928a0eed8d209fddbfa3861379e08b3b41f34ad17a329c2f78199371d  LICENSE
-+sha256  7d449ad916ce58aff60b89aae0b65ac130f289c24d6a5b7b317742eccffafc38  pyusb-1.1.1.tar.gz
-+sha256  03e39fdcee9c18f2f9d0c3500a993ddeac050695eb81070ea41347587c76a7fe  LICENSE
-diff --git a/package/python-pyusb/python-pyusb.mk b/package/python-pyusb/python-pyusb.mk
-index 0afcbe8b8f..dc81efde9e 100644
---- a/package/python-pyusb/python-pyusb.mk
-+++ b/package/python-pyusb/python-pyusb.mk
-@@ -4,12 +4,12 @@
- #
- ################################################################################
+diff --git a/package/intel-mediasdk/intel-mediasdk.mk b/package/intel-mediasdk/intel-mediasdk.mk
+index a2ffe081db..5467c96380 100644
+--- a/package/intel-mediasdk/intel-mediasdk.mk
++++ b/package/intel-mediasdk/intel-mediasdk.mk
+@@ -12,6 +12,9 @@ INTEL_MEDIASDK_LICENSE_FILES = LICENSE
+ INTEL_MEDIASDK_INSTALL_STAGING = YES
+ INTEL_MEDIASDK_DEPENDENCIES = intel-mediadriver
  
--PYTHON_PYUSB_VERSION = 1.0.0
--PYTHON_PYUSB_SOURCE = PyUSB-$(PYTHON_PYUSB_VERSION).tar.gz
--PYTHON_PYUSB_SITE = https://pypi.python.org/packages/8a/19/66fb48a4905e472f5dfeda3a1bafac369fbf6d6fc5cf55b780864962652d
-+PYTHON_PYUSB_VERSION = 1.1.1
-+PYTHON_PYUSB_SOURCE = pyusb-$(PYTHON_PYUSB_VERSION).tar.gz
-+PYTHON_PYUSB_SITE = https://files.pythonhosted.org/packages/b9/8d/25c4e446a07e918eb39b5af25c4a83a89db95ae44e4ed5a46c3c53b0a4d6
- PYTHON_PYUSB_LICENSE = BSD-3-Clause
- PYTHON_PYUSB_LICENSE_FILES = LICENSE
--PYTHON_PYUSB_SETUP_TYPE = distutils
--PYTHON_PYUSB_DEPENDENCIES = libusb
-+PYTHON_PYUSB_SETUP_TYPE = setuptools
-+PYTHON_PYUSB_DEPENDENCIES = host-python-setuptools-scm libusb
+-INTEL_MEDIASDK_CONF_OPTS = -DMFX_INCLUDE="$(@D)/api/include"
++INTEL_MEDIASDK_CONF_OPTS = \
++	-DBUILD_SAMPLES=OFF \
++	-DBUILD_TUTORIALS=OFF \
++	-DMFX_INCLUDE="$(@D)/api/include"
  
- $(eval $(python-package))
+ $(eval $(cmake-package))
 -- 
-2.17.0
+2.30.0
