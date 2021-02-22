@@ -1,74 +1,57 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 22 Feb 2021 19:28:01 +0100
-Subject: [Buildroot] [PATCH] support/download/svn: fix date format for
- archive creation
-In-Reply-To: <4cba7ba3-06c7-b45b-81c8-4746bcee2bcf@mind.be>
-References: <20210219212154.27107-1-vfazio@xes-inc.com>
- <20210220095148.GI2276@scaer>
- <4cba7ba3-06c7-b45b-81c8-4746bcee2bcf@mind.be>
-Message-ID: <20210222182801.GD2276@scaer>
+From: guillaume.bressaix at gmail.com <guillaume.bressaix@gmail.com>
+Date: Mon, 22 Feb 2021 19:33:07 +0100
+Subject: [Buildroot] [PATCH] package/libxcrypt: this patch has been merged
+ into mainline
+Message-ID: <20210222183307.1131-1-guillaume.bressaix@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+From: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
 
-On 2021-02-22 11:58 +0100, Arnout Vandecappelle spake thusly:
-> On 20/02/2021 10:51, Yann E. MORIN wrote:
-> > On 2021-02-19 15:21 -0600, Vincent Fazio spake thusly:
-> >> Now the returned date is massaged to drop the sub-seconds.
-[--SNIP--]
-> A much simpler solution is
-> date="$( date -d "${date}" -u +%Y-%m-%dT%T%:z )"
-> which is fully portable over any POSIX-compliant version of date.
+Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+---
+ ...gost3411-core.c-fix-conversion-error.patch | 30 -------------------
+ 1 file changed, 30 deletions(-)
+ delete mode 100644 package/libxcrypt/0001-lib-alg-gost3411-core.c-fix-conversion-error.patch
 
-%:z is not POSIX, it's a GNU extension. However, we do not care about
-computing the timezone: it's forcibly +00:00 becasue we do request -u.
-
-Also, %T is OK, but to keep in line with the %Y-%m-%d part, I've
-switched to %H:%M:%S.
-
-Eventually, I've settled for: 
-
-> > But I wonder whether this should be svn-specific, or whether we should
-> > move it into the generic herlper mk_tar_gz()... Arnout, thoughts?
->  I would expect any sane VCS to be able to show the last change date in ISO 8601
-> format - I'd hope that SVN is the exception rather than the rule...
-
-Actually, sub-second precision *is* allowed by ISO8601. ISO8601 even
-allows fractional parts after the last time element, eg.: 14:30,5 to
-represent 14 hours, 30.5 minutes (i.e. 30min and 30s). The precision of
-the fractional part is even left unspecified, with parties agreeing in
-advance (or autodetectig, I'd guess):
-
-    https://en.wikipedia.org/wiki/ISO_8601#Times
-
-So, svn *is* ISO8601-compliant.
-
-Regards,
-Yann E. MORIN.
-
->  Regards,
->  Arnout
-> 
-> > 
-> > Regards,
-> > Yann E. MORIN.
-> > 
-> >>  # Generate the archive.
-> >>  # We did a 'svn export' above, so it's not a working copy (there is no .svn
-> >>  # directory or file to ignore).
-> >> -- 
-> >> 2.30.0
-> >>
-> > 
-
+diff --git a/package/libxcrypt/0001-lib-alg-gost3411-core.c-fix-conversion-error.patch b/package/libxcrypt/0001-lib-alg-gost3411-core.c-fix-conversion-error.patch
+deleted file mode 100644
+index 1245216aad..0000000000
+--- a/package/libxcrypt/0001-lib-alg-gost3411-core.c-fix-conversion-error.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-From c7bf2cf8e610bb26bece7f3a2bc5b47d7c659c7d Mon Sep 17 00:00:00 2001
+-From: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
+-Date: Sat, 20 Feb 2021 16:51:04 +0100
+-Subject: [PATCH] lib/alg-gost3411-core.c: fix conversion error seen by
+- sensitive compilers
+-
+-Some compiler might be sensitive and raise an Warning/error on this line.
+-
+-Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+-[backported from upstream]
+----
+- lib/alg-gost3411-2012-core.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/lib/alg-gost3411-2012-core.c b/lib/alg-gost3411-2012-core.c
+-index 13bb493..af3a36e 100644
+---- a/lib/alg-gost3411-2012-core.c
+-+++ b/lib/alg-gost3411-2012-core.c
+-@@ -92,7 +92,7 @@ add512(const uint512_u *x, const uint512_u *y, uint512_u *r)
+-     for (i = 0; i < 64; i++)
+-     {
+-         buf = xp[i] + yp[i] + (buf >> 8);
+--        rp[i] = (unsigned char) buf & 0xFF;
+-+        rp[i] = (unsigned char) (buf & 0xFF);
+-     }
+- #endif
+- }
+---
+-2.20.1
+-
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
