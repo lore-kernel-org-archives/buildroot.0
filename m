@@ -1,99 +1,70 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 22 Feb 2021 22:38:04 +0100
-Subject: [Buildroot] [PATCH] package/avrdude: Switch to upstream
-In-Reply-To: <20210222022606.491102-1-alexander.sverdlin@gmail.com>
-References: <20210222022606.491102-1-alexander.sverdlin@gmail.com>
-Message-ID: <20210222213804.GG2276@scaer>
+Date: Mon, 22 Feb 2021 23:01:27 +0100
+Subject: [Buildroot] [git commit] support/download: drop sub-second
+ precision in tarball creation
+Message-ID: <20210222213950.8796C8624F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Alexander, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=b50eef1dfd9018bb6eec7bed1d7f20d4264621e6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-My previous review focused on the download part, here is a bit more...
+Some download backends, like svn, will provide timestamps with a
+sub-second precision, e.g.
 
-On 2021-02-22 03:26 +0100, Alexander Sverdlin spake thusly:
-> In the meanwhile "linuxspi" programmer was merged upstream, therefore it's
-> possible to switch to latest upstream tree instead of the old fork without
-> losing any functionality.
-> 
-> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-> ---
->  package/avrdude/avrdude.hash | 2 +-
->  package/avrdude/avrdude.mk   | 9 +++++----
->  2 files changed, 6 insertions(+), 5 deletions(-)
-> 
-> diff --git a/package/avrdude/avrdude.hash b/package/avrdude/avrdude.hash
-> index 888668ae44..9c56dacd60 100644
-> --- a/package/avrdude/avrdude.hash
-> +++ b/package/avrdude/avrdude.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed
-> -sha256  cfa97af7badc713c62306ab85d0e7a288b064bf72e698494f73cb16c5b2c659e  avrdude-f8893ccf0aceeff67c45f95ae4e86bc7fbe342aa.tar.gz
-> +sha256  39d77cec4064b03bfc0ff942d36c41df7eea9b56b89a3f991078b68caddd3c77  avrdude-r1450.tar.gz
->  sha256  201babc7da198873304a77a30dbfc7ca449c9bba52df2dffa4cca0009dbdfcb2  avrdude/COPYING
-> diff --git a/package/avrdude/avrdude.mk b/package/avrdude/avrdude.mk
-> index ae378dfbac..b6754684e1 100644
-> --- a/package/avrdude/avrdude.mk
-> +++ b/package/avrdude/avrdude.mk
-> @@ -4,15 +4,16 @@
->  #
->  ################################################################################
->  
-> -AVRDUDE_VERSION = f8893ccf0aceeff67c45f95ae4e86bc7fbe342aa
-> -AVRDUDE_SITE = $(call github,kcuzner,avrdude,$(AVRDUDE_VERSION))
-> +AVRDUDE_VERSION = r1450
-> +AVRDUDE_SITE_METHOD = svn
-> +AVRDUDE_SITE = http://svn.savannah.nongnu.org/svn/avrdude/trunk
->  AVRDUDE_LICENSE = GPL-2.0+
->  AVRDUDE_LICENSE_FILES = avrdude/COPYING
->  AVRDUDE_SUBDIR = avrdude
-> -# Sources coming from git, without generated configure and Makefile.in
-> +# Sources coming from svn, without generated configure and Makefile.in
->  # files.
->  AVRDUDE_AUTORECONF = YES
-> -AVRDUDE_CONF_OPTS = --enable-linuxgpio
-> +AVRDUDE_CONF_OPTS = --enable-linuxgpio --enable-linuxspi
+    $ svn info --show-item last-changed-date [...]
+    2021-02-19T20:22:34.889717Z
 
-So I was wondering why we would enable a new feature at the same time we
-do the bump.
+However, the PAX headers do not accept sub-second precision, leading to
+failure to download from subversion:
 
-So the fork we were using did auto-detection of kernel headers to detect
-whether spidev.h was present or not, and thuse whether to enable or
-disable its linuxspi 'driver'.
+    tar: Time stamp is out of allowed range
+    tar: Exiting with failure status due to previous errors
+    make[1]: *** [package/pkg-generic.mk:148: [...]/build/subversion-1886712/.stamp_downloaded] Error 1
 
-But upstream went a slightly diffferent route, and added a configure
-option (and they do no validity check). Since spidev.h has been present
-since linux-2.6.22, we can quite easily conclude that spidev support was
-always enabled in the fork, and thus that we should keep it enabled now
-that we switch back to the upstream.
+Fix that by massaging the timestamp to drop the sub-second part. We
+do that in the generic helper, rather than the svn backend, so that
+all callers to the generic helper benefit from this, as this is more
+an internal details of the tarball limitations, than of the backends
+themselves.
 
-That would have been good to have this explanations (or at least a
-trimmed-down vesion) in the commit log, because it is a bit ambiguous as
-it is now...
+Reported-by: Roosen Henri <Henri.Roosen@ginzinger.com>
+Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
+[yann.morin.1998 at free.fr:
+  - add Henri as reporter
+  - move it out of the svn backend, and to the generic helper
+  - reword the commit log accordingly
+  - use an explicit time format rather than -Iseconds
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ support/download/helpers | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-No need to respin, I can fix when applying...
-
-Regards,
-Yann E. MORIN.
-
->  AVRDUDE_DEPENDENCIES = elfutils libusb libusb-compat ncurses \
->  	host-flex host-bison
->  
-> -- 
-> 2.29.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/support/download/helpers b/support/download/helpers
+index 0e0432c884..57cc9fef44 100755
+--- a/support/download/helpers
++++ b/support/download/helpers
+@@ -8,6 +8,9 @@
+ #         find's -path option, and relative to the input directory $1
+ #
+ # Notes :
++#   - the timestamp is internally rounded to the highest entire second
++#     less than or equal to the timestamp (i.e. any sub-second fractional
++#     part is ignored)
+ #   - must not be called with CWD as, or below, the input directory
+ #   - some temporary files are created in CWD, and removed at the end
+ #
+@@ -41,6 +44,9 @@ mk_tar_gz() {
+         find_opts+=( -or -path "./${glob#./}" )
+     done
+ 
++    # Drop sub-second precision to play nice with GNU tar's valid_timespec check
++    date="$(date -d "${date}" -u +%Y-%m-%dT%H:%M:%S+00:00)"
++
+     pax_options="delete=atime,delete=ctime,delete=mtime"
+     pax_options+=",exthdr.name=%d/PaxHeaders/%f,exthdr.mtime={${date}}"
+ 
