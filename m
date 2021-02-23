@@ -1,45 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 23 Feb 2021 14:03:09 +0100
-Subject: [Buildroot] [git commit branch/next] package/mc: bump to version
- 4.8.26
-Message-ID: <20210223124338.C5C7681329@busybox.osuosl.org>
+Date: Tue, 23 Feb 2021 14:01:10 +0100
+Subject: [Buildroot] [git commit branch/next] package/iptables: bump to
+ version 1.8.7
+Message-ID: <20210223124338.904BB83F50@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e648dfa6f7078a6fbbc5feb83292c6a98300fe8f
+commit: https://git.buildroot.net/buildroot/commit/?id=49bb8ebd81a295a34511073739f50a235b931a3a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mc/mc.hash | 4 ++--
- package/mc/mc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/iptables/iptables.hash | 2 +-
+ package/iptables/iptables.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mc/mc.hash b/package/mc/mc.hash
-index 208d0beda4..63fbfa3213 100644
---- a/package/mc/mc.hash
-+++ b/package/mc/mc.hash
+diff --git a/package/iptables/iptables.hash b/package/iptables/iptables.hash
+index 120e7e4a89..7f14413931 100644
+--- a/package/iptables/iptables.hash
++++ b/package/iptables/iptables.hash
 @@ -1,4 +1,4 @@
--# Hash from http://ftp.midnight-commander.org/mc-4.8.25.sha256
--sha256  ffc19617f20ebb23330acd3998b7fd559a042d172fa55746d53d246697b2548a  mc-4.8.25.tar.xz
-+# Hash from http://ftp.midnight-commander.org/mc-4.8.26.sha256
-+sha256  c6deadc50595f2d9a22dc6c299a9f28b393e358346ebf6ca444a8469dc166c27  mc-4.8.26.tar.xz
- # sha256 locally computed:
- sha256  5576bbec76296e1c8e081f7037ebd01bdada388635f58d844a2f20d37bbe4284  COPYING
-diff --git a/package/mc/mc.mk b/package/mc/mc.mk
-index 00f34f81cc..50dc50f65e 100644
---- a/package/mc/mc.mk
-+++ b/package/mc/mc.mk
+ # From https://netfilter.org/projects/iptables/downloads.html
+-sha256  a0f4fe0c3eb8faa5bd9c8376d132f340b9558e750c91deb2d5028aa3d0047767  iptables-1.8.6.tar.bz2
++sha256  c109c96bb04998cd44156622d36f8e04b140701ec60531a10668cfdff5e8d8f0  iptables-1.8.7.tar.bz2
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/iptables/iptables.mk b/package/iptables/iptables.mk
+index dc01466607..ca8178425e 100644
+--- a/package/iptables/iptables.mk
++++ b/package/iptables/iptables.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MC_VERSION = 4.8.25
-+MC_VERSION = 4.8.26
- MC_SOURCE = mc-$(MC_VERSION).tar.xz
- MC_SITE = http://ftp.midnight-commander.org
- MC_LICENSE = GPL-3.0+
+-IPTABLES_VERSION = 1.8.6
++IPTABLES_VERSION = 1.8.7
+ IPTABLES_SOURCE = iptables-$(IPTABLES_VERSION).tar.bz2
+ IPTABLES_SITE = https://netfilter.org/projects/iptables/files
+ IPTABLES_INSTALL_STAGING = YES
