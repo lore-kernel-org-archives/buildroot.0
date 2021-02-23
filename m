@@ -1,49 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 25 Feb 2021 20:21:12 +0100
-Subject: [Buildroot] [git commit] package/uhubctl: bump to version 2.4.0
-Message-ID: <20210308072135.DF2AC88918@busybox.osuosl.org>
+Date: Tue, 23 Feb 2021 13:49:13 +0100
+Subject: [Buildroot] [git commit] package/linux-firmware: make install logic
+ macro accept a destination parameter
+Message-ID: <20210308072135.37EEA88918@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7328b08c564778485f27d633b714a41b8b937427
+commit: https://git.buildroot.net/buildroot/commit/?id=4cadbbfdb136f54b098d6c83128bf4c0191f80d1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add COPYING license text to _LICENSE_FILES.
+So it can be reused for also installing into the images directory.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/uhubctl/uhubctl.hash | 3 ++-
- package/uhubctl/uhubctl.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/linux-firmware/linux-firmware.mk | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/package/uhubctl/uhubctl.hash b/package/uhubctl/uhubctl.hash
-index c137088772..c696d70f6c 100644
---- a/package/uhubctl/uhubctl.hash
-+++ b/package/uhubctl/uhubctl.hash
-@@ -1,3 +1,4 @@
- # Locally computed
--sha256  714f733592d3cb6ba8efc84fbc03b1beed2323918ff33aef01cdb956755be7b7  uhubctl-2.3.0.tar.gz
-+sha256  391f24fd1f89cacce801df38ecc289b34c3627bc08ee69eec515af7e1a283d97  uhubctl-2.4.0.tar.gz
- sha256  2d3aa0737e8db9dfd710f9a282b446cb7b15b2b3eecac383f0c45c64d736eea0  LICENSE
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/uhubctl/uhubctl.mk b/package/uhubctl/uhubctl.mk
-index 08efca092c..3429d7d151 100644
---- a/package/uhubctl/uhubctl.mk
-+++ b/package/uhubctl/uhubctl.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 9bc59435ef..8defedd309 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -674,10 +674,10 @@ endif
+ # sure we canonicalize the pointed-to file, to cover the symlinks of the form
+ # a/foo -> ../b/foo  where a/ (the directory where to put the symlink) does
+ # not yet exist.
+-define LINUX_FIRMWARE_INSTALL_TARGET_CMDS
+-	mkdir -p $(TARGET_DIR)/lib/firmware
+-	$(TAR) xf $(@D)/br-firmware.tar -C $(TARGET_DIR)/lib/firmware/
+-	cd $(TARGET_DIR)/lib/firmware/ ; \
++define LINUX_FIRMWARE_INSTALL_FW
++	mkdir -p $(1)
++	$(TAR) xf $(@D)/br-firmware.tar -C $(1)
++	cd $(1) ; \
+ 	sed -r -e '/^Link: (.+) -> (.+)$$/!d; s//\1 \2/' $(@D)/WHENCE | \
+ 	while read f d; do \
+ 		if test -f $$(readlink -m $$(dirname $$f)/$$d); then \
+@@ -687,4 +687,8 @@ define LINUX_FIRMWARE_INSTALL_TARGET_CMDS
+ 	done
+ endef
  
--UHUBCTL_VERSION = 2.3.0
-+UHUBCTL_VERSION = 2.4.0
- UHUBCTL_SITE = $(call github,mvp,uhubctl,v$(UHUBCTL_VERSION))
- UHUBCTL_LICENSE = GPL-2.0
--UHUBCTL_LICENSE_FILES = LICENSE
-+UHUBCTL_LICENSE_FILES = LICENSE COPYING
- UHUBCTL_DEPENDENCIES = libusb
- 
- define UHUBCTL_BUILD_CMDS
++define LINUX_FIRMWARE_INSTALL_TARGET_CMDS
++	$(call LINUX_FIRMWARE_INSTALL_FW, $(TARGET_DIR)/lib/firmware)
++endef
++
+ $(eval $(generic-package))
