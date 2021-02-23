@@ -1,44 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 23 Feb 2021 14:01:10 +0100
-Subject: [Buildroot] [git commit branch/next] package/iptables: bump to
- version 1.8.7
-Message-ID: <20210223124338.904BB83F50@busybox.osuosl.org>
+Date: Tue, 23 Feb 2021 14:02:53 +0100
+Subject: [Buildroot] [git commit branch/next] package/libuev: bump version
+ to 2.3.2
+Message-ID: <20210223124338.BA2C881329@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=49bb8ebd81a295a34511073739f50a235b931a3a
+commit: https://git.buildroot.net/buildroot/commit/?id=7a3a47cc7462d33698a4b5ccf9d413129078e716
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+- update license hash (copyright year, maintainer surname, see [1])
+
+[1] https://github.com/troglobit/libuev/commit/86e01be26ebe51824e6574ef186a532823bc085c#diff-c693279643b8cd5d248172d9c22cb7cf4ed163a3c98c8a3f69c2717edd3eacb7
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/iptables/iptables.hash | 2 +-
- package/iptables/iptables.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libuev/libuev.hash | 6 +++---
+ package/libuev/libuev.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/iptables/iptables.hash b/package/iptables/iptables.hash
-index 120e7e4a89..7f14413931 100644
---- a/package/iptables/iptables.hash
-+++ b/package/iptables/iptables.hash
+diff --git a/package/libuev/libuev.hash b/package/libuev/libuev.hash
+index fece0e9b65..d52d210d10 100644
+--- a/package/libuev/libuev.hash
++++ b/package/libuev/libuev.hash
 @@ -1,4 +1,4 @@
- # From https://netfilter.org/projects/iptables/downloads.html
--sha256  a0f4fe0c3eb8faa5bd9c8376d132f340b9558e750c91deb2d5028aa3d0047767  iptables-1.8.6.tar.bz2
-+sha256  c109c96bb04998cd44156622d36f8e04b140701ec60531a10668cfdff5e8d8f0  iptables-1.8.7.tar.bz2
- # Locally calculated
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/iptables/iptables.mk b/package/iptables/iptables.mk
-index dc01466607..ca8178425e 100644
---- a/package/iptables/iptables.mk
-+++ b/package/iptables/iptables.mk
+-# From https://github.com/troglobit/libuev/releases/download/v2.3.1/libuev-2.3.1.tar.xz.md5
+-md5  ec601f69f69477858fa023a75da23793  libuev-2.3.1.tar.xz
++# From https://github.com/troglobit/libuev/releases/download/v2.3.2/libuev-2.3.2.tar.xz.sha256
++sha256  af31ffe1058a2ff6c56fee26ec8749688704d297189b6a898380a601efefbec9  libuev-2.3.2.tar.xz
+ # License files
+-sha256  3c2bf3fdd85687242ba6f2b02b6ce5176aba15b5e1a2ccb8b608439197ec4641  LICENSE
++sha256  694a734d9c1b46ae203314ed1c744a1acebd4fe5fc964b761703772546f0d3ab  LICENSE
+diff --git a/package/libuev/libuev.mk b/package/libuev/libuev.mk
+index c7b73b4221..8a6759a2d7 100644
+--- a/package/libuev/libuev.mk
++++ b/package/libuev/libuev.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IPTABLES_VERSION = 1.8.6
-+IPTABLES_VERSION = 1.8.7
- IPTABLES_SOURCE = iptables-$(IPTABLES_VERSION).tar.bz2
- IPTABLES_SITE = https://netfilter.org/projects/iptables/files
- IPTABLES_INSTALL_STAGING = YES
+-LIBUEV_VERSION = 2.3.1
++LIBUEV_VERSION = 2.3.2
+ LIBUEV_SOURCE = libuev-$(LIBUEV_VERSION).tar.xz
+ LIBUEV_SITE = https://github.com/troglobit/libuev/releases/download/v$(LIBUEV_VERSION)
+ LIBUEV_LICENSE = MIT
