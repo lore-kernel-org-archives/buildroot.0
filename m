@@ -1,56 +1,79 @@
-From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-Date: Tue, 23 Feb 2021 09:28:10 +0100
-Subject: [Buildroot] [PATCH] package/avrdude: Switch to upstream
-In-Reply-To: <20210222213804.GG2276@scaer>
-References: <20210222022606.491102-1-alexander.sverdlin@gmail.com>
- <20210222213804.GG2276@scaer>
-Message-ID: <e656a8e909b3c8f312636f7db8f8966960105318.camel@gmail.com>
+From: Federico Pellegrin <fede@evolware.org>
+Date: Tue, 23 Feb 2021 09:30:16 +0100
+Subject: [Buildroot] [PATCH 1/1] package/kexec: fix build on pre 4.4
+ kernels
+In-Reply-To: <CAM6O0ZhoTAtjiFm1NhwWiUkfXnO=m0v0gVTb1=2C-Q3hwcnG8g@mail.gmail.com>
+References: <20210129050312.12247-1-fede@evolware.org>
+ <20210131232413.15c9ae9a@windsurf.home>
+ <CAM6O0ZhoTAtjiFm1NhwWiUkfXnO=m0v0gVTb1=2C-Q3hwcnG8g@mail.gmail.com>
+Message-ID: <CAM6O0ZjhQiAtPjSt12tUeSCW5MnbRY+r3hD2fSEbQTJmzWdr+Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
+Hi Thomas,
+Just wanted to revive this thread/patch even if not with very useful
+info: pinged a few times in kexec mailing list but nothing yet, just
+one partecipant kindly forwarded directly also to the developer that
+wrote the specific code, but then everything stopped still sadly (~3
+week now since first patch post).
 
-On Mon, 2021-02-22 at 22:38 +0100, Yann E. MORIN wrote:
-> > -AVRDUDE_VERSION = f8893ccf0aceeff67c45f95ae4e86bc7fbe342aa
-> > -AVRDUDE_SITE = $(call github,kcuzner,avrdude,$(AVRDUDE_VERSION))
-> > +AVRDUDE_VERSION = r1450
-> > +AVRDUDE_SITE_METHOD = svn
-> > +AVRDUDE_SITE = http://svn.savannah.nongnu.org/svn/avrdude/trunk
-> > ? AVRDUDE_LICENSE = GPL-2.0+
-> > ? AVRDUDE_LICENSE_FILES = avrdude/COPYING
-> > ? AVRDUDE_SUBDIR = avrdude
-> > -# Sources coming from git, without generated configure and Makefile.in
-> > +# Sources coming from svn, without generated configure and Makefile.in
-> > ? # files.
-> > ? AVRDUDE_AUTORECONF = YES
-> > -AVRDUDE_CONF_OPTS = --enable-linuxgpio
-> > +AVRDUDE_CONF_OPTS = --enable-linuxgpio --enable-linuxspi
-> 
-> So I was wondering why we would enable a new feature at the same time we
-> do the bump.
-> 
-> So the fork we were using did auto-detection of kernel headers to detect
-> whether spidev.h was present or not, and thuse whether to enable or
-> disable its linuxspi 'driver'.
-> 
-> But upstream went a slightly diffferent route, and added a configure
-> option (and they do no validity check). Since spidev.h has been present
-> since linux-2.6.22, we can quite easily conclude that spidev support was
-> always enabled in the fork, and thus that we should keep it enabled now
-> that we switch back to the upstream.
-> 
-> That would have been good to have this explanations (or at least a
-> trimmed-down vesion) in the commit log, because it is a bit ambiguous as
-> it is now...
-> 
-> No need to respin, I can fix when applying...
+For the time being we keep it as a local patch, I'm not sure how you
+proceed in buildroot in such cases.
 
-This old fork from kcuzner was focused on "linuxspi", that's why I thought,
-whoever has chosen non-upstream version of the programmer wanted this
-programmer explicitly.
+Cheers,
+Federico
 
--- 
-Alexander Sverdlin.
+
+Il giorno mer 3 feb 2021 alle ore 11:15 Federico Pellegrin
+<fede@evolware.org> ha scritto:
+>
+> Hi Thomas,
+> I apologize for the very bad patch I sent last time, very sorry I
+> missed a level of patch indirection :-)
+>
+> I've just resubmitted a few moments ago, I hope it is fine this time.
+>
+> As for upstream: I contacted them on the kexec mailing list
+> (describing the problem, proposing informally the solution and asking
+> if a patch would be welcome) but got no response as of now. I will
+> wait a bit more and ping in case. I'm not really sure if they are
+> interested to support very old kernels (which may be somehow also true
+> for Buildroot, but I guess given that Buildroot proposes as of now
+> also that versions in the configuration stage, we should try to keep
+> all the tooling working with them as well)
+>
+> Many thanks!
+> Federico
+>
+>
+> Il giorno dom 31 gen 2021 alle ore 23:24 Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> ha scritto:
+> >
+> > Hello Federico,
+> >
+> > On Fri, 29 Jan 2021 06:03:12 +0100
+> > Federico Pellegrin <fede@evolware.org> wrote:
+> >
+> > > kexec build will fail on older kernels (pre 4.4) as the define VIDEO_CAPABILITY_64BIT_BASE was not present at that time.
+> > >
+> > > This patch adds it, as per linux/include/uapi/linux/screen_info.h, if not present.
+> > >
+> > > Signed-off-by: Federico Pellegrin <fede@evolware.org>
+> >
+> > Thanks a lot for your contribution! However, we need all patches added
+> > to packages to have a proper commit log and Signed-off-by line, and be
+> > generated using git format-patch. Could you adjust your patch
+> > accordingly ?
+> >
+> > Also, did you submit this change to upstream kexec ?
+> >
+> > Thanks a lot!
+> >
+> > Thomas
+> > --
+> > Thomas Petazzoni, CTO, Bootlin
+> > Embedded Linux and Kernel engineering
+> > https://bootlin.com
