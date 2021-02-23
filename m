@@ -1,42 +1,42 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Tue, 23 Feb 2021 06:44:57 +0100
-Subject: [Buildroot] [PATCH] package/mc: bump to version 4.8.26
-Message-ID: <20210223054457.210836-1-francois.perrad@gadz.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 23 Feb 2021 07:09:07 +0100
+Subject: [Buildroot] [PATCH/next 1/1] package/dav1d: bump version to 0.8.2
+Message-ID: <20210223060907.7202-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/mc/mc.hash | 4 ++--
- package/mc/mc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Release notes: https://code.videolan.org/videolan/dav1d/-/releases
 
-diff --git a/package/mc/mc.hash b/package/mc/mc.hash
-index 208d0beda..63fbfa321 100644
---- a/package/mc/mc.hash
-+++ b/package/mc/mc.hash
-@@ -1,4 +1,4 @@
--# Hash from http://ftp.midnight-commander.org/mc-4.8.25.sha256
--sha256  ffc19617f20ebb23330acd3998b7fd559a042d172fa55746d53d246697b2548a  mc-4.8.25.tar.xz
-+# Hash from http://ftp.midnight-commander.org/mc-4.8.26.sha256
-+sha256  c6deadc50595f2d9a22dc6c299a9f28b393e358346ebf6ca444a8469dc166c27  mc-4.8.26.tar.xz
- # sha256 locally computed:
- sha256  5576bbec76296e1c8e081f7037ebd01bdada388635f58d844a2f20d37bbe4284  COPYING
-diff --git a/package/mc/mc.mk b/package/mc/mc.mk
-index 00f34f81c..50dc50f65 100644
---- a/package/mc/mc.mk
-+++ b/package/mc/mc.mk
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/dav1d/dav1d.hash | 2 +-
+ package/dav1d/dav1d.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/dav1d/dav1d.hash b/package/dav1d/dav1d.hash
+index 45152f7a80..520e42fe90 100644
+--- a/package/dav1d/dav1d.hash
++++ b/package/dav1d/dav1d.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  842da2945afcf54e651d17112bf2823a238e6c935a6c8dff3a8e96a2eb740269  dav1d-0.8.1.tar.bz2
++sha256  78ec7a1714d98a8f4ecbc4255e83e6c4c944cdd881871ea234ce40153fd3df04  dav1d-0.8.2.tar.bz2
+ sha256  b327887de263238deaa80c34cdd2ff3e0ba1d35db585ce14a37ce3e74ee389e9  COPYING
+diff --git a/package/dav1d/dav1d.mk b/package/dav1d/dav1d.mk
+index 68f6fc8805..377bd63419 100644
+--- a/package/dav1d/dav1d.mk
++++ b/package/dav1d/dav1d.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MC_VERSION = 4.8.25
-+MC_VERSION = 4.8.26
- MC_SOURCE = mc-$(MC_VERSION).tar.xz
- MC_SITE = http://ftp.midnight-commander.org
- MC_LICENSE = GPL-3.0+
+-DAV1D_VERSION = 0.8.1
++DAV1D_VERSION = 0.8.2
+ DAV1D_SOURCE = dav1d-$(DAV1D_VERSION).tar.bz2
+ DAV1D_SITE = https://code.videolan.org/videolan/dav1d/-/archive/$(DAV1D_VERSION)
+ DAV1D_LICENSE = BSD-2-Clause
 -- 
-2.27.0
+2.29.2
