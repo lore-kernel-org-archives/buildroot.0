@@ -1,42 +1,33 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 23 Feb 2021 07:09:07 +0100
-Subject: [Buildroot] [PATCH/next 1/1] package/dav1d: bump version to 0.8.2
-Message-ID: <20210223060907.7202-1-bernd.kuhls@t-online.de>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 23 Feb 2021 06:24:42 +0000
+Subject: [Buildroot] [Bug 13551] 2021.02.rc2: Unicode not work on qt 5.15.2
+In-Reply-To: <bug-13551-163@https.bugs.busybox.net/>
+References: <bug-13551-163@https.bugs.busybox.net/>
+Message-ID: <bug-13551-163-CquIUCp5A3@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes: https://code.videolan.org/videolan/dav1d/-/releases
+https://bugs.busybox.net/show_bug.cgi?id=13551
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/dav1d/dav1d.hash | 2 +-
- package/dav1d/dav1d.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+--- Comment #2 from Alfredo Pons Menargues <alfredo.pons@gmail.com> ---
+You test is very good to reproduce the probem in a simple way.
 
-diff --git a/package/dav1d/dav1d.hash b/package/dav1d/dav1d.hash
-index 45152f7a80..520e42fe90 100644
---- a/package/dav1d/dav1d.hash
-+++ b/package/dav1d/dav1d.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  842da2945afcf54e651d17112bf2823a238e6c935a6c8dff3a8e96a2eb740269  dav1d-0.8.1.tar.bz2
-+sha256  78ec7a1714d98a8f4ecbc4255e83e6c4c944cdd881871ea234ce40153fd3df04  dav1d-0.8.2.tar.bz2
- sha256  b327887de263238deaa80c34cdd2ff3e0ba1d35db585ce14a37ce3e74ee389e9  COPYING
-diff --git a/package/dav1d/dav1d.mk b/package/dav1d/dav1d.mk
-index 68f6fc8805..377bd63419 100644
---- a/package/dav1d/dav1d.mk
-+++ b/package/dav1d/dav1d.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DAV1D_VERSION = 0.8.1
-+DAV1D_VERSION = 0.8.2
- DAV1D_SOURCE = dav1d-$(DAV1D_VERSION).tar.bz2
- DAV1D_SITE = https://code.videolan.org/videolan/dav1d/-/archive/$(DAV1D_VERSION)
- DAV1D_LICENSE = BSD-2-Clause
+In my Ubuntu 20.04 I get the same result as you. It's correct.
+
+
+But in the buildroot image for rpi3 (2021.02.rc2) I get:
+
+  $ ./test 2>&1 | hexdump -C
+
+  00000000  3f 0a                                             |?.|
+  00000002
+
+
+I don't understand why this is happening.
+
 -- 
-2.29.2
+You are receiving this mail because:
+You are on the CC list for the bug.
