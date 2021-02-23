@@ -1,27 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 23 Feb 2021 13:44:00 +0100
-Subject: [Buildroot] [PATCH/next 1/1] package/tor: bump version to
- 0.4.5.6
-In-Reply-To: <20210218213508.102398-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Thu, 18 Feb 2021 22:35:08 +0100")
-References: <20210218213508.102398-1-bernd.kuhls@t-online.de>
-Message-ID: <87wnuznecv.fsf@dell.be.48ers.dk>
+Date: Tue, 23 Feb 2021 13:44:15 +0100
+Subject: [Buildroot] [PATCH 1/1] package/micropython: bump to v1.14
+In-Reply-To: <20210219100344.130136-1-titouanchristophe@gmail.com> (Titouan
+ Christophe's message of "Fri, 19 Feb 2021 11:03:44 +0100")
+References: <20210219100344.130136-1-titouanchristophe@gmail.com>
+Message-ID: <87sg5nnecg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Titouan" == Titouan Christophe <titouanchristophe@gmail.com> writes:
 
- > Rebased patch, part of it was committed upstream:
- > https://gitweb.torproject.org/tor.git/commit/?id=c5817a0dafc67882f15730ee818fbcdba1b7b915
+ > Micropython 1.4 brings many changes, see the release notes:
+ > https://github.com/micropython/micropython/releases/tag/v1.14
 
- > Release notes: https://blog.torproject.org/node/2000
+ > Amongst these changes, Micropython can now produce reproducible
+ > builds, using the standard SOURCE_DATE_EPOCH.
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- > ---
- > Also verified that the patch is still needed for a static build.
+ > The LICENSE hash changed because the copyright year range was extended
+ > to 2021.
+
+ > Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
 
 Committed to next, thanks.
 
