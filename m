@@ -1,68 +1,48 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 23 Feb 2021 19:29:05 +0000
-Subject: [Buildroot] [Bug 13551] 2021.02.rc2: Unicode not work on qt 5.15.2
-In-Reply-To: <bug-13551-163@https.bugs.busybox.net/>
-References: <bug-13551-163@https.bugs.busybox.net/>
-Message-ID: <bug-13551-163-B1i8kpS9kZ@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 23 Feb 2021 22:36:57 +0100
+Subject: [Buildroot] [PATCH/next] package/wireguard-linux-compat: bump
+ version to 1.0.20210219
+Message-ID: <20210223213657.16813-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13551
+Includes various compat fixes and lowers memory requirements.  For details,
+see the announcement:
 
---- Comment #4 from Peter Seiderer <ps.report@gmx.net> ---
-On RPi3:
+https://lists.zx2c4.com/pipermail/wireguard/2021-February/006404.html
 
-  $ ./test 2>&1 | hexdump -C
-  00000000  3f 0a                                             |?.|
-  00000002
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/wireguard-linux-compat/wireguard-linux-compat.hash | 4 ++--
+ package/wireguard-linux-compat/wireguard-linux-compat.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-  $ LANG=en_US.utf8 ./test 2>&1 | hexdump -C
-00000000  e2 97 80 0a                                       |....|
-00000004
-
-With the following defconfig:
-
-  BR2_arm=y
-  BR2_cortex_a53=y
-  BR2_ARM_FPU_NEON_VFPV4=y
-  BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-  BR2_PACKAGE_GLIBC_UTILS=y
-  BR2_BINUTILS_VERSION_2_36_X=y
-  BR2_GCC_VERSION_10_X=y
-  BR2_TOOLCHAIN_BUILDROOT_CXX=y
-  BR2_PACKAGE_HOST_GDB=y
-  BR2_GDB_VERSION_10=y
-  BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-  BR2_SYSTEM_DHCP="eth0"
-  BR2_GENERATE_LOCALE="en_US"
-  BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3/post-build.sh"
-  BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3/post-image.sh"
-  BR2_ROOTFS_POST_SCRIPT_ARGS="--add-miniuart-bt-overlay"
-  BR2_LINUX_KERNEL=y
-  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-  BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call
-github,raspberrypi,linux,967d45b29ca2902f031b867809d72e3b3d623e7a)/linux-967d45b29ca2902f031b867809d72e3b3d623e7a.tar.gz"
-  BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
-  BR2_LINUX_KERNEL_DTS_SUPPORT=y
-  BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2710-rpi-3-b bcm2710-rpi-3-b-plus
-bcm2710-rpi-cm3"
-  BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-  BR2_PACKAGE_STRACE=y
-  BR2_PACKAGE_QT5=y
-  BR2_PACKAGE_QT5BASE_EXAMPLES=y
-  BR2_PACKAGE_RPI_FIRMWARE=y
-  BR2_PACKAGE_OPENSSH=y
-  BR2_TARGET_ROOTFS_EXT2=y
-  BR2_TARGET_ROOTFS_EXT2_4=y
-  BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
-  # BR2_TARGET_ROOTFS_TAR is not set
-  BR2_PACKAGE_HOST_DOSFSTOOLS=y
-  BR2_PACKAGE_HOST_GENIMAGE=y
-  BR2_PACKAGE_HOST_MTOOLS=y
-
+diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.hash b/package/wireguard-linux-compat/wireguard-linux-compat.hash
+index f4f94cfd2e..c164a9e48e 100644
+--- a/package/wireguard-linux-compat/wireguard-linux-compat.hash
++++ b/package/wireguard-linux-compat/wireguard-linux-compat.hash
+@@ -1,4 +1,4 @@
+-# https://lists.zx2c4.com/pipermail/wireguard/2021-January/006349.html
+-sha256  dac6e68cd4c3db441499850dfa8a70706384a3295f37fda1b839a50b79faef54  wireguard-linux-compat-1.0.20210124.tar.xz
++# https://lists.zx2c4.com/pipermail/wireguard/2021-February/006404.html
++sha256  99d35296b8d847a0d4db97a4dda96b464311a6354e75fe0bef6e7c4578690f00  wireguard-linux-compat-1.0.20210219.tar.xz
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.mk b/package/wireguard-linux-compat/wireguard-linux-compat.mk
+index 2f36ec8bfb..eba5686683 100644
+--- a/package/wireguard-linux-compat/wireguard-linux-compat.mk
++++ b/package/wireguard-linux-compat/wireguard-linux-compat.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIREGUARD_LINUX_COMPAT_VERSION = 1.0.20210124
++WIREGUARD_LINUX_COMPAT_VERSION = 1.0.20210219
+ WIREGUARD_LINUX_COMPAT_SITE = https://git.zx2c4.com/wireguard-linux-compat/snapshot
+ WIREGUARD_LINUX_COMPAT_SOURCE = wireguard-linux-compat-$(WIREGUARD_LINUX_COMPAT_VERSION).tar.xz
+ WIREGUARD_LINUX_COMPAT_LICENSE = GPL-2.0
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.20.1
