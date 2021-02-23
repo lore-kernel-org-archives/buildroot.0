@@ -1,46 +1,85 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 26 Feb 2021 23:47:00 +0100
-Subject: [Buildroot] [git commit] package/tar: bump version to 1.34
-Message-ID: <20210308072136.497D188918@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 23 Feb 2021 13:48:27 +0100
+Subject: [Buildroot] [git commit] package/go: bump version to 1.16
+Message-ID: <20210308072135.2170A88971@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=27fffea6db7358af20f5a3a8faa174d3b782d61f
+commit: https://git.buildroot.net/buildroot/commit/?id=9c035502bf2f44dd7ce5c0dca2e03cdcd4ef3f88
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump the version of tar to 1.34 for host and target.
+Release notes: https://golang.org/doc/go1.16
 
-Signed-off-by: Markus Mayer <mmayer@broadcom.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+The latest Go release, version 1.16, arrives six months after Go 1.15. Most of
+its changes are in the implementation of the toolchain, runtime, and libraries.
+
+The linker changes in 1.16 extend the 1.15 improvements to all supported
+architecture/OS combinations (the 1.15 performance improvements were primarily
+focused on ELF-based OSes and amd64 architectures). For a representative set of
+large Go programs, linking is 20-25% faster than 1.15 and requires 5-15% less
+memory on average for linux/amd64, with larger improvements for other
+architectures and OSes. Most binaries are also smaller as a result of more
+aggressive symbol pruning.
+
+According to the release notes, Go 1.16 drops support for x87 mode
+compilation (GO386=387).  Support for non-SSE2 processors is now available
+using soft float mode.  Buildroot will automatically set GO386=softfloat on
+non-SSE2 processors.
+
+Signed-off-by: Christian Stewart <christian@paral.in>
+
+v1 -> v2:
+
+ - added 386=softfloat handling re: Peter's review
+
+Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tar/tar.hash | 4 ++--
- package/tar/tar.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 7 ++++++-
+ 2 files changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/package/tar/tar.hash b/package/tar/tar.hash
-index 72f0cd6fcb..1914a9f3b4 100644
---- a/package/tar/tar.hash
-+++ b/package/tar/tar.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking signature
--sha256  d0d3ae07f103323be809bc3eac0dcc386d52c5262499fe05511ac4788af1fdd8  tar-1.32.tar.xz
--sha256  9fbfba0cba05233421dd619b8825e1ceb7c144e433c15ae48b68f17ede8d404a  tar-1.32.cpio.gz
-+sha256  63bebd26879c5e1eea4352f0d03c991f966aeb3ddeb3c7445c902568d5411d28  tar-1.34.tar.xz
-+sha256  51337b19c71df92cd4f51c50efe4dc6ddc267d31fd54679be9e9bc2e6ce8132b  tar-1.34.cpio.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/tar/tar.mk b/package/tar/tar.mk
-index 2da731f80a..690a5952ba 100644
---- a/package/tar/tar.mk
-+++ b/package/tar/tar.mk
+diff --git a/package/go/go.hash b/package/go/go.hash
+index cbc82a9b64..4181fb52c5 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,3 +1,3 @@
+ # From https://golang.org/dl/
+-sha256  540c0ab7781084d124991321ed1458e479982de94454a98afab6acadf38497c2  go1.15.8.src.tar.gz
++sha256  7688063d55656105898f323d90a79a39c378d86fe89ae192eb3b7fc46347c95a  go1.16.src.tar.gz
+ sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 7b7f173706..f6cb2469a8 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TAR_VERSION = 1.32
-+TAR_VERSION = 1.34
- TAR_SOURCE = tar-$(TAR_VERSION).tar.xz
- TAR_SITE = $(BR2_GNU_MIRROR)/tar
- # busybox installs in /bin, so we need tar to install as well in /bin
+-GO_VERSION = 1.15.8
++GO_VERSION = 1.16
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
+@@ -49,6 +49,10 @@ else ifeq ($(BR2_aarch64),y)
+ GO_GOARCH = arm64
+ else ifeq ($(BR2_i386),y)
+ GO_GOARCH = 386
++# i386: use softfloat if no SSE2: https://golang.org/doc/go1.16#386
++ifneq ($(BR2_X86_CPU_HAS_SSE2),y)
++GO_GO386 = softfloat
++endif
+ else ifeq ($(BR2_x86_64),y)
+ GO_GOARCH = amd64
+ else ifeq ($(BR2_powerpc64),y)
+@@ -90,6 +94,7 @@ HOST_GO_CROSS_ENV = \
+ 	CC_FOR_TARGET="$(TARGET_CC)" \
+ 	CXX_FOR_TARGET="$(TARGET_CXX)" \
+ 	GOARCH=$(GO_GOARCH) \
++	$(if $(GO_GO386),GO386=$(GO_GO386)) \
+ 	$(if $(GO_GOARM),GOARM=$(GO_GOARM)) \
+ 	GO_ASSUME_CROSSCOMPILING=1
+ 
