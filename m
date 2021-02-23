@@ -1,21 +1,21 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 23 Feb 2021 14:03:45 +0100
-Subject: [Buildroot] [PATCH/next 1/1] package/dav1d: bump version to
- 0.8.2
-In-Reply-To: <20210223060907.7202-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Tue, 23 Feb 2021 07:09:07 +0100")
-References: <20210223060907.7202-1-bernd.kuhls@t-online.de>
-Message-ID: <87ft1nlyvi.fsf@dell.be.48ers.dk>
+Date: Tue, 23 Feb 2021 14:04:36 +0100
+Subject: [Buildroot] [PATCH] package/python-dialog3: bump to version
+ 3.5.1
+In-Reply-To: <20210222145843.20785-1-yegorslists@googlemail.com>
+ (yegorslists's message of "Mon, 22 Feb 2021 15:58:43 +0100")
+References: <20210222145843.20785-1-yegorslists@googlemail.com>
+Message-ID: <87wnuzkk9n.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "yegorslists---" == yegorslists--- via buildroot <buildroot@busybox.net> writes:
 
- > Release notes: https://code.videolan.org/videolan/dav1d/-/releases
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > From: Yegor Yefremov <yegorslists@googlemail.com>
+ > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
 Committed to next, thanks.
 
