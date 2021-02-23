@@ -1,49 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 23 Feb 2021 13:49:13 +0100
-Subject: [Buildroot] [git commit] package/linux-firmware: make install logic
- macro accept a destination parameter
-Message-ID: <20210308072135.37EEA88918@busybox.osuosl.org>
+Date: Tue, 23 Feb 2021 13:49:21 +0100
+Subject: [Buildroot] [git commit] package/linux-firmware: also install into
+ images for early loading support
+Message-ID: <20210308072135.42F568893D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4cadbbfdb136f54b098d6c83128bf4c0191f80d1
+commit: https://git.buildroot.net/buildroot/commit/?id=af49734349ca06f88ed4c17e456fc385ebee2012
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-So it can be reused for also installing into the images directory.
+Some drivers request their firmware very early when built into the kernel,
+even before the initramfs is mounted - So the only way to provide firmware
+for those drivers is to include them directly in the kernel with the
+CONFIG_EXTRA_FIRMWARE option.
+
+An example of this is the uC firmware for modern Intel GPUs.
+
+Conceptually you can point CONFIG_EXTRA_FIRMWARE to
+${TARGET_DIR}/lib/firmware, but then you cannot remove the firmware from the
+initramfs and pay the size cost twice (inside the kernel + in initramfs), so
+instead also install linux-firmware to the images dir, similar to how we do
+it for intel-microcode.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-firmware/linux-firmware.mk | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ package/linux-firmware/linux-firmware.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 9bc59435ef..8defedd309 100644
+index 8defedd309..5e92b0446e 100644
 --- a/package/linux-firmware/linux-firmware.mk
 +++ b/package/linux-firmware/linux-firmware.mk
-@@ -674,10 +674,10 @@ endif
- # sure we canonicalize the pointed-to file, to cover the symlinks of the form
- # a/foo -> ../b/foo  where a/ (the directory where to put the symlink) does
- # not yet exist.
--define LINUX_FIRMWARE_INSTALL_TARGET_CMDS
--	mkdir -p $(TARGET_DIR)/lib/firmware
--	$(TAR) xf $(@D)/br-firmware.tar -C $(TARGET_DIR)/lib/firmware/
--	cd $(TARGET_DIR)/lib/firmware/ ; \
-+define LINUX_FIRMWARE_INSTALL_FW
-+	mkdir -p $(1)
-+	$(TAR) xf $(@D)/br-firmware.tar -C $(1)
-+	cd $(1) ; \
- 	sed -r -e '/^Link: (.+) -> (.+)$$/!d; s//\1 \2/' $(@D)/WHENCE | \
- 	while read f d; do \
- 		if test -f $$(readlink -m $$(dirname $$f)/$$d); then \
-@@ -687,4 +687,8 @@ define LINUX_FIRMWARE_INSTALL_TARGET_CMDS
- 	done
+@@ -7,6 +7,7 @@
+ LINUX_FIRMWARE_VERSION = 20201022
+ LINUX_FIRMWARE_SITE = http://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
+ LINUX_FIRMWARE_SITE_METHOD = git
++LINUX_FIRMWARE_INSTALL_IMAGES = YES
+ 
+ LINUX_FIRMWARE_CPE_ID_VENDOR = kernel
+ 
+@@ -691,4 +692,8 @@ define LINUX_FIRMWARE_INSTALL_TARGET_CMDS
+ 	$(call LINUX_FIRMWARE_INSTALL_FW, $(TARGET_DIR)/lib/firmware)
  endef
  
-+define LINUX_FIRMWARE_INSTALL_TARGET_CMDS
-+	$(call LINUX_FIRMWARE_INSTALL_FW, $(TARGET_DIR)/lib/firmware)
++define LINUX_FIRMWARE_INSTALL_IMAGES_CMDS
++	$(call LINUX_FIRMWARE_INSTALL_FW, $(BINARIES_DIR))
 +endef
 +
  $(eval $(generic-package))
