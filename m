@@ -1,12 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 23 Feb 2021 14:02:25 +0100
-Subject: [Buildroot] [PATCH/next v1 2/2] package/iwd: bump version to
- 1.12
-In-Reply-To: <20210222220802.20322-2-ps.report@gmx.net> (Peter Seiderer's
- message of "Mon, 22 Feb 2021 23:08:02 +0100")
-References: <20210222220802.20322-1-ps.report@gmx.net>
- <20210222220802.20322-2-ps.report@gmx.net>
-Message-ID: <87sg5nlyxq.fsf@dell.be.48ers.dk>
+Date: Tue, 23 Feb 2021 14:02:58 +0100
+Subject: [Buildroot] [PATCH/next v1] package/libuev: bump version to
+ 2.3.2
+In-Reply-To: <20210222222308.10516-1-ps.report@gmx.net> (Peter Seiderer's
+ message of "Mon, 22 Feb 2021 23:23:08 +0100")
+References: <20210222222308.10516-1-ps.report@gmx.net>
+Message-ID: <87o8gblywt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,10 +14,9 @@ To: buildroot@busybox.net
 
 >>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
- > - remove 0001-configure.ac-fix-static-build-with-readline.patch
- >   (upstream [1])
-
- > [1] https://git.kernel.org/pub/scm/network/wireless/iwd.git/commit/?id=62d31539d6e31a40d7d33c73637e37b50c59ef40
+ > - update license hash (copyright year, maintainer surname, see [1])
+ > [1]
+ > https://github.com/troglobit/libuev/commit/86e01be26ebe51824e6574ef186a532823bc085c#diff-c693279643b8cd5d248172d9c22cb7cf4ed163a3c98c8a3f69c2717edd3eacb7
 
  > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
