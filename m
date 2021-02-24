@@ -1,148 +1,201 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 24 Feb 2021 23:07:19 +0100
+Date: Wed, 24 Feb 2021 23:33:16 +0100
 Subject: [Buildroot] [PATCH 1/1] package/osm2pgsql: new package
-In-Reply-To: <f840c69b-91f1-bce3-a26f-da93aed9f765@inbox.ru>
+In-Reply-To: <20210224230719.56ca56fa@gmx.net>
 References: <20210127071847.1170622-1-fido_max@inbox.ru>
  <f840c69b-91f1-bce3-a26f-da93aed9f765@inbox.ru>
-Message-ID: <20210224230719.56ca56fa@gmx.net>
+ <20210224230719.56ca56fa@gmx.net>
+Message-ID: <20210224233316.436d633b@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 24 Feb 2021 09:04:33 +0300, Maxim Kochetkov via buildroot <buildroot@busybox.net> wrote:
+Hello Maxim,
 
-> Has this patch chance to be upstreamable? Should I resend or what?
+On Wed, 24 Feb 2021 23:07:19 +0100, Peter Seiderer <ps.report@gmx.net> wrote:
 
-Or find someone to do some review of the patch ;-)
+> On Wed, 24 Feb 2021 09:04:33 +0300, Maxim Kochetkov via buildroot <buildroot@busybox.net> wrote:
+> 
+> > Has this patch chance to be upstreamable? Should I resend or what?  
+> 
+> Or find someone to do some review of the patch ;-)
+> 
+> > 
+> > 27.01.2021 10:18, Maxim Kochetkov via buildroot ?????:  
+> > > osm2pgsql is a tool for loading OpenStreetMap data into a
+> > > PostgreSQL / PostGIS database suitable for applications like
+> > > rendering into a map, geocoding with Nominatim, or general analysis.
+> > > 
+> > > https://osm2pgsql.org
+> > > 
+> > > Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+> > > ---
+> > >   package/Config.in                |  1 +
+> > >   package/osm2pgsql/Config.in      | 15 +++++++++++++++
+> > >   package/osm2pgsql/osm2pgsql.hash |  3 +++
+> > >   package/osm2pgsql/osm2pgsql.mk   | 26 ++++++++++++++++++++++++++
+> > >   4 files changed, 45 insertions(+)
+> > >   create mode 100644 package/osm2pgsql/Config.in
+> > >   create mode 100644 package/osm2pgsql/osm2pgsql.hash
+> > >   create mode 100644 package/osm2pgsql/osm2pgsql.mk
+> > > 
+> > > diff --git a/package/Config.in b/package/Config.in
+> > > index 06dfc32cc6..0b7127bfd4 100644
+> > > --- a/package/Config.in
+> > > +++ b/package/Config.in
+> > > @@ -1400,6 +1400,7 @@ menu "Database"
+> > >   	source "package/libpqxx/Config.in"
+> > >   	source "package/mongodb/Config.in"
+> > >   	source "package/mysql/Config.in"
+> > > +	source "package/osm2pgsql/Config.in"
+> > >   	source "package/postgresql/Config.in"
+> > >   	source "package/redis/Config.in"
+> > >   	source "package/rocksdb/Config.in"
+> > > diff --git a/package/osm2pgsql/Config.in b/package/osm2pgsql/Config.in
+> > > new file mode 100644
+> > > index 0000000000..81be6b0c49
+> > > --- /dev/null
+> > > +++ b/package/osm2pgsql/Config.in
+> > > @@ -0,0 +1,15 @@
+> > > +config BR2_PACKAGE_OSM2PGSQL
+> > > +	bool "osm2pgsql"
+> > > +	depends on BR2_PACKAGE_POSTGRESQL
+> > > +	select BR2_PACKAGE_EXPAT
+> > > +	select BR2_PACKAGE_PROJ  
+> 
+> Same as for postgis package, dependencies should be propagated (with comment),
+> here:
+>         depends on BR2_INSTALL_LIBSTDCPP
+>         depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
+>         depends on BR2_TOOLCHAIN_HAS_THREADS
+>         depends on BR2_USE_WCHAR
+> 
+> > > +	select BR2_PACKAGE_BZIP2
+> > > +	select BR2_PACKAGE_ZLIB
+> > > +	select BR2_PACKAGE_BOOST  
+> 
+>         depends on BR2_INSTALL_LIBSTDCPP
+>         depends on BR2_TOOLCHAIN_HAS_THREADS
+>         depends on BR2_USE_WCHAR
+> 
+> > > +	select BR2_PACKAGE_BOOST_FILESYSTEM
+
+according to CMakeLists.txt boost system and filesystem should be selected...
+
+> > > +	help
+> > > +	  osm2pgsql is a tool for loading OpenStreetMap data into a
+> > > +	  PostgreSQL / PostGIS database suitable for applications like
+> > > +	  rendering into a map, geocoding with Nominatim, or general analysis.  
+> 
+> 
+> 
+> 	$ /utils/check-package package/osm2pgsql/*
+> package/osm2pgsql/Config.in:11: line contains trailing whitespace
+> package/osm2pgsql/Config.in:12: line contains trailing whitespace
+> package/osm2pgsql/Config.in:13: help text: <tab><2 spaces><62 chars> (http://nightly.buildroot.org/#writing-rules-config-in)
+> 
+> > > +
+> > > +	  https://osm2pgsql.org
+> > > diff --git a/package/osm2pgsql/osm2pgsql.hash b/package/osm2pgsql/osm2pgsql.hash
+> > > new file mode 100644
+> > > index 0000000000..28ff242321
+> > > --- /dev/null
+> > > +++ b/package/osm2pgsql/osm2pgsql.hash
+> > > @@ -0,0 +1,3 @@
+> > > +# Locally calculated
+> > > +sha256  403e25a0310d088183a868d80e5325dceee88617d0df570056e50a2930905369  osm2pgsql-1.4.0.tar.gz
+> > > +sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+> > > diff --git a/package/osm2pgsql/osm2pgsql.mk b/package/osm2pgsql/osm2pgsql.mk
+> > > new file mode 100644
+> > > index 0000000000..6d143d43f7
+> > > --- /dev/null
+> > > +++ b/package/osm2pgsql/osm2pgsql.mk
+> > > @@ -0,0 +1,26 @@
+> > > +################################################################################
+> > > +#
+> > > +# osm2pgsql
+> > > +#
+> > > +################################################################################
+> > > +
+> > > +OSM2PGSQL_VERSION = 1.4.0
+> > > +OSM2PGSQL_SITE = $(call github,openstreetmap,osm2pgsql,$(OSM2PGSQL_VERSION))
+> > > +OSM2PGSQL_LICENSE = GPL-2.0+
+> > > +OSM2PGSQL_LICENSE_FILES = COPYING
+> > > +OSM2PGSQL_SUPPORTS_IN_SOURCE_BUILD = NO
+> > > +
+> > > +OSM2PGSQL_DEPENDENCIES = postgresql expat proj bzip2 zlib boost  
+
+According to the README.md the proj dependency is optional...
+
+Looking at osm2pgsql-1.4.0/CMakeLists.txt shows some more options:
+
+
+	option(BUILD_TESTS    "Build test suite" OFF)
+
+handled by cmake-package
+
+	option(BUILD_COVERAGE "Build with coverage" OFF)
+
+should be forced to OFF (in case the default will change)...
+
+	option(WITH_LUA       "Build with Lua support" ON)
+	option(WITH_LUAJIT    "Build with LuaJIT support" OFF)
+
+already handled...
+
+	option(EXTERNAL_LIBOSMIUM "Do not use the bundled libosmium" OFF)
+	option(EXTERNAL_PROTOZERO "Do not use the bundled protozero" OFF)
+
+both not in buildroot(?), bundled version o.k. (did your check the licenses?)...
+
+	option(EXTERNAL_FMT       "Do not use the bundled fmt"       OFF)
+
+using buildroot package (in case it works) preferred...
 
 > 
-> 27.01.2021 10:18, Maxim Kochetkov via buildroot ?????:
-> > osm2pgsql is a tool for loading OpenStreetMap data into a
-> > PostgreSQL / PostGIS database suitable for applications like
-> > rendering into a map, geocoding with Nominatim, or general analysis.
-> > 
-> > https://osm2pgsql.org
-> > 
-> > Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
-> > ---
-> >   package/Config.in                |  1 +
-> >   package/osm2pgsql/Config.in      | 15 +++++++++++++++
-> >   package/osm2pgsql/osm2pgsql.hash |  3 +++
-> >   package/osm2pgsql/osm2pgsql.mk   | 26 ++++++++++++++++++++++++++
-> >   4 files changed, 45 insertions(+)
-> >   create mode 100644 package/osm2pgsql/Config.in
-> >   create mode 100644 package/osm2pgsql/osm2pgsql.hash
-> >   create mode 100644 package/osm2pgsql/osm2pgsql.mk
-> > 
-> > diff --git a/package/Config.in b/package/Config.in
-> > index 06dfc32cc6..0b7127bfd4 100644
-> > --- a/package/Config.in
-> > +++ b/package/Config.in
-> > @@ -1400,6 +1400,7 @@ menu "Database"
-> >   	source "package/libpqxx/Config.in"
-> >   	source "package/mongodb/Config.in"
-> >   	source "package/mysql/Config.in"
-> > +	source "package/osm2pgsql/Config.in"
-> >   	source "package/postgresql/Config.in"
-> >   	source "package/redis/Config.in"
-> >   	source "package/rocksdb/Config.in"
-> > diff --git a/package/osm2pgsql/Config.in b/package/osm2pgsql/Config.in
-> > new file mode 100644
-> > index 0000000000..81be6b0c49
-> > --- /dev/null
-> > +++ b/package/osm2pgsql/Config.in
-> > @@ -0,0 +1,15 @@
-> > +config BR2_PACKAGE_OSM2PGSQL
-> > +	bool "osm2pgsql"
-> > +	depends on BR2_PACKAGE_POSTGRESQL
-> > +	select BR2_PACKAGE_EXPAT
-> > +	select BR2_PACKAGE_PROJ
+> Should be sorted alphabetically...
+> 
+> > > +
+> > > +ifeq ($(BR2_PACKAGE_LUAJIT),y)
+> > > +OSM2PGSQL_DEPENDENCIES += luajit
+> > > +OSM2PGSQL_CONF_OPTS += -DWITH_LUAJIT=ON
 
-Same as for postgis package, dependencies should be propagated (with comment),
-here:
-        depends on BR2_INSTALL_LIBSTDCPP
-        depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
-        depends on BR2_TOOLCHAIN_HAS_THREADS
-        depends on BR2_USE_WCHAR
+My reading of the CMakeLists.txt is that this should be
+	-DWITH_LUA=ON -DWITH_LUAJIT=ON
 
-> > +	select BR2_PACKAGE_BZIP2
-> > +	select BR2_PACKAGE_ZLIB
-> > +	select BR2_PACKAGE_BOOST
+> > > +else
+> > > +ifeq ($(BR2_PACKAGE_LUA),y)
+> > > +OSM2PGSQL_DEPENDENCIES += lua
 
-        depends on BR2_INSTALL_LIBSTDCPP
-        depends on BR2_TOOLCHAIN_HAS_THREADS
-        depends on BR2_USE_WCHAR
-
-> > +	select BR2_PACKAGE_BOOST_FILESYSTEM
-> > +	help
-> > +	  osm2pgsql is a tool for loading OpenStreetMap data into a
-> > +	  PostgreSQL / PostGIS database suitable for applications like
-> > +	  rendering into a map, geocoding with Nominatim, or general analysis.
-
-
-
-	$ /utils/check-package package/osm2pgsql/*
-package/osm2pgsql/Config.in:11: line contains trailing whitespace
-package/osm2pgsql/Config.in:12: line contains trailing whitespace
-package/osm2pgsql/Config.in:13: help text: <tab><2 spaces><62 chars> (http://nightly.buildroot.org/#writing-rules-config-in)
-
-> > +
-> > +	  https://osm2pgsql.org
-> > diff --git a/package/osm2pgsql/osm2pgsql.hash b/package/osm2pgsql/osm2pgsql.hash
-> > new file mode 100644
-> > index 0000000000..28ff242321
-> > --- /dev/null
-> > +++ b/package/osm2pgsql/osm2pgsql.hash
-> > @@ -0,0 +1,3 @@
-> > +# Locally calculated
-> > +sha256  403e25a0310d088183a868d80e5325dceee88617d0df570056e50a2930905369  osm2pgsql-1.4.0.tar.gz
-> > +sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-> > diff --git a/package/osm2pgsql/osm2pgsql.mk b/package/osm2pgsql/osm2pgsql.mk
-> > new file mode 100644
-> > index 0000000000..6d143d43f7
-> > --- /dev/null
-> > +++ b/package/osm2pgsql/osm2pgsql.mk
-> > @@ -0,0 +1,26 @@
-> > +################################################################################
-> > +#
-> > +# osm2pgsql
-> > +#
-> > +################################################################################
-> > +
-> > +OSM2PGSQL_VERSION = 1.4.0
-> > +OSM2PGSQL_SITE = $(call github,openstreetmap,osm2pgsql,$(OSM2PGSQL_VERSION))
-> > +OSM2PGSQL_LICENSE = GPL-2.0+
-> > +OSM2PGSQL_LICENSE_FILES = COPYING
-> > +OSM2PGSQL_SUPPORTS_IN_SOURCE_BUILD = NO
-> > +
-> > +OSM2PGSQL_DEPENDENCIES = postgresql expat proj bzip2 zlib boost
-
-Should be sorted alphabetically...
-
-> > +
-> > +ifeq ($(BR2_PACKAGE_LUAJIT),y)
-> > +OSM2PGSQL_DEPENDENCIES += luajit
-> > +OSM2PGSQL_CONF_OPTS += -DWITH_LUAJIT=ON
-> > +else
-> > +ifeq ($(BR2_PACKAGE_LUA),y)
-> > +OSM2PGSQL_DEPENDENCIES += lua
-> > +else
-> > +OSM2PGSQL_CONF_OPTS += -DWITH_LUA=OFF
-> > +endif
-> > +endif
-> > +
-> > +$(eval $(cmake-package))
-
-And add an entry in the DEVELOPERS file...
-
-Did not find time (yet) for compile testing...
+Did your test all lua versions (5.1, 5.3, 5.4 see package/lua/Config.in),
+the README.md file talks only about lua5.3 liblua5.3-dev)...
 
 Regards,
 Peter
 
-> >   
+
+> > > +else
+> > > +OSM2PGSQL_CONF_OPTS += -DWITH_LUA=OFF
+> > > +endif
+> > > +endif
+> > > +
+> > > +$(eval $(cmake-package))  
+> 
+> And add an entry in the DEVELOPERS file...
+> 
+> Did not find time (yet) for compile testing...
+> 
+> Regards,
+> Peter
+> 
+> > >     
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot  
+> 
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
