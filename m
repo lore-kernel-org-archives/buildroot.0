@@ -1,41 +1,30 @@
-From: Norbert Lange <nolange79@gmail.com>
-Date: Wed, 24 Feb 2021 11:31:53 +0100
-Subject: [Buildroot] [PATCH 4/4] package/lttng-tools: set rundir to
- /run/lttng unconditionally
-In-Reply-To: <20210224103154.174602-1-nolange79@gmail.com>
-References: <20210224103154.174602-1-nolange79@gmail.com>
-Message-ID: <20210224103154.174602-4-nolange79@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 24 Feb 2021 10:50:20 +0000
+Subject: [Buildroot] [Bug 13561] Create a new user defining users-table.txt
+ not working fine
+In-Reply-To: <bug-13561-163@https.bugs.busybox.net/>
+References: <bug-13561-163@https.bugs.busybox.net/>
+Message-ID: <bug-13561-163-YKAYa2B8cF@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Buildroot ensures that all init-systems have a /run directory,
-this should be the preferred location.
+https://bugs.busybox.net/show_bug.cgi?id=13561
 
-Signed-off-by: Norbert Lange <nolange79@gmail.com>
----
- package/lttng-tools/lttng-tools.mk | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+Ivan Castell Rovira <al004140@gmail.com> changed:
 
-diff --git a/package/lttng-tools/lttng-tools.mk b/package/lttng-tools/lttng-tools.mk
-index d66233414e..b876b11650 100644
---- a/package/lttng-tools/lttng-tools.mk
-+++ b/package/lttng-tools/lttng-tools.mk
-@@ -10,12 +10,9 @@ LTTNG_TOOLS_SOURCE = lttng-tools-$(LTTNG_TOOLS_VERSION).tar.bz2
- LTTNG_TOOLS_INSTALL_STAGING = YES
- LTTNG_TOOLS_LICENSE = GPL-2.0, LGPL-2.1 (include/lttng/*, src/lib/lttng-ctl/*)
- LTTNG_TOOLS_LICENSE_FILES = LICENSE $(addprefix LICENSES/,BSD-2-Clause BSD-3-Clause GPL-2.0 LGPL-2.1 MIT)
--LTTNG_TOOLS_CONF_OPTS += --disable-man-pages
- LTTNG_TOOLS_DEPENDENCIES = liburcu libxml2 popt util-linux
--
--ifeq ($(BR2_INIT_SYSTEMD),y)
-+LTTNG_TOOLS_CONF_OPTS += --disable-man-pages
- LTTNG_TOOLS_CONF_OPTS += --with-lttng-system-rundir=/run/lttng
--endif
- 
- ifeq ($(BR2_PACKAGE_LTTNG_LIBUST),y)
- LTTNG_TOOLS_CONF_OPTS += --with-lttng-ust
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |FIXED
+             Status|NEW                         |RESOLVED
+
+--- Comment #1 from Ivan Castell Rovira <al004140@gmail.com> ---
+It works as expected, just get confused as the output target directory doesn't
+contain this user, it seems to be created in a last step. This can be closed.
+Thanks!
+
 -- 
-2.30.0
+You are receiving this mail because:
+You are on the CC list for the bug.
