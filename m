@@ -1,202 +1,121 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 24 Feb 2021 23:33:16 +0100
-Subject: [Buildroot] [PATCH 1/1] package/osm2pgsql: new package
-In-Reply-To: <20210224230719.56ca56fa@gmx.net>
-References: <20210127071847.1170622-1-fido_max@inbox.ru>
- <f840c69b-91f1-bce3-a26f-da93aed9f765@inbox.ru>
- <20210224230719.56ca56fa@gmx.net>
-Message-ID: <20210224233316.436d633b@gmx.net>
+From: Gustavo Heinz <gustavo@gsthnz.com>
+Date: Wed, 24 Feb 2021 20:28:50 -0300
+Subject: [Buildroot] [PATCH] package/python-m2crypto: bump to version 0.37.1
+Message-ID: <20210224232850.1262972-1-gustavo@gsthnz.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Maxim,
+Also, removed 0001 patch since it's already merged upstream.
 
-On Wed, 24 Feb 2021 23:07:19 +0100, Peter Seiderer <ps.report@gmx.net> wrote:
+https://gitlab.com/m2crypto/m2crypto/-/merge_requests/248
 
-> On Wed, 24 Feb 2021 09:04:33 +0300, Maxim Kochetkov via buildroot <buildroot@busybox.net> wrote:
-> 
-> > Has this patch chance to be upstreamable? Should I resend or what?  
-> 
-> Or find someone to do some review of the patch ;-)
-> 
-> > 
-> > 27.01.2021 10:18, Maxim Kochetkov via buildroot ?????:  
-> > > osm2pgsql is a tool for loading OpenStreetMap data into a
-> > > PostgreSQL / PostGIS database suitable for applications like
-> > > rendering into a map, geocoding with Nominatim, or general analysis.
-> > > 
-> > > https://osm2pgsql.org
-> > > 
-> > > Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
-> > > ---
-> > >   package/Config.in                |  1 +
-> > >   package/osm2pgsql/Config.in      | 15 +++++++++++++++
-> > >   package/osm2pgsql/osm2pgsql.hash |  3 +++
-> > >   package/osm2pgsql/osm2pgsql.mk   | 26 ++++++++++++++++++++++++++
-> > >   4 files changed, 45 insertions(+)
-> > >   create mode 100644 package/osm2pgsql/Config.in
-> > >   create mode 100644 package/osm2pgsql/osm2pgsql.hash
-> > >   create mode 100644 package/osm2pgsql/osm2pgsql.mk
-> > > 
-> > > diff --git a/package/Config.in b/package/Config.in
-> > > index 06dfc32cc6..0b7127bfd4 100644
-> > > --- a/package/Config.in
-> > > +++ b/package/Config.in
-> > > @@ -1400,6 +1400,7 @@ menu "Database"
-> > >   	source "package/libpqxx/Config.in"
-> > >   	source "package/mongodb/Config.in"
-> > >   	source "package/mysql/Config.in"
-> > > +	source "package/osm2pgsql/Config.in"
-> > >   	source "package/postgresql/Config.in"
-> > >   	source "package/redis/Config.in"
-> > >   	source "package/rocksdb/Config.in"
-> > > diff --git a/package/osm2pgsql/Config.in b/package/osm2pgsql/Config.in
-> > > new file mode 100644
-> > > index 0000000000..81be6b0c49
-> > > --- /dev/null
-> > > +++ b/package/osm2pgsql/Config.in
-> > > @@ -0,0 +1,15 @@
-> > > +config BR2_PACKAGE_OSM2PGSQL
-> > > +	bool "osm2pgsql"
-> > > +	depends on BR2_PACKAGE_POSTGRESQL
-> > > +	select BR2_PACKAGE_EXPAT
-> > > +	select BR2_PACKAGE_PROJ  
-> 
-> Same as for postgis package, dependencies should be propagated (with comment),
-> here:
->         depends on BR2_INSTALL_LIBSTDCPP
->         depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
->         depends on BR2_TOOLCHAIN_HAS_THREADS
->         depends on BR2_USE_WCHAR
-> 
-> > > +	select BR2_PACKAGE_BZIP2
-> > > +	select BR2_PACKAGE_ZLIB
-> > > +	select BR2_PACKAGE_BOOST  
-> 
->         depends on BR2_INSTALL_LIBSTDCPP
->         depends on BR2_TOOLCHAIN_HAS_THREADS
->         depends on BR2_USE_WCHAR
-> 
-> > > +	select BR2_PACKAGE_BOOST_FILESYSTEM
+Signed-off-by: Gustavo Heinz <gustavo@gsthnz.com>
+---
+ ...swig-default-includes-before-openssl.patch | 63 -------------------
+ package/python-m2crypto/python-m2crypto.hash  |  4 +-
+ package/python-m2crypto/python-m2crypto.mk    |  4 +-
+ 3 files changed, 4 insertions(+), 67 deletions(-)
+ delete mode 100644 package/python-m2crypto/0001-setup.py-move-swig-default-includes-before-openssl.patch
 
-according to CMakeLists.txt boost system and filesystem should be selected...
-
-> > > +	help
-> > > +	  osm2pgsql is a tool for loading OpenStreetMap data into a
-> > > +	  PostgreSQL / PostGIS database suitable for applications like
-> > > +	  rendering into a map, geocoding with Nominatim, or general analysis.  
-> 
-> 
-> 
-> 	$ /utils/check-package package/osm2pgsql/*
-> package/osm2pgsql/Config.in:11: line contains trailing whitespace
-> package/osm2pgsql/Config.in:12: line contains trailing whitespace
-> package/osm2pgsql/Config.in:13: help text: <tab><2 spaces><62 chars> (http://nightly.buildroot.org/#writing-rules-config-in)
-> 
-> > > +
-> > > +	  https://osm2pgsql.org
-> > > diff --git a/package/osm2pgsql/osm2pgsql.hash b/package/osm2pgsql/osm2pgsql.hash
-> > > new file mode 100644
-> > > index 0000000000..28ff242321
-> > > --- /dev/null
-> > > +++ b/package/osm2pgsql/osm2pgsql.hash
-> > > @@ -0,0 +1,3 @@
-> > > +# Locally calculated
-> > > +sha256  403e25a0310d088183a868d80e5325dceee88617d0df570056e50a2930905369  osm2pgsql-1.4.0.tar.gz
-> > > +sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-> > > diff --git a/package/osm2pgsql/osm2pgsql.mk b/package/osm2pgsql/osm2pgsql.mk
-> > > new file mode 100644
-> > > index 0000000000..6d143d43f7
-> > > --- /dev/null
-> > > +++ b/package/osm2pgsql/osm2pgsql.mk
-> > > @@ -0,0 +1,26 @@
-> > > +################################################################################
-> > > +#
-> > > +# osm2pgsql
-> > > +#
-> > > +################################################################################
-> > > +
-> > > +OSM2PGSQL_VERSION = 1.4.0
-> > > +OSM2PGSQL_SITE = $(call github,openstreetmap,osm2pgsql,$(OSM2PGSQL_VERSION))
-> > > +OSM2PGSQL_LICENSE = GPL-2.0+
-> > > +OSM2PGSQL_LICENSE_FILES = COPYING
-> > > +OSM2PGSQL_SUPPORTS_IN_SOURCE_BUILD = NO
-> > > +
-> > > +OSM2PGSQL_DEPENDENCIES = postgresql expat proj bzip2 zlib boost  
-
-According to the README.md the proj dependency is optional...
-
-Looking at osm2pgsql-1.4.0/CMakeLists.txt shows some more options:
-
-
-	option(BUILD_TESTS    "Build test suite" OFF)
-
-handled by cmake-package
-
-	option(BUILD_COVERAGE "Build with coverage" OFF)
-
-should be forced to OFF (in case the default will change)...
-
-	option(WITH_LUA       "Build with Lua support" ON)
-	option(WITH_LUAJIT    "Build with LuaJIT support" OFF)
-
-already handled...
-
-	option(EXTERNAL_LIBOSMIUM "Do not use the bundled libosmium" OFF)
-	option(EXTERNAL_PROTOZERO "Do not use the bundled protozero" OFF)
-
-both not in buildroot(?), bundled version o.k. (did your check the licenses?)...
-
-	option(EXTERNAL_FMT       "Do not use the bundled fmt"       OFF)
-
-using buildroot package (in case it works) preferred...
-
-> 
-> Should be sorted alphabetically...
-> 
-> > > +
-> > > +ifeq ($(BR2_PACKAGE_LUAJIT),y)
-> > > +OSM2PGSQL_DEPENDENCIES += luajit
-> > > +OSM2PGSQL_CONF_OPTS += -DWITH_LUAJIT=ON
-
-My reading of the CMakeLists.txt is that this should be
-	-DWITH_LUA=ON -DWITH_LUAJIT=ON
-
-> > > +else
-> > > +ifeq ($(BR2_PACKAGE_LUA),y)
-> > > +OSM2PGSQL_DEPENDENCIES += lua
-
-Did your test all lua versions (5.1, 5.3, 5.4 see package/lua/Config.in),
-the README.md file talks only about lua5.3 liblua5.3-dev)...
-
-Regards,
-Peter
-
-
-> > > +else
-> > > +OSM2PGSQL_CONF_OPTS += -DWITH_LUA=OFF
-> > > +endif
-> > > +endif
-> > > +
-> > > +$(eval $(cmake-package))  
-> 
-> And add an entry in the DEVELOPERS file...
-> 
-> Did not find time (yet) for compile testing...
-> 
-> Regards,
-> Peter
-> 
-> > >     
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot  
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/python-m2crypto/0001-setup.py-move-swig-default-includes-before-openssl.patch b/package/python-m2crypto/0001-setup.py-move-swig-default-includes-before-openssl.patch
+deleted file mode 100644
+index f4d7e428f1..0000000000
+--- a/package/python-m2crypto/0001-setup.py-move-swig-default-includes-before-openssl.patch
++++ /dev/null
+@@ -1,63 +0,0 @@
+-From 1aab31787a8d1ef9436d9cf81832691f729b6282 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sat, 7 Nov 2020 23:26:30 +0100
+-Subject: [PATCH] setup.py: move swig default includes before openssl
+-
+-Move swig default includes before openssl to avoid the following build
+-failure when cross-compiling for some architectures (e.g. arm, mips):
+-
+-swig -python -py3 -D__x86_64__ \
+- -I/srv/storage/autobuild/run/instance-0/output-1/host/mipsel-buildroot-linux-gnu/sysroot/usr/include/python3.9 \
+- -I/srv/storage/autobuild/run/instance-0/output-1/host/mipsel-buildroot-linux-gnu/sysroot/usr/include \
+- -I/srv/storage/autobuild/run/instance-0/output-1/host/mipsel-buildroot-linux-gnu/sysroot/usr/include/openssl \
+- -I/srv/storage/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/mipsel-buildroot-linux-gnu/8.3.0/include \
+- -I/srv/storage/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/mipsel-buildroot-linux-gnu/8.3.0/include-fixed \
+- -I/srv/storage/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/mipsel-buildroot-linux-gnu/8.3.0/../../../../mipsel-buildroot-linux-gnu/include \
+- -I/srv/storage/autobuild/run/instance-0/output-1/host/mipsel-buildroot-linux-gnu/sysroot/usr/include \
+- -includeall -modern -builtin -outdir \
+- /srv/storage/autobuild/run/instance-0/output-1/build/python-m2crypto-0.36.0/M2Crypto -o SWIG/_m2crypto_wrap.c SWIG/_m2crypto.i
+-Deprecated command line option: -modern. This option is now always on.
+-/srv/storage/autobuild/run/instance-0/output-1/host/mipsel-buildroot-linux-gnu/sysroot/usr/include/bits/types.h:139:
+-Error: CPP #error "". Use the -cpperraswarn option to continue swig processing.
+-
+-This build failure is probably raised because swig includes a wrong types.h file
+-from the openssl directory (e.g.
+-/srv/storage/autobuild/run/instance-0/output-1/host/mipsel-buildroot-linux-gnu/sysroot/usr/include)
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/7f63e6a2d8681cc3408f344556afd5dd16eb7368
+- - http://autobuild.buildroot.org/results/d115a082418321e7dc4715c635f94b30b3cad387
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status:
+-https://gitlab.com/m2crypto/m2crypto/-/merge_requests/248]
+----
+- setup.py | 5 +++--
+- 1 file changed, 3 insertions(+), 2 deletions(-)
+-
+-diff --git a/setup.py b/setup.py
+-index 89d03bb..0045fda 100644
+---- a/setup.py
+-+++ b/setup.py
+-@@ -154,6 +154,9 @@ class _M2CryptoBuildExt(build_ext.build_ext):
+-         if sys.version_info[:1] >= (3,):
+-             self.swig_opts.append('-py3')
+- 
+-+        # swig seems to need the default header file directories
+-+        self.swig_opts.extend(['-I%s' % i for i in _get_additional_includes()])
+-+
+-         log.debug('self.include_dirs = %s', self.include_dirs)
+-         log.debug('self.library_dirs = %s', self.library_dirs)
+- 
+-@@ -204,8 +207,6 @@ class _M2CryptoBuildExt(build_ext.build_ext):
+-             self.swig_opts.append(
+-                 '-I' + os.path.join(openssl_include_dir, 'openssl'))
+- 
+--        # swig seems to need the default header file directories
+--        self.swig_opts.extend(['-I%s' % i for i in _get_additional_includes()])
+-         self.swig_opts.append('-includeall')
+-         self.swig_opts.append('-modern')
+-         self.swig_opts.append('-builtin')
+--- 
+-2.28.0
+-
+diff --git a/package/python-m2crypto/python-m2crypto.hash b/package/python-m2crypto/python-m2crypto.hash
+index 148cdd8317..1ccc786f51 100644
+--- a/package/python-m2crypto/python-m2crypto.hash
++++ b/package/python-m2crypto/python-m2crypto.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/m2crypto/json
+-md5  b8b34c5b83892096a8676b6f2e8f4e7e  M2Crypto-0.36.0.tar.gz
+-sha256  1542c18e3ee5c01db5031d0b594677536963e3f54ecdf5315aeecb3a595b4dc1  M2Crypto-0.36.0.tar.gz
++md5 1f3095440092ca5e54007d1f3fa2562a M2Crypto-0.37.1.tar.gz
++sha256 e4e42f068b78ccbf113e5d0a72ae5f480f6c3ace4940b91e4fff5598cfff6fb3 M2Crypto-0.37.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  4eca478396f4b2b020729a111fce3f096456d74500bfd8f2b0388c3c69f997c0  LICENCE
+diff --git a/package/python-m2crypto/python-m2crypto.mk b/package/python-m2crypto/python-m2crypto.mk
+index ccc63058ce..557985eb0e 100644
+--- a/package/python-m2crypto/python-m2crypto.mk
++++ b/package/python-m2crypto/python-m2crypto.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_M2CRYPTO_VERSION = 0.36.0
++PYTHON_M2CRYPTO_VERSION = 0.37.1
+ PYTHON_M2CRYPTO_SOURCE = M2Crypto-$(PYTHON_M2CRYPTO_VERSION).tar.gz
+-PYTHON_M2CRYPTO_SITE = https://files.pythonhosted.org/packages/ff/df/84609ed874b5e6fcd3061a517bf4b6e4d0301f553baf9fa37bef2b509797
++PYTHON_M2CRYPTO_SITE = https://files.pythonhosted.org/packages/aa/36/9fef97358e378c1d3bd567c4e8f8ca0428a8d7e869852cef445ee6da91fd
+ PYTHON_M2CRYPTO_SETUP_TYPE = setuptools
+ PYTHON_M2CRYPTO_LICENSE = MIT
+ PYTHON_M2CRYPTO_LICENSE_FILES = LICENCE
+-- 
+2.30.1
