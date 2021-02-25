@@ -1,34 +1,26 @@
-From: Ivo Grondman <buildroot@grondman.net>
-Date: Thu, 25 Feb 2021 18:10:56 +0100
-Subject: [Buildroot] Python package installed without dependencies
- defined in setup.py
-In-Reply-To: <CAGm1_ksjakFD=iBx8RJRXtA9PeUOSFo_PQueytb2XsQm8XMRRw@mail.gmail.com>
-References: <FF75D700-F93F-4299-9093-BED6912A3868@grondman.net>
- <CAGm1_ksjakFD=iBx8RJRXtA9PeUOSFo_PQueytb2XsQm8XMRRw@mail.gmail.com>
-Message-ID: <EC9345B1-CC2D-4F0F-B2D8-7BE961B9F192@grondman.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 25 Feb 2021 20:11:43 +0100
+Subject: [Buildroot] [PATCH 1/1] package/xterm: add XTERM_CPE_ID_VENDOR
+In-Reply-To: <20210221181131.3939059-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 21 Feb 2021 19:11:31 +0100")
+References: <20210221181131.3939059-1-fontaine.fabrice@gmail.com>
+Message-ID: <878s7cx8r4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yegor,
+>>>>> "Fontaine" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-> On 25 Feb 2021, at 16:33, Yegor Yefremov <yegorslists@googlemail.com> wrote:
-> 
-> You'll have to manually add all required Python packages into your
-> package's Config.in file. See package/python-flask/Config.in for the
-> reference.
+ > cpe:2.3:a:invisible-island:xterm is a valid CPE identifier for this
+ > package:
 
-Thanks! It does seem a bit odd to me to have it in there, though, as:
+ >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ainvisible-island%3Axterm
 
-1) It seems to defeat the purpose of using a setup.py file as that already has the necessary information on the Python package dependencies.
-2) If the Python package dependencies of a custom Python package change, I have to make the changes in both the setup.py file (for the end user of the package in public use) and the Config.in (for myself in buildroot).
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Wouldn?t it be possible (maybe not now, but in the future perhaps) to have buildroot setup a virtualenv for Python during the build in which it does the installation of all the Python packages and dependencies (using pip or something) and then just moves the complete Python tree into the target? I?m being a bit short here, but I hope you know what I mean :)
+Committed, thanks.
 
-Any thoughts on this?
-
-Cheers,
-
-Ivo
+-- 
+Bye, Peter Korsgaard
