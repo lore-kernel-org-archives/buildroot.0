@@ -1,47 +1,48 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 25 Feb 2021 07:55:59 +0200
-Subject: [Buildroot] [PATCH next] package/uhubctl: bump to version 2.4.0
-Message-ID: <d567a0559b444d7f4b5bc8aaa0754987b3511be6.1614232559.git.baruch@tkos.co.il>
+Date: Thu, 25 Feb 2021 08:48:48 +0200
+Subject: [Buildroot] [PATCH next] package/daemon: bump to version 0.7.1
+Message-ID: <7a934090201ce89422608b7b1c7b50c303b68595.1614235728.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add COPYING license text to _LICENSE_FILES.
+Add COPYING to _LICENSE_FILES.
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/uhubctl/uhubctl.hash | 3 ++-
- package/uhubctl/uhubctl.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/daemon/daemon.hash | 4 +++-
+ package/daemon/daemon.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/uhubctl/uhubctl.hash b/package/uhubctl/uhubctl.hash
-index c137088772df..c696d70f6cd2 100644
---- a/package/uhubctl/uhubctl.hash
-+++ b/package/uhubctl/uhubctl.hash
-@@ -1,3 +1,4 @@
- # Locally computed
--sha256  714f733592d3cb6ba8efc84fbc03b1beed2323918ff33aef01cdb956755be7b7  uhubctl-2.3.0.tar.gz
-+sha256  391f24fd1f89cacce801df38ecc289b34c3627bc08ee69eec515af7e1a283d97  uhubctl-2.4.0.tar.gz
- sha256  2d3aa0737e8db9dfd710f9a282b446cb7b15b2b3eecac383f0c45c64d736eea0  LICENSE
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/uhubctl/uhubctl.mk b/package/uhubctl/uhubctl.mk
-index 08efca092c54..3429d7d151e8 100644
---- a/package/uhubctl/uhubctl.mk
-+++ b/package/uhubctl/uhubctl.mk
+diff --git a/package/daemon/daemon.hash b/package/daemon/daemon.hash
+index b1c1dcdc2c5d..ec7451a81ec1 100644
+--- a/package/daemon/daemon.hash
++++ b/package/daemon/daemon.hash
+@@ -1,3 +1,5 @@
+ # From http://www.libslack.org/daemon/
+-sha256  f66af2ece784c16dcb5219de1f4fa3ae5787bb3374e44bd4b1d3e275e8ff272c  daemon-0.7.tar.gz
++sha256  ba1f6dc87532c852bfb8f436179cd661c3458ff898f67767c414123198626dfd  daemon-0.7.1.tar.gz
++# Locally calculated
+ sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  LICENSE
++sha256  cbac6eb0e1f7f95826966c7903939d591092a7f7d7726862946cb49096e8497d  COPYING
+diff --git a/package/daemon/daemon.mk b/package/daemon/daemon.mk
+index f3a1917fadc1..91f77dd24a97 100644
+--- a/package/daemon/daemon.mk
++++ b/package/daemon/daemon.mk
 @@ -4,10 +4,10 @@
  #
  ################################################################################
  
--UHUBCTL_VERSION = 2.3.0
-+UHUBCTL_VERSION = 2.4.0
- UHUBCTL_SITE = $(call github,mvp,uhubctl,v$(UHUBCTL_VERSION))
- UHUBCTL_LICENSE = GPL-2.0
--UHUBCTL_LICENSE_FILES = LICENSE
-+UHUBCTL_LICENSE_FILES = LICENSE COPYING
- UHUBCTL_DEPENDENCIES = libusb
+-DAEMON_VERSION = 0.7
++DAEMON_VERSION = 0.7.1
+ DAEMON_SITE = http://libslack.org/daemon/download
+ DAEMON_LICENSE = GPL-2.0+
+-DAEMON_LICENSE_FILES = LICENSE
++DAEMON_LICENSE_FILES = LICENSE COPYING
  
- define UHUBCTL_BUILD_CMDS
+ define DAEMON_CONFIGURE_CMDS
+ 	(cd $(@D); ./configure)
 -- 
 2.30.0
