@@ -1,52 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 23 Feb 2021 13:44:23 +0100
-Subject: [Buildroot] [git commit] package/micropython: bump to v1.14
-Message-ID: <20210308072135.0D0A68893D@busybox.osuosl.org>
+Date: Thu, 25 Feb 2021 20:31:22 +0100
+Subject: [Buildroot] [git commit] package/wireguard-tools: bump version to
+ 1.0.20210223
+Message-ID: <20210308072136.077DA8896D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=947f982ded32e1dfb54b6e701d4c56ef9c8a1829
+commit: https://git.buildroot.net/buildroot/commit/?id=f3b292d907ace616b621748a35e22349b3286ee0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Micropython 1.4 brings many changes, see the release notes:
-https://github.com/micropython/micropython/releases/tag/v1.14
+For details, see the announcement:
+https://lists.zx2c4.com/pipermail/wireguard/2021-February/006407.html
 
-Amongst these changes, Micropython can now produce reproducible
-builds, using the standard SOURCE_DATE_EPOCH.
-
-The LICENSE hash changed because the copyright year range was extended
-to 2021.
-
-Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/micropython/micropython.hash | 4 ++--
- package/micropython/micropython.mk   | 2 +-
+ package/wireguard-tools/wireguard-tools.hash | 4 ++--
+ package/wireguard-tools/wireguard-tools.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/micropython/micropython.hash b/package/micropython/micropython.hash
-index 5dfbb74522..fe47ee09c4 100644
---- a/package/micropython/micropython.hash
-+++ b/package/micropython/micropython.hash
-@@ -1,3 +1,3 @@
- #locally computed
--sha256  31466dacebeb3af60dc80a071a07c3e15b657219a826e0b6ac741f9f22472f23  micropython-1.13.tar.gz
--sha256  4b8a8884a60cd72749f9ef40328b85b40d13c22594c01352e0a55392141e0f89  LICENSE
-+sha256  542eb120df8d9eb6f200bcd856294e143813adea9dda0d7189405c218d4b16f7  micropython-1.14.tar.gz
-+sha256  9c6089e26c8638a0645bcb0db2c85051f82de8022dcd07fb22baa0c5f9362085  LICENSE
-diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
-index a126b3eeae..80d086f3c8 100644
---- a/package/micropython/micropython.mk
-+++ b/package/micropython/micropython.mk
+diff --git a/package/wireguard-tools/wireguard-tools.hash b/package/wireguard-tools/wireguard-tools.hash
+index 3bff364e06..dab7f72ca8 100644
+--- a/package/wireguard-tools/wireguard-tools.hash
++++ b/package/wireguard-tools/wireguard-tools.hash
+@@ -1,4 +1,4 @@
+-# https://lists.zx2c4.com/pipermail/wireguard/2020-August/005790.html
+-sha256  51bc85e33a5b3cf353786ae64b0f1216d7a871447f058b6137f793eb0f53b7fd  wireguard-tools-1.0.20200827.tar.xz
++# https://lists.zx2c4.com/pipermail/wireguard/2021-February/006407.html
++sha256  1f72da217044622d79e0bab57779e136a3df795e3761a3fc1dc0941a9055877c  wireguard-tools-1.0.20210223.tar.xz
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wireguard-tools/wireguard-tools.mk b/package/wireguard-tools/wireguard-tools.mk
+index d360c81208..d3d2069846 100644
+--- a/package/wireguard-tools/wireguard-tools.mk
++++ b/package/wireguard-tools/wireguard-tools.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MICROPYTHON_VERSION = 1.13
-+MICROPYTHON_VERSION = 1.14
- MICROPYTHON_SITE = $(call github,micropython,micropython,v$(MICROPYTHON_VERSION))
- MICROPYTHON_LICENSE = MIT
- MICROPYTHON_LICENSE_FILES = LICENSE
+-WIREGUARD_TOOLS_VERSION = 1.0.20200827
++WIREGUARD_TOOLS_VERSION = 1.0.20210223
+ WIREGUARD_TOOLS_SITE = https://git.zx2c4.com/wireguard-tools/snapshot
+ WIREGUARD_TOOLS_SOURCE = wireguard-tools-$(WIREGUARD_TOOLS_VERSION).tar.xz
+ WIREGUARD_TOOLS_LICENSE = GPL-2.0
