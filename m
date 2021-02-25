@@ -1,35 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 25 Feb 2021 20:11:22 +0100
-Subject: [Buildroot] [git commit] package/screen: add SCREEN_CPE_ID_VENDOR
-Message-ID: <20210225185016.D078C80012@busybox.osuosl.org>
+Date: Thu, 25 Feb 2021 20:12:48 +0100
+Subject: [Buildroot] [PATCH/next 1/1] package/bwm-ng: bump to version
+ 0.6.3
+In-Reply-To: <20210221182842.3945236-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 21 Feb 2021 19:28:42 +0100")
+References: <20210221182842.3945236-1-fontaine.fabrice@gmail.com>
+Message-ID: <87zgzsvu4v.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=028aa3986d1fe07837c5442b46088be106e633ee
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-cpe:2.3:a:gnu:screen is a valid CPE identifier for this package:
+ > https://github.com/vgropp/bwm-ng/releases/tag/v0.6.3
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Agnu%3Ascreen
+Committed to next, thanks.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/screen/screen.mk | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/screen/screen.mk b/package/screen/screen.mk
-index c1705f742d..c24067440e 100644
---- a/package/screen/screen.mk
-+++ b/package/screen/screen.mk
-@@ -8,6 +8,7 @@ SCREEN_VERSION = 4.8.0
- SCREEN_SITE = $(BR2_GNU_MIRROR)/screen
- SCREEN_LICENSE = GPL-3.0+
- SCREEN_LICENSE_FILES = COPYING
-+SCREEN_CPE_ID_VENDOR = gnu
- SCREEN_DEPENDENCIES = ncurses
- SCREEN_AUTORECONF = YES
- SCREEN_CONF_ENV = CFLAGS="$(TARGET_CFLAGS)"
+-- 
+Bye, Peter Korsgaard
