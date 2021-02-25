@@ -1,44 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 23 Feb 2021 14:03:56 +0100
-Subject: [Buildroot] [git commit] package/dav1d: bump version to 0.8.2
-Message-ID: <20210308072135.966DA88971@busybox.osuosl.org>
+Date: Thu, 25 Feb 2021 20:21:12 +0100
+Subject: [Buildroot] [git commit] package/uhubctl: bump to version 2.4.0
+Message-ID: <20210308072135.DF2AC88918@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8939392424efb86bff02dd77994f748eac25c223
+commit: https://git.buildroot.net/buildroot/commit/?id=7328b08c564778485f27d633b714a41b8b937427
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes: https://code.videolan.org/videolan/dav1d/-/releases
+Add COPYING license text to _LICENSE_FILES.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dav1d/dav1d.hash | 2 +-
- package/dav1d/dav1d.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/uhubctl/uhubctl.hash | 3 ++-
+ package/uhubctl/uhubctl.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/dav1d/dav1d.hash b/package/dav1d/dav1d.hash
-index 45152f7a80..520e42fe90 100644
---- a/package/dav1d/dav1d.hash
-+++ b/package/dav1d/dav1d.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/uhubctl/uhubctl.hash b/package/uhubctl/uhubctl.hash
+index c137088772..c696d70f6c 100644
+--- a/package/uhubctl/uhubctl.hash
++++ b/package/uhubctl/uhubctl.hash
+@@ -1,3 +1,4 @@
  # Locally computed
--sha256  842da2945afcf54e651d17112bf2823a238e6c935a6c8dff3a8e96a2eb740269  dav1d-0.8.1.tar.bz2
-+sha256  78ec7a1714d98a8f4ecbc4255e83e6c4c944cdd881871ea234ce40153fd3df04  dav1d-0.8.2.tar.bz2
- sha256  b327887de263238deaa80c34cdd2ff3e0ba1d35db585ce14a37ce3e74ee389e9  COPYING
-diff --git a/package/dav1d/dav1d.mk b/package/dav1d/dav1d.mk
-index 68f6fc8805..377bd63419 100644
---- a/package/dav1d/dav1d.mk
-+++ b/package/dav1d/dav1d.mk
-@@ -4,7 +4,7 @@
+-sha256  714f733592d3cb6ba8efc84fbc03b1beed2323918ff33aef01cdb956755be7b7  uhubctl-2.3.0.tar.gz
++sha256  391f24fd1f89cacce801df38ecc289b34c3627bc08ee69eec515af7e1a283d97  uhubctl-2.4.0.tar.gz
+ sha256  2d3aa0737e8db9dfd710f9a282b446cb7b15b2b3eecac383f0c45c64d736eea0  LICENSE
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/uhubctl/uhubctl.mk b/package/uhubctl/uhubctl.mk
+index 08efca092c..3429d7d151 100644
+--- a/package/uhubctl/uhubctl.mk
++++ b/package/uhubctl/uhubctl.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--DAV1D_VERSION = 0.8.1
-+DAV1D_VERSION = 0.8.2
- DAV1D_SOURCE = dav1d-$(DAV1D_VERSION).tar.bz2
- DAV1D_SITE = https://code.videolan.org/videolan/dav1d/-/archive/$(DAV1D_VERSION)
- DAV1D_LICENSE = BSD-2-Clause
+-UHUBCTL_VERSION = 2.3.0
++UHUBCTL_VERSION = 2.4.0
+ UHUBCTL_SITE = $(call github,mvp,uhubctl,v$(UHUBCTL_VERSION))
+ UHUBCTL_LICENSE = GPL-2.0
+-UHUBCTL_LICENSE_FILES = LICENSE
++UHUBCTL_LICENSE_FILES = LICENSE COPYING
+ UHUBCTL_DEPENDENCIES = libusb
+ 
+ define UHUBCTL_BUILD_CMDS
