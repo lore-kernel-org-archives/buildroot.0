@@ -1,62 +1,28 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 25 Feb 2021 22:28:36 +0100
-Subject: [Buildroot] [PATCH 1/1] package/babeltrace2: link with
- libatomic if needed
-In-Reply-To: <20210221201452.103678-1-fontaine.fabrice@gmail.com>
-References: <20210221201452.103678-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210225212836.GK2276@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 25 Feb 2021 22:29:25 +0100
+Subject: [Buildroot] [PATCH/next 1/1] package/ffmpeg: bump version to
+ 4.3.2
+In-Reply-To: <20210221090225.136522-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sun, 21 Feb 2021 10:02:25 +0100")
+References: <20210221090225.136522-1-bernd.kuhls@t-online.de>
+Message-ID: <87sg5jvnt6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-On 2021-02-21 21:14 +0100, Fabrice Fontaine spake thusly:
-> Fix build of babeltrace2 in version 2.0.3 with Bootlin SPARC uclibc
-> toolchain added with commit 1348c569d0cb7f67eca30f170b782aa8b51cc259
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/31770bf70f9ce4e3be8fb310d084b214820c6829
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Removed patch which was applied upstream.
+ > Changelog:
+ > http://git.videolan.org/?p=ffmpeg.git;a=blob;f=Changelog;h=28d79ea1aed0a59f43ee922f5b6efa82dc7e2b18;hb=refs/heads/release/4.3
 
-Applied to master, thanks.
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Regards,
-Yann E. MORIN.
+I wonder if it wouldn't be safe to apply to main instead, but OK.
 
-> ---
->  package/babeltrace2/babeltrace2.mk | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/package/babeltrace2/babeltrace2.mk b/package/babeltrace2/babeltrace2.mk
-> index eb29a5928b..1e03f5fdd2 100644
-> --- a/package/babeltrace2/babeltrace2.mk
-> +++ b/package/babeltrace2/babeltrace2.mk
-> @@ -27,5 +27,9 @@ else
->  BABELTRACE2_CONF_OPTS += --disable-debug-info
->  endif
->  
-> +ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-> +BABELTRACE2_CONF_ENV += LIBS=-latomic
-> +endif
-> +
->  $(eval $(autotools-package))
->  $(eval $(host-autotools-package))
-> -- 
-> 2.30.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Committed to next, thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
