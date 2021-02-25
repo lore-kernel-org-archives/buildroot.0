@@ -1,9 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 25 Feb 2021 22:59:26 +0100
-Subject: [Buildroot] [PATCH 1/1] package/botan: avoid empty -l
-In-Reply-To: <20210221175902.3938257-1-fontaine.fabrice@gmail.com>
-References: <20210221175902.3938257-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210225215926.GN2276@scaer>
+Date: Thu, 25 Feb 2021 23:15:15 +0100
+Subject: [Buildroot] [PATCH 1/1] package/gstreamer1/gst1-plugins-bad:
+ add sctp option
+In-Reply-To: <20210221105158.3461858-1-fontaine.fabrice@gmail.com>
+References: <20210221105158.3461858-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210225221515.GO2276@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,57 +13,67 @@ To: buildroot@busybox.net
 
 Fabrice, All,
 
-On 2021-02-21 18:59 +0100, Fabrice Fontaine spake thusly:
-> Add upstream patch to fix upstream commit
-> af63fe89228172e5a395f7e6491fae3bfa9da4b1 which was added to buildroot in
-> commit d71de4143d7a8554929f2a1e9731f83a4cf85fd3
+On 2021-02-21 11:51 +0100, Fabrice Fontaine spake thusly:
+> sctp unconditionnally uses __sync_*_4 intrisics in
+> https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/-/blob/master/ext/sctp/usrsctp/usrsctplib/user_atomic.h
 > 
-> Fixes:
->  - http://autobuild.buildroot.org/results/801007860b7787b28b2b2e3611b59350034a3694
+> As a result, this will raise the following build failure with bootlin
+> sparc toolchain:
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> /srv/storage/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/9.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: ext/sctp/usrsctp/libusrsctp-static.a(usrsctplib_user_socket.c.o): in function `usrsctp_conninput':
+> user_socket.c:(.text+0x3004): undefined reference to `__sync_fetch_and_add_4'
+> 
+> sctp uses an internal version of usrsctp (which is not available in
+> buildroot) and is available since version 1.15.1:
+> https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/-/commit/e2f06326eac7c3c7fa9c0d5baf4bf9673fc93376
 
-Applied to master, thanks.
+But then, we should also pass -Dsctp-internal-usrsctp=enabled, so as to
+avoid using a system-wide one, no?
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  package/botan/0002-Avoid-empty-l.patch | 25 +++++++++++++++++++++++++
->  1 file changed, 25 insertions(+)
->  create mode 100644 package/botan/0002-Avoid-empty-l.patch
+> Fixes:
+>  - http://autobuild.buildroot.org/results/981b11ae9746d1eef40c1797398c4f6c16f005bd
 > 
-> diff --git a/package/botan/0002-Avoid-empty-l.patch b/package/botan/0002-Avoid-empty-l.patch
-> new file mode 100644
-> index 0000000000..9102360244
-> --- /dev/null
-> +++ b/package/botan/0002-Avoid-empty-l.patch
-> @@ -0,0 +1,25 @@
-> +From 4b2225ea54988e09b649768848b3c14b43e064de Mon Sep 17 00:00:00 2001
-> +From: Jack Lloyd <jack@randombit.net>
-> +Date: Mon, 15 Feb 2021 15:11:12 -0500
-> +Subject: [PATCH] Avoid empty -l
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/gstreamer1/gst1-plugins-bad/Config.in           | 4 ++++
+>  package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 6 ++++++
+>  2 files changed, 10 insertions(+)
+> 
+> diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+> index 191820df1d..3a9fc02745 100644
+> --- a/package/gstreamer1/gst1-plugins-bad/Config.in
+> +++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+> @@ -577,6 +577,10 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SBC
+>  	bool "sbc"
+>  	select BR2_PACKAGE_SBC
+>  
+> +config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SCTP
+> +	bool "sctp"
+> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # __sync_*_4 intrisics
 > +
-> +[Retrieved from:
-> +https://github.com/randombit/botan/commit/4b2225ea54988e09b649768848b3c14b43e064de]
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +---
-> + configure.py | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
+>  config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SHM
+>  	bool "shm"
+>  	help
+> diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+> index 83abc7fab8..96f757ba77 100644
+> --- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+> +++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+> @@ -691,6 +691,12 @@ else
+>  GST1_PLUGINS_BAD_CONF_OPTS += -Dsbc=disabled
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SCTP),y)
+> +GST1_PLUGINS_BAD_CONF_OPTS += -Dsctp=enabled
+> +else
+> +GST1_PLUGINS_BAD_CONF_OPTS += -Dsctp=disabled
+> +endif
 > +
-> +diff --git a/configure.py b/configure.py
-> +index 865a6c8e62..a79f672eca 100755
-> +--- a/configure.py
-> ++++ b/configure.py
-> +@@ -2027,7 +2027,7 @@ def extra_libs(libs, cc):
-> +         if libs is None:
-> +             return ''
-> + 
-> +-        return ' '.join([(cc.add_lib_option % lib) for lib in libs.split(',')])
-> ++        return ' '.join([(cc.add_lib_option % lib) for lib in libs.split(',') if lib != ''])
-> + 
-> +     variables = {
-> +         'version_major':  Version.major(),
+>  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SHM),y)
+>  GST1_PLUGINS_BAD_CONF_OPTS += -Dshm=enabled
+>  else
 > -- 
 > 2.30.0
 > 
