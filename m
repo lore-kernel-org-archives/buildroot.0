@@ -1,64 +1,41 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 25 Feb 2021 22:13:08 +0100
-Subject: [Buildroot] [PATCH 1/1] package/intel-mediasdk: disable samples
- and tutorials
-In-Reply-To: <20210222170048.409719-1-fontaine.fabrice@gmail.com>
-References: <20210222170048.409719-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210225211308.GI2276@scaer>
+Date: Thu, 25 Feb 2021 22:21:38 +0100
+Subject: [Buildroot] [git commit] package/elfutils: link with libatomic if
+ needed
+Message-ID: <20210225210527.A0BB7844EE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=51b5df23b2019eb9da1fc2ceb43c518dc79f1378
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-02-22 18:00 +0100, Fabrice Fontaine spake thusly:
-> Disable samples and tutorials which are enabled by default and fail to
-> build with gcc 10 without upstream commit:
-> https://github.com/Intel-Media-SDK/MediaSDK/commit/c7d40371eb0c2042261fe1f91a364f69a1457235
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/9ee28e5dc0b2ba854766d9bc82b95c28be2722d3
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fix build of elfutils 0.181 with Bootlin SPARC uclibc toolchain added
+with commit 1348c569d0cb7f67eca30f170b782aa8b51cc259
 
-Applied to master, thanks.
+Fixes:
+ - http://autobuild.buildroot.org/results/31ce9e3861c6229a7869a15d322f5d2f5bfc6165
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/elfutils/elfutils.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-> ---
->  package/intel-mediasdk/intel-mediasdk.mk | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/intel-mediasdk/intel-mediasdk.mk b/package/intel-mediasdk/intel-mediasdk.mk
-> index a2ffe081db..5467c96380 100644
-> --- a/package/intel-mediasdk/intel-mediasdk.mk
-> +++ b/package/intel-mediasdk/intel-mediasdk.mk
-> @@ -12,6 +12,9 @@ INTEL_MEDIASDK_LICENSE_FILES = LICENSE
->  INTEL_MEDIASDK_INSTALL_STAGING = YES
->  INTEL_MEDIASDK_DEPENDENCIES = intel-mediadriver
->  
-> -INTEL_MEDIASDK_CONF_OPTS = -DMFX_INCLUDE="$(@D)/api/include"
-> +INTEL_MEDIASDK_CONF_OPTS = \
-> +	-DBUILD_SAMPLES=OFF \
-> +	-DBUILD_TUTORIALS=OFF \
-> +	-DMFX_INCLUDE="$(@D)/api/include"
->  
->  $(eval $(cmake-package))
-> -- 
-> 2.30.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
+index 3d37c4634b..42f2f8b304 100644
+--- a/package/elfutils/elfutils.mk
++++ b/package/elfutils/elfutils.mk
+@@ -43,6 +43,10 @@ ELFUTILS_CONF_ENV += \
+ ELFUTILS_LDFLAGS = $(TARGET_LDFLAGS) \
+ 	$(TARGET_NLS_LIBS)
+ 
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++ELFUTILS_LDFLAGS += -latomic
++endif
++
+ ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),)
+ ELFUTILS_DEPENDENCIES += musl-fts
+ ELFUTILS_LDFLAGS += -lfts
