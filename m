@@ -1,86 +1,57 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 25 Feb 2021 22:47:49 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libuwsc: disable example
-In-Reply-To: <20210221185812.3963708-1-fontaine.fabrice@gmail.com>
-References: <20210221185812.3963708-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210225214748.GM2276@scaer>
+Date: Thu, 25 Feb 2021 22:58:22 +0100
+Subject: [Buildroot] [git commit] package/botan: avoid empty -l
+Message-ID: <20210225213655.CD8A1862FD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=6e9409ea3b976303c6a47bc28d68f941e45f32ad
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-02-21 19:58 +0100, Fabrice Fontaine spake thusly:
-> BUILD_EXAMPLE=OFF is already passed by cmake-package
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/f5256d5a3a86112f008506f1910d0600c491a2a0
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Add upstream patch to fix upstream commit
+af63fe89228172e5a395f7e6491fae3bfa9da4b1 which was added to buildroot in
+commit d71de4143d7a8554929f2a1e9731f83a4cf85fd3
 
-Applied to master, thanks.
+Fixes:
+ - http://autobuild.buildroot.org/results/801007860b7787b28b2b2e3611b59350034a3694
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/botan/0002-Avoid-empty-l.patch | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-> ---
->  ...001-CMakeLists.txt-add-BUILD_EXAMPLE.patch | 33 +++++++++++++++++++
->  1 file changed, 33 insertions(+)
->  create mode 100644 package/libuwsc/0001-CMakeLists.txt-add-BUILD_EXAMPLE.patch
-> 
-> diff --git a/package/libuwsc/0001-CMakeLists.txt-add-BUILD_EXAMPLE.patch b/package/libuwsc/0001-CMakeLists.txt-add-BUILD_EXAMPLE.patch
-> new file mode 100644
-> index 0000000000..0c5814d818
-> --- /dev/null
-> +++ b/package/libuwsc/0001-CMakeLists.txt-add-BUILD_EXAMPLE.patch
-> @@ -0,0 +1,33 @@
-> +From bb71b21eb9407479ad729b3c858b0fc350fae335 Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Sun, 21 Feb 2021 19:39:59 +0100
-> +Subject: [PATCH] CMakeLists.txt: add BUILD_EXAMPLE
-> +
-> +Allow the user to disable example
-> +
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +[Upstream status: https://github.com/zhaojh329/libuwsc/pull/30]
-> +---
-> + CMakeLists.txt | 6 +++++-
-> + 1 file changed, 5 insertions(+), 1 deletion(-)
-> +
-> +diff --git a/CMakeLists.txt b/CMakeLists.txt
-> +index 110d933..c52ab79 100644
-> +--- a/CMakeLists.txt
-> ++++ b/CMakeLists.txt
-> +@@ -2,7 +2,11 @@ cmake_minimum_required(VERSION 2.8)
-> + 
-> + project(libuwsc C)
-> + 
-> ++option(BUILD_EXAMPLE "Build example" ON)
-> ++
-> + list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/Modules/")
-> + 
-> + add_subdirectory(src)
-> +-add_subdirectory(example)
-> ++if(BUILD_EXAMPLE)
-> ++    add_subdirectory(example)
-> ++endif()
-> +-- 
-> +2.30.0
-> +
-> -- 
-> 2.30.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/botan/0002-Avoid-empty-l.patch b/package/botan/0002-Avoid-empty-l.patch
+new file mode 100644
+index 0000000000..9102360244
+--- /dev/null
++++ b/package/botan/0002-Avoid-empty-l.patch
+@@ -0,0 +1,25 @@
++From 4b2225ea54988e09b649768848b3c14b43e064de Mon Sep 17 00:00:00 2001
++From: Jack Lloyd <jack@randombit.net>
++Date: Mon, 15 Feb 2021 15:11:12 -0500
++Subject: [PATCH] Avoid empty -l
++
++[Retrieved from:
++https://github.com/randombit/botan/commit/4b2225ea54988e09b649768848b3c14b43e064de]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ configure.py | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure.py b/configure.py
++index 865a6c8e62..a79f672eca 100755
++--- a/configure.py
+++++ b/configure.py
++@@ -2027,7 +2027,7 @@ def extra_libs(libs, cc):
++         if libs is None:
++             return ''
++ 
++-        return ' '.join([(cc.add_lib_option % lib) for lib in libs.split(',')])
+++        return ' '.join([(cc.add_lib_option % lib) for lib in libs.split(',') if lib != ''])
++ 
++     variables = {
++         'version_major':  Version.major(),
