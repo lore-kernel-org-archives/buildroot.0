@@ -1,111 +1,149 @@
 From: Etienne Carriere <etienne.carriere@linaro.org>
-Date: Thu, 25 Feb 2021 16:33:42 +0100
-Subject: [Buildroot] [PATCH 2/5] package/optee-benchmark: bump to version
- 3.12.0
+Date: Thu, 25 Feb 2021 16:33:43 +0100
+Subject: [Buildroot] [PATCH 3/5] package/optee-client: bump to version 3.12.0
 In-Reply-To: <20210225153345.8061-1-etienne.carriere@linaro.org>
 References: <20210225153345.8061-1-etienne.carriere@linaro.org>
-Message-ID: <20210225153345.8061-2-etienne.carriere@linaro.org>
+Message-ID: <20210225153345.8061-3-etienne.carriere@linaro.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove main-fix-typo patch since merged in OP-TEE OS 3.12.0 and
-bump OP-TEE Benchmark package version to OP-TEE release 3.12.0.
+Remove local patch file since issue addressed in OP-TEE mainline
+since 3.12.0 and bump OP-TEE Client package version to OP-TEE
+release 3.12.0.
 
 Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
 ---
- .../optee-benchmark/0001-main-fix-typo.patch  | 55 -------------------
- package/optee-benchmark/optee-benchmark.hash  |  4 +-
- package/optee-benchmark/optee-benchmark.mk    |  2 +-
- 3 files changed, 3 insertions(+), 58 deletions(-)
- delete mode 100644 package/optee-benchmark/0001-main-fix-typo.patch
+ .../0001-libckteec-replace-initializer.patch  | 93 -------------------
+ package/optee-client/optee-client.hash        |  4 +-
+ package/optee-client/optee-client.mk          |  2 +-
+ 3 files changed, 3 insertions(+), 96 deletions(-)
+ delete mode 100644 package/optee-client/0001-libckteec-replace-initializer.patch
 
-diff --git a/package/optee-benchmark/0001-main-fix-typo.patch b/package/optee-benchmark/0001-main-fix-typo.patch
+diff --git a/package/optee-client/0001-libckteec-replace-initializer.patch b/package/optee-client/0001-libckteec-replace-initializer.patch
 deleted file mode 100644
-index 8ad5a26f13..0000000000
---- a/package/optee-benchmark/0001-main-fix-typo.patch
+index 21c75d142e..0000000000
+--- a/package/optee-client/0001-libckteec-replace-initializer.patch
 +++ /dev/null
-@@ -1,55 +0,0 @@
--From ffa935dc881c394a824e063c8fde7dd102e06d8c Mon Sep 17 00:00:00 2001
--From: Romain Naour <romain.naour@gmail.com>
--Date: Fri, 8 May 2020 23:39:59 +0200
--Subject: [PATCH] main: fix typo
+@@ -1,93 +0,0 @@
+-From 4fff84cebc05a238a8fed3c66d7dcde18f9574fb Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Mon, 2 Nov 2020 08:04:14 +0100
+-Subject: [PATCH] =?UTF-8?q?libckteec:=20replace=20{=C2=A0}=20initializer?=
+- =?UTF-8?q?=20by=20{=C2=A00=20}?=
 -MIME-Version: 1.0
 -Content-Type: text/plain; charset=UTF-8
 -Content-Transfer-Encoding: 8bit
 -
--The function yaml_mapping_start_event_initialize()
--take yaml_mapping_style_t style as last argument:
+-Replace { } initializer by { 0 } to fix the following build failure with
+-gcc 4.8:
 -
--int yaml_mapping_start_event_initialize(
--	yaml_event_t *event,
--	const yaml_char_t *anchor,
--	const yaml_char_t *tag,
--	int implicit,
--	yaml_mapping_style_t style)
+-libckteec/src/pkcs11_processing.c: In function 'ck_create_object':
+-libckteec/src/pkcs11_processing.c:22:9: error: missing initializer for field 'buffer' of 'struct serializer' [-Werror=missing-field-initializers]
+-  struct serializer obj = { };
+-         ^
 -
--Use YAML_ANY_MAPPING_STYLE instead of YAML_ANY_SEQUENCE_STYLE
--
--Fixes:
--main.c:173:5: error: implicit conversion from ?enum yaml_sequence_style_e? to ?yaml_mapping_style_t? {aka ?enum yaml_mapping_style_e?} [-Werror=enum-conversion]
--  173 |     YAML_ANY_SEQUENCE_STYLE))
--      |     ^~~~~~~~~~~~~~~~~~~~~~~
--
--Signed-off-by: Romain Naour <romain.naour@gmail.com>
+-Fixes: http://autobuild.buildroot.org/results/a3d663adb943aee814180f01d6e153b3309be962
+-Reviewed-by: Etienne Carriere <etienne.carriere@linaro.org>
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/OP-TEE/optee_client/pull/230]
 ----
-- main.c | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
+- libckteec/src/pkcs11_processing.c | 4 ++--
+- libckteec/src/serialize_ck.c      | 4 ++--
+- libckteec/src/serializer.c        | 4 ++--
+- 3 files changed, 6 insertions(+), 6 deletions(-)
 -
--diff --git a/main.c b/main.c
--index 29a7c42..1685d3e 100644
----- a/main.c
--+++ b/main.c
--@@ -170,7 +170,7 @@ static bool init_emitter(FILE *ts_file)
-- 	/* Mapping start */
-- 	if (!yaml_mapping_start_event_initialize(&event,
-- 				NULL, NULL , YAML_IMPLICIT,
---				YAML_ANY_SEQUENCE_STYLE))
--+				YAML_ANY_MAPPING_STYLE))
-- 		ERROR_GOTO(emitter_delete,
-- 			"Failed to initialize YAML mapping start event");
-- 	if (!yaml_emitter_emit(&emitter, &event))
--@@ -263,7 +263,7 @@ static bool fill_timestamp(uint32_t core, uint64_t count, uint64_t addr,
-- 	/* Mapping start */
-- 	if (!yaml_mapping_start_event_initialize(&event,
-- 				NULL, NULL , YAML_IMPLICIT,
---				YAML_ANY_SEQUENCE_STYLE))
--+				YAML_ANY_MAPPING_STYLE))
-- 		ERROR_RETURN_FALSE(
-- 			"Failed to initialize YAML mapping start event");
-- 	if (!yaml_emitter_emit(&emitter, &event))
---- 
--2.25.4
--
-diff --git a/package/optee-benchmark/optee-benchmark.hash b/package/optee-benchmark/optee-benchmark.hash
-index 12d1ddea88..144069b6f3 100644
---- a/package/optee-benchmark/optee-benchmark.hash
-+++ b/package/optee-benchmark/optee-benchmark.hash
+-diff --git a/libckteec/src/pkcs11_processing.c b/libckteec/src/pkcs11_processing.c
+-index 2eb191f5..8eebe769 100644
+---- a/libckteec/src/pkcs11_processing.c
+-+++ b/libckteec/src/pkcs11_processing.c
+-@@ -19,7 +19,7 @@ CK_RV ck_create_object(CK_SESSION_HANDLE session, CK_ATTRIBUTE_PTR attribs,
+- 		       CK_ULONG count, CK_OBJECT_HANDLE_PTR handle)
+- {
+- 	CK_RV rv = CKR_GENERAL_ERROR;
+--	struct serializer obj = { };
+-+	struct serializer obj = { 0 };
+- 	size_t ctrl_size = 0;
+- 	TEEC_SharedMemory *ctrl = NULL;
+- 	TEEC_SharedMemory *out_shm = NULL;
+-@@ -114,7 +114,7 @@ CK_RV ck_encdecrypt_init(CK_SESSION_HANDLE session,
+- {
+- 	CK_RV rv = CKR_GENERAL_ERROR;
+- 	TEEC_SharedMemory *ctrl = NULL;
+--	struct serializer obj = { };
+-+	struct serializer obj = { 0 };
+- 	uint32_t session_handle = session;
+- 	uint32_t key_handle = key;
+- 	size_t ctrl_size = 0;
+-diff --git a/libckteec/src/serialize_ck.c b/libckteec/src/serialize_ck.c
+-index 1fc26ddc..0e5df90a 100644
+---- a/libckteec/src/serialize_ck.c
+-+++ b/libckteec/src/serialize_ck.c
+-@@ -39,7 +39,7 @@ static CK_RV serialize_indirect_attribute(struct serializer *obj,
+- 	CK_ATTRIBUTE_PTR attr = NULL;
+- 	CK_ULONG count = 0;
+- 	CK_RV rv = CKR_GENERAL_ERROR;
+--	struct serializer obj2 = { };
+-+	struct serializer obj2 = { 0 };
+- 
+- 	switch (attribute->type) {
+- 	/* These are serialized each separately */
+-@@ -263,7 +263,7 @@ static CK_RV serialize_mecha_aes_iv(struct serializer *obj,
+- CK_RV serialize_ck_mecha_params(struct serializer *obj,
+- 				CK_MECHANISM_PTR mechanism)
+- {
+--	CK_MECHANISM mecha = { };
+-+	CK_MECHANISM mecha = { 0 };
+- 	CK_RV rv = CKR_GENERAL_ERROR;
+- 
+- 	memset(obj, 0, sizeof(*obj));
+-diff --git a/libckteec/src/serializer.c b/libckteec/src/serializer.c
+-index 0e3df65c..d94932ba 100644
+---- a/libckteec/src/serializer.c
+-+++ b/libckteec/src/serializer.c
+-@@ -14,7 +14,7 @@
+- 
+- CK_RV init_serial_object(struct serializer *obj)
+- {
+--	struct pkcs11_object_head head = { };
+-+	struct pkcs11_object_head head = { 0 };
+- 
+- 	memset(obj, 0, sizeof(*obj));
+- 
+-@@ -23,7 +23,7 @@ CK_RV init_serial_object(struct serializer *obj)
+- 
+- void finalize_serial_object(struct serializer *obj)
+- {
+--	struct pkcs11_object_head head = { };
+-+	struct pkcs11_object_head head = { 0 };
+- 
+- 	head.attrs_size = obj->size - sizeof(head);
+- 	head.attrs_count = obj->item_count;
+diff --git a/package/optee-client/optee-client.hash b/package/optee-client/optee-client.hash
+index d8e507dba7..253c29e22a 100644
+--- a/package/optee-client/optee-client.hash
++++ b/package/optee-client/optee-client.hash
 @@ -1,4 +1,4 @@
--# From https://github.com/linaro-swg/optee_benchmark/archive/3.11.0.tar.gz
--sha256 34c314a5cda1e9e3b92f01759585722b44503d9eea19f6b936fc951f5acbac16 optee-benchmark-3.11.0.tar.gz
-+# From https://github.com/linaro-swg/optee_benchmark/archive/3.12.0/optee-benchmark-3.12.0.tar.gz
-+sha256 468635656fa483911cf605a96711d848f8e0f6b4a6137208226de364dee25fe4 optee-benchmark-3.12.0.tar.gz
+-# From https://github.com/OP-TEE/optee_client/archive/3.11.0.tar.gz
+-sha256 91f8ec191cd999ee666b6203ec376415d5dc90a8a9955f3d5fce1f48df77169b  optee-client-3.11.0.tar.gz
++# From https://github.com/OP-TEE/optee_client/archive/3.12.0/optee-client-3.12.0.tar.gz
++sha256 f75c45b40147217fa8f4a2ae1e4c06b24eb45d35167854fa9ad3ec3d6a73e858  optee-client-3.12.0.tar.gz
  # Locally computed
- sha256 0571be5b739142dc3e40e0a4e7e30d4ab8bff0d4d606a3f2db2010745587d383  LICENSE
-diff --git a/package/optee-benchmark/optee-benchmark.mk b/package/optee-benchmark/optee-benchmark.mk
-index f9d7cae302..c17a7045d4 100644
---- a/package/optee-benchmark/optee-benchmark.mk
-+++ b/package/optee-benchmark/optee-benchmark.mk
+ sha256 fda8385993f112d7ca61b88b54ba5b4cbeec7e43a0f9b317d5186703c1985e8f  LICENSE
+diff --git a/package/optee-client/optee-client.mk b/package/optee-client/optee-client.mk
+index 8108fc2130..0ae8426fc1 100644
+--- a/package/optee-client/optee-client.mk
++++ b/package/optee-client/optee-client.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPTEE_BENCHMARK_VERSION = 3.11.0
-+OPTEE_BENCHMARK_VERSION = 3.12.0
- OPTEE_BENCHMARK_SITE = $(call github,linaro-swg,optee_benchmark,$(OPTEE_BENCHMARK_VERSION))
- OPTEE_BENCHMARK_LICENSE = BSD-2-Clause
- OPTEE_BENCHMARK_LICENSE_FILES = LICENSE
+-OPTEE_CLIENT_VERSION = 3.11.0
++OPTEE_CLIENT_VERSION = 3.12.0
+ OPTEE_CLIENT_SITE = $(call github,OP-TEE,optee_client,$(OPTEE_CLIENT_VERSION))
+ OPTEE_CLIENT_LICENSE = BSD-2-Clause
+ OPTEE_CLIENT_LICENSE_FILES = LICENSE
 -- 
 2.17.1
