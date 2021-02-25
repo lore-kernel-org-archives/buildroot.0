@@ -1,35 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 25 Feb 2021 20:30:20 +0100
-Subject: [Buildroot] [git commit] package/ply: build needs flex and bison
-Message-ID: <20210225190849.9E98D86485@busybox.osuosl.org>
+Date: Thu, 25 Feb 2021 20:31:52 +0100
+Subject: [Buildroot] [PATCH/next] package/wireguard-linux-compat: bump
+ version to 1.0.20210219
+In-Reply-To: <20210223213657.16813-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 23 Feb 2021 22:36:57 +0100")
+References: <20210223213657.16813-1-peter@korsgaard.com>
+Message-ID: <875z2gvt93.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=81e042128533154695b822e2d4750ee7f051c5df
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Building needs flex and bison installed on the host system.
+ > Includes various compat fixes and lowers memory requirements.  For details,
+ > see the announcement:
 
-Fixes:
-http://autobuild.buildroot.net/results/7cfe75725f4746367f2870ee9545f31ba56f6ec1
+ > https://lists.zx2c4.com/pipermail/wireguard/2021-February/006404.html
 
-Signed-off-by: Andreas Klinger <ak@it-klinger.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/ply/ply.mk | 1 +
- 1 file changed, 1 insertion(+)
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-diff --git a/package/ply/ply.mk b/package/ply/ply.mk
-index 0e4141f650..b72b29f315 100644
---- a/package/ply/ply.mk
-+++ b/package/ply/ply.mk
-@@ -10,5 +10,6 @@ PLY_AUTORECONF = YES
- PLY_LICENSE = GPL-2.0
- PLY_LICENSE_FILES = COPYING
- PLY_INSTALL_STAGING = YES
-+PLY_DEPENDENCIES = host-flex host-bison
- 
- $(eval $(autotools-package))
+Committed to next, thanks.
+
+-- 
+Bye, Peter Korsgaard
