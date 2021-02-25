@@ -1,90 +1,94 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Thu, 25 Feb 2021 12:01:48 +0100
-Subject: [Buildroot] [PATCHv6 4/5] package/bpftrace: new package
-In-Reply-To: <20210225101849.nt6rnloszarwrgm3@e107158-lin>
-References: <20201220151203.2206747-1-romain.naour@gmail.com>
- <20201220151203.2206747-4-romain.naour@gmail.com>
- <20201221134549.nk4eu6qpto36ahpq@e107158-lin>
- <20210123194408.3omcypashiq44le5@e107158-lin>
- <20210225101849.nt6rnloszarwrgm3@e107158-lin>
-Message-ID: <CANLo3JhERRWK_kJCa0phxXVybPJuPM76PEEstN9tRUek04e+gQ@mail.gmail.com>
+From: Grzegorz Blach <grzegorz@blach.pl>
+Date: Thu, 25 Feb 2021 14:48:00 +0100
+Subject: [Buildroot] [PATCH] package/python-aioblescan: Bump to version 0.2.7
+Message-ID: <20210225134802.257199-1-grzegorz@blach.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Quais, All,
+Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+---
+ ...ption-from-README.rst-instead-of-REA.patch | 39 +++++++++++++++++++
+ .../python-aioblescan/python-aioblescan.hash  |  6 +--
+ .../python-aioblescan/python-aioblescan.mk    |  4 +-
+ 3 files changed, 44 insertions(+), 5 deletions(-)
+ create mode 100644 package/python-aioblescan/0001-Load-long-description-from-README.rst-instead-of-REA.patch
 
-Le jeu. 25 f?vr. 2021 ? 11:18, Qais Yousef <qais.yousef@arm.com> a ?crit :
-
-> On 01/23/21 19:44, Qais Yousef wrote:
-> > On 12/21/20 13:45, Qais Yousef wrote:
-> > > On 12/20/20 16:12, Romain Naour wrote:
-> > > > From: Qais Yousef <qais.yousef@arm.com>
-> > > >
-> > > > bpftrace is a high-level tracing language for Linux enhanced Berkeley
-> > > > Packet Filter (eBPF) available in recent Linux kernels (4.x).
-> > > >
-> > > > Only tested on x86_64 and aarch64. The package doesn't support i386
-> and
-> > > > aarch32.
-> > > >
-> > > > The libbpf dependency allow to enable the BTF support:
-> > > >  # bpftrace --info
-> > > >  System
-> > > >    OS: Linux 5.4.58 #1 SMP Sun Dec 20 15:56:56 CET 2020
-> > > >    Arch: aarch64
-> > > >
-> > > >  Build
-> > > >    version: 2020.11-328-g019a9
-> > > >    LLVM: 9.0.1
-> > > >    foreach_sym: yes
-> > > >    unsafe uprobe: no
-> > > >    bfd: yes
-> > > >    bpf_attach_kfunc: yes
-> > > >    bcc_usdt_addsem: yes
-> > > >    bcc bpf_attach_uprobe refcount: yes
-> > > >    libbpf: yes
-> > > >    libbpf btf dump: yes
-> > > >    libbpf btf dump type decl: yes
-> > > >
-> > > > bfptrace doesn't use the libbpf_bcc library provided by bcc package.
-> > > >
-> > > > Signed-off-by: Qais Yousef <qais.yousef@arm.com>
-> > > > Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> > > > Cc: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-> > > > ---
-> > > > v6: Update DEVELOPERS file
-> > >
-> > > LGTM.
-> >
-> > Ping.
-> >
-> > I had issues with building patch 5, but the rest of the series is in
-> good shape
-> > IMO and can be merged independently at least.
-> >
-> > Is there anything more needs to be done to help get this support merged?
->
-> Ping again. It'd be great to finally have these merged.
->
-
-Maintainers are currently busy at the release 2021.02 version of Buildroot.
-
-But yes, this work has been reviewed and reworked by Quais and me.
-
-I guess It's good to go.
-
-Best regards,
-Romain
-
-
-> Thanks
->
-> --
-> Qais Yousef
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210225/9267291c/attachment.html>
+diff --git a/package/python-aioblescan/0001-Load-long-description-from-README.rst-instead-of-REA.patch b/package/python-aioblescan/0001-Load-long-description-from-README.rst-instead-of-REA.patch
+new file mode 100644
+index 0000000000..0b1c83032c
+--- /dev/null
++++ b/package/python-aioblescan/0001-Load-long-description-from-README.rst-instead-of-REA.patch
+@@ -0,0 +1,39 @@
++From cec20ab0494051d7aaf277ec19f36948141f6210 Mon Sep 17 00:00:00 2001
++From: Grzegorz Blach <grzegorz@blach.pl>
++Date: Thu, 25 Feb 2021 14:14:43 +0100
++Subject: [PATCH 1/1] Load long description from README.rst instead of
++ README.md, because README.md is missing in 0.2.7 release.
++
++Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
++---
++ setup.cfg | 2 +-
++ setup.py  | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/setup.cfg b/setup.cfg
++index 9f88734..26fc631 100644
++--- a/setup.cfg
+++++ b/setup.cfg
++@@ -1,5 +1,5 @@
++ [metadata]
++-description-file = README.md
+++description-file = README.rst
++ 
++ [egg_info]
++ tag_build = 
++diff --git a/setup.py b/setup.py
++index 582a994..1f3c251 100644
++--- a/setup.py
+++++ b/setup.py
++@@ -4,7 +4,7 @@ import setuptools
++ 
++ version = "0.2.7"
++ 
++-with open("README.md", "r") as fh:
+++with open("README.rst", "r") as fh:
++     long_description = fh.read()
++ 
++ setuptools.setup(
++-- 
++2.27.0
++
+diff --git a/package/python-aioblescan/python-aioblescan.hash b/package/python-aioblescan/python-aioblescan.hash
+index 902a7a30f8..99a715dcd0 100644
+--- a/package/python-aioblescan/python-aioblescan.hash
++++ b/package/python-aioblescan/python-aioblescan.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/aioblescan/json
+-md5	9ad3f04ea7ad4c81a53f8e1316985527  aioblescan-0.2.6.tar.gz
+-sha256	2e45c325e070a0ee4e952a7d0c56e95ad230643e1057fb5f3e95ea5c99081436  aioblescan-0.2.6.tar.gz
++md5  fbcbf92260269d401a197636412f0c99  aioblescan-0.2.7.tar.gz
++sha256  2987f575c5129a21e42ad59e439feb3c96e0ad7210ef73af8eba1344106e5f5f  aioblescan-0.2.7.tar.gz
+ # Locally computed sha256 checksums
+-sha256	c2066cd44079e0c706234001af18cb6ad4b62fc68d0d08d29fdc7319916647e0  LICENSE.txt
++sha256  c2066cd44079e0c706234001af18cb6ad4b62fc68d0d08d29fdc7319916647e0  LICENSE.txt
+diff --git a/package/python-aioblescan/python-aioblescan.mk b/package/python-aioblescan/python-aioblescan.mk
+index 6350007c70..2ace10503e 100644
+--- a/package/python-aioblescan/python-aioblescan.mk
++++ b/package/python-aioblescan/python-aioblescan.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_AIOBLESCAN_VERSION = 0.2.6
++PYTHON_AIOBLESCAN_VERSION = 0.2.7
+ PYTHON_AIOBLESCAN_SOURCE = aioblescan-$(PYTHON_AIOBLESCAN_VERSION).tar.gz
+-PYTHON_AIOBLESCAN_SITE = https://files.pythonhosted.org/packages/66/b8/888c2eb4323ed498dbc7deeb8aee0cfec9edd8c25184b06a8874bb0cf84f
++PYTHON_AIOBLESCAN_SITE = https://files.pythonhosted.org/packages/78/2c/c09d8f83ed6c2ca6c4f803f2e5c349698eb78b82c8d5e9302a8eed1a7480
+ PYTHON_AIOBLESCAN_SETUP_TYPE = setuptools
+ PYTHON_AIOBLESCAN_LICENSE = MIT
+ PYTHON_AIOBLESCAN_LICENSE_FILES = LICENSE.txt
+-- 
+2.27.0
