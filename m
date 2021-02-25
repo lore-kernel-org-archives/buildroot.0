@@ -1,70 +1,52 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 25 Feb 2021 21:29:29 +0100
-Subject: [Buildroot] [git commit] package/nodejs: security bump to version
- v12.21.0
-Message-ID: <20210225200753.A4AAB85FEE@busybox.osuosl.org>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Thu, 25 Feb 2021 21:50:22 +0100
+Subject: [Buildroot] Python package installed without dependencies
+ defined in setup.py
+In-Reply-To: <EC9345B1-CC2D-4F0F-B2D8-7BE961B9F192@grondman.net>
+References: <FF75D700-F93F-4299-9093-BED6912A3868@grondman.net>
+ <CAGm1_ksjakFD=iBx8RJRXtA9PeUOSFo_PQueytb2XsQm8XMRRw@mail.gmail.com>
+ <EC9345B1-CC2D-4F0F-B2D8-7BE961B9F192@grondman.net>
+Message-ID: <CAGm1_ks4KnqEGmGcmtkehshAaPeT9QHFiwGT3edT-rsGGtRcrQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7cb44a20116fb95a8ef8f6406ef24c2041daa8a7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Ivo,
 
-Fixes the following security issues:
+On Thu, Feb 25, 2021 at 6:11 PM Ivo Grondman <buildroot@grondman.net> wrote:
+>
+> Hi Yegor,
+>
+> > On 25 Feb 2021, at 16:33, Yegor Yefremov <yegorslists@googlemail.com> wrote:
+> >
+> > You'll have to manually add all required Python packages into your
+> > package's Config.in file. See package/python-flask/Config.in for the
+> > reference.
+>
+> Thanks! It does seem a bit odd to me to have it in there, though, as:
+>
+> 1) It seems to defeat the purpose of using a setup.py file as that already has the necessary information on the Python package dependencies.
+> 2) If the Python package dependencies of a custom Python package change, I have to make the changes in both the setup.py file (for the end user of the package in public use) and the Config.in (for myself in buildroot).
+>
+> Wouldn?t it be possible (maybe not now, but in the future perhaps) to have buildroot setup a virtualenv for Python during the build in which it does the installation of all the Python packages and dependencies (using pip or something) and then just moves the complete Python tree into the target? I?m being a bit short here, but I hope you know what I mean :)
+>
+> Any thoughts on this?
 
-CVE-2021-22883: HTTP2 'unknownProtocol' cause Denial of Service by resource exhaustion
+The whole stuff is not trivial. As you've seen the Python package
+itself has core modeles like SSL, XML, zlib support, etc. You'll have
+to find out whether your particular package needs this.
 
-Affected Node.js versions are vulnerable to denial of service attacks when
-too many connection attempts with an 'unknownProtocol' are established.
-This leads to a leak of file descriptors.  If a file descriptor limit is
-configured on the system, then the server is unable to accept new
-connections and prevent the process also from opening, e.g.  a file.  If no
-file descriptor limit is configured, then this lead to an excessive memory
-usage and cause the system to run out of memory.
+Then, many Python packages have dependencies on some C/C++ libraries
+like Qt, Boost, etc., other Python packages have to be patched in
+order to be compatible with BR environment etc.
 
-CVE-2021-22884: DNS rebinding in --inspect
+All these issues/features make such an automated approach very difficult.
 
-Affected Node.js versions are vulnerable to denial of service attacks when
-the whitelist includes ???localhost6???.  When ???localhost6??? is not present in
-/etc/hosts, it is just an ordinary domain that is resolved via DNS, i.e.,
-over network.  If the attacker controls the victim's DNS server or can spoof
-its responses, the DNS rebinding protection can be bypassed by using the
-???localhost6??? domain.  As long as the attacker uses the ???localhost6??? domain,
-they can still apply the attack described in CVE-2018-7160.
+Take a look at BR's user manual [1] and search scanpypi.
 
-For more details, see the advisory:
-https://nodejs.org/en/blog/vulnerability/february-2021-security-releases/
+[1] https://buildroot.org/downloads/manual/manual.html#_infrastructure_for_python_packages
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/nodejs/nodejs.hash | 4 ++--
- package/nodejs/nodejs.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index b3ea15ca31..7abb3c3b57 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,5 +1,5 @@
--# From https://nodejs.org/dist/v12.20.1/SHASUMS256.txt
--sha256  e00eee325d705b2bfa9929b7d061eb2315402d7e8548945eac9870bf84321853  node-v12.20.1.tar.xz
-+# From https://nodejs.org/dist/v12.21.0/SHASUMS256.txt
-+sha256  052f37ace6f569b513b5a1154b2a45d3c4d8b07d7d7c807b79f1566db61e979d  node-v12.21.0.tar.xz
- 
- # Hash for license file
- sha256  221417a7ca275112a5ac54639b36ee3c5184e74631ea1e1b01b701293b655190  LICENSE
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index 31ef499716..f8b29d3685 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NODEJS_VERSION = 12.20.1
-+NODEJS_VERSION = 12.21.0
- NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
- NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
- NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
+Best regards,
+Yegor
