@@ -1,60 +1,53 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 21 Feb 2021 22:54:55 +0100
-Subject: [Buildroot] [git commit] package/libxcrypt: fix conversion error
-Message-ID: <20210308072134.E209E81607@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 25 Feb 2021 20:20:28 +0100
+Subject: [Buildroot] [git commit] package/stunnel: bump to version 5.58
+Message-ID: <20210308072135.D0C8D8893D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=04f0ed0a444292075dfcd6abf0f8e1b10e492e28
+commit: https://git.buildroot.net/buildroot/commit/?id=38b58a0d65b3dd28f1585036d83a5257b8479d8b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes: http://autobuild.buildroot.net/results/e9a058a8c98daf197cd9d7ac632e0cb5707d524f
+Update COPYING hash; copyright year update:
 
-Some sensitive compilers may raise a warning that turns into an error on this line.
+-_Copyright (C) 1998-2020 Michal Trojnara_
++_Copyright (C) 1998-2021 Michal Trojnara_
 
-Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
-[yann.morin.1998 at free.fr: backport the actual commit]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+See full changelog https://www.stunnel.org/NEWS.html
+
+Signed-off-by: Pierre-Jean Texier <texier.pj2@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-alg-gost3411-core.c-fix-conversion-error.patch | 30 ++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+ package/stunnel/stunnel.hash | 6 +++---
+ package/stunnel/stunnel.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libxcrypt/0001-lib-alg-gost3411-core.c-fix-conversion-error.patch b/package/libxcrypt/0001-lib-alg-gost3411-core.c-fix-conversion-error.patch
-new file mode 100644
-index 0000000000..1245216aad
---- /dev/null
-+++ b/package/libxcrypt/0001-lib-alg-gost3411-core.c-fix-conversion-error.patch
-@@ -0,0 +1,30 @@
-+From c7bf2cf8e610bb26bece7f3a2bc5b47d7c659c7d Mon Sep 17 00:00:00 2001
-+From: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
-+Date: Sat, 20 Feb 2021 16:51:04 +0100
-+Subject: [PATCH] lib/alg-gost3411-core.c: fix conversion error seen by
-+ sensitive compilers
-+
-+Some compiler might be sensitive and raise an Warning/error on this line.
-+
-+Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
-+[backported from upstream]
-+---
-+ lib/alg-gost3411-2012-core.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/lib/alg-gost3411-2012-core.c b/lib/alg-gost3411-2012-core.c
-+index 13bb493..af3a36e 100644
-+--- a/lib/alg-gost3411-2012-core.c
-++++ b/lib/alg-gost3411-2012-core.c
-+@@ -92,7 +92,7 @@ add512(const uint512_u *x, const uint512_u *y, uint512_u *r)
-+     for (i = 0; i < 64; i++)
-+     {
-+         buf = xp[i] + yp[i] + (buf >> 8);
-+-        rp[i] = (unsigned char) buf & 0xFF;
-++        rp[i] = (unsigned char) (buf & 0xFF);
-+     }
-+ #endif
-+ }
-+--
-+2.20.1
-+
+diff --git a/package/stunnel/stunnel.hash b/package/stunnel/stunnel.hash
+index 67d06a4d7c..a62fa07607 100644
+--- a/package/stunnel/stunnel.hash
++++ b/package/stunnel/stunnel.hash
+@@ -1,5 +1,5 @@
+-# From https://www.stunnel.org/downloads/stunnel-5.57.tar.gz.sha256
+-sha256  af5ab973dde11807c38735b87bdd87563a47d2fa1c72a07929fcfce80a600fe1  stunnel-5.57.tar.gz
++# From https://www.stunnel.org/downloads/stunnel-5.58.tar.gz.sha256
++sha256  d4c14cc096577edca3f6a2a59c2f51869e35350b3988018ddf808c88e5973b79  stunnel-5.58.tar.gz
+ # Locally calculated
+-sha256  d3055d327fd4daa5895fcf8fc4ebe993d06f40f2841ac995c6a69988d19bac4b  COPYING.md
++sha256  28b55d0157efd5ceb63640faeebb50fda13b1f49aec0b9c1240b9a3ea9f0eb4c  COPYING.md
+ sha256  62f171d4d8b6726df61f18a6bbc0a70f79c4bc2134d837d35c81fc6289a2d84d  COPYRIGHT.md
+diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
+index e0cc5630e4..f163b2bc1a 100644
+--- a/package/stunnel/stunnel.mk
++++ b/package/stunnel/stunnel.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ STUNNEL_VERSION_MAJOR = 5
+-STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).57
++STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).58
+ STUNNEL_SITE = http://www.usenix.org.uk/mirrors/stunnel/archive/$(STUNNEL_VERSION_MAJOR).x
+ STUNNEL_DEPENDENCIES = host-pkgconf openssl
+ STUNNEL_CONF_OPTS = --with-ssl=$(STAGING_DIR)/usr --with-threads=fork \
