@@ -1,63 +1,90 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Thu, 25 Feb 2021 11:53:55 +0100
-Subject: [Buildroot] [PATCH 1/1] package/gerbera: add optional duktape
- dependency
-Message-ID: <20210225105355.43547-1-joerg.krause@embedded.rocks>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Thu, 25 Feb 2021 12:01:48 +0100
+Subject: [Buildroot] [PATCHv6 4/5] package/bpftrace: new package
+In-Reply-To: <20210225101849.nt6rnloszarwrgm3@e107158-lin>
+References: <20201220151203.2206747-1-romain.naour@gmail.com>
+ <20201220151203.2206747-4-romain.naour@gmail.com>
+ <20201221134549.nk4eu6qpto36ahpq@e107158-lin>
+ <20210123194408.3omcypashiq44le5@e107158-lin>
+ <20210225101849.nt6rnloszarwrgm3@e107158-lin>
+Message-ID: <CANLo3JhERRWK_kJCa0phxXVybPJuPM76PEEstN9tRUek04e+gQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Duktape allows the user to enable JavaScript scripting support.
+Hello Quais, All,
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/gerbera/Config.in  |  3 +++
- package/gerbera/gerbera.mk | 11 ++++++++---
- 2 files changed, 11 insertions(+), 3 deletions(-)
+Le jeu. 25 f?vr. 2021 ? 11:18, Qais Yousef <qais.yousef@arm.com> a ?crit :
 
-diff --git a/package/gerbera/Config.in b/package/gerbera/Config.in
-index b734de95de..a252dff9a9 100644
---- a/package/gerbera/Config.in
-+++ b/package/gerbera/Config.in
-@@ -20,6 +20,9 @@ config BR2_PACKAGE_GERBERA
- 	  A free media server.
- 	  Stream your media to devices on your home network.
- 
-+	  Select BR2_PACKAGE_DUKTAPE if you want to enable JavaScript for
-+	  scripting.
-+
- 	  https://gerbera.io
- 
- comment "gerbera needs a toolchain w/ C++, threads, wchar, gcc >= 8"
-diff --git a/package/gerbera/gerbera.mk b/package/gerbera/gerbera.mk
-index 6e36377798..ccb3b2eeb5 100644
---- a/package/gerbera/gerbera.mk
-+++ b/package/gerbera/gerbera.mk
-@@ -16,15 +16,20 @@ GERBERA_DEPENDENCIES = \
- 	sqlite \
- 	util-linux \
- 	zlib
--GERBERA_CONF_OPTS = \
--	-DWITH_DEBUG=OFF \
--	-DWITH_JS=OFF
-+GERBERA_CONF_OPTS = -DWITH_DEBUG=OFF
- 
- # Uses __atomic_fetch_add_4
- ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
- GERBERA_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -latomic"
- endif
- 
-+ifeq ($(BR2_PACKAGE_DUKTAPE),y)
-+GERBERA_DEPENDENCIES += duktape
-+GERBERA_CONF_OPTS += -DWITH_JS=ON
-+else
-+GERBERA_CONF_OPTS += -DWITH_JS=OFF
-+endif
-+
- ifeq ($(BR2_PACKAGE_EXIV2),y)
- GERBERA_DEPENDENCIES += exiv2
- GERBERA_CONF_OPTS += -DWITH_EXIV2=ON
--- 
-2.30.1
+> On 01/23/21 19:44, Qais Yousef wrote:
+> > On 12/21/20 13:45, Qais Yousef wrote:
+> > > On 12/20/20 16:12, Romain Naour wrote:
+> > > > From: Qais Yousef <qais.yousef@arm.com>
+> > > >
+> > > > bpftrace is a high-level tracing language for Linux enhanced Berkeley
+> > > > Packet Filter (eBPF) available in recent Linux kernels (4.x).
+> > > >
+> > > > Only tested on x86_64 and aarch64. The package doesn't support i386
+> and
+> > > > aarch32.
+> > > >
+> > > > The libbpf dependency allow to enable the BTF support:
+> > > >  # bpftrace --info
+> > > >  System
+> > > >    OS: Linux 5.4.58 #1 SMP Sun Dec 20 15:56:56 CET 2020
+> > > >    Arch: aarch64
+> > > >
+> > > >  Build
+> > > >    version: 2020.11-328-g019a9
+> > > >    LLVM: 9.0.1
+> > > >    foreach_sym: yes
+> > > >    unsafe uprobe: no
+> > > >    bfd: yes
+> > > >    bpf_attach_kfunc: yes
+> > > >    bcc_usdt_addsem: yes
+> > > >    bcc bpf_attach_uprobe refcount: yes
+> > > >    libbpf: yes
+> > > >    libbpf btf dump: yes
+> > > >    libbpf btf dump type decl: yes
+> > > >
+> > > > bfptrace doesn't use the libbpf_bcc library provided by bcc package.
+> > > >
+> > > > Signed-off-by: Qais Yousef <qais.yousef@arm.com>
+> > > > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> > > > Cc: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+> > > > ---
+> > > > v6: Update DEVELOPERS file
+> > >
+> > > LGTM.
+> >
+> > Ping.
+> >
+> > I had issues with building patch 5, but the rest of the series is in
+> good shape
+> > IMO and can be merged independently at least.
+> >
+> > Is there anything more needs to be done to help get this support merged?
+>
+> Ping again. It'd be great to finally have these merged.
+>
+
+Maintainers are currently busy at the release 2021.02 version of Buildroot.
+
+But yes, this work has been reviewed and reworked by Quais and me.
+
+I guess It's good to go.
+
+Best regards,
+Romain
+
+
+> Thanks
+>
+> --
+> Qais Yousef
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210225/9267291c/attachment.html>
