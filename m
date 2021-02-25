@@ -1,49 +1,94 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 25 Feb 2021 20:31:17 +0100
-Subject: [Buildroot] [git commit] package/wireguard-linux-compat: bump
- version to 1.0.20210219
-Message-ID: <20210308072135.F21CF88918@busybox.osuosl.org>
+Date: Thu, 25 Feb 2021 22:26:40 +0100
+Subject: [Buildroot] [git commit] package/ffmpeg: bump version to 4.3.2
+Message-ID: <20210308072136.1142A8893D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5211e7489490620f9512e0ff2c2034af286e95b0
+commit: https://git.buildroot.net/buildroot/commit/?id=2a3cfb2381d0254ee57debb7bd520f0e89843345
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Includes various compat fixes and lowers memory requirements.  For details,
-see the announcement:
+Removed patch which was applied upstream.
 
-https://lists.zx2c4.com/pipermail/wireguard/2021-February/006404.html
+Changelog:
+http://git.videolan.org/?p=ffmpeg.git;a=blob;f=Changelog;h=28d79ea1aed0a59f43ee922f5b6efa82dc7e2b18;hb=refs/heads/release/4.3
 
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wireguard-linux-compat/wireguard-linux-compat.hash | 4 ++--
- package/wireguard-linux-compat/wireguard-linux-compat.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...pegts-make-sure-mpegts-read-header-always.patch | 38 ----------------------
+ package/ffmpeg/ffmpeg.hash                         |  2 +-
+ package/ffmpeg/ffmpeg.mk                           |  2 +-
+ 3 files changed, 2 insertions(+), 40 deletions(-)
 
-diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.hash b/package/wireguard-linux-compat/wireguard-linux-compat.hash
-index f4f94cfd2e..c164a9e48e 100644
---- a/package/wireguard-linux-compat/wireguard-linux-compat.hash
-+++ b/package/wireguard-linux-compat/wireguard-linux-compat.hash
-@@ -1,4 +1,4 @@
--# https://lists.zx2c4.com/pipermail/wireguard/2021-January/006349.html
--sha256  dac6e68cd4c3db441499850dfa8a70706384a3295f37fda1b839a50b79faef54  wireguard-linux-compat-1.0.20210124.tar.xz
-+# https://lists.zx2c4.com/pipermail/wireguard/2021-February/006404.html
-+sha256  99d35296b8d847a0d4db97a4dda96b464311a6354e75fe0bef6e7c4578690f00  wireguard-linux-compat-1.0.20210219.tar.xz
+diff --git a/package/ffmpeg/0004-avformat-mpegts-make-sure-mpegts-read-header-always.patch b/package/ffmpeg/0004-avformat-mpegts-make-sure-mpegts-read-header-always.patch
+deleted file mode 100644
+index 75a39d16fa..0000000000
+--- a/package/ffmpeg/0004-avformat-mpegts-make-sure-mpegts-read-header-always.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+-From 3136f41e6db8189994a8e4f72eacc92b669776d1 Mon Sep 17 00:00:00 2001
+-From: Marton Balint <cus@passwd.hu>
+-Date: Sun, 15 Nov 2020 00:39:41 +0100
+-Subject: [PATCH] avformat/mpegts: make sure mpegts_read_header always stops at
+- the first pmt
+-
+-mpegts_read_header stops parsing the file at the first PMT. However the check
+-that ensured this was wrong because streams can also be added before the first
+-PMT is received (e.g. EIT).
+-
+-So let's make sure we are in the header reading phase by checking if ts->pkt is
+-unset instead of checking if the number of streams found so far is 0.
+-
+-Downloaded from Kodi ffmpeg repo:
+-https://github.com/xbmc/FFmpeg/commit/3136f41e6db8189994a8e4f72eacc92b669776d1
+-
+-Patch was committed upstream:
+-http://git.videolan.org/?p=ffmpeg.git;a=patch;h=ca55240b8c1fd4cfdb61f88fd2cb378d475d910a
+-
+-Signed-off-by: Marton Balint <cus@passwd.hu>
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- libavformat/mpegts.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/libavformat/mpegts.c b/libavformat/mpegts.c
+-index c6fd3e1cef63..1da81a0fe62a 100644
+---- a/libavformat/mpegts.c
+-+++ b/libavformat/mpegts.c
+-@@ -2352,7 +2352,7 @@ static void pmt_cb(MpegTSFilter *filter, const uint8_t *section, int section_len
+-         goto out;
+- 
+-     // stop parsing after pmt, we found header
+--    if (!ts->stream->nb_streams)
+-+    if (!ts->pkt)
+-         ts->stop_parse = 2;
+- 
+-     set_pmt_found(ts, h->id);
+diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
+index 959a562b8d..81dc0d3e6b 100644
+--- a/package/ffmpeg/ffmpeg.hash
++++ b/package/ffmpeg/ffmpeg.hash
+@@ -1,5 +1,5 @@
  # Locally calculated
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wireguard-linux-compat/wireguard-linux-compat.mk b/package/wireguard-linux-compat/wireguard-linux-compat.mk
-index 2f36ec8bfb..eba5686683 100644
---- a/package/wireguard-linux-compat/wireguard-linux-compat.mk
-+++ b/package/wireguard-linux-compat/wireguard-linux-compat.mk
+-sha256  ad009240d46e307b4e03a213a0f49c11b650e445b1f8be0dda2a9212b34d2ffb  ffmpeg-4.3.1.tar.xz
++sha256  46e4e64f1dd0233cbc0934b9f1c0da676008cad34725113fb7f802cfa84ccddb  ffmpeg-4.3.2.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPLv2
+ sha256  b634ab5640e258563c536e658cad87080553df6f34f62269a21d554844e58bfe  COPYING.LGPLv2.1
+ sha256  cb48bf09a11f5fb576cddb0431c8f5ed0a60157a9ec942adffc13907cbe083f2  LICENSE.md
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 6d28bfbed7..9b79dff48e 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WIREGUARD_LINUX_COMPAT_VERSION = 1.0.20210124
-+WIREGUARD_LINUX_COMPAT_VERSION = 1.0.20210219
- WIREGUARD_LINUX_COMPAT_SITE = https://git.zx2c4.com/wireguard-linux-compat/snapshot
- WIREGUARD_LINUX_COMPAT_SOURCE = wireguard-linux-compat-$(WIREGUARD_LINUX_COMPAT_VERSION).tar.xz
- WIREGUARD_LINUX_COMPAT_LICENSE = GPL-2.0
+-FFMPEG_VERSION = 4.3.1
++FFMPEG_VERSION = 4.3.2
+ FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
+ FFMPEG_SITE = http://ffmpeg.org/releases
+ FFMPEG_INSTALL_STAGING = YES
