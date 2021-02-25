@@ -1,46 +1,44 @@
-From: Etienne Carriere <etienne.carriere@linaro.org>
-Date: Thu, 25 Feb 2021 16:33:45 +0100
-Subject: [Buildroot] [PATCH 5/5] package/optee-test: bump to version 3.12.0
-In-Reply-To: <20210225153345.8061-1-etienne.carriere@linaro.org>
-References: <20210225153345.8061-1-etienne.carriere@linaro.org>
-Message-ID: <20210225153345.8061-5-etienne.carriere@linaro.org>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Thu, 25 Feb 2021 16:33:42 +0100
+Subject: [Buildroot] Python package installed without dependencies
+ defined in setup.py
+In-Reply-To: <FF75D700-F93F-4299-9093-BED6912A3868@grondman.net>
+References: <FF75D700-F93F-4299-9093-BED6912A3868@grondman.net>
+Message-ID: <CAGm1_ksjakFD=iBx8RJRXtA9PeUOSFo_PQueytb2XsQm8XMRRw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump OP-TEE Test package version to OP-TEE release 3.12.0.
+Hi Ivo,
 
-Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
----
- package/optee-test/optee-test.hash | 4 ++--
- package/optee-test/optee-test.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On Thu, Feb 25, 2021 at 4:21 PM Ivo Grondman <buildroot@grondman.net> wrote:
+>
+> Hi all,
+>
+> I?m using a custom Python package which relies on setuptools for its installation, with dependencies defined in the install_requires part of setup.py. Once I run everything, I can see that the package itself is installed correctly, but none of its dependencies is. I also cannot find anything about any attempts to install dependencies in the logs. I do see the explicit ?setup.py install? call in the logs and if I manually call the install script on the machine where I do my buildroot builds then all the dependencies do get installed, so I?m not sure why buildroot doesn?t...
+>
+> What could be going on here?
+>
+> My my-python-package.mk:
+> ######
+> MY_PYTHON_PACKAGE_VERSION = 0.0.1
+> MY_PYTHON_PACKAGE_SOURCE = my-package-$(MY_PYTHON_PACKAGE_VERSION).tar.gz
+> MY_PYTHON_PACKAGE_SITE = file://$(BR2_EXTERNAL_MYTREE_PATH)
+> MY_PYTHON_PACKAGE_SETUP_TYPE = setuptools
+> MY_PYTHON_PACKAGE_LICENSE = Other
+> MY_PYTHON_PACKAGE_LICENSE_FILES = LICENSE.md
+> $(eval $(python-package))
+> ######
+>
+> If you need any more info, please let me know.
+>
+> Any help on this or perhaps a hint to debug this is greatly appreciated!
 
-diff --git a/package/optee-test/optee-test.hash b/package/optee-test/optee-test.hash
-index 52e2373bf7..0c789e1cd1 100644
---- a/package/optee-test/optee-test.hash
-+++ b/package/optee-test/optee-test.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/OP-TEE/optee_test/archive/3.11.0.tar.gz
--sha256 54d4b7e2ad22cd409ee8e25e990c1878690b1b5eb8843f649d12022888186a53  optee-test-3.11.0.tar.gz
-+# From https://github.com/OP-TEE/optee_test/archive/3.12.0/optee-test-3.12.0.tar.gz
-+sha256 beebdc98e95af2e7a20595f7d6ca716872efde1ec74a48ab07be599f21e8ad70  optee-test-3.12.0.tar.gz
- # Locally computed
- sha256 6e6810981f0ddab9e0d44399d0700a15d9f760a3c2843cc866659c2074139ae7  LICENSE.md
-diff --git a/package/optee-test/optee-test.mk b/package/optee-test/optee-test.mk
-index 1f4f586672..2304b15925 100644
---- a/package/optee-test/optee-test.mk
-+++ b/package/optee-test/optee-test.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPTEE_TEST_VERSION = 3.11.0
-+OPTEE_TEST_VERSION = 3.12.0
- OPTEE_TEST_SITE = $(call github,OP-TEE,optee_test,$(OPTEE_TEST_VERSION))
- OPTEE_TEST_LICENSE = GPL-2.0, BSD-2-Clause,
- OPTEE_TEST_LICENSE_FILES = LICENSE.md
--- 
-2.17.1
+You'll have to manually add all required Python packages into your
+package's Config.in file. See package/python-flask/Config.in for the
+reference.
+
+Best regards,
+Yegor
