@@ -1,43 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 23 Feb 2021 14:01:10 +0100
-Subject: [Buildroot] [git commit] package/iptables: bump to version 1.8.7
-Message-ID: <20210308072135.5C7EA8896D@busybox.osuosl.org>
+Date: Thu, 25 Feb 2021 20:12:46 +0100
+Subject: [Buildroot] [git commit] package/bwm-ng: bump to version 0.6.3
+Message-ID: <20210308072135.B57458893D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=49bb8ebd81a295a34511073739f50a235b931a3a
+commit: https://git.buildroot.net/buildroot/commit/?id=564371c1f39283e27126908b3babc5eae37d0684
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+https://github.com/vgropp/bwm-ng/releases/tag/v0.6.3
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/iptables/iptables.hash | 2 +-
- package/iptables/iptables.mk   | 2 +-
+ package/bwm-ng/bwm-ng.hash | 2 +-
+ package/bwm-ng/bwm-ng.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/iptables/iptables.hash b/package/iptables/iptables.hash
-index 120e7e4a89..7f14413931 100644
---- a/package/iptables/iptables.hash
-+++ b/package/iptables/iptables.hash
-@@ -1,4 +1,4 @@
- # From https://netfilter.org/projects/iptables/downloads.html
--sha256  a0f4fe0c3eb8faa5bd9c8376d132f340b9558e750c91deb2d5028aa3d0047767  iptables-1.8.6.tar.bz2
-+sha256  c109c96bb04998cd44156622d36f8e04b140701ec60531a10668cfdff5e8d8f0  iptables-1.8.7.tar.bz2
+diff --git a/package/bwm-ng/bwm-ng.hash b/package/bwm-ng/bwm-ng.hash
+index 4b66227676..d447673f5d 100644
+--- a/package/bwm-ng/bwm-ng.hash
++++ b/package/bwm-ng/bwm-ng.hash
+@@ -1,3 +1,3 @@
  # Locally calculated
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/iptables/iptables.mk b/package/iptables/iptables.mk
-index dc01466607..ca8178425e 100644
---- a/package/iptables/iptables.mk
-+++ b/package/iptables/iptables.mk
+-sha256  906a2d561f2ec9e0dd68b7f51b302908e99515ea1216d0ecaf14d873ef54ae70  bwm-ng-0.6.2.tar.gz
++sha256  c1a552b6ff48ea3e4e10110a7c188861abc4750befc67c6caaba8eb3ecf67f46  bwm-ng-0.6.3.tar.gz
+ sha256  8556cc15ba3c0a411bf7d94bac5870829fb725f294b450c724c1e0856a601556  COPYING
+diff --git a/package/bwm-ng/bwm-ng.mk b/package/bwm-ng/bwm-ng.mk
+index 4a34559e3c..de09eafae5 100644
+--- a/package/bwm-ng/bwm-ng.mk
++++ b/package/bwm-ng/bwm-ng.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IPTABLES_VERSION = 1.8.6
-+IPTABLES_VERSION = 1.8.7
- IPTABLES_SOURCE = iptables-$(IPTABLES_VERSION).tar.bz2
- IPTABLES_SITE = https://netfilter.org/projects/iptables/files
- IPTABLES_INSTALL_STAGING = YES
+-BWM_NG_VERSION = 0.6.2
++BWM_NG_VERSION = 0.6.3
+ BWM_NG_SITE = $(call github,vgropp,bwm-ng,v$(BWM_NG_VERSION))
+ BWM_NG_CONF_OPTS = --with-procnetdev --with-diskstats
+ BWM_NG_LICENSE = GPL-2.0+
