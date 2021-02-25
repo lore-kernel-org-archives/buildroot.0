@@ -1,85 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 23 Feb 2021 13:48:27 +0100
-Subject: [Buildroot] [git commit] package/go: bump version to 1.16
-Message-ID: <20210308072135.2170A88971@busybox.osuosl.org>
+Date: Thu, 25 Feb 2021 20:20:19 +0100
+Subject: [Buildroot] [git commit] package/genimage: bump to version 14
+Message-ID: <20210308072135.C7A4D88918@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9c035502bf2f44dd7ce5c0dca2e03cdcd4ef3f88
+commit: https://git.buildroot.net/buildroot/commit/?id=50cfedc86d205f2ac7145deadb1c94474374acff
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes: https://golang.org/doc/go1.16
-
-The latest Go release, version 1.16, arrives six months after Go 1.15. Most of
-its changes are in the implementation of the toolchain, runtime, and libraries.
-
-The linker changes in 1.16 extend the 1.15 improvements to all supported
-architecture/OS combinations (the 1.15 performance improvements were primarily
-focused on ELF-based OSes and amd64 architectures). For a representative set of
-large Go programs, linking is 20-25% faster than 1.15 and requires 5-15% less
-memory on average for linux/amd64, with larger improvements for other
-architectures and OSes. Most binaries are also smaller as a result of more
-aggressive symbol pruning.
-
-According to the release notes, Go 1.16 drops support for x87 mode
-compilation (GO386=387).  Support for non-SSE2 processors is now available
-using soft float mode.  Buildroot will automatically set GO386=softfloat on
-non-SSE2 processors.
-
-Signed-off-by: Christian Stewart <christian@paral.in>
-
-v1 -> v2:
-
- - added 386=softfloat handling re: Peter's review
-
-Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Pierre-Jean Texier <texier.pj2@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/go/go.hash | 2 +-
- package/go/go.mk   | 7 ++++++-
- 2 files changed, 7 insertions(+), 2 deletions(-)
+ package/genimage/genimage.hash | 2 +-
+ package/genimage/genimage.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index cbc82a9b64..4181fb52c5 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
+diff --git a/package/genimage/genimage.hash b/package/genimage/genimage.hash
+index fbec5ce57b..9f60261b53 100644
+--- a/package/genimage/genimage.hash
++++ b/package/genimage/genimage.hash
 @@ -1,3 +1,3 @@
- # From https://golang.org/dl/
--sha256  540c0ab7781084d124991321ed1458e479982de94454a98afab6acadf38497c2  go1.15.8.src.tar.gz
-+sha256  7688063d55656105898f323d90a79a39c378d86fe89ae192eb3b7fc46347c95a  go1.16.src.tar.gz
- sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 7b7f173706..f6cb2469a8 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
+ # Locally calculated
+-sha256  4206e253226a384386c01591251f2ed1ea3485ef63f1e696db03600e1213db79  genimage-13.tar.xz
++sha256  9d1d53b33309fe24ea367ea057eb689bdb8ea33cb99d796de31127ca44ccf44c  genimage-14.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/genimage/genimage.mk b/package/genimage/genimage.mk
+index dde8f8b9e0..1934223b23 100644
+--- a/package/genimage/genimage.mk
++++ b/package/genimage/genimage.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GO_VERSION = 1.15.8
-+GO_VERSION = 1.16
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
-@@ -49,6 +49,10 @@ else ifeq ($(BR2_aarch64),y)
- GO_GOARCH = arm64
- else ifeq ($(BR2_i386),y)
- GO_GOARCH = 386
-+# i386: use softfloat if no SSE2: https://golang.org/doc/go1.16#386
-+ifneq ($(BR2_X86_CPU_HAS_SSE2),y)
-+GO_GO386 = softfloat
-+endif
- else ifeq ($(BR2_x86_64),y)
- GO_GOARCH = amd64
- else ifeq ($(BR2_powerpc64),y)
-@@ -90,6 +94,7 @@ HOST_GO_CROSS_ENV = \
- 	CC_FOR_TARGET="$(TARGET_CC)" \
- 	CXX_FOR_TARGET="$(TARGET_CXX)" \
- 	GOARCH=$(GO_GOARCH) \
-+	$(if $(GO_GO386),GO386=$(GO_GO386)) \
- 	$(if $(GO_GOARM),GOARM=$(GO_GOARM)) \
- 	GO_ASSUME_CROSSCOMPILING=1
- 
+-GENIMAGE_VERSION = 13
++GENIMAGE_VERSION = 14
+ GENIMAGE_SOURCE = genimage-$(GENIMAGE_VERSION).tar.xz
+ GENIMAGE_SITE = https://github.com/pengutronix/genimage/releases/download/v$(GENIMAGE_VERSION)
+ HOST_GENIMAGE_DEPENDENCIES = host-pkgconf host-libconfuse
