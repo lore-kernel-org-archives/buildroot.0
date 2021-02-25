@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 25 Feb 2021 22:28:18 +0100
-Subject: [Buildroot] [PATCH 1/1] package/elfutils: link with libatomic
- if needed
-In-Reply-To: <20210221202944.121423-1-fontaine.fabrice@gmail.com>
-References: <20210221202944.121423-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210225212818.GJ2276@scaer>
+Date: Thu, 25 Feb 2021 22:28:36 +0100
+Subject: [Buildroot] [PATCH 1/1] package/babeltrace2: link with
+ libatomic if needed
+In-Reply-To: <20210221201452.103678-1-fontaine.fabrice@gmail.com>
+References: <20210221201452.103678-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210225212836.GK2276@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,12 +13,12 @@ To: buildroot@busybox.net
 
 Fabrice, All,
 
-On 2021-02-21 21:29 +0100, Fabrice Fontaine spake thusly:
-> Fix build of elfutils 0.181 with Bootlin SPARC uclibc toolchain added
-> with commit 1348c569d0cb7f67eca30f170b782aa8b51cc259
+On 2021-02-21 21:14 +0100, Fabrice Fontaine spake thusly:
+> Fix build of babeltrace2 in version 2.0.3 with Bootlin SPARC uclibc
+> toolchain added with commit 1348c569d0cb7f67eca30f170b782aa8b51cc259
 > 
 > Fixes:
->  - http://autobuild.buildroot.org/results/31ce9e3861c6229a7869a15d322f5d2f5bfc6165
+>  - http://autobuild.buildroot.org/results/31770bf70f9ce4e3be8fb310d084b214820c6829
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
@@ -28,24 +28,23 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/elfutils/elfutils.mk | 4 ++++
+>  package/babeltrace2/babeltrace2.mk | 4 ++++
 >  1 file changed, 4 insertions(+)
 > 
-> diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
-> index 3d37c4634b..42f2f8b304 100644
-> --- a/package/elfutils/elfutils.mk
-> +++ b/package/elfutils/elfutils.mk
-> @@ -43,6 +43,10 @@ ELFUTILS_CONF_ENV += \
->  ELFUTILS_LDFLAGS = $(TARGET_LDFLAGS) \
->  	$(TARGET_NLS_LIBS)
+> diff --git a/package/babeltrace2/babeltrace2.mk b/package/babeltrace2/babeltrace2.mk
+> index eb29a5928b..1e03f5fdd2 100644
+> --- a/package/babeltrace2/babeltrace2.mk
+> +++ b/package/babeltrace2/babeltrace2.mk
+> @@ -27,5 +27,9 @@ else
+>  BABELTRACE2_CONF_OPTS += --disable-debug-info
+>  endif
 >  
 > +ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-> +ELFUTILS_LDFLAGS += -latomic
+> +BABELTRACE2_CONF_ENV += LIBS=-latomic
 > +endif
 > +
->  ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),)
->  ELFUTILS_DEPENDENCIES += musl-fts
->  ELFUTILS_LDFLAGS += -lfts
+>  $(eval $(autotools-package))
+>  $(eval $(host-autotools-package))
 > -- 
 > 2.30.0
 > 
