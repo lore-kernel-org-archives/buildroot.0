@@ -1,49 +1,58 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 26 Feb 2021 20:19:09 +0100
-Subject: [Buildroot] [PATCH v1] package/libinput: bump version to 1.16.5
-Message-ID: <20210226191909.27845-1-ps.report@gmx.net>
+From: Markus Mayer <mmayer@broadcom.com>
+Date: Fri, 26 Feb 2021 12:04:12 -0800
+Subject: [Buildroot] [PATCH] package/tar: bump version to 1.34
+In-Reply-To: <20210217215738.1759972-1-mmayer@broadcom.com>
+References: <20210217215738.1759972-1-mmayer@broadcom.com>
+Message-ID: <CAGt4E5tsQro=DLTTA=-DO6e6R5u2N=fOD6hdJ2CxO-=cMLS3Bw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For details see [1].
+Hi all,
 
-[1] https://lists.freedesktop.org/archives/wayland-devel/2021-February/041734.html
+Gentle ping regarding the tar upgrade, since I was asked to provide a
+patch. Not sure if you want to hold off until 2021.02 has been
+released. Just didn't want it to fall through the cracks.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/libinput/libinput.hash | 6 +++---
- package/libinput/libinput.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Regards,
+-Markus
 
-diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
-index f2cea28ee3..1664afbac8 100644
---- a/package/libinput/libinput.hash
-+++ b/package/libinput/libinput.hash
-@@ -1,6 +1,6 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2020-November/041664.html
--sha256  65923a06d5a8970e4a999c4668797b9b689614b62b1d44432ab1c87b65e39e29  libinput-1.16.4.tar.xz
--sha512  a95a3bcf58a9298946d15f4f2fd93dc5807d3042f8797950a1ffd96d3c979b55a764f035a9f7680d0ea400b033698c322eb61a4387dbc280db6110ffd3e137ee  libinput-1.16.4.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2021-February/041734.html
-+sha256  42d404af037a0dcc9dee7a1ab0a8e53cec0b62902fc4a262e5be9d2b7452c214  libinput-1.16.5.tar.xz
-+sha512  b2fdd87375cbd5b212f76cefedfaa146966dde1d5e5d566beadd3167749dc3667214946178b157fa4b44360dc6b86a25ffb0356049cdf5a57d0fa2b8e3fcb1e9  libinput-1.16.5.tar.xz
- 
- # License files
- sha256  70d5b1dfe5a9c50a1f2ea91b1c2b1c85d876c5c92339585edbb85cf69e945e14  COPYING
-diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
-index 3b459d6fb5..cbe4bb124f 100644
---- a/package/libinput/libinput.mk
-+++ b/package/libinput/libinput.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBINPUT_VERSION = 1.16.4
-+LIBINPUT_VERSION = 1.16.5
- LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
- LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
- LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
--- 
-2.30.1
+On Wed, 17 Feb 2021 at 13:58, Markus Mayer <mmayer@broadcom.com> wrote:
+>
+> Bump the version of tar to 1.34 for host and target.
+>
+> Signed-off-by: Markus Mayer <mmayer@broadcom.com>
+> ---
+>  package/tar/tar.hash | 4 ++--
+>  package/tar/tar.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/package/tar/tar.hash b/package/tar/tar.hash
+> index 72f0cd6fcbe6..1914a9f3b483 100644
+> --- a/package/tar/tar.hash
+> +++ b/package/tar/tar.hash
+> @@ -1,4 +1,4 @@
+>  # Locally calculated after checking signature
+> -sha256  d0d3ae07f103323be809bc3eac0dcc386d52c5262499fe05511ac4788af1fdd8  tar-1.32.tar.xz
+> -sha256  9fbfba0cba05233421dd619b8825e1ceb7c144e433c15ae48b68f17ede8d404a  tar-1.32.cpio.gz
+> +sha256  63bebd26879c5e1eea4352f0d03c991f966aeb3ddeb3c7445c902568d5411d28  tar-1.34.tar.xz
+> +sha256  51337b19c71df92cd4f51c50efe4dc6ddc267d31fd54679be9e9bc2e6ce8132b  tar-1.34.cpio.gz
+>  sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+> diff --git a/package/tar/tar.mk b/package/tar/tar.mk
+> index 2da731f80ad9..690a5952ba02 100644
+> --- a/package/tar/tar.mk
+> +++ b/package/tar/tar.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>
+> -TAR_VERSION = 1.32
+> +TAR_VERSION = 1.34
+>  TAR_SOURCE = tar-$(TAR_VERSION).tar.xz
+>  TAR_SITE = $(BR2_GNU_MIRROR)/tar
+>  # busybox installs in /bin, so we need tar to install as well in /bin
+> --
+> 2.25.1
+>
