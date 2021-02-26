@@ -1,58 +1,47 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Fri, 26 Feb 2021 23:12:34 +0100
-Subject: [Buildroot] [PATCH] package/qemu: disable tests
-In-Reply-To: <87ft1jusq9.fsf@dell.be.48ers.dk>
-References: <20210220172102.14174-1-romain.naour@gmail.com>
- <87ft1jusq9.fsf@dell.be.48ers.dk>
-Message-ID: <b8da047b-00b7-96f3-586d-bc376c45f060@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 26 Feb 2021 23:47:00 +0100
+Subject: [Buildroot] [git commit branch/next] package/tar: bump version to
+ 1.34
+Message-ID: <20210226223015.2773583849@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=27fffea6db7358af20f5a3a8faa174d3b782d61f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Le 26/02/2021 ? 09:40, Peter Korsgaard a ?crit?:
->>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
-> 
->  > tests/fp/fp-bench.c use fenv.h that is not always provided
->  > by the libc (uClibc).
-> 
->  > To workaround this issue, add an new meson option to
->  > disable tests while building Qemu.
-> 
->  > Fixes:
->  > http://autobuild.buildroot.net/results/53f5d8baa994d599b9da013ee643b82353366ec3/build-end.log
-> 
->  > Signed-off-by: Romain Naour <romain.naour@gmail.com>
->  > ---
->  >  .../qemu/0004-meson-add-tests-option.patch    | 92 +++++++++++++++++++
->  >  package/qemu/qemu.mk                          |  2 +
->  >  2 files changed, 94 insertions(+)
->  >  create mode 100644 package/qemu/0004-meson-add-tests-option.patch
-> 
->  > diff --git a/package/qemu/0004-meson-add-tests-option.patch b/package/qemu/0004-meson-add-tests-option.patch
->  > new file mode 100644
->  > index 0000000000..aff8a0f9fc
->  > --- /dev/null
->  > +++ b/package/qemu/0004-meson-add-tests-option.patch
->  > @@ -0,0 +1,92 @@
->  > +From c24f6cc8f847a4f90cd8fe0f94604862c5ac4a5e Mon Sep 17 00:00:00 2001
->  > +From: Romain Naour <romain.naour@gmail.com>
->  > +Date: Mon, 21 Dec 2020 22:12:14 +0100
-> 
-> I see you wrote this 2 months ago, but I don't seem to find it in qemu
-> git or the mailing list. Did you submit it upstream? If not, please do
-> so.
+Bump the version of tar to 1.34 for host and target.
 
-The patch was started at that time but not finished.
-I just sent the patch on the mailing list.
+Signed-off-by: Markus Mayer <mmayer@broadcom.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/tar/tar.hash | 4 ++--
+ package/tar/tar.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Best regards,
-Romain
-
-
-> 
-> Committed, thanks.
-> 
+diff --git a/package/tar/tar.hash b/package/tar/tar.hash
+index 72f0cd6fcb..1914a9f3b4 100644
+--- a/package/tar/tar.hash
++++ b/package/tar/tar.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking signature
+-sha256  d0d3ae07f103323be809bc3eac0dcc386d52c5262499fe05511ac4788af1fdd8  tar-1.32.tar.xz
+-sha256  9fbfba0cba05233421dd619b8825e1ceb7c144e433c15ae48b68f17ede8d404a  tar-1.32.cpio.gz
++sha256  63bebd26879c5e1eea4352f0d03c991f966aeb3ddeb3c7445c902568d5411d28  tar-1.34.tar.xz
++sha256  51337b19c71df92cd4f51c50efe4dc6ddc267d31fd54679be9e9bc2e6ce8132b  tar-1.34.cpio.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/tar/tar.mk b/package/tar/tar.mk
+index 2da731f80a..690a5952ba 100644
+--- a/package/tar/tar.mk
++++ b/package/tar/tar.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TAR_VERSION = 1.32
++TAR_VERSION = 1.34
+ TAR_SOURCE = tar-$(TAR_VERSION).tar.xz
+ TAR_SITE = $(BR2_GNU_MIRROR)/tar
+ # busybox installs in /bin, so we need tar to install as well in /bin
