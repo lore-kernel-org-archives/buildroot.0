@@ -1,110 +1,84 @@
 From: Conrad Ratschan <conrad.ratschan@rockwellcollins.com>
-Date: Fri, 26 Feb 2021 10:09:36 -0600
-Subject: [Buildroot] [PATCH 3/4] package/python3: Allow host-python ncurses
+Date: Fri, 26 Feb 2021 10:09:35 -0600
+Subject: [Buildroot] [PATCH 2/4] package/python-libarchive-c: Add as new
+ package
 In-Reply-To: <20210226160937.16082-1-conrad.ratschan@rockwellcollins.com>
 References: <20210226160937.16082-1-conrad.ratschan@rockwellcollins.com>
-Message-ID: <20210226160937.16082-3-conrad.ratschan@rockwellcollins.com>
+Message-ID: <20210226160937.16082-2-conrad.ratschan@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The Diffoscope tool has a runtime dependency on the curses module in
-Python. Buildroot disables curses support for host-python3. This patch
-allows for ncurses to be a configurable option for the host-python3
-package like it is for the target python3 package. An additional patch
-is added to fix the ncurses include path as it previously was not
-correct when not cross compiling.
+Add new host python package for python-libarchive-c. This is needed as a
+runtime dependency for Diffoscope.
 
 Signed-off-by: Conrad Ratschan <conrad.ratschan@rockwellcollins.com>
 ---
- ...-ncurses-include-when-not-cross-comp.patch | 35 +++++++++++++++++++
- package/python3/Config.in.host                |  5 +++
- package/python3/python3.mk                    |  8 ++++-
- 3 files changed, 47 insertions(+), 1 deletion(-)
- create mode 100644 package/python3/0035-configure.ac-Fix-ncurses-include-when-not-cross-comp.patch
+ package/Config.in.host                            |  1 +
+ package/python-libarchive-c/Config.in.host        |  8 ++++++++
+ .../python-libarchive-c/python-libarchive-c.hash  |  2 ++
+ .../python-libarchive-c/python-libarchive-c.mk    | 15 +++++++++++++++
+ 4 files changed, 26 insertions(+)
+ create mode 100644 package/python-libarchive-c/Config.in.host
+ create mode 100644 package/python-libarchive-c/python-libarchive-c.hash
+ create mode 100644 package/python-libarchive-c/python-libarchive-c.mk
 
-diff --git a/package/python3/0035-configure.ac-Fix-ncurses-include-when-not-cross-comp.patch b/package/python3/0035-configure.ac-Fix-ncurses-include-when-not-cross-comp.patch
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 1b3812decf..4edfb9cfa4 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -65,6 +65,7 @@ menu "Host utilities"
+ 	source "package/pwgen/Config.in.host"
+ 	source "package/python/Config.in.host"
+ 	source "package/python-cython/Config.in.host"
++	source "package/python-libarchive-c/Config.in.host"
+ 	source "package/python-lxml/Config.in.host"
+ 	source "package/python-magic/Config.in.host"
+ 	source "package/python-six/Config.in.host"
+diff --git a/package/python-libarchive-c/Config.in.host b/package/python-libarchive-c/Config.in.host
 new file mode 100644
-index 0000000000..15834772d0
+index 0000000000..cd0c09af9d
 --- /dev/null
-+++ b/package/python3/0035-configure.ac-Fix-ncurses-include-when-not-cross-comp.patch
-@@ -0,0 +1,35 @@
-+From 9f10c2f660ab24d622b66a58d14dd7522b120d6d Mon Sep 17 00:00:00 2001
-+From: Conrad Ratschan <conrad.ratschan@rockwellcollins.com>
-+Date: Tue, 2 Feb 2021 09:45:57 -0600
-+Subject: [PATCH] configure.ac: Fix ncurses include when not cross compiling
-+
-+When not cross compiling, the ncurses include path used by configure.ac
-+is hardcoded to a path on the user's development machine. Change this
-+path to use ${prefix} so that it can use a host folder path specified
-+by Buildroot.
-+
-+Signed-off-by: Conrad Ratschan <conrad.ratschan@rockwellcollins.com>
-+---
-+ configure.ac | 6 +++++-
-+ 1 file changed, 5 insertions(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 07bceda..0398da5 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -5271,7 +5271,11 @@ fi
-+ # first curses header check
-+ ac_save_cppflags="$CPPFLAGS"
-+ if test "$cross_compiling" = no; then
-+-  CPPFLAGS="$CPPFLAGS -I/usr/include/ncursesw"
-++  if test "x${prefix}" = "xNONE" ; then
-++    CPPFLAGS="$CPPFLAGS -I/usr/include/ncursesw"
-++  else
-++    CPPFLAGS="$CPPFLAGS -I${prefix}/include/ncursesw -I${prefix}/include/ncurses"
-++  fi
-+ fi
-+ 
-+ AC_CHECK_HEADERS(curses.h ncurses.h)
-+-- 
-+2.17.1
-+
-diff --git a/package/python3/Config.in.host b/package/python3/Config.in.host
-index 70b5dacdde..dc463e51b6 100644
---- a/package/python3/Config.in.host
-+++ b/package/python3/Config.in.host
-@@ -13,4 +13,9 @@ config BR2_PACKAGE_HOST_PYTHON3_SSL
- 	help
- 	  _ssl module for host Python3.
- 
-+config BR2_PACKAGE_HOST_PYTHON3_CURSES
-+	bool "curses"
++++ b/package/python-libarchive-c/Config.in.host
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_HOST_PYTHON_LIBARCHIVE_C
++	bool "host-python-libarchive-c"
++	depends on BR2_PACKAGE_HOST_PYTHON3
++	select BR2_PACKAGE_HOST_LIBARCHIVE
 +	help
-+	  curses module for Python3.
++	  A Python interface to libarchive
 +
- endif
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index 63d6c3f535..9187fb8220 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -20,7 +20,6 @@ HOST_PYTHON3_CONF_OPTS += \
- 	--disable-sqlite3 \
- 	--disable-tk \
- 	--with-expat=system \
--	--disable-curses \
- 	--disable-codecs-cjk \
- 	--disable-nis \
- 	--enable-unicodedata \
-@@ -47,6 +46,13 @@ else
- HOST_PYTHON3_CONF_OPTS += --disable-openssl
- endif
- 
-+ifeq ($(BR2_PACKAGE_HOST_PYTHON3_CURSES),y)
-+HOST_PYTHON3_DEPENDENCIES += host-ncurses
-+HOST_PYTHON3_CONF_OPTS += --enable-curses
-+else
-+HOST_PYTHON3_CONF_OPTS += --disable-curses
-+endif
++	  https://github.com/Changaco/python-libarchive-c
+diff --git a/package/python-libarchive-c/python-libarchive-c.hash b/package/python-libarchive-c/python-libarchive-c.hash
+new file mode 100644
+index 0000000000..adde6a8462
+--- /dev/null
++++ b/package/python-libarchive-c/python-libarchive-c.hash
+@@ -0,0 +1,2 @@
++# sha256 from https://pypi.org/pypi/diffoscope/json
++sha256  9919344cec203f5db6596a29b5bc26b07ba9662925a05e24980b84709232ef60  libarchive-c-2.9.tar.gz
+diff --git a/package/python-libarchive-c/python-libarchive-c.mk b/package/python-libarchive-c/python-libarchive-c.mk
+new file mode 100644
+index 0000000000..b67e0a6796
+--- /dev/null
++++ b/package/python-libarchive-c/python-libarchive-c.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# python-libarchive
++#
++################################################################################
 +
- PYTHON3_INSTALL_STAGING = YES
- 
- ifeq ($(BR2_PACKAGE_PYTHON3_2TO3),y)
++PYTHON_LIBARCHIVE_C_VERSION = 2.9
++PYTHON_LIBARCHIVE_C_SOURCE = libarchive-c-$(PYTHON_LIBARCHIVE_C_VERSION).tar.gz
++PYTHON_LIBARCHIVE_C_SITE = https://files.pythonhosted.org/packages/63/fe/9e6c78db381934e28c7ec3d30d4f209fe24442d17f1bd8c56d13ae185cf6
++PYTHON_LIBARCHIVE_C_SETUP_TYPE = setuptools
++PYTHON_LIBARCHIVE_C_LICENSE = CC0-1.0
++HOST_PYTHON_LIBARCHIVE_C_DL_SUBDIR = python-libarchive-c
++HOST_PYTHON_LIBARCHIVE_C_NEEDS_HOST_PYTHON = python3
++
++$(eval $(host-python-package))
 -- 
 2.17.1
