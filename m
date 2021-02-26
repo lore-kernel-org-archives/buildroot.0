@@ -1,24 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Feb 2021 08:47:50 +0100
-Subject: [Buildroot] [PATCH] package/refpolicy: bump to 2.20210203
-In-Reply-To: <20210222124758.2546796-1-atenart@kernel.org> (Antoine Tenart's
- message of "Mon, 22 Feb 2021 13:47:58 +0100")
-References: <20210222124758.2546796-1-atenart@kernel.org>
-Message-ID: <87o8g7uv6h.fsf@dell.be.48ers.dk>
+Date: Fri, 26 Feb 2021 08:49:38 +0100
+Subject: [Buildroot] [PATCH] package/nfs-utils: bump version to 2.5.3
+In-Reply-To: <20210222143325.3701803-1-giulio.benetti@benettiengineering.com>
+ (Giulio Benetti's message of "Mon, 22 Feb 2021 15:33:25 +0100")
+References: <20210222143325.3701803-1-giulio.benetti@benettiengineering.com>
+Message-ID: <87k0qvuv3h.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Antoine" == Antoine Tenart <atenart@kernel.org> writes:
+>>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
 
- > Changelog:
- > https://github.com/SELinuxProject/refpolicy/releases/tag/RELEASE_2_20210203
+ > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
- > Signed-off-by: Antoine Tenart <atenart@kernel.org>
+From the looks of it, it adds some new features so I've applied to next,
+thanks.
 
-Committed to next, thanks.
+https://lwn.net/Articles/847055/
 
 -- 
 Bye, Peter Korsgaard
