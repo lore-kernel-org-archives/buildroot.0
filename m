@@ -1,24 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Feb 2021 08:49:38 +0100
-Subject: [Buildroot] [PATCH] package/nfs-utils: bump version to 2.5.3
-In-Reply-To: <20210222143325.3701803-1-giulio.benetti@benettiengineering.com>
- (Giulio Benetti's message of "Mon, 22 Feb 2021 15:33:25 +0100")
-References: <20210222143325.3701803-1-giulio.benetti@benettiengineering.com>
-Message-ID: <87k0qvuv3h.fsf@dell.be.48ers.dk>
+Date: Fri, 26 Feb 2021 08:47:43 +0100
+Subject: [Buildroot] [git commit branch/next] package/refpolicy: bump to
+ 2.20210203
+Message-ID: <20210226072732.45ECC865BB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=d1d5c1c9141ab4e510938715d1a397a817f078e9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Changelog:
+https://github.com/SELinuxProject/refpolicy/releases/tag/RELEASE_2_20210203
 
-From the looks of it, it adds some new features so I've applied to next,
-thanks.
+Signed-off-by: Antoine Tenart <atenart@kernel.org>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/refpolicy/refpolicy.hash | 2 +-
+ package/refpolicy/refpolicy.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-https://lwn.net/Articles/847055/
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/refpolicy/refpolicy.hash b/package/refpolicy/refpolicy.hash
+index 7e258c4e04..6c33a4d974 100644
+--- a/package/refpolicy/refpolicy.hash
++++ b/package/refpolicy/refpolicy.hash
+@@ -1,5 +1,5 @@
+ # From https://github.com/SELinuxProject/refpolicy/releases
+-sha256 1488f9b94060de28addbcb29fb8437ee0d75cba15e11280dd9dfa3e09986f57b  refpolicy-2.20200818.tar.bz2
++sha256 48cbf2c63ff9003bef05e03c8d3cdddb4e8f63fef2a072ae51c987301f0b874d  refpolicy-2.20210203.tar.bz2
+ 
+ # Locally computed
+ sha256 204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994 COPYING
+diff --git a/package/refpolicy/refpolicy.mk b/package/refpolicy/refpolicy.mk
+index 0194708b37..0e7dfd86f8 100644
+--- a/package/refpolicy/refpolicy.mk
++++ b/package/refpolicy/refpolicy.mk
+@@ -22,9 +22,9 @@ REFPOLICY_SITE = $(call qstrip,$(BR2_PACKAGE_REFPOLICY_CUSTOM_REPO_URL))
+ REFPOLICY_SITE_METHOD = git
+ BR_NO_CHECK_HASH_FOR += $(REFPOLICY_SOURCE)
+ else
+-REFPOLICY_VERSION = 2.20200818
++REFPOLICY_VERSION = 2.20210203
+ REFPOLICY_SOURCE = refpolicy-$(REFPOLICY_VERSION).tar.bz2
+-REFPOLICY_SITE = https://github.com/SELinuxProject/refpolicy/releases/download/RELEASE_2_20200818
++REFPOLICY_SITE = https://github.com/SELinuxProject/refpolicy/releases/download/RELEASE_2_20210203
+ endif
+ 
+ # Cannot use multiple threads to build the reference policy
