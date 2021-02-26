@@ -1,68 +1,74 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 26 Feb 2021 23:53:04 +0100
-Subject: [Buildroot] [PATCH] package/tar: bump version to 1.34
-In-Reply-To: <20210217215738.1759972-1-mmayer@broadcom.com>
-References: <20210217215738.1759972-1-mmayer@broadcom.com>
-Message-ID: <20210226225304.GD2390841@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 27 Feb 2021 00:13:17 +0100
+Subject: [Buildroot] [PATCH] package/openldap: add upstream security fix for
+ CVE-2021-27212
+Message-ID: <20210226231318.21482-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Markus, All,
+In OpenLDAP through 2.4.57 and 2.5.x through 2.5.1alpha, an assertion
+failure in slapd can occur in the issuerAndThisUpdateCheck function via a
+crafted packet, resulting in a denial of service (daemon exit) via a short
+timestamp.  This is related to schema_init.c and checkTime.
 
-On 2021-02-17 13:57 -0800, Markus Mayer via buildroot spake thusly:
-> Bump the version of tar to 1.34 for host and target.
-> 
-> Signed-off-by: Markus Mayer <mmayer@broadcom.com>
+For more details, see the bugtracker:
+https://bugs.openldap.org/show_bug.cgi?id=9454
 
-Applied to next, thanks.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...TS-9454-fix-issuerAndThisUpdateCheck.patch | 26 +++++++++++++++++++
+ package/openldap/openldap.mk                  |  3 +++
+ 2 files changed, 29 insertions(+)
+ create mode 100644 package/openldap/0005-ITS-9454-fix-issuerAndThisUpdateCheck.patch
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/tar/tar.hash | 4 ++--
->  package/tar/tar.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/tar/tar.hash b/package/tar/tar.hash
-> index 72f0cd6fcbe6..1914a9f3b483 100644
-> --- a/package/tar/tar.hash
-> +++ b/package/tar/tar.hash
-> @@ -1,4 +1,4 @@
->  # Locally calculated after checking signature
-> -sha256  d0d3ae07f103323be809bc3eac0dcc386d52c5262499fe05511ac4788af1fdd8  tar-1.32.tar.xz
-> -sha256  9fbfba0cba05233421dd619b8825e1ceb7c144e433c15ae48b68f17ede8d404a  tar-1.32.cpio.gz
-> +sha256  63bebd26879c5e1eea4352f0d03c991f966aeb3ddeb3c7445c902568d5411d28  tar-1.34.tar.xz
-> +sha256  51337b19c71df92cd4f51c50efe4dc6ddc267d31fd54679be9e9bc2e6ce8132b  tar-1.34.cpio.gz
->  sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-> diff --git a/package/tar/tar.mk b/package/tar/tar.mk
-> index 2da731f80ad9..690a5952ba02 100644
-> --- a/package/tar/tar.mk
-> +++ b/package/tar/tar.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -TAR_VERSION = 1.32
-> +TAR_VERSION = 1.34
->  TAR_SOURCE = tar-$(TAR_VERSION).tar.xz
->  TAR_SITE = $(BR2_GNU_MIRROR)/tar
->  # busybox installs in /bin, so we need tar to install as well in /bin
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/openldap/0005-ITS-9454-fix-issuerAndThisUpdateCheck.patch b/package/openldap/0005-ITS-9454-fix-issuerAndThisUpdateCheck.patch
+new file mode 100644
+index 0000000000..a611b9ff59
+--- /dev/null
++++ b/package/openldap/0005-ITS-9454-fix-issuerAndThisUpdateCheck.patch
+@@ -0,0 +1,26 @@
++From 9badb73425a67768c09bcaed1a9c26c684af6c30 Mon Sep 17 00:00:00 2001
++From: Howard Chu <hyc@openldap.org>
++Date: Sat, 6 Feb 2021 20:52:06 +0000
++Subject: [PATCH] ITS#9454 fix issuerAndThisUpdateCheck
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ servers/slapd/schema_init.c | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/servers/slapd/schema_init.c b/servers/slapd/schema_init.c
++index 31be1154e..8b1e25539 100644
++--- a/servers/slapd/schema_init.c
+++++ b/servers/slapd/schema_init.c
++@@ -3900,6 +3900,8 @@ issuerAndThisUpdateCheck(
++ 					break;
++ 				}
++ 			}
+++			if ( tu->bv_len < STRLENOF("YYYYmmddHHmmssZ") ) return LDAP_INVALID_SYNTAX;
+++
++ 			x.bv_val += tu->bv_len + 1;
++ 			x.bv_len -= tu->bv_len + 1;
++ 
++-- 
++2.20.1
++
+diff --git a/package/openldap/openldap.mk b/package/openldap/openldap.mk
+index b4c06d8640..ec11e4fa7d 100644
+--- a/package/openldap/openldap.mk
++++ b/package/openldap/openldap.mk
+@@ -13,6 +13,9 @@ OPENLDAP_CPE_ID_VENDOR = openldap
+ OPENLDAP_INSTALL_STAGING = YES
+ OPENLDAP_DEPENDENCIES = host-pkgconf
+ 
++# 0005-ITS-9454-fix-issuerAndThisUpdateCheck.patch
++OPENLDAP_IGNORE_CVES += CVE-2021-27212
++
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ OPENLDAP_TLS = openssl
+ OPENLDAP_DEPENDENCIES += openssl
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
