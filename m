@@ -1,50 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 25 Feb 2021 20:21:40 +0100
-Subject: [Buildroot] [git commit] package/daemon: bump to version 0.7.1
-Message-ID: <20210308072135.E83EB81607@busybox.osuosl.org>
+Date: Fri, 26 Feb 2021 08:47:43 +0100
+Subject: [Buildroot] [git commit] package/refpolicy: bump to 2.20210203
+Message-ID: <20210308072136.1A8D988918@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8b2934e0aeea5e071d54e7b88c971690ef737f80
+commit: https://git.buildroot.net/buildroot/commit/?id=d1d5c1c9141ab4e510938715d1a397a817f078e9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add COPYING to _LICENSE_FILES.
+Changelog:
+https://github.com/SELinuxProject/refpolicy/releases/tag/RELEASE_2_20210203
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Antoine Tenart <atenart@kernel.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/daemon/daemon.hash | 4 +++-
- package/daemon/daemon.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ package/refpolicy/refpolicy.hash | 2 +-
+ package/refpolicy/refpolicy.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/daemon/daemon.hash b/package/daemon/daemon.hash
-index b1c1dcdc2c..ec7451a81e 100644
---- a/package/daemon/daemon.hash
-+++ b/package/daemon/daemon.hash
-@@ -1,3 +1,5 @@
- # From http://www.libslack.org/daemon/
--sha256  f66af2ece784c16dcb5219de1f4fa3ae5787bb3374e44bd4b1d3e275e8ff272c  daemon-0.7.tar.gz
-+sha256  ba1f6dc87532c852bfb8f436179cd661c3458ff898f67767c414123198626dfd  daemon-0.7.1.tar.gz
-+# Locally calculated
- sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  LICENSE
-+sha256  cbac6eb0e1f7f95826966c7903939d591092a7f7d7726862946cb49096e8497d  COPYING
-diff --git a/package/daemon/daemon.mk b/package/daemon/daemon.mk
-index f3a1917fad..91f77dd24a 100644
---- a/package/daemon/daemon.mk
-+++ b/package/daemon/daemon.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
+diff --git a/package/refpolicy/refpolicy.hash b/package/refpolicy/refpolicy.hash
+index 7e258c4e04..6c33a4d974 100644
+--- a/package/refpolicy/refpolicy.hash
++++ b/package/refpolicy/refpolicy.hash
+@@ -1,5 +1,5 @@
+ # From https://github.com/SELinuxProject/refpolicy/releases
+-sha256 1488f9b94060de28addbcb29fb8437ee0d75cba15e11280dd9dfa3e09986f57b  refpolicy-2.20200818.tar.bz2
++sha256 48cbf2c63ff9003bef05e03c8d3cdddb4e8f63fef2a072ae51c987301f0b874d  refpolicy-2.20210203.tar.bz2
  
--DAEMON_VERSION = 0.7
-+DAEMON_VERSION = 0.7.1
- DAEMON_SITE = http://libslack.org/daemon/download
- DAEMON_LICENSE = GPL-2.0+
--DAEMON_LICENSE_FILES = LICENSE
-+DAEMON_LICENSE_FILES = LICENSE COPYING
+ # Locally computed
+ sha256 204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994 COPYING
+diff --git a/package/refpolicy/refpolicy.mk b/package/refpolicy/refpolicy.mk
+index 0194708b37..0e7dfd86f8 100644
+--- a/package/refpolicy/refpolicy.mk
++++ b/package/refpolicy/refpolicy.mk
+@@ -22,9 +22,9 @@ REFPOLICY_SITE = $(call qstrip,$(BR2_PACKAGE_REFPOLICY_CUSTOM_REPO_URL))
+ REFPOLICY_SITE_METHOD = git
+ BR_NO_CHECK_HASH_FOR += $(REFPOLICY_SOURCE)
+ else
+-REFPOLICY_VERSION = 2.20200818
++REFPOLICY_VERSION = 2.20210203
+ REFPOLICY_SOURCE = refpolicy-$(REFPOLICY_VERSION).tar.bz2
+-REFPOLICY_SITE = https://github.com/SELinuxProject/refpolicy/releases/download/RELEASE_2_20200818
++REFPOLICY_SITE = https://github.com/SELinuxProject/refpolicy/releases/download/RELEASE_2_20210203
+ endif
  
- define DAEMON_CONFIGURE_CMDS
- 	(cd $(@D); ./configure)
+ # Cannot use multiple threads to build the reference policy
