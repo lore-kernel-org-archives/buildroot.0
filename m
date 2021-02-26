@@ -1,80 +1,110 @@
 From: Conrad Ratschan <conrad.ratschan@rockwellcollins.com>
-Date: Fri, 26 Feb 2021 10:09:34 -0600
-Subject: [Buildroot] [PATCH 1/4] package/python-magic: Add new package
-Message-ID: <20210226160937.16082-1-conrad.ratschan@rockwellcollins.com>
+Date: Fri, 26 Feb 2021 10:09:36 -0600
+Subject: [Buildroot] [PATCH 3/4] package/python3: Allow host-python ncurses
+In-Reply-To: <20210226160937.16082-1-conrad.ratschan@rockwellcollins.com>
+References: <20210226160937.16082-1-conrad.ratschan@rockwellcollins.com>
+Message-ID: <20210226160937.16082-3-conrad.ratschan@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add new package for python-magic. This is needed as a runtime dependency
-for Diffoscope.
+The Diffoscope tool has a runtime dependency on the curses module in
+Python. Buildroot disables curses support for host-python3. This patch
+allows for ncurses to be a configurable option for the host-python3
+package like it is for the target python3 package. An additional patch
+is added to fix the ncurses include path as it previously was not
+correct when not cross compiling.
 
 Signed-off-by: Conrad Ratschan <conrad.ratschan@rockwellcollins.com>
 ---
- package/Config.in.host                 |  1 +
- package/python-magic/Config.in.host    |  8 ++++++++
- package/python-magic/python-magic.hash |  2 ++
- package/python-magic/python-magic.mk   | 14 ++++++++++++++
- 4 files changed, 25 insertions(+)
- create mode 100644 package/python-magic/Config.in.host
- create mode 100644 package/python-magic/python-magic.hash
- create mode 100644 package/python-magic/python-magic.mk
+ ...-ncurses-include-when-not-cross-comp.patch | 35 +++++++++++++++++++
+ package/python3/Config.in.host                |  5 +++
+ package/python3/python3.mk                    |  8 ++++-
+ 3 files changed, 47 insertions(+), 1 deletion(-)
+ create mode 100644 package/python3/0035-configure.ac-Fix-ncurses-include-when-not-cross-comp.patch
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index ba6a68c728..1b3812decf 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -66,6 +66,7 @@ menu "Host utilities"
- 	source "package/python/Config.in.host"
- 	source "package/python-cython/Config.in.host"
- 	source "package/python-lxml/Config.in.host"
-+	source "package/python-magic/Config.in.host"
- 	source "package/python-six/Config.in.host"
- 	source "package/python-xlrd/Config.in.host"
- 	source "package/python3/Config.in.host"
-diff --git a/package/python-magic/Config.in.host b/package/python-magic/Config.in.host
+diff --git a/package/python3/0035-configure.ac-Fix-ncurses-include-when-not-cross-comp.patch b/package/python3/0035-configure.ac-Fix-ncurses-include-when-not-cross-comp.patch
 new file mode 100644
-index 0000000000..021c6b11ed
+index 0000000000..15834772d0
 --- /dev/null
-+++ b/package/python-magic/Config.in.host
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_HOST_PYTHON_MAGIC
-+	bool "host-python-magic"
-+	depends on BR2_PACKAGE_HOST_PYTHON3
++++ b/package/python3/0035-configure.ac-Fix-ncurses-include-when-not-cross-comp.patch
+@@ -0,0 +1,35 @@
++From 9f10c2f660ab24d622b66a58d14dd7522b120d6d Mon Sep 17 00:00:00 2001
++From: Conrad Ratschan <conrad.ratschan@rockwellcollins.com>
++Date: Tue, 2 Feb 2021 09:45:57 -0600
++Subject: [PATCH] configure.ac: Fix ncurses include when not cross compiling
++
++When not cross compiling, the ncurses include path used by configure.ac
++is hardcoded to a path on the user's development machine. Change this
++path to use ${prefix} so that it can use a host folder path specified
++by Buildroot.
++
++Signed-off-by: Conrad Ratschan <conrad.ratschan@rockwellcollins.com>
++---
++ configure.ac | 6 +++++-
++ 1 file changed, 5 insertions(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 07bceda..0398da5 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -5271,7 +5271,11 @@ fi
++ # first curses header check
++ ac_save_cppflags="$CPPFLAGS"
++ if test "$cross_compiling" = no; then
++-  CPPFLAGS="$CPPFLAGS -I/usr/include/ncursesw"
+++  if test "x${prefix}" = "xNONE" ; then
+++    CPPFLAGS="$CPPFLAGS -I/usr/include/ncursesw"
+++  else
+++    CPPFLAGS="$CPPFLAGS -I${prefix}/include/ncursesw -I${prefix}/include/ncurses"
+++  fi
++ fi
++ 
++ AC_CHECK_HEADERS(curses.h ncurses.h)
++-- 
++2.17.1
++
+diff --git a/package/python3/Config.in.host b/package/python3/Config.in.host
+index 70b5dacdde..dc463e51b6 100644
+--- a/package/python3/Config.in.host
++++ b/package/python3/Config.in.host
+@@ -13,4 +13,9 @@ config BR2_PACKAGE_HOST_PYTHON3_SSL
+ 	help
+ 	  _ssl module for host Python3.
+ 
++config BR2_PACKAGE_HOST_PYTHON3_CURSES
++	bool "curses"
 +	help
-+	  A Python interface to the libmagic file type identification
-+	  library.
++	  curses module for Python3.
 +
-+	  https://github.com/ahupp/python-magic
-diff --git a/package/python-magic/python-magic.hash b/package/python-magic/python-magic.hash
-new file mode 100644
-index 0000000000..e6d722ec50
---- /dev/null
-+++ b/package/python-magic/python-magic.hash
-@@ -0,0 +1,2 @@
-+# sha256 from https://pypi.org/pypi/python-magic/json
-+sha256  ca884349f2c92ce830e3f498c5b7c7051fe2942c3ee4332f65213b8ebff15a62  python-magic-0.4.22.tar.gz
-diff --git a/package/python-magic/python-magic.mk b/package/python-magic/python-magic.mk
-new file mode 100644
-index 0000000000..fb9e61d2e9
---- /dev/null
-+++ b/package/python-magic/python-magic.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-magic
-+#
-+################################################################################
+ endif
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 63d6c3f535..9187fb8220 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -20,7 +20,6 @@ HOST_PYTHON3_CONF_OPTS += \
+ 	--disable-sqlite3 \
+ 	--disable-tk \
+ 	--with-expat=system \
+-	--disable-curses \
+ 	--disable-codecs-cjk \
+ 	--disable-nis \
+ 	--enable-unicodedata \
+@@ -47,6 +46,13 @@ else
+ HOST_PYTHON3_CONF_OPTS += --disable-openssl
+ endif
+ 
++ifeq ($(BR2_PACKAGE_HOST_PYTHON3_CURSES),y)
++HOST_PYTHON3_DEPENDENCIES += host-ncurses
++HOST_PYTHON3_CONF_OPTS += --enable-curses
++else
++HOST_PYTHON3_CONF_OPTS += --disable-curses
++endif
 +
-+PYTHON_MAGIC_VERSION = 0.4.22
-+PYTHON_MAGIC_SITE = https://files.pythonhosted.org/packages/26/60/6d45e0e7043f5a7bf15238ca451256a78d3c5fe02cd372f0ed6d888a16d5
-+PYTHON_MAGIC_SETUP_TYPE = setuptools
-+PYTHON_MAGIC_LICENSE = MIT
-+HOST_PYTHON_MAGIC_DL_SUBDIR = python-magic
-+HOST_PYTHON_MAGIC_NEEDS_HOST_PYTHON = python3
-+
-+$(eval $(host-python-package))
+ PYTHON3_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_PYTHON3_2TO3),y)
 -- 
 2.17.1
