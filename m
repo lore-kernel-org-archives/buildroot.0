@@ -1,40 +1,49 @@
-From: Jianhui Zhao <zhaojh329@gmail.com>
-Date: Sat, 27 Feb 2021 01:12:33 +0800
-Subject: [Buildroot] [PATCH 1/1] package/libuhttpd: bump version to 3.10.0
-Message-ID: <20210226171233.8056-1-zhaojh329@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri, 26 Feb 2021 20:19:09 +0100
+Subject: [Buildroot] [PATCH v1] package/libinput: bump version to 1.16.5
+Message-ID: <20210226191909.27845-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
----
- package/libuhttpd/libuhttpd.hash | 2 +-
- package/libuhttpd/libuhttpd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+For details see [1].
 
-diff --git a/package/libuhttpd/libuhttpd.hash b/package/libuhttpd/libuhttpd.hash
-index 68f1f21733..e772cc84ee 100644
---- a/package/libuhttpd/libuhttpd.hash
-+++ b/package/libuhttpd/libuhttpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  9939cd5f9aaad2c118bc04417fb2d21994fb1cdca7fff475a0930a1374635af0  libuhttpd-3.9.0.tar.gz
-+sha256  78b1c670e4f259346a1e49e57d158c619eace23f0b72821b0ff2ba991f7dcc51  libuhttpd-3.10.0.tar.gz
- sha256  99efed4bbc0b62f96f999ef23399e38234fb91651af734fd389a52b033a85b55  LICENSE
-diff --git a/package/libuhttpd/libuhttpd.mk b/package/libuhttpd/libuhttpd.mk
-index a90fe666a8..06d7bc7d5e 100644
---- a/package/libuhttpd/libuhttpd.mk
-+++ b/package/libuhttpd/libuhttpd.mk
+[1] https://lists.freedesktop.org/archives/wayland-devel/2021-February/041734.html
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/libinput/libinput.hash | 6 +++---
+ package/libinput/libinput.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
+index f2cea28ee3..1664afbac8 100644
+--- a/package/libinput/libinput.hash
++++ b/package/libinput/libinput.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2020-November/041664.html
+-sha256  65923a06d5a8970e4a999c4668797b9b689614b62b1d44432ab1c87b65e39e29  libinput-1.16.4.tar.xz
+-sha512  a95a3bcf58a9298946d15f4f2fd93dc5807d3042f8797950a1ffd96d3c979b55a764f035a9f7680d0ea400b033698c322eb61a4387dbc280db6110ffd3e137ee  libinput-1.16.4.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2021-February/041734.html
++sha256  42d404af037a0dcc9dee7a1ab0a8e53cec0b62902fc4a262e5be9d2b7452c214  libinput-1.16.5.tar.xz
++sha512  b2fdd87375cbd5b212f76cefedfaa146966dde1d5e5d566beadd3167749dc3667214946178b157fa4b44360dc6b86a25ffb0356049cdf5a57d0fa2b8e3fcb1e9  libinput-1.16.5.tar.xz
+ 
+ # License files
+ sha256  70d5b1dfe5a9c50a1f2ea91b1c2b1c85d876c5c92339585edbb85cf69e945e14  COPYING
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+index 3b459d6fb5..cbe4bb124f 100644
+--- a/package/libinput/libinput.mk
++++ b/package/libinput/libinput.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBUHTTPD_VERSION = 3.9.0
-+LIBUHTTPD_VERSION = 3.10.0
- LIBUHTTPD_SITE = https://github.com/zhaojh329/libuhttpd/releases/download/v$(LIBUHTTPD_VERSION)
- LIBUHTTPD_LICENSE = MIT
- LIBUHTTPD_LICENSE_FILES = LICENSE
+-LIBINPUT_VERSION = 1.16.4
++LIBINPUT_VERSION = 1.16.5
+ LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
+ LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
+ LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
 -- 
-2.25.1
+2.30.1
