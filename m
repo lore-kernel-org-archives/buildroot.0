@@ -1,48 +1,76 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 27 Feb 2021 19:02:28 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/irqbalance: fix
- sysv startup script (add mkdir /run/irqbalance)
-Message-ID: <20210227182007.73746814CD@busybox.osuosl.org>
+Date: Sat, 27 Feb 2021 19:05:03 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x]
+ support/scripts/boot-qemu-image.py: properly catch timeout
+Message-ID: <20210227182007.9BA2E82676@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=be40ea61cf2da9c20b5813b23c955cebb5f341c2
+commit: https://git.buildroot.net/buildroot/commit/?id=6bf41019fbce3d42d6857a81754ac7f7f43980e7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-- add mkdir -p /run/irqbalance to sysv startup script needed to
-  create socket /run/irqbalance/irqbalance<pid>.sock
+As reported on IRC by sephthir, the gitlab test of the defconfig
+qemu_sparc_ss10_defconfig doesn't error out while the system
+is not working properly.
 
-Fixes:
+This is because we explicitly wait for the timeout as an expected
+condition, but do not check for it. Indeed, pexpect.expect() returns
+the index of the matching condition in the list of expected conditions,
+but we just ignore the return code, so we are not able to differentiate
+between a successful login (or prompt) from a timeout.
 
-  - Bug 13541 [1]
+By default, pexepect.expect() raises the pexpect.TIMEOUT exception on a
+timeout, and we are already prepared to catch and handle that exception.
+But because pexpect.TIMEOUT is passed as an expected condition, the
+exception is not raised.
 
-  daemon.warn /usr/sbin/irqbalance: Daemon couldn't be bound to the file-based socket.
+Remove pexpect.TIMEOUT from the list of expected conditions, so that the
+exception is properly raised again, and so that we can catch it.
 
-[1] https://bugs.busybox.net/show_bug.cgi?id=13541
+The qemu_sparc_ss10_defconfig is already fixed by
+4d16e6f5324f0285f51bfbb5a3503584f3b3ad12.
 
-Reported-by: Alfredo Pons Menargues <alfredo.pons@gmail.com>
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-[yann.morin.1998 at free.fr: only create in start case]
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+[yann.morin.1998 at free.fr: reword commit log]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 4a95f38f306411ca750a676b81326dc7ec67bcaa)
+(cherry picked from commit 03c3fbd81c51c7b0cc236362b3afc73e01219170)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/irqbalance/S13irqbalance | 2 ++
- 1 file changed, 2 insertions(+)
+ support/scripts/boot-qemu-image.py | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/irqbalance/S13irqbalance b/package/irqbalance/S13irqbalance
-index b06a3372e9..f6ed9291be 100644
---- a/package/irqbalance/S13irqbalance
-+++ b/package/irqbalance/S13irqbalance
-@@ -10,6 +10,8 @@ PID="/var/run/irqbalance.pid"
- case "$1" in
-     start)
- 	printf "Starting irqbalance: "
-+	# for irqbalance socket /run/irqbalance/irqbalance<pid>.sock
-+	mkdir -p /run/irqbalance
- 	start-stop-daemon -S -q -x $EXEC -- $ARGS
- 	if [ $? != 0 ]; then
- 	    echo "FAILED"
+diff --git a/support/scripts/boot-qemu-image.py b/support/scripts/boot-qemu-image.py
+index dbbba552ad..9b7bfec990 100755
+--- a/support/scripts/boot-qemu-image.py
++++ b/support/scripts/boot-qemu-image.py
+@@ -32,7 +32,7 @@ def main():
+     time.sleep(1)
+ 
+     try:
+-        child.expect(["buildroot login:", pexpect.TIMEOUT], timeout=60)
++        child.expect(["buildroot login:"], timeout=60)
+     except pexpect.EOF as e:
+         # Some emulations require a fork of qemu-system, which may be
+         # missing on the system, and is not provided by Buildroot.
+@@ -54,7 +54,7 @@ def main():
+     child.sendline("root\r")
+ 
+     try:
+-        child.expect(["# ", pexpect.TIMEOUT], timeout=60)
++        child.expect(["# "], timeout=60)
+     except pexpect.EOF:
+         print("Cannot connect to shell")
+         sys.exit(1)
+@@ -65,7 +65,7 @@ def main():
+     child.sendline("poweroff\r")
+ 
+     try:
+-        child.expect(["System halted", pexpect.TIMEOUT], timeout=60)
++        child.expect(["System halted"], timeout=60)
+         child.expect(pexpect.EOF)
+     except pexpect.EOF:
+         pass
