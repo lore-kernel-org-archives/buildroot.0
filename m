@@ -1,45 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Feb 2021 08:48:19 +0100
-Subject: [Buildroot] [git commit] package/nfs-utils: bump version to 2.5.3
-Message-ID: <20210308072136.23C938896D@busybox.osuosl.org>
+Date: Sat, 27 Feb 2021 18:18:13 +0100
+Subject: [Buildroot] [git commit] package/pcsc-lite: bump to version 1.9.1
+Message-ID: <20210308072136.5E56188918@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f50c212218a8521bc66be22cc14581f5449ff84e
+commit: https://git.buildroot.net/buildroot/commit/?id=a66614dddda1c2143ddbb2111f7e0ccee96be6ea
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
+https://github.com/LudovicRousseau/PCSC/releases/tag/1.9.1
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nfs-utils/nfs-utils.hash | 4 ++--
- package/nfs-utils/nfs-utils.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/pcsc-lite/pcsc-lite.hash | 2 +-
+ package/pcsc-lite/pcsc-lite.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/nfs-utils/nfs-utils.hash b/package/nfs-utils/nfs-utils.hash
-index 6268552ca1..25c11cb686 100644
---- a/package/nfs-utils/nfs-utils.hash
-+++ b/package/nfs-utils/nfs-utils.hash
+diff --git a/package/pcsc-lite/pcsc-lite.hash b/package/pcsc-lite/pcsc-lite.hash
+index 08bc85b154..4d31b25aaa 100644
+--- a/package/pcsc-lite/pcsc-lite.hash
++++ b/package/pcsc-lite/pcsc-lite.hash
 @@ -1,4 +1,4 @@
--# From https://www.kernel.org/pub/linux/utils/nfs-utils/2.5.2/sha256sums.asc
--sha256  d493b81c9d3ffce5d10af701a63ed2b8a21768c23da4a2eceb4d708aea65d9de  nfs-utils-2.5.2.tar.xz
-+# From https://www.kernel.org/pub/linux/utils/nfs-utils/2.5.3/sha256sums.asc
-+sha256  b54d6d8ea2ee62d64111278301ba4631b7bb19174e7f717a724fe5d463900c80  nfs-utils-2.5.3.tar.xz
- # Locally computed
- sha256  576540abf5e95029ad4ad90e32071385a5e95b2c30708c706116f3eb87b9a3de  COPYING
-diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
-index df581b381f..c384e939d8 100644
---- a/package/nfs-utils/nfs-utils.mk
-+++ b/package/nfs-utils/nfs-utils.mk
+ # Locally calculated
+-sha256  0148d403137124552c5d0f10f8cdab2cbb8dfc7c6ce75e018faf667be34f2ef9  pcsc-lite-1.9.0.tar.bz2
++sha256  73c4789b7876a833a70f493cda21655dfe85689d9b7e29701c243276e55e683a  pcsc-lite-1.9.1.tar.bz2
+ sha256  40d4358bb8dc8d30f5365ae6d999b6f820bbc051b292912482f2e4d0ebd837e1  COPYING
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  GPL-3.0.txt
+diff --git a/package/pcsc-lite/pcsc-lite.mk b/package/pcsc-lite/pcsc-lite.mk
+index c411e9c7ee..3091da41a4 100644
+--- a/package/pcsc-lite/pcsc-lite.mk
++++ b/package/pcsc-lite/pcsc-lite.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NFS_UTILS_VERSION = 2.5.2
-+NFS_UTILS_VERSION = 2.5.3
- NFS_UTILS_SOURCE = nfs-utils-$(NFS_UTILS_VERSION).tar.xz
- NFS_UTILS_SITE = https://www.kernel.org/pub/linux/utils/nfs-utils/$(NFS_UTILS_VERSION)
- NFS_UTILS_LICENSE = GPL-2.0+
+-PCSC_LITE_VERSION = 1.9.0
++PCSC_LITE_VERSION = 1.9.1
+ PCSC_LITE_SOURCE = pcsc-lite-$(PCSC_LITE_VERSION).tar.bz2
+ PCSC_LITE_SITE = https://pcsclite.apdu.fr/files
+ PCSC_LITE_INSTALL_STAGING = YES
