@@ -1,36 +1,84 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 27 Feb 2021 16:54:13 +0100
-Subject: [Buildroot] [PATCH v1] package/util-linux: disable runuser for the
- host build
-Message-ID: <20210227155413.15809-1-ps.report@gmx.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 27 Feb 2021 16:55:51 +0100
+Subject: [Buildroot] [PATCH] package/python-aiohttp: security bump to
+ version 3.7.4
+In-Reply-To: <20210227123844.6652-1-peter@korsgaard.com>
+References: <20210227123844.6652-1-peter@korsgaard.com>
+Message-ID: <20210227155551.GG2390841@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes host build in case unsuitable libs are found on the system
-(see [1]).
+Peter, All,
 
-[1] http://lists.busybox.net/pipermail/buildroot/2021-February/304261.html
+On 2021-02-27 13:38 +0100, Peter Korsgaard spake thusly:
+> Fixes the following security issue:
+> 
+> CVE-2021-21330: Open redirect vulnerability in aiohttp
+> (normalize_path_middleware middleware)
+> 
+> Beast Glatisant and Jelmer Vernooij reported that python-aiohttp, a async
+> HTTP client/server framework, is prone to an open redirect vulnerability.  A
+> maliciously crafted link to an aiohttp-based web-server could redirect the
+> browser to a different website.
+> 
+> For more details, see the advisory:
+> https://github.com/aio-libs/aiohttp/security/advisories/GHSA-v6wp-4m6f-gcjg
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Reported-by: GA K <guyarkam@gmail.com>
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/util-linux/util-linux.mk | 1 +
- 1 file changed, 1 insertion(+)
+Applied to master, thanks.
 
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index 0178c52bac..09acaca1a7 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -211,6 +211,7 @@ HOST_UTIL_LINUX_CONF_OPTS += \
- 	--disable-nsenter \
- 	--disable-pg \
- 	--disable-rfkill \
-+	--disable-runuser \
- 	--disable-schedutils \
- 	--disable-setpriv \
- 	--disable-setterm \
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/python-aiohttp/python-aiohttp.hash | 4 ++--
+>  package/python-aiohttp/python-aiohttp.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/python-aiohttp/python-aiohttp.hash b/package/python-aiohttp/python-aiohttp.hash
+> index 36056d2f99..db7dfd6b15 100644
+> --- a/package/python-aiohttp/python-aiohttp.hash
+> +++ b/package/python-aiohttp/python-aiohttp.hash
+> @@ -1,5 +1,5 @@
+>  # md5, sha256 from https://pypi.org/pypi/aiohttp/json
+> -md5  a66039c12f33dd093a2c260f5c459632  aiohttp-3.7.3.tar.gz
+> -sha256  9c1a81af067e72261c9cbe33ea792893e83bc6aa987bfbd6fdc1e5e7b22777c4  aiohttp-3.7.3.tar.gz
+> +md5  586eb4e4dcb1e41242ede0c5bcfd4014  aiohttp-3.7.4.tar.gz
+> +sha256  5d84ecc73141d0a0d61ece0742bb7ff5751b0657dab8405f899d3ceb104cc7de  aiohttp-3.7.4.tar.gz
+>  # Locally computed sha256 checksums
+>  sha256  96627bed0ad08e9b2efa9f4e04e80837cd0550e7694a0fec33b1dab2550282ab  LICENSE.txt
+> diff --git a/package/python-aiohttp/python-aiohttp.mk b/package/python-aiohttp/python-aiohttp.mk
+> index e5a1354267..f1e755c023 100644
+> --- a/package/python-aiohttp/python-aiohttp.mk
+> +++ b/package/python-aiohttp/python-aiohttp.mk
+> @@ -4,9 +4,9 @@
+>  #
+>  ################################################################################
+>  
+> -PYTHON_AIOHTTP_VERSION = 3.7.3
+> +PYTHON_AIOHTTP_VERSION = 3.7.4
+>  PYTHON_AIOHTTP_SOURCE = aiohttp-$(PYTHON_AIOHTTP_VERSION).tar.gz
+> -PYTHON_AIOHTTP_SITE = https://files.pythonhosted.org/packages/68/96/40a765d7d68028c5a6d169b2747ea3f4828ec91a358a63818d468380521c
+> +PYTHON_AIOHTTP_SITE = https://files.pythonhosted.org/packages/7a/95/eb60aaad7943e18c9d091de93c9b0b5ed40aa67c7d5e3c5ee9b36f100a38
+>  PYTHON_AIOHTTP_SETUP_TYPE = setuptools
+>  PYTHON_AIOHTTP_LICENSE = Apache-2.0
+>  PYTHON_AIOHTTP_LICENSE_FILES = LICENSE.txt
+> -- 
+> 2.20.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.30.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
