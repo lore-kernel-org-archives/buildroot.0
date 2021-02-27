@@ -1,97 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 27 Feb 2021 19:13:02 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/bind: bump to
- version 9.11.24
-Message-ID: <20210227182007.DEC678670A@busybox.osuosl.org>
+Date: Sat, 27 Feb 2021 19:06:03 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/unbound: bump to
+ version 1.13.1
+Message-ID: <20210227182007.C0F6C814CD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=33f3033607724bbf12e199298e5967741069b0ca
+commit: https://git.buildroot.net/buildroot/commit/?id=862cb008946091d92f8745e4af2c595a0adc78e9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-Turn 0001-cross.patch into git patch.
+This release contains a number of bug fixes. There is added support
+for the EDNS Padding option (RFC7830 and RFC8467), and the EDNS NSID
+option (RFC 5001). Unbound control has added commands to enable and
+disable rpz processing. Reply callbacks have a start time passed to
+them that can be used to calculate time, these are callbacks for
+response processing. With the option serve-original-ttl the TTL served
+in responses is the original, not counted down, value, for when in
+front of authority service.
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 9679d3f0218519ea7a01f3b5fefb7f6dd23b138e)
+https://github.com/NLnetLabs/unbound/releases/tag/release-1.13.1
+
+Signed-off-by: Stefan Ott <stefan@ott.net>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 048f7723543a8d6b8f24942c0e6eab7e2a3c87ce)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bind/0001-cross.patch | 25 ++++++++++++++++++-------
- package/bind/bind.hash        |  6 +++---
- package/bind/bind.mk          |  2 +-
- 3 files changed, 22 insertions(+), 11 deletions(-)
+ package/unbound/unbound.hash | 4 ++--
+ package/unbound/unbound.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/bind/0001-cross.patch b/package/bind/0001-cross.patch
-index d3e7cc68a6..f39be2f837 100644
---- a/package/bind/0001-cross.patch
-+++ b/package/bind/0001-cross.patch
-@@ -1,15 +1,24 @@
--Use host compiler to build 'gen' since it's run when building.
-+From 505cc9fcadda5607dc4c5bacb03928c0b35162a8 Mon Sep 17 00:00:00 2001
-+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+Date: Wed, 4 Nov 2020 17:51:38 +0100
-+Subject: [PATCH] Use host compiler to build 'gen' since it's run when
-+ building.
+diff --git a/package/unbound/unbound.hash b/package/unbound/unbound.hash
+index 9ccea6eb88..ec7e940791 100644
+--- a/package/unbound/unbound.hash
++++ b/package/unbound/unbound.hash
+@@ -1,5 +1,5 @@
+-# From https://nlnetlabs.nl/downloads/unbound/unbound-1.13.0.tar.gz.sha256
+-sha256  a954043a95b0326ca4037e50dace1f3a207a0a19e9a4a22f4c6718fc623db2a1  unbound-1.13.0.tar.gz
++# From https://nlnetlabs.nl/downloads/unbound/unbound-1.13.1.tar.gz.sha256
++sha256  8504d97b8fc5bd897345c95d116e0ee0ddf8c8ff99590ab2b4bd13278c9f50b8  unbound-1.13.1.tar.gz
  
- Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- [Fabrice: updated for 9.11.10]
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-+---
-+ lib/dns/Makefile.in | 6 ++----
-+ 1 file changed, 2 insertions(+), 4 deletions(-)
- 
--diff -Nura bind-9.5.1-P1/lib/dns/Makefile.in bind-9.5.1-P1.gencross/lib/dns/Makefile.in
----- bind-9.5.1-P1/lib/dns/Makefile.in	2007-09-11 22:09:08.000000000 -0300
--+++ bind-9.5.1-P1.gencross/lib/dns/Makefile.in	2009-03-04 16:35:23.000000000 -0200
--@@ -160,10 +160,8 @@
-+diff --git a/lib/dns/Makefile.in b/lib/dns/Makefile.in
-+index 8fc4e94f26..4ac92857e0 100644
-+--- a/lib/dns/Makefile.in
-++++ b/lib/dns/Makefile.in
-+@@ -184,10 +184,8 @@ code.h:	gen
-  	./gen -s ${srcdir} > code.h || { rm -f $@ ; exit 1; }
--
-+ 
-  gen: gen.c
- -	${BUILD_CC} ${BUILD_CFLAGS} -I${top_srcdir}/lib/isc/include \
- -	${LFS_CFLAGS} ${LFS_LDFLAGS} \
-@@ -17,7 +26,9 @@ diff -Nura bind-9.5.1-P1/lib/dns/Makefile.in bind-9.5.1-P1.gencross/lib/dns/Make
- -	${BUILD_LIBS} ${LFS_LIBS}
- +	${HOSTCC} ${HOST_CFLAGS} -I${top_srcdir}/lib/isc/include \
- +	${HOST_LDFLAGS} -o $@ ${srcdir}/gen.c
--
-+ 
-  timestamp: include libdns. at A@
-  	touch timestamp
-+-- 
-+2.29.1
- 
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index 4ba0182b1c..e02c06ff3e 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
-@@ -1,4 +1,4 @@
--# Verified from https://ftp.isc.org/isc/bind9/9.11.22/bind-9.11.22.tar.gz.asc
--# with key AE3FAC796711EC59FC007AA474BB6B9A4CBB3D38
--sha256  afc6d8015006f1cabf699ff19f517bb8fd9c1811e5231f26baf51c3550262ac9  bind-9.11.22.tar.gz
-+# Verified from https://ftp.isc.org/isc/bind9/9.11.24/bind-9.11.24.tar.gz.asc
-+# with key 95CEDA256B1CA0A15F302FB59521A7ED5DACE918
-+sha256  f261587c5d37c7f14e8393547c4556faefa701a646930f1b6408d71519a30428  bind-9.11.24.tar.gz
- sha256  da2aec2b7f6f0feb16bcb080e2c587375fd3195145f047e4d92d112f5b9db501  COPYRIGHT
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 18fc4845f9..ba60c111ef 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
+ # Locally calculated
+ sha256  8eb9a16cbfb8703090bbfa3a2028fd46bb351509a2f90dc1001e51fbe6fd45db  LICENSE
+diff --git a/package/unbound/unbound.mk b/package/unbound/unbound.mk
+index 8b7d1e8e9f..cec3195b9b 100644
+--- a/package/unbound/unbound.mk
++++ b/package/unbound/unbound.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BIND_VERSION = 9.11.22
-+BIND_VERSION = 9.11.24
- BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- # bind does not support parallel builds.
- BIND_MAKE = $(MAKE1)
+-UNBOUND_VERSION = 1.13.0
++UNBOUND_VERSION = 1.13.1
+ UNBOUND_SITE = https://www.unbound.net/downloads
+ UNBOUND_DEPENDENCIES = host-pkgconf expat libevent openssl
+ UNBOUND_LICENSE = BSD-3-Clause
