@@ -1,75 +1,143 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 27 Feb 2021 09:10:45 +0100
-Subject: [Buildroot] [git commit] package/openldap: add upstream security
- fix for CVE-2021-27212
-Message-ID: <20210227075715.BD24B836DA@busybox.osuosl.org>
+Date: Sat, 27 Feb 2021 09:20:08 +0100
+Subject: [Buildroot] [PATCH] package/screen: add security fix for
+ CVE-2021-26937
+In-Reply-To: <20210226232256.25046-1-peter@korsgaard.com>
+References: <20210226232256.25046-1-peter@korsgaard.com>
+Message-ID: <20210227082008.GE2390841@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2d6a0ea93e8adf53377b6c1ab06e07ce1ba4961a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Peter, All,
 
-In OpenLDAP through 2.4.57 and 2.5.x through 2.5.1alpha, an assertion
-failure in slapd can occur in the issuerAndThisUpdateCheck function via a
-crafted packet, resulting in a denial of service (daemon exit) via a short
-timestamp.  This is related to schema_init.c and checkTime.
+On 2021-02-27 00:22 +0100, Peter Korsgaard spake thusly:
+> encoding.c in GNU Screen through 4.8.0 allows remote attackers to cause a
+> denial of service (invalid write access and application crash) or possibly
+> have unspecified other impact via a crafted UTF-8 character sequence.
+> 
+> For more details, see the oss-security discussion:
+> https://www.openwall.com/lists/oss-security/2021/02/09/3
+> 
+> So far no fix has been added to upstream git, and a number of early proposed
+> fixes caused regressions, so pull the security fix from the screen 4.8.0-5
+> Debian package.
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-For more details, see the bugtracker:
-https://bugs.openldap.org/show_bug.cgi?id=9454
+Applied to master, thanks.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- ...005-ITS-9454-fix-issuerAndThisUpdateCheck.patch | 26 ++++++++++++++++++++++
- package/openldap/openldap.mk                       |  3 +++
- 2 files changed, 29 insertions(+)
+Regards,
+Yann E. MORIN.
 
-diff --git a/package/openldap/0005-ITS-9454-fix-issuerAndThisUpdateCheck.patch b/package/openldap/0005-ITS-9454-fix-issuerAndThisUpdateCheck.patch
-new file mode 100644
-index 0000000000..a611b9ff59
---- /dev/null
-+++ b/package/openldap/0005-ITS-9454-fix-issuerAndThisUpdateCheck.patch
-@@ -0,0 +1,26 @@
-+From 9badb73425a67768c09bcaed1a9c26c684af6c30 Mon Sep 17 00:00:00 2001
-+From: Howard Chu <hyc@openldap.org>
-+Date: Sat, 6 Feb 2021 20:52:06 +0000
-+Subject: [PATCH] ITS#9454 fix issuerAndThisUpdateCheck
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ servers/slapd/schema_init.c | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/servers/slapd/schema_init.c b/servers/slapd/schema_init.c
-+index 31be1154e..8b1e25539 100644
-+--- a/servers/slapd/schema_init.c
-++++ b/servers/slapd/schema_init.c
-+@@ -3900,6 +3900,8 @@ issuerAndThisUpdateCheck(
-+ 					break;
-+ 				}
-+ 			}
-++			if ( tu->bv_len < STRLENOF("YYYYmmddHHmmssZ") ) return LDAP_INVALID_SYNTAX;
-++
-+ 			x.bv_val += tu->bv_len + 1;
-+ 			x.bv_len -= tu->bv_len + 1;
-+ 
-+-- 
-+2.20.1
-+
-diff --git a/package/openldap/openldap.mk b/package/openldap/openldap.mk
-index b4c06d8640..ec11e4fa7d 100644
---- a/package/openldap/openldap.mk
-+++ b/package/openldap/openldap.mk
-@@ -13,6 +13,9 @@ OPENLDAP_CPE_ID_VENDOR = openldap
- OPENLDAP_INSTALL_STAGING = YES
- OPENLDAP_DEPENDENCIES = host-pkgconf
- 
-+# 0005-ITS-9454-fix-issuerAndThisUpdateCheck.patch
-+OPENLDAP_IGNORE_CVES += CVE-2021-27212
-+
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- OPENLDAP_TLS = openssl
- OPENLDAP_DEPENDENCIES += openssl
+> ---
+>  package/screen/0008_CVE-2021-26937.patch | 68 ++++++++++++++++++++++++
+>  package/screen/screen.mk                 |  3 ++
+>  2 files changed, 71 insertions(+)
+>  create mode 100644 package/screen/0008_CVE-2021-26937.patch
+> 
+> diff --git a/package/screen/0008_CVE-2021-26937.patch b/package/screen/0008_CVE-2021-26937.patch
+> new file mode 100644
+> index 0000000000..df7efa0294
+> --- /dev/null
+> +++ b/package/screen/0008_CVE-2021-26937.patch
+> @@ -0,0 +1,68 @@
+> +Description: [CVE-2021-26937] Fix out of bounds array access
+> +Author: Michael Schr?der <mls@suse.de>
+> +Bug-Debian: https://bugs.debian.org/982435
+> +Bug: https://savannah.gnu.org/bugs/?60030
+> +Bug: https://lists.gnu.org/archive/html/screen-devel/2021-02/msg00000.html
+> +Bug-OSS-Security: https://www.openwall.com/lists/oss-security/2021/02/09/3
+> +Origin: https://lists.gnu.org/archive/html/screen-devel/2021-02/msg00010.html
+> +
+> +Downloaded from Debian:
+> +https://sources.debian.org/data/main/s/screen/4.8.0-5/debian/patches/99_CVE-2021-26937.patch
+> +
+> +Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> +--- a/encoding.c
+> ++++ b/encoding.c
+> +@@ -43,7 +43,7 @@
+> + # ifdef UTF8
+> + static int   recode_char __P((int, int, int));
+> + static int   recode_char_to_encoding __P((int, int));
+> +-static void  comb_tofront __P((int, int));
+> ++static void  comb_tofront __P((int));
+> + #  ifdef DW_CHARS
+> + static int   recode_char_dw __P((int, int *, int, int));
+> + static int   recode_char_dw_to_encoding __P((int, int *, int));
+> +@@ -1263,6 +1263,8 @@
+> +     {0x30000, 0x3FFFD},
+> +   };
+> + 
+> ++  if (c >= 0xdf00 && c <= 0xdfff)
+> ++    return 1;          /* dw combining sequence */
+> +   return ((bisearch(c, wide, sizeof(wide) / sizeof(struct interval) - 1)) ||
+> +           (cjkwidth &&
+> +            bisearch(c, ambiguous,
+> +@@ -1330,11 +1332,12 @@
+> + }
+> + 
+> + static void
+> +-comb_tofront(root, i)
+> +-int root, i;
+> ++comb_tofront(i)
+> ++int i;
+> + {
+> +   for (;;)
+> +     {
+> ++      int root = i >= 0x700 ? 0x801 : 0x800;
+> +       debug1("bring to front: %x\n", i);
+> +       combchars[combchars[i]->prev]->next = combchars[i]->next;
+> +       combchars[combchars[i]->next]->prev = combchars[i]->prev;
+> +@@ -1396,9 +1399,9 @@
+> +     {
+> +       /* full, recycle old entry */
+> +       if (c1 >= 0xd800 && c1 < 0xe000)
+> +-        comb_tofront(root, c1 - 0xd800);
+> ++        comb_tofront(c1 - 0xd800);
+> +       i = combchars[root]->prev;
+> +-      if (c1 == i + 0xd800)
+> ++      if (i == 0x800 || i == 0x801 || c1 == i + 0xd800)
+> + 	{
+> + 	  /* completely full, can't recycle */
+> + 	  debug("utf8_handle_comp: completely full!\n");
+> +@@ -1422,7 +1425,7 @@
+> +   mc->font  = (i >> 8) + 0xd8;
+> +   mc->fontx = 0;
+> +   debug3("combinig char %x %x -> %x\n", c1, c, i + 0xd800);
+> +-  comb_tofront(root, i);
+> ++  comb_tofront(i);
+> + }
+> + 
+> + #else /* !UTF8 */
+> diff --git a/package/screen/screen.mk b/package/screen/screen.mk
+> index c24067440e..f75f92cb47 100644
+> --- a/package/screen/screen.mk
+> +++ b/package/screen/screen.mk
+> @@ -15,6 +15,9 @@ SCREEN_CONF_ENV = CFLAGS="$(TARGET_CFLAGS)"
+>  SCREEN_CONF_OPTS = --enable-colors256
+>  SCREEN_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) SCREEN=screen install_bin
+>  
+> +# 0008_CVE-2021-26937.patch
+> +SCREEN_IGNORE_CVES += CVE-2021-26937
+> +
+>  ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
+>  SCREEN_DEPENDENCIES += linux-pam
+>  SCREEN_CONF_OPTS += --enable-pam
+> -- 
+> 2.20.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
