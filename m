@@ -1,122 +1,60 @@
-From: guillaume.bressaix at gmail.com <guillaume.bressaix@gmail.com>
-Date: Sat, 27 Feb 2021 11:45:03 +0100
-Subject: [Buildroot] [PATCH RESEND] package/python-pyext: new package
-Message-ID: <20210227104503.14434-1-guillaume.bressaix@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 27 Feb 2021 13:38:44 +0100
+Subject: [Buildroot] [PATCH] package/python-aiohttp: security bump to
+ version 3.7.4
+Message-ID: <20210227123844.6652-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Guillaume W. Bres" <guillaume.bressaix@gmail.com>
+Fixes the following security issue:
 
-Python-pyext is a set of scripts to enhance python.
-This includes features such as function overloading
-and the "switch" statement.
+CVE-2021-21330: Open redirect vulnerability in aiohttp
+(normalize_path_middleware middleware)
 
-Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
+Beast Glatisant and Jelmer Vernooij reported that python-aiohttp, a async
+HTTP client/server framework, is prone to an open redirect vulnerability.  A
+maliciously crafted link to an aiohttp-based web-server could redirect the
+browser to a different website.
+
+For more details, see the advisory:
+https://github.com/aio-libs/aiohttp/security/advisories/GHSA-v6wp-4m6f-gcjg
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
+ package/python-aiohttp/python-aiohttp.hash | 4 ++--
+ package/python-aiohttp/python-aiohttp.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-No license file is currently delivered with the package sources.
-You can see on "pypi.org" that it is under MIT license though.
-I asked confirmation to the author though, here's a copy
-of that email:
-
-Hello,
-
-I just pushed a contribution to "Buildroot",
-a tool to generate embedded linux image easily,
-to have your package available in the general interface.
-
-I saw on "pypi.org" that your package is under MIT license,
-that is what I declared in Buildroot. However,
-since no license file is provided, the license verification is turned off.
-
-* Can you confirm your package is under MIT license?
-* Do you plan on delivering a license file in the next release
-
-Thank you
-
-Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
----
- DEVELOPERS                             |  1 +
- package/Config.in                      |  1 +
- package/python-pyext/Config.in         |  8 ++++++++
- package/python-pyext/python-pyext.hash |  2 ++
- package/python-pyext/python-pyext.mk   | 17 +++++++++++++++++
- 5 files changed, 29 insertions(+)
- create mode 100644 package/python-pyext/Config.in
- create mode 100644 package/python-pyext/python-pyext.hash
- create mode 100644 package/python-pyext/python-pyext.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index b019fe04d5..17fc951805 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1057,6 +1057,7 @@ N:	Guillaume William Brs <guillaume.bressaix@gmail.com>
- F:	package/libnids/
- F:	package/liquid-dsp/
- F:	package/pixiewps/
-+F:	package/pyext/
- F:	package/python-pybind/
- F:	package/reaver/
+diff --git a/package/python-aiohttp/python-aiohttp.hash b/package/python-aiohttp/python-aiohttp.hash
+index 36056d2f99..db7dfd6b15 100644
+--- a/package/python-aiohttp/python-aiohttp.hash
++++ b/package/python-aiohttp/python-aiohttp.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/aiohttp/json
+-md5  a66039c12f33dd093a2c260f5c459632  aiohttp-3.7.3.tar.gz
+-sha256  9c1a81af067e72261c9cbe33ea792893e83bc6aa987bfbd6fdc1e5e7b22777c4  aiohttp-3.7.3.tar.gz
++md5  586eb4e4dcb1e41242ede0c5bcfd4014  aiohttp-3.7.4.tar.gz
++sha256  5d84ecc73141d0a0d61ece0742bb7ff5751b0657dab8405f899d3ceb104cc7de  aiohttp-3.7.4.tar.gz
+ # Locally computed sha256 checksums
+ sha256  96627bed0ad08e9b2efa9f4e04e80837cd0550e7694a0fec33b1dab2550282ab  LICENSE.txt
+diff --git a/package/python-aiohttp/python-aiohttp.mk b/package/python-aiohttp/python-aiohttp.mk
+index e5a1354267..f1e755c023 100644
+--- a/package/python-aiohttp/python-aiohttp.mk
++++ b/package/python-aiohttp/python-aiohttp.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
-diff --git a/package/Config.in b/package/Config.in
-index 5304ab141c..bc72708d1d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1117,6 +1117,7 @@ menu "External python modules"
- 	source "package/python-pydal/Config.in"
- 	source "package/python-pydantic/Config.in"
- 	source "package/python-pyelftools/Config.in"
-+	source "package/python-pyext/Config.in"
- 	source "package/python-pyftpdlib/Config.in"
- 	source "package/python-pygame/Config.in"
- 	source "package/python-pygments/Config.in"
-diff --git a/package/python-pyext/Config.in b/package/python-pyext/Config.in
-new file mode 100644
-index 0000000000..4290d3899a
---- /dev/null
-+++ b/package/python-pyext/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_PYEXT
-+	bool "python-pyext"
-+	help
-+	  python-pyext is a set of extensions to enhance python.
-+	  This includes features such as function overloading,
-+	  the 'switch' statement, python2 safe tuple unpacking.
-+
-+	  https://pypi.org/project/pyext/
-diff --git a/package/python-pyext/python-pyext.hash b/package/python-pyext/python-pyext.hash
-new file mode 100644
-index 0000000000..55ecee1317
---- /dev/null
-+++ b/package/python-pyext/python-pyext.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  e618a635be4e8c4a84b443cc27186601ad052efe35f01839815f2a2cf3947cdf  pyext-0.7.tar.gz
-diff --git a/package/python-pyext/python-pyext.mk b/package/python-pyext/python-pyext.mk
-new file mode 100644
-index 0000000000..cc01cc9ac7
---- /dev/null
-+++ b/package/python-pyext/python-pyext.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# python-pyext
-+#
-+################################################################################
-+
-+PYTHON_PYEXT_VERSION = 0.7
-+PYTHON_PYEXT_SOURCE = pyext-$(PYTHON_PYEXT_VERSION).tar.gz
-+PYTHON_PYEXT_SITE = https://files.pythonhosted.org/packages/b0/be/9b6005ac644aaef022527ce49617263379e49dbdbd433d1d3dd66d71f570
-+
-+# A license file is not delivered with pyext, however,
-+# pypi.org clearly says this package is under MIT license.
-+# I asked confirmation to package authors
-+PYTHON_PYEXT_LICENSE = Unknown (clarification has been asked to authors)
-+PYTHON_PYEXT_SETUP_TYPE = setuptools
-+
-+$(eval $(python-package))
+-PYTHON_AIOHTTP_VERSION = 3.7.3
++PYTHON_AIOHTTP_VERSION = 3.7.4
+ PYTHON_AIOHTTP_SOURCE = aiohttp-$(PYTHON_AIOHTTP_VERSION).tar.gz
+-PYTHON_AIOHTTP_SITE = https://files.pythonhosted.org/packages/68/96/40a765d7d68028c5a6d169b2747ea3f4828ec91a358a63818d468380521c
++PYTHON_AIOHTTP_SITE = https://files.pythonhosted.org/packages/7a/95/eb60aaad7943e18c9d091de93c9b0b5ed40aa67c7d5e3c5ee9b36f100a38
+ PYTHON_AIOHTTP_SETUP_TYPE = setuptools
+ PYTHON_AIOHTTP_LICENSE = Apache-2.0
+ PYTHON_AIOHTTP_LICENSE_FILES = LICENSE.txt
 -- 
 2.20.1
