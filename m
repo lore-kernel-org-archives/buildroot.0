@@ -1,71 +1,58 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 27 Feb 2021 16:54:50 +0100
-Subject: [Buildroot] [git commit] package/libglib2: security bump to version
- 2.66.7
-Message-ID: <20210227153339.5033481568@busybox.osuosl.org>
+Date: Sat, 27 Feb 2021 16:56:20 +0100
+Subject: [Buildroot] [PATCH 1/1] package/openntpd: add
+ OPENNTPD_CPE_ID_VENDOR
+In-Reply-To: <20210227093241.483647-1-fontaine.fabrice@gmail.com>
+References: <20210227093241.483647-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210227155620.GH2390841@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=908d96717051c5b57566638c7566372553c6e148
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fabrice, All,
 
-- Fix CVE-2021-27218: An issue was discovered in GNOME GLib before
-  2.66.7 and 2.67.x before 2.67.4. If g_byte_array_new_take() was called
-  with a buffer of 4GB or more on a 64-bit platform, the length would be
-  truncated modulo 2**32, causing unintended length truncation.
-- Fix CVE-2021-27219: An issue was discovered in GNOME GLib before
-  2.66.6 and 2.67.x before 2.67.3. The function g_bytes_new has an
-  integer overflow on 64-bit platforms due to an implicit cast from 64
-  bits to 32 bits. The overflow could potentially lead to memory
-  corruption.
+On 2021-02-27 10:32 +0100, Fabrice Fontaine spake thusly:
+> cpe:2.3:a:openntpd:openntpd is a valid CPE identifier for this package:
+> 
+> https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aopenntpd%3Aopenntpd
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-https://gitlab.gnome.org/GNOME/glib/-/blob/2.66.7/NEWS
+Applied to master, thanks.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/libglib2/0003-remove-cpp-requirement.patch | 2 +-
- package/libglib2/libglib2.hash                     | 4 ++--
- package/libglib2/libglib2.mk                       | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+Regards,
+Yann E. MORIN.
 
-diff --git a/package/libglib2/0003-remove-cpp-requirement.patch b/package/libglib2/0003-remove-cpp-requirement.patch
-index 72304fa4b1..25cb23c239 100644
---- a/package/libglib2/0003-remove-cpp-requirement.patch
-+++ b/package/libglib2/0003-remove-cpp-requirement.patch
-@@ -35,7 +35,7 @@ index 4bbf4c2..ac59f4e 100644
- @@ -1,4 +1,4 @@
- -project('glib', 'c', 'cpp',
- +project('glib', 'c',
--   version : '2.66.3',
-+   version : '2.66.7',
-    # NOTE: We keep this pinned at 0.49 because that's what Debian 10 ships
-    meson_version : '>= 0.49.2',
- @@ -10,7 +10,6 @@ project('glib', 'c', 'cpp',
-diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
-index ac32f1b14b..7886bb5c59 100644
---- a/package/libglib2/libglib2.hash
-+++ b/package/libglib2/libglib2.hash
-@@ -1,4 +1,4 @@
--# https://download.gnome.org/sources/glib/2.66/glib-2.66.3.sha256sum
--sha256  79f31365a99cb1cc9db028625635d1438890702acde9e2802eae0acebcf7b5b1  glib-2.66.3.tar.xz
-+# https://download.gnome.org/sources/glib/2.66/glib-2.66.7.sha256sum
-+sha256  09f158769f6f26b31074e15b1ac80ec39b13b53102dfae66cfe826fb2cc65502  glib-2.66.7.tar.xz
- # License files, locally calculated
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index c738415216..ffbb4c96b5 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LIBGLIB2_VERSION_MAJOR = 2.66
--LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).3
-+LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).7
- LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
- LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
- LIBGLIB2_LICENSE = LGPL-2.1+
+> ---
+>  package/openntpd/openntpd.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/openntpd/openntpd.mk b/package/openntpd/openntpd.mk
+> index 9076f3ddda..30c39e45ed 100644
+> --- a/package/openntpd/openntpd.mk
+> +++ b/package/openntpd/openntpd.mk
+> @@ -8,6 +8,7 @@ OPENNTPD_VERSION = 6.2p3
+>  OPENNTPD_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenNTPD
+>  OPENNTPD_LICENSE = MIT-like, BSD-2-Clause, BSD-3-Clause
+>  OPENNTPD_LICENSE_FILES = COPYING
+> +OPENNTPD_CPE_ID_VENDOR = openntpd
+>  OPENNTPD_DEPENDENCIES = host-bison
+>  # Need to autoreconf for our libtool patch to apply properly
+>  OPENNTPD_AUTORECONF = YES
+> -- 
+> 2.30.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
