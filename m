@@ -1,144 +1,97 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 27 Feb 2021 19:29:04 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/bind: fix
- compile/linking failure
-Message-ID: <20210227182008.1C26E814CD@busybox.osuosl.org>
+Date: Sat, 27 Feb 2021 19:13:02 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/bind: bump to
+ version 9.11.24
+Message-ID: <20210227182007.DEC678670A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=07c2270cee88a884e0ac88ef97edb71b7a8df8ab
+commit: https://git.buildroot.net/buildroot/commit/?id=33f3033607724bbf12e199298e5967741069b0ca
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-Fixes:
+Turn 0001-cross.patch into git patch.
 
-  - http://autobuild.buildroot.net/results/966a3de94aa97fa8e9895eede29c9cbfb4bd7301
-
-  .../host/lib/gcc/arm-buildroot-linux-musleabihf/9.3.0/../../../../arm-buildroot-linux-musleabihf/bin/ld: warning: libisccfg.so.163, needed by ../../lib/bind9/.libs/libbind9.so, not found (try using -rpath or -rpath-link)
-  .../host/lib/gcc/arm-buildroot-linux-musleabihf/9.3.0/../../../../arm-buildroot-linux-musleabihf/bin/ld: ../../lib/bind9/.libs/libbind9.so: undefined reference to `cfg_obj_line'
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-[Peter: replace by upstream patches]
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit e4af234d3caa39e34fde68a39150c7fac0363a63)
+(cherry picked from commit 9679d3f0218519ea7a01f3b5fefb7f6dd23b138e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../bind/0002-update-link-order-of-libbind9.patch  | 26 +++++++++++++++
- ...LIB0-for-isc-hmac-fixup-and-named-nzd2nzf.patch | 38 ++++++++++++++++++++++
- ...ed-library-platforms-that-don-t-support-i.patch | 30 +++++++++++++++++
- 3 files changed, 94 insertions(+)
+ package/bind/0001-cross.patch | 25 ++++++++++++++++++-------
+ package/bind/bind.hash        |  6 +++---
+ package/bind/bind.mk          |  2 +-
+ 3 files changed, 22 insertions(+), 11 deletions(-)
 
-diff --git a/package/bind/0002-update-link-order-of-libbind9.patch b/package/bind/0002-update-link-order-of-libbind9.patch
-new file mode 100644
-index 0000000000..32c0776eec
---- /dev/null
-+++ b/package/bind/0002-update-link-order-of-libbind9.patch
-@@ -0,0 +1,26 @@
-+From f63b2d8fbd010d60f2a07f4f69b11d7a10c48ae5 Mon Sep 17 00:00:00 2001
-+From: Mark Andrews <marka@isc.org>
-+Date: Tue, 15 Dec 2020 12:07:03 +1100
-+Subject: [PATCH] update link order of libbind9
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+diff --git a/package/bind/0001-cross.patch b/package/bind/0001-cross.patch
+index d3e7cc68a6..f39be2f837 100644
+--- a/package/bind/0001-cross.patch
++++ b/package/bind/0001-cross.patch
+@@ -1,15 +1,24 @@
+-Use host compiler to build 'gen' since it's run when building.
++From 505cc9fcadda5607dc4c5bacb03928c0b35162a8 Mon Sep 17 00:00:00 2001
++From: Gustavo Zacarias <gustavo@zacarias.com.ar>
++Date: Wed, 4 Nov 2020 17:51:38 +0100
++Subject: [PATCH] Use host compiler to build 'gen' since it's run when
++ building.
+ 
+ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ [Fabrice: updated for 9.11.10]
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 +---
-+ lib/bind9/Makefile.in | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/lib/bind9/Makefile.in b/lib/bind9/Makefile.in
-+index 2634451b15..704259dde1 100644
-+--- a/lib/bind9/Makefile.in
-++++ b/lib/bind9/Makefile.in
-+@@ -61,7 +61,7 @@ libbind9.la: ${OBJS} ${ISCCFGDEPLIBS} ${ISCDEPLIBS} ${DNSDEPLIBS}
-+ 	${LIBTOOL_MODE_LINK} \
-+ 		${CC} ${ALL_CFLAGS} ${LDFLAGS} -o libbind9.la -rpath ${libdir} \
-+ 		-version-info ${LIBINTERFACE}:${LIBREVISION}:${LIBAGE} \
-+-		${OBJS} ${DNSLIBS} ${ISCCFGLIBS} ${ISCLIBS} @DNS_CRYPTO_LIBS@ \
-++		${OBJS} ${ISCCFGLIBS} ${DNSLIBS} ${ISCLIBS} @DNS_CRYPTO_LIBS@ \
-+ 		${LIBS}
++ lib/dns/Makefile.in | 6 ++----
++ 1 file changed, 2 insertions(+), 4 deletions(-)
+ 
+-diff -Nura bind-9.5.1-P1/lib/dns/Makefile.in bind-9.5.1-P1.gencross/lib/dns/Makefile.in
+---- bind-9.5.1-P1/lib/dns/Makefile.in	2007-09-11 22:09:08.000000000 -0300
+-+++ bind-9.5.1-P1.gencross/lib/dns/Makefile.in	2009-03-04 16:35:23.000000000 -0200
+-@@ -160,10 +160,8 @@
++diff --git a/lib/dns/Makefile.in b/lib/dns/Makefile.in
++index 8fc4e94f26..4ac92857e0 100644
++--- a/lib/dns/Makefile.in
+++++ b/lib/dns/Makefile.in
++@@ -184,10 +184,8 @@ code.h:	gen
+  	./gen -s ${srcdir} > code.h || { rm -f $@ ; exit 1; }
+-
 + 
-+ timestamp: libbind9. at A@
+  gen: gen.c
+ -	${BUILD_CC} ${BUILD_CFLAGS} -I${top_srcdir}/lib/isc/include \
+ -	${LFS_CFLAGS} ${LFS_LDFLAGS} \
+@@ -17,7 +26,9 @@ diff -Nura bind-9.5.1-P1/lib/dns/Makefile.in bind-9.5.1-P1.gencross/lib/dns/Make
+ -	${BUILD_LIBS} ${LFS_LIBS}
+ +	${HOSTCC} ${HOST_CFLAGS} -I${top_srcdir}/lib/isc/include \
+ +	${HOST_LDFLAGS} -o $@ ${srcdir}/gen.c
+-
++ 
+  timestamp: include libdns. at A@
+  	touch timestamp
 +-- 
-+2.20.1
-+
-diff --git a/package/bind/0003-fix-LIB0-for-isc-hmac-fixup-and-named-nzd2nzf.patch b/package/bind/0003-fix-LIB0-for-isc-hmac-fixup-and-named-nzd2nzf.patch
-new file mode 100644
-index 0000000000..92573f1255
---- /dev/null
-+++ b/package/bind/0003-fix-LIB0-for-isc-hmac-fixup-and-named-nzd2nzf.patch
-@@ -0,0 +1,38 @@
-+From d744db22f3f0b1fa604517e4414c54531d98eb87 Mon Sep 17 00:00:00 2001
-+From: Mark Andrews <marka@isc.org>
-+Date: Tue, 15 Dec 2020 12:16:37 +1100
-+Subject: [PATCH] fix LIB0 for isc-hmac-fixup and named-nzd2nzf
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ bin/tools/Makefile.in | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/bin/tools/Makefile.in b/bin/tools/Makefile.in
-+index b12f80a334..6f984f121a 100644
-+--- a/bin/tools/Makefile.in
-++++ b/bin/tools/Makefile.in
-+@@ -87,7 +87,7 @@ nsec3hash at EXEEXT@: nsec3hash. at O@ ${ISCDEPLIBS} ${DNSDEPLIBS}
-+ 
-+ isc-hmac-fixup at EXEEXT@: isc-hmac-fixup. at O@ ${ISCDEPLIBS}
-+ 	export BASEOBJS="isc-hmac-fixup. at O@"; \
-+-	export LIBS0="${ISCLIBS}"; \
-++	export LIBS0=""; \
-+ 	${FINALBUILDCMD}
-+ 
-+ genrandom at EXEEXT@: genrandom. at O@
-+@@ -104,9 +104,9 @@ dnstap-read at EXEEXT@: dnstap-read. at O@ ${ISCDEPLIBS} ${DNSDEPLIBS}
-+ 	export LIBS0="${DNSLIBS}"; \
-+ 	${FINALBUILDCMD}
-+ 
-+-named-nzd2nzf at EXEEXT@: named-nzd2nzf. at O@ ${NZDDEPLIBS}
-++named-nzd2nzf at EXEEXT@: named-nzd2nzf. at O@ ${ISCDEPLIBS}
-+ 	export BASEOBJS="named-nzd2nzf. at O@"; \
-+-	export LIBS0="${ISCCFGLIBS} ${ISCCCLIBS} ${BIND9LIBS} ${DNSLIBS}"; \
-++	export LIBS0=""; \
-+ 	${FINALBUILDCMD}
-+ 
-+ doc man:: ${MANOBJS}
-+-- 
-+2.20.1
-+
-diff --git a/package/bind/0004-Handle-shared-library-platforms-that-don-t-support-i.patch b/package/bind/0004-Handle-shared-library-platforms-that-don-t-support-i.patch
-new file mode 100644
-index 0000000000..3e00e41d65
---- /dev/null
-+++ b/package/bind/0004-Handle-shared-library-platforms-that-don-t-support-i.patch
-@@ -0,0 +1,30 @@
-+From 5cec1ba2fa2f18e9d9e926eab923e0b1b7b8d226 Mon Sep 17 00:00:00 2001
-+From: Mark Andrews <marka@isc.org>
-+Date: Tue, 15 Dec 2020 19:18:41 +1100
-+Subject: [PATCH] Handle shared library platforms that don't support inter
-+ library dependancies
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ bin/tools/Makefile.in | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/bin/tools/Makefile.in b/bin/tools/Makefile.in
-+index 6f984f121a..d34bac1192 100644
-+--- a/bin/tools/Makefile.in
-++++ b/bin/tools/Makefile.in
-+@@ -94,9 +94,9 @@ genrandom at EXEEXT@: genrandom. at O@
-+ 	${LIBTOOL_MODE_LINK} ${PURIFY} ${CC} ${CFLAGS} ${LDFLAGS} \
-+ 		-o $@ genrandom. at O@ @GENRANDOMLIB@ ${LIBS}
-+ 
-+-mdig at EXEEXT@: mdig. at O@ ${ISCDEPLIBS} ${DNSDEPLIBS} ${BIND9DEPLIBS}
-++mdig at EXEEXT@: mdig. at O@ ${ISCDEPLIBS} ${DNSDEPLIBS} ${BIND9DEPLIBS} ${ISCCFGDEPLIBS}
-+ 	export BASEOBJS="mdig. at O@"; \
-+-	export LIBS0="${DNSLIBS} ${BIND9LIBS}"; \
-++	export LIBS0="${BIND9LIBS} ${ISCCFGLIBS} ${DNSLIBS}"; \
-+ 	${FINALBUILDCMD}
-+ 
-+ dnstap-read at EXEEXT@: dnstap-read. at O@ ${ISCDEPLIBS} ${DNSDEPLIBS}
-+-- 
-+2.20.1
-+
++2.29.1
+ 
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index 4ba0182b1c..e02c06ff3e 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
+@@ -1,4 +1,4 @@
+-# Verified from https://ftp.isc.org/isc/bind9/9.11.22/bind-9.11.22.tar.gz.asc
+-# with key AE3FAC796711EC59FC007AA474BB6B9A4CBB3D38
+-sha256  afc6d8015006f1cabf699ff19f517bb8fd9c1811e5231f26baf51c3550262ac9  bind-9.11.22.tar.gz
++# Verified from https://ftp.isc.org/isc/bind9/9.11.24/bind-9.11.24.tar.gz.asc
++# with key 95CEDA256B1CA0A15F302FB59521A7ED5DACE918
++sha256  f261587c5d37c7f14e8393547c4556faefa701a646930f1b6408d71519a30428  bind-9.11.24.tar.gz
+ sha256  da2aec2b7f6f0feb16bcb080e2c587375fd3195145f047e4d92d112f5b9db501  COPYRIGHT
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 18fc4845f9..ba60c111ef 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BIND_VERSION = 9.11.22
++BIND_VERSION = 9.11.24
+ BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ # bind does not support parallel builds.
+ BIND_MAKE = $(MAKE1)
