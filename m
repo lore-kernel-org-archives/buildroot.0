@@ -1,54 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 27 Feb 2021 18:46:44 +0100
-Subject: [Buildroot] Buildroot 2021.02-rc3 released
-Message-ID: <87czwltncr.fsf@dell.be.48ers.dk>
+Date: Sat, 27 Feb 2021 18:57:27 +0100
+Subject: [Buildroot] [PATCH] package/python-django: security bump to
+ version 3.0.13
+In-Reply-To: <20210219095942.20995-1-peter@korsgaard.com>
+References: <20210219095942.20995-1-peter@korsgaard.com>
+Message-ID: <CACXmVibKMdThYvb95wWq_F929ZGL9oUP_zF+tJmau5juHo4ajg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Fri, Feb 19, 2021 at 10:59 AM Peter Korsgaard <peter@korsgaard.com> wrote:
+>
+> Fixes the following security issue:
+>
+> - CVE-2021-23336: Web cache poisoning via django.utils.http.limited_parse_qsl()
+>
+>   Django contains a copy of urllib.parse.parse_qsl() which was added to
+>   backport some security fixes.  A further security fix has been issued
+>   recently such that parse_qsl() no longer allows using ; as a query
+>   parameter separator by default.  Django now includes this fix.  See
+>   bpo-42967 for further details.
+>
+> For more details, see the advisory:
+> https://www.djangoproject.com/weblog/2021/feb/19/security-releases/
+>
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Buildroot 2021.02-rc3 is released - Go download it at:
-
-http://buildroot.net/downloads/buildroot-2021.02-rc3.tar.gz
-
-or
-
-http://buildroot.net/downloads/buildroot-2021.02-rc3.tar.bz2
-
-Or get it from Git:
-
-git://git.buildroot.net/buildroot
-
-Another week, another release candidate.
-
-Please give it a spin and report any problems to the mailing list or
-bug tracker. Many thanks to the people contributing to this release:
-
-git shortlog -sn 2021.02-rc2..
-
-    12  Fabrice Fontaine
-    12  Peter Korsgaard
-     8  Peter Seiderer
-     3  Romain Naour
-     2  Scott Fan
-     1  Andreas Klinger
-     1  Bartosz Bilas
-     1  John Keeping
-     1  J?rg Krause
-     1  Markus Mayer
-     1  Ryan Barnett
-     1  Stefan Ott
-     1  Thomas Petazzoni
-     1  Vincent Fazio
-
-For more details, see the CHANGES file:
-
-http://git.buildroot.net/buildroot/plain/CHANGES?id=2021.02-rc3
-
-Expect the final 2021.02 release next week.
+Committed to 2020.02.x and 2020.11.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
