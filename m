@@ -1,46 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 27 Feb 2021 19:41:27 +0100
-Subject: [Buildroot] [PATCH] package/bind: security bump to version
- 9.11.28
-In-Reply-To: <87ft1orzrh.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Mon, 22 Feb 2021 14:35:46 +0100")
-References: <20210218082226.5695-1-peter@korsgaard.com>
- <87ft1orzrh.fsf@dell.be.48ers.dk>
-Message-ID: <871rd1s694.fsf@dell.be.48ers.dk>
+Date: Sat, 27 Feb 2021 18:59:59 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] utils/scanpypi: use
+ python3 explicitly
+Message-ID: <20210227181917.D165886705@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=03e713a0cc47341eb3e9f47bd6c086b1848400be
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
- >> Fixes the following security issue:
- >> - CVE-2020-8625: When tkey-gssapi-keytab or tkey-gssapi-credential was
- >> configured, a specially crafted GSS-TSIG query could cause a buffer
- >> overflow in the ISC implementation of SPNEGO (a protocol enabling
- >> negotiation of the security mechanism to use for GSSAPI authentication).
- >> This flaw could be exploited to crash named.  Theoretically, it also
- >> enabled remote code execution, but achieving the latter is very difficult
- >> in real-world conditions
+scanpypi is python3 compatible. In addition, it executes the setup.py
+of Python modules to extract the relevant information. Since these are
+more and more commonly using python3 constructs, using "python" to run
+scanpypi causes problems on systems that have python2 installed as
+python, when trying to parse setup.py scripts with python3 constructs.
 
- >> For details, see the advisory:
- >> https://kb.isc.org/docs/cve-2020-8625
+Fixes part of #13516.
 
- >> In addition, 9.11.26-27 fixed a number of issues, see the release notes for
- >> details:
- >> https://downloads.isc.org/isc/bind9/9.11.28/RELEASE-NOTES-bind-9.11.28.html
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit ee8b6808169e1e61b4318b44fbc706ec888c605d)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ utils/scanpypi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- >> Drop now upstreamed patches, update the GPG key for the 2021-2022 variant
- >> and update the COPYRIGHT hash for a change of year:
-
- >> -Copyright (C) 1996-2020  Internet Systems Consortium, Inc. ("ISC")
- >> +Copyright (C) 1996-2021  Internet Systems Consortium, Inc. ("ISC")
-
- >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed to 2020.02.x and 2020.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/utils/scanpypi b/utils/scanpypi
+index dfbf8131cd..c4abc53ff4 100755
+--- a/utils/scanpypi
++++ b/utils/scanpypi
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ """
+ 
+ Utility for building Buildroot packages for existing PyPI packages
