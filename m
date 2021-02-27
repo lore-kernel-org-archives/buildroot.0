@@ -1,45 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 27 Feb 2021 18:18:13 +0100
-Subject: [Buildroot] [git commit] package/pcsc-lite: bump to version 1.9.1
-Message-ID: <20210308072136.5E56188918@busybox.osuosl.org>
+Date: Sat, 27 Feb 2021 18:17:14 +0100
+Subject: [Buildroot] [git commit] package/libinput: bump version to 1.16.5
+Message-ID: <20210308072136.5507A8896D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a66614dddda1c2143ddbb2111f7e0ccee96be6ea
+commit: https://git.buildroot.net/buildroot/commit/?id=1fd8baac1d716916eb27f80a66de6aff26c3be08
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/LudovicRousseau/PCSC/releases/tag/1.9.1
+For details see [1].
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[1] https://lists.freedesktop.org/archives/wayland-devel/2021-February/041734.html
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pcsc-lite/pcsc-lite.hash | 2 +-
- package/pcsc-lite/pcsc-lite.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libinput/libinput.hash | 6 +++---
+ package/libinput/libinput.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/pcsc-lite/pcsc-lite.hash b/package/pcsc-lite/pcsc-lite.hash
-index 08bc85b154..4d31b25aaa 100644
---- a/package/pcsc-lite/pcsc-lite.hash
-+++ b/package/pcsc-lite/pcsc-lite.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  0148d403137124552c5d0f10f8cdab2cbb8dfc7c6ce75e018faf667be34f2ef9  pcsc-lite-1.9.0.tar.bz2
-+sha256  73c4789b7876a833a70f493cda21655dfe85689d9b7e29701c243276e55e683a  pcsc-lite-1.9.1.tar.bz2
- sha256  40d4358bb8dc8d30f5365ae6d999b6f820bbc051b292912482f2e4d0ebd837e1  COPYING
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  GPL-3.0.txt
-diff --git a/package/pcsc-lite/pcsc-lite.mk b/package/pcsc-lite/pcsc-lite.mk
-index c411e9c7ee..3091da41a4 100644
---- a/package/pcsc-lite/pcsc-lite.mk
-+++ b/package/pcsc-lite/pcsc-lite.mk
+diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
+index f2cea28ee3..1664afbac8 100644
+--- a/package/libinput/libinput.hash
++++ b/package/libinput/libinput.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2020-November/041664.html
+-sha256  65923a06d5a8970e4a999c4668797b9b689614b62b1d44432ab1c87b65e39e29  libinput-1.16.4.tar.xz
+-sha512  a95a3bcf58a9298946d15f4f2fd93dc5807d3042f8797950a1ffd96d3c979b55a764f035a9f7680d0ea400b033698c322eb61a4387dbc280db6110ffd3e137ee  libinput-1.16.4.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2021-February/041734.html
++sha256  42d404af037a0dcc9dee7a1ab0a8e53cec0b62902fc4a262e5be9d2b7452c214  libinput-1.16.5.tar.xz
++sha512  b2fdd87375cbd5b212f76cefedfaa146966dde1d5e5d566beadd3167749dc3667214946178b157fa4b44360dc6b86a25ffb0356049cdf5a57d0fa2b8e3fcb1e9  libinput-1.16.5.tar.xz
+ 
+ # License files
+ sha256  70d5b1dfe5a9c50a1f2ea91b1c2b1c85d876c5c92339585edbb85cf69e945e14  COPYING
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+index 3b459d6fb5..cbe4bb124f 100644
+--- a/package/libinput/libinput.mk
++++ b/package/libinput/libinput.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PCSC_LITE_VERSION = 1.9.0
-+PCSC_LITE_VERSION = 1.9.1
- PCSC_LITE_SOURCE = pcsc-lite-$(PCSC_LITE_VERSION).tar.bz2
- PCSC_LITE_SITE = https://pcsclite.apdu.fr/files
- PCSC_LITE_INSTALL_STAGING = YES
+-LIBINPUT_VERSION = 1.16.4
++LIBINPUT_VERSION = 1.16.5
+ LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
+ LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
+ LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
