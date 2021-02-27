@@ -1,106 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 27 Feb 2021 19:06:37 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/fakeroot: fix
- glibc detection on patch for new wrappers
-Message-ID: <20210227182007.D2BCC8396F@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 27 Feb 2021 20:26:39 +0100
+Subject: [Buildroot] [PATCH 1/1] package/tpm2-pkcs11: needs threads
+Message-ID: <20210227192639.6703-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=61f0c4b0b064734bcd33be7a232d67a33017c9f5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+tpm2-pkcs11 fails to build without threads since its addition with
+commit 42db2c7236c2249ec02608ed714fa6f95e36161b
 
-Commit f45925a951318e9e53bead80b363e004301adc6f add the patch:
+Fixes:
+ - http://autobuild.buildroot.org/results/8218776da34cc4a20663ae6737ad7727b12d8cd2
 
-0003-libfakeroot.c-add-wrappers-for-new-glibc-2.33-symbol.patch
-
-which allowed fakeroot to be compiled with GLIBC 2.33 or above.
-However, this introduce a bug for building with a non-GLIBC based
-toolchain as a GLIBC macro - __GLIBC_PREREQ - is used on the same line
-as the detection of GLIBC.
-
-Fix this by backporting the fix to this incorrect macro from upstream
-commit:
-
-https://salsa.debian.org/clint/fakeroot/-/commit/8090dffdad8fda86dccd47ce7a7db8840bdf7d7b
-
-CC: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit e41b170b328cc086334948ff3b8038075e2c09ce)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- .../0005-fix-build-regression-on-macOS.patch       | 63 ++++++++++++++++++++++
- 1 file changed, 63 insertions(+)
+ package/tpm2-pkcs11/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/fakeroot/0005-fix-build-regression-on-macOS.patch b/package/fakeroot/0005-fix-build-regression-on-macOS.patch
-new file mode 100644
-index 0000000000..d5589a79f5
---- /dev/null
-+++ b/package/fakeroot/0005-fix-build-regression-on-macOS.patch
-@@ -0,0 +1,63 @@
-+From 3590b817df703a256f2c1de9a5f5469eaa1c86e9 Mon Sep 17 00:00:00 2001
-+From: Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
-+Date: Mon, 15 Feb 2021 11:07:56 -0800
-+Subject: [PATCH] fix build regression on macOS
-+
-+Signed-off-by: Felix Fietkau <nbd@nbd.name>
-+Signed-off-by: Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
-+[Ryan: backported from 8090dffdad8fda86dccd47ce7a7db8840bdf7d7b]
-+Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
-+---
-+ configure.ac  | 6 ++++++
-+ libfakeroot.c | 4 +++-
-+ 2 files changed, 9 insertions(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index d85566f..d635df1 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -181,6 +181,9 @@ AC_MSG_CHECKING([for type of arg of __xmknod])
-+        #include <fcntl.h>
-+        #include <unistd.h>
-+   ]], [[
-++#ifndef __GLIBC__
-++#error no extra *
-++#endif
-+        int __xmknod  ( int ver,
-+                        const char *pathname ,
-+                        mode_t  mode ,  dev_t *dev);
-+@@ -207,6 +210,9 @@ AC_MSG_CHECKING([for type of arg of __xmknodat])
-+        #include <fcntl.h>
-+        #include <unistd.h>
-+   ]], [[
-++#ifndef __GLIBC__
-++#error no extra *
-++#endif
-+        int __xmknodat  ( int ver,
-+                          int dirfd,
-+                          const char *pathname ,
-+diff --git a/libfakeroot.c b/libfakeroot.c
-+index d75c51f..ec4e577 100644
-+--- a/libfakeroot.c
-++++ b/libfakeroot.c
-+@@ -1352,7 +1352,8 @@ int renameat(int olddir_fd, const char *oldpath,
-+ #endif /* HAVE_FSTATAT */
-+ 
-+ 
-+-#if defined(__GLIBC__) && __GLIBC_PREREQ(2,33)
-++#if defined(__GLIBC__)
-++#if __GLIBC_PREREQ(2,33)
-+ /* Glibc 2.33 exports symbols for these functions in the shared lib */
-+   int lstat(const char *file_name, struct stat *statbuf) {
-+      return WRAP_LSTAT LSTAT_ARG(_STAT_VER, file_name, statbuf);
-+@@ -1397,6 +1398,7 @@ int renameat(int olddir_fd, const char *oldpath,
-+        return WRAP_MKNODAT MKNODAT_ARG(_STAT_VER, dir_fd, pathname, mode, &dev);
-+     }
-+   #endif
-++#endif /* __GLIBC__ */
-+ #endif /* GLIBC_PREREQ */
-+ 
-+ 
-+-- 
-+2.25.1
-+
+diff --git a/package/tpm2-pkcs11/Config.in b/package/tpm2-pkcs11/Config.in
+index 46d5cab07e..5d45703223 100644
+--- a/package/tpm2-pkcs11/Config.in
++++ b/package/tpm2-pkcs11/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_TPM2_PKCS11
+ 	bool "tpm2-pkcs11"
+ 	depends on !BR2_STATIC_LIBS # tpm2-tss
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_LIBYAML
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_SQLITE
+@@ -10,5 +11,5 @@ config BR2_PACKAGE_TPM2_PKCS11
+ 
+ 	  https://github.com/tpm2-software/tpm2-pkcs11
+ 
+-comment "tpm2-pkcs11 needs a toolchain w/ dynamic library"
+-	depends on BR2_STATIC_LIBS
++comment "tpm2-pkcs11 needs a toolchain w/ dynamic library, threads"
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
+-- 
+2.30.0
