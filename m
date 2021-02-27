@@ -1,84 +1,120 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 27 Feb 2021 09:15:31 +0100
-Subject: [Buildroot] /bin/ld: skipping incompatible //lib/libpam.so when
- searching for -lpam
-In-Reply-To: <1614397562997-0.post@n4.nabble.com>
-References: <CAEYXRPmmUFFCzSudFX3qqKTRq4=QSBe-eijKvB92HTXJYaNfZw@mail.gmail.com>
- <1614397562997-0.post@n4.nabble.com>
-Message-ID: <20210227091531.588cd46c@gmx.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 27 Feb 2021 09:05:56 +0100
+Subject: [Buildroot] [git commit] package/screen: add security fix for
+ CVE-2021-26937
+Message-ID: <20210227075715.95CE8862FD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 26 Feb 2021 21:46:02 -0600 (CST), GA K <guyarkam@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=6ca1a7c2773cc13f71e284d0b3b4b3b35101d1db
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> The problem is related to the linking of runuser during the  build of
-> host-util-linux.
->
-> On the first system, the build process completes successfully because the
-> host-util-linux configuration script fails to locate PAM header files among
-> other things and issues the following warning:
->
-> configure: WARNING: ncursesw, ncurses or slang library not found; not
-> building irqtop
-> configure: WARNING: linux/blkzoned.h header not found; not building blkzone
-> checking for LIBUSER... no
-> configure: WARNING: PAM header file not found; not building runuser
-> checking for ECONF... no
-> configure: WARNING: libpython not found; not building pylibmount
-> checking that generated files are newer than configure... done
->
-> On the second system, the host-util-linux configuration script finds the PAM
-> header (I have these lines)
-> checking for LIBUSER... no
-> checking for ECONF... no
->  and proceeds with the build of runuser. However, on this system (64-bit
-> machine)  /lib/libpam.so points to the file libpam.so.0.83.1 which is a
-> 32-bit ELF file.
->
-> $ file libpam.so.0.83.1
-> libpam.so.0.83.1: ELF 32-bit LSB shared object, Intel 80386, version 1
-> (SYSV), dynamically linked,
-> BuildID[sha1]=75203587ca0241a766a756b1cec17c0fc54dd479, stripped
->
->
-> I have no root access to the second machine so my only solution is to skip
-> runuser during the host-util-linux build process. I see that
-> package/util-linux/Config.in defines BR2_PACKAGE_UTIL_LINUX_RUNUSER and
-> automatically selects it when BR2_PACKAGE_LINUX_PAM is selected. In my
-> particular case, I am not selecting BR2_PACKAGE_LINUX_PAM and yet runuser
-> gets selected. I am hence wondering what would be the safest way to skip
-> runuser while building host-util-linux.
->
-> Thanks for any hint
+encoding.c in GNU Screen through 4.8.0 allows remote attackers to cause a
+denial of service (invalid write access and application crash) or possibly
+have unspecified other impact via a crafted UTF-8 character sequence.
 
-Disable runuser for the host build (completely untested):
+For more details, see the oss-security discussion:
+https://www.openwall.com/lists/oss-security/2021/02/09/3
 
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index 0178c52bac..09acaca1a7 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -211,6 +211,7 @@ HOST_UTIL_LINUX_CONF_OPTS += \
- 	--disable-nsenter \
- 	--disable-pg \
- 	--disable-rfkill \
-+	--disable-runuser \
- 	--disable-schedutils \
- 	--disable-setpriv \
- 	--disable-setterm \
+So far no fix has been added to upstream git, and a number of early proposed
+fixes caused regressions, so pull the security fix from the screen 4.8.0-5
+Debian package.
 
-Regards,
-Peter
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/screen/0008_CVE-2021-26937.patch | 68 ++++++++++++++++++++++++++++++++
+ package/screen/screen.mk                 |  3 ++
+ 2 files changed, 71 insertions(+)
 
->
->
->
->
-> --
-> Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/screen/0008_CVE-2021-26937.patch b/package/screen/0008_CVE-2021-26937.patch
+new file mode 100644
+index 0000000000..df7efa0294
+--- /dev/null
++++ b/package/screen/0008_CVE-2021-26937.patch
+@@ -0,0 +1,68 @@
++Description: [CVE-2021-26937] Fix out of bounds array access
++Author: Michael Schr??der <mls@suse.de>
++Bug-Debian: https://bugs.debian.org/982435
++Bug: https://savannah.gnu.org/bugs/?60030
++Bug: https://lists.gnu.org/archive/html/screen-devel/2021-02/msg00000.html
++Bug-OSS-Security: https://www.openwall.com/lists/oss-security/2021/02/09/3
++Origin: https://lists.gnu.org/archive/html/screen-devel/2021-02/msg00010.html
++
++Downloaded from Debian:
++https://sources.debian.org/data/main/s/screen/4.8.0-5/debian/patches/99_CVE-2021-26937.patch
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++--- a/encoding.c
+++++ b/encoding.c
++@@ -43,7 +43,7 @@
++ # ifdef UTF8
++ static int   recode_char __P((int, int, int));
++ static int   recode_char_to_encoding __P((int, int));
++-static void  comb_tofront __P((int, int));
+++static void  comb_tofront __P((int));
++ #  ifdef DW_CHARS
++ static int   recode_char_dw __P((int, int *, int, int));
++ static int   recode_char_dw_to_encoding __P((int, int *, int));
++@@ -1263,6 +1263,8 @@
++     {0x30000, 0x3FFFD},
++   };
++ 
+++  if (c >= 0xdf00 && c <= 0xdfff)
+++    return 1;          /* dw combining sequence */
++   return ((bisearch(c, wide, sizeof(wide) / sizeof(struct interval) - 1)) ||
++           (cjkwidth &&
++            bisearch(c, ambiguous,
++@@ -1330,11 +1332,12 @@
++ }
++ 
++ static void
++-comb_tofront(root, i)
++-int root, i;
+++comb_tofront(i)
+++int i;
++ {
++   for (;;)
++     {
+++      int root = i >= 0x700 ? 0x801 : 0x800;
++       debug1("bring to front: %x\n", i);
++       combchars[combchars[i]->prev]->next = combchars[i]->next;
++       combchars[combchars[i]->next]->prev = combchars[i]->prev;
++@@ -1396,9 +1399,9 @@
++     {
++       /* full, recycle old entry */
++       if (c1 >= 0xd800 && c1 < 0xe000)
++-        comb_tofront(root, c1 - 0xd800);
+++        comb_tofront(c1 - 0xd800);
++       i = combchars[root]->prev;
++-      if (c1 == i + 0xd800)
+++      if (i == 0x800 || i == 0x801 || c1 == i + 0xd800)
++ 	{
++ 	  /* completely full, can't recycle */
++ 	  debug("utf8_handle_comp: completely full!\n");
++@@ -1422,7 +1425,7 @@
++   mc->font  = (i >> 8) + 0xd8;
++   mc->fontx = 0;
++   debug3("combinig char %x %x -> %x\n", c1, c, i + 0xd800);
++-  comb_tofront(root, i);
+++  comb_tofront(i);
++ }
++ 
++ #else /* !UTF8 */
+diff --git a/package/screen/screen.mk b/package/screen/screen.mk
+index c24067440e..f75f92cb47 100644
+--- a/package/screen/screen.mk
++++ b/package/screen/screen.mk
+@@ -15,6 +15,9 @@ SCREEN_CONF_ENV = CFLAGS="$(TARGET_CFLAGS)"
+ SCREEN_CONF_OPTS = --enable-colors256
+ SCREEN_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) SCREEN=screen install_bin
+ 
++# 0008_CVE-2021-26937.patch
++SCREEN_IGNORE_CVES += CVE-2021-26937
++
+ ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
+ SCREEN_DEPENDENCIES += linux-pam
+ SCREEN_CONF_OPTS += --enable-pam
