@@ -1,97 +1,144 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 27 Feb 2021 19:30:39 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/bind: bump to
- version 9.11.24
-Message-ID: <20210227181918.1CD7E8150E@busybox.osuosl.org>
+Date: Sat, 27 Feb 2021 19:03:19 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/irqbalance: fix
+ irqbalance/irqbalance-ui socket communication
+Message-ID: <20210227181918.0EDFF844F0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b62546d2237c60640ce3403e1dfc58c9e5692729
+commit: https://git.buildroot.net/buildroot/commit/?id=ceda85977e09ed936e0f5fa96414796abc0f7861
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Turn 0001-cross.patch into git patch.
+Add patch to fix irqbalance/irqbalance-ui socket communication by
+fixing uint64_t printf format usage.
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 9679d3f0218519ea7a01f3b5fefb7f6dd23b138e)
+Fixes:
+
+  $ irqbalance-ui
+  Invalid data sent.  Unexpected token: (null)TYPE
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+[yann.morin.1998 at free.fr:
+  - do an actual backport as upstream applied the patch
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit f204e5874082f01170c26f4e6cddca20ad517dbd)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bind/0001-cross.patch | 25 ++++++++++++++++++-------
- package/bind/bind.hash        |  6 +++---
- package/bind/bind.mk          |  2 +-
- 3 files changed, 22 insertions(+), 11 deletions(-)
+ ...001-fix-uint64_t-printf-format-use-PRIu64.patch | 105 +++++++++++++++++++++
+ 1 file changed, 105 insertions(+)
 
-diff --git a/package/bind/0001-cross.patch b/package/bind/0001-cross.patch
-index d3e7cc68a6..f39be2f837 100644
---- a/package/bind/0001-cross.patch
-+++ b/package/bind/0001-cross.patch
-@@ -1,15 +1,24 @@
--Use host compiler to build 'gen' since it's run when building.
-+From 505cc9fcadda5607dc4c5bacb03928c0b35162a8 Mon Sep 17 00:00:00 2001
-+From: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+Date: Wed, 4 Nov 2020 17:51:38 +0100
-+Subject: [PATCH] Use host compiler to build 'gen' since it's run when
-+ building.
- 
- Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- [Fabrice: updated for 9.11.10]
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+diff --git a/package/irqbalance/0001-fix-uint64_t-printf-format-use-PRIu64.patch b/package/irqbalance/0001-fix-uint64_t-printf-format-use-PRIu64.patch
+new file mode 100644
+index 0000000000..95a9616c71
+--- /dev/null
++++ b/package/irqbalance/0001-fix-uint64_t-printf-format-use-PRIu64.patch
+@@ -0,0 +1,105 @@
++From 0cdc7a22d5156440fecff14c438d4e24261ac793 Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Sat, 20 Feb 2021 23:38:56 +0100
++Subject: [PATCH] fix uint64_t printf format (use PRIu64)
++
++Fixes (on arm 32-bit):
++
++  $ irqbalance-ui
++  Invalid data sent.  Unexpected token: (null)TYPE
++
++And strace showed the following:
++
++  237   sendmsg(3, {msg_name=NULL, msg_namelen=0, msg_iov=[{iov_base="stats", iov_len=5}], msg_iovlen=1, msg_control=[{cmsg_len=24, cmsg_level=SOL_SOCKET, cmsg_type=SCM_CREDENTIALS, cmsg_data={pid=237, uid=0, gid=0}}], msg_controllen=24, msg_flags=0}, 0) = 5
++  237   recv(3, "TYPE 3 NUMBER -1 LOAD 0 SAVE_MODE 0 (null)TYPE 2 NUMBER 0 LOAD 0 SAVE_MODE 0 (null)TYPE 1 NUMBER 0 LOAD 0 SAVE_MODE 0 (null)TYPE 0 NUMBER 3 LOAD 0 SAVE_MODE 0 (null)TYPE 1 NUMBER 1 LOAD 0 SAVE_MODE 0 (null)TYPE 0 NUMBER 1 LOAD 0 SAVE_MODE 0 (null)TYPE 1 NUMBER 2 LOAD 0 SAVE_MODE 0 (null)TYPE 0 NUMBER 2 LOAD 0 SAVE_MODE 0 (null)TYPE 1 NUMBER 3 LOAD 0 SAVE_MODE 0 (null)TYPE 0 NUMBER 0 LOAD 0 SAVE_MODE 0 (null)", 8192, 0) = 411
++
++[backported from upstream]
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 +---
-+ lib/dns/Makefile.in | 6 ++----
-+ 1 file changed, 2 insertions(+), 4 deletions(-)
- 
--diff -Nura bind-9.5.1-P1/lib/dns/Makefile.in bind-9.5.1-P1.gencross/lib/dns/Makefile.in
----- bind-9.5.1-P1/lib/dns/Makefile.in	2007-09-11 22:09:08.000000000 -0300
--+++ bind-9.5.1-P1.gencross/lib/dns/Makefile.in	2009-03-04 16:35:23.000000000 -0200
--@@ -160,10 +160,8 @@
-+diff --git a/lib/dns/Makefile.in b/lib/dns/Makefile.in
-+index 8fc4e94f26..4ac92857e0 100644
-+--- a/lib/dns/Makefile.in
-++++ b/lib/dns/Makefile.in
-+@@ -184,10 +184,8 @@ code.h:	gen
-  	./gen -s ${srcdir} > code.h || { rm -f $@ ; exit 1; }
--
++ cputree.c    | 3 ++-
++ irqbalance.c | 5 +++--
++ ui/ui.c      | 5 +++--
++ 3 files changed, 8 insertions(+), 5 deletions(-)
++
++diff --git a/cputree.c b/cputree.c
++index fda0200..a8dba73 100644
++--- a/cputree.c
+++++ b/cputree.c
++@@ -33,6 +33,7 @@
++ #include <sys/types.h>
++ #include <sys/stat.h>
++ #include <dirent.h>
+++#include <inttypes.h>
 + 
-  gen: gen.c
- -	${BUILD_CC} ${BUILD_CFLAGS} -I${top_srcdir}/lib/isc/include \
- -	${LFS_CFLAGS} ${LFS_LDFLAGS} \
-@@ -17,7 +26,9 @@ diff -Nura bind-9.5.1-P1/lib/dns/Makefile.in bind-9.5.1-P1.gencross/lib/dns/Make
- -	${BUILD_LIBS} ${LFS_LIBS}
- +	${HOSTCC} ${HOST_CFLAGS} -I${top_srcdir}/lib/isc/include \
- +	${HOST_LDFLAGS} -o $@ ${srcdir}/gen.c
--
++ #include <glib.h>
 + 
-  timestamp: include libdns. at A@
-  	touch timestamp
++@@ -417,7 +418,7 @@ static void dump_irq(struct irq_info *info, void *data)
++ 		indent[i] = log_indent[0];
++ 
++ 	indent[i] = '\0';
++-	log(TO_CONSOLE, LOG_INFO, "%sInterrupt %i node_num is %d (%s/%lu:%lu) \n", indent,
+++	log(TO_CONSOLE, LOG_INFO, "%sInterrupt %i node_num is %d (%s/%" PRIu64 ":%" PRIu64 ") \n", indent,
++ 	    info->irq, irq_numa_node(info)->number, classes[info->class], info->load, (info->irq_count - info->last_irq_count));
++ 	free(indent);
++ }
++diff --git a/irqbalance.c b/irqbalance.c
++index 9baa955..458bb07 100644
++--- a/irqbalance.c
+++++ b/irqbalance.c
++@@ -34,6 +34,7 @@
++ #include <sys/socket.h>
++ #include <sys/un.h>
++ #include <fcntl.h>
+++#include <inttypes.h>
++ #ifdef HAVE_GETOPT_LONG 
++ #include <getopt.h>
++ #endif
++@@ -357,7 +358,7 @@ void get_irq_data(struct irq_info *irq, void *data)
++ 	*irqdata = newptr;
++ 
++ 	sprintf(*irqdata + strlen(*irqdata),
++-			"IRQ %d LOAD %lu DIFF %lu CLASS %d ", irq->irq, irq->load,
+++			"IRQ %d LOAD %" PRIu64 " DIFF %" PRIu64 " CLASS %d ", irq->irq, irq->load,
++ 			(irq->irq_count - irq->last_irq_count), irq->class);
++ }
++ 
++@@ -395,7 +396,7 @@ void get_object_stat(struct topo_obj *object, void *data)
++ 
++ 	*stats = newptr;
++ 
++-	sprintf(*stats + strlen(*stats), "TYPE %d NUMBER %d LOAD %lu SAVE_MODE %d %s",
+++	sprintf(*stats + strlen(*stats), "TYPE %d NUMBER %d LOAD %" PRIu64 " SAVE_MODE %d %s",
++ 			object->obj_type, object->number, object->load,
++ 			object->powersave_mode, irq_data ? irq_data : "");
++ 	free(irq_data);
++diff --git a/ui/ui.c b/ui/ui.c
++index 06ec472..4cf68bf 100644
++--- a/ui/ui.c
+++++ b/ui/ui.c
++@@ -1,4 +1,5 @@
++ 
+++#include <inttypes.h>
++ #include <string.h>
++ #include "ui.h"
++ 
++@@ -563,7 +564,7 @@ void settings()
++ 
++ 	char info[128] = "Current sleep interval between rebalancing: \0";
++ 	uint8_t sleep_input_offset = strlen(info) + 3;
++-	snprintf(info + strlen(info), 128 - strlen(info), "%lu\n", setup.sleep);
+++	snprintf(info + strlen(info), 128 - strlen(info), "%" PRIu64 "\n", setup.sleep);
++ 	attrset(COLOR_PAIR(1));
++ 	mvprintw(2, 3, info);
++ 	print_all_cpus();
++@@ -588,7 +589,7 @@ void settings()
++ 			if(new_sleep != setup.sleep) {
++ 				setup.sleep = new_sleep;
++ 				char settings_data[128];
++-				snprintf(settings_data, 128, "%s %lu", SET_SLEEP, new_sleep);
+++				snprintf(settings_data, 128, "%s %" PRIu64, SET_SLEEP, new_sleep);
++ 				send_settings(settings_data);
++ 			}
++ 			break;
 +-- 
-+2.29.1
- 
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index 4ba0182b1c..e02c06ff3e 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
-@@ -1,4 +1,4 @@
--# Verified from https://ftp.isc.org/isc/bind9/9.11.22/bind-9.11.22.tar.gz.asc
--# with key AE3FAC796711EC59FC007AA474BB6B9A4CBB3D38
--sha256  afc6d8015006f1cabf699ff19f517bb8fd9c1811e5231f26baf51c3550262ac9  bind-9.11.22.tar.gz
-+# Verified from https://ftp.isc.org/isc/bind9/9.11.24/bind-9.11.24.tar.gz.asc
-+# with key 95CEDA256B1CA0A15F302FB59521A7ED5DACE918
-+sha256  f261587c5d37c7f14e8393547c4556faefa701a646930f1b6408d71519a30428  bind-9.11.24.tar.gz
- sha256  da2aec2b7f6f0feb16bcb080e2c587375fd3195145f047e4d92d112f5b9db501  COPYRIGHT
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 18fc4845f9..ba60c111ef 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BIND_VERSION = 9.11.22
-+BIND_VERSION = 9.11.24
- BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- # bind does not support parallel builds.
- BIND_MAKE = $(MAKE1)
++2.25.1
++
