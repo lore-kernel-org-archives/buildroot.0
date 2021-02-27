@@ -1,40 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 27 Feb 2021 18:59:59 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] utils/scanpypi: use
- python3 explicitly
-Message-ID: <20210227181917.D165886705@busybox.osuosl.org>
+Date: Sat, 27 Feb 2021 19:03:10 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/irqbalance: fix
+ systemd startup script (add RuntimeDirectory)
+Message-ID: <20210227181917.E7DB08150E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=03e713a0cc47341eb3e9f47bd6c086b1848400be
+commit: https://git.buildroot.net/buildroot/commit/?id=ce9ae9906b7748d4f1036027af15fdc5d586d074
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-scanpypi is python3 compatible. In addition, it executes the setup.py
-of Python modules to extract the relevant information. Since these are
-more and more commonly using python3 constructs, using "python" to run
-scanpypi causes problems on systems that have python2 installed as
-python, when trying to parse setup.py scripts with python3 constructs.
+- add RuntimeDirectory=irqbalance to create /run/irqbalanace needed to
+  create socket /run/irqbalance/irqbalance<pid>.sock
 
-Fixes part of #13516.
+Fixes:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+  - Bug 13541 [1]
+
+  /usr/sbin/irqbalance[158]: Daemon couldn't be bound to the file-based socket.
+
+[1] https://bugs.busybox.net/show_bug.cgi?id=13541
+
+Reported-by: Alfredo Pons Menargues <alfredo.pons@gmail.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit ee8b6808169e1e61b4318b44fbc706ec888c605d)
+(cherry picked from commit 60518c1d7680bff5efe879ee86f48e6092239c03)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- utils/scanpypi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/irqbalance/irqbalance.service | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/utils/scanpypi b/utils/scanpypi
-index dfbf8131cd..c4abc53ff4 100755
---- a/utils/scanpypi
-+++ b/utils/scanpypi
-@@ -1,4 +1,4 @@
--#!/usr/bin/env python
-+#!/usr/bin/env python3
- """
+diff --git a/package/irqbalance/irqbalance.service b/package/irqbalance/irqbalance.service
+index 9ba3be43bb..39574877fb 100644
+--- a/package/irqbalance/irqbalance.service
++++ b/package/irqbalance/irqbalance.service
+@@ -3,6 +3,7 @@ Description=irqbalance daemon
+ After=syslog.target
  
- Utility for building Buildroot packages for existing PyPI packages
+ [Service]
++RuntimeDirectory=irqbalance
+ ExecStart=/usr/sbin/irqbalance --foreground
+ 
+ [Install]
