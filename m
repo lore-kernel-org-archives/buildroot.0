@@ -1,33 +1,44 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 27 Feb 2021 10:32:41 +0100
-Subject: [Buildroot] [PATCH 1/1] package/openntpd: add OPENNTPD_CPE_ID_VENDOR
-Message-ID: <20210227093241.483647-1-fontaine.fabrice@gmail.com>
+Date: Sat, 27 Feb 2021 10:39:01 +0100
+Subject: [Buildroot] [PATCH/next 1/1] package/pcsc-lite: bump to version
+ 1.9.1
+Message-ID: <20210227093901.506065-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:openntpd:openntpd is a valid CPE identifier for this package:
-
-https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aopenntpd%3Aopenntpd
+https://github.com/LudovicRousseau/PCSC/releases/tag/1.9.1
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/openntpd/openntpd.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/pcsc-lite/pcsc-lite.hash | 2 +-
+ package/pcsc-lite/pcsc-lite.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/openntpd/openntpd.mk b/package/openntpd/openntpd.mk
-index 9076f3ddda..30c39e45ed 100644
---- a/package/openntpd/openntpd.mk
-+++ b/package/openntpd/openntpd.mk
-@@ -8,6 +8,7 @@ OPENNTPD_VERSION = 6.2p3
- OPENNTPD_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenNTPD
- OPENNTPD_LICENSE = MIT-like, BSD-2-Clause, BSD-3-Clause
- OPENNTPD_LICENSE_FILES = COPYING
-+OPENNTPD_CPE_ID_VENDOR = openntpd
- OPENNTPD_DEPENDENCIES = host-bison
- # Need to autoreconf for our libtool patch to apply properly
- OPENNTPD_AUTORECONF = YES
+diff --git a/package/pcsc-lite/pcsc-lite.hash b/package/pcsc-lite/pcsc-lite.hash
+index 08bc85b154..4d31b25aaa 100644
+--- a/package/pcsc-lite/pcsc-lite.hash
++++ b/package/pcsc-lite/pcsc-lite.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  0148d403137124552c5d0f10f8cdab2cbb8dfc7c6ce75e018faf667be34f2ef9  pcsc-lite-1.9.0.tar.bz2
++sha256  73c4789b7876a833a70f493cda21655dfe85689d9b7e29701c243276e55e683a  pcsc-lite-1.9.1.tar.bz2
+ sha256  40d4358bb8dc8d30f5365ae6d999b6f820bbc051b292912482f2e4d0ebd837e1  COPYING
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  GPL-3.0.txt
+diff --git a/package/pcsc-lite/pcsc-lite.mk b/package/pcsc-lite/pcsc-lite.mk
+index c411e9c7ee..3091da41a4 100644
+--- a/package/pcsc-lite/pcsc-lite.mk
++++ b/package/pcsc-lite/pcsc-lite.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PCSC_LITE_VERSION = 1.9.0
++PCSC_LITE_VERSION = 1.9.1
+ PCSC_LITE_SOURCE = pcsc-lite-$(PCSC_LITE_VERSION).tar.bz2
+ PCSC_LITE_SITE = https://pcsclite.apdu.fr/files
+ PCSC_LITE_INSTALL_STAGING = YES
 -- 
 2.30.0
