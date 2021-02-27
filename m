@@ -1,51 +1,106 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 27 Feb 2021 19:13:19 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/bind: bump
- version to 9.11.25
-Message-ID: <20210227182008.003268396F@busybox.osuosl.org>
+Date: Sat, 27 Feb 2021 19:06:37 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/fakeroot: fix
+ glibc detection on patch for new wrappers
+Message-ID: <20210227182007.D2BCC8396F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fe8d9bf0f98ae2de13a0aa2116bd980bfa414053
+commit: https://git.buildroot.net/buildroot/commit/?id=61f0c4b0b064734bcd33be7a232d67a33017c9f5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-Release notes:
-https://ftp.isc.org/isc/bind9/9.11.25/RELEASE-NOTES-bind-9.11.25.html
+Commit f45925a951318e9e53bead80b363e004301adc6f add the patch:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 39b582eba40ed2919aca66b10b66dcee77ee02ca)
+0003-libfakeroot.c-add-wrappers-for-new-glibc-2.33-symbol.patch
+
+which allowed fakeroot to be compiled with GLIBC 2.33 or above.
+However, this introduce a bug for building with a non-GLIBC based
+toolchain as a GLIBC macro - __GLIBC_PREREQ - is used on the same line
+as the detection of GLIBC.
+
+Fix this by backporting the fix to this incorrect macro from upstream
+commit:
+
+https://salsa.debian.org/clint/fakeroot/-/commit/8090dffdad8fda86dccd47ce7a7db8840bdf7d7b
+
+CC: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit e41b170b328cc086334948ff3b8038075e2c09ce)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bind/bind.hash | 4 ++--
- package/bind/bind.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../0005-fix-build-regression-on-macOS.patch       | 63 ++++++++++++++++++++++
+ 1 file changed, 63 insertions(+)
 
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index cbd9562b56..ae196dacd5 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
-@@ -1,4 +1,4 @@
--# Verified from https://ftp.isc.org/isc/bind9/9.11.24/bind-9.11.24.tar.gz.asc
-+# Verified from https://ftp.isc.org/isc/bind9/9.11.25/bind-9.11.25.tar.gz.asc
- # with key 95CEDA256B1CA0A15F302FB59521A7ED5DACE918
--sha256  f261587c5d37c7f14e8393547c4556faefa701a646930f1b6408d71519a30428  bind-9.11.24.tar.gz
-+sha256  8491c24e5a3da68f421d0fcb946602c8d0ff963012fdd176b8026c8890f3a117  bind-9.11.25.tar.gz
- sha256  e316d9d12b3cc3600985d71011d7856f5ff93d28e748155a3a18171b32d98d8b  COPYRIGHT
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index ba60c111ef..4098f948a9 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BIND_VERSION = 9.11.24
-+BIND_VERSION = 9.11.25
- BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- # bind does not support parallel builds.
- BIND_MAKE = $(MAKE1)
+diff --git a/package/fakeroot/0005-fix-build-regression-on-macOS.patch b/package/fakeroot/0005-fix-build-regression-on-macOS.patch
+new file mode 100644
+index 0000000000..d5589a79f5
+--- /dev/null
++++ b/package/fakeroot/0005-fix-build-regression-on-macOS.patch
+@@ -0,0 +1,63 @@
++From 3590b817df703a256f2c1de9a5f5469eaa1c86e9 Mon Sep 17 00:00:00 2001
++From: Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
++Date: Mon, 15 Feb 2021 11:07:56 -0800
++Subject: [PATCH] fix build regression on macOS
++
++Signed-off-by: Felix Fietkau <nbd@nbd.name>
++Signed-off-by: Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
++[Ryan: backported from 8090dffdad8fda86dccd47ce7a7db8840bdf7d7b]
++Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
++---
++ configure.ac  | 6 ++++++
++ libfakeroot.c | 4 +++-
++ 2 files changed, 9 insertions(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index d85566f..d635df1 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -181,6 +181,9 @@ AC_MSG_CHECKING([for type of arg of __xmknod])
++        #include <fcntl.h>
++        #include <unistd.h>
++   ]], [[
+++#ifndef __GLIBC__
+++#error no extra *
+++#endif
++        int __xmknod  ( int ver,
++                        const char *pathname ,
++                        mode_t  mode ,  dev_t *dev);
++@@ -207,6 +210,9 @@ AC_MSG_CHECKING([for type of arg of __xmknodat])
++        #include <fcntl.h>
++        #include <unistd.h>
++   ]], [[
+++#ifndef __GLIBC__
+++#error no extra *
+++#endif
++        int __xmknodat  ( int ver,
++                          int dirfd,
++                          const char *pathname ,
++diff --git a/libfakeroot.c b/libfakeroot.c
++index d75c51f..ec4e577 100644
++--- a/libfakeroot.c
+++++ b/libfakeroot.c
++@@ -1352,7 +1352,8 @@ int renameat(int olddir_fd, const char *oldpath,
++ #endif /* HAVE_FSTATAT */
++ 
++ 
++-#if defined(__GLIBC__) && __GLIBC_PREREQ(2,33)
+++#if defined(__GLIBC__)
+++#if __GLIBC_PREREQ(2,33)
++ /* Glibc 2.33 exports symbols for these functions in the shared lib */
++   int lstat(const char *file_name, struct stat *statbuf) {
++      return WRAP_LSTAT LSTAT_ARG(_STAT_VER, file_name, statbuf);
++@@ -1397,6 +1398,7 @@ int renameat(int olddir_fd, const char *oldpath,
++        return WRAP_MKNODAT MKNODAT_ARG(_STAT_VER, dir_fd, pathname, mode, &dev);
++     }
++   #endif
+++#endif /* __GLIBC__ */
++ #endif /* GLIBC_PREREQ */
++ 
++ 
++-- 
++2.25.1
++
