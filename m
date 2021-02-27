@@ -1,98 +1,74 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 27 Feb 2021 09:20:22 +0100
-Subject: [Buildroot] [PATCH] package/openldap: add upstream security fix
- for CVE-2021-27212
-In-Reply-To: <20210226231318.21482-1-peter@korsgaard.com>
-References: <20210226231318.21482-1-peter@korsgaard.com>
-Message-ID: <20210227082022.GF2390841@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 27 Feb 2021 09:25:22 +0100
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/gstreamer1/gst1-plugins-bad: add sctp option
+Message-ID: <20210227082522.194604-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+sctp unconditionnally uses __sync_*_4 intrisics in
+https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/-/blob/master/ext/sctp/usrsctp/usrsctplib/user_atomic.h
 
-On 2021-02-27 00:13 +0100, Peter Korsgaard spake thusly:
-> In OpenLDAP through 2.4.57 and 2.5.x through 2.5.1alpha, an assertion
-> failure in slapd can occur in the issuerAndThisUpdateCheck function via a
-> crafted packet, resulting in a denial of service (daemon exit) via a short
-> timestamp.  This is related to schema_init.c and checkTime.
-> 
-> For more details, see the bugtracker:
-> https://bugs.openldap.org/show_bug.cgi?id=9454
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+As a result, this will raise the following build failure with bootlin
+sparc toolchain:
 
-Applied to master, thanks.
+/srv/storage/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/9.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: ext/sctp/usrsctp/libusrsctp-static.a(usrsctplib_user_socket.c.o): in function `usrsctp_conninput':
+user_socket.c:(.text+0x3004): undefined reference to `__sync_fetch_and_add_4'
 
-Regards,
-Yann E. MORIN.
+sctp uses an internal version of usrsctp (which is not available in
+buildroot) and is available since version 1.15.1:
+https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/-/commit/e2f06326eac7c3c7fa9c0d5baf4bf9673fc93376
 
-> ---
->  ...TS-9454-fix-issuerAndThisUpdateCheck.patch | 26 +++++++++++++++++++
->  package/openldap/openldap.mk                  |  3 +++
->  2 files changed, 29 insertions(+)
->  create mode 100644 package/openldap/0005-ITS-9454-fix-issuerAndThisUpdateCheck.patch
-> 
-> diff --git a/package/openldap/0005-ITS-9454-fix-issuerAndThisUpdateCheck.patch b/package/openldap/0005-ITS-9454-fix-issuerAndThisUpdateCheck.patch
-> new file mode 100644
-> index 0000000000..a611b9ff59
-> --- /dev/null
-> +++ b/package/openldap/0005-ITS-9454-fix-issuerAndThisUpdateCheck.patch
-> @@ -0,0 +1,26 @@
-> +From 9badb73425a67768c09bcaed1a9c26c684af6c30 Mon Sep 17 00:00:00 2001
-> +From: Howard Chu <hyc@openldap.org>
-> +Date: Sat, 6 Feb 2021 20:52:06 +0000
-> +Subject: [PATCH] ITS#9454 fix issuerAndThisUpdateCheck
-> +
-> +Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> +---
-> + servers/slapd/schema_init.c | 2 ++
-> + 1 file changed, 2 insertions(+)
-> +
-> +diff --git a/servers/slapd/schema_init.c b/servers/slapd/schema_init.c
-> +index 31be1154e..8b1e25539 100644
-> +--- a/servers/slapd/schema_init.c
-> ++++ b/servers/slapd/schema_init.c
-> +@@ -3900,6 +3900,8 @@ issuerAndThisUpdateCheck(
-> + 					break;
-> + 				}
-> + 			}
-> ++			if ( tu->bv_len < STRLENOF("YYYYmmddHHmmssZ") ) return LDAP_INVALID_SYNTAX;
-> ++
-> + 			x.bv_val += tu->bv_len + 1;
-> + 			x.bv_len -= tu->bv_len + 1;
-> + 
-> +-- 
-> +2.20.1
-> +
-> diff --git a/package/openldap/openldap.mk b/package/openldap/openldap.mk
-> index b4c06d8640..ec11e4fa7d 100644
-> --- a/package/openldap/openldap.mk
-> +++ b/package/openldap/openldap.mk
-> @@ -13,6 +13,9 @@ OPENLDAP_CPE_ID_VENDOR = openldap
->  OPENLDAP_INSTALL_STAGING = YES
->  OPENLDAP_DEPENDENCIES = host-pkgconf
->  
-> +# 0005-ITS-9454-fix-issuerAndThisUpdateCheck.patch
-> +OPENLDAP_IGNORE_CVES += CVE-2021-27212
-> +
->  ifeq ($(BR2_PACKAGE_OPENSSL),y)
->  OPENLDAP_TLS = openssl
->  OPENLDAP_DEPENDENCIES += openssl
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Fixes:
+ - http://autobuild.buildroot.org/results/981b11ae9746d1eef40c1797398c4f6c16f005bd
 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2 (after review of Yann E. Morin):
+ - Explicitly set sctp-internal-usrsctp option
+
+ package/gstreamer1/gst1-plugins-bad/Config.in          |  4 ++++
+ .../gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk    | 10 ++++++++++
+ 2 files changed, 14 insertions(+)
+
+diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+index 191820df1d..3a9fc02745 100644
+--- a/package/gstreamer1/gst1-plugins-bad/Config.in
++++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+@@ -577,6 +577,10 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SBC
+ 	bool "sbc"
+ 	select BR2_PACKAGE_SBC
+ 
++config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SCTP
++	bool "sctp"
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # __sync_*_4 intrisics
++
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SHM
+ 	bool "shm"
+ 	help
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+index 83abc7fab8..e8cea5bb34 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+@@ -691,6 +691,16 @@ else
+ GST1_PLUGINS_BAD_CONF_OPTS += -Dsbc=disabled
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SCTP),y)
++GST1_PLUGINS_BAD_CONF_OPTS += \
++	-Dsctp=enabled \
++	-Dsctp-internal-usrsctp=enabled
++else
++GST1_PLUGINS_BAD_CONF_OPTS += \
++	-Dsctp=disabled \
++	-Dsctp-internal-usrsctp=disabled
++endif
++
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SHM),y)
+ GST1_PLUGINS_BAD_CONF_OPTS += -Dshm=enabled
+ else
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.30.0
