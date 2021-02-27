@@ -1,47 +1,33 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 27 Feb 2021 19:00:44 +0100
-Subject: [Buildroot] [PATCH] package/avrdude: Switch to upstream
-In-Reply-To: <1fb4110698bd2c67f04061a8fc1320148540edd1.camel@gmail.com>
-References: <20210222022606.491102-1-alexander.sverdlin@gmail.com>
- <20210222211535.GF2276@scaer>
- <1fb4110698bd2c67f04061a8fc1320148540edd1.camel@gmail.com>
-Message-ID: <20210227180044.GJ2390841@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 27 Feb 2021 19:03:52 +0100
+Subject: [Buildroot] [PATCH v1 1/2] package/irqbalance: fix sysv startup
+ script (add mkdir /run/irqbalance)
+In-Reply-To: <20210220163349.25244-1-ps.report@gmx.net> (Peter Seiderer's
+ message of "Sat, 20 Feb 2021 17:33:48 +0100")
+References: <20210220163349.25244-1-ps.report@gmx.net>
+Message-ID: <87r1l1s7zr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Alexnder, All,
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
-On 2021-02-23 09:25 +0100, Alexander Sverdlin spake thusly:
-> On Mon, 2021-02-22 at 22:15 +0100, Yann E. MORIN wrote:
-> > > -AVRDUDE_VERSION = f8893ccf0aceeff67c45f95ae4e86bc7fbe342aa
-> > > -AVRDUDE_SITE = $(call github,kcuzner,avrdude,$(AVRDUDE_VERSION))
-> > > +AVRDUDE_VERSION = r1450
-> > > +AVRDUDE_SITE_METHOD = svn
-> > > +AVRDUDE_SITE = http://svn.savannah.nongnu.org/svn/avrdude/trunk
-> > I am wondering what version of Buildroot you've been testing this with,
-> > because downloading via svn is currently broken in master.
-> > No need to reend for now, until we fix the svn download (imminent,
-> > anytime soon, almost done, etc...)
-> You've cought me :)
-> Tested with 2020.11.x, rebased onto master.
+ > - add mkdir -p /run/irqbalance to sysv startup script needed to
+ >   create socket /run/irqbalance/irqbalance<pid>.sock
 
-Hehe. ;-)
+ > Fixes:
 
-The download via svn has been fixed in master, but the fix is still not
-in -next, and since this is a version bump, it will then have to wait
-for either master being merged into next (will most probably not
-happen), or next being merged ijnto master after the release.
+ >   - Bug 13541 [1]
 
-Regards,
-Yann E. MORIN.
+ >   daemon.warn /usr/sbin/irqbalance: Daemon couldn't be bound to the file-based socket.
+
+ > [1] https://bugs.busybox.net/show_bug.cgi?id=13541
+
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+
+Committed to 2020.02.x and 2020.11.x, thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
