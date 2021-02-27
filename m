@@ -1,40 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 27 Feb 2021 19:31:08 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/bind: drop
- unrecognized option
-Message-ID: <20210227181918.3E422844F0@busybox.osuosl.org>
+Date: Sat, 27 Feb 2021 19:40:54 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/bind: disable
+ backtrace support
+Message-ID: <20210227181918.576B0844F0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e4d7d6b9de53588d77fd369b9c380145fb8953d1
+commit: https://git.buildroot.net/buildroot/commit/?id=fdfbc12ffe89ccfd1a2f03af4a3bb0b4ec4c212f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Drop --enable-newstats option which is not recognized
+Disable backtrace support, fixes linking failure for uclibc/musl based
+toolchains.
 
-Unrecognized options:
-    --disable-gtk-doc, --disable-gtk-doc-html, --disable-doc, --disable-docs, --disable-documentation, --with-xmlto, --with-fop, --disable-dependency-tracking, --disable-nls, --enable-newstats
+Fixes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit a2be92afc28fa006f17a7a01d93f75d3611b7212)
+  - http://autobuild.buildroot.net/results/7a1a140314bc8d134f9eeb95ef2e46e7fb0ce9fd/
+
+  .../arm-buildroot-linux-uclibcgnueabi/bin/ld: ../isc/.libs/libisc.so: undefined reference to `_Unwind_GetIP'
+
+  - http://autobuild.buildroot.net/results/f0db5fe7fc6860b7270c784989c451e2e7aa2afb/
+
+  .../arm-buildroot-linux-uclibcgnueabi/bin/ld: ../isc/.libs/libisc.so: undefined reference to `_Unwind_GetIP'
+
+  - http://autobuild.buildroot.net/results/cb963298885df37f1e5c4d3ab3989773c01c54fc/
+
+  .../arm-buildroot-linux-musleabihf/bin/ld: ../isc/.libs/libisc.so: undefined reference to `_Unwind_GetIP'
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 700674b45c86d28570ecb50d657ac7f6dfd89784)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bind/bind.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/bind/bind.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 4098f948a9..0df2467bc5 100644
+index 0df2467bc5..ab42762e12 100644
 --- a/package/bind/bind.mk
 +++ b/package/bind/bind.mk
-@@ -47,7 +47,7 @@ BIND_CONF_OPTS += --disable-linux-caps
- endif
+@@ -30,7 +30,8 @@ BIND_CONF_OPTS = \
+ 	--with-randomdev=/dev/urandom \
+ 	--enable-epoll \
+ 	--with-gssapi=no \
+-	--enable-filter-aaaa
++	--enable-filter-aaaa \
++	--disable-backtrace
  
- ifeq ($(BR2_PACKAGE_LIBXML2),y)
--BIND_CONF_OPTS += --with-libxml2=$(STAGING_DIR)/usr --enable-newstats
-+BIND_CONF_OPTS += --with-libxml2=$(STAGING_DIR)/usr
- BIND_DEPENDENCIES += libxml2
- else
- BIND_CONF_OPTS += --with-libxml2=no
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ BIND_CONF_OPTS += --with-zlib=$(STAGING_DIR)/usr
