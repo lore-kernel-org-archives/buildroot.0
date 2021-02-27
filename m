@@ -1,50 +1,65 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 27 Feb 2021 18:57:59 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/cegui: use plain
- assignemnt for first _CONF_OPTS
-Message-ID: <20210227182007.23EF98396F@busybox.osuosl.org>
+Date: Sat, 27 Feb 2021 18:54:03 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/python-django:
+ security bump to version 3.0.13
+Message-ID: <20210227182007.1853682676@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=41f2185b12159bb190d2b3946415984c5a2f8afa
+commit: https://git.buildroot.net/buildroot/commit/?id=f6f1c7d2aa9d16845ae062e80986ea746f665a12
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-Commit 689b9c1a7cf5 (package/cegui: disable xerces support) added
-an unconditional assignment to _CONF_OPTS before all the conditional
-ones, but used the append-assignment instead of the traditional plain
-assignment.
+Fixes the following security issue:
 
-Fix that by removing the append-assignment.
+- CVE-2021-23336: Web cache poisoning via django.utils.http.limited_parse_qsl()
 
-Use that opportunity to also move the first item of this multi-line
-assignment, to its own line.
+  Django contains a copy of urllib.parse.parse_qsl() which was added to
+  backport some security fixes.  A further security fix has been issued
+  recently such that parse_qsl() no longer allows using ; as a query
+  parameter separator by default.  Django now includes this fix.  See
+  bpo-42967 for further details.
 
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
-[yann.morin.1998 at free.fr:
-  - reference the exact commit that introduce the issue
-  - also move the first item to its own line
-]
+For more details, see the advisory:
+https://www.djangoproject.com/weblog/2021/feb/19/security-releases/
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 86fbba8b81b09b676bf8f03e88b11b607599e066)
+(cherry picked from commit 82abd78a01fc832f758fc2b2d7326879500fb786)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cegui/cegui.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/python-django/python-django.hash | 4 ++--
+ package/python-django/python-django.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/cegui/cegui.mk b/package/cegui/cegui.mk
-index 23919e0151..d578c9913c 100644
---- a/package/cegui/cegui.mk
-+++ b/package/cegui/cegui.mk
-@@ -9,7 +9,8 @@ CEGUI_SITE = $(call github,cegui,cegui,v$(CEGUI_VERSION))
- CEGUI_LICENSE = MIT
- CEGUI_LICENSE_FILES = COPYING
- CEGUI_INSTALL_STAGING = YES
--CEGUI_CONF_OPTS += -DCEGUI_BUILD_XMLPARSER_XERCES=OFF \
-+CEGUI_CONF_OPTS = \
-+	-DCEGUI_BUILD_XMLPARSER_XERCES=OFF \
- 	-DCEGUI_HAS_MINIZIP_RESOURCE_PROVIDER=OFF \
- 	-DCEGUI_BUILD_RENDERER_OGRE=OFF
- CEGUI_DEPENDENCIES = glm \
+diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
+index 53f718ea0a..f40cfa8f3c 100644
+--- a/package/python-django/python-django.hash
++++ b/package/python-django/python-django.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/django/json
+-md5  55291777e25bd9e0a286c6f64751246a  Django-3.0.12.tar.gz
+-sha256  fd63e2c7acca5f2e7ad93dfb53d566e040d871404fc0f684a3e720006d221f9a  Django-3.0.12.tar.gz
++md5  7020810fb65b17e82d22001883b63a12  Django-3.0.13.tar.gz
++sha256  6f13c3e8109236129c49d65a42fbf30c928e66b05ca6862246061b9343ecbaf2  Django-3.0.13.tar.gz
+ # Locally computed sha256 checksums
+ sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
+index 512f2cd89c..a9cde4b45f 100644
+--- a/package/python-django/python-django.mk
++++ b/package/python-django/python-django.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-PYTHON_DJANGO_VERSION = 3.0.12
++PYTHON_DJANGO_VERSION = 3.0.13
+ PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
+ # The official Django site has an unpractical URL
+-PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/32/e3/e7e9a9378321fdfc3eb55de151911dce968fa245d1f16d8c480c63ea4ed1
++PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/3b/fe/11ec9b4cbae447e7b90d551be035d55c1293973592b491540334452f1f1f
+ PYTHON_DJANGO_LICENSE = BSD-3-Clause
+ PYTHON_DJANGO_LICENSE_FILES = LICENSE
+ PYTHON_DJANGO_SETUP_TYPE = setuptools
