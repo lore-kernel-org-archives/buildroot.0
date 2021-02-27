@@ -1,37 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 27 Feb 2021 19:00:25 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] DEVELOPERS: remove Scott
- Fan
-Message-ID: <20210227181917.DC1F2844F0@busybox.osuosl.org>
+Date: Sat, 27 Feb 2021 19:03:15 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/irqbalance: fix
+ sysv startup script (add mkdir /run/irqbalance)
+Message-ID: <20210227181918.0092586705@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5d75ec30702125caf298c5460cb0b9656bdb66b2
+commit: https://git.buildroot.net/buildroot/commit/?id=d006b75cbe6627589b62b2ce3342a6ab7c91f718
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Signed-off-by: Scott Fan <fancp2007@gmail.com>
+- add mkdir -p /run/irqbalance to sysv startup script needed to
+  create socket /run/irqbalance/irqbalance<pid>.sock
+
+Fixes:
+
+  - Bug 13541 [1]
+
+  daemon.warn /usr/sbin/irqbalance: Daemon couldn't be bound to the file-based socket.
+
+[1] https://bugs.busybox.net/show_bug.cgi?id=13541
+
+Reported-by: Alfredo Pons Menargues <alfredo.pons@gmail.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+[yann.morin.1998 at free.fr: only create in start case]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit d1054e851cb17a73cd2a94292a8acddbf530751a)
+(cherry picked from commit 4a95f38f306411ca750a676b81326dc7ec67bcaa)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 4 ----
- 1 file changed, 4 deletions(-)
+ package/irqbalance/S13irqbalance | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 97d808d2c5..75fb47650e 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2171,10 +2171,6 @@ F:	package/ripgrep/
- N:	Santosh Multhalli <santosh.multhalli@rockwellcollins.com>
- F:	package/valijson/
- 
--N:	Scott Fan <fancp2007@gmail.com>
--F:	package/libssh/
--F:	package/x11r7/xdriver_xf86-video-fbturbo/
--
- N:	S??bastien Szymanski <sebastien.szymanski@armadeus.com>
- F:	package/mmc-utils/
- F:	package/python-flask-jsonrpc/
+diff --git a/package/irqbalance/S13irqbalance b/package/irqbalance/S13irqbalance
+index b06a3372e9..f6ed9291be 100644
+--- a/package/irqbalance/S13irqbalance
++++ b/package/irqbalance/S13irqbalance
+@@ -10,6 +10,8 @@ PID="/var/run/irqbalance.pid"
+ case "$1" in
+     start)
+ 	printf "Starting irqbalance: "
++	# for irqbalance socket /run/irqbalance/irqbalance<pid>.sock
++	mkdir -p /run/irqbalance
+ 	start-stop-daemon -S -q -x $EXEC -- $ARGS
+ 	if [ $? != 0 ]; then
+ 	    echo "FAILED"
