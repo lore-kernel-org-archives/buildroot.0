@@ -1,76 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 27 Feb 2021 19:05:03 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x]
- support/scripts/boot-qemu-image.py: properly catch timeout
-Message-ID: <20210227182007.9BA2E82676@busybox.osuosl.org>
+Date: Sat, 27 Feb 2021 19:00:34 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] DEVELOPERS: remove Scott
+ Fan
+Message-ID: <20210227182007.4C4088396F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6bf41019fbce3d42d6857a81754ac7f7f43980e7
+commit: https://git.buildroot.net/buildroot/commit/?id=1f0e026ef746e1c475ccc7f515fff21d312e508e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-As reported on IRC by sephthir, the gitlab test of the defconfig
-qemu_sparc_ss10_defconfig doesn't error out while the system
-is not working properly.
-
-This is because we explicitly wait for the timeout as an expected
-condition, but do not check for it. Indeed, pexpect.expect() returns
-the index of the matching condition in the list of expected conditions,
-but we just ignore the return code, so we are not able to differentiate
-between a successful login (or prompt) from a timeout.
-
-By default, pexepect.expect() raises the pexpect.TIMEOUT exception on a
-timeout, and we are already prepared to catch and handle that exception.
-But because pexpect.TIMEOUT is passed as an expected condition, the
-exception is not raised.
-
-Remove pexpect.TIMEOUT from the list of expected conditions, so that the
-exception is properly raised again, and so that we can catch it.
-
-The qemu_sparc_ss10_defconfig is already fixed by
-4d16e6f5324f0285f51bfbb5a3503584f3b3ad12.
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-[yann.morin.1998 at free.fr: reword commit log]
+Signed-off-by: Scott Fan <fancp2007@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 03c3fbd81c51c7b0cc236362b3afc73e01219170)
+(cherry picked from commit d1054e851cb17a73cd2a94292a8acddbf530751a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/boot-qemu-image.py | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ DEVELOPERS | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/support/scripts/boot-qemu-image.py b/support/scripts/boot-qemu-image.py
-index dbbba552ad..9b7bfec990 100755
---- a/support/scripts/boot-qemu-image.py
-+++ b/support/scripts/boot-qemu-image.py
-@@ -32,7 +32,7 @@ def main():
-     time.sleep(1)
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 8a1b5c6705..d88e82bcf3 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2301,10 +2301,6 @@ F:	package/ripgrep/
+ N:	Santosh Multhalli <santosh.multhalli@rockwellcollins.com>
+ F:	package/valijson/
  
-     try:
--        child.expect(["buildroot login:", pexpect.TIMEOUT], timeout=60)
-+        child.expect(["buildroot login:"], timeout=60)
-     except pexpect.EOF as e:
-         # Some emulations require a fork of qemu-system, which may be
-         # missing on the system, and is not provided by Buildroot.
-@@ -54,7 +54,7 @@ def main():
-     child.sendline("root\r")
- 
-     try:
--        child.expect(["# ", pexpect.TIMEOUT], timeout=60)
-+        child.expect(["# "], timeout=60)
-     except pexpect.EOF:
-         print("Cannot connect to shell")
-         sys.exit(1)
-@@ -65,7 +65,7 @@ def main():
-     child.sendline("poweroff\r")
- 
-     try:
--        child.expect(["System halted", pexpect.TIMEOUT], timeout=60)
-+        child.expect(["System halted"], timeout=60)
-         child.expect(pexpect.EOF)
-     except pexpect.EOF:
-         pass
+-N:	Scott Fan <fancp2007@gmail.com>
+-F:	package/libssh/
+-F:	package/x11r7/xdriver_xf86-video-fbturbo/
+-
+ N:	S??bastien Szymanski <sebastien.szymanski@armadeus.com>
+ F:	package/mmc-utils/
+ F:	package/python-flask-jsonrpc/
