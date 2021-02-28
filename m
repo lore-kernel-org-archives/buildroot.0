@@ -1,28 +1,36 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 28 Feb 2021 16:12:54 +0000
-Subject: [Buildroot] [Bug 13551] 2021.02.rc2: Unicode not work on qt 5.15.2
-In-Reply-To: <bug-13551-163@https.bugs.busybox.net/>
-References: <bug-13551-163@https.bugs.busybox.net/>
-Message-ID: <bug-13551-163-zrqqUG0u72@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 28 Feb 2021 17:15:37 +0100
+Subject: [Buildroot] [PATCH 2020.11.x] package/i7z: fix build with gcc 10
+In-Reply-To: <20210220183553.10627-1-vincent.stehle@laposte.net> ("Vincent
+ =?utf-8?Q?Stehl=C3=A9=22's?= message of "Sat, 20 Feb 2021 19:35:53 +0100")
+References: <20210220183553.10627-1-vincent.stehle@laposte.net>
+Message-ID: <87tupwqic6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13551
+>>>>> "Vincent" == Vincent Stehl? <vincent.stehle@laposte.net> writes:
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+ > From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Fixes:
+ > - http://autobuild.buildroot.org/results/1a433611ba8676cf1ca276fccaf3633971bd562e
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |INVALID
-             Status|NEW                         |RESOLVED
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > [cherry pick commit dbe6870a4c9b to fix
+ > http://autobuild.buildroot.net/results/72ca4e447655e1dda5d201301b6916b47be2dc71]
+ > Signed-off-by: Vincent Stehl? <vincent.stehle@laposte.net>
+ > ---
 
---- Comment #5 from Peter Korsgaard <jacmet@uclibc.org> ---
-So the issue is simply about the locale used. The default (C) locale doesn't
-handle unicode, but using an unicode locale fixes it.
+
+ > Hi,
+
+ > I would like to propose backporting this patch from Fabrice Fontaine to the
+ > 2020.11.x branch, please. This would make the autobuild happy.
+
+Agreed, I must have missed it by accident. Committed to 2020.11.x, thanks.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
