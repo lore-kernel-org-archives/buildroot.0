@@ -1,94 +1,104 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 28 Feb 2021 17:15:06 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/i7z: fix build
- with gcc 10
-Message-ID: <20210228155313.D204A80F4A@busybox.osuosl.org>
+Date: Sun, 28 Feb 2021 18:00:19 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/fakeroot: fix
+ glibc detection on patch for new wrappers
+Message-ID: <20210228163801.835F6862DA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b283eccb50130f4d437049af9ca1efa544393604
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=5904d13b90ac3e50ed801587fdf717550daa62e9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Fixes:
- - http://autobuild.buildroot.org/results/1a433611ba8676cf1ca276fccaf3633971bd562e
+Commit f45925a951318e9e53bead80b363e004301adc6f add the patch:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit dbe6870a4c9b7356639cc53e566bc3f9aa857bde)
+0003-libfakeroot.c-add-wrappers-for-new-glibc-2.33-symbol.patch
+
+which allowed fakeroot to be compiled with GLIBC 2.33 or above.
+However, this introduce a bug for building with a non-GLIBC based
+toolchain as a GLIBC macro - __GLIBC_PREREQ - is used on the same line
+as the detection of GLIBC.
+
+Fix this by backporting the fix to this incorrect macro from upstream
+commit:
+
+https://salsa.debian.org/clint/fakeroot/-/commit/8090dffdad8fda86dccd47ce7a7db8840bdf7d7b
+
+CC: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/i7z/0001-fix-build-with-gcc-10.patch | 63 ++++++++++++++++++++++++++++
+ .../0008-fix-build-regression-on-macOS.patch       | 63 ++++++++++++++++++++++
  1 file changed, 63 insertions(+)
 
-diff --git a/package/i7z/0001-fix-build-with-gcc-10.patch b/package/i7z/0001-fix-build-with-gcc-10.patch
+diff --git a/package/fakeroot/0008-fix-build-regression-on-macOS.patch b/package/fakeroot/0008-fix-build-regression-on-macOS.patch
 new file mode 100644
-index 0000000000..a25e937b07
+index 0000000000..480e2b3d6d
 --- /dev/null
-+++ b/package/i7z/0001-fix-build-with-gcc-10.patch
++++ b/package/fakeroot/0008-fix-build-regression-on-macOS.patch
 @@ -0,0 +1,63 @@
-+From 6e4e407a374512b5bcb5a7c184258653e472ef9f Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 19 Jan 2021 07:47:58 +0100
-+Subject: [PATCH] fix build with gcc 10
++From dc910b81378b5fb8b4e851d5deb9755e6969dad5 Mon Sep 17 00:00:00 2001
++From: Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
++Date: Mon, 15 Feb 2021 11:07:56 -0800
++Subject: [PATCH] fix build regression on macOS
 +
-+Fix the following build failure with gcc 10 (which defaults to
-+-fno-common):
-+
-+/home/buildroot/autobuild/instance-2/output-1/host/bin/x86_64-linux-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -fno-schedule-insns2  -fno-schedule-insns -fno-inline-small-functions -fno-caller-saves -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -DBUILD_MAIN -Wimplicit-function-declaration -Dx64_BIT  -o i7z i7z.o helper_functions.o i7z_Single_Socket.o i7z_Dual_Socket.o -lncurses -lpthread -lrt -lm
-+/home/buildroot/autobuild/instance-2/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-gnu/10.2.0/../../../../x86_64-buildroot-linux-gnu/bin/ld: i7z_Dual_Socket.o:(.bss+0x0): multiple definition of `global_ts'; i7z_Single_Socket.o:(.bss+0x0): first defined here
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/1a433611ba8676cf1ca276fccaf3633971bd562e
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/ajaiantilal/i7z/pull/27]
++Signed-off-by: Felix Fietkau <nbd@nbd.name>
++Signed-off-by: Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>
++[Ryan: backported from 8090dffdad8fda86dccd47ce7a7db8840bdf7d7b]
++Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
 +---
-+ i7z.c               | 1 +
-+ i7z_Dual_Socket.c   | 2 +-
-+ i7z_Single_Socket.c | 2 +-
-+ 3 files changed, 3 insertions(+), 2 deletions(-)
++ configure.ac  | 6 ++++++
++ libfakeroot.c | 4 +++-
++ 2 files changed, 9 insertions(+), 1 deletion(-)
 +
-+diff --git a/i7z.c b/i7z.c
-+index 61e2757..910a608 100644
-+--- a/i7z.c
-++++ b/i7z.c
-+@@ -34,6 +34,7 @@ int Dual_Socket();
++diff --git a/configure.ac b/configure.ac
++index 71f90ff..0ad1da0 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -181,6 +181,9 @@ AC_MSG_CHECKING([for type of arg of __xmknod])
++        #include <fcntl.h>
++        #include <unistd.h>
++   ]], [[
+++#ifndef __GLIBC__
+++#error no extra *
+++#endif
++        int __xmknod  ( int ver,
++                        const char *pathname ,
++                        mode_t  mode ,  dev_t *dev);
++@@ -207,6 +210,9 @@ AC_MSG_CHECKING([for type of arg of __xmknodat])
++        #include <fcntl.h>
++        #include <unistd.h>
++   ]], [[
+++#ifndef __GLIBC__
+++#error no extra *
+++#endif
++        int __xmknodat  ( int ver,
++                          int dirfd,
++                          const char *pathname ,
++diff --git a/libfakeroot.c b/libfakeroot.c
++index 3eedd99..6e49618 100644
++--- a/libfakeroot.c
+++++ b/libfakeroot.c
++@@ -1351,7 +1351,8 @@ int renameat(int olddir_fd, const char *oldpath,
++ #endif /* HAVE_FSTATAT */
 + 
-+ int socket_0_num=0, socket_1_num=1;
-+ bool use_ncurses = true;
-++struct timespec global_ts;
 + 
-+ /////////////////////LOGGING TO FILE////////////////////////////////////////
-+ FILE *fp_log_file_freq;
-+diff --git a/i7z_Dual_Socket.c b/i7z_Dual_Socket.c
-+index 1388339..ceafdce 100644
-+--- a/i7z_Dual_Socket.c
-++++ b/i7z_Dual_Socket.c
-+@@ -37,7 +37,7 @@ float Read_Voltage_CPU(int cpu_num);
-+ extern struct program_options prog_options;
-+ FILE *fp_log_file;
++-#if defined(__GLIBC__) && __GLIBC_PREREQ(2,33)
+++#if defined(__GLIBC__)
+++#if __GLIBC_PREREQ(2,33)
++ /* Glibc 2.33 exports symbols for these functions in the shared lib */
++   int lstat(const char *file_name, struct stat *statbuf) {
++      return WRAP_LSTAT LSTAT_ARG(_STAT_VER, file_name, statbuf);
++@@ -1396,6 +1397,7 @@ int renameat(int olddir_fd, const char *oldpath,
++        return WRAP_MKNODAT MKNODAT_ARG(_STAT_VER, dir_fd, pathname, mode, &dev);
++     }
++   #endif
+++#endif /* __GLIBC__ */
++ #endif /* GLIBC_PREREQ */
 + 
-+-struct timespec global_ts;
-++extern struct timespec global_ts;
-+ extern FILE *fp_log_file_freq_1, *fp_log_file_freq_2;
 + 
-+ extern char* CPU_FREQUENCY_LOGGING_FILE_single;
-+diff --git a/i7z_Single_Socket.c b/i7z_Single_Socket.c
-+index 16e98c1..b7266e6 100644
-+--- a/i7z_Single_Socket.c
-++++ b/i7z_Single_Socket.c
-+@@ -35,7 +35,7 @@ int Read_Thermal_Status_CPU(int cpu_num);
-+ extern struct program_options prog_options;
-+ extern FILE *fp_log_file_freq;
-+ 
-+-struct timespec global_ts;
-++extern struct timespec global_ts;
-+ 
-+ extern char* CPU_FREQUENCY_LOGGING_FILE_single;
-+ extern char* CPU_FREQUENCY_LOGGING_FILE_dual;
 +-- 
-+2.29.2
++2.25.1
 +
