@@ -1,50 +1,87 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 27 Feb 2021 21:03:49 +0100
-Subject: [Buildroot] [PATCH/next 1/1] package/python-colorlog: bump to
- version 4.7.2
-Message-ID: <20210227200349.23088-1-fontaine.fabrice@gmail.com>
+From: Bin Meng <bmeng.cn@gmail.com>
+Date: Sun, 28 Feb 2021 15:45:17 +0800
+Subject: [Buildroot] [PATCH] board/qemu: Add ppc-e500mc configuration
+Message-ID: <20210228074517.18571-1-bmeng.cn@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update indentation in hash file (two spaces)
+This adds a 32-bit equivalent configuration of ppc64-e5500 board.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bin Meng <bmeng.cn@gmail.com>
 ---
- package/python-colorlog/python-colorlog.hash | 6 +++---
- package/python-colorlog/python-colorlog.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-colorlog/python-colorlog.hash b/package/python-colorlog/python-colorlog.hash
-index b7b27b59d9..4613cf0d3c 100644
---- a/package/python-colorlog/python-colorlog.hash
-+++ b/package/python-colorlog/python-colorlog.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/colorlog/json
--md5	25f79b76421132e2a9e08da15e4e0a73  colorlog-4.1.0.tar.gz
--sha256	30aaef5ab2a1873dec5da38fd6ba568fa761c9fa10b40241027fa3edea47f3d2  colorlog-4.1.0.tar.gz
-+md5  28500337c5bffc2a90dd19551479c992  colorlog-4.7.2.tar.gz
-+sha256  18d05b616438a75762d7d214b9ec3b05d274466c9f3ddd92807e755840c88251  colorlog-4.7.2.tar.gz
- # Locally computed sha256 checksums
--sha256	915d2c0c578d5015fb561f69ce2970a0d0ed566f0b99bdb6a4ebb439e9c81b0d  LICENSE
-+sha256  915d2c0c578d5015fb561f69ce2970a0d0ed566f0b99bdb6a4ebb439e9c81b0d  LICENSE
-diff --git a/package/python-colorlog/python-colorlog.mk b/package/python-colorlog/python-colorlog.mk
-index 18c077e4ab..ba1ef7247b 100644
---- a/package/python-colorlog/python-colorlog.mk
-+++ b/package/python-colorlog/python-colorlog.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_COLORLOG_VERSION = 4.1.0
-+PYTHON_COLORLOG_VERSION = 4.7.2
- PYTHON_COLORLOG_SOURCE = colorlog-$(PYTHON_COLORLOG_VERSION).tar.gz
--PYTHON_COLORLOG_SITE = https://files.pythonhosted.org/packages/a5/51/c6e1f2c7e6d7524b580d5a8d7691fd4530f894ae8a23ba66a065291ceba2
-+PYTHON_COLORLOG_SITE = https://files.pythonhosted.org/packages/b2/d8/7bd0e6aa6b7dc93611f90a847eefcd048d3cae66dc8867c72486362bdfbd
- PYTHON_COLORLOG_SETUP_TYPE = setuptools
- PYTHON_COLORLOG_LICENSE = MIT
- PYTHON_COLORLOG_LICENSE_FILES = LICENSE
+ board/qemu/ppc-e500mc/linux.fragment | 10 ++++++++++
+ board/qemu/ppc-e500mc/readme.txt     |  5 +++++
+ configs/qemu_ppc_e500mc_defconfig    | 29 ++++++++++++++++++++++++++++
+ 3 files changed, 44 insertions(+)
+ create mode 100644 board/qemu/ppc-e500mc/linux.fragment
+ create mode 100644 board/qemu/ppc-e500mc/readme.txt
+ create mode 100644 configs/qemu_ppc_e500mc_defconfig
+
+diff --git a/board/qemu/ppc-e500mc/linux.fragment b/board/qemu/ppc-e500mc/linux.fragment
+new file mode 100644
+index 0000000000..35a8dccf89
+--- /dev/null
++++ b/board/qemu/ppc-e500mc/linux.fragment
+@@ -0,0 +1,10 @@
++# Enables generic PPC e500 base arch support for QEMU.
++# The e500mc is a variant of the e500 arch.
++CONFIG_PPC_QEMU_E500=y
++
++# Enable virtio (blk, rng and net devices)
++CONFIG_VIRTIO=y
++CONFIG_VIRTIO_PCI=y
++CONFIG_HW_RANDOM_VIRTIO=y
++CONFIG_VIRTIO_BLK=y
++CONFIG_VIRTIO_NET=y
+diff --git a/board/qemu/ppc-e500mc/readme.txt b/board/qemu/ppc-e500mc/readme.txt
+new file mode 100644
+index 0000000000..77a864ed2b
+--- /dev/null
++++ b/board/qemu/ppc-e500mc/readme.txt
+@@ -0,0 +1,5 @@
++Run the emulation with:
++
++ qemu-system-ppc -M ppce500 -cpu e500mc -m 256 -kernel output/images/uImage -drive file=output/images/rootfs.ext2,if=virtio,format=raw -append "console=ttyS0 rootwait root=/dev/vda" -serial mon:stdio -nographic # qemu_ppc_e500mc_defconfig
++
++The login prompt will appear in the terminal that started Qemu.
+diff --git a/configs/qemu_ppc_e500mc_defconfig b/configs/qemu_ppc_e500mc_defconfig
+new file mode 100644
+index 0000000000..69fc8dbc06
+--- /dev/null
++++ b/configs/qemu_ppc_e500mc_defconfig
+@@ -0,0 +1,29 @@
++# Architecture
++BR2_powerpc=y
++BR2_powerpc_e500mc=y
++
++# Serial port config
++BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
++
++# Image
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
++
++# Linux headers same as the kernel
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.7"
++BR2_LINUX_KERNEL_DEFCONFIG="corenet32_smp"
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/ppc-e500mc/linux.fragment"
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++
++# Filesystem
++BR2_TARGET_ROOTFS_EXT2=y
++# BR2_TARGET_ROOTFS_TAR is not set
++
++# host-qemu for gitlab testing
++BR2_PACKAGE_HOST_QEMU=y
++BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
 -- 
-2.30.0
+2.25.1
