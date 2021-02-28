@@ -1,39 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 28 Feb 2021 18:00:41 +0100
-Subject: [Buildroot] [PATCH 2020.02.x] package/fakeroot: fix glibc
- detection on patch for new wrappers
-In-Reply-To: <20210227194338.54649-1-ryanbarnett3@gmail.com> (Ryan Barnett's
- message of "Sat, 27 Feb 2021 13:43:38 -0600")
-References: <20210227194338.54649-1-ryanbarnett3@gmail.com>
-Message-ID: <87pn0kqg92.fsf@dell.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 28 Feb 2021 19:47:36 +0000
+Subject: [Buildroot] [Bug 13466] creation of bridge interface via interfaces
+ does not work
+In-Reply-To: <bug-13466-163@https.bugs.busybox.net/>
+References: <bug-13466-163@https.bugs.busybox.net/>
+Message-ID: <bug-13466-163-uxYM7RqAky@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ryan" == Ryan Barnett <ryanbarnett3@gmail.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=13466
 
- > Commit f45925a951318e9e53bead80b363e004301adc6f add the patch:
- > 0003-libfakeroot.c-add-wrappers-for-new-glibc-2.33-symbol.patch
+--- Comment #2 from Frank Wunderlich <frank-w@public-files.de> ---
+hi, i've added bridge-utils.sh and ifupdown.sh to /lib/bridge-utils (like it's
+done in rules of package) including sylinks in /etc/network/if-pre-up.d and
+if-post-down.d
 
- > which allowed fakeroot to be compiled with GLIBC 2.33 or above.
- > However, this introduce a bug for building with a non-GLIBC based
- > toolchain as a GLIBC macro - __GLIBC_PREREQ - is used on the same line
- > as the detection of GLIBC.
+# ls -l /lib/bridge-utils/                                                      
+total 16                                                                        
+-rwxr-xr-x    1 root     root          1621 Feb 18 14:57 bridge-utils.sh        
+-rwxr-xr-x    1 root     root          5307 Feb 18 14:57 ifupdown.sh
 
- > Fix this by backporting the fix to this incorrect macro from upstream
- > commit:
+# ls -l /etc/network/if-post-down.d/bridge                                      
+lrwxrwxrwx    1 root     root            29 Feb 28 17:51
+/etc/network/if-post-down.d/bridge -> /lib/bridge-utils/ifupdown.sh             
+# ls -l /etc/network/if-pre-up.d/bridge                                         
+lrwxrwxrwx    1 root     root            29 Feb 28 17:51
+/etc/network/if-pre-up.d/bridge -> /lib/bridge-utils/ifupdown.sh                
+# 
 
- > https://salsa.debian.org/clint/fakeroot/-/commit/8090dffdad8fda86dccd47ce7a7db8840bdf7d7b
+and added BR2_PACKAGE_IFUPDOWN to my config...
 
- > CC: Peter Korsgaard <peter@korsgaard.com>
- > Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
- > ---
- > Backport to: 2020.02.x from commit
- > e41b170b328cc086334948ff3b8038075e2c09ce
-
-Committed to 2020.02.x, thanks.
+but it seems not working, i guess the hooks are not picked up by anything
 
 -- 
-Bye, Peter Korsgaard
+You are receiving this mail because:
+You are on the CC list for the bug.
