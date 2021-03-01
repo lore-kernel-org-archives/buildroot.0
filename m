@@ -1,28 +1,65 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 01 Mar 2021 22:22:49 +0100
-Subject: [Buildroot] [PATCH] package/python-aioblescan: Bump to version
- 0.2.7
-In-Reply-To: <20210225134802.257199-1-grzegorz@blach.pl> (Grzegorz Blach's
- message of "Thu, 25 Feb 2021 14:48:00 +0100")
-References: <20210225134802.257199-1-grzegorz@blach.pl>
-Message-ID: <87blc2o9g6.fsf@dell.be.48ers.dk>
+Date: Mon, 1 Mar 2021 22:20:36 +0100
+Subject: [Buildroot] [git commit branch/next] package/gerbera: add optional
+ duktape dependency
+Message-ID: <20210301210039.E4884836DA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Grzegorz" == Grzegorz Blach <grzegorz@blach.pl> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=3a80e190092fe08da816c4adcf0802651eb0c274
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- > Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+Duktape allows the user to enable JavaScript scripting support.
 
-What is the upstream status of the patch? You don't mention it in your
-commit message.
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gerbera/Config.in  |  3 +++
+ package/gerbera/gerbera.mk | 11 ++++++++---
+ 2 files changed, 11 insertions(+), 3 deletions(-)
 
-Also use the -N option to git format-patch as pointed out by
-check-package:
-
-package/python-aioblescan/0001-Load-long-description-from-README.rst-instead-of-REA.patch:4: generate your patches with 'git format-patch -N'
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/gerbera/Config.in b/package/gerbera/Config.in
+index b734de95de..33a9705bea 100644
+--- a/package/gerbera/Config.in
++++ b/package/gerbera/Config.in
+@@ -20,6 +20,9 @@ config BR2_PACKAGE_GERBERA
+ 	  A free media server.
+ 	  Stream your media to devices on your home network.
+ 
++	  Select BR2_PACKAGE_DUKTAPE if you want to enable JavaScript
++	  for scripting.
++
+ 	  https://gerbera.io
+ 
+ comment "gerbera needs a toolchain w/ C++, threads, wchar, gcc >= 8"
+diff --git a/package/gerbera/gerbera.mk b/package/gerbera/gerbera.mk
+index 6e36377798..ccb3b2eeb5 100644
+--- a/package/gerbera/gerbera.mk
++++ b/package/gerbera/gerbera.mk
+@@ -16,15 +16,20 @@ GERBERA_DEPENDENCIES = \
+ 	sqlite \
+ 	util-linux \
+ 	zlib
+-GERBERA_CONF_OPTS = \
+-	-DWITH_DEBUG=OFF \
+-	-DWITH_JS=OFF
++GERBERA_CONF_OPTS = -DWITH_DEBUG=OFF
+ 
+ # Uses __atomic_fetch_add_4
+ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+ GERBERA_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -latomic"
+ endif
+ 
++ifeq ($(BR2_PACKAGE_DUKTAPE),y)
++GERBERA_DEPENDENCIES += duktape
++GERBERA_CONF_OPTS += -DWITH_JS=ON
++else
++GERBERA_CONF_OPTS += -DWITH_JS=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_EXIV2),y)
+ GERBERA_DEPENDENCIES += exiv2
+ GERBERA_CONF_OPTS += -DWITH_EXIV2=ON
