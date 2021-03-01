@@ -1,55 +1,75 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Mar 2021 17:07:30 +0100
-Subject: [Buildroot] [git commit] package/openssh: security bump to version
- 8.4p1
-Message-ID: <20210301154837.3C205816C9@busybox.osuosl.org>
+Date: Mon,  1 Mar 2021 17:49:10 +0100
+Subject: [Buildroot] [PATCH] package/privoxy: security bump to version 3.0.32
+Message-ID: <20210301164910.13080-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6609cd0d8894771126cd82d95deb10180cb6cf41
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Privoxy 3.0.32 fixes a number of security issues:
 
-Fixes CVE-2020-15778: scp in OpenSSH through 8.3p1 allows command injection in
-the scp.c toremote function, as demonstrated by backtick characters in the
-destination argument. NOTE: the vendor reportedly has stated that they
-intentionally omit validation of "anomalous argument transfers" because that
-could "stand a great chance of breaking existing workflows."
+- Security/Reliability:
+  - ssplit(): Remove an assertion that could be triggered with a
+    crafted CGI request.
+    Commit 2256d7b4d67. OVE-20210203-0001.
+    Reported by: Joshua Rogers (Opera)
+  - cgi_send_banner(): Overrule invalid image types. Prevents a
+    crash with a crafted CGI request if Privoxy is toggled off.
+    Commit e711c505c48. OVE-20210206-0001.
+    Reported by: Joshua Rogers (Opera)
+  - socks5_connect(): Don't try to send credentials when none are
+    configured. Fixes a crash due to a NULL-pointer dereference
+    when the socks server misbehaves.
+    Commit 85817cc55b9. OVE-20210207-0001.
+    Reported by: Joshua Rogers (Opera)
+  - chunked_body_is_complete(): Prevent an invalid read of size two.
+    Commit a912ba7bc9c. OVE-20210205-0001.
+    Reported by: Joshua Rogers (Opera)
+  - Obsolete pcre: Prevent invalid memory accesses with an invalid
+    pattern passed to pcre_compile(). Note that the obsolete pcre code
+    is scheduled to be removed before the 3.0.33 release. There has been
+    a warning since 2008 already.
+    Commit 28512e5b624. OVE-20210222-0001.
+    Reported by: Joshua Rogers (Opera)
 
-https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-15778
+for more details, see the announcement:
+https://www.openwall.com/lists/oss-security/2021/02/28/1
 
-Signed-off-by: Christian Stewart <christian@paral.in>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openssh/openssh.hash | 4 ++--
- package/openssh/openssh.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/privoxy/privoxy.hash | 8 ++++----
+ package/privoxy/privoxy.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
-index 1d7dc14fb6..840467f50a 100644
---- a/package/openssh/openssh.hash
-+++ b/package/openssh/openssh.hash
-@@ -1,4 +1,4 @@
--# From https://www.openssh.com/txt/release-8.3 (base64 encoded)
--sha256  f2befbe0472fe7eb75d23340eb17531cb6b3aac24075e2066b41f814e12387b2  openssh-8.3p1.tar.gz
-+# From https://www.openssh.com/txt/release-8.4 (base64 encoded)
-+sha256  5a01d22e407eb1c05ba8a8f7c654d388a13e9f226e4ed33bd38748dafa1d2b24  openssh-8.4p1.tar.gz
- # Locally calculated
- sha256  73d0db766229670c7b4e1ec5e6baed54977a0694a565e7cc878c45ee834045d7  LICENCE
-diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index edcbfc2f62..64e3084ca1 100644
---- a/package/openssh/openssh.mk
-+++ b/package/openssh/openssh.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/privoxy/privoxy.hash b/package/privoxy/privoxy.hash
+index 00c0f33bdb..92ecd1dd21 100644
+--- a/package/privoxy/privoxy.hash
++++ b/package/privoxy/privoxy.hash
+@@ -1,6 +1,6 @@
+-# From https://sourceforge.net/projects/ijbswa/files/Sources/3.0.31%20%28stable%29/
+-md5  014cc371d00e84b2db34d0e2b05c77d4  privoxy-3.0.31-stable-src.tar.gz
+-sha1  4f0e0c36d55f72f6b33e4c645a9c5d4f40026abd  privoxy-3.0.31-stable-src.tar.gz
++# From https://sourceforge.net/projects/ijbswa/files/Sources/3.0.32%20%28stable%29/
++md5  3a0a8ebdf80e0a29154683e74cbf510b  privoxy-3.0.32-stable-src.tar.gz
++sha1  3a298ab2599fc92555c86dc29a37742d7396a0d3  privoxy-3.0.32-stable-src.tar.gz
+ # Locally computed
+-sha256  077729a3aac79222a4e8d88a650d9028d16fd4b0d6038da8f5f5e47120d004eb  privoxy-3.0.31-stable-src.tar.gz
++sha256  c61de4008c62445ec18f1f270407cbf2372eaba93beaccdc9e3238bb2defeed7  privoxy-3.0.32-stable-src.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
+diff --git a/package/privoxy/privoxy.mk b/package/privoxy/privoxy.mk
+index 7f0e5bb3a1..adb5af28ac 100644
+--- a/package/privoxy/privoxy.mk
++++ b/package/privoxy/privoxy.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPENSSH_VERSION = 8.3p1
--OPENSSH_CPE_ID_VERSION = 8.3
-+OPENSSH_VERSION = 8.4p1
-+OPENSSH_CPE_ID_VERSION = 8.4
- OPENSSH_CPE_ID_UPDATE = p1
- OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
- OPENSSH_LICENSE = BSD-3-Clause, BSD-2-Clause, Public Domain
+-PRIVOXY_VERSION = 3.0.31
++PRIVOXY_VERSION = 3.0.32
+ PRIVOXY_SITE = http://downloads.sourceforge.net/project/ijbswa/Sources/$(PRIVOXY_VERSION)%20%28stable%29
+ PRIVOXY_SOURCE = privoxy-$(PRIVOXY_VERSION)-stable-src.tar.gz
+ # configure not shipped
+-- 
+2.20.1
