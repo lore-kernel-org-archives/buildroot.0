@@ -1,52 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Mar 2021 22:35:20 +0100
-Subject: [Buildroot] [git commit branch/next] package/python-colorlog: bump
- to version 4.7.2
-Message-ID: <20210301211349.7029581585@busybox.osuosl.org>
+Date: Mon, 1 Mar 2021 22:35:02 +0100
+Subject: [Buildroot] [git commit branch/next] package/dfu-util: bump to
+ version 0.10
+Message-ID: <20210301211349.617B78469E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=17ee49fe2599a0b229d3723a15a9dd775a0a9dd1
+commit: https://git.buildroot.net/buildroot/commit/?id=29f38b4c603ef0900ed241de52cd5b5077ceea28
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Update indentation in hash file (two spaces)
 
+https://sourceforge.net/p/dfu-util/dfu-util/ci/v0.10/tree/ChangeLog
+
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-colorlog/python-colorlog.hash | 6 +++---
- package/python-colorlog/python-colorlog.mk   | 4 ++--
+ package/dfu-util/dfu-util.hash | 8 ++++----
+ package/dfu-util/dfu-util.mk   | 2 +-
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-colorlog/python-colorlog.hash b/package/python-colorlog/python-colorlog.hash
-index b7b27b59d9..4613cf0d3c 100644
---- a/package/python-colorlog/python-colorlog.hash
-+++ b/package/python-colorlog/python-colorlog.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/colorlog/json
--md5	25f79b76421132e2a9e08da15e4e0a73  colorlog-4.1.0.tar.gz
--sha256	30aaef5ab2a1873dec5da38fd6ba568fa761c9fa10b40241027fa3edea47f3d2  colorlog-4.1.0.tar.gz
-+md5  28500337c5bffc2a90dd19551479c992  colorlog-4.7.2.tar.gz
-+sha256  18d05b616438a75762d7d214b9ec3b05d274466c9f3ddd92807e755840c88251  colorlog-4.7.2.tar.gz
- # Locally computed sha256 checksums
--sha256	915d2c0c578d5015fb561f69ce2970a0d0ed566f0b99bdb6a4ebb439e9c81b0d  LICENSE
-+sha256  915d2c0c578d5015fb561f69ce2970a0d0ed566f0b99bdb6a4ebb439e9c81b0d  LICENSE
-diff --git a/package/python-colorlog/python-colorlog.mk b/package/python-colorlog/python-colorlog.mk
-index 18c077e4ab..ba1ef7247b 100644
---- a/package/python-colorlog/python-colorlog.mk
-+++ b/package/python-colorlog/python-colorlog.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/dfu-util/dfu-util.hash b/package/dfu-util/dfu-util.hash
+index 7c66a93376..a99e67565d 100644
+--- a/package/dfu-util/dfu-util.hash
++++ b/package/dfu-util/dfu-util.hash
+@@ -1,6 +1,6 @@
+-# From http://dfu-util.sourceforge.net/releases/dfu-util-0.9.tar.gz.md5
+-md5	233bb1e08ef4b405062445d84e28fde6	dfu-util-0.9.tar.gz
++# From http://dfu-util.sourceforge.net/releases/dfu-util-0.10.tar.gz.md5
++md5  8cf55663703cdc6b40f377f999eb8d3d  dfu-util-0.10.tar.gz
+ 
+ # Locally computed
+-sha256	36428c6a6cb3088cad5a3592933385253da5f29f2effa61518ee5991ea38f833	dfu-util-0.9.tar.gz
+-sha256	32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670	COPYING
++sha256  a03dc58dfc79c056819c0544b2a5970537566460102b3d82cfb038c60e619b42  dfu-util-0.10.tar.gz
++sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+diff --git a/package/dfu-util/dfu-util.mk b/package/dfu-util/dfu-util.mk
+index 5e8ba5a8f2..9f26948a1a 100644
+--- a/package/dfu-util/dfu-util.mk
++++ b/package/dfu-util/dfu-util.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_COLORLOG_VERSION = 4.1.0
-+PYTHON_COLORLOG_VERSION = 4.7.2
- PYTHON_COLORLOG_SOURCE = colorlog-$(PYTHON_COLORLOG_VERSION).tar.gz
--PYTHON_COLORLOG_SITE = https://files.pythonhosted.org/packages/a5/51/c6e1f2c7e6d7524b580d5a8d7691fd4530f894ae8a23ba66a065291ceba2
-+PYTHON_COLORLOG_SITE = https://files.pythonhosted.org/packages/b2/d8/7bd0e6aa6b7dc93611f90a847eefcd048d3cae66dc8867c72486362bdfbd
- PYTHON_COLORLOG_SETUP_TYPE = setuptools
- PYTHON_COLORLOG_LICENSE = MIT
- PYTHON_COLORLOG_LICENSE_FILES = LICENSE
+-DFU_UTIL_VERSION = 0.9
++DFU_UTIL_VERSION = 0.10
+ DFU_UTIL_SITE = http://dfu-util.sourceforge.net/releases
+ DFU_UTIL_LICENSE = GPL-2.0+
+ DFU_UTIL_LICENSE_FILES = COPYING
