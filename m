@@ -1,57 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 6 Mar 2021 23:13:59 +0100
-Subject: [Buildroot] [git commit] package/strace: bump to version 5.11
-Message-ID: <20210308072139.E114981607@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 1 Mar 2021 22:35:20 +0100
+Subject: [Buildroot] [git commit] package/python-colorlog: bump to version
+ 4.7.2
+Message-ID: <20210308072136.D9DFC8896D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=065820d06733722c297d8ea44078b24321e7f727
+commit: https://git.buildroot.net/buildroot/commit/?id=17ee49fe2599a0b229d3723a15a9dd775a0a9dd1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update COPYING: copyright year update, and added note about the bundled
-Linux UAPI headers. Upstream commit 5bd8364f4202d ("Introduce bundled
-directory") says:
+Update indentation in hash file (two spaces)
 
-   According to analysis made by Kent Gibson at [1], we are allowed to
-   re-distribute unmodified Linux kernel UAPI headers under the same
-   terms as they are provided by the Linux kernel, and such
-   re-distribution does not affect the license of strace itself.
-
-   [1] https://lore.kernel.org/linux-gpio/20210128032641.GA11655 at sol/
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/strace/strace.hash | 6 +++---
- package/strace/strace.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-colorlog/python-colorlog.hash | 6 +++---
+ package/python-colorlog/python-colorlog.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/strace/strace.hash b/package/strace/strace.hash
-index 7b211c78b9..e4fe690f61 100644
---- a/package/strace/strace.hash
-+++ b/package/strace/strace.hash
+diff --git a/package/python-colorlog/python-colorlog.hash b/package/python-colorlog/python-colorlog.hash
+index b7b27b59d9..4613cf0d3c 100644
+--- a/package/python-colorlog/python-colorlog.hash
++++ b/package/python-colorlog/python-colorlog.hash
 @@ -1,5 +1,5 @@
- # Locally calculated after checking signature with RSA key 0xA8041FA839E16E36
--# https://strace.io/files/5.10/strace-5.10.tar.xz.asc
--sha256  fe3982ea4cd9aeb3b4ba35f6279f0b577a37175d3282be24b9a5537b56b8f01c  strace-5.10.tar.xz
--sha256  6370eb67db918210944a8511a6995ebe9567852f26b4f15a01e5c8cf2aef7c46  COPYING
-+# https://strace.io/files/5.11/strace-5.11.tar.xz.asc
-+sha256  ffe340b10c145a0f85734271e9cce56457d23f21a7ea5931ab32f8cf4e793879  strace-5.11.tar.xz
-+sha256  f847d5ef26ad1151ca63bb88536b23a4cac5040c67917f3d5ee7ea1316e2b736  COPYING
- sha256  7c379436436a562834aa7d2f5dcae1f80a25230fa74201046ca1fba4367d39aa  LGPL-2.1-or-later
-diff --git a/package/strace/strace.mk b/package/strace/strace.mk
-index 646be41e5b..e3e255fd61 100644
---- a/package/strace/strace.mk
-+++ b/package/strace/strace.mk
-@@ -4,7 +4,7 @@
+ # md5, sha256 from https://pypi.org/pypi/colorlog/json
+-md5	25f79b76421132e2a9e08da15e4e0a73  colorlog-4.1.0.tar.gz
+-sha256	30aaef5ab2a1873dec5da38fd6ba568fa761c9fa10b40241027fa3edea47f3d2  colorlog-4.1.0.tar.gz
++md5  28500337c5bffc2a90dd19551479c992  colorlog-4.7.2.tar.gz
++sha256  18d05b616438a75762d7d214b9ec3b05d274466c9f3ddd92807e755840c88251  colorlog-4.7.2.tar.gz
+ # Locally computed sha256 checksums
+-sha256	915d2c0c578d5015fb561f69ce2970a0d0ed566f0b99bdb6a4ebb439e9c81b0d  LICENSE
++sha256  915d2c0c578d5015fb561f69ce2970a0d0ed566f0b99bdb6a4ebb439e9c81b0d  LICENSE
+diff --git a/package/python-colorlog/python-colorlog.mk b/package/python-colorlog/python-colorlog.mk
+index 18c077e4ab..ba1ef7247b 100644
+--- a/package/python-colorlog/python-colorlog.mk
++++ b/package/python-colorlog/python-colorlog.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--STRACE_VERSION = 5.10
-+STRACE_VERSION = 5.11
- STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
- STRACE_SITE = https://strace.io/files/$(STRACE_VERSION)
- STRACE_LICENSE = LGPL-2.1+
+-PYTHON_COLORLOG_VERSION = 4.1.0
++PYTHON_COLORLOG_VERSION = 4.7.2
+ PYTHON_COLORLOG_SOURCE = colorlog-$(PYTHON_COLORLOG_VERSION).tar.gz
+-PYTHON_COLORLOG_SITE = https://files.pythonhosted.org/packages/a5/51/c6e1f2c7e6d7524b580d5a8d7691fd4530f894ae8a23ba66a065291ceba2
++PYTHON_COLORLOG_SITE = https://files.pythonhosted.org/packages/b2/d8/7bd0e6aa6b7dc93611f90a847eefcd048d3cae66dc8867c72486362bdfbd
+ PYTHON_COLORLOG_SETUP_TYPE = setuptools
+ PYTHON_COLORLOG_LICENSE = MIT
+ PYTHON_COLORLOG_LICENSE_FILES = LICENSE
