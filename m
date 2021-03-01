@@ -1,75 +1,33 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon,  1 Mar 2021 17:49:10 +0100
-Subject: [Buildroot] [PATCH] package/privoxy: security bump to version 3.0.32
-Message-ID: <20210301164910.13080-1-peter@korsgaard.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon,  1 Mar 2021 17:48:18 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libbsd: add LIBBSD_CPE_ID_VENDOR
+Message-ID: <20210301164818.161629-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Privoxy 3.0.32 fixes a number of security issues:
+cpe:2.3:a:freedesktop:libbsd is a valid CPE identifier for this package:
 
-- Security/Reliability:
-  - ssplit(): Remove an assertion that could be triggered with a
-    crafted CGI request.
-    Commit 2256d7b4d67. OVE-20210203-0001.
-    Reported by: Joshua Rogers (Opera)
-  - cgi_send_banner(): Overrule invalid image types. Prevents a
-    crash with a crafted CGI request if Privoxy is toggled off.
-    Commit e711c505c48. OVE-20210206-0001.
-    Reported by: Joshua Rogers (Opera)
-  - socks5_connect(): Don't try to send credentials when none are
-    configured. Fixes a crash due to a NULL-pointer dereference
-    when the socks server misbehaves.
-    Commit 85817cc55b9. OVE-20210207-0001.
-    Reported by: Joshua Rogers (Opera)
-  - chunked_body_is_complete(): Prevent an invalid read of size two.
-    Commit a912ba7bc9c. OVE-20210205-0001.
-    Reported by: Joshua Rogers (Opera)
-  - Obsolete pcre: Prevent invalid memory accesses with an invalid
-    pattern passed to pcre_compile(). Note that the obsolete pcre code
-    is scheduled to be removed before the 3.0.33 release. There has been
-    a warning since 2008 already.
-    Commit 28512e5b624. OVE-20210222-0001.
-    Reported by: Joshua Rogers (Opera)
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Afreedesktop%3Alibbsd
 
-for more details, see the announcement:
-https://www.openwall.com/lists/oss-security/2021/02/28/1
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/privoxy/privoxy.hash | 8 ++++----
- package/privoxy/privoxy.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/libbsd/libbsd.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/privoxy/privoxy.hash b/package/privoxy/privoxy.hash
-index 00c0f33bdb..92ecd1dd21 100644
---- a/package/privoxy/privoxy.hash
-+++ b/package/privoxy/privoxy.hash
-@@ -1,6 +1,6 @@
--# From https://sourceforge.net/projects/ijbswa/files/Sources/3.0.31%20%28stable%29/
--md5  014cc371d00e84b2db34d0e2b05c77d4  privoxy-3.0.31-stable-src.tar.gz
--sha1  4f0e0c36d55f72f6b33e4c645a9c5d4f40026abd  privoxy-3.0.31-stable-src.tar.gz
-+# From https://sourceforge.net/projects/ijbswa/files/Sources/3.0.32%20%28stable%29/
-+md5  3a0a8ebdf80e0a29154683e74cbf510b  privoxy-3.0.32-stable-src.tar.gz
-+sha1  3a298ab2599fc92555c86dc29a37742d7396a0d3  privoxy-3.0.32-stable-src.tar.gz
- # Locally computed
--sha256  077729a3aac79222a4e8d88a650d9028d16fd4b0d6038da8f5f5e47120d004eb  privoxy-3.0.31-stable-src.tar.gz
-+sha256  c61de4008c62445ec18f1f270407cbf2372eaba93beaccdc9e3238bb2defeed7  privoxy-3.0.32-stable-src.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/privoxy/privoxy.mk b/package/privoxy/privoxy.mk
-index 7f0e5bb3a1..adb5af28ac 100644
---- a/package/privoxy/privoxy.mk
-+++ b/package/privoxy/privoxy.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libbsd/libbsd.mk b/package/libbsd/libbsd.mk
+index 27bac6838a..256a75f15e 100644
+--- a/package/libbsd/libbsd.mk
++++ b/package/libbsd/libbsd.mk
+@@ -10,6 +10,7 @@ LIBBSD_SITE = https://libbsd.freedesktop.org/releases
+ LIBBSD_LICENSE = BSD-2-Clause, BSD-3-Clause, BSD-4-Clause, BSD-5-Clause, \
+ 		MIT, ISC, Beerware
+ LIBBSD_LICENSE_FILES = COPYING
++LIBBSD_CPE_ID_VENDOR = freedesktop
+ LIBBSD_INSTALL_STAGING = YES
  
--PRIVOXY_VERSION = 3.0.31
-+PRIVOXY_VERSION = 3.0.32
- PRIVOXY_SITE = http://downloads.sourceforge.net/project/ijbswa/Sources/$(PRIVOXY_VERSION)%20%28stable%29
- PRIVOXY_SOURCE = privoxy-$(PRIVOXY_VERSION)-stable-src.tar.gz
- # configure not shipped
+ $(eval $(autotools-package))
 -- 
-2.20.1
+2.30.0
