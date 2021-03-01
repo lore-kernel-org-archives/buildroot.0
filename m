@@ -1,91 +1,43 @@
-From: Adrian Sweet <asweet@thegoodpenguin.co.uk>
-Date: Mon, 1 Mar 2021 16:55:49 +0000
-Subject: [Buildroot] [PATCH 1/1] package/cog: add
- BR2_PACKAGE_COG_USE_SYSTEM_DBUS
-In-Reply-To: <20210204223323.GB441747@momiji>
-References: <20210202115721.4136447-1-asweet@thegoodpenguin.co.uk>
- <20210204223323.GB441747@momiji>
-Message-ID: <CAH=7X1AyXmWKnV+57tX9w_Smgz413jsYYVJfzv1X8arz7Bs1zA@mail.gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Mon,  1 Mar 2021 19:43:16 +0100
+Subject: [Buildroot] [PATCH] package/nano: bump to version 5.6
+Message-ID: <20210301184316.829457-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
-Is there anything preventing this being merged? Can I help with any issues?
-Thanks, Adrian
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/nano/nano.hash | 4 ++--
+ package/nano/nano.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On Thu, 4 Feb 2021 at 20:33, Adrian Perez de Castro <aperez@igalia.com>
-wrote:
-
-> Hi Adrian,
->
-> Thanks for the patch, I think adding the option is fine given that there
-> are people around who would use it?which seems to be the case.
->
-> Unless somebody else has an opinion against, I think we could merge this
-> change =]
->
-> On Tue, 02 Feb 2021 11:57:21 +0000 Adrian Sweet <
-> asweet at thegoodpenguin.co.uk> wrote:
-> > Added config option to expose browser remote control on the D-Bus system
-> bus
-> >
-> > Signed-off-by: Adrian Sweet <asweet@thegoodpenguin.co.uk>
->
-> Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
->
-> > ---
-> >  package/cog/Config.in | 6 ++++++
-> >  package/cog/cog.mk    | 6 ++++++
-> >  2 files changed, 12 insertions(+)
-> >
-> > diff --git a/package/cog/Config.in b/package/cog/Config.in
-> > index a9ca7473a9..c19f1c200e 100644
-> > --- a/package/cog/Config.in
-> > +++ b/package/cog/Config.in
-> > @@ -47,6 +47,12 @@ config BR2_PACKAGE_COG_PLATFORM_DRM
-> >         with video drivers that support kernel mode-setting (KMS)
-> >         via the DRM user-space API.
-> >
-> > +config BR2_PACKAGE_COG_USE_SYSTEM_DBUS
-> > +     bool "Use D-Bus system bus"
-> > +     default n
-> > +     help
-> > +       Expose remote control interface on system bus
-> > +
-> >  comment "DRM platform needs mesa3d w/ EGL driver and GBM"
-> >       depends on !BR2_PACKAGE_MESA3D_OPENGL_EGL
-> >
-> > diff --git a/package/cog/cog.mk b/package/cog/cog.mk
-> > index 47a5573dda..c5a1cc0df2 100644
-> > --- a/package/cog/cog.mk
-> > +++ b/package/cog/cog.mk
-> > @@ -31,4 +31,10 @@ else
-> >  COG_CONF_OPTS += -DCOG_PLATFORM_DRM=OFF
-> >  endif
-> >
-> > +ifeq ($(BR2_PACKAGE_COG_USE_SYSTEM_DBUS),y)
-> > +COG_CONF_OPTS += -DCOG_DBUS_SYSTEM_BUS=ON
-> > +else
-> > +COG_CONF_OPTS += -DCOG_DBUS_SYSTEM_BUS=OFF
-> > +endif
-> > +
-> >  $(eval $(cmake-package))
-> > --
-> > 2.25.1
-> >
->
-
-
+diff --git a/package/nano/nano.hash b/package/nano/nano.hash
+index 4498414fd..152766aa3 100644
+--- a/package/nano/nano.hash
++++ b/package/nano/nano.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://www.nano-editor.org/dist/v5/nano-5.5.tar.xz.asc
++# https://www.nano-editor.org/dist/v5/nano-5.6.tar.xz.asc
+ # using key BFD009061E535052AD0DF2150D28D4D2A0ACE884
+-sha256  390b81bf9b41ff736db997aede4d1f60b4453fbd75a519a4ddb645f6fd687e4a  nano-5.5.tar.xz
++sha256  fce183e4a7034d07d219c79aa2f579005d1fd49f156db6e50f53543a87637a32  nano-5.6.tar.xz
+ sha256  fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
+diff --git a/package/nano/nano.mk b/package/nano/nano.mk
+index d47c749ef..43f5f5f0b 100644
+--- a/package/nano/nano.mk
++++ b/package/nano/nano.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ NANO_VERSION_MAJOR = 5
+-NANO_VERSION = $(NANO_VERSION_MAJOR).5
++NANO_VERSION = $(NANO_VERSION_MAJOR).6
+ NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
+ NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
+ NANO_LICENSE = GPL-3.0+
 -- 
-Adrian Sweet, Software Engineer
-https://www.thegoodpenguin.co.uk
-
-The Good Penguin Ltd is a company registered in England and Wales with
-company number 12374667 and VAT number 341687879. Registered office: The
-Good Penguin Ltd, Westcott, Glasllwch Lane, Newport, NP20 3PS.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210301/b9687bea/attachment.html>
+2.27.0
