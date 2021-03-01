@@ -1,53 +1,68 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Mar 2021 22:35:02 +0100
-Subject: [Buildroot] [git commit branch/next] package/dfu-util: bump to
- version 0.10
-Message-ID: <20210301211349.617B78469E@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 1 Mar 2021 22:40:28 +0100
+Subject: [Buildroot] [PATCH v1] package/util-linux: disable runuser for
+ the host build
+In-Reply-To: <20210227155413.15809-1-ps.report@gmx.net>
+References: <20210227155413.15809-1-ps.report@gmx.net>
+Message-ID: <20210301214028.GC2275@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=29f38b4c603ef0900ed241de52cd5b5077ceea28
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Peter, All,
 
-Update indentation in hash file (two spaces)
+On 2021-02-27 16:54 +0100, Peter Seiderer spake thusly:
+> Fixes host build in case unsuitable libs are found on the system
+> (see [1]).
+> 
+> [1] http://lists.busybox.net/pipermail/buildroot/2021-February/304261.html
 
-https://sourceforge.net/p/dfu-util/dfu-util/ci/v0.10/tree/ChangeLog
+I would contend that this problem is a badly configured host, and if
+such hosts have libraries installed that incompatible with their native
+compiler, then those host should be fixed.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/dfu-util/dfu-util.hash | 8 ++++----
- package/dfu-util/dfu-util.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+However, runuser really is a non-necessary tool for the Buildroot case,
+so disabling it is still a good idea.
 
-diff --git a/package/dfu-util/dfu-util.hash b/package/dfu-util/dfu-util.hash
-index 7c66a93376..a99e67565d 100644
---- a/package/dfu-util/dfu-util.hash
-+++ b/package/dfu-util/dfu-util.hash
-@@ -1,6 +1,6 @@
--# From http://dfu-util.sourceforge.net/releases/dfu-util-0.9.tar.gz.md5
--md5	233bb1e08ef4b405062445d84e28fde6	dfu-util-0.9.tar.gz
-+# From http://dfu-util.sourceforge.net/releases/dfu-util-0.10.tar.gz.md5
-+md5  8cf55663703cdc6b40f377f999eb8d3d  dfu-util-0.10.tar.gz
- 
- # Locally computed
--sha256	36428c6a6cb3088cad5a3592933385253da5f29f2effa61518ee5991ea38f833	dfu-util-0.9.tar.gz
--sha256	32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670	COPYING
-+sha256  a03dc58dfc79c056819c0544b2a5970537566460102b3d82cfb038c60e619b42  dfu-util-0.10.tar.gz
-+sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/dfu-util/dfu-util.mk b/package/dfu-util/dfu-util.mk
-index 5e8ba5a8f2..9f26948a1a 100644
---- a/package/dfu-util/dfu-util.mk
-+++ b/package/dfu-util/dfu-util.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DFU_UTIL_VERSION = 0.9
-+DFU_UTIL_VERSION = 0.10
- DFU_UTIL_SITE = http://dfu-util.sourceforge.net/releases
- DFU_UTIL_LICENSE = GPL-2.0+
- DFU_UTIL_LICENSE_FILES = COPYING
+> Reported-by: GA K <guyarkam@gmail.com>
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+
+Applied to master, with a commit log expanded to provide a more
+fundamental reason why we disable runuser. Thanks!
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/util-linux/util-linux.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+> index 0178c52bac..09acaca1a7 100644
+> --- a/package/util-linux/util-linux.mk
+> +++ b/package/util-linux/util-linux.mk
+> @@ -211,6 +211,7 @@ HOST_UTIL_LINUX_CONF_OPTS += \
+>  	--disable-nsenter \
+>  	--disable-pg \
+>  	--disable-rfkill \
+> +	--disable-runuser \
+>  	--disable-schedutils \
+>  	--disable-setpriv \
+>  	--disable-setterm \
+> -- 
+> 2.30.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
