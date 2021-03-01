@@ -1,123 +1,86 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 08 Mar 2021 07:44:47 -0000
-Subject: [Buildroot] [git commit] package/libubox: bump version to 5bc0146a
-Message-ID: <20210308072133.A746F8896D@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 1 Mar 2021 23:50:15 +0100
+Subject: [Buildroot] [git commit] board/qemu: Add ppc-e500mc configuration
+Message-ID: <20210308072137.007B38893D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7851f5a1279e918e38ee531b8e77b21aef0848c1
+commit: https://git.buildroot.net/buildroot/commit/?id=88c1cb10b66b8690aed29447cbedfa6d7657db00
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- change download url to https
+This adds a 32-bit equivalent configuration of ppc64-e5500 board.
 
-- update homepage url (the old one returns 404 - No projects found)
-
-- add hash file
-
-- delete 0001-blobmsg-fix-array-out-of-bounds-GCC-10-warning.patch
-  (from upstream [1])
-
-[1] https://git.openwrt.org/?p=project/libubox.git;a=commit;h=eb7eb6393d47a918c420f5b287946dbd6c0d5f57
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Bin Meng <bmeng.cn@gmail.com>
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...sg-fix-array-out-of-bounds-GCC-10-warning.patch | 47 ----------------------
- package/libubox/Config.in                          |  2 +-
- package/libubox/libubox.hash                       |  2 +
- package/libubox/libubox.mk                         |  5 ++-
- 4 files changed, 6 insertions(+), 50 deletions(-)
+ board/qemu/ppc-e500mc/linux.fragment | 10 ++++++++++
+ board/qemu/ppc-e500mc/readme.txt     |  5 +++++
+ configs/qemu_ppc_e500mc_defconfig    | 29 +++++++++++++++++++++++++++++
+ 3 files changed, 44 insertions(+)
 
-diff --git a/package/libubox/0001-blobmsg-fix-array-out-of-bounds-GCC-10-warning.patch b/package/libubox/0001-blobmsg-fix-array-out-of-bounds-GCC-10-warning.patch
-deleted file mode 100644
-index 09128db9e2..0000000000
---- a/package/libubox/0001-blobmsg-fix-array-out-of-bounds-GCC-10-warning.patch
-+++ /dev/null
-@@ -1,47 +0,0 @@
--From eb7eb6393d47a918c420f5b287946dbd6c0d5f57 Mon Sep 17 00:00:00 2001
--From: =?utf8?q?Petr=20=C5=A0tetiar?= <ynezz@true.cz>
--Date: Wed, 25 Dec 2019 10:27:59 +0100
--Subject: [PATCH] blobmsg: fix array out of bounds GCC 10 warning
--MIME-Version: 1.0
--Content-Type: text/plain; charset=utf8
--Content-Transfer-Encoding: 8bit
--
--Fixes following warning reported by GCC 10.0.0 20191203:
--
-- blobmsg.c:234:2: error: 'strcpy' offset 6 from the object at 'attr' is out of the bounds of referenced subobject 'name' with type 'uint8_t[0]' {aka 'unsigned char[0]'} at offset 6 [-Werror=array-bounds]
--   234 |  strcpy((char *) hdr->name, (const char *)name);
--       |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
--
-- In file included from blobmsg.c:16:
-- blobmsg.h:42:10: note: subobject 'name' declared here
--    42 |  uint8_t name[];
--       |          ^~~~
--
--Reported-by: Khem Raj <raj.khem@gmail.com>
--Signed-off-by: Petr ????tetiar <ynezz@true.cz>
--[Retrieved from:
--https://git.openwrt.org/?p=project/libubox.git;a=commit;h=eb7eb6393d47a918c420f5b287946dbd6c0d5f57]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- blobmsg.c | 5 ++++-
-- 1 file changed, 4 insertions(+), 1 deletion(-)
--
--diff --git a/blobmsg.c b/blobmsg.c
--index 48dba81..37821c3 100644
----- a/blobmsg.c
--+++ b/blobmsg.c
--@@ -240,7 +240,10 @@ blobmsg_new(struct blob_buf *buf, int type, const char *name, int payload_len, v
-- 	attr->id_len |= be32_to_cpu(BLOB_ATTR_EXTENDED);
-- 	hdr = blob_data(attr);
-- 	hdr->namelen = cpu_to_be16(namelen);
---	strcpy((char *) hdr->name, (const char *)name);
--+
--+	memcpy(hdr->name, name, namelen);
--+	hdr->name[namelen] = '\0';
--+
-- 	pad_end = *data = blobmsg_data(attr);
-- 	pad_start = (char *) &hdr->name[namelen];
-- 	if (pad_start < pad_end)
---- 
--2.20.1
--
-diff --git a/package/libubox/Config.in b/package/libubox/Config.in
-index 25ef4bb89a..1f0b691e13 100644
---- a/package/libubox/Config.in
-+++ b/package/libubox/Config.in
-@@ -7,7 +7,7 @@ config BR2_PACKAGE_LIBUBOX
- 	  also be used for the same purposes in projects other
- 	  than OpenWrt.
- 
--	  http://nbd.name/gitweb.cgi?p=luci2/libubox.git;a=summary
-+	  https://openwrt.org/docs/techref/libubox
- 
- comment "libubox needs a toolchain w/ dynamic library"
- 	depends on BR2_STATIC_LIBS
-diff --git a/package/libubox/libubox.hash b/package/libubox/libubox.hash
+diff --git a/board/qemu/ppc-e500mc/linux.fragment b/board/qemu/ppc-e500mc/linux.fragment
 new file mode 100644
-index 0000000000..fd4c5a4a39
+index 0000000000..35a8dccf89
 --- /dev/null
-+++ b/package/libubox/libubox.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  e383caf80a241e9711ab0c58a5e8f4d16479693be1e44ffb6cc716a185e7e303  libubox-5bc0146a1d6474d339c4ade9a227f32cc27a8b93-br1.tar.gz
-diff --git a/package/libubox/libubox.mk b/package/libubox/libubox.mk
-index d3e3b709dc..4626659158 100644
---- a/package/libubox/libubox.mk
-+++ b/package/libubox/libubox.mk
-@@ -4,8 +4,9 @@
- #
- ################################################################################
- 
--LIBUBOX_VERSION = 723730214732862de7e892bae2f7a7889e66bf1b
--LIBUBOX_SITE = git://git.openwrt.org/project/libubox.git
-+LIBUBOX_VERSION = 5bc0146a1d6474d339c4ade9a227f32cc27a8b93
-+LIBUBOX_SITE = https://git.openwrt.org/project/libubox.git
-+LIBUBOX_SITE_METHOD = git
- LIBUBOX_LICENSE = ISC, BSD-3-Clause
- LIBUBOX_INSTALL_STAGING = YES
- LIBUBOX_DEPENDENCIES = $(if $(BR2_PACKAGE_JSON_C),json-c)
++++ b/board/qemu/ppc-e500mc/linux.fragment
+@@ -0,0 +1,10 @@
++# Enables generic PPC e500 base arch support for QEMU.
++# The e500mc is a variant of the e500 arch.
++CONFIG_PPC_QEMU_E500=y
++
++# Enable virtio (blk, rng and net devices)
++CONFIG_VIRTIO=y
++CONFIG_VIRTIO_PCI=y
++CONFIG_HW_RANDOM_VIRTIO=y
++CONFIG_VIRTIO_BLK=y
++CONFIG_VIRTIO_NET=y
+diff --git a/board/qemu/ppc-e500mc/readme.txt b/board/qemu/ppc-e500mc/readme.txt
+new file mode 100644
+index 0000000000..77a864ed2b
+--- /dev/null
++++ b/board/qemu/ppc-e500mc/readme.txt
+@@ -0,0 +1,5 @@
++Run the emulation with:
++
++ qemu-system-ppc -M ppce500 -cpu e500mc -m 256 -kernel output/images/uImage -drive file=output/images/rootfs.ext2,if=virtio,format=raw -append "console=ttyS0 rootwait root=/dev/vda" -serial mon:stdio -nographic # qemu_ppc_e500mc_defconfig
++
++The login prompt will appear in the terminal that started Qemu.
+diff --git a/configs/qemu_ppc_e500mc_defconfig b/configs/qemu_ppc_e500mc_defconfig
+new file mode 100644
+index 0000000000..69fc8dbc06
+--- /dev/null
++++ b/configs/qemu_ppc_e500mc_defconfig
+@@ -0,0 +1,29 @@
++# Architecture
++BR2_powerpc=y
++BR2_powerpc_e500mc=y
++
++# Serial port config
++BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
++
++# Image
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
++
++# Linux headers same as the kernel
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.7"
++BR2_LINUX_KERNEL_DEFCONFIG="corenet32_smp"
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/ppc-e500mc/linux.fragment"
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++
++# Filesystem
++BR2_TARGET_ROOTFS_EXT2=y
++# BR2_TARGET_ROOTFS_TAR is not set
++
++# host-qemu for gitlab testing
++BR2_PACKAGE_HOST_QEMU=y
++BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
