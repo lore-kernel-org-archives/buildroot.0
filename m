@@ -1,25 +1,45 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 01 Mar 2021 22:35:13 +0100
-Subject: [Buildroot] [PATCH/next 1/1] package/dfu-util: bump to version
- 0.10
-In-Reply-To: <20210227195608.21466-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 27 Feb 2021 20:56:08 +0100")
-References: <20210227195608.21466-1-fontaine.fabrice@gmail.com>
-Message-ID: <87lfb6mub2.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 1 Mar 2021 22:35:51 +0100
+Subject: [Buildroot] [git commit] package/util-linux: disable runuser for
+ the host build
+Message-ID: <20210301211321.A866081532@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=955d6c099b2035dcca47554a735a4c700b5d3e1e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Update indentation in hash file (two spaces)
- > https://sourceforge.net/p/dfu-util/dfu-util/ci/v0.10/tree/ChangeLog
+runuser allows running commands as another user, but needs to run as
+root to be able to setuid(). But Buildroot does not require running as
+root, and so runuser can't be used.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Incientally, that fixes host build in case unsuitable libs are found on
+the system:
+    http://lists.busybox.net/pipermail/buildroot/2021-February/304261.html
 
-Committed to next, thanks.
+Reported-by: GA K <guyarkam@gmail.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+[yann.morin.1998 at free.fr:
+  - expand the commit log with a more fundamental explanation that
+    runuser can't be used anyway
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/util-linux/util-linux.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index 0178c52bac..09acaca1a7 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -211,6 +211,7 @@ HOST_UTIL_LINUX_CONF_OPTS += \
+ 	--disable-nsenter \
+ 	--disable-pg \
+ 	--disable-rfkill \
++	--disable-runuser \
+ 	--disable-schedutils \
+ 	--disable-setpriv \
+ 	--disable-setterm \
