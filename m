@@ -1,120 +1,35 @@
-From: Dan Raymond <draymond@foxvalley.net>
-Date: Mon, 1 Mar 2021 10:00:45 -0700
-Subject: [Buildroot] [PATCH 1/1] fix failure during 'make linux-menuconfig'
- when PATH env var has spaces
-In-Reply-To: <20210301072125.GK2390841@scaer>
-References: <16100eb6-bac8-2e4d-65f2-26333179f3b8@foxvalley.net>
- <20210301072125.GK2390841@scaer>
-Message-ID: <61db383c-08eb-2360-7c2b-ab1afc649b88@foxvalley.net>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon,  1 Mar 2021 18:22:03 +0100
+Subject: [Buildroot] [PATCH 1/1] package/python-aiohttp-session: add CPE
+ variables
+Message-ID: <20210301172203.205169-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi, Yann.? While I was digging through the Makefiles hunting down this 
-bug I saw plenty of evidence of spaces in environment variables (and 
-quoting used to manage them).? When using default buildroot and kernel 
-options this was the only bug I encountered. After fixing it I am able 
-to fully build all targets.? There may be other bugs lurking in various 
-packages I didn't build but that doesn't seem like a good reason not to 
-fix this one.? Also, note that the bug impacts more than just PATH.? It 
-impacts the following variables now (and any that may be added in the 
-future):
+cpe:2.3:a:aiohttp-session_project:aiohttp-session is a valid CPE
+identifier for this package:
 
-PATH
-PKG_CONFIG
-PKG_CONFIG_SYSROOT_DIR
-PKG_CONFIG_ALLOW_SYSTEM_CFLAGS
-PKG_CONFIG_ALLOW_SYSTEM_LIBS
-PKG_CONFIG_LIBDIR
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aaiohttp-session_project%3Aaiohttp-session
 
-Since I spent the time debugging this and implementing/testing a clean 
-and reliable fix why don't we merge this now and if there are future bug 
-reports about spaces in environment variables we can discuss how to 
-proceed then?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/python-aiohttp-session/python-aiohttp-session.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-On 3/1/2021 12:21 AM, Yann E. MORIN wrote:
-> Dan, All,
->
-> On 2021-02-28 19:40 -0700, Dan Raymond spake thusly:
->>  From 4db6db355723bedb5918be214fbd6c6eb4a39257 Mon Sep 17 00:00:00 2001
->> From: Dan Raymond <draymond@foxvalley.net>
->> Date: Sun, 28 Feb 2021 18:27:18 -0700
->> Subject: [PATCH 1/1] fix failure during 'make linux-menuconfig' when PATH
->> env var has spaces
-> Thanks for the patch.
->
-> However, as I explained on IRC, this is far from sufficient. A lot of
-> places do not expect spaces in PATH. For example, the config.guess from
-> the gnuconfig package (i.e. a file we do bundle, and that is maintain
-> elsewhere), and present in virtually all autotools-based packages, has
-> this line:
->
->      PATH=$PATH:/.attbin ; export PATH
->
-> So, basically, all autotools packages are somewhat broken when PATH
-> contains spaces.
->
-> As a second example, package/fakedate/fakedate splits PATH on spaces:
->
->      for P in `echo $PATH | tr ':' ' '`; do
->
-> Fixing that is too cumbersome, and again, the vast majority of things is
-> going to break when PATH contains spaces.
->
-> Rather, as I suggested on IRC, please add a sanity check in
-> support/dependencies/dependencies.sh, lines 31..44, that there indeed is
-> no spaces in PATH.
->
-> Besides, Buildroot does not even build when the top-level or output
-> directories contain spaces.
->
-> Regards,
-> Yann E. MORIN.
->
->> Signed-off-by: Dan Raymond <draymond@foxvalley.net>
->> ---
->>  ?package/pkg-kconfig.mk | 6 +++---
->>  ?support/misc/utils.mk? | 6 ++++++
->>  ?2 files changed, 9 insertions(+), 3 deletions(-)
->>
->> diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
->> index 2aecf2e203..6bf87fbead 100644
->> --- a/package/pkg-kconfig.mk
->> +++ b/package/pkg-kconfig.mk
->> @@ -205,9 +205,9 @@ endif
->>  ?# nconfig, gconfig, xconfig).
->>  ?# So we simply remove our PATH and PKG_CONFIG_* variables.
->>  ?$(2)_CONFIGURATOR_MAKE_ENV = \
->> -??? $$(filter-out PATH=% PKG_CONFIG=% PKG_CONFIG_SYSROOT_DIR=% \
->> -??? ?? PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=% PKG_CONFIG_ALLOW_SYSTEM_LIBS=% \
->> -??? ?? PKG_CONFIG_LIBDIR=%,$$($(2)_MAKE_ENV)) \
->> +??? $$(call strip_env,PATH PKG_CONFIG PKG_CONFIG_SYSROOT_DIR \
->> +??? ?? PKG_CONFIG_ALLOW_SYSTEM_CFLAGS PKG_CONFIG_ALLOW_SYSTEM_LIBS \
->> +??? ?? PKG_CONFIG_LIBDIR,$$($(2)_MAKE_ENV)) \
->>  ???? PKG_CONFIG_PATH="$(HOST_PKG_CONFIG_PATH)"
->>
->>  ?# Configuration editors (menuconfig, ...)
->> diff --git a/support/misc/utils.mk b/support/misc/utils.mk
->> index dc60cad979..640e56c775 100644
->> --- a/support/misc/utils.mk
->> +++ b/support/misc/utils.mk
->> @@ -135,3 +135,9 @@ define PRINTF
->>  ???? ??? ??? $(subst $(QUOTE),$(QUOTE)\$(QUOTE)$(QUOTE),\
->>  ???? ??? ??? ??? $(subst \,\\,$(1)))))\n'
->>  ?endef
->> +
->> +# strip variables (quoted or unquoted) from an environment string:
->> +# MYENV = PATH="/bin:/dir with spaces" USER=root SHELL=/bin/sh
->> +# $(call strip_env,PATH SHELL,$(MYENV)) --> USER=root
->> +sed_cmds=$(foreach var,$(1),-e 's/$(var)="[^"]*" *//' -e 's/$(var)=[^ ]*
->> *//')
->> +strip_env=$(shell echo "$(subst ",\",$(2))" | sed $(call sed_cmds,$(1)))
->> -- 
->> 2.25.1
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/python-aiohttp-session/python-aiohttp-session.mk b/package/python-aiohttp-session/python-aiohttp-session.mk
+index 8fcd8e21b9..fa724fdb86 100644
+--- a/package/python-aiohttp-session/python-aiohttp-session.mk
++++ b/package/python-aiohttp-session/python-aiohttp-session.mk
+@@ -10,5 +10,7 @@ PYTHON_AIOHTTP_SESSION_SITE = https://files.pythonhosted.org/packages/f8/fe/53df
+ PYTHON_AIOHTTP_SESSION_SETUP_TYPE = setuptools
+ PYTHON_AIOHTTP_SESSION_LICENSE = Apache-2.0
+ PYTHON_AIOHTTP_SESSION_LICENSE_FILES = LICENSE
++PYTHON_AIOHTTP_SESSION_CPE_ID_VENDOR = aiohttp-session_project
++PYTHON_AIOHTTP_SESSION_CPE_ID_PRODUCT = aiohttp-session
+ 
+ $(eval $(python-package))
+-- 
+2.30.0
