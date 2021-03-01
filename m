@@ -1,126 +1,100 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Mar 2021 22:28:19 +0100
-Subject: [Buildroot] [git commit branch/next] package/s390-tools: bump to
- version 2.16.0
-Message-ID: <20210301210606.64B1186241@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 1 Mar 2021 22:28:55 +0100
+Subject: [Buildroot] [PATCH] package/privoxy: security bump to version
+ 3.0.32
+In-Reply-To: <20210301164910.13080-1-peter@korsgaard.com>
+References: <20210301164910.13080-1-peter@korsgaard.com>
+Message-ID: <20210301212855.GB2275@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b82b58a8ddc3d079aa2976b3dafbc965b6107648
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Peter, All,
 
-- Remove patch 0001-zkey-ekmfweb-fix-linking-of-libekmfweb.patch which has
-  been merged.
-- Also update the GitHub URL because the project has been renamed.
+On 2021-03-01 17:49 +0100, Peter Korsgaard spake thusly:
+> Privoxy 3.0.32 fixes a number of security issues:
+> 
+> - Security/Reliability:
+>   - ssplit(): Remove an assertion that could be triggered with a
+>     crafted CGI request.
+>     Commit 2256d7b4d67. OVE-20210203-0001.
+>     Reported by: Joshua Rogers (Opera)
+>   - cgi_send_banner(): Overrule invalid image types. Prevents a
+>     crash with a crafted CGI request if Privoxy is toggled off.
+>     Commit e711c505c48. OVE-20210206-0001.
+>     Reported by: Joshua Rogers (Opera)
+>   - socks5_connect(): Don't try to send credentials when none are
+>     configured. Fixes a crash due to a NULL-pointer dereference
+>     when the socks server misbehaves.
+>     Commit 85817cc55b9. OVE-20210207-0001.
+>     Reported by: Joshua Rogers (Opera)
+>   - chunked_body_is_complete(): Prevent an invalid read of size two.
+>     Commit a912ba7bc9c. OVE-20210205-0001.
+>     Reported by: Joshua Rogers (Opera)
+>   - Obsolete pcre: Prevent invalid memory accesses with an invalid
+>     pattern passed to pcre_compile(). Note that the obsolete pcre code
+>     is scheduled to be removed before the 3.0.33 release. There has been
+>     a warning since 2008 already.
+>     Commit 28512e5b624. OVE-20210222-0001.
+>     Reported by: Joshua Rogers (Opera)
+> 
+> for more details, see the announcement:
+> https://www.openwall.com/lists/oss-security/2021/02/28/1
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
-[Peter: also update Config.in URL]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...-osasnmpd-Makefile-fix-cross-compilation.patch} |  0
- ...01-zkey-ekmfweb-fix-linking-of-libekmfweb.patch | 53 ----------------------
- package/s390-tools/Config.in                       |  2 +-
- package/s390-tools/s390-tools.hash                 |  2 +-
- package/s390-tools/s390-tools.mk                   |  4 +-
- 5 files changed, 4 insertions(+), 57 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/s390-tools/0002-osasnmpd-Makefile-fix-cross-compilation.patch b/package/s390-tools/0001-osasnmpd-Makefile-fix-cross-compilation.patch
-similarity index 100%
-rename from package/s390-tools/0002-osasnmpd-Makefile-fix-cross-compilation.patch
-rename to package/s390-tools/0001-osasnmpd-Makefile-fix-cross-compilation.patch
-diff --git a/package/s390-tools/0001-zkey-ekmfweb-fix-linking-of-libekmfweb.patch b/package/s390-tools/0001-zkey-ekmfweb-fix-linking-of-libekmfweb.patch
-deleted file mode 100644
-index 76a642af70..0000000000
---- a/package/s390-tools/0001-zkey-ekmfweb-fix-linking-of-libekmfweb.patch
-+++ /dev/null
-@@ -1,53 +0,0 @@
--From a4e6f7239d8cee37e58eac974482d6deefa8a137 Mon Sep 17 00:00:00 2001
--From: Alexander Egorenkov <egorenar@linux.ibm.com>
--Date: Thu, 5 Nov 2020 17:42:58 +0100
--Subject: [PATCH 1/1] zkey/ekmfweb: fix linking of libekmfweb
--
--Use -L compiler's parameter instead of the environment variable
--LIBRARY_PATH.
--
--Fixes the following problem on buildroot:
--
--buildroot/qemu-s390x/host/bin/s390x-linux-gcc -shared -Wl,--version-script=zkey-ekmfweb.map -Wl,-z,defs,-Bsymbolic -Wl,-soname,zkey-ekmfweb.so.1 zkey-ekmfweb.o properties.o pkey.o cca.o ep11.o utils.o ../..//libutil/libutil.a -lekmfweb -ldl -lcrypto -o zkey-ekmfweb.so
--buildroot/qemu-s390x/host/bin/s390x-linux-gcc -I ../../include -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I ../include -std=gnu99 -Wno-unused-parameter -Wno-missing-field-initializers -DS390_TOOLS_RELEASE=2.15.1-build-20201105 -DS390_TOOLS_LIBDIR=/lib/s390-tools -DS390_TOOLS_DATADIR=/usr/share/s390-tools -DS390_TOOLS_SYSCONFDIR=/etc -DS390_TOOLS_BINDIR=/sbin -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -D_GNU_SOURCE -c udev_ccwgroup.c -o udev_ccwgroup.o
--buildroot/qemu-s390x/host/bin/s390x-linux-gcc -I ../../include -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I ../include -std=gnu99 -Wno-unused-parameter -Wno-missing-field-initializers -DS390_TOOLS_RELEASE=2.15.1-build-20201105 -DS390_TOOLS_LIBDIR=/lib/s390-tools -DS390_TOOLS_DATADIR=/usr/share/s390-tools -DS390_TOOLS_SYSCONFDIR=/etc -DS390_TOOLS_BINDIR=/sbin -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -D_GNU_SOURCE -c iscsi.c -o iscsi.o
--buildroot/qemu-s390x/host/bin/s390x-linux-gcc -I ../../include -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I ../include -std=gnu99 -Wno-unused-parameter -Wno-missing-field-initializers -DS390_TOOLS_RELEASE=2.15.1-build-20201105 -DS390_TOOLS_LIBDIR=/lib/s390-tools -DS390_TOOLS_DATADIR=/usr/share/s390-tools -DS390_TOOLS_SYSCONFDIR=/etc -DS390_TOOLS_BINDIR=/sbin -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -D_GNU_SOURCE -c dasd.c -o dasd.o
--buildroot/qemu-s390x/host/opt/ext-toolchain/bin/../lib/gcc/s390x-buildroot-linux-gnu/9.3.0/../../../../s390x-buildroot-linux-gnu/bin/ld: cannot find -lekmfweb
--collect2: error: ld returned 1 exit status
--make[4]: *** [Makefile:36: zkey-ekmfweb.so] Error 1
--make[3]: *** [Makefile:128: ekmfweb] Error 2
--buildroot/qemu-s390x/host/bin/s390x-linux-gcc -I ../../include -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I ../include -std=gnu99 -Wno-unused-parameter -Wno-missing-field-initializers -DS390_TOOLS_RELEASE=2.15.1-build-20201105 -DS390_TOOLS_LIBDIR=/lib/s390-tools -DS390_TOOLS_DATADIR=/usr/share/s390-tools -DS390_TOOLS_SYSCONFDIR=/etc -DS390_TOOLS_BINDIR=/sbin -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -D_GNU_SOURCE -c zfcp.c -o zfcp.o
--make[2]: *** [Makefile:43: zkey] Error 2
--make[2]: *** Waiting for unfinished jobs....
--
--Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
--Acked-by: Ingo Franzki <ifranzki@linux.ibm.com>
-----
-- zkey/ekmfweb/Makefile | 4 +---
-- 1 file changed, 1 insertion(+), 3 deletions(-)
--
--diff --git a/zkey/ekmfweb/Makefile b/zkey/ekmfweb/Makefile
--index 79a16cb5..1a3a4977 100644
----- a/zkey/ekmfweb/Makefile
--+++ b/zkey/ekmfweb/Makefile
--@@ -7,8 +7,6 @@ all: zkey-ekmfweb.so
-- 
-- libs = $(rootdir)/libutil/libutil.a
-- 
---export LIBRARY_PATH = $(rootdir)/libekmfweb:$LIBRARY_PATH
---
-- zkey-ekmfweb.o: zkey-ekmfweb.c zkey-ekmfweb.h ../kms-plugin.h \
-- 	../cca.h ../utils.h ../pkey.h ../properties.h \
-- 	$(rootdir)include/ekmfweb/ekmfweb.h libekmfweb.dep
--@@ -29,7 +27,7 @@ utils.o: ../utils.c ../utils.h ../pkey.h ../cca.h ../ep11.h
-- 	$(CC) $(ALL_CPPFLAGS) $(ALL_CFLAGS) -fPIC -c $< -o $@
-- 
-- zkey-ekmfweb.so: ALL_CFLAGS += -fPIC
---zkey-ekmfweb.so: LDLIBS = -lekmfweb -ldl -lcrypto
--+zkey-ekmfweb.so: LDLIBS = -L$(rootdir)/libekmfweb -lekmfweb -ldl -lcrypto
-- zkey-ekmfweb.so: ALL_LDFLAGS += -shared -Wl,--version-script=zkey-ekmfweb.map \
-- 	-Wl,-z,defs,-Bsymbolic -Wl,-soname,zkey-ekmfweb.so.$(VERM)
-- zkey-ekmfweb.so: zkey-ekmfweb.o properties.o pkey.o cca.o ep11.o utils.o $(libs)
---- 
--2.26.2
--
-diff --git a/package/s390-tools/Config.in b/package/s390-tools/Config.in
-index 4aede4e265..23b7d31db6 100644
---- a/package/s390-tools/Config.in
-+++ b/package/s390-tools/Config.in
-@@ -11,4 +11,4 @@ config BR2_PACKAGE_S390_TOOLS
- 	help
- 	  Tools for use with the s390 Linux kernel and device drivers.
- 
--	  https://github.com/ibm-s390-tools/s390-tools
-+	  https://github.com/ibm-s390-linux/s390-tools
-diff --git a/package/s390-tools/s390-tools.hash b/package/s390-tools/s390-tools.hash
-index 1de2399e03..bf007286b4 100644
---- a/package/s390-tools/s390-tools.hash
-+++ b/package/s390-tools/s390-tools.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  8dc1180031018756ccd5acf6c26c4175bcac79e512e8a2ea8569fdf5d3f9bd6c  s390-tools-2.15.1.tar.gz
-+sha256  b789d5c9d8587b288e1fd9b1c1c4512bb3439e1f389519cb257f1c7c302da58f  s390-tools-2.16.0.tar.gz
- sha256  cca17a9a944ebec769adee4aebd805c912c357785ff2705a99ffe68563021f75  LICENSE
-diff --git a/package/s390-tools/s390-tools.mk b/package/s390-tools/s390-tools.mk
-index 535caf208e..326262b475 100644
---- a/package/s390-tools/s390-tools.mk
-+++ b/package/s390-tools/s390-tools.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--S390_TOOLS_VERSION = 2.15.1
--S390_TOOLS_SITE = $(call github,ibm-s390-tools,s390-tools,v$(S390_TOOLS_VERSION))
-+S390_TOOLS_VERSION = 2.16.0
-+S390_TOOLS_SITE = $(call github,ibm-s390-linux,s390-tools,v$(S390_TOOLS_VERSION))
- S390_TOOLS_LICENSE = MIT
- S390_TOOLS_LICENSE_FILES = LICENSE
- S390_TOOLS_DEPENDENCIES = zlib
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/privoxy/privoxy.hash | 8 ++++----
+>  package/privoxy/privoxy.mk   | 2 +-
+>  2 files changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/package/privoxy/privoxy.hash b/package/privoxy/privoxy.hash
+> index 00c0f33bdb..92ecd1dd21 100644
+> --- a/package/privoxy/privoxy.hash
+> +++ b/package/privoxy/privoxy.hash
+> @@ -1,6 +1,6 @@
+> -# From https://sourceforge.net/projects/ijbswa/files/Sources/3.0.31%20%28stable%29/
+> -md5  014cc371d00e84b2db34d0e2b05c77d4  privoxy-3.0.31-stable-src.tar.gz
+> -sha1  4f0e0c36d55f72f6b33e4c645a9c5d4f40026abd  privoxy-3.0.31-stable-src.tar.gz
+> +# From https://sourceforge.net/projects/ijbswa/files/Sources/3.0.32%20%28stable%29/
+> +md5  3a0a8ebdf80e0a29154683e74cbf510b  privoxy-3.0.32-stable-src.tar.gz
+> +sha1  3a298ab2599fc92555c86dc29a37742d7396a0d3  privoxy-3.0.32-stable-src.tar.gz
+>  # Locally computed
+> -sha256  077729a3aac79222a4e8d88a650d9028d16fd4b0d6038da8f5f5e47120d004eb  privoxy-3.0.31-stable-src.tar.gz
+> +sha256  c61de4008c62445ec18f1f270407cbf2372eaba93beaccdc9e3238bb2defeed7  privoxy-3.0.32-stable-src.tar.gz
+>  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
+> diff --git a/package/privoxy/privoxy.mk b/package/privoxy/privoxy.mk
+> index 7f0e5bb3a1..adb5af28ac 100644
+> --- a/package/privoxy/privoxy.mk
+> +++ b/package/privoxy/privoxy.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -PRIVOXY_VERSION = 3.0.31
+> +PRIVOXY_VERSION = 3.0.32
+>  PRIVOXY_SITE = http://downloads.sourceforge.net/project/ijbswa/Sources/$(PRIVOXY_VERSION)%20%28stable%29
+>  PRIVOXY_SOURCE = privoxy-$(PRIVOXY_VERSION)-stable-src.tar.gz
+>  # configure not shipped
+> -- 
+> 2.20.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
