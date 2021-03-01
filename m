@@ -1,49 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Mar 2021 17:07:59 +0100
-Subject: [Buildroot] [git commit] package/mosquitto: bump to v2.0.8
-Message-ID: <20210301154837.471CF867A8@busybox.osuosl.org>
+Date: Mon, 1 Mar 2021 16:57:45 +0100
+Subject: [Buildroot] [git commit] package/haproxy: bump to version 2.2.9
+Message-ID: <20210301154837.23EC086736@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6e6fed30fa8238046eafdf8d21803ffdd60be59d
+commit: https://git.buildroot.net/buildroot/commit/?id=dfd44046f36edee3bfd48aa4336d0b9b9baf90d4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Mosquitto 2.0.8 is bugfix release. See the announcement:
-https://mosquitto.org/blog/2021/02/version-2-0-8-released/
+https://www.mail-archive.com/haproxy at formilux.org/msg39744.html
 
-Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mosquitto/mosquitto.hash | 4 ++--
- package/mosquitto/mosquitto.mk   | 2 +-
+ package/haproxy/haproxy.hash | 4 ++--
+ package/haproxy/haproxy.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
-index 225d4f2b36..fa83af7711 100644
---- a/package/mosquitto/mosquitto.hash
-+++ b/package/mosquitto/mosquitto.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking gpg signature
--# from https://mosquitto.org/files/source/mosquitto-2.0.7.tar.gz.asc
--sha256  a98054f0b8161588975ef24e1d467550d3935f4c16ccee63ecb623248a28356e  mosquitto-2.0.7.tar.gz
-+# from https://mosquitto.org/files/source/mosquitto-2.0.8.tar.gz.asc
-+sha256  b15da8fc4edcb91d554e1259e220ea0173ef639ceaa4b465e06feb7e125b84bf  mosquitto-2.0.8.tar.gz
- 
- # License files
- sha256  d3c4ccace4e5d3cc89d34cf2a0bc85b8596bfc0a32b815d0d77f9b7c41b5350c  LICENSE.txt
-diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index 7dfdf59451..be9d885976 100644
---- a/package/mosquitto/mosquitto.mk
-+++ b/package/mosquitto/mosquitto.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
+index 0e293e8545..956949275e 100644
+--- a/package/haproxy/haproxy.hash
++++ b/package/haproxy/haproxy.hash
+@@ -1,5 +1,5 @@
+-# From: http://www.haproxy.org/download/2.2/src/haproxy-2.2.8.tar.gz.sha256
+-sha256  61f90e3e2a36bd8800a5bee31cba7eef37c9aa8a353b6c741edaa411510b14be  haproxy-2.2.8.tar.gz
++# From: http://www.haproxy.org/download/2.2/src/haproxy-2.2.9.tar.gz.sha256
++sha256  21680459b08b9ba21c8cc9f5dbd0ee6e1842f57a3a67f87179871e1c13ebd4e3  haproxy-2.2.9.tar.gz
+ # Locally computed:
+ sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
+ sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
+diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
+index 7c05decf2f..45c62f7c21 100644
+--- a/package/haproxy/haproxy.mk
++++ b/package/haproxy/haproxy.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--MOSQUITTO_VERSION = 2.0.7
-+MOSQUITTO_VERSION = 2.0.8
- MOSQUITTO_SITE = https://mosquitto.org/files/source
- MOSQUITTO_LICENSE = EPL-2.0 or EDLv1.0
- MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v20 edl-v10
+ HAPROXY_VERSION_MAJOR = 2.2
+-HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).8
++HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).9
+ HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
+ HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
+ HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
