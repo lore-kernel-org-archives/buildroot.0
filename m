@@ -1,25 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 01 Mar 2021 20:18:11 +0100
-Subject: [Buildroot] [PATCH 1/1] package/jbig2dec: add
- JBIG2DEC_CPE_ID_VENDOR
-In-Reply-To: <20210301174840.207510-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 1 Mar 2021 18:48:40 +0100")
-References: <20210301174840.207510-1-fontaine.fabrice@gmail.com>
-Message-ID: <871rcyptsc.fsf@dell.be.48ers.dk>
+Date: Mon, 1 Mar 2021 20:18:43 +0100
+Subject: [Buildroot] [git commit] package/python3: add CPE variables
+Message-ID: <20210301185648.28DCA86098@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=e60d5bde2701f8f623bb8923fbdb4cc1526a6826
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > cpe:2.3:a:artifex:jbig2dec is a valid CPE identifier for this package:
- >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aartifex%3Ajbig2dec
+cpe:2.3:a:python:python is a valid CPE identifier for this package:
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Apython%3Apython
 
-Committed, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/python3/python3.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 63d6c3f535..def34f46ad 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -10,6 +10,8 @@ PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
+ PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
+ PYTHON3_LICENSE = Python-2.0, others
+ PYTHON3_LICENSE_FILES = LICENSE
++PYTHON3_CPE_ID_VENDOR = python
++PYTHON3_CPE_ID_PRODUCT = python
+ 
+ # This host Python is installed in $(HOST_DIR), as it is needed when
+ # cross-compiling third-party Python modules.
