@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue,  2 Mar 2021 08:07:09 +0100
-Subject: [Buildroot] [PATCH v2 14/54] package/kodi-pvr-argustv: bump version
- to 7.1.0-Matrix
+Date: Tue,  2 Mar 2021 08:07:25 +0100
+Subject: [Buildroot] [PATCH v2 30/54] package/kodi-pvr-vuplus: bump version
+ to 7.4.0-Matrix
 In-Reply-To: <20210302070749.647742-1-bernd.kuhls@t-online.de>
 References: <20210302070749.647742-1-bernd.kuhls@t-online.de>
-Message-ID: <20210302070749.647742-15-bernd.kuhls@t-online.de>
+Message-ID: <20210302070749.647742-31-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,56 +13,55 @@ To: buildroot@busybox.net
 
 Switch dependency to kodi after upstream removed the dependency to
 kodi-platform:
-https://github.com/kodi-pvr/pvr.argustv/commit/44d9c5a20579a2f505f26a072096911d68855a4a
-https://github.com/kodi-pvr/pvr.argustv/commit/6a6968892d468d02ca0d380e3fff54e607346024
+https://github.com/kodi-pvr/pvr.vuplus/commit/122a9b281668d31f921e842e8700b2f048121c16
 
 Switch license file to LICENSE.md.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-pvr-argustv/Config.in             | 1 -
- package/kodi-pvr-argustv/kodi-pvr-argustv.hash | 4 ++--
- package/kodi-pvr-argustv/kodi-pvr-argustv.mk   | 6 +++---
+ package/kodi-pvr-vuplus/Config.in            | 1 -
+ package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash | 4 ++--
+ package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk   | 6 +++---
  3 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/kodi-pvr-argustv/Config.in b/package/kodi-pvr-argustv/Config.in
-index 216000aefd..7cca2661c7 100644
---- a/package/kodi-pvr-argustv/Config.in
-+++ b/package/kodi-pvr-argustv/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_KODI_PVR_ARGUSTV
- 	bool "kodi-pvr-argustv"
- 	select BR2_PACKAGE_JSONCPP
+diff --git a/package/kodi-pvr-vuplus/Config.in b/package/kodi-pvr-vuplus/Config.in
+index b6a03e843f..862f5f9267 100644
+--- a/package/kodi-pvr-vuplus/Config.in
++++ b/package/kodi-pvr-vuplus/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_KODI_PVR_VUPLUS
+ 	bool "kodi-pvr-vuplus"
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # json-for-modern-cpp
+ 	select BR2_PACKAGE_JSON_FOR_MODERN_CPP
 -	select BR2_PACKAGE_KODI_PLATFORM
+ 	select BR2_PACKAGE_TINYXML
  	help
- 	  Kodi's ARGUS TV client addon
- 
-diff --git a/package/kodi-pvr-argustv/kodi-pvr-argustv.hash b/package/kodi-pvr-argustv/kodi-pvr-argustv.hash
-index 5c47dd30b2..3024d8e65f 100644
---- a/package/kodi-pvr-argustv/kodi-pvr-argustv.hash
-+++ b/package/kodi-pvr-argustv/kodi-pvr-argustv.hash
+ 	  VuPlus PVR client addon for Kodi
+diff --git a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
+index e80e51bc78..2b12649aea 100644
+--- a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
++++ b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  7bfedb27b2aec4015b2594df18b76fe42e97ec10f4b5cb9c6987b1a7a264c844  kodi-pvr-argustv-3.5.6-Leia.tar.gz
--sha256  17bc5450fff10fc46484886690adbf20c369f5baff021435feab1187b9943834  debian/copyright
-+sha256  d91f195c4a91af893231d03a887a340900c4e515597ea059ee6b9e6444717fc9  kodi-pvr-argustv-7.1.0-Matrix.tar.gz
+-sha256  d7dd890e4491e211ff3781cdc043347ab7a4ef6e00619ac1b4641ed81b0c3626  kodi-pvr-vuplus-3.28.9-Leia.tar.gz
+-sha256  e98518889de8d38eaa6ddcb086b6e3b86efed98b501a5c666b9cf48f79e6df5d  debian/copyright
++sha256  2024ed208168089e51d9beade47fedec2e80e23044029f6919e27746f9634150  kodi-pvr-vuplus-7.4.0-Matrix.tar.gz
 +sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-argustv/kodi-pvr-argustv.mk b/package/kodi-pvr-argustv/kodi-pvr-argustv.mk
-index 73a9f1c764..2d5d62a539 100644
---- a/package/kodi-pvr-argustv/kodi-pvr-argustv.mk
-+++ b/package/kodi-pvr-argustv/kodi-pvr-argustv.mk
+diff --git a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
+index bf1de1178d..fee4e816ab 100644
+--- a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
++++ b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
 @@ -4,10 +4,10 @@
  #
  ################################################################################
  
--KODI_PVR_ARGUSTV_VERSION = 3.5.6-Leia
-+KODI_PVR_ARGUSTV_VERSION = 7.1.0-Matrix
- KODI_PVR_ARGUSTV_SITE = $(call github,kodi-pvr,pvr.argustv,$(KODI_PVR_ARGUSTV_VERSION))
- KODI_PVR_ARGUSTV_LICENSE = GPL-2.0+
--KODI_PVR_ARGUSTV_LICENSE_FILES = debian/copyright
--KODI_PVR_ARGUSTV_DEPENDENCIES = jsoncpp kodi-platform
-+KODI_PVR_ARGUSTV_LICENSE_FILES = LICENSE.md
-+KODI_PVR_ARGUSTV_DEPENDENCIES = jsoncpp kodi
+-KODI_PVR_VUPLUS_VERSION = 3.28.9-Leia
++KODI_PVR_VUPLUS_VERSION = 7.4.0-Matrix
+ KODI_PVR_VUPLUS_SITE = $(call github,kodi-pvr,pvr.vuplus,$(KODI_PVR_VUPLUS_VERSION))
+ KODI_PVR_VUPLUS_LICENSE = GPL-2.0+
+-KODI_PVR_VUPLUS_LICENSE_FILES = debian/copyright
+-KODI_PVR_VUPLUS_DEPENDENCIES = json-for-modern-cpp kodi-platform tinyxml
++KODI_PVR_VUPLUS_LICENSE_FILES = LICENSE.md
++KODI_PVR_VUPLUS_DEPENDENCIES = json-for-modern-cpp kodi tinyxml
  
  $(eval $(cmake-package))
 -- 
