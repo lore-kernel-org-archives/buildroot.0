@@ -1,105 +1,45 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue,  2 Mar 2021 22:51:47 +0100
-Subject: [Buildroot] [PATCH] package/openssl: fix build on riscv32
-Message-ID: <20210302215147.1556308-1-yann.morin.1998@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue,  2 Mar 2021 22:59:43 +0100
+Subject: [Buildroot] [PATCH] package/wpa_supplicant: add upstream 2021-1
+ security fix
+Message-ID: <20210302215943.14131-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-riscv32 is (surprise!) a 32-bit architecture. But it has been 2038-safe
-from its inception. As such, there is no legacy binaries that may use
-the 32-bit time syscalls, and thus they are anot available on riscv32.
+Fixes the following security issue:
 
-Code tht directly calls to the syscalls without using the C libraries
-wrappers thus need to handle this case by themselves.
+- wpa_supplicant P2P provision discovery processing vulnerability (no CVE
+  yet)
 
-Backport a patch from the upstream development branch that will
-eventually be openssl 3.0, but has not yet been backported to the 1.1.1
-stable branch.
+A vulnerability was discovered in how wpa_supplicant processes P2P
+(Wi-Fi Direct) provision discovery requests. Under a corner case
+condition, an invalid Provision Discovery Request frame could end up
+reaching a state where the oldest peer entry needs to be removed. With
+a suitably constructed invalid frame, this could result in use
+(read+write) of freed memory. This can result in an attacker within
+radio range of the device running P2P discovery being able to cause
+unexpected behavior, including termination of the wpa_supplicant process
+and potentially code execution.
 
-Fixes:
-    http://autobuild.buildroot.org/results/eb9/eb9a64d4ffae8569b5225083f282cf87ffa7c681/
-    ...
-    http://autobuild.buildroot.org/results/07e/07e413b24ba8adc9558c80267ce16dda339bf032/
+For more details, see the advisory:
+https://w1.fi/security/2021-1/wpa_supplicant-p2p-provision-discovery-processing-vulnerability.txt
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Matt Weber <matthew.weber@rockwellcollins.com>
-Cc: Mark Corbin <mark@dibsco.co.uk>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ort-for-io_pgetevents_time64-syscall.patch | 63 +++++++++++++++++++
- 1 file changed, 63 insertions(+)
- create mode 100644 package/libopenssl/0006-Add-support-for-io_pgetevents_time64-syscall.patch
+ package/wpa_supplicant/wpa_supplicant.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libopenssl/0006-Add-support-for-io_pgetevents_time64-syscall.patch b/package/libopenssl/0006-Add-support-for-io_pgetevents_time64-syscall.patch
-new file mode 100644
-index 0000000000..ab552de91a
---- /dev/null
-+++ b/package/libopenssl/0006-Add-support-for-io_pgetevents_time64-syscall.patch
-@@ -0,0 +1,63 @@
-+From 5b5e2985f355c8e99c196d9ce5d02c15bebadfbc Mon Sep 17 00:00:00 2001
-+From: Alistair Francis <alistair.francis@wdc.com>
-+Date: Thu, 29 Aug 2019 13:56:21 -0700
-+Subject: [PATCH] Add support for io_pgetevents_time64 syscall
-+
-+32-bit architectures that are y2038 safe don't include syscalls that use
-+32-bit time_t. Instead these architectures have suffixed syscalls that
-+always use a 64-bit time_t. In the case of the io_getevents syscall the
-+syscall has been replaced with the io_pgetevents_time64 syscall instead.
-+
-+This patch changes the io_getevents() function to use the correct
-+syscall based on the avaliable syscalls and the time_t size. We will
-+only use the new 64-bit time_t syscall if the architecture is using a
-+64-bit time_t. This is to avoid having to deal with 32/64-bit
-+conversions and relying on a 64-bit timespec struct on 32-bit time_t
-+platforms. As of Linux 5.3 there are no 32-bit time_t architectures
-+without __NR_io_getevents. In the future if a 32-bit time_t architecture
-+wants to use the 64-bit syscalls we can handle the conversion.
-+
-+This fixes build failures on 32-bit RISC-V.
-+
-+Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
-+
-+Reviewed-by: Richard Levitte <levitte@openssl.org>
-+Reviewed-by: Paul Dale <paul.dale@oracle.com>
-+(Merged from https://github.com/openssl/openssl/pull/9819)
-+[yann.morin.1998 at free.fr: backport from upstream 3.0 branch]
-+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-+---
-+ engines/e_afalg.c | 16 ++++++++++++++++
-+ 1 file changed, 16 insertions(+)
-+
-+diff --git a/engines/e_afalg.c b/engines/e_afalg.c
-+index dacbe358cb..99516cb1bb 100644
-+--- a/engines/e_afalg.c
-++++ b/engines/e_afalg.c
-+@@ -125,7 +125,23 @@ static ossl_inline int io_getevents(aio_context_t ctx, long min, long max,
-+                                struct io_event *events,
-+                                struct timespec *timeout)
-+ {
-++#if defined(__NR_io_getevents)
-+     return syscall(__NR_io_getevents, ctx, min, max, events, timeout);
-++#elif defined(__NR_io_pgetevents_time64)
-++    /* Let's only support the 64 suffix syscalls for 64-bit time_t.
-++     * This simplifies the code for us as we don't need to use a 64-bit
-++     * version of timespec with a 32-bit time_t and handle converting
-++     * between 64-bit and 32-bit times and check for overflows.
-++     */
-++    if (sizeof(timeout->tv_sec) == 8)
-++        return syscall(__NR_io_pgetevents_time64, ctx, min, max, events, timeout, NULL);
-++    else {
-++        errno = ENOSYS;
-++        return -1;
-++    }
-++#else
-++# error "We require either the io_getevents syscall or __NR_io_pgetevents_time64."
-++#endif
-+ }
-+ 
-+ static void afalg_waitfd_cleanup(ASYNC_WAIT_CTX *ctx, const void *key,
-+-- 
-+2.25.1
-+
+diff --git a/package/wpa_supplicant/wpa_supplicant.hash b/package/wpa_supplicant/wpa_supplicant.hash
+index cce465d849..2387391a3c 100644
+--- a/package/wpa_supplicant/wpa_supplicant.hash
++++ b/package/wpa_supplicant/wpa_supplicant.hash
+@@ -2,3 +2,4 @@
+ sha256  fcbdee7b4a64bea8177973299c8c824419c413ec2e3a95db63dd6a5dc3541f17  wpa_supplicant-2.9.tar.gz
+ sha256  9da5dd0776da266b180b915e460ff75c6ff729aca1196ab396529510f24f3761  README
+ sha256  c4d65cc13863e0237d0644198558e2c47b4ed91e2b2be4516ff590724187c4a5  0001-P2P-Fix-copying-of-secondary-device-types-for-P2P-gr.patch
++sha256  7f40cfec5faf5e927ea9028ab9392cd118685bde7229ad24210caf0a8f6e9611  0001-P2P-Fix-a-corner-case-in-peer-addition-based-on-PD-R.patch
 -- 
-2.25.1
+2.20.1
