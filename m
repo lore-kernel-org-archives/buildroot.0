@@ -1,71 +1,64 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue,  2 Mar 2021 08:07:18 +0100
-Subject: [Buildroot] [PATCH v2 23/54] package/kodi-pvr-nextpvr: bump version
- to 8.2.1-Matrix
+Date: Tue,  2 Mar 2021 08:07:47 +0100
+Subject: [Buildroot] [PATCH v2 52/54] package/kodi-visualisation-waveform:
+ bump version to 4.4.0-Matrix
 In-Reply-To: <20210302070749.647742-1-bernd.kuhls@t-online.de>
 References: <20210302070749.647742-1-bernd.kuhls@t-online.de>
-Message-ID: <20210302070749.647742-24-bernd.kuhls@t-online.de>
+Message-ID: <20210302070749.647742-53-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Switch dependency to kodi after upstream removed the dependency to
-kodi-platform:
-https://github.com/kodi-pvr/pvr.nextpvr/commit/98b78cee615f5efeb207583c8b75adbaa742e43c
-https://github.com/kodi-pvr/pvr.nextpvr/commit/304b0ba94fc2ffb5f2982e6ea4c31cd0e601a44e
-
-Added dependency to tinyxml2:
-https://github.com/kodi-pvr/pvr.nextpvr/commit/6855f12ad8496760fa0787660b2c8025ce77311a
+Add dependency to glm due to upstream commit:
+https://github.com/xbmc/visualization.waveform/commit/18e32dd2416fc58e91c977d3c3a4c27b6ca59c3b
 
 Switch license file to LICENSE.md.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-pvr-nextpvr/Config.in             | 2 +-
- package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash | 4 ++--
- package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk   | 6 +++---
- 3 files changed, 6 insertions(+), 6 deletions(-)
+ package/kodi-visualisation-waveform/Config.in               | 1 +
+ .../kodi-visualisation-waveform.hash                        | 2 +-
+ .../kodi-visualisation-waveform.mk                          | 6 +++---
+ 3 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/kodi-pvr-nextpvr/Config.in b/package/kodi-pvr-nextpvr/Config.in
-index e520426796..d260df833f 100644
---- a/package/kodi-pvr-nextpvr/Config.in
-+++ b/package/kodi-pvr-nextpvr/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_KODI_PVR_NEXTPVR
- 	bool "kodi-pvr-nextpvr"
--	select BR2_PACKAGE_KODI_PLATFORM
-+	select BR2_PACKAGE_TINYXML2
+diff --git a/package/kodi-visualisation-waveform/Config.in b/package/kodi-visualisation-waveform/Config.in
+index 56f25096f5..24a5f7f365 100644
+--- a/package/kodi-visualisation-waveform/Config.in
++++ b/package/kodi-visualisation-waveform/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_KODI_VISUALISATION_WAVEFORM
+ 	bool "kodi-visualisation-waveform"
++	select BR2_PACKAGE_GLM
  	help
- 	  Kodi's NextPVR client addon
+ 	  Waveform visualiser for Kodi
  
-diff --git a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
-index 345ece6df9..f8d9e6c853 100644
---- a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
-+++ b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
+diff --git a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash
+index 578b2ea8a4..44e5ea5169 100644
+--- a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash
++++ b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  1f5576070a0bf076d1f28cdd547bc4ff134861c18a71cff7fd036eaacc357707  kodi-pvr-nextpvr-3.3.21-Leia.tar.gz
--sha256  0bd576badce05c6b4315c415dabd77d80c871e72026c399f7a7bb8582e0911fe  debian/copyright
-+sha256  ebe2b1f96b49c08c5960a6f75da6cb3cfc0cc30d6fafe43b77d2f2249915b752  kodi-pvr-nextpvr-8.2.1-Matrix.tar.gz
-+sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
-index b35216048c..bed6097c8a 100644
---- a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
-+++ b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
+-sha256  d734cbe9d7e661e8d4e61ff2bada423fd8dba33c5148b5044f4b1a1997c51376  kodi-visualisation-waveform-3.1.2-Leia.tar.gz
++sha256  d9acf0a3758bfc4ee6fa492bcdcf8764519bbf0f1b6a3b10807b65a0d031e55e  kodi-visualisation-waveform-4.4.0-Matrix.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk
+index 64a4db4fce..6c0ec3ac70 100644
+--- a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk
++++ b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk
 @@ -4,10 +4,10 @@
  #
  ################################################################################
  
--KODI_PVR_NEXTPVR_VERSION = 3.3.21-Leia
-+KODI_PVR_NEXTPVR_VERSION = 8.2.1-Matrix
- KODI_PVR_NEXTPVR_SITE = $(call github,kodi-pvr,pvr.nextpvr,$(KODI_PVR_NEXTPVR_VERSION))
- KODI_PVR_NEXTPVR_LICENSE = GPL-2.0+
--KODI_PVR_NEXTPVR_LICENSE_FILES = debian/copyright
--KODI_PVR_NEXTPVR_DEPENDENCIES = kodi-platform
-+KODI_PVR_NEXTPVR_LICENSE_FILES = LICENSE.md
-+KODI_PVR_NEXTPVR_DEPENDENCIES = kodi tinyxml2
+-KODI_VISUALISATION_WAVEFORM_VERSION = 3.1.2-Leia
++KODI_VISUALISATION_WAVEFORM_VERSION = 4.4.0-Matrix
+ KODI_VISUALISATION_WAVEFORM_SITE = $(call github,xbmc,visualization.waveform,$(KODI_VISUALISATION_WAVEFORM_VERSION))
+ KODI_VISUALISATION_WAVEFORM_LICENSE = GPL-2.0+
+-KODI_VISUALISATION_WAVEFORM_LICENSE_FILES = COPYING
+-KODI_VISUALISATION_WAVEFORM_DEPENDENCIES = kodi
++KODI_VISUALISATION_WAVEFORM_LICENSE_FILES = LICENSE.md
++KODI_VISUALISATION_WAVEFORM_DEPENDENCIES = glm kodi
  
  $(eval $(cmake-package))
 -- 
