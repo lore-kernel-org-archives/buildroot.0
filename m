@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue,  2 Mar 2021 08:07:44 +0100
-Subject: [Buildroot] [PATCH v2 49/54] package/kodi-visualisation-shadertoy:
- bump version to 2.3.0-Matrix
+Date: Tue,  2 Mar 2021 08:07:14 +0100
+Subject: [Buildroot] [PATCH v2 19/54] package/kodi-pvr-hts: bump version to
+ 8.2.1-Matrix
 In-Reply-To: <20210302070749.647742-1-bernd.kuhls@t-online.de>
 References: <20210302070749.647742-1-bernd.kuhls@t-online.de>
-Message-ID: <20210302070749.647742-50-bernd.kuhls@t-online.de>
+Message-ID: <20210302070749.647742-20-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,55 +13,63 @@ To: buildroot@busybox.net
 
 Switch dependency to kodi after upstream removed the dependency to
 kodi-platform:
-https://github.com/xbmc/visualization.shadertoy/commit/3fa4d118dcee2025620eb342d1a22a956beb06e5
+https://github.com/kodi-pvr/pvr.hts/commit/9943d05ce52b6ddcd63a3faa094f7ee9b2671c86
+https://github.com/kodi-pvr/pvr.hts/commit/d6b71de38b1c522a6f2716a7e4a90528ae06e992
+
+Added dependency to gcc >= 7 due to c++17 code added by
+https://github.com/kodi-pvr/pvr.hts/commit/954f25d39652098b5fb1a55d44e2d410de78902b
 
 Switch license file to LICENSE.md.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-visualisation-shadertoy/Config.in              | 1 -
- .../kodi-visualisation-shadertoy.hash                       | 4 ++--
- .../kodi-visualisation-shadertoy.mk                         | 6 +++---
- 3 files changed, 5 insertions(+), 6 deletions(-)
+ package/kodi-pvr-hts/Config.in         | 5 ++++-
+ package/kodi-pvr-hts/kodi-pvr-hts.hash | 4 ++--
+ package/kodi-pvr-hts/kodi-pvr-hts.mk   | 6 +++---
+ 3 files changed, 9 insertions(+), 6 deletions(-)
 
-diff --git a/package/kodi-visualisation-shadertoy/Config.in b/package/kodi-visualisation-shadertoy/Config.in
-index 1fabba5ef5..aa671aae13 100644
---- a/package/kodi-visualisation-shadertoy/Config.in
-+++ b/package/kodi-visualisation-shadertoy/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_KODI_VISUALISATION_SHADERTOY
- 	bool "kodi-visualisation-shadertoy"
- 	select BR2_PACKAGE_GLM
--	select BR2_PACKAGE_LIBPLATFORM
+diff --git a/package/kodi-pvr-hts/Config.in b/package/kodi-pvr-hts/Config.in
+index c4c4497bd3..a352457f31 100644
+--- a/package/kodi-pvr-hts/Config.in
++++ b/package/kodi-pvr-hts/Config.in
+@@ -1,7 +1,10 @@
+ config BR2_PACKAGE_KODI_PVR_HTS
+ 	bool "kodi-pvr-hts"
+-	select BR2_PACKAGE_KODI_PLATFORM
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17
  	help
- 	  Shadertoy visualiser for Kodi
+ 	  Tvheadend HTSP PVR client addon for Kodi
  
-diff --git a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.hash b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.hash
-index 67ab8867e6..8ecdfb6d50 100644
---- a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.hash
-+++ b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.hash
+ 	  https://github.com/kodi-pvr/pvr.hts
++
++comment "kodi-pvr-hts needs a toolchain w/ gcc >= 7"
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_7
+diff --git a/package/kodi-pvr-hts/kodi-pvr-hts.hash b/package/kodi-pvr-hts/kodi-pvr-hts.hash
+index c9724404b5..275712df49 100644
+--- a/package/kodi-pvr-hts/kodi-pvr-hts.hash
++++ b/package/kodi-pvr-hts/kodi-pvr-hts.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  07724fc59cc5f960a941b8255af326e87fa9fbc8234498c7e21d8a46050e0dd4  kodi-visualisation-shadertoy-1.2.4-Leia.tar.gz
--sha256  e33ac3ac6ca1bdd4a4a411481d43579d855622e7ecc207809b5f49ea617db480  debian/copyright
-+sha256  fbee4d8d4a41013705848eb89d4dcd55fe915a1ff997a60c800aa1bdd157530b  kodi-visualisation-shadertoy-2.3.0-Matrix.tar.gz
+-sha256  6958b91ca616554e4c068bc303c66388e9a2c3a68b5979d8918b4e0d7b6bb95c  kodi-pvr-hts-4.4.21-Leia.tar.gz
+-sha256  6d97c3d608a5d59565b567313bd3e53a1d0066ed59f4ae8e474c895d0c20e746  debian/copyright
++sha256  ec291b5717c19dfd639131d195c64043746043d4f85189accaf29e9b1547fbba  kodi-pvr-hts-8.2.2-Matrix.tar.gz
 +sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk
-index 865abf02cc..f5ad505fe7 100644
---- a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk
-+++ b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk
+diff --git a/package/kodi-pvr-hts/kodi-pvr-hts.mk b/package/kodi-pvr-hts/kodi-pvr-hts.mk
+index 6a25cda003..a4a14cdd6e 100644
+--- a/package/kodi-pvr-hts/kodi-pvr-hts.mk
++++ b/package/kodi-pvr-hts/kodi-pvr-hts.mk
 @@ -4,10 +4,10 @@
  #
  ################################################################################
  
--KODI_VISUALISATION_SHADERTOY_VERSION = 1.2.4-Leia
-+KODI_VISUALISATION_SHADERTOY_VERSION = 2.3.0-Matrix
- KODI_VISUALISATION_SHADERTOY_SITE = $(call github,xbmc,visualization.shadertoy,$(KODI_VISUALISATION_SHADERTOY_VERSION))
- KODI_VISUALISATION_SHADERTOY_LICENSE = GPL-2.0+
--KODI_VISUALISATION_SHADERTOY_LICENSE_FILES = debian/copyright
--KODI_VISUALISATION_SHADERTOY_DEPENDENCIES = glm kodi libplatform
-+KODI_VISUALISATION_SHADERTOY_LICENSE_FILES = LICENSE.md
-+KODI_VISUALISATION_SHADERTOY_DEPENDENCIES = glm kodi
+-KODI_PVR_HTS_VERSION = 4.4.21-Leia
++KODI_PVR_HTS_VERSION = 8.2.2-Matrix
+ KODI_PVR_HTS_SITE = $(call github,kodi-pvr,pvr.hts,$(KODI_PVR_HTS_VERSION))
+ KODI_PVR_HTS_LICENSE = GPL-2.0+
+-KODI_PVR_HTS_LICENSE_FILES = debian/copyright
+-KODI_PVR_HTS_DEPENDENCIES = kodi-platform
++KODI_PVR_HTS_LICENSE_FILES = LICENSE.md
++KODI_PVR_HTS_DEPENDENCIES = kodi
  
  $(eval $(cmake-package))
 -- 
