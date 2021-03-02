@@ -1,34 +1,72 @@
 From: Titouan Christophe <titouanchristophe@gmail.com>
-Date: Tue, 2 Mar 2021 09:11:10 +0100
-Subject: [Buildroot] [PATCH 1/1] package/redis: security bump to v6.2.0
-In-Reply-To: <87wnuqq2go.fsf@dell.be.48ers.dk>
-References: <20210301143700.253226-1-titouanchristophe@gmail.com>
- <87wnuqq2go.fsf@dell.be.48ers.dk>
-Message-ID: <d2736239-f814-13f8-73bc-a6ab61e99ed9@gmail.com>
+Date: Tue,  2 Mar 2021 09:12:41 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/redis: security bump to v6.0.12
+Message-ID: <20210302081241.173569-1-titouanchristophe@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
+From the release notes:
+(https://github.com/redis/redis/blob/6.0.12/00-RELEASENOTES)
 
-On 1/03/21 17:10, Peter Korsgaard wrote:
->>>>>> "Titouan" == Titouan Christophe <titouanchristophe@gmail.com> writes:
-> 
->   > This version also needs a patch from upstream to compile on musl systems.
->   > From the release notes:
->   > ================================================================================
->   > Redis 6.2.0 GA  Released Tue Feb 22 14:00:00 IST 2021
->   > ================================================================================
-> 
-> Why not upgrade to 6.0.11 instead? Given how close we are to 2021.02, I
-> would prefer to not move to a new major version.
-> 
+================================================================================
+Redis 6.0.11     Released Mon Feb 22 16:13:23 IST 2021
+================================================================================
 
-Indeed, thank you for pointing that out. In the meantime, upstream also 
-released 6.0.12, containing a backport of the patch we needed here. I'm 
-sending a v2 now.
+Upgrade urgency: SECURITY if you use 32bit build of redis (see bellow), LOW
+otherwise.
 
-Best regards,
-Titouan
+Integer overflow on 32-bit systems (CVE-2021-21309):
+Redis 4.0 or newer uses a configurable limit for the maximum supported bulk
+input size. By default, it is 512MB which is a safe value for all platforms.
+If the limit is significantly increased, receiving a large request from a client
+may trigger several integer overflow scenarios, which would result with buffer
+overflow and heap corruption.
+
+================================================================================
+Redis 6.0.12     Released Mon Mar  1 17:29:52 IST 2021
+================================================================================
+
+Upgrade urgency: LOW, fixes a compilation issue.
+
+Bug fixes:
+* Fix compilation error on non-glibc systems if jemalloc is not used (#8533)
+
+Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
+---
+Changes v1->v2:
+* Version bump within the 6.0 series (6.0.11 and 6.0.12) instead of 6.2.0
+* Remove patch that has been applied in 6.0.12
+---
+ package/redis/redis.hash | 2 +-
+ package/redis/redis.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/redis/redis.hash b/package/redis/redis.hash
+index b72605013e..9b87b49fb1 100644
+--- a/package/redis/redis.hash
++++ b/package/redis/redis.hash
+@@ -1,5 +1,5 @@
+ # From https://github.com/redis/redis-hashes/blob/master/README
+-sha256  79bbb894f9dceb33ca699ee3ca4a4e1228be7fb5547aeb2f99d921e86c1285bd  redis-6.0.10.tar.gz
++sha256  f16ad973d19f80f121e53794d5eb48a997e2c6a85b5be41bb3b66750cc17bf6b  redis-6.0.12.tar.gz
+ 
+ # Locally calculated
+ sha256  97f0a15b7bbae580d2609dad2e11f1956ae167be296ab60f4691ab9c30ee9828  COPYING
+diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+index 96132ae962..c851e589c4 100644
+--- a/package/redis/redis.mk
++++ b/package/redis/redis.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-REDIS_VERSION = 6.0.10
++REDIS_VERSION = 6.0.12
+ REDIS_SITE = http://download.redis.io/releases
+ REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
+ REDIS_LICENSE_FILES = COPYING
+-- 
+2.25.3
