@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue,  2 Mar 2021 08:07:40 +0100
-Subject: [Buildroot] [PATCH v2 45/54] package/kodi-vfs-rar: bump version to
- 4.0.0-Matrix
+Date: Tue,  2 Mar 2021 08:07:39 +0100
+Subject: [Buildroot] [PATCH v2 44/54] package/kodi-vfs-libarchive: new
+ package
 In-Reply-To: <20210302070749.647742-1-bernd.kuhls@t-online.de>
 References: <20210302070749.647742-1-bernd.kuhls@t-online.de>
-Message-ID: <20210302070749.647742-46-bernd.kuhls@t-online.de>
+Message-ID: <20210302070749.647742-45-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,33 +13,81 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-vfs-rar/kodi-vfs-rar.hash | 2 +-
- package/kodi-vfs-rar/kodi-vfs-rar.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/kodi-vfs-libarchive/Config.in         | 13 ++++++++++++
+ .../kodi-vfs-libarchive.hash                  |  3 +++
+ .../kodi-vfs-libarchive.mk                    | 21 +++++++++++++++++++
+ package/kodi/Config.in                        |  1 +
+ 4 files changed, 38 insertions(+)
+ create mode 100644 package/kodi-vfs-libarchive/Config.in
+ create mode 100644 package/kodi-vfs-libarchive/kodi-vfs-libarchive.hash
+ create mode 100644 package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk
 
-diff --git a/package/kodi-vfs-rar/kodi-vfs-rar.hash b/package/kodi-vfs-rar/kodi-vfs-rar.hash
-index 22ad584fb8..e4d0f7fe63 100644
---- a/package/kodi-vfs-rar/kodi-vfs-rar.hash
-+++ b/package/kodi-vfs-rar/kodi-vfs-rar.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  5275c09eed7e8354849caa17c3d9699abcfa2437a7c7af3833bffd10fc1c577f  kodi-vfs-rar-2.3.2-Leia.tar.gz
-+sha256  1111d1f90cc4addc2adb0884b779f4b47e30abb2766ba1708053e5f100b514bf  kodi-vfs-rar-4.0.0-Matrix.tar.gz
- # License files
- sha256  6ecc1687808b7d66b24f874755abfed7464d9751ed0001cd4e8e5d9bf397ff8a  lib/UnrarXLib/license.txt
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-vfs-rar/kodi-vfs-rar.mk b/package/kodi-vfs-rar/kodi-vfs-rar.mk
-index c0d52a1d25..001bd7c61c 100644
---- a/package/kodi-vfs-rar/kodi-vfs-rar.mk
-+++ b/package/kodi-vfs-rar/kodi-vfs-rar.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/kodi-vfs-libarchive/Config.in b/package/kodi-vfs-libarchive/Config.in
+new file mode 100644
+index 0000000000..6720e5206e
+--- /dev/null
++++ b/package/kodi-vfs-libarchive/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_KODI_VFS_LIBARCHIVE
++	bool "kodi-vfs-libarchive"
++	select BR2_PACKAGE_BZIP2
++	select BR2_PACKAGE_LIBARCHIVE
++	select BR2_PACKAGE_LZ4
++	select BR2_PACKAGE_LZO
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_XZ
++	select BR2_PACKAGE_ZLIB
++	help
++	  Libarchive VFS add-on for Kodi
++
++	  https://github.com/xbmc/vfs.libarchive
+diff --git a/package/kodi-vfs-libarchive/kodi-vfs-libarchive.hash b/package/kodi-vfs-libarchive/kodi-vfs-libarchive.hash
+new file mode 100644
+index 0000000000..59b3bc1078
+--- /dev/null
++++ b/package/kodi-vfs-libarchive/kodi-vfs-libarchive.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  6fd70f0e2775e9c4eef2e8b529396f1e739fe3e43e0d4202d7f08ab4a30fa760  kodi-vfs-libarchive-2.0.0-Matrix.tar.gz
++sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk b/package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk
+new file mode 100644
+index 0000000000..5278f50136
+--- /dev/null
++++ b/package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk
+@@ -0,0 +1,21 @@
++################################################################################
++#
++# kodi-vfs-libarchive
++#
++################################################################################
++
++KODI_VFS_LIBARCHIVE_VERSION = 2.0.0-Matrix
++KODI_VFS_LIBARCHIVE_SITE = $(call github,xbmc,vfs.libarchive,$(KODI_VFS_LIBARCHIVE_VERSION))
++KODI_VFS_LIBARCHIVE_LICENSE = GPL-2.0+
++KODI_VFS_LIBARCHIVE_LICENSE_FILES = LICENSE.md
++KODI_VFS_LIBARCHIVE_DEPENDENCIES = \
++	bzip2 \
++	kodi \
++	libarchive \
++	lz4 \
++	lzo \
++	openssl \
++	xz \
++	zlib
++
++$(eval $(cmake-package))
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index eefdd54990..a104ba53c3 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -347,6 +347,7 @@ menu "Skins"
+ endmenu
  
--KODI_VFS_RAR_VERSION = 2.3.2-Leia
-+KODI_VFS_RAR_VERSION = 4.0.0-Matrix
- KODI_VFS_RAR_SITE = $(call github,xbmc,vfs.rar,$(KODI_VFS_RAR_VERSION))
- KODI_VFS_RAR_LICENSE = unrar, GPL-2.0+
- KODI_VFS_RAR_LICENSE_FILES = lib/UnrarXLib/license.txt LICENSE.md
+ menu "Virtual file systems"
++	source "package/kodi-vfs-libarchive/Config.in"
+ 	source "package/kodi-vfs-rar/Config.in"
+ 	source "package/kodi-vfs-sftp/Config.in"
+ endmenu
 -- 
 2.29.2
