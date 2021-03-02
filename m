@@ -1,37 +1,36 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 2 Mar 2021 14:01:04 +0100
-Subject: [Buildroot] [git commit] package/libsndfile: set
- LIBSNDFILE_CPE_ID_VALID
-Message-ID: <20210302123842.0F70E86491@busybox.osuosl.org>
+Date: Tue, 2 Mar 2021 14:00:15 +0100
+Subject: [Buildroot] [git commit] package/rdesktop: add
+ RDESKTOP_CPE_ID_VENDOR
+Message-ID: <20210302123841.EDA00866B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b84a4ed139dd50be66283b9eb65679d5da0c2f24
+commit: https://git.buildroot.net/buildroot/commit/?id=bc418e01747e896a32993508bb3a052a7e6aaf2d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:libsndfile_project:libsndfile is a valid CPE identifier for
-this package:
+cpe:2.3:a:rdesktop:rdesktop is a valid CPE identifier for this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alibsndfile_project%3Alibsndfile
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ardesktop%3Ardesktop
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libsndfile/libsndfile.mk | 1 +
+ package/rdesktop/rdesktop.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/libsndfile/libsndfile.mk b/package/libsndfile/libsndfile.mk
-index 7d1dca0599..cdaa01de35 100644
---- a/package/libsndfile/libsndfile.mk
-+++ b/package/libsndfile/libsndfile.mk
-@@ -9,6 +9,7 @@ LIBSNDFILE_SITE = http://www.mega-nerd.com/libsndfile/files
- LIBSNDFILE_INSTALL_STAGING = YES
- LIBSNDFILE_LICENSE = LGPL-2.1+
- LIBSNDFILE_LICENSE_FILES = COPYING
-+LIBSNDFILE_CPE_ID_VALID = YES
+diff --git a/package/rdesktop/rdesktop.mk b/package/rdesktop/rdesktop.mk
+index 672d85b5c5..5a1739a46e 100644
+--- a/package/rdesktop/rdesktop.mk
++++ b/package/rdesktop/rdesktop.mk
+@@ -24,6 +24,7 @@ RDESKTOP_DEPENDENCIES = \
+ RDESKTOP_CONF_OPTS = --disable-credssp
+ RDESKTOP_LICENSE = GPL-3.0+
+ RDESKTOP_LICENSE_FILES = COPYING
++RDESKTOP_CPE_ID_VENDOR = rdesktop
  
- # 0001-double64_init-Check-psf-sf.channels-against-upper-bo.patch
- LIBSNDFILE_IGNORE_CVES += CVE-2017-14634
+ ifeq ($(BR2_PACKAGE_PCSC_LITE),y)
+ RDESKTOP_DEPENDENCIES += pcsc-lite
