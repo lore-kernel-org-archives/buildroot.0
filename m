@@ -1,43 +1,76 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue,  2 Mar 2021 08:07:38 +0100
-Subject: [Buildroot] [PATCH v2 43/54] package/kodi-skin-confluence: bump
- version
+Date: Tue,  2 Mar 2021 08:07:33 +0100
+Subject: [Buildroot] [PATCH v2 38/54] package/kodi-screensaver-matrixtrails:
+ bump version to 2.6.0-Matrix
 In-Reply-To: <20210302070749.647742-1-bernd.kuhls@t-online.de>
 References: <20210302070749.647742-1-bernd.kuhls@t-online.de>
-Message-ID: <20210302070749.647742-44-bernd.kuhls@t-online.de>
+Message-ID: <20210302070749.647742-39-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Remove dependency to libsoil:
+https://github.com/xbmc/screensaver.matrixtrails/commit/92a0d44e9151cfce3be74e81a3e39f0688d69b7a
+
+Remove dependency to opengl, opengles support was fixed upstream:
+https://github.com/xbmc/screensaver.matrixtrails/commit/ea6408ee391c75ae7ee4cb9f948df2ff8c0c87c5
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-skin-confluence/kodi-skin-confluence.hash | 2 +-
- package/kodi-skin-confluence/kodi-skin-confluence.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/kodi-screensaver-matrixtrails/Config.in        |  5 -----
+ .../kodi-screensaver-matrixtrails.hash                 |  4 ++--
+ .../kodi-screensaver-matrixtrails.mk                   | 10 +++++++---
+ 3 files changed, 9 insertions(+), 10 deletions(-)
 
-diff --git a/package/kodi-skin-confluence/kodi-skin-confluence.hash b/package/kodi-skin-confluence/kodi-skin-confluence.hash
-index fdd4e828f6..e3d1ff73f4 100644
---- a/package/kodi-skin-confluence/kodi-skin-confluence.hash
-+++ b/package/kodi-skin-confluence/kodi-skin-confluence.hash
+diff --git a/package/kodi-screensaver-matrixtrails/Config.in b/package/kodi-screensaver-matrixtrails/Config.in
+index 270a51c9f4..9f031ba10d 100644
+--- a/package/kodi-screensaver-matrixtrails/Config.in
++++ b/package/kodi-screensaver-matrixtrails/Config.in
+@@ -1,11 +1,6 @@
+ config BR2_PACKAGE_KODI_SCREENSAVER_MATRIXTRAILS
+ 	bool "kodi-screensaver-matrixtrails"
+-	depends on BR2_PACKAGE_HAS_LIBGL # libsoil
+-	select BR2_PACKAGE_LIBSOIL
+ 	help
+ 	  Matrix trails screensaver for Kodi
+ 
+ 	  https://github.com/xbmc/screensaver.matrixtrails
+-
+-comment "kodi-screensaver-matrixtrails needs OpenGL"
+-	depends on !BR2_PACKAGE_HAS_LIBGL
+diff --git a/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.hash b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.hash
+index 26b95cbc77..1f35f11b7d 100644
+--- a/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.hash
++++ b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  dc4a0abf05db50caf8e70e4904b8c2c445008ec3d6d23381c9c31dedaf6109de  kodi-skin-confluence-cffcb8320003e6048abe4b26316e5d5f3d50eac9.tar.gz
-+sha256  49ba4dcf4b512ac0a97bd1a4ebf14685d294d89a7a07c26ddda0fe730c8aa047  kodi-skin-confluence-37a196cdb58c0da87b5b22b047a5d44dc447f1ae.tar.gz
- sha256  89931c1fb1f3716694175763cf3221cfcd63d6935031cf6b4512d17ffe5d9860  LICENSE.txt
-diff --git a/package/kodi-skin-confluence/kodi-skin-confluence.mk b/package/kodi-skin-confluence/kodi-skin-confluence.mk
-index d9bd10bdfa..fcae506d1e 100644
---- a/package/kodi-skin-confluence/kodi-skin-confluence.mk
-+++ b/package/kodi-skin-confluence/kodi-skin-confluence.mk
-@@ -4,7 +4,7 @@
+-sha256  5a2f5bca0c197eea87f06376941c6d0ddbc81cf144d8c3854ac148fdec3400ec  kodi-screensaver-matrixtrails-2.2.3-Leia.tar.gz
+-sha256  385a17599b44aaea10537374c1991c21a5e06153878917b12f96fc1cf8bbc118  debian/copyright
++sha256  49986b82e7319e25ef2b3ec84b3892bbf1cb0b5253bd541da730c5cf5dd1940b  kodi-screensaver-matrixtrails-2.6.0-Matrix.tar.gz
++sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk
+index 10d3d45e08..a89ea72d5d 100644
+--- a/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk
++++ b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk
+@@ -4,10 +4,14 @@
  #
  ################################################################################
  
--KODI_SKIN_CONFLUENCE_VERSION = cffcb8320003e6048abe4b26316e5d5f3d50eac9
-+KODI_SKIN_CONFLUENCE_VERSION = 37a196cdb58c0da87b5b22b047a5d44dc447f1ae
- KODI_SKIN_CONFLUENCE_SITE = $(call github,xbmc,skin.confluence,$(KODI_SKIN_CONFLUENCE_VERSION))
- KODI_SKIN_CONFLUENCE_LICENSE = GPL-2.0
- KODI_SKIN_CONFLUENCE_LICENSE_FILES = LICENSE.txt
+-KODI_SCREENSAVER_MATRIXTRAILS_VERSION = 2.2.3-Leia
++KODI_SCREENSAVER_MATRIXTRAILS_VERSION = 2.6.0-Matrix
+ KODI_SCREENSAVER_MATRIXTRAILS_SITE = $(call github,xbmc,screensaver.matrixtrails,$(KODI_SCREENSAVER_MATRIXTRAILS_VERSION))
+ KODI_SCREENSAVER_MATRIXTRAILS_LICENSE = GPL-2.0+
+-KODI_SCREENSAVER_MATRIXTRAILS_LICENSE_FILES = debian/copyright
+-KODI_SCREENSAVER_MATRIXTRAILS_DEPENDENCIES = kodi libsoil
++KODI_SCREENSAVER_MATRIXTRAILS_LICENSE_FILES = LICENSE.md
++KODI_SCREENSAVER_MATRIXTRAILS_DEPENDENCIES = kodi
++
++KODI_SCREENSAVER_MATRIXTRAILS_CONF_OPTS += \
++	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) $(shell $(PKG_CONFIG_HOST_BINARY) --cflags egl)" \
++	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) $(shell $(PKG_CONFIG_HOST_BINARY) --cflags egl)"
+ 
+ $(eval $(cmake-package))
 -- 
 2.29.2
