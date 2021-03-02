@@ -1,63 +1,44 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue,  2 Mar 2021 08:07:04 +0100
-Subject: [Buildroot] [PATCH v2 09/54] package/kodi-inputstream-adaptive:
- bump version to 2.6.7-Matrix
+Date: Tue,  2 Mar 2021 08:06:56 +0100
+Subject: [Buildroot] [PATCH v2 01/54] package/kodi-pvr-iptvsimple: bump
+ version to 3.10.0-Leia
 In-Reply-To: <20210302070749.647742-1-bernd.kuhls@t-online.de>
 References: <20210302070749.647742-1-bernd.kuhls@t-online.de>
-Message-ID: <20210302070749.647742-10-bernd.kuhls@t-online.de>
+Message-ID: <20210302070749.647742-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add expat as dependency after it was removed from the kodi package:
-https://github.com/xbmc/inputstream.adaptive/blob/Matrix/CMakeLists.txt#L61
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-inputstream-adaptive/Config.in                   | 1 +
- .../kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash  | 2 +-
- .../kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk    | 4 ++--
- 3 files changed, 4 insertions(+), 3 deletions(-)
+ package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash | 2 +-
+ package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-inputstream-adaptive/Config.in b/package/kodi-inputstream-adaptive/Config.in
-index 21f1cff171..f0a24b7043 100644
---- a/package/kodi-inputstream-adaptive/Config.in
-+++ b/package/kodi-inputstream-adaptive/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_KODI_INPUTSTREAM_ADAPTIVE
- 	# wvdecrypter/cdm/build/build_config.h
- 	depends on BR2_aarch64 || BR2_arm || BR2_i386 || BR2_mipsel \
- 		|| BR2_mips64el || BR2_x86_64
-+	select BR2_PACKAGE_EXPAT
- 	help
- 	  Kodi inputstream addon for several manifest types
- 
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-index b12c93ac11..6c9b79b881 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
+index 2de9a4a15b..f90ff8b737 100644
+--- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
++++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  222b7ad879146c62a1fc6016fc70ca1ca57b3b882882ebc54e0b772bf96482e7  kodi-inputstream-adaptive-2.4.6-Leia.tar.gz
-+sha256  353207f5f98bf81ce8d79cec903c28da8c0227d7c7a632692c910d81e59c2dbe  kodi-inputstream-adaptive-2.6.7-Matrix.tar.gz
- sha256  89931c1fb1f3716694175763cf3221cfcd63d6935031cf6b4512d17ffe5d9860  LICENSE.GPL
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-index a8024951d4..d6d86817ce 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-@@ -4,10 +4,10 @@
+-sha256  0812e359a943f4ffb763b47fc0440768a8aa09f12172ef8dff4440b0a48f9c96  kodi-pvr-iptvsimple-3.9.8-Leia.tar.gz
++sha256  906d023b4713be558445902ff703ae65e03733d47dd7d0e1b16d02c05679c7ed  kodi-pvr-iptvsimple-3.10.0-Leia.tar.gz
+ sha256  50e33ec3cddb75e6c5c5eb1b3d38cc0adee7dec71d7244925106d4a2c4d5e31d  debian/copyright
+diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
+index f1a087100c..0b31024556 100644
+--- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
++++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_INPUTSTREAM_ADAPTIVE_VERSION = 2.4.6-Leia
-+KODI_INPUTSTREAM_ADAPTIVE_VERSION = 2.6.7-Matrix
- KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,xbmc,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPL-2.0+
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = LICENSE.GPL
--KODI_INPUTSTREAM_ADAPTIVE_DEPENDENCIES = kodi
-+KODI_INPUTSTREAM_ADAPTIVE_DEPENDENCIES = expat kodi
- 
- $(eval $(cmake-package))
+-KODI_PVR_IPTVSIMPLE_VERSION = 3.9.8-Leia
++KODI_PVR_IPTVSIMPLE_VERSION = 3.10.0-Leia
+ KODI_PVR_IPTVSIMPLE_SITE = $(call github,kodi-pvr,pvr.iptvsimple,$(KODI_PVR_IPTVSIMPLE_VERSION))
+ KODI_PVR_IPTVSIMPLE_LICENSE = GPL-2.0+
+ KODI_PVR_IPTVSIMPLE_LICENSE_FILES = debian/copyright
 -- 
 2.29.2
