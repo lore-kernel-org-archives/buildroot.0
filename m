@@ -1,33 +1,48 @@
-From: Dan Raymond <draymond@foxvalley.net>
-Date: Tue, 2 Mar 2021 08:43:35 -0700
-Subject: [Buildroot] environment variables with spaces (request for comments)
-In-Reply-To: <20210302123333.755928-1-yann.morin.1998@free.fr>
-References: <20210302123333.755928-1-yann.morin.1998@free.fr>
-Message-ID: <d29457bd-026e-6c02-8da3-7385e80d7fcf@foxvalley.net>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue,  2 Mar 2021 18:25:22 +0100
+Subject: [Buildroot] [PATCH 1/2] package/python-pyyaml: add CPE variables
+Message-ID: <20210302172523.373997-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I encountered a bug in Buildroot that resulted in a failure to run 'make 
-linux-menuconfig'.? I tracked down the problem to a bug in 
-package/pkg-kconfig.mk that was attempting to remove a set of variables 
-from an environment string.? The problem is that a naive technique was 
-being used that did not account for quoted variables that contained 
-embedded spaces.? To be clear, 'make menuconfig' from the linux kernel 
-tree works fine: this bug is in Buildroot only.? The reason I discovered 
-this bug (and others may not) is because my PATH environment variable 
-contains embedded spaces (which may be uncommon but valid and sometimes 
-necessary).
+cpe:2.3:a:pyyaml:pyyaml is a valid CPE identifier for this package:
 
-I implemented/tested/submitted a patch that reliably fixes the bug.
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Apyyaml%3Apyyaml
 
-Yann MORIN objected to my patch because he believes some of the packages 
-Buildroot supports contain similar bugs.? I responded to his objection 
-but he ignored my response and submitted his own patch that undermines 
-mine by intentionally causing ALL make targets to fail when the PATH 
-environment variable contains embedded spaces.? I don't think that 
-starting a "patch war" is productive or contributes to the goals of the 
-Buildroot community.? Can we have a discussion instead and come to a 
-consensus on this matter?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/python-pyyaml/python-pyyaml.mk   | 2 ++
+ package/python3-pyyaml/python3-pyyaml.mk | 2 ++
+ 2 files changed, 4 insertions(+)
+
+diff --git a/package/python-pyyaml/python-pyyaml.mk b/package/python-pyyaml/python-pyyaml.mk
+index 7bbae309c6..c2d0435275 100644
+--- a/package/python-pyyaml/python-pyyaml.mk
++++ b/package/python-pyyaml/python-pyyaml.mk
+@@ -11,6 +11,8 @@ PYTHON_PYYAML_SITE = https://files.pythonhosted.org/packages/64/c2/b80047c7ac247
+ PYTHON_PYYAML_SETUP_TYPE = distutils
+ PYTHON_PYYAML_LICENSE = MIT
+ PYTHON_PYYAML_LICENSE_FILES = LICENSE
++PYTHON_PYYAML_CPE_ID_VENDOR = pyyaml
++PYTHON_PYYAML_CPE_ID_PRODUCT = pyyaml
+ PYTHON_PYYAML_DEPENDENCIES = libyaml
+ HOST_PYTHON_PYYAML_DEPENDENCIES = host-libyaml
+ 
+diff --git a/package/python3-pyyaml/python3-pyyaml.mk b/package/python3-pyyaml/python3-pyyaml.mk
+index c0dcebf4fc..1b467645aa 100644
+--- a/package/python3-pyyaml/python3-pyyaml.mk
++++ b/package/python3-pyyaml/python3-pyyaml.mk
+@@ -11,6 +11,8 @@ PYTHON3_PYYAML_SITE = https://files.pythonhosted.org/packages/64/c2/b80047c7ac24
+ PYTHON3_PYYAML_SETUP_TYPE = distutils
+ PYTHON3_PYYAML_LICENSE = MIT
+ PYTHON3_PYYAML_LICENSE_FILES = LICENSE
++PYTHON3_PYYAML_CPE_ID_VENDOR = pyyaml
++PYTHON3_PYYAML_CPE_ID_PRODUCT = pyyaml
+ HOST_PYTHON3_PYYAML_DL_SUBDIR = python-pyyaml
+ HOST_PYTHON3_PYYAML_NEEDS_HOST_PYTHON = python3
+ HOST_PYTHON3_PYYAML_DEPENDENCIES = host-libyaml
+-- 
+2.30.0
