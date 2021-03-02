@@ -1,75 +1,57 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 2 Mar 2021 22:03:20 +0100
-Subject: [Buildroot] [PATCH 1/1] package/perl: link with -lintl if needed
-In-Reply-To: <20210221174549.3764415-1-fontaine.fabrice@gmail.com>
-References: <20210221174549.3764415-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210302210320.GI2275@scaer>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 2 Mar 2021 22:04:19 +0100
+Subject: [Buildroot] [git commit] package/kismet: server needs wchar
+Message-ID: <20210302204151.22C1D868AE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=b33f74823e70f073128762c86e1a8e83ac10d3e1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-02-21 18:45 +0100, Fabrice Fontaine spake thusly:
-> Link with TARGET_NLS_LIBS if needed to avoid the following build failure
-> with perl in version 5.32:
-> 
-> /home/buildroot/autobuild/instance-3/output-1/host/bin/arm-linux-gcc -lm -Wl,-E -o perl perlmain.o libperl.a  -lm -lcrypt -lpthread -ldl
-> /home/buildroot/autobuild/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/9.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: libperl.a(locale.o): in function `S_emulate_setlocale':
-> /home/buildroot/autobuild/instance-3/output-1/build/perl-5.32.1/locale.c:1182: undefined reference to `libintl_textdomain'
-> 
-> An upstream issue has been opened in:
-> https://github.com/Perl/perl5/issues/18467
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/9df8d8d28006845b4f927548f8856dfa8f79802b
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+kismet embeds its own copy of fmt since version 2019-04-R1 so add a
+dependency on wchar to avoid the following build failure when building
+the server:
 
-Applied to master, thanks.
+./fmt/core.h:1245:1:
+ std::wstring vformat(wstring_view format_str, wformat_args args);
+ ^~~
+./fmt/core.h:1266:13: error: 'wstring' in namespace 'std' does not name a type
+ inline std::wstring format(wstring_view format_str, const Args & ... args) {
+             ^~~~~~~
+./fmt/core.h:1266:8: note: 'std::wstring' is defined in header '<string>'; did you forget to '#include <string>'?
 
-Regards,
-Yann E. MORIN.
+Fixes:
+ - http://autobuild.buildroot.org/results/f19b3d080514a799a1c75b38ff5f7ae4e8d2628d
 
-> ---
->  package/perl/perl.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-> index ec1cfd4d0a..0ff288db0e 100644
-> --- a/package/perl/perl.mk
-> +++ b/package/perl/perl.mk
-> @@ -11,6 +11,7 @@ PERL_SITE = https://www.cpan.org/src/5.0
->  PERL_SOURCE = perl-$(PERL_VERSION).tar.xz
->  PERL_LICENSE = Artistic or GPL-1.0+
->  PERL_LICENSE_FILES = Artistic Copying README
-> +PERL_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
->  PERL_INSTALL_STAGING = YES
->  
->  PERL_CROSS_VERSION = 1.3.5
-> @@ -50,7 +51,7 @@ PERL_CONF_OPTS = \
->  	--prefix=/usr \
->  	-Dld="$(TARGET_CC)" \
->  	-Dccflags="$(TARGET_CFLAGS)" \
-> -	-Dldflags="$(TARGET_LDFLAGS) -lm" \
-> +	-Dldflags="$(TARGET_LDFLAGS) -lm $(TARGET_NLS_LIBS)" \
->  	-Dmydomain="" \
->  	-Dmyhostname="noname" \
->  	-Dmyuname="Buildroot $(BR2_VERSION_FULL)" \
-> -- 
-> 2.30.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/kismet/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/kismet/Config.in b/package/kismet/Config.in
+index 02046e7efb..d9f8ebe03d 100644
+--- a/package/kismet/Config.in
++++ b/package/kismet/Config.in
+@@ -59,14 +59,16 @@ config BR2_PACKAGE_KISMET_SERVER
+ 	default y
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
+ 	depends on !BR2_STATIC_LIBS # dlfcn.h
++	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # protobuf
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::future
+ 	select BR2_PACKAGE_PROTOBUF
+ 
+-comment "server needs a toolchain w/ dynamic library, gcc >= 4.8"
++comment "server needs a toolchain w/ dynamic library, wchar, gcc >= 4.8"
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+-	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 
+ comment "server needs a toolchain not affected by GCC bug 64735"
+ 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
