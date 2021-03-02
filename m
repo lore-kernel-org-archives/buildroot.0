@@ -1,106 +1,68 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue,  2 Mar 2021 08:07:45 +0100
-Subject: [Buildroot] [PATCH v2 50/54] package/kodi-visualisation-spectrum:
- bump version to 3.4.0-Matrix
+Date: Tue,  2 Mar 2021 08:07:09 +0100
+Subject: [Buildroot] [PATCH v2 14/54] package/kodi-pvr-argustv: bump version
+ to 7.1.0-Matrix
 In-Reply-To: <20210302070749.647742-1-bernd.kuhls@t-online.de>
 References: <20210302070749.647742-1-bernd.kuhls@t-online.de>
-Message-ID: <20210302070749.647742-51-bernd.kuhls@t-online.de>
+Message-ID: <20210302070749.647742-15-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Removed patch applied upstream:
-https://github.com/xbmc/visualization.spectrum/commit/46b605516b057823855c7f76dbc3f622dcf5983b
-
-Add dependency to glm due to upstream commit:
-https://github.com/xbmc/visualization.spectrum/commit/0a3e3885b87f61e9a511ec942b3c01679e4b3414
+Switch dependency to kodi after upstream removed the dependency to
+kodi-platform:
+https://github.com/kodi-pvr/pvr.argustv/commit/44d9c5a20579a2f505f26a072096911d68855a4a
+https://github.com/kodi-pvr/pvr.argustv/commit/6a6968892d468d02ca0d380e3fff54e607346024
 
 Switch license file to LICENSE.md.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...Backport-Add-missing-cstddef-include.patch | 30 -------------------
- package/kodi-visualisation-spectrum/Config.in |  1 +
- .../kodi-visualisation-spectrum.hash          |  4 +--
- .../kodi-visualisation-spectrum.mk            |  6 ++--
- 4 files changed, 6 insertions(+), 35 deletions(-)
- delete mode 100644 package/kodi-visualisation-spectrum/0001-Backport-Add-missing-cstddef-include.patch
+ package/kodi-pvr-argustv/Config.in             | 1 -
+ package/kodi-pvr-argustv/kodi-pvr-argustv.hash | 4 ++--
+ package/kodi-pvr-argustv/kodi-pvr-argustv.mk   | 6 +++---
+ 3 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/kodi-visualisation-spectrum/0001-Backport-Add-missing-cstddef-include.patch b/package/kodi-visualisation-spectrum/0001-Backport-Add-missing-cstddef-include.patch
-deleted file mode 100644
-index 5b1bb0c47c..0000000000
---- a/package/kodi-visualisation-spectrum/0001-Backport-Add-missing-cstddef-include.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--From b2c54c1043c2396678005b578e85db30bdf5ccb9 Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd.kuhls@t-online.de>
--Date: Sat, 18 Jan 2020 20:22:41 +0100
--Subject: [PATCH] [Backport] Add missing cstddef include
--
--Backported from https://github.com/xbmc/visualization.spectrum/pull/37
--
--Patch sent upstream:
--https://github.com/xbmc/visualization.spectrum/pull/38
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- src/opengl_spectrum.cpp | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/src/opengl_spectrum.cpp b/src/opengl_spectrum.cpp
--index 05409ea..2441fd6 100644
----- a/src/opengl_spectrum.cpp
--+++ b/src/opengl_spectrum.cpp
--@@ -38,6 +38,7 @@
-- #include <string.h>
-- #include <math.h>
-- #include <stdint.h>
--+#include <cstddef>
-- 
-- #include <glm/glm.hpp>
-- #include <glm/gtc/type_ptr.hpp>
---- 
--2.20.1
--
-diff --git a/package/kodi-visualisation-spectrum/Config.in b/package/kodi-visualisation-spectrum/Config.in
-index 3b2b0a25e2..deb623087f 100644
---- a/package/kodi-visualisation-spectrum/Config.in
-+++ b/package/kodi-visualisation-spectrum/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_KODI_VISUALISATION_SPECTRUM
- 	bool "kodi-visualisation-spectrum"
-+	select BR2_PACKAGE_GLM
+diff --git a/package/kodi-pvr-argustv/Config.in b/package/kodi-pvr-argustv/Config.in
+index 216000aefd..7cca2661c7 100644
+--- a/package/kodi-pvr-argustv/Config.in
++++ b/package/kodi-pvr-argustv/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_KODI_PVR_ARGUSTV
+ 	bool "kodi-pvr-argustv"
+ 	select BR2_PACKAGE_JSONCPP
+-	select BR2_PACKAGE_KODI_PLATFORM
  	help
- 	  Spectrum visualiser for Kodi
+ 	  Kodi's ARGUS TV client addon
  
-diff --git a/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.hash b/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.hash
-index ae78fbd355..e6473ab0a1 100644
---- a/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.hash
-+++ b/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.hash
+diff --git a/package/kodi-pvr-argustv/kodi-pvr-argustv.hash b/package/kodi-pvr-argustv/kodi-pvr-argustv.hash
+index 5c47dd30b2..3024d8e65f 100644
+--- a/package/kodi-pvr-argustv/kodi-pvr-argustv.hash
++++ b/package/kodi-pvr-argustv/kodi-pvr-argustv.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  ec88defbb90fdb03f075abdba39c436906a8fbad8f034da3e3b31f75842206cc  kodi-visualisation-spectrum-3.0.2-Leia.tar.gz
--sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-+sha256  0b08b99c0289a421425a5d3b39eafdf6262021e213bd3093e98704efb410d348  kodi-visualisation-spectrum-3.4.0-Matrix.tar.gz
+-sha256  7bfedb27b2aec4015b2594df18b76fe42e97ec10f4b5cb9c6987b1a7a264c844  kodi-pvr-argustv-3.5.6-Leia.tar.gz
+-sha256  17bc5450fff10fc46484886690adbf20c369f5baff021435feab1187b9943834  debian/copyright
++sha256  d91f195c4a91af893231d03a887a340900c4e515597ea059ee6b9e6444717fc9  kodi-pvr-argustv-7.1.0-Matrix.tar.gz
 +sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk b/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk
-index c3d61c1ef4..42abc156cd 100644
---- a/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk
-+++ b/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk
+diff --git a/package/kodi-pvr-argustv/kodi-pvr-argustv.mk b/package/kodi-pvr-argustv/kodi-pvr-argustv.mk
+index 73a9f1c764..2d5d62a539 100644
+--- a/package/kodi-pvr-argustv/kodi-pvr-argustv.mk
++++ b/package/kodi-pvr-argustv/kodi-pvr-argustv.mk
 @@ -4,10 +4,10 @@
  #
  ################################################################################
  
--KODI_VISUALISATION_SPECTRUM_VERSION = 3.0.2-Leia
-+KODI_VISUALISATION_SPECTRUM_VERSION = 3.4.0-Matrix
- KODI_VISUALISATION_SPECTRUM_SITE = $(call github,xbmc,visualization.spectrum,$(KODI_VISUALISATION_SPECTRUM_VERSION))
- KODI_VISUALISATION_SPECTRUM_LICENSE = GPL-2.0+
--KODI_VISUALISATION_SPECTRUM_LICENSE_FILES = COPYING
--KODI_VISUALISATION_SPECTRUM_DEPENDENCIES = kodi
-+KODI_VISUALISATION_SPECTRUM_LICENSE_FILES = LICENSE.md
-+KODI_VISUALISATION_SPECTRUM_DEPENDENCIES = glm kodi
+-KODI_PVR_ARGUSTV_VERSION = 3.5.6-Leia
++KODI_PVR_ARGUSTV_VERSION = 7.1.0-Matrix
+ KODI_PVR_ARGUSTV_SITE = $(call github,kodi-pvr,pvr.argustv,$(KODI_PVR_ARGUSTV_VERSION))
+ KODI_PVR_ARGUSTV_LICENSE = GPL-2.0+
+-KODI_PVR_ARGUSTV_LICENSE_FILES = debian/copyright
+-KODI_PVR_ARGUSTV_DEPENDENCIES = jsoncpp kodi-platform
++KODI_PVR_ARGUSTV_LICENSE_FILES = LICENSE.md
++KODI_PVR_ARGUSTV_DEPENDENCIES = jsoncpp kodi
  
  $(eval $(cmake-package))
 -- 
