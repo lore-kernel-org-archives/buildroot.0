@@ -1,141 +1,115 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 2 Mar 2021 22:14:53 +0100
-Subject: [Buildroot] [PATCH] utils/size-stats-compare: add package name
- in detail output
-In-Reply-To: <20210216115609.24656-1-patrickdepinguin@gmail.com>
-References: <20210216115609.24656-1-patrickdepinguin@gmail.com>
-Message-ID: <20210302211453.GJ2275@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue,  2 Mar 2021 22:15:51 +0100
+Subject: [Buildroot] [PATCH] support/scripts/gen-bootlin-toolchains: correct
+ xtensa toolchain dependencies
+Message-ID: <20210302211551.19018-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Fixes:
+http://autobuild.buildroot.net/results/011/0111c2ed54618daaeedfc66b0ea04eda00a7e855/
+http://autobuild.buildroot.net/results/e53/e53e3880b63a23fa3b3e6d34664d40d5ddbdff89/
+..
 
-On 2021-02-16 12:56 +0100, Thomas De Schampheleire spake thusly:
-> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> 
-> size-stats-compare gives an overview of the size increase/decrease between
-> two cases, based on packages-file-list.txt. The 'detail' mode gives info per
-> file, otherwise per package.
-> 
-> But sometimes, you want the detailed per-file info, but only for a specific
-> package. Since the detailed output no longer lists the package name, you
-> cannot simply grep for it. A workaround was to filter the input
-> packages-file-list.txt's first, and then pass these filtered versions to
-> size-stats-compare.
-> 
-> Make this easier by adding the package name next to the filename in detailed
-> output. This allows grep'ing normally.
-> For example:
-> 
->   $ utils/size-stats-compare orig new  -t 100 -d | grep ebtables
->       -67712 removed lib/ebtables/libebtc.so (ebtables)
->       -66764 removed lib/ebtables/libebt_nat.so (ebtables)
->       -66752 removed sbin/ebtables (ebtables)
->       -66704 removed lib/ebtables/libebt_arp.so (ebtables)
->       -66700 removed lib/ebtables/libebt_stp.so (ebtables)
->       -66700 removed lib/ebtables/libebt_among.so (ebtables)
->       -66684 removed lib/ebtables/libebt_ip.so (ebtables)
->       -66676 removed lib/ebtables/libebt_limit.so (ebtables)
->       -66656 removed lib/ebtables/libebt_log.so (ebtables)
->       -66648 removed lib/ebtables/libebt_mark.so (ebtables)
->       -66636 removed lib/ebtables/libebt_pkttype.so (ebtables)
->       -66604 removed lib/ebtables/libebt_vlan.so (ebtables)
->       -66588 removed lib/ebtables/libebt_ulog.so (ebtables)
->       -66588 removed lib/ebtables/libebt_nflog.so (ebtables)
->       -66584 removed lib/ebtables/libebt_arpreply.so (ebtables)
->       -66544 removed lib/ebtables/libebt_ip6.so (ebtables)
->       -66540 removed lib/ebtables/libebt_802_3.so (ebtables)
->       -66536 removed lib/ebtables/libebt_standard.so (ebtables)
->       -66524 removed lib/ebtables/libebt_mark_m.so (ebtables)
->       -66524 removed lib/ebtables/libebt_redirect.so (ebtables)
->       -66452 removed lib/ebtables/libebtable_broute.so (ebtables)
->       -66452 removed lib/ebtables/libebtable_filter.so (ebtables)
->       -66452 removed lib/ebtables/libebtable_nat.so (ebtables)
->        66752   added usr/sbin/ebtablesd (ebtables)
->        66752   added usr/sbin/ebtables-legacy (ebtables)
->        66752   added usr/sbin/ebtablesu (ebtables)
->       200840   added usr/lib/libebtc.so.0.0.0 (ebtables)
+As listed in the br_fragment file of the toolchain, this is built for a
+little-endian "custom" xtensa variant rather than the (big-endian) fsf one:
 
-I think it would make more sense to have the package name before the
-file name, so that it is easier to filter. Indeed, the package name will
-never have spaces, while the filenames may:
+BR2_xtensa=y
+BR2_XTENSA_CUSTOM=y
 
-    -66452 ebtables removed lib/ebtables/libebtable_nat.so
-     66752 ebtables added   usr/sbin/ebtablesd
+So update the dependencies in the script and regenerate Config.in.options /
+toolchain test.  Also fixup the autobuild config snippet to match.
 
-Yes, this means that parsers of this will have to be adapted. But even
-with the package name at the end, they would have to be adapted.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../autobuild/bootlin-xtensa-uclibc.config                | 2 ++
+ support/scripts/gen-bootlin-toolchains                    | 2 +-
+ support/testing/tests/toolchain/test_external_bootlin.py  | 6 ++++--
+ .../toolchain-external-bootlin/Config.in.options          | 8 +++++---
+ 4 files changed, 12 insertions(+), 6 deletions(-)
 
-Unless you have a strong argument to keep it at the end?
-
-Regards,
-Yann E. MORIN.
-
-> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> ---
->  utils/size-stats-compare | 17 +++++++++++------
->  1 file changed, 11 insertions(+), 6 deletions(-)
-> 
-> diff --git a/utils/size-stats-compare b/utils/size-stats-compare
-> index a3d7f250c6..7a6cb9d258 100755
-> --- a/utils/size-stats-compare
-> +++ b/utils/size-stats-compare
-> @@ -40,9 +40,9 @@ def read_file_size_csv(inputf, detail=None):
->  
->      for row in reader:
->          if detail:
-> -            sizes[row[0]] = int(row[2])
-> +            sizes[(row[0], row[1])] = int(row[2])
->          else:
-> -            sizes[row[1]] = int(row[3])
-> +            sizes[(None, row[1])] = int(row[3])
->  
->      return sizes
->  
-> @@ -73,13 +73,18 @@ def print_results(result, threshold):
->  
->      from six import iteritems
->      list_result = list(iteritems(result))
-> -    # result is a dictionary: name -> (flag, size difference)
-> -    # list_result is a list of tuples: (name, (flag, size difference))
-> +    # result is a dictionary: (filename, pkgname) -> (flag, size difference)
-> +    # list_result is a list of tuples: ((filename, pkgname), (flag, size difference))
-> +    # filename may be None if no detail is requested.
->  
->      for entry in sorted(list_result, key=lambda entry: entry[1][1]):
->          if threshold is not None and abs(entry[1][1]) <= threshold:
->              continue
-> -        print('%12s %7s %s' % (entry[1][1], entry[1][0], entry[0]))
-> +        if entry[0][0]:
-> +            name = '%s (%s)' % (entry[0][0], entry[0][1])
-> +        else:
-> +            name = '%s' % entry[0][1]
-> +        print('%12s %7s %s' % (entry[1][1], entry[1][0], name))
->  
->  
->  # main #########################################################################
-> @@ -126,5 +131,5 @@ print('Size difference per %s (bytes), threshold = %s' % (keyword, args.threshol
->  print(80*'-')
->  print_results(delta, args.threshold)
->  print(80*'-')
-> -print_results({'TOTAL': ('', sum(new_sizes.values()) - sum(old_sizes.values()))},
-> +print_results({(None, 'TOTAL'): ('', sum(new_sizes.values()) - sum(old_sizes.values()))},
->                threshold=None)
-> -- 
-> 2.26.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/support/config-fragments/autobuild/bootlin-xtensa-uclibc.config b/support/config-fragments/autobuild/bootlin-xtensa-uclibc.config
+index 7975287456..c44525b203 100644
+--- a/support/config-fragments/autobuild/bootlin-xtensa-uclibc.config
++++ b/support/config-fragments/autobuild/bootlin-xtensa-uclibc.config
+@@ -1,3 +1,5 @@
+ BR2_xtensa=y
++BR2_XTENSA_CUSTOM=y
++BR2_XTENSA_LITTLE_ENDIAN=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_XTENSA_LX60_UCLIBC_STABLE=y
+diff --git a/support/scripts/gen-bootlin-toolchains b/support/scripts/gen-bootlin-toolchains
+index fc9d57f5a4..902b7795ee 100755
+--- a/support/scripts/gen-bootlin-toolchains
++++ b/support/scripts/gen-bootlin-toolchains
+@@ -210,7 +210,7 @@ arches = {
+         'prefix': 'i686',
+     },
+     'xtensa-lx60': {
+-        'conditions': ['BR2_xtensa', 'BR2_xtensa_fsf'],
++        'conditions': ['BR2_xtensa', 'BR2_XTENSA_CUSTOM', 'BR2_XTENSA_LITTLE_ENDIAN'],
+         'prefix': 'xtensa',
+     },
+ }
+diff --git a/support/testing/tests/toolchain/test_external_bootlin.py b/support/testing/tests/toolchain/test_external_bootlin.py
+index 2edbfb3207..af60c21f7d 100644
+--- a/support/testing/tests/toolchain/test_external_bootlin.py
++++ b/support/testing/tests/toolchain/test_external_bootlin.py
+@@ -2567,7 +2567,8 @@ class TestExternalToolchainBootlinX86i686UclibcStable(TestExternalToolchain):
+ class TestExternalToolchainBootlinXtensalx60UclibcBleedingEdge(TestExternalToolchain):
+     config = """
+         BR2_xtensa=y
+-        BR2_xtensa_fsf=y
++        BR2_XTENSA_CUSTOM=y
++        BR2_XTENSA_LITTLE_ENDIAN=y
+         BR2_TOOLCHAIN_EXTERNAL=y
+         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_XTENSA_LX60_UCLIBC_BLEEDING_EDGE=y
+@@ -2582,7 +2583,8 @@ class TestExternalToolchainBootlinXtensalx60UclibcBleedingEdge(TestExternalToolc
+ class TestExternalToolchainBootlinXtensalx60UclibcStable(TestExternalToolchain):
+     config = """
+         BR2_xtensa=y
+-        BR2_xtensa_fsf=y
++        BR2_XTENSA_CUSTOM=y
++        BR2_XTENSA_LITTLE_ENDIAN=y
+         BR2_TOOLCHAIN_EXTERNAL=y
+         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_XTENSA_LX60_UCLIBC_STABLE=y
+diff --git a/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options b/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options
+index d47360ad8d..61ead9b82e 100644
+--- a/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options
++++ b/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options
+@@ -40,7 +40,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARCH_SUPPORTS
+ 	default y if BR2_x86_64 && BR2_X86_CPU_HAS_MMX && BR2_X86_CPU_HAS_SSE && BR2_X86_CPU_HAS_SSE2 && BR2_X86_CPU_HAS_SSE3 && BR2_X86_CPU_HAS_SSSE3 && BR2_X86_CPU_HAS_SSE4 && BR2_X86_CPU_HAS_SSE42
+ 	default y if BR2_i386 && BR2_X86_CPU_HAS_MMX && BR2_X86_CPU_HAS_SSE && BR2_X86_CPU_HAS_SSE2 && BR2_X86_CPU_HAS_SSE3 && BR2_X86_CPU_HAS_SSSE3
+ 	default y if BR2_i386 && !BR2_x86_i486 && !BR2_x86_i586 && !BR2_x86_x1000
+-	default y if BR2_xtensa && BR2_xtensa_fsf
++	default y if BR2_xtensa && BR2_XTENSA_CUSTOM && BR2_XTENSA_LITTLE_ENDIAN
+ 
+ if BR2_TOOLCHAIN_EXTERNAL_BOOTLIN
+ 
+@@ -4252,7 +4252,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_I686_UCLIBC_STABLE
+ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_XTENSA_LX60_UCLIBC_BLEEDING_EDGE
+ 	bool "xtensa-lx60 uclibc bleeding-edge 2020.08-1"
+ 	depends on BR2_xtensa
+-	depends on BR2_xtensa_fsf
++	depends on BR2_XTENSA_CUSTOM
++	depends on BR2_XTENSA_LITTLE_ENDIAN
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_10
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
+ 	select BR2_USE_WCHAR
+@@ -4276,7 +4277,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_XTENSA_LX60_UCLIBC_BLEEDING_EDGE
+ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_XTENSA_LX60_UCLIBC_STABLE
+ 	bool "xtensa-lx60 uclibc stable 2020.08-1"
+ 	depends on BR2_xtensa
+-	depends on BR2_xtensa_fsf
++	depends on BR2_XTENSA_CUSTOM
++	depends on BR2_XTENSA_LITTLE_ENDIAN
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_9
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_9
+ 	select BR2_USE_WCHAR
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
