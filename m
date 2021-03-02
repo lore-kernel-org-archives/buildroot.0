@@ -1,67 +1,68 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue,  2 Mar 2021 08:07:25 +0100
-Subject: [Buildroot] [PATCH v2 30/54] package/kodi-pvr-vuplus: bump version
- to 7.4.0-Matrix
+Date: Tue,  2 Mar 2021 08:07:30 +0100
+Subject: [Buildroot] [PATCH v2 35/54] package/kodi-screensaver-biogenesis:
+ bump version to 2.5.0-Matrix
 In-Reply-To: <20210302070749.647742-1-bernd.kuhls@t-online.de>
 References: <20210302070749.647742-1-bernd.kuhls@t-online.de>
-Message-ID: <20210302070749.647742-31-bernd.kuhls@t-online.de>
+Message-ID: <20210302070749.647742-36-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Switch dependency to kodi after upstream removed the dependency to
-kodi-platform:
-https://github.com/kodi-pvr/pvr.vuplus/commit/122a9b281668d31f921e842e8700b2f048121c16
+Remove dependency to opengl, opengles support was fixed upstream:
+https://github.com/xbmc/screensaver.biogenesis/commit/2de1b7eb5897001f7bdf72ec4e390be749ccac13
 
 Switch license file to LICENSE.md.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-pvr-vuplus/Config.in            | 1 -
- package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash | 4 ++--
- package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk   | 6 +++---
- 3 files changed, 5 insertions(+), 6 deletions(-)
+ package/kodi-screensaver-biogenesis/Config.in                 | 4 ----
+ .../kodi-screensaver-biogenesis.hash                          | 4 ++--
+ .../kodi-screensaver-biogenesis.mk                            | 4 ++--
+ 3 files changed, 4 insertions(+), 8 deletions(-)
 
-diff --git a/package/kodi-pvr-vuplus/Config.in b/package/kodi-pvr-vuplus/Config.in
-index b6a03e843f..862f5f9267 100644
---- a/package/kodi-pvr-vuplus/Config.in
-+++ b/package/kodi-pvr-vuplus/Config.in
-@@ -2,7 +2,6 @@ config BR2_PACKAGE_KODI_PVR_VUPLUS
- 	bool "kodi-pvr-vuplus"
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # json-for-modern-cpp
- 	select BR2_PACKAGE_JSON_FOR_MODERN_CPP
--	select BR2_PACKAGE_KODI_PLATFORM
- 	select BR2_PACKAGE_TINYXML
+diff --git a/package/kodi-screensaver-biogenesis/Config.in b/package/kodi-screensaver-biogenesis/Config.in
+index 9703e9091b..26f134d0bb 100644
+--- a/package/kodi-screensaver-biogenesis/Config.in
++++ b/package/kodi-screensaver-biogenesis/Config.in
+@@ -1,10 +1,6 @@
+ config BR2_PACKAGE_KODI_SCREENSAVER_BIOGENESIS
+ 	bool "kodi-screensaver-biogenesis"
+-	depends on BR2_PACKAGE_HAS_LIBGL
  	help
- 	  VuPlus PVR client addon for Kodi
-diff --git a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
-index e80e51bc78..2b12649aea 100644
---- a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
-+++ b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
+ 	  BioGenesis screensaver for Kodi
+ 
+ 	  https://github.com/xbmc/screensaver.biogenesis
+-
+-comment "kodi-screensaver-biogenesis needs OpenGL"
+-	depends on !BR2_PACKAGE_HAS_LIBGL
+diff --git a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash
+index df07f9fbc5..1f2c5e6305 100644
+--- a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash
++++ b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  d7dd890e4491e211ff3781cdc043347ab7a4ef6e00619ac1b4641ed81b0c3626  kodi-pvr-vuplus-3.28.9-Leia.tar.gz
--sha256  e98518889de8d38eaa6ddcb086b6e3b86efed98b501a5c666b9cf48f79e6df5d  debian/copyright
-+sha256  2024ed208168089e51d9beade47fedec2e80e23044029f6919e27746f9634150  kodi-pvr-vuplus-7.4.0-Matrix.tar.gz
+-sha256  b0f721d112282f633a769e7b077c5dd52e5045a8f1ae32c4e602b0e2e937acb0  kodi-screensaver-biogenesis-2.2.3-Leia.tar.gz
+-sha256  d38b9e2768b49acdedcb21a202d12753c8f1d7e85e5ee24ff1e4aee3c7601a65  debian/copyright
++sha256  bf56384e6956674cd911c52b2807993d0a6e0ffa9623b5a1981a3153911e135a  kodi-screensaver-biogenesis-2.5.0-Matrix.tar.gz
 +sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
-index bf1de1178d..fee4e816ab 100644
---- a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
-+++ b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
+diff --git a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk
+index 562c279ec6..8b2d6b2ee5 100644
+--- a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk
++++ b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk
 @@ -4,10 +4,10 @@
  #
  ################################################################################
  
--KODI_PVR_VUPLUS_VERSION = 3.28.9-Leia
-+KODI_PVR_VUPLUS_VERSION = 7.4.0-Matrix
- KODI_PVR_VUPLUS_SITE = $(call github,kodi-pvr,pvr.vuplus,$(KODI_PVR_VUPLUS_VERSION))
- KODI_PVR_VUPLUS_LICENSE = GPL-2.0+
--KODI_PVR_VUPLUS_LICENSE_FILES = debian/copyright
--KODI_PVR_VUPLUS_DEPENDENCIES = json-for-modern-cpp kodi-platform tinyxml
-+KODI_PVR_VUPLUS_LICENSE_FILES = LICENSE.md
-+KODI_PVR_VUPLUS_DEPENDENCIES = json-for-modern-cpp kodi tinyxml
+-KODI_SCREENSAVER_BIOGENESIS_VERSION = 2.2.3-Leia
++KODI_SCREENSAVER_BIOGENESIS_VERSION = 2.5.0-Matrix
+ KODI_SCREENSAVER_BIOGENESIS_SITE = $(call github,xbmc,screensaver.biogenesis,$(KODI_SCREENSAVER_BIOGENESIS_VERSION))
+ KODI_SCREENSAVER_BIOGENESIS_LICENSE = GPL-2.0+
+-KODI_SCREENSAVER_BIOGENESIS_LICENSE_FILES = debian/copyright
++KODI_SCREENSAVER_BIOGENESIS_LICENSE_FILES = LICENSE.md
+ KODI_SCREENSAVER_BIOGENESIS_DEPENDENCIES = kodi
  
  $(eval $(cmake-package))
 -- 
