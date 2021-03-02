@@ -1,93 +1,72 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue,  2 Mar 2021 08:07:39 +0100
-Subject: [Buildroot] [PATCH v2 44/54] package/kodi-vfs-libarchive: new
- package
+Date: Tue,  2 Mar 2021 08:07:34 +0100
+Subject: [Buildroot] [PATCH v2 39/54] package/kodi-screensaver-pingpong:
+ bump version to 2.4.0-Matrix
 In-Reply-To: <20210302070749.647742-1-bernd.kuhls@t-online.de>
 References: <20210302070749.647742-1-bernd.kuhls@t-online.de>
-Message-ID: <20210302070749.647742-45-bernd.kuhls@t-online.de>
+Message-ID: <20210302070749.647742-40-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Remove dependency to opengl, add dependency to glm, opengles support
+was added upstream:
+https://github.com/xbmc/screensaver.pingpong/commit/39ccbf75e6a7a56781329aeb508ae4f2ce210e4f
+
+Switch license file to LICENSE.md.
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-vfs-libarchive/Config.in         | 13 ++++++++++++
- .../kodi-vfs-libarchive.hash                  |  3 +++
- .../kodi-vfs-libarchive.mk                    | 21 +++++++++++++++++++
- package/kodi/Config.in                        |  1 +
- 4 files changed, 38 insertions(+)
- create mode 100644 package/kodi-vfs-libarchive/Config.in
- create mode 100644 package/kodi-vfs-libarchive/kodi-vfs-libarchive.hash
- create mode 100644 package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk
+ package/kodi-screensaver-pingpong/Config.in                 | 5 +----
+ .../kodi-screensaver-pingpong.hash                          | 4 ++--
+ .../kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk  | 6 +++---
+ 3 files changed, 6 insertions(+), 9 deletions(-)
 
-diff --git a/package/kodi-vfs-libarchive/Config.in b/package/kodi-vfs-libarchive/Config.in
-new file mode 100644
-index 0000000000..6720e5206e
---- /dev/null
-+++ b/package/kodi-vfs-libarchive/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_KODI_VFS_LIBARCHIVE
-+	bool "kodi-vfs-libarchive"
-+	select BR2_PACKAGE_BZIP2
-+	select BR2_PACKAGE_LIBARCHIVE
-+	select BR2_PACKAGE_LZ4
-+	select BR2_PACKAGE_LZO
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_XZ
-+	select BR2_PACKAGE_ZLIB
-+	help
-+	  Libarchive VFS add-on for Kodi
-+
-+	  https://github.com/xbmc/vfs.libarchive
-diff --git a/package/kodi-vfs-libarchive/kodi-vfs-libarchive.hash b/package/kodi-vfs-libarchive/kodi-vfs-libarchive.hash
-new file mode 100644
-index 0000000000..59b3bc1078
---- /dev/null
-+++ b/package/kodi-vfs-libarchive/kodi-vfs-libarchive.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  6fd70f0e2775e9c4eef2e8b529396f1e739fe3e43e0d4202d7f08ab4a30fa760  kodi-vfs-libarchive-2.0.0-Matrix.tar.gz
-+sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk b/package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk
-new file mode 100644
-index 0000000000..5278f50136
---- /dev/null
-+++ b/package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk
-@@ -0,0 +1,21 @@
-+################################################################################
-+#
-+# kodi-vfs-libarchive
-+#
-+################################################################################
-+
-+KODI_VFS_LIBARCHIVE_VERSION = 2.0.0-Matrix
-+KODI_VFS_LIBARCHIVE_SITE = $(call github,xbmc,vfs.libarchive,$(KODI_VFS_LIBARCHIVE_VERSION))
-+KODI_VFS_LIBARCHIVE_LICENSE = GPL-2.0+
-+KODI_VFS_LIBARCHIVE_LICENSE_FILES = LICENSE.md
-+KODI_VFS_LIBARCHIVE_DEPENDENCIES = \
-+	bzip2 \
-+	kodi \
-+	libarchive \
-+	lz4 \
-+	lzo \
-+	openssl \
-+	xz \
-+	zlib
-+
-+$(eval $(cmake-package))
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index eefdd54990..a104ba53c3 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -347,6 +347,7 @@ menu "Skins"
- endmenu
+diff --git a/package/kodi-screensaver-pingpong/Config.in b/package/kodi-screensaver-pingpong/Config.in
+index bc76fffd6e..2983f7c2ea 100644
+--- a/package/kodi-screensaver-pingpong/Config.in
++++ b/package/kodi-screensaver-pingpong/Config.in
+@@ -1,10 +1,7 @@
+ config BR2_PACKAGE_KODI_SCREENSAVER_PINGPONG
+ 	bool "kodi-screensaver-pingpong"
+-	depends on BR2_PACKAGE_HAS_LIBGL
++	select BR2_PACKAGE_GLM
+ 	help
+ 	  Ping-pong screensaver for Kodi
  
- menu "Virtual file systems"
-+	source "package/kodi-vfs-libarchive/Config.in"
- 	source "package/kodi-vfs-rar/Config.in"
- 	source "package/kodi-vfs-sftp/Config.in"
- endmenu
+ 	  https://github.com/xbmc/screensaver.pingpong
+-
+-comment "kodi-screensaver-pingpong needs OpenGL"
+-	depends on !BR2_PACKAGE_HAS_LIBGL
+diff --git a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash
+index 4b6114fd16..245fdfdbe9 100644
+--- a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash
++++ b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  b87e65d2e3c290de7167e1098899d5816103958a99769d84e930ffd2cbfa7d00  kodi-screensaver-pingpong-2.1.3-Leia.tar.gz
+-sha256  96e9b817ea6384e3d2c5241c8a0504df11d6f8bd0a2f58f25df7152da64f263c  debian/copyright
++sha256  c38cda571b345d61882b43cea839536fa6fbfbb08e07231e8d8bc8adb8d28c08  kodi-screensaver-pingpong-2.4.0-Matrix.tar.gz
++sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk
+index 929539f044..cd794128f3 100644
+--- a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk
++++ b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-KODI_SCREENSAVER_PINGPONG_VERSION = 2.1.3-Leia
++KODI_SCREENSAVER_PINGPONG_VERSION = 2.4.0-Matrix
+ KODI_SCREENSAVER_PINGPONG_SITE = $(call github,xbmc,screensaver.pingpong,$(KODI_SCREENSAVER_PINGPONG_VERSION))
+ KODI_SCREENSAVER_PINGPONG_LICENSE = GPL-2.0+
+-KODI_SCREENSAVER_PINGPONG_LICENSE_FILES = debian/copyright
+-KODI_SCREENSAVER_PINGPONG_DEPENDENCIES = kodi
++KODI_SCREENSAVER_PINGPONG_LICENSE_FILES = LICENSE.md
++KODI_SCREENSAVER_PINGPONG_DEPENDENCIES = glm kodi
+ 
+ $(eval $(cmake-package))
 -- 
 2.29.2
