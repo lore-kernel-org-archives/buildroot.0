@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue,  2 Mar 2021 08:07:03 +0100
-Subject: [Buildroot] [PATCH v2 08/54] package/kodi-audioencoder-*: mass
+Date: Tue,  2 Mar 2021 08:07:02 +0100
+Subject: [Buildroot] [PATCH v2 07/54] package/kodi-audiodecoder-*: mass
  version bump
 In-Reply-To: <20210302070749.647742-1-bernd.kuhls@t-online.de>
 References: <20210302070749.647742-1-bernd.kuhls@t-online.de>
-Message-ID: <20210302070749.647742-9-bernd.kuhls@t-online.de>
+Message-ID: <20210302070749.647742-8-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,122 +15,204 @@ Switch license file to LICENSE.md.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-audioencoder-flac/kodi-audioencoder-flac.hash    | 4 ++--
- package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk      | 4 ++--
- package/kodi-audioencoder-lame/kodi-audioencoder-lame.hash    | 4 ++--
- package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk      | 4 ++--
- .../kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.hash    | 4 ++--
- package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk  | 4 ++--
- package/kodi-audioencoder-wav/kodi-audioencoder-wav.hash      | 4 ++--
- package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk        | 4 ++--
- 8 files changed, 16 insertions(+), 16 deletions(-)
+ .../kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.hash  | 4 ++--
+ .../kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk    | 4 ++--
+ .../kodi-audiodecoder-nosefart.hash                           | 4 ++--
+ .../kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk  | 4 ++--
+ .../kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.hash  | 4 ++--
+ .../kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk    | 4 ++--
+ .../kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.hash  | 4 ++--
+ .../kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk    | 4 ++--
+ .../kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.hash  | 4 ++--
+ .../kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk    | 4 ++--
+ .../kodi-audiodecoder-timidity.hash                           | 2 +-
+ .../kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk  | 2 +-
+ .../kodi-audiodecoder-vgmstream.hash                          | 4 ++--
+ .../kodi-audiodecoder-vgmstream.mk                            | 4 ++--
+ 14 files changed, 26 insertions(+), 26 deletions(-)
 
-diff --git a/package/kodi-audioencoder-flac/kodi-audioencoder-flac.hash b/package/kodi-audioencoder-flac/kodi-audioencoder-flac.hash
-index 9f33d6c63a..162d21e39c 100644
---- a/package/kodi-audioencoder-flac/kodi-audioencoder-flac.hash
-+++ b/package/kodi-audioencoder-flac/kodi-audioencoder-flac.hash
+diff --git a/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.hash b/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.hash
+index ecc6f2b778..fcb5884807 100644
+--- a/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.hash
++++ b/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  42e18fc2477ce5abc3efd89851a4bacc6b9436889a607a15f8232ef68b297f93  kodi-audioencoder-flac-2.0.6-Leia.tar.gz
--sha256  21dc3eb9c75f1ed6367a4cf3f3999b299bc6c172da3730184edd2a5dd4d090aa  debian/copyright
-+sha256  e9001f1789970178b551f01d9242a897523af4f2d34f70bfd7bbbe598bce2e6c  kodi-audioencoder-flac-3.0.0-Matrix.tar.gz
+-sha256  6827f1ebefa5f281ace52bdf83b5ab95789c77b88a344524ead1b346668d57e7  kodi-audiodecoder-modplug-2.0.3-Leia.tar.gz
+-sha256  317f732723eb58745a9b22c234861dbd2d98972039543f6b549c7cb26eb2cb08  debian/copyright
++sha256  629a9f83a2663ab8f2ea1ae747782d1ce6df870f42d6d9b84c858bc9b607ae9c  kodi-audiodecoder-modplug-3.0.0-Matrix.tar.gz
 +sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk b/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk
-index 53c1f3debc..3987fa107d 100644
---- a/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk
-+++ b/package/kodi-audioencoder-flac/kodi-audioencoder-flac.mk
+diff --git a/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk b/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk
+index 8e1031053e..e4bee48f98 100644
+--- a/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk
++++ b/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk
 @@ -4,10 +4,10 @@
  #
  ################################################################################
  
--KODI_AUDIOENCODER_FLAC_VERSION = 2.0.6-Leia
-+KODI_AUDIOENCODER_FLAC_VERSION = 3.0.0-Matrix
- KODI_AUDIOENCODER_FLAC_SITE = $(call github,xbmc,audioencoder.flac,$(KODI_AUDIOENCODER_FLAC_VERSION))
- KODI_AUDIOENCODER_FLAC_LICENSE = GPL-2.0+
--KODI_AUDIOENCODER_FLAC_LICENSE_FILES = debian/copyright
-+KODI_AUDIOENCODER_FLAC_LICENSE_FILES = LICENSE.md
- KODI_AUDIOENCODER_FLAC_DEPENDENCIES = flac kodi libogg host-pkgconf
+-KODI_AUDIODECODER_MODPLUG_VERSION = 2.0.3-Leia
++KODI_AUDIODECODER_MODPLUG_VERSION = 3.0.0-Matrix
+ KODI_AUDIODECODER_MODPLUG_SITE = $(call github,xbmc,audiodecoder.modplug,$(KODI_AUDIODECODER_MODPLUG_VERSION))
+ KODI_AUDIODECODER_MODPLUG_LICENSE = GPL-2.0+
+-KODI_AUDIODECODER_MODPLUG_LICENSE_FILES = debian/copyright
++KODI_AUDIODECODER_MODPLUG_LICENSE_FILES = LICENSE.md
+ KODI_AUDIODECODER_MODPLUG_DEPENDENCIES = kodi libmodplug
  
  $(eval $(cmake-package))
-diff --git a/package/kodi-audioencoder-lame/kodi-audioencoder-lame.hash b/package/kodi-audioencoder-lame/kodi-audioencoder-lame.hash
-index cd3351e2b7..9c12a58e55 100644
---- a/package/kodi-audioencoder-lame/kodi-audioencoder-lame.hash
-+++ b/package/kodi-audioencoder-lame/kodi-audioencoder-lame.hash
+diff --git a/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.hash b/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.hash
+index 8f04dc5302..9f929d9f82 100644
+--- a/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.hash
++++ b/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  9df54cf5c5ae3882a2d89d745c1d1f8b749e71a7f9305a1b059ecfd356995a36  kodi-audioencoder-lame-2.0.4-Leia.tar.gz
--sha256  68a06632cc80eea941b07e27777788dcd4f7c5ba9c006e24f467a9d4bf4d3582  debian/copyright
-+sha256  ad47d8c4dffe6690bd1ff32bb5fd44f11b691706ff9a1e5b6152efee92976a75  kodi-audioencoder-lame-3.0.2-Matrix.tar.gz
+-sha256  66305c9d654aed0b9efcf44b90acac0ab8db321dff57523d13faf67606cd78ce  kodi-audiodecoder-nosefart-2.0.2-Leia.tar.gz
+-sha256  01a3f135925df23a5d8679ff633fe3d5021125224c9349acd2c35dd0cf3ea762  debian/copyright
++sha256  a4be5f6efc46841c9b1689c91b06f69cd695220b583e62ed2948768fa93d09a2  kodi-audiodecoder-nosefart-3.0.0-Matrix.tar.gz
 +sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk b/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk
-index 5d93e83ed6..2316473829 100644
---- a/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk
-+++ b/package/kodi-audioencoder-lame/kodi-audioencoder-lame.mk
+diff --git a/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk b/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk
+index 8f437a7378..377f6b7ef1 100644
+--- a/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk
++++ b/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk
 @@ -4,10 +4,10 @@
  #
  ################################################################################
  
--KODI_AUDIOENCODER_LAME_VERSION = 2.0.4-Leia
-+KODI_AUDIOENCODER_LAME_VERSION = 3.0.2-Matrix
- KODI_AUDIOENCODER_LAME_SITE = $(call github,xbmc,audioencoder.lame,$(KODI_AUDIOENCODER_LAME_VERSION))
- KODI_AUDIOENCODER_LAME_LICENSE = GPL-2.0+
--KODI_AUDIOENCODER_LAME_LICENSE_FILES = debian/copyright
-+KODI_AUDIOENCODER_LAME_LICENSE_FILES = LICENSE.md
- KODI_AUDIOENCODER_LAME_DEPENDENCIES = kodi lame
- KODI_AUDIOENCODER_LAME_CONF_OPTS += \
- 	-DLAME_INCLUDE_DIRS=$(STAGING_DIR)/usr/include
-diff --git a/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.hash b/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.hash
-index 0b9463feb8..f415624db0 100644
---- a/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.hash
-+++ b/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  b4b2b1b7ae8bda35514f20ad0275b434f2b60fc93b1e17ca6e654ae145852b1f  kodi-audioencoder-vorbis-2.0.4-Leia.tar.gz
--sha256  706e890fc5c0496b72d3c36284abcc85f9c83b3f2b21db53a68439c538122a59  debian/copyright
-+sha256  ba4e6bf402e31096c1fd791db8db26d0eea575998ae414a74c797e868fd08000  kodi-audioencoder-vorbis-3.0.1-Matrix.tar.gz
-+sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk b/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
-index b789d239bd..e79dd433db 100644
---- a/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
-+++ b/package/kodi-audioencoder-vorbis/kodi-audioencoder-vorbis.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--KODI_AUDIOENCODER_VORBIS_VERSION = 2.0.4-Leia
-+KODI_AUDIOENCODER_VORBIS_VERSION = 3.0.1-Matrix
- KODI_AUDIOENCODER_VORBIS_SITE = $(call github,xbmc,audioencoder.vorbis,$(KODI_AUDIOENCODER_VORBIS_VERSION))
- KODI_AUDIOENCODER_VORBIS_LICENSE = GPL-2.0+
--KODI_AUDIOENCODER_VORBIS_LICENSE_FILES = debian/copyright
-+KODI_AUDIOENCODER_VORBIS_LICENSE_FILES = LICENSE.md
- KODI_AUDIOENCODER_VORBIS_DEPENDENCIES = kodi libogg libvorbis host-pkgconf
+-KODI_AUDIODECODER_NOSEFART_VERSION = 2.0.2-Leia
++KODI_AUDIODECODER_NOSEFART_VERSION = 3.0.0-Matrix
+ KODI_AUDIODECODER_NOSEFART_SITE = $(call github,xbmc,audiodecoder.nosefart,$(KODI_AUDIODECODER_NOSEFART_VERSION))
+ KODI_AUDIODECODER_NOSEFART_LICENSE = GPL-2.0+
+-KODI_AUDIODECODER_NOSEFART_LICENSE_FILES = debian/copyright
++KODI_AUDIODECODER_NOSEFART_LICENSE_FILES = LICENSE.md
+ KODI_AUDIODECODER_NOSEFART_DEPENDENCIES = kodi
  
  $(eval $(cmake-package))
-diff --git a/package/kodi-audioencoder-wav/kodi-audioencoder-wav.hash b/package/kodi-audioencoder-wav/kodi-audioencoder-wav.hash
-index 9b9add2161..345fd1aa03 100644
---- a/package/kodi-audioencoder-wav/kodi-audioencoder-wav.hash
-+++ b/package/kodi-audioencoder-wav/kodi-audioencoder-wav.hash
+diff --git a/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.hash b/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.hash
+index 308f2b6fe1..cb66e0a00e 100644
+--- a/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.hash
++++ b/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  03cb2810b2aa335fd308a5e2b6580d21ac840334c55fc891acc310633c3c49b4  kodi-audioencoder-wav-2.0.3-Leia.tar.gz
--sha256  341a6317428fbc7c9d5b971d1c6162ea34be64649caa650ee0a05c06ae53a872  debian/copyright
-+sha256  9c4c834717060c5ca643a8f9758c8d784b00382ee6ce20e55ab8f2fe0b5f44dd  kodi-audioencoder-wav-3.0.0-Matrix.tar.gz
+-sha256  271e513a3094b163f986eb5bb5cbc70c7a602f5764cef255cc161cc5094e5648  kodi-audiodecoder-sidplay-1.2.2-Leia.tar.gz
+-sha256  dc915100daec3589f59b47f3438e8ec5ccc11ec25ccb3d0e7e66639764f31584  debian/copyright
++sha256  4919d71e76889df1c1e3c5abe60641cc266afdbbcf3976a5509ae3fda142d2c4  kodi-audiodecoder-sidplay-3.0.0-Matrix.tar.gz
 +sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk b/package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk
-index b597b1b13d..b47c2bce84 100644
---- a/package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk
-+++ b/package/kodi-audioencoder-wav/kodi-audioencoder-wav.mk
+diff --git a/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk b/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk
+index 079ae0b202..d0ab98418f 100644
+--- a/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk
++++ b/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk
 @@ -4,10 +4,10 @@
  #
  ################################################################################
  
--KODI_AUDIOENCODER_WAV_VERSION = 2.0.3-Leia
-+KODI_AUDIOENCODER_WAV_VERSION = 3.0.0-Matrix
- KODI_AUDIOENCODER_WAV_SITE = $(call github,xbmc,audioencoder.wav,$(KODI_AUDIOENCODER_WAV_VERSION))
- KODI_AUDIOENCODER_WAV_LICENSE = GPL-2.0+
--KODI_AUDIOENCODER_WAV_LICENSE_FILES = debian/copyright
-+KODI_AUDIOENCODER_WAV_LICENSE_FILES = LICENSE.md
- KODI_AUDIOENCODER_WAV_DEPENDENCIES = kodi
+-KODI_AUDIODECODER_SIDPLAY_VERSION = 1.2.2-Leia
++KODI_AUDIODECODER_SIDPLAY_VERSION = 3.0.0-Matrix
+ KODI_AUDIODECODER_SIDPLAY_SITE = $(call github,xbmc,audiodecoder.sidplay,$(KODI_AUDIODECODER_SIDPLAY_VERSION))
+ KODI_AUDIODECODER_SIDPLAY_LICENSE = GPL-2.0+
+-KODI_AUDIODECODER_SIDPLAY_LICENSE_FILES = debian/copyright
++KODI_AUDIODECODER_SIDPLAY_LICENSE_FILES = LICENSE.md
+ KODI_AUDIODECODER_SIDPLAY_DEPENDENCIES = host-pkgconf kodi libsidplay2
+ 
+ $(eval $(cmake-package))
+diff --git a/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.hash b/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.hash
+index c1c2eee2bc..b82c5b36a1 100644
+--- a/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.hash
++++ b/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  e059f84b04b8e92e5ecc2989303f6a736f37d6e3bda939ac765499e616c91580  kodi-audiodecoder-snesapu-2.0.2-Leia.tar.gz
+-sha256  b7e8b234fc40687d647d929fc554b91cdaa4011e5e656e68c5c6ee8c4cdf81d2  debian/copyright
++sha256  3537b735acfbbacaada2aa1d2035acbc698f37cc7626375f408e967ca612b2d0  kodi-audiodecoder-snesapu-3.0.0-Matrix.tar.gz
++sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk b/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk
+index 57504a17bb..7cd2fe588c 100644
+--- a/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk
++++ b/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-KODI_AUDIODECODER_SNESAPU_VERSION = 2.0.2-Leia
++KODI_AUDIODECODER_SNESAPU_VERSION = 3.0.0-Matrix
+ KODI_AUDIODECODER_SNESAPU_SITE = $(call github,xbmc,audiodecoder.snesapu,$(KODI_AUDIODECODER_SNESAPU_VERSION))
+ KODI_AUDIODECODER_SNESAPU_LICENSE = GPL-2.0+
+-KODI_AUDIODECODER_SNESAPU_LICENSE_FILES = debian/copyright
++KODI_AUDIODECODER_SNESAPU_LICENSE_FILES = LICENSE.md
+ KODI_AUDIODECODER_SNESAPU_DEPENDENCIES = kodi
+ 
+ $(eval $(cmake-package))
+diff --git a/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.hash b/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.hash
+index 24b764061b..ae6a5aa528 100644
+--- a/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.hash
++++ b/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  3e14a7da3822002a90bf7d31a9f98541ae9ec2137c764dc94ca5b4de4ac8de82  kodi-audiodecoder-stsound-2.0.2-Leia.tar.gz
+-sha256  417ded3464139990f7898ac17c9eacde85dc0fafd3b3ca0c497d945b1bd93af5  debian/copyright
++sha256  65b452cd3bdf8b21929084ca0dc238147784defdfb25351c857fa459230e2f3f  kodi-audiodecoder-stsound-3.0.0-Matrix.tar.gz
++sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk b/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk
+index 679be5a7ff..6a5bb721bc 100644
+--- a/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk
++++ b/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-KODI_AUDIODECODER_STSOUND_VERSION = 2.0.2-Leia
++KODI_AUDIODECODER_STSOUND_VERSION = 3.0.0-Matrix
+ KODI_AUDIODECODER_STSOUND_SITE = $(call github,xbmc,audiodecoder.stsound,$(KODI_AUDIODECODER_STSOUND_VERSION))
+ KODI_AUDIODECODER_STSOUND_LICENSE = GPL-2.0+
+-KODI_AUDIODECODER_STSOUND_LICENSE_FILES = debian/copyright
++KODI_AUDIODECODER_STSOUND_LICENSE_FILES = LICENSE.md
+ KODI_AUDIODECODER_STSOUND_DEPENDENCIES = kodi
+ 
+ $(eval $(cmake-package))
+diff --git a/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash
+index ea56c38f6c..dcb835664d 100644
+--- a/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash
++++ b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  b20a3a23056aaf76c216c755f36dff03e943d7c086d3e3fca4c920b93113e073  kodi-audiodecoder-timidity-2.0.5-Leia.tar.gz
++sha256  0e049f25a12d8cfc9965d189de573d87aa3e7e6549e99a7ddcaf9d8cddc111db  kodi-audiodecoder-timidity-3.0.0-Matrix.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk
+index a4f0126c43..a79622cfd9 100644
+--- a/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk
++++ b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_AUDIODECODER_TIMIDITY_VERSION = 2.0.5-Leia
++KODI_AUDIODECODER_TIMIDITY_VERSION = 3.0.0-Matrix
+ KODI_AUDIODECODER_TIMIDITY_SITE = $(call github,xbmc,audiodecoder.timidity,$(KODI_AUDIODECODER_TIMIDITY_VERSION))
+ KODI_AUDIODECODER_TIMIDITY_LICENSE = GPL-2.0+
+ KODI_AUDIODECODER_TIMIDITY_LICENSE_FILES = LICENSE.md
+diff --git a/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.hash b/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.hash
+index 3ee9ebbfcb..02df50cc7b 100644
+--- a/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.hash
++++ b/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  28876be1e1317b3ec5c3a4fe415f20d92a4c5868912656c5e8ab9cdd7e3f32d8  kodi-audiodecoder-vgmstream-1.1.5-Leia.tar.gz
+-sha256  fc7c7ab8774d94fb2eccdf47e3b8052a3906e4b5ec8554191da321020c965d8e  debian/copyright
++sha256  81f4577c2ec53bfa7ab04d3da374b1cc639ef5f5fe9c2837f9e85916b50d9d5d  kodi-audiodecoder-vgmstream-3.0.0-Matrix.tar.gz
++sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk b/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk
+index 4e3cdab584..1c3e96bb1d 100644
+--- a/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk
++++ b/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-KODI_AUDIODECODER_VGMSTREAM_VERSION = 1.1.5-Leia
++KODI_AUDIODECODER_VGMSTREAM_VERSION = 3.0.0-Matrix
+ KODI_AUDIODECODER_VGMSTREAM_SITE = $(call github,xbmc,audiodecoder.vgmstream,$(KODI_AUDIODECODER_VGMSTREAM_VERSION))
+ KODI_AUDIODECODER_VGMSTREAM_LICENSE = GPL-2.0+
+-KODI_AUDIODECODER_VGMSTREAM_LICENSE_FILES = debian/copyright
++KODI_AUDIODECODER_VGMSTREAM_LICENSE_FILES = LICENSE.md
+ KODI_AUDIODECODER_VGMSTREAM_DEPENDENCIES = kodi
  
  $(eval $(cmake-package))
 -- 
