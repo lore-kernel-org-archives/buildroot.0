@@ -1,43 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Mar 2021 23:56:06 +0100
-Subject: [Buildroot] [git commit branch/next] package/librelp: bump to
- version 1.10.0
-Message-ID: <20210301223350.C44418682B@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue,  2 Mar 2021 08:06:59 +0100
+Subject: [Buildroot] [PATCH v2 04/54] package/libcec: bump version to 6.0.2
+In-Reply-To: <20210302070749.647742-1-bernd.kuhls@t-online.de>
+References: <20210302070749.647742-1-bernd.kuhls@t-online.de>
+Message-ID: <20210302070749.647742-5-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1e07dc4ed2ccd791c607fa2fae3547b45227cc54
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-Signed-off-by: David GOUARIN <david.gouarin@thalesgroup.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/librelp/librelp.hash | 2 +-
- package/librelp/librelp.mk   | 2 +-
+ package/libcec/libcec.hash | 2 +-
+ package/libcec/libcec.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/librelp/librelp.hash b/package/librelp/librelp.hash
-index 88665bcf2a..23ce8c15f8 100644
---- a/package/librelp/librelp.hash
-+++ b/package/librelp/librelp.hash
+diff --git a/package/libcec/libcec.hash b/package/libcec/libcec.hash
+index 36b6bad861..3e5a443057 100644
+--- a/package/libcec/libcec.hash
++++ b/package/libcec/libcec.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  24ee9e843960d1400a44ffaedb0b1ec91463df8f8acca869cc027ed25ee6bf33  librelp-1.9.0.tar.gz
-+sha256  148db4e4d1a23e8136e9ec08810929a55faf5d45e24c2e3186d5ab34355dab31  librelp-1.10.0.tar.gz
- sha256  1ed76f935566e93e3c3c0d9f8fad22eb6d8bbe406e2eb8470a4a2764d9fd9685  COPYING
-diff --git a/package/librelp/librelp.mk b/package/librelp/librelp.mk
-index 2b8a53e833..0b2f5a20c9 100644
---- a/package/librelp/librelp.mk
-+++ b/package/librelp/librelp.mk
+ # Locally computed
+-sha256  bcd92c376993a5721d346edcc09eb17289451f9156b1d1d113c9663c2046315a  libcec-4.0.7.tar.gz
++sha256  090696d7a4fb772d7acebbb06f91ab92e025531c7c91824046b9e4e71ecb3377  libcec-6.0.2.tar.gz
+ sha256  0137261d24ce001fc5237aacddd267533e0f150ac23cf21acffea599f7358f7a  COPYING
+diff --git a/package/libcec/libcec.mk b/package/libcec/libcec.mk
+index 7c37d05c7f..6591bc009a 100644
+--- a/package/libcec/libcec.mk
++++ b/package/libcec/libcec.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBRELP_VERSION = 1.9.0
-+LIBRELP_VERSION = 1.10.0
- LIBRELP_SITE = http://download.rsyslog.com/librelp
- LIBRELP_LICENSE = GPL-3.0+
- LIBRELP_LICENSE_FILES = COPYING
+-LIBCEC_VERSION = 4.0.7
++LIBCEC_VERSION = 6.0.2
+ LIBCEC_SITE = $(call github,Pulse-Eight,libcec,libcec-$(LIBCEC_VERSION))
+ LIBCEC_LICENSE = GPL-2.0+
+ LIBCEC_LICENSE_FILES = COPYING
+-- 
+2.29.2
