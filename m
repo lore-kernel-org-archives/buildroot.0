@@ -1,67 +1,68 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue,  2 Mar 2021 08:07:23 +0100
-Subject: [Buildroot] [PATCH v2 28/54] package/kodi-pvr-vbox: bump version to
- 8.1.0-Matrix
+Date: Tue,  2 Mar 2021 08:07:41 +0100
+Subject: [Buildroot] [PATCH v2 46/54] package/kodi-vfs-sftp: bump version to
+ 2.0.0-Matrix
 In-Reply-To: <20210302070749.647742-1-bernd.kuhls@t-online.de>
 References: <20210302070749.647742-1-bernd.kuhls@t-online.de>
-Message-ID: <20210302070749.647742-29-bernd.kuhls@t-online.de>
+Message-ID: <20210302070749.647742-47-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Switch dependency to kodi after upstream removed the dependency to
-kodi-platform:
-https://github.com/kodi-pvr/pvr.vbox/commit/29bd329feb6a0b007299636d61f66b9efb526e5f
-https://github.com/kodi-pvr/pvr.vbox/commit/b007646f4389ce81f30ca60bdd7b7323e552ee22
+Upstream removed usage of libplatform
+https://github.com/xbmc/vfs.sftp/commit/a4fb0019a6b20c2e9b44ff80dd084002df6052a9
 
-Switch license file to LICENSE.md.
+Added remaining dependencies and removed unused kodi-platform:
+https://github.com/xbmc/vfs.sftp/blob/Matrix/CMakeLists.txt#L6
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-pvr-vbox/Config.in          | 1 -
- package/kodi-pvr-vbox/kodi-pvr-vbox.hash | 4 ++--
- package/kodi-pvr-vbox/kodi-pvr-vbox.mk   | 6 +++---
- 3 files changed, 5 insertions(+), 6 deletions(-)
+ package/kodi-vfs-sftp/Config.in          | 4 ++--
+ package/kodi-vfs-sftp/kodi-vfs-sftp.hash | 2 +-
+ package/kodi-vfs-sftp/kodi-vfs-sftp.mk   | 4 ++--
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/kodi-pvr-vbox/Config.in b/package/kodi-pvr-vbox/Config.in
-index c1c22c10d1..202e3c66e8 100644
---- a/package/kodi-pvr-vbox/Config.in
-+++ b/package/kodi-pvr-vbox/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_KODI_PVR_VBOX
- 	bool "kodi-pvr-vbox"
+diff --git a/package/kodi-vfs-sftp/Config.in b/package/kodi-vfs-sftp/Config.in
+index a939bd927d..b742777ff0 100644
+--- a/package/kodi-vfs-sftp/Config.in
++++ b/package/kodi-vfs-sftp/Config.in
+@@ -1,8 +1,8 @@
+ config BR2_PACKAGE_KODI_VFS_SFTP
+ 	bool "kodi-vfs-sftp"
 -	select BR2_PACKAGE_KODI_PLATFORM
+-	select BR2_PACKAGE_LIBPLATFORM
+ 	select BR2_PACKAGE_LIBSSH
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_ZLIB
  	help
- 	  Kodi PVR addon for interfacing with VBox Communications XTi TV
- 	  Gateway
-diff --git a/package/kodi-pvr-vbox/kodi-pvr-vbox.hash b/package/kodi-pvr-vbox/kodi-pvr-vbox.hash
-index b753b994a1..dc186f63f1 100644
---- a/package/kodi-pvr-vbox/kodi-pvr-vbox.hash
-+++ b/package/kodi-pvr-vbox/kodi-pvr-vbox.hash
+ 	  SFTP VFS addon for Kodi
+ 
+diff --git a/package/kodi-vfs-sftp/kodi-vfs-sftp.hash b/package/kodi-vfs-sftp/kodi-vfs-sftp.hash
+index a17c2d32c6..d12a85437b 100644
+--- a/package/kodi-vfs-sftp/kodi-vfs-sftp.hash
++++ b/package/kodi-vfs-sftp/kodi-vfs-sftp.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  98aadcf3d0109a7dc5f85b4e5473d595039b59c46b0686a2fbda88ff7631ee0c  kodi-pvr-vbox-4.7.0-Leia.tar.gz
--sha256  f535b79e33bdf4d270f8aed3fdcb92f807981f808d7f5e3c053c088e5ccf553b  debian/copyright
-+sha256  b30548dfbf892f7bedbf191b5a9d93fa978fb794f897268876a1e607518e15af  kodi-pvr-vbox-8.1.0-Matrix.tar.gz
-+sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-vbox/kodi-pvr-vbox.mk b/package/kodi-pvr-vbox/kodi-pvr-vbox.mk
-index b10bfc5b85..9ce667d496 100644
---- a/package/kodi-pvr-vbox/kodi-pvr-vbox.mk
-+++ b/package/kodi-pvr-vbox/kodi-pvr-vbox.mk
+-sha256  dc3db18b6cef90cd518b741e5c9bc7b3f4412774ee60bf70b451a8d2fc88a091  kodi-vfs-sftp-1.0.6-Leia.tar.gz
++sha256  b15c5dde7b3aadb3e82e61cb9b0440812b6c2f65b38c6c25aef726f97e746f68  kodi-vfs-sftp-2.0.0-Matrix.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-vfs-sftp/kodi-vfs-sftp.mk b/package/kodi-vfs-sftp/kodi-vfs-sftp.mk
+index 3870ff9b5b..b1b0bef36d 100644
+--- a/package/kodi-vfs-sftp/kodi-vfs-sftp.mk
++++ b/package/kodi-vfs-sftp/kodi-vfs-sftp.mk
 @@ -4,10 +4,10 @@
  #
  ################################################################################
  
--KODI_PVR_VBOX_VERSION = 4.7.0-Leia
-+KODI_PVR_VBOX_VERSION = 8.1.0-Matrix
- KODI_PVR_VBOX_SITE = $(call github,kodi-pvr,pvr.vbox,$(KODI_PVR_VBOX_VERSION))
- KODI_PVR_VBOX_LICENSE = GPL-2.0+
--KODI_PVR_VBOX_LICENSE_FILES = debian/copyright
--KODI_PVR_VBOX_DEPENDENCIES = kodi-platform
-+KODI_PVR_VBOX_LICENSE_FILES = LICENSE.md
-+KODI_PVR_VBOX_DEPENDENCIES = kodi
+-KODI_VFS_SFTP_VERSION = 1.0.6-Leia
++KODI_VFS_SFTP_VERSION = 2.0.0-Matrix
+ KODI_VFS_SFTP_SITE = $(call github,xbmc,vfs.sftp,$(KODI_VFS_SFTP_VERSION))
+ KODI_VFS_SFTP_LICENSE = GPL-2.0+
+ KODI_VFS_SFTP_LICENSE_FILES = LICENSE.md
+-KODI_VFS_SFTP_DEPENDENCIES = kodi-platform libplatform libssh
++KODI_VFS_SFTP_DEPENDENCIES = kodi libssh openssl zlib
  
  $(eval $(cmake-package))
 -- 
