@@ -1,37 +1,36 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 2 Mar 2021 21:37:40 +0100
-Subject: [Buildroot] [git commit] package/rabbitmq-c: set
- RABBITMQ_C_CPE_ID_VALID
-Message-ID: <20210302201929.B0424819E6@busybox.osuosl.org>
+Date: Tue, 2 Mar 2021 21:37:44 +0100
+Subject: [Buildroot] [git commit] package/libfribidi: add CPE variables
+Message-ID: <20210302201929.DD07681E4F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d94ac06d0d3ecdb773a7872e8108d1820c10dd33
+commit: https://git.buildroot.net/buildroot/commit/?id=77047841dc764235c6a2cd49669b8266f8c601fd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:rabbitmq-c_project:rabbitmq-c is a valid CPE identifier for
-this package:
+cpe:2.3:a:gnu:fribidi is a valid CPE identifier for this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Arabbitmq-c_project%3Arabbitmq-c
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Agnu%3Afribidi
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/rabbitmq-c/rabbitmq-c.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/libfribidi/libfribidi.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/rabbitmq-c/rabbitmq-c.mk b/package/rabbitmq-c/rabbitmq-c.mk
-index d25673b59b..2c7d15c0ad 100644
---- a/package/rabbitmq-c/rabbitmq-c.mk
-+++ b/package/rabbitmq-c/rabbitmq-c.mk
-@@ -8,6 +8,7 @@ RABBITMQ_C_VERSION = 0.10.0
- RABBITMQ_C_SITE = $(call github,alanxz,rabbitmq-c,v$(RABBITMQ_C_VERSION))
- RABBITMQ_C_LICENSE = MIT
- RABBITMQ_C_LICENSE_FILES = LICENSE-MIT
-+RABBITMQ_C_CPE_ID_VALID = YES
- RABBITMQ_C_INSTALL_STAGING = YES
- RABBITMQ_C_CONF_OPTS = \
- 	-DBUILD_API_DOCS=OFF \
+diff --git a/package/libfribidi/libfribidi.mk b/package/libfribidi/libfribidi.mk
+index 055620ae0d..97e875b4a2 100644
+--- a/package/libfribidi/libfribidi.mk
++++ b/package/libfribidi/libfribidi.mk
+@@ -9,6 +9,8 @@ LIBFRIBIDI_SOURCE = fribidi-$(LIBFRIBIDI_VERSION).tar.xz
+ LIBFRIBIDI_SITE = https://github.com/fribidi/fribidi/releases/download/v$(LIBFRIBIDI_VERSION)
+ LIBFRIBIDI_LICENSE = LGPL-2.1+
+ LIBFRIBIDI_LICENSE_FILES = COPYING
++LIBFRIBIDI_CPE_ID_VENDOR = gnu
++LIBFRIBIDI_CPE_ID_PRODUCT = fribidi
+ LIBFRIBIDI_INSTALL_STAGING = YES
+ LIBFRIBIDI_DEPENDENCIES = host-pkgconf
+ 
