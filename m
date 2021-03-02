@@ -1,110 +1,73 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 2 Mar 2021 21:44:20 +0100
-Subject: [Buildroot] [git commit] package/gnuradio: fix qtgui build when
- gr-analog is not set
-Message-ID: <20210302202151.2424E826AB@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 2 Mar 2021 21:44:26 +0100
+Subject: [Buildroot] [PATCH 1/1] package/e2fsprogs: set
+ E2FSPROGS_CPE_ID_VALID
+In-Reply-To: <20210302132456.361055-1-fontaine.fabrice@gmail.com>
+References: <20210302132456.361055-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210302204426.GF2275@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6b714a9c3b1b14526bffdb1319ab1bfaaba45732
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fabrice, All,
 
-gr-qtgui examples needs to have gr-analog enabled, without this dependency
-compile crash with:
+On 2021-03-02 14:24 +0100, Fabrice Fontaine spake thusly:
+> cpe:2.3:a:e2fsprogs_project:e2fsprogs is a valid CPE identifier for
+> this package:
+> 
+>   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ae2fsprogs_project%3Ae2fsprogs
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-In file included from
-/x/output/build/gnuradio-3.8.1.0/gr-qtgui/examples/c++/display_qt.cc:22:
-/x/output/build/gnuradio-3.8.1.0/gr-qtgui/examples/c++/display_qt.h:24:10:
-fatal error: gnuradio/analog/noise_source.h: No such file or directory
-24 | #include <gnuradio/analog/noise_source.h>
-| ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-make[3]: *** [gr-qtgui/examples/c++/CMakeFiles/display_qt.dir/build.make:67:
-gr-qtgui/examples/c++/CMakeFiles/display_qt.dir/display_qt.cc.o] Error 1
-make[3]: *** Waiting for unfinished jobs....
-In file included from
-/somewhere/gnuradio/build/gr-qtgui/examples/c++/moc_display_qt.cpp:10:
-/somewhere/gnuradio/build/gr-qtgui/examples/c++/../../../../gr-qtgui/examples/c++/display_qt.h:24:10:
-fatal error: gnuradio/analog/noise_source.h: No such file or directory
-24 | #include <gnuradio/analog/noise_source.h>
-| ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.
+Applied to master, along with the 11 other onces:
 
-GR_ANALOG is not an explicit dependency of GR_QTGUI, so disable c++ examples if
-user has not selected this option.
+    python-pyyaml
+    dovecot-pigeonhole
+    giflib
+    nmap
+    ruby
+    gd
+    libfribidi
+    jpeg-turbo
+    tiff
+    rabbitmq-c
+    libpam-tacplus
 
-[backported from 7470a7a3771dd90defb826b464dfe62977cb1eb6]
+Thanks!
 
-Fixes:
-- http://autobuild.buildroot.net/results/fde670499289f3d7d47379eebccf6e0f92c6d200/
+Regards,
+Yann E. MORIN.
 
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- ...nt-t-add-examples-c-subdirectory-when-gr-.patch | 55 ++++++++++++++++++++++
- 1 file changed, 55 insertions(+)
+> ---
+>  package/e2fsprogs/e2fsprogs.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+> index eb82a55ce7..e2d6263c4e 100644
+> --- a/package/e2fsprogs/e2fsprogs.mk
+> +++ b/package/e2fsprogs/e2fsprogs.mk
+> @@ -9,6 +9,7 @@ E2FSPROGS_SOURCE = e2fsprogs-$(E2FSPROGS_VERSION).tar.xz
+>  E2FSPROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/tytso/e2fsprogs/v$(E2FSPROGS_VERSION)
+>  E2FSPROGS_LICENSE = GPL-2.0, MIT-like with advertising clause (libss and libet)
+>  E2FSPROGS_LICENSE_FILES = NOTICE lib/ss/mit-sipb-copyright.h lib/et/internal.h
+> +E2FSPROGS_CPE_ID_VALID = YES
+>  E2FSPROGS_INSTALL_STAGING = YES
+>  
+>  # Use libblkid and libuuid from util-linux for host and target packages.
+> -- 
+> 2.30.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-diff --git a/package/gnuradio/0004-gr-qtgui-dont-t-add-examples-c-subdirectory-when-gr-.patch b/package/gnuradio/0004-gr-qtgui-dont-t-add-examples-c-subdirectory-when-gr-.patch
-new file mode 100644
-index 0000000000..034c10c5cc
---- /dev/null
-+++ b/package/gnuradio/0004-gr-qtgui-dont-t-add-examples-c-subdirectory-when-gr-.patch
-@@ -0,0 +1,55 @@
-+From 268b1a599304f58bd56c86ff09041b5912c24a0c Mon Sep 17 00:00:00 2001
-+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-+Date: Sun, 1 Nov 2020 17:24:36 +0100
-+Subject: [PATCH] gr-qtgui: dont't add examples/c++ subdirectory when gr-analog
-+ is disabled
-+
-+gr-qtgui examples needs to have gr-analog enabled, without this dependency
-+compile crash with:
-+
-+In file included from
-+/x/output/build/gnuradio-3.8.1.0/gr-qtgui/examples/c++/display_qt.cc:22:
-+/x/output/build/gnuradio-3.8.1.0/gr-qtgui/examples/c++/display_qt.h:24:10:
-+fatal error: gnuradio/analog/noise_source.h: No such file or directory
-+24 | #include <gnuradio/analog/noise_source.h>
-+| ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+compilation terminated.
-+make[3]: *** [gr-qtgui/examples/c++/CMakeFiles/display_qt.dir/build.make:67:
-+gr-qtgui/examples/c++/CMakeFiles/display_qt.dir/display_qt.cc.o] Error 1
-+make[3]: *** Waiting for unfinished jobs....
-+In file included from
-+/somewhere/gnuradio/build/gr-qtgui/examples/c++/moc_display_qt.cpp:10:
-+/somewhere/gnuradio/build/gr-qtgui/examples/c++/../../../../gr-qtgui/examples/c++/display_qt.h:24:10:
-+fatal error: gnuradio/analog/noise_source.h: No such file or directory
-+24 | #include <gnuradio/analog/noise_source.h>
-+| ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+compilation terminated.
-+
-+GR_ANALOG is not an explicit dependency of GR_QTGUI, so disable c++ examples if
-+user has not selected this option.
-+
-+[backported from 7470a7a3771dd90defb826b464dfe62977cb1eb6]
-+
-+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-+---
-+ gr-qtgui/CMakeLists.txt | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/gr-qtgui/CMakeLists.txt b/gr-qtgui/CMakeLists.txt
-+index 8831f3ad9..561186fbd 100644
-+--- a/gr-qtgui/CMakeLists.txt
-++++ b/gr-qtgui/CMakeLists.txt
-+@@ -68,7 +68,9 @@ if(ENABLE_GR_QTGUI)
-+ add_subdirectory(include/gnuradio/qtgui)
-+ add_subdirectory(lib)
-+ add_subdirectory(docs)
-+-add_subdirectory(examples/c++)
-++if (ENABLE_GR_ANALOG)
-++	add_subdirectory(examples/c++)
-++endif(ENABLE_GR_ANALOG)
-+ if(ENABLE_PYTHON)
-+     add_subdirectory(swig)
-+     add_subdirectory(python/qtgui)
-+-- 
-+2.26.2
-+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
