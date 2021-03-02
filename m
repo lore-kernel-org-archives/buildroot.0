@@ -1,79 +1,50 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue,  2 Mar 2021 08:07:48 +0100
-Subject: [Buildroot] [PATCH v2 53/54] package/kodi-visualisation-matrix: new
- package
+Date: Tue,  2 Mar 2021 08:07:08 +0100
+Subject: [Buildroot] [PATCH v2 13/54] package/kodi-peripheral-xarcade: bump
+ version to 1.2.0-Matrix
 In-Reply-To: <20210302070749.647742-1-bernd.kuhls@t-online.de>
 References: <20210302070749.647742-1-bernd.kuhls@t-online.de>
-Message-ID: <20210302070749.647742-54-bernd.kuhls@t-online.de>
+Message-ID: <20210302070749.647742-14-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Switch license file to LICENSE.md.
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-visualisation-matrix/Config.in         |  7 +++++++
- .../kodi-visualisation-matrix.hash                  |  3 +++
- .../kodi-visualisation-matrix.mk                    | 13 +++++++++++++
- package/kodi/Config.in                              |  1 +
- 4 files changed, 24 insertions(+)
- create mode 100644 package/kodi-visualisation-matrix/Config.in
- create mode 100644 package/kodi-visualisation-matrix/kodi-visualisation-matrix.hash
- create mode 100644 package/kodi-visualisation-matrix/kodi-visualisation-matrix.mk
+ package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.hash | 4 ++--
+ package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/kodi-visualisation-matrix/Config.in b/package/kodi-visualisation-matrix/Config.in
-new file mode 100644
-index 0000000000..db01f15231
---- /dev/null
-+++ b/package/kodi-visualisation-matrix/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_KODI_VISUALISATION_MATRIX
-+	bool "kodi-visualisation-matrix"
-+	select BR2_PACKAGE_GLM
-+	help
-+	  Matrix themed visualization addon for Kodi
-+
-+	  https://github.com/xbmc/visualization.matrix
-diff --git a/package/kodi-visualisation-matrix/kodi-visualisation-matrix.hash b/package/kodi-visualisation-matrix/kodi-visualisation-matrix.hash
-new file mode 100644
-index 0000000000..38b9311d6e
---- /dev/null
-+++ b/package/kodi-visualisation-matrix/kodi-visualisation-matrix.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  fc5c4790cbf957dbf8d504ae7c43eaeca122fde6423f1135029ff053135f8fd0  kodi-visualisation-matrix-1.0.0-Matrix.tar.gz
+diff --git a/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.hash b/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.hash
+index 7443ac65d8..a971493c02 100644
+--- a/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.hash
++++ b/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  c1d755230b0f2fe943cf7297a6d187371088f39391944d422d2bf5969c8863c1  kodi-peripheral-xarcade-51e1a4550a6c7d7feeb01760a731af17bea6c524.tar.gz
+-sha256  848ad4f3a480c953b556467fb9a315dd352ec1d267e012144c46adc571e39efb  debian/copyright
++sha256  6fa8e1d0e6ebb6c385a7aef6e6c7629d2f1f52601ade7839093c1c3abb844894  kodi-peripheral-xarcade-1.2.0-Matrix.tar.gz
 +sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-visualisation-matrix/kodi-visualisation-matrix.mk b/package/kodi-visualisation-matrix/kodi-visualisation-matrix.mk
-new file mode 100644
-index 0000000000..153c1c15b1
---- /dev/null
-+++ b/package/kodi-visualisation-matrix/kodi-visualisation-matrix.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# kodi-visualisation-matrix
-+#
-+################################################################################
-+
-+KODI_VISUALISATION_MATRIX_VERSION = 1.0.0-Matrix
-+KODI_VISUALISATION_MATRIX_SITE = $(call github,xbmc,visualization.matrix,$(KODI_VISUALISATION_MATRIX_VERSION))
-+KODI_VISUALISATION_MATRIX_LICENSE = GPL-2.0+
-+KODI_VISUALISATION_MATRIX_LICENSE_FILES = LICENSE.md
-+KODI_VISUALISATION_MATRIX_DEPENDENCIES = glm kodi
-+
-+$(eval $(cmake-package))
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index a104ba53c3..01d068da44 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -355,6 +355,7 @@ endmenu
- menu "Visualisations"
- 	source "package/kodi-visualisation-fishbmc/Config.in"
- 	source "package/kodi-visualisation-goom/Config.in"
-+	source "package/kodi-visualisation-matrix/Config.in"
- 	source "package/kodi-visualisation-shadertoy/Config.in"
- 	source "package/kodi-visualisation-spectrum/Config.in"
- 	source "package/kodi-visualisation-starburst/Config.in"
+diff --git a/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.mk b/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.mk
+index 42d7af8a02..fe5a9e41a0 100644
+--- a/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.mk
++++ b/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-KODI_PERIPHERAL_XARCADE_VERSION = 51e1a4550a6c7d7feeb01760a731af17bea6c524
++KODI_PERIPHERAL_XARCADE_VERSION = 1.2.0-Matrix
+ KODI_PERIPHERAL_XARCADE_SITE = $(call github,kodi-game,peripheral.xarcade,$(KODI_PERIPHERAL_XARCADE_VERSION))
+ KODI_PERIPHERAL_XARCADE_LICENSE = GPL-2.0+
+-KODI_PERIPHERAL_XARCADE_LICENSE_FILES = debian/copyright
++KODI_PERIPHERAL_XARCADE_LICENSE_FILES = LICENSE.md
+ KODI_PERIPHERAL_XARCADE_DEPENDENCIES = kodi
+ 
+ $(eval $(cmake-package))
 -- 
 2.29.2
