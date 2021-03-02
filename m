@@ -1,147 +1,70 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue,  2 Mar 2021 08:07:49 +0100
-Subject: [Buildroot] [PATCH v2 54/54] package/kodi-platform: remove package
+Date: Tue,  2 Mar 2021 08:07:06 +0100
+Subject: [Buildroot] [PATCH v2 11/54] package/kodi-inputstream-rtmp: bump
+ version to 3.4.0-Matrix
 In-Reply-To: <20210302070749.647742-1-bernd.kuhls@t-online.de>
 References: <20210302070749.647742-1-bernd.kuhls@t-online.de>
-Message-ID: <20210302070749.647742-55-bernd.kuhls@t-online.de>
+Message-ID: <20210302070749.647742-12-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package is not used by kodi addons anymore.
-No legacy handling needed because this package was never selectable.
+Openssl and zlib are built as hard-dependencies of Kodi already. For the
+case that Kodi drops these dependencies we need to make sure that this
+package still finds its dependencies:
+https://github.com/xbmc/inputstream.rtmp/blob/Matrix/CMakeLists.txt#L8
+
+Switch license file to LICENSE.md.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...nfig.cmake-fix-for-cross-compilation.patch | 56 -------------------
- package/kodi-platform/Config.in               |  7 ---
- package/kodi-platform/kodi-platform.hash      |  3 -
- package/kodi-platform/kodi-platform.mk        | 14 -----
- package/kodi/Config.in                        |  2 -
- 5 files changed, 82 deletions(-)
- delete mode 100644 package/kodi-platform/0001-kodiplatform-config.cmake-fix-for-cross-compilation.patch
- delete mode 100644 package/kodi-platform/Config.in
- delete mode 100644 package/kodi-platform/kodi-platform.hash
- delete mode 100644 package/kodi-platform/kodi-platform.mk
+ package/kodi-inputstream-rtmp/Config.in                  | 2 ++
+ package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash | 4 ++--
+ package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk   | 6 +++---
+ 3 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/package/kodi-platform/0001-kodiplatform-config.cmake-fix-for-cross-compilation.patch b/package/kodi-platform/0001-kodiplatform-config.cmake-fix-for-cross-compilation.patch
-deleted file mode 100644
-index cc514b002b..0000000000
---- a/package/kodi-platform/0001-kodiplatform-config.cmake-fix-for-cross-compilation.patch
-+++ /dev/null
-@@ -1,56 +0,0 @@
--From a6e25dba4b5c1d911a4644a0ca116abc642cd72a Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Thu, 30 Jul 2015 09:28:24 +0200
--Subject: [PATCH] kodiplatform-config.cmake: fix for cross-compilation
--
--Use CMAKE_FIND_ROOT_PATH in kodiplatform-config.cmake in order to make
--it cross-compilation friendly.
--
--Patch sent upstream: https://github.com/xbmc/kodi-platform/pull/30
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- CMakeLists.txt               | 2 +-
-- kodiplatform-config.cmake.in | 6 +++---
-- 2 files changed, 4 insertions(+), 4 deletions(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 25d8004..db23dc9 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -22,7 +22,7 @@ if(NOT WIN32)
--   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
-- endif()
-- 
---set(kodiplatform_INCLUDE_DIRS ${TINYXML_INCLUDE_DIR} "${CMAKE_INSTALL_PREFIX}/include/kodi")
--+set(kodiplatform_INCLUDE_DIRS "${CMAKE_INSTALL_PREFIX}/include/kodi")
-- IF(WIN32)
--   LIST(APPEND kodiplatform_INCLUDE_DIRS "${CMAKE_INSTALL_PREFIX}/include/kodi/windows")
-- ENDIF(WIN32)
--diff --git a/kodiplatform-config.cmake.in b/kodiplatform-config.cmake.in
--index 3fc5273..1bc437a 100644
----- a/kodiplatform-config.cmake.in
--+++ b/kodiplatform-config.cmake.in
--@@ -10,16 +10,16 @@
-- #
-- # propagate these properties from one build system to the other
-- set (kodiplatform_VERSION "@kodiplatform_VERSION_MAJOR at .@kodiplatform_VERSION_MINOR@")
---set (kodiplatform_INCLUDE_DIRS @kodiplatform_INCLUDE_DIRS@ @CMAKE_INSTALL_PREFIX@/include)
--+set (kodiplatform_INCLUDE_DIRS @TINYXML_INCLUDE_DIR@ ${CMAKE_FIND_ROOT_PATH}@kodiplatform_INCLUDE_DIRS@ ${CMAKE_FIND_ROOT_PATH}@CMAKE_INSTALL_PREFIX@/include)
-- set (kodiplatform_LIBRARY_DIRS "@CMAKE_LIBRARY_OUTPUT_DIRECTORY@")
-- set (kodiplatform_LINKER_FLAGS "@kodiplatform_LINKER_FLAGS@")
-- set (kodiplatform_CONFIG_VARS "@kodiplatform_CONFIG_VARS@")
-- 
-- # libraries come from the build tree where this file was generated
-- if(WIN32)
---  set (kodiplatform_LIBRARY "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@/kodiplatform.lib")
--+  set (kodiplatform_LIBRARY "${CMAKE_FIND_ROOT_PATH}@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@/kodiplatform.lib")
-- else(WIN32)
---  set (kodiplatform_LIBRARY "-L at CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@ -lkodiplatform")
--+  set (kodiplatform_LIBRARY "-L${CMAKE_FIND_ROOT_PATH}@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@ -lkodiplatform")
-- endif(WIN32)
-- set (kodiplatform_LIBRARIES ${kodiplatform_LIBRARY} "@kodiplatform_LIBRARIES@")
-- mark_as_advanced (kodiplatform_LIBRARY)
---- 
--2.5.0
--
-diff --git a/package/kodi-platform/Config.in b/package/kodi-platform/Config.in
-deleted file mode 100644
-index cde1925c07..0000000000
---- a/package/kodi-platform/Config.in
-+++ /dev/null
-@@ -1,7 +0,0 @@
--config BR2_PACKAGE_KODI_PLATFORM
--	bool
--	select BR2_PACKAGE_LIBPLATFORM
--	help
--	  Kodi add-on platform support library
--
--	  https://github.com/xbmc/kodi-platform
-diff --git a/package/kodi-platform/kodi-platform.hash b/package/kodi-platform/kodi-platform.hash
-deleted file mode 100644
-index 29a43cf021..0000000000
---- a/package/kodi-platform/kodi-platform.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# Locally computed
--sha256  159165ae641da5eb273885ce53b8a4b84e62a595c4974f9d12c1b5d1428ef25c  kodi-platform-809c5e9d711e378561440a896fcb7dbcd009eb3d.tar.gz
--sha256  2f4bc4c1244b679121749378ff1a2b4b4e318897dac3d346a236432948ebeea7  debian/copyright
-diff --git a/package/kodi-platform/kodi-platform.mk b/package/kodi-platform/kodi-platform.mk
-deleted file mode 100644
-index f1b97e3259..0000000000
---- a/package/kodi-platform/kodi-platform.mk
-+++ /dev/null
-@@ -1,14 +0,0 @@
--################################################################################
--#
--# kodi-platform
--#
--################################################################################
--
--KODI_PLATFORM_VERSION = 809c5e9d711e378561440a896fcb7dbcd009eb3d
--KODI_PLATFORM_SITE = $(call github,xbmc,kodi-platform,$(KODI_PLATFORM_VERSION))
--KODI_PLATFORM_LICENSE = GPL-2.0+
--KODI_PLATFORM_LICENSE_FILES = debian/copyright
--KODI_PLATFORM_INSTALL_STAGING = YES
--KODI_PLATFORM_DEPENDENCIES = libplatform kodi
--
--$(eval $(cmake-package))
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 01d068da44..782cca3c18 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -109,8 +109,6 @@ menuconfig BR2_PACKAGE_KODI
+diff --git a/package/kodi-inputstream-rtmp/Config.in b/package/kodi-inputstream-rtmp/Config.in
+index fa83926301..c4bd2e1380 100644
+--- a/package/kodi-inputstream-rtmp/Config.in
++++ b/package/kodi-inputstream-rtmp/Config.in
+@@ -1,6 +1,8 @@
+ config BR2_PACKAGE_KODI_INPUTSTREAM_RTMP
+ 	bool "kodi-inputstream-rtmp"
++	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_RTMPDUMP
++	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  RTMP input stream add-on for Kodi
  
- if BR2_PACKAGE_KODI
+diff --git a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
+index d472b89ba9..e645fb14bb 100644
+--- a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
++++ b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  56dac63262fa736620863900d903616d4827d735992e6d8beda84e377a5599e5  kodi-inputstream-rtmp-2.0.9-Leia.tar.gz
+-sha256  ddba7d22c2586f13de40786c21f3b87c6913c9937f4862dc828d33cfff0395eb  debian/copyright
++sha256  efaaa9b07c18810582a3826df476fc36a2aac82be7512271545073c3f6cc0212  kodi-inputstream-rtmp-3.4.0-Matrix.tar.gz
++sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
+index e850be40ff..6029b7d35c 100644
+--- a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
++++ b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
  
--source "package/kodi-platform/Config.in"
--
- config BR2_PACKAGE_KODI_ALSA_LIB
- 	bool "alsa"
- 	select BR2_PACKAGE_ALSA_LIB
+-KODI_INPUTSTREAM_RTMP_VERSION = 2.0.9-Leia
++KODI_INPUTSTREAM_RTMP_VERSION = 3.4.0-Matrix
+ KODI_INPUTSTREAM_RTMP_SITE = $(call github,xbmc,inputstream.rtmp,$(KODI_INPUTSTREAM_RTMP_VERSION))
+ KODI_INPUTSTREAM_RTMP_LICENSE = GPL-2.0+
+-KODI_INPUTSTREAM_RTMP_LICENSE_FILES = debian/copyright
+-KODI_INPUTSTREAM_RTMP_DEPENDENCIES = kodi rtmpdump
++KODI_INPUTSTREAM_RTMP_LICENSE_FILES = LICENSE.md
++KODI_INPUTSTREAM_RTMP_DEPENDENCIES = kodi openssl rtmpdump zlib
+ 
+ $(eval $(cmake-package))
 -- 
 2.29.2
