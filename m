@@ -1,55 +1,81 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  3 Mar 2021 19:12:28 +0100
-Subject: [Buildroot] [PATCH v2, 2/2] package/sconeserver: pcre is optional,
- not mandatory
-In-Reply-To: <20210303181228.1079557-1-fontaine.fabrice@gmail.com>
-References: <20210303181228.1079557-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210303181228.1079557-2-fontaine.fabrice@gmail.com>
+From: Dan Raymond <draymond@foxvalley.net>
+Date: Wed, 3 Mar 2021 11:18:14 -0700
+Subject: [Buildroot] [PATCH 1/1] fix failure during 'make
+ linux-menuconfig' when PATH env var has spaces
+In-Reply-To: <8d34f040-ac81-f000-895b-2607b5c0a018@foxvalley.net>
+References: <16100eb6-bac8-2e4d-65f2-26333179f3b8@foxvalley.net>
+ <9469affa-d61e-347a-ef52-1ce6b1a11a23@mind.be>
+ <8d34f040-ac81-f000-895b-2607b5c0a018@foxvalley.net>
+Message-ID: <a47fae4f-80f2-343b-72d7-39c245bfd753@foxvalley.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-pcre is optional not mandatory since
-https://github.com/sconemad/sconeserver/commit/98ec61436c9ea68ffe2d70a818c1175dcafa2a79
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2 (after review of Peter Seiderer):
- - Drop select from Config.in
+On 3/3/2021 10:37 AM, Dan Raymond wrote:
+> On 3/3/2021 10:11 AM, Arnout Vandecappelle wrote:
+>
+>> ? Hi Dan,
+>>
+>> On 01/03/2021 03:40, Dan Raymond wrote:
+>>> ??$(2)_CONFIGURATOR_MAKE_ENV = \
+>>> -??? $$(filter-out PATH=% PKG_CONFIG=% PKG_CONFIG_SYSROOT_DIR=% \
+>>> -??? ?? PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=% 
+>>> PKG_CONFIG_ALLOW_SYSTEM_LIBS=% \
+>>> -??? ?? PKG_CONFIG_LIBDIR=%,$$($(2)_MAKE_ENV)) \
+>>> +??? $$(call strip_env,PATH PKG_CONFIG PKG_CONFIG_SYSROOT_DIR \
+>>> +??? ?? PKG_CONFIG_ALLOW_SYSTEM_CFLAGS PKG_CONFIG_ALLOW_SYSTEM_LIBS \
+>>> +??? ?? PKG_CONFIG_LIBDIR,$$($(2)_MAKE_ENV)) \
+>>> ????? PKG_CONFIG_PATH="$(HOST_PKG_CONFIG_PATH)"
+>> This is a bit of half-hearted quoting. It happens to work for spaces, 
+>> but
+>> breaks down on double quotes, backslashes, dollar signs, and probably 
+>> others as
+>> well.
+>>
+>> ? I don't like to solve one specific corner case but leaving the door 
+>> wide open
+>> for different ones...
+>>
+>> ? Unfortunately, proper shell quoting is really really hard.
+>>
+>> ? Therefore, I'd propose to skirt around the issue entirely by 
+>> overriding the
+>> environment variables directly. Something like this (untested):
+>>
+>> $(2)_CONFIGURATOR_MAKE_ENV = \
+>> ????$$($(2)_MAKE_ENV) \
+>> ????PATH="$$(BR_PATH)" \
+>> ????PKG_CONFIG= \
+>> ????...
+>
+> I like your idea.? It is much simpler.? I'll prepare a new patch and 
+> test it.? But why are you setting PATH="$$(BR_PATH)"? Previously the 
+> PATH variable was stripped entirely.
 
- package/sconeserver/Config.in      | 1 -
- package/sconeserver/sconeserver.mk | 5 ++++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+OK, I see why we can't just set an empty path (none of the build tools 
+will be found).? I got the following to work.? You can't quote 
+$(BR_PATH) because it is already quoted and you only need one $.
 
-diff --git a/package/sconeserver/Config.in b/package/sconeserver/Config.in
-index 09cf5d459c..429ac81fe1 100644
---- a/package/sconeserver/Config.in
-+++ b/package/sconeserver/Config.in
-@@ -3,7 +3,6 @@ menuconfig BR2_PACKAGE_SCONESERVER
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on !BR2_STATIC_LIBS # dlopen()
--	select BR2_PACKAGE_PCRE
- 	select BR2_PACKAGE_ZLIB
- 	help
- 	  Sconeserver is a modular, object-orientated and extremely
-diff --git a/package/sconeserver/sconeserver.mk b/package/sconeserver/sconeserver.mk
-index b81134002e..62cc128d77 100644
---- a/package/sconeserver/sconeserver.mk
-+++ b/package/sconeserver/sconeserver.mk
-@@ -10,7 +10,10 @@ SCONESERVER_LICENSE = GPL-2.0+
- SCONESERVER_LICENSE_FILES = COPYING
- # fetching from Git, we need to generate the configure script
- SCONESERVER_AUTORECONF = YES
--SCONESERVER_DEPENDENCIES = host-pkgconf pcre zlib
-+SCONESERVER_DEPENDENCIES = \
-+	host-pkgconf \
-+	$(if $(BR2_PACKAGE_PCRE),pcre) \
-+	zlib
- # disable markdown module because its git submodule cmark
- # https://github.com/sconemad/sconeserver/tree/master/markdown
- # has no cross-compile support provided by the sconeserver build system
--- 
-2.30.0
+$(2)_CONFIGURATOR_MAKE_ENV = \
+ ??? $$($(2)_MAKE_ENV) \
+ ??? PATH=$(BR_PATH) \
+ ??? PKG_CONFIG= \
+ ??? PKG_CONFIG_SYSROOT_DIR= \
+ ??? PKG_CONFIG_ALLOW_SYSTEM_CFLAGS= \
+ ??? PKG_CONFIG_ALLOW_SYSTEM_LIBS= \
+ ??? PKG_CONFIG_LIBDIR= \
+ ??? PKG_CONFIG_PATH="$(HOST_PKG_CONFIG_PATH)"
+
+However the result is equivalent to leaving the PATH alone:
+
+$(2)_CONFIGURATOR_MAKE_ENV = \
+ ??? $$($(2)_MAKE_ENV) \
+ ??? PKG_CONFIG= \
+ ??? PKG_CONFIG_SYSROOT_DIR= \
+ ??? PKG_CONFIG_ALLOW_SYSTEM_CFLAGS= \
+ ??? PKG_CONFIG_ALLOW_SYSTEM_LIBS= \
+ ??? PKG_CONFIG_LIBDIR= \
+ ??? PKG_CONFIG_PATH="$(HOST_PKG_CONFIG_PATH)"
