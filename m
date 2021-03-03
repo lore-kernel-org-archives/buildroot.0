@@ -1,34 +1,68 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  3 Mar 2021 16:16:07 +0100
-Subject: [Buildroot] [PATCH 1/1] package/rpcbind: set RPCBIND_CPE_ID_VALID
-Message-ID: <20210303151607.504282-1-fontaine.fabrice@gmail.com>
+From: Lukas Hecht <mixolydisch@gmx.de>
+Date: Wed, 3 Mar 2021 16:48:28 +0100
+Subject: [Buildroot] Problems with generating an x86 Image
+Message-ID: <98397e30-a396-803a-ddc4-ed31719eae51@gmx.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:rpcbind_project:rpcbind is a valid CPE identifier for this
-package:
+Hi there,
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Arpcbind_project%3Arpcbind
+i'm having problems with generating an x86 image for an industrial pc
+based on an AMD Embedded G-Series APU which runs perfectly fine using
+Ubuntu.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/rpcbind/rpcbind.mk | 1 +
- 1 file changed, 1 insertion(+)
+Here's what i did, using Buildroot 2020.02.10:
 
-diff --git a/package/rpcbind/rpcbind.mk b/package/rpcbind/rpcbind.mk
-index cce84cfa88..abeca2d247 100644
---- a/package/rpcbind/rpcbind.mk
-+++ b/package/rpcbind/rpcbind.mk
-@@ -9,6 +9,7 @@ RPCBIND_SITE = http://downloads.sourceforge.net/project/rpcbind/rpcbind/$(RPCBIN
- RPCBIND_SOURCE = rpcbind-$(RPCBIND_VERSION).tar.bz2
- RPCBIND_LICENSE = BSD-3-Clause
- RPCBIND_LICENSE_FILES = COPYING
-+RPCBIND_CPE_ID_VALID = YES
- 
- RPCBIND_CONF_ENV += \
- 	CFLAGS="$(TARGET_CFLAGS) `$(PKG_CONFIG_HOST_BINARY) --cflags libtirpc`"
--- 
-2.30.0
+
+make pc_x86_64_bios_defconfig
+
+make menuconfig changes:
+
+Filesystem Image: 250M size
+
+iso image
+
+initial ram filesystem
+
+Networking applications - wireless-regdb (to get rid of an regdb error
+while booting)
+
+make
+
+
+dd disk.img to USB drive, and then copy bzImage to /boot on the USB drive.
+
+Boot my target system with clonezilla to console, and then dd the usb
+drive to /dev/sda
+
+
+When i reboot and remove the usb drive, grub starts and selects
+"buildroot" after 5 seconds, and then the boot starts but i don't get to
+the console. It stops with:
+
+
+Welcome to Buildroot
+
+buildroot login: scsi 0:0:0:0: Direct-Access Generic Ultra HS-COMBO 1.98
+PQ: 0 ANSI : 0
+
+sd 0:0:0:0 [sda] Attached SCSI removable disk
+
+random: fast init done
+
+random: crng init done (coming up after some minutes)
+
+
+And there it just stops, with a blinking cursor. Can anyone point me to
+what i am doing wrong?
+
+If not, is there an easy way to access and save the console output that
+comes up before these last lines to get a better understanding of what
+is happening?
+
+Thanks a lot!
+
+Lukas
