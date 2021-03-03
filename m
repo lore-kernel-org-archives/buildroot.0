@@ -1,49 +1,33 @@
-From: Lukas Hecht <mixolydisch@gmx.de>
-Date: Wed, 3 Mar 2021 17:16:31 +0100
-Subject: [Buildroot] Problems with generating an x86 Image
-In-Reply-To: <CAAXf6LVehreRKpkNMg2bY2KTsy2BL56dSOCVNUMUu5c7vNPzPw@mail.gmail.com>
-References: <98397e30-a396-803a-ddc4-ed31719eae51@gmx.de>
- <CAAXf6LVehreRKpkNMg2bY2KTsy2BL56dSOCVNUMUu5c7vNPzPw@mail.gmail.com>
-Message-ID: <8311428a-3ee1-6e00-78e5-064df934dbc5@gmx.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed,  3 Mar 2021 15:44:25 +0100
+Subject: [Buildroot] [PATCH 1/1] package/neon: add NEON_CPE_ID_VENDOR
+Message-ID: <20210303144425.501473-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+cpe:2.3:a:webdav:neon is a valid CPE identifier for this package:
 
-maybe this idea could lead in the right direction. The process takes
-about 12 seconds from leaving grub till stopping to boot, which sounds
-about right to me for such a basic system.
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Awebdav%3Aneon
 
-I did not change anything on the getty, etc/inittab shows:
-tty1::respawn:/sbin/getty -L tty1 0 vt100 # GENERIC_SERIAL
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/neon/neon.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-My hardware has three serial ports but i don't know any more details
-about these at the moment.
-
-Is there an easy way (like with booting a live ubuntu) to find out if
-tty1 is the right one?
-
-Thanks a lot,
-Lukas
-
-
-Am 03.03.2021 um 16:56 schrieb Thomas De Schampheleire:
-> While I don't have experience specifically with using Buildroot for PC
-> images, this symptom gives me the impression that the 'getty', which
-> is supposed to give you a login prompt, is not going to the terminal
-> you are looking at.
->
-> Based on the boot output, do you agree that the system 'seems' booted,
-> but you are just missing the login prompt?
->
-> Have a look at /etc/inittab , based on the defconfig you started from,
-> the getty is supposed to be assigned to 'tty1'.
-> Did you change anything in this regard?
-> Do you have something specific on this hardware with respect to tty /
-> serial line?
->
-> Best regards,
-> Thomas
+diff --git a/package/neon/neon.mk b/package/neon/neon.mk
+index 2c00e6a8b4..da53735d0e 100644
+--- a/package/neon/neon.mk
++++ b/package/neon/neon.mk
+@@ -8,6 +8,7 @@ NEON_VERSION = 0.30.2
+ NEON_SITE = http://www.webdav.org/neon
+ NEON_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (manual and tests)
+ NEON_LICENSE_FILES = src/COPYING.LIB test/COPYING README
++NEON_CPE_ID_VENDOR = webdav
+ NEON_INSTALL_STAGING = YES
+ NEON_CONF_OPTS = --without-gssapi --disable-rpath
+ NEON_CONFIG_SCRIPTS = neon-config
+-- 
+2.30.0
