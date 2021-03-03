@@ -1,81 +1,88 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 3 Mar 2021 18:11:46 +0100
-Subject: [Buildroot] [PATCH 1/1] fix failure during 'make
- linux-menuconfig' when PATH env var has spaces
-In-Reply-To: <16100eb6-bac8-2e4d-65f2-26333179f3b8@foxvalley.net>
-References: <16100eb6-bac8-2e4d-65f2-26333179f3b8@foxvalley.net>
-Message-ID: <9469affa-d61e-347a-ef52-1ce6b1a11a23@mind.be>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 3 Mar 2021 16:56:32 +0100
+Subject: [Buildroot] Problems with generating an x86 Image
+In-Reply-To: <98397e30-a396-803a-ddc4-ed31719eae51@gmx.de>
+References: <98397e30-a396-803a-ddc4-ed31719eae51@gmx.de>
+Message-ID: <CAAXf6LVehreRKpkNMg2bY2KTsy2BL56dSOCVNUMUu5c7vNPzPw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Dan,
-
-On 01/03/2021 03:40, Dan Raymond wrote:
-> From 4db6db355723bedb5918be214fbd6c6eb4a39257 Mon Sep 17 00:00:00 2001
-> From: Dan Raymond <draymond@foxvalley.net>
-> Date: Sun, 28 Feb 2021 18:27:18 -0700
-> Subject: [PATCH 1/1] fix failure during 'make linux-menuconfig' when PATH env
-> var has spaces
-> 
-> Signed-off-by: Dan Raymond <draymond@foxvalley.net>
-> ---
-> ?package/pkg-kconfig.mk | 6 +++---
-> ?support/misc/utils.mk? | 6 ++++++
-> ?2 files changed, 9 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
-> index 2aecf2e203..6bf87fbead 100644
-> --- a/package/pkg-kconfig.mk
-> +++ b/package/pkg-kconfig.mk
-> @@ -205,9 +205,9 @@ endif
-> ?# nconfig, gconfig, xconfig).
-> ?# So we simply remove our PATH and PKG_CONFIG_* variables.
-> ?$(2)_CONFIGURATOR_MAKE_ENV = \
-> -??? $$(filter-out PATH=% PKG_CONFIG=% PKG_CONFIG_SYSROOT_DIR=% \
-> -??? ?? PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=% PKG_CONFIG_ALLOW_SYSTEM_LIBS=% \
-> -??? ?? PKG_CONFIG_LIBDIR=%,$$($(2)_MAKE_ENV)) \
-> +??? $$(call strip_env,PATH PKG_CONFIG PKG_CONFIG_SYSROOT_DIR \
-> +??? ?? PKG_CONFIG_ALLOW_SYSTEM_CFLAGS PKG_CONFIG_ALLOW_SYSTEM_LIBS \
-> +??? ?? PKG_CONFIG_LIBDIR,$$($(2)_MAKE_ENV)) \
-> ???? PKG_CONFIG_PATH="$(HOST_PKG_CONFIG_PATH)"
-> 
-> ?# Configuration editors (menuconfig, ...)
-> diff --git a/support/misc/utils.mk b/support/misc/utils.mk
-> index dc60cad979..640e56c775 100644
-> --- a/support/misc/utils.mk
-> +++ b/support/misc/utils.mk
-> @@ -135,3 +135,9 @@ define PRINTF
-> ???? ??? ??? $(subst $(QUOTE),$(QUOTE)\$(QUOTE)$(QUOTE),\
-> ???? ??? ??? ??? $(subst \,\\,$(1)))))\n'
-> ?endef
-> +
-> +# strip variables (quoted or unquoted) from an environment string:
-> +# MYENV = PATH="/bin:/dir with spaces" USER=root SHELL=/bin/sh
-> +# $(call strip_env,PATH SHELL,$(MYENV)) --> USER=root
-> +sed_cmds=$(foreach var,$(1),-e 's/$(var)="[^"]*" *//' -e 's/$(var)=[^ ]* *//')
-> +strip_env=$(shell echo "$(subst ",\",$(2))" | sed $(call sed_cmds,$(1)))
-
- This is a bit of half-hearted quoting. It happens to work for spaces, but
-breaks down on double quotes, backslashes, dollar signs, and probably others as
-well.
-
- I don't like to solve one specific corner case but leaving the door wide open
-for different ones...
-
- Unfortunately, proper shell quoting is really really hard.
-
- Therefore, I'd propose to skirt around the issue entirely by overriding the
-environment variables directly. Something like this (untested):
-
-$(2)_CONFIGURATOR_MAKE_ENV = \
-	$$($(2)_MAKE_ENV) \
-	PATH="$$(BR_PATH)" \
-	PKG_CONFIG= \
-	...
+Hello,
 
 
- Regards,
- Arnout
+El mi?, 3 mar 2021 a las 16:48, Lukas Hecht (<mixolydisch@gmx.de>) escribi?:
+>
+> Hi there,
+>
+> i'm having problems with generating an x86 image for an industrial pc
+> based on an AMD Embedded G-Series APU which runs perfectly fine using
+> Ubuntu.
+>
+> Here's what i did, using Buildroot 2020.02.10:
+>
+>
+> make pc_x86_64_bios_defconfig
+>
+> make menuconfig changes:
+>
+> Filesystem Image: 250M size
+>
+> iso image
+>
+> initial ram filesystem
+>
+> Networking applications - wireless-regdb (to get rid of an regdb error
+> while booting)
+>
+> make
+>
+>
+> dd disk.img to USB drive, and then copy bzImage to /boot on the USB drive.
+>
+> Boot my target system with clonezilla to console, and then dd the usb
+> drive to /dev/sda
+>
+>
+> When i reboot and remove the usb drive, grub starts and selects
+> "buildroot" after 5 seconds, and then the boot starts but i don't get to
+> the console. It stops with:
+>
+>
+> Welcome to Buildroot
+>
+> buildroot login: scsi 0:0:0:0: Direct-Access Generic Ultra HS-COMBO 1.98
+> PQ: 0 ANSI : 0
+>
+> sd 0:0:0:0 [sda] Attached SCSI removable disk
+>
+> random: fast init done
+>
+> random: crng init done (coming up after some minutes)
+>
+>
+> And there it just stops, with a blinking cursor. Can anyone point me to
+> what i am doing wrong?
+>
+> If not, is there an easy way to access and save the console output that
+> comes up before these last lines to get a better understanding of what
+> is happening?
+
+While I don't have experience specifically with using Buildroot for PC
+images, this symptom gives me the impression that the 'getty', which
+is supposed to give you a login prompt, is not going to the terminal
+you are looking at.
+
+Based on the boot output, do you agree that the system 'seems' booted,
+but you are just missing the login prompt?
+
+Have a look at /etc/inittab , based on the defconfig you started from,
+the getty is supposed to be assigned to 'tty1'.
+Did you change anything in this regard?
+Do you have something specific on this hardware with respect to tty /
+serial line?
+
+Best regards,
+Thomas
