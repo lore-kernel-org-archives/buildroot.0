@@ -1,35 +1,33 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  3 Mar 2021 10:27:49 +0100
-Subject: [Buildroot] [PATCH 1/1] package/liburiparser: add CPE variables
-Message-ID: <20210303092749.468995-1-fontaine.fabrice@gmail.com>
+Date: Wed,  3 Mar 2021 10:29:57 +0100
+Subject: [Buildroot] [PATCH 1/1] package/prosody: add PROSODY_CPE_ID_VENDOR
+Message-ID: <20210303092957.469188-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:uriparser_project:uriparser is a valid CPE identifier for this
-package:
+cpe:2.3:a:prosody:prosody is a valid CPE identifier for this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Auriparser_project%3Auriparser
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aprosody%3Aprosody
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/liburiparser/liburiparser.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/prosody/prosody.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/liburiparser/liburiparser.mk b/package/liburiparser/liburiparser.mk
-index e333354ecc..4ba1e051e3 100644
---- a/package/liburiparser/liburiparser.mk
-+++ b/package/liburiparser/liburiparser.mk
-@@ -9,6 +9,8 @@ LIBURIPARSER_SOURCE = uriparser-$(LIBURIPARSER_VERSION).tar.bz2
- LIBURIPARSER_SITE = https://github.com/uriparser/uriparser/releases/download/uriparser-$(LIBURIPARSER_VERSION)
- LIBURIPARSER_LICENSE = BSD-3-Clause
- LIBURIPARSER_LICENSE_FILES = COPYING
-+LIBURIPARSER_CPE_ID_VENDOR = uriparser_project
-+LIBURIPARSER_CPE_ID_PRODUCT = uriparser
- LIBURIPARSER_INSTALL_STAGING = YES
- LIBURIPARSER_CONF_OPTS = -DURIPARSER_BUILD_DOCS=OFF -DURIPARSER_BUILD_TESTS=OFF
+diff --git a/package/prosody/prosody.mk b/package/prosody/prosody.mk
+index b2641545b9..a4482ad3c5 100644
+--- a/package/prosody/prosody.mk
++++ b/package/prosody/prosody.mk
+@@ -8,6 +8,7 @@ PROSODY_VERSION = 0.11.8
+ PROSODY_SITE = https://prosody.im/downloads/source
+ PROSODY_LICENSE = MIT
+ PROSODY_LICENSE_FILES = COPYING
++PROSODY_CPE_ID_VENDOR = prosody
+ PROSODY_DEPENDENCIES = host-luainterpreter luainterpreter libidn openssl
  
+ PROSODY_CFLAGS = $(TARGET_CFLAGS) -fPIC -std=c99 \
 -- 
 2.30.0
