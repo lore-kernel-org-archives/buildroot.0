@@ -1,259 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 4 Mar 2021 22:11:23 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/python3: security
- bump to version 3.8.8
-Message-ID: <20210304204954.69BFA86DA6@busybox.osuosl.org>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 3 Mar 2021 16:00:45 +0100
+Subject: [Buildroot] [PATCH] utils/size-stats-compare: add package name
+ in detail output
+In-Reply-To: <20210302211453.GJ2275@scaer>
+References: <20210216115609.24656-1-patrickdepinguin@gmail.com>
+ <20210302211453.GJ2275@scaer>
+Message-ID: <CAAXf6LWv1pMABOUXSy-GaZzv3dS8GcF+F71J2yX2ZNDKYhUjBQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=94bed600573265fb2250654fa92261e3ad62ba4d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+El mar, 2 mar 2021 a las 22:14, Yann E. MORIN
+(<yann.morin.1998@free.fr>) escribi?:
+[..]
+> >        66752   added usr/sbin/ebtables-legacy (ebtables)
+> >        66752   added usr/sbin/ebtablesu (ebtables)
+> >       200840   added usr/lib/libebtc.so.0.0.0 (ebtables)
+>
+> I think it would make more sense to have the package name before the
+> file name, so that it is easier to filter. Indeed, the package name will
+> never have spaces, while the filenames may:
+>
+>     -66452 ebtables removed lib/ebtables/libebtable_nat.so
+>      66752 ebtables added   usr/sbin/ebtablesd
+>
+> Yes, this means that parsers of this will have to be adapted. But even
+> with the package name at the end, they would have to be adapted.
+>
+> Unless you have a strong argument to keep it at the end?
 
-Fixes the following security issue:
+No I have no strong argument for that layout.
+In fact, what you propose makes more sense because the package name
+will always be in the third column, while with my approach it would
+swap to the fourth column in the detailed mode.
 
-- CVE-2021-23336: urllib.parse.parse_qsl(): Web cache poisoning - `; ` as a
-  query args separator
-  https://bugs.python.org/issue42967
+I will send a v2.
 
-And fixes a number of issues. For details, see the changelog:
-https://docs.python.org/release/3.8.8/whatsnew/changelog.html
-
-Drop the now upstreamed security patch and update the license hash for a
-change of copyright year:
-
--2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Python Software Foundation;
-+2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Python Software Foundation;
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...42938-Replace-snprintf-with-Python-unicod.patch | 190 ---------------------
- package/python3/python3.hash                       |   8 +-
- package/python3/python3.mk                         |   2 +-
- 3 files changed, 5 insertions(+), 195 deletions(-)
-
-diff --git a/package/python3/0034-closes-bpo-42938-Replace-snprintf-with-Python-unicod.patch b/package/python3/0034-closes-bpo-42938-Replace-snprintf-with-Python-unicod.patch
-deleted file mode 100644
-index 705ae18c25..0000000000
---- a/package/python3/0034-closes-bpo-42938-Replace-snprintf-with-Python-unicod.patch
-+++ /dev/null
-@@ -1,190 +0,0 @@
--From ece5dfd403dac211f8d3c72701fe7ba7b7aa5b5f Mon Sep 17 00:00:00 2001
--From: "Miss Islington (bot)"
-- <31488909+miss-islington@users.noreply.github.com>
--Date: Mon, 18 Jan 2021 13:28:52 -0800
--Subject: [PATCH] closes bpo-42938: Replace snprintf with Python unicode
-- formatting in ctypes param reprs. (GH-24248)
--
--(cherry picked from commit 916610ef90a0d0761f08747f7b0905541f0977c7)
--
--Co-authored-by: Benjamin Peterson <benjamin@python.org>
--
--Co-authored-by: Benjamin Peterson <benjamin@python.org>
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- Lib/ctypes/test/test_parameters.py            | 43 ++++++++++++++++
-- .../2021-01-18-09-27-31.bpo-42938.4Zn4Mp.rst  |  2 +
-- Modules/_ctypes/callproc.c                    | 51 +++++++------------
-- 3 files changed, 64 insertions(+), 32 deletions(-)
-- create mode 100644 Misc/NEWS.d/next/Security/2021-01-18-09-27-31.bpo-42938.4Zn4Mp.rst
--
--diff --git a/Lib/ctypes/test/test_parameters.py b/Lib/ctypes/test/test_parameters.py
--index e4c25fd880..531894fdec 100644
----- a/Lib/ctypes/test/test_parameters.py
--+++ b/Lib/ctypes/test/test_parameters.py
--@@ -201,6 +201,49 @@ class SimpleTypesTestCase(unittest.TestCase):
--         with self.assertRaises(ZeroDivisionError):
--             WorseStruct().__setstate__({}, b'foo')
-- 
--+    def test_parameter_repr(self):
--+        from ctypes import (
--+            c_bool,
--+            c_char,
--+            c_wchar,
--+            c_byte,
--+            c_ubyte,
--+            c_short,
--+            c_ushort,
--+            c_int,
--+            c_uint,
--+            c_long,
--+            c_ulong,
--+            c_longlong,
--+            c_ulonglong,
--+            c_float,
--+            c_double,
--+            c_longdouble,
--+            c_char_p,
--+            c_wchar_p,
--+            c_void_p,
--+        )
--+        self.assertRegex(repr(c_bool.from_param(True)), r"^<cparam '\?'@0x[A-Fa-f0-9]+>$")
--+        self.assertEqual(repr(c_char.from_param(97)), "<cparam 'c' ('a')>")
--+        self.assertRegex(repr(c_wchar.from_param('a')), r"^<cparam 'u'@0x[A-Fa-f0-9]+>$")
--+        self.assertEqual(repr(c_byte.from_param(98)), "<cparam 'b' (98)>")
--+        self.assertEqual(repr(c_ubyte.from_param(98)), "<cparam 'B' (98)>")
--+        self.assertEqual(repr(c_short.from_param(511)), "<cparam 'h' (511)>")
--+        self.assertEqual(repr(c_ushort.from_param(511)), "<cparam 'H' (511)>")
--+        self.assertRegex(repr(c_int.from_param(20000)), r"^<cparam '[li]' \(20000\)>$")
--+        self.assertRegex(repr(c_uint.from_param(20000)), r"^<cparam '[LI]' \(20000\)>$")
--+        self.assertRegex(repr(c_long.from_param(20000)), r"^<cparam '[li]' \(20000\)>$")
--+        self.assertRegex(repr(c_ulong.from_param(20000)), r"^<cparam '[LI]' \(20000\)>$")
--+        self.assertRegex(repr(c_longlong.from_param(20000)), r"^<cparam '[liq]' \(20000\)>$")
--+        self.assertRegex(repr(c_ulonglong.from_param(20000)), r"^<cparam '[LIQ]' \(20000\)>$")
--+        self.assertEqual(repr(c_float.from_param(1.5)), "<cparam 'f' (1.5)>")
--+        self.assertEqual(repr(c_double.from_param(1.5)), "<cparam 'd' (1.5)>")
--+        self.assertEqual(repr(c_double.from_param(1e300)), "<cparam 'd' (1e+300)>")
--+        self.assertRegex(repr(c_longdouble.from_param(1.5)), r"^<cparam ('d' \(1.5\)|'g'@0x[A-Fa-f0-9]+)>$")
--+        self.assertRegex(repr(c_char_p.from_param(b'hihi')), "^<cparam 'z' \(0x[A-Fa-f0-9]+\)>$")
--+        self.assertRegex(repr(c_wchar_p.from_param('hihi')), "^<cparam 'Z' \(0x[A-Fa-f0-9]+\)>$")
--+        self.assertRegex(repr(c_void_p.from_param(0x12)), r"^<cparam 'P' \(0x0*12\)>$")
--+
-- ################################################################
-- 
-- if __name__ == '__main__':
--diff --git a/Misc/NEWS.d/next/Security/2021-01-18-09-27-31.bpo-42938.4Zn4Mp.rst b/Misc/NEWS.d/next/Security/2021-01-18-09-27-31.bpo-42938.4Zn4Mp.rst
--new file mode 100644
--index 0000000000..7df65a156f
----- /dev/null
--+++ b/Misc/NEWS.d/next/Security/2021-01-18-09-27-31.bpo-42938.4Zn4Mp.rst
--@@ -0,0 +1,2 @@
--+Avoid static buffers when computing the repr of :class:`ctypes.c_double` and
--+:class:`ctypes.c_longdouble` values.
--diff --git a/Modules/_ctypes/callproc.c b/Modules/_ctypes/callproc.c
--index a9b8675cd9..de75918d49 100644
----- a/Modules/_ctypes/callproc.c
--+++ b/Modules/_ctypes/callproc.c
--@@ -484,58 +484,47 @@ is_literal_char(unsigned char c)
-- static PyObject *
-- PyCArg_repr(PyCArgObject *self)
-- {
---    char buffer[256];
--     switch(self->tag) {
--     case 'b':
--     case 'B':
---        sprintf(buffer, "<cparam '%c' (%d)>",
--+        return PyUnicode_FromFormat("<cparam '%c' (%d)>",
--             self->tag, self->value.b);
---        break;
--     case 'h':
--     case 'H':
---        sprintf(buffer, "<cparam '%c' (%d)>",
--+        return PyUnicode_FromFormat("<cparam '%c' (%d)>",
--             self->tag, self->value.h);
---        break;
--     case 'i':
--     case 'I':
---        sprintf(buffer, "<cparam '%c' (%d)>",
--+        return PyUnicode_FromFormat("<cparam '%c' (%d)>",
--             self->tag, self->value.i);
---        break;
--     case 'l':
--     case 'L':
---        sprintf(buffer, "<cparam '%c' (%ld)>",
--+        return PyUnicode_FromFormat("<cparam '%c' (%ld)>",
--             self->tag, self->value.l);
---        break;
-- 
--     case 'q':
--     case 'Q':
---        sprintf(buffer,
---#ifdef MS_WIN32
---            "<cparam '%c' (%I64d)>",
---#else
---            "<cparam '%c' (%lld)>",
---#endif
--+        return PyUnicode_FromFormat("<cparam '%c' (%lld)>",
--             self->tag, self->value.q);
---        break;
--     case 'd':
---        sprintf(buffer, "<cparam '%c' (%f)>",
---            self->tag, self->value.d);
---        break;
---    case 'f':
---        sprintf(buffer, "<cparam '%c' (%f)>",
---            self->tag, self->value.f);
---        break;
---
--+    case 'f': {
--+        PyObject *f = PyFloat_FromDouble((self->tag == 'f') ? self->value.f : self->value.d);
--+        if (f == NULL) {
--+            return NULL;
--+        }
--+        PyObject *result = PyUnicode_FromFormat("<cparam '%c' (%R)>", self->tag, f);
--+        Py_DECREF(f);
--+        return result;
--+    }
--     case 'c':
--         if (is_literal_char((unsigned char)self->value.c)) {
---            sprintf(buffer, "<cparam '%c' ('%c')>",
--+            return PyUnicode_FromFormat("<cparam '%c' ('%c')>",
--                 self->tag, self->value.c);
--         }
--         else {
---            sprintf(buffer, "<cparam '%c' ('\\x%02x')>",
--+            return PyUnicode_FromFormat("<cparam '%c' ('\\x%02x')>",
--                 self->tag, (unsigned char)self->value.c);
--         }
---        break;
-- 
-- /* Hm, are these 'z' and 'Z' codes useful at all?
--    Shouldn't they be replaced by the functionality of c_string
--@@ -544,22 +533,20 @@ PyCArg_repr(PyCArgObject *self)
--     case 'z':
--     case 'Z':
--     case 'P':
---        sprintf(buffer, "<cparam '%c' (%p)>",
--+        return PyUnicode_FromFormat("<cparam '%c' (%p)>",
--             self->tag, self->value.p);
--         break;
-- 
--     default:
--         if (is_literal_char((unsigned char)self->tag)) {
---            sprintf(buffer, "<cparam '%c'@%p>",
--+            return PyUnicode_FromFormat("<cparam '%c'@%p>",
--                 (unsigned char)self->tag, (void *)self);
--         }
--         else {
---            sprintf(buffer, "<cparam 0x%02x@%p>",
--+            return PyUnicode_FromFormat("<cparam 0x%02x@%p>",
--                 (unsigned char)self->tag, (void *)self);
--         }
---        break;
--     }
---    return PyUnicode_FromString(buffer);
-- }
-- 
-- static PyMemberDef PyCArgType_members[] = {
---- 
--2.20.1
--
-diff --git a/package/python3/python3.hash b/package/python3/python3.hash
-index d829fb9713..88a8072b8e 100644
---- a/package/python3/python3.hash
-+++ b/package/python3/python3.hash
-@@ -1,5 +1,5 @@
--# From https://www.python.org/downloads/release/python-387/
--md5  60fe018fffc7f33818e6c340d29e2db9  Python-3.8.7.tar.xz
-+# From https://www.python.org/downloads/release/python-388/
-+md5  23e6b769857233c1ac07b6be7442eff4  Python-3.8.8.tar.xz
- # Locally computed
--sha256  ddcc1df16bb5b87aa42ec5d20a5b902f2d088caa269b28e01590f97a798ec50a  Python-3.8.7.tar.xz
--sha256  1dceef1677a39befa8bf0285ab2db441ba117520bb2de839547ace006a17750d  LICENSE
-+sha256  7c664249ff77e443d6ea0e4cf0e587eae918ca3c48d081d1915fe2a1f1bcc5cc  Python-3.8.8.tar.xz
-+sha256  599826df92bfdcd2702eac691072498bb096c55af04ee984cf90f70ed77b5a70  LICENSE
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index 6675f84042..677baabf2a 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- PYTHON3_VERSION_MAJOR = 3.8
--PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).7
-+PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).8
- PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
- PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
- PYTHON3_LICENSE = Python-2.0, others
+Thanks!
+Thomas
