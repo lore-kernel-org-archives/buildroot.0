@@ -1,48 +1,48 @@
-From: Dan Raymond <draymond@foxvalley.net>
-Date: Wed, 3 Mar 2021 10:37:12 -0700
-Subject: [Buildroot] [PATCH 1/1] fix failure during 'make
- linux-menuconfig' when PATH env var has spaces
-In-Reply-To: <9469affa-d61e-347a-ef52-1ce6b1a11a23@mind.be>
-References: <16100eb6-bac8-2e4d-65f2-26333179f3b8@foxvalley.net>
- <9469affa-d61e-347a-ef52-1ce6b1a11a23@mind.be>
-Message-ID: <8d34f040-ac81-f000-895b-2607b5c0a018@foxvalley.net>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Wed, 3 Mar 2021 18:54:32 +0100
+Subject: [Buildroot] [PATCH 2/2] package/sconeserver: pcre is optional,
+ not mandatory
+In-Reply-To: <20210303172019.931457-2-fontaine.fabrice@gmail.com>
+References: <20210303172019.931457-1-fontaine.fabrice@gmail.com>
+ <20210303172019.931457-2-fontaine.fabrice@gmail.com>
+Message-ID: <20210303185432.5064244e@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 3/3/2021 10:11 AM, Arnout Vandecappelle wrote:
+Hello Fabrice,
 
->   Hi Dan,
->
-> On 01/03/2021 03:40, Dan Raymond wrote:
->>  ?$(2)_CONFIGURATOR_MAKE_ENV = \
->> -??? $$(filter-out PATH=% PKG_CONFIG=% PKG_CONFIG_SYSROOT_DIR=% \
->> -??? ?? PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=% PKG_CONFIG_ALLOW_SYSTEM_LIBS=% \
->> -??? ?? PKG_CONFIG_LIBDIR=%,$$($(2)_MAKE_ENV)) \
->> +??? $$(call strip_env,PATH PKG_CONFIG PKG_CONFIG_SYSROOT_DIR \
->> +??? ?? PKG_CONFIG_ALLOW_SYSTEM_CFLAGS PKG_CONFIG_ALLOW_SYSTEM_LIBS \
->> +??? ?? PKG_CONFIG_LIBDIR,$$($(2)_MAKE_ENV)) \
->>  ???? PKG_CONFIG_PATH="$(HOST_PKG_CONFIG_PATH)"
-> This is a bit of half-hearted quoting. It happens to work for spaces, but
-> breaks down on double quotes, backslashes, dollar signs, and probably others as
-> well.
->
->   I don't like to solve one specific corner case but leaving the door wide open
-> for different ones...
->
->   Unfortunately, proper shell quoting is really really hard.
->
->   Therefore, I'd propose to skirt around the issue entirely by overriding the
-> environment variables directly. Something like this (untested):
->
-> $(2)_CONFIGURATOR_MAKE_ENV = \
-> 	$$($(2)_MAKE_ENV) \
-> 	PATH="$$(BR_PATH)" \
-> 	PKG_CONFIG= \
-> 	...
+On Wed,  3 Mar 2021 18:20:19 +0100, Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-I like your idea.? It is much simpler.? I'll prepare a new patch and 
-test it.? But why are you setting PATH="$$(BR_PATH)"? Previously the 
-PATH variable was stripped entirely.
+> pcre is optional not mandatory since
+> https://github.com/sconemad/sconeserver/commit/98ec61436c9ea68ffe2d70a818c1175dcafa2a79
+>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/sconeserver/sconeserver.mk | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+>
+> diff --git a/package/sconeserver/sconeserver.mk b/package/sconeserver/sconeserver.mk
+> index b81134002e..62cc128d77 100644
+> --- a/package/sconeserver/sconeserver.mk
+> +++ b/package/sconeserver/sconeserver.mk
+> @@ -10,7 +10,10 @@ SCONESERVER_LICENSE = GPL-2.0+
+>  SCONESERVER_LICENSE_FILES = COPYING
+>  # fetching from Git, we need to generate the configure script
+>  SCONESERVER_AUTORECONF = YES
+> -SCONESERVER_DEPENDENCIES = host-pkgconf pcre zlib
+> +SCONESERVER_DEPENDENCIES = \
+> +	host-pkgconf \
+> +	$(if $(BR2_PACKAGE_PCRE),pcre) \
+
+Remove of 'select BR2_PACKAGE_PCRE' from Config.in missing?
+
+Regards,
+Peter
+
+> +	zlib
+>  # disable markdown module because its git submodule cmark
+>  # https://github.com/sconemad/sconeserver/tree/master/markdown
+>  # has no cross-compile support provided by the sconeserver build system
