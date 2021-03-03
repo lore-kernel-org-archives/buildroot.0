@@ -1,81 +1,28 @@
-From: Dan Raymond <draymond@foxvalley.net>
-Date: Wed, 3 Mar 2021 11:18:14 -0700
-Subject: [Buildroot] [PATCH 1/1] fix failure during 'make
- linux-menuconfig' when PATH env var has spaces
-In-Reply-To: <8d34f040-ac81-f000-895b-2607b5c0a018@foxvalley.net>
-References: <16100eb6-bac8-2e4d-65f2-26333179f3b8@foxvalley.net>
- <9469affa-d61e-347a-ef52-1ce6b1a11a23@mind.be>
- <8d34f040-ac81-f000-895b-2607b5c0a018@foxvalley.net>
-Message-ID: <a47fae4f-80f2-343b-72d7-39c245bfd753@foxvalley.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 03 Mar 2021 13:44:27 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libebml: security bump to
+ version 1.4.2
+In-Reply-To: <20210303101039.500302-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 3 Mar 2021 11:10:39 +0100")
+References: <20210303101039.500302-1-fontaine.fabrice@gmail.com>
+Message-ID: <87eegwjtjo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-On 3/3/2021 10:37 AM, Dan Raymond wrote:
-> On 3/3/2021 10:11 AM, Arnout Vandecappelle wrote:
->
->> ? Hi Dan,
->>
->> On 01/03/2021 03:40, Dan Raymond wrote:
->>> ??$(2)_CONFIGURATOR_MAKE_ENV = \
->>> -??? $$(filter-out PATH=% PKG_CONFIG=% PKG_CONFIG_SYSROOT_DIR=% \
->>> -??? ?? PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=% 
->>> PKG_CONFIG_ALLOW_SYSTEM_LIBS=% \
->>> -??? ?? PKG_CONFIG_LIBDIR=%,$$($(2)_MAKE_ENV)) \
->>> +??? $$(call strip_env,PATH PKG_CONFIG PKG_CONFIG_SYSROOT_DIR \
->>> +??? ?? PKG_CONFIG_ALLOW_SYSTEM_CFLAGS PKG_CONFIG_ALLOW_SYSTEM_LIBS \
->>> +??? ?? PKG_CONFIG_LIBDIR,$$($(2)_MAKE_ENV)) \
->>> ????? PKG_CONFIG_PATH="$(HOST_PKG_CONFIG_PATH)"
->> This is a bit of half-hearted quoting. It happens to work for spaces, 
->> but
->> breaks down on double quotes, backslashes, dollar signs, and probably 
->> others as
->> well.
->>
->> ? I don't like to solve one specific corner case but leaving the door 
->> wide open
->> for different ones...
->>
->> ? Unfortunately, proper shell quoting is really really hard.
->>
->> ? Therefore, I'd propose to skirt around the issue entirely by 
->> overriding the
->> environment variables directly. Something like this (untested):
->>
->> $(2)_CONFIGURATOR_MAKE_ENV = \
->> ????$$($(2)_MAKE_ENV) \
->> ????PATH="$$(BR_PATH)" \
->> ????PKG_CONFIG= \
->> ????...
->
-> I like your idea.? It is much simpler.? I'll prepare a new patch and 
-> test it.? But why are you setting PATH="$$(BR_PATH)"? Previously the 
-> PATH variable was stripped entirely.
+ > Fix CVE-2021-3405: A flaw was found in libebml before 1.4.2. A heap
+ > overflow bug exists in the implementation of EbmlString::ReadData and
+ > EbmlUnicodeString::ReadData in libebml.
 
-OK, I see why we can't just set an empty path (none of the build tools 
-will be found).? I got the following to work.? You can't quote 
-$(BR_PATH) because it is already quoted and you only need one $.
+ > https://github.com/Matroska-Org/libebml/blob/release-1.4.2/ChangeLog
 
-$(2)_CONFIGURATOR_MAKE_ENV = \
- ??? $$($(2)_MAKE_ENV) \
- ??? PATH=$(BR_PATH) \
- ??? PKG_CONFIG= \
- ??? PKG_CONFIG_SYSROOT_DIR= \
- ??? PKG_CONFIG_ALLOW_SYSTEM_CFLAGS= \
- ??? PKG_CONFIG_ALLOW_SYSTEM_LIBS= \
- ??? PKG_CONFIG_LIBDIR= \
- ??? PKG_CONFIG_PATH="$(HOST_PKG_CONFIG_PATH)"
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-However the result is equivalent to leaving the PATH alone:
+Committed, thanks.
 
-$(2)_CONFIGURATOR_MAKE_ENV = \
- ??? $$($(2)_MAKE_ENV) \
- ??? PKG_CONFIG= \
- ??? PKG_CONFIG_SYSROOT_DIR= \
- ??? PKG_CONFIG_ALLOW_SYSTEM_CFLAGS= \
- ??? PKG_CONFIG_ALLOW_SYSTEM_LIBS= \
- ??? PKG_CONFIG_LIBDIR= \
- ??? PKG_CONFIG_PATH="$(HOST_PKG_CONFIG_PATH)"
+-- 
+Bye, Peter Korsgaard
