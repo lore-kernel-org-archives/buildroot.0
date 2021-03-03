@@ -1,40 +1,49 @@
-From: Michael Nosthoff <buildroot@heine.tech>
-Date: Wed,  3 Mar 2021 16:59:47 +0100
-Subject: [Buildroot] [PATCH] package/grpc: bump to version 1.36.0
-Message-ID: <20210303155946.222582-1-buildroot@heine.tech>
+From: Lukas Hecht <mixolydisch@gmx.de>
+Date: Wed, 3 Mar 2021 17:16:31 +0100
+Subject: [Buildroot] Problems with generating an x86 Image
+In-Reply-To: <CAAXf6LVehreRKpkNMg2bY2KTsy2BL56dSOCVNUMUu5c7vNPzPw@mail.gmail.com>
+References: <98397e30-a396-803a-ddc4-ed31719eae51@gmx.de>
+ <CAAXf6LVehreRKpkNMg2bY2KTsy2BL56dSOCVNUMUu5c7vNPzPw@mail.gmail.com>
+Message-ID: <8311428a-3ee1-6e00-78e5-064df934dbc5@gmx.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
----
- package/grpc/grpc.hash | 2 +-
- package/grpc/grpc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hi Thomas,
 
-diff --git a/package/grpc/grpc.hash b/package/grpc/grpc.hash
-index 52d25fc5ed..2e6bd71cb3 100644
---- a/package/grpc/grpc.hash
-+++ b/package/grpc/grpc.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  27dd2fc5c9809ddcde8eb6fa1fa278a3486566dfc28335fca13eb8df8bd3b958  grpc-1.35.0.tar.gz
-+sha256  1a5127c81487f4e3e57973bb332f04b9159f94d860c207e096d8a587d371edbd  grpc-1.36.0.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
-index 27b28deff3..8426ff5736 100644
---- a/package/grpc/grpc.mk
-+++ b/package/grpc/grpc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GRPC_VERSION = 1.35.0
-+GRPC_VERSION = 1.36.0
- GRPC_SITE = $(call github,grpc,grpc,v$(GRPC_VERSION))
- GRPC_LICENSE = Apache-2.0
- GRPC_LICENSE_FILES = LICENSE
--- 
-2.25.1
+maybe this idea could lead in the right direction. The process takes
+about 12 seconds from leaving grub till stopping to boot, which sounds
+about right to me for such a basic system.
+
+I did not change anything on the getty, etc/inittab shows:
+tty1::respawn:/sbin/getty -L tty1 0 vt100 # GENERIC_SERIAL
+
+My hardware has three serial ports but i don't know any more details
+about these at the moment.
+
+Is there an easy way (like with booting a live ubuntu) to find out if
+tty1 is the right one?
+
+Thanks a lot,
+Lukas
+
+
+Am 03.03.2021 um 16:56 schrieb Thomas De Schampheleire:
+> While I don't have experience specifically with using Buildroot for PC
+> images, this symptom gives me the impression that the 'getty', which
+> is supposed to give you a login prompt, is not going to the terminal
+> you are looking at.
+>
+> Based on the boot output, do you agree that the system 'seems' booted,
+> but you are just missing the login prompt?
+>
+> Have a look at /etc/inittab , based on the defconfig you started from,
+> the getty is supposed to be assigned to 'tty1'.
+> Did you change anything in this regard?
+> Do you have something specific on this hardware with respect to tty /
+> serial line?
+>
+> Best regards,
+> Thomas
