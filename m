@@ -1,51 +1,78 @@
-From: Michael Nosthoff <buildroot@heine.tech>
-Date: Wed,  3 Mar 2021 16:57:40 +0100
-Subject: [Buildroot] [PATCH] package/{protobuf,
- python-protobuf}: bump to version 3.15.3
-Message-ID: <20210303155741.222365-1-buildroot@heine.tech>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed,  3 Mar 2021 16:58:01 +0100
+Subject: [Buildroot] [PATCH 1/1] package/sox: fix static build with magic
+Message-ID: <20210303155801.573321-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
----
- package/protobuf/protobuf.hash               | 2 +-
- package/protobuf/protobuf.mk                 | 2 +-
- package/python-protobuf/python-protobuf.hash | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+This build failure is raised since bump to
+7524160b29a476f7e87bc14fddf12d349f9a3c5e
 
-diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
-index 001b41be9a..084f8ce0f2 100644
---- a/package/protobuf/protobuf.hash
-+++ b/package/protobuf/protobuf.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
- sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
--sha256  50ec5a07c0c55d4ec536dd49021f2e194a26bfdbc531d03d1e9d4d3e27175659  protobuf-cpp-3.14.0.tar.gz
-+sha256  984a65bcc3522b40b7aa493e392dc7ff710c2e4254fdd3ca0594a16f32391199  protobuf-cpp-3.15.3.tar.gz
-diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
-index 661b7a6b81..99174841ea 100644
---- a/package/protobuf/protobuf.mk
-+++ b/package/protobuf/protobuf.mk
-@@ -7,7 +7,7 @@
- # When bumping this package, make sure to also verify if the
- # python-protobuf package still works and to update its hash,
- # as they share the same version/site variables.
--PROTOBUF_VERSION = 3.14.0
-+PROTOBUF_VERSION = 3.15.3
- PROTOBUF_SOURCE = protobuf-cpp-$(PROTOBUF_VERSION).tar.gz
- PROTOBUF_SITE = https://github.com/google/protobuf/releases/download/v$(PROTOBUF_VERSION)
- PROTOBUF_LICENSE = BSD-3-Clause
-diff --git a/package/python-protobuf/python-protobuf.hash b/package/python-protobuf/python-protobuf.hash
-index c8762b5416..f74625bd2f 100644
---- a/package/python-protobuf/python-protobuf.hash
-+++ b/package/python-protobuf/python-protobuf.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  969019c5fd9c1345f0b34afa06ab2664c1441d159d5ae87ded5fa01d79f028c1  protobuf-python-3.14.0.tar.gz
-+sha256  f777d95da5b870b8d5e06765bec3596a9ad5aa1f1595279a4836db562e82e281  protobuf-python-3.15.3.tar.gz
- sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
+Fixes:
+ - http://autobuild.buildroot.org/results/d96f27cd96926060046e2e1115777f5bceda3741
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...ure.ac-fix-static-linking-with-magic.patch | 48 +++++++++++++++++++
+ 1 file changed, 48 insertions(+)
+ create mode 100644 package/sox/0004-configure.ac-fix-static-linking-with-magic.patch
+
+diff --git a/package/sox/0004-configure.ac-fix-static-linking-with-magic.patch b/package/sox/0004-configure.ac-fix-static-linking-with-magic.patch
+new file mode 100644
+index 0000000000..2fbb8ff8a4
+--- /dev/null
++++ b/package/sox/0004-configure.ac-fix-static-linking-with-magic.patch
+@@ -0,0 +1,48 @@
++From d591a38d934b2a6750f16c7bd46a9ad12233301c Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 3 Mar 2021 16:48:57 +0100
++Subject: [PATCH] configure.ac: fix static linking with magic
++
++Put back -lz (i.e. ZLIB_LIBS) when searching for magic which was
++wrongly removed by commit 6ff0e9322f9891f5a6ac6c9b3bceffbfca16bec3. This
++will fix the following static build failure:
++
++configure:11677: checking for magic_open in -lmagic
++configure:11702: /srv/storage/autobuild/run/instance-0/output-1/host/bin/arm-linux-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -static -Wall -Wmissing-prototypes -Wstrict-prototypes  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -static -Wl,--as-needed conftest.c -lmagic    >&5
++conftest.c:53:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
++   53 | char magic_open ();
++      | ^~~~
++conftest.c:55:1: warning: function declaration isn't a prototype [-Wstrict-prototypes]
++   55 | main ()
++      | ^~~~
++/srv/storage/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/9.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /srv/storage/autobuild/run/instance-0/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libmagic.a(compress.o): in function `uncompresszlib':
++compress.c:(.text+0x1d0): undefined reference to `inflateInit_'
++/srv/storage/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/9.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: compress.c:(.text+0x1e4): undefined reference to `inflate'
++/srv/storage/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/9.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: compress.c:(.text+0x1fc): undefined reference to `inflateEnd'
++
++Fixes:
++ - http://autobuild.buildroot.org/results/d96f27cd96926060046e2e1115777f5bceda3741
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: not sent yet (waiting for feedback on third patch)]
++---
++ configure.ac | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 896714f5..ca7bccaa 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -80,8 +80,8 @@ SOX_REPORT([other], [LADSPA effect plugins], [$HAVE_LADSPA])
++ 
++ dnl Various libraries
++ 
++-SOX_WITH_LIB([magic], [magic.h], [magic], [magic_open])
++ SOX_CHECK_LIB([ZLIB], [zlib.h], [z], [uncompress])
+++SOX_WITH_LIB([magic], [magic.h], [magic], [magic_open], [], [], [], [$ZLIB_LIBS])
++ SOX_WITH_LIB([png], [png.h], [png], [png_set_rows], [], [], [], [$ZLIB_LIBS])
++ SOX_WITH_LIB([id3tag], [id3tag.h], [id3tag], [id3_file_open], [], [], [], [$ZLIB_LIBS])
++ SOX_WITH_LIB([libgsm], [gsm/gsm.h gsm.h], [gsm], [gsm_create])
++-- 
++2.30.0
++
 -- 
-2.25.1
+2.30.0
