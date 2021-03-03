@@ -1,113 +1,48 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  3 Mar 2021 18:20:18 +0100
-Subject: [Buildroot] [PATCH 1/2] package/sconeserver: drop unrecognized
- options
-Message-ID: <20210303172019.931457-1-fontaine.fabrice@gmail.com>
+From: Dan Raymond <draymond@foxvalley.net>
+Date: Wed, 3 Mar 2021 10:37:12 -0700
+Subject: [Buildroot] [PATCH 1/1] fix failure during 'make
+ linux-menuconfig' when PATH env var has spaces
+In-Reply-To: <9469affa-d61e-347a-ef52-1ce6b1a11a23@mind.be>
+References: <16100eb6-bac8-2e4d-65f2-26333179f3b8@foxvalley.net>
+ <9469affa-d61e-347a-ef52-1ce6b1a11a23@mind.be>
+Message-ID: <8d34f040-ac81-f000-895b-2607b5c0a018@foxvalley.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop Magick++-config, lettuce and ui options which are
-not recognized since latest bump in commit
-ca17e0c7a02298b0250cdc121bcacef0b58fffe1 (back in 2018).
+On 3/3/2021 10:11 AM, Arnout Vandecappelle wrote:
 
-Indeed:
-- Magick++-config is not used since
-  https://github.com/sconemad/sconeserver/commit/b025999b8a9a9715b72d0fc8ccbf0888e163388f
-- Experimental UI and lettuce modules have been dropped since
-  https://github.com/sconemad/sconeserver/commit/ccc1efdb8981fbef63a714ff6315c8a18372090a
+>   Hi Dan,
+>
+> On 01/03/2021 03:40, Dan Raymond wrote:
+>>  ?$(2)_CONFIGURATOR_MAKE_ENV = \
+>> -??? $$(filter-out PATH=% PKG_CONFIG=% PKG_CONFIG_SYSROOT_DIR=% \
+>> -??? ?? PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=% PKG_CONFIG_ALLOW_SYSTEM_LIBS=% \
+>> -??? ?? PKG_CONFIG_LIBDIR=%,$$($(2)_MAKE_ENV)) \
+>> +??? $$(call strip_env,PATH PKG_CONFIG PKG_CONFIG_SYSROOT_DIR \
+>> +??? ?? PKG_CONFIG_ALLOW_SYSTEM_CFLAGS PKG_CONFIG_ALLOW_SYSTEM_LIBS \
+>> +??? ?? PKG_CONFIG_LIBDIR,$$($(2)_MAKE_ENV)) \
+>>  ???? PKG_CONFIG_PATH="$(HOST_PKG_CONFIG_PATH)"
+> This is a bit of half-hearted quoting. It happens to work for spaces, but
+> breaks down on double quotes, backslashes, dollar signs, and probably others as
+> well.
+>
+>   I don't like to solve one specific corner case but leaving the door wide open
+> for different ones...
+>
+>   Unfortunately, proper shell quoting is really really hard.
+>
+>   Therefore, I'd propose to skirt around the issue entirely by overriding the
+> environment variables directly. Something like this (untested):
+>
+> $(2)_CONFIGURATOR_MAKE_ENV = \
+> 	$$($(2)_MAKE_ENV) \
+> 	PATH="$$(BR_PATH)" \
+> 	PKG_CONFIG= \
+> 	...
 
-Moreover, replace sconesite-image by image (broken since 2013 and
-https://github.com/sconemad/sconeserver/commit/7693301fdb0076bf7676eb2db278c2f015ac7157)
-
-As UI and lettuce options are broken since a long time, it does not seem
-useful to add entries in Config.in.legacy
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/sconeserver/Config.in      | 17 -----------------
- package/sconeserver/sconeserver.mk | 19 ++-----------------
- 2 files changed, 2 insertions(+), 34 deletions(-)
-
-diff --git a/package/sconeserver/Config.in b/package/sconeserver/Config.in
-index a42abd70b7..09cf5d459c 100644
---- a/package/sconeserver/Config.in
-+++ b/package/sconeserver/Config.in
-@@ -79,13 +79,6 @@ comment "location support needs a toolchain w/ theads, dynamic library"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBRARY
- 
--config BR2_PACKAGE_SCONESERVER_LETTUCE
--	bool "lettuce"
--	help
--	  Sconeserver module for Lettuce embedded automation platform
--
--	  http://www.sconemad.com/lettuce/
--
- config BR2_PACKAGE_SCONESERVER_MATHS
- 	bool "maths"
- 	select BR2_PACKAGE_MPFR
-@@ -97,16 +90,6 @@ config BR2_PACKAGE_SCONESERVER_TESTBUILDER
- 	help
- 	  Testbuilder module for Sconeserver
- 
--config BR2_PACKAGE_SCONESERVER_UI
--	bool "ui"
--	depends on BR2_PACKAGE_XORG7
--	select BR2_PACKAGE_XLIB_LIBX11
--	help
--	  UI module for Sconeserver
--
--comment "ui module requires X.org"
--	depends on !BR2_PACKAGE_XORG7
--
- endif # BR2_PACKAGE_SCONESERVER
- 
- comment "sconeserver needs a toolchain with dynamic library, C++, NPTL"
-diff --git a/package/sconeserver/sconeserver.mk b/package/sconeserver/sconeserver.mk
-index 9d4713afea..b81134002e 100644
---- a/package/sconeserver/sconeserver.mk
-+++ b/package/sconeserver/sconeserver.mk
-@@ -44,11 +44,9 @@ endif
- 
- ifeq ($(BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE_IMAGE),y)
- SCONESERVER_DEPENDENCIES += imagemagick
--SCONESERVER_CONF_OPTS += \
--	--with-sconesite-image \
--	--with-Magick++-config="$(STAGING_DIR)/usr/bin/Magick++-config"
-+SCONESERVER_CONF_OPTS += --with-image
- else
--SCONESERVER_CONF_OPTS += --without-sconesite-image --with-Magick++-config=no
-+SCONESERVER_CONF_OPTS += --without-image
- endif
- 
- ifeq ($(BR2_PACKAGE_SCONESERVER_MYSQL),y)
-@@ -82,12 +80,6 @@ else
- SCONESERVER_CONF_OPTS += --without-location
- endif
- 
--ifeq ($(BR2_PACKAGE_SCONESERVER_LETTUCE),y)
--SCONESERVER_CONF_OPTS += --with-lettuce
--else
--SCONESERVER_CONF_OPTS += --without-lettuce
--endif
--
- ifeq ($(BR2_PACKAGE_SCONESERVER_MATHS),y)
- SCONESERVER_DEPENDENCIES += mpfr
- SCONESERVER_CONF_OPTS += --with-maths
-@@ -101,11 +93,4 @@ else
- SCONESERVER_CONF_OPTS += --without-testbuilder
- endif
- 
--ifeq ($(BR2_PACKAGE_SCONESERVER_UI),y)
--SCONESERVER_DEPENDENCIES += xlib_libX11
--SCONESERVER_CONF_OPTS += --with-ui
--else
--SCONESERVER_CONF_OPTS += --without-ui
--endif
--
- $(eval $(autotools-package))
--- 
-2.30.0
+I like your idea.? It is much simpler.? I'll prepare a new patch and 
+test it.? But why are you setting PATH="$$(BR_PATH)"? Previously the 
+PATH variable was stripped entirely.
