@@ -1,35 +1,45 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  3 Mar 2021 15:41:36 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libconfuse: set
- LIBCONFUSE_CPE_ID_VALID
-Message-ID: <20210303144136.501063-1-fontaine.fabrice@gmail.com>
+From: Michael Vetter <jubalh@iodoru.org>
+Date: Wed,  3 Mar 2021 15:49:59 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libstrophe: bump to version 0.10.1
+Message-ID: <20210303144959.27740-1-jubalh@iodoru.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:libconfuse_project:libconfuse is a valid CPE identifier for
-this package:
+Changes:
+* Fixed compilation error when LibreSSL is used
+* Fixed crash when NULL is provided as password
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alibconfuse_project%3Alibconfuse
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Michael Vetter <jubalh@iodoru.org>
 ---
- package/libconfuse/libconfuse.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/libstrophe/libstrophe.hash | 2 +-
+ package/libstrophe/libstrophe.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libconfuse/libconfuse.mk b/package/libconfuse/libconfuse.mk
-index 516c0056d1..b4523d069c 100644
---- a/package/libconfuse/libconfuse.mk
-+++ b/package/libconfuse/libconfuse.mk
-@@ -11,6 +11,7 @@ LIBCONFUSE_INSTALL_STAGING = YES
- LIBCONFUSE_CONF_OPTS = --disable-rpath
- LIBCONFUSE_LICENSE = ISC
- LIBCONFUSE_LICENSE_FILES = LICENSE
-+LIBCONFUSE_CPE_ID_VALID = YES
- LIBCONFUSE_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
+diff --git a/package/libstrophe/libstrophe.hash b/package/libstrophe/libstrophe.hash
+index 5f3b098c89..6aca289fb5 100644
+--- a/package/libstrophe/libstrophe.hash
++++ b/package/libstrophe/libstrophe.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256 8d804e4c74cea1133203cc95a59a88f700fbdaead076e7959b495d734dd7936d  libstrophe-0.10.0.tar.gz
++sha256 4918c47029ecdea2deab4b0f9336ca4a8bb12c28b72b2cec397d98664b94c771  libstrophe-0.10.1.tar.gz
+ sha256 82476f36ffd5e895a176013c0812166ba7b7d99f3d536fc7f5ed2e33e9f74a08  MIT-LICENSE.txt
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  GPL-LICENSE.txt
+diff --git a/package/libstrophe/libstrophe.mk b/package/libstrophe/libstrophe.mk
+index 81fc1b9f97..e078eb25cd 100644
+--- a/package/libstrophe/libstrophe.mk
++++ b/package/libstrophe/libstrophe.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- $(eval $(autotools-package))
+-LIBSTROPHE_VERSION = 0.10.0
++LIBSTROPHE_VERSION = 0.10.1
+ LIBSTROPHE_SITE = $(call github,strophe,libstrophe,$(LIBSTROPHE_VERSION))
+ LIBSTROPHE_DEPENDENCIES = openssl host-pkgconf
+ # Doesn't ship configure
 -- 
-2.30.0
+2.26.2
