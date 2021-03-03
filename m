@@ -1,47 +1,43 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  3 Mar 2021 11:10:39 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libebml: security bump to version
- 1.4.2
-Message-ID: <20210303101039.500302-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 03 Mar 2021 08:12:15 +0100
+Subject: [Buildroot] [PATCH] package/openssl: fix build on riscv32
+In-Reply-To: <20210302215147.1556308-1-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Tue, 2 Mar 2021 22:51:47 +0100")
+References: <20210302215147.1556308-1-yann.morin.1998@free.fr>
+Message-ID: <878s74lnhs.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix CVE-2021-3405: A flaw was found in libebml before 1.4.2. A heap
-overflow bug exists in the implementation of EbmlString::ReadData and
-EbmlUnicodeString::ReadData in libebml.
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-https://github.com/Matroska-Org/libebml/blob/release-1.4.2/ChangeLog
+ > riscv32 is (surprise!) a 32-bit architecture. But it has been 2038-safe
+ > from its inception. As such, there is no legacy binaries that may use
+ > the 32-bit time syscalls, and thus they are anot available on riscv32.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libebml/libebml.hash | 2 +-
- package/libebml/libebml.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > Code tht directly calls to the syscalls without using the C libraries
+ > wrappers thus need to handle this case by themselves.
 
-diff --git a/package/libebml/libebml.hash b/package/libebml/libebml.hash
-index f06924076e..32ca1e3dd3 100644
---- a/package/libebml/libebml.hash
-+++ b/package/libebml/libebml.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  80abc9a82549615018798ee704997270a39b43de9a6e7e0d23b62f8ce682c4b3  libebml-1.4.0.tar.xz
-+sha256  41c7237ce05828fb220f62086018b080af4db4bb142f31bec0022c925889b9f2  libebml-1.4.2.tar.xz
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL
-diff --git a/package/libebml/libebml.mk b/package/libebml/libebml.mk
-index 7ae31d3e22..056cf888e1 100644
---- a/package/libebml/libebml.mk
-+++ b/package/libebml/libebml.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBEBML_VERSION = 1.4.0
-+LIBEBML_VERSION = 1.4.2
- LIBEBML_SOURCE = libebml-$(LIBEBML_VERSION).tar.xz
- LIBEBML_SITE = http://dl.matroska.org/downloads/libebml
- LIBEBML_INSTALL_STAGING = YES
+ > Backport a patch from the upstream development branch that will
+ > eventually be openssl 3.0, but has not yet been backported to the 1.1.1
+ > stable branch.
+
+ > Fixes:
+ >     http://autobuild.buildroot.org/results/eb9/eb9a64d4ffae8569b5225083f282cf87ffa7c681/
+ >     ...
+ >     http://autobuild.buildroot.org/results/07e/07e413b24ba8adc9558c80267ce16dda339bf032/
+
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ > Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+ > Cc: Mark Corbin <mark@dibsco.co.uk>
+
+Did you see Arndbs comment on the upstream commit?
+
+https://github.com/openssl/openssl/commit/5b5e2985f355c8e99c196d9ce5d02c15bebadfbc
+
+I cannot quite figure out if this causes issues for other archs?
+
 -- 
-2.30.0
+Bye, Peter Korsgaard
