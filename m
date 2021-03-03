@@ -1,43 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 03 Mar 2021 08:12:15 +0100
-Subject: [Buildroot] [PATCH] package/openssl: fix build on riscv32
-In-Reply-To: <20210302215147.1556308-1-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Tue, 2 Mar 2021 22:51:47 +0100")
-References: <20210302215147.1556308-1-yann.morin.1998@free.fr>
-Message-ID: <878s74lnhs.fsf@dell.be.48ers.dk>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed,  3 Mar 2021 10:20:45 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libmodplug: add
+ LIBMODPLUG_CPE_ID_VENDOR
+Message-ID: <20210303092045.467923-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+cpe:2.3:a:konstanty_bialkowski:libmodplug is a valid CPE identifier for
+this package:
 
- > riscv32 is (surprise!) a 32-bit architecture. But it has been 2038-safe
- > from its inception. As such, there is no legacy binaries that may use
- > the 32-bit time syscalls, and thus they are anot available on riscv32.
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Akonstanty_bialkowski%3Alibmodplug
 
- > Code tht directly calls to the syscalls without using the C libraries
- > wrappers thus need to handle this case by themselves.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libmodplug/libmodplug.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
- > Backport a patch from the upstream development branch that will
- > eventually be openssl 3.0, but has not yet been backported to the 1.1.1
- > stable branch.
-
- > Fixes:
- >     http://autobuild.buildroot.org/results/eb9/eb9a64d4ffae8569b5225083f282cf87ffa7c681/
- >     ...
- >     http://autobuild.buildroot.org/results/07e/07e413b24ba8adc9558c80267ce16dda339bf032/
-
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
- > Cc: Matt Weber <matthew.weber@rockwellcollins.com>
- > Cc: Mark Corbin <mark@dibsco.co.uk>
-
-Did you see Arndbs comment on the upstream commit?
-
-https://github.com/openssl/openssl/commit/5b5e2985f355c8e99c196d9ce5d02c15bebadfbc
-
-I cannot quite figure out if this causes issues for other archs?
-
+diff --git a/package/libmodplug/libmodplug.mk b/package/libmodplug/libmodplug.mk
+index 05786ce812..98c38a3b00 100644
+--- a/package/libmodplug/libmodplug.mk
++++ b/package/libmodplug/libmodplug.mk
+@@ -9,5 +9,6 @@ LIBMODPLUG_SITE = http://downloads.sourceforge.net/project/modplug-xmms/libmodpl
+ LIBMODPLUG_INSTALL_STAGING = YES
+ LIBMODPLUG_LICENSE = Public Domain
+ LIBMODPLUG_LICENSE_FILES = COPYING
++LIBMODPLUG_CPE_ID_VENDOR = konstanty_bialkowski
+ 
+ $(eval $(autotools-package))
 -- 
-Bye, Peter Korsgaard
+2.30.0
