@@ -1,60 +1,55 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu,  4 Mar 2021 13:29:25 +0100
-Subject: [Buildroot] [PATCH 1/1] package/kismet: fix build when time_t is
- defined as long long
-Message-ID: <20210304122925.1609049-1-fontaine.fabrice@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu,  4 Mar 2021 14:39:11 +0200
+Subject: [Buildroot] [PATCH] package/strace: bump to version 5.11
+Message-ID: <d7b7ea987a3b40c1c7e76728de569e96860c0189.1614861551.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On some platforms time_t is defined as long long. At the moment, the
-compilation of sqlite3_column_as<time_t>(...) fails on these systems
-because the appropriate getter is not defined
+Update COPYING: copyright year update, and added note about the bundled
+Linux UAPI headers. Upstream commit 5bd8364f4202d ("Introduce bundled
+directory") says:
 
-Fixes:
- - http://autobuild.buildroot.org/results/3a76afdbd8b564579bfb08a4d75b438dbd73ac2e
+   According to analysis made by Kent Gibson at [1], we are allowed to
+   re-distribute unmodified Linux kernel UAPI headers under the same
+   terms as they are provided by the Linux kernel, and such
+   re-distribution does not affect the license of strace itself.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+   [1] https://lore.kernel.org/linux-gpio/20210128032641.GA11655 at sol/
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- ...to-read-database-values-as-long-long.patch | 28 +++++++++++++++++++
- 1 file changed, 28 insertions(+)
- create mode 100644 package/kismet/0001-Add-getter-to-read-database-values-as-long-long.patch
+ package/strace/strace.hash | 6 +++---
+ package/strace/strace.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/kismet/0001-Add-getter-to-read-database-values-as-long-long.patch b/package/kismet/0001-Add-getter-to-read-database-values-as-long-long.patch
-new file mode 100644
-index 0000000000..564cba87bb
---- /dev/null
-+++ b/package/kismet/0001-Add-getter-to-read-database-values-as-long-long.patch
-@@ -0,0 +1,28 @@
-+From 1d36faad18e34b43ac8ea3e7f6a44315f827a2db Mon Sep 17 00:00:00 2001
-+From: George Hopkins <george-hopkins@null.net>
-+Date: Mon, 4 Jan 2021 13:59:41 +0100
-+Subject: [PATCH] Add getter to read database values as long long
-+
-+[Retrieved from:
-+https://github.com/kismetwireless/kismet/commit/1d36faad18e34b43ac8ea3e7f6a44315f827a2db]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ sqlite3_cpp11.cc | 5 +++++
-+ 1 file changed, 5 insertions(+)
-+
-+diff --git a/sqlite3_cpp11.cc b/sqlite3_cpp11.cc
-+index 7974bde8c..5c92dfa87 100644
-+--- a/sqlite3_cpp11.cc
-++++ b/sqlite3_cpp11.cc
-+@@ -411,6 +411,11 @@ namespace kissqlite3 {
-+         return (unsigned long) sqlite3_column_int64(stmt.get(), column);
-+     }
-+ 
-++    template<>
-++    long long sqlite3_column_as(std::shared_ptr<sqlite3_stmt> stmt, unsigned int column) {
-++        return (long long) sqlite3_column_int64(stmt.get(), column);
-++    }
-++
-+     template<>
-+     unsigned long long sqlite3_column_as(std::shared_ptr<sqlite3_stmt> stmt, unsigned int column) {
-+         return (unsigned long long) sqlite3_column_int64(stmt.get(), column);
+diff --git a/package/strace/strace.hash b/package/strace/strace.hash
+index 7b211c78b995..e4fe690f612e 100644
+--- a/package/strace/strace.hash
++++ b/package/strace/strace.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking signature with RSA key 0xA8041FA839E16E36
+-# https://strace.io/files/5.10/strace-5.10.tar.xz.asc
+-sha256  fe3982ea4cd9aeb3b4ba35f6279f0b577a37175d3282be24b9a5537b56b8f01c  strace-5.10.tar.xz
+-sha256  6370eb67db918210944a8511a6995ebe9567852f26b4f15a01e5c8cf2aef7c46  COPYING
++# https://strace.io/files/5.11/strace-5.11.tar.xz.asc
++sha256  ffe340b10c145a0f85734271e9cce56457d23f21a7ea5931ab32f8cf4e793879  strace-5.11.tar.xz
++sha256  f847d5ef26ad1151ca63bb88536b23a4cac5040c67917f3d5ee7ea1316e2b736  COPYING
+ sha256  7c379436436a562834aa7d2f5dcae1f80a25230fa74201046ca1fba4367d39aa  LGPL-2.1-or-later
+diff --git a/package/strace/strace.mk b/package/strace/strace.mk
+index 646be41e5b3a..e3e255fd6137 100644
+--- a/package/strace/strace.mk
++++ b/package/strace/strace.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-STRACE_VERSION = 5.10
++STRACE_VERSION = 5.11
+ STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
+ STRACE_SITE = https://strace.io/files/$(STRACE_VERSION)
+ STRACE_LICENSE = LGPL-2.1+
 -- 
-2.30.0
+2.30.1
