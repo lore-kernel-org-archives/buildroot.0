@@ -1,34 +1,60 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu,  4 Mar 2021 12:28:55 +0100
-Subject: [Buildroot] [PATCH 1/1] package/systemd: add SYSTEMD_CPE_ID_VENDOR
-Message-ID: <20210304112855.1235660-1-fontaine.fabrice@gmail.com>
+Date: Thu,  4 Mar 2021 13:29:25 +0100
+Subject: [Buildroot] [PATCH 1/1] package/kismet: fix build when time_t is
+ defined as long long
+Message-ID: <20210304122925.1609049-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:freedesktop:systemd is a valid CPE identifier for this
-package:
+On some platforms time_t is defined as long long. At the moment, the
+compilation of sqlite3_column_as<time_t>(...) fails on these systems
+because the appropriate getter is not defined
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Afreedesktop%3Asystemd
+Fixes:
+ - http://autobuild.buildroot.org/results/3a76afdbd8b564579bfb08a4d75b438dbd73ac2e
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/systemd/systemd.mk | 1 +
- 1 file changed, 1 insertion(+)
+ ...to-read-database-values-as-long-long.patch | 28 +++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+ create mode 100644 package/kismet/0001-Add-getter-to-read-database-values-as-long-long.patch
 
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 64f23c38a9..41332f207a 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -8,6 +8,7 @@ SYSTEMD_VERSION = 247.3
- SYSTEMD_SITE = $(call github,systemd,systemd-stable,v$(SYSTEMD_VERSION))
- SYSTEMD_LICENSE = LGPL-2.1+, GPL-2.0+ (udev), Public Domain (few source files, see README), BSD-3-Clause (tools/chromiumos)
- SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README tools/chromiumos/LICENSE
-+SYSTEMD_CPE_ID_VENDOR = freedesktop
- SYSTEMD_INSTALL_STAGING = YES
- SYSTEMD_DEPENDENCIES = \
- 	$(BR2_COREUTILS_HOST_DEPENDENCY) \
+diff --git a/package/kismet/0001-Add-getter-to-read-database-values-as-long-long.patch b/package/kismet/0001-Add-getter-to-read-database-values-as-long-long.patch
+new file mode 100644
+index 0000000000..564cba87bb
+--- /dev/null
++++ b/package/kismet/0001-Add-getter-to-read-database-values-as-long-long.patch
+@@ -0,0 +1,28 @@
++From 1d36faad18e34b43ac8ea3e7f6a44315f827a2db Mon Sep 17 00:00:00 2001
++From: George Hopkins <george-hopkins@null.net>
++Date: Mon, 4 Jan 2021 13:59:41 +0100
++Subject: [PATCH] Add getter to read database values as long long
++
++[Retrieved from:
++https://github.com/kismetwireless/kismet/commit/1d36faad18e34b43ac8ea3e7f6a44315f827a2db]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ sqlite3_cpp11.cc | 5 +++++
++ 1 file changed, 5 insertions(+)
++
++diff --git a/sqlite3_cpp11.cc b/sqlite3_cpp11.cc
++index 7974bde8c..5c92dfa87 100644
++--- a/sqlite3_cpp11.cc
+++++ b/sqlite3_cpp11.cc
++@@ -411,6 +411,11 @@ namespace kissqlite3 {
++         return (unsigned long) sqlite3_column_int64(stmt.get(), column);
++     }
++ 
+++    template<>
+++    long long sqlite3_column_as(std::shared_ptr<sqlite3_stmt> stmt, unsigned int column) {
+++        return (long long) sqlite3_column_int64(stmt.get(), column);
+++    }
+++
++     template<>
++     unsigned long long sqlite3_column_as(std::shared_ptr<sqlite3_stmt> stmt, unsigned int column) {
++         return (unsigned long long) sqlite3_column_int64(stmt.get(), column);
 -- 
 2.30.0
