@@ -1,39 +1,37 @@
-From: Bartosz Bilas <b.bilas@grinn-global.com>
-Date: Thu,  4 Mar 2021 18:54:28 +0100
-Subject: [Buildroot] [PATCH] package/janet: add -std=c99 to CFLAGS
-Message-ID: <20210304175428.1132524-1-b.bilas@grinn-global.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 4 Mar 2021 19:53:33 +0100
+Subject: [Buildroot] [git commit] package/apr-util: add CPE variables
+Message-ID: <20210304183428.76DBD868AE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As upstream says Janet should be compiled with -std=c99
-so pass this in order to fix the failures below.
+commit: https://git.buildroot.net/buildroot/commit/?id=968418490cd87d5933e8a3c99339ba26168c0bb4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
- http://autobuild.buildroot.net/results/192/1922ec115b9dc9e879760a6868969d9677093510/build-end.log
- ...
- http://autobuild.buildroot.net/results/355/355e0992338a8d132050517f83a3884606b00529/build-end.log
+cpe:2.3:a:apache:portable_runtime_utility is a valid CPE identifier for
+this package:
 
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aapache%3Aportable_runtime_utility
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/janet/janet.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/apr-util/apr-util.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/janet/janet.mk b/package/janet/janet.mk
-index 7243d60c01..ea042221d8 100644
---- a/package/janet/janet.mk
-+++ b/package/janet/janet.mk
-@@ -8,8 +8,8 @@ JANET_VERSION = 1.15.0
- JANET_SITE = $(call github,janet-lang,janet,v$(JANET_VERSION))
- JANET_LICENSE = MIT
- JANET_LICENSE_FILES = LICENSE
--
- JANET_INSTALL_STAGING = YES
-+JANET_CFLAGS = $(TARGET_CFLAGS) -std=c99
- 
- ifeq ($(BR2_STATIC_LIBS),y)
- JANET_CONF_OPTS += -Ddynamic_modules=false
--- 
-2.30.1
+diff --git a/package/apr-util/apr-util.mk b/package/apr-util/apr-util.mk
+index 53b633b159..db4df91564 100644
+--- a/package/apr-util/apr-util.mk
++++ b/package/apr-util/apr-util.mk
+@@ -9,6 +9,8 @@ APR_UTIL_SOURCE = apr-util-$(APR_UTIL_VERSION).tar.bz2
+ APR_UTIL_SITE = http://archive.apache.org/dist/apr
+ APR_UTIL_LICENSE = Apache-2.0
+ APR_UTIL_LICENSE_FILES = LICENSE
++APR_UTIL_CPE_ID_VENDOR = apache
++APR_UTIL_CPE_ID_PRODUCT = portable_runtime_utility
+ APR_UTIL_INSTALL_STAGING = YES
+ APR_UTIL_DEPENDENCIES = apr expat
+ APR_UTIL_CONF_OPTS = \
