@@ -1,34 +1,34 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu,  4 Mar 2021 12:27:26 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libosip2: add CPE variables
-Message-ID: <20210304112726.1235489-1-fontaine.fabrice@gmail.com>
+Date: Thu,  4 Mar 2021 12:29:41 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libmicrohttpd: add
+ LIBMICROHTTPD_CPE_ID_VENDOR
+Message-ID: <20210304112941.1235794-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:gnu:osip is a valid CPE identifier for this package:
+cpe:2.3:a:gnu:libmicrohttpd is a valid CPE identifier for this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Agnu%3Aosip
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Agnu%3Alibmicrohttpd
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libosip2/libosip2.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/libmicrohttpd/libmicrohttpd.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libosip2/libosip2.mk b/package/libosip2/libosip2.mk
-index d28027c135..b86a72479e 100644
---- a/package/libosip2/libosip2.mk
-+++ b/package/libosip2/libosip2.mk
-@@ -9,6 +9,8 @@ LIBOSIP2_SITE = $(BR2_GNU_MIRROR)/osip
- LIBOSIP2_INSTALL_STAGING = YES
- LIBOSIP2_LICENSE = LGPL-2.1+
- LIBOSIP2_LICENSE_FILES = COPYING
-+LIBOSIP2_CPE_ID_VENDOR = gnu
-+LIBOSIP2_CPE_ID_PRODUCT = osip
- 
- ifeq ($(BR2_arc),y)
- # toolchain __arc__ define conflicts with libosip2 source
+diff --git a/package/libmicrohttpd/libmicrohttpd.mk b/package/libmicrohttpd/libmicrohttpd.mk
+index e3469df423..6eee597c34 100644
+--- a/package/libmicrohttpd/libmicrohttpd.mk
++++ b/package/libmicrohttpd/libmicrohttpd.mk
+@@ -7,6 +7,7 @@
+ LIBMICROHTTPD_VERSION = 0.9.72
+ LIBMICROHTTPD_SITE = $(BR2_GNU_MIRROR)/libmicrohttpd
+ LIBMICROHTTPD_LICENSE_FILES = COPYING
++LIBMICROHTTPD_CPE_ID_VENDOR = gnu
+ LIBMICROHTTPD_INSTALL_STAGING = YES
+ LIBMICROHTTPD_CONF_OPTS = --disable-curl --disable-examples
+ LIBMICROHTTPD_CFLAGS = $(TARGET_CFLAGS) -std=c99
 -- 
 2.30.0
