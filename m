@@ -1,35 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 4 Mar 2021 08:08:41 +0100
-Subject: [Buildroot] [git commit] package/neon: add NEON_CPE_ID_VENDOR
-Message-ID: <20210304065255.00FE886AA7@busybox.osuosl.org>
+Date: Thu, 4 Mar 2021 08:06:16 +0100
+Subject: [Buildroot] [git commit] package/libsoup: add LIBSOUP_CPE_ID_VENDOR
+Message-ID: <20210304065254.B8D20812E5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3a6d53c9f0bac7963616e14f7e3d428ab1cb72a3
+commit: https://git.buildroot.net/buildroot/commit/?id=ca36994a885dfc98425a9978357f47e9e071fc96
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:webdav:neon is a valid CPE identifier for this package:
+cpe:2.3:a:gnome:libsoup is a valid CPE identifier for this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Awebdav%3Aneon
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Agnome%3Alibsoup
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/neon/neon.mk | 1 +
+ package/libsoup/libsoup.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/neon/neon.mk b/package/neon/neon.mk
-index 2c00e6a8b4..da53735d0e 100644
---- a/package/neon/neon.mk
-+++ b/package/neon/neon.mk
-@@ -8,6 +8,7 @@ NEON_VERSION = 0.30.2
- NEON_SITE = http://www.webdav.org/neon
- NEON_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (manual and tests)
- NEON_LICENSE_FILES = src/COPYING.LIB test/COPYING README
-+NEON_CPE_ID_VENDOR = webdav
- NEON_INSTALL_STAGING = YES
- NEON_CONF_OPTS = --without-gssapi --disable-rpath
- NEON_CONFIG_SCRIPTS = neon-config
+diff --git a/package/libsoup/libsoup.mk b/package/libsoup/libsoup.mk
+index 07c9d787bd..44808225ea 100644
+--- a/package/libsoup/libsoup.mk
++++ b/package/libsoup/libsoup.mk
+@@ -10,6 +10,7 @@ LIBSOUP_SOURCE = libsoup-$(LIBSOUP_VERSION).tar.xz
+ LIBSOUP_SITE = http://ftp.gnome.org/pub/gnome/sources/libsoup/$(LIBSOUP_VERSION_MAJOR)
+ LIBSOUP_LICENSE = LGPL-2.0+
+ LIBSOUP_LICENSE_FILES = COPYING
++LIBSOUP_CPE_ID_VENDOR = gnome
+ LIBSOUP_INSTALL_STAGING = YES
+ LIBSOUP_CONF_ENV = ac_cv_path_GLIB_GENMARSHAL=$(LIBGLIB2_HOST_BINARY)
+ LIBSOUP_CONF_OPTS = --disable-glibtest --enable-vala=no --with-gssapi=no
