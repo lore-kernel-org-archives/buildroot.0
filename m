@@ -1,27 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 04 Mar 2021 08:15:01 +0100
-Subject: [Buildroot] [PATCH 1/1] package/rpcbind: set
- RPCBIND_CPE_ID_VALID
-In-Reply-To: <20210303151607.504282-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Wed, 3 Mar 2021 16:16:07 +0100")
-References: <20210303151607.504282-1-fontaine.fabrice@gmail.com>
-Message-ID: <87h7lrgzka.fsf@dell.be.48ers.dk>
+Date: Thu, 4 Mar 2021 08:05:14 +0100
+Subject: [Buildroot] [git commit] package/stunnel: add STUNNEL_CPE_ID_VENDOR
+Message-ID: <20210304065254.BAC0486DAD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=01024f5612ddff11c73878c3e4dd61b28dad06a6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > cpe:2.3:a:rpcbind_project:rpcbind is a valid CPE identifier for this
- > package:
+cpe:2.3:a:stunnel:stunnel is a valid CPE identifier for this package:
 
- >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Arpcbind_project%3Arpcbind
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Astunnel%3Astunnel
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/stunnel/stunnel.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
+index e0cc5630e4..51cb4a4db4 100644
+--- a/package/stunnel/stunnel.mk
++++ b/package/stunnel/stunnel.mk
+@@ -15,6 +15,7 @@ STUNNEL_CONF_ENV = \
+ 	LIBS=`$(PKG_CONFIG_HOST_BINARY) --libs openssl`
+ STUNNEL_LICENSE = GPL-2.0+
+ STUNNEL_LICENSE_FILES = COPYING.md COPYRIGHT.md
++STUNNEL_CPE_ID_VENDOR = stunnel
+ 
+ ifeq ($(BR2_INIT_SYSTEMD),y)
+ STUNNEL_DEPENDENCIES += systemd
