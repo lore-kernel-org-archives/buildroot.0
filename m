@@ -1,25 +1,192 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 04 Mar 2021 08:16:37 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libvorbis: add
- LIBVORBIS_CPE_ID_VENDOR
-In-Reply-To: <20210303144233.501143-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Wed, 3 Mar 2021 15:42:33 +0100")
-References: <20210303144233.501143-1-fontaine.fabrice@gmail.com>
-Message-ID: <87czwfgzhm.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu,  4 Mar 2021 12:14:32 +0100
+Subject: [Buildroot] [PATCH] package/libopenssl does not support riscv32
+Message-ID: <20210304111432.1787074-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+riscv32 is (surprise!) a 32-bit architecture. But it has been Y2038-safe
+from its inception. As such, there are no legacy binaries that may use
+the 32-bit time syscalls, and thus they are not available on riscv32.
 
- > cpe:2.3:a:xiph.org:libvorbis is a valid CPE identifier for this package:
- >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Axiph.org%3Alibvorbis
+Code that directly calls to the syscalls without using the C libraries
+wrappers thus need to handle this case by themselves. That's what
+upstream tried to do with:
+    https://github.com/openssl/openssl/commit/5b5e2985f355c8e99c196d9ce5d02c15bebadfbc
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+We initially carried that patch with 2bb26c1a1d24 (package/libopenssl:
+fix build on riscv32).
 
-Committed, thanks.
+However, as Arnd Bergmann puts it [0]:
 
+    The patch looks wrong to me: __NR_io_pgetevents_time64 must be used
+    whenever time_t is 64-bit wide on a 32-bit architecture, while
+    __NR_io_getevents/__NR_io_pgetevents must be used when time_t is the
+    same width as 'long'.
+
+    Checking whether __NR_io_getevents is defined is wrong for all
+    architectures other than riscv
+
+And Arnd agrees that patch should be reverted [1] [2] (there are further
+comments in that stream, that are worth reading).
+
+As such, we've reverted 2bb26c1a1d24 with 6cfb4ad7f76a.
+
+This means we have no working solution to enable openssl on riscv32 for
+now. So, rather than fail the build, or backport a dysfunctional patch,
+let's just forbid openssl on riscv32.
+
+Drop the default from the choice selection; it was anyway superfluous:
+the default of a choice, if left unspecified, is the first entry of the
+choice.
+
+While at it, drop a useless redundant comment in ibm-sw-tpm2: if we
+select FORCE_LIBOPENSSL, it is obvious that's because libressl is not
+supported... Besides none of the other users of FORCE_LIBOPENSSL have
+such a comment.
+
+Fixes:
+    http://autobuild.buildroot.org/results/eb9/eb9a64d4ffae8569b5225083f282cf87ffa7c681/
+    ...
+    http://autobuild.buildroot.org/results/07e/07e413b24ba8adc9558c80267ce16dda339bf032/
+
+[0] https://github.com/openssl/openssl/commit/5b5e2985f355c8e99c196d9ce5d02c15bebadfbc#commitcomment-44782859
+[1] https://github.com/openssl/openssl/commit/5b5e2985f355c8e99c196d9ce5d02c15bebadfbc#commitcomment-47826509
+[2] https://github.com/openssl/openssl/commit/5b5e2985f355c8e99c196d9ce5d02c15bebadfbc#commitcomment-47830530
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
+Cc: Mark Corbin <mark@dibsco.co.uk>
+---
+ package/hostapd/Config.in        | 1 +
+ package/ibm-sw-tpm2/Config.in    | 3 ++-
+ package/openssl/Config.in        | 8 +++++++-
+ package/softether/Config.in      | 2 ++
+ package/tpm2-tss/Config.in       | 2 ++
+ package/wpa_supplicant/Config.in | 2 ++
+ 6 files changed, 16 insertions(+), 2 deletions(-)
+
+diff --git a/package/hostapd/Config.in b/package/hostapd/Config.in
+index 54d2086c09..38cead90ca 100644
+--- a/package/hostapd/Config.in
++++ b/package/hostapd/Config.in
+@@ -76,6 +76,7 @@ config BR2_PACKAGE_HOSTAPD_WPS
+ 
+ config BR2_PACKAGE_HOSTAPD_WPA3
+ 	bool "Enable WPA3 support"
++	depends on BR2_PACKAGE_LIBOPENSSL_ARCH_SUPPORTS
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
+ 	help
+diff --git a/package/ibm-sw-tpm2/Config.in b/package/ibm-sw-tpm2/Config.in
+index b402ba7150..57781a54bb 100644
+--- a/package/ibm-sw-tpm2/Config.in
++++ b/package/ibm-sw-tpm2/Config.in
+@@ -2,8 +2,8 @@ config BR2_PACKAGE_IBM_SW_TPM2
+ 	bool "ibm-sw-tpm2"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_STATIC_LIBS # ibm-sw-tpm2
++	depends on BR2_PACKAGE_LIBOPENSSL_ARCH_SUPPORTS
+ 	select BR2_PACKAGE_OPENSSL
+-	# libressl is not supported
+ 	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
+ 	help
+ 	  This project is an implementation of the TCG TPM 2.0
+@@ -14,4 +14,5 @@ config BR2_PACKAGE_IBM_SW_TPM2
+ 	  https://sourceforge.net/projects/ibmswtpm2/
+ 
+ comment "ibm-sw-tpm2 needs a toolchain w/ threads, dynamic library"
++	depends on BR2_PACKAGE_LIBOPENSSL_ARCH_SUPPORTS
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+diff --git a/package/openssl/Config.in b/package/openssl/Config.in
+index 5ce91cb80f..dd47091300 100644
+--- a/package/openssl/Config.in
++++ b/package/openssl/Config.in
+@@ -1,5 +1,11 @@
++config BR2_PACKAGE_LIBOPENSSL_ARCH_SUPPORTS
++	bool
++	default y
++	depends on !BR2_RISCV_32
++
+ config BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
+ 	bool
++	depends on BR2_PACKAGE_LIBOPENSSL_ARCH_SUPPORTS
+ 
+ config BR2_PACKAGE_OPENSSL
+ 	bool "openssl support"
+@@ -11,12 +17,12 @@ if BR2_PACKAGE_OPENSSL
+ 
+ choice
+ 	prompt "ssl library"
+-	default BR2_PACKAGE_LIBOPENSSL
+ 	help
+ 	  Select OpenSSL or LibreSSL.
+ 
+ config BR2_PACKAGE_LIBOPENSSL
+ 	bool "openssl"
++	depends on BR2_PACKAGE_LIBOPENSSL_ARCH_SUPPORTS
+ 	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  A collaborative effort to develop a robust, commercial-grade,
+diff --git a/package/softether/Config.in b/package/softether/Config.in
+index bfb45b0315..01104b5d39 100644
+--- a/package/softether/Config.in
++++ b/package/softether/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_SOFTETHER
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_USE_WCHAR
++	depends on BR2_PACKAGE_LIBOPENSSL_ARCH_SUPPORTS
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
+@@ -27,4 +28,5 @@ config BR2_PACKAGE_SOFTETHER
+ 
+ comment "softether needs a toolchain w/ wchar, threads"
+ 	depends on BR2_USE_MMU
++	depends on BR2_PACKAGE_LIBOPENSSL_ARCH_SUPPORTS
+ 	depends on !(BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS)
+diff --git a/package/tpm2-tss/Config.in b/package/tpm2-tss/Config.in
+index 2fc56dbd76..b1ab00dd38 100644
+--- a/package/tpm2-tss/Config.in
++++ b/package/tpm2-tss/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_TPM2_TSS
+ 	bool "tpm2-tss"
+ 	depends on !BR2_STATIC_LIBS # dlfcn.h
++	depends on BR2_PACKAGE_LIBOPENSSL_ARCH_SUPPORTS
+ 	select BR2_PACKAGE_LIBURIPARSER
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
+@@ -55,4 +56,5 @@ config BR2_PACKAGE_TPM2_TSS_FAPI
+ endif
+ 
+ comment "tpm2-tss needs a toolchain w/ dynamic library"
++	depends on BR2_PACKAGE_LIBOPENSSL_ARCH_SUPPORTS
+ 	depends on BR2_STATIC_LIBS
+diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
+index cba7fa07e1..c6e4de1d48 100644
+--- a/package/wpa_supplicant/Config.in
++++ b/package/wpa_supplicant/Config.in
+@@ -49,6 +49,7 @@ config BR2_PACKAGE_WPA_SUPPLICANT_WIFI_DISPLAY
+ config BR2_PACKAGE_WPA_SUPPLICANT_MESH_NETWORKING
+ 	bool "Enable mesh networking"
+ 	depends on BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT
++	depends on BR2_PACKAGE_LIBOPENSSL_ARCH_SUPPORTS
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
+ 	help
+@@ -83,6 +84,7 @@ config BR2_PACKAGE_WPA_SUPPLICANT_WPS
+ 
+ config BR2_PACKAGE_WPA_SUPPLICANT_WPA3
+ 	bool "Enable WPA3 support"
++	depends on BR2_PACKAGE_LIBOPENSSL_ARCH_SUPPORTS
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
+ 	help
 -- 
-Bye, Peter Korsgaard
+2.25.1
