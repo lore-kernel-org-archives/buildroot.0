@@ -1,93 +1,197 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 4 Mar 2021 22:42:48 +0100
-Subject: [Buildroot] [PATCH] package/libopenssl does not support riscv32
-In-Reply-To: <12e04566-0852-7096-c65d-ba1795b3f277@mind.be>
-References: <20210304111432.1787074-1-yann.morin.1998@free.fr>
- <12e04566-0852-7096-c65d-ba1795b3f277@mind.be>
-Message-ID: <20210304214248.GO2275@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 4 Mar 2021 22:49:26 +0100
+Subject: [Buildroot] Analysis of build results for 2021-03-03
+In-Reply-To: <20210304081519.C821B4B530@smtp4.osuosl.org>
+References: <20210304081519.C821B4B530@smtp4.osuosl.org>
+Message-ID: <20210304224926.45aa4056@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Hello,
 
-On 2021-03-04 20:36 +0100, Arnout Vandecappelle spake thusly:
-> On 04/03/2021 12:14, Yann E. MORIN wrote:
-> 
-> > Drop the default from the choice selection; it was anyway superfluous:
-> > the default of a choice, if left unspecified, is the first entry of the
-> > choice.
->  Bikeshedding time!
+Giulio, Heiko, Thomas DS there are specific questions for you below!
 
-Aha! ;-)
+On Thu, 04 Mar 2021 08:15:14 -0000
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
->  IMHO, it is still good to have an explicit default. Its effect remains exactly
-> the same (if the default cannot be selected due to missing dependencies, the
-> first available options will be chosen), but it makes it clear for the reader
-> what is the default, and it makes sure that inserting a new option or reordering
-> the options doesn't affect the default.
+>    nios2     |        asterisk-16.14.1        | NOK | http://autobuild.buildroot.net/results/24c0a6ca3b272711a1e6ceaa033925182d0d49c4
 
-OK, I see and understand your point.
+Some wonderful compiler issue.
 
-Still, defaults are cumbersome to manage when said default gains or
-loses dependencies; that's another location where we need to track
-those...
+utf8.c: In function 'ast_utf8_copy_string':
+utf8.c:157:1: internal compiler error: Segmentation fault
 
-Besides, the probability tht we gain a third implementation of openssl
-is... slim. Very slim...
+Giulio, does this look like a known NIOS2 issue ?
 
-So, I would still drop the default here.
+>    nios2     |        belle-sip-4.4.8         | NOK | http://autobuild.buildroot.net/results/71f26fd81db8e9b19b3f18f3f3cefd9c768f094f |     
 
-> [snip]
-> >  config BR2_PACKAGE_HOSTAPD_WPA3
-> >  	bool "Enable WPA3 support"
-> > +	depends on BR2_PACKAGE_LIBOPENSSL_ARCH_SUPPORTS
->  We normally add a comment of depends on. But I guess it's pretty obvious here.
+/tmp/ccDtjRfo.s: Assembler messages:
+/tmp/ccDtjRfo.s:210798: Error: branch offset out of range
 
-Yes, it is pretty obvious. So much so that it really does not warrant a
-comment, because it is really is overloading.
+Another wonderful nios2 toolchain issue. Giulio, what do you think ?
 
-> >  	select BR2_PACKAGE_OPENSSL
-> >  	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
-> >  	help
-> 
-> [snip]
-> > diff --git a/package/tpm2-tss/Config.in b/package/tpm2-tss/Config.in
-> > index 2fc56dbd76..b1ab00dd38 100644
-> > --- a/package/tpm2-tss/Config.in
-> > +++ b/package/tpm2-tss/Config.in
-> > @@ -1,6 +1,7 @@
-> >  config BR2_PACKAGE_TPM2_TSS
->  Unfortunately, TPM2_TSS is selected by ima-evm-utils, tpm2-abrmd, tpm2-pkcs11,
-> tpm2-tools, tpm2-totp. Fortunately, it doesn't recurse any further.
+>     arc      |         dc3dd-7.2.641          | NOK | http://autobuild.buildroot.net/results/4829278085da2409bb2902161f9984708411166a | ORPH
+>     arc      |         dc3dd-7.2.641          | NOK | http://autobuild.buildroot.net/results/3b145a99a1f7498ee7fcd445f3cc319f548e9a81 | ORPH
+>     arc      |         dc3dd-7.2.641          | NOK | http://autobuild.buildroot.net/results/c1cb2dd0b9e7547f3858e62281da3bd45b9a5b17 | ORPH
 
-Ah, right, well spotted. I was not carefull enough on that one.
+verify.h:132:30: error: negative width in bit-field 'verify_error_if_negative_size__'
+  132 |       (struct { unsigned int verify_error_if_negative_size__: (R) ? 1 : -1; }))
 
->  With the propagation of the TPM2_TSS dependency (and for those, a comment
-> *should* be added),
+This happens on RISC-V 32-bit, and on ARC, but only with internal
+toolchains. The assertion that breaks is:
 
-s/should/must/
+  116 | verify (LONG_MIN <= TYPE_MINIMUM (time_t) && TYPE_MAXIMUM (time_t) <= LONG_MAX);
 
-> you can add my
-> 
->  Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> 
-> and apply directly to master.
+So to me, it smells like another instance of "this is a 32-bit
+architecture, but time_t is 64-bit, and this breaks some userspace code
+that makes bogus assumptions on the size of time_t".
 
-Since you did not insist on keeping the default as a condition for your
-rev-by tag, I'll still drop it. ;-)
+This feels similar to the libopenssl situation for which Yann has just
+sent a patch. Should we have a BR2_ARCH_IS_32_BUT_TIME_T_IS_64 boolean ?
 
-Thanks!
+>    sparc     |          dhcpcd-9.4.0          | NOK | http://autobuild.buildroot.net/results/fba538d2ae4a1c53440ed73ced4023be27d7e9c2 |     
 
-Regards,
-Yann E. MORIN.
+I assume this is fixed by https://git.buildroot.org/buildroot/commit/?id=e5594f7239547672c08058b77f8098d2c080bebc
 
+>   riscv64    |      fuse-overlayfs-1.4.0      | NOK | http://autobuild.buildroot.net/results/cfef18f3adf51edaedbbd193efbff19aebdfe508 |     
+
+This is a bug in uClibc: it implements renameat() only if the
+SYS_renameat system call exists. If only the SYS_renameat2 system call
+exists, the renameat() function is not implemented. Musl does this
+correctly:
+
+int renameat(int oldfd, const char *old, int newfd, const char *new)
+{
+#ifdef SYS_renameat
+        return syscall(SYS_renameat, oldfd, old, newfd, new);
+#else
+        return syscall(SYS_renameat2, oldfd, old, newfd, new, 0);
+#endif
+}
+
+uclibc needs to be patched here.
+
+>   mips64el   |      gstreamer1-mm-1.10.0      | NOK | http://autobuild.buildroot.net/results/b1c5989a3a09b39e504c21201e3e07c0afc2a1ea | ORPH
+
+/home/buildroot/autobuild/instance-2/output-1/host/bin/../mips64el-buildroot-linux-gnu/sysroot/usr/include/glib-2.0/glib/gatomic.h:97:5: sorry, unimplemented: unexpected AST of kind static_assert
+
+This messages comes from deep down gcc, when compiling the gatomic.h
+macros. It happens on all MIPS architecture variants.
+
+>   aarch64    |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/739d625673f9b2ce2d915ecdc21910c62618d145 |     
+> microblazeel |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/b1779a7d46f6ee9c06864c3ca252f1cdad47cf08 |     
+>     i586     |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/a5fe402e3f4e538eb4584f345b029ef12ad43348 |     
+>     arc      |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/abd3f886335f146ff6f16370484106bd8a205bda |     
+
+What do we do with this? The only way to solve that is to have the
+Cargo vendoring support, which we won't have for 2021.02. Should we
+drop this package ?
+
+>     arc      |       kismet-2020-12-R3        | NOK | http://autobuild.buildroot.net/results/1c2885d75219aabadbb66ab66fe0dc4b4346ff1e | ORPH
+>     i586     |       kismet-2020-12-R3        | NOK | http://autobuild.buildroot.net/results/3a76afdbd8b564579bfb08a4d75b438dbd73ac2e | ORPH
+
+Would be fixed by https://patchwork.ozlabs.org/project/buildroot/patch/20210304200430.1749334-1-fontaine.fabrice at gmail.com/
+
+>  powerpc64   | kvm-unit-tests-kvm-unit-tes... | NOK | http://autobuild.buildroot.net/results/06cce5030766fcc789f0ba4a76d2cbaa091300d0 |     
+
+/home/giuliobenetti/autobuild/run/instance-1/output-1/host/bin/powerpc64-linux-ld: powerpc/spapr_hcall.elf: error: PHDR segment not covered by LOAD segment
+
+kvm-unit-tests has always been a bit complicated as it builds some kind
+of bare-metal code. I would simply suggest that we drop powerpc64 from
+the list of supported CPU architectures for this package.
+
+>    nios2     |         libgeos-3.9.0          | NOK | http://autobuild.buildroot.net/results/a05fdf1958f93a206c5c66c7f636b6650683626d | ORPH
+
+Some more nios2 toolchain issue.
+
+Should we get rid of nios2 support entirely ?
+
+>    mipsel    |       libopenh264-2.1.1        | NOK | http://autobuild.buildroot.net/results/26837f7c80a84e5ad31d5b15161848ebecc59917 |     
+
+This is happening since we have added the use of the Bootlin mips32
+toolchain early February:
+http://autobuild.buildroot.net/?reason=libopenh264-2.1.1
+
+Needs investigation to see if this is a toolchain issue, or a package
+issue that wasn't noticed until now.
+
+>   riscv32    |       libopenssl-1.1.1j        | NOK | http://autobuild.buildroot.net/results/e7bf5db7745c56c4533c225260ff6c3fcd2000f5 |     
+>   riscv32    |       libopenssl-1.1.1j        | NOK | http://autobuild.buildroot.net/results/5b4834023eca039be59b969e3037bb23feeed6ac |     
+
+Being worked on by Yann.
+
+>   riscv64    |        libostree-2020.8        | NOK | http://autobuild.buildroot.net/results/d42bce7ef9cf0f807b9ba7021af4a11f84e307d2 |     
+
+Ah another instance of renameat() missing from uClibc.
+
+>  powerpc64   |        netopeer2-1.1.53        | NOK | http://autobuild.buildroot.net/results/49efc0e93ad8fe30e5f32fed8a1efc1d2afd830e |     
+
+-- Installing missing sysrepo modules...
+[ERR]: Retrieving GID "8000" grp entry failed (No such GID).
+sysrepoctl error: Failed to connect (Item not found)
+[ERR]: Retrieving GID "8000" grp entry failed (No such GID).
+sysrepoctl error: Failed to connect (Item not found)
+CMake Error at cmake_install.cmake:77 (message):
+   scripts/setup.sh failed: 1
+
+Ah this seems like netopeer2's build system is looking at the host too
+much ?
+
+Heiko ?
+
+>    x86_64    |         openblas-0.3.9         | NOK | http://autobuild.buildroot.net/results/d530db0f37e1e0462e3af1e1787e15f94ff21884 | ORPH
+
+/home/giuliobenetti/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-musl/9.3.0/../../../../x86_64-buildroot-linux-musl/bin/ld: ../libopenblas_nehalem-r0.3.9.a(sbdsvdx.o): relocation R_X86_64_32 against `.rodata.str1.1' can not be used when making a shared object; recompile with -fPIC
+
+Thomas DS, you are now our expert in openblas. Could you have a look ?
+
+>   aarch64    |         rt-tests-1.10          | NOK | http://autobuild.buildroot.net/results/c6a3cdd4a07f8918b164e0e1e85c92d8b14ec228 |     
+
+make[1]: Entering directory `/home/buildroot/autobuild/run/instance-2/output-1/build/rt-tests-1.10'
+Makefile:41: *** commands commence before first target.  Stop.
+
+During the installation step. This shouldn't be too difficult to
+reproduce and track down?
+
+>    xtensa    |          strace-5.10           | NOK | http://autobuild.buildroot.net/results/6c679877e1a3f50d5e0bc4db3237e0c699bd7243 |     
+
+./linux/xtensa/arch_regs.c:10:32: error: invalid use of undefined type 'struct user_pt_regs'
+
+Some more pt_regs fun on a funky architecture. Oh dear.
+
+>    sparc     |            tio-1.32            | NOK | http://autobuild.buildroot.net/results/7cbace3ce72bbcce8ef36f71cba8071bfda9fc26 |     
+>   sparc64    |            tio-1.32            | NOK | http://autobuild.buildroot.net/results/b9a671c46fa41875c1fd6a16790b314c16ef989b |     
+
+This would be worked around by disabling the package on sparc/sparc64,
+which has been proposed a long time ago already:
+https://patchwork.ozlabs.org/project/buildroot/patch/20201025163457.30460-1-sergio.prado at e-labworks.com/
+
+>     arm      | toolchain-external-linaro-a... | NOK | http://autobuild.buildroot.net/results/d9b9a4b7c3660bd730a19ab09e44f24bc29e3f40 | ORPH
+>     arm      | toolchain-external-linaro-a... | NOK | http://autobuild.buildroot.net/results/13f9a551f5ac911e7daa2a382b0683d81486cffa | ORPH
+
+toolchain is gone ?
+
+>   powerpc    |            unknown             | NOK | http://autobuild.buildroot.net/results/159d2c07060c235080711d1d0da0b2eae995d4bf |     
+
+This is a top-level parallel build issue... but since we don't have the
+full log, we don't have the error.
+
+Should we perhaps keep the full log, compressed, for builds done in
+parallel ?
+
+>     or1k     |          zeromq-4.3.4          | NOK | http://autobuild.buildroot.net/results/ed105d321c0bde99c293ab7328d57c3764db6f27 |     
+>     or1k     |          zeromq-4.3.4          | NOK | http://autobuild.buildroot.net/results/ce351e0e97c2cacc17d4718d39941548c7558559 |     
+
+/home/giuliobenetti/autobuild/run/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld: BFD (GNU Binutils) 2.33.1 assertion fail elf32-or1k.c:2329
+collect2: error: ld returned 1 exit status
+
+Giulio, is this a known or1k issue ?
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
