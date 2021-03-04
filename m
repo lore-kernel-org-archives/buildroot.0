@@ -1,35 +1,34 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu,  4 Mar 2021 12:26:11 +0100
-Subject: [Buildroot] [PATCH 1/1] package/iucode-tool: set
- IUCODE_TOOL_CPE_ID_VALID
-Message-ID: <20210304112611.1235277-1-fontaine.fabrice@gmail.com>
+Date: Thu,  4 Mar 2021 12:27:26 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libosip2: add CPE variables
+Message-ID: <20210304112726.1235489-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:iucode-tool_project:iucode-tool is a valid CPE identifier for
-this package:
+cpe:2.3:a:gnu:osip is a valid CPE identifier for this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aiucode-tool_project%3Aiucode-tool
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Agnu%3Aosip
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/iucode-tool/iucode-tool.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/libosip2/libosip2.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/iucode-tool/iucode-tool.mk b/package/iucode-tool/iucode-tool.mk
-index bddc37295c..64229ccc0f 100644
---- a/package/iucode-tool/iucode-tool.mk
-+++ b/package/iucode-tool/iucode-tool.mk
-@@ -12,6 +12,7 @@ IUCODE_TOOL_DEPENDENCIES = argp-standalone
- endif
- IUCODE_TOOL_LICENSE = GPL-2.0+
- IUCODE_TOOL_LICENSE_FILES = COPYING
-+IUCODE_TOOL_CPE_ID_VALID = YES
+diff --git a/package/libosip2/libosip2.mk b/package/libosip2/libosip2.mk
+index d28027c135..b86a72479e 100644
+--- a/package/libosip2/libosip2.mk
++++ b/package/libosip2/libosip2.mk
+@@ -9,6 +9,8 @@ LIBOSIP2_SITE = $(BR2_GNU_MIRROR)/osip
+ LIBOSIP2_INSTALL_STAGING = YES
+ LIBOSIP2_LICENSE = LGPL-2.1+
+ LIBOSIP2_LICENSE_FILES = COPYING
++LIBOSIP2_CPE_ID_VENDOR = gnu
++LIBOSIP2_CPE_ID_PRODUCT = osip
  
- define IUCODE_TOOL_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 0755 package/iucode-tool/S00iucode-tool \
+ ifeq ($(BR2_arc),y)
+ # toolchain __arc__ define conflicts with libosip2 source
 -- 
 2.30.0
