@@ -1,81 +1,83 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 4 Mar 2021 20:13:40 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libminiupnpc: add CPE variables
-In-Reply-To: <20210304113039.1235899-1-fontaine.fabrice@gmail.com>
-References: <20210304113039.1235899-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210304191340.GN2275@scaer>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 4 Mar 2021 20:36:02 +0100
+Subject: [Buildroot] [PATCH] package/libopenssl does not support riscv32
+In-Reply-To: <20210304111432.1787074-1-yann.morin.1998@free.fr>
+References: <20210304111432.1787074-1-yann.morin.1998@free.fr>
+Message-ID: <12e04566-0852-7096-c65d-ba1795b3f277@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+ Hi Yann,
 
-On 2021-03-04 12:30 +0100, Fabrice Fontaine spake thusly:
-> cpe:2.3:a:miniupnp_project:miniupnpc is a valid CPE identifier for this
-> package:
-> 
->   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aminiupnp_project%3Aminiupnpc
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/libminiupnpc/libminiupnpc.mk | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/libminiupnpc/libminiupnpc.mk b/package/libminiupnpc/libminiupnpc.mk
-> index 50b3c6604c..d22b873428 100644
-> --- a/package/libminiupnpc/libminiupnpc.mk
-> +++ b/package/libminiupnpc/libminiupnpc.mk
-> @@ -4,11 +4,15 @@
->  #
->  ################################################################################
+On 04/03/2021 12:14, Yann E. MORIN wrote:
+
+> Drop the default from the choice selection; it was anyway superfluous:
+> the default of a choice, if left unspecified, is the first entry of the
+> choice.
+
+ Bikeshedding time!
+
+ IMHO, it is still good to have an explicit default. Its effect remains exactly
+the same (if the default cannot be selected due to missing dependencies, the
+first available options will be chosen), but it makes it clear for the reader
+what is the default, and it makes sure that inserting a new option or reordering
+the options doesn't affect the default.
+
+[snip]
+>  config BR2_PACKAGE_HOSTAPD_WPA3
+>  	bool "Enable WPA3 support"
+> +	depends on BR2_PACKAGE_LIBOPENSSL_ARCH_SUPPORTS
+
+ We normally add a comment of depends on. But I guess it's pretty obvious here.
+
+>  	select BR2_PACKAGE_OPENSSL
+>  	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
+>  	help
+
+
+[snip]
+> diff --git a/package/tpm2-tss/Config.in b/package/tpm2-tss/Config.in
+> index 2fc56dbd76..b1ab00dd38 100644
+> --- a/package/tpm2-tss/Config.in
+> +++ b/package/tpm2-tss/Config.in
+> @@ -1,6 +1,7 @@
+>  config BR2_PACKAGE_TPM2_TSS
+
+ Unfortunately, TPM2_TSS is selected by ima-evm-utils, tpm2-abrmd, tpm2-pkcs11,
+tpm2-tools, tpm2-totp. Fortunately, it doesn't recurse any further.
+
+[snip]
+>  config BR2_PACKAGE_WPA_SUPPLICANT_MESH_NETWORKING
+
+ WPA_SUPPLICANT is selected by connman but fortunately no mesh or WPA3. We got
+lucky there!
+
+
+ With the propagation of the TPM2_TSS dependency (and for those, a comment
+*should* be added), you can add my
+
+ Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+and apply directly to master.
+
+ Regards,
+ Arnout
+
+>  	bool "Enable mesh networking"
+>  	depends on BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT
+> +	depends on BR2_PACKAGE_LIBOPENSSL_ARCH_SUPPORTS
+>  	select BR2_PACKAGE_OPENSSL
+>  	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
+>  	help
+> @@ -83,6 +84,7 @@ config BR2_PACKAGE_WPA_SUPPLICANT_WPS
 >  
-> -LIBMINIUPNPC_VERSION = 2.1.20201016
-> +LIBMINIUPNPC_VERSION = $(LIBMINIUPNPC_CPE_ID_VERSION).$(LIBMINIUPNPC_CPE_ID_UPDATE)
->  LIBMINIUPNPC_SOURCE = miniupnpc-$(LIBMINIUPNPC_VERSION).tar.gz
->  LIBMINIUPNPC_SITE = http://miniupnp.free.fr/files
->  LIBMINIUPNPC_INSTALL_STAGING = YES
->  LIBMINIUPNPC_LICENSE = BSD-3-Clause
->  LIBMINIUPNPC_LICENSE_FILES = LICENSE
-> +LIBMINIUPNPC_CPE_ID_VENDOR = miniupnp_project
-> +LIBMINIUPNPC_CPE_ID_PRODUCT = miniupnpc
-> +LIBMINIUPNPC_CPE_ID_VERSION = 2.1
-> +LIBMINIUPNPC_CPE_ID_UPDATE = 20201016
-
-I thoght it would be more logicial to split _VERSION into its base
-constituents, the traditional major/minor, and use that to define the
-CPE variables, not the other way around:
-
-    LIBMINIUPNPC_VERSION_MAJOR = 2.1
-    LIBMINIUPNPC_VERSION_MINOR = 20201016
-    LIBMINIUPNPC_VERSION = $(LIBMINIUPNPC_VERSION_MAJOR).$(LIBMINIUPNPC_VERSION_MINOR)
-    LIBMINIUPNPC_CPE_ID_VERSION = $(LIBMINIUPNPC_VERSION_MAJOR)
-    LIBMINIUPNPC_CPE_ID_UPDATE = $(LIBMINIUPNPC_VERSION_MINOR)
-
-So I've done that and applied to master, thanks.
-
-Note: I also applied all your other pending CPE-related patches too. As
-usual, too any to individually reply to (and I am way lazier than Peter.
-;-) )
-
-Regards,
-Yann E. MORIN.
-
->  
->  $(eval $(cmake-package))
-> -- 
-> 2.30.0
+>  config BR2_PACKAGE_WPA_SUPPLICANT_WPA3
+>  	bool "Enable WPA3 support"
+> +	depends on BR2_PACKAGE_LIBOPENSSL_ARCH_SUPPORTS
+>  	select BR2_PACKAGE_OPENSSL
+>  	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
+>  	help
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
