@@ -1,35 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 4 Mar 2021 08:13:29 +0100
-Subject: [Buildroot] [git commit] package/librsvg: add LIBRSVG_CPE_ID_VENDOR
-Message-ID: <20210304065255.27BB686DAD@busybox.osuosl.org>
+Date: Thu, 4 Mar 2021 08:06:35 +0100
+Subject: [Buildroot] [git commit] package/libconfuse: set
+ LIBCONFUSE_CPE_ID_VALID
+Message-ID: <20210304065254.C187986AA7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=61eff3f98818aef8e329075c183cff862f33ea40
+commit: https://git.buildroot.net/buildroot/commit/?id=5743d90008527917ddd30472f4aaaf7193e74212
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:gnome:librsvg is a valid CPE identifier for this package:
+cpe:2.3:a:libconfuse_project:libconfuse is a valid CPE identifier for
+this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Agnome%3Alibrsvg
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alibconfuse_project%3Alibconfuse
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/librsvg/librsvg.mk | 1 +
+ package/libconfuse/libconfuse.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/librsvg/librsvg.mk b/package/librsvg/librsvg.mk
-index 6a45fc97e2..5eeb68f9b8 100644
---- a/package/librsvg/librsvg.mk
-+++ b/package/librsvg/librsvg.mk
-@@ -19,6 +19,7 @@ LIBRSVG_DEPENDENCIES = cairo host-gdk-pixbuf gdk-pixbuf host-rustc libglib2 libx
- HOST_LIBRSVG_DEPENDENCIES = host-cairo host-gdk-pixbuf host-libglib2 host-libxml2 host-pango host-rustc
- LIBRSVG_LICENSE = LGPL-2.1+
- LIBRSVG_LICENSE_FILES = COPYING.LIB
-+LIBRSVG_CPE_ID_VENDOR = gnome
+diff --git a/package/libconfuse/libconfuse.mk b/package/libconfuse/libconfuse.mk
+index 516c0056d1..b4523d069c 100644
+--- a/package/libconfuse/libconfuse.mk
++++ b/package/libconfuse/libconfuse.mk
+@@ -11,6 +11,7 @@ LIBCONFUSE_INSTALL_STAGING = YES
+ LIBCONFUSE_CONF_OPTS = --disable-rpath
+ LIBCONFUSE_LICENSE = ISC
+ LIBCONFUSE_LICENSE_FILES = LICENSE
++LIBCONFUSE_CPE_ID_VALID = YES
+ LIBCONFUSE_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
  
- ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
- LIBRSVG_CONF_OPTS += --enable-introspection
+ $(eval $(autotools-package))
