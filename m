@@ -1,36 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 4 Mar 2021 08:07:51 +0100
-Subject: [Buildroot] [git commit] package/sdl2_image: add
- SDL2_IMAGE_CPE_ID_VENDOR
-Message-ID: <20210304065254.E214786F0A@busybox.osuosl.org>
+Date: Thu, 4 Mar 2021 08:07:42 +0100
+Subject: [Buildroot] [git commit] package/procps-ng: set
+ PROCPS_NG_CPE_ID_VALID
+Message-ID: <20210304065254.D395A86F19@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=831a1bd2999ccda2e9e05b7c6ad9e7f3070ecd60
+commit: https://git.buildroot.net/buildroot/commit/?id=84e239775fbb51d0792dfad06914005b3a76feab
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:libsdl:sdl2_image is a valid CPE identifier for this package:
+cpe:2.3:a:procps-ng_project:procps-ng is a valid CPE identifier for this
+package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alibsdl%3Asdl2_image
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aprocps-ng_project%3Aprocps-ng
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sdl2_image/sdl2_image.mk | 1 +
+ package/procps-ng/procps-ng.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/sdl2_image/sdl2_image.mk b/package/sdl2_image/sdl2_image.mk
-index 68572b3f9f..06f6eca30c 100644
---- a/package/sdl2_image/sdl2_image.mk
-+++ b/package/sdl2_image/sdl2_image.mk
-@@ -10,6 +10,7 @@ SDL2_IMAGE_SITE = http://www.libsdl.org/projects/SDL_image/release
- SDL2_IMAGE_INSTALL_STAGING = YES
- SDL2_IMAGE_LICENSE = Zlib
- SDL2_IMAGE_LICENSE_FILES = COPYING.txt
-+SDL2_IMAGE_CPE_ID_VENDOR = libsdl
- 
- # Unconditionally enable support for image formats that don't require
- # any dependency.
+diff --git a/package/procps-ng/procps-ng.mk b/package/procps-ng/procps-ng.mk
+index 5bafc7ee97..1f99ac3e55 100644
+--- a/package/procps-ng/procps-ng.mk
++++ b/package/procps-ng/procps-ng.mk
+@@ -9,6 +9,7 @@ PROCPS_NG_SOURCE = procps-ng-$(PROCPS_NG_VERSION).tar.xz
+ PROCPS_NG_SITE = http://downloads.sourceforge.net/project/procps-ng/Production
+ PROCPS_NG_LICENSE = GPL-2.0+, LGPL-2.0+ (libproc and libps)
+ PROCPS_NG_LICENSE_FILES = COPYING COPYING.LIB
++PROCPS_NG_CPE_ID_VALID = YES
+ PROCPS_NG_INSTALL_STAGING = YES
+ PROCPS_NG_DEPENDENCIES = ncurses host-pkgconf $(TARGET_NLS_DEPENDENCIES)
+ PROCPS_NG_CONF_OPTS = LIBS=$(TARGET_NLS_LIBS)
