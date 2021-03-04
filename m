@@ -1,32 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 04 Mar 2021 21:20:24 +0100
-Subject: [Buildroot] [PATCH 2/2] package/gnuchess: security bump to
- version 6.2.7
-In-Reply-To: <20210304130846.1734524-2-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 4 Mar 2021 14:08:46 +0100")
-References: <20210304130846.1734524-1-fontaine.fabrice@gmail.com>
- <20210304130846.1734524-2-fontaine.fabrice@gmail.com>
-Message-ID: <878s72hdrr.fsf@dell.be.48ers.dk>
+Date: Thu, 04 Mar 2021 21:24:17 +0100
+Subject: [Buildroot] [PATCH] package/python3: security bump to version
+ 3.9.2
+In-Reply-To: <87o8g8y62r.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Thu, 25 Feb 2021 08:11:56 +0100")
+References: <20210223135031.23198-1-peter@korsgaard.com>
+ <87o8g8y62r.fsf@dell.be.48ers.dk>
+Message-ID: <874khqhdla.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Fix CVE-2019-15767: In GNU Chess 6.2.5, there is a stack-based buffer
- > overflow in the cmd_load function in frontend/cmd.cc via a crafted chess
- > position in an EPD file.
+ >> Fixes the following security issue:
+ >> - CVE-2021-23336: urllib.parse.parse_qsl(): Web cache poisoning - `; ` as a
+ >> query args separator
+ >> https://bugs.python.org/issue42967
 
- > Update indentation in hash file (two spaces)
+ >> And fixes a number of issues. For details, see the changelog:
+ >> https://docs.python.org/release/3.9.2/whatsnew/changelog.html
 
- > https://lists.gnu.org/archive/html/info-gnu-chess/2020-04/msg00000.html
- > https://lists.gnu.org/archive/html/info-gnu-chess/2020-05/msg00000.html
+ >> Drop the now upstreamed security patch and update the license hash for a
+ >> change of copyright year:
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ >> -2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020 Python Software Foundation;
+ >> +2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Python Software Foundation;
 
-Committed, thanks.
+ >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed to 2020.11.x, thanks. For 2020.02.x, I will instead bump to
+3.8.8.
 
 -- 
 Bye, Peter Korsgaard
