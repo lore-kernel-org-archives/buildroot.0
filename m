@@ -1,36 +1,36 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 4 Mar 2021 19:53:38 +0100
-Subject: [Buildroot] [git commit] package/rtmpdump: set RTMPDUMP_CPE_ID_VALID
-Message-ID: <20210304183428.AE9D881370@busybox.osuosl.org>
+Date: Thu, 4 Mar 2021 19:53:39 +0100
+Subject: [Buildroot] [git commit] package/minicom: set MINICOM_CPE_ID_VALID
+Message-ID: <20210304183428.B8C4F8704B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=67c06e47102be96290d6d8faf01a8595bf22fa00
+commit: https://git.buildroot.net/buildroot/commit/?id=d282eaebb0d903120fd69ccada968530bd6868fc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:rtmpdump_project:rtmpdump is a valid CPE identifier for this
+cpe:2.3:a:minicom_project:minicom is a valid CPE identifier for this
 package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Artmpdump_project%3Artmpdump
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aminicom_project%3Aminicom
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/rtmpdump/rtmpdump.mk | 1 +
+ package/minicom/minicom.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/rtmpdump/rtmpdump.mk b/package/rtmpdump/rtmpdump.mk
-index bc68b7a836..35b3ec1846 100644
---- a/package/rtmpdump/rtmpdump.mk
-+++ b/package/rtmpdump/rtmpdump.mk
-@@ -11,6 +11,7 @@ RTMPDUMP_INSTALL_STAGING = YES
- # care about librtmp, it's LGPL-2.1+
- RTMPDUMP_LICENSE = LGPL-2.1+
- RTMPDUMP_LICENSE_FILES = librtmp/COPYING
-+RTMPDUMP_CPE_ID_VALID = YES
- RTMPDUMP_DEPENDENCIES = zlib
+diff --git a/package/minicom/minicom.mk b/package/minicom/minicom.mk
+index 1e12725983..7a8b2ef369 100644
+--- a/package/minicom/minicom.mk
++++ b/package/minicom/minicom.mk
+@@ -10,6 +10,7 @@ MINICOM_SITE = \
+ 	https://salsa.debian.org/minicom-team/minicom/-/archive/$(MINICOM_VERSION)
+ MINICOM_LICENSE = GPL-2.0+
+ MINICOM_LICENSE_FILES = COPYING
++MINICOM_CPE_ID_VALID = YES
+ MINICOM_AUTORECONF = YES
  
- ifeq ($(BR2_PACKAGE_GNUTLS),y)
+ MINICOM_DEPENDENCIES = ncurses $(if $(BR2_ENABLE_LOCALE),,libiconv) \
