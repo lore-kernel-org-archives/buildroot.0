@@ -1,36 +1,34 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu,  4 Mar 2021 12:34:10 +0100
-Subject: [Buildroot] [PATCH 1/1] package/icu: add CPE variables
-Message-ID: <20210304113410.1236261-1-fontaine.fabrice@gmail.com>
+Date: Thu,  4 Mar 2021 12:34:54 +0100
+Subject: [Buildroot] [PATCH 1/1] package/harfbuzz: set HARFBUZZ_CPE_ID_VALID
+Message-ID: <20210304113454.1236366-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:icu-project:international_components_for_unicode is a valid
-CPE identifier for this package:
+cpe:2.3:a:harfbuzz_project:harfbuzz is a valid CPE identifier for this
+package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aicu-project%3Ainternational_components_for_unicode
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aharfbuzz_project%3Aharfbuzz
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/icu/icu.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/harfbuzz/harfbuzz.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/icu/icu.mk b/package/icu/icu.mk
-index 8d0288578c..4d67831c76 100644
---- a/package/icu/icu.mk
-+++ b/package/icu/icu.mk
-@@ -13,6 +13,9 @@ ICU_SITE = \
- 	https://github.com/unicode-org/icu/releases/download/release-$(ICU_VERSION)
- ICU_LICENSE = ICU License
- ICU_LICENSE_FILES = LICENSE
-+ICU_CPE_ID_VENDOR = icu-project
-+ICU_CPE_ID_PRODUCT = international_components_for_unicode
-+ICU_CPE_ID_VERSION = $(subst -,.,$(ICU_VERSION))
- 
- ICU_DEPENDENCIES = host-icu
- ICU_INSTALL_STAGING = YES
+diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+index a17283bea9..28771118a1 100644
+--- a/package/harfbuzz/harfbuzz.mk
++++ b/package/harfbuzz/harfbuzz.mk
+@@ -9,6 +9,7 @@ HARFBUZZ_SITE = https://github.com/harfbuzz/harfbuzz/releases/download/$(HARFBUZ
+ HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.xz
+ HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
+ HARFBUZZ_LICENSE_FILES = COPYING
++HARFBUZZ_CPE_ID_VALID = YES
+ HARFBUZZ_INSTALL_STAGING = YES
+ HARFBUZZ_CONF_OPTS = \
+ 	-Dfontconfig=disabled \
 -- 
 2.30.0
