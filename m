@@ -1,47 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 4 Mar 2021 08:09:59 +0100
-Subject: [Buildroot] [git commit] package/libstrophe: bump to version 0.10.1
-Message-ID: <20210304065255.1251086DAD@busybox.osuosl.org>
+Date: Thu, 4 Mar 2021 08:12:21 +0100
+Subject: [Buildroot] [git commit] package/libpjsip: add CPE variables
+Message-ID: <20210304065255.1CB8686AA7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=28c7ff0bdb602e75d2891818ff87fe7fd4ed0015
+commit: https://git.buildroot.net/buildroot/commit/?id=e51733c12617e29c53a21e78a7d648669b594b1e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changes:
-* Fixed compilation error when LibreSSL is used
-* Fixed crash when NULL is provided as password
+cpe:2.3:a:pjsip:pjsip is a valid CPE identifier for this package:
 
-Signed-off-by: Michael Vetter <jubalh@iodoru.org>
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Apjsip%3Apjsip
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libstrophe/libstrophe.hash | 2 +-
- package/libstrophe/libstrophe.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libpjsip/libpjsip.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/libstrophe/libstrophe.hash b/package/libstrophe/libstrophe.hash
-index 5f3b098c89..6aca289fb5 100644
---- a/package/libstrophe/libstrophe.hash
-+++ b/package/libstrophe/libstrophe.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256 8d804e4c74cea1133203cc95a59a88f700fbdaead076e7959b495d734dd7936d  libstrophe-0.10.0.tar.gz
-+sha256 4918c47029ecdea2deab4b0f9336ca4a8bb12c28b72b2cec397d98664b94c771  libstrophe-0.10.1.tar.gz
- sha256 82476f36ffd5e895a176013c0812166ba7b7d99f3d536fc7f5ed2e33e9f74a08  MIT-LICENSE.txt
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  GPL-LICENSE.txt
-diff --git a/package/libstrophe/libstrophe.mk b/package/libstrophe/libstrophe.mk
-index 81fc1b9f97..e078eb25cd 100644
---- a/package/libstrophe/libstrophe.mk
-+++ b/package/libstrophe/libstrophe.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
+index f0956d11ae..8feec9bcb2 100644
+--- a/package/libpjsip/libpjsip.mk
++++ b/package/libpjsip/libpjsip.mk
+@@ -12,6 +12,8 @@ LIBPJSIP_SITE = $(call github,pjsip,pjproject,$(LIBPJSIP_VERSION))
+ LIBPJSIP_DEPENDENCIES = libsrtp
+ LIBPJSIP_LICENSE = GPL-2.0+
+ LIBPJSIP_LICENSE_FILES = COPYING
++LIBPJSIP_CPE_ID_VENDOR = pjsip
++LIBPJSIP_CPE_ID_PRODUCT = pjsip
+ LIBPJSIP_INSTALL_STAGING = YES
+ LIBPJSIP_MAKE = $(MAKE1)
  
--LIBSTROPHE_VERSION = 0.10.0
-+LIBSTROPHE_VERSION = 0.10.1
- LIBSTROPHE_SITE = $(call github,strophe,libstrophe,$(LIBSTROPHE_VERSION))
- LIBSTROPHE_DEPENDENCIES = openssl host-pkgconf
- # Doesn't ship configure
