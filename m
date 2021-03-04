@@ -1,93 +1,53 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu,  4 Mar 2021 21:04:30 +0100
-Subject: [Buildroot] [PATCH 1/1] package/kismet: fix uclibc build
-Message-ID: <20210304200430.1749334-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 4 Mar 2021 21:19:45 +0100
+Subject: [Buildroot] [git commit] package/gnuchess: security bump to version
+ 6.2.7
+Message-ID: <20210304195729.75DA786DAD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/1c2885d75219aabadbb66ab66fe0dc4b4346ff1e
+commit: https://git.buildroot.net/buildroot/commit/?id=5d9fb6a2ae94238c7b5a80e9d780c162023ba7e9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Fix CVE-2019-15767: In GNU Chess 6.2.5, there is a stack-based buffer
+overflow in the cmd_load function in frontend/cmd.cc via a crafted chess
+position in an EPD file.
+
+Update indentation in hash file (two spaces)
+
+https://lists.gnu.org/archive/html/info-gnu-chess/2020-04/msg00000.html
+https://lists.gnu.org/archive/html/info-gnu-chess/2020-05/msg00000.html
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...sio-Use-eventfd-function-with-uClibc.patch | 66 +++++++++++++++++++
- 1 file changed, 66 insertions(+)
- create mode 100644 package/kismet/0002-boost-asio-Use-eventfd-function-with-uClibc.patch
+ package/gnuchess/gnuchess.hash | 4 ++--
+ package/gnuchess/gnuchess.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/kismet/0002-boost-asio-Use-eventfd-function-with-uClibc.patch b/package/kismet/0002-boost-asio-Use-eventfd-function-with-uClibc.patch
-new file mode 100644
-index 0000000000..eb5fb2ec21
---- /dev/null
-+++ b/package/kismet/0002-boost-asio-Use-eventfd-function-with-uClibc.patch
-@@ -0,0 +1,66 @@
-+From 9330d34ced1d7d0e56d579bb55a9ed1286d324f0 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 4 Mar 2021 13:36:52 +0100
-+Subject: [PATCH] boost/asio: Use eventfd() function with uClibc
-+
-+Fix build with uclibc thanks to
-+https://github.com/boostorg/asio/commit/b2ee39aee0b186c5bcabb051b7a536ab1517616a
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/1c2885d75219aabadbb66ab66fe0dc4b4346ff1e
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/kismetwireless/kismet/commit/9330d34ced1d7d0e56d579bb55a9ed1286d324f0]
-+---
-+ .../asio/detail/impl/eventfd_select_interrupter.ipp  | 12 ++++++------
-+ 1 file changed, 6 insertions(+), 6 deletions(-)
-+
-+diff --git a/boost/asio/detail/impl/eventfd_select_interrupter.ipp b/boost/asio/detail/impl/eventfd_select_interrupter.ipp
-+index 38d4b2a6..8bdb3c20 100644
-+--- a/boost/asio/detail/impl/eventfd_select_interrupter.ipp
-++++ b/boost/asio/detail/impl/eventfd_select_interrupter.ipp
-+@@ -23,11 +23,11 @@
-+ #include <sys/stat.h>
-+ #include <sys/types.h>
-+ #include <fcntl.h>
-+-#if __GLIBC__ == 2 && __GLIBC_MINOR__ < 8
-++#if __GLIBC__ == 2 && __GLIBC_MINOR__ < 8 && !defined(__UCLIBC__)
-+ # include <asm/unistd.h>
-+-#else // __GLIBC__ == 2 && __GLIBC_MINOR__ < 8
-++#else // __GLIBC__ == 2 && __GLIBC_MINOR__ < 8 && !defined(__UCLIBC__)
-+ # include <sys/eventfd.h>
-+-#endif // __GLIBC__ == 2 && __GLIBC_MINOR__ < 8
-++#endif // __GLIBC__ == 2 && __GLIBC_MINOR__ < 8 && !defined(__UCLIBC__)
-+ #include <boost/asio/detail/cstdint.hpp>
-+ #include <boost/asio/detail/eventfd_select_interrupter.hpp>
-+ #include <boost/asio/detail/throw_error.hpp>
-+@@ -46,14 +46,14 @@ eventfd_select_interrupter::eventfd_select_interrupter()
-+ 
-+ void eventfd_select_interrupter::open_descriptors()
-+ {
-+-#if __GLIBC__ == 2 && __GLIBC_MINOR__ < 8
-++#if __GLIBC__ == 2 && __GLIBC_MINOR__ < 8 && !defined(__UCLIBC__)
-+   write_descriptor_ = read_descriptor_ = syscall(__NR_eventfd, 0);
-+   if (read_descriptor_ != -1)
-+   {
-+     ::fcntl(read_descriptor_, F_SETFL, O_NONBLOCK);
-+     ::fcntl(read_descriptor_, F_SETFD, FD_CLOEXEC);
-+   }
-+-#else // __GLIBC__ == 2 && __GLIBC_MINOR__ < 8
-++#else // __GLIBC__ == 2 && __GLIBC_MINOR__ < 8 && !defined(__UCLIBC__)
-+ # if defined(EFD_CLOEXEC) && defined(EFD_NONBLOCK)
-+   write_descriptor_ = read_descriptor_ =
-+     ::eventfd(0, EFD_CLOEXEC | EFD_NONBLOCK);
-+@@ -70,7 +70,7 @@ void eventfd_select_interrupter::open_descriptors()
-+       ::fcntl(read_descriptor_, F_SETFD, FD_CLOEXEC);
-+     }
-+   }
-+-#endif // __GLIBC__ == 2 && __GLIBC_MINOR__ < 8
-++#endif // __GLIBC__ == 2 && __GLIBC_MINOR__ < 8 && !defined(__UCLIBC__)
-+ 
-+   if (read_descriptor_ == -1)
-+   {
-+-- 
-+2.30.0
-+
--- 
-2.30.0
+diff --git a/package/gnuchess/gnuchess.hash b/package/gnuchess/gnuchess.hash
+index 9342fc3eb7..1641a7d8f9 100644
+--- a/package/gnuchess/gnuchess.hash
++++ b/package/gnuchess/gnuchess.hash
+@@ -1,3 +1,3 @@
+ # sha256 locally computed
+-sha256 9a99e963355706cab32099d140b698eda9de164ebce40a5420b1b9772dd04802  gnuchess-6.2.5.tar.gz
+-sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
++sha256  e536675a61abe82e61b919f6b786755441d9fcd4c21e1c82fb9e5340dd229846  gnuchess-6.2.7.tar.gz
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/gnuchess/gnuchess.mk b/package/gnuchess/gnuchess.mk
+index e386556c9f..60327dfe06 100644
+--- a/package/gnuchess/gnuchess.mk
++++ b/package/gnuchess/gnuchess.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GNUCHESS_VERSION = 6.2.5
++GNUCHESS_VERSION = 6.2.7
+ GNUCHESS_SITE = $(BR2_GNU_MIRROR)/chess
+ GNUCHESS_LICENSE = GPL-3.0+
+ GNUCHESS_LICENSE_FILES = COPYING
