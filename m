@@ -1,37 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 4 Mar 2021 08:07:42 +0100
-Subject: [Buildroot] [git commit] package/procps-ng: set
- PROCPS_NG_CPE_ID_VALID
-Message-ID: <20210304065254.D395A86F19@busybox.osuosl.org>
+Date: Thu, 4 Mar 2021 08:09:59 +0100
+Subject: [Buildroot] [git commit] package/libstrophe: bump to version 0.10.1
+Message-ID: <20210304065255.1251086DAD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=84e239775fbb51d0792dfad06914005b3a76feab
+commit: https://git.buildroot.net/buildroot/commit/?id=28c7ff0bdb602e75d2891818ff87fe7fd4ed0015
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:procps-ng_project:procps-ng is a valid CPE identifier for this
-package:
+Changes:
+* Fixed compilation error when LibreSSL is used
+* Fixed crash when NULL is provided as password
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aprocps-ng_project%3Aprocps-ng
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Michael Vetter <jubalh@iodoru.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/procps-ng/procps-ng.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/libstrophe/libstrophe.hash | 2 +-
+ package/libstrophe/libstrophe.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/procps-ng/procps-ng.mk b/package/procps-ng/procps-ng.mk
-index 5bafc7ee97..1f99ac3e55 100644
---- a/package/procps-ng/procps-ng.mk
-+++ b/package/procps-ng/procps-ng.mk
-@@ -9,6 +9,7 @@ PROCPS_NG_SOURCE = procps-ng-$(PROCPS_NG_VERSION).tar.xz
- PROCPS_NG_SITE = http://downloads.sourceforge.net/project/procps-ng/Production
- PROCPS_NG_LICENSE = GPL-2.0+, LGPL-2.0+ (libproc and libps)
- PROCPS_NG_LICENSE_FILES = COPYING COPYING.LIB
-+PROCPS_NG_CPE_ID_VALID = YES
- PROCPS_NG_INSTALL_STAGING = YES
- PROCPS_NG_DEPENDENCIES = ncurses host-pkgconf $(TARGET_NLS_DEPENDENCIES)
- PROCPS_NG_CONF_OPTS = LIBS=$(TARGET_NLS_LIBS)
+diff --git a/package/libstrophe/libstrophe.hash b/package/libstrophe/libstrophe.hash
+index 5f3b098c89..6aca289fb5 100644
+--- a/package/libstrophe/libstrophe.hash
++++ b/package/libstrophe/libstrophe.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256 8d804e4c74cea1133203cc95a59a88f700fbdaead076e7959b495d734dd7936d  libstrophe-0.10.0.tar.gz
++sha256 4918c47029ecdea2deab4b0f9336ca4a8bb12c28b72b2cec397d98664b94c771  libstrophe-0.10.1.tar.gz
+ sha256 82476f36ffd5e895a176013c0812166ba7b7d99f3d536fc7f5ed2e33e9f74a08  MIT-LICENSE.txt
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  GPL-LICENSE.txt
+diff --git a/package/libstrophe/libstrophe.mk b/package/libstrophe/libstrophe.mk
+index 81fc1b9f97..e078eb25cd 100644
+--- a/package/libstrophe/libstrophe.mk
++++ b/package/libstrophe/libstrophe.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBSTROPHE_VERSION = 0.10.0
++LIBSTROPHE_VERSION = 0.10.1
+ LIBSTROPHE_SITE = $(call github,strophe,libstrophe,$(LIBSTROPHE_VERSION))
+ LIBSTROPHE_DEPENDENCIES = openssl host-pkgconf
+ # Doesn't ship configure
