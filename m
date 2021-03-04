@@ -1,89 +1,108 @@
-From: Ismael Luceno <ismael@iodev.co.uk>
-Date: Thu,  4 Mar 2021 14:40:49 +0100
-Subject: [Buildroot] [PATCH] package/mawk: new package
-Message-ID: <20210304134049.9317-1-ismael@iodev.co.uk>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Thu, 4 Mar 2021 17:25:03 +0200
+Subject: [Buildroot] [PATCH 1/1] package/cog: add
+ BR2_PACKAGE_COG_USE_SYSTEM_DBUS
+In-Reply-To: <CAH=7X1AyXmWKnV+57tX9w_Smgz413jsYYVJfzv1X8arz7Bs1zA@mail.gmail.com>
+References: <20210202115721.4136447-1-asweet@thegoodpenguin.co.uk>
+ <20210204223323.GB441747@momiji>
+ <CAH=7X1AyXmWKnV+57tX9w_Smgz413jsYYVJfzv1X8arz7Bs1zA@mail.gmail.com>
+Message-ID: <20210304172503.GB743912@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Interpreter for the AWK Programming Language.
+Hello Adrian,
 
-Signed-off-by: Ismael Luceno <ismael@iodev.co.uk>
----
- DEVELOPERS             |  1 +
- package/Config.in      |  1 +
- package/mawk/Config.in |  6 ++++++
- package/mawk/mawk.hash |  2 ++
- package/mawk/mawk.mk   | 13 +++++++++++++
- 5 files changed, 23 insertions(+)
- create mode 100644 package/mawk/Config.in
- create mode 100644 package/mawk/mawk.hash
- create mode 100644 package/mawk/mawk.mk
+On Mon, 01 Mar 2021 16:55:49 +0000 Adrian Sweet <asweet@thegoodpenguin.co.uk> wrote:
+> All,
+>
+> Is there anything preventing this being merged? Can I help with any issues?
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 0c48236da402..02b3dd23814c 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1122,6 +1122,7 @@ F:	package/exempi/
- 
- N:	Ismael Luceno <ismael@iodev.co.uk>
- F:	package/axel/
-+F:	package/mawk/
- 
- N:	Jagan Teki <jagan@amarulasolutions.com>
- F:	board/amarula/
-diff --git a/package/Config.in b/package/Config.in
-index 5304ab141c0f..ddfa671c2a46 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -178,6 +178,7 @@ menu "Development tools"
- 	source "package/jq/Config.in"
- 	source "package/libtool/Config.in"
- 	source "package/make/Config.in"
-+	source "package/mawk/Config.in"
- 	source "package/patch/Config.in"
- 	source "package/pkgconf/Config.in"
- 	source "package/ripgrep/Config.in"
-diff --git a/package/mawk/Config.in b/package/mawk/Config.in
-new file mode 100644
-index 000000000000..80118b3f6d52
---- /dev/null
-+++ b/package/mawk/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_MAWK
-+	bool "mawk"
-+	help
-+	  Interpreter for the AWK Programming Language.
-+
-+	  http://invisible-island.net/mawk/mawk.html
-diff --git a/package/mawk/mawk.hash b/package/mawk/mawk.hash
-new file mode 100644
-index 000000000000..69761f77df57
---- /dev/null
-+++ b/package/mawk/mawk.hash
-@@ -0,0 +1,2 @@
-+sha256  7fd4cd1e1fae9290fe089171181bbc6291dfd9bca939ca804f0ddb851c8b8237  mawk-1.3.4-20200120.tgz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/mawk/mawk.mk b/package/mawk/mawk.mk
-new file mode 100644
-index 000000000000..c4a486215d5d
---- /dev/null
-+++ b/package/mawk/mawk.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# mawk
-+#
-+################################################################################
-+
-+MAWK_VERSION = 1.3.4-20200120
-+MAWK_SITE = https://invisible-mirror.net/archives/mawk
-+MAWK_SOURCE = mawk-$(MAWK_VERSION).tgz
-+MAWK_LICENSE = GPL-2.0
-+MAWK_LICENSE_FILES = COPYING
-+
-+$(eval $(autotools-package))
--- 
-2.30.1
+The patch looks good to me (hence the "Reviewed-by" tag I sent earlier).
+What is left is for a Buildroot maintainer to merge it---if they agree that
+the patch is good to go :)
+
+Cheers,
+-Adrian
+
+> Thanks, Adrian
+> 
+> On Thu, 4 Feb 2021 at 20:33, Adrian Perez de Castro <aperez@igalia.com>
+> wrote:
+> 
+> > Hi Adrian,
+> >
+> > Thanks for the patch, I think adding the option is fine given that there
+> > are people around who would use it?which seems to be the case.
+> >
+> > Unless somebody else has an opinion against, I think we could merge this
+> > change =]
+> >
+> > On Tue, 02 Feb 2021 11:57:21 +0000 Adrian Sweet <
+> > asweet at thegoodpenguin.co.uk> wrote:
+> > > Added config option to expose browser remote control on the D-Bus system
+> > bus
+> > >
+> > > Signed-off-by: Adrian Sweet <asweet@thegoodpenguin.co.uk>
+> >
+> > Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
+> >
+> > > ---
+> > >  package/cog/Config.in | 6 ++++++
+> > >  package/cog/cog.mk    | 6 ++++++
+> > >  2 files changed, 12 insertions(+)
+> > >
+> > > diff --git a/package/cog/Config.in b/package/cog/Config.in
+> > > index a9ca7473a9..c19f1c200e 100644
+> > > --- a/package/cog/Config.in
+> > > +++ b/package/cog/Config.in
+> > > @@ -47,6 +47,12 @@ config BR2_PACKAGE_COG_PLATFORM_DRM
+> > >         with video drivers that support kernel mode-setting (KMS)
+> > >         via the DRM user-space API.
+> > >
+> > > +config BR2_PACKAGE_COG_USE_SYSTEM_DBUS
+> > > +     bool "Use D-Bus system bus"
+> > > +     default n
+> > > +     help
+> > > +       Expose remote control interface on system bus
+> > > +
+> > >  comment "DRM platform needs mesa3d w/ EGL driver and GBM"
+> > >       depends on !BR2_PACKAGE_MESA3D_OPENGL_EGL
+> > >
+> > > diff --git a/package/cog/cog.mk b/package/cog/cog.mk
+> > > index 47a5573dda..c5a1cc0df2 100644
+> > > --- a/package/cog/cog.mk
+> > > +++ b/package/cog/cog.mk
+> > > @@ -31,4 +31,10 @@ else
+> > >  COG_CONF_OPTS += -DCOG_PLATFORM_DRM=OFF
+> > >  endif
+> > >
+> > > +ifeq ($(BR2_PACKAGE_COG_USE_SYSTEM_DBUS),y)
+> > > +COG_CONF_OPTS += -DCOG_DBUS_SYSTEM_BUS=ON
+> > > +else
+> > > +COG_CONF_OPTS += -DCOG_DBUS_SYSTEM_BUS=OFF
+> > > +endif
+> > > +
+> > >  $(eval $(cmake-package))
+> > > --
+> > > 2.25.1
+> > >
+> >
+> 
+> 
+> -- 
+> Adrian Sweet, Software Engineer
+> https://www.thegoodpenguin.co.uk
+> 
+> The Good Penguin Ltd is a company registered in England and Wales with
+> company number 12374667 and VAT number 341687879. Registered office: The
+> Good Penguin Ltd, Westcott, Glasllwch Lane, Newport, NP20 3PS.
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210304/c99d60bf/attachment.asc>
