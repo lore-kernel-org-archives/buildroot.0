@@ -1,38 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Mar 2021 14:00:55 +0100
-Subject: [Buildroot] [git commit] package/python-simplejson: add CPE
- variables
-Message-ID: <20210305123920.5B38D812C8@busybox.osuosl.org>
+Date: Fri, 5 Mar 2021 13:59:54 +0100
+Subject: [Buildroot] [git commit] package/poppler: add POPPLER_CPE_ID_VENDOR
+Message-ID: <20210305123920.1F094812AF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=42488c58fc3a608980b2651eb92c4fa312c18807
+commit: https://git.buildroot.net/buildroot/commit/?id=3bf012797135b91cbf3027ff2846b4e0787ad7d4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:simplejson_project:simplejson is a valid CPE identifier for
-this package:
+cpe:2.3:a:freedesktop:poppler is a valid CPE identifier for this
+package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Asimplejson_project%3Asimplejson
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Afreedesktop%3Apoppler
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-simplejson/python-simplejson.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/poppler/poppler.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/python-simplejson/python-simplejson.mk b/package/python-simplejson/python-simplejson.mk
-index 3e875015a8..cf5bd3a482 100644
---- a/package/python-simplejson/python-simplejson.mk
-+++ b/package/python-simplejson/python-simplejson.mk
-@@ -9,6 +9,8 @@ PYTHON_SIMPLEJSON_SOURCE = simplejson-$(PYTHON_SIMPLEJSON_VERSION).tar.gz
- PYTHON_SIMPLEJSON_SITE = https://files.pythonhosted.org/packages/98/87/a7b98aa9256c8843f92878966dc3d8d914c14aad97e2c5ce4798d5743e07
- PYTHON_SIMPLEJSON_LICENSE = Academic Free License (AFL), MIT
- PYTHON_SIMPLEJSON_LICENSE_FILES = LICENSE.txt
-+PYTHON_SIMPLEJSON_CPE_ID_VENDOR = simplejson_project
-+PYTHON_SIMPLEJSON_CPE_ID_PRODUCT = simplejson
- PYTHON_SIMPLEJSON_SETUP_TYPE = setuptools
+diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
+index aba8602e06..44ad04bf7c 100644
+--- a/package/poppler/poppler.mk
++++ b/package/poppler/poppler.mk
+@@ -10,6 +10,7 @@ POPPLER_SITE = http://poppler.freedesktop.org
+ POPPLER_DEPENDENCIES = fontconfig host-pkgconf
+ POPPLER_LICENSE = GPL-2.0+
+ POPPLER_LICENSE_FILES = COPYING
++POPPLER_CPE_ID_VENDOR = freedesktop
+ POPPLER_INSTALL_STAGING = YES
  
- $(eval $(python-package))
+ POPPLER_CONF_OPTS = \
