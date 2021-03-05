@@ -1,29 +1,27 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Fri, 5 Mar 2021 20:29:31 +0100
-Subject: [Buildroot] [PATCH 0/2] package/belle-sip: work around bug 99410
-In-Reply-To: <b67310b8-e253-fb2e-234a-5947d0b17002@benettiengineering.com>
-References: <20210305151529.3477575-1-giulio.benetti@benettiengineering.com>
- <b67310b8-e253-fb2e-234a-5947d0b17002@benettiengineering.com>
-Message-ID: <dd3d951c-39b6-7aa0-376a-d1f9902d61a7@benettiengineering.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 05 Mar 2021 22:29:47 +0100
+Subject: [Buildroot] [PATCH 1/1] package/python-werkzeug: add CPE
+ variables
+In-Reply-To: <20210305111424.1902898-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 5 Mar 2021 12:14:24 +0100")
+References: <20210305111424.1902898-1-fontaine.fabrice@gmail.com>
+Message-ID: <87a6rhcmr8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 3/5/21 8:23 PM, Giulio Benetti wrote:
-> Sorry but this patchset is not correct, that is not a gcc bug but a
-> binutils bug, specifically:
-> https://sourceware.org/bugzilla/show_bug.cgi?id=27243
-> 
-> So going to rename and send a v2 patchset.
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-I was too in hurry, this is correct as I've mentioned here:
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=99410
+ > cpe:2.3:a:palletsprojects:werkzeug is a valid CPE identifier for this
+ > package:
 
-Sorry for the noise
+ >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Apalletsprojects%3Awerkzeug
 
-Best regards
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed, thanks.
+
 -- 
-Giulio Benetti
-Benetti Engineering sas
+Bye, Peter Korsgaard
