@@ -1,57 +1,45 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 05 Mar 2021 00:33:39 +0000
-Subject: [Buildroot] [Bug 13576] New: Issues compiling buildroot for 5x86
-Message-ID: <bug-13576-163@https.bugs.busybox.net/>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri,  5 Mar 2021 06:56:30 +0100
+Subject: [Buildroot] [PATCH 1/2] package/dovecot: bump version to 2.3.14
+Message-ID: <20210305055631.206914-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13576
+Release notes:
+https://dovecot.org/pipermail/dovecot-news/2021-March/000455.html
 
-            Bug ID: 13576
-           Summary: Issues compiling buildroot for 5x86
-           Product: buildroot
-           Version: unspecified
-          Hardware: PC
-                OS: Linux
-            Status: NEW
-          Severity: blocker
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: ingineru_de_sistem at yahoo.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/dovecot/dovecot.hash | 2 +-
+ package/dovecot/dovecot.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Tried to compile a buildroot environment to revive an old p1mmx machine.
-
-1) when choosing MariaDB to provide MySQL, perl DBD::mysql and rsyslog have
-trouble finding mysql.h, have to add -I/path/to/output/target/.../mysql.h to
-them individually
-
-2) syslinux hits umpteen double definitions when linking.
-Finally need to override the linker to always add --alow-multiple-definition
-always, otherwise it won't compile. (Not sure it works, though).
-(Uboot is not an option on a PC, lilo is absent from buildroot even though it
-would perfectly fit the need. Grub is not recommended when booting from SD
-cards, it tends to erase stuff when attempting to write and not waiting for the
-whole page to be rewritten)
-
-3) for some reason, buildroot needs to download a rust binary, but refuses to
-skip the hash if the hash is not in the hash file. Removing rust*hash fixes
-this.
-
-...and still going
-
-If it matters, the host is a VM running Ubuntu 20.04 LTS x64 .
-Buildroot is the last version available on git (git clone ....)
-
-
-I guess not many people are into reviving P1MMX machines with the latest kernel
-and libraries
-
+diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
+index 4d69f3abdd..edb9d20e6d 100644
+--- a/package/dovecot/dovecot.hash
++++ b/package/dovecot/dovecot.hash
+@@ -1,5 +1,5 @@
+ # Locally computed after checking signature
+-sha256  a3f875b80ec11a452480690108660030978c94fa8e796ad6d943a874b496f1c4  dovecot-2.3.13.tar.gz
++sha256  c8b3d7f3af1e558a3ff0f970309d4013a4d3ce136f8c02a53a3b05f345b9a34a  dovecot-2.3.14.tar.gz
+ sha256  319a9830aab406109cd67cb45496587566a8123203d66d037b209ca3e13de02a  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
+ sha256  52b8c95fabb19575281874b661ef7968ea47e8f5d74ba0dd40ce512e52b3fc97  COPYING.MIT
+diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
+index 8635ea5c4f..a38cf1941a 100644
+--- a/package/dovecot/dovecot.mk
++++ b/package/dovecot/dovecot.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ DOVECOT_VERSION_MAJOR = 2.3
+-DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).13
++DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).14
+ DOVECOT_SITE = https://dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
+ DOVECOT_INSTALL_STAGING = YES
+ DOVECOT_LICENSE = LGPL-2.1, MIT, Public Domain, BSD-3-Clause, Unicode-DFS-2015
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.29.2
