@@ -1,36 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Mar 2021 22:29:30 +0100
-Subject: [Buildroot] [git commit] package/python-werkzeug: add CPE variables
-Message-ID: <20210305212717.1765280DB7@busybox.osuosl.org>
+Date: Fri, 5 Mar 2021 22:30:50 +0100
+Subject: [Buildroot] [git commit] package/sdl2_image: add
+ SDL2_IMAGE_CPE_ID_PRODUCT
+Message-ID: <20210305212717.2397087510@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=79d0ffa94e5ddfdb0b4220a07ca2517704ec86bc
+commit: https://git.buildroot.net/buildroot/commit/?id=752354aa79440adb8be650cf386b1b9d10884182
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:palletsprojects:werkzeug is a valid CPE identifier for this
-package:
+cpe:2.3:a:libsdl:sdl_image is a valid CPE identifier for this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Apalletsprojects%3Awerkzeug
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alibsdl%3Asdl2_image
+
+Indeed, cpe:2.3:a:libsdl:sdl2_image contains a single CPE entry for
+version 2.0.4, all the other entries have been deprecated in favor of
+cpe:2.3:a:libsdl:sdl_image:
+
+  <cpe-item name="cpe:/a:libsdl:sdl2_image:2.0.3" deprecated="true" deprecation_date="2020-07-28T15:42:37.767Z">
+      <reference href="https://www.libsdl.org/projects/SDL_image/">Product</reference>
+    <cpe-23:cpe23-item name="cpe:2.3:a:libsdl:sdl2_image:2.0.3:*:*:*:*:*:*:*">
+        <cpe-23:deprecated-by name="cpe:2.3:a:libsdl:sdl_image:2.0.3:*:*:*:*:*:*:*" type="NAME_CORRECTION"/>
+  <cpe-item name="cpe:/a:libsdl:sdl2_image:2.0.4">
+      <reference href="http://hg.libsdl.org/SDL_image/">Version</reference>
+    <cpe-23:cpe23-item name="cpe:2.3:a:libsdl:sdl2_image:2.0.4:*:*:*:*:*:*:*"/>
+  <cpe-item name="cpe:/a:libsdl:sdl2_image:2.0.5" deprecated="true" deprecation_date="2020-07-28T15:42:40.500Z">
+      <reference href="http://hg.libsdl.org/SDL_image/">Version</reference>
+    <cpe-23:cpe23-item name="cpe:2.3:a:libsdl:sdl2_image:2.0.5:*:*:*:*:*:*:*">
+        <cpe-23:deprecated-by name="cpe:2.3:a:libsdl:sdl_image:2.0.5:*:*:*:*:*:*:*" type="NAME_CORRECTION"/>:
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-werkzeug/python-werkzeug.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/sdl2_image/sdl2_image.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/python-werkzeug/python-werkzeug.mk b/package/python-werkzeug/python-werkzeug.mk
-index 1013f8af80..fe9b87af1d 100644
---- a/package/python-werkzeug/python-werkzeug.mk
-+++ b/package/python-werkzeug/python-werkzeug.mk
-@@ -10,5 +10,7 @@ PYTHON_WERKZEUG_SITE = https://files.pythonhosted.org/packages/10/27/a3332915014
- PYTHON_WERKZEUG_SETUP_TYPE = setuptools
- PYTHON_WERKZEUG_LICENSE = BSD-3-Clause
- PYTHON_WERKZEUG_LICENSE_FILES = LICENSE.rst
-+PYTHON_WERKZEUG_CPE_ID_VENDOR = palletsprojects
-+PYTHON_WERKZEUG_CPE_ID_PRODUCT = werkzeug
+diff --git a/package/sdl2_image/sdl2_image.mk b/package/sdl2_image/sdl2_image.mk
+index 06f6eca30c..13de7b1268 100644
+--- a/package/sdl2_image/sdl2_image.mk
++++ b/package/sdl2_image/sdl2_image.mk
+@@ -11,6 +11,7 @@ SDL2_IMAGE_INSTALL_STAGING = YES
+ SDL2_IMAGE_LICENSE = Zlib
+ SDL2_IMAGE_LICENSE_FILES = COPYING.txt
+ SDL2_IMAGE_CPE_ID_VENDOR = libsdl
++SDL2_IMAGE_CPE_ID_PRODUCT = sdl_image
  
- $(eval $(python-package))
+ # Unconditionally enable support for image formats that don't require
+ # any dependency.
