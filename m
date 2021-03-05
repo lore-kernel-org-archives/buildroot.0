@@ -1,42 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Mar 2021 23:15:17 +0100
-Subject: [Buildroot] [git commit branch/next] package/janet: add -std=c99 to
- CFLAGS
-Message-ID: <20210305215513.A10218754E@busybox.osuosl.org>
+Date: Fri, 05 Mar 2021 23:22:28 +0100
+Subject: [Buildroot] [PATCH v2,1/1] package/libshout: disable tools
+In-Reply-To: <20210305150054.2007286-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 5 Mar 2021 16:00:54 +0100")
+References: <20210305150054.2007286-1-fontaine.fabrice@gmail.com>
+Message-ID: <87czwdb5qz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b5e8f1c1475b46c8d9b7159aafe983e72d329d29
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-As upstream says Janet should be compiled with -std=c99
-so pass this in order to fix the failures below.
+ > This will fix static build of libshout in version 2.4.5 with openssl
+ > (tools were added by
+ > https://gitlab.xiph.org/xiph/icecast-libshout/-/commit/34a535bdbb7d8bb4545d2bd71ba29a212e83041e)
 
-Fixes:
- http://autobuild.buildroot.net/results/192/1922ec115b9dc9e879760a6868969d9677093510/build-end.log
- ...
- http://autobuild.buildroot.net/results/355/355e0992338a8d132050517f83a3884606b00529/build-end.log
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/1c2885d75219aabadbb66ab66fe0dc4b4346ff1e
 
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/janet/janet.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This looks to be a kismet failure. I've replaced by:
 
-diff --git a/package/janet/janet.mk b/package/janet/janet.mk
-index 7243d60c01..ea042221d8 100644
---- a/package/janet/janet.mk
-+++ b/package/janet/janet.mk
-@@ -8,8 +8,8 @@ JANET_VERSION = 1.15.0
- JANET_SITE = $(call github,janet-lang,janet,v$(JANET_VERSION))
- JANET_LICENSE = MIT
- JANET_LICENSE_FILES = LICENSE
--
- JANET_INSTALL_STAGING = YES
-+JANET_CFLAGS = $(TARGET_CFLAGS) -std=c99
- 
- ifeq ($(BR2_STATIC_LIBS),y)
- JANET_CONF_OPTS += -Ddynamic_modules=false
+http://autobuild.buildroot.net/results/a6b/a6b7df5d4b4bccbfe54f3173365e88d849ed0e30/
+
+And committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
