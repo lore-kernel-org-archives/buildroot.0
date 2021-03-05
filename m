@@ -1,10 +1,10 @@
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Fri,  5 Mar 2021 17:12:11 +0100
-Subject: [Buildroot] [PATCH v2 3/3] package/zeromq: disable package if
+Date: Fri,  5 Mar 2021 17:12:10 +0100
+Subject: [Buildroot] [PATCH v2 2/3] package/protobuf: disable package if
  binutils is affected from bug 21464
 In-Reply-To: <20210305161211.4396-1-giulio.benetti@benettiengineering.com>
 References: <20210305161211.4396-1-giulio.benetti@benettiengineering.com>
-Message-ID: <20210305161211.4396-4-giulio.benetti@benettiengineering.com>
+Message-ID: <20210305161211.4396-3-giulio.benetti@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,29 +15,24 @@ This package is affected from binutils bug 21464, since there is no
 workaround, let's disable it.
 
 Fixes:
-http://autobuild.buildroot.net/results/ce351e0e97c2cacc17d4718d39941548c7558559
+http://autobuild.buildroot.net/results/908/9084cd777aefe0fa8235514c33767d8640ad7a5b/
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/zeromq/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/protobuf/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/zeromq/Config.in b/package/zeromq/Config.in
-index cf5c644c39..f99adf7acc 100644
---- a/package/zeromq/Config.in
-+++ b/package/zeromq/Config.in
-@@ -1,10 +1,12 @@
- comment "zeromq needs a toolchain w/ C++, threads"
- 	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS)
+diff --git a/package/protobuf/Config.in b/package/protobuf/Config.in
+index 46c820b9cf..30050950aa 100644
+--- a/package/protobuf/Config.in
++++ b/package/protobuf/Config.in
+@@ -24,6 +24,7 @@ config BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+ 	default y if BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+ 	depends on BR2_USE_MMU # fork()
 +	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464
  
- config BR2_PACKAGE_ZEROMQ
- 	bool "zeromq"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464
- 	select BR2_PACKAGE_UTIL_LINUX
- 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
- 	help
+ config BR2_PACKAGE_PROTOBUF
+ 	bool "protobuf"
 -- 
 2.25.1
