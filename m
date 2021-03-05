@@ -1,94 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Mar 2021 23:27:29 +0100
-Subject: [Buildroot] [git commit] package/kismet: fix uclibc build
-Message-ID: <20210305220541.CB64E7FBD1@busybox.osuosl.org>
+Date: Fri, 05 Mar 2021 23:31:10 +0100
+Subject: [Buildroot] [PATCH 1/1] package/jasper: bump version to 2.0.26
+In-Reply-To: <20210305154913.29414-1-jubalh@iodoru.org> (Michael Vetter's
+ message of "Fri, 5 Mar 2021 16:49:13 +0100")
+References: <20210305154913.29414-1-jubalh@iodoru.org>
+Message-ID: <87zgzh9qs1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=941fccf376f73c98b401104bc5721fe607a5b193
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Michael" == Michael Vetter <jubalh@iodoru.org> writes:
 
-Fixes:
- - http://autobuild.buildroot.org/results/1c2885d75219aabadbb66ab66fe0dc4b4346ff1e
+ > Changes:
+ > * Fix JP2 decoder bug that can cause a null pointer dereference for
+ >   some invalid CDEF boxes. (#268)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...ost-asio-Use-eventfd-function-with-uClibc.patch | 66 ++++++++++++++++++++++
- 1 file changed, 66 insertions(+)
+ > Signed-off-by: Michael Vetter <jubalh@iodoru.org>
 
-diff --git a/package/kismet/0002-boost-asio-Use-eventfd-function-with-uClibc.patch b/package/kismet/0002-boost-asio-Use-eventfd-function-with-uClibc.patch
-new file mode 100644
-index 0000000000..eb5fb2ec21
---- /dev/null
-+++ b/package/kismet/0002-boost-asio-Use-eventfd-function-with-uClibc.patch
-@@ -0,0 +1,66 @@
-+From 9330d34ced1d7d0e56d579bb55a9ed1286d324f0 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 4 Mar 2021 13:36:52 +0100
-+Subject: [PATCH] boost/asio: Use eventfd() function with uClibc
-+
-+Fix build with uclibc thanks to
-+https://github.com/boostorg/asio/commit/b2ee39aee0b186c5bcabb051b7a536ab1517616a
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/1c2885d75219aabadbb66ab66fe0dc4b4346ff1e
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/kismetwireless/kismet/commit/9330d34ced1d7d0e56d579bb55a9ed1286d324f0]
-+---
-+ .../asio/detail/impl/eventfd_select_interrupter.ipp  | 12 ++++++------
-+ 1 file changed, 6 insertions(+), 6 deletions(-)
-+
-+diff --git a/boost/asio/detail/impl/eventfd_select_interrupter.ipp b/boost/asio/detail/impl/eventfd_select_interrupter.ipp
-+index 38d4b2a6..8bdb3c20 100644
-+--- a/boost/asio/detail/impl/eventfd_select_interrupter.ipp
-++++ b/boost/asio/detail/impl/eventfd_select_interrupter.ipp
-+@@ -23,11 +23,11 @@
-+ #include <sys/stat.h>
-+ #include <sys/types.h>
-+ #include <fcntl.h>
-+-#if __GLIBC__ == 2 && __GLIBC_MINOR__ < 8
-++#if __GLIBC__ == 2 && __GLIBC_MINOR__ < 8 && !defined(__UCLIBC__)
-+ # include <asm/unistd.h>
-+-#else // __GLIBC__ == 2 && __GLIBC_MINOR__ < 8
-++#else // __GLIBC__ == 2 && __GLIBC_MINOR__ < 8 && !defined(__UCLIBC__)
-+ # include <sys/eventfd.h>
-+-#endif // __GLIBC__ == 2 && __GLIBC_MINOR__ < 8
-++#endif // __GLIBC__ == 2 && __GLIBC_MINOR__ < 8 && !defined(__UCLIBC__)
-+ #include <boost/asio/detail/cstdint.hpp>
-+ #include <boost/asio/detail/eventfd_select_interrupter.hpp>
-+ #include <boost/asio/detail/throw_error.hpp>
-+@@ -46,14 +46,14 @@ eventfd_select_interrupter::eventfd_select_interrupter()
-+ 
-+ void eventfd_select_interrupter::open_descriptors()
-+ {
-+-#if __GLIBC__ == 2 && __GLIBC_MINOR__ < 8
-++#if __GLIBC__ == 2 && __GLIBC_MINOR__ < 8 && !defined(__UCLIBC__)
-+   write_descriptor_ = read_descriptor_ = syscall(__NR_eventfd, 0);
-+   if (read_descriptor_ != -1)
-+   {
-+     ::fcntl(read_descriptor_, F_SETFL, O_NONBLOCK);
-+     ::fcntl(read_descriptor_, F_SETFD, FD_CLOEXEC);
-+   }
-+-#else // __GLIBC__ == 2 && __GLIBC_MINOR__ < 8
-++#else // __GLIBC__ == 2 && __GLIBC_MINOR__ < 8 && !defined(__UCLIBC__)
-+ # if defined(EFD_CLOEXEC) && defined(EFD_NONBLOCK)
-+   write_descriptor_ = read_descriptor_ =
-+     ::eventfd(0, EFD_CLOEXEC | EFD_NONBLOCK);
-+@@ -70,7 +70,7 @@ void eventfd_select_interrupter::open_descriptors()
-+       ::fcntl(read_descriptor_, F_SETFD, FD_CLOEXEC);
-+     }
-+   }
-+-#endif // __GLIBC__ == 2 && __GLIBC_MINOR__ < 8
-++#endif // __GLIBC__ == 2 && __GLIBC_MINOR__ < 8 && !defined(__UCLIBC__)
-+ 
-+   if (read_descriptor_ == -1)
-+   {
-+-- 
-+2.30.0
-+
+Committed to master given how small the diff is, thanks.
+
+-- 
+Bye, Peter Korsgaard
