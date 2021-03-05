@@ -1,46 +1,35 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Fri,  5 Mar 2021 16:15:29 +0100
-Subject: [Buildroot] [PATCH 2/2] package/belle-sip: fix build failure due to
- gcc bug 99410
-In-Reply-To: <20210305151529.3477575-1-giulio.benetti@benettiengineering.com>
-References: <20210305151529.3477575-1-giulio.benetti@benettiengineering.com>
-Message-ID: <20210305151529.3477575-3-giulio.benetti@benettiengineering.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri,  5 Mar 2021 16:32:03 +0100
+Subject: [Buildroot] [PATCH 1/1] package/sdl: add CPE variables
+Message-ID: <20210305153203.2009526-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The belle-sip package exhibits gcc bug 99410 when built for the Nios2
-architecture with optimization enabled, which causes a build failure.
+cpe:2.3:a:libsdl:simple_directmedia_layer is a valid CPE identifier for
+this package:
 
-As done for other packages in Buildroot work around this gcc bug by
-setting optimization to -O0 if BR2_TOOLCHAIN_HAS_GCC_BUG_99410=y.
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alibsdl%3Asdl
 
-Fixes:
-http://autobuild.buildroot.net/results/71f26fd81db8e9b19b3f18f3f3cefd9c768f094f/
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/belle-sip/belle-sip.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/sdl/sdl.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/belle-sip/belle-sip.mk b/package/belle-sip/belle-sip.mk
-index b5169be488..23b60e51f5 100644
---- a/package/belle-sip/belle-sip.mk
-+++ b/package/belle-sip/belle-sip.mk
-@@ -32,4 +32,12 @@ else ifeq ($(BR2_SHARED_LIBS),y)
- BELLE_SIP_CONF_OPTS += -DENABLE_SHARED=ON -DENABLE_STATIC=OFF
- endif
+diff --git a/package/sdl/sdl.mk b/package/sdl/sdl.mk
+index 06564d610a..7389cd3edb 100644
+--- a/package/sdl/sdl.mk
++++ b/package/sdl/sdl.mk
+@@ -9,6 +9,8 @@ SDL_SOURCE = SDL-$(SDL_VERSION).tar.gz
+ SDL_SITE = http://www.libsdl.org/release
+ SDL_LICENSE = LGPL-2.1+
+ SDL_LICENSE_FILES = COPYING
++SDL_CPE_ID_VENDOR = libsdl
++SDL_CPE_ID_PRODUCT = simple_directmedia_layer
+ SDL_INSTALL_STAGING = YES
  
-+BELLE_SIP_CFLAGS = $(TARGET_CFLAGS)
-+
-+ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_99140),y)
-+BELLE_SIP_CFLAGS += -O0
-+endif
-+
-+BELLE_SIP_CONF_OPTS += -DCMAKE_C_FLAGS="$(BELLE_SIP_CFLAGS)"
-+
- $(eval $(cmake-package))
+ # we're patching configure.in, but package cannot autoreconf with our version of
 -- 
-2.25.1
+2.30.0
