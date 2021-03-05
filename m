@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Mar 2021 11:55:34 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/nodejs: security
+Date: Fri, 5 Mar 2021 11:55:20 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/nodejs: security
  bump to version v12.21.0
-Message-ID: <20210305103438.4F37783982@busybox.osuosl.org>
+Message-ID: <20210305103442.79ECA865AD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=887d4fab3e0abfddd363d5a6001939a42dbb0c1f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=ccce1301b297ed3670ef1ff6580d05f34d6d280d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
 Fixes the following security issues:
 
