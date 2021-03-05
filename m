@@ -1,46 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Mar 2021 13:52:31 +0100
-Subject: [Buildroot] [git commit] package/dovecot-pigeonhole: bump version
- to 0.5.14
-Message-ID: <20210305123919.9EACC812AF@busybox.osuosl.org>
+Date: Fri, 5 Mar 2021 13:57:48 +0100
+Subject: [Buildroot] [git commit] package/fontconfig: set
+ FONTCONFIG_CPE_ID_VALID
+Message-ID: <20210305123919.D0892812AF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9b29e94980c134065f360a4beaa70be86bb0befd
+commit: https://git.buildroot.net/buildroot/commit/?id=b676a92e3c86ca2376d697eda14063a62977060c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://dovecot.org/pipermail/dovecot-news/2021-March/000456.html
+cpe:2.3:a:fontconfig_project:fontconfig is a valid CPE identifier for
+this package:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Afontconfig_project%3Afontconfig
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dovecot-pigeonhole/dovecot-pigeonhole.hash | 2 +-
- package/dovecot-pigeonhole/dovecot-pigeonhole.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/fontconfig/fontconfig.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
-index f2c76a05fd..cf3ebdbf54 100644
---- a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
-+++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
-@@ -1,3 +1,3 @@
- # Locally computed after checking signature
--sha256  911fe566da5b638eab1b11105314300bc9049cc3832d4bd2aed44c265013bf17  dovecot-2.3-pigeonhole-0.5.13.tar.gz
-+sha256  68ca0f78a3caa6b090a469f45c395c44cf16da8fcb3345755b1ca436c9ffb2d2  dovecot-2.3-pigeonhole-0.5.14.tar.gz
- sha256  fc9e9522216f2a9a28b31300e3c73c1df56acc27dfae951bf516e7995366b51a  COPYING
-diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
-index b65e388a06..35a1e1ef52 100644
---- a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
-+++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/fontconfig/fontconfig.mk b/package/fontconfig/fontconfig.mk
+index ee82cc1de3..0c15e89313 100644
+--- a/package/fontconfig/fontconfig.mk
++++ b/package/fontconfig/fontconfig.mk
+@@ -15,6 +15,7 @@ HOST_FONTCONFIG_DEPENDENCIES = \
+ 	host-freetype host-expat host-pkgconf host-gperf host-util-linux
+ FONTCONFIG_LICENSE = fontconfig license
+ FONTCONFIG_LICENSE_FILES = COPYING
++FONTCONFIG_CPE_ID_VALID = YES
  
--DOVECOT_PIGEONHOLE_VERSION = 0.5.13
-+DOVECOT_PIGEONHOLE_VERSION = 0.5.14
- DOVECOT_PIGEONHOLE_SOURCE = dovecot-2.3-pigeonhole-$(DOVECOT_PIGEONHOLE_VERSION).tar.gz
- DOVECOT_PIGEONHOLE_SITE = https://pigeonhole.dovecot.org/releases/2.3
- DOVECOT_PIGEONHOLE_LICENSE = LGPL-2.1
+ FONTCONFIG_CONF_OPTS = \
+ 	--with-arch=$(GNU_TARGET_NAME) \
