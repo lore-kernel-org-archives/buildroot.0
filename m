@@ -1,37 +1,23 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  5 Mar 2021 16:19:09 +0100
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/sdl_image: add SDL_IMAGE_CPE_ID_VENDOR
-Message-ID: <20210305151909.2008869-1-fontaine.fabrice@gmail.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Fri,  5 Mar 2021 16:15:27 +0100
+Subject: [Buildroot] [PATCH 0/2] package/belle-sip: work around bug 99410
+Message-ID: <20210305151529.3477575-1-giulio.benetti@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:libsdl:sdl_image is a valid CPE identifier for this package:
+This pachset introduces gcc bug 99410 and uses it work around package
+belle-sip.
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alibsdl%3Asdl_image
+Giulio Benetti (2):
+  toolchain: introduce BR2_TOOLCHAIN_HAS_GCC_BUG_99410
+  package/belle-sip: fix build failure due to gcc bug 99410
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2:
- - Fix title
+ package/belle-sip/belle-sip.mk | 8 ++++++++
+ toolchain/Config.in            | 7 +++++++
+ 2 files changed, 15 insertions(+)
 
- package/sdl_image/sdl_image.mk | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/sdl_image/sdl_image.mk b/package/sdl_image/sdl_image.mk
-index 95a03a3956..9ff9206b74 100644
---- a/package/sdl_image/sdl_image.mk
-+++ b/package/sdl_image/sdl_image.mk
-@@ -10,6 +10,7 @@ SDL_IMAGE_SITE = http://www.libsdl.org/projects/SDL_image/release
- SDL_IMAGE_INSTALL_STAGING = YES
- SDL_IMAGE_LICENSE = Zlib
- SDL_IMAGE_LICENSE_FILES = COPYING
-+SDL_IMAGE_CPE_ID_VENDOR = libsdl
- 
- SDL_IMAGE_CONF_OPTS = \
- 	--with-sdl-prefix=$(STAGING_DIR)/usr \
 -- 
-2.30.0
+2.25.1
