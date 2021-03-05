@@ -1,38 +1,40 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  5 Mar 2021 16:32:53 +0100
-Subject: [Buildroot] [PATCH 1/1] package/sdl2: update SDL2_CPE_ID_PRODUCT
-Message-ID: <20210305153253.2009635-1-fontaine.fabrice@gmail.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Fri,  5 Mar 2021 16:37:30 +0100
+Subject: [Buildroot] [PATCH] toolchain: disable gcc bug 68485 if gcc version
+ >= 10.x
+Message-ID: <20210305153730.3671327-1-giulio.benetti@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libsdl:sdl has been replaced by libsdl:simple_directmedia_layer:
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alibsdl%3Asimple_directmedia_layer
+Since gcc version 10.x bug 68485 doesn't show anymore, so let's make it
+enabled up to versino 10.x excluded.
 
-  <cpe-item name="cpe:/a:libsdl:sdl:2.0.12" deprecated="true" deprecation_date="2021-02-08T18:56:07.243Z">
-      <reference href="https://www.libsdl.org/release/">Version</reference>
-    <cpe-23:cpe23-item name="cpe:2.3:a:libsdl:sdl:2.0.12:*:*:*:*:*:*:*">
-        <cpe-23:deprecated-by name="cpe:2.3:a:libsdl:simple_directmedia_layer:2.0.12:*:*:*:*:*:*:*" type="NAME_CORRECTION"/>
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/sdl2/sdl2.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ toolchain/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
-index ca4f602360..92ef2b4ba5 100644
---- a/package/sdl2/sdl2.mk
-+++ b/package/sdl2/sdl2.mk
-@@ -10,7 +10,7 @@ SDL2_SITE = http://www.libsdl.org/release
- SDL2_LICENSE = Zlib
- SDL2_LICENSE_FILES = COPYING.txt
- SDL2_CPE_ID_VENDOR = libsdl
--SDL2_CPE_ID_PRODUCT = sdl
-+SDL2_CPE_ID_PRODUCT = simple_directmedia_layer
- SDL2_INSTALL_STAGING = YES
- SDL2_CONFIG_SCRIPTS = sdl2-config
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 553612c4aa..0cd8b82059 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -131,11 +131,12 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+ 	default y if !BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS && \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_7
  
+-# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68485. This bug still
+-# exists in gcc 9.x
++# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68485. This bug no
++# longer exists in gcc 10.x
+ config BR2_TOOLCHAIN_HAS_GCC_BUG_68485
+ 	bool
+ 	default y if BR2_microblaze
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_10
+ 
+ # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180. This bug no
+ # longer exists in gcc 8.x.
 -- 
-2.30.0
+2.25.1
