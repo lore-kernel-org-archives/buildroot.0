@@ -1,58 +1,92 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Fri, 5 Mar 2021 11:18:40 +0100
-Subject: [Buildroot] [git commit] package/dhcpcd: disable privsep on older
- kernels
-Message-ID: <20210305095558.D01B287307@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 5 Mar 2021 11:24:16 +0100
+Subject: [Buildroot] [PATCH 1/1] package/dhcpcd: bump to latest git
+ commit
+In-Reply-To: <CAPi7W83FN4MKOwKogfvWsc9eswPhoDeVnrUeno7VNGvsfD_Sog@mail.gmail.com>
+References: <20210303091904.467706-1-fontaine.fabrice@gmail.com>
+ <c287a0b7-9896-9c0f-7b3c-77999da85b82@mind.be>
+ <CAPi7W83FN4MKOwKogfvWsc9eswPhoDeVnrUeno7VNGvsfD_Sog@mail.gmail.com>
+Message-ID: <fbfa3e92-0e8a-fd16-7617-e8c9ebefcd88@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d412539dbca22265a940e45b6ae22fb58e004a3f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit e5594f7239547672c08058b77f8098d2c080bebc fixed privsep for sh,
-or1k, microblaze, xtensa, arc, nds32 and nios2, but failed to take into
-account that the audit functionality is only available in recent kernels
-on those architectures.
 
-Pass the --disable-privsep configure option if the kernel is too old in
-those architectures.
+On 05/03/2021 10:44, Fabrice Fontaine wrote:
+> Hi Arnout,
+> Le jeu. 4 mars 2021 ? 21:26, Arnout Vandecappelle <arnout@mind.be> a ?crit :
+>>
+>>
+>>
+>> On 03/03/2021 10:19, Fabrice Fontaine wrote:
+>>> Bump to latest git commit to retrieve the following commits:
+>>> - https://github.com/rsmarples/dhcpcd/commit/e3a40586dbb584774d0a17bc277e69cb500cfa38
+>>> - https://github.com/rsmarples/dhcpcd/commit/f3f7332001d5d5722239f6b7279f32923e4eedd0
+>>> - https://github.com/rsmarples/dhcpcd/commit/d670866ce008c21cbf6d5b20c4d4af6460ec35d2
+>>> - https://github.com/rsmarples/dhcpcd/commit/19c3d9209a834e02918a17e011afd9da3e5be38d
+>>> - https://github.com/rsmarples/dhcpcd/commit/82386110e67cf75c224e9817fce55e6b0f143266
+>>> - https://github.com/rsmarples/dhcpcd/commit/dcfd7a23f002793a855156255e81662ef84064d3
+>>> - https://github.com/rsmarples/dhcpcd/commit/166491c2953546a677073694036f43a65fc25063
+>>
+>>  This makes it seem as if the bump just comprises those commits. However, the
+>> bump actually comprises about 40 other commits as well. This makes a much bigger
+>> diff, and not something I think we are willing to take in just before the
+>> 2021.02 release.
+>>
+>>  Therefore, I've instead cherry-picked the above commits and added them as
+>> individual patches to Buildroot.
+> Thanks, it makes sense however you didn't apply the updates on
+> dhcpcd.mk. As a result, build will continue to fail with these archs
+> on old kernels.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/dhcpcd/dhcpcd.mk | 19 +++++++++++++++++--
- 1 file changed, 17 insertions(+), 2 deletions(-)
+ Darn, looks like I reverted too much!
 
-diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
-index cb269f1138..f040610de4 100644
---- a/package/dhcpcd/dhcpcd.mk
-+++ b/package/dhcpcd/dhcpcd.mk
-@@ -16,8 +16,23 @@ DHCPCD_CONFIG_OPTS = \
- 	--os=linux \
- 	--privsepuser=dhcpcd
- 
--# AUDIT_ARCH_NDS32 is only available since kernel >= 5.2
--ifeq ($(BR2_nds32):$(BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2),y:)
-+# AUDIT_ARCH_{OPENRISC,SH,SHEL,SH64,SHEL64} are only available with kernel >= 3.7
-+ifeq ($(BR2_or1k)$(BR2_sh):$(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7),y:)
-+DHCPCD_CONFIG_OPTS += --disable-privsep
-+endif
-+
-+# AUDIT_ARCH_MICROBLAZE is only available with kernel >= 3.18
-+ifeq ($(BR2_microblazeel)$(BR2_microblazebe):$(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18),y:)
-+DHCPCD_CONFIG_OPTS += --disable-privsep
-+endif
-+
-+# AUDIT_ARCH_XTENSA is only available with kernel >= 5.0
-+ifeq ($(BR2_xtensa):$(BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0),y:)
-+DHCPCD_CONFIG_OPTS += --disable-privsep
-+endif
-+
-+# AUDIT_ARCH_{ARCOMPACT,ARCV2,NDS32,NIOS2} are only available with kernel >= 5.2
-+ifeq ($(BR2_arceb)$(BR2_arcle)$(BR2_nds32)$(BR2_nios2):$(BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2),y:)
- DHCPCD_CONFIG_OPTS += --disable-privsep
- endif
- 
+ I re-applied that part of the patch in a new commit, with you as the author
+this time. Thanks for noticing!
+
+ BTW, for complicated conditions like that which only depend on Kconfig symbols,
+I prefer to do it in Config.in. Something like:
+
+config BR2_PACKAGE_DHCPCD_ENABLE_PRIVSEP
+	bool
+	default y
+	# Audit headers were only added in recent kernels for some arches
+	depends on !BR2_or1k || BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
+	depends on !BR2_sh || BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
+	...
+
+ But I didn't want to go and test all that, so I just applied your patch as-is.
+
+ Regards,
+ Arnout
+
+
+>>
+>>  I've also claimed authorship of the change (since nothing much was left of your
+>> patch), but kept your SoB.
+>>
+>>  I hope there will be a new release of dhcpcd  soonish. Roy usually makes
+>> several releases per month, but now it's almost 3 months ago...
+>>
+>>  Regards,
+>>  Arnout
+>>
+>>>
+>>> This will fix builds with arc, microblaze, nios2, or1k, sh, sparc and
+>>> xtensa
+>>>
+>>> Update hash of LICENSE (update in year:
+>>> https://github.com/rsmarples/dhcpcd/commit/f3d2ff551bb9b2919094ba6526dcebe217824f5c)
+>>>
+> Best Regards,
+> 
+> Fabrice
+>>> Fixes:
+>>>  - http://autobuild.buildroot.org/results/9ed863b3ba5e6e0587a48e619395e5bdb7e9c557
+>>>  - http://autobuild.buildroot.org/results/affd2f094084c4f53a324830539d07050b83587e
+>>>  - http://autobuild.buildroot.org/results/67f39606054930d307ddd0eb7743f06316d41544
+>>>
+>>> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
