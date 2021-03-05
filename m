@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Mar 2021 13:31:22 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/imagemagick:
+Date: Fri, 5 Mar 2021 13:31:29 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/imagemagick:
  security bump to version 7.0.10-62
-Message-ID: <20210305120831.E0508873F6@busybox.osuosl.org>
+Message-ID: <20210305120840.1A6EF83B6F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3c2d002018829a9d760f36d14546a838ae79d9cc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=c48b1522475fa88ad549a0863347b428a0f1f2da
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 Fixes the following security issue:
 
