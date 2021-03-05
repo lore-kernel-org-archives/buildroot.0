@@ -1,10 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Fri,  5 Mar 2021 14:48:37 +0100
-Subject: [Buildroot] [PATCH 2/3] package/openblas: strip any optimization
- flag where needed
+Date: Fri,  5 Mar 2021 14:48:38 +0100
+Subject: [Buildroot] [PATCH 3/3] package/openblas: respect the optimization
+ level specified by Buildroot
 In-Reply-To: <20210305134839.30612-1-patrickdepinguin@gmail.com>
 References: <20210305134839.30612-1-patrickdepinguin@gmail.com>
-Message-ID: <20210305134839.30612-2-patrickdepinguin@gmail.com>
+Message-ID: <20210305134839.30612-3-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,52 +13,64 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-openblas strips off -O1-O3 for certain source files, but forgets to handle
--Os, -Og and -O. This means that the intended effect of 'no optimization' is
-not always reached.
+openblas internally sets -O2, after the flags being passed by Buildroot
+(e.g. -Os).
+
+Patch openblas to let the Buildroot-specified flag survives.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- ...nsider-Os-when-determining-LAPACK_NO.patch | 31 +++++++++++++++++++
- 1 file changed, 31 insertions(+)
- create mode 100644 package/openblas/0003-Makefile-also-consider-Os-when-determining-LAPACK_NO.patch
+ ...don-t-specify-optimization-level-bui.patch | 40 +++++++++++++++++++
+ 1 file changed, 40 insertions(+)
+ create mode 100644 package/openblas/0004-Makefile.system-don-t-specify-optimization-level-bui.patch
 
-As the openblas patch is fixing a generic problem, I will attempt to upstream it.
+As this openblas patch is quite specific to Buildroot (the problem is hard to
+handle generically as you don't really know which flags the user may manipulate
+on the command-line), I don't think this can be upstreamed.
 
-diff --git a/package/openblas/0003-Makefile-also-consider-Os-when-determining-LAPACK_NO.patch b/package/openblas/0003-Makefile-also-consider-Os-when-determining-LAPACK_NO.patch
+diff --git a/package/openblas/0004-Makefile.system-don-t-specify-optimization-level-bui.patch b/package/openblas/0004-Makefile.system-don-t-specify-optimization-level-bui.patch
 new file mode 100644
-index 0000000000..0ff9051ae4
+index 0000000000..bcc3e0eb6a
 --- /dev/null
-+++ b/package/openblas/0003-Makefile-also-consider-Os-when-determining-LAPACK_NO.patch
-@@ -0,0 +1,31 @@
-+From ced08de1ad74811bc23d74121751537bfd8e9556 Mon Sep 17 00:00:00 2001
++++ b/package/openblas/0004-Makefile.system-don-t-specify-optimization-level-bui.patch
+@@ -0,0 +1,40 @@
++From 6d1c1350977d74fb2239f765bd92a5763cd3bb73 Mon Sep 17 00:00:00 2001
 +From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-+Date: Fri, 5 Mar 2021 11:15:52 +0100
-+Subject: [PATCH 1/2] Makefile: also consider -O, -Og and -Os when stripping flags
++Date: Fri, 5 Mar 2021 14:09:23 +0100
++Subject: [PATCH] Makefile.system: don't specify optimization level
++ [buildroot-specific]
 +
-+gcc also supports -O, -Og and -Os as optimization flags.
-+They may be given on the make command-line by users.
++Buildroot will pass an optimization level, but it is ignored because the
++openblas makefiles _append_ to the flags passed on the command-line.
 +
-+For the calculation of LAPACK_NOOPT, all such flags should be considered.
++The CFLAGS/FFLAGS would e.g. contain '-Os -O2' in which -O2 survives.
++
++Remove the optimization level specified in openblas itself.
 +
 +Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-+---
-+ Makefile | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/Makefile b/Makefile
-+index a22e16ba..fc5fe3f5 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -32,7 +32,7 @@ export NOFORTRAN
-+ export NO_LAPACK
++---
++ Makefile.system | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/Makefile.system b/Makefile.system
++index 1e30d05a..04b0be16 100644
++--- a/Makefile.system
+++++ b/Makefile.system
++@@ -1216,11 +1216,11 @@ FCOMMON_OPT += -g
 + endif
 + 
-+-LAPACK_NOOPT := $(filter-out -O0 -O1 -O2 -O3 -Ofast,$(LAPACK_FFLAGS))
-++LAPACK_NOOPT := $(filter-out -O0 -O1 -O2 -O3 -Ofast -O -Og -Os,$(LAPACK_FFLAGS))
++ ifndef COMMON_OPT
++-COMMON_OPT = -O2
+++COMMON_OPT =
++ endif
 + 
-+ SUBDIRS_ALL = $(SUBDIRS) test ctest utest exports benchmark ../laswp ../bench cpp_thread_test
++ ifndef FCOMMON_OPT
++-FCOMMON_OPT = -O2 -frecursive
+++FCOMMON_OPT = -frecursive
++ endif
 + 
++ override CFLAGS     += $(COMMON_OPT) $(CCOMMON_OPT) -I$(TOPDIR)
 +-- 
 +2.26.2
 +
