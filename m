@@ -1,33 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 05 Mar 2021 13:31:46 +0100
-Subject: [Buildroot] [PATCH/next v1 1/5] package/imagemagick: bump
- version to 7.0.10-62
-In-Reply-To: <87blc6v23o.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Sat, 27 Feb 2021 00:30:35 +0100")
-References: <20210219230256.27955-1-ps.report@gmx.net>
- <87blc6v23o.fsf@dell.be.48ers.dk>
-Message-ID: <877dmlg4st.fsf@dell.be.48ers.dk>
+Date: Fri, 05 Mar 2021 13:52:42 +0100
+Subject: [Buildroot] [PATCH 1/2] package/dovecot: bump version to 2.3.14
+In-Reply-To: <20210305055631.206914-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Fri, 5 Mar 2021 06:56:30 +0100")
+References: <20210305055631.206914-1-bernd.kuhls@t-online.de>
+Message-ID: <8735x9g3tx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
->>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
- >> - bump version to 7.0.10-62
- >> - update license file hash (copyright year update)
+ > Release notes:
+ > https://dovecot.org/pipermail/dovecot-news/2021-March/000455.html
 
- >> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
- > 7.0.10-57 fixed a security issue:
- > https://security-tracker.debian.org/tracker/CVE-2021-20176
-
- > So I've reworded the commit message to make this clear and committed to
- > master, thanks.
-
-Committed to 2020.02.x and 2020.11.x, thanks.
+Committed to master given the crash fixes, thanks.
 
 -- 
 Bye, Peter Korsgaard
