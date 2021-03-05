@@ -1,48 +1,59 @@
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Fri,  5 Mar 2021 10:11:02 +0100
-Subject: [Buildroot] [PATCH 2/2] package/asterisk: fix build failure due to
- gcc bug 93847
-In-Reply-To: <20210305091102.2420944-1-giulio.benetti@benettiengineering.com>
-References: <20210305091102.2420944-1-giulio.benetti@benettiengineering.com>
-Message-ID: <20210305091102.2420944-3-giulio.benetti@benettiengineering.com>
+Date: Fri, 5 Mar 2021 10:13:03 +0100
+Subject: [Buildroot] Analysis of build results for 2021-03-03
+In-Reply-To: <3995be7d-ce07-7b7a-d030-e6beab531a4f@benettiengineering.com>
+References: <20210304081519.C821B4B530@smtp4.osuosl.org>
+ <20210304224926.45aa4056@windsurf.home>
+ <6cb4a8d7-bee8-5712-2cac-1259d01e288e@benettiengineering.com>
+ <3995be7d-ce07-7b7a-d030-e6beab531a4f@benettiengineering.com>
+Message-ID: <8410964c-6d3f-987f-3345-653bf9f1615b@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The asterisk package exhibits gcc bug 93847 when built for the Nios2
-architecture with optimization enabled, which causes a build failure.
+On 3/5/21 9:55 AM, Giulio Benetti wrote:
+> 
+> 
+> On 3/5/21 8:56 AM, Giulio Benetti wrote:
+>> Hi Thomas, All,
+>>
+>> On 3/4/21 10:49 PM, Thomas Petazzoni wrote:
+>>> Hello,
+>>>
+>>> Giulio, Heiko, Thomas DS there are specific questions for you below!
+>>>
+>>> On Thu, 04 Mar 2021 08:15:14 -0000
+>>> Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+>>>
+>>>>       nios2     |        asterisk-16.14.1        | NOK | http://autobuild.buildroot.net/results/24c0a6ca3b272711a1e6ceaa033925182d0d49c4
+>>>
+>>> Some wonderful compiler issue.
+>>>
+>>> utf8.c: In function 'ast_utf8_copy_string':
+>>> utf8.c:157:1: internal compiler error: Segmentation fault
+>>>
+>>> Giulio, does this look like a known NIOS2 issue ?
+>>
+>> Yes, I've filed it time ago here:
+>> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=93847
+>>
+>> Then maintainer wanted me to provide all pre-preprocessed files and all
+>> build flags. There the issue was showing using Codesourcery only, but
+>> here we have a Buildroot toolchain, so better chance to dig.
+>>
+>> Anyway I can add patches to add the _BUG_ and use the -O0 workaround.
+>> What about that?
+> 
+> I've already added that _BUG_ to toolchain/Config.in, need some time to
+> pass CFLAGS to Asterisk in some way, at the moment -O3 is always
+> appended after -O0.
+> 
 
-As done for other packages in Buildroot work around this gcc bug by
-setting optimization to -O0 if BR2_TOOLCHAIN_HAS_GCC_BUG_93847=y.
+This ^^^ is fixed by this patchset:
+https://patchwork.ozlabs.org/project/buildroot/list/?series=232302
 
-Fixes:
-http://autobuild.buildroot.net/results/24c0a6ca3b272711a1e6ceaa033925182d0d49c4
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- package/asterisk/asterisk.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index f6a4f8f787..67b6da56db 100644
---- a/package/asterisk/asterisk.mk
-+++ b/package/asterisk/asterisk.mk
-@@ -283,6 +283,14 @@ endif
- # Remove default -O3 optimization flag
- ASTERISK_MAKE_OPTS += OPTIMIZE=""
- 
-+ASTERISK_CFLAGS = $(TARGET_CFLAGS)
-+
-+ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_93847),y)
-+ASTERISK_CFLAGS += -O0
-+endif
-+
-+ASTERISK_CONF_OPTS += CFLAGS="$(ASTERISK_CFLAGS)"
-+
- # We want to install sample configuration files, too.
- ASTERISK_INSTALL_TARGET_OPTS = \
- 	$(ASTERISK_DIRS) \
 -- 
-2.25.1
+Giulio Benetti
+Benetti Engineering sas
