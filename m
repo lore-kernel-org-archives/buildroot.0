@@ -1,44 +1,42 @@
-From: Michael Vetter <jubalh@iodoru.org>
-Date: Fri,  5 Mar 2021 16:49:13 +0100
-Subject: [Buildroot] [PATCH 1/1] package/jasper: bump version to 2.0.26
-Message-ID: <20210305154913.29414-1-jubalh@iodoru.org>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Fri,  5 Mar 2021 17:00:05 +0100
+Subject: [Buildroot] [PATCH] package/libgeos: disable package while building
+ for Nios II
+Message-ID: <20210305160005.3826615-1-giulio.benetti@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changes:
-* Fix JP2 decoder bug that can cause a null pointer dereference for
-  some invalid CDEF boxes. (#268)
+This package fails to build with Nios II up to gcc version 10.x and no
+work around has been found. So let's disable it whil building for Nios
+II.
 
-Signed-off-by: Michael Vetter <jubalh@iodoru.org>
+Fixes:
+http://autobuild.buildroot.net/results/a05fdf1958f93a206c5c66c7f636b6650683626d
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/jasper/jasper.hash | 2 +-
- package/jasper/jasper.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libgeos/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/jasper/jasper.hash b/package/jasper/jasper.hash
-index d4ed191f91..c1f1b4f602 100644
---- a/package/jasper/jasper.hash
-+++ b/package/jasper/jasper.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  f5bc48e2884bcabd2aca1737baff4ca962ec665b6eb673966ced1f7adea07edb  jasper-2.0.25.tar.gz
-+sha256  a82a119e85b7d1f448e61309777fa5f79053a9adca4a2b5bfe44be5439fb8fea  jasper-2.0.26.tar.gz
- sha256  4ad1bb42aff888c4403d792e6e2c5f1716d6c279fea70b296333c9d577d30b81  LICENSE
-diff --git a/package/jasper/jasper.mk b/package/jasper/jasper.mk
-index d487e8e2d6..bc66f11057 100644
---- a/package/jasper/jasper.mk
-+++ b/package/jasper/jasper.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libgeos/Config.in b/package/libgeos/Config.in
+index 9f02c8b13f..2caf6d1d5e 100644
+--- a/package/libgeos/Config.in
++++ b/package/libgeos/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_LIBGEOS
+ 	bool "libgeos"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
++	depends on !BR2_nios2
+ 	help
+ 	  GEOS (Geometry Engine - Open Source) is a C++ port of the
+ 	  JTS Topology Suite (JTS). It aims to contain the complete
+@@ -13,3 +14,4 @@ config BR2_PACKAGE_LIBGEOS
  
--JASPER_VERSION = 2.0.25
-+JASPER_VERSION = 2.0.26
- JASPER_SITE = $(call github,jasper-software,jasper,version-$(JASPER_VERSION))
- JASPER_INSTALL_STAGING = YES
- JASPER_LICENSE = JasPer-2.0
+ comment "libgeos needs a toolchain w/ C++, wchar"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
++	depends on !BR2_nios2
 -- 
-2.26.2
+2.25.1
