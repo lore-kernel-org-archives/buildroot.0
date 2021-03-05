@@ -1,92 +1,47 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 5 Mar 2021 11:24:16 +0100
-Subject: [Buildroot] [PATCH 1/1] package/dhcpcd: bump to latest git
- commit
-In-Reply-To: <CAPi7W83FN4MKOwKogfvWsc9eswPhoDeVnrUeno7VNGvsfD_Sog@mail.gmail.com>
-References: <20210303091904.467706-1-fontaine.fabrice@gmail.com>
- <c287a0b7-9896-9c0f-7b3c-77999da85b82@mind.be>
- <CAPi7W83FN4MKOwKogfvWsc9eswPhoDeVnrUeno7VNGvsfD_Sog@mail.gmail.com>
-Message-ID: <fbfa3e92-0e8a-fd16-7617-e8c9ebefcd88@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 05 Mar 2021 11:57:27 +0100
+Subject: [Buildroot] [PATCH] package/nodejs: security bump to version
+ v12.21.0
+In-Reply-To: <87wnuvvqke.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Thu, 25 Feb 2021 21:29:53 +0100")
+References: <20210225102634.15970-1-peter@korsgaard.com>
+ <87wnuvvqke.fsf@dell.be.48ers.dk>
+Message-ID: <87sg59g960.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
+ >> Fixes the following security issues:
+ >> CVE-2021-22883: HTTP2 'unknownProtocol' cause Denial of Service by resource exhaustion
 
-On 05/03/2021 10:44, Fabrice Fontaine wrote:
-> Hi Arnout,
-> Le jeu. 4 mars 2021 ? 21:26, Arnout Vandecappelle <arnout@mind.be> a ?crit :
->>
->>
->>
->> On 03/03/2021 10:19, Fabrice Fontaine wrote:
->>> Bump to latest git commit to retrieve the following commits:
->>> - https://github.com/rsmarples/dhcpcd/commit/e3a40586dbb584774d0a17bc277e69cb500cfa38
->>> - https://github.com/rsmarples/dhcpcd/commit/f3f7332001d5d5722239f6b7279f32923e4eedd0
->>> - https://github.com/rsmarples/dhcpcd/commit/d670866ce008c21cbf6d5b20c4d4af6460ec35d2
->>> - https://github.com/rsmarples/dhcpcd/commit/19c3d9209a834e02918a17e011afd9da3e5be38d
->>> - https://github.com/rsmarples/dhcpcd/commit/82386110e67cf75c224e9817fce55e6b0f143266
->>> - https://github.com/rsmarples/dhcpcd/commit/dcfd7a23f002793a855156255e81662ef84064d3
->>> - https://github.com/rsmarples/dhcpcd/commit/166491c2953546a677073694036f43a65fc25063
->>
->>  This makes it seem as if the bump just comprises those commits. However, the
->> bump actually comprises about 40 other commits as well. This makes a much bigger
->> diff, and not something I think we are willing to take in just before the
->> 2021.02 release.
->>
->>  Therefore, I've instead cherry-picked the above commits and added them as
->> individual patches to Buildroot.
-> Thanks, it makes sense however you didn't apply the updates on
-> dhcpcd.mk. As a result, build will continue to fail with these archs
-> on old kernels.
+ >> Affected Node.js versions are vulnerable to denial of service attacks when
+ >> too many connection attempts with an 'unknownProtocol' are established.
+ >> This leads to a leak of file descriptors.  If a file descriptor limit is
+ >> configured on the system, then the server is unable to accept new
+ >> connections and prevent the process also from opening, e.g.  a file.  If no
+ >> file descriptor limit is configured, then this lead to an excessive memory
+ >> usage and cause the system to run out of memory.
 
- Darn, looks like I reverted too much!
+ >> CVE-2021-22884: DNS rebinding in --inspect
 
- I re-applied that part of the patch in a new commit, with you as the author
-this time. Thanks for noticing!
+ >> Affected Node.js versions are vulnerable to denial of service attacks when
+ >> the whitelist includes ?localhost6?.  When ?localhost6? is not present in
+ >> /etc/hosts, it is just an ordinary domain that is resolved via DNS, i.e.,
+ >> over network.  If the attacker controls the victim's DNS server or can spoof
+ >> its responses, the DNS rebinding protection can be bypassed by using the
+ >> ?localhost6? domain.  As long as the attacker uses the ?localhost6? domain,
+ >> they can still apply the attack described in CVE-2018-7160.
 
- BTW, for complicated conditions like that which only depend on Kconfig symbols,
-I prefer to do it in Config.in. Something like:
+ >> For more details, see the advisory:
+ >> https://nodejs.org/en/blog/vulnerability/february-2021-security-releases/
 
-config BR2_PACKAGE_DHCPCD_ENABLE_PRIVSEP
-	bool
-	default y
-	# Audit headers were only added in recent kernels for some arches
-	depends on !BR2_or1k || BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
-	depends on !BR2_sh || BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
-	...
+ >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
- But I didn't want to go and test all that, so I just applied your patch as-is.
+Committed to 2020.02.x and 2020.11.x, thanks.
 
- Regards,
- Arnout
-
-
->>
->>  I've also claimed authorship of the change (since nothing much was left of your
->> patch), but kept your SoB.
->>
->>  I hope there will be a new release of dhcpcd  soonish. Roy usually makes
->> several releases per month, but now it's almost 3 months ago...
->>
->>  Regards,
->>  Arnout
->>
->>>
->>> This will fix builds with arc, microblaze, nios2, or1k, sh, sparc and
->>> xtensa
->>>
->>> Update hash of LICENSE (update in year:
->>> https://github.com/rsmarples/dhcpcd/commit/f3d2ff551bb9b2919094ba6526dcebe217824f5c)
->>>
-> Best Regards,
-> 
-> Fabrice
->>> Fixes:
->>>  - http://autobuild.buildroot.org/results/9ed863b3ba5e6e0587a48e619395e5bdb7e9c557
->>>  - http://autobuild.buildroot.org/results/affd2f094084c4f53a324830539d07050b83587e
->>>  - http://autobuild.buildroot.org/results/67f39606054930d307ddd0eb7743f06316d41544
->>>
->>> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-- 
+Bye, Peter Korsgaard
