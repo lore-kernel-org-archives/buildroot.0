@@ -1,242 +1,159 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Fri, 5 Mar 2021 08:56:32 +0100
-Subject: [Buildroot] Analysis of build results for 2021-03-03
-In-Reply-To: <20210304224926.45aa4056@windsurf.home>
-References: <20210304081519.C821B4B530@smtp4.osuosl.org>
- <20210304224926.45aa4056@windsurf.home>
-Message-ID: <6cb4a8d7-bee8-5712-2cac-1259d01e288e@benettiengineering.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 05 Mar 2021 08:13:06 -0000
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2021-03-04
+Message-ID: <20210305081311.42AAB6F583@smtp3.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, All,
+Hello,
 
-On 3/4/21 10:49 PM, Thomas Petazzoni wrote:
-> Hello,
-> 
-> Giulio, Heiko, Thomas DS there are specific questions for you below!
-> 
-> On Thu, 04 Mar 2021 08:15:14 -0000
-> Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
-> 
->>     nios2     |        asterisk-16.14.1        | NOK | http://autobuild.buildroot.net/results/24c0a6ca3b272711a1e6ceaa033925182d0d49c4
-> 
-> Some wonderful compiler issue.
-> 
-> utf8.c: In function 'ast_utf8_copy_string':
-> utf8.c:157:1: internal compiler error: Segmentation fault
-> 
-> Giulio, does this look like a known NIOS2 issue ?
+Autobuild statistics for 2021-03-04
+===================================
 
-Yes, I've filed it time ago here:
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=93847
+      branch |  OK | NOK | TIM | TOT |
+  2020.02.x  |  3  |  2  |  0  |  5  |
+  2020.11.x  |  7  |  1  |  0  |  8  |
+    master   | 74  | 29  |  0  | 103 |
+     next    | 20  | 18  |  0  | 38  |
 
-Then maintainer wanted me to provide all pre-preprocessed files and all 
-build flags. There the issue was showing using Codesourcery only, but 
-here we have a Buildroot toolchain, so better chance to dig.
+Classification of failures by reason for master
+-----------------------------------------------
 
-Anyway I can add patches to add the _BUG_ and use the -O0 workaround. 
-What about that?
+        host-sentry-cli-1.57.0 | 6 
+             libstrophe-0.10.1 | 3 
+             libopenssl-1.1.1j | 2 
+android-tools-4.2.2+git2013... | 1 
+               apcupsd-3.14.14 | 1 
+                    bird-2.0.7 | 1 
+                  boost-1.75.0 | 1 
+                clamav-0.103.1 | 1 
+                coreutils-8.32 | 1 
+            erlang-jiffy-1.0.6 | 1 
+             kismet-2020-12-R3 | 1 
+                libshout-2.4.5 | 1 
+                openblas-0.3.9 | 1 
+                 openmpi-4.0.0 | 1 
+                 pixman-0.40.0 | 1 
+               protobuf-3.14.0 | 1 
+             qt5wayland-5.15.2 | 1 
+                  quagga-1.2.4 | 1 
+                rocksdb-6.13.3 | 1 
+                       unknown | 1 
+                  zeromq-4.3.4 | 1 
 
-> 
->>     nios2     |        belle-sip-4.4.8         | NOK | http://autobuild.buildroot.net/results/71f26fd81db8e9b19b3f18f3f3cefd9c768f094f |
-> 
-> /tmp/ccDtjRfo.s: Assembler messages:
-> /tmp/ccDtjRfo.s:210798: Error: branch offset out of range
-> 
-> Another wonderful nios2 toolchain issue. Giulio, what do you think ?
 
-This is new to me, I've checked on Gcc Bugzilla and it doesn't seem to 
-be there. So I can file it up and look for a workaround, maybe the usual 
--O0.
+Detail of failures for master
+-----------------------------
 
-> 
->>      arc      |         dc3dd-7.2.641          | NOK | http://autobuild.buildroot.net/results/4829278085da2409bb2902161f9984708411166a | ORPH
->>      arc      |         dc3dd-7.2.641          | NOK | http://autobuild.buildroot.net/results/3b145a99a1f7498ee7fcd445f3cc319f548e9a81 | ORPH
->>      arc      |         dc3dd-7.2.641          | NOK | http://autobuild.buildroot.net/results/c1cb2dd0b9e7547f3858e62281da3bd45b9a5b17 | ORPH
-> 
-> verify.h:132:30: error: negative width in bit-field 'verify_error_if_negative_size__'
->    132 |       (struct { unsigned int verify_error_if_negative_size__: (R) ? 1 : -1; }))
-> 
-> This happens on RISC-V 32-bit, and on ARC, but only with internal
-> toolchains. The assertion that breaks is:
-> 
->    116 | verify (LONG_MIN <= TYPE_MINIMUM (time_t) && TYPE_MAXIMUM (time_t) <= LONG_MAX);
-> 
-> So to me, it smells like another instance of "this is a 32-bit
-> architecture, but time_t is 64-bit, and this breaks some userspace code
-> that makes bogus assumptions on the size of time_t".
-> 
-> This feels similar to the libopenssl situation for which Yann has just
-> sent a patch. Should we have a BR2_ARCH_IS_32_BUT_TIME_T_IS_64 boolean ?
-> 
->>     sparc     |          dhcpcd-9.4.0          | NOK | http://autobuild.buildroot.net/results/fba538d2ae4a1c53440ed73ced4023be27d7e9c2 |
-> 
-> I assume this is fixed by https://git.buildroot.org/buildroot/commit/?id=e5594f7239547672c08058b77f8098d2c080bebc
-> 
->>    riscv64    |      fuse-overlayfs-1.4.0      | NOK | http://autobuild.buildroot.net/results/cfef18f3adf51edaedbbd193efbff19aebdfe508 |
-> 
-> This is a bug in uClibc: it implements renameat() only if the
-> SYS_renameat system call exists. If only the SYS_renameat2 system call
-> exists, the renameat() function is not implemented. Musl does this
-> correctly:
-> 
-> int renameat(int oldfd, const char *old, int newfd, const char *new)
-> {
-> #ifdef SYS_renameat
->          return syscall(SYS_renameat, oldfd, old, newfd, new);
-> #else
->          return syscall(SYS_renameat2, oldfd, old, newfd, new, 0);
-> #endif
-> }
-> 
-> uclibc needs to be patched here.
-> 
->>    mips64el   |      gstreamer1-mm-1.10.0      | NOK | http://autobuild.buildroot.net/results/b1c5989a3a09b39e504c21201e3e07c0afc2a1ea | ORPH
-> 
-> /home/buildroot/autobuild/instance-2/output-1/host/bin/../mips64el-buildroot-linux-gnu/sysroot/usr/include/glib-2.0/glib/gatomic.h:97:5: sorry, unimplemented: unexpected AST of kind static_assert
-> 
-> This messages comes from deep down gcc, when compiling the gatomic.h
-> macros. It happens on all MIPS architecture variants.
-> 
->>    aarch64    |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/739d625673f9b2ce2d915ecdc21910c62618d145 |
->> microblazeel |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/b1779a7d46f6ee9c06864c3ca252f1cdad47cf08 |
->>      i586     |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/a5fe402e3f4e538eb4584f345b029ef12ad43348 |
->>      arc      |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/abd3f886335f146ff6f16370484106bd8a205bda |
-> 
-> What do we do with this? The only way to solve that is to have the
-> Cargo vendoring support, which we won't have for 2021.02. Should we
-> drop this package ?
-> 
->>      arc      |       kismet-2020-12-R3        | NOK | http://autobuild.buildroot.net/results/1c2885d75219aabadbb66ab66fe0dc4b4346ff1e | ORPH
->>      i586     |       kismet-2020-12-R3        | NOK | http://autobuild.buildroot.net/results/3a76afdbd8b564579bfb08a4d75b438dbd73ac2e | ORPH
-> 
-> Would be fixed by https://patchwork.ozlabs.org/project/buildroot/patch/20210304200430.1749334-1-fontaine.fabrice at gmail.com/
-> 
->>   powerpc64   | kvm-unit-tests-kvm-unit-tes... | NOK | http://autobuild.buildroot.net/results/06cce5030766fcc789f0ba4a76d2cbaa091300d0 |
-> 
-> /home/giuliobenetti/autobuild/run/instance-1/output-1/host/bin/powerpc64-linux-ld: powerpc/spapr_hcall.elf: error: PHDR segment not covered by LOAD segment
-> 
-> kvm-unit-tests has always been a bit complicated as it builds some kind
-> of bare-metal code. I would simply suggest that we drop powerpc64 from
-> the list of supported CPU architectures for this package.
-> 
->>     nios2     |         libgeos-3.9.0          | NOK | http://autobuild.buildroot.net/results/a05fdf1958f93a206c5c66c7f636b6650683626d | ORPH
-> 
-> Some more nios2 toolchain issue.
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+ powerpc64   | android-tools-4.2.2+git2013... | NOK | http://autobuild.buildroot.net/results/335adf16ec7ed3eb61c9576ef8c5a79026dbcc3f |     
+   sparc     |        apcupsd-3.14.14         | NOK | http://autobuild.buildroot.net/results/a6d34dff70f365fa2b30147c044261882a10b3d9 |     
+  nds32le    |           bird-2.0.7           | NOK | http://autobuild.buildroot.net/results/f7755fd218f9df7ae7e5155197f37efc15d7e199 |     
+  riscv32    |          boost-1.75.0          | NOK | http://autobuild.buildroot.net/results/02cf4f6b54b1b0a20eed07d0ace2651cd0553773 |     
+  riscv64    |         clamav-0.103.1         | NOK | http://autobuild.buildroot.net/results/c4bad051a498d7372982fa52c2e749f0d1dccfe0 |     
+    arm      |         coreutils-8.32         | NOK | http://autobuild.buildroot.net/results/f0be2137cb8a7c79a779b74c51bf372f3f442f0b | ORPH
+   mipsel    |       erlang-jiffy-1.0.6       | NOK | http://autobuild.buildroot.net/results/75f6cd08d92bd98ac5f2748f3e941c645c7411c1 |     
+   x86_64    |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/64b3963feb6e0b3eb10042566bd4256c9a26e3ce |     
+    arm      |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/0869204a8770155a4023035b36789507406be49e |     
+    arm      |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/12a83cbf02f469a4231e56d1e6c076633a999572 |     
+   sparc     |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/251681f13593d800f3185482d650cc79e0e43bda |     
+    arm      |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/35892839e50eca074fa95be32c4a654d7df752b3 |     
+    arc      |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/f36955709a8cbc0aad525798d5d1a68db5ecd510 |     
+    arc      |       kismet-2020-12-R3        | NOK | http://autobuild.buildroot.net/results/6971e349a6ddcfc3816488c93d6209519cf4fecf | ORPH
+  riscv32    |       libopenssl-1.1.1j        | NOK | http://autobuild.buildroot.net/results/ef920c5af5aea5b3d32a8150fa3c45a15d61f4fd |     
+  riscv32    |       libopenssl-1.1.1j        | NOK | http://autobuild.buildroot.net/results/3fe41562bea5509b8d6d6e347cd218f2f6d17f03 |     
+    arm      |         libshout-2.4.5         | NOK | http://autobuild.buildroot.net/results/f58e5ba829a03922aa3433fcd39864cc1e3a0a40 | ORPH
+  mips64el   |       libstrophe-0.10.1        | NOK | http://autobuild.buildroot.net/results/7695be885268a17704d7f47f571cef1c80bbd208 |     
+  mips64el   |       libstrophe-0.10.1        | NOK | http://autobuild.buildroot.net/results/c36a52b76e8a379a2a07a92502442992dbf14b84 |     
+  riscv64    |       libstrophe-0.10.1        | NOK | http://autobuild.buildroot.net/results/2f13af96eee20176ccb37ad32ec1472b4c9d6208 |     
+ aarch64_be  |         openblas-0.3.9         | NOK | http://autobuild.buildroot.net/results/66661cc64dc13e9484df4b7971ca972f31d424c8 | ORPH
+   mipsel    |         openmpi-4.0.0          | NOK | http://autobuild.buildroot.net/results/707983c9ecd3b84973fdf7c8ff1eae5e9cda1dc1 | ORPH
+    sh4      |         pixman-0.40.0          | NOK | http://autobuild.buildroot.net/results/b8bbc0ce6837067749f12655814b2a039e558498 |     
+    or1k     |        protobuf-3.14.0         | NOK | http://autobuild.buildroot.net/results/23f6237fe401e284d9b1b7bf17598ac82aab91a7 |     
+  aarch64    |       qt5wayland-5.15.2        | NOK | http://autobuild.buildroot.net/results/cc2ffcaf76be808b6305929333cb40cf3ca55c74 |     
+    arm      |          quagga-1.2.4          | NOK | http://autobuild.buildroot.net/results/fd5ee2b52a3cfaec268fafd3ffe4c30e51465c7e | ORPH
+    arm      |         rocksdb-6.13.3         | NOK | http://autobuild.buildroot.net/results/bf26d6c4b1dabfde55c6a8c697384754136ed3f5 |     
+    arm      |            unknown             | NOK | http://autobuild.buildroot.net/results/021dd126d50c5f3c10ac7d8e2b4e47b8ab889527 |     
+    i586     |          zeromq-4.3.4          | NOK | http://autobuild.buildroot.net/results/8299e87c101a0e6091e95480416f210e906170cd |     
 
-This is very similar to one of Microblaze gcc bugs. So I could be able 
-to workaround it with the same -O0.
 
-> Should we get rid of nios2 support entirely ?
+Classification of failures by reason for 2020.02.x
+--------------------------------------------------
 
-Here it seems we get to the same point of Microblaze, if there is no 
-hurry I can provide patches to save Nios the same way I've done for 
-Microblaze.
+                 augeas-1.12.0 | 1 
+                 qt5svg-5.12.8 | 1 
 
->>     mipsel    |       libopenh264-2.1.1        | NOK | http://autobuild.buildroot.net/results/26837f7c80a84e5ad31d5b15161848ebecc59917 |
-> 
-> This is happening since we have added the use of the Bootlin mips32
-> toolchain early February:
-> http://autobuild.buildroot.net/?reason=libopenh264-2.1.1
-> 
-> Needs investigation to see if this is a toolchain issue, or a package
-> issue that wasn't noticed until now.
-> 
->>    riscv32    |       libopenssl-1.1.1j        | NOK | http://autobuild.buildroot.net/results/e7bf5db7745c56c4533c225260ff6c3fcd2000f5 |
->>    riscv32    |       libopenssl-1.1.1j        | NOK | http://autobuild.buildroot.net/results/5b4834023eca039be59b969e3037bb23feeed6ac |
-> 
-> Being worked on by Yann.
-> 
->>    riscv64    |        libostree-2020.8        | NOK | http://autobuild.buildroot.net/results/d42bce7ef9cf0f807b9ba7021af4a11f84e307d2 |
-> 
-> Ah another instance of renameat() missing from uClibc.
-> 
->>   powerpc64   |        netopeer2-1.1.53        | NOK | http://autobuild.buildroot.net/results/49efc0e93ad8fe30e5f32fed8a1efc1d2afd830e |
-> 
-> -- Installing missing sysrepo modules...
-> [ERR]: Retrieving GID "8000" grp entry failed (No such GID).
-> sysrepoctl error: Failed to connect (Item not found)
-> [ERR]: Retrieving GID "8000" grp entry failed (No such GID).
-> sysrepoctl error: Failed to connect (Item not found)
-> CMake Error at cmake_install.cmake:77 (message):
->     scripts/setup.sh failed: 1
-> 
-> Ah this seems like netopeer2's build system is looking at the host too
-> much ?
-> 
-> Heiko ?
-> 
->>     x86_64    |         openblas-0.3.9         | NOK | http://autobuild.buildroot.net/results/d530db0f37e1e0462e3af1e1787e15f94ff21884 | ORPH
-> 
-> /home/giuliobenetti/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-musl/9.3.0/../../../../x86_64-buildroot-linux-musl/bin/ld: ../libopenblas_nehalem-r0.3.9.a(sbdsvdx.o): relocation R_X86_64_32 against `.rodata.str1.1' can not be used when making a shared object; recompile with -fPIC
-> 
-> Thomas DS, you are now our expert in openblas. Could you have a look ?
-> 
->>    aarch64    |         rt-tests-1.10          | NOK | http://autobuild.buildroot.net/results/c6a3cdd4a07f8918b164e0e1e85c92d8b14ec228 |
-> 
-> make[1]: Entering directory `/home/buildroot/autobuild/run/instance-2/output-1/build/rt-tests-1.10'
-> Makefile:41: *** commands commence before first target.  Stop.
-> 
-> During the installation step. This shouldn't be too difficult to
-> reproduce and track down?
-> 
->>     xtensa    |          strace-5.10           | NOK | http://autobuild.buildroot.net/results/6c679877e1a3f50d5e0bc4db3237e0c699bd7243 |
-> 
-> ./linux/xtensa/arch_regs.c:10:32: error: invalid use of undefined type 'struct user_pt_regs'
-> 
-> Some more pt_regs fun on a funky architecture. Oh dear.
-> 
->>     sparc     |            tio-1.32            | NOK | http://autobuild.buildroot.net/results/7cbace3ce72bbcce8ef36f71cba8071bfda9fc26 |
->>    sparc64    |            tio-1.32            | NOK | http://autobuild.buildroot.net/results/b9a671c46fa41875c1fd6a16790b314c16ef989b |
-> 
-> This would be worked around by disabling the package on sparc/sparc64,
-> which has been proposed a long time ago already:
-> https://patchwork.ozlabs.org/project/buildroot/patch/20201025163457.30460-1-sergio.prado at e-labworks.com/
-> 
->>      arm      | toolchain-external-linaro-a... | NOK | http://autobuild.buildroot.net/results/d9b9a4b7c3660bd730a19ab09e44f24bc29e3f40 | ORPH
->>      arm      | toolchain-external-linaro-a... | NOK | http://autobuild.buildroot.net/results/13f9a551f5ac911e7daa2a382b0683d81486cffa | ORPH
-> 
-> toolchain is gone ?
 
-Here it's Micronova firewall that blocks it, I've just written to my IT.
+Detail of failures for 2020.02.x
+--------------------------------
 
-> 
->>    powerpc    |            unknown             | NOK | http://autobuild.buildroot.net/results/159d2c07060c235080711d1d0da0b2eae995d4bf |
-> 
-> This is a top-level parallel build issue... but since we don't have the
-> full log, we don't have the error.
-> 
-> Should we perhaps keep the full log, compressed, for builds done in
-> parallel ?
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    m68k     |         augeas-1.12.0          | NOK | http://autobuild.buildroot.net/results/4eb598af887b482ab21db2dbf5fc70ae9ed56c99 |     
+   xtensa    |         qt5svg-5.12.8          | NOK | http://autobuild.buildroot.net/results/cb3128b722d690ad6c7f5668032a2ee40a4ceb31 |     
 
-I see it's on my Autobuilder, what can I do to provide suck full log? Do 
-you mean the entire Buildroot log? If yes I can try to reproduce it and 
-save it on a file and post it in some way.
 
->>      or1k     |          zeromq-4.3.4          | NOK | http://autobuild.buildroot.net/results/ed105d321c0bde99c293ab7328d57c3764db6f27 |
->>      or1k     |          zeromq-4.3.4          | NOK | http://autobuild.buildroot.net/results/ce351e0e97c2cacc17d4718d39941548c7558559 |
-> 
-> /home/giuliobenetti/autobuild/run/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld: BFD (GNU Binutils) 2.33.1 assertion fail elf32-or1k.c:2329
-> collect2: error: ld returned 1 exit status
-> 
-> Giulio, is this a known or1k issue ?
+Classification of failures by reason for 2020.11.x
+--------------------------------------------------
 
-Yes, for this I've sent a patchset time ago:
-https://patchwork.ozlabs.org/project/buildroot/list/?series=161548
+        host-sentry-cli-1.57.0 | 1 
 
-So basically zeromq should be disabled like protobuf. But need to check it.
 
-You've also answered me here:
-https://patchwork.ozlabs.org/project/buildroot/patch/20200228175814.128730-1-giulio.benetti at benettiengineering.com/
+Detail of failures for 2020.11.x
+--------------------------------
 
-Here it seems the same situation as Nios and Microblaze.
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    mips     |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/58969181bb60a409463fd3816337a1442bb55a2c |     
 
-For this I can provide patches too if not in hurry.
 
-Best regards
+Classification of failures by reason for next
+---------------------------------------------
+
+                  perl-gd-2.73 | 3 
+                  dhcpcd-9.4.0 | 2 
+                  janet-1.15.0 | 2 
+             libopenssl-1.1.1i | 2 
+                  bustle-0.8.0 | 1 
+        host-sentry-cli-1.57.0 | 1 
+             libgpg-error-1.41 | 1 
+                     mc-4.8.26 | 1 
+              netopeer2-1.1.53 | 1 
+package/ruby/ruby.mk:88: ru... | 1 
+                    qemu-5.2.0 | 1 
+                       unknown | 1 
+                  zeromq-4.3.4 | 1 
+
+
+Detail of failures for next
+---------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    arm      |          bustle-0.8.0          | NOK | http://autobuild.buildroot.net/results/9d5daa4923f37084fd93aae62c422b4b99772121 | ORPH
+    m68k     |          dhcpcd-9.4.0          | NOK | http://autobuild.buildroot.net/results/6054211b4d4a4865407a98d01814ee8c870cd945 |     
+   xtensa    |          dhcpcd-9.4.0          | NOK | http://autobuild.buildroot.net/results/a182a9ec6274d19fd1005de601a220de1f1b8b68 |     
+  powerpc    |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/c18005cb9d9b61ceeded203f22859309fedced1a |     
+  mips64el   |          janet-1.15.0          | NOK | http://autobuild.buildroot.net/results/1922ec115b9dc9e879760a6868969d9677093510 |     
+    arm      |          janet-1.15.0          | NOK | http://autobuild.buildroot.net/results/fbc159e3b008a6ad351a6ef717139528ab76a404 |     
+    arm      |       libgpg-error-1.41        | NOK | http://autobuild.buildroot.net/results/1cdc2fe5b15aaee8f85e7e5248bad35b5d030c9b | ORPH
+  riscv32    |       libopenssl-1.1.1i        | NOK | http://autobuild.buildroot.net/results/9678d944265800d63ff907a73e184eadfdebe306 |     
+  riscv32    |       libopenssl-1.1.1i        | NOK | http://autobuild.buildroot.net/results/dcb646a715b3c6d3495ab920da8c7f00e65dc6b2 |     
+ aarch64_be  |           mc-4.8.26            | NOK | http://autobuild.buildroot.net/results/a1f480fc8b44b0f68f3839edfcdc6daa5da42a91 |     
+  powerpc    |        netopeer2-1.1.53        | NOK | http://autobuild.buildroot.net/results/78d383f6b057f059fb415bc8f51c6a373e95e4cb |     
+    arm      | package/ruby/ruby.mk:88: ru... | NOK | http://autobuild.buildroot.net/results/7884897db397543d6bcea572e69a29605bf5b75c |     
+   mipsel    |          perl-gd-2.73          | NOK | http://autobuild.buildroot.net/results/0e4f176e31c7d205cdf1b477a40dc5ead0b90325 |     
+    arm      |          perl-gd-2.73          | NOK | http://autobuild.buildroot.net/results/f5279d9d12c0482ea9013b948ba4215551008c5a |     
+    arm      |          perl-gd-2.73          | NOK | http://autobuild.buildroot.net/results/6d19dc9d89ff008c36d48fba6250d93ba55f7393 |     
+    arm      |           qemu-5.2.0           | NOK | http://autobuild.buildroot.net/results/20b92e6c12399532d9c7f5a629dad6eaaa9806dd |     
+   x86_64    |            unknown             | NOK | http://autobuild.buildroot.net/results/9386ffbadd357687ea36c92c1e106cb32674aa8b |     
+    or1k     |          zeromq-4.3.4          | NOK | http://autobuild.buildroot.net/results/7bfad5443fcf670f380924e27ccd1c2dc14227bf |     
+
+
+
 -- 
-Giulio Benetti
-Benetti Engineering sas
+http://autobuild.buildroot.net
