@@ -1,38 +1,44 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Fri,  5 Mar 2021 16:41:39 +0100
-Subject: [Buildroot] [PATCH] toolchain: disable gcc bug 60620 if gcc version
- >= 10.x
-Message-ID: <20210305154139.3682817-1-giulio.benetti@benettiengineering.com>
+From: Michael Vetter <jubalh@iodoru.org>
+Date: Fri,  5 Mar 2021 16:49:13 +0100
+Subject: [Buildroot] [PATCH 1/1] package/jasper: bump version to 2.0.26
+Message-ID: <20210305154913.29414-1-jubalh@iodoru.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since gcc version 10.x bug 60620 doesn't show anymore, so let's make it
-enabled up to versino 10.x excluded.
+Changes:
+* Fix JP2 decoder bug that can cause a null pointer dereference for
+  some invalid CDEF boxes. (#268)
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Michael Vetter <jubalh@iodoru.org>
 ---
- toolchain/Config.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/jasper/jasper.hash | 2 +-
+ package/jasper/jasper.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 0cd8b82059..9d6e96d275 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -155,10 +155,11 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_85862
+diff --git a/package/jasper/jasper.hash b/package/jasper/jasper.hash
+index d4ed191f91..c1f1b4f602 100644
+--- a/package/jasper/jasper.hash
++++ b/package/jasper/jasper.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  f5bc48e2884bcabd2aca1737baff4ca962ec665b6eb673966ced1f7adea07edb  jasper-2.0.25.tar.gz
++sha256  a82a119e85b7d1f448e61309777fa5f79053a9adca4a2b5bfe44be5439fb8fea  jasper-2.0.26.tar.gz
+ sha256  4ad1bb42aff888c4403d792e6e2c5f1716d6c279fea70b296333c9d577d30b81  LICENSE
+diff --git a/package/jasper/jasper.mk b/package/jasper/jasper.mk
+index d487e8e2d6..bc66f11057 100644
+--- a/package/jasper/jasper.mk
++++ b/package/jasper/jasper.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=90620
- # ICE: in do_output_reload, at reload1.c:7978 on microblaze.
--# It's still not fixed in gcc 9.x
-+# This bug no longer exists in gcc 10.x
- config BR2_TOOLCHAIN_HAS_GCC_BUG_90620
- 	bool
- 	default y if BR2_microblaze
-+	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_10
- 
- # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=93847
- # ICE: compiler error: Segmentation fault on Nios II. This bug
+-JASPER_VERSION = 2.0.25
++JASPER_VERSION = 2.0.26
+ JASPER_SITE = $(call github,jasper-software,jasper,version-$(JASPER_VERSION))
+ JASPER_INSTALL_STAGING = YES
+ JASPER_LICENSE = JasPer-2.0
 -- 
-2.25.1
+2.26.2
