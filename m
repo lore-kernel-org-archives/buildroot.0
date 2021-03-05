@@ -1,72 +1,89 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Mar 2021 11:55:20 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/nodejs: security
- bump to version v12.21.0
-Message-ID: <20210305103442.79ECA865AD@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri,  5 Mar 2021 12:10:48 +0100
+Subject: [Buildroot] [PATCH 1/1] package/dhcpcd: add
+ BR2_PACKAGE_DHCPCD_ENABLE_PRIVSEP
+Message-ID: <20210305111048.1902558-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ccce1301b297ed3670ef1ff6580d05f34d6d280d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+Add BR2_PACKAGE_DHCPCD_ENABLE_PRIVSEP following Arnout feedback:
+https://patchwork.ozlabs.org/project/buildroot/patch/20210303091904.467706-1-fontaine.fabrice at gmail.com
 
-Fixes the following security issues:
-
-CVE-2021-22883: HTTP2 'unknownProtocol' cause Denial of Service by resource exhaustion
-
-Affected Node.js versions are vulnerable to denial of service attacks when
-too many connection attempts with an 'unknownProtocol' are established.
-This leads to a leak of file descriptors.  If a file descriptor limit is
-configured on the system, then the server is unable to accept new
-connections and prevent the process also from opening, e.g.  a file.  If no
-file descriptor limit is configured, then this lead to an excessive memory
-usage and cause the system to run out of memory.
-
-CVE-2021-22884: DNS rebinding in --inspect
-
-Affected Node.js versions are vulnerable to denial of service attacks when
-the whitelist includes ???localhost6???.  When ???localhost6??? is not present in
-/etc/hosts, it is just an ordinary domain that is resolved via DNS, i.e.,
-over network.  If the attacker controls the victim's DNS server or can spoof
-its responses, the DNS rebinding protection can be bypassed by using the
-???localhost6??? domain.  As long as the attacker uses the ???localhost6??? domain,
-they can still apply the attack described in CVE-2018-7160.
-
-For more details, see the advisory:
-https://nodejs.org/en/blog/vulnerability/february-2021-security-releases/
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 7cb44a20116fb95a8ef8f6406ef24c2041daa8a7)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/nodejs/nodejs.hash | 4 ++--
- package/nodejs/nodejs.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/dhcpcd/Config.in | 19 +++++++++++++++++++
+ package/dhcpcd/dhcpcd.mk | 22 ++++------------------
+ 2 files changed, 23 insertions(+), 18 deletions(-)
 
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index b3ea15ca31..7abb3c3b57 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,5 +1,5 @@
--# From https://nodejs.org/dist/v12.20.1/SHASUMS256.txt
--sha256  e00eee325d705b2bfa9929b7d061eb2315402d7e8548945eac9870bf84321853  node-v12.20.1.tar.xz
-+# From https://nodejs.org/dist/v12.21.0/SHASUMS256.txt
-+sha256  052f37ace6f569b513b5a1154b2a45d3c4d8b07d7d7c807b79f1566db61e979d  node-v12.21.0.tar.xz
+diff --git a/package/dhcpcd/Config.in b/package/dhcpcd/Config.in
+index ece08d2c96..3ebacb3ba2 100644
+--- a/package/dhcpcd/Config.in
++++ b/package/dhcpcd/Config.in
+@@ -8,3 +8,22 @@ config BR2_PACKAGE_DHCPCD
+ 	  An RFC2131 compliant DHCP client
  
- # Hash for license file
- sha256  221417a7ca275112a5ac54639b36ee3c5184e74631ea1e1b01b701293b655190  LICENSE
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index 8916d47940..04b33bb9b6 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ 	  http://roy.marples.name/projects/dhcpcd/
++
++if BR2_PACKAGE_DHCPCD
++
++config BR2_PACKAGE_DHCPCD_ENABLE_PRIVSEP
++	bool
++	default y
++	depends on BR2_USE_MMU
++	# Audit headers were only added in recent kernels for some arches
++	depends on !(BR2_arceb || BR2_arcle) || \
++		BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2
++	depends on !(BR2_microblazeel || BR2_microblazebe) || \
++		BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18
++	depends on !BR2_nds32 || BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2
++	depends on !BR2_nios2 || BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2
++	depends on !BR2_or1k || BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
++	depends on !BR2_sh || BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
++	depends on !BR2_xtensa || BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0
++
++endif
+diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
+index f040610de4..30f0aab867 100644
+--- a/package/dhcpcd/dhcpcd.mk
++++ b/package/dhcpcd/dhcpcd.mk
+@@ -16,23 +16,9 @@ DHCPCD_CONFIG_OPTS = \
+ 	--os=linux \
+ 	--privsepuser=dhcpcd
  
--NODEJS_VERSION = 12.20.1
-+NODEJS_VERSION = 12.21.0
- NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
- NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
- NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
+-# AUDIT_ARCH_{OPENRISC,SH,SHEL,SH64,SHEL64} are only available with kernel >= 3.7
+-ifeq ($(BR2_or1k)$(BR2_sh):$(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7),y:)
+-DHCPCD_CONFIG_OPTS += --disable-privsep
+-endif
+-
+-# AUDIT_ARCH_MICROBLAZE is only available with kernel >= 3.18
+-ifeq ($(BR2_microblazeel)$(BR2_microblazebe):$(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18),y:)
+-DHCPCD_CONFIG_OPTS += --disable-privsep
+-endif
+-
+-# AUDIT_ARCH_XTENSA is only available with kernel >= 5.0
+-ifeq ($(BR2_xtensa):$(BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0),y:)
+-DHCPCD_CONFIG_OPTS += --disable-privsep
+-endif
+-
+-# AUDIT_ARCH_{ARCOMPACT,ARCV2,NDS32,NIOS2} are only available with kernel >= 5.2
+-ifeq ($(BR2_arceb)$(BR2_arcle)$(BR2_nds32)$(BR2_nios2):$(BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2),y:)
++ifeq ($(BR2_PACKAGE_DHCPCD_ENABLE_PRIVSEP),y)
++DHCPCD_CONFIG_OPTS += --enable-privsep
++else
+ DHCPCD_CONFIG_OPTS += --disable-privsep
+ endif
+ 
+@@ -48,7 +34,7 @@ DHCPCD_CONFIG_OPTS += --enable-static
+ endif
+ 
+ ifeq ($(BR2_USE_MMU),)
+-DHCPCD_CONFIG_OPTS += --disable-fork --disable-privsep
++DHCPCD_CONFIG_OPTS += --disable-fork
+ endif
+ 
+ define DHCPCD_CONFIGURE_CMDS
+-- 
+2.30.0
