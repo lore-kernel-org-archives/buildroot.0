@@ -1,35 +1,27 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  5 Mar 2021 10:46:24 +0100
-Subject: [Buildroot] [PATCH 1/1] package/fontconfig: set
- FONTCONFIG_CPE_ID_VALID
-Message-ID: <20210305094624.1832106-1-fontaine.fabrice@gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
+Date: Fri, 5 Mar 2021 10:48:10 +0100
+Subject: [Buildroot] Analysis of build results for 2021-03-03
+In-Reply-To: <20210304224926.45aa4056@windsurf.home>
+References: <20210304081519.C821B4B530@smtp4.osuosl.org>
+ <20210304224926.45aa4056@windsurf.home>
+Message-ID: <CAAXf6LVstHLbFJU9BKMWsZhBqJ4KYZrQv2Ufh8mZzUuY6V6=2w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:fontconfig_project:fontconfig is a valid CPE identifier for
-this package:
+Hello,
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Afontconfig_project%3Afontconfig
+El jue, 4 mar 2021 a las 22:49, Thomas Petazzoni
+(<thomas.petazzoni@bootlin.com>) escribi?:
+[..]
+>
+> >    x86_64    |         openblas-0.3.9         | NOK | http://autobuild.buildroot.net/results/d530db0f37e1e0462e3af1e1787e15f94ff21884 | ORPH
+>
+> /home/giuliobenetti/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-musl/9.3.0/../../../../x86_64-buildroot-linux-musl/bin/ld: ../libopenblas_nehalem-r0.3.9.a(sbdsvdx.o): relocation R_X86_64_32 against `.rodata.str1.1' can not be used when making a shared object; recompile with -fPIC
+>
+> Thomas DS, you are now our expert in openblas. Could you have a look ?
+>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/fontconfig/fontconfig.mk | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/fontconfig/fontconfig.mk b/package/fontconfig/fontconfig.mk
-index 018a28556e..b7bc59366e 100644
---- a/package/fontconfig/fontconfig.mk
-+++ b/package/fontconfig/fontconfig.mk
-@@ -16,6 +16,7 @@ HOST_FONTCONFIG_DEPENDENCIES = \
- 	host-freetype host-expat host-pkgconf host-gperf host-util-linux
- FONTCONFIG_LICENSE = fontconfig license
- FONTCONFIG_LICENSE_FILES = COPYING
-+FONTCONFIG_CPE_ID_VALID = YES
- 
- FONTCONFIG_CONF_OPTS = \
- 	--with-arch=$(GNU_TARGET_NAME) \
--- 
-2.30.0
+Yes I will have a look. I can reproduce locally, will see if I can fix it.
