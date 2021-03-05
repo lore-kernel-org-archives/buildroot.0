@@ -1,7 +1,8 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  5 Mar 2021 16:16:33 +0100
-Subject: [Buildroot] [PATCH 1/1] package/sdl_image: add LIBSDL_CPE_ID_VENDOR
-Message-ID: <20210305151633.2008660-1-fontaine.fabrice@gmail.com>
+Date: Fri,  5 Mar 2021 16:19:09 +0100
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/sdl_image: add SDL_IMAGE_CPE_ID_VENDOR
+Message-ID: <20210305151909.2008869-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,6 +15,9 @@ cpe:2.3:a:libsdl:sdl_image is a valid CPE identifier for this package:
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
+Changes v1 -> v2:
+ - Fix title
+
  package/sdl_image/sdl_image.mk | 1 +
  1 file changed, 1 insertion(+)
 
