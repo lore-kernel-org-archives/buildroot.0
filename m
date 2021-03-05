@@ -1,64 +1,29 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  5 Mar 2021 12:30:05 +0100
-Subject: [Buildroot] [PATCH 1/1] package/dhcpcd: fix build on m68k
-Message-ID: <20210305113005.1913849-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 05 Mar 2021 13:22:24 +0100
+Subject: [Buildroot] [PATCH 1/1] package/intel-mediasdk: disable samples
+ and tutorials
+In-Reply-To: <20210222170048.409719-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 22 Feb 2021 18:00:48 +0100")
+References: <20210222170048.409719-1-fontaine.fabrice@gmail.com>
+Message-ID: <87o8fxg58f.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/56301b566e210f06ac581e04ad1ec2ca3f9b7103
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...privsep-linux.c-add-support-for-m68k.patch | 37 +++++++++++++++++++
- 1 file changed, 37 insertions(+)
- create mode 100644 package/dhcpcd/0011-src-privsep-linux.c-add-support-for-m68k.patch
+ > Disable samples and tutorials which are enabled by default and fail to
+ > build with gcc 10 without upstream commit:
+ > https://github.com/Intel-Media-SDK/MediaSDK/commit/c7d40371eb0c2042261fe1f91a364f69a1457235
 
-diff --git a/package/dhcpcd/0011-src-privsep-linux.c-add-support-for-m68k.patch b/package/dhcpcd/0011-src-privsep-linux.c-add-support-for-m68k.patch
-new file mode 100644
-index 0000000000..8fe80d4266
---- /dev/null
-+++ b/package/dhcpcd/0011-src-privsep-linux.c-add-support-for-m68k.patch
-@@ -0,0 +1,37 @@
-+From f7721a6728bfd786604474df051f463a12dd0335 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 5 Mar 2021 12:22:13 +0100
-+Subject: [PATCH] src/privsep-linux.c: add support for m68k
-+
-+Fix the following build failure:
-+
-+privsep-linux.c:206:4: error: #error "Platform does not support seccomp filter yet"
-+ #  error "Platform does not support seccomp filter yet"
-+    ^~~~~
-+In file included from privsep-linux.c:36:
-+privsep-linux.c:213:38: error: 'SECCOMP_AUDIT_ARCH' undeclared here (not in a function); did you mean 'SECCOMP_ALLOW_ARG'?
-+  BPF_JUMP(BPF_JMP + BPF_JEQ + BPF_K, SECCOMP_AUDIT_ARCH, 1, 0),
-+                                      ^~~~~~~~~~~~~~~~~~
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/rsmarples/dhcpcd/pull/29]
-+---
-+ src/privsep-linux.c | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/src/privsep-linux.c b/src/privsep-linux.c
-+index 21d41a9a..7dc92083 100644
-+--- a/src/privsep-linux.c
-++++ b/src/privsep-linux.c
-+@@ -188,6 +188,8 @@ ps_root_sendnetlink(struct dhcpcd_ctx *ctx, int protocol, struct msghdr *msg)
-+ #  define SECCOMP_AUDIT_ARCH AUDIT_ARCH_IA64
-+ #elif defined(__microblaze__)
-+ #  define SECCOMP_AUDIT_ARCH AUDIT_ARCH_MICROBLAZE
-++#elif defined(__m68k__)
-++#  define SECCOMP_AUDIT_ARCH AUDIT_ARCH_M68K
-+ #elif defined(__mips__)
-+ #  if defined(__MIPSEL__)
-+ #    if defined(__LP64__)
-+-- 
-+2.30.0
-+
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/9ee28e5dc0b2ba854766d9bc82b95c28be2722d3
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed to 2020.11.x, thanks.
+
 -- 
-2.30.0
+Bye, Peter Korsgaard
