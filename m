@@ -1,42 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Mar 2021 23:56:06 +0100
-Subject: [Buildroot] [git commit] package/librelp: bump to version 1.10.0
-Message-ID: <20210308072137.0DFA381607@busybox.osuosl.org>
+Date: Fri, 5 Mar 2021 23:15:17 +0100
+Subject: [Buildroot] [git commit] package/janet: add -std=c99 to CFLAGS
+Message-ID: <20210308072137.1AC728893D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1e07dc4ed2ccd791c607fa2fae3547b45227cc54
+commit: https://git.buildroot.net/buildroot/commit/?id=b5e8f1c1475b46c8d9b7159aafe983e72d329d29
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: David GOUARIN <david.gouarin@thalesgroup.com>
+As upstream says Janet should be compiled with -std=c99
+so pass this in order to fix the failures below.
+
+Fixes:
+ http://autobuild.buildroot.net/results/192/1922ec115b9dc9e879760a6868969d9677093510/build-end.log
+ ...
+ http://autobuild.buildroot.net/results/355/355e0992338a8d132050517f83a3884606b00529/build-end.log
+
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/librelp/librelp.hash | 2 +-
- package/librelp/librelp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/janet/janet.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/librelp/librelp.hash b/package/librelp/librelp.hash
-index 88665bcf2a..23ce8c15f8 100644
---- a/package/librelp/librelp.hash
-+++ b/package/librelp/librelp.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  24ee9e843960d1400a44ffaedb0b1ec91463df8f8acca869cc027ed25ee6bf33  librelp-1.9.0.tar.gz
-+sha256  148db4e4d1a23e8136e9ec08810929a55faf5d45e24c2e3186d5ab34355dab31  librelp-1.10.0.tar.gz
- sha256  1ed76f935566e93e3c3c0d9f8fad22eb6d8bbe406e2eb8470a4a2764d9fd9685  COPYING
-diff --git a/package/librelp/librelp.mk b/package/librelp/librelp.mk
-index 2b8a53e833..0b2f5a20c9 100644
---- a/package/librelp/librelp.mk
-+++ b/package/librelp/librelp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/janet/janet.mk b/package/janet/janet.mk
+index 7243d60c01..ea042221d8 100644
+--- a/package/janet/janet.mk
++++ b/package/janet/janet.mk
+@@ -8,8 +8,8 @@ JANET_VERSION = 1.15.0
+ JANET_SITE = $(call github,janet-lang,janet,v$(JANET_VERSION))
+ JANET_LICENSE = MIT
+ JANET_LICENSE_FILES = LICENSE
+-
+ JANET_INSTALL_STAGING = YES
++JANET_CFLAGS = $(TARGET_CFLAGS) -std=c99
  
--LIBRELP_VERSION = 1.9.0
-+LIBRELP_VERSION = 1.10.0
- LIBRELP_SITE = http://download.rsyslog.com/librelp
- LIBRELP_LICENSE = GPL-3.0+
- LIBRELP_LICENSE_FILES = COPYING
+ ifeq ($(BR2_STATIC_LIBS),y)
+ JANET_CONF_OPTS += -Ddynamic_modules=false
