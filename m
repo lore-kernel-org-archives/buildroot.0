@@ -1,25 +1,32 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 05 Mar 2021 23:31:10 +0100
-Subject: [Buildroot] [PATCH 1/1] package/jasper: bump version to 2.0.26
-In-Reply-To: <20210305154913.29414-1-jubalh@iodoru.org> (Michael Vetter's
- message of "Fri, 5 Mar 2021 16:49:13 +0100")
-References: <20210305154913.29414-1-jubalh@iodoru.org>
-Message-ID: <87zgzh9qs1.fsf@dell.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 05 Mar 2021 22:35:00 +0000
+Subject: [Buildroot] [Bug 13576] Issues compiling buildroot for 5x86
+In-Reply-To: <bug-13576-163@https.bugs.busybox.net/>
+References: <bug-13576-163@https.bugs.busybox.net/>
+Message-ID: <bug-13576-163-YlAlIPtnUL@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Michael" == Michael Vetter <jubalh@iodoru.org> writes:
+https://bugs.busybox.net/show_bug.cgi?id=13576
 
- > Changes:
- > * Fix JP2 decoder bug that can cause a null pointer dereference for
- >   some invalid CDEF boxes. (#268)
+ingineru_de_sistem at yahoo.com changed:
 
- > Signed-off-by: Michael Vetter <jubalh@iodoru.org>
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |ingineru_de_sistem at yahoo.co
+                   |                            |m
 
-Committed to master given how small the diff is, thanks.
+--- Comment #2 from ingineru_de_sistem at yahoo.com ---
+Created attachment 8776
+  --> https://bugs.busybox.net/attachment.cgi?id=8776&action=edit
+.config used
+
+This is the config file requested, compressed with xz (Bugzilla won't attach it
+otherwise).
 
 -- 
-Bye, Peter Korsgaard
+You are receiving this mail because:
+You are on the CC list for the bug.
