@@ -1,44 +1,43 @@
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Fri,  5 Mar 2021 17:12:09 +0100
-Subject: [Buildroot] [PATCH v2 1/3] toolchain: introduce
- BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464
+Date: Fri,  5 Mar 2021 17:12:11 +0100
+Subject: [Buildroot] [PATCH v2 3/3] package/zeromq: disable package if
+ binutils is affected from bug 21464
 In-Reply-To: <20210305161211.4396-1-giulio.benetti@benettiengineering.com>
 References: <20210305161211.4396-1-giulio.benetti@benettiengineering.com>
-Message-ID: <20210305161211.4396-2-giulio.benetti@benettiengineering.com>
+Message-ID: <20210305161211.4396-4-giulio.benetti@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On OpenRisc binutils it still present ld bug 21464 leading to a package
-protobuf to fail building:
-http://autobuild.buildroot.net/results/908/9084cd777aefe0fa8235514c33767d8640ad7a5b/
+This package is affected from binutils bug 21464, since there is no
+workaround, let's disable it.
 
-The bug was already reported and it's been updated:
-https://sourceware.org/bugzilla/show_bug.cgi?id=21464
+Fixes:
+http://autobuild.buildroot.net/results/ce351e0e97c2cacc17d4718d39941548c7558559
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- toolchain/Config.in | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/zeromq/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 553612c4aa..d181644f98 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -81,6 +81,12 @@ config BR2_TOOLCHAIN_HAS_BINUTILS_BUG_19615
- config BR2_TOOLCHAIN_HAS_BINUTILS_BUG_20006
- 	bool
+diff --git a/package/zeromq/Config.in b/package/zeromq/Config.in
+index cf5c644c39..f99adf7acc 100644
+--- a/package/zeromq/Config.in
++++ b/package/zeromq/Config.in
+@@ -1,10 +1,12 @@
+ comment "zeromq needs a toolchain w/ C++, threads"
+ 	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_TOOLCHAIN_HAS_THREADS)
++	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464
  
-+# https://sourceware.org/bugzilla/show_bug.cgi?id=21464
-+# Affect toolchains built with binutils 2.31.1, still not fixed.
-+config BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464
-+	bool
-+	default y if BR2_or1k
-+
- # Atomic types can be:
- #  - never lock-free
- #  - sometimes lock-free
+ config BR2_PACKAGE_ZEROMQ
+ 	bool "zeromq"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+ 	help
 -- 
 2.25.1
