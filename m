@@ -1,36 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Mar 2021 22:33:29 +0100
-Subject: [Buildroot] [git commit] package/sdl_image: add
- SDL_IMAGE_CPE_ID_VENDOR
-Message-ID: <20210305212717.3014687514@busybox.osuosl.org>
+Date: Fri, 05 Mar 2021 22:52:23 +0100
+Subject: [Buildroot] [PATCH 1/1] package/sdl2: update SDL2_CPE_ID_PRODUCT
+In-Reply-To: <20210305153253.2009635-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 5 Mar 2021 16:32:53 +0100")
+References: <20210305153253.2009635-1-fontaine.fabrice@gmail.com>
+Message-ID: <87sg59b754.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c115ef807e4dd3138bf887733f7b183c53413199
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-cpe:2.3:a:libsdl:sdl_image is a valid CPE identifier for this package:
+ > libsdl:sdl has been replaced by libsdl:simple_directmedia_layer:
+ >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alibsdl%3Asimple_directmedia_layer
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alibsdl%3Asdl_image
+ >   <cpe-item name="cpe:/a:libsdl:sdl:2.0.12" deprecated="true" deprecation_date="2021-02-08T18:56:07.243Z">
+ >       <reference href="https://www.libsdl.org/release/">Version</reference>
+ >     <cpe-23:cpe23-item name="cpe:2.3:a:libsdl:sdl:2.0.12:*:*:*:*:*:*:*">
+ >         <cpe-23:deprecated-by name="cpe:2.3:a:libsdl:simple_directmedia_layer:2.0.12:*:*:*:*:*:*:*" type="NAME_CORRECTION"/>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/sdl_image/sdl_image.mk | 1 +
- 1 file changed, 1 insertion(+)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/sdl_image/sdl_image.mk b/package/sdl_image/sdl_image.mk
-index 95a03a3956..9ff9206b74 100644
---- a/package/sdl_image/sdl_image.mk
-+++ b/package/sdl_image/sdl_image.mk
-@@ -10,6 +10,7 @@ SDL_IMAGE_SITE = http://www.libsdl.org/projects/SDL_image/release
- SDL_IMAGE_INSTALL_STAGING = YES
- SDL_IMAGE_LICENSE = Zlib
- SDL_IMAGE_LICENSE_FILES = COPYING
-+SDL_IMAGE_CPE_ID_VENDOR = libsdl
- 
- SDL_IMAGE_CONF_OPTS = \
- 	--with-sdl-prefix=$(STAGING_DIR)/usr \
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
