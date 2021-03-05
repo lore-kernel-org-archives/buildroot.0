@@ -1,7 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  5 Mar 2021 15:59:28 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libshout: disable tools
-Message-ID: <20210305145928.2007111-1-fontaine.fabrice@gmail.com>
+Date: Fri,  5 Mar 2021 16:00:54 +0100
+Subject: [Buildroot] [PATCH v2,1/1] package/libshout: disable tools
+Message-ID: <20210305150054.2007286-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,8 +12,14 @@ This will fix static build of libshout in version 2.4.5 with openssl
 (tools were added by
 https://gitlab.xiph.org/xiph/icecast-libshout/-/commit/34a535bdbb7d8bb4545d2bd71ba29a212e83041e)
 
+Fixes:
+ - http://autobuild.buildroot.org/results/1c2885d75219aabadbb66ab66fe0dc4b4346ff1e
+
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
+Changes v1 -> v2:
+ - Add link to autobuilder failure
+
  ...re.ac-add-an-option-to-disable-tools.patch | 51 +++++++++++++++++++
  package/libshout/libshout.mk                  |  6 ++-
  2 files changed, 56 insertions(+), 1 deletion(-)
