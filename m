@@ -1,56 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 6 Mar 2021 21:22:59 +0100
-Subject: [Buildroot] [git commit branch/next] package/libubootenv: bump to
- version e663439
-Message-ID: <20210306200021.77C7A86EF7@busybox.osuosl.org>
+Date: Sat, 6 Mar 2021 21:23:29 +0100
+Subject: [Buildroot] [git commit branch/next] package/grpc: bump to version
+ 1.36.0
+Message-ID: <20210306200138.0953E875E2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=88df5192a8859fab7d74945151411561cfba24f7
+commit: https://git.buildroot.net/buildroot/commit/?id=46979791ba200180a6cccfb0794696936f16fa20
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Include the following changes:
-
-e663439 Always fsync file writes
-80b7f31 Treat '=' as an illegal character in variable names
-950f541 libuboot_env: fix calculation of usable envsize
-fb88032 Correct initialisations in libuboot_configure
-20d1ec7 Force writing of environment if default is used
-5ca11bd libuboot_env: correct length to usable env size length
-cd4a8f1 libuboot_env_store: fix env double-null termination
-9510164 uboot_env: fix infinite loop on short read (EOF)
-
-Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libubootenv/libubootenv.hash | 2 +-
- package/libubootenv/libubootenv.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/grpc/grpc.hash | 2 +-
+ package/grpc/grpc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libubootenv/libubootenv.hash b/package/libubootenv/libubootenv.hash
-index a655ed2349..0b5320b36f 100644
---- a/package/libubootenv/libubootenv.hash
-+++ b/package/libubootenv/libubootenv.hash
+diff --git a/package/grpc/grpc.hash b/package/grpc/grpc.hash
+index 52d25fc5ed..2e6bd71cb3 100644
+--- a/package/grpc/grpc.hash
++++ b/package/grpc/grpc.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  4c52dd908b69f18cdd5721b3f24573fb276e61115f66edb74906d766ca60399f  libubootenv-0.3.1.tar.gz
-+sha256  e25adf81dd2d4a083cb2cf032843a1ee2bb1fab54aa7a0202bd2295186bfe1b7  libubootenv-e663439e3d39a4cdbddb7e818245a99c485fa965.tar.gz
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  Licenses/lgpl-2.1.txt
-diff --git a/package/libubootenv/libubootenv.mk b/package/libubootenv/libubootenv.mk
-index 61516710a7..7a98f5324b 100644
---- a/package/libubootenv/libubootenv.mk
-+++ b/package/libubootenv/libubootenv.mk
-@@ -4,8 +4,8 @@
+ # Locally computed
+-sha256  27dd2fc5c9809ddcde8eb6fa1fa278a3486566dfc28335fca13eb8df8bd3b958  grpc-1.35.0.tar.gz
++sha256  1a5127c81487f4e3e57973bb332f04b9159f94d860c207e096d8a587d371edbd  grpc-1.36.0.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
+index 27b28deff3..8426ff5736 100644
+--- a/package/grpc/grpc.mk
++++ b/package/grpc/grpc.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBUBOOTENV_VERSION = 0.3.1
--LIBUBOOTENV_SITE = $(call github,sbabic,libubootenv,v$(LIBUBOOTENV_VERSION))
-+LIBUBOOTENV_VERSION = e663439e3d39a4cdbddb7e818245a99c485fa965
-+LIBUBOOTENV_SITE = $(call github,sbabic,libubootenv,$(LIBUBOOTENV_VERSION))
- LIBUBOOTENV_LICENSE = LGPL-2.1
- LIBUBOOTENV_LICENSE_FILES = Licenses/lgpl-2.1.txt
- LIBUBOOTENV_INSTALL_STAGING = YES
+-GRPC_VERSION = 1.35.0
++GRPC_VERSION = 1.36.0
+ GRPC_SITE = $(call github,grpc,grpc,v$(GRPC_VERSION))
+ GRPC_LICENSE = Apache-2.0
+ GRPC_LICENSE_FILES = LICENSE
