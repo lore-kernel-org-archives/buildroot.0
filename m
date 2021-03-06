@@ -1,71 +1,68 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 6 Mar 2021 16:35:44 +0100
-Subject: [Buildroot] [git commit] package/openblas: respect the optimization
- level specified by Buildroot
-Message-ID: <20210306151353.06B7C8758B@busybox.osuosl.org>
+Date: Sat, 6 Mar 2021 16:27:42 +0100
+Subject: [Buildroot] [git commit] package/libeXosip2: fix build with libressl
+Message-ID: <20210306151352.CBA8C8754D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b4df526ce37bced5be76f40c880de83f4fb23e7b
+commit: https://git.buildroot.net/buildroot/commit/?id=11ac2ab5811a2be35816e30c5817b5fd0e552cee
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-openblas internally sets -O2, after the flags being passed by Buildroot
-(e.g. -Os).
+Build with libressl is broken since version 5.1.0 and
+https://git.savannah.nongnu.org/cgit/exosip.git/commit/?id=d7488b7bbf59870192372384ef338a44be23e888
 
-Patch openblas to let the Buildroot-specified flag survive.
+For an unknown reason, we only have one autobuilder failure with version
+5.2.0
 
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/89d8d4ba99d6dcc1618cf6b5302c124a92d75be9
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...stem-don-t-specify-optimization-level-bui.patch | 40 ++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
+ ...-src-eXtls_dtls.c-fix-build-with-libressl.patch | 34 ++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-diff --git a/package/openblas/0004-Makefile.system-don-t-specify-optimization-level-bui.patch b/package/openblas/0004-Makefile.system-don-t-specify-optimization-level-bui.patch
+diff --git a/package/libeXosip2/0001-src-eXtls_dtls.c-fix-build-with-libressl.patch b/package/libeXosip2/0001-src-eXtls_dtls.c-fix-build-with-libressl.patch
 new file mode 100644
-index 0000000000..bcc3e0eb6a
+index 0000000000..b153eee65c
 --- /dev/null
-+++ b/package/openblas/0004-Makefile.system-don-t-specify-optimization-level-bui.patch
-@@ -0,0 +1,40 @@
-+From 6d1c1350977d74fb2239f765bd92a5763cd3bb73 Mon Sep 17 00:00:00 2001
-+From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-+Date: Fri, 5 Mar 2021 14:09:23 +0100
-+Subject: [PATCH] Makefile.system: don't specify optimization level
-+ [buildroot-specific]
++++ b/package/libeXosip2/0001-src-eXtls_dtls.c-fix-build-with-libressl.patch
+@@ -0,0 +1,34 @@
++From 178632fa5530a72f50376a60d59be2a07e65c28b Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 6 Mar 2021 15:20:51 +0100
++Subject: [PATCH] src/eXtls_dtls.c: fix build with libressl
 +
-+Buildroot will pass an optimization level, but it is ignored because the
-+openblas makefiles _append_ to the flags passed on the command-line.
++Build with libressl is broken since
++https://git.savannah.nongnu.org/cgit/exosip.git/commit/?id=d7488b7bbf59870192372384ef338a44be23e888
++because libressl does not define SSL_set0_rbio
 +
-+The CFLAGS/FFLAGS would e.g. contain '-Os -O2' in which -O2 survives.
++Fixes:
++ - http://autobuild.buildroot.org/results/89d8d4ba99d6dcc1618cf6b5302c124a92d75be9
 +
-+Remove the optimization level specified in openblas itself.
-+
-+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-+
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: sent to amoizard at antisip.com]
 +---
-+ Makefile.system | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
++ src/eXtl_dtls.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/Makefile.system b/Makefile.system
-+index 1e30d05a..04b0be16 100644
-+--- a/Makefile.system
-++++ b/Makefile.system
-+@@ -1216,11 +1216,11 @@ FCOMMON_OPT += -g
-+ endif
++diff --git a/src/eXtl_dtls.c b/src/eXtl_dtls.c
++index 40fa658..8ac3a13 100644
++--- a/src/eXtl_dtls.c
+++++ b/src/eXtl_dtls.c
++@@ -70,7 +70,7 @@
++ #define RANDOM  "random.pem"
++ #define DHFILE "dh1024.pem"
 + 
-+ ifndef COMMON_OPT
-+-COMMON_OPT = -O2
-++COMMON_OPT =
-+ endif
++-#if OPENSSL_VERSION_NUMBER < 0x10100000L
+++#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
 + 
-+ ifndef FCOMMON_OPT
-+-FCOMMON_OPT = -O2 -frecursive
-++FCOMMON_OPT = -frecursive
-+ endif
-+ 
-+ override CFLAGS     += $(COMMON_OPT) $(CCOMMON_OPT) -I$(TOPDIR)
++ static void
++ SSL_set0_rbio (SSL * s, BIO * rbio)
 +-- 
-+2.26.2
++2.30.0
 +
