@@ -1,88 +1,43 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 6 Mar 2021 23:25:57 +0100
-Subject: [Buildroot] [git commit] package/mawk: new package
-Message-ID: <20210308072140.1B35288971@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 6 Mar 2021 23:32:14 +0100
+Subject: [Buildroot] [git commit] package/lttng-tools: set rundir to
+ /run/lttng unconditionally
+Message-ID: <20210308072140.43B1681607@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bd77d4557209e047b071710196ce0acc4e0ba8ac
+commit: https://git.buildroot.net/buildroot/commit/?id=9441b93ca474b8112de490b96cbaf77e08a3be2d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Interpreter for the AWK Programming Language.
+Buildroot ensures that all init-systems have a /run directory,
+this should be the preferred location.
 
-Signed-off-by: Ismael Luceno <ismael@iodev.co.uk>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS             |  1 +
- package/Config.in      |  1 +
- package/mawk/Config.in |  6 ++++++
- package/mawk/mawk.hash |  2 ++
- package/mawk/mawk.mk   | 13 +++++++++++++
- 5 files changed, 23 insertions(+)
+ package/lttng-tools/lttng-tools.mk | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 42f3c66274..9031d99b97 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1123,6 +1123,7 @@ F:	package/exempi/
+diff --git a/package/lttng-tools/lttng-tools.mk b/package/lttng-tools/lttng-tools.mk
+index d66233414e..8789ded333 100644
+--- a/package/lttng-tools/lttng-tools.mk
++++ b/package/lttng-tools/lttng-tools.mk
+@@ -10,12 +10,10 @@ LTTNG_TOOLS_SOURCE = lttng-tools-$(LTTNG_TOOLS_VERSION).tar.bz2
+ LTTNG_TOOLS_INSTALL_STAGING = YES
+ LTTNG_TOOLS_LICENSE = GPL-2.0, LGPL-2.1 (include/lttng/*, src/lib/lttng-ctl/*)
+ LTTNG_TOOLS_LICENSE_FILES = LICENSE $(addprefix LICENSES/,BSD-2-Clause BSD-3-Clause GPL-2.0 LGPL-2.1 MIT)
+-LTTNG_TOOLS_CONF_OPTS += --disable-man-pages
+ LTTNG_TOOLS_DEPENDENCIES = liburcu libxml2 popt util-linux
+-
+-ifeq ($(BR2_INIT_SYSTEMD),y)
+-LTTNG_TOOLS_CONF_OPTS += --with-lttng-system-rundir=/run/lttng
+-endif
++LTTNG_TOOLS_CONF_OPTS = \
++	--disable-man-pages \
++	--with-lttng-system-rundir=/run/lttng
  
- N:	Ismael Luceno <ismael@iodev.co.uk>
- F:	package/axel/
-+F:	package/mawk/
- 
- N:	Jagan Teki <jagan@amarulasolutions.com>
- F:	board/amarula/
-diff --git a/package/Config.in b/package/Config.in
-index 1cfbabeb86..992e46a319 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -178,6 +178,7 @@ menu "Development tools"
- 	source "package/jq/Config.in"
- 	source "package/libtool/Config.in"
- 	source "package/make/Config.in"
-+	source "package/mawk/Config.in"
- 	source "package/patch/Config.in"
- 	source "package/pkgconf/Config.in"
- 	source "package/ripgrep/Config.in"
-diff --git a/package/mawk/Config.in b/package/mawk/Config.in
-new file mode 100644
-index 0000000000..80118b3f6d
---- /dev/null
-+++ b/package/mawk/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_MAWK
-+	bool "mawk"
-+	help
-+	  Interpreter for the AWK Programming Language.
-+
-+	  http://invisible-island.net/mawk/mawk.html
-diff --git a/package/mawk/mawk.hash b/package/mawk/mawk.hash
-new file mode 100644
-index 0000000000..69761f77df
---- /dev/null
-+++ b/package/mawk/mawk.hash
-@@ -0,0 +1,2 @@
-+sha256  7fd4cd1e1fae9290fe089171181bbc6291dfd9bca939ca804f0ddb851c8b8237  mawk-1.3.4-20200120.tgz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/mawk/mawk.mk b/package/mawk/mawk.mk
-new file mode 100644
-index 0000000000..c4a486215d
---- /dev/null
-+++ b/package/mawk/mawk.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# mawk
-+#
-+################################################################################
-+
-+MAWK_VERSION = 1.3.4-20200120
-+MAWK_SITE = https://invisible-mirror.net/archives/mawk
-+MAWK_SOURCE = mawk-$(MAWK_VERSION).tgz
-+MAWK_LICENSE = GPL-2.0
-+MAWK_LICENSE_FILES = COPYING
-+
-+$(eval $(autotools-package))
+ ifeq ($(BR2_PACKAGE_LTTNG_LIBUST),y)
+ LTTNG_TOOLS_CONF_OPTS += --with-lttng-ust
