@@ -1,69 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 6 Mar 2021 22:56:51 +0100
-Subject: [Buildroot] [git commit] package/kodi-vfs-sftp: bump version to
- 2.0.0-Matrix
-Message-ID: <20210308072139.6BFEB8896D@busybox.osuosl.org>
+Date: Sat, 6 Mar 2021 23:15:50 +0100
+Subject: [Buildroot] [git commit] package/libnss: bump version to 3.62
+Message-ID: <20210308072140.036E98896D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d94599a175078e4644bf9a516c77a30707d75e2d
+commit: https://git.buildroot.net/buildroot/commit/?id=06d695cd70dfcab7806bf778919744f7847ec1c2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Upstream removed usage of libplatform
-https://github.com/xbmc/vfs.sftp/commit/a4fb0019a6b20c2e9b44ff80dd084002df6052a9
+Release Notes:
+https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.62_release_notes
 
-Added remaining dependencies and removed unused kodi-platform:
-https://github.com/xbmc/vfs.sftp/blob/Matrix/CMakeLists.txt#L6
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-vfs-sftp/Config.in          | 4 ++--
- package/kodi-vfs-sftp/kodi-vfs-sftp.hash | 2 +-
- package/kodi-vfs-sftp/kodi-vfs-sftp.mk   | 4 ++--
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/libnss/libnss.hash | 4 ++--
+ package/libnss/libnss.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/kodi-vfs-sftp/Config.in b/package/kodi-vfs-sftp/Config.in
-index a939bd927d..b742777ff0 100644
---- a/package/kodi-vfs-sftp/Config.in
-+++ b/package/kodi-vfs-sftp/Config.in
-@@ -1,8 +1,8 @@
- config BR2_PACKAGE_KODI_VFS_SFTP
- 	bool "kodi-vfs-sftp"
--	select BR2_PACKAGE_KODI_PLATFORM
--	select BR2_PACKAGE_LIBPLATFORM
- 	select BR2_PACKAGE_LIBSSH
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_ZLIB
- 	help
- 	  SFTP VFS addon for Kodi
- 
-diff --git a/package/kodi-vfs-sftp/kodi-vfs-sftp.hash b/package/kodi-vfs-sftp/kodi-vfs-sftp.hash
-index a17c2d32c6..d12a85437b 100644
---- a/package/kodi-vfs-sftp/kodi-vfs-sftp.hash
-+++ b/package/kodi-vfs-sftp/kodi-vfs-sftp.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  dc3db18b6cef90cd518b741e5c9bc7b3f4412774ee60bf70b451a8d2fc88a091  kodi-vfs-sftp-1.0.6-Leia.tar.gz
-+sha256  b15c5dde7b3aadb3e82e61cb9b0440812b6c2f65b38c6c25aef726f97e746f68  kodi-vfs-sftp-2.0.0-Matrix.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-vfs-sftp/kodi-vfs-sftp.mk b/package/kodi-vfs-sftp/kodi-vfs-sftp.mk
-index 3870ff9b5b..b1b0bef36d 100644
---- a/package/kodi-vfs-sftp/kodi-vfs-sftp.mk
-+++ b/package/kodi-vfs-sftp/kodi-vfs-sftp.mk
-@@ -4,10 +4,10 @@
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index ad632f724a..85c694bc66 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_61_RTM/src/SHA256SUMS
+-sha256  312e2d804b34ccf0fec70b57cf8cd6ac853f8ced60df53e30ebb0a7bcd0e1370  nss-3.61.tar.gz
++# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_62_RTM/src/SHA256SUMS
++sha256  86d6df7cece25b8d4efa53e4c19af903c484eb79871163f37b5232bb406a5478  nss-3.62.tar.gz
+ # Locally calculated
+ sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 3bc3197e34..07991ae786 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_VFS_SFTP_VERSION = 1.0.6-Leia
-+KODI_VFS_SFTP_VERSION = 2.0.0-Matrix
- KODI_VFS_SFTP_SITE = $(call github,xbmc,vfs.sftp,$(KODI_VFS_SFTP_VERSION))
- KODI_VFS_SFTP_LICENSE = GPL-2.0+
- KODI_VFS_SFTP_LICENSE_FILES = LICENSE.md
--KODI_VFS_SFTP_DEPENDENCIES = kodi-platform libplatform libssh
-+KODI_VFS_SFTP_DEPENDENCIES = kodi libssh openssl zlib
- 
- $(eval $(cmake-package))
+-LIBNSS_VERSION = 3.61
++LIBNSS_VERSION = 3.62
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
