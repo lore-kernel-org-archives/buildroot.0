@@ -1,220 +1,175 @@
-From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@laposte.net>
-Date: Sat,  6 Mar 2021 22:00:48 +0100
-Subject: [Buildroot] [PATCH] configs/qemu_arm_vexpress_tz: bump versions and
- update
-Message-ID: <20210306210048.24399-1-vincent.stehle@laposte.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 6 Mar 2021 22:16:45 +0100
+Subject: [Buildroot] [git commit] Update for 2021.02
+Message-ID: <20210306210003.18DC9815EA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Bump TF-A to version 2.4.
-- Bump u-boot to version 2021.01.
-- Bump kernel to version 5.11.3.
+commit: https://git.buildroot.net/buildroot/commit/?id=e2fba6457bd9d9c720540332eaf0c1f8c29eab00
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We switch TF-A to a single FIP image. Thanks to this, TF-A does not need to
-use semihosting to load the various BL* anymore (but U-Boot still does).
-Update the readme.txt accordingly.
-
-We switch to a u-boot image for the ramdisk. This removes the need to
-update the fdt chosen node manually in the bootcmd.
-
-While at it, we drop the generation of the kernel dtb, which we do not use.
-In this config, we are indeed using the dtb generated on-the-fly by qemu
-and amended by TF-A.
-
-Signed-off-by: Vincent Stehl? <vincent.stehle@laposte.net>
-Cc: Gerome Burlats <gerome.burlats@smile.fr>
-Cc: Romain Naour <romain.naour@gmail.com>
-Cc: Etienne Carriere <etienne.carriere@linaro.org>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
+ CHANGES                    | 20 ++++++++++++++++++++
+ Makefile                   |  4 ++--
+ docs/website/download.html | 22 +++++++++++-----------
+ docs/website/news.html     | 21 +++++++++++++++++++++
+ support/misc/Vagrantfile   |  2 +-
+ 5 files changed, 55 insertions(+), 14 deletions(-)
 
-
-Hi,
-
-I would like to propose "modernizing" this qemu arm-vexpress-tz config a bit by
-switching to TF-A FIP image and u-boot image.
-
-The TF-A FIP image is a step towards getting rid of semihosting as TF-A does
-not need it anymore, only U-Boot. I find that aiming at getting rid of
-semihosting makes sense ultimately, as it would make it easier for people to
-e.g. add grub between U-Boot and Linux kernel locally. Let me know if that
-sounds like a reasonable motivation to you.
-
-Switching to a recent U-Boot (after 2019.01) has the drawback of causing the
-following error during boot:
-
-  ERROR: reserving fdt memory region failed (addr=7fe00000 size=200000)
-
-From what I can tell this is due to U-Boot being now overzealous about reserved
-regions, while not being able to handle overlapping regions correctly.
-I think this is harmless, and the boot and op-tee TA are functional.
-
-If you don't mind I would suggest we proceed with this update anyway. If
-anything, that could help people reproduce the issue and fix it in U-Boot
-upstream. Let me know if you prefer that we stay with U-Boot v2019.01 instead.
-
-I verified that secure world debug output with telnet and breaking at the first
-instruction of the kernel still work, as described in the readme.txt.
-
-Best regards,
-Vincent.
-
-
- board/qemu/arm-vexpress-tz/post-build.sh |  9 ++++-----
- board/qemu/arm-vexpress-tz/readme.txt    | 23 +++++++++++------------
- board/qemu/arm-vexpress-tz/u-boot.config |  3 ++-
- configs/qemu_arm_vexpress_tz_defconfig   | 14 +++++++-------
- 4 files changed, 24 insertions(+), 25 deletions(-)
-
-diff --git a/board/qemu/arm-vexpress-tz/post-build.sh b/board/qemu/arm-vexpress-tz/post-build.sh
-index 7ead69a99a..c9c81701dc 100755
---- a/board/qemu/arm-vexpress-tz/post-build.sh
-+++ b/board/qemu/arm-vexpress-tz/post-build.sh
-@@ -3,8 +3,7 @@
- set -u
- set -e
+diff --git a/CHANGES b/CHANGES
+index ab34fde9ae..f7b69af806 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,23 @@
++2021.02, released March 6th, 2021
++
++	Various fixes.
++
++	Toolchain: Correct Bootlin xtensa-lx60 dependencies
++
++	Updated/fixed packages: asterisk, belle-sip, bustle, dhcpcd,
++	dovecot, dovecot-pigeonhole, gnuchess, gnuradio,
++	gst1-plugins-bad, haproxy, jasper, kismet, libebml,
++	libeXosip2, libgeos, libhtp, libjpeg, libopenssl, libshout,
++	libstrophe, mosquitto, openblas, openssh, perl, privoxy,
++	prosody, python-pyyaml, python3-pyyaml, quagga, redis,
++	rust-bin, sox, suricata, tpm2-pkcs11, uclibc-ng-test, ushare,
++	util-linux, wolfssl, wpa_supplicant
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#13501: 2021.02.rc2: Unicode not work on qt 5.15.2
++	#13581: jpegsrc.v9d.tar.gz has changed hash
++
+ 2021.02-rc3, released February 27th, 2021
  
--# Rename boot images for the dear TF-A
--ln -sf u-boot.bin ${BINARIES_DIR}/bl33.bin
--ln -sf tee-header_v2.bin ${BINARIES_DIR}/bl32.bin
--ln -sf tee-pager_v2.bin ${BINARIES_DIR}/bl32_extra1.bin
--ln -sf tee-pageable_v2.bin ${BINARIES_DIR}/bl32_extra2.bin
-+# Create flash.bin TF-A FIP image from bl1.bin and fip.bin
-+cd "$BINARIES_DIR"
-+dd if=bl1.bin of=flash.bin bs=4096 conv=notrunc
-+dd if=fip.bin of=flash.bin seek=64 bs=4096 conv=notrunc
-diff --git a/board/qemu/arm-vexpress-tz/readme.txt b/board/qemu/arm-vexpress-tz/readme.txt
-index abce750291..d33640d0ca 100644
---- a/board/qemu/arm-vexpress-tz/readme.txt
-+++ b/board/qemu/arm-vexpress-tz/readme.txt
-@@ -6,19 +6,18 @@ builds of the QEMU host ARM target emulator.
-   make qemu_arm_vexpress_tz_defconfig
-   make
+ 	Fixes all over the tree.
+diff --git a/Makefile b/Makefile
+index 13e98e85be..9d6b962477 100644
+--- a/Makefile
++++ b/Makefile
+@@ -92,9 +92,9 @@ all:
+ .PHONY: all
  
--The BIOS used in the QEMU host is the ARM Trusted Firmware-A (TF-A). TF-A
--uses QEMU semihosting file access to access boot image files. The
--QEMU platform is quite specific for that in TF-A and one needs to
--run the emulation from the image directory for TF-A to boot the
--secure and non-secure worlds.
-+The BIOS used in the QEMU host is the ARM Trusted Firmware-A (TF-A).
-+In our configuration, U-Boot uses QEMU semihosting file access to load the
-+kernel and rootfs image files.
-+Run the emulation with:
+ # Set and export the version string
+-export BR2_VERSION := 2021.02-rc3
++export BR2_VERSION := 2021.02
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1614447000
++BR2_VERSION_EPOCH = 1615065000
  
--  cd output/images && ../host/bin/qemu-system-arm \
-+  ./output/host/bin/qemu-system-arm \
- 	-machine virt -machine secure=on -cpu cortex-a15 \
- 	-smp 1 -s -m 1024 -d unimp \
- 	-serial stdio \
- 	-netdev user,id=vmnic -device virtio-net-device,netdev=vmnic \
- 	-semihosting-config enable,target=native \
--	-bios bl1.bin # qemu_arm_vexpress_tz_defconfig
-+	-bios output/images/flash.bin # qemu_arm_vexpress_tz_defconfig
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/docs/website/download.html b/docs/website/download.html
+index 1bc7104a44..bd6499dfce 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -8,40 +8,40 @@
+     <div class="panel-heading">Download</div>
+     <div class="panel-body">
  
- The boot stage traces (if any) followed by the login prompt will appear
- in the terminal that started QEMU.
-@@ -57,14 +56,14 @@ To get the OP-TEE OS traces, append a second -serial argument after
- -serial stdio in the QEMU command line. I.e, the following enables 2 serial
- consoles over telnet connections:
+-      <h3 style="text-align: center;">Latest long term support release: <b>2020.02.11</b></h3>
++      <h3 style="text-align: center;">Latest stable / long term support release: <b>2021.02</b></h3>
  
--  cd output/images && ../host/bin/qemu-system-arm \
-+  ./output/host/bin/qemu-system-arm \
- 	-machine virt -machine secure=on -cpu cortex-a15 \
- 	-smp 1 -s -m 1024 -d unimp \
- 	-serial telnet:127.0.0.1:1235,server \
- 	-serial telnet:127.0.0.1:1236,server \
- 	-netdev user,id=vmnic -device virtio-net-device,netdev=vmnic \
- 	-semihosting-config enable,target=native \
--	-bios bl1.bin
-+	-bios output/images/flash.bin
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2020.02.11.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2021.02.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2020.02.11.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2021.02.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+-	  <h3><a href="/downloads/buildroot-2020.02.11.tar.gz">buildroot-2020.02.11.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2020.02.11.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2021.02.tar.gz">buildroot-2021.02.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2021.02.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2020.02.11.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2021.02.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2020.02.11.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2021.02.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
  
- QEMU is now waiting for the telnet connection. From another shell, open a
- telnet connection on the port for the U-boot and Linux consoles:
-@@ -87,13 +86,13 @@ host computer. We use option -S of qemu-system-arm to make QEMU
- waiting for the GDB continue instruction before booting the images.
+-	  <h3><a href="/downloads/buildroot-2020.02.11.tar.bz2">buildroot-2020.02.11.tar.bz2</a></h3>
+-	  <p><a href="/downloads/buildroot-2020.02.11.tar.bz2.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2021.02.tar.bz2">buildroot-2021.02.tar.bz2</a></h3>
++	  <p><a href="/downloads/buildroot-2021.02.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+-
++<!--
+       <h3 style="text-align: center;">Latest stable release: <b>2020.11.3</b></h3>
  
- From a first shell:
--  cd output/images && ../host/bin/qemu-system-arm \
-+  ./output/host/bin/qemu-system-arm \
- 	-machine virt -machine secure=on -cpu cortex-a15 \
- 	-smp 1 -s -m 1024 -d unimp \
- 	-serial stdio \
- 	-netdev user,id=vmnic -device virtio-net-device,netdev=vmnic \
- 	-semihosting-config enable,target=native \
--	-bios bl1.bin \
-+	-bios output/images/flash.bin \
- 	-S
+       <div class="row mt centered">
+@@ -109,7 +109,7 @@
+ 	  <p><a href="/downloads/buildroot-2021.02-rc3.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+-
++-->
+       This and earlier releases (and their PGP signatures) can always be downloaded from
+       <a href="/downloads/">http://buildroot.net/downloads/</a>.
+     </div>
+diff --git a/docs/website/news.html b/docs/website/news.html
+index c10230c41b..c882664c77 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,27 @@
+ <h2>News</h2>
+ <ul class="timeline">
  
- From a second shell:
-@@ -109,7 +108,7 @@ From this GDB console, connect to the target, load the OP-TEE core symbols,
- set a breakpoint to its entry point (__text_start) and start emulation:
++  <li>
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2021.02 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>6 March 2021</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>The stable 2021.02 release is out - Thanks to everyone
++	  contributing and testing the release candidates. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2021.02">CHANGES</a>
++	  file for more details
++	  and go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2021.02.tar.bz2">2021.02 release</a>.</p>
++
++	  <p>Notice that this is a long term support release which will be
++	  supported with security and other important fixes until March 2022.</p>
++      </div>
++    </div>
++  </li>
++
+   <li class="timeline-inverted">
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
+diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
+index 28a74b9929..685d8e3b75 100644
+--- a/support/misc/Vagrantfile
++++ b/support/misc/Vagrantfile
+@@ -5,7 +5,7 @@
+ ################################################################################
  
-   (gdb) target remote 127.0.0.1:1234
--  (gdb) symbol-file ./output/build/optee-os-<reference>/out/arm/core/tee.elf
-+  (gdb) symbol-file ./output/build/optee-os-<reference>/out/core/tee.elf
-   (gdb) hbreak __text_start
-   Hardware assisted breakpoint 1 at 0xe100000: file core/arch/arm/kernel/generic_entry_a32.S, line 246.
-   (gdb) cont
-diff --git a/board/qemu/arm-vexpress-tz/u-boot.config b/board/qemu/arm-vexpress-tz/u-boot.config
-index fd74bf1fe7..9f54f806ce 100644
---- a/board/qemu/arm-vexpress-tz/u-boot.config
-+++ b/board/qemu/arm-vexpress-tz/u-boot.config
-@@ -1,7 +1,8 @@
- CONFIG_SYS_TEXT_BASE=0x60000000
--CONFIG_BOOTCOMMAND="fdt addr ${fdt_addr} && fdt resize 1000 && smhload zImage ${kernel_addr_r} && smhload rootfs.cpio.gz ${ramdisk_addr_r} ramdisk_addr_end &&  setenv bootargs console=ttyAMA0,115200 earlyprintk=serial,ttyAMA0,115200 && fdt chosen ${ramdisk_addr_r} ${ramdisk_addr_end} && bootz ${kernel_addr_r} - ${fdt_addr}"
-+CONFIG_BOOTCOMMAND="smhload output/images/zImage ${kernel_addr_r} && smhload output/images/rootfs.cpio.uboot ${ramdisk_addr_r} && setenv bootargs console=ttyAMA0,115200 earlyprintk=serial,ttyAMA0,115200 && bootz ${kernel_addr_r} ${ramdisk_addr_r} ${fdt_addr}"
- CONFIG_SEMIHOSTING=y
- # Drop flash accesses
- CONFIG_ENV_IS_IN_FLASH=n
- CONFIG_MTD=n
- CONFIG_MTD_NOR_FLASH=n
-+CONFIG_ENV_IS_NOWHERE=y
-diff --git a/configs/qemu_arm_vexpress_tz_defconfig b/configs/qemu_arm_vexpress_tz_defconfig
-index 3e37024deb..602bdaf304 100644
---- a/configs/qemu_arm_vexpress_tz_defconfig
-+++ b/configs/qemu_arm_vexpress_tz_defconfig
-@@ -13,25 +13,25 @@ BR2_TOOLCHAIN_BUILDROOT_CXX=y
- # Filesystem
- BR2_TARGET_ROOTFS_CPIO=y
- BR2_TARGET_ROOTFS_CPIO_GZIP=y
-+BR2_TARGET_ROOTFS_CPIO_UIMAGE=y
- # BR2_TARGET_ROOTFS_TAR is not set
+ # Buildroot version to use
+-RELEASE='2020.11.3'
++RELEASE='2021.02'
  
--# Linux headers same as kernel, a 5.10 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
-+# Linux headers same as kernel, a 5.11 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_11=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.7"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.11.3"
- BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/arm-vexpress-tz/linux.fragment"
--BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca15_a7"
- 
- # TF-A for booting OP-TEE secure and uboot/linux non secure
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.2"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.4"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="qemu"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="BL32_RAM_LOCATION=tdram"
-@@ -51,7 +51,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.01"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.01"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="qemu_arm"
- BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/qemu/arm-vexpress-tz/u-boot.config"
- 
--- 
-2.30.0
+ ### Change here for more memory/cores ###
+ VM_MEMORY=2048
