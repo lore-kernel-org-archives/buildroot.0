@@ -1,92 +1,131 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 6 Mar 2021 23:10:49 +0100
-Subject: [Buildroot] [git commit] package/python-aioblescan: bump to version
- 0.2.7
-Message-ID: <20210308072139.D5CFB88971@busybox.osuosl.org>
+Date: Sat, 6 Mar 2021 22:56:50 +0100
+Subject: [Buildroot] [git commit] package/kodi-screensaver-rsxs: bump version
+Message-ID: <20210308072139.340AB81607@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8603fcbc254b2e625c9449951bdd84bc5b97fa10
+commit: https://git.buildroot.net/buildroot/commit/?id=792b03879c8e665345d8c26c1e3107e7b88936f8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+Removed patch 0001, ImageMagick code was removed upstream:
+https://github.com/xbmc/screensavers.rsxs/commit/e3793a1e5d120b0354d07d6bf9dc175af883e134#diff-f9e414fa2a69e3c79d590dd6e91236778d803a84669f93f0e550483f7be105e9L31
+
+Removed various dependencies after upstream cleanup:
+https://github.com/xbmc/screensavers.rsxs/commit/e3793a1e5d120b0354d07d6bf9dc175af883e134
+
+Switched opengl dependency to render system used by Kodi.
+
+Switch license file to LICENSE.md.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0001-Move-README-to-reStructured-text.patch    | 35 ++++++++++++++++++++++
- package/python-aioblescan/python-aioblescan.hash   |  6 ++--
- package/python-aioblescan/python-aioblescan.mk     |  4 +--
- 3 files changed, 40 insertions(+), 5 deletions(-)
+ .../0001-Disable-drempels.patch                    | 40 ----------------------
+ package/kodi-screensaver-rsxs/Config.in            | 10 ++----
+ .../kodi-screensaver-rsxs.hash                     |  4 +--
+ .../kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk |  6 ++--
+ 4 files changed, 8 insertions(+), 52 deletions(-)
 
-diff --git a/package/python-aioblescan/0001-Move-README-to-reStructured-text.patch b/package/python-aioblescan/0001-Move-README-to-reStructured-text.patch
-new file mode 100644
-index 0000000000..3db03bd835
---- /dev/null
-+++ b/package/python-aioblescan/0001-Move-README-to-reStructured-text.patch
-@@ -0,0 +1,35 @@
-+From 62260e0a42dd6c1c10660f68a531c49bd6cade2e Mon Sep 17 00:00:00 2001
-+From: Francois Wautier <francois@wautier.eu>
-+Date: Thu, 25 Feb 2021 20:07:08 +0700
-+Subject: [PATCH] Move README to reStructured text
-+
-+Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
-+---
-+ setup.py | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/setup.py b/setup.py
-+index 582a994..315b3bb 100644
-+--- a/setup.py
-++++ b/setup.py
-+@@ -4,7 +4,7 @@ import setuptools
-+ 
-+ version = "0.2.7"
-+ 
-+-with open("README.md", "r") as fh:
-++with open("README.rst", "r") as fh:
-+     long_description = fh.read()
-+ 
-+ setuptools.setup(
-+@@ -16,7 +16,7 @@ setuptools.setup(
-+     author_email="francois at wautier.eu",
-+     description="Scanning Bluetooth for advertised info with asyncio.",
-+     long_description=long_description,
-+-    long_description_content_type="text/markdown",
-++    long_description_content_type="text/x-rst",
-+     url="http://github.com/frawau/aioblescan",
-+     keywords=["bluetooth", "advertising", "hci", "ble"],
-+     license="MIT",
-+-- 
-+2.27.0
-+
-diff --git a/package/python-aioblescan/python-aioblescan.hash b/package/python-aioblescan/python-aioblescan.hash
-index 902a7a30f8..99a715dcd0 100644
---- a/package/python-aioblescan/python-aioblescan.hash
-+++ b/package/python-aioblescan/python-aioblescan.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/aioblescan/json
--md5	9ad3f04ea7ad4c81a53f8e1316985527  aioblescan-0.2.6.tar.gz
--sha256	2e45c325e070a0ee4e952a7d0c56e95ad230643e1057fb5f3e95ea5c99081436  aioblescan-0.2.6.tar.gz
-+md5  fbcbf92260269d401a197636412f0c99  aioblescan-0.2.7.tar.gz
-+sha256  2987f575c5129a21e42ad59e439feb3c96e0ad7210ef73af8eba1344106e5f5f  aioblescan-0.2.7.tar.gz
- # Locally computed sha256 checksums
--sha256	c2066cd44079e0c706234001af18cb6ad4b62fc68d0d08d29fdc7319916647e0  LICENSE.txt
-+sha256  c2066cd44079e0c706234001af18cb6ad4b62fc68d0d08d29fdc7319916647e0  LICENSE.txt
-diff --git a/package/python-aioblescan/python-aioblescan.mk b/package/python-aioblescan/python-aioblescan.mk
-index 6350007c70..2ace10503e 100644
---- a/package/python-aioblescan/python-aioblescan.mk
-+++ b/package/python-aioblescan/python-aioblescan.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/kodi-screensaver-rsxs/0001-Disable-drempels.patch b/package/kodi-screensaver-rsxs/0001-Disable-drempels.patch
+deleted file mode 100644
+index e76a9b9943..0000000000
+--- a/package/kodi-screensaver-rsxs/0001-Disable-drempels.patch
++++ /dev/null
+@@ -1,40 +0,0 @@
+-From 28c01686ba0d67d317e058776f01efba5e6471bd Mon Sep 17 00:00:00 2001
+-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+-Date: Sat, 13 Jul 2019 14:18:12 +0200
+-Subject: [PATCH] Disable drempels
+-
+-Does not build with ImageMagick 7.x:
+-
+-src/drempels/TexMgr.cpp:31:10: fatal error: magick/api.h:
+- No such file or directory
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- CMakeLists.txt | 4 +---
+- 1 file changed, 1 insertion(+), 3 deletions(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index a86ccd0..b5ca03f 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -40,8 +40,7 @@ include_directories(${KODI_INCLUDE_DIR}/.. # Hack way with "/..", need bigger Ko
+- if(ImageMagick_FOUND AND NOT ${OWN_IMAGE_MAGICK})
+-   message(STATUS "ImageMagick found in the system and is used")
+- else()
+--  message(STATUS "ImageMagick not found or forced and add custom created")
+--  add_subdirectory(lib/ImageMagick)
+-+  message(STATUS "ImageMagick not found")
+- endif()
+- add_subdirectory(lib/kodi/gui/gl)
+- add_subdirectory(lib/Implicit)
+-@@ -70,7 +69,6 @@ include(src/biof/CMakeLists.txt)
+- include(src/busyspheres/CMakeLists.txt)
+- include(src/colorfire/CMakeLists.txt)
+- include(src/cyclone/CMakeLists.txt)
+--include(src/drempels/CMakeLists.txt)
+- include(src/euphoria/CMakeLists.txt)
+- include(src/feedback/CMakeLists.txt)
+- include(src/fieldlines/CMakeLists.txt)
+--- 
+-2.20.1
+-
+diff --git a/package/kodi-screensaver-rsxs/Config.in b/package/kodi-screensaver-rsxs/Config.in
+index 076c7effa0..e88df1fe49 100644
+--- a/package/kodi-screensaver-rsxs/Config.in
++++ b/package/kodi-screensaver-rsxs/Config.in
+@@ -1,17 +1,13 @@
+ config BR2_PACKAGE_KODI_SCREENSAVER_RSXS
+ 	bool "kodi-screensaver-rsxs"
+-	depends on BR2_PACKAGE_HAS_LIBGL # libglu
++	depends on BR2_PACKAGE_KODI_RENDER_SYSTEM_GL
+ 	select BR2_PACKAGE_BZIP2
+ 	select BR2_PACKAGE_GLI
+ 	select BR2_PACKAGE_GLM
+-	select BR2_PACKAGE_JPEG
+-	select BR2_PACKAGE_LIBPNG
+-	select BR2_PACKAGE_LIBTOOL
+-	select BR2_PACKAGE_TIFF
+ 	help
+ 	  RSXS screensaver add-ons for Kodi
+ 
+ 	  https://github.com/xbmc/screensavers.rsxs
+ 
+-comment "kodi-screensaver-rsxs needs an OpenGL backend"
+-	depends on !BR2_PACKAGE_HAS_LIBGL
++comment "kodi-screensaver-rsxs needs OpenGL as Kodi render system"
++	depends on !BR2_PACKAGE_KODI_RENDER_SYSTEM_GL
+diff --git a/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.hash b/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.hash
+index f4987a44cd..ceb8d360f7 100644
+--- a/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.hash
++++ b/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  22ff3f0ca9679c59ce1a90b98d918dd10a8012b789729b2e44c04d4ce8c86ad8  kodi-screensaver-rsxs-7cb648507440d87948dec10d5bfdab3b722d37fe.tar.gz
+-sha256  fa0ff8b6a6267b9477be7d505aa384056633b4be17e0b9d308df9bd70d1c99f6  debian/copyright
++sha256  343ecedbf6cfb75d43bb94e805aae807d61b0cd4f681a05c126f65839e3687a3  kodi-screensaver-rsxs-21c65de59546bde770225f023747a39b345baffd.tar.gz
++sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk b/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk
+index aa881d0d59..9b839b3112 100644
+--- a/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk
++++ b/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--PYTHON_AIOBLESCAN_VERSION = 0.2.6
-+PYTHON_AIOBLESCAN_VERSION = 0.2.7
- PYTHON_AIOBLESCAN_SOURCE = aioblescan-$(PYTHON_AIOBLESCAN_VERSION).tar.gz
--PYTHON_AIOBLESCAN_SITE = https://files.pythonhosted.org/packages/66/b8/888c2eb4323ed498dbc7deeb8aee0cfec9edd8c25184b06a8874bb0cf84f
-+PYTHON_AIOBLESCAN_SITE = https://files.pythonhosted.org/packages/78/2c/c09d8f83ed6c2ca6c4f803f2e5c349698eb78b82c8d5e9302a8eed1a7480
- PYTHON_AIOBLESCAN_SETUP_TYPE = setuptools
- PYTHON_AIOBLESCAN_LICENSE = MIT
- PYTHON_AIOBLESCAN_LICENSE_FILES = LICENSE.txt
+-KODI_SCREENSAVER_RSXS_VERSION = 7cb648507440d87948dec10d5bfdab3b722d37fe
++KODI_SCREENSAVER_RSXS_VERSION = 21c65de59546bde770225f023747a39b345baffd
+ KODI_SCREENSAVER_RSXS_SITE = $(call github,xbmc,screensavers.rsxs,$(KODI_SCREENSAVER_RSXS_VERSION))
+ KODI_SCREENSAVER_RSXS_LICENSE = GPL-2.0+
+-KODI_SCREENSAVER_RSXS_LICENSE_FILES = debian/copyright
+-KODI_SCREENSAVER_RSXS_DEPENDENCIES = bzip2 gli glm jpeg kodi libpng libtool tiff
++KODI_SCREENSAVER_RSXS_LICENSE_FILES = LICENSE.md
++KODI_SCREENSAVER_RSXS_DEPENDENCIES = bzip2 gli glm kodi
+ 
+ $(eval $(cmake-package))
