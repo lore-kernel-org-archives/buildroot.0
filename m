@@ -1,51 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 6 Mar 2021 17:05:59 +0100
-Subject: [Buildroot] [git commit] docs/manual: do not expose CPE_ID_VALID as
- package-settable
-Message-ID: <20210306160433.9BFCE8163C@busybox.osuosl.org>
+Date: Sat, 6 Mar 2021 17:06:47 +0100
+Subject: [Buildroot] [git commit] package/sudo: cleanup the CPE_ID variables
+Message-ID: <20210306160433.A743281294@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2770ccf471f2284dc9cce51bee1a7db7aff3fb10
+commit: https://git.buildroot.net/buildroot/commit/?id=d0b208652f123eb0049aee20d88b66e0f86707ce
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-FOO_CPE_ID_VALID is an internal implementation detail. Packages should
-really define an actual CPE_ID variable to trigger their full CPE_ID
-definition.
+The CPE variables are derived from the package upstream values, so they
+must be set from the package values, not the other way around.
 
-Reported-by: Peter Korsgaard <peter@korsgaard.com>
+Also drop CPE_ID_VALID as it is implied as soon as at least one CPE
+variable is set.
+
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Peter Korsgaard <peter@korsgaard.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
 Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-[Peter: completely drop any mention of _CPE_ID_VALID in the manual]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/adding-packages-generic.txt | 10 ++--------
- 1 file changed, 2 insertions(+), 8 deletions(-)
+ package/sudo/sudo.mk | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index 75af18b70c..2201d4385e 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -528,14 +528,8 @@ LIBFOO_IGNORE_CVES += CVE-2020-54321
- +
- If any of those variables is defined, then the generic package
- infrastructure assumes the package provides valid CPE information. In
--this case, +LIBFOO_CPE_ID_VALID = YES+ will be set, and the generic
--package infrastructure will define +LIBFOO_CPE_ID+.
--+
--Alternatively, a package can also explicitly set +LIBFOO_CPE_ID_VALID
--= YES+ if the default values for +LIBFOO_CPE_ID_PREFIX+,
--+LIBFOO_CPE_ID_VENDOR+, +LIBFOO_CPE_ID_PRODUCT+,
--+LIBFOO_CPE_ID_VERSION+, +LIBFOO_CPE_ID_UPDATE+ are all correct for
--this package and don't need to be explicitly overridden.
-+this case, the generic package infrastructure will define
-++LIBFOO_CPE_ID+.
- +
- For a host package, if its +LIBFOO_CPE_ID_*+ variables are not
- defined, it inherits the value of those variables from the
+diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
+index 7f57c66b75..57c2292506 100644
+--- a/package/sudo/sudo.mk
++++ b/package/sudo/sudo.mk
+@@ -4,13 +4,14 @@
+ #
+ ################################################################################
+ 
+-SUDO_VERSION = $(SUDO_CPE_ID_VERSION)$(SUDO_CPE_ID_UPDATE)
++SUDO_VERSION_MAJOR = 1.9.5
++SUDO_VERSION_MINOR = p2
++SUDO_VERSION = $(SUDO_VERSION_MAJOR)$(SUDO_VERSION_MINOR)
+ SUDO_SITE = https://www.sudo.ws/sudo/dist
+ SUDO_LICENSE = ISC, BSD-3-Clause
+ SUDO_LICENSE_FILES = doc/LICENSE
+-SUDO_CPE_ID_VALID = YES
+-SUDO_CPE_ID_VERSION = 1.9.5
+-SUDO_CPE_ID_UPDATE = p2
++SUDO_CPE_ID_VERSION = $(SUDO_VERSION_MAJOR)
++SUDO_CPE_ID_UPDATE = $(SUDO_VERSION_MINOR)
+ # This is to avoid sudo's make install from chown()ing files which fails
+ SUDO_INSTALL_TARGET_OPTS = INSTALL_OWNER="" DESTDIR="$(TARGET_DIR)" install
+ SUDO_CONF_OPTS = \
