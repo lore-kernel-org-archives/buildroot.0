@@ -1,80 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 6 Mar 2021 22:56:50 +0100
-Subject: [Buildroot] [git commit branch/next]
- package/kodi-screensaver-cpblobs: bump version to 3.4.0-Matrix
-Message-ID: <20210306213555.A56CD86DA6@busybox.osuosl.org>
+Date: Sat, 6 Mar 2021 22:56:49 +0100
+Subject: [Buildroot] [git commit branch/next] package/kodi-pvr-pctv: bump
+ version to 6.1.0-Matrix
+Message-ID: <20210306213555.30DA786782@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6ee5476913f8bacf8e856ba344b2429b413fab65
+commit: https://git.buildroot.net/buildroot/commit/?id=ea50ce3a067d0d79e86074be09e49d63fd1dd556
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Remove dependency to libsoil:
-https://github.com/xbmc/screensaver.cpblobs/commit/c505105f277b7e4bae0797e1c3cf89a0515ff3a5
-
-Add dependency to glm and remove dependency to opengl, opengles support
-was added upstream:
-https://github.com/xbmc/screensaver.cpblobs/commit/cab48fbc8a7b288b758eb10c1c27caa99cc33f06
+Switch dependency to kodi after upstream removed the dependency to
+kodi-platform:
+https://github.com/kodi-pvr/pvr.pctv/commit/b6cebce2c9579a2bcce619dbba586eafd2cf2701
+https://github.com/kodi-pvr/pvr.pctv/commit/db2eca67995017c7b3b4755e5bf674faaebe77ea
 
 Switch license file to LICENSE.md.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-screensaver-cpblobs/Config.in                     |  6 +-----
- package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash |  4 ++--
- package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk   | 10 +++++++---
- 3 files changed, 10 insertions(+), 10 deletions(-)
+ package/kodi-pvr-pctv/Config.in          | 1 -
+ package/kodi-pvr-pctv/kodi-pvr-pctv.hash | 4 ++--
+ package/kodi-pvr-pctv/kodi-pvr-pctv.mk   | 6 +++---
+ 3 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/kodi-screensaver-cpblobs/Config.in b/package/kodi-screensaver-cpblobs/Config.in
-index 4e0003bddc..7f9a591418 100644
---- a/package/kodi-screensaver-cpblobs/Config.in
-+++ b/package/kodi-screensaver-cpblobs/Config.in
-@@ -1,11 +1,7 @@
- config BR2_PACKAGE_KODI_SCREENSAVER_CPBLOBS
- 	bool "kodi-screensaver-cpblobs"
--	depends on BR2_PACKAGE_HAS_LIBGL # libsoil
--	select BR2_PACKAGE_LIBSOIL
-+	select BR2_PACKAGE_GLM
+diff --git a/package/kodi-pvr-pctv/Config.in b/package/kodi-pvr-pctv/Config.in
+index 255cd4a5f0..11fe09b2f1 100644
+--- a/package/kodi-pvr-pctv/Config.in
++++ b/package/kodi-pvr-pctv/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_KODI_PVR_PCTV
+ 	bool "kodi-pvr-pctv"
+ 	select BR2_PACKAGE_JSONCPP
+-	select BR2_PACKAGE_KODI_PLATFORM
  	help
- 	  CpBlobs screensaver for Kodi
+ 	  PCTV PVR client addon for Kodi
  
- 	  https://github.com/xbmc/screensaver.cpblobs
--
--comment "kodi-screensaver-cpblobs needs OpenGL"
--	depends on !BR2_PACKAGE_HAS_LIBGL
-diff --git a/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash
-index 4ff614a995..bc77c36248 100644
---- a/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash
-+++ b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash
+diff --git a/package/kodi-pvr-pctv/kodi-pvr-pctv.hash b/package/kodi-pvr-pctv/kodi-pvr-pctv.hash
+index 30fb81a906..0e3f464cff 100644
+--- a/package/kodi-pvr-pctv/kodi-pvr-pctv.hash
++++ b/package/kodi-pvr-pctv/kodi-pvr-pctv.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  afab934a2c93f73334943775f45f5a1d065e74714528bc700459d110e88e43a4  kodi-screensaver-cpblobs-3.0.5-Leia.tar.gz
--sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-+sha256  eda36572da291d870dacbf3ad596e4ff3daed96350d9585583c279b55cfdc34a  kodi-screensaver-cpblobs-3.4.0-Matrix.tar.gz
+-sha256  10124e5444c6cfb0c77bad1d1122f6ba5fc233248d6b33066ba799f4dedceeee  kodi-pvr-pctv-2.4.7-Leia.tar.gz
+-sha256  43376e70ae80133530c8ce71a3b0dcde8529a8162d3b3956009eb8fc0f5c559c  debian/copyright
++sha256  94b8be4988cb6d8c61f6bdf237ddabb04d77fe4900f61411f5abf918eb5a078c  kodi-pvr-pctv-6.1.0-Matrix.tar.gz
 +sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk
-index 01f6bdf3d3..628f254a42 100644
---- a/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk
-+++ b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk
-@@ -4,10 +4,14 @@
+diff --git a/package/kodi-pvr-pctv/kodi-pvr-pctv.mk b/package/kodi-pvr-pctv/kodi-pvr-pctv.mk
+index 851788c96b..78d500e3e8 100644
+--- a/package/kodi-pvr-pctv/kodi-pvr-pctv.mk
++++ b/package/kodi-pvr-pctv/kodi-pvr-pctv.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--KODI_SCREENSAVER_CPBLOBS_VERSION = 3.0.5-Leia
-+KODI_SCREENSAVER_CPBLOBS_VERSION = 3.4.0-Matrix
- KODI_SCREENSAVER_CPBLOBS_SITE = $(call github,xbmc,screensaver.cpblobs,$(KODI_SCREENSAVER_CPBLOBS_VERSION))
- KODI_SCREENSAVER_CPBLOBS_LICENSE = GPL-2.0
--KODI_SCREENSAVER_CPBLOBS_LICENSE_FILES = LICENSE
--KODI_SCREENSAVER_CPBLOBS_DEPENDENCIES = kodi libsoil
-+KODI_SCREENSAVER_CPBLOBS_LICENSE_FILES = LICENSE.md
-+KODI_SCREENSAVER_CPBLOBS_DEPENDENCIES = glm kodi
-+
-+KODI_SCREENSAVER_CPBLOBS_CONF_OPTS += \
-+	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) $(shell $(PKG_CONFIG_HOST_BINARY) --cflags egl)" \
-+	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) $(shell $(PKG_CONFIG_HOST_BINARY) --cflags egl)"
+-KODI_PVR_PCTV_VERSION = 2.4.7-Leia
++KODI_PVR_PCTV_VERSION = 6.1.0-Matrix
+ KODI_PVR_PCTV_SITE = $(call github,kodi-pvr,pvr.pctv,$(KODI_PVR_PCTV_VERSION))
+ KODI_PVR_PCTV_LICENSE = GPL-2.0+
+-KODI_PVR_PCTV_LICENSE_FILES = debian/copyright
+-KODI_PVR_PCTV_DEPENDENCIES = jsoncpp kodi-platform
++KODI_PVR_PCTV_LICENSE_FILES = LICENSE.md
++KODI_PVR_PCTV_DEPENDENCIES = jsoncpp kodi
  
  $(eval $(cmake-package))
