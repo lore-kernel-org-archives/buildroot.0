@@ -1,31 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 6 Mar 2021 23:15:59 +0100
-Subject: [Buildroot] [PATCH] package/libnss: bump version to 3.62
-In-Reply-To: <20210222175202.384731-1-giulio.benetti@benettiengineering.com>
-References: <20210222175202.384731-1-giulio.benetti@benettiengineering.com>
-Message-ID: <20210306231559.695819ec@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 6 Mar 2021 23:16:46 +0100
+Subject: [Buildroot] [git commit branch/next] toolchain: disable gcc bug
+ 60620 if gcc version >= 10.x
+Message-ID: <20210306215355.3803B8150B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 22 Feb 2021 18:52:02 +0100
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=d8e6179807bdfc89608a037e31c0dcc43382bcb0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> Release Notes:
-> https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.62_release_notes
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
->  package/libnss/libnss.hash | 4 ++--
->  package/libnss/libnss.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+Since gcc version 10.x bug 60620 doesn't show anymore, so let's make it
+enabled up to versino 10.x excluded.
 
-Applied to next, thanks.
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ toolchain/Config.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index ce7e7f6cc4..1940c076a9 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -154,10 +154,11 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_85862
+ 
+ # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=90620
+ # ICE: in do_output_reload, at reload1.c:7978 on microblaze.
+-# It's still not fixed in gcc 9.x
++# This bug no longer exists in gcc 10.x
+ config BR2_TOOLCHAIN_HAS_GCC_BUG_90620
+ 	bool
+ 	default y if BR2_microblaze
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_10
+ 
+ # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=93847
+ # ICE: compiler error: Segmentation fault on Nios II. This bug
