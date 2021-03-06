@@ -1,94 +1,67 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 08 Mar 2021 07:44:51 -0000
-Subject: [Buildroot] [git commit] support/scripts/cpedb.py: drop CPE XML
- database caching
-Message-ID: <20210308072134.0FD348893D@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 6 Mar 2021 22:15:30 +0100
+Subject: [Buildroot] [git commit] package/kodi-pvr-dvblink: bump version to
+ 9.1.0-Matrix
+Message-ID: <20210308072138.0227D8893D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f81b0998eadc8aa8a4f8f205f5fa4d68438fb68d
+commit: https://git.buildroot.net/buildroot/commit/?id=6b99569d8d74e130c3607b1b853647c68015b70e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently, the CPE XML database is parsed into a Python dict, which is
-then pickled into a local file, to speed up the processing of further
-invocations.
+Switch dependency to kodi after upstream removed the dependency to
+kodi-platform:
+https://github.com/kodi-pvr/pvr.dvblink/commit/a07c82f1591b0231e66b3ae14fabffa88259b8ec
 
-However, it turns out that since the initial implementation, we have
-switched the XML parsing from the out of tree xmltodict module to the
-standard ElementTree one, which has made the parsing much faster. The
-pickle caching only saves 6 seconds, on something that takes more than
-13 minutes total.
+Switch license file to LICENSE.md.
 
-In addition, this pickle caching consumes a significant amount of RAM,
-causing the Python process to be OOM-killed on a server with 4 GB of
-RAM.
-
-So let's just drop this caching entirely.
-
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- support/scripts/cpedb.py | 40 ++++++----------------------------------
- 1 file changed, 6 insertions(+), 34 deletions(-)
+ package/kodi-pvr-dvblink/Config.in             | 1 -
+ package/kodi-pvr-dvblink/kodi-pvr-dvblink.hash | 4 ++--
+ package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk   | 6 +++---
+ 3 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/support/scripts/cpedb.py b/support/scripts/cpedb.py
-index 825ed6cb1e..b1e7e7012c 100644
---- a/support/scripts/cpedb.py
-+++ b/support/scripts/cpedb.py
-@@ -94,22 +94,6 @@ class CPEDB:
-         self.all_cpes_no_version = dict()
-         self.nvd_path = nvd_path
+diff --git a/package/kodi-pvr-dvblink/Config.in b/package/kodi-pvr-dvblink/Config.in
+index 57f11271ec..3358750376 100644
+--- a/package/kodi-pvr-dvblink/Config.in
++++ b/package/kodi-pvr-dvblink/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_KODI_PVR_DVBLINK
+ 	bool "kodi-pvr-dvblink"
+-	select BR2_PACKAGE_KODI_PLATFORM
+ 	select BR2_PACKAGE_TINYXML2
+ 	help
+ 	  Kodi's DVBLink client addon
+diff --git a/package/kodi-pvr-dvblink/kodi-pvr-dvblink.hash b/package/kodi-pvr-dvblink/kodi-pvr-dvblink.hash
+index c2121df025..ce4a42acac 100644
+--- a/package/kodi-pvr-dvblink/kodi-pvr-dvblink.hash
++++ b/package/kodi-pvr-dvblink/kodi-pvr-dvblink.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  ad7586abfe7b3f9dd67b3a2225c442fc8d2a442e48bd7df75b11652286392c2f  kodi-pvr-dvblink-4.7.2-Leia.tar.gz
+-sha256  4200fb35edb052f04dc43d267a1ad59468cb899e7b4931756b5830039b82716d  debian/copyright
++sha256  4b216871a16c7d9d9ab29f2788dfd0abdc828d1a2cb8203e84aee60ded75c9f6  kodi-pvr-dvblink-9.1.0-Matrix.tar.gz
++sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk b/package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk
+index 95bc7bbb4b..b691be6f5b 100644
+--- a/package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk
++++ b/package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
  
--    def gen_cached_cpedb(self, cpedb, cache_all_cpes, cache_all_cpes_no_version):
--        print("CPE: Unzipping xml manifest...")
--        nist_cpe_file = gzip.GzipFile(fileobj=open(cpedb, 'rb'))
--        print("CPE: Converting xml manifest to dict...")
--        tree = ET.parse(nist_cpe_file)
--        all_cpedb = tree.getroot()
--        self.parse_dict(all_cpedb)
--
--        print("CPE: Caching dictionary")
--        cpes_file = open(cache_all_cpes, 'wb')
--        pickle.dump(self.all_cpes, cpes_file)
--        cpes_file.close()
--        cpes_file = open(cache_all_cpes_no_version, 'wb')
--        pickle.dump(self.all_cpes_no_version, cpes_file)
--        cpes_file.close()
--
-     def get_xml_dict(self):
-         print("CPE: Setting up NIST dictionary")
-         if not os.path.exists(os.path.join(self.nvd_path, "cpe")):
-@@ -121,24 +105,12 @@ class CPEDB:
-             cpe_dict = requests.get(CPEDB_URL)
-             open(cpe_dict_local, "wb").write(cpe_dict.content)
+-KODI_PVR_DVBLINK_VERSION = 4.7.2-Leia
++KODI_PVR_DVBLINK_VERSION = 9.1.0-Matrix
+ KODI_PVR_DVBLINK_SITE = $(call github,kodi-pvr,pvr.dvblink,$(KODI_PVR_DVBLINK_VERSION))
+ KODI_PVR_DVBLINK_LICENSE = GPL-2.0+
+-KODI_PVR_DVBLINK_LICENSE_FILES = debian/copyright
+-KODI_PVR_DVBLINK_DEPENDENCIES = kodi-platform tinyxml2
++KODI_PVR_DVBLINK_LICENSE_FILES = LICENSE.md
++KODI_PVR_DVBLINK_DEPENDENCIES = kodi tinyxml2
  
--        cache_all_cpes = os.path.join(self.nvd_path, "cpe", "all_cpes.pkl")
--        cache_all_cpes_no_version = os.path.join(self.nvd_path, "cpe", "all_cpes_no_version.pkl")
--
--        if not os.path.exists(cache_all_cpes) or \
--           not os.path.exists(cache_all_cpes_no_version) or \
--           os.stat(cache_all_cpes).st_mtime < os.stat(cpe_dict_local).st_mtime or \
--           os.stat(cache_all_cpes_no_version).st_mtime < os.stat(cpe_dict_local).st_mtime:
--            self.gen_cached_cpedb(cpe_dict_local,
--                                  cache_all_cpes,
--                                  cache_all_cpes_no_version)
--
--        print("CPE: Loading CACHED dictionary")
--        cpe_file = open(cache_all_cpes, 'rb')
--        self.all_cpes = pickle.load(cpe_file)
--        cpe_file.close()
--        cpe_file = open(cache_all_cpes_no_version, 'rb')
--        self.all_cpes_no_version = pickle.load(cpe_file)
--        cpe_file.close()
-+        print("CPE: Unzipping xml manifest...")
-+        nist_cpe_file = gzip.GzipFile(fileobj=open(cpe_dict_local, 'rb'))
-+        print("CPE: Converting xml manifest to dict...")
-+        tree = ET.parse(nist_cpe_file)
-+        all_cpedb = tree.getroot()
-+        self.parse_dict(all_cpedb)
- 
-     def parse_dict(self, all_cpedb):
-         # Cycle through the dict and build two dict to be used for custom
+ $(eval $(cmake-package))
