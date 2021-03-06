@@ -1,70 +1,71 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 6 Mar 2021 21:53:16 +0100
-Subject: [Buildroot] [git commit] package/kodi-inputstream-rtmp: bump
- version to 3.4.0-Matrix
-Message-ID: <20210308072137.CDAB888918@busybox.osuosl.org>
+Date: Sat, 6 Mar 2021 22:15:31 +0100
+Subject: [Buildroot] [git commit] package/kodi-pvr-dvbviewer: bump version
+ to 7.2.0-Matrix
+Message-ID: <20210308072138.0CE2A88918@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d8a582f140695711d940b2d5611daf62a302b08d
+commit: https://git.buildroot.net/buildroot/commit/?id=1784f47c8530fcc05e2c92b4f1992969b3f0e9fb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Openssl and zlib are built as hard-dependencies of Kodi already. For the
-case that Kodi drops these dependencies we need to make sure that this
-package still finds its dependencies:
-https://github.com/xbmc/inputstream.rtmp/blob/Matrix/CMakeLists.txt#L8
+Switch dependency to kodi after upstream removed the dependency to
+kodi-platform:
+https://github.com/kodi-pvr/pvr.dvbviewer/commit/838efac4e46ad249d066437b96633c2e0b9dda1a
+https://github.com/kodi-pvr/pvr.dvbviewer/commit/7ca7ca3ab05f67606d7cdae15fcfab292ad00b37
+
+Add missing dependency to tinyxml.
 
 Switch license file to LICENSE.md.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-inputstream-rtmp/Config.in                  | 2 ++
- package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash | 4 ++--
- package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk   | 6 +++---
- 3 files changed, 7 insertions(+), 5 deletions(-)
+ package/kodi-pvr-dvbviewer/Config.in               | 2 +-
+ package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash | 4 ++--
+ package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk   | 6 +++---
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/kodi-inputstream-rtmp/Config.in b/package/kodi-inputstream-rtmp/Config.in
-index fa83926301..c4bd2e1380 100644
---- a/package/kodi-inputstream-rtmp/Config.in
-+++ b/package/kodi-inputstream-rtmp/Config.in
-@@ -1,6 +1,8 @@
- config BR2_PACKAGE_KODI_INPUTSTREAM_RTMP
- 	bool "kodi-inputstream-rtmp"
-+	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_RTMPDUMP
-+	select BR2_PACKAGE_ZLIB
+diff --git a/package/kodi-pvr-dvbviewer/Config.in b/package/kodi-pvr-dvbviewer/Config.in
+index e7dd7b3eb6..6a47d154fc 100644
+--- a/package/kodi-pvr-dvbviewer/Config.in
++++ b/package/kodi-pvr-dvbviewer/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_KODI_PVR_DVBVIEWER
+ 	bool "kodi-pvr-dvbviewer"
+-	select BR2_PACKAGE_KODI_PLATFORM
++	select BR2_PACKAGE_TINYXML
  	help
- 	  RTMP input stream add-on for Kodi
+ 	  Kodi's DVBViewer client addon
  
-diff --git a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
-index d472b89ba9..e645fb14bb 100644
---- a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
-+++ b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
+diff --git a/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash b/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash
+index ec2013412f..a2aac32bf3 100644
+--- a/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash
++++ b/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  56dac63262fa736620863900d903616d4827d735992e6d8beda84e377a5599e5  kodi-inputstream-rtmp-2.0.9-Leia.tar.gz
--sha256  ddba7d22c2586f13de40786c21f3b87c6913c9937f4862dc828d33cfff0395eb  debian/copyright
-+sha256  efaaa9b07c18810582a3826df476fc36a2aac82be7512271545073c3f6cc0212  kodi-inputstream-rtmp-3.4.0-Matrix.tar.gz
+-sha256  8a3d167e652574caf30ba0ce9c22d278715e0237774b817e37826f1b2d647bff  kodi-pvr-dvbviewer-3.7.11-Leia.tar.gz
+-sha256  5757dbd6a8731e9395508cd7ab9ca0ea0c2863a7aac7136299d40549c88c9c2c  debian/copyright
++sha256  aa81c0a59c00aa13bc1ea3adc078e2910fde42bc86ad3a78ecefc6e4c3d5de59  kodi-pvr-dvbviewer-7.2.0-Matrix.tar.gz
 +sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
-index e850be40ff..6029b7d35c 100644
---- a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
-+++ b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
+diff --git a/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk b/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk
+index b88d3d86cd..cbc12ed9e5 100644
+--- a/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk
++++ b/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk
 @@ -4,10 +4,10 @@
  #
  ################################################################################
  
--KODI_INPUTSTREAM_RTMP_VERSION = 2.0.9-Leia
-+KODI_INPUTSTREAM_RTMP_VERSION = 3.4.0-Matrix
- KODI_INPUTSTREAM_RTMP_SITE = $(call github,xbmc,inputstream.rtmp,$(KODI_INPUTSTREAM_RTMP_VERSION))
- KODI_INPUTSTREAM_RTMP_LICENSE = GPL-2.0+
--KODI_INPUTSTREAM_RTMP_LICENSE_FILES = debian/copyright
--KODI_INPUTSTREAM_RTMP_DEPENDENCIES = kodi rtmpdump
-+KODI_INPUTSTREAM_RTMP_LICENSE_FILES = LICENSE.md
-+KODI_INPUTSTREAM_RTMP_DEPENDENCIES = kodi openssl rtmpdump zlib
+-KODI_PVR_DVBVIEWER_VERSION = 3.7.11-Leia
++KODI_PVR_DVBVIEWER_VERSION = 7.2.0-Matrix
+ KODI_PVR_DVBVIEWER_SITE = $(call github,kodi-pvr,pvr.dvbviewer,$(KODI_PVR_DVBVIEWER_VERSION))
+ KODI_PVR_DVBVIEWER_LICENSE = GPL-2.0+
+-KODI_PVR_DVBVIEWER_LICENSE_FILES = debian/copyright
+-KODI_PVR_DVBVIEWER_DEPENDENCIES = kodi-platform
++KODI_PVR_DVBVIEWER_LICENSE_FILES = LICENSE.md
++KODI_PVR_DVBVIEWER_DEPENDENCIES = kodi tinyxml
  
  $(eval $(cmake-package))
