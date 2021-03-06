@@ -1,72 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 6 Mar 2021 22:56:50 +0100
-Subject: [Buildroot] [git commit branch/next]
- package/kodi-screensaver-pingpong: bump version to 2.4.0-Matrix
-Message-ID: <20210306213555.CD5E086782@busybox.osuosl.org>
+Date: Sat, 6 Mar 2021 22:56:51 +0100
+Subject: [Buildroot] [git commit branch/next] package/kodi-vfs-sftp: bump
+ version to 2.0.0-Matrix
+Message-ID: <20210306213556.32CE786DA6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2d300aa916221f55cacce28c9f3056f2518f946b
+commit: https://git.buildroot.net/buildroot/commit/?id=d94599a175078e4644bf9a516c77a30707d75e2d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Remove dependency to opengl, add dependency to glm, opengles support
-was added upstream:
-https://github.com/xbmc/screensaver.pingpong/commit/39ccbf75e6a7a56781329aeb508ae4f2ce210e4f
+Upstream removed usage of libplatform
+https://github.com/xbmc/vfs.sftp/commit/a4fb0019a6b20c2e9b44ff80dd084002df6052a9
 
-Switch license file to LICENSE.md.
+Added remaining dependencies and removed unused kodi-platform:
+https://github.com/xbmc/vfs.sftp/blob/Matrix/CMakeLists.txt#L6
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-screensaver-pingpong/Config.in                      | 5 +----
- package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash | 4 ++--
- package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk   | 6 +++---
- 3 files changed, 6 insertions(+), 9 deletions(-)
+ package/kodi-vfs-sftp/Config.in          | 4 ++--
+ package/kodi-vfs-sftp/kodi-vfs-sftp.hash | 2 +-
+ package/kodi-vfs-sftp/kodi-vfs-sftp.mk   | 4 ++--
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/kodi-screensaver-pingpong/Config.in b/package/kodi-screensaver-pingpong/Config.in
-index bc76fffd6e..2983f7c2ea 100644
---- a/package/kodi-screensaver-pingpong/Config.in
-+++ b/package/kodi-screensaver-pingpong/Config.in
-@@ -1,10 +1,7 @@
- config BR2_PACKAGE_KODI_SCREENSAVER_PINGPONG
- 	bool "kodi-screensaver-pingpong"
--	depends on BR2_PACKAGE_HAS_LIBGL
-+	select BR2_PACKAGE_GLM
+diff --git a/package/kodi-vfs-sftp/Config.in b/package/kodi-vfs-sftp/Config.in
+index a939bd927d..b742777ff0 100644
+--- a/package/kodi-vfs-sftp/Config.in
++++ b/package/kodi-vfs-sftp/Config.in
+@@ -1,8 +1,8 @@
+ config BR2_PACKAGE_KODI_VFS_SFTP
+ 	bool "kodi-vfs-sftp"
+-	select BR2_PACKAGE_KODI_PLATFORM
+-	select BR2_PACKAGE_LIBPLATFORM
+ 	select BR2_PACKAGE_LIBSSH
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_ZLIB
  	help
- 	  Ping-pong screensaver for Kodi
+ 	  SFTP VFS addon for Kodi
  
- 	  https://github.com/xbmc/screensaver.pingpong
--
--comment "kodi-screensaver-pingpong needs OpenGL"
--	depends on !BR2_PACKAGE_HAS_LIBGL
-diff --git a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash
-index 4b6114fd16..245fdfdbe9 100644
---- a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash
-+++ b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash
+diff --git a/package/kodi-vfs-sftp/kodi-vfs-sftp.hash b/package/kodi-vfs-sftp/kodi-vfs-sftp.hash
+index a17c2d32c6..d12a85437b 100644
+--- a/package/kodi-vfs-sftp/kodi-vfs-sftp.hash
++++ b/package/kodi-vfs-sftp/kodi-vfs-sftp.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  b87e65d2e3c290de7167e1098899d5816103958a99769d84e930ffd2cbfa7d00  kodi-screensaver-pingpong-2.1.3-Leia.tar.gz
--sha256  96e9b817ea6384e3d2c5241c8a0504df11d6f8bd0a2f58f25df7152da64f263c  debian/copyright
-+sha256  c38cda571b345d61882b43cea839536fa6fbfbb08e07231e8d8bc8adb8d28c08  kodi-screensaver-pingpong-2.4.0-Matrix.tar.gz
-+sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk
-index 929539f044..cd794128f3 100644
---- a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk
-+++ b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk
+-sha256  dc3db18b6cef90cd518b741e5c9bc7b3f4412774ee60bf70b451a8d2fc88a091  kodi-vfs-sftp-1.0.6-Leia.tar.gz
++sha256  b15c5dde7b3aadb3e82e61cb9b0440812b6c2f65b38c6c25aef726f97e746f68  kodi-vfs-sftp-2.0.0-Matrix.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-vfs-sftp/kodi-vfs-sftp.mk b/package/kodi-vfs-sftp/kodi-vfs-sftp.mk
+index 3870ff9b5b..b1b0bef36d 100644
+--- a/package/kodi-vfs-sftp/kodi-vfs-sftp.mk
++++ b/package/kodi-vfs-sftp/kodi-vfs-sftp.mk
 @@ -4,10 +4,10 @@
  #
  ################################################################################
  
--KODI_SCREENSAVER_PINGPONG_VERSION = 2.1.3-Leia
-+KODI_SCREENSAVER_PINGPONG_VERSION = 2.4.0-Matrix
- KODI_SCREENSAVER_PINGPONG_SITE = $(call github,xbmc,screensaver.pingpong,$(KODI_SCREENSAVER_PINGPONG_VERSION))
- KODI_SCREENSAVER_PINGPONG_LICENSE = GPL-2.0+
--KODI_SCREENSAVER_PINGPONG_LICENSE_FILES = debian/copyright
--KODI_SCREENSAVER_PINGPONG_DEPENDENCIES = kodi
-+KODI_SCREENSAVER_PINGPONG_LICENSE_FILES = LICENSE.md
-+KODI_SCREENSAVER_PINGPONG_DEPENDENCIES = glm kodi
+-KODI_VFS_SFTP_VERSION = 1.0.6-Leia
++KODI_VFS_SFTP_VERSION = 2.0.0-Matrix
+ KODI_VFS_SFTP_SITE = $(call github,xbmc,vfs.sftp,$(KODI_VFS_SFTP_VERSION))
+ KODI_VFS_SFTP_LICENSE = GPL-2.0+
+ KODI_VFS_SFTP_LICENSE_FILES = LICENSE.md
+-KODI_VFS_SFTP_DEPENDENCIES = kodi-platform libplatform libssh
++KODI_VFS_SFTP_DEPENDENCIES = kodi libssh openssl zlib
  
  $(eval $(cmake-package))
