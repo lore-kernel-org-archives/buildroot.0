@@ -1,70 +1,70 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 6 Mar 2021 22:56:49 +0100
-Subject: [Buildroot] [git commit] package/kodi-screensaver-asteroids: bump
- version to 2.6.0-Matrix
-Message-ID: <20210308072138.D586088918@busybox.osuosl.org>
+Date: Sat, 6 Mar 2021 22:56:48 +0100
+Subject: [Buildroot] [git commit] package/kodi-pvr-njoy: bump version to
+ 7.1.0-Matrix
+Message-ID: <20210308072138.7227A88971@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=de87bbe0b402c5dc97772d4780095778214edbf9
+commit: https://git.buildroot.net/buildroot/commit/?id=f45a4ce07b5b9fe73e65c9964fdafbecd89819c8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Remove dependency to opengl, opengles support was fixed upstream:
-https://github.com/xbmc/screensaver.asteroids/commit/360a02fc20925fa17179f3298dd4515b4354e266
+Switch dependency to kodi after upstream removed the dependency to
+kodi-platform:
+https://github.com/kodi-pvr/pvr.njoy/commit/eb5613fb8bbf45643e211147f39f106ea9ff573d
+
+Added missing dependency to tinyxml.
 
 Switch license file to LICENSE.md.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-screensaver-asteroids/Config.in                       | 4 ----
- package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash | 4 ++--
- package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk   | 4 ++--
- 3 files changed, 4 insertions(+), 8 deletions(-)
+ package/kodi-pvr-njoy/Config.in          | 2 +-
+ package/kodi-pvr-njoy/kodi-pvr-njoy.hash | 4 ++--
+ package/kodi-pvr-njoy/kodi-pvr-njoy.mk   | 6 +++---
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/kodi-screensaver-asteroids/Config.in b/package/kodi-screensaver-asteroids/Config.in
-index 3d66c3dcc3..833e065dfa 100644
---- a/package/kodi-screensaver-asteroids/Config.in
-+++ b/package/kodi-screensaver-asteroids/Config.in
-@@ -1,11 +1,7 @@
- config BR2_PACKAGE_KODI_SCREENSAVER_ASTEROIDS
- 	bool "kodi-screensaver-asteroids"
--	depends on BR2_PACKAGE_HAS_LIBGL
- 	select BR2_PACKAGE_GLM
+diff --git a/package/kodi-pvr-njoy/Config.in b/package/kodi-pvr-njoy/Config.in
+index 33c493cb8b..bb84ea3a66 100644
+--- a/package/kodi-pvr-njoy/Config.in
++++ b/package/kodi-pvr-njoy/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_KODI_PVR_NJOY
+ 	bool "kodi-pvr-njoy"
+-	select BR2_PACKAGE_KODI_PLATFORM
++	select BR2_PACKAGE_TINYXML
  	help
- 	  Asteroids screensaver for Kodi
+ 	  Kodi's Njoy N7 client addon
  
- 	  https://github.com/xbmc/screensaver.asteroids
--
--comment "kodi-screensaver-asteroids needs OpenGL"
--	depends on !BR2_PACKAGE_HAS_LIBGL
-diff --git a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash
-index e6855a3bc6..a8886d2733 100644
---- a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash
-+++ b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash
+diff --git a/package/kodi-pvr-njoy/kodi-pvr-njoy.hash b/package/kodi-pvr-njoy/kodi-pvr-njoy.hash
+index 3071dfac67..76e5e988db 100644
+--- a/package/kodi-pvr-njoy/kodi-pvr-njoy.hash
++++ b/package/kodi-pvr-njoy/kodi-pvr-njoy.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  f4b54ed79eedd1a39e24dcbe8d372dbfc9edbc9358499ea9ab28777dd9082ee3  kodi-screensaver-asteroids-2.3.3-Leia.tar.gz
--sha256  297a1d34e6000f1b1a924f5ab75c16c2270968bfa47357dd8fa3799c9dfc47d8  debian/copyright
-+sha256  b60d0123dd2ad2326a03b2a66a3cdba3ac17f0a109c4ecedc3216699ca28cae2  kodi-screensaver-asteroids-2.6.0-Matrix.tar.gz
+-sha256  8c42a3c3754d7a07de9682504c4883a584eb21a92b9af70f0129ffc2707c1554  kodi-pvr-njoy-3.4.2-Leia.tar.gz
+-sha256  9d42154eabd84ae131cc6384a3ea0fc622c3551595564bec7a6bec8df4a57fbd  debian/copyright
++sha256  26134e815efd38fa09507a6119e6463c4785a78a417e253558d23a94a9989613  kodi-pvr-njoy-7.1.0-Matrix.tar.gz
 +sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
-index dcd0a3d34c..add0ca5b9b 100644
---- a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
-+++ b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
+diff --git a/package/kodi-pvr-njoy/kodi-pvr-njoy.mk b/package/kodi-pvr-njoy/kodi-pvr-njoy.mk
+index ca86d46d85..17a69af73b 100644
+--- a/package/kodi-pvr-njoy/kodi-pvr-njoy.mk
++++ b/package/kodi-pvr-njoy/kodi-pvr-njoy.mk
 @@ -4,10 +4,10 @@
  #
  ################################################################################
  
--KODI_SCREENSAVER_ASTEROIDS_VERSION = 2.3.3-Leia
-+KODI_SCREENSAVER_ASTEROIDS_VERSION = 2.6.0-Matrix
- KODI_SCREENSAVER_ASTEROIDS_SITE = $(call github,xbmc,screensaver.asteroids,$(KODI_SCREENSAVER_ASTEROIDS_VERSION))
- KODI_SCREENSAVER_ASTEROIDS_LICENSE = GPL-2.0+
--KODI_SCREENSAVER_ASTEROIDS_LICENSE_FILES = debian/copyright
-+KODI_SCREENSAVER_ASTEROIDS_LICENSE_FILES = LICENSE.md
- KODI_SCREENSAVER_ASTEROIDS_DEPENDENCIES = glm kodi
+-KODI_PVR_NJOY_VERSION = 3.4.2-Leia
++KODI_PVR_NJOY_VERSION = 7.1.0-Matrix
+ KODI_PVR_NJOY_SITE = $(call github,kodi-pvr,pvr.njoy,$(KODI_PVR_NJOY_VERSION))
+ KODI_PVR_NJOY_LICENSE = GPL-2.0+
+-KODI_PVR_NJOY_LICENSE_FILES = debian/copyright
+-KODI_PVR_NJOY_DEPENDENCIES = kodi-platform
++KODI_PVR_NJOY_LICENSE_FILES = LICENSE.md
++KODI_PVR_NJOY_DEPENDENCIES = kodi tinyxml
  
  $(eval $(cmake-package))
