@@ -1,89 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 6 Mar 2021 22:56:50 +0100
-Subject: [Buildroot] [git commit] package/kodi-vfs-libarchive: new package
-Message-ID: <20210308072139.54CB581132@busybox.osuosl.org>
+Date: Sat, 6 Mar 2021 22:56:51 +0100
+Subject: [Buildroot] [git commit] package/kodi-visualisation-shadertoy: bump
+ version to 2.3.0-Matrix
+Message-ID: <20210308072139.88AD881607@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=39e482e791d799ec03db8e7655e21d092898e789
+commit: https://git.buildroot.net/buildroot/commit/?id=eb9cef745cf6595617ae102dda1aacd48c2462b4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Switch dependency to kodi after upstream removed the dependency to
+kodi-platform:
+https://github.com/xbmc/visualization.shadertoy/commit/3fa4d118dcee2025620eb342d1a22a956beb06e5
+
+Switch license file to LICENSE.md.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-vfs-libarchive/Config.in               | 13 +++++++++++++
- .../kodi-vfs-libarchive/kodi-vfs-libarchive.hash    |  3 +++
- package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk  | 21 +++++++++++++++++++++
- package/kodi/Config.in                              |  1 +
- 4 files changed, 38 insertions(+)
+ package/kodi-visualisation-shadertoy/Config.in                      | 1 -
+ .../kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.hash  | 4 ++--
+ .../kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk    | 6 +++---
+ 3 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/kodi-vfs-libarchive/Config.in b/package/kodi-vfs-libarchive/Config.in
-new file mode 100644
-index 0000000000..6720e5206e
---- /dev/null
-+++ b/package/kodi-vfs-libarchive/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_KODI_VFS_LIBARCHIVE
-+	bool "kodi-vfs-libarchive"
-+	select BR2_PACKAGE_BZIP2
-+	select BR2_PACKAGE_LIBARCHIVE
-+	select BR2_PACKAGE_LZ4
-+	select BR2_PACKAGE_LZO
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_XZ
-+	select BR2_PACKAGE_ZLIB
-+	help
-+	  Libarchive VFS add-on for Kodi
-+
-+	  https://github.com/xbmc/vfs.libarchive
-diff --git a/package/kodi-vfs-libarchive/kodi-vfs-libarchive.hash b/package/kodi-vfs-libarchive/kodi-vfs-libarchive.hash
-new file mode 100644
-index 0000000000..59b3bc1078
---- /dev/null
-+++ b/package/kodi-vfs-libarchive/kodi-vfs-libarchive.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  6fd70f0e2775e9c4eef2e8b529396f1e739fe3e43e0d4202d7f08ab4a30fa760  kodi-vfs-libarchive-2.0.0-Matrix.tar.gz
-+sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk b/package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk
-new file mode 100644
-index 0000000000..5278f50136
---- /dev/null
-+++ b/package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk
-@@ -0,0 +1,21 @@
-+################################################################################
-+#
-+# kodi-vfs-libarchive
-+#
-+################################################################################
-+
-+KODI_VFS_LIBARCHIVE_VERSION = 2.0.0-Matrix
-+KODI_VFS_LIBARCHIVE_SITE = $(call github,xbmc,vfs.libarchive,$(KODI_VFS_LIBARCHIVE_VERSION))
-+KODI_VFS_LIBARCHIVE_LICENSE = GPL-2.0+
-+KODI_VFS_LIBARCHIVE_LICENSE_FILES = LICENSE.md
-+KODI_VFS_LIBARCHIVE_DEPENDENCIES = \
-+	bzip2 \
-+	kodi \
-+	libarchive \
-+	lz4 \
-+	lzo \
-+	openssl \
-+	xz \
-+	zlib
-+
-+$(eval $(cmake-package))
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index eefdd54990..a104ba53c3 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -347,6 +347,7 @@ menu "Skins"
- endmenu
+diff --git a/package/kodi-visualisation-shadertoy/Config.in b/package/kodi-visualisation-shadertoy/Config.in
+index 1fabba5ef5..aa671aae13 100644
+--- a/package/kodi-visualisation-shadertoy/Config.in
++++ b/package/kodi-visualisation-shadertoy/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_KODI_VISUALISATION_SHADERTOY
+ 	bool "kodi-visualisation-shadertoy"
+ 	select BR2_PACKAGE_GLM
+-	select BR2_PACKAGE_LIBPLATFORM
+ 	help
+ 	  Shadertoy visualiser for Kodi
  
- menu "Virtual file systems"
-+	source "package/kodi-vfs-libarchive/Config.in"
- 	source "package/kodi-vfs-rar/Config.in"
- 	source "package/kodi-vfs-sftp/Config.in"
- endmenu
+diff --git a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.hash b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.hash
+index 67ab8867e6..8ecdfb6d50 100644
+--- a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.hash
++++ b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  07724fc59cc5f960a941b8255af326e87fa9fbc8234498c7e21d8a46050e0dd4  kodi-visualisation-shadertoy-1.2.4-Leia.tar.gz
+-sha256  e33ac3ac6ca1bdd4a4a411481d43579d855622e7ecc207809b5f49ea617db480  debian/copyright
++sha256  fbee4d8d4a41013705848eb89d4dcd55fe915a1ff997a60c800aa1bdd157530b  kodi-visualisation-shadertoy-2.3.0-Matrix.tar.gz
++sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk
+index 865abf02cc..f5ad505fe7 100644
+--- a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk
++++ b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-KODI_VISUALISATION_SHADERTOY_VERSION = 1.2.4-Leia
++KODI_VISUALISATION_SHADERTOY_VERSION = 2.3.0-Matrix
+ KODI_VISUALISATION_SHADERTOY_SITE = $(call github,xbmc,visualization.shadertoy,$(KODI_VISUALISATION_SHADERTOY_VERSION))
+ KODI_VISUALISATION_SHADERTOY_LICENSE = GPL-2.0+
+-KODI_VISUALISATION_SHADERTOY_LICENSE_FILES = debian/copyright
+-KODI_VISUALISATION_SHADERTOY_DEPENDENCIES = glm kodi libplatform
++KODI_VISUALISATION_SHADERTOY_LICENSE_FILES = LICENSE.md
++KODI_VISUALISATION_SHADERTOY_DEPENDENCIES = glm kodi
+ 
+ $(eval $(cmake-package))
