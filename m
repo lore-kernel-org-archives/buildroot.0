@@ -1,43 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 6 Mar 2021 23:32:14 +0100
-Subject: [Buildroot] [git commit] package/lttng-libust: set rundir to
- /run/lttng unconditionally
-Message-ID: <20210308072140.3A8DE88918@busybox.osuosl.org>
+Date: Sat, 6 Mar 2021 23:32:37 +0100
+Subject: [Buildroot] [git commit] boot/optee-os: bump to version 3.12.0
+Message-ID: <20210308072140.4D7498896D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=52912b2cb0112cff94fbe36f367ad5e5d24b139c
+commit: https://git.buildroot.net/buildroot/commit/?id=80d1bc9b199491cc3cff3b0d82fed939355df2b0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Buildroot ensures that all init-systems have a /run directory,
-this should be the preferred location.
+Bump OP-TEE OS package version to OP-TEE release 3.12.0.
 
-Signed-off-by: Norbert Lange <nolange79@gmail.com>
+Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/lttng-libust/lttng-libust.mk | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ boot/optee-os/Config.in     | 4 ++--
+ boot/optee-os/optee-os.hash | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/lttng-libust/lttng-libust.mk b/package/lttng-libust/lttng-libust.mk
-index 69dc4473f0..608e8781b1 100644
---- a/package/lttng-libust/lttng-libust.mk
-+++ b/package/lttng-libust/lttng-libust.mk
-@@ -11,11 +11,10 @@ LTTNG_LIBUST_LICENSE = LGPL-2.1, MIT (system headers), GPL-2.0 (liblttng-ust-ctl
- LTTNG_LIBUST_LICENSE_FILES = COPYING
- LTTNG_LIBUST_INSTALL_STAGING = YES
- LTTNG_LIBUST_DEPENDENCIES = liburcu util-linux
--LTTNG_LIBUST_CONF_OPTS += --disable-man-pages --disable-examples
--
--ifeq ($(BR2_INIT_SYSTEMD),y)
--LTTNG_LIBUST_CONF_OPTS += --with-lttng-system-rundir=/run/lttng
--endif
-+LTTNG_LIBUST_CONF_OPTS = \
-+	--disable-man-pages \
-+	--disable-examples \
-+	--with-lttng-system-rundir=/run/lttng
+diff --git a/boot/optee-os/Config.in b/boot/optee-os/Config.in
+index 3076be6b42..8e833ecd75 100644
+--- a/boot/optee-os/Config.in
++++ b/boot/optee-os/Config.in
+@@ -18,7 +18,7 @@ choice
+ 	  Select the version of OP-TEE OS you want to use
  
- ifeq ($(BR2_PACKAGE_PYTHON),y)
- LTTNG_LIBUST_DEPENDENCIES += python
+ config BR2_TARGET_OPTEE_OS_LATEST
+-	bool "3.11.0"
++	bool "3.12.0"
+ 	help
+ 	  Use the latest release tag from the OP-TEE OS official Git
+ 	  repository.
+@@ -50,7 +50,7 @@ endif
+ 
+ config BR2_TARGET_OPTEE_OS_VERSION
+ 	string
+-	default "3.11.0"	if BR2_TARGET_OPTEE_OS_LATEST
++	default "3.12.0"	if BR2_TARGET_OPTEE_OS_LATEST
+ 	default BR2_TARGET_OPTEE_OS_CUSTOM_REPO_VERSION \
+ 				if BR2_TARGET_OPTEE_OS_CUSTOM_GIT
+ 
+diff --git a/boot/optee-os/optee-os.hash b/boot/optee-os/optee-os.hash
+index 0d60cebea1..36bc1d9593 100644
+--- a/boot/optee-os/optee-os.hash
++++ b/boot/optee-os/optee-os.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/OP-TEE/optee_os/archive/3.11.0.tar.gz
+-sha256 3c34eda1052fbb9ed36fcfdfaecfd2685023b9290670c1a5982f8a0457bfd2cb  optee-os-3.11.0.tar.gz
++# From https://github.com/OP-TEE/optee_os/archive/3.12.0/optee-os-3.12.0.tar.gz
++sha256 b13991099f25d00dac479db93b55034cb93d206e296f2c7aa9c42b92bca2c783  optee-os-3.12.0.tar.gz
+ # Locally computed
+ sha256 1247ee90858f4037b6cac63cbffddfed435d0d73c631b37d78c1e6e6ab3e5d1a  LICENSE
