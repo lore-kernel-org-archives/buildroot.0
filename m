@@ -1,63 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 6 Mar 2021 21:52:06 +0100
-Subject: [Buildroot] [git commit branch/next]
- package/kodi-inputstream-adaptive: bump version to 2.6.7-Matrix
-Message-ID: <20210306213554.524D38183D@busybox.osuosl.org>
+Date: Sat, 6 Mar 2021 22:15:32 +0100
+Subject: [Buildroot] [git commit branch/next] package/kodi-pvr-filmon: bump
+ version to 6.1.0-Matrix
+Message-ID: <20210306213554.BC15686DA6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8e78c80467c99b6aa094416959e0f18992bf30e4
+commit: https://git.buildroot.net/buildroot/commit/?id=5d7b098e146acac0184d6bdf8c35a8d164b0f85b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Add expat as dependency after it was removed from the kodi package:
-https://github.com/xbmc/inputstream.adaptive/blob/Matrix/CMakeLists.txt#L61
+Switch dependency to kodi after upstream removed the dependency to
+kodi-platform:
+https://github.com/kodi-pvr/pvr.filmon/commit/b0ea8036274480245b5a7aa48d2ba18cc37b6b88
+https://github.com/kodi-pvr/pvr.filmon/commit/b8f249fcb50a27168f8b96ca9b4b8075d8c42b4a
+
+Switch license file to LICENSE.md.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-inputstream-adaptive/Config.in                      | 1 +
- package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash | 2 +-
- package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk   | 4 ++--
- 3 files changed, 4 insertions(+), 3 deletions(-)
+ package/kodi-pvr-filmon/Config.in            | 1 -
+ package/kodi-pvr-filmon/kodi-pvr-filmon.hash | 4 ++--
+ package/kodi-pvr-filmon/kodi-pvr-filmon.mk   | 6 +++---
+ 3 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/kodi-inputstream-adaptive/Config.in b/package/kodi-inputstream-adaptive/Config.in
-index f9ba20adcf..90e9a85dd8 100644
---- a/package/kodi-inputstream-adaptive/Config.in
-+++ b/package/kodi-inputstream-adaptive/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_KODI_INPUTSTREAM_ADAPTIVE
- 	# wvdecrypter/cdm/build/build_config.h
- 	depends on BR2_aarch64 || BR2_arm || BR2_i386 || BR2_mipsel \
- 		|| BR2_mips64el || BR2_x86_64
-+	select BR2_PACKAGE_EXPAT
+diff --git a/package/kodi-pvr-filmon/Config.in b/package/kodi-pvr-filmon/Config.in
+index 0b662df176..d10002912a 100644
+--- a/package/kodi-pvr-filmon/Config.in
++++ b/package/kodi-pvr-filmon/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_KODI_PVR_FILMON
+ 	bool "kodi-pvr-filmon"
+ 	select BR2_PACKAGE_JSONCPP
+-	select BR2_PACKAGE_KODI_PLATFORM
  	help
- 	  Kodi inputstream addon for several manifest types
+ 	  Filmon PVR client addon for Kodi
  
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-index b12c93ac11..6c9b79b881 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+diff --git a/package/kodi-pvr-filmon/kodi-pvr-filmon.hash b/package/kodi-pvr-filmon/kodi-pvr-filmon.hash
+index e89ce6359b..277adb4087 100644
+--- a/package/kodi-pvr-filmon/kodi-pvr-filmon.hash
++++ b/package/kodi-pvr-filmon/kodi-pvr-filmon.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  222b7ad879146c62a1fc6016fc70ca1ca57b3b882882ebc54e0b772bf96482e7  kodi-inputstream-adaptive-2.4.6-Leia.tar.gz
-+sha256  353207f5f98bf81ce8d79cec903c28da8c0227d7c7a632692c910d81e59c2dbe  kodi-inputstream-adaptive-2.6.7-Matrix.tar.gz
- sha256  89931c1fb1f3716694175763cf3221cfcd63d6935031cf6b4512d17ffe5d9860  LICENSE.GPL
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-index 30fbaf5251..6b085e49ce 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+-sha256  90988e4833c0f84ab08e08be3cd08b84e4ba2baf2ebc1545c62e5dbd6708d749  kodi-pvr-filmon-2.4.6-Leia.tar.gz
+-sha256  081907693b03f27cb1b17e0a440ae05fd8c8b4631be6fe6fdba4e18a5d40fdc5  debian/copyright
++sha256  7c2998bdde04acee5c147cb9f82939cfb13af57e5ecf46a4343dcfee15eb02e2  kodi-pvr-filmon-6.1.0-Matrix.tar.gz
++sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-filmon/kodi-pvr-filmon.mk b/package/kodi-pvr-filmon/kodi-pvr-filmon.mk
+index 078eae176a..2612f9aead 100644
+--- a/package/kodi-pvr-filmon/kodi-pvr-filmon.mk
++++ b/package/kodi-pvr-filmon/kodi-pvr-filmon.mk
 @@ -4,10 +4,10 @@
  #
  ################################################################################
  
--KODI_INPUTSTREAM_ADAPTIVE_VERSION = 2.4.6-Leia
-+KODI_INPUTSTREAM_ADAPTIVE_VERSION = 2.6.7-Matrix
- KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,peak3d,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPL-2.0+
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = LICENSE.GPL
--KODI_INPUTSTREAM_ADAPTIVE_DEPENDENCIES = kodi
-+KODI_INPUTSTREAM_ADAPTIVE_DEPENDENCIES = expat kodi
+-KODI_PVR_FILMON_VERSION = 2.4.6-Leia
++KODI_PVR_FILMON_VERSION = 6.1.0-Matrix
+ KODI_PVR_FILMON_SITE = $(call github,kodi-pvr,pvr.filmon,$(KODI_PVR_FILMON_VERSION))
+ KODI_PVR_FILMON_LICENSE = GPL-2.0+
+-KODI_PVR_FILMON_LICENSE_FILES = debian/copyright
+-KODI_PVR_FILMON_DEPENDENCIES = jsoncpp kodi-platform
++KODI_PVR_FILMON_LICENSE_FILES = LICENSE.md
++KODI_PVR_FILMON_DEPENDENCIES = jsoncpp kodi
  
  $(eval $(cmake-package))
