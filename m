@@ -1,68 +1,83 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 6 Mar 2021 16:27:42 +0100
-Subject: [Buildroot] [git commit] package/libeXosip2: fix build with libressl
-Message-ID: <20210306151352.CBA8C8754D@busybox.osuosl.org>
+Date: Sat, 6 Mar 2021 16:33:10 +0100
+Subject: [Buildroot] [git commit] package/openblas: fix build failure due to
+ forced FFLAGS
+Message-ID: <20210306151352.D943C812AB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=11ac2ab5811a2be35816e30c5817b5fd0e552cee
+commit: https://git.buildroot.net/buildroot/commit/?id=2793167b57f3ca197be92e493312643d14a4300a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Build with libressl is broken since version 5.1.0 and
-https://git.savannah.nongnu.org/cgit/exosip.git/commit/?id=d7488b7bbf59870192372384ef338a44be23e888
+Buildroot specifies a value for FFLAGS on the make command-line.
+While the openblas makefiles allowed this principle for the most part by
+using 'override FFLAGS += ....', the make.inc file generated for the shipped
+'lapack' sources just used a 'FFLAGS = ...' statement, whose value is then
+eclipsed by the command-line FFLAGS.
 
-For an unknown reason, we only have one autobuilder failure with version
-5.2.0
+This meant that -fPIC may be passed to the link step but not to all relevant
+source files, causing relocation failures.
 
-Fixes:
- - http://autobuild.buildroot.org/results/89d8d4ba99d6dcc1618cf6b5302c124a92d75be9
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes: http://autobuild.buildroot.net/results/d530db0f37e1e0462e3af1e1787e15f94ff21884/
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-src-eXtls_dtls.c-fix-build-with-libressl.patch | 34 ++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+ ...x-support-for-passing-FFLAGS-on-the-make-.patch | 47 ++++++++++++++++++++++
+ 1 file changed, 47 insertions(+)
 
-diff --git a/package/libeXosip2/0001-src-eXtls_dtls.c-fix-build-with-libressl.patch b/package/libeXosip2/0001-src-eXtls_dtls.c-fix-build-with-libressl.patch
+diff --git a/package/openblas/0002-Makefile-fix-support-for-passing-FFLAGS-on-the-make-.patch b/package/openblas/0002-Makefile-fix-support-for-passing-FFLAGS-on-the-make-.patch
 new file mode 100644
-index 0000000000..b153eee65c
+index 0000000000..72b387b93e
 --- /dev/null
-+++ b/package/libeXosip2/0001-src-eXtls_dtls.c-fix-build-with-libressl.patch
-@@ -0,0 +1,34 @@
-+From 178632fa5530a72f50376a60d59be2a07e65c28b Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 6 Mar 2021 15:20:51 +0100
-+Subject: [PATCH] src/eXtls_dtls.c: fix build with libressl
++++ b/package/openblas/0002-Makefile-fix-support-for-passing-FFLAGS-on-the-make-.patch
+@@ -0,0 +1,47 @@
++From 4d3829fa52240c2b7e48770ab19584db33ba7863 Mon Sep 17 00:00:00 2001
++From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
++Date: Fri, 5 Mar 2021 11:17:59 +0100
++Subject: [PATCH] Makefile: fix support for passing FFLAGS on the make
++ command line
 +
-+Build with libressl is broken since
-+https://git.savannah.nongnu.org/cgit/exosip.git/commit/?id=d7488b7bbf59870192372384ef338a44be23e888
-+because libressl does not define SSL_set0_rbio
++When openblas is built while passing FFLAGS on the make command line, the
++compilation of lapack objects will not contain the flags specified in
++Makefile but _only_ those passed in FFLAGS.
 +
-+Fixes:
-+ - http://autobuild.buildroot.org/results/89d8d4ba99d6dcc1618cf6b5302c124a92d75be9
++This can lead to build failure, e.g. because -fPIC is not passed to the
++compilation of most lapack objects, but is given to the link command:
 +
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: sent to amoizard at antisip.com]
++.../buildroot/output/host/bin/x86_64-linux-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -O2 -DMAX_STACK_ALLOC=2048 -Wall -m64 -DF_INTERFACE_GFORT -fPIC -DNO_WARMUP -DMAX_CPU_NUMBER=4 -DMAX_PARALLEL_NUMBER=1 -DVERSION=\"0.3.9\" -DASMNAME= -DASMFNAME=_ -DNAME=_ -DCNAME= -DCHAR_NAME=\"_\" -DCHAR_CNAME=\"\" -DNO_AFFINITY -I..  -shared -o ../libopenblas_nehalem-r0.3.9.so \
++-Wl,--whole-archive ../libopenblas_nehalem-r0.3.9.a -Wl,--no-whole-archive \
++-Wl,-soname,libopenblas.so.0 -lm -lgfortran -lm -lgfortran
++.../buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-musl/9.3.0/../../../../x86_64-buildroot-linux-musl/bin/ld: ../libopenblas_nehalem-r0.3.9.a(sbdsvdx.o): relocation R_X86_64_32 against `.rodata.str1.1' can not be used when making a shared object; recompile with -fPIC
++
++In the initial support for this principle, added in commit
++d0e731e8b825e7a554f245aa8f1118dcec9e2728, the flags specified in the
++makefile were appended to the flags specified on the command-line.
++
++Fix this situation by using 'override' for 'FFLAGS' in
++lapack-netlib/make.inc. The flags passed on the command-line are already
++part of the LAPACK_FFLAGS variable, so no '+=' is needed here.
++
++Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 +---
-+ src/eXtl_dtls.c | 2 +-
++ Makefile | 2 +-
 + 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/src/eXtl_dtls.c b/src/eXtl_dtls.c
-+index 40fa658..8ac3a13 100644
-+--- a/src/eXtl_dtls.c
-++++ b/src/eXtl_dtls.c
-+@@ -70,7 +70,7 @@
-+ #define RANDOM  "random.pem"
-+ #define DHFILE "dh1024.pem"
-+ 
-+-#if OPENSSL_VERSION_NUMBER < 0x10100000L
-++#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
-+ 
-+ static void
-+ SSL_set0_rbio (SSL * s, BIO * rbio)
++diff --git a/Makefile b/Makefile
++index fc5fe3f5..8ae1ff47 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -248,7 +248,7 @@ prof_lapack : lapack_prebuild
++ lapack_prebuild :
++ ifeq ($(NOFORTRAN), $(filter 0,$(NOFORTRAN)))
++ 	- at echo "FC          = $(FC)" > $(NETLIB_LAPACK_DIR)/make.inc
++-	- at echo "FFLAGS      = $(LAPACK_FFLAGS)" >> $(NETLIB_LAPACK_DIR)/make.inc
+++	- at echo "override FFLAGS      = $(LAPACK_FFLAGS)" >> $(NETLIB_LAPACK_DIR)/make.inc
++ 	- at echo "POPTS       = $(LAPACK_FPFLAGS)" >> $(NETLIB_LAPACK_DIR)/make.inc
++ 	- at echo "FFLAGS_NOOPT       = -O0 $(LAPACK_NOOPT)" >> $(NETLIB_LAPACK_DIR)/make.inc
++ 	- at echo "PNOOPT      = $(LAPACK_FPFLAGS) -O0" >> $(NETLIB_LAPACK_DIR)/make.inc
 +-- 
-+2.30.0
++2.26.2
 +
