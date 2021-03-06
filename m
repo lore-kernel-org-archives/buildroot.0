@@ -1,55 +1,87 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  6 Mar 2021 10:04:46 +0100
-Subject: [Buildroot] [PATCH] package/libjpeg: switch to s.b.o. as source site
-Message-ID: <20210306090446.2180129-1-yann.morin.1998@free.fr>
+Date: Sat,  6 Mar 2021 10:19:30 +0100
+Subject: [Buildroot] [PATCHv2] support/dependencies: detect and bailout when
+ PATH contains spaces/TABs
+Message-ID: <20210306091930.2186970-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The tarball for version 9d, released 2020-01-12, has been silently
-replaced upstream (a kinfd of BOM was removed from a few files),
-causing hash mismatch.
+In Makefiles, variables are split, filtered, and otherwise mangled on a
+space as a separator. In a shell, they will also be split on TABs.
 
-This means that all our versions since 2020.02 will fail the hash
-check, and fallback to using s.b.o. so we can't update the copy we
-have on s.b.o.
+We split and filter and iterate of variables in a lot of places, and
+most importantly, spaces in PATH is very seldom tested, if at all, so a
+lot of packages will not be working properly in such a situation.
 
-As a consequence, we can't update the hash in master (soon 2021.02)
-otherwise it would not match what we have on s.b.o.
+For example, the config.guess contains constructs that are not resilient
+to a space in PATH:
 
-This means that users will see hash mismatch by default, which is not
-very nice. Although we can't do anything for all previous releases,
-we can still try to paper over the problem for the future ones, like
-2021.02, by switching the upstream to be s.b.o.
+    PATH=$PATH:/.attbin ; export PATH
 
-Sigh... :-(
+Also, our fakedate will iterate over PATH:
 
-Reported-by: Nick Shaforostov <mshaforostov@airmusictech.com>
+    for P in `echo $PATH | tr ':' ' '`; do
+
+Those are only two cases, but the first means basically all
+autotools-based packages are susceptible to subtle breakage.
+
+Furthermore, Buildroot itself does not support that the top-level or
+output directories are in a path with spaces anyway.
+
+So, instead of chasing all cases that might be potentially broken,
+let's just detect the case and bail out, like we already do when PATH
+contains a \n, or when it contains the current working directory.
+
+Reported-by: Dan Raymond <draymond@foxvalley.net>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
----
- package/libjpeg/libjpeg.mk | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-diff --git a/package/libjpeg/libjpeg.mk b/package/libjpeg/libjpeg.mk
-index 389ecb6299..bd463ad40a 100644
---- a/package/libjpeg/libjpeg.mk
-+++ b/package/libjpeg/libjpeg.mk
-@@ -5,7 +5,11 @@
- ################################################################################
+---
+Changes v1 -> v2:
+  - fix the newline case
+
+---
+Notes: Dan had provided a patch [0] that would fix their own specific
+issue when runing linux-menuconfig, but I believe this is by far
+insufficient to properly solve the issues with spaces in PATH, and I
+believe it can't be reliably fixed (at least not in the foreseeable
+future with our available manpower), so I prefer that we detect the
+situation and bail out.
+
+[0] https://patchwork.ozlabs.org/project/buildroot/patch/16100eb6-bac8-2e4d-65f2-26333179f3b8 at foxvalley.net/
+---
+ support/dependencies/dependencies.sh | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+index b44d28682c..1954f038be 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -2,6 +2,9 @@
+ # vi: set sw=4 ts=4:
  
- LIBJPEG_VERSION = 9d
--LIBJPEG_SITE = http://www.ijg.org/files
-+# 9d was released 2020-01-12, but the tarball was replaced upstream circa
-+# 2021-03, causing hash mismatch. Until there is a new version released,
-+# use our cached copy from s.b.o.
-+#LIBJPEG_SITE = http://www.ijg.org/files
-+LIBJPEG_SITE = http://sources.buildroot.org/libjpeg/
- LIBJPEG_SOURCE = jpegsrc.v$(LIBJPEG_VERSION).tar.gz
- LIBJPEG_LICENSE = IJG
- LIBJPEG_LICENSE_FILES = README
+ export LC_ALL=C
++TAB="$(printf '\t')"
++NL="
++"
+ 
+ # Verify that grep works
+ echo "WORKS" | grep "WORKS" >/dev/null 2>&1
+@@ -35,9 +38,9 @@ case ":${PATH:-unset}:" in
+ 	echo "PATH environment variable. This doesn't work."
+ 	exit 1
+ 	;;
+-(*"
+-"*)	printf "\n"
+-	printf "Your PATH contains a newline (\\\n) character.\n"
++(*" "*|*"${TAB}"*|*"${NL}"*)
++	printf "\n"
++	printf "Your PATH contains spaces, TABs, and/or newline (\\\n) characters.\n"
+ 	printf "This doesn't work. Fix you PATH.\n"
+ 	exit 1
+ 	;;
 -- 
 2.25.1
