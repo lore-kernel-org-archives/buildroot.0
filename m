@@ -1,69 +1,104 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 6 Mar 2021 21:53:50 +0100
-Subject: [Buildroot] [git commit] package/kodi-pvr-argustv: bump version to
- 7.1.0-Matrix
-Message-ID: <20210308072137.EBE8A88918@busybox.osuosl.org>
+Date: Sat, 6 Mar 2021 21:30:27 +0100
+Subject: [Buildroot] [git commit] package/kodi-screensaver-crystalmorph:
+ remove package
+Message-ID: <20210308072137.5613E88918@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2fe5c6bf5704ed62c7dd0e4cc18404308fe6cd6e
+commit: https://git.buildroot.net/buildroot/commit/?id=49eb73cac119d96822e8b758de18aec840b98d61
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Switch dependency to kodi after upstream removed the dependency to
-kodi-platform:
-https://github.com/kodi-pvr/pvr.argustv/commit/44d9c5a20579a2f505f26a072096911d68855a4a
-https://github.com/kodi-pvr/pvr.argustv/commit/6a6968892d468d02ca0d380e3fff54e607346024
-
-Switch license file to LICENSE.md.
+The package received its last updates in 2017, is not part of the
+official Kodi github repo and its build is broken with Kodi 19.x.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-pvr-argustv/Config.in             | 1 -
- package/kodi-pvr-argustv/kodi-pvr-argustv.hash | 4 ++--
- package/kodi-pvr-argustv/kodi-pvr-argustv.mk   | 6 +++---
- 3 files changed, 5 insertions(+), 6 deletions(-)
+ Config.in.legacy                                            | 10 ++++++++++
+ package/kodi-screensaver-crystalmorph/Config.in             | 10 ----------
+ .../kodi-screensaver-crystalmorph.hash                      |  3 ---
+ .../kodi-screensaver-crystalmorph.mk                        | 13 -------------
+ package/kodi/Config.in                                      |  1 -
+ 5 files changed, 10 insertions(+), 27 deletions(-)
 
-diff --git a/package/kodi-pvr-argustv/Config.in b/package/kodi-pvr-argustv/Config.in
-index 216000aefd..7cca2661c7 100644
---- a/package/kodi-pvr-argustv/Config.in
-+++ b/package/kodi-pvr-argustv/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_KODI_PVR_ARGUSTV
- 	bool "kodi-pvr-argustv"
- 	select BR2_PACKAGE_JSONCPP
--	select BR2_PACKAGE_KODI_PLATFORM
- 	help
- 	  Kodi's ARGUS TV client addon
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 9deb67b31f..8ebbc4c295 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -144,6 +144,16 @@ endif
  
-diff --git a/package/kodi-pvr-argustv/kodi-pvr-argustv.hash b/package/kodi-pvr-argustv/kodi-pvr-argustv.hash
-index 5c47dd30b2..3024d8e65f 100644
---- a/package/kodi-pvr-argustv/kodi-pvr-argustv.hash
-+++ b/package/kodi-pvr-argustv/kodi-pvr-argustv.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  7bfedb27b2aec4015b2594df18b76fe42e97ec10f4b5cb9c6987b1a7a264c844  kodi-pvr-argustv-3.5.6-Leia.tar.gz
--sha256  17bc5450fff10fc46484886690adbf20c369f5baff021435feab1187b9943834  debian/copyright
-+sha256  d91f195c4a91af893231d03a887a340900c4e515597ea059ee6b9e6444717fc9  kodi-pvr-argustv-7.1.0-Matrix.tar.gz
-+sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-argustv/kodi-pvr-argustv.mk b/package/kodi-pvr-argustv/kodi-pvr-argustv.mk
-index 73a9f1c764..2d5d62a539 100644
---- a/package/kodi-pvr-argustv/kodi-pvr-argustv.mk
-+++ b/package/kodi-pvr-argustv/kodi-pvr-argustv.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
+ ###############################################################################
  
--KODI_PVR_ARGUSTV_VERSION = 3.5.6-Leia
-+KODI_PVR_ARGUSTV_VERSION = 7.1.0-Matrix
- KODI_PVR_ARGUSTV_SITE = $(call github,kodi-pvr,pvr.argustv,$(KODI_PVR_ARGUSTV_VERSION))
- KODI_PVR_ARGUSTV_LICENSE = GPL-2.0+
--KODI_PVR_ARGUSTV_LICENSE_FILES = debian/copyright
--KODI_PVR_ARGUSTV_DEPENDENCIES = jsoncpp kodi-platform
-+KODI_PVR_ARGUSTV_LICENSE_FILES = LICENSE.md
-+KODI_PVR_ARGUSTV_DEPENDENCIES = jsoncpp kodi
++comment "Legacy options removed in 2021.05"
++
++config BR2_PACKAGE_KODI_SCREENSAVER_CRYSTALMORPH
++	bool "kodi-screensaver-crystalmorph removed"
++	select BR2_LEGACY
++	help
++	  The package received its last updates in 2017, is not part
++	  of the official Kodi github repo and its build is broken
++	  with Kodi 19.x, so it was removed.
++
+ comment "Legacy options removed in 2021.02"
  
- $(eval $(cmake-package))
+ config BR2_PACKAGE_MPD_AUDIOFILE
+diff --git a/package/kodi-screensaver-crystalmorph/Config.in b/package/kodi-screensaver-crystalmorph/Config.in
+deleted file mode 100644
+index 1303d229fd..0000000000
+--- a/package/kodi-screensaver-crystalmorph/Config.in
++++ /dev/null
+@@ -1,10 +0,0 @@
+-config BR2_PACKAGE_KODI_SCREENSAVER_CRYSTALMORPH
+-	bool "kodi-screensaver-crystalmorph"
+-	depends on BR2_PACKAGE_HAS_LIBGL # libglu
+-	help
+-	  CrystalMorph screensaver for Kodi
+-
+-	  https://github.com/notspiff/screensaver.crystalmorph
+-
+-comment "kodi-screensaver-crystalmorph needs OpenGL"
+-	depends on !BR2_PACKAGE_HAS_LIBGL
+diff --git a/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.hash b/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.hash
+deleted file mode 100644
+index 59e0703255..0000000000
+--- a/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# Locally computed
+-sha256  d8ed548222f1118964104fefc8ac3056dfe6c9d2ee35cd7c8355c9ea9fcaffc5  kodi-screensaver-crystalmorph-4439c84c38abf889e19a1863e745942c0d7f8203.tar.gz
+-sha256  febce1924ed772f22ec3fabec646b1401aad4f4a81a7f1baeb858f27ae4f5241  src/Fractal.cpp
+diff --git a/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.mk b/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.mk
+deleted file mode 100644
+index 35642d5580..0000000000
+--- a/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.mk
++++ /dev/null
+@@ -1,13 +0,0 @@
+-################################################################################
+-#
+-# kodi-screensaver-crystalmorph
+-#
+-################################################################################
+-
+-KODI_SCREENSAVER_CRYSTALMORPH_VERSION = 4439c84c38abf889e19a1863e745942c0d7f8203
+-KODI_SCREENSAVER_CRYSTALMORPH_SITE = $(call github,notspiff,screensaver.crystalmorph,$(KODI_SCREENSAVER_CRYSTALMORPH_VERSION))
+-KODI_SCREENSAVER_CRYSTALMORPH_LICENSE = GPL-2.0+
+-KODI_SCREENSAVER_CRYSTALMORPH_LICENSE_FILES = src/Fractal.cpp
+-KODI_SCREENSAVER_CRYSTALMORPH_DEPENDENCIES = kodi
+-
+-$(eval $(cmake-package))
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index 8453ba0e07..e805aa9d31 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -357,7 +357,6 @@ menu "Screensavers"
+ 	source "package/kodi-screensaver-asterwave/Config.in"
+ 	source "package/kodi-screensaver-biogenesis/Config.in"
+ 	source "package/kodi-screensaver-cpblobs/Config.in"
+-	source "package/kodi-screensaver-crystalmorph/Config.in"
+ 	source "package/kodi-screensaver-greynetic/Config.in"
+ 	source "package/kodi-screensaver-matrixtrails/Config.in"
+ 	source "package/kodi-screensaver-pingpong/Config.in"
