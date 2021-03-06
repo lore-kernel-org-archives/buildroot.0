@@ -1,87 +1,35 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  6 Mar 2021 10:19:30 +0100
-Subject: [Buildroot] [PATCHv2] support/dependencies: detect and bailout when
- PATH contains spaces/TABs
-Message-ID: <20210306091930.2186970-1-yann.morin.1998@free.fr>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat,  6 Mar 2021 10:41:36 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libmodsecurity: add CPE variables
+Message-ID: <20210306094136.2154945-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In Makefiles, variables are split, filtered, and otherwise mangled on a
-space as a separator. In a shell, they will also be split on TABs.
+cpe:2.3:a:trustwave:modsecurity is a valid CPE identifier for this
+package:
 
-We split and filter and iterate of variables in a lot of places, and
-most importantly, spaces in PATH is very seldom tested, if at all, so a
-lot of packages will not be working properly in such a situation.
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Atrustwave%3Amodsecurity
 
-For example, the config.guess contains constructs that are not resilient
-to a space in PATH:
-
-    PATH=$PATH:/.attbin ; export PATH
-
-Also, our fakedate will iterate over PATH:
-
-    for P in `echo $PATH | tr ':' ' '`; do
-
-Those are only two cases, but the first means basically all
-autotools-based packages are susceptible to subtle breakage.
-
-Furthermore, Buildroot itself does not support that the top-level or
-output directories are in a path with spaces anyway.
-
-So, instead of chasing all cases that might be potentially broken,
-let's just detect the case and bail out, like we already do when PATH
-contains a \n, or when it contains the current working directory.
-
-Reported-by: Dan Raymond <draymond@foxvalley.net>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v1 -> v2:
-  - fix the newline case
+ package/libmodsecurity/libmodsecurity.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
----
-Notes: Dan had provided a patch [0] that would fix their own specific
-issue when runing linux-menuconfig, but I believe this is by far
-insufficient to properly solve the issues with spaces in PATH, and I
-believe it can't be reliably fixed (at least not in the foreseeable
-future with our available manpower), so I prefer that we detect the
-situation and bail out.
-
-[0] https://patchwork.ozlabs.org/project/buildroot/patch/16100eb6-bac8-2e4d-65f2-26333179f3b8 at foxvalley.net/
----
- support/dependencies/dependencies.sh | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
-
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index b44d28682c..1954f038be 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -2,6 +2,9 @@
- # vi: set sw=4 ts=4:
- 
- export LC_ALL=C
-+TAB="$(printf '\t')"
-+NL="
-+"
- 
- # Verify that grep works
- echo "WORKS" | grep "WORKS" >/dev/null 2>&1
-@@ -35,9 +38,9 @@ case ":${PATH:-unset}:" in
- 	echo "PATH environment variable. This doesn't work."
- 	exit 1
- 	;;
--(*"
--"*)	printf "\n"
--	printf "Your PATH contains a newline (\\\n) character.\n"
-+(*" "*|*"${TAB}"*|*"${NL}"*)
-+	printf "\n"
-+	printf "Your PATH contains spaces, TABs, and/or newline (\\\n) characters.\n"
- 	printf "This doesn't work. Fix you PATH.\n"
- 	exit 1
- 	;;
+diff --git a/package/libmodsecurity/libmodsecurity.mk b/package/libmodsecurity/libmodsecurity.mk
+index 063f969fc6..a84cd27b34 100644
+--- a/package/libmodsecurity/libmodsecurity.mk
++++ b/package/libmodsecurity/libmodsecurity.mk
+@@ -10,6 +10,8 @@ LIBMODSECURITY_SITE = https://github.com/SpiderLabs/ModSecurity/releases/downloa
+ LIBMODSECURITY_INSTALL_STAGING = YES
+ LIBMODSECURITY_LICENSE = Apache-2.0
+ LIBMODSECURITY_LICENSE_FILES = LICENSE
++LIBMODSECURITY_CPE_ID_VENDOR = trustwave
++LIBMODSECURITY_CPE_ID_PRODUCT = modsecurity
+ # 0002-test-for-uClinux-in-configure-script.patch
+ LIBMODSECURITY_AUTORECONF = YES
+ # libinjection uses AC_CHECK_FILE, not available in cross-compile
 -- 
-2.25.1
+2.30.0
