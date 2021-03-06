@@ -1,155 +1,56 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 6 Mar 2021 20:35:26 +0100
-Subject: [Buildroot] [git commit] package/quagga: fix build with gcc 10
-Message-ID: <20210306191501.52ED7815EF@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 6 Mar 2021 21:22:59 +0100
+Subject: [Buildroot] [git commit branch/next] package/libubootenv: bump to
+ version e663439
+Message-ID: <20210306200021.77C7A86EF7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1e4bc89960b700c8a35c895fb66ff98c4881c083
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=88df5192a8859fab7d74945151411561cfba24f7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes:
- - http://autobuild.buildroot.org/results/fd5ee2b52a3cfaec268fafd3ffe4c30e51465c7e
+Include the following changes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+e663439 Always fsync file writes
+80b7f31 Treat '=' as an illegal character in variable names
+950f541 libuboot_env: fix calculation of usable envsize
+fb88032 Correct initialisations in libuboot_configure
+20d1ec7 Force writing of environment if default is used
+5ca11bd libuboot_env: correct length to usable env size length
+cd4a8f1 libuboot_env_store: fix env double-null termination
+9510164 uboot_env: fix infinite loop on short read (EOF)
+
+Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/quagga/0003-Fix-build-with-gcc-10.patch | 127 ++++++++++++++++++++++++
- 1 file changed, 127 insertions(+)
+ package/libubootenv/libubootenv.hash | 2 +-
+ package/libubootenv/libubootenv.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/quagga/0003-Fix-build-with-gcc-10.patch b/package/quagga/0003-Fix-build-with-gcc-10.patch
-new file mode 100644
-index 0000000000..fbe85165ee
---- /dev/null
-+++ b/package/quagga/0003-Fix-build-with-gcc-10.patch
-@@ -0,0 +1,127 @@
-+From 7a446434302d7b71211b81b3c6cd12a7b35223d1 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 6 Mar 2021 16:28:37 +0100
-+Subject: [PATCH] Fix build with gcc 10
-+
-+Fix the following build failure with gcc 10 (which defaults to
-+-fno-common):
-+
-+  CCLD     pimd
-+/home/buildroot/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: pimd.o:(.bss+0x8): multiple definition of `qpim_static_route_list'; pim_main.o:(.bss+0x8): first defined here
-+/home/buildroot/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: pimd.o:(.bss+0x28): multiple definition of `qpim_mroute_del_last'; pim_main.o:(.bss+0x10): first defined here
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/fd5ee2b52a3cfaec268fafd3ffe4c30e51465c7e
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://bugzilla.quagga.net/show_bug.cgi?id=1014]
-+---
-+ pimd/pim_version.h |  2 +-
-+ pimd/pimd.c        |  1 +
-+ pimd/pimd.h        | 66 +++++++++++++++++++++++-----------------------
-+ 3 files changed, 35 insertions(+), 34 deletions(-)
-+
-+diff --git a/pimd/pim_version.h b/pimd/pim_version.h
-+index ef9f370c..891d4314 100644
-+--- a/pimd/pim_version.h
-++++ b/pimd/pim_version.h
-+@@ -25,6 +25,6 @@
-+ 
-+ #define PIMD_VERSION_STR "0.166"
-+ 
-+-const char * const PIMD_VERSION;
-++extern const char * const PIMD_VERSION;
-+ 
-+ #endif /* PIM_VERSION_H */
-+diff --git a/pimd/pimd.c b/pimd/pimd.c
-+index 97fb2233..d7340cc0 100644
-+--- a/pimd/pimd.c
-++++ b/pimd/pimd.c
-+@@ -50,6 +50,7 @@ int64_t                   qpim_mroute_socket_creation = 0; /* timestamp of creat
-+ struct thread            *qpim_mroute_socket_reader = 0;
-+ int                       qpim_mroute_oif_highest_vif_index = -1;
-+ struct list              *qpim_channel_oil_list = 0;
-++struct in_addr            qpim_all_pim_routers_addr;
-+ int                       qpim_t_periodic = PIM_DEFAULT_T_PERIODIC; /* Period between Join/Prune Messages */
-+ struct list              *qpim_upstream_list = 0;
-+ struct zclient           *qpim_zclient_update = 0;
-+diff --git a/pimd/pimd.h b/pimd/pimd.h
-+index 9a7e6058..8b3496fd 100644
-+--- a/pimd/pimd.h
-++++ b/pimd/pimd.h
-+@@ -68,39 +68,39 @@
-+ #define PIM_MASK_PIM_J_P             (1 << 12)
-+ #define PIM_MASK_STATIC              (1 << 13)
-+ 
-+-const char *const PIM_ALL_SYSTEMS;
-+-const char *const PIM_ALL_ROUTERS;
-+-const char *const PIM_ALL_PIM_ROUTERS;
-+-const char *const PIM_ALL_IGMP_ROUTERS;
-+-
-+-struct thread_master     *master;
-+-uint32_t                  qpim_debugs;
-+-int                       qpim_mroute_socket_fd;
-+-int64_t                   qpim_mroute_socket_creation; /* timestamp of creation */
-+-struct thread            *qpim_mroute_socket_reader;
-+-int                       qpim_mroute_oif_highest_vif_index;
-+-struct list              *qpim_channel_oil_list; /* list of struct channel_oil */
-+-struct in_addr            qpim_all_pim_routers_addr;
-+-int                       qpim_t_periodic; /* Period between Join/Prune Messages */
-+-struct list              *qpim_upstream_list; /* list of struct pim_upstream */
-+-struct zclient           *qpim_zclient_update;
-+-struct zclient           *qpim_zclient_lookup;
-+-struct pim_assert_metric  qpim_infinite_assert_metric;
-+-long                      qpim_rpf_cache_refresh_delay_msec;
-+-struct thread            *qpim_rpf_cache_refresher;
-+-int64_t                   qpim_rpf_cache_refresh_requests;
-+-int64_t                   qpim_rpf_cache_refresh_events;
-+-int64_t                   qpim_rpf_cache_refresh_last;
-+-struct in_addr            qpim_inaddr_any;
-+-struct list              *qpim_ssmpingd_list; /* list of struct ssmpingd_sock */
-+-struct in_addr            qpim_ssmpingd_group_addr;
-+-int64_t                   qpim_scan_oil_events;
-+-int64_t                   qpim_scan_oil_last;
-+-int64_t                   qpim_mroute_add_events;
-+-int64_t                   qpim_mroute_add_last;
-+-int64_t                   qpim_mroute_del_events;
-+-int64_t                   qpim_mroute_del_last;
-+-struct list              *qpim_static_route_list; /* list of routes added statically */
-++extern const char *const PIM_ALL_SYSTEMS;
-++extern const char *const PIM_ALL_ROUTERS;
-++extern const char *const PIM_ALL_PIM_ROUTERS;
-++extern const char *const PIM_ALL_IGMP_ROUTERS;
-++
-++extern struct thread_master     *master;
-++extern uint32_t                  qpim_debugs;
-++extern int                       qpim_mroute_socket_fd;
-++extern int64_t                   qpim_mroute_socket_creation; /* timestamp of creation */
-++extern struct thread            *qpim_mroute_socket_reader;
-++extern int                       qpim_mroute_oif_highest_vif_index;
-++extern struct list              *qpim_channel_oil_list; /* list of struct channel_oil */
-++extern struct in_addr            qpim_all_pim_routers_addr;
-++extern int                       qpim_t_periodic; /* Period between Join/Prune Messages */
-++extern struct list              *qpim_upstream_list; /* list of struct pim_upstream */
-++extern struct zclient           *qpim_zclient_update;
-++extern struct zclient           *qpim_zclient_lookup;
-++extern struct pim_assert_metric  qpim_infinite_assert_metric;
-++extern long                      qpim_rpf_cache_refresh_delay_msec;
-++extern struct thread            *qpim_rpf_cache_refresher;
-++extern int64_t                   qpim_rpf_cache_refresh_requests;
-++extern int64_t                   qpim_rpf_cache_refresh_events;
-++extern int64_t                   qpim_rpf_cache_refresh_last;
-++extern struct in_addr            qpim_inaddr_any;
-++extern struct list              *qpim_ssmpingd_list; /* list of struct ssmpingd_sock */
-++extern struct in_addr            qpim_ssmpingd_group_addr;
-++extern int64_t                   qpim_scan_oil_events;
-++extern int64_t                   qpim_scan_oil_last;
-++extern int64_t                   qpim_mroute_add_events;
-++extern int64_t                   qpim_mroute_add_last;
-++extern int64_t                   qpim_mroute_del_events;
-++extern int64_t                   qpim_mroute_del_last;
-++extern struct list              *qpim_static_route_list; /* list of routes added statically */
-+ 
-+ #define PIM_JP_HOLDTIME (qpim_t_periodic * 7 / 2)
-+ 
-+-- 
-+2.30.0
-+
+diff --git a/package/libubootenv/libubootenv.hash b/package/libubootenv/libubootenv.hash
+index a655ed2349..0b5320b36f 100644
+--- a/package/libubootenv/libubootenv.hash
++++ b/package/libubootenv/libubootenv.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  4c52dd908b69f18cdd5721b3f24573fb276e61115f66edb74906d766ca60399f  libubootenv-0.3.1.tar.gz
++sha256  e25adf81dd2d4a083cb2cf032843a1ee2bb1fab54aa7a0202bd2295186bfe1b7  libubootenv-e663439e3d39a4cdbddb7e818245a99c485fa965.tar.gz
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  Licenses/lgpl-2.1.txt
+diff --git a/package/libubootenv/libubootenv.mk b/package/libubootenv/libubootenv.mk
+index 61516710a7..7a98f5324b 100644
+--- a/package/libubootenv/libubootenv.mk
++++ b/package/libubootenv/libubootenv.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-LIBUBOOTENV_VERSION = 0.3.1
+-LIBUBOOTENV_SITE = $(call github,sbabic,libubootenv,v$(LIBUBOOTENV_VERSION))
++LIBUBOOTENV_VERSION = e663439e3d39a4cdbddb7e818245a99c485fa965
++LIBUBOOTENV_SITE = $(call github,sbabic,libubootenv,$(LIBUBOOTENV_VERSION))
+ LIBUBOOTENV_LICENSE = LGPL-2.1
+ LIBUBOOTENV_LICENSE_FILES = Licenses/lgpl-2.1.txt
+ LIBUBOOTENV_INSTALL_STAGING = YES
