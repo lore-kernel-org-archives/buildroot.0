@@ -1,53 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 08 Mar 2021 07:44:49 -0000
-Subject: [Buildroot] [git commit] package/collectd: add 'infiniband' option
-Message-ID: <20210308072134.3CCAF81607@busybox.osuosl.org>
+Date: Sat, 6 Mar 2021 21:30:37 +0100
+Subject: [Buildroot] [git commit] package/libcec: bump version to 6.0.2
+Message-ID: <20210308072137.61F6A8893D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6b41a0e91e57e9c46404fe7b103a48d9325e7845
+commit: https://git.buildroot.net/buildroot/commit/?id=639fe21d5b36409dd7698b9805f91b5673c820b8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The infiniband plugin is new since 5.12.0 and enabled by default in
-collectd.
-
-Add an option in Buildroot, disabled by default.
-
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/collectd/Config.in   | 5 +++++
- package/collectd/collectd.mk | 1 +
- 2 files changed, 6 insertions(+)
+ package/libcec/libcec.hash | 2 +-
+ package/libcec/libcec.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/collectd/Config.in b/package/collectd/Config.in
-index f02cedda49..ae69482608 100644
---- a/package/collectd/Config.in
-+++ b/package/collectd/Config.in
-@@ -285,6 +285,11 @@ config BR2_PACKAGE_COLLECTD_HUGEPAGES
- 	help
- 	  Reports the number of used and free hugepages on Linux.
+diff --git a/package/libcec/libcec.hash b/package/libcec/libcec.hash
+index 36b6bad861..3e5a443057 100644
+--- a/package/libcec/libcec.hash
++++ b/package/libcec/libcec.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  bcd92c376993a5721d346edcc09eb17289451f9156b1d1d113c9663c2046315a  libcec-4.0.7.tar.gz
++sha256  090696d7a4fb772d7acebbb06f91ab92e025531c7c91824046b9e4e71ecb3377  libcec-6.0.2.tar.gz
+ sha256  0137261d24ce001fc5237aacddd267533e0f150ac23cf21acffea599f7358f7a  COPYING
+diff --git a/package/libcec/libcec.mk b/package/libcec/libcec.mk
+index 7c37d05c7f..6591bc009a 100644
+--- a/package/libcec/libcec.mk
++++ b/package/libcec/libcec.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_COLLECTD_INFINIBAND
-+	bool "infiniband"
-+	help
-+	  Attributes and counters for each port on each IB device.
-+
- config BR2_PACKAGE_COLLECTD_INTERFACE
- 	bool "interface"
- 	help
-diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
-index 3fcca12a45..4a4e313224 100644
---- a/package/collectd/collectd.mk
-+++ b/package/collectd/collectd.mk
-@@ -83,6 +83,7 @@ COLLECTD_CONF_OPTS += \
- 	$(if $(BR2_PACKAGE_COLLECTD_GRPC),--enable-grpc,--disable-grpc) \
- 	$(if $(BR2_PACKAGE_COLLECTD_HASHED),--enable-match_hashed,--disable-match_hashed) \
- 	$(if $(BR2_PACKAGE_COLLECTD_HUGEPAGES),--enable-hugepages,--disable-hugepages) \
-+	$(if $(BR2_PACKAGE_COLLECTD_INFINIBAND),--enable-infiniband,--disable-infiniband) \
- 	$(if $(BR2_PACKAGE_COLLECTD_INTERFACE),--enable-interface,--disable-interface) \
- 	$(if $(BR2_PACKAGE_COLLECTD_IPC),--enable-ipc,--disable-ipc) \
- 	$(if $(BR2_PACKAGE_COLLECTD_IPTABLES),--enable-iptables,--disable-iptables) \
+-LIBCEC_VERSION = 4.0.7
++LIBCEC_VERSION = 6.0.2
+ LIBCEC_SITE = $(call github,Pulse-Eight,libcec,libcec-$(LIBCEC_VERSION))
+ LIBCEC_LICENSE = GPL-2.0+
+ LIBCEC_LICENSE_FILES = COPYING
