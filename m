@@ -1,30 +1,132 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 6 Mar 2021 23:33:14 +0100
-Subject: [Buildroot] [PATCH 1/5] boot/optee-os: bump to version 3.12.0
-In-Reply-To: <20210225153345.8061-1-etienne.carriere@linaro.org>
-References: <20210225153345.8061-1-etienne.carriere@linaro.org>
-Message-ID: <20210306233314.309f9339@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 6 Mar 2021 23:39:28 +0100
+Subject: [Buildroot] [PATCH] package/mawk: new package
+In-Reply-To: <20210306222820.GU2275@scaer>
+References: <20210304134049.9317-1-ismael@iodev.co.uk>
+ <20210306222820.GU2275@scaer>
+Message-ID: <20210306223928.GV2275@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 25 Feb 2021 16:33:41 +0100
-Etienne Carriere <etienne.carriere@linaro.org> wrote:
+Ismael, All,
 
-> Bump OP-TEE OS package version to OP-TEE release 3.12.0.
+On 2021-03-06 23:28 +0100, Yann E. MORIN spake thusly:
+> On 2021-03-04 14:40 +0100, Ismael Luceno spake thusly:
+> > Interpreter for the AWK Programming Language.
+> > 
+> > Signed-off-by: Ismael Luceno <ismael@iodev.co.uk>
 > 
-> Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
-> ---
->  boot/optee-os/Config.in     | 4 ++--
->  boot/optee-os/optee-os.hash | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+> Applied to master, thanks.
 
-Thanks, series applied to next!
+Sorry, this was applied to next...
 
-Thomas
+Regards,
+Yann E. MORIN.
+
+> Regards,
+> Yann E. MORIN.
+> 
+> > ---
+> >  DEVELOPERS             |  1 +
+> >  package/Config.in      |  1 +
+> >  package/mawk/Config.in |  6 ++++++
+> >  package/mawk/mawk.hash |  2 ++
+> >  package/mawk/mawk.mk   | 13 +++++++++++++
+> >  5 files changed, 23 insertions(+)
+> >  create mode 100644 package/mawk/Config.in
+> >  create mode 100644 package/mawk/mawk.hash
+> >  create mode 100644 package/mawk/mawk.mk
+> > 
+> > diff --git a/DEVELOPERS b/DEVELOPERS
+> > index 0c48236da402..02b3dd23814c 100644
+> > --- a/DEVELOPERS
+> > +++ b/DEVELOPERS
+> > @@ -1122,6 +1122,7 @@ F:	package/exempi/
+> >  
+> >  N:	Ismael Luceno <ismael@iodev.co.uk>
+> >  F:	package/axel/
+> > +F:	package/mawk/
+> >  
+> >  N:	Jagan Teki <jagan@amarulasolutions.com>
+> >  F:	board/amarula/
+> > diff --git a/package/Config.in b/package/Config.in
+> > index 5304ab141c0f..ddfa671c2a46 100644
+> > --- a/package/Config.in
+> > +++ b/package/Config.in
+> > @@ -178,6 +178,7 @@ menu "Development tools"
+> >  	source "package/jq/Config.in"
+> >  	source "package/libtool/Config.in"
+> >  	source "package/make/Config.in"
+> > +	source "package/mawk/Config.in"
+> >  	source "package/patch/Config.in"
+> >  	source "package/pkgconf/Config.in"
+> >  	source "package/ripgrep/Config.in"
+> > diff --git a/package/mawk/Config.in b/package/mawk/Config.in
+> > new file mode 100644
+> > index 000000000000..80118b3f6d52
+> > --- /dev/null
+> > +++ b/package/mawk/Config.in
+> > @@ -0,0 +1,6 @@
+> > +config BR2_PACKAGE_MAWK
+> > +	bool "mawk"
+> > +	help
+> > +	  Interpreter for the AWK Programming Language.
+> > +
+> > +	  http://invisible-island.net/mawk/mawk.html
+> > diff --git a/package/mawk/mawk.hash b/package/mawk/mawk.hash
+> > new file mode 100644
+> > index 000000000000..69761f77df57
+> > --- /dev/null
+> > +++ b/package/mawk/mawk.hash
+> > @@ -0,0 +1,2 @@
+> > +sha256  7fd4cd1e1fae9290fe089171181bbc6291dfd9bca939ca804f0ddb851c8b8237  mawk-1.3.4-20200120.tgz
+> > +sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+> > diff --git a/package/mawk/mawk.mk b/package/mawk/mawk.mk
+> > new file mode 100644
+> > index 000000000000..c4a486215d5d
+> > --- /dev/null
+> > +++ b/package/mawk/mawk.mk
+> > @@ -0,0 +1,13 @@
+> > +################################################################################
+> > +#
+> > +# mawk
+> > +#
+> > +################################################################################
+> > +
+> > +MAWK_VERSION = 1.3.4-20200120
+> > +MAWK_SITE = https://invisible-mirror.net/archives/mawk
+> > +MAWK_SOURCE = mawk-$(MAWK_VERSION).tgz
+> > +MAWK_LICENSE = GPL-2.0
+> > +MAWK_LICENSE_FILES = COPYING
+> > +
+> > +$(eval $(autotools-package))
+> > -- 
+> > 2.30.1
+> > 
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+> -- 
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
