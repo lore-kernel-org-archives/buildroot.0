@@ -1,50 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 6 Mar 2021 22:56:51 +0100
-Subject: [Buildroot] [git commit branch/next]
- package/kodi-visualisation-starburst: bump version to 2.4.0-Matrix
-Message-ID: <20210306213556.6666D8183D@busybox.osuosl.org>
+Date: Sat, 6 Mar 2021 22:56:49 +0100
+Subject: [Buildroot] [git commit branch/next] package/kodi-pvr-vuplus: bump
+ version to 7.4.0-Matrix
+Message-ID: <20210306213555.5EC6B8754D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4e4fccd71296523fc29f14a550e9faf647f1fa04
+commit: https://git.buildroot.net/buildroot/commit/?id=6bd4830c82e2836d17d91cf91695d0f87b261a4d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+Switch dependency to kodi after upstream removed the dependency to
+kodi-platform:
+https://github.com/kodi-pvr/pvr.vuplus/commit/122a9b281668d31f921e842e8700b2f048121c16
 
 Switch license file to LICENSE.md.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../kodi-visualisation-starburst/kodi-visualisation-starburst.hash    | 4 ++--
- package/kodi-visualisation-starburst/kodi-visualisation-starburst.mk  | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/kodi-pvr-vuplus/Config.in            | 1 -
+ package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash | 4 ++--
+ package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk   | 6 +++---
+ 3 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/kodi-visualisation-starburst/kodi-visualisation-starburst.hash b/package/kodi-visualisation-starburst/kodi-visualisation-starburst.hash
-index 834d71ae5c..b08da9788e 100644
---- a/package/kodi-visualisation-starburst/kodi-visualisation-starburst.hash
-+++ b/package/kodi-visualisation-starburst/kodi-visualisation-starburst.hash
+diff --git a/package/kodi-pvr-vuplus/Config.in b/package/kodi-pvr-vuplus/Config.in
+index b6a03e843f..862f5f9267 100644
+--- a/package/kodi-pvr-vuplus/Config.in
++++ b/package/kodi-pvr-vuplus/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_KODI_PVR_VUPLUS
+ 	bool "kodi-pvr-vuplus"
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # json-for-modern-cpp
+ 	select BR2_PACKAGE_JSON_FOR_MODERN_CPP
+-	select BR2_PACKAGE_KODI_PLATFORM
+ 	select BR2_PACKAGE_TINYXML
+ 	help
+ 	  VuPlus PVR client addon for Kodi
+diff --git a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
+index e80e51bc78..2b12649aea 100644
+--- a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
++++ b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  5a06385dd4824373a00fe4e2139b3d851c51ed001f68671acf99d17ce348f5e2  kodi-visualisation-starburst-2.0.3-Leia.tar.gz
--sha256  2e668b3da2f061a6d6ecc3cb96bdfb0f8fc9cc98c9e9f95454bc45b88708690f  debian/copyright
-+sha256  fb991924b8f9a4f86d81b28ec629c131d36364f82914098356184c9ef03e753e  kodi-visualisation-starburst-2.4.0-Matrix.tar.gz
+-sha256  d7dd890e4491e211ff3781cdc043347ab7a4ef6e00619ac1b4641ed81b0c3626  kodi-pvr-vuplus-3.28.9-Leia.tar.gz
+-sha256  e98518889de8d38eaa6ddcb086b6e3b86efed98b501a5c666b9cf48f79e6df5d  debian/copyright
++sha256  2024ed208168089e51d9beade47fedec2e80e23044029f6919e27746f9634150  kodi-pvr-vuplus-7.4.0-Matrix.tar.gz
 +sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-visualisation-starburst/kodi-visualisation-starburst.mk b/package/kodi-visualisation-starburst/kodi-visualisation-starburst.mk
-index 8d736f08e9..f19a82bf81 100644
---- a/package/kodi-visualisation-starburst/kodi-visualisation-starburst.mk
-+++ b/package/kodi-visualisation-starburst/kodi-visualisation-starburst.mk
+diff --git a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
+index bf1de1178d..fee4e816ab 100644
+--- a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
++++ b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
 @@ -4,10 +4,10 @@
  #
  ################################################################################
  
--KODI_VISUALISATION_STARBURST_VERSION = 2.0.3-Leia
-+KODI_VISUALISATION_STARBURST_VERSION = 2.4.0-Matrix
- KODI_VISUALISATION_STARBURST_SITE = $(call github,xbmc,visualization.starburst,$(KODI_VISUALISATION_STARBURST_VERSION))
- KODI_VISUALISATION_STARBURST_LICENSE = GPL-2.0+
--KODI_VISUALISATION_STARBURST_LICENSE_FILES = debian/copyright
-+KODI_VISUALISATION_STARBURST_LICENSE_FILES = LICENSE.md
- KODI_VISUALISATION_STARBURST_DEPENDENCIES = glm kodi
+-KODI_PVR_VUPLUS_VERSION = 3.28.9-Leia
++KODI_PVR_VUPLUS_VERSION = 7.4.0-Matrix
+ KODI_PVR_VUPLUS_SITE = $(call github,kodi-pvr,pvr.vuplus,$(KODI_PVR_VUPLUS_VERSION))
+ KODI_PVR_VUPLUS_LICENSE = GPL-2.0+
+-KODI_PVR_VUPLUS_LICENSE_FILES = debian/copyright
+-KODI_PVR_VUPLUS_DEPENDENCIES = json-for-modern-cpp kodi-platform tinyxml
++KODI_PVR_VUPLUS_LICENSE_FILES = LICENSE.md
++KODI_PVR_VUPLUS_DEPENDENCIES = json-for-modern-cpp kodi tinyxml
  
  $(eval $(cmake-package))
