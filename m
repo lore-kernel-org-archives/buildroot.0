@@ -1,69 +1,76 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 6 Mar 2021 22:56:49 +0100
-Subject: [Buildroot] [git commit] package/kodi-screensaver-biogenesis: bump
- version to 2.5.0-Matrix
-Message-ID: <20210308072138.E8C7488918@busybox.osuosl.org>
+Date: Sat, 6 Mar 2021 22:56:50 +0100
+Subject: [Buildroot] [git commit] package/kodi-screensaver-matrixtrails:
+ bump version to 2.6.0-Matrix
+Message-ID: <20210308072139.1344188918@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=017984a553b6d3737b9bc3217732b4b590ba35e1
+commit: https://git.buildroot.net/buildroot/commit/?id=9bae62f5789d0b763a8d8c457eebc92dba53269e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Remove dependency to opengl, opengles support was fixed upstream:
-https://github.com/xbmc/screensaver.biogenesis/commit/2de1b7eb5897001f7bdf72ec4e390be749ccac13
+Remove dependency to libsoil:
+https://github.com/xbmc/screensaver.matrixtrails/commit/92a0d44e9151cfce3be74e81a3e39f0688d69b7a
 
-Switch license file to LICENSE.md.
+Remove dependency to opengl, opengles support was fixed upstream:
+https://github.com/xbmc/screensaver.matrixtrails/commit/ea6408ee391c75ae7ee4cb9f948df2ff8c0c87c5
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-screensaver-biogenesis/Config.in                        | 4 ----
- package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash | 4 ++--
- package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk   | 4 ++--
- 3 files changed, 4 insertions(+), 8 deletions(-)
+ package/kodi-screensaver-matrixtrails/Config.in                |  5 -----
+ .../kodi-screensaver-matrixtrails.hash                         |  4 ++--
+ .../kodi-screensaver-matrixtrails.mk                           | 10 +++++++---
+ 3 files changed, 9 insertions(+), 10 deletions(-)
 
-diff --git a/package/kodi-screensaver-biogenesis/Config.in b/package/kodi-screensaver-biogenesis/Config.in
-index 9703e9091b..26f134d0bb 100644
---- a/package/kodi-screensaver-biogenesis/Config.in
-+++ b/package/kodi-screensaver-biogenesis/Config.in
-@@ -1,10 +1,6 @@
- config BR2_PACKAGE_KODI_SCREENSAVER_BIOGENESIS
- 	bool "kodi-screensaver-biogenesis"
--	depends on BR2_PACKAGE_HAS_LIBGL
+diff --git a/package/kodi-screensaver-matrixtrails/Config.in b/package/kodi-screensaver-matrixtrails/Config.in
+index 270a51c9f4..9f031ba10d 100644
+--- a/package/kodi-screensaver-matrixtrails/Config.in
++++ b/package/kodi-screensaver-matrixtrails/Config.in
+@@ -1,11 +1,6 @@
+ config BR2_PACKAGE_KODI_SCREENSAVER_MATRIXTRAILS
+ 	bool "kodi-screensaver-matrixtrails"
+-	depends on BR2_PACKAGE_HAS_LIBGL # libsoil
+-	select BR2_PACKAGE_LIBSOIL
  	help
- 	  BioGenesis screensaver for Kodi
+ 	  Matrix trails screensaver for Kodi
  
- 	  https://github.com/xbmc/screensaver.biogenesis
+ 	  https://github.com/xbmc/screensaver.matrixtrails
 -
--comment "kodi-screensaver-biogenesis needs OpenGL"
+-comment "kodi-screensaver-matrixtrails needs OpenGL"
 -	depends on !BR2_PACKAGE_HAS_LIBGL
-diff --git a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash
-index df07f9fbc5..1f2c5e6305 100644
---- a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash
-+++ b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash
+diff --git a/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.hash b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.hash
+index 26b95cbc77..1f35f11b7d 100644
+--- a/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.hash
++++ b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  b0f721d112282f633a769e7b077c5dd52e5045a8f1ae32c4e602b0e2e937acb0  kodi-screensaver-biogenesis-2.2.3-Leia.tar.gz
--sha256  d38b9e2768b49acdedcb21a202d12753c8f1d7e85e5ee24ff1e4aee3c7601a65  debian/copyright
-+sha256  bf56384e6956674cd911c52b2807993d0a6e0ffa9623b5a1981a3153911e135a  kodi-screensaver-biogenesis-2.5.0-Matrix.tar.gz
+-sha256  5a2f5bca0c197eea87f06376941c6d0ddbc81cf144d8c3854ac148fdec3400ec  kodi-screensaver-matrixtrails-2.2.3-Leia.tar.gz
+-sha256  385a17599b44aaea10537374c1991c21a5e06153878917b12f96fc1cf8bbc118  debian/copyright
++sha256  49986b82e7319e25ef2b3ec84b3892bbf1cb0b5253bd541da730c5cf5dd1940b  kodi-screensaver-matrixtrails-2.6.0-Matrix.tar.gz
 +sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk
-index 562c279ec6..8b2d6b2ee5 100644
---- a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk
-+++ b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk
-@@ -4,10 +4,10 @@
+diff --git a/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk
+index 10d3d45e08..a89ea72d5d 100644
+--- a/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk
++++ b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk
+@@ -4,10 +4,14 @@
  #
  ################################################################################
  
--KODI_SCREENSAVER_BIOGENESIS_VERSION = 2.2.3-Leia
-+KODI_SCREENSAVER_BIOGENESIS_VERSION = 2.5.0-Matrix
- KODI_SCREENSAVER_BIOGENESIS_SITE = $(call github,xbmc,screensaver.biogenesis,$(KODI_SCREENSAVER_BIOGENESIS_VERSION))
- KODI_SCREENSAVER_BIOGENESIS_LICENSE = GPL-2.0+
--KODI_SCREENSAVER_BIOGENESIS_LICENSE_FILES = debian/copyright
-+KODI_SCREENSAVER_BIOGENESIS_LICENSE_FILES = LICENSE.md
- KODI_SCREENSAVER_BIOGENESIS_DEPENDENCIES = kodi
+-KODI_SCREENSAVER_MATRIXTRAILS_VERSION = 2.2.3-Leia
++KODI_SCREENSAVER_MATRIXTRAILS_VERSION = 2.6.0-Matrix
+ KODI_SCREENSAVER_MATRIXTRAILS_SITE = $(call github,xbmc,screensaver.matrixtrails,$(KODI_SCREENSAVER_MATRIXTRAILS_VERSION))
+ KODI_SCREENSAVER_MATRIXTRAILS_LICENSE = GPL-2.0+
+-KODI_SCREENSAVER_MATRIXTRAILS_LICENSE_FILES = debian/copyright
+-KODI_SCREENSAVER_MATRIXTRAILS_DEPENDENCIES = kodi libsoil
++KODI_SCREENSAVER_MATRIXTRAILS_LICENSE_FILES = LICENSE.md
++KODI_SCREENSAVER_MATRIXTRAILS_DEPENDENCIES = kodi
++
++KODI_SCREENSAVER_MATRIXTRAILS_CONF_OPTS += \
++	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) $(shell $(PKG_CONFIG_HOST_BINARY) --cflags egl)" \
++	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) $(shell $(PKG_CONFIG_HOST_BINARY) --cflags egl)"
  
  $(eval $(cmake-package))
