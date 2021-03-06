@@ -1,46 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 6 Mar 2021 23:32:41 +0100
-Subject: [Buildroot] [git commit] package/optee-test: bump to version 3.12.0
-Message-ID: <20210308072140.7BB2F81132@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 7 Mar 2021 00:10:08 +0100
+Subject: [Buildroot] [git commit] package/optee-test: add deps on openssl
+ when enabled
+Message-ID: <20210308072140.9221988918@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2ed41deaf7d5e53e7c70150105813d5c3714e5e4
+commit: https://git.buildroot.net/buildroot/commit/?id=b2821ca786f31066eaab4687607fbcfec268c36f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump OP-TEE Test package version to OP-TEE release 3.12.0.
+Add a dependency on openssl upon BR2_PACKAGE_LIBOPENSSL=y to
+enable some for OP-TEE embedded tests.
+
+Building with libressl makes the optee-test test tool fail on a
+certificate test; so we explicitly depend on libopenssl.
 
 Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[yann.morin.1998 at free.fr:
+  - match the depenency to libopenssl, since that's is what is used in
+    the condition (BR2_PACKAGE_LIBOPENSSL)
+  - add a blurb to explain why libopenssl is used, not the virutal
+    openssl
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/optee-test/optee-test.hash | 4 ++--
- package/optee-test/optee-test.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/optee-test/optee-test.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/optee-test/optee-test.hash b/package/optee-test/optee-test.hash
-index 52e2373bf7..0c789e1cd1 100644
---- a/package/optee-test/optee-test.hash
-+++ b/package/optee-test/optee-test.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/OP-TEE/optee_test/archive/3.11.0.tar.gz
--sha256 54d4b7e2ad22cd409ee8e25e990c1878690b1b5eb8843f649d12022888186a53  optee-test-3.11.0.tar.gz
-+# From https://github.com/OP-TEE/optee_test/archive/3.12.0/optee-test-3.12.0.tar.gz
-+sha256 beebdc98e95af2e7a20595f7d6ca716872efde1ec74a48ab07be599f21e8ad70  optee-test-3.12.0.tar.gz
- # Locally computed
- sha256 6e6810981f0ddab9e0d44399d0700a15d9f760a3c2843cc866659c2074139ae7  LICENSE.md
 diff --git a/package/optee-test/optee-test.mk b/package/optee-test/optee-test.mk
-index 1f4f586672..2304b15925 100644
+index 2304b15925..a2d18dadfc 100644
 --- a/package/optee-test/optee-test.mk
 +++ b/package/optee-test/optee-test.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -11,6 +11,10 @@ OPTEE_TEST_LICENSE_FILES = LICENSE.md
  
--OPTEE_TEST_VERSION = 3.11.0
-+OPTEE_TEST_VERSION = 3.12.0
- OPTEE_TEST_SITE = $(call github,OP-TEE,optee_test,$(OPTEE_TEST_VERSION))
- OPTEE_TEST_LICENSE = GPL-2.0, BSD-2-Clause,
- OPTEE_TEST_LICENSE_FILES = LICENSE.md
+ OPTEE_TEST_DEPENDENCIES = optee-client optee-os
+ 
++ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
++OPTEE_TEST_DEPENDENCIES += libopenssl
++endif
++
+ OPTEE_TEST_CONF_OPTS = -DOPTEE_TEST_SDK=$(OPTEE_OS_SDK)
+ 
+ # Trusted Application are not built from CMake due to ta_dev_kit
