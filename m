@@ -1,90 +1,70 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 6 Mar 2021 22:56:50 +0100
-Subject: [Buildroot] [git commit branch/next] package/kodi-vfs-libarchive:
- new package
-Message-ID: <20210306213556.1DFDD86DA6@busybox.osuosl.org>
+Date: Sat, 6 Mar 2021 22:56:49 +0100
+Subject: [Buildroot] [git commit branch/next]
+ package/kodi-screensaver-asteroids: bump version to 2.6.0-Matrix
+Message-ID: <20210306213555.8362E86782@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=39e482e791d799ec03db8e7655e21d092898e789
+commit: https://git.buildroot.net/buildroot/commit/?id=de87bbe0b402c5dc97772d4780095778214edbf9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+Remove dependency to opengl, opengles support was fixed upstream:
+https://github.com/xbmc/screensaver.asteroids/commit/360a02fc20925fa17179f3298dd4515b4354e266
+
+Switch license file to LICENSE.md.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-vfs-libarchive/Config.in               | 13 +++++++++++++
- .../kodi-vfs-libarchive/kodi-vfs-libarchive.hash    |  3 +++
- package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk  | 21 +++++++++++++++++++++
- package/kodi/Config.in                              |  1 +
- 4 files changed, 38 insertions(+)
+ package/kodi-screensaver-asteroids/Config.in                       | 4 ----
+ package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash | 4 ++--
+ package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk   | 4 ++--
+ 3 files changed, 4 insertions(+), 8 deletions(-)
 
-diff --git a/package/kodi-vfs-libarchive/Config.in b/package/kodi-vfs-libarchive/Config.in
-new file mode 100644
-index 0000000000..6720e5206e
---- /dev/null
-+++ b/package/kodi-vfs-libarchive/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_KODI_VFS_LIBARCHIVE
-+	bool "kodi-vfs-libarchive"
-+	select BR2_PACKAGE_BZIP2
-+	select BR2_PACKAGE_LIBARCHIVE
-+	select BR2_PACKAGE_LZ4
-+	select BR2_PACKAGE_LZO
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_XZ
-+	select BR2_PACKAGE_ZLIB
-+	help
-+	  Libarchive VFS add-on for Kodi
-+
-+	  https://github.com/xbmc/vfs.libarchive
-diff --git a/package/kodi-vfs-libarchive/kodi-vfs-libarchive.hash b/package/kodi-vfs-libarchive/kodi-vfs-libarchive.hash
-new file mode 100644
-index 0000000000..59b3bc1078
---- /dev/null
-+++ b/package/kodi-vfs-libarchive/kodi-vfs-libarchive.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  6fd70f0e2775e9c4eef2e8b529396f1e739fe3e43e0d4202d7f08ab4a30fa760  kodi-vfs-libarchive-2.0.0-Matrix.tar.gz
-+sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk b/package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk
-new file mode 100644
-index 0000000000..5278f50136
---- /dev/null
-+++ b/package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk
-@@ -0,0 +1,21 @@
-+################################################################################
-+#
-+# kodi-vfs-libarchive
-+#
-+################################################################################
-+
-+KODI_VFS_LIBARCHIVE_VERSION = 2.0.0-Matrix
-+KODI_VFS_LIBARCHIVE_SITE = $(call github,xbmc,vfs.libarchive,$(KODI_VFS_LIBARCHIVE_VERSION))
-+KODI_VFS_LIBARCHIVE_LICENSE = GPL-2.0+
-+KODI_VFS_LIBARCHIVE_LICENSE_FILES = LICENSE.md
-+KODI_VFS_LIBARCHIVE_DEPENDENCIES = \
-+	bzip2 \
-+	kodi \
-+	libarchive \
-+	lz4 \
-+	lzo \
-+	openssl \
-+	xz \
-+	zlib
-+
-+$(eval $(cmake-package))
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index eefdd54990..a104ba53c3 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -347,6 +347,7 @@ menu "Skins"
- endmenu
+diff --git a/package/kodi-screensaver-asteroids/Config.in b/package/kodi-screensaver-asteroids/Config.in
+index 3d66c3dcc3..833e065dfa 100644
+--- a/package/kodi-screensaver-asteroids/Config.in
++++ b/package/kodi-screensaver-asteroids/Config.in
+@@ -1,11 +1,7 @@
+ config BR2_PACKAGE_KODI_SCREENSAVER_ASTEROIDS
+ 	bool "kodi-screensaver-asteroids"
+-	depends on BR2_PACKAGE_HAS_LIBGL
+ 	select BR2_PACKAGE_GLM
+ 	help
+ 	  Asteroids screensaver for Kodi
  
- menu "Virtual file systems"
-+	source "package/kodi-vfs-libarchive/Config.in"
- 	source "package/kodi-vfs-rar/Config.in"
- 	source "package/kodi-vfs-sftp/Config.in"
- endmenu
+ 	  https://github.com/xbmc/screensaver.asteroids
+-
+-comment "kodi-screensaver-asteroids needs OpenGL"
+-	depends on !BR2_PACKAGE_HAS_LIBGL
+diff --git a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash
+index e6855a3bc6..a8886d2733 100644
+--- a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash
++++ b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  f4b54ed79eedd1a39e24dcbe8d372dbfc9edbc9358499ea9ab28777dd9082ee3  kodi-screensaver-asteroids-2.3.3-Leia.tar.gz
+-sha256  297a1d34e6000f1b1a924f5ab75c16c2270968bfa47357dd8fa3799c9dfc47d8  debian/copyright
++sha256  b60d0123dd2ad2326a03b2a66a3cdba3ac17f0a109c4ecedc3216699ca28cae2  kodi-screensaver-asteroids-2.6.0-Matrix.tar.gz
++sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
+index dcd0a3d34c..add0ca5b9b 100644
+--- a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
++++ b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-KODI_SCREENSAVER_ASTEROIDS_VERSION = 2.3.3-Leia
++KODI_SCREENSAVER_ASTEROIDS_VERSION = 2.6.0-Matrix
+ KODI_SCREENSAVER_ASTEROIDS_SITE = $(call github,xbmc,screensaver.asteroids,$(KODI_SCREENSAVER_ASTEROIDS_VERSION))
+ KODI_SCREENSAVER_ASTEROIDS_LICENSE = GPL-2.0+
+-KODI_SCREENSAVER_ASTEROIDS_LICENSE_FILES = debian/copyright
++KODI_SCREENSAVER_ASTEROIDS_LICENSE_FILES = LICENSE.md
+ KODI_SCREENSAVER_ASTEROIDS_DEPENDENCIES = glm kodi
+ 
+ $(eval $(cmake-package))
