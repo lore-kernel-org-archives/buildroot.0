@@ -1,50 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 6 Mar 2021 21:53:25 +0100
+Date: Sat, 6 Mar 2021 21:52:06 +0100
 Subject: [Buildroot] [git commit branch/next]
- package/kodi-peripheral-joystick: bump version to 1.7.1-Matrix
-Message-ID: <20210306213554.7AD7486DA6@busybox.osuosl.org>
+ package/kodi-inputstream-adaptive: bump version to 2.6.7-Matrix
+Message-ID: <20210306213554.524D38183D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=36c3a64ad8faac06eb29637edfa7342103f60798
+commit: https://git.buildroot.net/buildroot/commit/?id=8e78c80467c99b6aa094416959e0f18992bf30e4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Switch license file to LICENSE.md.
+Add expat as dependency after it was removed from the kodi package:
+https://github.com/xbmc/inputstream.adaptive/blob/Matrix/CMakeLists.txt#L61
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash | 4 ++--
- package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/kodi-inputstream-adaptive/Config.in                      | 1 +
+ package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash | 2 +-
+ package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk   | 4 ++--
+ 3 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
-index d0cac8e4bb..650cab0f2d 100644
---- a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
-+++ b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
+diff --git a/package/kodi-inputstream-adaptive/Config.in b/package/kodi-inputstream-adaptive/Config.in
+index f9ba20adcf..90e9a85dd8 100644
+--- a/package/kodi-inputstream-adaptive/Config.in
++++ b/package/kodi-inputstream-adaptive/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_KODI_INPUTSTREAM_ADAPTIVE
+ 	# wvdecrypter/cdm/build/build_config.h
+ 	depends on BR2_aarch64 || BR2_arm || BR2_i386 || BR2_mipsel \
+ 		|| BR2_mips64el || BR2_x86_64
++	select BR2_PACKAGE_EXPAT
+ 	help
+ 	  Kodi inputstream addon for several manifest types
+ 
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+index b12c93ac11..6c9b79b881 100644
+--- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  e83c32380a51ea74bd5f0af74afc747ff5de99167934e2644bc2b3438cd998d0  kodi-peripheral-joystick-1.4.9-Leia.tar.gz
--sha256  2bb807179053b1a7795f9952539a394664847f561a9ffa4ccc36d7bb3cddadf9  debian/copyright
-+sha256  4dc63c6c5bdad25881eeba800765d97c53b2583addf28e71bbcd67775452ecdb  kodi-peripheral-joystick-1.7.1-Matrix.tar.gz
-+sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
-index 9cce174da1..0fdd4851cf 100644
---- a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
-+++ b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
+-sha256  222b7ad879146c62a1fc6016fc70ca1ca57b3b882882ebc54e0b772bf96482e7  kodi-inputstream-adaptive-2.4.6-Leia.tar.gz
++sha256  353207f5f98bf81ce8d79cec903c28da8c0227d7c7a632692c910d81e59c2dbe  kodi-inputstream-adaptive-2.6.7-Matrix.tar.gz
+ sha256  89931c1fb1f3716694175763cf3221cfcd63d6935031cf6b4512d17ffe5d9860  LICENSE.GPL
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+index 30fbaf5251..6b085e49ce 100644
+--- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
 @@ -4,10 +4,10 @@
  #
  ################################################################################
  
--KODI_PERIPHERAL_JOYSTICK_VERSION = 1.4.9-Leia
-+KODI_PERIPHERAL_JOYSTICK_VERSION = 1.7.1-Matrix
- KODI_PERIPHERAL_JOYSTICK_SITE = $(call github,xbmc,peripheral.joystick,$(KODI_PERIPHERAL_JOYSTICK_VERSION))
- KODI_PERIPHERAL_JOYSTICK_LICENSE = GPL-2.0+
--KODI_PERIPHERAL_JOYSTICK_LICENSE_FILES = debian/copyright
-+KODI_PERIPHERAL_JOYSTICK_LICENSE_FILES = LICENSE.md
- KODI_PERIPHERAL_JOYSTICK_DEPENDENCIES = kodi tinyxml udev
+-KODI_INPUTSTREAM_ADAPTIVE_VERSION = 2.4.6-Leia
++KODI_INPUTSTREAM_ADAPTIVE_VERSION = 2.6.7-Matrix
+ KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,peak3d,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
+ KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPL-2.0+
+ KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = LICENSE.GPL
+-KODI_INPUTSTREAM_ADAPTIVE_DEPENDENCIES = kodi
++KODI_INPUTSTREAM_ADAPTIVE_DEPENDENCIES = expat kodi
  
  $(eval $(cmake-package))
