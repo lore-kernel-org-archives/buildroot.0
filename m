@@ -1,84 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 6 Mar 2021 21:52:40 +0100
-Subject: [Buildroot] [git commit] package/kodi-inputstream-ffmpegdirect: new
- package
-Message-ID: <20210308072137.C367F8896D@busybox.osuosl.org>
+Date: Sat, 6 Mar 2021 21:52:06 +0100
+Subject: [Buildroot] [git commit] package/kodi-inputstream-adaptive: bump
+ version to 2.6.7-Matrix
+Message-ID: <20210308072137.B832E81607@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d0c70351a5a878ffd03ba7e27d0851bb40b1be89
+commit: https://git.buildroot.net/buildroot/commit/?id=8e78c80467c99b6aa094416959e0f18992bf30e4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Add expat as dependency after it was removed from the kodi package:
+https://github.com/xbmc/inputstream.adaptive/blob/Matrix/CMakeLists.txt#L61
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-inputstream-ffmpegdirect/Config.in           | 13 +++++++++++++
- .../kodi-inputstream-ffmpegdirect.hash                    |  3 +++
- .../kodi-inputstream-ffmpegdirect.mk                      | 15 +++++++++++++++
- package/kodi/Config.in                                    |  1 +
- 4 files changed, 32 insertions(+)
+ package/kodi-inputstream-adaptive/Config.in                      | 1 +
+ package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash | 2 +-
+ package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk   | 4 ++--
+ 3 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/kodi-inputstream-ffmpegdirect/Config.in b/package/kodi-inputstream-ffmpegdirect/Config.in
-new file mode 100644
-index 0000000000..4f246e1733
---- /dev/null
-+++ b/package/kodi-inputstream-ffmpegdirect/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_KODI_INPUTSTREAM_FFMPEGDIRECT
-+	bool "kodi-inputstream-ffmpegdirect"
-+	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
-+	select BR2_PACKAGE_BZIP2
-+	select BR2_PACKAGE_FFMPEG
-+	select BR2_PACKAGE_FFMPEG_GPL
-+	select BR2_PACKAGE_FFMPEG_POSTPROC
-+	help
-+	  This is a Kodi input stream addon for streams that can be
-+	  opened by FFmpeg's libavformat, such as plain TS, HLS and
-+	  DASH streams.
-+
-+	  https://github.com/xbmc/inputstream.ffmpegdirect
-diff --git a/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.hash b/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.hash
-new file mode 100644
-index 0000000000..ccb7291bb8
---- /dev/null
-+++ b/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  952eeaa7af717dd954c940feb2902b51e497cde8822222c1bfa98804ec8665c7  kodi-inputstream-ffmpegdirect-1.19.2-Matrix.tar.gz
-+sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.mk b/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.mk
-new file mode 100644
-index 0000000000..80891858cf
---- /dev/null
-+++ b/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# kodi-inputstream-ffmpegdirect
-+#
-+################################################################################
-+
-+KODI_INPUTSTREAM_FFMPEGDIRECT_VERSION = 1.19.2-Matrix
-+KODI_INPUTSTREAM_FFMPEGDIRECT_SITE = $(call github,xbmc,inputstream.ffmpegdirect,$(KODI_INPUTSTREAM_FFMPEGDIRECT_VERSION))
-+KODI_INPUTSTREAM_FFMPEGDIRECT_LICENSE = GPL-2.0+
-+KODI_INPUTSTREAM_FFMPEGDIRECT_LICENSE_FILES = LICENSE.md
-+KODI_INPUTSTREAM_FFMPEGDIRECT_DEPENDENCIES = bzip2 ffmpeg kodi
-+KODI_INPUTSTREAM_FFMPEGDIRECT_CONF_OPTS = \
-+	-DFFMPEG_PATH=$(STAGING_DIR)/usr
-+
-+$(eval $(cmake-package))
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 4fc2f832ac..eefdd54990 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -303,6 +303,7 @@ endmenu
+diff --git a/package/kodi-inputstream-adaptive/Config.in b/package/kodi-inputstream-adaptive/Config.in
+index f9ba20adcf..90e9a85dd8 100644
+--- a/package/kodi-inputstream-adaptive/Config.in
++++ b/package/kodi-inputstream-adaptive/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_KODI_INPUTSTREAM_ADAPTIVE
+ 	# wvdecrypter/cdm/build/build_config.h
+ 	depends on BR2_aarch64 || BR2_arm || BR2_i386 || BR2_mipsel \
+ 		|| BR2_mips64el || BR2_x86_64
++	select BR2_PACKAGE_EXPAT
+ 	help
+ 	  Kodi inputstream addon for several manifest types
  
- menu "Inputstream addons"
- 	source "package/kodi-inputstream-adaptive/Config.in"
-+	source "package/kodi-inputstream-ffmpegdirect/Config.in"
- 	source "package/kodi-inputstream-rtmp/Config.in"
- endmenu
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+index b12c93ac11..6c9b79b881 100644
+--- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  222b7ad879146c62a1fc6016fc70ca1ca57b3b882882ebc54e0b772bf96482e7  kodi-inputstream-adaptive-2.4.6-Leia.tar.gz
++sha256  353207f5f98bf81ce8d79cec903c28da8c0227d7c7a632692c910d81e59c2dbe  kodi-inputstream-adaptive-2.6.7-Matrix.tar.gz
+ sha256  89931c1fb1f3716694175763cf3221cfcd63d6935031cf6b4512d17ffe5d9860  LICENSE.GPL
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+index 30fbaf5251..6b085e49ce 100644
+--- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
  
+-KODI_INPUTSTREAM_ADAPTIVE_VERSION = 2.4.6-Leia
++KODI_INPUTSTREAM_ADAPTIVE_VERSION = 2.6.7-Matrix
+ KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,peak3d,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
+ KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPL-2.0+
+ KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = LICENSE.GPL
+-KODI_INPUTSTREAM_ADAPTIVE_DEPENDENCIES = kodi
++KODI_INPUTSTREAM_ADAPTIVE_DEPENDENCIES = expat kodi
+ 
+ $(eval $(cmake-package))
