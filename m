@@ -1,42 +1,89 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 6 Mar 2021 23:09:39 +0100
-Subject: [Buildroot] [git commit] package/pigpio: bump to version 79
-Message-ID: <20210308072139.CA2EE88918@busybox.osuosl.org>
+Date: Sat, 6 Mar 2021 22:56:50 +0100
+Subject: [Buildroot] [git commit] package/kodi-vfs-libarchive: new package
+Message-ID: <20210308072139.54CB581132@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=698751c5641285b9e493d60ed8242f7ba9b094d1
+commit: https://git.buildroot.net/buildroot/commit/?id=39e482e791d799ec03db8e7655e21d092898e789
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/pigpio/pigpio.hash | 2 +-
- package/pigpio/pigpio.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/kodi-vfs-libarchive/Config.in               | 13 +++++++++++++
+ .../kodi-vfs-libarchive/kodi-vfs-libarchive.hash    |  3 +++
+ package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk  | 21 +++++++++++++++++++++
+ package/kodi/Config.in                              |  1 +
+ 4 files changed, 38 insertions(+)
 
-diff --git a/package/pigpio/pigpio.hash b/package/pigpio/pigpio.hash
-index b6de0c19f6..fecb7ccbeb 100644
---- a/package/pigpio/pigpio.hash
-+++ b/package/pigpio/pigpio.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  ef4a4dc7ca8ca2f97fbdb9fd75586f61be7222d0f6c14e58af6c9192ad42f682  pigpio-78.tar.gz
-+sha256  c5337c0b7ae888caf0262a6f476af0e2ab67065f7650148a0b21900b8d1eaed7  pigpio-79.tar.gz
- sha256  6a90b88421a0d9b090e121daa11b3c6d55eed5eeb3281a2fcc454d6a28b5547c  UNLICENCE
-diff --git a/package/pigpio/pigpio.mk b/package/pigpio/pigpio.mk
-index 345b315c42..e34974972a 100644
---- a/package/pigpio/pigpio.mk
-+++ b/package/pigpio/pigpio.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/kodi-vfs-libarchive/Config.in b/package/kodi-vfs-libarchive/Config.in
+new file mode 100644
+index 0000000000..6720e5206e
+--- /dev/null
++++ b/package/kodi-vfs-libarchive/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_KODI_VFS_LIBARCHIVE
++	bool "kodi-vfs-libarchive"
++	select BR2_PACKAGE_BZIP2
++	select BR2_PACKAGE_LIBARCHIVE
++	select BR2_PACKAGE_LZ4
++	select BR2_PACKAGE_LZO
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_XZ
++	select BR2_PACKAGE_ZLIB
++	help
++	  Libarchive VFS add-on for Kodi
++
++	  https://github.com/xbmc/vfs.libarchive
+diff --git a/package/kodi-vfs-libarchive/kodi-vfs-libarchive.hash b/package/kodi-vfs-libarchive/kodi-vfs-libarchive.hash
+new file mode 100644
+index 0000000000..59b3bc1078
+--- /dev/null
++++ b/package/kodi-vfs-libarchive/kodi-vfs-libarchive.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  6fd70f0e2775e9c4eef2e8b529396f1e739fe3e43e0d4202d7f08ab4a30fa760  kodi-vfs-libarchive-2.0.0-Matrix.tar.gz
++sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk b/package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk
+new file mode 100644
+index 0000000000..5278f50136
+--- /dev/null
++++ b/package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk
+@@ -0,0 +1,21 @@
++################################################################################
++#
++# kodi-vfs-libarchive
++#
++################################################################################
++
++KODI_VFS_LIBARCHIVE_VERSION = 2.0.0-Matrix
++KODI_VFS_LIBARCHIVE_SITE = $(call github,xbmc,vfs.libarchive,$(KODI_VFS_LIBARCHIVE_VERSION))
++KODI_VFS_LIBARCHIVE_LICENSE = GPL-2.0+
++KODI_VFS_LIBARCHIVE_LICENSE_FILES = LICENSE.md
++KODI_VFS_LIBARCHIVE_DEPENDENCIES = \
++	bzip2 \
++	kodi \
++	libarchive \
++	lz4 \
++	lzo \
++	openssl \
++	xz \
++	zlib
++
++$(eval $(cmake-package))
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index eefdd54990..a104ba53c3 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -347,6 +347,7 @@ menu "Skins"
+ endmenu
  
--PIGPIO_VERSION = 78
-+PIGPIO_VERSION = 79
- PIGPIO_SITE = $(call github,joan2937,pigpio,v$(PIGPIO_VERSION))
- PIGPIO_LICENSE = Unlicense
- PIGPIO_LICENSE_FILES = UNLICENCE
+ menu "Virtual file systems"
++	source "package/kodi-vfs-libarchive/Config.in"
+ 	source "package/kodi-vfs-rar/Config.in"
+ 	source "package/kodi-vfs-sftp/Config.in"
+ endmenu
