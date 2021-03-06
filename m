@@ -1,30 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 6 Mar 2021 23:15:19 +0100
-Subject: [Buildroot] [PATCH 1/1] package/timescaledb: bump version to
- 2.1.0
-In-Reply-To: <20210304084721.1940508-1-fido_max@inbox.ru>
-References: <20210304084721.1940508-1-fido_max@inbox.ru>
-Message-ID: <20210306231519.4d3a016c@windsurf.home>
+Date: Sat, 6 Mar 2021 23:15:50 +0100
+Subject: [Buildroot] [git commit branch/next] package/libnss: bump version
+ to 3.62
+Message-ID: <20210306215252.7DCD484226@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu,  4 Mar 2021 11:47:21 +0300
-Maxim Kochetkov via buildroot <buildroot@busybox.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=06d695cd70dfcab7806bf778919744f7847ec1c2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> Remove all PG13 upstream patches.
-> 
-> Release notes: https://github.com/timescale/timescaledb/releases/tag/2.1.0
-> 
-> Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+Release Notes:
+https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.62_release_notes
 
-Applied to next, thanks. Nice to have this new version available that
-allows to drop all those patches!
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libnss/libnss.hash | 4 ++--
+ package/libnss/libnss.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index ad632f724a..85c694bc66 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_61_RTM/src/SHA256SUMS
+-sha256  312e2d804b34ccf0fec70b57cf8cd6ac853f8ced60df53e30ebb0a7bcd0e1370  nss-3.61.tar.gz
++# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_62_RTM/src/SHA256SUMS
++sha256  86d6df7cece25b8d4efa53e4c19af903c484eb79871163f37b5232bb406a5478  nss-3.62.tar.gz
+ # Locally calculated
+ sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 3bc3197e34..07991ae786 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNSS_VERSION = 3.61
++LIBNSS_VERSION = 3.62
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
