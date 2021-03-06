@@ -1,69 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 6 Mar 2021 22:56:49 +0100
+Date: Sat, 6 Mar 2021 22:56:51 +0100
 Subject: [Buildroot] [git commit branch/next]
- package/kodi-screensaver-biogenesis: bump version to 2.5.0-Matrix
-Message-ID: <20210306213555.99C3186782@busybox.osuosl.org>
+ package/kodi-visualisation-starburst: bump version to 2.4.0-Matrix
+Message-ID: <20210306213556.6666D8183D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=017984a553b6d3737b9bc3217732b4b590ba35e1
+commit: https://git.buildroot.net/buildroot/commit/?id=4e4fccd71296523fc29f14a550e9faf647f1fa04
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-Remove dependency to opengl, opengles support was fixed upstream:
-https://github.com/xbmc/screensaver.biogenesis/commit/2de1b7eb5897001f7bdf72ec4e390be749ccac13
 
 Switch license file to LICENSE.md.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-screensaver-biogenesis/Config.in                        | 4 ----
- package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash | 4 ++--
- package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk   | 4 ++--
- 3 files changed, 4 insertions(+), 8 deletions(-)
+ .../kodi-visualisation-starburst/kodi-visualisation-starburst.hash    | 4 ++--
+ package/kodi-visualisation-starburst/kodi-visualisation-starburst.mk  | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/kodi-screensaver-biogenesis/Config.in b/package/kodi-screensaver-biogenesis/Config.in
-index 9703e9091b..26f134d0bb 100644
---- a/package/kodi-screensaver-biogenesis/Config.in
-+++ b/package/kodi-screensaver-biogenesis/Config.in
-@@ -1,10 +1,6 @@
- config BR2_PACKAGE_KODI_SCREENSAVER_BIOGENESIS
- 	bool "kodi-screensaver-biogenesis"
--	depends on BR2_PACKAGE_HAS_LIBGL
- 	help
- 	  BioGenesis screensaver for Kodi
- 
- 	  https://github.com/xbmc/screensaver.biogenesis
--
--comment "kodi-screensaver-biogenesis needs OpenGL"
--	depends on !BR2_PACKAGE_HAS_LIBGL
-diff --git a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash
-index df07f9fbc5..1f2c5e6305 100644
---- a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash
-+++ b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash
+diff --git a/package/kodi-visualisation-starburst/kodi-visualisation-starburst.hash b/package/kodi-visualisation-starburst/kodi-visualisation-starburst.hash
+index 834d71ae5c..b08da9788e 100644
+--- a/package/kodi-visualisation-starburst/kodi-visualisation-starburst.hash
++++ b/package/kodi-visualisation-starburst/kodi-visualisation-starburst.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  b0f721d112282f633a769e7b077c5dd52e5045a8f1ae32c4e602b0e2e937acb0  kodi-screensaver-biogenesis-2.2.3-Leia.tar.gz
--sha256  d38b9e2768b49acdedcb21a202d12753c8f1d7e85e5ee24ff1e4aee3c7601a65  debian/copyright
-+sha256  bf56384e6956674cd911c52b2807993d0a6e0ffa9623b5a1981a3153911e135a  kodi-screensaver-biogenesis-2.5.0-Matrix.tar.gz
+-sha256  5a06385dd4824373a00fe4e2139b3d851c51ed001f68671acf99d17ce348f5e2  kodi-visualisation-starburst-2.0.3-Leia.tar.gz
+-sha256  2e668b3da2f061a6d6ecc3cb96bdfb0f8fc9cc98c9e9f95454bc45b88708690f  debian/copyright
++sha256  fb991924b8f9a4f86d81b28ec629c131d36364f82914098356184c9ef03e753e  kodi-visualisation-starburst-2.4.0-Matrix.tar.gz
 +sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk
-index 562c279ec6..8b2d6b2ee5 100644
---- a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk
-+++ b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk
+diff --git a/package/kodi-visualisation-starburst/kodi-visualisation-starburst.mk b/package/kodi-visualisation-starburst/kodi-visualisation-starburst.mk
+index 8d736f08e9..f19a82bf81 100644
+--- a/package/kodi-visualisation-starburst/kodi-visualisation-starburst.mk
++++ b/package/kodi-visualisation-starburst/kodi-visualisation-starburst.mk
 @@ -4,10 +4,10 @@
  #
  ################################################################################
  
--KODI_SCREENSAVER_BIOGENESIS_VERSION = 2.2.3-Leia
-+KODI_SCREENSAVER_BIOGENESIS_VERSION = 2.5.0-Matrix
- KODI_SCREENSAVER_BIOGENESIS_SITE = $(call github,xbmc,screensaver.biogenesis,$(KODI_SCREENSAVER_BIOGENESIS_VERSION))
- KODI_SCREENSAVER_BIOGENESIS_LICENSE = GPL-2.0+
--KODI_SCREENSAVER_BIOGENESIS_LICENSE_FILES = debian/copyright
-+KODI_SCREENSAVER_BIOGENESIS_LICENSE_FILES = LICENSE.md
- KODI_SCREENSAVER_BIOGENESIS_DEPENDENCIES = kodi
+-KODI_VISUALISATION_STARBURST_VERSION = 2.0.3-Leia
++KODI_VISUALISATION_STARBURST_VERSION = 2.4.0-Matrix
+ KODI_VISUALISATION_STARBURST_SITE = $(call github,xbmc,visualization.starburst,$(KODI_VISUALISATION_STARBURST_VERSION))
+ KODI_VISUALISATION_STARBURST_LICENSE = GPL-2.0+
+-KODI_VISUALISATION_STARBURST_LICENSE_FILES = debian/copyright
++KODI_VISUALISATION_STARBURST_LICENSE_FILES = LICENSE.md
+ KODI_VISUALISATION_STARBURST_DEPENDENCIES = glm kodi
  
  $(eval $(cmake-package))
