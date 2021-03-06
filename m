@@ -1,28 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 06 Mar 2021 11:19:27 +0100
-Subject: [Buildroot] [PATCH 1/1] package/expat: update CPE variables
-In-Reply-To: <20210306095311.2155649-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 6 Mar 2021 10:53:11 +0100")
-References: <20210306095311.2155649-1-fontaine.fabrice@gmail.com>
-Message-ID: <87im64a8k0.fsf@dell.be.48ers.dk>
+Date: Sat, 06 Mar 2021 11:20:31 +0100
+Subject: [Buildroot] [PATCH] package/libgeos: disable package while
+ building for Nios II
+In-Reply-To: <20210305160005.3826615-1-giulio.benetti@benettiengineering.com>
+ (Giulio Benetti's message of "Fri, 5 Mar 2021 17:00:05 +0100")
+References: <20210305160005.3826615-1-giulio.benetti@benettiengineering.com>
+Message-ID: <87eegsa8i8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
 
- > libexpat:expat has been replaced by libexpat_project:libexpat:
- >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alibexpat_project%3Alibexpat
+ > This package fails to build with Nios II up to gcc version 10.x and no
+ > work around has been found. So let's disable it whil building for Nios
+ > II.
 
- >   <cpe-item name="cpe:/a:libexpat:expat:2.2.10" deprecated="true" deprecation_date="2021-01-25T15:44:50.537Z">
- >     <title xml:lang="en-US">libexpat Expat 2.2.10</title>
- >       <reference href="https://github.com/libexpat/libexpat/">Version</reference>
- >     <cpe-23:cpe23-item name="cpe:2.3:a:libexpat:expat:2.2.10:*:*:*:*:*:*:*">
- >         <cpe-23:deprecated-by name="cpe:2.3:a:libexpat_project:libexpat:2.2.10:*:*:*:*:*:*:*" type="NAME_CORRECTION"/>
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Fixes:
+ > http://autobuild.buildroot.net/results/a05fdf1958f93a206c5c66c7f636b6650683626d
+ > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
 Committed, thanks.
 
