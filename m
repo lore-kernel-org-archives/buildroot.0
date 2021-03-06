@@ -1,32 +1,28 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 06 Mar 2021 10:14:49 +0000
-Subject: [Buildroot] [Bug 13581] jpegsrc.v9d.tar.gz has changed hash
-In-Reply-To: <bug-13581-163@https.bugs.busybox.net/>
-References: <bug-13581-163@https.bugs.busybox.net/>
-Message-ID: <bug-13581-163-zrNGbMpLaT@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 06 Mar 2021 11:17:56 +0100
+Subject: [Buildroot] [PATCH 1/1] package/python{3}-pyyaml: switch to
+ setuptools
+In-Reply-To: <20210306085432.129560-1-asafka7@gmail.com> (Asaf Kahlon's
+ message of "Sat, 6 Mar 2021 10:54:32 +0200")
+References: <20210306085432.129560-1-asafka7@gmail.com>
+Message-ID: <87r1ksa8mj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13581
+>>>>> "Asaf" == Asaf Kahlon <asafka7@gmail.com> writes:
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+ > Since version 5.4.0 pyyaml uses setuptools (see
+ > https://github.com/yaml/pyyaml/blob/master/CHANGES)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|RESOLVED                    |CLOSED
-         Resolution|WONTFIX                     |FIXED
+ > Fixes:
+ >   - http://autobuild.buildroot.net/results/bc36ae51a1e4d70c5fd2a3eb4b458aba4220f2dc
 
---- Comment #2 from Peter Korsgaard <jacmet@uclibc.org> ---
-Hi,
+ > Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 
-As a workaround, we've changed the libjpeg package to fetch the tarball from
-the Buildroot source mirror until we update to a new release:
-
-https://git.buildroot.org/buildroot/commit/?id=b83184de674a6d68e110d5666685edb0a7374d74
+Committed, thanks.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
