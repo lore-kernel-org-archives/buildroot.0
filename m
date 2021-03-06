@@ -1,144 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 6 Mar 2021 22:56:51 +0100
-Subject: [Buildroot] [git commit branch/next] package/kodi-platform: remove
- package
-Message-ID: <20210306213556.A102D813AF@busybox.osuosl.org>
+Date: Sat, 6 Mar 2021 22:56:49 +0100
+Subject: [Buildroot] [git commit branch/next] package/kodi-pvr-wmc: bump
+ version to 6.1.1-Matrix
+Message-ID: <20210306213555.69D6D86782@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f470066ed679788e0852f23e28fad7e68abf23d2
+commit: https://git.buildroot.net/buildroot/commit/?id=818cff7bff1d4a97f20f4a0508b8edf0bf2876fa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This package is not used by kodi addons anymore.
-No legacy handling needed because this package was never selectable.
+Switch dependency to kodi after upstream removed the dependency to
+kodi-platform:
+https://github.com/kodi-pvr/pvr.wmc/commit/6549e6f0cec7314dd4a34dc5cad96d6f76ac7751
+https://github.com/kodi-pvr/pvr.wmc/commit/f824bd285df06a45fc0a2f57859fd5b28c426ad6
+
+Switch license file to LICENSE.md.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...rm-config.cmake-fix-for-cross-compilation.patch | 56 ----------------------
- package/kodi-platform/Config.in                    |  7 ---
- package/kodi-platform/kodi-platform.hash           |  3 --
- package/kodi-platform/kodi-platform.mk             | 14 ------
- package/kodi/Config.in                             |  2 -
- 5 files changed, 82 deletions(-)
+ package/kodi-pvr-wmc/Config.in         | 1 -
+ package/kodi-pvr-wmc/kodi-pvr-wmc.hash | 4 ++--
+ package/kodi-pvr-wmc/kodi-pvr-wmc.mk   | 6 +++---
+ 3 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/kodi-platform/0001-kodiplatform-config.cmake-fix-for-cross-compilation.patch b/package/kodi-platform/0001-kodiplatform-config.cmake-fix-for-cross-compilation.patch
-deleted file mode 100644
-index cc514b002b..0000000000
---- a/package/kodi-platform/0001-kodiplatform-config.cmake-fix-for-cross-compilation.patch
-+++ /dev/null
-@@ -1,56 +0,0 @@
--From a6e25dba4b5c1d911a4644a0ca116abc642cd72a Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Thu, 30 Jul 2015 09:28:24 +0200
--Subject: [PATCH] kodiplatform-config.cmake: fix for cross-compilation
--
--Use CMAKE_FIND_ROOT_PATH in kodiplatform-config.cmake in order to make
--it cross-compilation friendly.
--
--Patch sent upstream: https://github.com/xbmc/kodi-platform/pull/30
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- CMakeLists.txt               | 2 +-
-- kodiplatform-config.cmake.in | 6 +++---
-- 2 files changed, 4 insertions(+), 4 deletions(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 25d8004..db23dc9 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -22,7 +22,7 @@ if(NOT WIN32)
--   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
-- endif()
-- 
---set(kodiplatform_INCLUDE_DIRS ${TINYXML_INCLUDE_DIR} "${CMAKE_INSTALL_PREFIX}/include/kodi")
--+set(kodiplatform_INCLUDE_DIRS "${CMAKE_INSTALL_PREFIX}/include/kodi")
-- IF(WIN32)
--   LIST(APPEND kodiplatform_INCLUDE_DIRS "${CMAKE_INSTALL_PREFIX}/include/kodi/windows")
-- ENDIF(WIN32)
--diff --git a/kodiplatform-config.cmake.in b/kodiplatform-config.cmake.in
--index 3fc5273..1bc437a 100644
----- a/kodiplatform-config.cmake.in
--+++ b/kodiplatform-config.cmake.in
--@@ -10,16 +10,16 @@
-- #
-- # propagate these properties from one build system to the other
-- set (kodiplatform_VERSION "@kodiplatform_VERSION_MAJOR at .@kodiplatform_VERSION_MINOR@")
---set (kodiplatform_INCLUDE_DIRS @kodiplatform_INCLUDE_DIRS@ @CMAKE_INSTALL_PREFIX@/include)
--+set (kodiplatform_INCLUDE_DIRS @TINYXML_INCLUDE_DIR@ ${CMAKE_FIND_ROOT_PATH}@kodiplatform_INCLUDE_DIRS@ ${CMAKE_FIND_ROOT_PATH}@CMAKE_INSTALL_PREFIX@/include)
-- set (kodiplatform_LIBRARY_DIRS "@CMAKE_LIBRARY_OUTPUT_DIRECTORY@")
-- set (kodiplatform_LINKER_FLAGS "@kodiplatform_LINKER_FLAGS@")
-- set (kodiplatform_CONFIG_VARS "@kodiplatform_CONFIG_VARS@")
-- 
-- # libraries come from the build tree where this file was generated
-- if(WIN32)
---  set (kodiplatform_LIBRARY "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@/kodiplatform.lib")
--+  set (kodiplatform_LIBRARY "${CMAKE_FIND_ROOT_PATH}@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@/kodiplatform.lib")
-- else(WIN32)
---  set (kodiplatform_LIBRARY "-L at CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@ -lkodiplatform")
--+  set (kodiplatform_LIBRARY "-L${CMAKE_FIND_ROOT_PATH}@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@ -lkodiplatform")
-- endif(WIN32)
-- set (kodiplatform_LIBRARIES ${kodiplatform_LIBRARY} "@kodiplatform_LIBRARIES@")
-- mark_as_advanced (kodiplatform_LIBRARY)
---- 
--2.5.0
--
-diff --git a/package/kodi-platform/Config.in b/package/kodi-platform/Config.in
-deleted file mode 100644
-index cde1925c07..0000000000
---- a/package/kodi-platform/Config.in
-+++ /dev/null
-@@ -1,7 +0,0 @@
--config BR2_PACKAGE_KODI_PLATFORM
--	bool
--	select BR2_PACKAGE_LIBPLATFORM
--	help
--	  Kodi add-on platform support library
--
--	  https://github.com/xbmc/kodi-platform
-diff --git a/package/kodi-platform/kodi-platform.hash b/package/kodi-platform/kodi-platform.hash
-deleted file mode 100644
-index 29a43cf021..0000000000
---- a/package/kodi-platform/kodi-platform.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# Locally computed
--sha256  159165ae641da5eb273885ce53b8a4b84e62a595c4974f9d12c1b5d1428ef25c  kodi-platform-809c5e9d711e378561440a896fcb7dbcd009eb3d.tar.gz
--sha256  2f4bc4c1244b679121749378ff1a2b4b4e318897dac3d346a236432948ebeea7  debian/copyright
-diff --git a/package/kodi-platform/kodi-platform.mk b/package/kodi-platform/kodi-platform.mk
-deleted file mode 100644
-index f1b97e3259..0000000000
---- a/package/kodi-platform/kodi-platform.mk
-+++ /dev/null
-@@ -1,14 +0,0 @@
--################################################################################
--#
--# kodi-platform
--#
--################################################################################
--
--KODI_PLATFORM_VERSION = 809c5e9d711e378561440a896fcb7dbcd009eb3d
--KODI_PLATFORM_SITE = $(call github,xbmc,kodi-platform,$(KODI_PLATFORM_VERSION))
--KODI_PLATFORM_LICENSE = GPL-2.0+
--KODI_PLATFORM_LICENSE_FILES = debian/copyright
--KODI_PLATFORM_INSTALL_STAGING = YES
--KODI_PLATFORM_DEPENDENCIES = libplatform kodi
--
--$(eval $(cmake-package))
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 01d068da44..782cca3c18 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -109,8 +109,6 @@ menuconfig BR2_PACKAGE_KODI
+diff --git a/package/kodi-pvr-wmc/Config.in b/package/kodi-pvr-wmc/Config.in
+index 2672c83434..3daf4c387b 100644
+--- a/package/kodi-pvr-wmc/Config.in
++++ b/package/kodi-pvr-wmc/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_KODI_PVR_WMC
+ 	bool "kodi-pvr-wmc"
+-	select BR2_PACKAGE_KODI_PLATFORM
+ 	help
+ 	  Kodi's Windows Media Center client addon
  
- if BR2_PACKAGE_KODI
+diff --git a/package/kodi-pvr-wmc/kodi-pvr-wmc.hash b/package/kodi-pvr-wmc/kodi-pvr-wmc.hash
+index d5387e8534..0da7c17c23 100644
+--- a/package/kodi-pvr-wmc/kodi-pvr-wmc.hash
++++ b/package/kodi-pvr-wmc/kodi-pvr-wmc.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  7fb150ba3b8b41cf164425b56ae5dda3a5fb2f64cdea7229900113965d492fee  kodi-pvr-wmc-2.4.6-Leia.tar.gz
+-sha256  6d97c3d608a5d59565b567313bd3e53a1d0066ed59f4ae8e474c895d0c20e746  debian/copyright
++sha256  b58b4d6d2358faf5887133ea1794a2d3f8b35f77411aacafa569d45f7bc4bb3a  kodi-pvr-wmc-6.1.1-Matrix.tar.gz
++sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-wmc/kodi-pvr-wmc.mk b/package/kodi-pvr-wmc/kodi-pvr-wmc.mk
+index c280f89df4..7135fda9f2 100644
+--- a/package/kodi-pvr-wmc/kodi-pvr-wmc.mk
++++ b/package/kodi-pvr-wmc/kodi-pvr-wmc.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
  
--source "package/kodi-platform/Config.in"
--
- config BR2_PACKAGE_KODI_ALSA_LIB
- 	bool "alsa"
- 	select BR2_PACKAGE_ALSA_LIB
+-KODI_PVR_WMC_VERSION = 2.4.6-Leia
++KODI_PVR_WMC_VERSION = 6.1.1-Matrix
+ KODI_PVR_WMC_SITE = $(call github,kodi-pvr,pvr.wmc,$(KODI_PVR_WMC_VERSION))
+ KODI_PVR_WMC_LICENSE = GPL-2.0+
+-KODI_PVR_WMC_LICENSE_FILES = debian/copyright
+-KODI_PVR_WMC_DEPENDENCIES = kodi-platform
++KODI_PVR_WMC_LICENSE_FILES = LICENSE.md
++KODI_PVR_WMC_DEPENDENCIES = kodi
+ 
+ $(eval $(cmake-package))
