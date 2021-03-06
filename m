@@ -1,27 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 06 Mar 2021 11:12:47 +0100
-Subject: [Buildroot] [PATCH] package/libjpeg: switch to s.b.o. as source
- site
-In-Reply-To: <20210306090446.2180129-1-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Sat, 6 Mar 2021 10:04:46 +0100")
-References: <20210306090446.2180129-1-yann.morin.1998@free.fr>
-Message-ID: <87v9a4a8v4.fsf@dell.be.48ers.dk>
+Date: Sat, 6 Mar 2021 11:11:59 +0100
+Subject: [Buildroot] [git commit] package/libjpeg: switch to s.b.o. as
+ source site
+Message-ID: <20210306095023.D3BCE846A1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=b83184de674a6d68e110d5666685edb0a7374d74
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > The tarball for version 9d, released 2020-01-12, has been silently
- > replaced upstream (a kinfd of BOM was removed from a few files),
+Fixes #13581
 
-Ahh, the Windows-style unicode byte order mark:
+The tarball for version 9d, released 2020-01-12, has been silently
+replaced upstream (a unicode BOM was removed from a few files),
+causing hash mismatch.
 
-https://en.wikipedia.org/wiki/Byte_order_mark
+This means that all our versions since 2020.02 will fail the hash
+check, and fallback to using s.b.o. so we can't update the copy we
+have on s.b.o.
 
-Committed after adding the bugzilla reference, thanks.
+As a consequence, we can't update the hash in master (soon 2021.02)
+otherwise it would not match what we have on s.b.o.
 
--- 
-Bye, Peter Korsgaard
+This means that users will see hash mismatch by default, which is not
+very nice. Although we can't do anything for all previous releases,
+we can still try to paper over the problem for the future ones, like
+2021.02, by switching the upstream to be s.b.o.
+
+Sigh... :-(
+
+Reported-by: Nick Shaforostov <mshaforostov@airmusictech.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libjpeg/libjpeg.mk | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/package/libjpeg/libjpeg.mk b/package/libjpeg/libjpeg.mk
+index 389ecb6299..bd463ad40a 100644
+--- a/package/libjpeg/libjpeg.mk
++++ b/package/libjpeg/libjpeg.mk
+@@ -5,7 +5,11 @@
+ ################################################################################
+ 
+ LIBJPEG_VERSION = 9d
+-LIBJPEG_SITE = http://www.ijg.org/files
++# 9d was released 2020-01-12, but the tarball was replaced upstream circa
++# 2021-03, causing hash mismatch. Until there is a new version released,
++# use our cached copy from s.b.o.
++#LIBJPEG_SITE = http://www.ijg.org/files
++LIBJPEG_SITE = http://sources.buildroot.org/libjpeg/
+ LIBJPEG_SOURCE = jpegsrc.v$(LIBJPEG_VERSION).tar.gz
+ LIBJPEG_LICENSE = IJG
+ LIBJPEG_LICENSE_FILES = README
