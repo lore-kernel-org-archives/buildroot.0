@@ -1,68 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 6 Mar 2021 22:56:49 +0100
-Subject: [Buildroot] [git commit branch/next] package/kodi-pvr-vbox: bump
- version to 8.1.0-Matrix
-Message-ID: <20210306213555.4670886782@busybox.osuosl.org>
+Date: Sat, 6 Mar 2021 22:56:50 +0100
+Subject: [Buildroot] [git commit branch/next] package/kodi-skin-confluence:
+ bump version
+Message-ID: <20210306213556.128D086DA6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=434dc09f2c639b362d76df7a251634172df44815
+commit: https://git.buildroot.net/buildroot/commit/?id=61a7c4cbb511aaf0556ac2d121ee315cdc04b2db
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-Switch dependency to kodi after upstream removed the dependency to
-kodi-platform:
-https://github.com/kodi-pvr/pvr.vbox/commit/29bd329feb6a0b007299636d61f66b9efb526e5f
-https://github.com/kodi-pvr/pvr.vbox/commit/b007646f4389ce81f30ca60bdd7b7323e552ee22
-
-Switch license file to LICENSE.md.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-pvr-vbox/Config.in          | 1 -
- package/kodi-pvr-vbox/kodi-pvr-vbox.hash | 4 ++--
- package/kodi-pvr-vbox/kodi-pvr-vbox.mk   | 6 +++---
- 3 files changed, 5 insertions(+), 6 deletions(-)
+ package/kodi-skin-confluence/kodi-skin-confluence.hash | 2 +-
+ package/kodi-skin-confluence/kodi-skin-confluence.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-pvr-vbox/Config.in b/package/kodi-pvr-vbox/Config.in
-index c1c22c10d1..202e3c66e8 100644
---- a/package/kodi-pvr-vbox/Config.in
-+++ b/package/kodi-pvr-vbox/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_KODI_PVR_VBOX
- 	bool "kodi-pvr-vbox"
--	select BR2_PACKAGE_KODI_PLATFORM
- 	help
- 	  Kodi PVR addon for interfacing with VBox Communications XTi TV
- 	  Gateway
-diff --git a/package/kodi-pvr-vbox/kodi-pvr-vbox.hash b/package/kodi-pvr-vbox/kodi-pvr-vbox.hash
-index b753b994a1..dc186f63f1 100644
---- a/package/kodi-pvr-vbox/kodi-pvr-vbox.hash
-+++ b/package/kodi-pvr-vbox/kodi-pvr-vbox.hash
+diff --git a/package/kodi-skin-confluence/kodi-skin-confluence.hash b/package/kodi-skin-confluence/kodi-skin-confluence.hash
+index fdd4e828f6..e3d1ff73f4 100644
+--- a/package/kodi-skin-confluence/kodi-skin-confluence.hash
++++ b/package/kodi-skin-confluence/kodi-skin-confluence.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  98aadcf3d0109a7dc5f85b4e5473d595039b59c46b0686a2fbda88ff7631ee0c  kodi-pvr-vbox-4.7.0-Leia.tar.gz
--sha256  f535b79e33bdf4d270f8aed3fdcb92f807981f808d7f5e3c053c088e5ccf553b  debian/copyright
-+sha256  b30548dfbf892f7bedbf191b5a9d93fa978fb794f897268876a1e607518e15af  kodi-pvr-vbox-8.1.0-Matrix.tar.gz
-+sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-vbox/kodi-pvr-vbox.mk b/package/kodi-pvr-vbox/kodi-pvr-vbox.mk
-index b10bfc5b85..9ce667d496 100644
---- a/package/kodi-pvr-vbox/kodi-pvr-vbox.mk
-+++ b/package/kodi-pvr-vbox/kodi-pvr-vbox.mk
-@@ -4,10 +4,10 @@
+-sha256  dc4a0abf05db50caf8e70e4904b8c2c445008ec3d6d23381c9c31dedaf6109de  kodi-skin-confluence-cffcb8320003e6048abe4b26316e5d5f3d50eac9.tar.gz
++sha256  49ba4dcf4b512ac0a97bd1a4ebf14685d294d89a7a07c26ddda0fe730c8aa047  kodi-skin-confluence-37a196cdb58c0da87b5b22b047a5d44dc447f1ae.tar.gz
+ sha256  89931c1fb1f3716694175763cf3221cfcd63d6935031cf6b4512d17ffe5d9860  LICENSE.txt
+diff --git a/package/kodi-skin-confluence/kodi-skin-confluence.mk b/package/kodi-skin-confluence/kodi-skin-confluence.mk
+index d9bd10bdfa..fcae506d1e 100644
+--- a/package/kodi-skin-confluence/kodi-skin-confluence.mk
++++ b/package/kodi-skin-confluence/kodi-skin-confluence.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_PVR_VBOX_VERSION = 4.7.0-Leia
-+KODI_PVR_VBOX_VERSION = 8.1.0-Matrix
- KODI_PVR_VBOX_SITE = $(call github,kodi-pvr,pvr.vbox,$(KODI_PVR_VBOX_VERSION))
- KODI_PVR_VBOX_LICENSE = GPL-2.0+
--KODI_PVR_VBOX_LICENSE_FILES = debian/copyright
--KODI_PVR_VBOX_DEPENDENCIES = kodi-platform
-+KODI_PVR_VBOX_LICENSE_FILES = LICENSE.md
-+KODI_PVR_VBOX_DEPENDENCIES = kodi
- 
- $(eval $(cmake-package))
+-KODI_SKIN_CONFLUENCE_VERSION = cffcb8320003e6048abe4b26316e5d5f3d50eac9
++KODI_SKIN_CONFLUENCE_VERSION = 37a196cdb58c0da87b5b22b047a5d44dc447f1ae
+ KODI_SKIN_CONFLUENCE_SITE = $(call github,xbmc,skin.confluence,$(KODI_SKIN_CONFLUENCE_VERSION))
+ KODI_SKIN_CONFLUENCE_LICENSE = GPL-2.0
+ KODI_SKIN_CONFLUENCE_LICENSE_FILES = LICENSE.txt
