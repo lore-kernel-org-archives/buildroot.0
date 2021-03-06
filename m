@@ -1,76 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sat, 6 Mar 2021 22:56:49 +0100
-Subject: [Buildroot] [git commit] package/kodi-pvr-vdr-vnsi: bump version to
- 8.2.1-Matrix
-Message-ID: <20210308072138.A88848893D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi-pvr-vuplus: bump version to
+ 7.4.0-Matrix
+Message-ID: <20210308072138.B4DDE81132@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dbe372ac12ad50a7d8048ddd3eea8cb7963b49bc
+commit: https://git.buildroot.net/buildroot/commit/?id=6bd4830c82e2836d17d91cf91695d0f87b261a4d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Switch dependency to kodi after upstream removed the dependency to
 kodi-platform:
-https://github.com/kodi-pvr/pvr.vdr.vnsi/commit/d8af242ba923590330c65fded9034c1ac9b6157c
-https://github.com/kodi-pvr/pvr.vdr.vnsi/commit/49cc728f18bbe8df1d1779eb5e42e060fa9f78ed
-
-Added dependency to gcc >= 7 due to c++17 code added by
-https://github.com/kodi-pvr/pvr.vdr.vnsi/commit/8a3f3c8fe378a4aae4ac381db45d0ce980f44761
+https://github.com/kodi-pvr/pvr.vuplus/commit/122a9b281668d31f921e842e8700b2f048121c16
 
 Switch license file to LICENSE.md.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-pvr-vdr-vnsi/Config.in              | 5 ++++-
- package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash | 4 ++--
- package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk   | 6 +++---
- 3 files changed, 9 insertions(+), 6 deletions(-)
+ package/kodi-pvr-vuplus/Config.in            | 1 -
+ package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash | 4 ++--
+ package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk   | 6 +++---
+ 3 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/kodi-pvr-vdr-vnsi/Config.in b/package/kodi-pvr-vdr-vnsi/Config.in
-index 768dec88fd..6b57900b29 100644
---- a/package/kodi-pvr-vdr-vnsi/Config.in
-+++ b/package/kodi-pvr-vdr-vnsi/Config.in
-@@ -1,7 +1,10 @@
- config BR2_PACKAGE_KODI_PVR_VDR_VNSI
- 	bool "kodi-pvr-vdr-vnsi"
+diff --git a/package/kodi-pvr-vuplus/Config.in b/package/kodi-pvr-vuplus/Config.in
+index b6a03e843f..862f5f9267 100644
+--- a/package/kodi-pvr-vuplus/Config.in
++++ b/package/kodi-pvr-vuplus/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_KODI_PVR_VUPLUS
+ 	bool "kodi-pvr-vuplus"
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # json-for-modern-cpp
+ 	select BR2_PACKAGE_JSON_FOR_MODERN_CPP
 -	select BR2_PACKAGE_KODI_PLATFORM
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17
+ 	select BR2_PACKAGE_TINYXML
  	help
- 	  Kodi PVR addon VNSI
- 
- 	  https://github.com/kodi-pvr/pvr.vdr.vnsi
-+
-+comment "kodi-pvr-vdr-vnsi needs a toolchain w/ gcc >= 7"
-+	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_7
-diff --git a/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash b/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash
-index f7043b58a0..8b6548de9a 100644
---- a/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash
-+++ b/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash
+ 	  VuPlus PVR client addon for Kodi
+diff --git a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
+index e80e51bc78..2b12649aea 100644
+--- a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
++++ b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  f0ea8907e77ca014429bbe73d07c3410cc7be25a6db0df157863b87d2684affb  kodi-pvr-vdr-vnsi-3.6.4-Leia.tar.gz
--sha256  28266596fdf4162d4f15985e0108cd9ddb42531ddad2297011649c1af49f7fe2  debian/copyright
-+sha256  aebb00f433b93256760960149e41647d65c84fdf6a78d7467df304f26c8bc4b2  kodi-pvr-vdr-vnsi-8.2.2-Matrix.tar.gz
+-sha256  d7dd890e4491e211ff3781cdc043347ab7a4ef6e00619ac1b4641ed81b0c3626  kodi-pvr-vuplus-3.28.9-Leia.tar.gz
+-sha256  e98518889de8d38eaa6ddcb086b6e3b86efed98b501a5c666b9cf48f79e6df5d  debian/copyright
++sha256  2024ed208168089e51d9beade47fedec2e80e23044029f6919e27746f9634150  kodi-pvr-vuplus-7.4.0-Matrix.tar.gz
 +sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk b/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk
-index f467fa98f5..4eff02f264 100644
---- a/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk
-+++ b/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk
+diff --git a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
+index bf1de1178d..fee4e816ab 100644
+--- a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
++++ b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
 @@ -4,10 +4,10 @@
  #
  ################################################################################
  
--KODI_PVR_VDR_VNSI_VERSION = 3.6.4-Leia
-+KODI_PVR_VDR_VNSI_VERSION = 8.2.2-Matrix
- KODI_PVR_VDR_VNSI_SITE = $(call github,kodi-pvr,pvr.vdr.vnsi,$(KODI_PVR_VDR_VNSI_VERSION))
- KODI_PVR_VDR_VNSI_LICENSE = GPL-2.0+
--KODI_PVR_VDR_VNSI_LICENSE_FILES = debian/copyright
--KODI_PVR_VDR_VNSI_DEPENDENCIES = kodi-platform
-+KODI_PVR_VDR_VNSI_LICENSE_FILES = LICENSE.md
-+KODI_PVR_VDR_VNSI_DEPENDENCIES = kodi
+-KODI_PVR_VUPLUS_VERSION = 3.28.9-Leia
++KODI_PVR_VUPLUS_VERSION = 7.4.0-Matrix
+ KODI_PVR_VUPLUS_SITE = $(call github,kodi-pvr,pvr.vuplus,$(KODI_PVR_VUPLUS_VERSION))
+ KODI_PVR_VUPLUS_LICENSE = GPL-2.0+
+-KODI_PVR_VUPLUS_LICENSE_FILES = debian/copyright
+-KODI_PVR_VUPLUS_DEPENDENCIES = json-for-modern-cpp kodi-platform tinyxml
++KODI_PVR_VUPLUS_LICENSE_FILES = LICENSE.md
++KODI_PVR_VUPLUS_DEPENDENCIES = json-for-modern-cpp kodi tinyxml
  
  $(eval $(cmake-package))
