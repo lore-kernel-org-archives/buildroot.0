@@ -1,46 +1,46 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 7 Mar 2021 21:36:51 +0100
-Subject: [Buildroot] [git commit] package/ruby: update hashes
-Message-ID: <20210308072140.9D4F481132@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 6 Mar 2021 23:32:41 +0100
+Subject: [Buildroot] [git commit] package/optee-test: bump to version 3.12.0
+Message-ID: <20210308072140.7BB2F81132@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0c308c482802d9830ae5618b60ab50a84127dacf
+commit: https://git.buildroot.net/buildroot/commit/?id=2ed41deaf7d5e53e7c70150105813d5c3714e5e4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit af5226f2fd1292a26f2dfda32f41cbbad7aa4cc6 forgot to update
-hash of LEGAL and BSDL files.
+Bump OP-TEE Test package version to OP-TEE release 3.12.0.
 
-Those two files have mostly undergone reoraganizing. A few new files
-have also been listed. The resulting licensing does not change
-fundamentally, especially sine we already list 'others' in the list of
-licenses applicable to Ruby.
-
-Fixes:
- - http://autobuild.buildroot.net/results/448/4484fcce51dd2556156631d20b35bbba44abc171/build-end.log
- ..
- - http://autobuild.buildroot.net/results/c60/c60e5923159b3d66b422eb988f5d49e1c73e8710/build-end.log
-
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
-[yann.morin.1998 at free.fr: explain what changed]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/ruby/ruby.hash | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/optee-test/optee-test.hash | 4 ++--
+ package/optee-test/optee-test.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
-index b4594fcaba..ec9492aa5e 100644
---- a/package/ruby/ruby.hash
-+++ b/package/ruby/ruby.hash
-@@ -1,6 +1,6 @@
- # https://www.ruby-lang.org/en/news/2020/12/25/ruby-3-0-0-released/
- sha256  68bfaeef027b6ccd0032504a68ae69721a70e97d921ff328c0c8836c798f6cb1  ruby-3.0.0.tar.xz
- # License files, Locally calculated
--sha256  b09ca195d2de08f0aacfa8793d0af62d7681c304b3ef714b75813721823295a6  LEGAL
-+sha256  274f8d7983052448e7fd691c81043465c92ee6fb7bd8ab3f20a7997862f2778e  LEGAL
- sha256  967586d538a28955ec2541910cf63c5ac345fcdea94bfb1f1705a1f6eb36bcbb  COPYING
--sha256  a5e3042dacb53eebda91f3b1caefbfec8307711df8c4ed1ed20e4e97c43307a4  BSDL
-+sha256  36a9a6e7347214bbba599a412617204e65bff065dcbe5c46f5cb454c80de9eb0  BSDL
+diff --git a/package/optee-test/optee-test.hash b/package/optee-test/optee-test.hash
+index 52e2373bf7..0c789e1cd1 100644
+--- a/package/optee-test/optee-test.hash
++++ b/package/optee-test/optee-test.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/OP-TEE/optee_test/archive/3.11.0.tar.gz
+-sha256 54d4b7e2ad22cd409ee8e25e990c1878690b1b5eb8843f649d12022888186a53  optee-test-3.11.0.tar.gz
++# From https://github.com/OP-TEE/optee_test/archive/3.12.0/optee-test-3.12.0.tar.gz
++sha256 beebdc98e95af2e7a20595f7d6ca716872efde1ec74a48ab07be599f21e8ad70  optee-test-3.12.0.tar.gz
+ # Locally computed
+ sha256 6e6810981f0ddab9e0d44399d0700a15d9f760a3c2843cc866659c2074139ae7  LICENSE.md
+diff --git a/package/optee-test/optee-test.mk b/package/optee-test/optee-test.mk
+index 1f4f586672..2304b15925 100644
+--- a/package/optee-test/optee-test.mk
++++ b/package/optee-test/optee-test.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPTEE_TEST_VERSION = 3.11.0
++OPTEE_TEST_VERSION = 3.12.0
+ OPTEE_TEST_SITE = $(call github,OP-TEE,optee_test,$(OPTEE_TEST_VERSION))
+ OPTEE_TEST_LICENSE = GPL-2.0, BSD-2-Clause,
+ OPTEE_TEST_LICENSE_FILES = LICENSE.md
