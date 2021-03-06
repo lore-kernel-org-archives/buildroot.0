@@ -1,70 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 6 Mar 2021 22:56:48 +0100
-Subject: [Buildroot] [git commit] package/kodi-pvr-octonet: bump version to
- 4.1.0-2-Matrix
-Message-ID: <20210308072138.7BDA988918@busybox.osuosl.org>
+Date: Sat, 6 Mar 2021 22:56:49 +0100
+Subject: [Buildroot] [git commit] package/kodi-pvr-zattoo: bump version to
+ 19.7.3-Matrix
+Message-ID: <20210308072138.CAFD181132@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=feba2e8b6ab692e64c22c8740579496540a9c876
+commit: https://git.buildroot.net/buildroot/commit/?id=62983606f8cb877b9e232cd09fcd1175fb831e5d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Switch dependency to kodi after upstream removed the dependency to
-libplatform and kodi-platform:
-https://github.com/DigitalDevices/pvr.octonet/commit/ec08c205408de47a08fdc6e540e21dc0d6e18bd7
-https://github.com/DigitalDevices/pvr.octonet/commit/e7449d9537a650790c2e742a57277d46b6cf6b33
+kodi-platform and libplatform:
+https://github.com/rbuehlma/pvr.zattoo/commit/382c83d0cadcfb3152c577291ee0a2d1015a128c
+https://github.com/rbuehlma/pvr.zattoo/commit/a813b2c9f0510d2b9cd23d57b659ae5346c63065
 
 Switch license file to LICENSE.md.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-pvr-octonet/Config.in             | 2 --
- package/kodi-pvr-octonet/kodi-pvr-octonet.hash | 4 ++--
- package/kodi-pvr-octonet/kodi-pvr-octonet.mk   | 6 +++---
+ package/kodi-pvr-zattoo/Config.in            | 2 --
+ package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash | 4 ++--
+ package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk   | 6 +++---
  3 files changed, 5 insertions(+), 7 deletions(-)
 
-diff --git a/package/kodi-pvr-octonet/Config.in b/package/kodi-pvr-octonet/Config.in
-index b8bcd7e218..e831194ba5 100644
---- a/package/kodi-pvr-octonet/Config.in
-+++ b/package/kodi-pvr-octonet/Config.in
-@@ -2,8 +2,6 @@ config BR2_PACKAGE_KODI_PVR_OCTONET
- 	bool "kodi-pvr-octonet"
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # json-for-modern-cpp
- 	select BR2_PACKAGE_JSON_FOR_MODERN_CPP
+diff --git a/package/kodi-pvr-zattoo/Config.in b/package/kodi-pvr-zattoo/Config.in
+index 5dfadcadd1..9a6eb3fec5 100644
+--- a/package/kodi-pvr-zattoo/Config.in
++++ b/package/kodi-pvr-zattoo/Config.in
+@@ -1,7 +1,5 @@
+ config BR2_PACKAGE_KODI_PVR_ZATTOO
+ 	bool "kodi-pvr-zattoo"
 -	select BR2_PACKAGE_KODI_PLATFORM
 -	select BR2_PACKAGE_LIBPLATFORM
+ 	select BR2_PACKAGE_RAPIDJSON
+ 	select BR2_PACKAGE_TINYXML2
  	help
- 	  DigitalDevices Octonet PVR client addon for Kodi
- 
-diff --git a/package/kodi-pvr-octonet/kodi-pvr-octonet.hash b/package/kodi-pvr-octonet/kodi-pvr-octonet.hash
-index 5ee0eeb6e9..8fdeac2a92 100644
---- a/package/kodi-pvr-octonet/kodi-pvr-octonet.hash
-+++ b/package/kodi-pvr-octonet/kodi-pvr-octonet.hash
+diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
+index a9e2cd996c..824a40b96a 100644
+--- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
++++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  e55d440afe3b1f1bc1529d1f662d4d18f5334ecf01e023d34d5a7e419b6fbf10  kodi-pvr-octonet-e35cc373476a92aee11ec8e8a14fb8fc086a4f84.tar.gz
--sha256  8547bcbe8bd72c18ac285fd801fcbff8806a988913741b14497f4aba88bba403  debian/copyright
-+sha256  091ba0288a8c12d42f6352b453fb39bcace3174c8763f6cbe3dc8fef40a33f2b  kodi-pvr-octonet-4.1.0-2-Matrix.tar.gz
+-sha256  9c3dc2ed9f8c39bcc4f5798439b85f2bdae1a427ffeb1b9d18aa5e2caca29f4e  kodi-pvr-zattoo-18.1.23-Leia.tar.gz
+-sha256  d3670aef89085fd6b97665967a8422c89324afbc4720daa0975696a2ee92e236  debian/copyright
++sha256  7f9f1e5907ea0ad8a30d073e67ad42a2ddc16a99f30f704a6b9690ce5dac3268  kodi-pvr-zattoo-19.7.3-Matrix.tar.gz
 +sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-octonet/kodi-pvr-octonet.mk b/package/kodi-pvr-octonet/kodi-pvr-octonet.mk
-index 890a283565..becd43a4e4 100644
---- a/package/kodi-pvr-octonet/kodi-pvr-octonet.mk
-+++ b/package/kodi-pvr-octonet/kodi-pvr-octonet.mk
+diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
+index cb995c9c78..58acd7edc6 100644
+--- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
++++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
 @@ -4,10 +4,10 @@
  #
  ################################################################################
  
--KODI_PVR_OCTONET_VERSION = e35cc373476a92aee11ec8e8a14fb8fc086a4f84
-+KODI_PVR_OCTONET_VERSION = 4.1.0-2-Matrix
- KODI_PVR_OCTONET_SITE = $(call github,DigitalDevices,pvr.octonet,$(KODI_PVR_OCTONET_VERSION))
- KODI_PVR_OCTONET_LICENSE = GPL-2.0+
--KODI_PVR_OCTONET_LICENSE_FILES = debian/copyright
--KODI_PVR_OCTONET_DEPENDENCIES = json-for-modern-cpp kodi-platform libplatform
-+KODI_PVR_OCTONET_LICENSE_FILES = LICENSE.md
-+KODI_PVR_OCTONET_DEPENDENCIES = json-for-modern-cpp kodi
+-KODI_PVR_ZATTOO_VERSION = 18.1.23-Leia
++KODI_PVR_ZATTOO_VERSION = 19.7.3-Matrix
+ KODI_PVR_ZATTOO_SITE = $(call github,rbuehlma,pvr.zattoo,$(KODI_PVR_ZATTOO_VERSION))
+ KODI_PVR_ZATTOO_LICENSE = GPL-2.0+
+-KODI_PVR_ZATTOO_LICENSE_FILES = debian/copyright
+-KODI_PVR_ZATTOO_DEPENDENCIES = kodi-platform libplatform rapidjson tinyxml2
++KODI_PVR_ZATTOO_LICENSE_FILES = LICENSE.md
++KODI_PVR_ZATTOO_DEPENDENCIES = kodi rapidjson tinyxml2
  
  $(eval $(cmake-package))
