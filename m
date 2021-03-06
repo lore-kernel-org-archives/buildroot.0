@@ -1,47 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 6 Mar 2021 23:32:40 +0100
-Subject: [Buildroot] [git commit branch/next] package/optee-examples: bump
- to version 3.12.0
-Message-ID: <20210306220945.C80F38763B@busybox.osuosl.org>
+Date: Sat, 6 Mar 2021 23:32:37 +0100
+Subject: [Buildroot] [git commit branch/next] boot/optee-os: bump to version
+ 3.12.0
+Message-ID: <20210306220945.A6BB4856EC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0198de312d94e59cef2825869a6af381552cf9eb
+commit: https://git.buildroot.net/buildroot/commit/?id=80d1bc9b199491cc3cff3b0d82fed939355df2b0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Bump OP-TEE Examples package version to OP-TEE release 3.12.0.
+Bump OP-TEE OS package version to OP-TEE release 3.12.0.
 
 Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/optee-examples/optee-examples.hash | 4 ++--
- package/optee-examples/optee-examples.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ boot/optee-os/Config.in     | 4 ++--
+ boot/optee-os/optee-os.hash | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/optee-examples/optee-examples.hash b/package/optee-examples/optee-examples.hash
-index 230d5d3ccf..d43534832a 100644
---- a/package/optee-examples/optee-examples.hash
-+++ b/package/optee-examples/optee-examples.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/linaro-swg/optee_examples/archive/3.11.0.tar.gz
--sha256 b910479a2d432014b6c49aafed27e26dd6f930e7c31d277c1500c1b60b4b3876  optee-examples-3.11.0.tar.gz
-+# From https://github.com/linaro-swg/optee_examples/archive/3.12.0/optee-examples-3.12.0.tar.gz
-+sha256 d3ae2cc4c51900a887f4c93e58571305bd37d60718a281953c3d775b3113f1f8  optee-examples-3.12.0.tar.gz
- # Locally computed
- sha256 6f1ef8449cb82ae79d2155605f7985bdf0f08e7ab5007de9b4362e8bf28733b9  LICENSE
-diff --git a/package/optee-examples/optee-examples.mk b/package/optee-examples/optee-examples.mk
-index b6f77c72f0..ca7956e5bc 100644
---- a/package/optee-examples/optee-examples.mk
-+++ b/package/optee-examples/optee-examples.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/boot/optee-os/Config.in b/boot/optee-os/Config.in
+index 3076be6b42..8e833ecd75 100644
+--- a/boot/optee-os/Config.in
++++ b/boot/optee-os/Config.in
+@@ -18,7 +18,7 @@ choice
+ 	  Select the version of OP-TEE OS you want to use
  
--OPTEE_EXAMPLES_VERSION = 3.11.0
-+OPTEE_EXAMPLES_VERSION = 3.12.0
- OPTEE_EXAMPLES_SITE = $(call github,linaro-swg,optee_examples,$(OPTEE_EXAMPLES_VERSION))
- OPTEE_EXAMPLES_LICENSE = BSD-2-Clause
- OPTEE_EXAMPLES_LICENSE_FILES = LICENSE
+ config BR2_TARGET_OPTEE_OS_LATEST
+-	bool "3.11.0"
++	bool "3.12.0"
+ 	help
+ 	  Use the latest release tag from the OP-TEE OS official Git
+ 	  repository.
+@@ -50,7 +50,7 @@ endif
+ 
+ config BR2_TARGET_OPTEE_OS_VERSION
+ 	string
+-	default "3.11.0"	if BR2_TARGET_OPTEE_OS_LATEST
++	default "3.12.0"	if BR2_TARGET_OPTEE_OS_LATEST
+ 	default BR2_TARGET_OPTEE_OS_CUSTOM_REPO_VERSION \
+ 				if BR2_TARGET_OPTEE_OS_CUSTOM_GIT
+ 
+diff --git a/boot/optee-os/optee-os.hash b/boot/optee-os/optee-os.hash
+index 0d60cebea1..36bc1d9593 100644
+--- a/boot/optee-os/optee-os.hash
++++ b/boot/optee-os/optee-os.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/OP-TEE/optee_os/archive/3.11.0.tar.gz
+-sha256 3c34eda1052fbb9ed36fcfdfaecfd2685023b9290670c1a5982f8a0457bfd2cb  optee-os-3.11.0.tar.gz
++# From https://github.com/OP-TEE/optee_os/archive/3.12.0/optee-os-3.12.0.tar.gz
++sha256 b13991099f25d00dac479db93b55034cb93d206e296f2c7aa9c42b92bca2c783  optee-os-3.12.0.tar.gz
+ # Locally computed
+ sha256 1247ee90858f4037b6cac63cbffddfed435d0d73c631b37d78c1e6e6ab3e5d1a  LICENSE
