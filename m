@@ -1,36 +1,47 @@
-From: Christian Stewart <christian@paral.in>
-Date: Sat, 6 Mar 2021 14:44:31 -0800
-Subject: [Buildroot] [PATCH] package/runc: cleanup the CPE_ID variables
-In-Reply-To: <20210306215027.2421773-1-yann.morin.1998@free.fr>
-References: <20210306215027.2421773-1-yann.morin.1998@free.fr>
-Message-ID: <CA+h8R2qX9Fd6pg58iT2qtE6_vugJoJbX7KN-in=baOMHLNRUiA@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 6 Mar 2021 23:43:54 +0100
+Subject: [Buildroot] [git commit branch/next] package/optee-client: disable
+ -Werror
+Message-ID: <20210306222334.19279875E5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+commit: https://git.buildroot.net/buildroot/commit/?id=6a47e70743abcedba51ae406853a3f414f9ff48a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sat, Mar 6, 2021 at 1:50 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> The CPE variables are derived from the package upstream values, so they
-> must be set from the package values, not the other way around.
->
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> Cc: Christian Stewart <christian@paral.in>
+Disable -Werror thanks to CFG_WERROR which is available since version
+3.3.0 and
+https://github.com/OP-TEE/optee_client/commit/5355fdb841bce4f7cce3dd37fc31fa91bd625c98
+to fix the following build failure with optee-client 3.11.0:
 
-[snip]
+/home/giuliobenetti/autobuild/run/instance-2/output-1/build/optee-client-3.11.0/libckteec/src/pkcs11_processing.c: In function 'ck_create_object':
+/home/giuliobenetti/autobuild/run/instance-2/output-1/build/optee-client-3.11.0/libckteec/src/pkcs11_processing.c:22:9: error: missing initializer for field 'buffer' of 'struct serializer' [-Werror=missing-field-initializers]
+  struct serializer obj = { };
+         ^
 
-> +RUNC_VERSION = $(RUNC_VERSION_MAJOR)-$(RUNC_VERSION_MINOR)
-> +RUNC_CPE_ID_VERSION = $(RUNC_VERSION_MAJOR)
-> +RUNC_CPE_ID_UPDATE = $(RUNC_VERSION_MINOR)
+Fixes:
+ - http://autobuild.buildroot.org/results/a3d663adb943aee814180f01d6e153b3309be962
 
-Thanks, LGTM.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/optee-client/optee-client.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Reviewed-by: Christian Stewart <christian@paral.in>
-
-Best regards,
-Christian
+diff --git a/package/optee-client/optee-client.mk b/package/optee-client/optee-client.mk
+index 0ae8426fc1..22f205e407 100644
+--- a/package/optee-client/optee-client.mk
++++ b/package/optee-client/optee-client.mk
+@@ -11,7 +11,8 @@ OPTEE_CLIENT_LICENSE_FILES = LICENSE
+ OPTEE_CLIENT_INSTALL_STAGING = YES
+ 
+ OPTEE_CLIENT_CONF_OPTS = \
+-	-DCFG_TEE_FS_PARENT_PATH=$(BR2_PACKAGE_OPTEE_CLIENT_TEE_FS_PATH)
++	-DCFG_TEE_FS_PARENT_PATH=$(BR2_PACKAGE_OPTEE_CLIENT_TEE_FS_PATH) \
++	-DCFG_WERROR=OFF
+ 
+ define OPTEE_CLIENT_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 0755 -D $(OPTEE_CLIENT_PKGDIR)/S30optee \
