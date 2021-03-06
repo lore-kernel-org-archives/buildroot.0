@@ -1,113 +1,33 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 6 Mar 2021 23:28:20 +0100
-Subject: [Buildroot] [PATCH] package/mawk: new package
-In-Reply-To: <20210304134049.9317-1-ismael@iodev.co.uk>
-References: <20210304134049.9317-1-ismael@iodev.co.uk>
-Message-ID: <20210306222820.GU2275@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 6 Mar 2021 23:28:46 +0100
+Subject: [Buildroot] [PATCH 1/4] package/lttng-tools: bump version to
+ 2.12.3
+In-Reply-To: <20210224103154.174602-1-nolange79@gmail.com>
+References: <20210224103154.174602-1-nolange79@gmail.com>
+Message-ID: <20210306232846.0872edfe@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ismael, All,
+On Wed, 24 Feb 2021 11:31:50 +0100
+Norbert Lange <nolange79@gmail.com> wrote:
 
-On 2021-03-04 14:40 +0100, Ismael Luceno spake thusly:
-> Interpreter for the AWK Programming Language.
+> Remove patch 001 as it has been fixed upstream.
 > 
-> Signed-off-by: Ismael Luceno <ismael@iodev.co.uk>
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
+> Signed-off-by: Norbert Lange <nolange79@gmail.com>
 > ---
->  DEVELOPERS             |  1 +
->  package/Config.in      |  1 +
->  package/mawk/Config.in |  6 ++++++
->  package/mawk/mawk.hash |  2 ++
->  package/mawk/mawk.mk   | 13 +++++++++++++
->  5 files changed, 23 insertions(+)
->  create mode 100644 package/mawk/Config.in
->  create mode 100644 package/mawk/mawk.hash
->  create mode 100644 package/mawk/mawk.mk
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 0c48236da402..02b3dd23814c 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1122,6 +1122,7 @@ F:	package/exempi/
->  
->  N:	Ismael Luceno <ismael@iodev.co.uk>
->  F:	package/axel/
-> +F:	package/mawk/
->  
->  N:	Jagan Teki <jagan@amarulasolutions.com>
->  F:	board/amarula/
-> diff --git a/package/Config.in b/package/Config.in
-> index 5304ab141c0f..ddfa671c2a46 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -178,6 +178,7 @@ menu "Development tools"
->  	source "package/jq/Config.in"
->  	source "package/libtool/Config.in"
->  	source "package/make/Config.in"
-> +	source "package/mawk/Config.in"
->  	source "package/patch/Config.in"
->  	source "package/pkgconf/Config.in"
->  	source "package/ripgrep/Config.in"
-> diff --git a/package/mawk/Config.in b/package/mawk/Config.in
-> new file mode 100644
-> index 000000000000..80118b3f6d52
-> --- /dev/null
-> +++ b/package/mawk/Config.in
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_MAWK
-> +	bool "mawk"
-> +	help
-> +	  Interpreter for the AWK Programming Language.
-> +
-> +	  http://invisible-island.net/mawk/mawk.html
-> diff --git a/package/mawk/mawk.hash b/package/mawk/mawk.hash
-> new file mode 100644
-> index 000000000000..69761f77df57
-> --- /dev/null
-> +++ b/package/mawk/mawk.hash
-> @@ -0,0 +1,2 @@
-> +sha256  7fd4cd1e1fae9290fe089171181bbc6291dfd9bca939ca804f0ddb851c8b8237  mawk-1.3.4-20200120.tgz
-> +sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-> diff --git a/package/mawk/mawk.mk b/package/mawk/mawk.mk
-> new file mode 100644
-> index 000000000000..c4a486215d5d
-> --- /dev/null
-> +++ b/package/mawk/mawk.mk
-> @@ -0,0 +1,13 @@
-> +################################################################################
-> +#
-> +# mawk
-> +#
-> +################################################################################
-> +
-> +MAWK_VERSION = 1.3.4-20200120
-> +MAWK_SITE = https://invisible-mirror.net/archives/mawk
-> +MAWK_SOURCE = mawk-$(MAWK_VERSION).tgz
-> +MAWK_LICENSE = GPL-2.0
-> +MAWK_LICENSE_FILES = COPYING
-> +
-> +$(eval $(autotools-package))
-> -- 
-> 2.30.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+>  ...nts-ns-tp.h-Fix-build-with-musl-libc.patch | 46 -------------------
+>  package/lttng-tools/lttng-tools.hash          |  4 +-
+>  package/lttng-tools/lttng-tools.mk            |  2 +-
+>  3 files changed, 3 insertions(+), 49 deletions(-)
+>  delete mode 100644 package/lttng-tools/0001-tests-gen-ust-events-ns-tp.h-Fix-build-with-musl-libc.patch
 
+Series applied to next. Thanks!
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
