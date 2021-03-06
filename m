@@ -1,69 +1,67 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 6 Mar 2021 22:56:49 +0100
-Subject: [Buildroot] [git commit] package/kodi-pvr-pctv: bump version to
- 6.1.0-Matrix
-Message-ID: <20210308072138.851368893D@busybox.osuosl.org>
+Date: Sat, 6 Mar 2021 22:56:48 +0100
+Subject: [Buildroot] [git commit] package/kodi-pvr-mythtv: bump version to
+ 7.3.0-Matrix
+Message-ID: <20210308072138.5EF4A81607@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ea50ce3a067d0d79e86074be09e49d63fd1dd556
+commit: https://git.buildroot.net/buildroot/commit/?id=c84437722f69be1dd8776eda0fbdd7ccb9d6d0c9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Switch dependency to kodi after upstream removed the dependency to
 kodi-platform:
-https://github.com/kodi-pvr/pvr.pctv/commit/b6cebce2c9579a2bcce619dbba586eafd2cf2701
-https://github.com/kodi-pvr/pvr.pctv/commit/db2eca67995017c7b3b4755e5bf674faaebe77ea
+https://github.com/janbar/pvr.mythtv/commit/b847285c33ce4e469d29f8ada643c69d4360af62
 
 Switch license file to LICENSE.md.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-pvr-pctv/Config.in          | 1 -
- package/kodi-pvr-pctv/kodi-pvr-pctv.hash | 4 ++--
- package/kodi-pvr-pctv/kodi-pvr-pctv.mk   | 6 +++---
+ package/kodi-pvr-mythtv/Config.in            | 1 -
+ package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash | 4 ++--
+ package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk   | 6 +++---
  3 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/kodi-pvr-pctv/Config.in b/package/kodi-pvr-pctv/Config.in
-index 255cd4a5f0..11fe09b2f1 100644
---- a/package/kodi-pvr-pctv/Config.in
-+++ b/package/kodi-pvr-pctv/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_KODI_PVR_PCTV
- 	bool "kodi-pvr-pctv"
- 	select BR2_PACKAGE_JSONCPP
+diff --git a/package/kodi-pvr-mythtv/Config.in b/package/kodi-pvr-mythtv/Config.in
+index 798ff3e911..ebdbc00487 100644
+--- a/package/kodi-pvr-mythtv/Config.in
++++ b/package/kodi-pvr-mythtv/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_KODI_PVR_MYTHTV
+ 	bool "kodi-pvr-mythtv"
 -	select BR2_PACKAGE_KODI_PLATFORM
  	help
- 	  PCTV PVR client addon for Kodi
+ 	  MythTV PVR for Kodi
  
-diff --git a/package/kodi-pvr-pctv/kodi-pvr-pctv.hash b/package/kodi-pvr-pctv/kodi-pvr-pctv.hash
-index 30fb81a906..0e3f464cff 100644
---- a/package/kodi-pvr-pctv/kodi-pvr-pctv.hash
-+++ b/package/kodi-pvr-pctv/kodi-pvr-pctv.hash
+diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
+index 1896592cf5..30a7ec841c 100644
+--- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
++++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  10124e5444c6cfb0c77bad1d1122f6ba5fc233248d6b33066ba799f4dedceeee  kodi-pvr-pctv-2.4.7-Leia.tar.gz
--sha256  43376e70ae80133530c8ce71a3b0dcde8529a8162d3b3956009eb8fc0f5c559c  debian/copyright
-+sha256  94b8be4988cb6d8c61f6bdf237ddabb04d77fe4900f61411f5abf918eb5a078c  kodi-pvr-pctv-6.1.0-Matrix.tar.gz
+-sha256  b2048db252966d5f78828cacd41e85d00a522c03fe7f24a0f000f720fe7aff0a  kodi-pvr-mythtv-5.10.19-Leia.tar.gz
+-sha256  0efb11009d447b39ec35d77dc265db3d1c3d261730bbc33b267587254d973ec8  debian/copyright
++sha256  fa741677fc2d58689111d18c8eb1114115f4c33bc99267bb761f225e82fdc588  kodi-pvr-mythtv-7.3.0-Matrix.tar.gz
 +sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-pctv/kodi-pvr-pctv.mk b/package/kodi-pvr-pctv/kodi-pvr-pctv.mk
-index 851788c96b..78d500e3e8 100644
---- a/package/kodi-pvr-pctv/kodi-pvr-pctv.mk
-+++ b/package/kodi-pvr-pctv/kodi-pvr-pctv.mk
+diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
+index e902bab148..98e83e2035 100644
+--- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
++++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
 @@ -4,10 +4,10 @@
  #
  ################################################################################
  
--KODI_PVR_PCTV_VERSION = 2.4.7-Leia
-+KODI_PVR_PCTV_VERSION = 6.1.0-Matrix
- KODI_PVR_PCTV_SITE = $(call github,kodi-pvr,pvr.pctv,$(KODI_PVR_PCTV_VERSION))
- KODI_PVR_PCTV_LICENSE = GPL-2.0+
--KODI_PVR_PCTV_LICENSE_FILES = debian/copyright
--KODI_PVR_PCTV_DEPENDENCIES = jsoncpp kodi-platform
-+KODI_PVR_PCTV_LICENSE_FILES = LICENSE.md
-+KODI_PVR_PCTV_DEPENDENCIES = jsoncpp kodi
+-KODI_PVR_MYTHTV_VERSION = 5.10.19-Leia
++KODI_PVR_MYTHTV_VERSION = 7.3.0-Matrix
+ KODI_PVR_MYTHTV_SITE = $(call github,janbar,pvr.mythtv,$(KODI_PVR_MYTHTV_VERSION))
+ KODI_PVR_MYTHTV_LICENSE = GPL-2.0+
+-KODI_PVR_MYTHTV_LICENSE_FILES = debian/copyright
+-KODI_PVR_MYTHTV_DEPENDENCIES = kodi-platform
++KODI_PVR_MYTHTV_LICENSE_FILES = LICENSE.md
++KODI_PVR_MYTHTV_DEPENDENCIES = kodi
  
  $(eval $(cmake-package))
