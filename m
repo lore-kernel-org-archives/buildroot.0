@@ -1,26 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 06 Mar 2021 11:17:56 +0100
-Subject: [Buildroot] [PATCH 1/1] package/python{3}-pyyaml: switch to
- setuptools
-In-Reply-To: <20210306085432.129560-1-asafka7@gmail.com> (Asaf Kahlon's
- message of "Sat, 6 Mar 2021 10:54:32 +0200")
-References: <20210306085432.129560-1-asafka7@gmail.com>
-Message-ID: <87r1ksa8mj.fsf@dell.be.48ers.dk>
+Date: Sat, 06 Mar 2021 11:18:31 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libmodsecurity: add CPE
+ variables
+In-Reply-To: <20210306094136.2154945-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 6 Mar 2021 10:41:36 +0100")
+References: <20210306094136.2154945-1-fontaine.fabrice@gmail.com>
+Message-ID: <87mtvga8lk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Asaf" == Asaf Kahlon <asafka7@gmail.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Since version 5.4.0 pyyaml uses setuptools (see
- > https://github.com/yaml/pyyaml/blob/master/CHANGES)
+ > cpe:2.3:a:trustwave:modsecurity is a valid CPE identifier for this
+ > package:
 
- > Fixes:
- >   - http://autobuild.buildroot.net/results/bc36ae51a1e4d70c5fd2a3eb4b458aba4220f2dc
+ >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Atrustwave%3Amodsecurity
 
- > Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
 
