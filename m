@@ -1,69 +1,76 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 6 Mar 2021 22:56:49 +0100
-Subject: [Buildroot] [git commit branch/next] package/kodi-pvr-pctv: bump
- version to 6.1.0-Matrix
-Message-ID: <20210306213555.30DA786782@busybox.osuosl.org>
+Date: Sat, 6 Mar 2021 22:56:51 +0100
+Subject: [Buildroot] [git commit branch/next]
+ package/kodi-visualisation-matrix: new package
+Message-ID: <20210306213556.96D238183D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ea50ce3a067d0d79e86074be09e49d63fd1dd556
+commit: https://git.buildroot.net/buildroot/commit/?id=a806340de26dc6cd805e97698302ee1da94cdb61
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-Switch dependency to kodi after upstream removed the dependency to
-kodi-platform:
-https://github.com/kodi-pvr/pvr.pctv/commit/b6cebce2c9579a2bcce619dbba586eafd2cf2701
-https://github.com/kodi-pvr/pvr.pctv/commit/db2eca67995017c7b3b4755e5bf674faaebe77ea
-
-Switch license file to LICENSE.md.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-pvr-pctv/Config.in          | 1 -
- package/kodi-pvr-pctv/kodi-pvr-pctv.hash | 4 ++--
- package/kodi-pvr-pctv/kodi-pvr-pctv.mk   | 6 +++---
- 3 files changed, 5 insertions(+), 6 deletions(-)
+ package/kodi-visualisation-matrix/Config.in                 |  7 +++++++
+ .../kodi-visualisation-matrix.hash                          |  3 +++
+ .../kodi-visualisation-matrix/kodi-visualisation-matrix.mk  | 13 +++++++++++++
+ package/kodi/Config.in                                      |  1 +
+ 4 files changed, 24 insertions(+)
 
-diff --git a/package/kodi-pvr-pctv/Config.in b/package/kodi-pvr-pctv/Config.in
-index 255cd4a5f0..11fe09b2f1 100644
---- a/package/kodi-pvr-pctv/Config.in
-+++ b/package/kodi-pvr-pctv/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_KODI_PVR_PCTV
- 	bool "kodi-pvr-pctv"
- 	select BR2_PACKAGE_JSONCPP
--	select BR2_PACKAGE_KODI_PLATFORM
- 	help
- 	  PCTV PVR client addon for Kodi
- 
-diff --git a/package/kodi-pvr-pctv/kodi-pvr-pctv.hash b/package/kodi-pvr-pctv/kodi-pvr-pctv.hash
-index 30fb81a906..0e3f464cff 100644
---- a/package/kodi-pvr-pctv/kodi-pvr-pctv.hash
-+++ b/package/kodi-pvr-pctv/kodi-pvr-pctv.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  10124e5444c6cfb0c77bad1d1122f6ba5fc233248d6b33066ba799f4dedceeee  kodi-pvr-pctv-2.4.7-Leia.tar.gz
--sha256  43376e70ae80133530c8ce71a3b0dcde8529a8162d3b3956009eb8fc0f5c559c  debian/copyright
-+sha256  94b8be4988cb6d8c61f6bdf237ddabb04d77fe4900f61411f5abf918eb5a078c  kodi-pvr-pctv-6.1.0-Matrix.tar.gz
+diff --git a/package/kodi-visualisation-matrix/Config.in b/package/kodi-visualisation-matrix/Config.in
+new file mode 100644
+index 0000000000..db01f15231
+--- /dev/null
++++ b/package/kodi-visualisation-matrix/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_KODI_VISUALISATION_MATRIX
++	bool "kodi-visualisation-matrix"
++	select BR2_PACKAGE_GLM
++	help
++	  Matrix themed visualization addon for Kodi
++
++	  https://github.com/xbmc/visualization.matrix
+diff --git a/package/kodi-visualisation-matrix/kodi-visualisation-matrix.hash b/package/kodi-visualisation-matrix/kodi-visualisation-matrix.hash
+new file mode 100644
+index 0000000000..38b9311d6e
+--- /dev/null
++++ b/package/kodi-visualisation-matrix/kodi-visualisation-matrix.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  fc5c4790cbf957dbf8d504ae7c43eaeca122fde6423f1135029ff053135f8fd0  kodi-visualisation-matrix-1.0.0-Matrix.tar.gz
 +sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-pctv/kodi-pvr-pctv.mk b/package/kodi-pvr-pctv/kodi-pvr-pctv.mk
-index 851788c96b..78d500e3e8 100644
---- a/package/kodi-pvr-pctv/kodi-pvr-pctv.mk
-+++ b/package/kodi-pvr-pctv/kodi-pvr-pctv.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--KODI_PVR_PCTV_VERSION = 2.4.7-Leia
-+KODI_PVR_PCTV_VERSION = 6.1.0-Matrix
- KODI_PVR_PCTV_SITE = $(call github,kodi-pvr,pvr.pctv,$(KODI_PVR_PCTV_VERSION))
- KODI_PVR_PCTV_LICENSE = GPL-2.0+
--KODI_PVR_PCTV_LICENSE_FILES = debian/copyright
--KODI_PVR_PCTV_DEPENDENCIES = jsoncpp kodi-platform
-+KODI_PVR_PCTV_LICENSE_FILES = LICENSE.md
-+KODI_PVR_PCTV_DEPENDENCIES = jsoncpp kodi
- 
- $(eval $(cmake-package))
+diff --git a/package/kodi-visualisation-matrix/kodi-visualisation-matrix.mk b/package/kodi-visualisation-matrix/kodi-visualisation-matrix.mk
+new file mode 100644
+index 0000000000..153c1c15b1
+--- /dev/null
++++ b/package/kodi-visualisation-matrix/kodi-visualisation-matrix.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# kodi-visualisation-matrix
++#
++################################################################################
++
++KODI_VISUALISATION_MATRIX_VERSION = 1.0.0-Matrix
++KODI_VISUALISATION_MATRIX_SITE = $(call github,xbmc,visualization.matrix,$(KODI_VISUALISATION_MATRIX_VERSION))
++KODI_VISUALISATION_MATRIX_LICENSE = GPL-2.0+
++KODI_VISUALISATION_MATRIX_LICENSE_FILES = LICENSE.md
++KODI_VISUALISATION_MATRIX_DEPENDENCIES = glm kodi
++
++$(eval $(cmake-package))
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index a104ba53c3..01d068da44 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -355,6 +355,7 @@ endmenu
+ menu "Visualisations"
+ 	source "package/kodi-visualisation-fishbmc/Config.in"
+ 	source "package/kodi-visualisation-goom/Config.in"
++	source "package/kodi-visualisation-matrix/Config.in"
+ 	source "package/kodi-visualisation-shadertoy/Config.in"
+ 	source "package/kodi-visualisation-spectrum/Config.in"
+ 	source "package/kodi-visualisation-starburst/Config.in"
