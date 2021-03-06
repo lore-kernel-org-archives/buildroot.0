@@ -1,42 +1,56 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Mar 2021 20:20:09 +0100
-Subject: [Buildroot] [git commit] package/gd: bump to version 2.3.1
-Message-ID: <20210308072136.72B1A88971@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 6 Mar 2021 21:22:59 +0100
+Subject: [Buildroot] [git commit] package/libubootenv: bump to version
+ e663439
+Message-ID: <20210308072137.276318896D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=970b2ca3cc3f927f679c871eeadb22ec110b0ed5
+commit: https://git.buildroot.net/buildroot/commit/?id=88df5192a8859fab7d74945151411561cfba24f7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gd/gd.hash | 2 +-
- package/gd/gd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Include the following changes:
 
-diff --git a/package/gd/gd.hash b/package/gd/gd.hash
-index 5aec317f2d..3fd4ca0eb5 100644
---- a/package/gd/gd.hash
-+++ b/package/gd/gd.hash
+e663439 Always fsync file writes
+80b7f31 Treat '=' as an illegal character in variable names
+950f541 libuboot_env: fix calculation of usable envsize
+fb88032 Correct initialisations in libuboot_configure
+20d1ec7 Force writing of environment if default is used
+5ca11bd libuboot_env: correct length to usable env size length
+cd4a8f1 libuboot_env_store: fix env double-null termination
+9510164 uboot_env: fix infinite loop on short read (EOF)
+
+Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libubootenv/libubootenv.hash | 2 +-
+ package/libubootenv/libubootenv.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/libubootenv/libubootenv.hash b/package/libubootenv/libubootenv.hash
+index a655ed2349..0b5320b36f 100644
+--- a/package/libubootenv/libubootenv.hash
++++ b/package/libubootenv/libubootenv.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256  ecd9155b9a417fb3f837f29e5966323796de247789163761dd72dbf83bfcac58  libgd-2.3.0.tar.xz
-+sha256  9767917d9f818faec4ddd763fe4a4ad9f6322c3d25da290ab2ea3e2ce4b52a7b  libgd-2.3.1.tar.xz
- sha256  4d80b4af6c38d7a65128c881623dee2a5daee6b3a6ccab74a5cdfa0dfda96da7  COPYING
-diff --git a/package/gd/gd.mk b/package/gd/gd.mk
-index f54c2b37a2..53bf62dabd 100644
---- a/package/gd/gd.mk
-+++ b/package/gd/gd.mk
-@@ -4,7 +4,7 @@
+-sha256  4c52dd908b69f18cdd5721b3f24573fb276e61115f66edb74906d766ca60399f  libubootenv-0.3.1.tar.gz
++sha256  e25adf81dd2d4a083cb2cf032843a1ee2bb1fab54aa7a0202bd2295186bfe1b7  libubootenv-e663439e3d39a4cdbddb7e818245a99c485fa965.tar.gz
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  Licenses/lgpl-2.1.txt
+diff --git a/package/libubootenv/libubootenv.mk b/package/libubootenv/libubootenv.mk
+index 61516710a7..7a98f5324b 100644
+--- a/package/libubootenv/libubootenv.mk
++++ b/package/libubootenv/libubootenv.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--GD_VERSION = 2.3.0
-+GD_VERSION = 2.3.1
- GD_SOURCE = libgd-$(GD_VERSION).tar.xz
- GD_SITE = https://github.com/libgd/libgd/releases/download/gd-$(GD_VERSION)
- GD_INSTALL_STAGING = YES
+-LIBUBOOTENV_VERSION = 0.3.1
+-LIBUBOOTENV_SITE = $(call github,sbabic,libubootenv,v$(LIBUBOOTENV_VERSION))
++LIBUBOOTENV_VERSION = e663439e3d39a4cdbddb7e818245a99c485fa965
++LIBUBOOTENV_SITE = $(call github,sbabic,libubootenv,$(LIBUBOOTENV_VERSION))
+ LIBUBOOTENV_LICENSE = LGPL-2.1
+ LIBUBOOTENV_LICENSE_FILES = Licenses/lgpl-2.1.txt
+ LIBUBOOTENV_INSTALL_STAGING = YES
