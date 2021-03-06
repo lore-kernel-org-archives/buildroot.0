@@ -1,38 +1,27 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat,  6 Mar 2021 12:23:07 +0100
-Subject: [Buildroot] [PATCH v1] package/rust-bin: add i586 download hash
-Message-ID: <20210306112307.28337-1-ps.report@gmx.net>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 06 Mar 2021 11:31:23 +0000
+Subject: [Buildroot] [Bug 13576] Issues compiling buildroot for 5x86
+In-Reply-To: <bug-13576-163@https.bugs.busybox.net/>
+References: <bug-13576-163@https.bugs.busybox.net/>
+Message-ID: <bug-13576-163-kXE16ACdSu@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
+https://bugs.busybox.net/show_bug.cgi?id=13576
 
-  - https://bugs.busybox.net/show_bug.cgi?id=13576
+--- Comment #6 from Peter Seiderer <ps.report@gmx.net> ---
+Regarding Description - Point 3) - rust binary/missing hash:
 
-  ERROR: No hash found for rust-std-1.48.0-i586-unknown-linux-gnu.tar.xz
+Fixed by
 
-Reported-by: ingineru_de_sistem at yahoo.com
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/rust-bin/rust-bin.hash | 3 +++
- 1 file changed, 3 insertions(+)
+https://patchwork.ozlabs.org/project/buildroot/patch/20210306112307.28337-1-ps.report at gmx.net/
 
-diff --git a/package/rust-bin/rust-bin.hash b/package/rust-bin/rust-bin.hash
-index cc3ea89b1f..46c023e62f 100644
---- a/package/rust-bin/rust-bin.hash
-+++ b/package/rust-bin/rust-bin.hash
-@@ -16,6 +16,9 @@ sha256  5bc6c5dfcc9c345c3f7af519df8ac77c2b0938ea32aa7949f589bec2c7cd3a22  rust-s
- # From https://static.rust-lang.org/dist/rust-std-1.48.0-armv7-unknown-linux-gnueabihf.tar.xz.sha256
- # Verified using https://static.rust-lang.org/dist/rust-std-1.48.0-armv7-unknown-linux-gnueabihf.tar.xz.asc
- sha256  da71ec82973eb6fdf67de25b5a39d9cb4b943ec2c43de570f4785a3a79036430  rust-std-1.48.0-armv7-unknown-linux-gnueabihf.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.48.0-i586-unknown-linux-gnu.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rust-std-1.48.0-i586-unknown-linux-gnu.tar.xz.asc
-+sha256  d700751756d9b6e7881dd3a5f67bec1b998b3e278a113f4de2125f4281deaf5c  rust-std-1.48.0-i586-unknown-linux-gnu.tar.xz
- # From https://static.rust-lang.org/dist/rust-std-1.48.0-i686-unknown-linux-gnu.tar.xz.sha256
- # Verified using https://static.rust-lang.org/dist/rust-std-1.48.0-i686-unknown-linux-gnu.tar.xz.asc
- sha256  d4ea5ca6f9c8f9092b50c879f1d9a2620486f08020fa4cac227743a19f6e8cdf  rust-std-1.48.0-i686-unknown-linux-gnu.tar.xz
+The dependency is by package ripgrep --> host-rustc --> host-rust-bin (take a
+look at 'make graph-depends' buildroot feature)...
+
 -- 
-2.30.1
+You are receiving this mail because:
+You are on the CC list for the bug.
