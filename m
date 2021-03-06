@@ -1,38 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 6 Mar 2021 16:39:34 +0100
-Subject: [Buildroot] [git commit] package/asterisk: remove default -O3
- optimization flag
-Message-ID: <20210306152053.4E0F58112A@busybox.osuosl.org>
+Date: Sat, 06 Mar 2021 16:47:29 +0100
+Subject: [Buildroot] [PATCH 1/2] toolchain: introduce
+ BR2_TOOLCHAIN_HAS_GCC_BUG_99410
+In-Reply-To: <20210305151529.3477575-2-giulio.benetti@benettiengineering.com>
+ (Giulio Benetti's message of "Fri, 5 Mar 2021 16:15:28 +0100")
+References: <20210305151529.3477575-1-giulio.benetti@benettiengineering.com>
+ <20210305151529.3477575-2-giulio.benetti@benettiengineering.com>
+Message-ID: <87h7lo8esu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eaba3c8e131e21c4bae79483211685942e035300
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
 
-Actually asterisk package gets built with -O3 cflag since it's defaulted
-into its sources, but it's not what we want, so let's empty its OPTIMIZE
-Makefile variable letting Buildroot CFLAGS to take place instead.
+ > git package fails to build for the Nios2 architecture with optimization
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/asterisk/asterisk.mk | 3 +++
- 1 file changed, 3 insertions(+)
+s/git/belle-sip/
 
-diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index b220b54189..f6a4f8f787 100644
---- a/package/asterisk/asterisk.mk
-+++ b/package/asterisk/asterisk.mk
-@@ -280,6 +280,9 @@ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
- ASTERISK_MAKE_OPTS += ASTLDFLAGS="-latomic"
- endif
- 
-+# Remove default -O3 optimization flag
-+ASTERISK_MAKE_OPTS += OPTIMIZE=""
-+
- # We want to install sample configuration files, too.
- ASTERISK_INSTALL_TARGET_OPTS = \
- 	$(ASTERISK_DIRS) \
+Committed with that fixed, thanks.
+
+-- 
+Bye, Peter Korsgaard
