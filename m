@@ -1,42 +1,38 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 6 Mar 2021 11:19:03 +0100
-Subject: [Buildroot] [git commit] package/expat: update CPE variables
-Message-ID: <20210306095745.5BD6486EE9@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sat,  6 Mar 2021 12:23:07 +0100
+Subject: [Buildroot] [PATCH v1] package/rust-bin: add i586 download hash
+Message-ID: <20210306112307.28337-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ad97d01b8439b1d0f2365566d2a04ca1d92fa9f1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fixes:
 
-libexpat:expat has been replaced by libexpat_project:libexpat:
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alibexpat_project%3Alibexpat
+  - https://bugs.busybox.net/show_bug.cgi?id=13576
 
-  <cpe-item name="cpe:/a:libexpat:expat:2.2.10" deprecated="true" deprecation_date="2021-01-25T15:44:50.537Z">
-    <title xml:lang="en-US">libexpat Expat 2.2.10</title>
-      <reference href="https://github.com/libexpat/libexpat/">Version</reference>
-    <cpe-23:cpe23-item name="cpe:2.3:a:libexpat:expat:2.2.10:*:*:*:*:*:*:*">
-        <cpe-23:deprecated-by name="cpe:2.3:a:libexpat_project:libexpat:2.2.10:*:*:*:*:*:*:*" type="NAME_CORRECTION"/>
+  ERROR: No hash found for rust-std-1.48.0-i586-unknown-linux-gnu.tar.xz
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Reported-by: ingineru_de_sistem at yahoo.com
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/expat/expat.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/rust-bin/rust-bin.hash | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/expat/expat.mk b/package/expat/expat.mk
-index 201e18ae65..4acbade2c8 100644
---- a/package/expat/expat.mk
-+++ b/package/expat/expat.mk
-@@ -12,7 +12,8 @@ EXPAT_DEPENDENCIES = host-pkgconf
- HOST_EXPAT_DEPENDENCIES = host-pkgconf
- EXPAT_LICENSE = MIT
- EXPAT_LICENSE_FILES = COPYING
--EXPAT_CPE_ID_VENDOR = libexpat
-+EXPAT_CPE_ID_VENDOR = libexpat_project
-+EXPAT_CPE_ID_PRODUCT = libexpat
- 
- EXPAT_CONF_OPTS = --without-docbook
- HOST_EXPAT_CONF_OPTS = --without-docbook
+diff --git a/package/rust-bin/rust-bin.hash b/package/rust-bin/rust-bin.hash
+index cc3ea89b1f..46c023e62f 100644
+--- a/package/rust-bin/rust-bin.hash
++++ b/package/rust-bin/rust-bin.hash
+@@ -16,6 +16,9 @@ sha256  5bc6c5dfcc9c345c3f7af519df8ac77c2b0938ea32aa7949f589bec2c7cd3a22  rust-s
+ # From https://static.rust-lang.org/dist/rust-std-1.48.0-armv7-unknown-linux-gnueabihf.tar.xz.sha256
+ # Verified using https://static.rust-lang.org/dist/rust-std-1.48.0-armv7-unknown-linux-gnueabihf.tar.xz.asc
+ sha256  da71ec82973eb6fdf67de25b5a39d9cb4b943ec2c43de570f4785a3a79036430  rust-std-1.48.0-armv7-unknown-linux-gnueabihf.tar.xz
++# From https://static.rust-lang.org/dist/rust-std-1.48.0-i586-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/rust-std-1.48.0-i586-unknown-linux-gnu.tar.xz.asc
++sha256  d700751756d9b6e7881dd3a5f67bec1b998b3e278a113f4de2125f4281deaf5c  rust-std-1.48.0-i586-unknown-linux-gnu.tar.xz
+ # From https://static.rust-lang.org/dist/rust-std-1.48.0-i686-unknown-linux-gnu.tar.xz.sha256
+ # Verified using https://static.rust-lang.org/dist/rust-std-1.48.0-i686-unknown-linux-gnu.tar.xz.asc
+ sha256  d4ea5ca6f9c8f9092b50c879f1d9a2620486f08020fa4cac227743a19f6e8cdf  rust-std-1.48.0-i686-unknown-linux-gnu.tar.xz
+-- 
+2.30.1
