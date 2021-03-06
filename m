@@ -1,43 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 6 Mar 2021 22:56:50 +0100
-Subject: [Buildroot] [git commit branch/next] package/kodi-skin-confluence:
- bump version
-Message-ID: <20210306213556.128D086DA6@busybox.osuosl.org>
+Date: Sat, 6 Mar 2021 22:56:49 +0100
+Subject: [Buildroot] [git commit branch/next] package/kodi-pvr-stalker: bump
+ version to 7.1.0-Matrix
+Message-ID: <20210306213555.3ACD286DA6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=61a7c4cbb511aaf0556ac2d121ee315cdc04b2db
+commit: https://git.buildroot.net/buildroot/commit/?id=269e9548cdb8335ecae9d5f6028faaaf27782ef0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+Switch dependency to kodi after upstream removed the dependency to
+kodi-platform:
+https://github.com/kodi-pvr/pvr.stalker/commit/8cee21986877bd4d324d078203e2bd9101e794ec
+https://github.com/kodi-pvr/pvr.stalker/commit/e30167549bbd7a33b2aca4bdc93ddf9e2b83c442
+
+Switch license file to LICENSE.md.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-skin-confluence/kodi-skin-confluence.hash | 2 +-
- package/kodi-skin-confluence/kodi-skin-confluence.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/kodi-pvr-stalker/Config.in             | 1 -
+ package/kodi-pvr-stalker/kodi-pvr-stalker.hash | 4 ++--
+ package/kodi-pvr-stalker/kodi-pvr-stalker.mk   | 6 +++---
+ 3 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/kodi-skin-confluence/kodi-skin-confluence.hash b/package/kodi-skin-confluence/kodi-skin-confluence.hash
-index fdd4e828f6..e3d1ff73f4 100644
---- a/package/kodi-skin-confluence/kodi-skin-confluence.hash
-+++ b/package/kodi-skin-confluence/kodi-skin-confluence.hash
+diff --git a/package/kodi-pvr-stalker/Config.in b/package/kodi-pvr-stalker/Config.in
+index d334d0c2cb..f82d5a497f 100644
+--- a/package/kodi-pvr-stalker/Config.in
++++ b/package/kodi-pvr-stalker/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_KODI_PVR_STALKER
+ 	bool "kodi-pvr-stalker"
+ 	select BR2_PACKAGE_JSONCPP
+-	select BR2_PACKAGE_KODI_PLATFORM
+ 	select BR2_PACKAGE_LIBXML2
+ 	help
+ 	  A PVR Client that connects Kodi to Stalker Middleware
+diff --git a/package/kodi-pvr-stalker/kodi-pvr-stalker.hash b/package/kodi-pvr-stalker/kodi-pvr-stalker.hash
+index cc129d90ec..545af9ec7e 100644
+--- a/package/kodi-pvr-stalker/kodi-pvr-stalker.hash
++++ b/package/kodi-pvr-stalker/kodi-pvr-stalker.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  dc4a0abf05db50caf8e70e4904b8c2c445008ec3d6d23381c9c31dedaf6109de  kodi-skin-confluence-cffcb8320003e6048abe4b26316e5d5f3d50eac9.tar.gz
-+sha256  49ba4dcf4b512ac0a97bd1a4ebf14685d294d89a7a07c26ddda0fe730c8aa047  kodi-skin-confluence-37a196cdb58c0da87b5b22b047a5d44dc447f1ae.tar.gz
- sha256  89931c1fb1f3716694175763cf3221cfcd63d6935031cf6b4512d17ffe5d9860  LICENSE.txt
-diff --git a/package/kodi-skin-confluence/kodi-skin-confluence.mk b/package/kodi-skin-confluence/kodi-skin-confluence.mk
-index d9bd10bdfa..fcae506d1e 100644
---- a/package/kodi-skin-confluence/kodi-skin-confluence.mk
-+++ b/package/kodi-skin-confluence/kodi-skin-confluence.mk
-@@ -4,7 +4,7 @@
+-sha256  03eb428f21d6b8526b6671278b60ac6dc5a761a515af27172d8ac5c814cc3f65  kodi-pvr-stalker-3.4.10-Leia.tar.gz
+-sha256  f9fa34b2caa07376a7a976c1f0b1b9761b37449afd4ceb1e7afa283492054237  debian/copyright
++sha256  bce055008d0ae7212924f41753970e3176a218f6a45bd76b202463a43be3d192  kodi-pvr-stalker-7.1.0-Matrix.tar.gz
++sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-stalker/kodi-pvr-stalker.mk b/package/kodi-pvr-stalker/kodi-pvr-stalker.mk
+index 0ae41171a9..5ca466981c 100644
+--- a/package/kodi-pvr-stalker/kodi-pvr-stalker.mk
++++ b/package/kodi-pvr-stalker/kodi-pvr-stalker.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--KODI_SKIN_CONFLUENCE_VERSION = cffcb8320003e6048abe4b26316e5d5f3d50eac9
-+KODI_SKIN_CONFLUENCE_VERSION = 37a196cdb58c0da87b5b22b047a5d44dc447f1ae
- KODI_SKIN_CONFLUENCE_SITE = $(call github,xbmc,skin.confluence,$(KODI_SKIN_CONFLUENCE_VERSION))
- KODI_SKIN_CONFLUENCE_LICENSE = GPL-2.0
- KODI_SKIN_CONFLUENCE_LICENSE_FILES = LICENSE.txt
+-KODI_PVR_STALKER_VERSION = 3.4.10-Leia
++KODI_PVR_STALKER_VERSION = 7.1.0-Matrix
+ KODI_PVR_STALKER_SITE = $(call github,kodi-pvr,pvr.stalker,$(KODI_PVR_STALKER_VERSION))
+ KODI_PVR_STALKER_LICENSE = GPL-2.0+
+-KODI_PVR_STALKER_LICENSE_FILES = debian/copyright
+-KODI_PVR_STALKER_DEPENDENCIES = jsoncpp kodi-platform libxml2
++KODI_PVR_STALKER_LICENSE_FILES = LICENSE.md
++KODI_PVR_STALKER_DEPENDENCIES = jsoncpp kodi libxml2
+ 
+ $(eval $(cmake-package))
