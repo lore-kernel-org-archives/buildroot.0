@@ -1,70 +1,72 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 6 Mar 2021 21:53:16 +0100
-Subject: [Buildroot] [git commit branch/next] package/kodi-inputstream-rtmp:
- bump version to 3.4.0-Matrix
-Message-ID: <20210306213554.70A248183D@busybox.osuosl.org>
+Date: Sat, 6 Mar 2021 22:56:50 +0100
+Subject: [Buildroot] [git commit branch/next]
+ package/kodi-screensaver-greynetic: bump version to 2.5.0-Matrix
+Message-ID: <20210306213555.B5BA786782@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d8a582f140695711d940b2d5611daf62a302b08d
+commit: https://git.buildroot.net/buildroot/commit/?id=8004d2c0ad8cf443b7b272f212292fba9e127b2d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Openssl and zlib are built as hard-dependencies of Kodi already. For the
-case that Kodi drops these dependencies we need to make sure that this
-package still finds its dependencies:
-https://github.com/xbmc/inputstream.rtmp/blob/Matrix/CMakeLists.txt#L8
+Remove dependency to opengl, add dependency to glm, opengles support
+was fixed upstream:
+https://github.com/xbmc/screensaver.greynetic/commit/aee7082c92f8c8aa1195c33db89e38753a039bba
 
 Switch license file to LICENSE.md.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-inputstream-rtmp/Config.in                  | 2 ++
- package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash | 4 ++--
- package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk   | 6 +++---
- 3 files changed, 7 insertions(+), 5 deletions(-)
+ package/kodi-screensaver-greynetic/Config.in                       | 5 +----
+ package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.hash | 4 ++--
+ package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.mk   | 6 +++---
+ 3 files changed, 6 insertions(+), 9 deletions(-)
 
-diff --git a/package/kodi-inputstream-rtmp/Config.in b/package/kodi-inputstream-rtmp/Config.in
-index fa83926301..c4bd2e1380 100644
---- a/package/kodi-inputstream-rtmp/Config.in
-+++ b/package/kodi-inputstream-rtmp/Config.in
-@@ -1,6 +1,8 @@
- config BR2_PACKAGE_KODI_INPUTSTREAM_RTMP
- 	bool "kodi-inputstream-rtmp"
-+	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_RTMPDUMP
-+	select BR2_PACKAGE_ZLIB
+diff --git a/package/kodi-screensaver-greynetic/Config.in b/package/kodi-screensaver-greynetic/Config.in
+index 685feb8872..92db2855e6 100644
+--- a/package/kodi-screensaver-greynetic/Config.in
++++ b/package/kodi-screensaver-greynetic/Config.in
+@@ -1,10 +1,7 @@
+ config BR2_PACKAGE_KODI_SCREENSAVER_GREYNETIC
+ 	bool "kodi-screensaver-greynetic"
+-	depends on BR2_PACKAGE_HAS_LIBGL
++	select BR2_PACKAGE_GLM
  	help
- 	  RTMP input stream add-on for Kodi
+ 	  Greynetic screensaver for Kodi
  
-diff --git a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
-index d472b89ba9..e645fb14bb 100644
---- a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
-+++ b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
+ 	  https://github.com/xbmc/screensaver.greynetic
+-
+-comment "kodi-screensaver-greynetic needs OpenGL"
+-	depends on !BR2_PACKAGE_HAS_LIBGL
+diff --git a/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.hash b/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.hash
+index 87961fdae0..d1f4992240 100644
+--- a/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.hash
++++ b/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  56dac63262fa736620863900d903616d4827d735992e6d8beda84e377a5599e5  kodi-inputstream-rtmp-2.0.9-Leia.tar.gz
--sha256  ddba7d22c2586f13de40786c21f3b87c6913c9937f4862dc828d33cfff0395eb  debian/copyright
-+sha256  efaaa9b07c18810582a3826df476fc36a2aac82be7512271545073c3f6cc0212  kodi-inputstream-rtmp-3.4.0-Matrix.tar.gz
+-sha256  e9a24d3204e3d6d5b5302a865e37c6f2ae9e25a3536eeda4205830f5e0256555  kodi-screensaver-greynetic-2.2.3-Leia.tar.gz
+-sha256  2905fdee5c68dc4944c42711d45f47794e8fb881bd67d66d0875d10f9a2156a0  debian/copyright
++sha256  093c77ad332dc5797f1866895218d6c6b4490ef1f9bd4cbdf15c000c3b881798  kodi-screensaver-greynetic-2.5.0-Matrix.tar.gz
 +sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
-index e850be40ff..6029b7d35c 100644
---- a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
-+++ b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
+diff --git a/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.mk b/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.mk
+index 6311325540..b7c4a15b87 100644
+--- a/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.mk
++++ b/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.mk
 @@ -4,10 +4,10 @@
  #
  ################################################################################
  
--KODI_INPUTSTREAM_RTMP_VERSION = 2.0.9-Leia
-+KODI_INPUTSTREAM_RTMP_VERSION = 3.4.0-Matrix
- KODI_INPUTSTREAM_RTMP_SITE = $(call github,xbmc,inputstream.rtmp,$(KODI_INPUTSTREAM_RTMP_VERSION))
- KODI_INPUTSTREAM_RTMP_LICENSE = GPL-2.0+
--KODI_INPUTSTREAM_RTMP_LICENSE_FILES = debian/copyright
--KODI_INPUTSTREAM_RTMP_DEPENDENCIES = kodi rtmpdump
-+KODI_INPUTSTREAM_RTMP_LICENSE_FILES = LICENSE.md
-+KODI_INPUTSTREAM_RTMP_DEPENDENCIES = kodi openssl rtmpdump zlib
+-KODI_SCREENSAVER_GREYNETIC_VERSION = 2.2.3-Leia
++KODI_SCREENSAVER_GREYNETIC_VERSION = 2.5.0-Matrix
+ KODI_SCREENSAVER_GREYNETIC_SITE = $(call github,xbmc,screensaver.greynetic,$(KODI_SCREENSAVER_GREYNETIC_VERSION))
+ KODI_SCREENSAVER_GREYNETIC_LICENSE = GPL-2.0+
+-KODI_SCREENSAVER_GREYNETIC_LICENSE_FILES = debian/copyright
+-KODI_SCREENSAVER_GREYNETIC_DEPENDENCIES = kodi
++KODI_SCREENSAVER_GREYNETIC_LICENSE_FILES = LICENSE.md
++KODI_SCREENSAVER_GREYNETIC_DEPENDENCIES = glm kodi
  
  $(eval $(cmake-package))
