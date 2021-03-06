@@ -1,154 +1,44 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  6 Mar 2021 16:56:07 +0100
-Subject: [Buildroot] [PATCH 1/1] package/quagga: fix build with gcc 10
-Message-ID: <20210306155607.2414795-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 06 Mar 2021 17:06:35 +0100
+Subject: [Buildroot] [PATCH 1/3] docs/manual: do not expose CPE_ID_VALID
+ as package-settable
+In-Reply-To: <4ebb44a253dcc8fd32938ce49c4b776dcf4d2ffd.1614983175.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Fri, 5 Mar 2021 23:27:42 +0100")
+References: <cover.1614983175.git.yann.morin.1998@free.fr>
+ <4ebb44a253dcc8fd32938ce49c4b776dcf4d2ffd.1614983175.git.yann.morin.1998@free.fr>
+Message-ID: <878s708dx0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/fd5ee2b52a3cfaec268fafd3ffe4c30e51465c7e
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- .../quagga/0003-Fix-build-with-gcc-10.patch   | 127 ++++++++++++++++++
- 1 file changed, 127 insertions(+)
- create mode 100644 package/quagga/0003-Fix-build-with-gcc-10.patch
+ > FOO_CPE_ID_VALID is an internal implementation detail. Packages should
+ > really define an actual CPE_ID variable to trigger their full CPE_ID
+ > definition.
 
-diff --git a/package/quagga/0003-Fix-build-with-gcc-10.patch b/package/quagga/0003-Fix-build-with-gcc-10.patch
-new file mode 100644
-index 0000000000..fbe85165ee
---- /dev/null
-+++ b/package/quagga/0003-Fix-build-with-gcc-10.patch
-@@ -0,0 +1,127 @@
-+From 7a446434302d7b71211b81b3c6cd12a7b35223d1 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 6 Mar 2021 16:28:37 +0100
-+Subject: [PATCH] Fix build with gcc 10
-+
-+Fix the following build failure with gcc 10 (which defaults to
-+-fno-common):
-+
-+  CCLD     pimd
-+/home/buildroot/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: pimd.o:(.bss+0x8): multiple definition of `qpim_static_route_list'; pim_main.o:(.bss+0x8): first defined here
-+/home/buildroot/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: pimd.o:(.bss+0x28): multiple definition of `qpim_mroute_del_last'; pim_main.o:(.bss+0x10): first defined here
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/fd5ee2b52a3cfaec268fafd3ffe4c30e51465c7e
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://bugzilla.quagga.net/show_bug.cgi?id=1014]
-+---
-+ pimd/pim_version.h |  2 +-
-+ pimd/pimd.c        |  1 +
-+ pimd/pimd.h        | 66 +++++++++++++++++++++++-----------------------
-+ 3 files changed, 35 insertions(+), 34 deletions(-)
-+
-+diff --git a/pimd/pim_version.h b/pimd/pim_version.h
-+index ef9f370c..891d4314 100644
-+--- a/pimd/pim_version.h
-++++ b/pimd/pim_version.h
-+@@ -25,6 +25,6 @@
-+ 
-+ #define PIMD_VERSION_STR "0.166"
-+ 
-+-const char * const PIMD_VERSION;
-++extern const char * const PIMD_VERSION;
-+ 
-+ #endif /* PIM_VERSION_H */
-+diff --git a/pimd/pimd.c b/pimd/pimd.c
-+index 97fb2233..d7340cc0 100644
-+--- a/pimd/pimd.c
-++++ b/pimd/pimd.c
-+@@ -50,6 +50,7 @@ int64_t                   qpim_mroute_socket_creation = 0; /* timestamp of creat
-+ struct thread            *qpim_mroute_socket_reader = 0;
-+ int                       qpim_mroute_oif_highest_vif_index = -1;
-+ struct list              *qpim_channel_oil_list = 0;
-++struct in_addr            qpim_all_pim_routers_addr;
-+ int                       qpim_t_periodic = PIM_DEFAULT_T_PERIODIC; /* Period between Join/Prune Messages */
-+ struct list              *qpim_upstream_list = 0;
-+ struct zclient           *qpim_zclient_update = 0;
-+diff --git a/pimd/pimd.h b/pimd/pimd.h
-+index 9a7e6058..8b3496fd 100644
-+--- a/pimd/pimd.h
-++++ b/pimd/pimd.h
-+@@ -68,39 +68,39 @@
-+ #define PIM_MASK_PIM_J_P             (1 << 12)
-+ #define PIM_MASK_STATIC              (1 << 13)
-+ 
-+-const char *const PIM_ALL_SYSTEMS;
-+-const char *const PIM_ALL_ROUTERS;
-+-const char *const PIM_ALL_PIM_ROUTERS;
-+-const char *const PIM_ALL_IGMP_ROUTERS;
-+-
-+-struct thread_master     *master;
-+-uint32_t                  qpim_debugs;
-+-int                       qpim_mroute_socket_fd;
-+-int64_t                   qpim_mroute_socket_creation; /* timestamp of creation */
-+-struct thread            *qpim_mroute_socket_reader;
-+-int                       qpim_mroute_oif_highest_vif_index;
-+-struct list              *qpim_channel_oil_list; /* list of struct channel_oil */
-+-struct in_addr            qpim_all_pim_routers_addr;
-+-int                       qpim_t_periodic; /* Period between Join/Prune Messages */
-+-struct list              *qpim_upstream_list; /* list of struct pim_upstream */
-+-struct zclient           *qpim_zclient_update;
-+-struct zclient           *qpim_zclient_lookup;
-+-struct pim_assert_metric  qpim_infinite_assert_metric;
-+-long                      qpim_rpf_cache_refresh_delay_msec;
-+-struct thread            *qpim_rpf_cache_refresher;
-+-int64_t                   qpim_rpf_cache_refresh_requests;
-+-int64_t                   qpim_rpf_cache_refresh_events;
-+-int64_t                   qpim_rpf_cache_refresh_last;
-+-struct in_addr            qpim_inaddr_any;
-+-struct list              *qpim_ssmpingd_list; /* list of struct ssmpingd_sock */
-+-struct in_addr            qpim_ssmpingd_group_addr;
-+-int64_t                   qpim_scan_oil_events;
-+-int64_t                   qpim_scan_oil_last;
-+-int64_t                   qpim_mroute_add_events;
-+-int64_t                   qpim_mroute_add_last;
-+-int64_t                   qpim_mroute_del_events;
-+-int64_t                   qpim_mroute_del_last;
-+-struct list              *qpim_static_route_list; /* list of routes added statically */
-++extern const char *const PIM_ALL_SYSTEMS;
-++extern const char *const PIM_ALL_ROUTERS;
-++extern const char *const PIM_ALL_PIM_ROUTERS;
-++extern const char *const PIM_ALL_IGMP_ROUTERS;
-++
-++extern struct thread_master     *master;
-++extern uint32_t                  qpim_debugs;
-++extern int                       qpim_mroute_socket_fd;
-++extern int64_t                   qpim_mroute_socket_creation; /* timestamp of creation */
-++extern struct thread            *qpim_mroute_socket_reader;
-++extern int                       qpim_mroute_oif_highest_vif_index;
-++extern struct list              *qpim_channel_oil_list; /* list of struct channel_oil */
-++extern struct in_addr            qpim_all_pim_routers_addr;
-++extern int                       qpim_t_periodic; /* Period between Join/Prune Messages */
-++extern struct list              *qpim_upstream_list; /* list of struct pim_upstream */
-++extern struct zclient           *qpim_zclient_update;
-++extern struct zclient           *qpim_zclient_lookup;
-++extern struct pim_assert_metric  qpim_infinite_assert_metric;
-++extern long                      qpim_rpf_cache_refresh_delay_msec;
-++extern struct thread            *qpim_rpf_cache_refresher;
-++extern int64_t                   qpim_rpf_cache_refresh_requests;
-++extern int64_t                   qpim_rpf_cache_refresh_events;
-++extern int64_t                   qpim_rpf_cache_refresh_last;
-++extern struct in_addr            qpim_inaddr_any;
-++extern struct list              *qpim_ssmpingd_list; /* list of struct ssmpingd_sock */
-++extern struct in_addr            qpim_ssmpingd_group_addr;
-++extern int64_t                   qpim_scan_oil_events;
-++extern int64_t                   qpim_scan_oil_last;
-++extern int64_t                   qpim_mroute_add_events;
-++extern int64_t                   qpim_mroute_add_last;
-++extern int64_t                   qpim_mroute_del_events;
-++extern int64_t                   qpim_mroute_del_last;
-++extern struct list              *qpim_static_route_list; /* list of routes added statically */
-+ 
-+ #define PIM_JP_HOLDTIME (qpim_t_periodic * 7 / 2)
-+ 
-+-- 
-+2.30.0
-+
+ > Reported-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ > Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
+ > Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > ---
+ >  docs/manual/adding-packages-generic.txt | 6 ------
+ >  1 file changed, 6 deletions(-)
+
+ > diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+ > index 75af18b70c..67336b4c1f 100644
+ > --- a/docs/manual/adding-packages-generic.txt
+ > +++ b/docs/manual/adding-packages-generic.txt
+ > @@ -531,12 +531,6 @@ infrastructure assumes the package provides valid CPE information. In
+ >  this case, +LIBFOO_CPE_ID_VALID = YES+ will be set, and the generic
+ >  package infrastructure will define +LIBFOO_CPE_ID+.
+
+I would even drop the mention of the variable just here above.
+Committed with that changed, thanks.
+
 -- 
-2.30.0
+Bye, Peter Korsgaard
