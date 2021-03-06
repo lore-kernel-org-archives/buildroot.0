@@ -1,52 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 1 Mar 2021 22:35:02 +0100
-Subject: [Buildroot] [git commit] package/dfu-util: bump to version 0.10
-Message-ID: <20210308072136.CD06188918@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 6 Mar 2021 23:43:54 +0100
+Subject: [Buildroot] [git commit] package/optee-client: disable -Werror
+Message-ID: <20210308072140.85A348896D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=29f38b4c603ef0900ed241de52cd5b5077ceea28
+commit: https://git.buildroot.net/buildroot/commit/?id=6a47e70743abcedba51ae406853a3f414f9ff48a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update indentation in hash file (two spaces)
+Disable -Werror thanks to CFG_WERROR which is available since version
+3.3.0 and
+https://github.com/OP-TEE/optee_client/commit/5355fdb841bce4f7cce3dd37fc31fa91bd625c98
+to fix the following build failure with optee-client 3.11.0:
 
-https://sourceforge.net/p/dfu-util/dfu-util/ci/v0.10/tree/ChangeLog
+/home/giuliobenetti/autobuild/run/instance-2/output-1/build/optee-client-3.11.0/libckteec/src/pkcs11_processing.c: In function 'ck_create_object':
+/home/giuliobenetti/autobuild/run/instance-2/output-1/build/optee-client-3.11.0/libckteec/src/pkcs11_processing.c:22:9: error: missing initializer for field 'buffer' of 'struct serializer' [-Werror=missing-field-initializers]
+  struct serializer obj = { };
+         ^
+
+Fixes:
+ - http://autobuild.buildroot.org/results/a3d663adb943aee814180f01d6e153b3309be962
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/dfu-util/dfu-util.hash | 8 ++++----
- package/dfu-util/dfu-util.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/optee-client/optee-client.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/dfu-util/dfu-util.hash b/package/dfu-util/dfu-util.hash
-index 7c66a93376..a99e67565d 100644
---- a/package/dfu-util/dfu-util.hash
-+++ b/package/dfu-util/dfu-util.hash
-@@ -1,6 +1,6 @@
--# From http://dfu-util.sourceforge.net/releases/dfu-util-0.9.tar.gz.md5
--md5	233bb1e08ef4b405062445d84e28fde6	dfu-util-0.9.tar.gz
-+# From http://dfu-util.sourceforge.net/releases/dfu-util-0.10.tar.gz.md5
-+md5  8cf55663703cdc6b40f377f999eb8d3d  dfu-util-0.10.tar.gz
+diff --git a/package/optee-client/optee-client.mk b/package/optee-client/optee-client.mk
+index 0ae8426fc1..22f205e407 100644
+--- a/package/optee-client/optee-client.mk
++++ b/package/optee-client/optee-client.mk
+@@ -11,7 +11,8 @@ OPTEE_CLIENT_LICENSE_FILES = LICENSE
+ OPTEE_CLIENT_INSTALL_STAGING = YES
  
- # Locally computed
--sha256	36428c6a6cb3088cad5a3592933385253da5f29f2effa61518ee5991ea38f833	dfu-util-0.9.tar.gz
--sha256	32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670	COPYING
-+sha256  a03dc58dfc79c056819c0544b2a5970537566460102b3d82cfb038c60e619b42  dfu-util-0.10.tar.gz
-+sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/dfu-util/dfu-util.mk b/package/dfu-util/dfu-util.mk
-index 5e8ba5a8f2..9f26948a1a 100644
---- a/package/dfu-util/dfu-util.mk
-+++ b/package/dfu-util/dfu-util.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ OPTEE_CLIENT_CONF_OPTS = \
+-	-DCFG_TEE_FS_PARENT_PATH=$(BR2_PACKAGE_OPTEE_CLIENT_TEE_FS_PATH)
++	-DCFG_TEE_FS_PARENT_PATH=$(BR2_PACKAGE_OPTEE_CLIENT_TEE_FS_PATH) \
++	-DCFG_WERROR=OFF
  
--DFU_UTIL_VERSION = 0.9
-+DFU_UTIL_VERSION = 0.10
- DFU_UTIL_SITE = http://dfu-util.sourceforge.net/releases
- DFU_UTIL_LICENSE = GPL-2.0+
- DFU_UTIL_LICENSE_FILES = COPYING
+ define OPTEE_CLIENT_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 0755 -D $(OPTEE_CLIENT_PKGDIR)/S30optee \
