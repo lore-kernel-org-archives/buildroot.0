@@ -1,35 +1,28 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  6 Mar 2021 10:41:36 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libmodsecurity: add CPE variables
-Message-ID: <20210306094136.2154945-1-fontaine.fabrice@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 06 Mar 2021 09:52:20 +0000
+Subject: [Buildroot] [Bug 13576] Issues compiling buildroot for 5x86
+In-Reply-To: <bug-13576-163@https.bugs.busybox.net/>
+References: <bug-13576-163@https.bugs.busybox.net/>
+Message-ID: <bug-13576-163-C97B4MhoAL@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:trustwave:modsecurity is a valid CPE identifier for this
-package:
+https://bugs.busybox.net/show_bug.cgi?id=13576
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Atrustwave%3Amodsecurity
+--- Comment #5 from Peter Korsgaard <jacmet@uclibc.org> ---
+You are reporting a bunch of more-or-less unrelated issues and suggested
+improvements, making it kind of hard to keep track of. Care to send your
+suggestions as patches to the mailing list instead?
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libmodsecurity/libmodsecurity.mk | 2 ++
- 1 file changed, 2 insertions(+)
+http://lists.busybox.net/mailman/listinfo/buildroot
 
-diff --git a/package/libmodsecurity/libmodsecurity.mk b/package/libmodsecurity/libmodsecurity.mk
-index 063f969fc6..a84cd27b34 100644
---- a/package/libmodsecurity/libmodsecurity.mk
-+++ b/package/libmodsecurity/libmodsecurity.mk
-@@ -10,6 +10,8 @@ LIBMODSECURITY_SITE = https://github.com/SpiderLabs/ModSecurity/releases/downloa
- LIBMODSECURITY_INSTALL_STAGING = YES
- LIBMODSECURITY_LICENSE = Apache-2.0
- LIBMODSECURITY_LICENSE_FILES = LICENSE
-+LIBMODSECURITY_CPE_ID_VENDOR = trustwave
-+LIBMODSECURITY_CPE_ID_PRODUCT = modsecurity
- # 0002-test-for-uClinux-in-configure-script.patch
- LIBMODSECURITY_AUTORECONF = YES
- # libinjection uses AC_CHECK_FILE, not available in cross-compile
+Also for the bugreports, please be specific, E.G. you mentioned issues with
+mariadb and syslinux. What is your exact defconfig and what is the exact error
+message you get?
+
 -- 
-2.30.0
+You are receiving this mail because:
+You are on the CC list for the bug.
