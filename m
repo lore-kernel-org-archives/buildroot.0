@@ -1,98 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 08 Mar 2021 07:44:56 -0000
-Subject: [Buildroot] [git commit] package/libxcrypt: new package
-Message-ID: <20210308072134.C1DE488918@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 7 Mar 2021 21:54:45 +0100
+Subject: [Buildroot] [git commit] package/libuhttpd: bump version to 3.10.1
+Message-ID: <20210308072140.B236181607@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=464bbe26ff5fb9e5bfe26a26ea65c700b90598f5
+commit: https://git.buildroot.net/buildroot/commit/?id=d1133a6927bf8cf920b6b39ad1ed9ab5aa395e7b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libxcrypt is a modern library for one-way hashing of passwords.  It
-supports a wide variety of both modern and historical hashing methods:
-yescrypt, gost-yescrypt, scrypt, bcrypt, sha512crypt, sha256crypt,
-md5crypt, SunMD5, sha1crypt, NT.
-
-Signed-off-by: Guillaume W. Bres <guillaume.bressaix@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- DEVELOPERS                       |  1 +
- package/Config.in                |  1 +
- package/libxcrypt/Config.in      | 11 +++++++++++
- package/libxcrypt/libxcrypt.hash |  4 ++++
- package/libxcrypt/libxcrypt.mk   | 13 +++++++++++++
- 5 files changed, 30 insertions(+)
+ package/libuhttpd/libuhttpd.hash | 2 +-
+ package/libuhttpd/libuhttpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index cee62ddca8..42f3c66274 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1055,6 +1055,7 @@ F:	package/python-wtforms/
+diff --git a/package/libuhttpd/libuhttpd.hash b/package/libuhttpd/libuhttpd.hash
+index e772cc84ee..4b0b5027c6 100644
+--- a/package/libuhttpd/libuhttpd.hash
++++ b/package/libuhttpd/libuhttpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  78b1c670e4f259346a1e49e57d158c619eace23f0b72821b0ff2ba991f7dcc51  libuhttpd-3.10.0.tar.gz
++sha256  6e7a9ad61e3d0ab5bd4d20b274b850542dff8057a8fcf6c36ce59eb34818f61f  libuhttpd-3.10.1.tar.gz
+ sha256  99efed4bbc0b62f96f999ef23399e38234fb91651af734fd389a52b033a85b55  LICENSE
+diff --git a/package/libuhttpd/libuhttpd.mk b/package/libuhttpd/libuhttpd.mk
+index 06d7bc7d5e..326c78face 100644
+--- a/package/libuhttpd/libuhttpd.mk
++++ b/package/libuhttpd/libuhttpd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- N:	Guillaume William Brs <guillaume.bressaix@gmail.com>
- F:	package/libnids/
-+F:	package/libxcrypt/
- F:	package/liquid-dsp/
- F:	package/pixiewps/
- F:	package/python-pybind/
-diff --git a/package/Config.in b/package/Config.in
-index 8fb173540f..1cfbabeb86 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1372,6 +1372,7 @@ menu "Crypto"
- 	source "package/libssh2/Config.in"
- 	source "package/libtomcrypt/Config.in"
- 	source "package/libuecc/Config.in"
-+	source "package/libxcrypt/Config.in"
- 	source "package/mbedtls/Config.in"
- 	source "package/nettle/Config.in"
- 	source "package/openssl/Config.in"
-diff --git a/package/libxcrypt/Config.in b/package/libxcrypt/Config.in
-new file mode 100644
-index 0000000000..57ae8f67a3
---- /dev/null
-+++ b/package/libxcrypt/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_LIBXCRYPT
-+	bool "libxcrypt"
-+	help
-+	  libxcrypt is a modern library for one-way hashing
-+	  of passwords. It supports a wide variety of both
-+	  modern and historical hashing methods:
-+	  yescrypt, gost-yescrypt, scrypt, bcrypt, sha512crypt,
-+	  sha256crypt, md5crypt, SunMD5, sha1crypt, NT,
-+	  bsdicrypt, bigcrypt, and descrypt.
-+
-+	  https://github.com/besser82/libxcrypt
-diff --git a/package/libxcrypt/libxcrypt.hash b/package/libxcrypt/libxcrypt.hash
-new file mode 100644
-index 0000000000..b56ab6beaf
---- /dev/null
-+++ b/package/libxcrypt/libxcrypt.hash
-@@ -0,0 +1,4 @@
-+# Locally calculated
-+sha256 7665168d0409574a03f7b484682e68334764c29c21ca5df438955a381384ca07  libxcrypt-4.4.17.tar.gz
-+sha256 f8198fcc4f002bf54512bac2e68e1e3f04af7d105f4f4f98d7d22cb110e04715  LICENSING
-+sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/libxcrypt/libxcrypt.mk b/package/libxcrypt/libxcrypt.mk
-new file mode 100644
-index 0000000000..f9799ac006
---- /dev/null
-+++ b/package/libxcrypt/libxcrypt.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# libxcrypt
-+#
-+################################################################################
-+
-+LIBXCRYPT_VERSION = 4.4.17
-+LIBXCRYPT_SITE = $(call github,besser82,libxcrypt,v$(LIBXCRYPT_VERSION))
-+LIBXCRYPT_LICENSE = LGPL-2.1+
-+LIBXCRYPT_LICENSE_FILES = LICENSING COPYING.LIB
-+LIBXCRYPT_AUTORECONF = YES
-+
-+$(eval $(autotools-package))
+-LIBUHTTPD_VERSION = 3.10.0
++LIBUHTTPD_VERSION = 3.10.1
+ LIBUHTTPD_SITE = https://github.com/zhaojh329/libuhttpd/releases/download/v$(LIBUHTTPD_VERSION)
+ LIBUHTTPD_LICENSE = MIT
+ LIBUHTTPD_LICENSE_FILES = LICENSE
