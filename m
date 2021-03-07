@@ -1,47 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 6 Mar 2021 23:32:40 +0100
-Subject: [Buildroot] [git commit] package/optee-examples: bump to version
- 3.12.0
-Message-ID: <20210308072140.718C381607@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 7 Mar 2021 21:36:51 +0100
+Subject: [Buildroot] [git commit] package/ruby: update hashes
+Message-ID: <20210308072140.9D4F481132@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0198de312d94e59cef2825869a6af381552cf9eb
+commit: https://git.buildroot.net/buildroot/commit/?id=0c308c482802d9830ae5618b60ab50a84127dacf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump OP-TEE Examples package version to OP-TEE release 3.12.0.
+Commit af5226f2fd1292a26f2dfda32f41cbbad7aa4cc6 forgot to update
+hash of LEGAL and BSDL files.
 
-Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Those two files have mostly undergone reoraganizing. A few new files
+have also been listed. The resulting licensing does not change
+fundamentally, especially sine we already list 'others' in the list of
+licenses applicable to Ruby.
+
+Fixes:
+ - http://autobuild.buildroot.net/results/448/4484fcce51dd2556156631d20b35bbba44abc171/build-end.log
+ ..
+ - http://autobuild.buildroot.net/results/c60/c60e5923159b3d66b422eb988f5d49e1c73e8710/build-end.log
+
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+[yann.morin.1998 at free.fr: explain what changed]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/optee-examples/optee-examples.hash | 4 ++--
- package/optee-examples/optee-examples.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/ruby/ruby.hash | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/optee-examples/optee-examples.hash b/package/optee-examples/optee-examples.hash
-index 230d5d3ccf..d43534832a 100644
---- a/package/optee-examples/optee-examples.hash
-+++ b/package/optee-examples/optee-examples.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/linaro-swg/optee_examples/archive/3.11.0.tar.gz
--sha256 b910479a2d432014b6c49aafed27e26dd6f930e7c31d277c1500c1b60b4b3876  optee-examples-3.11.0.tar.gz
-+# From https://github.com/linaro-swg/optee_examples/archive/3.12.0/optee-examples-3.12.0.tar.gz
-+sha256 d3ae2cc4c51900a887f4c93e58571305bd37d60718a281953c3d775b3113f1f8  optee-examples-3.12.0.tar.gz
- # Locally computed
- sha256 6f1ef8449cb82ae79d2155605f7985bdf0f08e7ab5007de9b4362e8bf28733b9  LICENSE
-diff --git a/package/optee-examples/optee-examples.mk b/package/optee-examples/optee-examples.mk
-index b6f77c72f0..ca7956e5bc 100644
---- a/package/optee-examples/optee-examples.mk
-+++ b/package/optee-examples/optee-examples.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPTEE_EXAMPLES_VERSION = 3.11.0
-+OPTEE_EXAMPLES_VERSION = 3.12.0
- OPTEE_EXAMPLES_SITE = $(call github,linaro-swg,optee_examples,$(OPTEE_EXAMPLES_VERSION))
- OPTEE_EXAMPLES_LICENSE = BSD-2-Clause
- OPTEE_EXAMPLES_LICENSE_FILES = LICENSE
+diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
+index b4594fcaba..ec9492aa5e 100644
+--- a/package/ruby/ruby.hash
++++ b/package/ruby/ruby.hash
+@@ -1,6 +1,6 @@
+ # https://www.ruby-lang.org/en/news/2020/12/25/ruby-3-0-0-released/
+ sha256  68bfaeef027b6ccd0032504a68ae69721a70e97d921ff328c0c8836c798f6cb1  ruby-3.0.0.tar.xz
+ # License files, Locally calculated
+-sha256  b09ca195d2de08f0aacfa8793d0af62d7681c304b3ef714b75813721823295a6  LEGAL
++sha256  274f8d7983052448e7fd691c81043465c92ee6fb7bd8ab3f20a7997862f2778e  LEGAL
+ sha256  967586d538a28955ec2541910cf63c5ac345fcdea94bfb1f1705a1f6eb36bcbb  COPYING
+-sha256  a5e3042dacb53eebda91f3b1caefbfec8307711df8c4ed1ed20e4e97c43307a4  BSDL
++sha256  36a9a6e7347214bbba599a412617204e65bff065dcbe5c46f5cb454c80de9eb0  BSDL
