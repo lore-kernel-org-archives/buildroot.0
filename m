@@ -1,34 +1,38 @@
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Sun,  7 Mar 2021 15:04:05 +0100
-Subject: [Buildroot] [PATCH 0/6] Some Nios II and OpenRisc Fixes
-Message-ID: <20210307140411.3776544-1-giulio.benetti@benettiengineering.com>
+Date: Sun,  7 Mar 2021 15:04:11 +0100
+Subject: [Buildroot] [PATCH 6/6] package/kf5-kcoreaddons: disable package
+ while building for Nios II
+In-Reply-To: <20210307140411.3776544-1-giulio.benetti@benettiengineering.com>
+References: <20210307140411.3776544-1-giulio.benetti@benettiengineering.com>
+Message-ID: <20210307140411.3776544-7-giulio.benetti@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patchset applies after this:
-https://patchwork.ozlabs.org/project/buildroot/list/?series=232409
+This package fails to build with Nios II up to gcc version 10.x and no
+work around has been found. So let's disable it whil building for Nios
+II.
 
-and fixes build failures on Nios II and OpenRisc.
+Fixes:
+http://autobuild.buildroot.net/results/0c1/0c1e7e094b0990970f28cda2be0e3fe7d82ce6a2/
 
-Giulio Benetti (6):
-  package/libtheora: disable package if binutils is affected from bug
-    21464
-  package/gnutls: disable package if binutils is affected from bug 21464
-  toolchain: introduce BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27100
-  package/openal: disable package if binutils is affected from bug 27100
-  package/libcamera: disable package while building for Nios II
-  package/kf5-kcoreaddons: disable package while building for Nios II
-
- package/gnutls/Config.in              | 4 +++-
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
  package/kf5/kf5-kcoreaddons/Config.in | 1 +
- package/libcamera/Config.in           | 4 +++-
- package/libtheora/Config.in           | 1 +
- package/openal/Config.in              | 4 +++-
- toolchain/Config.in                   | 6 ++++++
- 6 files changed, 17 insertions(+), 3 deletions(-)
+ 1 file changed, 1 insertion(+)
 
+diff --git a/package/kf5/kf5-kcoreaddons/Config.in b/package/kf5/kf5-kcoreaddons/Config.in
+index 88fda03ee0..0acb68297b 100644
+--- a/package/kf5/kf5-kcoreaddons/Config.in
++++ b/package/kf5/kf5-kcoreaddons/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_KF5_KCOREADDONS
+ 	bool "kf5-kcoreaddons"
++	depends on !BR2_nios
+ 	select BR2_PACKAGE_KF5_EXTRA_CMAKE_MODULES
+ 	select BR2_PACKAGE_QT5TOOLS
+ 	select BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS
 -- 
 2.25.1
