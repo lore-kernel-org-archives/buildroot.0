@@ -1,101 +1,38 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 7 Mar 2021 23:16:00 +0100
-Subject: [Buildroot] [PATCH] package/wine: bump to version 6.0
-In-Reply-To: <20210307215403.887067-1-nerv@dawncrow.de>
-References: <20210307215403.887067-1-nerv@dawncrow.de>
-Message-ID: <20210307221600.GH2275@scaer>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Sun,  7 Mar 2021 14:25:32 -0800
+Subject: [Buildroot] [PATCH 0/4] mender updates
+Message-ID: <20210307222536.2743089-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Andr?, All,
+From: Adam Duskett <aduskett@gmail.com>
 
-On 2021-03-07 22:54 +0100, Andr? Hentschel spake thusly:
-> Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
-> ---
-[--SNIP--]
-> diff --git a/package/wine/wine.mk b/package/wine/wine.mk
-> index 80c9d20d3d..f1b76736ad 100644
-> --- a/package/wine/wine.mk
-> +++ b/package/wine/wine.mk
-[--SNIP--]
-> @@ -340,14 +320,13 @@ endif
->  # Wine only needs the host tools to be built, so cut-down the
->  # build time by building just what we need.
->  define HOST_WINE_BUILD_CMDS
-> -	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) \
-> -	  tools \
-> -	  tools/sfnt2fon \
-> -	  tools/widl \
-> -	  tools/winebuild \
-> -	  tools/winegcc \
-> -	  tools/wmc \
-> -	  tools/wrc
-> +	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)/tools
-> +	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)/tools/sfnt2fon
-> +	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)/tools/widl
-> +	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)/tools/winebuild
-> +	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)/tools/winegcc
-> +	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)/tools/wmc
-> +	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)/tools/wrc
+The upstream developers asked me to update the mender packages as a favor, as
+they are pretty outdated right now.
 
-Why did you need change this?
+This patch series includes updates to all of the mender packages and a small
+change that removes auto-selecting uboot-tools if uboot is selected in
+mender/Config.in (the patch itself has an explination as to why.)
 
-Basically, your commit log is empty, when there are things that you
-should explain. For example, for zlib, ncurses and GLU, stating they
-are no longer used would be sufficient. But really, what needs to be
-explained is that part about the host build.
+Adam Duskett (4):
+  package/mender-artifact: bump to version 3.4.1
+  package/mender: bump version to 2.4.2
+  package/mender-grubenv: bump version to
+    f39c2c7ec7c9c24aae0108a9b04a0e6e61a3e96b
+  package/mender: Do not automatically select uboot tools if uboot is
+    selected
 
-Regards,
-Yann E. MORIN.
-
->  endef
->  
->  # Wine only needs its host variant to be built, not that it is
-> @@ -368,11 +347,9 @@ HOST_WINE_CONF_OPTS += \
->  	--without-coreaudio \
->  	--without-faudio \
->  	--without-cups \
-> -	--without-curses \
->  	--without-dbus \
->  	--without-fontconfig \
->  	--without-gphoto \
-> -	--without-glu \
->  	--without-gnutls \
->  	--without-gsm \
->  	--without-gssapi \
-> @@ -381,6 +358,7 @@ HOST_WINE_CONF_OPTS += \
->  	--without-jpeg \
->  	--without-krb5 \
->  	--without-ldap \
-> +	--without-mingw \
->  	--without-mpg123 \
->  	--without-netapi \
->  	--without-openal \
-> @@ -410,8 +388,7 @@ HOST_WINE_CONF_OPTS += \
->  	--without-xshape \
->  	--without-xshm \
->  	--without-xslt \
-> -	--without-xxf86vm \
-> -	--without-zlib
-> +	--without-xxf86vm
->  
->  $(eval $(autotools-package))
->  $(eval $(host-autotools-package))
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+ package/mender-artifact/mender-artifact.hash |  7 ++++---
+ package/mender-artifact/mender-artifact.mk   |  5 +++--
+ package/mender-grubenv/mender-grubenv.hash   |  4 ++--
+ package/mender-grubenv/mender-grubenv.mk     |  4 ++--
+ package/mender/Config.in                     | 15 +++++++++++++--
+ package/mender/mender.hash                   | 16 +++++++++-------
+ package/mender/mender.mk                     | 13 ++++++++-----
+ 7 files changed, 41 insertions(+), 23 deletions(-)
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.25.1
