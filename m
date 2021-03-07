@@ -1,47 +1,33 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 7 Mar 2021 00:10:08 +0100
-Subject: [Buildroot] [git commit] package/optee-test: add deps on openssl
- when enabled
-Message-ID: <20210308072140.9221988918@busybox.osuosl.org>
+Date: Sun, 7 Mar 2021 21:42:24 +0100
+Subject: [Buildroot] [git commit] boot/at91bootstrap3: fix checksum of
+ license
+Message-ID: <20210308072140.A775488918@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b2821ca786f31066eaab4687607fbcfec268c36f
+commit: https://git.buildroot.net/buildroot/commit/?id=71088383869f761e54280d41d844e146da9569b6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add a dependency on openssl upon BR2_PACKAGE_LIBOPENSSL=y to
-enable some for OP-TEE embedded tests.
+Commit ca1604388a86d73c548c6e65eadd13f424685838 updated the checksum of
+the tarball, but failed to update the one of main.c, which serves as a
+license file.
 
-Building with libressl makes the optee-test test tool fail on a
-certificate test; so we explicitly depend on libopenssl.
-
-Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
-[yann.morin.1998 at free.fr:
-  - match the depenency to libopenssl, since that's is what is used in
-    the condition (BR2_PACKAGE_LIBOPENSSL)
-  - add a blurb to explain why libopenssl is used, not the virutal
-    openssl
-]
+Signed-off-by: Edgar Bonet <bonet@grenoble.cnrs.fr>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/optee-test/optee-test.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ boot/at91bootstrap3/at91bootstrap3.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/optee-test/optee-test.mk b/package/optee-test/optee-test.mk
-index 2304b15925..a2d18dadfc 100644
---- a/package/optee-test/optee-test.mk
-+++ b/package/optee-test/optee-test.mk
-@@ -11,6 +11,10 @@ OPTEE_TEST_LICENSE_FILES = LICENSE.md
- 
- OPTEE_TEST_DEPENDENCIES = optee-client optee-os
- 
-+ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
-+OPTEE_TEST_DEPENDENCIES += libopenssl
-+endif
-+
- OPTEE_TEST_CONF_OPTS = -DOPTEE_TEST_SDK=$(OPTEE_OS_SDK)
- 
- # Trusted Application are not built from CMake due to ta_dev_kit
+diff --git a/boot/at91bootstrap3/at91bootstrap3.hash b/boot/at91bootstrap3/at91bootstrap3.hash
+index 6671a4ac70..6b6257b0ab 100644
+--- a/boot/at91bootstrap3/at91bootstrap3.hash
++++ b/boot/at91bootstrap3/at91bootstrap3.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+ sha256  dd6a3c57c1c84fc3b18187bee3d139146a0e032dd1d8edea7b242730e0bc4fe1  at91bootstrap3-v3.9.3.tar.gz
+-sha256  732b2a55b5905031d8ae420136ffb5f8889214865784386bf754cffab8d2bc6e  main.c
++sha256  fd7a1ce5719bb7abf5e289da2e0ea8c933af3ba0f6ad03dbdbd2b7f54a77498a  main.c
