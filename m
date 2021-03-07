@@ -1,45 +1,37 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Sun,  7 Mar 2021 18:52:14 +0100
-Subject: [Buildroot] [PATCH] package/libgeos: disable package if binutils is
- affected from bug 21464
-Message-ID: <20210307175214.3980194-1-giulio.benetti@benettiengineering.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 07 Mar 2021 18:02:42 +0000
+Subject: [Buildroot] [Bug 13576] Issues compiling buildroot for 5x86
+In-Reply-To: <bug-13576-163@https.bugs.busybox.net/>
+References: <bug-13576-163@https.bugs.busybox.net/>
+Message-ID: <bug-13576-163-oYt8BpqcJS@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package is affected from binutils bug 21464, since there is no
-workaround, let's disable it.
+https://bugs.busybox.net/show_bug.cgi?id=13576
 
-Fixes:
-http://autobuild.buildroot.net/results/3eb/3eb9f9d0f6d8274b2d19753c006bd83f7d536e3c/
+--- Comment #7 from Peter Seiderer <ps.report@gmx.net> ---
+Regarding Description - Point 3) - syslinux double definitions
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
-This patch must be applied after this patchset:
-https://patchwork.ozlabs.org/project/buildroot/list/?series=232409
----
- package/libgeos/Config.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Fixed (hopefully) by:
 
-diff --git a/package/libgeos/Config.in b/package/libgeos/Config.in
-index 2caf6d1d5e..bbcafe7740 100644
---- a/package/libgeos/Config.in
-+++ b/package/libgeos/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_LIBGEOS
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
- 	depends on !BR2_nios2
-+	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464
- 	help
- 	  GEOS (Geometry Engine - Open Source) is a C++ port of the
- 	  JTS Topology Suite (JTS). It aims to contain the complete
-@@ -14,4 +15,4 @@ config BR2_PACKAGE_LIBGEOS
- 
- comment "libgeos needs a toolchain w/ C++, wchar"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
--	depends on !BR2_nios2
-+	depends on !BR2_nios2 || !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464
+https://patchwork.ozlabs.org/project/buildroot/patch/20210307174753.9400-1-ps.report at gmx.net/
+
+Out of interest, any references for the grub statement?
+
+
+Regarding Description - Point 1) - MariaDB
+
+No problem building your provided defconfig here, did you do a full
+rebuild after changing your config (see [1] for details)?
+
+In case a full rebuild fails, any special packages installed on your build
+system?
+
+[1] http://nightly.buildroot.org/manual.html#full-rebuild
+
 -- 
-2.25.1
+You are receiving this mail because:
+You are on the CC list for the bug.
