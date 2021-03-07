@@ -1,43 +1,46 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 7 Mar 2021 21:54:45 +0100
-Subject: [Buildroot] [git commit branch/next] package/libuhttpd: bump
- version to 3.10.1
-Message-ID: <20210307205417.D9154887DF@busybox.osuosl.org>
+Date: Sun, 7 Mar 2021 21:54:47 +0100
+Subject: [Buildroot] [git commit branch/next] package/nano: bump to version
+ 5.6.1
+Message-ID: <20210307205417.EFF2A876E8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d1133a6927bf8cf920b6b39ad1ed9ab5aa395e7b
+commit: https://git.buildroot.net/buildroot/commit/?id=ff084e1933625cd40aecfd1e37869156372b8682
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libuhttpd/libuhttpd.hash | 2 +-
- package/libuhttpd/libuhttpd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/nano/nano.hash | 4 ++--
+ package/nano/nano.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libuhttpd/libuhttpd.hash b/package/libuhttpd/libuhttpd.hash
-index e772cc84ee..4b0b5027c6 100644
---- a/package/libuhttpd/libuhttpd.hash
-+++ b/package/libuhttpd/libuhttpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  78b1c670e4f259346a1e49e57d158c619eace23f0b72821b0ff2ba991f7dcc51  libuhttpd-3.10.0.tar.gz
-+sha256  6e7a9ad61e3d0ab5bd4d20b274b850542dff8057a8fcf6c36ce59eb34818f61f  libuhttpd-3.10.1.tar.gz
- sha256  99efed4bbc0b62f96f999ef23399e38234fb91651af734fd389a52b033a85b55  LICENSE
-diff --git a/package/libuhttpd/libuhttpd.mk b/package/libuhttpd/libuhttpd.mk
-index 06d7bc7d5e..326c78face 100644
---- a/package/libuhttpd/libuhttpd.mk
-+++ b/package/libuhttpd/libuhttpd.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/nano/nano.hash b/package/nano/nano.hash
+index 152766aa3b..cbb4977223 100644
+--- a/package/nano/nano.hash
++++ b/package/nano/nano.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://www.nano-editor.org/dist/v5/nano-5.6.tar.xz.asc
++# https://www.nano-editor.org/dist/v5/nano-5.6.1.tar.xz.asc
+ # using key BFD009061E535052AD0DF2150D28D4D2A0ACE884
+-sha256  fce183e4a7034d07d219c79aa2f579005d1fd49f156db6e50f53543a87637a32  nano-5.6.tar.xz
++sha256  760d7059e0881ca0ee7e2a33b09d999ec456ff7204df86bee58eb6f523ee8b09  nano-5.6.1.tar.xz
+ sha256  fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
+diff --git a/package/nano/nano.mk b/package/nano/nano.mk
+index 43f5f5f0b2..77126fd4b0 100644
+--- a/package/nano/nano.mk
++++ b/package/nano/nano.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LIBUHTTPD_VERSION = 3.10.0
-+LIBUHTTPD_VERSION = 3.10.1
- LIBUHTTPD_SITE = https://github.com/zhaojh329/libuhttpd/releases/download/v$(LIBUHTTPD_VERSION)
- LIBUHTTPD_LICENSE = MIT
- LIBUHTTPD_LICENSE_FILES = LICENSE
+ NANO_VERSION_MAJOR = 5
+-NANO_VERSION = $(NANO_VERSION_MAJOR).6
++NANO_VERSION = $(NANO_VERSION_MAJOR).6.1
+ NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
+ NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
+ NANO_LICENSE = GPL-3.0+
