@@ -1,76 +1,45 @@
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Sun, 7 Mar 2021 13:53:04 +0100
-Subject: [Buildroot] [PATCH] toolchain: disable gcc bug 68485 if gcc
- version >= 10.x
-In-Reply-To: <20210306221354.GS2275@scaer>
-References: <20210305153730.3671327-1-giulio.benetti@benettiengineering.com>
- <20210306221354.GS2275@scaer>
-Message-ID: <98f0e504-f1c2-e9b2-a235-d4c9b8162575@benettiengineering.com>
+Date: Sun,  7 Mar 2021 15:04:07 +0100
+Subject: [Buildroot] [PATCH 2/6] package/gnutls: disable package if binutils
+ is affected from bug 21464
+In-Reply-To: <20210307140411.3776544-1-giulio.benetti@benettiengineering.com>
+References: <20210307140411.3776544-1-giulio.benetti@benettiengineering.com>
+Message-ID: <20210307140411.3776544-3-giulio.benetti@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+This package is affected from binutils bug 21464, since there is no
+workaround, let's disable it.
 
-On 3/6/21 11:13 PM, Yann E. MORIN wrote:
-> Giulio, All,
-> 
-> On 2021-03-05 16:37 +0100, Giulio Benetti spake thusly:
->> Since gcc version 10.x bug 68485 doesn't show anymore, so let's make it
->> enabled up to versino 10.x excluded.
->>
->> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
->> ---
->>   toolchain/Config.in | 5 +++--
->>   1 file changed, 3 insertions(+), 2 deletions(-)
->>
->> diff --git a/toolchain/Config.in b/toolchain/Config.in
->> index 553612c4aa..0cd8b82059 100644
->> --- a/toolchain/Config.in
->> +++ b/toolchain/Config.in
->> @@ -131,11 +131,12 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_64735
->>   	default y if !BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS && \
->>   		!BR2_TOOLCHAIN_GCC_AT_LEAST_7
->>   
->> -# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68485. This bug still
->> -# exists in gcc 9.x
->> +# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68485. This bug no
->> +# longer exists in gcc 10.x
-> 
-> I don;t understand, because you said exactly the opposite ion that bug
-> tracker:
->      https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68485#c9
-> 
->      bug still exists on gcc 10.2, is there any news about it?
-> 
-> So what? ;-)
+Fixes:
+http://autobuild.buildroot.net/results/ce9/ce9050a183a3f1e31cefbc4d4a6d780235466e39/
 
-You're right, I've re-tested all cases I can test and on 10.2 doesn't 
-work, so please drop this patch.
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ package/gnutls/Config.in | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Thank you
-Best regards
+diff --git a/package/gnutls/Config.in b/package/gnutls/Config.in
+index 15b930b6bd..c4fa729e71 100644
+--- a/package/gnutls/Config.in
++++ b/package/gnutls/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_GNUTLS
+ 	# gnulib requires a library that implements wctomb().
+ 	# This is noticed only when linking with libgnutls.so.
+ 	depends on BR2_USE_WCHAR
++	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464
+ 	select BR2_PACKAGE_LIBTASN1
+ 	select BR2_PACKAGE_NETTLE
+ 	select BR2_PACKAGE_PCRE
+@@ -32,4 +33,5 @@ config BR2_PACKAGE_GNUTLS_TOOLS
+ endif
+ 
+ comment "gnutls needs a toolchain w/ wchar, dynamic library"
+-	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS
++	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS || \
++		   !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464
 -- 
-Giulio Benetti
-Benetti Engineering sas
-
-> Regards,
-> Yann E. MORIN.
-> 
->>   config BR2_TOOLCHAIN_HAS_GCC_BUG_68485
->>   	bool
->>   	default y if BR2_microblaze
->> +	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_10
->>   
->>   # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180. This bug no
->>   # longer exists in gcc 8.x.
->> -- 
->> 2.25.1
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+2.25.1
