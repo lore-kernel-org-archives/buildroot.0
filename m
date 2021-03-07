@@ -1,106 +1,69 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 08 Mar 2021 07:44:53 -0000
-Subject: [Buildroot] [git commit] package/{wlroots,
- cage}: change mesa3d dependency to virtual libegl/libgles
-Message-ID: <20210308072134.6AF9A88918@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 7 Mar 2021 21:54:46 +0100
+Subject: [Buildroot] [git commit] package/frotz: Update to version 2.53
+Message-ID: <20210308072140.BCED388918@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fed835768aac18f2457544ff40f3b59b387117ed
+commit: https://git.buildroot.net/buildroot/commit/?id=807dd03eec9dfc5aab1677d639729ed68f052b2e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since commits:
-https://github.com/swaywm/wlroots/commit/c2288a7b88240e4377bfc1c67b44efb58f704a42
-https://github.com/swaywm/wlroots/commit/e18599b05e0f0cbeba11adbd489e801285470eab
+This version should now also compile fine on systems without pthreads,
+so we can remove the dependency on BR2_TOOLCHAIN_HAS_THREADS again.
 
-Mesa dependency is no longer required. Wlroots is able to run on
-drivers that provide EGL and GLES2.0 support, and with specific EGL
-wayland extensions.  (thus the BR2_PACKAGE_HAS_LIBEGL_WAYLAND
-dependency)
+While we're at it, also fix a typo in the description (replace "can not"
+with "cannot").
 
-This was verified on NXP's i.MX8MMini using imx-gpu-viv driver.
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Thomas Huth <huth@tuxfamily.org>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/cage/Config.in     | 12 +++++++-----
- package/wlroots/Config.in  | 15 +++++++--------
- package/wlroots/wlroots.mk |  3 ++-
- 3 files changed, 16 insertions(+), 14 deletions(-)
+ package/frotz/Config.in  | 6 +-----
+ package/frotz/frotz.hash | 2 +-
+ package/frotz/frotz.mk   | 2 +-
+ 3 files changed, 3 insertions(+), 7 deletions(-)
 
-diff --git a/package/cage/Config.in b/package/cage/Config.in
-index 3bef08f037..0844d6ff62 100644
---- a/package/cage/Config.in
-+++ b/package/cage/Config.in
-@@ -1,6 +1,7 @@
--comment "cage needs udev, mesa3d w/ EGL and GLES support"
--	depends on !BR2_PACKAGE_MESA3D_OPENGL_EGL || \
--		!BR2_PACKAGE_MESA3D_OPENGL_ES || \
-+comment "cage needs udev, EGL w/ Wayland backend and OpenGL ES support"
-+	depends on !BR2_PACKAGE_HAS_LIBEGL || \
-+		!BR2_PACKAGE_HAS_LIBEGL_WAYLAND || \
-+		!BR2_PACKAGE_HAS_LIBGLES || \
- 		!BR2_PACKAGE_HAS_UDEV
- 
- comment "cage needs a toolchain w/ threads, dynamic library"
-@@ -11,9 +12,10 @@ config BR2_PACKAGE_CAGE
- 	bool "cage"
- 	depends on !BR2_STATIC_LIBS # wlroots
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # wlroots
-+	depends on BR2_PACKAGE_HAS_LIBEGL # wlroots
-+	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND # wlroots
-+	depends on BR2_PACKAGE_HAS_LIBGLES # wlroots
- 	depends on BR2_PACKAGE_HAS_UDEV # wlroots
--	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL # wlroots
--	depends on BR2_PACKAGE_MESA3D_OPENGL_ES # wlroots
- 	select BR2_PACKAGE_WLROOTS
+diff --git a/package/frotz/Config.in b/package/frotz/Config.in
+index b73beea330..9473f5944d 100644
+--- a/package/frotz/Config.in
++++ b/package/frotz/Config.in
+@@ -1,14 +1,10 @@
+ config BR2_PACKAGE_FROTZ
+ 	bool "frotz"
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_NCURSES
  	help
- 	  Kiosk compositor for Wayland, which displays a single
-diff --git a/package/wlroots/Config.in b/package/wlroots/Config.in
-index 2f72fd4945..694aa79de4 100644
---- a/package/wlroots/Config.in
-+++ b/package/wlroots/Config.in
-@@ -1,6 +1,7 @@
--comment "wlroots needs udev, mesa3d w/ EGL and GLES support"
--	depends on !BR2_PACKAGE_MESA3D_OPENGL_EGL || \
--		!BR2_PACKAGE_MESA3D_OPENGL_ES || \
-+comment "wlroots needs udev, EGL w/ Wayland backend and OpenGL ES support"
-+	depends on !BR2_PACKAGE_HAS_LIBEGL || \
-+		!BR2_PACKAGE_HAS_LIBEGL_WAYLAND || \
-+		!BR2_PACKAGE_HAS_LIBGLES || \
- 		!BR2_PACKAGE_HAS_UDEV
+ 	  Frotz is an interpreter for old Infocom adventure games and
+-	  other Z-code games. Note that frotz can not be run as root.
++	  other Z-code games. Note that frotz cannot be run as root.
+ 	  You must add a normal user to your buildroot configuration to
+ 	  be able to use it.
  
- comment "wlroots needs a toolchain w/ threads, dynamic library"
-@@ -12,11 +13,9 @@ config BR2_PACKAGE_WLROOTS
- 	depends on !BR2_STATIC_LIBS # wayland
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm, wayland
- 	depends on BR2_PACKAGE_HAS_UDEV # libinput
--	# Technically wlroots should work with any OpenGL implementation
--	# which provides EGL, GLES2, and libgbm; but in practice only
--	# Mesa ships an usable libgbm.
--	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL
--	depends on BR2_PACKAGE_MESA3D_OPENGL_ES
-+	depends on BR2_PACKAGE_HAS_LIBEGL
-+	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND
-+	depends on BR2_PACKAGE_HAS_LIBGLES
- 	select BR2_PACKAGE_LIBDRM
- 	select BR2_PACKAGE_LIBINPUT
- 	select BR2_PACKAGE_LIBXKBCOMMON
-diff --git a/package/wlroots/wlroots.mk b/package/wlroots/wlroots.mk
-index 5665d5a956..0160b1aedb 100644
---- a/package/wlroots/wlroots.mk
-+++ b/package/wlroots/wlroots.mk
-@@ -15,7 +15,8 @@ WLROOTS_DEPENDENCIES = \
- 	host-wayland \
- 	libinput \
- 	libxkbcommon \
--	mesa3d \
-+	libegl \
-+	libgles \
- 	pixman \
- 	udev \
- 	wayland \
+ 	  https://661.org/proj/if/frotz/
+-
+-comment "frotz needs a toolchain w/ threads"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/frotz/frotz.hash b/package/frotz/frotz.hash
+index 14f1a7fbe2..e5024aa2cd 100644
+--- a/package/frotz/frotz.hash
++++ b/package/frotz/frotz.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  7e488140791259a1a8c9e16a0c467ca69b694b918c28ffe3d83c654bcb253cca  frotz-2.51.tar.bz2
++sha256  8da558828dd74d6d6ee30483bb32276ef918b8b72b7f6e89b4f7cb27e7abf58b  frotz-2.53.tar.bz2
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/frotz/frotz.mk b/package/frotz/frotz.mk
+index ce27bdf0bf..cc0421358c 100644
+--- a/package/frotz/frotz.mk
++++ b/package/frotz/frotz.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FROTZ_VERSION = 2.51
++FROTZ_VERSION = 2.53
+ FROTZ_SOURCE = frotz-$(FROTZ_VERSION).tar.bz2
+ FROTZ_SITE = https://gitlab.com/DavidGriffith/frotz/-/archive/$(FROTZ_VERSION)
+ FROTZ_DEPENDENCIES = host-pkgconf ncurses
