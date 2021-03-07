@@ -1,43 +1,38 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Sun,  7 Mar 2021 17:32:27 +0100
-Subject: [Buildroot] [PATCH] package/nano: bump to version 5.6.1
-Message-ID: <20210307163227.1292263-1-francois.perrad@gadz.org>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+Date: Sun,  7 Mar 2021 17:34:55 +0100
+Subject: [Buildroot] [PATCH] package/ruby: update hashes
+Message-ID: <20210307163455.8023-1-b.bilas@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/nano/nano.hash | 4 ++--
- package/nano/nano.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Commit af5226f2fd1292a26f2dfda32f41cbbad7aa4cc6 forgot to update
+hash of LEGAL and BSDL files.
 
-diff --git a/package/nano/nano.hash b/package/nano/nano.hash
-index 152766aa3..cbb497722 100644
---- a/package/nano/nano.hash
-+++ b/package/nano/nano.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://www.nano-editor.org/dist/v5/nano-5.6.tar.xz.asc
-+# https://www.nano-editor.org/dist/v5/nano-5.6.1.tar.xz.asc
- # using key BFD009061E535052AD0DF2150D28D4D2A0ACE884
--sha256  fce183e4a7034d07d219c79aa2f579005d1fd49f156db6e50f53543a87637a32  nano-5.6.tar.xz
-+sha256  760d7059e0881ca0ee7e2a33b09d999ec456ff7204df86bee58eb6f523ee8b09  nano-5.6.1.tar.xz
- sha256  fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
-diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-index 43f5f5f0b..77126fd4b 100644
---- a/package/nano/nano.mk
-+++ b/package/nano/nano.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- NANO_VERSION_MAJOR = 5
--NANO_VERSION = $(NANO_VERSION_MAJOR).6
-+NANO_VERSION = $(NANO_VERSION_MAJOR).6.1
- NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
- NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
- NANO_LICENSE = GPL-3.0+
+Fixes:
+ - http://autobuild.buildroot.net/results/448/4484fcce51dd2556156631d20b35bbba44abc171/build-end.log
+ ..
+ - http://autobuild.buildroot.net/results/c60/c60e5923159b3d66b422eb988f5d49e1c73e8710/build-end.log
+
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+---
+ package/ruby/ruby.hash | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
+index b4594fcaba..ec9492aa5e 100644
+--- a/package/ruby/ruby.hash
++++ b/package/ruby/ruby.hash
+@@ -1,6 +1,6 @@
+ # https://www.ruby-lang.org/en/news/2020/12/25/ruby-3-0-0-released/
+ sha256  68bfaeef027b6ccd0032504a68ae69721a70e97d921ff328c0c8836c798f6cb1  ruby-3.0.0.tar.xz
+ # License files, Locally calculated
+-sha256  b09ca195d2de08f0aacfa8793d0af62d7681c304b3ef714b75813721823295a6  LEGAL
++sha256  274f8d7983052448e7fd691c81043465c92ee6fb7bd8ab3f20a7997862f2778e  LEGAL
+ sha256  967586d538a28955ec2541910cf63c5ac345fcdea94bfb1f1705a1f6eb36bcbb  COPYING
+-sha256  a5e3042dacb53eebda91f3b1caefbfec8307711df8c4ed1ed20e4e97c43307a4  BSDL
++sha256  36a9a6e7347214bbba599a412617204e65bff065dcbe5c46f5cb454c80de9eb0  BSDL
 -- 
-2.27.0
+2.30.1
