@@ -1,110 +1,106 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 6 Mar 2021 23:32:38 +0100
-Subject: [Buildroot] [git commit] package/optee-benchmark: bump to version
- 3.12.0
-Message-ID: <20210308072140.59AEC81607@busybox.osuosl.org>
+Date: Mon, 08 Mar 2021 07:44:53 -0000
+Subject: [Buildroot] [git commit] package/{wlroots,
+ cage}: change mesa3d dependency to virtual libegl/libgles
+Message-ID: <20210308072134.6AF9A88918@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4ecb88f1d37b670300b7e648c76baa613337e559
+commit: https://git.buildroot.net/buildroot/commit/?id=fed835768aac18f2457544ff40f3b59b387117ed
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Remove main-fix-typo patch since merged in OP-TEE OS 3.12.0 and
-bump OP-TEE Benchmark package version to OP-TEE release 3.12.0.
+Since commits:
+https://github.com/swaywm/wlroots/commit/c2288a7b88240e4377bfc1c67b44efb58f704a42
+https://github.com/swaywm/wlroots/commit/e18599b05e0f0cbeba11adbd489e801285470eab
 
-Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+Mesa dependency is no longer required. Wlroots is able to run on
+drivers that provide EGL and GLES2.0 support, and with specific EGL
+wayland extensions.  (thus the BR2_PACKAGE_HAS_LIBEGL_WAYLAND
+dependency)
+
+This was verified on NXP's i.MX8MMini using imx-gpu-viv driver.
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/optee-benchmark/0001-main-fix-typo.patch | 55 ------------------------
- package/optee-benchmark/optee-benchmark.hash     |  4 +-
- package/optee-benchmark/optee-benchmark.mk       |  2 +-
- 3 files changed, 3 insertions(+), 58 deletions(-)
+ package/cage/Config.in     | 12 +++++++-----
+ package/wlroots/Config.in  | 15 +++++++--------
+ package/wlroots/wlroots.mk |  3 ++-
+ 3 files changed, 16 insertions(+), 14 deletions(-)
 
-diff --git a/package/optee-benchmark/0001-main-fix-typo.patch b/package/optee-benchmark/0001-main-fix-typo.patch
-deleted file mode 100644
-index 8ad5a26f13..0000000000
---- a/package/optee-benchmark/0001-main-fix-typo.patch
-+++ /dev/null
-@@ -1,55 +0,0 @@
--From ffa935dc881c394a824e063c8fde7dd102e06d8c Mon Sep 17 00:00:00 2001
--From: Romain Naour <romain.naour@gmail.com>
--Date: Fri, 8 May 2020 23:39:59 +0200
--Subject: [PATCH] main: fix typo
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--The function yaml_mapping_start_event_initialize()
--take yaml_mapping_style_t style as last argument:
--
--int yaml_mapping_start_event_initialize(
--	yaml_event_t *event,
--	const yaml_char_t *anchor,
--	const yaml_char_t *tag,
--	int implicit,
--	yaml_mapping_style_t style)
--
--Use YAML_ANY_MAPPING_STYLE instead of YAML_ANY_SEQUENCE_STYLE
--
--Fixes:
--main.c:173:5: error: implicit conversion from ???enum yaml_sequence_style_e??? to ???yaml_mapping_style_t??? {aka ???enum yaml_mapping_style_e???} [-Werror=enum-conversion]
--  173 |     YAML_ANY_SEQUENCE_STYLE))
--      |     ^~~~~~~~~~~~~~~~~~~~~~~
--
--Signed-off-by: Romain Naour <romain.naour@gmail.com>
-----
-- main.c | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/main.c b/main.c
--index 29a7c42..1685d3e 100644
----- a/main.c
--+++ b/main.c
--@@ -170,7 +170,7 @@ static bool init_emitter(FILE *ts_file)
-- 	/* Mapping start */
-- 	if (!yaml_mapping_start_event_initialize(&event,
-- 				NULL, NULL , YAML_IMPLICIT,
---				YAML_ANY_SEQUENCE_STYLE))
--+				YAML_ANY_MAPPING_STYLE))
-- 		ERROR_GOTO(emitter_delete,
-- 			"Failed to initialize YAML mapping start event");
-- 	if (!yaml_emitter_emit(&emitter, &event))
--@@ -263,7 +263,7 @@ static bool fill_timestamp(uint32_t core, uint64_t count, uint64_t addr,
-- 	/* Mapping start */
-- 	if (!yaml_mapping_start_event_initialize(&event,
-- 				NULL, NULL , YAML_IMPLICIT,
---				YAML_ANY_SEQUENCE_STYLE))
--+				YAML_ANY_MAPPING_STYLE))
-- 		ERROR_RETURN_FALSE(
-- 			"Failed to initialize YAML mapping start event");
-- 	if (!yaml_emitter_emit(&emitter, &event))
---- 
--2.25.4
--
-diff --git a/package/optee-benchmark/optee-benchmark.hash b/package/optee-benchmark/optee-benchmark.hash
-index 12d1ddea88..144069b6f3 100644
---- a/package/optee-benchmark/optee-benchmark.hash
-+++ b/package/optee-benchmark/optee-benchmark.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/linaro-swg/optee_benchmark/archive/3.11.0.tar.gz
--sha256 34c314a5cda1e9e3b92f01759585722b44503d9eea19f6b936fc951f5acbac16 optee-benchmark-3.11.0.tar.gz
-+# From https://github.com/linaro-swg/optee_benchmark/archive/3.12.0/optee-benchmark-3.12.0.tar.gz
-+sha256 468635656fa483911cf605a96711d848f8e0f6b4a6137208226de364dee25fe4 optee-benchmark-3.12.0.tar.gz
- # Locally computed
- sha256 0571be5b739142dc3e40e0a4e7e30d4ab8bff0d4d606a3f2db2010745587d383  LICENSE
-diff --git a/package/optee-benchmark/optee-benchmark.mk b/package/optee-benchmark/optee-benchmark.mk
-index f9d7cae302..c17a7045d4 100644
---- a/package/optee-benchmark/optee-benchmark.mk
-+++ b/package/optee-benchmark/optee-benchmark.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/cage/Config.in b/package/cage/Config.in
+index 3bef08f037..0844d6ff62 100644
+--- a/package/cage/Config.in
++++ b/package/cage/Config.in
+@@ -1,6 +1,7 @@
+-comment "cage needs udev, mesa3d w/ EGL and GLES support"
+-	depends on !BR2_PACKAGE_MESA3D_OPENGL_EGL || \
+-		!BR2_PACKAGE_MESA3D_OPENGL_ES || \
++comment "cage needs udev, EGL w/ Wayland backend and OpenGL ES support"
++	depends on !BR2_PACKAGE_HAS_LIBEGL || \
++		!BR2_PACKAGE_HAS_LIBEGL_WAYLAND || \
++		!BR2_PACKAGE_HAS_LIBGLES || \
+ 		!BR2_PACKAGE_HAS_UDEV
  
--OPTEE_BENCHMARK_VERSION = 3.11.0
-+OPTEE_BENCHMARK_VERSION = 3.12.0
- OPTEE_BENCHMARK_SITE = $(call github,linaro-swg,optee_benchmark,$(OPTEE_BENCHMARK_VERSION))
- OPTEE_BENCHMARK_LICENSE = BSD-2-Clause
- OPTEE_BENCHMARK_LICENSE_FILES = LICENSE
+ comment "cage needs a toolchain w/ threads, dynamic library"
+@@ -11,9 +12,10 @@ config BR2_PACKAGE_CAGE
+ 	bool "cage"
+ 	depends on !BR2_STATIC_LIBS # wlroots
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # wlroots
++	depends on BR2_PACKAGE_HAS_LIBEGL # wlroots
++	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND # wlroots
++	depends on BR2_PACKAGE_HAS_LIBGLES # wlroots
+ 	depends on BR2_PACKAGE_HAS_UDEV # wlroots
+-	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL # wlroots
+-	depends on BR2_PACKAGE_MESA3D_OPENGL_ES # wlroots
+ 	select BR2_PACKAGE_WLROOTS
+ 	help
+ 	  Kiosk compositor for Wayland, which displays a single
+diff --git a/package/wlroots/Config.in b/package/wlroots/Config.in
+index 2f72fd4945..694aa79de4 100644
+--- a/package/wlroots/Config.in
++++ b/package/wlroots/Config.in
+@@ -1,6 +1,7 @@
+-comment "wlroots needs udev, mesa3d w/ EGL and GLES support"
+-	depends on !BR2_PACKAGE_MESA3D_OPENGL_EGL || \
+-		!BR2_PACKAGE_MESA3D_OPENGL_ES || \
++comment "wlroots needs udev, EGL w/ Wayland backend and OpenGL ES support"
++	depends on !BR2_PACKAGE_HAS_LIBEGL || \
++		!BR2_PACKAGE_HAS_LIBEGL_WAYLAND || \
++		!BR2_PACKAGE_HAS_LIBGLES || \
+ 		!BR2_PACKAGE_HAS_UDEV
+ 
+ comment "wlroots needs a toolchain w/ threads, dynamic library"
+@@ -12,11 +13,9 @@ config BR2_PACKAGE_WLROOTS
+ 	depends on !BR2_STATIC_LIBS # wayland
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm, wayland
+ 	depends on BR2_PACKAGE_HAS_UDEV # libinput
+-	# Technically wlroots should work with any OpenGL implementation
+-	# which provides EGL, GLES2, and libgbm; but in practice only
+-	# Mesa ships an usable libgbm.
+-	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL
+-	depends on BR2_PACKAGE_MESA3D_OPENGL_ES
++	depends on BR2_PACKAGE_HAS_LIBEGL
++	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND
++	depends on BR2_PACKAGE_HAS_LIBGLES
+ 	select BR2_PACKAGE_LIBDRM
+ 	select BR2_PACKAGE_LIBINPUT
+ 	select BR2_PACKAGE_LIBXKBCOMMON
+diff --git a/package/wlroots/wlroots.mk b/package/wlroots/wlroots.mk
+index 5665d5a956..0160b1aedb 100644
+--- a/package/wlroots/wlroots.mk
++++ b/package/wlroots/wlroots.mk
+@@ -15,7 +15,8 @@ WLROOTS_DEPENDENCIES = \
+ 	host-wayland \
+ 	libinput \
+ 	libxkbcommon \
+-	mesa3d \
++	libegl \
++	libgles \
+ 	pixman \
+ 	udev \
+ 	wayland \
