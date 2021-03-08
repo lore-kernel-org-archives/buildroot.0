@@ -1,26 +1,56 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 08 Mar 2021 10:54:21 +0000
-Subject: [Buildroot] [Bug 13591] small businesses commonly employ:
-In-Reply-To: <bug-13591-163@https.bugs.busybox.net/>
-References: <bug-13591-163@https.bugs.busybox.net/>
-Message-ID: <bug-13591-163-o3MzJublHm@https.bugs.busybox.net/>
+From: Titouan Christophe <titouanchristophe@gmail.com>
+Date: Mon,  8 Mar 2021 12:09:39 +0100
+Subject: [Buildroot] [PATCH 1/1] package/redis: bump to v6.2.1
+Message-ID: <20210308110939.242728-1-titouanchristophe@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13591
+From the release notes:
+Introduction to the Redis 6.2 release
+=====================================
 
-harry <mahaa1995@protonmail.com> changed:
+This release is the first significant Redis release managed by the core team
+under the new project governance model.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                URL|                            |https://www.fieldengineer.c
-                   |                            |om/blogs/how-do-small-busin
-                   |                            |esses-benefit-from-gig-econ
-                   |                            |omy
+Redis 6.2 includes many new commands and improvements, but no big features. It
+mainly makes Redis more complete and addresses issues that have been requested
+by many users frequently or for a long time.
+=====================================
 
+See https://github.com/redis/redis/blob/6.2/00-RELEASENOTES
+
+Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
+---
+ package/redis/redis.hash | 2 +-
+ package/redis/redis.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/redis/redis.hash b/package/redis/redis.hash
+index 9b87b49fb1..13c35195a6 100644
+--- a/package/redis/redis.hash
++++ b/package/redis/redis.hash
+@@ -1,5 +1,5 @@
+ # From https://github.com/redis/redis-hashes/blob/master/README
+-sha256  f16ad973d19f80f121e53794d5eb48a997e2c6a85b5be41bb3b66750cc17bf6b  redis-6.0.12.tar.gz
++sha256  cd222505012cce20b25682fca931ec93bd21ae92cb4abfe742cf7b76aa907520  redis-6.2.1.tar.gz
+ 
+ # Locally calculated
+ sha256  97f0a15b7bbae580d2609dad2e11f1956ae167be296ab60f4691ab9c30ee9828  COPYING
+diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+index c851e589c4..074773c3e1 100644
+--- a/package/redis/redis.mk
++++ b/package/redis/redis.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-REDIS_VERSION = 6.0.12
++REDIS_VERSION = 6.2.1
+ REDIS_SITE = http://download.redis.io/releases
+ REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
+ REDIS_LICENSE_FILES = COPYING
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.25.3
