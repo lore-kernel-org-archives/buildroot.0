@@ -1,63 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 8 Mar 2021 19:14:46 +0100
-Subject: [Buildroot] [PATCH] package/frotz: Update to version 2.53
-In-Reply-To: <20210308051551.3dace767@tuxfamily.org>
-References: <20210307152147.514774-1-huth@tuxfamily.org>
- <20210307214115.GG2275@scaer>
- <20210308051551.3dace767@tuxfamily.org>
-Message-ID: <20210308181446.GA2737665@scaer>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon,  8 Mar 2021 20:33:54 +0100
+Subject: [Buildroot] [PATCH v1] package/libinput: bump version to 1.17.0
+Message-ID: <20210308193354.7115-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+For details see [1].
 
-On 2021-03-08 05:15 +0100, Thomas Huth spake thusly:
-> Am Sun, 7 Mar 2021 22:41:15 +0100
-> schrieb "Yann E. MORIN" <yann.morin.1998@free.fr>:
-> > On 2021-03-07 16:21 +0100, Thomas Huth spake thusly:
-> > > +	  other Z-code games. Note that frotz cannot be run as
-> > > root.  
-> > Out of curiosity: what is the technical reason this is not possible?
-> I don't know for sure, but I think it's because Frotz is running
-> untrusted byte code - so if there's a bug in the interpreter, some
-> malicious byte code could get root access to the system.
+[1] https://lists.freedesktop.org/archives/wayland-devel/2021-February/041733.html
 
-Ok, that is indeed not a technical limitation, but rathetr an attempt at
-not causing too much trouble... But in practice, that does not protect
-from much, and there night be cases where running as root is actually
-required. But oh well, this is a game emualtor, so I am not too
-concerned about it. ;-)
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/libinput/libinput.hash | 6 +++---
+ package/libinput/libinput.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Thanks for the explanations.
-
-> > >  	  You must add a normal user to your buildroot
-> > > configuration to be able to use it.  
-> > Why don't we then define one, like:
-> >     define FROTS_USERS
-> >         frotz -1 frotz -1 - - - -
-> >     endef
-> Not sure whether it makes sense to hard-code a user without password
-> here...? IMHO it makes more sense to leave that decision (how should
-> the user be called? should the account get a password or not?) to the
-> person who creates the buildroot image.
-
-I am a bit torn between the "make things work by default" mantra, and
-the "let the user customise as they see fit" attitude...
-
-I guess we can leave ats it is now, then...
-
-Thanks! :-)
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
+index 1664afbac8..f39ba3dbb6 100644
+--- a/package/libinput/libinput.hash
++++ b/package/libinput/libinput.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2021-February/041734.html
+-sha256  42d404af037a0dcc9dee7a1ab0a8e53cec0b62902fc4a262e5be9d2b7452c214  libinput-1.16.5.tar.xz
+-sha512  b2fdd87375cbd5b212f76cefedfaa146966dde1d5e5d566beadd3167749dc3667214946178b157fa4b44360dc6b86a25ffb0356049cdf5a57d0fa2b8e3fcb1e9  libinput-1.16.5.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2021-February/041733.html
++sha256  c560cfca14cb5c50d2a1b7551df06bc5d4306e32c128f3e3d37e137285dedbad  libinput-1.17.0.tar.xz
++sha512  490c7e59cbaa43e4190dbc421582dca887b6ae92304c4f8f3ea9df515bd76de41ca9a376e6f1cfe7b235dd2d5d8d8ef5982f5ddcf958e3b31b981e9440bb0888  libinput-1.17.0.tar.xz
+ 
+ # License files
+ sha256  70d5b1dfe5a9c50a1f2ea91b1c2b1c85d876c5c92339585edbb85cf69e945e14  COPYING
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+index cbe4bb124f..982d92d062 100644
+--- a/package/libinput/libinput.mk
++++ b/package/libinput/libinput.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBINPUT_VERSION = 1.16.5
++LIBINPUT_VERSION = 1.17.0
+ LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
+ LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
+ LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.30.1
