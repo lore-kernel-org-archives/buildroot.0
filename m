@@ -1,72 +1,130 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 8 Mar 2021 23:01:56 +0100
-Subject: [Buildroot] Segmentation fault for ICU-68 on LTS 2021.02
-In-Reply-To: <CAJe_jjBKPYHrLyOPU=Kji9s6yT1O1u9rRgQTRJ0ODwq77bC2Qg@mail.gmail.com>
-References: <CAJe_jjBKPYHrLyOPU=Kji9s6yT1O1u9rRgQTRJ0ODwq77bC2Qg@mail.gmail.com>
-Message-ID: <20210308230156.5b234e34@gmx.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 8 Mar 2021 23:04:31 +0100
+Subject: [Buildroot] [RFC/next v2 1/2] package/rpi-firmware: rework
+ boot/config file handling
+In-Reply-To: <20210216201148.26688-1-ps.report@gmx.net>
+References: <20210216201148.26688-1-ps.report@gmx.net>
+Message-ID: <20210308220431.GC2737665@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Peter, All,
 
-On Sun, 7 Mar 2021 19:28:54 +0100, primeroz <primeroznl@gmail.com> wrote:
+Second part of the review... ;-)
 
-> Hi,
->
-> I just tried building one of my projects on LTS 2021.02 and ICU-68 is
-> getting a very strange segmentation fault
->
-> note, this is running in a ubuntu:18.04 docker container ( hence as root
-> user )
->
-> ```
-> make[2]: Entering directory
-> '/root/buildroot/output/build/icu-68-1/source/data'
-> /bin/bash ../mkinstalldirs
->  /root/buildroot/output/host/x86_64-buildroot-linux-gnu/sysroot/usr/lib
-> LD_LIBRARY_PATH=/root/buildroot/output/build/host-icu-68-1/source/stubdata:/root/buildroot/output/build/host-icu-68-1/source/tools/ctestfw:/root/buildroot/output/build/host-icu-68-1/source/lib:$LD_LIBRARY_PATH
->  /root/buildroot/output/build/host-icu-68-1/source/bin/pkgdata -O
-> ../data/icupkg.inc -q -c -s
-> /root/buildroot/output/build/icu-68-1/source/data/out/build/icudt68l -d
-> ../lib -m dll -r 68.1 -e icudt68  -T ./out/tmp -s ./out/build/icudt68l -p
-> icudt68l -L icudata ./out/tmp/icudata.lst -I
-> /root/buildroot/output/host/x86_64-buildroot-linux-gnu/sysroot/usr/lib
-> pkgdata: cd ../lib/ && /usr/bin/install -c libicudata.so.68.1
-> /root/buildroot/output/host/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libicudata.so.68.1
-> pkgdata: cd
-> /root/buildroot/output/host/x86_64-buildroot-linux-gnu/sysroot/usr/lib &&
-> rm -f libicudata.so.68 && ln -s libicudata.so.68.1 libicudata.so.68
-> Segmentation fault (core dumped)
-> -- return status = 35584
-> Error creating symbolic links. Failed command: cd
-> /root/buildroot/output/host/x86_64-buildroot-linux-gnu/sysroot/usr/lib &&
-> rm -f libicudata.so.68 && ln -s libicudata.so.68.1 libicudata.so.68
-> Makefile:184: recipe for target 'install-local' failed
-> make[2]: *** [install-local] Error 1
-> make[2]: Leaving directory
-> '/root/buildroot/output/build/icu-68-1/source/data'
-> Makefile:153: recipe for target 'install-recursive' failed
-> make[1]: *** [install-recursive] Error 2
-> make[1]: Leaving directory '/root/buildroot/output/build/icu-68-1/source'
-> package/pkg-generic.mk:286: recipe for target
-> '/root/buildroot/output/build/icu-68-1/.stamp_staging_installed' failed
-> make: *** [/root/buildroot/output/build/icu-68-1/.stamp_staging_installed]
-> Error 2
-> ```
->
-> Anyone else getting the same ?
+On 2021-02-16 21:11 +0100, Peter Seiderer spake thusly:
+> Try to be less smart (focused on the one target/one use-case),
+> instead reduce the rpi-firmware package to a selectable list
+> of (verbatim) installed firmware files.
+> 
+> - change rpi-firmware config handling from rpi-variant/rpi-flavour
+>   choices to bootcode.bin, pi-default/-extended/-cut-down and
+>   pi4-/default/-extended/-cut-down selection
+> 
+> - add BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE option to select installable
+>   config.txt file
+> 
+> - remove config.txt modify code/handling from raspberry post-image.sh
+>   script
+> 
+> - add different customized config.txt files to the raspberry board
+>   section
+> 
+> - change raspberry defconfigs to select appropiate rpi-firmware
+>   and config.txt files
+> 
+> - change genimage-raspberrypi4.cfg/genimage-raspberrypi4-64.cfg to
+>   use start4.elf and fixup4.dat
+> 
+> With this changes a better support for custom use-cases should
+> be possible, specially multi-target SD cards as suggested by
+> Stefan Agner ([1]).
+> 
+> [1] http://lists.busybox.net/pipermail/buildroot/2021-February/303318.html
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+[--SNIP--]
+> diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+> index f3d28ef825..a7ab8f0f14 100644
+> --- a/package/rpi-firmware/rpi-firmware.mk
+> +++ b/package/rpi-firmware/rpi-firmware.mk
+> @@ -10,6 +10,46 @@ RPI_FIRMWARE_LICENSE = BSD-3-Clause
+>  RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
+>  RPI_FIRMWARE_INSTALL_IMAGES = YES
+>  
+> +ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_BOOTCODE_BIN),y)
+> +RPI_FIRMWARE_FILES += bootcode.bin
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI),y)
+> +RPI_FIRMWARE_FILES += start.elf fixup.dat
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI_X),y)
+> +RPI_FIRMWARE_FILES += startx.elf fixupx.dat
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI_CD),y)
+> +RPI_FIRMWARE_FILES += start_cd.elf fixup_cd.dat
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4),y)
+> +RPI_FIRMWARE_FILES += start4.elf fixup4.dat
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4_X),y)
+> +RPI_FIRMWARE_FILES += start4x.elf fixup4x.dat
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4_CD),y)
+> +RPI_FIRMWARE_FILES += start4cd.elf fixup4cd.dat
+> +endif
 
-Something maybe similar(?) was reported in January, see [1]...
+What about:
 
-Can you provide your failing config/defconfig?
+    RPI_FIRMWARE_FILES = \
+        $(if $(BR2_PACKAGE_RPI_FIRMWARE_BOOTCODE_BIN),bootcode.bin) \
+        $(if $(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI),start.elf fixup.dat) \
+        $(if $(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI_X),startx.elf fixupx.dat) \
+        $(if $(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI_CD),start_cd.elf fixup_cd.dat) \
+        $(if $(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4),start4.elf fixup4.dat) \
+        $(if $(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4_X),start4x.elf fixup4x.dat) \
+        $(if $(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4_CD),start4cd.elf fixup4cd.dat)
 
-Can your try get a core dump file and try to analyze it?
+Or alternatively:
+
+    RPI_FIRMWARE_FILES_$(BR2_PACKAGE_RPI_FIRMWARE_BOOTCODE_BIN) += bootcode.bin
+    RPI_FIRMWARE_FILES_$(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI) += start.elf fixup.dat
+    RPI_FIRMWARE_FILES_$(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI_X) += startx.elf fixupx.dat
+    RPI_FIRMWARE_FILES_$(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI_CD) += start_cd.elf fixup_cd.dat
+    RPI_FIRMWARE_FILES_$(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4) += start4.elf fixup4.dat
+    RPI_FIRMWARE_FILES_$(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4_X) += start4x.elf fixup4x.dat
+    RPI_FIRMWARE_FILES_$(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4_CD) += start4cd.elf fixup4cd.dat
+
+    define RPI_FIRMWARE_INSTALL_BIN
+        $(foreach f,$(RPI_FIRMWARE_FILES_y),
+            $(INSTALL) -D -m 0644 $(@D)/$(f) $(BINARIES_DIR)/rpi-firmware/$(f)
+        )
+    endef
+
+> +define RPI_FIRMWARE_INSTALL_BIN
+> +	for firmwbin in  $(RPI_FIRMWARE_FILES); do \
+> +		$(INSTALL) -D -m 0644 $(@D)/boot/$${firmwbin} $(BINARIES_DIR)/rpi-firmware/$${firmwbin} || exit 1; \
+> +	done
+
+Use a make-level $(foreach) loop rather than a shell loop (see example
+above).
 
 Regards,
-Peter
+Yann E. MORIN.
 
-
-[1] http://lists.busybox.net/pipermail/buildroot/2021-January/300457.html
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
