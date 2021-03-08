@@ -1,8 +1,10 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Mon,  8 Mar 2021 14:45:39 +0100
-Subject: [Buildroot] [PATCH 1/2] utils/scanpypi: add setup.py script
- directory as sys.path[0]
-Message-ID: <20210308134542.22324-1-patrickdepinguin@gmail.com>
+Date: Mon,  8 Mar 2021 14:45:40 +0100
+Subject: [Buildroot] [PATCH 2/2] utils/scanpypi: allow installation of
+ commands without 'main' method
+In-Reply-To: <20210308134542.22324-1-patrickdepinguin@gmail.com>
+References: <20210308134542.22324-1-patrickdepinguin@gmail.com>
+Message-ID: <20210308134542.22324-2-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,68 +13,74 @@ To: buildroot@busybox.net
 
 From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-Even though the directory containing a package's setup.py was added to
-sys.path, some setup.py implementations rely on the fact that it is placed
-in sys.path[0].
+In case the setup.py file of a python package does not directly call the
+'setup' method, utils/scanpypi was hoping there be a 'main' function which
+would do the work, normally called via a construct like:
 
-An example package is 'cram' which failed to be added with scanpypi:
-
-    Traceback (most recent call last):
-      File "utils/scanpypi", line 756, in <module>
+    if __name__ == '__main__':
         main()
-      File "utils/scanpypi", line 703, in main
-        package.load_setup()
-      File "utils/scanpypi", line 303, in load_setup
-        setup = imp.load_module('setup', s_file, s_path, s_desc)
-      File "/usr/lib/python3.8/imp.py", line 234, in load_module
-        return load_source(name, filename, file)
-      File "/usr/lib/python3.8/imp.py", line 171, in load_source
-        module = _load(spec)
-      File "<frozen importlib._bootstrap>", line 702, in _load
-      File "<frozen importlib._bootstrap>", line 671, in _load_unlocked
-      File "<frozen importlib._bootstrap_external>", line 783, in exec_module
-      File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
-      File "/tmp/scanpypi-2pzc5wb_/python-cram/cram-0.7/setup.py", line 44, in <module>
-        long_description=long_description(),
-      File "/tmp/scanpypi-2pzc5wb_/python-cram/cram-0.7/setup.py", line 20, in long_description
-        return open(os.path.join(sys.path[0], 'README.rst')).read()
-    FileNotFoundError: [Errno 2] No such file or directory: '.../buildroot/utils/README.rst'
 
-The corresponding code from cram's setup.py is:
+However, this construct is nonstandard, and there are packages in PyPI which
+call 'setup()' directly from the 'if' statement, without a main() method.
 
-    def long_description():
-        """Get the long description from the README"""
-        return open(os.path.join(sys.path[0], 'README.rst')).read()
+But scanpypi does not actually need to make such assumption: when loading
+the module, it can decide the name to be '__main__', just as if setup.py
+would be loaded interactively.
 
-Indeed, the Python documentation says:
-
-https://docs.python.org/3.8/library/sys.html#sys.path
-    "...
-    As initialized upon program startup, the first item of this list,
-    path[0], is the directory containing the script that was used to invoke
-    the Python interpreter.
-    ..."
-
-Fix this by inserting explicitly at index 0 instead of appending to
-sys.path.
+Additionally, remove some logic seemingly related to the previous trick of
+calling 'main'. There should not be a problem in keeping already loaded
+modules in sys.modules, as this is the purpose of sys.modules.
 
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- utils/scanpypi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ utils/scanpypi | 21 ++++++---------------
+ 1 file changed, 6 insertions(+), 15 deletions(-)
 
 diff --git a/utils/scanpypi b/utils/scanpypi
-index 47c7c00c60..24c64dddde 100755
+index 24c64dddde..1d1f25f596 100755
 --- a/utils/scanpypi
 +++ b/utils/scanpypi
-@@ -297,7 +297,7 @@ class BuildrootPackage():
-         """
-         current_dir = os.getcwd()
+@@ -299,7 +299,7 @@ class BuildrootPackage():
          os.chdir(self.tmp_extract)
--        sys.path.append(self.tmp_extract)
-+        sys.path.insert(0,self.tmp_extract)
+         sys.path.insert(0,self.tmp_extract)
          s_file, s_path, s_desc = imp.find_module('setup', [self.tmp_extract])
-         setup = imp.load_module('setup', s_file, s_path, s_desc)
+-        setup = imp.load_module('setup', s_file, s_path, s_desc)
++        setup = imp.load_module('__main__', s_file, s_path, s_desc)
          if self.metadata_name in self.setup_args:
+             pass
+         elif self.metadata_name.replace('_', '-') in self.setup_args:
+@@ -309,19 +309,10 @@ class BuildrootPackage():
+         try:
+             self.setup_metadata = self.setup_args[self.metadata_name]
+         except KeyError:
+-            # This means setup was not called which most likely mean that it is
+-            # called through the if __name__ == '__main__' directive.
+-            # In this case, we can only pray that it is called through a
+-            # function called main() in setup.py.
+-            setup.main()  # Will raise AttributeError if not found
+-            self.setup_metadata = self.setup_args[self.metadata_name]
+-        # Here we must remove the module the hard way.
+-        # We must do this because of a very specific case: if a package calls
+-        # setup from the __main__ but does not come with a 'main()' function,
+-        # for some reason setup.main() will successfully call the main
+-        # function of a previous package...
+-        sys.modules.pop('setup', None)
+-        del setup
++            # This means setup was not called
++            print('ERROR: Could not determine package metadata for {pkg}.\n'
++                  .format(pkg=self.real_name))
++            raise
+         os.chdir(current_dir)
+         sys.path.remove(self.tmp_extract)
+ 
+@@ -706,7 +697,7 @@ def main():
+                 else:
+                     raise
+                 continue
+-            except AttributeError as error:
++            except (AttributeError, KeyError) as error:
+                 print('Error: Could not install package {pkg}: {error}'.format(
+                     pkg=package.real_name, error=error))
+                 continue
 -- 
 2.26.2
