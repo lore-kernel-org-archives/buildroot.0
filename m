@@ -1,31 +1,72 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 08 Mar 2021 22:59:34 +0100
-Subject: [Buildroot] [PATCH 00/12 v8] Introduce libudev (branch
- yem/libudev-4)
-References: <cover.1468274498.git.yann.morin.1998@free.fr>
- <20160716154736.19dd42fb@free-electrons.com> <20160718175241.GA3738@free.fr>
-Message-ID: <6bjihhxnm.ln2@ID-313208.user.individual.net>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 8 Mar 2021 23:01:56 +0100
+Subject: [Buildroot] Segmentation fault for ICU-68 on LTS 2021.02
+In-Reply-To: <CAJe_jjBKPYHrLyOPU=Kji9s6yT1O1u9rRgQTRJ0ODwq77bC2Qg@mail.gmail.com>
+References: <CAJe_jjBKPYHrLyOPU=Kji9s6yT1O1u9rRgQTRJ0ODwq77bC2Qg@mail.gmail.com>
+Message-ID: <20210308230156.5b234e34@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Mon, 18 Jul 2016 19:52:41 +0200 schrieb Yann E. MORIN:
+Hello,
 
-> Bernd has a (imho, valid) use-case about using only libudev without a
-> udev daemon altogether; there *are* other similar cases.
+On Sun, 7 Mar 2021 19:28:54 +0100, primeroz <primeroznl@gmail.com> wrote:
 
-Hi Yann,
+> Hi,
+>
+> I just tried building one of my projects on LTS 2021.02 and ICU-68 is
+> getting a very strange segmentation fault
+>
+> note, this is running in a ubuntu:18.04 docker container ( hence as root
+> user )
+>
+> ```
+> make[2]: Entering directory
+> '/root/buildroot/output/build/icu-68-1/source/data'
+> /bin/bash ../mkinstalldirs
+>  /root/buildroot/output/host/x86_64-buildroot-linux-gnu/sysroot/usr/lib
+> LD_LIBRARY_PATH=/root/buildroot/output/build/host-icu-68-1/source/stubdata:/root/buildroot/output/build/host-icu-68-1/source/tools/ctestfw:/root/buildroot/output/build/host-icu-68-1/source/lib:$LD_LIBRARY_PATH
+>  /root/buildroot/output/build/host-icu-68-1/source/bin/pkgdata -O
+> ../data/icupkg.inc -q -c -s
+> /root/buildroot/output/build/icu-68-1/source/data/out/build/icudt68l -d
+> ../lib -m dll -r 68.1 -e icudt68  -T ./out/tmp -s ./out/build/icudt68l -p
+> icudt68l -L icudata ./out/tmp/icudata.lst -I
+> /root/buildroot/output/host/x86_64-buildroot-linux-gnu/sysroot/usr/lib
+> pkgdata: cd ../lib/ && /usr/bin/install -c libicudata.so.68.1
+> /root/buildroot/output/host/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libicudata.so.68.1
+> pkgdata: cd
+> /root/buildroot/output/host/x86_64-buildroot-linux-gnu/sysroot/usr/lib &&
+> rm -f libicudata.so.68 && ln -s libicudata.so.68.1 libicudata.so.68
+> Segmentation fault (core dumped)
+> -- return status = 35584
+> Error creating symbolic links. Failed command: cd
+> /root/buildroot/output/host/x86_64-buildroot-linux-gnu/sysroot/usr/lib &&
+> rm -f libicudata.so.68 && ln -s libicudata.so.68.1 libicudata.so.68
+> Makefile:184: recipe for target 'install-local' failed
+> make[2]: *** [install-local] Error 1
+> make[2]: Leaving directory
+> '/root/buildroot/output/build/icu-68-1/source/data'
+> Makefile:153: recipe for target 'install-recursive' failed
+> make[1]: *** [install-recursive] Error 2
+> make[1]: Leaving directory '/root/buildroot/output/build/icu-68-1/source'
+> package/pkg-generic.mk:286: recipe for target
+> '/root/buildroot/output/build/icu-68-1/.stamp_staging_installed' failed
+> make: *** [/root/buildroot/output/build/icu-68-1/.stamp_staging_installed]
+> Error 2
+> ```
+>
+> Anyone else getting the same ?
 
-years later there is a new solution for this problem: libudev-zero
+Something maybe similar(?) was reported in January, see [1]...
 
-Here is a hackish patch for buildroot which I am using with Kodi 19/gbm/
-OpenGLES/no_X11 to provide udev support for libinput:
+Can you provide your failing config/defconfig?
 
-https://github.com/bkuhls/buildroot/commit/
-ba49d2a8f9bb9879373d17711b82adfe867f4bdc
+Can your try get a core dump file and try to analyze it?
 
-What about adding libudev-zero to buildroot?
+Regards,
+Peter
 
-Regards, Bernd
+
+[1] http://lists.busybox.net/pipermail/buildroot/2021-January/300457.html
