@@ -1,51 +1,44 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 8 Mar 2021 23:46:48 +0100
-Subject: [Buildroot] [git commit] package/libinput: bump version to 1.17.0
-Message-ID: <20210308222722.9219F87643@busybox.osuosl.org>
+Date: Mon, 8 Mar 2021 23:48:20 +0100
+Subject: [Buildroot] [git commit] package/sysklogd: bump to version 2.2.2
+Message-ID: <20210308222722.A5EB188C89@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e46fc353fb045df2294ab84befb01c92eabbccb9
+commit: https://git.buildroot.net/buildroot/commit/?id=b5c5a1d49d62040e8713c5151ba6aca8499251ef
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For details see [1].
+https://github.com/troglobit/sysklogd/releases/tag/v2.2.2
 
-[1] https://lists.freedesktop.org/archives/wayland-devel/2021-February/041733.html
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libinput/libinput.hash | 6 +++---
- package/libinput/libinput.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/sysklogd/sysklogd.hash | 2 +-
+ package/sysklogd/sysklogd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
-index 1664afbac8..f39ba3dbb6 100644
---- a/package/libinput/libinput.hash
-+++ b/package/libinput/libinput.hash
-@@ -1,6 +1,6 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2021-February/041734.html
--sha256  42d404af037a0dcc9dee7a1ab0a8e53cec0b62902fc4a262e5be9d2b7452c214  libinput-1.16.5.tar.xz
--sha512  b2fdd87375cbd5b212f76cefedfaa146966dde1d5e5d566beadd3167749dc3667214946178b157fa4b44360dc6b86a25ffb0356049cdf5a57d0fa2b8e3fcb1e9  libinput-1.16.5.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2021-February/041733.html
-+sha256  c560cfca14cb5c50d2a1b7551df06bc5d4306e32c128f3e3d37e137285dedbad  libinput-1.17.0.tar.xz
-+sha512  490c7e59cbaa43e4190dbc421582dca887b6ae92304c4f8f3ea9df515bd76de41ca9a376e6f1cfe7b235dd2d5d8d8ef5982f5ddcf958e3b31b981e9440bb0888  libinput-1.17.0.tar.xz
- 
- # License files
- sha256  70d5b1dfe5a9c50a1f2ea91b1c2b1c85d876c5c92339585edbb85cf69e945e14  COPYING
-diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
-index cbe4bb124f..982d92d062 100644
---- a/package/libinput/libinput.mk
-+++ b/package/libinput/libinput.mk
+diff --git a/package/sysklogd/sysklogd.hash b/package/sysklogd/sysklogd.hash
+index ec14363d9f..0ef5e17116 100644
+--- a/package/sysklogd/sysklogd.hash
++++ b/package/sysklogd/sysklogd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  a93b7ad6a615336f030d8a3257544cff1644908af6a12c65f65482f27bd39ca9  sysklogd-2.2.1.tar.gz
++sha256  2752a693a2486f7e532b6b028296c8ac0a97def8a4848f1e915f3e583fd0b4b6  sysklogd-2.2.2.tar.gz
+ sha256  7a71d7603a7c4456df441463e54da35acf151c1be0879246de63544f1f34f477  LICENSE
+diff --git a/package/sysklogd/sysklogd.mk b/package/sysklogd/sysklogd.mk
+index ea7b869d7b..0110974069 100644
+--- a/package/sysklogd/sysklogd.mk
++++ b/package/sysklogd/sysklogd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBINPUT_VERSION = 1.16.5
-+LIBINPUT_VERSION = 1.17.0
- LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
- LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
- LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
+-SYSKLOGD_VERSION = 2.2.1
++SYSKLOGD_VERSION = 2.2.2
+ SYSKLOGD_SITE = https://github.com/troglobit/sysklogd/releases/download/v$(SYSKLOGD_VERSION)
+ SYSKLOGD_LICENSE = BSD-3-Clause
+ SYSKLOGD_LICENSE_FILES = LICENSE
