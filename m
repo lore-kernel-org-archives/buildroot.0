@@ -1,52 +1,91 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 08 Mar 2021 07:44:43 -0000
-Subject: [Buildroot] [git commit] package/ustream-ssl: bump version to
- 68d0924
-Message-ID: <20210308072133.D8B828896D@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 08 Mar 2021 07:44:44 -0000
+Subject: [Buildroot] [git commit] package/eudev: bump version to 3.2.10
+Message-ID: <20210308072133.68FE38896D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2766ac8d577074b478ff8f65bbea9ccea3cdb5ad
+commit: https://git.buildroot.net/buildroot/commit/?id=516ce1f134e6ee866e20bc2a087bec689844b586
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- change download url to https
+Removed patch which was applied upstream:
+https://github.com/gentoo/eudev/commit/799591c57368bbe47667f5b696050247a766b117
 
-- change hash of ustream-ssl.h, which is used as license file. There
-  are no changes to the license text, only changes in the code.
+Reformatted hashes.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ustream-ssl/ustream-ssl.hash | 4 ++--
- package/ustream-ssl/ustream-ssl.mk   | 5 +++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ ...-libudev-monitor.c-do-not-check-if-dev-is.patch | 33 ----------------------
+ package/eudev/eudev.hash                           |  6 ++--
+ package/eudev/eudev.mk                             |  2 +-
+ 3 files changed, 4 insertions(+), 37 deletions(-)
 
-diff --git a/package/ustream-ssl/ustream-ssl.hash b/package/ustream-ssl/ustream-ssl.hash
-index 60672b38b3..0c51a977cc 100644
---- a/package/ustream-ssl/ustream-ssl.hash
-+++ b/package/ustream-ssl/ustream-ssl.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  f09474dbe4680b51cc0c6a088807102d64954764ef58c2a1e3231e3a77c4b01f  ustream-ssl-23a3f2830341acd1db149175baf7315a33bd0edb-br1.tar.gz
--sha256  90dd1590cf400a548438e2575e1ff46d8fb8cebae7d09f544aae7e059e30b6c5  ustream-ssl.h
-+sha256  e77e579b718085c1447339e0fcd5385b85a783d5c92544e48a6b37b1695a7f39  ustream-ssl-68d09243b6fd4473004b27ff6483352e76e6af1a-br1.tar.gz
-+sha256  cf28f0f01a57423983fa062eb0f04bb1a78891863cb58c53059c3d8cb52c1dd4  ustream-ssl.h
-diff --git a/package/ustream-ssl/ustream-ssl.mk b/package/ustream-ssl/ustream-ssl.mk
-index 7804eb5d38..bee8d7de15 100644
---- a/package/ustream-ssl/ustream-ssl.mk
-+++ b/package/ustream-ssl/ustream-ssl.mk
-@@ -4,8 +4,9 @@
+diff --git a/package/eudev/0001-src-libudev-libudev-monitor.c-do-not-check-if-dev-is.patch b/package/eudev/0001-src-libudev-libudev-monitor.c-do-not-check-if-dev-is.patch
+deleted file mode 100644
+index 3027ad7f17..0000000000
+--- a/package/eudev/0001-src-libudev-libudev-monitor.c-do-not-check-if-dev-is.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-From 799591c57368bbe47667f5b696050247a766b117 Mon Sep 17 00:00:00 2001
+-From: "Anthony G. Basile" <blueness@gentoo.org>
+-Date: Mon, 6 Jan 2020 11:14:47 -0500
+-Subject: [PATCH] src/libudev/libudev-monitor.c: do not check if /dev is tmpfs
+-
+-This check fails for buildroot systems where /dev is not mounted
+-as a tmpfs filesystem.  Dropping this check should be safe even
+-on regular systems.
+-
+-This solves issue #172.
+-
+-Signed-off-by: Anthony G. Basile <blueness@gentoo.org>
+-Signed-off-by: Joel Stanley <joel@jms.id.au>
+----
+- src/libudev/libudev-monitor.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/src/libudev/libudev-monitor.c b/src/libudev/libudev-monitor.c
+-index 614149c6243c..060ba733f33b 100644
+---- a/src/libudev/libudev-monitor.c
+-+++ b/src/libudev/libudev-monitor.c
+-@@ -186,7 +186,7 @@ struct udev_monitor *udev_monitor_new_from_netlink_fd(struct udev *udev, const c
+-                  * We do not set a netlink multicast group here, so the socket
+-                  * will not receive any messages.
+-                  */
+--                if (access(UDEV_ROOT_RUN "/udev/control", F_OK) < 0 || !udev_has_devtmpfs(udev)) {
+-+                if (access(UDEV_ROOT_RUN "/udev/control", F_OK) < 0) {
+-                         log_debug("the udev service seems not to be active, disable the monitor");
+-                         group = UDEV_MONITOR_NONE;
+-                 } else
+--- 
+-2.25.0
+-
+diff --git a/package/eudev/eudev.hash b/package/eudev/eudev.hash
+index e6a319ac44..fda0481351 100644
+--- a/package/eudev/eudev.hash
++++ b/package/eudev/eudev.hash
+@@ -1,5 +1,5 @@
+ # From http://dev.gentoo.org/~blueness/eudev/
+-md5 dedfb1964f6098fe9320de827957331f  eudev-3.2.9.tar.gz
++md5  60b135a189523f333cea5f71a3345c8d  eudev-3.2.10.tar.gz
+ # Locally calculated
+-sha256 89618619084a19e1451d373c43f141b469c9fd09767973d73dd268b92074d4fc  eudev-3.2.9.tar.gz
+-sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
++sha256  87bb028d470fd1b85169349b44c55d5b733733dc2d50ddf1196e026725ead034  eudev-3.2.10.tar.gz
++sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
+index d4133a5ace..5d18b388c7 100644
+--- a/package/eudev/eudev.mk
++++ b/package/eudev/eudev.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--USTREAM_SSL_VERSION = 23a3f2830341acd1db149175baf7315a33bd0edb
--USTREAM_SSL_SITE = git://git.openwrt.org/project/ustream-ssl.git
-+USTREAM_SSL_VERSION = 68d09243b6fd4473004b27ff6483352e76e6af1a
-+USTREAM_SSL_SITE = https://git.openwrt.org/project/ustream-ssl.git
-+USTREAM_SSL_SITE_METHOD = git
- USTREAM_SSL_LICENSE = ISC
- USTREAM_SSL_LICENSE_FILES = ustream-ssl.h
- USTREAM_SSL_INSTALL_STAGING = YES
+-EUDEV_VERSION = 3.2.9
++EUDEV_VERSION = 3.2.10
+ EUDEV_SITE = http://dev.gentoo.org/~blueness/eudev
+ EUDEV_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
+ EUDEV_LICENSE_FILES = COPYING
