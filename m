@@ -1,69 +1,50 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon, 08 Mar 2021 07:44:46 -0000
-Subject: [Buildroot] [git commit] package/wpa_supplicant: Simplify D-Bus
- support.
-Message-ID: <20210308072133.91DA488918@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 08 Mar 2021 07:44:47 -0000
+Subject: [Buildroot] [git commit] package/uhttpd: bump version to f53a639
+Message-ID: <20210308072133.E7F0188918@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f3dcb2012522505b1dba0f39da6987b8882252d9
+commit: https://git.buildroot.net/buildroot/commit/?id=2854c31aceac89f8b397fd456229802e3837d3e7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-wpa_supplicant 2.8 dropped support for the old D-Bus interface, so
-remove mentions of it and rename DBUS_NEW variables to just DBUS.
+- change download url to https
 
-Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+- update license file hash (uhttpd.h - license unrelated source
+  code changes only)
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/wpa_supplicant/Config.in         | 2 +-
- package/wpa_supplicant/wpa_supplicant.mk | 8 +++-----
- 2 files changed, 4 insertions(+), 6 deletions(-)
+ package/uhttpd/uhttpd.hash | 4 ++--
+ package/uhttpd/uhttpd.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
-index 9553dcf7df..3c986ff4ba 100644
---- a/package/wpa_supplicant/Config.in
-+++ b/package/wpa_supplicant/Config.in
-@@ -154,6 +154,6 @@ config BR2_PACKAGE_WPA_SUPPLICANT_DBUS_INTROSPECTION
- 	bool "Introspection support"
- 	depends on BR2_PACKAGE_WPA_SUPPLICANT_DBUS
- 	help
--	  Add introspection support for new DBus control interface.
-+	  Add introspection support for the DBus control interface.
+diff --git a/package/uhttpd/uhttpd.hash b/package/uhttpd/uhttpd.hash
+index 389a0ef636..6f8b4a60f8 100644
+--- a/package/uhttpd/uhttpd.hash
++++ b/package/uhttpd/uhttpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  5b81ebf9e419c668de4181cce7b9f5fa358cabb2a4a0d1f1a3a24190eeb21f25  uhttpd-a8bf9c00842224edb394e79909053f7628ee6a82-br1.tar.gz
+-sha256  2a61a8a690e7646a4bfe4261bf77c49f47588db5fc234b3cc66809dcc0cb3985  uhttpd.h
++sha256  8a537a377c8dc1abda147a1e3feb3fe3e3633a9d30e4e37d378cc6309dace2f0  uhttpd-f53a63999784bcb7dc513e221f3f25dd3de2f35e-br1.tar.gz
++sha256  ce1803f83f776cc88661e303fede0e5ff52faf1d9f74508fadbecf7705b4c84d  uhttpd.h
+diff --git a/package/uhttpd/uhttpd.mk b/package/uhttpd/uhttpd.mk
+index cc7649d0ec..355a266d6b 100644
+--- a/package/uhttpd/uhttpd.mk
++++ b/package/uhttpd/uhttpd.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
- endif
-diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-index f4ed74abc3..b7bdc4e0af 100644
---- a/package/wpa_supplicant/wpa_supplicant.mk
-+++ b/package/wpa_supplicant/wpa_supplicant.mk
-@@ -13,8 +13,7 @@ WPA_SUPPLICANT_LICENSE_FILES = README
- WPA_SUPPLICANT_CPE_ID_VENDOR = w1.fi
- WPA_SUPPLICANT_CONFIG = $(WPA_SUPPLICANT_DIR)/wpa_supplicant/.config
- WPA_SUPPLICANT_SUBDIR = wpa_supplicant
--WPA_SUPPLICANT_DBUS_OLD_SERVICE = fi.epitest.hostap.WPASupplicant
--WPA_SUPPLICANT_DBUS_NEW_SERVICE = fi.w1.wpa_supplicant1
-+WPA_SUPPLICANT_DBUS_SERVICE = fi.w1.wpa_supplicant1
- WPA_SUPPLICANT_CFLAGS = $(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/libnl3/
- WPA_SUPPLICANT_LDFLAGS = $(TARGET_LDFLAGS)
- WPA_SUPPLICANT_SELINUX_MODULES = networkmanager
-@@ -146,8 +145,8 @@ WPA_SUPPLICANT_MAKE_ENV = \
- WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_CTRL_IFACE_DBUS_NEW
- define WPA_SUPPLICANT_INSTALL_DBUS_NEW
- 	$(INSTALL) -m 0644 -D \
--		$(@D)/wpa_supplicant/dbus/$(WPA_SUPPLICANT_DBUS_NEW_SERVICE).service \
--		$(TARGET_DIR)/usr/share/dbus-1/system-services/$(WPA_SUPPLICANT_DBUS_NEW_SERVICE).service
-+		$(@D)/wpa_supplicant/dbus/$(WPA_SUPPLICANT_DBUS_SERVICE).service \
-+		$(TARGET_DIR)/usr/share/dbus-1/system-services/$(WPA_SUPPLICANT_DBUS_SERVICE).service
- endef
- 
- ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DBUS_INTROSPECTION),y)
-@@ -220,7 +219,6 @@ define WPA_SUPPLICANT_INSTALL_DBUS
- 	$(INSTALL) -m 0644 -D \
- 		$(@D)/wpa_supplicant/dbus/dbus-wpa_supplicant.conf \
- 		$(TARGET_DIR)/etc/dbus-1/system.d/wpa_supplicant.conf
--	$(WPA_SUPPLICANT_INSTALL_DBUS_OLD)
- 	$(WPA_SUPPLICANT_INSTALL_DBUS_NEW)
- endef
- endif
+-UHTTPD_VERSION = a8bf9c00842224edb394e79909053f7628ee6a82
+-UHTTPD_SITE = http://git.openwrt.org/project/uhttpd.git
++UHTTPD_VERSION = f53a63999784bcb7dc513e221f3f25dd3de2f35e
++UHTTPD_SITE = https://git.openwrt.org/project/uhttpd.git
+ UHTTPD_SITE_METHOD = git
+ UHTTPD_LICENSE = ISC
+ UHTTPD_LICENSE_FILES = uhttpd.h
