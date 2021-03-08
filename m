@@ -1,130 +1,129 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 8 Mar 2021 23:04:31 +0100
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 8 Mar 2021 23:14:54 +0100
 Subject: [Buildroot] [RFC/next v2 1/2] package/rpi-firmware: rework
  boot/config file handling
-In-Reply-To: <20210216201148.26688-1-ps.report@gmx.net>
+In-Reply-To: <20210308215541.GB2737665@scaer>
 References: <20210216201148.26688-1-ps.report@gmx.net>
-Message-ID: <20210308220431.GC2737665@scaer>
+ <20210308215541.GB2737665@scaer>
+Message-ID: <20210308231454.519fa1dc@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Hello Yann,
 
-Second part of the review... ;-)
+On Mon, 8 Mar 2021 22:55:41 +0100, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-On 2021-02-16 21:11 +0100, Peter Seiderer spake thusly:
-> Try to be less smart (focused on the one target/one use-case),
-> instead reduce the rpi-firmware package to a selectable list
-> of (verbatim) installed firmware files.
-> 
-> - change rpi-firmware config handling from rpi-variant/rpi-flavour
->   choices to bootcode.bin, pi-default/-extended/-cut-down and
->   pi4-/default/-extended/-cut-down selection
-> 
-> - add BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE option to select installable
->   config.txt file
-> 
-> - remove config.txt modify code/handling from raspberry post-image.sh
->   script
-> 
-> - add different customized config.txt files to the raspberry board
->   section
-> 
-> - change raspberry defconfigs to select appropiate rpi-firmware
->   and config.txt files
-> 
-> - change genimage-raspberrypi4.cfg/genimage-raspberrypi4-64.cfg to
->   use start4.elf and fixup4.dat
-> 
-> With this changes a better support for custom use-cases should
-> be possible, specially multi-target SD cards as suggested by
-> Stefan Agner ([1]).
-> 
-> [1] http://lists.busybox.net/pipermail/buildroot/2021-February/303318.html
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-[--SNIP--]
-> diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-> index f3d28ef825..a7ab8f0f14 100644
-> --- a/package/rpi-firmware/rpi-firmware.mk
-> +++ b/package/rpi-firmware/rpi-firmware.mk
-> @@ -10,6 +10,46 @@ RPI_FIRMWARE_LICENSE = BSD-3-Clause
->  RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
->  RPI_FIRMWARE_INSTALL_IMAGES = YES
->  
-> +ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_BOOTCODE_BIN),y)
-> +RPI_FIRMWARE_FILES += bootcode.bin
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI),y)
-> +RPI_FIRMWARE_FILES += start.elf fixup.dat
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI_X),y)
-> +RPI_FIRMWARE_FILES += startx.elf fixupx.dat
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI_CD),y)
-> +RPI_FIRMWARE_FILES += start_cd.elf fixup_cd.dat
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4),y)
-> +RPI_FIRMWARE_FILES += start4.elf fixup4.dat
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4_X),y)
-> +RPI_FIRMWARE_FILES += start4x.elf fixup4x.dat
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4_CD),y)
-> +RPI_FIRMWARE_FILES += start4cd.elf fixup4cd.dat
-> +endif
+> Peter, All,
+>
+> On 2021-02-16 21:11 +0100, Peter Seiderer spake thusly:
+> > Try to be less smart (focused on the one target/one use-case),
+> > instead reduce the rpi-firmware package to a selectable list
+> > of (verbatim) installed firmware files.
+> >
+> > - change rpi-firmware config handling from rpi-variant/rpi-flavour
+> >   choices to bootcode.bin, pi-default/-extended/-cut-down and
+> >   pi4-/default/-extended/-cut-down selection
+> >
+> > - add BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE option to select installable
+> >   config.txt file
+> >
+> > - remove config.txt modify code/handling from raspberry post-image.sh
+> >   script
+> >
+> > - add different customized config.txt files to the raspberry board
+> >   section
+> >
+> > - change raspberry defconfigs to select appropiate rpi-firmware
+> >   and config.txt files
+> >
+> > - change genimage-raspberrypi4.cfg/genimage-raspberrypi4-64.cfg to
+> >   use start4.elf and fixup4.dat
+> >
+> > With this changes a better support for custom use-cases should
+> > be possible, specially multi-target SD cards as suggested by
+> > Stefan Agner ([1]).
+> >
+> > [1] http://lists.busybox.net/pipermail/buildroot/2021-February/303318.html
+> >
+> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+>
+> So I have started looking at this patch, and although I think it is
+> going in the right direction, there are two things I am not very happy
+> with...
+>
+> I'm not saying they would be definite blockers, just that I'd like we
+> think a bit more about it.
+>
+> So, the first thing that bugs me, are all the varions config.txt files
+> that are mostly identical, except of a few tweaks:
+>
+>   - dtoverlay=miniuart-bt or not
+>   - arm_64bit=1 or not
+>
+> And the arm_64bit=1 can be automatically added when Buildroot is
+> configured for BR2_aarch64=y anyway.
+>
+> And of course, a single outlier, the qt5we example, that has
+> gpu_mem_1024=200...
+>
+> Still, that makes me nervous to mostly duplicate all those config.txt...
+>
+> The second thing leaves me thinking is the new config option that
+> points to the config.txt to use. My first reaction was 'hell-no, this
+> belongs to the post-image script and we should have it passed with
+> BR2_ROOTFS_POST_SCRIPT_ARGS="board/rpiXXX/config_XXX.txt".'
+>
+> But them this means that the rpi post-image script diverges from the
+> others; the few others I've had a look at are just callinggenimage
+> without amy preparation whatsoever. The rpi one is already diverging, as
+> it creates a temporary empty rootpath (commit ee47fea5781) and currently
+> has a few options that none of the others have.
+>
+> Getting rid of the existing options --miniuart, --aarch64, et al. is a
+> nice thing, because it helps get it more inline with the others...
+>
+> But still, I am not too fond of this new BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE
+> option...
+>
+> And really, both issues are really just me wondering if we can't do
+> better...
+>
+> So, let's keep the qt5 example aside, and see what we can do. What if
+> we'd go with the following:
+>
+>   - keep a single, generic config.txt in rpi-firmware, and install that,
+>
+>   - if BR2_aarch64=y, add arm_64bit=1
+>
+>   - add an option to rpi-firmware:
+>
+>     config BR2_PKG_RPI_FW_DTOVERLAY_LIST
+>         string "DT overlays to load"
+>         depends on BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
+>         help
+>           Space-separated list of DT overlays to be loaded from config.txt.
+>
+>           For example, miniuart-bt on rpi0w to restore the serial console.
+>
+>     and if this option is not empty, construct the list of dtoverlay and
+>     add it to config.txt.
+>
+>   - eventually, adapt the defconfigs with that list of dtoverlays
 
-What about:
-
-    RPI_FIRMWARE_FILES = \
-        $(if $(BR2_PACKAGE_RPI_FIRMWARE_BOOTCODE_BIN),bootcode.bin) \
-        $(if $(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI),start.elf fixup.dat) \
-        $(if $(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI_X),startx.elf fixupx.dat) \
-        $(if $(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI_CD),start_cd.elf fixup_cd.dat) \
-        $(if $(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4),start4.elf fixup4.dat) \
-        $(if $(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4_X),start4x.elf fixup4x.dat) \
-        $(if $(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4_CD),start4cd.elf fixup4cd.dat)
-
-Or alternatively:
-
-    RPI_FIRMWARE_FILES_$(BR2_PACKAGE_RPI_FIRMWARE_BOOTCODE_BIN) += bootcode.bin
-    RPI_FIRMWARE_FILES_$(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI) += start.elf fixup.dat
-    RPI_FIRMWARE_FILES_$(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI_X) += startx.elf fixupx.dat
-    RPI_FIRMWARE_FILES_$(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI_CD) += start_cd.elf fixup_cd.dat
-    RPI_FIRMWARE_FILES_$(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4) += start4.elf fixup4.dat
-    RPI_FIRMWARE_FILES_$(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4_X) += start4x.elf fixup4x.dat
-    RPI_FIRMWARE_FILES_$(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4_CD) += start4cd.elf fixup4cd.dat
-
-    define RPI_FIRMWARE_INSTALL_BIN
-        $(foreach f,$(RPI_FIRMWARE_FILES_y),
-            $(INSTALL) -D -m 0644 $(@D)/$(f) $(BINARIES_DIR)/rpi-firmware/$(f)
-        )
-    endef
-
-> +define RPI_FIRMWARE_INSTALL_BIN
-> +	for firmwbin in  $(RPI_FIRMWARE_FILES); do \
-> +		$(INSTALL) -D -m 0644 $(@D)/boot/$${firmwbin} $(BINARIES_DIR)/rpi-firmware/$${firmwbin} || exit 1; \
-> +	done
-
-Use a make-level $(foreach) loop rather than a shell loop (see example
-above).
+...but back to the direction of trying to being smart..., which can work for
+90% of the buildroot defconfig cases, but will not work for the rest of the
+buildroot ones (one at the moment) and not for customized ones (none dtoverlay
+extensions, multi-bootable SD-Cards, ...)...
 
 Regards,
-Yann E. MORIN.
+Peter
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+>
+> Thoughts?
+>
+> Regards,
+> Yann E. MORIN.
+>
