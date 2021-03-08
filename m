@@ -1,56 +1,88 @@
-From: Titouan Christophe <titouanchristophe@gmail.com>
-Date: Mon,  8 Mar 2021 12:09:39 +0100
-Subject: [Buildroot] [PATCH 1/1] package/redis: bump to v6.2.1
-Message-ID: <20210308110939.242728-1-titouanchristophe@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon,  8 Mar 2021 13:17:59 +0100
+Subject: [Buildroot] [PATCH 1/1] package/inih: bump version to 53
+Message-ID: <20210308121759.2242090-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From the release notes:
-Introduction to the Redis 6.2 release
-=====================================
+Removed patch which was applied upstream, fixed upper-case package name.
 
-This release is the first significant Redis release managed by the core team
-under the new project governance model.
-
-Redis 6.2 includes many new commands and improvements, but no big features. It
-mainly makes Redis more complete and addresses issues that have been requested
-by many users frequently or for a long time.
-=====================================
-
-See https://github.com/redis/redis/blob/6.2/00-RELEASENOTES
-
-Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/redis/redis.hash | 2 +-
- package/redis/redis.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../0001-meson-optionally-depend-on-c.patch   | 34 -------------------
+ package/inih/inih.hash                        |  2 +-
+ package/inih/inih.mk                          |  4 +--
+ 3 files changed, 3 insertions(+), 37 deletions(-)
+ delete mode 100644 package/inih/0001-meson-optionally-depend-on-c.patch
 
-diff --git a/package/redis/redis.hash b/package/redis/redis.hash
-index 9b87b49fb1..13c35195a6 100644
---- a/package/redis/redis.hash
-+++ b/package/redis/redis.hash
-@@ -1,5 +1,5 @@
- # From https://github.com/redis/redis-hashes/blob/master/README
--sha256  f16ad973d19f80f121e53794d5eb48a997e2c6a85b5be41bb3b66750cc17bf6b  redis-6.0.12.tar.gz
-+sha256  cd222505012cce20b25682fca931ec93bd21ae92cb4abfe742cf7b76aa907520  redis-6.2.1.tar.gz
- 
- # Locally calculated
- sha256  97f0a15b7bbae580d2609dad2e11f1956ae167be296ab60f4691ab9c30ee9828  COPYING
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index c851e589c4..074773c3e1 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/inih/0001-meson-optionally-depend-on-c.patch b/package/inih/0001-meson-optionally-depend-on-c.patch
+deleted file mode 100644
+index a039dde1db..0000000000
+--- a/package/inih/0001-meson-optionally-depend-on-c.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-From e192e4762749cfe3bc350e0353aa82b1a849256d Mon Sep 17 00:00:00 2001
+-From: bkuhls <bkuhls@users.noreply.github.com>
+-Date: Sun, 10 Jan 2021 21:56:56 +0100
+-Subject: [PATCH] meson: optionally depend on c++ (#124)
+-
+-This fix is needed to allow building with toolchains which lack c++.
+-
+-Downloaded from upstream commit:
+-https://github.com/benhoyt/inih/commit/e192e4762749cfe3bc350e0353aa82b1a849256d
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- meson.build | 3 ++-
+- 1 file changed, 2 insertions(+), 1 deletion(-)
+-
+-diff --git a/meson.build b/meson.build
+-index 4602326..5393af4 100644
+---- a/meson.build
+-+++ b/meson.build
+-@@ -1,5 +1,5 @@
+- project('inih',
+--    ['c','cpp'],
+-+    ['c'],
+-     default_options : ['default_library=static'],
+-     license : 'BSD-3-Clause',
+- )
+-@@ -83,6 +83,7 @@ inih_dep = declare_dependency(
+- 
+- #### INIReader ####
+- if get_option('with_INIReader')
+-+    add_languages('cpp')
+-     inc_INIReader = include_directories('cpp')
+- 
+-     lib_INIReader = library('INIReader',
+diff --git a/package/inih/inih.hash b/package/inih/inih.hash
+index 2560a91fed..21234e156d 100644
+--- a/package/inih/inih.hash
++++ b/package/inih/inih.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  439cff9ce9a8afc52d08772ac3e93b3cecd79c7707f871fb4534fb3a48201880  inih-52.tar.gz
++sha256  01b0366fdfdf6363efc070c2f856f1afa33e7a6546548bada5456ad94a516241  inih-53.tar.gz
+ sha256  9ae3b39e83e9158e44b67733baa3bb2d84e80efdcfb14a5820210a42c7abdf7f  LICENSE.txt
+diff --git a/package/inih/inih.mk b/package/inih/inih.mk
+index ccc549b01e..dec9465121 100644
+--- a/package/inih/inih.mk
++++ b/package/inih/inih.mk
+@@ -1,10 +1,10 @@
+ ################################################################################
+ #
+-# INIH
++# inih
  #
  ################################################################################
  
--REDIS_VERSION = 6.0.12
-+REDIS_VERSION = 6.2.1
- REDIS_SITE = http://download.redis.io/releases
- REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
- REDIS_LICENSE_FILES = COPYING
+-INIH_VERSION = 52
++INIH_VERSION = 53
+ INIH_SITE = $(call github,benhoyt,inih,r$(INIH_VERSION))
+ INIH_INSTALL_STAGING = YES
+ INIH_LICENSE = BSD-3-Clause
 -- 
-2.25.3
+2.29.2
