@@ -1,62 +1,87 @@
-From: Thomas Huth <huth@tuxfamily.org>
-Date: Mon, 8 Mar 2021 05:15:51 +0100
-Subject: [Buildroot] [PATCH] package/frotz: Update to version 2.53
-In-Reply-To: <20210307214115.GG2275@scaer>
-References: <20210307152147.514774-1-huth@tuxfamily.org>
- <20210307214115.GG2275@scaer>
-Message-ID: <20210308051551.3dace767@tuxfamily.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 08 Mar 2021 07:44:43 -0000
+Subject: [Buildroot] [git commit] configs/olimex_a20_olinuxino_lime*: bump
+ Linux and U-Boot versions
+Message-ID: <20210308072133.5D31781607@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sun, 7 Mar 2021 22:41:15 +0100
-schrieb "Yann E. MORIN" <yann.morin.1998@free.fr>:
+commit: https://git.buildroot.net/buildroot/commit/?id=31a21958633bac220471faafb801547511f9c312
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Thomas, All,
-> 
-> On 2021-03-07 16:21 +0100, Thomas Huth spake thusly:
-[...]
-> > diff --git a/package/frotz/Config.in b/package/frotz/Config.in
-> > index b73beea330..9473f5944d 100644
-> > --- a/package/frotz/Config.in
-> > +++ b/package/frotz/Config.in
-> > @@ -1,14 +1,10 @@
-> >  config BR2_PACKAGE_FROTZ
-> >  	bool "frotz"
-> > -	depends on BR2_TOOLCHAIN_HAS_THREADS
-> >  	select BR2_PACKAGE_NCURSES
-> >  	help
-> >  	  Frotz is an interpreter for old Infocom adventure games
-> > and
-> > -	  other Z-code games. Note that frotz can not be run as
-> > root.
-> > +	  other Z-code games. Note that frotz cannot be run as
-> > root.  
-> 
-> Out of curiosity: what is the technical reason this is not possible?
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ configs/olimex_a20_olinuxino_lime2_defconfig | 8 ++++----
+ configs/olimex_a20_olinuxino_lime_defconfig  | 8 ++++----
+ 2 files changed, 8 insertions(+), 8 deletions(-)
 
-I don't know for sure, but I think it's because Frotz is running
-untrusted byte code - so if there's a bug in the interpreter, some
-malicious byte code could get root access to the system.
-
-> There is an explicit check in src/curses/ux_init.c, but except for
-> that, I could not easily spot a reason for not being able to run as
-> root...
-> 
-> >  	  You must add a normal user to your buildroot
-> > configuration to be able to use it.  
-> 
-> Why don't we then define one, like:
-> 
->     define FROTS_USERS
->         frotz -1 frotz -1 - - - -
->     endef
-
-Not sure whether it makes sense to hard-code a user without password
-here...? IMHO it makes more sense to leave that decision (how should
-the user be called? should the account get a password or not?) to the
-person who creates the buildroot image.
-
- Thomas
+diff --git a/configs/olimex_a20_olinuxino_lime2_defconfig b/configs/olimex_a20_olinuxino_lime2_defconfig
+index ca8a319e68..8b10502de8 100644
+--- a/configs/olimex_a20_olinuxino_lime2_defconfig
++++ b/configs/olimex_a20_olinuxino_lime2_defconfig
+@@ -3,8 +3,8 @@ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_EABIHF=y
+ 
+-# Linux headers same as kernel, a 5.4 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
++# Linux headers same as kernel, a 5.10 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ 
+ # Toolchain
+ # glibc is needed for sunxi-mali-mainline-package.
+@@ -22,7 +22,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.69"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.6"
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -43,7 +43,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.10"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.01"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime2"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
+index 9de6de77f3..9ae713569b 100644
+--- a/configs/olimex_a20_olinuxino_lime_defconfig
++++ b/configs/olimex_a20_olinuxino_lime_defconfig
+@@ -3,8 +3,8 @@ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_EABIHF=y
+ 
+-# Linux headers same as kernel, a 5.4 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
++# Linux headers same as kernel, a 5.10 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ 
+ # Toolchain
+ # glibc is needed for sunxi-mali-mainline-package.
+@@ -22,7 +22,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.4.69"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.6"
+ BR2_LINUX_KERNEL_USE_DEFCONFIG=y
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -43,7 +43,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.10"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.01"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
