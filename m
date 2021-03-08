@@ -1,42 +1,142 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 7 Mar 2021 21:54:45 +0100
-Subject: [Buildroot] [git commit] package/libuhttpd: bump version to 3.10.1
-Message-ID: <20210308072140.B236181607@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 08 Mar 2021 07:44:57 -0000
+Subject: [Buildroot] [git commit] {linux, linux-headers}: add version 5.11
+Message-ID: <20210308072134.811BD88918@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d1133a6927bf8cf920b6b39ad1ed9ab5aa395e7b
+commit: https://git.buildroot.net/buildroot/commit/?id=d2fe9c64154d675da116b1390eedfe77806d92d6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Michael Walle <michael@walle.cc>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libuhttpd/libuhttpd.hash | 2 +-
- package/libuhttpd/libuhttpd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ linux/Config.in                                             |  4 ++--
+ linux/linux.hash                                            |  1 +
+ package/linux-headers/Config.in.host                        | 13 +++++++++++--
+ toolchain/Config.in                                         |  5 +++++
+ .../toolchain-external-custom/Config.in.options             |  6 +++++-
+ 5 files changed, 24 insertions(+), 5 deletions(-)
 
-diff --git a/package/libuhttpd/libuhttpd.hash b/package/libuhttpd/libuhttpd.hash
-index e772cc84ee..4b0b5027c6 100644
---- a/package/libuhttpd/libuhttpd.hash
-+++ b/package/libuhttpd/libuhttpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  78b1c670e4f259346a1e49e57d158c619eace23f0b72821b0ff2ba991f7dcc51  libuhttpd-3.10.0.tar.gz
-+sha256  6e7a9ad61e3d0ab5bd4d20b274b850542dff8057a8fcf6c36ce59eb34818f61f  libuhttpd-3.10.1.tar.gz
- sha256  99efed4bbc0b62f96f999ef23399e38234fb91651af734fd389a52b033a85b55  LICENSE
-diff --git a/package/libuhttpd/libuhttpd.mk b/package/libuhttpd/libuhttpd.mk
-index 06d7bc7d5e..326c78face 100644
---- a/package/libuhttpd/libuhttpd.mk
-+++ b/package/libuhttpd/libuhttpd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/linux/Config.in b/linux/Config.in
+index f0515632e5..3370162faa 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -28,7 +28,7 @@ choice
+ 	prompt "Kernel version"
  
--LIBUHTTPD_VERSION = 3.10.0
-+LIBUHTTPD_VERSION = 3.10.1
- LIBUHTTPD_SITE = https://github.com/zhaojh329/libuhttpd/releases/download/v$(LIBUHTTPD_VERSION)
- LIBUHTTPD_LICENSE = MIT
- LIBUHTTPD_LICENSE_FILES = LICENSE
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+-	bool "Latest version (5.10)"
++	bool "Latest version (5.11)"
+ 
+ config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	bool "Latest CIP SLTS version (4.19.152-cip37)"
+@@ -125,7 +125,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "5.10.13" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "5.11" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "4.19.152-cip37" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "4.19.152-cip37-rt16" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 5200c53a35..58b8c1171a 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,4 +1,5 @@
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
++sha256  04f07b54f0d40adfab02ee6cbd2a942c96728d87c1ef9e120d0cb9ba3fe067b4  linux-5.11.tar.xz
+ sha256  06698c0ce35ceefa9b79ceb108ec7fb86de05f51fe615f3ae5cc82e293dfe1f2  linux-5.10.13.tar.xz
+ sha256  030ae544f346bfa2ce619dd9e17e93d10ec393632d3b6d6cf5d1fc84b914d449  linux-5.4.95.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 8da119cfa9..f50a9d0ff4 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_HOST_LINUX_HEADERS
+ choice
+ 	prompt "Kernel Headers"
+ 	default BR2_KERNEL_HEADERS_AS_KERNEL if BR2_LINUX_KERNEL
+-	default BR2_KERNEL_HEADERS_5_10
++	default BR2_KERNEL_HEADERS_5_11
+ 	help
+ 	  Select the kernel version to get headers from.
+ 
+@@ -57,6 +57,10 @@ config BR2_KERNEL_HEADERS_5_4
+ config BR2_KERNEL_HEADERS_5_10
+ 	bool "Linux 5.10.x kernel headers"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10
++
++config BR2_KERNEL_HEADERS_5_11
++	bool "Linux 5.11.x kernel headers"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_11
+ 	select BR2_KERNEL_HEADERS_LATEST
+ 
+ config BR2_KERNEL_HEADERS_VERSION
+@@ -131,8 +135,12 @@ choice
+ 	  If your kernel headers are more recent than the latest version
+ 	  in the choice, then select the latest version.
+ 
++config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_11
++	bool "5.11.x or later"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_11
++
+ config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10
+-	bool "5.10.x or later"
++	bool "5.10.x"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10
+ 
+ config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_9
+@@ -352,6 +360,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "4.19.173"	if BR2_KERNEL_HEADERS_4_19
+ 	default "5.4.95"	if BR2_KERNEL_HEADERS_5_4
+ 	default "5.10.13"	if BR2_KERNEL_HEADERS_5_10
++	default "5.11"		if BR2_KERNEL_HEADERS_5_11
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 553612c4aa..ce7e7f6cc4 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -492,6 +492,10 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_9
+ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10
+ 	bool
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_9
++
++config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_11
++	bool
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10
+ 	select BR2_TOOLCHAIN_HEADERS_LATEST
+ 
+ # This should be selected by the latest version, above, to indicate that
+@@ -505,6 +509,7 @@ config BR2_TOOLCHAIN_HEADERS_LATEST
+ # stops affecting a value on the first matching default.
+ config BR2_TOOLCHAIN_HEADERS_AT_LEAST
+ 	string
++	default "5.11" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_11
+ 	default "5.10" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10
+ 	default "5.9"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_9
+ 	default "5.8"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_8
+diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+index 992fd2c150..4331c2528a 100644
+--- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
++++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+@@ -119,8 +119,12 @@ choice
+ 	  If your toolchain uses headers newer than the latest version
+ 	  in the choice, then select the latest version.
+ 
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_11
++	bool "5.11.x or later"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_11
++
+ config BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_10
+-	bool "5.10.x or later"
++	bool "5.10.x"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_9
