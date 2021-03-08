@@ -1,62 +1,102 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 8 Mar 2021 23:56:29 +0100
-Subject: [Buildroot] [PATCH 1/1] package/zyre: bump version to 2.0.1
-In-Reply-To: <20210308122733.1404-1-jack.cripps@disguise.one>
-References: <20210308122733.1404-1-jack.cripps@disguise.one>
-Message-ID: <20210308225629.GJ2737665@scaer>
+Date: Mon, 8 Mar 2021 23:56:49 +0100
+Subject: [Buildroot] [PATCH 1/1] package/inih: bump version to 53
+In-Reply-To: <20210308121759.2242090-1-bernd.kuhls@t-online.de>
+References: <20210308121759.2242090-1-bernd.kuhls@t-online.de>
+Message-ID: <20210308225649.GK2737665@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jack, All,
+Bernd, All,
 
-On 2021-03-08 12:27 +0000, Jack Cripps spake thusly:
-> Version bump required due to python setup.py missing from v2.0.0 python bindings
+On 2021-03-08 13:17 +0100, Bernd Kuhls spake thusly:
+> Removed patch which was applied upstream, fixed upper-case package name.
 > 
-> Signed-off-by: Jack Cripps <jack.cripps@disguise.one>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Applied to master, thanks.
-
-> ---
-> Backport to 2019.11.x
-
-2019.11.x was not an LTS, and it stopped being maintained in February
-2020.
 
 Regards,
 Yann E. MORIN.
 
 > ---
->  package/zyre/zyre.hash | 2 +-
->  package/zyre/zyre.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  .../0001-meson-optionally-depend-on-c.patch   | 34 -------------------
+>  package/inih/inih.hash                        |  2 +-
+>  package/inih/inih.mk                          |  4 +--
+>  3 files changed, 3 insertions(+), 37 deletions(-)
+>  delete mode 100644 package/inih/0001-meson-optionally-depend-on-c.patch
 > 
-> diff --git a/package/zyre/zyre.hash b/package/zyre/zyre.hash
-> index 289341f494..d9d92d78f2 100644
-> --- a/package/zyre/zyre.hash
-> +++ b/package/zyre/zyre.hash
+> diff --git a/package/inih/0001-meson-optionally-depend-on-c.patch b/package/inih/0001-meson-optionally-depend-on-c.patch
+> deleted file mode 100644
+> index a039dde1db..0000000000
+> --- a/package/inih/0001-meson-optionally-depend-on-c.patch
+> +++ /dev/null
+> @@ -1,34 +0,0 @@
+> -From e192e4762749cfe3bc350e0353aa82b1a849256d Mon Sep 17 00:00:00 2001
+> -From: bkuhls <bkuhls@users.noreply.github.com>
+> -Date: Sun, 10 Jan 2021 21:56:56 +0100
+> -Subject: [PATCH] meson: optionally depend on c++ (#124)
+> -
+> -This fix is needed to allow building with toolchains which lack c++.
+> -
+> -Downloaded from upstream commit:
+> -https://github.com/benhoyt/inih/commit/e192e4762749cfe3bc350e0353aa82b1a849256d
+> -
+> -Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ----
+> - meson.build | 3 ++-
+> - 1 file changed, 2 insertions(+), 1 deletion(-)
+> -
+> -diff --git a/meson.build b/meson.build
+> -index 4602326..5393af4 100644
+> ---- a/meson.build
+> -+++ b/meson.build
+> -@@ -1,5 +1,5 @@
+> - project('inih',
+> --    ['c','cpp'],
+> -+    ['c'],
+> -     default_options : ['default_library=static'],
+> -     license : 'BSD-3-Clause',
+> - )
+> -@@ -83,6 +83,7 @@ inih_dep = declare_dependency(
+> - 
+> - #### INIReader ####
+> - if get_option('with_INIReader')
+> -+    add_languages('cpp')
+> -     inc_INIReader = include_directories('cpp')
+> - 
+> -     lib_INIReader = library('INIReader',
+> diff --git a/package/inih/inih.hash b/package/inih/inih.hash
+> index 2560a91fed..21234e156d 100644
+> --- a/package/inih/inih.hash
+> +++ b/package/inih/inih.hash
 > @@ -1,3 +1,3 @@
 >  # Locally computed
-> -sha256  b978a999947ddb6722d956db2427869b313225e50518c4fbbf960a68109e3e91  zyre-2.0.0.tar.gz
-> +sha256  624d379dc880025144f58d3a7dc35ea1be4a57ba4e2a58c98ec15a60891be12d  zyre-2.0.1.tar.gz
->  sha256  1f256ecad192880510e84ad60474eab7589218784b9a50bc7ceee34c2b91f1d5  LICENSE
-> diff --git a/package/zyre/zyre.mk b/package/zyre/zyre.mk
-> index 21224d6bb4..a726859adf 100644
-> --- a/package/zyre/zyre.mk
-> +++ b/package/zyre/zyre.mk
-> @@ -4,7 +4,7 @@
+> -sha256  439cff9ce9a8afc52d08772ac3e93b3cecd79c7707f871fb4534fb3a48201880  inih-52.tar.gz
+> +sha256  01b0366fdfdf6363efc070c2f856f1afa33e7a6546548bada5456ad94a516241  inih-53.tar.gz
+>  sha256  9ae3b39e83e9158e44b67733baa3bb2d84e80efdcfb14a5820210a42c7abdf7f  LICENSE.txt
+> diff --git a/package/inih/inih.mk b/package/inih/inih.mk
+> index ccc549b01e..dec9465121 100644
+> --- a/package/inih/inih.mk
+> +++ b/package/inih/inih.mk
+> @@ -1,10 +1,10 @@
+>  ################################################################################
+>  #
+> -# INIH
+> +# inih
 >  #
 >  ################################################################################
 >  
-> -ZYRE_VERSION = 2.0.0
-> +ZYRE_VERSION = 2.0.1
->  ZYRE_SITE = $(call github,zeromq,zyre,v$(ZYRE_VERSION))
->  ZYRE_LICENSE = MPL-2.0
->  ZYRE_LICENSE_FILES = LICENSE
+> -INIH_VERSION = 52
+> +INIH_VERSION = 53
+>  INIH_SITE = $(call github,benhoyt,inih,r$(INIH_VERSION))
+>  INIH_INSTALL_STAGING = YES
+>  INIH_LICENSE = BSD-3-Clause
 > -- 
-> 2.17.1
+> 2.29.2
 > 
 > _______________________________________________
 > buildroot mailing list
