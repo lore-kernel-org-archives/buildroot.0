@@ -1,41 +1,50 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Mar 2021 23:15:17 +0100
-Subject: [Buildroot] [git commit] package/janet: add -std=c99 to CFLAGS
-Message-ID: <20210308072137.1AC728893D@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 08 Mar 2021 07:44:49 -0000
+Subject: [Buildroot] [git commit] package/python-uvloop: bump to version
+ 0.15.0
+Message-ID: <20210308072134.075238896D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b5e8f1c1475b46c8d9b7159aafe983e72d329d29
+commit: https://git.buildroot.net/buildroot/commit/?id=797d63e6039de83bb2b466886fafefb17f41d52c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As upstream says Janet should be compiled with -std=c99
-so pass this in order to fix the failures below.
-
-Fixes:
- http://autobuild.buildroot.net/results/192/1922ec115b9dc9e879760a6868969d9677093510/build-end.log
- ...
- http://autobuild.buildroot.net/results/355/355e0992338a8d132050517f83a3884606b00529/build-end.log
-
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/janet/janet.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/python-uvloop/python-uvloop.hash | 4 ++--
+ package/python-uvloop/python-uvloop.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/janet/janet.mk b/package/janet/janet.mk
-index 7243d60c01..ea042221d8 100644
---- a/package/janet/janet.mk
-+++ b/package/janet/janet.mk
-@@ -8,8 +8,8 @@ JANET_VERSION = 1.15.0
- JANET_SITE = $(call github,janet-lang,janet,v$(JANET_VERSION))
- JANET_LICENSE = MIT
- JANET_LICENSE_FILES = LICENSE
--
- JANET_INSTALL_STAGING = YES
-+JANET_CFLAGS = $(TARGET_CFLAGS) -std=c99
+diff --git a/package/python-uvloop/python-uvloop.hash b/package/python-uvloop/python-uvloop.hash
+index 436babf915..baed0b3e58 100644
+--- a/package/python-uvloop/python-uvloop.hash
++++ b/package/python-uvloop/python-uvloop.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/uvloop/json
+-md5	a2f82abb676756f11f544c6b51caf171  uvloop-0.14.0.tar.gz
+-sha256	123ac9c0c7dd71464f58f1b4ee0bbd81285d96cdda8bc3519281b8973e3a461e  uvloop-0.14.0.tar.gz
++md5	c97447b8b386971be5e6f4328563be42  uvloop-0.15.0.tar.gz
++sha256	1a503d5b49da6e3dd5607d6e533a5315b1caedbf629901807c65a23a09cad065  uvloop-0.15.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256	2fdc436a67077941295c58647f521fbef8f50e46db0970552fa1a4dd8ae261c6  LICENSE-APACHE
+ sha256	9185f3c77e9f6ef8859a6ba4c94128ac1329876be3e813aad32d7645e51ae409  LICENSE-MIT
+diff --git a/package/python-uvloop/python-uvloop.mk b/package/python-uvloop/python-uvloop.mk
+index 3ee8d299a3..ff98d747b2 100644
+--- a/package/python-uvloop/python-uvloop.mk
++++ b/package/python-uvloop/python-uvloop.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_STATIC_LIBS),y)
- JANET_CONF_OPTS += -Ddynamic_modules=false
+-PYTHON_UVLOOP_VERSION = 0.14.0
++PYTHON_UVLOOP_VERSION = 0.15.0
+ PYTHON_UVLOOP_SOURCE = uvloop-$(PYTHON_UVLOOP_VERSION).tar.gz
+-PYTHON_UVLOOP_SITE = https://files.pythonhosted.org/packages/84/2e/462e7a25b787d2b40cf6c9864a9e702f358349fc9cfb77e83c38acb73048
++PYTHON_UVLOOP_SITE = https://files.pythonhosted.org/packages/df/fb/0e1b479ac5502f3d4531a2fc3f046312616f1ad020c686da353c2ff3bbc6
+ PYTHON_UVLOOP_SETUP_TYPE = setuptools
+ PYTHON_UVLOOP_LICENSE = Apache-2.0, MIT
+ PYTHON_UVLOOP_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
