@@ -1,63 +1,69 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Date: Mon, 08 Mar 2021 07:44:46 -0000
-Subject: [Buildroot] [git commit] package/libuci: bump version to 52bbc99
-Message-ID: <20210308072133.C2A2688918@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/wpa_supplicant: Simplify D-Bus
+ support.
+Message-ID: <20210308072133.91DA488918@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=351e6a9bce11ced9e75a5aca0ada6dcf9de2e113
+commit: https://git.buildroot.net/buildroot/commit/?id=f3dcb2012522505b1dba0f39da6987b8882252d9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- change download url to https
+wpa_supplicant 2.8 dropped support for the old D-Bus interface, so
+remove mentions of it and rename DBUS_NEW variables to just DBUS.
 
-- update homepage url (the old one redirects to legacy read only
-  OpenWrt wiki system)
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/libuci/Config.in   | 2 +-
- package/libuci/libuci.hash | 2 +-
- package/libuci/libuci.mk   | 5 +++--
- 3 files changed, 5 insertions(+), 4 deletions(-)
+ package/wpa_supplicant/Config.in         | 2 +-
+ package/wpa_supplicant/wpa_supplicant.mk | 8 +++-----
+ 2 files changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/package/libuci/Config.in b/package/libuci/Config.in
-index 2f4ad40487..f94d7dc391 100644
---- a/package/libuci/Config.in
-+++ b/package/libuci/Config.in
-@@ -10,7 +10,7 @@ config BR2_PACKAGE_LIBUCI
+diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
+index 9553dcf7df..3c986ff4ba 100644
+--- a/package/wpa_supplicant/Config.in
++++ b/package/wpa_supplicant/Config.in
+@@ -154,6 +154,6 @@ config BR2_PACKAGE_WPA_SUPPLICANT_DBUS_INTROSPECTION
+ 	bool "Introspection support"
+ 	depends on BR2_PACKAGE_WPA_SUPPLICANT_DBUS
+ 	help
+-	  Add introspection support for new DBus control interface.
++	  Add introspection support for the DBus control interface.
  
- 	  This package will also install CLI tool uci.
+ endif
+diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+index f4ed74abc3..b7bdc4e0af 100644
+--- a/package/wpa_supplicant/wpa_supplicant.mk
++++ b/package/wpa_supplicant/wpa_supplicant.mk
+@@ -13,8 +13,7 @@ WPA_SUPPLICANT_LICENSE_FILES = README
+ WPA_SUPPLICANT_CPE_ID_VENDOR = w1.fi
+ WPA_SUPPLICANT_CONFIG = $(WPA_SUPPLICANT_DIR)/wpa_supplicant/.config
+ WPA_SUPPLICANT_SUBDIR = wpa_supplicant
+-WPA_SUPPLICANT_DBUS_OLD_SERVICE = fi.epitest.hostap.WPASupplicant
+-WPA_SUPPLICANT_DBUS_NEW_SERVICE = fi.w1.wpa_supplicant1
++WPA_SUPPLICANT_DBUS_SERVICE = fi.w1.wpa_supplicant1
+ WPA_SUPPLICANT_CFLAGS = $(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/libnl3/
+ WPA_SUPPLICANT_LDFLAGS = $(TARGET_LDFLAGS)
+ WPA_SUPPLICANT_SELINUX_MODULES = networkmanager
+@@ -146,8 +145,8 @@ WPA_SUPPLICANT_MAKE_ENV = \
+ WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_CTRL_IFACE_DBUS_NEW
+ define WPA_SUPPLICANT_INSTALL_DBUS_NEW
+ 	$(INSTALL) -m 0644 -D \
+-		$(@D)/wpa_supplicant/dbus/$(WPA_SUPPLICANT_DBUS_NEW_SERVICE).service \
+-		$(TARGET_DIR)/usr/share/dbus-1/system-services/$(WPA_SUPPLICANT_DBUS_NEW_SERVICE).service
++		$(@D)/wpa_supplicant/dbus/$(WPA_SUPPLICANT_DBUS_SERVICE).service \
++		$(TARGET_DIR)/usr/share/dbus-1/system-services/$(WPA_SUPPLICANT_DBUS_SERVICE).service
+ endef
  
--	  http://wiki.openwrt.org/doc/techref/uci
-+	  https://openwrt.org/docs/techref/uci
- 
- comment "libuci needs a toolchain w/ dynamic library"
- 	depends on BR2_STATIC_LIBS
-diff --git a/package/libuci/libuci.hash b/package/libuci/libuci.hash
-index b808810ccf..b6962c2541 100644
---- a/package/libuci/libuci.hash
-+++ b/package/libuci/libuci.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256  1ee875910bdf751807f10d44f6b6b7f9ec71c12d4c407a80bae5cb654d2ba4cc  libuci-49ec6efbdac4819033d34f08927d795f83a3932d-br1.tar.gz
-+sha256  76ef826df2961420cd7a4f1702bef06c37563d9807a2d8e84557963aab21ac80  libuci-52bbc99f69ea6f67b6fe264f424dac91bde5016c-br1.tar.gz
-diff --git a/package/libuci/libuci.mk b/package/libuci/libuci.mk
-index 55afd53c10..fcfda95b3a 100644
---- a/package/libuci/libuci.mk
-+++ b/package/libuci/libuci.mk
-@@ -4,8 +4,9 @@
- #
- ################################################################################
- 
--LIBUCI_VERSION = 49ec6efbdac4819033d34f08927d795f83a3932d
--LIBUCI_SITE = git://git.openwrt.org/project/uci.git
-+LIBUCI_VERSION = 52bbc99f69ea6f67b6fe264f424dac91bde5016c
-+LIBUCI_SITE = https://git.openwrt.org/project/uci.git
-+LIBUCI_SITE_METHOD = git
- LIBUCI_LICENSE = LGPL-2.1, GPL-2.0 (tools)
- LIBUCI_INSTALL_STAGING = YES
- LIBUCI_DEPENDENCIES = libubox
+ ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DBUS_INTROSPECTION),y)
+@@ -220,7 +219,6 @@ define WPA_SUPPLICANT_INSTALL_DBUS
+ 	$(INSTALL) -m 0644 -D \
+ 		$(@D)/wpa_supplicant/dbus/dbus-wpa_supplicant.conf \
+ 		$(TARGET_DIR)/etc/dbus-1/system.d/wpa_supplicant.conf
+-	$(WPA_SUPPLICANT_INSTALL_DBUS_OLD)
+ 	$(WPA_SUPPLICANT_INSTALL_DBUS_NEW)
+ endef
+ endif
