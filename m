@@ -1,50 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Mon, 08 Mar 2021 07:44:49 -0000
-Subject: [Buildroot] [git commit] package/python-uvloop: bump to version
- 0.15.0
-Message-ID: <20210308072134.075238896D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/collectd: add 'infiniband' option
+Message-ID: <20210308072134.3CCAF81607@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=797d63e6039de83bb2b466886fafefb17f41d52c
+commit: https://git.buildroot.net/buildroot/commit/?id=6b41a0e91e57e9c46404fe7b103a48d9325e7845
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+The infiniband plugin is new since 5.12.0 and enabled by default in
+collectd.
+
+Add an option in Buildroot, disabled by default.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-uvloop/python-uvloop.hash | 4 ++--
- package/python-uvloop/python-uvloop.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/collectd/Config.in   | 5 +++++
+ package/collectd/collectd.mk | 1 +
+ 2 files changed, 6 insertions(+)
 
-diff --git a/package/python-uvloop/python-uvloop.hash b/package/python-uvloop/python-uvloop.hash
-index 436babf915..baed0b3e58 100644
---- a/package/python-uvloop/python-uvloop.hash
-+++ b/package/python-uvloop/python-uvloop.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/uvloop/json
--md5	a2f82abb676756f11f544c6b51caf171  uvloop-0.14.0.tar.gz
--sha256	123ac9c0c7dd71464f58f1b4ee0bbd81285d96cdda8bc3519281b8973e3a461e  uvloop-0.14.0.tar.gz
-+md5	c97447b8b386971be5e6f4328563be42  uvloop-0.15.0.tar.gz
-+sha256	1a503d5b49da6e3dd5607d6e533a5315b1caedbf629901807c65a23a09cad065  uvloop-0.15.0.tar.gz
- # Locally computed sha256 checksums
- sha256	2fdc436a67077941295c58647f521fbef8f50e46db0970552fa1a4dd8ae261c6  LICENSE-APACHE
- sha256	9185f3c77e9f6ef8859a6ba4c94128ac1329876be3e813aad32d7645e51ae409  LICENSE-MIT
-diff --git a/package/python-uvloop/python-uvloop.mk b/package/python-uvloop/python-uvloop.mk
-index 3ee8d299a3..ff98d747b2 100644
---- a/package/python-uvloop/python-uvloop.mk
-+++ b/package/python-uvloop/python-uvloop.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/collectd/Config.in b/package/collectd/Config.in
+index f02cedda49..ae69482608 100644
+--- a/package/collectd/Config.in
++++ b/package/collectd/Config.in
+@@ -285,6 +285,11 @@ config BR2_PACKAGE_COLLECTD_HUGEPAGES
+ 	help
+ 	  Reports the number of used and free hugepages on Linux.
  
--PYTHON_UVLOOP_VERSION = 0.14.0
-+PYTHON_UVLOOP_VERSION = 0.15.0
- PYTHON_UVLOOP_SOURCE = uvloop-$(PYTHON_UVLOOP_VERSION).tar.gz
--PYTHON_UVLOOP_SITE = https://files.pythonhosted.org/packages/84/2e/462e7a25b787d2b40cf6c9864a9e702f358349fc9cfb77e83c38acb73048
-+PYTHON_UVLOOP_SITE = https://files.pythonhosted.org/packages/df/fb/0e1b479ac5502f3d4531a2fc3f046312616f1ad020c686da353c2ff3bbc6
- PYTHON_UVLOOP_SETUP_TYPE = setuptools
- PYTHON_UVLOOP_LICENSE = Apache-2.0, MIT
- PYTHON_UVLOOP_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
++config BR2_PACKAGE_COLLECTD_INFINIBAND
++	bool "infiniband"
++	help
++	  Attributes and counters for each port on each IB device.
++
+ config BR2_PACKAGE_COLLECTD_INTERFACE
+ 	bool "interface"
+ 	help
+diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+index 3fcca12a45..4a4e313224 100644
+--- a/package/collectd/collectd.mk
++++ b/package/collectd/collectd.mk
+@@ -83,6 +83,7 @@ COLLECTD_CONF_OPTS += \
+ 	$(if $(BR2_PACKAGE_COLLECTD_GRPC),--enable-grpc,--disable-grpc) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_HASHED),--enable-match_hashed,--disable-match_hashed) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_HUGEPAGES),--enable-hugepages,--disable-hugepages) \
++	$(if $(BR2_PACKAGE_COLLECTD_INFINIBAND),--enable-infiniband,--disable-infiniband) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_INTERFACE),--enable-interface,--disable-interface) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_IPC),--enable-ipc,--disable-ipc) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_IPTABLES),--enable-iptables,--disable-iptables) \
