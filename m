@@ -1,112 +1,25 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 8 Mar 2021 23:56:49 +0100
-Subject: [Buildroot] [PATCH 1/1] package/inih: bump version to 53
-In-Reply-To: <20210308121759.2242090-1-bernd.kuhls@t-online.de>
-References: <20210308121759.2242090-1-bernd.kuhls@t-online.de>
-Message-ID: <20210308225649.GK2737665@scaer>
+From: GA K <guyarkam@gmail.com>
+Date: Mon, 8 Mar 2021 17:11:10 -0600 (CST)
+Subject: [Buildroot] RISCV32 How to avoid the generation of compressed
+ instructions
+In-Reply-To: <CAEYXRPniVPF2VZze00+vhCvy-qZTG6QerUm1u0Ez61v+coGKqg@mail.gmail.com>
+References: <CAEYXRPniVPF2VZze00+vhCvy-qZTG6QerUm1u0Ez61v+coGKqg@mail.gmail.com>
+Message-ID: <1615245070183-0.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+The follow the steps below to fix the issue:
+1) make linux-xconfig (make linux-menuconfig would work too)
+2) go to Boot Options => remove UEFI (which is selected by default)
+3) got to  Platform Type => remove "Emit compressed instructions"
+4) make
+That should do the job
+G
 
-On 2021-03-08 13:17 +0100, Bernd Kuhls spake thusly:
-> Removed patch which was applied upstream, fixed upper-case package name.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Applied to master, thanks.
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  .../0001-meson-optionally-depend-on-c.patch   | 34 -------------------
->  package/inih/inih.hash                        |  2 +-
->  package/inih/inih.mk                          |  4 +--
->  3 files changed, 3 insertions(+), 37 deletions(-)
->  delete mode 100644 package/inih/0001-meson-optionally-depend-on-c.patch
-> 
-> diff --git a/package/inih/0001-meson-optionally-depend-on-c.patch b/package/inih/0001-meson-optionally-depend-on-c.patch
-> deleted file mode 100644
-> index a039dde1db..0000000000
-> --- a/package/inih/0001-meson-optionally-depend-on-c.patch
-> +++ /dev/null
-> @@ -1,34 +0,0 @@
-> -From e192e4762749cfe3bc350e0353aa82b1a849256d Mon Sep 17 00:00:00 2001
-> -From: bkuhls <bkuhls@users.noreply.github.com>
-> -Date: Sun, 10 Jan 2021 21:56:56 +0100
-> -Subject: [PATCH] meson: optionally depend on c++ (#124)
-> -
-> -This fix is needed to allow building with toolchains which lack c++.
-> -
-> -Downloaded from upstream commit:
-> -https://github.com/benhoyt/inih/commit/e192e4762749cfe3bc350e0353aa82b1a849256d
-> -
-> -Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ----
-> - meson.build | 3 ++-
-> - 1 file changed, 2 insertions(+), 1 deletion(-)
-> -
-> -diff --git a/meson.build b/meson.build
-> -index 4602326..5393af4 100644
-> ---- a/meson.build
-> -+++ b/meson.build
-> -@@ -1,5 +1,5 @@
-> - project('inih',
-> --    ['c','cpp'],
-> -+    ['c'],
-> -     default_options : ['default_library=static'],
-> -     license : 'BSD-3-Clause',
-> - )
-> -@@ -83,6 +83,7 @@ inih_dep = declare_dependency(
-> - 
-> - #### INIReader ####
-> - if get_option('with_INIReader')
-> -+    add_languages('cpp')
-> -     inc_INIReader = include_directories('cpp')
-> - 
-> -     lib_INIReader = library('INIReader',
-> diff --git a/package/inih/inih.hash b/package/inih/inih.hash
-> index 2560a91fed..21234e156d 100644
-> --- a/package/inih/inih.hash
-> +++ b/package/inih/inih.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed
-> -sha256  439cff9ce9a8afc52d08772ac3e93b3cecd79c7707f871fb4534fb3a48201880  inih-52.tar.gz
-> +sha256  01b0366fdfdf6363efc070c2f856f1afa33e7a6546548bada5456ad94a516241  inih-53.tar.gz
->  sha256  9ae3b39e83e9158e44b67733baa3bb2d84e80efdcfb14a5820210a42c7abdf7f  LICENSE.txt
-> diff --git a/package/inih/inih.mk b/package/inih/inih.mk
-> index ccc549b01e..dec9465121 100644
-> --- a/package/inih/inih.mk
-> +++ b/package/inih/inih.mk
-> @@ -1,10 +1,10 @@
->  ################################################################################
->  #
-> -# INIH
-> +# inih
->  #
->  ################################################################################
->  
-> -INIH_VERSION = 52
-> +INIH_VERSION = 53
->  INIH_SITE = $(call github,benhoyt,inih,r$(INIH_VERSION))
->  INIH_INSTALL_STAGING = YES
->  INIH_LICENSE = BSD-3-Clause
-> -- 
-> 2.29.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+--
+Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
