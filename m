@@ -1,91 +1,134 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Date: Mon, 08 Mar 2021 07:44:44 -0000
-Subject: [Buildroot] [git commit] package/eudev: bump version to 3.2.10
-Message-ID: <20210308072133.68FE38896D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/wpa_supplicant: Add options to
+ disable more features.
+Message-ID: <20210308072133.8615381607@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=516ce1f134e6ee866e20bc2a087bec689844b586
+commit: https://git.buildroot.net/buildroot/commit/?id=1f24dcf4801dd5a345978b26dabdf103970cbf17
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Removed patch which was applied upstream:
-https://github.com/gentoo/eudev/commit/799591c57368bbe47667f5b696050247a766b117
+Together, they increase the size of the binary by a bit less than a
+megabyte.
 
-Reformatted hashes.
+As a result, make the wpa_supplicant option a menuconfig.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...-libudev-monitor.c-do-not-check-if-dev-is.patch | 33 ----------------------
- package/eudev/eudev.hash                           |  6 ++--
- package/eudev/eudev.mk                             |  2 +-
- 3 files changed, 4 insertions(+), 37 deletions(-)
+ package/wpa_supplicant/Config.in         | 35 +++++++++++++++++++++++++++++++-
+ package/wpa_supplicant/wpa_supplicant.mk | 19 +++++++++++++++++
+ 2 files changed, 53 insertions(+), 1 deletion(-)
 
-diff --git a/package/eudev/0001-src-libudev-libudev-monitor.c-do-not-check-if-dev-is.patch b/package/eudev/0001-src-libudev-libudev-monitor.c-do-not-check-if-dev-is.patch
-deleted file mode 100644
-index 3027ad7f17..0000000000
---- a/package/eudev/0001-src-libudev-libudev-monitor.c-do-not-check-if-dev-is.patch
-+++ /dev/null
-@@ -1,33 +0,0 @@
--From 799591c57368bbe47667f5b696050247a766b117 Mon Sep 17 00:00:00 2001
--From: "Anthony G. Basile" <blueness@gentoo.org>
--Date: Mon, 6 Jan 2020 11:14:47 -0500
--Subject: [PATCH] src/libudev/libudev-monitor.c: do not check if /dev is tmpfs
--
--This check fails for buildroot systems where /dev is not mounted
--as a tmpfs filesystem.  Dropping this check should be safe even
--on regular systems.
--
--This solves issue #172.
--
--Signed-off-by: Anthony G. Basile <blueness@gentoo.org>
--Signed-off-by: Joel Stanley <joel@jms.id.au>
-----
-- src/libudev/libudev-monitor.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/src/libudev/libudev-monitor.c b/src/libudev/libudev-monitor.c
--index 614149c6243c..060ba733f33b 100644
----- a/src/libudev/libudev-monitor.c
--+++ b/src/libudev/libudev-monitor.c
--@@ -186,7 +186,7 @@ struct udev_monitor *udev_monitor_new_from_netlink_fd(struct udev *udev, const c
--                  * We do not set a netlink multicast group here, so the socket
--                  * will not receive any messages.
--                  */
---                if (access(UDEV_ROOT_RUN "/udev/control", F_OK) < 0 || !udev_has_devtmpfs(udev)) {
--+                if (access(UDEV_ROOT_RUN "/udev/control", F_OK) < 0) {
--                         log_debug("the udev service seems not to be active, disable the monitor");
--                         group = UDEV_MONITOR_NONE;
--                 } else
---- 
--2.25.0
--
-diff --git a/package/eudev/eudev.hash b/package/eudev/eudev.hash
-index e6a319ac44..fda0481351 100644
---- a/package/eudev/eudev.hash
-+++ b/package/eudev/eudev.hash
-@@ -1,5 +1,5 @@
- # From http://dev.gentoo.org/~blueness/eudev/
--md5 dedfb1964f6098fe9320de827957331f  eudev-3.2.9.tar.gz
-+md5  60b135a189523f333cea5f71a3345c8d  eudev-3.2.10.tar.gz
- # Locally calculated
--sha256 89618619084a19e1451d373c43f141b469c9fd09767973d73dd268b92074d4fc  eudev-3.2.9.tar.gz
--sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-+sha256  87bb028d470fd1b85169349b44c55d5b733733dc2d50ddf1196e026725ead034  eudev-3.2.10.tar.gz
-+sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
-index d4133a5ace..5d18b388c7 100644
---- a/package/eudev/eudev.mk
-+++ b/package/eudev/eudev.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
+index 8057c0b7be..9553dcf7df 100644
+--- a/package/wpa_supplicant/Config.in
++++ b/package/wpa_supplicant/Config.in
+@@ -1,4 +1,4 @@
+-config BR2_PACKAGE_WPA_SUPPLICANT
++menuconfig BR2_PACKAGE_WPA_SUPPLICANT
+ 	bool "wpa_supplicant"
+ 	depends on BR2_USE_MMU # fork()
+ 	help
+@@ -29,6 +29,33 @@ config BR2_PACKAGE_WPA_SUPPLICANT_NL80211
+ comment "nl80211 support needs a toolchain w/ threads"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
  
--EUDEV_VERSION = 3.2.9
-+EUDEV_VERSION = 3.2.10
- EUDEV_SITE = http://dev.gentoo.org/~blueness/eudev
- EUDEV_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
- EUDEV_LICENSE_FILES = COPYING
++config BR2_PACKAGE_WPA_SUPPLICANT_WEXT
++	bool "Enable wext (deprecated)"
++	default y if !BR2_TOOLCHAIN_HAS_THREADS
++	help
++	  Enable support for wext.  This is the historic wireless API
++	  for Linux, which is now deprecated and in maintenance-only in
++	  the kernel.  It may still be required by out-of-tree drivers.
++
++config BR2_PACKAGE_WPA_SUPPLICANT_WIRED
++	bool "Enable wired support"
++	select BR2_PACKAGE_WPA_SUPPLICANT_EAP
++	help
++	  Include the "wired" driver, so the internal IEEE 802.1x
++	  supplicant can be used with Ethernet.  This also enables
++	  support for MACSEC.
++
++comment "wpa_supplicant will be useless without at least one driver"
++	depends on !BR2_PACKAGE_WPA_SUPPLICANT_NL80211 && \
++		!BR2_PACKAGE_WPA_SUPPLICANT_WEXT && \
++		!BR2_PACKAGE_WPA_SUPPLICANT_WIRED
++
++config BR2_PACKAGE_WPA_SUPPLICANT_IBSS_RSN
++	bool "Enable IBSS RSN"
++	depends on BR2_PACKAGE_WPA_SUPPLICANT_NL80211
++	help
++	  Enable support for RSN/WPA2 in Ad-Hoc mode.
++
+ config BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT
+ 	bool "Enable AP mode"
+ 	depends on BR2_PACKAGE_WPA_SUPPLICANT_NL80211
+@@ -90,6 +117,7 @@ config BR2_PACKAGE_WPA_SUPPLICANT_WPA3
+ 
+ config BR2_PACKAGE_WPA_SUPPLICANT_CLI
+ 	bool "Install wpa_cli binary"
++	select BR2_PACKAGE_WPA_SUPPLICANT_CTRL_IFACE
+ 	help
+ 	  Install wpa_cli command line utility
+ 
+@@ -107,6 +135,11 @@ config BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE
+ 	help
+ 	  Install wpa_passphrase command line utility.
+ 
++config BR2_PACKAGE_WPA_SUPPLICANT_CTRL_IFACE
++	bool "Enable the Unix-socket control interface"
++	help
++	  Enable support for the Unix-socket-based API.
++
+ config BR2_PACKAGE_WPA_SUPPLICANT_DBUS
+ 	bool "Enable support for the DBus control interface"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus
+diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+index 295f368d78..f4ed74abc3 100644
+--- a/package/wpa_supplicant/wpa_supplicant.mk
++++ b/package/wpa_supplicant/wpa_supplicant.mk
+@@ -47,6 +47,14 @@ else
+ WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_DRIVER_NL80211
+ endif
+ 
++ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_WEXT),)
++WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_DRIVER_WEXT
++endif
++
++ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_IBSS_RSN), )
++WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_IBSS_RSN
++endif
++
+ # Trailing underscore on purpose to not enable CONFIG_EAPOL_TEST
+ ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_EAP),y)
+ WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_EAP_
+@@ -61,6 +69,13 @@ WPA_SUPPLICANT_CONFIG_DISABLE += \
+ 	CONFIG_FILS
+ endif
+ 
++ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_WIRED),)
++WPA_SUPPLICANT_CONFIG_DISABLE += \
++	CONFIG_DRIVER_WIRED \
++	CONFIG_MACSEC \
++	CONFIG_DRIVER_MACSEC
++endif
++
+ ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_HOTSPOT),)
+ WPA_SUPPLICANT_CONFIG_DISABLE += \
+ 	CONFIG_HS20 \
+@@ -119,6 +134,10 @@ WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_EAP_PWD CONFIG_EAP_TEAP
+ WPA_SUPPLICANT_CONFIG_EDITS += 's/\#\(CONFIG_TLS=\).*/\1internal/'
+ endif
+ 
++ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_CTRL_IFACE),)
++WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_CTRL_IFACE
++endif
++
+ ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DBUS),y)
+ WPA_SUPPLICANT_DEPENDENCIES += host-pkgconf dbus
+ WPA_SUPPLICANT_MAKE_ENV = \
