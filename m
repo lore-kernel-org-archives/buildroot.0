@@ -1,62 +1,62 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Sun,  7 Mar 2021 14:25:36 -0800
-Subject: [Buildroot] [PATCH 4/4] package/mender: Do not automatically select
- uboot tools if uboot is selected
-In-Reply-To: <20210307222536.2743089-1-aduskett@gmail.com>
-References: <20210307222536.2743089-1-aduskett@gmail.com>
-Message-ID: <20210307222536.2743089-5-aduskett@gmail.com>
+From: Thomas Huth <huth@tuxfamily.org>
+Date: Mon, 8 Mar 2021 05:15:51 +0100
+Subject: [Buildroot] [PATCH] package/frotz: Update to version 2.53
+In-Reply-To: <20210307214115.GG2275@scaer>
+References: <20210307152147.514774-1-huth@tuxfamily.org>
+ <20210307214115.GG2275@scaer>
+Message-ID: <20210308051551.3dace767@tuxfamily.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <aduskett@gmail.com>
+Am Sun, 7 Mar 2021 22:41:15 +0100
+schrieb "Yann E. MORIN" <yann.morin.1998@free.fr>:
 
-Because uboot requires a set of unique patches for each board, the upstream
-package developers are phasing out supporting uboot wherever possible.
-Instead, they recommend using Grub as a secondary bootloader and using
-mender-grubenv whenever possible.
+> Thomas, All,
+> 
+> On 2021-03-07 16:21 +0100, Thomas Huth spake thusly:
+[...]
+> > diff --git a/package/frotz/Config.in b/package/frotz/Config.in
+> > index b73beea330..9473f5944d 100644
+> > --- a/package/frotz/Config.in
+> > +++ b/package/frotz/Config.in
+> > @@ -1,14 +1,10 @@
+> >  config BR2_PACKAGE_FROTZ
+> >  	bool "frotz"
+> > -	depends on BR2_TOOLCHAIN_HAS_THREADS
+> >  	select BR2_PACKAGE_NCURSES
+> >  	help
+> >  	  Frotz is an interpreter for old Infocom adventure games
+> > and
+> > -	  other Z-code games. Note that frotz can not be run as
+> > root.
+> > +	  other Z-code games. Note that frotz cannot be run as
+> > root.  
+> 
+> Out of curiosity: what is the technical reason this is not possible?
 
-As such, remove selecting uboot tools when uboot is selected, and instead add
-a note in the help section about what Mender requires for uboot and grub-based
-systems.
+I don't know for sure, but I think it's because Frotz is running
+untrusted byte code - so if there's a bug in the interpreter, some
+malicious byte code could get root access to the system.
 
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
----
- package/mender/Config.in | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+> There is an explicit check in src/curses/ux_init.c, but except for
+> that, I could not easily spot a reason for not being able to run as
+> root...
+> 
+> >  	  You must add a normal user to your buildroot
+> > configuration to be able to use it.  
+> 
+> Why don't we then define one, like:
+> 
+>     define FROTS_USERS
+>         frotz -1 frotz -1 - - - -
+>     endef
 
-diff --git a/package/mender/Config.in b/package/mender/Config.in
-index 6a80c410ce..6c84157734 100644
---- a/package/mender/Config.in
-+++ b/package/mender/Config.in
-@@ -5,14 +5,24 @@ config BR2_PACKAGE_MENDER
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_XZ
--	select BR2_PACKAGE_UBOOT_TOOLS if BR2_TARGET_UBOOT # runtime
--	select BR2_PACKAGE_UBOOT_TOOLS_FWPRINTENV if BR2_TARGET_UBOOT # runtime
- 	help
- 	  Mender is an open source over-the-air (OTA) software updater
- 	  for embedded Linux devices. Mender comprises a client
- 	  running at the embedded device, as well as a server that
- 	  manages deployments across many devices.
- 
-+	  Note:
-+	  For systems using uboot as the bootloader:
-+	    - uboot must be patched with the mender uboot patches.
-+	    - uboot-tools must be selected.
-+	    - fw_printenv must be functional on the device.
-+
-+	  For systems using Grub as the bootloader:
-+	    - Mender depends on the mender-grubenv package.
-+
-+	  The mender project recommends using uboot to load Grub as a
-+	  secondary bootloader when possible.
-+
- 	  https://github.com/mendersoftware/mender
- 
- comment "mender needs a toolchain w/ threads"
--- 
-2.25.1
+Not sure whether it makes sense to hard-code a user without password
+here...? IMHO it makes more sense to leave that decision (how should
+the user be called? should the account get a password or not?) to the
+person who creates the buildroot image.
+
+ Thomas
