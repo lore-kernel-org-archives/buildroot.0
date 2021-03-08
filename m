@@ -1,104 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 6 Mar 2021 21:30:27 +0100
-Subject: [Buildroot] [git commit] package/kodi-screensaver-crystalmorph:
- remove package
-Message-ID: <20210308072137.5613E88918@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 08 Mar 2021 07:44:50 -0000
+Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-nouveau:
+ bump version to 1.0.17
+Message-ID: <20210308072134.1CE5581607@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=49eb73cac119d96822e8b758de18aec840b98d61
+commit: https://git.buildroot.net/buildroot/commit/?id=f0b41307a336b4d3eee383e913019e39067459d0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The package received its last updates in 2017, is not part of the
-official Kodi github repo and its build is broken with Kodi 19.x.
+Release notes:
+https://lists.freedesktop.org/archives/nouveau/2021-January/037766.html
+
+Reformatted hashes.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in.legacy                                            | 10 ++++++++++
- package/kodi-screensaver-crystalmorph/Config.in             | 10 ----------
- .../kodi-screensaver-crystalmorph.hash                      |  3 ---
- .../kodi-screensaver-crystalmorph.mk                        | 13 -------------
- package/kodi/Config.in                                      |  1 -
- 5 files changed, 10 insertions(+), 27 deletions(-)
+ .../xdriver_xf86-video-nouveau.hash                           | 11 +++++------
+ .../xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.mk  |  2 +-
+ 2 files changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 9deb67b31f..8ebbc4c295 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -144,6 +144,16 @@ endif
- 
- ###############################################################################
- 
-+comment "Legacy options removed in 2021.05"
+diff --git a/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.hash b/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.hash
+index b70728f9b7..336f29be46 100644
+--- a/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.hash
++++ b/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.hash
+@@ -1,7 +1,6 @@
+-# From https://lists.freedesktop.org/archives/nouveau/2019-January/032053.html
+-md5 ecd9be89d853301167e3d564c49f7a8e  xf86-video-nouveau-1.0.16.tar.bz2
+-sha1 a2d19439ceed315079207a62c6888a12e8489995  xf86-video-nouveau-1.0.16.tar.bz2
+-sha256 304060806415579cdb5c1f71f1c54d11cacb431b5552b170decbc883ed43bf06  xf86-video-nouveau-1.0.16.tar.bz2
+-sha512 41b7839c37372660968ab7da2bc3d9feef3cab4e994d05d4ba6e59071f0d1b1f8d7dcdbcb15a42a375a556d28dc067f9ffe45d73c1d121ad307d199107ade3e0  xf86-video-nouveau-1.0.16.tar.bz2
++# From https://lists.freedesktop.org/archives/nouveau/2021-January/037766.html
++sha256  499322e27a55c8183166bf2dd1e47d085eb834143e0d7036baba8427b90c156b  xf86-video-nouveau-1.0.17.tar.bz2
++sha512  adba58ba5298d1a5b3f9f8540f9ef2cb2e10e47bba8e374103ec2e1f92e915f5f4393ed0021168cd649646e12315135a1efcdf77e8fb1648e1295914d87279b2  xf86-video-nouveau-1.0.17.tar.bz2
 +
-+config BR2_PACKAGE_KODI_SCREENSAVER_CRYSTALMORPH
-+	bool "kodi-screensaver-crystalmorph removed"
-+	select BR2_LEGACY
-+	help
-+	  The package received its last updates in 2017, is not part
-+	  of the official Kodi github repo and its build is broken
-+	  with Kodi 19.x, so it was removed.
-+
- comment "Legacy options removed in 2021.02"
+ # Locally computed
+-sha256 27d8cbdcde7a0bd062ce49cdf8c672201452a64e3e6823f09b1beffe2c4b8eff  COPYING
++sha256  27d8cbdcde7a0bd062ce49cdf8c672201452a64e3e6823f09b1beffe2c4b8eff  COPYING
+diff --git a/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.mk b/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.mk
+index d85cbfe4a4..e63bc611bf 100644
+--- a/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.mk
++++ b/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_MPD_AUDIOFILE
-diff --git a/package/kodi-screensaver-crystalmorph/Config.in b/package/kodi-screensaver-crystalmorph/Config.in
-deleted file mode 100644
-index 1303d229fd..0000000000
---- a/package/kodi-screensaver-crystalmorph/Config.in
-+++ /dev/null
-@@ -1,10 +0,0 @@
--config BR2_PACKAGE_KODI_SCREENSAVER_CRYSTALMORPH
--	bool "kodi-screensaver-crystalmorph"
--	depends on BR2_PACKAGE_HAS_LIBGL # libglu
--	help
--	  CrystalMorph screensaver for Kodi
--
--	  https://github.com/notspiff/screensaver.crystalmorph
--
--comment "kodi-screensaver-crystalmorph needs OpenGL"
--	depends on !BR2_PACKAGE_HAS_LIBGL
-diff --git a/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.hash b/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.hash
-deleted file mode 100644
-index 59e0703255..0000000000
---- a/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# Locally computed
--sha256  d8ed548222f1118964104fefc8ac3056dfe6c9d2ee35cd7c8355c9ea9fcaffc5  kodi-screensaver-crystalmorph-4439c84c38abf889e19a1863e745942c0d7f8203.tar.gz
--sha256  febce1924ed772f22ec3fabec646b1401aad4f4a81a7f1baeb858f27ae4f5241  src/Fractal.cpp
-diff --git a/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.mk b/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.mk
-deleted file mode 100644
-index 35642d5580..0000000000
---- a/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.mk
-+++ /dev/null
-@@ -1,13 +0,0 @@
--################################################################################
--#
--# kodi-screensaver-crystalmorph
--#
--################################################################################
--
--KODI_SCREENSAVER_CRYSTALMORPH_VERSION = 4439c84c38abf889e19a1863e745942c0d7f8203
--KODI_SCREENSAVER_CRYSTALMORPH_SITE = $(call github,notspiff,screensaver.crystalmorph,$(KODI_SCREENSAVER_CRYSTALMORPH_VERSION))
--KODI_SCREENSAVER_CRYSTALMORPH_LICENSE = GPL-2.0+
--KODI_SCREENSAVER_CRYSTALMORPH_LICENSE_FILES = src/Fractal.cpp
--KODI_SCREENSAVER_CRYSTALMORPH_DEPENDENCIES = kodi
--
--$(eval $(cmake-package))
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 8453ba0e07..e805aa9d31 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -357,7 +357,6 @@ menu "Screensavers"
- 	source "package/kodi-screensaver-asterwave/Config.in"
- 	source "package/kodi-screensaver-biogenesis/Config.in"
- 	source "package/kodi-screensaver-cpblobs/Config.in"
--	source "package/kodi-screensaver-crystalmorph/Config.in"
- 	source "package/kodi-screensaver-greynetic/Config.in"
- 	source "package/kodi-screensaver-matrixtrails/Config.in"
- 	source "package/kodi-screensaver-pingpong/Config.in"
+-XDRIVER_XF86_VIDEO_NOUVEAU_VERSION = 1.0.16
++XDRIVER_XF86_VIDEO_NOUVEAU_VERSION = 1.0.17
+ XDRIVER_XF86_VIDEO_NOUVEAU_SOURCE = xf86-video-nouveau-$(XDRIVER_XF86_VIDEO_NOUVEAU_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_NOUVEAU_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_NOUVEAU_LICENSE = MIT
