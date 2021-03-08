@@ -1,44 +1,49 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 8 Mar 2021 23:48:20 +0100
-Subject: [Buildroot] [git commit] package/sysklogd: bump to version 2.2.2
-Message-ID: <20210308222722.A5EB188C89@busybox.osuosl.org>
+Date: Mon, 8 Mar 2021 23:47:59 +0100
+Subject: [Buildroot] [git commit] package/python-bluezero: bump to version
+ 0.6.0
+Message-ID: <20210308222722.9D0B2813BC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b5c5a1d49d62040e8713c5151ba6aca8499251ef
+commit: https://git.buildroot.net/buildroot/commit/?id=7e958a24e233ffabffbd2edf601ebf516f2a35c5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/troglobit/sysklogd/releases/tag/v2.2.2
-
-Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/sysklogd/sysklogd.hash | 2 +-
- package/sysklogd/sysklogd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-bluezero/python-bluezero.hash | 4 ++--
+ package/python-bluezero/python-bluezero.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/sysklogd/sysklogd.hash b/package/sysklogd/sysklogd.hash
-index ec14363d9f..0ef5e17116 100644
---- a/package/sysklogd/sysklogd.hash
-+++ b/package/sysklogd/sysklogd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  a93b7ad6a615336f030d8a3257544cff1644908af6a12c65f65482f27bd39ca9  sysklogd-2.2.1.tar.gz
-+sha256  2752a693a2486f7e532b6b028296c8ac0a97def8a4848f1e915f3e583fd0b4b6  sysklogd-2.2.2.tar.gz
- sha256  7a71d7603a7c4456df441463e54da35acf151c1be0879246de63544f1f34f477  LICENSE
-diff --git a/package/sysklogd/sysklogd.mk b/package/sysklogd/sysklogd.mk
-index ea7b869d7b..0110974069 100644
---- a/package/sysklogd/sysklogd.mk
-+++ b/package/sysklogd/sysklogd.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-bluezero/python-bluezero.hash b/package/python-bluezero/python-bluezero.hash
+index d0df83c4c6..59e8c5af5b 100644
+--- a/package/python-bluezero/python-bluezero.hash
++++ b/package/python-bluezero/python-bluezero.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/bluezero/json
+-md5  4004c165f762029c2139f31c269a7531  bluezero-0.5.0.tar.gz
+-sha256  d9562a2d107abc918ffdabd4646039c15c54ca1fca0cec91aa45ba6135d2d0b1  bluezero-0.5.0.tar.gz
++md5  b26e6425d8adc4613b7cdf1d131f8c0b  bluezero-0.6.0.tar.gz
++sha256  d94f0672b1de3ff0040801538143fe9a42c501d8db79bcd183c9e051b8da83bc  bluezero-0.6.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  59319e80b4caa94ace4817c9f84aa16abc9d4d2b5f7866251b5fda92e87ccdef  LICENSE
+diff --git a/package/python-bluezero/python-bluezero.mk b/package/python-bluezero/python-bluezero.mk
+index 27e11efc14..7e244fe3f0 100644
+--- a/package/python-bluezero/python-bluezero.mk
++++ b/package/python-bluezero/python-bluezero.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--SYSKLOGD_VERSION = 2.2.1
-+SYSKLOGD_VERSION = 2.2.2
- SYSKLOGD_SITE = https://github.com/troglobit/sysklogd/releases/download/v$(SYSKLOGD_VERSION)
- SYSKLOGD_LICENSE = BSD-3-Clause
- SYSKLOGD_LICENSE_FILES = LICENSE
+-PYTHON_BLUEZERO_VERSION = 0.5.0
++PYTHON_BLUEZERO_VERSION = 0.6.0
+ PYTHON_BLUEZERO_SOURCE = bluezero-$(PYTHON_BLUEZERO_VERSION).tar.gz
+-PYTHON_BLUEZERO_SITE = https://files.pythonhosted.org/packages/90/63/67c56cebe6f741b190f047531810911cfb528e9c0ec6db8d4c911808ba32
++PYTHON_BLUEZERO_SITE = https://files.pythonhosted.org/packages/be/15/4a806580ffd359a03184776f37cf201298918f302b414b8a3e594d1be65c
+ PYTHON_BLUEZERO_SETUP_TYPE = setuptools
+ PYTHON_BLUEZERO_LICENSE = MIT
+ PYTHON_BLUEZERO_LICENSE_FILES = LICENSE
