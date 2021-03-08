@@ -1,52 +1,43 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Mon,  8 Mar 2021 10:49:42 +0200
-Subject: [Buildroot] [PATCH 1/1] package/cog: bump to version 0.8.1
-Message-ID: <20210308084942.454799-1-aperez@igalia.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon,  8 Mar 2021 10:36:00 +0100
+Subject: [Buildroot] [PATCH 4/4] package/kodi-pvr-mythtv: bump version to
+ 7.3.1-Matrix
+In-Reply-To: <20210308093600.1610397-1-bernd.kuhls@t-online.de>
+References: <20210308093600.1610397-1-bernd.kuhls@t-online.de>
+Message-ID: <20210308093600.1610397-4-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This minor release contains a number of fixes and improves the reliability
-of the build system.  Release notes:
-
-  https://wpewebkit.org/release/cog-0.8.1.html
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/cog/cog.hash | 8 ++++----
- package/cog/cog.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash | 2 +-
+ package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/cog/cog.hash b/package/cog/cog.hash
-index d76306ca54..2cafe8ca6e 100644
---- a/package/cog/cog.hash
-+++ b/package/cog/cog.hash
-@@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/cog-0.8.0.tar.xz.sums
--md5  f7aa8a425927cab247563411fc67c5a3  cog-0.8.0.tar.xz
--sha1  977559204dae0f9220e4c6b8ded7537899fd2daf  cog-0.8.0.tar.xz
--sha256  181b1f4963cdf264b8068460a64d14c92a627f7138ebecc0f36fce085f4e92dd  cog-0.8.0.tar.xz
-+# From https://wpewebkit.org/releases/cog-0.8.1.tar.xz.sums
-+md5  21664fb04c9149dea6d68e13e6074276  cog-0.8.1.tar.xz
-+sha1  baabba7f0f6009c64ef0c4f7c5f807382cffef5d  cog-0.8.1.tar.xz
-+sha256  b82e917eb764943b9859c631974f8f0e748b79ae87bb7a944f46c818740e0208  cog-0.8.1.tar.xz
- 
- # Hashes for license files:
- sha256  e6c42d93c68b292bcccf6d2ec3e13da85df90b718ba27c2c2a01053a9d009252  COPYING
-diff --git a/package/cog/cog.mk b/package/cog/cog.mk
-index 47a5573dda..c7fc5e6fee 100644
---- a/package/cog/cog.mk
-+++ b/package/cog/cog.mk
+diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
+index 30a7ec841c..307509cdd1 100644
+--- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
++++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  fa741677fc2d58689111d18c8eb1114115f4c33bc99267bb761f225e82fdc588  kodi-pvr-mythtv-7.3.0-Matrix.tar.gz
++sha256  91cb98ea39fd41e9edcfd079e6ca39bfabeb4d6c247b1a540d86a7856e77c75e  kodi-pvr-mythtv-7.3.1-Matrix.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
+index 98e83e2035..70b1c6efe0 100644
+--- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
++++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--COG_VERSION = 0.8.0
-+COG_VERSION = 0.8.1
- COG_SITE = https://wpewebkit.org/releases
- COG_SOURCE = cog-$(COG_VERSION).tar.xz
- COG_INSTALL_STAGING = YES
+-KODI_PVR_MYTHTV_VERSION = 7.3.0-Matrix
++KODI_PVR_MYTHTV_VERSION = 7.3.1-Matrix
+ KODI_PVR_MYTHTV_SITE = $(call github,janbar,pvr.mythtv,$(KODI_PVR_MYTHTV_VERSION))
+ KODI_PVR_MYTHTV_LICENSE = GPL-2.0+
+ KODI_PVR_MYTHTV_LICENSE_FILES = LICENSE.md
 -- 
-2.30.1
+2.29.2
