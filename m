@@ -1,43 +1,36 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  8 Mar 2021 10:36:00 +0100
-Subject: [Buildroot] [PATCH 4/4] package/kodi-pvr-mythtv: bump version to
- 7.3.1-Matrix
-In-Reply-To: <20210308093600.1610397-1-bernd.kuhls@t-online.de>
-References: <20210308093600.1610397-1-bernd.kuhls@t-online.de>
-Message-ID: <20210308093600.1610397-4-bernd.kuhls@t-online.de>
+Date: Mon,  8 Mar 2021 10:35:57 +0100
+Subject: [Buildroot] [PATCH 1/4] package/kodi-inputstream-adaptive: update
+ project URL
+Message-ID: <20210308093600.1610397-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Reference: https://github.com/xbmc/repo-binary-addons/pull/143
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash | 2 +-
- package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+https://git.buildroot.net/buildroot/commit/?id=fd72673d91a4b3326640bfb799d1af1926acd3ad
+partly got lost while branch 'next' was merged
 
-diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
-index 30a7ec841c..307509cdd1 100644
---- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
-+++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  fa741677fc2d58689111d18c8eb1114115f4c33bc99267bb761f225e82fdc588  kodi-pvr-mythtv-7.3.0-Matrix.tar.gz
-+sha256  91cb98ea39fd41e9edcfd079e6ca39bfabeb4d6c247b1a540d86a7856e77c75e  kodi-pvr-mythtv-7.3.1-Matrix.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
-index 98e83e2035..70b1c6efe0 100644
---- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
-+++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
-@@ -4,7 +4,7 @@
- #
+ package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+index 6b085e49ce..d6d86817ce 100644
+--- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--KODI_PVR_MYTHTV_VERSION = 7.3.0-Matrix
-+KODI_PVR_MYTHTV_VERSION = 7.3.1-Matrix
- KODI_PVR_MYTHTV_SITE = $(call github,janbar,pvr.mythtv,$(KODI_PVR_MYTHTV_VERSION))
- KODI_PVR_MYTHTV_LICENSE = GPL-2.0+
- KODI_PVR_MYTHTV_LICENSE_FILES = LICENSE.md
+ KODI_INPUTSTREAM_ADAPTIVE_VERSION = 2.6.7-Matrix
+-KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,peak3d,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
++KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,xbmc,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
+ KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPL-2.0+
+ KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = LICENSE.GPL
+ KODI_INPUTSTREAM_ADAPTIVE_DEPENDENCIES = expat kodi
 -- 
 2.29.2
