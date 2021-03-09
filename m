@@ -1,73 +1,56 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 9 Mar 2021 22:35:45 +0100
-Subject: [Buildroot] [RFC/next v2 1/2] package/rpi-firmware: rework
- boot/config file handling
-In-Reply-To: <20210309212942.GP2737665@scaer>
-References: <20210216201148.26688-1-ps.report@gmx.net>
- <20210308215541.GB2737665@scaer> <20210308231454.519fa1dc@gmx.net>
- <20210308222753.GE2737665@scaer> <20210309213246.382d07b4@gmx.net>
- <20210309212942.GP2737665@scaer>
-Message-ID: <20210309213545.GQ2737665@scaer>
+Date: Tue,  9 Mar 2021 22:37:16 +0100
+Subject: [Buildroot] [PATCH 0/2] package/libopenssl: fix build wrt 64-bit
+ time-related structs (branch yem/openssl-riscv32)
+Message-ID: <cover.1615325812.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Hello All!
 
-On 2021-03-09 22:29 +0100, Yann E. MORIN spake thusly:
-[--SNIP--]
-> OK, so here's my new proposal:
-> 
->   - keep your BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE, which points to a
->     default, basic one, not unlike the busybox default config:
->         default "package/rpi-firmware/config.txt"
+This two-patch series aims at fixing, once and for all, the many build
+failures we've seen in the autobuilders, related to riscv32.
 
-I meant:  "not unlike what we do with the busybox default config"
+It turns out that those failures exposed a deeper issue in openssl, that
+was just fixed upstream
 
-Sorry for any confusion...
+Note: the first pach is a candidate for backporting to 2021.02.x, but
+the second patch is not.
+
+Thanks to Alistair for working promptly on the issue and coming up with
+a fix! ;-)
 
 Regards,
 Yann E. MORIN.
 
->   - package/rpi-firmware/config.txt is just the common part of all the
->     config.txt you currently had in your patch
-> 
->   - rpi-firmware.mk will add arm_64bit=1 as needed, based on
->     BR2_aarch64=y, because that *really* is not an option.
-> 
->   - add BR2_PKG_RPI_FW_DTOVERLAY_LIST as I suggest above, which is not
->     empty, will be copied as is to dtoverlay
-> 
->   - change the defconfig files to just set:
->     BR2_PKG_RPI_FW_DTOVERLAY_LIST="miniuart-bt"
-> 
-> That way, we get best of both worlds:
-> 
->   - we avoid duplication of the config.txt, and we can still customise
->     it a bit with just "easy stuff" that we need for our example
->     defconfigs,
-> 
->   - users can stil point to their custom, fine-tuned config.txt (in
->     which case they will probably not set BR2_PKG_RPI_FW_DTOVERLAY_LIST)
-> 
-> Thoughts?
-> 
-> Regards,
-> Yann E. MORIN.
-> 
-> -- 
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Regards,
+Yann E. MORIN.
+
+
+----------------------------------------------------------------
+Yann E. MORIN (2):
+      package/libopenssl: fix build wrt. 64-bit time-related syscalls & structs
+      Revert "package/libopenssl does not support riscv32"
+
+ package/hostapd/Config.in                          |  1 -
+ package/ibm-sw-tpm2/Config.in                      |  2 -
+ package/ima-evm-utils/Config.in                    |  2 -
+ ...-support-for-io_pgetevents_time64-syscall.patch | 61 ++++++++++++++
+ ...-support-for-io_pgetevents_time64-syscall.patch | 98 ++++++++++++++++++++++
+ package/openssl/Config.in                          |  7 --
+ package/softether/Config.in                        |  2 -
+ package/tpm2-abrmd/Config.in                       |  2 -
+ package/tpm2-pkcs11/Config.in                      |  2 -
+ package/tpm2-tools/Config.in                       |  2 -
+ package/tpm2-totp/Config.in                        |  2 -
+ package/tpm2-tss/Config.in                         |  2 -
+ package/wpa_supplicant/Config.in                   |  2 -
+ 13 files changed, 159 insertions(+), 26 deletions(-)
+ create mode 100644 package/libopenssl/0006-Add-support-for-io_pgetevents_time64-syscall.patch
+ create mode 100644 package/libopenssl/0007-Fixup-support-for-io_pgetevents_time64-syscall.patch
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
