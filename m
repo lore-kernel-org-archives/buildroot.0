@@ -1,33 +1,53 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 09 Mar 2021 23:59:21 +0100
-Subject: [Buildroot] [PATCH] package/screen: add security fix for
- CVE-2021-26937
-In-Reply-To: <20210226232256.25046-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sat, 27 Feb 2021 00:22:55 +0100")
-References: <20210226232256.25046-1-peter@korsgaard.com>
-Message-ID: <87wnug53xy.fsf@dell.be.48ers.dk>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Wed, 10 Mar 2021 00:59:32 +0200
+Subject: [Buildroot] [PATCH 1/1] package/wpebackend-fdo: bump to version
+ 1.8.1
+Message-ID: <20210309225932.854986-1-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+This bugfix release solves a couple of leaks and sporadic crashes.
+Release notes:
 
- > encoding.c in GNU Screen through 4.8.0 allows remote attackers to cause a
- > denial of service (invalid write access and application crash) or possibly
- > have unspecified other impact via a crafted UTF-8 character sequence.
+  https://wpewebkit.org/release/wpebackend-fdo-1.8.1.html
 
- > For more details, see the oss-security discussion:
- > https://www.openwall.com/lists/oss-security/2021/02/09/3
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+---
+ package/wpebackend-fdo/wpebackend-fdo.hash | 8 ++++----
+ package/wpebackend-fdo/wpebackend-fdo.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
- > So far no fix has been added to upstream git, and a number of early proposed
- > fixes caused regressions, so pull the security fix from the screen 4.8.0-5
- > Debian package.
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed to 2020.02.x and 2020.11.x, thanks.
-
+diff --git a/package/wpebackend-fdo/wpebackend-fdo.hash b/package/wpebackend-fdo/wpebackend-fdo.hash
+index 2f8321833c..a7b419fc32 100644
+--- a/package/wpebackend-fdo/wpebackend-fdo.hash
++++ b/package/wpebackend-fdo/wpebackend-fdo.hash
+@@ -1,7 +1,7 @@
+-# From https://wpewebkit.org/releases/wpebackend-fdo-1.8.0.tar.xz.sums
+-md5  6df96f80ff34c02d56f32a7a153a62c0  wpebackend-fdo-1.8.0.tar.xz
+-sha1  48dd8d5d525e0c89b8b7068fe51c439921804240  wpebackend-fdo-1.8.0.tar.xz
+-sha256  9652a99c75fe1c6eab0585b6395f4e104b2427e4d1f42969f1f77df29920d253  wpebackend-fdo-1.8.0.tar.xz
++# From https://wpewebkit.org/releases/wpebackend-fdo-1.8.1.tar.xz.sums
++md5  e7083e9fd325f289b23253b770d08d2e  wpebackend-fdo-1.8.1.tar.xz
++sha1  08472f1bcff6100ba963bdbe7347487253006ca0  wpebackend-fdo-1.8.1.tar.xz
++sha256  8adb4475be949ae4092370de6a37d7b9e1d3704cf4674867312e87de2ff0d880  wpebackend-fdo-1.8.1.tar.xz
+ 
+ # Hashes for license files:
+ sha256  c9f6803371047fad3e72200ec6cd226329a5ee08ac61104c8211c2761fb46825  COPYING
+diff --git a/package/wpebackend-fdo/wpebackend-fdo.mk b/package/wpebackend-fdo/wpebackend-fdo.mk
+index dc0c9b6740..fd313132b3 100644
+--- a/package/wpebackend-fdo/wpebackend-fdo.mk
++++ b/package/wpebackend-fdo/wpebackend-fdo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WPEBACKEND_FDO_VERSION = 1.8.0
++WPEBACKEND_FDO_VERSION = 1.8.1
+ WPEBACKEND_FDO_SITE = https://wpewebkit.org/releases
+ WPEBACKEND_FDO_SOURCE = wpebackend-fdo-$(WPEBACKEND_FDO_VERSION).tar.xz
+ WPEBACKEND_FDO_INSTALL_STAGING = YES
 -- 
-Bye, Peter Korsgaard
+2.30.1
