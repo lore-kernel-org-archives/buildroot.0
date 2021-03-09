@@ -1,68 +1,91 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 9 Mar 2021 21:19:34 +0100
-Subject: [Buildroot] [git commit] package/optee-client: fix gid_t build
- issue in OP-TEE 3.12 libckteec
-Message-ID: <20210309195706.EB20D875E0@busybox.osuosl.org>
+Date: Tue, 9 Mar 2021 21:22:44 +0100
+Subject: [Buildroot] [PATCH] package/optee-client: fix git_d build issue
+ in OP-TEE 3.12 libckteec
+In-Reply-To: <20210309113348.22974-1-etienne.carriere@linaro.org>
+References: <20210309113348.22974-1-etienne.carriere@linaro.org>
+Message-ID: <20210309202244.GN2737665@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=da6cca38da1584fed17ffb40316cd7c2fdd5e754
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Etienne, All,
 
-Include missing unistd.h to support type gid_t in ckteec library
-of optee-client 3.12.0. This change fixes [1]. The fix has been
-posted to optee-client forum, see [2].
+On 2021-03-09 12:33 +0100, Etienne Carriere spake thusly:
+> Include missing unistd.h to support type gid_t in ckteec library
+> of optee-client 3.12.0. This change fixes [1]. The fix has been
+> posted to optee-client forum, see [2].
+> 
+> Link: [1] http://autobuild.buildroot.net/results/34b9946e6d59112a7eead304933534ad4739a84c/build-end.log
+> Link: [2] https://github.com/OP-TEE/optee_client/pull/262
+> Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
 
-Link: [1] http://autobuild.buildroot.net/results/34b9946e6d59112a7eead304933534ad4739a84c/build-end.log
-Link: [2] https://github.com/OP-TEE/optee_client/pull/262
+Applied to master, with the folowing changes:
 
-Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
-[yann.morin.1998 at free.fr:
   - use an actual backport now that upstream applied it
   - fix typo in title
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- ...-libckteec-add-missing-unistd.h-for-gid_t.patch | 31 ++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
 
-diff --git a/package/optee-client/0001-libckteec-add-missing-unistd.h-for-gid_t.patch b/package/optee-client/0001-libckteec-add-missing-unistd.h-for-gid_t.patch
-new file mode 100644
-index 0000000000..534f1d3bee
---- /dev/null
-+++ b/package/optee-client/0001-libckteec-add-missing-unistd.h-for-gid_t.patch
-@@ -0,0 +1,31 @@
-+From 6b908687d37dc4e5c00df90058990da034506628 Mon Sep 17 00:00:00 2001
-+From: Etienne Carriere <etienne.carriere@linaro.org>
-+Date: Tue, 9 Mar 2021 11:52:32 +0100
-+Subject: [PATCH 1/1] libckteec: add missing <unistd.h> for gid_t
-+
-+Include missing unistd.h to support type gid_t. This change fixes [1].
-+
-+Link: [1] http://autobuild.buildroot.net/results/34b9946e6d59112a7eead304933534ad4739a84c/build-end.log
-+Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
-+Acked-by: Jerome Forissier <jerome@forissier.org>
-+[yann.morin.1998 at free.fr: actual backport now that upstream applied it]
-+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-+---
-+ libckteec/src/invoke_ta.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/libckteec/src/invoke_ta.c b/libckteec/src/invoke_ta.c
-+index 6236719..70575d0 100644
-+--- a/libckteec/src/invoke_ta.c
-++++ b/libckteec/src/invoke_ta.c
-+@@ -18,6 +18,7 @@
-+ #include <sys/types.h>
-+ #include <tee_client_api.h>
-+ #include <teec_trace.h>
-++#include <unistd.h>
-+ 
-+ #include "ck_helpers.h"
-+ #include "invoke_ta.h"
-+-- 
-+2.25.1
-+
+Thanks.
+
+Be carefull if you rebase your tree: the patch was renamed to accomodate
+the upstream commit title.
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  ...d-missing-unistd.h-for-group-ID-type.patch | 28 +++++++++++++++++++
+>  1 file changed, 28 insertions(+)
+>  create mode 100644 package/optee-client/0001-libckteec-add-missing-unistd.h-for-group-ID-type.patch
+> 
+> diff --git a/package/optee-client/0001-libckteec-add-missing-unistd.h-for-group-ID-type.patch b/package/optee-client/0001-libckteec-add-missing-unistd.h-for-group-ID-type.patch
+> new file mode 100644
+> index 0000000000..f47c6ad865
+> --- /dev/null
+> +++ b/package/optee-client/0001-libckteec-add-missing-unistd.h-for-group-ID-type.patch
+> @@ -0,0 +1,28 @@
+> +From 34b992d7e5d4ffaa955ea8f6a3dff7ea789e1def Mon Sep 17 00:00:00 2001
+> +From: Etienne Carriere <etienne.carriere@linaro.org>
+> +Date: Tue, 9 Mar 2021 11:52:32 +0100
+> +Subject: [PATCH] libckteec: add missing unistd.h for group ID type
+> +
+> +Include missing unistd.h to support type gid_t. This change fixes [1].
+> +
+> +Link: [1] http://autobuild.buildroot.net/results/34b9946e6d59112a7eead304933534ad4739a84c/build-end.log
+> +Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+> +---
+> + libckteec/src/invoke_ta.c | 1 +
+> + 1 file changed, 1 insertion(+)
+> +
+> +diff --git a/libckteec/src/invoke_ta.c b/libckteec/src/invoke_ta.c
+> +index 7c4c5a7..444e099 100644
+> +--- a/libckteec/src/invoke_ta.c
+> ++++ b/libckteec/src/invoke_ta.c
+> +@@ -17,6 +17,7 @@
+> + #include <string.h>
+> + #include <tee_client_api.h>
+> + #include <teec_trace.h>
+> ++#include <unistd.h>
+> + 
+> + #include "ck_helpers.h"
+> + #include "invoke_ta.h"
+> +-- 
+> +2.17.1
+> +
+> -- 
+> 2.17.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
