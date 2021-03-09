@@ -1,72 +1,29 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 9 Mar 2021 21:07:34 +0100
-Subject: [Buildroot] [PATCH 1/1] package/linux-firmware: fix build
- failure when no firmware item selected
-In-Reply-To: <539abc1b8ea48daa694b45242cab63d0@umbiko.net>
-References: <539abc1b8ea48daa694b45242cab63d0@umbiko.net>
-Message-ID: <20210309200734.GM2737665@scaer>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 09 Mar 2021 20:15:29 +0000
+Subject: [Buildroot] [Bug 13601] Gen image :Iappropriate ioctl error
+In-Reply-To: <bug-13601-163@https.bugs.busybox.net/>
+References: <bug-13601-163@https.bugs.busybox.net/>
+Message-ID: <bug-13601-163-RcnkI3cdNH@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Andreas, All,
+https://bugs.busybox.net/show_bug.cgi?id=13601
 
-On 2021-03-09 18:25 +0000, Andreas Ziegler spake thusly:
-> The latest change in Linux firmware handling breaks the build if no specific
-> firmware item is selected below BR2_PACKAGE_LINUX_FIRMWARE.
-> 
-> The firmware archive is only created if at least one firmware sub-category
-> is selected; the installation step wants to unpack the archive
-> unconditionally.
-> 
-> Use the same condition to control install command definition as in the build
-> step.
-> 
-> Signed-off-by: Andreas Ziegler <br015@umbiko.net>
+--- Comment #2 from Peter Seiderer <ps.report@gmx.net> ---
+WSL2 could be the decisive information, similar/same failure was already
+reported, see [1], the fix/workaround is accepted/committed upstream, see [2],
+and should be in buildroot after latest genimage version bump (see [3]), not
+yet in 2021.02, only on git master...
 
-Not sure why, but your patch ended up completely mangled on Patchwork:
-    https://patchwork.ozlabs.org/project/buildroot/patch/539abc1b8ea48daa694b45242cab63d0 at umbiko.net/
-
-Anyway, I fixed it, and moved everything inside a single conditional
-block, rather than triplicate the same condition in sequence.
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> diff --git a/package/linux-firmware/linux-firmware.mk
-> b/package/linux-firmware/linux-firmware.mk
-> index 5e92b0446e..5dfc4a657d 100644
-> --- a/package/linux-firmware/linux-firmware.mk
-> +++ b/package/linux-firmware/linux-firmware.mk
-> @@ -675,6 +675,7 @@ endif
->  # sure we canonicalize the pointed-to file, to cover the symlinks of the
-> form
->  # a/foo -> ../b/foo  where a/ (the directory where to put the symlink) does
->  # not yet exist.
-> +ifneq ($(LINUX_FIRMWARE_FILES)$(LINUX_FIRMWARE_DIRS),)
->  define LINUX_FIRMWARE_INSTALL_FW
->         mkdir -p $(1)
->         $(TAR) xf $(@D)/br-firmware.tar -C $(1)
-> @@ -695,5 +696,6 @@ endef
->  define LINUX_FIRMWARE_INSTALL_IMAGES_CMDS
->         $(call LINUX_FIRMWARE_INSTALL_FW, $(BINARIES_DIR))
->  endef
-> +endif # LINUX_FIRMWARE_FILES || LINUX_FIRMWARE_DIRS
-> 
->  $(eval $(generic-package))
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+[1] https://bugs.busybox.net/show_bug.cgi?id=13146
+[2]
+https://git.pengutronix.de/cgit/genimage/commit/?id=4c2b02df0861e06ca9320d80ad60994d4a239ad6
+[3]
+https://git.buildroot.net/buildroot/commit/?id=50cfedc86d205f2ac7145deadb1c94474374acff
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+You are receiving this mail because:
+You are on the CC list for the bug.
