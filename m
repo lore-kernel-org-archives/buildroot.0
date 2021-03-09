@@ -1,122 +1,77 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 9 Mar 2021 23:58:09 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/screen: add
- security fix for CVE-2021-26937
-Message-ID: <20210309223947.B2BA888D43@busybox.osuosl.org>
+Date: Wed, 10 Mar 2021 00:00:03 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/openldap: add
+ upstream security fix for CVE-2021-27212
+Message-ID: <20210309223952.B96D380E37@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0ef043517640ab6537933b1caa44e88e077f35dc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=f2b6d4c053936582167946627f8c886e6403e32b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-encoding.c in GNU Screen through 4.8.0 allows remote attackers to cause a
-denial of service (invalid write access and application crash) or possibly
-have unspecified other impact via a crafted UTF-8 character sequence.
+In OpenLDAP through 2.4.57 and 2.5.x through 2.5.1alpha, an assertion
+failure in slapd can occur in the issuerAndThisUpdateCheck function via a
+crafted packet, resulting in a denial of service (daemon exit) via a short
+timestamp.  This is related to schema_init.c and checkTime.
 
-For more details, see the oss-security discussion:
-https://www.openwall.com/lists/oss-security/2021/02/09/3
-
-So far no fix has been added to upstream git, and a number of early proposed
-fixes caused regressions, so pull the security fix from the screen 4.8.0-5
-Debian package.
+For more details, see the bugtracker:
+https://bugs.openldap.org/show_bug.cgi?id=9454
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 6ca1a7c2773cc13f71e284d0b3b4b3b35101d1db)
+(cherry picked from commit 2d6a0ea93e8adf53377b6c1ab06e07ce1ba4961a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/screen/0008_CVE-2021-26937.patch | 68 ++++++++++++++++++++++++++++++++
- package/screen/screen.mk                 |  3 ++
- 2 files changed, 71 insertions(+)
+ ...005-ITS-9454-fix-issuerAndThisUpdateCheck.patch | 26 ++++++++++++++++++++++
+ package/openldap/openldap.mk                       |  3 +++
+ 2 files changed, 29 insertions(+)
 
-diff --git a/package/screen/0008_CVE-2021-26937.patch b/package/screen/0008_CVE-2021-26937.patch
+diff --git a/package/openldap/0005-ITS-9454-fix-issuerAndThisUpdateCheck.patch b/package/openldap/0005-ITS-9454-fix-issuerAndThisUpdateCheck.patch
 new file mode 100644
-index 0000000000..df7efa0294
+index 0000000000..a611b9ff59
 --- /dev/null
-+++ b/package/screen/0008_CVE-2021-26937.patch
-@@ -0,0 +1,68 @@
-+Description: [CVE-2021-26937] Fix out of bounds array access
-+Author: Michael Schr??der <mls@suse.de>
-+Bug-Debian: https://bugs.debian.org/982435
-+Bug: https://savannah.gnu.org/bugs/?60030
-+Bug: https://lists.gnu.org/archive/html/screen-devel/2021-02/msg00000.html
-+Bug-OSS-Security: https://www.openwall.com/lists/oss-security/2021/02/09/3
-+Origin: https://lists.gnu.org/archive/html/screen-devel/2021-02/msg00010.html
-+
-+Downloaded from Debian:
-+https://sources.debian.org/data/main/s/screen/4.8.0-5/debian/patches/99_CVE-2021-26937.patch
++++ b/package/openldap/0005-ITS-9454-fix-issuerAndThisUpdateCheck.patch
+@@ -0,0 +1,26 @@
++From 9badb73425a67768c09bcaed1a9c26c684af6c30 Mon Sep 17 00:00:00 2001
++From: Howard Chu <hyc@openldap.org>
++Date: Sat, 6 Feb 2021 20:52:06 +0000
++Subject: [PATCH] ITS#9454 fix issuerAndThisUpdateCheck
 +
 +Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+--- a/encoding.c
-++++ b/encoding.c
-+@@ -43,7 +43,7 @@
-+ # ifdef UTF8
-+ static int   recode_char __P((int, int, int));
-+ static int   recode_char_to_encoding __P((int, int));
-+-static void  comb_tofront __P((int, int));
-++static void  comb_tofront __P((int));
-+ #  ifdef DW_CHARS
-+ static int   recode_char_dw __P((int, int *, int, int));
-+ static int   recode_char_dw_to_encoding __P((int, int *, int));
-+@@ -1263,6 +1263,8 @@
-+     {0x30000, 0x3FFFD},
-+   };
-+ 
-++  if (c >= 0xdf00 && c <= 0xdfff)
-++    return 1;          /* dw combining sequence */
-+   return ((bisearch(c, wide, sizeof(wide) / sizeof(struct interval) - 1)) ||
-+           (cjkwidth &&
-+            bisearch(c, ambiguous,
-+@@ -1330,11 +1332,12 @@
-+ }
-+ 
-+ static void
-+-comb_tofront(root, i)
-+-int root, i;
-++comb_tofront(i)
-++int i;
-+ {
-+   for (;;)
-+     {
-++      int root = i >= 0x700 ? 0x801 : 0x800;
-+       debug1("bring to front: %x\n", i);
-+       combchars[combchars[i]->prev]->next = combchars[i]->next;
-+       combchars[combchars[i]->next]->prev = combchars[i]->prev;
-+@@ -1396,9 +1399,9 @@
-+     {
-+       /* full, recycle old entry */
-+       if (c1 >= 0xd800 && c1 < 0xe000)
-+-        comb_tofront(root, c1 - 0xd800);
-++        comb_tofront(c1 - 0xd800);
-+       i = combchars[root]->prev;
-+-      if (c1 == i + 0xd800)
-++      if (i == 0x800 || i == 0x801 || c1 == i + 0xd800)
-+ 	{
-+ 	  /* completely full, can't recycle */
-+ 	  debug("utf8_handle_comp: completely full!\n");
-+@@ -1422,7 +1425,7 @@
-+   mc->font  = (i >> 8) + 0xd8;
-+   mc->fontx = 0;
-+   debug3("combinig char %x %x -> %x\n", c1, c, i + 0xd800);
-+-  comb_tofront(root, i);
-++  comb_tofront(i);
-+ }
-+ 
-+ #else /* !UTF8 */
-diff --git a/package/screen/screen.mk b/package/screen/screen.mk
-index c1705f742d..5f40c68742 100644
---- a/package/screen/screen.mk
-+++ b/package/screen/screen.mk
-@@ -14,6 +14,9 @@ SCREEN_CONF_ENV = CFLAGS="$(TARGET_CFLAGS)"
- SCREEN_CONF_OPTS = --enable-colors256
- SCREEN_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) SCREEN=screen install_bin
- 
-+# 0008_CVE-2021-26937.patch
-+SCREEN_IGNORE_CVES += CVE-2021-26937
++---
++ servers/slapd/schema_init.c | 2 ++
++ 1 file changed, 2 insertions(+)
 +
- ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
- SCREEN_DEPENDENCIES += linux-pam
- SCREEN_CONF_OPTS += --enable-pam
++diff --git a/servers/slapd/schema_init.c b/servers/slapd/schema_init.c
++index 31be1154e..8b1e25539 100644
++--- a/servers/slapd/schema_init.c
+++++ b/servers/slapd/schema_init.c
++@@ -3900,6 +3900,8 @@ issuerAndThisUpdateCheck(
++ 					break;
++ 				}
++ 			}
+++			if ( tu->bv_len < STRLENOF("YYYYmmddHHmmssZ") ) return LDAP_INVALID_SYNTAX;
+++
++ 			x.bv_val += tu->bv_len + 1;
++ 			x.bv_len -= tu->bv_len + 1;
++ 
++-- 
++2.20.1
++
+diff --git a/package/openldap/openldap.mk b/package/openldap/openldap.mk
+index e361fc420c..02bf8a2df5 100644
+--- a/package/openldap/openldap.mk
++++ b/package/openldap/openldap.mk
+@@ -12,6 +12,9 @@ OPENLDAP_LICENSE_FILES = LICENSE
+ OPENLDAP_INSTALL_STAGING = YES
+ OPENLDAP_DEPENDENCIES = host-pkgconf
+ 
++# 0005-ITS-9454-fix-issuerAndThisUpdateCheck.patch
++OPENLDAP_IGNORE_CVES += CVE-2021-27212
++
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ OPENLDAP_TLS = openssl
+ OPENLDAP_DEPENDENCIES += openssl
