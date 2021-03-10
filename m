@@ -1,8 +1,8 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 10 Mar 2021 23:37:43 +0100
-Subject: [Buildroot] [PATCH v1] package/transmission: fix sysv init script
+Date: Wed, 10 Mar 2021 23:41:55 +0100
+Subject: [Buildroot] [PATCH v2] package/transmission: fix sysv init script
  (name vs. exec)
-Message-ID: <20210310223743.7879-1-ps.report@gmx.net>
+Message-ID: <20210310224155.8138-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,12 +14,18 @@ To: buildroot@busybox.net
 
 Fixes:
 
+  - https://bugs.busybox.net/show_bug.cgi?id=13576
+
   $ /etc/init.d/S92transmission stop
   Stopping bittorrent client transmission-daemon...
   start-stop-daemon: warning: this system is not able to track process names
   longer than 15 characters, please use --exec instead of --name.
 
+Reported-by: ingineru_de_sistem at yahoo.com
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+Changes v1 -> v2:
+  - add reported-by and reference to bug entry
 ---
  package/transmission/S92transmission | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
