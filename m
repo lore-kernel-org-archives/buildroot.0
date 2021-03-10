@@ -1,35 +1,38 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Wed, 10 Mar 2021 09:24:08 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
- 2021-03-09
-In-Reply-To: <20210310081500.49FA64314A@smtp2.osuosl.org>
-References: <20210310081500.49FA64314A@smtp2.osuosl.org>
-Message-ID: <CAEyMn7YwU3Obq_dwieA1-qe4Wamx7EC9UdRBDUj_oBmBww9=vg@mail.gmail.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Wed, 10 Mar 2021 10:14:48 +0100
+Subject: [Buildroot] [PATCH v2 1/6] package/libtheora: disable package if
+ binutils is affected from bug 21464
+In-Reply-To: <20210310091453.23611-1-giulio.benetti@benettiengineering.com>
+References: <20210310091453.23611-1-giulio.benetti@benettiengineering.com>
+Message-ID: <20210310091453.23611-2-giulio.benetti@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+This package is affected from binutils bug 21464, since there is no
+workaround, let's disable it.
 
-Am Mi., 10. M?rz 2021 um 09:15 Uhr schrieb Thomas Petazzoni
-<thomas.petazzoni@bootlin.com>:
->
-> Hello,
->
-> Autobuild statistics for 2021-03-09
-> ===================================
->
->       branch |  OK | NOK | TIM | TOT |
->   2020.02.x  | 15  |  5  |  0  | 20  |
->   2020.11.x  | 14  |  1  |  0  | 15  |
->     master   | 99  | 45  |  0  | 144 |
->      next    | 27  | 19  |  0  | 46  |
+Fixes:
+http://autobuild.buildroot.net/results/6c8/6c87be004adf03955c832be72c0c59749f311f71/
 
-Will the next branch for the autobuilder be shut disabled again? I get
-fail messages that are already fixed in the master.
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ package/libtheora/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thank you
+diff --git a/package/libtheora/Config.in b/package/libtheora/Config.in
+index eee9e9b1db..18a450ce99 100644
+--- a/package/libtheora/Config.in
++++ b/package/libtheora/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_LIBTHEORA
+ 	bool "libtheora"
+ 	select BR2_PACKAGE_LIBOGG
+ 	select BR2_PACKAGE_LIBVORBIS
++	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464
+ 	help
+ 	  A library for the free and open video compression format
+ 	  "Theora" from the Xiph.org Foundation.
 -- 
-Heiko
+2.25.1
