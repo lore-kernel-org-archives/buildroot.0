@@ -1,47 +1,27 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 10 Mar 2021 23:41:55 +0100
-Subject: [Buildroot] [PATCH v2] package/transmission: fix sysv init script
- (name vs. exec)
-Message-ID: <20210310224155.8138-1-ps.report@gmx.net>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 10 Mar 2021 22:47:47 +0000
+Subject: [Buildroot] [Bug 13576] Issues compiling buildroot for 5x86
+In-Reply-To: <bug-13576-163@https.bugs.busybox.net/>
+References: <bug-13576-163@https.bugs.busybox.net/>
+Message-ID: <bug-13576-163-1mKUMBC12b@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- fix sysv init script in case package start-stop-daemon is
-  enabled
+https://bugs.busybox.net/show_bug.cgi?id=13576
 
-Fixes:
+--- Comment #12 from Peter Seiderer <ps.report@gmx.net> ---
+(In reply to ingineru_de_sistem from comment #4)
 
-  - https://bugs.busybox.net/show_bug.cgi?id=13576
+Regarding sysv init script for transmission
 
-  $ /etc/init.d/S92transmission stop
-  Stopping bittorrent client transmission-daemon...
-  start-stop-daemon: warning: this system is not able to track process names
-  longer than 15 characters, please use --exec instead of --name.
+Fixed by:
 
-Reported-by: ingineru_de_sistem at yahoo.com
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
-Changes v1 -> v2:
-  - add reported-by and reference to bug entry
----
- package/transmission/S92transmission | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/transmission/S92transmission b/package/transmission/S92transmission
-index 29d7cd5863..85ff40ec16 100644
---- a/package/transmission/S92transmission
-+++ b/package/transmission/S92transmission
-@@ -93,7 +93,7 @@ stop()
-         #   1 if daemon was already stopped
-         #   2 if daemon could not be stopped
-         #   other if a failure occurred
--        start-stop-daemon --stop --quiet --retry=TERM/10/KILL/5 --pidfile $PIDFILE --name $NAME
-+        start-stop-daemon --stop --quiet --retry=TERM/10/KILL/5 --pidfile $PIDFILE --exec $DAEMON
-         RETVAL="$?"
-         [ "$RETVAL" = 2 ] && return 2
  
+https://patchwork.ozlabs.org/project/buildroot/patch/20210310223743.7879-1-ps.report at gmx.net/
+
 -- 
-2.30.1
+You are receiving this mail because:
+You are on the CC list for the bug.
