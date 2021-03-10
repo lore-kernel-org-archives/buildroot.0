@@ -1,46 +1,75 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 10 Mar 2021 19:46:16 +0000
-Subject: [Buildroot] [Bug 13576] Issues compiling buildroot for 5x86
-In-Reply-To: <bug-13576-163@https.bugs.busybox.net/>
-References: <bug-13576-163@https.bugs.busybox.net/>
-Message-ID: <bug-13576-163-6eaJ0A4lbl@https.bugs.busybox.net/>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 10 Mar 2021 20:44:31 +0100
+Subject: [Buildroot] [PATCH 1/1] package/mc: fix build with ncurses
+Message-ID: <20210310194431.443498-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13576
+wchar support in ncurses is needed since version 4.8.26 and
+https://github.com/MidnightCommander/mc/commit/8b4386df83ab5a525f0568113fe1e53d362f433e
 
---- Comment #9 from ingineru_de_sistem at yahoo.com ---
-(In reply to Peter Seiderer from comment #7)
+Fixes:
+ - http://autobuild.buildroot.org/results/446eb0a15a728e2fe7a58312bb7329983b2df647
 
-About the grub issue:
-For an older project of mine (reviving an old AMD Sempron laptop where the
-original hdd had unrecoverable bad sectors), I tried Lubuntu 18.04 LTS with an
-IDE44pin-to-SDCard convertor with a fairly new micro-SD card.
-All went fine except for the part when booting it with grub would erase the
-partition table at every boot from the hdd (well, sd-card+adapter).
-After tons of Googling (can't remember the exact search terms) found that one
-guy had replaced grub with lilo (which fortunately still comes as a Lubuntu
-package at least in 18.04) and it worked. So I did the same (full install, add
-the lilo package, purge grub, remove all grubby remnants, configure and run
-lilo) and it worked fine.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...FTBFS-against-NCurses-on-OS-X-10-9-5.patch | 32 +++++++++++++++++++
+ package/mc/Config.in                          |  1 +
+ 2 files changed, 33 insertions(+)
+ create mode 100644 package/mc/0001-Ticket-4181-FTBFS-against-NCurses-on-OS-X-10-9-5.patch
 
-
-For syslinux - if one wraps the linker in a shell file that adds
---allow-multiple-definition, all works fine. And it's even simpler than LILO
-but it needs a FAT partition (no biggie), tested that one as well.
-
-For the revival project at hand (ancient 32-bit 5*86 with an asterisk zap card)
-I reused the ancient LILO which can load new kernels as well. 
-Still a lot to do (Asterisk+zaptel doesn't compile directly either from
-buildroot on 586, GCC doesn't come at all with buildroot and GCC's
-documentation is not very friendly as to what sources one needs to download to
-do the whole bootstraping stuff) and since it's a pet low-priority project, it
-will take a long while. If anything pops up in the mean time, I will let you
-know.
-
+diff --git a/package/mc/0001-Ticket-4181-FTBFS-against-NCurses-on-OS-X-10-9-5.patch b/package/mc/0001-Ticket-4181-FTBFS-against-NCurses-on-OS-X-10-9-5.patch
+new file mode 100644
+index 0000000000..6dfae52af5
+--- /dev/null
++++ b/package/mc/0001-Ticket-4181-FTBFS-against-NCurses-on-OS-X-10-9-5.patch
+@@ -0,0 +1,32 @@
++From ba62dd32add2767d6d13f9abb82f43304418740f Mon Sep 17 00:00:00 2001
++From: Andrew Borodin <aborodin@vmail.ru>
++Date: Sun, 24 Jan 2021 14:19:22 +0300
++Subject: [PATCH] Ticket #4181: FTBFS against NCurses on OS X 10.9.5.
++
++lib/tty/tty-ncurses.h: define _XOPEN_SOURCE_EXTENDED to use cchar_t,
++getcchar(), setcchar().
++
++Signed-off-by: Andrew Borodin <aborodin@vmail.ru>
++[Retrieved from:
++https://github.com/MidnightCommander/mc/commit/ba62dd32add2767d6d13f9abb82f43304418740f]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ lib/tty/tty-ncurses.h | 5 +++++
++ 1 file changed, 5 insertions(+)
++
++diff --git a/lib/tty/tty-ncurses.h b/lib/tty/tty-ncurses.h
++index 9962c7c413..d75df9533a 100644
++--- a/lib/tty/tty-ncurses.h
+++++ b/lib/tty/tty-ncurses.h
++@@ -2,6 +2,11 @@
++ #ifndef MC__TTY_NCURSES_H
++ #define MC__TTY_NCURSES_H
++ 
+++/* for cchar_t, getcchar(), setcchar() */
+++#ifndef _XOPEN_SOURCE_EXTENDED
+++#define _XOPEN_SOURCE_EXTENDED
+++#endif
+++
++ #ifdef USE_NCURSES
++ #ifdef HAVE_NCURSES_CURSES_H
++ #include <ncurses/curses.h>
+diff --git a/package/mc/Config.in b/package/mc/Config.in
+index 61f351c41d..ac512116ca 100644
+--- a/package/mc/Config.in
++++ b/package/mc/Config.in
+@@ -6,6 +6,7 @@ config BR2_PACKAGE_MC
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	# mc prefers slang, but can use ncurses too
+ 	select BR2_PACKAGE_SLANG if !BR2_PACKAGE_NCURSES
++	select BR2_PACKAGE_NCURSES_WCHAR if BR2_PACKAGE_NCURSES
+ 	help
+ 	  GNU Midnight Commander is a visual file manager, licensed
+ 	  under GNU General Public License. It can use either SLang
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.30.0
