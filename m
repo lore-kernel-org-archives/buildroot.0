@@ -1,29 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 10 Mar 2021 21:20:17 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
- 2021-03-09
-In-Reply-To: <CAEyMn7YwU3Obq_dwieA1-qe4Wamx7EC9UdRBDUj_oBmBww9=vg@mail.gmail.com>
-References: <20210310081500.49FA64314A@smtp2.osuosl.org>
- <CAEyMn7YwU3Obq_dwieA1-qe4Wamx7EC9UdRBDUj_oBmBww9=vg@mail.gmail.com>
-Message-ID: <20210310212017.515fc833@windsurf.home>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Wed, 10 Mar 2021 21:50:02 +0100
+Subject: [Buildroot] [PATCH v1] package/libubox: bump version to 551d75b
+Message-ID: <20210310205002.18278-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 10 Mar 2021 09:24:08 +0100
-Heiko Thiery <heiko.thiery@gmail.com> wrote:
+Changelog:
 
-> Will the next branch for the autobuilder be shut disabled again? I get
-> fail messages that are already fixed in the master.
+  2e52c7e libubox: fix BLOBMSG_CAST_INT64 (do not override BLOBMSG_TYPE_DOUBLE)
+  870acee tests: cram: test_base64: fix failing tests
+  4d8995e tests: cram: test_base64: really fix failing tests
+  551d75b libubox: tests: add more blobmsg/json test cases
 
-I've just done that now. Also, I've dropped the next branch from
-git.buildroot.net so that the next autobuild.buildroot.org/stats
-results will be based on the master branch.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/libubox/libubox.hash | 2 +-
+ package/libubox/libubox.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
+diff --git a/package/libubox/libubox.hash b/package/libubox/libubox.hash
+index fd4c5a4a39..94a071d80d 100644
+--- a/package/libubox/libubox.hash
++++ b/package/libubox/libubox.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  e383caf80a241e9711ab0c58a5e8f4d16479693be1e44ffb6cc716a185e7e303  libubox-5bc0146a1d6474d339c4ade9a227f32cc27a8b93-br1.tar.gz
++sha256  c6bac8baa7525b2d35eb22edeb5722c098370794d00e8859ef1a0bdfd8716151  libubox-551d75b5662cccd0466b990d58136bdf799a804d-br1.tar.gz
+diff --git a/package/libubox/libubox.mk b/package/libubox/libubox.mk
+index 4626659158..20da5c2ec2 100644
+--- a/package/libubox/libubox.mk
++++ b/package/libubox/libubox.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBUBOX_VERSION = 5bc0146a1d6474d339c4ade9a227f32cc27a8b93
++LIBUBOX_VERSION = 551d75b5662cccd0466b990d58136bdf799a804d
+ LIBUBOX_SITE = https://git.openwrt.org/project/libubox.git
+ LIBUBOX_SITE_METHOD = git
+ LIBUBOX_LICENSE = ISC, BSD-3-Clause
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.30.1
