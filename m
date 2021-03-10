@@ -1,98 +1,41 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 10 Mar 2021 23:33:11 +0100
-Subject: [Buildroot] [PATCH/2021.2 v1] package/genimage: fix for WSL
- (Windows-Subsystem for Linux)
-In-Reply-To: <20210310191651.20769-1-ps.report@gmx.net>
-References: <20210310191651.20769-1-ps.report@gmx.net>
-Message-ID: <20210310223311.GT2737665@scaer>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Wed, 10 Mar 2021 23:37:43 +0100
+Subject: [Buildroot] [PATCH v1] package/transmission: fix sysv init script
+ (name vs. exec)
+Message-ID: <20210310223743.7879-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, Peter, All,
+- fix sysv init script in case package start-stop-daemon is
+  enabled
 
-On 2021-03-10 20:16 +0100, Peter Seiderer spake thusly:
-> - add upstream patch ([1]) to fix usage with WSL (Windows-Subsystem for Linux)
-> 
-> Fixes:
-> 
->   - https://bugs.busybox.net/show_bug.cgi?id=13146
->   - https://bugs.busybox.net/show_bug.cgi?id=13601
-> 
->   ERROR: hdimage(sdcard.img): fiemap .../images/boot.vfat: 25 Inappropriate ioctl for device
->   ERROR: hdimage(sdcard.img): failed to write image partition 'boot'
-> 
-> [1] https://github.com/pengutronix/genimage/commit/4c2b02df0861e06ca9320d80ad60994d4a239ad6.patch
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Fixes:
 
-Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
+  $ /etc/init.d/S92transmission stop
+  Stopping bittorrent client transmission-daemon...
+  start-stop-daemon: warning: this system is not able to track process names
+  longer than 15 characters, please use --exec instead of --name.
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/transmission/S92transmission | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> ---
->  ...add-fiemap-fallback-for-errno-ENOTTY.patch | 37 +++++++++++++++++++
->  1 file changed, 37 insertions(+)
->  create mode 100644 package/genimage/0001-util-add-fiemap-fallback-for-errno-ENOTTY.patch
-> 
-> diff --git a/package/genimage/0001-util-add-fiemap-fallback-for-errno-ENOTTY.patch b/package/genimage/0001-util-add-fiemap-fallback-for-errno-ENOTTY.patch
-> new file mode 100644
-> index 0000000000..4ce91ed19b
-> --- /dev/null
-> +++ b/package/genimage/0001-util-add-fiemap-fallback-for-errno-ENOTTY.patch
-> @@ -0,0 +1,37 @@
-> +From 6b61b55807fdce5d09ea470e7b5c8ca1e40f724f Mon Sep 17 00:00:00 2001
-> +From: Peter Seiderer <ps.report@gmx.net>
-> +Date: Wed, 12 Aug 2020 21:10:36 +0200
-> +Subject: [PATCH] util: add fiemap fallback for errno ENOTTY
-> +
-> +On WSL-1, genimage fails with (see [1] for details):
-> +
-> +  ERROR: hdimage(sdcard.img): fiemap .../boot.vfat: 25 Inappropriate ioctl for device
-> +
-> +This is because WSL-1 is a limited Linux emulation layer, where the fiemap
-> +ioctl incorrectly returns ENOTTY instead of the expected EOPNOTSUPP.
-> +
-> +[1] https://bugs.busybox.net/show_bug.cgi?id=13146
-> +
-> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> +[From https://github.com/pengutronix/genimage/commit/4c2b02df0861e06ca9320d80ad60994d4a239ad6.patch]
-> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> +---
-> + util.c | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/util.c b/util.c
-> +index 381c5d9..2dcf396 100644
-> +--- a/util.c
-> ++++ b/util.c
-> +@@ -387,7 +387,7 @@ err_out:
-> + 	free(fiemap);
-> + 
-> + 	/* If failure is due to no filesystem support, return a single extent */
-> +-	if (ret == -EOPNOTSUPP)
-> ++	if (ret == -EOPNOTSUPP || ret == -ENOTTY)
-> + 		return whole_file_exent(size, extents, extent_count);
-> + 
-> + 	image_error(image, "fiemap %s: %d %s\n", filename, errno, strerror(errno));
-> +-- 
-> +2.30.1
-> +
-> -- 
-> 2.30.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/transmission/S92transmission b/package/transmission/S92transmission
+index 29d7cd5863..85ff40ec16 100644
+--- a/package/transmission/S92transmission
++++ b/package/transmission/S92transmission
+@@ -93,7 +93,7 @@ stop()
+         #   1 if daemon was already stopped
+         #   2 if daemon could not be stopped
+         #   other if a failure occurred
+-        start-stop-daemon --stop --quiet --retry=TERM/10/KILL/5 --pidfile $PIDFILE --name $NAME
++        start-stop-daemon --stop --quiet --retry=TERM/10/KILL/5 --pidfile $PIDFILE --exec $DAEMON
+         RETVAL="$?"
+         [ "$RETVAL" = 2 ] && return 2
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.30.1
