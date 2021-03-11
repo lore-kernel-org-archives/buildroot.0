@@ -1,7 +1,10 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 11 Mar 2021 22:08:03 +0100
-Subject: [Buildroot] [PATCH v1 1/2] package/batctl: bump version to 2021.0
-Message-ID: <20210311210804.9616-1-ps.report@gmx.net>
+Date: Thu, 11 Mar 2021 22:08:04 +0100
+Subject: [Buildroot] [PATCH v1 2/2] package/batman-adv: bump version to
+ 2021.0
+In-Reply-To: <20210311210804.9616-1-ps.report@gmx.net>
+References: <20210311210804.9616-1-ps.report@gmx.net>
+Message-ID: <20210311210804.9616-2-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,36 +17,39 @@ For details see [1].
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/batctl/batctl.hash | 6 +++---
- package/batctl/batctl.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/batman-adv/batman-adv.hash | 10 +++++-----
+ package/batman-adv/batman-adv.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/batctl/batctl.hash b/package/batctl/batctl.hash
-index e8127aa26f..56bea3c5da 100644
---- a/package/batctl/batctl.hash
-+++ b/package/batctl/batctl.hash
-@@ -1,6 +1,6 @@
--# From https://downloads.open-mesh.org/batman/releases/batman-adv-2020.2/batctl-2020.2.tar.gz.sha1
--sha1  e347fb126e2a8f6d21516296325afc043062e3bd  batctl-2020.2.tar.gz
-+# From https://downloads.open-mesh.org/batman/releases/batman-adv-2021.0/batctl-2021.0.tar.gz.sha1
-+sha1  87d0bb34950cb70578a0ca5ce706513a8279a01c  batctl-2021.0.tar.gz
- # Locally calculated
--sha256  d29cdb53ee68abd5027eae07d9fd645b3f154e0d577efa2666c1334bb6d60efd  batctl-2020.2.tar.gz
-+sha256  9cec8bf1952f885192749a9dc0318a54633b717aaf05c438d504efd83f5201e4  batctl-2021.0.tar.gz
- sha256  cecbf53d1148e13256ac29f8b900655b7fc8dc12d59939a95bc2323ea1747025  LICENSES/preferred/GPL-2.0
- sha256  323c587d0ccf10e376f8bf9a7f31fb4ca6078105194b42e0b1e0ee2bc9bde71f  LICENSES/preferred/MIT
-diff --git a/package/batctl/batctl.mk b/package/batctl/batctl.mk
-index 229c042aaf..8ff591844d 100644
---- a/package/batctl/batctl.mk
-+++ b/package/batctl/batctl.mk
+diff --git a/package/batman-adv/batman-adv.hash b/package/batman-adv/batman-adv.hash
+index dabbec8120..2422723f40 100644
+--- a/package/batman-adv/batman-adv.hash
++++ b/package/batman-adv/batman-adv.hash
+@@ -1,7 +1,7 @@
+-# From https://downloads.open-mesh.org/batman/stable/sources/batman-adv/batman-adv-2019.3.tar.gz.{md5,sha1}
+-md5  39345688ddf12a542853b2318325f07b         batman-adv-2019.3.tar.gz
+-sha1 202539c0cbf4604f6c8e9d427b338d4e807bd220 batman-adv-2019.3.tar.gz
++# From https://downloads.open-mesh.org/batman/releases/batman-adv-2021.0/batman-adv-2021.0.tar.gz.sha1
++sha1  7edd4dfb9434f80adf791990d4e383c7ef80a256  batman-adv-2021.0.tar.gz
+ 
+ # Hash for license files
+-sha256 cecbf53d1148e13256ac29f8b900655b7fc8dc12d59939a95bc2323ea1747025 LICENSES/preferred/GPL-2.0
+-sha256 323c587d0ccf10e376f8bf9a7f31fb4ca6078105194b42e0b1e0ee2bc9bde71f LICENSES/preferred/MIT
++sha256  5a989ba580897268373bd516b87b588061f344af773a0f6b038a3d8d2af028a1  batman-adv-2021.0.tar.gz
++sha256  cecbf53d1148e13256ac29f8b900655b7fc8dc12d59939a95bc2323ea1747025  LICENSES/preferred/GPL-2.0
++sha256  323c587d0ccf10e376f8bf9a7f31fb4ca6078105194b42e0b1e0ee2bc9bde71f  LICENSES/preferred/MIT
+diff --git a/package/batman-adv/batman-adv.mk b/package/batman-adv/batman-adv.mk
+index 3f48e62051..bd648b5a6c 100644
+--- a/package/batman-adv/batman-adv.mk
++++ b/package/batman-adv/batman-adv.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BATCTL_VERSION = 2020.2
-+BATCTL_VERSION = 2021.0
- BATCTL_SITE = http://downloads.open-mesh.org/batman/releases/batman-adv-$(BATCTL_VERSION)
- BATCTL_LICENSE = GPL-2.0, MIT (batman_adv.h, list.h)
- BATCTL_LICENSE_FILES = LICENSES/preferred/GPL-2.0 LICENSES/preferred/MIT
+-BATMAN_ADV_VERSION = 2019.3
++BATMAN_ADV_VERSION = 2021.0
+ BATMAN_ADV_SITE = https://downloads.open-mesh.org/batman/stable/sources/batman-adv
+ BATMAN_ADV_LICENSE = GPL-2.0, MIT (batman_adv.h)
+ BATMAN_ADV_LICENSE_FILES = LICENSES/preferred/GPL-2.0 LICENSES/preferred/MIT
 -- 
 2.30.1
