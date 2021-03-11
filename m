@@ -1,43 +1,123 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 11 Mar 2021 08:29:25 -0600
-Subject: [Buildroot] [PATCH v11 2/9] package/clang: bump to version 11.1.0
+Date: Thu, 11 Mar 2021 08:29:31 -0600
+Subject: [Buildroot] [PATCH v11 8/9] package/clang: install a
+ toolchain-wrapper for the host clang cross-compiler
 In-Reply-To: <20210311142932.44985-1-matthew.weber@rockwellcollins.com>
 References: <20210311142932.44985-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20210311142932.44985-2-matthew.weber@rockwellcollins.com>
+Message-ID: <20210311142932.44985-8-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
----
- package/clang/clang.hash | 2 +-
- package/clang/clang.mk   | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+From: Romain Naour <romain.naour@smile.fr>
 
-diff --git a/package/clang/clang.hash b/package/clang/clang.hash
-index 067a2c0470..32a19c1659 100644
---- a/package/clang/clang.hash
-+++ b/package/clang/clang.hash
-@@ -1,3 +1,3 @@
- # locally calculated
--sha256 5778512b2e065c204010f88777d44b95250671103e434f9dc7363ab2e3804253 clang-9.0.1.src.tar.xz
-+sha256 0a8288f065d1f57cb6d96da4d2965cbea32edc572aa972e466e954d17148558b clang-11.1.0.src.tar.xz
- sha256 ebcd9bbf783a73d05c53ba4d586b8d5813dcdf3bbec50265860ccc885e606f47 LICENSE.TXT
+In order to use Clang as a host cross-compiler for Buildroot, we
+need to provide at least the path to the sysroot (using
+--sysroot) and some other compiler flags.
+
+This series looks to reuse the toolchain wrapper for GCC since
+Clang support most of the gcc flags used in the Buildroot's
+toolchain wrapper. The only flag -mfused-madd (deprecated
+since gcc 4.6) for mips is not supported by clang. Since
+Clang require gcc >= 5.x this flag can never be used.
+
+host-clang refers to an existing GCC-based toolchain (internal or
+external) for libstdc++. However, a Buildroot external toolchain
+gets a different BR_CROSS_PATH_SUFFIX. Therefore, we can't reuse the
+toolchain-wrapper that gets built for the GCC-based toolchain, but
+instead have to compile an additional clang-specific wrapper, called
+toolchain-wrapper-clang.
+
+After building the clang toolchain wrapper, create the symlinks needed
+to force package infrastructure to use clang througt the wrapper.
+
+Initially clang install the clang-8 binary and create all other symlinks:
+
+ # clang -> clang-8
+ # clang++ -> clang
+ # clang-8
+ # clang-cl -> clang
+ # clang-cpp -> clang
+
+Use a post install hook to rename the clang-8 binary to clang-8.br_real
+and recreate all symlinks:
+
+ # clang -> toolchain-wrapper-clang
+ # clang++ -> toolchain-wrapper-clang
+ # clang-8 -> toolchain-wrapper-clang
+ # clang-8.br_real
+ # clang++.br_real -> clang-8.br_real
+ # clang.br_real -> clang-8.br_real
+ # clang-cl -> toolchain-wrapper-clang
+ # clang-cl.br_real -> clang-8.br_real
+ # clang-cpp -> toolchain-wrapper-clang
+ # clang-cpp.br_real -> clang-8.br_real
+
+NOTE: *.br_real symlinks are needed as the wrapper references them
+
+Use the previously introduced CLANG_VERSION_MAJOR variable to create
+theses symlinks.
+
+Set BR_CROSS_PATH_SUFFIX to ".br_real" as for the Buildroot's internal
+GCC toolchain backend to find the "real" clang binary installed in
+$(HOST_DIR)/bin.
+
+Borrow TOOLCHAIN_WRAPPER_BUILD and TOOLCHAIN_WRAPPER_INSTALL to
+build and install the specific clang toolchain wrapper.
+
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Cc: Valentin Korenblit <valentinkorenblit@gmail.com>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+
+---
+Changes
+v1 -> v2
+[Arnout
+ - Fixup commit description and clarified *.br_real
+ - Simplified loop
+---
+ package/clang/clang.mk | 28 ++++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+
 diff --git a/package/clang/clang.mk b/package/clang/clang.mk
-index 939f000cbd..d1667d79b6 100644
+index 95b4964be3..3c75f8d6b1 100644
 --- a/package/clang/clang.mk
 +++ b/package/clang/clang.mk
-@@ -5,7 +5,8 @@
- ################################################################################
+@@ -112,5 +112,33 @@ ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
+ HOST_CLANG_CONF_OPTS += -DGCC_INSTALL_PREFIX:PATH=`realpath --relative-to=$(HOST_DIR)/bin/ $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)`
+ endif
  
- # LLVM, Clang and lld should be version bumped together
--CLANG_VERSION = 9.0.1
-+CLANG_VERSION_MAJOR = 11
-+CLANG_VERSION = $(CLANG_VERSION_MAJOR).1.0
- CLANG_SITE = https://github.com/llvm/llvm-project/releases/download/llvmorg-$(CLANG_VERSION)
- CLANG_SOURCE = clang-$(CLANG_VERSION).src.tar.xz
- CLANG_LICENSE = Apache-2.0 with exceptions
++define HOST_CLANG_INSTALL_WRAPPER_AND_SIMPLE_SYMLINKS
++	$(Q)cd $(HOST_DIR)/bin; \
++	rm -f clang-$(CLANG_VERSION_MAJOR).br_real; \
++	mv clang-$(CLANG_VERSION_MAJOR) clang-$(CLANG_VERSION_MAJOR).br_real; \
++	ln -sf toolchain-wrapper-clang clang-$(CLANG_VERSION_MAJOR); \
++	for i in clang clang++ clang-cl clang-cpp; do \
++		ln -snf toolchain-wrapper-clang $$i; \
++		ln -snf clang-$(CLANG_VERSION_MAJOR).br_real $$i.br_real; \
++	done
++endef
++
++define HOST_CLANG_TOOLCHAIN_WRAPPER_BUILD
++	$(HOSTCC) $(HOST_CFLAGS) $(TOOLCHAIN_WRAPPER_ARGS) \
++		-s -Wl,--hash-style=$(TOOLCHAIN_WRAPPER_HASH_STYLE) \
++		toolchain/toolchain-wrapper.c \
++		-o $(@D)/toolchain-wrapper-clang
++endef
++
++define HOST_CLANG_TOOLCHAIN_WRAPPER_INSTALL
++	$(INSTALL) -D -m 0755 $(@D)/toolchain-wrapper-clang \
++		$(HOST_DIR)/bin/toolchain-wrapper-clang
++endef
++
++HOST_CLANG_TOOLCHAIN_WRAPPER_ARGS += -DBR_CROSS_PATH_SUFFIX='".br_real"'
++HOST_CLANG_POST_BUILD_HOOKS += HOST_CLANG_TOOLCHAIN_WRAPPER_BUILD
++HOST_CLANG_POST_INSTALL_HOOKS += HOST_CLANG_TOOLCHAIN_WRAPPER_INSTALL
++HOST_CLANG_POST_INSTALL_HOOKS += HOST_CLANG_INSTALL_WRAPPER_AND_SIMPLE_SYMLINKS
++
+ $(eval $(cmake-package))
+ $(eval $(host-cmake-package))
 -- 
 2.17.1
