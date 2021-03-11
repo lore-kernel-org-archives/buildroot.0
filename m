@@ -1,55 +1,59 @@
-From: Grzegorz Blach <grzegorz@blach.pl>
-Date: Wed, 10 Mar 2021 23:58:10 +0100
-Subject: [Buildroot] [PATCH] package/python-rpi-ws281x: bump to version 4.2.6
-Message-ID: <20210310225813.374664-1-grzegorz@blach.pl>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 11 Mar 2021 06:59:27 +0200
+Subject: [Buildroot] [PATCH] strace: fix build for no-MMU targets
+Message-ID: <479cffd2532537c8d913d9c43ef4c582871ebef4.1615438767.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Set proper license.
+Add patch to disable fork() calling code on !HAVE_FORK.
 
-Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
-Changes v1 -> v2:
-  - bump to version 4.2.6
----
- package/python-rpi-ws281x/python-rpi-ws281x.hash | 4 ++--
- package/python-rpi-ws281x/python-rpi-ws281x.mk   | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ ...et_syscall_info-disable_ptrace_getre.patch | 33 +++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+ create mode 100644 package/strace/0001-disable_ptrace_get_syscall_info-disable_ptrace_getre.patch
 
-diff --git a/package/python-rpi-ws281x/python-rpi-ws281x.hash b/package/python-rpi-ws281x/python-rpi-ws281x.hash
-index 54d91a6df0..cb021a821d 100644
---- a/package/python-rpi-ws281x/python-rpi-ws281x.hash
-+++ b/package/python-rpi-ws281x/python-rpi-ws281x.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/rpi-ws281x/json
--md5  8eb175e05905ee7a00bb5fd2f1b15e40  rpi_ws281x-4.2.4.tar.gz
--sha256  7175e708d6085bc02a9d0b8227797d697e34fd00787030ae5f119fe2f4f90889  rpi_ws281x-4.2.4.tar.gz
-+md5  5da00a092ac3755c4913f5a53451744b  rpi_ws281x-4.2.6.tar.gz
-+sha256  65a9918fbdd9df1ac612ccc1a385d4a550f1bc74cc6bbf6b9035ad26dc41b3ce  rpi_ws281x-4.2.6.tar.gz
- # Locally computed sha256 checksums
- sha256  7bbf6337c1eee7169579e6acd398f31ea274dfa3a1689ab7e654ca3585d5a8a9  LICENSE
- sha256  7bbf6337c1eee7169579e6acd398f31ea274dfa3a1689ab7e654ca3585d5a8a9  lib/LICENSE
-diff --git a/package/python-rpi-ws281x/python-rpi-ws281x.mk b/package/python-rpi-ws281x/python-rpi-ws281x.mk
-index 4af1d268af..b8ba119919 100644
---- a/package/python-rpi-ws281x/python-rpi-ws281x.mk
-+++ b/package/python-rpi-ws281x/python-rpi-ws281x.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
- 
--PYTHON_RPI_WS281X_VERSION = 4.2.4
-+PYTHON_RPI_WS281X_VERSION = 4.2.6
- PYTHON_RPI_WS281X_SOURCE = rpi_ws281x-$(PYTHON_RPI_WS281X_VERSION).tar.gz
--PYTHON_RPI_WS281X_SITE = https://files.pythonhosted.org/packages/3b/99/0f74f2d303e03432d10b11dab240cb15afad1bc6ab9a1449c9bc08af2ee4
-+PYTHON_RPI_WS281X_SITE = https://files.pythonhosted.org/packages/7f/1e/ea9ff56d9823fc55c79748630ffe0ceb30f619c9218743050bbf96d08704
- PYTHON_RPI_WS281X_SETUP_TYPE = setuptools
--PYTHON_RPI_WS281X_LICENSE = MIT
-+PYTHON_RPI_WS281X_LICENSE = BSD-2-Clause
- PYTHON_RPI_WS281X_LICENSE_FILES = LICENSE lib/LICENSE
- 
- $(eval $(python-package))
+diff --git a/package/strace/0001-disable_ptrace_get_syscall_info-disable_ptrace_getre.patch b/package/strace/0001-disable_ptrace_get_syscall_info-disable_ptrace_getre.patch
+new file mode 100644
+index 000000000000..1367d2985a0f
+--- /dev/null
++++ b/package/strace/0001-disable_ptrace_get_syscall_info-disable_ptrace_getre.patch
+@@ -0,0 +1,33 @@
++From 84536a993417f3bfff4a54830fa34a3f91f5716e Mon Sep 17 00:00:00 2001
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Thu, 11 Mar 2021 06:43:26 +0200
++Subject: [PATCH] disable_ptrace_get_syscall_info, disable_ptrace_getregset:
++ require fork()
++
++These helper programs require fork(), so they are incompatible with
++no-MMU systems. Make the code depend on HAVE_FORK.
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: https://lists.strace.io/pipermail/strace-devel/2021-March/010421.html
++
++ src/disable_ptrace_request.c | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/src/disable_ptrace_request.c b/src/disable_ptrace_request.c
++index 57163e77f0f4..715006941572 100644
++--- a/src/disable_ptrace_request.c
+++++ b/src/disable_ptrace_request.c
++@@ -41,7 +41,8 @@ init(int argc, char **argv)
++  && defined PR_SET_NO_NEW_PRIVS \
++  && defined PR_SET_SECCOMP \
++  && defined BPF_JUMP \
++- && defined BPF_STMT
+++ && defined BPF_STMT \
+++ && defined HAVE_FORK
++ 
++ static unsigned int
++ get_arch(void)
++-- 
++2.30.1
++
 -- 
-2.27.0
+2.30.1
