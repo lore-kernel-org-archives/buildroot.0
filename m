@@ -1,55 +1,163 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 11 Mar 2021 22:08:04 +0100
-Subject: [Buildroot] [PATCH v1 2/2] package/batman-adv: bump version to
- 2021.0
-In-Reply-To: <20210311210804.9616-1-ps.report@gmx.net>
-References: <20210311210804.9616-1-ps.report@gmx.net>
-Message-ID: <20210311210804.9616-2-ps.report@gmx.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 11 Mar 2021 22:18:25 +0100
+Subject: [Buildroot] [git commit] package/wine: bump to version 6.0
+Message-ID: <20210311205730.B80B288974@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For details see [1].
+commit: https://git.buildroot.net/buildroot/commit/?id=5dfe4975b6f10b146d010c6013b9b0cda486eed7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[1] https://www.open-mesh.org/news/100
+Starting with this Wine version many things changed.
+zlib, ncurses and GLU are no longer used.
+I also explicitly disabled mingw, as otherwise my host mingw-w64 was picked up.
+The build system was refactored, so now we have to build the host tools in their
+directories instead of asking for them to be built.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
+[yann.morin.1998 at free.fr: slightly rework the build of the host tools]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/batman-adv/batman-adv.hash | 10 +++++-----
- package/batman-adv/batman-adv.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/wine/wine.hash |  4 ++--
+ package/wine/wine.mk   | 52 +++++++++++++++++---------------------------------
+ 2 files changed, 19 insertions(+), 37 deletions(-)
 
-diff --git a/package/batman-adv/batman-adv.hash b/package/batman-adv/batman-adv.hash
-index dabbec8120..2422723f40 100644
---- a/package/batman-adv/batman-adv.hash
-+++ b/package/batman-adv/batman-adv.hash
-@@ -1,7 +1,7 @@
--# From https://downloads.open-mesh.org/batman/stable/sources/batman-adv/batman-adv-2019.3.tar.gz.{md5,sha1}
--md5  39345688ddf12a542853b2318325f07b         batman-adv-2019.3.tar.gz
--sha1 202539c0cbf4604f6c8e9d427b338d4e807bd220 batman-adv-2019.3.tar.gz
-+# From https://downloads.open-mesh.org/batman/releases/batman-adv-2021.0/batman-adv-2021.0.tar.gz.sha1
-+sha1  7edd4dfb9434f80adf791990d4e383c7ef80a256  batman-adv-2021.0.tar.gz
- 
- # Hash for license files
--sha256 cecbf53d1148e13256ac29f8b900655b7fc8dc12d59939a95bc2323ea1747025 LICENSES/preferred/GPL-2.0
--sha256 323c587d0ccf10e376f8bf9a7f31fb4ca6078105194b42e0b1e0ee2bc9bde71f LICENSES/preferred/MIT
-+sha256  5a989ba580897268373bd516b87b588061f344af773a0f6b038a3d8d2af028a1  batman-adv-2021.0.tar.gz
-+sha256  cecbf53d1148e13256ac29f8b900655b7fc8dc12d59939a95bc2323ea1747025  LICENSES/preferred/GPL-2.0
-+sha256  323c587d0ccf10e376f8bf9a7f31fb4ca6078105194b42e0b1e0ee2bc9bde71f  LICENSES/preferred/MIT
-diff --git a/package/batman-adv/batman-adv.mk b/package/batman-adv/batman-adv.mk
-index 3f48e62051..bd648b5a6c 100644
---- a/package/batman-adv/batman-adv.mk
-+++ b/package/batman-adv/batman-adv.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/wine/wine.hash b/package/wine/wine.hash
+index 08abccb4a8..083e3dd3eb 100644
+--- a/package/wine/wine.hash
++++ b/package/wine/wine.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256  87f17254c6794ec6eeb7020b164c859983c9df0dacdd66d6449ff000498c842e  wine-5.12.tar.xz
++sha256  b493065f2f83ee429c62e2ec58698a3cf63ef78722e1b20765823152e8582c56  wine-6.0.tar.xz
+ # Locally calculated
+ sha256  e237fa56668030e928551ddd60f05df5fe957f75eab874bbd017e085ed722e7c  COPYING.LIB
+-sha256  f3ca909e68d38c972e8ded5248b4745958dbb26f2e581ad73cfbedb6b0408e58  LICENSE
++sha256  111398f1be25b1ae1f124512fe61569e6b4555408e2feb9bc82f9fe57d39b302  LICENSE
+diff --git a/package/wine/wine.mk b/package/wine/wine.mk
+index 80c9d20d3d..3179658cee 100644
+--- a/package/wine/wine.mk
++++ b/package/wine/wine.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--BATMAN_ADV_VERSION = 2019.3
-+BATMAN_ADV_VERSION = 2021.0
- BATMAN_ADV_SITE = https://downloads.open-mesh.org/batman/stable/sources/batman-adv
- BATMAN_ADV_LICENSE = GPL-2.0, MIT (batman_adv.h)
- BATMAN_ADV_LICENSE_FILES = LICENSES/preferred/GPL-2.0 LICENSES/preferred/MIT
--- 
-2.30.1
+-WINE_VERSION = 5.12
++WINE_VERSION = 6.0
+ WINE_SOURCE = wine-$(WINE_VERSION).tar.xz
+-WINE_SITE = https://dl.winehq.org/wine/source/5.x
++WINE_SITE = https://dl.winehq.org/wine/source/6.0
+ WINE_LICENSE = LGPL-2.1+
+ WINE_LICENSE_FILES = COPYING.LIB LICENSE
+ WINE_CPE_ID_VENDOR = winehq
+@@ -26,6 +26,7 @@ WINE_CONF_OPTS = \
+ 	--without-gphoto \
+ 	--without-gsm \
+ 	--without-hal \
++	--without-mingw \
+ 	--without-opencl \
+ 	--without-oss \
+ 	--without-vkd3d \
+@@ -118,13 +119,6 @@ else
+ WINE_CONF_OPTS += --without-opengl
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LIBGLU),y)
+-WINE_CONF_OPTS += --with-glu
+-WINE_DEPENDENCIES += libglu
+-else
+-WINE_CONF_OPTS += --without-glu
+-endif
+-
+ ifeq ($(BR2_PACKAGE_LIBKRB5),y)
+ WINE_CONF_OPTS += --with-krb5
+ WINE_DEPENDENCIES += libkrb5
+@@ -183,13 +177,6 @@ else
+ WINE_CONF_OPTS += --without-mpg123
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_NCURSES),y)
+-WINE_CONF_OPTS += --with-curses
+-WINE_DEPENDENCIES += ncurses
+-else
+-WINE_CONF_OPTS += --without-curses
+-endif
+-
+ ifeq ($(BR2_PACKAGE_OPENAL),y)
+ WINE_CONF_OPTS += --with-openal
+ WINE_DEPENDENCIES += openal
+@@ -317,13 +304,6 @@ else
+ WINE_CONF_OPTS += --without-xxf86vm
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_ZLIB),y)
+-WINE_CONF_OPTS += --with-zlib
+-WINE_DEPENDENCIES += zlib
+-else
+-WINE_CONF_OPTS += --without-zlib
+-endif
+-
+ # host-gettext is essential for .po file support in host-wine wrc
+ ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
+ HOST_WINE_DEPENDENCIES += host-gettext
+@@ -339,15 +319,19 @@ endif
+ 
+ # Wine only needs the host tools to be built, so cut-down the
+ # build time by building just what we need.
++HOST_WINE_TOOLS = \
++	tools \
++	tools/sfnt2fon \
++	tools/widl \
++	tools/winebuild \
++	tools/winegcc \
++	tools/wmc \
++	tools/wrc
++
+ define HOST_WINE_BUILD_CMDS
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) \
+-	  tools \
+-	  tools/sfnt2fon \
+-	  tools/widl \
+-	  tools/winebuild \
+-	  tools/winegcc \
+-	  tools/wmc \
+-	  tools/wrc
++	$(foreach t, $(HOST_WINE_TOOLS),
++		$(HOST_MAKE_ENV) $(MAKE) -C $(@D)/$(t)
++	)
+ endef
+ 
+ # Wine only needs its host variant to be built, not that it is
+@@ -368,11 +352,9 @@ HOST_WINE_CONF_OPTS += \
+ 	--without-coreaudio \
+ 	--without-faudio \
+ 	--without-cups \
+-	--without-curses \
+ 	--without-dbus \
+ 	--without-fontconfig \
+ 	--without-gphoto \
+-	--without-glu \
+ 	--without-gnutls \
+ 	--without-gsm \
+ 	--without-gssapi \
+@@ -381,6 +363,7 @@ HOST_WINE_CONF_OPTS += \
+ 	--without-jpeg \
+ 	--without-krb5 \
+ 	--without-ldap \
++	--without-mingw \
+ 	--without-mpg123 \
+ 	--without-netapi \
+ 	--without-openal \
+@@ -410,8 +393,7 @@ HOST_WINE_CONF_OPTS += \
+ 	--without-xshape \
+ 	--without-xshm \
+ 	--without-xslt \
+-	--without-xxf86vm \
+-	--without-zlib
++	--without-xxf86vm
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
