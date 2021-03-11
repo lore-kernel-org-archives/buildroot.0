@@ -1,84 +1,64 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 11 Mar 2021 18:36:53 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libsigc: bump to version 2.10.6
-Message-ID: <20210311173653.611070-1-fontaine.fabrice@gmail.com>
+Date: Thu, 11 Mar 2021 18:44:01 +0100
+Subject: [Buildroot] [PATCH 1/1] package/rng-tools: bump to version 6.12
+Message-ID: <20210311174401.626348-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Switch to meson-package as configure is not shipped in the official
-  tarball anymore
-- Drop host-m4 dependency (only needed in maintainer mode)
-- Disable examples and XML validation (enabled by default)
-- Drop LIBSIGC_INSTALL_TARGET_FIXUP as documentation is disabled by
-  default
-- Update web page in Config.in
-- Update indentation in hash file (two spaces)
+libsysfs is not needed since
+https://github.com/nhorman/rng-tools/commit/46b4e8fd8955e25ef0d5e89d26c8cf1543d2fa8a
 
-https://github.com/libsigcplusplus/libsigcplusplus/blob/2.10.6/NEWS
+https://github.com/nhorman/rng-tools/releases/tag/v6.12
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libsigc/Config.in    |  2 +-
- package/libsigc/libsigc.hash |  6 +++---
- package/libsigc/libsigc.mk   | 14 +++++---------
- 3 files changed, 9 insertions(+), 13 deletions(-)
+ package/rng-tools/Config.in      | 1 -
+ package/rng-tools/rng-tools.hash | 2 +-
+ package/rng-tools/rng-tools.mk   | 6 +++---
+ 3 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/libsigc/Config.in b/package/libsigc/Config.in
-index 4bd762efce..e5157e87b4 100644
---- a/package/libsigc/Config.in
-+++ b/package/libsigc/Config.in
-@@ -8,7 +8,7 @@ config BR2_PACKAGE_LIBSIGC
- 	  signals to any callback function, either global or a member
- 	  function, regardless of whether it is static or virtual.
- 
--	  http://libsigc.sourceforge.net/
-+	  https://libsigcplusplus.github.io/libsigcplusplus/
- 
- comment "libsigc++ needs a toolchain w/ C++, gcc >= 4.8"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-diff --git a/package/libsigc/libsigc.hash b/package/libsigc/libsigc.hash
-index bc3880f7c3..d631185a41 100644
---- a/package/libsigc/libsigc.hash
-+++ b/package/libsigc/libsigc.hash
-@@ -1,5 +1,5 @@
--# From http://ftp.gnome.org/pub/gnome/sources/libsigc++/2.10/libsigc++-2.10.0.sha256sum
--sha256	f843d6346260bfcb4426259e314512b99e296e8ca241d771d21ac64f28298d81	libsigc++-2.10.0.tar.xz
-+# From http://ftp.gnome.org/pub/gnome/sources/libsigc++/2.10/libsigc++-2.10.6.sha256sum
-+sha256  dda176dc4681bda9d5a2ac1bc55273bdd381662b7a6d49e918267d13e8774e1b  libsigc++-2.10.6.tar.xz
- 
- # Locally calculated
--sha256	5bbcbb737e60fe9deba08ecbd00920cfcc3403ba2e534c64fdeea49d6bb87509	COPYING
-+sha256  5bbcbb737e60fe9deba08ecbd00920cfcc3403ba2e534c64fdeea49d6bb87509  COPYING
-diff --git a/package/libsigc/libsigc.mk b/package/libsigc/libsigc.mk
-index d7cbd36da8..6539fdbdb6 100644
---- a/package/libsigc/libsigc.mk
-+++ b/package/libsigc/libsigc.mk
-@@ -5,18 +5,14 @@
+diff --git a/package/rng-tools/Config.in b/package/rng-tools/Config.in
+index 67e3d4185b..0dd269c818 100644
+--- a/package/rng-tools/Config.in
++++ b/package/rng-tools/Config.in
+@@ -3,7 +3,6 @@ config BR2_PACKAGE_RNG_TOOLS
+ 	# pthread_setaffinity_np
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
+-	select BR2_PACKAGE_LIBSYSFS
+ 	select BR2_PACKAGE_OPENSSL
+ 	help
+ 	  Daemon to use hardware random number generators.
+diff --git a/package/rng-tools/rng-tools.hash b/package/rng-tools/rng-tools.hash
+index de1f72617c..0ba2dc8329 100644
+--- a/package/rng-tools/rng-tools.hash
++++ b/package/rng-tools/rng-tools.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  644d8bd4e84cee29debddc7e6db72aff27e628e5a879ce310562edf50f12be41  rng-tools-6.11.tar.gz
++sha256  6fd5b52a700edec85eb1043970e22e8e2ad06a4b43851f35d33d90e09570e9d3  rng-tools-6.12.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/rng-tools/rng-tools.mk b/package/rng-tools/rng-tools.mk
+index ae20d96362..2d508413a4 100644
+--- a/package/rng-tools/rng-tools.mk
++++ b/package/rng-tools/rng-tools.mk
+@@ -4,11 +4,11 @@
+ #
  ################################################################################
  
- LIBSIGC_VERSION_MAJOR = 2.10
--LIBSIGC_VERSION = $(LIBSIGC_VERSION_MAJOR).0
-+LIBSIGC_VERSION = $(LIBSIGC_VERSION_MAJOR).6
- LIBSIGC_SOURCE = libsigc++-$(LIBSIGC_VERSION).tar.xz
- LIBSIGC_SITE = http://ftp.gnome.org/pub/GNOME/sources/libsigc++/$(LIBSIGC_VERSION_MAJOR)
--LIBSIGC_DEPENDENCIES = host-m4
- LIBSIGC_INSTALL_STAGING = YES
- LIBSIGC_LICENSE = LGPL-2.1+
- LIBSIGC_LICENSE_FILES = COPYING
-+LIBSIGC_CONF_OPTS = \
-+	-Dbuild-examples=false \
-+	-Dvalidation=false
+-RNG_TOOLS_VERSION = 6.11
+-RNG_TOOLS_SITE = $(call github,nhorman,$(RNG_TOOLS_NAME),V$(RNG_TOOLS_VERSION))
++RNG_TOOLS_VERSION = 6.12
++RNG_TOOLS_SITE = $(call github,nhorman,$(RNG_TOOLS_NAME),v$(RNG_TOOLS_VERSION))
+ RNG_TOOLS_LICENSE = GPL-2.0
+ RNG_TOOLS_LICENSE_FILES = COPYING
+-RNG_TOOLS_DEPENDENCIES = libsysfs host-pkgconf openssl
++RNG_TOOLS_DEPENDENCIES = host-pkgconf openssl
+ # From git
+ RNG_TOOLS_AUTORECONF = YES
  
--define LIBSIGC_INSTALL_TARGET_FIXUP
--	rm -rf $(TARGET_DIR)/usr/share/devhelp/books/libsigc++*
--endef
--
--LIBSIGC_POST_INSTALL_TARGET_HOOKS += LIBSIGC_INSTALL_TARGET_FIXUP
--
--$(eval $(autotools-package))
-+$(eval $(meson-package))
 -- 
 2.30.0
