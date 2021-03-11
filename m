@@ -1,94 +1,53 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 11 Mar 2021 22:44:44 +0100
-Subject: [Buildroot] [PATCH v1] package/sysvinit: add patch to fix
- compile without stack-protector support
-In-Reply-To: <20210310220812.25726-1-ps.report@gmx.net>
-References: <20210310220812.25726-1-ps.report@gmx.net>
-Message-ID: <20210311214444.GY2737665@scaer>
+Date: Thu, 11 Mar 2021 22:49:39 +0100
+Subject: [Buildroot] [git commit] package/transmission: fix sysv init script
+ (name vs. exec)
+Message-ID: <20210311213113.35B6B81831@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=45d326a08c7838658f1ed9813967ea8caeff7495
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-03-10 23:08 +0100, Peter Seiderer spake thusly:
-> - add patch to remove '-fstack-protector-strong' compile flag
-> 
-> Fixes:
->   .../aarch64-buildroot-linux-uclibc/bin/ld: runlevel.o: in function `main':
->   runlevel.c:(.text.startup+0x4): undefined reference to `__stack_chk_guard'
->   .../aarch64-buildroot-linux-uclibc/bin/ld: cannot find -lssp_nonshared
->   .../aarch64-buildroot-linux-uclibc/bin/ld: cannot find -lssp
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+With the start-stop-daemon enabled (instead of the busybox applet),
+stopping transmission emits spurious warnings:
 
-I've added a little blurb that explains that Buildroot uses the
-toolchain wrapper to pass such flags, and only those supoprted by
-the toolchain.
+  $ /etc/init.d/S92transmission stop
+  Stopping bittorrent client transmission-daemon...
+  start-stop-daemon: warning: this system is not able to track process names
+  longer than 15 characters, please use --exec instead of --name.
 
-Applied to master, thanks.
+Update our startup script to match what was done upstream 9 years ago:
+    https://trac.transmissionbt.com/ticket/4724
+    https://trac.transmissionbt.com/wiki/Scripts/initd?action=diff&version=24&old_version=23
 
-Regards,
-Yann E. MORIN.
+Partially fixes:
+  - https://bugs.busybox.net/show_bug.cgi?id=13576
 
-> ---
->  ...efile-disable-stack-protector-strong.patch | 33 +++++++++++++++++++
->  1 file changed, 33 insertions(+)
->  create mode 100644 package/sysvinit/0001-Makefile-disable-stack-protector-strong.patch
-> 
-> diff --git a/package/sysvinit/0001-Makefile-disable-stack-protector-strong.patch b/package/sysvinit/0001-Makefile-disable-stack-protector-strong.patch
-> new file mode 100644
-> index 0000000000..066bdb3660
-> --- /dev/null
-> +++ b/package/sysvinit/0001-Makefile-disable-stack-protector-strong.patch
-> @@ -0,0 +1,33 @@
-> +From 0759f3f9bb2850df455599e7c82eda4ec804e3b6 Mon Sep 17 00:00:00 2001
-> +From: Peter Seiderer <ps.report@gmx.net>
-> +Date: Wed, 10 Mar 2021 22:57:50 +0100
-> +Subject: [PATCH] Makefile: disable stack-protector-strong
-> +
-> +Fixes:
-> +
-> +  .../aarch64-buildroot-linux-uclibc/bin/ld: runlevel.o: in function `main':
-> +  runlevel.c:(.text.startup+0x4): undefined reference to `__stack_chk_guard'
-> +  .../aarch64-buildroot-linux-uclibc/bin/ld: cannot find -lssp_nonshared
-> +  .../aarch64-buildroot-linux-uclibc/bin/ld: cannot find -lssp
-> +
-> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> +---
-> + src/Makefile | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/src/Makefile b/src/Makefile
-> +index 1b368dc..1985929 100644
-> +--- a/src/Makefile
-> ++++ b/src/Makefile
-> +@@ -10,7 +10,7 @@
-> + 
-> + CPPFLAGS =
-> + CFLAGS  ?= -O2
-> +-override CFLAGS += -ansi -fomit-frame-pointer -fstack-protector-strong -W -Wall -Wunreachable-code -Wformat -Werror=format-security -D_FORTIFY_SOURCE=2 -D_XOPEN_SOURCE -D_GNU_SOURCE -DVERSION=\"$(VERSION)\"
-> ++override CFLAGS += -ansi -fomit-frame-pointer -W -Wall -Wunreachable-code -Wformat -Werror=format-security -D_FORTIFY_SOURCE=2 -D_XOPEN_SOURCE -D_GNU_SOURCE -DVERSION=\"$(VERSION)\"
-> + override CFLAGS += $(shell getconf LFS_CFLAGS)
-> + STATIC	=
-> + MANDB	:= s@^\('\\\\\"\)[^\*-]*-\*- coding: [^[:blank:]]\+ -\*-@\1@
-> +-- 
-> +2.30.1
-> +
-> -- 
-> 2.30.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Reported-by: ingineru_de_sistem at yahoo.com
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+[yann.morin.1998 at free.fr:
+  - reword commit log
+  - add reference to upstream ticket and changeset
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/transmission/S92transmission | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/transmission/S92transmission b/package/transmission/S92transmission
+index 29d7cd5863..85ff40ec16 100644
+--- a/package/transmission/S92transmission
++++ b/package/transmission/S92transmission
+@@ -93,7 +93,7 @@ stop()
+         #   1 if daemon was already stopped
+         #   2 if daemon could not be stopped
+         #   other if a failure occurred
+-        start-stop-daemon --stop --quiet --retry=TERM/10/KILL/5 --pidfile $PIDFILE --name $NAME
++        start-stop-daemon --stop --quiet --retry=TERM/10/KILL/5 --pidfile $PIDFILE --exec $DAEMON
+         RETVAL="$?"
+         [ "$RETVAL" = 2 ] && return 2
+ 
