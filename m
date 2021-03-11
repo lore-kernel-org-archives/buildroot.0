@@ -1,225 +1,210 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 11 Mar 2021 08:29:28 -0600
-Subject: [Buildroot] [PATCH v11 5/9] package/compiler-rt: new package
+Date: Thu, 11 Mar 2021 08:29:30 -0600
+Subject: [Buildroot] [PATCH v11 7/9] package/clang: help host-clang to find
+ our external toolchain
 In-Reply-To: <20210311142932.44985-1-matthew.weber@rockwellcollins.com>
 References: <20210311142932.44985-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20210311142932.44985-5-matthew.weber@rockwellcollins.com>
+Message-ID: <20210311142932.44985-7-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds support for the compiler-rt (CLANG runtime) library.
-It builds a set of static libraries and installs them into the
-CLANG/LLVM toolchain resource folder. These libraries can then be
-used by developers in the SDK for building target applications for
-analysis.
+From: Romain Naour <romain.naour@smile.fr>
 
-What is fuzzing and why libfuzzer?
-https://www.moritz.systems/blog/an-introduction-to-llvm-libfuzzer/
+To build libfuzzer package Matthew Weber noticed that (host) clang
+doesn't run on the host without "-B $(HOST_DIR)/opt/ext-toolchain"
+option. This option add a new search path for binaries and object
+files used implicitly.
 
-The compiler-rt fuzzer and address sanitizer tools require additional
-LLVM binary tools installed to allow stack trace decoding actively during
-executable analysis.  This patch conditionally enables these tools.
-https://github.com/google/sanitizers/wiki/AddressSanitizerCallStack
+Without -B clang fail to link due to missing crtbeging.o file and libgcc:
+output/host/bin/aarch64-linux-gnu-ld: cannot find crtbegin.o: No such file or directory
+output/host/bin/aarch64-linux-gnu-ld: cannot find -lgcc
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-Cc: Romain Naour <romain.naour@smile.fr>
-Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Indeed, clang search path doesn't include the dafault cross-gcc's search paths:
+
+$ output/host/bin/clang -print-search-dirs
+programs: = output/host/bin:output/host/bin:/..//bin
+libraries: = output/host/lib/clang/8.0.0:
+             output/host/bin/../lib64:
+             /lib/../lib64:
+             /usr/lib/../lib64:
+             output/host/bin/../lib:
+             /lib:/usr/lib
+
+Here is the same command for cross-gcc:
+
+$ output/host/bin/aarch64-linux-gnu-gcc -print-search-dirs
+install: output/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-linux-gnu/8.3.0/
+programs: = output/host/opt/ext-toolchain/bin/../libexec/gcc/aarch64-linux-gnu/8.3.0/:
+            output/host/opt/ext-toolchain/bin/../libexec/gcc/:
+            output/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-linux-gnu/8.3.0/../../../../aarch64-linux-gnu/bin/aarch64-linux-gnu/8.3.0/:
+            output/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-linux-gnu/8.3.0/../../../../aarch64-linux-gnu/bin/
+libraries: = output/opt/ext-toolchain/bin/../lib/gcc/aarch64-linux-gnu/8.3.0/:
+             output/host/opt/ext-toolchain/bin/../lib/gcc/:
+             output/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-linux-gnu/8.3.0/../../../../aarch64-linux-gnu/lib/aarch64-linux-gnu/8.3.0/:
+             output/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-linux-gnu/8.3.0/../../../../aarch64-linux-gnu/lib/../lib64/:
+             output/host/aarch64-buildroot-linux-gnu/sysroot/lib/aarch64-linux-gnu/8.3.0/:
+             output/host/aarch64-buildroot-linux-gnu/sysroot/lib/../lib64/:
+             output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/aarch64-linux-gnu/8.3.0/:
+             output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/../lib64/:
+             output/host/opt/ext-toolchain/bin/../lib/gcc/aarch64-linux-gnu/8.3.0/../../../../aarch64-linux-gnu/lib/:
+             output/host/aarch64-buildroot-linux-gnu/sysroot/lib/:
+             output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/
+
+We can see that gcc default search path contains
+"output/host/opt/ext-toolchain" directory where the external toolchain
+has been extracted.
+
+Since we want to use clang without additional option like -B,
+patch clang in order to use GCC_INSTALL_PREFIX instead of
+using automatic detection (which doesn't work for Buildroot).
+
+We eventually want to relocate the Buildroot SDK containing the clang
+cross-compiler, so we provide a relative path to GCC_INSTALL_PREFIX
+in order to avoid to hardcode the path to the GCC toolchain.
+
+Also the path between clang and the GCC external toolchain is not always
+the same, we have the following case:
+
+* Toolchain to be downloaded and installed
+  The toolchain is extracted into $(HOST_DIR)/opt/ext-toolchain, so the
+  path is "../opt/ext-toolchain".
+
+* Pre-installed toolchain
+  The toolchain is localed somewhere in the host filesystem and
+  defined by the user using BR2_TOOLCHAIN_EXTERNAL_PATH.
+
+So, set GCC_INSTALL_PREFIX using realpath:
+
+-DGCC_INSTALL_PREFIX:PATH=`realpath --relative-to=$(HOST_DIR)/bin/ $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)`
+
+When we use a Buildroot's internal toolchain, clang will find theses
+crt*.o files and libgcc.
+
+http://lists.busybox.net/pipermail/buildroot/2019-August/256204.html
+
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Cc: Matthew Weber <matthew.weber@rockwellcollins.com>
 Cc: Valentin Korenblit <valentinkorenblit@gmail.com>
-Cc: Michael Drake <michael.drake@codethink.co.uk>
+Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
 
 ---
-Changes
-v1 -> v2
-[Romain
- - Removed unnecessary host-cmake dependency
-
-v2 -> v3
-[Romain
- - Update to use COMPILER_RT_INSTALL_PATH for library install
-[Ricardo
- - Fixed check-package extra line
- - Spelling in commit message
-
-v3 -> v4
-[Valentin
- - Pointed out that non-glibc libraries won't build. Further
-   investigation shows that the lib asan support in compiler-rt
-   doesn't have the libc checks yet to support multiple libraries.
-   (https://patchwork.ozlabs.org/patch/339938/ was the best example
-    I could find and it doesn't look like anything has changed in the
-    recent codebase)
-
-v4 -> v5
-[Thomas P
- - Revisited staging install step and found a cleaner way to use the
-   default and then a hook to setup the runtime library path
-
-v6
- - Bumped to 7.0.1 to match current LLVM/Clang version
-
-v7
- - Rebased on master for 8.0 LLVM/Clang version
- - Added comment about bumping verions of LLVM/Clang and Compiler-rt
-   together
-[Romain
- - Disabled test cases (-DCOMPILER_RT_INCLUDE_TESTS=OFF)
-
-v8
- - Rebased and updated version to 9.x to match llvm/clang
-
-[Romain
- - Squashed "[v7,1/5]package/llvm: install target binary/debug tools" to
-   be included in this patch
-
-[Michael D
- - compiler-rt symlink creation to include shared folder such
-   that control flow lists work
-
-v9
- - Rebased post 2020.05
-
-v10
- - Switched compiler-rt site to point towards new github project
- - Updated compiler-rt version to 11.0.0
- - Tested against master[8640e8ffde3f61c5838] using
-   support/testing/run-tests -o runtest -k \
-      tests.package.test_clang.TestClangCompilerRT
-
-v11
- - Updated compiler-rt version to 11.1.0
+Changes v1 -> v2
+[Arnout
+ - Can't dropped ":PATH" from "-DGCC_INSTALL_PREFIX:PATH=" as suggested,
+   The string isn't set correctly and results in "cannot find crtbegin.o"
+ - Attempting to post patch upstream
+ - I did not address the relative vs absolute path comment. The
+   current approach seemed correct per my understanding for handling
+   the two toolchain install location cases
 ---
- DEVELOPERS                           |  1 +
- package/Config.in                    |  1 +
- package/compiler-rt/Config.in        | 14 +++++++++++
- package/compiler-rt/compiler-rt.hash |  3 +++
- package/compiler-rt/compiler-rt.mk   | 37 ++++++++++++++++++++++++++++
- package/llvm/llvm.mk                 | 11 ++++++++-
- 6 files changed, 66 insertions(+), 1 deletion(-)
- create mode 100644 package/compiler-rt/Config.in
- create mode 100644 package/compiler-rt/compiler-rt.hash
- create mode 100644 package/compiler-rt/compiler-rt.mk
+ ...hains-Gnu-Use-GCC_INSTALL_PREFIX-in-.patch | 78 +++++++++++++++++++
+ package/clang/clang.mk                        |  7 ++
+ 2 files changed, 85 insertions(+)
+ create mode 100644 package/clang/0001-lib-Driver-ToolChains-Gnu-Use-GCC_INSTALL_PREFIX-in-.patch
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index c750105623..cc365c42ed 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1709,6 +1709,7 @@ F:	package/bridge-utils/
- F:	package/checkpolicy/
- F:	package/checksec/
- F:	package/cgroupfs-mount/
-+F:	package/compiler-rt/
- F:	package/crda/
- F:	package/cunit/
- F:	package/dacapo/
-diff --git a/package/Config.in b/package/Config.in
-index 06dfc32cc6..61ec54fd38 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1856,6 +1856,7 @@ menu "Other"
- 	source "package/clang/Config.in"
- 	source "package/clapack/Config.in"
- 	source "package/cmocka/Config.in"
-+	source "package/compiler-rt/Config.in"
- 	source "package/cppcms/Config.in"
- 	source "package/cracklib/Config.in"
- 	source "package/dawgdic/Config.in"
-diff --git a/package/compiler-rt/Config.in b/package/compiler-rt/Config.in
+diff --git a/package/clang/0001-lib-Driver-ToolChains-Gnu-Use-GCC_INSTALL_PREFIX-in-.patch b/package/clang/0001-lib-Driver-ToolChains-Gnu-Use-GCC_INSTALL_PREFIX-in-.patch
 new file mode 100644
-index 0000000000..9afc0d9d60
+index 0000000000..08371154d5
 --- /dev/null
-+++ b/package/compiler-rt/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_COMPILER_RT
-+	bool "compiler-rt"
-+	depends on BR2_PACKAGE_LLVM
-+	depends on BR2_TOOLCHAIN_USES_GLIBC # asan lib requires
-+	help
-+	  A collection of runtime libraries primarily used by clang and
-+	  llvm to provide builtins, sanitizer runtimes, and profiling
-+	  at runtime.
++++ b/package/clang/0001-lib-Driver-ToolChains-Gnu-Use-GCC_INSTALL_PREFIX-in-.patch
+@@ -0,0 +1,78 @@
++From fe21cede3939a435d62efbd5799547fab6af1b0a Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@smile.fr>
++Date: Mon, 5 Aug 2019 16:06:48 +0200
++Subject: [PATCH] lib/Driver/ToolChains/Gnu: Use GCC_INSTALL_PREFIX in the set
++ of prefixes for searching the gcc toolchain
 +
-+	  https://compiler-rt.llvm.org/
++By default, the Gnu Toolchains driver is looking at the parent
++directory while looking for the gcc toolchain when clang is installed
++at "D.InstalledDir"
 +
-+comment "compiler-rt requires llvm to be enabled and a glibc toolchain"
-+	depends on !BR2_PACKAGE_LLVM
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC
-diff --git a/package/compiler-rt/compiler-rt.hash b/package/compiler-rt/compiler-rt.hash
-new file mode 100644
-index 0000000000..0689ec3d2a
---- /dev/null
-+++ b/package/compiler-rt/compiler-rt.hash
-@@ -0,0 +1,3 @@
-+# Locally computed:
-+sha256 def1fc00c764cd3abbba925c712ac38860a756a43b696b291f46fee09e453274  compiler-rt-11.1.0.src.tar.xz
-+sha256 1a8f1058753f1ba890de984e48f0242a3a5c29a6a8f2ed9fd813f36985387e8d  LICENSE.TXT
-diff --git a/package/compiler-rt/compiler-rt.mk b/package/compiler-rt/compiler-rt.mk
-new file mode 100644
-index 0000000000..57f9c26854
---- /dev/null
-+++ b/package/compiler-rt/compiler-rt.mk
-@@ -0,0 +1,37 @@
-+################################################################################
-+#
-+# compiler-rt
-+#
-+################################################################################
++But this doesn't work with Buildroot since the external
++toolchain is installed in host/opt/ext-toolchain and the sysroot is
++moved to host/<arch>-buildroot-linux-gnu/sysroot/ directory.
 +
-+# Compiler-RT should be bumped together with LLVM and Clang as the run-time is
-+# tied to the version of those tools
-+COMPILER_RT_VERSION = 11.1.0
-+COMPILER_RT_SOURCE = compiler-rt-$(COMPILER_RT_VERSION).src.tar.xz
-+COMPILER_RT_SITE = https://github.com/llvm/llvm-project/releases/download/llvmorg-$(COMPILER_RT_VERSION)
-+COMPILER_RT_LICENSE = NCSA MIT
-+COMPILER_RT_LICENSE_FILES = LICENSE.TXT
-+COMPILER_RT_DEPENDENCIES = host-clang llvm
++We tried by setting GCC_INSTALL_PREFIX in clang.mk for host-clang
++but it doesn't work since we already provide a sysroot [1].
 +
-+COMPILER_RT_INSTALL_STAGING = YES
-+COMPILER_RT_INSTALL_TARGET = NO
++Help the Gnu Toolchains driver by using GCC_INSTALL_PREFIX path.
 +
-+COMPILER_RT_CONF_OPTS=-DCOMPILER_RT_STANDALONE_BUILD=OFF \
-+	-DCOMPILER_RT_STANDALONE_BUILD=ON \
-+	-DCOMPILER_RT_DEFAULT_TARGET_TRIPLE=$(GNU_TARGET_NAME) \
-+	-DLLVM_CONFIG_PATH=$(HOST_DIR)/usr/bin/llvm-config
++Since we want to be able to relocate the clang toolchain,
++allow to use a relative path with GCC_INSTALL_PREFIX.
 +
-+# The installation of the target runtime libraries defaults to DESTDIR, however
-+# host-clang resources directory needs a link so Clang can find the runtime
-+# libraries in the same location they would be if built as part of the Clang
-+# build. The "resources" directory is loosely documented and seems to be
-+# assumed, as compiler-rt is usually build at the same time as Clang and not
-+# standalone.
-+define COMPILER_RT_SETUP_RUNTIME_LIBS
-+	mkdir -p $(HOST_DIR)/lib/clang/$(HOST_CLANG_VERSION)/lib
-+	ln -sf ../../../../$(GNU_TARGET_NAME)/sysroot/usr/lib/linux $(HOST_DIR)/lib/clang/$(HOST_CLANG_VERSION)/lib/linux
-+	ln -sf ../../../../$(GNU_TARGET_NAME)/sysroot/usr/share $(HOST_DIR)/lib/clang/$(HOST_CLANG_VERSION)/share
-+endef
-+COMPILER_RT_POST_INSTALL_STAGING_HOOKS += COMPILER_RT_SETUP_RUNTIME_LIBS
++Buildroot will provide such relative path by using:
++HOST_CLANG_CONF_OPTS += -DGCC_INSTALL_PREFIX:PATH=`realpath --relative-to=$(HOST_DIR)/bin/ $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)`
 +
-+$(eval $(cmake-package))
-diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
-index 6c7ae3f838..9b0f3c30d2 100644
---- a/package/llvm/llvm.mk
-+++ b/package/llvm/llvm.mk
-@@ -215,8 +215,17 @@ HOST_LLVM_CONF_OPTS += \
- # We need to activate LLVM_INCLUDE_TOOLS, otherwise it does not generate
- # libLLVM.so
- LLVM_CONF_OPTS += \
--	-DLLVM_INCLUDE_TOOLS=ON \
-+	-DLLVM_INCLUDE_TOOLS=ON
++Doing so allow to use clang without providing additional search
++paths with -B option on the clang's command line.
 +
-+# The llvm-symbolizer binary is used by the Compiler-RT Fuzzer
-+# and AddressSanitizer tools for stack traces.
-+ifeq ($(BR2_PACKAGE_COMPILER_RT),y)
-+LLVM_CONF_OPTS += \
-+	-DLLVM_BUILD_TOOLS=ON
-+else
-+LLVM_CONF_OPTS += \
- 	-DLLVM_BUILD_TOOLS=OFF
-+endif
++[1] https://reviews.llvm.org/D49244
++[2] http://lists.busybox.net/pipermail/buildroot/2019-August/256204.html
++
++Signed-off-by: Romain Naour <romain.naour@smile.fr>
++Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
++---
++Pending, access to llvm mailing lists to submit it is pending. They
++seem to be having issues with their listserv.
++---
++ lib/Driver/ToolChains/Gnu.cpp | 17 +++++++++++++++++
++ 1 file changed, 17 insertions(+)
++
++diff --git a/lib/Driver/ToolChains/Gnu.cpp b/lib/Driver/ToolChains/Gnu.cpp
++index 2ad45097dc..90d6b5b748 100644
++--- a/lib/Driver/ToolChains/Gnu.cpp
+++++ b/lib/Driver/ToolChains/Gnu.cpp
++@@ -1725,6 +1725,8 @@ void Generic_GCC::GCCInstallationDetector::init(
++ 
++     Prefixes.push_back(GCCToolchainDir);
++   } else {
+++    StringRef GccIinstallPrefix = GCC_INSTALL_PREFIX;
+++
++     // If we have a SysRoot, try that first.
++     if (!D.SysRoot.empty()) {
++       Prefixes.push_back(D.SysRoot);
++@@ -1734,6 +1736,21 @@ void Generic_GCC::GCCInstallationDetector::init(
++     // Then look for gcc installed alongside clang.
++     Prefixes.push_back(D.InstalledDir + "/..");
++ 
+++    // Use GCC_INSTALL_PREFIX if provided by the buildsystem.
+++    if (!GccIinstallPrefix.empty())
+++    {
+++        if (llvm::sys::path::is_relative(GccIinstallPrefix))
+++        {
+++            // Use a relative path to gcc from clang install path.
+++            Prefixes.push_back(D.InstalledDir + "/" + GccIinstallPrefix.str());
+++        }
+++        else
+++        {
+++            // Hardcode the absolute path provided by GCC_INSTALL_PREFIX.
+++            Prefixes.push_back(GCC_INSTALL_PREFIX);
+++        }
+++    }
+++
++     // Next, look for prefix(es) that correspond to distribution-supplied gcc
++     // installations.
++     if (D.SysRoot.empty()) {
++-- 
++2.20.1
++
+diff --git a/package/clang/clang.mk b/package/clang/clang.mk
+index d1667d79b6..95b4964be3 100644
+--- a/package/clang/clang.mk
++++ b/package/clang/clang.mk
+@@ -105,5 +105,12 @@ CLANG_CONF_OPTS += -DLLVM_LINK_LLVM_DYLIB=ON
+ HOST_CLANG_CONF_OPTS += -DLLVM_DYLIB_COMPONENTS=all
+ CLANG_CONF_OPTS += -DLLVM_DYLIB_COMPONENTS=all
  
- ifeq ($(BR2_PACKAGE_LLVM_RTTI),y)
- HOST_LLVM_CONF_OPTS += -DLLVM_ENABLE_RTTI=ON
++# Help host-clang to find our external toolchain, use a relative path from the clang
++# installation directory to the external toolchain installation directory in order to
++# not hardcode the toolchain absolute path.
++ifeq ($(BR2_TOOLCHAIN_EXTERNAL),y)
++HOST_CLANG_CONF_OPTS += -DGCC_INSTALL_PREFIX:PATH=`realpath --relative-to=$(HOST_DIR)/bin/ $(TOOLCHAIN_EXTERNAL_INSTALL_DIR)`
++endif
++
+ $(eval $(cmake-package))
+ $(eval $(host-cmake-package))
 -- 
 2.17.1
