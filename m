@@ -1,44 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 11 Mar 2021 22:05:30 +0100
-Subject: [Buildroot] [git commit] package/bash-completion: bump version to
- 2.11
-Message-ID: <20210311204417.0359388E4A@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 11 Mar 2021 22:08:03 +0100
+Subject: [Buildroot] [PATCH v1 1/2] package/batctl: bump version to 2021.0
+Message-ID: <20210311210804.9616-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=44dd253da4dc45b6d4d5d23c7d1c596a25e407db
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+For details see [1].
+
+[1] https://www.open-mesh.org/news/100
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/bash-completion/bash-completion.hash | 4 ++--
- package/bash-completion/bash-completion.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/batctl/batctl.hash | 6 +++---
+ package/batctl/batctl.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/bash-completion/bash-completion.hash b/package/bash-completion/bash-completion.hash
-index fa98272be6..7e952e5b02 100644
---- a/package/bash-completion/bash-completion.hash
-+++ b/package/bash-completion/bash-completion.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/batctl/batctl.hash b/package/batctl/batctl.hash
+index e8127aa26f..56bea3c5da 100644
+--- a/package/batctl/batctl.hash
++++ b/package/batctl/batctl.hash
+@@ -1,6 +1,6 @@
+-# From https://downloads.open-mesh.org/batman/releases/batman-adv-2020.2/batctl-2020.2.tar.gz.sha1
+-sha1  e347fb126e2a8f6d21516296325afc043062e3bd  batctl-2020.2.tar.gz
++# From https://downloads.open-mesh.org/batman/releases/batman-adv-2021.0/batctl-2021.0.tar.gz.sha1
++sha1  87d0bb34950cb70578a0ca5ce706513a8279a01c  batctl-2021.0.tar.gz
  # Locally calculated
--sha256 123c17998e34b937ce57bb1b111cd817bc369309e9a8047c0bcf06ead4a3ec92  bash-completion-2.10.tar.xz
--sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-+sha256  73a8894bad94dee83ab468fa09f628daffd567e8bef1a24277f1e9a0daf911ac  bash-completion-2.11.tar.xz
-+sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/bash-completion/bash-completion.mk b/package/bash-completion/bash-completion.mk
-index 4b86e9f118..8b0e949416 100644
---- a/package/bash-completion/bash-completion.mk
-+++ b/package/bash-completion/bash-completion.mk
+-sha256  d29cdb53ee68abd5027eae07d9fd645b3f154e0d577efa2666c1334bb6d60efd  batctl-2020.2.tar.gz
++sha256  9cec8bf1952f885192749a9dc0318a54633b717aaf05c438d504efd83f5201e4  batctl-2021.0.tar.gz
+ sha256  cecbf53d1148e13256ac29f8b900655b7fc8dc12d59939a95bc2323ea1747025  LICENSES/preferred/GPL-2.0
+ sha256  323c587d0ccf10e376f8bf9a7f31fb4ca6078105194b42e0b1e0ee2bc9bde71f  LICENSES/preferred/MIT
+diff --git a/package/batctl/batctl.mk b/package/batctl/batctl.mk
+index 229c042aaf..8ff591844d 100644
+--- a/package/batctl/batctl.mk
++++ b/package/batctl/batctl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BASH_COMPLETION_VERSION = 2.10
-+BASH_COMPLETION_VERSION = 2.11
- BASH_COMPLETION_SITE = https://github.com/scop/bash-completion/releases/download/$(BASH_COMPLETION_VERSION)
- BASH_COMPLETION_SOURCE = bash-completion-$(BASH_COMPLETION_VERSION).tar.xz
- BASH_COMPLETION_LICENSE = GPL-2.0
+-BATCTL_VERSION = 2020.2
++BATCTL_VERSION = 2021.0
+ BATCTL_SITE = http://downloads.open-mesh.org/batman/releases/batman-adv-$(BATCTL_VERSION)
+ BATCTL_LICENSE = GPL-2.0, MIT (batman_adv.h, list.h)
+ BATCTL_LICENSE_FILES = LICENSES/preferred/GPL-2.0 LICENSES/preferred/MIT
+-- 
+2.30.1
