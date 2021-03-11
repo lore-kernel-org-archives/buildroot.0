@@ -1,49 +1,41 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 11 Mar 2021 21:45:16 +0100
-Subject: [Buildroot] [git commit] package/runc: cleanup the CPE_ID variables
-Message-ID: <20210311202203.1FFED81D49@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 11 Mar 2021 21:49:21 +0100
+Subject: [Buildroot] [PATCH v1] package/bash-completion: bump version to 2.11
+Message-ID: <20210311204921.2438-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=051ccfbaf1d8f835fe5742ffdda00220873025ac
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-The CPE variables are derived from the package upstream values, so they
-must be set from the package values, not the other way around.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Cc: Christian Stewart <christian@paral.in>
-Reviewed-by: Christian Stewart <christian@paral.in>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/runc/runc.mk | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ package/bash-completion/bash-completion.hash | 4 ++--
+ package/bash-completion/bash-completion.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/runc/runc.mk b/package/runc/runc.mk
-index c0de2783e4..14689bbde1 100644
---- a/package/runc/runc.mk
-+++ b/package/runc/runc.mk
-@@ -4,13 +4,15 @@
+diff --git a/package/bash-completion/bash-completion.hash b/package/bash-completion/bash-completion.hash
+index fa98272be6..7e952e5b02 100644
+--- a/package/bash-completion/bash-completion.hash
++++ b/package/bash-completion/bash-completion.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 123c17998e34b937ce57bb1b111cd817bc369309e9a8047c0bcf06ead4a3ec92  bash-completion-2.10.tar.xz
+-sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
++sha256  73a8894bad94dee83ab468fa09f628daffd567e8bef1a24277f1e9a0daf911ac  bash-completion-2.11.tar.xz
++sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/bash-completion/bash-completion.mk b/package/bash-completion/bash-completion.mk
+index 4b86e9f118..8b0e949416 100644
+--- a/package/bash-completion/bash-completion.mk
++++ b/package/bash-completion/bash-completion.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RUNC_VERSION = $(RUNC_CPE_ID_VERSION)-$(RUNC_CPE_ID_UPDATE)
-+RUNC_VERSION_MAJOR = 1.0.0
-+RUNC_VERSION_MINOR = rc92
-+RUNC_VERSION = $(RUNC_VERSION_MAJOR)-$(RUNC_VERSION_MINOR)
- RUNC_SITE = $(call github,opencontainers,runc,v$(RUNC_VERSION))
- RUNC_LICENSE = Apache-2.0
- RUNC_LICENSE_FILES = LICENSE
- RUNC_CPE_ID_VENDOR = linuxfoundation
--RUNC_CPE_ID_VERSION = 1.0.0
--RUNC_CPE_ID_UPDATE = rc92
-+RUNC_CPE_ID_VERSION = $(RUNC_VERSION_MAJOR)
-+RUNC_CPE_ID_UPDATE = $(RUNC_VERSION_MINOR)
- 
- RUNC_LDFLAGS = -X main.version=$(RUNC_VERSION)
- RUNC_TAGS = cgo static_build
+-BASH_COMPLETION_VERSION = 2.10
++BASH_COMPLETION_VERSION = 2.11
+ BASH_COMPLETION_SITE = https://github.com/scop/bash-completion/releases/download/$(BASH_COMPLETION_VERSION)
+ BASH_COMPLETION_SOURCE = bash-completion-$(BASH_COMPLETION_VERSION).tar.xz
+ BASH_COMPLETION_LICENSE = GPL-2.0
+-- 
+2.30.1
