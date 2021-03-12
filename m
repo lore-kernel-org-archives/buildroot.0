@@ -1,70 +1,38 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 12 Mar 2021 22:02:47 +0100
-Subject: [Buildroot] [PATCH 1/1] package/bash: fix seventh patch
-In-Reply-To: <20210312070803.768698-1-fontaine.fabrice@gmail.com>
-References: <20210312070803.768698-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210312210247.GA2737665@scaer>
+Date: Fri, 12 Mar 2021 22:04:21 +0100
+Subject: [Buildroot] [git commit] docs/website: adjust link to Buildroot
+ training course
+Message-ID: <20210312204106.35B2188DBC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=5568837997eaa770ed6918767750ad6684d98b13
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-03-12 08:08 +0100, Fabrice Fontaine spake thusly:
-> Since bump to version 5.1 in commit
-> 9e778b044c949d165207150cc9e79fdcfbafcb9d, seventh patch wrongly defines
-> wcdequote_pathname as static which will result in the following build
-> failure:
-> 
-> smatch.c:(.text+0x22f0): undefined reference to `wcdequote_pathname'
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/d83f5d260dccd38984ec6fdb340835ca928bb687
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+The previous course has ended, announce the next one.
 
-Applied to master, thanks.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ docs/website/docs.html | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  ...-glob-fix-dequote_pathname-vs.-udequote_pathname.patch | 8 +-------
->  1 file changed, 1 insertion(+), 7 deletions(-)
-> 
-> diff --git a/package/bash/0007-glob-fix-dequote_pathname-vs.-udequote_pathname.patch b/package/bash/0007-glob-fix-dequote_pathname-vs.-udequote_pathname.patch
-> index b769dc296e..a801f68236 100644
-> --- a/package/bash/0007-glob-fix-dequote_pathname-vs.-udequote_pathname.patch
-> +++ b/package/bash/0007-glob-fix-dequote_pathname-vs.-udequote_pathname.patch
-> @@ -27,13 +27,7 @@ diff --git a/lib/glob/glob.c b/lib/glob/glob.c
->  index eb6277f..c903b15 100644
->  --- a/lib/glob/glob.c
->  +++ b/lib/glob/glob.c
-> -@@ -117,12 +117,11 @@ static int mbskipname PARAMS((char *, char *, int));
-> - #endif
-> - void udequote_pathname PARAMS((char *));
-> - #if HANDLE_MULTIBYTE
-> --void wcdequote_pathname PARAMS((wchar_t *));
-> -+static void wcdequote_pathname PARAMS((wchar_t *));
-> - static void wdequote_pathname PARAMS((char *));
-> +@@ -117,6 +117,5 @@ static int mbskipname PARAMS((char *, char *, int));
->   #else
->   #  define dequote_pathname udequote_pathname
->   #endif
-> -- 
-> 2.30.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/docs/website/docs.html b/docs/website/docs.html
+index c619c16fa6..e8d8138565 100644
+--- a/docs/website/docs.html
++++ b/docs/website/docs.html
+@@ -113,9 +113,9 @@
+ 	      The next online public training course on Buildroot
+ 	      organized
+ 	      by <a href="https://www.bootlin.com">Bootlin</a> will
+-	      take place on March 8-11, 2021, with Thomas Petazzoni as
++	      take place from May 31 to June 4, 2021, with Thomas Petazzoni as
+ 	      trainer. <a href="https://bootlin.com/training/buildroot/">Infos</a>
+-	      and <a href="https://www.eventbrite.fr/e/bootlin-embedded-linux-development-with-buildroot-training-seminar-tickets-108855638144">registration</a>.
++	      and <a href="https://www.eventbrite.com/e/bootlin-embedded-linux-development-with-buildroot-training-seminar-tickets-145276318379">registration</a>.
+ 	    </div>
+ 	  </div>
+ 	</div>
