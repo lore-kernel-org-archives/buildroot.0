@@ -1,60 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 12 Mar 2021 23:22:10 +0100
-Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: remove myself for aufs
-In-Reply-To: <20210312220814.1318426-1-christian@paral.in>
-References: <20210312220814.1318426-1-christian@paral.in>
-Message-ID: <20210312222210.GI2737665@scaer>
+From: Christian Stewart <christian@paral.in>
+Date: Fri, 12 Mar 2021 14:48:32 -0800
+Subject: [Buildroot] [PATCH 2/3] package/docker-cli: bump version to 20.10.5
+In-Reply-To: <20210312224833.1908386-1-christian@paral.in>
+References: <20210312224833.1908386-1-christian@paral.in>
+Message-ID: <20210312224833.1908386-2-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Christian, All,
+https://docs.docker.com/engine/release-notes/
 
-On 2021-03-12 14:08 -0800, Christian Stewart spake thusly:
-> Aufs has been deprecated for the purposes of Docker/containers since overlay2
-> became the mainline kernel module of choice.
+Signed-off-by: Christian Stewart <christian@paral.in>
+---
+ package/docker-cli/docker-cli.hash | 2 +-
+ package/docker-cli/docker-cli.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Sure, that makes sense.
-
-> Signed-off-by: Christian Stewart <christian@paral.in>
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  DEVELOPERS | 3 ---
->  1 file changed, 3 deletions(-)
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index f6d6e4aa06..ad6bd1f241 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -509,9 +509,6 @@ N:	Christian Kellermann <christian.kellermann@solectrix.de>
->  F:	package/python-pylibftdi/
->  
->  N:	Christian Stewart <christian@paral.in>
-> -F:	linux/linux-ext-aufs.mk
-> -F:	package/aufs/
-> -F:	package/aufs-util/
->  F:	package/batman-adv/
->  F:	package/delve/
->  F:	package/docker-cli/
-> -- 
-> 2.30.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
+index 95b15b539b..f4787062bb 100644
+--- a/package/docker-cli/docker-cli.hash
++++ b/package/docker-cli/docker-cli.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  aafba3765d9013cb75810b4f4334525f0e74e82ef073b4df9e8b524f3794e60a  docker-cli-20.10.3.tar.gz
++sha256  4ba845f8c7e2e0a2ca1ec6589847159ca8d0d37b609f0e6f78def7a893b9b342  docker-cli-20.10.5.tar.gz
+ sha256  2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
+diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
+index d90c3b7d10..d710bb2fee 100644
+--- a/package/docker-cli/docker-cli.mk
++++ b/package/docker-cli/docker-cli.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DOCKER_CLI_VERSION = 20.10.3
++DOCKER_CLI_VERSION = 20.10.5
+ DOCKER_CLI_SITE = $(call github,docker,cli,v$(DOCKER_CLI_VERSION))
+ 
+ DOCKER_CLI_LICENSE = Apache-2.0
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.30.2
