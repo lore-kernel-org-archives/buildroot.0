@@ -1,41 +1,46 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 12 Mar 2021 07:18:53 +0100
-Subject: [Buildroot] [PATCH 1/1] package/kodi-pvr-iptvsimple: bump version
- to 7.5.0-Matrix
-Message-ID: <20210312061853.21252-1-bernd.kuhls@t-online.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 12 Mar 2021 08:08:03 +0100
+Subject: [Buildroot] [PATCH 1/1] package/bash: fix seventh patch
+Message-ID: <20210312070803.768698-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash | 2 +-
- package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Since bump to version 5.1 in commit
+9e778b044c949d165207150cc9e79fdcfbafcb9d, seventh patch wrongly defines
+wcdequote_pathname as static which will result in the following build
+failure:
 
-diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
-index 24f8f377f7..b136cef01b 100644
---- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
-+++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  70afe4e0c8df6c00c155cff0cc1e6bcf2d2a2de07a3f77367b4ad76ba7442b22  kodi-pvr-iptvsimple-7.4.3-Matrix.tar.gz
-+sha256  1cbe623e1eec0246c782398d8a8964d26b0fa68966c7f1422666068e50fb4e00  kodi-pvr-iptvsimple-7.5.0-Matrix.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
-index ca4b2ff604..8251c53f8f 100644
---- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
-+++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_PVR_IPTVSIMPLE_VERSION = 7.4.3-Matrix
-+KODI_PVR_IPTVSIMPLE_VERSION = 7.5.0-Matrix
- KODI_PVR_IPTVSIMPLE_SITE = $(call github,kodi-pvr,pvr.iptvsimple,$(KODI_PVR_IPTVSIMPLE_VERSION))
- KODI_PVR_IPTVSIMPLE_LICENSE = GPL-2.0+
- KODI_PVR_IPTVSIMPLE_LICENSE_FILES = LICENSE.md
+smatch.c:(.text+0x22f0): undefined reference to `wcdequote_pathname'
+
+Fixes:
+ - http://autobuild.buildroot.org/results/d83f5d260dccd38984ec6fdb340835ca928bb687
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...-glob-fix-dequote_pathname-vs.-udequote_pathname.patch | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
+
+diff --git a/package/bash/0007-glob-fix-dequote_pathname-vs.-udequote_pathname.patch b/package/bash/0007-glob-fix-dequote_pathname-vs.-udequote_pathname.patch
+index b769dc296e..a801f68236 100644
+--- a/package/bash/0007-glob-fix-dequote_pathname-vs.-udequote_pathname.patch
++++ b/package/bash/0007-glob-fix-dequote_pathname-vs.-udequote_pathname.patch
+@@ -27,13 +27,7 @@ diff --git a/lib/glob/glob.c b/lib/glob/glob.c
+ index eb6277f..c903b15 100644
+ --- a/lib/glob/glob.c
+ +++ b/lib/glob/glob.c
+-@@ -117,12 +117,11 @@ static int mbskipname PARAMS((char *, char *, int));
+- #endif
+- void udequote_pathname PARAMS((char *));
+- #if HANDLE_MULTIBYTE
+--void wcdequote_pathname PARAMS((wchar_t *));
+-+static void wcdequote_pathname PARAMS((wchar_t *));
+- static void wdequote_pathname PARAMS((char *));
++@@ -117,6 +117,5 @@ static int mbskipname PARAMS((char *, char *, int));
+  #else
+  #  define dequote_pathname udequote_pathname
+  #endif
 -- 
-2.29.2
+2.30.0
