@@ -1,50 +1,64 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 12 Mar 2021 22:45:19 +0100
-Subject: [Buildroot] [git commit] package/go: security bump to 1.16.2
-Message-ID: <20210312212357.2894981106@busybox.osuosl.org>
+Date: Fri, 12 Mar 2021 22:45:18 +0100
+Subject: [Buildroot] [git commit] package/mbedtls: security bump to version
+ 2.6.10
+Message-ID: <20210312212357.150F388E9B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9b36b4aa284466e7294ef8d3ef741b674a96a993
+commit: https://git.buildroot.net/buildroot/commit/?id=694c7d3ecee92eae84e9781acca4e5630b92d427
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-go1.16.1 (released 2021/03/10) includes security fixes to the archive/zip and
-encoding/xml packages.
+- Fix a buffer overflow in mbedtls_mpi_sub_abs() when calculating
+  |A| - |B| where |B| is larger than |A| and has more limbs (so the
+  function should return MBEDTLS_ERR_MPI_NEGATIVE_VALUE). Only
+  applications calling mbedtls_mpi_sub_abs() directly are affected:
+  all calls inside the library were safe since this function is
+  only called with |A| >= |B|.
+- Fix an errorneous estimation for an internal buffer in
+  mbedtls_pk_write_key_pem(). If MBEDTLS_MPI_MAX_SIZE is set to an odd
+  value the function might fail to write a private RSA keys of the
+  largest supported size.
+- Fix a stack buffer overflow with mbedtls_net_poll() and
+  mbedtls_net_recv_timeout() when given a file descriptor that is
+  beyond FD_SETSIZE.
+- Guard against strong local side channel attack against base64 tables
+  by making access aceess to them use constant flow code.
 
-go1.16.2 (released 2021/03/11) includes fixes to cgo, the compiler, linker, the
-go command, and the syscall and time packages.
+https://github.com/ARMmbed/mbedtls/releases/tag/v2.16.10
 
-https://golang.org/doc/devel/release.html#go1.16
-
-Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[yann.morin.1998 at free.fr: fix the hash after upstream mess-up]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/mbedtls/mbedtls.hash | 4 ++--
+ package/mbedtls/mbedtls.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index 4181fb52c5..524b6131dc 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,3 +1,3 @@
- # From https://golang.org/dl/
--sha256  7688063d55656105898f323d90a79a39c378d86fe89ae192eb3b7fc46347c95a  go1.16.src.tar.gz
-+sha256  37ca14287a23cb8ba2ac3f5c3dd8adbc1f7a54b9701a57824bf19a0b271f83ea  go1.16.2.src.tar.gz
- sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index f6cb2469a8..ff12fb0c62 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
+diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
+index 39df050609..d9912a50d9 100644
+--- a/package/mbedtls/mbedtls.hash
++++ b/package/mbedtls/mbedtls.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/ARMmbed/mbedtls/releases/tag/v2.16.9:
+-sha256  fc17ff7d8c11d08f23ae2800a18269408ad2c24ea6bb8b9363e41a01c2425697  mbedtls-2.16.9.tar.gz
++# From https://github.com/ARMmbed/mbedtls/releases/tag/v2.16.10:
++sha256  96257bb03b30300b2f35f861ffe204ed957e9fd0329d80646fe57fc49f589b29  mbedtls-2.16.10.tar.gz
+ # Locally calculated
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  apache-2.0.txt
+diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
+index 9e3e9f626d..8776fb9134 100644
+--- a/package/mbedtls/mbedtls.mk
++++ b/package/mbedtls/mbedtls.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GO_VERSION = 1.16
-+GO_VERSION = 1.16.2
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
+-MBEDTLS_VERSION = 2.16.9
++MBEDTLS_VERSION = 2.16.10
+ MBEDTLS_SITE = $(call github,ARMmbed,mbedtls,v$(MBEDTLS_VERSION))
+ MBEDTLS_CONF_OPTS = \
+ 	-DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_MBEDTLS_PROGRAMS),ON,OFF) \
