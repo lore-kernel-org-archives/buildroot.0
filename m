@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 12 Mar 2021 23:52:04 +0100
-Subject: [Buildroot] [PATCH 6/8] package/opkg-utils: add missing
- dependencies for host build
-In-Reply-To: <20210312200534.923-7-ryan.barnett@rockwellcollins.com>
+Date: Fri, 12 Mar 2021 23:56:03 +0100
+Subject: [Buildroot] [PATCH 7/8] package/opkg-utils: add opkg-utils as
+ target pkg
+In-Reply-To: <20210312200534.923-8-ryan.barnett@rockwellcollins.com>
 References: <20210312200534.923-1-ryan.barnett@rockwellcollins.com>
- <20210312200534.923-7-ryan.barnett@rockwellcollins.com>
-Message-ID: <20210312225204.GJ2737665@scaer>
+ <20210312200534.923-8-ryan.barnett@rockwellcollins.com>
+Message-ID: <20210312225603.GK2737665@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,86 +15,60 @@ To: buildroot@busybox.net
 Ryan, All,
 
 On 2021-03-12 14:05 -0600, Ryan Barnett spake thusly:
-> opkg-utils is a collection of bash and python scripts which require
-> additional commands/tools be available for the bash scripts. The full
-> list of dependencies that the opkg-util scripts require is:
-> 
->   bash
->   binutils
->   bzip2
->   coreutils
->   diffutils
->   findutils
->   grep
->   gzip
->   lz4
->   python3
->   sed
->   tar
->   xz
-> 
-> Since buildroot requires that bash, binutils, bzip2, gzip, sed and tar
-> be installed on the host system, only add dependencies on the
-> remaining host tools.
+> Supports a use case of building container rootfs images where a matching
+> target version of the tools is required for repackaging of a installer
+>  archive.
 > 
 > Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
 > ---
->  package/opkg-utils/opkg-utils.mk | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
-> 
+[--SNIP--]
 > diff --git a/package/opkg-utils/opkg-utils.mk b/package/opkg-utils/opkg-utils.mk
-> index a250b4ef9f..d7f68b8555 100644
+> index d7f68b8555..a445c9f49e 100644
 > --- a/package/opkg-utils/opkg-utils.mk
 > +++ b/package/opkg-utils/opkg-utils.mk
-> @@ -10,7 +10,14 @@ OPKG_UTILS_SITE_METHOD = git
+> @@ -10,6 +10,21 @@ OPKG_UTILS_SITE_METHOD = git
 >  OPKG_UTILS_LICENSE = GPL-2.0+
 >  OPKG_UTILS_LICENSE_FILES = COPYING
 >  
-> -HOST_OPKG_UTILS_DEPENDENCIES += $(BR2_PYTHON3_HOST_DEPENDENCY)
-> +HOST_OPKG_UTILS_DEPENDENCIES += \
-> +	host-coreutils \
-> +	host-diffutils \
-> +	host-findutils \
-> +	host-grep \
+> +OPKG_UTILS_DEPENDENCIES += \
+> +	bash \
+> +	binutils \
+> +	bzip2 \
+> +	coreutils \
+> +	diffutils \
+> +	findutils \
+> +	grep \
+> +	gzip \
+> +	lz4 \
+> +	python3 \
+> +	sed \
+> +	tar \
+> +	xz
 
-We already implicitely require grep: we're calling it so many times in
-the existing code. I am of the opinion that grep is a required package.
-
-That it is inot in the manual, is probably because it is so wildely
-installed by default in all distributions that we never had an issue
-with it missing so far, so it was not added to the list of required
-packages.
-
-Yes, that's basically how that list came to be: someone reported an
-issue about a tool missing, and it got added to the list (or we
-instroduced a host version).
-
-In the case of grep, I would say we should just require it on the host.
-
-find is also on the same page: it is a required package.
-
-As for coreutils, I would tend to be on the same page: it is a required
-package.
-
-However, we do have a host-coreutils package, but we only use when a
-package needs either or both of 'ln --relative' or 'realpath'. See:
-support/dependencies/check-host-coreutils.sh
-
-If that is the case for opkg-utils, then it should add
-$(BR2_COREUTILS_HOST_DEPENDENCY) to its _DEPENDENCIES. See:
-    package/libselinux/libselinux.mk
-    package/libsepol/libsepol.mk
-    package/systemd/systemd.mk
+As you explained in a previous commit, opkg-utils only contains scripts
+(in various languages, but still scripts), so the dependencies are not
+needed at build time.
 
 Regards,
 Yann E. MORIN.
 
-> +	host-lz4 \
-> +	$(BR2_PYTHON3_HOST_DEPENDENCY) \
-> +	host-xz
+>  HOST_OPKG_UTILS_DEPENDENCIES += \
+>  	host-coreutils \
+>  	host-diffutils \
+> @@ -19,8 +34,13 @@ HOST_OPKG_UTILS_DEPENDENCIES += \
+>  	$(BR2_PYTHON3_HOST_DEPENDENCY) \
+>  	host-xz
 >  
+> +define OPKG_UTILS_INSTALL_CMDS
+> +	$(MAKE) -C $(@D) PREFIX=$(TARGET_DIR) install-utils
+> +endef
+> +
 >  define HOST_OPKG_UTILS_INSTALL_CMDS
 >  	$(MAKE) -C $(@D) PREFIX=$(HOST_DIR) install-utils
+>  endef
+>  
+> +$(eval $(generic-package))
+>  $(eval $(host-generic-package))
 > -- 
 > 2.17.1
 > 
