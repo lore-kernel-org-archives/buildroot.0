@@ -1,37 +1,34 @@
 From: Christian Stewart <christian@paral.in>
-Date: Fri, 12 Mar 2021 13:59:18 -0800
-Subject: [Buildroot] [PATCH v1 2/2] package/batman-adv: bump version to
- 2021.0
-In-Reply-To: <20210311210804.9616-2-ps.report@gmx.net>
-References: <20210311210804.9616-1-ps.report@gmx.net>
- <20210311210804.9616-2-ps.report@gmx.net>
-Message-ID: <CA+h8R2ps1MF-NiZKYWceSTruHLXMpzLPORhzORetVKuF1PWDdA@mail.gmail.com>
+Date: Fri, 12 Mar 2021 14:08:14 -0800
+Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: remove myself for aufs
+Message-ID: <20210312220814.1318426-1-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Aufs has been deprecated for the purposes of Docker/containers since overlay2
+became the mainline kernel module of choice.
 
-On Thu, Mar 11, 2021 at 1:08 PM Peter Seiderer <ps.report@gmx.net> wrote:
-> -BATMAN_ADV_VERSION = 2019.3
-> +BATMAN_ADV_VERSION = 2021.0
+Signed-off-by: Christian Stewart <christian@paral.in>
+---
+ DEVELOPERS | 3 ---
+ 1 file changed, 3 deletions(-)
 
-I get build errors against 2 different device kernels (x86_64 and pi4):
-
-LD [M]  /build/batman-adv-2021.0/net/batman-adv/batman-adv.o
-MODPOST /build/batman-adv-2021.0/net/batman-adv/Module.symvers
-ERROR: modpost: "batadv_v_mesh_free"
-[/build/batman-adv-2021.0/net/batman-adv/batman-adv.ko] undefined!
-ERROR: modpost: "batadv_v_mesh_init"
-[/build/batman-adv-2021.0/net/batman-adv/batman-adv.ko] undefined!
-ERROR: modpost: "batadv_v_hardif_init"
-[/build/batman-adv-2021.0/net/batman-adv/batman-adv.ko] undefined!
-ERROR: modpost: "batadv_v_init"
-[/build/batman-adv-2021.0/net/batman-adv/batman-adv.ko] undefined!
-
-Possibly the package makefile needs to be updated?
-
-thanks,
-Christian
+diff --git a/DEVELOPERS b/DEVELOPERS
+index f6d6e4aa06..ad6bd1f241 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -509,9 +509,6 @@ N:	Christian Kellermann <christian.kellermann@solectrix.de>
+ F:	package/python-pylibftdi/
+ 
+ N:	Christian Stewart <christian@paral.in>
+-F:	linux/linux-ext-aufs.mk
+-F:	package/aufs/
+-F:	package/aufs-util/
+ F:	package/batman-adv/
+ F:	package/delve/
+ F:	package/docker-cli/
+-- 
+2.30.2
