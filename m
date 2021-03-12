@@ -1,86 +1,68 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 12 Mar 2021 23:56:03 +0100
-Subject: [Buildroot] [PATCH 7/8] package/opkg-utils: add opkg-utils as
- target pkg
-In-Reply-To: <20210312200534.923-8-ryan.barnett@rockwellcollins.com>
-References: <20210312200534.923-1-ryan.barnett@rockwellcollins.com>
- <20210312200534.923-8-ryan.barnett@rockwellcollins.com>
-Message-ID: <20210312225603.GK2737665@scaer>
+From: Christian Stewart <christian@paral.in>
+Date: Fri, 12 Mar 2021 15:51:05 -0800
+Subject: [Buildroot] [PATCH v1 2/2] package/batman-adv: bump version to
+ 2021.0
+In-Reply-To: <20210312230903.18bf4a0a@gmx.net>
+References: <20210311210804.9616-1-ps.report@gmx.net>
+ <20210311210804.9616-2-ps.report@gmx.net>
+ <CA+h8R2ps1MF-NiZKYWceSTruHLXMpzLPORhzORetVKuF1PWDdA@mail.gmail.com>
+ <20210312230903.18bf4a0a@gmx.net>
+Message-ID: <CA+h8R2r7oBE1h7FSQC+CR=q2Vr-K5bS-qkwVFO-+GT24Qb6Raw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ryan, All,
+Hi Peter,
 
-On 2021-03-12 14:05 -0600, Ryan Barnett spake thusly:
-> Supports a use case of building container rootfs images where a matching
-> target version of the tools is required for repackaging of a installer
->  archive.
-> 
-> Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-> ---
-[--SNIP--]
-> diff --git a/package/opkg-utils/opkg-utils.mk b/package/opkg-utils/opkg-utils.mk
-> index d7f68b8555..a445c9f49e 100644
-> --- a/package/opkg-utils/opkg-utils.mk
-> +++ b/package/opkg-utils/opkg-utils.mk
-> @@ -10,6 +10,21 @@ OPKG_UTILS_SITE_METHOD = git
->  OPKG_UTILS_LICENSE = GPL-2.0+
->  OPKG_UTILS_LICENSE_FILES = COPYING
->  
-> +OPKG_UTILS_DEPENDENCIES += \
-> +	bash \
-> +	binutils \
-> +	bzip2 \
-> +	coreutils \
-> +	diffutils \
-> +	findutils \
-> +	grep \
-> +	gzip \
-> +	lz4 \
-> +	python3 \
-> +	sed \
-> +	tar \
-> +	xz
+On Fri, Mar 12, 2021 at 2:09 PM Peter Seiderer <ps.report@gmx.net> wrote:
+> > On Thu, Mar 11, 2021 at 1:08 PM Peter Seiderer <ps.report@gmx.net> wrote:
+> > > -BATMAN_ADV_VERSION = 2019.3
+> > > +BATMAN_ADV_VERSION = 2021.0
+> >
+> > I get build errors against 2 different device kernels (x86_64 and pi4):
+> >
+> > LD [M]  /build/batman-adv-2021.0/net/batman-adv/batman-adv.o
+> > MODPOST /build/batman-adv-2021.0/net/batman-adv/Module.symvers
+> > ERROR: modpost: "batadv_v_mesh_free"
+> > [/build/batman-adv-2021.0/net/batman-adv/batman-adv.ko] undefined!
+> > ERROR: modpost: "batadv_v_mesh_init"
+> > [/build/batman-adv-2021.0/net/batman-adv/batman-adv.ko] undefined!
+> > ERROR: modpost: "batadv_v_hardif_init"
+> > [/build/batman-adv-2021.0/net/batman-adv/batman-adv.ko] undefined!
+> > ERROR: modpost: "batadv_v_init"
+> > [/build/batman-adv-2021.0/net/batman-adv/batman-adv.ko] undefined!
+> >
+> > Possibly the package makefile needs to be updated?
+>
+> For me the update fixed the compile for RPi4_64 ;-), can you share your
+> defconfig(s)?
 
-As you explained in a previous commit, opkg-utils only contains scripts
-(in various languages, but still scripts), so the dependencies are not
-needed at build time.
+OK, I see what happened here. I just ran "make batman-adv" in an
+existing tree without enabling the Kconfig options.
 
-Regards,
-Yann E. MORIN.
+The problem is when batman adv protocol version 5 is not enabled:
 
->  HOST_OPKG_UTILS_DEPENDENCIES += \
->  	host-coreutils \
->  	host-diffutils \
-> @@ -19,8 +34,13 @@ HOST_OPKG_UTILS_DEPENDENCIES += \
->  	$(BR2_PYTHON3_HOST_DEPENDENCY) \
->  	host-xz
->  
-> +define OPKG_UTILS_INSTALL_CMDS
-> +	$(MAKE) -C $(@D) PREFIX=$(TARGET_DIR) install-utils
-> +endef
-> +
->  define HOST_OPKG_UTILS_INSTALL_CMDS
->  	$(MAKE) -C $(@D) PREFIX=$(HOST_DIR) install-utils
->  endef
->  
-> +$(eval $(generic-package))
->  $(eval $(host-generic-package))
-> -- 
-> 2.17.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+BR2_PACKAGE_BATMAN_ADV=y
+# BR2_PACKAGE_BATMAN_ADV_DEBUG is not set
+# BR2_PACKAGE_BATMAN_ADV_NC is not set
+# BR2_PACKAGE_BATMAN_ADV_BATMAN_V is not set
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+That's causing the "batadv_v_init" undefined errors.
+
+Best regards,
+Christian Stewart
+
+>
+> Regards,
+> Peter
+>
+> >
+> > thanks,
+> > Christian
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+>
