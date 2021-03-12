@@ -1,12 +1,15 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 12 Mar 2021 23:17:04 +0100
-Subject: [Buildroot] [PATCH v1] package/sysvinit: bump version to 2.99
-Message-ID: <20210312221704.4521-1-ps.report@gmx.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 12 Mar 2021 23:20:15 +0100
+Subject: [Buildroot] [git commit] package/sysvinit: bump version to 2.99
+Message-ID: <20210312215736.5DBFF88DC3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+commit: https://git.buildroot.net/buildroot/commit/?id=08305295deb6f6eaea6d88d1f17dbf195645ec54
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Changelog according to [1]:
 
@@ -17,6 +20,7 @@ Changelog according to [1]:
 [1] https://fossies.org/linux/sysvinit/doc/Changelog
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
  package/sysvinit/sysvinit.hash | 2 +-
  package/sysvinit/sysvinit.mk   | 2 +-
@@ -46,5 +50,3 @@ index c7ddf67c2f..72cf313f25 100644
  SYSVINIT_SOURCE = sysvinit-$(SYSVINIT_VERSION).tar.xz
  SYSVINIT_SITE = http://download.savannah.nongnu.org/releases/sysvinit
  SYSVINIT_LICENSE = GPL-2.0+
--- 
-2.30.1
