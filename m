@@ -1,36 +1,57 @@
-From: Ryan Barnett <ryan.barnett@collins.com>
-Date: Fri, 12 Mar 2021 13:51:52 -0600
-Subject: [Buildroot] [PATCH 1/1] package/bash: fix seventh patch
-In-Reply-To: <20210312070803.768698-1-fontaine.fabrice@gmail.com>
-References: <20210312070803.768698-1-fontaine.fabrice@gmail.com>
-Message-ID: <CAMQcK5KJD-_76z2ztdyLd5Hj3tV2myJE-hk7q_PLT_EsFULR-A@mail.gmail.com>
+From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+Date: Fri, 12 Mar 2021 14:05:26 -0600
+Subject: [Buildroot] [PATCH 0/8] package/opkg-utils: add target build
+Message-ID: <20210312200534.923-1-ryan.barnett@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Mar 12, 2021 at 1:11 AM Fabrice Fontaine
-<fontaine.fabrice@gmail.com> wrote:
->
-> Since bump to version 5.1 in commit
-> 9e778b044c949d165207150cc9e79fdcfbafcb9d, seventh patch wrongly defines
-> wcdequote_pathname as static which will result in the following build
-> failure:
->
-> smatch.c:(.text+0x22f0): undefined reference to `wcdequote_pathname'
->
-> Fixes:
->  - http://autobuild.buildroot.org/results/d83f5d260dccd38984ec6fdb340835ca928bb687
->
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...-glob-fix-dequote_pathname-vs.-udequote_pathname.patch | 8 +-------
->  1 file changed, 1 insertion(+), 7 deletions(-)
+A first revision of adding opkg-utils as a target package was proposed
+in the following patch:
 
-Thanks for the patch as the building of bash on master is currently broken...
+  https://patchwork.ozlabs.org/project/buildroot/patch/20210126192605.20002-1-matthew.weber at rockwellcollins.com/
 
-Tested-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+Based on feedback received from Yann, it uncovered some issues with the
+current host package build for opkg-utils.
+
+This patch series addresses the following items:
+
+ * Remove build step since all it does is generate man pages for a
+   single command (Patch 1)
+ * Incorporated accepted patch for splitting off the installation of
+   docs and utils (Patch 2)
+ * Add missing host dependencies for host-opkg-utils which are not
+   manditory packages of for buildroot (Patches 3-6)
+ * Add target package for opkg-utils (Patch 7)
 
 Thanks,
 -Ryan
+
+CC: Yann E. MORIN <yann.morin.1998@free.fr>
+
+Ryan Barnett (8):
+  package/opkg-utils: remove build step
+  package/opkg-utils: install only utility scripts
+  package/diffutils: add host package
+  package/findutils: add host package
+  package/grep: add host package
+  package/opkg-utils: add missing dependencies for host build
+  package/opkg-utils: add opkg-utils as target pkg
+  DEVELOPERS: Add Ryan Barnett for opkg and opkg-utils
+
+ DEVELOPERS                                    |  2 +
+ package/Config.in                             |  1 +
+ package/diffutils/diffutils.mk                |  1 +
+ package/findutils/findutils.mk                |  1 +
+ package/grep/grep.mk                          |  1 +
+ ...-seperate-manpages-and-utils-install.patch | 50 +++++++++++++++++++
+ package/opkg-utils/Config.in                  | 33 ++++++++++++
+ package/opkg-utils/opkg-utils.mk              | 31 ++++++++++--
+ 8 files changed, 116 insertions(+), 4 deletions(-)
+ create mode 100644 package/opkg-utils/0001-Makefile-seperate-manpages-and-utils-install.patch
+ create mode 100644 package/opkg-utils/Config.in
+
+--
+2.17.1
