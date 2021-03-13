@@ -1,54 +1,64 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 13 Mar 2021 15:53:16 +0100
+Date: Sat, 13 Mar 2021 15:53:30 +0100
 Subject: [Buildroot] [git commit branch/2020.02.x] package/python-aiohttp:
- bump to version 3.7.3
-Message-ID: <20210313143049.EAAA57FEA2@busybox.osuosl.org>
+ security bump to version 3.7.4
+Message-ID: <20210313143050.306AD7F92A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b1e24c34d4209045f37e9c9dd3cf20c2b8087389
+commit: https://git.buildroot.net/buildroot/commit/?id=5300eb5c5a6c84c300838462e432889e4e0cf3dc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-License hash changed due to year update.
+Fixes the following security issue:
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 89a950631e7f13dd9c7554a506aa279c5db290bf)
+CVE-2021-21330: Open redirect vulnerability in aiohttp
+(normalize_path_middleware middleware)
+
+Beast Glatisant and Jelmer Vernooij reported that python-aiohttp, a async
+HTTP client/server framework, is prone to an open redirect vulnerability.  A
+maliciously crafted link to an aiohttp-based web-server could redirect the
+browser to a different website.
+
+For more details, see the advisory:
+https://github.com/aio-libs/aiohttp/security/advisories/GHSA-v6wp-4m6f-gcjg
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 0e60a9aa835a2141d4f8e382dc736862a29f6e7f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-aiohttp/python-aiohttp.hash | 6 +++---
+ package/python-aiohttp/python-aiohttp.hash | 4 ++--
  package/python-aiohttp/python-aiohttp.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/package/python-aiohttp/python-aiohttp.hash b/package/python-aiohttp/python-aiohttp.hash
-index fd02bc80d6..36056d2f99 100644
+index 36056d2f99..db7dfd6b15 100644
 --- a/package/python-aiohttp/python-aiohttp.hash
 +++ b/package/python-aiohttp/python-aiohttp.hash
 @@ -1,5 +1,5 @@
  # md5, sha256 from https://pypi.org/pypi/aiohttp/json
--md5	ca40144c199a09fc1a141960cf6295f0  aiohttp-3.6.2.tar.gz
--sha256	259ab809ff0727d0e834ac5e8a283dc5e3e0ecc30c4d80b3cd17a4139ce1f326  aiohttp-3.6.2.tar.gz
-+md5  a66039c12f33dd093a2c260f5c459632  aiohttp-3.7.3.tar.gz
-+sha256  9c1a81af067e72261c9cbe33ea792893e83bc6aa987bfbd6fdc1e5e7b22777c4  aiohttp-3.7.3.tar.gz
+-md5  a66039c12f33dd093a2c260f5c459632  aiohttp-3.7.3.tar.gz
+-sha256  9c1a81af067e72261c9cbe33ea792893e83bc6aa987bfbd6fdc1e5e7b22777c4  aiohttp-3.7.3.tar.gz
++md5  586eb4e4dcb1e41242ede0c5bcfd4014  aiohttp-3.7.4.tar.gz
++sha256  5d84ecc73141d0a0d61ece0742bb7ff5751b0657dab8405f899d3ceb104cc7de  aiohttp-3.7.4.tar.gz
  # Locally computed sha256 checksums
--sha256	6fd5243e92dd7f98ec69c7ac377728e74905709ff527a5bf98d6d0263c04f5b6  LICENSE.txt
-+sha256  96627bed0ad08e9b2efa9f4e04e80837cd0550e7694a0fec33b1dab2550282ab  LICENSE.txt
+ sha256  96627bed0ad08e9b2efa9f4e04e80837cd0550e7694a0fec33b1dab2550282ab  LICENSE.txt
 diff --git a/package/python-aiohttp/python-aiohttp.mk b/package/python-aiohttp/python-aiohttp.mk
-index 5a5964ed5f..e5a1354267 100644
+index e5a1354267..f1e755c023 100644
 --- a/package/python-aiohttp/python-aiohttp.mk
 +++ b/package/python-aiohttp/python-aiohttp.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_AIOHTTP_VERSION = 3.6.2
-+PYTHON_AIOHTTP_VERSION = 3.7.3
+-PYTHON_AIOHTTP_VERSION = 3.7.3
++PYTHON_AIOHTTP_VERSION = 3.7.4
  PYTHON_AIOHTTP_SOURCE = aiohttp-$(PYTHON_AIOHTTP_VERSION).tar.gz
--PYTHON_AIOHTTP_SITE = https://files.pythonhosted.org/packages/00/94/f9fa18e8d7124d7850a5715a0b9c0584f7b9375d331d35e157cee50f27cc
-+PYTHON_AIOHTTP_SITE = https://files.pythonhosted.org/packages/68/96/40a765d7d68028c5a6d169b2747ea3f4828ec91a358a63818d468380521c
+-PYTHON_AIOHTTP_SITE = https://files.pythonhosted.org/packages/68/96/40a765d7d68028c5a6d169b2747ea3f4828ec91a358a63818d468380521c
++PYTHON_AIOHTTP_SITE = https://files.pythonhosted.org/packages/7a/95/eb60aaad7943e18c9d091de93c9b0b5ed40aa67c7d5e3c5ee9b36f100a38
  PYTHON_AIOHTTP_SETUP_TYPE = setuptools
  PYTHON_AIOHTTP_LICENSE = Apache-2.0
  PYTHON_AIOHTTP_LICENSE_FILES = LICENSE.txt
