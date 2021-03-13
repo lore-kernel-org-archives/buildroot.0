@@ -1,68 +1,41 @@
-From: Christian Stewart <christian@paral.in>
-Date: Fri, 12 Mar 2021 15:51:05 -0800
-Subject: [Buildroot] [PATCH v1 2/2] package/batman-adv: bump version to
- 2021.0
-In-Reply-To: <20210312230903.18bf4a0a@gmx.net>
-References: <20210311210804.9616-1-ps.report@gmx.net>
- <20210311210804.9616-2-ps.report@gmx.net>
- <CA+h8R2ps1MF-NiZKYWceSTruHLXMpzLPORhzORetVKuF1PWDdA@mail.gmail.com>
- <20210312230903.18bf4a0a@gmx.net>
-Message-ID: <CA+h8R2r7oBE1h7FSQC+CR=q2Vr-K5bS-qkwVFO-+GT24Qb6Raw@mail.gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Sat, 13 Mar 2021 08:11:44 +0100
+Subject: [Buildroot] [PATCH 1/2] package/lua-curl: bump to version 0.3.13
+Message-ID: <20210313071145.1558401-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/lua-curl/lua-curl.hash | 4 ++--
+ package/lua-curl/lua-curl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On Fri, Mar 12, 2021 at 2:09 PM Peter Seiderer <ps.report@gmx.net> wrote:
-> > On Thu, Mar 11, 2021 at 1:08 PM Peter Seiderer <ps.report@gmx.net> wrote:
-> > > -BATMAN_ADV_VERSION = 2019.3
-> > > +BATMAN_ADV_VERSION = 2021.0
-> >
-> > I get build errors against 2 different device kernels (x86_64 and pi4):
-> >
-> > LD [M]  /build/batman-adv-2021.0/net/batman-adv/batman-adv.o
-> > MODPOST /build/batman-adv-2021.0/net/batman-adv/Module.symvers
-> > ERROR: modpost: "batadv_v_mesh_free"
-> > [/build/batman-adv-2021.0/net/batman-adv/batman-adv.ko] undefined!
-> > ERROR: modpost: "batadv_v_mesh_init"
-> > [/build/batman-adv-2021.0/net/batman-adv/batman-adv.ko] undefined!
-> > ERROR: modpost: "batadv_v_hardif_init"
-> > [/build/batman-adv-2021.0/net/batman-adv/batman-adv.ko] undefined!
-> > ERROR: modpost: "batadv_v_init"
-> > [/build/batman-adv-2021.0/net/batman-adv/batman-adv.ko] undefined!
-> >
-> > Possibly the package makefile needs to be updated?
->
-> For me the update fixed the compile for RPi4_64 ;-), can you share your
-> defconfig(s)?
-
-OK, I see what happened here. I just ran "make batman-adv" in an
-existing tree without enabling the Kconfig options.
-
-The problem is when batman adv protocol version 5 is not enabled:
-
-BR2_PACKAGE_BATMAN_ADV=y
-# BR2_PACKAGE_BATMAN_ADV_DEBUG is not set
-# BR2_PACKAGE_BATMAN_ADV_NC is not set
-# BR2_PACKAGE_BATMAN_ADV_BATMAN_V is not set
-
-That's causing the "batadv_v_init" undefined errors.
-
-Best regards,
-Christian Stewart
-
->
-> Regards,
-> Peter
->
-> >
-> > thanks,
-> > Christian
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
->
+diff --git a/package/lua-curl/lua-curl.hash b/package/lua-curl/lua-curl.hash
+index 5210ceb0f..836e2cb6f 100644
+--- a/package/lua-curl/lua-curl.hash
++++ b/package/lua-curl/lua-curl.hash
+@@ -1,3 +1,3 @@
+ # computed by luarocks/buildroot
+-sha256 b6b860cd416ad883f2c7c2e1696aceda60c96036f660fb8c0236a5cc3d961c04  lua-curl-0.3.12-1.src.rock
+-sha256 0f92f4c4665aadffb023de44b16022282040fe4409d5cd3148f1812dec30cdff  Lua-cURLv3-0.3.12/LICENSE
++sha256 6b2cc48621fac3cb7c1669705475e67a6932829ba46efb9ac5864604848f8ea2  lua-curl-0.3.13-1.src.rock
++sha256 0f92f4c4665aadffb023de44b16022282040fe4409d5cd3148f1812dec30cdff  Lua-cURLv3-0.3.13/LICENSE
+diff --git a/package/lua-curl/lua-curl.mk b/package/lua-curl/lua-curl.mk
+index 37fbf30cc..2120d33ab 100644
+--- a/package/lua-curl/lua-curl.mk
++++ b/package/lua-curl/lua-curl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LUA_CURL_VERSION_UPSTREAM = 0.3.12
++LUA_CURL_VERSION_UPSTREAM = 0.3.13
+ LUA_CURL_VERSION = $(LUA_CURL_VERSION_UPSTREAM)-1
+ LUA_CURL_SUBDIR = Lua-cURLv3-$(LUA_CURL_VERSION_UPSTREAM)
+ LUA_CURL_LICENSE = MIT
+-- 
+2.27.0
