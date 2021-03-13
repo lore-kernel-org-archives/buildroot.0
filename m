@@ -1,54 +1,67 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 13 Mar 2021 23:27:37 +0100
-Subject: [Buildroot] [PATCH v1] package/dos2unix: bump version to 7.4.2
-Message-ID: <20210313222737.25831-1-ps.report@gmx.net>
+Date: Sat, 13 Mar 2021 23:30:32 +0100
+Subject: [Buildroot] [PATCH v1] package/psmisc: bump version to 23.4
+Message-ID: <20210313223032.26357-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- update COPYING.txt hash (update copyright year)
-
 Changelog ([1]):
 
-  2020-10-12: Version 7.4.2
-    * New Friulian translation of the messages.
-    * Updated Dutch, German, Serbian, Traditional Chinese, and Ukrainian
-      translations.
+  Changes in 23.4
+  ===============
+    * killall: Dynamically link to selinux and use security attributes
+    * pstree: Do not crash on missing processes !21
+    * pstree: fix layout when using -C !24
+    * pstree: add time namespace !25
+    * pstree: Dynamically link to selinux and use attr
+    * fuser: Get less confused about duplicate dev_id !10
+    * fuser: Only check pathname on non-block devices !31
 
-[1] https://sourceforge.net/projects/dos2unix/files/dos2unix/7.4.2/
+  Changes in 23.3
+  ===============
+    * killall: check also truncated 16 char comm names Debian #912748
+    * fuser: Return early if have nulls !18
+    * peekfd: Add support for ARM64 !19
+    * pstree: Add color by age #21
+    * fuser: Use larger inode sizes #16
+
+[1] https://gitlab.com/psmisc/psmisc/-/blob/master/ChangeLog
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/dos2unix/dos2unix.hash | 6 +++---
- package/dos2unix/dos2unix.mk   | 2 +-
+ package/psmisc/psmisc.hash | 6 +++---
+ package/psmisc/psmisc.mk   | 2 +-
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/dos2unix/dos2unix.hash b/package/dos2unix/dos2unix.hash
-index 41fb23429b..493011fce4 100644
---- a/package/dos2unix/dos2unix.hash
-+++ b/package/dos2unix/dos2unix.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://waterlan.home.xs4all.nl/dos2unix/dos2unix-7.4.1.tar.gz.asc
--sha256	1cd58a60b03ed28fa39046102a185c5e88c4f7665e1e0417c25de7f8b9f78623	dos2unix-7.4.1.tar.gz
--sha256	af32dca9450e90b9a7a0f6408da1554466382cc81960108c59512f78a666a276	COPYING.txt
-+# https://waterlan.home.xs4all.nl/dos2unix/dos2unix-7.4.2.tar.gz.asc
-+sha256	6035c58df6ea2832e868b599dfa0d60ad41ca3ecc8aa27822c4b7a9789d3ae01  dos2unix-7.4.2.tar.gz
-+sha256	db8888b7d1454348aca0c6ca851327245ef60e57afa8a6555761c8b95d24af77  COPYING.txt
-diff --git a/package/dos2unix/dos2unix.mk b/package/dos2unix/dos2unix.mk
-index 5064b7e5bb..1f3e79ec4e 100644
---- a/package/dos2unix/dos2unix.mk
-+++ b/package/dos2unix/dos2unix.mk
+diff --git a/package/psmisc/psmisc.hash b/package/psmisc/psmisc.hash
+index 8e380a5591..47e44f6921 100644
+--- a/package/psmisc/psmisc.hash
++++ b/package/psmisc/psmisc.hash
+@@ -1,6 +1,6 @@
+ # From https://sourceforge.net/projects/psmisc/files/psmisc/
+-md5 0524258861f00be1a02d27d39d8e5e62 psmisc-23.2.tar.xz
+-sha1 2bf3ec1c87ab3bc0610c819452c21cf4b849b0b8 psmisc-23.2.tar.xz
++md5  8114cd4489b95308efe2509c3a406bbf  psmisc-23.4.tar.xz
++sha1  a4c34111e570c43967efb2bbd8a4f31d94d22e0f  psmisc-23.4.tar.xz
+ # Locally computed:
+-sha256  4b7cbffdc9373474da49b85dc3457ae511c43dc7fa7d94513fe06f89dcb87880  psmisc-23.2.tar.xz
++sha256  7f0cceeace2050c525f3ebb35f3ba01d618b8d690620580bdb8cd8269a0c1679  psmisc-23.4.tar.xz
+ sha256  dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa  COPYING
+diff --git a/package/psmisc/psmisc.mk b/package/psmisc/psmisc.mk
+index e9a7b00c9d..3d0d2c5367 100644
+--- a/package/psmisc/psmisc.mk
++++ b/package/psmisc/psmisc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DOS2UNIX_VERSION = 7.4.1
-+DOS2UNIX_VERSION = 7.4.2
- DOS2UNIX_SITE = http://waterlan.home.xs4all.nl/dos2unix
- DOS2UNIX_LICENSE = BSD-2-Clause
- DOS2UNIX_LICENSE_FILES = COPYING.txt
+-PSMISC_VERSION = 23.2
++PSMISC_VERSION = 23.4
+ PSMISC_SITE = http://downloads.sourceforge.net/project/psmisc/psmisc
+ PSMISC_SOURCE = psmisc-$(PSMISC_VERSION).tar.xz
+ PSMISC_LICENSE = GPL-2.0+
 -- 
 2.30.1
