@@ -1,67 +1,53 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 13 Mar 2021 23:30:32 +0100
-Subject: [Buildroot] [PATCH v1] package/psmisc: bump version to 23.4
-Message-ID: <20210313223032.26357-1-ps.report@gmx.net>
+Date: Sat, 13 Mar 2021 23:34:19 +0100
+Subject: [Buildroot] [PATCH v1] package/wget: bump version to 1.12.1
+Message-ID: <20210313223419.26648-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog ([1]):
+- update/fix signing key hash
 
-  Changes in 23.4
-  ===============
-    * killall: Dynamically link to selinux and use security attributes
-    * pstree: Do not crash on missing processes !21
-    * pstree: fix layout when using -C !24
-    * pstree: add time namespace !25
-    * pstree: Dynamically link to selinux and use attr
-    * fuser: Get less confused about duplicate dev_id !10
-    * fuser: Only check pathname on non-block devices !31
+For details see [1], [2].
 
-  Changes in 23.3
-  ===============
-    * killall: check also truncated 16 char comm names Debian #912748
-    * fuser: Return early if have nulls !18
-    * peekfd: Add support for ARM64 !19
-    * pstree: Add color by age #21
-    * fuser: Use larger inode sizes #16
-
-[1] https://gitlab.com/psmisc/psmisc/-/blob/master/ChangeLog
+[1] https://lists.gnu.org/archive/html/info-gnu/2020-12/msg00013.html
+[2] https://lists.gnu.org/archive/html/info-gnu/2021-01/msg00007.html
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/psmisc/psmisc.hash | 6 +++---
- package/psmisc/psmisc.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/wget/wget.hash | 8 ++++----
+ package/wget/wget.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/psmisc/psmisc.hash b/package/psmisc/psmisc.hash
-index 8e380a5591..47e44f6921 100644
---- a/package/psmisc/psmisc.hash
-+++ b/package/psmisc/psmisc.hash
+diff --git a/package/wget/wget.hash b/package/wget/wget.hash
+index 956e1127f3..11071566aa 100644
+--- a/package/wget/wget.hash
++++ b/package/wget/wget.hash
 @@ -1,6 +1,6 @@
- # From https://sourceforge.net/projects/psmisc/files/psmisc/
--md5 0524258861f00be1a02d27d39d8e5e62 psmisc-23.2.tar.xz
--sha1 2bf3ec1c87ab3bc0610c819452c21cf4b849b0b8 psmisc-23.2.tar.xz
-+md5  8114cd4489b95308efe2509c3a406bbf  psmisc-23.4.tar.xz
-+sha1  a4c34111e570c43967efb2bbd8a4f31d94d22e0f  psmisc-23.4.tar.xz
- # Locally computed:
--sha256  4b7cbffdc9373474da49b85dc3457ae511c43dc7fa7d94513fe06f89dcb87880  psmisc-23.2.tar.xz
-+sha256  7f0cceeace2050c525f3ebb35f3ba01d618b8d690620580bdb8cd8269a0c1679  psmisc-23.4.tar.xz
- sha256  dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa  COPYING
-diff --git a/package/psmisc/psmisc.mk b/package/psmisc/psmisc.mk
-index e9a7b00c9d..3d0d2c5367 100644
---- a/package/psmisc/psmisc.mk
-+++ b/package/psmisc/psmisc.mk
+ # Locally calculated after checking pgp signature
+-# https://ftp.gnu.org/gnu/wget/wget-1.20.3.tar.lz.sig
+-# with key 1CB27DBC98614B2D5841646D08302DB6A2670428
+-sha256 69607ce8216c2d1126b7a872db594b3f21e511e660e07ca1f81be96650932abb  wget-1.20.3.tar.lz
++# https://ftp.gnu.org/gnu/wget/wget-1.21.tar.lz.sig
++# with key 6B98F637D879C5236E277C5C64FF90AAE8C70AF9
++sha256  db9bbe5347e6faa06fc78805eeb808b268979455ead9003a608569c9d4fc90ad  wget-1.21.1.tar.lz
+ # Locally calculated
+-sha256 e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b  COPYING
++sha256  e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b  COPYING
+diff --git a/package/wget/wget.mk b/package/wget/wget.mk
+index 65c132e453..ae036478b8 100644
+--- a/package/wget/wget.mk
++++ b/package/wget/wget.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PSMISC_VERSION = 23.2
-+PSMISC_VERSION = 23.4
- PSMISC_SITE = http://downloads.sourceforge.net/project/psmisc/psmisc
- PSMISC_SOURCE = psmisc-$(PSMISC_VERSION).tar.xz
- PSMISC_LICENSE = GPL-2.0+
+-WGET_VERSION = 1.20.3
++WGET_VERSION = 1.21.1
+ WGET_SOURCE = wget-$(WGET_VERSION).tar.lz
+ WGET_SITE = $(BR2_GNU_MIRROR)/wget
+ WGET_DEPENDENCIES = host-pkgconf
 -- 
 2.30.1
