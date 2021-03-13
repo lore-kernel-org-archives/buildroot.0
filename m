@@ -1,10 +1,9 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 13 Mar 2021 10:59:08 +0100
-Subject: [Buildroot] [PATCH 2/3] package/janet: defaults to c99 for
- build.c_std
+Date: Sat, 13 Mar 2021 10:59:09 +0100
+Subject: [Buildroot] [PATCH 3/3] package/janet: fix static build
 In-Reply-To: <20210313095909.93871-1-fontaine.fabrice@gmail.com>
 References: <20210313095909.93871-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210313095909.93871-2-fontaine.fabrice@gmail.com>
+Message-ID: <20210313095909.93871-3-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,59 +11,54 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Fixes:
- - http://autobuild.buildroot.org/results/d5e46e094b27f40e12b32624d1431bfeeb617be3
+ - http://autobuild.buildroot.org/results/a4f927f73a7b80e65408c992d7b6023609a1eacc
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...uild-defaults-to-c99-for-build.c_std.patch | 42 +++++++++++++++++++
- 1 file changed, 42 insertions(+)
- create mode 100644 package/janet/0001-meson.build-defaults-to-c99-for-build.c_std.patch
+ .../0002-meson.build-fix-static-build.patch   | 37 +++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+ create mode 100644 package/janet/0002-meson.build-fix-static-build.patch
 
-diff --git a/package/janet/0001-meson.build-defaults-to-c99-for-build.c_std.patch b/package/janet/0001-meson.build-defaults-to-c99-for-build.c_std.patch
+diff --git a/package/janet/0002-meson.build-fix-static-build.patch b/package/janet/0002-meson.build-fix-static-build.patch
 new file mode 100644
-index 0000000000..607fc2ee86
+index 0000000000..bd335cad90
 --- /dev/null
-+++ b/package/janet/0001-meson.build-defaults-to-c99-for-build.c_std.patch
-@@ -0,0 +1,42 @@
-+From 546437d799f4cbc1dd86a015eac3b9ab405130c6 Mon Sep 17 00:00:00 2001
++++ b/package/janet/0002-meson.build-fix-static-build.patch
+@@ -0,0 +1,37 @@
++From b0f1a4967db9d8910e0091adff5e40a2a147323f Mon Sep 17 00:00:00 2001
 +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 10 Mar 2021 07:57:53 +0100
-+Subject: [PATCH] meson.build: defaults to c99 for "build.c_std"
++Date: Fri, 12 Mar 2021 08:46:05 +0100
++Subject: [PATCH] meson.build: fix static build
 +
-+Since Meson 0.51, there are special build options for "native:true"
-+builds, prefixed with "build.".  This change breaks cross builds
-+because `janet-boot/src_core_asm.c` is no longer built with `-std=c99`:
++Don't enforce -rdynamic when building statically to avoid the following
++build failure:
 +
-+FAILED: janet-boot.p/src_core_asm.c.o
-+/usr/bin/gcc -Ijanet-boot.p -I. -I.. -I../src/include -pipe -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -O3 -pthread -DJANET_BOOTSTRAP -MD -MQ janet-boot.p/src_core_asm.c.o -MF janet-boot.p/src_core_asm.c.o.d -o janet-boot.p/src_core_asm.c.o -c ../src/core/asm.c
-+../src/core/asm.c: In function 'janet_disasm_bytecode':
-+../src/core/asm.c:866:5: error: 'for' loop initial declarations are only allowed in C99 mode
-+     for (int32_t i = 0; i < def->bytecode_length; i++) {
-+     ^
++/home/giuliobenetti/autobuild/run/instance-2/output-1/host/bin/arm-linux-gcc  -o janet janet.p/meson-generated_.._janet.c.o janet.p/src_mainclient_shell.c.o -Wl,--as-needed -Wl,--allow-shlib-undefined -Wl,-O1 -rdynamic -Wl,-elf2flt -static -Wl,--start-group -lm -ldl -Wl,--end-group -pthread
++arm-linux-gcc.br_real: error: unrecognized command line option '-rdynamic'
 +
 +Fixes:
-+ - http://autobuild.buildroot.net/results/355e0992338a8d132050517f83a3884606b00529
++ - http://autobuild.buildroot.org/results/a4f927f73a7b80e65408c992d7b6023609a1eacc
 +
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved (and backported) from:
-+https://github.com/janet-lang/janet/commit/546437d799f4cbc1dd86a015eac3b9ab405130c6]
++[Retrieved from:
++https://github.com/janet-lang/janet/commit/b0f1a4967db9d8910e0091adff5e40a2a147323f]
 +---
 + meson.build | 2 +-
 + 1 file changed, 1 insertion(+), 1 deletion(-)
 +
 +diff --git a/meson.build b/meson.build
-+index 1b326111..d3a2d399 100644
++index d3a2d399..a8a0a054 100644
 +--- a/meson.build
 ++++ b/meson.build
-+@@ -19,7 +19,7 @@
-+ # IN THE SOFTWARE.
++@@ -33,7 +33,7 @@ dl_dep = cc.find_library('dl', required : false)
++ thread_dep = dependency('threads')
 + 
-+ project('janet', 'c',
-+-  default_options : ['c_std=c99', 'b_lundef=false', 'default_library=both'],
-++  default_options : ['c_std=c99', 'build.c_std=c99', 'b_lundef=false', 'default_library=both'],
-+   version : '1.15.0')
++ # Link options
++-if build_machine.system() != 'windows'
+++if get_option('default_library') != 'static' and build_machine.system() != 'windows'
++     add_project_link_arguments('-rdynamic', language : 'c')
++ endif
 + 
-+ # Global settings
 +-- 
 +2.30.0
 +
