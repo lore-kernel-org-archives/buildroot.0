@@ -1,138 +1,46 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 13 Mar 2021 23:24:21 +0100
-Subject: [Buildroot] [PATCH v1] package/meson: bump version to 0.57.1
-Message-ID: <20210313222421.25397-1-ps.report@gmx.net>
+Date: Sat, 13 Mar 2021 23:26:31 +0100
+Subject: [Buildroot] [PATCH v1] package/btrfs-progs: bump version to 5.11
+Message-ID: <20210313222631.25633-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- update patch 0001-Prefer-ext-static-libs-when-default-library-static.patch
-  (use get_option(OptionKey()) instead of get_builtin_option())
-
-- rebase patch 0002-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch
-
 For details see [1].
 
-[1] https://mesonbuild.com/Release-notes-for-0-57-0.html
+[1] https://btrfs.wiki.kernel.org/index.php/Changelog#btrfs-progs_v5.11_.28Mar_2021.29
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- ...atic-libs-when-default-library-static.patch | 12 +++++++-----
- ...ndencies-base.py-add-pkg_config_stati.patch | 18 ++++++++++--------
- package/meson/meson.hash                       |  4 ++--
- package/meson/meson.mk                         |  2 +-
- 4 files changed, 20 insertions(+), 16 deletions(-)
+ package/btrfs-progs/btrfs-progs.hash | 2 +-
+ package/btrfs-progs/btrfs-progs.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/meson/0001-Prefer-ext-static-libs-when-default-library-static.patch b/package/meson/0001-Prefer-ext-static-libs-when-default-library-static.patch
-index 2639915891..4a1325bd6b 100644
---- a/package/meson/0001-Prefer-ext-static-libs-when-default-library-static.patch
-+++ b/package/meson/0001-Prefer-ext-static-libs-when-default-library-static.patch
-@@ -1,4 +1,4 @@
--From ea85465e608178080c3b4d51af9765a8c7c0dae3 Mon Sep 17 00:00:00 2001
-+From cf9ad9b79a924081ce3d1e045bba3544815ea5f8 Mon Sep 17 00:00:00 2001
- From: Matt Weber <matthew.weber@rockwellcollins.com>
- Date: Sat, 26 Oct 2019 09:17:29 -0500
- Subject: [PATCH] Prefer ext static libs when --default-library=static
-@@ -22,24 +22,26 @@ http://autobuild.buildroot.net/results/db1740b4777f436324218c52bc7b08e5c21b667d/
- http://autobuild.buildroot.net/results/c17/c17bbb12d9deadd64a441b36e324cfbbe8aba5be/
- 
- Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-+[Updated for 0.57.1 - get_builtin_option() vs. get_option(OptionKey())]
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
- ---
-  mesonbuild/compilers/mixins/clike.py | 3 +++
-  1 file changed, 3 insertions(+)
- 
- diff --git a/mesonbuild/compilers/mixins/clike.py b/mesonbuild/compilers/mixins/clike.py
--index 47e97d261..729c98acc 100644
-+index ad3bfae..4733910 100644
- --- a/mesonbuild/compilers/mixins/clike.py
- +++ b/mesonbuild/compilers/mixins/clike.py
--@@ -940,6 +940,9 @@ class CLikeCompiler:
-+@@ -999,6 +999,9 @@ class CLikeCompiler(Compiler):
-          elif env.machines[self.for_machine].is_cygwin():
-              shlibext = ['dll', 'dll.a']
-              prefixes = ['cyg'] + prefixes
--+        elif env.coredata.get_builtin_option('default_library') == 'static':
-++        elif env.coredata.get_option(OptionKey('default_library')) == 'static':
- +            # Linux/BSDs
- +            shlibext = ['a']
-          else:
-              # Linux/BSDs
-              shlibext = ['so']
- -- 
--2.25.1
-+2.30.1
- 
-diff --git a/package/meson/0002-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch b/package/meson/0002-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch
-index eda17cadc5..9dbe22c83f 100644
---- a/package/meson/0002-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch
-+++ b/package/meson/0002-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch
-@@ -1,4 +1,4 @@
--From 8622d37587169c1e4a4206a9462868ede057f0e8 Mon Sep 17 00:00:00 2001
-+From 885af6ab2e02cca6bd190b8b29a355fdb6516936 Mon Sep 17 00:00:00 2001
- From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- Date: Sat, 15 Feb 2020 15:13:59 +0100
- Subject: [PATCH] mesonbuild/dependencies/base.py: add pkg_config_static
-@@ -18,24 +18,26 @@ Fixes:
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- [Romain: Fix if condition, pkg_config_static is a string not a boolean]
- Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+[Rebased on 0.57.1]
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
- ---
-  mesonbuild/dependencies/base.py | 3 ++-
-  1 file changed, 2 insertions(+), 1 deletion(-)
- 
- diff --git a/mesonbuild/dependencies/base.py b/mesonbuild/dependencies/base.py
--index 23701da95..83e51626d 100644
-+index cd77b4b..08675e6 100644
- --- a/mesonbuild/dependencies/base.py
- +++ b/mesonbuild/dependencies/base.py
--@@ -849,7 +849,8 @@ class PkgConfigDependency(ExternalDependency):
--     def _set_libs(self):
-+@@ -883,7 +883,8 @@ class PkgConfigDependency(ExternalDependency):
-          env = None
--         libcmd = [self.name, '--libs']
-+         libcmd = ['--libs']
-+ 
- -        if self.static:
- +        if self.static or \
- +           (self.env.properties[self.for_machine].get('pkg_config_static', None) == 'true'):
-              libcmd.append('--static')
--         # Force pkg-config to output -L fields even if they are system
--         # paths so we can do manual searching with cc.find_library() later.
-+ 
-+         libcmd.append(self.name)
- -- 
--2.25.1
-+2.30.1
- 
-diff --git a/package/meson/meson.hash b/package/meson/meson.hash
-index e07b914be5..d13a605e80 100644
---- a/package/meson/meson.hash
-+++ b/package/meson/meson.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://github.com/mesonbuild/meson/releases/download/0.56.0/meson-0.56.2.tar.gz.asc
--sha256  3cb8bdb91383f7f8da642f916e4c44066a29262caa499341e2880f010edb87f4  meson-0.56.2.tar.gz
-+# https://github.com/mesonbuild/meson/releases/download/0.57.1/meson-0.57.1.tar.gz.asc
-+sha256  72e1c782ba9bda204f4a1ed57f98d027d7b6eb9414c723eebbd6ec7f1955c8a6  meson-0.57.1.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  COPYING
-diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-index 7e39883db3..eea5aedc51 100644
---- a/package/meson/meson.mk
-+++ b/package/meson/meson.mk
+diff --git a/package/btrfs-progs/btrfs-progs.hash b/package/btrfs-progs/btrfs-progs.hash
+index 9008513630..aac144963e 100644
+--- a/package/btrfs-progs/btrfs-progs.hash
++++ b/package/btrfs-progs/btrfs-progs.hash
+@@ -1,5 +1,5 @@
+ # From https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/sha256sums.asc
+-sha256 5c2f048b8c814852614b0b262ab2d468ea02774ef01124ebc0ab708df262de5c  btrfs-progs-v5.7.tar.xz
++sha256 d41961b0a92160c80f894ad9a1882822889c2e1d084cbf3e08b8c214a5cf0137  btrfs-progs-v5.11.tar.xz
+ # Locally computed
+ sha256 0d5bf346df9e635a29dcdddf832dc5b002ca6cdc1c5c9c6c567d2a61bb0c5c15  COPYING
+ sha256 3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  libbtrfsutil/COPYING
+diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
+index 22e1e330c5..96456d1238 100644
+--- a/package/btrfs-progs/btrfs-progs.mk
++++ b/package/btrfs-progs/btrfs-progs.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MESON_VERSION = 0.56.2
-+MESON_VERSION = 0.57.1
- MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
- MESON_LICENSE = Apache-2.0
- MESON_LICENSE_FILES = COPYING
+-BTRFS_PROGS_VERSION = 5.7
++BTRFS_PROGS_VERSION = 5.11
+ BTRFS_PROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/kdave/btrfs-progs
+ BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
+ BTRFS_PROGS_DEPENDENCIES = host-pkgconf lzo util-linux zlib
 -- 
 2.30.1
