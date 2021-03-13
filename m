@@ -1,64 +1,66 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 13 Mar 2021 16:06:56 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/prosody: security
- bump to 0.11.8
-Message-ID: <20210313144552.B686581441@busybox.osuosl.org>
+Date: Sat, 13 Mar 2021 16:58:50 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] {linux,
+ linux-headers}: bump 4.{4, 9, 14, 19}.x / 5.{4, 10}.x series
+Message-ID: <20210313153533.9EC8C866CA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6e12fe513abdfb4609ac416f8bb474f276368640
+commit: https://git.buildroot.net/buildroot/commit/?id=223f964db973512db03873d1f49d5f1fbff6a046
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-From the release notes:
-https://blog.prosody.im/prosody-0.11.8-released/
-
-This release also fixes a security issue, where channel binding, which
-connects the authentication layer (i.e.  SASL) with the security layer (i.e.
-TLS) to detect man-in-the-middle attacks, could be used on connections
-encrypted with TLS 1.3, despite the holy texts declaring this undefined.
-
-https://issues.prosody.im/1542
-
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-[Peter: mark as security bump, expand commit text]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 9aba85e3f509498426bd37df8a043fdaa8220953)
+(cherry picked from commit f6e9e22ac99eb6cc2d6470b4edd289bf1b4381dc)
+[Peter: drop 5.10.x bump]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/prosody/prosody.hash | 8 ++++----
- package/prosody/prosody.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ linux/linux.hash                     | 10 +++++-----
+ package/linux-headers/Config.in.host | 10 +++++-----
+ 2 files changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/package/prosody/prosody.hash b/package/prosody/prosody.hash
-index dc4e567d4e..309ae0181f 100644
---- a/package/prosody/prosody.hash
-+++ b/package/prosody/prosody.hash
-@@ -1,8 +1,8 @@
- # Locally computed:
--md5  a9bf18a713804b5cc9d0322d1bf5d5d8  prosody-0.11.7.tar.gz
--sha1  425e1c7ca37464b31711da8eb4a4c9444a70360f  prosody-0.11.7.tar.gz
--sha256  28ffc07653485cb63e22b387d3ea4825ee2baaee0c5827de4d6053a35b1c8747   prosody-0.11.7.tar.gz
--sha512  923aa92598ef851ed8408931942859f78f1e3d700fee251f4f5ca67abdcdae43448318ed90a9a1cdc7824d5f4dc5a4732fad4b9ed36d97455fa9b3bff0881a20  prosody-0.11.7.tar.gz
-+md5  24cd3c1f7ab16a6b3726423d2fff802d  prosody-0.11.8.tar.gz
-+sha1  f1f030c75abde6e3c7232fedbe8371f5cb913245  prosody-0.11.8.tar.gz
-+sha256  830f183b98d5742d81e908d2d8e3258f1b538dad7411f06fda5b2cc5c75068f8  prosody-0.11.8.tar.gz
-+sha512  b0b7e1d3e41f47f0f88ad5b76444e4959b20f4c7a937f3cc605ba6ed5d92e713a3054dcb61ee6629063883a8f9ff1a03952893de4a0d840dcec4e5e42079eb57  prosody-0.11.8.tar.gz
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 4b35626dce..b727ef180c 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,12 +1,12 @@
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+ sha256  b0d7abae88e5f91893627c645e680a95c818defd1b4fcaf3e2afb4b2b6b4ab86  linux-5.9.16.tar.xz
+ sha256  4ab4a3f694b7b4cfbe78871eab34c8039ad33692144c45c669827a594da85534  linux-5.8.18.tar.xz
+-sha256  030ae544f346bfa2ce619dd9e17e93d10ec393632d3b6d6cf5d1fc84b914d449  linux-5.4.95.tar.xz
++sha256  4e118c072dbe3209ddeaff32ecc558f7e809d54e661550342079f1ee76d9349d  linux-5.4.101.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+-sha256  2f3830ed4767b27dc6ead9af5c802eed7258b28c527efe90ce188cc6bd668550  linux-4.4.255.tar.xz
+-sha256  afdf2d03c920f6b12f4e207ab18e45fbe2d7f4a61c066eff0d9916fc5d00c118  linux-4.9.255.tar.xz
+-sha256  75eecaa731c091fcf3bc2ec914b01d299a447d78041cb66a11a2ab169eb801dd  linux-4.14.219.tar.xz
+-sha256  d2fdd236e6f31aa8e939f4a686c95417d8571bde3d091fc6a2535937c144195f  linux-4.19.173.tar.xz
++sha256  0c41611ae151b80723eb68c75f8a3366756f93e8748ab0892255344f38d76665  linux-4.4.258.tar.xz
++sha256  d478f8e069f6d8b86b0a69f99252ea9e7cd7070bf6bdd0e9b3773ee418e5c8cd  linux-4.9.258.tar.xz
++sha256  734082b03d9f8e43b123b0061f08045b70c34e3a4b09f8a8da6a287686dac744  linux-4.14.222.tar.xz
++sha256  ac0eb3794e01eac66bea3ab39b8776dadf15c418ddc534ccfd95a0270302357d  linux-4.19.177.tar.xz
+ # Locally computed
+ sha256  d2a06f52143deb929b8d513cf9afc9bd065951389a80fa70bc4d63025b5b3fb9  linux-cip-4.19.152-cip37.tar.gz
+ sha256  bc1dacd3d0f526de3e8754a444e8e02a54521527af639ddb907cb35cda775a8c  linux-cip-4.19.152-cip37-rt16.tar.gz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 2b9e064645..f90c5c8219 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -346,11 +346,11 @@ endchoice
  
- # Hash for license file:
- sha256 bbbdc1c5426e5944cf869fc0faeaf19d88a220cd2b39ea98b7b8e86b0e88a2ef  COPYING
-diff --git a/package/prosody/prosody.mk b/package/prosody/prosody.mk
-index ad51f6797e..b2641545b9 100644
---- a/package/prosody/prosody.mk
-+++ b/package/prosody/prosody.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PROSODY_VERSION = 0.11.7
-+PROSODY_VERSION = 0.11.8
- PROSODY_SITE = https://prosody.im/downloads/source
- PROSODY_LICENSE = MIT
- PROSODY_LICENSE_FILES = COPYING
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "4.4.255"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.255"	if BR2_KERNEL_HEADERS_4_9
+-	default "4.14.219"	if BR2_KERNEL_HEADERS_4_14
+-	default "4.19.173"	if BR2_KERNEL_HEADERS_4_19
+-	default "5.4.95"	if BR2_KERNEL_HEADERS_5_4
++	default "4.4.258"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.258"	if BR2_KERNEL_HEADERS_4_9
++	default "4.14.222"	if BR2_KERNEL_HEADERS_4_14
++	default "4.19.177"	if BR2_KERNEL_HEADERS_4_19
++	default "5.4.101"	if BR2_KERNEL_HEADERS_5_4
+ 	default "5.8.18"	if BR2_KERNEL_HEADERS_5_8
+ 	default "5.9.16"	if BR2_KERNEL_HEADERS_5_9
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
