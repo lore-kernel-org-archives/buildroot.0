@@ -1,80 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 13 Mar 2021 16:04:04 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/privoxy: security
- bump to version 3.0.32
-Message-ID: <20210313144532.807B88408D@busybox.osuosl.org>
+Date: Sat, 13 Mar 2021 16:08:01 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/prosody: bump to
+ version 0.11.5
+Message-ID: <20210313144532.9E8BD8408D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ba0f46478d7fb7abac74b26d68baf57cca393185
+commit: https://git.buildroot.net/buildroot/commit/?id=acc1664c4e0af75c2de1fab7d07f1ec8cc721003
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Privoxy 3.0.32 fixes a number of security issues:
-
-- Security/Reliability:
-  - ssplit(): Remove an assertion that could be triggered with a
-    crafted CGI request.
-    Commit 2256d7b4d67. OVE-20210203-0001.
-    Reported by: Joshua Rogers (Opera)
-  - cgi_send_banner(): Overrule invalid image types. Prevents a
-    crash with a crafted CGI request if Privoxy is toggled off.
-    Commit e711c505c48. OVE-20210206-0001.
-    Reported by: Joshua Rogers (Opera)
-  - socks5_connect(): Don't try to send credentials when none are
-    configured. Fixes a crash due to a NULL-pointer dereference
-    when the socks server misbehaves.
-    Commit 85817cc55b9. OVE-20210207-0001.
-    Reported by: Joshua Rogers (Opera)
-  - chunked_body_is_complete(): Prevent an invalid read of size two.
-    Commit a912ba7bc9c. OVE-20210205-0001.
-    Reported by: Joshua Rogers (Opera)
-  - Obsolete pcre: Prevent invalid memory accesses with an invalid
-    pattern passed to pcre_compile(). Note that the obsolete pcre code
-    is scheduled to be removed before the 3.0.33 release. There has been
-    a warning since 2008 already.
-    Commit 28512e5b624. OVE-20210222-0001.
-    Reported by: Joshua Rogers (Opera)
-
-for more details, see the announcement:
-https://www.openwall.com/lists/oss-security/2021/02/28/1
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit e276d14cd846d396fd8e7c4fcc1f2c4c5613ba65)
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 4db08ef8607aad9928a66cb62f23edee8d55144e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/privoxy/privoxy.hash | 8 ++++----
- package/privoxy/privoxy.mk   | 2 +-
+ package/prosody/prosody.hash | 8 ++++----
+ package/prosody/prosody.mk   | 2 +-
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/privoxy/privoxy.hash b/package/privoxy/privoxy.hash
-index 00c0f33bdb..92ecd1dd21 100644
---- a/package/privoxy/privoxy.hash
-+++ b/package/privoxy/privoxy.hash
-@@ -1,6 +1,6 @@
--# From https://sourceforge.net/projects/ijbswa/files/Sources/3.0.31%20%28stable%29/
--md5  014cc371d00e84b2db34d0e2b05c77d4  privoxy-3.0.31-stable-src.tar.gz
--sha1  4f0e0c36d55f72f6b33e4c645a9c5d4f40026abd  privoxy-3.0.31-stable-src.tar.gz
-+# From https://sourceforge.net/projects/ijbswa/files/Sources/3.0.32%20%28stable%29/
-+md5  3a0a8ebdf80e0a29154683e74cbf510b  privoxy-3.0.32-stable-src.tar.gz
-+sha1  3a298ab2599fc92555c86dc29a37742d7396a0d3  privoxy-3.0.32-stable-src.tar.gz
- # Locally computed
--sha256  077729a3aac79222a4e8d88a650d9028d16fd4b0d6038da8f5f5e47120d004eb  privoxy-3.0.31-stable-src.tar.gz
-+sha256  c61de4008c62445ec18f1f270407cbf2372eaba93beaccdc9e3238bb2defeed7  privoxy-3.0.32-stable-src.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/privoxy/privoxy.mk b/package/privoxy/privoxy.mk
-index 5c1f862bfd..2d9f9e8c78 100644
---- a/package/privoxy/privoxy.mk
-+++ b/package/privoxy/privoxy.mk
+diff --git a/package/prosody/prosody.hash b/package/prosody/prosody.hash
+index e39fafde69..e158f5de45 100644
+--- a/package/prosody/prosody.hash
++++ b/package/prosody/prosody.hash
+@@ -1,8 +1,8 @@
+ # Locally computed:
+-md5    375a3737ffd6831d967fb1917f097372  prosody-0.11.4.tar.gz
+-sha1   59e9e684230c26daf53526e18b0e6e2efb0d63c5  prosody-0.11.4.tar.gz
+-sha256 b5f26fa343c7f32f6242721d6991cb35f5d2a28d2bf59d2bc329a940523704fd  prosody-0.11.4.tar.gz
+-sha512 0c3aa3373c53f803b88a87dad4ca18b215de7a485d29b0bc4b186d97f7c48262840199a74f62aba6b7b4f1766fdfb37327ed4ff24e877c3a6dfca58764a035c3  prosody-0.11.4.tar.gz
++md5    224b9b49bd1a568a9548590ade253dd6  prosody-0.11.5.tar.gz
++sha1   fbe27d3203671a6ecd5ba8233dc4c113fd76cd2e  prosody-0.11.5.tar.gz
++sha256 55f8bd65d5d2af61cc739bd6164e4207011e0d2d260cde583071c90d8d85408b  prosody-0.11.5.tar.gz
++sha512 43a9facee8d61b69e277e7e8a9091fbfa60be71d6141195dff991f6020c8afadacce26f356b869cb2d7edd9be285e9ce1bcd822f9628cc845d91757e818a0dff  prosody-0.11.5.tar.gz
+ 
+ # Hash for license file:
+ sha256 bbbdc1c5426e5944cf869fc0faeaf19d88a220cd2b39ea98b7b8e86b0e88a2ef  COPYING
+diff --git a/package/prosody/prosody.mk b/package/prosody/prosody.mk
+index 7245afdc6c..7348ddabef 100644
+--- a/package/prosody/prosody.mk
++++ b/package/prosody/prosody.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PRIVOXY_VERSION = 3.0.31
-+PRIVOXY_VERSION = 3.0.32
- PRIVOXY_SITE = http://downloads.sourceforge.net/project/ijbswa/Sources/$(PRIVOXY_VERSION)%20%28stable%29
- PRIVOXY_SOURCE = privoxy-$(PRIVOXY_VERSION)-stable-src.tar.gz
- # configure not shipped
+-PROSODY_VERSION = 0.11.4
++PROSODY_VERSION = 0.11.5
+ PROSODY_SITE = https://prosody.im/downloads/source
+ PROSODY_LICENSE = MIT
+ PROSODY_LICENSE_FILES = COPYING
