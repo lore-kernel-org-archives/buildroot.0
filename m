@@ -1,94 +1,93 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 13 Mar 2021 15:52:39 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x]
- package/python-typing-extensions: new package
-Message-ID: <20210313143049.C28307FB95@busybox.osuosl.org>
+Date: Sat, 13 Mar 2021 15:21:49 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/libglib2:
+ backport upstream security fix for CVE-2021-27218
+Message-ID: <20210313143124.258A5840E7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=28e53bde358f608939ebcb30f3211d1d902c7be4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=62c34f01da4955bd9055af0eaa532448fcc2260c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 3fb7bb45602c7ec08cb9835d2ec00e1a0a3e7c87)
+CVE-2021-27218: An issue was discovered in GNOME GLib before 2.66.7 and
+2.67.x before 2.67.4.  If g_byte_array_new_take() was called
+with a buffer of 4GB or more on a 64-bit platform, the length would be
+truncated modulo 2**32, causing unintended length truncation.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS                                                 |  1 +
- package/Config.in                                          |  1 +
- package/python-typing-extensions/Config.in                 |  7 +++++++
- .../python-typing-extensions/python-typing-extensions.hash |  5 +++++
- .../python-typing-extensions/python-typing-extensions.mk   | 14 ++++++++++++++
- 5 files changed, 28 insertions(+)
+ ...array-Do-not-accept-too-large-byte-arrays.patch | 63 ++++++++++++++++++++++
+ 1 file changed, 63 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 75fb47650e..b9ea6bf267 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1504,6 +1504,7 @@ F:	package/lua-flu/
- F:	package/lua-stdlib/
- F:	package/luaossl/
- F:	package/murata-cyw-fw/
-+F:	package/python-typing-extensions/
- F:	package/rs485conf/
- F:	package/turbolua/
- 
-diff --git a/package/Config.in b/package/Config.in
-index 3deafedb0d..c2962f6fb7 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1159,6 +1159,7 @@ menu "External python modules"
- 	source "package/python-txtorcon/Config.in"
- 	source "package/python-typepy/Config.in"
- 	source "package/python-typing/Config.in"
-+	source "package/python-typing-extensions/Config.in"
- 	source "package/python-u-msgpack/Config.in"
- 	source "package/python-ubjson/Config.in"
- 	source "package/python-ujson/Config.in"
-diff --git a/package/python-typing-extensions/Config.in b/package/python-typing-extensions/Config.in
+diff --git a/package/libglib2/0005-gbytearray-Do-not-accept-too-large-byte-arrays.patch b/package/libglib2/0005-gbytearray-Do-not-accept-too-large-byte-arrays.patch
 new file mode 100644
-index 0000000000..0c7c74c5fa
+index 0000000000..e5ec22369c
 --- /dev/null
-+++ b/package/python-typing-extensions/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS
-+	bool "python-typing-extensions"
-+	select BR2_PACKAGE_PYTHON_TYPING if BR2_PACKAGE_PYTHON # runtime
-+	help
-+	  Backported and Experimental Type Hints for Python 3.5+.
++++ b/package/libglib2/0005-gbytearray-Do-not-accept-too-large-byte-arrays.patch
+@@ -0,0 +1,63 @@
++From acb7b0ec69f26a7df10af3992359890b09f076e8 Mon Sep 17 00:00:00 2001
++From: Krzesimir Nowak <qdlacz@gmail.com>
++Date: Wed, 10 Feb 2021 23:51:07 +0100
++Subject: [PATCH] gbytearray: Do not accept too large byte arrays
 +
-+	  https://github.com/python/typing/blob/master/typing_extensions/README.rst
-diff --git a/package/python-typing-extensions/python-typing-extensions.hash b/package/python-typing-extensions/python-typing-extensions.hash
-new file mode 100644
-index 0000000000..4c76caba43
---- /dev/null
-+++ b/package/python-typing-extensions/python-typing-extensions.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/typing_extensions/json
-+md5  5fcbfcb22e6f8c9bf23fb9f8e020f6ee  typing_extensions-3.7.4.3.tar.gz
-+sha256  99d4073b617d30288f569d3f13d2bd7548c3a7e4c8de87db09a9d29bb3a4a60c  typing_extensions-3.7.4.3.tar.gz
-+# Locally computed sha256 checksums
-+sha256  ff17ce94e102024deb68773eb1cc74ca76da4e658f373531f0ac22d68a6bb1ad  LICENSE
-diff --git a/package/python-typing-extensions/python-typing-extensions.mk b/package/python-typing-extensions/python-typing-extensions.mk
-new file mode 100644
-index 0000000000..2bcf1342a2
---- /dev/null
-+++ b/package/python-typing-extensions/python-typing-extensions.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-typing-extensions
-+#
-+################################################################################
++GByteArray uses guint for storing the length of the byte array, but it
++also has a constructor (g_byte_array_new_take) that takes length as a
++gsize. gsize may be larger than guint (64 bits for gsize vs 32 bits
++for guint). It is possible to call the function with a value greater
++than G_MAXUINT, which will result in silent length truncation. This
++may happen as a result of unreffing GBytes into GByteArray, so rather
++be loud about it.
 +
-+PYTHON_TYPING_EXTENSIONS_VERSION = 3.7.4.3
-+PYTHON_TYPING_EXTENSIONS_SOURCE = typing_extensions-$(PYTHON_TYPING_EXTENSIONS_VERSION).tar.gz
-+PYTHON_TYPING_EXTENSIONS_SITE = https://files.pythonhosted.org/packages/16/06/0f7367eafb692f73158e5c5cbca1aec798cdf78be5167f6415dd4205fa32
-+PYTHON_TYPING_EXTENSIONS_SETUP_TYPE = setuptools
-+PYTHON_TYPING_EXTENSIONS_LICENSE = Python-2.0
-+PYTHON_TYPING_EXTENSIONS_LICENSE_FILES = LICENSE
++(Test case tweaked by Philip Withnall.)
++[Peter: Fixes CVE-2021-27218, drop test case]
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ glib/garray.c      |  6 ++++++
++ glib/gbytes.c      |  4 ++++
++ 2 files changed, 10 insertions(+), 0 deletion(-)
 +
-+$(eval $(python-package))
++diff --git a/glib/garray.c b/glib/garray.c
++index de720210c..2b66f16a6 100644
++--- a/glib/garray.c
+++++ b/glib/garray.c
++@@ -2261,6 +2261,10 @@ g_byte_array_steal (GByteArray *array,
++  * Create byte array containing the data. The data will be owned by the array
++  * and will be freed with g_free(), i.e. it could be allocated using g_strdup().
++  *
+++ * Do not use it if @len is greater than %G_MAXUINT. #GByteArray
+++ * stores the length of its data in #guint, which may be shorter than
+++ * #gsize.
+++ *
++  * Since: 2.32
++  *
++  * Returns: (transfer full): a new #GByteArray
++@@ -2272,6 +2276,8 @@ g_byte_array_new_take (guint8 *data,
++   GByteArray *array;
++   GRealArray *real;
++ 
+++  g_return_val_if_fail (len <= G_MAXUINT, NULL);
+++
++   array = g_byte_array_new ();
++   real = (GRealArray *)array;
++   g_assert (real->data == NULL);
++diff --git a/glib/gbytes.c b/glib/gbytes.c
++index 00fd79155..aaadf451b 100644
++--- a/glib/gbytes.c
+++++ b/glib/gbytes.c
++@@ -519,6 +519,10 @@ g_bytes_unref_to_data (GBytes *bytes,
++  * g_bytes_new(), g_bytes_new_take() or g_byte_array_free_to_bytes(). In all
++  * other cases the data is copied.
++  *
+++ * Do not use it if @bytes contains more than %G_MAXUINT
+++ * bytes. #GByteArray stores the length of its data in #guint, which
+++ * may be shorter than #gsize, that @bytes is using.
+++ *
++  * Returns: (transfer full): a new mutable #GByteArray containing the same byte data
++  *
++  * Since: 2.32
++-- 
++2.20.1
++
