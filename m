@@ -1,53 +1,50 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 13 Mar 2021 23:34:19 +0100
-Subject: [Buildroot] [PATCH v1] package/wget: bump version to 1.12.1
-Message-ID: <20210313223419.26648-1-ps.report@gmx.net>
+Date: Sat, 13 Mar 2021 23:39:20 +0100
+Subject: [Buildroot] [PATCH v1] package/cjson: bump version to 1.7.14
+Message-ID: <20210313223920.27266-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- update/fix signing key hash
+Changelog ([1]):
 
-For details see [1], [2].
+  1.7.14 (Sep 3, 2020)
+  Fixes:
+    optimize the way to find tail node, see #503
+    Fix WError error on macosx because NAN is a float. Thanks @sappo, see #484
+    Fix some bugs in detach and replace. Thanks @miaoerduo, see #456
 
-[1] https://lists.gnu.org/archive/html/info-gnu/2020-12/msg00013.html
-[2] https://lists.gnu.org/archive/html/info-gnu/2021-01/msg00007.html
+[1] https://github.com/DaveGamble/cJSON/blob/master/CHANGELOG.md
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/wget/wget.hash | 8 ++++----
- package/wget/wget.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/cjson/cjson.hash | 2 +-
+ package/cjson/cjson.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/wget/wget.hash b/package/wget/wget.hash
-index 956e1127f3..11071566aa 100644
---- a/package/wget/wget.hash
-+++ b/package/wget/wget.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--# https://ftp.gnu.org/gnu/wget/wget-1.20.3.tar.lz.sig
--# with key 1CB27DBC98614B2D5841646D08302DB6A2670428
--sha256 69607ce8216c2d1126b7a872db594b3f21e511e660e07ca1f81be96650932abb  wget-1.20.3.tar.lz
-+# https://ftp.gnu.org/gnu/wget/wget-1.21.tar.lz.sig
-+# with key 6B98F637D879C5236E277C5C64FF90AAE8C70AF9
-+sha256  db9bbe5347e6faa06fc78805eeb808b268979455ead9003a608569c9d4fc90ad  wget-1.21.1.tar.lz
- # Locally calculated
--sha256 e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b  COPYING
-+sha256  e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b  COPYING
-diff --git a/package/wget/wget.mk b/package/wget/wget.mk
-index 65c132e453..ae036478b8 100644
---- a/package/wget/wget.mk
-+++ b/package/wget/wget.mk
+diff --git a/package/cjson/cjson.hash b/package/cjson/cjson.hash
+index b99fcee8ba..5133c15a4f 100644
+--- a/package/cjson/cjson.hash
++++ b/package/cjson/cjson.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  d4e77a38f540f2c37f55758f2666655314f1f51c716fea5f279659940efdcf04  cjson-1.7.13.tar.gz
++sha256  fb50a663eefdc76bafa80c82bc045af13b1363e8f45cec8b442007aef6a41343  cjson-1.7.14.tar.gz
+ sha256  a36dda207c36db5818729c54e7ad4e8b0c6fba847491ba64f372c1a2037b6d5c  LICENSE
+diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
+index 47f8ecfd15..daa498f9ff 100644
+--- a/package/cjson/cjson.mk
++++ b/package/cjson/cjson.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WGET_VERSION = 1.20.3
-+WGET_VERSION = 1.21.1
- WGET_SOURCE = wget-$(WGET_VERSION).tar.lz
- WGET_SITE = $(BR2_GNU_MIRROR)/wget
- WGET_DEPENDENCIES = host-pkgconf
+-CJSON_VERSION = 1.7.13
++CJSON_VERSION = 1.7.14
+ CJSON_SITE = $(call github,DaveGamble,cjson,v$(CJSON_VERSION))
+ CJSON_INSTALL_STAGING = YES
+ CJSON_LICENSE = MIT
 -- 
 2.30.1
