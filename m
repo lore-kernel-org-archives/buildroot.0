@@ -1,52 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 13 Mar 2021 17:07:53 +0100
-Subject: [Buildroot] [PATCH v2 1/1] package/redis: security bump to
- v6.0.12
-In-Reply-To: <20210302081241.173569-1-titouanchristophe@gmail.com> (Titouan
- Christophe's message of "Tue, 2 Mar 2021 09:12:41 +0100")
-References: <20210302081241.173569-1-titouanchristophe@gmail.com>
-Message-ID: <87zgz72g12.fsf@dell.be.48ers.dk>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 13 Mar 2021 17:08:39 +0100
+Subject: [Buildroot] [PATCH 1/1] package/ushare: bump to version 2.1
+In-Reply-To: <87lfar3xkx.fsf@dell.be.48ers.dk>
+References: <20210222071301.220417-1-fontaine.fabrice@gmail.com>
+ <87lfar3xkx.fsf@dell.be.48ers.dk>
+Message-ID: <CAPi7W81k7caNNYozxzsCy-e49amKayqxPUUcmQygbRO-hFvqVw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Titouan" == Titouan Christophe <titouanchristophe@gmail.com> writes:
+Le sam. 13 mars 2021 ? 16:03, Peter Korsgaard <peter@korsgaard.com> a ?crit :
+>
+> >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>
+>  > Fix SOAP action responses which are broken since the switch to latest
+>  > version of libupnp (1.14.x) in version 2.0
+>
+>  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>
+> For my understanding, is this only broken in 2.0 or also in 1.1a +
+> libupnp patches like we use in 2020.02.x / 2020.11.x?
+It's also broken on 2020.02.x and 2020.11.x because of
+0004-switch-to-libupnp-1.14.x-API.patch
+https://github.com/ddugovic/uShare/commit/9ef0ac7196f316c683ef01b15c60a39bdb64a953
+should be applied on those versions.
+>
+> --
+> Bye, Peter Korsgaard
+Best Regards,
 
- > From the release notes:
- > (https://github.com/redis/redis/blob/6.0.12/00-RELEASENOTES)
-
- > ================================================================================
- > Redis 6.0.11     Released Mon Feb 22 16:13:23 IST 2021
- > ================================================================================
-
- > Upgrade urgency: SECURITY if you use 32bit build of redis (see bellow), LOW
- > otherwise.
-
- > Integer overflow on 32-bit systems (CVE-2021-21309):
- > Redis 4.0 or newer uses a configurable limit for the maximum supported bulk
- > input size. By default, it is 512MB which is a safe value for all platforms.
- > If the limit is significantly increased, receiving a large request from a client
- > may trigger several integer overflow scenarios, which would result with buffer
- > overflow and heap corruption.
-
- > ================================================================================
- > Redis 6.0.12     Released Mon Mar  1 17:29:52 IST 2021
- > ================================================================================
-
- > Upgrade urgency: LOW, fixes a compilation issue.
-
- > Bug fixes:
- > * Fix compilation error on non-glibc systems if jemalloc is not used (#8533)
-
- > Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
- > ---
- > Changes v1->v2:
- > * Version bump within the 6.0 series (6.0.11 and 6.0.12) instead of 6.2.0
- > * Remove patch that has been applied in 6.0.12
-
-Committed to 2020.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+Fabrice
