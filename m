@@ -1,73 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 13 Mar 2021 17:00:58 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/redis: security
- bump to v6.0.12
-Message-ID: <20210313153735.407E37FCCE@busybox.osuosl.org>
+Date: Sat, 13 Mar 2021 17:06:14 +0100
+Subject: [Buildroot] [PATCH 2020.02.x] package/redis: security bump to
+ version 5.0.11 (CVE-2021-21309)
+In-Reply-To: <20210309112303.28379-1-patrickdepinguin@gmail.com> (Thomas De
+ Schampheleire's message of "Tue, 9 Mar 2021 12:23:02 +0100")
+References: <20210309112303.28379-1-patrickdepinguin@gmail.com>
+Message-ID: <874khf3uo9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9715bc7a129ee56d887cd35307c56288af2e9207
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
 
-From the release notes:
-(https://github.com/redis/redis/blob/6.0.12/00-RELEASENOTES)
+ > From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+ > References:
+ > https://github.com/redis/redis/security/advisories/GHSA-hgj8-vff2-7cjf
+ > https://nvd.nist.gov/vuln/detail/CVE-2021-21309
 
-================================================================================
-Redis 6.0.11     Released Mon Feb 22 16:13:23 IST 2021
-================================================================================
+ > "Impact:
 
-Upgrade urgency: SECURITY if you use 32bit build of redis (see bellow), LOW
-otherwise.
+ >     An integer overflow bug in 32-bit Redis version 4.0 or newer could be
+ >     exploited to corrupt the heap and potentially result with remote code
+ >     execution.
 
-Integer overflow on 32-bit systems (CVE-2021-21309):
-Redis 4.0 or newer uses a configurable limit for the maximum supported bulk
-input size. By default, it is 512MB which is a safe value for all platforms.
-If the limit is significantly increased, receiving a large request from a client
-may trigger several integer overflow scenarios, which would result with buffer
-overflow and heap corruption.
+ >     Redis 4.0 or newer uses a configurable limit for the maximum supported
+ >     bulk input size. By default, it is 512MB which is a safe value for all
+ >     platforms.
 
-================================================================================
-Redis 6.0.12     Released Mon Mar  1 17:29:52 IST 2021
-================================================================================
+ >     If the limit is significantly increased, receiving a large request from
+ >     a client may trigger several integer overflow scenarios, which would
+ >     result with buffer overflow and heap corruption. We believe this could
+ >     in certain conditions be exploited for remote code execution.
 
-Upgrade urgency: LOW, fixes a compilation issue.
+ >     By default, authenticated Redis users have access to all configuration
+ >     parameters and can therefore use the ?CONFIG SET proto-max-bulk-len? to
+ >     change the safe default, making the system vulnerable.
 
-Bug fixes:
-* Fix compilation error on non-glibc systems if jemalloc is not used (#8533)
+ >     This problem only affects 32-bit Redis (on a 32-bit system, or as a
+ >     32-bit executable running on a 64-bit system).
 
-Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit cbd5f7e3a9331286ddcbcf9d6d9788116bd3a8e6)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/redis/redis.hash | 2 +-
- package/redis/redis.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > Patches
 
-diff --git a/package/redis/redis.hash b/package/redis/redis.hash
-index b72605013e..9b87b49fb1 100644
---- a/package/redis/redis.hash
-+++ b/package/redis/redis.hash
-@@ -1,5 +1,5 @@
- # From https://github.com/redis/redis-hashes/blob/master/README
--sha256  79bbb894f9dceb33ca699ee3ca4a4e1228be7fb5547aeb2f99d921e86c1285bd  redis-6.0.10.tar.gz
-+sha256  f16ad973d19f80f121e53794d5eb48a997e2c6a85b5be41bb3b66750cc17bf6b  redis-6.0.12.tar.gz
- 
- # Locally calculated
- sha256  97f0a15b7bbae580d2609dad2e11f1956ae167be296ab60f4691ab9c30ee9828  COPYING
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index 0a6f7045c3..0c3285d884 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--REDIS_VERSION = 6.0.10
-+REDIS_VERSION = 6.0.12
- REDIS_SITE = http://download.redis.io/releases
- REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
- REDIS_LICENSE_FILES = COPYING
+ >     The problem is fixed in version 6.2, and the fix is back ported to
+ >     6.0.11 and 5.0.11. Make sure you use one of these versions if you're
+ >     running 32-bit Redis.
+ > "
+
+ > Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+ > ---
+
+ > NOTE: this only applies to 2020.02.x.
+ > - For 2020.11.x a bump to 6.0.11 or later is needed (e.g. backport commit cbd5f7e3a9331).
+ > - For 2021.02, 6.0.12 is used which already contains the fix.
+
+Committed to 2020.02.x after updating to 5.0.12 as pointed out by
+Titouan, thanks.
+
+-- 
+Bye, Peter Korsgaard
