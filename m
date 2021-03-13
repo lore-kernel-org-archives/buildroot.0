@@ -1,39 +1,72 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 13 Mar 2021 10:59:07 +0100
-Subject: [Buildroot] [PATCH 1/3] Revert "package/janet: add -std=c99 to
- CFLAGS"
-Message-ID: <20210313095909.93871-1-fontaine.fabrice@gmail.com>
+Date: Sat, 13 Mar 2021 10:59:08 +0100
+Subject: [Buildroot] [PATCH 2/3] package/janet: defaults to c99 for
+ build.c_std
+In-Reply-To: <20210313095909.93871-1-fontaine.fabrice@gmail.com>
+References: <20210313095909.93871-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210313095909.93871-2-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This reverts commit b5e8f1c1475b46c8d9b7159aafe983e72d329d29. Indeed,
-this commit does not fix the build failure as c_std=c99 is already set
-in default_options in meson.build.
-
-The issue is that this parameter is not used for native executables
-since meson 0.51.
+Fixes:
+ - http://autobuild.buildroot.org/results/d5e46e094b27f40e12b32624d1431bfeeb617be3
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/janet/janet.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ...uild-defaults-to-c99-for-build.c_std.patch | 42 +++++++++++++++++++
+ 1 file changed, 42 insertions(+)
+ create mode 100644 package/janet/0001-meson.build-defaults-to-c99-for-build.c_std.patch
 
-diff --git a/package/janet/janet.mk b/package/janet/janet.mk
-index ea042221d8..7243d60c01 100644
---- a/package/janet/janet.mk
-+++ b/package/janet/janet.mk
-@@ -8,8 +8,8 @@ JANET_VERSION = 1.15.0
- JANET_SITE = $(call github,janet-lang,janet,v$(JANET_VERSION))
- JANET_LICENSE = MIT
- JANET_LICENSE_FILES = LICENSE
+diff --git a/package/janet/0001-meson.build-defaults-to-c99-for-build.c_std.patch b/package/janet/0001-meson.build-defaults-to-c99-for-build.c_std.patch
+new file mode 100644
+index 0000000000..607fc2ee86
+--- /dev/null
++++ b/package/janet/0001-meson.build-defaults-to-c99-for-build.c_std.patch
+@@ -0,0 +1,42 @@
++From 546437d799f4cbc1dd86a015eac3b9ab405130c6 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 10 Mar 2021 07:57:53 +0100
++Subject: [PATCH] meson.build: defaults to c99 for "build.c_std"
 +
- JANET_INSTALL_STAGING = YES
--JANET_CFLAGS = $(TARGET_CFLAGS) -std=c99
- 
- ifeq ($(BR2_STATIC_LIBS),y)
- JANET_CONF_OPTS += -Ddynamic_modules=false
++Since Meson 0.51, there are special build options for "native:true"
++builds, prefixed with "build.".  This change breaks cross builds
++because `janet-boot/src_core_asm.c` is no longer built with `-std=c99`:
++
++FAILED: janet-boot.p/src_core_asm.c.o
++/usr/bin/gcc -Ijanet-boot.p -I. -I.. -I../src/include -pipe -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -O3 -pthread -DJANET_BOOTSTRAP -MD -MQ janet-boot.p/src_core_asm.c.o -MF janet-boot.p/src_core_asm.c.o.d -o janet-boot.p/src_core_asm.c.o -c ../src/core/asm.c
++../src/core/asm.c: In function 'janet_disasm_bytecode':
++../src/core/asm.c:866:5: error: 'for' loop initial declarations are only allowed in C99 mode
++     for (int32_t i = 0; i < def->bytecode_length; i++) {
++     ^
++
++Fixes:
++ - http://autobuild.buildroot.net/results/355e0992338a8d132050517f83a3884606b00529
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved (and backported) from:
++https://github.com/janet-lang/janet/commit/546437d799f4cbc1dd86a015eac3b9ab405130c6]
++---
++ meson.build | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/meson.build b/meson.build
++index 1b326111..d3a2d399 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -19,7 +19,7 @@
++ # IN THE SOFTWARE.
++ 
++ project('janet', 'c',
++-  default_options : ['c_std=c99', 'b_lundef=false', 'default_library=both'],
+++  default_options : ['c_std=c99', 'build.c_std=c99', 'b_lundef=false', 'default_library=both'],
++   version : '1.15.0')
++ 
++ # Global settings
++-- 
++2.30.0
++
 -- 
 2.30.0
