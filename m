@@ -1,47 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 13 Mar 2021 16:05:26 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/util-linux:
- disable runuser for the host build
-Message-ID: <20210313144532.8DDEB83BC8@busybox.osuosl.org>
+Date: Sat, 13 Mar 2021 16:08:35 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/prosody: bump to
+ version 0.11.7
+Message-ID: <20210313144532.B84DC83BC8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d1745ffdece7201df26a17a2572c6a3570a6bec4
+commit: https://git.buildroot.net/buildroot/commit/?id=8923cdc1de9f7ac7df487a7e31dca88afc94cb99
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-runuser allows running commands as another user, but needs to run as
-root to be able to setuid(). But Buildroot does not require running as
-root, and so runuser can't be used.
-
-Incientally, that fixes host build in case unsuitable libs are found on
-the system:
-    http://lists.busybox.net/pipermail/buildroot/2021-February/304261.html
-
-Reported-by: GA K <guyarkam@gmail.com>
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-[yann.morin.1998 at free.fr:
-  - expand the commit log with a more fundamental explanation that
-    runuser can't be used anyway
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 955d6c099b2035dcca47554a735a4c700b5d3e1e)
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 0f5e9efbd82c6a25f93f156080b8d613c8f9792a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/util-linux/util-linux.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/prosody/prosody.hash | 8 ++++----
+ package/prosody/prosody.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index b6ccaaa78d..49220d7329 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -193,6 +193,7 @@ HOST_UTIL_LINUX_CONF_OPTS += \
- 	--disable-nsenter \
- 	--disable-pg \
- 	--disable-rfkill \
-+	--disable-runuser \
- 	--disable-schedutils \
- 	--disable-setpriv \
- 	--disable-setterm \
+diff --git a/package/prosody/prosody.hash b/package/prosody/prosody.hash
+index 868b781f96..dc4e567d4e 100644
+--- a/package/prosody/prosody.hash
++++ b/package/prosody/prosody.hash
+@@ -1,8 +1,8 @@
+ # Locally computed:
+-md5  e49a0cff05b307f9010bffafdec60b6d  prosody-0.11.6.tar.gz
+-sha1  3c24f3faf7735c570213da74eba6343c3afdf50d  prosody-0.11.6.tar.gz
+-sha256  cda1db631c5f91f8439c66c9204dbf3bc41efd65313f7f5d3c88121ff9141755  prosody-0.11.6.tar.gz
+-sha512  4ba048f686d3780ed9a58d81bbb791bec85d6c1caf60793fa85f9921c5352d74ccfc70b3c8db57a16edd8ad8f05cfc26e1403e4e2d0fa53a0d2ecc238dd2781d  prosody-0.11.6.tar.gz
++md5  a9bf18a713804b5cc9d0322d1bf5d5d8  prosody-0.11.7.tar.gz
++sha1  425e1c7ca37464b31711da8eb4a4c9444a70360f  prosody-0.11.7.tar.gz
++sha256  28ffc07653485cb63e22b387d3ea4825ee2baaee0c5827de4d6053a35b1c8747   prosody-0.11.7.tar.gz
++sha512  923aa92598ef851ed8408931942859f78f1e3d700fee251f4f5ca67abdcdae43448318ed90a9a1cdc7824d5f4dc5a4732fad4b9ed36d97455fa9b3bff0881a20  prosody-0.11.7.tar.gz
+ 
+ # Hash for license file:
+ sha256 bbbdc1c5426e5944cf869fc0faeaf19d88a220cd2b39ea98b7b8e86b0e88a2ef  COPYING
+diff --git a/package/prosody/prosody.mk b/package/prosody/prosody.mk
+index 2bf4f3e791..ad51f6797e 100644
+--- a/package/prosody/prosody.mk
++++ b/package/prosody/prosody.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PROSODY_VERSION = 0.11.6
++PROSODY_VERSION = 0.11.7
+ PROSODY_SITE = https://prosody.im/downloads/source
+ PROSODY_LICENSE = MIT
+ PROSODY_LICENSE_FILES = COPYING
