@@ -1,64 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 13 Mar 2021 15:51:28 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/python-aiohttp:
- security bump to version 3.7.4
-Message-ID: <20210313143124.7D3AE80E15@busybox.osuosl.org>
+Date: Sat, 13 Mar 2021 16:00:14 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/openssh: security bump to
+ version 8.4p1
+In-Reply-To: <20210301115903.10828-1-christian@paral.in> (Christian Stewart's
+ message of "Mon, 1 Mar 2021 03:59:03 -0800")
+References: <20210301115903.10828-1-christian@paral.in>
+Message-ID: <87pn033xq9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8b49573dcb69c8b64530eadd8d6853969fa027b0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+>>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
 
-Fixes the following security issue:
+ > From: Baruch Siach <baruch@tkos.co.il>
+ > Fixes CVE-2020-15778: scp in OpenSSH through 8.3p1 allows command injection in
+ > the scp.c toremote function, as demonstrated by backtick characters in the
+ > destination argument. NOTE: the vendor reportedly has stated that they
+ > intentionally omit validation of "anomalous argument transfers" because that
+ > could "stand a great chance of breaking existing workflows."
 
-CVE-2021-21330: Open redirect vulnerability in aiohttp
-(normalize_path_middleware middleware)
+ > https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-15778
 
-Beast Glatisant and Jelmer Vernooij reported that python-aiohttp, a async
-HTTP client/server framework, is prone to an open redirect vulnerability.  A
-maliciously crafted link to an aiohttp-based web-server could redirect the
-browser to a different website.
+ > Signed-off-by: Christian Stewart <christian@paral.in>
 
-For more details, see the advisory:
-https://github.com/aio-libs/aiohttp/security/advisories/GHSA-v6wp-4m6f-gcjg
+Committed to 2020.02.x and 2020.11.x, thanks.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 0e60a9aa835a2141d4f8e382dc736862a29f6e7f)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python-aiohttp/python-aiohttp.hash | 4 ++--
- package/python-aiohttp/python-aiohttp.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/python-aiohttp/python-aiohttp.hash b/package/python-aiohttp/python-aiohttp.hash
-index 36056d2f99..db7dfd6b15 100644
---- a/package/python-aiohttp/python-aiohttp.hash
-+++ b/package/python-aiohttp/python-aiohttp.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/aiohttp/json
--md5  a66039c12f33dd093a2c260f5c459632  aiohttp-3.7.3.tar.gz
--sha256  9c1a81af067e72261c9cbe33ea792893e83bc6aa987bfbd6fdc1e5e7b22777c4  aiohttp-3.7.3.tar.gz
-+md5  586eb4e4dcb1e41242ede0c5bcfd4014  aiohttp-3.7.4.tar.gz
-+sha256  5d84ecc73141d0a0d61ece0742bb7ff5751b0657dab8405f899d3ceb104cc7de  aiohttp-3.7.4.tar.gz
- # Locally computed sha256 checksums
- sha256  96627bed0ad08e9b2efa9f4e04e80837cd0550e7694a0fec33b1dab2550282ab  LICENSE.txt
-diff --git a/package/python-aiohttp/python-aiohttp.mk b/package/python-aiohttp/python-aiohttp.mk
-index e5a1354267..f1e755c023 100644
---- a/package/python-aiohttp/python-aiohttp.mk
-+++ b/package/python-aiohttp/python-aiohttp.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_AIOHTTP_VERSION = 3.7.3
-+PYTHON_AIOHTTP_VERSION = 3.7.4
- PYTHON_AIOHTTP_SOURCE = aiohttp-$(PYTHON_AIOHTTP_VERSION).tar.gz
--PYTHON_AIOHTTP_SITE = https://files.pythonhosted.org/packages/68/96/40a765d7d68028c5a6d169b2747ea3f4828ec91a358a63818d468380521c
-+PYTHON_AIOHTTP_SITE = https://files.pythonhosted.org/packages/7a/95/eb60aaad7943e18c9d091de93c9b0b5ed40aa67c7d5e3c5ee9b36f100a38
- PYTHON_AIOHTTP_SETUP_TYPE = setuptools
- PYTHON_AIOHTTP_LICENSE = Apache-2.0
- PYTHON_AIOHTTP_LICENSE_FILES = LICENSE.txt
+-- 
+Bye, Peter Korsgaard
