@@ -1,73 +1,102 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 13 Mar 2021 08:47:18 +0100
-Subject: [Buildroot] [git commit] package/opkg-utils: add missing
- dependencies for host build
-Message-ID: <20210313072428.7DB8F81172@busybox.osuosl.org>
+Date: Sat, 13 Mar 2021 08:59:37 +0100
+Subject: [Buildroot] [PATCH 0/8] package/opkg-utils: add target build
+In-Reply-To: <20210312200534.923-1-ryan.barnett@rockwellcollins.com>
+References: <20210312200534.923-1-ryan.barnett@rockwellcollins.com>
+Message-ID: <20210313075937.GL2737665@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9521492bd0706fbb5c81e87b65ad25898f974f4d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Ryan, All,
 
-opkg-utils is a collection of bash and python scripts which require
-additional commands/tools be available for the bash scripts. The full
-list of dependencies that the opkg-util scripts require is:
+On 2021-03-12 14:05 -0600, Ryan Barnett spake thusly:
+> A first revision of adding opkg-utils as a target package was proposed
+> in the following patch:
+> 
+>   https://patchwork.ozlabs.org/project/buildroot/patch/20210126192605.20002-1-matthew.weber at rockwellcollins.com/
+> 
+> Based on feedback received from Yann, it uncovered some issues with the
+> current host package build for opkg-utils.
+> 
+> This patch series addresses the following items:
+> 
+>  * Remove build step since all it does is generate man pages for a
+>    single command (Patch 1)
+>  * Incorporated accepted patch for splitting off the installation of
+>    docs and utils (Patch 2)
+>  * Add missing host dependencies for host-opkg-utils which are not
+>    manditory packages of for buildroot (Patches 3-6)
+>  * Add target package for opkg-utils (Patch 7)
+> 
+> Thanks,
+> -Ryan
+> 
+> CC: Yann E. MORIN <yann.morin.1998@free.fr>
+> 
+> Ryan Barnett (8):
+>   package/opkg-utils: remove build step
+>   package/opkg-utils: install only utility scripts
 
-  bash
-  binutils
-  bzip2
-  coreutils
-  diffutils
-  findutils
-  grep
-  gzip
-  lz4
-  python3
-  sed
-  tar
-  xz
+I've inverted the order of those two first patches; I reworded the
+commit log of the now-second patch (I'll reply further in that patch).
 
-The Buildroot manual requires a few packages (bash, binutils, bzip2,
-gzip, sed and tar) to be installed on the host system, so we need not
-add those. Additionally, and even though they are not in that list,
-that grep and find are also required (we already make extensive use of
-both everywhere, so it is as good as them being in the list).
+Applied to master.
 
-We have a host variant for coreutils, but only for systems that do not
-already have a recent-enough one, i.e. that provides 'realpath' and
-'ln --relative'. opkg-utils uses neither, so can rely on the ones on the
-system.
+>   package/diffutils: add host package
 
-Only add dependencies on the remaining host tools: diffutils, lz4, and
-xz.
+Applied to master.
 
-Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-[yann.morin.1998 at free.fr:
-  - drop excessive dependencies,
-  - reword the commit log accordingly
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/opkg-utils/opkg-utils.mk | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+>   package/findutils: add host package
+>   package/grep: add host package
 
-diff --git a/package/opkg-utils/opkg-utils.mk b/package/opkg-utils/opkg-utils.mk
-index a7dc22d7c4..19dfb26f7a 100644
---- a/package/opkg-utils/opkg-utils.mk
-+++ b/package/opkg-utils/opkg-utils.mk
-@@ -10,7 +10,11 @@ OPKG_UTILS_SITE_METHOD = git
- OPKG_UTILS_LICENSE = GPL-2.0+
- OPKG_UTILS_LICENSE_FILES = COPYING
- 
--HOST_OPKG_UTILS_DEPENDENCIES += $(BR2_PYTHON3_HOST_DEPENDENCY)
-+HOST_OPKG_UTILS_DEPENDENCIES = \
-+	$(BR2_PYTHON3_HOST_DEPENDENCY) \
-+	host-diffutils \
-+	host-lz4 \
-+	host-xz
- 
- # Nothing to build; only scripts to install.
- define HOST_OPKG_UTILS_INSTALL_CMDS
+I've dropped those two, as I explained in the review of...
+
+>   package/opkg-utils: add missing dependencies for host build
+
+... this patch: grep and find are already required (but not on the list
+in the manual).
+
+Applied to master with less dependencies and a commit log reworded
+accodingly.
+
+I got short on time, so I stopped here. I'll resume the remaining two
+later.
+
+Thanks!
+
+Regards,
+Yann E. MORIN.
+
+>   package/opkg-utils: add opkg-utils as target pkg
+>   DEVELOPERS: Add Ryan Barnett for opkg and opkg-utils
+> 
+>  DEVELOPERS                                    |  2 +
+>  package/Config.in                             |  1 +
+>  package/diffutils/diffutils.mk                |  1 +
+>  package/findutils/findutils.mk                |  1 +
+>  package/grep/grep.mk                          |  1 +
+>  ...-seperate-manpages-and-utils-install.patch | 50 +++++++++++++++++++
+>  package/opkg-utils/Config.in                  | 33 ++++++++++++
+>  package/opkg-utils/opkg-utils.mk              | 31 ++++++++++--
+>  8 files changed, 116 insertions(+), 4 deletions(-)
+>  create mode 100644 package/opkg-utils/0001-Makefile-seperate-manpages-and-utils-install.patch
+>  create mode 100644 package/opkg-utils/Config.in
+> 
+> --
+> 2.17.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
