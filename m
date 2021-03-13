@@ -1,75 +1,39 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 13 Mar 2021 09:04:17 +0100
-Subject: [Buildroot] [PATCH 1/8] package/opkg-utils: remove build step
-In-Reply-To: <20210312200534.923-2-ryan.barnett@rockwellcollins.com>
-References: <20210312200534.923-1-ryan.barnett@rockwellcollins.com>
- <20210312200534.923-2-ryan.barnett@rockwellcollins.com>
-Message-ID: <20210313080417.GM2737665@scaer>
+Date: Sat, 13 Mar 2021 09:08:48 +0100
+Subject: [Buildroot] [git commit] boot/uboot: fix kconfig with per-package
+ directories and host-make
+Message-ID: <20210313074949.E332D875E2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2021-03-12 14:05 -0600, Ryan Barnett spake thusly:
-> opkg-utils is a package that only provides bash and python scripts.
-> Upon further inspection of the Makefile for the package, invoking
-> `make` is equivalent to `make install`.
+commit: https://git.buildroot.net/buildroot/commit/?id=3cf8173e5c3d23c3b147a3a083082409f09869ee
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-That is not really true: 'make' does not install, which 'make isntall'
-does; to they are not equivalent.
+If PER_PACKAGE_DIRECTORIES=Y and using host-make package (because
+BR2_FORCE_HOST_BUILD=Y or local make is too old) .stamp_dotconfig
+target needs per-package/uboot/host/bin/host-make that doesn't
+exist yet.
 
-In fact, 'make' only buiold the manpage, and as you explained in the
-following patch, we don't want to build+install it.
+Add host-make into UBOOT_KCONFIG_DEPENDENCIES.
 
-So by inverting the order f patches 2 and 1, building the manpage is no
-longer ncessary as it is no longer installed.
+Signed-off-by: Nicolas Toromanoff <nicolas.toromanoff@foss.st.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ boot/uboot/uboot.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-(if we'd keep your initial order, the build of the manpage would happen
-durign installation, which is not nice)
-
-I've added a small comment to explain why we only have an install step.
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> The makes the build step
-> unnecessary so remove it.
-> 
-> Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-> ---
->  package/opkg-utils/opkg-utils.mk | 4 ----
->  1 file changed, 4 deletions(-)
-> 
-> diff --git a/package/opkg-utils/opkg-utils.mk b/package/opkg-utils/opkg-utils.mk
-> index a94a4cd5cd..47fc4c63b4 100644
-> --- a/package/opkg-utils/opkg-utils.mk
-> +++ b/package/opkg-utils/opkg-utils.mk
-> @@ -12,10 +12,6 @@ OPKG_UTILS_LICENSE_FILES = COPYING
->  
->  HOST_OPKG_UTILS_DEPENDENCIES += $(BR2_PYTHON3_HOST_DEPENDENCY)
->  
-> -define HOST_OPKG_UTILS_BUILD_CMDS
-> -	$(MAKE) -C $(@D) $(HOST_CONFIGURE_OPTS)
-> -endef
-> -
->  define HOST_OPKG_UTILS_INSTALL_CMDS
->  	$(MAKE) -C $(@D) PREFIX=$(HOST_DIR) install
->  endef
-> -- 
-> 2.17.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index bb45980022..dbe82e65b1 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -498,6 +498,7 @@ $(eval $(generic-package))
+ else ifeq ($(BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG),y)
+ UBOOT_MAKE_ENV = $(TARGET_MAKE_ENV)
+ UBOOT_KCONFIG_DEPENDENCIES = \
++	$(BR2_MAKE_HOST_DEPENDENCY) \
+ 	$(BR2_BISON_HOST_DEPENDENCY) \
+ 	$(BR2_FLEX_HOST_DEPENDENCY)
+ $(eval $(kconfig-package))
