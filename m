@@ -1,41 +1,75 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 13 Mar 2021 23:40:49 +0100
-Subject: [Buildroot] [PATCH v1] package/hwdata: bump version to 0.345
-Message-ID: <20210313224049.27458-1-ps.report@gmx.net>
+Date: Sat, 13 Mar 2021 23:42:11 +0100
+Subject: [Buildroot] [PATCH v1] package/rsync: bump version to 3.2.3
+Message-ID: <20210313224211.27678-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+- disable simd, openssl, xxhash, zstd, lz4, asm options
+
+- update COPYING hash (add openssl and xxhash license
+  enhancement):
+
+  In addition, as a special exception, the copyright holders give
+  permission to dynamically link rsync with the OpenSSL and xxhash
+  libraries when those libraries are being distributed in compliance
+  with their license terms, and to distribute a dynamically linked
+  combination of rsync and these libraries.  This is also considered
+  to be covered under the GPL's System Libraries exception.
+
+For details see [1].
+
+[1] https://download.samba.org/pub/rsync/NEWS#3.2.3
+
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/hwdata/hwdata.hash | 2 +-
- package/hwdata/hwdata.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/rsync/rsync.hash |  6 +++---
+ package/rsync/rsync.mk   | 10 ++++++++--
+ 2 files changed, 11 insertions(+), 5 deletions(-)
 
-diff --git a/package/hwdata/hwdata.hash b/package/hwdata/hwdata.hash
-index 489f47a7cf..be8576d8d2 100644
---- a/package/hwdata/hwdata.hash
-+++ b/package/hwdata/hwdata.hash
-@@ -1,4 +1,4 @@
+diff --git a/package/rsync/rsync.hash b/package/rsync/rsync.hash
+index 2da62a18f1..92f6156ba8 100644
+--- a/package/rsync/rsync.hash
++++ b/package/rsync/rsync.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/rsync/src/rsync-3.1.3.tar.gz.asc
+-sha256	55cc554efec5fdaad70de921cd5a5eeb6c29a95524c715f3bbf849235b0800c0	rsync-3.1.3.tar.gz
++# https://download.samba.org/pub/rsync/src/rsync-3.2.3.tar.gz.asc
++sha256  becc3c504ceea499f4167a260040ccf4d9f2ef9499ad5683c179a697146ce50e  rsync-3.2.3.tar.gz
  # Locally calculated
--sha256  f1e79131c870dce4a3b4b75edeefc5c9aef416d488a131c66cb6893be743be63  hwdata-0.342.tar.gz
-+sha256  fafcc97421ba766e08a2714ccc3eebb0daabc99e67d53c2d682721dd01ccf7a7  hwdata-0.345.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  21d0406f93e884a050426ebc21931839a45d56bfcbcbfdda7686d583f36f107f  LICENSE
-diff --git a/package/hwdata/hwdata.mk b/package/hwdata/hwdata.mk
-index 7d718baca8..0485603f16 100644
---- a/package/hwdata/hwdata.mk
-+++ b/package/hwdata/hwdata.mk
+-sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
++sha256  0d33aa97d302cb9df27f99dfa28d58001c2479a02317956f1a7a890f3937a976  COPYING
+diff --git a/package/rsync/rsync.mk b/package/rsync/rsync.mk
+index db26ebd93a..6a456c147a 100644
+--- a/package/rsync/rsync.mk
++++ b/package/rsync/rsync.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--HWDATA_VERSION = 0.342
-+HWDATA_VERSION = 0.345
- HWDATA_SITE = $(call github,vcrhonek,hwdata,v$(HWDATA_VERSION))
- HWDATA_LICENSE = GPL-2.0+, BSD-3-Clause, XFree86 1.0
- HWDATA_LICENSE_FILES = COPYING LICENSE
+-RSYNC_VERSION = 3.1.3
++RSYNC_VERSION = 3.2.3
+ RSYNC_SITE = http://rsync.samba.org/ftp/rsync/src
+ RSYNC_LICENSE = GPL-3.0+
+ RSYNC_LICENSE_FILES = COPYING
+@@ -12,7 +12,13 @@ RSYNC_CPE_ID_VENDOR = samba
+ RSYNC_DEPENDENCIES = zlib popt
+ RSYNC_CONF_OPTS = \
+ 	--with-included-zlib=no \
+-	--with-included-popt=no
++	--with-included-popt=no \
++	--disable-simd \
++	--disable-openssl \
++	--disable-xxhash \
++	--disable-zstd \
++	--disable-lz4 \
++	--disable-asm
+ 
+ ifeq ($(BR2_PACKAGE_ACL),y)
+ RSYNC_DEPENDENCIES += acl
 -- 
 2.30.1
