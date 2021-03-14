@@ -1,44 +1,39 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 14 Mar 2021 23:32:07 +0100
-Subject: [Buildroot] [PATCH v1 2/2] package/batman-adv: enable B.A.T.M.A.N.
- V protocol by default
-In-Reply-To: <20210314223207.13460-1-ps.report@gmx.net>
-References: <20210314223207.13460-1-ps.report@gmx.net>
-Message-ID: <20210314223207.13460-2-ps.report@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 14 Mar 2021 23:32:31 +0100
+Subject: [Buildroot] [PATCH] package/libgeos: disable package if
+ binutils is affected from bug 21464
+In-Reply-To: <20210307175214.3980194-1-giulio.benetti@benettiengineering.com>
+References: <20210307175214.3980194-1-giulio.benetti@benettiengineering.com>
+Message-ID: <20210314233231.351fce1c@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As upstream enables CONFIG_BATMAN_ADV_BATMAN_V option since
-2018.2 by defaullt ([1]) honor this in buildroot and do
-the same (and remove the leagcy experimental comment accordingly).
+On Sun,  7 Mar 2021 18:52:14 +0100
+Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
 
-[1] https://git.open-mesh.org/batman-adv.git/blob/HEAD:/CHANGELOG.rst#l174
+> This package is affected from binutils bug 21464, since there is no
+> workaround, let's disable it.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/3eb/3eb9f9d0f6d8274b2d19753c006bd83f7d536e3c/
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> ---
+> This patch must be applied after this patchset:
+> https://patchwork.ozlabs.org/project/buildroot/list/?series=232409
+> ---
+>  package/libgeos/Config.in | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/batman-adv/Config.in | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+I've applied. However, it's a bit inconsistent that we fixed this for
+OpenRISC with a proper BR2_TOOLCHAIN_HAS_BINUTILS_BUG_xyz, but for
+NIOS2 it is globally disabled for BR2_nios2.
 
-diff --git a/package/batman-adv/Config.in b/package/batman-adv/Config.in
-index 9d3d7967b9..f3ac974296 100644
---- a/package/batman-adv/Config.in
-+++ b/package/batman-adv/Config.in
-@@ -25,11 +25,10 @@ config BR2_PACKAGE_BATMAN_ADV_NC
- 	  https://www.open-mesh.org/projects/batman-adv/wiki/NetworkCoding
- 
- config BR2_PACKAGE_BATMAN_ADV_BATMAN_V
--	bool "enable B.A.T.M.A.N. V protocol (experimental)"
-+	bool "enable B.A.T.M.A.N. V protocol"
-+	default y
- 	help
- 	  Enables B.A.T.M.A.N. V network protocol.
--	  This is the next-gen protocol and is experimental at this
--	  time.
- 
- 	  https://www.open-mesh.org/projects/batman-adv/wiki/BATMAN_V
- 
+Thomas
 -- 
-2.30.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
