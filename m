@@ -1,70 +1,45 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Mar 2021 18:00:37 +0100
-Subject: [Buildroot] [PATCH v1] package/libubox: bump version to 551d75b
-In-Reply-To: <20210310205002.18278-1-ps.report@gmx.net>
-References: <20210310205002.18278-1-ps.report@gmx.net>
-Message-ID: <20210314170037.GI2737665@scaer>
+Date: Sun, 14 Mar 2021 18:01:05 +0100
+Subject: [Buildroot] [git commit] package/upmpdcli: bump to version 1.5.10
+Message-ID: <20210314163756.4FF8387821@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=ac6ed05dcaa52f11c49c85477adf138919f64374
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-03-10 21:50 +0100, Peter Seiderer spake thusly:
-> Changelog:
-> 
->   2e52c7e libubox: fix BLOBMSG_CAST_INT64 (do not override BLOBMSG_TYPE_DOUBLE)
->   870acee tests: cram: test_base64: fix failing tests
->   4d8995e tests: cram: test_base64: really fix failing tests
->   551d75b libubox: tests: add more blobmsg/json test cases
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/upmpdcli/upmpdcli.hash | 4 ++--
+ package/upmpdcli/upmpdcli.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/libubox/libubox.hash | 2 +-
->  package/libubox/libubox.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/libubox/libubox.hash b/package/libubox/libubox.hash
-> index fd4c5a4a39..94a071d80d 100644
-> --- a/package/libubox/libubox.hash
-> +++ b/package/libubox/libubox.hash
-> @@ -1,2 +1,2 @@
->  # Locally calculated
-> -sha256  e383caf80a241e9711ab0c58a5e8f4d16479693be1e44ffb6cc716a185e7e303  libubox-5bc0146a1d6474d339c4ade9a227f32cc27a8b93-br1.tar.gz
-> +sha256  c6bac8baa7525b2d35eb22edeb5722c098370794d00e8859ef1a0bdfd8716151  libubox-551d75b5662cccd0466b990d58136bdf799a804d-br1.tar.gz
-> diff --git a/package/libubox/libubox.mk b/package/libubox/libubox.mk
-> index 4626659158..20da5c2ec2 100644
-> --- a/package/libubox/libubox.mk
-> +++ b/package/libubox/libubox.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -LIBUBOX_VERSION = 5bc0146a1d6474d339c4ade9a227f32cc27a8b93
-> +LIBUBOX_VERSION = 551d75b5662cccd0466b990d58136bdf799a804d
->  LIBUBOX_SITE = https://git.openwrt.org/project/libubox.git
->  LIBUBOX_SITE_METHOD = git
->  LIBUBOX_LICENSE = ISC, BSD-3-Clause
-> -- 
-> 2.30.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/upmpdcli/upmpdcli.hash b/package/upmpdcli/upmpdcli.hash
+index fe8999d471..176713b89c 100644
+--- a/package/upmpdcli/upmpdcli.hash
++++ b/package/upmpdcli/upmpdcli.hash
+@@ -1,5 +1,5 @@
+-# From http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.5.8.tar.gz.sha256:
+-sha256  802a2ab795841fbb9bfff5fd7951881022f5414ed893a1db704801b999e658a8  upmpdcli-1.5.8.tar.gz
++# From http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.5.10.tar.gz.sha256:
++sha256  8d864bf2eb2192a2f6a891f36016df413753247e3879e3553cc1693233604684  upmpdcli-1.5.10.tar.gz
+ 
+ # Hash for license file:
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
+index 3dc79f8f44..867c1abb01 100644
+--- a/package/upmpdcli/upmpdcli.mk
++++ b/package/upmpdcli/upmpdcli.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UPMPDCLI_VERSION = 1.5.8
++UPMPDCLI_VERSION = 1.5.10
+ UPMPDCLI_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
+ UPMPDCLI_LICENSE = LGPL-2.1+
+ UPMPDCLI_LICENSE_FILES = COPYING
