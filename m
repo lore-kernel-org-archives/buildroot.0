@@ -1,88 +1,43 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Mar 2021 13:34:07 +0100
-Subject: [Buildroot] [PATCH 1/1] package/rng-tools: bump to version 6.12
-In-Reply-To: <20210311174401.626348-1-fontaine.fabrice@gmail.com>
-References: <20210311174401.626348-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210314123407.GT2737665@scaer>
+Date: Sun, 14 Mar 2021 13:40:11 +0100
+Subject: [Buildroot] [git commit] package/kodi-pvr-iptvsimple: bump version
+ to 7.5.0-Matrix
+Message-ID: <20210314121701.30EFE8167A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=9045aad15c6db195ca0737d3e1ab5512ac9f7ef0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-03-11 18:44 +0100, Fabrice Fontaine spake thusly:
-> libsysfs is not needed since
-> https://github.com/nhorman/rng-tools/commit/46b4e8fd8955e25ef0d5e89d26c8cf1543d2fa8a
-> 
-> https://github.com/nhorman/rng-tools/releases/tag/v6.12
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash | 2 +-
+ package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/rng-tools/Config.in      | 1 -
->  package/rng-tools/rng-tools.hash | 2 +-
->  package/rng-tools/rng-tools.mk   | 6 +++---
->  3 files changed, 4 insertions(+), 5 deletions(-)
-> 
-> diff --git a/package/rng-tools/Config.in b/package/rng-tools/Config.in
-> index 67e3d4185b..0dd269c818 100644
-> --- a/package/rng-tools/Config.in
-> +++ b/package/rng-tools/Config.in
-> @@ -3,7 +3,6 @@ config BR2_PACKAGE_RNG_TOOLS
->  	# pthread_setaffinity_np
->  	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
->  	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
-> -	select BR2_PACKAGE_LIBSYSFS
->  	select BR2_PACKAGE_OPENSSL
->  	help
->  	  Daemon to use hardware random number generators.
-> diff --git a/package/rng-tools/rng-tools.hash b/package/rng-tools/rng-tools.hash
-> index de1f72617c..0ba2dc8329 100644
-> --- a/package/rng-tools/rng-tools.hash
-> +++ b/package/rng-tools/rng-tools.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed
-> -sha256  644d8bd4e84cee29debddc7e6db72aff27e628e5a879ce310562edf50f12be41  rng-tools-6.11.tar.gz
-> +sha256  6fd5b52a700edec85eb1043970e22e8e2ad06a4b43851f35d33d90e09570e9d3  rng-tools-6.12.tar.gz
->  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-> diff --git a/package/rng-tools/rng-tools.mk b/package/rng-tools/rng-tools.mk
-> index ae20d96362..2d508413a4 100644
-> --- a/package/rng-tools/rng-tools.mk
-> +++ b/package/rng-tools/rng-tools.mk
-> @@ -4,11 +4,11 @@
->  #
->  ################################################################################
->  
-> -RNG_TOOLS_VERSION = 6.11
-> -RNG_TOOLS_SITE = $(call github,nhorman,$(RNG_TOOLS_NAME),V$(RNG_TOOLS_VERSION))
-> +RNG_TOOLS_VERSION = 6.12
-> +RNG_TOOLS_SITE = $(call github,nhorman,$(RNG_TOOLS_NAME),v$(RNG_TOOLS_VERSION))
->  RNG_TOOLS_LICENSE = GPL-2.0
->  RNG_TOOLS_LICENSE_FILES = COPYING
-> -RNG_TOOLS_DEPENDENCIES = libsysfs host-pkgconf openssl
-> +RNG_TOOLS_DEPENDENCIES = host-pkgconf openssl
->  # From git
->  RNG_TOOLS_AUTORECONF = YES
->  
-> -- 
-> 2.30.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
+index 24f8f377f7..b136cef01b 100644
+--- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
++++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  70afe4e0c8df6c00c155cff0cc1e6bcf2d2a2de07a3f77367b4ad76ba7442b22  kodi-pvr-iptvsimple-7.4.3-Matrix.tar.gz
++sha256  1cbe623e1eec0246c782398d8a8964d26b0fa68966c7f1422666068e50fb4e00  kodi-pvr-iptvsimple-7.5.0-Matrix.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
+index ca4b2ff604..8251c53f8f 100644
+--- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
++++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_PVR_IPTVSIMPLE_VERSION = 7.4.3-Matrix
++KODI_PVR_IPTVSIMPLE_VERSION = 7.5.0-Matrix
+ KODI_PVR_IPTVSIMPLE_SITE = $(call github,kodi-pvr,pvr.iptvsimple,$(KODI_PVR_IPTVSIMPLE_VERSION))
+ KODI_PVR_IPTVSIMPLE_LICENSE = GPL-2.0+
+ KODI_PVR_IPTVSIMPLE_LICENSE_FILES = LICENSE.md
