@@ -1,44 +1,79 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Mar 2021 16:49:21 +0100
-Subject: [Buildroot] [git commit] package/docker-cli: bump version to 20.10.5
-Message-ID: <20210314152734.CB11687B51@busybox.osuosl.org>
+Date: Sun, 14 Mar 2021 16:51:07 +0100
+Subject: [Buildroot] [PATCH 1/3] package/docker-containerd: security
+ bump to 1.4.4
+In-Reply-To: <20210312224833.1908386-1-christian@paral.in>
+References: <20210312224833.1908386-1-christian@paral.in>
+Message-ID: <20210314155107.GD2737665@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eef5da1f77d4f1dd284fab4c9f543fb884f7a023
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Christian, All,
 
-https://docs.docker.com/engine/release-notes/
+On 2021-03-12 14:48 -0800, Christian Stewart spake thusly:
+> Security fix for CVE-2021-21334:
+> 
+> https://github.com/containerd/containerd/security/advisories/GHSA-6g2q-w5j3-fwh4
+> 
+> Other changes:
+> 
+>  - Fix container create in CRI to prevent possible environment variable leak between containers
+>  - Update shim server to return grpc NotFound error
+>  - Add bounds on max oom_score_adj value for shim's AdjustOOMScore
+>  - Update task manager to use fresh context when calling shim shutdown
+>  - Update Docker resolver to avoid possible concurrent map access panic
+>  - Update shim's log file open flags to avoid containerd hang on syscall open
+>  - Fix incorrect usage calculation
+> 
+> Signed-off-by: Christian Stewart <christian@paral.in>
 
-Signed-off-by: Christian Stewart <christian@paral.in>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/docker-cli/docker-cli.hash | 2 +-
- package/docker-cli/docker-cli.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Series of 3 applied to master, thanks.
 
-diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
-index 95b15b539b..f4787062bb 100644
---- a/package/docker-cli/docker-cli.hash
-+++ b/package/docker-cli/docker-cli.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  aafba3765d9013cb75810b4f4334525f0e74e82ef073b4df9e8b524f3794e60a  docker-cli-20.10.3.tar.gz
-+sha256  4ba845f8c7e2e0a2ca1ec6589847159ca8d0d37b609f0e6f78def7a893b9b342  docker-cli-20.10.5.tar.gz
- sha256  2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
-diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
-index d90c3b7d10..d710bb2fee 100644
---- a/package/docker-cli/docker-cli.mk
-+++ b/package/docker-cli/docker-cli.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DOCKER_CLI_VERSION = 20.10.3
-+DOCKER_CLI_VERSION = 20.10.5
- DOCKER_CLI_SITE = $(call github,docker,cli,v$(DOCKER_CLI_VERSION))
- 
- DOCKER_CLI_LICENSE = Apache-2.0
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/docker-containerd/docker-containerd.hash | 2 +-
+>  package/docker-containerd/docker-containerd.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/docker-containerd/docker-containerd.hash b/package/docker-containerd/docker-containerd.hash
+> index c5cfc137b8..bb544e8d60 100644
+> --- a/package/docker-containerd/docker-containerd.hash
+> +++ b/package/docker-containerd/docker-containerd.hash
+> @@ -1,3 +1,3 @@
+>  # Computed locally
+> -sha256	bc6d9452c700af0ebc09c0da8ddba55be4c03ac8928e72ca92d98905800c8018  docker-containerd-1.4.3.tar.gz
+> +sha256  ac62c64664bf62fd44df0891c896eecdb6d93def3438271d7892dca75bc069d1  docker-containerd-1.4.4.tar.gz
+>  sha256	4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4  LICENSE
+> diff --git a/package/docker-containerd/docker-containerd.mk b/package/docker-containerd/docker-containerd.mk
+> index 626889e5f4..e229d9cb54 100644
+> --- a/package/docker-containerd/docker-containerd.mk
+> +++ b/package/docker-containerd/docker-containerd.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -DOCKER_CONTAINERD_VERSION = 1.4.3
+> +DOCKER_CONTAINERD_VERSION = 1.4.4
+>  DOCKER_CONTAINERD_SITE = $(call github,containerd,containerd,v$(DOCKER_CONTAINERD_VERSION))
+>  DOCKER_CONTAINERD_LICENSE = Apache-2.0
+>  DOCKER_CONTAINERD_LICENSE_FILES = LICENSE
+> -- 
+> 2.30.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
