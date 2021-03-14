@@ -1,55 +1,48 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Mar 2021 11:59:08 +0100
-Subject: [Buildroot] [git commit] package/wget: bump version to 1.12.1
-Message-ID: <20210314103653.368E57FB95@busybox.osuosl.org>
+Date: Sun, 14 Mar 2021 11:59:04 +0100
+Subject: [Buildroot] [git commit] package/btrfs-progs: bump version to 5.11
+Message-ID: <20210314103653.0427A82DC8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=89a3f73910402ed40066eed076d5a53ac270307c
+commit: https://git.buildroot.net/buildroot/commit/?id=57095edf43d4fdab8c6e73312dab601f87f7fff4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- update/fix signing key hash
+For details see [1].
 
-For details see [1], [2].
-
-[1] https://lists.gnu.org/archive/html/info-gnu/2020-12/msg00013.html
-[2] https://lists.gnu.org/archive/html/info-gnu/2021-01/msg00007.html
+[1] https://btrfs.wiki.kernel.org/index.php/Changelog#btrfs-progs_v5.11_.28Mar_2021.29
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/wget/wget.hash | 8 ++++----
- package/wget/wget.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/btrfs-progs/btrfs-progs.hash | 2 +-
+ package/btrfs-progs/btrfs-progs.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/wget/wget.hash b/package/wget/wget.hash
-index 956e1127f3..11071566aa 100644
---- a/package/wget/wget.hash
-+++ b/package/wget/wget.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--# https://ftp.gnu.org/gnu/wget/wget-1.20.3.tar.lz.sig
--# with key 1CB27DBC98614B2D5841646D08302DB6A2670428
--sha256 69607ce8216c2d1126b7a872db594b3f21e511e660e07ca1f81be96650932abb  wget-1.20.3.tar.lz
-+# https://ftp.gnu.org/gnu/wget/wget-1.21.tar.lz.sig
-+# with key 6B98F637D879C5236E277C5C64FF90AAE8C70AF9
-+sha256  db9bbe5347e6faa06fc78805eeb808b268979455ead9003a608569c9d4fc90ad  wget-1.21.1.tar.lz
- # Locally calculated
--sha256 e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b  COPYING
-+sha256  e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b  COPYING
-diff --git a/package/wget/wget.mk b/package/wget/wget.mk
-index 65c132e453..ae036478b8 100644
---- a/package/wget/wget.mk
-+++ b/package/wget/wget.mk
+diff --git a/package/btrfs-progs/btrfs-progs.hash b/package/btrfs-progs/btrfs-progs.hash
+index 9008513630..aac144963e 100644
+--- a/package/btrfs-progs/btrfs-progs.hash
++++ b/package/btrfs-progs/btrfs-progs.hash
+@@ -1,5 +1,5 @@
+ # From https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/sha256sums.asc
+-sha256 5c2f048b8c814852614b0b262ab2d468ea02774ef01124ebc0ab708df262de5c  btrfs-progs-v5.7.tar.xz
++sha256 d41961b0a92160c80f894ad9a1882822889c2e1d084cbf3e08b8c214a5cf0137  btrfs-progs-v5.11.tar.xz
+ # Locally computed
+ sha256 0d5bf346df9e635a29dcdddf832dc5b002ca6cdc1c5c9c6c567d2a61bb0c5c15  COPYING
+ sha256 3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  libbtrfsutil/COPYING
+diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
+index 22e1e330c5..96456d1238 100644
+--- a/package/btrfs-progs/btrfs-progs.mk
++++ b/package/btrfs-progs/btrfs-progs.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WGET_VERSION = 1.20.3
-+WGET_VERSION = 1.21.1
- WGET_SOURCE = wget-$(WGET_VERSION).tar.lz
- WGET_SITE = $(BR2_GNU_MIRROR)/wget
- WGET_DEPENDENCIES = host-pkgconf
+-BTRFS_PROGS_VERSION = 5.7
++BTRFS_PROGS_VERSION = 5.11
+ BTRFS_PROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/kdave/btrfs-progs
+ BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
+ BTRFS_PROGS_DEPENDENCIES = host-pkgconf lzo util-linux zlib
