@@ -1,37 +1,46 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Sun, 14 Mar 2021 22:45:07 +0100
-Subject: [Buildroot] [PATCH v2 3/3] package/zeromq: disable package if
- binutils is affected from bug 21464
-In-Reply-To: <20210314223616.5bfcc62f@windsurf.home>
-References: <20210305161211.4396-1-giulio.benetti@benettiengineering.com>
- <20210305161211.4396-4-giulio.benetti@benettiengineering.com>
- <20210314223616.5bfcc62f@windsurf.home>
-Message-ID: <bfde2763-b4f6-a816-101e-033b3801c003@benettiengineering.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 14 Mar 2021 22:48:24 +0100
+Subject: [Buildroot] [PATCH v1 2/2] package/batman-adv: bump version to
+ 2021.0
+In-Reply-To: <20210314221809.618a8d72@gmx.net>
+References: <20210311210804.9616-1-ps.report@gmx.net>
+ <20210311210804.9616-2-ps.report@gmx.net>
+ <CA+h8R2ps1MF-NiZKYWceSTruHLXMpzLPORhzORetVKuF1PWDdA@mail.gmail.com>
+ <20210312230903.18bf4a0a@gmx.net>
+ <CA+h8R2r7oBE1h7FSQC+CR=q2Vr-K5bS-qkwVFO-+GT24Qb6Raw@mail.gmail.com>
+ <20210314124249.GW2737665@scaer> <20210314221809.618a8d72@gmx.net>
+Message-ID: <20210314214824.GP2737665@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 3/14/21 10:36 PM, Thomas Petazzoni wrote:
-> On Fri,  5 Mar 2021 17:12:11 +0100
-> Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
-> 
->>   config BR2_PACKAGE_ZEROMQ
->>   	bool "zeromq"
->>   	depends on BR2_INSTALL_LIBSTDCPP
->>   	depends on BR2_TOOLCHAIN_HAS_THREADS
->> +	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464
-> 
-> This is not sufficient: there are numerous packages that "select
-> BR2_PACKAGE_ZEROMQ", so this "depends on" would have to be propagated.
+Peter, All,
 
-Oh, again forgotten about Kconfig dependencies, I'm going to fix this
-and the other patches too.
+On 2021-03-14 22:18 +0100, Peter Seiderer spake thusly:
+> I can confirm the compile failure in case BR2_PACKAGE_BATMAN_ADV_BATMAN_V is
+> not enabled...., but the buildroot config still states it is 'exerpimental':
+[--SNIP--]
+> According to [1] CONFIG_BATMAN_ADV_BATMAN_V option is enabled by default
+> since 2018.2 (and it seems compile without is not tested very carefully),
+> maybe time to drop the buildroot config option and always enable
+> CONFIG_BATMAN_ADV_BATMAN_V?
 
-Thanks for reviewing.
+I am perfectly OK with dropping the option and always enabling it.
 
-Best regards
+> But will take a deeper look at the source code if the failure is fixable
+> (or post an upstream failure report)...
+
+Cool, thanks! :-)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Giulio Benetti
-Benetti Engineering sas
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
