@@ -1,64 +1,47 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Mar 2021 21:47:47 +0100
-Subject: [Buildroot] [git commit] package/libplist: bump to version 2.2.0
-Message-ID: <20210314202540.CF5A487659@busybox.osuosl.org>
+Date: Sun, 14 Mar 2021 21:47:45 +0100
+Subject: [Buildroot] [git commit] package/freerdp: bump to version 2.3.1
+Message-ID: <20210314202540.AFB8E87659@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eca5c438357131d3d97da9edd63c3c7f682bcff7
+commit: https://git.buildroot.net/buildroot/commit/?id=01e78811db25c34d506138994efd981e4ab60caf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Use official tarball and so drop autoreconf
-
-Extract from
-https://github.com/libimobiledevice/libplist/releases/tag/2.2.0:
-
-"Rename library and all related files by adding an API version resulting
-in libplist-2.0 and libplist++-2.0"
-
-The only user of libplist in buildroot is kodi which is comptatible with
-libplist 2.2.0 since its version 19.0-Matrix and
-https://github.com/xbmc/xbmc/commit/22ab58e8f958980c070a46cabe197b3557dda0a3
-which has been commited in 148e695e37561fe45d4726cb68f6454464d17797
+https://github.com/FreeRDP/FreeRDP/blob/2.3.1/ChangeLog
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libplist/libplist.hash | 2 +-
- package/libplist/libplist.mk   | 7 +++----
- 2 files changed, 4 insertions(+), 5 deletions(-)
+ package/freerdp/freerdp.hash | 4 ++--
+ package/freerdp/freerdp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libplist/libplist.hash b/package/libplist/libplist.hash
-index 58054d0b84..4dab755e5d 100644
---- a/package/libplist/libplist.hash
-+++ b/package/libplist/libplist.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/freerdp/freerdp.hash b/package/freerdp/freerdp.hash
+index 8217a2106c..ebb5798ace 100644
+--- a/package/freerdp/freerdp.hash
++++ b/package/freerdp/freerdp.hash
+@@ -1,5 +1,5 @@
+-# From https://pub.freerdp.com/releases/freerdp-2.2.0.tar.gz.sha256
+-sha256  19b30759e324ce7a9767af880116a4c571761e9ad9c5d6c98c5b302ff8c24c6c  freerdp-2.2.0.tar.gz
++# From https://pub.freerdp.com/releases/freerdp-2.3.1.tar.gz.sha256
++sha256  20071c691c1947ca256149e1d03edec1a5dfbf9960f0ef4e21ecab87433c2178  freerdp-2.3.1.tar.gz
+ 
  # Locally calculated
--sha256  4b33f9af3f9208d54a3c3e1a8c149932513f451c98d1dd696fe42c06e30b7f03  libplist-2.1.0.tar.gz
-+sha256  4a5517e5377ec421df84c586ba85bb4e1d26f11ad203d7d450a907c0156fbd9a  libplist-2.2.0.tar.bz2
- sha256  7619c753cac95d4740220223bde48a032606fcaccde5e546f9bc444c81ab356d  COPYING
-diff --git a/package/libplist/libplist.mk b/package/libplist/libplist.mk
-index 42da4fac0f..e7cecb612d 100644
---- a/package/libplist/libplist.mk
-+++ b/package/libplist/libplist.mk
-@@ -4,14 +4,13 @@
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+index 16d58b5aa0..171c248bd2 100644
+--- a/package/freerdp/freerdp.mk
++++ b/package/freerdp/freerdp.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBPLIST_VERSION = 2.1.0
--LIBPLIST_SITE = $(call github,libimobiledevice,libplist,$(LIBPLIST_VERSION))
-+LIBPLIST_VERSION = 2.2.0
-+LIBPLIST_SOURCE = libplist-$(LIBPLIST_VERSION).tar.bz2
-+LIBPLIST_SITE = https://github.com/libimobiledevice/libplist/releases/download/$(LIBPLIST_VERSION)
- LIBPLIST_INSTALL_STAGING = YES
- LIBPLIST_LICENSE = LGPL-2.1+
- LIBPLIST_LICENSE_FILES = COPYING
- LIBPLIST_CPE_ID_VENDOR = libimobiledevice
--# github tarball does not include configure
--LIBPLIST_AUTORECONF = YES
- 
- # Disable building Python bindings, because it requires host-cython, which
- # is not packaged in Buildroot at all.
+-FREERDP_VERSION = 2.2.0
++FREERDP_VERSION = 2.3.1
+ FREERDP_SITE = https://pub.freerdp.com/releases
+ FREERDP_DEPENDENCIES = libglib2 openssl zlib
+ FREERDP_LICENSE = Apache-2.0
