@@ -1,57 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 14 Mar 2021 23:30:15 +0100
-Subject: [Buildroot] [PATCHv2] support/dependencies: detect and bailout
- when PATH contains spaces/TABs
-In-Reply-To: <20210306091930.2186970-1-yann.morin.1998@free.fr>
-References: <20210306091930.2186970-1-yann.morin.1998@free.fr>
-Message-ID: <20210314233015.1ef778f3@windsurf.home>
+Date: Sun, 14 Mar 2021 23:31:27 +0100
+Subject: [Buildroot] [git commit] package/libgeos: disable package if
+ binutils is affected from bug 21464
+Message-ID: <20210314220810.567B986228@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat,  6 Mar 2021 10:19:30 +0100
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=4a26e019611157c897dae9742621fa24bac4876a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> In Makefiles, variables are split, filtered, and otherwise mangled on a
-> space as a separator. In a shell, they will also be split on TABs.
-> 
-> We split and filter and iterate of variables in a lot of places, and
-> most importantly, spaces in PATH is very seldom tested, if at all, so a
-> lot of packages will not be working properly in such a situation.
-> 
-> For example, the config.guess contains constructs that are not resilient
-> to a space in PATH:
-> 
->     PATH=$PATH:/.attbin ; export PATH
-> 
-> Also, our fakedate will iterate over PATH:
-> 
->     for P in `echo $PATH | tr ':' ' '`; do
-> 
-> Those are only two cases, but the first means basically all
-> autotools-based packages are susceptible to subtle breakage.
-> 
-> Furthermore, Buildroot itself does not support that the top-level or
-> output directories are in a path with spaces anyway.
-> 
-> So, instead of chasing all cases that might be potentially broken,
-> let's just detect the case and bail out, like we already do when PATH
-> contains a \n, or when it contains the current working directory.
-> 
-> Reported-by: Dan Raymond <draymond@foxvalley.net>
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> 
-> ---
-> Changes v1 -> v2:
->   - fix the newline case
+This package is affected from binutils bug 21464, since there is no
+workaround, let's disable it.
 
-Applied to master, thanks.
+Fixes:
+http://autobuild.buildroot.net/results/3eb/3eb9f9d0f6d8274b2d19753c006bd83f7d536e3c/
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libgeos/Config.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/package/libgeos/Config.in b/package/libgeos/Config.in
+index 2caf6d1d5e..bbcafe7740 100644
+--- a/package/libgeos/Config.in
++++ b/package/libgeos/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_LIBGEOS
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
+ 	depends on !BR2_nios2
++	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464
+ 	help
+ 	  GEOS (Geometry Engine - Open Source) is a C++ port of the
+ 	  JTS Topology Suite (JTS). It aims to contain the complete
+@@ -14,4 +15,4 @@ config BR2_PACKAGE_LIBGEOS
+ 
+ comment "libgeos needs a toolchain w/ C++, wchar"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
+-	depends on !BR2_nios2
++	depends on !BR2_nios2 || !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464
