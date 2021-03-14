@@ -1,45 +1,117 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 14 Mar 2021 18:17:46 +0100
-Subject: [Buildroot] [PATCH 1/1] package/freerdp: bump to version 2.3.1
-Message-ID: <20210314171746.619263-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 14 Mar 2021 18:21:35 +0100
+Subject: [Buildroot] [git commit] package/siproxd: new package
+Message-ID: <20210314165949.E24E1826AB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://github.com/FreeRDP/FreeRDP/blob/2.3.1/ChangeLog
+commit: https://git.buildroot.net/buildroot/commit/?id=3efc5a250c1c98598ba4c91a7d71d11343d937ab
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Siproxd is a masquerading SIP Proxy Server.  We had a buildroot package
+for that in the fli4l Linux router distribution for years with different
+authors contributing.
+
+Co-authored-by: Christoph Schulz <fli4l@kristov.de>
+Co-authored-by: Claas Hilbrecht <babel@fli4l.de>
+Signed-off-by: Alexander Dahl <post@lespocky.de>
+[yann.morin.1998 at free.fr: unconditionally use an external libtool]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/freerdp/freerdp.hash | 4 ++--
- package/freerdp/freerdp.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ DEVELOPERS                   |  1 +
+ package/Config.in            |  1 +
+ package/siproxd/Config.in    | 17 +++++++++++++++++
+ package/siproxd/siproxd.hash | 11 +++++++++++
+ package/siproxd/siproxd.mk   | 17 +++++++++++++++++
+ 5 files changed, 47 insertions(+)
 
-diff --git a/package/freerdp/freerdp.hash b/package/freerdp/freerdp.hash
-index 8217a2106c..ebb5798ace 100644
---- a/package/freerdp/freerdp.hash
-+++ b/package/freerdp/freerdp.hash
-@@ -1,5 +1,5 @@
--# From https://pub.freerdp.com/releases/freerdp-2.2.0.tar.gz.sha256
--sha256  19b30759e324ce7a9767af880116a4c571761e9ad9c5d6c98c5b302ff8c24c6c  freerdp-2.2.0.tar.gz
-+# From https://pub.freerdp.com/releases/freerdp-2.3.1.tar.gz.sha256
-+sha256  20071c691c1947ca256149e1d03edec1a5dfbf9960f0ef4e21ecab87433c2178  freerdp-2.3.1.tar.gz
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 1358971782..6eef9f988d 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -70,6 +70,7 @@ F:	package/odhcp6c/
+ N:	Alexander Dahl <post@lespocky.de>
+ F:	package/fastd/
+ F:	package/libuecc/
++F:	package/siproxd/
+ F:	package/putty/
  
- # Locally calculated
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
-index 16d58b5aa0..171c248bd2 100644
---- a/package/freerdp/freerdp.mk
-+++ b/package/freerdp/freerdp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FREERDP_VERSION = 2.2.0
-+FREERDP_VERSION = 2.3.1
- FREERDP_SITE = https://pub.freerdp.com/releases
- FREERDP_DEPENDENCIES = libglib2 openssl zlib
- FREERDP_LICENSE = Apache-2.0
--- 
-2.30.0
+ N:	Alexander Egorenkov <egorenar-dev@posteo.net>
+diff --git a/package/Config.in b/package/Config.in
+index 1a7d54d12f..9a2596e729 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1829,6 +1829,7 @@ menu "Networking"
+ 	source "package/resiprocate/Config.in"
+ 	source "package/restclient-cpp/Config.in"
+ 	source "package/rtmpdump/Config.in"
++	source "package/siproxd/Config.in"
+ 	source "package/slirp/Config.in"
+ 	source "package/snmppp/Config.in"
+ 	source "package/sofia-sip/Config.in"
+diff --git a/package/siproxd/Config.in b/package/siproxd/Config.in
+new file mode 100644
+index 0000000000..0a471553e4
+--- /dev/null
++++ b/package/siproxd/Config.in
+@@ -0,0 +1,17 @@
++config BR2_PACKAGE_SIPROXD
++	bool "siproxd"
++	select BR2_PACKAGE_LIBOSIP2
++	select BR2_PACKAGE_LIBTOOL
++	select BR2_PACKAGE_SQLITE
++	help
++	  Siproxd is a proxy/masquerading daemon for SIP (Session
++	  Initiation Protocol), which is used in IP telephony. It
++	  handles registrations of SIP clients on a private IP network
++	  and performs rewriting of the SIP message bodies to make SIP
++	  connections work via a masquerading firewall (NAT). It allows
++	  SIP software clients (like kphone, linphone) or SIP hardware
++	  clients (Voice over IP phones which are SIP-compatible, such
++	  as those from Cisco, Grandstream or Snom) to work behind an IP
++	  masquerading firewall or NAT router.
++
++	  http://siproxd.sourceforge.net/
+diff --git a/package/siproxd/siproxd.hash b/package/siproxd/siproxd.hash
+new file mode 100644
+index 0000000000..be6815725a
+--- /dev/null
++++ b/package/siproxd/siproxd.hash
+@@ -0,0 +1,11 @@
++# Locally calculated after checking pgp signature from:
++# https://downloads.sourceforge.net/project/siproxd/siproxd/0.8.3/siproxd-0.8.3.tar.gz.asc
++sha256  9a6d7a6bb6fff162775b1e1fb7018de9c69642cbf8626185dc6ffceeeba07736  siproxd-0.8.3.tar.gz
++
++# https://sourceforge.net/projects/siproxd/files/siproxd/0.8.3/
++sha1  d13d4a05b8a16dbe20d04b99b535610e49050d9d  siproxd-0.8.3.tar.gz
++md5  9a9d2c89e5f0c59fdde9444a66d8372c  siproxd-0.8.3.tar.gz
++
++# Hash for license files:
++sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
++sha256  f18a0811fa0e220ccbc42f661545e77f0388631e209585ed582a1c693029c6aa  libltdl/COPYING.LIB
+diff --git a/package/siproxd/siproxd.mk b/package/siproxd/siproxd.mk
+new file mode 100644
+index 0000000000..228f0855a6
+--- /dev/null
++++ b/package/siproxd/siproxd.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# siproxd
++#
++################################################################################
++
++SIPROXD_VERSION = 0.8.3
++SIPROXD_SITE = https://downloads.sourceforge.net/project/siproxd/siproxd/$(SIPROXD_VERSION)
++
++SIPROXD_LICENSE = GPL-2.0+
++SIPROXD_LICENSE_FILES = COPYING
++
++SIPROXD_DEPENDENCIES = libosip2 libtool sqlite
++
++SIPROXD_CONF_OPTS = --without-included-ltdl
++
++$(eval $(autotools-package))
