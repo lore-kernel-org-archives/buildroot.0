@@ -1,44 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 14 Mar 2021 23:31:27 +0100
-Subject: [Buildroot] [git commit] package/libgeos: disable package if
- binutils is affected from bug 21464
-Message-ID: <20210314220810.567B986228@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun, 14 Mar 2021 23:32:06 +0100
+Subject: [Buildroot] [PATCH v1 1/2] package/batman-adv: fix compile with
+ BR2_PACKAGE_BATMAN_ADV_BATMAN_V disabled
+Message-ID: <20210314223207.13460-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4a26e019611157c897dae9742621fa24bac4876a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-This package is affected from binutils bug 21464, since there is no
-workaround, let's disable it.
+The given 'CONFIG_BATMAN_ADV_BATMAN_V=' is enough to trigger the wrong
+code compile path in net/batman-adv/bat_v.h missing the static inline
+dummy implementations.
 
 Fixes:
-http://autobuild.buildroot.net/results/3eb/3eb9f9d0f6d8274b2d19753c006bd83f7d536e3c/
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+  ERROR: modpost: "batadv_v_mesh_free" [.../build/batman-adv-2021.0/net/batman-adv/batman-adv.ko] undefined!
+  ERROR: modpost: "batadv_v_mesh_init" [.../build/batman-adv-2021.0/net/batman-adv/batman-adv.ko] undefined!
+  ERROR: modpost: "batadv_v_hardif_init" [.../build/batman-adv-2021.0/net/batman-adv/batman-adv.ko] undefined!
+  ERROR: modpost: "batadv_v_init" [.../build/batman-adv-2021.0/net/batman-adv/batman-adv.ko] undefined!
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/libgeos/Config.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/batman-adv/batman-adv.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libgeos/Config.in b/package/libgeos/Config.in
-index 2caf6d1d5e..bbcafe7740 100644
---- a/package/libgeos/Config.in
-+++ b/package/libgeos/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_LIBGEOS
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
- 	depends on !BR2_nios2
-+	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464
- 	help
- 	  GEOS (Geometry Engine - Open Source) is a C++ port of the
- 	  JTS Topology Suite (JTS). It aims to contain the complete
-@@ -14,4 +15,4 @@ config BR2_PACKAGE_LIBGEOS
+diff --git a/package/batman-adv/batman-adv.mk b/package/batman-adv/batman-adv.mk
+index bd648b5a6c..0b9fcaefc0 100644
+--- a/package/batman-adv/batman-adv.mk
++++ b/package/batman-adv/batman-adv.mk
+@@ -20,12 +20,12 @@ BATMAN_ADV_MODULE_MAKE_OPTS = \
+ 	INSTALL_MOD_DIR=updates/net/batman-adv \
+ 	NOSTDINC_FLAGS="$(BATMAN_ADV_CFLAGS)" \
+ 	CONFIG_BATMAN_ADV=m \
+-	CONFIG_BATMAN_ADV_BATMAN_V=$(BR2_PACKAGE_BATMAN_ADV_BATMAN_V) \
++	$(if $(BR2_PACKAGE_BATMAN_ADV_BATMAN_V), CONFIG_BATMAN_ADV_BATMAN_V=y) \
+ 	CONFIG_BATMAN_ADV_BLA=y \
+ 	CONFIG_BATMAN_ADV_DAT=y \
+-	CONFIG_BATMAN_ADV_DEBUG=$(BR2_PACKAGE_BATMAN_ADV_DEBUG) \
++	$(if $(BR2_PACKAGE_BATMAN_ADV_DEBUG), CONFIG_BATMAN_ADV_DEBUG=y) \
+ 	CONFIG_BATMAN_ADV_MCAST=y \
+-	CONFIG_BATMAN_ADV_NC=$(BR2_PACKAGE_BATMAN_ADV_NC)
++	$(if $(BR2_PACKAGE_BATMAN_ADV_NC), CONFIG_BATMAN_ADV_NC=y)
+ BATMAN_ADV_MODULE_SUBDIRS = net/batman-adv
  
- comment "libgeos needs a toolchain w/ C++, wchar"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
--	depends on !BR2_nios2
-+	depends on !BR2_nios2 || !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464
+ define BATMAN_ADV_CONFIGURE_CMDS
+-- 
+2.30.1
