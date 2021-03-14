@@ -1,42 +1,74 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 14 Mar 2021 22:12:54 +0100
-Subject: [Buildroot] [git commit] package/gd: bump to version 2.3.2
-Message-ID: <20210314205203.09713815D8@busybox.osuosl.org>
+Date: Sun, 14 Mar 2021 22:13:13 +0100
+Subject: [Buildroot] [git commit] package/nettle: bump to version 3.7.1
+Message-ID: <20210314205203.3AAEF81DAE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6945b55823aba7ceff269c4ebb34db6ae68045c4
+commit: https://git.buildroot.net/buildroot/commit/?id=a3e0c045e498afce4b11325710945ab0e1b610f4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gd/gd.hash | 2 +-
- package/gd/gd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/nettle/0001-disable-testsuite-examples.patch | 4 ++--
+ package/nettle/Config.in                             | 2 +-
+ package/nettle/nettle.hash                           | 4 ++--
+ package/nettle/nettle.mk                             | 2 +-
+ 4 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/gd/gd.hash b/package/gd/gd.hash
-index 3fd4ca0eb5..25e64e801b 100644
---- a/package/gd/gd.hash
-+++ b/package/gd/gd.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/nettle/0001-disable-testsuite-examples.patch b/package/nettle/0001-disable-testsuite-examples.patch
+index 82d97d5d21..aa37bcf8f3 100644
+--- a/package/nettle/0001-disable-testsuite-examples.patch
++++ b/package/nettle/0001-disable-testsuite-examples.patch
+@@ -9,9 +9,9 @@ Signed-off-by:  "Yann E. MORIN" <yann.morin.1998@free.fr>
+ diff -durN nettle-2.7.1.orig/Makefile.in nettle-2.7.1/Makefile.in
+ --- nettle-2.7.1.orig/Makefile.in	2013-05-28 16:21:54.000000000 +0200
+ +++ nettle-2.7.1/Makefile.in	2014-12-12 19:57:12.499805574 +0100
+-@@ -16,7 +16,7 @@
++@@ -19,7 +19,7 @@
+  
+- OPT_ASM_SOURCES = @OPT_ASM_SOURCES@
++ FAT_TEST_LIST = @FAT_TEST_LIST@
+  
+ -SUBDIRS = tools testsuite examples
+ +SUBDIRS = tools
+diff --git a/package/nettle/Config.in b/package/nettle/Config.in
+index 4890970120..cf4803c7bb 100644
+--- a/package/nettle/Config.in
++++ b/package/nettle/Config.in
+@@ -7,4 +7,4 @@ config BR2_PACKAGE_NETTLE
+ 	  object-oriented languages, in applications like LSH or
+ 	  GNUPG, or even in kernel space
+ 
+-	  http://www.lysator.liu.se/~nisse/nettle/
++	  https://www.lysator.liu.se/~nisse/nettle/
+diff --git a/package/nettle/nettle.hash b/package/nettle/nettle.hash
+index 1bbc1c6d22..5fd69200bf 100644
+--- a/package/nettle/nettle.hash
++++ b/package/nettle/nettle.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://ftp.gnu.org/gnu/nettle/nettle-3.6.tar.gz.sig
+-sha256  d24c0d0f2abffbc8f4f34dcf114b0f131ec3774895f3555922fe2f40f3d5e3f1  nettle-3.6.tar.gz
++# https://ftp.gnu.org/gnu/nettle/nettle-3.7.1.tar.gz.sig
++sha256  156621427c7b00a75ff9b34b770b95d34f80ef7a55c3407de94b16cbf436c42e  nettle-3.7.1.tar.gz
  # Locally calculated
--sha256  9767917d9f818faec4ddd763fe4a4ad9f6322c3d25da290ab2ea3e2ce4b52a7b  libgd-2.3.1.tar.xz
-+sha256  478a047084e0d89b83616e4c2cf3c9438175fb0cc55d8c8967f06e0427f7d7fb  libgd-2.3.2.tar.xz
- sha256  4d80b4af6c38d7a65128c881623dee2a5daee6b3a6ccab74a5cdfa0dfda96da7  COPYING
-diff --git a/package/gd/gd.mk b/package/gd/gd.mk
-index a1c5704044..97a1a143ec 100644
---- a/package/gd/gd.mk
-+++ b/package/gd/gd.mk
+ sha256  a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LESSERv3
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYINGv2
+diff --git a/package/nettle/nettle.mk b/package/nettle/nettle.mk
+index fef68375db..dc76fc21ff 100644
+--- a/package/nettle/nettle.mk
++++ b/package/nettle/nettle.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GD_VERSION = 2.3.1
-+GD_VERSION = 2.3.2
- GD_SOURCE = libgd-$(GD_VERSION).tar.xz
- GD_SITE = https://github.com/libgd/libgd/releases/download/gd-$(GD_VERSION)
- GD_INSTALL_STAGING = YES
+-NETTLE_VERSION = 3.6
++NETTLE_VERSION = 3.7.1
+ NETTLE_SITE = http://www.lysator.liu.se/~nisse/archive
+ NETTLE_DEPENDENCIES = gmp
+ NETTLE_INSTALL_STAGING = YES
