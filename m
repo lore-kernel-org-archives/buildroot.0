@@ -1,83 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Mar 2021 21:17:06 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/python-pyyaml:
- security bump to version 5.4.1
-Message-ID: <20210314201236.1A058840E7@busybox.osuosl.org>
+Date: Sun, 14 Mar 2021 21:17:21 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/python{3}-pyyaml:
+ switch to setuptools
+Message-ID: <20210314201236.28F0A87C90@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=31052d0dc1e2f12da0279e44433e96e4ddb8f20c
+commit: https://git.buildroot.net/buildroot/commit/?id=a6b3f0d1b0e7d30663da132cb01020213e9f5902
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-Fix CVE-2020-14343: A vulnerability was discovered in the PyYAML library
-in versions before 5.4, where it is susceptible to arbitrary code
-execution when it processes untrusted YAML files through the full_load
-method or with the FullLoader loader. Applications that use the library
-to process untrusted input may be vulnerable to this flaw. This flaw
-allows an attacker to execute arbitrary code on the system by abusing
-the python/object/new constructor. This flaw is due to an incomplete fix
-for CVE-2020-1747.
+Since version 5.4.0 pyyaml uses setuptools (see
+https://github.com/yaml/pyyaml/blob/master/CHANGES)
 
-Update hash of LICENSE file (update in year:
-https://github.com/yaml/pyyaml/commit/58d0cb7ee09954c67fabfbd714c5673b03e7a9e1)
+Fixes:
+  - http://autobuild.buildroot.net/results/bc36ae51a1e4d70c5fd2a3eb4b458aba4220f2dc
 
-https://github.com/yaml/pyyaml/blob/5.4.1/CHANGES
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit de43a9775d4646035b18eb5737e5fa4cd2eeedea)
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit d64a905d9f8ec61eb4390f7b0317f070c6869ed5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-pyyaml/python-pyyaml.hash | 6 +++---
- package/python-pyyaml/python-pyyaml.mk   | 4 ++--
- package/python3-pyyaml/python3-pyyaml.mk | 4 ++--
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ package/python-pyyaml/python-pyyaml.mk   | 2 +-
+ package/python3-pyyaml/python3-pyyaml.mk | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-pyyaml/python-pyyaml.hash b/package/python-pyyaml/python-pyyaml.hash
-index 90e1f2199e..82b2f4f880 100644
---- a/package/python-pyyaml/python-pyyaml.hash
-+++ b/package/python-pyyaml/python-pyyaml.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/PyYAML/json
--md5  d3590b85917362e837298e733321962b  PyYAML-5.3.1.tar.gz
--sha256  b8eac752c5e14d3eca0e6dd9199cd627518cb5ec06add0de9d32baeee6fe645d  PyYAML-5.3.1.tar.gz
-+md5  46e25294c7efec23d4072ed6a7777f46  PyYAML-5.4.1.tar.gz
-+sha256  607774cbba28732bfa802b54baa7484215f530991055bb562efbed5b2f20a45e  PyYAML-5.4.1.tar.gz
- # Locally computed sha256 checksums
--sha256  c40112449f254b9753045925248313e9270efa36d226b22d82d4cc6c43c57f29  LICENSE
-+sha256  8d3928f9dc4490fd635707cb88eb26bd764102a7282954307d3e5167a577e8a4  LICENSE
 diff --git a/package/python-pyyaml/python-pyyaml.mk b/package/python-pyyaml/python-pyyaml.mk
-index 7bbae309c6..b5798d44a2 100644
+index b5798d44a2..8279adbcca 100644
 --- a/package/python-pyyaml/python-pyyaml.mk
 +++ b/package/python-pyyaml/python-pyyaml.mk
-@@ -5,9 +5,9 @@
- ################################################################################
- 
- # Please keep in sync package/python3-pyyaml/python3-pyyaml.mk
--PYTHON_PYYAML_VERSION = 5.3.1
-+PYTHON_PYYAML_VERSION = 5.4.1
+@@ -8,7 +8,7 @@
+ PYTHON_PYYAML_VERSION = 5.4.1
  PYTHON_PYYAML_SOURCE = PyYAML-$(PYTHON_PYYAML_VERSION).tar.gz
--PYTHON_PYYAML_SITE = https://files.pythonhosted.org/packages/64/c2/b80047c7ac2478f9501676c988a5411ed5572f35d1beff9cae07d321512c
-+PYTHON_PYYAML_SITE = https://files.pythonhosted.org/packages/a0/a4/d63f2d7597e1a4b55aa3b4d6c5b029991d3b824b5bd331af8d4ab1ed687d
- PYTHON_PYYAML_SETUP_TYPE = distutils
+ PYTHON_PYYAML_SITE = https://files.pythonhosted.org/packages/a0/a4/d63f2d7597e1a4b55aa3b4d6c5b029991d3b824b5bd331af8d4ab1ed687d
+-PYTHON_PYYAML_SETUP_TYPE = distutils
++PYTHON_PYYAML_SETUP_TYPE = setuptools
  PYTHON_PYYAML_LICENSE = MIT
  PYTHON_PYYAML_LICENSE_FILES = LICENSE
+ PYTHON_PYYAML_DEPENDENCIES = libyaml
 diff --git a/package/python3-pyyaml/python3-pyyaml.mk b/package/python3-pyyaml/python3-pyyaml.mk
-index c0dcebf4fc..b7d1c42c00 100644
+index b7d1c42c00..ec9c153391 100644
 --- a/package/python3-pyyaml/python3-pyyaml.mk
 +++ b/package/python3-pyyaml/python3-pyyaml.mk
-@@ -5,9 +5,9 @@
- ################################################################################
- 
- # Please keep in sync with package/python-pyyaml/python-pyyaml.mk
--PYTHON3_PYYAML_VERSION = 5.3.1
-+PYTHON3_PYYAML_VERSION = 5.4.1
+@@ -8,7 +8,7 @@
+ PYTHON3_PYYAML_VERSION = 5.4.1
  PYTHON3_PYYAML_SOURCE = PyYAML-$(PYTHON3_PYYAML_VERSION).tar.gz
--PYTHON3_PYYAML_SITE = https://files.pythonhosted.org/packages/64/c2/b80047c7ac2478f9501676c988a5411ed5572f35d1beff9cae07d321512c
-+PYTHON3_PYYAML_SITE = https://files.pythonhosted.org/packages/a0/a4/d63f2d7597e1a4b55aa3b4d6c5b029991d3b824b5bd331af8d4ab1ed687d
- PYTHON3_PYYAML_SETUP_TYPE = distutils
+ PYTHON3_PYYAML_SITE = https://files.pythonhosted.org/packages/a0/a4/d63f2d7597e1a4b55aa3b4d6c5b029991d3b824b5bd331af8d4ab1ed687d
+-PYTHON3_PYYAML_SETUP_TYPE = distutils
++PYTHON3_PYYAML_SETUP_TYPE = setuptools
  PYTHON3_PYYAML_LICENSE = MIT
  PYTHON3_PYYAML_LICENSE_FILES = LICENSE
+ HOST_PYTHON3_PYYAML_DL_SUBDIR = python-pyyaml
