@@ -1,43 +1,44 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Mar 2021 16:49:22 +0100
-Subject: [Buildroot] [git commit] package/docker-engine: bump version to
- 20.10.5
-Message-ID: <20210314152734.D822E87AA1@busybox.osuosl.org>
+Date: Sun, 14 Mar 2021 16:49:21 +0100
+Subject: [Buildroot] [git commit] package/docker-cli: bump version to 20.10.5
+Message-ID: <20210314152734.CB11687B51@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=36b8a8ba6bdbc3001f93f6037910841db712a54d
+commit: https://git.buildroot.net/buildroot/commit/?id=eef5da1f77d4f1dd284fab4c9f543fb884f7a023
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+https://docs.docker.com/engine/release-notes/
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/docker-engine/docker-engine.hash | 2 +-
- package/docker-engine/docker-engine.mk   | 2 +-
+ package/docker-cli/docker-cli.hash | 2 +-
+ package/docker-cli/docker-cli.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
-index 69ebd113ea..7e3ce6a5cf 100644
---- a/package/docker-engine/docker-engine.hash
-+++ b/package/docker-engine/docker-engine.hash
+diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
+index 95b15b539b..f4787062bb 100644
+--- a/package/docker-cli/docker-cli.hash
++++ b/package/docker-cli/docker-cli.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256  62bb03f197b8a064da568e62639f6834f91c8cfc9273126a978847becc214c31  docker-engine-20.10.3.tar.gz
-+sha256  bcf651d75e5c80421e8cd3b0d47f3425e01047cf67aef0eda83b68776905a583  docker-engine-20.10.5.tar.gz
- sha256  7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index bbc97af8b5..d3f4d81572 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
+-sha256  aafba3765d9013cb75810b4f4334525f0e74e82ef073b4df9e8b524f3794e60a  docker-cli-20.10.3.tar.gz
++sha256  4ba845f8c7e2e0a2ca1ec6589847159ca8d0d37b609f0e6f78def7a893b9b342  docker-cli-20.10.5.tar.gz
+ sha256  2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
+diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
+index d90c3b7d10..d710bb2fee 100644
+--- a/package/docker-cli/docker-cli.mk
++++ b/package/docker-cli/docker-cli.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DOCKER_ENGINE_VERSION = 20.10.3
-+DOCKER_ENGINE_VERSION = 20.10.5
- DOCKER_ENGINE_SITE = $(call github,moby,moby,v$(DOCKER_ENGINE_VERSION))
+-DOCKER_CLI_VERSION = 20.10.3
++DOCKER_CLI_VERSION = 20.10.5
+ DOCKER_CLI_SITE = $(call github,docker,cli,v$(DOCKER_CLI_VERSION))
  
- DOCKER_ENGINE_LICENSE = Apache-2.0
+ DOCKER_CLI_LICENSE = Apache-2.0
