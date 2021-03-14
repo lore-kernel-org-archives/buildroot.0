@@ -1,157 +1,262 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Mar 2021 18:23:24 +0100
-Subject: [Buildroot] [PATCH v1] package/siproxd: new package
-In-Reply-To: <20210310073844.26494-1-post@lespocky.de>
-References: <20210310073844.26494-1-post@lespocky.de>
-Message-ID: <20210314172324.GL2737665@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 14 Mar 2021 18:35:04 +0100
+Subject: [Buildroot] [PATCH 1/1] package/mutt: bump to version 2.0.6
+Message-ID: <20210314173504.715580-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Alexander, All,
+Drop patches (already in version)
 
-On 2021-03-10 08:38 +0100, Alexander Dahl spake thusly:
-> Siproxd is a masquerading SIP Proxy Server.  We had a buildroot package
-> for that in the fli4l Linux router distribution for years with different
-> authors contributing.
-> 
-> Co-authored-by: Christoph Schulz <fli4l@kristov.de>
-> Co-authored-by: Claas Hilbrecht <babel@fli4l.de>
-> Signed-off-by: Alexander Dahl <post@lespocky.de>
-> ---
-> 
-> Notes:
->     Actually what we had in fli4l was a package for 0.8.2.  I revised it and
->     covered all things check-packaged complained about.  Tested on x86_64
->     with uclibc toolchain.  Builds fine on all fli4l targets (x86, x86_64,
->     rpi, sunxi).  This is basically just upstreaming effort.  I marked it as
->     v1, because I expect some remarks and little things to be changed.
+https://gitlab.com/muttmua/mutt/-/blob/mutt-2-0-6-rel/ChangeLog
 
-I've made use of an external libtool unconditional, and applied to
-master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...n-is-closed-after-a-connection-error.patch | 48 -----------------
+ package/mutt/0002-CVE-2021-3181-1.patch       | 40 --------------
+ package/mutt/0003-CVE-2021-3181-2.patch       | 53 -------------------
+ package/mutt/0004-CVE-2021-3181-3.patch       | 30 -----------
+ package/mutt/mutt.hash                        |  2 +-
+ package/mutt/mutt.mk                          | 10 +---
+ 6 files changed, 2 insertions(+), 181 deletions(-)
+ delete mode 100644 package/mutt/0001-Ensure-IMAP-connection-is-closed-after-a-connection-error.patch
+ delete mode 100644 package/mutt/0002-CVE-2021-3181-1.patch
+ delete mode 100644 package/mutt/0003-CVE-2021-3181-2.patch
+ delete mode 100644 package/mutt/0004-CVE-2021-3181-3.patch
 
-Regards,
-Yann E. MORIN.
-
->  DEVELOPERS                   |  1 +
->  package/Config.in            |  1 +
->  package/siproxd/Config.in    | 16 ++++++++++++++++
->  package/siproxd/siproxd.hash | 11 +++++++++++
->  package/siproxd/siproxd.mk   | 24 ++++++++++++++++++++++++
->  5 files changed, 53 insertions(+)
->  create mode 100644 package/siproxd/Config.in
->  create mode 100644 package/siproxd/siproxd.hash
->  create mode 100644 package/siproxd/siproxd.mk
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index f6d6e4aa06..a7a0c30bd6 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -70,6 +70,7 @@ F:	package/odhcp6c/
->  N:	Alexander Dahl <post@lespocky.de>
->  F:	package/fastd/
->  F:	package/libuecc/
-> +F:	package/siproxd/
->  F:	package/putty/
->  
->  N:	Alexander Egorenkov <egorenar-dev@posteo.net>
-> diff --git a/package/Config.in b/package/Config.in
-> index 992e46a319..d919e71cb3 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1828,6 +1828,7 @@ menu "Networking"
->  	source "package/resiprocate/Config.in"
->  	source "package/restclient-cpp/Config.in"
->  	source "package/rtmpdump/Config.in"
-> +	source "package/siproxd/Config.in"
->  	source "package/slirp/Config.in"
->  	source "package/snmppp/Config.in"
->  	source "package/sofia-sip/Config.in"
-> diff --git a/package/siproxd/Config.in b/package/siproxd/Config.in
-> new file mode 100644
-> index 0000000000..6939033025
-> --- /dev/null
-> +++ b/package/siproxd/Config.in
-> @@ -0,0 +1,16 @@
-> +config BR2_PACKAGE_SIPROXD
-> +	bool "siproxd"
-> +	select BR2_PACKAGE_LIBOSIP2
-> +	select BR2_PACKAGE_SQLITE
-> +	help
-> +	  Siproxd is a proxy/masquerading daemon for SIP (Session
-> +	  Initiation Protocol), which is used in IP telephony. It
-> +	  handles registrations of SIP clients on a private IP network
-> +	  and performs rewriting of the SIP message bodies to make SIP
-> +	  connections work via a masquerading firewall (NAT). It allows
-> +	  SIP software clients (like kphone, linphone) or SIP hardware
-> +	  clients (Voice over IP phones which are SIP-compatible, such
-> +	  as those from Cisco, Grandstream or Snom) to work behind an IP
-> +	  masquerading firewall or NAT router.
-> +
-> +	  http://siproxd.sourceforge.net/
-> diff --git a/package/siproxd/siproxd.hash b/package/siproxd/siproxd.hash
-> new file mode 100644
-> index 0000000000..be6815725a
-> --- /dev/null
-> +++ b/package/siproxd/siproxd.hash
-> @@ -0,0 +1,11 @@
-> +# Locally calculated after checking pgp signature from:
-> +# https://downloads.sourceforge.net/project/siproxd/siproxd/0.8.3/siproxd-0.8.3.tar.gz.asc
-> +sha256  9a6d7a6bb6fff162775b1e1fb7018de9c69642cbf8626185dc6ffceeeba07736  siproxd-0.8.3.tar.gz
-> +
-> +# https://sourceforge.net/projects/siproxd/files/siproxd/0.8.3/
-> +sha1  d13d4a05b8a16dbe20d04b99b535610e49050d9d  siproxd-0.8.3.tar.gz
-> +md5  9a9d2c89e5f0c59fdde9444a66d8372c  siproxd-0.8.3.tar.gz
-> +
-> +# Hash for license files:
-> +sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
-> +sha256  f18a0811fa0e220ccbc42f661545e77f0388631e209585ed582a1c693029c6aa  libltdl/COPYING.LIB
-> diff --git a/package/siproxd/siproxd.mk b/package/siproxd/siproxd.mk
-> new file mode 100644
-> index 0000000000..624b948699
-> --- /dev/null
-> +++ b/package/siproxd/siproxd.mk
-> @@ -0,0 +1,24 @@
-> +################################################################################
-> +#
-> +# siproxd
-> +#
-> +################################################################################
-> +
-> +SIPROXD_VERSION = 0.8.3
-> +SIPROXD_SITE = https://downloads.sourceforge.net/project/siproxd/siproxd/$(SIPROXD_VERSION)
-> +
-> +SIPROXD_LICENSE = GPL-2.0+
-> +SIPROXD_LICENSE_FILES = COPYING
-> +
-> +SIPROXD_DEPENDENCIES = libosip2 sqlite
-> +
-> +ifeq ($(BR2_PACKAGE_LIBTOOL),y)
-> +SIPROXD_CONF_OPTS += --without-included-ltdl
-> +SIPROXD_DEPENDENCIES += libtool
-> +else
-> +SIPROXD_CONF_OPTS += --with-included-ltdl
-> +SIPROXD_LICENSE += , LGPL-2.1+
-> +SIPROXD_LICENSE_FILES += libltdl/COPYING.LIB
-> +endif
-> +
-> +$(eval $(autotools-package))
-> 
-> base-commit: da6cca38da1584fed17ffb40316cd7c2fdd5e754
-> -- 
-> 2.20.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/mutt/0001-Ensure-IMAP-connection-is-closed-after-a-connection-error.patch b/package/mutt/0001-Ensure-IMAP-connection-is-closed-after-a-connection-error.patch
+deleted file mode 100644
+index 7afc736085..0000000000
+--- a/package/mutt/0001-Ensure-IMAP-connection-is-closed-after-a-connection-error.patch
++++ /dev/null
+@@ -1,48 +0,0 @@
+-From 04b06aaa3e0cc0022b9b01dbca2863756ebbf59a Mon Sep 17 00:00:00 2001
+-From: Kevin McCarthy <kevin@8t8.us>
+-Date: Mon, 16 Nov 2020 10:20:21 -0800
+-Subject: [PATCH] Ensure IMAP connection is closed after a connection error.
+-
+-During connection, if the server provided an illegal initial response,
+-Mutt "bailed", but did not actually close the connection.  The calling
+-code unfortunately relied on the connection status to decide to
+-continue with authentication, instead of checking the "bail" return
+-value.
+-
+-This could result in authentication credentials being sent over an
+-unencrypted connection, without $ssl_force_tls being consulted.
+-
+-Fix this by strictly closing the connection on any invalid response
+-during connection.  The fix is intentionally small, to ease
+-backporting.  A better fix would include removing the 'err_close_conn'
+-label, and perhaps adding return value checking in the caller (though
+-this change obviates the need for that).
+-
+-This addresses CVE-2020-28896.  Thanks to Gabriel Salles-Loustau for
+-reporting the problem, and providing test cases to reproduce.
+-
+-[Retrieved from:
+-https://gitlab.com/muttmua/mutt/-/commit/04b06aaa3e0cc0022b9b01dbca2863756ebbf59a]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- imap/imap.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/imap/imap.c b/imap/imap.c
+-index b24e8a3f..b13dd54d 100644
+---- a/imap/imap.c
+-+++ b/imap/imap.c
+-@@ -561,9 +561,9 @@ int imap_open_connection (IMAP_DATA* idata)
+- 
+- #if defined(USE_SSL)
+- err_close_conn:
+--  imap_close_connection (idata);
+- #endif
+- bail:
+-+  imap_close_connection (idata);
+-   FREE (&idata->capstr);
+-   return -1;
+- }
+--- 
+-GitLab
+-
+diff --git a/package/mutt/0002-CVE-2021-3181-1.patch b/package/mutt/0002-CVE-2021-3181-1.patch
+deleted file mode 100644
+index cbb12cf2f2..0000000000
+--- a/package/mutt/0002-CVE-2021-3181-1.patch
++++ /dev/null
+@@ -1,40 +0,0 @@
+-From 4a2becbdb4422aaffe3ce314991b9d670b7adf17 Mon Sep 17 00:00:00 2001
+-From: Kevin McCarthy <kevin@8t8.us>
+-Date: Sun, 17 Jan 2021 10:40:37 -0800
+-Subject: [PATCH] Fix memory leak parsing group addresses without a display
+- name.
+-
+-When there was a group address terminator with no previous
+-addresses (including the group display-name), an address would be
+-allocated but not attached to the address list.
+-
+-Change this to only allocate when last exists.
+-
+-It would be more correct to not allocate at all unless we are inside a
+-group list, but I will address that in a separate commit to master.
+-
+-[Retrieved from:
+-https://git.launchpad.net/ubuntu/+source/mutt/plain/debian/patches/CVE-2021-3181-1.patch?h=import/1.14.6-1ubuntu0.2]
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- rfc822.c | 5 ++---
+- 1 file changed, 2 insertions(+), 3 deletions(-)
+-
+-Index: mutt-1.14.6/rfc822.c
+-===================================================================
+---- mutt-1.14.6.orig/rfc822.c
+-+++ mutt-1.14.6/rfc822.c
+-@@ -491,11 +491,10 @@ ADDRESS *rfc822_parse_adrlist (ADDRESS *
+- #endif
+- 
+-       /* add group terminator */
+--      cur = rfc822_new_address ();
+-       if (last)
+-       {
+--	last->next = cur;
+--	last = cur;
+-+	last->next = rfc822_new_address ();
+-+	last = last->next;
+-       }
+- 
+-       phraselen = 0;
+diff --git a/package/mutt/0003-CVE-2021-3181-2.patch b/package/mutt/0003-CVE-2021-3181-2.patch
+deleted file mode 100644
+index c3184a40ed..0000000000
+--- a/package/mutt/0003-CVE-2021-3181-2.patch
++++ /dev/null
+@@ -1,53 +0,0 @@
+-From 939b02b33ae29bc0d642570c1dcfd4b339037d19 Mon Sep 17 00:00:00 2001
+-From: Kevin McCarthy <kevin@8t8.us>
+-Date: Sun, 17 Jan 2021 10:53:19 -0800
+-Subject: [PATCH] Don't allocate a group terminator unless we are in a
+- group-list.
+-
+-This will reduce memory allocation for garbage/spam address lists.
+-
+-It also makes no sense to store a terminator when there wasn't a
+-display-name indicating the start of a group.
+-
+-[Retrieved from:
+-https://git.launchpad.net/ubuntu/+source/mutt/plain/debian/patches/CVE-2021-3181-2.patch?h=import/1.14.6-1ubuntu0.2]
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- rfc822.c | 6 ++++--
+- 1 file changed, 4 insertions(+), 2 deletions(-)
+-
+-Index: mutt-1.14.6/rfc822.c
+-===================================================================
+---- mutt-1.14.6.orig/rfc822.c
+-+++ mutt-1.14.6/rfc822.c
+-@@ -378,7 +378,7 @@ add_addrspec (ADDRESS **top, ADDRESS **l
+- 
+- ADDRESS *rfc822_parse_adrlist (ADDRESS *top, const char *s)
+- {
+--  int ws_pending, nl;
+-+  int ws_pending, nl, in_group = 0;
+- #ifdef EXACT_ADDRESS
+-   const char *begin;
+- #endif
+-@@ -455,6 +455,7 @@ ADDRESS *rfc822_parse_adrlist (ADDRESS *
+-       terminate_buffer (phrase, phraselen);
+-       cur->mailbox = safe_strdup (phrase);
+-       cur->group = 1;
+-+      in_group = 1;
+- 
+-       if (last)
+- 	last->next = cur;
+-@@ -491,11 +492,12 @@ ADDRESS *rfc822_parse_adrlist (ADDRESS *
+- #endif
+- 
+-       /* add group terminator */
+--      if (last)
+-+      if (last && in_group)
+-       {
+- 	last->next = rfc822_new_address ();
+- 	last = last->next;
+-       }
+-+      in_group = 0;
+- 
+-       phraselen = 0;
+-       commentlen = 0;
+diff --git a/package/mutt/0004-CVE-2021-3181-3.patch b/package/mutt/0004-CVE-2021-3181-3.patch
+deleted file mode 100644
+index 42d0cbaef5..0000000000
+--- a/package/mutt/0004-CVE-2021-3181-3.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-From d4305208955c5cdd9fe96dfa61e7c1e14e176a14 Mon Sep 17 00:00:00 2001
+-From: Kevin McCarthy <kevin@8t8.us>
+-Date: Sun, 17 Jan 2021 11:05:36 -0800
+-Subject: [PATCH] Add group terminator if it is left off.
+-
+-If there is no terminating ";" add one to the list, to make the text
+-re-rendering correct.
+-
+-[Retrieved from:
+-https://git.launchpad.net/ubuntu/+source/mutt/plain/debian/patches/CVE-2021-3181-3.patch?h=import/1.14.6-1ubuntu0.2]
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- rfc822.c | 4 ++++
+- 1 file changed, 4 insertions(+)
+-
+-Index: mutt-1.14.6/rfc822.c
+-===================================================================
+---- mutt-1.14.6.orig/rfc822.c
+-+++ mutt-1.14.6/rfc822.c
+-@@ -560,6 +560,10 @@ ADDRESS *rfc822_parse_adrlist (ADDRESS *
+-     last->val = mutt_substrdup (begin, s - nl < begin ? begin : s - nl);
+- #endif
+- 
+-+  /* add group terminator, if it was left off */
+-+  if (last && in_group)
+-+    last->next = rfc822_new_address ();
+-+
+-   return top;
+- }
+- 
+diff --git a/package/mutt/mutt.hash b/package/mutt/mutt.hash
+index 23e5dd0ff1..8fccbd3709 100644
+--- a/package/mutt/mutt.hash
++++ b/package/mutt/mutt.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  e4f507b133253cb5eef27996b8668956cdf9caac622cf8adad13f0f9a4eda864  mutt-1.14.7.tar.gz
++sha256  81e31c45895fd624747f19106aa2697d2aa135049ff2e9e9db0a6ed876bcb598  mutt-2.0.6.tar.gz
+ sha256  732f24b69a6c71cd8e01e4672bb8e12cc1cbb88a50a4665e6ca4fd95000a57ee  GPL
+diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
+index 9557983a07..004a88d0b3 100644
+--- a/package/mutt/mutt.mk
++++ b/package/mutt/mutt.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MUTT_VERSION = 1.14.7
++MUTT_VERSION = 2.0.6
+ MUTT_SITE = https://bitbucket.org/mutt/mutt/downloads
+ MUTT_LICENSE = GPL-2.0+
+ MUTT_LICENSE_FILES = GPL
+@@ -12,14 +12,6 @@ MUTT_CPE_ID_VENDOR = mutt
+ MUTT_DEPENDENCIES = ncurses
+ MUTT_CONF_OPTS = --disable-doc --disable-smtp
+ 
+-# 0001-Ensure-IMAP-connection-is-closed-after-a-connection-error.patch
+-MUTT_IGNORE_CVES += CVE-2020-28896
+-
+-# 0002-CVE-2021-3181-1.patch
+-# 0003-CVE-2021-3181-2.patch
+-# 0004-CVE-2021-3181-3.patch
+-MUTT_IGNORE_CVES += CVE-2021-3181
+-
+ ifeq ($(BR2_PACKAGE_LIBICONV),y)
+ MUTT_DEPENDENCIES += libiconv
+ MUTT_CONF_OPTS += --enable-iconv
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.30.0
