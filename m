@@ -1,33 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 14 Mar 2021 23:13:37 +0100
-Subject: [Buildroot] [PATCH 0/4] mender updates
-In-Reply-To: <20210307222536.2743089-1-aduskett@gmail.com>
+Date: Sun, 14 Mar 2021 23:15:07 +0100
+Subject: [Buildroot] [PATCH 4/4] package/mender: Do not automatically
+ select uboot tools if uboot is selected
+In-Reply-To: <20210307222536.2743089-5-aduskett@gmail.com>
 References: <20210307222536.2743089-1-aduskett@gmail.com>
-Message-ID: <20210314231337.356ddf94@windsurf.home>
+ <20210307222536.2743089-5-aduskett@gmail.com>
+Message-ID: <20210314231507.7336bf4f@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Adam,
 
-On Sun,  7 Mar 2021 14:25:32 -0800
+On Sun,  7 Mar 2021 14:25:36 -0800
 aduskett at gmail.com wrote:
 
-> Adam Duskett (4):
->   package/mender-artifact: bump to version 3.4.1
->   package/mender: bump version to 2.4.2
->   package/mender-grubenv: bump version to
->     f39c2c7ec7c9c24aae0108a9b04a0e6e61a3e96b
+> diff --git a/package/mender/Config.in b/package/mender/Config.in
+> index 6a80c410ce..6c84157734 100644
+> --- a/package/mender/Config.in
+> +++ b/package/mender/Config.in
+> @@ -5,14 +5,24 @@ config BR2_PACKAGE_MENDER
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+>  	select BR2_PACKAGE_OPENSSL
+>  	select BR2_PACKAGE_XZ
+> -	select BR2_PACKAGE_UBOOT_TOOLS if BR2_TARGET_UBOOT # runtime
+> -	select BR2_PACKAGE_UBOOT_TOOLS_FWPRINTENV if BR2_TARGET_UBOOT # runtime
 
-Thanks, I've applied those patches to master!
+It's a bit odd to drop these.
 
->   package/mender: Do not automatically select uboot tools if uboot is
->     selected
+>  	help
+>  	  Mender is an open source over-the-air (OTA) software updater
+>  	  for embedded Linux devices. Mender comprises a client
+>  	  running at the embedded device, as well as a server that
+>  	  manages deployments across many devices.
+>  
+> +	  Note:
+> +	  For systems using uboot as the bootloader:
+> +	    - uboot must be patched with the mender uboot patches.
+> +	    - uboot-tools must be selected.
+> +	    - fw_printenv must be functional on the device.
 
-I do have a few comments/questions on this one, so I'll reply to it
-directly.
+Indeed, here you are precisely saying that fw_printenv is needed. What
+about keeping the selects *and* adding your Config.in comment, perhaps
+without the "uboot-tools must be selected". It would be nice to have
+some more specific reference to the Mender U-Boot patches.
+
+> +	  For systems using Grub as the bootloader:
+> +	    - Mender depends on the mender-grubenv package.
+
+What about selecting BR2_PACKAGE_MENDER_GRUBENV then when
+BR2_TARGET_GRUB is enabled?
+
+Thanks!
 
 Thomas
 -- 
