@@ -1,68 +1,150 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 14 Mar 2021 19:05:20 +0100
-Subject: [Buildroot] [PATCH 1/1] package/glibmm: bump to version 2.66.0
-Message-ID: <20210314180520.850073-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 14 Mar 2021 19:38:35 +0100
+Subject: [Buildroot] [PATCH 7/8] package/opkg-utils: add opkg-utils as
+ target pkg
+In-Reply-To: <20210312200534.923-8-ryan.barnett@rockwellcollins.com>
+References: <20210312200534.923-1-ryan.barnett@rockwellcollins.com>
+ <20210312200534.923-8-ryan.barnett@rockwellcollins.com>
+Message-ID: <20210314183835.GM2737665@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Switch to meson-package as configure is not shiiped in the official
-  tarball anymore and autoreconf fails due to missing MM_ARG_xxx macros
-- Disable examples (enabled by default)
-- Update indentation in hash file (two spaces)
+Ryan, All,
 
-https://gitlab.gnome.org/GNOME/glibmm/-/blob/2.66.0/NEWS
+On 2021-03-12 14:05 -0600, Ryan Barnett spake thusly:
+> Supports a use case of building container rootfs images where a matching
+> target version of the tools is required for repackaging of a installer
+>  archive.
+> 
+> Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/glibmm/glibmm.hash | 8 ++++----
- package/glibmm/glibmm.mk   | 7 +++----
- 2 files changed, 7 insertions(+), 8 deletions(-)
+Applied to master, with the following changes:
 
-diff --git a/package/glibmm/glibmm.hash b/package/glibmm/glibmm.hash
-index 021b77ef0a..389ee5c369 100644
---- a/package/glibmm/glibmm.hash
-+++ b/package/glibmm/glibmm.hash
-@@ -1,5 +1,5 @@
--# From http://ftp.gnome.org/pub/gnome/sources/glibmm/2.62/glibmm-2.62.0.sha256sum
--sha256	36659f13cc73282392d1305858f3bbca46fbd1ce2f078cc9db8b9f79b2e93cfe glibmm-2.62.0.tar.xz
-+# From http://ftp.gnome.org/pub/gnome/sources/glibmm/2.66/glibmm-2.66.0.sha256sum
-+sha256  9e1db7d43d2e2d4dfa2771354e21a69a6beec7c446b711619cf8c779e13a581e  glibmm-2.66.0.tar.xz
- # License files, locally calculated
--sha256	3ea7fa7c5d9a3a113e950eca9cfb85107f096270d8e4dd99daa9d8abdebc60e7 COPYING
--sha256	ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6 COPYING.tools
-+sha256  3ea7fa7c5d9a3a113e950eca9cfb85107f096270d8e4dd99daa9d8abdebc60e7  COPYING
-+sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING.tools
-diff --git a/package/glibmm/glibmm.mk b/package/glibmm/glibmm.mk
-index c31c794ca2..30fbe65f6e 100644
---- a/package/glibmm/glibmm.mk
-+++ b/package/glibmm/glibmm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GLIBMM_VERSION_MAJOR = 2.62
-+GLIBMM_VERSION_MAJOR = 2.66
- GLIBMM_VERSION = $(GLIBMM_VERSION_MAJOR).0
- GLIBMM_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (tools)
- GLIBMM_LICENSE_FILES = COPYING COPYING.tools
-@@ -12,6 +12,7 @@ GLIBMM_SOURCE = glibmm-$(GLIBMM_VERSION).tar.xz
- GLIBMM_SITE = http://ftp.gnome.org/pub/gnome/sources/glibmm/$(GLIBMM_VERSION_MAJOR)
- GLIBMM_INSTALL_STAGING = YES
- GLIBMM_DEPENDENCIES = libglib2 libsigc host-pkgconf
-+GLIBMM_CONF_OPTS = -Dbuild-examples=false
- 
- GLIBMM_CXXFLAGS = $(TARGET_CXXFLAGS)
- 
-@@ -19,6 +20,4 @@ ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
- GLIBMM_CXXFLAGS += -O0
- endif
- 
--GLIBMM_CONF_ENV += CXXFLAGS="$(GLIBMM_CXXFLAGS)"
--
--$(eval $(autotools-package))
-+$(eval $(meson-package))
+  - only select full-blown packages if busybox is not enabled
+  - select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS, instead of 'depends on'
+  - allow on nios2 when busybox is enabled
+  - add binutils binaries on target (for 'ar')
+  - drop _DEPENDENCIES: they all are only runtime-dpeendencies
+  - add comment when python(2) is enabled
+
+Thanks!
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/Config.in                |  1 +
+>  package/opkg-utils/Config.in     | 33 ++++++++++++++++++++++++++++++++
+>  package/opkg-utils/opkg-utils.mk | 20 +++++++++++++++++++
+>  3 files changed, 54 insertions(+)
+>  create mode 100644 package/opkg-utils/Config.in
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index 992e46a319..fb77ba134e 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -2337,6 +2337,7 @@ comment "See the manual:                                        "
+>  comment "http://buildroot.org/manual.html#faq-no-binary-packages"
+>  comment "-------------------------------------------------------"
+>  	source "package/opkg/Config.in"
+> +	source "package/opkg-utils/Config.in"
+>  	source "package/rpm/Config.in"
+>  endmenu
+>  
+> diff --git a/package/opkg-utils/Config.in b/package/opkg-utils/Config.in
+> new file mode 100644
+> index 0000000000..b60a48c19d
+> --- /dev/null
+> +++ b/package/opkg-utils/Config.in
+> @@ -0,0 +1,33 @@
+> +config BR2_PACKAGE_OPKG_UTILS
+> +	bool "opkg-utils"
+> +	depends on BR2_USE_MMU # bash, coreutils, findutils, tar
+> +	depends on !BR2_nios2 # binutils
+> +	# binutils, coreutils, diffutils, findutils, grep, gzip, python3, sed,
+> +	# tar
+> +	depends on BR2_USE_WCHAR
+> +	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # libffi
+> +	depends on !BR2_STATIC_LIBS # python3
+> +	depends on !BR2_PACKAGE_PYTHON # python3
+> +	select BR2_PACKAGE_BASH
+> +	select BR2_PACKAGE_BINUTILS
+> +	select BR2_PACKAGE_BZIP2
+> +	select BR2_PACKAGE_COREUTILS
+> +	select BR2_PACKAGE_DIFFUTILS
+> +	select BR2_PACKAGE_FINDUTILS
+> +	select BR2_PACKAGE_GREP
+> +	select BR2_PACKAGE_GZIP
+> +	select BR2_PACKAGE_LZ4
+> +	select BR2_PACKAGE_PYTHON3
+> +	select BR2_PACKAGE_SED
+> +	select BR2_PACKAGE_TAR
+> +	select BR2_PACKAGE_XZ
+> +	help
+> +	  Helper scripts for use with the opkg package manager.
+> +
+> +	  https://git.yoctoproject.org/cgit/cgit.cgi/opkg-utils/
+> +
+> +comment "opkg-utils needs a toolchain w/ wchar, threads, dynamic library"
+> +	depends on BR2_USE_MMU
+> +	depends on !BR2_nios2
+> +	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+> diff --git a/package/opkg-utils/opkg-utils.mk b/package/opkg-utils/opkg-utils.mk
+> index d7f68b8555..a445c9f49e 100644
+> --- a/package/opkg-utils/opkg-utils.mk
+> +++ b/package/opkg-utils/opkg-utils.mk
+> @@ -10,6 +10,21 @@ OPKG_UTILS_SITE_METHOD = git
+>  OPKG_UTILS_LICENSE = GPL-2.0+
+>  OPKG_UTILS_LICENSE_FILES = COPYING
+>  
+> +OPKG_UTILS_DEPENDENCIES += \
+> +	bash \
+> +	binutils \
+> +	bzip2 \
+> +	coreutils \
+> +	diffutils \
+> +	findutils \
+> +	grep \
+> +	gzip \
+> +	lz4 \
+> +	python3 \
+> +	sed \
+> +	tar \
+> +	xz
+> +
+>  HOST_OPKG_UTILS_DEPENDENCIES += \
+>  	host-coreutils \
+>  	host-diffutils \
+> @@ -19,8 +34,13 @@ HOST_OPKG_UTILS_DEPENDENCIES += \
+>  	$(BR2_PYTHON3_HOST_DEPENDENCY) \
+>  	host-xz
+>  
+> +define OPKG_UTILS_INSTALL_CMDS
+> +	$(MAKE) -C $(@D) PREFIX=$(TARGET_DIR) install-utils
+> +endef
+> +
+>  define HOST_OPKG_UTILS_INSTALL_CMDS
+>  	$(MAKE) -C $(@D) PREFIX=$(HOST_DIR) install-utils
+>  endef
+>  
+> +$(eval $(generic-package))
+>  $(eval $(host-generic-package))
+> -- 
+> 2.17.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.30.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
