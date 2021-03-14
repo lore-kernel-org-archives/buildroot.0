@@ -1,49 +1,65 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Mar 2021 13:31:40 +0100
-Subject: [Buildroot] [git commit] package/luasec: bump to version 1.0
-Message-ID: <20210314120902.2BBF687A1A@busybox.osuosl.org>
+Date: Sun, 14 Mar 2021 13:33:18 +0100
+Subject: [Buildroot] [PATCH 1/2] package/lua-curl: bump to version 0.3.13
+In-Reply-To: <20210313071145.1558401-1-francois.perrad@gadz.org>
+References: <20210313071145.1558401-1-francois.perrad@gadz.org>
+Message-ID: <20210314123318.GR2737665@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5465f0ce59e722be31c092013c56193389a4adb2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fran?ois, All,
 
-diff LICENSE:
--LuaSec 0.9 license
--Copyright (C) 2006-2019 Bruno Silvestre, UFG
-+LuaSec 1.0 license
-+Copyright (C) 2006-2021 Bruno Silvestre, UFG
+On 2021-03-13 08:11 +0100, Francois Perrad spake thusly:
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/luasec/luasec.hash | 4 ++--
- package/luasec/luasec.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Series applied to master, thanks.
 
-diff --git a/package/luasec/luasec.hash b/package/luasec/luasec.hash
-index c50da8b9a2..1ea422aa9b 100644
---- a/package/luasec/luasec.hash
-+++ b/package/luasec/luasec.hash
-@@ -1,3 +1,3 @@
- # computed by luarocks/buildroot
--sha256 b87c7d3bc5f07f5ad6fcf90f32f182d9a4a3f5f6b07e19221a86e89179ebd702  luasec-0.9-1.src.rock
--sha256 4e1b2e7a46c756febf3ea76440fb5456c17e6c0312fd0135bd4649f4a2cd0d41  luasec/LICENSE
-+sha256  b7e18f475c64896fe4921d367adabae765914f7526a68487a5fa6831040e7138  luasec-1.0-1.src.rock
-+sha256  0d3431dad143f41c8902e4ee867e386a702ebad856c45239fb86460e27dabfbf  luasec/LICENSE
-diff --git a/package/luasec/luasec.mk b/package/luasec/luasec.mk
-index 42d292245d..3ef0c14daf 100644
---- a/package/luasec/luasec.mk
-+++ b/package/luasec/luasec.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LUASEC_VERSION = 0.9-1
-+LUASEC_VERSION = 1.0-1
- LUASEC_SUBDIR = luasec
- LUASEC_LICENSE = MIT
- LUASEC_LICENSE_FILES = $(LUASEC_SUBDIR)/LICENSE
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/lua-curl/lua-curl.hash | 4 ++--
+>  package/lua-curl/lua-curl.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/lua-curl/lua-curl.hash b/package/lua-curl/lua-curl.hash
+> index 5210ceb0f..836e2cb6f 100644
+> --- a/package/lua-curl/lua-curl.hash
+> +++ b/package/lua-curl/lua-curl.hash
+> @@ -1,3 +1,3 @@
+>  # computed by luarocks/buildroot
+> -sha256 b6b860cd416ad883f2c7c2e1696aceda60c96036f660fb8c0236a5cc3d961c04  lua-curl-0.3.12-1.src.rock
+> -sha256 0f92f4c4665aadffb023de44b16022282040fe4409d5cd3148f1812dec30cdff  Lua-cURLv3-0.3.12/LICENSE
+> +sha256 6b2cc48621fac3cb7c1669705475e67a6932829ba46efb9ac5864604848f8ea2  lua-curl-0.3.13-1.src.rock
+> +sha256 0f92f4c4665aadffb023de44b16022282040fe4409d5cd3148f1812dec30cdff  Lua-cURLv3-0.3.13/LICENSE
+> diff --git a/package/lua-curl/lua-curl.mk b/package/lua-curl/lua-curl.mk
+> index 37fbf30cc..2120d33ab 100644
+> --- a/package/lua-curl/lua-curl.mk
+> +++ b/package/lua-curl/lua-curl.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -LUA_CURL_VERSION_UPSTREAM = 0.3.12
+> +LUA_CURL_VERSION_UPSTREAM = 0.3.13
+>  LUA_CURL_VERSION = $(LUA_CURL_VERSION_UPSTREAM)-1
+>  LUA_CURL_SUBDIR = Lua-cURLv3-$(LUA_CURL_VERSION_UPSTREAM)
+>  LUA_CURL_LICENSE = MIT
+> -- 
+> 2.27.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
