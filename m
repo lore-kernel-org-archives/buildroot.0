@@ -1,72 +1,48 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Mar 2021 17:58:15 +0100
-Subject: [Buildroot] [PATCH] package/python-periphery: bump to version
- 2.3.0
-In-Reply-To: <20210314160327.5747-1-texier.pj2@gmail.com>
-References: <20210314160327.5747-1-texier.pj2@gmail.com>
-Message-ID: <20210314165815.GH2737665@scaer>
+Date: Sun, 14 Mar 2021 17:59:50 +0100
+Subject: [Buildroot] [git commit] package/libubox: bump version to 551d75b
+Message-ID: <20210314163704.2EA8A87765@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Pierre-Jean, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=2cd0a13cfc61a031a6f715600a3348822ff63124
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-03-14 17:03 +0100, Pierre-Jean Texier spake thusly:
-> See changelog https://github.com/vsergeev/python-periphery/blob/master/CHANGELOG.md
-> 
-> Update the license hash for a change in copyright years:
-> -Copyright (c) 2015-2020 vsergeev / Ivan (Vanya) A. Sergeev
-> +Copyright (c) 2015-2021 vsergeev / Ivan (Vanya) A. Sergeev
-> 
-> Signed-off-by: Pierre-Jean Texier <texier.pj2@gmail.com>
+Changelog:
 
-Applied to master, thanks.
+  2e52c7e libubox: fix BLOBMSG_CAST_INT64 (do not override BLOBMSG_TYPE_DOUBLE)
+  870acee tests: cram: test_base64: fix failing tests
+  4d8995e tests: cram: test_base64: really fix failing tests
+  551d75b libubox: tests: add more blobmsg/json test cases
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/libubox/libubox.hash | 2 +-
+ package/libubox/libubox.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> ---
->  package/python-periphery/python-periphery.hash | 4 ++--
->  package/python-periphery/python-periphery.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/python-periphery/python-periphery.hash b/package/python-periphery/python-periphery.hash
-> index 13636d17ad..24e104d3ad 100644
-> --- a/package/python-periphery/python-periphery.hash
-> +++ b/package/python-periphery/python-periphery.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256  2c2482d026afc974ba5a966cd2c3a724ecf55e253223a9ea80fc98f77a3ca414  python-periphery-2.1.0.tar.gz
-> -sha256  4a2ed465d05c7ec58bb5a8cd7d2475a2d423bb73cb9bc3e3565500c222d03dc8  LICENSE
-> +sha256  385716bdbd11fcf2c5728548c3d42f12ebc0974faa64fa1a98b89b4a44dc004c  python-periphery-2.3.0.tar.gz
-> +sha256  76fe342043adfe8d9453c4979aa165476875137e15b0ddea1f4c3f3fa9808361  LICENSE
-> diff --git a/package/python-periphery/python-periphery.mk b/package/python-periphery/python-periphery.mk
-> index c322ded3b5..2c533fa2c2 100644
-> --- a/package/python-periphery/python-periphery.mk
-> +++ b/package/python-periphery/python-periphery.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -PYTHON_PERIPHERY_VERSION = 2.1.0
-> +PYTHON_PERIPHERY_VERSION = 2.3.0
->  PYTHON_PERIPHERY_SITE = $(call github,vsergeev,python-periphery,v$(PYTHON_PERIPHERY_VERSION))
->  PYTHON_PERIPHERY_LICENSE = MIT
->  PYTHON_PERIPHERY_LICENSE_FILES = LICENSE
-> -- 
-> 2.17.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/libubox/libubox.hash b/package/libubox/libubox.hash
+index fd4c5a4a39..94a071d80d 100644
+--- a/package/libubox/libubox.hash
++++ b/package/libubox/libubox.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  e383caf80a241e9711ab0c58a5e8f4d16479693be1e44ffb6cc716a185e7e303  libubox-5bc0146a1d6474d339c4ade9a227f32cc27a8b93-br1.tar.gz
++sha256  c6bac8baa7525b2d35eb22edeb5722c098370794d00e8859ef1a0bdfd8716151  libubox-551d75b5662cccd0466b990d58136bdf799a804d-br1.tar.gz
+diff --git a/package/libubox/libubox.mk b/package/libubox/libubox.mk
+index 4626659158..20da5c2ec2 100644
+--- a/package/libubox/libubox.mk
++++ b/package/libubox/libubox.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBUBOX_VERSION = 5bc0146a1d6474d339c4ade9a227f32cc27a8b93
++LIBUBOX_VERSION = 551d75b5662cccd0466b990d58136bdf799a804d
+ LIBUBOX_SITE = https://git.openwrt.org/project/libubox.git
+ LIBUBOX_SITE_METHOD = git
+ LIBUBOX_LICENSE = ISC, BSD-3-Clause
