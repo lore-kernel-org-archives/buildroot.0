@@ -1,73 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 14 Mar 2021 23:01:37 +0100
-Subject: [Buildroot] [PATCH] toolchain: drop old
- BR2_TOOLCHAIN_HAS_BINUTILS_BUG_* options
-Message-ID: <20210314220138.485204-1-thomas.petazzoni@bootlin.com>
+Date: Sun, 14 Mar 2021 23:05:44 +0100
+Subject: [Buildroot] [PATCH v2 3/6] toolchain: introduce
+ BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27100
+In-Reply-To: <20210310091453.23611-4-giulio.benetti@benettiengineering.com>
+References: <20210310091453.23611-1-giulio.benetti@benettiengineering.com>
+ <20210310091453.23611-4-giulio.benetti@benettiengineering.com>
+Message-ID: <20210314230544.20b9191f@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The BR2_TOOLCHAIN_HAS_BINUTILS_BUG_19615 and
-BR2_TOOLCHAIN_HAS_BINUTILS_BUG_20006 options were last selected by the
-BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_AMD64 toolchain, but this
-toolchain has been removed as part of commit
-d87e114a8ffacdc71f853e7c4ea76fd3c6958d22 in August 2020.
+On Wed, 10 Mar 2021 10:14:50 +0100
+Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
 
-It's time to get rid of those two options that are never enabled.
+> On OpenRisc binutils it still present ld bug 27100 leading to a package
+> openal to fail building:
+> http://autobuild.buildroot.net/results/c05/c053b9e191b31f0b1f8f8c902b602e187f714dc0/
+> 
+> The bug was already reported and it's been updated:
+> https://sourceware.org/bugzilla/show_bug.cgi?id=27100
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- boot/syslinux/Config.in   |  1 -
- package/go/Config.in.host |  1 -
- toolchain/Config.in       | 10 ----------
- 3 files changed, 12 deletions(-)
+How do you know it is this bug? The "final link failed: bad value"
+message is pretty generic. Did you actually check that those issues no
+longer appear with binutils 2.36 ?
 
-diff --git a/boot/syslinux/Config.in b/boot/syslinux/Config.in
-index 339a97f0e4..c95dac1804 100644
---- a/boot/syslinux/Config.in
-+++ b/boot/syslinux/Config.in
-@@ -35,7 +35,6 @@ config BR2_TARGET_SYSLINUX_PXELINUX
- 
- config BR2_TARGET_SYSLINUX_MBR
- 	bool "install mbr"
--	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_19615
- 	select BR2_TARGET_SYSLINUX_LEGACY_BIOS
- 	help
- 	  Install the legacy-BIOS 'mbr' image, to boot off a
-diff --git a/package/go/Config.in.host b/package/go/Config.in.host
-index 87942c7a1e..e82ab6e81a 100644
---- a/package/go/Config.in.host
-+++ b/package/go/Config.in.host
-@@ -2,7 +2,6 @@
- config BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
- 	bool
- 	default y
--	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_20006
- 	depends on BR2_PACKAGE_HOST_GO_BOOTSTRAP_ARCH_SUPPORTS
- 	depends on (BR2_arm && BR2_TOOLCHAIN_SUPPORTS_PIE) || BR2_aarch64 \
- 		|| BR2_i386 || BR2_x86_64 || BR2_powerpc64le \
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index f3f9bbe641..dc1e710603 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -71,16 +71,6 @@ source "package/gdb/Config.in.host"
- 
- comment "Toolchain Generic Options"
- 
--# https://sourceware.org/bugzilla/show_bug.cgi?id=19615
--# Affect toolchains built with binutils 2.26 (fixed in binutils 2.26.1).
--config BR2_TOOLCHAIN_HAS_BINUTILS_BUG_19615
--	bool
--
--# https://sourceware.org/bugzilla/show_bug.cgi?id=20006
--# Affect toolchains built with binutils 2.26 (fixed in binutils 2.26.1).
--config BR2_TOOLCHAIN_HAS_BINUTILS_BUG_20006
--	bool
--
- # https://sourceware.org/bugzilla/show_bug.cgi?id=21464
- # Affect toolchains built with binutils 2.31.1, still not fixed.
- config BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464
+> +# https://sourceware.org/bugzilla/show_bug.cgi?id=27100
+> +# Affect toolchains built with binutils 2.33.1 (fixed in binutils 2.36)
+> +config BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27100
+> +	bool
+> +	default y if BR2_or1k && !BR2_BINUTILS_VERSION_2_36_X
+
+Obviously, an annoying problem is that the BR2_BINUTILS_VERSION_2_36_X
+part of the condition does not take into account external toolchains.
+So for external toolchains that have binutils >= 2.36, we still won't
+be able to build those packages.
+
+But oh well, for something like OpenRISC, this is perhaps an acceptable
+trade-off.
+
+Thomas
 -- 
-2.29.2
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
