@@ -1,33 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 14 Mar 2021 23:26:08 +0100
-Subject: [Buildroot] [PATCH v2 3/3] package/zeromq: disable package if
- binutils is affected from bug 21464
-In-Reply-To: <bfde2763-b4f6-a816-101e-033b3801c003@benettiengineering.com>
-References: <20210305161211.4396-1-giulio.benetti@benettiengineering.com>
- <20210305161211.4396-4-giulio.benetti@benettiengineering.com>
- <20210314223616.5bfcc62f@windsurf.home>
- <bfde2763-b4f6-a816-101e-033b3801c003@benettiengineering.com>
-Message-ID: <20210314232608.44e9d133@windsurf.home>
+Date: Sun, 14 Mar 2021 23:28:02 +0100
+Subject: [Buildroot] [git commit] package/sconeserver: pcre is optional,
+ not mandatory
+Message-ID: <20210314220425.141B6815E7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 14 Mar 2021 22:45:07 +0100
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=754633fe8c306190c00087662df42f5b740c8754
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> > This is not sufficient: there are numerous packages that "select
-> > BR2_PACKAGE_ZEROMQ", so this "depends on" would have to be propagated.  
-> 
-> Oh, again forgotten about Kconfig dependencies, I'm going to fix this
-> and the other patches too.
+pcre is optional not mandatory since
+https://github.com/sconemad/sconeserver/commit/98ec61436c9ea68ffe2d70a818c1175dcafa2a79
 
-But it's annoying to propagate all those depends on... It would be so
-much nicer to have a workaround for those bugs.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/sconeserver/Config.in      | 1 -
+ package/sconeserver/sconeserver.mk | 5 ++++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/sconeserver/Config.in b/package/sconeserver/Config.in
+index 09cf5d459c..429ac81fe1 100644
+--- a/package/sconeserver/Config.in
++++ b/package/sconeserver/Config.in
+@@ -3,7 +3,6 @@ menuconfig BR2_PACKAGE_SCONESERVER
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on !BR2_STATIC_LIBS # dlopen()
+-	select BR2_PACKAGE_PCRE
+ 	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  Sconeserver is a modular, object-orientated and extremely
+diff --git a/package/sconeserver/sconeserver.mk b/package/sconeserver/sconeserver.mk
+index b81134002e..62cc128d77 100644
+--- a/package/sconeserver/sconeserver.mk
++++ b/package/sconeserver/sconeserver.mk
+@@ -10,7 +10,10 @@ SCONESERVER_LICENSE = GPL-2.0+
+ SCONESERVER_LICENSE_FILES = COPYING
+ # fetching from Git, we need to generate the configure script
+ SCONESERVER_AUTORECONF = YES
+-SCONESERVER_DEPENDENCIES = host-pkgconf pcre zlib
++SCONESERVER_DEPENDENCIES = \
++	host-pkgconf \
++	$(if $(BR2_PACKAGE_PCRE),pcre) \
++	zlib
+ # disable markdown module because its git submodule cmark
+ # https://github.com/sconemad/sconeserver/tree/master/markdown
+ # has no cross-compile support provided by the sconeserver build system
