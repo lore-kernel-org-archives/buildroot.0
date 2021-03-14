@@ -1,39 +1,112 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Mar 2021 21:32:46 +0100
-Subject: [Buildroot] [PATCH] package/wpa_supplicant: add upstream 2021-1
- security fix
-In-Reply-To: <20210302215943.14131-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Tue, 2 Mar 2021 22:59:43 +0100")
-References: <20210302215943.14131-1-peter@korsgaard.com>
-Message-ID: <87ft0x328h.fsf@dell.be.48ers.dk>
+Date: Sun, 14 Mar 2021 21:15:11 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/gnuradio: fix
+ qtgui build when gr-analog is not set
+Message-ID: <20210314201236.137B887A17@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=18fca94f11077b330b12d912a969c018c84f76a3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
- > Fixes the following security issue:
- > - wpa_supplicant P2P provision discovery processing vulnerability (no CVE
- >   yet)
+gr-qtgui examples needs to have gr-analog enabled, without this dependency
+compile crash with:
 
- > A vulnerability was discovered in how wpa_supplicant processes P2P
- > (Wi-Fi Direct) provision discovery requests. Under a corner case
- > condition, an invalid Provision Discovery Request frame could end up
- > reaching a state where the oldest peer entry needs to be removed. With
- > a suitably constructed invalid frame, this could result in use
- > (read+write) of freed memory. This can result in an attacker within
- > radio range of the device running P2P discovery being able to cause
- > unexpected behavior, including termination of the wpa_supplicant process
- > and potentially code execution.
+In file included from
+/x/output/build/gnuradio-3.8.1.0/gr-qtgui/examples/c++/display_qt.cc:22:
+/x/output/build/gnuradio-3.8.1.0/gr-qtgui/examples/c++/display_qt.h:24:10:
+fatal error: gnuradio/analog/noise_source.h: No such file or directory
+24 | #include <gnuradio/analog/noise_source.h>
+| ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[3]: *** [gr-qtgui/examples/c++/CMakeFiles/display_qt.dir/build.make:67:
+gr-qtgui/examples/c++/CMakeFiles/display_qt.dir/display_qt.cc.o] Error 1
+make[3]: *** Waiting for unfinished jobs....
+In file included from
+/somewhere/gnuradio/build/gr-qtgui/examples/c++/moc_display_qt.cpp:10:
+/somewhere/gnuradio/build/gr-qtgui/examples/c++/../../../../gr-qtgui/examples/c++/display_qt.h:24:10:
+fatal error: gnuradio/analog/noise_source.h: No such file or directory
+24 | #include <gnuradio/analog/noise_source.h>
+| ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
 
- > For more details, see the advisory:
- > https://w1.fi/security/2021-1/wpa_supplicant-p2p-provision-discovery-processing-vulnerability.txt
+GR_ANALOG is not an explicit dependency of GR_QTGUI, so disable c++ examples if
+user has not selected this option.
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+[backported from 7470a7a3771dd90defb826b464dfe62977cb1eb6]
 
-Committed to 2020.02.x and 2020.11.x, thanks.
+Fixes:
+- http://autobuild.buildroot.net/results/fde670499289f3d7d47379eebccf6e0f92c6d200/
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit 6b714a9c3b1b14526bffdb1319ab1bfaaba45732)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...nt-t-add-examples-c-subdirectory-when-gr-.patch | 55 ++++++++++++++++++++++
+ 1 file changed, 55 insertions(+)
+
+diff --git a/package/gnuradio/0004-gr-qtgui-dont-t-add-examples-c-subdirectory-when-gr-.patch b/package/gnuradio/0004-gr-qtgui-dont-t-add-examples-c-subdirectory-when-gr-.patch
+new file mode 100644
+index 0000000000..034c10c5cc
+--- /dev/null
++++ b/package/gnuradio/0004-gr-qtgui-dont-t-add-examples-c-subdirectory-when-gr-.patch
+@@ -0,0 +1,55 @@
++From 268b1a599304f58bd56c86ff09041b5912c24a0c Mon Sep 17 00:00:00 2001
++From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
++Date: Sun, 1 Nov 2020 17:24:36 +0100
++Subject: [PATCH] gr-qtgui: dont't add examples/c++ subdirectory when gr-analog
++ is disabled
++
++gr-qtgui examples needs to have gr-analog enabled, without this dependency
++compile crash with:
++
++In file included from
++/x/output/build/gnuradio-3.8.1.0/gr-qtgui/examples/c++/display_qt.cc:22:
++/x/output/build/gnuradio-3.8.1.0/gr-qtgui/examples/c++/display_qt.h:24:10:
++fatal error: gnuradio/analog/noise_source.h: No such file or directory
++24 | #include <gnuradio/analog/noise_source.h>
++| ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++compilation terminated.
++make[3]: *** [gr-qtgui/examples/c++/CMakeFiles/display_qt.dir/build.make:67:
++gr-qtgui/examples/c++/CMakeFiles/display_qt.dir/display_qt.cc.o] Error 1
++make[3]: *** Waiting for unfinished jobs....
++In file included from
++/somewhere/gnuradio/build/gr-qtgui/examples/c++/moc_display_qt.cpp:10:
++/somewhere/gnuradio/build/gr-qtgui/examples/c++/../../../../gr-qtgui/examples/c++/display_qt.h:24:10:
++fatal error: gnuradio/analog/noise_source.h: No such file or directory
++24 | #include <gnuradio/analog/noise_source.h>
++| ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++compilation terminated.
++
++GR_ANALOG is not an explicit dependency of GR_QTGUI, so disable c++ examples if
++user has not selected this option.
++
++[backported from 7470a7a3771dd90defb826b464dfe62977cb1eb6]
++
++Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
++---
++ gr-qtgui/CMakeLists.txt | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
++
++diff --git a/gr-qtgui/CMakeLists.txt b/gr-qtgui/CMakeLists.txt
++index 8831f3ad9..561186fbd 100644
++--- a/gr-qtgui/CMakeLists.txt
+++++ b/gr-qtgui/CMakeLists.txt
++@@ -68,7 +68,9 @@ if(ENABLE_GR_QTGUI)
++ add_subdirectory(include/gnuradio/qtgui)
++ add_subdirectory(lib)
++ add_subdirectory(docs)
++-add_subdirectory(examples/c++)
+++if (ENABLE_GR_ANALOG)
+++	add_subdirectory(examples/c++)
+++endif(ENABLE_GR_ANALOG)
++ if(ENABLE_PYTHON)
++     add_subdirectory(swig)
++     add_subdirectory(python/qtgui)
++-- 
++2.26.2
++
