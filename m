@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 14 Mar 2021 22:37:45 +0100
+Date: Sun, 14 Mar 2021 22:44:38 +0100
 Subject: [Buildroot] [PATCH v2 2/6] package/gnutls: disable package if
  binutils is affected from bug 21464
 In-Reply-To: <20210310091453.23611-3-giulio.benetti@benettiengineering.com>
 References: <20210310091453.23611-1-giulio.benetti@benettiengineering.com>
  <20210310091453.23611-3-giulio.benetti@benettiengineering.com>
-Message-ID: <20210314223745.0ae58c68@windsurf.home>
+Message-ID: <20210314224438.3123e1f9@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -22,22 +22,28 @@ Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
 > http://autobuild.buildroot.net/results/ce9/ce9050a183a3f1e31cefbc4d4a6d780235466e39/
 > 
 > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
->  package/gnutls/Config.in | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/gnutls/Config.in b/package/gnutls/Config.in
-> index 15b930b6bd..c4fa729e71 100644
-> --- a/package/gnutls/Config.in
-> +++ b/package/gnutls/Config.in
-> @@ -5,6 +5,7 @@ config BR2_PACKAGE_GNUTLS
->  	# gnulib requires a library that implements wctomb().
->  	# This is noticed only when linking with libgnutls.so.
->  	depends on BR2_USE_WCHAR
-> +	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464
 
-Not correct: there are plenty of packages that select
-BR2_PACKAGE_GNUTLS.
+FYI, the latest build failure of gnutls on OpenRISC was in July 2020:
+
+  http://autobuild.buildroot.net/?reason=gnutls%
+
+Since then, no failure.
+
+I just tested this configuration:
+
+BR2_or1k=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_OPENRISC_UCLIBC_STABLE=y
+BR2_INIT_NONE=y
+BR2_SYSTEM_BIN_SH_NONE=y
+# BR2_PACKAGE_BUSYBOX is not set
+BR2_PACKAGE_GNUTLS=y
+# BR2_TARGET_ROOTFS_TAR is not set
+
+and it builds fine.
+
+Please double check that the failures and bugs still exist before
+sending patches. Thanks!
 
 Thomas
 -- 
