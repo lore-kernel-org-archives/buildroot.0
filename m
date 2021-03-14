@@ -1,155 +1,213 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Mar 2021 14:07:36 +0100
-Subject: [Buildroot] [PATCH v1] package/meson: bump version to 0.57.1
-In-Reply-To: <20210313222421.25397-1-ps.report@gmx.net>
-References: <20210313222421.25397-1-ps.report@gmx.net>
-Message-ID: <20210314130736.GZ2737665@scaer>
+Date: Sun, 14 Mar 2021 14:24:17 +0100
+Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
+ mesa3d-headers}: bump version to 21.0.0
+In-Reply-To: <20210313073211.686428-1-bernd.kuhls@t-online.de>
+References: <20210313073211.686428-1-bernd.kuhls@t-online.de>
+Message-ID: <20210314132417.GA2737665@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+On 2021-03-13 08:32 +0100, Bernd Kuhls spake thusly:
+> Release notes:
+> https://lists.freedesktop.org/archives/mesa-announce/2021-March/000622.html
+> 
+> OSMesa classic support was removed:
+> https://cgit.freedesktop.org/mesa/mesa/commit/?h=21.0&id=ee802372180a2b4460cc7abb53438e45c6b6f1e4
 
-On 2021-03-13 23:24 +0100, Peter Seiderer spake thusly:
-> - update patch 0001-Prefer-ext-static-libs-when-default-library-static.patch
->   (use get_option(OptionKey()) instead of get_builtin_option())
-> 
-> - rebase patch 0002-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch
-> 
-> For details see [1].
-> 
-> [1] https://mesonbuild.com/Release-notes-for-0-57-0.html
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+There is something odd with your change, then. You are replacing classic
+OSMesa with the Gallium-backed one.
 
-Applied to master, thanks.
+But while classic only used swrast, while Gallium uses softpipe or
+llvmpipe. So don't we need something like:
 
-Please monitor the autobuilders to see if that breaks anything (meson
-had a dependency to break some packages when bumped in the past).
+    config BR2_PACKAGE_MESA3D_OSMESA
+        bool "OSMesa"
+        depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
+
+or maybe a select?
+
+Also, BR2_PACKAGE_MESA3D_OSMESA_CLASSIC is used in mesa3d-demos.
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  ...atic-libs-when-default-library-static.patch | 12 +++++++-----
->  ...ndencies-base.py-add-pkg_config_stati.patch | 18 ++++++++++--------
->  package/meson/meson.hash                       |  4 ++--
->  package/meson/meson.mk                         |  2 +-
->  4 files changed, 20 insertions(+), 16 deletions(-)
+> DRI swrast driver was removed:
+> https://cgit.freedesktop.org/mesa/mesa/commit/?h=21.0&id=435de835cd639d1b9bb96f81fc224771dc90af6d
 > 
-> diff --git a/package/meson/0001-Prefer-ext-static-libs-when-default-library-static.patch b/package/meson/0001-Prefer-ext-static-libs-when-default-library-static.patch
-> index 2639915891..4a1325bd6b 100644
-> --- a/package/meson/0001-Prefer-ext-static-libs-when-default-library-static.patch
-> +++ b/package/meson/0001-Prefer-ext-static-libs-when-default-library-static.patch
-> @@ -1,4 +1,4 @@
-> -From ea85465e608178080c3b4d51af9765a8c7c0dae3 Mon Sep 17 00:00:00 2001
-> +From cf9ad9b79a924081ce3d1e045bba3544815ea5f8 Mon Sep 17 00:00:00 2001
->  From: Matt Weber <matthew.weber@rockwellcollins.com>
->  Date: Sat, 26 Oct 2019 09:17:29 -0500
->  Subject: [PATCH] Prefer ext static libs when --default-library=static
-> @@ -22,24 +22,26 @@ http://autobuild.buildroot.net/results/db1740b4777f436324218c52bc7b08e5c21b667d/
->  http://autobuild.buildroot.net/results/c17/c17bbb12d9deadd64a441b36e324cfbbe8aba5be/
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  Config.in.legacy                         | 22 ++++++++++++++--------
+>  package/mesa3d-headers/mesa3d-headers.mk |  2 +-
+>  package/mesa3d/Config.in                 | 19 ++++---------------
+>  package/mesa3d/mesa3d.hash               |  6 +++---
+>  package/mesa3d/mesa3d.mk                 |  9 ++++-----
+>  5 files changed, 26 insertions(+), 32 deletions(-)
+> 
+> diff --git a/Config.in.legacy b/Config.in.legacy
+> index 8ebbc4c295..da48a78158 100644
+> --- a/Config.in.legacy
+> +++ b/Config.in.legacy
+> @@ -146,6 +146,20 @@ endif
 >  
->  Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> +[Updated for 0.57.1 - get_builtin_option() vs. get_option(OptionKey())]
-> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
->  ---
->   mesonbuild/compilers/mixins/clike.py | 3 +++
->   1 file changed, 3 insertions(+)
+>  comment "Legacy options removed in 2021.05"
 >  
->  diff --git a/mesonbuild/compilers/mixins/clike.py b/mesonbuild/compilers/mixins/clike.py
-> -index 47e97d261..729c98acc 100644
-> +index ad3bfae..4733910 100644
->  --- a/mesonbuild/compilers/mixins/clike.py
->  +++ b/mesonbuild/compilers/mixins/clike.py
-> -@@ -940,6 +940,9 @@ class CLikeCompiler:
-> +@@ -999,6 +999,9 @@ class CLikeCompiler(Compiler):
->           elif env.machines[self.for_machine].is_cygwin():
->               shlibext = ['dll', 'dll.a']
->               prefixes = ['cyg'] + prefixes
-> -+        elif env.coredata.get_builtin_option('default_library') == 'static':
-> ++        elif env.coredata.get_option(OptionKey('default_library')) == 'static':
->  +            # Linux/BSDs
->  +            shlibext = ['a']
->           else:
->               # Linux/BSDs
->               shlibext = ['so']
->  -- 
-> -2.25.1
-> +2.30.1
+> +config BR2_PACKAGE_MESA3D_OSMESA_CLASSIC
+> +	bool "mesa OSMesa option renamed"
+> +	select BR2_LEGACY
+> +	select BR2_PACKAGE_MESA3D_OSMESA
+> +	help
+> +	  The option was renamed in order to match the naming used
+> +	  by the meson buildsystem.
+> +
+> +config BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST
+> +	bool "mesa DRI swrast driver removed"
+> +	select BR2_LEGACY
+> +	help
+> +	  The DRI swrast driver was removed.
+> +
+>  config BR2_PACKAGE_KODI_SCREENSAVER_CRYSTALMORPH
+>  	bool "kodi-screensaver-crystalmorph removed"
+>  	select BR2_LEGACY
+> @@ -886,14 +900,6 @@ config BR2_PACKAGE_KODI_AUDIODECODER_OPUS
+>  	help
+>  	  This package is incompatible with Kodi 18.x.
 >  
-> diff --git a/package/meson/0002-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch b/package/meson/0002-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch
-> index eda17cadc5..9dbe22c83f 100644
-> --- a/package/meson/0002-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch
-> +++ b/package/meson/0002-mesonbuild-dependencies-base.py-add-pkg_config_stati.patch
-> @@ -1,4 +1,4 @@
-> -From 8622d37587169c1e4a4206a9462868ede057f0e8 Mon Sep 17 00:00:00 2001
-> +From 885af6ab2e02cca6bd190b8b29a355fdb6516936 Mon Sep 17 00:00:00 2001
->  From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->  Date: Sat, 15 Feb 2020 15:13:59 +0100
->  Subject: [PATCH] mesonbuild/dependencies/base.py: add pkg_config_static
-> @@ -18,24 +18,26 @@ Fixes:
->  Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->  [Romain: Fix if condition, pkg_config_static is a string not a boolean]
->  Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> +[Rebased on 0.57.1]
-> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
->  ---
->   mesonbuild/dependencies/base.py | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
+> -config BR2_PACKAGE_MESA3D_OSMESA
+> -	bool "mesa OSMesa option renamed"
+> -	select BR2_PACKAGE_MESA3D_OSMESA_CLASSIC if BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST
+> -	select BR2_LEGACY
+> -	help
+> -	  The option was renamed in order to match the naming used
+> -	  by the meson buildsystem.
+> -
+>  config BR2_PACKAGE_HOSTAPD_DRIVER_RTW
+>  	bool "hostapd rtl871xdrv driver removed"
+>  	select BR2_LEGACY
+> diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+> index 6e2f0b5a79..4b462d05b8 100644
+> --- a/package/mesa3d-headers/mesa3d-headers.mk
+> +++ b/package/mesa3d-headers/mesa3d-headers.mk
+> @@ -12,7 +12,7 @@ endif
 >  
->  diff --git a/mesonbuild/dependencies/base.py b/mesonbuild/dependencies/base.py
-> -index 23701da95..83e51626d 100644
-> +index cd77b4b..08675e6 100644
->  --- a/mesonbuild/dependencies/base.py
->  +++ b/mesonbuild/dependencies/base.py
-> -@@ -849,7 +849,8 @@ class PkgConfigDependency(ExternalDependency):
-> -     def _set_libs(self):
-> +@@ -883,7 +883,8 @@ class PkgConfigDependency(ExternalDependency):
->           env = None
-> -         libcmd = [self.name, '--libs']
-> +         libcmd = ['--libs']
-> + 
->  -        if self.static:
->  +        if self.static or \
->  +           (self.env.properties[self.for_machine].get('pkg_config_static', None) == 'true'):
->               libcmd.append('--static')
-> -         # Force pkg-config to output -L fields even if they are system
-> -         # paths so we can do manual searching with cc.find_library() later.
-> + 
-> +         libcmd.append(self.name)
->  -- 
-> -2.25.1
-> +2.30.1
+>  # Not possible to directly refer to mesa3d variables, because of
+>  # first/second expansion trickery...
+> -MESA3D_HEADERS_VERSION = 20.3.4
+> +MESA3D_HEADERS_VERSION = 21.0.0
+>  MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+>  MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
+>  MESA3D_HEADERS_DL_SUBDIR = mesa3d
+> diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+> index a96fd46bbe..6eb4f37b23 100644
+> --- a/package/mesa3d/Config.in
+> +++ b/package/mesa3d/Config.in
+> @@ -64,7 +64,7 @@ config BR2_PACKAGE_MESA3D_DRI_DRIVER
+>  	select BR2_PACKAGE_MESA3D_GBM if \
+>  		!BR2_PACKAGE_MESA3D_OPENGL_GLX && \
+>  		!BR2_PACKAGE_MESA3D_OPENGL_EGL && \
+> -		!BR2_PACKAGE_MESA3D_OSMESA_CLASSIC
+> +		!BR2_PACKAGE_MESA3D_OSMESA
+>  	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if \
+>  		(BR2_PACKAGE_XORG7 && BR2_TOOLCHAIN_HAS_SYNC_4)
 >  
-> diff --git a/package/meson/meson.hash b/package/meson/meson.hash
-> index e07b914be5..d13a605e80 100644
-> --- a/package/meson/meson.hash
-> +++ b/package/meson/meson.hash
-> @@ -1,4 +1,4 @@
->  # Locally calculated after checking pgp signature
-> -# https://github.com/mesonbuild/meson/releases/download/0.56.0/meson-0.56.2.tar.gz.asc
-> -sha256  3cb8bdb91383f7f8da642f916e4c44066a29262caa499341e2880f010edb87f4  meson-0.56.2.tar.gz
-> +# https://github.com/mesonbuild/meson/releases/download/0.57.1/meson-0.57.1.tar.gz.asc
-> +sha256  72e1c782ba9bda204f4a1ed57f98d027d7b6eb9414c723eebbd6ec7f1955c8a6  meson-0.57.1.tar.gz
->  sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  COPYING
-> diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-> index 7e39883db3..eea5aedc51 100644
-> --- a/package/meson/meson.mk
-> +++ b/package/meson/meson.mk
-> @@ -4,7 +4,7 @@
->  #
+> @@ -242,15 +242,11 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA
+>  
+>  config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
+>  	bool "Gallium swrast driver"
+> -	depends on !BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST
+>  	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+>  	help
+>  	  This is a software opengl implementation using the Gallium3D
+>  	  infrastructure.
+>  
+> -comment "Gallium swrast: Only one swrast provider can be built"
+> -	depends on BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST
+> -
+>  config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_TEGRA
+>  	bool "Gallium tegra driver"
+>  	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+> @@ -334,13 +330,6 @@ comment "Gallium XvMC state tracker needs X.org and gallium drivers r600 or nouv
+>  
+>  comment "DRI drivers"
+>  
+> -config BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST
+> -	bool "DRI swrast driver"
+> -	select BR2_PACKAGE_MESA3D_DRI_DRIVER
+> -	help
+> -	  This is a software opengl implementation using the DRI
+> -	  infrastructure.
+> -
+>  config BR2_PACKAGE_MESA3D_DRI_DRIVER_I915
+>  	bool "DRI i915 driver"
+>  	depends on BR2_i386 || BR2_x86_64
+> @@ -405,10 +394,10 @@ comment "intel vulkan depends on X.org and needs a glibc toolchain w/ headers >=
+>  
+>  comment "Off-screen Rendering"
+>  
+> -config BR2_PACKAGE_MESA3D_OSMESA_CLASSIC
+> -	bool "OSMesa (classic) library"
+> +config BR2_PACKAGE_MESA3D_OSMESA
+> +	bool "OSMesa library"
+>  	help
+> -	  The OSMesa classic API provides functions for
+> +	  The OSMesa API provides functions for
+>  	  making off-screen renderings.
+>  
+>  if BR2_PACKAGE_MESA3D_DRIVER
+> diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+> index e7b375440d..235578197b 100644
+> --- a/package/mesa3d/mesa3d.hash
+> +++ b/package/mesa3d/mesa3d.hash
+> @@ -1,6 +1,6 @@
+> -# From https://lists.freedesktop.org/archives/mesa-announce/2021-January/000618.html
+> -sha256  dc21a987ec1ff45b278fe4b1419b1719f1968debbb80221480e44180849b4084  mesa-20.3.4.tar.xz
+> -sha512  81c4d032213b4aef842f1594e0e89bc0045f7ca7ce5f267b62a0f8236eb12ab09c1f780d8b3776b3072f37cd0bd8829f8a1330a749ccf462471b262ef8097477  mesa-20.3.4.tar.xz
+> +# From https://lists.freedesktop.org/archives/mesa-announce/2021-March/000622.html
+> +sha256  e6204e98e6a8d77cf9dc5d34f99dd8e3ef7144f3601c808ca0dd26ba522e0d84  mesa-21.0.0.tar.xz
+> +sha512  32f4a74fbc1456dac478fdc3a85e37cedb9ac1e1b7c5434706dc24930a70bc9e857ba6b5bf1e7e05798e259f8ff0b05bad5252c07253cb5d6a9707c7c2e147ad  mesa-21.0.0.tar.xz
+>  
+>  # License
+>  sha256  1361129baa4519b6ed27a1bf4aeee33a58b060bf7bb9b6ea415ecede04e35e46  docs/license.rst
+> diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+> index 4ca51f5e71..04a03980df 100644
+> --- a/package/mesa3d/mesa3d.mk
+> +++ b/package/mesa3d/mesa3d.mk
+> @@ -5,7 +5,7 @@
 >  ################################################################################
 >  
-> -MESON_VERSION = 0.56.2
-> +MESON_VERSION = 0.57.1
->  MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
->  MESON_LICENSE = Apache-2.0
->  MESON_LICENSE_FILES = COPYING
+>  # When updating the version, please also update mesa3d-headers
+> -MESA3D_VERSION = 20.3.4
+> +MESA3D_VERSION = 21.0.0
+>  MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+>  MESA3D_SITE = https://mesa.freedesktop.org/archive
+>  MESA3D_LICENSE = MIT, SGI, Khronos
+> @@ -102,7 +102,6 @@ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D)      += v3d
+>  MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4)      += vc4
+>  MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL)    += virgl
+>  # DRI Drivers
+> -MESA3D_DRI_DRIVERS-$(BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST) += swrast
+>  MESA3D_DRI_DRIVERS-$(BR2_PACKAGE_MESA3D_DRI_DRIVER_I915)   += i915
+>  MESA3D_DRI_DRIVERS-$(BR2_PACKAGE_MESA3D_DRI_DRIVER_I965)   += i965
+>  MESA3D_DRI_DRIVERS-$(BR2_PACKAGE_MESA3D_DRI_DRIVER_NOUVEAU) += nouveau
+> @@ -149,10 +148,10 @@ endif
+>  
+>  # APIs
+>  
+> -ifeq ($(BR2_PACKAGE_MESA3D_OSMESA_CLASSIC),y)
+> -MESA3D_CONF_OPTS += -Dosmesa=classic
+> +ifeq ($(BR2_PACKAGE_MESA3D_OSMESA),y)
+> +MESA3D_CONF_OPTS += -Dosmesa=true
+>  else
+> -MESA3D_CONF_OPTS += -Dosmesa=none
+> +MESA3D_CONF_OPTS += -Dosmesa=false
+>  endif
+>  
+>  # Always enable OpenGL:
 > -- 
-> 2.30.1
+> 2.29.2
 > 
 > _______________________________________________
 > buildroot mailing list
