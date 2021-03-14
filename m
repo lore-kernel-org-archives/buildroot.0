@@ -1,71 +1,221 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Mar 2021 18:12:59 +0100
-Subject: [Buildroot] [PATCH v1 1/4] package/python-click: bump version
- to 7.1.2
-In-Reply-To: <20210308195912.10749-1-ps.report@gmx.net>
-References: <20210308195912.10749-1-ps.report@gmx.net>
-Message-ID: <20210314171259.GJ2737665@scaer>
+Date: Sun, 14 Mar 2021 18:16:35 +0100
+Subject: [Buildroot] [PATCH 1/1] package/openntpd: bump to version 6.8p1
+In-Reply-To: <20210314170024.358572-1-fontaine.fabrice@gmail.com>
+References: <20210314170024.358572-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210314171635.GK2737665@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Fabrice, All,
 
-On 2021-03-08 20:59 +0100, Peter Seiderer spake thusly:
-> - bump version to 7.1.2
-> - update license hash ('standardize license ', see [1])
-
-I've slightly expanded that part to explicitly state the license did not
-change, but that the text is the same as what SPDX provides, now.
-
-> [1] https://github.com/pallets/click/commit/d64eddae7d59cebd24b5100d72147fcf2e7cd1dc
+On 2021-03-14 18:00 +0100, Fabrice Fontaine spake thusly:
+> - Drop patches (already in version)
+> - Update indentation in hash file (two spaces)
 > 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> http://www.openntpd.org/txt/release-6.8p1.txt
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Series of 4 applied to master, thanks.
+Applied to master, thanks.
 
 Regards,
 Yann E. MORIN.
 
 > ---
->  package/python-click/python-click.hash | 6 +++---
->  package/python-click/python-click.mk   | 6 +++---
->  2 files changed, 6 insertions(+), 6 deletions(-)
+>  package/openntpd/0001-fix-musl.patch          | 38 -------------
+>  ...ide-fallback-definition-for-__packed.patch | 43 ---------------
+>  ...make-ibuf_dns-static-to-avoid-double.patch | 54 -------------------
+>  package/openntpd/openntpd.hash                |  4 +-
+>  package/openntpd/openntpd.mk                  |  2 +-
+>  5 files changed, 3 insertions(+), 138 deletions(-)
+>  delete mode 100644 package/openntpd/0001-fix-musl.patch
+>  delete mode 100644 package/openntpd/0002-Provide-fallback-definition-for-__packed.patch
+>  delete mode 100644 package/openntpd/0003-Zap-double-definition-of-conf-and-make-ibuf_dns-static-to-avoid-double.patch
 > 
-> diff --git a/package/python-click/python-click.hash b/package/python-click/python-click.hash
-> index 911f13dfa3..fb6e457ad5 100644
-> --- a/package/python-click/python-click.hash
-> +++ b/package/python-click/python-click.hash
+> diff --git a/package/openntpd/0001-fix-musl.patch b/package/openntpd/0001-fix-musl.patch
+> deleted file mode 100644
+> index e369d5a8ae..0000000000
+> --- a/package/openntpd/0001-fix-musl.patch
+> +++ /dev/null
+> @@ -1,38 +0,0 @@
+> -From: Baruch Siach <baruch@tkos.co.il>
+> -Date: Fri, 29 Sep 2017 10:06:52 +0300
+> -Subject: [PATCH] Fix build with musl and older Linux kernel
+> -
+> -The musl libc carries its own copy of Linux system calls. When building
+> -with Linux headers older than v3.17, musl provides SYS_getrandom
+> -definition, but not GRND_NONBLOCK. This causes build failure for
+> -libressl and openntpd:
+> -
+> -getentropy_linux.c: In function 'getentropy_getrandom':
+> -getentropy_linux.c:205:42: error: 'GRND_NONBLOCK' undeclared (first use in this function)
+> -   ret = syscall(SYS_getrandom, buf, len, GRND_NONBLOCK);
+> -                                          ^~~~~~~~~~~~~
+> -
+> -Define GRND_NONBLOCK locally when its definition is missing to fix the
+> -build. There should be no run-time effect. Older kernels return ENOSYS
+> -for unsupported syscall().
+> -
+> -[ from upstream pull request with file location changed ]
+> -Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ----
+> -Upstream status: https://github.com/libressl-portable/openbsd/pull/82
+> -
+> -diff -Nuar openntpd-6.2p2-orig/compat/getentropy_linux.c openntpd-6.2p2/compat/getentropy_linux.c
+> ---- openntpd-6.2p2-orig/compat/getentropy_linux.c	2017-09-07 22:12:02.000000000 +0300
+> -+++ openntpd-6.2p2/compat/getentropy_linux.c	2017-09-29 11:54:54.856245770 +0300
+> -@@ -194,6 +194,11 @@
+> - }
+> - 
+> - #ifdef SYS_getrandom
+> -+
+> -+#ifndef GRND_NONBLOCK
+> -+#define GRND_NONBLOCK   0x0001
+> -+#endif
+> -+
+> - static int
+> - getentropy_getrandom(void *buf, size_t len)
+> - {
+> diff --git a/package/openntpd/0002-Provide-fallback-definition-for-__packed.patch b/package/openntpd/0002-Provide-fallback-definition-for-__packed.patch
+> deleted file mode 100644
+> index 4d8f636b9d..0000000000
+> --- a/package/openntpd/0002-Provide-fallback-definition-for-__packed.patch
+> +++ /dev/null
+> @@ -1,43 +0,0 @@
+> -From bc2cd89715155fe1fead19338dac5f4059917dfe Mon Sep 17 00:00:00 2001
+> -From: Michael Forney <mforney@mforney.org>
+> -Date: Thu, 20 Jun 2019 13:52:22 -0700
+> -Subject: [PATCH] Provide fallback definition for __packed
+> -
+> -Otherwise, systems that don't support it will treat it as a name for a
+> -global `struct ntp_msg` variable.
+> -
+> -[Retrieved from:
+> -https://github.com/openntpd-portable/openntpd-portable/commit/bc2cd89715155fe1fead19338dac5f4059917dfe]
+> -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ----
+> - include/sys/types.h    | 4 ++++
+> - m4/check-os-options.m4 | 1 +
+> - 2 files changed, 5 insertions(+)
+> -
+> -diff --git a/include/sys/types.h b/include/sys/types.h
+> -index 86821c7..5492e20 100644
+> ---- a/include/sys/types.h
+> -+++ b/include/sys/types.h
+> -@@ -22,6 +22,10 @@
+> - # define __bounded__(x, y, z)
+> - #endif
+> - 
+> -+#if !defined(HAVE_ATTRIBUTE__PACKED) && !defined(__packed)
+> -+# define __packed	__attribute__((__packed__))
+> -+#endif
+> -+
+> - /*
+> -  * Define BSD-style unsigned bits types for systems that do not have them.
+> -  */
+> -diff --git a/m4/check-os-options.m4 b/m4/check-os-options.m4
+> -index d4d02d9..4883d1f 100644
+> ---- a/m4/check-os-options.m4
+> -+++ b/m4/check-os-options.m4
+> -@@ -69,6 +69,7 @@ case $host_os in
+> - 		HOST_ABI=elf
+> - 		AC_DEFINE([HAVE_ATTRIBUTE__BOUNDED__], [1], [OpenBSD gcc has bounded])
+> - 		AC_DEFINE([HAVE_ATTRIBUTE__DEAD], [1], [OpenBSD gcc has __dead])
+> -+		AC_DEFINE([HAVE_ATTRIBUTE__PACKED], [1], [OpenBSD gcc has __packed])
+> - 		;;
+> - 	*solaris*)
+> - 		HOST_OS=solaris
+> diff --git a/package/openntpd/0003-Zap-double-definition-of-conf-and-make-ibuf_dns-static-to-avoid-double.patch b/package/openntpd/0003-Zap-double-definition-of-conf-and-make-ibuf_dns-static-to-avoid-double.patch
+> deleted file mode 100644
+> index f54237e310..0000000000
+> --- a/package/openntpd/0003-Zap-double-definition-of-conf-and-make-ibuf_dns-static-to-avoid-double.patch
+> +++ /dev/null
+> @@ -1,54 +0,0 @@
+> -From 956b4239d919d6922b9ba6ef39be0d1753f8ff34 Mon Sep 17 00:00:00 2001
+> -From: otto <>
+> -Date: Sat, 11 Apr 2020 07:49:48 +0000
+> -Subject: [PATCH] Zap double definition of conf and make ibuf_dns static to
+> - avoid double definition; from Michael Forney
+> -
+> -[Retrieved (and backported by updating paths and dropping date and
+> -version updates) from:
+> -https://github.com/openntpd-portable/openntpd-openbsd/commit/956b4239d919d6922b9ba6ef39be0d1753f8ff34]
+> -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ----
+> - src/usr.sbin/ntpd/ntp.c     | 4 ++--
+> - src/usr.sbin/ntpd/ntp_dns.c | 4 ++--
+> - src/usr.sbin/ntpd/parse.y   | 3 +--
+> - 3 files changed, 5 insertions(+), 6 deletions(-)
+> -
+> -diff --git a/src/ntp.c b/src/ntp.c
+> -index ea9a4e922..ec3d6bc43 100644
+> ---- a/src/ntp.c
+> -+++ b/src/ntp.c
+> -@@ -42,7 +42,7 @@
+> - 
+> - volatile sig_atomic_t	 ntp_quit = 0;
+> - struct imsgbuf		*ibuf_main;
+> --struct imsgbuf		*ibuf_dns;
+> -+static struct imsgbuf	*ibuf_dns;
+> - struct ntpd_conf	*conf;
+> - struct ctl_conns	 ctl_conns;
+> - u_int			 peer_cnt;
+> -diff --git a/src/ntp_dns.c b/src/ntp_dns.c
+> -index 2e1a97833..88391801c 100644
+> ---- a/src/ntp_dns.c
+> -+++ b/src/ntp_dns.c
+> -@@ -39,7 +39,7 @@
+> - #include "ntpd.h"
+> - 
+> - volatile sig_atomic_t	 quit_dns = 0;
+> --struct imsgbuf		*ibuf_dns;
+> -+static struct imsgbuf	*ibuf_dns;
+> - 
+> - void	sighdlr_dns(int);
+> - int	dns_dispatch_imsg(struct ntpd_conf *);
+> -diff --git a/src/parse.y b/src/uparse.y
+> -index 8d7ab09de..81d19bbff 100644
+> ---- a/src/parse.y
+> -+++ b/src/parse.y
+> -@@ -57,7 +57,6 @@ int		 lgetc(int);
+> - int		 lungetc(int);
+> - int		 findeol(void);
+> - 
+> --struct ntpd_conf		*conf;
+> - struct sockaddr_in		 query_addr4;
+> - struct sockaddr_in6		 query_addr6;
+> - int				 poolseqnum;
+> diff --git a/package/openntpd/openntpd.hash b/package/openntpd/openntpd.hash
+> index 4d00b7bb9d..2ef8a619eb 100644
+> --- a/package/openntpd/openntpd.hash
+> +++ b/package/openntpd/openntpd.hash
 > @@ -1,5 +1,5 @@
->  # md5, sha256 from https://pypi.org/pypi/click/json
-> -md5 7f53d50f7b7373ebc7963f9ff697450a Click-7.0.tar.gz
-> -sha256 5b94b49521f6456670fdb30cd82a4eca9412788a93fa6dd6df72c94d5a8ff2d7 Click-7.0.tar.gz
-> +md5  53692f62cb99a1a10c59248f1776d9c0  click-7.1.2.tar.gz
-> +sha256  d2b5255c7c6349bc1bd1e59e08cd12acbbd63ce649f2588755783aa94dfb6b1a  click-7.1.2.tar.gz
->  # Locally computed sha256
-> -sha256 e212319faefa4f459c8ac937fdc8557040a3cab8af29366ca2a48d239025225c LICENSE.rst
-> +sha256  9a8ad106a394e853bfe21f42f4e72d592819a22805d991b5f3275029292b658d  LICENSE.rst
-> diff --git a/package/python-click/python-click.mk b/package/python-click/python-click.mk
-> index 12539f557b..a829257f5e 100644
-> --- a/package/python-click/python-click.mk
-> +++ b/package/python-click/python-click.mk
-> @@ -4,9 +4,9 @@
+>  # from http://ftp.openbsd.org/pub/OpenBSD/OpenNTPD/SHA256
+> -sha256 7b02691524197e01ba6b1b4b7595b33956e657ba6d5c4cf2fc20ea3f4914c13a	openntpd-6.2p3.tar.gz
+> +sha256  8582db838a399153d4a17f2a76518b638cc3020f58028575bf54127518f55a46  openntpd-6.8p1.tar.gz
+>  
+>  # Locally computed
+> -sha256 6c1822ee950652c12bb3773849db18794f62c63452a70d018edf23e8cba71839 COPYING
+> +sha256  6c1822ee950652c12bb3773849db18794f62c63452a70d018edf23e8cba71839  COPYING
+> diff --git a/package/openntpd/openntpd.mk b/package/openntpd/openntpd.mk
+> index 30c39e45ed..f9409cd90c 100644
+> --- a/package/openntpd/openntpd.mk
+> +++ b/package/openntpd/openntpd.mk
+> @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
 >  
-> -PYTHON_CLICK_VERSION = 7.0
-> -PYTHON_CLICK_SOURCE = Click-$(PYTHON_CLICK_VERSION).tar.gz
-> -PYTHON_CLICK_SITE = https://files.pythonhosted.org/packages/f8/5c/f60e9d8a1e77005f664b76ff8aeaee5bc05d0a91798afd7f53fc998dbc47
-> +PYTHON_CLICK_VERSION = 7.1.2
-> +PYTHON_CLICK_SOURCE = click-$(PYTHON_CLICK_VERSION).tar.gz
-> +PYTHON_CLICK_SITE = https://files.pythonhosted.org/packages/27/6f/be940c8b1f1d69daceeb0032fee6c34d7bd70e3e649ccac0951500b4720e
->  PYTHON_CLICK_LICENSE = BSD-3-Clause
->  PYTHON_CLICK_LICENSE_FILES = LICENSE.rst
->  PYTHON_CLICK_SETUP_TYPE = setuptools
+> -OPENNTPD_VERSION = 6.2p3
+> +OPENNTPD_VERSION = 6.8p1
+>  OPENNTPD_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenNTPD
+>  OPENNTPD_LICENSE = MIT-like, BSD-2-Clause, BSD-3-Clause
+>  OPENNTPD_LICENSE_FILES = COPYING
 > -- 
-> 2.30.1
+> 2.30.0
 > 
 > _______________________________________________
 > buildroot mailing list
