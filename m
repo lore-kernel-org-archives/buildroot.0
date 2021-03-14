@@ -1,42 +1,57 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 14 Mar 2021 19:00:27 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libmatroska: bump to version 1.6.3
-Message-ID: <20210314180027.848846-1-fontaine.fabrice@gmail.com>
+Date: Sun, 14 Mar 2021 19:03:05 +0100
+Subject: [Buildroot] [PATCH 1/1] package/bluez5_utils: bump to version 5.56
+Message-ID: <20210314180305.849467-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://github.com/Matroska-Org/libmatroska/blob/release-1.6.3/ChangeLog
+http://www.bluez.org/release-of-bluez-5-56/
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libmatroska/libmatroska.hash | 2 +-
- package/libmatroska/libmatroska.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/bluez5_utils-headers/bluez5_utils-headers.mk | 2 +-
+ package/bluez5_utils/bluez5_utils.hash               | 2 +-
+ package/bluez5_utils/bluez5_utils.mk                 | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libmatroska/libmatroska.hash b/package/libmatroska/libmatroska.hash
-index 4c3d754f8f..81b418d030 100644
---- a/package/libmatroska/libmatroska.hash
-+++ b/package/libmatroska/libmatroska.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  bc4479aa8422ab07643df6a1fa5a19e4bed4badfd41ca77e081628620d1e1990  libmatroska-1.6.2.tar.xz
-+sha256  daf91a63f58dd157ca340c457871e66260cb9c3333fefb008b318befbb0e081a  libmatroska-1.6.3.tar.xz
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL
-diff --git a/package/libmatroska/libmatroska.mk b/package/libmatroska/libmatroska.mk
-index 91727ae973..7d326c0076 100644
---- a/package/libmatroska/libmatroska.mk
-+++ b/package/libmatroska/libmatroska.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/bluez5_utils-headers/bluez5_utils-headers.mk b/package/bluez5_utils-headers/bluez5_utils-headers.mk
+index a2e22148ae..096745def8 100644
+--- a/package/bluez5_utils-headers/bluez5_utils-headers.mk
++++ b/package/bluez5_utils-headers/bluez5_utils-headers.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LIBMATROSKA_VERSION = 1.6.2
-+LIBMATROSKA_VERSION = 1.6.3
- LIBMATROSKA_SOURCE = libmatroska-$(LIBMATROSKA_VERSION).tar.xz
- LIBMATROSKA_SITE = http://dl.matroska.org/downloads/libmatroska
- LIBMATROSKA_INSTALL_STAGING = YES
+ # Keep the version and patches in sync with bluez5_utils
+-BLUEZ5_UTILS_HEADERS_VERSION = 5.55
++BLUEZ5_UTILS_HEADERS_VERSION = 5.56
+ BLUEZ5_UTILS_HEADERS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
+ BLUEZ5_UTILS_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
+ BLUEZ5_UTILS_HEADERS_DL_SUBDIR = bluez5_utils
+diff --git a/package/bluez5_utils/bluez5_utils.hash b/package/bluez5_utils/bluez5_utils.hash
+index d0f3b80598..9bd8022e3d 100644
+--- a/package/bluez5_utils/bluez5_utils.hash
++++ b/package/bluez5_utils/bluez5_utils.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/linux/bluetooth/sha256sums.asc:
+-sha256  8863717113c4897e2ad3271fc808ea245319e6fd95eed2e934fae8e0894e9b88  bluez-5.55.tar.xz
++sha256  59c4dba9fc8aae2a6a5f8f12f19bc1b0c2dc27355c7ca3123eed3fe6bd7d0b9d  bluez-5.56.tar.xz
+ sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
+ sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING.LIB
+diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
+index 2fd3016b50..7b3207d952 100644
+--- a/package/bluez5_utils/bluez5_utils.mk
++++ b/package/bluez5_utils/bluez5_utils.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # Keep the version and patches in sync with bluez5_utils-headers
+-BLUEZ5_UTILS_VERSION = 5.55
++BLUEZ5_UTILS_VERSION = 5.56
+ BLUEZ5_UTILS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
+ BLUEZ5_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
+ BLUEZ5_UTILS_INSTALL_STAGING = YES
 -- 
 2.30.0
