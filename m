@@ -1,38 +1,58 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 14 Mar 2021 22:53:02 +0100
-Subject: [Buildroot] [PATCH v2 1/6] package/libtheora: disable package
- if binutils is affected from bug 21464
-In-Reply-To: <20210310091453.23611-2-giulio.benetti@benettiengineering.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Sun, 14 Mar 2021 22:52:57 +0100
+Subject: [Buildroot] [PATCH v2 2/6] package/gnutls: disable package if
+ binutils is affected from bug 21464
+In-Reply-To: <20210314224438.3123e1f9@windsurf.home>
 References: <20210310091453.23611-1-giulio.benetti@benettiengineering.com>
- <20210310091453.23611-2-giulio.benetti@benettiengineering.com>
-Message-ID: <20210314225302.462b353d@windsurf.home>
+ <20210310091453.23611-3-giulio.benetti@benettiengineering.com>
+ <20210314224438.3123e1f9@windsurf.home>
+Message-ID: <11e5583d-9214-a0b9-e203-4ca267b1509e@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 10 Mar 2021 10:14:48 +0100
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
 
-> This package is affected from binutils bug 21464, since there is no
-> workaround, let's disable it.
+
+On 3/14/21 10:44 PM, Thomas Petazzoni wrote:
+> On Wed, 10 Mar 2021 10:14:49 +0100
+> Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
 > 
-> Fixes:
-> http://autobuild.buildroot.net/results/6c8/6c87be004adf03955c832be72c0c59749f311f71/
+>> This package is affected from binutils bug 21464, since there is no
+>> workaround, let's disable it.
+>>
+>> Fixes:
+>> http://autobuild.buildroot.net/results/ce9/ce9050a183a3f1e31cefbc4d4a6d780235466e39/
+>>
+>> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 > 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
->  package/libtheora/Config.in | 1 +
->  1 file changed, 1 insertion(+)
+> FYI, the latest build failure of gnutls on OpenRISC was in July 2020:
+> 
+>    http://autobuild.buildroot.net/?reason=gnutls%
+> 
+> Since then, no failure.
+> 
+> I just tested this configuration:
+> 
+> BR2_or1k=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_OPENRISC_UCLIBC_STABLE=y
+> BR2_INIT_NONE=y
+> BR2_SYSTEM_BIN_SH_NONE=y
+> # BR2_PACKAGE_BUSYBOX is not set
+> BR2_PACKAGE_GNUTLS=y
+> # BR2_TARGET_ROOTFS_TAR is not set
+> 
+> and it builds fine.
+> 
+> Please double check that the failures and bugs still exist before
+> sending patches. Thanks!
 
-This problem still affects binutils 2.33.1 and 2.34. Did you test with
-binutils 2.36 ?
+Ah, sorry, sure I will, and I will do the same for 2 old patches pending
+for riscv build failure that probably has been fixed in the meanwhile.
 
-Thanks,
-
-Thomas
+Kind regards
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Giulio Benetti
+Benetti Engineering sas
