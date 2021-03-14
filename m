@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Mar 2021 21:24:33 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/wpa_supplicant:
+Date: Sun, 14 Mar 2021 21:29:36 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/wpa_supplicant:
  add upstream 2021-1 security fix
-Message-ID: <20210314201236.3528F840E7@busybox.osuosl.org>
+Message-ID: <20210314201241.46EC987C90@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eb695bcbbc9d44987e05d9fcd1eddec20d6a0eed
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=ca8e5c9e33bcde0228e50a7c98966dd0bac4e95e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 Fixes the following security issue:
 
