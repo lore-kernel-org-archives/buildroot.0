@@ -1,86 +1,49 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Mar 2021 13:21:38 +0100
-Subject: [Buildroot] [git commit] package/libsigc: bump to version 2.10.6
-Message-ID: <20210314120902.005A887883@busybox.osuosl.org>
+Date: Sun, 14 Mar 2021 13:31:40 +0100
+Subject: [Buildroot] [git commit] package/luasec: bump to version 1.0
+Message-ID: <20210314120902.2BBF687A1A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5cd8c4313769774d11bb4919437bbb671be8e2da
+commit: https://git.buildroot.net/buildroot/commit/?id=5465f0ce59e722be31c092013c56193389a4adb2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Switch to meson-package as configure is not shipped in the official
-  tarball anymore
-- Drop host-m4 dependency (only needed in maintainer mode)
-- Disable examples and XML validation (enabled by default)
-- Drop LIBSIGC_INSTALL_TARGET_FIXUP as documentation is disabled by
-  default
-- Update web page in Config.in
-- Update indentation in hash file (two spaces)
+diff LICENSE:
+-LuaSec 0.9 license
+-Copyright (C) 2006-2019 Bruno Silvestre, UFG
++LuaSec 1.0 license
++Copyright (C) 2006-2021 Bruno Silvestre, UFG
 
-https://github.com/libsigcplusplus/libsigcplusplus/blob/2.10.6/NEWS
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libsigc/Config.in    |  2 +-
- package/libsigc/libsigc.hash |  6 +++---
- package/libsigc/libsigc.mk   | 14 +++++---------
- 3 files changed, 9 insertions(+), 13 deletions(-)
+ package/luasec/luasec.hash | 4 ++--
+ package/luasec/luasec.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libsigc/Config.in b/package/libsigc/Config.in
-index 4bd762efce..e5157e87b4 100644
---- a/package/libsigc/Config.in
-+++ b/package/libsigc/Config.in
-@@ -8,7 +8,7 @@ config BR2_PACKAGE_LIBSIGC
- 	  signals to any callback function, either global or a member
- 	  function, regardless of whether it is static or virtual.
- 
--	  http://libsigc.sourceforge.net/
-+	  https://libsigcplusplus.github.io/libsigcplusplus/
- 
- comment "libsigc++ needs a toolchain w/ C++, gcc >= 4.8"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-diff --git a/package/libsigc/libsigc.hash b/package/libsigc/libsigc.hash
-index bc3880f7c3..d631185a41 100644
---- a/package/libsigc/libsigc.hash
-+++ b/package/libsigc/libsigc.hash
-@@ -1,5 +1,5 @@
--# From http://ftp.gnome.org/pub/gnome/sources/libsigc++/2.10/libsigc++-2.10.0.sha256sum
--sha256	f843d6346260bfcb4426259e314512b99e296e8ca241d771d21ac64f28298d81	libsigc++-2.10.0.tar.xz
-+# From http://ftp.gnome.org/pub/gnome/sources/libsigc++/2.10/libsigc++-2.10.6.sha256sum
-+sha256  dda176dc4681bda9d5a2ac1bc55273bdd381662b7a6d49e918267d13e8774e1b  libsigc++-2.10.6.tar.xz
- 
- # Locally calculated
--sha256	5bbcbb737e60fe9deba08ecbd00920cfcc3403ba2e534c64fdeea49d6bb87509	COPYING
-+sha256  5bbcbb737e60fe9deba08ecbd00920cfcc3403ba2e534c64fdeea49d6bb87509  COPYING
-diff --git a/package/libsigc/libsigc.mk b/package/libsigc/libsigc.mk
-index d7cbd36da8..6539fdbdb6 100644
---- a/package/libsigc/libsigc.mk
-+++ b/package/libsigc/libsigc.mk
-@@ -5,18 +5,14 @@
+diff --git a/package/luasec/luasec.hash b/package/luasec/luasec.hash
+index c50da8b9a2..1ea422aa9b 100644
+--- a/package/luasec/luasec.hash
++++ b/package/luasec/luasec.hash
+@@ -1,3 +1,3 @@
+ # computed by luarocks/buildroot
+-sha256 b87c7d3bc5f07f5ad6fcf90f32f182d9a4a3f5f6b07e19221a86e89179ebd702  luasec-0.9-1.src.rock
+-sha256 4e1b2e7a46c756febf3ea76440fb5456c17e6c0312fd0135bd4649f4a2cd0d41  luasec/LICENSE
++sha256  b7e18f475c64896fe4921d367adabae765914f7526a68487a5fa6831040e7138  luasec-1.0-1.src.rock
++sha256  0d3431dad143f41c8902e4ee867e386a702ebad856c45239fb86460e27dabfbf  luasec/LICENSE
+diff --git a/package/luasec/luasec.mk b/package/luasec/luasec.mk
+index 42d292245d..3ef0c14daf 100644
+--- a/package/luasec/luasec.mk
++++ b/package/luasec/luasec.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- LIBSIGC_VERSION_MAJOR = 2.10
--LIBSIGC_VERSION = $(LIBSIGC_VERSION_MAJOR).0
-+LIBSIGC_VERSION = $(LIBSIGC_VERSION_MAJOR).6
- LIBSIGC_SOURCE = libsigc++-$(LIBSIGC_VERSION).tar.xz
- LIBSIGC_SITE = http://ftp.gnome.org/pub/GNOME/sources/libsigc++/$(LIBSIGC_VERSION_MAJOR)
--LIBSIGC_DEPENDENCIES = host-m4
- LIBSIGC_INSTALL_STAGING = YES
- LIBSIGC_LICENSE = LGPL-2.1+
- LIBSIGC_LICENSE_FILES = COPYING
-+LIBSIGC_CONF_OPTS = \
-+	-Dbuild-examples=false \
-+	-Dvalidation=false
- 
--define LIBSIGC_INSTALL_TARGET_FIXUP
--	rm -rf $(TARGET_DIR)/usr/share/devhelp/books/libsigc++*
--endef
--
--LIBSIGC_POST_INSTALL_TARGET_HOOKS += LIBSIGC_INSTALL_TARGET_FIXUP
--
--$(eval $(autotools-package))
-+$(eval $(meson-package))
+-LUASEC_VERSION = 0.9-1
++LUASEC_VERSION = 1.0-1
+ LUASEC_SUBDIR = luasec
+ LUASEC_LICENSE = MIT
+ LUASEC_LICENSE_FILES = $(LUASEC_SUBDIR)/LICENSE
