@@ -1,28 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Mar 2021 22:30:56 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libebml: security bump to
- version 1.4.2
-In-Reply-To: <20210303101039.500302-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Wed, 3 Mar 2021 11:10:39 +0100")
-References: <20210303101039.500302-1-fontaine.fabrice@gmail.com>
-Message-ID: <87blbl2zjj.fsf@dell.be.48ers.dk>
+Date: Sun, 14 Mar 2021 22:22:43 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/libebml: security
+ bump to version 1.4.2
+Message-ID: <20210314210721.7AD5B8122D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=878a7fded034dc91c023465a200ba22fcc4503bd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
- > Fix CVE-2021-3405: A flaw was found in libebml before 1.4.2. A heap
- > overflow bug exists in the implementation of EbmlString::ReadData and
- > EbmlUnicodeString::ReadData in libebml.
+Fix CVE-2021-3405: A flaw was found in libebml before 1.4.2. A heap
+overflow bug exists in the implementation of EbmlString::ReadData and
+EbmlUnicodeString::ReadData in libebml.
 
- > https://github.com/Matroska-Org/libebml/blob/release-1.4.2/ChangeLog
+https://github.com/Matroska-Org/libebml/blob/release-1.4.2/ChangeLog
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit ff18652b425c001ae06ce717790ebe2068735bc2)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libebml/libebml.hash | 2 +-
+ package/libebml/libebml.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Committed to 2020.02.x and 2020.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libebml/libebml.hash b/package/libebml/libebml.hash
+index f06924076e..32ca1e3dd3 100644
+--- a/package/libebml/libebml.hash
++++ b/package/libebml/libebml.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  80abc9a82549615018798ee704997270a39b43de9a6e7e0d23b62f8ce682c4b3  libebml-1.4.0.tar.xz
++sha256  41c7237ce05828fb220f62086018b080af4db4bb142f31bec0022c925889b9f2  libebml-1.4.2.tar.xz
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL
+diff --git a/package/libebml/libebml.mk b/package/libebml/libebml.mk
+index 911093f5ce..1949bede1f 100644
+--- a/package/libebml/libebml.mk
++++ b/package/libebml/libebml.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBEBML_VERSION = 1.4.0
++LIBEBML_VERSION = 1.4.2
+ LIBEBML_SOURCE = libebml-$(LIBEBML_VERSION).tar.xz
+ LIBEBML_SITE = http://dl.matroska.org/downloads/libebml
+ LIBEBML_INSTALL_STAGING = YES
