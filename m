@@ -1,51 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Mar 2021 22:15:00 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/libebml: security
- bump to version 1.4.2
-Message-ID: <20210314210729.4C053846E4@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 14 Mar 2021 22:33:09 +0100
+Subject: [Buildroot] [git commit] toolchain: introduce
+ BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464
+Message-ID: <20210314211134.4284987B83@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3c5bba0413015aab9b6c134529aa9ee4b848823a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=227cefef41f4edd4eaae3c2068fb41d236370f29
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix CVE-2021-3405: A flaw was found in libebml before 1.4.2. A heap
-overflow bug exists in the implementation of EbmlString::ReadData and
-EbmlUnicodeString::ReadData in libebml.
+The OpenRISC binutils is affected by a linker bug (binutils bug 21464)
+for which no workaround exists. This causes build breakage in a number
+of packages, so this commit introduces a
+BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464 option to identify this bug. As
+all binutils versions are affected, this option is true whenever the
+configuration targets OpenRISC.
 
-https://github.com/Matroska-Org/libebml/blob/release-1.4.2/ChangeLog
+The bug was already reported and it's been recently updated:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit ff18652b425c001ae06ce717790ebe2068735bc2)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+  https://sourceware.org/bugzilla/show_bug.cgi?id=21464
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libebml/libebml.hash | 2 +-
- package/libebml/libebml.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ toolchain/Config.in | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/libebml/libebml.hash b/package/libebml/libebml.hash
-index f06924076e..32ca1e3dd3 100644
---- a/package/libebml/libebml.hash
-+++ b/package/libebml/libebml.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  80abc9a82549615018798ee704997270a39b43de9a6e7e0d23b62f8ce682c4b3  libebml-1.4.0.tar.xz
-+sha256  41c7237ce05828fb220f62086018b080af4db4bb142f31bec0022c925889b9f2  libebml-1.4.2.tar.xz
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL
-diff --git a/package/libebml/libebml.mk b/package/libebml/libebml.mk
-index 911093f5ce..1949bede1f 100644
---- a/package/libebml/libebml.mk
-+++ b/package/libebml/libebml.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index ff1391beda..f3f9bbe641 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -81,6 +81,12 @@ config BR2_TOOLCHAIN_HAS_BINUTILS_BUG_19615
+ config BR2_TOOLCHAIN_HAS_BINUTILS_BUG_20006
+ 	bool
  
--LIBEBML_VERSION = 1.4.0
-+LIBEBML_VERSION = 1.4.2
- LIBEBML_SOURCE = libebml-$(LIBEBML_VERSION).tar.xz
- LIBEBML_SITE = http://dl.matroska.org/downloads/libebml
- LIBEBML_INSTALL_STAGING = YES
++# https://sourceware.org/bugzilla/show_bug.cgi?id=21464
++# Affect toolchains built with binutils 2.31.1, still not fixed.
++config BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464
++	bool
++	default y if BR2_or1k
++
+ # Atomic types can be:
+ #  - never lock-free
+ #  - sometimes lock-free
