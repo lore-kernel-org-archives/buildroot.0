@@ -1,55 +1,98 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Mar 2021 13:33:18 +0100
-Subject: [Buildroot] [PATCH 1/2] package/lua-curl: bump to version 0.3.13
-In-Reply-To: <20210313071145.1558401-1-francois.perrad@gadz.org>
-References: <20210313071145.1558401-1-francois.perrad@gadz.org>
-Message-ID: <20210314123318.GR2737665@scaer>
+Date: Sun, 14 Mar 2021 13:33:49 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libsigc: bump to version 2.10.6
+In-Reply-To: <20210311173653.611070-1-fontaine.fabrice@gmail.com>
+References: <20210311173653.611070-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210314123349.GS2737665@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fran?ois, All,
+Fabrice, All,
 
-On 2021-03-13 08:11 +0100, Francois Perrad spake thusly:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+On 2021-03-11 18:36 +0100, Fabrice Fontaine spake thusly:
+> - Switch to meson-package as configure is not shipped in the official
+>   tarball anymore
+> - Drop host-m4 dependency (only needed in maintainer mode)
+> - Disable examples and XML validation (enabled by default)
+> - Drop LIBSIGC_INSTALL_TARGET_FIXUP as documentation is disabled by
+>   default
+> - Update web page in Config.in
+> - Update indentation in hash file (two spaces)
+> 
+> https://github.com/libsigcplusplus/libsigcplusplus/blob/2.10.6/NEWS
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Series applied to master, thanks.
+Applied to master, thanks.
 
 Regards,
 Yann E. MORIN.
 
 > ---
->  package/lua-curl/lua-curl.hash | 4 ++--
->  package/lua-curl/lua-curl.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/libsigc/Config.in    |  2 +-
+>  package/libsigc/libsigc.hash |  6 +++---
+>  package/libsigc/libsigc.mk   | 14 +++++---------
+>  3 files changed, 9 insertions(+), 13 deletions(-)
 > 
-> diff --git a/package/lua-curl/lua-curl.hash b/package/lua-curl/lua-curl.hash
-> index 5210ceb0f..836e2cb6f 100644
-> --- a/package/lua-curl/lua-curl.hash
-> +++ b/package/lua-curl/lua-curl.hash
-> @@ -1,3 +1,3 @@
->  # computed by luarocks/buildroot
-> -sha256 b6b860cd416ad883f2c7c2e1696aceda60c96036f660fb8c0236a5cc3d961c04  lua-curl-0.3.12-1.src.rock
-> -sha256 0f92f4c4665aadffb023de44b16022282040fe4409d5cd3148f1812dec30cdff  Lua-cURLv3-0.3.12/LICENSE
-> +sha256 6b2cc48621fac3cb7c1669705475e67a6932829ba46efb9ac5864604848f8ea2  lua-curl-0.3.13-1.src.rock
-> +sha256 0f92f4c4665aadffb023de44b16022282040fe4409d5cd3148f1812dec30cdff  Lua-cURLv3-0.3.13/LICENSE
-> diff --git a/package/lua-curl/lua-curl.mk b/package/lua-curl/lua-curl.mk
-> index 37fbf30cc..2120d33ab 100644
-> --- a/package/lua-curl/lua-curl.mk
-> +++ b/package/lua-curl/lua-curl.mk
-> @@ -4,7 +4,7 @@
->  #
+> diff --git a/package/libsigc/Config.in b/package/libsigc/Config.in
+> index 4bd762efce..e5157e87b4 100644
+> --- a/package/libsigc/Config.in
+> +++ b/package/libsigc/Config.in
+> @@ -8,7 +8,7 @@ config BR2_PACKAGE_LIBSIGC
+>  	  signals to any callback function, either global or a member
+>  	  function, regardless of whether it is static or virtual.
+>  
+> -	  http://libsigc.sourceforge.net/
+> +	  https://libsigcplusplus.github.io/libsigcplusplus/
+>  
+>  comment "libsigc++ needs a toolchain w/ C++, gcc >= 4.8"
+>  	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+> diff --git a/package/libsigc/libsigc.hash b/package/libsigc/libsigc.hash
+> index bc3880f7c3..d631185a41 100644
+> --- a/package/libsigc/libsigc.hash
+> +++ b/package/libsigc/libsigc.hash
+> @@ -1,5 +1,5 @@
+> -# From http://ftp.gnome.org/pub/gnome/sources/libsigc++/2.10/libsigc++-2.10.0.sha256sum
+> -sha256	f843d6346260bfcb4426259e314512b99e296e8ca241d771d21ac64f28298d81	libsigc++-2.10.0.tar.xz
+> +# From http://ftp.gnome.org/pub/gnome/sources/libsigc++/2.10/libsigc++-2.10.6.sha256sum
+> +sha256  dda176dc4681bda9d5a2ac1bc55273bdd381662b7a6d49e918267d13e8774e1b  libsigc++-2.10.6.tar.xz
+>  
+>  # Locally calculated
+> -sha256	5bbcbb737e60fe9deba08ecbd00920cfcc3403ba2e534c64fdeea49d6bb87509	COPYING
+> +sha256  5bbcbb737e60fe9deba08ecbd00920cfcc3403ba2e534c64fdeea49d6bb87509  COPYING
+> diff --git a/package/libsigc/libsigc.mk b/package/libsigc/libsigc.mk
+> index d7cbd36da8..6539fdbdb6 100644
+> --- a/package/libsigc/libsigc.mk
+> +++ b/package/libsigc/libsigc.mk
+> @@ -5,18 +5,14 @@
 >  ################################################################################
 >  
-> -LUA_CURL_VERSION_UPSTREAM = 0.3.12
-> +LUA_CURL_VERSION_UPSTREAM = 0.3.13
->  LUA_CURL_VERSION = $(LUA_CURL_VERSION_UPSTREAM)-1
->  LUA_CURL_SUBDIR = Lua-cURLv3-$(LUA_CURL_VERSION_UPSTREAM)
->  LUA_CURL_LICENSE = MIT
+>  LIBSIGC_VERSION_MAJOR = 2.10
+> -LIBSIGC_VERSION = $(LIBSIGC_VERSION_MAJOR).0
+> +LIBSIGC_VERSION = $(LIBSIGC_VERSION_MAJOR).6
+>  LIBSIGC_SOURCE = libsigc++-$(LIBSIGC_VERSION).tar.xz
+>  LIBSIGC_SITE = http://ftp.gnome.org/pub/GNOME/sources/libsigc++/$(LIBSIGC_VERSION_MAJOR)
+> -LIBSIGC_DEPENDENCIES = host-m4
+>  LIBSIGC_INSTALL_STAGING = YES
+>  LIBSIGC_LICENSE = LGPL-2.1+
+>  LIBSIGC_LICENSE_FILES = COPYING
+> +LIBSIGC_CONF_OPTS = \
+> +	-Dbuild-examples=false \
+> +	-Dvalidation=false
+>  
+> -define LIBSIGC_INSTALL_TARGET_FIXUP
+> -	rm -rf $(TARGET_DIR)/usr/share/devhelp/books/libsigc++*
+> -endef
+> -
+> -LIBSIGC_POST_INSTALL_TARGET_HOOKS += LIBSIGC_INSTALL_TARGET_FIXUP
+> -
+> -$(eval $(autotools-package))
+> +$(eval $(meson-package))
 > -- 
-> 2.27.0
+> 2.30.0
 > 
 > _______________________________________________
 > buildroot mailing list
