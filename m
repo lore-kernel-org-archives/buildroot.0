@@ -1,57 +1,43 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Mar 2021 16:49:20 +0100
-Subject: [Buildroot] [git commit] package/docker-containerd: security bump
- to 1.4.4
-Message-ID: <20210314152734.B8E4687AA1@busybox.osuosl.org>
+Date: Sun, 14 Mar 2021 16:49:22 +0100
+Subject: [Buildroot] [git commit] package/docker-engine: bump version to
+ 20.10.5
+Message-ID: <20210314152734.D822E87AA1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=43a766e92d3b147c2118b9eb1ae008026d94f995
+commit: https://git.buildroot.net/buildroot/commit/?id=36b8a8ba6bdbc3001f93f6037910841db712a54d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Security fix for CVE-2021-21334:
-
-https://github.com/containerd/containerd/security/advisories/GHSA-6g2q-w5j3-fwh4
-
-Other changes:
-
- - Fix container create in CRI to prevent possible environment variable leak between containers
- - Update shim server to return grpc NotFound error
- - Add bounds on max oom_score_adj value for shim's AdjustOOMScore
- - Update task manager to use fresh context when calling shim shutdown
- - Update Docker resolver to avoid possible concurrent map access panic
- - Update shim's log file open flags to avoid containerd hang on syscall open
- - Fix incorrect usage calculation
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/docker-containerd/docker-containerd.hash | 2 +-
- package/docker-containerd/docker-containerd.mk   | 2 +-
+ package/docker-engine/docker-engine.hash | 2 +-
+ package/docker-engine/docker-engine.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/docker-containerd/docker-containerd.hash b/package/docker-containerd/docker-containerd.hash
-index c5cfc137b8..bb544e8d60 100644
---- a/package/docker-containerd/docker-containerd.hash
-+++ b/package/docker-containerd/docker-containerd.hash
+diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
+index 69ebd113ea..7e3ce6a5cf 100644
+--- a/package/docker-engine/docker-engine.hash
++++ b/package/docker-engine/docker-engine.hash
 @@ -1,3 +1,3 @@
- # Computed locally
--sha256	bc6d9452c700af0ebc09c0da8ddba55be4c03ac8928e72ca92d98905800c8018  docker-containerd-1.4.3.tar.gz
-+sha256  ac62c64664bf62fd44df0891c896eecdb6d93def3438271d7892dca75bc069d1  docker-containerd-1.4.4.tar.gz
- sha256	4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4  LICENSE
-diff --git a/package/docker-containerd/docker-containerd.mk b/package/docker-containerd/docker-containerd.mk
-index 626889e5f4..e229d9cb54 100644
---- a/package/docker-containerd/docker-containerd.mk
-+++ b/package/docker-containerd/docker-containerd.mk
+ # Locally calculated
+-sha256  62bb03f197b8a064da568e62639f6834f91c8cfc9273126a978847becc214c31  docker-engine-20.10.3.tar.gz
++sha256  bcf651d75e5c80421e8cd3b0d47f3425e01047cf67aef0eda83b68776905a583  docker-engine-20.10.5.tar.gz
+ sha256  7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index bbc97af8b5..d3f4d81572 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DOCKER_CONTAINERD_VERSION = 1.4.3
-+DOCKER_CONTAINERD_VERSION = 1.4.4
- DOCKER_CONTAINERD_SITE = $(call github,containerd,containerd,v$(DOCKER_CONTAINERD_VERSION))
- DOCKER_CONTAINERD_LICENSE = Apache-2.0
- DOCKER_CONTAINERD_LICENSE_FILES = LICENSE
+-DOCKER_ENGINE_VERSION = 20.10.3
++DOCKER_ENGINE_VERSION = 20.10.5
+ DOCKER_ENGINE_SITE = $(call github,moby,moby,v$(DOCKER_ENGINE_VERSION))
+ 
+ DOCKER_ENGINE_LICENSE = Apache-2.0
