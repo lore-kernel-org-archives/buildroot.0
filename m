@@ -1,74 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 14 Mar 2021 22:13:13 +0100
-Subject: [Buildroot] [git commit] package/nettle: bump to version 3.7.1
-Message-ID: <20210314205203.3AAEF81DAE@busybox.osuosl.org>
+Date: Sun, 14 Mar 2021 22:13:04 +0100
+Subject: [Buildroot] [git commit] package/lzip: bump to version 1.22
+Message-ID: <20210314205203.2BE4A815D8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a3e0c045e498afce4b11325710945ab0e1b610f4
+commit: https://git.buildroot.net/buildroot/commit/?id=4f09d90b08785a00dacc0511f11a410df6146cf2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/nettle/0001-disable-testsuite-examples.patch | 4 ++--
- package/nettle/Config.in                             | 2 +-
- package/nettle/nettle.hash                           | 4 ++--
- package/nettle/nettle.mk                             | 2 +-
- 4 files changed, 6 insertions(+), 6 deletions(-)
+ package/lzip/Config.in | 2 +-
+ package/lzip/lzip.hash | 4 ++--
+ package/lzip/lzip.mk   | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/nettle/0001-disable-testsuite-examples.patch b/package/nettle/0001-disable-testsuite-examples.patch
-index 82d97d5d21..aa37bcf8f3 100644
---- a/package/nettle/0001-disable-testsuite-examples.patch
-+++ b/package/nettle/0001-disable-testsuite-examples.patch
-@@ -9,9 +9,9 @@ Signed-off-by:  "Yann E. MORIN" <yann.morin.1998@free.fr>
- diff -durN nettle-2.7.1.orig/Makefile.in nettle-2.7.1/Makefile.in
- --- nettle-2.7.1.orig/Makefile.in	2013-05-28 16:21:54.000000000 +0200
- +++ nettle-2.7.1/Makefile.in	2014-12-12 19:57:12.499805574 +0100
--@@ -16,7 +16,7 @@
-+@@ -19,7 +19,7 @@
-  
-- OPT_ASM_SOURCES = @OPT_ASM_SOURCES@
-+ FAT_TEST_LIST = @FAT_TEST_LIST@
-  
- -SUBDIRS = tools testsuite examples
- +SUBDIRS = tools
-diff --git a/package/nettle/Config.in b/package/nettle/Config.in
-index 4890970120..cf4803c7bb 100644
---- a/package/nettle/Config.in
-+++ b/package/nettle/Config.in
-@@ -7,4 +7,4 @@ config BR2_PACKAGE_NETTLE
- 	  object-oriented languages, in applications like LSH or
- 	  GNUPG, or even in kernel space
+diff --git a/package/lzip/Config.in b/package/lzip/Config.in
+index d406e7710d..c07ef8d676 100644
+--- a/package/lzip/Config.in
++++ b/package/lzip/Config.in
+@@ -12,4 +12,4 @@ config BR2_PACKAGE_LZIP
+ 	  perspective. Lzip is a clean implementation of the LZMA
+ 	  algorithm.
  
--	  http://www.lysator.liu.se/~nisse/nettle/
-+	  https://www.lysator.liu.se/~nisse/nettle/
-diff --git a/package/nettle/nettle.hash b/package/nettle/nettle.hash
-index 1bbc1c6d22..5fd69200bf 100644
---- a/package/nettle/nettle.hash
-+++ b/package/nettle/nettle.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--# https://ftp.gnu.org/gnu/nettle/nettle-3.6.tar.gz.sig
--sha256  d24c0d0f2abffbc8f4f34dcf114b0f131ec3774895f3555922fe2f40f3d5e3f1  nettle-3.6.tar.gz
-+# https://ftp.gnu.org/gnu/nettle/nettle-3.7.1.tar.gz.sig
-+sha256  156621427c7b00a75ff9b34b770b95d34f80ef7a55c3407de94b16cbf436c42e  nettle-3.7.1.tar.gz
+-	  http://www.nongnu.org/lzip/lzip.html
++	  https://www.nongnu.org/lzip/lzip.html
+diff --git a/package/lzip/lzip.hash b/package/lzip/lzip.hash
+index 35ff7a44a0..57e7eb43f4 100644
+--- a/package/lzip/lzip.hash
++++ b/package/lzip/lzip.hash
+@@ -1,4 +1,4 @@
+-# From https://lists.nongnu.org/archive/html/lzip-bug/2019-01/msg00010.html
+-sha256  e48b5039d3164d670791f9c5dbaa832bf2df080cb1fbb4f33aa7b3300b670d8b  lzip-1.21.tar.gz
++# From https://lists.nongnu.org/archive/html/lzip-bug/2021-01/msg00008.html
++sha256  c3342d42e67139c165b8b128d033b5c96893a13ac5f25933190315214e87a948  lzip-1.22.tar.gz
  # Locally calculated
- sha256  a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LESSERv3
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYINGv2
-diff --git a/package/nettle/nettle.mk b/package/nettle/nettle.mk
-index fef68375db..dc76fc21ff 100644
---- a/package/nettle/nettle.mk
-+++ b/package/nettle/nettle.mk
+ sha256  3d77c1a58fbde5ddba612d1fe09965e20a3804953eca12e8c1892298bb8a5eef  COPYING
+diff --git a/package/lzip/lzip.mk b/package/lzip/lzip.mk
+index 2a9a079cde..cca6da07d0 100644
+--- a/package/lzip/lzip.mk
++++ b/package/lzip/lzip.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NETTLE_VERSION = 3.6
-+NETTLE_VERSION = 3.7.1
- NETTLE_SITE = http://www.lysator.liu.se/~nisse/archive
- NETTLE_DEPENDENCIES = gmp
- NETTLE_INSTALL_STAGING = YES
+-LZIP_VERSION = 1.21
++LZIP_VERSION = 1.22
+ LZIP_SITE = http://download.savannah.gnu.org/releases/lzip
+ LZIP_LICENSE = GPL-2.0+
+ LZIP_LICENSE_FILES = COPYING
