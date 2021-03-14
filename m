@@ -1,43 +1,66 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Mar 2021 13:31:07 +0100
-Subject: [Buildroot] [git commit] package/lua-curl: bump to version 0.3.13
-Message-ID: <20210314120902.157A687753@busybox.osuosl.org>
+Date: Sun, 14 Mar 2021 13:21:40 +0100
+Subject: [Buildroot] [git commit] package/rng-tools: bump to version 6.12
+Message-ID: <20210314120902.0B6F3811FF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=71cbdeb87eb42e39e8b5a6659f418c064e63e2fe
+commit: https://git.buildroot.net/buildroot/commit/?id=6d67585cac7df66f5f95a14b4fc129f8173c0190
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+libsysfs is not needed since
+https://github.com/nhorman/rng-tools/commit/46b4e8fd8955e25ef0d5e89d26c8cf1543d2fa8a
+
+https://github.com/nhorman/rng-tools/releases/tag/v6.12
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/lua-curl/lua-curl.hash | 4 ++--
- package/lua-curl/lua-curl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/rng-tools/Config.in      | 1 -
+ package/rng-tools/rng-tools.hash | 2 +-
+ package/rng-tools/rng-tools.mk   | 6 +++---
+ 3 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/lua-curl/lua-curl.hash b/package/lua-curl/lua-curl.hash
-index 5210ceb0f9..32f0506bbd 100644
---- a/package/lua-curl/lua-curl.hash
-+++ b/package/lua-curl/lua-curl.hash
+diff --git a/package/rng-tools/Config.in b/package/rng-tools/Config.in
+index 67e3d4185b..0dd269c818 100644
+--- a/package/rng-tools/Config.in
++++ b/package/rng-tools/Config.in
+@@ -3,7 +3,6 @@ config BR2_PACKAGE_RNG_TOOLS
+ 	# pthread_setaffinity_np
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
+-	select BR2_PACKAGE_LIBSYSFS
+ 	select BR2_PACKAGE_OPENSSL
+ 	help
+ 	  Daemon to use hardware random number generators.
+diff --git a/package/rng-tools/rng-tools.hash b/package/rng-tools/rng-tools.hash
+index de1f72617c..0ba2dc8329 100644
+--- a/package/rng-tools/rng-tools.hash
++++ b/package/rng-tools/rng-tools.hash
 @@ -1,3 +1,3 @@
- # computed by luarocks/buildroot
--sha256 b6b860cd416ad883f2c7c2e1696aceda60c96036f660fb8c0236a5cc3d961c04  lua-curl-0.3.12-1.src.rock
--sha256 0f92f4c4665aadffb023de44b16022282040fe4409d5cd3148f1812dec30cdff  Lua-cURLv3-0.3.12/LICENSE
-+sha256  6b2cc48621fac3cb7c1669705475e67a6932829ba46efb9ac5864604848f8ea2  lua-curl-0.3.13-1.src.rock
-+sha256  0f92f4c4665aadffb023de44b16022282040fe4409d5cd3148f1812dec30cdff  Lua-cURLv3-0.3.13/LICENSE
-diff --git a/package/lua-curl/lua-curl.mk b/package/lua-curl/lua-curl.mk
-index 37fbf30ccb..2120d33ab5 100644
---- a/package/lua-curl/lua-curl.mk
-+++ b/package/lua-curl/lua-curl.mk
-@@ -4,7 +4,7 @@
+ # Locally computed
+-sha256  644d8bd4e84cee29debddc7e6db72aff27e628e5a879ce310562edf50f12be41  rng-tools-6.11.tar.gz
++sha256  6fd5b52a700edec85eb1043970e22e8e2ad06a4b43851f35d33d90e09570e9d3  rng-tools-6.12.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/rng-tools/rng-tools.mk b/package/rng-tools/rng-tools.mk
+index ae20d96362..2d508413a4 100644
+--- a/package/rng-tools/rng-tools.mk
++++ b/package/rng-tools/rng-tools.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--LUA_CURL_VERSION_UPSTREAM = 0.3.12
-+LUA_CURL_VERSION_UPSTREAM = 0.3.13
- LUA_CURL_VERSION = $(LUA_CURL_VERSION_UPSTREAM)-1
- LUA_CURL_SUBDIR = Lua-cURLv3-$(LUA_CURL_VERSION_UPSTREAM)
- LUA_CURL_LICENSE = MIT
+-RNG_TOOLS_VERSION = 6.11
+-RNG_TOOLS_SITE = $(call github,nhorman,$(RNG_TOOLS_NAME),V$(RNG_TOOLS_VERSION))
++RNG_TOOLS_VERSION = 6.12
++RNG_TOOLS_SITE = $(call github,nhorman,$(RNG_TOOLS_NAME),v$(RNG_TOOLS_VERSION))
+ RNG_TOOLS_LICENSE = GPL-2.0
+ RNG_TOOLS_LICENSE_FILES = COPYING
+-RNG_TOOLS_DEPENDENCIES = libsysfs host-pkgconf openssl
++RNG_TOOLS_DEPENDENCIES = host-pkgconf openssl
+ # From git
+ RNG_TOOLS_AUTORECONF = YES
+ 
