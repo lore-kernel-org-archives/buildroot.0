@@ -1,62 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 14 Mar 2021 23:15:07 +0100
-Subject: [Buildroot] [PATCH 4/4] package/mender: Do not automatically
- select uboot tools if uboot is selected
-In-Reply-To: <20210307222536.2743089-5-aduskett@gmail.com>
-References: <20210307222536.2743089-1-aduskett@gmail.com>
- <20210307222536.2743089-5-aduskett@gmail.com>
-Message-ID: <20210314231507.7336bf4f@windsurf.home>
+Date: Sun, 14 Mar 2021 23:17:16 +0100
+Subject: [Buildroot] [git commit] package/kodi-inputstream-adaptive: update
+ project URL
+Message-ID: <20210314215352.0DE5D8678A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Adam,
+commit: https://git.buildroot.net/buildroot/commit/?id=9486de722722c61630387d275af0984537fa2109
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  7 Mar 2021 14:25:36 -0800
-aduskett at gmail.com wrote:
+Reference: https://github.com/xbmc/repo-binary-addons/pull/143
 
-> diff --git a/package/mender/Config.in b/package/mender/Config.in
-> index 6a80c410ce..6c84157734 100644
-> --- a/package/mender/Config.in
-> +++ b/package/mender/Config.in
-> @@ -5,14 +5,24 @@ config BR2_PACKAGE_MENDER
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
->  	select BR2_PACKAGE_OPENSSL
->  	select BR2_PACKAGE_XZ
-> -	select BR2_PACKAGE_UBOOT_TOOLS if BR2_TARGET_UBOOT # runtime
-> -	select BR2_PACKAGE_UBOOT_TOOLS_FWPRINTENV if BR2_TARGET_UBOOT # runtime
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-It's a bit odd to drop these.
-
->  	help
->  	  Mender is an open source over-the-air (OTA) software updater
->  	  for embedded Linux devices. Mender comprises a client
->  	  running at the embedded device, as well as a server that
->  	  manages deployments across many devices.
->  
-> +	  Note:
-> +	  For systems using uboot as the bootloader:
-> +	    - uboot must be patched with the mender uboot patches.
-> +	    - uboot-tools must be selected.
-> +	    - fw_printenv must be functional on the device.
-
-Indeed, here you are precisely saying that fw_printenv is needed. What
-about keeping the selects *and* adding your Config.in comment, perhaps
-without the "uboot-tools must be selected". It would be nice to have
-some more specific reference to the Mender U-Boot patches.
-
-> +	  For systems using Grub as the bootloader:
-> +	    - Mender depends on the mender-grubenv package.
-
-What about selecting BR2_PACKAGE_MENDER_GRUBENV then when
-BR2_TARGET_GRUB is enabled?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+index 6b085e49ce..d6d86817ce 100644
+--- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ KODI_INPUTSTREAM_ADAPTIVE_VERSION = 2.6.7-Matrix
+-KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,peak3d,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
++KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,xbmc,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
+ KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPL-2.0+
+ KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = LICENSE.GPL
+ KODI_INPUTSTREAM_ADAPTIVE_DEPENDENCIES = expat kodi
