@@ -1,52 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 14 Mar 2021 22:44:38 +0100
-Subject: [Buildroot] [PATCH v2 2/6] package/gnutls: disable package if
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Sun, 14 Mar 2021 22:45:07 +0100
+Subject: [Buildroot] [PATCH v2 3/3] package/zeromq: disable package if
  binutils is affected from bug 21464
-In-Reply-To: <20210310091453.23611-3-giulio.benetti@benettiengineering.com>
-References: <20210310091453.23611-1-giulio.benetti@benettiengineering.com>
- <20210310091453.23611-3-giulio.benetti@benettiengineering.com>
-Message-ID: <20210314224438.3123e1f9@windsurf.home>
+In-Reply-To: <20210314223616.5bfcc62f@windsurf.home>
+References: <20210305161211.4396-1-giulio.benetti@benettiengineering.com>
+ <20210305161211.4396-4-giulio.benetti@benettiengineering.com>
+ <20210314223616.5bfcc62f@windsurf.home>
+Message-ID: <bfde2763-b4f6-a816-101e-033b3801c003@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 10 Mar 2021 10:14:49 +0100
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
-
-> This package is affected from binutils bug 21464, since there is no
-> workaround, let's disable it.
+On 3/14/21 10:36 PM, Thomas Petazzoni wrote:
+> On Fri,  5 Mar 2021 17:12:11 +0100
+> Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
 > 
-> Fixes:
-> http://autobuild.buildroot.net/results/ce9/ce9050a183a3f1e31cefbc4d4a6d780235466e39/
+>>   config BR2_PACKAGE_ZEROMQ
+>>   	bool "zeromq"
+>>   	depends on BR2_INSTALL_LIBSTDCPP
+>>   	depends on BR2_TOOLCHAIN_HAS_THREADS
+>> +	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464
 > 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> This is not sufficient: there are numerous packages that "select
+> BR2_PACKAGE_ZEROMQ", so this "depends on" would have to be propagated.
 
-FYI, the latest build failure of gnutls on OpenRISC was in July 2020:
+Oh, again forgotten about Kconfig dependencies, I'm going to fix this
+and the other patches too.
 
-  http://autobuild.buildroot.net/?reason=gnutls%
+Thanks for reviewing.
 
-Since then, no failure.
-
-I just tested this configuration:
-
-BR2_or1k=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_OPENRISC_UCLIBC_STABLE=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_GNUTLS=y
-# BR2_TARGET_ROOTFS_TAR is not set
-
-and it builds fine.
-
-Please double check that the failures and bugs still exist before
-sending patches. Thanks!
-
-Thomas
+Best regards
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Giulio Benetti
+Benetti Engineering sas
