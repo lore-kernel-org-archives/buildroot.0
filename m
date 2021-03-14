@@ -1,58 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 14 Mar 2021 23:32:55 +0100
-Subject: [Buildroot] [git commit] package/redis: bump to v6.2.1
-Message-ID: <20210314221215.0A4B787748@busybox.osuosl.org>
+Date: Sun, 14 Mar 2021 23:32:43 +0100
+Subject: [Buildroot] [git commit] package/cog: bump to version 0.8.1
+Message-ID: <20210314221214.F346487404@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=774dfafdd8b81904acc2ab181916b0323d3e2a2e
+commit: https://git.buildroot.net/buildroot/commit/?id=0965217c445b27c18a47576deb9d85021002e5fc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-From the release notes:
-Introduction to the Redis 6.2 release
-=====================================
+This minor release contains a number of fixes and improves the reliability
+of the build system.  Release notes:
 
-This release is the first significant Redis release managed by the core team
-under the new project governance model.
+  https://wpewebkit.org/release/cog-0.8.1.html
 
-Redis 6.2 includes many new commands and improvements, but no big features. It
-mainly makes Redis more complete and addresses issues that have been requested
-by many users frequently or for a long time.
-=====================================
-
-See https://github.com/redis/redis/blob/6.2/00-RELEASENOTES
-
-Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/redis/redis.hash | 2 +-
- package/redis/redis.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/cog/cog.hash | 8 ++++----
+ package/cog/cog.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/redis/redis.hash b/package/redis/redis.hash
-index 9b87b49fb1..13c35195a6 100644
---- a/package/redis/redis.hash
-+++ b/package/redis/redis.hash
-@@ -1,5 +1,5 @@
- # From https://github.com/redis/redis-hashes/blob/master/README
--sha256  f16ad973d19f80f121e53794d5eb48a997e2c6a85b5be41bb3b66750cc17bf6b  redis-6.0.12.tar.gz
-+sha256  cd222505012cce20b25682fca931ec93bd21ae92cb4abfe742cf7b76aa907520  redis-6.2.1.tar.gz
+diff --git a/package/cog/cog.hash b/package/cog/cog.hash
+index d76306ca54..2cafe8ca6e 100644
+--- a/package/cog/cog.hash
++++ b/package/cog/cog.hash
+@@ -1,7 +1,7 @@
+-# From https://wpewebkit.org/releases/cog-0.8.0.tar.xz.sums
+-md5  f7aa8a425927cab247563411fc67c5a3  cog-0.8.0.tar.xz
+-sha1  977559204dae0f9220e4c6b8ded7537899fd2daf  cog-0.8.0.tar.xz
+-sha256  181b1f4963cdf264b8068460a64d14c92a627f7138ebecc0f36fce085f4e92dd  cog-0.8.0.tar.xz
++# From https://wpewebkit.org/releases/cog-0.8.1.tar.xz.sums
++md5  21664fb04c9149dea6d68e13e6074276  cog-0.8.1.tar.xz
++sha1  baabba7f0f6009c64ef0c4f7c5f807382cffef5d  cog-0.8.1.tar.xz
++sha256  b82e917eb764943b9859c631974f8f0e748b79ae87bb7a944f46c818740e0208  cog-0.8.1.tar.xz
  
- # Locally calculated
- sha256  97f0a15b7bbae580d2609dad2e11f1956ae167be296ab60f4691ab9c30ee9828  COPYING
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index c851e589c4..074773c3e1 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
+ # Hashes for license files:
+ sha256  e6c42d93c68b292bcccf6d2ec3e13da85df90b718ba27c2c2a01053a9d009252  COPYING
+diff --git a/package/cog/cog.mk b/package/cog/cog.mk
+index 47a5573dda..c7fc5e6fee 100644
+--- a/package/cog/cog.mk
++++ b/package/cog/cog.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--REDIS_VERSION = 6.0.12
-+REDIS_VERSION = 6.2.1
- REDIS_SITE = http://download.redis.io/releases
- REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
- REDIS_LICENSE_FILES = COPYING
+-COG_VERSION = 0.8.0
++COG_VERSION = 0.8.1
+ COG_SITE = https://wpewebkit.org/releases
+ COG_SOURCE = cog-$(COG_VERSION).tar.xz
+ COG_INSTALL_STAGING = YES
