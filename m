@@ -1,39 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Mar 2021 21:21:48 +0100
-Subject: [Buildroot] [git commit] package/python-pyyaml: security bump
- to version 5.4.1
-In-Reply-To: <20210302202639.36CF986A88@busybox.osuosl.org> (Yann E. MORIN's
- message of "Tue, 2 Mar 2021 21:49:10 +0100")
-References: <20210302202639.36CF986A88@busybox.osuosl.org>
-Message-ID: <87k0q932qr.fsf@dell.be.48ers.dk>
+Date: Sun, 14 Mar 2021 21:32:46 +0100
+Subject: [Buildroot] [PATCH] package/wpa_supplicant: add upstream 2021-1
+ security fix
+In-Reply-To: <20210302215943.14131-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 2 Mar 2021 22:59:43 +0100")
+References: <20210302215943.14131-1-peter@korsgaard.com>
+Message-ID: <87ft0x328h.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > commit:
- > https://git.buildroot.net/buildroot/commit/?id=de43a9775d4646035b18eb5737e5fa4cd2eeedea
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ > Fixes the following security issue:
+ > - wpa_supplicant P2P provision discovery processing vulnerability (no CVE
+ >   yet)
 
- > Fix CVE-2020-14343: A vulnerability was discovered in the PyYAML library
- > in versions before 5.4, where it is susceptible to arbitrary code
- > execution when it processes untrusted YAML files through the full_load
- > method or with the FullLoader loader. Applications that use the library
- > to process untrusted input may be vulnerable to this flaw. This flaw
- > allows an attacker to execute arbitrary code on the system by abusing
- > the python/object/new constructor. This flaw is due to an incomplete fix
- > for CVE-2020-1747.
+ > A vulnerability was discovered in how wpa_supplicant processes P2P
+ > (Wi-Fi Direct) provision discovery requests. Under a corner case
+ > condition, an invalid Provision Discovery Request frame could end up
+ > reaching a state where the oldest peer entry needs to be removed. With
+ > a suitably constructed invalid frame, this could result in use
+ > (read+write) of freed memory. This can result in an attacker within
+ > radio range of the device running P2P discovery being able to cause
+ > unexpected behavior, including termination of the wpa_supplicant process
+ > and potentially code execution.
 
- > Update hash of LICENSE file (update in year:
- > https://github.com/yaml/pyyaml/commit/58d0cb7ee09954c67fabfbd714c5673b03e7a9e1)
+ > For more details, see the advisory:
+ > https://w1.fi/security/2021-1/wpa_supplicant-p2p-provision-discovery-processing-vulnerability.txt
 
- > https://github.com/yaml/pyyaml/blob/5.4.1/CHANGES
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed to 2020.02.x and 2020.11.x, thanks.
 
