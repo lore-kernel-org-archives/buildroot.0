@@ -1,65 +1,87 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 15 Mar 2021 21:00:56 +0100
-Subject: [Buildroot] [PATCH 1/2] package/kodi-pvr-hts: bump version to
- 8.2.4-Matrix
-In-Reply-To: <20210315062124.120447-1-bernd.kuhls@t-online.de>
-References: <20210315062124.120447-1-bernd.kuhls@t-online.de>
-Message-ID: <20210315200056.GT2737665@scaer>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 15 Mar 2021 21:13:45 +0100
+Subject: [Buildroot] [PATCH v1] package/sane-backends: fix gcc-4.8 compile
+Message-ID: <20210315201345.4567-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+Add patch to use legacy initializer variant to fix gcc-4.8 compile.
 
-On 2021-03-15 07:21 +0100, Bernd Kuhls spake thusly:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Fixes:
 
-Series of two patches applied to master, thanks.
+  - http://autobuild.buildroot.net/results/9d1cd0d0aa8c929c4b1b23b04075c331c1be80e0
 
-Regards,
-Yann E. MORIN.
+  genesys/utilities.h:229:23: error: invalid initialization of non-const reference of type 'std::basic_ios<char>&' from an rvalue of type '<brace-enclosed initializer list>'
+           stream_{stream}
+                         ^
+  genesys/image_pipeline.cpp:715:19: error: invalid initialization of non-const reference of type 'genesys::ImagePipelineNode&' from an rvalue of type '<brace-enclosed initializer list>'
+       source_{source}
+                     ^
 
-> ---
->  package/kodi-pvr-hts/kodi-pvr-hts.hash | 2 +-
->  package/kodi-pvr-hts/kodi-pvr-hts.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/kodi-pvr-hts/kodi-pvr-hts.hash b/package/kodi-pvr-hts/kodi-pvr-hts.hash
-> index c5bcd63a4c..1264f1b4d3 100644
-> --- a/package/kodi-pvr-hts/kodi-pvr-hts.hash
-> +++ b/package/kodi-pvr-hts/kodi-pvr-hts.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed
-> -sha256  bdaf63945d6552bead5a6e8ba4ffe1b8057e3b0c05b52c0fbf93a7834f652330  kodi-pvr-hts-8.2.3-Matrix.tar.gz
-> +sha256  9b1cc87b776d6c2fdeb0f2b89c09c0de6e3aba86b2da515d24957292dbab8134  kodi-pvr-hts-8.2.4-Matrix.tar.gz
->  sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-> diff --git a/package/kodi-pvr-hts/kodi-pvr-hts.mk b/package/kodi-pvr-hts/kodi-pvr-hts.mk
-> index 849643ff1d..1456e79632 100644
-> --- a/package/kodi-pvr-hts/kodi-pvr-hts.mk
-> +++ b/package/kodi-pvr-hts/kodi-pvr-hts.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -KODI_PVR_HTS_VERSION = 8.2.3-Matrix
-> +KODI_PVR_HTS_VERSION = 8.2.4-Matrix
->  KODI_PVR_HTS_SITE = $(call github,kodi-pvr,pvr.hts,$(KODI_PVR_HTS_VERSION))
->  KODI_PVR_HTS_LICENSE = GPL-2.0+
->  KODI_PVR_HTS_LICENSE_FILES = LICENSE.md
-> -- 
-> 2.29.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ .../0002-genesys-fix-gcc-4.8-compile.patch    | 50 +++++++++++++++++++
+ 1 file changed, 50 insertions(+)
+ create mode 100644 package/sane-backends/0002-genesys-fix-gcc-4.8-compile.patch
 
+diff --git a/package/sane-backends/0002-genesys-fix-gcc-4.8-compile.patch b/package/sane-backends/0002-genesys-fix-gcc-4.8-compile.patch
+new file mode 100644
+index 0000000000..80346596cb
+--- /dev/null
++++ b/package/sane-backends/0002-genesys-fix-gcc-4.8-compile.patch
+@@ -0,0 +1,50 @@
++From f67cfd6a534e9faaca83afebd61a6d77d7837174 Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Mon, 15 Mar 2021 20:53:55 +0100
++Subject: [PATCH] genesys: fix gcc-4.8 compile
++
++Fixes:
++
++  genesys/utilities.h:229:23: error: invalid initialization of non-const reference of type 'std::basic_ios<char>&' from an rvalue of type '<brace-enclosed initializer list>'
++           stream_{stream}
++                         ^
++  genesys/image_pipeline.cpp:715:19: error: invalid initialization of non-const reference of type 'genesys::ImagePipelineNode&' from an rvalue of type '<brace-enclosed initializer list>'
++       source_{source}
++                     ^
++
++[Upstream: https://gitlab.com/sane-project/backends/-/merge_requests/609]
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ backend/genesys/image_pipeline.cpp | 2 +-
++ backend/genesys/utilities.h        | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/backend/genesys/image_pipeline.cpp b/backend/genesys/image_pipeline.cpp
++index 4161e95..14e2f8d 100644
++--- a/backend/genesys/image_pipeline.cpp
+++++ b/backend/genesys/image_pipeline.cpp
++@@ -712,7 +712,7 @@ ImagePipelineNodeCalibrate::ImagePipelineNodeCalibrate(ImagePipelineNode& source
++                                                        const std::vector<std::uint16_t>& bottom,
++                                                        const std::vector<std::uint16_t>& top,
++                                                        std::size_t x_start) :
++-    source_{source}
+++    source_(source)
++ {
++     std::size_t size = 0;
++     if (bottom.size() >= x_start && top.size() >= x_start) {
++diff --git a/backend/genesys/utilities.h b/backend/genesys/utilities.h
++index 6e637d0..2ef2ddd 100644
++--- a/backend/genesys/utilities.h
+++++ b/backend/genesys/utilities.h
++@@ -226,7 +226,7 @@ class BasicStreamStateSaver
++ {
++ public:
++     explicit BasicStreamStateSaver(std::basic_ios<Char, Traits>& stream) :
++-        stream_{stream}
+++        stream_(stream)
++     {
++         flags_ = stream_.flags();
++         width_ = stream_.width();
++-- 
++2.30.1
++
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.30.1
