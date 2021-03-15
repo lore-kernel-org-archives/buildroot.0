@@ -1,45 +1,47 @@
-From: Christian Stewart <christian@paral.in>
-Date: Mon, 15 Mar 2021 14:00:38 -0700
-Subject: [Buildroot] [PATCH v1 1/2] package/batman-adv: fix compile with
- BR2_PACKAGE_BATMAN_ADV_BATMAN_V disabled
-In-Reply-To: <20210314223207.13460-1-ps.report@gmx.net>
-References: <20210314223207.13460-1-ps.report@gmx.net>
-Message-ID: <CA+h8R2qT=su3CO8OCVbQtdpsZezCxsrnq2UtWWNJVp+ZP75r8A@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 15 Mar 2021 21:07:09 +0000
+Subject: [Buildroot] [Bug 13616] tar file from git repository generation
+ issue
+In-Reply-To: <bug-13616-163@https.bugs.busybox.net/>
+References: <bug-13616-163@https.bugs.busybox.net/>
+Message-ID: <bug-13616-163-QXbhzR03Tr@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, all,
+https://bugs.busybox.net/show_bug.cgi?id=13616
 
-On Sun, Mar 14, 2021 at 3:32 PM Peter Seiderer <ps.report@gmx.net> wrote:
->
-> The given 'CONFIG_BATMAN_ADV_BATMAN_V=' is enough to trigger the wrong
-> code compile path in net/batman-adv/bat_v.h missing the static inline
-> dummy implementations.
->
-> Fixes:
+Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
-Unfortunately after applying this commit it still breaks.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |yann.morin.1998 at free.fr
+           Assignee|unassigned at buildroot.uclibc |yann.morin.1998 at free.fr
+                   |.org                        |
+             Status|NEW                         |ASSIGNED
 
-I confirmed that the CONFIG_BATMAN_ADV_BATMAN_V is not being set now.
+--- Comment #3 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+Jean-Pierre, All,
 
+Thanks for the report.
 
-CONFIG_BATMAN_ADV=m
-CONFIG_BATMAN_ADV_BLA=y
-CONFIG_BATMAN_ADV_DAT=y
-CONFIG_BATMAN_ADV_MCAST=y
-M=build/batman-adv-2021.0/net/batman-adv
-make modules
+The use of --transform (in the current form or similar) has been introduced in
+commit 6d938bcb5249 in 2018-04-02, and although we had a few fixups over the
+following days, it has stayed like that ever since, until we introduced the
+current generic helper, that reuses that exact same --transform pattern.
 
-[snip]
+So, is this a new behaviour on your side, or is it a new package you are
+introducing?
 
-  MODPOST /build/batman-adv-2021.0/net/batman-adv/Module.symvers
-ERROR: modpost: "batadv_v_mesh_free" undefined!
-ERROR: modpost: "batadv_v_mesh_init" undefined!
-ERROR: modpost: "batadv_v_hardif_init" undefined!
-ERROR: modpost: "batadv_v_init" undefined!
+In any case, the use of the 'S' flag does indeed make sense.
 
-Thanks,
-Christian Stewart
+Can you submit your patches to the mailing list, please?
+
+Regards,
+Yann E. MORIN.
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
