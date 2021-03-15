@@ -1,76 +1,49 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Mon, 15 Mar 2021 10:31:06 -0700
-Subject: [Buildroot] [PATCH v2 1/1] package/mender: Do not automatically
- select uboot tools if uboot is selected
-Message-ID: <20210315173106.162235-1-aduskett@rivian.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 15 Mar 2021 19:58:05 +0100
+Subject: [Buildroot] [PATCH 1/1] package/pcmanfm: bump to version 1.3.2
+Message-ID: <20210315185805.2107718-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <aduskett@gmail.com>
+Update indentation in hash file (two spaces)
 
-Because uboot requires a set of unique patches for each board, the upstream
-package developers are phasing out supporting uboot wherever possible.
-Instead, they recommend using Grub2 as a secondary bootloader and using
-the mender-grubenv package.
-
-Because the mender-grubenv file provides it's own fw_printenv script, it is
-not possible to know if U-Boot's fw_printenv or mender-grubenv's fw_printenv
-should be used.
-
-As such, remove selecting uboot tools when uboot is selected, and instead add
-a more comprehensive note in the help section about what Mender requires for
-uboot and grub2-based systems, with a link to the meta-mender github project
-for the base uboot patches, and a link to the official documentation on
-manual uboot integration.
-
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/mender/Config.in | 24 ++++++++++++++++++++++--
- 1 file changed, 22 insertions(+), 2 deletions(-)
+ package/pcmanfm/pcmanfm.hash | 9 +++++----
+ package/pcmanfm/pcmanfm.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/mender/Config.in b/package/mender/Config.in
-index 6a80c410ce..accee4676a 100644
---- a/package/mender/Config.in
-+++ b/package/mender/Config.in
-@@ -5,14 +5,34 @@ config BR2_PACKAGE_MENDER
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_XZ
--	select BR2_PACKAGE_UBOOT_TOOLS if BR2_TARGET_UBOOT # runtime
--	select BR2_PACKAGE_UBOOT_TOOLS_FWPRINTENV if BR2_TARGET_UBOOT # runtime
- 	help
- 	  Mender is an open source over-the-air (OTA) software updater
- 	  for embedded Linux devices. Mender comprises a client
- 	  running at the embedded device, as well as a server that
- 	  manages deployments across many devices.
+diff --git a/package/pcmanfm/pcmanfm.hash b/package/pcmanfm/pcmanfm.hash
+index b5574e39cd..1911de20b1 100644
+--- a/package/pcmanfm/pcmanfm.hash
++++ b/package/pcmanfm/pcmanfm.hash
+@@ -1,6 +1,7 @@
+ # From https://sourceforge.net/projects/pcmanfm/files/PCManFM%20%2B%20Libfm%20%28tarball%20release%29/PCManFM/
+-md5  d32ad2c9c7c52bff2004bbc120b53420 pcmanfm-1.3.1.tar.xz
+-sha1  4de1e5cb00fbf837c137f205e7e2327e3b49cb90 pcmanfm-1.3.1.tar.xz
++md5  ef7c4417d2697ef138d175db7aeae15a  pcmanfm-1.3.2.tar.xz
++sha1  bc4e468b0ec3089aaf817eafed43ae06350961ee  pcmanfm-1.3.2.tar.xz
  
-+	  Notes:
-+	  For systems using uboot as the bootloader:
-+	    - uboot must have the mender uboot patches applied.
-+	    - uboot-tools must be selected.
-+	    - fw_printenv must be functional on the device.
-+	  The Mender Uboot patches are at:
-+	  https://github.com/mendersoftware/meta-mender/
-+
-+	  For more information on Manual U-Boot integration, see:
-+	  https://docs.mender.io/2.6/system-updates-yocto-project/board-integration/bootloader-support/u-boot/manual-u-boot-integration
-+
-+	  For systems using Grub2 as the bootloader:
-+	    - Mender depends on the mender-grubenv package.
-+	    - The mender-grubenv package provides a fw_printenv script,
-+	      which is not compatible with the uboot-tools fw_printenv
-+	      script.
-+
-+	  The mender project recommends using uboot to load Grub2 as a
-+	  secondary bootloader whenever possible. Using Grub2 as a
-+	  secondary bootloader prevents users from porting the patches
-+	  for uboot to each new device.
-+
- 	  https://github.com/mendersoftware/mender
+-# Hash for license file:
+-sha256 231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
++# Locally computed:
++sha256  14cb7b247493c4cce65fbb5902611e3ad00a7a870fbc1e50adc50428c5140cf7  pcmanfm-1.3.2.tar.xz
++sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
+diff --git a/package/pcmanfm/pcmanfm.mk b/package/pcmanfm/pcmanfm.mk
+index 1d946ba521..cb69f60d42 100644
+--- a/package/pcmanfm/pcmanfm.mk
++++ b/package/pcmanfm/pcmanfm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- comment "mender needs a toolchain w/ threads"
+-PCMANFM_VERSION = 1.3.1
++PCMANFM_VERSION = 1.3.2
+ PCMANFM_SOURCE = pcmanfm-$(PCMANFM_VERSION).tar.xz
+ PCMANFM_SITE = http://sourceforge.net/projects/pcmanfm/files
+ PCMANFM_DEPENDENCIES = libglib2 menu-cache libfm $(TARGET_NLS_DEPENDENCIES)
 -- 
-2.29.2
+2.30.0
