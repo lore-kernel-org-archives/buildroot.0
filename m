@@ -1,41 +1,83 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 15 Mar 2021 07:21:23 +0100
-Subject: [Buildroot] [PATCH 1/2] package/kodi-pvr-hts: bump version to
- 8.2.4-Matrix
-Message-ID: <20210315062124.120447-1-bernd.kuhls@t-online.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 15 Mar 2021 07:34:10 +0100
+Subject: [Buildroot] [PATCH 1/1] package/proftpd: fix build with gcc 10
+Message-ID: <20210315063410.991675-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/kodi-pvr-hts/kodi-pvr-hts.hash | 2 +-
- package/kodi-pvr-hts/kodi-pvr-hts.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Fixes:
+ - http://autobuild.buildroot.org/results/d6ce64245c2724cbd94583490bf009c188182b1b
 
-diff --git a/package/kodi-pvr-hts/kodi-pvr-hts.hash b/package/kodi-pvr-hts/kodi-pvr-hts.hash
-index c5bcd63a4c..1264f1b4d3 100644
---- a/package/kodi-pvr-hts/kodi-pvr-hts.hash
-+++ b/package/kodi-pvr-hts/kodi-pvr-hts.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  bdaf63945d6552bead5a6e8ba4ffe1b8057e3b0c05b52c0fbf93a7834f652330  kodi-pvr-hts-8.2.3-Matrix.tar.gz
-+sha256  9b1cc87b776d6c2fdeb0f2b89c09c0de6e3aba86b2da515d24957292dbab8134  kodi-pvr-hts-8.2.4-Matrix.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-hts/kodi-pvr-hts.mk b/package/kodi-pvr-hts/kodi-pvr-hts.mk
-index 849643ff1d..1456e79632 100644
---- a/package/kodi-pvr-hts/kodi-pvr-hts.mk
-+++ b/package/kodi-pvr-hts/kodi-pvr-hts.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_PVR_HTS_VERSION = 8.2.3-Matrix
-+KODI_PVR_HTS_VERSION = 8.2.4-Matrix
- KODI_PVR_HTS_SITE = $(call github,kodi-pvr,pvr.hts,$(KODI_PVR_HTS_VERSION))
- KODI_PVR_HTS_LICENSE = GPL-2.0+
- KODI_PVR_HTS_LICENSE_FILES = LICENSE.md
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...tab-fix-build-failure-against-gcc-10.patch | 56 +++++++++++++++++++
+ 1 file changed, 56 insertions(+)
+ create mode 100644 package/proftpd/0001-mod_quotatab-fix-build-failure-against-gcc-10.patch
+
+diff --git a/package/proftpd/0001-mod_quotatab-fix-build-failure-against-gcc-10.patch b/package/proftpd/0001-mod_quotatab-fix-build-failure-against-gcc-10.patch
+new file mode 100644
+index 0000000000..5f4eb66c71
+--- /dev/null
++++ b/package/proftpd/0001-mod_quotatab-fix-build-failure-against-gcc-10.patch
+@@ -0,0 +1,56 @@
++From 9c9623c8a47fb5580dfea1a59296c6d224479504 Mon Sep 17 00:00:00 2001
++From: Sergei Trofimovich <slyfox@gentoo.org>
++Date: Mon, 2 Mar 2020 23:45:22 +0000
++Subject: [PATCH] mod_quotatab: fix build failure against gcc-10
++
++On gcc-10 (and gcc-9 -fno-common) build fails as:
++
++```
++$ ./configure --with-modules=mod_quotatab && make
++...
++ld: modules/module_glue.o:(.data.rel+0x68):
++  undefined reference to `quotatab_file_module'
++collect2: error: ld returned 1 exit status
++make: *** [Makefile:56: proftpd] Error 1
++```
++
++gcc-10 will change the default from -fcommon to fno-common:
++https://gcc.gnu.org/PR85678.
++
++The error also happens if CFLAGS=-fno-common passed explicitly.
++
++Signed-off-by: Sergei Trofimovich <slyfox@gentoo.org>
++
++[Retrieved from:
++https://github.com/proftpd/proftpd/commit/9c9623c8a47fb5580dfea1a59296c6d224479504]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ contrib/mod_quotatab.c | 1 +
++ contrib/mod_quotatab.h | 2 +-
++ 2 files changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/contrib/mod_quotatab.c b/contrib/mod_quotatab.c
++index 4fa6c1f44..0ee480163 100644
++--- a/contrib/mod_quotatab.c
+++++ b/contrib/mod_quotatab.c
++@@ -50,6 +50,7 @@ typedef struct regtab_obj {
++ module quotatab_module;
++ 
++ /* Quota objects for the current session */
+++quota_deltas_t quotatab_deltas;
++ static quota_table_t *limit_tab = NULL;
++ static quota_limit_t sess_limit;
++ 
++diff --git a/contrib/mod_quotatab.h b/contrib/mod_quotatab.h
++index ed30333f5..c818395a0 100644
++--- a/contrib/mod_quotatab.h
+++++ b/contrib/mod_quotatab.h
++@@ -188,7 +188,7 @@ typedef struct table_obj {
++ #define QUOTATAB_TALLY_SRC      0x0002
++ 
++ /* Quota objects for the current session. */
++-quota_deltas_t quotatab_deltas;
+++extern quota_deltas_t quotatab_deltas;
++ 
++ /* Function prototypes necessary for quotatab sub-modules */
++ int quotatab_log(const char *, ...)
 -- 
-2.29.2
+2.30.0
