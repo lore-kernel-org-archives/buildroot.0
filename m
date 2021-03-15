@@ -1,150 +1,63 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 15 Mar 2021 22:34:38 +0100
-Subject: [Buildroot] [PATCH v1] package/cifs-utils: bump version to 6.12
-Message-ID: <20210315213438.6103-1-ps.report@gmx.net>
+Date: Mon, 15 Mar 2021 22:50:46 +0100
+Subject: [Buildroot] [PATCH v1 1/2] package/batman-adv: fix compile with
+ BR2_PACKAGE_BATMAN_ADV_BATMAN_V disabled
+In-Reply-To: <CA+h8R2qT=su3CO8OCVbQtdpsZezCxsrnq2UtWWNJVp+ZP75r8A@mail.gmail.com>
+References: <20210314223207.13460-1-ps.report@gmx.net>
+ <CA+h8R2qT=su3CO8OCVbQtdpsZezCxsrnq2UtWWNJVp+ZP75r8A@mail.gmail.com>
+Message-ID: <20210315225046.522e98f6@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- removed 0001-Use-DESTDIR-when-installing-mount.smb3-and-optionall.patch
-  (superseded by upstream commit [1])
+Hello Christian,
 
-- adjust autoreconf comment accordingly
+On Mon, 15 Mar 2021 14:00:38 -0700, Christian Stewart <christian@paral.in> wrote:
 
-- add option for smb tools to avoid hard python runtime dependency
-  (smbinfo and smb2-quota are python scripts)
+> Peter, all,
+>
+> On Sun, Mar 14, 2021 at 3:32 PM Peter Seiderer <ps.report@gmx.net> wrote:
+> >
+> > The given 'CONFIG_BATMAN_ADV_BATMAN_V=' is enough to trigger the wrong
+> > code compile path in net/batman-adv/bat_v.h missing the static inline
+> > dummy implementations.
+> >
+> > Fixes:
+>
+> Unfortunately after applying this commit it still breaks.
+>
+> I confirmed that the CONFIG_BATMAN_ADV_BATMAN_V is not being set now.
+>
+>
+> CONFIG_BATMAN_ADV=m
+> CONFIG_BATMAN_ADV_BLA=y
+> CONFIG_BATMAN_ADV_DAT=y
+> CONFIG_BATMAN_ADV_MCAST=y
+> M=build/batman-adv-2021.0/net/batman-adv
+> make modules
+>
+> [snip]
+>
+>   MODPOST /build/batman-adv-2021.0/net/batman-adv/Module.symvers
+> ERROR: modpost: "batadv_v_mesh_free" undefined!
+> ERROR: modpost: "batadv_v_mesh_init" undefined!
+> ERROR: modpost: "batadv_v_hardif_init" undefined!
+> ERROR: modpost: "batadv_v_init" undefined!
 
-Changelog ([2]):
+Mind to share your defconfig (which cross-compiler)?
 
-  December, 2020: Release 6.12
-  get/setcifsacl tools are improved to support changing owner, group and SACLs
-  mount.cifs is enhanced to use SUDO_UID env variable for cruid
-  smbinfo is re-written in Python language
-  https://lists.samba.org/archive/samba-technical/2020-December/136156.html
+Did you do a complete re-build of the batman-adv-2021.0
+package (rm -rf build/batman-adv-2021.0 && make batman-adv)?
 
-[1] https://git.samba.org/?p=cifs-utils.git;a=patch;h=a00e84378d9c5e63272ff69ca18fd0e872b384d3
-[2] https://wiki.samba.org/index.php/LinuxCIFS_utils
+Regards,
+Peter
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- ...-installing-mount.smb3-and-optionall.patch | 41 -------------------
- package/cifs-utils/Config.in                  | 11 +++++
- package/cifs-utils/cifs-utils.hash            |  2 +-
- package/cifs-utils/cifs-utils.mk              | 12 +++++-
- 4 files changed, 22 insertions(+), 44 deletions(-)
- delete mode 100644 package/cifs-utils/0001-Use-DESTDIR-when-installing-mount.smb3-and-optionall.patch
-
-diff --git a/package/cifs-utils/0001-Use-DESTDIR-when-installing-mount.smb3-and-optionall.patch b/package/cifs-utils/0001-Use-DESTDIR-when-installing-mount.smb3-and-optionall.patch
-deleted file mode 100644
-index e36ec5b5da..0000000000
---- a/package/cifs-utils/0001-Use-DESTDIR-when-installing-mount.smb3-and-optionall.patch
-+++ /dev/null
-@@ -1,41 +0,0 @@
--From dbb4452787cb966cc74b2015689961875fd5d668 Mon Sep 17 00:00:00 2001
--From: Ryan Barnett <ryanbarnett3@gmail.com>
--Date: Mon, 27 Apr 2020 22:03:25 -0500
--Subject: [PATCH] Use DESTDIR when installing mount.smb3 and optionally install
-- man page
--
--Properly create mount.smb3 symlink by using DESTDIR. Also use
--CONFIG_MAN to optionally install manpage for mount.smb3.
--
--Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
-----
--Upstream: https://marc.info/?l=linux-cifs&m=158804444725745&w=2
-----
-- Makefile.am | 10 ++++++----
-- 1 file changed, 6 insertions(+), 4 deletions(-)
--
--diff --git a/Makefile.am b/Makefile.am
--index fe9cd34..e0587f1 100644
----- a/Makefile.am
--+++ b/Makefile.am
--@@ -119,11 +119,13 @@ endif
-- SUBDIRS = contrib
-- 
-- install-exec-hook:
---	(cd $(ROOTSBINDIR) && ln -sf mount.cifs mount.smb3)
--+	(cd $(DESTDIR)$(ROOTSBINDIR) && ln -sf mount.cifs mount.smb3)
-- 
--+if CONFIG_MAN
-- install-data-hook:
---	(cd $(man8dir) && ln -sf mount.cifs.8 mount.smb3.8)
--+	(cd $(DESTDIR)$(man8dir) && ln -sf mount.cifs.8 mount.smb3.8)
--+endif
-- 
-- uninstall-hook:
---	(cd $(ROOTSBINDIR) && rm -f $(ROOTSBINDIR)/mount.smb3)
---	(cd $(man8dir) && rm -f $(man8dir)/mount.smb3.8)
--+	rm -f $(DESTDIR)$(ROOTSBINDIR)/mount.smb3
--+	rm -f $(DESTDIR)$(man8dir)/mount.smb3.8
---- 
--2.17.1
--
-diff --git a/package/cifs-utils/Config.in b/package/cifs-utils/Config.in
-index b433850a18..0e61243de4 100644
---- a/package/cifs-utils/Config.in
-+++ b/package/cifs-utils/Config.in
-@@ -13,3 +13,14 @@ config BR2_PACKAGE_CIFS_UTILS
- 	  split them off into their own package.
- 
- 	  http://wiki.samba.org/index.php/LinuxCIFS_utils
-+
-+if BR2_PACKAGE_CIFS_UTILS
-+
-+config BR2_PACKAGE_CIFS_UTILS_SMBTOOLS
-+	bool "smbtools"
-+	select BR2_PACKAGE_PYTHON3 if !BR2_PACKAGE_PYTHON # runtime
-+	help
-+	  Install the smb tools smbinfo and smb2-quota (python
-+	  implementations).
-+
-+endif
-diff --git a/package/cifs-utils/cifs-utils.hash b/package/cifs-utils/cifs-utils.hash
-index ca97eb8e56..cd7a9bba62 100644
---- a/package/cifs-utils/cifs-utils.hash
-+++ b/package/cifs-utils/cifs-utils.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--sha256  b859239a3f204f8220d3e54ed43bf8109e1ef202042dd87ba87492f8878728d9  cifs-utils-6.11.tar.bz2
-+sha256  922ddcc3059922e80789312c386b9c569991b4350d3ae3099de3e4b82f3885ef  cifs-utils-6.12.tar.bz2
- 
- # Hash for license file:
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/cifs-utils/cifs-utils.mk b/package/cifs-utils/cifs-utils.mk
-index 63b454413c..473e8a2c28 100644
---- a/package/cifs-utils/cifs-utils.mk
-+++ b/package/cifs-utils/cifs-utils.mk
-@@ -4,13 +4,13 @@
- #
- ################################################################################
- 
--CIFS_UTILS_VERSION = 6.11
-+CIFS_UTILS_VERSION = 6.12
- CIFS_UTILS_SOURCE = cifs-utils-$(CIFS_UTILS_VERSION).tar.bz2
- CIFS_UTILS_SITE = http://ftp.samba.org/pub/linux-cifs/cifs-utils
- CIFS_UTILS_LICENSE = GPL-3.0+
- CIFS_UTILS_LICENSE_FILES = COPYING
- CIFS_UTILS_CPE_ID_VENDOR = samba
--# Missing install-sh in release tarball and patching Makefile.am
-+# Missing install-sh in release tarball
- CIFS_UTILS_AUTORECONF = YES
- CIFS_UTILS_DEPENDENCIES = host-pkgconf
- 
-@@ -31,4 +31,12 @@ endef
- 
- CIFS_UTILS_POST_PATCH_HOOKS += CIFS_UTILS_NO_WERROR
- 
-+ifeq ($(BR2_PACKAGE_CIFS_UTILS_SMBTOOLS),)
-+define CIFS_UTILS_REMOVE_SMBTOOLS
-+	rm -f $(TARGET_DIR)/usr/bin/smbinfo
-+	rm -f $(TARGET_DIR)/usr/bin/smb2-quota
-+endef
-+CIFS_UTILS_POST_INSTALL_TARGET_HOOKS += CIFS_UTILS_REMOVE_SMBTOOLS
-+endif
-+
- $(eval $(autotools-package))
--- 
-2.30.1
+>
+> Thanks,
+> Christian Stewart
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
