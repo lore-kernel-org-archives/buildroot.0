@@ -1,51 +1,45 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 15 Mar 2021 20:16:57 +0100
-Subject: [Buildroot] [PATCH v2,4/4] package/pcmanfm: bump to version 1.3.2
-In-Reply-To: <20210315191657.2150193-1-fontaine.fabrice@gmail.com>
-References: <20210315191657.2150193-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210315191657.2150193-4-fontaine.fabrice@gmail.com>
+Date: Mon, 15 Mar 2021 20:32:02 +0100
+Subject: [Buildroot] [PATCH 1/1] package/whois: bump to version 5.5.8
+Message-ID: <20210315193202.2222020-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update indentation in hash file (two spaces)
-
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/pcmanfm/pcmanfm.hash | 9 +++++----
- package/pcmanfm/pcmanfm.mk   | 2 +-
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ package/whois/whois.hash | 4 ++--
+ package/whois/whois.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/pcmanfm/pcmanfm.hash b/package/pcmanfm/pcmanfm.hash
-index b5574e39cd..1911de20b1 100644
---- a/package/pcmanfm/pcmanfm.hash
-+++ b/package/pcmanfm/pcmanfm.hash
-@@ -1,6 +1,7 @@
- # From https://sourceforge.net/projects/pcmanfm/files/PCManFM%20%2B%20Libfm%20%28tarball%20release%29/PCManFM/
--md5  d32ad2c9c7c52bff2004bbc120b53420 pcmanfm-1.3.1.tar.xz
--sha1  4de1e5cb00fbf837c137f205e7e2327e3b49cb90 pcmanfm-1.3.1.tar.xz
-+md5  ef7c4417d2697ef138d175db7aeae15a  pcmanfm-1.3.2.tar.xz
-+sha1  bc4e468b0ec3089aaf817eafed43ae06350961ee  pcmanfm-1.3.2.tar.xz
+diff --git a/package/whois/whois.hash b/package/whois/whois.hash
+index f42db356a5..8bdbf4bb20 100644
+--- a/package/whois/whois.hash
++++ b/package/whois/whois.hash
+@@ -1,5 +1,5 @@
+-# From http://snapshot.debian.org/archive/debian/20201003T204015Z/pool/main/w/whois/whois_5.5.7.dsc
+-sha256  3efa700dbf38d127c31b21af3176cd6e5a69f96a056be60ac1dcd13df7717393  whois_5.5.7.tar.xz
++# From http://snapshot.debian.org/archive/debian/20210216T023642Z/pool/main/w/whois/whois_5.5.8.dsc
++sha256  cd9e7bad3b6968182bfcc311e22be3aec9a974397377d748845147884ce07547  whois_5.5.8.tar.xz
  
--# Hash for license file:
--sha256 231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
-+# Locally computed:
-+sha256  14cb7b247493c4cce65fbb5902611e3ad00a7a870fbc1e50adc50428c5140cf7  pcmanfm-1.3.2.tar.xz
-+sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
-diff --git a/package/pcmanfm/pcmanfm.mk b/package/pcmanfm/pcmanfm.mk
-index 1d946ba521..cb69f60d42 100644
---- a/package/pcmanfm/pcmanfm.mk
-+++ b/package/pcmanfm/pcmanfm.mk
-@@ -4,7 +4,7 @@
+ # Hash for license file:
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/whois/whois.mk b/package/whois/whois.mk
+index 7d684922b7..a09624a7b5 100644
+--- a/package/whois/whois.mk
++++ b/package/whois/whois.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--PCMANFM_VERSION = 1.3.1
-+PCMANFM_VERSION = 1.3.2
- PCMANFM_SOURCE = pcmanfm-$(PCMANFM_VERSION).tar.xz
- PCMANFM_SITE = http://sourceforge.net/projects/pcmanfm/files
- PCMANFM_DEPENDENCIES = libglib2 menu-cache libfm $(TARGET_NLS_DEPENDENCIES)
+-WHOIS_VERSION = 5.5.7
+-WHOIS_SITE = http://snapshot.debian.org/archive/debian/20201003T204015Z/pool/main/w/whois
++WHOIS_VERSION = 5.5.8
++WHOIS_SITE = http://snapshot.debian.org/archive/debian/20210216T023642Z/pool/main/w/whois
+ WHOIS_SOURCE = whois_$(WHOIS_VERSION).tar.xz
+ WHOIS_DEPENDENCIES = \
+ 	host-pkgconf \
 -- 
 2.30.0
