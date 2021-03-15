@@ -1,51 +1,47 @@
-From: Michael Nosthoff <buildroot@heine.tech>
-Date: Mon, 15 Mar 2021 15:28:03 +0100
-Subject: [Buildroot] [PATCH] package/{protobuf,
- python-protobuf}: bump to version 3.15.6
-Message-ID: <20210315142805.680254-1-buildroot@heine.tech>
+From: Titouan Christophe <titouanchristophe@gmail.com>
+Date: Mon, 15 Mar 2021 15:42:29 +0100
+Subject: [Buildroot] [PATCH 1/1] package/mosquitto: security bump to v2.0.9
+Message-ID: <20210315144229.193670-1-titouanchristophe@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
----
- package/protobuf/protobuf.hash               | 2 +-
- package/protobuf/protobuf.mk                 | 2 +-
- package/python-protobuf/python-protobuf.hash | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+This is a bugfix release and include a minor security fix.
+Read the announcement on https://mosquitto.org/blog/2021/03/version-2-0-9-released/
 
-diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
-index 084f8ce0f2..79d3184f59 100644
---- a/package/protobuf/protobuf.hash
-+++ b/package/protobuf/protobuf.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
- sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
--sha256  984a65bcc3522b40b7aa493e392dc7ff710c2e4254fdd3ca0594a16f32391199  protobuf-cpp-3.15.3.tar.gz
-+sha256  bbdfb7455431d7d58666e8a2996d14b236718ff238eecde10646581e4c87f168  protobuf-cpp-3.15.6.tar.gz
-diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
-index 0c8ac46bfa..ea75480038 100644
---- a/package/protobuf/protobuf.mk
-+++ b/package/protobuf/protobuf.mk
-@@ -7,7 +7,7 @@
- # When bumping this package, make sure to also verify if the
- # python-protobuf package still works and to update its hash,
- # as they share the same version/site variables.
--PROTOBUF_VERSION = 3.15.3
-+PROTOBUF_VERSION = 3.15.6
- PROTOBUF_SOURCE = protobuf-cpp-$(PROTOBUF_VERSION).tar.gz
- PROTOBUF_SITE = https://github.com/google/protobuf/releases/download/v$(PROTOBUF_VERSION)
- PROTOBUF_LICENSE = BSD-3-Clause
-diff --git a/package/python-protobuf/python-protobuf.hash b/package/python-protobuf/python-protobuf.hash
-index f74625bd2f..0d3665b736 100644
---- a/package/python-protobuf/python-protobuf.hash
-+++ b/package/python-protobuf/python-protobuf.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  f777d95da5b870b8d5e06765bec3596a9ad5aa1f1595279a4836db562e82e281  protobuf-python-3.15.3.tar.gz
-+sha256  7e8c58a14950ac7a727864d5c521f48c81feb66ff7df325487fc930c9aa50d8b  protobuf-python-3.15.6.tar.gz
- sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
+Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
+---
+ package/mosquitto/mosquitto.hash | 4 ++--
+ package/mosquitto/mosquitto.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
+index fa83af7711..e2c5181223 100644
+--- a/package/mosquitto/mosquitto.hash
++++ b/package/mosquitto/mosquitto.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking gpg signature
+-# from https://mosquitto.org/files/source/mosquitto-2.0.8.tar.gz.asc
+-sha256  b15da8fc4edcb91d554e1259e220ea0173ef639ceaa4b465e06feb7e125b84bf  mosquitto-2.0.8.tar.gz
++# from https://mosquitto.org/files/source/mosquitto-2.0.9.tar.gz.asc
++sha256  1b8553ef64a1cf5e4f4cfbe098330ae612adccd3d37f35b2db6f6fab501b01d4  mosquitto-2.0.9.tar.gz
+ 
+ # License files
+ sha256  d3c4ccace4e5d3cc89d34cf2a0bc85b8596bfc0a32b815d0d77f9b7c41b5350c  LICENSE.txt
+diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
+index be9d885976..d1699ab860 100644
+--- a/package/mosquitto/mosquitto.mk
++++ b/package/mosquitto/mosquitto.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MOSQUITTO_VERSION = 2.0.8
++MOSQUITTO_VERSION = 2.0.9
+ MOSQUITTO_SITE = https://mosquitto.org/files/source
+ MOSQUITTO_LICENSE = EPL-2.0 or EDLv1.0
+ MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v20 edl-v10
 -- 
-2.25.1
+2.25.3
