@@ -1,186 +1,43 @@
-From: Alexander Dahl <post@lespocky.de>
-Date: Mon, 15 Mar 2021 06:55:37 +0100
-Subject: [Buildroot] [PATCH v1] package/siproxd: new package
-In-Reply-To: <20210314172324.GL2737665@scaer>
-References: <20210310073844.26494-1-post@lespocky.de>
- <20210314172324.GL2737665@scaer>
-Message-ID: <20210315055536.2bxyo3n4ypim6g7q@falbala.internal.home.lespocky.de>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 15 Mar 2021 07:21:24 +0100
+Subject: [Buildroot] [PATCH 2/2] package/kodi-pvr-zattoo: bump version to
+ 19.7.8.1-Matrix
+In-Reply-To: <20210315062124.120447-1-bernd.kuhls@t-online.de>
+References: <20210315062124.120447-1-bernd.kuhls@t-online.de>
+Message-ID: <20210315062124.120447-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hei hei,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash | 2 +-
+ package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Sun, Mar 14, 2021 at 06:23:24PM +0100, Yann E. MORIN wrote:
-> On 2021-03-10 08:38 +0100, Alexander Dahl spake thusly:
-> > Siproxd is a masquerading SIP Proxy Server.  We had a buildroot package
-> > for that in the fli4l Linux router distribution for years with different
-> > authors contributing.
-> > 
-> > Co-authored-by: Christoph Schulz <fli4l@kristov.de>
-> > Co-authored-by: Claas Hilbrecht <babel@fli4l.de>
-> > Signed-off-by: Alexander Dahl <post@lespocky.de>
-> > ---
-> > 
-> > Notes:
-> >     Actually what we had in fli4l was a package for 0.8.2.  I revised it and
-> >     covered all things check-packaged complained about.  Tested on x86_64
-> >     with uclibc toolchain.  Builds fine on all fli4l targets (x86, x86_64,
-> >     rpi, sunxi).  This is basically just upstreaming effort.  I marked it as
-> >     v1, because I expect some remarks and little things to be changed.
-> 
-> I've made use of an external libtool unconditional, and applied to
-> master, thanks.
-
-Thanks Yann. A question though: siproxd uses ltdl for loading .so
-files (its own plugins) at runtime. Would that be possible with
-static-only builds at all? Asking because I stumbled over bff7b75552ad
-("package/nut: disable libltdl (and nut-scanner) for static-only") and
-because I'm currently investigating how squid uses libltdl.
-
-Greets
-Alex
-
-> 
-> Regards,
-> Yann E. MORIN.
-> 
-> >  DEVELOPERS                   |  1 +
-> >  package/Config.in            |  1 +
-> >  package/siproxd/Config.in    | 16 ++++++++++++++++
-> >  package/siproxd/siproxd.hash | 11 +++++++++++
-> >  package/siproxd/siproxd.mk   | 24 ++++++++++++++++++++++++
-> >  5 files changed, 53 insertions(+)
-> >  create mode 100644 package/siproxd/Config.in
-> >  create mode 100644 package/siproxd/siproxd.hash
-> >  create mode 100644 package/siproxd/siproxd.mk
-> > 
-> > diff --git a/DEVELOPERS b/DEVELOPERS
-> > index f6d6e4aa06..a7a0c30bd6 100644
-> > --- a/DEVELOPERS
-> > +++ b/DEVELOPERS
-> > @@ -70,6 +70,7 @@ F:	package/odhcp6c/
-> >  N:	Alexander Dahl <post@lespocky.de>
-> >  F:	package/fastd/
-> >  F:	package/libuecc/
-> > +F:	package/siproxd/
-> >  F:	package/putty/
-> >  
-> >  N:	Alexander Egorenkov <egorenar-dev@posteo.net>
-> > diff --git a/package/Config.in b/package/Config.in
-> > index 992e46a319..d919e71cb3 100644
-> > --- a/package/Config.in
-> > +++ b/package/Config.in
-> > @@ -1828,6 +1828,7 @@ menu "Networking"
-> >  	source "package/resiprocate/Config.in"
-> >  	source "package/restclient-cpp/Config.in"
-> >  	source "package/rtmpdump/Config.in"
-> > +	source "package/siproxd/Config.in"
-> >  	source "package/slirp/Config.in"
-> >  	source "package/snmppp/Config.in"
-> >  	source "package/sofia-sip/Config.in"
-> > diff --git a/package/siproxd/Config.in b/package/siproxd/Config.in
-> > new file mode 100644
-> > index 0000000000..6939033025
-> > --- /dev/null
-> > +++ b/package/siproxd/Config.in
-> > @@ -0,0 +1,16 @@
-> > +config BR2_PACKAGE_SIPROXD
-> > +	bool "siproxd"
-> > +	select BR2_PACKAGE_LIBOSIP2
-> > +	select BR2_PACKAGE_SQLITE
-> > +	help
-> > +	  Siproxd is a proxy/masquerading daemon for SIP (Session
-> > +	  Initiation Protocol), which is used in IP telephony. It
-> > +	  handles registrations of SIP clients on a private IP network
-> > +	  and performs rewriting of the SIP message bodies to make SIP
-> > +	  connections work via a masquerading firewall (NAT). It allows
-> > +	  SIP software clients (like kphone, linphone) or SIP hardware
-> > +	  clients (Voice over IP phones which are SIP-compatible, such
-> > +	  as those from Cisco, Grandstream or Snom) to work behind an IP
-> > +	  masquerading firewall or NAT router.
-> > +
-> > +	  http://siproxd.sourceforge.net/
-> > diff --git a/package/siproxd/siproxd.hash b/package/siproxd/siproxd.hash
-> > new file mode 100644
-> > index 0000000000..be6815725a
-> > --- /dev/null
-> > +++ b/package/siproxd/siproxd.hash
-> > @@ -0,0 +1,11 @@
-> > +# Locally calculated after checking pgp signature from:
-> > +# https://downloads.sourceforge.net/project/siproxd/siproxd/0.8.3/siproxd-0.8.3.tar.gz.asc
-> > +sha256  9a6d7a6bb6fff162775b1e1fb7018de9c69642cbf8626185dc6ffceeeba07736  siproxd-0.8.3.tar.gz
-> > +
-> > +# https://sourceforge.net/projects/siproxd/files/siproxd/0.8.3/
-> > +sha1  d13d4a05b8a16dbe20d04b99b535610e49050d9d  siproxd-0.8.3.tar.gz
-> > +md5  9a9d2c89e5f0c59fdde9444a66d8372c  siproxd-0.8.3.tar.gz
-> > +
-> > +# Hash for license files:
-> > +sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
-> > +sha256  f18a0811fa0e220ccbc42f661545e77f0388631e209585ed582a1c693029c6aa  libltdl/COPYING.LIB
-> > diff --git a/package/siproxd/siproxd.mk b/package/siproxd/siproxd.mk
-> > new file mode 100644
-> > index 0000000000..624b948699
-> > --- /dev/null
-> > +++ b/package/siproxd/siproxd.mk
-> > @@ -0,0 +1,24 @@
-> > +################################################################################
-> > +#
-> > +# siproxd
-> > +#
-> > +################################################################################
-> > +
-> > +SIPROXD_VERSION = 0.8.3
-> > +SIPROXD_SITE = https://downloads.sourceforge.net/project/siproxd/siproxd/$(SIPROXD_VERSION)
-> > +
-> > +SIPROXD_LICENSE = GPL-2.0+
-> > +SIPROXD_LICENSE_FILES = COPYING
-> > +
-> > +SIPROXD_DEPENDENCIES = libosip2 sqlite
-> > +
-> > +ifeq ($(BR2_PACKAGE_LIBTOOL),y)
-> > +SIPROXD_CONF_OPTS += --without-included-ltdl
-> > +SIPROXD_DEPENDENCIES += libtool
-> > +else
-> > +SIPROXD_CONF_OPTS += --with-included-ltdl
-> > +SIPROXD_LICENSE += , LGPL-2.1+
-> > +SIPROXD_LICENSE_FILES += libltdl/COPYING.LIB
-> > +endif
-> > +
-> > +$(eval $(autotools-package))
-> > 
-> > base-commit: da6cca38da1584fed17ffb40316cd7c2fdd5e754
-> > -- 
-> > 2.20.1
-> > 
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> -- 
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
+index 10e50fccb8..a5a56f6db6 100644
+--- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
++++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  a10b268071a28397e48fd4ec4127a4b533f96cf430aaa88f5148e38ceffe60a3  kodi-pvr-zattoo-19.7.8-Matrix.tar.gz
++sha256  25dc4ea72b5315a65286ba606e6e26d281fb8eb830d5e0164b66b8d7ae90319a  kodi-pvr-zattoo-19.7.8.1-Matrix.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
+index 8c3d574cb0..1ae1e884b0 100644
+--- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
++++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_PVR_ZATTOO_VERSION = 19.7.8-Matrix
++KODI_PVR_ZATTOO_VERSION = 19.7.8.1-Matrix
+ KODI_PVR_ZATTOO_SITE = $(call github,rbuehlma,pvr.zattoo,$(KODI_PVR_ZATTOO_VERSION))
+ KODI_PVR_ZATTOO_LICENSE = GPL-2.0+
+ KODI_PVR_ZATTOO_LICENSE_FILES = LICENSE.md
 -- 
-/"\ ASCII RIBBON | ?With the first link, the chain is forged. The first
-\ / CAMPAIGN     | speech censured, the first thought forbidden, the
- X  AGAINST      | first freedom denied, chains us all irrevocably.?
-/ \ HTML MAIL    | (Jean-Luc Picard, quoting Judge Aaron Satie)
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 833 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210315/7992a1a5/attachment.asc>
+2.29.2
