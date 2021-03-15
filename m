@@ -1,82 +1,76 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Mon, 15 Mar 2021 09:17:33 -0700
-Subject: [Buildroot] [PATCH 4/4] package/mender: Do not automatically
+Date: Mon, 15 Mar 2021 10:31:06 -0700
+Subject: [Buildroot] [PATCH v2 1/1] package/mender: Do not automatically
  select uboot tools if uboot is selected
-In-Reply-To: <20210315170924.32fd0f7a@windsurf.home>
-References: <20210307222536.2743089-1-aduskett@gmail.com>
- <20210307222536.2743089-5-aduskett@gmail.com>
- <20210314231507.7336bf4f@windsurf.home>
- <CAFSsvmoXU1x1OV9RjVQ-U8J8gFC8fDDatsQ6NNjh=msEGogbBg@mail.gmail.com>
- <20210315170924.32fd0f7a@windsurf.home>
-Message-ID: <CAFSsvmrNdM5Txv+nDt6pE089s55w3jF4Qn+mdbqxUb0Yn_nmbQ@mail.gmail.com>
+Message-ID: <20210315173106.162235-1-aduskett@rivian.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Mar 15, 2021 at 9:09 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> On Mon, 15 Mar 2021 08:44:35 -0700
-> Adam Duskett <aduskett@gmail.com> wrote:
->
-> > > > -     select BR2_PACKAGE_UBOOT_TOOLS if BR2_TARGET_UBOOT # runtime
-> > > > -     select BR2_PACKAGE_UBOOT_TOOLS_FWPRINTENV if BR2_TARGET_UBOOT # runtime
-> > >
-> > > It's a bit odd to drop these.
-> > >
-> > Not really, because mender-grubenv has it's own fake fw_printenv.
-> >
-> > > >       help
-> > > >         Mender is an open source over-the-air (OTA) software updater
-> > > >         for embedded Linux devices. Mender comprises a client
-> > > >         running at the embedded device, as well as a server that
-> > > >         manages deployments across many devices.
-> > > >
-> > > > +       Note:
-> > > > +       For systems using uboot as the bootloader:
-> > > > +         - uboot must be patched with the mender uboot patches.
-> > > > +         - uboot-tools must be selected.
-> > > > +         - fw_printenv must be functional on the device.
-> > >
-> > > Indeed, here you are precisely saying that fw_printenv is needed. What
-> > > about keeping the selects *and* adding your Config.in comment, perhaps
-> > > without the "uboot-tools must be selected". It would be nice to have
-> > > some more specific reference to the Mender U-Boot patches.
-> > The problem with this suggestion is that mender-grubenv has its own
-> > fw_printenv. So if both were built then
-> > uboot's fw_printenv may be built last, which would overwrite the
-> > fw_printenv provided by mender-grubenv.
->
-> Ah, so the problem comes from the situation where both U-Boot and grub
-> are enabled, I see. I still find that a very odd combination, are there
-> really people who do that?
->
-Yes actually! Mender recommends doing it this way because then a developer
-only needs to use mender-grubenev instead of porting the uboot patches to every
-new platform. Uboot is indeed capable of loading grub as a kernel image which is
-quite nice!
+From: Adam Duskett <aduskett@gmail.com>
 
-> That being said, with that info, indeed you can't really know if
-> U-Boot's fw_printenv should be used, or mender-grubenv's fw_printenv
-> should be used, so not selecting any of them probably makes the most
-> sense.
+Because uboot requires a set of unique patches for each board, the upstream
+package developers are phasing out supporting uboot wherever possible.
+Instead, they recommend using Grub2 as a secondary bootloader and using
+the mender-grubenv package.
 
-I'm glad you agree!
+Because the mender-grubenv file provides it's own fw_printenv script, it is
+not possible to know if U-Boot's fw_printenv or mender-grubenv's fw_printenv
+should be used.
 
->
-> > I could provide a URL to the meta-mender repository for links to the
-> > uboot patches. Would that work?
->
-> That would certainly be a useful addition.
->
-Great! I will add the new information and resubmit the patch!
+As such, remove selecting uboot tools when uboot is selected, and instead add
+a more comprehensive note in the help section about what Mender requires for
+uboot and grub2-based systems, with a link to the meta-mender github project
+for the base uboot patches, and a link to the official documentation on
+manual uboot integration.
 
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, co-owner and CEO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+---
+ package/mender/Config.in | 24 ++++++++++++++++++++++--
+ 1 file changed, 22 insertions(+), 2 deletions(-)
+
+diff --git a/package/mender/Config.in b/package/mender/Config.in
+index 6a80c410ce..accee4676a 100644
+--- a/package/mender/Config.in
++++ b/package/mender/Config.in
+@@ -5,14 +5,34 @@ config BR2_PACKAGE_MENDER
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_XZ
+-	select BR2_PACKAGE_UBOOT_TOOLS if BR2_TARGET_UBOOT # runtime
+-	select BR2_PACKAGE_UBOOT_TOOLS_FWPRINTENV if BR2_TARGET_UBOOT # runtime
+ 	help
+ 	  Mender is an open source over-the-air (OTA) software updater
+ 	  for embedded Linux devices. Mender comprises a client
+ 	  running at the embedded device, as well as a server that
+ 	  manages deployments across many devices.
+ 
++	  Notes:
++	  For systems using uboot as the bootloader:
++	    - uboot must have the mender uboot patches applied.
++	    - uboot-tools must be selected.
++	    - fw_printenv must be functional on the device.
++	  The Mender Uboot patches are at:
++	  https://github.com/mendersoftware/meta-mender/
++
++	  For more information on Manual U-Boot integration, see:
++	  https://docs.mender.io/2.6/system-updates-yocto-project/board-integration/bootloader-support/u-boot/manual-u-boot-integration
++
++	  For systems using Grub2 as the bootloader:
++	    - Mender depends on the mender-grubenv package.
++	    - The mender-grubenv package provides a fw_printenv script,
++	      which is not compatible with the uboot-tools fw_printenv
++	      script.
++
++	  The mender project recommends using uboot to load Grub2 as a
++	  secondary bootloader whenever possible. Using Grub2 as a
++	  secondary bootloader prevents users from porting the patches
++	  for uboot to each new device.
++
+ 	  https://github.com/mendersoftware/mender
+ 
+ comment "mender needs a toolchain w/ threads"
+-- 
+2.29.2
