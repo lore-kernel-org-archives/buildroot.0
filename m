@@ -1,83 +1,43 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 15 Mar 2021 20:59:00 +0100
-Subject: [Buildroot] [PATCH v1 2/2] package/batman-adv: enable
- B.A.T.M.A.N. V protocol by default
-In-Reply-To: <20210314223207.13460-2-ps.report@gmx.net>
-References: <20210314223207.13460-1-ps.report@gmx.net>
- <20210314223207.13460-2-ps.report@gmx.net>
-Message-ID: <20210315195900.GS2737665@scaer>
+Date: Mon, 15 Mar 2021 20:59:46 +0100
+Subject: [Buildroot] [git commit] package/kodi-pvr-zattoo: bump version to
+ 19.7.8.1-Matrix
+Message-ID: <20210315193637.B63F58035D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=758cbd9f877c96d9a90ad17108e699923925513c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-03-14 23:32 +0100, Peter Seiderer spake thusly:
-> As upstream enables CONFIG_BATMAN_ADV_BATMAN_V option since
-> 2018.2 by defaullt ([1]) honor this in buildroot and do
-> the same (and remove the leagcy experimental comment accordingly).
-> 
-> [1] https://git.open-mesh.org/batman-adv.git/blob/HEAD:/CHANGELOG.rst#l174
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  package/batman-adv/Config.in | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/batman-adv/Config.in b/package/batman-adv/Config.in
-> index 9d3d7967b9..f3ac974296 100644
-> --- a/package/batman-adv/Config.in
-> +++ b/package/batman-adv/Config.in
-> @@ -25,11 +25,10 @@ config BR2_PACKAGE_BATMAN_ADV_NC
->  	  https://www.open-mesh.org/projects/batman-adv/wiki/NetworkCoding
->  
->  config BR2_PACKAGE_BATMAN_ADV_BATMAN_V
-> -	bool "enable B.A.T.M.A.N. V protocol (experimental)"
-> +	bool "enable B.A.T.M.A.N. V protocol"
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash | 2 +-
+ package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Upstream seems to still consider this to be experimental [0].
-
-> +	default y
-
-What we talked about earlier [1], was to always enable it, not to change
-the default.
-
-Now, people that have a defconfig file with BATMAN-V disabled (i.e.
-there would be nothing in the defconfig as 'is not set' is the default),
-will have it enabled now.
-
-So, if upstream recommends to not disable it (do you have a ref?), then
-we should just drop our option, and to always enable it.
-
-Thoughts?
-
-[0] https://git.open-mesh.org/batman-adv.git/blob/HEAD:/Makefile#l7
-[1] http://lists.busybox.net/pipermail/buildroot/2021-March/305811.html
-
-Regards,
-Yann E. MORIN.
-
->  	help
->  	  Enables B.A.T.M.A.N. V network protocol.
-> -	  This is the next-gen protocol and is experimental at this
-> -	  time.
->  
->  	  https://www.open-mesh.org/projects/batman-adv/wiki/BATMAN_V
->  
-> -- 
-> 2.30.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
+index 10e50fccb8..a5a56f6db6 100644
+--- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
++++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  a10b268071a28397e48fd4ec4127a4b533f96cf430aaa88f5148e38ceffe60a3  kodi-pvr-zattoo-19.7.8-Matrix.tar.gz
++sha256  25dc4ea72b5315a65286ba606e6e26d281fb8eb830d5e0164b66b8d7ae90319a  kodi-pvr-zattoo-19.7.8.1-Matrix.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
+index 8c3d574cb0..1ae1e884b0 100644
+--- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
++++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_PVR_ZATTOO_VERSION = 19.7.8-Matrix
++KODI_PVR_ZATTOO_VERSION = 19.7.8.1-Matrix
+ KODI_PVR_ZATTOO_SITE = $(call github,rbuehlma,pvr.zattoo,$(KODI_PVR_ZATTOO_VERSION))
+ KODI_PVR_ZATTOO_LICENSE = GPL-2.0+
+ KODI_PVR_ZATTOO_LICENSE_FILES = LICENSE.md
