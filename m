@@ -1,140 +1,150 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 15 Mar 2021 22:08:40 +0100
-Subject: [Buildroot] [PATCH v1] package/elfutils: bump version to 0.183
-Message-ID: <20210315210840.17649-1-ps.report@gmx.net>
+Date: Mon, 15 Mar 2021 22:34:38 +0100
+Subject: [Buildroot] [PATCH v1] package/cifs-utils: bump version to 6.12
+Message-ID: <20210315213438.6103-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- handle new zstd option (disable for host, optional for target)
+- removed 0001-Use-DESTDIR-when-installing-mount.smb3-and-optionall.patch
+  (superseded by upstream commit [1])
 
-For details see [1], [2].
+- adjust autoreconf comment accordingly
 
-[1] https://sourceware.org/pipermail/elfutils-devel/2020q4/003053.html
-[2] https://sourceware.org/pipermail/elfutils-devel/2021q1/003486.html
+- add option for smb tools to avoid hard python runtime dependency
+  (smbinfo and smb2-quota are python scripts)
+
+Changelog ([2]):
+
+  December, 2020: Release 6.12
+  get/setcifsacl tools are improved to support changing owner, group and SACLs
+  mount.cifs is enhanced to use SUDO_UID env variable for cruid
+  smbinfo is re-written in Python language
+  https://lists.samba.org/archive/samba-technical/2020-December/136156.html
+
+[1] https://git.samba.org/?p=cifs-utils.git;a=patch;h=a00e84378d9c5e63272ff69ca18fd0e872b384d3
+[2] https://wiki.samba.org/index.php/LinuxCIFS_utils
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- ...nable-disable-progs-configure-option.patch | 24 ++++++++++---------
- package/elfutils/elfutils.hash                |  4 ++--
- package/elfutils/elfutils.mk                  | 10 +++++++-
- 3 files changed, 24 insertions(+), 14 deletions(-)
+ ...-installing-mount.smb3-and-optionall.patch | 41 -------------------
+ package/cifs-utils/Config.in                  | 11 +++++
+ package/cifs-utils/cifs-utils.hash            |  2 +-
+ package/cifs-utils/cifs-utils.mk              | 12 +++++-
+ 4 files changed, 22 insertions(+), 44 deletions(-)
+ delete mode 100644 package/cifs-utils/0001-Use-DESTDIR-when-installing-mount.smb3-and-optionall.patch
 
-diff --git a/package/elfutils/0001-Add-a-enable-disable-progs-configure-option.patch b/package/elfutils/0001-Add-a-enable-disable-progs-configure-option.patch
-index 7b3c459321..e51f749cf6 100644
---- a/package/elfutils/0001-Add-a-enable-disable-progs-configure-option.patch
-+++ b/package/elfutils/0001-Add-a-enable-disable-progs-configure-option.patch
-@@ -1,4 +1,4 @@
--From dfea82b761b2ea4708fbf9370a5467ae4be525ca Mon Sep 17 00:00:00 2001
-+From 73e4da5ca780196d23db8029dcd28f87a0402711 Mon Sep 17 00:00:00 2001
- From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Date: Mon, 29 May 2017 23:03:48 +0300
- Subject: [PATCH] Add a --{enable,disable}-progs configure option
-@@ -18,37 +18,39 @@ Based on the former patch by Thomas Petazzoni.
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
- Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+[Rebased on 0.183]
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
- ---
-  Makefile.am  | 6 +++++-
-  configure.ac | 6 ++++++
-  2 files changed, 11 insertions(+), 1 deletion(-)
+diff --git a/package/cifs-utils/0001-Use-DESTDIR-when-installing-mount.smb3-and-optionall.patch b/package/cifs-utils/0001-Use-DESTDIR-when-installing-mount.smb3-and-optionall.patch
+deleted file mode 100644
+index e36ec5b5da..0000000000
+--- a/package/cifs-utils/0001-Use-DESTDIR-when-installing-mount.smb3-and-optionall.patch
++++ /dev/null
+@@ -1,41 +0,0 @@
+-From dbb4452787cb966cc74b2015689961875fd5d668 Mon Sep 17 00:00:00 2001
+-From: Ryan Barnett <ryanbarnett3@gmail.com>
+-Date: Mon, 27 Apr 2020 22:03:25 -0500
+-Subject: [PATCH] Use DESTDIR when installing mount.smb3 and optionally install
+- man page
+-
+-Properly create mount.smb3 symlink by using DESTDIR. Also use
+-CONFIG_MAN to optionally install manpage for mount.smb3.
+-
+-Signed-off-by: Ryan Barnett <ryanbarnett3@gmail.com>
+----
+-Upstream: https://marc.info/?l=linux-cifs&m=158804444725745&w=2
+----
+- Makefile.am | 10 ++++++----
+- 1 file changed, 6 insertions(+), 4 deletions(-)
+-
+-diff --git a/Makefile.am b/Makefile.am
+-index fe9cd34..e0587f1 100644
+---- a/Makefile.am
+-+++ b/Makefile.am
+-@@ -119,11 +119,13 @@ endif
+- SUBDIRS = contrib
+- 
+- install-exec-hook:
+--	(cd $(ROOTSBINDIR) && ln -sf mount.cifs mount.smb3)
+-+	(cd $(DESTDIR)$(ROOTSBINDIR) && ln -sf mount.cifs mount.smb3)
+- 
+-+if CONFIG_MAN
+- install-data-hook:
+--	(cd $(man8dir) && ln -sf mount.cifs.8 mount.smb3.8)
+-+	(cd $(DESTDIR)$(man8dir) && ln -sf mount.cifs.8 mount.smb3.8)
+-+endif
+- 
+- uninstall-hook:
+--	(cd $(ROOTSBINDIR) && rm -f $(ROOTSBINDIR)/mount.smb3)
+--	(cd $(man8dir) && rm -f $(man8dir)/mount.smb3.8)
+-+	rm -f $(DESTDIR)$(ROOTSBINDIR)/mount.smb3
+-+	rm -f $(DESTDIR)$(man8dir)/mount.smb3.8
+--- 
+-2.17.1
+-
+diff --git a/package/cifs-utils/Config.in b/package/cifs-utils/Config.in
+index b433850a18..0e61243de4 100644
+--- a/package/cifs-utils/Config.in
++++ b/package/cifs-utils/Config.in
+@@ -13,3 +13,14 @@ config BR2_PACKAGE_CIFS_UTILS
+ 	  split them off into their own package.
  
- diff --git a/Makefile.am b/Makefile.am
--index 2ff444e7bf1d..70443abb4fb6 100644
-+index 9c47afa..edf8dfc 100644
- --- a/Makefile.am
- +++ b/Makefile.am
- @@ -26,8 +26,12 @@ AM_MAKEFLAGS = --no-print-directory
--
-+ 
-  pkginclude_HEADERS = version.h
--
-+ 
- +if ENABLE_PROGS
- +PROGS_SUBDIR = src
- +endif
- +
-- SUBDIRS = config m4 lib libelf libcpu backends libebl libdwelf libdwfl libdw \
-+ SUBDIRS = config lib libelf libcpu backends libebl libdwelf libdwfl libdw \
- -	  libasm debuginfod src po doc tests
- +	  libasm debuginfod $(PROGS_SUBDIR) po doc tests
--
-+ 
-  EXTRA_DIST = elfutils.spec GPG-KEY NOTES CONTRIBUTING \
-  	     COPYING COPYING-GPLV2 COPYING-LGPLV3
- diff --git a/configure.ac b/configure.ac
--index c2c1d90b2133..7b4c38381cca 100644
-+index d345495..0dd4b1e 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -390,6 +390,12 @@
-+@@ -393,6 +393,12 @@ AS_HELP_STRING([--enable-tests-rpath],[build $ORIGIN-using rpath into tests]),
-  	       [tests_use_rpath=$enableval], [tests_use_rpath=no])
-  AM_CONDITIONAL(TESTS_RPATH, test "$tests_use_rpath" = yes)
--
-+ 
- +AC_ARG_ENABLE([progs],
- +	AS_HELP_STRING([--enable-progs], [enable progs]),
- +	enable_progs=$enableval,
-@@ -58,6 +60,6 @@ index c2c1d90b2133..7b4c38381cca 100644
-  dnl zlib is mandatory.
-  save_LIBS="$LIBS"
-  LIBS=
----
--2.11.0
-+-- 
-+2.30.1
- 
-diff --git a/package/elfutils/elfutils.hash b/package/elfutils/elfutils.hash
-index 65ee764bcb..c14a86e31f 100644
---- a/package/elfutils/elfutils.hash
-+++ b/package/elfutils/elfutils.hash
+ 	  http://wiki.samba.org/index.php/LinuxCIFS_utils
++
++if BR2_PACKAGE_CIFS_UTILS
++
++config BR2_PACKAGE_CIFS_UTILS_SMBTOOLS
++	bool "smbtools"
++	select BR2_PACKAGE_PYTHON3 if !BR2_PACKAGE_PYTHON # runtime
++	help
++	  Install the smb tools smbinfo and smb2-quota (python
++	  implementations).
++
++endif
+diff --git a/package/cifs-utils/cifs-utils.hash b/package/cifs-utils/cifs-utils.hash
+index ca97eb8e56..cd7a9bba62 100644
+--- a/package/cifs-utils/cifs-utils.hash
++++ b/package/cifs-utils/cifs-utils.hash
 @@ -1,5 +1,5 @@
--# From https://sourceware.org/elfutils/ftp/0.181/sha512.sum
--sha512  d565541d5817f409dc89ebb1ee593366f69c371a1531308eeb67ff934b14a0fab0c9009fd7c23240efbaa1b4e04edac5c425e47d80e3e66ba03dcaf000afea36  elfutils-0.181.tar.bz2
-+# From https://sourceware.org/elfutils/ftp/0.183/sha512.sum
-+sha512  bdafdd738a33cebe4f87849e5e6f1133881e77ef71b27faa0f0234ff80e9674f506957898326c2a55fd8438cbd189f7930597d0b4b9ca6c77921cc0cbd83b6b7  elfutils-0.183.tar.bz2
- # Locally calculated
+ # Locally calculated after checking pgp signature
+-sha256  b859239a3f204f8220d3e54ed43bf8109e1ef202042dd87ba87492f8878728d9  cifs-utils-6.11.tar.bz2
++sha256  922ddcc3059922e80789312c386b9c569991b4350d3ae3099de3e4b82f3885ef  cifs-utils-6.12.tar.bz2
+ 
+ # Hash for license file:
  sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING-GPLV2
-diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
-index b76b06bcb3..942949547a 100644
---- a/package/elfutils/elfutils.mk
-+++ b/package/elfutils/elfutils.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/cifs-utils/cifs-utils.mk b/package/cifs-utils/cifs-utils.mk
+index 63b454413c..473e8a2c28 100644
+--- a/package/cifs-utils/cifs-utils.mk
++++ b/package/cifs-utils/cifs-utils.mk
+@@ -4,13 +4,13 @@
  #
  ################################################################################
  
--ELFUTILS_VERSION = 0.181
-+ELFUTILS_VERSION = 0.183
- ELFUTILS_SOURCE = elfutils-$(ELFUTILS_VERSION).tar.bz2
- ELFUTILS_SITE = https://sourceware.org/elfutils/ftp/$(ELFUTILS_VERSION)
- ELFUTILS_INSTALL_STAGING = YES
-@@ -26,6 +26,7 @@ ELFUTILS_CONF_OPTS += \
- HOST_ELFUTILS_CONF_OPTS = \
- 	--with-bzlib \
- 	--with-lzma \
-+	--without-zstd \
- 	--disable-progs
+-CIFS_UTILS_VERSION = 6.11
++CIFS_UTILS_VERSION = 6.12
+ CIFS_UTILS_SOURCE = cifs-utils-$(CIFS_UTILS_VERSION).tar.bz2
+ CIFS_UTILS_SITE = http://ftp.samba.org/pub/linux-cifs/cifs-utils
+ CIFS_UTILS_LICENSE = GPL-3.0+
+ CIFS_UTILS_LICENSE_FILES = COPYING
+ CIFS_UTILS_CPE_ID_VENDOR = samba
+-# Missing install-sh in release tarball and patching Makefile.am
++# Missing install-sh in release tarball
+ CIFS_UTILS_AUTORECONF = YES
+ CIFS_UTILS_DEPENDENCIES = host-pkgconf
  
- # elfutils gets confused when lfs mode is forced, so don't
-@@ -79,6 +80,13 @@ else
- ELFUTILS_CONF_OPTS += --without-lzma
- endif
+@@ -31,4 +31,12 @@ endef
  
-+ifeq ($(BR2_PACKAGE_ZSTD),y)
-+ELFUTILS_DEPENDENCIES += zstd
-+ELFUTILS_CONF_OPTS += --with-zstd
-+else
-+ELFUTILS_CONF_OPTS += --without-zstd
+ CIFS_UTILS_POST_PATCH_HOOKS += CIFS_UTILS_NO_WERROR
+ 
++ifeq ($(BR2_PACKAGE_CIFS_UTILS_SMBTOOLS),)
++define CIFS_UTILS_REMOVE_SMBTOOLS
++	rm -f $(TARGET_DIR)/usr/bin/smbinfo
++	rm -f $(TARGET_DIR)/usr/bin/smb2-quota
++endef
++CIFS_UTILS_POST_INSTALL_TARGET_HOOKS += CIFS_UTILS_REMOVE_SMBTOOLS
 +endif
 +
- ifeq ($(BR2_PACKAGE_ELFUTILS_PROGS),y)
- ELFUTILS_CONF_OPTS += --enable-progs
- ELFUTILS_LICENSE += , GPL-3.0+ (programs)
+ $(eval $(autotools-package))
 -- 
 2.30.1
