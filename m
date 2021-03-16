@@ -1,36 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 16 Mar 2021 22:08:38 +0100
-Subject: [Buildroot] [PATCH v2 1/1] Added config option to expose
- browser remote control on the D-Bus system bus
-In-Reply-To: <20210316094727.1881200-1-asweet@thegoodpenguin.co.uk>
-References: <20210316094727.1881200-1-asweet@thegoodpenguin.co.uk>
-Message-ID: <20210316220838.033faca3@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 16 Mar 2021 22:08:24 +0100
+Subject: [Buildroot] [git commit] package/batctl: bump version to 2021.0
+Message-ID: <20210316204457.E27E588096@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Adrian,
+commit: https://git.buildroot.net/buildroot/commit/?id=b7893ebd60538d63b303e21f23bf49858a1e474c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 16 Mar 2021 09:47:27 +0000
-Adrian Sweet <asweet@thegoodpenguin.co.uk> wrote:
+For details see [1].
 
-> Signed-off-by: Adrian Sweet <asweet@thegoodpenguin.co.uk>
-> ---
->  package/cog/Config.in | 5 +++++
->  package/cog/cog.mk    | 6 ++++++
->  2 files changed, 11 insertions(+)
+[1] https://www.open-mesh.org/news/100
 
-Thanks a lot, I have applied your patch. There were a few minor issues
-though: the indentation in the Config.in file was not correct (this is
-spotted by running "make check-package") and the commit title was
-missing the package name as a prefix. I fixed that up when applying.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Reviewed-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/batctl/batctl.hash | 6 +++---
+ package/batctl/batctl.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Thanks again!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/batctl/batctl.hash b/package/batctl/batctl.hash
+index e8127aa26f..56bea3c5da 100644
+--- a/package/batctl/batctl.hash
++++ b/package/batctl/batctl.hash
+@@ -1,6 +1,6 @@
+-# From https://downloads.open-mesh.org/batman/releases/batman-adv-2020.2/batctl-2020.2.tar.gz.sha1
+-sha1  e347fb126e2a8f6d21516296325afc043062e3bd  batctl-2020.2.tar.gz
++# From https://downloads.open-mesh.org/batman/releases/batman-adv-2021.0/batctl-2021.0.tar.gz.sha1
++sha1  87d0bb34950cb70578a0ca5ce706513a8279a01c  batctl-2021.0.tar.gz
+ # Locally calculated
+-sha256  d29cdb53ee68abd5027eae07d9fd645b3f154e0d577efa2666c1334bb6d60efd  batctl-2020.2.tar.gz
++sha256  9cec8bf1952f885192749a9dc0318a54633b717aaf05c438d504efd83f5201e4  batctl-2021.0.tar.gz
+ sha256  cecbf53d1148e13256ac29f8b900655b7fc8dc12d59939a95bc2323ea1747025  LICENSES/preferred/GPL-2.0
+ sha256  323c587d0ccf10e376f8bf9a7f31fb4ca6078105194b42e0b1e0ee2bc9bde71f  LICENSES/preferred/MIT
+diff --git a/package/batctl/batctl.mk b/package/batctl/batctl.mk
+index 229c042aaf..8ff591844d 100644
+--- a/package/batctl/batctl.mk
++++ b/package/batctl/batctl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BATCTL_VERSION = 2020.2
++BATCTL_VERSION = 2021.0
+ BATCTL_SITE = http://downloads.open-mesh.org/batman/releases/batman-adv-$(BATCTL_VERSION)
+ BATCTL_LICENSE = GPL-2.0, MIT (batman_adv.h, list.h)
+ BATCTL_LICENSE_FILES = LICENSES/preferred/GPL-2.0 LICENSES/preferred/MIT
