@@ -1,158 +1,151 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Mar 2021 23:20:45 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/quagga: fix build
- with gcc 10
-Message-ID: <20210316215715.828EC83C5B@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 16 Mar 2021 23:26:12 +0100
+Subject: [Buildroot] [git commit] support/download: print command used for
+ download
+Message-ID: <20210316220248.06E6980367@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d883461fbd5d0d00bcb7bb1803ff54a76c75b4f4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=54d3d94b6e3846447b5796ef8587b08b537cd348
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
- - http://autobuild.buildroot.org/results/fd5ee2b52a3cfaec268fafd3ffe4c30e51465c7e
+Even though that most download commands actually print some output, like
+progress indication or other messages, the actual command used is not. This
+makes it hard to analyze a build log when you are not fully familiar with
+the typical output of said log.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 1e4bc89960b700c8a35c895fb66ff98c4881c083)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Update the download helpers to do just that, respecting any quiet/verbose
+flag so that a silent make (make -s) does not get more verbose.
+
+Note: getting rid of the duplication of the command in the script is not
+straightforward without breaking support for arguments with spaces.
+
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+[yann.morin.1998 at free.fr: use printf, not echo]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/quagga/0003-Fix-build-with-gcc-10.patch | 127 ++++++++++++++++++++++++
- 1 file changed, 127 insertions(+)
+ support/download/bzr  | 3 +++
+ support/download/cvs  | 3 +++
+ support/download/file | 3 +++
+ support/download/git  | 3 +++
+ support/download/hg   | 3 +++
+ support/download/scp  | 3 +++
+ support/download/svn  | 3 +++
+ support/download/wget | 3 +++
+ 8 files changed, 24 insertions(+)
 
-diff --git a/package/quagga/0003-Fix-build-with-gcc-10.patch b/package/quagga/0003-Fix-build-with-gcc-10.patch
-new file mode 100644
-index 0000000000..fbe85165ee
---- /dev/null
-+++ b/package/quagga/0003-Fix-build-with-gcc-10.patch
-@@ -0,0 +1,127 @@
-+From 7a446434302d7b71211b81b3c6cd12a7b35223d1 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 6 Mar 2021 16:28:37 +0100
-+Subject: [PATCH] Fix build with gcc 10
-+
-+Fix the following build failure with gcc 10 (which defaults to
-+-fno-common):
-+
-+  CCLD     pimd
-+/home/buildroot/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: pimd.o:(.bss+0x8): multiple definition of `qpim_static_route_list'; pim_main.o:(.bss+0x8): first defined here
-+/home/buildroot/autobuild/run/instance-3/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: pimd.o:(.bss+0x28): multiple definition of `qpim_mroute_del_last'; pim_main.o:(.bss+0x10): first defined here
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/fd5ee2b52a3cfaec268fafd3ffe4c30e51465c7e
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://bugzilla.quagga.net/show_bug.cgi?id=1014]
-+---
-+ pimd/pim_version.h |  2 +-
-+ pimd/pimd.c        |  1 +
-+ pimd/pimd.h        | 66 +++++++++++++++++++++++-----------------------
-+ 3 files changed, 35 insertions(+), 34 deletions(-)
-+
-+diff --git a/pimd/pim_version.h b/pimd/pim_version.h
-+index ef9f370c..891d4314 100644
-+--- a/pimd/pim_version.h
-++++ b/pimd/pim_version.h
-+@@ -25,6 +25,6 @@
-+ 
-+ #define PIMD_VERSION_STR "0.166"
-+ 
-+-const char * const PIMD_VERSION;
-++extern const char * const PIMD_VERSION;
-+ 
-+ #endif /* PIM_VERSION_H */
-+diff --git a/pimd/pimd.c b/pimd/pimd.c
-+index 97fb2233..d7340cc0 100644
-+--- a/pimd/pimd.c
-++++ b/pimd/pimd.c
-+@@ -50,6 +50,7 @@ int64_t                   qpim_mroute_socket_creation = 0; /* timestamp of creat
-+ struct thread            *qpim_mroute_socket_reader = 0;
-+ int                       qpim_mroute_oif_highest_vif_index = -1;
-+ struct list              *qpim_channel_oil_list = 0;
-++struct in_addr            qpim_all_pim_routers_addr;
-+ int                       qpim_t_periodic = PIM_DEFAULT_T_PERIODIC; /* Period between Join/Prune Messages */
-+ struct list              *qpim_upstream_list = 0;
-+ struct zclient           *qpim_zclient_update = 0;
-+diff --git a/pimd/pimd.h b/pimd/pimd.h
-+index 9a7e6058..8b3496fd 100644
-+--- a/pimd/pimd.h
-++++ b/pimd/pimd.h
-+@@ -68,39 +68,39 @@
-+ #define PIM_MASK_PIM_J_P             (1 << 12)
-+ #define PIM_MASK_STATIC              (1 << 13)
-+ 
-+-const char *const PIM_ALL_SYSTEMS;
-+-const char *const PIM_ALL_ROUTERS;
-+-const char *const PIM_ALL_PIM_ROUTERS;
-+-const char *const PIM_ALL_IGMP_ROUTERS;
-+-
-+-struct thread_master     *master;
-+-uint32_t                  qpim_debugs;
-+-int                       qpim_mroute_socket_fd;
-+-int64_t                   qpim_mroute_socket_creation; /* timestamp of creation */
-+-struct thread            *qpim_mroute_socket_reader;
-+-int                       qpim_mroute_oif_highest_vif_index;
-+-struct list              *qpim_channel_oil_list; /* list of struct channel_oil */
-+-struct in_addr            qpim_all_pim_routers_addr;
-+-int                       qpim_t_periodic; /* Period between Join/Prune Messages */
-+-struct list              *qpim_upstream_list; /* list of struct pim_upstream */
-+-struct zclient           *qpim_zclient_update;
-+-struct zclient           *qpim_zclient_lookup;
-+-struct pim_assert_metric  qpim_infinite_assert_metric;
-+-long                      qpim_rpf_cache_refresh_delay_msec;
-+-struct thread            *qpim_rpf_cache_refresher;
-+-int64_t                   qpim_rpf_cache_refresh_requests;
-+-int64_t                   qpim_rpf_cache_refresh_events;
-+-int64_t                   qpim_rpf_cache_refresh_last;
-+-struct in_addr            qpim_inaddr_any;
-+-struct list              *qpim_ssmpingd_list; /* list of struct ssmpingd_sock */
-+-struct in_addr            qpim_ssmpingd_group_addr;
-+-int64_t                   qpim_scan_oil_events;
-+-int64_t                   qpim_scan_oil_last;
-+-int64_t                   qpim_mroute_add_events;
-+-int64_t                   qpim_mroute_add_last;
-+-int64_t                   qpim_mroute_del_events;
-+-int64_t                   qpim_mroute_del_last;
-+-struct list              *qpim_static_route_list; /* list of routes added statically */
-++extern const char *const PIM_ALL_SYSTEMS;
-++extern const char *const PIM_ALL_ROUTERS;
-++extern const char *const PIM_ALL_PIM_ROUTERS;
-++extern const char *const PIM_ALL_IGMP_ROUTERS;
-++
-++extern struct thread_master     *master;
-++extern uint32_t                  qpim_debugs;
-++extern int                       qpim_mroute_socket_fd;
-++extern int64_t                   qpim_mroute_socket_creation; /* timestamp of creation */
-++extern struct thread            *qpim_mroute_socket_reader;
-++extern int                       qpim_mroute_oif_highest_vif_index;
-++extern struct list              *qpim_channel_oil_list; /* list of struct channel_oil */
-++extern struct in_addr            qpim_all_pim_routers_addr;
-++extern int                       qpim_t_periodic; /* Period between Join/Prune Messages */
-++extern struct list              *qpim_upstream_list; /* list of struct pim_upstream */
-++extern struct zclient           *qpim_zclient_update;
-++extern struct zclient           *qpim_zclient_lookup;
-++extern struct pim_assert_metric  qpim_infinite_assert_metric;
-++extern long                      qpim_rpf_cache_refresh_delay_msec;
-++extern struct thread            *qpim_rpf_cache_refresher;
-++extern int64_t                   qpim_rpf_cache_refresh_requests;
-++extern int64_t                   qpim_rpf_cache_refresh_events;
-++extern int64_t                   qpim_rpf_cache_refresh_last;
-++extern struct in_addr            qpim_inaddr_any;
-++extern struct list              *qpim_ssmpingd_list; /* list of struct ssmpingd_sock */
-++extern struct in_addr            qpim_ssmpingd_group_addr;
-++extern int64_t                   qpim_scan_oil_events;
-++extern int64_t                   qpim_scan_oil_last;
-++extern int64_t                   qpim_mroute_add_events;
-++extern int64_t                   qpim_mroute_add_last;
-++extern int64_t                   qpim_mroute_del_events;
-++extern int64_t                   qpim_mroute_del_last;
-++extern struct list              *qpim_static_route_list; /* list of routes added statically */
-+ 
-+ #define PIM_JP_HOLDTIME (qpim_t_periodic * 7 / 2)
-+ 
-+-- 
-+2.30.0
-+
+diff --git a/support/download/bzr b/support/download/bzr
+index 7cc6890a30..835f6ef564 100755
+--- a/support/download/bzr
++++ b/support/download/bzr
+@@ -34,6 +34,9 @@ shift $((OPTIND-1)) # Get rid of our options
+ # Caller needs to single-quote its arguments to prevent them from
+ # being expanded a second time (in case there are spaces in them)
+ _bzr() {
++    if [ -z "${quiet}" ]; then
++        printf '%s ' ${BZR} "${@}"; printf '\n'
++    fi
+     eval ${BZR} "${@}"
+ }
+ 
+diff --git a/support/download/cvs b/support/download/cvs
+index 463d70c220..ed034ade2d 100755
+--- a/support/download/cvs
++++ b/support/download/cvs
+@@ -39,6 +39,9 @@ shift $((OPTIND-1)) # Get rid of our options
+ # ). Since nobody sane will put large code bases in CVS, a timeout of
+ # 10 minutes should do the trick.
+ _cvs() {
++    if [ -z "${quiet}" ]; then
++        printf '%s ' timeout 10m ${CVS} "${@}"; printf '\n'
++    fi
+     eval timeout 10m ${CVS} "${@}"
+ }
+ 
+diff --git a/support/download/file b/support/download/file
+index e52fcf2c8c..f2a638b1a8 100755
+--- a/support/download/file
++++ b/support/download/file
+@@ -36,6 +36,9 @@ shift $((OPTIND-1)) # Get rid of our options
+ # Caller needs to single-quote its arguments to prevent them from
+ # being expanded a second time (in case there are spaces in them)
+ _localfiles() {
++    if [ -n "${verbose}" ]; then
++        printf '%s ' ${LOCALFILES} "${@}"; printf '\n'
++    fi
+     eval ${LOCALFILES} "${@}"
+ }
+ 
+diff --git a/support/download/git b/support/download/git
+index 01e0f214cf..336e170126 100755
+--- a/support/download/git
++++ b/support/download/git
+@@ -79,6 +79,9 @@ trap _on_error ERR
+ # Caller needs to single-quote its arguments to prevent them from
+ # being expanded a second time (in case there are spaces in them)
+ _git() {
++    if [ -z "${quiet}" ]; then
++        printf '%s ' GIT_DIR="${git_cache}/.git" ${GIT} "${@}"; printf '\n'
++    fi
+     eval GIT_DIR="${git_cache}/.git" ${GIT} "${@}"
+ }
+ 
+diff --git a/support/download/hg b/support/download/hg
+index c8149c9c91..add697d6ad 100755
+--- a/support/download/hg
++++ b/support/download/hg
+@@ -33,6 +33,9 @@ shift $((OPTIND-1)) # Get rid of our options
+ # Caller needs to single-quote its arguments to prevent them from
+ # being expanded a second time (in case there are spaces in them)
+ _hg() {
++    if [ -z "${quiet}" ]; then
++        printf '%s ' ${HG} "${@}"; printf '\n'
++    fi
+     eval ${HG} "${@}"
+ }
+ 
+diff --git a/support/download/scp b/support/download/scp
+index 636d66c66a..27dcb5550f 100755
+--- a/support/download/scp
++++ b/support/download/scp
+@@ -31,6 +31,9 @@ shift $((OPTIND-1)) # Get rid of our options
+ # Caller needs to single-quote its arguments to prevent them from
+ # being expanded a second time (in case there are spaces in them)
+ _scp() {
++    if [ -z "${quiet}" ]; then
++        printf '%s ' ${SCP} "${@}"; printf '\n'
++    fi
+     eval ${SCP} "${@}"
+ }
+ 
+diff --git a/support/download/svn b/support/download/svn
+index 395c92594f..e85ff6981f 100755
+--- a/support/download/svn
++++ b/support/download/svn
+@@ -40,6 +40,9 @@ shift $((OPTIND-1)) # Get rid of our options
+ # Caller needs to single-quote its arguments to prevent them from
+ # being expanded a second time (in case there are spaces in them)
+ _svn() {
++    if [ -z "${quiet}" ]; then
++        printf '%s ' ${SVN} "${@}"; printf '\n'
++    fi
+     eval ${SVN} "${@}"
+ }
+ 
+diff --git a/support/download/wget b/support/download/wget
+index 1bcb1e4b00..383b1edd26 100755
+--- a/support/download/wget
++++ b/support/download/wget
+@@ -33,6 +33,9 @@ shift $((OPTIND-1)) # Get rid of our options
+ # Caller needs to single-quote its arguments to prevent them from
+ # being expanded a second time (in case there are spaces in them)
+ _wget() {
++    if [ -z "${quiet}" ]; then
++        printf '%s ' ${WGET} "${@}"; printf '\n'
++    fi
+     eval ${WGET} "${@}"
+ }
+ 
