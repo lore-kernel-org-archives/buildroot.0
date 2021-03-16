@@ -1,49 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Mar 2021 22:34:57 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/jasper: bump
- version to 2.0.26
-Message-ID: <20210316215242.39DC67FA97@busybox.osuosl.org>
+Date: Tue, 16 Mar 2021 22:29:37 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x]
+ package/dovecot-pigeonhole: bump version to 0.5.14
+Message-ID: <20210316215242.2D6D18829E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=db4e04cae5bcb99b43f0821395cba0c8c4477e84
+commit: https://git.buildroot.net/buildroot/commit/?id=0b88d3f0870e49622f310239d48949e6284a18df
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Changes:
-* Fix JP2 decoder bug that can cause a null pointer dereference for
-  some invalid CDEF boxes. (#268)
+Release notes:
+https://dovecot.org/pipermail/dovecot-news/2021-March/000456.html
 
-Signed-off-by: Michael Vetter <jubalh@iodoru.org>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 5742a0f33e285e27c5ae37b32cf5570bfa856946)
+(cherry picked from commit 9b29e94980c134065f360a4beaa70be86bb0befd)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/jasper/jasper.hash | 2 +-
- package/jasper/jasper.mk   | 2 +-
+ package/dovecot-pigeonhole/dovecot-pigeonhole.hash | 2 +-
+ package/dovecot-pigeonhole/dovecot-pigeonhole.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/jasper/jasper.hash b/package/jasper/jasper.hash
-index d4ed191f91..c1f1b4f602 100644
---- a/package/jasper/jasper.hash
-+++ b/package/jasper/jasper.hash
+diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
+index f2c76a05fd..cf3ebdbf54 100644
+--- a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
++++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  f5bc48e2884bcabd2aca1737baff4ca962ec665b6eb673966ced1f7adea07edb  jasper-2.0.25.tar.gz
-+sha256  a82a119e85b7d1f448e61309777fa5f79053a9adca4a2b5bfe44be5439fb8fea  jasper-2.0.26.tar.gz
- sha256  4ad1bb42aff888c4403d792e6e2c5f1716d6c279fea70b296333c9d577d30b81  LICENSE
-diff --git a/package/jasper/jasper.mk b/package/jasper/jasper.mk
-index 7b78f522db..2ff4bafb8c 100644
---- a/package/jasper/jasper.mk
-+++ b/package/jasper/jasper.mk
+ # Locally computed after checking signature
+-sha256  911fe566da5b638eab1b11105314300bc9049cc3832d4bd2aed44c265013bf17  dovecot-2.3-pigeonhole-0.5.13.tar.gz
++sha256  68ca0f78a3caa6b090a469f45c395c44cf16da8fcb3345755b1ca436c9ffb2d2  dovecot-2.3-pigeonhole-0.5.14.tar.gz
+ sha256  fc9e9522216f2a9a28b31300e3c73c1df56acc27dfae951bf516e7995366b51a  COPYING
+diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
+index 5c4cdb633e..df39a83c1d 100644
+--- a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
++++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--JASPER_VERSION = 2.0.25
-+JASPER_VERSION = 2.0.26
- JASPER_SITE = $(call github,jasper-software,jasper,version-$(JASPER_VERSION))
- JASPER_INSTALL_STAGING = YES
- JASPER_LICENSE = JasPer-2.0
+-DOVECOT_PIGEONHOLE_VERSION = 0.5.13
++DOVECOT_PIGEONHOLE_VERSION = 0.5.14
+ DOVECOT_PIGEONHOLE_SOURCE = dovecot-2.3-pigeonhole-$(DOVECOT_PIGEONHOLE_VERSION).tar.gz
+ DOVECOT_PIGEONHOLE_SITE = https://pigeonhole.dovecot.org/releases/2.3
+ DOVECOT_PIGEONHOLE_LICENSE = LGPL-2.1
