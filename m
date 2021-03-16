@@ -1,29 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 16 Mar 2021 21:25:50 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libxcrypt: disable obsolete API
-In-Reply-To: <20210316193037.2613209-1-fontaine.fabrice@gmail.com>
-References: <20210316193037.2613209-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210316212550.1242bb60@windsurf.home>
+Date: Tue, 16 Mar 2021 21:25:56 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libnet: add
+ LIBNET_CONFIG_SCRIPTS
+In-Reply-To: <20210316201824.3179128-1-fontaine.fabrice@gmail.com>
+References: <20210316201824.3179128-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210316212556.27ed1917@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 16 Mar 2021 20:30:37 +0100
+On Tue, 16 Mar 2021 21:18:24 +0100
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Disable obsolete API following upstream feedback as it raises build
-> failures on some architectures such as nds32le or arc and because this
-> API is unsecure: https://github.com/besser82/libxcrypt/issues/122
+> Set LIBNET_CONFIG_SCRIPTS to libnet-config to fix a build failure with
+> syslog-ng and libnet in version 1.2 due to -L$(libdir) which has been
+> added with
+> https://github.com/libnet/libnet/commit/6859d1f198f97aad129c54fcd156700a9178204e
 > 
 > Fixes:
->  - http://autobuild.buildroot.org/results/5ae235b6ec66ac86efadaa2847307be58064c167
+>  - http://autobuild.buildroot.org/results/45e517401d14e304e9c6c990f1b4ead92c850ba2
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/libxcrypt/libxcrypt.mk | 3 +++
->  1 file changed, 3 insertions(+)
+>  package/libnet/libnet.mk | 1 +
+>  1 file changed, 1 insertion(+)
 
 Applied to master, thanks.
 
