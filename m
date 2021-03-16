@@ -1,41 +1,41 @@
-From: Tian Yuanhao <tianyuanhao@aliyun.com>
-Date: Tue, 16 Mar 2021 10:18:04 +0800
-Subject: [Buildroot] [PATCH 1/1] package/wpa_supplicant: fix
- WPA_SUPPLICANT_CONFIGURE_CMDS
-Message-ID: <20210316021804.3790808-1-tianyuanhao@aliyun.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 16 Mar 2021 07:38:20 +0100
+Subject: [Buildroot] [PATCH 1/2] package/siproxd: needs threads
+Message-ID: <20210316063821.2310693-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When "BR2_PACKAGE_WPA_SUPPLICANT_CTRL_IFACE=n" and
-"BR2_PACKAGE_WPA_SUPPLICANT_DBUS=y" are set,
-"CONFIG_CTRL_IFACE_DBUS_NEW" will be enabled by
-"-e 's/^#\(CONFIG_CTRL_IFACE_DBUS_NEW\)/\1/'" first, and then disabled
-by "-e 's/^\(CONFIG_CTRL_IFACE\)/#\1/'".
+siproxd which has been added with commit
+3efc5a250c1c98598ba4c91a7d71d11343d937ab unconditionally uses pthread
 
-Fix it by adding an "=" at the end.
+Fixes:
+ - http://autobuild.buildroot.org/results/828448fff87772e1c34b3696284a44eb9fc692fb
 
-Signed-off-by: Tian Yuanhao <tianyuanhao@aliyun.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/wpa_supplicant/wpa_supplicant.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/siproxd/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-index c82db43c1c..7941a00748 100644
---- a/package/wpa_supplicant/wpa_supplicant.mk
-+++ b/package/wpa_supplicant/wpa_supplicant.mk
-@@ -185,8 +185,8 @@ endif
+diff --git a/package/siproxd/Config.in b/package/siproxd/Config.in
+index 0a471553e4..e73a33bf14 100644
+--- a/package/siproxd/Config.in
++++ b/package/siproxd/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_SIPROXD
+ 	bool "siproxd"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_LIBOSIP2
+ 	select BR2_PACKAGE_LIBTOOL
+ 	select BR2_PACKAGE_SQLITE
+@@ -15,3 +16,6 @@ config BR2_PACKAGE_SIPROXD
+ 	  masquerading firewall or NAT router.
  
- define WPA_SUPPLICANT_CONFIGURE_CMDS
- 	cp $(@D)/wpa_supplicant/defconfig $(WPA_SUPPLICANT_CONFIG)
--	sed -i $(patsubst %,-e 's/^#\(%\)/\1/',$(WPA_SUPPLICANT_CONFIG_ENABLE)) \
--		$(patsubst %,-e 's/^\(%\)/#\1/',$(WPA_SUPPLICANT_CONFIG_DISABLE)) \
-+	sed -i $(patsubst %,-e 's/^#\(%=\)/\1/',$(WPA_SUPPLICANT_CONFIG_ENABLE)) \
-+		$(patsubst %,-e 's/^\(%=\)/#\1/',$(WPA_SUPPLICANT_CONFIG_DISABLE)) \
- 		$(patsubst %,-e '1i%=y',$(WPA_SUPPLICANT_CONFIG_SET)) \
- 		$(patsubst %,-e %,$(WPA_SUPPLICANT_CONFIG_EDITS)) \
- 		$(WPA_SUPPLICANT_CONFIG)
+ 	  http://siproxd.sourceforge.net/
++
++comment "siproxd needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
 -- 
-2.25.1
+2.30.0
