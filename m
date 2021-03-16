@@ -1,38 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 16 Mar 2021 21:24:44 +0100
-Subject: [Buildroot] [git commit] package/libnet: add LIBNET_CONFIG_SCRIPTS
-Message-ID: <20210316200058.18D93802D1@busybox.osuosl.org>
+Date: Tue, 16 Mar 2021 21:24:43 +0100
+Subject: [Buildroot] [git commit] package/libxcrypt: disable obsolete API
+Message-ID: <20210316200058.076AA88154@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3ca79b8d1850f19aa83468ada5c3f852d6774185
+commit: https://git.buildroot.net/buildroot/commit/?id=e6e0670ae3f2b02da76d4e9ea34fb3505bb950b4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Set LIBNET_CONFIG_SCRIPTS to libnet-config to fix a build failure with
-syslog-ng and libnet in version 1.2 due to -L$(libdir) which has been
-added with
-https://github.com/libnet/libnet/commit/6859d1f198f97aad129c54fcd156700a9178204e
+Disable obsolete API following upstream feedback as it raises build
+failures on some architectures such as nds32le or arc and because this
+API is unsecure: https://github.com/besser82/libxcrypt/issues/122
 
 Fixes:
- - http://autobuild.buildroot.org/results/45e517401d14e304e9c6c990f1b4ead92c850ba2
+ - http://autobuild.buildroot.org/results/5ae235b6ec66ac86efadaa2847307be58064c167
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libnet/libnet.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/libxcrypt/libxcrypt.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/libnet/libnet.mk b/package/libnet/libnet.mk
-index da7d5db3ed..a5a814f4d2 100644
---- a/package/libnet/libnet.mk
-+++ b/package/libnet/libnet.mk
-@@ -13,5 +13,6 @@ LIBNET_CONF_OPTS = libnet_cv_have_packet_socket=yes
- LIBNET_LICENSE = BSD-2-Clause, BSD-3-Clause
- LIBNET_LICENSE_FILES = LICENSE
- LIBNET_CPE_ID_VENDOR = libnet_project
-+LIBNET_CONFIG_SCRIPTS = libnet-config
+diff --git a/package/libxcrypt/libxcrypt.mk b/package/libxcrypt/libxcrypt.mk
+index fd33fb7ab5..3cf0555ac0 100644
+--- a/package/libxcrypt/libxcrypt.mk
++++ b/package/libxcrypt/libxcrypt.mk
+@@ -14,4 +14,7 @@ LIBXCRYPT_AUTORECONF = YES
+ # Some warnings turn into errors with some sensitive compilers
+ LIBXCRYPT_CONF_OPTS = --disable-werror
  
++# Disable obsolete and unsecure API
++LIBXCRYPT_CONF_OPTS += --disable-obsolete_api
++
  $(eval $(autotools-package))
