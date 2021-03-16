@@ -1,49 +1,71 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Mar 2021 22:34:45 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/jasper: bump
- version to 2.0.26
-Message-ID: <20210316215256.23B5586DA6@busybox.osuosl.org>
+Date: Tue, 16 Mar 2021 22:53:36 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/libeXosip2: fix
+ build with libressl
+Message-ID: <20210316215256.3C93386DA6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0a8f54abc6ae2abd41136b3d7d42ede137ca1af2
+commit: https://git.buildroot.net/buildroot/commit/?id=00b1d477e5590dfba42b7111921a3fef1f49b6b6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-Changes:
-* Fix JP2 decoder bug that can cause a null pointer dereference for
-  some invalid CDEF boxes. (#268)
+Build with libressl is broken since version 5.1.0 and
+https://git.savannah.nongnu.org/cgit/exosip.git/commit/?id=d7488b7bbf59870192372384ef338a44be23e888
 
-Signed-off-by: Michael Vetter <jubalh@iodoru.org>
+For an unknown reason, we only have one autobuilder failure with version
+5.2.0
+
+Fixes:
+ - http://autobuild.buildroot.org/results/89d8d4ba99d6dcc1618cf6b5302c124a92d75be9
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 5742a0f33e285e27c5ae37b32cf5570bfa856946)
+(cherry picked from commit 11ac2ab5811a2be35816e30c5817b5fd0e552cee)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/jasper/jasper.hash | 2 +-
- package/jasper/jasper.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...-src-eXtls_dtls.c-fix-build-with-libressl.patch | 34 ++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-diff --git a/package/jasper/jasper.hash b/package/jasper/jasper.hash
-index d4ed191f91..c1f1b4f602 100644
---- a/package/jasper/jasper.hash
-+++ b/package/jasper/jasper.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  f5bc48e2884bcabd2aca1737baff4ca962ec665b6eb673966ced1f7adea07edb  jasper-2.0.25.tar.gz
-+sha256  a82a119e85b7d1f448e61309777fa5f79053a9adca4a2b5bfe44be5439fb8fea  jasper-2.0.26.tar.gz
- sha256  4ad1bb42aff888c4403d792e6e2c5f1716d6c279fea70b296333c9d577d30b81  LICENSE
-diff --git a/package/jasper/jasper.mk b/package/jasper/jasper.mk
-index 7b78f522db..2ff4bafb8c 100644
---- a/package/jasper/jasper.mk
-+++ b/package/jasper/jasper.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--JASPER_VERSION = 2.0.25
-+JASPER_VERSION = 2.0.26
- JASPER_SITE = $(call github,jasper-software,jasper,version-$(JASPER_VERSION))
- JASPER_INSTALL_STAGING = YES
- JASPER_LICENSE = JasPer-2.0
+diff --git a/package/libeXosip2/0001-src-eXtls_dtls.c-fix-build-with-libressl.patch b/package/libeXosip2/0001-src-eXtls_dtls.c-fix-build-with-libressl.patch
+new file mode 100644
+index 0000000000..b153eee65c
+--- /dev/null
++++ b/package/libeXosip2/0001-src-eXtls_dtls.c-fix-build-with-libressl.patch
+@@ -0,0 +1,34 @@
++From 178632fa5530a72f50376a60d59be2a07e65c28b Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 6 Mar 2021 15:20:51 +0100
++Subject: [PATCH] src/eXtls_dtls.c: fix build with libressl
++
++Build with libressl is broken since
++https://git.savannah.nongnu.org/cgit/exosip.git/commit/?id=d7488b7bbf59870192372384ef338a44be23e888
++because libressl does not define SSL_set0_rbio
++
++Fixes:
++ - http://autobuild.buildroot.org/results/89d8d4ba99d6dcc1618cf6b5302c124a92d75be9
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: sent to amoizard at antisip.com]
++---
++ src/eXtl_dtls.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/eXtl_dtls.c b/src/eXtl_dtls.c
++index 40fa658..8ac3a13 100644
++--- a/src/eXtl_dtls.c
+++++ b/src/eXtl_dtls.c
++@@ -70,7 +70,7 @@
++ #define RANDOM  "random.pem"
++ #define DHFILE "dh1024.pem"
++ 
++-#if OPENSSL_VERSION_NUMBER < 0x10100000L
+++#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
++ 
++ static void
++ SSL_set0_rbio (SSL * s, BIO * rbio)
++-- 
++2.30.0
++
