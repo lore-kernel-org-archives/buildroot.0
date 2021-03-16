@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Mar 2021 23:19:16 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/libjpeg: fix
+Date: Tue, 16 Mar 2021 23:19:25 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/libjpeg: fix
  LIBJPEG_SITE
-Message-ID: <20210316215532.6267585FF1@busybox.osuosl.org>
+Message-ID: <20210316215539.74C0485FF1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=de8a007e219452e4dc7c6978b271ebc36e5fe9ec
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=bf4916554d51fa201c1d36ab19753a869469cae1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 Commit b83184de674a (package/libjpeg: switch to s.b.o. as source site)
 improperly added a trailing slash '/' at the end of LIBJPEG_SITE,
