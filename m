@@ -1,18 +1,19 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 16 Mar 2021 21:52:50 +0100
-Subject: [Buildroot] [git commit] package/rsyslog: add impcap support
-Message-ID: <20210316202904.C870583C5B@busybox.osuosl.org>
+Date: Tue, 16 Mar 2021 21:52:49 +0100
+Subject: [Buildroot] [git commit] package/rsyslog: add imhttp support
+Message-ID: <20210316202904.B8CEC80841@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e471e5dd41d382d96ecc47ff082a7433571494d8
+commit: https://git.buildroot.net/buildroot/commit/?id=6a3178d1331244172a29476a71cd2c8ea8ca2b27
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-impcap is available since version 8.2006.0 and only depends on libpcap:
-https://github.com/rsyslog/rsyslog/commit/76318ad9269309d0423358c545f72f3f79c12203
+imhttp support is available since version 8.2010.0 and only depends on
+civetweb:
+https://github.com/rsyslog/rsyslog/commit/6102f6083cfa73fe4a91e3d34c4d1dc924465278
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
@@ -21,28 +22,25 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
  1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
-index 6da2a469a9..99e80ae268 100644
+index d20a13dbdd..6da2a469a9 100644
 --- a/package/rsyslog/rsyslog.mk
 +++ b/package/rsyslog/rsyslog.mk
-@@ -30,7 +30,6 @@ RSYSLOG_CONF_OPTS += --disable-elasticsearch \
+@@ -30,11 +30,17 @@ RSYSLOG_CONF_OPTS += --disable-elasticsearch \
  	--disable-omhttp \
  	--disable-fmhttp \
  	--disable-imdocker \
--	--disable-impcap \
+-	--disable-imhttp \
+ 	--disable-impcap \
  	--disable-omhttpfs \
  	--disable-mmkubernetes
  
-@@ -60,6 +59,13 @@ else
- RSYSLOG_CONF_OPTS += --disable-libgcrypt
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBPCAP),y)
-+RSYSLOG_DEPENDENCIES += libpcap
-+RSYSLOG_CONF_OPTS += --enable-impcap
++ifeq ($(BR2_PACKAGE_CIVETWEB_LIB),y)
++RSYSLOG_DEPENDENCIES += civetweb
++RSYSLOG_CONF_OPTS += --enable-imhttp
 +else
-+RSYSLOG_CONF_OPTS += --disable-impcap
++RSYSLOG_CONF_OPTS += --disable-imhttp
 +endif
 +
- ifeq ($(BR2_PACKAGE_MYSQL),y)
- RSYSLOG_DEPENDENCIES += mysql
- RSYSLOG_CONF_OPTS += --enable-mysql
+ ifeq ($(BR2_PACKAGE_GNUTLS),y)
+ RSYSLOG_DEPENDENCIES += gnutls
+ RSYSLOG_CONF_OPTS += --enable-gnutls
