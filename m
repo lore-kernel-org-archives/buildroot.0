@@ -1,50 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Mar 2021 22:29:34 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/dovecot: bump
- version to 2.3.14
-Message-ID: <20210316215242.1ED5D7FA97@busybox.osuosl.org>
+Date: Tue, 16 Mar 2021 23:13:37 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/asterisk: remove
+ default -O3 optimization flag
+Message-ID: <20210316215242.50939882B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=01ae2122eccbadce76f45b0a701edee813f363f7
+commit: https://git.buildroot.net/buildroot/commit/?id=9223b19da70e7d6e06be6efc7da1fe2b05035f78
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Release notes:
-https://dovecot.org/pipermail/dovecot-news/2021-March/000455.html
+Actually asterisk package gets built with -O3 cflag since it's defaulted
+into its sources, but it's not what we want, so let's empty its OPTIMIZE
+Makefile variable letting Buildroot CFLAGS to take place instead.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 5a16d4536066281054305bdaec43023a52281074)
+(cherry picked from commit eaba3c8e131e21c4bae79483211685942e035300)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dovecot/dovecot.hash | 2 +-
- package/dovecot/dovecot.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/asterisk/asterisk.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
-index 4d69f3abdd..edb9d20e6d 100644
---- a/package/dovecot/dovecot.hash
-+++ b/package/dovecot/dovecot.hash
-@@ -1,5 +1,5 @@
- # Locally computed after checking signature
--sha256  a3f875b80ec11a452480690108660030978c94fa8e796ad6d943a874b496f1c4  dovecot-2.3.13.tar.gz
-+sha256  c8b3d7f3af1e558a3ff0f970309d4013a4d3ce136f8c02a53a3b05f345b9a34a  dovecot-2.3.14.tar.gz
- sha256  319a9830aab406109cd67cb45496587566a8123203d66d037b209ca3e13de02a  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
- sha256  52b8c95fabb19575281874b661ef7968ea47e8f5d74ba0dd40ce512e52b3fc97  COPYING.MIT
-diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
-index 3100bfbc93..89541fc9f5 100644
---- a/package/dovecot/dovecot.mk
-+++ b/package/dovecot/dovecot.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
+index 25b968667c..6d8edc7d59 100644
+--- a/package/asterisk/asterisk.mk
++++ b/package/asterisk/asterisk.mk
+@@ -281,6 +281,9 @@ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+ ASTERISK_MAKE_OPTS += ASTLDFLAGS="-latomic"
+ endif
  
- DOVECOT_VERSION_MAJOR = 2.3
--DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).13
-+DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).14
- DOVECOT_SITE = https://dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
- DOVECOT_INSTALL_STAGING = YES
- DOVECOT_LICENSE = LGPL-2.1, MIT, Public Domain, BSD-3-Clause, Unicode-DFS-2015
++# Remove default -O3 optimization flag
++ASTERISK_MAKE_OPTS += OPTIMIZE=""
++
+ # We want to install sample configuration files, too.
+ ASTERISK_INSTALL_TARGET_OPTS = \
+ 	$(ASTERISK_DIRS) \
