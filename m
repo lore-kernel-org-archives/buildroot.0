@@ -1,50 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 16 Mar 2021 21:23:30 +0100
-Subject: [Buildroot] [PATCH v1] package/cifs-utils: bump version to 6.12
-In-Reply-To: <20210315213438.6103-1-ps.report@gmx.net>
-References: <20210315213438.6103-1-ps.report@gmx.net>
-Message-ID: <20210316212330.0383f444@windsurf.home>
+Date: Tue, 16 Mar 2021 21:24:43 +0100
+Subject: [Buildroot] [git commit] package/kodi-pvr-zattoo: bump version to
+ 19.7.9-Matrix
+Message-ID: <20210316200057.E4B4F8814B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 15 Mar 2021 22:34:38 +0100
-Peter Seiderer <ps.report@gmx.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=24a52c23f57c368b41ef2ade625b15de59c129d9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> - removed 0001-Use-DESTDIR-when-installing-mount.smb3-and-optionall.patch
->   (superseded by upstream commit [1])
-> 
-> - adjust autoreconf comment accordingly
-> 
-> - add option for smb tools to avoid hard python runtime dependency
->   (smbinfo and smb2-quota are python scripts)
-> 
-> Changelog ([2]):
-> 
->   December, 2020: Release 6.12
->   get/setcifsacl tools are improved to support changing owner, group and SACLs
->   mount.cifs is enhanced to use SUDO_UID env variable for cruid
->   smbinfo is re-written in Python language
->   https://lists.samba.org/archive/samba-technical/2020-December/136156.html
-> 
-> [1] https://git.samba.org/?p=cifs-utils.git;a=patch;h=a00e84378d9c5e63272ff69ca18fd0e872b384d3
-> [2] https://wiki.samba.org/index.php/LinuxCIFS_utils
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  ...-installing-mount.smb3-and-optionall.patch | 41 -------------------
->  package/cifs-utils/Config.in                  | 11 +++++
->  package/cifs-utils/cifs-utils.hash            |  2 +-
->  package/cifs-utils/cifs-utils.mk              | 12 +++++-
->  4 files changed, 22 insertions(+), 44 deletions(-)
->  delete mode 100644 package/cifs-utils/0001-Use-DESTDIR-when-installing-mount.smb3-and-optionall.patch
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash | 2 +-
+ package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
+index a5a56f6db6..138ad19b88 100644
+--- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
++++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  25dc4ea72b5315a65286ba606e6e26d281fb8eb830d5e0164b66b8d7ae90319a  kodi-pvr-zattoo-19.7.8.1-Matrix.tar.gz
++sha256  d0dee5802592aa1fd53c3835e373b2c49bdc3121575273bf2a0c8ebf1a40bd2c  kodi-pvr-zattoo-19.7.9-Matrix.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
+index 1ae1e884b0..554fd3946f 100644
+--- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
++++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_PVR_ZATTOO_VERSION = 19.7.8.1-Matrix
++KODI_PVR_ZATTOO_VERSION = 19.7.9-Matrix
+ KODI_PVR_ZATTOO_SITE = $(call github,rbuehlma,pvr.zattoo,$(KODI_PVR_ZATTOO_VERSION))
+ KODI_PVR_ZATTOO_LICENSE = GPL-2.0+
+ KODI_PVR_ZATTOO_LICENSE_FILES = LICENSE.md
