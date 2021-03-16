@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Mar 2021 22:13:46 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/sox: fix static
+Date: Tue, 16 Mar 2021 22:13:15 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/sox: fix static
  build with magic
-Message-ID: <20210316205045.21DF088211@busybox.osuosl.org>
+Message-ID: <20210316205102.694E488075@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a19693c6ad5ff723c63ca62850a5253a4dc6aefb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=3a5f65fe8f5bdd2aa34d56fd61f4d57450881dab
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
 This build failure is raised since bump to
 7524160b29a476f7e87bc14fddf12d349f9a3c5e
