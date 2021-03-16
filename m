@@ -1,36 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 16 Mar 2021 23:10:37 +0100
-Subject: [Buildroot] [git commit] package/kismet: add SELinux refpolicy
- module
-Message-ID: <20210316214740.9D7AE87B82@busybox.osuosl.org>
+Date: Tue, 16 Mar 2021 23:10:35 +0100
+Subject: [Buildroot] [git commit] package/kexec: add SELinux refpolicy module
+Message-ID: <20210316214740.84F8C87B82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=32630e28d82ae7951eced0bbf6faa0fa9cfd12fd
+commit: https://git.buildroot.net/buildroot/commit/?id=44670b4f4efe1034ca6704c7333d7ccdaf6d422c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-SELinux support for kismet is provided by the admin/kismet refpolicy
-module.
+SELinux support for kexec and kdump is added by the admin/kdump
+refpolicy module.
 
 Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kismet/kismet.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/kexec/kexec.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/kismet/kismet.mk b/package/kismet/kismet.mk
-index b39b58d81b..5445db0b1f 100644
---- a/package/kismet/kismet.mk
-+++ b/package/kismet/kismet.mk
-@@ -17,6 +17,8 @@ KISMET_DEPENDENCIES = \
- 	zlib
- KISMET_LICENSE = GPL-2.0+
- KISMET_LICENSE_FILES = LICENSE
-+KISMET_SELINUX_MODULES = kismet
-+
- KISMET_CONF_OPTS = --disable-debuglibs
+diff --git a/package/kexec/kexec.mk b/package/kexec/kexec.mk
+index 63fcc074b5..c54ce1f11a 100644
+--- a/package/kexec/kexec.mk
++++ b/package/kexec/kexec.mk
+@@ -9,6 +9,7 @@ KEXEC_SOURCE = kexec-tools-$(KEXEC_VERSION).tar.xz
+ KEXEC_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kexec
+ KEXEC_LICENSE = GPL-2.0
+ KEXEC_LICENSE_FILES = COPYING
++KEXEC_SELINUX_MODULES = kdump
  
- KISMET_CXXFLAGS = $(TARGET_CXXFLAGS)
+ # Makefile expects $STRIP -o to work, so needed for !BR2_STRIP_strip
+ KEXEC_MAKE_OPTS = STRIP="$(TARGET_CROSS)strip"
