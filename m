@@ -1,54 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 16 Mar 2021 20:46:17 +0100
-Subject: [Buildroot] Improved CVE reporting
-Message-ID: <20210316204617.6e0b0b2d@windsurf.home>
+Date: Tue, 16 Mar 2021 21:06:24 +0100
+Subject: [Buildroot] [git commit] package/siproxd: needs MMU
+Message-ID: <20210316194241.3279F80F89@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=a187032535f9b08593dace499a4a4df11d16d82a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Last week-end, I worked on improving a bit the CVE information
-reporting. Until now, the reporting was done only based on the master
-branch. However, we definitely want to also watch out for CVEs that
-affect our current LTS branch.
+siproxd which has been added with commit
+3efc5a250c1c98598ba4c91a7d71d11343d937ab unconditionally uses fork
 
-So:
+Fixes:
+ - http://autobuild.buildroot.org/results/0c59373ab3778cf7b15e73968295cec8d109f7cb
 
- * The pkg-stats script is now executed on a daily basis on all active
-   branches, with active branches being defined by
-   http://autobuild.buildroot.net/branches, which is also used by the
-   autobuilders to know which branches to test. The results of these
-   pkg-stats runs are available at
-   http://autobuild.buildroot.net/stats/.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Acked-by: Alexander Dahl <post@lespocky.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/siproxd/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-   You'll note that even though 2020.02.x is an active branch, there
-   are no results for it. Indeed, the pkg-stats machinery in this
-   branch is broken, and 2020.02.x is anyway soon going to go out of
-   maintenance.
-
- * The weekly e-mail sent to the mailing list and to individual
-   developers with CVE information about packages now contains details
-   about all branches. See
-   http://lists.busybox.net/pipermail/buildroot/2021-March/305859.html
-   for an example.
-
-Hopefully this will be useful to the overall Buildroot community to
-ensure that we have all the security fixes needed in our packages. As
-you can see from the above report, there is quite a bit of work to be
-done. Of course, some of the issues may also be in correct
-classification by the NVD database, in which case our goal is to
-contribute to this database to get the data fixed.
-
-Let me know if this is useful, and/or if you see additional possible
-improvements.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/siproxd/Config.in b/package/siproxd/Config.in
+index e73a33bf14..24c710b375 100644
+--- a/package/siproxd/Config.in
++++ b/package/siproxd/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_SIPROXD
+ 	bool "siproxd"
++	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_LIBOSIP2
+ 	select BR2_PACKAGE_LIBTOOL
+@@ -18,4 +19,5 @@ config BR2_PACKAGE_SIPROXD
+ 	  http://siproxd.sourceforge.net/
+ 
+ comment "siproxd needs a toolchain w/ threads"
++	depends on BR2_USE_MMU
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
