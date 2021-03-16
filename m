@@ -1,35 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 16 Mar 2021 23:10:33 +0100
-Subject: [Buildroot] [git commit] package/dmidecode: add SELinux refpolicy
+Date: Tue, 16 Mar 2021 23:10:30 +0100
+Subject: [Buildroot] [git commit] package/alsa-utils: add SELinux repolicy
  module
-Message-ID: <20210316214740.67F078624F@busybox.osuosl.org>
+Message-ID: <20210316214740.4AE4F87B82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=205f03d1b886bc12586d54262a47b8d7a48961b9
+commit: https://git.buildroot.net/buildroot/commit/?id=8a376df7f154573052aecc4475a7998694e8c0c1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Dmidecode provides 4 tools, for which support for SELinux is provided by
-the admin/dmidecode refpolicy module.
+The alsa-utils package adds some tools that needs the proper module in
+the SELinux refpolicy to work properly when SELinux is enabled on the
+system.
+
+Add support for the alsactl tool, through the use of the admin/alsa
+module.
 
 Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/dmidecode/dmidecode.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/alsa-utils/alsa-utils.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/dmidecode/dmidecode.mk b/package/dmidecode/dmidecode.mk
-index 89d9155f95..3f09cc956d 100644
---- a/package/dmidecode/dmidecode.mk
-+++ b/package/dmidecode/dmidecode.mk
-@@ -9,6 +9,7 @@ DMIDECODE_SOURCE = dmidecode-$(DMIDECODE_VERSION).tar.xz
- DMIDECODE_SITE = http://download.savannah.gnu.org/releases/dmidecode
- DMIDECODE_LICENSE = GPL-2.0+
- DMIDECODE_LICENSE_FILES = LICENSE
-+DMIDECODE_SELINUX_MODULES = dmidecode
+diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
+index d9f0fea7b4..2658c827a0 100644
+--- a/package/alsa-utils/alsa-utils.mk
++++ b/package/alsa-utils/alsa-utils.mk
+@@ -15,6 +15,10 @@ ALSA_UTILS_DEPENDENCIES = host-pkgconf alsa-lib \
+ 	$(if $(BR2_PACKAGE_LIBSAMPLERATE),libsamplerate) \
+ 	$(TARGET_NLS_DEPENDENCIES)
  
- define DMIDECODE_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS)
++ifeq ($(BR2_PACKAGE_ALSA_UTILS_ALSACTL),y)
++ALSA_UTILS_SELINUX_MODULES += alsa
++endif
++
+ ALSA_UTILS_CONF_ENV = \
+ 	ac_cv_prog_ncurses5_config=$(STAGING_DIR)/usr/bin/$(NCURSES_CONFIG_SCRIPTS) \
+ 	LIBS=$(TARGET_NLS_LIBS)
