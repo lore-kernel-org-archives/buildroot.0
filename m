@@ -1,28 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 16 Mar 2021 21:23:21 +0100
-Subject: [Buildroot] [PATCH v1] package/libxkbcommon: bump version to
- 1.1.0
-In-Reply-To: <20210315204705.11184-1-ps.report@gmx.net>
-References: <20210315204705.11184-1-ps.report@gmx.net>
-Message-ID: <20210316212321.5a68544d@windsurf.home>
+Date: Tue, 16 Mar 2021 21:23:24 +0100
+Subject: [Buildroot] [PATCH v1] package/pcre2: bump version to 10.36
+In-Reply-To: <20210315204845.11464-1-ps.report@gmx.net>
+References: <20210315204845.11464-1-ps.report@gmx.net>
+Message-ID: <20210316212324.22d31ef3@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 15 Mar 2021 21:47:05 +0100
+On Mon, 15 Mar 2021 21:48:45 +0100
 Peter Seiderer <ps.report@gmx.net> wrote:
 
-> For details see [1].
+> - removed 0001-Use-the-standard-code-path-of-sljit_emit_cmov-on-mips-r6.patch
+>   (upstream [1])
 > 
-> [1] https://lists.freedesktop.org/archives/wayland-devel/2021-March/041747.html
+> - license file hash update (email update for Philip Hazel)
+> 
+> [1] https://vcs.pcre.org/pcre2?view=revision&revision=1281
 > 
 > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 > ---
->  package/libxkbcommon/libxkbcommon.hash | 4 ++--
->  package/libxkbcommon/libxkbcommon.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  ...e-path-of-sljit_emit_cmov-on-mips-r6.patch | 59 -------------------
+>  package/pcre2/pcre2.hash                      |  7 ++-
+>  package/pcre2/pcre2.mk                        |  2 +-
+>  3 files changed, 5 insertions(+), 63 deletions(-)
+>  delete mode 100644 package/pcre2/0001-Use-the-standard-code-path-of-sljit_emit_cmov-on-mips-r6.patch
 
 Applied to master, thanks.
 
