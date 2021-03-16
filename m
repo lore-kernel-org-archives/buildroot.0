@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Mar 2021 22:15:46 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/gnuchess:
+Date: Tue, 16 Mar 2021 22:15:21 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/gnuchess:
  security bump to version 6.2.7
-Message-ID: <20210316205223.CDA7E88075@busybox.osuosl.org>
+Message-ID: <20210316205316.22C7788075@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=46e3a6e4211479a271b42c92be0c27b9a176cf19
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=68b2095a89add05f2fed671e366418320994fdda
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
 Fix CVE-2019-15767: In GNU Chess 6.2.5, there is a stack-based buffer
 overflow in the cmd_load function in frontend/cmd.cc via a crafted chess
