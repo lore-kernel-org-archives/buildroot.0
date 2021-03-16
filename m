@@ -1,31 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Mar 2021 22:37:13 +0100
-Subject: [Buildroot] [PATCH] package/libjpeg: switch to s.b.o. as source
- site
-In-Reply-To: <87v9a4a8v4.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Sat, 06 Mar 2021 11:12:47 +0100")
-References: <20210306090446.2180129-1-yann.morin.1998@free.fr>
- <87v9a4a8v4.fsf@dell.be.48ers.dk>
-Message-ID: <87eegezsom.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 16 Mar 2021 22:37:50 +0100
+Subject: [Buildroot] [PATCH 1/3] package/python-semantic-version: new
+ package
+In-Reply-To: <20210211051252.966385-1-james.hilliard1@gmail.com>
+References: <20210211051252.966385-1-james.hilliard1@gmail.com>
+Message-ID: <20210316223750.782a3864@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+Hello James,
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
- >> The tarball for version 9d, released 2020-01-12, has been silently
- >> replaced upstream (a kinfd of BOM was removed from a few files),
+On Wed, 10 Feb 2021 22:12:50 -0700
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
- > Ahh, the Windows-style unicode byte order mark:
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  .../python-semantic-version.hash                   |  5 +++++
+>  .../python-semantic-version.mk                     | 14 ++++++++++++++
+>  2 files changed, 19 insertions(+)
+>  create mode 100644 package/python-semantic-version/python-semantic-version.hash
+>  create mode 100644 package/python-semantic-version/python-semantic-version.mk
 
- > https://en.wikipedia.org/wiki/Byte_order_mark
+I have applied the series to master, after splitting PATCH 3/3 into one
+patch doing the host-python-toml addition, and another patch for
+host-python-setuptools-rust.
 
- > Committed after adding the bugzilla reference, thanks.
+One word of caution though: host-python-setuptools-rust has host-rustc
+in its dependencies, so packages that will use
+host-python-setuptools-rust will have to be careful in their Config.in
+dependencies to depend on the appropriate BR2_PACKAGE_HOST_RUSTC_*
+options. Indeed host-rustc and Rust support for the target is not
+available for all CPU architectures.
 
-Committed to 2020.02.x and 2020.11.x, thanks.
+Thanks!
 
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
