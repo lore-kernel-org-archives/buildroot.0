@@ -1,32 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Mar 2021 23:14:40 +0100
-Subject: [Buildroot] [PATCH 2/2] package/asterisk: fix build failure due
- to gcc bug 93847
-In-Reply-To: <20210305091102.2420944-3-giulio.benetti@benettiengineering.com>
- (Giulio Benetti's message of "Fri, 5 Mar 2021 10:11:02 +0100")
-References: <20210305091102.2420944-1-giulio.benetti@benettiengineering.com>
- <20210305091102.2420944-3-giulio.benetti@benettiengineering.com>
-Message-ID: <87sg4uycdr.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 16 Mar 2021 23:15:21 +0100
+Subject: [Buildroot] [PATCH v2 1/1] package/x264: bump version
+In-Reply-To: <20210128062939.192717-1-bernd.kuhls@t-online.de>
+References: <20210128062939.192717-1-bernd.kuhls@t-online.de>
+Message-ID: <20210316231521.41308446@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
+On Thu, 28 Jan 2021 07:29:39 +0100
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
- > The asterisk package exhibits gcc bug 93847 when built for the Nios2
- > architecture with optimization enabled, which causes a build failure.
+> Reformatted hashes.
+> 
+> Switch _SITE* according to
+> http://download.videolan.org/x264/snapshots/x264-snapshot-20191218-README.txt
+> 
+> "The snapshotting service is discontinued.
+> 
+>  Please use https://code.videolan.org/videolan/x264/ to get the
+>  tarballs."
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+> v2: switched _SITE_METHOD to git (Yann)
 
- > As done for other packages in Buildroot work around this gcc bug by
- > setting optimization to -O0 if BR2_TOOLCHAIN_HAS_GCC_BUG_93847=y.
+Applied to master, thanks.
 
- > Fixes:
- > http://autobuild.buildroot.net/results/24c0a6ca3b272711a1e6ceaa033925182d0d49c4
-
- > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-
-Committed to 2020.02.x and 2020.11.x, thanks.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
