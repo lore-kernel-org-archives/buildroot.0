@@ -1,36 +1,33 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 16 Mar 2021 21:18:24 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libnet: add LIBNET_CONFIG_SCRIPTS
-Message-ID: <20210316201824.3179128-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 16 Mar 2021 21:23:18 +0100
+Subject: [Buildroot] [PATCH 1/2] package/siproxd: needs threads
+In-Reply-To: <20210316063821.2310693-1-fontaine.fabrice@gmail.com>
+References: <20210316063821.2310693-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210316212318.098e9ca9@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Set LIBNET_CONFIG_SCRIPTS to libnet-config to fix a build failure with
-syslog-ng and libnet in version 1.2 due to -L$(libdir) which has been
-added with
-https://github.com/libnet/libnet/commit/6859d1f198f97aad129c54fcd156700a9178204e
+On Tue, 16 Mar 2021 07:38:20 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Fixes:
- - http://autobuild.buildroot.org/results/45e517401d14e304e9c6c990f1b4ead92c850ba2
+> siproxd which has been added with commit
+> 3efc5a250c1c98598ba4c91a7d71d11343d937ab unconditionally uses pthread
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/828448fff87772e1c34b3696284a44eb9fc692fb
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/siproxd/Config.in | 4 ++++
+>  1 file changed, 4 insertions(+)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libnet/libnet.mk | 1 +
- 1 file changed, 1 insertion(+)
+Both applied to master. Thanks!
 
-diff --git a/package/libnet/libnet.mk b/package/libnet/libnet.mk
-index da7d5db3ed..a5a814f4d2 100644
---- a/package/libnet/libnet.mk
-+++ b/package/libnet/libnet.mk
-@@ -13,5 +13,6 @@ LIBNET_CONF_OPTS = libnet_cv_have_packet_socket=yes
- LIBNET_LICENSE = BSD-2-Clause, BSD-3-Clause
- LIBNET_LICENSE_FILES = LICENSE
- LIBNET_CPE_ID_VENDOR = libnet_project
-+LIBNET_CONFIG_SCRIPTS = libnet-config
- 
- $(eval $(autotools-package))
+Thomas
 -- 
-2.30.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
