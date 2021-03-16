@@ -1,30 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 16 Mar 2021 21:23:18 +0100
-Subject: [Buildroot] [PATCH 1/2] package/siproxd: needs threads
-In-Reply-To: <20210316063821.2310693-1-fontaine.fabrice@gmail.com>
-References: <20210316063821.2310693-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210316212318.098e9ca9@windsurf.home>
+Date: Tue, 16 Mar 2021 21:23:21 +0100
+Subject: [Buildroot] [PATCH v1] package/libxkbcommon: bump version to
+ 1.1.0
+In-Reply-To: <20210315204705.11184-1-ps.report@gmx.net>
+References: <20210315204705.11184-1-ps.report@gmx.net>
+Message-ID: <20210316212321.5a68544d@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 16 Mar 2021 07:38:20 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Mon, 15 Mar 2021 21:47:05 +0100
+Peter Seiderer <ps.report@gmx.net> wrote:
 
-> siproxd which has been added with commit
-> 3efc5a250c1c98598ba4c91a7d71d11343d937ab unconditionally uses pthread
+> For details see [1].
 > 
-> Fixes:
->  - http://autobuild.buildroot.org/results/828448fff87772e1c34b3696284a44eb9fc692fb
+> [1] https://lists.freedesktop.org/archives/wayland-devel/2021-March/041747.html
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 > ---
->  package/siproxd/Config.in | 4 ++++
->  1 file changed, 4 insertions(+)
+>  package/libxkbcommon/libxkbcommon.hash | 4 ++--
+>  package/libxkbcommon/libxkbcommon.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Both applied to master. Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
