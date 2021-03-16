@@ -1,54 +1,36 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 16 Mar 2021 22:06:44 +0100
-Subject: [Buildroot] [git commit] package/batman-adv: bump version to 2021.0
-Message-ID: <20210316204301.616B4844ED@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 16 Mar 2021 22:08:38 +0100
+Subject: [Buildroot] [PATCH v2 1/1] Added config option to expose
+ browser remote control on the D-Bus system bus
+In-Reply-To: <20210316094727.1881200-1-asweet@thegoodpenguin.co.uk>
+References: <20210316094727.1881200-1-asweet@thegoodpenguin.co.uk>
+Message-ID: <20210316220838.033faca3@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=390b4e684be24a87865a56cf7d8e2f9b3ac74626
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Adrian,
 
-For details see [1].
+On Tue, 16 Mar 2021 09:47:27 +0000
+Adrian Sweet <asweet@thegoodpenguin.co.uk> wrote:
 
-[1] https://www.open-mesh.org/news/100
+> Signed-off-by: Adrian Sweet <asweet@thegoodpenguin.co.uk>
+> ---
+>  package/cog/Config.in | 5 +++++
+>  package/cog/cog.mk    | 6 ++++++
+>  2 files changed, 11 insertions(+)
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/batman-adv/batman-adv.hash | 10 +++++-----
- package/batman-adv/batman-adv.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+Thanks a lot, I have applied your patch. There were a few minor issues
+though: the indentation in the Config.in file was not correct (this is
+spotted by running "make check-package") and the commit title was
+missing the package name as a prefix. I fixed that up when applying.
 
-diff --git a/package/batman-adv/batman-adv.hash b/package/batman-adv/batman-adv.hash
-index dabbec8120..2422723f40 100644
---- a/package/batman-adv/batman-adv.hash
-+++ b/package/batman-adv/batman-adv.hash
-@@ -1,7 +1,7 @@
--# From https://downloads.open-mesh.org/batman/stable/sources/batman-adv/batman-adv-2019.3.tar.gz.{md5,sha1}
--md5  39345688ddf12a542853b2318325f07b         batman-adv-2019.3.tar.gz
--sha1 202539c0cbf4604f6c8e9d427b338d4e807bd220 batman-adv-2019.3.tar.gz
-+# From https://downloads.open-mesh.org/batman/releases/batman-adv-2021.0/batman-adv-2021.0.tar.gz.sha1
-+sha1  7edd4dfb9434f80adf791990d4e383c7ef80a256  batman-adv-2021.0.tar.gz
- 
- # Hash for license files
--sha256 cecbf53d1148e13256ac29f8b900655b7fc8dc12d59939a95bc2323ea1747025 LICENSES/preferred/GPL-2.0
--sha256 323c587d0ccf10e376f8bf9a7f31fb4ca6078105194b42e0b1e0ee2bc9bde71f LICENSES/preferred/MIT
-+sha256  5a989ba580897268373bd516b87b588061f344af773a0f6b038a3d8d2af028a1  batman-adv-2021.0.tar.gz
-+sha256  cecbf53d1148e13256ac29f8b900655b7fc8dc12d59939a95bc2323ea1747025  LICENSES/preferred/GPL-2.0
-+sha256  323c587d0ccf10e376f8bf9a7f31fb4ca6078105194b42e0b1e0ee2bc9bde71f  LICENSES/preferred/MIT
-diff --git a/package/batman-adv/batman-adv.mk b/package/batman-adv/batman-adv.mk
-index 194951a712..cb802d6939 100644
---- a/package/batman-adv/batman-adv.mk
-+++ b/package/batman-adv/batman-adv.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BATMAN_ADV_VERSION = 2019.3
-+BATMAN_ADV_VERSION = 2021.0
- BATMAN_ADV_SITE = https://downloads.open-mesh.org/batman/stable/sources/batman-adv
- BATMAN_ADV_LICENSE = GPL-2.0, MIT (batman_adv.h)
- BATMAN_ADV_LICENSE_FILES = LICENSES/preferred/GPL-2.0 LICENSES/preferred/MIT
+Thanks again!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
