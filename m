@@ -1,48 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Mar 2021 22:29:37 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x]
- package/dovecot-pigeonhole: bump version to 0.5.14
-Message-ID: <20210316215242.2D6D18829E@busybox.osuosl.org>
+Date: Tue, 16 Mar 2021 22:35:52 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/libjpeg: switch
+ to s.b.o. as source site
+Message-ID: <20210316215242.44EDB8829E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0b88d3f0870e49622f310239d48949e6284a18df
+commit: https://git.buildroot.net/buildroot/commit/?id=6f679d20ba07a60e9ea0e9a439956e540d27bb19
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Release notes:
-https://dovecot.org/pipermail/dovecot-news/2021-March/000456.html
+Fixes #13581
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+The tarball for version 9d, released 2020-01-12, has been silently
+replaced upstream (a unicode BOM was removed from a few files),
+causing hash mismatch.
+
+This means that all our versions since 2020.02 will fail the hash
+check, and fallback to using s.b.o. so we can't update the copy we
+have on s.b.o.
+
+As a consequence, we can't update the hash in master (soon 2021.02)
+otherwise it would not match what we have on s.b.o.
+
+This means that users will see hash mismatch by default, which is not
+very nice. Although we can't do anything for all previous releases,
+we can still try to paper over the problem for the future ones, like
+2021.02, by switching the upstream to be s.b.o.
+
+Sigh... :-(
+
+Reported-by: Nick Shaforostov <mshaforostov@airmusictech.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 9b29e94980c134065f360a4beaa70be86bb0befd)
+(cherry picked from commit b83184de674a6d68e110d5666685edb0a7374d74)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dovecot-pigeonhole/dovecot-pigeonhole.hash | 2 +-
- package/dovecot-pigeonhole/dovecot-pigeonhole.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libjpeg/libjpeg.mk | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
-index f2c76a05fd..cf3ebdbf54 100644
---- a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
-+++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
-@@ -1,3 +1,3 @@
- # Locally computed after checking signature
--sha256  911fe566da5b638eab1b11105314300bc9049cc3832d4bd2aed44c265013bf17  dovecot-2.3-pigeonhole-0.5.13.tar.gz
-+sha256  68ca0f78a3caa6b090a469f45c395c44cf16da8fcb3345755b1ca436c9ffb2d2  dovecot-2.3-pigeonhole-0.5.14.tar.gz
- sha256  fc9e9522216f2a9a28b31300e3c73c1df56acc27dfae951bf516e7995366b51a  COPYING
-diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
-index 5c4cdb633e..df39a83c1d 100644
---- a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
-+++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/libjpeg/libjpeg.mk b/package/libjpeg/libjpeg.mk
+index b855344f3c..5c15e6fc6d 100644
+--- a/package/libjpeg/libjpeg.mk
++++ b/package/libjpeg/libjpeg.mk
+@@ -5,7 +5,11 @@
  ################################################################################
  
--DOVECOT_PIGEONHOLE_VERSION = 0.5.13
-+DOVECOT_PIGEONHOLE_VERSION = 0.5.14
- DOVECOT_PIGEONHOLE_SOURCE = dovecot-2.3-pigeonhole-$(DOVECOT_PIGEONHOLE_VERSION).tar.gz
- DOVECOT_PIGEONHOLE_SITE = https://pigeonhole.dovecot.org/releases/2.3
- DOVECOT_PIGEONHOLE_LICENSE = LGPL-2.1
+ LIBJPEG_VERSION = 9d
+-LIBJPEG_SITE = http://www.ijg.org/files
++# 9d was released 2020-01-12, but the tarball was replaced upstream circa
++# 2021-03, causing hash mismatch. Until there is a new version released,
++# use our cached copy from s.b.o.
++#LIBJPEG_SITE = http://www.ijg.org/files
++LIBJPEG_SITE = http://sources.buildroot.org/libjpeg/
+ LIBJPEG_SOURCE = jpegsrc.v$(LIBJPEG_VERSION).tar.gz
+ LIBJPEG_LICENSE = IJG
+ LIBJPEG_LICENSE_FILES = README
