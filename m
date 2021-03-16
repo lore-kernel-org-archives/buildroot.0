@@ -1,41 +1,36 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 16 Mar 2021 20:04:52 +0100
-Subject: [Buildroot] [PATCH 1/1] package/kodi-pvr-zattoo: bump version to
- 19.7.9-Matrix
-Message-ID: <20210316190452.1005526-1-bernd.kuhls@t-online.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 16 Mar 2021 20:30:37 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libxcrypt: disable obsolete API
+Message-ID: <20210316193037.2613209-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash | 2 +-
- package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Disable obsolete API following upstream feedback as it raises build
+failures on some architectures such as nds32le or arc and because this
+API is unsecure: https://github.com/besser82/libxcrypt/issues/122
 
-diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
-index a5a56f6db6..138ad19b88 100644
---- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
-+++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  25dc4ea72b5315a65286ba606e6e26d281fb8eb830d5e0164b66b8d7ae90319a  kodi-pvr-zattoo-19.7.8.1-Matrix.tar.gz
-+sha256  d0dee5802592aa1fd53c3835e373b2c49bdc3121575273bf2a0c8ebf1a40bd2c  kodi-pvr-zattoo-19.7.9-Matrix.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
-index 1ae1e884b0..554fd3946f 100644
---- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
-+++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Fixes:
+ - http://autobuild.buildroot.org/results/5ae235b6ec66ac86efadaa2847307be58064c167
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libxcrypt/libxcrypt.mk | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/package/libxcrypt/libxcrypt.mk b/package/libxcrypt/libxcrypt.mk
+index fd33fb7ab5..3cf0555ac0 100644
+--- a/package/libxcrypt/libxcrypt.mk
++++ b/package/libxcrypt/libxcrypt.mk
+@@ -14,4 +14,7 @@ LIBXCRYPT_AUTORECONF = YES
+ # Some warnings turn into errors with some sensitive compilers
+ LIBXCRYPT_CONF_OPTS = --disable-werror
  
--KODI_PVR_ZATTOO_VERSION = 19.7.8.1-Matrix
-+KODI_PVR_ZATTOO_VERSION = 19.7.9-Matrix
- KODI_PVR_ZATTOO_SITE = $(call github,rbuehlma,pvr.zattoo,$(KODI_PVR_ZATTOO_VERSION))
- KODI_PVR_ZATTOO_LICENSE = GPL-2.0+
- KODI_PVR_ZATTOO_LICENSE_FILES = LICENSE.md
++# Disable obsolete and unsecure API
++LIBXCRYPT_CONF_OPTS += --disable-obsolete_api
++
+ $(eval $(autotools-package))
 -- 
-2.29.2
+2.30.1
