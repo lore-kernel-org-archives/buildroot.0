@@ -1,71 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Mar 2021 22:53:36 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/libeXosip2: fix
- build with libressl
-Message-ID: <20210316215256.3C93386DA6@busybox.osuosl.org>
+Date: Tue, 16 Mar 2021 22:36:06 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/libjpeg: switch
+ to s.b.o. as source site
+Message-ID: <20210316215256.2D78B8829E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=00b1d477e5590dfba42b7111921a3fef1f49b6b6
+commit: https://git.buildroot.net/buildroot/commit/?id=4c5687464a19d63a56f2cf8b0312009c40bd02bd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-Build with libressl is broken since version 5.1.0 and
-https://git.savannah.nongnu.org/cgit/exosip.git/commit/?id=d7488b7bbf59870192372384ef338a44be23e888
+Fixes #13581
 
-For an unknown reason, we only have one autobuilder failure with version
-5.2.0
+The tarball for version 9d, released 2020-01-12, has been silently
+replaced upstream (a unicode BOM was removed from a few files),
+causing hash mismatch.
 
-Fixes:
- - http://autobuild.buildroot.org/results/89d8d4ba99d6dcc1618cf6b5302c124a92d75be9
+This means that all our versions since 2020.02 will fail the hash
+check, and fallback to using s.b.o. so we can't update the copy we
+have on s.b.o.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+As a consequence, we can't update the hash in master (soon 2021.02)
+otherwise it would not match what we have on s.b.o.
+
+This means that users will see hash mismatch by default, which is not
+very nice. Although we can't do anything for all previous releases,
+we can still try to paper over the problem for the future ones, like
+2021.02, by switching the upstream to be s.b.o.
+
+Sigh... :-(
+
+Reported-by: Nick Shaforostov <mshaforostov@airmusictech.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 11ac2ab5811a2be35816e30c5817b5fd0e552cee)
+(cherry picked from commit b83184de674a6d68e110d5666685edb0a7374d74)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-src-eXtls_dtls.c-fix-build-with-libressl.patch | 34 ++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+ package/libjpeg/libjpeg.mk | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/package/libeXosip2/0001-src-eXtls_dtls.c-fix-build-with-libressl.patch b/package/libeXosip2/0001-src-eXtls_dtls.c-fix-build-with-libressl.patch
-new file mode 100644
-index 0000000000..b153eee65c
---- /dev/null
-+++ b/package/libeXosip2/0001-src-eXtls_dtls.c-fix-build-with-libressl.patch
-@@ -0,0 +1,34 @@
-+From 178632fa5530a72f50376a60d59be2a07e65c28b Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 6 Mar 2021 15:20:51 +0100
-+Subject: [PATCH] src/eXtls_dtls.c: fix build with libressl
-+
-+Build with libressl is broken since
-+https://git.savannah.nongnu.org/cgit/exosip.git/commit/?id=d7488b7bbf59870192372384ef338a44be23e888
-+because libressl does not define SSL_set0_rbio
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/89d8d4ba99d6dcc1618cf6b5302c124a92d75be9
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: sent to amoizard at antisip.com]
-+---
-+ src/eXtl_dtls.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/eXtl_dtls.c b/src/eXtl_dtls.c
-+index 40fa658..8ac3a13 100644
-+--- a/src/eXtl_dtls.c
-++++ b/src/eXtl_dtls.c
-+@@ -70,7 +70,7 @@
-+ #define RANDOM  "random.pem"
-+ #define DHFILE "dh1024.pem"
-+ 
-+-#if OPENSSL_VERSION_NUMBER < 0x10100000L
-++#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
-+ 
-+ static void
-+ SSL_set0_rbio (SSL * s, BIO * rbio)
-+-- 
-+2.30.0
-+
+diff --git a/package/libjpeg/libjpeg.mk b/package/libjpeg/libjpeg.mk
+index b855344f3c..5c15e6fc6d 100644
+--- a/package/libjpeg/libjpeg.mk
++++ b/package/libjpeg/libjpeg.mk
+@@ -5,7 +5,11 @@
+ ################################################################################
+ 
+ LIBJPEG_VERSION = 9d
+-LIBJPEG_SITE = http://www.ijg.org/files
++# 9d was released 2020-01-12, but the tarball was replaced upstream circa
++# 2021-03, causing hash mismatch. Until there is a new version released,
++# use our cached copy from s.b.o.
++#LIBJPEG_SITE = http://www.ijg.org/files
++LIBJPEG_SITE = http://sources.buildroot.org/libjpeg/
+ LIBJPEG_SOURCE = jpegsrc.v$(LIBJPEG_VERSION).tar.gz
+ LIBJPEG_LICENSE = IJG
+ LIBJPEG_LICENSE_FILES = README
