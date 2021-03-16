@@ -1,103 +1,94 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 16 Mar 2021 22:47:23 +0100
-Subject: [Buildroot] [git commit] package/log4qt: new package
-Message-ID: <20210316213949.04ADF881F2@busybox.osuosl.org>
+Date: Tue, 16 Mar 2021 23:06:23 +0100
+Subject: [Buildroot] [PATCH v3] package/log4qt: new package
+In-Reply-To: <20210217194959.1708700-1-b.bilas@grinn-global.com>
+References: <20210217194959.1708700-1-b.bilas@grinn-global.com>
+Message-ID: <20210316230623.2f346620@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9eede622dde4d322cb84bd96bc58faa847ed6cbc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Log4Qt is a C++ port of the Apache Software Foundation
-Log4j package using the Qt Framework.
+On Wed, 17 Feb 2021 20:49:59 +0100
+Bartosz Bilas <b.bilas@grinn-global.com> wrote:
 
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                 |  1 +
- package/Config.in          |  1 +
- package/log4qt/Config.in   | 12 ++++++++++++
- package/log4qt/log4qt.hash |  3 +++
- package/log4qt/log4qt.mk   | 20 ++++++++++++++++++++
- 5 files changed, 37 insertions(+)
+> Log4Qt is a C++ port of the Apache Software Foundation
+> Log4j package using the Qt Framework.
+> 
+> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 450dd84043..6a7e88039e 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -262,6 +262,7 @@ F:	package/python-canopen/
- N:	Bartosz Bilas <b.bilas@grinn-global.com>
- F:	board/stmicroelectronics/stm32mp157a-dk1/
- F:	configs/stm32mp157a_dk1_defconfig
-+F:	package/log4qt/
- F:	package/python-esptool/
- F:	package/python-pyaes/
- F:	package/ttyd/
-diff --git a/package/Config.in b/package/Config.in
-index 7e2e8430fb..d278e78b68 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1663,6 +1663,7 @@ menu "Logging"
- 	source "package/log4cplus/Config.in"
- 	source "package/log4cpp/Config.in"
- 	source "package/log4cxx/Config.in"
-+	source "package/log4qt/Config.in"
- 	source "package/opentracing-cpp/Config.in"
- 	source "package/spdlog/Config.in"
- 	source "package/zlog/Config.in"
-diff --git a/package/log4qt/Config.in b/package/log4qt/Config.in
-new file mode 100644
-index 0000000000..25cc6f0708
---- /dev/null
-+++ b/package/log4qt/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_LOG4QT
-+	bool "log4qt"
-+	depends on BR2_PACKAGE_QT5
-+	help
-+	  Log4Qt is a C++ port of the Apache Software Foundation
-+	  Log4j package using the Qt Framework. It is intended to be
-+	  used by open source and commercial Qt projects.
-+
-+	  https://github.com/MEONMedical/Log4Qt
-+
-+comment "log4qt needs qt5"
-+	depends on !BR2_PACKAGE_QT5
-diff --git a/package/log4qt/log4qt.hash b/package/log4qt/log4qt.hash
-new file mode 100644
-index 0000000000..757bab1a25
---- /dev/null
-+++ b/package/log4qt/log4qt.hash
-@@ -0,0 +1,3 @@
-+# Locally computed:
-+sha256  ff17b794ca7d5290a150a53f6272e6a30a7f4d942aa58298a8328bf10a65858a  log4qt-1.5.1.tar.gz
-+sha256  c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08  LICENSE
-diff --git a/package/log4qt/log4qt.mk b/package/log4qt/log4qt.mk
-new file mode 100644
-index 0000000000..b01d9c6611
---- /dev/null
-+++ b/package/log4qt/log4qt.mk
-@@ -0,0 +1,20 @@
-+################################################################################
-+#
-+# log4qt
-+#
-+################################################################################
-+
-+LOG4QT_VERSION = 1.5.1
-+LOG4QT_SITE = $(call github,MEONMedical,Log4Qt,v$(LOG4QT_VERSION))
-+LOG4QT_DEPENDENCIES = qt5base
-+LOG4QT_LICENSE = Apache-2.0
-+LOG4QT_LICENSE_FILES = LICENSE
-+LOG4QT_INSTALL_STAGING = YES
-+
-+ifeq ($(BR2_PACKAGE_QT5BASE_SQLITE_QT)$(BR2_PACKAGE_QT5BASE_SQLITE_SYSTEM),y)
-+LOG4QT_CONF_OPTS += -DBUILD_WITH_DB_LOGGING=ON
-+else
-+LOG4QT_CONF_OPTS += -DBUILD_WITH_DB_LOGGING=OFF
-+endif
-+
-+$(eval $(cmake-package))
+Thanks for this contribution! I have applied, with a number of changes.
+See below.
+
+> Changes v1 -> v2:
+>  - bump version to 1.5.1
+>  - use qmake pkg infra
+>  - propagate dependencies from qt5 package
+
+Actually, this was not needed. Propagating "depends on" is needed if
+you "select" something. But if you "depends on" that something, then
+it's not needed.
+
+> diff --git a/package/log4qt/Config.in b/package/log4qt/Config.in
+> new file mode 100644
+> index 0000000000..1b716bbc51
+> --- /dev/null
+> +++ b/package/log4qt/Config.in
+> @@ -0,0 +1,19 @@
+> +config BR2_PACKAGE_LOG4QT
+> +	bool "log4qt"
+> +	depends on BR2_INSTALL_LIBSTDCPP
+> +	depends on BR2_PACKAGE_QT5
+> +	depends on BR2_USE_WCHAR
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # c++11 qt5base
+> +	depends on !BR2_STATIC_LIBS
+
+So I simplified all of this to just:
+
+	depends on BR2_PACKAGE_QT5
+
+> +comment "Log4Qt needs qt5, a toolchain w/ gcc >= 5.0, wchar, NPTL, C++, dynamic library"
+> +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+> +		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS || \
+> +		!BR2_TOOLCHAIN_GCC_AT_LEAST_5 || !BR2_PACKAGE_QT5
+
+And simplified that as well.
+
+> +LOG4QT_VERSION = 1.5.1
+> +LOG4QT_SITE = $(call github,MEONMedical,Log4Qt,v$(LOG4QT_VERSION))
+> +LOG4QT_DEPENDENCIES += qt5base
+> +LOG4QT_LICENSE = Apache-2.0
+> +LOG4QT_LICENSE_FILES = LICENSE
+> +LOG4QT_INSTALL_STAGING = YES
+> +
+> +ifeq ($(BR2_PACKAGE_QT5BASE_SQLITE_QT),y)
+> +LOG4QT_CONF_OPTS += -DBUILD_WITH_DB_LOGGING=ON
+> +else ifeq ($(BR2_PACKAGE_SQLITE)$(BR2_PACKAGE_QT5BASE_SQLITE_SYSTEM),yy)
+> +LOG4QT_CONF_OPTS += -DBUILD_WITH_DB_LOGGING=ON
+> +LOG4QT_DEPENDENCIES += sqlite
+
+This dance was not needed. If BR2_PACKAGE_QT5BASE_SQLITE_SYSTEM=y then
+you know that Qt5 has been built with SQLite support.
+
+So, I simplified this to:
+
+ifeq ($(BR2_PACKAGE_QT5BASE_SQLITE_QT)$(BR2_PACKAGE_QT5BASE_SQLITE_SYSTEM),y)
+LOG4QT_CONF_OPTS += -DBUILD_WITH_DB_LOGGING=ON
+else
+LOG4QT_CONF_OPTS += -DBUILD_WITH_DB_LOGGING=OFF
+endif
+
+I'm curious though: is this DB_LOGGING feature only supported with the
+Sqlite DB backend of Qt, or would it also work with other DB backends ?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
