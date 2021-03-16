@@ -1,31 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 16 Mar 2021 21:23:27 +0100
-Subject: [Buildroot] [PATCH v1] package/elfutils: bump version to 0.183
-In-Reply-To: <20210315210840.17649-1-ps.report@gmx.net>
-References: <20210315210840.17649-1-ps.report@gmx.net>
-Message-ID: <20210316212327.1ef053ed@windsurf.home>
+Date: Tue, 16 Mar 2021 21:23:30 +0100
+Subject: [Buildroot] [PATCH v1] package/cifs-utils: bump version to 6.12
+In-Reply-To: <20210315213438.6103-1-ps.report@gmx.net>
+References: <20210315213438.6103-1-ps.report@gmx.net>
+Message-ID: <20210316212330.0383f444@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 15 Mar 2021 22:08:40 +0100
+On Mon, 15 Mar 2021 22:34:38 +0100
 Peter Seiderer <ps.report@gmx.net> wrote:
 
-> - handle new zstd option (disable for host, optional for target)
+> - removed 0001-Use-DESTDIR-when-installing-mount.smb3-and-optionall.patch
+>   (superseded by upstream commit [1])
 > 
-> For details see [1], [2].
+> - adjust autoreconf comment accordingly
 > 
-> [1] https://sourceware.org/pipermail/elfutils-devel/2020q4/003053.html
-> [2] https://sourceware.org/pipermail/elfutils-devel/2021q1/003486.html
+> - add option for smb tools to avoid hard python runtime dependency
+>   (smbinfo and smb2-quota are python scripts)
+> 
+> Changelog ([2]):
+> 
+>   December, 2020: Release 6.12
+>   get/setcifsacl tools are improved to support changing owner, group and SACLs
+>   mount.cifs is enhanced to use SUDO_UID env variable for cruid
+>   smbinfo is re-written in Python language
+>   https://lists.samba.org/archive/samba-technical/2020-December/136156.html
+> 
+> [1] https://git.samba.org/?p=cifs-utils.git;a=patch;h=a00e84378d9c5e63272ff69ca18fd0e872b384d3
+> [2] https://wiki.samba.org/index.php/LinuxCIFS_utils
 > 
 > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 > ---
->  ...nable-disable-progs-configure-option.patch | 24 ++++++++++---------
->  package/elfutils/elfutils.hash                |  4 ++--
->  package/elfutils/elfutils.mk                  | 10 +++++++-
->  3 files changed, 24 insertions(+), 14 deletions(-)
+>  ...-installing-mount.smb3-and-optionall.patch | 41 -------------------
+>  package/cifs-utils/Config.in                  | 11 +++++
+>  package/cifs-utils/cifs-utils.hash            |  2 +-
+>  package/cifs-utils/cifs-utils.mk              | 12 +++++-
+>  4 files changed, 22 insertions(+), 44 deletions(-)
+>  delete mode 100644 package/cifs-utils/0001-Use-DESTDIR-when-installing-mount.smb3-and-optionall.patch
 
 Applied to master, thanks.
 
