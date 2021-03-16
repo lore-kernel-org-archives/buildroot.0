@@ -1,100 +1,100 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 16 Mar 2021 19:19:35 +0100
-Subject: [Buildroot] [PATCH v1 1/2] package/batman-adv: fix compile with
- BR2_PACKAGE_BATMAN_ADV_BATMAN_V disabled
-In-Reply-To: <CA+h8R2p+uepuOOpG=QbZ+y4bEzQZ4eL6BQU1wScyqXfVXALYZA@mail.gmail.com>
-References: <20210314223207.13460-1-ps.report@gmx.net>
- <CA+h8R2qT=su3CO8OCVbQtdpsZezCxsrnq2UtWWNJVp+ZP75r8A@mail.gmail.com>
- <20210315225046.522e98f6@gmx.net>
- <CA+h8R2p+uepuOOpG=QbZ+y4bEzQZ4eL6BQU1wScyqXfVXALYZA@mail.gmail.com>
-Message-ID: <20210316191935.6cfb47fa@gmx.net>
+From: =?UTF-8?B?SmVucyBNw7ZsemVy?= <moelzerjens@gmail.com>
+Date: Tue, 16 Mar 2021 19:24:09 +0100
+Subject: [Buildroot] GRUB works with qemu but not on real hardware
+Message-ID: <CAGszA8=WtUw6d6=KsmgR=8k=L8t3bva6UYYiEc4jVK5Un9gTwg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Christian,
+Hello,
 
-On Mon, 15 Mar 2021 18:45:20 -0700, Christian Stewart <christian@paral.in> wrote:
+I'm building an image for a i486 based Board booting via BIOS/MBR using
+GRUB. The resulting disk image works fine in qemu (`qemu-system-i386 -hda
+disk.img`) but does not work on real hardware. The GRUB menu and shell work
+but when loading Linux there is just a blinking cursor for a few seconds
+followed by a reboot. This is definitely a problem with GRUB as the exact
+same bzImage boots fine via PXELINUX on the same Hardware! It also seems
+like Linux isn't even loaded since the reboot also happens with `panic=0`
+and I don't get any output even with `earlyprintk`.
 
-> Hi Peter,
->
-> On Mon, Mar 15, 2021 at 2:50 PM Peter Seiderer <ps.report@gmx.net> wrote:
-> > On Mon, 15 Mar 2021 14:00:38 -0700, Christian Stewart <christian@paral.in> wrote:
-> > > On Sun, Mar 14, 2021 at 3:32 PM Peter Seiderer <ps.report@gmx.net> wrote:
-> > > >
-> > > > The given 'CONFIG_BATMAN_ADV_BATMAN_V=' is enough to trigger the wrong
-> > > > code compile path in net/batman-adv/bat_v.h missing the static inline
-> > > > dummy implementations.
-> > > >
-> > > > Fixes:
-> > >
-> > > Unfortunately after applying this commit it still breaks.
-> > >
-> > > I confirmed that the CONFIG_BATMAN_ADV_BATMAN_V is not being set now.
-> > >
-> > >
-> > > CONFIG_BATMAN_ADV=m
-> > > CONFIG_BATMAN_ADV_BLA=y
-> > > CONFIG_BATMAN_ADV_DAT=y
-> > > CONFIG_BATMAN_ADV_MCAST=y
-> > > M=build/batman-adv-2021.0/net/batman-adv
-> > > make modules
-> > >
-> > > [snip]
-> > >
-> > >   MODPOST /build/batman-adv-2021.0/net/batman-adv/Module.symvers
-> > > ERROR: modpost: "batadv_v_mesh_free" undefined!
-> > > ERROR: modpost: "batadv_v_mesh_init" undefined!
-> > > ERROR: modpost: "batadv_v_hardif_init" undefined!
-> > > ERROR: modpost: "batadv_v_init" undefined!
-> >
-> > Mind to share your defconfig (which cross-compiler)?
-> >
-> > Did you do a complete re-build of the batman-adv-2021.0
-> > package (rm -rf build/batman-adv-2021.0 && make batman-adv)?
->
-> Buildroot toolchain,
->
-> BR2_x86_64=y
-> BR2_TOOLCHAIN=y
-> BR2_TOOLCHAIN_USES_GLIBC=y
-> BR2_TOOLCHAIN_BUILDROOT=y
-> BR2_BINUTILS_VERSION_2_35_X=y
-> BR2_GCC_VERSION_10_X=y
-> BR2_PACKAGE_BATMAN_ADV=y
->
-> Yes, deleted the build/batman-adv* dir and fully re-built, and
-> confirmed that it was not setting the BATMAN_ADV_V flag anymore.
+I used the GRUB shell to confirm that it can access the boot partition and
+find the bzImage. I also tried to manually boot it from the shell but that
+fails with the same behavior.
 
-O.k, using the following defconfig I get the same failure:
+The disk image is generated with genimage following the advise from
+`buildroot/boot/grub2/readme.txt` but I also tried the manual way using
+`grub-bios-setup` described there with the same non-working result.
 
-BR2_x86_64=y
-BR2_GCC_VERSION_10_X=y
-BR2_LINUX_KERNEL=y
-BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-BR2_PACKAGE_BATMAN_ADV=y
+At this point I have no clue what the problem could be (I assume it must be
+a bug in GRUB or how it is built?) and no idea how to debug this further.
 
-My RPi4 test case had an RPi4 linux kernel already enabling the build-in
-batman-adv module inclusive batman-v...
+I use a initial RAM filesystem that is directly linked into the kernel and
+the grub2 package from buildroot.
 
-Hopefully fixed this time for real with
+Buildroot version is 2021.02 with Linux 5.10, using a internal toolchain
+with GCC 10.x and musl as libc.
 
-https://patchwork.ozlabs.org/project/buildroot/patch/20210316181429.30804-1-ps.report at gmx.net/
-https://patchwork.ozlabs.org/project/buildroot/patch/20210316181429.30804-2-ps.report at gmx.net/
+This is the `genimage.cfg` used (`grub_boot.img` is just
+`${HOST_DIR}/lib/grub/i386-pc/boot.img` copied into the `images` dir).
 
-and a note about the linux mainline kernel module added with
+```
+image boot.vfat {
+    vfat {
+        file boot/grub/grub.cfg { image = "grub.cfg" }
+        file boot/bzImage { image = "bzImage" }
+    }
+    size = 32M
+}
 
-https://patchwork.ozlabs.org/project/buildroot/patch/20210316181429.30804-3-ps.report at gmx.net/
+image data.img {
+    ext4{}
+    size = 32M
+}
 
-Regards,
-Peter
+image disk.img {
+    hdimage {}
 
->
-> Thanks,
-> Christian
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+    partition mbr {
+        in-partition-table = "no"
+        image = "grub_boot.img"
+        offset = 0
+        size = 512
+    }
+    partition grub {
+        in-partition-table = "no"
+        image = "grub.img"
+        offset = 512
+    }
+
+    partition boot {
+        partition-type = 0xC
+        image = "boot.vfat"
+        bootable = "true"
+        offset = 1M
+    }
+
+    partition data {
+        partition-type = 0x83
+        image = "data.img"
+    }
+}
+```
+
+This is the `grub.cfg` used:
+
+```
+set default="0"
+set timeout="2"
+
+menuentry "Buildroot" {
+    linux /boot/bzImage console=ttyS0,115200 earlyprintk=serial,ttyS0,115200
+}
+```
+
+I use the exact same bzImage file and Linux cmdline when booting via
+PXELINUX (which works).
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210316/749ce4da/attachment.html>
