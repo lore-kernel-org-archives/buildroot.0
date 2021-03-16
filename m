@@ -1,73 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Mar 2021 23:11:41 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/openblas: respect
- the optimization level specified by Buildroot
-Message-ID: <20210316215256.605E97FD28@busybox.osuosl.org>
+Date: Tue, 16 Mar 2021 23:13:31 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/asterisk: remove
+ default -O3 optimization flag
+Message-ID: <20210316215256.6A51D882C4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cf9deb8160e69344089dc7f5887902784fab29ce
+commit: https://git.buildroot.net/buildroot/commit/?id=fe9fd36e30325a946e206db6c5195f88f210076a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-openblas internally sets -O2, after the flags being passed by Buildroot
-(e.g. -Os).
+Actually asterisk package gets built with -O3 cflag since it's defaulted
+into its sources, but it's not what we want, so let's empty its OPTIMIZE
+Makefile variable letting Buildroot CFLAGS to take place instead.
 
-Patch openblas to let the Buildroot-specified flag survive.
-
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit b4df526ce37bced5be76f40c880de83f4fb23e7b)
+(cherry picked from commit eaba3c8e131e21c4bae79483211685942e035300)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...stem-don-t-specify-optimization-level-bui.patch | 40 ++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
+ package/asterisk/asterisk.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/openblas/0004-Makefile.system-don-t-specify-optimization-level-bui.patch b/package/openblas/0004-Makefile.system-don-t-specify-optimization-level-bui.patch
-new file mode 100644
-index 0000000000..bcc3e0eb6a
---- /dev/null
-+++ b/package/openblas/0004-Makefile.system-don-t-specify-optimization-level-bui.patch
-@@ -0,0 +1,40 @@
-+From 6d1c1350977d74fb2239f765bd92a5763cd3bb73 Mon Sep 17 00:00:00 2001
-+From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-+Date: Fri, 5 Mar 2021 14:09:23 +0100
-+Subject: [PATCH] Makefile.system: don't specify optimization level
-+ [buildroot-specific]
+diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
+index fb3eb6ec8a..6de941c8f0 100644
+--- a/package/asterisk/asterisk.mk
++++ b/package/asterisk/asterisk.mk
+@@ -277,6 +277,9 @@ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+ ASTERISK_MAKE_OPTS += ASTLDFLAGS="-latomic"
+ endif
+ 
++# Remove default -O3 optimization flag
++ASTERISK_MAKE_OPTS += OPTIMIZE=""
 +
-+Buildroot will pass an optimization level, but it is ignored because the
-+openblas makefiles _append_ to the flags passed on the command-line.
-+
-+The CFLAGS/FFLAGS would e.g. contain '-Os -O2' in which -O2 survives.
-+
-+Remove the optimization level specified in openblas itself.
-+
-+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-+
-+---
-+ Makefile.system | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/Makefile.system b/Makefile.system
-+index 1e30d05a..04b0be16 100644
-+--- a/Makefile.system
-++++ b/Makefile.system
-+@@ -1216,11 +1216,11 @@ FCOMMON_OPT += -g
-+ endif
-+ 
-+ ifndef COMMON_OPT
-+-COMMON_OPT = -O2
-++COMMON_OPT =
-+ endif
-+ 
-+ ifndef FCOMMON_OPT
-+-FCOMMON_OPT = -O2 -frecursive
-++FCOMMON_OPT = -frecursive
-+ endif
-+ 
-+ override CFLAGS     += $(COMMON_OPT) $(CCOMMON_OPT) -I$(TOPDIR)
-+-- 
-+2.26.2
-+
+ # We want to install sample configuration files, too.
+ ASTERISK_INSTALL_TARGET_OPTS = \
+ 	$(ASTERISK_DIRS) \
