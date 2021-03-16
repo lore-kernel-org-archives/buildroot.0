@@ -1,89 +1,85 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 16 Mar 2021 23:06:23 +0100
-Subject: [Buildroot] [PATCH v3] package/log4qt: new package
-In-Reply-To: <20210217194959.1708700-1-b.bilas@grinn-global.com>
-References: <20210217194959.1708700-1-b.bilas@grinn-global.com>
-Message-ID: <20210316230623.2f346620@windsurf.home>
+Date: Tue, 16 Mar 2021 23:08:52 +0100
+Subject: [Buildroot] [PATCH] boot/uboot: fix uboot build
+In-Reply-To: <20210204170446.15188-1-kory.maincent@bootlin.com>
+References: <20210204170446.15188-1-kory.maincent@bootlin.com>
+Message-ID: <20210316230852.298db3b5@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Kory,
 
-On Wed, 17 Feb 2021 20:49:59 +0100
-Bartosz Bilas <b.bilas@grinn-global.com> wrote:
+On Thu,  4 Feb 2021 18:04:46 +0100
+Kory Maincent <kory.maincent@bootlin.com> wrote:
 
-> Log4Qt is a C++ port of the Apache Software Foundation
-> Log4j package using the Qt Framework.
+> The make all command run the tools/makefile on the process.
+> This makefile use "pkg-config" command to support static link.
+> The issue is the use of pkg-config configured for crosscompiling
+> to build binaries tools for host architecture.
+> To fix it, I copied the behavior of QtWebengine by using a pkg-config
+> executable preconfigured for host.
 > 
-> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+> Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
 
-Thanks for this contribution! I have applied, with a number of changes.
-See below.
+Thanks for the patch. It would require a better commit title though, as
+"fix uboot build" is very vague.
 
-> Changes v1 -> v2:
->  - bump version to 1.5.1
->  - use qmake pkg infra
->  - propagate dependencies from qt5 package
-
-Actually, this was not needed. Propagating "depends on" is needed if
-you "select" something. But if you "depends on" that something, then
-it's not needed.
-
-> diff --git a/package/log4qt/Config.in b/package/log4qt/Config.in
+> diff --git a/boot/uboot/host-pkg-config.in b/boot/uboot/host-pkg-config.in
 > new file mode 100644
-> index 0000000000..1b716bbc51
+> index 0000000000..86a980648b
 > --- /dev/null
-> +++ b/package/log4qt/Config.in
-> @@ -0,0 +1,19 @@
-> +config BR2_PACKAGE_LOG4QT
-> +	bool "log4qt"
-> +	depends on BR2_INSTALL_LIBSTDCPP
-> +	depends on BR2_PACKAGE_QT5
-> +	depends on BR2_USE_WCHAR
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # c++11 qt5base
-> +	depends on !BR2_STATIC_LIBS
-
-So I simplified all of this to just:
-
-	depends on BR2_PACKAGE_QT5
-
-> +comment "Log4Qt needs qt5, a toolchain w/ gcc >= 5.0, wchar, NPTL, C++, dynamic library"
-> +	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
-> +		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS || \
-> +		!BR2_TOOLCHAIN_GCC_AT_LEAST_5 || !BR2_PACKAGE_QT5
-
-And simplified that as well.
-
-> +LOG4QT_VERSION = 1.5.1
-> +LOG4QT_SITE = $(call github,MEONMedical,Log4Qt,v$(LOG4QT_VERSION))
-> +LOG4QT_DEPENDENCIES += qt5base
-> +LOG4QT_LICENSE = Apache-2.0
-> +LOG4QT_LICENSE_FILES = LICENSE
-> +LOG4QT_INSTALL_STAGING = YES
+> +++ b/boot/uboot/host-pkg-config.in
+> @@ -0,0 +1,6 @@
+> +#!/bin/sh
+> +PKG_CONFIG_SYSROOT_DIR="/" \
+> +PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
+> +PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
+> +PKG_CONFIG_LIBDIR="@HOST_DIR@/lib/pkgconfig:@HOST_DIR@/share/pkgconfig" \
+> +exec @HOST_DIR@/bin/pkgconf "$@"
+> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+> index 2478a2a1e9..0bcc1ac9a9 100644
+> --- a/boot/uboot/uboot.mk
+> +++ b/boot/uboot/uboot.mk
+> @@ -302,11 +302,19 @@ endif # BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY
+>  
+>  UBOOT_CUSTOM_DTS_PATH = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_DTS_PATH))
+>  
+> +define UBOOT_CREATE_HOST_PKG_CONFIG
+> +	mkdir -p $(@D)/host-bin
+> +	sed s%@HOST_DIR@%$(HOST_DIR)%g $(UBOOT_PKGDIR)/host-pkg-config.in > $(@D)/host-bin/pkg-config
+> +	chmod +x $(@D)/host-bin/pkg-config
+> +endef
+> +UBOOT_PRE_CONFIGURE_HOOKS = UBOOT_CREATE_HOST_PKG_CONFIG
+> +UBOOT_ENV = PATH=$(@D)/host-bin:$(BR_PATH)
 > +
-> +ifeq ($(BR2_PACKAGE_QT5BASE_SQLITE_QT),y)
-> +LOG4QT_CONF_OPTS += -DBUILD_WITH_DB_LOGGING=ON
-> +else ifeq ($(BR2_PACKAGE_SQLITE)$(BR2_PACKAGE_QT5BASE_SQLITE_SYSTEM),yy)
-> +LOG4QT_CONF_OPTS += -DBUILD_WITH_DB_LOGGING=ON
-> +LOG4QT_DEPENDENCIES += sqlite
+>  define UBOOT_BUILD_CMDS
+>  	$(if $(UBOOT_CUSTOM_DTS_PATH),
+>  		cp -f $(UBOOT_CUSTOM_DTS_PATH) $(@D)/arch/$(UBOOT_ARCH)/dts/
+>  	)
+> -	$(TARGET_CONFIGURE_OPTS) \
+> +	$(TARGET_CONFIGURE_OPTS) $(UBOOT_ENV) \
 
-This dance was not needed. If BR2_PACKAGE_QT5BASE_SQLITE_SYSTEM=y then
-you know that Qt5 has been built with SQLite support.
+After discussing with Yann E. Morin on IRC, could you try this change
+instead:
 
-So, I simplified this to:
+	$(TARGET_CONFIGURE_OPTS) \
+	        PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+        	PKG_CONFIG_SYSROOT_DIR="/" \
+	        PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
+	        PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
+	        PKG_CONFIG_LIBDIR="$(HOST_DIR)/lib/pkgconfig:$(HOST_DIR)/share/pkgconfig"
 
-ifeq ($(BR2_PACKAGE_QT5BASE_SQLITE_QT)$(BR2_PACKAGE_QT5BASE_SQLITE_SYSTEM),y)
-LOG4QT_CONF_OPTS += -DBUILD_WITH_DB_LOGGING=ON
-else
-LOG4QT_CONF_OPTS += -DBUILD_WITH_DB_LOGGING=OFF
-endif
+The reasoning is that U-Boot anyway only uses pkg-config for host
+tools, so we could just as well pass those environment variables when
+building U-Boot.
 
-I'm curious though: is this DB_LOGGING feature only supported with the
-Sqlite DB backend of Qt, or would it also work with other DB backends ?
+Could you try this out?
+
+Also, do you have a Buildroot .config to reproduce the issue? Perhaps
+it would be nice to have a test case in our runtime test infrastructure.
 
 Thanks!
 
