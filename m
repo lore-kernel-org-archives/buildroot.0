@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Mar 2021 23:19:59 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/wolfssl: security
+Date: Tue, 16 Mar 2021 23:19:54 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/wolfssl: security
  bump to version 4.7.0
-Message-ID: <20210316215622.DDEB987843@busybox.osuosl.org>
+Message-ID: <20210316215627.5043D87843@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=070b2a2bcfaf8fb5ae4aa1f6f3d13af21a73d25d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=8315da3e4c133fb57b9c5dcd91ee322406d8d285
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 Fix CVE-2021-3336: DoTls13CertificateVerify in tls13.c in wolfSSL before
 4.7.0 does not cease processing for certain anomalous peer behavior
