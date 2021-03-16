@@ -1,50 +1,63 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Mar 2021 23:14:06 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/asterisk: fix
- build failure due to gcc bug 93847
-Message-ID: <20210316215256.76A8D7FD28@busybox.osuosl.org>
+Date: Tue, 16 Mar 2021 23:11:24 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/openblas: strip
+ any optimization flag where needed
+Message-ID: <20210316215256.56CAF86DA6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9a721ec09d7f198bfe5a907fd27341d596fca771
+commit: https://git.buildroot.net/buildroot/commit/?id=cec2bce04d60dc64801c09ad40b46cf8d263def0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-The asterisk package exhibits gcc bug 93847 when built for the Nios2
-architecture with optimization enabled, which causes a build failure.
+openblas strips off -O1-O3 for certain source files, but forgets to handle
+-Os, -Og and -O. This means that the intended effect of 'no optimization' is
+not always reached.
 
-As done for other packages in Buildroot work around this gcc bug by
-setting optimization to -O0 if BR2_TOOLCHAIN_HAS_GCC_BUG_93847=y.
-
-Fixes:
-http://autobuild.buildroot.net/results/24c0a6ca3b272711a1e6ceaa033925182d0d49c4
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 830fb82822c4a0948fd2dc45ec7851908220e801)
+(cherry picked from commit a0508b570530f381a42d9dd04757032ce4e72a57)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/asterisk/asterisk.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ ...so-consider-Os-when-determining-LAPACK_NO.patch | 31 ++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
 
-diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index 6de941c8f0..7558ac6ecb 100644
---- a/package/asterisk/asterisk.mk
-+++ b/package/asterisk/asterisk.mk
-@@ -280,6 +280,14 @@ endif
- # Remove default -O3 optimization flag
- ASTERISK_MAKE_OPTS += OPTIMIZE=""
- 
-+ASTERISK_CFLAGS = $(TARGET_CFLAGS)
+diff --git a/package/openblas/0003-Makefile-also-consider-Os-when-determining-LAPACK_NO.patch b/package/openblas/0003-Makefile-also-consider-Os-when-determining-LAPACK_NO.patch
+new file mode 100644
+index 0000000000..f9278bd099
+--- /dev/null
++++ b/package/openblas/0003-Makefile-also-consider-Os-when-determining-LAPACK_NO.patch
+@@ -0,0 +1,31 @@
++From ced08de1ad74811bc23d74121751537bfd8e9556 Mon Sep 17 00:00:00 2001
++From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
++Date: Fri, 5 Mar 2021 11:15:52 +0100
++Subject: [PATCH] Makefile: also consider -O, -Og and -Os when stripping flags
 +
-+ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_93847),y)
-+ASTERISK_CFLAGS += -O0
-+endif
++gcc also supports -O, -Og and -Os as optimization flags.
++They may be given on the make command-line by users.
 +
-+ASTERISK_CONF_OPTS += CFLAGS="$(ASTERISK_CFLAGS)"
++For the calculation of LAPACK_NOOPT, all such flags should be considered.
 +
- # We want to install sample configuration files, too.
- ASTERISK_INSTALL_TARGET_OPTS = \
- 	$(ASTERISK_DIRS) \
++Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
++---
++ Makefile | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/Makefile b/Makefile
++index a22e16ba..fc5fe3f5 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -32,7 +32,7 @@ export NOFORTRAN
++ export NO_LAPACK
++ endif
++ 
++-LAPACK_NOOPT := $(filter-out -O0 -O1 -O2 -O3 -Ofast,$(LAPACK_FFLAGS))
+++LAPACK_NOOPT := $(filter-out -O0 -O1 -O2 -O3 -Ofast -O -Og -Os,$(LAPACK_FFLAGS))
++ 
++ SUBDIRS_ALL = $(SUBDIRS) test ctest utest exports benchmark ../laswp ../bench cpp_thread_test
++ 
++-- 
++2.26.2
++
