@@ -1,46 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 16 Mar 2021 22:42:22 +0100
-Subject: [Buildroot] [git commit] package/irqbalance: bump version to 1.7.0
-Message-ID: <20210316211849.07A318807C@busybox.osuosl.org>
+Date: Tue, 16 Mar 2021 22:42:50 +0100
+Subject: [Buildroot] [PATCH/next v1] package/irqbalance: bump version to
+ 1.7.0
+In-Reply-To: <20210220170406.27723-1-ps.report@gmx.net>
+References: <20210220170406.27723-1-ps.report@gmx.net>
+Message-ID: <20210316224250.2577ec77@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=df18d209b42b9869b0af8495cc3f052df44a2518
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, 20 Feb 2021 18:04:06 +0100
+Peter Seiderer <ps.report@gmx.net> wrote:
 
-For details see [1].
+> For details see [1].
+> 
+> [1] https://github.com/Irqbalance/irqbalance/releases/tag/v1.7.0
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+>  package/irqbalance/irqbalance.hash | 2 +-
+>  package/irqbalance/irqbalance.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-[1] https://github.com/Irqbalance/irqbalance/releases/tag/v1.7.0
+Applied to master, thanks.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/irqbalance/irqbalance.hash | 2 +-
- package/irqbalance/irqbalance.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/irqbalance/irqbalance.hash b/package/irqbalance/irqbalance.hash
-index 2e7cf49c25..587173ca65 100644
---- a/package/irqbalance/irqbalance.hash
-+++ b/package/irqbalance/irqbalance.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 5ace9dd69d5190e24ee34210c3131333e9963e3ba649bf9237eabb4313c300d2  irqbalance-1.6.0.tar.gz
-+sha256 28f2ad35945b93d90f4a5bad95b4c0871a0f644375f746ec16f61045b9ec970e  irqbalance-1.7.0.tar.gz
- sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/irqbalance/irqbalance.mk b/package/irqbalance/irqbalance.mk
-index 36e9e42493..b099f7c6e2 100644
---- a/package/irqbalance/irqbalance.mk
-+++ b/package/irqbalance/irqbalance.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IRQBALANCE_VERSION = 1.6.0
-+IRQBALANCE_VERSION = 1.7.0
- IRQBALANCE_SITE = $(call github,irqbalance,irqbalance,v$(IRQBALANCE_VERSION))
- IRQBALANCE_LICENSE = GPL-2.0
- IRQBALANCE_LICENSE_FILES = COPYING
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
