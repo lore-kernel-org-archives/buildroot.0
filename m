@@ -1,100 +1,41 @@
-From: =?UTF-8?B?SmVucyBNw7ZsemVy?= <moelzerjens@gmail.com>
-Date: Tue, 16 Mar 2021 19:24:09 +0100
-Subject: [Buildroot] GRUB works with qemu but not on real hardware
-Message-ID: <CAGszA8=WtUw6d6=KsmgR=8k=L8t3bva6UYYiEc4jVK5Un9gTwg@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 16 Mar 2021 20:04:52 +0100
+Subject: [Buildroot] [PATCH 1/1] package/kodi-pvr-zattoo: bump version to
+ 19.7.9-Matrix
+Message-ID: <20210316190452.1005526-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash | 2 +-
+ package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-I'm building an image for a i486 based Board booting via BIOS/MBR using
-GRUB. The resulting disk image works fine in qemu (`qemu-system-i386 -hda
-disk.img`) but does not work on real hardware. The GRUB menu and shell work
-but when loading Linux there is just a blinking cursor for a few seconds
-followed by a reboot. This is definitely a problem with GRUB as the exact
-same bzImage boots fine via PXELINUX on the same Hardware! It also seems
-like Linux isn't even loaded since the reboot also happens with `panic=0`
-and I don't get any output even with `earlyprintk`.
-
-I used the GRUB shell to confirm that it can access the boot partition and
-find the bzImage. I also tried to manually boot it from the shell but that
-fails with the same behavior.
-
-The disk image is generated with genimage following the advise from
-`buildroot/boot/grub2/readme.txt` but I also tried the manual way using
-`grub-bios-setup` described there with the same non-working result.
-
-At this point I have no clue what the problem could be (I assume it must be
-a bug in GRUB or how it is built?) and no idea how to debug this further.
-
-I use a initial RAM filesystem that is directly linked into the kernel and
-the grub2 package from buildroot.
-
-Buildroot version is 2021.02 with Linux 5.10, using a internal toolchain
-with GCC 10.x and musl as libc.
-
-This is the `genimage.cfg` used (`grub_boot.img` is just
-`${HOST_DIR}/lib/grub/i386-pc/boot.img` copied into the `images` dir).
-
-```
-image boot.vfat {
-    vfat {
-        file boot/grub/grub.cfg { image = "grub.cfg" }
-        file boot/bzImage { image = "bzImage" }
-    }
-    size = 32M
-}
-
-image data.img {
-    ext4{}
-    size = 32M
-}
-
-image disk.img {
-    hdimage {}
-
-    partition mbr {
-        in-partition-table = "no"
-        image = "grub_boot.img"
-        offset = 0
-        size = 512
-    }
-    partition grub {
-        in-partition-table = "no"
-        image = "grub.img"
-        offset = 512
-    }
-
-    partition boot {
-        partition-type = 0xC
-        image = "boot.vfat"
-        bootable = "true"
-        offset = 1M
-    }
-
-    partition data {
-        partition-type = 0x83
-        image = "data.img"
-    }
-}
-```
-
-This is the `grub.cfg` used:
-
-```
-set default="0"
-set timeout="2"
-
-menuentry "Buildroot" {
-    linux /boot/bzImage console=ttyS0,115200 earlyprintk=serial,ttyS0,115200
-}
-```
-
-I use the exact same bzImage file and Linux cmdline when booting via
-PXELINUX (which works).
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210316/749ce4da/attachment.html>
+diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
+index a5a56f6db6..138ad19b88 100644
+--- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
++++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  25dc4ea72b5315a65286ba606e6e26d281fb8eb830d5e0164b66b8d7ae90319a  kodi-pvr-zattoo-19.7.8.1-Matrix.tar.gz
++sha256  d0dee5802592aa1fd53c3835e373b2c49bdc3121575273bf2a0c8ebf1a40bd2c  kodi-pvr-zattoo-19.7.9-Matrix.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
+index 1ae1e884b0..554fd3946f 100644
+--- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
++++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_PVR_ZATTOO_VERSION = 19.7.8.1-Matrix
++KODI_PVR_ZATTOO_VERSION = 19.7.9-Matrix
+ KODI_PVR_ZATTOO_SITE = $(call github,rbuehlma,pvr.zattoo,$(KODI_PVR_ZATTOO_VERSION))
+ KODI_PVR_ZATTOO_LICENSE = GPL-2.0+
+ KODI_PVR_ZATTOO_LICENSE_FILES = LICENSE.md
+-- 
+2.29.2
