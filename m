@@ -1,49 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 16 Mar 2021 21:46:48 +0100
-Subject: [Buildroot] [git commit] package/mosquitto: security bump to v2.0.9
-Message-ID: <20210316202333.D8F4580153@busybox.osuosl.org>
+Date: Tue, 16 Mar 2021 21:46:50 +0100
+Subject: [Buildroot] [git commit] package/grpc: bump to version 1.36.2
+Message-ID: <20210316202334.117B9814E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=521597d47f116d2baad7df0b5404e3285dfcb14b
+commit: https://git.buildroot.net/buildroot/commit/?id=b008910936c1d268bda1469827a97a387bdab771
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This is a bugfix release and include a minor security fix.
-Read the announcement on https://mosquitto.org/blog/2021/03/version-2-0-9-released/
-
-Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mosquitto/mosquitto.hash | 4 ++--
- package/mosquitto/mosquitto.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/grpc/grpc.hash | 2 +-
+ package/grpc/grpc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
-index fa83af7711..e2c5181223 100644
---- a/package/mosquitto/mosquitto.hash
-+++ b/package/mosquitto/mosquitto.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking gpg signature
--# from https://mosquitto.org/files/source/mosquitto-2.0.8.tar.gz.asc
--sha256  b15da8fc4edcb91d554e1259e220ea0173ef639ceaa4b465e06feb7e125b84bf  mosquitto-2.0.8.tar.gz
-+# from https://mosquitto.org/files/source/mosquitto-2.0.9.tar.gz.asc
-+sha256  1b8553ef64a1cf5e4f4cfbe098330ae612adccd3d37f35b2db6f6fab501b01d4  mosquitto-2.0.9.tar.gz
- 
- # License files
- sha256  d3c4ccace4e5d3cc89d34cf2a0bc85b8596bfc0a32b815d0d77f9b7c41b5350c  LICENSE.txt
-diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index be9d885976..d1699ab860 100644
---- a/package/mosquitto/mosquitto.mk
-+++ b/package/mosquitto/mosquitto.mk
+diff --git a/package/grpc/grpc.hash b/package/grpc/grpc.hash
+index 2e6bd71cb3..cfeb7eaa29 100644
+--- a/package/grpc/grpc.hash
++++ b/package/grpc/grpc.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  1a5127c81487f4e3e57973bb332f04b9159f94d860c207e096d8a587d371edbd  grpc-1.36.0.tar.gz
++sha256  51403542b19e9ed5d3b6551ce4a828e17883a1593d4ca408b098f04b0767d202  grpc-1.36.2.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
+index 8426ff5736..8a04435654 100644
+--- a/package/grpc/grpc.mk
++++ b/package/grpc/grpc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MOSQUITTO_VERSION = 2.0.8
-+MOSQUITTO_VERSION = 2.0.9
- MOSQUITTO_SITE = https://mosquitto.org/files/source
- MOSQUITTO_LICENSE = EPL-2.0 or EDLv1.0
- MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v20 edl-v10
+-GRPC_VERSION = 1.36.0
++GRPC_VERSION = 1.36.2
+ GRPC_SITE = $(call github,grpc,grpc,v$(GRPC_VERSION))
+ GRPC_LICENSE = Apache-2.0
+ GRPC_LICENSE_FILES = LICENSE
