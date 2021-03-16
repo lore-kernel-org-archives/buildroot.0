@@ -1,23 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 16 Mar 2021 21:49:13 +0100
-Subject: [Buildroot] [PATCH] package/grpc: bump to version 1.36.2
-In-Reply-To: <20210315150528.1103702-1-buildroot@heine.tech>
-References: <20210315150528.1103702-1-buildroot@heine.tech>
-Message-ID: <20210316214913.434ef681@windsurf.home>
+Date: Tue, 16 Mar 2021 21:49:39 +0100
+Subject: [Buildroot] [PATCH 1/1] package/proftpd: fix build with gcc 10
+In-Reply-To: <20210315063410.991675-1-fontaine.fabrice@gmail.com>
+References: <20210315063410.991675-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210316214939.689ae245@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 15 Mar 2021 16:05:27 +0100
-Michael Nosthoff via buildroot <buildroot@busybox.net> wrote:
+On Mon, 15 Mar 2021 07:34:10 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+> Fixes:
+>  - http://autobuild.buildroot.org/results/d6ce64245c2724cbd94583490bf009c188182b1b
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/grpc/grpc.hash | 2 +-
->  package/grpc/grpc.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  ...tab-fix-build-failure-against-gcc-10.patch | 56 +++++++++++++++++++
+>  1 file changed, 56 insertions(+)
+>  create mode 100644 package/proftpd/0001-mod_quotatab-fix-build-failure-against-gcc-10.patch
 
 Applied to master, thanks.
 
