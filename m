@@ -1,43 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 16 Mar 2021 21:24:43 +0100
-Subject: [Buildroot] [git commit] package/kodi-pvr-zattoo: bump version to
- 19.7.9-Matrix
-Message-ID: <20210316200057.E4B4F8814B@busybox.osuosl.org>
+Date: Tue, 16 Mar 2021 21:24:44 +0100
+Subject: [Buildroot] [git commit] package/libnet: add LIBNET_CONFIG_SCRIPTS
+Message-ID: <20210316200058.18D93802D1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=24a52c23f57c368b41ef2ade625b15de59c129d9
+commit: https://git.buildroot.net/buildroot/commit/?id=3ca79b8d1850f19aa83468ada5c3f852d6774185
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Set LIBNET_CONFIG_SCRIPTS to libnet-config to fix a build failure with
+syslog-ng and libnet in version 1.2 due to -L$(libdir) which has been
+added with
+https://github.com/libnet/libnet/commit/6859d1f198f97aad129c54fcd156700a9178204e
+
+Fixes:
+ - http://autobuild.buildroot.org/results/45e517401d14e304e9c6c990f1b4ead92c850ba2
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash | 2 +-
- package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libnet/libnet.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
-index a5a56f6db6..138ad19b88 100644
---- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
-+++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  25dc4ea72b5315a65286ba606e6e26d281fb8eb830d5e0164b66b8d7ae90319a  kodi-pvr-zattoo-19.7.8.1-Matrix.tar.gz
-+sha256  d0dee5802592aa1fd53c3835e373b2c49bdc3121575273bf2a0c8ebf1a40bd2c  kodi-pvr-zattoo-19.7.9-Matrix.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
-index 1ae1e884b0..554fd3946f 100644
---- a/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
-+++ b/package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libnet/libnet.mk b/package/libnet/libnet.mk
+index da7d5db3ed..a5a814f4d2 100644
+--- a/package/libnet/libnet.mk
++++ b/package/libnet/libnet.mk
+@@ -13,5 +13,6 @@ LIBNET_CONF_OPTS = libnet_cv_have_packet_socket=yes
+ LIBNET_LICENSE = BSD-2-Clause, BSD-3-Clause
+ LIBNET_LICENSE_FILES = LICENSE
+ LIBNET_CPE_ID_VENDOR = libnet_project
++LIBNET_CONFIG_SCRIPTS = libnet-config
  
--KODI_PVR_ZATTOO_VERSION = 19.7.8.1-Matrix
-+KODI_PVR_ZATTOO_VERSION = 19.7.9-Matrix
- KODI_PVR_ZATTOO_SITE = $(call github,rbuehlma,pvr.zattoo,$(KODI_PVR_ZATTOO_VERSION))
- KODI_PVR_ZATTOO_LICENSE = GPL-2.0+
- KODI_PVR_ZATTOO_LICENSE_FILES = LICENSE.md
+ $(eval $(autotools-package))
