@@ -1,40 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Mar 2021 23:19:25 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/libjpeg: fix
- LIBJPEG_SITE
-Message-ID: <20210316215539.74C0485FF1@busybox.osuosl.org>
+Date: Tue, 16 Mar 2021 23:20:08 +0100
+Subject: [Buildroot] [PATCH 1/1] package/wolfssl: security bump to
+ version 4.7.0
+In-Reply-To: <20210306161450.2424523-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 6 Mar 2021 17:14:50 +0100")
+References: <20210306161450.2424523-1-fontaine.fabrice@gmail.com>
+Message-ID: <87k0q6yc4n.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bf4916554d51fa201c1d36ab19753a869469cae1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Commit b83184de674a (package/libjpeg: switch to s.b.o. as source site)
-improperly added a trailing slash '/' at the end of LIBJPEG_SITE,
-causing builds to fail:
+ > Fix CVE-2021-3336: DoTls13CertificateVerify in tls13.c in wolfSSL before
+ > 4.7.0 does not cease processing for certain anomalous peer behavior
+ > (sending an ED22519, ED448, ECC, or RSA signature without the
+ > corresponding certificate). The client side is affected because
+ > man-in-the-middle attackers can impersonate TLS 1.3 servers.
 
-    package/libjpeg/libjpeg.mk:35: *** LIBJPEG_SITE (http://sources.buildroot.org/libjpeg/) cannot have a trailing slash.  Stop.
+ > https://github.com/wolfSSL/wolfssl/releases/tag/v4.7.0-stable
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 308f4428c8d8cbe6ea563b295f590a4c3da23646)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libjpeg/libjpeg.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/libjpeg/libjpeg.mk b/package/libjpeg/libjpeg.mk
-index 5c15e6fc6d..cd23814bde 100644
---- a/package/libjpeg/libjpeg.mk
-+++ b/package/libjpeg/libjpeg.mk
-@@ -9,7 +9,7 @@ LIBJPEG_VERSION = 9d
- # 2021-03, causing hash mismatch. Until there is a new version released,
- # use our cached copy from s.b.o.
- #LIBJPEG_SITE = http://www.ijg.org/files
--LIBJPEG_SITE = http://sources.buildroot.org/libjpeg/
-+LIBJPEG_SITE = http://sources.buildroot.org/libjpeg
- LIBJPEG_SOURCE = jpegsrc.v$(LIBJPEG_VERSION).tar.gz
- LIBJPEG_LICENSE = IJG
- LIBJPEG_LICENSE_FILES = README
+Committed to 2020.02.x and 2020.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
