@@ -1,62 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Mar 2021 22:35:52 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/libjpeg: switch
- to s.b.o. as source site
-Message-ID: <20210316215242.44EDB8829E@busybox.osuosl.org>
+Date: Tue, 16 Mar 2021 22:29:34 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/dovecot: bump
+ version to 2.3.14
+Message-ID: <20210316215242.1ED5D7FA97@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6f679d20ba07a60e9ea0e9a439956e540d27bb19
+commit: https://git.buildroot.net/buildroot/commit/?id=01ae2122eccbadce76f45b0a701edee813f363f7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Fixes #13581
+Release notes:
+https://dovecot.org/pipermail/dovecot-news/2021-March/000455.html
 
-The tarball for version 9d, released 2020-01-12, has been silently
-replaced upstream (a unicode BOM was removed from a few files),
-causing hash mismatch.
-
-This means that all our versions since 2020.02 will fail the hash
-check, and fallback to using s.b.o. so we can't update the copy we
-have on s.b.o.
-
-As a consequence, we can't update the hash in master (soon 2021.02)
-otherwise it would not match what we have on s.b.o.
-
-This means that users will see hash mismatch by default, which is not
-very nice. Although we can't do anything for all previous releases,
-we can still try to paper over the problem for the future ones, like
-2021.02, by switching the upstream to be s.b.o.
-
-Sigh... :-(
-
-Reported-by: Nick Shaforostov <mshaforostov@airmusictech.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit b83184de674a6d68e110d5666685edb0a7374d74)
+(cherry picked from commit 5a16d4536066281054305bdaec43023a52281074)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libjpeg/libjpeg.mk | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ package/dovecot/dovecot.hash | 2 +-
+ package/dovecot/dovecot.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libjpeg/libjpeg.mk b/package/libjpeg/libjpeg.mk
-index b855344f3c..5c15e6fc6d 100644
---- a/package/libjpeg/libjpeg.mk
-+++ b/package/libjpeg/libjpeg.mk
-@@ -5,7 +5,11 @@
+diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
+index 4d69f3abdd..edb9d20e6d 100644
+--- a/package/dovecot/dovecot.hash
++++ b/package/dovecot/dovecot.hash
+@@ -1,5 +1,5 @@
+ # Locally computed after checking signature
+-sha256  a3f875b80ec11a452480690108660030978c94fa8e796ad6d943a874b496f1c4  dovecot-2.3.13.tar.gz
++sha256  c8b3d7f3af1e558a3ff0f970309d4013a4d3ce136f8c02a53a3b05f345b9a34a  dovecot-2.3.14.tar.gz
+ sha256  319a9830aab406109cd67cb45496587566a8123203d66d037b209ca3e13de02a  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
+ sha256  52b8c95fabb19575281874b661ef7968ea47e8f5d74ba0dd40ce512e52b3fc97  COPYING.MIT
+diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
+index 3100bfbc93..89541fc9f5 100644
+--- a/package/dovecot/dovecot.mk
++++ b/package/dovecot/dovecot.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
- LIBJPEG_VERSION = 9d
--LIBJPEG_SITE = http://www.ijg.org/files
-+# 9d was released 2020-01-12, but the tarball was replaced upstream circa
-+# 2021-03, causing hash mismatch. Until there is a new version released,
-+# use our cached copy from s.b.o.
-+#LIBJPEG_SITE = http://www.ijg.org/files
-+LIBJPEG_SITE = http://sources.buildroot.org/libjpeg/
- LIBJPEG_SOURCE = jpegsrc.v$(LIBJPEG_VERSION).tar.gz
- LIBJPEG_LICENSE = IJG
- LIBJPEG_LICENSE_FILES = README
+ DOVECOT_VERSION_MAJOR = 2.3
+-DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).13
++DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).14
+ DOVECOT_SITE = https://dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
+ DOVECOT_INSTALL_STAGING = YES
+ DOVECOT_LICENSE = LGPL-2.1, MIT, Public Domain, BSD-3-Clause, Unicode-DFS-2015
