@@ -1,71 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 16 Mar 2021 23:16:40 +0100
-Subject: [Buildroot] [PATCH] package/open62541: cleanup tools files
- after installation
-In-Reply-To: <20210222053953.583102-1-fancp2007@gmail.com>
-References: <20210220162715.283519-1-fancp2007@gmail.com>
- <20210222053953.583102-1-fancp2007@gmail.com>
-Message-ID: <20210316231640.3c3e5b54@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 16 Mar 2021 22:34:45 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/jasper: bump
+ version to 2.0.26
+Message-ID: <20210316215256.23B5586DA6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=0a8f54abc6ae2abd41136b3d7d42ede137ca1af2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-Thanks for the patch. Yann, since you contributed this package, could
-you give your opinion on this? It is quite important, as 52 MiB on the
-target is really huge.
+Changes:
+* Fix JP2 decoder bug that can cause a null pointer dereference for
+  some invalid CDEF boxes. (#268)
 
-Thanks a lot,
+Signed-off-by: Michael Vetter <jubalh@iodoru.org>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 5742a0f33e285e27c5ae37b32cf5570bfa856946)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/jasper/jasper.hash | 2 +-
+ package/jasper/jasper.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
-
-On Mon, 22 Feb 2021 13:39:52 +0800
-Scott Fan <fancp2007@gmail.com> wrote:
-
-> The open62541 tools directory is indeed 52 MiB, which built as a standalone package
-> named 'libopen62541-1-tools' in launchpad. Nothing is required at runtime.
-> 
-> See the official debian control file template:
-> https://raw.githubusercontent.com/open62541/open62541/master/debian/control-template
-> 
-> See https://launchpad.net/~open62541-team/+archive/ubuntu/ppa/+packages
-> libopen62541-1       Open source implementation of OPC UA - shared library
-> libopen62541-1-dev   Open source implementation of OPC UA - development files
-> libopen62541-1-tools Open source implementation of OPC UA - tools
-> open62541-doc        Open source implementation of OPC UA - documentation
-> 
-> Signed-off-by: Scott Fan <fancp2007@gmail.com>
-> 
-> ---
-> Changes v1 -> v2:
->   - extend the commit log to explain why nothing in there is required.
-> ---
->  package/open62541/open62541.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/package/open62541/open62541.mk b/package/open62541/open62541.mk
-> index 102e09a429..3f75196817 100644
-> --- a/package/open62541/open62541.mk
-> +++ b/package/open62541/open62541.mk
-> @@ -54,4 +54,11 @@ else
->  OPEN62541_CONF_OPTS += -DUA_ENABLE_PUBSUB_INFORMATIONMODEL=OFF
->  endif
->  
-> +# Remove unneeded files
-> +define OPEN62541_REMOVE_UNNEEDED_FILES
-> +	$(RM) -r $(TARGET_DIR)/usr/share/open62541
-> +endef
-> +
-> +OPEN62541_POST_INSTALL_TARGET_HOOKS += OPEN62541_REMOVE_UNNEEDED_FILES
-> +
->  $(eval $(cmake-package))
-
-
-
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/jasper/jasper.hash b/package/jasper/jasper.hash
+index d4ed191f91..c1f1b4f602 100644
+--- a/package/jasper/jasper.hash
++++ b/package/jasper/jasper.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  f5bc48e2884bcabd2aca1737baff4ca962ec665b6eb673966ced1f7adea07edb  jasper-2.0.25.tar.gz
++sha256  a82a119e85b7d1f448e61309777fa5f79053a9adca4a2b5bfe44be5439fb8fea  jasper-2.0.26.tar.gz
+ sha256  4ad1bb42aff888c4403d792e6e2c5f1716d6c279fea70b296333c9d577d30b81  LICENSE
+diff --git a/package/jasper/jasper.mk b/package/jasper/jasper.mk
+index 7b78f522db..2ff4bafb8c 100644
+--- a/package/jasper/jasper.mk
++++ b/package/jasper/jasper.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-JASPER_VERSION = 2.0.25
++JASPER_VERSION = 2.0.26
+ JASPER_SITE = $(call github,jasper-software,jasper,version-$(JASPER_VERSION))
+ JASPER_INSTALL_STAGING = YES
+ JASPER_LICENSE = JasPer-2.0
