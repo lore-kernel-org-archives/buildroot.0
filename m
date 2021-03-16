@@ -1,35 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 16 Mar 2021 23:11:22 +0100
-Subject: [Buildroot] [git commit] package/mcelog: add SELinux refpolicy
- module
-Message-ID: <20210316214740.B99FA87B82@busybox.osuosl.org>
+Date: Tue, 16 Mar 2021 23:11:58 +0100
+Subject: [Buildroot] [PATCH 0/9] packages: Add more SELinux modules to
+ some packages
+In-Reply-To: <20210128092757.1016598-1-maxime.chevallier@bootlin.com>
+References: <20210128092757.1016598-1-maxime.chevallier@bootlin.com>
+Message-ID: <20210316231158.0035f440@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5337785981de8d2377ad124f202384983275a5c0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, 28 Jan 2021 10:27:48 +0100
+Maxime Chevallier <maxime.chevallier@bootlin.com> wrote:
 
-SELinux support for mcelog is added by the admin/mcelog refpolicy
-module.
+> Maxime Chevallier (9):
+>   package/alsa-utils: add SELinux repolicy module
+>   package/bridge-utils: add SELinux refpolicy module
+>   package/dmidecode: add SELinux refpolicy module
+>   package/hwloc: add SELinux refpolicy module
+>   package/kexec: add SELinux refpolicy module
+>   package/kexec-lite: add SELinux refpolicy module
+>   package/kismet: add SELinux refpolicy module
+>   package/logrotate: add SELinux refpolicy module
+>   package/mcelog: add SELinux refpolicy module
 
-Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/mcelog/mcelog.mk | 1 +
- 1 file changed, 1 insertion(+)
+Thanks, series applied!
 
-diff --git a/package/mcelog/mcelog.mk b/package/mcelog/mcelog.mk
-index c24366546c..9245825430 100644
---- a/package/mcelog/mcelog.mk
-+++ b/package/mcelog/mcelog.mk
-@@ -8,6 +8,7 @@ MCELOG_VERSION = 172
- MCELOG_SITE = $(call github,andikleen,mcelog,v$(MCELOG_VERSION))
- MCELOG_LICENSE = GPL-2.0
- MCELOG_LICENSE_FILES = LICENSE
-+MCELOG_SELINUX_MODULES = mcelog
- 
- define MCELOG_BUILD_CMDS
- 	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) all
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
