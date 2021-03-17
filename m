@@ -1,310 +1,92 @@
-From: Valerio De Benedetto <posta@debevv.com>
-Date: Wed, 17 Mar 2021 22:37:00 +0000
-Subject: [Buildroot] [PATCH 1/1] package/python-matplotlib: fix "Couldn't
- close file" runtime_error in pyplot import
-Message-ID: <451fd672-7cde-127d-db41-df81eafcdbc5@debevv.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 17 Mar 2021 23:00:08 +0000
+Subject: [Buildroot] [Bug 13551] 2021.02.rc2: Unicode not work on qt 5.15.2
+In-Reply-To: <bug-13551-163@https.bugs.busybox.net/>
+References: <bug-13551-163@https.bugs.busybox.net/>
+Message-ID: <bug-13551-163-thtVPsW48Q@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This backports the PR from
-https://github.com/matplotlib/matplotlib/pull/15104 to matplotlib 3.0.3.
-Fixes the runtime_error thrown when executing "import matplotlib.pyplot"
-in a python3 shell (same symptoms of
-https://github.com/matplotlib/matplotlib/issues/15410)
+https://bugs.busybox.net/show_bug.cgi?id=13551
 
-Signed-off-by: Valerio De Benedetto <posta@debevv.com>
----
- ?...03-Simplify-file-handling-in-ft2font.patch | 261 ++++++++++++++++++
- ?1 file changed, 261 insertions(+)
- ?create mode 100644
-package/python-matplotlib/0003-Simplify-file-handling-in-ft2font.patch
+--- Comment #11 from Peter Seiderer <ps.report@gmx.net> ---
+(In reply to Alfredo Pons Menargues from comment #10)
 
-diff --git
-a/package/python-matplotlib/0003-Simplify-file-handling-in-ft2font.patch
-b/package/python-matplotlib/0003-Simplify-file-handling-in-ft2font.patch
-new file mode 100644
-index 0000000000..392d1195f5
---- /dev/null
-+++ b/package/python-matplotlib/0003-Simplify-file-handling-in-ft2font.patch
-@@ -0,0 +1,261 @@
-+--- a/src/ft2font_wrapper.cpp??? 2019-03-01 04:33:38.000000000 +0100
-++++ b/src/ft2font_wrapper.cpp??? 2021-03-17 02:22:07.580939585 +0100
-+@@ -1,6 +1,5 @@
-+ #include "mplutils.h"
-+ #include "ft2font.h"
-+-#include "file_compat.h"
-+ #include "py_converters.h"
-+ #include "py_exceptions.h"
-+ #include "numpy_cpp.h"
-+@@ -328,12 +327,7 @@
-+???? FT2Font *x;
-+???? PyObject *fname;
-+???? PyObject *py_file;
-+-??? FILE *fp;
-+-??? int close_file;
-+-??? mpl_off_t offset;
-+???? FT_StreamRec stream;
-+-??? FT_Byte *mem;
-+-??? size_t mem_size;
-+???? Py_ssize_t shape[2];
-+???? Py_ssize_t strides[2];
-+???? Py_ssize_t suboffsets[2];
-+@@ -344,118 +338,43 @@
-+????????????????????????????????????????????? unsigned char *buffer,
-+????????????????????????????????????????????? unsigned long count)
-+ {
-+-
-+-??? PyFT2Font *def = (PyFT2Font *)stream->descriptor.pointer;
-+-
-+-??? if (fseek(def->fp, offset, SEEK_SET) == -1) {
-+-??????? return 0;
-++??? PyObject *py_file = ((PyFT2Font
-*)stream->descriptor.pointer)->py_file;
-++??? PyObject *seek_result = NULL, *read_result = NULL;
-++??? Py_ssize_t n_read = 0;
-++??? if (!(seek_result = PyObject_CallMethod(py_file, "seek", "k", offset))
-++??????? || !(read_result = PyObject_CallMethod(py_file, "read", "k",
-count))) {
-++??????? goto exit;
-++??? }
-++??? char *tmpbuf;
-++??? if (PyBytes_AsStringAndSize(read_result, &tmpbuf, &n_read) == -1) {
-++??????? goto exit;
-+???? }
-+-
-+-??? if (count > 0) {
-+-??????? return fread(buffer, 1, count, def->fp);
-++??? memcpy(buffer, tmpbuf, n_read);
-++exit:
-++??? Py_XDECREF(seek_result);
-++??? Py_XDECREF(read_result);
-++??? if (PyErr_Occurred()) {
-++??????? PyErr_WriteUnraisable(py_file);
-++??????? if (!count) {
-++??????????? return 1;? // Non-zero signals error, when count == 0.
-++??????? }
-+???? }
-+-
-+-??? return 0;
-++??? return n_read;
-+ }
-+
-+ static void close_file_callback(FT_Stream stream)
-+ {
-+-??? PyFT2Font *def = (PyFT2Font *)stream->descriptor.pointer;
-+-
-+-??? if (mpl_PyFile_DupClose(def->py_file, def->fp, def->offset)) {
-+-??????? throw std::runtime_error("Couldn't close file");
-+-??? }
-+-
-+-??? if (def->close_file) {
-+-??????? mpl_PyFile_CloseFile(def->py_file);
-+-??? }
-+-
-+-??? Py_DECREF(def->py_file);
-+-??? def->py_file = NULL;
-+-}
-+-
-+-static int convert_open_args(PyFT2Font *self, PyObject *py_file_arg,
-FT_Open_Args *open_args)
-+-{
-+-??? PyObject *py_file = NULL;
-+-??? int close_file = 0;
-+-??? FILE *fp;
-+-??? PyObject *data = NULL;
-+-??? char *data_ptr;
-+-??? Py_ssize_t data_len;
-+-??? long file_size;
-+-??? FT_Byte *new_memory;
-+-??? mpl_off_t offset = 0;
-+-
-+-??? int result = 0;
-+-
-+-??? memset((void *)open_args, 0, sizeof(FT_Open_Args));
-+-
-+-??? if (PyBytes_Check(py_file_arg) || PyUnicode_Check(py_file_arg)) {
-+-??????? if ((py_file = mpl_PyFile_OpenFile(py_file_arg, (char *)"rb"))
-== NULL) {
-+-??????????? goto exit;
-+-??????? }
-+-??????? close_file = 1;
-+-??? } else {
-+-??????? Py_INCREF(py_file_arg);
-+-??????? py_file = py_file_arg;
-+-??? }
-+-
-+-??? if ((fp = mpl_PyFile_Dup(py_file, (char *)"rb", &offset))) {
-+-??????? Py_INCREF(py_file);
-+-??????? self->py_file = py_file;
-+-??????? self->close_file = close_file;
-+-??????? self->fp = fp;
-+-??????? self->offset = offset;
-+-??????? fseek(fp, 0, SEEK_END);
-+-??????? file_size = ftell(fp);
-+-??????? fseek(fp, 0, SEEK_SET);
-+-
-+-??????? self->stream.base = NULL;
-+-??????? self->stream.size = (unsigned long)file_size;
-+-??????? self->stream.pos = 0;
-+-??????? self->stream.descriptor.pointer = self;
-+-??????? self->stream.read = &read_from_file_callback;
-+-??????? self->stream.close = &close_file_callback;
-+-
-+-??????? open_args->flags = FT_OPEN_STREAM;
-+-??????? open_args->stream = &self->stream;
-+-??? } else {
-+-??????? if (PyObject_HasAttrString(py_file_arg, "read") &&
-+-??????????? (data = PyObject_CallMethod(py_file_arg, (char *)"read",
-(char *)""))) {
-+-??????????? if (PyBytes_AsStringAndSize(data, &data_ptr, &data_len)) {
-+-??????????????? goto exit;
-+-??????????? }
-+-
-+-??????????? if (self->mem) {
-+-??????????????? free(self->mem);
-+-??????????? }
-+-??????????? self->mem = (FT_Byte *)malloc((self->mem_size + data_len)
-* sizeof(FT_Byte));
-+-??????????? if (self->mem == NULL) {
-+-??????????????? goto exit;
-+-??????????? }
-+-??????????? new_memory = self->mem + self->mem_size;
-+-??????????? self->mem_size += data_len;
-+-
-+-??????????? memcpy(new_memory, data_ptr, data_len);
-+-??????????? open_args->flags = FT_OPEN_MEMORY;
-+-??????????? open_args->memory_base = new_memory;
-+-??????????? open_args->memory_size = data_len;
-+-??????????? open_args->stream = NULL;
-+-??????? } else {
-+-??????????? PyErr_SetString(PyExc_TypeError,
-+-??????????????????????????? "First argument must be a path or file
-object reading bytes");
-+-??????????? goto exit;
-+-??????? }
-++??? PyFT2Font *self = (PyFT2Font *)stream->descriptor.pointer;
-++??? PyObject *close_result = NULL;
-++??? if (!(close_result = PyObject_CallMethod(self->py_file, "close",
-""))) {
-++??????? goto exit;
-+???? }
-+-
-+-??? result = 1;
-+-
-+ exit:
-+-
-+-??? Py_XDECREF(py_file);
-+-??? Py_XDECREF(data);
-+-
-+-??? return result;
-++??? Py_XDECREF(close_result);
-++??? Py_CLEAR(self->py_file);
-++??? if (PyErr_Occurred()) {
-++??????? PyErr_WriteUnraisable((PyObject*)self);
-++??? }
-+ }
-+
-+ static PyTypeObject PyFT2FontType;
-+@@ -467,12 +386,7 @@
-+???? self->x = NULL;
-+???? self->fname = NULL;
-+???? self->py_file = NULL;
-+-??? self->fp = NULL;
-+-??? self->close_file = 0;
-+-??? self->offset = 0;
-+???? memset(&self->stream, 0, sizeof(FT_StreamRec));
-+-??? self->mem = 0;
-+-??? self->mem_size = 0;
-+???? return (PyObject *)self;
-+ }
-+
-+@@ -503,35 +417,54 @@
-+???? "? underline_thickness??? vertical thickness of the underline\n"
-+???? "? postscript_name??????? PostScript name of the font\n";
-+
-+-static void PyFT2Font_fail(PyFT2Font *self)
-+-{
-+-??? free(self->mem);
-+-??? self->mem = NULL;
-+-??? Py_XDECREF(self->py_file);
-+-??? self->py_file = NULL;
-+-}
-+-
-+ static int PyFT2Font_init(PyFT2Font *self, PyObject *args, PyObject *kwds)
-+ {
-+-??? PyObject *fname;
-++??? PyObject *filename = NULL, *open = NULL, *data = NULL;
-+???? FT_Open_Args open_args;
-+???? long hinting_factor = 8;
-+???? const char *names[] = { "filename", "hinting_factor", NULL };
-+
-+???? if (!PyArg_ParseTupleAndKeywords(
-+-???????????? args, kwds, "O|l:FT2Font", (char **)names, &fname,
-&hinting_factor)) {
-++???????????? args, kwds, "O|l:FT2Font", (char **)names, &filename,
-&hinting_factor)) {
-+???????? return -1;
-+???? }
-+
-+-??? if (!convert_open_args(self, fname, &open_args)) {
-+-??????? return -1;
-++??? self->stream.base = NULL;
-++??? self->stream.size = 0x7fffffff;? // Unknown size.
-++??? self->stream.pos = 0;
-++??? self->stream.descriptor.pointer = self;
-++??? self->stream.read = &read_from_file_callback;
-++??? memset((void *)&open_args, 0, sizeof(FT_Open_Args));
-++??? open_args.flags = FT_OPEN_STREAM;
-++??? open_args.stream = &self->stream;
-++
-++??? if (PyBytes_Check(filename) || PyUnicode_Check(filename)) {
-++??????? if (!(open = PyDict_GetItemString(PyEval_GetBuiltins(),
-"open"))? // Borrowed reference.
-++??????????? || !(self->py_file = PyObject_CallFunction(open, "Os",
-filename, "rb"))) {
-++??????????? goto exit;
-++??????? }
-++??????? self->stream.close = &close_file_callback;
-++??? } else if (!PyObject_HasAttrString(filename, "read")
-++?????????????? || !(data = PyObject_CallMethod(filename, "read", "i", 0))
-++?????????????? || !PyBytes_Check(data)) {
-++??????? PyErr_SetString(PyExc_TypeError,
-++??????????????????????? "First argument must be a path or binary-mode
-file object");
-++??????? goto exit;
-++??? } else {
-++??????? self->py_file = filename;
-++??????? self->stream.close = NULL;
-++??????? Py_INCREF(filename);
-+???? }
-+
-+???? CALL_CPP_FULL(
-+-??????? "FT2Font", (self->x = new FT2Font(open_args, hinting_factor)),
-PyFT2Font_fail(self), -1);
-++??????? "FT2Font", (self->x = new FT2Font(open_args, hinting_factor)),
-++??????? Py_CLEAR(self->py_file), -1);
-+
-+-??? Py_INCREF(fname);
-+-??? self->fname = fname;
-++??? Py_INCREF(filename);
-++??? self->fname = filename;
-++
-++exit:
-++??? Py_XDECREF(data);
-+
-+???? return 0;
-+ }
-+@@ -539,7 +472,6 @@
-+ static void PyFT2Font_dealloc(PyFT2Font *self)
-+ {
-+???? delete self->x;
-+-??? free(self->mem);
-+???? Py_XDECREF(self->py_file);
-+???? Py_XDECREF(self->fname);
-+???? Py_TYPE(self)->tp_free((PyObject *)self);
+Example works for me (Desktop/RPi4) as expected, both times the
+'Trigram For Heaven' (U+2620, see [1]) is shown...
 
---
-2.25.1
+Back to the hint from my first reply: 
+
+- please describe exactly what (and how) did you test
+- please describe exactly which result did you expect and which result did you
+get?
+- which target hardware, which buildroot version and provide your used
+  defconfig
+
+
+Test on RPi4 was done with the following defconfig:
+
+BR2_aarch64=y
+BR2_cortex_a72=y
+BR2_ARM_FPU_VFPV4=y
+BR2_ENABLE_DEBUG=y
+BR2_OPTIMIZE_3=y
+BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+BR2_BINUTILS_VERSION_2_36_X=y
+BR2_GCC_VERSION_10_X=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+BR2_SYSTEM_DHCP="eth0"
+BR2_GENERATE_LOCALE="en_US"
+BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi4-64/post-build.sh"
+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi4-64/post-image.sh"
+BR2_ROOTFS_POST_SCRIPT_ARGS="--add-miniuart-bt-overlay --aarch64"
+BR2_LINUX_KERNEL=y
+BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call
+github,raspberrypi,linux,967d45b29ca2902f031b867809d72e3b3d623e7a)/linux-967d45b29ca2902f031b867809d72e3b3d623e7a.tar.gz"
+BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
+BR2_LINUX_KERNEL_DTS_SUPPORT=y
+BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2711-rpi-4-b"
+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+BR2_PACKAGE_STRACE=y
+BR2_PACKAGE_DEJAVU=y
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO=y
+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D=y
+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4=y
+BR2_PACKAGE_MESA3D_OPENGL_ES=y
+BR2_PACKAGE_QT5=y
+BR2_PACKAGE_QT5BASE_EXAMPLES=y
+BR2_PACKAGE_QT5BASE_OPENGL_LIB=y
+BR2_PACKAGE_QT5BASE_EGLFS=y
+BR2_PACKAGE_QT5BASE_DEFAULT_QPA="eglfs"
+BR2_PACKAGE_QT5BASE_FONTCONFIG=y
+BR2_PACKAGE_QT5BASE_HARFBUZZ=y
+BR2_PACKAGE_QT5BASE_GIF=y
+BR2_PACKAGE_QT5BASE_JPEG=y
+BR2_PACKAGE_QT5BASE_PNG=y
+BR2_PACKAGE_QT5QUICKCONTROLS=y
+BR2_PACKAGE_QT5QUICKCONTROLS2=y
+BR2_PACKAGE_RPI_FIRMWARE=y
+BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4=y
+BR2_PACKAGE_OPENSSH=y
+BR2_TARGET_ROOTFS_EXT2=y
+BR2_TARGET_ROOTFS_EXT2_4=y
+BR2_TARGET_ROOTFS_EXT2_SIZE="384M"
+# BR2_TARGET_ROOTFS_TAR is not set
+BR2_PACKAGE_HOST_DOSFSTOOLS=y
+BR2_PACKAGE_HOST_GENIMAGE=y
+BR2_PACKAGE_HOST_MTOOLS=y
+
+and 'dtoverlay=vc4-kms-v3d-pi4' enabled...
+
+[1] https://codepoints.net/U+2630?lang=de
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
