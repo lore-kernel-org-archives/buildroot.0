@@ -1,42 +1,46 @@
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Wed, 17 Mar 2021 18:00:32 +0100
-Subject: [Buildroot] [PATCH v2] package/libcamera: disable package affected
- by binutils bug 27597
-In-Reply-To: <20210317174530.15bd89ac@windsurf.home>
-References: <20210317174530.15bd89ac@windsurf.home>
-Message-ID: <20210317170032.1944665-1-giulio.benetti@benettiengineering.com>
+Date: Wed, 17 Mar 2021 18:01:29 +0100
+Subject: [Buildroot] [PATCH v2 4/6] package/openal: disable package if
+ binutils is affected from bug 27100
+In-Reply-To: <20210314230712.13207ad0@windsurf.home>
+References: <20210310091453.23611-1-giulio.benetti@benettiengineering.com>
+ <20210310091453.23611-5-giulio.benetti@benettiengineering.com>
+ <20210314230712.13207ad0@windsurf.home>
+Message-ID: <c30e0bdf-8afe-4076-ff54-e6a368bc8214@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package is affected by binutils bug 27597 and no work around has
-been found, so let's disable it if
-BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597=y.
+Hi Thomas,
 
-Fixes:
-http://autobuild.buildroot.net/results/8ac/8ac599392f773eecff4773393ef0d0232a22f372/
+following previous e-mail about bug 27100, this is not a binutils bug, 
+it's a package link failure. So please drop this patch. Thank you
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
-V1->V2:
-* move BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597 under BR2_PACKAGE_LIBCAMERA_ARCH_SUPPORTS
----
- package/libcamera/Config.in | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/libcamera/Config.in b/package/libcamera/Config.in
-index b9c243084e..92c17df849 100644
---- a/package/libcamera/Config.in
-+++ b/package/libcamera/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_LIBCAMERA_ARCH_SUPPORTS
- 	default y
- 	# Invalid packing size of ControlValue struct on m68k
- 	depends on !BR2_m68k
-+	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597
- 
- menuconfig BR2_PACKAGE_LIBCAMERA
- 	bool "libcamera"
 -- 
-2.25.1
+Giulio Benetti
+Benetti Engineering sas
+
+On 3/14/21 11:07 PM, Thomas Petazzoni wrote:
+> On Wed, 10 Mar 2021 10:14:51 +0100
+> Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+> 
+>> This package is affected from binutils bug 21464, since there is no
+> 
+> You're using the BUG_27100 condition, not 21464.
+> 
+>> diff --git a/package/openal/Config.in b/package/openal/Config.in
+>> index 6b0e9973db..def95222de 100644
+>> --- a/package/openal/Config.in
+>> +++ b/package/openal/Config.in
+>> @@ -19,6 +19,7 @@ config BR2_PACKAGE_OPENAL
+>>   	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11 PR56019
+>>   	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+>>   	depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS
+>> +	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27100
+> 
+> What about all the things that select BR2_PACKAGE_OPENAL ?
+> 
+> Thomas
+> 
