@@ -1,43 +1,37 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 17 Mar 2021 14:49:09 +0000
-Subject: [Buildroot] [Bug 13626] New: Can't connect to openssh-server
-Message-ID: <bug-13626-163@https.bugs.busybox.net/>
+From: Filip Skoneczny <fskoneczny@gmail.com>
+Date: Wed, 17 Mar 2021 16:16:47 +0100
+Subject: [Buildroot] [PATCH 1/1] configs/bananapi_m1_plus_defconfig: select
+ custom headers
+Message-ID: <20210317151647.699472-1-fskoneczny@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13626
+Board used custom Kernel but did not specify
+custom headers. This broke the build when
+Linux 5.11 was added in d2fe9c6.
 
-            Bug ID: 13626
-           Summary: Can't connect to openssh-server
-           Product: buildroot
-           Version: 2021.02
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: posta at debevv.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/1089053980
 
-Created attachment 8806
-  --> https://bugs.busybox.net/attachment.cgi?id=8806&action=edit
-Client and server logs, defconfig
+Signed-off-by: Filip Skoneczny <fskoneczny@gmail.com>
+---
+ configs/bananapi_m1_plus_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-The openssh-server installed on the board abruptly closes the connection before
-the key exchange with the client.
-I tried fiddling with ciphers and macs on both sides, changing network
-interfaces MTUs (I read online that there are issue related to openssh),
-changing client, but the problem persists.
-sshd_config is the default one.
-I also tried with busybox as init, instead as systemd.
-I attached the client and server logs and my defconfig.
-
+diff --git a/configs/bananapi_m1_plus_defconfig b/configs/bananapi_m1_plus_defconfig
+index 8f278f932d..271124f79a 100644
+--- a/configs/bananapi_m1_plus_defconfig
++++ b/configs/bananapi_m1_plus_defconfig
+@@ -2,6 +2,7 @@ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_FPU_NEON_VFPV4=y
+ BR2_GLOBAL_PATCH_DIR="board/sinovoip/m1-plus/patches"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ BR2_TARGET_GENERIC_HOSTNAME="bananapi"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to Banana Pi!"
+ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.25.1
