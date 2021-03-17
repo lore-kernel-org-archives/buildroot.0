@@ -1,296 +1,97 @@
-From: =?UTF-8?q?Jos=C3=A9=20Luis=20Salvador=20Rufo?= <salvador.joseluis@gmail.com>
-Date: Wed, 17 Mar 2021 10:52:30 +0100
-Subject: [Buildroot] [PATCH v3] package/zfs: new package
-Message-ID: <20210317095228.447428-1-salvador.joseluis@gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Wed, 17 Mar 2021 11:12:34 +0100
+Subject: [Buildroot] [PATCH] package/lualdap: bump to version 1.2.6
+Message-ID: <20210317101234.1775425-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-OpenZFS is an advanced file system and volume manager which was originally
-developed for Solaris and is now maintained by the OpenZFS community. This
-repository contains the code for running OpenZFS on Linux and FreeBSD.
+- switch to luarocks infrastructure
+- support Lua 5.4
 
-http://zfsonlinux.org/
-
-Signed-off-by: Jos? Luis Salvador Rufo <salvador.joseluis@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
-Changes v2 -> v3:
-  - Updated OpenZFS to 2.0.4
-Changes v1 -> v2:
-  (suggested by Yann E. MORIN)
-  - Config.in: check-package accomplished
-  - Config.in: fixed Config.in dependences
-  - zfs.hash: proper zfs.hash format
-  - zfs.mk: added cpe for openzfs
-  - zfs.mk: uclibc patch merged into upstream
-  - zfs.mk: removed futile comments as "zfs needs"
-  - zfs.mk: added comments about the kernel dependence
-  - zfs.mk: removed autotools default arguments values
-  - zfs.mk: added optional PAM dependence
-  - zfs.mk: replaced inline conditionals by full explained blocks
-  - zfs.mk: added comments about optionals systemd and sysv
-  - zfs.mk: removed --disable-silent-rules
-  - zfs.mk: reordered autoreconf
-  - zfs.mk: removed futile shared, static, and both logic
-  - zfs.mk: fixed optional python(2|3) support for pyzfs
-  - zfs.mk: removed futile kernel fragment
-  - test_zfs: replaced external toolchain by already defined bootlin
-  - test_zfs: increased memory a bit to prevents OOM
-  - test_zfs: added pyzfs test
+ package/lualdap/Config.in    |  7 +++----
+ package/lualdap/lualdap.hash |  6 +++---
+ package/lualdap/lualdap.mk   | 30 +++++-------------------------
+ 3 files changed, 11 insertions(+), 32 deletions(-)
 
- DEVELOPERS                                |  4 +
- package/Config.in                         |  1 +
- package/zfs/Config.in                     | 32 ++++++++
- package/zfs/zfs.hash                      |  6 ++
- package/zfs/zfs.mk                        | 90 +++++++++++++++++++++++
- support/testing/tests/package/test_zfs.py | 61 +++++++++++++++
- 6 files changed, 194 insertions(+)
- create mode 100644 package/zfs/Config.in
- create mode 100644 package/zfs/zfs.hash
- create mode 100644 package/zfs/zfs.mk
- create mode 100644 support/testing/tests/package/test_zfs.py
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 6a7e88039e..71e95b5bcf 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1383,6 +1383,10 @@ F:	package/libuio/
- F:	package/netsniff-ng/
- F:	package/rabbitmq-c/
+diff --git a/package/lualdap/Config.in b/package/lualdap/Config.in
+index ef3e93202..5ef89728f 100644
+--- a/package/lualdap/Config.in
++++ b/package/lualdap/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_LUALDAP
+ 	bool "lualdap"
+ 	depends on !BR2_STATIC_LIBS
+-	depends on !BR2_PACKAGE_LUA_5_4
+ 	depends on BR2_USE_WCHAR # openldap
+ 	depends on BR2_USE_MMU # openldap
+ 	select BR2_PACKAGE_OPENLDAP
+@@ -9,8 +8,8 @@ config BR2_PACKAGE_LUALDAP
+ 	  LuaLDAP is a simple interface from Lua to an LDAP client,
+ 	  in fact it is a bind to OpenLDAP client.
  
-+N:	Jos? Luis Salvador Rufo <salvador.joseluis@gmail.com>
-+F:	package/zfs/
-+F:	support/testing/tests/package/test_zfs.py
-+
- N:	Joseph Kogut <joseph.kogut@gmail.com>
- F:	package/at-spi2-atk/
- F:	package/at-spi2-core/
-diff --git a/package/Config.in b/package/Config.in
-index d278e78b68..60afa84c2f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -229,6 +229,7 @@ menu "Filesystem and flash utilities"
- 	source "package/udftools/Config.in"
- 	source "package/unionfs/Config.in"
- 	source "package/xfsprogs/Config.in"
-+	source "package/zfs/Config.in"
- endmenu
+-	  https://github.com/lualdap/lualdap
++	  https://lualdap.github.io/lualdap/
  
- menu "Fonts, cursors, icons, sounds and themes"
-diff --git a/package/zfs/Config.in b/package/zfs/Config.in
-new file mode 100644
-index 0000000000..96711d681e
---- /dev/null
-+++ b/package/zfs/Config.in
-@@ -0,0 +1,32 @@
-+comment "zfs needs a Linux kernel to be built"
-+	depends on !BR2_LINUX_KERNEL
-+
-+comment "zfs needs udev /dev management"
-+	depends on BR2_LINUX_KERNEL
-+	depends on !BR2_PACKAGE_HAS_UDEV
-+
-+config BR2_PACKAGE_ZFS
-+	bool "zfs"
-+	depends on BR2_LINUX_KERNEL
-+	depends on BR2_PACKAGE_HAS_UDEV
-+	depends on BR2_USE_MMU  # util-linux (libblkid)
-+	depends on BR2_TOOLCHAIN_HAS_THREADS  # libtirpc
-+	select BR2_PACKAGE_UTIL_LINUX
-+	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
-+	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-+	select BR2_PACKAGE_LIBTIRPC
-+	select BR2_PACKAGE_LIBAIO
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_ZLIB
-+	help
-+	  OpenZFS on Linux and FreeBSD
-+
-+	  OpenZFS is an advanced file system and volume manager which
-+	  was originally developed for Solaris and is now maintained by
-+	  the OpenZFS community. This repository contains the code for
-+	  running OpenZFS on Linux and FreeBSD.
-+
-+	  http://zfsonlinux.org/
-+
-+	  This package builds the kernel modules and userland utils
-+	  required to operates with ZFS volumes.
-diff --git a/package/zfs/zfs.hash b/package/zfs/zfs.hash
-new file mode 100644
-index 0000000000..5a0c43d366
---- /dev/null
-+++ b/package/zfs/zfs.hash
-@@ -0,0 +1,6 @@
-+# Locally calculated
-+sha256  7d1344c5433b91823f02c2e40b33d181fa6faf286bea5591f4b1965f23d45f6c  zfs-2.0.4.tar.gz
-+
-+# Hash for license files:
-+sha256  1ffb70c33c4f79f04e947facc5c7851f289609256aacb47fc115f700427d9520  LICENSE
-+sha256  f125a37c829705eff3e6f77a9f6c58fd71060f84ab54180b98fafdf94a2021eb  COPYRIGHT
-diff --git a/package/zfs/zfs.mk b/package/zfs/zfs.mk
-new file mode 100644
-index 0000000000..7e7e6081a5
---- /dev/null
-+++ b/package/zfs/zfs.mk
-@@ -0,0 +1,90 @@
-+################################################################################
-+#
-+# zfs
-+#
-+################################################################################
-+
-+ZFS_VERSION = 2.0.4
-+ZFS_SITE = https://github.com/openzfs/zfs/releases/download/zfs-$(ZFS_VERSION)
-+ZFS_LICENSE = CDDL
-+ZFS_LICENSE_FILES = LICENSE COPYRIGHT
-+ZFS_CPE_ID_VENDOR = openzfs
-+ZFS_CPE_ID_PRODUCT = openzfs
-+ZFS_CPE_ID_PREFIX = cpe:2.3:a
-+
-+# ZFS userland tools are unfunctional without its Linux kernel modules.
-+ZFS_MODULES = zavl icp zlua znvpair spl zunicode zcommon zzstd zfs
-+ZFS_MODULE_SUBDIRS = module/avl module/icp module/lua module/nvpair module/spl module/unicode module/zcommon module/zstd module/zfs
-+
-+# These requirements will be validated by zfs/config/kernel-config-defined.m4
-+define ZFS_LINUX_CONFIG_FIXUPS
-+	$(call KCONFIG_DISABLE_OPT,CONFIG_DEBUG_LOCK_ALLOC)
-+	$(call KCONFIG_DISABLE_OPT,CONFIG_TRIM_UNUSED_KSYMS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CRYPTO_DEFLATE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_ZLIB_DEFLATE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_ZLIB_INFLATE)
-+endef
-+
-+ZFS_AUTORECONF = YES
-+ZFS_AUTORECONF_OPTS = -fiv
-+
-+ZFS_DEPENDENCIES += zlib util-linux libtirpc libaio openssl udev
-+ZFS_CONF_OPTS = \
-+	--with-linux=$(LINUX_DIR) \
-+	--with-linux-obj=$(LINUX_DIR) \
-+	--with-tirpc \
-+	--disable-rpath
-+
-+ifeq ($(BR2_ENABLE_LOCALE),)
-+ZFS_CONF_OPTS += --enable-nls
-+else
-+ZFS_CONF_OPTS += --disable-nls
-+endif
-+
-+ifeq ($(BR2_INIT_SYSTEMD),y)
-+# Installs the optional systemd generators, units, and presets files.
-+ZFS_CONF_OPTS += --enable-systemd
-+else
-+ZFS_CONF_OPTS += --disable-systemd
-+endif
-+
-+ifeq ($(BR2_INIT_SYSV),y)
-+# Installs the optional sysvinit modules-load.d conf. file.
-+ZFS_CONF_OPTS += --enable-sysvinit
-+else
-+ZFS_CONF_OPTS += --disable-sysvinit
-+endif
-+
-+# The optional PyZFS uses different scripts depending on the python
-+# version (ex: arc_summary2 or arc_summary3).
-+ifeq ($(BR2_PACKAGE_PYTHON),y)
-+ZFS_DEPENDENCIES += python python-setuptools host-python-cffi
-+ZFS_CONF_ENV += \
-+	PYTHON=$(HOST_DIR)/usr/bin/python2 \
-+	PYTHON_CPPFLAGS="`$(STAGING_DIR)/usr/bin/python2-config --includes`" \
-+	PYTHON_LIBS="`$(STAGING_DIR)/usr/bin/python2-config --ldflags`" \
-+	PYTHON_SITE_PKG="/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages"
-+ZFS_CONF_OPTS += --enable-pyzfs
-+else ifeq ($(BR2_PACKAGE_PYTHON3),y)
-+ZFS_DEPENDENCIES += python3 python-setuptools host-python-cffi
-+ZFS_CONF_ENV += \
-+	PYTHON=$(HOST_DIR)/usr/bin/python3 \
-+	PYTHON_CPPFLAGS="`$(STAGING_DIR)/usr/bin/python3-config --includes`" \
-+	PYTHON_LIBS="`$(STAGING_DIR)/usr/bin/python3-config --ldflags`" \
-+	PYTHON_EXTRA_LIBS="`$(STAGING_DIR)/usr/bin/python3-config --libs --embed`" \
-+	PYTHON_SITE_PKG="/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages"
-+ZFS_CONF_OPTS += --enable-pyzfs
-+else
-+ZFS_CONF_OPTS += --disable-pyzfs --without-python
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
-+# ZFS will check for pam_modules.h
-+ZFS_DEPENDENCIES += linux-pam
-+ZFS_CONF_ENV += --enable-pam=yes
-+else
-+ZFS_CONF_OPTS += --disable-pam
-+endif
-+
-+$(eval $(kernel-module))
-+$(eval $(autotools-package))
-diff --git a/support/testing/tests/package/test_zfs.py b/support/testing/tests/package/test_zfs.py
-new file mode 100644
-index 0000000000..6a6d2da120
---- /dev/null
-+++ b/support/testing/tests/package/test_zfs.py
-@@ -0,0 +1,61 @@
-+import os
-+
-+from ..toolchain.test_external_bootlin import (
-+    TestExternalToolchainBootlinX8664corei7UclibcStable,
-+)
-+
-+
-+class TestZfs(TestExternalToolchainBootlinX8664corei7UclibcStable):
-+    config = (
-+        TestExternalToolchainBootlinX8664corei7UclibcStable.config
-+        + """
-+        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux.config"
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.23"
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+        BR2_LINUX_KERNEL=y
-+        BR2_PACKAGE_BUSYBOX=y
-+        BR2_PACKAGE_ZFS=y
-+        BR2_PACKAGE_ZLIB_NG=y
-+        BR2_PACKAGE_LIBRESSL=y
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_SETUPTOOLS=y
-+        BR2_PACKAGE_PYTHON_CFFI=y
-+        BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        """
-+    )
-+
-+    def test_run(self):
-+        kernel = os.path.join(self.builddir, "images", "bzImage")
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(
-+            arch="x86_64",
-+            kernel=kernel,
-+            kernel_cmdline=["console=ttyS0"],
-+            options=["-cpu", "Nehalem", "-m", "320", "-initrd", cpio_file],
-+        )
-+        self.emulator.login()
-+
-+        timeout = 35 * self.emulator.timeout_multiplier
-+        cmds = [
-+            # Init
-+            "modprobe zfs",
-+            "mount -o remount,size=132M /tmp",
-+            "fallocate -l 64M /tmp/container1.raw",
-+            "fallocate -l 64M /tmp/container2.raw",
-+            "zpool create -m /pool pool raidz /tmp/container1.raw /tmp/container2.raw",
-+            "dd if=/dev/urandom bs=1M count=8 of=/pool/urandom",
-+            "sha256sum /pool/urandom > /tmp/urandom.sha256",
-+            # Check ZFS
-+            "zpool export pool",
-+            "zpool import pool -d /tmp/container1.raw -d /tmp/container2.raw",
-+            "dd conv=notrunc bs=1M count=32 seek=16 if=/dev/urandom of=/tmp/container1.raw",
-+            "zpool scrub -w pool",
-+            "sha256sum -c /tmp/urandom.sha256",
-+            "zpool status -v",
-+            # Check PyZFS
-+            "arc_summary",
-+        ]
-+        for cmd in cmds:
-+            self.assertRunOk(cmd, timeout=timeout)
+-comment "lualdap needs a toolchain w/ wchar, dynamic library, Lua <= 5.3"
++comment "lualdap needs a toolchain w/ wchar, dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS || BR2_PACKAGE_LUA_5_4
++	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS
+diff --git a/package/lualdap/lualdap.hash b/package/lualdap/lualdap.hash
+index 77eced434..488deb4e1 100644
+--- a/package/lualdap/lualdap.hash
++++ b/package/lualdap/lualdap.hash
+@@ -1,3 +1,3 @@
+-# locally computed
+-sha256  3e028faa6a5798cf2f3d50b9853b9b3fb6eb562b62010747bd5b6f50b57bb1cc  lualdap-1.2.5.tar.gz
+-sha256  7afd8bed6c96a2ba1d1fa9f03ea04c140065462dbd37d7fb66cc7c3c6722aa89  LICENSE.md
++# computed by luarocks/buildroot
++sha256 0fcd82a77b20f7cee00050b63b4241d462564421bbd464f6fd0c1bebc62bff32  lualdap-1.2.6-1.src.rock
++sha256 b9b75da18d1e1147ec47bff508ffdce831da07dc371891b9057cf1c422660af4  lualdap/docs/license.md
+diff --git a/package/lualdap/lualdap.mk b/package/lualdap/lualdap.mk
+index 6ab330269..acfcbdfc6 100644
+--- a/package/lualdap/lualdap.mk
++++ b/package/lualdap/lualdap.mk
+@@ -4,30 +4,10 @@
+ #
+ ################################################################################
+ 
+-LUALDAP_VERSION = 1.2.5
+-LUALDAP_SITE = $(call github,lualdap,lualdap,v$(LUALDAP_VERSION))
++LUALDAP_VERSION = 1.2.6-1
++LUALDAP_SUBDIR = lualdap
+ LUALDAP_LICENSE = MIT
+-LUALDAP_LICENSE_FILES = LICENSE.md
+-LUALDAP_DEPENDENCIES = luainterpreter openldap
++LUALDAP_LICENSE_FILES = $(LUALDAP_SUBDIR)/docs/license.md
++LUALDAP_DEPENDENCIES = openldap
+ 
+-define LUALDAP_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) \
+-		CC=$(TARGET_CC) \
+-		LUA_LIB=-llua \
+-		LUA_LIBDIR="$(STAGING_DIR)/usr/lib" \
+-		LUA_INCDIR="$(STAGING_DIR)/usr/include" \
+-		LDAP_LIBDIR="$(STAGING_DIR)/usr/lib" \
+-		LDAP_INCDIR="$(STAGING_DIR)/usr/include" \
+-		LBER_LIBDIR="$(STAGING_DIR)/usr/lib" \
+-		LBER_INCDIR="$(STAGING_DIR)/usr/include" \
+-		src/lualdap.so
+-endef
+-
+-define LUALDAP_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) \
+-		DESTDIR="$(TARGET_DIR)" \
+-		INST_LIBDIR="/usr/lib/lua/$(LUAINTERPRETER_ABIVER)/" \
+-		install
+-endef
+-
+-$(eval $(generic-package))
++$(eval $(luarocks-package))
 -- 
-2.31.0
+2.27.0
