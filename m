@@ -1,37 +1,49 @@
-From: Alexander Dahl <post@lespocky.de>
-Date: Wed, 17 Mar 2021 07:11:33 +0100
-Subject: [Buildroot] [PATCH] package/siproxd: Remove license file hash for
- internal libltdl
-In-Reply-To: <20210315075603.szbekct3w37mhsu6@falbala.internal.home.lespocky.de>
-References: <20210315075603.szbekct3w37mhsu6@falbala.internal.home.lespocky.de>
-Message-ID: <20210317061133.26547-1-post@lespocky.de>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 17 Mar 2021 07:52:31 +0100
+Subject: [Buildroot] [PATCH 1/1] package/tor: security bump version to
+ 0.4.5.7
+Message-ID: <20210317065231.421826-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In a first draft of what ended up in commit 3efc5a250c1c
-("package/siproxd: new package") libltdl was optionally built from an
-internal copy of siproxd.  Now external libltdl is selected
-unconditionally, thus the license file of the internal copy of libtool
-does not apply anymore.
+Updated license hash due to upstream commit:
+https://gitweb.torproject.org/tor.git/commit/LICENSE?h=tor-0.4.5.7&id=02230575c4da6cd6342516e6682f95dad3e3e29e
 
-Signed-off-by: Alexander Dahl <post@lespocky.de>
+Fixes CVE-2021-28089 & CVE-2021-28090.
+
+Release notes: https://blog.torproject.org/node/2009
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/siproxd/siproxd.hash | 1 -
- 1 file changed, 1 deletion(-)
+ package/tor/tor.hash | 4 ++--
+ package/tor/tor.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/siproxd/siproxd.hash b/package/siproxd/siproxd.hash
-index be6815725a..9c9b8b8f5f 100644
---- a/package/siproxd/siproxd.hash
-+++ b/package/siproxd/siproxd.hash
-@@ -8,4 +8,3 @@ md5  9a9d2c89e5f0c59fdde9444a66d8372c  siproxd-0.8.3.tar.gz
+diff --git a/package/tor/tor.hash b/package/tor/tor.hash
+index ecbe738574..e46335f79c 100644
+--- a/package/tor/tor.hash
++++ b/package/tor/tor.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  22cba3794fedd5fa87afc1e512c6ce2c21bc20b4e1c6f8079d832dc1e545e733  tor-0.4.5.6.tar.gz
+-sha256  ae2afe6cd3fd9d512afbaa1ef218757eb00aa6b6aa5e2dfc2774b6837e373fa1  LICENSE
++sha256  447fcaaa133e2ef22427e98098a60a9c495edf9ff3e0dd13f484b9ad0185f074  tor-0.4.5.7.tar.gz
++sha256  47b54ed17e8fdcab3c44729a1789a09b208f9a63a845a7e50def9df729eebad0  LICENSE
+diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+index 1c9d2f2367..56779f1633 100644
+--- a/package/tor/tor.mk
++++ b/package/tor/tor.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Hash for license files:
- sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
--sha256  f18a0811fa0e220ccbc42f661545e77f0388631e209585ed582a1c693029c6aa  libltdl/COPYING.LIB
-
-base-commit: 54d3d94b6e3846447b5796ef8587b08b537cd348
+-TOR_VERSION = 0.4.5.6
++TOR_VERSION = 0.4.5.7
+ TOR_SITE = https://dist.torproject.org
+ TOR_LICENSE = BSD-3-Clause
+ TOR_LICENSE_FILES = LICENSE
 -- 
-2.20.1
+2.29.2
