@@ -1,45 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 17 Mar 2021 20:11:11 +0100
-Subject: [Buildroot] [git commit branch/2021.02.x] package/lttng-libust: set
- rundir to /run/lttng unconditionally
-Message-ID: <20210317191335.6AAEA7F87B@busybox.osuosl.org>
+Date: Wed, 17 Mar 2021 20:06:12 +0100
+Subject: [Buildroot] [git commit branch/2021.02.x] package/optee-test: add
+ deps on openssl when enabled
+Message-ID: <20210317191335.4E7697F87B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=940406722263555f698eb1d9cb58a27270e61a0e
+commit: https://git.buildroot.net/buildroot/commit/?id=993777636425f530d1695757eb94a1dd9dc52d83
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Buildroot ensures that all init-systems have a /run directory,
-this should be the preferred location.
+Add a dependency on openssl upon BR2_PACKAGE_LIBOPENSSL=y to
+enable some for OP-TEE embedded tests.
 
-Signed-off-by: Norbert Lange <nolange79@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 52912b2cb0112cff94fbe36f367ad5e5d24b139c)
+Building with libressl makes the optee-test test tool fail on a
+certificate test; so we explicitly depend on libopenssl.
+
+Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+[yann.morin.1998 at free.fr:
+  - match the depenency to libopenssl, since that's is what is used in
+    the condition (BR2_PACKAGE_LIBOPENSSL)
+  - add a blurb to explain why libopenssl is used, not the virutal
+    openssl
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit b2821ca786f31066eaab4687607fbcfec268c36f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lttng-libust/lttng-libust.mk | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ package/optee-test/optee-test.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/lttng-libust/lttng-libust.mk b/package/lttng-libust/lttng-libust.mk
-index f3c660c56f..2d52fa6e0f 100644
---- a/package/lttng-libust/lttng-libust.mk
-+++ b/package/lttng-libust/lttng-libust.mk
-@@ -11,11 +11,10 @@ LTTNG_LIBUST_LICENSE = LGPL-2.1, MIT (system headers), GPL-2.0 (liblttng-ust-ctl
- LTTNG_LIBUST_LICENSE_FILES = COPYING
- LTTNG_LIBUST_INSTALL_STAGING = YES
- LTTNG_LIBUST_DEPENDENCIES = liburcu util-linux
--LTTNG_LIBUST_CONF_OPTS += --disable-man-pages --disable-examples
--
--ifeq ($(BR2_INIT_SYSTEMD),y)
--LTTNG_LIBUST_CONF_OPTS += --with-lttng-system-rundir=/run/lttng
--endif
-+LTTNG_LIBUST_CONF_OPTS = \
-+	--disable-man-pages \
-+	--disable-examples \
-+	--with-lttng-system-rundir=/run/lttng
+diff --git a/package/optee-test/optee-test.mk b/package/optee-test/optee-test.mk
+index 1f4f586672..f7e4cb3b99 100644
+--- a/package/optee-test/optee-test.mk
++++ b/package/optee-test/optee-test.mk
+@@ -11,6 +11,10 @@ OPTEE_TEST_LICENSE_FILES = LICENSE.md
  
- ifeq ($(BR2_PACKAGE_PYTHON),y)
- LTTNG_LIBUST_DEPENDENCIES += python
+ OPTEE_TEST_DEPENDENCIES = optee-client optee-os
+ 
++ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
++OPTEE_TEST_DEPENDENCIES += libopenssl
++endif
++
+ OPTEE_TEST_CONF_OPTS = -DOPTEE_TEST_SDK=$(OPTEE_OS_SDK)
+ 
+ # Trusted Application are not built from CMake due to ta_dev_kit
