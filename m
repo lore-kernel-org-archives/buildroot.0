@@ -1,46 +1,155 @@
-From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@laposte.net>
-Date: Wed, 17 Mar 2021 23:10:12 +0100
-Subject: [Buildroot] [PATCH] package/fwts: bump to version 21.02.00
-Message-ID: <20210317221012.6173-1-vincent.stehle@laposte.net>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Thu, 18 Mar 2021 07:28:47 +0900
+Subject: [Buildroot] [PATCH 2/4] qemu_arm_versatile_nommu: switch to
+ in-kernel defconfig + fragment
+In-Reply-To: <20210317222849.1658538-1-masahiroy@kernel.org>
+References: <20210317222849.1658538-1-masahiroy@kernel.org>
+Message-ID: <20210317222849.1658538-2-masahiroy@kernel.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The dates in the copyright file have changed; update the hash accordingly.
+This platform has its own kernel defconfig in Buildroot, but we cannot
+get quick idea about how much it diverged from the in-kernel defconfig.
 
-Signed-off-by: Vincent Stehl? <vincent.stehle@laposte.net>
-Cc: Erico Nunes <nunes.erico@gmail.com>
+Let's use the upstream arch/arm/config/versatile_defconfig as a base,
+and maintain the diff as a merge-config fragment. The same .config is
+still generated based on the 5.10.7 kernel.
+
+The diff is quite big, but this is a good start-point for cleanups.
+Follow-up works can drop diff lines unless we find a good reason for
+divergence.
+
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
- package/fwts/fwts.hash | 4 ++--
- package/fwts/fwts.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/fwts/fwts.hash b/package/fwts/fwts.hash
-index 9b05673152..916035bda6 100644
---- a/package/fwts/fwts.hash
-+++ b/package/fwts/fwts.hash
-@@ -1,5 +1,5 @@
- # Hash from: http://fwts.ubuntu.com/release/SHA256SUMS
--sha256  bfe7993f1dd328b96a90ecfe92df67063df21afe4b4a103e498da6625c7c71b7  fwts-V20.08.00.tar.gz
-+sha256  02160657383a918a48c946a0ffb72c047d19a46f1455c29c0fff4d9ef7e48680  fwts-V21.02.00.tar.gz
+ board/qemu/arm-versatile/linux-nommu.config | 98 ++++++++++++---------
+ configs/qemu_arm_versatile_nommu_defconfig  |  4 +-
+ 2 files changed, 57 insertions(+), 45 deletions(-)
+
+diff --git a/board/qemu/arm-versatile/linux-nommu.config b/board/qemu/arm-versatile/linux-nommu.config
+index 1d91d51a14..6f1cc3f26d 100644
+--- a/board/qemu/arm-versatile/linux-nommu.config
++++ b/board/qemu/arm-versatile/linux-nommu.config
+@@ -1,47 +1,59 @@
+-# CONFIG_MMU is not set
+-CONFIG_ARCH_VERSATILE=y
++# CONFIG_ARM_SINGLE_ARMV7M is not set
+ CONFIG_ARM_SINGLE_ARCH_VERSATILE=y
+-CONFIG_SET_MEM_PARAM=y
++CONFIG_BINFMT_ELF_FDPIC=y
++CONFIG_BINFMT_FLAT=y
++# CONFIG_BLK_DEV_RAM is not set
++# CONFIG_CRAMFS is not set
++CONFIG_CMDLINE=""
++# CONFIG_DEBUG_FS is not set
++# CONFIG_DEBUG_KERNEL is not set
++# CONFIG_DEBUG_USER is not set
++# CONFIG_DRM is not set
++# CONFIG_EEPROM_LEGACY is not set
++# CONFIG_EXT2_FS is not set
++CONFIG_EXT4_FS=y
++CONFIG_FB_ARMCLCD=y
++# CONFIG_FONTS is not set
++CONFIG_FONT_8x16=y
++CONFIG_FONT_8x8=y
++# CONFIG_FRAMEBUFFER_CONSOLE_DETECT_PRIMARY is not set
++# CONFIG_FTRACE is not set
++# CONFIG_GPIO_PL061 is not set
++# CONFIG_HIGH_RES_TIMERS is not set
++CONFIG_HWMON=y
++# CONFIG_I2C_VERSATILE is not set
++CONFIG_INET_DIAG=y
++CONFIG_INPUT_EVDEV=y
++CONFIG_IPV6=y
++# CONFIG_IP_MULTICAST is not set
++# CONFIG_IP_PNP is not set
++# CONFIG_MMU is not set
++CONFIG_LOCALVERSION_AUTO=y
++# CONFIG_LOGO is not set
++CONFIG_LOG_BUF_SHIFT=17
++CONFIG_MDIO_DEVICE=y
++# CONFIG_MINIX_FS is not set
++# CONFIG_MMC is not set
++# CONFIG_MTD is not set
++# CONFIG_NEW_LEDS is not set
++# CONFIG_NFSD is not set
++# CONFIG_NFS_FS is not set
++# CONFIG_NLS_CODEPAGE_850 is not set
++# CONFIG_NLS_ISO8859_1 is not set
++# CONFIG_NO_HZ_IDLE is not set
++# CONFIG_NVMEM is not set
+ CONFIG_DRAM_BASE=0x00000000
+ CONFIG_DRAM_SIZE=0x08000000
+-CONFIG_ARCH_VERSATILE_PB=y
+-CONFIG_MACH_VERSATILE_AB=y
+-CONFIG_MACH_VERSATILE_DT=y
+-CONFIG_BINFMT_FLAT=y
+-CONFIG_SYSVIPC=y
+-CONFIG_MODULES=y
+-CONFIG_MODULE_UNLOAD=y
+-# CONFIG_ARCH_MULTI_V7 is not set
+-CONFIG_AEABI=y
+-CONFIG_NET=y
+-CONFIG_PACKET=y
+-CONFIG_UNIX=y
+-CONFIG_INET=y
+-CONFIG_NETDEVICES=y
+-CONFIG_SMC91X=y
++CONFIG_INITRAMFS_SOURCE="${BR_BINARIES_DIR}/rootfs.cpio"
++# CONFIG_PARTITION_ADVANCED is not set
++# CONFIG_OABI_COMPAT is not set
+ CONFIG_PHYLIB=y
+-CONFIG_INPUT_EVDEV=y
+-CONFIG_SERIO_AMBAKMI=y
+-CONFIG_LEGACY_PTY_COUNT=16
+-CONFIG_SERIAL_8250=m
+-CONFIG_SERIAL_8250_EXTENDED=y
+-CONFIG_SERIAL_8250_MANY_PORTS=y
+-CONFIG_SERIAL_8250_SHARE_IRQ=y
+-CONFIG_SERIAL_8250_RSA=y
+-CONFIG_SERIAL_AMBA_PL011=y
+-CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
+-CONFIG_I2C=y
+-CONFIG_I2C_CHARDEV=m
+-CONFIG_FB=y
+-CONFIG_FB_ARMCLCD=y
+-CONFIG_FRAMEBUFFER_CONSOLE=y
+-CONFIG_SOUND=y
+-CONFIG_SND=m
+-CONFIG_SND_MIXER_OSS=m
+-CONFIG_SND_PCM_OSS=m
+-CONFIG_SND_ARMAACI=m
+-CONFIG_EXT4_FS=y
+-CONFIG_VFAT_FS=m
+-CONFIG_TMPFS=y
+-CONFIG_TMPFS_POSIX_ACL=y
+-CONFIG_MAGIC_SYSRQ=y
++# CONFIG_ROMFS_FS is not set
++# CONFIG_RTC_CLASS is not set
++CONFIG_SERIAL_CORE=y
++CONFIG_SERIO_SERPORT=y
++CONFIG_SET_MEM_PARAM=y
++CONFIG_SLUB=y
++# CONFIG_SPI is not set
++# CONFIG_SYNC_FILE is not set
++# CONFIG_VFP is not set
+diff --git a/configs/qemu_arm_versatile_nommu_defconfig b/configs/qemu_arm_versatile_nommu_defconfig
+index fa783f9299..1cd5a94756 100644
+--- a/configs/qemu_arm_versatile_nommu_defconfig
++++ b/configs/qemu_arm_versatile_nommu_defconfig
+@@ -32,8 +32,8 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.7"
+-BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/arm-versatile/linux-nommu.config"
++BR2_LINUX_KERNEL_DEFCONFIG="versatile"
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/arm-versatile/linux-nommu.config"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="versatile-pb"
  
- # Hash for license file
--sha256  379eab3c1071a6f5b8acd3632586577ec9c47ef10601b10467e890b8ff8b3842  debian/copyright
-+sha256  2003f5c8a1e40d7882f1499bd7adb7bc748c9656851abb28647a3d297c2e8e23  debian/copyright
-diff --git a/package/fwts/fwts.mk b/package/fwts/fwts.mk
-index e4e9defebf..eaff7b786b 100644
---- a/package/fwts/fwts.mk
-+++ b/package/fwts/fwts.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FWTS_VERSION = 20.08.00
-+FWTS_VERSION = 21.02.00
- FWTS_SOURCE = fwts-V$(FWTS_VERSION).tar.gz
- FWTS_SITE = http://fwts.ubuntu.com/release
- FWTS_STRIP_COMPONENTS = 0
 -- 
-2.30.0
+2.27.0
