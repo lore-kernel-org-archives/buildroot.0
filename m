@@ -1,55 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 17 Mar 2021 19:57:49 +0100
-Subject: [Buildroot] [PATCH 1/1] package/optee-client: disable -Werror
-In-Reply-To: <20210306225353.GX2275@scaer> (Yann E. MORIN's message of "Sat, 6
- Mar 2021 23:53:53 +0100")
-References: <20201101204349.2553267-1-fontaine.fabrice@gmail.com>
- <20210306225353.GX2275@scaer>
-Message-ID: <8735wty5ea.fsf@dell.be.48ers.dk>
+Date: Wed, 17 Mar 2021 19:48:51 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/optee-client:
+ disable -Werror
+Message-ID: <20210317183435.4A9EC8816D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=b41a7eb5a19eadda08e7077acb37aed8418796f4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
- > Fabrice, All,
- > On 2020-11-01 21:43 +0100, Fabrice Fontaine spake thusly:
- >> Disable -Werror thanks to CFG_WERROR which is available since version
- >> 3.3.0 and
- >> https://github.com/OP-TEE/optee_client/commit/5355fdb841bce4f7cce3dd37fc31fa91bd625c98
- >> to fix the following build failure with optee-client 3.11.0:
- >> 
- >> /home/giuliobenetti/autobuild/run/instance-2/output-1/build/optee-client-3.11.0/libckteec/src/pkcs11_processing.c: In function 'ck_create_object':
- >> /home/giuliobenetti/autobuild/run/instance-2/output-1/build/optee-client-3.11.0/libckteec/src/pkcs11_processing.c:22:9: error: missing initializer for field 'buffer' of 'struct serializer' [-Werror=missing-field-initializers]
- >> struct serializer obj = { };
- >> ^
- >> 
- >> Fixes:
- >> - http://autobuild.buildroot.org/results/a3d663adb943aee814180f01d6e153b3309be962
- >> 
- >> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Disable -Werror thanks to CFG_WERROR which is available since version
+3.3.0 and
+https://github.com/OP-TEE/optee_client/commit/5355fdb841bce4f7cce3dd37fc31fa91bd625c98
+to fix the following build failure with optee-client 3.11.0:
 
- > After reading the thread, I decided to apply this (oldish) patch to
- > next.
+/home/giuliobenetti/autobuild/run/instance-2/output-1/build/optee-client-3.11.0/libckteec/src/pkcs11_processing.c: In function 'ck_create_object':
+/home/giuliobenetti/autobuild/run/instance-2/output-1/build/optee-client-3.11.0/libckteec/src/pkcs11_processing.c:22:9: error: missing initializer for field 'buffer' of 'struct serializer' [-Werror=missing-field-initializers]
+  struct serializer obj = { };
+         ^
 
- > Indeed, as you mentionned in the thread, we do try to remove -Werror
- > when we hit issues with it.
+Fixes:
+ - http://autobuild.buildroot.org/results/a3d663adb943aee814180f01d6e153b3309be962
 
- > -Werror is very important for the developpers of a package, because they
- > indeed can find and fix their code as early as possible.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 6a47e70743abcedba51ae406853a3f414f9ff48a)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/optee-client/optee-client.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
- > But for downstreams, that does not help at all, especially since there
- > are a myriad of possible combination of binutils versions, compiler
- > versins, C libraries flavours and versions, optimisations flags and
- > architectures, that it is virtually impossible to guarantee a no-warning
- > build on all those combinations, especially when a new version of any of
- > those gets out.
-
- > So, applied to next, thanks.
-
-Committed to 2021.02.x and 2020.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/optee-client/optee-client.mk b/package/optee-client/optee-client.mk
+index 8108fc2130..7f613f724d 100644
+--- a/package/optee-client/optee-client.mk
++++ b/package/optee-client/optee-client.mk
+@@ -11,7 +11,8 @@ OPTEE_CLIENT_LICENSE_FILES = LICENSE
+ OPTEE_CLIENT_INSTALL_STAGING = YES
+ 
+ OPTEE_CLIENT_CONF_OPTS = \
+-	-DCFG_TEE_FS_PARENT_PATH=$(BR2_PACKAGE_OPTEE_CLIENT_TEE_FS_PATH)
++	-DCFG_TEE_FS_PARENT_PATH=$(BR2_PACKAGE_OPTEE_CLIENT_TEE_FS_PATH) \
++	-DCFG_WERROR=OFF
+ 
+ define OPTEE_CLIENT_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 0755 -D $(OPTEE_CLIENT_PKGDIR)/S30optee \
