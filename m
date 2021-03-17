@@ -1,35 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 17 Mar 2021 20:00:57 +0100
-Subject: [Buildroot] [git commit branch/2021.02.x] boot/at91bootstrap3: fix
- checksum of license
-Message-ID: <20210317191335.3B24C8820D@busybox.osuosl.org>
+Date: Wed, 17 Mar 2021 20:11:11 +0100
+Subject: [Buildroot] [git commit branch/2021.02.x] package/lttng-libust: set
+ rundir to /run/lttng unconditionally
+Message-ID: <20210317191335.6AAEA7F87B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a42fd4f7b9f6cec5daaedff178090c35afcc70ef
+commit: https://git.buildroot.net/buildroot/commit/?id=940406722263555f698eb1d9cb58a27270e61a0e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Commit ca1604388a86d73c548c6e65eadd13f424685838 updated the checksum of
-the tarball, but failed to update the one of main.c, which serves as a
-license file.
+Buildroot ensures that all init-systems have a /run directory,
+this should be the preferred location.
 
-Signed-off-by: Edgar Bonet <bonet@grenoble.cnrs.fr>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 71088383869f761e54280d41d844e146da9569b6)
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 52912b2cb0112cff94fbe36f367ad5e5d24b139c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/at91bootstrap3/at91bootstrap3.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/lttng-libust/lttng-libust.mk | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/boot/at91bootstrap3/at91bootstrap3.hash b/boot/at91bootstrap3/at91bootstrap3.hash
-index 6671a4ac70..6b6257b0ab 100644
---- a/boot/at91bootstrap3/at91bootstrap3.hash
-+++ b/boot/at91bootstrap3/at91bootstrap3.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
- sha256  dd6a3c57c1c84fc3b18187bee3d139146a0e032dd1d8edea7b242730e0bc4fe1  at91bootstrap3-v3.9.3.tar.gz
--sha256  732b2a55b5905031d8ae420136ffb5f8889214865784386bf754cffab8d2bc6e  main.c
-+sha256  fd7a1ce5719bb7abf5e289da2e0ea8c933af3ba0f6ad03dbdbd2b7f54a77498a  main.c
+diff --git a/package/lttng-libust/lttng-libust.mk b/package/lttng-libust/lttng-libust.mk
+index f3c660c56f..2d52fa6e0f 100644
+--- a/package/lttng-libust/lttng-libust.mk
++++ b/package/lttng-libust/lttng-libust.mk
+@@ -11,11 +11,10 @@ LTTNG_LIBUST_LICENSE = LGPL-2.1, MIT (system headers), GPL-2.0 (liblttng-ust-ctl
+ LTTNG_LIBUST_LICENSE_FILES = COPYING
+ LTTNG_LIBUST_INSTALL_STAGING = YES
+ LTTNG_LIBUST_DEPENDENCIES = liburcu util-linux
+-LTTNG_LIBUST_CONF_OPTS += --disable-man-pages --disable-examples
+-
+-ifeq ($(BR2_INIT_SYSTEMD),y)
+-LTTNG_LIBUST_CONF_OPTS += --with-lttng-system-rundir=/run/lttng
+-endif
++LTTNG_LIBUST_CONF_OPTS = \
++	--disable-man-pages \
++	--disable-examples \
++	--with-lttng-system-rundir=/run/lttng
+ 
+ ifeq ($(BR2_PACKAGE_PYTHON),y)
+ LTTNG_LIBUST_DEPENDENCIES += python
