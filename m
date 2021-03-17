@@ -1,65 +1,42 @@
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Wed, 17 Mar 2021 17:57:07 +0100
-Subject: [Buildroot] [PATCH v2 3/6] toolchain: introduce
- BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27100
-In-Reply-To: <20210314230544.20b9191f@windsurf.home>
-References: <20210310091453.23611-1-giulio.benetti@benettiengineering.com>
- <20210310091453.23611-4-giulio.benetti@benettiengineering.com>
- <20210314230544.20b9191f@windsurf.home>
-Message-ID: <14e8fc61-c8bb-a97b-84d3-2394f1db03a9@benettiengineering.com>
+Date: Wed, 17 Mar 2021 18:00:32 +0100
+Subject: [Buildroot] [PATCH v2] package/libcamera: disable package affected
+ by binutils bug 27597
+In-Reply-To: <20210317174530.15bd89ac@windsurf.home>
+References: <20210317174530.15bd89ac@windsurf.home>
+Message-ID: <20210317170032.1944665-1-giulio.benetti@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+This package is affected by binutils bug 27597 and no work around has
+been found, so let's disable it if
+BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597=y.
 
-On 3/14/21 11:05 PM, Thomas Petazzoni wrote:
-> On Wed, 10 Mar 2021 10:14:50 +0100
-> Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
-> 
->> On OpenRisc binutils it still present ld bug 27100 leading to a package
->> openal to fail building:
->> http://autobuild.buildroot.net/results/c05/c053b9e191b31f0b1f8f8c902b602e187f714dc0/
->>
->> The bug was already reported and it's been updated:
->> https://sourceware.org/bugzilla/show_bug.cgi?id=27100
-> 
-> How do you know it is this bug? The "final link failed: bad value"
-> message is pretty generic. 
+Fixes:
+http://autobuild.buildroot.net/results/8ac/8ac599392f773eecff4773393ef0d0232a22f372/
 
-You're right, that is not the entire message, it's:
-'''
-/home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld: 
-CMakeFiles/OpenAL.dir/al/source.cpp.o: pc-relative relocation against 
-dynamic symbol alSourcePlayv
-/home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld: 
-final link failed: bad value
-'''
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+V1->V2:
+* move BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597 under BR2_PACKAGE_LIBCAMERA_ARCH_SUPPORTS
+---
+ package/libcamera/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-and that a package's issue. I think I've added by mistake openal failure 
-as a test-case but it's not.
-
->Did you actually check that those issues no
-> longer appear with binutils 2.36 ?
->> +# https://sourceware.org/bugzilla/show_bug.cgi?id=27100
->> +# Affect toolchains built with binutils 2.33.1 (fixed in binutils 2.36)
->> +config BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27100
->> +	bool
->> +	default y if BR2_or1k && !BR2_BINUTILS_VERSION_2_36_X
-> 
-> Obviously, an annoying problem is that the BR2_BINUTILS_VERSION_2_36_X
-> part of the condition does not take into account external toolchains.
-> So for external toolchains that have binutils >= 2.36, we still won't
-> be able to build those packages.
-> 
-> But oh well, for something like OpenRISC, this is perhaps an acceptable
-> trade-off.
-> 
-> Thomas
-> 
-
+diff --git a/package/libcamera/Config.in b/package/libcamera/Config.in
+index b9c243084e..92c17df849 100644
+--- a/package/libcamera/Config.in
++++ b/package/libcamera/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_LIBCAMERA_ARCH_SUPPORTS
+ 	default y
+ 	# Invalid packing size of ControlValue struct on m68k
+ 	depends on !BR2_m68k
++	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27597
+ 
+ menuconfig BR2_PACKAGE_LIBCAMERA
+ 	bool "libcamera"
 -- 
-Giulio Benetti
-Benetti Engineering sas
+2.25.1
