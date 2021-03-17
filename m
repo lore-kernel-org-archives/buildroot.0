@@ -1,24 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 17 Mar 2021 20:11:35 +0100
-Subject: [Buildroot] [PATCH 4/4] package/lttng-tools: set rundir to
- /run/lttng unconditionally
-In-Reply-To: <20210224103154.174602-4-nolange79@gmail.com> (Norbert Lange's
- message of "Wed, 24 Feb 2021 11:31:53 +0100")
-References: <20210224103154.174602-1-nolange79@gmail.com>
- <20210224103154.174602-4-nolange79@gmail.com>
-Message-ID: <87lfalwq6w.fsf@dell.be.48ers.dk>
+Date: Wed, 17 Mar 2021 20:22:56 +0100
+Subject: [Buildroot] [PATCH] toolchain: disable gcc bug 60620 if gcc
+ version >= 10.x
+In-Reply-To: <20210305154139.3682817-1-giulio.benetti@benettiengineering.com>
+ (Giulio Benetti's message of "Fri, 5 Mar 2021 16:41:39 +0100")
+References: <20210305154139.3682817-1-giulio.benetti@benettiengineering.com>
+Message-ID: <87h7l9wpnz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Norbert" == Norbert Lange <nolange79@gmail.com> writes:
+>>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
 
- > Buildroot ensures that all init-systems have a /run directory,
- > this should be the preferred location.
+ > Since gcc version 10.x bug 60620 doesn't show anymore, so let's make it
+ > enabled up to versino 10.x excluded.
 
- > Signed-off-by: Norbert Lange <nolange79@gmail.com>
+ > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
 Committed to 2021.02.x, thanks.
 
