@@ -1,42 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 17 Mar 2021 20:14:53 +0100
-Subject: [Buildroot] [git commit branch/2021.02.x] toolchain: disable gcc
- bug 60620 if gcc version >= 10.x
-Message-ID: <20210317191335.787328820D@busybox.osuosl.org>
+Date: Wed, 17 Mar 2021 20:06:04 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/optee-test: add
+ deps on openssl when enabled
+Message-ID: <20210317191341.9223B7FFFE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f204c7ab9e120d4a2e38fd7736d76bd980fd288c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=501de136b4d42abe67e3f3d39e1a0a2666fa4480
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-Since gcc version 10.x bug 60620 doesn't show anymore, so let's make it
-enabled up to versino 10.x excluded.
+Add a dependency on openssl upon BR2_PACKAGE_LIBOPENSSL=y to
+enable some for OP-TEE embedded tests.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Building with libressl makes the optee-test test tool fail on a
+certificate test; so we explicitly depend on libopenssl.
+
+Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+[yann.morin.1998 at free.fr:
+  - match the depenency to libopenssl, since that's is what is used in
+    the condition (BR2_PACKAGE_LIBOPENSSL)
+  - add a blurb to explain why libopenssl is used, not the virutal
+    openssl
+]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit d8e6179807bdfc89608a037e31c0dcc43382bcb0)
+(cherry picked from commit b2821ca786f31066eaab4687607fbcfec268c36f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- toolchain/Config.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/optee-test/optee-test.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index fdc0f9ba59..2a7b7ea554 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -154,10 +154,11 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_85862
+diff --git a/package/optee-test/optee-test.mk b/package/optee-test/optee-test.mk
+index 1f4f586672..f7e4cb3b99 100644
+--- a/package/optee-test/optee-test.mk
++++ b/package/optee-test/optee-test.mk
+@@ -11,6 +11,10 @@ OPTEE_TEST_LICENSE_FILES = LICENSE.md
  
- # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=90620
- # ICE: in do_output_reload, at reload1.c:7978 on microblaze.
--# It's still not fixed in gcc 9.x
-+# This bug no longer exists in gcc 10.x
- config BR2_TOOLCHAIN_HAS_GCC_BUG_90620
- 	bool
- 	default y if BR2_microblaze
-+	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_10
+ OPTEE_TEST_DEPENDENCIES = optee-client optee-os
  
- # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=93847
- # ICE: compiler error: Segmentation fault on Nios II. This bug
++ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
++OPTEE_TEST_DEPENDENCIES += libopenssl
++endif
++
+ OPTEE_TEST_CONF_OPTS = -DOPTEE_TEST_SDK=$(OPTEE_OS_SDK)
+ 
+ # Trusted Application are not built from CMake due to ta_dev_kit
