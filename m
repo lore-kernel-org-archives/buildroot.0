@@ -1,142 +1,154 @@
 From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Thu, 18 Mar 2021 07:28:49 +0900
-Subject: [Buildroot] [PATCH 4/4] Rename custom kernel config fragment files
- to *.config
-In-Reply-To: <20210317222849.1658538-1-masahiroy@kernel.org>
-References: <20210317222849.1658538-1-masahiroy@kernel.org>
-Message-ID: <20210317222849.1658538-4-masahiroy@kernel.org>
+Date: Thu, 18 Mar 2021 07:28:46 +0900
+Subject: [Buildroot] [PATCH 1/4] qemu_arm_versatile: switch to in-kernel
+ defconfig + fragment
+Message-ID: <20210317222849.1658538-1-masahiroy@kernel.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-There is no consistency in file names for
-BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES. Some are suffiex with ".config",
-and some with ".config.fragment".
+This platform has its own kernel defconfig in Buildroot, but we cannot
+get quick idea about how much it diverged from the in-kernel defconfig.
 
-Rename *.config.fragment to *.config because this is the convention in the
-upstream Linux kernel.
+Let's use the upstream arch/arm/config/versatile_defconfig as a base,
+and maintain the diff as a merge-config fragment. The same .config is
+still generated based on the 5.10.7 kernel.
 
-I used the following shell script for the conversion:
-
-for f in $(find configs -name '*_defconfig')
-do
-	old_name=$(sed -n 's/BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="\(.*\.config.fragment\)"/\1/p' $f)
-	if [ -n "$old_name" ]; then
-		new_name=${old_name%.fragment}
-		if [ -e "$old_name" ]; then
-			git mv $old_name $new_name
-		fi
-		sed -i 's:="'$old_name'":="'$new_name'":' $f
-	fi
-done
+The diff is quite big, but this is a good start-point for cleanups.
+Follow-up works can drop diff lines unless we find a good reason for
+divergence.
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
 
- .../csky/{linux-ck610.config.fragment => linux-ck610.config}    | 0
- .../csky/{linux-ck807.config.fragment => linux-ck807.config}    | 0
- .../csky/{linux-ck810.config.fragment => linux-ck810.config}    | 0
- .../csky/{linux-ck860.config.fragment => linux-ck860.config}    | 0
- .../hifive-unleashed/{linux.config.fragment => linux.config}    | 0
- configs/csky_gx6605s_defconfig                                  | 2 +-
- configs/hifive_unleashed_defconfig                              | 2 +-
- configs/qemu_csky610_virt_defconfig                             | 2 +-
- configs/qemu_csky807_virt_defconfig                             | 2 +-
- configs/qemu_csky810_virt_defconfig                             | 2 +-
- configs/qemu_csky860_virt_defconfig                             | 2 +-
- 11 files changed, 6 insertions(+), 6 deletions(-)
- rename board/qemu/csky/{linux-ck610.config.fragment => linux-ck610.config} (100%)
- rename board/qemu/csky/{linux-ck807.config.fragment => linux-ck807.config} (100%)
- rename board/qemu/csky/{linux-ck810.config.fragment => linux-ck810.config} (100%)
- rename board/qemu/csky/{linux-ck860.config.fragment => linux-ck860.config} (100%)
- rename board/sifive/hifive-unleashed/{linux.config.fragment => linux.config} (100%)
+ board/qemu/arm-versatile/linux.config | 97 +++++++++++++++++----------
+ configs/qemu_arm_versatile_defconfig  |  4 +-
+ 2 files changed, 62 insertions(+), 39 deletions(-)
 
-diff --git a/board/qemu/csky/linux-ck610.config.fragment b/board/qemu/csky/linux-ck610.config
-similarity index 100%
-rename from board/qemu/csky/linux-ck610.config.fragment
-rename to board/qemu/csky/linux-ck610.config
-diff --git a/board/qemu/csky/linux-ck807.config.fragment b/board/qemu/csky/linux-ck807.config
-similarity index 100%
-rename from board/qemu/csky/linux-ck807.config.fragment
-rename to board/qemu/csky/linux-ck807.config
-diff --git a/board/qemu/csky/linux-ck810.config.fragment b/board/qemu/csky/linux-ck810.config
-similarity index 100%
-rename from board/qemu/csky/linux-ck810.config.fragment
-rename to board/qemu/csky/linux-ck810.config
-diff --git a/board/qemu/csky/linux-ck860.config.fragment b/board/qemu/csky/linux-ck860.config
-similarity index 100%
-rename from board/qemu/csky/linux-ck860.config.fragment
-rename to board/qemu/csky/linux-ck860.config
-diff --git a/board/sifive/hifive-unleashed/linux.config.fragment b/board/sifive/hifive-unleashed/linux.config
-similarity index 100%
-rename from board/sifive/hifive-unleashed/linux.config.fragment
-rename to board/sifive/hifive-unleashed/linux.config
-diff --git a/configs/csky_gx6605s_defconfig b/configs/csky_gx6605s_defconfig
-index f1f9579dca..1f467f8934 100644
---- a/configs/csky_gx6605s_defconfig
-+++ b/configs/csky_gx6605s_defconfig
-@@ -14,6 +14,6 @@ BR2_LINUX_KERNEL=y
+diff --git a/board/qemu/arm-versatile/linux.config b/board/qemu/arm-versatile/linux.config
+index b1001d84a7..0aed558315 100644
+--- a/board/qemu/arm-versatile/linux.config
++++ b/board/qemu/arm-versatile/linux.config
+@@ -1,43 +1,66 @@
+-CONFIG_SYSVIPC=y
+-CONFIG_MODULES=y
+-CONFIG_MODULE_UNLOAD=y
+-# CONFIG_ARCH_MULTI_V7 is not set
+-CONFIG_ARCH_VERSATILE=y
++# CONFIG_BLK_DEV_INITRD is not set
++# CONFIG_BLK_DEV_RAM is not set
++# CONFIG_CMA is not set
++# CONFIG_CRAMFS is not set
++CONFIG_CMDLINE=""
++CONFIG_CRC16=y
++CONFIG_CRYPTO=y
++# CONFIG_DEBUG_FS is not set
++# CONFIG_DEBUG_KERNEL is not set
++# CONFIG_DEBUG_USER is not set
++CONFIG_DEVTMPFS=y
++# CONFIG_DRM is not set
++# CONFIG_EEPROM_LEGACY is not set
++# CONFIG_EXT2_FS is not set
++CONFIG_EXT4_FS=y
++CONFIG_FB_ARMCLCD=y
++# CONFIG_FONTS is not set
++CONFIG_FONT_8x16=y
++CONFIG_FONT_8x8=y
++# CONFIG_FRAMEBUFFER_CONSOLE_DETECT_PRIMARY is not set
++# CONFIG_FTRACE is not set
++# CONFIG_GPIOLIB is not set
++# CONFIG_HIGH_RES_TIMERS is not set
++CONFIG_HWMON=y
++CONFIG_HZ_PERIODIC=y
++# CONFIG_I2C_VERSATILE is not set
++CONFIG_INET_DIAG=y
++CONFIG_INPUT_EVDEV=y
++CONFIG_IPV6=y
++# CONFIG_IP_MULTICAST is not set
++# CONFIG_IP_PNP is not set
++CONFIG_LOCALVERSION_AUTO=y
++# CONFIG_LOGO is not set
++CONFIG_LOG_BUF_SHIFT=17
++CONFIG_MDIO_DEVICE=y
++# CONFIG_MINIX_FS is not set
++# CONFIG_MMC is not set
++# CONFIG_MTD is not set
++# CONFIG_NEW_LEDS is not set
++# CONFIG_NFSD is not set
++# CONFIG_NFS_FS is not set
++# CONFIG_NLS_CODEPAGE_850 is not set
++# CONFIG_NLS_ISO8859_1 is not set
++# CONFIG_NO_HZ_IDLE is not set
++# CONFIG_NVMEM is not set
++# CONFIG_OABI_COMPAT is not set
++# CONFIG_PARTITION_ADVANCED is not set
+ CONFIG_PCI=y
+ CONFIG_PCI_VERSATILE=y
+-CONFIG_AEABI=y
+-CONFIG_NET=y
+-CONFIG_PACKET=y
+-CONFIG_UNIX=y
+-CONFIG_INET=y
++CONFIG_PHYLIB=y
++# CONFIG_ROMFS_FS is not set
++# CONFIG_RTC_CLASS is not set
+ CONFIG_SCSI=y
+-CONFIG_BLK_DEV_SD=y
++CONFIG_SCSI_SPI_ATTRS=y
+ CONFIG_SCSI_SYM53C8XX_2=y
+-CONFIG_NETDEVICES=y
+-CONFIG_8139CP=y
+-CONFIG_PHYLIB=y
+-CONFIG_INPUT_EVDEV=y
+-CONFIG_SERIO_AMBAKMI=y
+-CONFIG_LEGACY_PTY_COUNT=16
+-CONFIG_SERIAL_8250=m
+-CONFIG_SERIAL_8250_EXTENDED=y
+-CONFIG_SERIAL_8250_MANY_PORTS=y
+-CONFIG_SERIAL_8250_SHARE_IRQ=y
+-CONFIG_SERIAL_8250_RSA=y
+-CONFIG_SERIAL_AMBA_PL011=y
+-CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
+-CONFIG_I2C=y
+-CONFIG_I2C_CHARDEV=m
+-CONFIG_FB=y
+-CONFIG_FB_ARMCLCD=y
+-CONFIG_FRAMEBUFFER_CONSOLE=y
+-CONFIG_SOUND=y
+-CONFIG_SND=m
+-CONFIG_SND_MIXER_OSS=m
+-CONFIG_SND_PCM_OSS=m
+-CONFIG_SND_ARMAACI=m
+-CONFIG_EXT4_FS=y
+-CONFIG_VFAT_FS=m
++CONFIG_SERIO_SERPORT=y
++CONFIG_SLUB=y
++# CONFIG_SPI is not set
++# CONFIG_SYNC_FILE is not set
+ CONFIG_TMPFS=y
+ CONFIG_TMPFS_POSIX_ACL=y
+-CONFIG_MAGIC_SYSRQ=y
++CONFIG_TMPFS_XATTR=y
++# CONFIG_VFP is not set
++# CONFIG_XZ_DEC is not set
++CONFIG_8139CP=y
++CONFIG_BLK_DEV_SD=y
+diff --git a/configs/qemu_arm_versatile_defconfig b/configs/qemu_arm_versatile_defconfig
+index 10dd9e52b4..0abba4772e 100644
+--- a/configs/qemu_arm_versatile_defconfig
++++ b/configs/qemu_arm_versatile_defconfig
+@@ -21,8 +21,8 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ BR2_LINUX_KERNEL=y
  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0.12"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
--BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/csky/linux-ck610.config.fragment"
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/csky/linux-ck610.config"
+ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.7"
+-BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/arm-versatile/linux.config"
++BR2_LINUX_KERNEL_DEFCONFIG="versatile"
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/arm-versatile/linux.config"
  BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="board/csky/gx6605s/gx6605s.dts"
-diff --git a/configs/hifive_unleashed_defconfig b/configs/hifive_unleashed_defconfig
-index 0b87f2588f..430746c4d3 100644
---- a/configs/hifive_unleashed_defconfig
-+++ b/configs/hifive_unleashed_defconfig
-@@ -29,7 +29,7 @@ BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
--BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/sifive/hifive-unleashed/linux.config.fragment"
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/sifive/hifive-unleashed/linux.config"
- BR2_LINUX_KERNEL_IMAGE=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="sifive/hifive-unleashed-a00"
-diff --git a/configs/qemu_csky610_virt_defconfig b/configs/qemu_csky610_virt_defconfig
-index e7d75f5f49..e6df36a638 100644
---- a/configs/qemu_csky610_virt_defconfig
-+++ b/configs/qemu_csky610_virt_defconfig
-@@ -17,4 +17,4 @@ BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0.12"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
--BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/csky/linux-ck610.config.fragment"
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/csky/linux-ck610.config"
-diff --git a/configs/qemu_csky807_virt_defconfig b/configs/qemu_csky807_virt_defconfig
-index df12450a55..fb00fe5c5f 100644
---- a/configs/qemu_csky807_virt_defconfig
-+++ b/configs/qemu_csky807_virt_defconfig
-@@ -17,4 +17,4 @@ BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0.12"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
--BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/csky/linux-ck807.config.fragment"
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/csky/linux-ck807.config"
-diff --git a/configs/qemu_csky810_virt_defconfig b/configs/qemu_csky810_virt_defconfig
-index dd1fd329f5..e5d3a6d230 100644
---- a/configs/qemu_csky810_virt_defconfig
-+++ b/configs/qemu_csky810_virt_defconfig
-@@ -17,4 +17,4 @@ BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0.12"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
--BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/csky/linux-ck810.config.fragment"
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/csky/linux-ck810.config"
-diff --git a/configs/qemu_csky860_virt_defconfig b/configs/qemu_csky860_virt_defconfig
-index 6edfba4e8e..4324cc2166 100644
---- a/configs/qemu_csky860_virt_defconfig
-+++ b/configs/qemu_csky860_virt_defconfig
-@@ -17,4 +17,4 @@ BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0.12"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
--BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/csky/linux-ck860.config.fragment"
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/csky/linux-ck860.config"
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="versatile-pb"
+ 
 -- 
 2.27.0
