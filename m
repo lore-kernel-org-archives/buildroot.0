@@ -1,46 +1,73 @@
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Wed, 17 Mar 2021 18:01:29 +0100
-Subject: [Buildroot] [PATCH v2 4/6] package/openal: disable package if
- binutils is affected from bug 27100
-In-Reply-To: <20210314230712.13207ad0@windsurf.home>
+Date: Wed, 17 Mar 2021 18:02:31 +0100
+Subject: [Buildroot] [PATCH v2 3/6] toolchain: introduce
+ BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27100
+In-Reply-To: <14e8fc61-c8bb-a97b-84d3-2394f1db03a9@benettiengineering.com>
 References: <20210310091453.23611-1-giulio.benetti@benettiengineering.com>
- <20210310091453.23611-5-giulio.benetti@benettiengineering.com>
- <20210314230712.13207ad0@windsurf.home>
-Message-ID: <c30e0bdf-8afe-4076-ff54-e6a368bc8214@benettiengineering.com>
+ <20210310091453.23611-4-giulio.benetti@benettiengineering.com>
+ <20210314230544.20b9191f@windsurf.home>
+ <14e8fc61-c8bb-a97b-84d3-2394f1db03a9@benettiengineering.com>
+Message-ID: <6800c174-f1ac-069b-2af9-6cf94ebba8f7@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+And since only openal package seemed to be "affected by this bug", 
+please drop this patch.
 
-following previous e-mail about bug 27100, this is not a binutils bug, 
-it's a package link failure. So please drop this patch. Thank you
-
+Thank you!
+Kind regards
 -- 
 Giulio Benetti
 Benetti Engineering sas
 
-On 3/14/21 11:07 PM, Thomas Petazzoni wrote:
-> On Wed, 10 Mar 2021 10:14:51 +0100
-> Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+On 3/17/21 5:57 PM, Giulio Benetti wrote:
+> Hi Thomas,
 > 
->> This package is affected from binutils bug 21464, since there is no
+> On 3/14/21 11:05 PM, Thomas Petazzoni wrote:
+>> On Wed, 10 Mar 2021 10:14:50 +0100
+>> Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+>>
+>>> On OpenRisc binutils it still present ld bug 27100 leading to a package
+>>> openal to fail building:
+>>> http://autobuild.buildroot.net/results/c05/c053b9e191b31f0b1f8f8c902b602e187f714dc0/
+>>>
+>>> The bug was already reported and it's been updated:
+>>> https://sourceware.org/bugzilla/show_bug.cgi?id=27100
+>>
+>> How do you know it is this bug? The "final link failed: bad value"
+>> message is pretty generic.
 > 
-> You're using the BUG_27100 condition, not 21464.
+> You're right, that is not the entire message, it's:
+> '''
+> /home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld:
+> CMakeFiles/OpenAL.dir/al/source.cpp.o: pc-relative relocation against
+> dynamic symbol alSourcePlayv
+> /home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld:
+> final link failed: bad value
+> '''
 > 
->> diff --git a/package/openal/Config.in b/package/openal/Config.in
->> index 6b0e9973db..def95222de 100644
->> --- a/package/openal/Config.in
->> +++ b/package/openal/Config.in
->> @@ -19,6 +19,7 @@ config BR2_PACKAGE_OPENAL
->>   	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11 PR56019
->>   	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
->>   	depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS
->> +	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27100
+> and that a package's issue. I think I've added by mistake openal failure
+> as a test-case but it's not.
 > 
-> What about all the things that select BR2_PACKAGE_OPENAL ?
-> 
-> Thomas
+>> Did you actually check that those issues no
+>> longer appear with binutils 2.36 ?
+>>> +# https://sourceware.org/bugzilla/show_bug.cgi?id=27100
+>>> +# Affect toolchains built with binutils 2.33.1 (fixed in binutils 2.36)
+>>> +config BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27100
+>>> +	bool
+>>> +	default y if BR2_or1k && !BR2_BINUTILS_VERSION_2_36_X
+>>
+>> Obviously, an annoying problem is that the BR2_BINUTILS_VERSION_2_36_X
+>> part of the condition does not take into account external toolchains.
+>> So for external toolchains that have binutils >= 2.36, we still won't
+>> be able to build those packages.
+>>
+>> But oh well, for something like OpenRISC, this is perhaps an acceptable
+>> trade-off.
+>>
+>> Thomas
+>>
 > 
