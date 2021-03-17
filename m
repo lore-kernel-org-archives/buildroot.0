@@ -1,73 +1,45 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Wed, 17 Mar 2021 18:02:31 +0100
-Subject: [Buildroot] [PATCH v2 3/6] toolchain: introduce
- BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27100
-In-Reply-To: <14e8fc61-c8bb-a97b-84d3-2394f1db03a9@benettiengineering.com>
-References: <20210310091453.23611-1-giulio.benetti@benettiengineering.com>
- <20210310091453.23611-4-giulio.benetti@benettiengineering.com>
- <20210314230544.20b9191f@windsurf.home>
- <14e8fc61-c8bb-a97b-84d3-2394f1db03a9@benettiengineering.com>
-Message-ID: <6800c174-f1ac-069b-2af9-6cf94ebba8f7@benettiengineering.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 17 Mar 2021 18:20:13 +0100
+Subject: [Buildroot] [PATCH 1/1] package/haproxy: bump to version 2.2.10
+Message-ID: <20210317172013.3863309-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-And since only openal package seemed to be "affected by this bug", 
-please drop this patch.
+https://www.mail-archive.com/haproxy at formilux.org/msg39916.html
 
-Thank you!
-Kind regards
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/haproxy/haproxy.hash | 4 ++--
+ package/haproxy/haproxy.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
+index 956949275e..04cb2e3c06 100644
+--- a/package/haproxy/haproxy.hash
++++ b/package/haproxy/haproxy.hash
+@@ -1,5 +1,5 @@
+-# From: http://www.haproxy.org/download/2.2/src/haproxy-2.2.9.tar.gz.sha256
+-sha256  21680459b08b9ba21c8cc9f5dbd0ee6e1842f57a3a67f87179871e1c13ebd4e3  haproxy-2.2.9.tar.gz
++# From: http://www.haproxy.org/download/2.2/src/haproxy-2.2.10.tar.gz.sha256
++sha256  a027e9cd8f703ba48dc193f5ae34d9aa152221f67ab58a4e939c96b9f4edd3bc  haproxy-2.2.10.tar.gz
+ # Locally computed:
+ sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
+ sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
+diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
+index 45c62f7c21..03c872e6b2 100644
+--- a/package/haproxy/haproxy.mk
++++ b/package/haproxy/haproxy.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ HAPROXY_VERSION_MAJOR = 2.2
+-HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).9
++HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).10
+ HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
+ HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
+ HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
 -- 
-Giulio Benetti
-Benetti Engineering sas
-
-On 3/17/21 5:57 PM, Giulio Benetti wrote:
-> Hi Thomas,
-> 
-> On 3/14/21 11:05 PM, Thomas Petazzoni wrote:
->> On Wed, 10 Mar 2021 10:14:50 +0100
->> Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
->>
->>> On OpenRisc binutils it still present ld bug 27100 leading to a package
->>> openal to fail building:
->>> http://autobuild.buildroot.net/results/c05/c053b9e191b31f0b1f8f8c902b602e187f714dc0/
->>>
->>> The bug was already reported and it's been updated:
->>> https://sourceware.org/bugzilla/show_bug.cgi?id=27100
->>
->> How do you know it is this bug? The "final link failed: bad value"
->> message is pretty generic.
-> 
-> You're right, that is not the entire message, it's:
-> '''
-> /home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld:
-> CMakeFiles/OpenAL.dir/al/source.cpp.o: pc-relative relocation against
-> dynamic symbol alSourcePlayv
-> /home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/or1k-buildroot-linux-uclibc/9.3.0/../../../../or1k-buildroot-linux-uclibc/bin/ld:
-> final link failed: bad value
-> '''
-> 
-> and that a package's issue. I think I've added by mistake openal failure
-> as a test-case but it's not.
-> 
->> Did you actually check that those issues no
->> longer appear with binutils 2.36 ?
->>> +# https://sourceware.org/bugzilla/show_bug.cgi?id=27100
->>> +# Affect toolchains built with binutils 2.33.1 (fixed in binutils 2.36)
->>> +config BR2_TOOLCHAIN_HAS_BINUTILS_BUG_27100
->>> +	bool
->>> +	default y if BR2_or1k && !BR2_BINUTILS_VERSION_2_36_X
->>
->> Obviously, an annoying problem is that the BR2_BINUTILS_VERSION_2_36_X
->> part of the condition does not take into account external toolchains.
->> So for external toolchains that have binutils >= 2.36, we still won't
->> be able to build those packages.
->>
->> But oh well, for something like OpenRISC, this is perhaps an acceptable
->> trade-off.
->>
->> Thomas
->>
-> 
+2.30.1
