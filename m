@@ -1,131 +1,125 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 17 Mar 2021 10:27:22 -0000
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for 2021-03-16
-Message-ID: <20210317102727.46BC84EDBD@smtp4.osuosl.org>
+From: Yann Cardaillac <ycardaillac@sepro-group.com>
+Date: Wed, 17 Mar 2021 11:33:47 +0100 (CET)
+Subject: [Buildroot] [PATCH] package/open62541: cleanup tools files
+ after installation
+In-Reply-To: <20210316231640.3c3e5b54@windsurf.home>
+References: <20210220162715.283519-1-fancp2007@gmail.com>
+ <20210222053953.583102-1-fancp2007@gmail.com>
+ <20210316231640.3c3e5b54@windsurf.home>
+Message-ID: <1544624036.3211054.1615977227946.JavaMail.zimbra@sepro-group.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Thomas, Scott,
+
+We didn't really used open6241 yet, so we did not really go further with the integration.
+
+However I've just built the package in buildroot mainline, here's the size of output/target/usr/share/open62541/ :
+
+$ du -h output/target/usr/share/open62541/
+20K     output/target/usr/share/open62541/tools/certs
+1,1M    output/target/usr/share/open62541/tools/schema
+2,4M    output/target/usr/share/open62541/tools/ua-nodeset/MTConnect
+988K    output/target/usr/share/open62541/tools/ua-nodeset/TMC
+228K    output/target/usr/share/open62541/tools/ua-nodeset/ISA-95
+3,1M    output/target/usr/share/open62541/tools/ua-nodeset/FDI
+1,2M    output/target/usr/share/open62541/tools/ua-nodeset/GDS
+3,3M    output/target/usr/share/open62541/tools/ua-nodeset/ADI
+24K     output/target/usr/share/open62541/tools/ua-nodeset/CSPPlusForMachine
+2,6M    output/target/usr/share/open62541/tools/ua-nodeset/AnsiC
+31M     output/target/usr/share/open62541/tools/ua-nodeset/Schema
+2,9M    output/target/usr/share/open62541/tools/ua-nodeset/POWERLINK
+192K    output/target/usr/share/open62541/tools/ua-nodeset/Sercos
+880K    output/target/usr/share/open62541/tools/ua-nodeset/DotNet
+276K    output/target/usr/share/open62541/tools/ua-nodeset/PLCopen
+1016K   output/target/usr/share/open62541/tools/ua-nodeset/DI
+824K    output/target/usr/share/open62541/tools/ua-nodeset/MDIS
+51M     output/target/usr/share/open62541/tools/ua-nodeset
+160K    output/target/usr/share/open62541/tools/nodeset_compiler
+52M     output/target/usr/share/open62541/tools
+52M     output/target/usr/share/open62541/
+
+To be honnest I don't really know what those are for, from my point of view the only people that can answer that question would be open62541 devs.
+
+In ua-nodeset we can find some .cs, .csv, .xml, .uanodes, .bsd, .xsd, .h, .wsdl, .c ... I would agree on the fact that most of them are probably useless, but I can't give you strong insight on this.
+
+I've added Julius Pfrommer that is one of the biggest contributor to open62541 in the hope that he could give us some advice. 
+
+Best regards,
+
+Yann CARDAILLAC 
+Ing?nieur d?veloppement logiciel 
+SEPRO Robotique - 88 Rue Henry Bessemer - Zone Ajoncs Ouest - CS 10084 - 85003 La Roche sur Yon Cedex (France) 
+
+[ http://www.sepro-group.com/fr | www.sepro-group.com ] | [ https://twitter.com/seprogroup | 
+
+                @SeproGroup
+             ]
+
+----- Mail original -----
+De: "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
+?: "Scott Fan" <fancp2007@gmail.com>, "Yann Cardaillac" <ycardaillac@sepro-group.com>
+Cc: buildroot at buildroot.org
+Envoy?: Mardi 16 Mars 2021 23:16:40
+Objet: Re: [Buildroot] [PATCH] package/open62541: cleanup tools files after installation
+
 Hello,
 
-Autobuild statistics for 2021-03-16
-===================================
+Thanks for the patch. Yann, since you contributed this package, could
+you give your opinion on this? It is quite important, as 52 MiB on the
+target is really huge.
 
-      branch |  OK | NOK | TIM | TOT |
-  2020.02.x  |  7  |  1  |  0  |  8  |
-  2020.11.x  | 10  |  1  |  0  | 11  |
-  2021.02.x  | 23  |  2  |  0  | 25  |
-    master   | 94  | 30  |  0  | 124 |
+Thanks a lot,
 
-Classification of failures by reason for master
------------------------------------------------
+Thomas
 
-        host-sentry-cli-1.57.0 | 4 
-                 siproxd-0.8.3 | 3 
-              syslog-ng-3.30.1 | 3 
-               apcupsd-3.14.14 | 2 
-                    xen-4.14.1 | 2 
-                  botan-2.17.3 | 1 
-                     efivar-37 | 1 
-  gobject-introspection-1.64.1 | 1 
-kvm-unit-tests-kvm-unit-tes... | 1 
-              libxcrypt-4.4.18 | 1 
-                 mesa3d-20.3.4 | 1 
-                  monkey-1.6.9 | 1 
-                mono-6.12.0.90 | 1 
-                 pixman-0.40.0 | 1 
-       python-rpi-ws281x-4.2.6 | 1 
-                rocksdb-6.13.3 | 1 
-                 rt-tests-1.10 | 1 
-                       unknown | 1 
-                    unscd-0.54 | 1 
-               waylandpp-0.2.8 | 1 
-                  zeromq-4.3.4 | 1 
+On Mon, 22 Feb 2021 13:39:52 +0800
+Scott Fan <fancp2007@gmail.com> wrote:
 
-
-Detail of failures for master
------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-   sparc     |        apcupsd-3.14.14         | NOK | http://autobuild.buildroot.net/results/11eae0999c91acc9bffc902058cafbc64f93cd27 |     
-   sparc     |        apcupsd-3.14.14         | NOK | http://autobuild.buildroot.net/results/f3bebbc2ee2b88d8b5651f9f82b2e27122f4a05a |     
-  riscv32    |          botan-2.17.3          | NOK | http://autobuild.buildroot.net/results/28c952e2be85ec13b5793f95dc784bc8de1abbde | ORPH
-   x86_64    |           efivar-37            | NOK | http://autobuild.buildroot.net/results/f5bdcdca3298f9b1864d5878986d03aa267d161b |     
-   s390x     |  gobject-introspection-1.64.1  | NOK | http://autobuild.buildroot.net/results/12e3b95d9995a48f91bf2db1bcc4ac4bc29276ad | ORPH
-    arm      |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/294b892b04c654b59a3c84572d562b4d3add8bc3 |     
-microblazeel |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/2fa5294d5f381749dd6b202e155e019d9df6c83a |     
- aarch64_be  |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/d35e0d1fb8fd89963140047fdb3dae9db3670770 |     
-    i686     |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/ced2809e886e4d2a67c3bf8cc1f038f8c9d07a64 |     
- powerpc64   | kvm-unit-tests-kvm-unit-tes... | NOK | http://autobuild.buildroot.net/results/2036fdbb6514c010dd53d884b9593cede383db9c |     
-  nds32le    |        libxcrypt-4.4.18        | NOK | http://autobuild.buildroot.net/results/5ae235b6ec66ac86efadaa2847307be58064c167 |     
-    arm      |         mesa3d-20.3.4          | NOK | http://autobuild.buildroot.net/results/7814f12778726e14271e28cf0805c78d878419ef |     
-   x86_64    |          monkey-1.6.9          | NOK | http://autobuild.buildroot.net/results/2ffc784535faba4790a1acba94dc3b9432a5193f | ORPH
-    arm      |         mono-6.12.0.90         | NOK | http://autobuild.buildroot.net/results/28c696e78573d2259326ec81fd49b7b3feb8bd05 |     
-    sh4      |         pixman-0.40.0          | NOK | http://autobuild.buildroot.net/results/ba7c342845ca5f15a55663b6d4d67507890bc165 |     
-    arm      |    python-rpi-ws281x-4.2.6     | NOK | http://autobuild.buildroot.net/results/f7ae8a2ce9bc8a24b54c937eb0b296dc1b34f328 |     
-    arm      |         rocksdb-6.13.3         | NOK | http://autobuild.buildroot.net/results/34f440f708de66e49201f748bd554723fa517bc5 |     
-  aarch64    |         rt-tests-1.10          | NOK | http://autobuild.buildroot.net/results/872bbdeb4cbb50265646d582f43677876871f880 |     
-    arm      |         siproxd-0.8.3          | NOK | http://autobuild.buildroot.net/results/3ba619106640a5d6facef09a05512a856207ed4a |     
-    arm      |         siproxd-0.8.3          | NOK | http://autobuild.buildroot.net/results/828448fff87772e1c34b3696284a44eb9fc692fb |     
-    m68k     |         siproxd-0.8.3          | NOK | http://autobuild.buildroot.net/results/0c59373ab3778cf7b15e73968295cec8d109f7cb |     
-    arc      |        syslog-ng-3.30.1        | NOK | http://autobuild.buildroot.net/results/45e517401d14e304e9c6c990f1b4ead92c850ba2 |     
-microblazeel |        syslog-ng-3.30.1        | NOK | http://autobuild.buildroot.net/results/597ba6c2829823a82c583ef213a58f617bcac7d4 |     
-    arm      |        syslog-ng-3.30.1        | NOK | http://autobuild.buildroot.net/results/232e355749ed69baabf47a6b141f81fbef538e90 |     
-    m68k     |            unknown             | NOK | http://autobuild.buildroot.net/results/44445fd75b9c15eb997f2b2fb1a0ebafb25f649c |     
-  riscv32    |           unscd-0.54           | NOK | http://autobuild.buildroot.net/results/5ef46251a7db89c51b8504589822fa70c32d8c93 |     
-    arm      |        waylandpp-0.2.8         | NOK | http://autobuild.buildroot.net/results/175426606e29692a5c35a8c7e939f0c69a2e0cb4 |     
-    arm      |           xen-4.14.1           | NOK | http://autobuild.buildroot.net/results/a70fe52ab99916dc9642c60502c738999894584d |     
-    arm      |           xen-4.14.1           | NOK | http://autobuild.buildroot.net/results/3bf29032a1a3c8bf73d1d5dbc1301cb1cd0c9750 |     
-    or1k     |          zeromq-4.3.4          | NOK | http://autobuild.buildroot.net/results/6dcc034eaa726930a988d872bae69d59e2f56d77 |     
-
-
-Classification of failures by reason for 2020.02.x
---------------------------------------------------
-
-                       unknown | 1 
-
-
-Detail of failures for 2020.02.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    sh4      |            unknown             | NOK | http://autobuild.buildroot.net/results/43ebe42fd58579a18d8db7d4bb725d477da3c7ef |     
-
-
-Classification of failures by reason for 2020.11.x
---------------------------------------------------
-
-                openblas-0.3.9 | 1 
-
-
-Detail of failures for 2020.11.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-  aarch64    |         openblas-0.3.9         | NOK | http://autobuild.buildroot.net/results/1d08af43ca7fe693a8f8d1625857a3b07c3e975b | ORPH
-
-
-Classification of failures by reason for 2021.02.x
---------------------------------------------------
-
-        host-sentry-cli-1.57.0 | 1 
-                  zeromq-4.3.4 | 1 
-
-
-Detail of failures for 2021.02.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    arm      |     host-sentry-cli-1.57.0     | NOK | http://autobuild.buildroot.net/results/8d7d75cbb79c05e8f4a8745d90cdd88752b40e3a |     
-    or1k     |          zeromq-4.3.4          | NOK | http://autobuild.buildroot.net/results/294cc5052d84b4a0fa65992f474b53feab848bd6 |     
+> The open62541 tools directory is indeed 52 MiB, which built as a standalone package
+> named 'libopen62541-1-tools' in launchpad. Nothing is required at runtime.
+> 
+> See the official debian control file template:
+> https://raw.githubusercontent.com/open62541/open62541/master/debian/control-template
+> 
+> See https://launchpad.net/~open62541-team/+archive/ubuntu/ppa/+packages
+> libopen62541-1       Open source implementation of OPC UA - shared library
+> libopen62541-1-dev   Open source implementation of OPC UA - development files
+> libopen62541-1-tools Open source implementation of OPC UA - tools
+> open62541-doc        Open source implementation of OPC UA - documentation
+> 
+> Signed-off-by: Scott Fan <fancp2007@gmail.com>
+> 
+> ---
+> Changes v1 -> v2:
+>   - extend the commit log to explain why nothing in there is required.
+> ---
+>  package/open62541/open62541.mk | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/package/open62541/open62541.mk b/package/open62541/open62541.mk
+> index 102e09a429..3f75196817 100644
+> --- a/package/open62541/open62541.mk
+> +++ b/package/open62541/open62541.mk
+> @@ -54,4 +54,11 @@ else
+>  OPEN62541_CONF_OPTS += -DUA_ENABLE_PUBSUB_INFORMATIONMODEL=OFF
+>  endif
+>  
+> +# Remove unneeded files
+> +define OPEN62541_REMOVE_UNNEEDED_FILES
+> +	$(RM) -r $(TARGET_DIR)/usr/share/open62541
+> +endef
+> +
+> +OPEN62541_POST_INSTALL_TARGET_HOOKS += OPEN62541_REMOVE_UNNEEDED_FILES
+> +
+>  $(eval $(cmake-package))
 
 
 
 -- 
-http://autobuild.buildroot.net
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
