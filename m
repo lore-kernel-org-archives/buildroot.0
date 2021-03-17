@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 17 Mar 2021 19:48:51 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/optee-client:
+Date: Wed, 17 Mar 2021 19:48:30 +0100
+Subject: [Buildroot] [git commit branch/2021.02.x] package/optee-client:
  disable -Werror
-Message-ID: <20210317183435.4A9EC8816D@busybox.osuosl.org>
+Message-ID: <20210317183450.A7EBB7FFE6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b41a7eb5a19eadda08e7077acb37aed8418796f4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=5df060f9a35d5c2cd92de5e51e705074e00bf593
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
 Disable -Werror thanks to CFG_WERROR which is available since version
 3.3.0 and
