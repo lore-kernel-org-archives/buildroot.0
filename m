@@ -1,122 +1,57 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 17 Mar 2021 21:43:34 +0100
-Subject: [Buildroot] [PATCH] package/efivar: add upstream post-37 patches
- fixing efibootmgr -v
-Message-ID: <20210317204335.30705-1-peter@korsgaard.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Wed, 17 Mar 2021 22:31:13 +0100
+Subject: [Buildroot] [PATCH v2 2/6] package/gnutls: disable package if
+ binutils is affected from bug 21464
+In-Reply-To: <20210314224438.3123e1f9@windsurf.home>
+References: <20210310091453.23611-1-giulio.benetti@benettiengineering.com>
+ <20210310091453.23611-3-giulio.benetti@benettiengineering.com>
+ <20210314224438.3123e1f9@windsurf.home>
+Message-ID: <d78f01ed-3cea-9d03-1d7b-b53ade187dbe@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Without this patch, efibootmgr -v errors out:
+Hi Thomas,
 
-efibootmgr -v
-BootCurrent: 0001
-Timeout: 1 seconds
-BootOrder: 0001,0002,0000
-Boot0000* Diagnostic ProgramCould not parse device path: Invalid argument
+On 3/14/21 10:44 PM, Thomas Petazzoni wrote:
+> On Wed, 10 Mar 2021 10:14:49 +0100
+> Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+> 
+>> This package is affected from binutils bug 21464, since there is no
+>> workaround, let's disable it.
+>>
+>> Fixes:
+>> http://autobuild.buildroot.net/results/ce9/ce9050a183a3f1e31cefbc4d4a6d780235466e39/
+>>
+>> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> 
+> FYI, the latest build failure of gnutls on OpenRISC was in July 2020:
+> 
+>    http://autobuild.buildroot.net/?reason=gnutls%
+> 
+> Since then, no failure.
+> 
+> I just tested this configuration:
+> 
+> BR2_or1k=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_OPENRISC_UCLIBC_STABLE=y
+> BR2_INIT_NONE=y
+> BR2_SYSTEM_BIN_SH_NONE=y
+> # BR2_PACKAGE_BUSYBOX is not set
+> BR2_PACKAGE_GNUTLS=y
+> # BR2_TARGET_ROOTFS_TAR is not set
+> 
+> and it builds fine.
+> 
+> Please double check that the failures and bugs still exist before
+> sending patches. Thanks!
 
-vs:
+Yes, I confirm, this package build correctly now, while others not.
 
-efibootmgr -v
-BootCurrent: 0001
-Timeout: 1 seconds
-BootOrder: 0001,0002,0000
-Boot0000* Diagnostic Program    FvVol(5c60f367-a505-419a-859e-2a4ff6ca6fe5)/FvFile(085e8cc2-8ec9-4666-bd2a-49d481e95fa7)
-Boot0001* containeros-a HD(1,GPT,1491d519-d9d7-7c4e-9110-4ab21271ac64,0x800,0x20000)/File(\efi\container\boot.efi)
-
-For more details, see:
-
-https://github.com/rhboot/efibootmgr/issues/133
-https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=963475
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../0005-ucs2.h-remove-unused-variable.patch  | 35 +++++++++++++++++++
- ...-that-checks-for-UCS-2-string-termin.patch | 32 +++++++++++++++++
- 2 files changed, 67 insertions(+)
- create mode 100644 package/efivar/0005-ucs2.h-remove-unused-variable.patch
- create mode 100644 package/efivar/0006-ucs2.h-fix-logic-that-checks-for-UCS-2-string-termin.patch
-
-diff --git a/package/efivar/0005-ucs2.h-remove-unused-variable.patch b/package/efivar/0005-ucs2.h-remove-unused-variable.patch
-new file mode 100644
-index 0000000000..a814043ce8
---- /dev/null
-+++ b/package/efivar/0005-ucs2.h-remove-unused-variable.patch
-@@ -0,0 +1,35 @@
-+From fdb803402fb32fa6d020bac57a40c7efe4aabb7d Mon Sep 17 00:00:00 2001
-+From: Javier Martinez Canillas <javierm@redhat.com>
-+Date: Tue, 5 Mar 2019 17:23:24 +0100
-+Subject: [PATCH] ucs2.h: remove unused variable
-+
-+The const uint16_t pointer is not used since now the two bytes of the
-+UCS-2 chars are checked to know if is the termination of the string.
-+
-+Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/ucs2.h | 3 +--
-+ 1 file changed, 1 insertion(+), 2 deletions(-)
-+
-+diff --git a/src/ucs2.h b/src/ucs2.h
-+index edd8367..e0390c3 100644
-+--- a/src/ucs2.h
-++++ b/src/ucs2.h
-+@@ -26,12 +26,11 @@ static inline size_t UNUSED
-+ ucs2len(const void *vs, ssize_t limit)
-+ {
-+ 	ssize_t i;
-+-	const uint16_t *s = vs;
-+ 	const uint8_t *s8 = vs;
-+ 
-+ 	for (i = 0;
-+ 	     i < (limit >= 0 ? limit : i+1) && s8[0] != 0 && s8[1] != 0;
-+-	     i++, s8 += 2, s++)
-++	     i++, s8 += 2)
-+ 		;
-+ 	return i;
-+ }
-+-- 
-+2.20.1
-+
-diff --git a/package/efivar/0006-ucs2.h-fix-logic-that-checks-for-UCS-2-string-termin.patch b/package/efivar/0006-ucs2.h-fix-logic-that-checks-for-UCS-2-string-termin.patch
-new file mode 100644
-index 0000000000..00b20332ef
---- /dev/null
-+++ b/package/efivar/0006-ucs2.h-fix-logic-that-checks-for-UCS-2-string-termin.patch
-@@ -0,0 +1,32 @@
-+From 4e04afc2df9bbc26e5ab524b53a6f4f1e61d7c9e Mon Sep 17 00:00:00 2001
-+From: Javier Martinez Canillas <javierm@redhat.com>
-+Date: Tue, 5 Mar 2019 17:23:32 +0100
-+Subject: [PATCH] ucs2.h: fix logic that checks for UCS-2 string termination
-+
-+Currently the loop to count the lenght of the UCS-2 string ends if either
-+of the two bytes are 0, but 0 is a valid value for UCS-2 character codes.
-+
-+So only break the loop when 0 is the value for both UCS-2 char bytes.
-+
-+Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/ucs2.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/ucs2.h b/src/ucs2.h
-+index e0390c3..fd8b056 100644
-+--- a/src/ucs2.h
-++++ b/src/ucs2.h
-+@@ -29,7 +29,7 @@ ucs2len(const void *vs, ssize_t limit)
-+ 	const uint8_t *s8 = vs;
-+ 
-+ 	for (i = 0;
-+-	     i < (limit >= 0 ? limit : i+1) && s8[0] != 0 && s8[1] != 0;
-++	     i < (limit >= 0 ? limit : i+1) && !(s8[0] == 0 && s8[1] == 0);
-+ 	     i++, s8 += 2)
-+ 		;
-+ 	return i;
-+-- 
-+2.20.1
-+
+Best regards
 -- 
-2.20.1
+Giulio Benetti
+Benetti Engineering sas
