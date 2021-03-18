@@ -1,92 +1,68 @@
-From: Dick Olsson <hi@senzilla.io>
-Date: Thu, 18 Mar 2021 15:42:56 +0000
-Subject: [Buildroot] [PATCH v4 04/10] configs/aarch64_efi_defconfig: build
- the EDK2 firmware from source
-Message-ID: <Oza7o8F2CNJZdTMIHIxcX4vg10BiNjLDXcKEmSrPrY@cp3-web-033.plabs.ch>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 18 Mar 2021 18:33:16 +0100
+Subject: [Buildroot] [PATCH 1/1] package/elfutils: fix build with uclibc
+In-Reply-To: <20210318074219.4113728-1-fontaine.fabrice@gmail.com>
+References: <20210318074219.4113728-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210318183316.78e4a75c@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Prior to this, you had to manually download a pre-built EDK2 flash
-device image (QEMU_EFI.fd) in order to boot this configuration with
-QEMU. Now, the configuration is building EDK2 from source.
+Hello Fabrice,
 
-Signed-off-by: Dick Olsson <hi@senzilla.io>
+On Thu, 18 Mar 2021 08:42:19 +0100, Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
----
+> Update first patch to fix a build failure with uclibc and elfutils in
+> version 0.183.0 which errors out if obstack is not found since
+> https://sourceware.org/git/?p=elfutils.git;a=commit;h=da855fc9cd415c288bfcb9de1f3d5eb329de0557
+>
+> Indeed, obstack has been removed from uclibc-ng since version 1.0.21 and
+> https://github.com/wbx-github/uclibc-ng/commit/0bd6bfb2b643ea2b4b1440dfd917ba752f0c0d15
+>
+> Fixes:
+>  - http://autobuild.buildroot.org/results/003ae73c7b48ad6b9837fb19ca197061d20eaf6d
+>
 
-Revision 4:
+Thanks for taking care of the build failure, but...
 
- * Addressed review items from Yann E. MORIN
- * Simplified resizing of the flash images with the trucate command
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  ...-Add-a-enable-disable-progs-configure-option.patch | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+>
+> diff --git a/package/elfutils/0001-Add-a-enable-disable-progs-configure-option.patch b/package/elfutils/0001-Add-a-enable-disable-progs-configure-option.patch
+> index e51f749cf6..bac9bc1245 100644
+> --- a/package/elfutils/0001-Add-a-enable-disable-progs-configure-option.patch
+> +++ b/package/elfutils/0001-Add-a-enable-disable-progs-configure-option.patch
+> @@ -20,6 +20,8 @@ Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+>  Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+>  [Rebased on 0.183]
+>  Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> +[Fabrice: don't error out if obstack is not found]
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>  ---
+>   Makefile.am  | 6 +++++-
+>   configure.ac | 6 ++++++
+> @@ -60,6 +62,15 @@ index d345495..0dd4b1e 100644
+>   dnl zlib is mandatory.
+>   save_LIBS="$LIBS"
+>   LIBS=
+> +@@ -579,7 +585,7 @@ saved_LIBS="$LIBS"
+> + AC_SEARCH_LIBS([_obstack_free], [obstack])
+> + LIBS="$saved_LIBS"
+> + case "$ac_cv_search__obstack_free" in
+> +-        no) AC_MSG_FAILURE([failed to find _obstack_free]) ;;
+> ++        no) obstack_LIBS= ;;
+> +         -l*) obstack_LIBS="$ac_cv_search__obstack_free" ;;
+> +         *) obstack_LIBS= ;;
+> + esac
+>  --
+>  2.30.1
+>
 
-Revision 3:
+Is this not a complete unrelated/new matter (and so belongs to an extra patch)?
 
- * post-image.sh will now provide resized flash devices
- * readme.txt suggests pflash instead of bios
-
-Revision 2:
-
- * Explicitly added the default EDK2 platform to defconfig
-
-Signed-off-by: Dick Olsson <hi@senzilla.io>
----
- board/aarch64-efi/post-image.sh | 6 +++++-
- board/aarch64-efi/readme.txt    | 9 ++++-----
- configs/aarch64_efi_defconfig   | 2 ++
- 3 files changed, 11 insertions(+), 6 deletions(-)
-
-diff --git a/board/aarch64-efi/post-image.sh b/board/aarch64-efi/post-image.sh
-index f0214dc866..63a582d99a 100755
---- a/board/aarch64-efi/post-image.sh
-+++ b/board/aarch64-efi/post-image.sh
-@@ -1,5 +1,9 @@
--#!/bin/sh
-+#!/bin/bash
- 
- BOARD_DIR="$(dirname $0)"
- 
- cp -f ${BOARD_DIR}/grub.cfg ${BINARIES_DIR}/efi-part/EFI/BOOT/grub.cfg
-+
-+# The QEMU virt machine expects flash devices to be 64M.
-+truncate -s 64M "${BINARIES_DIR}/QEMU_EFI.fd"
-+truncate -s 64M "${BINARIES_DIR}/QEMU_VARS.fd"
-diff --git a/board/aarch64-efi/readme.txt b/board/aarch64-efi/readme.txt
-index 65a6345b6c..d0f900c616 100644
---- a/board/aarch64-efi/readme.txt
-+++ b/board/aarch64-efi/readme.txt
-@@ -22,13 +22,12 @@ qemu-system-aarch64 \
- 	-cpu cortex-a57 \
- 	-m 512 \
- 	-nographic \
--	-bios </path/to/QEMU_EFI.fd> \
-+	-drive file=output/images/QEMU_EFI_RESIZED.fd,if=pflash,format=raw \
-+	-drive file=output/images/QEMU_VARS_RESIZED.fd,if=pflash,format=raw \
- 	-drive file=output/images/disk.img,if=none,format=raw,id=hd0 \
- 	-device virtio-blk-device,drive=hd0 \
- 	-netdev user,id=eth0 \
- 	-device virtio-net-device,netdev=eth0
- 
--Note that </path/to/QEMU_EFI.fd> needs to point to a valid aarch64 UEFI
--firmware image for qemu.
--It may be provided by your distribution as a edk2-aarch64 or AAVMF
--package, in path such as /usr/share/edk2/aarch64/QEMU_EFI.fd .
-+Note that output/images/QEMU_*.fd are the flash device files built by
-+the EDK2 package.
-diff --git a/configs/aarch64_efi_defconfig b/configs/aarch64_efi_defconfig
-index 99600575ed..0e8d7f8c1c 100644
---- a/configs/aarch64_efi_defconfig
-+++ b/configs/aarch64_efi_defconfig
-@@ -12,6 +12,8 @@ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
- BR2_PACKAGE_HOST_GENIMAGE=y
- 
- # Bootloader
-+BR2_TARGET_EDK2=y
-+BR2_TARGET_EDK2_PLATFORM_ARM_VIRT_QEMU=y
- BR2_TARGET_GRUB2=y
- BR2_TARGET_GRUB2_ARM64_EFI=y
- 
--- 
-2.24.3 (Apple Git-128)
+Regards,
+Peter
