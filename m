@@ -1,254 +1,413 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Wed, 17 Mar 2021 22:42:52 -0600
-Subject: [Buildroot] [PATCH v3 1/2] package/python3-setuptools: bump to
- version 54.1.2
-Message-ID: <20210318044253.3202355-1-james.hilliard1@gmail.com>
+Date: Wed, 17 Mar 2021 22:42:53 -0600
+Subject: [Buildroot] [PATCH v3 2/2] package/python-cryptography: bump to
+ version 3.4.6
+In-Reply-To: <20210318044253.3202355-1-james.hilliard1@gmail.com>
+References: <20210318044253.3202355-1-james.hilliard1@gmail.com>
+Message-ID: <20210318044253.3202355-2-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Rebased add executable patch.
+Python 2 is no longer supported, a rust toolchain is also
+now a direct compile time requirement for cryptography.
 
-We can no longer keep the python3 and python2 versions in sync as
-python2 support was dropped in setuptools version 45.0.0.
+Drop all dependencies that are no longer needed to build
+cryptography.
+
+Propagate the new rust toolchain and python 3 requirement
+to all packages that depend on python-cryptography.
+
+Drop the C++ toolchain dependency for packages in which
+that dependency was only needed for python-cryptography.
+
+Drop python 2 dependencies for packages that depend
+on python-cryptography.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
-Changes v2 -> v3:
-  - Update to 54.1.2 from 53.0.0
-Changes v1 -> v2:
-  - Update to 53.0.0 from 46.1.3
-  - Use 53.0.0 for both target and host python3
----
- .../{ => 44.0.0}/0001-add-executable.patch    |  0
- .../{ => 44.0.0}/python-setuptools.hash       |  0
- .../54.1.2/0001-add-executable.patch          |  1 +
- .../54.1.2/python3-setuptools.hash            |  1 +
- .../python-setuptools/python-setuptools.mk    | 27 +++++--
- .../0001-add-executable.patch                 | 75 ++++++++++++++++++-
- .../python3-setuptools.hash                   |  5 +-
- .../python3-setuptools/python3-setuptools.mk  | 10 +--
- 8 files changed, 105 insertions(+), 14 deletions(-)
- rename package/python-setuptools/{ => 44.0.0}/0001-add-executable.patch (100%)
- rename package/python-setuptools/{ => 44.0.0}/python-setuptools.hash (100%)
- create mode 120000 package/python-setuptools/54.1.2/0001-add-executable.patch
- create mode 120000 package/python-setuptools/54.1.2/python3-setuptools.hash
- mode change 120000 => 100644 package/python3-setuptools/0001-add-executable.patch
- mode change 120000 => 100644 package/python3-setuptools/python3-setuptools.hash
+ package/docker-compose/Config.in              | 13 +++++--------
+ package/python-autobahn/Config.in             |  6 +++---
+ package/python-crossbar/Config.in             |  6 +++---
+ package/python-cryptography/Config.in         | 19 +++++--------------
+ .../python-cryptography.hash                  |  6 +++---
+ .../python-cryptography.mk                    |  9 ++++++---
+ package/python-keyring/Config.in              |  7 ++++---
+ package/python-opcua-asyncio/Config.in        |  5 +++++
+ package/python-paramiko/Config.in             |  8 +++++---
+ package/python-pyopenssl/Config.in            |  8 +++++---
+ package/python-pysftp/Config.in               |  6 ++++++
+ package/python-secretstorage/Config.in        |  7 ++++---
+ package/python-service-identity/Config.in     |  9 +++++----
+ package/python-treq/Config.in                 |  8 +++++---
+ package/python-twisted/Config.in              |  8 +++++---
+ package/python-txtorcon/Config.in             |  9 +++++----
+ 16 files changed, 74 insertions(+), 60 deletions(-)
 
-diff --git a/package/python-setuptools/0001-add-executable.patch b/package/python-setuptools/44.0.0/0001-add-executable.patch
-similarity index 100%
-rename from package/python-setuptools/0001-add-executable.patch
-rename to package/python-setuptools/44.0.0/0001-add-executable.patch
-diff --git a/package/python-setuptools/python-setuptools.hash b/package/python-setuptools/44.0.0/python-setuptools.hash
-similarity index 100%
-rename from package/python-setuptools/python-setuptools.hash
-rename to package/python-setuptools/44.0.0/python-setuptools.hash
-diff --git a/package/python-setuptools/54.1.2/0001-add-executable.patch b/package/python-setuptools/54.1.2/0001-add-executable.patch
-new file mode 120000
-index 0000000000..6a35e5fd85
---- /dev/null
-+++ b/package/python-setuptools/54.1.2/0001-add-executable.patch
-@@ -0,0 +1 @@
-+../../python3-setuptools/0001-add-executable.patch
-\ No newline at end of file
-diff --git a/package/python-setuptools/54.1.2/python3-setuptools.hash b/package/python-setuptools/54.1.2/python3-setuptools.hash
-new file mode 120000
-index 0000000000..d385f4cbb3
---- /dev/null
-+++ b/package/python-setuptools/54.1.2/python3-setuptools.hash
-@@ -0,0 +1 @@
-+../../python3-setuptools/python3-setuptools.hash
-\ No newline at end of file
-diff --git a/package/python-setuptools/python-setuptools.mk b/package/python-setuptools/python-setuptools.mk
-index 08a180ce0c..4dd2994c7c 100644
---- a/package/python-setuptools/python-setuptools.mk
-+++ b/package/python-setuptools/python-setuptools.mk
-@@ -4,11 +4,20 @@
+diff --git a/package/docker-compose/Config.in b/package/docker-compose/Config.in
+index 74af8e03d5..6751974c4c 100644
+--- a/package/docker-compose/Config.in
++++ b/package/docker-compose/Config.in
+@@ -4,12 +4,9 @@ config BR2_PACKAGE_DOCKER_COMPOSE
+ 	depends on BR2_USE_WCHAR # python
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # python
+ 	depends on !BR2_STATIC_LIBS # python
+-	depends on BR2_INSTALL_LIBSTDCPP # python-paramiko -> python-cryptography
+-	select BR2_PACKAGE_PYTHON3 if !BR2_PACKAGE_PYTHON
+-	select BR2_PACKAGE_PYTHON_BACKPORTS_SSL_MATCH_HOSTNAME \
+-	       if BR2_PACKAGE_PYTHON # runtime
+-	select BR2_PACKAGE_PYTHON_ENUM34 if BR2_PACKAGE_PYTHON # runtime
+-	select BR2_PACKAGE_PYTHON_IPADDRESS if BR2_PACKAGE_PYTHON # runtime
++	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-paramiko -> python-cryptography
++	depends on !BR2_PACKAGE_PYTHON # python-paramiko -> python-cryptography
++	select BR2_PACKAGE_PYTHON3
+ 	select BR2_PACKAGE_PYTHON_CACHED_PROPERTY # runtime
+ 	select BR2_PACKAGE_PYTHON_DOCOPT # runtime
+ 	select BR2_PACKAGE_PYTHON_PARAMIKO # runtime
+@@ -26,7 +23,7 @@ config BR2_PACKAGE_DOCKER_COMPOSE
+ 
+ 	  https://www.docker.com/
+ 
+-comment "docker-compose needs a toolchain w/ C++, wchar, threads, dynamic library"
++comment "docker-compose needs a toolchain w/ rust, wchar, threads, dynamic library"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+-		BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP
++		BR2_STATIC_LIBS || !BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+diff --git a/package/python-autobahn/Config.in b/package/python-autobahn/Config.in
+index 78b16897bc..f55e14e284 100644
+--- a/package/python-autobahn/Config.in
++++ b/package/python-autobahn/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_PYTHON_AUTOBAHN
+ 	bool "python-autobahn"
+-	depends on BR2_INSTALL_LIBSTDCPP # python-cryptography -> python-pyasn
++	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-cryptography
+ 	depends on BR2_PACKAGE_PYTHON3
+ 	select BR2_PACKAGE_PYTHON_CRYPTOGRAPHY # runtime
+ 	select BR2_PACKAGE_PYTHON_TXAIO # runtime
+@@ -10,6 +10,6 @@ config BR2_PACKAGE_PYTHON_AUTOBAHN
+ 
+ 	  https://pypi.python.org/pypi/autobahn
+ 
+-comment "python-autobahn needs a toolchain w/ C++"
+-	depends on !BR2_INSTALL_LIBSTDCPP
++comment "python-autobahn needs a toolchain w/ rust"
++	depends on !BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_PYTHON3
+diff --git a/package/python-crossbar/Config.in b/package/python-crossbar/Config.in
+index 50b70b8e02..a2ae4e7b95 100644
+--- a/package/python-crossbar/Config.in
++++ b/package/python-crossbar/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_PYTHON_CROSSBAR
+ 	bool "python-crossbar"
+-	depends on BR2_INSTALL_LIBSTDCPP # python-cryptography
++	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-cryptography
+ 	depends on BR2_PACKAGE_PYTHON3
+ 	# All the following dependencies are runtime dependencies
+ 	select BR2_PACKAGE_PYTHON_ATTRS
+@@ -49,6 +49,6 @@ config BR2_PACKAGE_PYTHON_CROSSBAR
+ 
+ 	  https://pypi.python.org/pypi/crossbar
+ 
+-comment "python-crossbar needs a toolchain w/ C++"
+-	depends on !BR2_INSTALL_LIBSTDCPP
++comment "python-crossbar needs a toolchain w/ rust"
++	depends on !BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_PYTHON3
+diff --git a/package/python-cryptography/Config.in b/package/python-cryptography/Config.in
+index d1c2917ea9..9246debdf8 100644
+--- a/package/python-cryptography/Config.in
++++ b/package/python-cryptography/Config.in
+@@ -1,24 +1,15 @@
+ config BR2_PACKAGE_PYTHON_CRYPTOGRAPHY
+ 	bool "python-cryptography"
+-	depends on BR2_INSTALL_LIBSTDCPP # python-pyasn
++	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_PYTHON3
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_PYTHON_CFFI # runtime
+-	select BR2_PACKAGE_PYTHON_ENUM34 if BR2_PACKAGE_PYTHON # runtime
+-	select BR2_PACKAGE_PYTHON_HASHLIB if BR2_PACKAGE_PYTHON # runtime
+-	select BR2_PACKAGE_PYTHON_IDNA # runtime
+-	select BR2_PACKAGE_PYTHON_IPADDRESS if BR2_PACKAGE_PYTHON # runtime
+-	select BR2_PACKAGE_PYTHON_ASN1CRYPTO # runtime
+-	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON # runtime
+-	select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3 # runtime
+-	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
+-	select BR2_PACKAGE_PYTHON_SIX # runtime
+-	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON # runtime
+-	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3 # runtime
+ 	help
+ 	  cryptography is a package designed to expose cryptographic
+ 	  primitives and recipes to Python developers.
+ 
+ 	  https://cryptography.io
+ 
+-comment "python-cryptography needs a toolchain w/ C++"
+-	depends on !BR2_INSTALL_LIBSTDCPP
++comment "python-cryptography needs a toolchain w/ rust"
++	depends on !BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_PYTHON3
+diff --git a/package/python-cryptography/python-cryptography.hash b/package/python-cryptography/python-cryptography.hash
+index c6768ff21a..b047416736 100644
+--- a/package/python-cryptography/python-cryptography.hash
++++ b/package/python-cryptography/python-cryptography.hash
+@@ -1,7 +1,7 @@
+ # md5, sha256 from https://pypi.org/pypi/cryptography/json
+-md5  163608a7cb838c6b39360e1e64377d54  cryptography-3.0.tar.gz
+-sha256  8e924dbc025206e97756e8903039662aa58aa9ba357d8e1d8fc29e3092322053  cryptography-3.0.tar.gz
++md5  498e716708a5d36ff4593c71d7bef364  cryptography-3.4.6.tar.gz
++sha256  2d32223e5b0ee02943f32b19245b61a62db83a882f0e76cc564e1cec60d48f87  cryptography-3.4.6.tar.gz
+ # Locally computed sha256 checksums
+-sha256  35452b557fab0efb1e80d7edb9c4e5118b9384082adaa051dde342102cb9de8d  LICENSE
++sha256  43dad2cc752ab721cd9a9f36ece70fb53ab7713551f2d3d8694d8e8c5a06d6e2  LICENSE
+ sha256  aac73b3148f6d1d7111dbca32099f68d26c644c6813ae1e4f05f6579aa2663fe  LICENSE.APACHE
+ sha256  602c4c7482de6479dd2e9793cda275e5e63d773dacd1eca689232ab7008fb4fb  LICENSE.BSD
+diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
+index 6eb7be8d5d..65d3d692cc 100644
+--- a/package/python-cryptography/python-cryptography.mk
++++ b/package/python-cryptography/python-cryptography.mk
+@@ -4,12 +4,15 @@
  #
  ################################################################################
  
-+HOST_PYTHON_SETUPTOOLS_VERSION = 44.0.0
-+HOST_PYTHON_SETUPTOOLS_SOURCE = setuptools-$(PYTHON_SETUPTOOLS_VERSION).zip
-+HOST_PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/b0/f3/44da7482ac6da3f36f68e253cb04de37365b3dba9036a3c70773b778b485
-+ifeq ($(BR2_PACKAGE_PYTHON3),y)
- # Please keep in sync with
- # package/python3-setuptools/python3-setuptools.mk
--PYTHON_SETUPTOOLS_VERSION = 44.0.0
--PYTHON_SETUPTOOLS_SOURCE = setuptools-$(PYTHON_SETUPTOOLS_VERSION).zip
--PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/b0/f3/44da7482ac6da3f36f68e253cb04de37365b3dba9036a3c70773b778b485
-+PYTHON_SETUPTOOLS_VERSION = 54.1.2
-+PYTHON_SETUPTOOLS_SOURCE = setuptools-$(PYTHON_SETUPTOOLS_VERSION).tar.gz
-+PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/b8/d3/155ebd29b6e34ac283614d3a1e7f476ffb93f535aa0d8b3647fa014815aa
-+else
-+PYTHON_SETUPTOOLS_VERSION = $(HOST_PYTHON_SETUPTOOLS_VERSION)
-+PYTHON_SETUPTOOLS_SOURCE = $(HOST_PYTHON_SETUPTOOLS_SOURCE)
-+PYTHON_SETUPTOOLS_SITE = $(HOST_PYTHON_SETUPTOOLS_SITE)
-+endif
- PYTHON_SETUPTOOLS_LICENSE = MIT
- PYTHON_SETUPTOOLS_LICENSE_FILES = LICENSE
- PYTHON_SETUPTOOLS_CPE_ID_VENDOR = python
-@@ -16,16 +25,22 @@ PYTHON_SETUPTOOLS_CPE_ID_PRODUCT = setuptools
- PYTHON_SETUPTOOLS_SETUP_TYPE = setuptools
- HOST_PYTHON_SETUPTOOLS_NEEDS_HOST_PYTHON = python2
- 
-+ifeq ($(BR2_PACKAGE_PYTHON3),y)
-+define PYTHON_SETUPTOOLS_EXTRACT_CMDS
-+	$(TAR) --strip-components=1 -C $(@D) $(TAR_OPTIONS) $(PYTHON_SETUPTOOLS_DL_DIR)/$(PYTHON_SETUPTOOLS_SOURCE)
-+endef
-+else
- define PYTHON_SETUPTOOLS_EXTRACT_CMDS
- 	$(UNZIP) -d $(@D) $(PYTHON_SETUPTOOLS_DL_DIR)/$(PYTHON_SETUPTOOLS_SOURCE)
- 	mv $(@D)/setuptools-$(PYTHON_SETUPTOOLS_VERSION)/* $(@D)
- 	$(RM) -r $(@D)/setuptools-$(PYTHON_SETUPTOOLS_VERSION)
- endef
-+endif
- 
- define HOST_PYTHON_SETUPTOOLS_EXTRACT_CMDS
--	$(UNZIP) -d $(@D) $(HOST_PYTHON_SETUPTOOLS_DL_DIR)/$(PYTHON_SETUPTOOLS_SOURCE)
--	mv $(@D)/setuptools-$(PYTHON_SETUPTOOLS_VERSION)/* $(@D)
--	$(RM) -r $(@D)/setuptools-$(PYTHON_SETUPTOOLS_VERSION)
-+	$(UNZIP) -d $(@D) $(HOST_PYTHON_SETUPTOOLS_DL_DIR)/$(HOST_PYTHON_SETUPTOOLS_SOURCE)
-+	mv $(@D)/setuptools-$(HOST_PYTHON_SETUPTOOLS_VERSION)/* $(@D)
-+	$(RM) -r $(@D)/setuptools-$(HOST_PYTHON_SETUPTOOLS_VERSION)
- endef
+-PYTHON_CRYPTOGRAPHY_VERSION = 3.0
++PYTHON_CRYPTOGRAPHY_VERSION = 3.4.6
+ PYTHON_CRYPTOGRAPHY_SOURCE = cryptography-$(PYTHON_CRYPTOGRAPHY_VERSION).tar.gz
+-PYTHON_CRYPTOGRAPHY_SITE = https://files.pythonhosted.org/packages/bf/ac/552fc8729d90393845cc3a2062facf4a89dcbe206fa78771d60ddaae7554
++PYTHON_CRYPTOGRAPHY_SITE = https://files.pythonhosted.org/packages/fa/2d/2154d8cb773064570f48ec0b60258a4522490fcb115a6c7c9423482ca993
+ PYTHON_CRYPTOGRAPHY_SETUP_TYPE = setuptools
+ PYTHON_CRYPTOGRAPHY_LICENSE = Apache-2.0 or BSD-3-Clause
+ PYTHON_CRYPTOGRAPHY_LICENSE_FILES = LICENSE LICENSE.APACHE LICENSE.BSD
+-PYTHON_CRYPTOGRAPHY_DEPENDENCIES = host-python-cffi openssl
++PYTHON_CRYPTOGRAPHY_DEPENDENCIES = host-python-setuptools-rust host-python-cffi host-rustc
++PYTHON_CRYPTOGRAPHY_ENV = CARGO_BUILD_TARGET="$(RUSTC_TARGET_NAME)" \
++	PYO3_CROSS_LIB_DIR="$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)" \
++	CARGO_HOME="$(HOST_DIR)/share/cargo"
  
  $(eval $(python-package))
-diff --git a/package/python3-setuptools/0001-add-executable.patch b/package/python3-setuptools/0001-add-executable.patch
-deleted file mode 120000
-index 5bab3d96a1..0000000000
---- a/package/python3-setuptools/0001-add-executable.patch
-+++ /dev/null
-@@ -1 +0,0 @@
--../python-setuptools/0001-add-executable.patch
-\ No newline at end of file
-diff --git a/package/python3-setuptools/0001-add-executable.patch b/package/python3-setuptools/0001-add-executable.patch
-new file mode 100644
-index 0000000000..c9d363cd36
---- /dev/null
-+++ b/package/python3-setuptools/0001-add-executable.patch
-@@ -0,0 +1,74 @@
-+From b325d59820450a4bd04c3466999a7b2e2ab5546f Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-+Date: Mon, 7 Dec 2015 01:14:33 +0100
-+Subject: [PATCH] add executable
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Add a new --executable option to distribute so that we can
-+force the shebang line in installed python scripts.
-+
-+[Thomas: refresh for setuptools 5.8.]
-+[J?rg: refresh for setuptools 18.7.1]
-+[James: refresh for setuptools 54.1.2]
-+
-+Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-+---
-+ setuptools/command/install.py         | 2 ++
-+ setuptools/command/install_scripts.py | 9 +++++++++
-+ 2 files changed, 11 insertions(+)
-+
-+diff --git a/setuptools/command/install.py b/setuptools/command/install.py
-+index 72b9a3e4..6781d2bc 100644
-+--- a/setuptools/command/install.py
-++++ b/setuptools/command/install.py
-+@@ -16,6 +16,7 @@ class install(orig.install):
-+     """Use easy_install to install the package, w/dependencies"""
-+ 
-+     user_options = orig.install.user_options + [
-++        ('executable=', 'e', "specify final destination interpreter path"),
-+         ('old-and-unmanageable', None, "Try not to use this!"),
-+         ('single-version-externally-managed', None,
-+          "used by system package builders to create 'flat' eggs"),
-+@@ -31,6 +32,7 @@ class install(orig.install):
-+ 
-+     def initialize_options(self):
-+         orig.install.initialize_options(self)
-++        self.executable = None
-+         self.old_and_unmanageable = None
-+         self.single_version_externally_managed = None
-+ 
-+diff --git a/setuptools/command/install_scripts.py b/setuptools/command/install_scripts.py
-+index 8c9a15e2..bf0417b6 100644
-+--- a/setuptools/command/install_scripts.py
-++++ b/setuptools/command/install_scripts.py
-+@@ -12,6 +12,13 @@ class install_scripts(orig.install_scripts):
-+     def initialize_options(self):
-+         orig.install_scripts.initialize_options(self)
-+         self.no_ep = False
-++        self.executable = None
-++
-++    def finalize_options(self):
-++        orig.install_scripts.finalize_options(self)
-++        self.set_undefined_options('install',
-++                ('executable','executable')
-++        )
-+ 
-+     def run(self):
-+         import setuptools.command.easy_install as ei
-+@@ -32,6 +39,8 @@ class install_scripts(orig.install_scripts):
-+         )
-+         bs_cmd = self.get_finalized_command('build_scripts')
-+         exec_param = getattr(bs_cmd, 'executable', None)
-++        if self.executable is not None:
-++            exec_param = self.executable
-+         try:
-+             bw_cmd = self.get_finalized_command("bdist_wininst")
-+             is_wininst = getattr(bw_cmd, '_is_running', False)
-+-- 
-+2.25.1
-+
-diff --git a/package/python3-setuptools/python3-setuptools.hash b/package/python3-setuptools/python3-setuptools.hash
-deleted file mode 120000
-index a3af7f0fb1..0000000000
---- a/package/python3-setuptools/python3-setuptools.hash
-+++ /dev/null
-@@ -1 +0,0 @@
--../python-setuptools/python-setuptools.hash
-\ No newline at end of file
-diff --git a/package/python3-setuptools/python3-setuptools.hash b/package/python3-setuptools/python3-setuptools.hash
-new file mode 100644
-index 0000000000..6d1c01100e
---- /dev/null
-+++ b/package/python3-setuptools/python3-setuptools.hash
-@@ -0,0 +1,4 @@
-+# From https://pypi.org/pypi/setuptools/json
-+md5  684e00a094af81fac87ffe0bcf5732c4  setuptools-54.1.2.tar.gz
-+sha256  ebd0148faf627b569c8d2a1b20f5d3b09c873f12739d71c7ee88f037d5be82ff  setuptools-54.1.2.tar.gz
-+sha256  db3f0246b1f9278f15845b99fec478b8b506eb76487993722f8c6e254285faf8  LICENSE
-diff --git a/package/python3-setuptools/python3-setuptools.mk b/package/python3-setuptools/python3-setuptools.mk
-index 3f4f1100fe..538417bece 100644
---- a/package/python3-setuptools/python3-setuptools.mk
-+++ b/package/python3-setuptools/python3-setuptools.mk
-@@ -6,9 +6,9 @@
+diff --git a/package/python-keyring/Config.in b/package/python-keyring/Config.in
+index 18fad84007..1897cbd8f5 100644
+--- a/package/python-keyring/Config.in
++++ b/package/python-keyring/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_PYTHON_KEYRING
+ 	bool "python-keyring"
++	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-secretstorage -> python-cryptography
+ 	depends on BR2_PACKAGE_PYTHON3
+-	depends on BR2_INSTALL_LIBSTDCPP # python-secretstorage
+ 	select BR2_PACKAGE_PYTHON_ENTRYPOINTS # runtime
+ 	select BR2_PACKAGE_PYTHON_SECRETSTORAGE # runtime
+ 	help
+@@ -10,5 +10,6 @@ config BR2_PACKAGE_PYTHON_KEYRING
  
- # Please keep in sync with
- # package/python-setuptools/python-setuptools.mk
--PYTHON3_SETUPTOOLS_VERSION = 44.0.0
--PYTHON3_SETUPTOOLS_SOURCE = setuptools-$(PYTHON3_SETUPTOOLS_VERSION).zip
--PYTHON3_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/b0/f3/44da7482ac6da3f36f68e253cb04de37365b3dba9036a3c70773b778b485
-+PYTHON3_SETUPTOOLS_VERSION = 54.1.2
-+PYTHON3_SETUPTOOLS_SOURCE = setuptools-$(PYTHON3_SETUPTOOLS_VERSION).tar.gz
-+PYTHON3_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/b8/d3/155ebd29b6e34ac283614d3a1e7f476ffb93f535aa0d8b3647fa014815aa
- PYTHON3_SETUPTOOLS_LICENSE = MIT
- PYTHON3_SETUPTOOLS_LICENSE_FILES = LICENSE
- PYTHON3_SETUPTOOLS_SETUP_TYPE = setuptools
-@@ -16,9 +16,7 @@ HOST_PYTHON3_SETUPTOOLS_DL_SUBDIR = python-setuptools
- HOST_PYTHON3_SETUPTOOLS_NEEDS_HOST_PYTHON = python3
+ 	  https://pypi.python.org/pypi/keyring
  
- define HOST_PYTHON3_SETUPTOOLS_EXTRACT_CMDS
--	$(UNZIP) -d $(@D) $(HOST_PYTHON3_SETUPTOOLS_DL_DIR)/$(PYTHON3_SETUPTOOLS_SOURCE)
--	mv $(@D)/setuptools-$(PYTHON3_SETUPTOOLS_VERSION)/* $(@D)
--	$(RM) -r $(@D)/setuptools-$(PYTHON3_SETUPTOOLS_VERSION)
-+	$(TAR) --strip-components=1 -C $(@D) $(TAR_OPTIONS) $(HOST_PYTHON3_SETUPTOOLS_DL_DIR)/$(PYTHON3_SETUPTOOLS_SOURCE)
- endef
+-comment "python-keyring needs a toolchain w/ C++"
+-	depends on !BR2_INSTALL_LIBSTDCPP
++comment "python-keyring needs a toolchain w/ rust"
++	depends on !BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_PYTHON3
+diff --git a/package/python-opcua-asyncio/Config.in b/package/python-opcua-asyncio/Config.in
+index 3700e00e1d..cc9a02a9c5 100644
+--- a/package/python-opcua-asyncio/Config.in
++++ b/package/python-opcua-asyncio/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PYTHON_OPCUA_ASYNCIO
+ 	bool "python-opcua-asyncio"
++	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-cryptography
+ 	depends on BR2_PACKAGE_PYTHON3
+ 	select BR2_PACKAGE_PYTHON_AIOFILES # runtime
+ 	select BR2_PACKAGE_PYTHON_CRYPTOGRAPHY # runtime
+@@ -12,3 +13,7 @@ config BR2_PACKAGE_PYTHON_OPCUA_ASYNCIO
+ 	  hacks for support of python < 3.6.
  
- $(eval $(host-python-package))
+ 	  https://github.com/FreeOpcUa/opcua-asyncio
++
++comment "python-opcua-asyncio needs a toolchain w/ rust"
++	depends on !BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_PYTHON3
+diff --git a/package/python-paramiko/Config.in b/package/python-paramiko/Config.in
+index e33199c82c..b4cefff5c0 100644
+--- a/package/python-paramiko/Config.in
++++ b/package/python-paramiko/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_PYTHON_PARAMIKO
+ 	bool "python-paramiko"
+-	depends on BR2_INSTALL_LIBSTDCPP # python-cryptography
++	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-cryptography
++	depends on BR2_PACKAGE_PYTHON3
+ 	select BR2_PACKAGE_PYTHON_BCRYPT # runtime
+ 	select BR2_PACKAGE_PYTHON_CRYPTOGRAPHY # runtime
+ 	select BR2_PACKAGE_PYTHON_PYASN1 # runtime
+@@ -12,5 +13,6 @@ config BR2_PACKAGE_PYTHON_PARAMIKO
+ 
+ 	  https://github.com/paramiko/paramiko/
+ 
+-comment "python-paramiko needs a toolchain w/ C++"
+-	depends on !BR2_INSTALL_LIBSTDCPP
++comment "python-paramiko needs a toolchain w/ rust"
++	depends on !BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_PYTHON3
+diff --git a/package/python-pyopenssl/Config.in b/package/python-pyopenssl/Config.in
+index c32e211e17..ffd0f10373 100644
+--- a/package/python-pyopenssl/Config.in
++++ b/package/python-pyopenssl/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_PYTHON_PYOPENSSL
+ 	bool "python-pyopenssl"
+-	depends on BR2_INSTALL_LIBSTDCPP # python-cryptography
++	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-cryptography
++	depends on BR2_PACKAGE_PYTHON3 # python-cryptography
+ 	select BR2_PACKAGE_PYTHON_CRYPTOGRAPHY # runtime
+ 	select BR2_PACKAGE_PYTHON_SIX # runtime
+ 	help
+@@ -8,5 +9,6 @@ config BR2_PACKAGE_PYTHON_PYOPENSSL
+ 
+ 	  https://github.com/pyca/pyopenssl
+ 
+-comment "python-pyopenssl needs a toolchain w/ C++"
+-	depends on !BR2_INSTALL_LIBSTDCPP
++comment "python-pyopenssl needs a toolchain w/ rust"
++	depends on !BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_PYTHON3
+diff --git a/package/python-pysftp/Config.in b/package/python-pysftp/Config.in
+index 06f883f602..55b67c6f48 100644
+--- a/package/python-pysftp/Config.in
++++ b/package/python-pysftp/Config.in
+@@ -1,7 +1,13 @@
+ config BR2_PACKAGE_PYTHON_PYSFTP
+ 	bool "python-pysftp"
++	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-paramiko -> python-cryptography
++	depends on BR2_PACKAGE_PYTHON3 # python-paramiko -> python-cryptography
+ 	select BR2_PACKAGE_PYTHON_PARAMIKO # runtime
+ 	help
+ 	  A friendly face on SFTP.
+ 
+ 	  https://bitbucket.org/dundeemt/pysftp
++
++comment "python-pysftp needs a toolchain w/ rust"
++	depends on !BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_PYTHON3
+diff --git a/package/python-secretstorage/Config.in b/package/python-secretstorage/Config.in
+index 78a0a2ae15..4f79f55a15 100644
+--- a/package/python-secretstorage/Config.in
++++ b/package/python-secretstorage/Config.in
+@@ -1,12 +1,13 @@
+ config BR2_PACKAGE_PYTHON_SECRETSTORAGE
+ 	bool "python-secretstorage"
++	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-cryptography
+ 	depends on BR2_PACKAGE_PYTHON3
+-	depends on BR2_INSTALL_LIBSTDCPP # python-cryptography
+ 	select BR2_PACKAGE_PYTHON_CRYPTOGRAPHY # runtime
+ 	help
+ 	  Python bindings to FreeDesktop.org Secret Service API.
+ 
+ 	  https://github.com/mitya57/secretstorage
+ 
+-comment "python-secretstorage needs a toolchain w/ C++"
+-	depends on !BR2_INSTALL_LIBSTDCPP
++comment "python-secretstorage needs a toolchain w/ rust"
++	depends on !BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_PYTHON3
+diff --git a/package/python-service-identity/Config.in b/package/python-service-identity/Config.in
+index 0260ab4010..8d46408a7e 100644
+--- a/package/python-service-identity/Config.in
++++ b/package/python-service-identity/Config.in
+@@ -1,9 +1,9 @@
+ config BR2_PACKAGE_PYTHON_SERVICE_IDENTITY
+ 	bool "python-service-identity"
+-	depends on BR2_INSTALL_LIBSTDCPP # python-pyopenssl
++	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-pyopenssl -> python-cryptography
++	depends on BR2_PACKAGE_PYTHON3 # python-pyopenssl -> python-cryptography
+ 	select BR2_PACKAGE_PYTHON_ATTRS # runtime
+ 	select BR2_PACKAGE_PYTHON_CHARACTERISTIC # runtime
+-	select BR2_PACKAGE_PYTHON_IPADDRESS if BR2_PACKAGE_PYTHON # runtime
+ 	select BR2_PACKAGE_PYTHON_PYASN1 # runtime
+ 	select BR2_PACKAGE_PYTHON_PYASN1_MODULES # runtime
+ 	select BR2_PACKAGE_PYTHON_PYOPENSSL # runtime
+@@ -12,5 +12,6 @@ config BR2_PACKAGE_PYTHON_SERVICE_IDENTITY
+ 
+ 	  https://pypi.python.org/pypi/service_identity
+ 
+-comment "python-service-identify needs a toolchain w/ C++"
+-	depends on !BR2_INSTALL_LIBSTDCPP
++comment "python-service-identify needs a toolchain w/ rust"
++	depends on !BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_PYTHON3
+diff --git a/package/python-treq/Config.in b/package/python-treq/Config.in
+index 23056e72d2..68e71e1c7f 100644
+--- a/package/python-treq/Config.in
++++ b/package/python-treq/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_PYTHON_TREQ
+ 	bool "python-treq"
+-	depends on BR2_INSTALL_LIBSTDCPP # python-pyopenssl
++	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-pyopenssl -> python-cryptography
++	depends on BR2_PACKAGE_PYTHON3 # python-pyopenssl -> python-cryptography
+ 	select BR2_PACKAGE_PYTHON_ATTRS # runtime
+ 	select BR2_PACKAGE_PYTHON_IDNA # runtime
+ 	select BR2_PACKAGE_PYTHON_INCREMENTAL # runtime
+@@ -16,5 +17,6 @@ config BR2_PACKAGE_PYTHON_TREQ
+ 
+ 	  https://github.com/twisted/treq
+ 
+-comment "python-treq needs a toolchain w/ C++"
+-	depends on !BR2_INSTALL_LIBSTDCPP
++comment "python-treq needs a toolchain w/ rust"
++	depends on !BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_PYTHON3
+diff --git a/package/python-twisted/Config.in b/package/python-twisted/Config.in
+index 4e24a3f71a..4a384524d2 100644
+--- a/package/python-twisted/Config.in
++++ b/package/python-twisted/Config.in
+@@ -22,12 +22,14 @@ config BR2_PACKAGE_PYTHON_TWISTED_HTTP2
+ 
+ config BR2_PACKAGE_PYTHON_TWISTED_TLS
+ 	bool "TLS support"
+-	depends on BR2_INSTALL_LIBSTDCPP # python-{pyopenssl,service-identity}
++	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-{pyopenssl,service-identity}
++	depends on BR2_PACKAGE_PYTHON3 # python-{pyopenssl,service-identity}
+ 	select BR2_PACKAGE_PYTHON_IDNA # runtime
+ 	select BR2_PACKAGE_PYTHON_PYOPENSSL # runtime
+ 	select BR2_PACKAGE_PYTHON_SERVICE_IDENTITY # runtime
+ 
+-comment "TLS support needs a toolchain w/ C++"
+-	depends on !BR2_INSTALL_LIBSTDCPP
++comment "TLS support needs a toolchain w/ rust"
++	depends on !BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_PYTHON3
+ 
+ endif
+diff --git a/package/python-txtorcon/Config.in b/package/python-txtorcon/Config.in
+index 4f91e7b048..e4d49e4aff 100644
+--- a/package/python-txtorcon/Config.in
++++ b/package/python-txtorcon/Config.in
+@@ -1,10 +1,10 @@
+ config BR2_PACKAGE_PYTHON_TXTORCON
+ 	bool "python-txtorcon"
+-	depends on BR2_INSTALL_LIBSTDCPP # python-pyopenssl, python-service-identity
++	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-pyopenssl, python-service-identity
++	depends on BR2_PACKAGE_PYTHON3 # python-pyopenssl, python-service-identity
+ 	select BR2_PACKAGE_PYTHON_AUTOMAT # runtime
+ 	select BR2_PACKAGE_PYTHON_IDNA # runtime
+ 	select BR2_PACKAGE_PYTHON_INCREMENTAL # runtime
+-	select BR2_PACKAGE_PYTHON_IPADDRESS if BR2_PACKAGE_PYTHON # runtime
+ 	select BR2_PACKAGE_PYTHON_PYOPENSSL # runtime
+ 	select BR2_PACKAGE_PYTHON_SERVICE_IDENTITY # runtime
+ 	select BR2_PACKAGE_PYTHON_TWISTED # runtime
+@@ -15,5 +15,6 @@ config BR2_PACKAGE_PYTHON_TXTORCON
+ 
+ 	  https://github.com/meejah/txtorcon
+ 
+-comment "python-txtorcon needs a toolchain w/ C++"
+-	depends on !BR2_INSTALL_LIBSTDCPP
++comment "python-txtorcon needs a toolchain w/ rust"
++	depends on !BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_PYTHON3
 -- 
 2.25.1
