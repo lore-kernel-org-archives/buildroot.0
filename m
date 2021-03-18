@@ -1,41 +1,54 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 18 Mar 2021 21:11:19 +0100
-Subject: [Buildroot] [PATCH] package/efivar: add upstream post-37
- patches fixing efibootmgr -v
-In-Reply-To: <CAMQcK5+QAGBtmbtAmW8g6tyoTa8YLQyvCEXEtBO9K_pYauPNSw@mail.gmail.com>
- (Ryan Barnett's message of "Thu, 18 Mar 2021 12:34:21 -0500")
-References: <20210317204335.30705-1-peter@korsgaard.com>
- <CAMQcK5+QAGBtmbtAmW8g6tyoTa8YLQyvCEXEtBO9K_pYauPNSw@mail.gmail.com>
-Message-ID: <87zgz0usrc.fsf@dell.be.48ers.dk>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 18 Mar 2021 21:16:54 +0100
+Subject: [Buildroot] [PATCH v1 1/2] package/git: bump version to 2.30.2
+Message-ID: <20210318201655.32647-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ryan" == Ryan Barnett <ryan.barnett@collins.com> writes:
+Fix CVE-2021-21300:
 
- > On Wed, Mar 17, 2021 at 3:45 PM Peter Korsgaard <peter@korsgaard.com> wrote:
+  On case-insensitive file systems with support for symbolic links,
+  if Git is configured globally to apply delay-capable clean/smudge
+  filters (such as Git LFS), Git could be fooled into running
+  remote code during a clone.
 
-..
- >> 
- >> +From fdb803402fb32fa6d020bac57a40c7efe4aabb7d Mon Sep 17 00:00:00 2001
- >> +From: Javier Martinez Canillas <javierm@redhat.com>
- >> +Date: Tue, 5 Mar 2019 17:23:24 +0100
- >> +Subject: [PATCH] ucs2.h: remove unused variable
- >> +
- >> +The const uint16_t pointer is not used since now the two bytes of the
- >> +UCS-2 chars are checked to know if is the termination of the string.
- >> +
+For details see [1] and [2].
 
- > Should 'Backported from: fdb803402fb32fa6d020bac57a40c7efe4aabb7d' be
- > added here since the patches could be regenerated and the original
- > commit sha1 could be lost?
+[1] http://lkml.iu.edu/hypermail/linux/kernel/2102.1/01858.html
+[2] http://lkml.iu.edu/hypermail/linux/kernel/2103.1/02533.html
 
- > https://buildroot.org/downloads/manual/manual.html#_integrating_patches_found_on_the_web
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/git/git.hash | 2 +-
+ package/git/git.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Given that these are upstream patches, I don't see why they would ever
-need to be rebased and regenerated?
-
+diff --git a/package/git/git.hash b/package/git/git.hash
+index 375ce787e9..c1960b9728 100644
+--- a/package/git/git.hash
++++ b/package/git/git.hash
+@@ -1,5 +1,5 @@
+ # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
+-sha256  55735021109565721af805af382c45cce73c3cfaa59daad22443d1477d334d19  git-2.30.0.tar.xz
++sha256  41f7d90c71f9476cd387673fcb10ce09ccbed67332436a4cc58d7af32c355faa  git-2.30.2.tar.xz
+ # Locally calculated
+ sha256  5b2198d1645f767585e8a88ac0499b04472164c0d2da22e75ecf97ef443ab32e  COPYING
+ sha256  1922f45d2c49e390032c9c0ba6d7cac904087f7cec51af30c2b2ad022ce0e76a  LGPL-2.1
+diff --git a/package/git/git.mk b/package/git/git.mk
+index 55178de138..910dcf5fa1 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GIT_VERSION = 2.30.0
++GIT_VERSION = 2.30.2
+ GIT_SOURCE = git-$(GIT_VERSION).tar.xz
+ GIT_SITE = $(BR2_KERNEL_MIRROR)/software/scm/git
+ GIT_LICENSE = GPL-2.0, LGPL-2.1+
 -- 
-Bye, Peter Korsgaard
+2.30.2
