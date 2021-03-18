@@ -1,139 +1,204 @@
-From: Ryan Barnett <ryan.barnett@collins.com>
-Date: Thu, 18 Mar 2021 12:34:21 -0500
-Subject: [Buildroot] [PATCH] package/efivar: add upstream post-37
- patches fixing efibootmgr -v
-In-Reply-To: <20210317204335.30705-1-peter@korsgaard.com>
-References: <20210317204335.30705-1-peter@korsgaard.com>
-Message-ID: <CAMQcK5+QAGBtmbtAmW8g6tyoTa8YLQyvCEXEtBO9K_pYauPNSw@mail.gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 18 Mar 2021 19:18:27 +0100
+Subject: [Buildroot] [PATCH 1/1] package/qt5webkit: fix ICU related
+ compile failures from capital bool defines
+In-Reply-To: <20210318125437.3543-1-henri.roosen@ginzinger.com>
+References: <20210318125437.3543-1-henri.roosen@ginzinger.com>
+Message-ID: <20210318191827.73c2f99a@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Mar 17, 2021 at 3:45 PM Peter Korsgaard <peter@korsgaard.com> wrote:
->
-> Without this patch, efibootmgr -v errors out:
->
-> efibootmgr -v
-> BootCurrent: 0001
-> Timeout: 1 seconds
-> BootOrder: 0001,0002,0000
-> Boot0000* Diagnostic ProgramCould not parse device path: Invalid argument
->
-> vs:
->
-> efibootmgr -v
-> BootCurrent: 0001
-> Timeout: 1 seconds
-> BootOrder: 0001,0002,0000
-> Boot0000* Diagnostic Program    FvVol(5c60f367-a505-419a-859e-2a4ff6ca6fe5)/FvFile(085e8cc2-8ec9-4666-bd2a-49d481e95fa7)
-> Boot0001* containeros-a HD(1,GPT,1491d519-d9d7-7c4e-9110-4ab21271ac64,0x800,0x20000)/File(\efi\container\boot.efi)
->
-> For more details, see:
->
-> https://github.com/rhboot/efibootmgr/issues/133
-> https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=963475
->
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Hello Henri,
+
+On Thu, 18 Mar 2021 13:54:37 +0100, Henri Roosen <henriroosen@gmail.com> wrote:
+
+> This patch fixes the following compile failures:
+> 
+> In file included from platform/text/TextAllInOne.cpp:30:
+> platform/text/TextBreakIteratorICU.cpp: In function ?bool
+> WebCore::textInChunkOrOutOfRange(UText*, int64_t, int64_t, UBool,
+> UBool&)?:
+> platform/text/TextBreakIteratorICU.cpp:217:28: error: ?TRUE? was not
+> declared in this scope
+>   217 |             isAccessible = TRUE;
+>       |                            ^~~~
+> platform/text/TextBreakIteratorICU.cpp:222:28: error: ?FALSE? was not
+> declared in this scope
+>   222 |             isAccessible = FALSE;
+>       |                            ^~~~~
+> platform/text/TextBreakIteratorICU.cpp:231:28: error: ?TRUE? was not
+> declared in this scope
+>   231 |             isAccessible = TRUE;
+>       |                            ^~~~
+> platform/text/TextBreakIteratorICU.cpp:236:28: error: ?FALSE? was not
+> declared in this scope
+>   236 |             isAccessible = FALSE;
+>       |                            ^~~~~
+> platform/text/TextBreakIteratorICU.cpp: In function ?UBool
+> WebCore::textLatin1Access(UText*, int64_t, UBool)?:
+> platform/text/TextBreakIteratorICU.cpp:246:16: error: ?FALSE? was not
+> declared in this scope
+>   246 |         return FALSE;
+>       |                ^~~~~
+> platform/text/TextBreakIteratorICU.cpp:266:12: error: ?TRUE? was not
+> declared in this scope
+>   266 |     return TRUE;
+>       |            ^~~~
+> platform/text/TextBreakIteratorICU.cpp: In function ?UBool
+> WebCore::textUTF16Access(UText*, int64_t, UBool)?:
+> platform/text/TextBreakIteratorICU.cpp:367:16: error: ?FALSE? was not
+> declared in this scope
+>   367 |         return FALSE;
+>       |                ^~~~~
+> platform/text/TextBreakIteratorICU.cpp:387:12: error: ?TRUE? was not
+> declared in this scope
+>   387 |     return TRUE;
+>       |            ^~~~
+> ...
+> In file included from platform/text/TextAllInOne.cpp:32:
+> platform/text/TextCodecICU.cpp: In member function ?void
+> WebCore::TextCodecICU::createICUConverter() const?:
+> platform/text/TextCodecICU.cpp:272:42: error: ?TRUE? was not declared in
+> this scope
+>   272 |         ucnv_setFallback(m_converterICU, TRUE);
+>       |                                          ^~~~
+> 
+> The compile failures are fixed by replacing the use of FALSE/TRUE with
+> false/true as suggested by [1] and/or [2].
+> 
+> [1] https://unicode-org.atlassian.net/browse/ICU-21267
+> [2] https://unicode-org.atlassian.net/browse/ICU-21148
+
+A better description is directly from the patch/pull-request ([3]):
+
+  Traditionally, ICU4C has defined its own `FALSE`=0 / `TRUE`=1 macros for use with `UBool`.
+  Starting with ICU 68 (2020q4), we no longer define these in public header files
+  (unless `U_DEFINE_FALSE_AND_TRUE`=1),
+  in order to avoid name collisions with code outside ICU defining enum constants and similar
+  with these names.
+
+and explains why it occurred just recently/since the icu bump to version 68-1 ([4])...
+
+With this information added you can add my
+
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+
+Regards,
+Peter
+
+[3] https://github.com/unicode-org/icu/pull/1282/commits/5d77f7084dbfad50c7ccc17bccb85aa24bae8937
+[4] https://git.buildroot.net/buildroot/commit/?id=88f2d1c4e52607d2c2a1fa8d934152c47167a168
+
+> 
+> Signed-off-by: Henri Roosen <henri.roosen@ginzinger.com>
 > ---
->  .../0005-ucs2.h-remove-unused-variable.patch  | 35 +++++++++++++++++++
->  ...-that-checks-for-UCS-2-string-termin.patch | 32 +++++++++++++++++
->  2 files changed, 67 insertions(+)
->  create mode 100644 package/efivar/0005-ucs2.h-remove-unused-variable.patch
->  create mode 100644 package/efivar/0006-ucs2.h-fix-logic-that-checks-for-UCS-2-string-termin.patch
->
-> diff --git a/package/efivar/0005-ucs2.h-remove-unused-variable.patch b/package/efivar/0005-ucs2.h-remove-unused-variable.patch
+>  ...compile-failures-from-capital-bool-d.patch | 97 +++++++++++++++++++
+>  1 file changed, 97 insertions(+)
+>  create mode 100644 package/qt5/qt5webkit/0009-Fix-ICU-related-compile-failures-from-capital-bool-d.patch
+> 
+> diff --git a/package/qt5/qt5webkit/0009-Fix-ICU-related-compile-failures-from-capital-bool-d.patch b/package/qt5/qt5webkit/0009-Fix-ICU-related-compile-failures-from-capital-bool-d.patch
 > new file mode 100644
-> index 0000000000..a814043ce8
+> index 0000000000..04f41afee0
 > --- /dev/null
-> +++ b/package/efivar/0005-ucs2.h-remove-unused-variable.patch
-> @@ -0,0 +1,35 @@
-> +From fdb803402fb32fa6d020bac57a40c7efe4aabb7d Mon Sep 17 00:00:00 2001
-> +From: Javier Martinez Canillas <javierm@redhat.com>
-> +Date: Tue, 5 Mar 2019 17:23:24 +0100
-> +Subject: [PATCH] ucs2.h: remove unused variable
+> +++ b/package/qt5/qt5webkit/0009-Fix-ICU-related-compile-failures-from-capital-bool-d.patch
+> @@ -0,0 +1,97 @@
+> +From 37ee268d9d07a8dad02c1d8db3bf96e0b30df10b Mon Sep 17 00:00:00 2001
+> +From: Henri Roosen <henri.roosen@ginzinger.com>
+> +Date: Thu, 18 Mar 2021 11:53:57 +0100
+> +Subject: [PATCH] Fix ICU related compile failures from capital bool defines
 > +
-> +The const uint16_t pointer is not used since now the two bytes of the
-> +UCS-2 chars are checked to know if is the termination of the string.
-> +
-
-Should 'Backported from: fdb803402fb32fa6d020bac57a40c7efe4aabb7d' be
-added here since the patches could be regenerated and the original
-commit sha1 could be lost?
-
-https://buildroot.org/downloads/manual/manual.html#_integrating_patches_found_on_the_web
-
-> +Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-> +Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> +See ICU-21267
 > +---
-> + src/ucs2.h | 3 +--
-> + 1 file changed, 1 insertion(+), 2 deletions(-)
+> + .../platform/text/TextBreakIteratorICU.cpp       | 16 ++++++++--------
+> + Source/WebCore/platform/text/TextCodecICU.cpp    |  2 +-
+> + 2 files changed, 9 insertions(+), 9 deletions(-)
 > +
-> +diff --git a/src/ucs2.h b/src/ucs2.h
-> +index edd8367..e0390c3 100644
-> +--- a/src/ucs2.h
-> ++++ b/src/ucs2.h
-> +@@ -26,12 +26,11 @@ static inline size_t UNUSED
-> + ucs2len(const void *vs, ssize_t limit)
+> +diff --git a/Source/WebCore/platform/text/TextBreakIteratorICU.cpp b/Source/WebCore/platform/text/TextBreakIteratorICU.cpp
+> +index b4046ac9..832890a2 100644
+> +--- a/Source/WebCore/platform/text/TextBreakIteratorICU.cpp
+> ++++ b/Source/WebCore/platform/text/TextBreakIteratorICU.cpp
+> +@@ -214,12 +214,12 @@ static inline bool textInChunkOrOutOfRange(UText* text, int64_t nativeIndex, int
+> +             // Ensure chunk offset is well formed if computed offset exceeds int32_t range.
+> +             ASSERT(offset < numeric_limits<int32_t>::max());
+> +             text->chunkOffset = offset < numeric_limits<int32_t>::max() ? static_cast<int32_t>(offset) : 0;
+> +-            isAccessible = TRUE;
+> ++            isAccessible = true;
+> +             return true;
+> +         }
+> +         if (nativeIndex >= nativeLength && text->chunkNativeLimit == nativeLength) {
+> +             text->chunkOffset = text->chunkLength;
+> +-            isAccessible = FALSE;
+> ++            isAccessible = false;
+> +             return true;
+> +         }
+> +     } else {
+> +@@ -228,12 +228,12 @@ static inline bool textInChunkOrOutOfRange(UText* text, int64_t nativeIndex, int
+> +             // Ensure chunk offset is well formed if computed offset exceeds int32_t range.
+> +             ASSERT(offset < numeric_limits<int32_t>::max());
+> +             text->chunkOffset = offset < numeric_limits<int32_t>::max() ? static_cast<int32_t>(offset) : 0;
+> +-            isAccessible = TRUE;
+> ++            isAccessible = true;
+> +             return true;
+> +         }
+> +         if (nativeIndex <= 0 && !text->chunkNativeStart) {
+> +             text->chunkOffset = 0;
+> +-            isAccessible = FALSE;
+> ++            isAccessible = false;
+> +             return true;
+> +         }
+> +     }
+> +@@ -243,7 +243,7 @@ static inline bool textInChunkOrOutOfRange(UText* text, int64_t nativeIndex, int
+> + static UBool textLatin1Access(UText* text, int64_t nativeIndex, UBool forward)
 > + {
-> +       ssize_t i;
-> +-      const uint16_t *s = vs;
-> +       const uint8_t *s8 = vs;
-> +
-> +       for (i = 0;
-> +            i < (limit >= 0 ? limit : i+1) && s8[0] != 0 && s8[1] != 0;
-> +-           i++, s8 += 2, s++)
-> ++           i++, s8 += 2)
-> +               ;
-> +       return i;
+> +     if (!text->context)
+> +-        return FALSE;
+> ++        return false;
+> +     int64_t nativeLength = textNativeLength(text);
+> +     UBool isAccessible;
+> +     if (textInChunkOrOutOfRange(text, nativeIndex, nativeLength, forward, isAccessible))
+> +@@ -263,7 +263,7 @@ static UBool textLatin1Access(UText* text, int64_t nativeIndex, UBool forward)
+> +         ASSERT(newContext == PriorContext);
+> +         textLatin1SwitchToPriorContext(text, nativeIndex, nativeLength, forward);
+> +     }
+> +-    return TRUE;
+> ++    return true;
 > + }
-> +--
+> + 
+> + static const struct UTextFuncs textLatin1Funcs = {
+> +@@ -364,7 +364,7 @@ static void textUTF16SwitchToPriorContext(UText* text, int64_t nativeIndex, int6
+> + static UBool textUTF16Access(UText* text, int64_t nativeIndex, UBool forward)
+> + {
+> +     if (!text->context)
+> +-        return FALSE;
+> ++        return false;
+> +     int64_t nativeLength = textNativeLength(text);
+> +     UBool isAccessible;
+> +     if (textInChunkOrOutOfRange(text, nativeIndex, nativeLength, forward, isAccessible))
+> +@@ -384,7 +384,7 @@ static UBool textUTF16Access(UText* text, int64_t nativeIndex, UBool forward)
+> +         ASSERT(newContext == PriorContext);
+> +         textUTF16SwitchToPriorContext(text, nativeIndex, nativeLength, forward);
+> +     }
+> +-    return TRUE;
+> ++    return true;
+> + }
+> + 
+> + static const struct UTextFuncs textUTF16Funcs = {
+> +diff --git a/Source/WebCore/platform/text/TextCodecICU.cpp b/Source/WebCore/platform/text/TextCodecICU.cpp
+> +index 86d4ea17..da152edd 100644
+> +--- a/Source/WebCore/platform/text/TextCodecICU.cpp
+> ++++ b/Source/WebCore/platform/text/TextCodecICU.cpp
+> +@@ -269,7 +269,7 @@ void TextCodecICU::createICUConverter() const
+> +     m_converterICU = ucnv_open(m_canonicalConverterName, &err);
+> +     ASSERT(U_SUCCESS(err));
+> +     if (m_converterICU)
+> +-        ucnv_setFallback(m_converterICU, TRUE);
+> ++        ucnv_setFallback(m_converterICU, true);
+> + }
+> + 
+> + int TextCodecICU::decodeToBuffer(UChar* target, UChar* targetLimit, const char*& source, const char* sourceLimit, int32_t* offsets, bool flush, UErrorCode& err)
+> +-- 
 > +2.20.1
 > +
-> diff --git a/package/efivar/0006-ucs2.h-fix-logic-that-checks-for-UCS-2-string-termin.patch b/package/efivar/0006-ucs2.h-fix-logic-that-checks-for-UCS-2-string-termin.patch
-> new file mode 100644
-> index 0000000000..00b20332ef
-> --- /dev/null
-> +++ b/package/efivar/0006-ucs2.h-fix-logic-that-checks-for-UCS-2-string-termin.patch
-> @@ -0,0 +1,32 @@
-> +From 4e04afc2df9bbc26e5ab524b53a6f4f1e61d7c9e Mon Sep 17 00:00:00 2001
-> +From: Javier Martinez Canillas <javierm@redhat.com>
-> +Date: Tue, 5 Mar 2019 17:23:32 +0100
-> +Subject: [PATCH] ucs2.h: fix logic that checks for UCS-2 string termination
-> +
-> +Currently the loop to count the lenght of the UCS-2 string ends if either
-> +of the two bytes are 0, but 0 is a valid value for UCS-2 character codes.
-> +
-> +So only break the loop when 0 is the value for both UCS-2 char bytes.
-> +
-
-Same about adding 'backported from' as above.
-
-> +Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-> +Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> +---
-> + src/ucs2.h | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/src/ucs2.h b/src/ucs2.h
-> +index e0390c3..fd8b056 100644
-> +--- a/src/ucs2.h
-> ++++ b/src/ucs2.h
-> +@@ -29,7 +29,7 @@ ucs2len(const void *vs, ssize_t limit)
-> +       const uint8_t *s8 = vs;
-> +
-> +       for (i = 0;
-> +-           i < (limit >= 0 ? limit : i+1) && s8[0] != 0 && s8[1] != 0;
-> ++           i < (limit >= 0 ? limit : i+1) && !(s8[0] == 0 && s8[1] == 0);
-> +            i++, s8 += 2)
-> +               ;
-> +       return i;
-> +--
-> +2.20.1
-> +
-
-Reviewed-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-
-Thanks,
--Ryan
