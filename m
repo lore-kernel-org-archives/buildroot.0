@@ -1,59 +1,49 @@
-From: Jean-pierre Cartal <jpcartal@free.fr>
-Date: Thu, 18 Mar 2021 08:32:40 +0100
-Subject: [Buildroot] [PATCH 1/1] support/download: Fix tarball generation -
- 2020.02.x branch patch
-Message-ID: <20210318073240.404490-1-jpcartal@free.fr>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 18 Mar 2021 07:35:59 +0000
+Subject: [Buildroot] [Bug 13551] 2021.02.rc2: Unicode not work on qt 5.15.2
+In-Reply-To: <bug-13551-163@https.bugs.busybox.net/>
+References: <bug-13551-163@https.bugs.busybox.net/>
+Message-ID: <bug-13551-163-iGaYdiKtXc@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-fix tarball generation with symlinks pointing to ./something
+https://bugs.busybox.net/show_bug.cgi?id=13551
 
-When a --transform expression is provided, it is by default also applied
-to the target of a symlink.
+--- Comment #12 from Alfredo Pons Menargues <alfredo.pons@gmail.com> ---
+Created attachment 8821
+  --> https://bugs.busybox.net/attachment.cgi?id=8821&action=edit
+My config file for buildroot-2021.02
 
-When we create tarballs (from git or svn checkouts), we use a --transform
-expression to replace the leading ./ with the package name and version.
+Buildroot: buildroot-2021.02
+CPU: eglfs/RPi3
 
-This causes issues when a package contains symlinks that points to
-./something, as the leading './' is also replaced.
+In this scenario, if you run the tests of QT Console code:
 
-Fix that by using the 'S' transformation scope flag, as described in the
-tar manual:
-  https://www.gnu.org/software/tar/manual/html_node/transform.html#transform
+  #include <QDebug>
+  int main(int argc, char* argv[]) {
+      qInfo() << "\u25C0";
+      return 0;
+  }
 
-  In addition, several transformation scope flags are supported, that
-  control to what files transformations apply. These are:
+Run:
 
-  ?r? Apply transformation to regular archive members.
-  ?R? Do not apply transformation to regular archive members.
-  ?s? Apply transformation to symbolic link targets.
-  ?S? Do not apply transformation to symbolic link targets.
-  ?h? Apply transformation to hard link targets.
-  ?H? Do not apply transformation to hard link targets.
+$ ./test 2>&1 | hexdump -C  --> NO UTF8
 
-  Default is ?rsh? [...].
 
-Fixes: #13616
-Signed-off-by: Jean-pierre Cartal <jpcartal@free.fr>
----
- support/download/git | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+$ LANG=en_US.utf8 ./test 2>&1 | hexdump -C   --> UTF8 OK
 
-diff --git a/support/download/git b/support/download/git
-index 15d8c66e05..1b0dc1b115 100755
---- a/support/download/git
-+++ b/support/download/git
-@@ -203,7 +203,7 @@ LC_ALL=C sort <"${output}.list" >"${output}.list.sorted"
- 
- # Create GNU-format tarballs, since that's the format of the tarballs on
- # sources.buildroot.org and used in the *.hash files
--tar cf - --transform="s#^\./#${basename}/#" \
-+tar cf - --transform="s#^\./#${basename}/#S" \
-          --numeric-owner --owner=0 --group=0 --mtime="${date}" --format=gnu \
-          -T "${output}.list.sorted" >"${output}.tar"
- gzip -6 -n <"${output}.tar" >"${output}"
+
+In the console example the utf-8 text works if we pass in the environment the
+variable LANG=en_US.utf8, but in QML test this does not happen:
+
+
+$ ./testQML --> NO UTF8
+
+$ LANG=en_US.utf8 ./testQML --> NO UTF8
+
 -- 
-2.30.2
+You are receiving this mail because:
+You are on the CC list for the bug.
