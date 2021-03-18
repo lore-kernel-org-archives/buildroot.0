@@ -1,49 +1,56 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 18 Mar 2021 07:35:59 +0000
-Subject: [Buildroot] [Bug 13551] 2021.02.rc2: Unicode not work on qt 5.15.2
-In-Reply-To: <bug-13551-163@https.bugs.busybox.net/>
-References: <bug-13551-163@https.bugs.busybox.net/>
-Message-ID: <bug-13551-163-iGaYdiKtXc@https.bugs.busybox.net/>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 18 Mar 2021 08:42:19 +0100
+Subject: [Buildroot] [PATCH 1/1] package/elfutils: fix build with uclibc
+Message-ID: <20210318074219.4113728-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13551
+Update first patch to fix a build failure with uclibc and elfutils in
+version 0.183.0 which errors out if obstack is not found since
+https://sourceware.org/git/?p=elfutils.git;a=commit;h=da855fc9cd415c288bfcb9de1f3d5eb329de0557
 
---- Comment #12 from Alfredo Pons Menargues <alfredo.pons@gmail.com> ---
-Created attachment 8821
-  --> https://bugs.busybox.net/attachment.cgi?id=8821&action=edit
-My config file for buildroot-2021.02
+Indeed, obstack has been removed from uclibc-ng since version 1.0.21 and
+https://github.com/wbx-github/uclibc-ng/commit/0bd6bfb2b643ea2b4b1440dfd917ba752f0c0d15
 
-Buildroot: buildroot-2021.02
-CPU: eglfs/RPi3
+Fixes:
+ - http://autobuild.buildroot.org/results/003ae73c7b48ad6b9837fb19ca197061d20eaf6d
 
-In this scenario, if you run the tests of QT Console code:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...-Add-a-enable-disable-progs-configure-option.patch | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-  #include <QDebug>
-  int main(int argc, char* argv[]) {
-      qInfo() << "\u25C0";
-      return 0;
-  }
-
-Run:
-
-$ ./test 2>&1 | hexdump -C  --> NO UTF8
-
-
-$ LANG=en_US.utf8 ./test 2>&1 | hexdump -C   --> UTF8 OK
-
-
-In the console example the utf-8 text works if we pass in the environment the
-variable LANG=en_US.utf8, but in QML test this does not happen:
-
-
-$ ./testQML --> NO UTF8
-
-$ LANG=en_US.utf8 ./testQML --> NO UTF8
-
+diff --git a/package/elfutils/0001-Add-a-enable-disable-progs-configure-option.patch b/package/elfutils/0001-Add-a-enable-disable-progs-configure-option.patch
+index e51f749cf6..bac9bc1245 100644
+--- a/package/elfutils/0001-Add-a-enable-disable-progs-configure-option.patch
++++ b/package/elfutils/0001-Add-a-enable-disable-progs-configure-option.patch
+@@ -20,6 +20,8 @@ Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ [Rebased on 0.183]
+ Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++[Fabrice: don't error out if obstack is not found]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ ---
+  Makefile.am  | 6 +++++-
+  configure.ac | 6 ++++++
+@@ -60,6 +62,15 @@ index d345495..0dd4b1e 100644
+  dnl zlib is mandatory.
+  save_LIBS="$LIBS"
+  LIBS=
++@@ -579,7 +585,7 @@ saved_LIBS="$LIBS"
++ AC_SEARCH_LIBS([_obstack_free], [obstack])
++ LIBS="$saved_LIBS"
++ case "$ac_cv_search__obstack_free" in
++-        no) AC_MSG_FAILURE([failed to find _obstack_free]) ;;
+++        no) obstack_LIBS= ;;
++         -l*) obstack_LIBS="$ac_cv_search__obstack_free" ;;
++         *) obstack_LIBS= ;;
++ esac
+ -- 
+ 2.30.1
+ 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.30.1
