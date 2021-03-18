@@ -1,44 +1,58 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 18 Mar 2021 20:47:35 +0100
-Subject: [Buildroot] [PATCH v1 04/12] package/gst1-plugins-bad: bump version
- to 1.18.4
-In-Reply-To: <20210318194743.30623-1-ps.report@gmx.net>
-References: <20210318194743.30623-1-ps.report@gmx.net>
-Message-ID: <20210318194743.30623-5-ps.report@gmx.net>
+Date: Thu, 18 Mar 2021 20:47:31 +0100
+Subject: [Buildroot] [PATCH v1 00/12] GStreamer 1.18.4 stable bug fix release
+Message-ID: <20210318194743.30623-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash | 4 ++--
- package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+GStreamer 1.18.4 stable bug fix release
 
-diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash
-index b6edff7e1a..18c4ed4b63 100644
---- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash
-+++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash
-@@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-1.18.3.tar.xz.sha256sum
--sha256  b7e34b6b86272588fbd8b314dadfa6ceff895198cfb59e2950378e9e31ff22e0  gst-plugins-bad-1.18.3.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-1.18.4.tar.xz.sha256sum
-+sha256  74e806bc5595b18c70e9ca93571e27e79dfb808e5d2e7967afa952b52e99c85f  gst-plugins-bad-1.18.4.tar.xz
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-index e8cea5bb34..f1be9cd961 100644
---- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-+++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GST1_PLUGINS_BAD_VERSION = 1.18.3
-+GST1_PLUGINS_BAD_VERSION = 1.18.4
- GST1_PLUGINS_BAD_SOURCE = gst-plugins-bad-$(GST1_PLUGINS_BAD_VERSION).tar.xz
- GST1_PLUGINS_BAD_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-bad
- GST1_PLUGINS_BAD_INSTALL_STAGING = YES
+For details see [1].
+
+[1] https://gstreamer.freedesktop.org/releases/1.18/#1.18.4
+
+Peter Seiderer (12):
+  package/gstreamer1: bump version to 1.18.4
+  package/gst1-plugins-base: bump version to 1.18.4
+  package/gst1-plugins-good: bump version to 1.18.4
+  package/gst1-plugins-bad: bump version to 1.18.4
+  package/gst1-plugins-ugly: bump version to 1.18.4
+  package/gst1-devtools: bump version to 1.18.4
+  package/gst1-libav: bump version to 1.18.4
+  package/gst1-vaapi: bump version to 1.18.4
+  package/gst1-rtsp-server: bump version to 1.18.4
+  package/gstreamer1-editing-services: bump version to 1.18.4
+  package/gst-omx: bump version to 1.18.4
+  package/gst1-python: bump version to 1.18.4
+
+ package/gstreamer1/gst-omx/gst-omx.hash                       | 4 ++--
+ package/gstreamer1/gst-omx/gst-omx.mk                         | 2 +-
+ package/gstreamer1/gst1-devtools/gst1-devtools.hash           | 4 ++--
+ package/gstreamer1/gst1-devtools/gst1-devtools.mk             | 2 +-
+ package/gstreamer1/gst1-libav/gst1-libav.hash                 | 4 ++--
+ package/gstreamer1/gst1-libav/gst1-libav.mk                   | 2 +-
+ package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash     | 4 ++--
+ package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk       | 2 +-
+ package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash   | 4 ++--
+ package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk     | 2 +-
+ package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash   | 4 ++--
+ package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk     | 2 +-
+ package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash   | 4 ++--
+ package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk     | 2 +-
+ package/gstreamer1/gst1-python/gst1-python.hash               | 4 ++--
+ package/gstreamer1/gst1-python/gst1-python.mk                 | 2 +-
+ package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash     | 4 ++--
+ package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk       | 2 +-
+ package/gstreamer1/gst1-vaapi/gst1-vaapi.hash                 | 4 ++--
+ package/gstreamer1/gst1-vaapi/gst1-vaapi.mk                   | 2 +-
+ .../gstreamer1-editing-services.hash                          | 4 ++--
+ .../gstreamer1-editing-services.mk                            | 2 +-
+ package/gstreamer1/gstreamer1/gstreamer1.hash                 | 4 ++--
+ package/gstreamer1/gstreamer1/gstreamer1.mk                   | 2 +-
+ 24 files changed, 36 insertions(+), 36 deletions(-)
+
 -- 
 2.30.2
