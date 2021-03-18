@@ -1,146 +1,110 @@
 From: Dick Olsson <hi@senzilla.io>
-Date: Thu, 18 Mar 2021 15:43:25 +0000
-Subject: [Buildroot] [PATCH v4 08/10]
- configs/socionext_developerbox_defconfig: new config for Developerbox
-Message-ID: <T3SoFMBRAnJjeMy4YYF6AFBkVY9Q5U6GtaV6KHGmthc@cp3-web-021.plabs.ch>
+Date: Thu, 18 Mar 2021 15:42:24 +0000
+Subject: [Buildroot] [PATCH v4 00/10] Introduce EDK2 firmware package
+Message-ID: <nbEwztTDjkNzk05Pubco5HD621kj6YGLocA0g2rvk@cp3-web-029.plabs.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This introduces configuration for the Socionext Developerbox, an
-Aarch64 workstation built with ARM Trusted Firmware and EDK2 firmware.
+Hi all,
 
-Signed-off-by: Dick Olsson <hi@senzilla.io>
+It's taken me a while to find time to follow-up with this fourth revision
+of this EDK2 firmware patchset. But I think I've finally got this
+patchset to a good place.
 
----
+I believe I have now addressed most of the review items from Thomas, Yann
+and everyone else. Perhaps most notably, we now make better use of $@D
+and $STAGING_DIR for different intermediate outputs throughout the
+packages. Various inline comments have also been cleaned up and clarified.
 
-Revision 4:
 
- * Renamed post-image.sh to assemble-flash-images
- * Updated to Linux LTS kernel 5.10
- * Added startup.nsh script for auto-booting from the EFI shell
+Cheers
 
-Signed-off-by: Dick Olsson <hi@senzilla.io>
----
- .../developerbox/assemble-flash-images        | 14 +++++++++++
- board/socionext/developerbox/genimage.cfg     | 24 +++++++++++++++++++
- board/socionext/developerbox/readme.txt       | 16 +++++++++++++
- board/socionext/developerbox/startup.nsh      |  1 +
- configs/socionext_developerbox_defconfig      | 21 ++++++++++++++++
- 5 files changed, 76 insertions(+)
+D. Olsson
+PGP: 8204A8CD
+
+
+
+Dick Olsson (10):
+  package/edk2-platforms: new package
+  boot/edk2: new package
+  boot/arm-trusted-firmware: Integrate with EDK2 as BL33 payload
+  configs/aarch64_efi_defconfig: build the EDK2 firmware from source
+  configs/pc_x86_64_defconfig: build the EDK2 firmware from source
+  configs/qemu_aarch64_sbsa_defconfig: new config for QEMU sbsa-ref
+  configs/qemu_aarch64_virt_efi_defconfig: new config for QEMU Virt EFI
+  configs/socionext_developerbox_defconfig: new config for Developerbox
+  configs/solidrun_macchiatobin_efi_defconfig: EFI config for
+    MacchiatoBin
+  DEVELOPERS: add Dick Olsson to all files related to EDK2
+
+ DEVELOPERS                                    |  17 ++
+ board/aarch64-efi/post-image.sh               |   6 +-
+ board/aarch64-efi/readme.txt                  |   9 +-
+ board/pc/readme.txt                           |   9 +-
+ board/qemu/aarch64-sbsa/assemble-flash-images |  18 +++
+ board/qemu/aarch64-sbsa/genimage.cfg          |  27 ++++
+ board/qemu/aarch64-sbsa/readme.txt            |  26 +++
+ board/qemu/aarch64-sbsa/startup.nsh           |   1 +
+ .../aarch64-virt-efi/assemble-flash-images    |  19 +++
+ board/qemu/aarch64-virt-efi/genimage.cfg      |  27 ++++
+ board/qemu/aarch64-virt-efi/readme.txt        |  27 ++++
+ board/qemu/aarch64-virt-efi/startup.nsh       |   1 +
+ .../developerbox/assemble-flash-images        |  14 ++
+ board/socionext/developerbox/genimage.cfg     |  24 +++
+ board/socionext/developerbox/readme.txt       |  16 ++
+ board/socionext/developerbox/startup.nsh      |   1 +
+ .../macchiatobin-efi/assemble-flash-images    |  14 ++
+ board/solidrun/macchiatobin-efi/genimage.cfg  |  24 +++
+ .../solidrun/macchiatobin-efi/linux.fragment  |   3 +
+ board/solidrun/macchiatobin-efi/readme.txt    |  90 +++++++++++
+ board/solidrun/macchiatobin-efi/startup.nsh   |   1 +
+ boot/Config.in                                |   1 +
+ boot/arm-trusted-firmware/Config.in           |  15 +-
+ .../arm-trusted-firmware.mk                   |   9 ++
+ boot/edk2/Config.in                           | 110 +++++++++++++
+ boot/edk2/edk2.hash                           |   3 +
+ boot/edk2/edk2.mk                             | 150 ++++++++++++++++++
+ configs/aarch64_efi_defconfig                 |   2 +
+ configs/pc_x86_64_efi_defconfig               |   2 +
+ configs/qemu_aarch64_sbsa_defconfig           |  43 +++++
+ configs/qemu_aarch64_virt_efi_defconfig       |  45 ++++++
+ configs/socionext_developerbox_defconfig      |  21 +++
+ configs/solidrun_macchiatobin_efi_defconfig   |  25 +++
+ package/Config.in                             |   1 +
+ package/edk2-platforms/Config.in              |   8 +
+ package/edk2-platforms/edk2-platforms.hash    |   3 +
+ package/edk2-platforms/edk2-platforms.mk      |  21 +++
+ 37 files changed, 821 insertions(+), 12 deletions(-)
+ create mode 100755 board/qemu/aarch64-sbsa/assemble-flash-images
+ create mode 100644 board/qemu/aarch64-sbsa/genimage.cfg
+ create mode 100644 board/qemu/aarch64-sbsa/readme.txt
+ create mode 100644 board/qemu/aarch64-sbsa/startup.nsh
+ create mode 100755 board/qemu/aarch64-virt-efi/assemble-flash-images
+ create mode 100644 board/qemu/aarch64-virt-efi/genimage.cfg
+ create mode 100644 board/qemu/aarch64-virt-efi/readme.txt
+ create mode 100644 board/qemu/aarch64-virt-efi/startup.nsh
  create mode 100755 board/socionext/developerbox/assemble-flash-images
  create mode 100644 board/socionext/developerbox/genimage.cfg
  create mode 100644 board/socionext/developerbox/readme.txt
  create mode 100644 board/socionext/developerbox/startup.nsh
+ create mode 100755 board/solidrun/macchiatobin-efi/assemble-flash-images
+ create mode 100644 board/solidrun/macchiatobin-efi/genimage.cfg
+ create mode 100644 board/solidrun/macchiatobin-efi/linux.fragment
+ create mode 100644 board/solidrun/macchiatobin-efi/readme.txt
+ create mode 100644 board/solidrun/macchiatobin-efi/startup.nsh
+ create mode 100644 boot/edk2/Config.in
+ create mode 100644 boot/edk2/edk2.hash
+ create mode 100644 boot/edk2/edk2.mk
+ create mode 100644 configs/qemu_aarch64_sbsa_defconfig
+ create mode 100644 configs/qemu_aarch64_virt_efi_defconfig
  create mode 100644 configs/socionext_developerbox_defconfig
+ create mode 100644 configs/solidrun_macchiatobin_efi_defconfig
+ create mode 100644 package/edk2-platforms/Config.in
+ create mode 100644 package/edk2-platforms/edk2-platforms.hash
+ create mode 100644 package/edk2-platforms/edk2-platforms.mk
 
-diff --git a/board/socionext/developerbox/assemble-flash-images b/board/socionext/developerbox/assemble-flash-images
-new file mode 100755
-index 0000000000..22a86e1f6b
---- /dev/null
-+++ b/board/socionext/developerbox/assemble-flash-images
-@@ -0,0 +1,14 @@
-+#!/bin/bash
-+
-+set -e
-+
-+BOARD_DIR="$(dirname $0)"
-+EFI_PART=${BINARIES_DIR}/efi-part
-+EFI_DIR=${EFI_PART}/EFI/BOOT
-+
-+# Create the EFI system partition with startup script and kernel
-+# executable according to the UEFI standard.
-+rm -rf ${EFI_DIR}
-+mkdir -p ${EFI_DIR}
-+cp ${BOARD_DIR}/startup.nsh ${EFI_PART}/
-+ln -sf ${BINARIES_DIR}/Image ${EFI_DIR}/bootaa64.efi
-diff --git a/board/socionext/developerbox/genimage.cfg b/board/socionext/developerbox/genimage.cfg
-new file mode 100644
-index 0000000000..f653b1f35d
---- /dev/null
-+++ b/board/socionext/developerbox/genimage.cfg
-@@ -0,0 +1,24 @@
-+image efi-part.vfat {
-+  vfat {
-+    file EFI {
-+      image = "efi-part/EFI"
-+    }
-+  }
-+  size = 32M
-+}
-+
-+image disk.img {
-+  hdimage {
-+    gpt = true
-+  }
-+
-+  partition boot {
-+    partition-type = 0xEF
-+    image = "efi-part.vfat"
-+  }
-+
-+  partition root {
-+    partition-type = 0x83
-+    image = "rootfs.ext2"
-+  }
-+}
-diff --git a/board/socionext/developerbox/readme.txt b/board/socionext/developerbox/readme.txt
-new file mode 100644
-index 0000000000..4c301c1353
---- /dev/null
-+++ b/board/socionext/developerbox/readme.txt
-@@ -0,0 +1,16 @@
-+Intro
-+=====
-+
-+This is the board support for the Socionext SynQuacer Developerbox (SC2A11).
-+The firmware is built with ARM Trusted Firmware and EDK2 (UEFI).
-+
-+CM3_IMAGE.bin
-+
-+More info
-+=========
-+
-+For more information about this board and the firmware see:
-+
-+- https://www.96boards.org/product/developerbox/
-+- https://www.96boards.org/documentation/enterprise/developerbox/downloads/edk2.md.html
-+- https://trustedfirmware-a.readthedocs.io/en/latest/plat/synquacer.html
-diff --git a/board/socionext/developerbox/startup.nsh b/board/socionext/developerbox/startup.nsh
-new file mode 100644
-index 0000000000..8c85089d7d
---- /dev/null
-+++ b/board/socionext/developerbox/startup.nsh
-@@ -0,0 +1 @@
-+FS0:\EFI\BOOT\bootaa64.efi root=/dev/sda2 rootwait
-diff --git a/configs/socionext_developerbox_defconfig b/configs/socionext_developerbox_defconfig
-new file mode 100644
-index 0000000000..4a389eb48b
---- /dev/null
-+++ b/configs/socionext_developerbox_defconfig
-@@ -0,0 +1,21 @@
-+BR2_aarch64=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/socionext/developerbox/assemble-flash-images support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/socionext/developerbox/genimage.cfg"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.2"
-+BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="200M"
-+# BR2_TARGET_ROOTFS_TAR is not set
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="synquacer"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_TARGETS="bl31 fiptool"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="PRELOADED_BL33_BASE=0x8200000"
-+BR2_TARGET_EDK2=y
-+BR2_TARGET_EDK2_PLATFORM_SOCIONEXT_DEVELOPERBOX=y
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
 -- 
 2.24.3 (Apple Git-128)
