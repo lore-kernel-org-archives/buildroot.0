@@ -1,16 +1,18 @@
 From: Dick Olsson <hi@senzilla.io>
-Date: Thu, 18 Mar 2021 15:43:32 +0000
-Subject: [Buildroot] [PATCH v4 09/10]
- configs/solidrun_macchiatobin_efi_defconfig: EFI config for MacchiatoBin
-Message-ID: <BR9BhREuAfwfd9s4mqI0EWezwoEfLpNZ5ISfiQPgxQ@cp4-web-040.plabs.ch>
+Date: Thu, 18 Mar 2021 15:42:32 +0000
+Subject: [Buildroot] [PATCH v4 01/10] package/edk2-platforms: new package
+Message-ID: <34j7jMPklxbGS9VL3KH4ywYUUSnP2J5paG6i58IM9Uk@cp3-web-024.plabs.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This introduces an alternative board build for the MacchiatoBin based on
-EDK2 (UEFI) firmware loaded as BL33 by ARM Trusted Firmware.
+EDK2 firmware is usually built from two sources; the core EDK2
+environment, and additional platform description files maintained
+separately. This package adds the latter set of description files to
+staging so that the core EDK2 package can build with these for certain
+platforms during the building process.
 
 Signed-off-by: Dick Olsson <hi@senzilla.io>
 
@@ -18,218 +20,95 @@ Signed-off-by: Dick Olsson <hi@senzilla.io>
 
 Revision 4:
 
- * Renamed post-image.sh to assemble-flash-images
- * Updated to Linux LTS kernel 5.10
- * Added startup.nsh for auto-booting from the EFI shell
+ * Addressed review items from Yann Morin
+ * Install description files to the staging dir instead of the host dir
+ * Updated to HEAD as of 7 Jan, 2021
+
+Revision 3:
+
+ * Added standard comment header
+ * Added sha256 of the license file
+ * Updated to hash matching edk2 202008
+
+Revision 2:
+
+ * Now installs all description files into HOST_DIR so other packages do not
+   have to compile from its BUILD_DIR (suggested by Thomas Petazzoni)
+
+edk2-platforms fixes
 
 Signed-off-by: Dick Olsson <hi@senzilla.io>
 ---
- .../macchiatobin-efi/assemble-flash-images    | 14 +++
- board/solidrun/macchiatobin-efi/genimage.cfg  | 24 +++++
- .../solidrun/macchiatobin-efi/linux.fragment  |  3 +
- board/solidrun/macchiatobin-efi/readme.txt    | 90 +++++++++++++++++++
- board/solidrun/macchiatobin-efi/startup.nsh   |  1 +
- configs/solidrun_macchiatobin_efi_defconfig   | 25 ++++++
- 6 files changed, 157 insertions(+)
- create mode 100755 board/solidrun/macchiatobin-efi/assemble-flash-images
- create mode 100644 board/solidrun/macchiatobin-efi/genimage.cfg
- create mode 100644 board/solidrun/macchiatobin-efi/linux.fragment
- create mode 100644 board/solidrun/macchiatobin-efi/readme.txt
- create mode 100644 board/solidrun/macchiatobin-efi/startup.nsh
- create mode 100644 configs/solidrun_macchiatobin_efi_defconfig
+ package/Config.in                          |  1 +
+ package/edk2-platforms/Config.in           |  8 ++++++++
+ package/edk2-platforms/edk2-platforms.hash |  3 +++
+ package/edk2-platforms/edk2-platforms.mk   | 21 +++++++++++++++++++++
+ 4 files changed, 33 insertions(+)
+ create mode 100644 package/edk2-platforms/Config.in
+ create mode 100644 package/edk2-platforms/edk2-platforms.hash
+ create mode 100644 package/edk2-platforms/edk2-platforms.mk
 
-diff --git a/board/solidrun/macchiatobin-efi/assemble-flash-images b/board/solidrun/macchiatobin-efi/assemble-flash-images
-new file mode 100755
-index 0000000000..22a86e1f6b
---- /dev/null
-+++ b/board/solidrun/macchiatobin-efi/assemble-flash-images
-@@ -0,0 +1,14 @@
-+#!/bin/bash
-+
-+set -e
-+
-+BOARD_DIR="$(dirname $0)"
-+EFI_PART=${BINARIES_DIR}/efi-part
-+EFI_DIR=${EFI_PART}/EFI/BOOT
-+
-+# Create the EFI system partition with startup script and kernel
-+# executable according to the UEFI standard.
-+rm -rf ${EFI_DIR}
-+mkdir -p ${EFI_DIR}
-+cp ${BOARD_DIR}/startup.nsh ${EFI_PART}/
-+ln -sf ${BINARIES_DIR}/Image ${EFI_DIR}/bootaa64.efi
-diff --git a/board/solidrun/macchiatobin-efi/genimage.cfg b/board/solidrun/macchiatobin-efi/genimage.cfg
+diff --git a/package/Config.in b/package/Config.in
+index d278e78b68..580c9b154a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -458,6 +458,7 @@ endmenu
+ 	source "package/dvb-apps/Config.in"
+ 	source "package/dvbsnoop/Config.in"
+ 	source "package/edid-decode/Config.in"
++	source "package/edk2-platforms/Config.in"
+ 	source "package/eudev/Config.in"
+ 	source "package/ev3dev-linux-drivers/Config.in"
+ 	source "package/evemu/Config.in"
+diff --git a/package/edk2-platforms/Config.in b/package/edk2-platforms/Config.in
 new file mode 100644
-index 0000000000..5d8457e4ac
+index 0000000000..c6002ba019
 --- /dev/null
-+++ b/board/solidrun/macchiatobin-efi/genimage.cfg
-@@ -0,0 +1,24 @@
-+image efi-part.vfat {
-+  vfat {
-+    file EFI {
-+      image = "efi-part/EFI"
-+    }
-+  }
-+  size = 32M
-+}
++++ b/package/edk2-platforms/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_EDK2_PLATFORMS
++	bool
++	help
++	  EDK II description files for all supported platforms. The main EDK2
++	  bootloader package will depend on these description files while building
++	  firmware for certain platforms.
 +
-+image sdcard.img {
-+  hdimage {
-+    gpt = true
-+  }
-+
-+  partition boot {
-+    partition-type = 0xEF
-+    image = "efi-part.vfat"
-+  }
-+
-+  partition root {
-+    partition-type = 0x83
-+    image = "rootfs.ext2"
-+  }
-+}
-diff --git a/board/solidrun/macchiatobin-efi/linux.fragment b/board/solidrun/macchiatobin-efi/linux.fragment
++	  https://github.com/tianocore/edk2-platforms
+diff --git a/package/edk2-platforms/edk2-platforms.hash b/package/edk2-platforms/edk2-platforms.hash
 new file mode 100644
-index 0000000000..29fd630626
+index 0000000000..5b57f653b6
 --- /dev/null
-+++ b/board/solidrun/macchiatobin-efi/linux.fragment
++++ b/package/edk2-platforms/edk2-platforms.hash
 @@ -0,0 +1,3 @@
-+CONFIG_MARVELL_PHY=y
-+CONFIG_MARVELL_10G_PHY=y
-+CONFIG_SFP=y
-diff --git a/board/solidrun/macchiatobin-efi/readme.txt b/board/solidrun/macchiatobin-efi/readme.txt
++# Locally calculated
++sha256 b90b923425f81ca1b1ae37a5adc02853cdb609d716f08f64482b735ac5d253a7  edk2-platforms-f8958b86e8863432b815a132a0f0fe82950c6dd1.tar.gz
++sha256 50ce20c9cfdb0e19ee34fe0a51fc0afe961f743697b068359ab2f862b494df80  License.txt
+diff --git a/package/edk2-platforms/edk2-platforms.mk b/package/edk2-platforms/edk2-platforms.mk
 new file mode 100644
-index 0000000000..b9794dd3d4
+index 0000000000..b9e3f0fb1b
 --- /dev/null
-+++ b/board/solidrun/macchiatobin-efi/readme.txt
-@@ -0,0 +1,90 @@
-+Intro
-+=====
++++ b/package/edk2-platforms/edk2-platforms.mk
+@@ -0,0 +1,21 @@
++################################################################################
++#
++# edk2-platforms
++#
++################################################################################
 +
-+This is the board support for MacchiatoBin with a more modern firmware stack
-+compared to the original build with board/solidrun/macchiatobin.
++EDK2_PLATFORMS_VERSION = f8958b86e8863432b815a132a0f0fe82950c6dd1
++EDK2_PLATFORMS_SITE = $(call github,tianocore,edk2-platforms,$(EDK2_PLATFORMS_VERSION))
++EDK2_PLATFORMS_LICENSE = BSD-2-Clause
++EDK2_PLATFORMS_LICENSE_FILE = License.txt
++EDK2_PLATFORMS_INSTALL_TARGET = NO
++EDK2_PLATFORMS_INSTALL_STAGING = YES
 +
-+The goal with this default configuration is to provide a build as close to
-+ARM Server Base Boot Requirement (SBBR) as possible. This gives us the
-+following benefits:
++# There is nothing to build for edk2-platforms. All we need to do is to copy
++# all description files to staging, for other packages to build with.
++define EDK2_PLATFORMS_INSTALL_STAGING_CMDS
++	rm -rf $(STAGING_DIR)/usr/share/edk2-platforms
++	cp -rf $(@D) $(STAGING_DIR)/usr/share/edk2-platforms
++endef
 +
-+ - The firmware is built and flashed separately from the OS image
-+ - Therefore, the board will boot with any standard Aarch64 distribution image
-+ - UEFI provides a more standardized firmware interface
-+
-+How to build
-+============
-+
-+The default configuration provides the following stack:
-+
-+ - ARM Trusted Firmware (mainline)
-+ - EDK2 UEFI firmware (mainline)
-+ - Linux 5.9 (mainline)
-+
-+    $ make solidrun_macchiatobin_efi_defconfig
-+    $ make
-+
-+The next step will depend on whether you have U-Boot or UEFI flashed on the
-+board.
-+
-+How to flash the firmware from U-Boot
-+=====================================
-+
-+In this example we will assume that the board has U-Boot flashed on it. We will
-+flash the new UEFI firmware from the U-Boot console to the SPI flash, using
-+the "bubt" (Burn ATF) command.
-+
-+Once the build process is finished you will have an image called
-+"flash-image.bin" in the output/images/ directory.
-+
-+First, format a USB drive with an EXT4 partition and copy the "flash-image.bin"
-+file onto the USB drive.
-+
-+Second, attach to the serial console[1], insert the USB drive into the board,
-+boot the board and enter the U-Boot console. On the U-Boot console enter the
-+following commands:
-+
-+    usb start
-+    bubt flash-image.bin spi usb
-+
-+Lastly, unplug the USB drive and reboot the board. The board will now
-+boot with the newly flashed UEFI firmware.
-+
-+How to flash the firmware from UEFI
-+===================================
-+
-+In this example we will assume that the board has UEFI flashed on it. We will
-+flash the new UEFI firmware from the old UEFI console to the SPI flash, using
-+the "fupdate" command.
-+
-+First, format a USB drive with an FAT partition and copy the "flash-image.bin"
-+file onto the USB drive.
-+
-+Second, attach to the serial console[1], insert the USB drive into the board,
-+boot the board and enter the UEFI shell. In the UEFI shell, find what file
-+system your USB drive got mapped to by using the "map" and "ls" commands.
-+Then enter this command (assuming your USB drive is on "FS0"):
-+
-+    fupdate FS0:\flash-image.bin spi
-+
-+Lastly, unplug the USB drive and reboot the board. The board will now
-+boot with the newly flashed UEFI firmware.
-+
-+How to write the SD card
-+========================
-+
-+Once the build process is finished you will have an image called "sdcard.img"
-+in the output/images/ directory. This image only contains the Linux kernel and
-+the rest of the operating system.
-+
-+Copy the bootable "sdcard.img" onto an SD card with "dd":
-+
-+  $ sudo dd if=output/images/sdcard.img of=/dev/sdX bs=1M conv=fsync
-+  $ sudo sync
-+
-+Plug in the SD card into the board and boot.
-+
-+Note that because the board is now using UEFI firmware, the board will also
-+boot any other standard Aarch64 distribution image.
-+
-+[1]: http://wiki.espressobin.net/tiki-index.php?page=Quick+User+Guide
-diff --git a/board/solidrun/macchiatobin-efi/startup.nsh b/board/solidrun/macchiatobin-efi/startup.nsh
-new file mode 100644
-index 0000000000..79c00ce65c
---- /dev/null
-+++ b/board/solidrun/macchiatobin-efi/startup.nsh
-@@ -0,0 +1 @@
-+FS0:\EFI\BOOT\bootaa64.efi console=ttyS0,115200n8 root=/dev/mmcblk1p2 rootwait
-diff --git a/configs/solidrun_macchiatobin_efi_defconfig b/configs/solidrun_macchiatobin_efi_defconfig
-new file mode 100644
-index 0000000000..a71b5fa322
---- /dev/null
-+++ b/configs/solidrun_macchiatobin_efi_defconfig
-@@ -0,0 +1,25 @@
-+BR2_aarch64=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/solidrun/macchiatobin-efi/assemble-flash-images support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/solidrun/macchiatobin-efi/genimage.cfg"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.2"
-+BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/solidrun/macchiatobin-efi/linux.fragment"
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="200M"
-+# BR2_TARGET_ROOTFS_TAR is not set
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="a80x0_mcbin"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_EDK2_AS_BL33=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_TARGETS="mrvl_flash"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="USE_COHERENT_MEM=0"
-+BR2_TARGET_BINARIES_MARVELL=y
-+BR2_TARGET_EDK2=y
-+BR2_TARGET_EDK2_PLATFORM_SOLIDRUN_ARMADA80X0MCBIN=y
-+BR2_TARGET_MV_DDR_MARVELL=y
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
++$(eval $(generic-package))
 -- 
 2.24.3 (Apple Git-128)
