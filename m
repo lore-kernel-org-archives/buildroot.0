@@ -1,172 +1,102 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 19 Mar 2021 21:56:26 +0100
-Subject: [Buildroot] [git commit branch/2021.02.x] support/download: make
- the svn backend more reproducible
-Message-ID: <20210319204446.1146C8038C@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 19 Mar 2021 22:27:37 +0100
+Subject: [Buildroot] [PATCH 1/1] package/janet: fix build without threads
+Message-ID: <20210319212737.353274-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bf1c7e45a3f24f8b12211ec6c12addb19d073502
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
-
-Since c043ecb20ce6 (support/download: change format of archives
-generated from svn), the svn backend uses the generic helper to
-create reproducible archives.
-
-That helper really does its job as expected, but the svn backend
-is flawed in two ways:
-
-  - the first, most obvious breakage happens with versions older
-    than 1.9, as they do not support the '--show-item' option
-    for the 'info' action;
-
-  - the second is more involved, in that svn will by default
-    expand the old, legacy, deprecated, cumbersome CVS-style
-    keywords, in the form of revision marks like '$Date$' in a
-    C-style comment in a source file. These replacements are
-    done on checkout as well as on export, and they use local
-    settings, like the local locale and timezone.
-
-    This means that two people with different settings, will get
-    different sources when the svn-checkout or svn-export the same
-    revision from the same tree...
-
-    Needless to say that this is not very reproducible...
-
-While the first is easily solved, the second is more involved.
-
-We need to ensure that what source is used initially to compute
-the hash, will also be the source that are used to check the hash.
-
-There are basically two solutions:
-
- 1. we ensure the same environment, by forcing the timezone and
-    the locale to arbitrary values
-
- 2. we disable keyword expansion
-
-For the first solution, this still leaves the possibility that we
-miss some environment settings that have an impact on the keyword
-expansion. It would mean that Yann's settings be used, as he did
-introduce the hash for the only svn-downloaded package we have,
-avrdude, settings which are:
-    TZ=Europe/Paris
-    LC_TIME="en_US.UTF-8"
-    LC_COLLATE="en_GB.UTF-8"
-    LC_MONETARY="fr_FR.utf8"
-    LC_NUMERIC="fr_FR.utf8"
-
-The second option means that the generated archives change. That
-means we'd have to bump the archive version for svn downloads, and
-that we update the hashes for all the svn-downloaded packages.
-
-We chose to go with the second option, because this is what really
-makes more sense, rather than hard-coding arbitrary values in the
-environment. And we also have only one svn-downloaded package,
-avrdude.
-
-And thus, we're reaching the trigger for this change: avrdude is
-impacted by the CVS-keyword expansion issue:
-
-    https://svn.savannah.gnu.org/viewvc/avrdude/trunk/avrdude/atmel-docs/EDBG/common/jquery/layout/jquery.layout.js?revision=1396&view=markup
-
-which would give two different files when checked out on different
-machines:
-
-    diff -durN foo/avrdude-r1450/avrdude/atmel-docs/EDBG/common/jquery/layout/jquery.layout.js bar/avrdude-r1450/avrdude/atmel-docs/EDBG/common/jquery/layout/jquery.layout.js
-    --- foo/avrdude-r1450/avrdude/atmel-docs/EDBG/common/jquery/layout/jquery.layout.js 2020-09-22 09:36:45.000000000 +0200
-    +++ bar/avrdude-r1450/avrdude/atmel-docs/EDBG/common/jquery/layout/jquery.layout.js 2020-09-22 09:36:45.000000000 +0200
-    @@ -1,6 +1,6 @@
-     /**
-      * @preserve jquery.layout 1.3.0 - Release Candidate 30.51
-    - * $Date: 2015-11-02 22:13:28 +0100 (Mon, 02 Nov 2015) $
-    + * $Date: 2015-11-02 21:13:28 +0000 (Mon, 02 Nov 2015) $
-      * $Rev: 303005 $
-      *
-      * Copyright (c) 2012
-    @@ -4718,7 +4718,7 @@
-
-     /**
-      * jquery.layout.state 1.0
-    - * $Date: 2015-11-02 22:13:28 +0100 (Mon, 02 Nov 2015) $
-    + * $Date: 2015-11-02 21:13:28 +0000 (Mon, 02 Nov 2015) $
-      *
-      * Copyright (c) 2010
-      *   Kevin Dalman (http://allpro.net)
-    @@ -5074,7 +5074,7 @@
-
-     /**
-      * jquery.layout.buttons 1.0
-    - * $Date: 2015-11-02 22:13:28 +0100 (Mon, 02 Nov 2015) $
-    + * $Date: 2015-11-02 21:13:28 +0000 (Mon, 02 Nov 2015) $
-      *
-      * Copyright (c) 2010
-      *   Kevin Dalman (http://allpro.net)
-    @@ -5356,7 +5356,7 @@
-
-     /**
-      * jquery.layout.browserZoom 1.0
-    - * $Date: 2015-11-02 22:13:28 +0100 (Mon, 02 Nov 2015) $
-    + * $Date: 2015-11-02 21:13:28 +0000 (Mon, 02 Nov 2015) $
-      *
-      * Copyright (c) 2012
-      *   Kevin Dalman (http://allpro.net)
-
-So we also update the hash for avrdude.
+Fix build of janet without threads which is broken since its addition
+in commit 9a5c9c058cbb250cfb9519347507a030e157ed16
 
 Fixes:
-    http://autobuild.buildroot.org/results/e3b/e3b0508047f32008ebfa83c5255ec5994b6af120/ (time issue)
-    http://autobuild.buildroot.org/results/48e/48e78e84b425e79cdb98c16ab40247a0fa7e9676/ (keyword expansion issue)
+ - http://autobuild.buildroot.org/results/dd894a7178a395ea29912804132b1516934e8fa3
 
-Reported-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Vincent Fazio <vfazio@xes-inc.com>
-Cc: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-Reviewed-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit c92be85e3a291e4e54ba8eaf54effcf1c86ce402)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/pkg-download.mk | 2 +-
- support/download/svn    | 6 ++++--
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ ...eson.build-fix-build-without-threads.patch | 72 +++++++++++++++++++
+ 1 file changed, 72 insertions(+)
+ create mode 100644 package/janet/0003-meson.build-fix-build-without-threads.patch
 
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index c0fb810205..4d97ef9a31 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -20,7 +20,7 @@ export LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
- # Version of the format of the archives we generate in the corresponding
- # download backend:
- BR_FMT_VERSION_git = -br1
--BR_FMT_VERSION_svn = -br1
-+BR_FMT_VERSION_svn = -br2
- 
- DL_WRAPPER = support/download/dl-wrapper
- 
-diff --git a/support/download/svn b/support/download/svn
-index 839dccaf62..75bf9ab3b2 100755
---- a/support/download/svn
-+++ b/support/download/svn
-@@ -43,14 +43,16 @@ _svn() {
-     eval ${SVN} "${@}"
- }
- 
--_svn export ${verbose} "${@}" "'${uri}@${rev}'" "'${basename}'"
-+_svn export --ignore-keywords ${verbose} "${@}" "'${uri}@${rev}'" "'${basename}'"
- 
- # Get the date of the revision, to generate reproducible archives.
- # The output format is YYYY-MM-DDTHH:MM:SS.mmmuuuZ (i.e. always in the
- # UTC timezone), which we can feed as-is to the --mtime option for tar.
- # In case there is a redirection (e.g. http -> https), just keep the
- # last line (svn outputs everything on stdout)
--date="$( _svn info --show-item last-changed-date "'${uri}@${rev}'" |tail -n 1 )"
-+date="$( _svn info "'${uri}@${rev}'" \
-+        |sed -r -e '/^Last Changed Date: /!d; s///'
-+       )"
- 
- # Generate the archive.
- # We did a 'svn export' above, so it's not a working copy (there is no .svn
+diff --git a/package/janet/0003-meson.build-fix-build-without-threads.patch b/package/janet/0003-meson.build-fix-build-without-threads.patch
+new file mode 100644
+index 0000000000..e6c9e878b4
+--- /dev/null
++++ b/package/janet/0003-meson.build-fix-build-without-threads.patch
+@@ -0,0 +1,72 @@
++From a7abe11105ac71081455fb4ff0400606bf1668e8 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Thu, 18 Mar 2021 09:00:23 +0100
++Subject: [PATCH] meson.build: fix build without threads
++
++Fix the following build failure with -Dsingle_threaded=true on embedded
++toolchains without pthread:
++
++FAILED: janet.p/meson-generated_.._janet.c.o
++/home/buildroot/autobuild/run/instance-3/output-1/host/bin/arm-linux-gcc -Ijanet.p -I. -I.. -I../src/include -fdiagnostics-color=always -pipe -Wall -Winvalid-pch -std=c99 -O3 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -pthread -fvisibility=hidden -MD -MQ janet.p/meson-generated_.._janet.c.o -MF janet.p/meson-generated_.._janet.c.o.d -o janet.p/meson-generated_.._janet.c.o -c janet.c
++In file included from /home/buildroot/autobuild/run/instance-3/output-1/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/stdlib.h:24,
++                 from ../src/include/janet.h:300,
++                 from src/core/features.h:57:
++/home/buildroot/autobuild/run/instance-3/output-1/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/features.h:218:5: warning: #warning requested reentrant code, but thread support was disabled [-Wcpp]
++  218 | #   warning requested reentrant code, but thread support was disabled
++      |     ^~~~~~~
++src/core/ev.c:39:10: fatal error: pthread.h: No such file or directory
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/janet-lang/janet/commit/a7abe11105ac71081455fb4ff0400606bf1668e8]
++---
++ meson.build | 13 +++++++++----
++ 1 file changed, 9 insertions(+), 4 deletions(-)
++
++diff --git a/meson.build b/meson.build
++index ea8c2f2e..d6c6c069 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -60,7 +60,7 @@ conf.set('JANET_NO_SOURCEMAPS', not get_option('sourcemaps'))
++ conf.set('JANET_NO_ASSEMBLER', not get_option('assembler'))
++ conf.set('JANET_NO_PEG', not get_option('peg'))
++ conf.set('JANET_NO_NET', not get_option('net'))
++-conf.set('JANET_NO_EV', not get_option('ev'))
+++conf.set('JANET_NO_EV', not get_option('ev') or get_option('single_threaded'))
++ conf.set('JANET_REDUCED_OS', get_option('reduced_os'))
++ conf.set('JANET_NO_TYPED_ARRAY', not get_option('typed_array'))
++ conf.set('JANET_NO_INT_TYPES', not get_option('int_types'))
++@@ -173,9 +173,14 @@ janetc = custom_target('janetc',
++     'JANET_PATH', janet_path, 'JANET_HEADERPATH', header_path
++   ])
++ 
+++janet_dependencies = [m_dep, dl_dep]
+++if not get_option('single_threaded')
+++  janet_dependencies += thread_dep
+++endif
+++
++ libjanet = library('janet', janetc,
++   include_directories : incdir,
++-  dependencies : [m_dep, dl_dep, thread_dep],
+++  dependencies : janet_dependencies,
++   version: meson.project_version(),
++   soversion: version_parts[0] + '.' + version_parts[1],
++   install : true)
++@@ -189,7 +194,7 @@ else
++ endif
++ janet_mainclient = executable('janet', janetc, mainclient_src,
++   include_directories : incdir,
++-  dependencies : [m_dep, dl_dep, thread_dep],
+++  dependencies : janet_dependencies,
++   c_args : extra_cflags,
++   install : true)
++ 
++@@ -202,7 +207,7 @@ if meson.is_cross_build()
++   endif
++   janet_nativeclient = executable('janet-native', janetc, mainclient_src,
++     include_directories : incdir,
++-    dependencies : [m_dep, dl_dep, thread_dep],
+++    dependencies : janet_dependencies,
++     c_args : extra_native_cflags,
++     native : true)
++ else
+-- 
+2.30.1
