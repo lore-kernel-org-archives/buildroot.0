@@ -1,31 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 19 Mar 2021 23:19:47 +0100
-Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: remove myself for aufs
-In-Reply-To: <20210312222210.GI2737665@scaer> (Yann E. MORIN's message of
- "Fri, 12 Mar 2021 23:22:10 +0100")
-References: <20210312220814.1318426-1-christian@paral.in>
- <20210312222210.GI2737665@scaer>
-Message-ID: <87ft0qu6po.fsf@dell.be.48ers.dk>
+Date: Fri, 19 Mar 2021 23:03:33 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/transmission: fix
+ sysv init script (name vs. exec)
+Message-ID: <20210319215607.CF4D1884BD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=b95dcfda388cecbe69bf6f7947821a670895905b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
- > Christian, All,
- > On 2021-03-12 14:08 -0800, Christian Stewart spake thusly:
- >> Aufs has been deprecated for the purposes of Docker/containers since overlay2
- >> became the mainline kernel module of choice.
+With the start-stop-daemon enabled (instead of the busybox applet),
+stopping transmission emits spurious warnings:
 
- > Sure, that makes sense.
+  $ /etc/init.d/S92transmission stop
+  Stopping bittorrent client transmission-daemon...
+  start-stop-daemon: warning: this system is not able to track process names
+  longer than 15 characters, please use --exec instead of --name.
 
- >> Signed-off-by: Christian Stewart <christian@paral.in>
+Update our startup script to match what was done upstream 9 years ago:
+    https://trac.transmissionbt.com/ticket/4724
+    https://trac.transmissionbt.com/wiki/Scripts/initd?action=diff&version=24&old_version=23
 
- > Applied to master, thanks.
+Partially fixes:
+  - https://bugs.busybox.net/show_bug.cgi?id=13576
 
-Committed to 2020.02.x, 2020.11.x and 2021.02.x, thanks.
+Reported-by: ingineru_de_sistem at yahoo.com
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+[yann.morin.1998 at free.fr:
+  - reword commit log
+  - add reference to upstream ticket and changeset
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 45d326a08c7838658f1ed9813967ea8caeff7495)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/transmission/S92transmission | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/transmission/S92transmission b/package/transmission/S92transmission
+index 29d7cd5863..85ff40ec16 100644
+--- a/package/transmission/S92transmission
++++ b/package/transmission/S92transmission
+@@ -93,7 +93,7 @@ stop()
+         #   1 if daemon was already stopped
+         #   2 if daemon could not be stopped
+         #   other if a failure occurred
+-        start-stop-daemon --stop --quiet --retry=TERM/10/KILL/5 --pidfile $PIDFILE --name $NAME
++        start-stop-daemon --stop --quiet --retry=TERM/10/KILL/5 --pidfile $PIDFILE --exec $DAEMON
+         RETVAL="$?"
+         [ "$RETVAL" = 2 ] && return 2
+ 
