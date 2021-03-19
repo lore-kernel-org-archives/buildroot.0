@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 19 Mar 2021 23:08:50 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/mbedtls: security
+Date: Fri, 19 Mar 2021 23:08:32 +0100
+Subject: [Buildroot] [git commit branch/2021.02.x] package/mbedtls: security
  bump to version 2.6.10
-Message-ID: <20210319215617.44CCF884BD@busybox.osuosl.org>
+Message-ID: <20210319215633.574C2884BD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d09b798bb7bf576b0c207bfc55c9bf04e5108d23
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=e72a5291caadd6fee41f299c80ff754c4e475229
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
 - Fix a buffer overflow in mbedtls_mpi_sub_abs() when calculating
   |A| - |B| where |B| is larger than |A| and has more limbs (so the
@@ -52,7 +52,7 @@ index 39df050609..d9912a50d9 100644
  # Locally calculated
  sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  apache-2.0.txt
 diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
-index 77373d8b34..56cf71f7e3 100644
+index 9e3e9f626d..8776fb9134 100644
 --- a/package/mbedtls/mbedtls.mk
 +++ b/package/mbedtls/mbedtls.mk
 @@ -4,7 +4,7 @@
