@@ -1,102 +1,81 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 19 Mar 2021 22:27:37 +0100
-Subject: [Buildroot] [PATCH 1/1] package/janet: fix build without threads
-Message-ID: <20210319212737.353274-1-fontaine.fabrice@gmail.com>
+Date: Fri, 19 Mar 2021 22:29:00 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libwebsockets: needs dynamic library
+Message-ID: <20210319212900.353459-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix build of janet without threads which is broken since its addition
-in commit 9a5c9c058cbb250cfb9519347507a030e157ed16
+kismets fails to build statically with libwebsockets since commit
+14522a8f9d272204763c49a21ebce5653430c612 because libwebsockets does not
+specify any Libs.Private field in its pkg-config file resulting in the
+following failure:
+
+configure:10659: checking for lws_client_connect_via_info in -lwebsockets
+configure:10684: /usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-1/output-1/host/bin/arm-linux-g++ -std=gnu++17 -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2   -static -static -O3 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 conftest.cpp -lwebsockets  -latomic -lz >&5
+/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/9.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-1/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libwebsockets.a(tls.c.o): in function `alpn_cb':
+tls.c:(.text+0x24): undefined reference to `SSL_select_next_proto'
+
+As it is not trivial to specify Libs.Private with cmake buildsystem
+(i.e. LIB_LIST contains the list of libraries but in the "cmake format"
+with full paths and ';'), just disable static build with libwebsockets.
 
 Fixes:
- - http://autobuild.buildroot.org/results/dd894a7178a395ea29912804132b1516934e8fa3
+ - http://autobuild.buildroot.org/results/9fc7891b61b1c487b95f07c59b802dd98ef71e3a
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...eson.build-fix-build-without-threads.patch | 72 +++++++++++++++++++
- 1 file changed, 72 insertions(+)
- create mode 100644 package/janet/0003-meson.build-fix-build-without-threads.patch
+ package/libwebsockets/Config.in        | 4 ++++
+ package/libwebsockets/libwebsockets.mk | 4 ----
+ package/ttyd/Config.in                 | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/janet/0003-meson.build-fix-build-without-threads.patch b/package/janet/0003-meson.build-fix-build-without-threads.patch
-new file mode 100644
-index 0000000000..e6c9e878b4
---- /dev/null
-+++ b/package/janet/0003-meson.build-fix-build-without-threads.patch
-@@ -0,0 +1,72 @@
-+From a7abe11105ac71081455fb4ff0400606bf1668e8 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 18 Mar 2021 09:00:23 +0100
-+Subject: [PATCH] meson.build: fix build without threads
+diff --git a/package/libwebsockets/Config.in b/package/libwebsockets/Config.in
+index dff6688e83..d7b529cafd 100644
+--- a/package/libwebsockets/Config.in
++++ b/package/libwebsockets/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LIBWEBSOCKETS
+ 	bool "libwebsockets"
++	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  Libwebsockets is a lightweight pure C library built to use
+@@ -7,3 +8,6 @@ config BR2_PACKAGE_LIBWEBSOCKETS
+ 	  in both directions.
+ 
+ 	  https://libwebsockets.org/
 +
-+Fix the following build failure with -Dsingle_threaded=true on embedded
-+toolchains without pthread:
-+
-+FAILED: janet.p/meson-generated_.._janet.c.o
-+/home/buildroot/autobuild/run/instance-3/output-1/host/bin/arm-linux-gcc -Ijanet.p -I. -I.. -I../src/include -fdiagnostics-color=always -pipe -Wall -Winvalid-pch -std=c99 -O3 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -pthread -fvisibility=hidden -MD -MQ janet.p/meson-generated_.._janet.c.o -MF janet.p/meson-generated_.._janet.c.o.d -o janet.p/meson-generated_.._janet.c.o -c janet.c
-+In file included from /home/buildroot/autobuild/run/instance-3/output-1/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/stdlib.h:24,
-+                 from ../src/include/janet.h:300,
-+                 from src/core/features.h:57:
-+/home/buildroot/autobuild/run/instance-3/output-1/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/features.h:218:5: warning: #warning requested reentrant code, but thread support was disabled [-Wcpp]
-+  218 | #   warning requested reentrant code, but thread support was disabled
-+      |     ^~~~~~~
-+src/core/ev.c:39:10: fatal error: pthread.h: No such file or directory
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/janet-lang/janet/commit/a7abe11105ac71081455fb4ff0400606bf1668e8]
-+---
-+ meson.build | 13 +++++++++----
-+ 1 file changed, 9 insertions(+), 4 deletions(-)
-+
-+diff --git a/meson.build b/meson.build
-+index ea8c2f2e..d6c6c069 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -60,7 +60,7 @@ conf.set('JANET_NO_SOURCEMAPS', not get_option('sourcemaps'))
-+ conf.set('JANET_NO_ASSEMBLER', not get_option('assembler'))
-+ conf.set('JANET_NO_PEG', not get_option('peg'))
-+ conf.set('JANET_NO_NET', not get_option('net'))
-+-conf.set('JANET_NO_EV', not get_option('ev'))
-++conf.set('JANET_NO_EV', not get_option('ev') or get_option('single_threaded'))
-+ conf.set('JANET_REDUCED_OS', get_option('reduced_os'))
-+ conf.set('JANET_NO_TYPED_ARRAY', not get_option('typed_array'))
-+ conf.set('JANET_NO_INT_TYPES', not get_option('int_types'))
-+@@ -173,9 +173,14 @@ janetc = custom_target('janetc',
-+     'JANET_PATH', janet_path, 'JANET_HEADERPATH', header_path
-+   ])
-+ 
-++janet_dependencies = [m_dep, dl_dep]
-++if not get_option('single_threaded')
-++  janet_dependencies += thread_dep
-++endif
-++
-+ libjanet = library('janet', janetc,
-+   include_directories : incdir,
-+-  dependencies : [m_dep, dl_dep, thread_dep],
-++  dependencies : janet_dependencies,
-+   version: meson.project_version(),
-+   soversion: version_parts[0] + '.' + version_parts[1],
-+   install : true)
-+@@ -189,7 +194,7 @@ else
-+ endif
-+ janet_mainclient = executable('janet', janetc, mainclient_src,
-+   include_directories : incdir,
-+-  dependencies : [m_dep, dl_dep, thread_dep],
-++  dependencies : janet_dependencies,
-+   c_args : extra_cflags,
-+   install : true)
-+ 
-+@@ -202,7 +207,7 @@ if meson.is_cross_build()
-+   endif
-+   janet_nativeclient = executable('janet-native', janetc, mainclient_src,
-+     include_directories : incdir,
-+-    dependencies : [m_dep, dl_dep, thread_dep],
-++    dependencies : janet_dependencies,
-+     c_args : extra_native_cflags,
-+     native : true)
-+ else
++comment "libwebsockets needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
+diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
+index 6f752f998e..c25686d385 100644
+--- a/package/libwebsockets/libwebsockets.mk
++++ b/package/libwebsockets/libwebsockets.mk
+@@ -69,10 +69,6 @@ else
+ LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_LIBUV=OFF
+ endif
+ 
+-ifeq ($(BR2_STATIC_LIBS),y)
+-LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_SHARED=OFF
+-endif
+-
+ ifeq ($(BR2_SHARED_LIBS),y)
+ LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_STATIC=OFF
+ endif
+diff --git a/package/ttyd/Config.in b/package/ttyd/Config.in
+index df710fbac3..ecc705b17e 100644
+--- a/package/ttyd/Config.in
++++ b/package/ttyd/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_TTYD
+ 	bool "ttyd"
+-	depends on !BR2_STATIC_LIBS # libuv
++	depends on !BR2_STATIC_LIBS # libuv, libwebsockets
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # libuv
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libuv, json-c
+ 	depends on BR2_USE_MMU # libuv
 -- 
 2.30.1
