@@ -1,37 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 19 Mar 2021 18:20:03 +0100
-Subject: [Buildroot] [git commit branch/2021.02.x] package/bridge-utils: add
+Date: Fri, 19 Mar 2021 18:33:10 +0100
+Subject: [Buildroot] [git commit branch/2021.02.x] package/kexec: add
  SELinux refpolicy module
-Message-ID: <20210319171640.04F0F8840F@busybox.osuosl.org>
+Message-ID: <20210319171640.208718840D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=03a6866bbb56f2ab286a015775a112f30ce814e7
+commit: https://git.buildroot.net/buildroot/commit/?id=926d709a00c35365d5e607810f788228e5c28843
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Bridge-utils's brctl tool is supported by the admin/brctl SELinux
+SELinux support for kexec and kdump is added by the admin/kdump
 refpolicy module.
 
 Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit e2683207a2fbcaa2ceff4252889136b41cc81317)
+(cherry picked from commit 44670b4f4efe1034ca6704c7333d7ccdaf6d422c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bridge-utils/bridge-utils.mk | 1 +
+ package/kexec/kexec.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/bridge-utils/bridge-utils.mk b/package/bridge-utils/bridge-utils.mk
-index fa71c3a64e..2de5517fc5 100644
---- a/package/bridge-utils/bridge-utils.mk
-+++ b/package/bridge-utils/bridge-utils.mk
-@@ -11,6 +11,7 @@ BRIDGE_UTILS_AUTORECONF = YES
- BRIDGE_UTILS_LICENSE = GPL-2.0+
- BRIDGE_UTILS_LICENSE_FILES = COPYING
- BRIDGE_UTILS_CPE_ID_VENDOR = kernel
-+BRIDGE_UTILS_SELINUX_MODULES = brctl
+diff --git a/package/kexec/kexec.mk b/package/kexec/kexec.mk
+index 63fcc074b5..c54ce1f11a 100644
+--- a/package/kexec/kexec.mk
++++ b/package/kexec/kexec.mk
+@@ -9,6 +9,7 @@ KEXEC_SOURCE = kexec-tools-$(KEXEC_VERSION).tar.xz
+ KEXEC_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kexec
+ KEXEC_LICENSE = GPL-2.0
+ KEXEC_LICENSE_FILES = COPYING
++KEXEC_SELINUX_MODULES = kdump
  
- # Avoid using the host's headers. Location is not important as
- # required headers will anyway be found from within the sysroot.
+ # Makefile expects $STRIP -o to work, so needed for !BR2_STRIP_strip
+ KEXEC_MAKE_OPTS = STRIP="$(TARGET_CROSS)strip"
