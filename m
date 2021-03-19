@@ -1,44 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 19 Mar 2021 18:19:54 +0100
-Subject: [Buildroot] [git commit branch/2021.02.x] package/alsa-utils: add
- SELinux repolicy module
-Message-ID: <20210319171639.EF1BD8840D@busybox.osuosl.org>
+Date: Fri, 19 Mar 2021 18:20:03 +0100
+Subject: [Buildroot] [git commit branch/2021.02.x] package/bridge-utils: add
+ SELinux refpolicy module
+Message-ID: <20210319171640.04F0F8840F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3d0b1f6a7e5c98a9c799de865d10b56d2e45beba
+commit: https://git.buildroot.net/buildroot/commit/?id=03a6866bbb56f2ab286a015775a112f30ce814e7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-The alsa-utils package adds some tools that needs the proper module in
-the SELinux refpolicy to work properly when SELinux is enabled on the
-system.
-
-Add support for the alsactl tool, through the use of the admin/alsa
-module.
+Bridge-utils's brctl tool is supported by the admin/brctl SELinux
+refpolicy module.
 
 Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 8a376df7f154573052aecc4475a7998694e8c0c1)
+(cherry picked from commit e2683207a2fbcaa2ceff4252889136b41cc81317)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/alsa-utils/alsa-utils.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/bridge-utils/bridge-utils.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
-index d9f0fea7b4..2658c827a0 100644
---- a/package/alsa-utils/alsa-utils.mk
-+++ b/package/alsa-utils/alsa-utils.mk
-@@ -15,6 +15,10 @@ ALSA_UTILS_DEPENDENCIES = host-pkgconf alsa-lib \
- 	$(if $(BR2_PACKAGE_LIBSAMPLERATE),libsamplerate) \
- 	$(TARGET_NLS_DEPENDENCIES)
+diff --git a/package/bridge-utils/bridge-utils.mk b/package/bridge-utils/bridge-utils.mk
+index fa71c3a64e..2de5517fc5 100644
+--- a/package/bridge-utils/bridge-utils.mk
++++ b/package/bridge-utils/bridge-utils.mk
+@@ -11,6 +11,7 @@ BRIDGE_UTILS_AUTORECONF = YES
+ BRIDGE_UTILS_LICENSE = GPL-2.0+
+ BRIDGE_UTILS_LICENSE_FILES = COPYING
+ BRIDGE_UTILS_CPE_ID_VENDOR = kernel
++BRIDGE_UTILS_SELINUX_MODULES = brctl
  
-+ifeq ($(BR2_PACKAGE_ALSA_UTILS_ALSACTL),y)
-+ALSA_UTILS_SELINUX_MODULES += alsa
-+endif
-+
- ALSA_UTILS_CONF_ENV = \
- 	ac_cv_prog_ncurses5_config=$(STAGING_DIR)/usr/bin/$(NCURSES_CONFIG_SCRIPTS) \
- 	LIBS=$(TARGET_NLS_LIBS)
+ # Avoid using the host's headers. Location is not important as
+ # required headers will anyway be found from within the sysroot.
