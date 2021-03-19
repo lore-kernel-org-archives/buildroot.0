@@ -1,114 +1,75 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 18 Mar 2021 23:25:48 +0100
-Subject: [Buildroot] [RFC/next v2 1/2] package/rpi-firmware: rework
- boot/config file handling
-In-Reply-To: <20210309212942.GP2737665@scaer>
-References: <20210216201148.26688-1-ps.report@gmx.net>
- <20210308215541.GB2737665@scaer> <20210308231454.519fa1dc@gmx.net>
- <20210308222753.GE2737665@scaer> <20210309213246.382d07b4@gmx.net>
- <20210309212942.GP2737665@scaer>
-Message-ID: <20210318232548.2bb4a716@gmx.net>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 19 Mar 2021 06:45:14 +0200
+Subject: [Buildroot] [PATCH v4 09/10]
+ configs/solidrun_macchiatobin_efi_defconfig: EFI config for MacchiatoBin
+In-Reply-To: <BR9BhREuAfwfd9s4mqI0EWezwoEfLpNZ5ISfiQPgxQ@cp4-web-040.plabs.ch>
+References: <BR9BhREuAfwfd9s4mqI0EWezwoEfLpNZ5ISfiQPgxQ@cp4-web-040.plabs.ch>
+Message-ID: <875z1nhhut.fsf@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann,
+Hi Dick,
 
-On Tue, 9 Mar 2021 22:29:42 +0100, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+On Thu, Mar 18 2021, Dick Olsson via buildroot wrote:
+> This introduces an alternative board build for the MacchiatoBin based on
+> EDK2 (UEFI) firmware loaded as BL33 by ARM Trusted Firmware.
+>
+> Signed-off-by: Dick Olsson <hi@senzilla.io>
+>
+> ---
+>
+> Revision 4:
+>
+>  * Renamed post-image.sh to assemble-flash-images
+>  * Updated to Linux LTS kernel 5.10
+>  * Added startup.nsh for auto-booting from the EFI shell
 
-> Peter, All,
->
-> On 2021-03-09 21:32 +0100, Peter Seiderer spake thusly:
-> > On Mon, 8 Mar 2021 23:27:53 +0100, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
-> > > On 2021-03-08 23:14 +0100, Peter Seiderer spake thusly:
-> > > > On Mon, 8 Mar 2021 22:55:41 +0100, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
-> > > > > On 2021-02-16 21:11 +0100, Peter Seiderer spake thusly:
-> > > > > > Try to be less smart (focused on the one target/one use-case),
-> > > > > > instead reduce the rpi-firmware package to a selectable list
-> > > > > > of (verbatim) installed firmware files.
-> > > [--SNIP--]
-> > > > > So, let's keep the qt5 example aside, and see what we can do. What if
-> > > > > we'd go with the following:
-> > > > >
-> > > > >   - keep a single, generic config.txt in rpi-firmware, and install that,
-> > > > >
-> > > > >   - if BR2_aarch64=y, add arm_64bit=1
-> > > > >
-> > > > >   - add an option to rpi-firmware:
-> > > > >
-> > > > >     config BR2_PKG_RPI_FW_DTOVERLAY_LIST
-> > > > >         string "DT overlays to load"
-> > > > >         depends on BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
-> > > > >         help
-> > > > >           Space-separated list of DT overlays to be loaded from config.txt.
-> > > > >
-> > > > >           For example, miniuart-bt on rpi0w to restore the serial console.
-> > > > >
-> > > > >     and if this option is not empty, construct the list of dtoverlay and
-> > > > >     add it to config.txt.
-> > > > >
-> > > > >   - eventually, adapt the defconfigs with that list of dtoverlays
-> [--SNIP--]
-> > More flexible than the possibility for a custom config.txt (mind that there
-> > are overlays with parameters and more possible options besides the overlays)?
-> [--SNIP--]
-> > The part with 'override' feels a little bit ugly and would count for me as
-> > an argument against the hard-coded logic/overlays-only approach, still
-> > believing that sooner or later most/every beyond-buildroot-defconfig-only
-> > user will use a hand-crafted config.txt file...
->
-> OK, so here's my new proposal:
->
->   - keep your BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE, which points to a
->     default, basic one, not unlike the busybox default config:
->         default "package/rpi-firmware/config.txt"
->
->   - package/rpi-firmware/config.txt is just the common part of all the
->     config.txt you currently had in your patch
->
->   - rpi-firmware.mk will add arm_64bit=1 as needed, based on
->     BR2_aarch64=y, because that *really* is not an option.
->
->   - add BR2_PKG_RPI_FW_DTOVERLAY_LIST as I suggest above, which is not
->     empty, will be copied as is to dtoverlay
->
->   - change the defconfig files to just set:
->     BR2_PKG_RPI_FW_DTOVERLAY_LIST="miniuart-bt"
->
-> That way, we get best of both worlds:
->
->   - we avoid duplication of the config.txt, and we can still customise
->     it a bit with just "easy stuff" that we need for our example
->     defconfigs,
->
->   - users can stil point to their custom, fine-tuned config.txt (in
->     which case they will probably not set BR2_PKG_RPI_FW_DTOVERLAY_LIST)
+[...]
 
-Finally found time for a new iteration of the patch set:
+> diff --git a/board/solidrun/macchiatobin-efi/readme.txt b/board/solidrun/macchiatobin-efi/readme.txt
+> new file mode 100644
+> index 0000000000..b9794dd3d4
+> --- /dev/null
+> +++ b/board/solidrun/macchiatobin-efi/readme.txt
+> @@ -0,0 +1,90 @@
+> +Intro
+> +=====
+> +
+> +This is the board support for MacchiatoBin with a more modern firmware stack
+> +compared to the original build with board/solidrun/macchiatobin.
+> +
+> +The goal with this default configuration is to provide a build as close to
+> +ARM Server Base Boot Requirement (SBBR) as possible. This gives us the
+> +following benefits:
+> +
+> + - The firmware is built and flashed separately from the OS image
+> + - Therefore, the board will boot with any standard Aarch64 distribution image
+> + - UEFI provides a more standardized firmware interface
+> +
+> +How to build
+> +============
+> +
+> +The default configuration provides the following stack:
+> +
+> + - ARM Trusted Firmware (mainline)
+> + - EDK2 UEFI firmware (mainline)
+> + - Linux 5.9 (mainline)
 
-- fixed two bugs
-- changed the firmware list handling to one-assignment style
-- changed the firmware install to make-level foreach loop
-- changed the dtb overlay install to make-level foreach loop
+Should be 5.10.
 
-- kept the verbatim BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE option,
-  as your suggestion missed one more point where the config.txt
-  files diverge (aside from dtoverlay=miniuart-bt and arm_64bit=1),
-  the start_file=start.elf/fixup_file=fixup.dat or start_file=start4.elf/
-  fixup_file=fixup4.dat as the firmware files are now copied verbatim...,
-  and still confident that the principal of taking a verbatim copy of
-  a given file is more flexible than implementing some more or less smart
-  logic...
+baruch
 
-Regards,
-Peter
+> +
+> +    $ make solidrun_macchiatobin_efi_defconfig
+> +    $ make
+> +
+> +The next step will depend on whether you have U-Boot or UEFI flashed on the
+> +board.
 
-
->
-> Thoughts?
->
-> Regards,
-> Yann E. MORIN.
->
+-- 
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
