@@ -1,51 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 19 Mar 2021 23:15:20 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/go: security bump
- to version 1.5.10
-Message-ID: <20210319215607.E72DE884C0@busybox.osuosl.org>
+Date: Fri, 19 Mar 2021 23:17:31 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] DEVELOPERS: remove myself
+ for aufs
+Message-ID: <20210319215607.F3A838103D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=008fcacf948a47bb24bd03eb2b1ce8b606cfb73a
+commit: https://git.buildroot.net/buildroot/commit/?id=0704cfefb98264200a1170488b63e861e79b98ec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-go1.15.9 (released 2021/03/10) includes security fixes to the encoding/xml
-package.  See the Go 1.15.9 milestone on our issue tracker for details.
+Aufs has been deprecated for the purposes of Docker/containers since overlay2
+became the mainline kernel module of choice.
 
-go1.15.10 (released 2021/03/11) includes fixes to the compiler, the go
-command, and the net/http, os, syscall, and time packages.  See the Go
-1.15.10 milestone on our issue tracker for details.
-
-https://golang.org/doc/devel/release.html#go1.15.minor
-
+Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 8a99b47ec2606141560ddba769ad8d1d35baf252)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ DEVELOPERS | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index cbc82a9b64..19962633fb 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,3 +1,3 @@
- # From https://golang.org/dl/
--sha256  540c0ab7781084d124991321ed1458e479982de94454a98afab6acadf38497c2  go1.15.8.src.tar.gz
-+sha256  c1dbca6e0910b41d61a95bf9878f6d6e93d15d884c226b91d9d4b1113c10dd65  go1.15.10.src.tar.gz
- sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index b269cb3527..3f942a2cf0 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d56a3d6ab1..83b268a449 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -499,9 +499,6 @@ N:	Christian Kellermann <christian.kellermann@solectrix.de>
+ F:	package/python-pylibftdi/
  
--GO_VERSION = 1.15.8
-+GO_VERSION = 1.15.10
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
+ N:	Christian Stewart <christian@paral.in>
+-F:	linux/linux-ext-aufs.mk
+-F:	package/aufs/
+-F:	package/aufs-util/
+ F:	package/batman-adv/
+ F:	package/docker-cli/
+ F:	package/docker-containerd/
