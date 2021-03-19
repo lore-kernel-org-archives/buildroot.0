@@ -1,55 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 19 Mar 2021 23:00:34 +0100
-Subject: [Buildroot] [git commit branch/2021.02.x] package/transmission: fix
- sysv init script (name vs. exec)
-Message-ID: <20210319215633.487548840D@busybox.osuosl.org>
+Date: Fri, 19 Mar 2021 23:14:16 +0100
+Subject: [Buildroot] [git commit branch/2021.02.x] package/go: security bump
+ to version 1.5.10
+Message-ID: <20210319215633.642058840D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=21eb4f8ad2163dc9c142121701e9fa2b2d875b4b
+commit: https://git.buildroot.net/buildroot/commit/?id=d34f999566ba6ca35f9c9af9c1424b166154f25c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-With the start-stop-daemon enabled (instead of the busybox applet),
-stopping transmission emits spurious warnings:
+go1.15.9 (released 2021/03/10) includes security fixes to the encoding/xml
+package.  See the Go 1.15.9 milestone on our issue tracker for details.
 
-  $ /etc/init.d/S92transmission stop
-  Stopping bittorrent client transmission-daemon...
-  start-stop-daemon: warning: this system is not able to track process names
-  longer than 15 characters, please use --exec instead of --name.
+go1.15.10 (released 2021/03/11) includes fixes to the compiler, the go
+command, and the net/http, os, syscall, and time packages.  See the Go
+1.15.10 milestone on our issue tracker for details.
 
-Update our startup script to match what was done upstream 9 years ago:
-    https://trac.transmissionbt.com/ticket/4724
-    https://trac.transmissionbt.com/wiki/Scripts/initd?action=diff&version=24&old_version=23
+https://golang.org/doc/devel/release.html#go1.15.minor
 
-Partially fixes:
-  - https://bugs.busybox.net/show_bug.cgi?id=13576
-
-Reported-by: ingineru_de_sistem at yahoo.com
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-[yann.morin.1998 at free.fr:
-  - reword commit log
-  - add reference to upstream ticket and changeset
-]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 45d326a08c7838658f1ed9813967ea8caeff7495)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/transmission/S92transmission | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/transmission/S92transmission b/package/transmission/S92transmission
-index 29d7cd5863..85ff40ec16 100644
---- a/package/transmission/S92transmission
-+++ b/package/transmission/S92transmission
-@@ -93,7 +93,7 @@ stop()
-         #   1 if daemon was already stopped
-         #   2 if daemon could not be stopped
-         #   other if a failure occurred
--        start-stop-daemon --stop --quiet --retry=TERM/10/KILL/5 --pidfile $PIDFILE --name $NAME
-+        start-stop-daemon --stop --quiet --retry=TERM/10/KILL/5 --pidfile $PIDFILE --exec $DAEMON
-         RETVAL="$?"
-         [ "$RETVAL" = 2 ] && return 2
+diff --git a/package/go/go.hash b/package/go/go.hash
+index cbc82a9b64..19962633fb 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,3 +1,3 @@
+ # From https://golang.org/dl/
+-sha256  540c0ab7781084d124991321ed1458e479982de94454a98afab6acadf38497c2  go1.15.8.src.tar.gz
++sha256  c1dbca6e0910b41d61a95bf9878f6d6e93d15d884c226b91d9d4b1113c10dd65  go1.15.10.src.tar.gz
+ sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 7b7f173706..ff863032bd 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GO_VERSION = 1.15.8
++GO_VERSION = 1.15.10
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
  
