@@ -1,11 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 19 Mar 2021 21:49:40 +0100
-Subject: [Buildroot] [PATCH 0/2] package/libopenssl: fix build wrt
- 64-bit time-related structs (branch yem/openssl-riscv32)
-In-Reply-To: <cover.1615325812.git.yann.morin.1998@free.fr> (Yann E. MORIN's
- message of "Tue, 9 Mar 2021 22:37:16 +0100")
-References: <cover.1615325812.git.yann.morin.1998@free.fr>
-Message-ID: <87a6qyvpgb.fsf@dell.be.48ers.dk>
+Date: Fri, 19 Mar 2021 21:52:07 +0100
+Subject: [Buildroot] [PATCH] package/runc: cleanup the CPE_ID variables
+In-Reply-To: <20210306215027.2421773-1-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Sat, 6 Mar 2021 22:50:27 +0100")
+References: <20210306215027.2421773-1-yann.morin.1998@free.fr>
+Message-ID: <875z1mvpc8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,22 +13,16 @@ To: buildroot@busybox.net
 
 >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Hello All!
- > This two-patch series aims at fixing, once and for all, the many build
- > failures we've seen in the autobuilders, related to riscv32.
+ > The CPE variables are derived from the package upstream values, so they
+ > must be set from the package values, not the other way around.
 
-Those issues are "fixed" now that libopenssl is disabled for riscv32,
-right?
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ > Cc: Peter Korsgaard <peter@korsgaard.com>
+ > Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Cc: Christian Stewart <christian@paral.in>
 
-
- > It turns out that those failures exposed a deeper issue in openssl, that
- > was just fixed upstream
-
- > Note: the first pach is a candidate for backporting to 2021.02.x, but
- > the second patch is not.
-
-Why? Isn't this only an issue on riscv32? What would the advantage be of
-adding those patches if libopenssl isn't available for riscv32?
+Not really a fix, but safe and it probably makes it easier to backport
+fixes in the future, so committed to 2021.02.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
