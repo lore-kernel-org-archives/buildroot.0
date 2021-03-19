@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 19 Mar 2021 22:07:39 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/sysvinit: add
+Date: Fri, 19 Mar 2021 22:07:05 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/sysvinit: add
  patch to fix compile without stack-protector support
-Message-ID: <20210319204425.614E08648E@busybox.osuosl.org>
+Message-ID: <20210319204432.3A85086D2C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cb39699db00543c34dbc083c18eba162d0f16547
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=02d0c78da5869cb3b24935071cad86dcce777f8b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
 In Buildroot, the SSP flags are passed via the wrapper, and only flags
 supported by the toolchain will be used.
