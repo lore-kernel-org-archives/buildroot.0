@@ -1,40 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 19 Mar 2021 23:09:20 +0100
-Subject: [Buildroot] [PATCH 1/1] package/mbedtls: security bump to
- version 2.6.10
-In-Reply-To: <20210312202133.10544-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 12 Mar 2021 21:21:33 +0100")
-References: <20210312202133.10544-1-fontaine.fabrice@gmail.com>
-Message-ID: <87o8feu773.fsf@dell.be.48ers.dk>
+Date: Fri, 19 Mar 2021 23:15:22 +0100
+Subject: [Buildroot] [PATCH 1/1] package/go: security bump to 1.16.2
+In-Reply-To: <20210312214717.GD2737665@scaer> (Yann E. MORIN's message of
+ "Fri, 12 Mar 2021 22:47:17 +0100")
+References: <20210312205659.76580-1-christian@paral.in>
+ <20210312214717.GD2737665@scaer>
+Message-ID: <87k0q2u6x1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > - Fix a buffer overflow in mbedtls_mpi_sub_abs() when calculating
- >   |A| - |B| where |B| is larger than |A| and has more limbs (so the
- >   function should return MBEDTLS_ERR_MPI_NEGATIVE_VALUE). Only
- >   applications calling mbedtls_mpi_sub_abs() directly are affected:
- >   all calls inside the library were safe since this function is
- >   only called with |A| >= |B|.
- > - Fix an errorneous estimation for an internal buffer in
- >   mbedtls_pk_write_key_pem(). If MBEDTLS_MPI_MAX_SIZE is set to an odd
- >   value the function might fail to write a private RSA keys of the
- >   largest supported size.
- > - Fix a stack buffer overflow with mbedtls_net_poll() and
- >   mbedtls_net_recv_timeout() when given a file descriptor that is
- >   beyond FD_SETSIZE.
- > - Guard against strong local side channel attack against base64 tables
- >   by making access aceess to them use constant flow code.
+ > Christian, All,
+ > On 2021-03-12 12:56 -0800, Christian Stewart spake thusly:
+ >> go1.16.1 (released 2021/03/10) includes security fixes to the archive/zip and
+ >> encoding/xml packages.
+ >> 
+ >> go1.16.2 (released 2021/03/11) includes fixes to cgo, the compiler, linker, the
+ >> go command, and the syscall and time packages.
+ >> 
+ >> https://golang.org/doc/devel/release.html#go1.16
+ >> 
+ >> Signed-off-by: Christian Stewart <christian@paral.in>
 
- > https://github.com/ARMmbed/mbedtls/releases/tag/v2.16.10
+ > Applied to master, thanks.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Committed to 2020.02.x, 2020.11.x and 2021.02.x, thanks.
+For 2020.11.x and 2021.02.x I have instead bumped to 1.15.10, which
+contains the same fixes.
 
 -- 
 Bye, Peter Korsgaard
