@@ -1,72 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 19 Mar 2021 22:07:05 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/sysvinit: add
- patch to fix compile without stack-protector support
-Message-ID: <20210319204432.3A85086D2C@busybox.osuosl.org>
+Date: Fri, 19 Mar 2021 21:51:06 +0100
+Subject: [Buildroot] [git commit branch/2021.02.x] package/runc: cleanup the
+ CPE_ID variables
+Message-ID: <20210319204446.0087986D2C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=02d0c78da5869cb3b24935071cad86dcce777f8b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=27d933a5ed25221ec1d4344bcfc0498437650a46
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-In Buildroot, the SSP flags are passed via the wrapper, and only flags
-supported by the toolchain will be used.
+The CPE variables are derived from the package upstream values, so they
+must be set from the package values, not the other way around.
 
-Add patch to remove '-fstack-protector-strong' compile flag.
-
-Fixes:
-  .../aarch64-buildroot-linux-uclibc/bin/ld: runlevel.o: in function `main':
-  runlevel.c:(.text.startup+0x4): undefined reference to `__stack_chk_guard'
-  .../aarch64-buildroot-linux-uclibc/bin/ld: cannot find -lssp_nonshared
-  .../aarch64-buildroot-linux-uclibc/bin/ld: cannot find -lssp
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 50cbac5099b1767c8f69509a900dae2b58ca66ff)
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Christian Stewart <christian@paral.in>
+Reviewed-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 051ccfbaf1d8f835fe5742ffdda00220873025ac)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...1-Makefile-disable-stack-protector-strong.patch | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+ package/runc/runc.mk | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/sysvinit/0001-Makefile-disable-stack-protector-strong.patch b/package/sysvinit/0001-Makefile-disable-stack-protector-strong.patch
-new file mode 100644
-index 0000000000..066bdb3660
---- /dev/null
-+++ b/package/sysvinit/0001-Makefile-disable-stack-protector-strong.patch
-@@ -0,0 +1,33 @@
-+From 0759f3f9bb2850df455599e7c82eda4ec804e3b6 Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Wed, 10 Mar 2021 22:57:50 +0100
-+Subject: [PATCH] Makefile: disable stack-protector-strong
-+
-+Fixes:
-+
-+  .../aarch64-buildroot-linux-uclibc/bin/ld: runlevel.o: in function `main':
-+  runlevel.c:(.text.startup+0x4): undefined reference to `__stack_chk_guard'
-+  .../aarch64-buildroot-linux-uclibc/bin/ld: cannot find -lssp_nonshared
-+  .../aarch64-buildroot-linux-uclibc/bin/ld: cannot find -lssp
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ src/Makefile | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/Makefile b/src/Makefile
-+index 1b368dc..1985929 100644
-+--- a/src/Makefile
-++++ b/src/Makefile
-+@@ -10,7 +10,7 @@
-+ 
-+ CPPFLAGS =
-+ CFLAGS  ?= -O2
-+-override CFLAGS += -ansi -fomit-frame-pointer -fstack-protector-strong -W -Wall -Wunreachable-code -Wformat -Werror=format-security -D_FORTIFY_SOURCE=2 -D_XOPEN_SOURCE -D_GNU_SOURCE -DVERSION=\"$(VERSION)\"
-++override CFLAGS += -ansi -fomit-frame-pointer -W -Wall -Wunreachable-code -Wformat -Werror=format-security -D_FORTIFY_SOURCE=2 -D_XOPEN_SOURCE -D_GNU_SOURCE -DVERSION=\"$(VERSION)\"
-+ override CFLAGS += $(shell getconf LFS_CFLAGS)
-+ STATIC	=
-+ MANDB	:= s@^\('\\\\\"\)[^\*-]*-\*- coding: [^[:blank:]]\+ -\*-@\1@
-+-- 
-+2.30.1
-+
+diff --git a/package/runc/runc.mk b/package/runc/runc.mk
+index c0de2783e4..14689bbde1 100644
+--- a/package/runc/runc.mk
++++ b/package/runc/runc.mk
+@@ -4,13 +4,15 @@
+ #
+ ################################################################################
+ 
+-RUNC_VERSION = $(RUNC_CPE_ID_VERSION)-$(RUNC_CPE_ID_UPDATE)
++RUNC_VERSION_MAJOR = 1.0.0
++RUNC_VERSION_MINOR = rc92
++RUNC_VERSION = $(RUNC_VERSION_MAJOR)-$(RUNC_VERSION_MINOR)
+ RUNC_SITE = $(call github,opencontainers,runc,v$(RUNC_VERSION))
+ RUNC_LICENSE = Apache-2.0
+ RUNC_LICENSE_FILES = LICENSE
+ RUNC_CPE_ID_VENDOR = linuxfoundation
+-RUNC_CPE_ID_VERSION = 1.0.0
+-RUNC_CPE_ID_UPDATE = rc92
++RUNC_CPE_ID_VERSION = $(RUNC_VERSION_MAJOR)
++RUNC_CPE_ID_UPDATE = $(RUNC_VERSION_MINOR)
+ 
+ RUNC_LDFLAGS = -X main.version=$(RUNC_VERSION)
+ RUNC_TAGS = cgo static_build
