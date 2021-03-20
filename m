@@ -1,41 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 20 Mar 2021 17:50:01 +0100
-Subject: [Buildroot] [git commit branch/2021.02.x] boot/uboot: fix kconfig
- with per-package directories and host-make
-Message-ID: <20210320162645.510C788133@busybox.osuosl.org>
+Date: Sat, 20 Mar 2021 17:40:22 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/opkg-utils:
+ remove build step
+Message-ID: <20210320162650.D3DA187955@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b6aa163d2b6db2d5074f7fce858a70d63326d693
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=ea485a205d514da87b2cc68b1e2be6cbbcbc0864
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-If PER_PACKAGE_DIRECTORIES=Y and using host-make package (because
-BR2_FORCE_HOST_BUILD=Y or local make is too old) .stamp_dotconfig
-target needs per-package/uboot/host/bin/host-make that doesn't
-exist yet.
+opkg-utils is a package that only provides bash and python scripts.
+Upon further inspection of the Makefile for the package, invoking
+`make` only ever builds the manpage. The previous commit dropped the
+installation of the manpage. This makes the build step unnecessary so
+remove it.
 
-Add host-make into UBOOT_KCONFIG_DEPENDENCIES.
+Add a comment to explain the situation
 
-Signed-off-by: Nicolas Toromanoff <nicolas.toromanoff@foss.st.com>
+Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+[yann.morin.1998 at free.fr: reword commit log]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 3cf8173e5c3d23c3b147a3a083082409f09869ee)
+(cherry picked from commit 05bf014f56c0c99f08c93db7829e8fd53af3c9a8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/uboot/uboot.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/opkg-utils/opkg-utils.mk | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index bb45980022..dbe82e65b1 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -498,6 +498,7 @@ $(eval $(generic-package))
- else ifeq ($(BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG),y)
- UBOOT_MAKE_ENV = $(TARGET_MAKE_ENV)
- UBOOT_KCONFIG_DEPENDENCIES = \
-+	$(BR2_MAKE_HOST_DEPENDENCY) \
- 	$(BR2_BISON_HOST_DEPENDENCY) \
- 	$(BR2_FLEX_HOST_DEPENDENCY)
- $(eval $(kconfig-package))
+diff --git a/package/opkg-utils/opkg-utils.mk b/package/opkg-utils/opkg-utils.mk
+index be827e6cac..a7dc22d7c4 100644
+--- a/package/opkg-utils/opkg-utils.mk
++++ b/package/opkg-utils/opkg-utils.mk
+@@ -12,10 +12,7 @@ OPKG_UTILS_LICENSE_FILES = COPYING
+ 
+ HOST_OPKG_UTILS_DEPENDENCIES += $(BR2_PYTHON3_HOST_DEPENDENCY)
+ 
+-define HOST_OPKG_UTILS_BUILD_CMDS
+-	$(MAKE) -C $(@D) $(HOST_CONFIGURE_OPTS)
+-endef
+-
++# Nothing to build; only scripts to install.
+ define HOST_OPKG_UTILS_INSTALL_CMDS
+ 	$(MAKE) -C $(@D) PREFIX=$(HOST_DIR) install-utils
+ endef
