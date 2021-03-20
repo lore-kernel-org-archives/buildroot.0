@@ -1,73 +1,90 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 20 Mar 2021 18:40:56 +0100
-Subject: [Buildroot] [PATCH 1/1] package/qpid-proton: fix build on musl
-Message-ID: <20210320174056.442784-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 20 Mar 2021 18:51:06 +0100
+Subject: [Buildroot] [PATCH 1/1] support/download: Fix tarball
+ generation - 2020.02.x branch patch
+In-Reply-To: <20210318073240.404490-1-jpcartal@free.fr>
+References: <20210318073240.404490-1-jpcartal@free.fr>
+Message-ID: <20210320175106.GU3443324@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix build on musl with qpid-proton in version 0.33.0 which was added
-with commit d4c0fde91da0d79204a21ed8de1bd410efa1c4d6
+Peter,
 
-Fixes:
- - http://autobuild.buildroot.org/results/6a901b9ff68b7f52cabf8273d1017025fbd93b0d
+You will want to get that one for 2021.02, and also 2020.11 and 2020.02
+if they are a still alive.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...r-epoll-internal.h-fix-build-on-musl.patch | 43 +++++++++++++++++++
- 1 file changed, 43 insertions(+)
- create mode 100644 package/qpid-proton/0001-c-src-proactor-epoll-internal.h-fix-build-on-musl.patch
+You may want to complement the commit log with the scriptlet I added in
+c9f27fdc1b (and adding opkg-utils to the list of host-only packages):
+I've tested locally that our current hashes are still valid.
 
-diff --git a/package/qpid-proton/0001-c-src-proactor-epoll-internal.h-fix-build-on-musl.patch b/package/qpid-proton/0001-c-src-proactor-epoll-internal.h-fix-build-on-musl.patch
-new file mode 100644
-index 0000000000..1806a7a780
---- /dev/null
-+++ b/package/qpid-proton/0001-c-src-proactor-epoll-internal.h-fix-build-on-musl.patch
-@@ -0,0 +1,43 @@
-+From e4211aa978606b9201dc0eb2399d1af6c010a46a Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 17 Mar 2021 17:21:52 +0100
-+Subject: [PATCH] c/src/proactor/epoll-internal.h: fix build on musl
-+
-+Build with epoll proactor on musl is broken since at least version 0.23.0 and
-+https://github.com/apache/qpid-proton/commit/37136940e3077f25ce58c94775f48c66f666f4a8
-+because musl does not define PTHREAD_MUTEX_ADAPTIVE_NP resulting in the
-+following build failure:
-+
-+In file included from /home/giuliobenetti/autobuild/run/instance-0/output-1/build/qpid-proton-0.33.0/c/src/proactor/epoll.c:60:
-+/home/giuliobenetti/autobuild/run/instance-0/output-1/build/qpid-proton-0.33.0/c/src/proactor/epoll-internal.h: In function 'pmutex_init':
-+/home/giuliobenetti/autobuild/run/instance-0/output-1/build/qpid-proton-0.33.0/c/src/proactor/epoll-internal.h:319:36: error: 'PTHREAD_MUTEX_ADAPTIVE_NP' undeclared (first use in this function); did you mean 'PTHREAD_MUTEX_STALLED'?
-+  319 |   pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ADAPTIVE_NP);
-+      |                                    ^~~~~~~~~~~~~~~~~~~~~~~~~
-+      |                                    PTHREAD_MUTEX_STALLED
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/6a901b9ff68b7f52cabf8273d1017025fbd93b0d
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://issues.apache.org/jira/browse/PROTON-2346]
-+---
-+ c/src/proactor/epoll-internal.h | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/c/src/proactor/epoll-internal.h b/c/src/proactor/epoll-internal.h
-+index e8c9f0a9..fa6a6f2a 100644
-+--- a/c/src/proactor/epoll-internal.h
-++++ b/c/src/proactor/epoll-internal.h
-+@@ -315,7 +315,9 @@ static inline void pmutex_init(pthread_mutex_t *pm){
-+   pthread_mutexattr_t attr;
-+ 
-+   pthread_mutexattr_init(&attr);
-++#ifdef PTHREAD_MUTEX_ADAPTIVE_NP
-+   pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ADAPTIVE_NP);
-++#endif
-+   if (pthread_mutex_init(pm, &attr)) {
-+     perror("pthread failure");
-+     abort();
-+-- 
-+2.30.1
-+
+Tested-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+On 2021-03-18 08:32 +0100, Jean-pierre Cartal spake thusly:
+> fix tarball generation with symlinks pointing to ./something
+> 
+> When a --transform expression is provided, it is by default also applied
+> to the target of a symlink.
+> 
+> When we create tarballs (from git or svn checkouts), we use a --transform
+> expression to replace the leading ./ with the package name and version.
+> 
+> This causes issues when a package contains symlinks that points to
+> ./something, as the leading './' is also replaced.
+> 
+> Fix that by using the 'S' transformation scope flag, as described in the
+> tar manual:
+>   https://www.gnu.org/software/tar/manual/html_node/transform.html#transform
+> 
+>   In addition, several transformation scope flags are supported, that
+>   control to what files transformations apply. These are:
+> 
+>   ?r? Apply transformation to regular archive members.
+>   ?R? Do not apply transformation to regular archive members.
+>   ?s? Apply transformation to symbolic link targets.
+>   ?S? Do not apply transformation to symbolic link targets.
+>   ?h? Apply transformation to hard link targets.
+>   ?H? Do not apply transformation to hard link targets.
+> 
+>   Default is ?rsh? [...].
+> 
+> Fixes: #13616
+> Signed-off-by: Jean-pierre Cartal <jpcartal@free.fr>
+> ---
+>  support/download/git | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/support/download/git b/support/download/git
+> index 15d8c66e05..1b0dc1b115 100755
+> --- a/support/download/git
+> +++ b/support/download/git
+> @@ -203,7 +203,7 @@ LC_ALL=C sort <"${output}.list" >"${output}.list.sorted"
+>  
+>  # Create GNU-format tarballs, since that's the format of the tarballs on
+>  # sources.buildroot.org and used in the *.hash files
+> -tar cf - --transform="s#^\./#${basename}/#" \
+> +tar cf - --transform="s#^\./#${basename}/#S" \
+>           --numeric-owner --owner=0 --group=0 --mtime="${date}" --format=gnu \
+>           -T "${output}.list.sorted" >"${output}.tar"
+>  gzip -6 -n <"${output}.tar" >"${output}"
+> -- 
+> 2.30.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.30.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
