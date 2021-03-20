@@ -1,45 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 20 Mar 2021 23:03:58 +0100
-Subject: [Buildroot] [PATCH v2 next] configs/qemu_arm_vexpress_tz: bump
- versions and update
-In-Reply-To: <20210307094317.9171-1-vincent.stehle@laposte.net>
-References: <YESc/7MpZkLtU1n2@romuald.bergerie>
- <20210307094317.9171-1-vincent.stehle@laposte.net>
-Message-ID: <20210320230358.5a8bfc83@windsurf.home>
+Date: Sat, 20 Mar 2021 23:05:26 +0100
+Subject: [Buildroot] [git commit] configs/qemu_arm_vexpress_tz_defconfig:
+ enable openssl library
+Message-ID: <20210320214133.D040D875E0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun,  7 Mar 2021 10:43:17 +0100
-Vincent Stehl? via buildroot <buildroot@busybox.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=0a662a0134549931ff71f0ca7022aea9c3dd469a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> - Bump TF-A to version 2.4.
-> - Bump u-boot to version 2021.01.
-> - Bump kernel to version 5.11.3.
-> 
-> We switch TF-A to a single FIP image. Thanks to this, TF-A does not need to
-> use semihosting to load the various BL* anymore (but U-Boot still does).
-> Update the readme.txt accordingly.
-> 
-> We switch to a u-boot image for the ramdisk. This removes the need to
-> update the fdt chosen node manually in the bootcmd.
-> 
-> While at it, we drop the generation of the kernel dtb, which we do not use.
-> In this config, we are indeed using the dtb generated on-the-fly by qemu
-> and amended by TF-A.
-> 
-> Signed-off-by: Vincent Stehl? <vincent.stehle@laposte.net>
-> Cc: Gerome Burlats <gerome.burlats@smile.fr>
-> Cc: Romain Naour <romain.naour@gmail.com>
-> Cc: Etienne Carriere <etienne.carriere@linaro.org>
-> ---
+Enable the OpenSSL library to enable some OP-TEE tests that relies on
+it.
 
-Applied to master, thanks.
+Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ configs/qemu_arm_vexpress_tz_defconfig | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/configs/qemu_arm_vexpress_tz_defconfig b/configs/qemu_arm_vexpress_tz_defconfig
+index 602bdaf304..2f5189b8eb 100644
+--- a/configs/qemu_arm_vexpress_tz_defconfig
++++ b/configs/qemu_arm_vexpress_tz_defconfig
+@@ -43,6 +43,10 @@ BR2_PACKAGE_OPTEE_BENCHMARK=y
+ BR2_PACKAGE_OPTEE_EXAMPLES=y
+ BR2_PACKAGE_OPTEE_TEST=y
+ 
++# Enable OpenSSL library for some optee-test tests
++BR2_PACKAGE_OPENSSL=y
++BR2_PACKAGE_LIBOPENSSL=y
++
+ # Image
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
