@@ -1,40 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 20 Mar 2021 23:40:58 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/protobuf: disable
- package if binutils is affected from bug 21464
-Message-ID: <20210320221838.6E3867FBEE@busybox.osuosl.org>
+Date: Sat, 20 Mar 2021 23:40:01 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] toolchain: introduce
+ BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464
+Message-ID: <20210320221846.67ECA87C78@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d59baa170c20614c563ce4e708a39e322ad2e100
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=4aff544321d4044a56f480fb35c46784233d708d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-This package is affected from binutils bug 21464, since there is no
-workaround, let's disable it.
+The OpenRISC binutils is affected by a linker bug (binutils bug 21464)
+for which no workaround exists. This causes build breakage in a number
+of packages, so this commit introduces a
+BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464 option to identify this bug. As
+all binutils versions are affected, this option is true whenever the
+configuration targets OpenRISC.
 
-Fixes:
-http://autobuild.buildroot.net/results/908/9084cd777aefe0fa8235514c33767d8640ad7a5b/
+The bug was already reported and it's been recently updated:
+
+  https://sourceware.org/bugzilla/show_bug.cgi?id=21464
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 9e71b6e2cb28a66e116019bf8808fb48cef1d7b9)
+(cherry picked from commit 227cefef41f4edd4eaae3c2068fb41d236370f29)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/protobuf/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ toolchain/Config.in | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/protobuf/Config.in b/package/protobuf/Config.in
-index 46c820b9cf..30050950aa 100644
---- a/package/protobuf/Config.in
-+++ b/package/protobuf/Config.in
-@@ -24,6 +24,7 @@ config BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
- 	default y if BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on BR2_USE_MMU # fork()
-+	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index ae8e605cdd..af3f88b4ee 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -81,6 +81,12 @@ config BR2_TOOLCHAIN_HAS_BINUTILS_BUG_19615
+ config BR2_TOOLCHAIN_HAS_BINUTILS_BUG_20006
+ 	bool
  
- config BR2_PACKAGE_PROTOBUF
- 	bool "protobuf"
++# https://sourceware.org/bugzilla/show_bug.cgi?id=21464
++# Affect toolchains built with binutils 2.31.1, still not fixed.
++config BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464
++	bool
++	default y if BR2_or1k
++
+ # Atomic types can be:
+ #  - never lock-free
+ #  - sometimes lock-free
