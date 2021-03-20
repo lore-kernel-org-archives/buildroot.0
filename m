@@ -1,10 +1,10 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Sat, 20 Mar 2021 15:28:32 -0700
-Subject: [Buildroot] [PATCH 1/4] package/mender/mender.mk: use MENDER_PKGDIR
- variable
+Date: Sat, 20 Mar 2021 15:28:35 -0700
+Subject: [Buildroot] [PATCH 4/4] package/mender: install dbus authentication
+ file if dbus is selected
 In-Reply-To: <20210320222835.3951325-1-aduskett@gmail.com>
 References: <20210320222835.3951325-1-aduskett@gmail.com>
-Message-ID: <20210320222835.3951325-2-aduskett@gmail.com>
+Message-ID: <20210320222835.3951325-5-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,39 +13,33 @@ To: buildroot@busybox.net
 
 From: Adam Duskett <Aduskett@rivian.com>
 
-Currently there is a mix of calls to package/mender and $(MENDER_PKGDIR) in the
-mender.mk file. Standardize the calls to only $(MENDER_PKGDIR).
+While not a requirement to run mender itself, the mender-connect package
+requires this file to be installed to talk to mender.
 
 Signed-off-by: Adam Duskett <Aduskett@rivian.com>
 ---
- package/mender/mender.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/mender/mender.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
 diff --git a/package/mender/mender.mk b/package/mender/mender.mk
-index bb37f2d8ed..3e82f556fb 100644
+index a5b5654ff9..fc077c6fa2 100644
 --- a/package/mender/mender.mk
 +++ b/package/mender/mender.mk
-@@ -62,10 +62,10 @@ define MENDER_INSTALL_CONFIG_FILES
- 			$(TARGET_DIR)/usr/share/mender/inventory/mender-inventory-$(f)
- 	)
+@@ -78,6 +78,15 @@ endef
  
--	$(INSTALL) -D -m 0755 package/mender/artifact_info \
-+	$(INSTALL) -D -m 0755 $(MENDER_PKGDIR)/artifact_info \
- 			$(TARGET_DIR)/etc/mender/artifact_info
+ MENDER_POST_INSTALL_TARGET_HOOKS += MENDER_INSTALL_CONFIG_FILES
  
--	$(INSTALL) -D -m 0755 package/mender/device_type \
-+	$(INSTALL) -D -m 0755 $(MENDER_PKGDIR)/device_type \
- 			$(TARGET_DIR)/etc/mender/device_type
- 
- 	mkdir -p $(TARGET_DIR)/var/lib
-@@ -84,7 +84,7 @@ define MENDER_INSTALL_INIT_SYSTEMD
- endef
- 
- define MENDER_INSTALL_INIT_SYSV
--	$(INSTALL) -D -m 755 package/mender/S42mender \
-+	$(INSTALL) -D -m 755 $(MENDER_PKGDIR)/S42mender \
- 		$(TARGET_DIR)/etc/init.d/S42mender
- endef
- 
++ifeq ($(BR2_PACKAGE_DBUS),y)
++MENDER_DEPENDENCIES += dbus
++define MENDER_INSTALL_DBUS_AUTHENTICATION_MANAGER_CONF
++	$(INSTALL) -D -m 0755 $(@D)/support/dbus/io.mender.AuthenticationManager.conf \
++		      $(TARGET_DIR)/etc/dbus-1/system.d/io.mender.AuthenticationManager.conf
++endef
++MENDER_POST_INSTALL_TARGET_HOOKS += MENDER_INSTALL_DBUS_AUTHENTICATION_MANAGER_CONF
++endif
++
+ define MENDER_INSTALL_INIT_SYSTEMD
+ 	$(INSTALL) -D -m 0644 $(MENDER_PKGDIR)/mender-client.service \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/mender-client.service
 -- 
 2.25.1
