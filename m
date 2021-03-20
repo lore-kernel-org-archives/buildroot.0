@@ -1,75 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 20 Mar 2021 17:46:22 +0100
-Subject: [Buildroot] [git commit branch/2021.02.x] package/opkg-utils: add
- missing dependencies for host build
-Message-ID: <20210320162645.37AF083BC8@busybox.osuosl.org>
+Date: Sat, 20 Mar 2021 17:50:01 +0100
+Subject: [Buildroot] [git commit branch/2021.02.x] boot/uboot: fix kconfig
+ with per-package directories and host-make
+Message-ID: <20210320162645.510C788133@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c7ba64ea0e099929be7d90a07f122c0217e1b7d4
+commit: https://git.buildroot.net/buildroot/commit/?id=b6aa163d2b6db2d5074f7fce858a70d63326d693
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-opkg-utils is a collection of bash and python scripts which require
-additional commands/tools be available for the bash scripts. The full
-list of dependencies that the opkg-util scripts require is:
+If PER_PACKAGE_DIRECTORIES=Y and using host-make package (because
+BR2_FORCE_HOST_BUILD=Y or local make is too old) .stamp_dotconfig
+target needs per-package/uboot/host/bin/host-make that doesn't
+exist yet.
 
-  bash
-  binutils
-  bzip2
-  coreutils
-  diffutils
-  findutils
-  grep
-  gzip
-  lz4
-  python3
-  sed
-  tar
-  xz
+Add host-make into UBOOT_KCONFIG_DEPENDENCIES.
 
-The Buildroot manual requires a few packages (bash, binutils, bzip2,
-gzip, sed and tar) to be installed on the host system, so we need not
-add those. Additionally, and even though they are not in that list,
-that grep and find are also required (we already make extensive use of
-both everywhere, so it is as good as them being in the list).
-
-We have a host variant for coreutils, but only for systems that do not
-already have a recent-enough one, i.e. that provides 'realpath' and
-'ln --relative'. opkg-utils uses neither, so can rely on the ones on the
-system.
-
-Only add dependencies on the remaining host tools: diffutils, lz4, and
-xz.
-
-Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
-[yann.morin.1998 at free.fr:
-  - drop excessive dependencies,
-  - reword the commit log accordingly
-]
+Signed-off-by: Nicolas Toromanoff <nicolas.toromanoff@foss.st.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 9521492bd0706fbb5c81e87b65ad25898f974f4d)
+(cherry picked from commit 3cf8173e5c3d23c3b147a3a083082409f09869ee)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/opkg-utils/opkg-utils.mk | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ boot/uboot/uboot.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/opkg-utils/opkg-utils.mk b/package/opkg-utils/opkg-utils.mk
-index a7dc22d7c4..19dfb26f7a 100644
---- a/package/opkg-utils/opkg-utils.mk
-+++ b/package/opkg-utils/opkg-utils.mk
-@@ -10,7 +10,11 @@ OPKG_UTILS_SITE_METHOD = git
- OPKG_UTILS_LICENSE = GPL-2.0+
- OPKG_UTILS_LICENSE_FILES = COPYING
- 
--HOST_OPKG_UTILS_DEPENDENCIES += $(BR2_PYTHON3_HOST_DEPENDENCY)
-+HOST_OPKG_UTILS_DEPENDENCIES = \
-+	$(BR2_PYTHON3_HOST_DEPENDENCY) \
-+	host-diffutils \
-+	host-lz4 \
-+	host-xz
- 
- # Nothing to build; only scripts to install.
- define HOST_OPKG_UTILS_INSTALL_CMDS
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index bb45980022..dbe82e65b1 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -498,6 +498,7 @@ $(eval $(generic-package))
+ else ifeq ($(BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG),y)
+ UBOOT_MAKE_ENV = $(TARGET_MAKE_ENV)
+ UBOOT_KCONFIG_DEPENDENCIES = \
++	$(BR2_MAKE_HOST_DEPENDENCY) \
+ 	$(BR2_BISON_HOST_DEPENDENCY) \
+ 	$(BR2_FLEX_HOST_DEPENDENCY)
+ $(eval $(kconfig-package))
