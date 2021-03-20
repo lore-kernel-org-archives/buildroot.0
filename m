@@ -1,37 +1,99 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 20 Mar 2021 22:24:18 +0100
-Subject: [Buildroot] [PATCH 1/1] package/elfutils: fix build with uclibc
-In-Reply-To: <20210318074219.4113728-1-fontaine.fabrice@gmail.com>
-References: <20210318074219.4113728-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210320222418.3fbc9ee2@windsurf.home>
+Date: Sat, 20 Mar 2021 22:24:50 +0100
+Subject: [Buildroot] [git commit] package/lualdap: bump to version 1.2.6
+Message-ID: <20210320212201.61AAC81121@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 18 Mar 2021 08:42:19 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=09edbd1ed1404dc6fb2e3c9cfdec631f785d7443
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Update first patch to fix a build failure with uclibc and elfutils in
-> version 0.183.0 which errors out if obstack is not found since
-> https://sourceware.org/git/?p=elfutils.git;a=commit;h=da855fc9cd415c288bfcb9de1f3d5eb329de0557
-> 
-> Indeed, obstack has been removed from uclibc-ng since version 1.0.21 and
-> https://github.com/wbx-github/uclibc-ng/commit/0bd6bfb2b643ea2b4b1440dfd917ba752f0c0d15
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/003ae73c7b48ad6b9837fb19ca197061d20eaf6d
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...-Add-a-enable-disable-progs-configure-option.patch | 11 +++++++++++
->  1 file changed, 11 insertions(+)
+- switch to luarocks infrastructure
+- support Lua 5.4
 
-Applied to master, thanks.
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/lualdap/Config.in    |  7 +++----
+ package/lualdap/lualdap.hash |  6 +++---
+ package/lualdap/lualdap.mk   | 30 +++++-------------------------
+ 3 files changed, 11 insertions(+), 32 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/lualdap/Config.in b/package/lualdap/Config.in
+index ef3e932027..5ef89728f2 100644
+--- a/package/lualdap/Config.in
++++ b/package/lualdap/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_LUALDAP
+ 	bool "lualdap"
+ 	depends on !BR2_STATIC_LIBS
+-	depends on !BR2_PACKAGE_LUA_5_4
+ 	depends on BR2_USE_WCHAR # openldap
+ 	depends on BR2_USE_MMU # openldap
+ 	select BR2_PACKAGE_OPENLDAP
+@@ -9,8 +8,8 @@ config BR2_PACKAGE_LUALDAP
+ 	  LuaLDAP is a simple interface from Lua to an LDAP client,
+ 	  in fact it is a bind to OpenLDAP client.
+ 
+-	  https://github.com/lualdap/lualdap
++	  https://lualdap.github.io/lualdap/
+ 
+-comment "lualdap needs a toolchain w/ wchar, dynamic library, Lua <= 5.3"
++comment "lualdap needs a toolchain w/ wchar, dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS || BR2_PACKAGE_LUA_5_4
++	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS
+diff --git a/package/lualdap/lualdap.hash b/package/lualdap/lualdap.hash
+index 77eced4341..488deb4e16 100644
+--- a/package/lualdap/lualdap.hash
++++ b/package/lualdap/lualdap.hash
+@@ -1,3 +1,3 @@
+-# locally computed
+-sha256  3e028faa6a5798cf2f3d50b9853b9b3fb6eb562b62010747bd5b6f50b57bb1cc  lualdap-1.2.5.tar.gz
+-sha256  7afd8bed6c96a2ba1d1fa9f03ea04c140065462dbd37d7fb66cc7c3c6722aa89  LICENSE.md
++# computed by luarocks/buildroot
++sha256 0fcd82a77b20f7cee00050b63b4241d462564421bbd464f6fd0c1bebc62bff32  lualdap-1.2.6-1.src.rock
++sha256 b9b75da18d1e1147ec47bff508ffdce831da07dc371891b9057cf1c422660af4  lualdap/docs/license.md
+diff --git a/package/lualdap/lualdap.mk b/package/lualdap/lualdap.mk
+index 6ab3302697..acfcbdfc68 100644
+--- a/package/lualdap/lualdap.mk
++++ b/package/lualdap/lualdap.mk
+@@ -4,30 +4,10 @@
+ #
+ ################################################################################
+ 
+-LUALDAP_VERSION = 1.2.5
+-LUALDAP_SITE = $(call github,lualdap,lualdap,v$(LUALDAP_VERSION))
++LUALDAP_VERSION = 1.2.6-1
++LUALDAP_SUBDIR = lualdap
+ LUALDAP_LICENSE = MIT
+-LUALDAP_LICENSE_FILES = LICENSE.md
+-LUALDAP_DEPENDENCIES = luainterpreter openldap
++LUALDAP_LICENSE_FILES = $(LUALDAP_SUBDIR)/docs/license.md
++LUALDAP_DEPENDENCIES = openldap
+ 
+-define LUALDAP_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) \
+-		CC=$(TARGET_CC) \
+-		LUA_LIB=-llua \
+-		LUA_LIBDIR="$(STAGING_DIR)/usr/lib" \
+-		LUA_INCDIR="$(STAGING_DIR)/usr/include" \
+-		LDAP_LIBDIR="$(STAGING_DIR)/usr/lib" \
+-		LDAP_INCDIR="$(STAGING_DIR)/usr/include" \
+-		LBER_LIBDIR="$(STAGING_DIR)/usr/lib" \
+-		LBER_INCDIR="$(STAGING_DIR)/usr/include" \
+-		src/lualdap.so
+-endef
+-
+-define LUALDAP_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) \
+-		DESTDIR="$(TARGET_DIR)" \
+-		INST_LIBDIR="/usr/lib/lua/$(LUAINTERPRETER_ABIVER)/" \
+-		install
+-endef
+-
+-$(eval $(generic-package))
++$(eval $(luarocks-package))
