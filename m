@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 20 Mar 2021 20:07:32 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x]
+Date: Sat, 20 Mar 2021 20:07:24 +0100
+Subject: [Buildroot] [git commit branch/2021.02.x]
  package/docker-containerd: security bump to 1.4.4
-Message-ID: <20210320185727.EF2FB81452@busybox.osuosl.org>
+Message-ID: <20210320185734.56041865AD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e4adf54868f754550164839e8051eff30b9ac29f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=6ff5bdbfc02e8243474facec4b5c42fa8cbdc69e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
 Security fix for CVE-2021-21334:
 
@@ -45,7 +45,7 @@ index c5cfc137b8..bb544e8d60 100644
 +sha256  ac62c64664bf62fd44df0891c896eecdb6d93def3438271d7892dca75bc069d1  docker-containerd-1.4.4.tar.gz
  sha256	4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4  LICENSE
 diff --git a/package/docker-containerd/docker-containerd.mk b/package/docker-containerd/docker-containerd.mk
-index 6b79bd14ae..04114a7553 100644
+index 626889e5f4..e229d9cb54 100644
 --- a/package/docker-containerd/docker-containerd.mk
 +++ b/package/docker-containerd/docker-containerd.mk
 @@ -4,7 +4,7 @@
