@@ -1,35 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 20 Mar 2021 20:18:37 +0100
-Subject: [Buildroot] [git commit branch/2021.02.x] DEVELOPERS: Add Ryan
- Barnett for opkg and opkg-utils
-Message-ID: <20210320185734.B6C6E865AD@busybox.osuosl.org>
+Date: Sat, 20 Mar 2021 20:08:38 +0100
+Subject: [Buildroot] [git commit branch/2021.02.x] package/docker-engine:
+ bump version to 20.10.5
+Message-ID: <20210320185734.7F07B885FA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bd307f4bcbb976a9c32e8e8fd094a86baacff9da
+commit: https://git.buildroot.net/buildroot/commit/?id=09d913dc4f192ccc8493f63ffa466f8586ccf18c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+Signed-off-by: Christian Stewart <christian@paral.in>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit c994860de5431bda81569eb0e745bdb4339b195f)
+(cherry picked from commit 36b8a8ba6bdbc3001f93f6037910841db712a54d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 2 ++
- 1 file changed, 2 insertions(+)
+ package/docker-engine/docker-engine.hash | 2 +-
+ package/docker-engine/docker-engine.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index a47fd621b7..f42b87effc 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2307,6 +2307,8 @@ N:	Ryan Barnett <ryan.barnett@rockwellcollins.com>
- F:	package/atftp/
- F:	package/c-periphery/
- F:	package/miraclecast/
-+F:	package/opkg/
-+F:	package/opkg-utils/
- F:	package/python-pysnmp/
- F:	package/python-pysnmp-mibs/
- F:	package/python-tornado/
+diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
+index 69ebd113ea..7e3ce6a5cf 100644
+--- a/package/docker-engine/docker-engine.hash
++++ b/package/docker-engine/docker-engine.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  62bb03f197b8a064da568e62639f6834f91c8cfc9273126a978847becc214c31  docker-engine-20.10.3.tar.gz
++sha256  bcf651d75e5c80421e8cd3b0d47f3425e01047cf67aef0eda83b68776905a583  docker-engine-20.10.5.tar.gz
+ sha256  7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index bbc97af8b5..d3f4d81572 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DOCKER_ENGINE_VERSION = 20.10.3
++DOCKER_ENGINE_VERSION = 20.10.5
+ DOCKER_ENGINE_SITE = $(call github,moby,moby,v$(DOCKER_ENGINE_VERSION))
+ 
+ DOCKER_ENGINE_LICENSE = Apache-2.0
