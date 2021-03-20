@@ -1,45 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 20 Mar 2021 20:08:38 +0100
-Subject: [Buildroot] [git commit branch/2021.02.x] package/docker-engine:
- bump version to 20.10.5
-Message-ID: <20210320185734.7F07B885FA@busybox.osuosl.org>
+Date: Sat, 20 Mar 2021 20:09:20 +0100
+Subject: [Buildroot] [git commit branch/2021.02.x] package/libnet: add
+ LIBNET_CPE_ID_VENDOR
+Message-ID: <20210320185734.959DC865AD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=09d913dc4f192ccc8493f63ffa466f8586ccf18c
+commit: https://git.buildroot.net/buildroot/commit/?id=54bc59387553436e9682db299aac04f591a9f25b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Signed-off-by: Christian Stewart <christian@paral.in>
+cpe:2.3:a:libnet_project:libnet is a valid CPE identifier for this package:
+
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alibnet_project%3Alibnet
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 36b8a8ba6bdbc3001f93f6037910841db712a54d)
+(cherry picked from commit 135bae2163c96a3d5d1c419ad737b1b5ae93f61f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/docker-engine/docker-engine.hash | 2 +-
- package/docker-engine/docker-engine.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libnet/libnet.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
-index 69ebd113ea..7e3ce6a5cf 100644
---- a/package/docker-engine/docker-engine.hash
-+++ b/package/docker-engine/docker-engine.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  62bb03f197b8a064da568e62639f6834f91c8cfc9273126a978847becc214c31  docker-engine-20.10.3.tar.gz
-+sha256  bcf651d75e5c80421e8cd3b0d47f3425e01047cf67aef0eda83b68776905a583  docker-engine-20.10.5.tar.gz
- sha256  7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index bbc97af8b5..d3f4d81572 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libnet/libnet.mk b/package/libnet/libnet.mk
+index 966106837a..5c5071b9c3 100644
+--- a/package/libnet/libnet.mk
++++ b/package/libnet/libnet.mk
+@@ -11,5 +11,6 @@ LIBNET_INSTALL_STAGING = YES
+ LIBNET_CONF_OPTS = libnet_cv_have_packet_socket=yes
+ LIBNET_LICENSE = BSD-2-Clause, BSD-3-Clause
+ LIBNET_LICENSE_FILES = doc/COPYING
++LIBNET_CPE_ID_VENDOR = libnet_project
  
--DOCKER_ENGINE_VERSION = 20.10.3
-+DOCKER_ENGINE_VERSION = 20.10.5
- DOCKER_ENGINE_SITE = $(call github,moby,moby,v$(DOCKER_ENGINE_VERSION))
- 
- DOCKER_ENGINE_LICENSE = Apache-2.0
+ $(eval $(autotools-package))
