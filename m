@@ -1,40 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 20 Mar 2021 23:37:53 +0100
-Subject: [Buildroot] [git commit branch/2021.02.x] package/protobuf: disable
- package if binutils is affected from bug 21464
-Message-ID: <20210320221852.98BAF81366@busybox.osuosl.org>
+Date: Sat, 20 Mar 2021 23:48:59 +0100
+Subject: [Buildroot] [PATCH 1/1] package/wpebackend-fdo: bump to version
+ 1.8.1
+In-Reply-To: <20210309225932.854986-1-aperez@igalia.com> (Adrian Perez de
+ Castro's message of "Wed, 10 Mar 2021 00:59:32 +0200")
+References: <20210309225932.854986-1-aperez@igalia.com>
+Message-ID: <87eeg9qw4k.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5e8bc02c7e5791299b20e96da8c2bb3e258caacc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+>>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
 
-This package is affected from binutils bug 21464, since there is no
-workaround, let's disable it.
+ > This bugfix release solves a couple of leaks and sporadic crashes.
+ > Release notes:
 
-Fixes:
-http://autobuild.buildroot.net/results/908/9084cd777aefe0fa8235514c33767d8640ad7a5b/
+ >   https://wpewebkit.org/release/wpebackend-fdo-1.8.1.html
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 9e71b6e2cb28a66e116019bf8808fb48cef1d7b9)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/protobuf/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 
-diff --git a/package/protobuf/Config.in b/package/protobuf/Config.in
-index 46c820b9cf..30050950aa 100644
---- a/package/protobuf/Config.in
-+++ b/package/protobuf/Config.in
-@@ -24,6 +24,7 @@ config BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
- 	default y if BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on BR2_USE_MMU # fork()
-+	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464
- 
- config BR2_PACKAGE_PROTOBUF
- 	bool "protobuf"
+Committed to 2020.11.x and 2021.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
