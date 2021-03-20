@@ -1,40 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 20 Mar 2021 22:47:50 +0100
-Subject: [Buildroot] [PATCH] package/squid: Use external libltdl
-In-Reply-To: <20210317060145.25009-1-post@lespocky.de>
-References: <20210317060145.25009-1-post@lespocky.de>
-Message-ID: <20210320224750.7a3fbe99@windsurf.home>
+Date: Sat, 20 Mar 2021 22:51:23 +0100
+Subject: [Buildroot] [git commit] configs/bananapi_m1_plus_defconfig: select
+ custom headers
+Message-ID: <20210320212816.D6ABF81730@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 17 Mar 2021 07:01:45 +0100
-Alexander Dahl <post@lespocky.de> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=76efcc2f548b307a821b8e4ab284a31a97b1c315
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> When enabling BR2_PACKAGE_LIBTOOL it depended on the build order if
-> squid used the external libltdl or built it from its internal copy. That
-> broke the build in fli4l where we have additional post build checks
-> analyzing runtime dependencies and a separate step for copying build
-> artefacts to target packages.
-> 
-> Depend on the external libltdl unconditionally like done with commit
-> 3efc5a250c1c ("package/siproxd: new package") for package siproxd
-> recently as well. For reproducibility, size, and security.
-> 
-> Link: https://web.nettworks.org/ci/job/fli4l/job/buildroot/job/4.0/job/trunk-sunxi/672/
-> Suggested-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Signed-off-by: Alexander Dahl <post@lespocky.de>
-> ---
->  package/squid/Config.in | 1 +
->  package/squid/squid.mk  | 4 +++-
->  2 files changed, 4 insertions(+), 1 deletion(-)
+Board used custom Kernel but did not specify
+custom headers. This broke the build when
+Linux 5.11 was added in d2fe9c6.
 
-Applied to master, thanks.
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/1089053980
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Filip Skoneczny <fskoneczny@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ configs/bananapi_m1_plus_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/configs/bananapi_m1_plus_defconfig b/configs/bananapi_m1_plus_defconfig
+index 8f278f932d..271124f79a 100644
+--- a/configs/bananapi_m1_plus_defconfig
++++ b/configs/bananapi_m1_plus_defconfig
+@@ -2,6 +2,7 @@ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_FPU_NEON_VFPV4=y
+ BR2_GLOBAL_PATCH_DIR="board/sinovoip/m1-plus/patches"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ BR2_TARGET_GENERIC_HOSTNAME="bananapi"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to Banana Pi!"
+ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
