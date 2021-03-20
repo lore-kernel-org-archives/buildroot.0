@@ -1,34 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 20 Mar 2021 22:24:11 +0100
-Subject: [Buildroot] [PATCH 1/1] package/pulseview: bump to version 0.4.2
-In-Reply-To: <20210318063313.3946906-1-fontaine.fabrice@gmail.com>
-References: <20210318063313.3946906-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210320222411.6de24b82@windsurf.home>
+Date: Sat, 20 Mar 2021 22:24:18 +0100
+Subject: [Buildroot] [PATCH 1/1] package/elfutils: fix build with uclibc
+In-Reply-To: <20210318074219.4113728-1-fontaine.fabrice@gmail.com>
+References: <20210318074219.4113728-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210320222418.3fbc9ee2@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 18 Mar 2021 07:33:13 +0100
+On Thu, 18 Mar 2021 08:42:19 +0100
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> - Drop first patch (already in version)
-> - BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS is mandatory since
->   https://sigrok.org/gitweb/?p=pulseview.git;a=commit;h=0466001be51e779b23aaebec1cc9361305c07be9
+> Update first patch to fix a build failure with uclibc and elfutils in
+> version 0.183.0 which errors out if obstack is not found since
+> https://sourceware.org/git/?p=elfutils.git;a=commit;h=da855fc9cd415c288bfcb9de1f3d5eb329de0557
 > 
-> https://github.com/sigrokproject/pulseview/blob/pulseview-0.4.2/NEWS
+> Indeed, obstack has been removed from uclibc-ng since version 1.0.21 and
+> https://github.com/wbx-github/uclibc-ng/commit/0bd6bfb2b643ea2b4b1440dfd917ba752f0c0d15
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/003ae73c7b48ad6b9837fb19ca197061d20eaf6d
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  ...lace-obsolete-deprecated-Qt-methods.patch} |  0
->  ...ar-fix-build-without-libsigrokdecode.patch | 37 -------------------
->  package/pulseview/Config.in                   |  2 +
->  package/pulseview/pulseview.hash              |  2 +-
->  package/pulseview/pulseview.mk                |  4 +-
->  5 files changed, 5 insertions(+), 40 deletions(-)
->  rename package/pulseview/{0002-Replace-obsolete-deprecated-Qt-methods.patch => 0001-Replace-obsolete-deprecated-Qt-methods.patch} (100%)
->  delete mode 100644 package/pulseview/0001-mainbar-fix-build-without-libsigrokdecode.patch
+>  ...-Add-a-enable-disable-progs-configure-option.patch | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
 
 Applied to master, thanks.
 
