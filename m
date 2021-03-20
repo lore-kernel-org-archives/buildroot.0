@@ -1,99 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 20 Mar 2021 22:24:50 +0100
-Subject: [Buildroot] [git commit] package/lualdap: bump to version 1.2.6
-Message-ID: <20210320212201.61AAC81121@busybox.osuosl.org>
+Date: Sat, 20 Mar 2021 22:46:17 +0100
+Subject: [Buildroot] [git commit] package/tor: security bump version to
+ 0.4.5.7
+Message-ID: <20210320212259.B256687826@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=09edbd1ed1404dc6fb2e3c9cfdec631f785d7443
+commit: https://git.buildroot.net/buildroot/commit/?id=ed308a5cc3cb322eeabdc64a7b468bc3b6cc019e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- switch to luarocks infrastructure
-- support Lua 5.4
+Updated license hash due to upstream commit:
+https://gitweb.torproject.org/tor.git/commit/LICENSE?h=tor-0.4.5.7&id=02230575c4da6cd6342516e6682f95dad3e3e29e
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Fixes CVE-2021-28089 & CVE-2021-28090.
+
+Release notes: https://blog.torproject.org/node/2009
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/lualdap/Config.in    |  7 +++----
- package/lualdap/lualdap.hash |  6 +++---
- package/lualdap/lualdap.mk   | 30 +++++-------------------------
- 3 files changed, 11 insertions(+), 32 deletions(-)
+ package/tor/tor.hash | 4 ++--
+ package/tor/tor.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/lualdap/Config.in b/package/lualdap/Config.in
-index ef3e932027..5ef89728f2 100644
---- a/package/lualdap/Config.in
-+++ b/package/lualdap/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_LUALDAP
- 	bool "lualdap"
- 	depends on !BR2_STATIC_LIBS
--	depends on !BR2_PACKAGE_LUA_5_4
- 	depends on BR2_USE_WCHAR # openldap
- 	depends on BR2_USE_MMU # openldap
- 	select BR2_PACKAGE_OPENLDAP
-@@ -9,8 +8,8 @@ config BR2_PACKAGE_LUALDAP
- 	  LuaLDAP is a simple interface from Lua to an LDAP client,
- 	  in fact it is a bind to OpenLDAP client.
- 
--	  https://github.com/lualdap/lualdap
-+	  https://lualdap.github.io/lualdap/
- 
--comment "lualdap needs a toolchain w/ wchar, dynamic library, Lua <= 5.3"
-+comment "lualdap needs a toolchain w/ wchar, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS || BR2_PACKAGE_LUA_5_4
-+	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS
-diff --git a/package/lualdap/lualdap.hash b/package/lualdap/lualdap.hash
-index 77eced4341..488deb4e16 100644
---- a/package/lualdap/lualdap.hash
-+++ b/package/lualdap/lualdap.hash
+diff --git a/package/tor/tor.hash b/package/tor/tor.hash
+index ecbe738574..e46335f79c 100644
+--- a/package/tor/tor.hash
++++ b/package/tor/tor.hash
 @@ -1,3 +1,3 @@
--# locally computed
--sha256  3e028faa6a5798cf2f3d50b9853b9b3fb6eb562b62010747bd5b6f50b57bb1cc  lualdap-1.2.5.tar.gz
--sha256  7afd8bed6c96a2ba1d1fa9f03ea04c140065462dbd37d7fb66cc7c3c6722aa89  LICENSE.md
-+# computed by luarocks/buildroot
-+sha256 0fcd82a77b20f7cee00050b63b4241d462564421bbd464f6fd0c1bebc62bff32  lualdap-1.2.6-1.src.rock
-+sha256 b9b75da18d1e1147ec47bff508ffdce831da07dc371891b9057cf1c422660af4  lualdap/docs/license.md
-diff --git a/package/lualdap/lualdap.mk b/package/lualdap/lualdap.mk
-index 6ab3302697..acfcbdfc68 100644
---- a/package/lualdap/lualdap.mk
-+++ b/package/lualdap/lualdap.mk
-@@ -4,30 +4,10 @@
+ # Locally computed
+-sha256  22cba3794fedd5fa87afc1e512c6ce2c21bc20b4e1c6f8079d832dc1e545e733  tor-0.4.5.6.tar.gz
+-sha256  ae2afe6cd3fd9d512afbaa1ef218757eb00aa6b6aa5e2dfc2774b6837e373fa1  LICENSE
++sha256  447fcaaa133e2ef22427e98098a60a9c495edf9ff3e0dd13f484b9ad0185f074  tor-0.4.5.7.tar.gz
++sha256  47b54ed17e8fdcab3c44729a1789a09b208f9a63a845a7e50def9df729eebad0  LICENSE
+diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+index 1c9d2f2367..56779f1633 100644
+--- a/package/tor/tor.mk
++++ b/package/tor/tor.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LUALDAP_VERSION = 1.2.5
--LUALDAP_SITE = $(call github,lualdap,lualdap,v$(LUALDAP_VERSION))
-+LUALDAP_VERSION = 1.2.6-1
-+LUALDAP_SUBDIR = lualdap
- LUALDAP_LICENSE = MIT
--LUALDAP_LICENSE_FILES = LICENSE.md
--LUALDAP_DEPENDENCIES = luainterpreter openldap
-+LUALDAP_LICENSE_FILES = $(LUALDAP_SUBDIR)/docs/license.md
-+LUALDAP_DEPENDENCIES = openldap
- 
--define LUALDAP_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) \
--		CC=$(TARGET_CC) \
--		LUA_LIB=-llua \
--		LUA_LIBDIR="$(STAGING_DIR)/usr/lib" \
--		LUA_INCDIR="$(STAGING_DIR)/usr/include" \
--		LDAP_LIBDIR="$(STAGING_DIR)/usr/lib" \
--		LDAP_INCDIR="$(STAGING_DIR)/usr/include" \
--		LBER_LIBDIR="$(STAGING_DIR)/usr/lib" \
--		LBER_INCDIR="$(STAGING_DIR)/usr/include" \
--		src/lualdap.so
--endef
--
--define LUALDAP_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) \
--		DESTDIR="$(TARGET_DIR)" \
--		INST_LIBDIR="/usr/lib/lua/$(LUAINTERPRETER_ABIVER)/" \
--		install
--endef
--
--$(eval $(generic-package))
-+$(eval $(luarocks-package))
+-TOR_VERSION = 0.4.5.6
++TOR_VERSION = 0.4.5.7
+ TOR_SITE = https://dist.torproject.org
+ TOR_LICENSE = BSD-3-Clause
+ TOR_LICENSE_FILES = LICENSE
