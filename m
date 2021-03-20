@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 20 Mar 2021 20:19:31 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] DEVELOPERS: Add Ryan
+Date: Sat, 20 Mar 2021 20:18:42 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] DEVELOPERS: Add Ryan
  Barnett for opkg and opkg-utils
-Message-ID: <20210320185723.2C960862BC@busybox.osuosl.org>
+Message-ID: <20210320185728.181177F896@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ae19032d6dd2bc3627eaa441849baa3a4adb3601
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=9e09738117123c75b85fa23949ab5bfbc1730b1f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
 Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
@@ -21,13 +21,13 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 2 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index bb32794ff7..0a2a3b11c5 100644
+index 83b268a449..d10d3e7bf6 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2135,6 +2135,8 @@ F:	package/atftp/
+@@ -2265,6 +2265,8 @@ N:	Ryan Barnett <ryan.barnett@rockwellcollins.com>
+ F:	package/atftp/
  F:	package/c-periphery/
  F:	package/miraclecast/
- F:	package/python-pyasn/
 +F:	package/opkg/
 +F:	package/opkg-utils/
  F:	package/python-pysnmp/
