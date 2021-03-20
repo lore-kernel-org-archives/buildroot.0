@@ -1,36 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 20 Mar 2021 20:58:18 +0100
-Subject: [Buildroot] [git commit] package/davfs2: add DAVFS2_CPE_ID_VENDOR
-Message-ID: <20210320193548.C2984812F0@busybox.osuosl.org>
+Date: Sat, 20 Mar 2021 20:58:19 +0100
+Subject: [Buildroot] [git commit] package/dhcpcd: add DHCPCD_CPE_ID_VENDOR
+Message-ID: <20210320193548.F0630812F0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=58134c1570963e61ca5dd60f2ec104c275a1fcf2
+commit: https://git.buildroot.net/buildroot/commit/?id=b844bf46ba521397e5d19de77a2c55e85514ac21
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:werner_baumann:davfs2 is a valid CPE identifier for this
+cpe:2.3:a:dhcpcd_project:dhcpcd is a valid CPE identifier for this
 package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Awerner_baumann%3Adavfs2
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Adhcpcd_project%3Adhcpcd
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/davfs2/davfs2.mk | 1 +
+ package/dhcpcd/dhcpcd.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/davfs2/davfs2.mk b/package/davfs2/davfs2.mk
-index 1099f1b13b..9b96140fd8 100644
---- a/package/davfs2/davfs2.mk
-+++ b/package/davfs2/davfs2.mk
-@@ -8,6 +8,7 @@ DAVFS2_VERSION = 1.6.0
- DAVFS2_SITE = http://download.savannah.nongnu.org/releases/davfs2
- DAVFS2_LICENSE = GPL-3.0+
- DAVFS2_LICENSE_FILES = COPYING
-+DAVFS2_CPE_ID_VENDOR = werner_baumann
+diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
+index f040610de4..1af019fd9e 100644
+--- a/package/dhcpcd/dhcpcd.mk
++++ b/package/dhcpcd/dhcpcd.mk
+@@ -10,6 +10,7 @@ DHCPCD_SITE = http://roy.marples.name/downloads/dhcpcd
+ DHCPCD_DEPENDENCIES = host-pkgconf
+ DHCPCD_LICENSE = BSD-2-Clause
+ DHCPCD_LICENSE_FILES = LICENSE
++DHCPCD_CPE_ID_VENDOR = dhcpcd_project
  
- DAVFS2_DEPENDENCIES = \
- 	neon \
+ DHCPCD_CONFIG_OPTS = \
+ 	--libexecdir=/lib/dhcpcd \
