@@ -1,34 +1,34 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 20 Mar 2021 19:21:02 +0100
-Subject: [Buildroot] [PATCH 1/1] package/cracklib: add CRACKLIB_CPE_ID_VENDOR
-Message-ID: <20210320182102.444974-1-fontaine.fabrice@gmail.com>
+Date: Sat, 20 Mar 2021 19:30:19 +0100
+Subject: [Buildroot] [PATCH 1/1] package/davfs2: add DAVFS2_CPE_ID_VENDOR
+Message-ID: <20210320183019.445398-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:cracklib_project:cracklib is a valid CPE identifier for this
+cpe:2.3:a:werner_baumann:davfs2 is a valid CPE identifier for this
 package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Acracklib_project%3Acracklib
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Awerner_baumann%3Adavfs2
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/cracklib/cracklib.mk | 1 +
+ package/davfs2/davfs2.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/cracklib/cracklib.mk b/package/cracklib/cracklib.mk
-index 91d510ff34..8e6a844f11 100644
---- a/package/cracklib/cracklib.mk
-+++ b/package/cracklib/cracklib.mk
-@@ -8,6 +8,7 @@ CRACKLIB_VERSION = 2.9.7
- CRACKLIB_SITE = https://github.com/cracklib/cracklib/releases/download/v$(CRACKLIB_VERSION)
- CRACKLIB_LICENSE = LGPL-2.1
- CRACKLIB_LICENSE_FILES = COPYING.LIB
-+CRACKLIB_CPE_ID_VENDOR = cracklib_project
- CRACKLIB_INSTALL_STAGING = YES
- CRACKLIB_DEPENDENCIES = host-cracklib $(TARGET_NLS_DEPENDENCIES)
- CRACKLIB_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
+diff --git a/package/davfs2/davfs2.mk b/package/davfs2/davfs2.mk
+index 1099f1b13b..9b96140fd8 100644
+--- a/package/davfs2/davfs2.mk
++++ b/package/davfs2/davfs2.mk
+@@ -8,6 +8,7 @@ DAVFS2_VERSION = 1.6.0
+ DAVFS2_SITE = http://download.savannah.nongnu.org/releases/davfs2
+ DAVFS2_LICENSE = GPL-3.0+
+ DAVFS2_LICENSE_FILES = COPYING
++DAVFS2_CPE_ID_VENDOR = werner_baumann
+ 
+ DAVFS2_DEPENDENCIES = \
+ 	neon \
 -- 
 2.30.1
