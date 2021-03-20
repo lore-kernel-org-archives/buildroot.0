@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 20 Mar 2021 23:48:39 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/wpebackend-fdo:
+Date: Sat, 20 Mar 2021 23:48:20 +0100
+Subject: [Buildroot] [git commit branch/2021.02.x] package/wpebackend-fdo:
  bump to version 1.8.1
-Message-ID: <20210320222459.98361866B0@busybox.osuosl.org>
+Message-ID: <20210320222503.E7031866B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=89d324d5b7dfd0ad8dc8a83b0d7d944a2837d2a0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=9254477db74ef19ac80f1bf41ab090f44375cd44
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
 This bugfix release solves a couple of leaks and sporadic crashes.
 Release notes:
