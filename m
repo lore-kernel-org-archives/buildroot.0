@@ -1,40 +1,67 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 20 Mar 2021 21:47:39 +0100
-Subject: [Buildroot] [PATCH v1 1/2] package/git: bump version to 2.30.2
-In-Reply-To: <20210318201655.32647-1-ps.report@gmx.net>
-References: <20210318201655.32647-1-ps.report@gmx.net>
-Message-ID: <20210320214739.14cf9cf5@windsurf.home>
+Date: Sat, 20 Mar 2021 21:48:42 +0100
+Subject: [Buildroot] [git commit] package/linux-firmware: add option for
+ Marvell 8997 wifi cards
+Message-ID: <20210320202557.8518A865CB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 18 Mar 2021 21:16:54 +0100
-Peter Seiderer <ps.report@gmx.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=b0d2da558345c5b3383d8c4ed4885ce36f7f8fc4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Fix CVE-2021-21300:
-> 
->   On case-insensitive file systems with support for symbolic links,
->   if Git is configured globally to apply delay-capable clean/smudge
->   filters (such as Git LFS), Git could be fooled into running
->   remote code during a clone.
-> 
-> For details see [1] and [2].
-> 
-> [1] http://lkml.iu.edu/hypermail/linux/kernel/2102.1/01858.html
-> [2] http://lkml.iu.edu/hypermail/linux/kernel/2103.1/02533.html
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  package/git/git.hash | 2 +-
->  package/git/git.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/linux-firmware/Config.in         | 12 ++++++++++++
+ package/linux-firmware/linux-firmware.mk | 12 ++++++++++++
+ 2 files changed, 24 insertions(+)
 
-Both applied to master, thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
+index ba3322fa18..4cf39ddbc1 100644
+--- a/package/linux-firmware/Config.in
++++ b/package/linux-firmware/Config.in
+@@ -304,6 +304,18 @@ config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_PCIE8897
+ 	help
+ 	  Firmware files for the Marvell Wifi-Ex 8897 module on PCI-E.
+ 
++config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_PCIEUART8997
++	bool "Marvell Wifi-Ex 8997 PCI-E/UART
++	help
++	  Firmware files for the Marvell Wifi-Ex 8997 module on
++	  PCI-E/UART.
++
++config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_PCIEUSB8997
++	bool "Marvell Wifi-Ex 8997 PCI-E/USB"
++	help
++	  Firmware files for the Marvell Wifi-Ex 8997 module on
++	  PCI-E/USB.
++
+ config BR2_PACKAGE_LINUX_FIRMWARE_MEDIATEK_MT7601U
+ 	bool "MediaTek MT7601U"
+ 	help
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index edb0f40594..9adab67bf1 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -318,6 +318,18 @@ LINUX_FIRMWARE_FILES += mrvl/pcie8897_uapsta.bin
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.Marvell
+ endif
+ 
++# pcieuart8997
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_PCIEUART8997),y)
++LINUX_FIRMWARE_FILES += mrvl/pcieuart8997_combo_v4.bin
++LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.Marvell
++endif
++
++# pcieusb8997
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_PCIEUSB8997),y)
++LINUX_FIRMWARE_FILES += mrvl/pcieusb8997_combo_v4.bin
++LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.Marvell
++endif
++
+ # MT7601
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_MEDIATEK_MT7601U),y)
+ LINUX_FIRMWARE_FILES += mt7601u.bin
