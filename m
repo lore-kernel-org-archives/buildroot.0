@@ -1,27 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 20 Mar 2021 17:50:43 +0100
-Subject: [Buildroot] [PATCH 1/1] boot/uboot: fix compilation with
- PER_PACKAGE_DIRECTORIES enable
-In-Reply-To: <20210310161646.23709-1-nicolas.toromanoff@foss.st.com> (Nicolas
- Toromanoff's message of "Wed, 10 Mar 2021 17:16:46 +0100")
-References: <20210310161646.23709-1-nicolas.toromanoff@foss.st.com>
-Message-ID: <87tup5sra4.fsf@dell.be.48ers.dk>
+Date: Sat, 20 Mar 2021 17:45:06 +0100
+Subject: [Buildroot] [git commit branch/2021.02.x] package/diffutils: add
+ host package
+Message-ID: <20210320162645.1DF7888133@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Nicolas" == Nicolas Toromanoff <nicolas.toromanoff@foss.st.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=08e044bdf72d7723e3bb7372db9ad40d330abb8f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
- > If PER_PACKAGE_DIRECTORIES=Y and using host-make package
- > (because BR2_FORCE_HOST_BUILD=Y or local make is too old)
- > .stamp_dotconfig target needs per-package/uboot/host/bin/host-make that doesn't exist yet.
- > Add host-make into UBOOT_KCONFIG_DEPENDENCIES.
+Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 819637e0e977493bcb176a82981b6916aeca8793)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/diffutils/diffutils.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
- > Signed-off-by: Nicolas Toromanoff <nicolas.toromanoff@foss.st.com>
-
-Committed to 2020.02.x, 2020.11.x and 2021.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/diffutils/diffutils.mk b/package/diffutils/diffutils.mk
+index 586b81ace8..107de79383 100644
+--- a/package/diffutils/diffutils.mk
++++ b/package/diffutils/diffutils.mk
+@@ -18,3 +18,4 @@ DIFFUTILS_CONF_ENV += gl_cv_func_getopt_gnu=yes
+ endif
+ 
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
