@@ -1,43 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 20 Mar 2021 17:49:11 +0100
-Subject: [Buildroot] [PATCH 6/8] package/opkg-utils: add missing
- dependencies for host build
-In-Reply-To: <20210312200534.923-7-ryan.barnett@rockwellcollins.com> (Ryan
- Barnett's message of "Fri, 12 Mar 2021 14:05:32 -0600")
-References: <20210312200534.923-1-ryan.barnett@rockwellcollins.com>
- <20210312200534.923-7-ryan.barnett@rockwellcollins.com>
-Message-ID: <87y2ehsrco.fsf@dell.be.48ers.dk>
+Date: Sat, 20 Mar 2021 17:50:43 +0100
+Subject: [Buildroot] [PATCH 1/1] boot/uboot: fix compilation with
+ PER_PACKAGE_DIRECTORIES enable
+In-Reply-To: <20210310161646.23709-1-nicolas.toromanoff@foss.st.com> (Nicolas
+ Toromanoff's message of "Wed, 10 Mar 2021 17:16:46 +0100")
+References: <20210310161646.23709-1-nicolas.toromanoff@foss.st.com>
+Message-ID: <87tup5sra4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ryan" == Ryan Barnett <ryan.barnett@rockwellcollins.com> writes:
+>>>>> "Nicolas" == Nicolas Toromanoff <nicolas.toromanoff@foss.st.com> writes:
 
- > opkg-utils is a collection of bash and python scripts which require
- > additional commands/tools be available for the bash scripts. The full
- > list of dependencies that the opkg-util scripts require is:
+ > If PER_PACKAGE_DIRECTORIES=Y and using host-make package
+ > (because BR2_FORCE_HOST_BUILD=Y or local make is too old)
+ > .stamp_dotconfig target needs per-package/uboot/host/bin/host-make that doesn't exist yet.
+ > Add host-make into UBOOT_KCONFIG_DEPENDENCIES.
 
- >   bash
- >   binutils
- >   bzip2
- >   coreutils
- >   diffutils
- >   findutils
- >   grep
- >   gzip
- >   lz4
- >   python3
- >   sed
- >   tar
- >   xz
-
- > Since buildroot requires that bash, binutils, bzip2, gzip, sed and tar
- > be installed on the host system, only add dependencies on the
- > remaining host tools.
-
- > Signed-off-by: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+ > Signed-off-by: Nicolas Toromanoff <nicolas.toromanoff@foss.st.com>
 
 Committed to 2020.02.x, 2020.11.x and 2021.02.x, thanks.
 
