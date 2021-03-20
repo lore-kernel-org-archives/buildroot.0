@@ -1,96 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 20 Mar 2021 22:05:49 +0100
-Subject: [Buildroot] [PATCH 1/1] package/rustc: add musl as an available
- Rust libc
-In-Reply-To: <BN1P111MB0914D910EDE814D643995A08F5699@BN1P111MB0914.NAMP111.PROD.OUTLOOK.COM>
-References: <BN1P111MB0914433AA54196ABAEB91D63F5699@BN1P111MB0914.NAMP111.PROD.OUTLOOK.COM>
- <BN1P111MB0914D910EDE814D643995A08F5699@BN1P111MB0914.NAMP111.PROD.OUTLOOK.COM>
-Message-ID: <20210320220549.65c51497@windsurf.home>
+Date: Sat, 20 Mar 2021 22:08:35 +0100
+Subject: [Buildroot] [git commit] package/liburiparser: bump to version 0.9.5
+Message-ID: <20210320204434.A5129815FD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Nathaniel,
+commit: https://git.buildroot.net/buildroot/commit/?id=502c397ec388a6f5dbdbe0ea47d17318d68b29f3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 18 Mar 2021 18:55:30 +0000
-"Husted, Nathaniel CIV USN NSWC CD CRANE IN (USA)" <nathaniel.husted@navy.mil> wrote:
+https://github.com/uriparser/uriparser/blob/uriparser-0.9.5/ChangeLog
 
-> The current rustc package only supports gnu libc and hardcodes this requirement. This patch adds musl to the available libc options for Rust packages.
-> 
-> Musl is now a Tier 2 supported environment for Rust. Tier 2 means the platforms are "guaranteed to build" and official binary releases are available. The changes in rustc.mk will also support adding uclibc when that environment reaches Tier 2 support but does not allow for uclibc as it is still a Tier 3 supported libc.
-> 
-> Signed-off-by: Nathaniel Husted <nathaniel.husted@navy.mil>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/liburiparser/liburiparser.hash | 2 +-
+ package/liburiparser/liburiparser.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thanks a lot for your patch! I do have a few comments below on the code
-itself. But first, could you resent your patch with "git send-email",
-so that it isn't mangled by your e-mail client? Also, wrapping your
-commit message to ~72 columns would be good.
-
-> ---
->  package/rustc/Config.in.host | 2 +-
->  package/rustc/rustc.mk       | 3 ++-
->  2 files changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/rustc/Config.in.host b/package/rustc/Config.in.host index 1df25ae326..4ab9086446 100644
-> --- a/package/rustc/Config.in.host
-> +++ b/package/rustc/Config.in.host
-> @@ -17,7 +17,7 @@ config BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
->         default y if (BR2_mips || BR2_mipsel) && !BR2_MIPS_CPU_MIPS32R6
->         default y if (BR2_mips64 || BR2_mips64el) && !BR2_MIPS_CPU_MIPS64R6 \
->                 && BR2_MIPS_NABI64
-> -       depends on BR2_TOOLCHAIN_USES_GLIBC
-> +       depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL
->         depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
-> 
->  config BR2_PACKAGE_HOST_RUSTC_ARCH
-> diff --git a/package/rustc/rustc.mk b/package/rustc/rustc.mk index 35ffc36106..181e19ac9d 100644
-> --- a/package/rustc/rustc.mk
-> +++ b/package/rustc/rustc.mk
-> @@ -6,9 +6,10 @@
-> 
->  RUSTC_ARCH = $(call qstrip,$(BR2_PACKAGE_HOST_RUSTC_ARCH))
->  RUSTC_ABI = $(call qstrip,$(BR2_PACKAGE_HOST_RUSTC_ABI))
-> +RUSTC_TARGET_LIBC = $(call qstrip,$(BR2_TOOLCHAIN_BUILDROOT_LIBC))
-> 
->  ifeq ($(BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS),y)
-> -RUSTC_TARGET_NAME = $(RUSTC_ARCH)-unknown-linux-gnu$(RUSTC_ABI)
-> +RUSTC_TARGET_NAME =
-> +$(RUSTC_ARCH)-unknown-linux-$(RUSTC_TARGET_LIBC)$(RUSTC_ABI)
-
-Unfortunately, this doesn't work, for two reasons:
-
- (1) $(BR2_TOOLCHAIN_BUILDROOT_LIBC) is only defined when you use the
-     "internal toolchain backend" i.e Buildroot builds the toolchain for
-     you. For a Buildroot configuration that uses an external
-     toolchain, this wouldn't work.
-
- (2) The current value being used is "gnu"... but the value of
-     $(BR2_TOOLCHAIN_BUILDROOT_LIBC) for a glibc toolchain is "glibc". So
-     with your patch, the value of RUSTC_TARGET_NAME would be incorrect for
-     glibc toolchains.
-
-I think instead you could simply use $(LIBC). Indeed, it is defined in
-all cases (internal/external) toolchains and has the value "gnu" for
-glibc toolchains. It is defined in package/Makefile.in as follows:
-
-ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
-LIBC = uclibc
-else ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
-LIBC = musl
-else
-LIBC = gnu
-endif
-
-What do you think ?
-
-If you agree with this, could you send an updated patch?
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/liburiparser/liburiparser.hash b/package/liburiparser/liburiparser.hash
+index feb5945849..60acca2215 100644
+--- a/package/liburiparser/liburiparser.hash
++++ b/package/liburiparser/liburiparser.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  b7cdabe5611408fc2c3a10f8beecb881a0c7e93ff669c578cd9e3e6d64b8f87b  uriparser-0.9.4.tar.bz2
++sha256  dd8061eba7f2e66c151722e6db0b27c972baa6215cf16f135dbe0f0a4bc6606c  uriparser-0.9.5.tar.bz2
+ sha256  287f09e6546a9610f949f89e8fb937cacfeabd7bfaa8c8a0c18312193bf04ad3  COPYING
+diff --git a/package/liburiparser/liburiparser.mk b/package/liburiparser/liburiparser.mk
+index 4ba1e051e3..c7bc604ece 100644
+--- a/package/liburiparser/liburiparser.mk
++++ b/package/liburiparser/liburiparser.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBURIPARSER_VERSION = 0.9.4
++LIBURIPARSER_VERSION = 0.9.5
+ LIBURIPARSER_SOURCE = uriparser-$(LIBURIPARSER_VERSION).tar.bz2
+ LIBURIPARSER_SITE = https://github.com/uriparser/uriparser/releases/download/uriparser-$(LIBURIPARSER_VERSION)
+ LIBURIPARSER_LICENSE = BSD-3-Clause
