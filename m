@@ -1,33 +1,103 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 20 Mar 2021 21:02:40 +0100
-Subject: [Buildroot] [PATCH] configs/beaglebone_qt5: add overlay to
- defconfig
-In-Reply-To: <20210319145907.464593-1-buildroot@heine.tech>
-References: <20210319145907.464593-1-buildroot@heine.tech>
-Message-ID: <20210320210240.778bdb53@windsurf.home>
+Date: Sat, 20 Mar 2021 21:03:21 +0100
+Subject: [Buildroot] [git commit] package/janet: fix build without threads
+Message-ID: <20210320193920.AE67288552@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 19 Mar 2021 15:59:07 +0100
-Michael Nosthoff via buildroot <buildroot@busybox.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=985c8bc9f128f728cb89c1010a03d3d24b61942f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> commit 8efc5dce98f9795d97b7a3452f9be4a774032379 added an overlay but
-> forgot to add it to the related defconfig.
-> 
-> Fixes: missing overlay data in image
-> 
-> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
-> ---
->  configs/beaglebone_qt5_defconfig | 1 +
->  1 file changed, 1 insertion(+)
+Fix build of janet without threads which is broken since its addition
+in commit 9a5c9c058cbb250cfb9519347507a030e157ed16
 
-Applied to master, thanks.
+Fixes:
+ - http://autobuild.buildroot.org/results/dd894a7178a395ea29912804132b1516934e8fa3
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...003-meson.build-fix-build-without-threads.patch | 72 ++++++++++++++++++++++
+ 1 file changed, 72 insertions(+)
+
+diff --git a/package/janet/0003-meson.build-fix-build-without-threads.patch b/package/janet/0003-meson.build-fix-build-without-threads.patch
+new file mode 100644
+index 0000000000..e6c9e878b4
+--- /dev/null
++++ b/package/janet/0003-meson.build-fix-build-without-threads.patch
+@@ -0,0 +1,72 @@
++From a7abe11105ac71081455fb4ff0400606bf1668e8 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Thu, 18 Mar 2021 09:00:23 +0100
++Subject: [PATCH] meson.build: fix build without threads
++
++Fix the following build failure with -Dsingle_threaded=true on embedded
++toolchains without pthread:
++
++FAILED: janet.p/meson-generated_.._janet.c.o
++/home/buildroot/autobuild/run/instance-3/output-1/host/bin/arm-linux-gcc -Ijanet.p -I. -I.. -I../src/include -fdiagnostics-color=always -pipe -Wall -Winvalid-pch -std=c99 -O3 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -pthread -fvisibility=hidden -MD -MQ janet.p/meson-generated_.._janet.c.o -MF janet.p/meson-generated_.._janet.c.o.d -o janet.p/meson-generated_.._janet.c.o -c janet.c
++In file included from /home/buildroot/autobuild/run/instance-3/output-1/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/stdlib.h:24,
++                 from ../src/include/janet.h:300,
++                 from src/core/features.h:57:
++/home/buildroot/autobuild/run/instance-3/output-1/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/include/features.h:218:5: warning: #warning requested reentrant code, but thread support was disabled [-Wcpp]
++  218 | #   warning requested reentrant code, but thread support was disabled
++      |     ^~~~~~~
++src/core/ev.c:39:10: fatal error: pthread.h: No such file or directory
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/janet-lang/janet/commit/a7abe11105ac71081455fb4ff0400606bf1668e8]
++---
++ meson.build | 13 +++++++++----
++ 1 file changed, 9 insertions(+), 4 deletions(-)
++
++diff --git a/meson.build b/meson.build
++index ea8c2f2e..d6c6c069 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -60,7 +60,7 @@ conf.set('JANET_NO_SOURCEMAPS', not get_option('sourcemaps'))
++ conf.set('JANET_NO_ASSEMBLER', not get_option('assembler'))
++ conf.set('JANET_NO_PEG', not get_option('peg'))
++ conf.set('JANET_NO_NET', not get_option('net'))
++-conf.set('JANET_NO_EV', not get_option('ev'))
+++conf.set('JANET_NO_EV', not get_option('ev') or get_option('single_threaded'))
++ conf.set('JANET_REDUCED_OS', get_option('reduced_os'))
++ conf.set('JANET_NO_TYPED_ARRAY', not get_option('typed_array'))
++ conf.set('JANET_NO_INT_TYPES', not get_option('int_types'))
++@@ -173,9 +173,14 @@ janetc = custom_target('janetc',
++     'JANET_PATH', janet_path, 'JANET_HEADERPATH', header_path
++   ])
++ 
+++janet_dependencies = [m_dep, dl_dep]
+++if not get_option('single_threaded')
+++  janet_dependencies += thread_dep
+++endif
+++
++ libjanet = library('janet', janetc,
++   include_directories : incdir,
++-  dependencies : [m_dep, dl_dep, thread_dep],
+++  dependencies : janet_dependencies,
++   version: meson.project_version(),
++   soversion: version_parts[0] + '.' + version_parts[1],
++   install : true)
++@@ -189,7 +194,7 @@ else
++ endif
++ janet_mainclient = executable('janet', janetc, mainclient_src,
++   include_directories : incdir,
++-  dependencies : [m_dep, dl_dep, thread_dep],
+++  dependencies : janet_dependencies,
++   c_args : extra_cflags,
++   install : true)
++ 
++@@ -202,7 +207,7 @@ if meson.is_cross_build()
++   endif
++   janet_nativeclient = executable('janet-native', janetc, mainclient_src,
++     include_directories : incdir,
++-    dependencies : [m_dep, dl_dep, thread_dep],
+++    dependencies : janet_dependencies,
++     c_args : extra_native_cflags,
++     native : true)
++ else
