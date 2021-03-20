@@ -1,33 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 20 Mar 2021 22:53:55 +0100
-Subject: [Buildroot] [PATCH 1/1] package/python-setuptools-rust: bump to
- version 0.12.1
-In-Reply-To: <20210317023021.1821721-1-james.hilliard1@gmail.com>
-References: <20210317023021.1821721-1-james.hilliard1@gmail.com>
-Message-ID: <20210320225355.45edd29b@windsurf.home>
+Date: Sat, 20 Mar 2021 22:56:48 +0100
+Subject: [Buildroot] [PATCH 3/4] Rename custom kernel defconfig files to
+ *_defconfig
+In-Reply-To: <20210317222849.1658538-3-masahiroy@kernel.org>
+References: <20210317222849.1658538-1-masahiroy@kernel.org>
+ <20210317222849.1658538-3-masahiroy@kernel.org>
+Message-ID: <20210320225648.5c8d0cb4@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 16 Mar 2021 20:30:21 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+On Thu, 18 Mar 2021 07:28:48 +0900
+Masahiro Yamada <masahiroy@kernel.org> wrote:
 
-> Drop patch that is now upstream.
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  ...-t-require-optional-wheel-dependency.patch | 40 -------------------
->  .../python-setuptools-rust.hash               |  4 +-
->  .../python-setuptools-rust.mk                 |  4 +-
->  3 files changed, 4 insertions(+), 44 deletions(-)
->  delete mode 100644 package/python-setuptools-rust/0001-Don-t-require-optional-wheel-dependency.patch
+> There is no consistency in file names for
+> BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE. Some are suffiex with "defconfig",
+> and some with ".config".
 
-Applied to master, thanks.
+The *vast* majority of them are named .config. Only three use
+-defconfig or _defconfig. Please normalize on .config, not the opposite.
+
+Thanks!
 
 Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
+Thomas Petazzoni, co-owner and CEO, Bootlin
 Embedded Linux and Kernel engineering
 https://bootlin.com
