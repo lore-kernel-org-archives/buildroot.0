@@ -1,48 +1,44 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 21 Mar 2021 09:53:37 +0100
-Subject: [Buildroot] [git commit] package/libnss: bump version to 3.63
-Message-ID: <20210321083423.7342E817A2@busybox.osuosl.org>
+Date: Sun, 21 Mar 2021 09:53:36 +0100
+Subject: [Buildroot] [git commit] package/libnspr: bump version to 4.30
+Message-ID: <20210321083423.66E058776D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a0f020f7ae478826c137f90ac43ab415cc7c6425
+commit: https://git.buildroot.net/buildroot/commit/?id=2022de646953c26ea75113d4a4670ae6b10683c1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Note: NSS 3.63 requires NSPR 4.30.
-Release Notes:
-https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.63_release_notes
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/libnss/libnss.hash | 4 ++--
- package/libnss/libnss.mk   | 2 +-
+ package/libnspr/libnspr.hash | 4 ++--
+ package/libnspr/libnspr.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index 85c694bc66..b3e7a2935d 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
+diff --git a/package/libnspr/libnspr.hash b/package/libnspr/libnspr.hash
+index f8f8fa76b9..8ca0f573b9 100644
+--- a/package/libnspr/libnspr.hash
++++ b/package/libnspr/libnspr.hash
 @@ -1,4 +1,4 @@
--# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_62_RTM/src/SHA256SUMS
--sha256  86d6df7cece25b8d4efa53e4c19af903c484eb79871163f37b5232bb406a5478  nss-3.62.tar.gz
-+# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_63_RTM/src/SHA256SUMS
-+sha256  182d2fef629102ae9423aabf2c192242b565cf5098e82c5a26cf70c5e4ea2221  nss-3.63.tar.gz
+-# From https://ftp.mozilla.org/pub/nspr/releases/v4.29/src/SHA256SUMS
+-sha256  22286bdb8059d74632cc7c2865c139e63953ecfb33bf4362ab58827e86e92582  nspr-4.29.tar.gz
++# From https://ftp.mozilla.org/pub/nspr/releases/v4.30/src/SHA256SUMS
++sha256  8d4cd8f8409484dc4c3d31e180354bfc506573eccf86cd691106a1ef7edc913b  nspr-4.30.tar.gz
  # Locally calculated
- sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index 07991ae786..9296bdcc18 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
+ sha256  fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85  nspr/LICENSE
+diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
+index 6f072cb6d2..67fb738b57 100644
+--- a/package/libnspr/libnspr.mk
++++ b/package/libnspr/libnspr.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBNSS_VERSION = 3.62
-+LIBNSS_VERSION = 3.63
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
+-LIBNSPR_VERSION = 4.29
++LIBNSPR_VERSION = 4.30
+ LIBNSPR_SOURCE = nspr-$(LIBNSPR_VERSION).tar.gz
+ LIBNSPR_SITE = https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v$(LIBNSPR_VERSION)/src
+ LIBNSPR_SUBDIR = nspr
