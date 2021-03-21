@@ -1,74 +1,40 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 21 Mar 2021 12:40:01 +0100
-Subject: [Buildroot] [PATCH v4 2/3] package/rpi-firmware: add option for the
- debug set of start/fixup boot files
+Date: Sun, 21 Mar 2021 12:40:02 +0100
+Subject: [Buildroot] [PATCH v4 3/3] package/rpi-firmware: convert dtb
+ overlay install loop to make-level foreach loop
 In-Reply-To: <20210321114002.31000-1-ps.report@gmx.net>
 References: <20210321114002.31000-1-ps.report@gmx.net>
-Message-ID: <20210321114002.31000-2-ps.report@gmx.net>
+Message-ID: <20210321114002.31000-3-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add option for the debug set of start/fixup boot files.
-
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
-Changes v1 -> v2:
-  - new patch
-
 Changes v2 -> v3:
-  - adjust to one-assignment style
+  - new patch
 ---
- package/rpi-firmware/Config.in       | 10 ++++++++++
- package/rpi-firmware/rpi-firmware.mk |  4 +++-
- 2 files changed, 13 insertions(+), 1 deletion(-)
+ package/rpi-firmware/rpi-firmware.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/rpi-firmware/Config.in b/package/rpi-firmware/Config.in
-index 9e401829c6..f9fc0b0e5e 100644
---- a/package/rpi-firmware/Config.in
-+++ b/package/rpi-firmware/Config.in
-@@ -35,6 +35,11 @@ config BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI_CD
- 	  The cut-down set of files for versions Zero/1/2/3 (only
- 	  features required to boot a Linux kernel).
- 
-+config BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI_DB
-+	bool "rpi 0/1/2/3 (debug)"
-+	help
-+	  The debug set of files for versions Zero/1/2/3.
-+
- config BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4
- 	bool "rpi 4 (default)"
- 	help
-@@ -53,6 +58,11 @@ config BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4_CD
- 	  The cut-down set of files for versions 4 (only features
- 	  required to boot a Linux kernel).
- 
-+config BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4_DB
-+	bool "rpi 4 (debug)"
-+	help
-+	  The debug set of files for versions 4.
-+
- config BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE
- 	string "Path to a file stored as boot/config.txt"
- 	help
 diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-index 7905791d1d..0c06f2c80d 100644
+index 0c06f2c80d..2e9750931b 100644
 --- a/package/rpi-firmware/rpi-firmware.mk
 +++ b/package/rpi-firmware/rpi-firmware.mk
-@@ -15,9 +15,11 @@ RPI_FIRMWARE_FILES = \
- 	$(if $(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI), start.elf fixup.dat) \
- 	$(if $(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI_X), startx.elf fixupx.dat) \
- 	$(if $(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI_CD), start_cd.elf fixup_cd.dat) \
-+	$(if $(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI_DB), start_db.elf fixup_db.dat) \
- 	$(if $(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4), start4.elf fixup4.dat) \
- 	$(if $(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4_X), start4x.elf fixup4x.dat) \
--	$(if $(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4_CD), start4cd.elf fixup4cd.dat)
-+	$(if $(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4_CD), start4cd.elf fixup4cd.dat) \
-+	$(if $(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4_DB), start4db.elf fixup4db.dat)
+@@ -43,9 +43,9 @@ endif
  
- define RPI_FIRMWARE_INSTALL_BIN
- 	$(foreach f,$(RPI_FIRMWARE_FILES), \
+ ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS),y)
+ define RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
+-	for ovldtb in  $(@D)/boot/overlays/*.dtbo; do \
+-		$(INSTALL) -D -m 0644 $${ovldtb} $(BINARIES_DIR)/rpi-firmware/overlays/$${ovldtb##*/} || exit 1; \
+-	done
++	$(foreach ovldtb,$(wildcard $(@D)/boot/overlays/*.dtbo), \
++		$(INSTALL) -D -m 0644 $(ovldtb) $(BINARIES_DIR)/rpi-firmware/overlays/$(notdir $(ovldtb))
++	)
+ endef
+ else
+ # Still create the directory, so a genimage.cfg can include it independently of
 -- 
 2.30.2
