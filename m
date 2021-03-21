@@ -1,37 +1,35 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 21 Mar 2021 11:26:07 +0100
-Subject: [Buildroot] [git commit] package/gutenprint: add
- GUTENPRINT_CPE_ID_VENDOR
-Message-ID: <20210321100356.D8D8F843B6@busybox.osuosl.org>
+Date: Sun, 21 Mar 2021 11:26:06 +0100
+Subject: [Buildroot] [git commit] package/gpsd: add GPSD_CPE_ID_VENDOR
+Message-ID: <20210321100356.C501288D1B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9462869f271ddb4cfd7a19a59a082fc2f4a6f6d5
+commit: https://git.buildroot.net/buildroot/commit/?id=b72416bc6c412d51b917baf0b96eb6344ad972f7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:gutenprint_project:gutenprint is a valid CPE identifier for
-this package:
+cpe:2.3:a:gpsd_project:gpsd is a valid CPE identifier for this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Agutenprint_project%3Agutenprint
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Agpsd_project%3Agpsd
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/gutenprint/gutenprint.mk | 1 +
+ package/gpsd/gpsd.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/gutenprint/gutenprint.mk b/package/gutenprint/gutenprint.mk
-index 9cb80c3e95..b0fcd5a598 100644
---- a/package/gutenprint/gutenprint.mk
-+++ b/package/gutenprint/gutenprint.mk
-@@ -10,6 +10,7 @@ GUTENPRINT_SITE = http://downloads.sourceforge.net/project/gimp-print/gutenprint
- GUTENPRINT_SOURCE = gutenprint-$(GUTENPRINT_VERSION).tar.bz2
- GUTENPRINT_LICENSE = GPL-2.0+
- GUTENPRINT_LICENSE_FILES = COPYING
-+GUTENPRINT_CPE_ID_VENDOR = gutenprint_project
+diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
+index 57955b7895..be7327ac95 100644
+--- a/package/gpsd/gpsd.mk
++++ b/package/gpsd/gpsd.mk
+@@ -8,6 +8,7 @@ GPSD_VERSION = 3.20
+ GPSD_SITE = http://download-mirror.savannah.gnu.org/releases/gpsd
+ GPSD_LICENSE = BSD-2-Clause
+ GPSD_LICENSE_FILES = COPYING
++GPSD_CPE_ID_VENDOR = gpsd_project
+ GPSD_INSTALL_STAGING = YES
  
- # Needed, as we touch Makefile.am
- GUTENPRINT_AUTORECONF = YES
+ GPSD_DEPENDENCIES = host-python3 host-scons host-pkgconf
