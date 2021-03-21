@@ -1,48 +1,34 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 21 Mar 2021 09:59:06 +0100
-Subject: [Buildroot] [PATCH 0/2] package/libnss: bump version
-In-Reply-To: <20210321075931.3404471-1-giulio.benetti@benettiengineering.com>
-References: <20210321075931.3404471-1-giulio.benetti@benettiengineering.com>
-Message-ID: <20210321085906.GX3443324@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 21 Mar 2021 10:09:13 +0100
+Subject: [Buildroot] [PATCH 1/1] package/gettext-gnu: add CPE variables
+Message-ID: <20210321090913.532331-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Giulio, All,
+cpe:2.3:a:gnu:gettext is a valid CPE identifier for this package:
 
-On 2021-03-21 08:59 +0100, Giulio Benetti spake thusly:
-> This patchset update libnss version as well as libnspr version because
-> NSS 3.63 requires NSPR 4.30
-> 
-> Giulio Benetti (2):
->   package/libnspr: bump version to 4.30
->   package/libnss: bump version to 3.63
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Agnu%3Agettext
 
-Series of two applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/gettext-gnu/gettext-gnu.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Regards,
-Yann E. MORIN.
-
->  package/libnspr/libnspr.hash | 4 ++--
->  package/libnspr/libnspr.mk   | 2 +-
->  package/libnss/libnss.hash   | 4 ++--
->  package/libnss/libnss.mk     | 2 +-
->  4 files changed, 6 insertions(+), 6 deletions(-)
-> 
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/gettext-gnu/gettext-gnu.mk b/package/gettext-gnu/gettext-gnu.mk
+index ee7e97baf7..9a1eabd0df 100644
+--- a/package/gettext-gnu/gettext-gnu.mk
++++ b/package/gettext-gnu/gettext-gnu.mk
+@@ -11,6 +11,8 @@ GETTEXT_GNU_SOURCE = gettext-$(GETTEXT_GNU_VERSION).tar.xz
+ GETTEXT_GNU_INSTALL_STAGING = YES
+ GETTEXT_GNU_LICENSE = LGPL-2.1+ (libintl), GPL-3.0+ (the rest)
+ GETTEXT_GNU_LICENSE_FILES = COPYING gettext-runtime/intl/COPYING.LIB
++GETTEXT_GNU_CPE_ID_VENDOR = gnu
++GETTEXT_GNU_CPE_ID_PRODUCT = gettext
+ # 0002-restore-the-ability-to-buld-gettext-tools-seperately-part1.patch
+ GETTEXT_GNU_AUTORECONF = YES
+ GETTEXT_GNU_PROVIDES = gettext
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.30.1
