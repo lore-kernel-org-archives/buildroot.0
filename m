@@ -1,29 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 21 Mar 2021 19:55:35 +0100
-Subject: [Buildroot] [PATCH v2,
- 2/2] package/sconeserver: pcre is optional, not mandatory
-In-Reply-To: <20210303181228.1079557-2-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Wed, 3 Mar 2021 19:12:28 +0100")
-References: <20210303181228.1079557-1-fontaine.fabrice@gmail.com>
- <20210303181228.1079557-2-fontaine.fabrice@gmail.com>
-Message-ID: <875z1kqqu0.fsf@dell.be.48ers.dk>
+Date: Sun, 21 Mar 2021 19:55:27 +0100
+Subject: [Buildroot] [git commit branch/2021.02.x] package/sconeserver: pcre
+ is optional, not mandatory
+Message-ID: <20210321183127.4555C7FF3C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=b455a46c031aec8dd5794069cd135e3a6d7e944d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
- > pcre is optional not mandatory since
- > https://github.com/sconemad/sconeserver/commit/98ec61436c9ea68ffe2d70a818c1175dcafa2a79
+pcre is optional not mandatory since
+https://github.com/sconemad/sconeserver/commit/98ec61436c9ea68ffe2d70a818c1175dcafa2a79
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > ---
- > Changes v1 -> v2 (after review of Peter Seiderer):
- >  - Drop select from Config.in
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 754633fe8c306190c00087662df42f5b740c8754)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/sconeserver/Config.in      | 1 -
+ package/sconeserver/sconeserver.mk | 5 ++++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-Committed to 2020.02.x, 2020.11.x and 2021.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/sconeserver/Config.in b/package/sconeserver/Config.in
+index 09cf5d459c..429ac81fe1 100644
+--- a/package/sconeserver/Config.in
++++ b/package/sconeserver/Config.in
+@@ -3,7 +3,6 @@ menuconfig BR2_PACKAGE_SCONESERVER
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on !BR2_STATIC_LIBS # dlopen()
+-	select BR2_PACKAGE_PCRE
+ 	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  Sconeserver is a modular, object-orientated and extremely
+diff --git a/package/sconeserver/sconeserver.mk b/package/sconeserver/sconeserver.mk
+index b81134002e..62cc128d77 100644
+--- a/package/sconeserver/sconeserver.mk
++++ b/package/sconeserver/sconeserver.mk
+@@ -10,7 +10,10 @@ SCONESERVER_LICENSE = GPL-2.0+
+ SCONESERVER_LICENSE_FILES = COPYING
+ # fetching from Git, we need to generate the configure script
+ SCONESERVER_AUTORECONF = YES
+-SCONESERVER_DEPENDENCIES = host-pkgconf pcre zlib
++SCONESERVER_DEPENDENCIES = \
++	host-pkgconf \
++	$(if $(BR2_PACKAGE_PCRE),pcre) \
++	zlib
+ # disable markdown module because its git submodule cmark
+ # https://github.com/sconemad/sconeserver/tree/master/markdown
+ # has no cross-compile support provided by the sconeserver build system
