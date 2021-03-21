@@ -1,31 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 21 Mar 2021 20:34:55 +0100
-Subject: [Buildroot] [PATCH] package/libgeos: disable package if
- binutils is affected from bug 21464
-In-Reply-To: <20210307175214.3980194-1-giulio.benetti@benettiengineering.com>
- (Giulio Benetti's message of "Sun, 7 Mar 2021 18:52:14 +0100")
-References: <20210307175214.3980194-1-giulio.benetti@benettiengineering.com>
-Message-ID: <87tup4pag0.fsf@dell.be.48ers.dk>
+Date: Sun, 21 Mar 2021 20:35:58 +0100
+Subject: [Buildroot] [PATCH 1/1] package/cog: bump to version 0.8.1
+In-Reply-To: <20210308084942.454799-1-aperez@igalia.com> (Adrian Perez de
+ Castro's message of "Mon, 8 Mar 2021 10:49:42 +0200")
+References: <20210308084942.454799-1-aperez@igalia.com>
+Message-ID: <87pmzspae9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
+>>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
 
- > This package is affected from binutils bug 21464, since there is no
- > workaround, let's disable it.
+ > This minor release contains a number of fixes and improves the reliability
+ > of the build system.  Release notes:
 
- > Fixes:
- > http://autobuild.buildroot.net/results/3eb/3eb9f9d0f6d8274b2d19753c006bd83f7d536e3c/
+ >   https://wpewebkit.org/release/cog-0.8.1.html
 
- > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
- > ---
- > This patch must be applied after this patchset:
- > https://patchwork.ozlabs.org/project/buildroot/list/?series=232409
+ > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 
-Committed to 2021.02.x, thanks.
+Committed to 2020.11.x and 2021.02.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
