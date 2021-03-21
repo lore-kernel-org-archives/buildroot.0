@@ -1,46 +1,74 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 21 Mar 2021 11:31:11 +0100
-Subject: [Buildroot] [git commit] package/kodi-inputstream-ffmpegdirect:
- bump version to 1.19.3-Matrix
-Message-ID: <20210321100848.33E1B885A9@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun, 21 Mar 2021 12:40:01 +0100
+Subject: [Buildroot] [PATCH v4 2/3] package/rpi-firmware: add option for the
+ debug set of start/fixup boot files
+In-Reply-To: <20210321114002.31000-1-ps.report@gmx.net>
+References: <20210321114002.31000-1-ps.report@gmx.net>
+Message-ID: <20210321114002.31000-2-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=39ca40b9ee6b8732322dd0912f22e0fe8b08294d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Add option for the debug set of start/fixup boot files.
 
-Changelog:
-https://github.com/xbmc/inputstream.ffmpegdirect/blob/Matrix/inputstream.ffmpegdirect/changelog.txt
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- .../kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.hash    | 2 +-
- package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.mk  | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Changes v1 -> v2:
+  - new patch
 
-diff --git a/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.hash b/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.hash
-index ccb7291bb8..1eda502305 100644
---- a/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.hash
-+++ b/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  952eeaa7af717dd954c940feb2902b51e497cde8822222c1bfa98804ec8665c7  kodi-inputstream-ffmpegdirect-1.19.2-Matrix.tar.gz
-+sha256  63610cef455cf57540a36dd92b1bd2ea38cc6bf6dd1bc94a8e4089d439172e27  kodi-inputstream-ffmpegdirect-1.19.3-Matrix.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.mk b/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.mk
-index 80891858cf..5df8f6fbb9 100644
---- a/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.mk
-+++ b/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Changes v2 -> v3:
+  - adjust to one-assignment style
+---
+ package/rpi-firmware/Config.in       | 10 ++++++++++
+ package/rpi-firmware/rpi-firmware.mk |  4 +++-
+ 2 files changed, 13 insertions(+), 1 deletion(-)
+
+diff --git a/package/rpi-firmware/Config.in b/package/rpi-firmware/Config.in
+index 9e401829c6..f9fc0b0e5e 100644
+--- a/package/rpi-firmware/Config.in
++++ b/package/rpi-firmware/Config.in
+@@ -35,6 +35,11 @@ config BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI_CD
+ 	  The cut-down set of files for versions Zero/1/2/3 (only
+ 	  features required to boot a Linux kernel).
  
--KODI_INPUTSTREAM_FFMPEGDIRECT_VERSION = 1.19.2-Matrix
-+KODI_INPUTSTREAM_FFMPEGDIRECT_VERSION = 1.19.3-Matrix
- KODI_INPUTSTREAM_FFMPEGDIRECT_SITE = $(call github,xbmc,inputstream.ffmpegdirect,$(KODI_INPUTSTREAM_FFMPEGDIRECT_VERSION))
- KODI_INPUTSTREAM_FFMPEGDIRECT_LICENSE = GPL-2.0+
- KODI_INPUTSTREAM_FFMPEGDIRECT_LICENSE_FILES = LICENSE.md
++config BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI_DB
++	bool "rpi 0/1/2/3 (debug)"
++	help
++	  The debug set of files for versions Zero/1/2/3.
++
+ config BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4
+ 	bool "rpi 4 (default)"
+ 	help
+@@ -53,6 +58,11 @@ config BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4_CD
+ 	  The cut-down set of files for versions 4 (only features
+ 	  required to boot a Linux kernel).
+ 
++config BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4_DB
++	bool "rpi 4 (debug)"
++	help
++	  The debug set of files for versions 4.
++
+ config BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE
+ 	string "Path to a file stored as boot/config.txt"
+ 	help
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index 7905791d1d..0c06f2c80d 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
+@@ -15,9 +15,11 @@ RPI_FIRMWARE_FILES = \
+ 	$(if $(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI), start.elf fixup.dat) \
+ 	$(if $(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI_X), startx.elf fixupx.dat) \
+ 	$(if $(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI_CD), start_cd.elf fixup_cd.dat) \
++	$(if $(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI_DB), start_db.elf fixup_db.dat) \
+ 	$(if $(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4), start4.elf fixup4.dat) \
+ 	$(if $(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4_X), start4x.elf fixup4x.dat) \
+-	$(if $(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4_CD), start4cd.elf fixup4cd.dat)
++	$(if $(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4_CD), start4cd.elf fixup4cd.dat) \
++	$(if $(BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4_DB), start4db.elf fixup4db.dat)
+ 
+ define RPI_FIRMWARE_INSTALL_BIN
+ 	$(foreach f,$(RPI_FIRMWARE_FILES), \
+-- 
+2.30.2
