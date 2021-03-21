@@ -1,35 +1,49 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 21 Mar 2021 11:26:06 +0100
-Subject: [Buildroot] [git commit] package/gpsd: add GPSD_CPE_ID_VENDOR
-Message-ID: <20210321100356.C501288D1B@busybox.osuosl.org>
+Date: Sun, 21 Mar 2021 11:28:38 +0100
+Subject: [Buildroot] [git commit] package/libressl: security bump to 3.2.5
+Message-ID: <20210321100433.795BC87511@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b72416bc6c412d51b917baf0b96eb6344ad972f7
+commit: https://git.buildroot.net/buildroot/commit/?id=f3894ffce2b6e6c52c2d9e3b7d0040f3d5a5b728
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:gpsd_project:gpsd is a valid CPE identifier for this package:
+It includes the following bug fix:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Agpsd_project%3Agpsd
+ * A TLS client using session resumption may cause a use-after-free.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-3.2.5-relnotes.txt
+
+Signed-off-by: Ismael Luceno <ismael@iodev.co.uk>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/gpsd/gpsd.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/libressl/libressl.hash | 2 +-
+ package/libressl/libressl.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
-index 57955b7895..be7327ac95 100644
---- a/package/gpsd/gpsd.mk
-+++ b/package/gpsd/gpsd.mk
-@@ -8,6 +8,7 @@ GPSD_VERSION = 3.20
- GPSD_SITE = http://download-mirror.savannah.gnu.org/releases/gpsd
- GPSD_LICENSE = BSD-2-Clause
- GPSD_LICENSE_FILES = COPYING
-+GPSD_CPE_ID_VENDOR = gpsd_project
- GPSD_INSTALL_STAGING = YES
+diff --git a/package/libressl/libressl.hash b/package/libressl/libressl.hash
+index 0dd0ffcaed..9f216bf2f1 100644
+--- a/package/libressl/libressl.hash
++++ b/package/libressl/libressl.hash
+@@ -1,4 +1,4 @@
+ # From https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/SHA256
+-sha256  412dc2baa739228c7779e93eb07cd645d5c964d2f2d837a9fd56db7498463d73  libressl-3.2.3.tar.gz
++sha256  798a65fd61d385e09d559810cdfa46512f8def5919264cfef241a7b086ce7cfe  libressl-3.2.5.tar.gz
+ # Locally computed
+ sha256  5c63613f008f16a9c0025c096bbd736cecf720494d121b5c5203e0ec6e5955b1  COPYING
+diff --git a/package/libressl/libressl.mk b/package/libressl/libressl.mk
+index 654b8bda26..ad345ba3f0 100644
+--- a/package/libressl/libressl.mk
++++ b/package/libressl/libressl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- GPSD_DEPENDENCIES = host-python3 host-scons host-pkgconf
+-LIBRESSL_VERSION = 3.2.3
++LIBRESSL_VERSION = 3.2.5
+ LIBRESSL_SITE = https://ftp.openbsd.org/pub/OpenBSD/LibreSSL
+ LIBRESSL_LICENSE = ISC (new additions), OpenSSL or SSLeay (original OpenSSL code)
+ LIBRESSL_LICENSE_FILES = COPYING
