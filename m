@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 21 Mar 2021 19:59:20 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] support/dependencies:
+Date: Sun, 21 Mar 2021 19:59:14 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] support/dependencies:
  detect and bailout when PATH contains spaces/TABs
-Message-ID: <20210321183629.28521885AE@busybox.osuosl.org>
+Message-ID: <20210321183640.1676E885AE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a42d58a2084fc79f4d59ce12282997216169a4a5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=4cb21c8ca5825be858e4add63124a7688227570c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
 In Makefiles, variables are split, filtered, and otherwise mangled on
 a space as a separator. In a shell, they will also be split on TABs.
@@ -49,7 +49,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 6 insertions(+), 3 deletions(-)
 
 diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index 891e234045..e2c7a081d1 100755
+index b44d28682c..1954f038be 100755
 --- a/support/dependencies/dependencies.sh
 +++ b/support/dependencies/dependencies.sh
 @@ -2,6 +2,9 @@
