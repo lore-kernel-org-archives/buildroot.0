@@ -1,47 +1,45 @@
-From: Ismael Luceno <ismael@iodev.co.uk>
-Date: Sun, 21 Mar 2021 00:03:37 +0100
-Subject: [Buildroot] [PATCH] package/libressl: security bump to 3.2.5
-Message-ID: <20210320230337.1841-1-ismael@iodev.co.uk>
+From: Gleb Mazovetskiy <glex.spb@gmail.com>
+Date: Sun, 21 Mar 2021 07:10:37 +0000
+Subject: [Buildroot] [PATCH 1/1] package/sdl_ttf: Update to GitHub source
+Message-ID: <20210321071038.1734475-1-glex.spb@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It includes the following bug fix:
+SDL's canonical source is now on GitHub
 
- * A TLS client using session resumption may cause a use-after-free.
-
-https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-3.2.5-relnotes.txt
-
-Signed-off-by: Ismael Luceno <ismael@iodev.co.uk>
+Signed-off-by: Gleb Mazovetskiy <glex.spb@gmail.com>
 ---
- package/libressl/libressl.hash | 2 +-
- package/libressl/libressl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/sdl_ttf/sdl_ttf.hash | 2 +-
+ package/sdl_ttf/sdl_ttf.mk   | 5 ++---
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/libressl/libressl.hash b/package/libressl/libressl.hash
-index 0dd0ffcaed03..9f216bf2f143 100644
---- a/package/libressl/libressl.hash
-+++ b/package/libressl/libressl.hash
-@@ -1,4 +1,4 @@
- # From https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/SHA256
--sha256  412dc2baa739228c7779e93eb07cd645d5c964d2f2d837a9fd56db7498463d73  libressl-3.2.3.tar.gz
-+sha256  798a65fd61d385e09d559810cdfa46512f8def5919264cfef241a7b086ce7cfe  libressl-3.2.5.tar.gz
- # Locally computed
- sha256  5c63613f008f16a9c0025c096bbd736cecf720494d121b5c5203e0ec6e5955b1  COPYING
-diff --git a/package/libressl/libressl.mk b/package/libressl/libressl.mk
-index 654b8bda2622..ad345ba3f091 100644
---- a/package/libressl/libressl.mk
-+++ b/package/libressl/libressl.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/sdl_ttf/sdl_ttf.hash b/package/sdl_ttf/sdl_ttf.hash
+index 97416c18c6..0da8416bc9 100644
+--- a/package/sdl_ttf/sdl_ttf.hash
++++ b/package/sdl_ttf/sdl_ttf.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  f7bf5f6a4a21542a6ce5440dc0d81f3a26d029ee689e1fade62925b1e6667bd9  de50cffd41e6.tar.gz
++sha256  c24e3b48f5ffa5afb3256d23700506fad72117ac2834147c2e46ee94c3cb12b5  sdl_ttf-70b2940cc7.tar.gz
+ sha256  b609721d3d4ac67facaf86f068c8b311b6c5f6cef89b6d84268aa38b7867ab7b  COPYING
+diff --git a/package/sdl_ttf/sdl_ttf.mk b/package/sdl_ttf/sdl_ttf.mk
+index 9ac12ef5b7..0fdb6d665b 100644
+--- a/package/sdl_ttf/sdl_ttf.mk
++++ b/package/sdl_ttf/sdl_ttf.mk
+@@ -13,9 +13,8 @@
  #
- ################################################################################
+ # DPI scaling is used for rendering on HiDPI displays and displays
+ # with non-square pixels.
+-SDL_TTF_VERSION = de50cffd41e6
+-SDL_TTF_SOURCE = $(SDL_TTF_VERSION).tar.gz
+-SDL_TTF_SITE = https://hg.libsdl.org/SDL_ttf/archive
++SDL_TTF_VERSION = 70b2940cc7
++SDL_TTF_SITE = $(call github,libsdl-org,SDL_ttf,$(SDL_TTF_VERSION))
+ SDL_TTF_LICENSE = Zlib
+ SDL_TTF_LICENSE_FILES = COPYING
  
--LIBRESSL_VERSION = 3.2.3
-+LIBRESSL_VERSION = 3.2.5
- LIBRESSL_SITE = https://ftp.openbsd.org/pub/OpenBSD/LibreSSL
- LIBRESSL_LICENSE = ISC (new additions), OpenSSL or SSLeay (original OpenSSL code)
- LIBRESSL_LICENSE_FILES = COPYING
 -- 
-2.31.0
+2.27.0
