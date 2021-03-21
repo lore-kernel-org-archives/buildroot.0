@@ -1,46 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 21 Mar 2021 20:34:12 +0100
-Subject: [Buildroot] [git commit branch/2021.02.x] package/libgeos: disable
- package if binutils is affected from bug 21464
-Message-ID: <20210321191154.86E3B88409@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun, 21 Mar 2021 21:58:06 +0100
+Subject: [Buildroot] [PATCH v1] package/tzdata: bump version to 2021a
+Message-ID: <20210321205806.9643-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b22b4de616e3c7d8628c2c22ba54b6923d1658e6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+For details see [1].
 
-This package is affected from binutils bug 21464, since there is no
-workaround, let's disable it.
+[1] https://mm.icann.org/pipermail/tz-announce/2021-January/000065.html
 
-Fixes:
-http://autobuild.buildroot.net/results/3eb/3eb9f9d0f6d8274b2d19753c006bd83f7d536e3c/
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 4a26e019611157c897dae9742621fa24bac4876a)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/libgeos/Config.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/tzdata/tzdata.hash | 4 ++--
+ package/tzdata/tzdata.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libgeos/Config.in b/package/libgeos/Config.in
-index 2caf6d1d5e..bbcafe7740 100644
---- a/package/libgeos/Config.in
-+++ b/package/libgeos/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_LIBGEOS
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
- 	depends on !BR2_nios2
-+	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464
- 	help
- 	  GEOS (Geometry Engine - Open Source) is a C++ port of the
- 	  JTS Topology Suite (JTS). It aims to contain the complete
-@@ -14,4 +15,4 @@ config BR2_PACKAGE_LIBGEOS
+diff --git a/package/tzdata/tzdata.hash b/package/tzdata/tzdata.hash
+index 6a1ccc128d..f70627481a 100644
+--- a/package/tzdata/tzdata.hash
++++ b/package/tzdata/tzdata.hash
+@@ -1,4 +1,4 @@
+-# From https://mm.icann.org/pipermail/tz-announce/2020-December/000064.html
+-sha512  dd312def18c807452fda2e697514e2064c5f51ebdbedd0cfe6f231252c76ee5d4409f653b295ed5657b7d30b868690047fdb70a10942e69eaa40b77473e3f9ca  tzdata2020f.tar.gz
++# From https://mm.icann.org/pipermail/tz-announce/2021-January/000065.html
++sha512  7cdd762ec90ce12a30fa36b1d66d1ea82d9fa21e514e2b9c7fcbe2541514ee0fadf30843ff352c65512fb270857b51d1517b45e1232b89c6f954ba9ff1833bb3  tzdata2021a.tar.gz
+ # Locally computed:
+ sha256  0613408568889f5739e5ae252b722a2659c02002839ad970a63dc5e9174b27cf  LICENSE
+diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
+index 8201dc1201..922e7420bc 100644
+--- a/package/tzdata/tzdata.mk
++++ b/package/tzdata/tzdata.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- comment "libgeos needs a toolchain w/ C++, wchar"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
--	depends on !BR2_nios2
-+	depends on !BR2_nios2 || !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464
+-TZDATA_VERSION = 2020f
++TZDATA_VERSION = 2021a
+ TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
+ TZDATA_SITE = https://www.iana.org/time-zones/repository/releases
+ TZDATA_STRIP_COMPONENTS = 0
+-- 
+2.30.2
