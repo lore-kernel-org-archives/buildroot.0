@@ -1,117 +1,64 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 21 Mar 2021 19:53:41 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/sconeserver: drop
- unrecognized options
-Message-ID: <20210321183136.9824A88083@busybox.osuosl.org>
+Date: Sun, 21 Mar 2021 20:00:08 +0100
+Subject: [Buildroot] [PATCHv2] support/dependencies: detect and bailout
+ when PATH contains spaces/TABs
+In-Reply-To: <20210306091930.2186970-1-yann.morin.1998@free.fr> (Yann
+ E. MORIN's message of "Sat, 6 Mar 2021 10:19:30 +0100")
+References: <20210306091930.2186970-1-yann.morin.1998@free.fr>
+Message-ID: <87y2egpc1z.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=926b07d1c32cd1541c1bd1c792abeaabb4e96477
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Drop Magick++-config, lettuce and ui options which are
-not recognized since latest bump in commit
-ca17e0c7a02298b0250cdc121bcacef0b58fffe1 (back in 2018).
+ > In Makefiles, variables are split, filtered, and otherwise mangled on a
+ > space as a separator. In a shell, they will also be split on TABs.
 
-Indeed:
-- Magick++-config is not used since
-  https://github.com/sconemad/sconeserver/commit/b025999b8a9a9715b72d0fc8ccbf0888e163388f
-- Experimental UI and lettuce modules have been dropped since
-  https://github.com/sconemad/sconeserver/commit/ccc1efdb8981fbef63a714ff6315c8a18372090a
+ > We split and filter and iterate of variables in a lot of places, and
+ > most importantly, spaces in PATH is very seldom tested, if at all, so a
+ > lot of packages will not be working properly in such a situation.
 
-Moreover, replace sconesite-image by image (broken since 2013 and
-https://github.com/sconemad/sconeserver/commit/7693301fdb0076bf7676eb2db278c2f015ac7157)
+ > For example, the config.guess contains constructs that are not resilient
+ > to a space in PATH:
 
-As UI and lettuce options are broken since a long time, it does not seem
-useful to add entries in Config.in.legacy
+ >     PATH=$PATH:/.attbin ; export PATH
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit d3b818c3cf0990117a8b59fcfc6c212f310ae6ec)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/sconeserver/Config.in      | 17 -----------------
- package/sconeserver/sconeserver.mk | 19 ++-----------------
- 2 files changed, 2 insertions(+), 34 deletions(-)
+ > Also, our fakedate will iterate over PATH:
 
-diff --git a/package/sconeserver/Config.in b/package/sconeserver/Config.in
-index a42abd70b7..09cf5d459c 100644
---- a/package/sconeserver/Config.in
-+++ b/package/sconeserver/Config.in
-@@ -79,13 +79,6 @@ comment "location support needs a toolchain w/ theads, dynamic library"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBRARY
- 
--config BR2_PACKAGE_SCONESERVER_LETTUCE
--	bool "lettuce"
--	help
--	  Sconeserver module for Lettuce embedded automation platform
--
--	  http://www.sconemad.com/lettuce/
--
- config BR2_PACKAGE_SCONESERVER_MATHS
- 	bool "maths"
- 	select BR2_PACKAGE_MPFR
-@@ -97,16 +90,6 @@ config BR2_PACKAGE_SCONESERVER_TESTBUILDER
- 	help
- 	  Testbuilder module for Sconeserver
- 
--config BR2_PACKAGE_SCONESERVER_UI
--	bool "ui"
--	depends on BR2_PACKAGE_XORG7
--	select BR2_PACKAGE_XLIB_LIBX11
--	help
--	  UI module for Sconeserver
--
--comment "ui module requires X.org"
--	depends on !BR2_PACKAGE_XORG7
--
- endif # BR2_PACKAGE_SCONESERVER
- 
- comment "sconeserver needs a toolchain with dynamic library, C++, NPTL"
-diff --git a/package/sconeserver/sconeserver.mk b/package/sconeserver/sconeserver.mk
-index 9d4713afea..b81134002e 100644
---- a/package/sconeserver/sconeserver.mk
-+++ b/package/sconeserver/sconeserver.mk
-@@ -44,11 +44,9 @@ endif
- 
- ifeq ($(BR2_PACKAGE_SCONESERVER_HTTP_SCONESITE_IMAGE),y)
- SCONESERVER_DEPENDENCIES += imagemagick
--SCONESERVER_CONF_OPTS += \
--	--with-sconesite-image \
--	--with-Magick++-config="$(STAGING_DIR)/usr/bin/Magick++-config"
-+SCONESERVER_CONF_OPTS += --with-image
- else
--SCONESERVER_CONF_OPTS += --without-sconesite-image --with-Magick++-config=no
-+SCONESERVER_CONF_OPTS += --without-image
- endif
- 
- ifeq ($(BR2_PACKAGE_SCONESERVER_MYSQL),y)
-@@ -82,12 +80,6 @@ else
- SCONESERVER_CONF_OPTS += --without-location
- endif
- 
--ifeq ($(BR2_PACKAGE_SCONESERVER_LETTUCE),y)
--SCONESERVER_CONF_OPTS += --with-lettuce
--else
--SCONESERVER_CONF_OPTS += --without-lettuce
--endif
--
- ifeq ($(BR2_PACKAGE_SCONESERVER_MATHS),y)
- SCONESERVER_DEPENDENCIES += mpfr
- SCONESERVER_CONF_OPTS += --with-maths
-@@ -101,11 +93,4 @@ else
- SCONESERVER_CONF_OPTS += --without-testbuilder
- endif
- 
--ifeq ($(BR2_PACKAGE_SCONESERVER_UI),y)
--SCONESERVER_DEPENDENCIES += xlib_libX11
--SCONESERVER_CONF_OPTS += --with-ui
--else
--SCONESERVER_CONF_OPTS += --without-ui
--endif
--
- $(eval $(autotools-package))
+ >     for P in `echo $PATH | tr ':' ' '`; do
+
+ > Those are only two cases, but the first means basically all
+ > autotools-based packages are susceptible to subtle breakage.
+
+ > Furthermore, Buildroot itself does not support that the top-level or
+ > output directories are in a path with spaces anyway.
+
+ > So, instead of chasing all cases that might be potentially broken,
+ > let's just detect the case and bail out, like we already do when PATH
+ > contains a \n, or when it contains the current working directory.
+
+ > Reported-by: Dan Raymond <draymond@foxvalley.net>
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ > Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+ > ---
+ > Changes v1 -> v2:
+ >   - fix the newline case
+
+ > ---
+ > Notes: Dan had provided a patch [0] that would fix their own specific
+ > issue when runing linux-menuconfig, but I believe this is by far
+ > insufficient to properly solve the issues with spaces in PATH, and I
+ > believe it can't be reliably fixed (at least not in the foreseeable
+ > future with our available manpower), so I prefer that we detect the
+ > situation and bail out.
+
+ > [0] https://patchwork.ozlabs.org/project/buildroot/patch/16100eb6-bac8-2e4d-65f2-26333179f3b8 at foxvalley.net/
+
+Committed to 2020.02.x, 2020.11.x and 2021.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
