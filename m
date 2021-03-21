@@ -1,46 +1,35 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 21 Mar 2021 10:21:25 +0100
-Subject: [Buildroot] [PATCH 2/2] package/kodi-pvr-vuplus: bump version to
- 7.4.1-Matrix
-In-Reply-To: <20210321092125.648090-1-bernd.kuhls@t-online.de>
-References: <20210321092125.648090-1-bernd.kuhls@t-online.de>
-Message-ID: <20210321092125.648090-2-bernd.kuhls@t-online.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 21 Mar 2021 10:27:06 +0100
+Subject: [Buildroot] [PATCH 1/1] package/gutenprint: add
+ GUTENPRINT_CPE_ID_VENDOR
+Message-ID: <20210321092706.533564-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog:
-https://github.com/kodi-pvr/pvr.vuplus/blob/Matrix/pvr.vuplus/changelog.txt
+cpe:2.3:a:gutenprint_project:gutenprint is a valid CPE identifier for
+this package:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Agutenprint_project%3Agutenprint
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash | 2 +-
- package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gutenprint/gutenprint.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
-index 2b12649aea..8fac6a1770 100644
---- a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
-+++ b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  2024ed208168089e51d9beade47fedec2e80e23044029f6919e27746f9634150  kodi-pvr-vuplus-7.4.0-Matrix.tar.gz
-+sha256  9f10c35477f977646416a0a3f858e95e4dc896436582179981223ccd0570596c  kodi-pvr-vuplus-7.4.1-Matrix.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
-index fee4e816ab..22b923bf86 100644
---- a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
-+++ b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/gutenprint/gutenprint.mk b/package/gutenprint/gutenprint.mk
+index 9cb80c3e95..b0fcd5a598 100644
+--- a/package/gutenprint/gutenprint.mk
++++ b/package/gutenprint/gutenprint.mk
+@@ -10,6 +10,7 @@ GUTENPRINT_SITE = http://downloads.sourceforge.net/project/gimp-print/gutenprint
+ GUTENPRINT_SOURCE = gutenprint-$(GUTENPRINT_VERSION).tar.bz2
+ GUTENPRINT_LICENSE = GPL-2.0+
+ GUTENPRINT_LICENSE_FILES = COPYING
++GUTENPRINT_CPE_ID_VENDOR = gutenprint_project
  
--KODI_PVR_VUPLUS_VERSION = 7.4.0-Matrix
-+KODI_PVR_VUPLUS_VERSION = 7.4.1-Matrix
- KODI_PVR_VUPLUS_SITE = $(call github,kodi-pvr,pvr.vuplus,$(KODI_PVR_VUPLUS_VERSION))
- KODI_PVR_VUPLUS_LICENSE = GPL-2.0+
- KODI_PVR_VUPLUS_LICENSE_FILES = LICENSE.md
+ # Needed, as we touch Makefile.am
+ GUTENPRINT_AUTORECONF = YES
 -- 
-2.29.2
+2.30.1
