@@ -1,57 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 21 Mar 2021 20:35:23 +0100
-Subject: [Buildroot] [git commit branch/2021.02.x] package/cog: bump to
- version 0.8.1
-Message-ID: <20210321191154.957A38143F@busybox.osuosl.org>
+Date: Sun, 21 Mar 2021 20:34:12 +0100
+Subject: [Buildroot] [git commit branch/2021.02.x] package/libgeos: disable
+ package if binutils is affected from bug 21464
+Message-ID: <20210321191154.86E3B88409@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c67b470d9fdb907772f5c784ab4806f76fc1dbcf
+commit: https://git.buildroot.net/buildroot/commit/?id=b22b4de616e3c7d8628c2c22ba54b6923d1658e6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-This minor release contains a number of fixes and improves the reliability
-of the build system.  Release notes:
+This package is affected from binutils bug 21464, since there is no
+workaround, let's disable it.
 
-  https://wpewebkit.org/release/cog-0.8.1.html
+Fixes:
+http://autobuild.buildroot.net/results/3eb/3eb9f9d0f6d8274b2d19753c006bd83f7d536e3c/
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 0965217c445b27c18a47576deb9d85021002e5fc)
+(cherry picked from commit 4a26e019611157c897dae9742621fa24bac4876a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cog/cog.hash | 8 ++++----
- package/cog/cog.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/libgeos/Config.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/cog/cog.hash b/package/cog/cog.hash
-index d76306ca54..2cafe8ca6e 100644
---- a/package/cog/cog.hash
-+++ b/package/cog/cog.hash
-@@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/cog-0.8.0.tar.xz.sums
--md5  f7aa8a425927cab247563411fc67c5a3  cog-0.8.0.tar.xz
--sha1  977559204dae0f9220e4c6b8ded7537899fd2daf  cog-0.8.0.tar.xz
--sha256  181b1f4963cdf264b8068460a64d14c92a627f7138ebecc0f36fce085f4e92dd  cog-0.8.0.tar.xz
-+# From https://wpewebkit.org/releases/cog-0.8.1.tar.xz.sums
-+md5  21664fb04c9149dea6d68e13e6074276  cog-0.8.1.tar.xz
-+sha1  baabba7f0f6009c64ef0c4f7c5f807382cffef5d  cog-0.8.1.tar.xz
-+sha256  b82e917eb764943b9859c631974f8f0e748b79ae87bb7a944f46c818740e0208  cog-0.8.1.tar.xz
+diff --git a/package/libgeos/Config.in b/package/libgeos/Config.in
+index 2caf6d1d5e..bbcafe7740 100644
+--- a/package/libgeos/Config.in
++++ b/package/libgeos/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_LIBGEOS
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
+ 	depends on !BR2_nios2
++	depends on !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464
+ 	help
+ 	  GEOS (Geometry Engine - Open Source) is a C++ port of the
+ 	  JTS Topology Suite (JTS). It aims to contain the complete
+@@ -14,4 +15,4 @@ config BR2_PACKAGE_LIBGEOS
  
- # Hashes for license files:
- sha256  e6c42d93c68b292bcccf6d2ec3e13da85df90b718ba27c2c2a01053a9d009252  COPYING
-diff --git a/package/cog/cog.mk b/package/cog/cog.mk
-index 47a5573dda..c7fc5e6fee 100644
---- a/package/cog/cog.mk
-+++ b/package/cog/cog.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--COG_VERSION = 0.8.0
-+COG_VERSION = 0.8.1
- COG_SITE = https://wpewebkit.org/releases
- COG_SOURCE = cog-$(COG_VERSION).tar.xz
- COG_INSTALL_STAGING = YES
+ comment "libgeos needs a toolchain w/ C++, wchar"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
+-	depends on !BR2_nios2
++	depends on !BR2_nios2 || !BR2_TOOLCHAIN_HAS_BINUTILS_BUG_21464
