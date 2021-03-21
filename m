@@ -1,44 +1,48 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 21 Mar 2021 09:53:36 +0100
-Subject: [Buildroot] [git commit] package/libnspr: bump version to 4.30
-Message-ID: <20210321083423.66E058776D@busybox.osuosl.org>
+Date: Sun, 21 Mar 2021 09:59:06 +0100
+Subject: [Buildroot] [PATCH 0/2] package/libnss: bump version
+In-Reply-To: <20210321075931.3404471-1-giulio.benetti@benettiengineering.com>
+References: <20210321075931.3404471-1-giulio.benetti@benettiengineering.com>
+Message-ID: <20210321085906.GX3443324@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2022de646953c26ea75113d4a4670ae6b10683c1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Giulio, All,
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/libnspr/libnspr.hash | 4 ++--
- package/libnspr/libnspr.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On 2021-03-21 08:59 +0100, Giulio Benetti spake thusly:
+> This patchset update libnss version as well as libnspr version because
+> NSS 3.63 requires NSPR 4.30
+> 
+> Giulio Benetti (2):
+>   package/libnspr: bump version to 4.30
+>   package/libnss: bump version to 3.63
 
-diff --git a/package/libnspr/libnspr.hash b/package/libnspr/libnspr.hash
-index f8f8fa76b9..8ca0f573b9 100644
---- a/package/libnspr/libnspr.hash
-+++ b/package/libnspr/libnspr.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.mozilla.org/pub/nspr/releases/v4.29/src/SHA256SUMS
--sha256  22286bdb8059d74632cc7c2865c139e63953ecfb33bf4362ab58827e86e92582  nspr-4.29.tar.gz
-+# From https://ftp.mozilla.org/pub/nspr/releases/v4.30/src/SHA256SUMS
-+sha256  8d4cd8f8409484dc4c3d31e180354bfc506573eccf86cd691106a1ef7edc913b  nspr-4.30.tar.gz
- # Locally calculated
- sha256  fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85  nspr/LICENSE
-diff --git a/package/libnspr/libnspr.mk b/package/libnspr/libnspr.mk
-index 6f072cb6d2..67fb738b57 100644
---- a/package/libnspr/libnspr.mk
-+++ b/package/libnspr/libnspr.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBNSPR_VERSION = 4.29
-+LIBNSPR_VERSION = 4.30
- LIBNSPR_SOURCE = nspr-$(LIBNSPR_VERSION).tar.gz
- LIBNSPR_SITE = https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v$(LIBNSPR_VERSION)/src
- LIBNSPR_SUBDIR = nspr
+Series of two applied to master, thanks.
+
+Regards,
+Yann E. MORIN.
+
+>  package/libnspr/libnspr.hash | 4 ++--
+>  package/libnspr/libnspr.mk   | 2 +-
+>  package/libnss/libnss.hash   | 4 ++--
+>  package/libnss/libnss.mk     | 2 +-
+>  4 files changed, 6 insertions(+), 6 deletions(-)
+> 
+> -- 
+> 2.25.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
