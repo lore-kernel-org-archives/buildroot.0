@@ -1,184 +1,84 @@
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Mon, 22 Mar 2021 16:56:55 +0100
-Subject: [Buildroot] [PATCH] package/binutils: add patches to fix OpenRisc
- bug 27624
-Message-ID: <20210322155655.547476-1-giulio.benetti@benettiengineering.com>
+Date: Mon, 22 Mar 2021 16:57:23 +0100
+Subject: [Buildroot] [PATCH] package/zeromq: fix build failure due to
+ binutils bug 21464
+In-Reply-To: <20210322144220.5f9158c4@windsurf.home>
+References: <20210314223616.5bfcc62f@windsurf.home>
+ <20210317154520.1613272-1-giulio.benetti@benettiengineering.com>
+ <519abe18-e47a-38f9-e659-1a6dde6cd41d@benettiengineering.com>
+ <3a252a05-54ac-24a7-a9d6-1c5a21679aee@benettiengineering.com>
+ <20210322144220.5f9158c4@windsurf.home>
+Message-ID: <712d75cc-4d52-1a2c-e89e-74d71c1f0a35@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-These patches fix OpenRisc linker bug 27624 that affects packages
-libtheora, protobuf and zeromq.
+On 3/22/21 2:42 PM, Thomas Petazzoni wrote:
+> On Mon, 22 Mar 2021 14:15:08 +0100
+> Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+> 
+>> OpenRisc binutils 21464 bug has a fix:
+>> https://sourceware.org/bugzilla/show_bug.cgi?id=21464
+>>
+>> I've tested it with binutils:
+>> - 2.32
+>> - 2.34
+>> - 2.35.2
+>> - 2.36.1
+>>
+>> and works good while building:
+>> - protobuf
+>> - libtheora
+>> - zeromq
+> Excellent! Thanks for all this work!
+> 
+> Has this fix been suggested by upstream? How do you know it's the
+> "right" fix ?
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- .../0010-bfd-elf32-or1k-fix-ld-assert.patch   | 33 +++++++++++++++++++
- .../0003-bfd-elf32-or1k-fix-ld-assert.patch   | 33 +++++++++++++++++++
- .../0003-bfd-elf32-or1k-fix-ld-assert.patch   | 33 +++++++++++++++++++
- .../0003-bfd-elf32-or1k-fix-ld-assert.patch   | 33 +++++++++++++++++++
- 4 files changed, 132 insertions(+)
- create mode 100644 package/binutils/2.32/0010-bfd-elf32-or1k-fix-ld-assert.patch
- create mode 100644 package/binutils/2.34/0003-bfd-elf32-or1k-fix-ld-assert.patch
- create mode 100644 package/binutils/2.35.2/0003-bfd-elf32-or1k-fix-ld-assert.patch
- create mode 100644 package/binutils/2.36.1/0003-bfd-elf32-or1k-fix-ld-assert.patch
+Yes it's been suggested by Stafford here:
+https://sourceware.org/bugzilla/show_bug.cgi?id=21464
 
-diff --git a/package/binutils/2.32/0010-bfd-elf32-or1k-fix-ld-assert.patch b/package/binutils/2.32/0010-bfd-elf32-or1k-fix-ld-assert.patch
-new file mode 100644
-index 0000000000..07121c3d0d
---- /dev/null
-+++ b/package/binutils/2.32/0010-bfd-elf32-or1k-fix-ld-assert.patch
-@@ -0,0 +1,33 @@
-+From 93cf62b662499e560812145dd989056fcf14f00e Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Mon, 22 Mar 2021 13:30:07 +0100
-+Subject: [PATCH] bfd/elf32-or1k: fix ld assert
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ bfd/elf32-or1k.c | 9 ++++-----
-+ 1 file changed, 4 insertions(+), 5 deletions(-)
-+
-+diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
-+index 2f200b197b..ae508540f5 100644
-+--- a/bfd/elf32-or1k.c
-++++ b/bfd/elf32-or1k.c
-+@@ -2535,11 +2535,10 @@ or1k_elf_adjust_dynamic_symbol (struct bfd_link_info *info,
-+   if (h->type == STT_FUNC
-+       || h->needs_plt)
-+     {
-+-      if (! bfd_link_pic (info)
-+-	  && !h->def_dynamic
-+-	  && !h->ref_dynamic
-+-	  && h->root.type != bfd_link_hash_undefweak
-+-	  && h->root.type != bfd_link_hash_undefined)
-++      if (h->plt.refcount <= 0
-++         || (SYMBOL_CALLS_LOCAL (info, h)
-++         || (ELF_ST_VISIBILITY (h->other) != STV_DEFAULT
-++             && h->root.type == bfd_link_hash_undefweak)))
-+ 	{
-+ 	  /* This case can occur if we saw a PLT reloc in an input
-+ 	     file, but the symbol was never referred to by a dynamic
-+-- 
-+2.25.1
-+
-diff --git a/package/binutils/2.34/0003-bfd-elf32-or1k-fix-ld-assert.patch b/package/binutils/2.34/0003-bfd-elf32-or1k-fix-ld-assert.patch
-new file mode 100644
-index 0000000000..4aedc40e51
---- /dev/null
-+++ b/package/binutils/2.34/0003-bfd-elf32-or1k-fix-ld-assert.patch
-@@ -0,0 +1,33 @@
-+From 1659226a96b1daecfd08c057d0d5c39309d207ee Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Mon, 22 Mar 2021 13:30:07 +0100
-+Subject: [PATCH] bfd/elf32-or1k: fix ld assert
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ bfd/elf32-or1k.c | 9 ++++-----
-+ 1 file changed, 4 insertions(+), 5 deletions(-)
-+
-+diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
-+index 65938e5137..41908f8938 100644
-+--- a/bfd/elf32-or1k.c
-++++ b/bfd/elf32-or1k.c
-+@@ -2566,11 +2566,10 @@ or1k_elf_adjust_dynamic_symbol (struct bfd_link_info *info,
-+   if (h->type == STT_FUNC
-+       || h->needs_plt)
-+     {
-+-      if (! bfd_link_pic (info)
-+-	  && !h->def_dynamic
-+-	  && !h->ref_dynamic
-+-	  && h->root.type != bfd_link_hash_undefweak
-+-	  && h->root.type != bfd_link_hash_undefined)
-++      if (h->plt.refcount <= 0
-++         || (SYMBOL_CALLS_LOCAL (info, h)
-++         || (ELF_ST_VISIBILITY (h->other) != STV_DEFAULT
-++             && h->root.type == bfd_link_hash_undefweak)))
-+ 	{
-+ 	  /* This case can occur if we saw a PLT reloc in an input
-+ 	     file, but the symbol was never referred to by a dynamic
-+-- 
-+2.25.1
-+
-diff --git a/package/binutils/2.35.2/0003-bfd-elf32-or1k-fix-ld-assert.patch b/package/binutils/2.35.2/0003-bfd-elf32-or1k-fix-ld-assert.patch
-new file mode 100644
-index 0000000000..4aedc40e51
---- /dev/null
-+++ b/package/binutils/2.35.2/0003-bfd-elf32-or1k-fix-ld-assert.patch
-@@ -0,0 +1,33 @@
-+From 1659226a96b1daecfd08c057d0d5c39309d207ee Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Mon, 22 Mar 2021 13:30:07 +0100
-+Subject: [PATCH] bfd/elf32-or1k: fix ld assert
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ bfd/elf32-or1k.c | 9 ++++-----
-+ 1 file changed, 4 insertions(+), 5 deletions(-)
-+
-+diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
-+index 65938e5137..41908f8938 100644
-+--- a/bfd/elf32-or1k.c
-++++ b/bfd/elf32-or1k.c
-+@@ -2566,11 +2566,10 @@ or1k_elf_adjust_dynamic_symbol (struct bfd_link_info *info,
-+   if (h->type == STT_FUNC
-+       || h->needs_plt)
-+     {
-+-      if (! bfd_link_pic (info)
-+-	  && !h->def_dynamic
-+-	  && !h->ref_dynamic
-+-	  && h->root.type != bfd_link_hash_undefweak
-+-	  && h->root.type != bfd_link_hash_undefined)
-++      if (h->plt.refcount <= 0
-++         || (SYMBOL_CALLS_LOCAL (info, h)
-++         || (ELF_ST_VISIBILITY (h->other) != STV_DEFAULT
-++             && h->root.type == bfd_link_hash_undefweak)))
-+ 	{
-+ 	  /* This case can occur if we saw a PLT reloc in an input
-+ 	     file, but the symbol was never referred to by a dynamic
-+-- 
-+2.25.1
-+
-diff --git a/package/binutils/2.36.1/0003-bfd-elf32-or1k-fix-ld-assert.patch b/package/binutils/2.36.1/0003-bfd-elf32-or1k-fix-ld-assert.patch
-new file mode 100644
-index 0000000000..4aedc40e51
---- /dev/null
-+++ b/package/binutils/2.36.1/0003-bfd-elf32-or1k-fix-ld-assert.patch
-@@ -0,0 +1,33 @@
-+From 1659226a96b1daecfd08c057d0d5c39309d207ee Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Mon, 22 Mar 2021 13:30:07 +0100
-+Subject: [PATCH] bfd/elf32-or1k: fix ld assert
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ bfd/elf32-or1k.c | 9 ++++-----
-+ 1 file changed, 4 insertions(+), 5 deletions(-)
-+
-+diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
-+index 65938e5137..41908f8938 100644
-+--- a/bfd/elf32-or1k.c
-++++ b/bfd/elf32-or1k.c
-+@@ -2566,11 +2566,10 @@ or1k_elf_adjust_dynamic_symbol (struct bfd_link_info *info,
-+   if (h->type == STT_FUNC
-+       || h->needs_plt)
-+     {
-+-      if (! bfd_link_pic (info)
-+-	  && !h->def_dynamic
-+-	  && !h->ref_dynamic
-+-	  && h->root.type != bfd_link_hash_undefweak
-+-	  && h->root.type != bfd_link_hash_undefined)
-++      if (h->plt.refcount <= 0
-++         || (SYMBOL_CALLS_LOCAL (info, h)
-++         || (ELF_ST_VISIBILITY (h->other) != STV_DEFAULT
-++             && h->root.type == bfd_link_hash_undefweak)))
-+ 	{
-+ 	  /* This case can occur if we saw a PLT reloc in an input
-+ 	     file, but the symbol was never referred to by a dynamic
-+-- 
-+2.25.1
-+
+>> zeromq is the only package that could be worked around with -O0.
+>>
+>> I would add patches that add patches to all binutils versions, so this
+>> way buildroot toolchain built by buildroot are safe, but I should tag
+>> as buggy all the external openrisc toolchains, basically the one
+>> provided by Bootlin. This implies adding patches to disable building
+>> libtheora with all its dependencies and I can do it, or otherwise we can
+>> wait for Bootlin to release a new fixed openrisc toolchain, what about that?
+> 
+> Don't bother with the external Bootlin toolchains, I was working on a
+> new release of the toolchains based on 2021.02, so I'll include the
+> binutils fix.
+
+Ok, so it fixes this bug for Buildroot toolchain and you'll provide 
+Bootlin toolchain and we can consider this bug as not affecting
+Buildroot anymore. The chance one would use an external OpenRisc 
+toolchain would be very rare. Right?
+
+Then we could revert commit:
+"package/protobuf: disable package if binutils is affected from bug 21464"
+https://git.buildroot.net/buildroot/commit/?id=9e71b6e2cb
+
+While doing all these tests I've gound that libgeos still has this bug 
+and most of all, the diff proposed doesn't fix bug 21464, they are 2 
+different bugs, so I've updated that here:
+https://sourceware.org/bugzilla/show_bug.cgi?id=21464
+
+And submitted the other bug:
+https://sourceware.org/bugzilla/show_bug.cgi?id=27624
+
+So bug 21464 is still there and my binutils patches need do be re-worded.
+
+And please drop my pending patch:
+https://patchwork.ozlabs.org/project/buildroot/patch/20210322131437.392225-1-giulio.benetti at benettiengineering.com/
+
+I've submitted a reworded one:
+https://patchwork.ozlabs.org/project/buildroot/patch/20210322155655.547476-1-giulio.benetti at benettiengineering.com/
+
+Best regards
 -- 
-2.25.1
+Giulio Benetti
+Benetti Engineering sas
