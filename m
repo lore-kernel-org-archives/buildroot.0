@@ -1,34 +1,35 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 22 Mar 2021 20:10:34 +0100
-Subject: [Buildroot] [PATCH 1/1] package/kodi: add configure option to
- disable libusb support
-Message-ID: <20210322191034.3428-1-bernd.kuhls@t-online.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 22 Mar 2021 20:13:16 +0100
+Subject: [Buildroot] [PATCH 1/1] package/wpa_supplicant: annotate
+ CVE-2021-27803
+Message-ID: <20210322191316.1171234-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Make sure libusb support is properly disabled even if the libusb
-package is enabled.
+Add a WPA_SUPPLICANT_IGNORE_CVES entry for CVE-2021-27803 which was
+fixed by commit 9ada4eb2f1c3d67ee49f6f5466738bcd821fc647
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/kodi/kodi.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/wpa_supplicant/wpa_supplicant.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index bf5822eb61..6edb0b7fca 100644
---- a/package/kodi/kodi.mk
-+++ b/package/kodi/kodi.mk
-@@ -206,6 +206,8 @@ KODI_CONF_OPTS += -DENABLE_UDEV=OFF
- ifeq ($(BR2_PACKAGE_KODI_LIBUSB),y)
- KODI_CONF_OPTS += -DENABLE_LIBUSB=ON
- KODI_DEPENDENCIES += libusb-compat
-+else
-+KODI_CONF_OPTS += -DENABLE_LIBUSB=OFF
- endif
- endif
+diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+index c82db43c1c..96f0596bfe 100644
+--- a/package/wpa_supplicant/wpa_supplicant.mk
++++ b/package/wpa_supplicant/wpa_supplicant.mk
+@@ -22,6 +22,9 @@ WPA_SUPPLICANT_SELINUX_MODULES = networkmanager
+ # 0001-AP-Silently-ignore-management-frame-from-unexpected-.patch
+ WPA_SUPPLICANT_IGNORE_CVES += CVE-2019-16275
+ 
++# 0001-P2P-Fix-a-corner-case-in-peer-addition-based-on-PD-R.patch
++WPA_SUPPLICANT_IGNORE_CVES += CVE-2021-27803
++
+ # install the wpa_client library
+ WPA_SUPPLICANT_INSTALL_STAGING = YES
  
 -- 
-2.29.2
+2.30.1
