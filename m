@@ -1,31 +1,34 @@
-From: Atilla Filiz <atilla.filiz@gmail.com>
-Date: Mon, 22 Mar 2021 09:39:45 +0100
-Subject: [Buildroot] Xeon variant for x86_64 target
-Message-ID: <CACTZKX7MKLbamOdpBp5RAf4LdBu3ThYop6-doQBgq1fRE0WrtQ@mail.gmail.com>
+From: Stephane Viau <stephane.viau@oss.nxp.com>
+Date: Mon, 22 Mar 2021 10:12:47 +0100
+Subject: [Buildroot] [PATCH v2 0/5] imx: add i.MX8M Plus SoC & 8MPlus EVK
+ board support
+Message-ID: <20210322091252.11392-1-stephane.viau@oss.nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello
+This patch set adds support for the NXP i.MX 8MPlus.
 
-I am preparing a config for an Intel Xeon D based target. There is no Xeon
-variant available in the 2021.02 release. I am not very familiar with the
-x86 family but I want to create a pro[er variant if possible.
+Stephane Viau (5):
+  package/freescale-imx: add option for i.MX8M Plus
+  package/freescale-imx/firmware-imx: add support for i.MX8M Plus
+  package/imx-mkimage: add support for i.MX8M Plus
+  board/freescale/common/imx: add support for i.MX8M Plus
+  configs/freescale_imx8mpevk: new defconfig
 
-I see the build variant selects certain flags. E.g. Atom selects
-BR2_X86_CPU_HAS_MMX [=y] && BR2_X86_CPU_HAS_SSE [=y] &&
-BR2_X86_CPU_HAS_SSE2 [=y] && BR2_X86_CPU_HAS_SSE3 [=y] &&
-BR2_X86_CPU_HAS_SSSE3 [=y]
-
-What else does this variant selection affect? I assume a few additional
-build flags to pass on GCC? Maybe some kernel build options?
-
-How does one go about creating a proper x86_64 variant?
+ DEVELOPERS                                    |  2 +
+ .../common/imx/imx8-bootloader-prepare.sh     |  7 ++
+ board/freescale/common/imx/post-image.sh      |  2 +
+ board/freescale/imx8mpevk/readme.txt          | 71 +++++++++++++++++++
+ configs/freescale_imx8mpevk_defconfig         | 42 +++++++++++
+ package/freescale-imx/Config.in               |  8 ++-
+ package/freescale-imx/firmware-imx/Config.in  |  2 +
+ package/imx-mkimage/imx-mkimage.mk            |  2 +-
+ 8 files changed, 134 insertions(+), 2 deletions(-)
+ create mode 100644 board/freescale/imx8mpevk/readme.txt
+ create mode 100644 configs/freescale_imx8mpevk_defconfig
 
 -- 
-Atilla Filiz
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210322/d0b88268/attachment.html>
+2.29.2
