@@ -1,36 +1,60 @@
-From: Alassane <alassaneg@gmail.com>
-Date: Mon, 22 Mar 2021 15:13:47 +0100
-Subject: [Buildroot] PHP installation issues
-Message-ID: <CAJ2YAHtdmiVyOZJNZbaWpGon15hznYV815QAhgKe4KY7YBBdmQ@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 22 Mar 2021 15:27:18 +0000
+Subject: [Buildroot] [Bug 13646] New: Gen image version 14 error : no sub
+ -section title/index for 'config'
+Message-ID: <bug-13646-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=13646
 
-I have tried to generate a linux image with buildroot2020.11.1 but i'm
-having some issues after that.
-First of all, i've activated the external php extension "php-imagick" in
-target package after i run "make menuconfig".
-After that, i perform a full rebuild, reflash my sd card, launch my target
-but when i run the commande "php -m", it doesn't show me the "imagick"
-module...
-And this is the following error message i'm facing when trying to run a
-program with the "php" command : *PHP Fatal error:  Uncaught Error: Class
-'Imagick' not found*
+            Bug ID: 13646
+           Summary: Gen image version 14 error : no sub -section
+                    title/index for 'config'
+           Product: buildroot
+           Version: 2021.02
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: neerajkrishnat at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-Also, i've selected the php "iconv" package and facing this error when i
-try to run my php program : *PHP Notice:  iconv(): Unknown error (22).*
+The following error is for any board not just for Ci20 , i tried earlier
+versions of genimage also but haven't had much of luck 
 
-Do you know where these issues i'm facing could potentially come from?
 
-Kind regards
+>>>   Executing post-image script support/scripts/genimage.sh
+board/ci20/genimage.cfg:29: no sub-section title/index for 'config'
+INFO: cmd: "mkdir -p "/home/nirajtummala/buildroot/output/build/genimage.tmp""
+(stderr):
+INFO: cmd: "rm -rf "/home/nirajtummala/buildroot/output/build/genimage.tmp"/*"
+(stderr):
+INFO: cmd: "mkdir -p "/home/nirajtummala/buildroot/output/build/genimage.tmp""
+(stderr):
+INFO: cmd: "cp -a "/tmp/tmp.tU65pvVkfR"
+"/home/nirajtummala/buildroot/output/build/genimage.tmp/root"" (stderr):
+INFO: cmd: "find '/home/nirajtummala/buildroot/output/build/genimage.tmp/root'
+-depth -type d -printf '%P\0' | xargs -0 -I {} touch -r
+'/tmp/tmp.tU65pvVkfR/{}'
+'/home/nirajtummala/buildroot/output/build/genimage.tmp/root/{}'" (stderr):
+INFO: cmd: "mkdir -p "/home/nirajtummala/buildroot/output/images"" (stderr):
+INFO: hdimage(sdcard.img): adding partition 'uboot-spl' from 'u-boot-spl.bin'
+...
+INFO: hdimage(sdcard.img): adding partition 'uboot' from 'u-boot.img' ...
+INFO: hdimage(sdcard.img): adding partition 'uboot-env' from 'uboot-env.bin'
+...
+INFO: hdimage(sdcard.img): adding partition 'rootfs' (in MBR) from
+'rootfs.ext4' ...
+INFO: hdimage(sdcard.img): writing MBR
 
-Thank you
-
-Alassane
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210322/0a21e09c/attachment.html>
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
