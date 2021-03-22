@@ -1,45 +1,28 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 22 Mar 2021 16:28:14 +0000
-Subject: [Buildroot] [Bug 13641] glibc on raspberrypi
-In-Reply-To: <bug-13641-163@https.bugs.busybox.net/>
-References: <bug-13641-163@https.bugs.busybox.net/>
-Message-ID: <bug-13641-163-CxM2vgd6u4@https.bugs.busybox.net/>
+From: Andreas Ziegler <br015@umbiko.net>
+Date: Mon, 22 Mar 2021 16:43:35 +0000
+Subject: [Buildroot] Xeon variant for x86_64 target
+In-Reply-To: <mailman.16066.1616404411.250923.buildroot@busybox.net>
+References: <mailman.16066.1616404411.250923.buildroot@busybox.net>
+Message-ID: <a6b872eb8a8039297b4a5c8057922c51@umbiko.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13641
+Hi Atilla,
 
-Yann E. MORIN <yann.morin.1998@free.fr> changed:
+> I am preparing a config for an Intel Xeon D based target. There is no 
+> Xeon
+> variant available in the 2021.02 release. I am not very familiar with 
+> the
+> x86 family but I want to create a pro[er variant if possible.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |yann.morin.1998 at free.fr
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |WORKSFORME
+You need to specify the processor architecture inside the Linux kernel 
+separately (Processor type -> Processor family).
 
---- Comment #1 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-Julien,
-
-I can not reproduce the error:
-
-    make raspberrypi_defconfig
-    make menuconfig
-     -> toolchain
-         -> C library
-             -> glibc
-    make
-
-You need to provide more information, like the full build log.
-
-Note : be sure to start the build from scratch when you change the C library,
-see the manual: https://buildroot.org/manual.html#full-rebuild
+Since Linux puts Core 2 and (newer) Xeon in one setting, you should be 
+fine with Core 2 for Buildroot also.
 
 Regards,
-Yann E. MORIN.
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Andreas
