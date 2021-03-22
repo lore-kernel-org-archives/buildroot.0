@@ -1,55 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 22 Mar 2021 17:03:33 +0100
-Subject: [Buildroot] [PATCH] package/zeromq: fix build failure due to
- binutils bug 21464
-In-Reply-To: <712d75cc-4d52-1a2c-e89e-74d71c1f0a35@benettiengineering.com>
-References: <20210314223616.5bfcc62f@windsurf.home>
- <20210317154520.1613272-1-giulio.benetti@benettiengineering.com>
- <519abe18-e47a-38f9-e659-1a6dde6cd41d@benettiengineering.com>
- <3a252a05-54ac-24a7-a9d6-1c5a21679aee@benettiengineering.com>
- <20210322144220.5f9158c4@windsurf.home>
- <712d75cc-4d52-1a2c-e89e-74d71c1f0a35@benettiengineering.com>
-Message-ID: <20210322170333.643d9605@windsurf.home>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 22 Mar 2021 16:28:14 +0000
+Subject: [Buildroot] [Bug 13641] glibc on raspberrypi
+In-Reply-To: <bug-13641-163@https.bugs.busybox.net/>
+References: <bug-13641-163@https.bugs.busybox.net/>
+Message-ID: <bug-13641-163-CxM2vgd6u4@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 22 Mar 2021 16:57:23 +0100
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+https://bugs.busybox.net/show_bug.cgi?id=13641
 
-> > Has this fix been suggested by upstream? How do you know it's the
-> > "right" fix ?  
-> 
-> Yes it's been suggested by Stafford here:
-> https://sourceware.org/bugzilla/show_bug.cgi?id=21464
+Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
-Ah, OK!
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |yann.morin.1998 at free.fr
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |WORKSFORME
 
-> > Don't bother with the external Bootlin toolchains, I was working on a
-> > new release of the toolchains based on 2021.02, so I'll include the
-> > binutils fix.  
-> 
-> Ok, so it fixes this bug for Buildroot toolchain and you'll provide 
-> Bootlin toolchain and we can consider this bug as not affecting
-> Buildroot anymore. The chance one would use an external OpenRisc 
-> toolchain would be very rare. Right?
+--- Comment #1 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+Julien,
 
-Yes, that's the idea.
+I can not reproduce the error:
 
-> So bug 21464 is still there and my binutils patches need do be re-worded.
-> 
-> And please drop my pending patch:
-> https://patchwork.ozlabs.org/project/buildroot/patch/20210322131437.392225-1-giulio.benetti at benettiengineering.com/
-> 
-> I've submitted a reworded one:
-> https://patchwork.ozlabs.org/project/buildroot/patch/20210322155655.547476-1-giulio.benetti at benettiengineering.com/
+    make raspberrypi_defconfig
+    make menuconfig
+     -> toolchain
+         -> C library
+             -> glibc
+    make
 
-OK, thanks!
+You need to provide more information, like the full build log.
 
-Thomas
+Note : be sure to start the build from scratch when you change the C library,
+see the manual: https://buildroot.org/manual.html#full-rebuild
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
