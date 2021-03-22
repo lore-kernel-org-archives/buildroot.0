@@ -1,26 +1,31 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 22 Mar 2021 08:14:26 +0000
-Subject: [Buildroot] [Bug 13631] Commit 54d3d94b6e breaks packages with git
- download method
-In-Reply-To: <bug-13631-163@https.bugs.busybox.net/>
-References: <bug-13631-163@https.bugs.busybox.net/>
-Message-ID: <bug-13631-163-2aST4e5fVd@https.bugs.busybox.net/>
+From: Atilla Filiz <atilla.filiz@gmail.com>
+Date: Mon, 22 Mar 2021 09:39:45 +0100
+Subject: [Buildroot] Xeon variant for x86_64 target
+Message-ID: <CACTZKX7MKLbamOdpBp5RAf4LdBu3ThYop6-doQBgq1fRE0WrtQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13631
+Hello
 
---- Comment #2 from Matthias Hardt <mhardt@berlinux-solutions.de> ---
-Hello Yann,
+I am preparing a config for an Intel Xeon D based target. There is no Xeon
+variant available in the 2021.02 release. I am not very familiar with the
+x86 family but I want to create a pro[er variant if possible.
 
-it works now. Good work.
+I see the build variant selects certain flags. E.g. Atom selects
+BR2_X86_CPU_HAS_MMX [=y] && BR2_X86_CPU_HAS_SSE [=y] &&
+BR2_X86_CPU_HAS_SSE2 [=y] && BR2_X86_CPU_HAS_SSE3 [=y] &&
+BR2_X86_CPU_HAS_SSSE3 [=y]
 
-Regards,
-Matthias
+What else does this variant selection affect? I assume a few additional
+build flags to pass on GCC? Maybe some kernel build options?
+
+How does one go about creating a proper x86_64 variant?
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Atilla Filiz
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210322/d0b88268/attachment.html>
