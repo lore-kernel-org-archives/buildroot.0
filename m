@@ -1,58 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 22 Mar 2021 14:42:20 +0100
-Subject: [Buildroot] [PATCH] package/zeromq: fix build failure due to
- binutils bug 21464
-In-Reply-To: <3a252a05-54ac-24a7-a9d6-1c5a21679aee@benettiengineering.com>
-References: <20210314223616.5bfcc62f@windsurf.home>
- <20210317154520.1613272-1-giulio.benetti@benettiengineering.com>
- <519abe18-e47a-38f9-e659-1a6dde6cd41d@benettiengineering.com>
- <3a252a05-54ac-24a7-a9d6-1c5a21679aee@benettiengineering.com>
-Message-ID: <20210322144220.5f9158c4@windsurf.home>
+From: Alassane <alassaneg@gmail.com>
+Date: Mon, 22 Mar 2021 15:13:47 +0100
+Subject: [Buildroot] PHP installation issues
+Message-ID: <CAJ2YAHtdmiVyOZJNZbaWpGon15hznYV815QAhgKe4KY7YBBdmQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 22 Mar 2021 14:15:08 +0100
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+Hello,
 
-> OpenRisc binutils 21464 bug has a fix:
-> https://sourceware.org/bugzilla/show_bug.cgi?id=21464
-> 
-> I've tested it with binutils:
-> - 2.32
-> - 2.34
-> - 2.35.2
-> - 2.36.1
-> 
-> and works good while building:
-> - protobuf
-> - libtheora
-> - zeromq
+I have tried to generate a linux image with buildroot2020.11.1 but i'm
+having some issues after that.
+First of all, i've activated the external php extension "php-imagick" in
+target package after i run "make menuconfig".
+After that, i perform a full rebuild, reflash my sd card, launch my target
+but when i run the commande "php -m", it doesn't show me the "imagick"
+module...
+And this is the following error message i'm facing when trying to run a
+program with the "php" command : *PHP Fatal error:  Uncaught Error: Class
+'Imagick' not found*
 
-Excellent! Thanks for all this work!
+Also, i've selected the php "iconv" package and facing this error when i
+try to run my php program : *PHP Notice:  iconv(): Unknown error (22).*
 
-Has this fix been suggested by upstream? How do you know it's the
-"right" fix ?
+Do you know where these issues i'm facing could potentially come from?
 
-> zeromq is the only package that could be worked around with -O0.
-> 
-> I would add patches that add patches to all binutils versions, so this 
-> way buildroot toolchain built by buildroot are safe, but I should tag
-> as buggy all the external openrisc toolchains, basically the one 
-> provided by Bootlin. This implies adding patches to disable building 
-> libtheora with all its dependencies and I can do it, or otherwise we can 
-> wait for Bootlin to release a new fixed openrisc toolchain, what about that?
+Kind regards
 
-Don't bother with the external Bootlin toolchains, I was working on a
-new release of the toolchains based on 2021.02, so I'll include the
-binutils fix.
+Thank you
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Alassane
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210322/0a21e09c/attachment.html>
