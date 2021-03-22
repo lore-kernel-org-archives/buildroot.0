@@ -1,44 +1,184 @@
-From: Vadym Kochan <vadym.kochan@plvision.eu>
-Date: Mon, 22 Mar 2021 15:12:28 +0200
-Subject: [Buildroot] [PATCH] package/frr: bump to 7.5.1 version
-Message-ID: <20210322131228.12614-1-vadym.kochan@plvision.eu>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Mon, 22 Mar 2021 14:14:37 +0100
+Subject: [Buildroot] [PATCH] package/binutils: add patches to fix OpenRisc
+ bug 21464
+Message-ID: <20210322131437.392225-1-giulio.benetti@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is a maintenance release of FRR 7.5 with lots of bug fixes:
+These patches fix OpenRisc linker bug 21464 that affects packages
+libtheora, protobuf and zeromq.
 
-    https://github.com/FRRouting/frr/releases/tag/frr-7.5.1
-
-Signed-off-by: Vadym Kochan <vadym.kochan@plvision.eu>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/frr/frr.hash | 2 +-
- package/frr/frr.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../0010-bfd-elf32-or1k-fix-ld-assert.patch   | 33 +++++++++++++++++++
+ .../0003-bfd-elf32-or1k-fix-ld-assert.patch   | 33 +++++++++++++++++++
+ .../0003-bfd-elf32-or1k-fix-ld-assert.patch   | 33 +++++++++++++++++++
+ .../0003-bfd-elf32-or1k-fix-ld-assert.patch   | 33 +++++++++++++++++++
+ 4 files changed, 132 insertions(+)
+ create mode 100644 package/binutils/2.32/0010-bfd-elf32-or1k-fix-ld-assert.patch
+ create mode 100644 package/binutils/2.34/0003-bfd-elf32-or1k-fix-ld-assert.patch
+ create mode 100644 package/binutils/2.35.2/0003-bfd-elf32-or1k-fix-ld-assert.patch
+ create mode 100644 package/binutils/2.36.1/0003-bfd-elf32-or1k-fix-ld-assert.patch
 
-diff --git a/package/frr/frr.hash b/package/frr/frr.hash
-index 942065f0f307..3a044d4c2a91 100644
---- a/package/frr/frr.hash
-+++ b/package/frr/frr.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 54066e82a82751ec5876d9b67aa0cb24fe94e19e7371af290ac25099eda9f136  frr-7.5.tar.gz
-+sha256 030d4e66f577726dfea13bd3a9c669fd41d8fd89b25953a36b5b0966d406ff28  frr-7.5.1.tar.gz
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/frr/frr.mk b/package/frr/frr.mk
-index 3ae292874aaa..0907c0ad97a6 100644
---- a/package/frr/frr.mk
-+++ b/package/frr/frr.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FRR_VERSION = 7.5
-+FRR_VERSION = 7.5.1
- FRR_SITE = $(call github,FRRouting,frr,frr-$(FRR_VERSION))
- FRR_LICENSE = GPL-2.0
- FRR_LICENSE_FILES = COPYING
+diff --git a/package/binutils/2.32/0010-bfd-elf32-or1k-fix-ld-assert.patch b/package/binutils/2.32/0010-bfd-elf32-or1k-fix-ld-assert.patch
+new file mode 100644
+index 0000000000..07121c3d0d
+--- /dev/null
++++ b/package/binutils/2.32/0010-bfd-elf32-or1k-fix-ld-assert.patch
+@@ -0,0 +1,33 @@
++From 93cf62b662499e560812145dd989056fcf14f00e Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Mon, 22 Mar 2021 13:30:07 +0100
++Subject: [PATCH] bfd/elf32-or1k: fix ld assert
++
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ bfd/elf32-or1k.c | 9 ++++-----
++ 1 file changed, 4 insertions(+), 5 deletions(-)
++
++diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
++index 2f200b197b..ae508540f5 100644
++--- a/bfd/elf32-or1k.c
+++++ b/bfd/elf32-or1k.c
++@@ -2535,11 +2535,10 @@ or1k_elf_adjust_dynamic_symbol (struct bfd_link_info *info,
++   if (h->type == STT_FUNC
++       || h->needs_plt)
++     {
++-      if (! bfd_link_pic (info)
++-	  && !h->def_dynamic
++-	  && !h->ref_dynamic
++-	  && h->root.type != bfd_link_hash_undefweak
++-	  && h->root.type != bfd_link_hash_undefined)
+++      if (h->plt.refcount <= 0
+++         || (SYMBOL_CALLS_LOCAL (info, h)
+++         || (ELF_ST_VISIBILITY (h->other) != STV_DEFAULT
+++             && h->root.type == bfd_link_hash_undefweak)))
++ 	{
++ 	  /* This case can occur if we saw a PLT reloc in an input
++ 	     file, but the symbol was never referred to by a dynamic
++-- 
++2.25.1
++
+diff --git a/package/binutils/2.34/0003-bfd-elf32-or1k-fix-ld-assert.patch b/package/binutils/2.34/0003-bfd-elf32-or1k-fix-ld-assert.patch
+new file mode 100644
+index 0000000000..4aedc40e51
+--- /dev/null
++++ b/package/binutils/2.34/0003-bfd-elf32-or1k-fix-ld-assert.patch
+@@ -0,0 +1,33 @@
++From 1659226a96b1daecfd08c057d0d5c39309d207ee Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Mon, 22 Mar 2021 13:30:07 +0100
++Subject: [PATCH] bfd/elf32-or1k: fix ld assert
++
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ bfd/elf32-or1k.c | 9 ++++-----
++ 1 file changed, 4 insertions(+), 5 deletions(-)
++
++diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
++index 65938e5137..41908f8938 100644
++--- a/bfd/elf32-or1k.c
+++++ b/bfd/elf32-or1k.c
++@@ -2566,11 +2566,10 @@ or1k_elf_adjust_dynamic_symbol (struct bfd_link_info *info,
++   if (h->type == STT_FUNC
++       || h->needs_plt)
++     {
++-      if (! bfd_link_pic (info)
++-	  && !h->def_dynamic
++-	  && !h->ref_dynamic
++-	  && h->root.type != bfd_link_hash_undefweak
++-	  && h->root.type != bfd_link_hash_undefined)
+++      if (h->plt.refcount <= 0
+++         || (SYMBOL_CALLS_LOCAL (info, h)
+++         || (ELF_ST_VISIBILITY (h->other) != STV_DEFAULT
+++             && h->root.type == bfd_link_hash_undefweak)))
++ 	{
++ 	  /* This case can occur if we saw a PLT reloc in an input
++ 	     file, but the symbol was never referred to by a dynamic
++-- 
++2.25.1
++
+diff --git a/package/binutils/2.35.2/0003-bfd-elf32-or1k-fix-ld-assert.patch b/package/binutils/2.35.2/0003-bfd-elf32-or1k-fix-ld-assert.patch
+new file mode 100644
+index 0000000000..4aedc40e51
+--- /dev/null
++++ b/package/binutils/2.35.2/0003-bfd-elf32-or1k-fix-ld-assert.patch
+@@ -0,0 +1,33 @@
++From 1659226a96b1daecfd08c057d0d5c39309d207ee Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Mon, 22 Mar 2021 13:30:07 +0100
++Subject: [PATCH] bfd/elf32-or1k: fix ld assert
++
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ bfd/elf32-or1k.c | 9 ++++-----
++ 1 file changed, 4 insertions(+), 5 deletions(-)
++
++diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
++index 65938e5137..41908f8938 100644
++--- a/bfd/elf32-or1k.c
+++++ b/bfd/elf32-or1k.c
++@@ -2566,11 +2566,10 @@ or1k_elf_adjust_dynamic_symbol (struct bfd_link_info *info,
++   if (h->type == STT_FUNC
++       || h->needs_plt)
++     {
++-      if (! bfd_link_pic (info)
++-	  && !h->def_dynamic
++-	  && !h->ref_dynamic
++-	  && h->root.type != bfd_link_hash_undefweak
++-	  && h->root.type != bfd_link_hash_undefined)
+++      if (h->plt.refcount <= 0
+++         || (SYMBOL_CALLS_LOCAL (info, h)
+++         || (ELF_ST_VISIBILITY (h->other) != STV_DEFAULT
+++             && h->root.type == bfd_link_hash_undefweak)))
++ 	{
++ 	  /* This case can occur if we saw a PLT reloc in an input
++ 	     file, but the symbol was never referred to by a dynamic
++-- 
++2.25.1
++
+diff --git a/package/binutils/2.36.1/0003-bfd-elf32-or1k-fix-ld-assert.patch b/package/binutils/2.36.1/0003-bfd-elf32-or1k-fix-ld-assert.patch
+new file mode 100644
+index 0000000000..4aedc40e51
+--- /dev/null
++++ b/package/binutils/2.36.1/0003-bfd-elf32-or1k-fix-ld-assert.patch
+@@ -0,0 +1,33 @@
++From 1659226a96b1daecfd08c057d0d5c39309d207ee Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Mon, 22 Mar 2021 13:30:07 +0100
++Subject: [PATCH] bfd/elf32-or1k: fix ld assert
++
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ bfd/elf32-or1k.c | 9 ++++-----
++ 1 file changed, 4 insertions(+), 5 deletions(-)
++
++diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
++index 65938e5137..41908f8938 100644
++--- a/bfd/elf32-or1k.c
+++++ b/bfd/elf32-or1k.c
++@@ -2566,11 +2566,10 @@ or1k_elf_adjust_dynamic_symbol (struct bfd_link_info *info,
++   if (h->type == STT_FUNC
++       || h->needs_plt)
++     {
++-      if (! bfd_link_pic (info)
++-	  && !h->def_dynamic
++-	  && !h->ref_dynamic
++-	  && h->root.type != bfd_link_hash_undefweak
++-	  && h->root.type != bfd_link_hash_undefined)
+++      if (h->plt.refcount <= 0
+++         || (SYMBOL_CALLS_LOCAL (info, h)
+++         || (ELF_ST_VISIBILITY (h->other) != STV_DEFAULT
+++             && h->root.type == bfd_link_hash_undefweak)))
++ 	{
++ 	  /* This case can occur if we saw a PLT reloc in an input
++ 	     file, but the symbol was never referred to by a dynamic
++-- 
++2.25.1
++
 -- 
-2.17.1
+2.25.1
