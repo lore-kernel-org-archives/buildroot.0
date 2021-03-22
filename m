@@ -1,83 +1,84 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 22 Mar 2021 08:00:47 +0100
-Subject: [Buildroot] [PATCH 1/1] package/efivar: disable -Werror
-Message-ID: <20210322070047.514146-1-fontaine.fabrice@gmail.com>
+Date: Mon, 22 Mar 2021 08:44:42 +0100
+Subject: [Buildroot] [PATCH 1/1] package/s390-tools: fix zkey build
+Message-ID: <20210322074442.1112603-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix the following build failure with gcc 10:
-
-/home/buildroot/autobuild/run/instance-1/output-1/host/bin/aarch64-none-linux-gnu-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2   -I/home/buildroot/autobuild/run/instance-1/output-1/build/efivar-37/src/include/   -specs=/home/buildroot/autobuild/run/instance-1/output-1/build/efivar-37/gcc.specs  -L.  -fPIC -Wl,-z,muldefs     -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -o efivar efivar.c -lefivar -ldl
-In file included from efivar.h:28,
-                 from efivar.c:40:
-In function 'text_to_guid',
-    inlined from 'parse_name.constprop' at efivar.c:157:8:
-guid.h:106:2: error: 'strncpy' output may be truncated copying 8 bytes from a string of length 38 [-Werror=stringop-truncation]
-  106 |  strncpy(eightbytes, text, 8);
-      |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-cc1: all warnings being treated as errors
+Build of zkey fails since bump to version 2.16.0 in commit
+b82b58a8ddc3d079aa2976b3dafbc965b6107648
 
 Fixes:
- - http://autobuild.buildroot.org/results/fcba72d359f4128515560e9105384cd4deff5043
+ - http://autobuild.buildroot.org/results/e7f229a98dab188ee9c40e4709fd26bfa67358d3
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- .../efivar/0007-gcc.specs-drop-Werror.patch   | 44 +++++++++++++++++++
- 1 file changed, 44 insertions(+)
- create mode 100644 package/efivar/0007-gcc.specs-drop-Werror.patch
+ ...en-the-compiler-flags-are-overridden.patch | 54 +++++++++++++++++++
+ 1 file changed, 54 insertions(+)
+ create mode 100644 package/s390-tools/0002-zkey-Fix-build-error-when-the-compiler-flags-are-overridden.patch
 
-diff --git a/package/efivar/0007-gcc.specs-drop-Werror.patch b/package/efivar/0007-gcc.specs-drop-Werror.patch
+diff --git a/package/s390-tools/0002-zkey-Fix-build-error-when-the-compiler-flags-are-overridden.patch b/package/s390-tools/0002-zkey-Fix-build-error-when-the-compiler-flags-are-overridden.patch
 new file mode 100644
-index 0000000000..aa717fedaf
+index 0000000000..ee725d396e
 --- /dev/null
-+++ b/package/efivar/0007-gcc.specs-drop-Werror.patch
-@@ -0,0 +1,44 @@
-+From 8d5cf3347cce9d644f670ffd1d48e71d74635481 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 22 Mar 2021 07:52:34 +0100
-+Subject: [PATCH] gcc.specs: drop -Werror
++++ b/package/s390-tools/0002-zkey-Fix-build-error-when-the-compiler-flags-are-overridden.patch
+@@ -0,0 +1,54 @@
++From 3f3f063c98278f53ad3b34e68b70fca62eaea8fb Mon Sep 17 00:00:00 2001
++From: Ingo Franzki <ifranzki@linux.ibm.com>
++Date: Tue, 23 Feb 2021 08:52:26 +0100
++Subject: [PATCH] zkey: Fix build error when the compiler flags are overridden
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
 +
-+Build with -Werror raises the following build failure with gcc 10:
++When the compiler flags are overridden, the build of zkey may fail with:
 +
-+/home/buildroot/autobuild/run/instance-1/output-1/host/bin/aarch64-none-linux-gnu-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2   -I/home/buildroot/autobuild/run/instance-1/output-1/build/efivar-37/src/include/   -specs=/home/buildroot/autobuild/run/instance-1/output-1/build/efivar-37/gcc.specs  -L.  -fPIC -Wl,-z,muldefs     -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -o efivar efivar.c -lefivar -ldl
-+In file included from efivar.h:28,
-+                 from efivar.c:40:
-+In function 'text_to_guid',
-+    inlined from 'parse_name.constprop' at efivar.c:157:8:
-+guid.h:106:2: error: 'strncpy' output may be truncated copying 8 bytes from a string of length 38 [-Werror=stringop-truncation]
-+  106 |  strncpy(eightbytes, text, 8);
-+      |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+cc1: all warnings being treated as errors
++kms.c:44:2: error: #error KMS_PLUGIN_LOCATION must be defined
++   44 | #error KMS_PLUGIN_LOCATION must be defined
++      |  ^~~~~
 +
-+Fixes:
-+ - http://autobuild.buildroot.org/results/fcba72d359f4128515560e9105384cd4deff5043
++The Makefile uses CFLAGS variable for defining the KMS_PLUGIN_LOCATION,
++but it should rather use ALL_CFLAGS.
 +
++Also use ALL_CPPFLAGS for defining HAVE_LUKS2_SUPPORT.
++
++Fixes: https://github.com/ibm-s390-linux/s390-tools/issues/108
++
++Signed-off-by: Ingo Franzki <ifranzki@linux.ibm.com>
++Reviewed-by: Jan Hoeppner <hoeppner@linux.ibm.com>
++Signed-off-by: Jan H?ppner <hoeppner@linux.ibm.com>
++
++[Retrieved from:
++https://github.com/ibm-s390-linux/s390-tools/commit/3f3f063c98278f53ad3b34e68b70fca62eaea8fb]
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: not upstreamable as Makefiles were reworked and a new
-+ERRORS parameter was added:
-+https://github.com/rhboot/efivar/commit/998f617cec92d526e1fadb745673ceef63fa1483]
 +---
-+ gcc.specs | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ zkey/Makefile | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
 +
-+diff --git a/gcc.specs b/gcc.specs
-+index 45d43d1..1baf11a 100644
-+--- a/gcc.specs
-++++ b/gcc.specs
-+@@ -2,7 +2,7 @@
-+ + -D_GNU_SOURCE
++diff --git a/zkey/Makefile b/zkey/Makefile
++index 41129bcf..f74e2091 100644
++--- a/zkey/Makefile
+++++ b/zkey/Makefile
++@@ -18,7 +18,7 @@ ifneq (${HAVE_CRYPTSETUP2},0)
++ 		ifneq (${HAVE_OPENSSL},0)
++ 			BUILD_TARGETS += zkey-cryptsetup
++ 			INSTALL_TARGETS += install-zkey-cryptsetup
++-			CPPFLAGS += -DHAVE_LUKS2_SUPPORT
+++			ALL_CPPFLAGS += -DHAVE_LUKS2_SUPPORT
++ 		else
++ 			BUILD_TARGETS += zkey-cryptsetup-skip-openssl
++ 			INSTALL_TARGETS += zkey-cryptsetup-skip-openssl
++@@ -34,7 +34,7 @@ endif
 + 
-+ *efivar_cpp_options:
-+- -Werror -Wall -std=gnu11 -Wextra
-++ -Wall -std=gnu11 -Wextra
++ libs = $(rootdir)/libutil/libutil.a
 + 
-+ *cpp_options:
-+ + %(efivar_cpp_options)
-+-- 
-+2.30.1
-+
++-CFLAGS += -DKMS_PLUGIN_LOCATION=\"$(ZKEYKMSPLUGINDIR)\"
+++ALL_CFLAGS += -DKMS_PLUGIN_LOCATION=\"$(ZKEYKMSPLUGINDIR)\"
++ 
++ detect-libcryptsetup.dep:
++ 	echo "#include <libcryptsetup.h>" > detect-libcryptsetup.dep
 -- 
 2.30.1
