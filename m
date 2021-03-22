@@ -1,88 +1,80 @@
-From: Jack Cripps <jack.cripps@disguise.one>
-Date: Mon, 22 Mar 2021 11:35:21 +0000
-Subject: [Buildroot] Fwd: [PATCH 1/1] package/zyre: bump version to 2.0.1
-In-Reply-To: <CAHFmVmW-6PVAnYV_8=233JvTLO_htDnSfbuV09CwynFjLco4XQ@mail.gmail.com>
-References: <20210308122733.1404-1-jack.cripps@disguise.one>
- <87eegavqh1.fsf@dell.be.48ers.dk>
- <CAHFmVmW-6PVAnYV_8=233JvTLO_htDnSfbuV09CwynFjLco4XQ@mail.gmail.com>
-Message-ID: <CAHFmVmUrLbG5xP5kHPzP0og=+38YsMf9Z0n07KM=UP--51OCYw@mail.gmail.com>
+From: Alexander Dahl <post@lespocky.de>
+Date: Mon, 22 Mar 2021 12:48:36 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
+ 2021-03-21
+Message-ID: <20210322114835.6hmpplzygzejxiab@falbala.internal.home.lespocky.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
----------- Forwarded message ---------
-From: Jack Cripps <jack.cripps@disguise.one>
-Date: Mon, 22 Mar 2021 at 11:22
-Subject: Re: [PATCH 1/1] package/zyre: bump version to 2.0.1
-To: Peter Korsgaard <peter@korsgaard.com>
-Cc: <buildroot@buildroot.org>, Simon Dawson <spdawson@gmail.com>
+Hello,
 
+I'm a little unhappy to annoy anyone with this request, however
+reports like the one below pop up over and over again in my INBOX like
+round about once a week.  That particular CVE issue in fastd was fixed
+upstream in October 2020 and was fixed for buildroot by Fabrice
+Fontaine few days later already.  See below.
 
-Hi,
+On Mon, Mar 22, 2021 at 10:26:07AM -0000, Thomas Petazzoni wrote:
+> Hello,
+> 
+> Packages having CVEs
+> ====================
+> 
+> This is the list of packages for which a known CVE is affecting them,
+> which means a security vulnerability exists for those packages.
+> 
+> CVEs for the 'master' branch
+> ----------------------------
+> 
+>              name              |       CVE        |                             link                            
+> -------------------------------+------------------+--------------------------------------------------------------
+>                          fastd | CVE-2020-27638   | https://security-tracker.debian.org/tracker/CVE-2020-27638  
+> 
 
-Apologies, the zyre.mk file included in 2.0.0 or 2.0.1 does not build any
-of the auto-generated, alternative language bindings for zyre ecosystem. I
-don't know if this would be desired behaviour (or whether there is some way
-of adding this to the zyre config file). In lieu of this, I use an custom
-external package 'python-zyre' to build the ctypes python bindings as a
-python package. Zyre 2.0.0 is missing the setuptools.py file from it's
-python bindings hence the required bump to v2.0.1. I do not know why this
-quite critical file is missing from v2.0.0.
+Fixed in master with 7e4af3ce3f91 ("package/fastd: fix
+CVE-2020-27638"). And it remains fixed after 148058a46293
+("package/fastd: bump to version 21").
 
-I believe probably all buildroot versions that have zyre 2.0.0 should be
-updated to 2.0.1, so 2020.02.x onwards I suppose.
+> 
+> CVEs for the '2020.11.x' branch
+> -------------------------------
+> 
+>              name              |       CVE        |                             link                            
+> -------------------------------+------------------+--------------------------------------------------------------
+>                          fastd | CVE-2020-27638   | https://security-tracker.debian.org/tracker/CVE-2020-27638  
+> 
 
-Thanks,
-Jack Cripps
+Same commits as above are in this branch, too.
 
-On Fri, 19 Mar 2021 at 20:27, Peter Korsgaard <peter@korsgaard.com> wrote:
+> 
+> CVEs for the '2021.02.x' branch
+> -------------------------------
+> 
+>              name              |       CVE        |                             link                            
+> -------------------------------+------------------+--------------------------------------------------------------
+>                          fastd | CVE-2020-27638   | https://security-tracker.debian.org/tracker/CVE-2020-27638  
+> 
 
-> >>>>> "Jack" == Jack Cripps <jack.cripps@disguise.one> writes:
->
->  > Version bump required due to python setup.py missing from v2.0.0 python
-> bindings
->
-> What does that mean exactly? How are those bindings installed and used?
-> We don't seem to do anything to handle them in zyre.mk?
->
->  > Signed-off-by: Jack Cripps <jack.cripps@disguise.one>
->  > ---
->  > Backport to 2019.11.x
->
-> I take it you mean 2020.11.x here? 2020.02.x and 2021.02.x also has
-> zyre, so it is presumably needed there as well?
->
-> --
-> Bye, Peter Korsgaard
->
+Same commits as above are in this branch, too.
 
+Could please someone with access to that bot fix it to not report
+already addressed CVEs anymore?
 
--- 
-<http://www.disguise.one/>
-Jack Cripps
-Jnr Embedded SW Engineer
-A : 88-89 Blackfriars Road, London, SE1 8HA
-<https://www.google.com/maps/place/88-89%20Blackfriars%20Road,%20London,%20SE1%208HA>
-<https://www.facebook.com/disguise.one/>
-<https://twitter.com/disguise_one>
-<https://www.youtube.com/channel/UCBXckvTm2VHU29BUoKJizvA>
-<https://www.instagram.com/disguise_one/>
-<https://www.linkedin.com/company/disguise-/>
-
+Thanks and greets
+Alex
 
 -- 
-<http://www.disguise.one/>
-Jack Cripps
-Jnr Embedded SW Engineer
-A : 88-89 Blackfriars Road, London, SE1 8HA
-<https://www.google.com/maps/place/88-89%20Blackfriars%20Road,%20London,%20SE1%208HA>
-<https://www.facebook.com/disguise.one/>
-<https://twitter.com/disguise_one>
-<https://www.youtube.com/channel/UCBXckvTm2VHU29BUoKJizvA>
-<https://www.instagram.com/disguise_one/>
-<https://www.linkedin.com/company/disguise-/>
+/"\ ASCII RIBBON | ?With the first link, the chain is forged. The first
+\ / CAMPAIGN     | speech censured, the first thought forbidden, the
+ X  AGAINST      | first freedom denied, chains us all irrevocably.?
+/ \ HTML MAIL    | (Jean-Luc Picard, quoting Judge Aaron Satie)
 -------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210322/8cc0b593/attachment.html>
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 833 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210322/e90f2ebf/attachment.asc>
