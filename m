@@ -1,58 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 23 Mar 2021 16:48:58 +0100
-Subject: [Buildroot] [git commit branch/2021.02.x] package/batman-adv: fix
- compile with BR2_PACKAGE_BATMAN_ADV_BATMAN_V disabled
-Message-ID: <20210323170614.65992836AD@busybox.osuosl.org>
+Date: Tue, 23 Mar 2021 18:20:07 +0100
+Subject: [Buildroot] [git commit branch/2021.02.x] package/batman-adv: add
+ note about linux mainline kernel module alternative
+Message-ID: <20210323170614.83C42836AD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1c7acbf3a78d1bd207045ce51226493d40352a80
+commit: https://git.buildroot.net/buildroot/commit/?id=4a373ec8cd219cdbf06d3917b65d3c5fde5e9f94
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Commit e8b1eeb2f3f5 (package/batman-adv: fix compile with
-BR2_PACKAGE_BATMAN_ADV_BATMAN_V disabled) was tested against an RPi4
-linux kernel already enabling the build-in batman-adv module inlcusive
-batman-v, hence it missed the case where the in-tree module is not
-enabled.
+Since version 2.6.38 batman-adv is integreated into the linux mainline
+kernel ([1], [2]) so add a note about it in the Config.in help text.
 
-Taking a deeper look at the configure script gen-compat-autoconf.sh
-reveals that the batman feature options must be explicitly set to 'y' or
-'n' to work as expected.
+[1] https://kernelnewbies.org/Linux_2_6_38
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c6c8fea29769d998d94fcec9b9f14d4b52b349d3
 
-Fixes:
-
-  ERROR: modpost: "batadv_v_mesh_free" [.../build/batman-adv-2021.0/net/batman-adv/batman-adv.ko] undefined!
-  ERROR: modpost: "batadv_v_mesh_init" [.../build/batman-adv-2021.0/net/batman-adv/batman-adv.ko] undefined!
-  ERROR: modpost: "batadv_v_hardif_init" [.../build/batman-adv-2021.0/net/batman-adv/batman-adv.ko] undefined!
-  ERROR: modpost: "batadv_v_init" [.../build/batman-adv-2021.0/net/batman-adv/batman-adv.ko] undefined!
-
-Reported-by: Christian Stewart <christian@paral.in>
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-[yann.morin.1998 at free.fr: add blurb about tests on previous commit]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 20b9724ee25d61d6ee23a43057886d64eb8ddbda)
+(cherry picked from commit 8ec31f1bc325d8544c8da2922d857272900f3ded)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/batman-adv/batman-adv.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/batman-adv/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/batman-adv/batman-adv.mk b/package/batman-adv/batman-adv.mk
-index bfa573643d..2de92d6543 100644
---- a/package/batman-adv/batman-adv.mk
-+++ b/package/batman-adv/batman-adv.mk
-@@ -24,9 +24,9 @@ BATMAN_ADV_MODULE_MAKE_OPTS = \
- 	CONFIG_BATMAN_ADV_BLA=y \
- 	CONFIG_BATMAN_ADV_DAT=y \
- 	CONFIG_BATMAN_ADV_MCAST=y \
--	$(if $(BR2_PACKAGE_BATMAN_ADV_BATMAN_V), CONFIG_BATMAN_ADV_BATMAN_V=y) \
--	$(if $(BR2_PACKAGE_BATMAN_ADV_DEBUG), CONFIG_BATMAN_ADV_DEBUG=y) \
--	$(if $(BR2_PACKAGE_BATMAN_ADV_NC), CONFIG_BATMAN_ADV_NC=y)
-+	CONFIG_BATMAN_ADV_BATMAN_V=$(if $(BR2_PACKAGE_BATMAN_ADV_BATMAN_V),y,n) \
-+	CONFIG_BATMAN_ADV_DEBUG=$(if $(BR2_PACKAGE_BATMAN_ADV_DEBUG),y,n) \
-+	CONFIG_BATMAN_ADV_NC=$(if $(BR2_PACKAGE_BATMAN_ADV_NC),y,n)
+diff --git a/package/batman-adv/Config.in b/package/batman-adv/Config.in
+index 9d3d7967b9..eae94fd130 100644
+--- a/package/batman-adv/Config.in
++++ b/package/batman-adv/Config.in
+@@ -6,6 +6,8 @@ config BR2_PACKAGE_BATMAN_ADV
+ 	depends on BR2_LINUX_KERNEL
+ 	help
+ 	  batman-adv mesh networking kernel module
++	  Note: batman-adv is part of the linux mainline
++	  kernel since version 2.6.38
  
- BATMAN_ADV_MODULE_SUBDIRS = net/batman-adv
+ 	  https://www.open-mesh.org/projects/batman-adv/
  
