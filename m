@@ -1,49 +1,58 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 23 Mar 2021 20:44:22 +0100
-Subject: [Buildroot] [PATCH 1/1] package/ipset: bump to version 7.11
-Message-ID: <20210323194422.283008-1-fontaine.fabrice@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 23 Mar 2021 20:51:26 +0100
+Subject: [Buildroot] Buildroot - make again - wants to reapply a patch
+In-Reply-To: <CAPm8-H4CryCNWboC-UXm=iED+a+H1K0RQ7knUpEq_KwZ0gbz_w@mail.gmail.com>
+References: <CAPm8-H4CryCNWboC-UXm=iED+a+H1K0RQ7knUpEq_KwZ0gbz_w@mail.gmail.com>
+Message-ID: <20210323205126.48b2bc67@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update indentation in hash file (two spaces)
+Hello Laurentiu-Cristian,
 
-http://git.netfilter.org/ipset/tree/ChangeLog?h=v7.11
+On Tue, 23 Mar 2021 16:57:13 +0200, Laurentiu-Cristian Duca <laurentiu.duca@gmail.com> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/ipset/ipset.hash | 8 +++-----
- package/ipset/ipset.mk   | 2 +-
- 2 files changed, 4 insertions(+), 6 deletions(-)
+> Hello buildroot community,
+>
+>   I am looking for an answer which I hope it will save a lot of time for me.
+>
+>   At time moment t0, I have successfully built buildroot for rpi0w.
+> At time moment t1, I have made some configuration changes (new additions only),
+> and when I want to build (preferably only the changes), I get the error [1].
+> Does anybody know how to avoid such errors?
+> Why does buildroot try to reapply the patch?
+>
+> Thanks a lot,
+> L-C
+>
+> [1]
+> $ make
+> >>> host-util-linux 2.33 Patching
+>
+> Applying 0001-rtcwake-use-poweroff-if-shutdown-is-not-found.patch using patch:
+> Error: duplicate filename
+> '0001-rtcwake-use-poweroff-if-shutdown-is-not-found.patch'
+> Conflicting files are:
+>   already applied:
+> /home/laur/lucru/raspberry-pi/buildroot/buildroot-2019.02.rpi/package/util-linux/0001-rtcwake-use-poweroff-if-shutdown-is-not-found.patch
+>   to be applied  :
+> /home/laur/lucru/raspberry-pi/buildroot/buildroot-2019.02.rpi/package/util-linux/0001-rtcwake-use-poweroff-if-shutdown-is-not-found.patch
 
-diff --git a/package/ipset/ipset.hash b/package/ipset/ipset.hash
-index fb200585d1..afe83f6dce 100644
---- a/package/ipset/ipset.hash
-+++ b/package/ipset/ipset.hash
-@@ -1,6 +1,4 @@
--# From http://ipset.netfilter.org/ipset-7.6.tar.bz2.md5sum.txt
--md5 e107b679c3256af795261cece864d6d9  ipset-7.6.tar.bz2
--# Calculated based on the hash above
--sha256 0e7d44caa9c153d96a9b5f12644fbe35a632537a5a7f653792b72e53d9d5c2db  ipset-7.6.tar.bz2
-+# From https://ipset.netfilter.org/ipset-7.11.tar.bz2.sha512sum.txt
-+sha512  20890de32c17c04d9d3ae42fff64acfe21a252974bee5843ae39bdda707fcef55fde11cffccab9f987bf7e18f5445443c46c50eb854fb6f93f172f7bad07f922  ipset-7.11.tar.bz2
- # Locally calculated
--sha256 231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
-+sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
-diff --git a/package/ipset/ipset.mk b/package/ipset/ipset.mk
-index 4c5a44a56a..07f865d4ec 100644
---- a/package/ipset/ipset.mk
-+++ b/package/ipset/ipset.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IPSET_VERSION = 7.6
-+IPSET_VERSION = 7.11
- IPSET_SOURCE = ipset-$(IPSET_VERSION).tar.bz2
- IPSET_SITE = http://ipset.netfilter.org
- IPSET_DEPENDENCIES = libmnl host-pkgconf
--- 
-2.30.1
+Not sure why this happens in your case, but generally only a full rebuild is supported
+after configuration changes (see [1] and [2])...., but a build can succeed (sometimes)
+after configuration changes, but for this case you need a good understanding of the
+dependencies...
+
+Regards,
+Peter
+
+
+[1] http://nightly.buildroot.org/manual.html#full-rebuild
+[2] http://nightly.buildroot.org/manual.html#rebuild-pkg
+
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
