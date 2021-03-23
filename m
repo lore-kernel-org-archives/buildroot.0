@@ -1,22 +1,27 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 23 Mar 2021 21:16:28 +0000
-Subject: [Buildroot] [Bug 13671] openSSH server closes connection before
- authentication is finished
-In-Reply-To: <bug-13671-163@https.bugs.busybox.net/>
-References: <bug-13671-163@https.bugs.busybox.net/>
-Message-ID: <bug-13671-163-goZfC6GkZS@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 23 Mar 2021 22:30:22 +0100
+Subject: [Buildroot] [PATCH v2,3/4] pcmanfm: add PCMANFM_CPE_ID_VENDOR
+In-Reply-To: <20210315191657.2150193-3-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 15 Mar 2021 20:16:56 +0100")
+References: <20210315191657.2150193-1-fontaine.fabrice@gmail.com>
+ <20210315191657.2150193-3-fontaine.fabrice@gmail.com>
+Message-ID: <87mtuto8wh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13671
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
---- Comment #4 from Geert Lens <g.lens@livetech-systems.com> ---
-I overwrite the default root password with the correct SHA512 and add the
-authorized public key using the post-build.sh script of my board.
+ > cpe:2.3:a:pcmanfm_project:pcmanfm is a valid CPE identifier for this
+ > package:
+
+ >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Apcmanfm_project%3Apcmanfm
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed to 2021.02.x, thanks.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
