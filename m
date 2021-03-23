@@ -1,9 +1,7 @@
 From: Petr Vorel <petr.vorel@gmail.com>
-Date: Tue, 23 Mar 2021 19:08:11 +0100
-Subject: [Buildroot] [PATCH 2/2] linux: bump CIP kernel 4.19 series
-In-Reply-To: <20210323180811.24938-1-petr.vorel@gmail.com>
-References: <20210323180811.24938-1-petr.vorel@gmail.com>
-Message-ID: <20210323180811.24938-2-petr.vorel@gmail.com>
+Date: Tue, 23 Mar 2021 19:10:04 +0100
+Subject: [Buildroot] [PATCH 1/1] package/iproute2: Bump version to 5.11.0
+Message-ID: <20210323181004.25172-1-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,57 +10,40 @@ To: buildroot@busybox.net
 
 Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 ---
- linux/Config.in  | 8 ++++----
- linux/linux.hash | 4 ++--
- 2 files changed, 6 insertions(+), 6 deletions(-)
+Hi,
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 1f60fbc801..1c9bef53b4 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -31,7 +31,7 @@ config BR2_LINUX_KERNEL_LATEST_VERSION
- 	bool "Latest version (5.11.8)"
+NOTE: this should not be applied until uclibc based toolchains are
+regenerated. But posted for people who don't use uclibc and would like
+to have iproute2 sync with kernel version.
+
+Kind regards,
+Petr
+
+ package/iproute2/iproute2.hash | 2 +-
+ package/iproute2/iproute2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/iproute2/iproute2.hash b/package/iproute2/iproute2.hash
+index 4d82de4c46..c7c06bf5f7 100644
+--- a/package/iproute2/iproute2.hash
++++ b/package/iproute2/iproute2.hash
+@@ -1,3 +1,3 @@
+ # From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
+-sha256  cfcd1f890290f8c8afcc91d9444ad929b9252c16f9ab3f286c50dd3c59dc646e  iproute2-5.8.0.tar.xz
++sha256  c5e2ea108212b3445051b35953ec267f9f3469e1d5c67ac034ab559849505c54  iproute2-5.11.0.tar.xz
+ sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index 98fbe4f3cd..1be94e9a45 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
--	bool "Latest CIP SLTS version (4.19.152-cip37)"
-+	bool "Latest CIP SLTS version (4.19.182-cip45)"
- 	help
- 	  CIP launched in the spring of 2016 to address the needs of
- 	  organizations in industries such as power generation and
-@@ -50,7 +50,7 @@ config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	  https://www.cip-project.org
- 
- config BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
--	bool "Latest CIP RT SLTS version (4.19.152-cip37-rt16)"
-+	bool "Latest CIP RT SLTS version (4.19.165-cip41-rt18)"
- 	help
- 	  Same as the CIP version, but this is the PREEMPT_RT realtime
- 	  variant.
-@@ -126,8 +126,8 @@ endif
- config BR2_LINUX_KERNEL_VERSION
- 	string
- 	default "5.11.8" if BR2_LINUX_KERNEL_LATEST_VERSION
--	default "4.19.152-cip37" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
--	default "4.19.152-cip37-rt16" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-+	default "4.19.182-cip45" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-+	default "4.19.165-cip41-rt18" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 98616755ef..992ae22d11 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -8,8 +8,8 @@ sha256  b22e764095362d9e63d76375db838d9372474ba5cbe6132c9a8b07f7533f07ff  linux-
- sha256  7adc041af81424ff8d68affe3005fa9e5babc4e84e0b07e4effdf54225ba9426  linux-4.14.226.tar.xz
- sha256  05db750ba01ad557bef50835c253894fad9fb0db2224f0e803b25e2ff7ab2365  linux-4.19.182.tar.xz
- # Locally computed
--sha256  d2a06f52143deb929b8d513cf9afc9bd065951389a80fa70bc4d63025b5b3fb9  linux-cip-4.19.152-cip37.tar.gz
--sha256  bc1dacd3d0f526de3e8754a444e8e02a54521527af639ddb907cb35cda775a8c  linux-cip-4.19.152-cip37-rt16.tar.gz
-+sha256  9f1de83c5c2bb582a33bd4ee892d45671901cd06af9dc159f0f499f1b5265b20  linux-cip-4.19.182-cip45.tar.gz
-+sha256  0eeba6d6ecc45cf8f16458842b64d22e7064b9de9c31c11d1c395b08a47e3855  linux-cip-4.19.165-cip41-rt18.tar.gz
- 
- # Licenses hashes
- sha256  fb5a425bd3b3cd6071a3a9aff9909a859e7c1158d54d32e07658398cd67eb6a0  COPYING
+-IPROUTE2_VERSION = 5.8.0
++IPROUTE2_VERSION = 5.11.0
+ IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
+ IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
+ IPROUTE2_DEPENDENCIES = host-bison host-flex host-pkgconf \
 -- 
 2.30.2
