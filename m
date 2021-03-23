@@ -1,41 +1,71 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 23 Mar 2021 18:20:07 +0100
-Subject: [Buildroot] [git commit branch/2021.02.x] package/batman-adv: add
- note about linux mainline kernel module alternative
-Message-ID: <20210323170614.83C42836AD@busybox.osuosl.org>
+Date: Tue, 23 Mar 2021 16:48:04 +0100
+Subject: [Buildroot] [git commit branch/2021.02.x] package/batman-adv: fix
+ compile with BR2_PACKAGE_BATMAN_ADV_BATMAN_V disabled
+Message-ID: <20210323170614.508C288FB8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4a373ec8cd219cdbf06d3917b65d3c5fde5e9f94
+commit: https://git.buildroot.net/buildroot/commit/?id=acf850e65d1e95047df62c0bc95a15727aa33019
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Since version 2.6.38 batman-adv is integreated into the linux mainline
-kernel ([1], [2]) so add a note about it in the Config.in help text.
+The given 'CONFIG_BATMAN_ADV_BATMAN_V=' is enough to trigger the wrong
+code compile path in net/batman-adv/bat_v.h missing the static inline
+dummy implementations.
 
-[1] https://kernelnewbies.org/Linux_2_6_38
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c6c8fea29769d998d94fcec9b9f14d4b52b349d3
+Fixes:
+
+  ERROR: modpost: "batadv_v_mesh_free" [.../build/batman-adv-2021.0/net/batman-adv/batman-adv.ko] undefined!
+  ERROR: modpost: "batadv_v_mesh_init" [.../build/batman-adv-2021.0/net/batman-adv/batman-adv.ko] undefined!
+  ERROR: modpost: "batadv_v_hardif_init" [.../build/batman-adv-2021.0/net/batman-adv/batman-adv.ko] undefined!
+  ERROR: modpost: "batadv_v_init" [.../build/batman-adv-2021.0/net/batman-adv/batman-adv.ko] undefined!
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+[yann.morin.1998 at free.fr:
+  - move all conditional options together
+  - slight cleanup/reorganise
+]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 8ec31f1bc325d8544c8da2922d857272900f3ded)
+(cherry picked from commit e8b1eeb2f3f5f0bfd089704ccad57e5665f5813a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/batman-adv/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/batman-adv/batman-adv.mk | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/batman-adv/Config.in b/package/batman-adv/Config.in
-index 9d3d7967b9..eae94fd130 100644
---- a/package/batman-adv/Config.in
-+++ b/package/batman-adv/Config.in
-@@ -6,6 +6,8 @@ config BR2_PACKAGE_BATMAN_ADV
- 	depends on BR2_LINUX_KERNEL
- 	help
- 	  batman-adv mesh networking kernel module
-+	  Note: batman-adv is part of the linux mainline
-+	  kernel since version 2.6.38
+diff --git a/package/batman-adv/batman-adv.mk b/package/batman-adv/batman-adv.mk
+index 3f48e62051..bfa573643d 100644
+--- a/package/batman-adv/batman-adv.mk
++++ b/package/batman-adv/batman-adv.mk
+@@ -9,23 +9,25 @@ BATMAN_ADV_SITE = https://downloads.open-mesh.org/batman/stable/sources/batman-a
+ BATMAN_ADV_LICENSE = GPL-2.0, MIT (batman_adv.h)
+ BATMAN_ADV_LICENSE_FILES = LICENSES/preferred/GPL-2.0 LICENSES/preferred/MIT
  
- 	  https://www.open-mesh.org/projects/batman-adv/
+-# Bridge Loop Avoidance, Distributed Arp Table are always enabled
+ BATMAN_ADV_CFLAGS = \
+ 	-I$(@D)/compat-include/ \
+ 	-I$(@D)/include/ \
+ 	-include $(@D)/compat.h \
+ 	-DBATADV_SOURCE_VERSION=\"\\\"$(BATMAN_ADV_VERSION)\\\"\"
++
++# Bridge Loop Avoidance, Distributed Arp Table are always enabled
+ BATMAN_ADV_MODULE_MAKE_OPTS = \
+ 	KVER=$(LINUX_VERSION_PROBED) \
+ 	INSTALL_MOD_DIR=updates/net/batman-adv \
+ 	NOSTDINC_FLAGS="$(BATMAN_ADV_CFLAGS)" \
+ 	CONFIG_BATMAN_ADV=m \
+-	CONFIG_BATMAN_ADV_BATMAN_V=$(BR2_PACKAGE_BATMAN_ADV_BATMAN_V) \
+ 	CONFIG_BATMAN_ADV_BLA=y \
+ 	CONFIG_BATMAN_ADV_DAT=y \
+-	CONFIG_BATMAN_ADV_DEBUG=$(BR2_PACKAGE_BATMAN_ADV_DEBUG) \
+ 	CONFIG_BATMAN_ADV_MCAST=y \
+-	CONFIG_BATMAN_ADV_NC=$(BR2_PACKAGE_BATMAN_ADV_NC)
++	$(if $(BR2_PACKAGE_BATMAN_ADV_BATMAN_V), CONFIG_BATMAN_ADV_BATMAN_V=y) \
++	$(if $(BR2_PACKAGE_BATMAN_ADV_DEBUG), CONFIG_BATMAN_ADV_DEBUG=y) \
++	$(if $(BR2_PACKAGE_BATMAN_ADV_NC), CONFIG_BATMAN_ADV_NC=y)
++
+ BATMAN_ADV_MODULE_SUBDIRS = net/batman-adv
  
+ define BATMAN_ADV_CONFIGURE_CMDS
