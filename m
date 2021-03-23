@@ -1,71 +1,33 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Tue, 23 Mar 2021 17:30:51 +0100
-Subject: [Buildroot] [PATCH 2/2] Revert "package/mpd: fix build of
- GenParseName"
-In-Reply-To: <20210323163051.1284416-1-joerg.krause@embedded.rocks>
-References: <20210323163051.1284416-1-joerg.krause@embedded.rocks>
-Message-ID: <20210323163051.1284416-2-joerg.krause@embedded.rocks>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 23 Mar 2021 18:26:38 +0100
+Subject: [Buildroot] [PATCH v1 1/2] package/batman-adv: fix compile with
+ BR2_PACKAGE_BATMAN_ADV_BATMAN_V disabled
+In-Reply-To: <20210314223207.13460-1-ps.report@gmx.net> (Peter Seiderer's
+ message of "Sun, 14 Mar 2021 23:32:06 +0100")
+References: <20210314223207.13460-1-ps.report@gmx.net>
+Message-ID: <874kh1pyr5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This reverts commit 9783c04aaf5e4fc94099772f1dc699a974ee6538.
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
-This commit is actually a workaround to get Meson passing `-libstdc++`
-to the C linker. The correct fix is to pass the host C++ compiler to
-Meson instead of the host C compiler using the `CXX_FOR_BUILD` variable.
+ > The given 'CONFIG_BATMAN_ADV_BATMAN_V=' is enough to trigger the wrong
+ > code compile path in net/batman-adv/bat_v.h missing the static inline
+ > dummy implementations.
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- ...meson.build-fix-GenParseName-linking.patch | 38 -------------------
- 1 file changed, 38 deletions(-)
- delete mode 100644 package/mpd/0002-src-tag-meson.build-fix-GenParseName-linking.patch
+ > Fixes:
 
-diff --git a/package/mpd/0002-src-tag-meson.build-fix-GenParseName-linking.patch b/package/mpd/0002-src-tag-meson.build-fix-GenParseName-linking.patch
-deleted file mode 100644
-index e120b3e4ea..0000000000
---- a/package/mpd/0002-src-tag-meson.build-fix-GenParseName-linking.patch
-+++ /dev/null
-@@ -1,38 +0,0 @@
--From 4c37d0b316a15213381bd7e07c5dee7526471fc8 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Mon, 1 Feb 2021 08:10:45 +0100
--Subject: [PATCH] src/tag/meson.build: fix GenParseName linking
--
--Set link_language to cpp for GenParseName to avoid the following build
--failure due to gcc being used to link a C and C++ source file:
--
--FAILED: src/tag/GenParseName
--/usr/bin/gcc  -o src/tag/GenParseName src/tag/GenParseName.p/GenParseName.cxx.o src/tag/GenParseName.p/Names.c.o -Wl,--as-needed -Wl,--no-undefined -Wl,-O1
--/usr/bin/ld: src/tag/GenParseName.p/GenParseName.cxx.o: in function `std::_Rb_tree<std::basic_string_view<char, std::char_traits<char> >, std::pair<std::basic_string_view<char, std::char_traits<char> > const, TagType>, std::_Select1st<std::pair<std::basic_string_view<char, std::char_traits<char> > const, TagType> >, std::less<std::basic_string_view<char, std::char_traits<char> > >, std::allocator<std::pair<std::basic_string_view<char, std::char_traits<char> > const, TagType> > >::_M_erase(std::_Rb_tree_node<std::pair<std::basic_string_view<char, std::char_traits<char> > const, TagType> >*)':
--GenParseName.cxx:
--(.text._ZNSt8_Rb_treeISt17basic_string_viewIcSt11char_traitsIcEESt4pairIKS3_7TagTypeESt10_Select1stIS7_ESt4lessIS3_ESaIS7_EE8_M_eraseEPSt13_Rb_tree_nodeIS7_E[_ZNSt8_Rb_treeISt17basic_string_viewIcSt11char_traitsIcEESt4pairIKS3_7TagTypeESt10_Select1stIS7_ESt4lessIS3_ESaIS7_EE8_M_eraseEPSt13_Rb_tree_nodeIS7_E]+0x23): undefined reference to `operator delete(void*)'
--
--Fixes:
-- - http://autobuild.buildroot.org/results/871e1362c44e5b68a149e6a5dd3caf99ea0d904a
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/MusicPlayerDaemon/MPD/pull/1068]
-----
-- src/tag/meson.build | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/src/tag/meson.build b/src/tag/meson.build
--index 064eada18..4fda35e52 100644
----- a/src/tag/meson.build
--+++ b/src/tag/meson.build
--@@ -2,6 +2,7 @@ generate_parse_name = executable(
--   'GenParseName',
--   'GenParseName.cxx',
--   'Names.c',
--+  link_language: 'cpp',
--   native: true,
-- )
-- 
---- 
--2.29.2
--
+ >   ERROR: modpost: "batadv_v_mesh_free" [.../build/batman-adv-2021.0/net/batman-adv/batman-adv.ko] undefined!
+ >   ERROR: modpost: "batadv_v_mesh_init" [.../build/batman-adv-2021.0/net/batman-adv/batman-adv.ko] undefined!
+ >   ERROR: modpost: "batadv_v_hardif_init" [.../build/batman-adv-2021.0/net/batman-adv/batman-adv.ko] undefined!
+ >   ERROR: modpost: "batadv_v_init" [.../build/batman-adv-2021.0/net/batman-adv/batman-adv.ko] undefined!
+
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+
+Committed to 2020.02.x, 2020.11.x and 2021.02.x, thanks.
+
 -- 
-2.31.0
+Bye, Peter Korsgaard
