@@ -1,91 +1,51 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 23 Mar 2021 07:50:50 +0100
-Subject: [Buildroot] [PATCH 1/1] package/sox: fix static build with magic
- and bzip2
-Message-ID: <20210323065050.2172418-1-fontaine.fabrice@gmail.com>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Tue, 23 Mar 2021 09:30:06 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libupnpp: bump to version 0.21.0
+Message-ID: <20210323083006.90238-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update patch added by commit 183d583fb5f19eb11637873d73e13fe14536efa6 to
-use pkg-config instead of linking with zlib to fix the following static
-build failure with a bzip2-enabled libmagic:
+From https://www.lesbonscomptes.com/upmpdcli/pages/releases.html:
 
-/home/buildroot/autobuild/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arc-buildroot-linux-uclibc/9.3.1/../../../../arc-buildroot-linux-uclibc/bin/ld: /home/buildroot/autobuild/instance-1/output-1/host/arc-buildroot-linux-uclibc/sysroot/usr/lib/libmagic.a(compress.o): in function `uncompressbuf':
-compress.c:(.text+0x422): undefined reference to `BZ2_bzDecompressInit'
-/home/buildroot/autobuild/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arc-buildroot-linux-uclibc/9.3.1/../../../../arc-buildroot-linux-uclibc/bin/ld: compress.c:(.text+0x422): undefined reference to `BZ2_bzDecompressInit'
+2021-03-13 libupnpp 0.21.0
+ * Allow configuring the subscription timeout (init option)
+ * Add interface for the lib to report a subscription autorenewal failure, and
+   to renew all subscriptions.
+ * Add API to set the product/version values in User-Agent and Server headers.
 
-Fixes:
- - http://autobuild.buildroot.org/results/4c511c02e4c63b35ecf77a2658f88e8a0d9dbb4d
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- ...gure.ac-fix-static-linking-with-magic.patch | 18 +++++++++---------
- package/sox/sox.mk                             |  4 ++--
- 2 files changed, 11 insertions(+), 11 deletions(-)
+ package/libupnpp/libupnpp.hash | 4 ++--
+ package/libupnpp/libupnpp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/sox/0004-configure.ac-fix-static-linking-with-magic.patch b/package/sox/0004-configure.ac-fix-static-linking-with-magic.patch
-index 2fbb8ff8a4..7d2e390df1 100644
---- a/package/sox/0004-configure.ac-fix-static-linking-with-magic.patch
-+++ b/package/sox/0004-configure.ac-fix-static-linking-with-magic.patch
-@@ -1,11 +1,12 @@
--From d591a38d934b2a6750f16c7bd46a9ad12233301c Mon Sep 17 00:00:00 2001
-+From 4630e574e6c0269b94fd910e7c72b8ad1ee62ce7 Mon Sep 17 00:00:00 2001
- From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- Date: Wed, 3 Mar 2021 16:48:57 +0100
- Subject: [PATCH] configure.ac: fix static linking with magic
+diff --git a/package/libupnpp/libupnpp.hash b/package/libupnpp/libupnpp.hash
+index ae79cfe8a7..5bc282f270 100644
+--- a/package/libupnpp/libupnpp.hash
++++ b/package/libupnpp/libupnpp.hash
+@@ -1,5 +1,5 @@
+-# Hash from: http://www.lesbonscomptes.com/upmpdcli/downloads/libupnpp-0.20.2.tar.gz.sha256
+-sha256  48c2cc7b5a3eef55f4dddda88d8676ed11f7e88f1d6680c8458512067a0e0a11  libupnpp-0.20.2.tar.gz
++# Hash from: http://www.lesbonscomptes.com/upmpdcli/downloads/libupnpp-0.21.0.tar.gz.sha256
++sha256  e43dbe5020ed25152aaec71b325dd80498e72038da5aeb50ed7dd51e213cd903  libupnpp-0.21.0.tar.gz
  
--Put back -lz (i.e. ZLIB_LIBS) when searching for magic which was
--wrongly removed by commit 6ff0e9322f9891f5a6ac6c9b3bceffbfca16bec3. This
--will fix the following static build failure:
-+Use SOX_FMT_PKG to retrieve magic dependencies (e.g. bzip2 or zlib)
-+indeed -lz (i.e. ZLIB_LIBS) was wrongly removed by commit
-+6ff0e9322f9891f5a6ac6c9b3bceffbfca16bec3. This will fix the following
-+static build failure:
+ # Hash for license file:
+ sha256  00a89b0d18aacd4114decf79122db87bf35bddaf2bc50e383c9c9f4c263390b2  COPYING
+diff --git a/package/libupnpp/libupnpp.mk b/package/libupnpp/libupnpp.mk
+index 4ee98b01cc..fc76a43a11 100644
+--- a/package/libupnpp/libupnpp.mk
++++ b/package/libupnpp/libupnpp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- configure:11677: checking for magic_open in -lmagic
- configure:11702: /srv/storage/autobuild/run/instance-0/output-1/host/bin/arm-linux-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -static -Wall -Wmissing-prototypes -Wstrict-prototypes  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -static -Wl,--as-needed conftest.c -lmagic    >&5
-@@ -30,19 +31,18 @@ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-  1 file changed, 1 insertion(+), 1 deletion(-)
- 
- diff --git a/configure.ac b/configure.ac
--index 896714f5..ca7bccaa 100644
-+index 896714f5..8ae3202c 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -80,8 +80,8 @@ SOX_REPORT([other], [LADSPA effect plugins], [$HAVE_LADSPA])
-+@@ -80,7 +80,7 @@ SOX_REPORT([other], [LADSPA effect plugins], [$HAVE_LADSPA])
-  
-  dnl Various libraries
-  
- -SOX_WITH_LIB([magic], [magic.h], [magic], [magic_open])
-++SOX_FMT_PKG([magic], [libmagic])
-  SOX_CHECK_LIB([ZLIB], [zlib.h], [z], [uncompress])
--+SOX_WITH_LIB([magic], [magic.h], [magic], [magic_open], [], [], [], [$ZLIB_LIBS])
-  SOX_WITH_LIB([png], [png.h], [png], [png_set_rows], [], [], [], [$ZLIB_LIBS])
-  SOX_WITH_LIB([id3tag], [id3tag.h], [id3tag], [id3_file_open], [], [], [], [$ZLIB_LIBS])
-- SOX_WITH_LIB([libgsm], [gsm/gsm.h gsm.h], [gsm], [gsm_create])
- -- 
--2.30.0
-+2.30.1
- 
-diff --git a/package/sox/sox.mk b/package/sox/sox.mk
-index 99ba20ac9c..dcc1a670b4 100644
---- a/package/sox/sox.mk
-+++ b/package/sox/sox.mk
-@@ -34,9 +34,9 @@ endif
- 
- ifeq ($(BR2_PACKAGE_FILE),y)
- SOX_DEPENDENCIES += file
--SOX_CONF_OPTS += --with-magic
-+SOX_CONF_OPTS += --enable-magic
- else
--SOX_CONF_OPTS += --without-magic
-+SOX_CONF_OPTS += --disable-magic
- endif
- 
- ifeq ($(BR2_PACKAGE_FLAC),y)
+-LIBUPNPP_VERSION = 0.20.2
++LIBUPNPP_VERSION = 0.21.0
+ LIBUPNPP_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
+ LIBUPNPP_LICENSE = LGPL-2.1+
+ LIBUPNPP_LICENSE_FILES = COPYING
 -- 
-2.30.1
+2.31.0
