@@ -1,10 +1,10 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 23 Mar 2021 20:01:39 +0000
+Date: Tue, 23 Mar 2021 20:45:41 +0000
 Subject: [Buildroot] [Bug 13671] openSSH server closes connection before
  authentication is finished
 In-Reply-To: <bug-13671-163@https.bugs.busybox.net/>
 References: <bug-13671-163@https.bugs.busybox.net/>
-Message-ID: <bug-13671-163-XNqymzSLOF@https.bugs.busybox.net/>
+Message-ID: <bug-13671-163-M6VDxm9dmC@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,12 +13,27 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=13671
 
---- Comment #2 from Matt Weber <matthew.weber@rockwellcollins.com> ---
-We've noticed a similar issue and haven't quite narrowed it down. So far what
-we observed is that everything works on a 2020.02 LTS through the latest master
-with a GCC8.x Buildroot internal toolchain.  However, when we switched to
-GCC9.x (bootlin stable toolchain) while using 2020.02 LTS we noticed this same
-behavior with packet type 50 (https://tools.ietf.org/html/rfc4252#section-6 ).
+--- Comment #3 from Peter Seiderer <ps.report@gmx.net> ---
+Additional/similar bug report:
+
+https://bugs.busybox.net/show_bug.cgi?id=13626
+
+Older OpenSSH login problem report:
+
+http://lists.busybox.net/pipermail/buildroot/2020-August/289111.html
+http://lists.busybox.net/pipermail/buildroot/2020-September/291853.html
+
+Dropbear login problem with password and BR2_TARGET_GENERIC_PASSWD_SHA512:
+
+http://lists.busybox.net/pipermail/buildroot/2020-August/288682.html
+
+By the way, you disabled BR2_TARGET_ENABLE_ROOT_LOGIN, how did you setup the
+root and/or test account/password?
+
+And another reported OpenSSH login problem:
+
+http://lists.busybox.net/pipermail/buildroot/2020-August/289111.html
+http://lists.busybox.net/pipermail/buildroot/2020-September/291379.html
 
 -- 
 You are receiving this mail because:
