@@ -1,58 +1,25 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 23 Mar 2021 20:51:26 +0100
-Subject: [Buildroot] Buildroot - make again - wants to reapply a patch
-In-Reply-To: <CAPm8-H4CryCNWboC-UXm=iED+a+H1K0RQ7knUpEq_KwZ0gbz_w@mail.gmail.com>
-References: <CAPm8-H4CryCNWboC-UXm=iED+a+H1K0RQ7knUpEq_KwZ0gbz_w@mail.gmail.com>
-Message-ID: <20210323205126.48b2bc67@gmx.net>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 23 Mar 2021 20:01:39 +0000
+Subject: [Buildroot] [Bug 13671] openSSH server closes connection before
+ authentication is finished
+In-Reply-To: <bug-13671-163@https.bugs.busybox.net/>
+References: <bug-13671-163@https.bugs.busybox.net/>
+Message-ID: <bug-13671-163-XNqymzSLOF@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Laurentiu-Cristian,
+https://bugs.busybox.net/show_bug.cgi?id=13671
 
-On Tue, 23 Mar 2021 16:57:13 +0200, Laurentiu-Cristian Duca <laurentiu.duca@gmail.com> wrote:
+--- Comment #2 from Matt Weber <matthew.weber@rockwellcollins.com> ---
+We've noticed a similar issue and haven't quite narrowed it down. So far what
+we observed is that everything works on a 2020.02 LTS through the latest master
+with a GCC8.x Buildroot internal toolchain.  However, when we switched to
+GCC9.x (bootlin stable toolchain) while using 2020.02 LTS we noticed this same
+behavior with packet type 50 (https://tools.ietf.org/html/rfc4252#section-6 ).
 
-> Hello buildroot community,
->
->   I am looking for an answer which I hope it will save a lot of time for me.
->
->   At time moment t0, I have successfully built buildroot for rpi0w.
-> At time moment t1, I have made some configuration changes (new additions only),
-> and when I want to build (preferably only the changes), I get the error [1].
-> Does anybody know how to avoid such errors?
-> Why does buildroot try to reapply the patch?
->
-> Thanks a lot,
-> L-C
->
-> [1]
-> $ make
-> >>> host-util-linux 2.33 Patching
->
-> Applying 0001-rtcwake-use-poweroff-if-shutdown-is-not-found.patch using patch:
-> Error: duplicate filename
-> '0001-rtcwake-use-poweroff-if-shutdown-is-not-found.patch'
-> Conflicting files are:
->   already applied:
-> /home/laur/lucru/raspberry-pi/buildroot/buildroot-2019.02.rpi/package/util-linux/0001-rtcwake-use-poweroff-if-shutdown-is-not-found.patch
->   to be applied  :
-> /home/laur/lucru/raspberry-pi/buildroot/buildroot-2019.02.rpi/package/util-linux/0001-rtcwake-use-poweroff-if-shutdown-is-not-found.patch
-
-Not sure why this happens in your case, but generally only a full rebuild is supported
-after configuration changes (see [1] and [2])...., but a build can succeed (sometimes)
-after configuration changes, but for this case you need a good understanding of the
-dependencies...
-
-Regards,
-Peter
-
-
-[1] http://nightly.buildroot.org/manual.html#full-rebuild
-[2] http://nightly.buildroot.org/manual.html#rebuild-pkg
-
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
