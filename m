@@ -1,124 +1,91 @@
-From: Christian Stewart <christian@paral.in>
-Date: Mon, 22 Mar 2021 22:10:27 -0700
-Subject: [Buildroot] [PATCH v1 1/1] package/nerdctl: new package
-Message-ID: <20210323051027.91385-1-christian@paral.in>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 23 Mar 2021 07:50:50 +0100
+Subject: [Buildroot] [PATCH 1/1] package/sox: fix static build with magic
+ and bzip2
+Message-ID: <20210323065050.2172418-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-nerdctl is a CLI for containerd (package docker-containerd) which is drop-in
-compatible with the Docker Daemon CLI.
+Update patch added by commit 183d583fb5f19eb11637873d73e13fe14536efa6 to
+use pkg-config instead of linking with zlib to fix the following static
+build failure with a bzip2-enabled libmagic:
 
-This allows using the lighter weight containerd daemon directly, instead of via
-the additional docker daemon. It also implements rootless mode.
+/home/buildroot/autobuild/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arc-buildroot-linux-uclibc/9.3.1/../../../../arc-buildroot-linux-uclibc/bin/ld: /home/buildroot/autobuild/instance-1/output-1/host/arc-buildroot-linux-uclibc/sysroot/usr/lib/libmagic.a(compress.o): in function `uncompressbuf':
+compress.c:(.text+0x422): undefined reference to `BZ2_bzDecompressInit'
+/home/buildroot/autobuild/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arc-buildroot-linux-uclibc/9.3.1/../../../../arc-buildroot-linux-uclibc/bin/ld: compress.c:(.text+0x422): undefined reference to `BZ2_bzDecompressInit'
 
-https://github.com/containerd/nerdctl
+Fixes:
+ - http://autobuild.buildroot.org/results/4c511c02e4c63b35ecf77a2658f88e8a0d9dbb4d
 
-Signed-off-by: Christian Stewart <christian@paral.in>
-
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
+ ...gure.ac-fix-static-linking-with-magic.patch | 18 +++++++++---------
+ package/sox/sox.mk                             |  4 ++--
+ 2 files changed, 11 insertions(+), 11 deletions(-)
 
-v1:
-
- - pkg-golang does not support main.go at root of project
- - https://bugs.busybox.net/show_bug.cgi?id=13651
- - override the build command instead
-
-Signed-off-by: Christian Stewart <christian@paral.in>
----
- package/Config.in            |  1 +
- package/nerdctl/Config.in    | 24 ++++++++++++++++++++++++
- package/nerdctl/nerdctl.hash |  3 +++
- package/nerdctl/nerdctl.mk   | 26 ++++++++++++++++++++++++++
- 4 files changed, 54 insertions(+)
- create mode 100644 package/nerdctl/Config.in
- create mode 100644 package/nerdctl/nerdctl.hash
- create mode 100644 package/nerdctl/nerdctl.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index d278e78b68..696d479267 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2456,6 +2456,7 @@ menu "System tools"
- 	source "package/monit/Config.in"
- 	source "package/multipath-tools/Config.in"
- 	source "package/ncdu/Config.in"
-+	source "package/nerdctl/Config.in"
- 	source "package/netifrc/Config.in"
- 	source "package/numactl/Config.in"
- 	source "package/nut/Config.in"
-diff --git a/package/nerdctl/Config.in b/package/nerdctl/Config.in
-new file mode 100644
-index 0000000000..6c07a62128
---- /dev/null
-+++ b/package/nerdctl/Config.in
-@@ -0,0 +1,24 @@
-+config BR2_PACKAGE_NERDCTL
-+	bool "nerdctl"
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC # containerd
-+	depends on BR2_USE_MMU # util-linux
-+	select BR2_PACKAGE_DOCKER_CONTAINERD # containerd runtime dependency
-+	select BR2_PACKAGE_RUNC # containerd runtime dependency
-+	select BR2_PACKAGE_UTIL_LINUX # runtime dependency
-+	select BR2_PACKAGE_UTIL_LINUX_BINARIES # containerd
-+	select BR2_PACKAGE_UTIL_LINUX_PIVOT_ROOT # containerd
-+	select BR2_PACKAGE_UTIL_LINUX_MOUNTPOINT # containerd
-+	select BR2_PACKAGE_UTIL_LINUX_MOUNT # containerd
-+	help
-+	  Docker-compatible CLI for containerd, controlling runc.
-+
-+	  https://github.com/containerd/nerdctl
-+
-+comment "nerdctl needs a glibc or musl toolchain w/ threads"
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
-+	depends on BR2_USE_MMU
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_UCLIBC
-diff --git a/package/nerdctl/nerdctl.hash b/package/nerdctl/nerdctl.hash
-new file mode 100644
-index 0000000000..1d2f540940
---- /dev/null
-+++ b/package/nerdctl/nerdctl.hash
-@@ -0,0 +1,3 @@
-+# Computed locally
-+sha256  6c2f2cbc70703fed49a0b77a7c0823ad870b9a7b341bfd2a547ae833f24cd921  nerdctl-0.7.2.tar.gz
-+sha256  4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4  LICENSE
-diff --git a/package/nerdctl/nerdctl.mk b/package/nerdctl/nerdctl.mk
-new file mode 100644
-index 0000000000..a50b6c49bc
---- /dev/null
-+++ b/package/nerdctl/nerdctl.mk
-@@ -0,0 +1,26 @@
-+################################################################################
-+#
-+# nerdctl
-+#
-+################################################################################
-+
-+NERDCTL_VERSION = 0.7.2
-+NERDCTL_SITE = $(call github,containerd,nerdctl,v$(NERDCTL_VERSION))
-+NERDCTL_LICENSE = Apache-2.0
-+NERDCTL_LICENSE_FILES = LICENSE
-+
-+NERDCTL_GOMOD = github.com/containerd/nerdctl
-+NERDCTL_LDFLAGS = \
-+	-X $(NERDCTL_GOMOD)/pkg/version.Version=$(NERDCTL_VERSION)
-+
-+# pkg-golang does not support main.go at the root of the project
-+define NERDCTL_BUILD_CMDS
-+	cd $(@D); \
-+	$(HOST_GO_TARGET_ENV) \
-+		$(NERDCTL_GO_ENV) \
-+		$(GO_BIN) build -v $(NERDCTL_BUILD_OPTS) \
-+		-o $(@D)/bin/nerdctl \
-+		$(NERDCTL_GOMOD)
-+endef
-+
-+$(eval $(golang-package))
+diff --git a/package/sox/0004-configure.ac-fix-static-linking-with-magic.patch b/package/sox/0004-configure.ac-fix-static-linking-with-magic.patch
+index 2fbb8ff8a4..7d2e390df1 100644
+--- a/package/sox/0004-configure.ac-fix-static-linking-with-magic.patch
++++ b/package/sox/0004-configure.ac-fix-static-linking-with-magic.patch
+@@ -1,11 +1,12 @@
+-From d591a38d934b2a6750f16c7bd46a9ad12233301c Mon Sep 17 00:00:00 2001
++From 4630e574e6c0269b94fd910e7c72b8ad1ee62ce7 Mon Sep 17 00:00:00 2001
+ From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Date: Wed, 3 Mar 2021 16:48:57 +0100
+ Subject: [PATCH] configure.ac: fix static linking with magic
+ 
+-Put back -lz (i.e. ZLIB_LIBS) when searching for magic which was
+-wrongly removed by commit 6ff0e9322f9891f5a6ac6c9b3bceffbfca16bec3. This
+-will fix the following static build failure:
++Use SOX_FMT_PKG to retrieve magic dependencies (e.g. bzip2 or zlib)
++indeed -lz (i.e. ZLIB_LIBS) was wrongly removed by commit
++6ff0e9322f9891f5a6ac6c9b3bceffbfca16bec3. This will fix the following
++static build failure:
+ 
+ configure:11677: checking for magic_open in -lmagic
+ configure:11702: /srv/storage/autobuild/run/instance-0/output-1/host/bin/arm-linux-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -static -Wall -Wmissing-prototypes -Wstrict-prototypes  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -static -Wl,--as-needed conftest.c -lmagic    >&5
+@@ -30,19 +31,18 @@ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+  1 file changed, 1 insertion(+), 1 deletion(-)
+ 
+ diff --git a/configure.ac b/configure.ac
+-index 896714f5..ca7bccaa 100644
++index 896714f5..8ae3202c 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -80,8 +80,8 @@ SOX_REPORT([other], [LADSPA effect plugins], [$HAVE_LADSPA])
++@@ -80,7 +80,7 @@ SOX_REPORT([other], [LADSPA effect plugins], [$HAVE_LADSPA])
+  
+  dnl Various libraries
+  
+ -SOX_WITH_LIB([magic], [magic.h], [magic], [magic_open])
+++SOX_FMT_PKG([magic], [libmagic])
+  SOX_CHECK_LIB([ZLIB], [zlib.h], [z], [uncompress])
+-+SOX_WITH_LIB([magic], [magic.h], [magic], [magic_open], [], [], [], [$ZLIB_LIBS])
+  SOX_WITH_LIB([png], [png.h], [png], [png_set_rows], [], [], [], [$ZLIB_LIBS])
+  SOX_WITH_LIB([id3tag], [id3tag.h], [id3tag], [id3_file_open], [], [], [], [$ZLIB_LIBS])
+- SOX_WITH_LIB([libgsm], [gsm/gsm.h gsm.h], [gsm], [gsm_create])
+ -- 
+-2.30.0
++2.30.1
+ 
+diff --git a/package/sox/sox.mk b/package/sox/sox.mk
+index 99ba20ac9c..dcc1a670b4 100644
+--- a/package/sox/sox.mk
++++ b/package/sox/sox.mk
+@@ -34,9 +34,9 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_FILE),y)
+ SOX_DEPENDENCIES += file
+-SOX_CONF_OPTS += --with-magic
++SOX_CONF_OPTS += --enable-magic
+ else
+-SOX_CONF_OPTS += --without-magic
++SOX_CONF_OPTS += --disable-magic
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_FLAC),y)
 -- 
-2.31.0
+2.30.1
