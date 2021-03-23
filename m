@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 23 Mar 2021 23:13:41 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/zstd: security
+Date: Tue, 23 Mar 2021 23:13:07 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/zstd: security
  bump to version 1.4.9
-Message-ID: <20210323215015.3062E81173@busybox.osuosl.org>
+Message-ID: <20210323215020.D96F488F86@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fc415fd41710d378933ea47e50a9bcd4744ac946
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=f4fc5626e7f2abfd46a91e4518293072253aa947
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
 Fix CVE-2021-24032: Beginning in v1.4.1 and prior to v1.4.9, due to an
 incomplete fix for CVE-2021-24031, the Zstandard command-line utility
