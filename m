@@ -1,30 +1,35 @@
-From: Matthew Weber <matthew.weber@collins.com>
-Date: Tue, 23 Mar 2021 07:54:40 -0500
-Subject: [Buildroot] [PATCH v1 1/1] package/nerdctl: new package
-In-Reply-To: <20210323051027.91385-1-christian@paral.in>
-References: <20210323051027.91385-1-christian@paral.in>
-Message-ID: <CANQCQpabm-BFmSKGapR5Fiwu_60O-nvJtWuuVc=41h4d3ZZpbQ@mail.gmail.com>
+From: Laurentiu-Cristian Duca <laurentiu.duca@gmail.com>
+Date: Tue, 23 Mar 2021 16:57:13 +0200
+Subject: [Buildroot] Buildroot - make again - wants to reapply a patch
+Message-ID: <CAPm8-H4CryCNWboC-UXm=iED+a+H1K0RQ7knUpEq_KwZ0gbz_w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Christian,
+Hello buildroot community,
 
-On Tue, Mar 23, 2021 at 12:11 AM Christian Stewart <christian@paral.in> wrote:
->
-> nerdctl is a CLI for containerd (package docker-containerd) which is drop-in
-> compatible with the Docker Daemon CLI.
+  I am looking for an answer which I hope it will save a lot of time for me.
 
-By chance, do you have any rough estimates on the size difference
-between the set of GOLang executables between a pure Docker solution
-and a containerd+ nerdctl? (If I remember correctly Docker was
-200-300MB (engine+CLI))
+  At time moment t0, I have successfully built buildroot for rpi0w.
+At time moment t1, I have made some configuration changes (new additions only),
+and when I want to build (preferably only the changes), I get the error [1].
+Does anybody know how to avoid such errors?
+Why does buildroot try to reapply the patch?
 
-I saw the other RFC as well for renaming docker-containerd to
-containerd, that makes sense to me as the containerd runtime stands
-alone and this would make any dependencies cleaner with no reference
-to docker-*.
+Thanks a lot,
+L-C
 
-Matt
+[1]
+$ make
+>>> host-util-linux 2.33 Patching
+
+Applying 0001-rtcwake-use-poweroff-if-shutdown-is-not-found.patch using patch:
+Error: duplicate filename
+'0001-rtcwake-use-poweroff-if-shutdown-is-not-found.patch'
+Conflicting files are:
+  already applied:
+/home/laur/lucru/raspberry-pi/buildroot/buildroot-2019.02.rpi/package/util-linux/0001-rtcwake-use-poweroff-if-shutdown-is-not-found.patch
+  to be applied  :
+/home/laur/lucru/raspberry-pi/buildroot/buildroot-2019.02.rpi/package/util-linux/0001-rtcwake-use-poweroff-if-shutdown-is-not-found.patch
