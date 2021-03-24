@@ -1,38 +1,86 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Mar 2021 14:07:24 +0100
-Subject: [Buildroot] [git commit branch/2021.02.x] package/doxygen: add
- DOXYGEN_CPE_ID_VENDOR
-Message-ID: <20210324133906.86B11890A2@busybox.osuosl.org>
+Date: Wed, 24 Mar 2021 14:43:09 +0100
+Subject: [Buildroot] [git commit branch/2021.02.x] package/libwebsockets:
+ needs dynamic library
+Message-ID: <20210324133906.CA8AA890A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9cc277222b5a285521283909f788ed080e9ccd2e
+commit: https://git.buildroot.net/buildroot/commit/?id=79629821e4f59a4b433c108f32ceede09a12388d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-cpe:2.3:a:doxygen:doxygen is a valid CPE identifier for this package:
+kismets fails to build statically with libwebsockets since commit
+14522a8f9d272204763c49a21ebce5653430c612 because libwebsockets does not
+specify any Libs.Private field in its pkg-config file resulting in the
+following failure:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Adoxygen%3Adoxygen
+configure:10659: checking for lws_client_connect_via_info in -lwebsockets
+configure:10684: /usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-1/output-1/host/bin/arm-linux-g++ -std=gnu++17 -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2   -static -static -O3 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 conftest.cpp -lwebsockets  -latomic -lz >&5
+/usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-1/output-1/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/9.3.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: /usr/lfs/hdd_v1/rc-buildroot-test/scripts/instance-1/output-1/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libwebsockets.a(tls.c.o): in function `alpn_cb':
+tls.c:(.text+0x24): undefined reference to `SSL_select_next_proto'
+
+As it is not trivial to specify Libs.Private with cmake buildsystem
+(i.e. LIB_LIST contains the list of libraries but in the "cmake format"
+with full paths and ';'), just disable static build with libwebsockets.
+
+Fixes:
+ - http://autobuild.buildroot.org/results/9fc7891b61b1c487b95f07c59b802dd98ef71e3a
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 44b76cc49f698f2be250d8b18f308479528b04eb)
+(cherry picked from commit 46a1e2847fbcecff19b2861b3424602c3a38c6c2)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/doxygen/doxygen.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/libwebsockets/Config.in        | 4 ++++
+ package/libwebsockets/libwebsockets.mk | 4 ----
+ package/ttyd/Config.in                 | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/doxygen/doxygen.mk b/package/doxygen/doxygen.mk
-index ee8ae4fde4..b24c527a20 100644
---- a/package/doxygen/doxygen.mk
-+++ b/package/doxygen/doxygen.mk
-@@ -9,6 +9,7 @@ DOXYGEN_SOURCE = doxygen-$(DOXYGEN_VERSION).src.tar.gz
- DOXYGEN_SITE = http://doxygen.nl/files
- DOXYGEN_LICENSE = GPL-2.0
- DOXYGEN_LICENSE_FILES = LICENSE
-+DOXYGEN_CPE_ID_VENDOR = doxygen
- HOST_DOXYGEN_DEPENDENCIES = host-flex host-bison
+diff --git a/package/libwebsockets/Config.in b/package/libwebsockets/Config.in
+index dff6688e83..d7b529cafd 100644
+--- a/package/libwebsockets/Config.in
++++ b/package/libwebsockets/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LIBWEBSOCKETS
+ 	bool "libwebsockets"
++	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  Libwebsockets is a lightweight pure C library built to use
+@@ -7,3 +8,6 @@ config BR2_PACKAGE_LIBWEBSOCKETS
+ 	  in both directions.
  
- HOST_DOXYGEN_CONF_OPTS += -DBUILD_SHARED_LIBS=OFF
+ 	  https://libwebsockets.org/
++
++comment "libwebsockets needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
+diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
+index 6f752f998e..c25686d385 100644
+--- a/package/libwebsockets/libwebsockets.mk
++++ b/package/libwebsockets/libwebsockets.mk
+@@ -69,10 +69,6 @@ else
+ LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_LIBUV=OFF
+ endif
+ 
+-ifeq ($(BR2_STATIC_LIBS),y)
+-LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_SHARED=OFF
+-endif
+-
+ ifeq ($(BR2_SHARED_LIBS),y)
+ LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_STATIC=OFF
+ endif
+diff --git a/package/ttyd/Config.in b/package/ttyd/Config.in
+index df710fbac3..ecc705b17e 100644
+--- a/package/ttyd/Config.in
++++ b/package/ttyd/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_TTYD
+ 	bool "ttyd"
+-	depends on !BR2_STATIC_LIBS # libuv
++	depends on !BR2_STATIC_LIBS # libuv, libwebsockets
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # libuv
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libuv, json-c
+ 	depends on BR2_USE_MMU # libuv
