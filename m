@@ -1,64 +1,39 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 24 Mar 2021 23:27:03 +0100
-Subject: [Buildroot] Buildroot: enable lib/firmware/brcm for rpi0w
-In-Reply-To: <75b24e8f6fe588935be2f1320d172d68@umbiko.net>
-References: <mailman.13.1616500803.19462.buildroot@busybox.net>
- <75b24e8f6fe588935be2f1320d172d68@umbiko.net>
-Message-ID: <20210324232703.46b691fe@gmx.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 24 Mar 2021 23:30:44 +0100
+Subject: [Buildroot] [PATCH v1 00/12] GStreamer 1.18.4 stable bug fix
+ release
+In-Reply-To: <20210318194743.30623-1-ps.report@gmx.net> (Peter Seiderer's
+ message of "Thu, 18 Mar 2021 20:47:31 +0100")
+References: <20210318194743.30623-1-ps.report@gmx.net>
+Message-ID: <87r1k4kwvf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Laurentiu-Cristian, Andreas,
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
-On Wed, 24 Mar 2021 06:37:23 +0000, Andreas Ziegler <br015@umbiko.net> wrote:
+ > GStreamer 1.18.4 stable bug fix release
+ > For details see [1].
 
-> Hello Laurentiu-Cristian,
->
-> > Subject: [Buildroot] Buildroot: enable lib/firmware/brcm for rpi0w
->
-> > output/target/lib/firmware/brcm/brcmfmac43430-sdio.raspberrypi-rpi.txt
->
-> The nvram file with 'raspberrypi' in its name is not present in the
-> rpi-wifi-firmware blob; you need to create it yourself. As an example,
-> this is what I use in a post-build script for a RPi4:
->
->    ### create missing nvram file for Raspberry Pi 4
->    _TARGET_DIR="${TARGET_DIR}/lib/firmware"
->    src_file=brcm/brcmfmac43455-sdio.txt
->    dst_file=brcm/brcmfmac43455-sdio.raspberrypi,4-model-b.txt
->    if [ -f ${_TARGET_DIR}/${src_file} ] && ! [ -h
-> ${_TARGET_DIR}/${dst_file} ]; then
-> 	ln -rs ${_TARGET_DIR}/${src_file} ${_TARGET_DIR}/${dst_file}
->    fi
+ > [1] https://gstreamer.freedesktop.org/releases/1.18/#1.18.4
 
-Or use BR2_PACKAGE_LINUX_FIRMWARE/BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XXX
-already containing the file brcmfmac43455-sdio.raspberrypi,4-model-b.txt
-([1], but according to [2],[3],[4] the linux-firmware provided files are
-'older than that used by the Raspbian distribution, and has (in certain situations)
-significantly worse performance than it (and indeed with some APs, will not
-associate at all).')?
+ > Peter Seiderer (12):
+ >   package/gstreamer1: bump version to 1.18.4
+ >   package/gst1-plugins-base: bump version to 1.18.4
+ >   package/gst1-plugins-good: bump version to 1.18.4
+ >   package/gst1-plugins-bad: bump version to 1.18.4
+ >   package/gst1-plugins-ugly: bump version to 1.18.4
+ >   package/gst1-devtools: bump version to 1.18.4
+ >   package/gst1-libav: bump version to 1.18.4
+ >   package/gst1-vaapi: bump version to 1.18.4
+ >   package/gst1-rtsp-server: bump version to 1.18.4
+ >   package/gstreamer1-editing-services: bump version to 1.18.4
+ >   package/gst-omx: bump version to 1.18.4
+ >   package/gst1-python: bump version to 1.18.4
 
-Did not (yet) compare the various provided firmware files:
+Committed to 2021.02.x, thanks.
 
-- http://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
-- github,LibreELEC,brcmfmac_sdio-firmware-rpi
-- https://github.com/RPi-Distro/firmware-nonfree/tree/master/brcm
-
-Regards,
-Peter
-
-[1] https://git.buildroot.net/buildroot/tree/package/linux-firmware/linux-firmware.mk#n602
-[2] https://forums.gentoo.org/viewtopic-t-1108138-start-0.html
-[3] https://forums.gentoo.org/viewtopic-p-8398532.html#8398532
-[4] https://forum.manjaro.org/t/significant-wifi-speed-increase-with-latest-firmware/43607
-
->
-> Kind regards,
-> Andreas
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+-- 
+Bye, Peter Korsgaard
