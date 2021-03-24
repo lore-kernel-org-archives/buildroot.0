@@ -1,61 +1,59 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Mar 2021 15:04:03 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] support/download: Fix
- tarball generation with symlinks pointing to ./something
-Message-ID: <20210324133943.AD07D88FC4@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 24 Mar 2021 15:12:54 +0100
+Subject: [Buildroot] gmp.h error compiling Linux 5.11 with Buildroot
+ 2021.02 default arm toolchain
+In-Reply-To: <5c4c65f0-886a-e54c-16ae-ef6dc5093566@bootlin.com>
+References: <a66afe8f-7f99-db2c-f966-c62dad9af5e3@bootlin.com>
+ <20210324105006.18e0dfb6@windsurf.home>
+ <5c4c65f0-886a-e54c-16ae-ef6dc5093566@bootlin.com>
+Message-ID: <20210324151254.2cea132a@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=60e31c823f6899087c8dd0e7bc3f14514d28a3d0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+On Wed, 24 Mar 2021 14:47:28 +0100
+Michael Opdenacker <michael.opdenacker@bootlin.com> wrote:
 
-When a --transform expression is provided, it is by default also applied
-to the target of a symlink.
+> On 3/24/21 10:50 AM, Thomas Petazzoni wrote:
+> > Do you have a Buildroot configuration that uses an internal toolchain +
+> > a Linux kernel built by Buildroot, that reproduces this? Or does it
+> > only happens with an external toolchain and/or when you build the
+> > kernel outside of Buildroot?  
+> 
+> Actually, the compile job succeeds with the "omap2plus" configuration
+> when the 5.11 kernel is built by Buildroot. Good guess.
+> 
+> What doesn't work is building the kernel outside Buildroot with (the
+> Buildroot toolchain from output/host/ or the latest ARM 32 GNU toolchain).
+> 
+> Does this help?
 
-When we create tarballs (from git or svn checkouts), we use a --transform
-expression to replace the leading ./ with the package name and version.
+It doesn't help per-se, but it's another useful data point. This whole
+gmp.h is due to the gcc plugins that the kernel is building.
 
-This causes issues when a package contains symlinks that points to
-./something, as the leading './' is also replaced.
+The gcc plugin causing issue there is built when
+CONFIG_GCC_PLUGIN_ARM_SSP_PER_TASK=y in your kernel configuration.
+Could you double check you have that enabled both when building the
+kernel within Buildroot, and outside of Buildroot ?
 
-Fix that by using the 'S' transformation scope flag, as described in the
-tar manual:
-  https://www.gnu.org/software/tar/manual/html_node/transform.html#transform
+To me, it seems like passing
+HOSTCXXFLAGS=-I/path/to/buildroot/output/host/include when building
+the kernel should get you passed the issue when building the kernel
+externally.
 
-  In addition, several transformation scope flags are supported, that
-  control to what files transformations apply. These are:
+And it probably works when Buildroot builds the kernel, because we're
+passing:
 
-  ???r??? Apply transformation to regular archive members.
-  ???R??? Do not apply transformation to regular archive members.
-  ???s??? Apply transformation to symbolic link targets.
-  ???S??? Do not apply transformation to symbolic link targets.
-  ???h??? Apply transformation to hard link targets.
-  ???H??? Do not apply transformation to hard link targets.
+        HOSTCC="$(HOSTCC) $(HOST_CFLAGS) $(HOST_LDFLAGS)" \
 
-  Default is ???rsh??? [...].
+when building the kernel, so the kernel build system does invoke the
+native gcc with the appropriate -I option pointing to
+$(HOST_DIR)/include.
 
-Fixes: #13616
-Signed-off-by: Jean-pierre Cartal <jpcartal@free.fr>
-Tested-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- support/download/git | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/support/download/git b/support/download/git
-index 15d8c66e05..1b0dc1b115 100755
---- a/support/download/git
-+++ b/support/download/git
-@@ -203,7 +203,7 @@ LC_ALL=C sort <"${output}.list" >"${output}.list.sorted"
- 
- # Create GNU-format tarballs, since that's the format of the tarballs on
- # sources.buildroot.org and used in the *.hash files
--tar cf - --transform="s#^\./#${basename}/#" \
-+tar cf - --transform="s#^\./#${basename}/#S" \
-          --numeric-owner --owner=0 --group=0 --mtime="${date}" --format=gnu \
-          -T "${output}.list.sorted" >"${output}.tar"
- gzip -6 -n <"${output}.tar" >"${output}"
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
