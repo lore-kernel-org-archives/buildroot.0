@@ -1,9 +1,7 @@
 From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Wed, 24 Mar 2021 13:34:10 +0100
-Subject: [Buildroot] [PATCH 4/4] package/netopeer2: bump version to 1.1.70
-In-Reply-To: <20210324123407.23006-1-heiko.thiery@gmail.com>
-References: <20210324123407.23006-1-heiko.thiery@gmail.com>
-Message-ID: <20210324123407.23006-4-heiko.thiery@gmail.com>
+Date: Wed, 24 Mar 2021 13:36:04 +0100
+Subject: [Buildroot] [PATCH 1/2] package/gensio: bump version to 2.2.4
+Message-ID: <20210324123605.24228-1-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,31 +10,37 @@ To: buildroot@busybox.net
 
 Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 ---
- package/netopeer2/netopeer2.hash | 2 +-
- package/netopeer2/netopeer2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gensio/gensio.hash | 6 +++---
+ package/gensio/gensio.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/netopeer2/netopeer2.hash b/package/netopeer2/netopeer2.hash
-index 801c353e11..4386e5661c 100644
---- a/package/netopeer2/netopeer2.hash
-+++ b/package/netopeer2/netopeer2.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  6b43026211a787d5cb91d47cb7fdd7923649044c55f264aaf85bf5676c004211  netopeer2-1.1.53.tar.gz
-+sha256  7fc1a3520ee4bb488112f502e34cea465464dc933d2a5742a72eb32a6dfe3b3f  netopeer2-1.1.70.tar.gz
- sha256  b46f161fbdcf127d3ef22602e15958c3092fe3294f71a2dc8cdf8f6689cba95b  LICENSE
-diff --git a/package/netopeer2/netopeer2.mk b/package/netopeer2/netopeer2.mk
-index be5ffd2be7..c9fa097606 100644
---- a/package/netopeer2/netopeer2.mk
-+++ b/package/netopeer2/netopeer2.mk
+diff --git a/package/gensio/gensio.hash b/package/gensio/gensio.hash
+index 77963abe40..03bd85cd0f 100644
+--- a/package/gensio/gensio.hash
++++ b/package/gensio/gensio.hash
+@@ -1,7 +1,7 @@
+ # From https://sourceforge.net/projects/ser2net/files/ser2net/
+-md5  3feb9b586f41cdda4025eeac11000127  gensio-2.2.3.tar.gz
+-sha1  85eb2f063e906868672e08c8f7e282272904631c  gensio-2.2.3.tar.gz
++md5  3d1135a7bd7a3aca48493997fed1f1a0  gensio-2.2.4.tar.gz
++sha1  3c59d94e48c0a8ec5ed57ebb4ea95f3709d108ac  gensio-2.2.4.tar.gz
+ # Locally computed:
+-sha256  ffc849be3349ba15cd6f92d109a54c7608c15d33d210a262c02ddcf00ea76262  gensio-2.2.3.tar.gz
++sha256  36cadbc790e03e4150a12bca14b20215afdff0a0f8deaf85c10434dca54d0493  gensio-2.2.4.tar.gz
+ sha256  501f3108e6c03e5a0a5585ebaaa369171aead5319cd0a7a4dc1f66211c1f09f1  COPYING
+ sha256  dcac7d447dd81ab96d28dce00a07a6486e623f7ded94e2a2a8e83312405cdf89  COPYING.LIB
+diff --git a/package/gensio/gensio.mk b/package/gensio/gensio.mk
+index e68e75e2ad..0b2bb63956 100644
+--- a/package/gensio/gensio.mk
++++ b/package/gensio/gensio.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NETOPEER2_VERSION = 1.1.53
-+NETOPEER2_VERSION = 1.1.70
- NETOPEER2_SITE = $(call github,CESNET,Netopeer2,v$(NETOPEER2_VERSION))
- NETOPEER2_DL_SUBDIR = netopeer2
- NETOPEER2_LICENSE = BSD-3-Clause
+-GENSIO_VERSION = 2.2.3
++GENSIO_VERSION = 2.2.4
+ GENSIO_SITE = http://downloads.sourceforge.net/project/ser2net/ser2net
+ GENSIO_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (tools)
+ GENSIO_LICENSE_FILES = COPYING.LIB COPYING
 -- 
 2.30.0
