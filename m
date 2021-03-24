@@ -1,44 +1,49 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 24 Mar 2021 22:24:40 +0100
-Subject: [Buildroot] [PATCH 1/1] package/kodi-pvr-hts: bump version to
- 8.3.0-Matrix
-Message-ID: <20210324212440.590880-1-bernd.kuhls@t-online.de>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Wed, 24 Mar 2021 22:27:55 +0100
+Subject: [Buildroot] [PATCH v1] package/libinput: bump version to 1.17.1
+Message-ID: <20210324212755.9168-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog:
-https://github.com/kodi-pvr/pvr.hts/blob/Matrix/pvr.hts/changelog.txt
+For details see [1].
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[1] https://lists.freedesktop.org/archives/wayland-devel/2021-March/041758.html
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/kodi-pvr-hts/kodi-pvr-hts.hash | 2 +-
- package/kodi-pvr-hts/kodi-pvr-hts.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libinput/libinput.hash | 6 +++---
+ package/libinput/libinput.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/kodi-pvr-hts/kodi-pvr-hts.hash b/package/kodi-pvr-hts/kodi-pvr-hts.hash
-index 1264f1b4d3..e22e13df23 100644
---- a/package/kodi-pvr-hts/kodi-pvr-hts.hash
-+++ b/package/kodi-pvr-hts/kodi-pvr-hts.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  9b1cc87b776d6c2fdeb0f2b89c09c0de6e3aba86b2da515d24957292dbab8134  kodi-pvr-hts-8.2.4-Matrix.tar.gz
-+sha256  51d27171c55aea8ee3c7573adca3e942b57f34171b1b685501ac8f5dbd3623b7  kodi-pvr-hts-8.3.0-Matrix.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-hts/kodi-pvr-hts.mk b/package/kodi-pvr-hts/kodi-pvr-hts.mk
-index 1456e79632..ee7a24688b 100644
---- a/package/kodi-pvr-hts/kodi-pvr-hts.mk
-+++ b/package/kodi-pvr-hts/kodi-pvr-hts.mk
+diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
+index f39ba3dbb6..e26512afd3 100644
+--- a/package/libinput/libinput.hash
++++ b/package/libinput/libinput.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2021-February/041733.html
+-sha256  c560cfca14cb5c50d2a1b7551df06bc5d4306e32c128f3e3d37e137285dedbad  libinput-1.17.0.tar.xz
+-sha512  490c7e59cbaa43e4190dbc421582dca887b6ae92304c4f8f3ea9df515bd76de41ca9a376e6f1cfe7b235dd2d5d8d8ef5982f5ddcf958e3b31b981e9440bb0888  libinput-1.17.0.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2021-March/041758.html
++sha256  e51c50f3ce253961bed452d9f93102cc26128406975ab88ff9ec9e6c3b875137  libinput-1.17.1.tar.xz
++sha512  2e7baa198fed9c673d28453efb066f9371f2b575a844e41cde455c636bbe1cc68faae7129026944a502cd5d7bfcc72272066b9e3cda5c959f7b464483f9dd860  libinput-1.17.1.tar.xz
+ 
+ # License files
+ sha256  70d5b1dfe5a9c50a1f2ea91b1c2b1c85d876c5c92339585edbb85cf69e945e14  COPYING
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+index 982d92d062..264b19b026 100644
+--- a/package/libinput/libinput.mk
++++ b/package/libinput/libinput.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_PVR_HTS_VERSION = 8.2.4-Matrix
-+KODI_PVR_HTS_VERSION = 8.3.0-Matrix
- KODI_PVR_HTS_SITE = $(call github,kodi-pvr,pvr.hts,$(KODI_PVR_HTS_VERSION))
- KODI_PVR_HTS_LICENSE = GPL-2.0+
- KODI_PVR_HTS_LICENSE_FILES = LICENSE.md
+-LIBINPUT_VERSION = 1.17.0
++LIBINPUT_VERSION = 1.17.1
+ LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
+ LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
+ LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
 -- 
-2.29.2
+2.30.2
