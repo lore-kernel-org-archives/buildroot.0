@@ -1,46 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Mar 2021 23:26:59 +0100
-Subject: [Buildroot] [git commit branch/2021.02.x] package/gst1-devtools:
- bump version to 1.18.4
-Message-ID: <20210324220719.A6B1589080@busybox.osuosl.org>
+Date: Wed, 24 Mar 2021 23:27:26 +0100
+Subject: [Buildroot] [git commit branch/2021.02.x] package/gst1-libav: bump
+ version to 1.18.4
+Message-ID: <20210324220719.B8E2E890DC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=12f91cf504ad0dac1cdeead2d39f3d0227a81d42
+commit: https://git.buildroot.net/buildroot/commit/?id=1edd82f04f64e0dd39813a4c2090dd77a4d06cc9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 091cafd1ae594e17e4b8217942ae14e0a660e9d7)
+(cherry picked from commit 75f3adff9482a7a181ed792ba5f2744aa67a6b89)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer1/gst1-devtools/gst1-devtools.hash | 4 ++--
- package/gstreamer1/gst1-devtools/gst1-devtools.mk   | 2 +-
+ package/gstreamer1/gst1-libav/gst1-libav.hash | 4 ++--
+ package/gstreamer1/gst1-libav/gst1-libav.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-devtools/gst1-devtools.hash b/package/gstreamer1/gst1-devtools/gst1-devtools.hash
-index bfed3570f7..4c0c5b5b02 100644
---- a/package/gstreamer1/gst1-devtools/gst1-devtools.hash
-+++ b/package/gstreamer1/gst1-devtools/gst1-devtools.hash
+diff --git a/package/gstreamer1/gst1-libav/gst1-libav.hash b/package/gstreamer1/gst1-libav/gst1-libav.hash
+index dcb99fb632..632c2f8651 100644
+--- a/package/gstreamer1/gst1-libav/gst1-libav.hash
++++ b/package/gstreamer1/gst1-libav/gst1-libav.hash
 @@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gst-devtools/gst-devtools-1.18.3.tar.xz.sha256sum
--sha256  3025fee3607caf5069154c099533785675916e044ee92c936bbeacdda3750f26  gst-devtools-1.18.3.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-devtools/gst-devtools-1.18.4.tar.xz.sha256sum
-+sha256  ffbd194c40912cb5e7fca2863648bf9dd8257b7af97d3a60c4fcd4efd8526ccf  gst-devtools-1.18.4.tar.xz
- sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  validate/COPYING
-diff --git a/package/gstreamer1/gst1-devtools/gst1-devtools.mk b/package/gstreamer1/gst1-devtools/gst1-devtools.mk
-index 5e1f0110ee..5a10e4fab3 100644
---- a/package/gstreamer1/gst1-devtools/gst1-devtools.mk
-+++ b/package/gstreamer1/gst1-devtools/gst1-devtools.mk
+-# From https://gstreamer.freedesktop.org/src/gst-libav/gst-libav-1.18.3.tar.xz.sha256sum
+-sha256  ad20546bcd78ac1e7cf194666d73c4f33efeb62647d2b6af22993b540699e91c  gst-libav-1.18.3.tar.xz
++# From https://gstreamer.freedesktop.org/src/gst-libav/gst-libav-1.18.4.tar.xz.sha256sum
++sha256  344a463badca216c2cef6ee36f9510c190862bdee48dc4591c0a430df7e8c396  gst-libav-1.18.4.tar.xz
+ sha256  f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a  COPYING
+diff --git a/package/gstreamer1/gst1-libav/gst1-libav.mk b/package/gstreamer1/gst1-libav/gst1-libav.mk
+index 6ec4f3cd65..8ae5b87beb 100644
+--- a/package/gstreamer1/gst1-libav/gst1-libav.mk
++++ b/package/gstreamer1/gst1-libav/gst1-libav.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GST1_DEVTOOLS_VERSION = 1.18.3
-+GST1_DEVTOOLS_VERSION = 1.18.4
- GST1_DEVTOOLS_SOURCE = gst-devtools-$(GST1_DEVTOOLS_VERSION).tar.xz
- GST1_DEVTOOLS_SITE = https://gstreamer.freedesktop.org/src/gst-devtools
- GST1_DEVTOOLS_LICENSE = LGPL-2.1+
+-GST1_LIBAV_VERSION = 1.18.3
++GST1_LIBAV_VERSION = 1.18.4
+ GST1_LIBAV_SOURCE = gst-libav-$(GST1_LIBAV_VERSION).tar.xz
+ GST1_LIBAV_SITE = https://gstreamer.freedesktop.org/src/gst-libav
+ GST1_LIBAV_LICENSE = LGPL-2.0+
