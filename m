@@ -1,39 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Mar 2021 14:11:22 +0100
-Subject: [Buildroot] [git commit branch/2021.02.x] configs/beaglebone_qt5:
- add overlay to defconfig
-Message-ID: <20210324133906.B9703873DC@busybox.osuosl.org>
+Date: Wed, 24 Mar 2021 14:07:24 +0100
+Subject: [Buildroot] [git commit branch/2021.02.x] package/doxygen: add
+ DOXYGEN_CPE_ID_VENDOR
+Message-ID: <20210324133906.86B11890A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ecbec131680d685ffaefae8b6c56af0c4a6ede90
+commit: https://git.buildroot.net/buildroot/commit/?id=9cc277222b5a285521283909f788ed080e9ccd2e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-commit 8efc5dce98f9795d97b7a3452f9be4a774032379 added an overlay but
-forgot to add it to the related defconfig.
+cpe:2.3:a:doxygen:doxygen is a valid CPE identifier for this package:
 
-Fixes: missing overlay data in image
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Adoxygen%3Adoxygen
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit d08bb7491ad8966a743ae965793a6043794c9dbf)
+(cherry picked from commit 44b76cc49f698f2be250d8b18f308479528b04eb)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/beaglebone_qt5_defconfig | 1 +
+ package/doxygen/doxygen.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/configs/beaglebone_qt5_defconfig b/configs/beaglebone_qt5_defconfig
-index 6e0371a7d3..5f084b77df 100644
---- a/configs/beaglebone_qt5_defconfig
-+++ b/configs/beaglebone_qt5_defconfig
-@@ -5,6 +5,7 @@ BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-+BR2_ROOTFS_OVERLAY="board/beaglebone/rootfs_overlay"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/beaglebone/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/beaglebone/genimage.cfg"
+diff --git a/package/doxygen/doxygen.mk b/package/doxygen/doxygen.mk
+index ee8ae4fde4..b24c527a20 100644
+--- a/package/doxygen/doxygen.mk
++++ b/package/doxygen/doxygen.mk
+@@ -9,6 +9,7 @@ DOXYGEN_SOURCE = doxygen-$(DOXYGEN_VERSION).src.tar.gz
+ DOXYGEN_SITE = http://doxygen.nl/files
+ DOXYGEN_LICENSE = GPL-2.0
+ DOXYGEN_LICENSE_FILES = LICENSE
++DOXYGEN_CPE_ID_VENDOR = doxygen
+ HOST_DOXYGEN_DEPENDENCIES = host-flex host-bison
+ 
+ HOST_DOXYGEN_CONF_OPTS += -DBUILD_SHARED_LIBS=OFF
