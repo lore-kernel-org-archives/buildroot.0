@@ -1,46 +1,40 @@
-From: Alexander Egorenkov <egorenar@linux.ibm.com>
-Date: Wed, 24 Mar 2021 12:45:22 +0100
-Subject: [Buildroot] [PATCH 1/1] linux: support uncompressed kernel
-Message-ID: <20210324114522.285121-1-egorenar@linux.ibm.com>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Wed, 24 Mar 2021 13:34:04 +0100
+Subject: [Buildroot] [PATCH 1/4] package/libyang: bump version to 1.0.225
+Message-ID: <20210324123407.23006-1-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Enables to build an uncompressed Linux kernel.
-
-Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 ---
- linux/Config.in | 3 +++
- linux/linux.mk  | 1 +
- 2 files changed, 4 insertions(+)
+ package/libyang/libyang.hash | 2 +-
+ package/libyang/libyang.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 3370162faa..c09f70c4ac 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -329,6 +329,9 @@ config BR2_LINUX_KERNEL_XZ
- config BR2_LINUX_KERNEL_ZSTD
- 	bool "zstd compression"
+diff --git a/package/libyang/libyang.hash b/package/libyang/libyang.hash
+index bc9e948c03..94685cb4de 100644
+--- a/package/libyang/libyang.hash
++++ b/package/libyang/libyang.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  c4498a77a7c12a28c9911f993eeafbf2badd2ecea58bb74781bd61cfc635e4c9  libyang-1.0.215.tar.gz
++sha256  1b736443d2c69b5d7a71ac412655e6edab0647b18f35f7bf504b0a24e06cb046  libyang-1.0.225.tar.gz
+ sha256  f942fe693e03e4e3ff67a351c00dc8f468a042e0d7273b0aa6bc53060b568112  LICENSE
+diff --git a/package/libyang/libyang.mk b/package/libyang/libyang.mk
+index ee24256bed..ed61ec97d2 100644
+--- a/package/libyang/libyang.mk
++++ b/package/libyang/libyang.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_LINUX_KERNEL_UNCOMPRESSED
-+	bool "uncompressed"
-+
- endchoice
- 
- config BR2_LINUX_KERNEL_IMAGE_TARGET_NAME
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 5e4b319cf1..1457228eb9 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -111,6 +111,7 @@ LINUX_COMPRESSION_OPT_$(BR2_LINUX_KERNEL_LZMA) += CONFIG_KERNEL_LZMA
- LINUX_COMPRESSION_OPT_$(BR2_LINUX_KERNEL_LZO) += CONFIG_KERNEL_LZO
- LINUX_COMPRESSION_OPT_$(BR2_LINUX_KERNEL_XZ) += CONFIG_KERNEL_XZ
- LINUX_COMPRESSION_OPT_$(BR2_LINUX_KERNEL_ZSTD) += CONFIG_KERNEL_ZSTD
-+LINUX_COMPRESSION_OPT_$(BR2_LINUX_KERNEL_UNCOMPRESSED) += CONFIG_KERNEL_UNCOMPRESSED
- 
- ifeq ($(BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL),y)
- LINUX_DEPENDENCIES += host-openssl
+-LIBYANG_VERSION = 1.0.215
++LIBYANG_VERSION = 1.0.225
+ LIBYANG_SITE = $(call github,CESNET,libyang,v$(LIBYANG_VERSION))
+ LIBYANG_LICENSE = BSD-3-Clause
+ LIBYANG_LICENSE_FILES = LICENSE
 -- 
-2.26.3
+2.30.0
