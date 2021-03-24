@@ -1,41 +1,39 @@
-From: Michael Opdenacker <michael.opdenacker@bootlin.com>
-Date: Wed, 24 Mar 2021 14:47:28 +0100
-Subject: [Buildroot] gmp.h error compiling Linux 5.11 with Buildroot
- 2021.02 default arm toolchain
-In-Reply-To: <20210324105006.18e0dfb6@windsurf.home>
-References: <a66afe8f-7f99-db2c-f966-c62dad9af5e3@bootlin.com>
- <20210324105006.18e0dfb6@windsurf.home>
-Message-ID: <5c4c65f0-886a-e54c-16ae-ef6dc5093566@bootlin.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 24 Mar 2021 14:07:17 +0100
+Subject: [Buildroot] [git commit branch/2021.02.x] package/dhcpcd: add
+ DHCPCD_CPE_ID_VENDOR
+Message-ID: <20210324133906.73981890A5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=171211a38bccfca3e5163b417b32973fcb08003d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Thanks for your questions!
+cpe:2.3:a:dhcpcd_project:dhcpcd is a valid CPE identifier for this
+package:
 
-On 3/24/21 10:50 AM, Thomas Petazzoni wrote:
-> Do you have a Buildroot configuration that uses an internal toolchain +
-> a Linux kernel built by Buildroot, that reproduces this? Or does it
-> only happens with an external toolchain and/or when you build the
-> kernel outside of Buildroot?
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Adhcpcd_project%3Adhcpcd
 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit b844bf46ba521397e5d19de77a2c55e85514ac21)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/dhcpcd/dhcpcd.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Actually, the compile job succeeds with the "omap2plus" configuration
-when the 5.11 kernel is built by Buildroot. Good guess.
-
-What doesn't work is building the kernel outside Buildroot with (the
-Buildroot toolchain from output/host/ or the latest ARM 32 GNU toolchain).
-
-Does this help?
-
-Cheers,
-
-Michael.
-
--- 
-Michael Opdenacker, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/dhcpcd/dhcpcd.mk b/package/dhcpcd/dhcpcd.mk
+index f040610de4..1af019fd9e 100644
+--- a/package/dhcpcd/dhcpcd.mk
++++ b/package/dhcpcd/dhcpcd.mk
+@@ -10,6 +10,7 @@ DHCPCD_SITE = http://roy.marples.name/downloads/dhcpcd
+ DHCPCD_DEPENDENCIES = host-pkgconf
+ DHCPCD_LICENSE = BSD-2-Clause
+ DHCPCD_LICENSE_FILES = LICENSE
++DHCPCD_CPE_ID_VENDOR = dhcpcd_project
+ 
+ DHCPCD_CONFIG_OPTS = \
+ 	--libexecdir=/lib/dhcpcd \
