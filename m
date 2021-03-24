@@ -1,88 +1,80 @@
-From: Michael Opdenacker <michael.opdenacker@bootlin.com>
-Date: Wed, 24 Mar 2021 15:54:12 +0100
-Subject: [Buildroot] gmp.h error compiling Linux 5.11 with Buildroot
- 2021.02 default arm toolchain
-In-Reply-To: <20210324151254.2cea132a@windsurf.home>
-References: <a66afe8f-7f99-db2c-f966-c62dad9af5e3@bootlin.com>
- <20210324105006.18e0dfb6@windsurf.home>
- <5c4c65f0-886a-e54c-16ae-ef6dc5093566@bootlin.com>
- <20210324151254.2cea132a@windsurf.home>
-Message-ID: <3362b2dc-8262-dc8f-4055-4e86470576cc@bootlin.com>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Wed, 24 Mar 2021 15:57:47 +0100
+Subject: [Buildroot] [PATCH v2 1/5] package/freescale-imx: add option
+ for i.MX8M Plus
+In-Reply-To: <20210322091252.11392-2-stephane.viau@oss.nxp.com>
+References: <20210322091252.11392-1-stephane.viau@oss.nxp.com>
+ <20210322091252.11392-2-stephane.viau@oss.nxp.com>
+Message-ID: <YFtTa+wRGP+0TLTg@p1g2>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas
+Hi Stephane,
 
-Thanks for your help!
+On Mon, Mar 22, 2021 at 10:12:48AM +0100, Stephane Viau wrote:
+> The i.MX Plus focuses on machine learning and vision and industrial
+          ^
+	  8M
 
-On 3/24/21 3:12 PM, Thomas Petazzoni wrote:
-> On Wed, 24 Mar 2021 14:47:28 +0100
-> Michael Opdenacker <michael.opdenacker@bootlin.com> wrote:
->
->> On 3/24/21 10:50 AM, Thomas Petazzoni wrote:
->>> Do you have a Buildroot configuration that uses an internal toolchain +
->>> a Linux kernel built by Buildroot, that reproduces this? Or does it
->>> only happens with an external toolchain and/or when you build the
->>> kernel outside of Buildroot?  
->> Actually, the compile job succeeds with the "omap2plus" configuration
->> when the 5.11 kernel is built by Buildroot. Good guess.
->>
->> What doesn't work is building the kernel outside Buildroot with (the
->> Buildroot toolchain from output/host/ or the latest ARM 32 GNU toolchain).
->>
->> Does this help?
-> It doesn't help per-se, but it's another useful data point. This whole
-> gmp.h is due to the gcc plugins that the kernel is building.
->
-> The gcc plugin causing issue there is built when
-> CONFIG_GCC_PLUGIN_ARM_SSP_PER_TASK=y in your kernel configuration.
-> Could you double check you have that enabled both when building the
-> kernel within Buildroot, and outside of Buildroot ?
+> automation. It also provides advanced multimedia, including a VPU and
+> the GC7000UL GPU.
+              ^
+	      + GC520L (2D)
 
+> Signed-off-by: Stephane Viau <stephane.viau@oss.nxp.com>
+> ---
+>  package/freescale-imx/Config.in | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
+> index b0c7de8436..bedd05a471 100644
+> --- a/package/freescale-imx/Config.in
+> +++ b/package/freescale-imx/Config.in
+> @@ -52,6 +52,9 @@ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM
+>  config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN
+>  	bool "imx8mn"
+>  
+> +config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MP
+> +	bool "imx8mp"
+> +
+>  config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
+>  	bool "imx8x"
+>  endchoice
+> @@ -72,6 +75,7 @@ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM
+>  	default "IMX8MQ" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M
+>  	default "IMX8MM" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM
+>  	default "IMX8MN" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN
+> +	default "IMX8MP" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MP
+>  
+>  config BR2_PACKAGE_FREESCALE_IMX_HAS_VPU
+>  	bool
+> @@ -83,7 +87,8 @@ config BR2_PACKAGE_FREESCALE_IMX_HAS_VPU
+>  config BR2_PACKAGE_FREESCALE_IMX_HAS_VPU_HANTRO
+>  	bool
+>  	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M || \
+> -		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM
+> +		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM || \
+> +		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MP
+>  
+>  config BR2_PACKAGE_FREESCALE_IMX_HAS_VIV_GPU
+>  	bool
+> @@ -94,6 +99,7 @@ config BR2_PACKAGE_FREESCALE_IMX_HAS_VIV_GPU
+>  		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M || \
+>  		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM || \
+>  		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN || \
+> +		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MP || \
+>  		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
 
-Indeed, when compiling the kernel from outside of Buildroot is breaking,
-CONFIG_GCC_PLUGIN_ARM_SSP_PER_TASK is set,and if I disable this option,
-the kernel builds fine. The kernel built by Buildroot internally didn't
-have this flag.
+Note that I've received a complaint from NXP some time back because the
+CPU name wasn't spelled correctly, I was told: "there should always be a
+space between 'i.MX' and the series number like '8M'".
+So the title should be "i.MX 8M Plus" ;-)
 
-What was unexpected for me is that this option is set by "make
-omap2plus_defconfig" depending on your CROSS_COMPILE setting. With
-arm-linux-gnueabi-gcc package by Ubuntu, you don't have it, but you do
-have it with the Buildroot or ARM toolchain. It's because it depends on
-a test for gcc plugins (see
-https://elixir.bootlin.com/linux/latest/A/ident/CONFIG_GCC_PLUGIN_ARM_SSP_PER_TASK
-and https://elixir.bootlin.com/linux/latest/K/ident/CONFIG_GCC_PLUGINS)
+With those minor changes:
+Reviewed-by: Gary Bisson <gary.bisson@boundarydevices.com>
 
->
-> To me, it seems like passing
-> HOSTCXXFLAGS=-I/path/to/buildroot/output/host/include when building
-> the kernel should get you passed the issue when building the kernel
-> externally.
-
-
-Right, I confirm this works. Thanks!
-
->
-> And it probably works when Buildroot builds the kernel, because we're
-> passing:
->
->         HOSTCC="$(HOSTCC) $(HOST_CFLAGS) $(HOST_LDFLAGS)" \
->
-> when building the kernel, so the kernel build system does invoke the
-> native gcc with the appropriate -I option pointing to
-> $(HOST_DIR)/include.
-
-Good to know, thanks! Is there anything that should be changed in the
-Linux build system or in our toolchains ?
-
-Anyway, thanks for documenting this behavior.
-
-Michael.
-
--- 
-Michael Opdenacker, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Regards,
+Gary
