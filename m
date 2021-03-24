@@ -1,61 +1,69 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Mar 2021 10:45:13 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] support/download: Fix
- tarball generation with symlinks pointing to ./something
-Message-ID: <20210324104321.019B785F3D@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 24 Mar 2021 11:35:40 +0000
+Subject: [Buildroot] [Bug 13671] openSSH server closes connection before
+ authentication is finished
+In-Reply-To: <bug-13671-163@https.bugs.busybox.net/>
+References: <bug-13671-163@https.bugs.busybox.net/>
+Message-ID: <bug-13671-163-vdKhb6KtRg@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7d377e1f449e36f2756255cc528ebff5ea96e568
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+https://bugs.busybox.net/show_bug.cgi?id=13671
 
-When a --transform expression is provided, it is by default also applied
-to the target of a symlink.
+--- Comment #7 from Geert Lens <g.lens@livetech-systems.com> ---
+When I use the Arm ARM 2020.11 toolchain (GCC 10.2, GDB 10.1, glibc 2.31,
+Binutils 2.35.1) to build 2021.02, the OpenSSH is being killed when trying to
+login.
+I made a strace using that setup and got this:
 
-When we create tarballs (from git or svn checkouts), we use a --transform
-expression to replace the leading ./ with the package name and version.
+[pid 14957] write(2, "debug3: mm_request_send entering"..., 52 <unfinished ...>
+[pid 15027] write(7, "\0\0\0/\0\0\0\6\0\0\0'input_userauth_reque"..., 51
+<unfinished ...>
+[pid 14957] <... write resumed>)        = 52
+[pid 15027] <... write resumed>)        = 51
+[pid 14957] poll([{fd=5, events=POLLIN}, {fd=6, events=POLLIN}], 2, -1
+<unfinished ...>
+[pid 15027] write(7, "\0\0\08\0\0\0\7\0\0\0000user_specific_delay:"..., 60
+<unfinished ...>
+[pid 14957] <... poll resumed>)         = 2 ([{fd=5, revents=POLLIN}, {fd=6,
+revents=POLLIN}])
+[pid 15027] <... write resumed>)        = 60
+[pid 14957] read(6,  <unfinished ...>
+[pid 15027] clock_gettime(CLOCK_BOOTTIME,  <unfinished ...>
+[pid 14957] <... read resumed>"\0\0\0/", 4) = 4
+[pid 15027] <... clock_gettime resumed>{tv_sec=3303, tv_nsec=218403125}) = 0
+[pid 14957] read(6,  <unfinished ...>
+[pid 15027] write(7, "\0\0\0[\0\0\0\7\0\0\0Sensure_minimum_time_"..., 95
+<unfinished ...>
+[pid 14957] <... read resumed>"\0\0\0\6\0\0\0'input_userauth_request: "..., 47)
+= 47
+[pid 15027] <... write resumed>)        = 95
+[pid 14957] write(2, "debug2: input_userauth_request: "..., 59 <unfinished ...>
+[pid 15027] clock_nanosleep_time64(CLOCK_REALTIME, 0, {tv_sec=0,
+tv_nsec=24392751410935043},  <unfinished ...>
+[pid 14957] <... write resumed>)        = 59
+[pid 15027] <... clock_nanosleep_time64 resumed> <unfinished ...>) = ?
+[pid 14957] poll([{fd=5, events=POLLIN}, {fd=6, events=POLLIN}], 2, -1
+<unfinished ...>
+[pid 15027] +++ killed by SIGSYS +++
+<... poll resumed>)                     = 2 ([{fd=5, revents=POLLIN}, {fd=6,
+revents=POLLIN}])
+--- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_KILLED, si_pid=15027, si_uid=1001,
+si_status=SIGSYS, si_utime=8, si_stime=4} ---
 
-This causes issues when a package contains symlinks that points to
-./something, as the leading './' is also replaced.
+It looks similar to what you could reproduce, the only difference is that the
+call to clock_nanosleep_time64() is aborted with SIGSYS.
 
-Fix that by using the 'S' transformation scope flag, as described in the
-tar manual:
-  https://www.gnu.org/software/tar/manual/html_node/transform.html#transform
+When I use the Arm ARM 2019.2 toolchain (GCC 9.2.1, GDB 8.3.0, glibc 2.30,
+Binutils 2.33.1) to build 2021.02, OpenSSH is not being killed and I am able to
+login in.
+Do you have any idea what could cause this?
 
-  In addition, several transformation scope flags are supported, that
-  control to what files transformations apply. These are:
+Furthermore, I am using the Linux kernel v4.14.78 in my project.
 
-  ???r??? Apply transformation to regular archive members.
-  ???R??? Do not apply transformation to regular archive members.
-  ???s??? Apply transformation to symbolic link targets.
-  ???S??? Do not apply transformation to symbolic link targets.
-  ???h??? Apply transformation to hard link targets.
-  ???H??? Do not apply transformation to hard link targets.
-
-  Default is ???rsh??? [...].
-
-Fixes: #13616
-Signed-off-by: Jean-pierre Cartal <jpcartal@free.fr>
-Tested-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- support/download/git | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/support/download/git b/support/download/git
-index 15d8c66e05..1b0dc1b115 100755
---- a/support/download/git
-+++ b/support/download/git
-@@ -203,7 +203,7 @@ LC_ALL=C sort <"${output}.list" >"${output}.list.sorted"
- 
- # Create GNU-format tarballs, since that's the format of the tarballs on
- # sources.buildroot.org and used in the *.hash files
--tar cf - --transform="s#^\./#${basename}/#" \
-+tar cf - --transform="s#^\./#${basename}/#S" \
-          --numeric-owner --owner=0 --group=0 --mtime="${date}" --format=gnu \
-          -T "${output}.list.sorted" >"${output}.tar"
- gzip -6 -n <"${output}.tar" >"${output}"
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
