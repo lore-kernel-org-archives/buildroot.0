@@ -1,46 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Mar 2021 23:25:46 +0100
-Subject: [Buildroot] [git commit branch/2021.02.x] package/gstreamer1: bump
+Date: Wed, 24 Mar 2021 23:29:22 +0100
+Subject: [Buildroot] [git commit branch/2021.02.x] package/gst1-python: bump
  version to 1.18.4
-Message-ID: <20210324220719.6275489080@busybox.osuosl.org>
+Message-ID: <20210324220720.0220881384@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9ea796d82224c9dce975443fc5448e7759e625e5
+commit: https://git.buildroot.net/buildroot/commit/?id=bc360ecd02b687248fb620fd420718878a7298da
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 40f46cb0ab65a8ffcf3972d5745ab4467ad4a141)
+(cherry picked from commit b06a83e354005e0b5e27f399a99f57b9d7b73053)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gstreamer1/gstreamer1/gstreamer1.hash | 4 ++--
- package/gstreamer1/gstreamer1/gstreamer1.mk   | 2 +-
+ package/gstreamer1/gst1-python/gst1-python.hash | 4 ++--
+ package/gstreamer1/gst1-python/gst1-python.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gstreamer1/gstreamer1.hash b/package/gstreamer1/gstreamer1/gstreamer1.hash
-index 18fb343ff0..e9709ef0c9 100644
---- a/package/gstreamer1/gstreamer1/gstreamer1.hash
-+++ b/package/gstreamer1/gstreamer1/gstreamer1.hash
+diff --git a/package/gstreamer1/gst1-python/gst1-python.hash b/package/gstreamer1/gst1-python/gst1-python.hash
+index e64d5c3ab2..f7c2d57077 100644
+--- a/package/gstreamer1/gst1-python/gst1-python.hash
++++ b/package/gstreamer1/gst1-python/gst1-python.hash
 @@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.18.3.tar.xz.sha256sum
--sha256  0c2e09e18f2df69a99b5cb3bd53c597b3cc2e35cf6c98043bb86a66f3d312100  gstreamer-1.18.3.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.18.4.tar.xz.sha256sum
-+sha256  9aeec99b38e310817012aa2d1d76573b787af47f8a725a65b833880a094dfbc5  gstreamer-1.18.4.tar.xz
- sha256  f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a  COPYING
-diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
-index a63a17676f..99846c1be5 100644
---- a/package/gstreamer1/gstreamer1/gstreamer1.mk
-+++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
+-# From https://gstreamer.freedesktop.org/src/gst-python/gst-python-1.18.3.tar.xz.sha256sum
+-sha256  4e630735276e08ff4d70337aa5d91fd008e5f1ed3dc0993674cd5820e264259a  gst-python-1.18.3.tar.xz
++# From https://gstreamer.freedesktop.org/src/gst-python/gst-python-1.18.4.tar.xz.sha256sum
++sha256  cb68e08a7e825e08b83a12a22dcd6e4f1b328a7b02a7ac84f42f68f4ddc7098e  gst-python-1.18.4.tar.xz
+ sha256  ea3ad127610e5ded2210b3a86a46314f2b3b28e438eccffdae19a4d6fbcdb0c2  COPYING
+diff --git a/package/gstreamer1/gst1-python/gst1-python.mk b/package/gstreamer1/gst1-python/gst1-python.mk
+index 9ec50f0851..ed127cdba8 100644
+--- a/package/gstreamer1/gst1-python/gst1-python.mk
++++ b/package/gstreamer1/gst1-python/gst1-python.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GSTREAMER1_VERSION = 1.18.3
-+GSTREAMER1_VERSION = 1.18.4
- GSTREAMER1_SOURCE = gstreamer-$(GSTREAMER1_VERSION).tar.xz
- GSTREAMER1_SITE = https://gstreamer.freedesktop.org/src/gstreamer
- GSTREAMER1_INSTALL_STAGING = YES
+-GST1_PYTHON_VERSION = 1.18.3
++GST1_PYTHON_VERSION = 1.18.4
+ GST1_PYTHON_SOURCE = gst-python-$(GST1_PYTHON_VERSION).tar.xz
+ GST1_PYTHON_SITE = https://gstreamer.freedesktop.org/src/gst-python
+ GST1_PYTHON_INSTALL_STAGING = YES
