@@ -1,32 +1,56 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 24 Mar 2021 08:04:13 +0100
-Subject: [Buildroot] [PATCH 1/1] package/openmpi: drop unrecognized option
-Message-ID: <20210324070413.733545-1-fontaine.fabrice@gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Wed, 24 Mar 2021 09:51:42 +0100
+Subject: [Buildroot] [PATCH] package/lualogging: bump to version 1.5.1
+Message-ID: <20210324085142.2019521-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
---disable-vt has been dropped since version 2.0.0 and
-https://github.com/open-mpi/ompi/commit/94190bf04b0877e878223a04c236443774e57ef2
+diff LICENSE:
+-Copyright (c) 2004-2020 Kepler Project.
++Copyright (c) 2004-2021 Kepler Project.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/openmpi/openmpi.mk | 1 -
- 1 file changed, 1 deletion(-)
+ package/lualogging/Config.in       | 2 +-
+ package/lualogging/lualogging.hash | 4 ++--
+ package/lualogging/lualogging.mk   | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/openmpi/openmpi.mk b/package/openmpi/openmpi.mk
-index b682e6e74e..8bdc3fa188 100644
---- a/package/openmpi/openmpi.mk
-+++ b/package/openmpi/openmpi.mk
-@@ -11,7 +11,6 @@ OPENMPI_SOURCE = openmpi-$(OPENMPI_VERSION).tar.bz2
- OPENMPI_LICENSE = BSD-3-Clause
- OPENMPI_LICENSE_FILES = LICENSE
- OPENMPI_INSTALL_STAGING = YES
--OPENMPI_CONF_OPTS = --disable-vt
+diff --git a/package/lualogging/Config.in b/package/lualogging/Config.in
+index 79e352a75..b12b95142 100644
+--- a/package/lualogging/Config.in
++++ b/package/lualogging/Config.in
+@@ -6,4 +6,4 @@ config BR2_PACKAGE_LUALOGGING
+ 	  supports, through the use of appenders, console, file, rolling
+ 	  file, email, socket and SQL outputs.
  
- # Enabling Fortran support requires pre-seeding the configure script
- # with various values that cannot be guessed, so we provide cache
+-	  https://github.com/keplerproject/lualogging
++	  https://lunarmodules.github.io/lualogging/
+diff --git a/package/lualogging/lualogging.hash b/package/lualogging/lualogging.hash
+index 6cd82ab2e..45f186885 100644
+--- a/package/lualogging/lualogging.hash
++++ b/package/lualogging/lualogging.hash
+@@ -1,3 +1,3 @@
+ # computed by luarocks/buildroot
+-sha256 54501b7b84c28fa0c0d310ebfceb6e30be3396bd8aa9caaef7ddfbb0ac0976bc  lualogging-1.4.0-1.src.rock
+-sha256 895d1a80efc5fc60236b70c4bf60bdec409c56c75b4ebe4c2da9cb20a1a11908  lualogging/COPYRIGHT
++sha256 70451dbec500dbc760f0eae666a10b19a0ba9bcbfa5dd8d3134908e5ae6d28b1  lualogging-1.5.1-1.src.rock
++sha256 4d95b123e667a13615f567a829aa39211dd55b0b48c9f247bf3fcc5c0b485da7  lualogging/COPYRIGHT
+diff --git a/package/lualogging/lualogging.mk b/package/lualogging/lualogging.mk
+index 26df9e331..9c94e588a 100644
+--- a/package/lualogging/lualogging.mk
++++ b/package/lualogging/lualogging.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LUALOGGING_VERSION = 1.4.0-1
++LUALOGGING_VERSION = 1.5.1-1
+ LUALOGGING_SUBDIR = lualogging
+ LUALOGGING_LICENSE = MIT
+ LUALOGGING_LICENSE_FILES = $(LUALOGGING_SUBDIR)/COPYRIGHT
 -- 
-2.30.1
+2.27.0
