@@ -1,39 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Mar 2021 14:08:52 +0100
-Subject: [Buildroot] [git commit branch/2021.02.x] package/ejabberd: add
- EJABBERD_CPE_ID_VENDOR
-Message-ID: <20210324133906.A4E4F873DC@busybox.osuosl.org>
+Date: Wed, 24 Mar 2021 15:04:03 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] support/download: Fix
+ tarball generation with symlinks pointing to ./something
+Message-ID: <20210324133943.AD07D88FC4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c14d48bfdb25f86ddf469169a7d249cc3c8dddf8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=60e31c823f6899087c8dd0e7bc3f14514d28a3d0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-cpe:2.3:a:process-one:ejabberd is a valid CPE identifier for this
-package:
+When a --transform expression is provided, it is by default also applied
+to the target of a symlink.
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aprocess-one%3Aejabberd
+When we create tarballs (from git or svn checkouts), we use a --transform
+expression to replace the leading ./ with the package name and version.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 61aee0d75b41fe8b79ebdb6056882e07cbfc10bf)
+This causes issues when a package contains symlinks that points to
+./something, as the leading './' is also replaced.
+
+Fix that by using the 'S' transformation scope flag, as described in the
+tar manual:
+  https://www.gnu.org/software/tar/manual/html_node/transform.html#transform
+
+  In addition, several transformation scope flags are supported, that
+  control to what files transformations apply. These are:
+
+  ???r??? Apply transformation to regular archive members.
+  ???R??? Do not apply transformation to regular archive members.
+  ???s??? Apply transformation to symbolic link targets.
+  ???S??? Do not apply transformation to symbolic link targets.
+  ???h??? Apply transformation to hard link targets.
+  ???H??? Do not apply transformation to hard link targets.
+
+  Default is ???rsh??? [...].
+
+Fixes: #13616
+Signed-off-by: Jean-pierre Cartal <jpcartal@free.fr>
+Tested-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ejabberd/ejabberd.mk | 1 +
- 1 file changed, 1 insertion(+)
+ support/download/git | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/ejabberd/ejabberd.mk b/package/ejabberd/ejabberd.mk
-index a0b4a63542..2b23701ddf 100644
---- a/package/ejabberd/ejabberd.mk
-+++ b/package/ejabberd/ejabberd.mk
-@@ -9,6 +9,7 @@ EJABBERD_SOURCE = ejabberd-$(EJABBERD_VERSION).tgz
- EJABBERD_SITE = https://static.process-one.net/ejabberd/downloads/$(EJABBERD_VERSION)
- EJABBERD_LICENSE = GPL-2.0+ with OpenSSL exception
- EJABBERD_LICENSE_FILES = COPYING
-+EJABBERD_CPE_ID_VENDOR = process-one
- EJABBERD_DEPENDENCIES = getent openssl erlang-eimp host-erlang-lager \
- 	erlang-lager erlang-p1-cache-tab erlang-p1-sip \
- 	erlang-p1-stringprep erlang-p1-stun erlang-p1-tls \
+diff --git a/support/download/git b/support/download/git
+index 15d8c66e05..1b0dc1b115 100755
+--- a/support/download/git
++++ b/support/download/git
+@@ -203,7 +203,7 @@ LC_ALL=C sort <"${output}.list" >"${output}.list.sorted"
+ 
+ # Create GNU-format tarballs, since that's the format of the tarballs on
+ # sources.buildroot.org and used in the *.hash files
+-tar cf - --transform="s#^\./#${basename}/#" \
++tar cf - --transform="s#^\./#${basename}/#S" \
+          --numeric-owner --owner=0 --group=0 --mtime="${date}" --format=gnu \
+          -T "${output}.list.sorted" >"${output}.tar"
+ gzip -6 -n <"${output}.tar" >"${output}"
