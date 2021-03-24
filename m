@@ -1,22 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Mar 2021 14:09:04 +0100
-Subject: [Buildroot] [PATCH 1/1] package/dtc: add DTC_CPE_ID_VENDOR
-In-Reply-To: <20210320190006.446819-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 20 Mar 2021 20:00:06 +0100")
-References: <20210320190006.446819-1-fontaine.fabrice@gmail.com>
-Message-ID: <877dlwn1fz.fsf@dell.be.48ers.dk>
+Date: Wed, 24 Mar 2021 14:11:46 +0100
+Subject: [Buildroot] [PATCH] configs/beaglebone_qt5: add overlay to
+ defconfig
+In-Reply-To: <20210319145907.464593-1-buildroot@heine.tech> (Michael Nosthoff
+ via buildroot's message of "Fri, 19 Mar 2021 15:59:07 +0100")
+References: <20210319145907.464593-1-buildroot@heine.tech>
+Message-ID: <8735wkn1bh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Michael" == Michael Nosthoff via buildroot <buildroot@busybox.net> writes:
 
- > cpe:2.3:a:dtc_project:dtc is a valid CPE identifier for this package:
- >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Adtc_project%3Adtc
+ > commit 8efc5dce98f9795d97b7a3452f9be4a774032379 added an overlay but
+ > forgot to add it to the related defconfig.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Fixes: missing overlay data in image
+
+ > Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 
 Committed to 2021.02.x, thanks.
 
