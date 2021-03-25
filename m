@@ -1,49 +1,45 @@
-From: Alassane <alassaneg@gmail.com>
-Date: Thu, 25 Mar 2021 13:44:04 +0100
-Subject: [Buildroot] PHP installation issues
-In-Reply-To: <CAJ2YAHtdmiVyOZJNZbaWpGon15hznYV815QAhgKe4KY7YBBdmQ@mail.gmail.com>
-References: <CAJ2YAHtdmiVyOZJNZbaWpGon15hznYV815QAhgKe4KY7YBBdmQ@mail.gmail.com>
-Message-ID: <CAJ2YAHu7_rnwA8Qe8juPXW18cNdozfO7i=CN4owL6NUYWWD9FQ@mail.gmail.com>
+From: John Keeping <john@metanate.com>
+Date: Thu, 25 Mar 2021 12:46:16 +0000
+Subject: [Buildroot] [PATCH] package/ca-certificates: always use host-python3
+Message-ID: <20210325124616.153411-1-john@metanate.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+When no Python package is selected for the target, ca-certificate
+defaults to host-python (as opposed to host-python3).  However, with
+many packages using the meson build system, which requires host-python3,
+it is likely that this results in both Python 2 and Python 3 being built
+for the host.
 
-Do you have any idea of what the issue could be?
+One option would be to flip the default to use host-python3 when no
+target Python package is selected, but Python 2 is no longer supported
+and the package is marked as deprecated so it makes sense to just
+require host-python3 here.
 
-Kind regards
+Signed-off-by: John Keeping <john@metanate.com>
+---
+ package/ca-certificates/ca-certificates.mk | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-Thank you
-
-Le lun. 22 mars 2021 ? 15:13, Alassane <alassaneg@gmail.com> a ?crit :
-
-> Hello,
->
-> I have tried to generate a linux image with buildroot2020.11.1 but i'm
-> having some issues after that.
-> First of all, i've activated the external php extension "php-imagick" in
-> target package after i run "make menuconfig".
-> After that, i perform a full rebuild, reflash my sd card, launch my target
-> but when i run the commande "php -m", it doesn't show me the "imagick"
-> module...
-> And this is the following error message i'm facing when trying to run a
-> program with the "php" command : *PHP Fatal error:  Uncaught Error: Class
-> 'Imagick' not found*
->
-> Also, i've selected the php "iconv" package and facing this error when i
-> try to run my php program : *PHP Notice:  iconv(): Unknown error (22).*
->
-> Do you know where these issues i'm facing could potentially come from?
->
-> Kind regards
->
-> Thank you
->
-> Alassane
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210325/c5bfa49b/attachment.html>
+diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
+index 5c24d4be49..86e64f4270 100644
+--- a/package/ca-certificates/ca-certificates.mk
++++ b/package/ca-certificates/ca-certificates.mk
+@@ -7,11 +7,7 @@
+ CA_CERTIFICATES_VERSION = 20200601
+ CA_CERTIFICATES_SOURCE = ca-certificates_$(CA_CERTIFICATES_VERSION).tar.xz
+ CA_CERTIFICATES_SITE = http://snapshot.debian.org/archive/debian/20200602T145955Z/pool/main/c/ca-certificates
+-CA_CERTIFICATES_DEPENDENCIES = host-openssl
+-# ca-certificates can be built with either python 2 or python 3
+-# but it must be at least python 2.7
+-CA_CERTIFICATES_DEPENDENCIES += \
+-	$(if $(BR2_PACKAGE_PYTHON3),host-python3,host-python)
++CA_CERTIFICATES_DEPENDENCIES = host-openssl host-python3
+ CA_CERTIFICATES_LICENSE = GPL-2.0+ (script), MPL-2.0 (data)
+ CA_CERTIFICATES_LICENSE_FILES = debian/copyright
+ 
+-- 
+2.31.0
