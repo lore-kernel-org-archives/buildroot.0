@@ -1,55 +1,57 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 25 Mar 2021 16:22:46 +0200
-Subject: [Buildroot] [PATCH] package/libbytesize: remove pcre2 runtime
- dependency
-In-Reply-To: <226176cabe249af62546689fbb39de8a7010c329.1616681740.git.stefan@agner.ch>
-References: <226176cabe249af62546689fbb39de8a7010c329.1616681740.git.stefan@agner.ch>
-Message-ID: <8735wjl3d5.fsf@tarshish>
+From: John Keeping <john@metanate.com>
+Date: Thu, 25 Mar 2021 14:39:46 +0000
+Subject: [Buildroot] [PATCH] package/ca-certificates: bump to version
+ 20210119
+Message-ID: <20210325143946.297692-1-john@metanate.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Stefan,
+Upstream has switched to requiring python3, so change the dependency to
+always use host-python3.
 
-On Thu, Mar 25 2021, Stefan Agner wrote:
-> The library is only required at build time, which is handled by the
-> select in Config.in.
+Signed-off-by: John Keeping <john@metanate.com>
+---
+ package/ca-certificates/ca-certificates.hash |  4 ++--
+ package/ca-certificates/ca-certificates.mk   | 10 +++-------
+ 2 files changed, 5 insertions(+), 9 deletions(-)
 
-The _DEPENDENCIES list is meant to make sure that pcre2 builds before
-libbytesize. Config.in select does not guarantee the build order.
-Config.in select only makes pcre2 build.
-
-So if pcre2 is required at build time we need it in the _DEPENDENCIES
-list.
-
-Am I missing something?
-
-baruch
-
-> Signed-off-by: Stefan Agner <stefan@agner.ch>
-> ---
->  package/libbytesize/libbytesize.mk | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/package/libbytesize/libbytesize.mk b/package/libbytesize/libbytesize.mk
-> index 0ba380dc74..df54ae84b7 100644
-> --- a/package/libbytesize/libbytesize.mk
-> +++ b/package/libbytesize/libbytesize.mk
-> @@ -14,8 +14,7 @@ LIBBYTESIZE_DEPENDENCIES = \
->  	host-pkgconf \
->  	host-gettext \
->  	gmp \
-> -	mpfr \
-> -	pcre2
-> +	mpfr
->  
->  LIBBYTESIZE_CONF_OPTS += \
->  	--without-python3 \
-
-
+diff --git a/package/ca-certificates/ca-certificates.hash b/package/ca-certificates/ca-certificates.hash
+index 1ed1c3ca06..024034c977 100644
+--- a/package/ca-certificates/ca-certificates.hash
++++ b/package/ca-certificates/ca-certificates.hash
+@@ -1,6 +1,6 @@
+ # hashes from: $(CA_CERTIFICATES_SITE)/ca-certificates_$(CA_CERTIFICATES_VERSION).dsc :
+-sha1  f17235bc9c3aec538065a655681815c242a6d7d5  ca-certificates_20200601.tar.xz
+-sha256  43766d5a436519503dfd65ab83488ae33ab4d4ca3d0993797b58c92eb9ed4e63  ca-certificates_20200601.tar.xz
++sha1  c9875aa16e42981c6975e59a11727539053e2299  ca-certificates_20210119.tar.xz
++sha256  daa3afae563711c30a0586ddae4336e8e3974c2b627faaca404c4e0141b64665  ca-certificates_20210119.tar.xz
+ 
+ # Locally computed
+ sha256  e85e1bcad3a915dc7e6f41412bc5bdeba275cadd817896ea0451f2140a93967c  debian/copyright
+diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
+index 5c24d4be49..94302ea96b 100644
+--- a/package/ca-certificates/ca-certificates.mk
++++ b/package/ca-certificates/ca-certificates.mk
+@@ -4,14 +4,10 @@
+ #
+ ################################################################################
+ 
+-CA_CERTIFICATES_VERSION = 20200601
++CA_CERTIFICATES_VERSION = 20210119
+ CA_CERTIFICATES_SOURCE = ca-certificates_$(CA_CERTIFICATES_VERSION).tar.xz
+-CA_CERTIFICATES_SITE = http://snapshot.debian.org/archive/debian/20200602T145955Z/pool/main/c/ca-certificates
+-CA_CERTIFICATES_DEPENDENCIES = host-openssl
+-# ca-certificates can be built with either python 2 or python 3
+-# but it must be at least python 2.7
+-CA_CERTIFICATES_DEPENDENCIES += \
+-	$(if $(BR2_PACKAGE_PYTHON3),host-python3,host-python)
++CA_CERTIFICATES_SITE = https://snapshot.debian.org/archive/debian/20210325T091936Z/pool/main/c/ca-certificates
++CA_CERTIFICATES_DEPENDENCIES = host-openssl host-python3
+ CA_CERTIFICATES_LICENSE = GPL-2.0+ (script), MPL-2.0 (data)
+ CA_CERTIFICATES_LICENSE_FILES = debian/copyright
+ 
 -- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.31.0
