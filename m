@@ -1,42 +1,49 @@
 From: Petr Vorel <petr.vorel@gmail.com>
-Date: Thu, 25 Mar 2021 19:00:23 +0100
-Subject: [Buildroot] [PATCH 1/1] package/libmbim: bump version to 1.24.6
-Message-ID: <20210325180023.20646-1-petr.vorel@gmail.com>
+Date: Thu, 25 Mar 2021 20:19:11 +0100
+Subject: [Buildroot] [PATCH 1/1] package/abootimg: Update to 1ebeb39,
+ switch to ajs124
+Message-ID: <20210325191911.27127-1-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ajs124 [1] has 2 fixes over than original [2].
+
+[1] https://gitlab.com/ajs124/abootimg
+[2] https://github.com/ggrandou/abootimg.
+
 Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 ---
- package/libmbim/libmbim.hash | 4 ++--
- package/libmbim/libmbim.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/abootimg/abootimg.hash | 2 +-
+ package/abootimg/abootimg.mk   | 5 +++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/libmbim/libmbim.hash b/package/libmbim/libmbim.hash
-index 7ce1a2e7ae..b6a82e367d 100644
---- a/package/libmbim/libmbim.hash
-+++ b/package/libmbim/libmbim.hash
-@@ -1,4 +1,4 @@
--# Locally computed:
--sha256  dd488ee6176243a6adb27a5872897336272ea7bea33a3ad501ba268e5a58b285  libmbim-1.24.4.tar.xz
-+# Locally computed
-+sha256  760465caaa1ccd699c14290e9791da456d5300dd11ebf4c1486151033e875dfd  libmbim-1.24.6.tar.xz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/libmbim/libmbim.mk b/package/libmbim/libmbim.mk
-index 4ce3ca892e..175111381f 100644
---- a/package/libmbim/libmbim.mk
-+++ b/package/libmbim/libmbim.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/abootimg/abootimg.hash b/package/abootimg/abootimg.hash
+index fa5282c6c3..141db26860 100644
+--- a/package/abootimg/abootimg.hash
++++ b/package/abootimg/abootimg.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	eb8d912bc7b5454c2afd3385fd86f4917d3587c48a6f5ae45df7856d88502cab	abootimg-7e127fee6a3981f6b0a50ce9910267cd501e09d4.tar.gz
++sha256	f377da42a57d982cfc22fa75c5a69febdc3e4c1ef43cd0ceaec42e14067e2f37	abootimg-1ebeb393252ab5aeed62e34bc439b6728444f06e-br1.tar.gz
+ sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	LICENSE
+diff --git a/package/abootimg/abootimg.mk b/package/abootimg/abootimg.mk
+index ab6c709318..a07100df5a 100644
+--- a/package/abootimg/abootimg.mk
++++ b/package/abootimg/abootimg.mk
+@@ -4,8 +4,9 @@
  #
  ################################################################################
  
--LIBMBIM_VERSION = 1.24.4
-+LIBMBIM_VERSION = 1.24.6
- LIBMBIM_SITE = https://www.freedesktop.org/software/libmbim
- LIBMBIM_SOURCE = libmbim-$(LIBMBIM_VERSION).tar.xz
- LIBMBIM_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (programs)
+-ABOOTIMG_VERSION = 7e127fee6a3981f6b0a50ce9910267cd501e09d4
+-ABOOTIMG_SITE = $(call github,ggrandou,abootimg,$(ABOOTIMG_VERSION))
++ABOOTIMG_VERSION = 1ebeb393252ab5aeed62e34bc439b6728444f06e
++ABOOTIMG_SITE = https://gitlab.com/ajs124/abootimg.git
++ABOOTIMG_SITE_METHOD = git
+ ABOOTIMG_LICENSE = GPL-2.0+
+ ABOOTIMG_LICENSE_FILES = LICENSE
+ 
 -- 
 2.30.2
