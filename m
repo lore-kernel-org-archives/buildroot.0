@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 25 Mar 2021 08:16:18 +0100
-Subject: [Buildroot] [git commit branch/2020.11.x] package/jasper: bump
+Date: Thu, 25 Mar 2021 08:16:25 +0100
+Subject: [Buildroot] [git commit branch/2020.02.x] package/jasper: bump
  version to 2.0.27
-Message-ID: <20210326184121.19A888911C@busybox.osuosl.org>
+Message-ID: <20210326184128.3944B89087@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e550b0a32b1ce4f278408149384618c24b28db55
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=fa3dbc059fdfcc29f94d0d4bb5e0ce93ff187ff8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 Changes:
   * Check for an image containing no samples in the PGX
