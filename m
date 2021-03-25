@@ -1,45 +1,35 @@
-From: John Keeping <john@metanate.com>
-Date: Thu, 25 Mar 2021 12:46:16 +0000
-Subject: [Buildroot] [PATCH] package/ca-certificates: always use host-python3
-Message-ID: <20210325124616.153411-1-john@metanate.com>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Thu, 25 Mar 2021 13:54:42 +0100
+Subject: [Buildroot] [PATCH 1/2] package/network-manager: add CPE variables
+Message-ID: <20210325125442.17709-1-heiko.thiery@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When no Python package is selected for the target, ca-certificate
-defaults to host-python (as opposed to host-python3).  However, with
-many packages using the meson build system, which requires host-python3,
-it is likely that this results in both Python 2 and Python 3 being built
-for the host.
+cpe:2.3:a:gnome:networkmanager is a valid CPE identifier for this
+package:
 
-One option would be to flip the default to use host-python3 when no
-target Python package is selected, but Python 2 is no longer supported
-and the package is marked as deprecated so it makes sense to just
-require host-python3 here.
+https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Agnome%3Anetworkmanager
 
-Signed-off-by: John Keeping <john@metanate.com>
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 ---
- package/ca-certificates/ca-certificates.mk | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+ package/network-manager/network-manager.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
-index 5c24d4be49..86e64f4270 100644
---- a/package/ca-certificates/ca-certificates.mk
-+++ b/package/ca-certificates/ca-certificates.mk
-@@ -7,11 +7,7 @@
- CA_CERTIFICATES_VERSION = 20200601
- CA_CERTIFICATES_SOURCE = ca-certificates_$(CA_CERTIFICATES_VERSION).tar.xz
- CA_CERTIFICATES_SITE = http://snapshot.debian.org/archive/debian/20200602T145955Z/pool/main/c/ca-certificates
--CA_CERTIFICATES_DEPENDENCIES = host-openssl
--# ca-certificates can be built with either python 2 or python 3
--# but it must be at least python 2.7
--CA_CERTIFICATES_DEPENDENCIES += \
--	$(if $(BR2_PACKAGE_PYTHON3),host-python3,host-python)
-+CA_CERTIFICATES_DEPENDENCIES = host-openssl host-python3
- CA_CERTIFICATES_LICENSE = GPL-2.0+ (script), MPL-2.0 (data)
- CA_CERTIFICATES_LICENSE_FILES = debian/copyright
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index 4b2ade5b9b..9402564cb4 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -13,6 +13,8 @@ NETWORK_MANAGER_DEPENDENCIES = host-pkgconf udev gnutls libglib2 \
+ 	libgcrypt wireless_tools util-linux host-intltool readline libndp
+ NETWORK_MANAGER_LICENSE = GPL-2.0+ (app), LGPL-2.1+ (libnm)
+ NETWORK_MANAGER_LICENSE_FILES = COPYING COPYING.LGPL CONTRIBUTING
++NETWORK_MANAGER_CPE_ID_VENDOR = gnome
++NETWORK_MANAGER_CPE_ID_PRODUCT = networkmanager
+ NETWORK_MANAGER_SELINUX_MODULES = networkmanager
  
+ NETWORK_MANAGER_CONF_ENV = \
 -- 
-2.31.0
+2.30.0
