@@ -1,26 +1,27 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 25 Mar 2021 20:49:02 +0000
-Subject: [Buildroot] [Bug 13271] systemd-resolved: /etc/resolv.conf link
- broken on per-package build
-In-Reply-To: <bug-13271-163@https.bugs.busybox.net/>
-References: <bug-13271-163@https.bugs.busybox.net/>
-Message-ID: <bug-13271-163-zyuDVPveHJ@https.bugs.busybox.net/>
+Date: Thu, 25 Mar 2021 21:09:02 +0000
+Subject: [Buildroot] [Bug 13671] openSSH server closes connection before
+ authentication is finished
+In-Reply-To: <bug-13671-163@https.bugs.busybox.net/>
+References: <bug-13671-163@https.bugs.busybox.net/>
+Message-ID: <bug-13671-163-PIrduroNbf@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=13271
+https://bugs.busybox.net/show_bug.cgi?id=13671
 
-Leo <leojrfs@gmail.com> changed:
+--- Comment #8 from Peter Seiderer <ps.report@gmx.net> ---
+(In reply to Geert Lens from comment #7)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-            Version|2020.08.1                   |2021.02
-
---- Comment #2 from Leo <leojrfs@gmail.com> ---
-btw, this is still reproducible on 2021.02
+No other advise at the moment as avoid the buggy (?) pre-build toolchains,
+change to a buildroot build ones (and/or avoid/fix uclibc?), or patch openssh
+according/specific to your toolchain/openssh failure (see suggested patch
+above),
+or disable seccomp-filter for openssh (did not investigate yet if or how it is
+possible)...
 
 -- 
 You are receiving this mail because:
