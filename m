@@ -1,31 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Mar 2021 23:55:05 +0100
-Subject: [Buildroot] [PATCH 1/1] package/jasper: bump version to 2.0.27
-In-Reply-To: <20210318113327.829-1-jubalh@iodoru.org> (Michael Vetter's
- message of "Thu, 18 Mar 2021 12:33:27 +0100")
-References: <20210318113327.829-1-jubalh@iodoru.org>
-Message-ID: <87im5gkvqu.fsf@dell.be.48ers.dk>
+From: Stephane Viau <stephane.viau@oss.nxp.com>
+Date: Thu, 25 Mar 2021 07:21:36 +0100
+Subject: [Buildroot] [PATCH v3 0/5] imx: add i.MX 8M Plus SoC & 8MPlus EVK
+ board support
+Message-ID: <20210325062141.10226-1-stephane.viau@oss.nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Michael" == Michael Vetter <jubalh@iodoru.org> writes:
+This series adds support for the NXP i.MX 8M Plus SoC and EVK board.
 
- > Changes:
- >   * Check for an image containing no samples in the PGX
- >     decoder. (#271, #272, #273, #274, #275, #276, #281)
- >   * Check for dimensions of zero in the JPC and JPEG decoders.
- >   * Fix an arguably incorrect type for an integer literal
- >     in the PGX decoder. (#270)
- >   * Check for an invalid component reference in the
- >     JP2 decoder. (#269)
- >   * Check on integer size in JP2 decoder. (#278)
+Stephane Viau (5):
+  package/freescale-imx: add option for i.MX 8M Plus
+  package/freescale-imx/firmware-imx: add support for i.MX 8M Plus
+  package/imx-mkimage: add support for i.MX 8M Plus
+  board/freescale/common/imx: add support for i.MX 8M Plus
+  configs/freescale_imx8mpevk: new defconfig
 
- > Signed-off-by: Michael Vetter <jubalh@iodoru.org>
-
-Committed to 2021.02.x given the fixes, thanks.
+ DEVELOPERS                                    |  2 +
+ .../common/imx/imx8-bootloader-prepare.sh     |  7 ++
+ board/freescale/common/imx/post-image.sh      |  2 +
+ board/freescale/imx8mpevk/readme.txt          | 71 +++++++++++++++++++
+ configs/freescale_imx8mpevk_defconfig         | 42 +++++++++++
+ package/freescale-imx/Config.in               |  8 ++-
+ package/freescale-imx/firmware-imx/Config.in  |  2 +
+ package/imx-mkimage/imx-mkimage.mk            |  2 +-
+ 8 files changed, 134 insertions(+), 2 deletions(-)
+ create mode 100644 board/freescale/imx8mpevk/readme.txt
+ create mode 100644 configs/freescale_imx8mpevk_defconfig
 
 -- 
-Bye, Peter Korsgaard
+2.31.0
