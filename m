@@ -1,47 +1,101 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 25 Mar 2021 08:34:34 +0100
-Subject: [Buildroot] [PATCH 1/1] package/pulseview: fix patch
-Message-ID: <20210325073434.625844-1-fontaine.fabrice@gmail.com>
+From: Andreas Ziegler <br015@umbiko.net>
+Date: Thu, 25 Mar 2021 09:45:09 +0000
+Subject: [Buildroot] Buildroot: enable lib/firmware/brcm for rpi0w
+In-Reply-To: <20210324232703.46b691fe@gmx.net>
+References: <mailman.13.1616500803.19462.buildroot@busybox.net>
+ <75b24e8f6fe588935be2f1320d172d68@umbiko.net>
+ <20210324232703.46b691fe@gmx.net>
+Message-ID: <ed68882a97bad7976f53b30716196c96@umbiko.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 4b7db318262a023a4a5396b06adafd9fd19d40a3 forgot to restore
-upstream patch
+Hello Peter,
 
-Fixes:
- - http://autobuild.buildroot.org/results/589cfc6ea43dc5e714751f05be488f5c469641b9
+Thank you for this detailed information!
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- .../0001-Replace-obsolete-deprecated-Qt-methods.patch       | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+On 2021-03-24 22:27, Peter Seiderer wrote:
 
-diff --git a/package/pulseview/0001-Replace-obsolete-deprecated-Qt-methods.patch b/package/pulseview/0001-Replace-obsolete-deprecated-Qt-methods.patch
-index 42cdc467be..047fe2cccd 100644
---- a/package/pulseview/0001-Replace-obsolete-deprecated-Qt-methods.patch
-+++ b/package/pulseview/0001-Replace-obsolete-deprecated-Qt-methods.patch
-@@ -7,6 +7,8 @@ Subject: [PATCH] Replace obsolete/deprecated Qt methods
- ae726b70a7ada9a4be5808e00f0c951318479684, one conflict manually
- resolved in pv/util.cpp.]
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+[Fabrice: restore original patch in pv/util.cpp for 0.4.2]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- ---
-  pv/util.cpp                     | 21 +++++++++++++++++++--
-  pv/util.hpp                     | 10 ++++++++++
-@@ -25,8 +27,8 @@ index 49b9467c..2a63038d 100644
-  	if (sign && !v.is_zero())
- -		ts << forcesign;
- +		ts.setNumberFlags(ts.numberFlags() | QTextStream::ForceSign);
-- 	ts << qSetRealNumberPrecision(precision) << (v * multiplier) << ' '
-- 		<< prefix << unit;
-+ 	ts << qSetRealNumberPrecision(precision) << (v * multiplier);
-+ 	ts << ' ' << prefix << unit;
-  
- @@ -171,7 +171,7 @@ QString format_value_si(double v, SIPrefix prefix, unsigned precision,
-  	QString s;
--- 
-2.30.1
+> Or use 
+> BR2_PACKAGE_LINUX_FIRMWARE/BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XXX
+> already containing the file 
+> brcmfmac43455-sdio.raspberrypi,4-model-b.txt
+> ([1], but according to [2],[3],[4] the linux-firmware provided files 
+> are
+> 'older than that used by the Raspbian distribution, and has (in
+> certain situations)
+> significantly worse performance than it (and indeed with some APs, will 
+> not
+> associate at all).')?
+> 
+> Did not (yet) compare the various provided firmware files:
+> 
+
+I performed some tests this morning; the linux-firmware version is 
+indeed considerably older than the rpi-wifi-firmware one (buildroot 
+2021.02-git):
+
+rpi-wifi-firmware [1]
+[raspi]# dmesg | grep brcm
+[    1.016287] brcmfmac: brcmf_fw_alloc_request: using 
+brcm/brcmfmac43455-sdio for chip BCM4345/6
+[    1.163138] brcmfmac: brcmf_fw_alloc_request: using 
+brcm/brcmfmac43455-sdio for chip BCM4345/6
+[    1.170984] brcmfmac: brcmf_c_preinit_dcmds: Firmware: BCM4345/6 wl0: 
+Mar 23 2020 02:19:54 version 7.45.206 (r725000 CY) FWID 01-88ee44ea
+
+linux-firmwlare [2]
+[raspi]# dmesg | grep brcmfmac
+[    1.014318] brcmfmac: brcmf_fw_alloc_request: using 
+brcm/brcmfmac43455-sdio for chip BCM4345/6
+[    1.015164] usbcore: registered new interface driver brcmfmac
+[    1.123380] brcmfmac: brcmf_fw_alloc_request: using 
+brcm/brcmfmac43455-sdio for chip BCM4345/6
+[    1.131265] brcmfmac: brcmf_c_preinit_dcmds: Firmware: BCM4345/6 wl0: 
+Mar  1 2015 07:29:38 version 7.45.18 (r538002) FWID 01-6a2c8ad4
+
+Both worked (at least on my hardware: 'Machine model: Raspberry Pi 4 
+Model B Rev 1.1' running 5.10.21-rt33-v8) and data rate over WiFi was 
+not different for both versions.
+
+The version from [3] is quite recent:
+
+RPi-Distro / firmware-nonfree
+[raspi]# dmesg | grep brcmfmac
+[    1.036680] brcmfmac: brcmf_fw_alloc_request: using 
+brcm/brcmfmac43455-sdio for chip BCM4345/6
+[    1.037717] usbcore: registered new interface driver brcmfmac
+[    1.183610] brcmfmac: brcmf_fw_alloc_request: using 
+brcm/brcmfmac43455-sdio for chip BCM4345/6
+[    1.188657] brcmfmac: brcmf_c_preinit_dcmds: Firmware: BCM4345/6 wl0: 
+Jan  4 2021 19:56:29 version 7.45.229 (617f1f5 CY) FWID 01-2dbd9d2e
+
+Also here, no change in throughput.
+
+The LibreELEC repository (rpi-wifi-firmware) seems to have adopted this 
+version in commit 7dbd877545ae15069f2bd0e73893af942500e23d on Jan. 25.
+
+Armbian-firmware, by the way, is on version 7.45.154 (2018-02-27).
+
+There seem to be some bigger changes in the pipeline: linux-firmware 
+removed the Broadcom redistributed binaries in January [4] for the 
+20210208 release; instead Cypress firmware should be used. The upstream 
+repository for this firmware seems to be murata-wireless /
+cyw-fmac-fw [5]
+
+I need to look into this in detail at some other time ...
+
+Kind regards,
+Andreas
+
+[1] 
+https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git 
+(version 20201022)
+[2] 
+https://github.com/LibreELEC/brcmfmac_sdio-firmware-rpi/tree/9c0ffe9a7f0753b36ed88f7981905a989d940ea9
+[3] https://github.com/RPi-Distro/firmware-nonfree/tree/master/brcm
+[4] 
+https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/commit/?h=20210208&id=0f0aefd733f70beae4c0246edbd2c158d5ce974c
+[5] https://github.com/murata-wireless/cyw-fmac-fw/
