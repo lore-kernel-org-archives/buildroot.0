@@ -1,42 +1,47 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 26 Mar 2021 19:05:37 +0100
-Subject: [Buildroot] Raspberry Pi 3 linux image installation
-In-Reply-To: <MWHPR02MB2368FA6939186ECB2BDBD14DF1619@MWHPR02MB2368.namprd02.prod.outlook.com>
-References: <MWHPR02MB2368FA6939186ECB2BDBD14DF1619@MWHPR02MB2368.namprd02.prod.outlook.com>
-Message-ID: <20210326190537.5f421abc@gmx.net>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri, 26 Mar 2021 19:44:28 +0100
+Subject: [Buildroot] [PATCH 1/1] package/libopenssl: security bump version
+ to 1.1.1k
+Message-ID: <20210326184428.331954-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Nicolas,
+Fixes CVE-2021-3449 & CVE-2021-3450:
+https://www.openssl.org/news/vulnerabilities-1.1.1.html
 
-On Fri, 26 Mar 2021 13:17:12 +0000, Nicolas Chango <nicolas.chango96@outlook.fr> wrote:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/libopenssl/libopenssl.hash | 4 ++--
+ package/libopenssl/libopenssl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> Hi, I try to install image for Raspberry Pi 3 device,
-> 
-> I use the last Ubuntu version in virtualbox.
-> 
-> Afer commands :
-> 
-> $ make raspberrypi3_defconfig
-> $ make
-> 
-> ?I have the following errors :
-> 
-> g++: fatal error: Processus arr?t? signal terminated program cc1plus
-> compilation terminated.
-> make[3]: *** [Makefile:1116 : gimple-match.o] Erreur 1
-> make[3]: *** Attente des t?ches non termin?es....
-> make[2]: *** [Makefile:4300 : all-gcc] Erreur 2
-> make[1]: *** [package/pkg-generic.mk:250 : /home/nicolas/buildroot/output/build/host-gcc-initial-9.3.0/.stamp_built] Erreur 2
-> make: *** [Makefile:84 : _all] Erreur 2
-> 
-> Someone could help me please ?
-
-Maybe Out-Of-Memory in your Virtualbox? Try to configure more memory (or less CPUs),
-or set BR2_JLEVEL in your config file to something smaller than your CPU count...
-
-Regards,
-Peter
+diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
+index 854f8a03f7..585486ffbe 100644
+--- a/package/libopenssl/libopenssl.hash
++++ b/package/libopenssl/libopenssl.hash
+@@ -1,5 +1,5 @@
+-# From https://www.openssl.org/source/openssl-1.1.1j.tar.gz.sha256
+-sha256  aaf2fcb575cdf6491b98ab4829abf78a3dec8402b8b81efc8f23c00d443981bf  openssl-1.1.1j.tar.gz
++# From https://www.openssl.org/source/openssl-1.1.1k.tar.gz.sha256
++sha256  892a0875b9872acd04a9fde79b1f943075d5ea162415de3047c327df33fbaee5  openssl-1.1.1k.tar.gz
+ 
+ # License files
+ sha256  c32913b33252e71190af2066f08115c69bc9fddadf3bf29296e20c835389841c  LICENSE
+diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
+index 19f1c89f06..a10b64c8fd 100644
+--- a/package/libopenssl/libopenssl.mk
++++ b/package/libopenssl/libopenssl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBOPENSSL_VERSION = 1.1.1j
++LIBOPENSSL_VERSION = 1.1.1k
+ LIBOPENSSL_SITE = https://www.openssl.org/source
+ LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
+ LIBOPENSSL_LICENSE = OpenSSL or SSLeay
+-- 
+2.29.2
