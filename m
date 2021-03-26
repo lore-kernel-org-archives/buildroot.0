@@ -1,64 +1,40 @@
-From: Christian Stewart <christian@paral.in>
-Date: Thu, 25 Mar 2021 22:11:51 -0700
-Subject: [Buildroot] [PATCH v1 1/1] package/nerdctl: new package
-In-Reply-To: <CANQCQpabm-BFmSKGapR5Fiwu_60O-nvJtWuuVc=41h4d3ZZpbQ@mail.gmail.com>
-References: <20210323051027.91385-1-christian@paral.in>
- <CANQCQpabm-BFmSKGapR5Fiwu_60O-nvJtWuuVc=41h4d3ZZpbQ@mail.gmail.com>
-Message-ID: <CA+h8R2p-u8jCyhjTGH=L86AdzfbZCX7KpATPReP+2Vj_ayAFYQ@mail.gmail.com>
+From: Marcus Folkesson <marcus.folkesson@gmail.com>
+Date: Fri, 26 Mar 2021 08:41:50 +0100
+Subject: [Buildroot] [PATCH] package/libostree: bump to version 2021.1
+Message-ID: <20210326074150.2433920-1-marcus.folkesson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Matthew,
+Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+---
+ package/libostree/libostree.hash | 2 +-
+ package/libostree/libostree.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Tue, Mar 23, 2021 at 5:59 AM Matthew Weber <matthew.weber@collins.com> wrote:
->
-> Christian,
->
-> On Tue, Mar 23, 2021 at 12:11 AM Christian Stewart <christian@paral.in> wrote:
-> >
-> > nerdctl is a CLI for containerd (package docker-containerd) which is drop-in
-> > compatible with the Docker Daemon CLI.
->
-> By chance, do you have any rough estimates on the size difference
-> between the set of GOLang executables between a pure Docker solution
-> and a containerd+ nerdctl? (If I remember correctly Docker was
-> 200-300MB (engine+CLI))
-
-According to "graph-size":
-
- - docker-engine: 49MB
- - docker-cli 39MB
-
- - docker-containerd: 66MB
-
- - nerdctl: 19.3MB
-
-So, the savings would be around ~70MB.
-
-I believe docker-engine and docker-containerd are both much larger
-than they have any right to be at the moment, and can probably be
-minimized to something much smaller by deleting dependencies to
-kubernetes repos, cloud provider libraries, and other features
-probably most Buildroot users don't need.
-
-One way to save space would be a "busybox" approach where there are
-multiple symlinks to a single Go binary to implement both
-docker-container, docker-cli, runc, etc. This way the common
-dependencies (i.e. OCI interfaces) are shared between binaries
-(admittedly this is what dynamic linking normally is for).
-
->
-> I saw the other RFC as well for renaming docker-containerd to
-> containerd, that makes sense to me as the containerd runtime stands
-> alone and this would make any dependencies cleaner with no reference
-> to docker-*.
-
-Yeah, docker-containerd should be renamed to containerd. While it
-originally was part of Docker, it's now a standalone project with
-multiple downstream consumers.
-
-Best regards,
-Christian Stewart
+diff --git a/package/libostree/libostree.hash b/package/libostree/libostree.hash
+index 751feb6b2e..bc1249deed 100644
+--- a/package/libostree/libostree.hash
++++ b/package/libostree/libostree.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  fdaa5992d0a6f62157152355449ac8476c50df6602be398e9ad10438cc1e679b  libostree-2020.8.tar.xz
++sha256  91b4bd9264831d20ff00ec442d48ede526db55379bd917606863c05f43b85a51  libostree-2021.1.tar.xz
+ sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
+index 7c887ebee8..a0e7e0ef0d 100644
+--- a/package/libostree/libostree.mk
++++ b/package/libostree/libostree.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBOSTREE_VERSION = 2020.8
++LIBOSTREE_VERSION = 2021.1
+ LIBOSTREE_SOURCE = libostree-$(LIBOSTREE_VERSION).tar.xz
+ LIBOSTREE_SITE = https://github.com/ostreedev/ostree/releases/download/v$(LIBOSTREE_VERSION)
+ 
+-- 
+2.30.0
