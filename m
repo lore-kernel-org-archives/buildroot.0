@@ -1,50 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Mar 2021 20:05:40 +0100
-Subject: [Buildroot] [git commit branch/2021.02.x] package/haproxy: bump to
- version 2.2.10
-Message-ID: <20210326184156.3128888079@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri, 26 Mar 2021 20:08:56 +0100
+Subject: [Buildroot] [PATCH 2/2] package/freeswitch: bump version to 1.10.6
+In-Reply-To: <20210326190856.704217-1-bernd.kuhls@t-online.de>
+References: <20210326190856.704217-1-bernd.kuhls@t-online.de>
+Message-ID: <20210326190856.704217-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=716e151b00294c27d971acedfabe36fe272e8298
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+Release notes:
+https://github.com/signalwire/freeswitch/releases/tag/v1.10.6
 
-https://www.mail-archive.com/haproxy at formilux.org/msg39916.html
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 31f6fc2bdeaf36b9aa342b74f68495f76d73c976)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/haproxy/haproxy.hash | 4 ++--
- package/haproxy/haproxy.mk   | 2 +-
+ package/freeswitch/freeswitch.hash | 4 ++--
+ package/freeswitch/freeswitch.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
-index 956949275e..04cb2e3c06 100644
---- a/package/haproxy/haproxy.hash
-+++ b/package/haproxy/haproxy.hash
+diff --git a/package/freeswitch/freeswitch.hash b/package/freeswitch/freeswitch.hash
+index d95e05c0b1..dc5a67980f 100644
+--- a/package/freeswitch/freeswitch.hash
++++ b/package/freeswitch/freeswitch.hash
 @@ -1,5 +1,5 @@
--# From: http://www.haproxy.org/download/2.2/src/haproxy-2.2.9.tar.gz.sha256
--sha256  21680459b08b9ba21c8cc9f5dbd0ee6e1842f57a3a67f87179871e1c13ebd4e3  haproxy-2.2.9.tar.gz
-+# From: http://www.haproxy.org/download/2.2/src/haproxy-2.2.10.tar.gz.sha256
-+sha256  a027e9cd8f703ba48dc193f5ae34d9aa152221f67ab58a4e939c96b9f4edd3bc  haproxy-2.2.10.tar.gz
- # Locally computed:
- sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
- sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
-diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
-index 45c62f7c21..03c872e6b2 100644
---- a/package/haproxy/haproxy.mk
-+++ b/package/haproxy/haproxy.mk
-@@ -5,7 +5,7 @@
+-# From https://files.freeswitch.org/freeswitch-releases/freeswitch-1.10.5.-release.tar.xz.sha256
+-sha256  3e26600767a82946eca94af2c8f14712783aa83db5fb1cc57585f544aecce327 freeswitch-1.10.5.-release.tar.xz
++# From https://files.freeswitch.org/freeswitch-releases/freeswitch-1.10.6.-release.tar.xz.sha256
++sha256  9a08d4e184e6d715e1c12c43a0f901597151752ef236f0a37e40996272b5c38d  freeswitch-1.10.6.-release.tar.xz
+ # Locally computed
+ sha256  75c933202f40939cdc3827fce20a1efdaa38291e2b5a65d234eb16e2cffda66a  COPYING
+ sha256  c3e3388768dae8bf4edcc4108f95be815b8a05c0b0aef6e4c3d8df81affdfa34  docs/OPENH264_BINARY_LICENSE.txt
+diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
+index 7219880530..63f6324af2 100644
+--- a/package/freeswitch/freeswitch.mk
++++ b/package/freeswitch/freeswitch.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- HAPROXY_VERSION_MAJOR = 2.2
--HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).9
-+HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).10
- HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
- HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
- HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
+-FREESWITCH_VERSION = 1.10.5
++FREESWITCH_VERSION = 1.10.6
+ FREESWITCH_SOURCE = freeswitch-$(FREESWITCH_VERSION).-release.tar.xz
+ FREESWITCH_SITE = https://files.freeswitch.org/freeswitch-releases
+ # External modules need headers/libs from staging
+-- 
+2.29.2
