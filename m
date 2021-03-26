@@ -1,44 +1,210 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Mar 2021 23:39:15 +0100
-Subject: [Buildroot] [PATCH v1] boot/syslinux: fix gcc-10.x compile
-In-Reply-To: <20210307174753.9400-1-ps.report@gmx.net> (Peter Seiderer's
- message of "Sun, 7 Mar 2021 18:47:53 +0100")
-References: <20210307174753.9400-1-ps.report@gmx.net>
-Message-ID: <87blb5k0a4.fsf@dell.be.48ers.dk>
+Date: Fri, 26 Mar 2021 23:38:21 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] boot/syslinux: fix
+ gcc-10.x compile
+Message-ID: <20210326221542.6E82889110@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=130a8077b6201ef29576259c23f3397d5e6a4fd5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
- > Add two patches ([1], [2]) taken from the fedora syslinux package ([3]) to fix
- > compile/linking with gcc-10.x compiler.
+Add two patches ([1], [2]) taken from the fedora syslinux package ([3]) to fix
+compile/linking with gcc-10.x compiler.
 
- > [1] https://src.fedoraproject.org/rpms/syslinux/raw/rawhide/f/0005-Workaround-multiple-definition-of-symbol-errors.patch
- > [2] https://src.fedoraproject.org/rpms/syslinux/raw/rawhide/f/0006-Replace-builtin-strlen-that-appears-to-get-optimized.patch
- > [3] https://src.fedoraproject.org/rpms/syslinux/tree/rawhide
+[1] https://src.fedoraproject.org/rpms/syslinux/raw/rawhide/f/0005-Workaround-multiple-definition-of-symbol-errors.patch
+[2] https://src.fedoraproject.org/rpms/syslinux/raw/rawhide/f/0006-Replace-builtin-strlen-that-appears-to-get-optimized.patch
+[3] https://src.fedoraproject.org/rpms/syslinux/tree/rawhide
 
- > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
- > ---
- > Notes:
- >  - possible follow-up would be a buildroot syslinux package version
- >    bump to upstream syslinux-6.04-pre4 (or git master), dropping
- >    all current patches and importing all current fedora patches
- >    instead (and/or check for duplicates)
- >  - [4] and [5] advice to use 6.04-pre1 and avoid 6.04-pre2/6.04-pre3
- >    and [6] to avoid 6.04-pre4
- >  - not manny updates on the official git [7], but a wiki page
- >    [8] mentioning various needed patches
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit a9f94d7aba750f36ff34b10a5e208e8529f53bcc)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...ound-multiple-definition-of-symbol-errors.patch | 126 +++++++++++++++++++++
+ ...ltin-strlen-that-appears-to-get-optimized.patch |  42 +++++++
+ 2 files changed, 168 insertions(+)
 
- >   [4] https://www.syslinux.org/archives/2019-August/026497.html
- >   [5] https://www.syslinux.org/archives/2019-August/026500.html
- >   [6] https://www.syslinux.org/archives/2019-August/026509.html
- >   [7] https://repo.or.cz/syslinux.git/shortlog
- >   [8] https://wiki.syslinux.org/wiki/index.php?title=Building
-
-Committed to 2020.11.x and 2021.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/boot/syslinux/0016-Workaround-multiple-definition-of-symbol-errors.patch b/boot/syslinux/0016-Workaround-multiple-definition-of-symbol-errors.patch
+new file mode 100644
+index 0000000000..ea91de5cb3
+--- /dev/null
++++ b/boot/syslinux/0016-Workaround-multiple-definition-of-symbol-errors.patch
+@@ -0,0 +1,126 @@
++From 16f293d67eace501c98494976030f4319778ebf5 Mon Sep 17 00:00:00 2001
++From: Merlin Mathesius <mmathesi@redhat.com>
++Date: Wed, 13 May 2020 08:02:27 -0500
++Subject: [PATCH] Workaround multiple definition of symbol errors
++
++[From https://src.fedoraproject.org/rpms/syslinux/raw/rawhide/f/0005-Workaround-multiple-definition-of-symbol-errors.patch
++ plus adding '-z muldefs' for gpxe]
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ com32/cmenu/Makefile           | 2 +-
++ com32/elflink/ldlinux/Makefile | 2 +-
++ com32/gpllib/Makefile          | 2 +-
++ com32/hdt/Makefile             | 2 +-
++ core/Makefile                  | 2 +-
++ dos/Makefile                   | 2 +-
++ efi/Makefile                   | 2 +-
++ gpxe/src/arch/i386/Makefile    | 2 +-
++ 8 files changed, 8 insertions(+), 8 deletions(-)
++
++diff --git a/com32/cmenu/Makefile b/com32/cmenu/Makefile
++index 6bb52316..66cdd649 100644
++--- a/com32/cmenu/Makefile
+++++ b/com32/cmenu/Makefile
++@@ -49,7 +49,7 @@ makeoutputdirs:
++ 	@mkdir -p $(OBJ)/libmenu
++ 
++ libmenu/libmenu.elf: $(LIBMENU)
++-	$(LD) -shared $(LDFLAGS) -soname $(patsubst %.elf,%.c32,$(@F)) \
+++	$(LD) -shared $(LDFLAGS) -z muldefs -soname $(patsubst %.elf,%.c32,$(@F)) \
++ 		-o $@ $^
++ 
++ tidy dist:
++diff --git a/com32/elflink/ldlinux/Makefile b/com32/elflink/ldlinux/Makefile
++index d948da43..67434a1f 100644
++--- a/com32/elflink/ldlinux/Makefile
+++++ b/com32/elflink/ldlinux/Makefile
++@@ -33,7 +33,7 @@ endif
++ all: $(BTARGET) ldlinux_lnx.a
++ 
++ ldlinux.elf : $(OBJS)
++-	$(LD) $(LDFLAGS) -soname $(SONAME) -o $@ $^ $(LIBS)
+++	$(LD) $(LDFLAGS) -z muldefs -soname $(SONAME) -o $@ $^ $(LIBS)
++ 
++ LNXCFLAGS += -D__export='__attribute__((visibility("default")))'
++ LNXLIBOBJS = get_key.lo
++diff --git a/com32/gpllib/Makefile b/com32/gpllib/Makefile
++index e3e30d76..17520a1e 100644
++--- a/com32/gpllib/Makefile
+++++ b/com32/gpllib/Makefile
++@@ -24,7 +24,7 @@ makeoutputdirs:
++ 		$(addprefix $(OBJ),$(sort $(dir $(LIBOBJS)))),$(b))
++ 
++ libgpl.elf : $(LIBOBJS)
++-	$(LD) -shared $(LDFLAGS) -soname $(patsubst %.elf,%.c32,$(@F)) -o $@ $^
+++	$(LD) -shared $(LDFLAGS) -z muldefs -soname $(patsubst %.elf,%.c32,$(@F)) -o $@ $^
++ 
++ tidy dist clean:
++ 	find . \( -name \*.o -o -name .\*.d -o -name \*.tmp \) -print0 | \
++diff --git a/com32/hdt/Makefile b/com32/hdt/Makefile
++index 80f2d0a0..8509cd96 100644
++--- a/com32/hdt/Makefile
+++++ b/com32/hdt/Makefile
++@@ -52,7 +52,7 @@ QEMU			?= qemu-kvm
++ all: $(MODULES) $(TESTFILES)
++ 
++ hdt.elf : $(OBJS) $(LIBS) $(C_LIBS)
++-	$(LD) $(LDFLAGS) -o $@ $^
+++	$(LD) $(LDFLAGS) -z muldefs -o $@ $^
++ 
++ memtest:
++ 	-[ ! -f $(FLOPPY_DIR)/$(MEMTEST) ] && $(WGET) $(MEMTEST_URL) -O $(FLOPPY_DIR)/$(MEMTEST)
++diff --git a/core/Makefile b/core/Makefile
++index ad0acb5a..3bee4dc9 100644
++--- a/core/Makefile
+++++ b/core/Makefile
++@@ -164,7 +164,7 @@ AUXLIBS = libisolinux.a libisolinux-debug.a libldlinux.a \
++ LDSCRIPT = $(SRC)/$(ARCH)/syslinux.ld
++ 
++ %.elf: %.o $(LIBDEP) $(LDSCRIPT) $(AUXLIBS)
++-	$(LD) $(LDFLAGS) -Bsymbolic $(LD_PIE) -E --hash-style=gnu -T $(LDSCRIPT) -M -o $@ $< \
+++	$(LD) $(LDFLAGS) -z muldefs -Bsymbolic $(LD_PIE) -E --hash-style=gnu -T $(LDSCRIPT) -M -o $@ $< \
++ 		--start-group $(LIBS) $(subst $(*F).elf,lib$(*F).a,$@) --end-group \
++ 		> $(@:.elf=.map)
++ 	$(OBJDUMP) -h $@ > $(@:.elf=.sec)
++diff --git a/dos/Makefile b/dos/Makefile
++index b9c337d5..2af87346 100644
++--- a/dos/Makefile
+++++ b/dos/Makefile
++@@ -19,7 +19,7 @@ include $(MAKEDIR)/embedded.mk
++ CFLAGS	+= -D__MSDOS__ -mregparm=3 -DREGPARM=3
++ # CFLAGS  += -DDEBUG
++ 
++-LDFLAGS	 = -T $(SRC)/dosexe.ld
+++LDFLAGS	 = -T $(SRC)/dosexe.ld -z muldefs
++ OPTFLAGS = -g
++ INCLUDES = -include code16.h -nostdinc -iwithprefix include \
++ 	   -I$(SRC) -I$(SRC)/.. -I$(SRC)/../libfat \
++diff --git a/efi/Makefile b/efi/Makefile
++index d24d16db..7c714ebf 100644
++--- a/efi/Makefile
+++++ b/efi/Makefile
++@@ -70,7 +70,7 @@ $(OBJS): subdirs
++ BTARGET  = syslinux.efi
++ 
++ syslinux.so: $(OBJS) $(CORE_OBJS) $(LIB_OBJS)
++-	$(LD) $(LDFLAGS) --strip-debug -o $@ $^ -lgnuefi -lefi
+++	$(LD) $(LDFLAGS) -z muldefs --strip-debug -o $@ $^ -lgnuefi -lefi
++ 
++ # We need to rename the .hash section because the EFI firmware
++ # linker really doesn't like it.
++diff --git a/gpxe/src/arch/i386/Makefile b/gpxe/src/arch/i386/Makefile
++index dd8da802..be1d00ff 100644
++--- a/gpxe/src/arch/i386/Makefile
+++++ b/gpxe/src/arch/i386/Makefile
++@@ -55,7 +55,7 @@ ASFLAGS		+= --32
++ ifeq ($(HOST_OS),FreeBSD)
++ LDFLAGS		+= -m elf_i386_fbsd
++ else
++-LDFLAGS		+= -m elf_i386
+++LDFLAGS		+= -z muldefs -m elf_i386
++ endif
++ 
++ # EFI requires -fshort-wchar, and nothing else currently uses wchar_t
++-- 
++2.30.1
++
+diff --git a/boot/syslinux/0017-Replace-builtin-strlen-that-appears-to-get-optimized.patch b/boot/syslinux/0017-Replace-builtin-strlen-that-appears-to-get-optimized.patch
+new file mode 100644
+index 0000000000..69a7e87d85
+--- /dev/null
++++ b/boot/syslinux/0017-Replace-builtin-strlen-that-appears-to-get-optimized.patch
+@@ -0,0 +1,42 @@
++From 698a6ce88524b727d265b204d648e78d8acb485c Mon Sep 17 00:00:00 2001
++From: Merlin Mathesius <mmathesi@redhat.com>
++Date: Wed, 13 May 2020 11:58:37 -0500
++Subject: [PATCH] Replace builtin strlen that appears to get optimized away
++
++[From https://src.fedoraproject.org/rpms/syslinux/raw/rawhide/f/0006-Replace-builtin-strlen-that-appears-to-get-optimized.patch]
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ dos/string.h | 12 +++++++++++-
++ 1 file changed, 11 insertions(+), 1 deletion(-)
++
++diff --git a/dos/string.h b/dos/string.h
++index f648de2d..407d0233 100644
++--- a/dos/string.h
+++++ b/dos/string.h
++@@ -5,12 +5,22 @@
++ #ifndef _STRING_H
++ #define _STRING_H
++ 
+++#include <stddef.h>
+++
++ /* Standard routines */
++ #define memcpy(a,b,c)	__builtin_memcpy(a,b,c)
++ #define memmove(a,b,c)	__builtin_memmove(a,b,c)
++ #define memset(a,b,c)	__builtin_memset(a,b,c)
++ #define strcpy(a,b)	__builtin_strcpy(a,b)
++-#define strlen(a)	__builtin_strlen(a)
+++#define strlen(a)	inline_strlen(a)
+++
+++/* replacement for builtin strlen that appears to get optimized away */
+++static inline size_t inline_strlen(const char *str)
+++{
+++    size_t l;
+++    for (l = 0; *str++; l++);
+++    return l;
+++}
++ 
++ /* This only returns true or false */
++ static inline int memcmp(const void *__m1, const void *__m2, unsigned int __n)
++-- 
++2.30.1
++
