@@ -1,106 +1,23 @@
-From: Andreas Ziegler <br015@umbiko.net>
-Date: Fri, 26 Mar 2021 12:47:21 +0000
-Subject: [Buildroot] Buildroot: enable lib/firmware/brcm for rpi0w
-In-Reply-To: <20210325222017.39c79288@gmx.net>
-References: <mailman.13.1616500803.19462.buildroot@busybox.net>
- <75b24e8f6fe588935be2f1320d172d68@umbiko.net>
- <20210324232703.46b691fe@gmx.net>
- <ed68882a97bad7976f53b30716196c96@umbiko.net>
- <20210325222017.39c79288@gmx.net>
-Message-ID: <0d1e250a62069d63923fccf305f9766d@umbiko.net>
+From: Nicolas Chango <nicolas.chango96@outlook.fr>
+Date: Fri, 26 Mar 2021 13:10:24 +0000
+Subject: [Buildroot] Install "Which" package
+Message-ID: <MWHPR02MB2368356DEE08F8DBAE1F018EF1619@MWHPR02MB2368.namprd02.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
+Hi,
 
-On 2021-03-25 21:20, Peter Seiderer wrote:
-> 
-> Many thanks for doing the tests!
-> 
+I try to install buildroot on my Ubuntu version.
 
-Not at all; after getting confused with different versions and 
-repositories, I wanted to understand the reason behind this.
+In the list of mandatory packages https://buildroot.org/downloads/manual/manual.html#requirement-mandatory , there is the ? which ? package.
 
-Short summary of my findings; I may state the obvious here, but it was 
-new for me and maybe it helps someone with the same hazy knowledge about 
-hardware engineering as myself:
+But impossible to find any information in internet about how I can install it.
 
-Broadcom sold its RF division to Cypress in 2016. Cypress now supports 
-the legacy wireless /bluetooth /radio hardware from Broadcom; that is 
-the reason why BCM* and CYW* versions of firmware exist, and 
-linux-firmware removed the original Broadcom supplied binaries.
+Some one could help me please ?
 
-Cypress does not directly sell to end customers, but provides silicon to 
-hardware partners (AzureWave, Murata, ...), which in turn sell RF 
-solutions. Cypress distributes firmware for their silicon chips 
-(probably to same hardware partners).
-
-End product is some type of SOC (subsystem on chip); the benefit is that 
-tuning and regulatory issues have been taken care of. The SOC 
-manufacturer is responsible for supplying bluetooth patch (HCD), 
-regulatory data (CLM) and firmware configuration (TXT).
-
-That means the firmware binary (BIN) can be obtained from any source, 
-the other items (HCD, CLM, TXT) need to be sourced from the implementer.
-
->> The LibreELEC repository (rpi-wifi-firmware) seems to have adopted 
->> this
->> version in commit 7dbd877545ae15069f2bd0e73893af942500e23d on Jan. 25.
-> 
-> So a good reason to stay with LibreELEC (and fix the firmware package 
-> to
-> provide raspberrypi,4-model-b.txt as a link or copy, do you know if 
-> missing
-> it has some disadvantages or produces only the firmware load warning or 
-> is
-> there a fallback to plain brcmfmac43455-sdio.txt?), keeping up with
-> RPi-Distro...
-
-Yes, also my opinion to stay with LibreELEC. The repository is small, is 
-updated in a timely manner, and is (slightly) better documented than 
-RPi-Distro.
-
-There is one thing (apart from providing the missing link) I would 
-propose: merge rpi-bt-firmware and rpi-wifi-firmware into 
-rpi-rf-firmware, combining the code from both .mk and Config.in files. 
-Functionality would be identical, but one less firmware package. If 
-anyone is interested, I could provide a patch.
-
-In recent kernels, firmware load tries board-specific path first, then 
-falls back to firmware derived path [1]. If I remember correctly, in 
-kernels < 5.0 the firmware load failed.
-
->> There seem to be some bigger changes in the pipeline: linux-firmware
->> removed the Broadcom redistributed binaries in January [4] for the
->> 20210208 release; instead Cypress firmware should be used. The 
->> upstream
->> repository for this firmware seems to be murata-wireless /
->> cyw-fmac-fw [5]
->> 
->> I need to look into this in detail at some other time ...
-> 
-> Seems kind of (another) firmware mess...., different versions at 
-> different
-> repositories...., all with the same name (instead of clear version 
-> string)...
-
-There are at least three different versions available in Buildroot:
-
-(available in Buildroot, repo 'master' version listed respectively)
-   libreELEC		build 2021-01-04	version 7.45.229
-   linux-firmware	build 2020-09-18	version 7.45.221
-   murata-wireless	build 2020-09-18	version 7.45.221
-(not in buildroot)
-   rpi-distro		build 2021-01-04	version 7.45.229
-
-> Regards,
-> Peter
-
-Kind regards,
-Andreas
-
-[1] 
-https://elixir.bootlin.com/linux/v5.10.21/source/drivers/net/wireless/broadcom/brcm80211/brcmfmac/firmware.c#L616
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210326/2c843dac/attachment.html>
