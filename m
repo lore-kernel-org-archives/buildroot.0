@@ -1,29 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Mar 2021 23:47:03 +0100
-Subject: [Buildroot] [PATCH] package/libressl: security bump to 3.2.5
-In-Reply-To: <20210320230337.1841-1-ismael@iodev.co.uk> (Ismael Luceno's
- message of "Sun, 21 Mar 2021 00:03:37 +0100")
-References: <20210320230337.1841-1-ismael@iodev.co.uk>
-Message-ID: <87pmzlilco.fsf@dell.be.48ers.dk>
+Date: Fri, 26 Mar 2021 23:43:39 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/libressl:
+ security bump to 3.2.5
+Message-ID: <20210326222235.5BB3288FBC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ismael" == Ismael Luceno <ismael@iodev.co.uk> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=1fd67853458788133f3e7cc409b3f5bd2e267156
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
- > It includes the following bug fix:
- >  * A TLS client using session resumption may cause a use-after-free.
+It includes the following bug fix:
 
- > https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-3.2.5-relnotes.txt
+ * A TLS client using session resumption may cause a use-after-free.
 
- > Signed-off-by: Ismael Luceno <ismael@iodev.co.uk>
+https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-3.2.5-relnotes.txt
 
-Committed to 2020.11.x and 2021.02.x, thanks.
+Signed-off-by: Ismael Luceno <ismael@iodev.co.uk>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit f3894ffce2b6e6c52c2d9e3b7d0040f3d5a5b728)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libressl/libressl.hash | 2 +-
+ package/libressl/libressl.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-It it not really clear to me if this is only an issue in 3.2.x /
-TLSv1.3?
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libressl/libressl.hash b/package/libressl/libressl.hash
+index 0dd0ffcaed..9f216bf2f1 100644
+--- a/package/libressl/libressl.hash
++++ b/package/libressl/libressl.hash
+@@ -1,4 +1,4 @@
+ # From https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/SHA256
+-sha256  412dc2baa739228c7779e93eb07cd645d5c964d2f2d837a9fd56db7498463d73  libressl-3.2.3.tar.gz
++sha256  798a65fd61d385e09d559810cdfa46512f8def5919264cfef241a7b086ce7cfe  libressl-3.2.5.tar.gz
+ # Locally computed
+ sha256  5c63613f008f16a9c0025c096bbd736cecf720494d121b5c5203e0ec6e5955b1  COPYING
+diff --git a/package/libressl/libressl.mk b/package/libressl/libressl.mk
+index 2f7644a8e8..7c9ef3930d 100644
+--- a/package/libressl/libressl.mk
++++ b/package/libressl/libressl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBRESSL_VERSION = 3.2.3
++LIBRESSL_VERSION = 3.2.5
+ LIBRESSL_SITE = https://ftp.openbsd.org/pub/OpenBSD/LibreSSL
+ LIBRESSL_LICENSE = ISC (new additions), OpenSSL or SSLeay (original OpenSSL code)
+ LIBRESSL_LICENSE_FILES = COPYING
