@@ -1,31 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Mar 2021 20:24:54 +0100
-Subject: [Buildroot] [PATCH 1/1] package/tor: security bump version to
- 0.4.5.7
-In-Reply-To: <20210317065231.421826-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Wed, 17 Mar 2021 07:52:31 +0100")
-References: <20210317065231.421826-1-bernd.kuhls@t-online.de>
-Message-ID: <87sg4hk9a1.fsf@dell.be.48ers.dk>
+Date: Fri, 26 Mar 2021 20:09:13 +0100
+Subject: [Buildroot] [git commit branch/2021.02.x] package/tor: security
+ bump version to 0.4.5.7
+Message-ID: <20210326190028.E363481532@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=9efd9bf0edce025872ac367531c8991e8f286256
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
- > Updated license hash due to upstream commit:
- > https://gitweb.torproject.org/tor.git/commit/LICENSE?h=tor-0.4.5.7&id=02230575c4da6cd6342516e6682f95dad3e3e29e
+Updated license hash due to upstream commit:
+https://gitweb.torproject.org/tor.git/commit/LICENSE?h=tor-0.4.5.7&id=02230575c4da6cd6342516e6682f95dad3e3e29e
 
- > Fixes CVE-2021-28089 & CVE-2021-28090.
+Fixes CVE-2021-28089 & CVE-2021-28090.
 
- > Release notes: https://blog.torproject.org/node/2009
+Release notes: https://blog.torproject.org/node/2009
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit ed308a5cc3cb322eeabdc64a7b468bc3b6cc019e)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/tor/tor.hash | 4 ++--
+ package/tor/tor.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Committed to 2021.02.x, thanks.
-
-For 2020.02.x / 2020.11.x, I will instead bump to 0.4.4.8.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/tor/tor.hash b/package/tor/tor.hash
+index ecbe738574..e46335f79c 100644
+--- a/package/tor/tor.hash
++++ b/package/tor/tor.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  22cba3794fedd5fa87afc1e512c6ce2c21bc20b4e1c6f8079d832dc1e545e733  tor-0.4.5.6.tar.gz
+-sha256  ae2afe6cd3fd9d512afbaa1ef218757eb00aa6b6aa5e2dfc2774b6837e373fa1  LICENSE
++sha256  447fcaaa133e2ef22427e98098a60a9c495edf9ff3e0dd13f484b9ad0185f074  tor-0.4.5.7.tar.gz
++sha256  47b54ed17e8fdcab3c44729a1789a09b208f9a63a845a7e50def9df729eebad0  LICENSE
+diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+index 1c9d2f2367..56779f1633 100644
+--- a/package/tor/tor.mk
++++ b/package/tor/tor.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TOR_VERSION = 0.4.5.6
++TOR_VERSION = 0.4.5.7
+ TOR_SITE = https://dist.torproject.org
+ TOR_LICENSE = BSD-3-Clause
+ TOR_LICENSE_FILES = LICENSE
