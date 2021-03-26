@@ -1,24 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Mar 2021 23:43:06 +0100
-Subject: [Buildroot] [PATCH 1/1] package/gvfs: add GVFS_CPE_ID_VENDOR
-In-Reply-To: <20210321093000.533877-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 21 Mar 2021 10:30:00 +0100")
-References: <20210321093000.533877-1-fontaine.fabrice@gmail.com>
-Message-ID: <87tuoxilj9.fsf@dell.be.48ers.dk>
+Date: Fri, 26 Mar 2021 23:47:03 +0100
+Subject: [Buildroot] [PATCH] package/libressl: security bump to 3.2.5
+In-Reply-To: <20210320230337.1841-1-ismael@iodev.co.uk> (Ismael Luceno's
+ message of "Sun, 21 Mar 2021 00:03:37 +0100")
+References: <20210320230337.1841-1-ismael@iodev.co.uk>
+Message-ID: <87pmzlilco.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Ismael" == Ismael Luceno <ismael@iodev.co.uk> writes:
 
- > cpe:2.3:a:gnome:gvfs is a valid CPE identifier for this package:
- >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Agnome%3Agvfs
+ > It includes the following bug fix:
+ >  * A TLS client using session resumption may cause a use-after-free.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-3.2.5-relnotes.txt
 
-Committed, thanks.
+ > Signed-off-by: Ismael Luceno <ismael@iodev.co.uk>
+
+Committed to 2020.11.x and 2021.02.x, thanks.
+
+It it not really clear to me if this is only an issue in 3.2.x /
+TLSv1.3?
 
 -- 
 Bye, Peter Korsgaard
