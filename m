@@ -1,38 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Mar 2021 23:41:53 +0100
-Subject: [Buildroot] [git commit branch/2021.02.x] package/gpsd: add
- GPSD_CPE_ID_VENDOR
-Message-ID: <20210326222258.D2EC88909E@busybox.osuosl.org>
+Date: Fri, 26 Mar 2021 23:41:48 +0100
+Subject: [Buildroot] [git commit branch/2021.02.x] package/gettext-gnu: add
+ CPE variables
+Message-ID: <20210326222258.C647789088@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d83b753643fa90dc966dc9ffde9ebe9c3fbc175b
+commit: https://git.buildroot.net/buildroot/commit/?id=11c566e3066911e0889b8d0c67ac41354eb2e404
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-cpe:2.3:a:gpsd_project:gpsd is a valid CPE identifier for this package:
+cpe:2.3:a:gnu:gettext is a valid CPE identifier for this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Agpsd_project%3Agpsd
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Agnu%3Agettext
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit b72416bc6c412d51b917baf0b96eb6344ad972f7)
+(cherry picked from commit 15b6cae49a8f1e48362732ed1845307fdd505f04)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gpsd/gpsd.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/gettext-gnu/gettext-gnu.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
-index 57955b7895..be7327ac95 100644
---- a/package/gpsd/gpsd.mk
-+++ b/package/gpsd/gpsd.mk
-@@ -8,6 +8,7 @@ GPSD_VERSION = 3.20
- GPSD_SITE = http://download-mirror.savannah.gnu.org/releases/gpsd
- GPSD_LICENSE = BSD-2-Clause
- GPSD_LICENSE_FILES = COPYING
-+GPSD_CPE_ID_VENDOR = gpsd_project
- GPSD_INSTALL_STAGING = YES
- 
- GPSD_DEPENDENCIES = host-python3 host-scons host-pkgconf
+diff --git a/package/gettext-gnu/gettext-gnu.mk b/package/gettext-gnu/gettext-gnu.mk
+index ee7e97baf7..9a1eabd0df 100644
+--- a/package/gettext-gnu/gettext-gnu.mk
++++ b/package/gettext-gnu/gettext-gnu.mk
+@@ -11,6 +11,8 @@ GETTEXT_GNU_SOURCE = gettext-$(GETTEXT_GNU_VERSION).tar.xz
+ GETTEXT_GNU_INSTALL_STAGING = YES
+ GETTEXT_GNU_LICENSE = LGPL-2.1+ (libintl), GPL-3.0+ (the rest)
+ GETTEXT_GNU_LICENSE_FILES = COPYING gettext-runtime/intl/COPYING.LIB
++GETTEXT_GNU_CPE_ID_VENDOR = gnu
++GETTEXT_GNU_CPE_ID_PRODUCT = gettext
+ # 0002-restore-the-ability-to-buld-gettext-tools-seperately-part1.patch
+ GETTEXT_GNU_AUTORECONF = YES
+ GETTEXT_GNU_PROVIDES = gettext
