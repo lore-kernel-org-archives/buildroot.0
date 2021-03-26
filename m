@@ -1,38 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Mar 2021 23:42:59 +0100
-Subject: [Buildroot] [git commit branch/2021.02.x] package/gvfs: add
- GVFS_CPE_ID_VENDOR
-Message-ID: <20210326222258.EB1A28909E@busybox.osuosl.org>
+Date: Fri, 26 Mar 2021 23:42:18 +0100
+Subject: [Buildroot] [git commit branch/2021.02.x] package/gutenprint: add
+ GUTENPRINT_CPE_ID_VENDOR
+Message-ID: <20210326222258.DD5A07FD2E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0438a071b185b23ee4d69c2572b13a21ff483ea4
+commit: https://git.buildroot.net/buildroot/commit/?id=ea70d89250709927dacd0beac2fac3b3bd336ad0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-cpe:2.3:a:gnome:gvfs is a valid CPE identifier for this package:
+cpe:2.3:a:gutenprint_project:gutenprint is a valid CPE identifier for
+this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Agnome%3Agvfs
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Agutenprint_project%3Agutenprint
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 7062e183a2742651bc88af0149470fed0d95e3f9)
+(cherry picked from commit 9462869f271ddb4cfd7a19a59a082fc2f4a6f6d5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gvfs/gvfs.mk | 1 +
+ package/gutenprint/gutenprint.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/gvfs/gvfs.mk b/package/gvfs/gvfs.mk
-index c5104e8dbf..fc77e8e1aa 100644
---- a/package/gvfs/gvfs.mk
-+++ b/package/gvfs/gvfs.mk
-@@ -19,6 +19,7 @@ GVFS_DEPENDENCIES = \
- 	$(TARGET_NLS_DEPENDENCIES)
- GVFS_LICENSE = LGPL-2.0+
- GVFS_LICENSE_FILES = COPYING
-+GVFS_CPE_ID_VENDOR = gnome
+diff --git a/package/gutenprint/gutenprint.mk b/package/gutenprint/gutenprint.mk
+index 9cb80c3e95..b0fcd5a598 100644
+--- a/package/gutenprint/gutenprint.mk
++++ b/package/gutenprint/gutenprint.mk
+@@ -10,6 +10,7 @@ GUTENPRINT_SITE = http://downloads.sourceforge.net/project/gimp-print/gutenprint
+ GUTENPRINT_SOURCE = gutenprint-$(GUTENPRINT_VERSION).tar.bz2
+ GUTENPRINT_LICENSE = GPL-2.0+
+ GUTENPRINT_LICENSE_FILES = COPYING
++GUTENPRINT_CPE_ID_VENDOR = gutenprint_project
  
- GVFS_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
- 
+ # Needed, as we touch Makefile.am
+ GUTENPRINT_AUTORECONF = YES
