@@ -1,101 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Mar 2021 23:26:53 +0100
-Subject: [Buildroot] [git commit branch/2020.02.x] package/tor: bump version
- to 0.4.4.5
-Message-ID: <20210326220815.3499C800CE@busybox.osuosl.org>
+Date: Fri, 26 Mar 2021 22:48:45 +0100
+Subject: [Buildroot] [git commit branch/2020.11.x] package/tor: security
+ bump version to 0.4.4.8
+Message-ID: <20210326220819.BC86E87A9F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c8615465353eb3f6c8ca89bc39f3e5e35f370917
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=3359de91b02aef5c9500a84d6ded588ac3d231bd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-Release notes: https://blog.torproject.org/node/1921
+Updated license hash due to upstream commit:
+https://gitweb.torproject.org/tor.git/commit/LICENSE?h=tor-0.4.4.8&id=02230575c4da6cd6342516e6682f95dad3e3e29e
 
-Rebased patch.
+Fixes CVE-2021-28089 & CVE-2021-28090.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 4ceefab178f0c9664302bb3bfd55fc64f07de08b)
+Release notes: https://blog.torproject.org/node/2009
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tor/0001-Fix-static-linking-with-OpenSSL.patch | 12 ++++++------
- package/tor/tor.hash                                   |  2 +-
- package/tor/tor.mk                                     |  2 +-
- 3 files changed, 8 insertions(+), 8 deletions(-)
+ package/tor/tor.hash | 4 ++--
+ package/tor/tor.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/tor/0001-Fix-static-linking-with-OpenSSL.patch b/package/tor/0001-Fix-static-linking-with-OpenSSL.patch
-index 942f913465..128b6ed0ce 100644
---- a/package/tor/0001-Fix-static-linking-with-OpenSSL.patch
-+++ b/package/tor/0001-Fix-static-linking-with-OpenSSL.patch
-@@ -8,8 +8,8 @@ and remove host paths when looking for openssl.
- 
- [Vincent:
-  - Adapt the patch to make it apply on the new version.]
--[Bernd: rebased for tor-0.2.7.6, 0.2.8.10, 0.2.9.9, 0.3.1.7, 0.3.2.10 &
--        0.3.4.8, 0.3.5.7]
-+[Bernd: rebased for tor-0.2.7.6, 0.2.8.10, 0.2.9.9, 0.3.1.7, 0.3.2.10,
-+        0.3.4.8, 0.3.5.7 & 0.4.4.5]
- [Fabrice: fix detection of openssl functions in 0.3.5.8]
- Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
- Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-@@ -38,7 +38,7 @@ diff --git a/configure.ac b/configure.ac
- index 05e1392cf..580befa6b 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -966,7 +966,7 @@ AC_ARG_WITH(ssl-dir,
-+@@ -973,7 +973,7 @@ AC_ARG_WITH(ssl-dir,
-    ])
-  
-  AC_MSG_NOTICE([Now, we'll look for OpenSSL >= 1.0.1])
-@@ -47,7 +47,7 @@ index 05e1392cf..580befa6b 100644
-      [#include <openssl/ssl.h>
-       char *getenv(const char *);],
-      [struct ssl_cipher_st;
--@@ -998,7 +998,7 @@ dnl Now check for particular openssl functions.
-+@@ -1005,7 +1005,7 @@ dnl Now check for particular openssl functions.
-  save_LIBS="$LIBS"
-  save_LDFLAGS="$LDFLAGS"
-  save_CPPFLAGS="$CPPFLAGS"
-@@ -60,7 +60,7 @@ diff --git a/src/test/include.am b/src/test/include.am
- index ecb768957..39a622e88 100644
- --- a/src/test/include.am
- +++ b/src/test/include.am
--@@ -378,8 +378,8 @@ src_test_test_ntor_cl_LDFLAGS = @TOR_LDFLAGS_zlib@ $(TOR_LDFLAGS_CRYPTLIB)
-+@@ -400,8 +400,8 @@ src_test_test_ntor_cl_LDFLAGS = @TOR_LDFLAGS_zlib@ $(TOR_LDFLAGS_CRYPTLIB)
-  src_test_test_ntor_cl_LDADD = \
-  	$(TOR_INTERNAL_LIBS) \
-  	$(rust_ldadd) \
-@@ -71,7 +71,7 @@ index ecb768957..39a622e88 100644
-  	@CURVE25519_LIBS@ @TOR_LZMA_LIBS@
-  src_test_test_ntor_cl_AM_CPPFLAGS =	       \
-  	$(AM_CPPFLAGS)
--@@ -388,8 +388,8 @@ src_test_test_hs_ntor_cl_SOURCES  = src/test/test_hs_ntor_cl.c
-+@@ -410,8 +410,8 @@ src_test_test_hs_ntor_cl_SOURCES  = src/test/test_hs_ntor_cl.c
-  src_test_test_hs_ntor_cl_LDFLAGS = @TOR_LDFLAGS_zlib@ $(TOR_LDFLAGS_CRYPTLIB)
-  src_test_test_hs_ntor_cl_LDADD = \
-  	$(TOR_INTERNAL_LIBS) \
 diff --git a/package/tor/tor.hash b/package/tor/tor.hash
-index 1f564c113a..ddf1a880ff 100644
+index 7aa7280f2b..a383704033 100644
 --- a/package/tor/tor.hash
 +++ b/package/tor/tor.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  b20f0b55a7058a952b167fcd2ed75b1a380ade95efce9a509f570c4636c2117a  tor-0.4.3.7.tar.gz
-+sha256  a45ca00afe765e3baa839767c9dd6ac9a46dd01720a3a8ff4d86558c12359926  tor-0.4.4.5.tar.gz
- sha256  ae2afe6cd3fd9d512afbaa1ef218757eb00aa6b6aa5e2dfc2774b6837e373fa1  LICENSE
+-sha256  5f154c155803adf5c89e87cab53017b6908c5ebe50c65839e8cf4fbd2abe1fdc  tor-0.4.4.6.tar.gz
+-sha256  ae2afe6cd3fd9d512afbaa1ef218757eb00aa6b6aa5e2dfc2774b6837e373fa1  LICENSE
++sha256  4cad1638d22d47f4877da44f85d655205a069464a02d2f2a2d20f08756cb7547  tor-0.4.4.8.tar.gz
++sha256  47b54ed17e8fdcab3c44729a1789a09b208f9a63a845a7e50def9df729eebad0  LICENSE
 diff --git a/package/tor/tor.mk b/package/tor/tor.mk
-index 23320b895e..fe9b52670b 100644
+index b7095aa39c..bcfd2f4550 100644
 --- a/package/tor/tor.mk
 +++ b/package/tor/tor.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TOR_VERSION = 0.4.3.7
-+TOR_VERSION = 0.4.4.5
+-TOR_VERSION = 0.4.4.6
++TOR_VERSION = 0.4.4.8
  TOR_SITE = https://dist.torproject.org
  TOR_LICENSE = BSD-3-Clause
  TOR_LICENSE_FILES = LICENSE
