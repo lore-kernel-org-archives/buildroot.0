@@ -1,68 +1,84 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Mar 2021 23:52:42 +0100
-Subject: [Buildroot] [git commit] linux: bump CIP kernel 4.19 series
-Message-ID: <20210326223002.5A8D18A265@busybox.osuosl.org>
+Date: Fri, 26 Mar 2021 23:50:51 +0100
+Subject: [Buildroot] [git commit] {linux, linux-headers}: bump 5.{4, 10,
+ 11}.x 4.{4, 9, 14, 19} series
+Message-ID: <20210326223002.4C8808A268@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c670ab1e6c5782ea80ec0f1be81ef482786d2b94
+commit: https://git.buildroot.net/buildroot/commit/?id=ddfac826aea915a95a4ad64e7b8e8af93c5620c3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in  | 8 ++++----
- linux/linux.hash | 4 ++--
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ linux/Config.in                      |  2 +-
+ linux/linux.hash                     | 14 +++++++-------
+ package/linux-headers/Config.in.host | 14 +++++++-------
+ 3 files changed, 15 insertions(+), 15 deletions(-)
 
 diff --git a/linux/Config.in b/linux/Config.in
-index d8b2f6089c..d7bdf5e7d8 100644
+index 3370162faa..d8b2f6089c 100644
 --- a/linux/Config.in
 +++ b/linux/Config.in
-@@ -31,7 +31,7 @@ config BR2_LINUX_KERNEL_LATEST_VERSION
- 	bool "Latest version (5.11)"
+@@ -125,7 +125,7 @@ endif
  
- config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
--	bool "Latest CIP SLTS version (4.19.152-cip37)"
-+	bool "Latest CIP SLTS version (4.19.182-cip45)"
- 	help
- 	  CIP launched in the spring of 2016 to address the needs of
- 	  organizations in industries such as power generation and
-@@ -50,7 +50,7 @@ config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	  https://www.cip-project.org
- 
- config BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
--	bool "Latest CIP RT SLTS version (4.19.152-cip37-rt16)"
-+	bool "Latest CIP RT SLTS version (4.19.165-cip41-rt18)"
- 	help
- 	  Same as the CIP version, but this is the PREEMPT_RT realtime
- 	  variant.
-@@ -126,8 +126,8 @@ endif
  config BR2_LINUX_KERNEL_VERSION
  	string
- 	default "5.11.8" if BR2_LINUX_KERNEL_LATEST_VERSION
--	default "4.19.152-cip37" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
--	default "4.19.152-cip37-rt16" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
-+	default "4.19.182-cip45" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-+	default "4.19.165-cip41-rt18" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+-	default "5.11" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "5.11.8" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "4.19.152-cip37" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "4.19.152-cip37-rt16" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
  	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
 diff --git a/linux/linux.hash b/linux/linux.hash
-index 98616755ef..992ae22d11 100644
+index 94775566ea..98616755ef 100644
 --- a/linux/linux.hash
 +++ b/linux/linux.hash
-@@ -8,8 +8,8 @@ sha256  b22e764095362d9e63d76375db838d9372474ba5cbe6132c9a8b07f7533f07ff  linux-
- sha256  7adc041af81424ff8d68affe3005fa9e5babc4e84e0b07e4effdf54225ba9426  linux-4.14.226.tar.xz
- sha256  05db750ba01ad557bef50835c253894fad9fb0db2224f0e803b25e2ff7ab2365  linux-4.19.182.tar.xz
+@@ -1,12 +1,12 @@
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  04f07b54f0d40adfab02ee6cbd2a942c96728d87c1ef9e120d0cb9ba3fe067b4  linux-5.11.tar.xz
+-sha256  27e7bbb0de7f0acc29c3c2e0a70c9a5fafc5fcf250993ce48713f809862ab4d6  linux-5.10.19.tar.xz
+-sha256  4e118c072dbe3209ddeaff32ecc558f7e809d54e661550342079f1ee76d9349d  linux-5.4.101.tar.xz
++sha256  91f939263a350da676b274e3ec84ad5b57f27ffdf4bd6b74cd002ce21fc0c89f  linux-5.11.8.tar.xz
++sha256  930ae76b9a3b64b98802849aca332d17a706f20595de21e1ae729b55ee461add  linux-5.10.25.tar.xz
++sha256  1c3cef545f366b56332c11c28d074c9d9148c28059a970ec8710826652237560  linux-5.4.107.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+-sha256  0c41611ae151b80723eb68c75f8a3366756f93e8748ab0892255344f38d76665  linux-4.4.258.tar.xz
+-sha256  d478f8e069f6d8b86b0a69f99252ea9e7cd7070bf6bdd0e9b3773ee418e5c8cd  linux-4.9.258.tar.xz
+-sha256  734082b03d9f8e43b123b0061f08045b70c34e3a4b09f8a8da6a287686dac744  linux-4.14.222.tar.xz
+-sha256  ac0eb3794e01eac66bea3ab39b8776dadf15c418ddc534ccfd95a0270302357d  linux-4.19.177.tar.xz
++sha256  d270c529910aefa70f7eeaafe313588b9949cfde33a5553bd4cd1a1249c4e97b  linux-4.4.262.tar.xz
++sha256  b22e764095362d9e63d76375db838d9372474ba5cbe6132c9a8b07f7533f07ff  linux-4.9.262.tar.xz
++sha256  7adc041af81424ff8d68affe3005fa9e5babc4e84e0b07e4effdf54225ba9426  linux-4.14.226.tar.xz
++sha256  05db750ba01ad557bef50835c253894fad9fb0db2224f0e803b25e2ff7ab2365  linux-4.19.182.tar.xz
  # Locally computed
--sha256  d2a06f52143deb929b8d513cf9afc9bd065951389a80fa70bc4d63025b5b3fb9  linux-cip-4.19.152-cip37.tar.gz
--sha256  bc1dacd3d0f526de3e8754a444e8e02a54521527af639ddb907cb35cda775a8c  linux-cip-4.19.152-cip37-rt16.tar.gz
-+sha256  9f1de83c5c2bb582a33bd4ee892d45671901cd06af9dc159f0f499f1b5265b20  linux-cip-4.19.182-cip45.tar.gz
-+sha256  0eeba6d6ecc45cf8f16458842b64d22e7064b9de9c31c11d1c395b08a47e3855  linux-cip-4.19.165-cip41-rt18.tar.gz
+ sha256  d2a06f52143deb929b8d513cf9afc9bd065951389a80fa70bc4d63025b5b3fb9  linux-cip-4.19.152-cip37.tar.gz
+ sha256  bc1dacd3d0f526de3e8754a444e8e02a54521527af639ddb907cb35cda775a8c  linux-cip-4.19.152-cip37-rt16.tar.gz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index c0bf126caf..6d83ecf952 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -354,13 +354,13 @@ endchoice
  
- # Licenses hashes
- sha256  fb5a425bd3b3cd6071a3a9aff9909a859e7c1158d54d32e07658398cd67eb6a0  COPYING
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "4.4.258"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.258"	if BR2_KERNEL_HEADERS_4_9
+-	default "4.14.222"	if BR2_KERNEL_HEADERS_4_14
+-	default "4.19.177"	if BR2_KERNEL_HEADERS_4_19
+-	default "5.4.101"	if BR2_KERNEL_HEADERS_5_4
+-	default "5.10.19"	if BR2_KERNEL_HEADERS_5_10
+-	default "5.11"		if BR2_KERNEL_HEADERS_5_11
++	default "4.4.262"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.262"	if BR2_KERNEL_HEADERS_4_9
++	default "4.14.226"	if BR2_KERNEL_HEADERS_4_14
++	default "4.19.182"	if BR2_KERNEL_HEADERS_4_19
++	default "5.4.107"	if BR2_KERNEL_HEADERS_5_4
++	default "5.10.25"	if BR2_KERNEL_HEADERS_5_10
++	default "5.11.8"	if BR2_KERNEL_HEADERS_5_11
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
