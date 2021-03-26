@@ -1,46 +1,70 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Mar 2021 23:53:48 +0100
-Subject: [Buildroot] [git commit] package/kodi-pvr-iptvsimple: bump version
- to 7.5.1-Matrix
-Message-ID: <20210326223002.7F7668A268@busybox.osuosl.org>
+Date: Fri, 26 Mar 2021 23:59:20 +0100
+Subject: [Buildroot] [PATCH 1/1] linux: support uncompressed kernel
+In-Reply-To: <20210324114522.285121-1-egorenar@linux.ibm.com> (Alexander
+ Egorenkov's message of "Wed, 24 Mar 2021 12:45:22 +0100")
+References: <20210324114522.285121-1-egorenar@linux.ibm.com>
+Message-ID: <87zgyph67r.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=47dfa562f0b3100718c3b78071bbc72da19ec111
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Alexander" == Alexander Egorenkov <egorenar@linux.ibm.com> writes:
 
-Changelog:
-https://github.com/kodi-pvr/pvr.iptvsimple/blob/Matrix/pvr.iptvsimple/changelog.txt
+ > Enables to build an uncompressed Linux kernel.
+ > Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
+ > ---
+ >  linux/Config.in | 3 +++
+ >  linux/linux.mk  | 1 +
+ >  2 files changed, 4 insertions(+)
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash | 2 +-
- package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
-index b136cef01b..9170da5bc0 100644
---- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
-+++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  1cbe623e1eec0246c782398d8a8964d26b0fa68966c7f1422666068e50fb4e00  kodi-pvr-iptvsimple-7.5.0-Matrix.tar.gz
-+sha256  df020ba77864111476c7ab637fa82d658c248723c64d5fd4a31443def60cd75a  kodi-pvr-iptvsimple-7.5.1-Matrix.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
-index 8251c53f8f..fa14e5677c 100644
---- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
-+++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ > diff --git a/linux/Config.in b/linux/Config.in
+ > index 3370162faa..c09f70c4ac 100644
+ > --- a/linux/Config.in
+ > +++ b/linux/Config.in
+ > @@ -329,6 +329,9 @@ config BR2_LINUX_KERNEL_XZ
+ >  config BR2_LINUX_KERNEL_ZSTD
+ >  	bool "zstd compression"
  
--KODI_PVR_IPTVSIMPLE_VERSION = 7.5.0-Matrix
-+KODI_PVR_IPTVSIMPLE_VERSION = 7.5.1-Matrix
- KODI_PVR_IPTVSIMPLE_SITE = $(call github,kodi-pvr,pvr.iptvsimple,$(KODI_PVR_IPTVSIMPLE_VERSION))
- KODI_PVR_IPTVSIMPLE_LICENSE = GPL-2.0+
- KODI_PVR_IPTVSIMPLE_LICENSE_FILES = LICENSE.md
+ > +config BR2_LINUX_KERNEL_UNCOMPRESSED
+ > +	bool "uncompressed"
+
+It looks like this is a s390-specific option:
+
+commit 89b5202e81df9f0f0f0a11cf8c78bc8bfdc52a21
+Author: Vasily Gorbik <gor@linux.ibm.com>
+Date:   Wed Jun 13 00:00:25 2018 +0200
+
+    s390/decompressor: support uncompressed kernel
+
+
+So it should depend on BR2_s390x.
+
+ > +
+ >  endchoice
+ 
+ >  config BR2_LINUX_KERNEL_IMAGE_TARGET_NAME
+ > diff --git a/linux/linux.mk b/linux/linux.mk
+ > index 5e4b319cf1..1457228eb9 100644
+ > --- a/linux/linux.mk
+ > +++ b/linux/linux.mk
+ > @@ -111,6 +111,7 @@ LINUX_COMPRESSION_OPT_$(BR2_LINUX_KERNEL_LZMA) += CONFIG_KERNEL_LZMA
+ >  LINUX_COMPRESSION_OPT_$(BR2_LINUX_KERNEL_LZO) += CONFIG_KERNEL_LZO
+ >  LINUX_COMPRESSION_OPT_$(BR2_LINUX_KERNEL_XZ) += CONFIG_KERNEL_XZ
+ >  LINUX_COMPRESSION_OPT_$(BR2_LINUX_KERNEL_ZSTD) += CONFIG_KERNEL_ZSTD
+ > +LINUX_COMPRESSION_OPT_$(BR2_LINUX_KERNEL_UNCOMPRESSED) += CONFIG_KERNEL_UNCOMPRESSED
+ 
+ >  ifeq ($(BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL),y)
+ >  LINUX_DEPENDENCIES += host-openssl
+ > -- 
+ > 2.26.3
+
+ > _______________________________________________
+ > buildroot mailing list
+ > buildroot at busybox.net
+ > http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+Bye, Peter Korsgaard
