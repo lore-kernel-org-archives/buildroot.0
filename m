@@ -1,40 +1,44 @@
-From: Marcus Folkesson <marcus.folkesson@gmail.com>
-Date: Fri, 26 Mar 2021 08:41:50 +0100
-Subject: [Buildroot] [PATCH] package/libostree: bump to version 2021.1
-Message-ID: <20210326074150.2433920-1-marcus.folkesson@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri, 26 Mar 2021 09:02:14 +0100
+Subject: [Buildroot] [PATCH 1/1] package/kodi-pvr-vuplus: bump version to
+ 7.4.2-Matrix
+Message-ID: <20210326080214.589102-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+Changelog:
+https://github.com/kodi-pvr/pvr.vuplus/blob/Matrix/pvr.vuplus/changelog.txt
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libostree/libostree.hash | 2 +-
- package/libostree/libostree.mk   | 2 +-
+ package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash | 2 +-
+ package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libostree/libostree.hash b/package/libostree/libostree.hash
-index 751feb6b2e..bc1249deed 100644
---- a/package/libostree/libostree.hash
-+++ b/package/libostree/libostree.hash
+diff --git a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
+index 8fac6a1770..2439e2619d 100644
+--- a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
++++ b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  fdaa5992d0a6f62157152355449ac8476c50df6602be398e9ad10438cc1e679b  libostree-2020.8.tar.xz
-+sha256  91b4bd9264831d20ff00ec442d48ede526db55379bd917606863c05f43b85a51  libostree-2021.1.tar.xz
- sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
-diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
-index 7c887ebee8..a0e7e0ef0d 100644
---- a/package/libostree/libostree.mk
-+++ b/package/libostree/libostree.mk
+ # Locally computed
+-sha256  9f10c35477f977646416a0a3f858e95e4dc896436582179981223ccd0570596c  kodi-pvr-vuplus-7.4.1-Matrix.tar.gz
++sha256  fcd77d5b12def3b6c95928d699460b1dd6b316216f2bd348735261c639113554  kodi-pvr-vuplus-7.4.2-Matrix.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
+index 22b923bf86..cce260c519 100644
+--- a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
++++ b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBOSTREE_VERSION = 2020.8
-+LIBOSTREE_VERSION = 2021.1
- LIBOSTREE_SOURCE = libostree-$(LIBOSTREE_VERSION).tar.xz
- LIBOSTREE_SITE = https://github.com/ostreedev/ostree/releases/download/v$(LIBOSTREE_VERSION)
- 
+-KODI_PVR_VUPLUS_VERSION = 7.4.1-Matrix
++KODI_PVR_VUPLUS_VERSION = 7.4.2-Matrix
+ KODI_PVR_VUPLUS_SITE = $(call github,kodi-pvr,pvr.vuplus,$(KODI_PVR_VUPLUS_VERSION))
+ KODI_PVR_VUPLUS_LICENSE = GPL-2.0+
+ KODI_PVR_VUPLUS_LICENSE_FILES = LICENSE.md
 -- 
-2.30.0
+2.29.2
