@@ -1,39 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Mar 2021 23:42:18 +0100
-Subject: [Buildroot] [git commit branch/2021.02.x] package/gutenprint: add
- GUTENPRINT_CPE_ID_VENDOR
-Message-ID: <20210326222258.DD5A07FD2E@busybox.osuosl.org>
+Date: Fri, 26 Mar 2021 23:43:19 +0100
+Subject: [Buildroot] [git commit branch/2021.02.x] package/libressl:
+ security bump to 3.2.5
+Message-ID: <20210326222259.075E37FD2E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ea70d89250709927dacd0beac2fac3b3bd336ad0
+commit: https://git.buildroot.net/buildroot/commit/?id=65d018436e5859abdc541af3d77ad14493afc0e2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-cpe:2.3:a:gutenprint_project:gutenprint is a valid CPE identifier for
-this package:
+It includes the following bug fix:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Agutenprint_project%3Agutenprint
+ * A TLS client using session resumption may cause a use-after-free.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-3.2.5-relnotes.txt
+
+Signed-off-by: Ismael Luceno <ismael@iodev.co.uk>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 9462869f271ddb4cfd7a19a59a082fc2f4a6f6d5)
+(cherry picked from commit f3894ffce2b6e6c52c2d9e3b7d0040f3d5a5b728)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gutenprint/gutenprint.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/libressl/libressl.hash | 2 +-
+ package/libressl/libressl.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gutenprint/gutenprint.mk b/package/gutenprint/gutenprint.mk
-index 9cb80c3e95..b0fcd5a598 100644
---- a/package/gutenprint/gutenprint.mk
-+++ b/package/gutenprint/gutenprint.mk
-@@ -10,6 +10,7 @@ GUTENPRINT_SITE = http://downloads.sourceforge.net/project/gimp-print/gutenprint
- GUTENPRINT_SOURCE = gutenprint-$(GUTENPRINT_VERSION).tar.bz2
- GUTENPRINT_LICENSE = GPL-2.0+
- GUTENPRINT_LICENSE_FILES = COPYING
-+GUTENPRINT_CPE_ID_VENDOR = gutenprint_project
+diff --git a/package/libressl/libressl.hash b/package/libressl/libressl.hash
+index 0dd0ffcaed..9f216bf2f1 100644
+--- a/package/libressl/libressl.hash
++++ b/package/libressl/libressl.hash
+@@ -1,4 +1,4 @@
+ # From https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/SHA256
+-sha256  412dc2baa739228c7779e93eb07cd645d5c964d2f2d837a9fd56db7498463d73  libressl-3.2.3.tar.gz
++sha256  798a65fd61d385e09d559810cdfa46512f8def5919264cfef241a7b086ce7cfe  libressl-3.2.5.tar.gz
+ # Locally computed
+ sha256  5c63613f008f16a9c0025c096bbd736cecf720494d121b5c5203e0ec6e5955b1  COPYING
+diff --git a/package/libressl/libressl.mk b/package/libressl/libressl.mk
+index 654b8bda26..ad345ba3f0 100644
+--- a/package/libressl/libressl.mk
++++ b/package/libressl/libressl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Needed, as we touch Makefile.am
- GUTENPRINT_AUTORECONF = YES
+-LIBRESSL_VERSION = 3.2.3
++LIBRESSL_VERSION = 3.2.5
+ LIBRESSL_SITE = https://ftp.openbsd.org/pub/OpenBSD/LibreSSL
+ LIBRESSL_LICENSE = ISC (new additions), OpenSSL or SSLeay (original OpenSSL code)
+ LIBRESSL_LICENSE_FILES = COPYING
