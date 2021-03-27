@@ -1,107 +1,48 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 27 Mar 2021 23:15:07 +0100
-Subject: [Buildroot] [PATCH 2/2] package/samba4: bump version to 4.14.2
-In-Reply-To: <20210327171336.95774-2-bernd.kuhls@t-online.de>
-References: <20210327171336.95774-1-bernd.kuhls@t-online.de>
- <20210327171336.95774-2-bernd.kuhls@t-online.de>
-Message-ID: <20210327221507.GA24043@scaer>
+Date: Sat, 27 Mar 2021 23:19:56 +0100
+Subject: [Buildroot] [PATCH 1/1] package/python-dialog3: switch to
+ setuptools
+In-Reply-To: <20210327203552.263391-1-asafka7@gmail.com>
+References: <20210327203552.263391-1-asafka7@gmail.com>
+Message-ID: <20210327221956.GB24043@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2021-03-27 18:13 +0100, Bernd Kuhls spake thusly:
-> Added patch to fix build error.
-> Removed patch which was applied upstream.
+Asaf, All,
+
+On 2021-03-27 23:35 +0300, Asaf Kahlon spake thusly:
+> The package switched to setuptools (see commit:
+> https://github.com/frougon/pythondialog/commit/88a3f0b45e81aaecf3a85bcf8b8d8ce907fbe29d)
 > 
-> Added two options to samba4-cache.txt to fix cross build.
+> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 
-Please explain why you used those specific values for thos e two
-options, see below...
-
-> host-perl is now mandatory, also host-perl-parse-yapp is needed.
-> 
-> Added option to fix build without dbus, this change needed a rework of
-> the shared-modules configure option, due to this upstream commit:
-> https://gitlab.com/samba-team/devel/samba/-/commit/b6805d5e0bcf1716f87e84bcbb2fd8f93c38a8a3
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-[--SNIP--]
-> diff --git a/package/samba4/samba4-cache.txt b/package/samba4/samba4-cache.txt
-> index e3a3720fc8..bd7c3654b4 100644
-> --- a/package/samba4/samba4-cache.txt
-> +++ b/package/samba4/samba4-cache.txt
-> @@ -40,3 +40,5 @@ Checking value of SIGRTMIN: "34"
->  Checking errno of iconv for illegal multibyte sequence: "0"
->  checking for clnt_create(): OK
->  Checking for a 64-bit host to support lmdb: NO
-> +Checking value of GNUTLS_CIPHER_AES_128_CFB8: 29
-> +Checking value of GNUTLS_MAC_AES_CMAC_128: 203
-
-So, those two options are abotu cryptography stuff, and so this is
-pretty much tricky... We really need those values to be explained, at
-least in the commit log, and if possible, with a comment in the cache
-file.
-
-> diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-> index 61d8190127..ef4ffce47c 100644
-> --- a/package/samba4/samba4.mk
-> +++ b/package/samba4/samba4.mk
-[--SNIP--]
-> @@ -125,6 +130,7 @@ define SAMBA4_CONFIGURE_CMDS
->  			--disable-glusterfs \
->  			--with-cluster-support \
->  			--bundled-libraries='!asn1_compile,!compile_et' \
-> +			 --with-shared-modules=$(SAMBA4_SHARED_MODULES) \
-
-Extraneous space just before the option.
-
-Also see below for another issue with this line...
-
->  			$(SAMBA4_CONF_OPTS) \
->  	)
->  endef
-> @@ -148,8 +154,9 @@ SAMBA4_CONF_OPTS += --without-ad-dc --without-json
->  endif
->  
->  ifeq ($(BR2_PACKAGE_SAMBA4_ADS),y)
-> -SAMBA4_CONF_OPTS += --with-ads --with-ldap --with-shared-modules=idmap_ad
-> +SAMBA4_CONF_OPTS += --with-ads --with-ldap
->  SAMBA4_DEPENDENCIES += openldap
-> +SAMBA4_SHARED_MODULES += idmap_ad
->  else
->  SAMBA4_CONF_OPTS += --without-ads --without-ldap
-
-Usually, we want to be symetric, so we should have:
-
-    SAMBA4_SHARED_MODULES += !idmap_ad
-
-Finally, the way SAMBA4_SHARED_MODULES is used, --with-shared-modules
-will get a space-separated list of items, but it is not quoted when
-expanded, above (quoted here again:
-
-    --with-shared-modules=$(SAMBA4_SHARED_MODULES)
-
-So if both vfs_snapper and idmap_ad are enabled, I doubt that will
-behave as expected... Furthermore, --with-shared-modules is expected to
-be comma-separated:
-
-    https://gitlab.com/samba-team/devel/samba/-/blob/master/source3/wscript#L32
-
-    Comma-separated list of names of modules to build shared. [...]
-
-So you probably want something like:
-
-    --with-shared-modules=$(subst $(space),$(comma),$(strip $(SAMBA4_SHARED_MODULES)))
+Applied to master, thanks.
 
 Regards,
 Yann E. MORIN.
 
->  endif
+> ---
+>  package/python-dialog3/python-dialog3.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/python-dialog3/python-dialog3.mk b/package/python-dialog3/python-dialog3.mk
+> index e2147507bf..6051985640 100644
+> --- a/package/python-dialog3/python-dialog3.mk
+> +++ b/package/python-dialog3/python-dialog3.mk
+> @@ -9,7 +9,7 @@ PYTHON_DIALOG3_SOURCE = pythondialog-$(PYTHON_DIALOG3_VERSION).tar.gz
+>  PYTHON_DIALOG3_SITE = https://files.pythonhosted.org/packages/72/3c/26ed0db035f97196704d0197d8b2254b8a6ca93a2d132430b0b0d597aa79
+>  PYTHON_DIALOG3_LICENSE = LGPL-2.1+
+>  PYTHON_DIALOG3_LICENSE_FILES = COPYING
+> -PYTHON_DIALOG3_SETUP_TYPE = distutils
+> +PYTHON_DIALOG3_SETUP_TYPE = setuptools
+>  PYTHON_DIALOG3_DEPENDENCIES = dialog
+>  
+>  $(eval $(python-package))
 > -- 
-> 2.29.2
+> 2.27.0
 > 
 > _______________________________________________
 > buildroot mailing list
