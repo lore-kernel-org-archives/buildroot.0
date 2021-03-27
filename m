@@ -1,80 +1,36 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 27 Mar 2021 23:17:17 +0100
-Subject: [Buildroot] [git commit] perl-parse-yapp: new package
-Message-ID: <20210327220906.4C32E80E24@busybox.osuosl.org>
+Date: Sat, 27 Mar 2021 22:57:34 +0100
+Subject: [Buildroot] [git commit] package/python-dialog3: switch to
+ setuptools
+Message-ID: <20210327220906.3C42E86FC3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=038013efd2c65ef766e64d914586d48a38129d0c
+commit: https://git.buildroot.net/buildroot/commit/?id=2af9ab7c31a67fbbd6008fd82878fc1019dfbe94
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Host version is needed for samba 4.14.x.
+The package switched to setuptools (see commit:
+https://github.com/frougon/pythondialog/commit/88a3f0b45e81aaecf3a85bcf8b8d8ce907fbe29d)
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/Config.in                            |  1 +
- package/perl-parse-yapp/Config.in            |  6 ++++++
- package/perl-parse-yapp/perl-parse-yapp.hash |  3 +++
- package/perl-parse-yapp/perl-parse-yapp.mk   | 17 +++++++++++++++++
- 4 files changed, 27 insertions(+)
+ package/python-dialog3/python-dialog3.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index d278e78b68..ce8247f0aa 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -820,6 +820,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-number-bytes-human/Config.in"
- 	source "package/perl-package-stash/Config.in"
- 	source "package/perl-params-util/Config.in"
-+	source "package/perl-parse-yapp/Config.in"
- 	source "package/perl-path-tiny/Config.in"
- 	source "package/perl-plack/Config.in"
- 	source "package/perl-posix-strftime-compiler/Config.in"
-diff --git a/package/perl-parse-yapp/Config.in b/package/perl-parse-yapp/Config.in
-new file mode 100644
-index 0000000000..5cde3d9211
---- /dev/null
-+++ b/package/perl-parse-yapp/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PERL_PARSE_YAPP
-+	bool "perl-parse-yapp"
-+	help
-+	  A perl frontend to the Parse::Yapp module
-+
-+	  https://metacpan.org/release/Parse-Yapp
-diff --git a/package/perl-parse-yapp/perl-parse-yapp.hash b/package/perl-parse-yapp/perl-parse-yapp.hash
-new file mode 100644
-index 0000000000..d5880a2a71
---- /dev/null
-+++ b/package/perl-parse-yapp/perl-parse-yapp.hash
-@@ -0,0 +1,3 @@
-+# locally computed
-+sha256  3810e998308fba2e0f4f26043035032b027ce51ce5c8a52a8b8e340ca65f13e5  Parse-Yapp-1.21.tar.gz
-+sha256  a5d97e3ee50ba12b7897841a117790f723795e4a61e5ad1668dc064956c84e96  lib/Parse/Yapp.pm
-diff --git a/package/perl-parse-yapp/perl-parse-yapp.mk b/package/perl-parse-yapp/perl-parse-yapp.mk
-new file mode 100644
-index 0000000000..94f51243fd
---- /dev/null
-+++ b/package/perl-parse-yapp/perl-parse-yapp.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# perl-parse-yapp
-+#
-+################################################################################
-+
-+PERL_PARSE_YAPP_VERSION = 1.21
-+PERL_PARSE_YAPP_SOURCE = Parse-Yapp-$(PERL_PARSE_YAPP_VERSION).tar.gz
-+PERL_PARSE_YAPP_SITE = $(BR2_CPAN_MIRROR)/authors/id/W/WB/WBRASWELL
-+PERL_PARSE_YAPP_DEPENDENCIES = host-perl-module-build
-+PERL_PARSE_YAPP_LICENSE = Artistic or GPL-1.0+
-+PERL_PARSE_YAPP_LICENSE_FILES = lib/Parse/Yapp.pm
-+PERL_PARSE_YAPP_DISTNAME = Parse-Yapp
-+HOST_PERL_PARSE_YAPP_DEPENDENCIES = host-perl-module-build
-+
-+$(eval $(perl-package))
-+$(eval $(host-perl-package))
+diff --git a/package/python-dialog3/python-dialog3.mk b/package/python-dialog3/python-dialog3.mk
+index e2147507bf..6051985640 100644
+--- a/package/python-dialog3/python-dialog3.mk
++++ b/package/python-dialog3/python-dialog3.mk
+@@ -9,7 +9,7 @@ PYTHON_DIALOG3_SOURCE = pythondialog-$(PYTHON_DIALOG3_VERSION).tar.gz
+ PYTHON_DIALOG3_SITE = https://files.pythonhosted.org/packages/72/3c/26ed0db035f97196704d0197d8b2254b8a6ca93a2d132430b0b0d597aa79
+ PYTHON_DIALOG3_LICENSE = LGPL-2.1+
+ PYTHON_DIALOG3_LICENSE_FILES = COPYING
+-PYTHON_DIALOG3_SETUP_TYPE = distutils
++PYTHON_DIALOG3_SETUP_TYPE = setuptools
+ PYTHON_DIALOG3_DEPENDENCIES = dialog
+ 
+ $(eval $(python-package))
