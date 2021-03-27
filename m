@@ -1,51 +1,105 @@
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Sat, 27 Mar 2021 23:33:46 +0100
-Subject: [Buildroot] [PATCH] boot/uboot: fix uboot build failure with
- UBOOT_CUSTOM_DTS_PATH on uboot version >= 2020.x
-In-Reply-To: <20210209201303.195093-1-giulio.benetti@benettiengineering.com>
-References: <20210209201303.195093-1-giulio.benetti@benettiengineering.com>
-Message-ID: <ad1b10c3-b36f-78fe-624d-4f1bb6068944@benettiengineering.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 27 Mar 2021 23:34:09 +0100
+Subject: [Buildroot] [PATCH 1/2] perl-parse-yapp: new package
+In-Reply-To: <20210327171336.95774-1-bernd.kuhls@t-online.de>
+References: <20210327171336.95774-1-bernd.kuhls@t-online.de>
+Message-ID: <20210327223409.GC24043@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All,
+Bernd, All,
 
-On 2/9/21 9:13 PM, Giulio Benetti wrote:
-> Starting from version 2020.x uboot can't build .dts files not listed in
-> dts/Makefile leading to a build failure when trying to pass a .dts file to
-> UBOOT_CUSTOM_DTS_PATH. So let's prepend that file(s) to dts/Makefile if
-> UBOOT_CUSTOM_DTS_PATH is used.
+On 2021-03-27 18:13 +0100, Bernd Kuhls spake thusly:
+> Host version is needed for samba 4.14.x.
 > 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+Applied to master, thanks.
+
+Regards,
+Yann E. MORIN.
+
 > ---
->   boot/uboot/uboot.mk | 5 +++++
->   1 file changed, 5 insertions(+)
+>  package/Config.in                            |  1 +
+>  package/perl-parse-yapp/Config.in            |  6 ++++++
+>  package/perl-parse-yapp/perl-parse-yapp.hash |  3 +++
+>  package/perl-parse-yapp/perl-parse-yapp.mk   | 17 +++++++++++++++++
+>  4 files changed, 27 insertions(+)
+>  create mode 100644 package/perl-parse-yapp/Config.in
+>  create mode 100644 package/perl-parse-yapp/perl-parse-yapp.hash
+>  create mode 100644 package/perl-parse-yapp/perl-parse-yapp.mk
 > 
-> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-> index 2478a2a1e9..a5ad101d68 100644
-> --- a/boot/uboot/uboot.mk
-> +++ b/boot/uboot/uboot.mk
-> @@ -303,6 +303,11 @@ endif # BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY
->   UBOOT_CUSTOM_DTS_PATH = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_DTS_PATH))
->   
->   define UBOOT_BUILD_CMDS
-> +	$(if $(UBOOT_CUSTOM_DTS_PATH),
-> +		$(Q)$(SED) \
-> +		'1s;^;dtb-y += $(subst .dts,.dtb,$(call notdir,$(UBOOT_CUSTOM_DTS_PATH)))\n;' \
-> +		$(@D)/arch/$(UBOOT_ARCH)/dts/Makefile
-> +	)
->   	$(if $(UBOOT_CUSTOM_DTS_PATH),
->   		cp -f $(UBOOT_CUSTOM_DTS_PATH) $(@D)/arch/$(UBOOT_ARCH)/dts/
->   	)
+> diff --git a/package/Config.in b/package/Config.in
+> index 2be9c4c634..9d950b7181 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -821,6 +821,7 @@ menu "Perl libraries/modules"
+>  	source "package/perl-number-bytes-human/Config.in"
+>  	source "package/perl-package-stash/Config.in"
+>  	source "package/perl-params-util/Config.in"
+> +	source "package/perl-parse-yapp/Config.in"
+>  	source "package/perl-path-tiny/Config.in"
+>  	source "package/perl-plack/Config.in"
+>  	source "package/perl-posix-strftime-compiler/Config.in"
+> diff --git a/package/perl-parse-yapp/Config.in b/package/perl-parse-yapp/Config.in
+> new file mode 100644
+> index 0000000000..5cde3d9211
+> --- /dev/null
+> +++ b/package/perl-parse-yapp/Config.in
+> @@ -0,0 +1,6 @@
+> +config BR2_PACKAGE_PERL_PARSE_YAPP
+> +	bool "perl-parse-yapp"
+> +	help
+> +	  A perl frontend to the Parse::Yapp module
+> +
+> +	  https://metacpan.org/release/Parse-Yapp
+> diff --git a/package/perl-parse-yapp/perl-parse-yapp.hash b/package/perl-parse-yapp/perl-parse-yapp.hash
+> new file mode 100644
+> index 0000000000..d5880a2a71
+> --- /dev/null
+> +++ b/package/perl-parse-yapp/perl-parse-yapp.hash
+> @@ -0,0 +1,3 @@
+> +# locally computed
+> +sha256  3810e998308fba2e0f4f26043035032b027ce51ce5c8a52a8b8e340ca65f13e5  Parse-Yapp-1.21.tar.gz
+> +sha256  a5d97e3ee50ba12b7897841a117790f723795e4a61e5ad1668dc064956c84e96  lib/Parse/Yapp.pm
+> diff --git a/package/perl-parse-yapp/perl-parse-yapp.mk b/package/perl-parse-yapp/perl-parse-yapp.mk
+> new file mode 100644
+> index 0000000000..94f51243fd
+> --- /dev/null
+> +++ b/package/perl-parse-yapp/perl-parse-yapp.mk
+> @@ -0,0 +1,17 @@
+> +################################################################################
+> +#
+> +# perl-parse-yapp
+> +#
+> +################################################################################
+> +
+> +PERL_PARSE_YAPP_VERSION = 1.21
+> +PERL_PARSE_YAPP_SOURCE = Parse-Yapp-$(PERL_PARSE_YAPP_VERSION).tar.gz
+> +PERL_PARSE_YAPP_SITE = $(BR2_CPAN_MIRROR)/authors/id/W/WB/WBRASWELL
+> +PERL_PARSE_YAPP_DEPENDENCIES = host-perl-module-build
+> +PERL_PARSE_YAPP_LICENSE = Artistic or GPL-1.0+
+> +PERL_PARSE_YAPP_LICENSE_FILES = lib/Parse/Yapp.pm
+> +PERL_PARSE_YAPP_DISTNAME = Parse-Yapp
+> +HOST_PERL_PARSE_YAPP_DEPENDENCIES = host-perl-module-build
+> +
+> +$(eval $(perl-package))
+> +$(eval $(host-perl-package))
+> -- 
+> 2.29.2
 > 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Any new about this patch? It's essential to build an external u-boot dts 
-after u-boot 2020.x
-
-Kind regards
 -- 
-Giulio Benetti
-Benetti Engineering sas
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
