@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 27 Mar 2021 21:53:29 +0100
-Subject: [Buildroot] [PATCH 3/5] legacy: drop options more than 4 years old
+Date: Sat, 27 Mar 2021 21:53:30 +0100
+Subject: [Buildroot] [PATCH 4/5] legacy: drop options more than 3 years old
 In-Reply-To: <cover.1616878389.git.yann.morin.1998@free.fr>
 References: <cover.1616878389.git.yann.morin.1998@free.fr>
-Message-ID: <f58fcac18d7135b5c6a730c5073c52d29d2f106e.1616878389.git.yann.morin.1998@free.fr>
+Message-ID: <92bdea7f7145048a5c9f167ac8c48e97e262b022.1616878389.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,583 +12,614 @@ To: buildroot@busybox.net
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- Config.in.legacy     | 551 -------------------------------------------
- boot/uboot/Config.in |   1 -
- 2 files changed, 552 deletions(-)
+ Config.in.legacy  | 582 ----------------------------------------------
+ fs/ext2/Config.in |   1 -
+ 2 files changed, 583 deletions(-)
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 66832787a0..c4dc342505 100644
+index c4dc342505..38c5cf4496 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
-@@ -2855,557 +2855,6 @@ config BR2_GLIBC_VERSION_2_22
- 	  Support for glibc version 2.22 has been removed. The current
- 	  default version has been selected instead.
+@@ -2273,588 +2273,6 @@ config BR2_PACKAGE_KODI_ADSP_FREESURROUND
+ 	help
+ 	  kodi-adsp-freesurround is unmaintained
  
 -###############################################################################
--comment "Legacy options removed in 2017.02"
+-comment "Legacy options removed in 2018.02"
 -
--config BR2_PACKAGE_PERL_DB_FILE
--	bool "perl-db-file removed"
--	select BR2_LEGACY
--	select BR2_PACKAGE_BERKELEYDB
--	select BR2_PACKAGE_PERL
--	help
--	  DB_File can be built as a core Perl module, so the separate
--	  perl-db-file package has been removed.
--
--config BR2_KERNEL_HEADERS_4_7
--	bool "kernel headers version 4.7.x are no longer supported"
+-config BR2_KERNEL_HEADERS_3_4
+-	bool "kernel headers version 3.4.x are no longer supported"
 -	select BR2_LEGACY
 -	help
--	  Version 4.7.x of the Linux kernel headers are no longer
+-	  Version 3.4.x of the Linux kernel headers are no longer
 -	  maintained upstream and are now removed.
 -
--config BR2_KERNEL_HEADERS_4_6
--	bool "kernel headers version 4.6.x are no longer supported"
+-config BR2_KERNEL_HEADERS_3_10
+-	bool "kernel headers version 3.10.x are no longer supported"
 -	select BR2_LEGACY
 -	help
--	  Version 4.6.x of the Linux kernel headers are no longer
+-	  Version 3.10.x of the Linux kernel headers are no longer
 -	  maintained upstream and are now removed.
 -
--config BR2_KERNEL_HEADERS_4_5
--	bool "kernel headers version 4.5.x are no longer supported"
+-config BR2_KERNEL_HEADERS_3_12
+-	bool "kernel headers version 3.12.x are no longer supported"
 -	select BR2_LEGACY
 -	help
--	  Version 4.5.x of the Linux kernel headers are no longer
--	   maintained upstream and are now removed.
--
--config BR2_KERNEL_HEADERS_3_14
--	bool "kernel headers version 3.14.x are no longer supported"
--	select BR2_LEGACY
--	  help
--	  Version 3.14.x of the Linux kernel headers are no longer
+-	  Version 3.12.x of the Linux kernel headers are no longer
 -	  maintained upstream and are now removed.
 -
--config BR2_TOOLCHAIN_EXTERNAL_MUSL_CROSS
--	bool "musl-cross 1.1.12 toolchain removed"
+-config BR2_BINUTILS_VERSION_2_27_X
+-	bool "binutils version 2.27 support removed"
 -	select BR2_LEGACY
 -	help
--	  The support for the prebuilt toolchain based on the Musl C
--	  library provided by the musl-cross project has been removed.
--	  Upstream doesn't provide any prebuilt toolchain anymore, use
--	  the Buildroot toolchain instead.
--
--config BR2_UCLIBC_INSTALL_TEST_SUITE
--	bool "uClibc tests now in uclibc-ng-test"
--	select BR2_LEGACY
--	select BR2_PACKAGE_UCLIBC_NG_TEST
--	help
--	  The test suite of the uClibc C library has been moved into a
--	  separate package, uclibc-ng-test.
--
--config BR2_TOOLCHAIN_EXTERNAL_BLACKFIN_UCLINUX
--	bool "Blackfin.uclinux.org 2014R1 toolchain removed"
--	select BR2_LEGACY
--	help
--	  The ADI Blackfin toolchain has many bugs which are fixed in
--	  more recent gcc and uClibc-ng releases. Use the Buildroot
--	  toolchain instead.
--
--config BR2_PACKAGE_MAKEDEVS
--	bool "makedevs removed"
--	select BR2_LEGACY
--	help
--	  The makedevs tool is part of busybox. The Buildroot fork
--	  should not be used outside of the Buildroot infrastructure.
--
--config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV7A
--	bool "Arago ARMv7 2011.09 removed"
--	select BR2_LEGACY
--	help
--	  The Arago toolchains are every old and not updated anymore.
--
--config BR2_TOOLCHAIN_EXTERNAL_ARAGO_ARMV5TE
--	bool "Arago ARMv5 2011.09 removed"
--	select BR2_LEGACY
--	help
--	  The Arago toolchains are every old and not updated anymore.
--
--config BR2_PACKAGE_SNOWBALL_HDMISERVICE
--	bool "snowball-hdmiservice removed"
--	select BR2_LEGACY
--	help
--	  We no longer have support for the Snowball platform in
--	  Buildroot, so this package was no longer useful.
--
--config BR2_PACKAGE_SNOWBALL_INIT
--	bool "snowball-init removed"
--	select BR2_LEGACY
--	help
--	  We no longer have support for the Snowball platform in
--	  Buildroot, so this package was no longer useful.
--
--config BR2_GDB_VERSION_7_9
--	bool "gdb 7.9 has been removed"
--	select BR2_LEGACY
--	help
--	  The 7.9 version of gdb has been removed. Use a newer version
+-	  Support for binutils version 2.27 has been removed. The
+-	  current default version (2.29 or later) has been selected
 -	  instead.
+-
+-config BR2_PACKAGE_EEPROG
+-	bool "eeprog package removed"
+-	select BR2_LEGACY
+-	select BR2_PACKAGE_I2C_TOOLS
+-	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+-	help
+-	  The eeprog program is now provided by the i2c-tools package.
+-
+-config BR2_PACKAGE_GNUPG2_GPGV2
+-	bool "gnupg2 gpgv2 option removed"
+-	select BR2_LEGACY
+-	select BR2_PACKAGE_GNUPG2_GPGV
+-	help
+-	  The gpgv2 executable is now named gpgv. The config option
+-	  has been renamed accordingly.
+-
+-config BR2_PACKAGE_IMX_GPU_VIV_APITRACE
+-	bool "Vivante apitrace tool option removed"
+-	select BR2_LEGACY
+-	help
+-	  The apitrace tool for Vivante is not provided by the
+-	  imx-gpu-viv package any longer.
+-
+-config BR2_PACKAGE_IMX_GPU_VIV_G2D
+-	bool "Vivante G2D libraries from imx-gpu-viv removed"
+-	select BR2_LEGACY
+-	select BR2_PACKAGE_IMX_GPU_G2D
+-	help
+-	  The G2D libraries are now provided by the imx-gpu-g2d package.
 -
 -###############################################################################
--comment "Legacy options removed in 2016.11"
+-comment "Legacy options removed in 2017.11"
 -
--config BR2_PACKAGE_PHP_SAPI_CLI_CGI
--	bool "PHP CGI and CLI options are now seperate"
--	select BR2_PACKAGE_PHP_SAPI_CLI
--	select BR2_PACKAGE_PHP_SAPI_CGI
+-config BR2_PACKAGE_RFKILL
+-	bool "rfkill package removed"
+-	select BR2_LEGACY
+-	select BR2_PACKAGE_UTIL_LINUX
+-	select BR2_PACKAGE_UTIL_LINUX_RFKILL
+-	help
+-	  The rfkill program is now provided by the util-linux package.
+-
+-config BR2_PACKAGE_UTIL_LINUX_RESET
+-	bool "util-linux reset option removed"
 -	select BR2_LEGACY
 -	help
--	  The PHP Interface options have been split up into a
--	  separate option for each interface.
+-	  The util-linux package no longer offers a "reset" command. Use
+-	  either the reset command provided by BusyBox or select ncurses
+-	  programs, which will install a symlink from "tset" to reset.
 -
--config BR2_PACKAGE_PHP_SAPI_CLI_FPM
--	bool "PHP CLI and FPM options are now separate"
--	select BR2_PACKAGE_PHP_SAPI_CLI
--	select BR2_PACKAGE_PHP_SAPI_FPM
+-config BR2_PACKAGE_POLICYCOREUTILS_AUDIT2ALLOW
+-	bool "policycoreutils audit2allow option removed"
+-	select BR2_LEGACY
+-	select BR2_PACKAGE_SELINUX_PYTHON
+-	select BR2_PACKAGE_SELINUX_PYTHON_AUDIT2ALLOW
+-	help
+-	  The policycoreutils package no longer offers audit2allow
+-	  as a option. This package has been moved into the
+-	  selinux-python package by the SELinux maintainers.
+-
+-config BR2_PACKAGE_POLICYCOREUTILS_RESTORECOND
+-	bool "policycoreutils restorecond option removed"
+-	select BR2_LEGACY
+-	select BR2_PACKAGE_RESTORECOND
+-	help
+-	  The policycoreutils package no longer offers restorecond
+-	  as a option.  This package has been moved into a seperate
+-	  package maintained by the SELinux maintainers.
+-
+-config BR2_PACKAGE_SEPOLGEN
+-	bool "sepolgen package has been removed"
+-	select BR2_LEGACY
+-	select BR2_PACKAGE_SELINUX_PYTHON
+-	select BR2_PACKAGE_SELINUX_PYTHON_SEPOLGEN
+-	help
+-	  Sepolgen is no longer a individual package, but instead has
+-	  been moved into the selinux-python package by the SELinux
+-	  maintainers.
+-
+-config BR2_PACKAGE_OPENOBEX_BLUEZ
+-	bool "openobex bluez option removed"
+-	select BR2_LEGACY
+-	select BR2_PACKAGE_BLUEZ_UTILS
+-	help
+-	  The OpenOBEX package no longer offers an option to enable or
+-	  disable BlueZ support. Instead, BlueZ support is always
+-	  included when the bluez5_utils or bluez_utils package is
+-	  selected.
+-
+-config BR2_PACKAGE_OPENOBEX_LIBUSB
+-	bool "openobex libusb option removed"
+-	select BR2_LEGACY
+-	select BR2_PACKAGE_LIBUSB
+-	help
+-	  The OpenOBEX package no longer offers an option to enable or
+-	  disable libusb support. Instead, USB support is always
+-	  included when the libusb package is selected.
+-
+-config BR2_PACKAGE_OPENOBEX_APPS
+-	bool "openobex apps option removed"
 -	select BR2_LEGACY
 -	help
--	  The PHP Interface options have been split up into a
--	  separate option for each interface.
+-	  The OpenOBEX package no longer offers an option to enable or
+-	  disable apps support.
 -
--config BR2_PACKAGE_WVSTREAMS
--	bool "wvstreams removed"
+-config BR2_PACKAGE_OPENOBEX_SYSLOG
+-	bool "openobex syslog option removed"
 -	select BR2_LEGACY
 -	help
--	  wvstreams is not maintained anymore since about 2009. It also
--	  doesn't build anymore with recent compilers (GCC 5+).
+-	  The OpenOBEX package no longer offers an option to enable or
+-	  disable syslog support.
 -
--config BR2_PACKAGE_WVDIAL
--	bool "wvdial removed"
+-config BR2_PACKAGE_OPENOBEX_DUMP
+-	bool "openobex dump option removed"
 -	select BR2_LEGACY
 -	help
--	  wvdial is not maintained anymore since about 2009. It also
--	  doesn't build anymore with recent compilers (GCC 5+).
+-	  The OpenOBEX package no longer offers an option to enable or
+-	  disable dump support.
 -
--config BR2_PACKAGE_WEBKITGTK24
--	bool "webkitgtk 2.4.x removed"
+-config BR2_PACKAGE_AICCU
+-	bool "aiccu utility removed"
 -	select BR2_LEGACY
 -	help
--	  This legacy package only existed because some other packages
--	  depended on that specific version of webkitgtk. However, the
--	  other packages have been fixed. webkitgtk 2.4 is full of
--	  security issues so it needs to be removed.
+-	  As the SixXS project has ceased its operation on 2017-06-06,
+-	  the AICCU utility has no use anymore and has been removed.
 -
--config BR2_PACKAGE_TORSMO
--	bool "torsmo removed"
+-	  https://www.sixxs.net/sunset/
+-
+-config BR2_PACKAGE_UTIL_LINUX_LOGIN_UTILS
+-	bool "util-linux login utilities option removed"
 -	select BR2_LEGACY
+-	select BR2_PACKAGE_UTIL_LINUX_LAST
+-	select BR2_PACKAGE_UTIL_LINUX_LOGIN
+-	select BR2_PACKAGE_UTIL_LINUX_RUNUSER
+-	select BR2_PACKAGE_UTIL_LINUX_SU
+-	select BR2_PACKAGE_UTIL_LINUX_SULOGIN
 -	help
--	  torsmo has been unmaintained for a long time, and nobody
--	  seems to be interested in it.
--
--config BR2_PACKAGE_SSTRIP
--	bool "sstrip removed"
--	select BR2_LEGACY
--	help
--	  sstrip is unmaintained and potentially harmful. It doesn't
--	  save so much compared to normal binutils strip, and there is
--	  a big risk of binaries that don't work. Use normal strip
--	  instead.
--
--config BR2_KERNEL_HEADERS_4_3
--	bool "kernel headers version 4.3.x are no longer supported"
--	select BR2_LEGACY
--	help
--	  Version 4.3.x of the Linux kernel headers are no longer
--	  maintained upstream and are now removed.
--
--config BR2_KERNEL_HEADERS_4_2
--	bool "kernel headers version 4.2.x are no longer supported"
--	select BR2_LEGACY
--	help
--	  Version 4.2.x of the Linux kernel headers are no longer
--	  maintained upstream and are now removed.
--
--config BR2_PACKAGE_KODI_ADDON_XVDR
--	bool "kodi-addon-xvdr removed"
--	select BR2_LEGACY
--	help
--	  According to the github project page:
--	  https://github.com/pipelka/xbmc-addon-xvdr
--	  this package is discontinued.
--
--config BR2_PACKAGE_IPKG
--	bool "ipkg removed"
--	select BR2_LEGACY
--	help
--	  ipkg dates back to the early 2000s when Compaq started the
--	  handhelds.org project and it hasn't seen development since
--	  2006. Use opkg as a replacement.
--
--config BR2_GCC_VERSION_4_7_X
--	bool "gcc 4.7.x support removed"
--	select BR2_LEGACY
--	help
--	  Support for gcc version 4.7.x has been removed. The current
--	  default version (4.9.x or later) has been selected instead.
--
--config BR2_BINUTILS_VERSION_2_24_X
--	bool "binutils version 2.24 support removed"
--	select BR2_LEGACY
--	help
--	  Support for binutils version 2.24 has been removed. The
--	  current default version (2.26 or later) has been selected
--	  instead.
--
--config BR2_PACKAGE_WESTON_RPI
--	bool "Weston propietary RPI support is gone"
--	select BR2_LEGACY
--	help
--	  Upstream decided the propietary (rpi-userland) weston composer
--	  support wasn't worth the effort so it was removed. Switch to
--	  the open VC4 support.
--
--config BR2_LINUX_KERNEL_TOOL_CPUPOWER
--	bool "linux-tool cpupower"
--	depends on BR2_LINUX_KERNEL
--	select BR2_LEGACY
--	select BR2_PACKAGE_LINUX_TOOLS_CPUPOWER
--	help
--	  Linux tool cpupower option was renamed.
--
--config BR2_LINUX_KERNEL_TOOL_PERF
--	bool "linux-tool perf"
--	depends on BR2_LINUX_KERNEL
--	select BR2_LEGACY
--	select BR2_PACKAGE_LINUX_TOOLS_PERF
--	help
--	  Linux tool perf option was renamed.
--
--config BR2_LINUX_KERNEL_TOOL_SELFTESTS
--	bool "linux-tool selftests"
--	depends on BR2_LINUX_KERNEL
--	select BR2_LEGACY
--	select BR2_PACKAGE_LINUX_TOOLS_SELFTESTS
--	help
--	  Linux tool selftests option was renamed.
--
--config BR2_GCC_VERSION_4_8_ARC
--	bool "gcc arc option renamed"
--	select BR2_LEGACY
--	select BR2_GCC_VERSION_ARC
--	help
--	  The option that selects the gcc version for the ARC
--	  architecture has been renamed to BR2_GCC_VERSION_ARC.
--
--config BR2_KERNEL_HEADERS_4_0
--	bool "kernel headers version 4.0.x are no longer supported"
--	select BR2_LEGACY
--	help
--	  Version 4.0.x of the Linux kernel headers have been deprecated
--	  for more than four buildroot releases and are now removed.
--
--config BR2_KERNEL_HEADERS_3_19
--	bool "kernel headers version 3.19.x are no longer supported"
--	select BR2_LEGACY
--	help
--	  Version 3.19.x of the Linux kernel headers have been
--	  deprecated for more than four buildroot releases and are now
--	  removed.
--
--config BR2_PACKAGE_LIBEVAS_GENERIC_LOADERS
--	bool "libevas-generic-loaders package removed"
--	select BR2_LEGACY
--	select BR2_PACKAGE_EFL
--	help
--	  With EFL 1.18, libevas-generic-loaders is now provided by the
--	  efl package.
--
--config BR2_PACKAGE_ELEMENTARY
--	bool "elementary package removed"
--	select BR2_LEGACY
--	select BR2_PACKAGE_EFL
--	help
--	  With EFL 1.18, elementary is now provided by the efl package.
--
--config BR2_LINUX_KERNEL_CUSTOM_LOCAL
--	bool "Linux kernel local directory option removed"
--	help
--	  The option to select a local directory as the source of the
--	  Linux kernel has been removed. It hurts reproducibility of
--	  builds.
--
--	  In case you were using this option during development of your
--	  Linux kernel, use the override mechanism instead.
+-	  Login utilities (last, login, runuser, su, sulogin) now have
+-	  their own configuration options in the util-linux menu.
 -
 -###############################################################################
--comment "Legacy options removed in 2016.08"
+-comment "Legacy options removed in 2017.08"
 -
--config BR2_PACKAGE_EFL_JP2K
--	bool "libevas jp2k loader has been removed"
+-config BR2_TARGET_GRUB
+-	bool "grub (aka grub-legacy) has been removed"
 -	select BR2_LEGACY
 -	help
--	  JP2K support in EFL requires openjpeg 1.x (libopenjpeg1.pc)
--	  while Buildroot only packages openjpeg 2.x. Therefore, the
--	  JP2K loader has been removed from EFL.
+-	  grub-legacy is no longer maintained, and no longer builds with
+-	  recent binutils versions.
 -
--config BR2_PACKAGE_SYSTEMD_COMPAT
--	bool "systemd compatibility libraries have been removed"
+-	  Use grub2 or syslinux instead.
+-
+-config BR2_PACKAGE_SIMICSFS
+-	bool "simicsfs support removed"
 -	select BR2_LEGACY
 -	help
--	  The systemd option to enable the compatibility libraries has
--	  been removed. Theses libraries have been useless since a few
--	  version, and have been fully dropped from the source since
--	  v230.
+-	  Support for simicsfs kernel driver that provides access to a
+-	  host computer's local filesystem when the target is
+-	  executing within a SIMICS simulation has been removed.
 -
--config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_LIVEADDER
--	bool "gst1-plugins-bad liveadder plugin removed"
--	select BR2_LEGACY
--	select BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_AUDIOMIXER
--	help
--	  The functionality of the liveadder plugin of the
--	  gst1-plugins-bad package has been merged into audiomixer.
--
--config BR2_PACKAGE_LIBFSLVPUWRAP
--	bool "libfslvpuwrap has been renamed to imx-vpuwrap"
--	select BR2_LEGACY
--	select BR2_PACKAGE_IMX_VPUWRAP
--	help
--	  The libfslvpuwrap has been renamed to match the renamed
--	  package.
--
--config BR2_PACKAGE_LIBFSLPARSER
--	bool "libfslparser has been renamed to imx-parser"
--	select BR2_LEGACY
--	select BR2_PACKAGE_IMX_PARSER
--	help
--	  The libfslparser has been renamed to match the renamed
--	  package.
--
--config BR2_PACKAGE_LIBFSLCODEC
--	bool "libfslcodec has been renamed to imx-codec"
--	select BR2_LEGACY
--	select BR2_PACKAGE_IMX_CODEC
--	help
--	  The libfslcodec has been renamed to match the renamed package.
--
--config BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE_FIT_SIGNATURE_SUPPORT
--	bool "FIT support in uboot-tools has been refactored"
--	select BR2_LEGACY
--	select BR2_PACKAGE_DTC
--	select BR2_PACKAGE_DTC_PROGRAMS
--	select BR2_PACKAGE_UBOOT_TOOLS_FIT_SUPPORT
--	select BR2_PACKAGE_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT
--	select BR2_PACKAGE_UBOOT_TOOLS_MKIMAGE
--	help
--	  This option has been removed in favor of a more fine-grained
--	  configuration, which is recommended. Selecting this option
--	  enables FIT and FIT signature support for the target packages.
--	  It will also select the dtc and openssl packages.
--
--config BR2_PTHREADS_OLD
--	bool "linuxthreads (stable/old)"
--	select BR2_LEGACY
--	help
--	  Linuxthreads have been reworked, BR2_PTHREADS_OLD is now
--	  BR2_PTHREADS and the old BR2_PTHREADS - LT.new got removed.
--
--config BR2_BINUTILS_VERSION_2_23_X
--	bool "binutils 2.23 removed"
--	select BR2_LEGACY
--	help
--	  Binutils 2.23 has been removed, using a newer version is
--	  recommended.
--
--config BR2_TOOLCHAIN_BUILDROOT_EGLIBC
--	bool "eglibc support has been removed"
--	select BR2_LEGACY
--	help
--	  The eglibc project no longer exists, as it has been merged
--	  back into the glibc project. Therefore, support for eglibc
--	  has been removed, and glibc should be used instead.
--
--config BR2_GDB_VERSION_7_8
--	bool "gdb 7.8 has been removed"
--	select BR2_LEGACY
--	help
--	  The 7.8 version of gdb has been removed. Use a newer version
+-	  Simics is now moving away from the simicsfs kernel module,
+-	  as the kernel module has required too much maintenance
+-	  work. Users should move to the user mode Simics agent
 -	  instead.
 -
--###############################################################################
--comment "Legacy options removed in 2016.05"
--
--config BR2_PACKAGE_OPENVPN_CRYPTO_POLARSSL
--	bool "openvpn polarssl crypto backend removed"
+-config BR2_BINUTILS_VERSION_2_26_X
+-	bool "binutils version 2.26 support removed"
 -	select BR2_LEGACY
 -	help
--	  The OpenVPN polarssl crypto backend option has been removed.
--	  Version from 2.3.10 onwards need polarssl >= 1.3.8 but aren't
--	  compatible with mbedtls (polarssl) series 2.x which is the
--	  version provided in buildroot. And both can't coexist.
--	  It now uses OpenSSL as the only option.
+-	  Support for binutils version 2.26 has been removed. The
+-	  current default version (2.28 or later) has been selected
+-	  instead.
 -
--config BR2_PACKAGE_NGINX_HTTP_SPDY_MODULE
--	bool "nginx http spdy module removed"
--	select BR2_LEGACY
--	select BR2_PACKAGE_NGINX_HTTP_V2_MODULE
+-config BR2_XTENSA_OVERLAY_DIR
+-	string "The BR2_XTENSA_OVERLAY_DIR option has been removed"
 -	help
--	  The ngx_http_spdy_module has been superseded by the
--	  ngx_http_v2_module since nginx v1.9.5.  The
--	  ngx_http_v2_module modules has been automatically selected
--	  in your configuration.
+-	  The BR2_XTENSA_OVERLAY_DIR has been removed in favour of
+-	  BR2_XTENSA_OVERLAY_FILE. You must now pass the complete
+-	  path to the overlay file, not to the directory containing
+-	  it.
 -
--config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_RTP
--	bool "gst1-plugins-bad rtp plugin moved to good"
--	select BR2_LEGACY
--	help
--	  The rtp plugin has been moved from gst1-plugins-base to
--	  gst1-plugins-good.
--
--config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_MPG123
--	bool "gst1-plugins-bad mpg123 plugin moved to ugly"
--	select BR2_LEGACY
--	help
--	  The mpg123 plugin has been moved from gst1-plugins-bad to
--	  gst1-plugins-ugly.
--
--config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC
--	bool "PowerPC Sourcery toolchain has been removed"
--	select BR2_LEGACY
--	help
--	  The Sourcery CodeBench toolchain for the PowerPC
--	  architecture has been removed, as it was very old, not
--	  maintained, and causing numerous build failures with modern
--	  userspace packages.
--
--config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_POWERPC_E500V2
--	bool "PowerPC Sourcery E500v2 toolchain has been removed"
--	select BR2_LEGACY
--	help
--	  The Sourcery CodeBench toolchain for the PowerPC E500v2
--	  architecture has been removed, as it was very old, not
--	  maintained, and causing numerous build failures with modern
--	  userspace packages.
--
--config BR2_x86_i386
--	bool "x86 i386 support removed"
--	select BR2_LEGACY
--	help
--	  The support for the i386 processors of the x86 architecture
--	  has been removed.
--
--config BR2_PACKAGE_QT5QUICK1
--	bool "qt5quick1 package removed"
--	select BR2_LEGACY
--	help
--	  The qt5quick1 package has been removed, since it was removed
--	  from upstream starting from Qt 5.6.
--
--config BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR
--	string "uboot custom patch dir has been removed"
--	help
--	  The uboot custom patch directory option has been removed. Use
--	  the improved BR2_TARGET_UBOOT_PATCH option instead.
--
--config BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR_WRAP
+-config BR2_XTENSA_OVERLAY_DIR_WRAP
 -	bool
--	default y if BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR != ""
+-	default y if BR2_XTENSA_OVERLAY_DIR != ""
 -	select BR2_LEGACY
 -
--# Note: BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR is still referenced from
--# boot/uboot/Config.in
+-config BR2_XTENSA_CUSTOM_NAME
+-	string "The BR2_XTENSA_CUSTOM_NAME option has been removed"
+-	help
+-	  The BR2_XTENSA_CUSTOM_NAME option has been removed.
 -
--config BR2_PACKAGE_XDRIVER_XF86_INPUT_VOID
--	bool "xf86-input-void removed"
+-config BR2_XTENSA_CUSTOM_NAME_WRAP
+-	bool
+-	default y if BR2_XTENSA_CUSTOM_NAME != ""
+-	select BR2_LEGACY
+-
+-config BR2_PACKAGE_HOST_MKE2IMG
+-	bool "host mke2img has been removed"
 -	select BR2_LEGACY
 -	help
--	  The xf86-input-void package has been removed, there's no need
--	  for it in any modern (post-2007) xorg server.
+-	  We now call mkfs directly to generate ext2/3/4 filesystem
+-	  image, so mke2img is no longer necessary.
 -
--config BR2_KERNEL_HEADERS_3_17
--	bool "kernel headers version 3.17.x are no longer supported"
+-config BR2_TARGET_ROOTFS_EXT2_BLOCKS
+-	int "exact size in blocks has been removed"
+-	default 0
+-	help
+-	  This option has been removed in favor of
+-	  BR2_TARGET_ROOTFS_EXT2_SIZE. It has been set automatically
+-	  to the value you had before. Set to 0 here to remove the
+-	  warning.
+-
+-config BR2_TARGET_ROOTFS_EXT2_BLOCKS_WRAP
+-	bool
+-	default y if BR2_TARGET_ROOTFS_EXT2_BLOCKS != 0 && \
+-		BR2_TARGET_ROOTFS_EXT2_BLOCKS != 61440 # deprecated default value
+-	select BR2_LEGACY
+-
+-# Note: BR2_TARGET_ROOTFS_EXT2_BLOCKS_WRAP still referenced in fs/ext2/Config.in
+-
+-config BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES
+-	int "ext2 extra inodes has been removed" if BR2_TARGET_ROOTFS_EXT2_INODES = 0
+-	default 0
+-	help
+-	  Buildroot now uses mkfs.ext2/3/4 to generate ext2/3/4
+-	  images. It now automatically selects the number of inodes
+-	  based on the image size. The extra number of inodes can no
+-	  longer be provided; instead, provide the total number of
+-	  inodes needed in BR2_TARGET_ROOTFS_EXT2_INODES.
+-
+-config BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES_WRAP
+-	bool
+-	default y if BR2_TARGET_ROOTFS_EXT2_EXTRA_INODES != 0
+-	select BR2_LEGACY
+-
+-config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_CDXAPARSE
+-	bool "cdxaparse removed"
+-	select BR2_LEGACY
+-
+-config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DATAURISRC
+-	bool "dataurisrc moved to gstreamer1"
 -	select BR2_LEGACY
 -	help
--	  Version 3.17.x of the Linux kernel headers have been
--	  deprecated for more than four buildroot releases and are now
--	  removed.
+-	  Dataurisrc has moved to gstreamer core and is always built.
 -
--config BR2_GDB_VERSION_7_7
--	bool "gdb 7.7 has been removed"
+-config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DCCP
+-	bool "dccp removed"
+-	select BR2_LEGACY
+-
+-config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_HDVPARSE
+-	bool "hdvparse removed"
+-	select BR2_LEGACY
+-
+-config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_MVE
+-	bool "mve removed"
+-	select BR2_LEGACY
+-
+-config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_NUVDEMUX
+-	bool "nuvdemux removed"
+-	select BR2_LEGACY
+-
+-config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_PATCHDETECT
+-	bool "patchdetect removed"
+-	select BR2_LEGACY
+-
+-config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SDI
+-	bool "sdi removed"
+-	select BR2_LEGACY
+-
+-config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_TTA
+-	bool "tta removed"
+-	select BR2_LEGACY
+-
+-config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VIDEOMEASURE
+-	bool "videomeasure removed"
+-	select BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_IQA
 -	select BR2_LEGACY
 -	help
--	  The 7.7 version of gdb has been removed. Use a newer version
+-	  videomeasure plugin has been removed and has been replaced by
+-	  iqa, which has automatically been enabled.
+-
+-config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_APEXSINK
+-	bool "apexsink removed"
+-	select BR2_LEGACY
+-
+-config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SDL
+-	bool "sdl removed"
+-	select BR2_LEGACY
+-
+-config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_MAD
+-	bool "mad (*.mp3 audio) removed"
+-	select BR2_LEGACY
+-
+-config BR2_STRIP_none
+-	bool "Strip command 'none' has been removed"
+-	select BR2_LEGACY
+-	help
+-	  The strip command choice has been changed into a single
+-	  boolean option. Please check that the new setting is
+-	  correct (in the "Build options" sub-menu)
+-
+-config BR2_PACKAGE_BEECRYPT_CPP
+-	bool "C++ support removed in beecrypt"
+-	select BR2_LEGACY
+-	help
+-	  Support for C++ depends on icu. The beecrypt package is
+-	  incompatible with icu 59+.
+-
+-config BR2_PACKAGE_SPICE_CLIENT
+-	bool "spice client support removed"
+-	select BR2_LEGACY
+-	help
+-	  Spice client support has been removed upstream. The
+-	  functionality now lives in the spice-gtk widget and
+-	  virt-viewer.
+-
+-config BR2_PACKAGE_SPICE_GUI
+-	bool "spice gui support removed"
+-	select BR2_LEGACY
+-	help
+-	  Spice gui support has been removed upstream. The
+-	  functionality now lives in the spice-gtk widget and
+-	  virt-viewer.
+-
+-config BR2_PACKAGE_SPICE_TUNNEL
+-	bool "spice network redirection removed"
+-	select BR2_LEGACY
+-	help
+-	  Spice network redirection, aka tunnelling has been removed
+-	  upstream.
+-
+-config BR2_PACKAGE_INPUT_TOOLS
+-	bool "input-tools removed"
+-	select BR2_LEGACY
+-	select BR2_PACKAGE_LINUXCONSOLETOOLS
+-	help
+-	  input-tools has been removed, it is replaced by
+-	  linuxconsoletools, which has automatically been enabled.
+-
+-config BR2_PACKAGE_INPUT_TOOLS_INPUTATTACH
+-	bool "inputattach moved to linuxconsoletools"
+-	select BR2_LEGACY
+-	select BR2_PACKAGE_LINUXCONSOLETOOLS
+-	select BR2_PACKAGE_LINUXCONSOLETOOLS_INPUTATTACH
+-	help
+-	  input-tools has been removed, inputattach is now part
+-	  of linuxconsoletools, which has automatically been
+-	  enabled.
+-
+-config BR2_PACKAGE_INPUT_TOOLS_JSCAL
+-	bool "jscal moved to linuxconsoletools"
+-	select BR2_LEGACY
+-	select BR2_PACKAGE_LINUXCONSOLETOOLS
+-	select BR2_PACKAGE_LINUXCONSOLETOOLS_JOYSTICK
+-	help
+-	  input-tools has been removed, jscal is now part
+-	  of linuxconsoletools, which has automatically been
+-	  enabled.
+-
+-config BR2_PACKAGE_INPUT_TOOLS_JSTEST
+-	bool "jstest moved to linuxconsoletools"
+-	select BR2_LEGACY
+-	select BR2_PACKAGE_LINUXCONSOLETOOLS
+-	select BR2_PACKAGE_LINUXCONSOLETOOLS_JOYSTICK
+-	help
+-	  input-tools has been removed, jstest is now part
+-	  of linuxconsoletools, which has automatically been
+-	  enabled.
+-
+-config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_SH
+-	bool "SH Sourcery toolchain has been removed"
+-	select BR2_LEGACY
+-	help
+-	  The Sourcery CodeBench toolchain for the sh architecture has
+-	  been removed, since it uses glibc older than 2.17 that
+-	  requires -lrt to link executables using clock_* system calls.
+-	  This makes this toolchain difficult to maintain over time.
+-
+-config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_X86
+-	bool "x86 Sourcery toolchain has been removed"
+-	select BR2_LEGACY
+-	help
+-	  The Sourcery CodeBench toolchain for the x86 architecture has
+-	  been removed, since it uses glibc older than 2.17 that
+-	  requires -lrt to link executables using clock_* system calls.
+-	  This makes this toolchain difficult to maintain over time.
+-
+-config BR2_GCC_VERSION_4_8_X
+-	bool "gcc 4.8.x support removed"
+-	select BR2_LEGACY
+-	help
+-	  Support for gcc version 4.8.x has been removed. The current
+-	  default version (5.x or later) has been selected instead.
+-
+-###############################################################################
+-comment "Legacy options removed in 2017.05"
+-
+-config BR2_PACKAGE_SUNXI_MALI_R2P4
+-	bool "sunxi-mali r2p4 removed"
+-	select BR2_LEGACY
+-	help
+-	  sunxi-mali libMali for r2p4 Mali kernel module has been
+-	  removed since the libump package only provides libUMP.so.3.
+-	  libMali for r2p4 Mali kernel module requires libUMP.so.2.
+-
+-config BR2_PACKAGE_NODEJS_MODULES_COFFEESCRIPT
+-	bool "CoffeeScript option has been removed"
+-	select BR2_LEGACY
+-	help
+-	  The option to enable NodeJS CoffeeScript has been removed.
+-	  To continue using it, add "coffee-script" to
+-	  BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL.
+-
+-config BR2_PACKAGE_NODEJS_MODULES_EXPRESS
+-	bool "Express web application framework option has been removed"
+-	select BR2_LEGACY
+-	help
+-	  The option to enable the NodeJS Express web application
+-	  framework has been removed. To continue using it, add
+-	  "express" to BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL.
+-
+-config BR2_PACKAGE_BLUEZ5_UTILS_GATTTOOL
+-	bool "bluez5_utils gatttool install option removed"
+-	select BR2_PACKAGE_BLUEZ5_UTILS_DEPRECATED
+-	help
+-	  The option to install gatttool specifically has been removed.
+-	  Since version 5.44 gatttool is in the list of deprecated
+-	  tools. The option to build and install deprecated tools has
+-	  been automatically enabled.
+-
+-config BR2_PACKAGE_OPENOCD_FT2XXX
+-	bool "openocd ft2232 support has been removed"
+-	select BR2_PACKAGE_OPENOCD_FTDI
+-	select BR2_LEGACY
+-	help
+-	  FT2232 support in OpenOCD has been removed, it's replaced by
+-	  FDTI support, which has automatically been enabled.
+-
+-config BR2_PACKAGE_KODI_RTMPDUMP
+-	bool "kodi rtmp has been removed"
+-	select BR2_LEGACY
+-	select BR2_PACKAGE_KODI_INPUTSTREAM_RTMP
+-	help
+-	  Internal rtmp support was removed from Kodi.
+-
+-config BR2_PACKAGE_KODI_VISUALISATION_FOUNTAIN
+-	bool "kodi-visualisation-fountain has been removed"
+-	select BR2_LEGACY
+-	help
+-	  According to upstream 'the visualization is not currently
+-	  in a working shape.'
+-
+-config BR2_PACKAGE_PORTMAP
+-	bool "portmap has been removed"
+-	select BR2_LEGACY
+-	select BR2_PACKAGE_RPCBIND
+-	help
+-	  The portmap upstream tarball is removed, no releases since
+-	  ten years and latest change in upstream git in 2014.
+-	  You should better use rpcbind as a RPC portmapper.
+-
+-config BR2_BINUTILS_VERSION_2_25_X
+-	bool "binutils version 2.25 support removed"
+-	select BR2_LEGACY
+-	help
+-	  Support for binutils version 2.25 has been removed. The
+-	  current default version (2.27 or later) has been selected
 -	  instead.
 -
--config BR2_PACKAGE_FOOMATIC_FILTERS
--	bool "foomatic-filters"
+-config BR2_TOOLCHAIN_BUILDROOT_INET_RPC
+-	bool "uclibc RPC support has been removed"
 -	select BR2_LEGACY
 -	help
--	  The foomatic-filters package was removed.
+-	  uClibc-ng removed internal RPC implementation in 1.0.23. You
+-	  should use libtirpc instead.
 -
--config BR2_PACKAGE_SAMBA
--	bool "samba"
--	select BR2_LEGACY
+-config BR2_TARGET_ROOTFS_EXT2_EXTRA_BLOCKS
+-	int "extra size in blocks has been removed"
+-	default 0
 -	help
--	  The samba package was removed in favour of samba4 since the
--	  3.x series isn't supported by upstream any longer.
+-	  Since the support for auto calculation of the filesystem size
+-	  has been removed, this option is now useless and must be 0.
+-	  You may want to check that BR2_TARGET_ROOTFS_EXT2_BLOCKS
+-	  matchs your needs.
 -
--config BR2_PACKAGE_KODI_WAVPACK
--	bool "wavpack"
+-config BR2_TARGET_ROOTFS_EXT2_EXTRA_BLOCKS_WRAP
+-	bool
+-	default y if BR2_TARGET_ROOTFS_EXT2_EXTRA_BLOCKS != 0
 -	select BR2_LEGACY
--	help
--	  wavpack support was removed in favour of ffmpeg:
--	  https://github.com/xbmc/xbmc/commit/7916902c9e6f7a523265594f3ad7f921f93f1cd4
 -
--config BR2_PACKAGE_KODI_RSXS
--	bool "rsxs support in Kodi was moved to an addon"
+-config BR2_PACKAGE_SYSTEMD_KDBUS
+-	bool "systemd-kdbus has been removed"
 -	select BR2_LEGACY
--	select BR2_PACKAGE_KODI_SCREENSAVER_RSXS
 -	help
--	  rsxs support in Kodi was moved to an addon
+-	  --enable/disable-kdbus configure option has been removed since
+-	  systemd-231.
 -
--config BR2_PACKAGE_KODI_GOOM
--	bool "Goom support in Kodi was moved to an addon"
+-config BR2_PACKAGE_POLARSSL
+-	bool "polarssl has been removed"
 -	select BR2_LEGACY
--	select BR2_PACKAGE_KODI_VISUALISATION_GOOM
 -	help
--	  Goom support in Kodi was moved to an addon
+-	  The polarssl crypto library has been removed since the 1.2.x
+-	  release branch is no longer maintained. Newer upstream
+-	  branches/releases (mbedtls) have API changes so they're not
+-	  drop-in replacements.
 -
--config BR2_PACKAGE_SYSTEMD_ALL_EXTRAS
--	bool "systemd all extras option has been removed"
+-config BR2_NBD_CLIENT
+-	bool "nbd client option was renamed"
 -	select BR2_LEGACY
--	select BR2_PACKAGE_XZ
--	select BR2_PACKAGE_LIBGCRYPT
+-	select BR2_PACKAGE_NBD_CLIENT
 -	help
--	  The systemd option to enable "all extras" has been
--	  removed. To get the same features, the libgcrypt and xz
--	  package should now be enabled.
+-	  The nbd client option has been renamed to
+-	  BR2_PACKAGE_NBD_CLIENT.
 -
--config BR2_GCC_VERSION_4_5_X
--	bool "gcc 4.5.x has been removed"
+-config BR2_NBD_SERVER
+-	bool "nbd server option was renamed"
 -	select BR2_LEGACY
+-	select BR2_PACKAGE_NBD_SERVER
 -	help
--	  The 4.5.x version of gcc has been removed. Use a newer
--	  version instead.
+-	  The nbd server option has been renamed to
+-	  BR2_PACKAGE_NBD_SERVER.
 -
--config BR2_PACKAGE_SQLITE_READLINE
--	bool "sqlite command-line editing support was updated"
--	select BR2_PACKAGE_NCURSES
--	select BR2_PACKAGE_READLINE
+-config BR2_PACKAGE_GMOCK
+-	bool "gmock merged into gtest package"
+-	select BR2_LEGACY
+-	select BR2_PACKAGE_GTEST
+-	select BR2_PACKAGE_GTEST_GMOCK
+-	help
+-	  GMock is now a suboption of the GTest package.
+-
+-config BR2_KERNEL_HEADERS_4_8
+-	bool "kernel headers version 4.8.x are no longer supported"
 -	select BR2_LEGACY
 -	help
--	  This option was removed in favour of the sqlite package
--	  deciding itself depending on the enabled packages whether
--	  command-line editing should be enabled, it also also takes
--	  libedit into account.
+-	  Version 4.8.x of the Linux kernel headers are no longer
+-	  maintained upstream and are now removed.
+-
+-config BR2_KERNEL_HEADERS_3_18
+-	bool "kernel headers version 3.18.x are no longer supported"
+-	select BR2_LEGACY
+-	help
+-	  Version 3.18.x of the Linux kernel headers are no longer
+-	  maintained upstream and are now removed.
+-
+-config BR2_GLIBC_VERSION_2_22
+-	bool "glibc 2.22 removed"
+-	select BR2_LEGACY
+-	help
+-	  Support for glibc version 2.22 has been removed. The current
+-	  default version has been selected instead.
 -
  endmenu
  
  endif # !SKIP_LEGACY
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index d43c85cce7..fe0c0cbc89 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -94,7 +94,6 @@ config BR2_TARGET_UBOOT_VERSION
+diff --git a/fs/ext2/Config.in b/fs/ext2/Config.in
+index 333ead95fe..b54692bca9 100644
+--- a/fs/ext2/Config.in
++++ b/fs/ext2/Config.in
+@@ -47,7 +47,6 @@ config BR2_TARGET_ROOTFS_EXT2_LABEL
  
- config BR2_TARGET_UBOOT_PATCH
- 	string "Custom U-Boot patches"
--	default BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR if BR2_TARGET_UBOOT_CUSTOM_PATCH_DIR != ""  # legacy
+ config BR2_TARGET_ROOTFS_EXT2_SIZE
+ 	string "exact size"
+-	default BR2_TARGET_ROOTFS_EXT2_BLOCKS if BR2_TARGET_ROOTFS_EXT2_BLOCKS_WRAP # legacy 2017.08
+ 	default "60M"
  	help
- 	  A space-separated list of patches to apply to U-Boot.
- 	  Each patch can be described as an URL, a local file path,
+ 	  The size of the filesystem image. If it does not have a
 -- 
 2.25.1
