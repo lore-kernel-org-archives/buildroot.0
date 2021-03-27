@@ -1,52 +1,43 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 27 Mar 2021 21:53:28 +0100
-Subject: [Buildroot] [PATCH 0/5] legacy: drop old options (branch
- yem/drop-old-legacy)
-Message-ID: <cover.1616878389.git.yann.morin.1998@free.fr>
+Date: Sat, 27 Mar 2021 21:53:27 +0100
+Subject: [Buildroot] [PATCH 1/5] legacy: add note about removing options
+In-Reply-To: <cover.1616878389.git.yann.morin.1998@free.fr>
+References: <cover.1616878389.git.yann.morin.1998@free.fr>
+Message-ID: <6d9b2dbd892a411fa00eb9ce653982016dcff229.1616878389.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+Legacy options might still be in use, for example as a legacy default
+(e.g. as a string default, or as a choice default).
 
-We advertise that legacy symbols will be removed after two years.
-However, so far, we've be more lax than that, and we only dropped
-symbols after about 5 year have elapsed.
+So, when we eventually remove legacy options, we must ensure they are
+no longer used.
 
-This series removes options in step, starting with the usual 5-year
-threshold, in 1-year increments, to eventually catch-up with the
-advertised 2-year threshold.
+Add a small shell snippet to make that easy.
 
-Additionally, a little shell snippet is added in the comments, to
-help eventually drop those legacy symbols when they are still used
-elsewhere (e.g. as legacy defaults).
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ Config.in.legacy | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Regards,
-Yann E. MORIN.
-
-
-----------------------------------------------------------------
-Yann E. MORIN (5):
-      legacy: add note about removing options
-      legacy: drop options more than 5 years old
-      legacy: drop options more than 4 years old
-      legacy: drop options more than 3 years old
-      legacy: drop options more than 2 years old
-
- Config.in                    |    1 -
- Config.in.legacy             | 2955 +-----------------------------------------
- boot/uboot/Config.in         |    2 -
- configs/sheevaplug_defconfig |    1 -
- fs/ext2/Config.in            |    1 -
- system/Config.in             |    1 -
- 6 files changed, 4 insertions(+), 2957 deletions(-)
-
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 8ebbc4c295..ef2da34c33 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -6,7 +6,10 @@
+ # This will make the transition for the user more convenient.
+ #
+ # When adding legacy symbols to this file, add them to the front. The oldest
+-# symbols will be removed again after about two years.
++# symbols will be removed again after about two years. When removing symbols,
++# ensure there is nothing that still uses them (like legacy defaults):
++#   syms="$(git diff |sed -r -e '/^-config ([^[:space:]]+)$/!d; s//\1/')"
++#   for sym in ${syms}; do git --no-pager grep ${sym}; done
+ #
+ # The symbol should be copied as-is from the place where it was previously
+ # defined, but the help text should be removed or replaced with something that
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.25.1
