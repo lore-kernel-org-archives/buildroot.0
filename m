@@ -1,8 +1,8 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 27 Mar 2021 13:56:28 +0100
-Subject: [Buildroot] [PATCH 1/2] package/x11r7/xorgproto: bump version to
- 2021.3
-Message-ID: <20210327125629.1719494-1-bernd.kuhls@t-online.de>
+Date: Sat, 27 Mar 2021 13:59:47 +0100
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xapp_xkbcomp: bump version to
+ 1.4.5
+Message-ID: <20210327125947.1724901-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,56 +10,44 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Release notes:
-https://lists.x.org/archives/xorg-announce/2021-February/003072.html
-https://lists.x.org/archives/xorg-announce/2021-February/003073.html
+https://lists.x.org/archives/xorg-announce/2021-March/003075.html
 
-Update license hash after upstream typo fix:
-https://cgit.freedesktop.org/xorg/proto/xorgproto/commit/COPYING-x11proto?id=09602b2130b3710bcca4d2707132bd47d4a832ef
+Update license hash after upstream removed trailing whitespaces:
+https://cgit.freedesktop.org/xorg/app/xkbcomp/commit/COPYING?id=3b3d25dd32ba48fd6d15ca98baf7109af21e1d97
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xorgproto/xorgproto.hash | 11 +++++------
- package/x11r7/xorgproto/xorgproto.mk   |  2 +-
- 2 files changed, 6 insertions(+), 7 deletions(-)
+ package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash | 9 +++++----
+ package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/x11r7/xorgproto/xorgproto.hash b/package/x11r7/xorgproto/xorgproto.hash
-index fda42ac8f6..3a1197027a 100644
---- a/package/x11r7/xorgproto/xorgproto.hash
-+++ b/package/x11r7/xorgproto/xorgproto.hash
-@@ -1,8 +1,7 @@
--# From https://lists.x.org/archives/xorg-announce/2020-April/003042.html
--md5 c29f4fa78f53b52b3efdc71ebd9506b6  xorgproto-2020.1.tar.bz2
--sha1 1cdab4e9ab796760ddb9582071328469a8eca08a  xorgproto-2020.1.tar.bz2
--sha256 54a153f139035a376c075845dd058049177212da94d7a9707cf9468367b699d2  xorgproto-2020.1.tar.bz2
--sha512 2d10533e54987f293e1c8578aa742c38cf2fac8551db1d317cf5ee4a6a9600eced50f59c57c38b35dd210fe02d350294c967512f04cb9876d6c0c1f7e89cb199  xorgproto-2020.1.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2021-February/003073.html
-+sha256  4c732b14fc7c7db64306374d9e8386d6172edbb93f587614df1938b9d9b9d737  xorgproto-2021.3.tar.bz2
-+sha512  3965e8f7f9fbfb2ad8c315865e112e2743915e6b9669fb1ee9bdd376fe4dce0145d547c679a321763b3eaa54832c7a92ff627f36505e914d2a4c48c2246a800e  xorgproto-2021.3.tar.bz2
+diff --git a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash
+index 7191d5520e..bccaae6f57 100644
+--- a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash
++++ b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash
+@@ -1,5 +1,6 @@
+-# From https://lists.x.org/archives/xorg-announce/2020-November/003063.html
+-sha256  59cce603a607a17722a0a1cf99010f4894e7812beb5d695abbc08474d59af27e  xkbcomp-1.4.4.tar.bz2
+-sha512  971eb06277a49083b42154472596f1452fa94cdee28bad345bbcd85b028441bfd975763c20ed92aa69d6605b3fb23d27fee89df91501963b77c863667bae41c4  xkbcomp-1.4.4.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2021-March/003075.html
++sha256  6851086c4244b6fd0cc562880d8ff193fb2bbf1e141c73632e10731b31d4b05e  xkbcomp-1.4.5.tar.bz2
++sha512  2e84f8d6b083e2e818cb95e5d2a184da00e50d71b280e92d1a71465a9a4348f922f4ddccb42cfeee6f76705bbfc8580ef67aedd0d958aaa1ae6bbcc66ccd8154  xkbcomp-1.4.5.tar.bz2
 +
  # Locally computed
- sha256 aacd931f191b610902aee1e526090c2858aabc07969441fa2537ffd3e7049555  COPYING-applewmproto
- sha256 dabc025f93129a0eb2d17f37c719dbe5ecbcb5bc8f7bc7f4ce89fe04576cc0c2  COPYING-bigreqsproto
-@@ -30,7 +29,7 @@ sha256 fcbd3c628bf4d28ee3e6032054bf44bbe58f3b1a944dad856a8d3eb6b37ea412  COPYING
- sha256 d6d3513f5a7099748dc387f54498d799380b45f8a444f13aa98aa45a860ae55b  COPYING-trapproto
- sha256 f8f49bbad61967ebc890fb79fff5bfb7cfc1c341aa8f8dee13eb3fb534040b47  COPYING-videoproto
- sha256 eb183a00c61bb47992f096b6993ed7ec17518bea9c285fe87efff7f622cc6c12  COPYING-windowswmproto
--sha256 da4a28570230228b9bd80a701c5d8752f8609394de2e0d46d26d978bd07610db  COPYING-x11proto
-+sha256 3bd8e0c41497bfe6ab8d11c3c90c5e79edd0b2437f2bf81161575f54bae53f21  COPYING-x11proto
- sha256 5531d18cfcc944dab39991f63f182cbbce3fe493ba0c7cf08a25c0d01ee84482  COPYING-xcmiscproto
- sha256 fb42146c6c06a200a9b121220eb692ff9101ba0fbd0b224b9e16a016c59ae86a  COPYING-xextproto
- sha256 3591964e01a9cdfc9cc4149a847a431a3f3d98328cc9e5864c7a7831b29c4058  COPYING-xf86bigfontproto
-diff --git a/package/x11r7/xorgproto/xorgproto.mk b/package/x11r7/xorgproto/xorgproto.mk
-index 1c9f320e51..7e157103a4 100644
---- a/package/x11r7/xorgproto/xorgproto.mk
-+++ b/package/x11r7/xorgproto/xorgproto.mk
+-sha256  f1a78f5796fe2374f2b93e579328a02283e57d2a8316484b31799b12debe7ee3  COPYING
++sha256  6b833fdc05906ce57f016dc791db86830d49ee4da2861ce45806c50b3f4dda9e  COPYING
+diff --git a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
+index 69d4aefb94..b52f5e6850 100644
+--- a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
++++ b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XORGPROTO_VERSION = 2020.1
-+XORGPROTO_VERSION = 2021.3
- XORGPROTO_SOURCE = xorgproto-$(XORGPROTO_VERSION).tar.bz2
- XORGPROTO_SITE = https://xorg.freedesktop.org/archive/individual/proto
- XORGPROTO_LICENSE = MIT
+-XAPP_XKBCOMP_VERSION = 1.4.4
++XAPP_XKBCOMP_VERSION = 1.4.5
+ XAPP_XKBCOMP_SOURCE = xkbcomp-$(XAPP_XKBCOMP_VERSION).tar.bz2
+ XAPP_XKBCOMP_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XKBCOMP_LICENSE = MIT
 -- 
 2.29.2
