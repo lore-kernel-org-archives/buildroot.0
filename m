@@ -1,36 +1,51 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 27 Mar 2021 22:57:34 +0100
-Subject: [Buildroot] [git commit] package/python-dialog3: switch to
- setuptools
-Message-ID: <20210327220906.3C42E86FC3@busybox.osuosl.org>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Sat, 27 Mar 2021 23:33:46 +0100
+Subject: [Buildroot] [PATCH] boot/uboot: fix uboot build failure with
+ UBOOT_CUSTOM_DTS_PATH on uboot version >= 2020.x
+In-Reply-To: <20210209201303.195093-1-giulio.benetti@benettiengineering.com>
+References: <20210209201303.195093-1-giulio.benetti@benettiengineering.com>
+Message-ID: <ad1b10c3-b36f-78fe-624d-4f1bb6068944@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2af9ab7c31a67fbbd6008fd82878fc1019dfbe94
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi All,
 
-The package switched to setuptools (see commit:
-https://github.com/frougon/pythondialog/commit/88a3f0b45e81aaecf3a85bcf8b8d8ce907fbe29d)
+On 2/9/21 9:13 PM, Giulio Benetti wrote:
+> Starting from version 2020.x uboot can't build .dts files not listed in
+> dts/Makefile leading to a build failure when trying to pass a .dts file to
+> UBOOT_CUSTOM_DTS_PATH. So let's prepend that file(s) to dts/Makefile if
+> UBOOT_CUSTOM_DTS_PATH is used.
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> ---
+>   boot/uboot/uboot.mk | 5 +++++
+>   1 file changed, 5 insertions(+)
+> 
+> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+> index 2478a2a1e9..a5ad101d68 100644
+> --- a/boot/uboot/uboot.mk
+> +++ b/boot/uboot/uboot.mk
+> @@ -303,6 +303,11 @@ endif # BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY
+>   UBOOT_CUSTOM_DTS_PATH = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_DTS_PATH))
+>   
+>   define UBOOT_BUILD_CMDS
+> +	$(if $(UBOOT_CUSTOM_DTS_PATH),
+> +		$(Q)$(SED) \
+> +		'1s;^;dtb-y += $(subst .dts,.dtb,$(call notdir,$(UBOOT_CUSTOM_DTS_PATH)))\n;' \
+> +		$(@D)/arch/$(UBOOT_ARCH)/dts/Makefile
+> +	)
+>   	$(if $(UBOOT_CUSTOM_DTS_PATH),
+>   		cp -f $(UBOOT_CUSTOM_DTS_PATH) $(@D)/arch/$(UBOOT_ARCH)/dts/
+>   	)
+> 
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/python-dialog3/python-dialog3.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Any new about this patch? It's essential to build an external u-boot dts 
+after u-boot 2020.x
 
-diff --git a/package/python-dialog3/python-dialog3.mk b/package/python-dialog3/python-dialog3.mk
-index e2147507bf..6051985640 100644
---- a/package/python-dialog3/python-dialog3.mk
-+++ b/package/python-dialog3/python-dialog3.mk
-@@ -9,7 +9,7 @@ PYTHON_DIALOG3_SOURCE = pythondialog-$(PYTHON_DIALOG3_VERSION).tar.gz
- PYTHON_DIALOG3_SITE = https://files.pythonhosted.org/packages/72/3c/26ed0db035f97196704d0197d8b2254b8a6ca93a2d132430b0b0d597aa79
- PYTHON_DIALOG3_LICENSE = LGPL-2.1+
- PYTHON_DIALOG3_LICENSE_FILES = COPYING
--PYTHON_DIALOG3_SETUP_TYPE = distutils
-+PYTHON_DIALOG3_SETUP_TYPE = setuptools
- PYTHON_DIALOG3_DEPENDENCIES = dialog
- 
- $(eval $(python-package))
+Kind regards
+-- 
+Giulio Benetti
+Benetti Engineering sas
