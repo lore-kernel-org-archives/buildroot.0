@@ -1,55 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 28 Mar 2021 21:13:48 +0200
-Subject: [Buildroot] [PATCH 1/7] docs/manual: improve details about the
- Github macro
+Date: Sun, 28 Mar 2021 21:13:50 +0200
+Subject: [Buildroot] [PATCH 3/7] docs/manual: add documentation for the
+ gitlab macro
 In-Reply-To: <20210328191355.778786-1-thomas.petazzoni@bootlin.com>
 References: <20210328191355.778786-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20210328191355.778786-2-thomas.petazzoni@bootlin.com>
+Message-ID: <20210328191355.778786-4-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The Github macro example shows something that is now considered
-incorrect: using v1.0 as the VERSION. This is not longer recommended
-as it prevents from matching with release-monitoring.org details.
-
-Let's update the example, and add a note to explain this in more
-details.
-
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- docs/manual/adding-packages-tips.txt | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ docs/manual/adding-packages-tips.txt | 30 ++++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
 diff --git a/docs/manual/adding-packages-tips.txt b/docs/manual/adding-packages-tips.txt
-index 95a1d599ef..6e4241d570 100644
+index 6e4241d570..d8c2eceb10 100644
 --- a/docs/manual/adding-packages-tips.txt
 +++ b/docs/manual/adding-packages-tips.txt
-@@ -174,8 +174,8 @@ past, the 'github' helper function should be used as shown below.
- 
- ------------------------
- # Use a tag or a full commit ID
--FOO_VERSION = v1.0
--FOO_SITE = $(call github,<user>,<package>,$(FOO_VERSION))
+@@ -210,3 +210,33 @@ image::github_hash_mongrel2.png[]
+ - On the other hand, if there's is *only* the "Source code" link, then
+   it's an automatically generated tarball and you should use the
+   'github' helper function.
++
++[[gitlab-download-url]]
++==== How to add a package from Gitlab
++
++In a similar way to the +github+ macro described in
++xref:github-download-url[], Buildroot also provides the +gitlab+ macro
++to download from Gitlab repositories. It can be used to download
++auto-generated tarballs produced by Gitlab, either for specific tags
++or commits:
++
++------------------------
++# Use a tag or a full commit ID
 +FOO_VERSION = 1.0
-+FOO_SITE = $(call github,<user>,<package>,v$(FOO_VERSION))
- ------------------------
- 
- .Notes
-@@ -184,6 +184,12 @@ FOO_SITE = $(call github,<user>,<package>,$(FOO_VERSION))
-   Buildroot (e.g.: +foo-f6fb6654af62045239caed5950bc6c7971965e60.tar.gz+),
-   so it is not necessary to specify it in the +.mk+ file.
- - When using a commit ID as version, you should use the full 40 hex characters.
-+- When the tag contains a prefix such as +v+ in +v1.0+, then the
-+  +VERSION+ variable should contain just +1.0+, and the +v+ should be
-+  added directly in the +SITE+ variable, as illustrated above. This
-+  ensures that the +VERSION+ variable value can be used to match
-+  against http://www.release-monitoring.org/[release-monitoring.org]
-+  results.
- 
- If the package you wish to add does have a release section on GitHub, the
- maintainer may have uploaded a release tarball, or the release may just point
++FOO_SITE = $(call gitlab,<user>,<package>,v$(FOO_VERSION))
++------------------------
++
++By default, it will use a +.tar.gz+ tarball, but Gitlab also provides
+++.tar.bz2+ tarballs, so by adding a +<pkg>_SOURCE+ variable, this
+++.tar.bz2+ tarball can be used:
++
++------------------------
++# Use a tag or a full commit ID
++FOO_VERSION = 1.0
++FOO_SITE = $(call gitlab,<user>,<package>,v$(FOO_VERSION))
++FOO_SOURCE = foo-$(FOO_VERSION).tar.bz2
++------------------------
++
++If there is a specific tarball uploaded by the upstream developers in
+++https://gitlab.com/<project>/releases/+, do not use this macro, but
++rather use directly the link to the tarball.
 -- 
 2.30.2
