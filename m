@@ -1,48 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 28 Mar 2021 22:52:48 +0200
-Subject: [Buildroot] [PATCH 1/1] linux: support uncompressed kernel
-In-Reply-To: <87zgyph67r.fsf@dell.be.48ers.dk>
-References: <20210324114522.285121-1-egorenar@linux.ibm.com>
- <87zgyph67r.fsf@dell.be.48ers.dk>
-Message-ID: <20210328225248.77bb3de4@windsurf.home>
+Date: Sun, 28 Mar 2021 22:53:11 +0200
+Subject: [Buildroot] [git commit] package/libvips: drop unrecogized options
+Message-ID: <20210328202826.140AE8A3D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 26 Mar 2021 23:59:20 +0100
-Peter Korsgaard <peter@korsgaard.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=953f00c7d82e4bde7bd513052239eabf181b862e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> It looks like this is a s390-specific option:
-> 
-> commit 89b5202e81df9f0f0f0a11cf8c78bc8bfdc52a21
-> Author: Vasily Gorbik <gor@linux.ibm.com>
-> Date:   Wed Jun 13 00:00:25 2018 +0200
-> 
->     s390/decompressor: support uncompressed kernel
-> 
-> 
-> So it should depend on BR2_s390x.
+--without-zip has been dropped since version 8.4.2 and
+https://github.com/libvips/libvips/commit/5ab0001ec68a5f61396aecd8d2d7a619b1dbe1fa
 
-This is true... but in fact also applies to our other compression
-options. For example, if you enable BR2_LINUX_KERNEL_LZMA on arm64, it
-does nothing, because this is not supported on arm64.
+--without-python has been dropped since version 8.6.0 and
+https://github.com/libvips/libvips/commit/fddd277995cf8ffb434eeaf2ee27fe22d921bc59
 
-Or if you use BR2_LINUX_KERNEL_ZSTD, it will only work on mips and x86,
-none of the other CPU architectures support that.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libvips/libvips.mk | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-And of course, since this is changing from one version of the kernel to
-another, we can't really add such dependencies in Buildroot. I've done
-so for the uncompressed/s390 case because it felt a bit "special", but
-in the general case, it doesn't work :-/
-
-The only way would be some kind of build-time verification that the
-option was really taken into account, to at least abort the build if
-the option doesn't do anything.
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libvips/libvips.mk b/package/libvips/libvips.mk
+index 169fda9b10..d0979b7e3b 100644
+--- a/package/libvips/libvips.mk
++++ b/package/libvips/libvips.mk
+@@ -32,9 +32,7 @@ LIBVIPS_CONF_OPTS = \
+ 	--without-cfitsio \
+ 	--without-libwebp \
+ 	--without-pangoft2 \
+-	--without-x \
+-	--without-zip \
+-	--without-python
++	--without-x
+ LIBVIPS_INSTALL_STAGING = YES
+ LIBVIPS_DEPENDENCIES = \
+ 	host-pkgconf expat libglib2 \
