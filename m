@@ -1,51 +1,50 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 28 Mar 2021 22:30:20 +0200
-Subject: [Buildroot] [PATCH 0/3] legacy: drop options older than 5 years,
- make that the new rule (branch yem/drop-old-legacy)
-Message-ID: <cover.1616963387.git.yann.morin.1998@free.fr>
+Date: Sun, 28 Mar 2021 22:30:21 +0200
+Subject: [Buildroot] [PATCH 1/3] legacy: increase the duration during whih
+ we keep legacy symbols
+In-Reply-To: <cover.1616963387.git.yann.morin.1998@free.fr>
+References: <cover.1616963387.git.yann.morin.1998@free.fr>
+Message-ID: <d41046d49bd9db1ccc30dea7d1f4d8c2310d3536.1616963387.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+Our LTS is only one-year long (actually, more like 13 mopnths), which
+is still seen as too short by some, who do not have the bandwidth,
+willingness, and/or capability to update once a year.
 
-We advertise that legacy symbols will be removed after two years.
-However, so far, we've be more lax than that, and we only dropped
-symbols after about 5 year have elapsed.
+As such, the 2-year retention guarantee for the legacy symbols, is
+often not enough, and people miss on them when eventually migrating.
 
-This series changes the rule to match the customs, and drops the
-entries older than 5 years.
+Furthermore, the cuystoms so far has been to drop the symbols only after
+a 5-year period has elapsed:
+    f289b1b36f5c  legacy: drop options removed more than 5 years ago now
+    a52e106bbd08  legacy: remove options made legacy 5 years ago
+    a7f49a9693d7  Config.in.legacy: drop 2013.02 entries
 
-Additionally, a little shell snippet is added in the comments, to
-help eventually drop those legacy symbols when they are still used
-elsewhere (e.g. as legacy defaults).
+So, make the customs the new rule: increase the retenetion period to 5
+years.
 
+Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
-Changes v1 -> v2:
-  - drop patches removing more recent entries up to 2-year old)
-  - make the 5-year customs the rule
+ Config.in.legacy | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Regards,
-Yann E. MORIN.
-
-
-----------------------------------------------------------------
-Yann E. MORIN (3):
-      legacy: increase the duration during whih we keep legacy symbols
-      legacy: add note about removing options
-      legacy: drop options more than 5 years old
-
- Config.in                    |   1 -
- Config.in.legacy             | 658 +------------------------------------------
- configs/sheevaplug_defconfig |   1 -
- 3 files changed, 4 insertions(+), 656 deletions(-)
-
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 8ebbc4c295..967b67e03e 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -6,7 +6,7 @@
+ # This will make the transition for the user more convenient.
+ #
+ # When adding legacy symbols to this file, add them to the front. The oldest
+-# symbols will be removed again after about two years.
++# symbols will be removed again after at least five years.
+ #
+ # The symbol should be copied as-is from the place where it was previously
+ # defined, but the help text should be removed or replaced with something that
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.25.1
