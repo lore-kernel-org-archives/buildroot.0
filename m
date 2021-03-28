@@ -1,110 +1,48 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 28 Mar 2021 10:12:27 +0200
-Subject: [Buildroot] [git commit] package/uclibc: update to 1.0.38
-In-Reply-To: <20210328074141.774EC88298@busybox.osuosl.org>
-References: <20210328074141.774EC88298@busybox.osuosl.org>
-Message-ID: <20210328081227.GE24043@scaer>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 28 Mar 2021 10:14:01 +0200
+Subject: [Buildroot] [PATCH 1/1] package/fetchmail: bump version to 6.4.18
+Message-ID: <20210328081401.200616-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Release notes:
+https://sourceforge.net/p/fetchmail/mailman/message/37249830/
 
-On 2021-03-28 10:05 +0200, Yann E. MORIN spake thusly:
-> commit: https://git.buildroot.net/buildroot/commit/?id=0cf28c2c5a4d053e46881926134a15c8b0c243ba
-> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-> 
-> - fixes renameat2 issues on riscv64
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/fetchmail/fetchmail.hash | 6 +++---
+ package/fetchmail/fetchmail.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-You may want to consider this bump for 2021.02.x, as the it almost
-exclusively contains bug fixes.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  ...arch-sh-Add-64-bit-time-types-from-kernel.patch | 33 ----------------------
->  package/uclibc/uclibc.hash                         |  4 +--
->  package/uclibc/uclibc.mk                           |  2 +-
->  3 files changed, 3 insertions(+), 36 deletions(-)
-> 
-> diff --git a/package/uclibc/0001-arch-sh-Add-64-bit-time-types-from-kernel.patch b/package/uclibc/0001-arch-sh-Add-64-bit-time-types-from-kernel.patch
-> deleted file mode 100644
-> index aec8fcda9f..0000000000
-> --- a/package/uclibc/0001-arch-sh-Add-64-bit-time-types-from-kernel.patch
-> +++ /dev/null
-> @@ -1,33 +0,0 @@
-> -From 385f2b18ccde15f72a6e8aee4c960a5bc18481d7 Mon Sep 17 00:00:00 2001
-> -From: =?UTF-8?q?Geoffrey=20Le=20Gourri=C3=A9rec?=
-> - <geoffrey.legourrierec@gmail.com>
-> -Date: Tue, 26 Jan 2021 20:39:36 +0100
-> -Subject: [PATCH] arch/sh: Add 64-bit time types from kernel
-> -
-> ----
-> - libc/sysdeps/linux/sh/bits/kernel_types.h | 2 ++
-> - 1 file changed, 2 insertions(+)
-> -
-> -diff --git a/libc/sysdeps/linux/sh/bits/kernel_types.h b/libc/sysdeps/linux/sh/bits/kernel_types.h
-> -index ac97261e6..90b2e66b6 100644
-> ---- a/libc/sysdeps/linux/sh/bits/kernel_types.h
-> -+++ b/libc/sysdeps/linux/sh/bits/kernel_types.h
-> -@@ -21,6 +21,7 @@ typedef unsigned int	__kernel_size_t;
-> - typedef int		__kernel_ssize_t;
-> - typedef int		__kernel_ptrdiff_t;
-> - typedef long		__kernel_time_t;
-> -+typedef long long	__kernel_time64_t;
-> - typedef long		__kernel_suseconds_t;
-> - typedef long		__kernel_clock_t;
-> - typedef int		__kernel_daddr_t;
-> -@@ -33,6 +34,7 @@ typedef unsigned short	__kernel_old_uid_t;
-> - typedef unsigned short	__kernel_old_gid_t;
-> - typedef __kernel_dev_t	__kernel_old_dev_t;
-> - typedef long		__kernel_long_t;
-> -+typedef __kernel_long_t	__kernel_old_time_t;
-> - typedef unsigned long	__kernel_ulong_t;
-> - typedef long long	__kernel_loff_t;
-> - 
-> --- 
-> -2.17.1
-> -
-> diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
-> index e8bd5c5192..2935785f48 100644
-> --- a/package/uclibc/uclibc.hash
-> +++ b/package/uclibc/uclibc.hash
-> @@ -1,4 +1,4 @@
-> -# From https://downloads.uclibc-ng.org/releases/1.0.37/uClibc-ng-1.0.37.tar.xz.sha256
-> -sha256  b2b815d20645cf604b99728202bf3ecb62507ce39dfa647884b4453caf86212c  uClibc-ng-1.0.37.tar.xz
-> +# From https://downloads.uclibc-ng.org/releases/1.0.38/uClibc-ng-1.0.38.tar.xz.sha256
-> +sha256  b1a3328330d2c94a2bec8c1436a8f15673f3a9b5895e155efc2e91d4e1882570  uClibc-ng-1.0.38.tar.xz
->  # Locally calculated
->  sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING.LIB
-> diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-> index 53983e852d..3d253d93bc 100644
-> --- a/package/uclibc/uclibc.mk
-> +++ b/package/uclibc/uclibc.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -UCLIBC_VERSION = 1.0.37
-> +UCLIBC_VERSION = 1.0.38
->  UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
->  UCLIBC_SITE = https://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
->  UCLIBC_LICENSE = LGPL-2.1+
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/fetchmail/fetchmail.hash b/package/fetchmail/fetchmail.hash
+index b526163849..698d83c88b 100644
+--- a/package/fetchmail/fetchmail.hash
++++ b/package/fetchmail/fetchmail.hash
+@@ -1,6 +1,6 @@
+-# From https://sourceforge.net/p/fetchmail/mailman/message/37215482/
+-sha256  044b9a0ac03afbae7744979defe3e2e32e39141bca68fd0c8deda2ed40884fb9  fetchmail-6.4.16.tar.xz
++# From https://sourceforge.net/p/fetchmail/mailman/message/37249830/
++sha256  302dc9bcdc6927dedf375d2baaead2347557faa70d98b1da83f2409fa6fb259f  fetchmail-6.4.18.tar.xz
+ # From https://sourceforge.net/projects/fetchmail/files/branch_6.4/
+-sha1  ec910eed3db4d8c44469aabaf33f529334a2fdb5  fetchmail-6.4.16.tar.xz
++sha1  1fd3e4f30bd9ba7bdcaed5edfca080dc6f66377e  fetchmail-6.4.18.tar.xz
+ # Locally computed:
+ sha256  8e3ec4863456a26fcd1cf84fadd4146efcb2fd8515bcec482e0f2b7060108895  COPYING
+diff --git a/package/fetchmail/fetchmail.mk b/package/fetchmail/fetchmail.mk
+index 2db635ec66..6fe9b5b3d7 100644
+--- a/package/fetchmail/fetchmail.mk
++++ b/package/fetchmail/fetchmail.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ FETCHMAIL_VERSION_MAJOR = 6.4
+-FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).16
++FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).18
+ FETCHMAIL_SOURCE = fetchmail-$(FETCHMAIL_VERSION).tar.xz
+ FETCHMAIL_SITE = http://downloads.sourceforge.net/project/fetchmail/branch_$(FETCHMAIL_VERSION_MAJOR)
+ FETCHMAIL_LICENSE = GPL-2.0; some exceptions are mentioned in COPYING
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.29.2
