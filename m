@@ -1,45 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 28 Mar 2021 21:45:53 +0200
-Subject: [Buildroot] [git commit] package/openvpn: bump version to 2.5.1
-Message-ID: <20210328192146.F04E988278@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 28 Mar 2021 21:52:05 +0200
+Subject: [Buildroot] [PATCH 0/5] legacy: drop old options (branch
+ yem/drop-old-legacy)
+In-Reply-To: <20210328212402.696e0207@windsurf.home>
+References: <cover.1616878389.git.yann.morin.1998@free.fr>
+ <20210328212402.696e0207@windsurf.home>
+Message-ID: <20210328195205.GQ24043@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=002fa467bfbcc65497a500afcf2d29d388622e33
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas, All,
 
-Release notes:
-https://sourceforge.net/p/openvpn/mailman/message/37226597/
+On 2021-03-28 21:24 +0200, Thomas Petazzoni spake thusly:
+> On Sat, 27 Mar 2021 21:53:28 +0100
+> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+> > We advertise that legacy symbols will be removed after two years.
+> > However, so far, we've be more lax than that, and we only dropped
+> > symbols after about 5 year have elapsed.
+> > 
+> > This series removes options in step, starting with the usual 5-year
+> > threshold, in 1-year increments, to eventually catch-up with the
+> > advertised 2-year threshold.
+> In fact, I am not sure I agree with the rule that we should keep them
+> only 2 years. Indeed, for users that follow the LTS releases, 2 years
+> should be more than enough. But believe it or not, our 12 months
+> maintenance period is still considered too short by users who don't
+> always have the resources/skills to update once a year. So we still do
+> have users that upgrade quite infrequently.
+> 
+> Since the maintenance cost of those legacy options is essentially zero,
+> I am wondering if we really need to drop them. Should we change the
+> rule and drop the ones that are 5 years old for example ?
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/openvpn/openvpn.hash | 2 +-
- package/openvpn/openvpn.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+I noticed the two-year rule while adding the snippet, when I thought the
+rule was five years, when it was only customs.
 
-diff --git a/package/openvpn/openvpn.hash b/package/openvpn/openvpn.hash
-index 4e371fc87b..d008b3496d 100644
---- a/package/openvpn/openvpn.hash
-+++ b/package/openvpn/openvpn.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking signature
--sha256  029a426e44d656cb4e1189319c95fe6fc9864247724f5599d99df9c4c3478fbd  openvpn-2.5.0.tar.xz
-+sha256  40930489c837c05f6153f38e1ebaec244431ef1a034e4846ff732d71d59ff194  openvpn-2.5.1.tar.xz
- sha256  1fcb78d7e478bb8a9408010bdc91b36e213b1facfad093df3f7ce7e28af19043  COPYRIGHT.GPL
-diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
-index 7c67e95074..e4066a405a 100644
---- a/package/openvpn/openvpn.mk
-+++ b/package/openvpn/openvpn.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENVPN_VERSION = 2.5.0
-+OPENVPN_VERSION = 2.5.1
- OPENVPN_SOURCE = openvpn-$(OPENVPN_VERSION).tar.xz
- OPENVPN_SITE = http://swupdate.openvpn.net/community/releases
- OPENVPN_DEPENDENCIES = host-pkgconf
+So, I split the series in steps, so that we could at least abide by the
+established usage of dropping 5-year old entries, and then catch up to
+the rule.
+
+I am OK with making the rule '5 years', since that's what I thought it
+was.
+
+I'll resend an updated series.
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
