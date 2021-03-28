@@ -1,46 +1,46 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 28 Mar 2021 10:13:48 +0200
-Subject: [Buildroot] [git commit] package/kodi-pvr-hts: bump version to
- 8.3.0-Matrix
-Message-ID: <20210328075050.516F087B83@busybox.osuosl.org>
+Date: Sun, 28 Mar 2021 10:15:08 +0200
+Subject: [Buildroot] [git commit] package/kodi-inputstream-adaptive: bump
+ version to 2.6.8-Matrix
+Message-ID: <20210328075050.71A1487B83@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3bf7f6baa1fdbdc992081e8f82710d351085f6d6
+commit: https://git.buildroot.net/buildroot/commit/?id=49424c00661d0730e9c5b8a5e06d382102aa94d6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Changelog:
-https://github.com/kodi-pvr/pvr.hts/blob/Matrix/pvr.hts/changelog.txt
+https://github.com/xbmc/inputstream.adaptive/blob/Matrix/inputstream.adaptive/addon.xml.in#L22
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/kodi-pvr-hts/kodi-pvr-hts.hash | 2 +-
- package/kodi-pvr-hts/kodi-pvr-hts.mk   | 2 +-
+ package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash | 2 +-
+ package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-pvr-hts/kodi-pvr-hts.hash b/package/kodi-pvr-hts/kodi-pvr-hts.hash
-index 1264f1b4d3..e22e13df23 100644
---- a/package/kodi-pvr-hts/kodi-pvr-hts.hash
-+++ b/package/kodi-pvr-hts/kodi-pvr-hts.hash
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+index 6c9b79b881..5be6bad3cb 100644
+--- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  9b1cc87b776d6c2fdeb0f2b89c09c0de6e3aba86b2da515d24957292dbab8134  kodi-pvr-hts-8.2.4-Matrix.tar.gz
-+sha256  51d27171c55aea8ee3c7573adca3e942b57f34171b1b685501ac8f5dbd3623b7  kodi-pvr-hts-8.3.0-Matrix.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-hts/kodi-pvr-hts.mk b/package/kodi-pvr-hts/kodi-pvr-hts.mk
-index 989d6f78b6..dc4dd9533e 100644
---- a/package/kodi-pvr-hts/kodi-pvr-hts.mk
-+++ b/package/kodi-pvr-hts/kodi-pvr-hts.mk
+-sha256  353207f5f98bf81ce8d79cec903c28da8c0227d7c7a632692c910d81e59c2dbe  kodi-inputstream-adaptive-2.6.7-Matrix.tar.gz
++sha256  6407a95140b728b959321512d5bdc8512b01d60030415459cf861ddae193e3e9  kodi-inputstream-adaptive-2.6.8-Matrix.tar.gz
+ sha256  89931c1fb1f3716694175763cf3221cfcd63d6935031cf6b4512d17ffe5d9860  LICENSE.GPL
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+index d6d86817ce..193ea66245 100644
+--- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_PVR_HTS_VERSION = 8.2.4-Matrix
-+KODI_PVR_HTS_VERSION = 8.3.0-Matrix
- KODI_PVR_HTS_SITE = $(call github,kodi-pvr,pvr.hts,$(KODI_PVR_HTS_VERSION))
- KODI_PVR_HTS_LICENSE = GPL-2.0+
- KODI_PVR_HTS_LICENSE_FILES = LICENSE.md
+-KODI_INPUTSTREAM_ADAPTIVE_VERSION = 2.6.7-Matrix
++KODI_INPUTSTREAM_ADAPTIVE_VERSION = 2.6.8-Matrix
+ KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,xbmc,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
+ KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPL-2.0+
+ KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = LICENSE.GPL
