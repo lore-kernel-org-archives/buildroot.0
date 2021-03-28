@@ -1,59 +1,60 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 28 Mar 2021 21:52:05 +0200
-Subject: [Buildroot] [PATCH 0/5] legacy: drop old options (branch
- yem/drop-old-legacy)
-In-Reply-To: <20210328212402.696e0207@windsurf.home>
-References: <cover.1616878389.git.yann.morin.1998@free.fr>
- <20210328212402.696e0207@windsurf.home>
-Message-ID: <20210328195205.GQ24043@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 28 Mar 2021 22:13:42 +0200
+Subject: [Buildroot] [git commit] package/libqmi: bump version to 1.28.2
+Message-ID: <20210328194905.4949D802D6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=53baf80834bf70839a9baea6f6352f1c9e594933
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-03-28 21:24 +0200, Thomas Petazzoni spake thusly:
-> On Sat, 27 Mar 2021 21:53:28 +0100
-> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
-> > We advertise that legacy symbols will be removed after two years.
-> > However, so far, we've be more lax than that, and we only dropped
-> > symbols after about 5 year have elapsed.
-> > 
-> > This series removes options in step, starting with the usual 5-year
-> > threshold, in 1-year increments, to eventually catch-up with the
-> > advertised 2-year threshold.
-> In fact, I am not sure I agree with the rule that we should keep them
-> only 2 years. Indeed, for users that follow the LTS releases, 2 years
-> should be more than enough. But believe it or not, our 12 months
-> maintenance period is still considered too short by users who don't
-> always have the resources/skills to update once a year. So we still do
-> have users that upgrade quite infrequently.
-> 
-> Since the maintenance cost of those legacy options is essentially zero,
-> I am wondering if we really need to drop them. Should we change the
-> rule and drop the ones that are 5 years old for example ?
+libqrtr-glib is now optional dependency (since libqmi >= 1.28.0)
 
-I noticed the two-year rule while adding the snippet, when I thought the
-rule was five years, when it was only customs.
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libqmi/libqmi.hash |  2 +-
+ package/libqmi/libqmi.mk   | 10 +++++++++-
+ 2 files changed, 10 insertions(+), 2 deletions(-)
 
-So, I split the series in steps, so that we could at least abide by the
-established usage of dropping 5-year old entries, and then catch up to
-the rule.
-
-I am OK with making the rule '5 years', since that's what I thought it
-was.
-
-I'll resend an updated series.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/libqmi/libqmi.hash b/package/libqmi/libqmi.hash
+index 1304a072e2..8cf25f486a 100644
+--- a/package/libqmi/libqmi.hash
++++ b/package/libqmi/libqmi.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+-sha256  a71963bb1097a42665287e40a9a36f95b8f9d6d6a4b7a5de22d660328af97cb9  libqmi-1.26.6.tar.xz
++sha256  8c8c3ee719874d2529bce9b35b028fe435b36f003979a360d3ad0938449db783  libqmi-1.28.2.tar.xz
+diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
+index 6b5ccfcdea..b02312d702 100644
+--- a/package/libqmi/libqmi.mk
++++ b/package/libqmi/libqmi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBQMI_VERSION = 1.26.6
++LIBQMI_VERSION = 1.28.2
+ LIBQMI_SITE = http://www.freedesktop.org/software/libqmi
+ LIBQMI_SOURCE = libqmi-$(LIBQMI_VERSION).tar.xz
+ LIBQMI_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (programs)
+@@ -33,6 +33,14 @@ else
+ LIBQMI_CONF_OPTS += --disable-mbim-qmux
+ endif
+ 
++# if libqrtr-glib available, enable support for QMI over QRTR
++ifeq ($(BR2_PACKAGE_LIBQRTR_GLIB),y)
++LIBQMI_DEPENDENCIES += libqrtr-glib
++LIBQMI_CONF_OPTS += --enable-qrtr
++else
++LIBQMI_CONF_OPTS += --disable-qrtr
++endif
++
+ # if ModemManager available, enable MM runtime check in
+ # qmi-firmware-update (note that we don't need to build-depend on
+ # anything else)
