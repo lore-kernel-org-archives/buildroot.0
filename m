@@ -1,28 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 28 Mar 2021 23:03:48 +0200
-Subject: [Buildroot] [PATCH] board/beaglebone: remove
- genimage_linux41.cfg
-In-Reply-To: <20210322152925.3218412-1-buildroot@heine.tech>
-References: <20210322152925.3218412-1-buildroot@heine.tech>
-Message-ID: <20210328230348.7413e5cd@windsurf.home>
+Date: Sun, 28 Mar 2021 23:03:53 +0200
+Subject: [Buildroot] [PATCH] package/janet: bump to version 1.15.4
+In-Reply-To: <20210322194221.1987437-1-francois.perrad@gadz.org>
+References: <20210322194221.1987437-1-francois.perrad@gadz.org>
+Message-ID: <20210328230353.3443cbfb@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 22 Mar 2021 16:29:17 +0100
-Michael Nosthoff via buildroot <buildroot@busybox.net> wrote:
+On Mon, 22 Mar 2021 20:42:21 +0100
+Francois Perrad <fperrad@gmail.com> wrote:
 
-> Commit 5502a889dd9f065ec4694a993cfa509377da2cce
-> ("configs/beaglebone_qt5: don't use custom post-image script") removed the use
-> of genimage_linux41.cfg but didn't remove the file.
+> remove 2 patches merged upstream
 > 
-> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 > ---
->  board/beaglebone/genimage_linux41.cfg | 32 ---------------------------
->  1 file changed, 32 deletions(-)
->  delete mode 100644 board/beaglebone/genimage_linux41.cfg
+>  ...uild-defaults-to-c99-for-build.c_std.patch | 42 -------------------
+>  .../0002-meson.build-fix-static-build.patch   | 37 ----------------
+>  package/janet/janet.hash                      |  2 +-
+>  package/janet/janet.mk                        |  2 +-
+>  4 files changed, 2 insertions(+), 81 deletions(-)
+>  delete mode 100644 package/janet/0001-meson.build-defaults-to-c99-for-build.c_std.patch
+>  delete mode 100644 package/janet/0002-meson.build-fix-static-build.patch
 
 Applied to master, thanks.
 
