@@ -1,51 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 28 Mar 2021 16:52:28 +0200
-Subject: [Buildroot] [PATCH] package/libbytesize: remove pcre2 runtime
- dependency
-In-Reply-To: <749f0f6adb5df95c1d0b0b7ad101caae@agner.ch>
-References: <226176cabe249af62546689fbb39de8a7010c329.1616681740.git.stefan@agner.ch>
- <8735wjl3d5.fsf@tarshish>
- <c1c09133e8e3d70f0458fd0da622062f@agner.ch>
- <20210325163942.7d8ecb69@windsurf.home>
- <749f0f6adb5df95c1d0b0b7ad101caae@agner.ch>
-Message-ID: <20210328145228.GP24043@scaer>
+From: lucavermei <lucavermei@gmail.com>
+Date: Sun, 28 Mar 2021 12:31:58 -0500 (CDT)
+Subject: [Buildroot] Buildroot post-image script error
+Message-ID: <1616952718209-0.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Stefan, All,
+Hi all,
+I am new to buildroot and I am trying to build a system for my beaglebone
+black wireless.
+The build exit with an error:
 
-On 2021-03-25 17:41 +0100, Stefan Agner spake thusly:
-> On 2021-03-25 16:39, Thomas Petazzoni wrote:
-> > On Thu, 25 Mar 2021 15:40:36 +0100
-> > Stefan Agner <stefan@agner.ch> wrote:
-> >> Is there a way to have something as compile time dependency but not a
-> >> runtime dependency?
-> > No, because it is fairly uncommon to have something that is a compile
-> > time dependency but not necessary at runtime. Do you have specific
-> > examples in mind ?
+>>>   Executing post-image script support/scripts/genimage.sh
+board/beaglebone/genimage.cfg:34: no sub-section title/index for 'config'
+INFO: cmd: "mkdir -p "/home/luca/buildroot/output/build/genimage.tmp""
+(stderr):
+INFO: cmd: "rm -rf "/home/luca/buildroot/output/build/genimage.tmp"/*"
+(stderr):
+INFO: cmd: "mkdir -p "/home/luca/buildroot/output/build/genimage.tmp""
+(stderr):
+INFO: cmd: "cp -a "/tmp/tmp.PeR17MSHjT"
+"/home/luca/buildroot/output/build/genimage.tmp/root"" (stderr):
+INFO: cmd: "find '/home/luca/buildroot/output/build/genimage.tmp/root'
+-depth -type d -printf '%P\0' | xargs -0 -I {} touch -r
+'/tmp/tmp.PeR17MSHjT/{}'
+'/home/luca/buildroot/output/build/genimage.tmp/root/{}'" (stderr):
+ERROR: file(am335x-evm.dtb):
+stat(/home/luca/buildroot/output/images/am335x-evm.dtb) failed: No such file
+or directory
+ERROR: vfat(boot.vfat): could not setup am335x-evm.dtb
+make[1]: *** [Makefile:836: target-post-image] Error 1
+make: *** [Makefile:84: _all] Error 2
 
-Well, technically there are two cases:
+In my config I set the option build a device tree blob and In-tree device
+tree source file names "am335x-boneblack-wireless"
+If a do ls in /buildroot/output/images I get:
+am335x-boneblack-wireless.dtb  MLO  rootfs.tar  u-boot.img  uEnv.txt  zImage
 
-  - dependencies on a host package
-  - dependencies on a header-only package
+How can I fix the problem with the post image script?
 
-However, even in the later case, the package that provides those headers
-still needs to be enabled in the configuration and must also be built
-and installed (actually, only installed as it is headers-only) before
-the package that depends on it gets built.
 
-I've marked the patch as rejected in Patchwork now.
 
-Regards,
-Yann E. MORIN.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+
+--
+Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
