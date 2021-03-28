@@ -1,106 +1,65 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 28 Mar 2021 10:29:38 +0200
-Subject: [Buildroot] [PATCH 1/1] package/openssh: security bump to
- version 8.5p1
-In-Reply-To: <20210322190034.1151555-1-fontaine.fabrice@gmail.com>
-References: <20210322190034.1151555-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210328082938.GM24043@scaer>
+Date: Sun, 28 Mar 2021 10:31:09 +0200
+Subject: [Buildroot] [git commit] package/libglib2: security bump to version
+ 2.66.8
+Message-ID: <20210328080658.0CD10873D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=3f2ea5db25a4ca1e9ab8db69497ab9b4e9ccb117
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-03-22 20:00 +0100, Fabrice Fontaine spake thusly:
->  * ssh-agent(1): fixed a double-free memory corruption that was
->    introduced in OpenSSH 8.2 . We treat all such memory faults as
->    potentially exploitable. This bug could be reached by an attacker
->    with access to the agent socket.
-> 
->    On modern operating systems where the OS can provide information
->    about the user identity connected to a socket, OpenSSH ssh-agent
->    and sshd limit agent socket access only to the originating user
->    and root. Additional mitigation may be afforded by the system's
->    malloc(3)/free(3) implementation, if it detects double-free
->    conditions.
-> 
->    The most likely scenario for exploitation is a user forwarding an
->    agent either to an account shared with a malicious user or to a
->    host with an attacker holding root access.
-> 
->  * Portable sshd(8): Prevent excessively long username going to PAM.
->    This is a mitigation for a buffer overflow in Solaris' PAM username
->    handling (CVE-2020-14871), and is only enabled for Sun-derived PAM
->    implementations.  This is not a problem in sshd itself, it only
->    prevents sshd from being used as a vector to attack Solaris' PAM.
->    It does not prevent the bug in PAM from being exploited via some
->    other PAM application. GHPR#212
-> 
-> Also license has been updated to add some openbsd-compat licenses:
-> https://github.com/openssh/openssh-portable/commit/922cfac5ed5ead9f796f7d39f012dd653dc5c173
-> 
-> https://www.openssh.com/txt/release-8.5
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fix a security issue when using g_file_replace() with
+G_FILE_CREATE_REPLACE_DESTINATION
 
-Applied to master, thanks.
+https://gitlab.gnome.org/GNOME/glib/-/tags/2.66.8
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/libglib2/0003-remove-cpp-requirement.patch | 2 +-
+ package/libglib2/libglib2.hash                     | 4 ++--
+ package/libglib2/libglib2.mk                       | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-> ---
->  package/openssh/openssh.hash |  6 +++---
->  package/openssh/openssh.mk   | 10 ++++++----
->  2 files changed, 9 insertions(+), 7 deletions(-)
-> 
-> diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
-> index 840467f50a..c50a49896c 100644
-> --- a/package/openssh/openssh.hash
-> +++ b/package/openssh/openssh.hash
-> @@ -1,4 +1,4 @@
-> -# From https://www.openssh.com/txt/release-8.4 (base64 encoded)
-> -sha256  5a01d22e407eb1c05ba8a8f7c654d388a13e9f226e4ed33bd38748dafa1d2b24  openssh-8.4p1.tar.gz
-> +# From https://www.openssh.com/txt/release-8.5 (base64 encoded)
-> +sha256  f52f3f41d429aa9918e38cf200af225ccdd8e66f052da572870c89737646ec25  openssh-8.5p1.tar.gz
->  # Locally calculated
-> -sha256  73d0db766229670c7b4e1ec5e6baed54977a0694a565e7cc878c45ee834045d7  LICENCE
-> +sha256  432abf7480fb31473a6706627212913fc70032e3fb71b90fecb28ae26a2d741d  LICENCE
-> diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-> index 64e3084ca1..055c024cab 100644
-> --- a/package/openssh/openssh.mk
-> +++ b/package/openssh/openssh.mk
-> @@ -4,11 +4,13 @@
->  #
->  ################################################################################
->  
-> -OPENSSH_VERSION = 8.4p1
-> -OPENSSH_CPE_ID_VERSION = 8.4
-> -OPENSSH_CPE_ID_UPDATE = p1
-> +OPENSSH_VERSION_MAJOR = 8.5
-> +OPENSSH_VERSION_MINOR = p1
-> +OPENSSH_VERSION = $(OPENSSH_VERSION_MAJOR)$(OPENSSH_VERSION_MINOR)
-> +OPENSSH_CPE_ID_VERSION = $(OPENSSH_VERSION_MAJOR)
-> +OPENSSH_CPE_ID_UPDATE = $(OPENSSH_VERSION_MINOR)
->  OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
-> -OPENSSH_LICENSE = BSD-3-Clause, BSD-2-Clause, Public Domain
-> +OPENSSH_LICENSE = BSD-4-Clause, BSD-3-Clause, BSD-2-Clause, Public Domain
->  OPENSSH_LICENSE_FILES = LICENCE
->  OPENSSH_CONF_ENV = \
->  	LD="$(TARGET_CC)" \
-> -- 
-> 2.30.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/libglib2/0003-remove-cpp-requirement.patch b/package/libglib2/0003-remove-cpp-requirement.patch
+index 25cb23c239..11978e9755 100644
+--- a/package/libglib2/0003-remove-cpp-requirement.patch
++++ b/package/libglib2/0003-remove-cpp-requirement.patch
+@@ -35,7 +35,7 @@ index 4bbf4c2..ac59f4e 100644
+ @@ -1,4 +1,4 @@
+ -project('glib', 'c', 'cpp',
+ +project('glib', 'c',
+-   version : '2.66.7',
++   version : '2.66.8',
+    # NOTE: We keep this pinned at 0.49 because that's what Debian 10 ships
+    meson_version : '>= 0.49.2',
+ @@ -10,7 +10,6 @@ project('glib', 'c', 'cpp',
+diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
+index 7886bb5c59..4f69f1cc48 100644
+--- a/package/libglib2/libglib2.hash
++++ b/package/libglib2/libglib2.hash
+@@ -1,4 +1,4 @@
+-# https://download.gnome.org/sources/glib/2.66/glib-2.66.7.sha256sum
+-sha256  09f158769f6f26b31074e15b1ac80ec39b13b53102dfae66cfe826fb2cc65502  glib-2.66.7.tar.xz
++# https://download.gnome.org/sources/glib/2.66/glib-2.66.8.sha256sum
++sha256  97bc87dd91365589af5cbbfea2574833aea7a1b71840fd365ecd2852c76b9c8b  glib-2.66.8.tar.xz
+ # License files, locally calculated
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index ffbb4c96b5..9ce40d91ff 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBGLIB2_VERSION_MAJOR = 2.66
+-LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).7
++LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).8
+ LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
+ LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
+ LIBGLIB2_LICENSE = LGPL-2.1+
