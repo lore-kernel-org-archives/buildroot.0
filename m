@@ -1,46 +1,68 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 28 Mar 2021 10:13:49 +0200
-Subject: [Buildroot] [git commit] package/kodi-pvr-vuplus: bump version to
- 7.4.2-Matrix
-Message-ID: <20210328075050.61F45860CE@busybox.osuosl.org>
+Date: Sun, 28 Mar 2021 10:16:16 +0200
+Subject: [Buildroot] [PATCH 1/1] package/kodi-inputstream-adaptive:
+ bumpp version to 2.6.8-Matrix
+In-Reply-To: <20210327071637.32286-1-bernd.kuhls@t-online.de>
+References: <20210327071637.32286-1-bernd.kuhls@t-online.de>
+Message-ID: <20210328081616.GF24043@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=51b8b87c6692218bb87185ee3239b790955a552a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Bernd, All,
 
-Changelog:
-https://github.com/kodi-pvr/pvr.vuplus/blob/Matrix/pvr.vuplus/changelog.txt
+On 2021-03-27 08:16 +0100, Bernd Kuhls spake thusly:
+> Changelog:
+> https://github.com/xbmc/inputstream.adaptive/blob/Matrix/inputstream.adaptive/addon.xml.in#L22
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash | 2 +-
- package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
-index 8fac6a1770..2439e2619d 100644
---- a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
-+++ b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  9f10c35477f977646416a0a3f858e95e4dc896436582179981223ccd0570596c  kodi-pvr-vuplus-7.4.1-Matrix.tar.gz
-+sha256  fcd77d5b12def3b6c95928d699460b1dd6b316216f2bd348735261c639113554  kodi-pvr-vuplus-7.4.2-Matrix.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
-index 22b923bf86..cce260c519 100644
---- a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
-+++ b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_PVR_VUPLUS_VERSION = 7.4.1-Matrix
-+KODI_PVR_VUPLUS_VERSION = 7.4.2-Matrix
- KODI_PVR_VUPLUS_SITE = $(call github,kodi-pvr,pvr.vuplus,$(KODI_PVR_VUPLUS_VERSION))
- KODI_PVR_VUPLUS_LICENSE = GPL-2.0+
- KODI_PVR_VUPLUS_LICENSE_FILES = LICENSE.md
+Regards,
+Yann E. MORIN.
+
+> ---
+>  .../kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash    | 2 +-
+>  package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk  | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+> index 6c9b79b881..5be6bad3cb 100644
+> --- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+> +++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+> @@ -1,3 +1,3 @@
+>  # Locally computed
+> -sha256  353207f5f98bf81ce8d79cec903c28da8c0227d7c7a632692c910d81e59c2dbe  kodi-inputstream-adaptive-2.6.7-Matrix.tar.gz
+> +sha256  6407a95140b728b959321512d5bdc8512b01d60030415459cf861ddae193e3e9  kodi-inputstream-adaptive-2.6.8-Matrix.tar.gz
+>  sha256  89931c1fb1f3716694175763cf3221cfcd63d6935031cf6b4512d17ffe5d9860  LICENSE.GPL
+> diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+> index d6d86817ce..193ea66245 100644
+> --- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+> +++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -KODI_INPUTSTREAM_ADAPTIVE_VERSION = 2.6.7-Matrix
+> +KODI_INPUTSTREAM_ADAPTIVE_VERSION = 2.6.8-Matrix
+>  KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,xbmc,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
+>  KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPL-2.0+
+>  KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = LICENSE.GPL
+> -- 
+> 2.29.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
