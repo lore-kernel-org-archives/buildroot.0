@@ -1,46 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 28 Mar 2021 21:24:02 +0200
-Subject: [Buildroot] [PATCH 0/5] legacy: drop old options (branch
- yem/drop-old-legacy)
-In-Reply-To: <cover.1616878389.git.yann.morin.1998@free.fr>
-References: <cover.1616878389.git.yann.morin.1998@free.fr>
-Message-ID: <20210328212402.696e0207@windsurf.home>
+Date: Sun, 28 Mar 2021 21:24:37 +0200
+Subject: [Buildroot] [git commit] package/perl: fix configure when
+ BR2_VERSION_FULL contains a '/'
+Message-ID: <20210328185954.2BE8084892@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=0a2141349c12fcab639182b744ec3e2e5ab5d1f7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 27 Mar 2021 21:53:28 +0100
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+When BR2_VERSION_FULL contains one or more '/', injection our version
+in the perl patch-level fails:
 
-> We advertise that legacy symbols will be removed after two years.
-> However, so far, we've be more lax than that, and we only dropped
-> symbols after about 5 year have elapsed.
-> 
-> This series removes options in step, starting with the usual 5-year
-> threshold, in 1-year increments, to eventually catch-up with the
-> advertised 2-year threshold.
-> 
-> Additionally, a little shell snippet is added in the comments, to
-> help eventually drop those legacy symbols when they are still used
-> elsewhere (e.g. as legacy defaults).
+    /usr/bin/sed: -e expression #1, char 27: unknown option to `s'
 
-In fact, I am not sure I agree with the rule that we should keep them
-only 2 years. Indeed, for users that follow the LTS releases, 2 years
-should be more than enough. But believe it or not, our 12 months
-maintenance period is still considered too short by users who don't
-always have the resources/skills to update once a year. So we still do
-have users that upgrade quite infrequently.
+When the build is done in a git tree, and HEAD is a tag, BR2_VERSION_FULL
+will contain that tag name. Even if not widely common, it is not unusual
+for a tag to contain a '/', and this is perfectly legit in git.
 
-Since the maintenance cost of those legacy options is essentially zero,
-I am wondering if we really need to drop them. Should we change the
-rule and drop the ones that are 5 years old for example ?
+So, mangle BR2_VERSION_FULL to escape all '/' with a backslash '\', so
+that the sed expression is correct, and so that we eventually have a
+correct pathclevel string in perl's --version output.
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/perl/perl.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index 0ff288db0e..a77686f951 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -79,7 +79,7 @@ endif
+ define PERL_CONFIGURE_CMDS
+ 	(cd $(@D); $(TARGET_MAKE_ENV) HOSTCC='$(HOSTCC_NOCCACHE)' \
+ 		./configure $(PERL_CONF_OPTS))
+-	$(SED) 's/UNKNOWN-/Buildroot $(BR2_VERSION_FULL) /' $(@D)/patchlevel.h
++	$(SED) 's/UNKNOWN-/Buildroot $(subst /,\/,$(BR2_VERSION_FULL)) /' $(@D)/patchlevel.h
+ endef
+ 
+ define PERL_BUILD_CMDS
