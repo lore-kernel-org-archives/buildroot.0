@@ -1,50 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 28 Mar 2021 22:53:44 +0200
-Subject: [Buildroot] [git commit] package/upmpdcli: bump to version 1.5.11
-Message-ID: <20210328203053.2F91F87826@busybox.osuosl.org>
+Date: Sun, 28 Mar 2021 22:53:27 +0200
+Subject: [Buildroot] [git commit] package/libupnpp: bump to version 0.21.0
+Message-ID: <20210328203053.1278387826@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d176ecbad316692a3830399727fd288d4a7a9f7e
+commit: https://git.buildroot.net/buildroot/commit/?id=53611433daffff012dcb9cc47118374bcb27cf57
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 From https://www.lesbonscomptes.com/upmpdcli/pages/releases.html:
 
-2021-03-13 upmpdcli 1.5.11
- * Fix rare possible issue with Kazoo volume control
+2021-03-13 libupnpp 0.21.0
+ * Allow configuring the subscription timeout (init option)
+ * Add interface for the lib to report a subscription autorenewal failure, and
+   to renew all subscriptions.
+ * Add API to set the product/version values in User-Agent and Server headers.
 
 Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/upmpdcli/upmpdcli.hash | 4 ++--
- package/upmpdcli/upmpdcli.mk   | 2 +-
+ package/libupnpp/libupnpp.hash | 4 ++--
+ package/libupnpp/libupnpp.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/upmpdcli/upmpdcli.hash b/package/upmpdcli/upmpdcli.hash
-index 176713b89c..20166e44e3 100644
---- a/package/upmpdcli/upmpdcli.hash
-+++ b/package/upmpdcli/upmpdcli.hash
+diff --git a/package/libupnpp/libupnpp.hash b/package/libupnpp/libupnpp.hash
+index ae79cfe8a7..5bc282f270 100644
+--- a/package/libupnpp/libupnpp.hash
++++ b/package/libupnpp/libupnpp.hash
 @@ -1,5 +1,5 @@
--# From http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.5.10.tar.gz.sha256:
--sha256  8d864bf2eb2192a2f6a891f36016df413753247e3879e3553cc1693233604684  upmpdcli-1.5.10.tar.gz
-+# From http://www.lesbonscomptes.com/upmpdcli/downloads/upmpdcli-1.5.11.tar.gz.sha256:
-+sha256  7c8c6ab866114699405223c60457448dcce35fc13e1e374f68b60eefc55f4f04  upmpdcli-1.5.11.tar.gz
+-# Hash from: http://www.lesbonscomptes.com/upmpdcli/downloads/libupnpp-0.20.2.tar.gz.sha256
+-sha256  48c2cc7b5a3eef55f4dddda88d8676ed11f7e88f1d6680c8458512067a0e0a11  libupnpp-0.20.2.tar.gz
++# Hash from: http://www.lesbonscomptes.com/upmpdcli/downloads/libupnpp-0.21.0.tar.gz.sha256
++sha256  e43dbe5020ed25152aaec71b325dd80498e72038da5aeb50ed7dd51e213cd903  libupnpp-0.21.0.tar.gz
  
  # Hash for license file:
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/upmpdcli/upmpdcli.mk b/package/upmpdcli/upmpdcli.mk
-index 867c1abb01..9d3e41881f 100644
---- a/package/upmpdcli/upmpdcli.mk
-+++ b/package/upmpdcli/upmpdcli.mk
+ sha256  00a89b0d18aacd4114decf79122db87bf35bddaf2bc50e383c9c9f4c263390b2  COPYING
+diff --git a/package/libupnpp/libupnpp.mk b/package/libupnpp/libupnpp.mk
+index 4ee98b01cc..fc76a43a11 100644
+--- a/package/libupnpp/libupnpp.mk
++++ b/package/libupnpp/libupnpp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--UPMPDCLI_VERSION = 1.5.10
-+UPMPDCLI_VERSION = 1.5.11
- UPMPDCLI_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
- UPMPDCLI_LICENSE = LGPL-2.1+
- UPMPDCLI_LICENSE_FILES = COPYING
+-LIBUPNPP_VERSION = 0.20.2
++LIBUPNPP_VERSION = 0.21.0
+ LIBUPNPP_SITE = http://www.lesbonscomptes.com/upmpdcli/downloads
+ LIBUPNPP_LICENSE = LGPL-2.1+
+ LIBUPNPP_LICENSE_FILES = COPYING
