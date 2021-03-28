@@ -1,79 +1,84 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 28 Mar 2021 10:25:25 +0200
-Subject: [Buildroot] [PATCH 2/2] package/wpebackend-fdo: bump to version
- 1.8.2
-In-Reply-To: <20210322222837.1382502-2-aperez@igalia.com>
-References: <20210322222837.1382502-1-aperez@igalia.com>
- <20210322222837.1382502-2-aperez@igalia.com>
-Message-ID: <20210328082525.GL24043@scaer>
+Date: Sun, 28 Mar 2021 10:28:35 +0200
+Subject: [Buildroot] [git commit] package/openssh: security bump to version
+ 8.5p1
+Message-ID: <20210328080417.9C3AD87B83@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adrian, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=ed63f95966aab7e30a938b94a4de7db848294f37
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-03-23 00:28 +0200, Adrian Perez de Castro spake thusly:
-> This minor release fixes an issue with its public API headers which
-> can cause third party packages (mainly wpewebkit) to show build errors.
-> Release notes:
-> 
->   https://wpewebkit.org/release/wpebackend-fdo-1.8.2.html
-> 
-> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+* ssh-agent(1): fixed a double-free memory corruption that was
+   introduced in OpenSSH 8.2 . We treat all such memory faults as
+   potentially exploitable. This bug could be reached by an attacker
+   with access to the agent socket.
 
-Applied to master, thanks.
+   On modern operating systems where the OS can provide information
+   about the user identity connected to a socket, OpenSSH ssh-agent
+   and sshd limit agent socket access only to the originating user
+   and root. Additional mitigation may be afforded by the system's
+   malloc(3)/free(3) implementation, if it detects double-free
+   conditions.
 
-Regards,
-Yann E. MORIN.
+   The most likely scenario for exploitation is a user forwarding an
+   agent either to an account shared with a malicious user or to a
+   host with an attacker holding root access.
 
-> ---
->  package/wpebackend-fdo/wpebackend-fdo.hash | 8 ++++----
->  package/wpebackend-fdo/wpebackend-fdo.mk   | 2 +-
->  2 files changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/package/wpebackend-fdo/wpebackend-fdo.hash b/package/wpebackend-fdo/wpebackend-fdo.hash
-> index a7b419fc32..89d58051c7 100644
-> --- a/package/wpebackend-fdo/wpebackend-fdo.hash
-> +++ b/package/wpebackend-fdo/wpebackend-fdo.hash
-> @@ -1,7 +1,7 @@
-> -# From https://wpewebkit.org/releases/wpebackend-fdo-1.8.1.tar.xz.sums
-> -md5  e7083e9fd325f289b23253b770d08d2e  wpebackend-fdo-1.8.1.tar.xz
-> -sha1  08472f1bcff6100ba963bdbe7347487253006ca0  wpebackend-fdo-1.8.1.tar.xz
-> -sha256  8adb4475be949ae4092370de6a37d7b9e1d3704cf4674867312e87de2ff0d880  wpebackend-fdo-1.8.1.tar.xz
-> +# From https://wpewebkit.org/releases/wpebackend-fdo-1.8.2.tar.xz.sums
-> +md5  93ca185b5c0f539abbf7ab32cfdc96b2  wpebackend-fdo-1.8.2.tar.xz
-> +sha1  715a1a1e0cfd85898a1f686ec4c5b79a1e8cfb9c  wpebackend-fdo-1.8.2.tar.xz
-> +sha256  98c291071128326a72918d670a46ef63268c43267928560ac3b84b6aebb2d78d  wpebackend-fdo-1.8.2.tar.xz
->  
->  # Hashes for license files:
->  sha256  c9f6803371047fad3e72200ec6cd226329a5ee08ac61104c8211c2761fb46825  COPYING
-> diff --git a/package/wpebackend-fdo/wpebackend-fdo.mk b/package/wpebackend-fdo/wpebackend-fdo.mk
-> index fd313132b3..193b4cf7ed 100644
-> --- a/package/wpebackend-fdo/wpebackend-fdo.mk
-> +++ b/package/wpebackend-fdo/wpebackend-fdo.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -WPEBACKEND_FDO_VERSION = 1.8.1
-> +WPEBACKEND_FDO_VERSION = 1.8.2
->  WPEBACKEND_FDO_SITE = https://wpewebkit.org/releases
->  WPEBACKEND_FDO_SOURCE = wpebackend-fdo-$(WPEBACKEND_FDO_VERSION).tar.xz
->  WPEBACKEND_FDO_INSTALL_STAGING = YES
-> -- 
-> 2.31.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+ * Portable sshd(8): Prevent excessively long username going to PAM.
+   This is a mitigation for a buffer overflow in Solaris' PAM username
+   handling (CVE-2020-14871), and is only enabled for Sun-derived PAM
+   implementations.  This is not a problem in sshd itself, it only
+   prevents sshd from being used as a vector to attack Solaris' PAM.
+   It does not prevent the bug in PAM from being exploited via some
+   other PAM application. GHPR#212
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Also license has been updated to add some openbsd-compat licenses:
+https://github.com/openssh/openssh-portable/commit/922cfac5ed5ead9f796f7d39f012dd653dc5c173
+
+https://www.openssh.com/txt/release-8.5
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/openssh/openssh.hash |  6 +++---
+ package/openssh/openssh.mk   | 10 ++++++----
+ 2 files changed, 9 insertions(+), 7 deletions(-)
+
+diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
+index 840467f50a..c50a49896c 100644
+--- a/package/openssh/openssh.hash
++++ b/package/openssh/openssh.hash
+@@ -1,4 +1,4 @@
+-# From https://www.openssh.com/txt/release-8.4 (base64 encoded)
+-sha256  5a01d22e407eb1c05ba8a8f7c654d388a13e9f226e4ed33bd38748dafa1d2b24  openssh-8.4p1.tar.gz
++# From https://www.openssh.com/txt/release-8.5 (base64 encoded)
++sha256  f52f3f41d429aa9918e38cf200af225ccdd8e66f052da572870c89737646ec25  openssh-8.5p1.tar.gz
+ # Locally calculated
+-sha256  73d0db766229670c7b4e1ec5e6baed54977a0694a565e7cc878c45ee834045d7  LICENCE
++sha256  432abf7480fb31473a6706627212913fc70032e3fb71b90fecb28ae26a2d741d  LICENCE
+diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+index 64e3084ca1..055c024cab 100644
+--- a/package/openssh/openssh.mk
++++ b/package/openssh/openssh.mk
+@@ -4,11 +4,13 @@
+ #
+ ################################################################################
+ 
+-OPENSSH_VERSION = 8.4p1
+-OPENSSH_CPE_ID_VERSION = 8.4
+-OPENSSH_CPE_ID_UPDATE = p1
++OPENSSH_VERSION_MAJOR = 8.5
++OPENSSH_VERSION_MINOR = p1
++OPENSSH_VERSION = $(OPENSSH_VERSION_MAJOR)$(OPENSSH_VERSION_MINOR)
++OPENSSH_CPE_ID_VERSION = $(OPENSSH_VERSION_MAJOR)
++OPENSSH_CPE_ID_UPDATE = $(OPENSSH_VERSION_MINOR)
+ OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
+-OPENSSH_LICENSE = BSD-3-Clause, BSD-2-Clause, Public Domain
++OPENSSH_LICENSE = BSD-4-Clause, BSD-3-Clause, BSD-2-Clause, Public Domain
+ OPENSSH_LICENSE_FILES = LICENCE
+ OPENSSH_CONF_ENV = \
+ 	LD="$(TARGET_CC)" \
