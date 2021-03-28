@@ -1,42 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sun, 28 Mar 2021 22:47:17 +0200
-Subject: [Buildroot] [git commit] package/libyang: bump version to 1.0.225
-Message-ID: <20210328202237.54CC487A9F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libnetconf2: bump version to 1.1.43
+Message-ID: <20210328202237.5E7E688529@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e7915f998f1bef230027a9fa208687c3535b8603
+commit: https://git.buildroot.net/buildroot/commit/?id=5d18a473c44cb253cdaf86f2f6550093748a7c5d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libyang/libyang.hash | 2 +-
- package/libyang/libyang.mk   | 2 +-
+ package/libnetconf2/libnetconf2.hash | 2 +-
+ package/libnetconf2/libnetconf2.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libyang/libyang.hash b/package/libyang/libyang.hash
-index bc9e948c03..94685cb4de 100644
---- a/package/libyang/libyang.hash
-+++ b/package/libyang/libyang.hash
+diff --git a/package/libnetconf2/libnetconf2.hash b/package/libnetconf2/libnetconf2.hash
+index a20e31e8d3..24cc3a5557 100644
+--- a/package/libnetconf2/libnetconf2.hash
++++ b/package/libnetconf2/libnetconf2.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256  c4498a77a7c12a28c9911f993eeafbf2badd2ecea58bb74781bd61cfc635e4c9  libyang-1.0.215.tar.gz
-+sha256  1b736443d2c69b5d7a71ac412655e6edab0647b18f35f7bf504b0a24e06cb046  libyang-1.0.225.tar.gz
- sha256  f942fe693e03e4e3ff67a351c00dc8f468a042e0d7273b0aa6bc53060b568112  LICENSE
-diff --git a/package/libyang/libyang.mk b/package/libyang/libyang.mk
-index ee24256bed..ed61ec97d2 100644
---- a/package/libyang/libyang.mk
-+++ b/package/libyang/libyang.mk
+-sha256  17aa551380ffcccc3bfd928edbcc170cbe85b0f336b361d5f03ede8f3e5f6348  libnetconf2-1.1.36.tar.gz
++sha256  66139fc9e68aa89c82235f4135dba9e44f5db663541279c14c74131e22b7f571  libnetconf2-1.1.43.tar.gz
+ sha256  bd962ab457c8a8cb8faaaa36c11484680f3c9a47dbc336507817ae8935384064  LICENSE
+diff --git a/package/libnetconf2/libnetconf2.mk b/package/libnetconf2/libnetconf2.mk
+index 770188df91..40fa935bb1 100644
+--- a/package/libnetconf2/libnetconf2.mk
++++ b/package/libnetconf2/libnetconf2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBYANG_VERSION = 1.0.215
-+LIBYANG_VERSION = 1.0.225
- LIBYANG_SITE = $(call github,CESNET,libyang,v$(LIBYANG_VERSION))
- LIBYANG_LICENSE = BSD-3-Clause
- LIBYANG_LICENSE_FILES = LICENSE
+-LIBNETCONF2_VERSION = 1.1.36
++LIBNETCONF2_VERSION = 1.1.43
+ LIBNETCONF2_SITE = $(call github,CESNET,libnetconf2,v$(LIBNETCONF2_VERSION))
+ LIBNETCONF2_INSTALL_STAGING = YES
+ LIBNETCONF2_LICENSE = BSD-3-Clause
