@@ -1,60 +1,100 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 28 Mar 2021 22:13:42 +0200
-Subject: [Buildroot] [git commit] package/libqmi: bump version to 1.28.2
-Message-ID: <20210328194905.4949D802D6@busybox.osuosl.org>
+Date: Sun, 28 Mar 2021 22:10:15 +0200
+Subject: [Buildroot] [git commit] package/libqrtr-glib: new package
+Message-ID: <20210328194905.36E4F8775F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=53baf80834bf70839a9baea6f6352f1c9e594933
+commit: https://git.buildroot.net/buildroot/commit/?id=ea64e05a1bfbe3b258a69013462f94d7db7a9c0b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-libqrtr-glib is now optional dependency (since libqmi >= 1.28.0)
 
 Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libqmi/libqmi.hash |  2 +-
- package/libqmi/libqmi.mk   | 10 +++++++++-
- 2 files changed, 10 insertions(+), 2 deletions(-)
+ DEVELOPERS                             |  1 +
+ package/Config.in                      |  1 +
+ package/libqrtr-glib/Config.in         | 17 +++++++++++++++++
+ package/libqrtr-glib/libqrtr-glib.hash |  3 +++
+ package/libqrtr-glib/libqrtr-glib.mk   | 15 +++++++++++++++
+ 5 files changed, 37 insertions(+)
 
-diff --git a/package/libqmi/libqmi.hash b/package/libqmi/libqmi.hash
-index 1304a072e2..8cf25f486a 100644
---- a/package/libqmi/libqmi.hash
-+++ b/package/libqmi/libqmi.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
--sha256  a71963bb1097a42665287e40a9a36f95b8f9d6d6a4b7a5de22d660328af97cb9  libqmi-1.26.6.tar.xz
-+sha256  8c8c3ee719874d2529bce9b35b028fe435b36f003979a360d3ad0938449db783  libqmi-1.28.2.tar.xz
-diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
-index 6b5ccfcdea..b02312d702 100644
---- a/package/libqmi/libqmi.mk
-+++ b/package/libqmi/libqmi.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBQMI_VERSION = 1.26.6
-+LIBQMI_VERSION = 1.28.2
- LIBQMI_SITE = http://www.freedesktop.org/software/libqmi
- LIBQMI_SOURCE = libqmi-$(LIBQMI_VERSION).tar.xz
- LIBQMI_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (programs)
-@@ -33,6 +33,14 @@ else
- LIBQMI_CONF_OPTS += --disable-mbim-qmux
- endif
- 
-+# if libqrtr-glib available, enable support for QMI over QRTR
-+ifeq ($(BR2_PACKAGE_LIBQRTR_GLIB),y)
-+LIBQMI_DEPENDENCIES += libqrtr-glib
-+LIBQMI_CONF_OPTS += --enable-qrtr
-+else
-+LIBQMI_CONF_OPTS += --disable-qrtr
-+endif
+diff --git a/DEVELOPERS b/DEVELOPERS
+index ab05b352e2..44978286b1 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2127,6 +2127,7 @@ N:	Petr Vorel <petr.vorel@gmail.com>
+ F:	package/ima-evm-utils/
+ F:	package/iproute2/
+ F:	package/iputils/
++F:	package/libqrtr-glib/
+ F:	package/libtirpc/
+ F:	package/linux-backports/
+ F:	package/ltp-testsuite/
+diff --git a/package/Config.in b/package/Config.in
+index ce8247f0aa..1269bc7b51 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1560,6 +1560,7 @@ menu "Hardware handling"
+ 	source "package/libphidget/Config.in"
+ 	source "package/libpri/Config.in"
+ 	source "package/libqmi/Config.in"
++	source "package/libqrtr-glib/Config.in"
+ 	source "package/libraw1394/Config.in"
+ 	source "package/librtas/Config.in"
+ 	source "package/librtlsdr/Config.in"
+diff --git a/package/libqrtr-glib/Config.in b/package/libqrtr-glib/Config.in
+new file mode 100644
+index 0000000000..ad4fd77687
+--- /dev/null
++++ b/package/libqrtr-glib/Config.in
+@@ -0,0 +1,17 @@
++config BR2_PACKAGE_LIBQRTR_GLIB
++	bool "libqrtr-glib"
++	depends on BR2_USE_WCHAR # glib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
++	depends on BR2_USE_MMU # glib2
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_15 # da7653f0faab
++	select BR2_PACKAGE_LIBGLIB2
++	help
++	  Qualcomm IPC Router protocol helper library.
++	  Optional dependency for libqmi >= 1.28.0.
 +
- # if ModemManager available, enable MM runtime check in
- # qmi-firmware-update (note that we don't need to build-depend on
- # anything else)
++	  https://www.freedesktop.org/software/libqmi/libqrtr-glib/latest/
++
++comment "libqrtr-glib needs a toolchain w/ wchar, threads, headers >= 4.15"
++	depends on BR2_USE_MMU
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_15
+diff --git a/package/libqrtr-glib/libqrtr-glib.hash b/package/libqrtr-glib/libqrtr-glib.hash
+new file mode 100644
+index 0000000000..e00dd0cb94
+--- /dev/null
++++ b/package/libqrtr-glib/libqrtr-glib.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
++sha256  30d879b2ade6f8f461def3a677755db5c0238babf688d5c83c03b3e6abe35cee  libqrtr-glib-1.0.0.tar.xz
+diff --git a/package/libqrtr-glib/libqrtr-glib.mk b/package/libqrtr-glib/libqrtr-glib.mk
+new file mode 100644
+index 0000000000..b9fc5cf3ba
+--- /dev/null
++++ b/package/libqrtr-glib/libqrtr-glib.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# libqrtr-glib
++#
++################################################################################
++
++LIBQRTR_GLIB_VERSION = 1.0.0
++LIBQRTR_GLIB_SITE = http://www.freedesktop.org/software/libqmi
++LIBQRTR_GLIB_SOURCE = libqrtr-glib-$(LIBQRTR_GLIB_VERSION).tar.xz
++LIBQRTR_GLIB_LICENSE = LGPL-2.1+
++LIBQRTR_GLIB_LICENSE_FILES = COPYING.LIB
++LIBQRTR_GLIB_INSTALL_STAGING = YES
++LIBQRTR_GLIB_DEPENDENCIES = libglib2
++
++$(eval $(autotools-package))
