@@ -1,297 +1,194 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 28 Mar 2021 11:45:54 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/samba4: bump version to 4.14.2
-Message-ID: <20210328094554.438194-1-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 28 Mar 2021 12:12:35 +0200
+Subject: [Buildroot] [git commit] package/qt5webkit: fix ICU related compile
+ failures from capital bool defines
+Message-ID: <20210328094829.15BDF87A16@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added patch to fix build error.
-Removed patch which was applied upstream.
+commit: https://git.buildroot.net/buildroot/commit/?id=0f6c209a1d7660846e2a99f903deb89f30ca45d7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Added two options to samba4-cache.txt to fix cross build, values were
-taken from GnuTLS source:
-https://gitlab.com/gnutls/gnutls/-/blob/3.6.15/lib/includes/gnutls/gnutls.h.in#L180
-https://gitlab.com/gnutls/gnutls/-/blob/3.6.15/lib/includes/gnutls/gnutls.h.in#L341
+This patch fixes the following compile failures:
 
-host-perl is now mandatory, also host-perl-parse-yapp is needed.
+In file included from platform/text/TextAllInOne.cpp:30:
+platform/text/TextBreakIteratorICU.cpp: In function ???bool
+WebCore::textInChunkOrOutOfRange(UText*, int64_t, int64_t, UBool,
+UBool&)???:
+platform/text/TextBreakIteratorICU.cpp:217:28: error: ???TRUE??? was not
+declared in this scope
+  217 |             isAccessible = TRUE;
+      |                            ^~~~
+platform/text/TextBreakIteratorICU.cpp:222:28: error: ???FALSE??? was not
+declared in this scope
+  222 |             isAccessible = FALSE;
+      |                            ^~~~~
+platform/text/TextBreakIteratorICU.cpp:231:28: error: ???TRUE??? was not
+declared in this scope
+  231 |             isAccessible = TRUE;
+      |                            ^~~~
+platform/text/TextBreakIteratorICU.cpp:236:28: error: ???FALSE??? was not
+declared in this scope
+  236 |             isAccessible = FALSE;
+      |                            ^~~~~
+platform/text/TextBreakIteratorICU.cpp: In function ???UBool
+WebCore::textLatin1Access(UText*, int64_t, UBool)???:
+platform/text/TextBreakIteratorICU.cpp:246:16: error: ???FALSE??? was not
+declared in this scope
+  246 |         return FALSE;
+      |                ^~~~~
+platform/text/TextBreakIteratorICU.cpp:266:12: error: ???TRUE??? was not
+declared in this scope
+  266 |     return TRUE;
+      |            ^~~~
+platform/text/TextBreakIteratorICU.cpp: In function ???UBool
+WebCore::textUTF16Access(UText*, int64_t, UBool)???:
+platform/text/TextBreakIteratorICU.cpp:367:16: error: ???FALSE??? was not
+declared in this scope
+  367 |         return FALSE;
+      |                ^~~~~
+platform/text/TextBreakIteratorICU.cpp:387:12: error: ???TRUE??? was not
+declared in this scope
+  387 |     return TRUE;
+      |            ^~~~
+...
+In file included from platform/text/TextAllInOne.cpp:32:
+platform/text/TextCodecICU.cpp: In member function ???void
+WebCore::TextCodecICU::createICUConverter() const???:
+platform/text/TextCodecICU.cpp:272:42: error: ???TRUE??? was not declared in
+this scope
+  272 |         ucnv_setFallback(m_converterICU, TRUE);
+      |                                          ^~~~
 
-Added option to fix build without dbus, this change needed a rework of
-the shared-modules configure option, due to this upstream commit:
-https://gitlab.com/samba-team/devel/samba/-/commit/b6805d5e0bcf1716f87e84bcbb2fd8f93c38a8a3
+The compile failures are fixed by replacing the use of FALSE/TRUE with
+false/true as suggested by [1] and/or [2].
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+A better description is directly from the patch/pull-request ([3]):
+
+  Traditionally, ICU4C has defined its own `FALSE`=0 / `TRUE`=1 macros for use with `UBool`.
+  Starting with ICU 68 (2020q4), we no longer define these in public header files
+  (unless `U_DEFINE_FALSE_AND_TRUE`=1),
+  in order to avoid name collisions with code outside ICU defining enum constants and similar
+  with these names.
+
+and explains why it occurred just recently/since the icu bump to version
+68-1 ([4])...
+
+[1] https://unicode-org.atlassian.net/browse/ICU-21267
+[2] https://unicode-org.atlassian.net/browse/ICU-21148
+[3] https://github.com/unicode-org/icu/pull/1282/commits/5d77f7084dbfad50c7ccc17bccb85aa24bae8937
+[4] https://git.buildroot.net/buildroot/commit/?id=88f2d1c4e52607d2c2a1fa8d934152c47167a168
+
+Signed-off-by: Henri Roosen <henri.roosen@ginzinger.com>
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
-v2: - updated patch 0005 following upstream comment
-    - added comment about new cache values (Yann)
-    - reworked with-shared-modules handling (Yann)
+ ...ated-compile-failures-from-capital-bool-d.patch | 97 ++++++++++++++++++++++
+ 1 file changed, 97 insertions(+)
 
- .../samba4/0005-dcesrv_core-fix-build.patch   |  56 ++++++++++
- ...-function-conflicts-with-glibc-nss-h.patch | 104 ------------------
- package/samba4/samba4-cache.txt               |   2 +
- package/samba4/samba4.hash                    |   4 +-
- package/samba4/samba4.mk                      |  14 ++-
- 5 files changed, 71 insertions(+), 109 deletions(-)
- create mode 100644 package/samba4/0005-dcesrv_core-fix-build.patch
- delete mode 100644 package/samba4/0005-nsswitch-nsstest-c-Avoid-nss-function-conflicts-with-glibc-nss-h.patch
-
-diff --git a/package/samba4/0005-dcesrv_core-fix-build.patch b/package/samba4/0005-dcesrv_core-fix-build.patch
+diff --git a/package/qt5/qt5webkit/0009-Fix-ICU-related-compile-failures-from-capital-bool-d.patch b/package/qt5/qt5webkit/0009-Fix-ICU-related-compile-failures-from-capital-bool-d.patch
 new file mode 100644
-index 0000000000..75835acdd1
+index 0000000000..04f41afee0
 --- /dev/null
-+++ b/package/samba4/0005-dcesrv_core-fix-build.patch
-@@ -0,0 +1,56 @@
-+From 44bccdf7d158ae93ba9a5515038aac2a5ac4fd85 Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Sat, 27 Mar 2021 17:17:34 +0100
-+Subject: [PATCH] dcesrv_core: fix build
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
++++ b/package/qt5/qt5webkit/0009-Fix-ICU-related-compile-failures-from-capital-bool-d.patch
+@@ -0,0 +1,97 @@
++From 37ee268d9d07a8dad02c1d8db3bf96e0b30df10b Mon Sep 17 00:00:00 2001
++From: Henri Roosen <henri.roosen@ginzinger.com>
++Date: Thu, 18 Mar 2021 11:53:57 +0100
++Subject: [PATCH] Fix ICU related compile failures from capital bool defines
 +
-+Move include of system/network.h to avoid a build error:
-+
-+In file included from ../../lib/replace/system/network.h:35,
-+                 from ../../librpc/rpc/dcesrv_core.c:2658:
-+usr/include/unistd.h: At top level:
-+usr/include/unistd.h:675:16: error: conflicting types for ?geteuid?
-+  675 | extern __uid_t geteuid (void) __THROW;
-+
-+Patch sent upstream:
-+https://gitlab.com/samba-team/samba/-/merge_requests/1871
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++See ICU-21267
 +---
-+ librpc/rpc/dcesrv_core.c | 11 +----------
-+ 1 file changed, 1 insertion(+), 10 deletions(-)
++ .../platform/text/TextBreakIteratorICU.cpp       | 16 ++++++++--------
++ Source/WebCore/platform/text/TextCodecICU.cpp    |  2 +-
++ 2 files changed, 9 insertions(+), 9 deletions(-)
 +
-+diff --git a/librpc/rpc/dcesrv_core.c b/librpc/rpc/dcesrv_core.c
-+index 70e0245532e..e761329d157 100644
-+--- a/librpc/rpc/dcesrv_core.c
-++++ b/librpc/rpc/dcesrv_core.c
-+@@ -32,6 +32,7 @@
-+ #include "lib/tsocket/tsocket.h"
-+ #include "librpc/gen_ndr/ndr_dcerpc.h"
-+ #include "lib/util/tevent_ntstatus.h"
-++#include "system/network.h"
-+ 
-+ 
-+ #undef DBGC_CLASS
-+@@ -2633,16 +2634,6 @@ _PUBLIC_ void dcesrv_cleanup_broken_connections(struct dcesrv_context *dce_ctx)
-+ 	}
++diff --git a/Source/WebCore/platform/text/TextBreakIteratorICU.cpp b/Source/WebCore/platform/text/TextBreakIteratorICU.cpp
++index b4046ac9..832890a2 100644
++--- a/Source/WebCore/platform/text/TextBreakIteratorICU.cpp
+++++ b/Source/WebCore/platform/text/TextBreakIteratorICU.cpp
++@@ -214,12 +214,12 @@ static inline bool textInChunkOrOutOfRange(UText* text, int64_t nativeIndex, int
++             // Ensure chunk offset is well formed if computed offset exceeds int32_t range.
++             ASSERT(offset < numeric_limits<int32_t>::max());
++             text->chunkOffset = offset < numeric_limits<int32_t>::max() ? static_cast<int32_t>(offset) : 0;
++-            isAccessible = TRUE;
+++            isAccessible = true;
++             return true;
++         }
++         if (nativeIndex >= nativeLength && text->chunkNativeLimit == nativeLength) {
++             text->chunkOffset = text->chunkLength;
++-            isAccessible = FALSE;
+++            isAccessible = false;
++             return true;
++         }
++     } else {
++@@ -228,12 +228,12 @@ static inline bool textInChunkOrOutOfRange(UText* text, int64_t nativeIndex, int
++             // Ensure chunk offset is well formed if computed offset exceeds int32_t range.
++             ASSERT(offset < numeric_limits<int32_t>::max());
++             text->chunkOffset = offset < numeric_limits<int32_t>::max() ? static_cast<int32_t>(offset) : 0;
++-            isAccessible = TRUE;
+++            isAccessible = true;
++             return true;
++         }
++         if (nativeIndex <= 0 && !text->chunkNativeStart) {
++             text->chunkOffset = 0;
++-            isAccessible = FALSE;
+++            isAccessible = false;
++             return true;
++         }
++     }
++@@ -243,7 +243,7 @@ static inline bool textInChunkOrOutOfRange(UText* text, int64_t nativeIndex, int
++ static UBool textLatin1Access(UText* text, int64_t nativeIndex, UBool forward)
++ {
++     if (!text->context)
++-        return FALSE;
+++        return false;
++     int64_t nativeLength = textNativeLength(text);
++     UBool isAccessible;
++     if (textInChunkOrOutOfRange(text, nativeIndex, nativeLength, forward, isAccessible))
++@@ -263,7 +263,7 @@ static UBool textLatin1Access(UText* text, int64_t nativeIndex, UBool forward)
++         ASSERT(newContext == PriorContext);
++         textLatin1SwitchToPriorContext(text, nativeIndex, nativeLength, forward);
++     }
++-    return TRUE;
+++    return true;
 + }
 + 
-+-/* We need this include to be able to compile on some plateforms
-+- * (ie. freebsd 7.2) as it seems that <sys/uio.h> is not included
-+- * correctly.
-+- * It has to be that deep because otherwise we have a conflict on
-+- * const struct dcesrv_interface declaration.
-+- * This is mostly due to socket_wrapper defining #define bind swrap_bind
-+- * which conflict with the bind used before.
-+- */
-+-#include "system/network.h"
-+-
-+ struct dcesrv_sock_reply_state {
-+ 	struct dcesrv_connection *dce_conn;
-+ 	struct dcesrv_call_state *call;
++ static const struct UTextFuncs textLatin1Funcs = {
++@@ -364,7 +364,7 @@ static void textUTF16SwitchToPriorContext(UText* text, int64_t nativeIndex, int6
++ static UBool textUTF16Access(UText* text, int64_t nativeIndex, UBool forward)
++ {
++     if (!text->context)
++-        return FALSE;
+++        return false;
++     int64_t nativeLength = textNativeLength(text);
++     UBool isAccessible;
++     if (textInChunkOrOutOfRange(text, nativeIndex, nativeLength, forward, isAccessible))
++@@ -384,7 +384,7 @@ static UBool textUTF16Access(UText* text, int64_t nativeIndex, UBool forward)
++         ASSERT(newContext == PriorContext);
++         textUTF16SwitchToPriorContext(text, nativeIndex, nativeLength, forward);
++     }
++-    return TRUE;
+++    return true;
++ }
++ 
++ static const struct UTextFuncs textUTF16Funcs = {
++diff --git a/Source/WebCore/platform/text/TextCodecICU.cpp b/Source/WebCore/platform/text/TextCodecICU.cpp
++index 86d4ea17..da152edd 100644
++--- a/Source/WebCore/platform/text/TextCodecICU.cpp
+++++ b/Source/WebCore/platform/text/TextCodecICU.cpp
++@@ -269,7 +269,7 @@ void TextCodecICU::createICUConverter() const
++     m_converterICU = ucnv_open(m_canonicalConverterName, &err);
++     ASSERT(U_SUCCESS(err));
++     if (m_converterICU)
++-        ucnv_setFallback(m_converterICU, TRUE);
+++        ucnv_setFallback(m_converterICU, true);
++ }
++ 
++ int TextCodecICU::decodeToBuffer(UChar* target, UChar* targetLimit, const char*& source, const char* sourceLimit, int32_t* offsets, bool flush, UErrorCode& err)
 +-- 
-+2.29.2
++2.20.1
 +
-diff --git a/package/samba4/0005-nsswitch-nsstest-c-Avoid-nss-function-conflicts-with-glibc-nss-h.patch b/package/samba4/0005-nsswitch-nsstest-c-Avoid-nss-function-conflicts-with-glibc-nss-h.patch
-deleted file mode 100644
-index c5e0b55dea..0000000000
---- a/package/samba4/0005-nsswitch-nsstest-c-Avoid-nss-function-conflicts-with-glibc-nss-h.patch
-+++ /dev/null
-@@ -1,104 +0,0 @@
--From 6e496aa3635557b59792e469f7c7f8eccd822322 Mon Sep 17 00:00:00 2001
--From: Khem Raj <raj.khem@gmail.com>
--Date: Wed, 22 Jul 2020 22:42:09 -0700
--Subject: [PATCH] nsswitch/nsstest.c: Avoid nss function conflicts with glibc
-- nss.h
--
--glibc 2.32 will define these varibles [1] which results in conflicts
--with these static function names, therefore prefix these function names
--with samba_ to avoid it
--
--[1] https://sourceware.org/git/?p=glibc.git;a=commit;h=499a92df8b9fc64a054cf3b7f728f8967fc1da7d
--
--Signed-off-by: Khem Raj <raj.khem@gmail.com>
--Reviewed-by: Volker Lendecke <vl@samba.org>
--Reviewed-by: Noel Power <npower@samba.org>
--
--Autobuild-User(master): Noel Power <npower@samba.org>
--Autobuild-Date(master): Tue Jul 28 10:52:00 UTC 2020 on sn-devel-184
--
--[Retrieved from:
--https://gitlab.com/samba-team/samba/-/commit/6e496aa3635557b59792e469f7c7f8eccd822322]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- nsswitch/nsstest.c | 16 ++++++++--------
-- 1 file changed, 8 insertions(+), 8 deletions(-)
--
--diff --git a/nsswitch/nsstest.c b/nsswitch/nsstest.c
--index e8c4306441d..e2ee9fbf3af 100644
----- a/nsswitch/nsstest.c
--+++ b/nsswitch/nsstest.c
--@@ -137,7 +137,7 @@ static struct passwd *nss_getpwuid(uid_t uid)
-- 	return &pwd;
-- }
-- 
---static void nss_setpwent(void)
--+static void samba_nss_setpwent(void)
-- {
-- 	NSS_STATUS (*_nss_setpwent)(void) =
-- 		(NSS_STATUS(*)(void))find_fn("setpwent");
--@@ -152,7 +152,7 @@ static void nss_setpwent(void)
-- 	}
-- }
-- 
---static void nss_endpwent(void)
--+static void samba_nss_endpwent(void)
-- {
-- 	NSS_STATUS (*_nss_endpwent)(void) =
-- 		(NSS_STATUS (*)(void))find_fn("endpwent");
--@@ -290,7 +290,7 @@ again:
-- 	return &grp;
-- }
-- 
---static void nss_setgrent(void)
--+static void samba_nss_setgrent(void)
-- {
-- 	NSS_STATUS (*_nss_setgrent)(void) =
-- 		(NSS_STATUS (*)(void))find_fn("setgrent");
--@@ -305,7 +305,7 @@ static void nss_setgrent(void)
-- 	}
-- }
-- 
---static void nss_endgrent(void)
--+static void samba_nss_endgrent(void)
-- {
-- 	NSS_STATUS (*_nss_endgrent)(void) =
-- 		(NSS_STATUS (*)(void))find_fn("endgrent");
--@@ -402,7 +402,7 @@ static void nss_test_users(void)
-- {
-- 	struct passwd *pwd;
-- 
---	nss_setpwent();
--+	samba_nss_setpwent();
-- 	/* loop over all users */
-- 	while ((pwd = nss_getpwent())) {
-- 		printf("Testing user %s\n", pwd->pw_name);
--@@ -424,14 +424,14 @@ static void nss_test_users(void)
-- 		printf("initgroups: "); nss_test_initgroups(pwd->pw_name, pwd->pw_gid);
-- 		printf("\n");
-- 	}
---	nss_endpwent();
--+	samba_nss_endpwent();
-- }
-- 
-- static void nss_test_groups(void)
-- {
-- 	struct group *grp;
-- 
---	nss_setgrent();
--+	samba_nss_setgrent();
-- 	/* loop over all groups */
-- 	while ((grp = nss_getgrent())) {
-- 		printf("Testing group %s\n", grp->gr_name);
--@@ -452,7 +452,7 @@ static void nss_test_groups(void)
-- 		printf("getgrgid: "); print_group(grp);
-- 		printf("\n");
-- 	}
---	nss_endgrent();
--+	samba_nss_endgrent();
-- }
-- 
-- static void nss_test_errors(void)
---- 
--GitLab
--
-diff --git a/package/samba4/samba4-cache.txt b/package/samba4/samba4-cache.txt
-index e3a3720fc8..bd7c3654b4 100644
---- a/package/samba4/samba4-cache.txt
-+++ b/package/samba4/samba4-cache.txt
-@@ -40,3 +40,5 @@ Checking value of SIGRTMIN: "34"
- Checking errno of iconv for illegal multibyte sequence: "0"
- checking for clnt_create(): OK
- Checking for a 64-bit host to support lmdb: NO
-+Checking value of GNUTLS_CIPHER_AES_128_CFB8: 29
-+Checking value of GNUTLS_MAC_AES_CMAC_128: 203
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 44fbc495c5..4d808c5fe3 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.11.17.tar.asc
--sha256  15167da19922c7be210ecf8149b73abcb7c2be051de05b756f7f24e7ec9e5b04  samba-4.11.17.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.14.2.tar.asc
-+sha256  95651da478743f7cb407aec81287536c096e3e18bb4981dbe47ca70bf6181f96  samba-4.14.2.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 61d8190127..203d0d1371 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SAMBA4_VERSION = 4.11.17
-+SAMBA4_VERSION = 4.14.2
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
-@@ -13,7 +13,8 @@ SAMBA4_LICENSE_FILES = COPYING
- SAMBA4_CPE_ID_VENDOR = samba
- SAMBA4_CPE_ID_PRODUCT = samba
- SAMBA4_DEPENDENCIES = \
--	host-e2fsprogs host-heimdal host-nfs-utils host-python3 \
-+	host-e2fsprogs host-heimdal host-nfs-utils \
-+	host-perl host-perl-parse-yapp host-python3 \
- 	cmocka e2fsprogs gnutls popt zlib \
- 	$(if $(BR2_PACKAGE_LIBAIO),libaio) \
- 	$(if $(BR2_PACKAGE_LIBCAP),libcap) \
-@@ -58,6 +59,9 @@ endif
- 
- ifeq ($(BR2_PACKAGE_DBUS),y)
- SAMBA4_DEPENDENCIES += dbus
-+SAMBA4_SHARED_MODULES += vfs_snapper
-+else
-+SAMBA4_SHARED_MODULES += !vfs_snapper
- endif
- 
- ifeq ($(BR2_PACKAGE_DBUS)$(BR2_PACKAGE_AVAHI_DAEMON),yy)
-@@ -104,6 +108,7 @@ define SAMBA4_CONFIGURE_CMDS
- 		$(SAMBA4_PYTHON) \
- 		python_LDFLAGS="" \
- 		python_LIBDIR="" \
-+		PERL="$(HOST_DIR)/bin/perl" \
- 		$(TARGET_CONFIGURE_OPTS) \
- 		$(SAMBA4_CONF_ENV) \
- 		./buildtools/bin/waf configure \
-@@ -125,6 +130,7 @@ define SAMBA4_CONFIGURE_CMDS
- 			--disable-glusterfs \
- 			--with-cluster-support \
- 			--bundled-libraries='!asn1_compile,!compile_et' \
-+			--with-shared-modules=$(subst $(space),$(comma),$(strip $(SAMBA4_SHARED_MODULES))) \
- 			$(SAMBA4_CONF_OPTS) \
- 	)
- endef
-@@ -148,10 +154,12 @@ SAMBA4_CONF_OPTS += --without-ad-dc --without-json
- endif
- 
- ifeq ($(BR2_PACKAGE_SAMBA4_ADS),y)
--SAMBA4_CONF_OPTS += --with-ads --with-ldap --with-shared-modules=idmap_ad
-+SAMBA4_CONF_OPTS += --with-ads --with-ldap
- SAMBA4_DEPENDENCIES += openldap
-+SAMBA4_SHARED_MODULES += idmap_ad
- else
- SAMBA4_CONF_OPTS += --without-ads --without-ldap
-+SAMBA4_SHARED_MODULES += !idmap_ad
- endif
- 
- ifeq ($(BR2_PACKAGE_SAMBA4_SMBTORTURE),)
--- 
-2.29.2
