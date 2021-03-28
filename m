@@ -1,77 +1,47 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 28 Mar 2021 22:48:25 +0200
-Subject: [Buildroot] [PATCH 0/7] Add a gitlab macro
-In-Reply-To: <20210328191355.778786-1-thomas.petazzoni@bootlin.com>
-References: <20210328191355.778786-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20210328204825.GR24043@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 28 Mar 2021 22:49:28 +0200
+Subject: [Buildroot] [git commit] linux: support uncompressed kernel on S390
+Message-ID: <20210328202448.6AFDE8A42B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=63de5158537129ee52a078b470c25e78ec63573d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-03-28 21:13 +0200, Thomas Petazzoni spake thusly:
-> Here is a small patch series that adds a gitlab macro, similar to the
-> github macro. What prompted me to add this is a pending patch for a
-> package, which uses gitlab, but does a git clone instead of relying on
-> gitlab tarballs.
+Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ linux/Config.in | 4 ++++
+ linux/linux.mk  | 1 +
+ 2 files changed, 5 insertions(+)
 
-Although tht is my personal preferenc, to use the git download backend
-for git-hosted source, rather than use remotely generated tarballs, I've
-still applied the entire series as-is, because that makes gitlab on-par
-with github, and the consensus among mantainers was not clear-cut.
-
-Still, I'd like to remind everyone that git trees are cached lcoally,
-which may make for a slower first-step, but is supposed to gfreatly
-increase subsequent downloads and updates. The local git cache has been
-quite some work, and not usign it is quite a bit of a waste..
-
-Anyway: entire series applied, thanks!
-
-Regards,
-Yann E. MORIN.
-
-> Hopefully, having a gitlab macro will make it more obvious how we
-> prefer to handle things.
-> 
-> This series also has a preparation patch improving some details about
-> the github macro.
-> 
-> Thanks,
-> 
-> Thomas
-> 
-> Thomas Petazzoni (7):
->   docs/manual: improve details about the Github macro
->   package/pkg-download.mk: add gitlab macro
->   docs/manual: add documentation for the gitlab macro
->   package/eigen: use gitlab macro
->   package/frotz: use gitlab macro
->   package/ipcalc: use gitlab macro
->   package/libsoundtouch: use gitlab macro
-> 
->  docs/manual/adding-packages-tips.txt   | 40 ++++++++++++++++++++++++--
->  package/eigen/eigen.mk                 |  2 +-
->  package/frotz/frotz.mk                 |  2 +-
->  package/ipcalc/ipcalc.mk               |  2 +-
->  package/libsoundtouch/libsoundtouch.mk |  2 +-
->  package/pkg-download.mk                |  3 ++
->  6 files changed, 45 insertions(+), 6 deletions(-)
-> 
-> -- 
-> 2.30.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/linux/Config.in b/linux/Config.in
+index d7bdf5e7d8..cf790963dd 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -329,6 +329,10 @@ config BR2_LINUX_KERNEL_XZ
+ config BR2_LINUX_KERNEL_ZSTD
+ 	bool "zstd compression"
+ 
++config BR2_LINUX_KERNEL_UNCOMPRESSED
++	bool "uncompressed"
++	depends on BR2_s390x
++
+ endchoice
+ 
+ config BR2_LINUX_KERNEL_IMAGE_TARGET_NAME
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 5e4b319cf1..1457228eb9 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -111,6 +111,7 @@ LINUX_COMPRESSION_OPT_$(BR2_LINUX_KERNEL_LZMA) += CONFIG_KERNEL_LZMA
+ LINUX_COMPRESSION_OPT_$(BR2_LINUX_KERNEL_LZO) += CONFIG_KERNEL_LZO
+ LINUX_COMPRESSION_OPT_$(BR2_LINUX_KERNEL_XZ) += CONFIG_KERNEL_XZ
+ LINUX_COMPRESSION_OPT_$(BR2_LINUX_KERNEL_ZSTD) += CONFIG_KERNEL_ZSTD
++LINUX_COMPRESSION_OPT_$(BR2_LINUX_KERNEL_UNCOMPRESSED) += CONFIG_KERNEL_UNCOMPRESSED
+ 
+ ifeq ($(BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL),y)
+ LINUX_DEPENDENCIES += host-openssl
