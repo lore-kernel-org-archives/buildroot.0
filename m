@@ -1,167 +1,139 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 28 Mar 2021 23:00:26 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/qt5webkit: fix ICU related
- compile failures from capital bool defines
-In-Reply-To: <20210328101404.GO24043@scaer>
-References: <20210325173948.31238-1-henri.roosen@ginzinger.com>
- <20210328101404.GO24043@scaer>
-Message-ID: <20210328210026.GT24043@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 28 Mar 2021 23:01:09 +0200
+Subject: [Buildroot] [git commit] package/janet: bump to version 1.15.4
+Message-ID: <20210328203624.30B3E8A42C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Henri, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=fcf6d481ddca46066da046ca43c687a6b888df00
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-03-28 12:14 +0200, Yann E. MORIN spake thusly:
-> On 2021-03-25 18:39 +0100, Henri Roosen spake thusly:
-> > This patch fixes the following compile failures:
-> > 
-> > In file included from platform/text/TextAllInOne.cpp:30:
-> > platform/text/TextBreakIteratorICU.cpp: In function ?bool
-> > WebCore::textInChunkOrOutOfRange(UText*, int64_t, int64_t, UBool,
-> > UBool&)?:
-> > platform/text/TextBreakIteratorICU.cpp:217:28: error: ?TRUE? was not
-> > declared in this scope
-> >   217 |             isAccessible = TRUE;
-> >       |                            ^~~~
-[--SNIP--]
-> > diff --git a/package/qt5/qt5webkit/0009-Fix-ICU-related-compile-failures-from-capital-bool-d.patch b/package/qt5/qt5webkit/0009-Fix-ICU-related-compile-failures-from-capital-bool-d.patch
-> > new file mode 100644
-> > index 0000000000..04f41afee0
-> > --- /dev/null
-> > +++ b/package/qt5/qt5webkit/0009-Fix-ICU-related-compile-failures-from-capital-bool-d.patch
-> > @@ -0,0 +1,97 @@
-> > +From 37ee268d9d07a8dad02c1d8db3bf96e0b30df10b Mon Sep 17 00:00:00 2001
-> > +From: Henri Roosen <henri.roosen@ginzinger.com>
-> > +Date: Thu, 18 Mar 2021 11:53:57 +0100
-> > +Subject: [PATCH] Fix ICU related compile failures from capital bool defines
-> > +
-> > +See ICU-21267
+remove 2 patches merged upstream
 
-When I applied, I missed that this patch should also have your SoB line.
-Would you care to send a fixup patch that adds your soB line to this
-patch, please?
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...son.build-defaults-to-c99-for-build.c_std.patch | 42 ----------------------
+ .../janet/0002-meson.build-fix-static-build.patch  | 37 -------------------
+ package/janet/janet.hash                           |  2 +-
+ package/janet/janet.mk                             |  2 +-
+ 4 files changed, 2 insertions(+), 81 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> > +---
-> > + .../platform/text/TextBreakIteratorICU.cpp       | 16 ++++++++--------
-> > + Source/WebCore/platform/text/TextCodecICU.cpp    |  2 +-
-> > + 2 files changed, 9 insertions(+), 9 deletions(-)
-> > +
-> > +diff --git a/Source/WebCore/platform/text/TextBreakIteratorICU.cpp b/Source/WebCore/platform/text/TextBreakIteratorICU.cpp
-> > +index b4046ac9..832890a2 100644
-> > +--- a/Source/WebCore/platform/text/TextBreakIteratorICU.cpp
-> > ++++ b/Source/WebCore/platform/text/TextBreakIteratorICU.cpp
-> > +@@ -214,12 +214,12 @@ static inline bool textInChunkOrOutOfRange(UText* text, int64_t nativeIndex, int
-> > +             // Ensure chunk offset is well formed if computed offset exceeds int32_t range.
-> > +             ASSERT(offset < numeric_limits<int32_t>::max());
-> > +             text->chunkOffset = offset < numeric_limits<int32_t>::max() ? static_cast<int32_t>(offset) : 0;
-> > +-            isAccessible = TRUE;
-> > ++            isAccessible = true;
-> > +             return true;
-> > +         }
-> > +         if (nativeIndex >= nativeLength && text->chunkNativeLimit == nativeLength) {
-> > +             text->chunkOffset = text->chunkLength;
-> > +-            isAccessible = FALSE;
-> > ++            isAccessible = false;
-> > +             return true;
-> > +         }
-> > +     } else {
-> > +@@ -228,12 +228,12 @@ static inline bool textInChunkOrOutOfRange(UText* text, int64_t nativeIndex, int
-> > +             // Ensure chunk offset is well formed if computed offset exceeds int32_t range.
-> > +             ASSERT(offset < numeric_limits<int32_t>::max());
-> > +             text->chunkOffset = offset < numeric_limits<int32_t>::max() ? static_cast<int32_t>(offset) : 0;
-> > +-            isAccessible = TRUE;
-> > ++            isAccessible = true;
-> > +             return true;
-> > +         }
-> > +         if (nativeIndex <= 0 && !text->chunkNativeStart) {
-> > +             text->chunkOffset = 0;
-> > +-            isAccessible = FALSE;
-> > ++            isAccessible = false;
-> > +             return true;
-> > +         }
-> > +     }
-> > +@@ -243,7 +243,7 @@ static inline bool textInChunkOrOutOfRange(UText* text, int64_t nativeIndex, int
-> > + static UBool textLatin1Access(UText* text, int64_t nativeIndex, UBool forward)
-> > + {
-> > +     if (!text->context)
-> > +-        return FALSE;
-> > ++        return false;
-> > +     int64_t nativeLength = textNativeLength(text);
-> > +     UBool isAccessible;
-> > +     if (textInChunkOrOutOfRange(text, nativeIndex, nativeLength, forward, isAccessible))
-> > +@@ -263,7 +263,7 @@ static UBool textLatin1Access(UText* text, int64_t nativeIndex, UBool forward)
-> > +         ASSERT(newContext == PriorContext);
-> > +         textLatin1SwitchToPriorContext(text, nativeIndex, nativeLength, forward);
-> > +     }
-> > +-    return TRUE;
-> > ++    return true;
-> > + }
-> > + 
-> > + static const struct UTextFuncs textLatin1Funcs = {
-> > +@@ -364,7 +364,7 @@ static void textUTF16SwitchToPriorContext(UText* text, int64_t nativeIndex, int6
-> > + static UBool textUTF16Access(UText* text, int64_t nativeIndex, UBool forward)
-> > + {
-> > +     if (!text->context)
-> > +-        return FALSE;
-> > ++        return false;
-> > +     int64_t nativeLength = textNativeLength(text);
-> > +     UBool isAccessible;
-> > +     if (textInChunkOrOutOfRange(text, nativeIndex, nativeLength, forward, isAccessible))
-> > +@@ -384,7 +384,7 @@ static UBool textUTF16Access(UText* text, int64_t nativeIndex, UBool forward)
-> > +         ASSERT(newContext == PriorContext);
-> > +         textUTF16SwitchToPriorContext(text, nativeIndex, nativeLength, forward);
-> > +     }
-> > +-    return TRUE;
-> > ++    return true;
-> > + }
-> > + 
-> > + static const struct UTextFuncs textUTF16Funcs = {
-> > +diff --git a/Source/WebCore/platform/text/TextCodecICU.cpp b/Source/WebCore/platform/text/TextCodecICU.cpp
-> > +index 86d4ea17..da152edd 100644
-> > +--- a/Source/WebCore/platform/text/TextCodecICU.cpp
-> > ++++ b/Source/WebCore/platform/text/TextCodecICU.cpp
-> > +@@ -269,7 +269,7 @@ void TextCodecICU::createICUConverter() const
-> > +     m_converterICU = ucnv_open(m_canonicalConverterName, &err);
-> > +     ASSERT(U_SUCCESS(err));
-> > +     if (m_converterICU)
-> > +-        ucnv_setFallback(m_converterICU, TRUE);
-> > ++        ucnv_setFallback(m_converterICU, true);
-> > + }
-> > + 
-> > + int TextCodecICU::decodeToBuffer(UChar* target, UChar* targetLimit, const char*& source, const char* sourceLimit, int32_t* offsets, bool flush, UErrorCode& err)
-> > +-- 
-> > +2.20.1
-> > +
-> > -- 
-> > 2.20.1
-> > 
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> -- 
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/janet/0001-meson.build-defaults-to-c99-for-build.c_std.patch b/package/janet/0001-meson.build-defaults-to-c99-for-build.c_std.patch
+deleted file mode 100644
+index 607fc2ee86..0000000000
+--- a/package/janet/0001-meson.build-defaults-to-c99-for-build.c_std.patch
++++ /dev/null
+@@ -1,42 +0,0 @@
+-From 546437d799f4cbc1dd86a015eac3b9ab405130c6 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Wed, 10 Mar 2021 07:57:53 +0100
+-Subject: [PATCH] meson.build: defaults to c99 for "build.c_std"
+-
+-Since Meson 0.51, there are special build options for "native:true"
+-builds, prefixed with "build.".  This change breaks cross builds
+-because `janet-boot/src_core_asm.c` is no longer built with `-std=c99`:
+-
+-FAILED: janet-boot.p/src_core_asm.c.o
+-/usr/bin/gcc -Ijanet-boot.p -I. -I.. -I../src/include -pipe -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -O3 -pthread -DJANET_BOOTSTRAP -MD -MQ janet-boot.p/src_core_asm.c.o -MF janet-boot.p/src_core_asm.c.o.d -o janet-boot.p/src_core_asm.c.o -c ../src/core/asm.c
+-../src/core/asm.c: In function 'janet_disasm_bytecode':
+-../src/core/asm.c:866:5: error: 'for' loop initial declarations are only allowed in C99 mode
+-     for (int32_t i = 0; i < def->bytecode_length; i++) {
+-     ^
+-
+-Fixes:
+- - http://autobuild.buildroot.net/results/355e0992338a8d132050517f83a3884606b00529
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrieved (and backported) from:
+-https://github.com/janet-lang/janet/commit/546437d799f4cbc1dd86a015eac3b9ab405130c6]
+----
+- meson.build | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/meson.build b/meson.build
+-index 1b326111..d3a2d399 100644
+---- a/meson.build
+-+++ b/meson.build
+-@@ -19,7 +19,7 @@
+- # IN THE SOFTWARE.
+- 
+- project('janet', 'c',
+--  default_options : ['c_std=c99', 'b_lundef=false', 'default_library=both'],
+-+  default_options : ['c_std=c99', 'build.c_std=c99', 'b_lundef=false', 'default_library=both'],
+-   version : '1.15.0')
+- 
+- # Global settings
+--- 
+-2.30.0
+-
+diff --git a/package/janet/0002-meson.build-fix-static-build.patch b/package/janet/0002-meson.build-fix-static-build.patch
+deleted file mode 100644
+index bd335cad90..0000000000
+--- a/package/janet/0002-meson.build-fix-static-build.patch
++++ /dev/null
+@@ -1,37 +0,0 @@
+-From b0f1a4967db9d8910e0091adff5e40a2a147323f Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Fri, 12 Mar 2021 08:46:05 +0100
+-Subject: [PATCH] meson.build: fix static build
+-
+-Don't enforce -rdynamic when building statically to avoid the following
+-build failure:
+-
+-/home/giuliobenetti/autobuild/run/instance-2/output-1/host/bin/arm-linux-gcc  -o janet janet.p/meson-generated_.._janet.c.o janet.p/src_mainclient_shell.c.o -Wl,--as-needed -Wl,--allow-shlib-undefined -Wl,-O1 -rdynamic -Wl,-elf2flt -static -Wl,--start-group -lm -ldl -Wl,--end-group -pthread
+-arm-linux-gcc.br_real: error: unrecognized command line option '-rdynamic'
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/a4f927f73a7b80e65408c992d7b6023609a1eacc
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrieved from:
+-https://github.com/janet-lang/janet/commit/b0f1a4967db9d8910e0091adff5e40a2a147323f]
+----
+- meson.build | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/meson.build b/meson.build
+-index d3a2d399..a8a0a054 100644
+---- a/meson.build
+-+++ b/meson.build
+-@@ -33,7 +33,7 @@ dl_dep = cc.find_library('dl', required : false)
+- thread_dep = dependency('threads')
+- 
+- # Link options
+--if build_machine.system() != 'windows'
+-+if get_option('default_library') != 'static' and build_machine.system() != 'windows'
+-     add_project_link_arguments('-rdynamic', language : 'c')
+- endif
+- 
+--- 
+-2.30.0
+-
+diff --git a/package/janet/janet.hash b/package/janet/janet.hash
+index 4a1167f8e7..ca80935367 100644
+--- a/package/janet/janet.hash
++++ b/package/janet/janet.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  e2cf16b330e47c858a675ac79b5a0af83727ff041efcb133a80f36bedfae57c4  janet-1.15.0.tar.gz
++sha256  8eed302c8ded1df882544d13ce7e415b213cf7bc8fa77ca16110c89b36d19763  janet-1.15.4.tar.gz
+ 
+ # Locally calculated
+ sha256  1114e280d850605ae71b656dfc88115ab06081e8157720a2497f50edf50b110e  LICENSE
+diff --git a/package/janet/janet.mk b/package/janet/janet.mk
+index 7243d60c01..027edd72c4 100644
+--- a/package/janet/janet.mk
++++ b/package/janet/janet.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-JANET_VERSION = 1.15.0
++JANET_VERSION = 1.15.4
+ JANET_SITE = $(call github,janet-lang,janet,v$(JANET_VERSION))
+ JANET_LICENSE = MIT
+ JANET_LICENSE_FILES = LICENSE
