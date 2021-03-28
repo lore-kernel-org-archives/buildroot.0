@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 28 Mar 2021 10:16:16 +0200
-Subject: [Buildroot] [PATCH 1/1] package/kodi-inputstream-adaptive:
- bumpp version to 2.6.8-Matrix
-In-Reply-To: <20210327071637.32286-1-bernd.kuhls@t-online.de>
-References: <20210327071637.32286-1-bernd.kuhls@t-online.de>
-Message-ID: <20210328081616.GF24043@scaer>
+Date: Sun, 28 Mar 2021 10:16:32 +0200
+Subject: [Buildroot] [PATCH 1/1] package/kodi-pvr-vuplus: bump version
+ to 7.4.2-Matrix
+In-Reply-To: <20210326080214.589102-1-bernd.kuhls@t-online.de>
+References: <20210326080214.589102-1-bernd.kuhls@t-online.de>
+Message-ID: <20210328081632.GG24043@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,9 +13,9 @@ To: buildroot@busybox.net
 
 Bernd, All,
 
-On 2021-03-27 08:16 +0100, Bernd Kuhls spake thusly:
+On 2021-03-26 09:02 +0100, Bernd Kuhls spake thusly:
 > Changelog:
-> https://github.com/xbmc/inputstream.adaptive/blob/Matrix/inputstream.adaptive/addon.xml.in#L22
+> https://github.com/kodi-pvr/pvr.vuplus/blob/Matrix/pvr.vuplus/changelog.txt
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
@@ -25,32 +25,32 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  .../kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash    | 2 +-
->  package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk  | 2 +-
+>  package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash | 2 +-
+>  package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk   | 2 +-
 >  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-> index 6c9b79b881..5be6bad3cb 100644
-> --- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-> +++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+> diff --git a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
+> index 8fac6a1770..2439e2619d 100644
+> --- a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
+> +++ b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
 > @@ -1,3 +1,3 @@
 >  # Locally computed
-> -sha256  353207f5f98bf81ce8d79cec903c28da8c0227d7c7a632692c910d81e59c2dbe  kodi-inputstream-adaptive-2.6.7-Matrix.tar.gz
-> +sha256  6407a95140b728b959321512d5bdc8512b01d60030415459cf861ddae193e3e9  kodi-inputstream-adaptive-2.6.8-Matrix.tar.gz
->  sha256  89931c1fb1f3716694175763cf3221cfcd63d6935031cf6b4512d17ffe5d9860  LICENSE.GPL
-> diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-> index d6d86817ce..193ea66245 100644
-> --- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-> +++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+> -sha256  9f10c35477f977646416a0a3f858e95e4dc896436582179981223ccd0570596c  kodi-pvr-vuplus-7.4.1-Matrix.tar.gz
+> +sha256  fcd77d5b12def3b6c95928d699460b1dd6b316216f2bd348735261c639113554  kodi-pvr-vuplus-7.4.2-Matrix.tar.gz
+>  sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+> diff --git a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
+> index 22b923bf86..cce260c519 100644
+> --- a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
+> +++ b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
 > @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
 >  
-> -KODI_INPUTSTREAM_ADAPTIVE_VERSION = 2.6.7-Matrix
-> +KODI_INPUTSTREAM_ADAPTIVE_VERSION = 2.6.8-Matrix
->  KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,xbmc,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
->  KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPL-2.0+
->  KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = LICENSE.GPL
+> -KODI_PVR_VUPLUS_VERSION = 7.4.1-Matrix
+> +KODI_PVR_VUPLUS_VERSION = 7.4.2-Matrix
+>  KODI_PVR_VUPLUS_SITE = $(call github,kodi-pvr,pvr.vuplus,$(KODI_PVR_VUPLUS_VERSION))
+>  KODI_PVR_VUPLUS_LICENSE = GPL-2.0+
+>  KODI_PVR_VUPLUS_LICENSE_FILES = LICENSE.md
 > -- 
 > 2.29.2
 > 
