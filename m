@@ -1,51 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 28 Mar 2021 22:46:08 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/libopenssl:
- security bump version to 1.1.1k
-Message-ID: <20210328202209.C1C20834E7@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 28 Mar 2021 22:47:17 +0200
+Subject: [Buildroot] [git commit] package/netopeer2: bump version to 1.1.70
+Message-ID: <20210328202237.76CD38A4B8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f939fb2a7de3bcf79ee2e135249ce4028d3e5d98
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=1a1ba25e6484037ecbe3c22940ecd845397f484b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes CVE-2021-3449 & CVE-2021-3450:
-https://www.openssl.org/news/vulnerabilities-1.1.1.html
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 198e20921fa7afde88773d40564d0aa5e81d4419)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libopenssl/libopenssl.hash | 4 ++--
- package/libopenssl/libopenssl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/netopeer2/netopeer2.hash | 2 +-
+ package/netopeer2/netopeer2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
-index 854f8a03f7..585486ffbe 100644
---- a/package/libopenssl/libopenssl.hash
-+++ b/package/libopenssl/libopenssl.hash
-@@ -1,5 +1,5 @@
--# From https://www.openssl.org/source/openssl-1.1.1j.tar.gz.sha256
--sha256  aaf2fcb575cdf6491b98ab4829abf78a3dec8402b8b81efc8f23c00d443981bf  openssl-1.1.1j.tar.gz
-+# From https://www.openssl.org/source/openssl-1.1.1k.tar.gz.sha256
-+sha256  892a0875b9872acd04a9fde79b1f943075d5ea162415de3047c327df33fbaee5  openssl-1.1.1k.tar.gz
- 
- # License files
- sha256  c32913b33252e71190af2066f08115c69bc9fddadf3bf29296e20c835389841c  LICENSE
-diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-index b944634bc8..cffac1629d 100644
---- a/package/libopenssl/libopenssl.mk
-+++ b/package/libopenssl/libopenssl.mk
+diff --git a/package/netopeer2/netopeer2.hash b/package/netopeer2/netopeer2.hash
+index 801c353e11..4386e5661c 100644
+--- a/package/netopeer2/netopeer2.hash
++++ b/package/netopeer2/netopeer2.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  6b43026211a787d5cb91d47cb7fdd7923649044c55f264aaf85bf5676c004211  netopeer2-1.1.53.tar.gz
++sha256  7fc1a3520ee4bb488112f502e34cea465464dc933d2a5742a72eb32a6dfe3b3f  netopeer2-1.1.70.tar.gz
+ sha256  b46f161fbdcf127d3ef22602e15958c3092fe3294f71a2dc8cdf8f6689cba95b  LICENSE
+diff --git a/package/netopeer2/netopeer2.mk b/package/netopeer2/netopeer2.mk
+index be5ffd2be7..c9fa097606 100644
+--- a/package/netopeer2/netopeer2.mk
++++ b/package/netopeer2/netopeer2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBOPENSSL_VERSION = 1.1.1j
-+LIBOPENSSL_VERSION = 1.1.1k
- LIBOPENSSL_SITE = https://www.openssl.org/source
- LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
- LIBOPENSSL_LICENSE = OpenSSL or SSLeay
+-NETOPEER2_VERSION = 1.1.53
++NETOPEER2_VERSION = 1.1.70
+ NETOPEER2_SITE = $(call github,CESNET,Netopeer2,v$(NETOPEER2_VERSION))
+ NETOPEER2_DL_SUBDIR = netopeer2
+ NETOPEER2_LICENSE = BSD-3-Clause
