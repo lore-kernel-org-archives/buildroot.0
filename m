@@ -1,33 +1,37 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 28 Mar 2021 10:10:02 +0200
-Subject: [Buildroot] [PATCH] package/uclibc: update to 1.0.38
-In-Reply-To: <20210327154741.GA29594@waldemar-brodkorb.de>
-References: <20210327154741.GA29594@waldemar-brodkorb.de>
-Message-ID: <20210328081002.GD24043@scaer>
+Date: Sun, 28 Mar 2021 10:12:27 +0200
+Subject: [Buildroot] [git commit] package/uclibc: update to 1.0.38
+In-Reply-To: <20210328074141.774EC88298@busybox.osuosl.org>
+References: <20210328074141.774EC88298@busybox.osuosl.org>
+Message-ID: <20210328081227.GE24043@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Waldemar, All,
+Peter, All,
 
-On 2021-03-27 16:48 +0100, Waldemar Brodkorb spake thusly:
+On 2021-03-28 10:05 +0200, Yann E. MORIN spake thusly:
+> commit: https://git.buildroot.net/buildroot/commit/?id=0cf28c2c5a4d053e46881926134a15c8b0c243ba
+> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> 
 > - fixes renameat2 issues on riscv64
 > 
 > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 
-Applied to master, thanks.
+You may want to consider this bump for 2021.02.x, as the it almost
+exclusively contains bug fixes.
 
 Regards,
 Yann E. MORIN.
 
 > ---
->  ...sh-Add-64-bit-time-types-from-kernel.patch | 33 -------------------
->  package/uclibc/uclibc.hash                    |  4 +--
->  package/uclibc/uclibc.mk                      |  2 +-
+>  ...arch-sh-Add-64-bit-time-types-from-kernel.patch | 33 ----------------------
+>  package/uclibc/uclibc.hash                         |  4 +--
+>  package/uclibc/uclibc.mk                           |  2 +-
 >  3 files changed, 3 insertions(+), 36 deletions(-)
->  delete mode 100644 package/uclibc/0001-arch-sh-Add-64-bit-time-types-from-kernel.patch
 > 
 > diff --git a/package/uclibc/0001-arch-sh-Add-64-bit-time-types-from-kernel.patch b/package/uclibc/0001-arch-sh-Add-64-bit-time-types-from-kernel.patch
 > deleted file mode 100644
@@ -92,9 +96,6 @@ Yann E. MORIN.
 >  UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
 >  UCLIBC_SITE = https://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
 >  UCLIBC_LICENSE = LGPL-2.1+
-> -- 
-> 2.20.1
-> 
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
