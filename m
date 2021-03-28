@@ -1,32 +1,55 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Sun, 28 Mar 2021 22:44:57 +0200
-Subject: [Buildroot] [git commit] package/frotz: use gitlab macro
-Message-ID: <20210328202028.7BBBF867A8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] docs/manual: improve details about the
+ Github macro
+Message-ID: <20210328202028.4BCDE8648F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=37e56d855d4c97cf0bb9b7699efeb0607f1af22f
+commit: https://git.buildroot.net/buildroot/commit/?id=b7cd17eb09701c336d8fb73ee339639b61488c26
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+The Github macro example shows something that is now considered
+incorrect: using v1.0 as the VERSION. This is not longer recommended
+as it prevents from matching with release-monitoring.org details.
+
+Let's update the example, and add a note to explain this in more
+details.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/frotz/frotz.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ docs/manual/adding-packages-tips.txt | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/package/frotz/frotz.mk b/package/frotz/frotz.mk
-index cc0421358c..c1362b2ac6 100644
---- a/package/frotz/frotz.mk
-+++ b/package/frotz/frotz.mk
-@@ -6,7 +6,7 @@
+diff --git a/docs/manual/adding-packages-tips.txt b/docs/manual/adding-packages-tips.txt
+index 95a1d599ef..6e4241d570 100644
+--- a/docs/manual/adding-packages-tips.txt
++++ b/docs/manual/adding-packages-tips.txt
+@@ -174,8 +174,8 @@ past, the 'github' helper function should be used as shown below.
  
- FROTZ_VERSION = 2.53
- FROTZ_SOURCE = frotz-$(FROTZ_VERSION).tar.bz2
--FROTZ_SITE = https://gitlab.com/DavidGriffith/frotz/-/archive/$(FROTZ_VERSION)
-+FROTZ_SITE = $(call gitlab,DavidGriffith,frotz,$(FROTZ_VERSION))
- FROTZ_DEPENDENCIES = host-pkgconf ncurses
- FROTZ_LICENSE = GPL-2.0+
- FROTZ_LICENSE_FILES = COPYING
+ ------------------------
+ # Use a tag or a full commit ID
+-FOO_VERSION = v1.0
+-FOO_SITE = $(call github,<user>,<package>,$(FOO_VERSION))
++FOO_VERSION = 1.0
++FOO_SITE = $(call github,<user>,<package>,v$(FOO_VERSION))
+ ------------------------
+ 
+ .Notes
+@@ -184,6 +184,12 @@ FOO_SITE = $(call github,<user>,<package>,$(FOO_VERSION))
+   Buildroot (e.g.: +foo-f6fb6654af62045239caed5950bc6c7971965e60.tar.gz+),
+   so it is not necessary to specify it in the +.mk+ file.
+ - When using a commit ID as version, you should use the full 40 hex characters.
++- When the tag contains a prefix such as +v+ in +v1.0+, then the
++  +VERSION+ variable should contain just +1.0+, and the +v+ should be
++  added directly in the +SITE+ variable, as illustrated above. This
++  ensures that the +VERSION+ variable value can be used to match
++  against http://www.release-monitoring.org/[release-monitoring.org]
++  results.
+ 
+ If the package you wish to add does have a release section on GitHub, the
+ maintainer may have uploaded a release tarball, or the release may just point
