@@ -1,49 +1,29 @@
-From: lucavermei <lucavermei@gmail.com>
-Date: Sun, 28 Mar 2021 12:31:58 -0500 (CDT)
-Subject: [Buildroot] Buildroot post-image script error
-Message-ID: <1616952718209-0.post@n4.nabble.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 28 Mar 2021 17:41:43 +0000
+Subject: [Buildroot] [Bug 13671] openSSH server closes connection before
+ authentication is finished
+In-Reply-To: <bug-13671-163@https.bugs.busybox.net/>
+References: <bug-13671-163@https.bugs.busybox.net/>
+Message-ID: <bug-13671-163-GT6qOwdQXc@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
-I am new to buildroot and I am trying to build a system for my beaglebone
-black wireless.
-The build exit with an error:
+https://bugs.busybox.net/show_bug.cgi?id=13671
 
->>>   Executing post-image script support/scripts/genimage.sh
-board/beaglebone/genimage.cfg:34: no sub-section title/index for 'config'
-INFO: cmd: "mkdir -p "/home/luca/buildroot/output/build/genimage.tmp""
-(stderr):
-INFO: cmd: "rm -rf "/home/luca/buildroot/output/build/genimage.tmp"/*"
-(stderr):
-INFO: cmd: "mkdir -p "/home/luca/buildroot/output/build/genimage.tmp""
-(stderr):
-INFO: cmd: "cp -a "/tmp/tmp.PeR17MSHjT"
-"/home/luca/buildroot/output/build/genimage.tmp/root"" (stderr):
-INFO: cmd: "find '/home/luca/buildroot/output/build/genimage.tmp/root'
--depth -type d -printf '%P\0' | xargs -0 -I {} touch -r
-'/tmp/tmp.PeR17MSHjT/{}'
-'/home/luca/buildroot/output/build/genimage.tmp/root/{}'" (stderr):
-ERROR: file(am335x-evm.dtb):
-stat(/home/luca/buildroot/output/images/am335x-evm.dtb) failed: No such file
-or directory
-ERROR: vfat(boot.vfat): could not setup am335x-evm.dtb
-make[1]: *** [Makefile:836: target-post-image] Error 1
-make: *** [Makefile:84: _all] Error 2
+--- Comment #10 from romain.naour at gmail.com ---
+See https://lore.kernel.org/lkml/20190719170343.GA13680 at linux.intel.com/
 
-In my config I set the option build a device tree blob and In-tree device
-tree source file names "am335x-boneblack-wireless"
-If a do ls in /buildroot/output/images I get:
-am335x-boneblack-wireless.dtb  MLO  rootfs.tar  u-boot.img  uEnv.txt  zImage
+"Using __NR_clock_gettime64 instead of __NR_clock_gettime breaks userspace
+applications that use seccomp filtering to block syscalls, as applications
+are completely unaware of the newly added of __NR_clock_gettime64, e.g.
+sshd gets zapped on syscall(403) when attempting to ssh into the system."
 
-How can I fix the problem with the post image script?
+The issue doesn't seems fixed with a running kernel 5.10.7 with a system built
+with a toolchain using 4.19.x kernel headers.
 
-
-
-
-
---
-Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
