@@ -1,38 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 28 Mar 2021 20:52:15 +0200
-Subject: [Buildroot] [PATCH] package/libressl: security bump to 3.2.5
-In-Reply-To: <20210327222316.GA11394@pirotess> (Ismael Luceno's message of
- "Sat, 27 Mar 2021 23:23:16 +0100")
-References: <20210320230337.1841-1-ismael@iodev.co.uk>
- <87pmzlilco.fsf@dell.be.48ers.dk> <20210327222316.GA11394@pirotess>
-Message-ID: <87r1jzglgg.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 28 Mar 2021 21:13:47 +0200
+Subject: [Buildroot] [PATCH 0/7] Add a gitlab macro
+Message-ID: <20210328191355.778786-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Ismael" == Ismael Luceno <ismael@iodev.co.uk> writes:
+Hello,
 
- > On 26/Mar/2021 23:47, Peter Korsgaard wrote:
- >> >>>>> "Ismael" == Ismael Luceno <ismael@iodev.co.uk> writes:
- >> 
- >> > It includes the following bug fix:
- >> >  * A TLS client using session resumption may cause a use-after-free.
- >> 
- >> > https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-3.2.5-relnotes.txt
- >> 
- >> > Signed-off-by: Ismael Luceno <ismael@iodev.co.uk>
- >> 
- >> Committed to 2020.11.x and 2021.02.x, thanks.
- >> 
- >> It it not really clear to me if this is only an issue in 3.2.x /
- >> TLSv1.3?
+Here is a small patch series that adds a gitlab macro, similar to the
+github macro. What prompted me to add this is a pending patch for a
+package, which uses gitlab, but does a git clone instead of relying on
+gitlab tarballs.
 
- > AFAICT, it's covered; 3.1 branch is unaffected, the field causing the issue
- > was introduced in the 3.2 branch. BTW, 3.3.1 also seems to be affected.
+Hopefully, having a gitlab macro will make it more obvious how we
+prefer to handle things.
 
-Ok, thanks!
+This series also has a preparation patch improving some details about
+the github macro.
+
+Thanks,
+
+Thomas
+
+Thomas Petazzoni (7):
+  docs/manual: improve details about the Github macro
+  package/pkg-download.mk: add gitlab macro
+  docs/manual: add documentation for the gitlab macro
+  package/eigen: use gitlab macro
+  package/frotz: use gitlab macro
+  package/ipcalc: use gitlab macro
+  package/libsoundtouch: use gitlab macro
+
+ docs/manual/adding-packages-tips.txt   | 40 ++++++++++++++++++++++++--
+ package/eigen/eigen.mk                 |  2 +-
+ package/frotz/frotz.mk                 |  2 +-
+ package/ipcalc/ipcalc.mk               |  2 +-
+ package/libsoundtouch/libsoundtouch.mk |  2 +-
+ package/pkg-download.mk                |  3 ++
+ 6 files changed, 45 insertions(+), 6 deletions(-)
 
 -- 
-Bye, Peter Korsgaard
+2.30.2
