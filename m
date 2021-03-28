@@ -1,42 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 28 Mar 2021 21:24:44 +0200
-Subject: [Buildroot] [PATCH] package/perl: fix configure when
- BR2_VERSION_FULL contains a '/'
-In-Reply-To: <20210327224220.961977-1-yann.morin.1998@free.fr>
-References: <20210327224220.961977-1-yann.morin.1998@free.fr>
-Message-ID: <20210328212444.4007f725@windsurf.home>
+Date: Sun, 28 Mar 2021 21:25:04 +0200
+Subject: [Buildroot] [git commit] package/tvheadend: bump version
+Message-ID: <20210328192020.ECFCF87B83@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 27 Mar 2021 23:42:20 +0100
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=df7757a532aee829f0368c7a0a784565f2a3d464
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> When BR2_VERSION_FULL contains one or more '/', injection our version
-> in the perl patch-level fails:
-> 
->     /usr/bin/sed: -e expression #1, char 27: unknown option to `s'
-> 
-> When the build is done in a git tree, and HEAD is a tag, BR2_VERSION_FULL
-> will contain that tag name. Even if not widely common, it is not unusual
-> for a tag to contain a '/', and this is perfectly legit in git.
-> 
-> So, mangle BR2_VERSION_FULL to escape all '/' with a backslash '\', so
-> that the sed expression is correct, and so that we eventually have a
-> correct pathclevel string in perl's --version output.
-> 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/perl/perl.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Upstream removed x11 dependency from vaapi support:
+https://github.com/tvheadend/tvheadend/commit/ecd05a21de3075466476df97cf37ffd42c787e58
 
-Applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/tvheadend/tvheadend.hash | 2 +-
+ package/tvheadend/tvheadend.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/tvheadend/tvheadend.hash b/package/tvheadend/tvheadend.hash
+index b987a735eb..1c896df140 100644
+--- a/package/tvheadend/tvheadend.hash
++++ b/package/tvheadend/tvheadend.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  b5e58601da7af383c2c7f27016417a478be0d302a4a8a00ec87fc8bdacc56ef1  tvheadend-febcf9818d7c37fec8a98d424934edcb3243d5e4.tar.gz
++sha256  fc734c36c98aa1535172621c3b6fcac9f1d253f850abc50d01b771937bfd2a76  tvheadend-dbaa0f850394af8ab845df802f5f781ac0218ec4.tar.gz
+ sha256  54dc3cbc00bf126bcba43e2af7f3ad1dc00f335985da1409fa943c7b7256d942  LICENSE.md
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index e19763e186..114142bfa9 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TVHEADEND_VERSION = febcf9818d7c37fec8a98d424934edcb3243d5e4
++TVHEADEND_VERSION = dbaa0f850394af8ab845df802f5f781ac0218ec4
+ TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
+ TVHEADEND_LICENSE = GPL-3.0+
+ TVHEADEND_LICENSE_FILES = LICENSE.md
+@@ -29,7 +29,7 @@ endif
+ ifeq ($(BR2_PACKAGE_TVHEADEND_TRANSCODING),y)
+ TVHEADEND_CONF_OPTS += --enable-libav --enable-libx264
+ TVHEADEND_DEPENDENCIES += ffmpeg x264
+-ifeq ($(BR2_PACKAGE_LIBVA)$(BR2_PACKAGE_XORG7),yy)
++ifeq ($(BR2_PACKAGE_LIBVA),y)
+ TVHEADEND_CONF_OPTS += --enable-vaapi
+ TVHEADEND_DEPENDENCIES += libva
+ else
