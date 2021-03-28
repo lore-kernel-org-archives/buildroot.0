@@ -1,48 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 28 Mar 2021 22:34:56 +0200
-Subject: [Buildroot] [git commit] package/freeswitch: bump version to 1.10.6
-Message-ID: <20210328201812.122A2809A8@busybox.osuosl.org>
+Date: Sun, 28 Mar 2021 22:42:55 +0200
+Subject: [Buildroot] [git commit] package/php: bump version to 7.4.16
+Message-ID: <20210328201812.24FF58A396@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b3f75b1b637f1c2d4ce79ecb840746b5365a080d
+commit: https://git.buildroot.net/buildroot/commit/?id=92797a892398af4954634a57322b63f0f071cc2b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://github.com/signalwire/freeswitch/releases/tag/v1.10.6
+Changelog: https://www.php.net/ChangeLog-7.php#7.4.16
+
+Update license hash due to copyright year bump:
+http://git.php.net/?p=php-src.git;a=commitdiff;h=8c04944b66fd4a4fa88e54b65a2391397998c51d
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/freeswitch/freeswitch.hash | 4 ++--
- package/freeswitch/freeswitch.mk   | 2 +-
+ package/php/php.hash | 4 ++--
+ package/php/php.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/freeswitch/freeswitch.hash b/package/freeswitch/freeswitch.hash
-index d95e05c0b1..dc5a67980f 100644
---- a/package/freeswitch/freeswitch.hash
-+++ b/package/freeswitch/freeswitch.hash
+diff --git a/package/php/php.hash b/package/php/php.hash
+index d60164d96f..14576cf506 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
 @@ -1,5 +1,5 @@
--# From https://files.freeswitch.org/freeswitch-releases/freeswitch-1.10.5.-release.tar.xz.sha256
--sha256  3e26600767a82946eca94af2c8f14712783aa83db5fb1cc57585f544aecce327 freeswitch-1.10.5.-release.tar.xz
-+# From https://files.freeswitch.org/freeswitch-releases/freeswitch-1.10.6.-release.tar.xz.sha256
-+sha256  9a08d4e184e6d715e1c12c43a0f901597151752ef236f0a37e40996272b5c38d  freeswitch-1.10.6.-release.tar.xz
- # Locally computed
- sha256  75c933202f40939cdc3827fce20a1efdaa38291e2b5a65d234eb16e2cffda66a  COPYING
- sha256  c3e3388768dae8bf4edcc4108f95be815b8a05c0b0aef6e4c3d8df81affdfa34  docs/OPENH264_BINARY_LICENSE.txt
-diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index 7219880530..63f6324af2 100644
---- a/package/freeswitch/freeswitch.mk
-+++ b/package/freeswitch/freeswitch.mk
+ # From https://www.php.net/downloads.php
+-sha256  9b859c65f0cf7b3eff9d4a28cfab719fb3d36a1db3c20d874a79b5ec44d43cb8  php-7.4.15.tar.xz
++sha256  1c16cefaf88ded4c92eed6a8a41eb682bb2ef42429deb55f1c4ba159053fb98b  php-7.4.16.tar.xz
+ 
+ # License file
+-sha256  0967ad6cf4b7fe81d38709d7aaef3fecb3bd685be7eebb37b864aa34c991baa7  LICENSE
++sha256  a188db807d711536f71e27b7d36879d63480f7994dc18adc08e624b3c5430fff  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 5ae2467a78..4987f6f3bb 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FREESWITCH_VERSION = 1.10.5
-+FREESWITCH_VERSION = 1.10.6
- FREESWITCH_SOURCE = freeswitch-$(FREESWITCH_VERSION).-release.tar.xz
- FREESWITCH_SITE = https://files.freeswitch.org/freeswitch-releases
- # External modules need headers/libs from staging
+-PHP_VERSION = 7.4.15
++PHP_VERSION = 7.4.16
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
