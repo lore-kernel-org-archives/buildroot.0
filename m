@@ -1,68 +1,36 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 28 Mar 2021 10:16:47 +0200
-Subject: [Buildroot] [PATCH 1/1] package/kodi-pvr-hts: bump version to
- 8.3.0-Matrix
-In-Reply-To: <20210324212440.590880-1-bernd.kuhls@t-online.de>
-References: <20210324212440.590880-1-bernd.kuhls@t-online.de>
-Message-ID: <20210328081647.GH24043@scaer>
+Date: Sun, 28 Mar 2021 10:18:32 +0200
+Subject: [Buildroot] [git commit] package/kodi: honour the libusb option
+ even when disabled
+Message-ID: <20210328075524.47250888A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=0e1acc6e36b087c1008981e7bccf4113bfa1751d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-03-24 22:24 +0100, Bernd Kuhls spake thusly:
-> Changelog:
-> https://github.com/kodi-pvr/pvr.hts/blob/Matrix/pvr.hts/changelog.txt
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Make sure libusb support is properly disabled even if the libusb
+package is enabled, and in case it gets built before Kodi.
 
-Applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/kodi/kodi.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/kodi-pvr-hts/kodi-pvr-hts.hash | 2 +-
->  package/kodi-pvr-hts/kodi-pvr-hts.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/kodi-pvr-hts/kodi-pvr-hts.hash b/package/kodi-pvr-hts/kodi-pvr-hts.hash
-> index 1264f1b4d3..e22e13df23 100644
-> --- a/package/kodi-pvr-hts/kodi-pvr-hts.hash
-> +++ b/package/kodi-pvr-hts/kodi-pvr-hts.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed
-> -sha256  9b1cc87b776d6c2fdeb0f2b89c09c0de6e3aba86b2da515d24957292dbab8134  kodi-pvr-hts-8.2.4-Matrix.tar.gz
-> +sha256  51d27171c55aea8ee3c7573adca3e942b57f34171b1b685501ac8f5dbd3623b7  kodi-pvr-hts-8.3.0-Matrix.tar.gz
->  sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-> diff --git a/package/kodi-pvr-hts/kodi-pvr-hts.mk b/package/kodi-pvr-hts/kodi-pvr-hts.mk
-> index 1456e79632..ee7a24688b 100644
-> --- a/package/kodi-pvr-hts/kodi-pvr-hts.mk
-> +++ b/package/kodi-pvr-hts/kodi-pvr-hts.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -KODI_PVR_HTS_VERSION = 8.2.4-Matrix
-> +KODI_PVR_HTS_VERSION = 8.3.0-Matrix
->  KODI_PVR_HTS_SITE = $(call github,kodi-pvr,pvr.hts,$(KODI_PVR_HTS_VERSION))
->  KODI_PVR_HTS_LICENSE = GPL-2.0+
->  KODI_PVR_HTS_LICENSE_FILES = LICENSE.md
-> -- 
-> 2.29.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index bf5822eb61..6edb0b7fca 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -206,6 +206,8 @@ KODI_CONF_OPTS += -DENABLE_UDEV=OFF
+ ifeq ($(BR2_PACKAGE_KODI_LIBUSB),y)
+ KODI_CONF_OPTS += -DENABLE_LIBUSB=ON
+ KODI_DEPENDENCIES += libusb-compat
++else
++KODI_CONF_OPTS += -DENABLE_LIBUSB=OFF
+ endif
+ endif
+ 
