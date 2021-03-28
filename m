@@ -1,67 +1,79 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 28 Mar 2021 22:28:27 +0200
-Subject: [Buildroot] Buildroot post-image script error
-In-Reply-To: <1616952718209-0.post@n4.nabble.com>
-References: <1616952718209-0.post@n4.nabble.com>
-Message-ID: <20210328222827.7e8c6976@gmx.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 28 Mar 2021 22:28:07 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] {linux,
+ linux-headers}: bump 5.{4, 10, 11}.x 4.{4, 9, 14, 19} series
+Message-ID: <20210328200345.07765888A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=ca7f3ffcbf619376143886d93fefed0b6a1304ce
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-On Sun, 28 Mar 2021 12:31:58 -0500 (CDT), lucavermei <lucavermei@gmail.com> wrote:
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit ddfac826aea915a95a4ad64e7b8e8af93c5620c3)
+[Peter: drop 5.10.x/5.11.x bump]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ linux/Config.in                      |  2 +-
+ linux/linux.hash                     | 10 +++++-----
+ package/linux-headers/Config.in.host | 10 +++++-----
+ 3 files changed, 11 insertions(+), 11 deletions(-)
 
-> Hi all,
-> I am new to buildroot and I am trying to build a system for my beaglebone
-> black wireless.
-> The build exit with an error:
->
-> >>>   Executing post-image script support/scripts/genimage.sh
-> board/beaglebone/genimage.cfg:34: no sub-section title/index for 'config'
-> INFO: cmd: "mkdir -p "/home/luca/buildroot/output/build/genimage.tmp""
-> (stderr):
-> INFO: cmd: "rm -rf "/home/luca/buildroot/output/build/genimage.tmp"/*"
-> (stderr):
-> INFO: cmd: "mkdir -p "/home/luca/buildroot/output/build/genimage.tmp""
-> (stderr):
-> INFO: cmd: "cp -a "/tmp/tmp.PeR17MSHjT"
-> "/home/luca/buildroot/output/build/genimage.tmp/root"" (stderr):
-> INFO: cmd: "find '/home/luca/buildroot/output/build/genimage.tmp/root'
-> -depth -type d -printf '%P\0' | xargs -0 -I {} touch -r
-> '/tmp/tmp.PeR17MSHjT/{}'
-> '/home/luca/buildroot/output/build/genimage.tmp/root/{}'" (stderr):
-> ERROR: file(am335x-evm.dtb):
-> stat(/home/luca/buildroot/output/images/am335x-evm.dtb) failed: No such file
-> or directory
-> ERROR: vfat(boot.vfat): could not setup am335x-evm.dtb
-> make[1]: *** [Makefile:836: target-post-image] Error 1
-> make: *** [Makefile:84: _all] Error 2
->
-> In my config I set the option build a device tree blob and In-tree device
-> tree source file names "am335x-boneblack-wireless"
-> If a do ls in /buildroot/output/images I get:
-> am335x-boneblack-wireless.dtb  MLO  rootfs.tar  u-boot.img  uEnv.txt  zImage
->
-> How can I fix the problem with the post image script?
-
-Edit board/beaglebone/genimage.cfg to suit your customization (or change
-to use your own file, see BR2_ROOTFS_POST_SCRIPT_ARGS in your config
-file)...
-
-Regards,
-Peter
-
->
->
->
->
->
-> --
-> Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/linux/Config.in b/linux/Config.in
+index e3d947018d..2e98f8af90 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -128,7 +128,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "5.4.101" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "5.4.107" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "4.19.152-cip37" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "4.19.152-cip37-rt16" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 08b5e28f77..029d7f2cfa 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,10 +1,10 @@
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  4e118c072dbe3209ddeaff32ecc558f7e809d54e661550342079f1ee76d9349d  linux-5.4.101.tar.xz
++sha256  1c3cef545f366b56332c11c28d074c9d9148c28059a970ec8710826652237560  linux-5.4.107.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+-sha256  0c41611ae151b80723eb68c75f8a3366756f93e8748ab0892255344f38d76665  linux-4.4.258.tar.xz
+-sha256  d478f8e069f6d8b86b0a69f99252ea9e7cd7070bf6bdd0e9b3773ee418e5c8cd  linux-4.9.258.tar.xz
+-sha256  734082b03d9f8e43b123b0061f08045b70c34e3a4b09f8a8da6a287686dac744  linux-4.14.222.tar.xz
+-sha256  ac0eb3794e01eac66bea3ab39b8776dadf15c418ddc534ccfd95a0270302357d  linux-4.19.177.tar.xz
++sha256  d270c529910aefa70f7eeaafe313588b9949cfde33a5553bd4cd1a1249c4e97b  linux-4.4.262.tar.xz
++sha256  b22e764095362d9e63d76375db838d9372474ba5cbe6132c9a8b07f7533f07ff  linux-4.9.262.tar.xz
++sha256  7adc041af81424ff8d68affe3005fa9e5babc4e84e0b07e4effdf54225ba9426  linux-4.14.226.tar.xz
++sha256  05db750ba01ad557bef50835c253894fad9fb0db2224f0e803b25e2ff7ab2365  linux-4.19.182.tar.xz
+ # Locally computed
+ sha256  d2a06f52143deb929b8d513cf9afc9bd065951389a80fa70bc4d63025b5b3fb9  linux-cip-4.19.152-cip37.tar.gz
+ sha256  bc1dacd3d0f526de3e8754a444e8e02a54521527af639ddb907cb35cda775a8c  linux-cip-4.19.152-cip37-rt16.tar.gz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 9de5a4e4db..a234ca5d30 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -318,11 +318,11 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "4.4.258"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.258"	if BR2_KERNEL_HEADERS_4_9
+-	default "4.14.222"	if BR2_KERNEL_HEADERS_4_14
+-	default "4.19.177"	if BR2_KERNEL_HEADERS_4_19
+-	default "5.4.101"	if BR2_KERNEL_HEADERS_5_4
++	default "4.4.262"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.262"	if BR2_KERNEL_HEADERS_4_9
++	default "4.14.226"	if BR2_KERNEL_HEADERS_4_14
++	default "4.19.182"	if BR2_KERNEL_HEADERS_4_19
++	default "5.4.107"	if BR2_KERNEL_HEADERS_5_4
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
