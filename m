@@ -1,44 +1,154 @@
-From: Michael Vetter <jubalh@iodoru.org>
-Date: Mon, 29 Mar 2021 19:15:02 +0200
-Subject: [Buildroot] [PATCH 1/1] package/jasper: bump version to 2.0.28
-Message-ID: <20210329171502.26661-1-jubalh@iodoru.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 29 Mar 2021 19:41:11 +0200
+Subject: [Buildroot] [PATCH v1] package/valgrind: bump version to 3.17.0
+Message-ID: <20210329174111.24543-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changes:
-  * Fix potential null pointer dereference in the JP2/JPC decoder. (#269)
-  * Fix ignoring of JAS_STREAM_FILEOBJ_NOCLOSE at stream close time. (#286)
-  * Fix integral type sizing problem in JP2 codec. (#284)
-Signed-off-by: Michael Vetter <jubalh@iodoru.org>
----
- package/jasper/jasper.hash | 2 +-
- package/jasper/jasper.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+- bump version to 3.17.0
+- adjust tool remove hooks according to the change to libexec
+- fix massive remove hook, ms_script vs. ms_print
+- add additional sha256 source package hash
 
-diff --git a/package/jasper/jasper.hash b/package/jasper/jasper.hash
-index 17260b00c9..67653a8e88 100644
---- a/package/jasper/jasper.hash
-+++ b/package/jasper/jasper.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  df41bd015a9dd0cc2a2e696f8ca5cbfb633323ca9429621f7fa801778681f2dd  jasper-2.0.27.tar.gz
-+sha256  6b4e5f682be0ab1a5acb0eeb6bf41d6ce17a658bb8e2dbda95de40100939cc88  jasper-2.0.28.tar.gz
- sha256  4ad1bb42aff888c4403d792e6e2c5f1716d6c279fea70b296333c9d577d30b81  LICENSE
-diff --git a/package/jasper/jasper.mk b/package/jasper/jasper.mk
-index e7bb08e200..6ef1afcac7 100644
---- a/package/jasper/jasper.mk
-+++ b/package/jasper/jasper.mk
+For details see [1].
+
+[1] https://www.valgrind.org/docs/manual/dist.news.html
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/valgrind/valgrind.hash |  4 +++-
+ package/valgrind/valgrind.mk   | 26 +++++++++++++-------------
+ 2 files changed, 16 insertions(+), 14 deletions(-)
+
+diff --git a/package/valgrind/valgrind.hash b/package/valgrind/valgrind.hash
+index 2b24ac44b6..648a590ca3 100644
+--- a/package/valgrind/valgrind.hash
++++ b/package/valgrind/valgrind.hash
+@@ -1,5 +1,7 @@
+ # From https://valgrind.org/downloads/current.html
+-md5  d1b153f1ab17cf1f311705e7a83ef589  valgrind-3.16.1.tar.bz2
++md5  afe11b5572c3121a781433b7c0ab741b  valgrind-3.17.0.tar.bz2
++# locally computed
++sha256  ad3aec668e813e40f238995f60796d9590eee64a16dff88421430630e69285a2  valgrind-3.17.0.tar.bz2
+ 
+ # License files
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
+index a1b4d97ee6..b87e1e518f 100644
+--- a/package/valgrind/valgrind.mk
++++ b/package/valgrind/valgrind.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--JASPER_VERSION = 2.0.27
-+JASPER_VERSION = 2.0.28
- JASPER_SITE = $(call github,jasper-software,jasper,version-$(JASPER_VERSION))
- JASPER_INSTALL_STAGING = YES
- JASPER_LICENSE = JasPer-2.0
+-VALGRIND_VERSION = 3.16.1
++VALGRIND_VERSION = 3.17.0
+ VALGRIND_SITE = https://sourceware.org/pub/valgrind
+ VALGRIND_SOURCE = valgrind-$(VALGRIND_VERSION).tar.bz2
+ VALGRIND_LICENSE = GPL-2.0, GFDL-1.2
+@@ -64,7 +64,7 @@ VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_INSTALL_UCLIBC_SUPP
+ 
+ ifeq ($(BR2_PACKAGE_VALGRIND_MEMCHECK),)
+ define VALGRIND_REMOVE_MEMCHECK
+-	rm -f $(TARGET_DIR)/usr/lib/valgrind/*memcheck*
++	rm -f $(TARGET_DIR)/usr/libexec/valgrind/*memcheck*
+ endef
+ 
+ VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_MEMCHECK
+@@ -72,7 +72,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_VALGRIND_CACHEGRIND),)
+ define VALGRIND_REMOVE_CACHEGRIND
+-	rm -f $(TARGET_DIR)/usr/lib/valgrind/*cachegrind*
++	rm -f $(TARGET_DIR)/usr/libexec/valgrind/*cachegrind*
+ 	for i in cg_annotate cg_diff cg_merge; do \
+ 		rm -f $(TARGET_DIR)/usr/bin/$$i ; \
+ 	done
+@@ -83,7 +83,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_VALGRIND_CALLGRIND),)
+ define VALGRIND_REMOVE_CALLGRIND
+-	rm -f $(TARGET_DIR)/usr/lib/valgrind/*callgrind*
++	rm -f $(TARGET_DIR)/usr/libexec/valgrind/*callgrind*
+ 	for i in callgrind_annotate callgrind_control ; do \
+ 		rm -f $(TARGET_DIR)/usr/bin/$$i ; \
+ 	done
+@@ -94,7 +94,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_VALGRIND_HELGRIND),)
+ define VALGRIND_REMOVE_HELGRIND
+-	rm -f $(TARGET_DIR)/usr/lib/valgrind/*helgrind*
++	rm -f $(TARGET_DIR)/usr/libexec/valgrind/*helgrind*
+ endef
+ 
+ VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_HELGRIND
+@@ -102,7 +102,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_VALGRIND_DRD),)
+ define VALGRIND_REMOVE_DRD
+-	rm -f $(TARGET_DIR)/usr/lib/valgrind/*drd*
++	rm -f $(TARGET_DIR)/usr/libexec/valgrind/*drd*
+ endef
+ 
+ VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_DRD
+@@ -110,8 +110,8 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_VALGRIND_MASSIF),)
+ define VALGRIND_REMOVE_MASSIF
+-	rm -f $(TARGET_DIR)/usr/lib/valgrind/*massif*
+-	rm -f $(TARGET_DIR)/usr/bin/ms_script
++	rm -f $(TARGET_DIR)/usr/libexec/valgrind/*massif*
++	rm -f $(TARGET_DIR)/usr/bin/ms_print
+ endef
+ 
+ VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_MASSIF
+@@ -119,7 +119,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_VALGRIND_DHAT),)
+ define VALGRIND_REMOVE_DHAT
+-	rm -f $(TARGET_DIR)/usr/lib/valgrind/*dhat*
++	rm -f $(TARGET_DIR)/usr/libexec/valgrind/*dhat*
+ endef
+ 
+ VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_DHAT
+@@ -127,7 +127,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_VALGRIND_SGCHECK),)
+ define VALGRIND_REMOVE_SGCHECK
+-	rm -f $(TARGET_DIR)/usr/lib/valgrind/*sgcheck*
++	rm -f $(TARGET_DIR)/usr/libexec/valgrind/*sgcheck*
+ endef
+ 
+ VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_SGCHECK
+@@ -135,7 +135,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_VALGRIND_BBV),)
+ define VALGRIND_REMOVE_BBV
+-	rm -f $(TARGET_DIR)/usr/lib/valgrind/*bbv*
++	rm -f $(TARGET_DIR)/usr/libexec/valgrind/*bbv*
+ endef
+ 
+ VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_BBV
+@@ -143,7 +143,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_VALGRIND_LACKEY),)
+ define VALGRIND_REMOVE_LACKEY
+-	rm -f $(TARGET_DIR)/usr/lib/valgrind/*lackey*
++	rm -f $(TARGET_DIR)/usr/libexec/valgrind/*lackey*
+ endef
+ 
+ VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_LACKEY
+@@ -151,7 +151,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_VALGRIND_NULGRIND),)
+ define VALGRIND_REMOVE_NULGRIND
+-	rm -f $(TARGET_DIR)/usr/lib/valgrind/*none*
++	rm -f $(TARGET_DIR)/usr/libexec/valgrind/*none*
+ endef
+ 
+ VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_NULGRIND
 -- 
-2.26.2
+2.30.2
