@@ -1,11 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 29 Mar 2021 21:45:53 +0200
-Subject: [Buildroot] [PATCH 1/2] package/wpewebkit: security bump to
- 2.30.6
-In-Reply-To: <20210322222837.1382502-1-aperez@igalia.com> (Adrian Perez de
- Castro's message of "Tue, 23 Mar 2021 00:28:36 +0200")
+Date: Mon, 29 Mar 2021 21:47:04 +0200
+Subject: [Buildroot] [PATCH 2/2] package/wpebackend-fdo: bump to version
+ 1.8.2
+In-Reply-To: <20210322222837.1382502-2-aperez@igalia.com> (Adrian Perez de
+ Castro's message of "Tue, 23 Mar 2021 00:28:37 +0200")
 References: <20210322222837.1382502-1-aperez@igalia.com>
-Message-ID: <87zgyleob2.fsf@dell.be.48ers.dk>
+ <20210322222837.1382502-2-aperez@igalia.com>
+Message-ID: <87v999eo93.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,17 +15,11 @@ To: buildroot@busybox.net
 
 >>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
 
- > This is a minor release which provides fixes for CVE-2020-27918,
- > CVE-2020-29623, CVE-2021-1765, CVE-2021-1789, CVE-2021-1799,
- > CVE-2021-1801, and CVE-2021-1870.
+ > This minor release fixes an issue with its public API headers which
+ > can cause third party packages (mainly wpewebkit) to show build errors.
+ > Release notes:
 
- > Full release notes can be found at:
-
- >   https://wpewebkit.org/release/wpewebkit-2.30.6.html
-
- > An accompanying security advisory has been published at:
-
- >   https://wpewebkit.org/security/WSA-2021-0002.html
+ >   https://wpewebkit.org/release/wpebackend-fdo-1.8.2.html
 
  > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 
