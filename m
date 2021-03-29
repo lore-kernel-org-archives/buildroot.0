@@ -1,107 +1,64 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Mon, 29 Mar 2021 20:49:34 +0200
-Subject: [Buildroot] [PATCH 1/1] package/modem-manager: bump version to
- 1.16.2
-Message-ID: <20210329184934.14690-1-petr.vorel@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 29 Mar 2021 21:06:33 +0200
+Subject: [Buildroot] [PATCH 1/1] package/pcmanfm: fix build with gettext-tiny
+Message-ID: <20210329190633.26229-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It requires libqmi >= 1.28.0
+Fix build of pcmanfm in version 1.3.2 with gettext-tiny
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/69f4e5fa44208429b143011640971a61d709d5b1
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Hi,
+ ...po-de-po-fix-build-with-gettext-tiny.patch | 35 +++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+ create mode 100644 package/pcmanfm/0001-po-de-po-fix-build-with-gettext-tiny.patch
 
-RFC: should I add also --enable-plugin-qcom-soc ?
-(there is qcom-db410c-firmware package)
-
-Kind regards,
-Petr
-
-Tested:
-                    bootlin-armv5-uclibc [1/6]: OK
-                     bootlin-armv7-glibc [2/6]: OK
-                   bootlin-armv7m-uclibc [3/6]: SKIPPED
-                     bootlin-x86-64-musl [4/6]: OK
-                      br-arm-full-static [5/6]: OK
-                            sourcery-arm [6/6]: OK
-6 builds, 1 skipped, 0 build failed, 0 legal-info failed
-
-                             andes-nds32 [ 1/45]: FAILED
-                             arm-aarch64 [ 2/45]: OK
-                   bootlin-aarch64-glibc [ 3/45]: OK
-               bootlin-arcle-hs38-uclibc [ 4/45]: OK
-                    bootlin-armv5-uclibc [ 5/45]: OK
-                     bootlin-armv7-glibc [ 6/45]: OK
-                   bootlin-armv7m-uclibc [ 7/45]: SKIPPED
-                      bootlin-armv7-musl [ 8/45]: OK
-             bootlin-microblazeel-uclibc [ 9/45]: OK
-                   bootlin-mipsel-uclibc [10/45]: OK
-                bootlin-mipsel32r6-glibc [11/45]: OK
-                bootlin-m68k-5208-uclibc [12/45]: SKIPPED
-               bootlin-m68k-68040-uclibc [13/45]: OK
-                     bootlin-nios2-glibc [14/45]: OK
-                 bootlin-openrisc-uclibc [15/45]: OK
-           bootlin-powerpc-e500mc-uclibc [16/45]: OK
-        bootlin-powerpc64le-power8-glibc [17/45]: OK
-                   bootlin-riscv32-glibc [18/45]: OK
-                   bootlin-riscv64-glibc [19/45]: OK
-                    bootlin-riscv64-musl [20/45]: OK
-                      bootlin-sh4-uclibc [21/45]: OK
-                    bootlin-sparc-uclibc [22/45]: OK
-                   bootlin-sparc64-glibc [23/45]: OK
-                   bootlin-xtensa-uclibc [24/45]: OK
-                    bootlin-x86-64-glibc [25/45]: OK
-                     bootlin-x86-64-musl [26/45]: OK
-                   bootlin-x86-64-uclibc [27/45]: OK
-                            br-arm-basic [28/45]: SKIPPED
-                    br-arm-full-nothread [29/45]: SKIPPED
-                      br-arm-full-static [30/45]: OK
-                br-i386-pentium-mmx-musl [31/45]: OK
-                   br-i386-pentium4-full [32/45]: OK
-                      br-mips64-n64-full [33/45]: OK
-                 br-mips64r6-el-hf-glibc [34/45]: OK
-               br-powerpc-603e-basic-cpp [35/45]: SKIPPED
-               br-powerpc64-power7-glibc [36/45]: OK
-                       linaro-aarch64-be [37/45]: OK
-                          linaro-aarch64 [38/45]: OK
-                              linaro-arm [39/45]: OK
-                     sourcery-arm-armv4t [40/45]: OK
-                            sourcery-arm [41/45]: OK
-                     sourcery-arm-thumb2 [42/45]: OK
-                           sourcery-mips [43/45]: OK
-                         sourcery-mips64 [44/45]: OK
-                          sourcery-nios2 [45/45]: OK
-
- package/modem-manager/modem-manager.hash | 2 +-
- package/modem-manager/modem-manager.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
-index 81a08295f7..3f272acef3 100644
---- a/package/modem-manager/modem-manager.hash
-+++ b/package/modem-manager/modem-manager.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  fe1a26ba51b4bda7abd09ad4dadedd87d8b8154809fc9d88e94f75fdfff19295  ModemManager-1.14.8.tar.xz
-+sha256  efa9a963499e0885f3f163096d433334143c4937545134ecd682e0157fa591e3  ModemManager-1.16.2.tar.xz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
-index 47d4eed823..2cc45d266b 100644
---- a/package/modem-manager/modem-manager.mk
-+++ b/package/modem-manager/modem-manager.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MODEM_MANAGER_VERSION = 1.14.8
-+MODEM_MANAGER_VERSION = 1.16.2
- MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
- MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
- MODEM_MANAGER_LICENSE = GPL-2.0+ (programs, plugins), LGPL-2.0+ (libmm-glib)
+diff --git a/package/pcmanfm/0001-po-de-po-fix-build-with-gettext-tiny.patch b/package/pcmanfm/0001-po-de-po-fix-build-with-gettext-tiny.patch
+new file mode 100644
+index 0000000000..ededd450ae
+--- /dev/null
++++ b/package/pcmanfm/0001-po-de-po-fix-build-with-gettext-tiny.patch
+@@ -0,0 +1,35 @@
++From 2e51d1015ffd58f26f4ddf03a858164edcf64a8c Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 26 Mar 2021 09:16:08 +0100
++Subject: [PATCH] po/de.po: fix build with gettext-tiny
++
++Build of de.gmo is broken with gettext-tiny since version 1.3.2 and
++commit 80e0f662861e6d0ad8888f61c19c0695978779bf:
++
++file=`echo de | sed 's,.*/,,'`.gmo \
++  && rm -f $file && /home/buildroot/autobuild/instance-2/output-1/host/bin/msgfmt -o $file de.po
++Makefile:102: recipe for target 'de.gmo' failed
++
++Fixes:
++ - http://autobuild.buildroot.org/results/69f4e5fa44208429b143011640971a61d709d5b1
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/lxde/pcmanfm/pull/8]
++---
++ po/de.po | 3 +--
++ 1 file changed, 1 insertion(+), 2 deletions(-)
++
++diff --git a/po/de.po b/po/de.po
++index 766a44e..9781ba3 100644
++--- a/po/de.po
+++++ b/po/de.po
++@@ -961,8 +961,7 @@ msgstr "Diese Ordneransicht merken"
++ #: ../src/main-win-ui.c:279
++ msgid ""
++ "Check to remember view and sort as folder setting rather than global one"
++-msgstr
++-"Ansicht und Sortierung f?r dieses Verzeichnis anstelle der globalen "
+++msgstr "Ansicht und Sortierung f?r dieses Verzeichnis anstelle der globalen "
++ "Einstellung merken"
++ 
++ #: ../src/main-win-ui.c:281
 -- 
 2.30.2
