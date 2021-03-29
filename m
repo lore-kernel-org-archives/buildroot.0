@@ -1,57 +1,50 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 29 Mar 2021 22:39:42 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-urllib3: security bump to
- version 1.26.4
-Message-ID: <20210329203942.304916-1-fontaine.fabrice@gmail.com>
+Date: Mon, 29 Mar 2021 22:49:03 +0200
+Subject: [Buildroot] [PATCH 1/1] package/sqlcipher: security bump to version
+ 4.4.3
+Message-ID: <20210329204903.320444-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix CVE-2021-28363: The urllib3 library 1.26.x before 1.26.4 for Python
-omits SSL certificate validation in some cases involving HTTPS to HTTPS
-proxies. The initial connection to the HTTPS proxy (if an SSLContext
-isn't given via proxy_config) doesn't verify the hostname of the
-certificate. This means certificates for different servers that still
-validate properly with the default urllib3 SSLContext will be silently
-accepted.
+Fix CVE-2021-3119: Zetetic SQLCipher 4.x before 4.4.3 has a NULL pointer
+dereferencing issue related to sqlcipher_export in crypto.c and
+sqlite3StrICmp in sqlite3.c. This may allow an attacker to perform a
+remote denial of service attack. For example, an SQL injection can be
+used to execute the crafted SQL command sequence, which causes a
+segmentation fault.
 
-https://github.com/urllib3/urllib3/blob/1.26.4/CHANGES.rst
+https://github.com/sqlcipher/sqlcipher/blob/v4.4.3/CHANGELOG.md
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/python-urllib3/python-urllib3.hash | 4 ++--
- package/python-urllib3/python-urllib3.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/sqlcipher/sqlcipher.hash | 2 +-
+ package/sqlcipher/sqlcipher.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-urllib3/python-urllib3.hash b/package/python-urllib3/python-urllib3.hash
-index dbc85c9114..820156b4ca 100644
---- a/package/python-urllib3/python-urllib3.hash
-+++ b/package/python-urllib3/python-urllib3.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/urllib3/json
--md5  2233256ccfe140a915f68703f8c2cc1f  urllib3-1.26.2.tar.gz
--sha256  19188f96923873c92ccb987120ec4acaa12f0461fa9ce5d3d0772bc965a39e08  urllib3-1.26.2.tar.gz
-+md5  e2a2039e22fc29b751e26b7042e8db2f  urllib3-1.26.4.tar.gz
-+sha256  e7b021f7241115872f92f43c6508082facffbd1c048e3c6e2bb9c2a157e28937  urllib3-1.26.4.tar.gz
- # Locally computed sha256 checksums
- sha256  c37bf186e27cf9dbe9619e55edfe3cea7b30091ceb3da63c7dacbe0e6d77907b  LICENSE.txt
-diff --git a/package/python-urllib3/python-urllib3.mk b/package/python-urllib3/python-urllib3.mk
-index 82db02fcc2..d5a04163f9 100644
---- a/package/python-urllib3/python-urllib3.mk
-+++ b/package/python-urllib3/python-urllib3.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/sqlcipher/sqlcipher.hash b/package/sqlcipher/sqlcipher.hash
+index 96a6a74013..ddc78ef7d6 100644
+--- a/package/sqlcipher/sqlcipher.hash
++++ b/package/sqlcipher/sqlcipher.hash
+@@ -1,3 +1,3 @@
+ # locally computed
+-sha256  87458e0e16594b3ba6c7a1f046bc1ba783d002d35e0e7b61bb6b7bb862f362a7  sqlcipher-4.4.2.tar.gz
++sha256  b8df69b998c042ce7f8a99f07cf11f45dfebe51110ef92de95f1728358853133  sqlcipher-4.4.3.tar.gz
+ sha256  3eee3c7964a9becc94d747bd36703d31fc86eb994680b06a61bfd4f2661eaac8  LICENSE
+diff --git a/package/sqlcipher/sqlcipher.mk b/package/sqlcipher/sqlcipher.mk
+index 393d50b201..776e2d0dcf 100644
+--- a/package/sqlcipher/sqlcipher.mk
++++ b/package/sqlcipher/sqlcipher.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_URLLIB3_VERSION = 1.26.2
-+PYTHON_URLLIB3_VERSION = 1.26.4
- PYTHON_URLLIB3_SOURCE = urllib3-$(PYTHON_URLLIB3_VERSION).tar.gz
--PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/29/e6/d1a1d78c439cad688757b70f26c50a53332167c364edb0134cadd280e234
-+PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/cb/cf/871177f1fc795c6c10787bc0e1f27bb6cf7b81dbde399fd35860472cecbc
- PYTHON_URLLIB3_LICENSE = MIT
- PYTHON_URLLIB3_LICENSE_FILES = LICENSE.txt
- PYTHON_URLLIB3_CPE_ID_VENDOR = python
+-SQLCIPHER_VERSION = 4.4.2
++SQLCIPHER_VERSION = 4.4.3
+ SQLCIPHER_SITE = $(call github,sqlcipher,sqlcipher,v$(SQLCIPHER_VERSION))
+ SQLCIPHER_LICENSE = BSD-3-Clause
+ SQLCIPHER_LICENSE_FILES = LICENSE
 -- 
 2.30.2
