@@ -1,46 +1,67 @@
-From: Aleksander Morgado <aleksander@aleksander.es>
-Date: Mon, 29 Mar 2021 23:40:59 +0200
-Subject: [Buildroot] [PATCH 2/2] package/libqmi: needs headers >= 4.14
-In-Reply-To: <20210329211957.321612-2-fontaine.fabrice@gmail.com>
-References: <20210329211957.321612-1-fontaine.fabrice@gmail.com>
- <20210329211957.321612-2-fontaine.fabrice@gmail.com>
-Message-ID: <CAAP7uc+4zEWFj-unho79p7mm6puX_XR-xiXPjcLqpfbScuwUYA@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 29 Mar 2021 21:56:45 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/libglib2:
+ security bump to version 2.66.8
+Message-ID: <20210329211715.E04708103C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey Fabrice,
+commit: https://git.buildroot.net/buildroot/commit/?id=37d674a48851840a4727a62af77aa963d031989e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-On Mon, Mar 29, 2021 at 11:23 PM Fabrice Fontaine
-<fontaine.fabrice@gmail.com> wrote:
->
-> libqmi unconditionnally uses ARPHRD_RAWIP since version 1.28.0 and
-> https://github.com/freedesktop/libqmi/commit/4085a2d6b771a40fb637433ed6a05b9d5d4d94b9
-> https://github.com/freedesktop/libqmi/commit/19f4b39ee85500e7e868b8a100fba19c04fb3c30
->
-> However, ARPHRD_RAWIP is only available since kernel 4.14 and
-> https://github.com/torvalds/linux/commit/cdf4969c42a6c1a376dd03a9e846cf638d3cd4b1
->
-> Fixes:
->  - http://autobuild.buildroot.org/results/c8853b7161bd85d46c1282c6c097e7ef4042ae68
->
+Fix a security issue when using g_file_replace() with
+G_FILE_CREATE_REPLACE_DESTINATION
 
-This is totally not intentional; the ARPHRD_RAWIP symbol is used in
-the rmnet backend, and the rmnet backend itself should only be used if
-the kernel has rmnet support, which we look for at configure time with
-the following check:
+https://gitlab.gnome.org/GNOME/glib/-/tags/2.66.8
 
-AC_EGREP_HEADER([ifla_rmnet_flags],
-                [linux/if_link.h],
-                [enable_rmnet_support=yes],
-                [enable_rmnet_support=no])
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 3f2ea5db25a4ca1e9ab8db69497ab9b4e9ccb117)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libglib2/0003-remove-cpp-requirement.patch | 2 +-
+ package/libglib2/libglib2.hash                     | 4 ++--
+ package/libglib2/libglib2.mk                       | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-We should probably improve that check to also include a lookup for the
-ARPHRD_RAWIP symbol.
-What do you think?
-
--- 
-Aleksander
-https://aleksander.es
+diff --git a/package/libglib2/0003-remove-cpp-requirement.patch b/package/libglib2/0003-remove-cpp-requirement.patch
+index 25cb23c239..11978e9755 100644
+--- a/package/libglib2/0003-remove-cpp-requirement.patch
++++ b/package/libglib2/0003-remove-cpp-requirement.patch
+@@ -35,7 +35,7 @@ index 4bbf4c2..ac59f4e 100644
+ @@ -1,4 +1,4 @@
+ -project('glib', 'c', 'cpp',
+ +project('glib', 'c',
+-   version : '2.66.7',
++   version : '2.66.8',
+    # NOTE: We keep this pinned at 0.49 because that's what Debian 10 ships
+    meson_version : '>= 0.49.2',
+ @@ -10,7 +10,6 @@ project('glib', 'c', 'cpp',
+diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
+index 7886bb5c59..4f69f1cc48 100644
+--- a/package/libglib2/libglib2.hash
++++ b/package/libglib2/libglib2.hash
+@@ -1,4 +1,4 @@
+-# https://download.gnome.org/sources/glib/2.66/glib-2.66.7.sha256sum
+-sha256  09f158769f6f26b31074e15b1ac80ec39b13b53102dfae66cfe826fb2cc65502  glib-2.66.7.tar.xz
++# https://download.gnome.org/sources/glib/2.66/glib-2.66.8.sha256sum
++sha256  97bc87dd91365589af5cbbfea2574833aea7a1b71840fd365ecd2852c76b9c8b  glib-2.66.8.tar.xz
+ # License files, locally calculated
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index ffbb4c96b5..9ce40d91ff 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBGLIB2_VERSION_MAJOR = 2.66
+-LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).7
++LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).8
+ LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
+ LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
+ LIBGLIB2_LICENSE = LGPL-2.1+
