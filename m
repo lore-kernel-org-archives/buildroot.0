@@ -1,45 +1,59 @@
-From: Aleksander Morgado <aleksander@aleksander.es>
-Date: Mon, 29 Mar 2021 21:28:03 +0200
-Subject: [Buildroot] [PATCH 1/1] package/modem-manager: bump version to
- 1.16.2
-In-Reply-To: <20210329184934.14690-1-petr.vorel@gmail.com>
-References: <20210329184934.14690-1-petr.vorel@gmail.com>
-Message-ID: <CAAP7uc+KkOsiPYvu=ac43X9nno-7LJw2DEtSExLETXR_VN+jXw@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 29 Mar 2021 21:30:58 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gnutls: drop unrecognized option
+Message-ID: <20210329193058.162304-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey,
+crywrap has been dropped since version 3.6.12 and
+https://github.com/gnutls/gnutls/commit/c991b5223140e4ef311afac0f25272e602238826
 
-On Mon, 29 Mar 2021, 20:49 Petr Vorel, <petr.vorel@gmail.com> wrote:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/gnutls/Config.in |  2 --
+ package/gnutls/gnutls.mk | 14 --------------
+ 2 files changed, 16 deletions(-)
 
-> It requires libqmi >= 1.28.0
->
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-> ---
-> Hi,
->
-> RFC: should I add also --enable-plugin-qcom-soc ?
-> (there is qcom-db410c-firmware package)
->
-
-
-The qcom-soc plugin is only relevant if the system where you're running the
-system is a Qualcomm SoC, and if you woulf plan to use the builtin modem as
-a modem in ModemManager. An obvious use case is e.g. qualcomm-phones
-running postmarketos.
-
-For any other kind of setup, where MM is supposed to use external (e.g.
-USB, serial...) modems, the qcom-soc plugin is not needed. But it really
-wouldn't harm to have it either, it would just waste space (in the same way
-as other plugins that may never be used really).
-
-Maybe enable it? I should have probably done that in upstream really, as it
-doesn't really collide with other stuff
-
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210329/9fcce55c/attachment.html>
+diff --git a/package/gnutls/Config.in b/package/gnutls/Config.in
+index 15b930b6bd..cd853d1e74 100644
+--- a/package/gnutls/Config.in
++++ b/package/gnutls/Config.in
+@@ -23,8 +23,6 @@ config BR2_PACKAGE_GNUTLS_OPENSSL
+ 
+ config BR2_PACKAGE_GNUTLS_TOOLS
+ 	bool "install tools"
+-	select BR2_PACKAGE_ARGP_STANDALONE \
+-		if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
+ 	help
+ 	  Install GnuTLS command line tools for various cryptographic
+ 	  tasks.
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index 65bb4893e8..cf2dedb590 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -47,20 +47,6 @@ GNUTLS_CONF_OPTS += \
+ 	--with-libregex-cflags="`$(PKG_CONFIG_HOST_BINARY) libpcreposix --cflags`" \
+ 	--with-libregex-libs="`$(PKG_CONFIG_HOST_BINARY) libpcreposix --libs`"
+ 
+-# Consider crywrap as part of tools because it needs WCHAR, and it's so too
+-ifeq ($(BR2_PACKAGE_GNUTLS_TOOLS),)
+-GNUTLS_CONF_OPTS += --disable-crywrap
+-endif
+-
+-# Prerequisite for crywrap
+-ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
+-GNUTLS_LIBS += -largp
+-GNUTLS_DEPENDENCIES += argp-standalone
+-endif
+-
+-# libidn support for nommu must exclude the crywrap wrapper (uses fork)
+-GNUTLS_CONF_OPTS += $(if $(BR2_USE_MMU),,--disable-crywrap)
+-
+ ifeq ($(BR2_PACKAGE_CRYPTODEV_LINUX),y)
+ GNUTLS_CONF_OPTS += --enable-cryptodev
+ GNUTLS_DEPENDENCIES += cryptodev-linux
+-- 
+2.30.2
