@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 29 Mar 2021 21:45:36 +0200
-Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: security bump to
+Date: Mon, 29 Mar 2021 21:45:53 +0200
+Subject: [Buildroot] [PATCH 1/2] package/wpewebkit: security bump to
  2.30.6
-In-Reply-To: <20210322221948.1380276-1-aperez@igalia.com> (Adrian Perez de
- Castro's message of "Tue, 23 Mar 2021 00:19:48 +0200")
-References: <20210322221948.1380276-1-aperez@igalia.com>
-Message-ID: <874kgtg2vz.fsf@dell.be.48ers.dk>
+In-Reply-To: <20210322222837.1382502-1-aperez@igalia.com> (Adrian Perez de
+ Castro's message of "Tue, 23 Mar 2021 00:28:36 +0200")
+References: <20210322222837.1382502-1-aperez@igalia.com>
+Message-ID: <87zgyleob2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,11 +20,11 @@ To: buildroot@busybox.net
 
  > Full release notes can be found at:
 
- >   https://webkitgtk.org/2021/03/18/webkitgtk2.30.6-released.html
+ >   https://wpewebkit.org/release/wpewebkit-2.30.6.html
 
  > An accompanying security advisory has been published at:
 
- >   https://webkitgtk.org/security/WSA-2021-0002.html
+ >   https://wpewebkit.org/security/WSA-2021-0002.html
 
  > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 
