@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 29 Mar 2021 21:51:15 +0200
-Subject: [Buildroot] [git commit branch/2020.11.x] package/openssh: security
+Date: Mon, 29 Mar 2021 21:48:26 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/openssh: security
  bump to version 8.5p1
-Message-ID: <20210329192857.6EBC48A335@busybox.osuosl.org>
+Message-ID: <20210329192902.70A978A335@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=80c1a3234b29bf4134aea4a5139d89ae3f0382b6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=d07342ced5dcdce17d73e42232abf20eb5fe50a1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
 * ssh-agent(1): fixed a double-free memory corruption that was
    introduced in OpenSSH 8.2 . We treat all such memory faults as
@@ -46,9 +46,9 @@ Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 (cherry picked from commit ed63f95966aab7e30a938b94a4de7db848294f37)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openssh/openssh.hash | 6 +++---
- package/openssh/openssh.mk   | 6 ++++--
- 2 files changed, 7 insertions(+), 5 deletions(-)
+ package/openssh/openssh.hash |  6 +++---
+ package/openssh/openssh.mk   | 10 ++++++----
+ 2 files changed, 9 insertions(+), 7 deletions(-)
 
 diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
 index 840467f50a..c50a49896c 100644
@@ -63,17 +63,21 @@ index 840467f50a..c50a49896c 100644
 -sha256  73d0db766229670c7b4e1ec5e6baed54977a0694a565e7cc878c45ee834045d7  LICENCE
 +sha256  432abf7480fb31473a6706627212913fc70032e3fb71b90fecb28ae26a2d741d  LICENCE
 diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index 1e1f425181..c3cda3f9b3 100644
+index 64e3084ca1..055c024cab 100644
 --- a/package/openssh/openssh.mk
 +++ b/package/openssh/openssh.mk
-@@ -4,9 +4,11 @@
+@@ -4,11 +4,13 @@
  #
  ################################################################################
  
 -OPENSSH_VERSION = 8.4p1
+-OPENSSH_CPE_ID_VERSION = 8.4
+-OPENSSH_CPE_ID_UPDATE = p1
 +OPENSSH_VERSION_MAJOR = 8.5
 +OPENSSH_VERSION_MINOR = p1
 +OPENSSH_VERSION = $(OPENSSH_VERSION_MAJOR)$(OPENSSH_VERSION_MINOR)
++OPENSSH_CPE_ID_VERSION = $(OPENSSH_VERSION_MAJOR)
++OPENSSH_CPE_ID_UPDATE = $(OPENSSH_VERSION_MINOR)
  OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
 -OPENSSH_LICENSE = BSD-3-Clause, BSD-2-Clause, Public Domain
 +OPENSSH_LICENSE = BSD-4-Clause, BSD-3-Clause, BSD-2-Clause, Public Domain
