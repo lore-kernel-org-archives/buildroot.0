@@ -1,66 +1,54 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 28 Mar 2021 23:06:15 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libmbim: bump version to 1.24.6
-In-Reply-To: <20210325180023.20646-1-petr.vorel@gmail.com>
-References: <20210325180023.20646-1-petr.vorel@gmail.com>
-Message-ID: <20210328210615.GV24043@scaer>
+From: Heiko Thiery <heiko.thiery@gmail.com>
+Date: Mon, 29 Mar 2021 08:55:29 +0200
+Subject: [Buildroot] [PATCH 2/2] package/network-manager-openvpn: add
+ CPE variables
+In-Reply-To: <20210328212129.4a2d6d29@windsurf.home>
+References: <20210325125442.17709-1-heiko.thiery@gmail.com>
+ <20210325125442.17709-2-heiko.thiery@gmail.com>
+ <20210328212129.4a2d6d29@windsurf.home>
+Message-ID: <CAEyMn7baVF1Up0ZeRw7+6Bgtr4zp4mj_S9L2hqoz=-x=1T2oYQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Petr, All,
+Hi Thomas,
 
-On 2021-03-25 19:00 +0100, Petr Vorel spake thusly:
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Am So., 28. M?rz 2021 um 21:21 Uhr schrieb Thomas Petazzoni
+<thomas.petazzoni@bootlin.com>:
+>
+> On Thu, 25 Mar 2021 13:54:44 +0100
+> Heiko Thiery <heiko.thiery@gmail.com> wrote:
+>
+> > cpe:2.3:a:gnome:network_manager_vpnc ia a valid CPE identifier for this
+> > package:
+> >
+> > https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Agnome%3Anetwork_manager_vpnc
+> >
+> > Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+> > ---
+> >  package/network-manager-openvpn/network-manager-openvpn.mk | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/package/network-manager-openvpn/network-manager-openvpn.mk b/package/network-manager-openvpn/network-manager-openvpn.mk
+> > index 1a872dc127..d861ac65ae 100644
+> > --- a/package/network-manager-openvpn/network-manager-openvpn.mk
+> > +++ b/package/network-manager-openvpn/network-manager-openvpn.mk
+> > @@ -11,6 +11,8 @@ NETWORK_MANAGER_OPENVPN_SITE = https://download.gnome.org/sources/NetworkManager
+> >  NETWORK_MANAGER_OPENVPN_DEPENDENCIES = network-manager openvpn
+> >  NETWORK_MANAGER_OPENVPN_LICENSE = GPL-2.0+
+> >  NETWORK_MANAGER_OPENVPN_LICENSE_FILES = COPYING
+> > +NETWORK_MANAGER_OPENVPN_CPE_ID_VENDOR = gnome
+> > +NETWORK_MANAGER_OPENVPN_CPE_ID_PRODUCT = network_manager_vpnc
+>
+> Are you sure this is correct ? NetworkManager-vpnc is for Cisco client,
+> not for OpenVPN clients. See
+> https://gitlab.gnome.org/GNOME/NetworkManager-vpnc vs
+> https://gitlab.gnome.org/GNOME/NetworkManager-openvpn.
 
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/libmbim/libmbim.hash | 4 ++--
->  package/libmbim/libmbim.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/libmbim/libmbim.hash b/package/libmbim/libmbim.hash
-> index 7ce1a2e7ae..b6a82e367d 100644
-> --- a/package/libmbim/libmbim.hash
-> +++ b/package/libmbim/libmbim.hash
-> @@ -1,4 +1,4 @@
-> -# Locally computed:
-> -sha256  dd488ee6176243a6adb27a5872897336272ea7bea33a3ad501ba268e5a58b285  libmbim-1.24.4.tar.xz
-> +# Locally computed
-> +sha256  760465caaa1ccd699c14290e9791da456d5300dd11ebf4c1486151033e875dfd  libmbim-1.24.6.tar.xz
->  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
->  sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-> diff --git a/package/libmbim/libmbim.mk b/package/libmbim/libmbim.mk
-> index 4ce3ca892e..175111381f 100644
-> --- a/package/libmbim/libmbim.mk
-> +++ b/package/libmbim/libmbim.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -LIBMBIM_VERSION = 1.24.4
-> +LIBMBIM_VERSION = 1.24.6
->  LIBMBIM_SITE = https://www.freedesktop.org/software/libmbim
->  LIBMBIM_SOURCE = libmbim-$(LIBMBIM_VERSION).tar.xz
->  LIBMBIM_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (programs)
-> -- 
-> 2.30.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+You are absolutely right. This was my fault. Please ignore this patch
+and sorry for the noise.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Heiko
