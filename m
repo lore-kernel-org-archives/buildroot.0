@@ -1,59 +1,40 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 29 Mar 2021 21:30:58 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gnutls: drop unrecognized option
-Message-ID: <20210329193058.162304-1-fontaine.fabrice@gmail.com>
+From: Alexander Dahl <post@lespocky.de>
+Date: Mon, 29 Mar 2021 21:29:05 +0200
+Subject: [Buildroot] [PATCH] package/fastd: add FASTD_CPE_ID_VERSION
+In-Reply-To: <20210329152803.594a910f@windsurf.home>
+References: <20210329152803.594a910f@windsurf.home>
+Message-ID: <20210329192905.19883-1-post@lespocky.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-crywrap has been dropped since version 3.6.12 and
-https://github.com/gnutls/gnutls/commit/c991b5223140e4ef311afac0f25272e602238826
+With that FASTD_CPE_ID expands to:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+    cpe:2.3:a:fastd_project:fastd:21.0:*:*:*:*:*:*:*
+
+That's the same as listed on
+https://nvd.nist.gov/products/cpe/detail/826746
+
+Signed-off-by: Alexander Dahl <post@lespocky.de>
 ---
- package/gnutls/Config.in |  2 --
- package/gnutls/gnutls.mk | 14 --------------
- 2 files changed, 16 deletions(-)
+ package/fastd/fastd.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/gnutls/Config.in b/package/gnutls/Config.in
-index 15b930b6bd..cd853d1e74 100644
---- a/package/gnutls/Config.in
-+++ b/package/gnutls/Config.in
-@@ -23,8 +23,6 @@ config BR2_PACKAGE_GNUTLS_OPENSSL
+diff --git a/package/fastd/fastd.mk b/package/fastd/fastd.mk
+index bbec63d963..c1db1cc472 100644
+--- a/package/fastd/fastd.mk
++++ b/package/fastd/fastd.mk
+@@ -9,6 +9,7 @@ FASTD_SITE = https://github.com/NeoRaider/fastd/releases/download/v$(FASTD_VERSI
+ FASTD_SOURCE = fastd-$(FASTD_VERSION).tar.xz
+ FASTD_LICENSE = BSD-2-Clause
+ FASTD_LICENSE_FILES = COPYRIGHT
++FASTD_CPE_ID_VERSION = $(FASTD_VERSION).0
+ FASTD_DEPENDENCIES = host-bison host-pkgconf libuecc libsodium
  
- config BR2_PACKAGE_GNUTLS_TOOLS
- 	bool "install tools"
--	select BR2_PACKAGE_ARGP_STANDALONE \
--		if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
- 	help
- 	  Install GnuTLS command line tools for various cryptographic
- 	  tasks.
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index 65bb4893e8..cf2dedb590 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -47,20 +47,6 @@ GNUTLS_CONF_OPTS += \
- 	--with-libregex-cflags="`$(PKG_CONFIG_HOST_BINARY) libpcreposix --cflags`" \
- 	--with-libregex-libs="`$(PKG_CONFIG_HOST_BINARY) libpcreposix --libs`"
- 
--# Consider crywrap as part of tools because it needs WCHAR, and it's so too
--ifeq ($(BR2_PACKAGE_GNUTLS_TOOLS),)
--GNUTLS_CONF_OPTS += --disable-crywrap
--endif
--
--# Prerequisite for crywrap
--ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
--GNUTLS_LIBS += -largp
--GNUTLS_DEPENDENCIES += argp-standalone
--endif
--
--# libidn support for nommu must exclude the crywrap wrapper (uses fork)
--GNUTLS_CONF_OPTS += $(if $(BR2_USE_MMU),,--disable-crywrap)
--
- ifeq ($(BR2_PACKAGE_CRYPTODEV_LINUX),y)
- GNUTLS_CONF_OPTS += --enable-cryptodev
- GNUTLS_DEPENDENCIES += cryptodev-linux
+ ifeq ($(BR2_PACKAGE_LIBCAP),y)
+
+base-commit: 86d70b64815ca5ced09525d0537e48aa69f6976c
 -- 
-2.30.2
+2.20.1
