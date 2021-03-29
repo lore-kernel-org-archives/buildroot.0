@@ -1,41 +1,44 @@
 From: Chris Packham <judge.packham@gmail.com>
-Date: Mon, 29 Mar 2021 20:28:28 +1300
-Subject: [Buildroot] [PATCH] package/micropython: Define MICROPY_NLR_SETJMP
- for xtensa
-Message-ID: <20210329072828.13989-1-judge.packham@gmail.com>
+Date: Mon, 29 Mar 2021 20:56:04 +1300
+Subject: [Buildroot] [PATCH] package/syslog-ng: Bump version to 3.31.2
+Message-ID: <20210329075604.12322-1-judge.packham@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As suggested on https://github.com/micropython/micropython/issues/6551
-define MICROPY_NLR_SETJMP to avoid the xtensa specific implementation
-of nlr_push.
-
-Fixes:
-- http://autobuild.buildroot.net/results/5fc8669b5c768ccfc02bd20d1159bce7fe43683e
+https://github.com/syslog-ng/syslog-ng/releases/tag/syslog-ng-3.31.2
 
 Signed-off-by: Chris Packham <judge.packham@gmail.com>
 ---
- package/micropython/micropython.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/syslog-ng/syslog-ng.hash | 2 +-
+ package/syslog-ng/syslog-ng.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
-index 80d086f3c8..fa28da9be3 100644
---- a/package/micropython/micropython.mk
-+++ b/package/micropython/micropython.mk
-@@ -21,6 +21,11 @@ ifeq ($(BR2_i386)$(BR2_x86_64)$(BR2_arm)$(BR2_armeb),)
- MICROPYTHON_CFLAGS = -DMICROPY_GCREGS_SETJMP=1
- endif
+diff --git a/package/syslog-ng/syslog-ng.hash b/package/syslog-ng/syslog-ng.hash
+index 60ea6b3c61..812655cd49 100644
+--- a/package/syslog-ng/syslog-ng.hash
++++ b/package/syslog-ng/syslog-ng.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  44e54a6186af14d01affa06bf7391cfe8fc2460bd4ba211aab5469d8b1ca5b4b  syslog-ng-3.30.1.tar.gz
++sha256  2eeb8e0dbbcb556fdd4e50bc9f29bc8c66c9b153026f87caa7567bd3139c186a  syslog-ng-3.31.2.tar.gz
+ sha256  e912cf1e1c09b81d61c0154eb6c179588622c31ad07bfb4a90c612d07ff09d9b  COPYING
+ sha256  ce3324c9f22299cfc7c281e5a6ab40fbe9c2ea1a67cee87226cb8cd39db1e1d2  GPL.txt
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LGPL.txt
+diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
+index 3c0c346563..20f5fc2235 100644
+--- a/package/syslog-ng/syslog-ng.mk
++++ b/package/syslog-ng/syslog-ng.mk
+@@ -6,7 +6,7 @@
  
-+# xtensa has problems with nlr_push, use setjmp based implementation instead
-+ifeq ($(BR2_xtensa),y)
-+MICROPYTHON_CFLAGS = -DMICROPY_NLR_SETJMP=1
-+endif
-+
- # When building from a tarball we don't have some of the dependencies that are in
- # the git repository as submodules
- MICROPYTHON_MAKE_OPTS += \
+ # When updating the version, please check at runtime if the version in
+ # syslog-ng.conf header needs to be updated
+-SYSLOG_NG_VERSION = 3.30.1
++SYSLOG_NG_VERSION = 3.31.2
+ SYSLOG_NG_SITE = https://github.com/balabit/syslog-ng/releases/download/syslog-ng-$(SYSLOG_NG_VERSION)
+ SYSLOG_NG_LICENSE = LGPL-2.1+ (syslog-ng core), GPL-2.0+ (modules)
+ SYSLOG_NG_LICENSE_FILES = COPYING GPL.txt LGPL.txt
 -- 
 2.31.0
