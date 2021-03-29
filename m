@@ -1,57 +1,52 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 29 Mar 2021 22:26:13 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mariadb: security bump to version
- 10.3.28
-Message-ID: <20210329202613.293334-1-fontaine.fabrice@gmail.com>
+Date: Mon, 29 Mar 2021 22:33:41 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-lxml: security bump to
+ version 4.6.3
+Message-ID: <20210329203341.303201-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix CVE-2021-27928: A remote code execution issue was discovered in
-MariaDB 10.2 before 10.2.37, 10.3 before 10.3.28, 10.4 before 10.4.18,
-and 10.5 before 10.5.9; Percona Server through 2021-03-03; and the wsrep
-patch through 2021-03-03 for MySQL. An untrusted search path leads to
-eval injection, in which a database SUPER user can execute OS commands
-after modifying wsrep_provider and wsrep_notify_cmd. NOTE: this does not
-affect an Oracle product.
+Fix CVE-2021-28957: lxml 4.6.2 allows XSS. It places the HTML action
+attribute into defs.link_attrs (in html/defs.py) for later use in input
+sanitization, but does not do the same for the HTML5 formaction
+attribute.
 
-https://mariadb.com/kb/en/mariadb-10328-release-notes/
-https://mariadb.com/kb/en/mariadb-10328-changelog/
+https://github.com/lxml/lxml/blob/lxml-4.6.3/CHANGES.txt
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/mariadb/mariadb.hash | 6 +++---
- package/mariadb/mariadb.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-lxml/python-lxml.hash | 2 +-
+ package/python-lxml/python-lxml.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
-index a210dd9dad..26faf529c2 100644
---- a/package/mariadb/mariadb.hash
-+++ b/package/mariadb/mariadb.hash
-@@ -1,6 +1,6 @@
--# From https://downloads.mariadb.org/mariadb/10.3.27
--sha256  0dadc1650ab2ff40caab58210e93b106ae1e3d1a82e5b0fd92c795b8b43e4619  mariadb-10.3.27.tar.gz
--sha512  1ebfdfa3ef6e13e92615ac2fb6995362ca60fe78f57ff3cf9e384517f95eaf4c701e60fe0977b1eee73889cdfe3367720da9a9bae3dd1a09a4558114ba593369  mariadb-10.3.27.tar.gz
-+# From https://downloads.mariadb.org/mariadb/10.3.28
-+sha256  e8c912cae2e5800d0da364cc23437907ed4be767f2cbdf198cf3afc03db6a6a3  mariadb-10.3.28.tar.gz
-+sha512  f6941bcc818f9b3640e4b5fdbdd3a32b45c62c04087e583f1f0e1c0258b09a21c7639abd1c902e183c057838308ad5eedc00ffee76d44a02043e8e349015fb20  mariadb-10.3.28.tar.gz
- 
- # Hash for license files
- sha256  a4665c1189fe31e0bbc27e9b55439df7dad6e99805407fe58d78da7aabe678f8  README.md
-diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
-index 252c3079e0..56d6afab17 100644
---- a/package/mariadb/mariadb.mk
-+++ b/package/mariadb/mariadb.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-lxml/python-lxml.hash b/package/python-lxml/python-lxml.hash
+index 7918e08745..dd6446e6cc 100644
+--- a/package/python-lxml/python-lxml.hash
++++ b/package/python-lxml/python-lxml.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  cd11c7e8d21af997ee8079037fff88f16fda188a9776eb4b81c7e4c9c0a7d7fc  lxml-4.6.2.tar.gz
++sha256  39b78571b3b30645ac77b95f7c69d1bffc4cf8c3b157c435a34da72e78c82468  lxml-4.6.3.tar.gz
+ sha256  41d49dd406aa0e1548a6d5f21a30d6bf638b3cd96eb7289dd348d83ed2e40392  LICENSES.txt
+ sha256  69edb445c1335a8312d4c09271847e9956d84f0d9f724d125340cc3fad767b2a  doc/licenses/BSD.txt
+ sha256  0497ae8138811ef4466ede653bab7a59feb3d3c14f9ed50fc33a00aeb5bec32e  doc/licenses/elementtree.txt
+diff --git a/package/python-lxml/python-lxml.mk b/package/python-lxml/python-lxml.mk
+index fe99f82472..0d3775a1bd 100644
+--- a/package/python-lxml/python-lxml.mk
++++ b/package/python-lxml/python-lxml.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--MARIADB_VERSION = 10.3.27
-+MARIADB_VERSION = 10.3.28
- MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
- MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
- # Tarball no longer contains LGPL license text
+-PYTHON_LXML_VERSION = 4.6.2
+-PYTHON_LXML_SITE = https://files.pythonhosted.org/packages/db/f7/43fecb94d66959c1e23aa53d6161231dca0e93ec500224cf31b3c4073e37
++PYTHON_LXML_VERSION = 4.6.3
++PYTHON_LXML_SITE = https://files.pythonhosted.org/packages/e5/21/a2e4517e3d216f0051687eea3d3317557bde68736f038a3b105ac3809247
+ PYTHON_LXML_SOURCE = lxml-$(PYTHON_LXML_VERSION).tar.gz
+ 
+ # Not including the GPL, because it is used only for the test scripts.
 -- 
 2.30.2
