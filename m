@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 29 Mar 2021 21:52:26 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/openssh: security
+Date: Mon, 29 Mar 2021 21:51:15 +0200
+Subject: [Buildroot] [git commit branch/2020.11.x] package/openssh: security
  bump to version 8.5p1
-Message-ID: <20210329192852.16BB3835F1@busybox.osuosl.org>
+Message-ID: <20210329192857.6EBC48A335@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cf3460fbf495fef3fd981111412bb43f8f3e82f5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=80c1a3234b29bf4134aea4a5139d89ae3f0382b6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
 * ssh-agent(1): fixed a double-free memory corruption that was
    introduced in OpenSSH 8.2 . We treat all such memory faults as
@@ -63,7 +63,7 @@ index 840467f50a..c50a49896c 100644
 -sha256  73d0db766229670c7b4e1ec5e6baed54977a0694a565e7cc878c45ee834045d7  LICENCE
 +sha256  432abf7480fb31473a6706627212913fc70032e3fb71b90fecb28ae26a2d741d  LICENCE
 diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index 1361702f5c..feed687854 100644
+index 1e1f425181..c3cda3f9b3 100644
 --- a/package/openssh/openssh.mk
 +++ b/package/openssh/openssh.mk
 @@ -4,9 +4,11 @@
