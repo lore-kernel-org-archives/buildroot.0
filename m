@@ -1,61 +1,29 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 29 Mar 2021 22:10:26 +0200
-Subject: [Buildroot] [PATCH 2/2] package/haserl: security bump to version
- 0.9.36
-In-Reply-To: <20210329201026.254940-1-fontaine.fabrice@gmail.com>
-References: <20210329201026.254940-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210329201026.254940-2-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 29 Mar 2021 22:14:48 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libglib2: security bump to
+ version 2.66.8
+In-Reply-To: <20210321131508.1141933-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 21 Mar 2021 14:15:08 +0100")
+References: <20210321131508.1141933-1-fontaine.fabrice@gmail.com>
+Message-ID: <87mtulemyv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2021-03-07	0.9.36
-*	Fix sf.net issue #5 - its possible to issue a PUT request
-	without a CONTENT-TYPE.   Assume an octet-stream in that case.
-*	Change the Prefix for variables to be the REQUEST_METHOD
-	(PUT/DELETE/GET/POST)
-	**** THIS IS A BREAKING CHANGE vs 0.9.33 ****
-*	Mitigations vs running haserl to get access to files not
-	available to the user.
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-- Fix CVE-2021-29133: Lack of verification in haserl, a component of
-  Alpine Linux Configuration Framework, before 0.9.36 allows local users
-  to read the contents of any file on the filesystem.
-- Update indentation in hash file (two spaces)
+ > Fix a security issue when using g_file_replace() with
+ > G_FILE_CREATE_REPLACE_DESTINATION
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/haserl/haserl.hash | 6 +++---
- package/haserl/haserl.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ > https://gitlab.gnome.org/GNOME/glib/-/tags/2.66.8
 
-diff --git a/package/haserl/haserl.hash b/package/haserl/haserl.hash
-index 149bf0b0a5..c66b54a0ac 100644
---- a/package/haserl/haserl.hash
-+++ b/package/haserl/haserl.hash
-@@ -1,5 +1,5 @@
- # From http://sourceforge.net/projects/haserl/files/haserl-devel/
--md5	918f0b4f6cec0b438c8b5c78f2989010	haserl-0.9.35.tar.gz
--sha1	9a331d41e9d47a81e81e158f9a16bf5443347cd4	haserl-0.9.35.tar.gz
-+md5  b94cd201a82b410b7f93fe3a31416cff  haserl-0.9.36.tar.gz
-+sha1  a6244b496f06e1fea70581cb02c04bc1f0ffcbc3  haserl-0.9.36.tar.gz
- # Locally computed
--sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/haserl/haserl.mk b/package/haserl/haserl.mk
-index a03afbd61d..22950f4d6d 100644
---- a/package/haserl/haserl.mk
-+++ b/package/haserl/haserl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--HASERL_VERSION = 0.9.35
-+HASERL_VERSION = 0.9.36
- HASERL_SITE = http://downloads.sourceforge.net/project/haserl/haserl-devel
- HASERL_LICENSE = GPL-2.0
- HASERL_LICENSE_FILES = COPYING
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed to 2021.02.x, thanks.
+
+Doesn't look immediately obvious to backport to 2.62.x / 2.64.x.
+
 -- 
-2.30.2
+Bye, Peter Korsgaard
