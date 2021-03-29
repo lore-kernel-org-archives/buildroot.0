@@ -1,129 +1,107 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 29 Mar 2021 20:49:37 +0200
-Subject: [Buildroot] Buildroot: enable lib/firmware/brcm for rpi0w
-In-Reply-To: <0d1e250a62069d63923fccf305f9766d@umbiko.net>
-References: <mailman.13.1616500803.19462.buildroot@busybox.net>
- <75b24e8f6fe588935be2f1320d172d68@umbiko.net>
- <20210324232703.46b691fe@gmx.net>
- <ed68882a97bad7976f53b30716196c96@umbiko.net>
- <20210325222017.39c79288@gmx.net>
- <0d1e250a62069d63923fccf305f9766d@umbiko.net>
-Message-ID: <20210329204937.01bb10a6@gmx.net>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Mon, 29 Mar 2021 20:49:34 +0200
+Subject: [Buildroot] [PATCH 1/1] package/modem-manager: bump version to
+ 1.16.2
+Message-ID: <20210329184934.14690-1-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Andreas,
+It requires libqmi >= 1.28.0
 
-On Fri, 26 Mar 2021 12:47:21 +0000, Andreas Ziegler <br015@umbiko.net> wrote:
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+---
+Hi,
 
-> Hello Peter,
->
-> On 2021-03-25 21:20, Peter Seiderer wrote:
-> >
-> > Many thanks for doing the tests!
-> >
->
-> Not at all; after getting confused with different versions and
-> repositories, I wanted to understand the reason behind this.
->
-> Short summary of my findings; I may state the obvious here, but it was
-> new for me and maybe it helps someone with the same hazy knowledge about
-> hardware engineering as myself:
->
-> Broadcom sold its RF division to Cypress in 2016. Cypress now supports
-> the legacy wireless /bluetooth /radio hardware from Broadcom; that is
-> the reason why BCM* and CYW* versions of firmware exist, and
-> linux-firmware removed the original Broadcom supplied binaries.
->
-> Cypress does not directly sell to end customers, but provides silicon to
-> hardware partners (AzureWave, Murata, ...), which in turn sell RF
-> solutions. Cypress distributes firmware for their silicon chips
-> (probably to same hardware partners).
->
-> End product is some type of SOC (subsystem on chip); the benefit is that
-> tuning and regulatory issues have been taken care of. The SOC
-> manufacturer is responsible for supplying bluetooth patch (HCD),
-> regulatory data (CLM) and firmware configuration (TXT).
->
-> That means the firmware binary (BIN) can be obtained from any source,
-> the other items (HCD, CLM, TXT) need to be sourced from the implementer.
->
-> >> The LibreELEC repository (rpi-wifi-firmware) seems to have adopted
-> >> this
-> >> version in commit 7dbd877545ae15069f2bd0e73893af942500e23d on Jan. 25.
-> >
-> > So a good reason to stay with LibreELEC (and fix the firmware package
-> > to
-> > provide raspberrypi,4-model-b.txt as a link or copy, do you know if
-> > missing
-> > it has some disadvantages or produces only the firmware load warning or
-> > is
-> > there a fallback to plain brcmfmac43455-sdio.txt?), keeping up with
-> > RPi-Distro...
->
-> Yes, also my opinion to stay with LibreELEC. The repository is small, is
-> updated in a timely manner, and is (slightly) better documented than
-> RPi-Distro.
->
-> There is one thing (apart from providing the missing link) I would
-> propose: merge rpi-bt-firmware and rpi-wifi-firmware into
-> rpi-rf-firmware, combining the code from both .mk and Config.in files.
-> Functionality would be identical, but one less firmware package. If
-> anyone is interested, I could provide a patch.
+RFC: should I add also --enable-plugin-qcom-soc ?
+(there is qcom-db410c-firmware package)
 
-+1 from my side...
+Kind regards,
+Petr
 
->
-> In recent kernels, firmware load tries board-specific path first, then
-> falls back to firmware derived path [1]. If I remember correctly, in
-> kernels < 5.0 the firmware load failed.
->
-> >> There seem to be some bigger changes in the pipeline: linux-firmware
-> >> removed the Broadcom redistributed binaries in January [4] for the
-> >> 20210208 release; instead Cypress firmware should be used. The
-> >> upstream
-> >> repository for this firmware seems to be murata-wireless /
-> >> cyw-fmac-fw [5]
-> >>
-> >> I need to look into this in detail at some other time ...
-> >
-> > Seems kind of (another) firmware mess...., different versions at
-> > different
-> > repositories...., all with the same name (instead of clear version
-> > string)...
->
-> There are at least three different versions available in Buildroot:
->
-> (available in Buildroot, repo 'master' version listed respectively)
->    libreELEC		build 2021-01-04	version 7.45.229
->    linux-firmware	build 2020-09-18	version 7.45.221
->    murata-wireless	build 2020-09-18	version 7.45.221
-> (not in buildroot)
->    rpi-distro		build 2021-01-04	version 7.45.229
->
-> > Regards,
-> > Peter
->
-> Kind regards,
-> Andreas
+Tested:
+                    bootlin-armv5-uclibc [1/6]: OK
+                     bootlin-armv7-glibc [2/6]: OK
+                   bootlin-armv7m-uclibc [3/6]: SKIPPED
+                     bootlin-x86-64-musl [4/6]: OK
+                      br-arm-full-static [5/6]: OK
+                            sourcery-arm [6/6]: OK
+6 builds, 1 skipped, 0 build failed, 0 legal-info failed
 
-Thanks again for the detailed information (and testing)!
+                             andes-nds32 [ 1/45]: FAILED
+                             arm-aarch64 [ 2/45]: OK
+                   bootlin-aarch64-glibc [ 3/45]: OK
+               bootlin-arcle-hs38-uclibc [ 4/45]: OK
+                    bootlin-armv5-uclibc [ 5/45]: OK
+                     bootlin-armv7-glibc [ 6/45]: OK
+                   bootlin-armv7m-uclibc [ 7/45]: SKIPPED
+                      bootlin-armv7-musl [ 8/45]: OK
+             bootlin-microblazeel-uclibc [ 9/45]: OK
+                   bootlin-mipsel-uclibc [10/45]: OK
+                bootlin-mipsel32r6-glibc [11/45]: OK
+                bootlin-m68k-5208-uclibc [12/45]: SKIPPED
+               bootlin-m68k-68040-uclibc [13/45]: OK
+                     bootlin-nios2-glibc [14/45]: OK
+                 bootlin-openrisc-uclibc [15/45]: OK
+           bootlin-powerpc-e500mc-uclibc [16/45]: OK
+        bootlin-powerpc64le-power8-glibc [17/45]: OK
+                   bootlin-riscv32-glibc [18/45]: OK
+                   bootlin-riscv64-glibc [19/45]: OK
+                    bootlin-riscv64-musl [20/45]: OK
+                      bootlin-sh4-uclibc [21/45]: OK
+                    bootlin-sparc-uclibc [22/45]: OK
+                   bootlin-sparc64-glibc [23/45]: OK
+                   bootlin-xtensa-uclibc [24/45]: OK
+                    bootlin-x86-64-glibc [25/45]: OK
+                     bootlin-x86-64-musl [26/45]: OK
+                   bootlin-x86-64-uclibc [27/45]: OK
+                            br-arm-basic [28/45]: SKIPPED
+                    br-arm-full-nothread [29/45]: SKIPPED
+                      br-arm-full-static [30/45]: OK
+                br-i386-pentium-mmx-musl [31/45]: OK
+                   br-i386-pentium4-full [32/45]: OK
+                      br-mips64-n64-full [33/45]: OK
+                 br-mips64r6-el-hf-glibc [34/45]: OK
+               br-powerpc-603e-basic-cpp [35/45]: SKIPPED
+               br-powerpc64-power7-glibc [36/45]: OK
+                       linaro-aarch64-be [37/45]: OK
+                          linaro-aarch64 [38/45]: OK
+                              linaro-arm [39/45]: OK
+                     sourcery-arm-armv4t [40/45]: OK
+                            sourcery-arm [41/45]: OK
+                     sourcery-arm-thumb2 [42/45]: OK
+                           sourcery-mips [43/45]: OK
+                         sourcery-mips64 [44/45]: OK
+                          sourcery-nios2 [45/45]: OK
 
-Did just sent out an patch adding the convenience firmware configuration
-links for RPi3A+, RPi3B+ and RPi4B (see [2])...
+ package/modem-manager/modem-manager.hash | 2 +-
+ package/modem-manager/modem-manager.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Regards,
-Peter
-
-[2] https://patchwork.ozlabs.org/project/buildroot/patch/20210329184503.10514-1-ps.report at gmx.net/
-
->
-> [1]
-> https://elixir.bootlin.com/linux/v5.10.21/source/drivers/net/wireless/broadcom/brcm80211/brcmfmac/firmware.c#L616
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
+index 81a08295f7..3f272acef3 100644
+--- a/package/modem-manager/modem-manager.hash
++++ b/package/modem-manager/modem-manager.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  fe1a26ba51b4bda7abd09ad4dadedd87d8b8154809fc9d88e94f75fdfff19295  ModemManager-1.14.8.tar.xz
++sha256  efa9a963499e0885f3f163096d433334143c4937545134ecd682e0157fa591e3  ModemManager-1.16.2.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
+index 47d4eed823..2cc45d266b 100644
+--- a/package/modem-manager/modem-manager.mk
++++ b/package/modem-manager/modem-manager.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MODEM_MANAGER_VERSION = 1.14.8
++MODEM_MANAGER_VERSION = 1.16.2
+ MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
+ MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
+ MODEM_MANAGER_LICENSE = GPL-2.0+ (programs, plugins), LGPL-2.0+ (libmm-glib)
+-- 
+2.30.2
