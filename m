@@ -1,34 +1,61 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 29 Mar 2021 22:10:25 +0200
-Subject: [Buildroot] [PATCH 1/2] package/haserl: add HASERL_CPE_ID_VENDOR
-Message-ID: <20210329201026.254940-1-fontaine.fabrice@gmail.com>
+Date: Mon, 29 Mar 2021 22:10:26 +0200
+Subject: [Buildroot] [PATCH 2/2] package/haserl: security bump to version
+ 0.9.36
+In-Reply-To: <20210329201026.254940-1-fontaine.fabrice@gmail.com>
+References: <20210329201026.254940-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210329201026.254940-2-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:haserl_project:hserl is a valid CPE identifier for this
-package:
+2021-03-07	0.9.36
+*	Fix sf.net issue #5 - its possible to issue a PUT request
+	without a CONTENT-TYPE.   Assume an octet-stream in that case.
+*	Change the Prefix for variables to be the REQUEST_METHOD
+	(PUT/DELETE/GET/POST)
+	**** THIS IS A BREAKING CHANGE vs 0.9.33 ****
+*	Mitigations vs running haserl to get access to files not
+	available to the user.
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ahaserl_project%3Ahaserl
+- Fix CVE-2021-29133: Lack of verification in haserl, a component of
+  Alpine Linux Configuration Framework, before 0.9.36 allows local users
+  to read the contents of any file on the filesystem.
+- Update indentation in hash file (two spaces)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/haserl/haserl.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/haserl/haserl.hash | 6 +++---
+ package/haserl/haserl.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
+diff --git a/package/haserl/haserl.hash b/package/haserl/haserl.hash
+index 149bf0b0a5..c66b54a0ac 100644
+--- a/package/haserl/haserl.hash
++++ b/package/haserl/haserl.hash
+@@ -1,5 +1,5 @@
+ # From http://sourceforge.net/projects/haserl/files/haserl-devel/
+-md5	918f0b4f6cec0b438c8b5c78f2989010	haserl-0.9.35.tar.gz
+-sha1	9a331d41e9d47a81e81e158f9a16bf5443347cd4	haserl-0.9.35.tar.gz
++md5  b94cd201a82b410b7f93fe3a31416cff  haserl-0.9.36.tar.gz
++sha1  a6244b496f06e1fea70581cb02c04bc1f0ffcbc3  haserl-0.9.36.tar.gz
+ # Locally computed
+-sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
 diff --git a/package/haserl/haserl.mk b/package/haserl/haserl.mk
-index 4c24b9bcea..a03afbd61d 100644
+index a03afbd61d..22950f4d6d 100644
 --- a/package/haserl/haserl.mk
 +++ b/package/haserl/haserl.mk
-@@ -8,6 +8,7 @@ HASERL_VERSION = 0.9.35
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-HASERL_VERSION = 0.9.35
++HASERL_VERSION = 0.9.36
  HASERL_SITE = http://downloads.sourceforge.net/project/haserl/haserl-devel
  HASERL_LICENSE = GPL-2.0
  HASERL_LICENSE_FILES = COPYING
-+HASERL_CPE_ID_VENDOR = haserl_project
- HASERL_DEPENDENCIES = host-pkgconf
- 
- ifeq ($(BR2_PACKAGE_HASERL_WITH_LUA),y)
 -- 
 2.30.2
