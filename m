@@ -1,35 +1,30 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Mon, 29 Mar 2021 21:42:40 +0200
-Subject: [Buildroot] [PATCH 1/1] package/modem-manager: bump version to
- 1.16.2
-In-Reply-To: <CAAP7uc+KkOsiPYvu=ac43X9nno-7LJw2DEtSExLETXR_VN+jXw@mail.gmail.com>
-References: <20210329184934.14690-1-petr.vorel@gmail.com>
- <CAAP7uc+KkOsiPYvu=ac43X9nno-7LJw2DEtSExLETXR_VN+jXw@mail.gmail.com>
-Message-ID: <YGItsBIZ32zztrcg@pevik>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 29 Mar 2021 21:44:01 +0200
+Subject: [Buildroot] [git commit] package/kodi: honour the libusb option
+ even when disabled
+In-Reply-To: <20210328075524.47250888A7@busybox.osuosl.org> (Yann E. MORIN's
+ message of "Sun, 28 Mar 2021 10:18:32 +0200")
+References: <20210328075524.47250888A7@busybox.osuosl.org>
+Message-ID: <878s65g2ym.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> > RFC: should I add also --enable-plugin-qcom-soc ?
-> > (there is qcom-db410c-firmware package)
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-> The qcom-soc plugin is only relevant if the system where you're running the
-> system is a Qualcomm SoC, and if you woulf plan to use the builtin modem as
-> a modem in ModemManager. An obvious use case is e.g. qualcomm-phones
-> running postmarketos.
-Yep, in postmarketOS it does make perfect sense.
+ > commit:
+ > https://git.buildroot.net/buildroot/commit/?id=0e1acc6e36b087c1008981e7bccf4113bfa1751d
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> For any other kind of setup, where MM is supposed to use external (e.g.
-> USB, serial...) modems, the qcom-soc plugin is not needed. But it really
-> wouldn't harm to have it either, it would just waste space (in the same way
-> as other plugins that may never be used really).
+ > Make sure libusb support is properly disabled even if the libusb
+ > package is enabled, and in case it gets built before Kodi.
 
-> Maybe enable it? I should have probably done that in upstream really, as it
-> doesn't really collide with other stuff
-Maybe having an option for user to decide? Most of the people won't need it,
-but it'd be nice to leave it for Dragonboard 410c (not sure if it uses modem).
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 
-Kind regards,
-Petr
+Committed to 2020.02.x, 2020.11.x and 2021.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
