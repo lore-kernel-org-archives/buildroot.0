@@ -1,44 +1,76 @@
-From: Alexander Dahl <post@lespocky.de>
-Date: Mon, 29 Mar 2021 15:46:50 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2021-03-21
-In-Reply-To: <20210329152803.594a910f@windsurf.home>
-References: <20210322114835.6hmpplzygzejxiab@falbala.internal.home.lespocky.de>
- <20210329132357.zxqt5szg72dchddu@falbala.internal.home.lespocky.de>
- <20210329152803.594a910f@windsurf.home>
-Message-ID: <20210329134649.zfdwajqrkbqnw6hb@falbala.internal.home.lespocky.de>
+From: Matthew Weber <matthew.weber@collins.com>
+Date: Mon, 29 Mar 2021 09:30:46 -0500
+Subject: [Buildroot] [External] Re: [PATCH v1 1/1] package/nerdctl: new
+ package
+In-Reply-To: <CA+h8R2p-u8jCyhjTGH=L86AdzfbZCX7KpATPReP+2Vj_ayAFYQ@mail.gmail.com>
+References: <20210323051027.91385-1-christian@paral.in>
+ <CANQCQpabm-BFmSKGapR5Fiwu_60O-nvJtWuuVc=41h4d3ZZpbQ@mail.gmail.com>
+ <CA+h8R2p-u8jCyhjTGH=L86AdzfbZCX7KpATPReP+2Vj_ayAFYQ@mail.gmail.com>
+Message-ID: <CANQCQpZtFqTrW6XzEmmsrs7ESTEsM=gtTJ7-k4AGZB2oFOFd_w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Christian,
 
-thanks for looking into this.
+On Fri, Mar 26, 2021 at 12:12 AM Christian Stewart <christian@paral.in> wrote:
+>
+> Hi Matthew,
+>
+> On Tue, Mar 23, 2021 at 5:59 AM Matthew Weber <matthew.weber@collins.com> wrote:
+> >
+> > Christian,
+> >
+> > On Tue, Mar 23, 2021 at 12:11 AM Christian Stewart <christian@paral.in> wrote:
+> > >
+> > > nerdctl is a CLI for containerd (package docker-containerd) which is drop-in
+> > > compatible with the Docker Daemon CLI.
+> >
+> > By chance, do you have any rough estimates on the size difference
+> > between the set of GOLang executables between a pure Docker solution
+> > and a containerd+ nerdctl? (If I remember correctly Docker was
+> > 200-300MB (engine+CLI))
+>
+> According to "graph-size":
+>
+>  - docker-engine: 49MB
+>  - docker-cli 39MB
+>
+>  - docker-containerd: 66MB
+>
+>  - nerdctl: 19.3MB
+>
+> So, the savings would be around ~70MB.
 
-On Mon, Mar 29, 2021 at 03:28:03PM +0200, Thomas Petazzoni wrote:
-> For this particular fastd CVE issue, what needs to be added is (1) the
-> proper CPE identifier information in the Buildroot package and (2) get
-> the NVD database maintainers to fix the CVE entry to indicate which
-> fastd version has fixed the security vulnerability.
+Nice, (sort of related) I've been gathering some rough metrics to try
+and baseline what a Buildroot container runtime for a Kubernetes edge
+device might expect for resource demands on storage/memory/processing.
+Ie. containerd+runc vs CRI-O+crun(~300k).  The footprint today using
+Docker as a runtime is just too large when you also include the
+Kubernetes (static) binaries and the resulting CNI containers after
+joining a cluster.
 
-Well, that's something to work with. Specific actions to take.
+>
+> I believe docker-engine and docker-containerd are both much larger
+> than they have any right to be at the moment, and can probably be
+> minimized to something much smaller by deleting dependencies to
+> kubernetes repos, cloud provider libraries, and other features
+> probably most Buildroot users don't need.
 
-Thanks for those hints.
+Or we add some other options which may be better suited to embedded?
 
-Greets
-Alex
+>
+> One way to save space would be a "busybox" approach where there are
+> multiple symlinks to a single Go binary to implement both
+> docker-container, docker-cli, runc, etc. This way the common
+> dependencies (i.e. OCI interfaces) are shared between binaries
+> (admittedly this is what dynamic linking normally is for).
 
--- 
-/"\ ASCII RIBBON | ?With the first link, the chain is forged. The first
-\ / CAMPAIGN     | speech censured, the first thought forbidden, the
- X  AGAINST      | first freedom denied, chains us all irrevocably.?
-/ \ HTML MAIL    | (Jean-Luc Picard, quoting Judge Aaron Satie)
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 833 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210329/60e2da9c/attachment.asc>
+Oh interesting, is there any precedence for this approach in other
+distros?  Go binaries are just BIG with all the debug + static
+linking....  However, they are pretty portable...
+
+Best Regards,
+Matt
