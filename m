@@ -1,44 +1,53 @@
-From: Chris Packham <judge.packham@gmail.com>
-Date: Mon, 29 Mar 2021 20:56:04 +1300
-Subject: [Buildroot] [PATCH] package/syslog-ng: Bump version to 3.31.2
-Message-ID: <20210329075604.12322-1-judge.packham@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 29 Mar 2021 10:04:33 +0200
+Subject: [Buildroot] [PATCH 0/5] legacy: drop old options (branch
+ yem/drop-old-legacy)
+In-Reply-To: <378607bf-548e-feec-a7b9-182bb6c50989@mind.be> (Arnout
+ Vandecappelle's message of "Mon, 29 Mar 2021 08:59:00 +0200")
+References: <cover.1616878389.git.yann.morin.1998@free.fr>
+ <20210328212402.696e0207@windsurf.home> <20210328195205.GQ24043@scaer>
+ <378607bf-548e-feec-a7b9-182bb6c50989@mind.be>
+Message-ID: <877dlqgzce.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://github.com/syslog-ng/syslog-ng/releases/tag/syslog-ng-3.31.2
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-Signed-off-by: Chris Packham <judge.packham@gmail.com>
----
- package/syslog-ng/syslog-ng.hash | 2 +-
- package/syslog-ng/syslog-ng.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hi,
 
-diff --git a/package/syslog-ng/syslog-ng.hash b/package/syslog-ng/syslog-ng.hash
-index 60ea6b3c61..812655cd49 100644
---- a/package/syslog-ng/syslog-ng.hash
-+++ b/package/syslog-ng/syslog-ng.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  44e54a6186af14d01affa06bf7391cfe8fc2460bd4ba211aab5469d8b1ca5b4b  syslog-ng-3.30.1.tar.gz
-+sha256  2eeb8e0dbbcb556fdd4e50bc9f29bc8c66c9b153026f87caa7567bd3139c186a  syslog-ng-3.31.2.tar.gz
- sha256  e912cf1e1c09b81d61c0154eb6c179588622c31ad07bfb4a90c612d07ff09d9b  COPYING
- sha256  ce3324c9f22299cfc7c281e5a6ab40fbe9c2ea1a67cee87226cb8cd39db1e1d2  GPL.txt
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LGPL.txt
-diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
-index 3c0c346563..20f5fc2235 100644
---- a/package/syslog-ng/syslog-ng.mk
-+++ b/package/syslog-ng/syslog-ng.mk
-@@ -6,7 +6,7 @@
- 
- # When updating the version, please check at runtime if the version in
- # syslog-ng.conf header needs to be updated
--SYSLOG_NG_VERSION = 3.30.1
-+SYSLOG_NG_VERSION = 3.31.2
- SYSLOG_NG_SITE = https://github.com/balabit/syslog-ng/releases/download/syslog-ng-$(SYSLOG_NG_VERSION)
- SYSLOG_NG_LICENSE = LGPL-2.1+ (syslog-ng core), GPL-2.0+ (modules)
- SYSLOG_NG_LICENSE_FILES = COPYING GPL.txt LGPL.txt
+ >  Absolutely. I recently did an update from 2018.02 to 2021.02 for a user whom I
+ > think is relatively conscientious about updating. So two years is definitely too
+ > short.
+
+:/
+
+ >  (As an aside: there's a good reason to not update too often, and that is that
+ > some projects sometimes dramatically break compatibility. In my case, it's the
+ > Phalcon PHP package - it took me three days to fix all the breakage in the
+ > custom PHP scripts using that package, and I'm still not sure it's all good.)
+
+I would argue that this is exactly a reason for updating MORE often than
+less, to make the delta smaller and easier to debug. Doing it often
+makes you also more inclined to automate it and write some decent
+regression tests.
+
+The best solution is naturally to not build your product on top of such
+moving targets in the first place, but you don't always have to option
+to do so.
+
+ >>> Since the maintenance cost of those legacy options is essentially zero,
+ >>> I am wondering if we really need to drop them. Should we change the
+ >>> rule and drop the ones that are 5 years old for example ?
+
+ >  Indeed. I always thought that the idea was that we would keep the legacy around
+ > until there was some reason to remove them, but that we'd advertise some fixed
+ > period to make sure people are not surprised about the removal.
+
+I am also fine with 5 years (or even more, as long as they don't get in
+the way).
+
 -- 
-2.31.0
+Bye, Peter Korsgaard
