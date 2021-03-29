@@ -1,56 +1,60 @@
-From: Aleksander Morgado <aleksander@aleksander.es>
-Date: Mon, 29 Mar 2021 23:46:50 +0200
-Subject: [Buildroot] [PATCH 1/2] package/libqmi: drop unrecognized option
-In-Reply-To: <20210329211957.321612-1-fontaine.fabrice@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 29 Mar 2021 23:44:55 +0200
+Subject: [Buildroot] [PATCH 2/2] package/libqmi: needs headers >= 4.14
+In-Reply-To: <CAAP7uc+4zEWFj-unho79p7mm6puX_XR-xiXPjcLqpfbScuwUYA@mail.gmail.com>
 References: <20210329211957.321612-1-fontaine.fabrice@gmail.com>
-Message-ID: <CAAP7uc+qpS+Y9xN=C89jzupCH5qS2-_W_H7smrYa7SqMov57hw@mail.gmail.com>
+ <20210329211957.321612-2-fontaine.fabrice@gmail.com>
+ <CAAP7uc+4zEWFj-unho79p7mm6puX_XR-xiXPjcLqpfbScuwUYA@mail.gmail.com>
+Message-ID: <CAPi7W81whpXvH0unTvU=HE5nb11-UeLbX5QK6WAPoOTrMroXcA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey,
+Hi Aleksander,
 
-On Mon, Mar 29, 2021 at 11:22 PM Fabrice Fontaine
-<fontaine.fabrice@gmail.com> wrote:
+Le lun. 29 mars 2021 ? 23:41, Aleksander Morgado
+<aleksander@aleksander.es> a ?crit :
 >
-> --enable-more-warnings has been dropped since version 1.26.0 and
-> https://github.com/freedesktop/libqmi/commit/9f31a45d5fc137431705d47b83669f35259932b4
+> Hey Fabrice,
 >
-
-For some context, the build switched to
-AX_COMPILER_FLAGS()+AX_IS_RELEASE() so, when building from a release
-tarball, the build will default to --enable-compile-warnings=yes, and
-when building from a git checkout, the build will default to
---enable-compile-warnings=error. As long as the buildroot makefile
-relies on stable release tarballs, -Werror should be always implicitly
-disabled.
-
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/libqmi/libqmi.mk | 3 ---
->  1 file changed, 3 deletions(-)
+> On Mon, Mar 29, 2021 at 11:23 PM Fabrice Fontaine
+> <fontaine.fabrice@gmail.com> wrote:
+> >
+> > libqmi unconditionnally uses ARPHRD_RAWIP since version 1.28.0 and
+> > https://github.com/freedesktop/libqmi/commit/4085a2d6b771a40fb637433ed6a05b9d5d4d94b9
+> > https://github.com/freedesktop/libqmi/commit/19f4b39ee85500e7e868b8a100fba19c04fb3c30
+> >
+> > However, ARPHRD_RAWIP is only available since kernel 4.14 and
+> > https://github.com/torvalds/linux/commit/cdf4969c42a6c1a376dd03a9e846cf638d3cd4b1
+> >
+> > Fixes:
+> >  - http://autobuild.buildroot.org/results/c8853b7161bd85d46c1282c6c097e7ef4042ae68
+> >
 >
-> diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
-> index b02312d702..998952e47d 100644
-> --- a/package/libqmi/libqmi.mk
-> +++ b/package/libqmi/libqmi.mk
-> @@ -13,9 +13,6 @@ LIBQMI_INSTALL_STAGING = YES
+> This is totally not intentional; the ARPHRD_RAWIP symbol is used in
+> the rmnet backend, and the rmnet backend itself should only be used if
+> the kernel has rmnet support, which we look for at configure time with
+> the following check:
 >
->  LIBQMI_DEPENDENCIES = libglib2
+> AC_EGREP_HEADER([ifla_rmnet_flags],
+>                 [linux/if_link.h],
+>                 [enable_rmnet_support=yes],
+>                 [enable_rmnet_support=no])
 >
-> -# we don't want -Werror
-> -LIBQMI_CONF_OPTS = --enable-more-warnings=no
-> -
->  # if libgudev available, request udev support for a better
->  # qmi-firmware-update experience
->  ifeq ($(BR2_PACKAGE_LIBGUDEV),y)
+> We should probably improve that check to also include a lookup for the
+> ARPHRD_RAWIP symbol.
+> What do you think?
+Thanks for your feedback, I wasn't sure if it was intentional or not
+by reading the two commit messages.
+I'll set this patch as rejected on patchwork.
+Feel free to send another patch as avoiding this dependency on kernel
+4.14 would be great indeed.
+>
 > --
-> 2.30.2
->
+> Aleksander
+> https://aleksander.es
+Best Regards,
 
-
--- 
-Aleksander
-https://aleksander.es
+Fabrice
