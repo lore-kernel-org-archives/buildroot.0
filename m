@@ -1,62 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 29 Mar 2021 09:14:04 +0200
-Subject: [Buildroot] [git commit] board/beaglebone: remove
- genimage_linux41.cfg
-Message-ID: <20210329064917.79B188A32C@busybox.osuosl.org>
+From: Chris Packham <judge.packham@gmail.com>
+Date: Mon, 29 Mar 2021 20:28:28 +1300
+Subject: [Buildroot] [PATCH] package/micropython: Define MICROPY_NLR_SETJMP
+ for xtensa
+Message-ID: <20210329072828.13989-1-judge.packham@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8c60df5a77f5e4541e748f541c510272150fcc0f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+As suggested on https://github.com/micropython/micropython/issues/6551
+define MICROPY_NLR_SETJMP to avoid the xtensa specific implementation
+of nlr_push.
 
-Commit 5502a889dd9f065ec4694a993cfa509377da2cce
-("configs/beaglebone_qt5: don't use custom post-image script") removed the use
-of genimage_linux41.cfg but didn't remove the file.
+Fixes:
+- http://autobuild.buildroot.net/results/5fc8669b5c768ccfc02bd20d1159bce7fe43683e
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Chris Packham <judge.packham@gmail.com>
 ---
- board/beaglebone/genimage_linux41.cfg | 32 --------------------------------
- 1 file changed, 32 deletions(-)
+ package/micropython/micropython.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/board/beaglebone/genimage_linux41.cfg b/board/beaglebone/genimage_linux41.cfg
-deleted file mode 100644
-index ba60297dde..0000000000
---- a/board/beaglebone/genimage_linux41.cfg
-+++ /dev/null
-@@ -1,32 +0,0 @@
--image boot.vfat {
--	vfat {
--		files = {
--			"MLO",
--			"u-boot.img",
--			"zImage",
--			"uEnv.txt",
--			"am335x-evm.dtb",
--			"am335x-evmsk.dtb",
--			"am335x-bone.dtb",
--			"am335x-boneblack.dtb",
--		}
--	}
--	size = 16M
--}
--
--image sdcard.img {
--	hdimage {
--	}
--
--	partition u-boot {
--		partition-type = 0xC
--		bootable = "true"
--                image = "boot.vfat"
--	}
--
--	partition rootfs {
--		partition-type = 0x83
--		image = "rootfs.ext4"
--		size = 512M
--	}
--}
+diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
+index 80d086f3c8..fa28da9be3 100644
+--- a/package/micropython/micropython.mk
++++ b/package/micropython/micropython.mk
+@@ -21,6 +21,11 @@ ifeq ($(BR2_i386)$(BR2_x86_64)$(BR2_arm)$(BR2_armeb),)
+ MICROPYTHON_CFLAGS = -DMICROPY_GCREGS_SETJMP=1
+ endif
+ 
++# xtensa has problems with nlr_push, use setjmp based implementation instead
++ifeq ($(BR2_xtensa),y)
++MICROPYTHON_CFLAGS = -DMICROPY_NLR_SETJMP=1
++endif
++
+ # When building from a tarball we don't have some of the dependencies that are in
+ # the git repository as submodules
+ MICROPYTHON_MAKE_OPTS += \
+-- 
+2.31.0
