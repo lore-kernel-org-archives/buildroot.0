@@ -1,63 +1,72 @@
 From: Aleksander Morgado <aleksander@aleksander.es>
-Date: Tue, 30 Mar 2021 00:13:07 +0200
-Subject: [Buildroot] [PATCH 2/2] package/libqmi: needs headers >= 4.14
-In-Reply-To: <CAPi7W81whpXvH0unTvU=HE5nb11-UeLbX5QK6WAPoOTrMroXcA@mail.gmail.com>
-References: <20210329211957.321612-1-fontaine.fabrice@gmail.com>
- <20210329211957.321612-2-fontaine.fabrice@gmail.com>
- <CAAP7uc+4zEWFj-unho79p7mm6puX_XR-xiXPjcLqpfbScuwUYA@mail.gmail.com>
- <CAPi7W81whpXvH0unTvU=HE5nb11-UeLbX5QK6WAPoOTrMroXcA@mail.gmail.com>
-Message-ID: <CAAP7ucKogo=ZMH4fz3CwcgoOEwdGuxx4VPBs7OMvv4wkNHRvuQ@mail.gmail.com>
+Date: Tue, 30 Mar 2021 00:35:42 +0200
+Subject: [Buildroot] [PATCH] package/libqmi: fix build when libc doesn't
+ define ARPHRD_RAWIP
+Message-ID: <20210329223542.13907-1-aleksander@aleksander.es>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey Fabrice
+The ARPHRD_RAWIP symbol is used in the rmnet backend in the link
+management support now included in libqmi.
 
-> > On Mon, Mar 29, 2021 at 11:23 PM Fabrice Fontaine
-> > <fontaine.fabrice@gmail.com> wrote:
-> > >
-> > > libqmi unconditionnally uses ARPHRD_RAWIP since version 1.28.0 and
-> > > https://github.com/freedesktop/libqmi/commit/4085a2d6b771a40fb637433ed6a05b9d5d4d94b9
-> > > https://github.com/freedesktop/libqmi/commit/19f4b39ee85500e7e868b8a100fba19c04fb3c30
-> > >
-> > > However, ARPHRD_RAWIP is only available since kernel 4.14 and
-> > > https://github.com/torvalds/linux/commit/cdf4969c42a6c1a376dd03a9e846cf638d3cd4b1
-> > >
-> > > Fixes:
-> > >  - http://autobuild.buildroot.org/results/c8853b7161bd85d46c1282c6c097e7ef4042ae68
-> > >
-> >
-> > This is totally not intentional; the ARPHRD_RAWIP symbol is used in
-> > the rmnet backend, and the rmnet backend itself should only be used if
-> > the kernel has rmnet support, which we look for at configure time with
-> > the following check:
-> >
-> > AC_EGREP_HEADER([ifla_rmnet_flags],
-> >                 [linux/if_link.h],
-> >                 [enable_rmnet_support=yes],
-> >                 [enable_rmnet_support=no])
-> >
-> > We should probably improve that check to also include a lookup for the
-> > ARPHRD_RAWIP symbol.
-> > What do you think?
-> Thanks for your feedback, I wasn't sure if it was intentional or not
-> by reading the two commit messages.
-> I'll set this patch as rejected on patchwork.
-> Feel free to send another patch as avoiding this dependency on kernel
-> 4.14 would be great indeed.
+If libc doesn't provide this symbol yet, define it ourselves. The
+symbol will only be used if rmnet is enabled in the kernel anyway.
 
-Oh, I don't think the issue is related to needing 4.14 or newer. The
-build you posted as failing was using (if I'm reading it correctly in
-the config file) kernel 5.11 headers. The ARPHRD_RAWIP symbol was
-indeed introduced in 4.14, but the ifla_rmnet_flags (what we check for
-during configure) were introduced much later in 4.17.
+This patch will be included in the next libqmi 1.28.4.
 
-The problem is, I believe, that we're including libc's if_arp.h, and
-that one may not have that symbol defined yet, and so it failed the
-build. I'll fix that in upstream and provide a patch here.
+Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
+---
+ ...-when-ARPHRD_RAWIP-isn-t-defined-in-.patch | 39 +++++++++++++++++++
+ 1 file changed, 39 insertions(+)
+ create mode 100644 package/libqmi/0001-libqmi-fix-build-when-ARPHRD_RAWIP-isn-t-defined-in-.patch
 
+diff --git a/package/libqmi/0001-libqmi-fix-build-when-ARPHRD_RAWIP-isn-t-defined-in-.patch b/package/libqmi/0001-libqmi-fix-build-when-ARPHRD_RAWIP-isn-t-defined-in-.patch
+new file mode 100644
+index 0000000000..fb438676a9
+--- /dev/null
++++ b/package/libqmi/0001-libqmi-fix-build-when-ARPHRD_RAWIP-isn-t-defined-in-.patch
+@@ -0,0 +1,39 @@
++From 6745e19b07006611eb392e5b33095c63ee41fe92 Mon Sep 17 00:00:00 2001
++From: Aleksander Morgado <aleksander@aleksander.es>
++Date: Tue, 30 Mar 2021 00:13:45 +0200
++Subject: [PATCH] libqmi: fix build when ARPHRD_RAWIP isn't defined in libc
++
++The kernel may be new enough to have rmnet support, but it could be
++that libc doesn't have ARPHRD_RAWIP defined yet; if so, just define it
++ourselves.
++
++Fixes http://autobuild.buildroot.org/results/c8853b7161bd85d46c1282c6c097e7ef4042ae68
++
++Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
++---
++ src/libqmi-glib/qmi-net-port-manager-rmnet.c | 7 +++++++
++ 1 file changed, 7 insertions(+)
++
++diff --git a/src/libqmi-glib/qmi-net-port-manager-rmnet.c b/src/libqmi-glib/qmi-net-port-manager-rmnet.c
++index bd6727e3..82935bb8 100644
++--- a/src/libqmi-glib/qmi-net-port-manager-rmnet.c
+++++ b/src/libqmi-glib/qmi-net-port-manager-rmnet.c
++@@ -24,8 +24,15 @@
++ #include <linux/if_link.h>
++ #include <linux/netlink.h>
++ #include <linux/rtnetlink.h>
+++
++ #include <net/if.h>
++ #include <net/if_arp.h>
+++
+++/* The if_arp.h from libc may not have this symbol yet */
+++#if !defined ARPHRD_RAWIP
+++#define ARPHRD_RAWIP 519
+++#endif
+++
++ #include <sys/socket.h>
++ #include <sys/types.h>
++ #include <string.h>
++-- 
++2.30.1
++
 -- 
-Aleksander
-https://aleksander.es
+2.30.1
