@@ -1,29 +1,57 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 29 Mar 2021 22:14:48 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libglib2: security bump to
- version 2.66.8
-In-Reply-To: <20210321131508.1141933-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 21 Mar 2021 14:15:08 +0100")
-References: <20210321131508.1141933-1-fontaine.fabrice@gmail.com>
-Message-ID: <87mtulemyv.fsf@dell.be.48ers.dk>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 29 Mar 2021 22:26:13 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mariadb: security bump to version
+ 10.3.28
+Message-ID: <20210329202613.293334-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+Fix CVE-2021-27928: A remote code execution issue was discovered in
+MariaDB 10.2 before 10.2.37, 10.3 before 10.3.28, 10.4 before 10.4.18,
+and 10.5 before 10.5.9; Percona Server through 2021-03-03; and the wsrep
+patch through 2021-03-03 for MySQL. An untrusted search path leads to
+eval injection, in which a database SUPER user can execute OS commands
+after modifying wsrep_provider and wsrep_notify_cmd. NOTE: this does not
+affect an Oracle product.
 
- > Fix a security issue when using g_file_replace() with
- > G_FILE_CREATE_REPLACE_DESTINATION
+https://mariadb.com/kb/en/mariadb-10328-release-notes/
+https://mariadb.com/kb/en/mariadb-10328-changelog/
 
- > https://gitlab.gnome.org/GNOME/glib/-/tags/2.66.8
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/mariadb/mariadb.hash | 6 +++---
+ package/mariadb/mariadb.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Committed to 2021.02.x, thanks.
-
-Doesn't look immediately obvious to backport to 2.62.x / 2.64.x.
-
+diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
+index a210dd9dad..26faf529c2 100644
+--- a/package/mariadb/mariadb.hash
++++ b/package/mariadb/mariadb.hash
+@@ -1,6 +1,6 @@
+-# From https://downloads.mariadb.org/mariadb/10.3.27
+-sha256  0dadc1650ab2ff40caab58210e93b106ae1e3d1a82e5b0fd92c795b8b43e4619  mariadb-10.3.27.tar.gz
+-sha512  1ebfdfa3ef6e13e92615ac2fb6995362ca60fe78f57ff3cf9e384517f95eaf4c701e60fe0977b1eee73889cdfe3367720da9a9bae3dd1a09a4558114ba593369  mariadb-10.3.27.tar.gz
++# From https://downloads.mariadb.org/mariadb/10.3.28
++sha256  e8c912cae2e5800d0da364cc23437907ed4be767f2cbdf198cf3afc03db6a6a3  mariadb-10.3.28.tar.gz
++sha512  f6941bcc818f9b3640e4b5fdbdd3a32b45c62c04087e583f1f0e1c0258b09a21c7639abd1c902e183c057838308ad5eedc00ffee76d44a02043e8e349015fb20  mariadb-10.3.28.tar.gz
+ 
+ # Hash for license files
+ sha256  a4665c1189fe31e0bbc27e9b55439df7dad6e99805407fe58d78da7aabe678f8  README.md
+diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
+index 252c3079e0..56d6afab17 100644
+--- a/package/mariadb/mariadb.mk
++++ b/package/mariadb/mariadb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MARIADB_VERSION = 10.3.27
++MARIADB_VERSION = 10.3.28
+ MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
+ MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
+ # Tarball no longer contains LGPL license text
 -- 
-Bye, Peter Korsgaard
+2.30.2
