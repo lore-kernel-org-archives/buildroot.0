@@ -1,154 +1,58 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 29 Mar 2021 19:41:11 +0200
-Subject: [Buildroot] [PATCH v1] package/valgrind: bump version to 3.17.0
-Message-ID: <20210329174111.24543-1-ps.report@gmx.net>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 29 Mar 2021 19:55:42 +0200
+Subject: [Buildroot] [PATCH 1/1] package/tvheadend: add option for iptv
+ support
+Message-ID: <20210329175542.182931-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- bump version to 3.17.0
-- adjust tool remove hooks according to the change to libexec
-- fix massive remove hook, ms_script vs. ms_print
-- add additional sha256 source package hash
+When enabled some IPTV streams are piped using /usr/bin/ffmpeg so make
+sure that the ffmpeg binary is present.
 
-For details see [1].
-
-[1] https://www.valgrind.org/docs/manual/dist.news.html
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/valgrind/valgrind.hash |  4 +++-
- package/valgrind/valgrind.mk   | 26 +++++++++++++-------------
- 2 files changed, 16 insertions(+), 14 deletions(-)
+ package/tvheadend/Config.in    | 7 +++++++
+ package/tvheadend/tvheadend.mk | 7 +++++++
+ 2 files changed, 14 insertions(+)
 
-diff --git a/package/valgrind/valgrind.hash b/package/valgrind/valgrind.hash
-index 2b24ac44b6..648a590ca3 100644
---- a/package/valgrind/valgrind.hash
-+++ b/package/valgrind/valgrind.hash
-@@ -1,5 +1,7 @@
- # From https://valgrind.org/downloads/current.html
--md5  d1b153f1ab17cf1f311705e7a83ef589  valgrind-3.16.1.tar.bz2
-+md5  afe11b5572c3121a781433b7c0ab741b  valgrind-3.17.0.tar.bz2
-+# locally computed
-+sha256  ad3aec668e813e40f238995f60796d9590eee64a16dff88421430630e69285a2  valgrind-3.17.0.tar.bz2
+diff --git a/package/tvheadend/Config.in b/package/tvheadend/Config.in
+index 909d955c02..94e1ccafe2 100644
+--- a/package/tvheadend/Config.in
++++ b/package/tvheadend/Config.in
+@@ -28,6 +28,13 @@ config BR2_PACKAGE_TVHEADEND
  
- # License files
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
-index a1b4d97ee6..b87e1e518f 100644
---- a/package/valgrind/valgrind.mk
-+++ b/package/valgrind/valgrind.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ if BR2_PACKAGE_TVHEADEND
  
--VALGRIND_VERSION = 3.16.1
-+VALGRIND_VERSION = 3.17.0
- VALGRIND_SITE = https://sourceware.org/pub/valgrind
- VALGRIND_SOURCE = valgrind-$(VALGRIND_VERSION).tar.bz2
- VALGRIND_LICENSE = GPL-2.0, GFDL-1.2
-@@ -64,7 +64,7 @@ VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_INSTALL_UCLIBC_SUPP
++config BR2_PACKAGE_TVHEADEND_IPTV
++	bool "IPTV support"
++	default y
++	select BR2_PACKAGE_FFMPEG_FFMPEG if BR2_PACKAGE_FFMPEG
++	help
++	  Enable IPTV support.
++
+ config BR2_PACKAGE_TVHEADEND_TRANSCODING
+ 	bool "transcoding support"
+ 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index 114142bfa9..e013c83446 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
+@@ -63,6 +63,13 @@ TVHEADEND_CONF_OPTS += \
+ 	--disable-libx265
+ endif
  
- ifeq ($(BR2_PACKAGE_VALGRIND_MEMCHECK),)
- define VALGRIND_REMOVE_MEMCHECK
--	rm -f $(TARGET_DIR)/usr/lib/valgrind/*memcheck*
-+	rm -f $(TARGET_DIR)/usr/libexec/valgrind/*memcheck*
- endef
- 
- VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_MEMCHECK
-@@ -72,7 +72,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_VALGRIND_CACHEGRIND),)
- define VALGRIND_REMOVE_CACHEGRIND
--	rm -f $(TARGET_DIR)/usr/lib/valgrind/*cachegrind*
-+	rm -f $(TARGET_DIR)/usr/libexec/valgrind/*cachegrind*
- 	for i in cg_annotate cg_diff cg_merge; do \
- 		rm -f $(TARGET_DIR)/usr/bin/$$i ; \
- 	done
-@@ -83,7 +83,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_VALGRIND_CALLGRIND),)
- define VALGRIND_REMOVE_CALLGRIND
--	rm -f $(TARGET_DIR)/usr/lib/valgrind/*callgrind*
-+	rm -f $(TARGET_DIR)/usr/libexec/valgrind/*callgrind*
- 	for i in callgrind_annotate callgrind_control ; do \
- 		rm -f $(TARGET_DIR)/usr/bin/$$i ; \
- 	done
-@@ -94,7 +94,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_VALGRIND_HELGRIND),)
- define VALGRIND_REMOVE_HELGRIND
--	rm -f $(TARGET_DIR)/usr/lib/valgrind/*helgrind*
-+	rm -f $(TARGET_DIR)/usr/libexec/valgrind/*helgrind*
- endef
- 
- VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_HELGRIND
-@@ -102,7 +102,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_VALGRIND_DRD),)
- define VALGRIND_REMOVE_DRD
--	rm -f $(TARGET_DIR)/usr/lib/valgrind/*drd*
-+	rm -f $(TARGET_DIR)/usr/libexec/valgrind/*drd*
- endef
- 
- VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_DRD
-@@ -110,8 +110,8 @@ endif
- 
- ifeq ($(BR2_PACKAGE_VALGRIND_MASSIF),)
- define VALGRIND_REMOVE_MASSIF
--	rm -f $(TARGET_DIR)/usr/lib/valgrind/*massif*
--	rm -f $(TARGET_DIR)/usr/bin/ms_script
-+	rm -f $(TARGET_DIR)/usr/libexec/valgrind/*massif*
-+	rm -f $(TARGET_DIR)/usr/bin/ms_print
- endef
- 
- VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_MASSIF
-@@ -119,7 +119,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_VALGRIND_DHAT),)
- define VALGRIND_REMOVE_DHAT
--	rm -f $(TARGET_DIR)/usr/lib/valgrind/*dhat*
-+	rm -f $(TARGET_DIR)/usr/libexec/valgrind/*dhat*
- endef
- 
- VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_DHAT
-@@ -127,7 +127,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_VALGRIND_SGCHECK),)
- define VALGRIND_REMOVE_SGCHECK
--	rm -f $(TARGET_DIR)/usr/lib/valgrind/*sgcheck*
-+	rm -f $(TARGET_DIR)/usr/libexec/valgrind/*sgcheck*
- endef
- 
- VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_SGCHECK
-@@ -135,7 +135,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_VALGRIND_BBV),)
- define VALGRIND_REMOVE_BBV
--	rm -f $(TARGET_DIR)/usr/lib/valgrind/*bbv*
-+	rm -f $(TARGET_DIR)/usr/libexec/valgrind/*bbv*
- endef
- 
- VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_BBV
-@@ -143,7 +143,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_VALGRIND_LACKEY),)
- define VALGRIND_REMOVE_LACKEY
--	rm -f $(TARGET_DIR)/usr/lib/valgrind/*lackey*
-+	rm -f $(TARGET_DIR)/usr/libexec/valgrind/*lackey*
- endef
- 
- VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_LACKEY
-@@ -151,7 +151,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_VALGRIND_NULGRIND),)
- define VALGRIND_REMOVE_NULGRIND
--	rm -f $(TARGET_DIR)/usr/lib/valgrind/*none*
-+	rm -f $(TARGET_DIR)/usr/libexec/valgrind/*none*
- endef
- 
- VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_NULGRIND
++ifeq ($(BR2_PACKAGE_TVHEADEND_IPTV),y)
++TVHEADEND_CONF_OPTS += --enable-iptv
++TVHEADEND_DEPENDENCIES += ffmpeg
++else
++TVHEADEND_CONF_OPTS += --disable-iptv
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBDVBCSA),y)
+ TVHEADEND_DEPENDENCIES += libdvbcsa
+ TVHEADEND_CONF_OPTS += --enable-tvhcsa
 -- 
-2.30.2
+2.29.2
