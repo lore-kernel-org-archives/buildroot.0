@@ -1,40 +1,35 @@
-From: Alexander Dahl <post@lespocky.de>
-Date: Mon, 29 Mar 2021 21:29:05 +0200
-Subject: [Buildroot] [PATCH] package/fastd: add FASTD_CPE_ID_VERSION
-In-Reply-To: <20210329152803.594a910f@windsurf.home>
-References: <20210329152803.594a910f@windsurf.home>
-Message-ID: <20210329192905.19883-1-post@lespocky.de>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Mon, 29 Mar 2021 21:42:40 +0200
+Subject: [Buildroot] [PATCH 1/1] package/modem-manager: bump version to
+ 1.16.2
+In-Reply-To: <CAAP7uc+KkOsiPYvu=ac43X9nno-7LJw2DEtSExLETXR_VN+jXw@mail.gmail.com>
+References: <20210329184934.14690-1-petr.vorel@gmail.com>
+ <CAAP7uc+KkOsiPYvu=ac43X9nno-7LJw2DEtSExLETXR_VN+jXw@mail.gmail.com>
+Message-ID: <YGItsBIZ32zztrcg@pevik>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With that FASTD_CPE_ID expands to:
+> > RFC: should I add also --enable-plugin-qcom-soc ?
+> > (there is qcom-db410c-firmware package)
 
-    cpe:2.3:a:fastd_project:fastd:21.0:*:*:*:*:*:*:*
+> The qcom-soc plugin is only relevant if the system where you're running the
+> system is a Qualcomm SoC, and if you woulf plan to use the builtin modem as
+> a modem in ModemManager. An obvious use case is e.g. qualcomm-phones
+> running postmarketos.
+Yep, in postmarketOS it does make perfect sense.
 
-That's the same as listed on
-https://nvd.nist.gov/products/cpe/detail/826746
+> For any other kind of setup, where MM is supposed to use external (e.g.
+> USB, serial...) modems, the qcom-soc plugin is not needed. But it really
+> wouldn't harm to have it either, it would just waste space (in the same way
+> as other plugins that may never be used really).
 
-Signed-off-by: Alexander Dahl <post@lespocky.de>
----
- package/fastd/fastd.mk | 1 +
- 1 file changed, 1 insertion(+)
+> Maybe enable it? I should have probably done that in upstream really, as it
+> doesn't really collide with other stuff
+Maybe having an option for user to decide? Most of the people won't need it,
+but it'd be nice to leave it for Dragonboard 410c (not sure if it uses modem).
 
-diff --git a/package/fastd/fastd.mk b/package/fastd/fastd.mk
-index bbec63d963..c1db1cc472 100644
---- a/package/fastd/fastd.mk
-+++ b/package/fastd/fastd.mk
-@@ -9,6 +9,7 @@ FASTD_SITE = https://github.com/NeoRaider/fastd/releases/download/v$(FASTD_VERSI
- FASTD_SOURCE = fastd-$(FASTD_VERSION).tar.xz
- FASTD_LICENSE = BSD-2-Clause
- FASTD_LICENSE_FILES = COPYRIGHT
-+FASTD_CPE_ID_VERSION = $(FASTD_VERSION).0
- FASTD_DEPENDENCIES = host-bison host-pkgconf libuecc libsodium
- 
- ifeq ($(BR2_PACKAGE_LIBCAP),y)
-
-base-commit: 86d70b64815ca5ced09525d0537e48aa69f6976c
--- 
-2.20.1
+Kind regards,
+Petr
