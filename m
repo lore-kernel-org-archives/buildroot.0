@@ -1,85 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 30 Mar 2021 22:04:34 +0200
-Subject: [Buildroot] [git commit] package/s390-tools: fix zkey build
-Message-ID: <20210330193939.D028386283@busybox.osuosl.org>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Tue, 30 Mar 2021 22:09:45 +0200
+Subject: [Buildroot] [PATCH 1/1] package/modem-manager: bump version to
+ 1.16.2
+In-Reply-To: <CAAP7ucJbn39MmCDtJkTj57cnv8F9QzG=M9SyNcnkWtZ_Ch0uSg@mail.gmail.com>
+References: <20210329184934.14690-1-petr.vorel@gmail.com>
+ <20210330195156.GA24043@scaer>
+ <CAAP7ucJbn39MmCDtJkTj57cnv8F9QzG=M9SyNcnkWtZ_Ch0uSg@mail.gmail.com>
+Message-ID: <YGOFiYzNtM+tnUfZ@pevik>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4e520b8b972fb558982bbca01d69c4ebf5cdd2d9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Yann, Aleksander,
 
-Build of zkey fails since bump to version 2.16.0 in commit
-b82b58a8ddc3d079aa2976b3dafbc965b6107648
+> Hey,
 
-Fixes:
- - http://autobuild.buildroot.org/results/e7f229a98dab188ee9c40e4709fd26bfa67358d3
+> > On 2021-03-29 20:49 +0200, Petr Vorel spake thusly:
+> > > It requires libqmi >= 1.28.0
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...or-when-the-compiler-flags-are-overridden.patch | 54 ++++++++++++++++++++++
- 1 file changed, 54 insertions(+)
+> > > Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 
-diff --git a/package/s390-tools/0002-zkey-Fix-build-error-when-the-compiler-flags-are-overridden.patch b/package/s390-tools/0002-zkey-Fix-build-error-when-the-compiler-flags-are-overridden.patch
-new file mode 100644
-index 0000000000..ee725d396e
---- /dev/null
-+++ b/package/s390-tools/0002-zkey-Fix-build-error-when-the-compiler-flags-are-overridden.patch
-@@ -0,0 +1,54 @@
-+From 3f3f063c98278f53ad3b34e68b70fca62eaea8fb Mon Sep 17 00:00:00 2001
-+From: Ingo Franzki <ifranzki@linux.ibm.com>
-+Date: Tue, 23 Feb 2021 08:52:26 +0100
-+Subject: [PATCH] zkey: Fix build error when the compiler flags are overridden
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+When the compiler flags are overridden, the build of zkey may fail with:
-+
-+kms.c:44:2: error: #error KMS_PLUGIN_LOCATION must be defined
-+   44 | #error KMS_PLUGIN_LOCATION must be defined
-+      |  ^~~~~
-+
-+The Makefile uses CFLAGS variable for defining the KMS_PLUGIN_LOCATION,
-+but it should rather use ALL_CFLAGS.
-+
-+Also use ALL_CPPFLAGS for defining HAVE_LUKS2_SUPPORT.
-+
-+Fixes: https://github.com/ibm-s390-linux/s390-tools/issues/108
-+
-+Signed-off-by: Ingo Franzki <ifranzki@linux.ibm.com>
-+Reviewed-by: Jan Hoeppner <hoeppner@linux.ibm.com>
-+Signed-off-by: Jan H??ppner <hoeppner@linux.ibm.com>
-+
-+[Retrieved from:
-+https://github.com/ibm-s390-linux/s390-tools/commit/3f3f063c98278f53ad3b34e68b70fca62eaea8fb]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ zkey/Makefile | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/zkey/Makefile b/zkey/Makefile
-+index 41129bcf..f74e2091 100644
-+--- a/zkey/Makefile
-++++ b/zkey/Makefile
-+@@ -18,7 +18,7 @@ ifneq (${HAVE_CRYPTSETUP2},0)
-+ 		ifneq (${HAVE_OPENSSL},0)
-+ 			BUILD_TARGETS += zkey-cryptsetup
-+ 			INSTALL_TARGETS += install-zkey-cryptsetup
-+-			CPPFLAGS += -DHAVE_LUKS2_SUPPORT
-++			ALL_CPPFLAGS += -DHAVE_LUKS2_SUPPORT
-+ 		else
-+ 			BUILD_TARGETS += zkey-cryptsetup-skip-openssl
-+ 			INSTALL_TARGETS += zkey-cryptsetup-skip-openssl
-+@@ -34,7 +34,7 @@ endif
-+ 
-+ libs = $(rootdir)/libutil/libutil.a
-+ 
-+-CFLAGS += -DKMS_PLUGIN_LOCATION=\"$(ZKEYKMSPLUGINDIR)\"
-++ALL_CFLAGS += -DKMS_PLUGIN_LOCATION=\"$(ZKEYKMSPLUGINDIR)\"
-+ 
-+ detect-libcryptsetup.dep:
-+ 	echo "#include <libcryptsetup.h>" > detect-libcryptsetup.dep
+> > Applied to master, thanks.
+Thanks a lot!
+
+> > > ---
+> > > Hi,
+
+> > > RFC: should I add also --enable-plugin-qcom-soc ?
+> > > (there is qcom-db410c-firmware package)
+
+> > Maybe you could enable the plugin if the package is enabled:
+
+> >     ifeq ($(BR2_PACKAGE_QCOM_DB410_FIRMWARE),y)
+> >     MODEM_MANAGER_CONF_OPTS += --enable-plugin-qcom-soc
+> >     else
+> >     MODEM_MANAGER_CONF_OPTS += --disable-plugin-qcom-soc
+> >     endif
+Again, thanks!
+
+
+> From a quick Google search, looks like there is no WWAN modem there:
+> "The DragonBoard 410c based on Qualcomm Snapdragon 410 processor is a
+> 64-bit development board with Wi-Fi, Bluetooth, and GPS."
+=> then it makes to leave it.
+
+> The qcom-soc plugin has been tested successfully on MSM8916 or MSM8974
+> SoCs, and there is some ongoing work to make it work on SDM845 and
+> similar platforms.
+It looks like it's so far really useful only for postmarketOS.
+
+Kind regards,
+Petr
