@@ -1,40 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 30 Mar 2021 22:24:50 +0200
-Subject: [Buildroot] [git commit] package/sdl2: drop tslib
-Message-ID: <20210330200112.AEFD88A4CA@busybox.osuosl.org>
+Date: Tue, 30 Mar 2021 22:28:45 +0200
+Subject: [Buildroot] [PATCH 1/1] package/efivar: disable -Werror
+In-Reply-To: <20210322070047.514146-1-fontaine.fabrice@gmail.com>
+References: <20210322070047.514146-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210330222845.43523120@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=083cd205c7e9f32145f7752502df7a2c24b519f2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 22 Mar 2021 08:00:47 +0100
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-non existing tslib support has been dropped since version 2.0.14 and
-https://github.com/libsdl-org/SDL/commit/4c96faee578efcba3f2d6afe8e2122f26b1dfb0b
+> Fix the following build failure with gcc 10:
+> 
+> /home/buildroot/autobuild/run/instance-1/output-1/host/bin/aarch64-none-linux-gnu-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2   -I/home/buildroot/autobuild/run/instance-1/output-1/build/efivar-37/src/include/   -specs=/home/buildroot/autobuild/run/instance-1/output-1/build/efivar-37/gcc.specs  -L.  -fPIC -Wl,-z,muldefs     -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -o efivar efivar.c -lefivar -ldl
+> In file included from efivar.h:28,
+>                  from efivar.c:40:
+> In function 'text_to_guid',
+>     inlined from 'parse_name.constprop' at efivar.c:157:8:
+> guid.h:106:2: error: 'strncpy' output may be truncated copying 8 bytes from a string of length 38 [-Werror=stringop-truncation]
+>   106 |  strncpy(eightbytes, text, 8);
+>       |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> cc1: all warnings being treated as errors
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/fcba72d359f4128515560e9105384cd4deff5043
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  .../efivar/0007-gcc.specs-drop-Werror.patch   | 44 +++++++++++++++++++
+>  1 file changed, 44 insertions(+)
+>  create mode 100644 package/efivar/0007-gcc.specs-drop-Werror.patch
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/sdl2/sdl2.mk | 7 -------
- 1 file changed, 7 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
-index 48148d38e3..a2e426e578 100644
---- a/package/sdl2/sdl2.mk
-+++ b/package/sdl2/sdl2.mk
-@@ -142,13 +142,6 @@ else
- SDL2_CONF_OPTS += --disable-video-opengles
- endif
- 
--ifeq ($(BR2_PACKAGE_TSLIB),y)
--SDL2_DEPENDENCIES += tslib
--SDL2_CONF_OPTS += --enable-input-tslib
--else
--SDL2_CONF_OPTS += --disable-input-tslib
--endif
--
- ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
- SDL2_DEPENDENCIES += alsa-lib
- SDL2_CONF_OPTS += --enable-alsa
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
