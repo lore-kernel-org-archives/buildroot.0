@@ -1,57 +1,72 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 30 Mar 2021 23:23:03 +0200
-Subject: [Buildroot] [git commit] package/qwt: bump version to 6.1.6
-Message-ID: <20210330205827.BECED8A8F0@busybox.osuosl.org>
+Date: Tue, 30 Mar 2021 23:23:15 +0200
+Subject: [Buildroot] [git commit] package/xtables-addons: bump version to
+ 3.17
+Message-ID: <20210330205827.C9DD1860CE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2d42cf256dd8e336ea06606ffd8b360a924eda29
+commit: https://git.buildroot.net/buildroot/commit/?id=c0526b953e6a490afba5c3d4e6dd037243309210
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Changelog ([1]):
 
-  1) Maintenance
-    - QwtPlotLayout::activate: avoid compiler issues with Qt 5.15
-    - QwtPointPolar: missing copy constructor added
+  v3.18 (2021-03-11)
+  ==================
+  - xt_pknock: fix a build failure on ARM 32-bit
 
-[1] https://sourceforge.net/p/qwt/code/HEAD/tree/tags/qwt-6.1.6/CHANGES-6.1
+  v3.17 (2021-02-28)
+  ==================
+  - xt_pknock: cure a NULL deref
+
+  v3.16 (2021-02-24)
+  ==================
+  - xt_pknock: build fix for ILP32 targets
+
+  v3.15 (2021-02-05)
+  ==================
+  - xt_ECHO: support new function signature of security_skb_classify_flow
+  - xt_lscan: add --mirai option
+  - Support for Linux 5.11
+
+  v3.14 (2020-11-24)
+  ==================
+  - DELUDE, ECHO, TARPIT: use actual tunnel socket (ip_route_me_harder).
+  - geoip: scripts for use with MaxMind DB have been brought back,
+    partly under new names.
+  - Gave xt_geoip_fetch a more fitting name, xt_geoip_query.
+
+[1] https://fossies.org/linux/privat/xtables-addons-3.18.tar.xz/xtables-addons-3.18/doc/changelog.txt
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/qwt/qwt.hash | 8 ++++----
- package/qwt/qwt.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/xtables-addons/xtables-addons.hash | 2 +-
+ package/xtables-addons/xtables-addons.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/qwt/qwt.hash b/package/qwt/qwt.hash
-index 5e9a9a3d7a..d4fd210cbd 100644
---- a/package/qwt/qwt.hash
-+++ b/package/qwt/qwt.hash
-@@ -1,7 +1,7 @@
--# From https://sourceforge.net/projects/qwt/files/qwt/6.1.5/
--sha1  07c71427f1f4bbd0354b3a98965943ce2f220766  qwt-6.1.5.tar.bz2
--md5  d65582f99312796ed42c3be3208ed3db  qwt-6.1.5.tar.bz2
-+# From https://sourceforge.net/projects/qwt/files/qwt/6.1.6
-+md5  cc71be5d6c33c2fc19ae8082ccdd3e83  qwt-6.1.6.tar.bz2
-+sha1  b1f17a86c9b1b0790a0c0067ef69fb6277efac79  qwt-6.1.6.tar.bz2
- 
- # Locally computed
--sha256  4076de63ec2b5e84379ddfebf27c7b29b8dc9074f3db7e2ca61d11a1d8adc041  qwt-6.1.5.tar.bz2
-+sha256  99460d31c115ee4117b0175d885f47c2c590d784206f09815dc058fbe5ede1f6  qwt-6.1.6.tar.bz2
- sha256  d8737db330e1eeb439962e11654ab7f1aece3561d9415454a8c538643824ede6  COPYING
-diff --git a/package/qwt/qwt.mk b/package/qwt/qwt.mk
-index 95a041e97a..9f0b78655f 100644
---- a/package/qwt/qwt.mk
-+++ b/package/qwt/qwt.mk
+diff --git a/package/xtables-addons/xtables-addons.hash b/package/xtables-addons/xtables-addons.hash
+index 2cfb91178e..a103fa3b52 100644
+--- a/package/xtables-addons/xtables-addons.hash
++++ b/package/xtables-addons/xtables-addons.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  893c0c4ea09759cda1ab7e68f1281d125e59270f7b59e446204ce686c6a76d65  xtables-addons-3.13.tar.xz
++sha256  2a640535f209ec59467b8c8b4343b446801a21a112a3fc189818d6e2697f5cf1  xtables-addons-3.17.tar.xz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE
+diff --git a/package/xtables-addons/xtables-addons.mk b/package/xtables-addons/xtables-addons.mk
+index 55e1a5d01b..feed054e88 100644
+--- a/package/xtables-addons/xtables-addons.mk
++++ b/package/xtables-addons/xtables-addons.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--QWT_VERSION = 6.1.5
-+QWT_VERSION = 6.1.6
- QWT_SOURCE = qwt-$(QWT_VERSION).tar.bz2
- QWT_SITE = http://downloads.sourceforge.net/project/qwt/qwt/$(QWT_VERSION)
- QWT_INSTALL_STAGING = YES
+-XTABLES_ADDONS_VERSION = 3.13
++XTABLES_ADDONS_VERSION = 3.17
+ XTABLES_ADDONS_SOURCE = xtables-addons-$(XTABLES_ADDONS_VERSION).tar.xz
+ XTABLES_ADDONS_SITE = https://inai.de/files/xtables-addons
+ XTABLES_ADDONS_DEPENDENCIES = iptables linux host-pkgconf
