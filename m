@@ -1,37 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 30 Mar 2021 22:25:22 +0200
-Subject: [Buildroot] [PATCH v1] package/start-stop-daemon: bump version
- to 1.20.7.1
-In-Reply-To: <20210321210013.10407-1-ps.report@gmx.net>
-References: <20210321210013.10407-1-ps.report@gmx.net>
-Message-ID: <20210330222522.2cb10dc5@windsurf.home>
+Date: Tue, 30 Mar 2021 22:24:50 +0200
+Subject: [Buildroot] [git commit] package/tzdata: bump version to 2021a
+Message-ID: <20210330200112.BA3DF8A672@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 21 Mar 2021 22:00:13 +0100
-Peter Seiderer <ps.report@gmx.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=01dc8f53418e4b91068e53f1fb99d765fe8b3833
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> - rebased 0001-add-uclibc-alias-and-musl.patch
-> - rebased 0002-just-warn-on-missing-arch.patch
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  .../0001-add-uclibc-alias-and-musl.patch      | 58 ++++++++++++-------
->  .../0002-just-warn-on-missing-arch.patch      | 38 ++++++++----
->  .../start-stop-daemon/start-stop-daemon.hash  |  4 +-
->  .../start-stop-daemon/start-stop-daemon.mk    |  4 +-
->  4 files changed, 66 insertions(+), 38 deletions(-)
+For details see [1].
 
-Applied to master, thanks. Of course, it would be nice if we could
-upstream our two patches :-)
+[1] https://mm.icann.org/pipermail/tz-announce/2021-January/000065.html
 
-Thanks!
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/tzdata/tzdata.hash | 4 ++--
+ package/tzdata/tzdata.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/tzdata/tzdata.hash b/package/tzdata/tzdata.hash
+index 6a1ccc128d..f70627481a 100644
+--- a/package/tzdata/tzdata.hash
++++ b/package/tzdata/tzdata.hash
+@@ -1,4 +1,4 @@
+-# From https://mm.icann.org/pipermail/tz-announce/2020-December/000064.html
+-sha512  dd312def18c807452fda2e697514e2064c5f51ebdbedd0cfe6f231252c76ee5d4409f653b295ed5657b7d30b868690047fdb70a10942e69eaa40b77473e3f9ca  tzdata2020f.tar.gz
++# From https://mm.icann.org/pipermail/tz-announce/2021-January/000065.html
++sha512  7cdd762ec90ce12a30fa36b1d66d1ea82d9fa21e514e2b9c7fcbe2541514ee0fadf30843ff352c65512fb270857b51d1517b45e1232b89c6f954ba9ff1833bb3  tzdata2021a.tar.gz
+ # Locally computed:
+ sha256  0613408568889f5739e5ae252b722a2659c02002839ad970a63dc5e9174b27cf  LICENSE
+diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
+index 8201dc1201..922e7420bc 100644
+--- a/package/tzdata/tzdata.mk
++++ b/package/tzdata/tzdata.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TZDATA_VERSION = 2020f
++TZDATA_VERSION = 2021a
+ TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
+ TZDATA_SITE = https://www.iana.org/time-zones/repository/releases
+ TZDATA_STRIP_COMPONENTS = 0
