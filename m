@@ -1,12 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 Mar 2021 08:17:36 +0200
-Subject: [Buildroot] [PATCH 2/2] package/haserl: security bump to
- version 0.9.36
-In-Reply-To: <20210329201026.254940-2-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 29 Mar 2021 22:10:26 +0200")
-References: <20210329201026.254940-1-fontaine.fabrice@gmail.com>
- <20210329201026.254940-2-fontaine.fabrice@gmail.com>
-Message-ID: <87a6qldv27.fsf@dell.be.48ers.dk>
+Date: Tue, 30 Mar 2021 08:18:10 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mariadb: security bump to
+ version 10.3.28
+In-Reply-To: <20210329202613.293334-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 29 Mar 2021 22:26:13 +0200")
+References: <20210329202613.293334-1-fontaine.fabrice@gmail.com>
+Message-ID: <875z19dv19.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,19 +14,16 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > 2021-03-07	0.9.36
- > *	Fix sf.net issue #5 - its possible to issue a PUT request
- > 	without a CONTENT-TYPE.   Assume an octet-stream in that case.
- > *	Change the Prefix for variables to be the REQUEST_METHOD
- > 	(PUT/DELETE/GET/POST)
- > 	**** THIS IS A BREAKING CHANGE vs 0.9.33 ****
- > *	Mitigations vs running haserl to get access to files not
- > 	available to the user.
+ > Fix CVE-2021-27928: A remote code execution issue was discovered in
+ > MariaDB 10.2 before 10.2.37, 10.3 before 10.3.28, 10.4 before 10.4.18,
+ > and 10.5 before 10.5.9; Percona Server through 2021-03-03; and the wsrep
+ > patch through 2021-03-03 for MySQL. An untrusted search path leads to
+ > eval injection, in which a database SUPER user can execute OS commands
+ > after modifying wsrep_provider and wsrep_notify_cmd. NOTE: this does not
+ > affect an Oracle product.
 
- > - Fix CVE-2021-29133: Lack of verification in haserl, a component of
- >   Alpine Linux Configuration Framework, before 0.9.36 allows local users
- >   to read the contents of any file on the filesystem.
- > - Update indentation in hash file (two spaces)
+ > https://mariadb.com/kb/en/mariadb-10328-release-notes/
+ > https://mariadb.com/kb/en/mariadb-10328-changelog/
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
