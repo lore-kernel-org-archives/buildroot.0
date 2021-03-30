@@ -1,72 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 30 Mar 2021 23:23:15 +0200
-Subject: [Buildroot] [git commit] package/xtables-addons: bump version to
- 3.17
-Message-ID: <20210330205827.C9DD1860CE@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 30 Mar 2021 23:39:24 +0200
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xapp_xkbcomp: bump
+ version to 1.4.5
+In-Reply-To: <20210327125947.1724901-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sat, 27 Mar 2021 13:59:47 +0100")
+References: <20210327125947.1724901-1-bernd.kuhls@t-online.de>
+Message-ID: <87a6qkcodv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c0526b953e6a490afba5c3d4e6dd037243309210
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-Changelog ([1]):
+ > Release notes:
+ > https://lists.x.org/archives/xorg-announce/2021-March/003075.html
 
-  v3.18 (2021-03-11)
-  ==================
-  - xt_pknock: fix a build failure on ARM 32-bit
+ > Update license hash after upstream removed trailing whitespaces:
+ > https://cgit.freedesktop.org/xorg/app/xkbcomp/commit/COPYING?id=3b3d25dd32ba48fd6d15ca98baf7109af21e1d97
 
-  v3.17 (2021-02-28)
-  ==================
-  - xt_pknock: cure a NULL deref
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-  v3.16 (2021-02-24)
-  ==================
-  - xt_pknock: build fix for ILP32 targets
+Committed, thanks.
 
-  v3.15 (2021-02-05)
-  ==================
-  - xt_ECHO: support new function signature of security_skb_classify_flow
-  - xt_lscan: add --mirai option
-  - Support for Linux 5.11
-
-  v3.14 (2020-11-24)
-  ==================
-  - DELUDE, ECHO, TARPIT: use actual tunnel socket (ip_route_me_harder).
-  - geoip: scripts for use with MaxMind DB have been brought back,
-    partly under new names.
-  - Gave xt_geoip_fetch a more fitting name, xt_geoip_query.
-
-[1] https://fossies.org/linux/privat/xtables-addons-3.18.tar.xz/xtables-addons-3.18/doc/changelog.txt
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/xtables-addons/xtables-addons.hash | 2 +-
- package/xtables-addons/xtables-addons.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/xtables-addons/xtables-addons.hash b/package/xtables-addons/xtables-addons.hash
-index 2cfb91178e..a103fa3b52 100644
---- a/package/xtables-addons/xtables-addons.hash
-+++ b/package/xtables-addons/xtables-addons.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  893c0c4ea09759cda1ab7e68f1281d125e59270f7b59e446204ce686c6a76d65  xtables-addons-3.13.tar.xz
-+sha256  2a640535f209ec59467b8c8b4343b446801a21a112a3fc189818d6e2697f5cf1  xtables-addons-3.17.tar.xz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE
-diff --git a/package/xtables-addons/xtables-addons.mk b/package/xtables-addons/xtables-addons.mk
-index 55e1a5d01b..feed054e88 100644
---- a/package/xtables-addons/xtables-addons.mk
-+++ b/package/xtables-addons/xtables-addons.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XTABLES_ADDONS_VERSION = 3.13
-+XTABLES_ADDONS_VERSION = 3.17
- XTABLES_ADDONS_SOURCE = xtables-addons-$(XTABLES_ADDONS_VERSION).tar.xz
- XTABLES_ADDONS_SITE = https://inai.de/files/xtables-addons
- XTABLES_ADDONS_DEPENDENCIES = iptables linux host-pkgconf
+-- 
+Bye, Peter Korsgaard
