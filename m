@@ -1,70 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 30 Mar 2021 22:21:12 +0200
-Subject: [Buildroot] [PATCH 1/1] board: add support for Acme Systems
- Acqua A5
-In-Reply-To: <6c4a7d31-8de0-4ead-9d49-11c2d8c674aa@grenoble.cnrs.fr>
-References: <6c4a7d31-8de0-4ead-9d49-11c2d8c674aa@grenoble.cnrs.fr>
-Message-ID: <20210330222112.2c4d748f@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 30 Mar 2021 22:22:53 +0200
+Subject: [Buildroot] [PATCH 1/1] support/scripts: fix pycompile for
+ short filenames
+In-Reply-To: <20210329105554.1622972-1-outtierbert@gmail.com>
+References: <20210329105554.1622972-1-outtierbert@gmail.com>
+Message-ID: <20210330202253.GE24043@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Edgar,
+Bert, All,
 
-Thanks a lot for this contribution!
+On 2021-03-29 12:55 +0200, Bert Outtier spake thusly:
+> Signed-off-by: Bert Outtier <outtierbert@gmail.com>
 
-On Mon, 22 Mar 2021 18:14:24 +0100
-Edgar Bonet <bonet@grenoble.cnrs.fr> wrote:
+I was pretty sure I had already handled that issue some time ago... And
+indeed, there was a patch posted, some changes were requested, but a v2
+never materialised.
 
-> The Acqua A5 is a system on module based on the Microchip SAMA5D31 SoC:
-> 
->     https://www.acmesystems.it/acqua
-> 
-> It is available in both 256 MiB and 512 MiB versions, hence the two
-> defconfig files. These configs build microSD card images with:
-> 
->     - AT91Bootstrap 3
->     - Linux 5.4.107
->     - default buildroot packages (uClibc, Busybox)
-> 
-> The device tree blob comes from Acme Systems:
-> 
->     https://github.com/AcmeSystems/dts-archive
-> 
-> It is licensed under GPLv2 or later.
+Applied to master, thanks.
 
-It is a bit annoying that we have to include the .dts directly in
-Buildroot, but it seems easier than creating a package for just
-downloading this Device Tree file, so I've kept your solution there.
+Regards,
+Yann E. MORIN.
 
-> 
-> Signed-off-by: Edgar Bonet <bonet@grenoble.cnrs.fr>
+http://lists.busybox.net/pipermail/buildroot/2020-December/298707.html
+http://lists.busybox.net/pipermail/buildroot/2020-December/298734.html
+
 > ---
->  .../acqua-a5/at91-sama5d3_acqua.dts           | 301 ++++++++++++++++++
->  board/acmesystems/acqua-a5/genimage.cfg       |  28 ++
->  board/acmesystems/acqua-a5/readme.txt         |  44 +++
->  configs/acmesystems_acqua_a5_256mb_defconfig  |  20 ++
->  configs/acmesystems_acqua_a5_512mb_defconfig  |  20 ++
->  5 files changed, 413 insertions(+)
+>  support/scripts/pycompile.py | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/support/scripts/pycompile.py b/support/scripts/pycompile.py
+> index 2b636e03cb..b8cd3cee6c 100644
+> --- a/support/scripts/pycompile.py
+> +++ b/support/scripts/pycompile.py
+> @@ -30,7 +30,7 @@ def compile_one(host_path, strip_root=None, verbose=False):
+>      if os.path.islink(host_path) or not os.path.isfile(host_path):
+>          return  # only compile real files
+>  
+> -    if not re.match(r"^[_A-Za-z][_A-Za-z0-9]+\.py$",
+> +    if not re.match(r"^[_A-Za-z][_A-Za-z0-9]*\.py$",
+>                      os.path.basename(host_path)):
+>          return  # only compile "importable" python modules
+>  
+> -- 
+> 2.25.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-And entry in the DEVELOPERS file was missing, so I've added that.
-
-> +BR2_PACKAGE_HOST_GENIMAGE=y
-
-This is not sufficient for your genimage configuration, you also need:
-
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-
-since you have a FAT partition.
-
-I've fixed those two minor issues, and applied your patch to our master
-branch. Thanks a lot!
-
-Thomas
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
