@@ -1,38 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 30 Mar 2021 21:55:12 +0200
-Subject: [Buildroot] [PATCH] package/binutils: add patches to fix
- OpenRisc bug 27624
-In-Reply-To: <20210322155655.547476-1-giulio.benetti@benettiengineering.com>
-References: <20210322155655.547476-1-giulio.benetti@benettiengineering.com>
-Message-ID: <20210330215512.28912ae3@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 30 Mar 2021 21:55:51 +0200
+Subject: [Buildroot] [git commit] package/pkg-kconfig: fix error string
+Message-ID: <20210330193106.477968AC01@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 22 Mar 2021 16:56:55 +0100
-Giulio Benetti <giulio.benetti@benettiengineering.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=a7348f0f7de1021ea578cd81784e70b1832adb79
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> These patches fix OpenRisc linker bug 27624 that affects packages
-> libtheora, protobuf and zeromq.
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
->  .../0010-bfd-elf32-or1k-fix-ld-assert.patch   | 33 +++++++++++++++++++
->  .../0003-bfd-elf32-or1k-fix-ld-assert.patch   | 33 +++++++++++++++++++
->  .../0003-bfd-elf32-or1k-fix-ld-assert.patch   | 33 +++++++++++++++++++
->  .../0003-bfd-elf32-or1k-fix-ld-assert.patch   | 33 +++++++++++++++++++
->  4 files changed, 132 insertions(+)
->  create mode 100644 package/binutils/2.32/0010-bfd-elf32-or1k-fix-ld-assert.patch
->  create mode 100644 package/binutils/2.34/0003-bfd-elf32-or1k-fix-ld-assert.patch
->  create mode 100644 package/binutils/2.35.2/0003-bfd-elf32-or1k-fix-ld-assert.patch
->  create mode 100644 package/binutils/2.36.1/0003-bfd-elf32-or1k-fix-ld-assert.patch
+Current error string speaks only about "fragment" but here we also deal
+with Kconfig files, so let's add "file or fragment" instead of "fragment".
 
-Applied to master, thanks.
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/pkg-kconfig.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+index 2aecf2e203..dd727b7200 100644
+--- a/package/pkg-kconfig.mk
++++ b/package/pkg-kconfig.mk
+@@ -117,7 +117,7 @@ $(2)_KCONFIG_STAMP_DOTCONFIG = .stamp_dotconfig
+ $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES): | $(1)-patch
+ 	for f in $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES); do \
+ 		if [ ! -f "$$$${f}" ]; then \
+-			printf "Kconfig fragment '%s' for '%s' does not exist\n" "$$$${f}" "$(1)"; \
++			printf "Kconfig file or fragment '%s' for '%s' does not exist\n" "$$$${f}" "$(1)"; \
+ 			exit 1; \
+ 		fi; \
+ 	done
