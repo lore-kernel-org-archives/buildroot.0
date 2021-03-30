@@ -1,32 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 30 Mar 2021 21:51:20 +0200
-Subject: [Buildroot] [PATCH] package/frr: bump to 7.5.1 version
-In-Reply-To: <20210322131228.12614-1-vadym.kochan@plvision.eu>
-References: <20210322131228.12614-1-vadym.kochan@plvision.eu>
-Message-ID: <20210330215120.61f0135b@windsurf.home>
+From: Aleksander Morgado <aleksander@aleksander.es>
+Date: Tue, 30 Mar 2021 21:51:21 +0200
+Subject: [Buildroot] [PATCH 1/2] package/libqmi: drop unrecognized option
+In-Reply-To: <20210330193734.GY24043@scaer>
+References: <20210329211957.321612-1-fontaine.fabrice@gmail.com>
+ <CAAP7uc+qpS+Y9xN=C89jzupCH5qS2-_W_H7smrYa7SqMov57hw@mail.gmail.com>
+ <20210330193734.GY24043@scaer>
+Message-ID: <CAAP7ucKtYSNbPXFMAy7y6k5fLrPM7PN8cWSdSi+N9qpTwz5hJA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 22 Mar 2021 15:12:28 +0200
-Vadym Kochan <vadym.kochan@plvision.eu> wrote:
+Hey,
 
-> This is a maintenance release of FRR 7.5 with lots of bug fixes:
-> 
->     https://github.com/FRRouting/frr/releases/tag/frr-7.5.1
-> 
-> Signed-off-by: Vadym Kochan <vadym.kochan@plvision.eu>
-> ---
->  package/frr/frr.hash | 2 +-
->  package/frr/frr.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+> > -Werror should be always implicitly
+> > disabled.
+>
+> But there is a --disable-Werror option, and I think we should use it
+> unconditionally.
+>
+> I've done that now, and applied to master, thanks.
 
-Applied to master, thanks.
+That is also fine, yes :)
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Aleksander
+https://aleksander.es
