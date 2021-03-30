@@ -1,65 +1,100 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Tue, 30 Mar 2021 11:00:26 +0200
-Subject: [Buildroot] [PATCH] package/perl-parse-yapp: remove useless
- dependencies
-Message-ID: <20210330090026.2049071-1-francois.perrad@gadz.org>
+Date: Tue, 30 Mar 2021 11:01:13 +0200
+Subject: [Buildroot] [PATCH] package/lua: bump to version 5.4.3
+Message-ID: <20210330090113.2049136-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Parse-Yapp comes with a Makefile.PL,
-so it is built with the perl core module ExtUtils-MakeMaker
-
-regenerated with `utils/scancpan -force -host Parse-Yapp`
-
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-parse-yapp/Config.in            | 2 +-
- package/perl-parse-yapp/perl-parse-yapp.hash | 5 ++++-
- package/perl-parse-yapp/perl-parse-yapp.mk   | 2 --
- 3 files changed, 5 insertions(+), 4 deletions(-)
+ package/lua/5.4.2/lua.hash                                  | 6 ------
+ package/lua/{5.4.2 => 5.4.3}/0001-root-path.patch           | 2 +-
+ package/lua/{5.4.2 => 5.4.3}/0002-shared-libs-for-lua.patch | 0
+ package/lua/{5.4.2 => 5.4.3}/0011-linenoise.patch           | 2 +-
+ package/lua/5.4.3/lua.hash                                  | 6 ++++++
+ package/lua/lua.mk                                          | 2 +-
+ 6 files changed, 9 insertions(+), 9 deletions(-)
+ delete mode 100644 package/lua/5.4.2/lua.hash
+ rename package/lua/{5.4.2 => 5.4.3}/0001-root-path.patch (95%)
+ rename package/lua/{5.4.2 => 5.4.3}/0002-shared-libs-for-lua.patch (100%)
+ rename package/lua/{5.4.2 => 5.4.3}/0011-linenoise.patch (97%)
+ create mode 100644 package/lua/5.4.3/lua.hash
 
-diff --git a/package/perl-parse-yapp/Config.in b/package/perl-parse-yapp/Config.in
-index 5cde3d921..278168267 100644
---- a/package/perl-parse-yapp/Config.in
-+++ b/package/perl-parse-yapp/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_PERL_PARSE_YAPP
- 	bool "perl-parse-yapp"
- 	help
--	  A perl frontend to the Parse::Yapp module
-+	  A perl frontend to the Parse::Yapp module.
- 
- 	  https://metacpan.org/release/Parse-Yapp
-diff --git a/package/perl-parse-yapp/perl-parse-yapp.hash b/package/perl-parse-yapp/perl-parse-yapp.hash
-index d5880a2a7..36541592f 100644
---- a/package/perl-parse-yapp/perl-parse-yapp.hash
-+++ b/package/perl-parse-yapp/perl-parse-yapp.hash
-@@ -1,3 +1,6 @@
--# locally computed
-+# retrieved by scancpan from http://cpan.metacpan.org/
-+md5  69584d5b0f0304bb2a23cffcd982c5de  Parse-Yapp-1.21.tar.gz
- sha256  3810e998308fba2e0f4f26043035032b027ce51ce5c8a52a8b8e340ca65f13e5  Parse-Yapp-1.21.tar.gz
+diff --git a/package/lua/5.4.2/lua.hash b/package/lua/5.4.2/lua.hash
+deleted file mode 100644
+index f916c8e4e..000000000
+--- a/package/lua/5.4.2/lua.hash
++++ /dev/null
+@@ -1,6 +0,0 @@
+-# Hashes from: https://www.lua.org/ftp/
+-md5  49c92d6a49faba342c35c52e1ac3f81e  lua-5.4.2.tar.gz
+-sha1  96d4a21393c94bed286b8dc0568f4bdde8730b22  lua-5.4.2.tar.gz
+-
+-# Locally computed
+-sha256  17bd5781d5dfa8c946fea639984fcbcb499d8bb3056a3c2cb5c15c3da5d1c207  doc/readme.html
+diff --git a/package/lua/5.4.2/0001-root-path.patch b/package/lua/5.4.3/0001-root-path.patch
+similarity index 95%
+rename from package/lua/5.4.2/0001-root-path.patch
+rename to package/lua/5.4.3/0001-root-path.patch
+index 8e82c1ce5..c4f6e312e 100644
+--- a/package/lua/5.4.2/0001-root-path.patch
++++ b/package/lua/5.4.3/0001-root-path.patch
+@@ -6,7 +6,7 @@ Index: b/src/luaconf.h
+ ===================================================================
+ --- a/src/luaconf.h
+ +++ b/src/luaconf.h
+-@@ -212,7 +212,7 @@
++@@ -217,7 +217,7 @@
+  
+  #else			/* }{ */
+  
+diff --git a/package/lua/5.4.2/0002-shared-libs-for-lua.patch b/package/lua/5.4.3/0002-shared-libs-for-lua.patch
+similarity index 100%
+rename from package/lua/5.4.2/0002-shared-libs-for-lua.patch
+rename to package/lua/5.4.3/0002-shared-libs-for-lua.patch
+diff --git a/package/lua/5.4.2/0011-linenoise.patch b/package/lua/5.4.3/0011-linenoise.patch
+similarity index 97%
+rename from package/lua/5.4.2/0011-linenoise.patch
+rename to package/lua/5.4.3/0011-linenoise.patch
+index e842e5b1e..7b9d6d76f 100644
+--- a/package/lua/5.4.2/0011-linenoise.patch
++++ b/package/lua/5.4.3/0011-linenoise.patch
+@@ -8,7 +8,7 @@ Index: b/src/lua.c
+ ===================================================================
+ --- a/src/lua.c
+ +++ b/src/lua.c
+-@@ -401,6 +401,14 @@
++@@ -421,6 +421,14 @@
+  #define lua_saveline(L,line)	((void)L, add_history(line))
+  #define lua_freeline(L,b)	((void)L, free(b))
+  
+diff --git a/package/lua/5.4.3/lua.hash b/package/lua/5.4.3/lua.hash
+new file mode 100644
+index 000000000..be3604837
+--- /dev/null
++++ b/package/lua/5.4.3/lua.hash
+@@ -0,0 +1,6 @@
++# Hashes from: https://www.lua.org/ftp/
++md5  ef63ed2ecfb713646a7fcc583cf5f352  lua-5.4.3.tar.gz
++sha1  1dda2ef23a9828492b4595c0197766de6e784bc7  lua-5.4.3.tar.gz
 +
-+# locally computed
- sha256  a5d97e3ee50ba12b7897841a117790f723795e4a61e5ad1668dc064956c84e96  lib/Parse/Yapp.pm
-diff --git a/package/perl-parse-yapp/perl-parse-yapp.mk b/package/perl-parse-yapp/perl-parse-yapp.mk
-index 94f51243f..12f05efe0 100644
---- a/package/perl-parse-yapp/perl-parse-yapp.mk
-+++ b/package/perl-parse-yapp/perl-parse-yapp.mk
-@@ -7,11 +7,9 @@
- PERL_PARSE_YAPP_VERSION = 1.21
- PERL_PARSE_YAPP_SOURCE = Parse-Yapp-$(PERL_PARSE_YAPP_VERSION).tar.gz
- PERL_PARSE_YAPP_SITE = $(BR2_CPAN_MIRROR)/authors/id/W/WB/WBRASWELL
--PERL_PARSE_YAPP_DEPENDENCIES = host-perl-module-build
- PERL_PARSE_YAPP_LICENSE = Artistic or GPL-1.0+
- PERL_PARSE_YAPP_LICENSE_FILES = lib/Parse/Yapp.pm
- PERL_PARSE_YAPP_DISTNAME = Parse-Yapp
--HOST_PERL_PARSE_YAPP_DEPENDENCIES = host-perl-module-build
++# Locally computed
++sha256  d205bfea131113bcdd64d4ebe4a50ce34063b42bad24b93e44b4b0d853ae4d49  doc/readme.html
+diff --git a/package/lua/lua.mk b/package/lua/lua.mk
+index e3a415a06..b385b78b3 100644
+--- a/package/lua/lua.mk
++++ b/package/lua/lua.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- $(eval $(perl-package))
- $(eval $(host-perl-package))
+ ifeq ($(BR2_PACKAGE_LUA_5_4),y)
+-LUA_VERSION = 5.4.2
++LUA_VERSION = 5.4.3
+ else ifeq ($(BR2_PACKAGE_LUA_5_3),y)
+ LUA_VERSION = 5.3.6
+ else
 -- 
 2.27.0
