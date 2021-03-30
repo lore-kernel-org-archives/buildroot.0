@@ -1,73 +1,42 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 30 Mar 2021 20:52:57 +0200
-Subject: [Buildroot] Raspberry Pi 3 linux image installation
-In-Reply-To: <MWHPR02MB23687A78F51DCFE0C3820C4DF17D9@MWHPR02MB2368.namprd02.prod.outlook.com>
-References: <MWHPR02MB2368FA6939186ECB2BDBD14DF1619@MWHPR02MB2368.namprd02.prod.outlook.com>
- <20210326190537.5f421abc@gmx.net>
- <MWHPR02MB23687A78F51DCFE0C3820C4DF17D9@MWHPR02MB2368.namprd02.prod.outlook.com>
-Message-ID: <20210330205257.3e07a915@gmx.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 30 Mar 2021 21:37:05 +0200
+Subject: [Buildroot] [git commit] package/libqmi: switch to the new option
+ to disable -Werror
+Message-ID: <20210330191230.036E9880C6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Nicolas,
+commit: https://git.buildroot.net/buildroot/commit/?id=0de1a23c7521d9fdfa20aff9d6608f7986a636ff
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 30 Mar 2021 10:52:26 +0000, Nicolas Chango <nicolas.chango96@outlook.fr> wrote:
+--enable-more-warnings has been dropped since version 1.26.0 and
+https://github.com/freedesktop/libqmi/commit/9f31a45d5fc137431705d47b83669f35259932b4
 
-> Hello Peter,
-> Thank you very much, it was memory.
-> I raised virtualbox RAM and retry and it was good.
+Instead, a new --disable-Werror option has been added, through the use
+of AX_COMPILER_FLAGS, so use that to explicitly request wrnings not be
+treated as errors.
 
-Thanks for the feedback, good to hear it now works for you
-(please keep the mailing list in CC as error message and
-fix might be helpfully for others too)...
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[yann.morin.1998 at free.fr: use --disable-Werror instead of nothing]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/libqmi/libqmi.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Regards,
-Peter
-
-> 
-> Regards,
-> Nicolas
-> 
-> 
-> 
-> -----Message d'origine-----
-> De?: Peter Seiderer <ps.report@gmx.net> 
-> Envoy??: vendredi 26 mars 2021 19:06
-> ??: Nicolas Chango <nicolas.chango96@outlook.fr>
-> Cc?: buildroot at busybox.net
-> Objet?: Re: [Buildroot] Raspberry Pi 3 linux image installation
-> 
-> Hello Nicolas,
-> 
-> On Fri, 26 Mar 2021 13:17:12 +0000, Nicolas Chango <nicolas.chango96@outlook.fr> wrote:
-> 
-> > Hi, I try to install image for Raspberry Pi 3 device,
-> > 
-> > I use the last Ubuntu version in virtualbox.
-> > 
-> > Afer commands :
-> > 
-> > $ make raspberrypi3_defconfig
-> > $ make
-> > 
-> > ?I have the following errors :
-> > 
-> > g++: fatal error: Processus arr?t? signal terminated program cc1plus
-> > compilation terminated.
-> > make[3]: *** [Makefile:1116 : gimple-match.o] Erreur 1
-> > make[3]: *** Attente des t?ches non termin?es....
-> > make[2]: *** [Makefile:4300 : all-gcc] Erreur 2
-> > make[1]: *** [package/pkg-generic.mk:250 : 
-> > /home/nicolas/buildroot/output/build/host-gcc-initial-9.3.0/.stamp_bui
-> > lt] Erreur 2
-> > make: *** [Makefile:84 : _all] Erreur 2
-> > 
-> > Someone could help me please ?  
-> 
-> Maybe Out-Of-Memory in your Virtualbox? Try to configure more memory (or less CPUs), or set BR2_JLEVEL in your config file to something smaller than your CPU count...
-> 
-> Regards,
-> Peter
+diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
+index b02312d702..4b430d11f8 100644
+--- a/package/libqmi/libqmi.mk
++++ b/package/libqmi/libqmi.mk
+@@ -13,8 +13,7 @@ LIBQMI_INSTALL_STAGING = YES
+ 
+ LIBQMI_DEPENDENCIES = libglib2
+ 
+-# we don't want -Werror
+-LIBQMI_CONF_OPTS = --enable-more-warnings=no
++LIBQMI_CONF_OPTS = --disable-Werror
+ 
+ # if libgudev available, request udev support for a better
+ # qmi-firmware-update experience
