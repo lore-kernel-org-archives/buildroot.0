@@ -1,54 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 Mar 2021 08:15:44 +0200
-Subject: [Buildroot] [git commit] package/wireshark: security bump to
- version 3.4.4
-Message-ID: <20210330055656.EC7098A673@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 30 Mar 2021 09:10:47 +0200
+Subject: [Buildroot] [PATCH 1/1] package/stellarium: bump version to 0.21.0
+Message-ID: <20210330071047.668464-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=705b3dd78cc4a1528308edba3a66bc3c6dfd670f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Release notes:
+http://stellarium.org/release/2021/03/28/stellarium-0.21.0.html
 
-Fix CVE-2021-22191: Improper URL handling in Wireshark 3.4.0 to 3.4.3
-and 3.2.0 to 3.2.11 could allow remote code execution via via packet
-injection or crafted capture file.
-
-https://www.wireshark.org/security/wnpa-sec-2021-03.html
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/wireshark/wireshark.hash | 6 +++---
- package/wireshark/wireshark.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/stellarium/stellarium.hash | 4 ++--
+ package/stellarium/stellarium.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-index 56a0122dd2..71703a2a8b 100644
---- a/package/wireshark/wireshark.hash
-+++ b/package/wireshark/wireshark.hash
-@@ -1,6 +1,6 @@
--# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.4.3.txt
--sha1  7dec4332f21827e360b5830d1d6d566365796a67  wireshark-3.4.3.tar.xz
--sha256  f467cc77f0fc73fce0b854cdbc292f132d4879fca69d417eccad5f967fbf262b  wireshark-3.4.3.tar.xz
-+# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.4.4.txt
-+sha1  fa5c553596dcc6a59735f96a9a0845e3c40abab2  wireshark-3.4.4.tar.xz
-+sha256  729cd11e9715c600e5ad74ca472bacf8af32c20902192d5f2b271268511d4d29  wireshark-3.4.4.tar.xz
- 
- # Locally calculated
- sha256  7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index e751e550bc..8cdc7305d0 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
+diff --git a/package/stellarium/stellarium.hash b/package/stellarium/stellarium.hash
+index fb6d464222..b5290acc72 100644
+--- a/package/stellarium/stellarium.hash
++++ b/package/stellarium/stellarium.hash
+@@ -1,5 +1,5 @@
+ # From https://github.com/Stellarium/stellarium/releases
+-sha1  c399f9c785f6a33d04f1a1c4f2db3309ce4781dc  stellarium-0.20.4.tar.gz
+-sha256  63033bb6ad01b5f021689766b2a09a99bcabcfec57a710e46a93c40a32fda388  stellarium-0.20.4.tar.gz
++sha1  0ada184a15729abb1b02490cb92d055ff3b61d7e   stellarium-0.21.0.tar.gz
++sha256  977fcd6776a47d34b1646727853d15968a1410c34c8ba1b3e5cfbf24b5126f13  stellarium-0.21.0.tar.gz
+ # Locally computed
+ sha256  3aeeb5bb98bf7041ab82cffe15efa28ac58ee2bdf162b71301f5c192be631259  COPYING
+diff --git a/package/stellarium/stellarium.mk b/package/stellarium/stellarium.mk
+index ac0bd47725..936a07c4b3 100644
+--- a/package/stellarium/stellarium.mk
++++ b/package/stellarium/stellarium.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WIRESHARK_VERSION = 3.4.3
-+WIRESHARK_VERSION = 3.4.4
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
- WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
+-STELLARIUM_VERSION = 0.20.4
++STELLARIUM_VERSION = 0.21.0
+ STELLARIUM_SITE = https://github.com/Stellarium/stellarium/releases/download/v$(STELLARIUM_VERSION)
+ STELLARIUM_LICENSE = GPL-2.0+
+ STELLARIUM_LICENSE_FILES = COPYING
+-- 
+2.29.2
