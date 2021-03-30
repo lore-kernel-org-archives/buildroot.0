@@ -1,29 +1,31 @@
-From: Aleksander Morgado <aleksander@aleksander.es>
-Date: Tue, 30 Mar 2021 21:51:21 +0200
-Subject: [Buildroot] [PATCH 1/2] package/libqmi: drop unrecognized option
-In-Reply-To: <20210330193734.GY24043@scaer>
-References: <20210329211957.321612-1-fontaine.fabrice@gmail.com>
- <CAAP7uc+qpS+Y9xN=C89jzupCH5qS2-_W_H7smrYa7SqMov57hw@mail.gmail.com>
- <20210330193734.GY24043@scaer>
-Message-ID: <CAAP7ucKtYSNbPXFMAy7y6k5fLrPM7PN8cWSdSi+N9qpTwz5hJA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 30 Mar 2021 21:51:14 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gnutls: drop unrecognized option
+In-Reply-To: <20210329193058.162304-1-fontaine.fabrice@gmail.com>
+References: <20210329193058.162304-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210330215114.6e2e73e5@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey,
+On Mon, 29 Mar 2021 21:30:58 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> > -Werror should be always implicitly
-> > disabled.
->
-> But there is a --disable-Werror option, and I think we should use it
-> unconditionally.
->
-> I've done that now, and applied to master, thanks.
+> crywrap has been dropped since version 3.6.12 and
+> https://github.com/gnutls/gnutls/commit/c991b5223140e4ef311afac0f25272e602238826
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/gnutls/Config.in |  2 --
+>  package/gnutls/gnutls.mk | 14 --------------
+>  2 files changed, 16 deletions(-)
 
-That is also fine, yes :)
+Applied to master, thanks.
 
+Thomas
 -- 
-Aleksander
-https://aleksander.es
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
