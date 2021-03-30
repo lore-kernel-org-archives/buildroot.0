@@ -1,190 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 30 Mar 2021 21:57:43 +0200
-Subject: [Buildroot] [git commit] package/binutils: add patches to fix
- OpenRisc bug 27624
-Message-ID: <20210330193248.B88E88A3C6@busybox.osuosl.org>
+From: Aleksander Morgado <aleksander@aleksander.es>
+Date: Tue, 30 Mar 2021 21:58:09 +0200
+Subject: [Buildroot] [PATCH 1/1] package/modem-manager: bump version to
+ 1.16.2
+In-Reply-To: <20210330195156.GA24043@scaer>
+References: <20210329184934.14690-1-petr.vorel@gmail.com>
+ <20210330195156.GA24043@scaer>
+Message-ID: <CAAP7ucJbn39MmCDtJkTj57cnv8F9QzG=M9SyNcnkWtZ_Ch0uSg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=da2c1d9c56b54c6022689c3696cd54ea7282b4d4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hey,
 
-These patches fix OpenRisc linker bug 27624 that affects packages
-libtheora, protobuf and zeromq.
+> On 2021-03-29 20:49 +0200, Petr Vorel spake thusly:
+> > It requires libqmi >= 1.28.0
+> >
+> > Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+>
+> Applied to master, thanks.
+>
+> > ---
+> > Hi,
+> >
+> > RFC: should I add also --enable-plugin-qcom-soc ?
+> > (there is qcom-db410c-firmware package)
+>
+> Maybe you could enable the plugin if the package is enabled:
+>
+>     ifeq ($(BR2_PACKAGE_QCOM_DB410_FIRMWARE),y)
+>     MODEM_MANAGER_CONF_OPTS += --enable-plugin-qcom-soc
+>     else
+>     MODEM_MANAGER_CONF_OPTS += --disable-plugin-qcom-soc
+>     endif
+>
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .../2.32/0010-bfd-elf32-or1k-fix-ld-assert.patch   | 35 ++++++++++++++++++++++
- .../2.34/0003-bfd-elf32-or1k-fix-ld-assert.patch   | 35 ++++++++++++++++++++++
- .../2.35.2/0003-bfd-elf32-or1k-fix-ld-assert.patch | 35 ++++++++++++++++++++++
- .../2.36.1/0003-bfd-elf32-or1k-fix-ld-assert.patch | 35 ++++++++++++++++++++++
- 4 files changed, 140 insertions(+)
+From a quick Google search, looks like there is no WWAN modem there:
+"The DragonBoard 410c based on Qualcomm Snapdragon 410 processor is a
+64-bit development board with Wi-Fi, Bluetooth, and GPS."
 
-diff --git a/package/binutils/2.32/0010-bfd-elf32-or1k-fix-ld-assert.patch b/package/binutils/2.32/0010-bfd-elf32-or1k-fix-ld-assert.patch
-new file mode 100644
-index 0000000000..824c9ce3e5
---- /dev/null
-+++ b/package/binutils/2.32/0010-bfd-elf32-or1k-fix-ld-assert.patch
-@@ -0,0 +1,35 @@
-+From 93cf62b662499e560812145dd989056fcf14f00e Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Mon, 22 Mar 2021 13:30:07 +0100
-+Subject: [PATCH] bfd/elf32-or1k: fix ld assert
-+
-+Fixes https://sourceware.org/bugzilla/show_bug.cgi?id=27624
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ bfd/elf32-or1k.c | 9 ++++-----
-+ 1 file changed, 4 insertions(+), 5 deletions(-)
-+
-+diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
-+index 2f200b197b..ae508540f5 100644
-+--- a/bfd/elf32-or1k.c
-++++ b/bfd/elf32-or1k.c
-+@@ -2535,11 +2535,10 @@ or1k_elf_adjust_dynamic_symbol (struct bfd_link_info *info,
-+   if (h->type == STT_FUNC
-+       || h->needs_plt)
-+     {
-+-      if (! bfd_link_pic (info)
-+-	  && !h->def_dynamic
-+-	  && !h->ref_dynamic
-+-	  && h->root.type != bfd_link_hash_undefweak
-+-	  && h->root.type != bfd_link_hash_undefined)
-++      if (h->plt.refcount <= 0
-++         || (SYMBOL_CALLS_LOCAL (info, h)
-++         || (ELF_ST_VISIBILITY (h->other) != STV_DEFAULT
-++             && h->root.type == bfd_link_hash_undefweak)))
-+ 	{
-+ 	  /* This case can occur if we saw a PLT reloc in an input
-+ 	     file, but the symbol was never referred to by a dynamic
-+-- 
-+2.25.1
-+
-diff --git a/package/binutils/2.34/0003-bfd-elf32-or1k-fix-ld-assert.patch b/package/binutils/2.34/0003-bfd-elf32-or1k-fix-ld-assert.patch
-new file mode 100644
-index 0000000000..756493667f
---- /dev/null
-+++ b/package/binutils/2.34/0003-bfd-elf32-or1k-fix-ld-assert.patch
-@@ -0,0 +1,35 @@
-+From 1659226a96b1daecfd08c057d0d5c39309d207ee Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Mon, 22 Mar 2021 13:30:07 +0100
-+Subject: [PATCH] bfd/elf32-or1k: fix ld assert
-+
-+Fixes https://sourceware.org/bugzilla/show_bug.cgi?id=27624
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ bfd/elf32-or1k.c | 9 ++++-----
-+ 1 file changed, 4 insertions(+), 5 deletions(-)
-+
-+diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
-+index 65938e5137..41908f8938 100644
-+--- a/bfd/elf32-or1k.c
-++++ b/bfd/elf32-or1k.c
-+@@ -2566,11 +2566,10 @@ or1k_elf_adjust_dynamic_symbol (struct bfd_link_info *info,
-+   if (h->type == STT_FUNC
-+       || h->needs_plt)
-+     {
-+-      if (! bfd_link_pic (info)
-+-	  && !h->def_dynamic
-+-	  && !h->ref_dynamic
-+-	  && h->root.type != bfd_link_hash_undefweak
-+-	  && h->root.type != bfd_link_hash_undefined)
-++      if (h->plt.refcount <= 0
-++         || (SYMBOL_CALLS_LOCAL (info, h)
-++         || (ELF_ST_VISIBILITY (h->other) != STV_DEFAULT
-++             && h->root.type == bfd_link_hash_undefweak)))
-+ 	{
-+ 	  /* This case can occur if we saw a PLT reloc in an input
-+ 	     file, but the symbol was never referred to by a dynamic
-+-- 
-+2.25.1
-+
-diff --git a/package/binutils/2.35.2/0003-bfd-elf32-or1k-fix-ld-assert.patch b/package/binutils/2.35.2/0003-bfd-elf32-or1k-fix-ld-assert.patch
-new file mode 100644
-index 0000000000..756493667f
---- /dev/null
-+++ b/package/binutils/2.35.2/0003-bfd-elf32-or1k-fix-ld-assert.patch
-@@ -0,0 +1,35 @@
-+From 1659226a96b1daecfd08c057d0d5c39309d207ee Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Mon, 22 Mar 2021 13:30:07 +0100
-+Subject: [PATCH] bfd/elf32-or1k: fix ld assert
-+
-+Fixes https://sourceware.org/bugzilla/show_bug.cgi?id=27624
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ bfd/elf32-or1k.c | 9 ++++-----
-+ 1 file changed, 4 insertions(+), 5 deletions(-)
-+
-+diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
-+index 65938e5137..41908f8938 100644
-+--- a/bfd/elf32-or1k.c
-++++ b/bfd/elf32-or1k.c
-+@@ -2566,11 +2566,10 @@ or1k_elf_adjust_dynamic_symbol (struct bfd_link_info *info,
-+   if (h->type == STT_FUNC
-+       || h->needs_plt)
-+     {
-+-      if (! bfd_link_pic (info)
-+-	  && !h->def_dynamic
-+-	  && !h->ref_dynamic
-+-	  && h->root.type != bfd_link_hash_undefweak
-+-	  && h->root.type != bfd_link_hash_undefined)
-++      if (h->plt.refcount <= 0
-++         || (SYMBOL_CALLS_LOCAL (info, h)
-++         || (ELF_ST_VISIBILITY (h->other) != STV_DEFAULT
-++             && h->root.type == bfd_link_hash_undefweak)))
-+ 	{
-+ 	  /* This case can occur if we saw a PLT reloc in an input
-+ 	     file, but the symbol was never referred to by a dynamic
-+-- 
-+2.25.1
-+
-diff --git a/package/binutils/2.36.1/0003-bfd-elf32-or1k-fix-ld-assert.patch b/package/binutils/2.36.1/0003-bfd-elf32-or1k-fix-ld-assert.patch
-new file mode 100644
-index 0000000000..756493667f
---- /dev/null
-+++ b/package/binutils/2.36.1/0003-bfd-elf32-or1k-fix-ld-assert.patch
-@@ -0,0 +1,35 @@
-+From 1659226a96b1daecfd08c057d0d5c39309d207ee Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Mon, 22 Mar 2021 13:30:07 +0100
-+Subject: [PATCH] bfd/elf32-or1k: fix ld assert
-+
-+Fixes https://sourceware.org/bugzilla/show_bug.cgi?id=27624
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ bfd/elf32-or1k.c | 9 ++++-----
-+ 1 file changed, 4 insertions(+), 5 deletions(-)
-+
-+diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
-+index 65938e5137..41908f8938 100644
-+--- a/bfd/elf32-or1k.c
-++++ b/bfd/elf32-or1k.c
-+@@ -2566,11 +2566,10 @@ or1k_elf_adjust_dynamic_symbol (struct bfd_link_info *info,
-+   if (h->type == STT_FUNC
-+       || h->needs_plt)
-+     {
-+-      if (! bfd_link_pic (info)
-+-	  && !h->def_dynamic
-+-	  && !h->ref_dynamic
-+-	  && h->root.type != bfd_link_hash_undefweak
-+-	  && h->root.type != bfd_link_hash_undefined)
-++      if (h->plt.refcount <= 0
-++         || (SYMBOL_CALLS_LOCAL (info, h)
-++         || (ELF_ST_VISIBILITY (h->other) != STV_DEFAULT
-++             && h->root.type == bfd_link_hash_undefweak)))
-+ 	{
-+ 	  /* This case can occur if we saw a PLT reloc in an input
-+ 	     file, but the symbol was never referred to by a dynamic
-+-- 
-+2.25.1
-+
+The qcom-soc plugin has been tested successfully on MSM8916 or MSM8974
+SoCs, and there is some ongoing work to make it work on SDM845 and
+similar platforms.
+
+-- 
+Aleksander
+https://aleksander.es
