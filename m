@@ -1,25 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 30 Mar 2021 22:23:44 +0200
-Subject: [Buildroot] [PATCH 1/1] package/sdl2: drop tslib
-In-Reply-To: <20210321162128.192269-1-fontaine.fabrice@gmail.com>
-References: <20210321162128.192269-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210330222344.065c40a7@windsurf.home>
+Date: Tue, 30 Mar 2021 22:23:48 +0200
+Subject: [Buildroot] [PATCH v1] package/tzdata: bump version to 2021a
+In-Reply-To: <20210321205806.9643-1-ps.report@gmx.net>
+References: <20210321205806.9643-1-ps.report@gmx.net>
+Message-ID: <20210330222348.2e1ac5c7@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 21 Mar 2021 17:21:28 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Sun, 21 Mar 2021 21:58:06 +0100
+Peter Seiderer <ps.report@gmx.net> wrote:
 
-> non existing tslib support has been dropped since version 2.0.14 and
-> https://github.com/libsdl-org/SDL/commit/4c96faee578efcba3f2d6afe8e2122f26b1dfb0b
+> For details see [1].
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> [1] https://mm.icann.org/pipermail/tz-announce/2021-January/000065.html
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 > ---
->  package/sdl2/sdl2.mk | 7 -------
->  1 file changed, 7 deletions(-)
+>  package/tzdata/tzdata.hash | 4 ++--
+>  package/tzdata/tzdata.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
 Applied to master, thanks.
 
