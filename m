@@ -1,139 +1,67 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 30 Mar 2021 21:51:56 +0200
-Subject: [Buildroot] [PATCH 1/1] package/modem-manager: bump version to
- 1.16.2
-In-Reply-To: <20210329184934.14690-1-petr.vorel@gmail.com>
-References: <20210329184934.14690-1-petr.vorel@gmail.com>
-Message-ID: <20210330195156.GA24043@scaer>
+Date: Tue, 30 Mar 2021 21:52:46 +0200
+Subject: [Buildroot] [git commit] package/perl-parse-yapp: remove useless
+ dependencies
+Message-ID: <20210330192846.4985E8A3C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Petr, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=6bcc220ccd5d2bdedeea81518e8cedf49b5af007
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-03-29 20:49 +0200, Petr Vorel spake thusly:
-> It requires libqmi >= 1.28.0
-> 
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Parse-Yapp comes with a Makefile.PL,
+so it is built with the perl core module ExtUtils-MakeMaker
 
-Applied to master, thanks.
+regenerated with `utils/scancpan -force -host Parse-Yapp`
 
-> ---
-> Hi,
-> 
-> RFC: should I add also --enable-plugin-qcom-soc ?
-> (there is qcom-db410c-firmware package)
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/perl-parse-yapp/Config.in            | 2 +-
+ package/perl-parse-yapp/perl-parse-yapp.hash | 5 ++++-
+ package/perl-parse-yapp/perl-parse-yapp.mk   | 2 --
+ 3 files changed, 5 insertions(+), 4 deletions(-)
 
-Maybe you could enable the plugin if the package is enabled:
-
-    ifeq ($(BR2_PACKAGE_QCOM_DB410_FIRMWARE),y)
-    MODEM_MANAGER_CONF_OPTS += --enable-plugin-qcom-soc
-    else
-    MODEM_MANAGER_CONF_OPTS += --disable-plugin-qcom-soc
-    endif
-
-Regards,
-Yann E. MORIN.
-
-> Kind regards,
-> Petr
-> 
-> Tested:
->                     bootlin-armv5-uclibc [1/6]: OK
->                      bootlin-armv7-glibc [2/6]: OK
->                    bootlin-armv7m-uclibc [3/6]: SKIPPED
->                      bootlin-x86-64-musl [4/6]: OK
->                       br-arm-full-static [5/6]: OK
->                             sourcery-arm [6/6]: OK
-> 6 builds, 1 skipped, 0 build failed, 0 legal-info failed
-> 
->                              andes-nds32 [ 1/45]: FAILED
->                              arm-aarch64 [ 2/45]: OK
->                    bootlin-aarch64-glibc [ 3/45]: OK
->                bootlin-arcle-hs38-uclibc [ 4/45]: OK
->                     bootlin-armv5-uclibc [ 5/45]: OK
->                      bootlin-armv7-glibc [ 6/45]: OK
->                    bootlin-armv7m-uclibc [ 7/45]: SKIPPED
->                       bootlin-armv7-musl [ 8/45]: OK
->              bootlin-microblazeel-uclibc [ 9/45]: OK
->                    bootlin-mipsel-uclibc [10/45]: OK
->                 bootlin-mipsel32r6-glibc [11/45]: OK
->                 bootlin-m68k-5208-uclibc [12/45]: SKIPPED
->                bootlin-m68k-68040-uclibc [13/45]: OK
->                      bootlin-nios2-glibc [14/45]: OK
->                  bootlin-openrisc-uclibc [15/45]: OK
->            bootlin-powerpc-e500mc-uclibc [16/45]: OK
->         bootlin-powerpc64le-power8-glibc [17/45]: OK
->                    bootlin-riscv32-glibc [18/45]: OK
->                    bootlin-riscv64-glibc [19/45]: OK
->                     bootlin-riscv64-musl [20/45]: OK
->                       bootlin-sh4-uclibc [21/45]: OK
->                     bootlin-sparc-uclibc [22/45]: OK
->                    bootlin-sparc64-glibc [23/45]: OK
->                    bootlin-xtensa-uclibc [24/45]: OK
->                     bootlin-x86-64-glibc [25/45]: OK
->                      bootlin-x86-64-musl [26/45]: OK
->                    bootlin-x86-64-uclibc [27/45]: OK
->                             br-arm-basic [28/45]: SKIPPED
->                     br-arm-full-nothread [29/45]: SKIPPED
->                       br-arm-full-static [30/45]: OK
->                 br-i386-pentium-mmx-musl [31/45]: OK
->                    br-i386-pentium4-full [32/45]: OK
->                       br-mips64-n64-full [33/45]: OK
->                  br-mips64r6-el-hf-glibc [34/45]: OK
->                br-powerpc-603e-basic-cpp [35/45]: SKIPPED
->                br-powerpc64-power7-glibc [36/45]: OK
->                        linaro-aarch64-be [37/45]: OK
->                           linaro-aarch64 [38/45]: OK
->                               linaro-arm [39/45]: OK
->                      sourcery-arm-armv4t [40/45]: OK
->                             sourcery-arm [41/45]: OK
->                      sourcery-arm-thumb2 [42/45]: OK
->                            sourcery-mips [43/45]: OK
->                          sourcery-mips64 [44/45]: OK
->                           sourcery-nios2 [45/45]: OK
-> 
->  package/modem-manager/modem-manager.hash | 2 +-
->  package/modem-manager/modem-manager.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
-> index 81a08295f7..3f272acef3 100644
-> --- a/package/modem-manager/modem-manager.hash
-> +++ b/package/modem-manager/modem-manager.hash
-> @@ -1,4 +1,4 @@
->  # Locally computed
-> -sha256  fe1a26ba51b4bda7abd09ad4dadedd87d8b8154809fc9d88e94f75fdfff19295  ModemManager-1.14.8.tar.xz
-> +sha256  efa9a963499e0885f3f163096d433334143c4937545134ecd682e0157fa591e3  ModemManager-1.16.2.tar.xz
->  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
->  sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-> diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
-> index 47d4eed823..2cc45d266b 100644
-> --- a/package/modem-manager/modem-manager.mk
-> +++ b/package/modem-manager/modem-manager.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -MODEM_MANAGER_VERSION = 1.14.8
-> +MODEM_MANAGER_VERSION = 1.16.2
->  MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
->  MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
->  MODEM_MANAGER_LICENSE = GPL-2.0+ (programs, plugins), LGPL-2.0+ (libmm-glib)
-> -- 
-> 2.30.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/perl-parse-yapp/Config.in b/package/perl-parse-yapp/Config.in
+index 5cde3d9211..2781682670 100644
+--- a/package/perl-parse-yapp/Config.in
++++ b/package/perl-parse-yapp/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_PERL_PARSE_YAPP
+ 	bool "perl-parse-yapp"
+ 	help
+-	  A perl frontend to the Parse::Yapp module
++	  A perl frontend to the Parse::Yapp module.
+ 
+ 	  https://metacpan.org/release/Parse-Yapp
+diff --git a/package/perl-parse-yapp/perl-parse-yapp.hash b/package/perl-parse-yapp/perl-parse-yapp.hash
+index d5880a2a71..36541592ff 100644
+--- a/package/perl-parse-yapp/perl-parse-yapp.hash
++++ b/package/perl-parse-yapp/perl-parse-yapp.hash
+@@ -1,3 +1,6 @@
+-# locally computed
++# retrieved by scancpan from http://cpan.metacpan.org/
++md5  69584d5b0f0304bb2a23cffcd982c5de  Parse-Yapp-1.21.tar.gz
+ sha256  3810e998308fba2e0f4f26043035032b027ce51ce5c8a52a8b8e340ca65f13e5  Parse-Yapp-1.21.tar.gz
++
++# locally computed
+ sha256  a5d97e3ee50ba12b7897841a117790f723795e4a61e5ad1668dc064956c84e96  lib/Parse/Yapp.pm
+diff --git a/package/perl-parse-yapp/perl-parse-yapp.mk b/package/perl-parse-yapp/perl-parse-yapp.mk
+index 94f51243fd..12f05efe0c 100644
+--- a/package/perl-parse-yapp/perl-parse-yapp.mk
++++ b/package/perl-parse-yapp/perl-parse-yapp.mk
+@@ -7,11 +7,9 @@
+ PERL_PARSE_YAPP_VERSION = 1.21
+ PERL_PARSE_YAPP_SOURCE = Parse-Yapp-$(PERL_PARSE_YAPP_VERSION).tar.gz
+ PERL_PARSE_YAPP_SITE = $(BR2_CPAN_MIRROR)/authors/id/W/WB/WBRASWELL
+-PERL_PARSE_YAPP_DEPENDENCIES = host-perl-module-build
+ PERL_PARSE_YAPP_LICENSE = Artistic or GPL-1.0+
+ PERL_PARSE_YAPP_LICENSE_FILES = lib/Parse/Yapp.pm
+ PERL_PARSE_YAPP_DISTNAME = Parse-Yapp
+-HOST_PERL_PARSE_YAPP_DEPENDENCIES = host-perl-module-build
+ 
+ $(eval $(perl-package))
+ $(eval $(host-perl-package))
