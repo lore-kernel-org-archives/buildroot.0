@@ -1,87 +1,38 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 30 Mar 2021 21:37:34 +0200
-Subject: [Buildroot] [PATCH 1/2] package/libqmi: drop unrecognized option
-In-Reply-To: <CAAP7uc+qpS+Y9xN=C89jzupCH5qS2-_W_H7smrYa7SqMov57hw@mail.gmail.com>
-References: <20210329211957.321612-1-fontaine.fabrice@gmail.com>
- <CAAP7uc+qpS+Y9xN=C89jzupCH5qS2-_W_H7smrYa7SqMov57hw@mail.gmail.com>
-Message-ID: <20210330193734.GY24043@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 30 Mar 2021 21:40:17 +0200
+Subject: [Buildroot] [git commit] package/fastd: add FASTD_CPE_ID_VERSION
+Message-ID: <20210330191546.031F884089@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2021-03-29 23:46 +0200, Aleksander Morgado spake thusly:
-> Hey,
-> 
-> On Mon, Mar 29, 2021 at 11:22 PM Fabrice Fontaine
-> <fontaine.fabrice@gmail.com> wrote:
-> >
-> > --enable-more-warnings has been dropped since version 1.26.0 and
-> > https://github.com/freedesktop/libqmi/commit/9f31a45d5fc137431705d47b83669f35259932b4
-> >
-> 
-> For some context, the build switched to
-> AX_COMPILER_FLAGS()+AX_IS_RELEASE() so, when building from a release
-> tarball, the build will default to --enable-compile-warnings=yes, and
-> when building from a git checkout, the build will default to
-> --enable-compile-warnings=error. As long as the buildroot makefile
-> relies on stable release tarballs,
+commit: https://git.buildroot.net/buildroot/commit/?id=ebe599de08ec4aa521d9eeb0d6eb452c1285774f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-And even when working from a git tree, we would not have the .git
-directory anyway, so I suppose we'd end up in the "release tarball"
-case.
+With that FASTD_CPE_ID expands to:
 
-Only people working with LIBQMI_OVERRIDE_SRCDIR set pointing to a
-local git clone would fall back into the "defaults to Werror" state.
+    cpe:2.3:a:fastd_project:fastd:21.0:*:*:*:*:*:*:*
 
-> -Werror should be always implicitly
-> disabled.
+That's the same as listed on
+https://nvd.nist.gov/products/cpe/detail/826746
 
-But there is a --disable-Werror option, and I think we should use it
-unconditionally.
+Signed-off-by: Alexander Dahl <post@lespocky.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/fastd/fastd.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-I've done that now, and applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > ---
-> >  package/libqmi/libqmi.mk | 3 ---
-> >  1 file changed, 3 deletions(-)
-> >
-> > diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
-> > index b02312d702..998952e47d 100644
-> > --- a/package/libqmi/libqmi.mk
-> > +++ b/package/libqmi/libqmi.mk
-> > @@ -13,9 +13,6 @@ LIBQMI_INSTALL_STAGING = YES
-> >
-> >  LIBQMI_DEPENDENCIES = libglib2
-> >
-> > -# we don't want -Werror
-> > -LIBQMI_CONF_OPTS = --enable-more-warnings=no
-> > -
-> >  # if libgudev available, request udev support for a better
-> >  # qmi-firmware-update experience
-> >  ifeq ($(BR2_PACKAGE_LIBGUDEV),y)
-> > --
-> > 2.30.2
-> >
-> 
-> 
-> -- 
-> Aleksander
-> https://aleksander.es
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/fastd/fastd.mk b/package/fastd/fastd.mk
+index bbec63d963..c1db1cc472 100644
+--- a/package/fastd/fastd.mk
++++ b/package/fastd/fastd.mk
+@@ -9,6 +9,7 @@ FASTD_SITE = https://github.com/NeoRaider/fastd/releases/download/v$(FASTD_VERSI
+ FASTD_SOURCE = fastd-$(FASTD_VERSION).tar.xz
+ FASTD_LICENSE = BSD-2-Clause
+ FASTD_LICENSE_FILES = COPYRIGHT
++FASTD_CPE_ID_VERSION = $(FASTD_VERSION).0
+ FASTD_DEPENDENCIES = host-bison host-pkgconf libuecc libsodium
+ 
+ ifeq ($(BR2_PACKAGE_LIBCAP),y)
