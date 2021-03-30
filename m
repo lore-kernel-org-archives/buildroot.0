@@ -1,57 +1,190 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 30 Mar 2021 21:56:27 +0200
-Subject: [Buildroot] [PATCH] package/pkg-kconfig: fix error string
-In-Reply-To: <20210329224154.3716438-1-giulio.benetti@benettiengineering.com>
-References: <20210329224154.3716438-1-giulio.benetti@benettiengineering.com>
-Message-ID: <20210330195627.GC24043@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 30 Mar 2021 21:57:43 +0200
+Subject: [Buildroot] [git commit] package/binutils: add patches to fix
+ OpenRisc bug 27624
+Message-ID: <20210330193248.B88E88A3C6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Giulio, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=da2c1d9c56b54c6022689c3696cd54ea7282b4d4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-03-30 00:41 +0200, Giulio Benetti spake thusly:
-> Current error string speaks only about "fragment" but here we also deal
-> with Kconfig files, so let's add "file or fragment" instead of "fragment".
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+These patches fix OpenRisc linker bug 27624 that affects packages
+libtheora, protobuf and zeromq.
 
-Applied to master, thanks.
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../2.32/0010-bfd-elf32-or1k-fix-ld-assert.patch   | 35 ++++++++++++++++++++++
+ .../2.34/0003-bfd-elf32-or1k-fix-ld-assert.patch   | 35 ++++++++++++++++++++++
+ .../2.35.2/0003-bfd-elf32-or1k-fix-ld-assert.patch | 35 ++++++++++++++++++++++
+ .../2.36.1/0003-bfd-elf32-or1k-fix-ld-assert.patch | 35 ++++++++++++++++++++++
+ 4 files changed, 140 insertions(+)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/pkg-kconfig.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
-> index 2aecf2e203..dd727b7200 100644
-> --- a/package/pkg-kconfig.mk
-> +++ b/package/pkg-kconfig.mk
-> @@ -117,7 +117,7 @@ $(2)_KCONFIG_STAMP_DOTCONFIG = .stamp_dotconfig
->  $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES): | $(1)-patch
->  	for f in $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES); do \
->  		if [ ! -f "$$$${f}" ]; then \
-> -			printf "Kconfig fragment '%s' for '%s' does not exist\n" "$$$${f}" "$(1)"; \
-> +			printf "Kconfig file or fragment '%s' for '%s' does not exist\n" "$$$${f}" "$(1)"; \
->  			exit 1; \
->  		fi; \
->  	done
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/binutils/2.32/0010-bfd-elf32-or1k-fix-ld-assert.patch b/package/binutils/2.32/0010-bfd-elf32-or1k-fix-ld-assert.patch
+new file mode 100644
+index 0000000000..824c9ce3e5
+--- /dev/null
++++ b/package/binutils/2.32/0010-bfd-elf32-or1k-fix-ld-assert.patch
+@@ -0,0 +1,35 @@
++From 93cf62b662499e560812145dd989056fcf14f00e Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Mon, 22 Mar 2021 13:30:07 +0100
++Subject: [PATCH] bfd/elf32-or1k: fix ld assert
++
++Fixes https://sourceware.org/bugzilla/show_bug.cgi?id=27624
++
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ bfd/elf32-or1k.c | 9 ++++-----
++ 1 file changed, 4 insertions(+), 5 deletions(-)
++
++diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
++index 2f200b197b..ae508540f5 100644
++--- a/bfd/elf32-or1k.c
+++++ b/bfd/elf32-or1k.c
++@@ -2535,11 +2535,10 @@ or1k_elf_adjust_dynamic_symbol (struct bfd_link_info *info,
++   if (h->type == STT_FUNC
++       || h->needs_plt)
++     {
++-      if (! bfd_link_pic (info)
++-	  && !h->def_dynamic
++-	  && !h->ref_dynamic
++-	  && h->root.type != bfd_link_hash_undefweak
++-	  && h->root.type != bfd_link_hash_undefined)
+++      if (h->plt.refcount <= 0
+++         || (SYMBOL_CALLS_LOCAL (info, h)
+++         || (ELF_ST_VISIBILITY (h->other) != STV_DEFAULT
+++             && h->root.type == bfd_link_hash_undefweak)))
++ 	{
++ 	  /* This case can occur if we saw a PLT reloc in an input
++ 	     file, but the symbol was never referred to by a dynamic
++-- 
++2.25.1
++
+diff --git a/package/binutils/2.34/0003-bfd-elf32-or1k-fix-ld-assert.patch b/package/binutils/2.34/0003-bfd-elf32-or1k-fix-ld-assert.patch
+new file mode 100644
+index 0000000000..756493667f
+--- /dev/null
++++ b/package/binutils/2.34/0003-bfd-elf32-or1k-fix-ld-assert.patch
+@@ -0,0 +1,35 @@
++From 1659226a96b1daecfd08c057d0d5c39309d207ee Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Mon, 22 Mar 2021 13:30:07 +0100
++Subject: [PATCH] bfd/elf32-or1k: fix ld assert
++
++Fixes https://sourceware.org/bugzilla/show_bug.cgi?id=27624
++
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ bfd/elf32-or1k.c | 9 ++++-----
++ 1 file changed, 4 insertions(+), 5 deletions(-)
++
++diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
++index 65938e5137..41908f8938 100644
++--- a/bfd/elf32-or1k.c
+++++ b/bfd/elf32-or1k.c
++@@ -2566,11 +2566,10 @@ or1k_elf_adjust_dynamic_symbol (struct bfd_link_info *info,
++   if (h->type == STT_FUNC
++       || h->needs_plt)
++     {
++-      if (! bfd_link_pic (info)
++-	  && !h->def_dynamic
++-	  && !h->ref_dynamic
++-	  && h->root.type != bfd_link_hash_undefweak
++-	  && h->root.type != bfd_link_hash_undefined)
+++      if (h->plt.refcount <= 0
+++         || (SYMBOL_CALLS_LOCAL (info, h)
+++         || (ELF_ST_VISIBILITY (h->other) != STV_DEFAULT
+++             && h->root.type == bfd_link_hash_undefweak)))
++ 	{
++ 	  /* This case can occur if we saw a PLT reloc in an input
++ 	     file, but the symbol was never referred to by a dynamic
++-- 
++2.25.1
++
+diff --git a/package/binutils/2.35.2/0003-bfd-elf32-or1k-fix-ld-assert.patch b/package/binutils/2.35.2/0003-bfd-elf32-or1k-fix-ld-assert.patch
+new file mode 100644
+index 0000000000..756493667f
+--- /dev/null
++++ b/package/binutils/2.35.2/0003-bfd-elf32-or1k-fix-ld-assert.patch
+@@ -0,0 +1,35 @@
++From 1659226a96b1daecfd08c057d0d5c39309d207ee Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Mon, 22 Mar 2021 13:30:07 +0100
++Subject: [PATCH] bfd/elf32-or1k: fix ld assert
++
++Fixes https://sourceware.org/bugzilla/show_bug.cgi?id=27624
++
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ bfd/elf32-or1k.c | 9 ++++-----
++ 1 file changed, 4 insertions(+), 5 deletions(-)
++
++diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
++index 65938e5137..41908f8938 100644
++--- a/bfd/elf32-or1k.c
+++++ b/bfd/elf32-or1k.c
++@@ -2566,11 +2566,10 @@ or1k_elf_adjust_dynamic_symbol (struct bfd_link_info *info,
++   if (h->type == STT_FUNC
++       || h->needs_plt)
++     {
++-      if (! bfd_link_pic (info)
++-	  && !h->def_dynamic
++-	  && !h->ref_dynamic
++-	  && h->root.type != bfd_link_hash_undefweak
++-	  && h->root.type != bfd_link_hash_undefined)
+++      if (h->plt.refcount <= 0
+++         || (SYMBOL_CALLS_LOCAL (info, h)
+++         || (ELF_ST_VISIBILITY (h->other) != STV_DEFAULT
+++             && h->root.type == bfd_link_hash_undefweak)))
++ 	{
++ 	  /* This case can occur if we saw a PLT reloc in an input
++ 	     file, but the symbol was never referred to by a dynamic
++-- 
++2.25.1
++
+diff --git a/package/binutils/2.36.1/0003-bfd-elf32-or1k-fix-ld-assert.patch b/package/binutils/2.36.1/0003-bfd-elf32-or1k-fix-ld-assert.patch
+new file mode 100644
+index 0000000000..756493667f
+--- /dev/null
++++ b/package/binutils/2.36.1/0003-bfd-elf32-or1k-fix-ld-assert.patch
+@@ -0,0 +1,35 @@
++From 1659226a96b1daecfd08c057d0d5c39309d207ee Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Mon, 22 Mar 2021 13:30:07 +0100
++Subject: [PATCH] bfd/elf32-or1k: fix ld assert
++
++Fixes https://sourceware.org/bugzilla/show_bug.cgi?id=27624
++
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ bfd/elf32-or1k.c | 9 ++++-----
++ 1 file changed, 4 insertions(+), 5 deletions(-)
++
++diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
++index 65938e5137..41908f8938 100644
++--- a/bfd/elf32-or1k.c
+++++ b/bfd/elf32-or1k.c
++@@ -2566,11 +2566,10 @@ or1k_elf_adjust_dynamic_symbol (struct bfd_link_info *info,
++   if (h->type == STT_FUNC
++       || h->needs_plt)
++     {
++-      if (! bfd_link_pic (info)
++-	  && !h->def_dynamic
++-	  && !h->ref_dynamic
++-	  && h->root.type != bfd_link_hash_undefweak
++-	  && h->root.type != bfd_link_hash_undefined)
+++      if (h->plt.refcount <= 0
+++         || (SYMBOL_CALLS_LOCAL (info, h)
+++         || (ELF_ST_VISIBILITY (h->other) != STV_DEFAULT
+++             && h->root.type == bfd_link_hash_undefweak)))
++ 	{
++ 	  /* This case can occur if we saw a PLT reloc in an input
++ 	     file, but the symbol was never referred to by a dynamic
++-- 
++2.25.1
++
