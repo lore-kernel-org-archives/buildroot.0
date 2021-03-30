@@ -1,97 +1,166 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 Mar 2021 17:15:00 +0200
-Subject: [Buildroot] [git commit] package/lua: bump to version 5.4.3
-Message-ID: <20210330145155.F14DF86283@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 30 Mar 2021 20:32:53 +0200
+Subject: [Buildroot] Buildroot: enable lib/firmware/brcm for rpi0w
+In-Reply-To: <9ade3a3c03ddd5de4ee38b8bb05f79e1@umbiko.net>
+References: <mailman.13.1616500803.19462.buildroot@busybox.net>
+ <75b24e8f6fe588935be2f1320d172d68@umbiko.net>
+ <20210324232703.46b691fe@gmx.net>
+ <ed68882a97bad7976f53b30716196c96@umbiko.net>
+ <20210325222017.39c79288@gmx.net>
+ <0d1e250a62069d63923fccf305f9766d@umbiko.net>
+ <20210329204937.01bb10a6@gmx.net>
+ <9ade3a3c03ddd5de4ee38b8bb05f79e1@umbiko.net>
+Message-ID: <20210330203253.5e4751a6@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=013652170f7e39ae3d406764992b4b664c01e47f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Andreas,
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/lua/5.4.2/lua.hash                                  | 6 ------
- package/lua/{5.4.2 => 5.4.3}/0001-root-path.patch           | 2 +-
- package/lua/{5.4.2 => 5.4.3}/0002-shared-libs-for-lua.patch | 0
- package/lua/{5.4.2 => 5.4.3}/0011-linenoise.patch           | 2 +-
- package/lua/5.4.3/lua.hash                                  | 6 ++++++
- package/lua/lua.mk                                          | 2 +-
- 6 files changed, 9 insertions(+), 9 deletions(-)
+On Tue, 30 Mar 2021 08:20:08 +0000, Andreas Ziegler <br015@umbiko.net> wrote:
 
-diff --git a/package/lua/5.4.2/lua.hash b/package/lua/5.4.2/lua.hash
-deleted file mode 100644
-index f916c8e4ef..0000000000
---- a/package/lua/5.4.2/lua.hash
-+++ /dev/null
-@@ -1,6 +0,0 @@
--# Hashes from: https://www.lua.org/ftp/
--md5  49c92d6a49faba342c35c52e1ac3f81e  lua-5.4.2.tar.gz
--sha1  96d4a21393c94bed286b8dc0568f4bdde8730b22  lua-5.4.2.tar.gz
--
--# Locally computed
--sha256  17bd5781d5dfa8c946fea639984fcbcb499d8bb3056a3c2cb5c15c3da5d1c207  doc/readme.html
-diff --git a/package/lua/5.4.2/0001-root-path.patch b/package/lua/5.4.3/0001-root-path.patch
-similarity index 95%
-rename from package/lua/5.4.2/0001-root-path.patch
-rename to package/lua/5.4.3/0001-root-path.patch
-index 8e82c1ce59..c4f6e312eb 100644
---- a/package/lua/5.4.2/0001-root-path.patch
-+++ b/package/lua/5.4.3/0001-root-path.patch
-@@ -6,7 +6,7 @@ Index: b/src/luaconf.h
- ===================================================================
- --- a/src/luaconf.h
- +++ b/src/luaconf.h
--@@ -212,7 +212,7 @@
-+@@ -217,7 +217,7 @@
-  
-  #else			/* }{ */
-  
-diff --git a/package/lua/5.4.2/0002-shared-libs-for-lua.patch b/package/lua/5.4.3/0002-shared-libs-for-lua.patch
-similarity index 100%
-rename from package/lua/5.4.2/0002-shared-libs-for-lua.patch
-rename to package/lua/5.4.3/0002-shared-libs-for-lua.patch
-diff --git a/package/lua/5.4.2/0011-linenoise.patch b/package/lua/5.4.3/0011-linenoise.patch
-similarity index 97%
-rename from package/lua/5.4.2/0011-linenoise.patch
-rename to package/lua/5.4.3/0011-linenoise.patch
-index e842e5b1ef..7b9d6d76f3 100644
---- a/package/lua/5.4.2/0011-linenoise.patch
-+++ b/package/lua/5.4.3/0011-linenoise.patch
-@@ -8,7 +8,7 @@ Index: b/src/lua.c
- ===================================================================
- --- a/src/lua.c
- +++ b/src/lua.c
--@@ -401,6 +401,14 @@
-+@@ -421,6 +421,14 @@
-  #define lua_saveline(L,line)	((void)L, add_history(line))
-  #define lua_freeline(L,b)	((void)L, free(b))
-  
-diff --git a/package/lua/5.4.3/lua.hash b/package/lua/5.4.3/lua.hash
-new file mode 100644
-index 0000000000..be3604837f
---- /dev/null
-+++ b/package/lua/5.4.3/lua.hash
-@@ -0,0 +1,6 @@
-+# Hashes from: https://www.lua.org/ftp/
-+md5  ef63ed2ecfb713646a7fcc583cf5f352  lua-5.4.3.tar.gz
-+sha1  1dda2ef23a9828492b4595c0197766de6e784bc7  lua-5.4.3.tar.gz
-+
-+# Locally computed
-+sha256  d205bfea131113bcdd64d4ebe4a50ce34063b42bad24b93e44b4b0d853ae4d49  doc/readme.html
-diff --git a/package/lua/lua.mk b/package/lua/lua.mk
-index e3a415a06a..b385b78b30 100644
---- a/package/lua/lua.mk
-+++ b/package/lua/lua.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- ifeq ($(BR2_PACKAGE_LUA_5_4),y)
--LUA_VERSION = 5.4.2
-+LUA_VERSION = 5.4.3
- else ifeq ($(BR2_PACKAGE_LUA_5_3),y)
- LUA_VERSION = 5.3.6
- else
+> Hello Peter,
+>
+> On 2021-03-29 18:49, Peter Seiderer wrote:
+> > Hello Andreas,
+> >
+> > On Fri, 26 Mar 2021 12:47:21 +0000, Andreas Ziegler <br015@umbiko.net>
+> > wrote:
+> >
+> >> Hello Peter,
+> >>
+> >> On 2021-03-25 21:20, Peter Seiderer wrote:
+> >> >
+> >> > Many thanks for doing the tests!
+> >> >
+> >>
+> >> Not at all; after getting confused with different versions and
+> >> repositories, I wanted to understand the reason behind this.
+> >>
+> >> Short summary of my findings; I may state the obvious here, but it was
+> >> new for me and maybe it helps someone with the same hazy knowledge
+> >> about
+> >> hardware engineering as myself:
+> >>
+> >> Broadcom sold its RF division to Cypress in 2016. Cypress now supports
+> >> the legacy wireless /bluetooth /radio hardware from Broadcom; that is
+> >> the reason why BCM* and CYW* versions of firmware exist, and
+> >> linux-firmware removed the original Broadcom supplied binaries.
+> >>
+> >> Cypress does not directly sell to end customers, but provides silicon
+> >> to
+> >> hardware partners (AzureWave, Murata, ...), which in turn sell RF
+> >> solutions. Cypress distributes firmware for their silicon chips
+> >> (probably to same hardware partners).
+> >>
+> >> End product is some type of SOC (subsystem on chip); the benefit is
+> >> that
+> >> tuning and regulatory issues have been taken care of. The SOC
+> >> manufacturer is responsible for supplying bluetooth patch (HCD),
+> >> regulatory data (CLM) and firmware configuration (TXT).
+> >>
+> >> That means the firmware binary (BIN) can be obtained from any source,
+> >> the other items (HCD, CLM, TXT) need to be sourced from the
+> >> implementer.
+> >>
+> >> >> The LibreELEC repository (rpi-wifi-firmware) seems to have adopted
+> >> >> this
+> >> >> version in commit 7dbd877545ae15069f2bd0e73893af942500e23d on Jan. 25.
+> >> >
+> >> > So a good reason to stay with LibreELEC (and fix the firmware package
+> >> > to
+> >> > provide raspberrypi,4-model-b.txt as a link or copy, do you know if
+> >> > missing
+> >> > it has some disadvantages or produces only the firmware load warning or
+> >> > is
+> >> > there a fallback to plain brcmfmac43455-sdio.txt?), keeping up with
+> >> > RPi-Distro...
+> >>
+> >> Yes, also my opinion to stay with LibreELEC. The repository is small,
+> >> is
+> >> updated in a timely manner, and is (slightly) better documented than
+> >> RPi-Distro.
+> >>
+> >> There is one thing (apart from providing the missing link) I would
+> >> propose: merge rpi-bt-firmware and rpi-wifi-firmware into
+> >> rpi-rf-firmware, combining the code from both .mk and Config.in files.
+> >> Functionality would be identical, but one less firmware package. If
+> >> anyone is interested, I could provide a patch.
+> >
+> > +1 from my side...
+>
+> I will propose something via the mailing list.
+>
+>
+> >> In recent kernels, firmware load tries board-specific path first, then
+> >> falls back to firmware derived path [1]. If I remember correctly, in
+> >> kernels < 5.0 the firmware load failed.
+> >>
+> >> >> There seem to be some bigger changes in the pipeline: linux-firmware
+> >> >> removed the Broadcom redistributed binaries in January [4] for the
+> >> >> 20210208 release; instead Cypress firmware should be used. The
+> >> >> upstream
+> >> >> repository for this firmware seems to be murata-wireless /
+> >> >> cyw-fmac-fw [5]
+> >> >>
+> >> >> I need to look into this in detail at some other time ...
+> >> >
+> >> > Seems kind of (another) firmware mess...., different versions at
+> >> > different
+> >> > repositories...., all with the same name (instead of clear version
+> >> > string)...
+> >>
+> >> There are at least three different versions available in Buildroot:
+> >>
+> >> (available in Buildroot, repo 'master' version listed respectively)
+> >>    libreELEC		build 2021-01-04	version 7.45.229
+> >>    linux-firmware	build 2020-09-18	version 7.45.221
+> >>    murata-wireless	build 2020-09-18	version 7.45.221
+> >> (not in buildroot)
+> >>    rpi-distro		build 2021-01-04	version 7.45.229
+> >>
+> >> > Regards,
+> >> > Peter
+> >>
+> >> Kind regards,
+> >> Andreas
+> >
+> > Thanks again for the detailed information (and testing)!
+> >
+> > Did just sent out an patch adding the convenience firmware
+> > configuration
+> > links for RPi3A+, RPi3B+ and RPi4B (see [2])...
+>
+> Tested and works for me. Hardware used was RPi4B. I replied to your
+> patch, adding two lines for additional boards using BCM43430 Hardware.
+> One is in the Linux Firmware Repository (3B), the other is the one
+> reported by Laurentiu Christian (0W). I hope this approach is
+> acceptable.
+
+A little bit unusual (but not completely out of the way)..., but some
+remarks inline to the patch...., all in all I think an additional
+patch (based on my one) would be easier...
+
+Regards,
+Peter
+
+
+>
+> > Regards,
+> > Peter
+> >
+> > [2]
+> > https://patchwork.ozlabs.org/project/buildroot/patch/20210329184503.10514-1-ps.report at gmx.net/
+> >
+> >>
+> >> [1]
+> >> https://elixir.bootlin.com/linux/v5.10.21/source/drivers/net/wireless/broadcom/brcm80211/brcmfmac/firmware.c#L616
+> >> _______________________________________________
+> >> buildroot mailing list
+> >> buildroot at busybox.net
+> >> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+> Kind regards,
+> Andreas
