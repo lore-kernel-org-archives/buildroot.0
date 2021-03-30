@@ -1,46 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 30 Mar 2021 21:45:28 +0200
-Subject: [Buildroot] [git commit] package/frr: bump to 7.5.1 version
-Message-ID: <20210330192033.7177F81831@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 30 Mar 2021 21:49:03 +0200
+Subject: [Buildroot] [git commit] package/modem-manager: bump version to
+ 1.16.2
+Message-ID: <20210330192413.5454F8A66E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7a4a3a0295649ea80fc24664fb959c9ab4972b8d
+commit: https://git.buildroot.net/buildroot/commit/?id=4957e3c129006b67ee19acce4a81f916b8f2d325
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This is a maintenance release of FRR 7.5 with lots of bug fixes:
+It requires libqmi >= 1.28.0
 
-    https://github.com/FRRouting/frr/releases/tag/frr-7.5.1
-
-Signed-off-by: Vadym Kochan <vadym.kochan@plvision.eu>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/frr/frr.hash | 2 +-
- package/frr/frr.mk   | 2 +-
+ package/modem-manager/modem-manager.hash | 2 +-
+ package/modem-manager/modem-manager.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/frr/frr.hash b/package/frr/frr.hash
-index 942065f0f3..3a044d4c2a 100644
---- a/package/frr/frr.hash
-+++ b/package/frr/frr.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 54066e82a82751ec5876d9b67aa0cb24fe94e19e7371af290ac25099eda9f136  frr-7.5.tar.gz
-+sha256 030d4e66f577726dfea13bd3a9c669fd41d8fd89b25953a36b5b0966d406ff28  frr-7.5.1.tar.gz
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/frr/frr.mk b/package/frr/frr.mk
-index 3ae292874a..0907c0ad97 100644
---- a/package/frr/frr.mk
-+++ b/package/frr/frr.mk
+diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
+index 81a08295f7..3f272acef3 100644
+--- a/package/modem-manager/modem-manager.hash
++++ b/package/modem-manager/modem-manager.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  fe1a26ba51b4bda7abd09ad4dadedd87d8b8154809fc9d88e94f75fdfff19295  ModemManager-1.14.8.tar.xz
++sha256  efa9a963499e0885f3f163096d433334143c4937545134ecd682e0157fa591e3  ModemManager-1.16.2.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
+index 47d4eed823..2cc45d266b 100644
+--- a/package/modem-manager/modem-manager.mk
++++ b/package/modem-manager/modem-manager.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FRR_VERSION = 7.5
-+FRR_VERSION = 7.5.1
- FRR_SITE = $(call github,FRRouting,frr,frr-$(FRR_VERSION))
- FRR_LICENSE = GPL-2.0
- FRR_LICENSE_FILES = COPYING
+-MODEM_MANAGER_VERSION = 1.14.8
++MODEM_MANAGER_VERSION = 1.16.2
+ MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
+ MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
+ MODEM_MANAGER_LICENSE = GPL-2.0+ (programs, plugins), LGPL-2.0+ (libmm-glib)
