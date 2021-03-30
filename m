@@ -1,62 +1,54 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 30 Mar 2021 22:22:53 +0200
-Subject: [Buildroot] [PATCH 1/1] support/scripts: fix pycompile for
- short filenames
-In-Reply-To: <20210329105554.1622972-1-outtierbert@gmail.com>
-References: <20210329105554.1622972-1-outtierbert@gmail.com>
-Message-ID: <20210330202253.GE24043@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 30 Mar 2021 22:23:26 +0200
+Subject: [Buildroot] [PATCH v1] package/haveged: bump version to 1.9.14
+In-Reply-To: <20210321205908.10167-1-ps.report@gmx.net>
+References: <20210321205908.10167-1-ps.report@gmx.net>
+Message-ID: <20210330222326.5ef6482e@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bert, All,
+Hello Peter,
 
-On 2021-03-29 12:55 +0200, Bert Outtier spake thusly:
-> Signed-off-by: Bert Outtier <outtierbert@gmail.com>
+Thanks for this patch!
 
-I was pretty sure I had already handled that issue some time ago... And
-indeed, there was a patch posted, some changes were requested, but a v2
-never materialised.
+On Sun, 21 Mar 2021 21:59:08 +0100
+Peter Seiderer <ps.report@gmx.net> wrote:
 
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
-http://lists.busybox.net/pipermail/buildroot/2020-December/298707.html
-http://lists.busybox.net/pipermail/buildroot/2020-December/298734.html
-
-> ---
->  support/scripts/pycompile.py | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> - change to set all available configure options:
 > 
-> diff --git a/support/scripts/pycompile.py b/support/scripts/pycompile.py
-> index 2b636e03cb..b8cd3cee6c 100644
-> --- a/support/scripts/pycompile.py
-> +++ b/support/scripts/pycompile.py
-> @@ -30,7 +30,7 @@ def compile_one(host_path, strip_root=None, verbose=False):
->      if os.path.islink(host_path) or not os.path.isfile(host_path):
->          return  # only compile real files
->  
-> -    if not re.match(r"^[_A-Za-z][_A-Za-z0-9]+\.py$",
-> +    if not re.match(r"^[_A-Za-z][_A-Za-z0-9]*\.py$",
->                      os.path.basename(host_path)):
->          return  # only compile "importable" python modules
->  
-> -- 
-> 2.25.1
+>   * '--enable-daemon=yes': previous default
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+>   * '--enable-diagnostic=no': previous default
+> 
+>   * '-enable-init=no': do not install init files as buildroot ships its
+>     own sysv/systemd init files
+> 
+>   * '--enable-nistest=no': disable tests, previous default
+> 
+>   * '--enable-enttest=no': new option, disable tests
+> 
+>   * '--enable-olt=no': previous default was yes, disable builtin test
+> 
+>   * '--enable-tune=yes': previous default
 
+Do you have any reason for using --enable-<foo>=yes/no instead of the
+standard --enable-<foo> / --disable-<foo> we use everywhere in
+Buildroot ?
+
+> +# patch touchign configure.ac
+
+                ^^ minor typo
+
+(I would have fixed myself, but I have the other question
+enable/disable options).
+
+Thanks!
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
