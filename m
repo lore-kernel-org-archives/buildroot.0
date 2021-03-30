@@ -1,72 +1,56 @@
-From: Tian Yuanhao <tianyuanhao@aliyun.com>
-Date: Tue, 30 Mar 2021 09:25:30 +0800
-Subject: [Buildroot] [External] Re: [PATCH v1 1/1] package/nerdctl: new
- package
-In-Reply-To: <CANQCQpZtFqTrW6XzEmmsrs7ESTEsM=gtTJ7-k4AGZB2oFOFd_w@mail.gmail.com>
-References: <20210323051027.91385-1-christian@paral.in>
- <CANQCQpabm-BFmSKGapR5Fiwu_60O-nvJtWuuVc=41h4d3ZZpbQ@mail.gmail.com>
- <CA+h8R2p-u8jCyhjTGH=L86AdzfbZCX7KpATPReP+2Vj_ayAFYQ@mail.gmail.com>
- <CANQCQpZtFqTrW6XzEmmsrs7ESTEsM=gtTJ7-k4AGZB2oFOFd_w@mail.gmail.com>
-Message-ID: <64eb1735-ceb8-971e-c8b4-b293108a1bdd@aliyun.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 30 Mar 2021 08:10:03 +0200
+Subject: [Buildroot] [PATCH] package/squid: security bump to version 4.14
+Message-ID: <20210330061003.23351-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Matthew,
-On 2021/3/29 ??10:30, Matthew Weber via buildroot wrote:
-> Christian,
->
-> On Fri, Mar 26, 2021 at 12:12 AM Christian Stewart <christian@paral.in> wrote:
->> Hi Matthew,
->>
->> On Tue, Mar 23, 2021 at 5:59 AM Matthew Weber <matthew.weber@collins.com> wrote:
->>> Christian,
->>>
->>> On Tue, Mar 23, 2021 at 12:11 AM Christian Stewart <christian@paral.in> wrote:
->>>> nerdctl is a CLI for containerd (package docker-containerd) which is drop-in
->>>> compatible with the Docker Daemon CLI.
->>> By chance, do you have any rough estimates on the size difference
->>> between the set of GOLang executables between a pure Docker solution
->>> and a containerd+ nerdctl? (If I remember correctly Docker was
->>> 200-300MB (engine+CLI))
->> According to "graph-size":
->>
->>   - docker-engine: 49MB
->>   - docker-cli 39MB
->>
->>   - docker-containerd: 66MB
->>
->>   - nerdctl: 19.3MB
->>
->> So, the savings would be around ~70MB.
-> Nice, (sort of related) I've been gathering some rough metrics to try
-> and baseline what a Buildroot container runtime for a Kubernetes edge
-> device might expect for resource demands on storage/memory/processing.
-> Ie. containerd+runc vs CRI-O+crun(~300k).  The footprint today using
-> Docker as a runtime is just too large when you also include the
-> Kubernetes (static) binaries and the resulting CNI containers after
-> joining a cluster.
->
->> I believe docker-engine and docker-containerd are both much larger
->> than they have any right to be at the moment, and can probably be
->> minimized to something much smaller by deleting dependencies to
->> kubernetes repos, cloud provider libraries, and other features
->> probably most Buildroot users don't need.
-> Or we add some other options which may be better suited to embedded?
->
->> One way to save space would be a "busybox" approach where there are
->> multiple symlinks to a single Go binary to implement both
->> docker-container, docker-cli, runc, etc. This way the common
->> dependencies (i.e. OCI interfaces) are shared between binaries
->> (admittedly this is what dynamic linking normally is for).
-> Oh interesting, is there any precedence for this approach in other
-> distros?  Go binaries are just BIG with all the debug + static
-> linking....  However, they are pretty portable...
-You can try balenaEngine, which comes from balenaOS, by selecting 
-BR2_PACKAGE_BALENA_ENGINE.
-Currently, it is a fork of Moby 19.03.
+Fixes the following security issues:
 
-Best regards,
-Tian, Yuanhao
+- CVE-2020-25097: HTTP Request Smuggling
+
+  Due to improper input validation Squid is vulnerable to an HTTP Request
+  Smuggling attack.
+
+For more details, see the advisory:
+https://github.com/squid-cache/squid/security/advisories/GHSA-jvf6-h9gj-pmj6
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/squid/squid.hash | 8 ++++----
+ package/squid/squid.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/package/squid/squid.hash b/package/squid/squid.hash
+index b7e051960e..a2aaba5fd5 100644
+--- a/package/squid/squid.hash
++++ b/package/squid/squid.hash
+@@ -1,6 +1,6 @@
+-# From http://www.squid-cache.org/Versions/v4/squid-4.13.tar.xz.asc
+-md5  492e54afc15821141ff1d1d9903854d6  squid-4.13.tar.xz
+-sha1  cac95c18789e9ecd6620c2f278fc3900498c065b  squid-4.13.tar.xz
++# From http://www.squid-cache.org/Versions/v4/squid-4.14.tar.xz.asc
++md5  7d9ba82703cd770b2ede169a0c1de94a  squid-4.14.tar.xz
++sha1  71ae13a845a6a7ffc69ce11086ea3e427625bc08  squid-4.14.tar.xz
+ # Locally calculated
+-sha256  6891a0f540e60779b4f24f1802a302f813c6f473ec7336a474ed68c3e2e53ee0  squid-4.13.tar.xz
++sha256  f1097daa6434897c159bc100978b51347c0339041610845d0afa128151729ffc  squid-4.14.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index a3ccbbcf8e..7e6865f8ed 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SQUID_VERSION = 4.13
++SQUID_VERSION = 4.14
+ SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
+ SQUID_SITE = http://www.squid-cache.org/Versions/v4
+ SQUID_LICENSE = GPL-2.0+
+-- 
+2.20.1
