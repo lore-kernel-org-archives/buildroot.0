@@ -1,11 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 Mar 2021 08:16:25 +0200
-Subject: [Buildroot] [PATCH 1/1] package/wireshark: security bump to
- version 3.4.4
-In-Reply-To: <20210329195407.251619-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 29 Mar 2021 21:54:07 +0200")
-References: <20210329195407.251619-1-fontaine.fabrice@gmail.com>
-Message-ID: <87im59dv46.fsf@dell.be.48ers.dk>
+Date: Tue, 30 Mar 2021 08:17:31 +0200
+Subject: [Buildroot] [PATCH 1/2] package/haserl: add HASERL_CPE_ID_VENDOR
+In-Reply-To: <20210329201026.254940-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 29 Mar 2021 22:10:25 +0200")
+References: <20210329201026.254940-1-fontaine.fabrice@gmail.com>
+Message-ID: <87eefxdv2c.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,11 +13,10 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Fix CVE-2021-22191: Improper URL handling in Wireshark 3.4.0 to 3.4.3
- > and 3.2.0 to 3.2.11 could allow remote code execution via via packet
- > injection or crafted capture file.
+ > cpe:2.3:a:haserl_project:hserl is a valid CPE identifier for this
+ > package:
 
- > https://www.wireshark.org/security/wnpa-sec-2021-03.html
+ >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ahaserl_project%3Ahaserl
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
