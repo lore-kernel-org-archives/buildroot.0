@@ -1,36 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 31 Mar 2021 08:14:48 +0200
-Subject: [Buildroot] [PATCH] package/perl: fix configure when
- BR2_VERSION_FULL contains a '/'
-In-Reply-To: <20210327224220.961977-1-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Sat, 27 Mar 2021 23:42:20 +0100")
-References: <20210327224220.961977-1-yann.morin.1998@free.fr>
-Message-ID: <87sg4bc0iv.fsf@dell.be.48ers.dk>
+Date: Wed, 31 Mar 2021 08:14:11 +0200
+Subject: [Buildroot] [git commit branch/2020.11.x] package/perl: fix
+ configure when BR2_VERSION_FULL contains a '/'
+Message-ID: <20210331055713.26979883F1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=0614825798ac4d19c1a1d220bbc9ab102c53bdad
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
- > When BR2_VERSION_FULL contains one or more '/', injection our version
- > in the perl patch-level fails:
+When BR2_VERSION_FULL contains one or more '/', injection our version
+in the perl patch-level fails:
 
- >     /usr/bin/sed: -e expression #1, char 27: unknown option to `s'
+    /usr/bin/sed: -e expression #1, char 27: unknown option to `s'
 
- > When the build is done in a git tree, and HEAD is a tag, BR2_VERSION_FULL
- > will contain that tag name. Even if not widely common, it is not unusual
- > for a tag to contain a '/', and this is perfectly legit in git.
+When the build is done in a git tree, and HEAD is a tag, BR2_VERSION_FULL
+will contain that tag name. Even if not widely common, it is not unusual
+for a tag to contain a '/', and this is perfectly legit in git.
 
- > So, mangle BR2_VERSION_FULL to escape all '/' with a backslash '\', so
- > that the sed expression is correct, and so that we eventually have a
- > correct pathclevel string in perl's --version output.
+So, mangle BR2_VERSION_FULL to escape all '/' with a backslash '\', so
+that the sed expression is correct, and so that we eventually have a
+correct patchlevel string in perl's --version output.
 
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
- > Cc: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 0a2141349c12fcab639182b744ec3e2e5ab5d1f7)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/perl/perl.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Committed to 2020.02.x, 2020.11.x and 2021.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index 2f82e1d6d5..c053c98bbe 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -74,7 +74,7 @@ endif
+ define PERL_CONFIGURE_CMDS
+ 	(cd $(@D); $(TARGET_MAKE_ENV) HOSTCC='$(HOSTCC_NOCCACHE)' \
+ 		./configure $(PERL_CONF_OPTS))
+-	$(SED) 's/UNKNOWN-/Buildroot $(BR2_VERSION_FULL) /' $(@D)/patchlevel.h
++	$(SED) 's/UNKNOWN-/Buildroot $(subst /,\/,$(BR2_VERSION_FULL)) /' $(@D)/patchlevel.h
+ endef
+ 
+ define PERL_BUILD_CMDS
