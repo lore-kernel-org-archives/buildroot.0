@@ -1,55 +1,64 @@
-From: Michael John <MJohn@midmark.com>
-Date: Wed, 31 Mar 2021 14:12:15 +0000
-Subject: [Buildroot] sshd reports error in libcrypto while trying to read
- host key
-Message-ID: <DM6PR08MB4425422C1100F44BFF129275AE7C9@DM6PR08MB4425.namprd08.prod.outlook.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 31 Mar 2021 20:15:52 +0300
+Subject: [Buildroot] [PATCH] package/libcurl: security bump to version 7.76.0
+Message-ID: <ab738226f00b0f533fbcd1afa6e1b57a47928956.1617210952.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+CVE-2021-22890: TLS 1.3 session ticket proxy host mixup (since 7.63.0)
 
-I?ve built openssh and I?m having some issues running it on my board. While running sshd it reports an error in libcrypto while trying to read the host key. The host keys are generated under /etc/ssh.
+CVE-2021-22876: Automatic referer leaks credentials (since 7.1.1)
 
-~> ls /etc/ssh
-moduli                                 ssh_host_ecdsa_key                    ssh_host_rsa_key
-ssh_config                           ssh_host_ecdsa_key.pub           ssh_host_rsa_key.pub
-ssh_host_dsa_key             ssh_host_ed25519_key              sshd_config
-ssh_host_dsa_key.pub     ssh_host_ed25519_key.pub
+This version adds optional dependency on libgsasl.
 
-~> systemctl status sshd
-? sshd.service - OpenSSH server daemon
-     Loaded: loaded (/usr/lib/systemd/system/sshd.service; enabled; vendor preset: enabled)
-     Active: failed (Result: exit-code) since Wed 2021-03-31 13:21:02 UTC; 11s ago
-    Process: 315 ExecStartPre=/usr/bin/ssh-keygen -A (code=exited, status=0/SUCCESS)
-    Process: 341 ExecStart=/usr/sbin/sshd -D -e (code=exited, status=1/FAILURE)
-   Main PID: 341 (code=exited, status=1/FAILURE)
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/libcurl/libcurl.hash | 4 ++--
+ package/libcurl/libcurl.mk   | 9 ++++++++-
+ 2 files changed, 10 insertions(+), 3 deletions(-)
 
-Mar 31 13:20:51 cm1sd systemd[1]: Starting OpenSSH server daemon...
-Mar 31 13:20:54 cm1sd systemd[1]: Started OpenSSH server daemon.
-Mar 31 13:21:02 cm1sd sshd[341]: Unable to load host key "/etc/ssh/ssh_host_rsa_key": error in libcrypto
-Mar 31 13:21:02 cm1sd sshd[341]: Unable to load host key: /etc/ssh/ssh_host_rsa_key
-Mar 31 13:21:02 cm1sd sshd[341]: sshd: no hostkeys available -- exiting.
-Mar 31 13:21:02 cm1sd systemd[1]: sshd.service: Main process exited, code=exited, status=1/FAILURE
-Mar 31 13:21:02 cm1sd systemd[1]: sshd.service: Failed with result 'exit-code'.
-
-I?m using:
-openssh version 8.5p1
-openssl version 1.1.1k
-crpytodev-linux fabe5989a3d
-
-Is there an issue using this combination of packages? These are the lastest versions in buildroot.
-
-My config file (sshd_config) is only trying to load the host key for RSA, but I get the same error about libcrypto for ecdsa and ed25519.
-
-Anyone see this issue as well? Any help is appreciated.
-
-Thanks.
--Michael
-
-CONFIDENTIALITY NOTICE: This message, including any attachments, contains confidential information intended for a specific individual and purpose. If you are not the intended recipient, you should delete this message and any disclosure, copying, or distribution of this message, or the taking of any action based on it, by you is strictly prohibited.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210331/ad8547c4/attachment.html>
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index 368b8f67f13e..1906834e7a31 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://curl.haxx.se/download/curl-7.75.0.tar.xz.asc
++# https://curl.haxx.se/download/curl-7.76.0.tar.xz.asc
+ # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
+-sha256  fe0c49d8468249000bda75bcfdf9e30ff7e9a86d35f1a21f428d79c389d55675  curl-7.75.0.tar.xz
++sha256  6302e2d75c59cdc6b35ce3fbe716481dd4301841bbb5fd71854653652a014fc8  curl-7.76.0.tar.xz
+ sha256  6fd1a1c008b5ef4c4741dd188c3f8af6944c14c25afa881eb064f98fb98358e7  COPYING
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 6a9a5a3d3e6a..b02a9263512a 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBCURL_VERSION = 7.75.0
++LIBCURL_VERSION = 7.76.0
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.haxx.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
+@@ -126,6 +126,13 @@ else
+ LIBCURL_CONF_OPTS += --without-nghttp2
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBGSASL),y)
++LIBCURL_DEPENDENCIES += libgsasl
++LIBCURL_CONF_OPTS += --with-gsasl
++else
++LIBCURL_CONF_OPTS += --without-gsasl
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBCURL_COOKIES_SUPPORT),y)
+ LIBCURL_CONF_OPTS += --enable-cookies
+ else
+-- 
+2.30.2
