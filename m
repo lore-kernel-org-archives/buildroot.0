@@ -1,49 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 31 Mar 2021 08:13:52 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/perl: fix
- configure when BR2_VERSION_FULL contains a '/'
-Message-ID: <20210331055720.CF19E8A346@busybox.osuosl.org>
+Date: Wed, 31 Mar 2021 08:06:33 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/network-manager:
+ add CPE variables
+Message-ID: <20210331055758.327E78777D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5b3896cb767868f1ab8293084f6528eec17bafb0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a9a3b2a09ae61004114cd4d91c4775f0acec1bef
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-When BR2_VERSION_FULL contains one or more '/', injection our version
-in the perl patch-level fails:
+cpe:2.3:a:gnome:networkmanager is a valid CPE identifier for this
+package:
 
-    /usr/bin/sed: -e expression #1, char 27: unknown option to `s'
+https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Agnome%3Anetworkmanager
 
-When the build is done in a git tree, and HEAD is a tag, BR2_VERSION_FULL
-will contain that tag name. Even if not widely common, it is not unusual
-for a tag to contain a '/', and this is perfectly legit in git.
-
-So, mangle BR2_VERSION_FULL to escape all '/' with a backslash '\', so
-that the sed expression is correct, and so that we eventually have a
-correct patchlevel string in perl's --version output.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 0a2141349c12fcab639182b744ec3e2e5ab5d1f7)
+(cherry picked from commit 47f29fe098071d444a804403c1a433358ff7e451)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/perl/perl.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/network-manager/network-manager.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index 2f82e1d6d5..c053c98bbe 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -74,7 +74,7 @@ endif
- define PERL_CONFIGURE_CMDS
- 	(cd $(@D); $(TARGET_MAKE_ENV) HOSTCC='$(HOSTCC_NOCCACHE)' \
- 		./configure $(PERL_CONF_OPTS))
--	$(SED) 's/UNKNOWN-/Buildroot $(BR2_VERSION_FULL) /' $(@D)/patchlevel.h
-+	$(SED) 's/UNKNOWN-/Buildroot $(subst /,\/,$(BR2_VERSION_FULL)) /' $(@D)/patchlevel.h
- endef
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index 4b2ade5b9b..9402564cb4 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -13,6 +13,8 @@ NETWORK_MANAGER_DEPENDENCIES = host-pkgconf udev gnutls libglib2 \
+ 	libgcrypt wireless_tools util-linux host-intltool readline libndp
+ NETWORK_MANAGER_LICENSE = GPL-2.0+ (app), LGPL-2.1+ (libnm)
+ NETWORK_MANAGER_LICENSE_FILES = COPYING COPYING.LGPL CONTRIBUTING
++NETWORK_MANAGER_CPE_ID_VENDOR = gnome
++NETWORK_MANAGER_CPE_ID_PRODUCT = networkmanager
+ NETWORK_MANAGER_SELINUX_MODULES = networkmanager
  
- define PERL_BUILD_CMDS
+ NETWORK_MANAGER_CONF_ENV = \
