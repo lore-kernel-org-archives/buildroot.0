@@ -1,45 +1,41 @@
 From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-Date: Wed, 31 Mar 2021 10:14:47 +0200
-Subject: [Buildroot] [PATCH 1/1] package/netsnmp: fix script
- net-snmp-create-v3-user's usage of 'ps'.
-Message-ID: <20210331081447.29552-1-nicolas.cavallari@green-communications.fr>
+Date: Wed, 31 Mar 2021 10:15:59 +0200
+Subject: [Buildroot] [PATCH 1/1] package/bash: remove development files and
+ modules on the target.
+Message-ID: <20210331081559.29619-1-nicolas.cavallari@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-net-snmp-create-v3-user uses ps to check if snmpd is running.  To know
-how to invoke 'ps', the build system use 'which ps' and does other
-checks for the output format of 'ps', therefore inspecting 'ps' on the
-build machine instead of the target.
+bash installs /lib/pkgconfig/bash.pc on the target, which buildroot does
+not remove because it is not in the usual /usr/lib/pkgconfig.
 
-If the build machine runs a OS like Debian, that uses a merged-usr and a
-PATH of '/usr/bin:/bin', then 'which ps' returns /usr/bin/ps, which will
-not work on the target if it does not also use a merged-usr.
+It also install makefiles and example builtins in /lib/bash that are not
+required.
 
-Hardcode 'ps' to be /bin/ps to fix this issue and to improve build
-reproducibility.
+The Makefiles and .pc encode the build path and create reproducibility
+issues.  Remove them.
 
 Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
 ---
- package/netsnmp/netsnmp.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/bash/bash.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
-index 5b22d1a063..1a9a776033 100644
---- a/package/netsnmp/netsnmp.mk
-+++ b/package/netsnmp/netsnmp.mk
-@@ -12,7 +12,9 @@ NETSNMP_LICENSE_FILES = COPYING
- NETSNMP_CPE_ID_VENDOR = net-snmp
- NETSNMP_CPE_ID_PRODUCT = $(NETSNMP_CPE_ID_VENDOR)
- NETSNMP_INSTALL_STAGING = YES
--NETSNMP_CONF_ENV = ac_cv_NETSNMP_CAN_USE_SYSCTL=no
-+NETSNMP_CONF_ENV = \
-+	ac_cv_NETSNMP_CAN_USE_SYSCTL=no \
-+	ac_cv_path_PSPROG=/bin/ps
- NETSNMP_CONF_OPTS = \
- 	--with-persistent-directory=/var/lib/snmp \
- 	--with-defaults \
+diff --git a/package/bash/bash.mk b/package/bash/bash.mk
+index efe7cbbe59..6af31f182d 100644
+--- a/package/bash/bash.mk
++++ b/package/bash/bash.mk
+@@ -41,7 +41,8 @@ endif
+ define BASH_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+ 		DESTDIR=$(TARGET_DIR) exec_prefix=/ install
+-	rm -f $(TARGET_DIR)/bin/bashbug
++	rm -f $(TARGET_DIR)/bin/bashbug $(TARGET_DIR)/lib/pkgconfig/bash.pc
++	rm -rf $(TARGET_DIR)/lib/bash
+ endef
+ 
+ # Add /bin/bash to /etc/shells otherwise some login tools like dropbear
 -- 
 2.31.0
