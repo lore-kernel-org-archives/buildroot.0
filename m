@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 31 Mar 2021 08:14:11 +0200
-Subject: [Buildroot] [git commit branch/2020.11.x] package/perl: fix
+Date: Wed, 31 Mar 2021 08:13:52 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/perl: fix
  configure when BR2_VERSION_FULL contains a '/'
-Message-ID: <20210331055713.26979883F1@busybox.osuosl.org>
+Message-ID: <20210331055720.CF19E8A346@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0614825798ac4d19c1a1d220bbc9ab102c53bdad
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=5b3896cb767868f1ab8293084f6528eec17bafb0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 When BR2_VERSION_FULL contains one or more '/', injection our version
 in the perl patch-level fails:
