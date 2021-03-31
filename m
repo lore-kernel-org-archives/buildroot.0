@@ -1,40 +1,65 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 31 Mar 2021 20:59:43 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libvips: add giflib optional
- dependency
-Message-ID: <20210331185943.1430261-1-fontaine.fabrice@gmail.com>
+From: Aleksander Morgado <aleksander@aleksander.es>
+Date: Wed, 31 Mar 2021 21:12:11 +0200
+Subject: [Buildroot] [PATCH 1/1] package/modem-manager: bump version to
+ 1.16.2
+In-Reply-To: <YGS+cAr0P67MDjFa@pevik>
+References: <20210329184934.14690-1-petr.vorel@gmail.com>
+ <20210330195156.GA24043@scaer>
+ <CAAP7ucJbn39MmCDtJkTj57cnv8F9QzG=M9SyNcnkWtZ_Ch0uSg@mail.gmail.com>
+ <YGS+cAr0P67MDjFa@pevik>
+Message-ID: <CAAP7ucLckJ0sBGKsPaxg9an=sENcq6vBo8MQFuFEtzaue9Ut8A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-giflib is an optional dependency which is enabled by default since
-version 8.3.0 and
-https://github.com/libvips/libvips/commit/d79407f285c768a7338e73ccfc6cf09480b95582
+Hey,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libvips/libvips.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+> > > > RFC: should I add also --enable-plugin-qcom-soc ?
+> > > > (there is qcom-db410c-firmware package)
+>
+> > > Maybe you could enable the plugin if the package is enabled:
+>
+> > >     ifeq ($(BR2_PACKAGE_QCOM_DB410_FIRMWARE),y)
+> > >     MODEM_MANAGER_CONF_OPTS += --enable-plugin-qcom-soc
+> > >     else
+> > >     MODEM_MANAGER_CONF_OPTS += --disable-plugin-qcom-soc
+> > >     endif
+>
+>
+> > From a quick Google search, looks like there is no WWAN modem there:
+> > "The DragonBoard 410c based on Qualcomm Snapdragon 410 processor is a
+> > 64-bit development board with Wi-Fi, Bluetooth, and GPS."
+>
+> > The qcom-soc plugin has been tested successfully on MSM8916 or MSM8974
+> > SoCs, and there is some ongoing work to make it work on SDM845 and
+> > similar platforms.
+>
+> I wonder if libqrtr-glib has other use than qcom-soc plugin.
+> Originally I thought there is more use and thus I add it to buildroot,
+> but if it's just for qcom-soc, it should be added:
+>
+> ifeq ($(BR2_PACKAGE_LIBQRTR_GLIB),y)
+> MODEM_MANAGER_CONF_OPTS += --enable-plugin-qcom-soc
+> else
+> MODEM_MANAGER_CONF_OPTS += --disable-plugin-qcom-soc
+> endif
+>
 
-diff --git a/package/libvips/libvips.mk b/package/libvips/libvips.mk
-index 014aaf0327..0449751380 100644
---- a/package/libvips/libvips.mk
-+++ b/package/libvips/libvips.mk
-@@ -38,6 +38,13 @@ LIBVIPS_DEPENDENCIES = \
- 	host-pkgconf expat libglib2 \
- 	$(TARGET_NLS_DEPENDENCIES)
- 
-+ifeq ($(BR2_PACKAGE_GIFLIB),y)
-+LIBVIPS_CONF_OPTS += --with-giflib
-+LIBVIPS_DEPENDENCIES += giflib
-+else
-+LIBVIPS_CONF_OPTS += --without-giflib
-+endif
-+
- ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
- LIBVIPS_CONF_OPTS += --enable-introspection
- LIBVIPS_DEPENDENCIES += gobject-introspection
+So, in ModemManager, right now libqrtr-glib will indeed be exclusively
+for the qcom-soc plugin; it will be the only plugin making use of the
+QRTR nodes exposed by the kernel.
+
+> Although it will not be useful until anybody tries to add some phone based
+> defconfigs into buildroot.
+>
+
+The QRTR protocol itself is not specific to WWAN. E.g. Qualcomm SoCs
+may expose access to control other features (e.g. thermal control) via
+this kind of nodes. That said, *right now*  it may make sense to make
+it specific to the MM usecase only.
+
 -- 
-2.30.2
+Aleksander
+https://aleksander.es
