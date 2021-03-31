@@ -1,40 +1,55 @@
-From: =?UTF-8?B?0JLQu9Cw0LQg0JrQsNGA0LXQu9C40L0=?= <karelinvld@gmail.com>
-Date: Wed, 31 Mar 2021 17:01:41 +0300
-Subject: [Buildroot] Problems with integration of package
-Message-ID: <CAMwF3yws+TqD31uXGrFEvWUWmX02rQchksaUqmHhfv6qk0-QKA@mail.gmail.com>
+From: Michael John <MJohn@midmark.com>
+Date: Wed, 31 Mar 2021 14:12:15 +0000
+Subject: [Buildroot] sshd reports error in libcrypto while trying to read
+ host key
+Message-ID: <DM6PR08MB4425422C1100F44BFF129275AE7C9@DM6PR08MB4425.namprd08.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I try to integrate a package openscada, but have some problems with
-installing it.
+Hello,
 
-I wrote Config.in and .mk file in dir package. Build is OK. But when
-package begins to install I had next error.
+I?ve built openssh and I?m having some issues running it on my board. While running sshd it reports an error in libcrypto while trying to read the host key. The host keys are generated under /etc/ssh.
 
-/usr/bin/mkdir -p
-'/home/vlad/work/stm/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib'
- /bin/bash ../libtool   --mode=install /usr/bin/install -c   liboscada.la
-'/home/vlad/work/stm/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib'
- /usr/bin/mkdir -p
-'/home/vlad/work/stm/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/openscada'
-fopen: No such file or directory
+~> ls /etc/ssh
+moduli                                 ssh_host_ecdsa_key                    ssh_host_rsa_key
+ssh_config                           ssh_host_ecdsa_key.pub           ssh_host_rsa_key.pub
+ssh_host_dsa_key             ssh_host_ed25519_key              sshd_config
+ssh_host_dsa_key.pub     ssh_host_ed25519_key.pub
 
-I undestand, that problem is with paths.
+~> systemctl status sshd
+? sshd.service - OpenSSH server daemon
+     Loaded: loaded (/usr/lib/systemd/system/sshd.service; enabled; vendor preset: enabled)
+     Active: failed (Result: exit-code) since Wed 2021-03-31 13:21:02 UTC; 11s ago
+    Process: 315 ExecStartPre=/usr/bin/ssh-keygen -A (code=exited, status=0/SUCCESS)
+    Process: 341 ExecStart=/usr/sbin/sshd -D -e (code=exited, status=1/FAILURE)
+   Main PID: 341 (code=exited, status=1/FAILURE)
 
-I tried to add next lines to .mk
+Mar 31 13:20:51 cm1sd systemd[1]: Starting OpenSSH server daemon...
+Mar 31 13:20:54 cm1sd systemd[1]: Started OpenSSH server daemon.
+Mar 31 13:21:02 cm1sd sshd[341]: Unable to load host key "/etc/ssh/ssh_host_rsa_key": error in libcrypto
+Mar 31 13:21:02 cm1sd sshd[341]: Unable to load host key: /etc/ssh/ssh_host_rsa_key
+Mar 31 13:21:02 cm1sd sshd[341]: sshd: no hostkeys available -- exiting.
+Mar 31 13:21:02 cm1sd systemd[1]: sshd.service: Main process exited, code=exited, status=1/FAILURE
+Mar 31 13:21:02 cm1sd systemd[1]: sshd.service: Failed with result 'exit-code'.
 
-OPENSCADA_INSTALL_STAGING = YES
-OPENSCADA_INSTALL_TARGET  = YES
- OPENSCADA_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR)
- OPENSCADA_INSTALL_TARGET_OPTS  = DESTDIR=$(TARGET_DIR)
+I?m using:
+openssh version 8.5p1
+openssl version 1.1.1k
+crpytodev-linux fabe5989a3d
 
-After that, make package is OK. But I don't see binary in target/usr/bin
-directory and libtool doing nothing.
+Is there an issue using this combination of packages? These are the lastest versions in buildroot.
 
-The build system of package is autotools.
+My config file (sshd_config) is only trying to load the host key for RSA, but I get the same error about libcrypto for ecdsa and ed25519.
+
+Anyone see this issue as well? Any help is appreciated.
+
+Thanks.
+-Michael
+
+CONFIDENTIALITY NOTICE: This message, including any attachments, contains confidential information intended for a specific individual and purpose. If you are not the intended recipient, you should delete this message and any disclosure, copying, or distribution of this message, or the taking of any action based on it, by you is strictly prohibited.
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210331/f6d46be7/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210331/ad8547c4/attachment.html>
