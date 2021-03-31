@@ -1,47 +1,69 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 31 Mar 2021 21:49:09 +0200
-Subject: [Buildroot] [git commit] package/netsnmp: fix script
+Date: Wed, 31 Mar 2021 21:49:37 +0200
+Subject: [Buildroot] [PATCH 1/1] package/netsnmp: fix script
  net-snmp-create-v3-user's usage of 'ps'.
-Message-ID: <20210331192412.C423C8B4B2@busybox.osuosl.org>
+In-Reply-To: <20210331081447.29552-1-nicolas.cavallari@green-communications.fr>
+References: <20210331081447.29552-1-nicolas.cavallari@green-communications.fr>
+Message-ID: <20210331194937.GG24043@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=57d339f20bdb46f509fff37629b0e0725241b26d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Nicolas, All,
 
-net-snmp-create-v3-user uses ps to check if snmpd is running.  To know
-how to invoke 'ps', the build system use 'which ps' and does other
-checks for the output format of 'ps', therefore inspecting 'ps' on the
-build machine instead of the target.
+On 2021-03-31 10:14 +0200, Nicolas Cavallari spake thusly:
+> net-snmp-create-v3-user uses ps to check if snmpd is running.  To know
+> how to invoke 'ps', the build system use 'which ps' and does other
+> checks for the output format of 'ps', therefore inspecting 'ps' on the
+> build machine instead of the target.
+> 
+> If the build machine runs a OS like Debian, that uses a merged-usr and a
+> PATH of '/usr/bin:/bin', then 'which ps' returns /usr/bin/ps, which will
+> not work on the target if it does not also use a merged-usr.
+> 
+> Hardcode 'ps' to be /bin/ps to fix this issue and to improve build
+> reproducibility.
+> 
+> Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
 
-If the build machine runs a OS like Debian, that uses a merged-usr and a
-PATH of '/usr/bin:/bin', then 'which ps' returns /usr/bin/ps, which will
-not work on the target if it does not also use a merged-usr.
+Applied to master, thanks.
 
-Hardcode 'ps' to be /bin/ps to fix this issue and to improve build
-reproducibility.
+Regards,
+Yann E. MORIN.
 
-Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/netsnmp/netsnmp.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+> ---
+>  package/netsnmp/netsnmp.mk | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
+> index 5b22d1a063..1a9a776033 100644
+> --- a/package/netsnmp/netsnmp.mk
+> +++ b/package/netsnmp/netsnmp.mk
+> @@ -12,7 +12,9 @@ NETSNMP_LICENSE_FILES = COPYING
+>  NETSNMP_CPE_ID_VENDOR = net-snmp
+>  NETSNMP_CPE_ID_PRODUCT = $(NETSNMP_CPE_ID_VENDOR)
+>  NETSNMP_INSTALL_STAGING = YES
+> -NETSNMP_CONF_ENV = ac_cv_NETSNMP_CAN_USE_SYSCTL=no
+> +NETSNMP_CONF_ENV = \
+> +	ac_cv_NETSNMP_CAN_USE_SYSCTL=no \
+> +	ac_cv_path_PSPROG=/bin/ps
+>  NETSNMP_CONF_OPTS = \
+>  	--with-persistent-directory=/var/lib/snmp \
+>  	--with-defaults \
+> -- 
+> 2.31.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
-index 5b22d1a063..1a9a776033 100644
---- a/package/netsnmp/netsnmp.mk
-+++ b/package/netsnmp/netsnmp.mk
-@@ -12,7 +12,9 @@ NETSNMP_LICENSE_FILES = COPYING
- NETSNMP_CPE_ID_VENDOR = net-snmp
- NETSNMP_CPE_ID_PRODUCT = $(NETSNMP_CPE_ID_VENDOR)
- NETSNMP_INSTALL_STAGING = YES
--NETSNMP_CONF_ENV = ac_cv_NETSNMP_CAN_USE_SYSCTL=no
-+NETSNMP_CONF_ENV = \
-+	ac_cv_NETSNMP_CAN_USE_SYSCTL=no \
-+	ac_cv_path_PSPROG=/bin/ps
- NETSNMP_CONF_OPTS = \
- 	--with-persistent-directory=/var/lib/snmp \
- 	--with-defaults \
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
