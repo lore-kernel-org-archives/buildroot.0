@@ -1,64 +1,52 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 31 Mar 2021 20:15:52 +0300
-Subject: [Buildroot] [PATCH] package/libcurl: security bump to version 7.76.0
-Message-ID: <ab738226f00b0f533fbcd1afa6e1b57a47928956.1617210952.git.baruch@tkos.co.il>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Wed, 31 Mar 2021 20:24:48 +0200
+Subject: [Buildroot] [PATCH 1/1] package/modem-manager: bump version to
+ 1.16.2
+In-Reply-To: <CAAP7ucJbn39MmCDtJkTj57cnv8F9QzG=M9SyNcnkWtZ_Ch0uSg@mail.gmail.com>
+References: <20210329184934.14690-1-petr.vorel@gmail.com>
+ <20210330195156.GA24043@scaer>
+ <CAAP7ucJbn39MmCDtJkTj57cnv8F9QzG=M9SyNcnkWtZ_Ch0uSg@mail.gmail.com>
+Message-ID: <YGS+cAr0P67MDjFa@pevik>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-CVE-2021-22890: TLS 1.3 session ticket proxy host mixup (since 7.63.0)
+Hi Aleksander,
 
-CVE-2021-22876: Automatic referer leaks credentials (since 7.1.1)
+> > > RFC: should I add also --enable-plugin-qcom-soc ?
+> > > (there is qcom-db410c-firmware package)
 
-This version adds optional dependency on libgsasl.
+> > Maybe you could enable the plugin if the package is enabled:
 
-Cc: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/libcurl/libcurl.hash | 4 ++--
- package/libcurl/libcurl.mk   | 9 ++++++++-
- 2 files changed, 10 insertions(+), 3 deletions(-)
+> >     ifeq ($(BR2_PACKAGE_QCOM_DB410_FIRMWARE),y)
+> >     MODEM_MANAGER_CONF_OPTS += --enable-plugin-qcom-soc
+> >     else
+> >     MODEM_MANAGER_CONF_OPTS += --disable-plugin-qcom-soc
+> >     endif
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index 368b8f67f13e..1906834e7a31 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://curl.haxx.se/download/curl-7.75.0.tar.xz.asc
-+# https://curl.haxx.se/download/curl-7.76.0.tar.xz.asc
- # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
--sha256  fe0c49d8468249000bda75bcfdf9e30ff7e9a86d35f1a21f428d79c389d55675  curl-7.75.0.tar.xz
-+sha256  6302e2d75c59cdc6b35ce3fbe716481dd4301841bbb5fd71854653652a014fc8  curl-7.76.0.tar.xz
- sha256  6fd1a1c008b5ef4c4741dd188c3f8af6944c14c25afa881eb064f98fb98358e7  COPYING
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 6a9a5a3d3e6a..b02a9263512a 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBCURL_VERSION = 7.75.0
-+LIBCURL_VERSION = 7.76.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
- LIBCURL_SITE = https://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
-@@ -126,6 +126,13 @@ else
- LIBCURL_CONF_OPTS += --without-nghttp2
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBGSASL),y)
-+LIBCURL_DEPENDENCIES += libgsasl
-+LIBCURL_CONF_OPTS += --with-gsasl
-+else
-+LIBCURL_CONF_OPTS += --without-gsasl
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBCURL_COOKIES_SUPPORT),y)
- LIBCURL_CONF_OPTS += --enable-cookies
- else
--- 
-2.30.2
+
+> From a quick Google search, looks like there is no WWAN modem there:
+> "The DragonBoard 410c based on Qualcomm Snapdragon 410 processor is a
+> 64-bit development board with Wi-Fi, Bluetooth, and GPS."
+
+> The qcom-soc plugin has been tested successfully on MSM8916 or MSM8974
+> SoCs, and there is some ongoing work to make it work on SDM845 and
+> similar platforms.
+
+I wonder if libqrtr-glib has other use than qcom-soc plugin.
+Originally I thought there is more use and thus I add it to buildroot,
+but if it's just for qcom-soc, it should be added:
+
+ifeq ($(BR2_PACKAGE_LIBQRTR_GLIB),y)
+MODEM_MANAGER_CONF_OPTS += --enable-plugin-qcom-soc
+else
+MODEM_MANAGER_CONF_OPTS += --disable-plugin-qcom-soc
+endif
+
+Although it will not be useful until anybody tries to add some phone based
+defconfigs into buildroot.
+
+Kind regards,
+Petr
