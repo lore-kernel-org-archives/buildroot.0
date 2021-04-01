@@ -1,11 +1,11 @@
 From: Andreas Ziegler <br015@umbiko.net>
-Date: Thu,  1 Apr 2021 14:04:12 +0200
+Date: Thu,  1 Apr 2021 14:06:29 +0200
 Subject: [Buildroot] [PATCH v2 1/1] package/rpi-wifi-firmware: provide board
  specific links to firmware configuration files for BCM43430 and BCM43455
  based Raspberry Pi models
 In-Reply-To: <20210329184503.10514-1-ps.report@gmx.net>
 References: <20210329184503.10514-1-ps.report@gmx.net>
-Message-ID: <20210401120412.232714-1-br015@umbiko.net>
+Message-ID: <20210401120629.232775-1-br015@umbiko.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
