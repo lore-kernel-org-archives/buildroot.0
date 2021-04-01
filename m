@@ -1,60 +1,57 @@
-From: Heiko Thiery <heiko.thiery@gmail.com>
-Date: Thu, 1 Apr 2021 16:00:25 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
- 2021-03-31
-In-Reply-To: <87eefuazze.fsf@dell.be.48ers.dk>
-References: <20210401092300.6174540F73@smtp4.osuosl.org>
- <CAEyMn7ZVFpc2oUnYi+_ytcnvNOpT69ZYyK=c6+zR7rVDec9qcQ@mail.gmail.com>
- <87eefuazze.fsf@dell.be.48ers.dk>
-Message-ID: <CAEyMn7bdk0DfF0T_eN-jb=Kf61Hwdng6tmvHhjkDV2mioV7a4w@mail.gmail.com>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Thu,  1 Apr 2021 08:44:51 -0700
+Subject: [Buildroot] [PATCH] package/mender/mender.mk: fix license list
+Message-ID: <20210401154453.144605-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter.
+The license files were updated in the .hash file, but not in the .mk file.
 
-Am Do., 1. Apr. 2021 um 15:36 Uhr schrieb Peter Korsgaard <peter@korsgaard.com>:
->
-> >>>>> "Heiko" == Heiko Thiery <heiko.thiery@gmail.com> writes:
->
->  > Hi all,
->  > Am Do., 1. Apr. 2021 um 11:23 Uhr schrieb Thomas Petazzoni
->  > <thomas.petazzoni@bootlin.com>:
->  >>
->  >> Hello,
->  >>
->  >> Autobuild statistics for 2021-03-31
->  >> ===================================
->  >>
->  >> branch |  OK | NOK | TIM | TOT |
->  >> 2020.02.x  | 10  |  3  |  0  | 13  |
->  >> 2020.11.x  | 11  |  1  |  0  | 12  |
->  >> 2021.02.x  | 23  |  6  |  0  | 29  |
->  >> master   | 107 | 32  |  0  | 139 |
->  >>
->
->  > [..]
->
->  >> Classification of failures by reason for 2020.02.x
->  >> --------------------------------------------------
->  >>
->  >> augeas-1.12.0 | 1
->  >> libnetconf2-1.1.3 | 1
->  >> wireshark-3.2.10 | 1
->
->  > Do we still care about autobuild failures in the old LTS branch
->  > 2020.02.x? Or can I ignore that one for the package I'm listed as
->  > maintainer?
->
-> We normally do one more point release of the previous LTS approximately
-> 1 month after releasing a new LTS, so I will release it very soon. If you
-> have easy fixes for these issues then please send them, but it will
-> indeed very soon become EOL.
+Fixes:
+http://autobuild.buildroot.org/results/42c2987e5cf2bb8918f7fdbd8303951f34b8ead1
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+---
+ package/mender/mender.mk | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-I don't have a fix for the problem yet. I just wanted to make sure if
-it was still worth the effort.
-
+diff --git a/package/mender/mender.mk b/package/mender/mender.mk
+index 317e533532..794dd4be8c 100644
+--- a/package/mender/mender.mk
++++ b/package/mender/mender.mk
+@@ -14,18 +14,20 @@ MENDER_LICENSE = Apache-2.0, BSD-2-Clause, BSD-3-Clause, ISC, MIT, OLDAP-2.8
+ MENDER_LICENSE_FILES = \
+ 	LICENSE \
+ 	LIC_FILES_CHKSUM.sha256 \
+-	vendor/github.com/mendersoftware/mendertesting/LICENSE \
+ 	vendor/github.com/mendersoftware/mender-artifact/LICENSE \
+ 	vendor/github.com/mendersoftware/openssl/LICENSE \
++	vendor/github.com/minio/sha256-simd/LICENSE \
++	vendor/github.com/mendersoftware/progressbar/LICENSE \
+ 	vendor/github.com/pkg/errors/LICENSE \
++	vendor/github.com/godbus/dbus/LICENSE \
++	vendor/github.com/klauspost/compress/LICENSE \
+ 	vendor/github.com/pmezard/go-difflib/LICENSE \
+ 	vendor/golang.org/x/crypto/LICENSE \
+ 	vendor/golang.org/x/sys/LICENSE \
+-	vendor/golang.org/x/net/LICENSE \
+ 	vendor/github.com/bmatsuo/lmdb-go/LICENSE.md \
+-	vendor/golang.org/x/text/LICENSE \
+ 	vendor/github.com/remyoudompheng/go-liblzma/LICENSE \
+ 	vendor/github.com/davecgh/go-spew/LICENSE \
++	vendor/github.com/klauspost/pgzip/LICENSE \
+ 	vendor/github.com/sirupsen/logrus/LICENSE \
+ 	vendor/github.com/stretchr/testify/LICENSE \
+ 	vendor/github.com/ungerik/go-sysfs/LICENSE \
+@@ -33,6 +35,7 @@ MENDER_LICENSE_FILES = \
+ 	vendor/github.com/stretchr/objx/LICENSE \
+ 	vendor/github.com/konsorten/go-windows-terminal-sequences/LICENSE \
+ 	vendor/gopkg.in/yaml.v3/LICENSE \
++	vendor/github.com/mattn/go-isatty/LICENSE \
+ 	vendor/github.com/bmatsuo/lmdb-go/LICENSE.mdb.md
+ 
+ MENDER_DEPENDENCIES = host-pkgconf openssl xz
 -- 
-Heiko
+2.30.2
