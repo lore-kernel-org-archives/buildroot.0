@@ -1,92 +1,76 @@
-From: Maxim Kochetkov <fido_max@inbox.ru>
-Date: Thu, 1 Apr 2021 07:53:10 +0300
-Subject: [Buildroot] Problems with integration of package
-In-Reply-To: <CAMwF3yws+TqD31uXGrFEvWUWmX02rQchksaUqmHhfv6qk0-QKA@mail.gmail.com>
-References: <CAMwF3yws+TqD31uXGrFEvWUWmX02rQchksaUqmHhfv6qk0-QKA@mail.gmail.com>
-Message-ID: <ef8c0910-9cdc-2caa-a411-0edecd1986b6@inbox.ru>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu,  1 Apr 2021 08:02:22 +0200
+Subject: [Buildroot] [PATCH 1/1] package/wget: fix build with uclibc < 1.0.35
+Message-ID: <20210401060222.1758478-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Make sure BR2_SYSTEM_ENABLE_NLS is enabled
+Build of wget with uclibc < 1.0.35 is broken since bump to version
+1.21.1 in commit 89a3f73910402ed40066eed076d5a53ac270307c
 
-Here is my minimal glibc based package:
+Fixes:
+ - http://autobuild.buildroot.org/results/d507f8d8ae4dd6aac1e83b7cc81017caf0d2c30e
 
-################################################################################
-#
-# openscada
-#
-################################################################################ 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...andom.c-fix-build-with-uclibc-1.0.35.patch | 46 +++++++++++++++++++
+ 1 file changed, 46 insertions(+)
+ create mode 100644 package/wget/0001-lib-getrandom.c-fix-build-with-uclibc-1.0.35.patch
 
-OPENSCADA_VERSION  = 0.9.3
-OPENSCADA_SITE  = http://ftp.oscada.org/OpenSCADA/0.9
-OPENSCADA_SOURCE  = openscada- $( OPENSCADA_VERSION ) .tar.xz
-OPENSCADA_LICENSE  = GPL-3.0+
-OPENSCADA_FILES  = COPYING
-OPENSCADA_AUTORECONF  = YES
-OPENSCADA_CONF_OPTS  = --disable-SQLite  \
-                       --disable-MySQL  \
-                       --disable-PostgreSQL  \
-                       --disable-FireBird  \
-                       --disable-SoundCard  \
-                       --disable-VCAEngine  \
-                       --disable-QTStarter  \
-                       --disable-QTCfg  \
-                       --disable-Vision  \
-                       --disable-SNMP
-OPENSCADA_DEPENDENCIES  = libopenssl gd
-$( eval  $( autotools-package ))
-
-----------------------
-config BR2_PACKAGE_OPENSCADA
-     bool "openscada"
-     depends on BR2_INSTALL_LIBSTDCPP
-     depends on BR2_SYSTEM_ENABLE_NLS
-     select BR2_PACKAGE_LIBOPENSSL
-     select BR2_PACKAGE_GD
-     help
-       The OpenSCADA
-       OpenSCADA is an open implementation of SCADA (Supervisory
-       Control And Data Acquisition) and HMI (Human-Machine Interface)
-       systems.
-       http://oscada.org/
---------------------------------
-
-
-31.03.2021 17:01, ???? ??????? ?????:
-> I try to integrate a package openscada, but have some problems with
-> installing it.
-> 
-> I wrote Config.in and .mk file in dir package. Build is OK. But when
-> package begins to install I had next error.
-> 
-> /usr/bin/mkdir -p
-> '/home/vlad/work/stm/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib'
->   /bin/bash ../libtool   --mode=install /usr/bin/install -c   liboscada.la
-> '/home/vlad/work/stm/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib'
->   /usr/bin/mkdir -p
-> '/home/vlad/work/stm/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/openscada'
-> fopen: No such file or directory
-> 
-> I undestand, that problem is with paths.
-> 
-> I tried to add next lines to .mk
-> 
-> OPENSCADA_INSTALL_STAGING = YES
-> OPENSCADA_INSTALL_TARGET  = YES
->   OPENSCADA_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR)
->   OPENSCADA_INSTALL_TARGET_OPTS  = DESTDIR=$(TARGET_DIR)
-> 
-> After that, make package is OK. But I don't see binary in target/usr/bin
-> directory and libtool doing nothing.
-> 
-> The build system of package is autotools.
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+diff --git a/package/wget/0001-lib-getrandom.c-fix-build-with-uclibc-1.0.35.patch b/package/wget/0001-lib-getrandom.c-fix-build-with-uclibc-1.0.35.patch
+new file mode 100644
+index 0000000000..dd4b01f189
+--- /dev/null
++++ b/package/wget/0001-lib-getrandom.c-fix-build-with-uclibc-1.0.35.patch
+@@ -0,0 +1,46 @@
++From a0594387565e1e6b4a8a8ba04ad13b135cc1f0b5 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Thu, 1 Apr 2021 07:49:46 +0200
++Subject: [PATCH] lib/getrandom.c: fix build with uclibc < 1.0.35
++
++Fix the following build failure with uclibc < 1.0.35 which is raised
++since the addition of getrandom module in
++https://git.savannah.gnu.org/cgit/gnulib.git/commit/?id=682cc4e678aceff32dea2a84b6e5147bdf5a20a7:
++
++In file included from ./sys/random.h:40,
++                 from getrandom.c:22:
++/home/fabrice/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/sys/random.h:27:35: error: unknown type name 'size_t'
++   27 | extern int getrandom(void *__buf, size_t count, unsigned int flags)
++      |                                   ^~~~~~
++/home/fabrice/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/sys/random.h:8:1: note: 'size_t' is defined in header '<stddef.h>'; did you forget to '#include <stddef.h>'?
++    7 | #include <features.h>
++  +++ |+#include <stddef.h>
++    8 |
++
++This patch is not upstreamable as it is only a workaround for
++uclibc < 1.0.35, upstream uclibc has been patched with
++https://github.com/wbx-github/uclibc-ng/commit/00972c02c2b6e0a95d5def4a71bdfb188e091782
++
++Fixes:
++ - http://autobuild.buildroot.org/results/d507f8d8ae4dd6aac1e83b7cc81017caf0d2c30e
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ lib/getrandom.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/lib/getrandom.c b/lib/getrandom.c
++index 41212fb32..0ad3f9648 100644
++--- a/lib/getrandom.c
+++++ b/lib/getrandom.c
++@@ -19,6 +19,7 @@
++ 
++ #include <config.h>
++ 
+++#include <stddef.h>
++ #include <sys/random.h>
++ 
++ #include <errno.h>
++-- 
++2.30.2
++
+-- 
+2.30.2
