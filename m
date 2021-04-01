@@ -1,73 +1,63 @@
 From: Tian Yuanhao <tianyuanhao@aliyun.com>
-Date: Thu, 1 Apr 2021 09:21:30 +0800
-Subject: [Buildroot] building a kernel+ramdisk separate from rootfs for
- using dm_crypt filesystem
-In-Reply-To: <CAJ+vNU3mdFXbCL95QQ-67xj8w3cLv6e7_BB6ou=YwPC3AqJSPA@mail.gmail.com>
-References: <CAJ+vNU3mdFXbCL95QQ-67xj8w3cLv6e7_BB6ou=YwPC3AqJSPA@mail.gmail.com>
-Message-ID: <238e19cf-64c8-3b79-16cb-ab335696f5cb@aliyun.com>
+Date: Thu, 1 Apr 2021 09:43:54 +0800
+Subject: [Buildroot] [PATCH v2 1/1] package/wpa_supplicant: fix wrong
+ config
+In-Reply-To: <20210317033739.71436-1-tianyuanhao@aliyun.com>
+References: <20210316021804.3790808-1-tianyuanhao@aliyun.com>
+ <20210317033739.71436-1-tianyuanhao@aliyun.com>
+Message-ID: <fbef5119-fcd2-c9c8-f4c0-165aee254d41@aliyun.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Tim,
+Hi Nicolas,
 
-On 2021/4/1 ??5:02, Tim Harvey wrote:
- > Greetings,
- >
- > I'm using buildroot to build a kernel and rootfs but now need to
- > implement dm_crypt for a secure filesystem.
- >
- > I'm not all that familiar with dm_crypt but it would appear that I
- > need to use an initramfs to open (unlock) the encrypted filesystem and
- > mount it.
- >
- > Do I need to build a separate buildroot config for the initramfs image
- > from the buildroot config that builds my traditional kernel and
- > rootfs? I was hoping to be able to build this all as a single project.
-
-I am also doing similar work. I found two ways:
-
-1. Treat initramfs as a package. Write your own init shell script.
- ?? a. Compile all dependent packages (mainly busybox) statically.
- ?? b. Compile all dependent packages non-statically. Use lddtree.sh to 
-identify dependent libraries from TARGET_DIR.
-
-2. Write a Makefile like this:
-```
-# your-image.mk
-$(eval $(info $(pkgname)))
-
-.PHONY: your-image
-
-YOUR_IMAGE_DEPENDENCIES = package-a package-b
-
-your-image: $(YOUR_IMAGE_DEPENDENCIES) target-finalize
- ??????? @$(call MESSAGE,"Generating filesystem image $@")
- ??????? do something here
-
-TARGETS_ROOTFS += your-image
-PACKAGES += $(YOUR_IMAGE_DEPENDENCIES)
-```
-
-My final choice is method 1-a. Because the initramfs I need is not that 
-complicated.
+In my opinion, the two options CONFIG_CTRL_IFACE and 
+CONFIG_CTRL_IFACE_DBUS_NEW are not directly related except for their 
+similar names. It should be correct now. Could you please test it?
 
 Regards,
 Yuanhao
 
+On 2021/3/17 ??11:37, Tian Yuanhao wrote:
+ > When BR2_PACKAGE_WPA_SUPPLICANT_CTRL_IFACE is not set and
+ > BR2_PACKAGE_WPA_SUPPLICANT_DBUS=y, CONFIG_CTRL_IFACE_DBUS_NEW will be
+ > enabled by 's/^#\(CONFIG_CTRL_IFACE_DBUS_NEW\)/\1/' first, and then
+ > disabled by 's/^\(CONFIG_CTRL_IFACE\)/#\1/'.
  >
- > Perhaps there is a way of using dm_crypt without an initramfs that I'm
- > not aware of.
+ > v2:
+ >?? - fix it by adding '\>' after CONFIG_CTRL_IFACE
+ >?? - disable CONFIG_CTRL_IFACE_DBUS_INTRO when not enabled
  >
- > Perhaps I don't even need dm_crypt and there are other simple ways to
- > secure my root filesystem? I am working with a system that is secure
- > up to and including the bootloader and am using U-Boot verified boot
- > to boot a signed kernel from a FIT image.
+ > Signed-off-by: Tian Yuanhao <tianyuanhao@aliyun.com>
+ > ---
+ >? package/wpa_supplicant/wpa_supplicant.mk | 4 +++-
+ >? 1 file changed, 3 insertions(+), 1 deletion(-)
  >
- > Any suggestions?
+ > diff --git a/package/wpa_supplicant/wpa_supplicant.mk 
+b/package/wpa_supplicant/wpa_supplicant.mk
+ > index c82db43c1c..c861db3d12 100644
+ > --- a/package/wpa_supplicant/wpa_supplicant.mk
+ > +++ b/package/wpa_supplicant/wpa_supplicant.mk
+ > @@ -135,7 +135,7 @@ WPA_SUPPLICANT_CONFIG_EDITS += 
+'s/\#\(CONFIG_TLS=\).*/\1internal/'
+ >? endif
  >
- > Best regards,
+ >? ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_CTRL_IFACE),)
+ > -WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_CTRL_IFACE
+ > +WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_CTRL_IFACE\>
+ >? endif
  >
- > Tim
+ >? ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DBUS),y)
+ > @@ -152,6 +152,8 @@ endef
+ >
+ >? ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DBUS_INTROSPECTION),y)
+ >? WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_CTRL_IFACE_DBUS_INTRO
+ > +else
+ > +WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_CTRL_IFACE_DBUS_INTRO
+ >? endif
+ >
+ >? else
+ >
