@@ -1,25 +1,35 @@
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Sat,  3 Apr 2021 00:20:36 +0200
-Subject: [Buildroot] [PATCH 0/3] Align Amarula Vyasa with latest U-Boot and
- Linux
-Message-ID: <20210402222039.3812925-1-giulio.benetti@benettiengineering.com>
+Date: Sat,  3 Apr 2021 00:20:39 +0200
+Subject: [Buildroot] [PATCH 3/3] board/amarula/vyasa: set sd-card as boot
+ media
+In-Reply-To: <20210402222039.3812925-1-giulio.benetti@benettiengineering.com>
+References: <20210402222039.3812925-1-giulio.benetti@benettiengineering.com>
+Message-ID: <20210402222039.3812925-4-giulio.benetti@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patchset bump to latest versions of U-Boot and Linux. It also set sd-card
-as bootable media where to search extlinux.conf.
+I find easier to test using sd-card(mmcblk1p1) than eMMC(mmcblk0p1) to
+test this board. If needed one can swap back to mmcblk0p1 for using eMMC,
+or set a unique UUID for partition, so both sd-card or eMMC can be booted
+if that UUID partitions is found.
 
-Giulio Benetti (3):
-  configs/amarula_vyasa_rk3288: bump u-boot version to 2021.01
-  configs/amarula_vyasa_rk3288: vyasa: bump Linux version to 5.11
-  board/amarula/vyasa: set sd-card as boot media
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ board/amarula/vyasa/extlinux.conf | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- board/amarula/vyasa/extlinux.conf      | 2 +-
- configs/amarula_vyasa_rk3288_defconfig | 8 ++++----
- 2 files changed, 5 insertions(+), 5 deletions(-)
-
+diff --git a/board/amarula/vyasa/extlinux.conf b/board/amarula/vyasa/extlinux.conf
+index a8fcc35f5a..e7e12ab9bc 100644
+--- a/board/amarula/vyasa/extlinux.conf
++++ b/board/amarula/vyasa/extlinux.conf
+@@ -1,4 +1,4 @@
+ label Vyasa linux-next
+   kernel /boot/uImage
+   devicetree /boot/rk3288-vyasa.dtb
+-  append console=ttyS2,115200n8 root=/dev/mmcblk0p1 rootwait
++  append console=ttyS2,115200n8 root=/dev/mmcblk1p1 rootwait
 -- 
 2.25.1
