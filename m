@@ -1,10 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 2 Apr 2021 23:54:11 +0200
-Subject: [Buildroot] [PATCH 1/3] package/qpid-proton: fix build without
- threads
-In-Reply-To: <20210402163343.1254491-1-fontaine.fabrice@gmail.com>
+Date: Fri, 2 Apr 2021 23:54:50 +0200
+Subject: [Buildroot] [PATCH 3/3] package/qpid-proton: fix build without
+ C++
+In-Reply-To: <20210402163343.1254491-3-fontaine.fabrice@gmail.com>
 References: <20210402163343.1254491-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210402215411.GL24043@scaer>
+ <20210402163343.1254491-3-fontaine.fabrice@gmail.com>
+Message-ID: <20210402215450.GM24043@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,44 +15,41 @@ To: buildroot@busybox.net
 Fabrice, All,
 
 On 2021-04-02 18:33 +0200, Fabrice Fontaine spake thusly:
-> Build of qpid-proton is broken since bump to version 0.33.0 in commit
-> d4c0fde91da0d79204a21ed8de1bd410efa1c4d6 because epoll proactor
-> unconditonally uses pthread
-> 
 > Fixes:
->  - http://autobuild.buildroot.org/results/ec34da16a11f0600ecfbbbc4039e8210aea0498c
+>  - http://autobuild.buildroot.org/results/05f344151100219c159ca4d466a453df96bf07fa
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
-[--SNIP--]
-> diff --git a/package/qpid-proton/qpid-proton.mk b/package/qpid-proton/qpid-proton.mk
-> index b73ab8d6da..bbf953c472 100644
-> --- a/package/qpid-proton/qpid-proton.mk
-> +++ b/package/qpid-proton/qpid-proton.mk
-> @@ -31,6 +31,14 @@ QPID_PROTON_CONF_OPTS = \
->  	-DENABLE_WARNING_ERROR=OFF \
->  	-DPYTHON_EXECUTABLE=$(HOST_DIR)/bin/python2
->  
-> +# epoll proactor unconditionally uses pthread and cpp binding unconditionally
-> +# uses proactor
 
-I added a small clarification that 'CPP' in this context means C++, not
-cpp. Ain't it confusing? ;-)
+Applied to master, with the following changes:
 
-Applied to master, thanks.
+  - move code in thread condition, to avoid setting -DBUILD_CPP twice
+
+Thanks!
 
 Regards,
 Yann E. MORIN.
 
-> +ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
-> +QPID_PROTON_CONF_OPTS += \
-> +	-DBUILD_CPP=OFF \
-> +	-DPROACTOR=none
+> ---
+>  package/qpid-proton/qpid-proton.mk | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/package/qpid-proton/qpid-proton.mk b/package/qpid-proton/qpid-proton.mk
+> index bbf953c472..ce1f0af773 100644
+> --- a/package/qpid-proton/qpid-proton.mk
+> +++ b/package/qpid-proton/qpid-proton.mk
+> @@ -31,6 +31,12 @@ QPID_PROTON_CONF_OPTS = \
+>  	-DENABLE_WARNING_ERROR=OFF \
+>  	-DPYTHON_EXECUTABLE=$(HOST_DIR)/bin/python2
+>  
+> +ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
+> +QPID_PROTON_CONF_OPTS += -DBUILD_CPP=ON
+> +else
+> +QPID_PROTON_CONF_OPTS += -DBUILD_CPP=OFF
 > +endif
 > +
->  ifeq ($(BR2_PACKAGE_JSONCPP),y)
->  QPID_PROTON_DEPENDENCIES += jsoncpp
->  QPID_PROTON_CONF_OPTS += -DENABLE_JSONCPP=ON
+>  # epoll proactor unconditionally uses pthread and cpp binding unconditionally
+>  # uses proactor
+>  ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
 > -- 
 > 2.30.2
 > 
