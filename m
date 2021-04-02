@@ -1,44 +1,115 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Fri, 2 Apr 2021 23:50:16 +0200
-Subject: [Buildroot] [git commit] package/qpid-proton: fix build without C++
-Message-ID: <20210402212534.BE3968131A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qpid-proton: fix build without
+ threads
+Message-ID: <20210402212534.B2CC480361@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=64f34fbcfeb373b839d43bb986812714540cec07
+commit: https://git.buildroot.net/buildroot/commit/?id=50dfbe22a92036ae0c5642880603cd894954cc15
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Build of qpid-proton is broken since bump to version 0.33.0 in commit
+d4c0fde91da0d79204a21ed8de1bd410efa1c4d6 because epoll proactor
+unconditonally uses pthread
+
 Fixes:
- - http://autobuild.buildroot.org/results/05f344151100219c159ca4d466a453df96bf07fa
+ - http://autobuild.buildroot.org/results/ec34da16a11f0600ecfbbbc4039e8210aea0498c
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-[yann.morin.1998 at free.fr:
-  - move code in thread condition, to avoid setting -DBUILD_CPP twice
-]
+[yann.morin.1998 at free.fr: C++ precision in comment]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/qpid-proton/qpid-proton.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ ...PROTON-2355-Fix-build-with-DPROACTOR-none.patch | 61 ++++++++++++++++++++++
+ package/qpid-proton/qpid-proton.mk                 |  8 +++
+ 2 files changed, 69 insertions(+)
 
+diff --git a/package/qpid-proton/0002-PROTON-2355-Fix-build-with-DPROACTOR-none.patch b/package/qpid-proton/0002-PROTON-2355-Fix-build-with-DPROACTOR-none.patch
+new file mode 100644
+index 0000000000..c99a65f2f3
+--- /dev/null
++++ b/package/qpid-proton/0002-PROTON-2355-Fix-build-with-DPROACTOR-none.patch
+@@ -0,0 +1,61 @@
++From 2e3b81296020340692139f1a0d05c3bc7383b40e Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Jiri=20Dan=C4=9Bk?= <jdanek@redhat.com>
++Date: Thu, 1 Apr 2021 19:24:33 +0200
++Subject: [PATCH] PROTON-2355: Fix build with -DPROACTOR=none (#302)
++
++epoll proactor unconditionally uses pthread.h which will result in the
++following build failure:
++
++[  3%] Building C object c/CMakeFiles/qpid-proton-proactor-objects.dir/src/proactor/epoll.c.o
++In file included from /nvme/rc-buildroot-test/scripts/instance-0/output-1/build/qpid-proton-0.33.0/c/src/proactor/epoll.c:60:
++/nvme/rc-buildroot-test/scripts/instance-0/output-1/build/qpid-proton-0.33.0/c/src/proactor/epoll-internal.h:37:10: fatal error: pthread.h: No such file or directory
++   37 | #include <pthread.h>
++      |          ^~~~~~~~~~~
++
++To fix this failure, the user could use -DPROACTOR=none but it also
++fails on:
++
++CMake Error at c/CMakeLists.txt:481 (add_library):
++  Error evaluating generator expression:
++
++    $<TARGET_OBJECTS:qpid-proton-proactor-objects>
++
++  Objects of target "qpid-proton-proactor-objects" referenced but no such
++  target exists.
++
++Co-authored-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/apache/qpid-proton/commit/2e3b81296020340692139f1a0d05c3bc7383b40e]
++---
++ c/CMakeLists.txt | 11 +++++++++--
++ 1 file changed, 9 insertions(+), 2 deletions(-)
++
++diff --git a/c/CMakeLists.txt b/c/CMakeLists.txt
++index 2146a5c96..e1119d11d 100644
++--- a/c/CMakeLists.txt
+++++ b/c/CMakeLists.txt
++@@ -464,7 +464,11 @@ set(qpid-proton-noncore-src
++   ${qpid-proton-include-extra}
++ )
++ 
++-add_library (qpid-proton SHARED $<TARGET_OBJECTS:qpid-proton-core-objects> $<TARGET_OBJECTS:qpid-proton-platform-io-objects> $<TARGET_OBJECTS:qpid-proton-proactor-objects> ${qpid-proton-noncore-src})
+++add_library (qpid-proton SHARED
+++  $<TARGET_OBJECTS:qpid-proton-core-objects>
+++  $<TARGET_OBJECTS:qpid-proton-platform-io-objects>
+++  $<$<TARGET_EXISTS:qpid-proton-proactor-objects>:$<TARGET_OBJECTS:qpid-proton-proactor-objects>>
+++  ${qpid-proton-noncore-src})
++ target_link_libraries (qpid-proton LINK_PRIVATE ${SSL_LIB} ${SASL_LIB} ${TIME_LIB} ${PLATFORM_LIBS} ${PROACTOR_LIBS})
++ set_target_properties (qpid-proton
++   PROPERTIES
++@@ -480,7 +484,10 @@ if (BUILD_STATIC_LIBS)
++     C_EXTENSIONS ON)
++   add_library(qpid-proton-static STATIC $<TARGET_OBJECTS:qpid-proton-platform-io-static> ${qpid-proton-noncore-src})
++   target_compile_definitions(qpid-proton-static PUBLIC PROTON_DECLARE_STATIC)
++-  target_link_libraries (qpid-proton-static qpid-proton-core-static qpid-proton-proactor-static ${SSL_LIB} ${SASL_LIB} ${TIME_LIB} ${PLATFORM_LIBS} ${PROACTOR_LIBS})
+++  target_link_libraries (qpid-proton-static
+++    qpid-proton-core-static
+++    $<$<TARGET_EXISTS:qpid-proton-proactor-static>:qpid-proton-proactor-static>
+++    ${SSL_LIB} ${SASL_LIB} ${TIME_LIB} ${PLATFORM_LIBS} ${PROACTOR_LIBS})
++ endif(BUILD_STATIC_LIBS)
++ 
++ # Install executables and libraries
 diff --git a/package/qpid-proton/qpid-proton.mk b/package/qpid-proton/qpid-proton.mk
-index c1bcbd0d1a..4e03357261 100644
+index b73ab8d6da..c1bcbd0d1a 100644
 --- a/package/qpid-proton/qpid-proton.mk
 +++ b/package/qpid-proton/qpid-proton.mk
-@@ -33,7 +33,13 @@ QPID_PROTON_CONF_OPTS = \
+@@ -31,6 +31,14 @@ QPID_PROTON_CONF_OPTS = \
+ 	-DENABLE_WARNING_ERROR=OFF \
+ 	-DPYTHON_EXECUTABLE=$(HOST_DIR)/bin/python2
  
- # epoll proactor unconditionally uses pthread and cpp (C++) bindings
- # unconditionally use proactor
--ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
-+ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-+ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
-+QPID_PROTON_CONF_OPTS += -DBUILD_CPP=ON
-+else
-+QPID_PROTON_CONF_OPTS += -DBUILD_CPP=OFF
++# epoll proactor unconditionally uses pthread and cpp (C++) bindings
++# unconditionally use proactor
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),)
++QPID_PROTON_CONF_OPTS += \
++	-DBUILD_CPP=OFF \
++	-DPROACTOR=none
 +endif
-+else
- QPID_PROTON_CONF_OPTS += \
- 	-DBUILD_CPP=OFF \
- 	-DPROACTOR=none
++
+ ifeq ($(BR2_PACKAGE_JSONCPP),y)
+ QPID_PROTON_DEPENDENCIES += jsoncpp
+ QPID_PROTON_CONF_OPTS += -DENABLE_JSONCPP=ON
