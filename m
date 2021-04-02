@@ -1,46 +1,47 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  2 Apr 2021 08:09:39 +0200
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xdriver_xf86-video-ati: add
- missing dependency
-Message-ID: <20210402060939.643516-1-fontaine.fabrice@gmail.com>
+From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Date: Fri, 2 Apr 2021 11:08:03 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/wpa_supplicant: fix wrong
+ config
+In-Reply-To: <fbef5119-fcd2-c9c8-f4c0-165aee254d41@aliyun.com>
+References: <20210316021804.3790808-1-tianyuanhao@aliyun.com>
+ <20210317033739.71436-1-tianyuanhao@aliyun.com>
+ <fbef5119-fcd2-c9c8-f4c0-165aee254d41@aliyun.com>
+Message-ID: <f057be02-9655-a7b6-9417-2b97aa28640b@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix the following build failure which is raised since commit
-a3aac6d84713db7e6d2683eabf965eae21ce48bf:
+On 01/04/2021 03:43, Tian Yuanhao wrote:
+> Hi Nicolas,
+> 
+> In my opinion, the two options CONFIG_CTRL_IFACE and 
+> CONFIG_CTRL_IFACE_DBUS_NEW are not directly related except for their 
+> similar names. It should be correct now. Could you please test it?
 
-WARNING: unmet direct dependencies detected for BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON
-  Depends on [n]: BR2_PACKAGE_MESA3D [=y] && (BR2_i386 [=n] || BR2_x86_64 [=n])
-  Selected by [y]:
-  - BR2_PACKAGE_XDRIVER_XF86_VIDEO_ATI [=y] && BR2_PACKAGE_XORG7 [=y] && BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR [=y] && BR2_PACKAGE_MESA3D [=y]
+It works, you can add my Tested-By.
 
-Fixes:
- - http://autobuild.buildroot.org/results/36773085f933ab2ee558f53a6c0ae5365077ad5e
+However, the maintainers will probably ask you to :
+- Put the changelog below the "---" line, so that it does not appear in 
+the commit message
+- Maybe do one change at a time. The fix to disable CTRL_IFACE and the 
+fix to disable CTRL_IFACE_DBUS_INTRO are two separate things that maybe 
+should be in two patches.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/x11r7/xdriver_xf86-video-ati/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/package/x11r7/xdriver_xf86-video-ati/Config.in b/package/x11r7/xdriver_xf86-video-ati/Config.in
-index fdf1ebd18b..1246014dca 100644
---- a/package/x11r7/xdriver_xf86-video-ati/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-ati/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_XDRIVER_XF86_VIDEO_ATI
- 	bool "xf86-video-ati"
-+	depends on BR2_i386 || BR2_x86_64 # DRI radeon r100 driver
- 	depends on BR2_PACKAGE_MESA3D
- 	select BR2_PACKAGE_LIBDRM
- 	select BR2_PACKAGE_LIBDRM_RADEON
-@@ -10,4 +11,5 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_ATI
- 	  ATI video driver
- 
- comment "xf86-video-ati needs mesa3d"
-+	depends on BR2_i386 || BR2_x86_64
- 	depends on !BR2_PACKAGE_MESA3D
--- 
-2.30.2
+> On 2021/3/17 ??11:37, Tian Yuanhao wrote:
+>> When BR2_PACKAGE_WPA_SUPPLICANT_CTRL_IFACE is not set and
+>> BR2_PACKAGE_WPA_SUPPLICANT_DBUS=y, CONFIG_CTRL_IFACE_DBUS_NEW will be
+>> enabled by 's/^#\(CONFIG_CTRL_IFACE_DBUS_NEW\)/\1/' first, and then
+>> disabled by 's/^\(CONFIG_CTRL_IFACE\)/#\1/'.
+>>
+>> v2:
+>> ?? - fix it by adding '\>' after CONFIG_CTRL_IFACE
+>> ?? - disable CONFIG_CTRL_IFACE_DBUS_INTRO when not enabled
+>>
+>> Signed-off-by: Tian Yuanhao <tianyuanhao@aliyun.com>
+>> ---
+>> ? package/wpa_supplicant/wpa_supplicant.mk | 4 +++-
+>> ? 1 file changed, 3 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/package/wpa_supplicant/wpa_supplicant.mk 
