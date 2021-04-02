@@ -1,71 +1,46 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Fri, 2 Apr 2021 07:05:15 +0200
-Subject: [Buildroot] [PATCH 1/1] package/modem-manager: bump version to
- 1.16.2
-In-Reply-To: <CAAP7ucLckJ0sBGKsPaxg9an=sENcq6vBo8MQFuFEtzaue9Ut8A@mail.gmail.com>
-References: <20210329184934.14690-1-petr.vorel@gmail.com>
- <20210330195156.GA24043@scaer>
- <CAAP7ucJbn39MmCDtJkTj57cnv8F9QzG=M9SyNcnkWtZ_Ch0uSg@mail.gmail.com>
- <YGS+cAr0P67MDjFa@pevik>
- <CAAP7ucLckJ0sBGKsPaxg9an=sENcq6vBo8MQFuFEtzaue9Ut8A@mail.gmail.com>
-Message-ID: <YGamC04wSaeJMgin@pevik>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri,  2 Apr 2021 08:09:39 +0200
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xdriver_xf86-video-ati: add
+ missing dependency
+Message-ID: <20210402060939.643516-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Fix the following build failure which is raised since commit
+a3aac6d84713db7e6d2683eabf965eae21ce48bf:
 
-> Hey,
+WARNING: unmet direct dependencies detected for BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON
+  Depends on [n]: BR2_PACKAGE_MESA3D [=y] && (BR2_i386 [=n] || BR2_x86_64 [=n])
+  Selected by [y]:
+  - BR2_PACKAGE_XDRIVER_XF86_VIDEO_ATI [=y] && BR2_PACKAGE_XORG7 [=y] && BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR [=y] && BR2_PACKAGE_MESA3D [=y]
 
-> > > > > RFC: should I add also --enable-plugin-qcom-soc ?
-> > > > > (there is qcom-db410c-firmware package)
+Fixes:
+ - http://autobuild.buildroot.org/results/36773085f933ab2ee558f53a6c0ae5365077ad5e
 
-> > > > Maybe you could enable the plugin if the package is enabled:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/x11r7/xdriver_xf86-video-ati/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> > > >     ifeq ($(BR2_PACKAGE_QCOM_DB410_FIRMWARE),y)
-> > > >     MODEM_MANAGER_CONF_OPTS += --enable-plugin-qcom-soc
-> > > >     else
-> > > >     MODEM_MANAGER_CONF_OPTS += --disable-plugin-qcom-soc
-> > > >     endif
-
-
-> > > From a quick Google search, looks like there is no WWAN modem there:
-> > > "The DragonBoard 410c based on Qualcomm Snapdragon 410 processor is a
-> > > 64-bit development board with Wi-Fi, Bluetooth, and GPS."
-
-> > > The qcom-soc plugin has been tested successfully on MSM8916 or MSM8974
-> > > SoCs, and there is some ongoing work to make it work on SDM845 and
-> > > similar platforms.
-
-> > I wonder if libqrtr-glib has other use than qcom-soc plugin.
-> > Originally I thought there is more use and thus I add it to buildroot,
-> > but if it's just for qcom-soc, it should be added:
-
-> > ifeq ($(BR2_PACKAGE_LIBQRTR_GLIB),y)
-> > MODEM_MANAGER_CONF_OPTS += --enable-plugin-qcom-soc
-> > else
-> > MODEM_MANAGER_CONF_OPTS += --disable-plugin-qcom-soc
-> > endif
-
-
-> So, in ModemManager, right now libqrtr-glib will indeed be exclusively
-> for the qcom-soc plugin; it will be the only plugin making use of the
-> QRTR nodes exposed by the kernel.
-
-> > Although it will not be useful until anybody tries to add some phone based
-> > defconfigs into buildroot.
-
-
-> The QRTR protocol itself is not specific to WWAN. E.g. Qualcomm SoCs
-> may expose access to control other features (e.g. thermal control) via
-> this kind of nodes. That said, *right now*  it may make sense to make
-> it specific to the MM usecase only.
-
-Thanks for an explanation, I'll probably enable qcom-soc based on
-BR2_PACKAGE_LIBQRTR_GLIB selection even it's not a direct use of that plugin
-atm.
-
-Kind regards,
-Petr
+diff --git a/package/x11r7/xdriver_xf86-video-ati/Config.in b/package/x11r7/xdriver_xf86-video-ati/Config.in
+index fdf1ebd18b..1246014dca 100644
+--- a/package/x11r7/xdriver_xf86-video-ati/Config.in
++++ b/package/x11r7/xdriver_xf86-video-ati/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_ATI
+ 	bool "xf86-video-ati"
++	depends on BR2_i386 || BR2_x86_64 # DRI radeon r100 driver
+ 	depends on BR2_PACKAGE_MESA3D
+ 	select BR2_PACKAGE_LIBDRM
+ 	select BR2_PACKAGE_LIBDRM_RADEON
+@@ -10,4 +11,5 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_ATI
+ 	  ATI video driver
+ 
+ comment "xf86-video-ati needs mesa3d"
++	depends on BR2_i386 || BR2_x86_64
+ 	depends on !BR2_PACKAGE_MESA3D
+-- 
+2.30.2
