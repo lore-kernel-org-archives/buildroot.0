@@ -1,48 +1,37 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri,  2 Apr 2021 19:38:25 +0200
-Subject: [Buildroot] [PATCH 1/2] package/perl-crypt-openssl-guess: bump
- version to 0.12
-Message-ID: <20210402173826.908656-1-bernd.kuhls@t-online.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri,  2 Apr 2021 20:14:58 +0200
+Subject: [Buildroot] [PATCH 1/1] package/kismet: fix static build with uclibc
+Message-ID: <20210402181458.1554685-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Reformatted hashes.
+Fix static build with uclibc which is raised since bump to version
+2020-12-R3 in commit 14522a8f9d272204763c49a21ebce5653430c612
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Fixes:
+ - http://autobuild.buildroot.org/results/69dcb7ac99e63fca342e4d52d9311d1ee1931911
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- .../perl-crypt-openssl-guess/perl-crypt-openssl-guess.hash  | 6 +++---
- .../perl-crypt-openssl-guess/perl-crypt-openssl-guess.mk    | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/kismet/kismet.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.hash b/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.hash
-index 327b06900a..e6d19cb681 100644
---- a/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.hash
-+++ b/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.hash
-@@ -1,6 +1,6 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5    e768fe2c07826b0ac9ea604c79f93032 Crypt-OpenSSL-Guess-0.11.tar.gz
--sha256 aa6b18e38cb852cbad80a58cd90c395b40819d4d01e0ab37e7703149094d7167 Crypt-OpenSSL-Guess-0.11.tar.gz
-+md5  9e86baf96828a38c967003a5e66f0c39  Crypt-OpenSSL-Guess-0.12.tar.gz
-+sha256  0a18d18768cf42b49b15c9dea626199dc74346bbbc76acd3d817b9c1d2bd471d  Crypt-OpenSSL-Guess-0.12.tar.gz
+diff --git a/package/kismet/kismet.mk b/package/kismet/kismet.mk
+index 5445db0b1f..3a171af7b2 100644
+--- a/package/kismet/kismet.mk
++++ b/package/kismet/kismet.mk
+@@ -18,6 +18,9 @@ KISMET_DEPENDENCIES = \
+ KISMET_LICENSE = GPL-2.0+
+ KISMET_LICENSE_FILES = LICENSE
+ KISMET_SELINUX_MODULES = kismet
++# Needed because tarball configure has not been rebuilt after
++# https://github.com/kismetwireless/kismet/commit/e70968bcbca86dd448d619c40cdeaae8b7dcee98
++KISMET_AUTORECONF = YES
  
- # computed by scancpan
--sha256 5c739f181ce7aa31d739277996ff230067dad39332e5597c0dffd36e5d784072 LICENSE
-+sha256  5c739f181ce7aa31d739277996ff230067dad39332e5597c0dffd36e5d784072  LICENSE
-diff --git a/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.mk b/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.mk
-index a53285165b..4f0898cf53 100644
---- a/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.mk
-+++ b/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ KISMET_CONF_OPTS = --disable-debuglibs
  
--PERL_CRYPT_OPENSSL_GUESS_VERSION = 0.11
-+PERL_CRYPT_OPENSSL_GUESS_VERSION = 0.12
- PERL_CRYPT_OPENSSL_GUESS_SOURCE = Crypt-OpenSSL-Guess-$(PERL_CRYPT_OPENSSL_GUESS_VERSION).tar.gz
- PERL_CRYPT_OPENSSL_GUESS_SITE = $(BR2_CPAN_MIRROR)/authors/id/A/AK/AKIYM
- PERL_CRYPT_OPENSSL_GUESS_LICENSE = Artistic or GPL-1.0+
 -- 
-2.29.2
+2.30.2
