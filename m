@@ -1,79 +1,85 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  2 Apr 2021 18:33:42 +0200
-Subject: [Buildroot] [PATCH 2/3] package/pkg-cmake.mk: don't unconditionally
- set CMAKE_CXX_COMPILER
-In-Reply-To: <20210402163343.1254491-1-fontaine.fabrice@gmail.com>
-References: <20210402163343.1254491-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210402163343.1254491-2-fontaine.fabrice@gmail.com>
+Date: Fri,  2 Apr 2021 18:35:17 +0200
+Subject: [Buildroot] [PATCH 1/1] package/nginx: add libxcrypt optional
+ dependency
+Message-ID: <20210402163517.1254749-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Don't unconditionally set CMAKE_CXX_COMPILER as it will raise a build
-failure on qpid-proton because "if the toolchain specifies a value for
-CMAKE_CXX_COMPILER, then CMake assumes the compiler works and goes
-straight ahead trying to use it":
-https://cmake.org/cmake/help/latest/module/CheckLanguage.html
-https://issues.apache.org/jira/browse/PROTON-2365
+Fix build failure on uclibc with libxcrypt which has been added in
+commit 464bbe26ff5fb9e5bfe26a26ea65c700b90598f5
 
 Fixes:
- - http://autobuild.buildroot.org/results/05f344151100219c159ca4d466a453df96bf07fa
+ - http://autobuild.buildroot.org/results/79a51b0d348e756517b5c9ce815a67f5c657e7e6
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/pkg-cmake.mk                |  1 +
- support/misc/toolchainfile.cmake.in | 10 ++++++----
- 2 files changed, 7 insertions(+), 4 deletions(-)
+ ...to-os-linux-fix-build-with-libxcrypt.patch | 38 +++++++++++++++++++
+ package/nginx/nginx.mk                        |  4 +-
+ 2 files changed, 41 insertions(+), 1 deletion(-)
+ create mode 100644 package/nginx/0009-auto-os-linux-fix-build-with-libxcrypt.patch
 
-diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index c001051002..53e6fb81f2 100644
---- a/package/pkg-cmake.mk
-+++ b/package/pkg-cmake.mk
-@@ -264,6 +264,7 @@ define TOOLCHAIN_CMAKE_INSTALL_FILES
- 		-e 's#@@TARGET_CXX@@#$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_CXX)))#' \
- 		-e 's#@@TARGET_FC@@#$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_FC)))#' \
- 		-e 's#@@CMAKE_SYSTEM_PROCESSOR@@#$(call qstrip,$(CMAKE_SYSTEM_PROCESSOR))#' \
-+		-e 's#@@BR2_INSTALL_LIBSTDCPP@@#$(if $(BR2_INSTALL_LIBSTDCPP),1,0)#' \
- 		-e 's#@@TOOLCHAIN_HAS_FORTRAN@@#$(if $(BR2_TOOLCHAIN_HAS_FORTRAN),1,0)#' \
- 		-e 's#@@CMAKE_BUILD_TYPE@@#$(if $(BR2_ENABLE_DEBUG),Debug,Release)#' \
- 		$(TOPDIR)/support/misc/toolchainfile.cmake.in \
-diff --git a/support/misc/toolchainfile.cmake.in b/support/misc/toolchainfile.cmake.in
-index b25031a656..c2318f9587 100644
---- a/support/misc/toolchainfile.cmake.in
-+++ b/support/misc/toolchainfile.cmake.in
-@@ -29,9 +29,7 @@ set(CMAKE_SYSTEM_PROCESSOR @@CMAKE_SYSTEM_PROCESSOR@@)
- #   if the project forces some of these flag variables, Buildroot is
- #   screwed up and there is nothing Buildroot can do about that :(
- set(CMAKE_C_FLAGS_DEBUG "" CACHE STRING "Debug CFLAGS")
--set(CMAKE_CXX_FLAGS_DEBUG "" CACHE STRING "Debug CXXFLAGS")
- set(CMAKE_C_FLAGS_RELEASE " -DNDEBUG" CACHE STRING "Release CFLAGS")
--set(CMAKE_CXX_FLAGS_RELEASE " -DNDEBUG" CACHE STRING "Release CXXFLAGS")
+diff --git a/package/nginx/0009-auto-os-linux-fix-build-with-libxcrypt.patch b/package/nginx/0009-auto-os-linux-fix-build-with-libxcrypt.patch
+new file mode 100644
+index 0000000000..7e430ffc37
+--- /dev/null
++++ b/package/nginx/0009-auto-os-linux-fix-build-with-libxcrypt.patch
+@@ -0,0 +1,38 @@
++From 79f1fe5251afc4e22a138b0c8f44fc9c94093b8b Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 2 Apr 2021 09:18:26 +0200
++Subject: [PATCH] auto/os/linux: fix build with libxcrypt
++
++If crypt_r is found in libcrypt, add -lcrypt to CORE_LIBS to avoid the
++following build failure with libxcrypt:
++
++objs/ngx_modules.o \
++-lpcre -L/home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/../xtensa-buildroot-linux-uclibc/sysroot/usr/lib -lssl -lcrypto -L/home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/../xtensa-buildroot-linux-uclibc/sysroot/usr/lib -lxslt -lxml2 -lGeoIP \
++-Wl,-E
++/home/giuliobenetti/autobuild/run/instance-3/output-1/host/lib/gcc/xtensa-buildroot-linux-uclibc/9.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: objs/src/os/unix/ngx_user.o:/home/giuliobenetti/autobuild/run/instance-3/output-1/build/nginx-1.18.0/src/os/unix/ngx_user.c:18: undefined reference to `crypt_r'
++
++Fixes:
++ - http://autobuild.buildroot.org/results/79a51b0d348e756517b5c9ce815a67f5c657e7e6
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ auto/os/linux | 3 +++
++ 1 file changed, 3 insertions(+)
++
++diff --git a/auto/os/linux b/auto/os/linux
++index 5e280eca..04682812 100644
++--- a/auto/os/linux
+++++ b/auto/os/linux
++@@ -203,6 +203,9 @@ ngx_feature_test="struct crypt_data  cd;
++                   crypt_r(\"key\", \"salt\", &cd);"
++ . auto/feature
++ 
+++if [ $ngx_found = yes ]; then
+++    CORE_LIBS="$CORE_LIBS $ngx_feature_libs"
+++fi
++ 
++ ngx_include="sys/vfs.h";     . auto/include
++ 
++-- 
++2.30.2
++
+diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
+index 9c32546835..8a371a2cc8 100644
+--- a/package/nginx/nginx.mk
++++ b/package/nginx/nginx.mk
+@@ -9,7 +9,9 @@ NGINX_SITE = http://nginx.org/download
+ NGINX_LICENSE = BSD-2-Clause
+ NGINX_LICENSE_FILES = LICENSE
+ NGINX_CPE_ID_VENDOR = nginx
+-NGINX_DEPENDENCIES = host-pkgconf
++NGINX_DEPENDENCIES = \
++	host-pkgconf \
++	$(if $(BR2_PACKAGE_LIBXCRYPT),libxcrypt)
  
- # Build type from the Buildroot configuration
- set(CMAKE_BUILD_TYPE @@CMAKE_BUILD_TYPE@@ CACHE STRING "Buildroot build configuration")
-@@ -44,7 +42,6 @@ set(CMAKE_BUILD_TYPE @@CMAKE_BUILD_TYPE@@ CACHE STRING "Buildroot build configur
- # * and make sure the project's CMake code extends them like this if needed:
- #     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Dsome_definitions")
- set(CMAKE_C_FLAGS "@@TARGET_CFLAGS@@" CACHE STRING "Buildroot CFLAGS")
--set(CMAKE_CXX_FLAGS "@@TARGET_CXXFLAGS@@" CACHE STRING "Buildroot CXXFLAGS")
- set(CMAKE_EXE_LINKER_FLAGS "@@TARGET_LDFLAGS@@" CACHE STRING "Buildroot LDFLAGS for executables")
- set(CMAKE_SHARED_LINKER_FLAGS "@@TARGET_LDFLAGS@@" CACHE STRING "Buildroot LDFLAGS for shared libraries")
- set(CMAKE_MODULE_LINKER_FLAGS "@@TARGET_LDFLAGS@@" CACHE STRING "Buildroot LDFLAGS for module libraries")
-@@ -62,7 +59,12 @@ set(ENV{PKG_CONFIG_SYSROOT_DIR} "${RELOCATED_HOST_DIR}/@@STAGING_SUBDIR@@")
- 
- # This toolchain file can be used both inside and outside Buildroot.
- set(CMAKE_C_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CC@@")
--set(CMAKE_CXX_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CXX@@")
-+if(@@BR2_INSTALL_LIBSTDCPP@@)
-+  set(CMAKE_CXX_FLAGS_DEBUG "" CACHE STRING "Debug CXXFLAGS")
-+  set(CMAKE_CXX_FLAGS_RELEASE " -DNDEBUG" CACHE STRING "Release CXXFLAGS")
-+  set(CMAKE_CXX_FLAGS "@@TARGET_CXXFLAGS@@" CACHE STRING "Buildroot CXXFLAGS")
-+  set(CMAKE_CXX_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CXX@@")
-+endif()
- if(@@TOOLCHAIN_HAS_FORTRAN@@)
-   set(CMAKE_Fortran_FLAGS_DEBUG "" CACHE STRING "Debug Fortran FLAGS")
-   set(CMAKE_Fortran_FLAGS_RELEASE " -DNDEBUG" CACHE STRING "Release Fortran FLAGS")
+ NGINX_CONF_OPTS = \
+ 	--crossbuild=Linux::$(BR2_ARCH) \
 -- 
 2.30.2
