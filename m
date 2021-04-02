@@ -1,44 +1,73 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri,  2 Apr 2021 19:12:24 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libvpx: bump version to 1.10.0
-Message-ID: <20210402171224.771383-1-bernd.kuhls@t-online.de>
+Date: Fri,  2 Apr 2021 19:38:26 +0200
+Subject: [Buildroot] [PATCH 2/2] perl-html-parser: bump version to 3.76
+In-Reply-To: <20210402173826.908656-1-bernd.kuhls@t-online.de>
+References: <20210402173826.908656-1-bernd.kuhls@t-online.de>
+Message-ID: <20210402173826.908656-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes:
-https://chromium.googlesource.com/webm/libvpx/+/refs/tags/v1.10.0
+Added by scancpan:
+- runtime dependencies
+- new project URL
+- new SITE
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libvpx/libvpx.hash | 2 +-
- package/libvpx/libvpx.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/perl-html-parser/Config.in             | 4 +++-
+ package/perl-html-parser/perl-html-parser.hash | 4 ++--
+ package/perl-html-parser/perl-html-parser.mk   | 4 ++--
+ 3 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/package/libvpx/libvpx.hash b/package/libvpx/libvpx.hash
-index 57ee7179ba..5b9568837c 100644
---- a/package/libvpx/libvpx.hash
-+++ b/package/libvpx/libvpx.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256  d279c10e4b9316bf11a570ba16c3d55791e1ad6faa4404c67422eb631782c80a  libvpx-1.9.0.tar.gz
-+sha256  85803ccbdbdd7a3b03d930187cb055f1353596969c1f92ebec2db839fa4f834a  libvpx-1.10.0.tar.gz
- sha256  8267348d5af1262c11d1a08de2f5afc77457755f1ac658627dd9acf71011d615  LICENSE
- sha256  cc3273e0694ea5896145e0677699b53471b03ea43021ddc50e7923fbb9f5023c  PATENTS
-diff --git a/package/libvpx/libvpx.mk b/package/libvpx/libvpx.mk
-index 26d211cf86..d5d202a5da 100644
---- a/package/libvpx/libvpx.mk
-+++ b/package/libvpx/libvpx.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/perl-html-parser/Config.in b/package/perl-html-parser/Config.in
+index 10cd95e484..191d1b3b76 100644
+--- a/package/perl-html-parser/Config.in
++++ b/package/perl-html-parser/Config.in
+@@ -2,10 +2,12 @@ config BR2_PACKAGE_PERL_HTML_PARSER
+ 	bool "perl-html-parser"
+ 	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_PERL_HTML_TAGSET # runtime
++	select BR2_PACKAGE_PERL_HTTP_MESSAGE # runtime
++	select BR2_PACKAGE_PERL_URI # runtime
+ 	help
+ 	  HTML parser class.
+ 
+-	  https://metacpan.org/release/HTML-Parser
++	  https://github.com/libwww-perl/HTML-Parser
+ 
+ comment "perl-html-parser needs a toolchain w/ dynamic library"
+ 	depends on BR2_STATIC_LIBS
+diff --git a/package/perl-html-parser/perl-html-parser.hash b/package/perl-html-parser/perl-html-parser.hash
+index 021ef26c65..36b094a7cb 100644
+--- a/package/perl-html-parser/perl-html-parser.hash
++++ b/package/perl-html-parser/perl-html-parser.hash
+@@ -1,6 +1,6 @@
+ # retrieved by scancpan from http://cpan.metacpan.org/
+-md5  65bf65aa8b34b35443e094010f991406  HTML-Parser-3.75.tar.gz
+-sha256  ac6b5e25a8df7af54885201e91c45fb9ab6744c08cedc1a38fcc7d95d21193a9  HTML-Parser-3.75.tar.gz
++md5  60e266d5a07fbea671a0383dd8af7b6c  HTML-Parser-3.76.tar.gz
++sha256  64d9e2eb2b420f1492da01ec0e6976363245b4be9290f03f10b7d2cb63fa2f61  HTML-Parser-3.76.tar.gz
+ 
+ # computed by scancpan
+ sha256  0e57338bc10d5fb8891012ebee65a7b504b247f5bb485e121b8b48d7a118a60b  LICENSE
+diff --git a/package/perl-html-parser/perl-html-parser.mk b/package/perl-html-parser/perl-html-parser.mk
+index 93e4f6745b..097564dbcb 100644
+--- a/package/perl-html-parser/perl-html-parser.mk
++++ b/package/perl-html-parser/perl-html-parser.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--LIBVPX_VERSION = 1.9.0
-+LIBVPX_VERSION = 1.10.0
- LIBVPX_SITE = $(call github,webmproject,libvpx,v$(LIBVPX_VERSION))
- LIBVPX_LICENSE = BSD-3-Clause
- LIBVPX_LICENSE_FILES = LICENSE PATENTS
+-PERL_HTML_PARSER_VERSION = 3.75
++PERL_HTML_PARSER_VERSION = 3.76
+ PERL_HTML_PARSER_SOURCE = HTML-Parser-$(PERL_HTML_PARSER_VERSION).tar.gz
+-PERL_HTML_PARSER_SITE = $(BR2_CPAN_MIRROR)/authors/id/C/CA/CAPOEIRAB
++PERL_HTML_PARSER_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
+ PERL_HTML_PARSER_LICENSE = Artistic or GPL-1.0+
+ PERL_HTML_PARSER_LICENSE_FILES = LICENSE
+ PERL_HTML_PARSER_DISTNAME = HTML-Parser
 -- 
 2.29.2
