@@ -1,53 +1,83 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Apr 2021 09:44:34 +0200
-Subject: [Buildroot] [git commit branch/2020.11.x] package/php: bump version
- to 7.4.16
-Message-ID: <20210403072605.BEF818A399@busybox.osuosl.org>
+Date: Fri, 2 Apr 2021 18:01:06 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] perl-parse-yapp: new
+ package
+Message-ID: <20210403072612.24AEC803D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=86fccce793e82472e095e08e7c5e3db390530f9f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=3408039c4b6d8ef80ae11d9377cfa0053fa193c2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Changelog: https://www.php.net/ChangeLog-7.php#7.4.16
-
-Update license hash due to copyright year bump:
-http://git.php.net/?p=php-src.git;a=commitdiff;h=8c04944b66fd4a4fa88e54b65a2391397998c51d
+Host version is needed for samba 4.14.x.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 92797a892398af4954634a57322b63f0f071cc2b)
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 038013efd2c65ef766e64d914586d48a38129d0c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php/php.hash | 4 ++--
- package/php/php.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/Config.in                            |  1 +
+ package/perl-parse-yapp/Config.in            |  6 ++++++
+ package/perl-parse-yapp/perl-parse-yapp.hash |  3 +++
+ package/perl-parse-yapp/perl-parse-yapp.mk   | 17 +++++++++++++++++
+ 4 files changed, 27 insertions(+)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index d60164d96f..14576cf506 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256  9b859c65f0cf7b3eff9d4a28cfab719fb3d36a1db3c20d874a79b5ec44d43cb8  php-7.4.15.tar.xz
-+sha256  1c16cefaf88ded4c92eed6a8a41eb682bb2ef42429deb55f1c4ba159053fb98b  php-7.4.16.tar.xz
- 
- # License file
--sha256  0967ad6cf4b7fe81d38709d7aaef3fecb3bd685be7eebb37b864aa34c991baa7  LICENSE
-+sha256  a188db807d711536f71e27b7d36879d63480f7994dc18adc08e624b3c5430fff  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 0d713d948a..31cf219489 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PHP_VERSION = 7.4.15
-+PHP_VERSION = 7.4.16
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+diff --git a/package/Config.in b/package/Config.in
+index 5304ab141c..e420f02b37 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -818,6 +818,7 @@ menu "Perl libraries/modules"
+ 	source "package/perl-number-bytes-human/Config.in"
+ 	source "package/perl-package-stash/Config.in"
+ 	source "package/perl-params-util/Config.in"
++	source "package/perl-parse-yapp/Config.in"
+ 	source "package/perl-path-tiny/Config.in"
+ 	source "package/perl-plack/Config.in"
+ 	source "package/perl-posix-strftime-compiler/Config.in"
+diff --git a/package/perl-parse-yapp/Config.in b/package/perl-parse-yapp/Config.in
+new file mode 100644
+index 0000000000..5cde3d9211
+--- /dev/null
++++ b/package/perl-parse-yapp/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PERL_PARSE_YAPP
++	bool "perl-parse-yapp"
++	help
++	  A perl frontend to the Parse::Yapp module
++
++	  https://metacpan.org/release/Parse-Yapp
+diff --git a/package/perl-parse-yapp/perl-parse-yapp.hash b/package/perl-parse-yapp/perl-parse-yapp.hash
+new file mode 100644
+index 0000000000..d5880a2a71
+--- /dev/null
++++ b/package/perl-parse-yapp/perl-parse-yapp.hash
+@@ -0,0 +1,3 @@
++# locally computed
++sha256  3810e998308fba2e0f4f26043035032b027ce51ce5c8a52a8b8e340ca65f13e5  Parse-Yapp-1.21.tar.gz
++sha256  a5d97e3ee50ba12b7897841a117790f723795e4a61e5ad1668dc064956c84e96  lib/Parse/Yapp.pm
+diff --git a/package/perl-parse-yapp/perl-parse-yapp.mk b/package/perl-parse-yapp/perl-parse-yapp.mk
+new file mode 100644
+index 0000000000..94f51243fd
+--- /dev/null
++++ b/package/perl-parse-yapp/perl-parse-yapp.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# perl-parse-yapp
++#
++################################################################################
++
++PERL_PARSE_YAPP_VERSION = 1.21
++PERL_PARSE_YAPP_SOURCE = Parse-Yapp-$(PERL_PARSE_YAPP_VERSION).tar.gz
++PERL_PARSE_YAPP_SITE = $(BR2_CPAN_MIRROR)/authors/id/W/WB/WBRASWELL
++PERL_PARSE_YAPP_DEPENDENCIES = host-perl-module-build
++PERL_PARSE_YAPP_LICENSE = Artistic or GPL-1.0+
++PERL_PARSE_YAPP_LICENSE_FILES = lib/Parse/Yapp.pm
++PERL_PARSE_YAPP_DISTNAME = Parse-Yapp
++HOST_PERL_PARSE_YAPP_DEPENDENCIES = host-perl-module-build
++
++$(eval $(perl-package))
++$(eval $(host-perl-package))
