@@ -1,85 +1,47 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  2 Apr 2021 18:35:17 +0200
-Subject: [Buildroot] [PATCH 1/1] package/nginx: add libxcrypt optional
- dependency
-Message-ID: <20210402163517.1254749-1-fontaine.fabrice@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri,  2 Apr 2021 18:43:31 +0200
+Subject: [Buildroot] [PATCH 1/2] package/libva: bump version to 2.11.0
+Message-ID: <20210402164332.691865-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix build failure on uclibc with libxcrypt which has been added in
-commit 464bbe26ff5fb9e5bfe26a26ea65c700b90598f5
+Release notes:
+https://github.com/intel/libva/blob/master/NEWS
 
-Fixes:
- - http://autobuild.buildroot.org/results/79a51b0d348e756517b5c9ce815a67f5c657e7e6
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...to-os-linux-fix-build-with-libxcrypt.patch | 38 +++++++++++++++++++
- package/nginx/nginx.mk                        |  4 +-
- 2 files changed, 41 insertions(+), 1 deletion(-)
- create mode 100644 package/nginx/0009-auto-os-linux-fix-build-with-libxcrypt.patch
+ package/libva/libva.hash | 6 +++---
+ package/libva/libva.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/nginx/0009-auto-os-linux-fix-build-with-libxcrypt.patch b/package/nginx/0009-auto-os-linux-fix-build-with-libxcrypt.patch
-new file mode 100644
-index 0000000000..7e430ffc37
---- /dev/null
-+++ b/package/nginx/0009-auto-os-linux-fix-build-with-libxcrypt.patch
-@@ -0,0 +1,38 @@
-+From 79f1fe5251afc4e22a138b0c8f44fc9c94093b8b Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 2 Apr 2021 09:18:26 +0200
-+Subject: [PATCH] auto/os/linux: fix build with libxcrypt
-+
-+If crypt_r is found in libcrypt, add -lcrypt to CORE_LIBS to avoid the
-+following build failure with libxcrypt:
-+
-+objs/ngx_modules.o \
-+-lpcre -L/home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/../xtensa-buildroot-linux-uclibc/sysroot/usr/lib -lssl -lcrypto -L/home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/../xtensa-buildroot-linux-uclibc/sysroot/usr/lib -lxslt -lxml2 -lGeoIP \
-+-Wl,-E
-+/home/giuliobenetti/autobuild/run/instance-3/output-1/host/lib/gcc/xtensa-buildroot-linux-uclibc/9.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: objs/src/os/unix/ngx_user.o:/home/giuliobenetti/autobuild/run/instance-3/output-1/build/nginx-1.18.0/src/os/unix/ngx_user.c:18: undefined reference to `crypt_r'
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/79a51b0d348e756517b5c9ce815a67f5c657e7e6
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ auto/os/linux | 3 +++
-+ 1 file changed, 3 insertions(+)
-+
-+diff --git a/auto/os/linux b/auto/os/linux
-+index 5e280eca..04682812 100644
-+--- a/auto/os/linux
-++++ b/auto/os/linux
-+@@ -203,6 +203,9 @@ ngx_feature_test="struct crypt_data  cd;
-+                   crypt_r(\"key\", \"salt\", &cd);"
-+ . auto/feature
-+ 
-++if [ $ngx_found = yes ]; then
-++    CORE_LIBS="$CORE_LIBS $ngx_feature_libs"
-++fi
-+ 
-+ ngx_include="sys/vfs.h";     . auto/include
-+ 
-+-- 
-+2.30.2
-+
-diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index 9c32546835..8a371a2cc8 100644
---- a/package/nginx/nginx.mk
-+++ b/package/nginx/nginx.mk
-@@ -9,7 +9,9 @@ NGINX_SITE = http://nginx.org/download
- NGINX_LICENSE = BSD-2-Clause
- NGINX_LICENSE_FILES = LICENSE
- NGINX_CPE_ID_VENDOR = nginx
--NGINX_DEPENDENCIES = host-pkgconf
-+NGINX_DEPENDENCIES = \
-+	host-pkgconf \
-+	$(if $(BR2_PACKAGE_LIBXCRYPT),libxcrypt)
+diff --git a/package/libva/libva.hash b/package/libva/libva.hash
+index 80f7d3c066..60ab284d86 100644
+--- a/package/libva/libva.hash
++++ b/package/libva/libva.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/intel/libva/releases/download/2.10.0/libva-2.10.0.tar.bz2.sha1sum
+-sha1  c33459efcab503eea89379bb627ef8a8f497b5b4  libva-2.10.0.tar.bz2
++# From https://github.com/intel/libva/releases/download/2.11.0/libva-2.11.0.tar.bz2.sha1sum
++sha1  35baa7667e8a51ca3d481786095469d38cacfb2f  libva-2.11.0.tar.bz2
+ # Locally computed
+-sha256  fa81e35b50d9818fce5ec9eeeeff08a24a8864ceeb9a5c8e7ae4446eacfc0236  libva-2.10.0.tar.bz2
++sha256  6e361117038b571ad4741d38c9280db8c140b17e76e8c01fc7a4d608d3ed7d5d  libva-2.11.0.tar.bz2
+ sha256  c86a782ee845b52472dae9b9d79fb915d333628ac0efe49cdce63644814931de  COPYING
+diff --git a/package/libva/libva.mk b/package/libva/libva.mk
+index 0ec6b12868..f24a504445 100644
+--- a/package/libva/libva.mk
++++ b/package/libva/libva.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- NGINX_CONF_OPTS = \
- 	--crossbuild=Linux::$(BR2_ARCH) \
+-LIBVA_VERSION = 2.10.0
++LIBVA_VERSION = 2.11.0
+ LIBVA_SOURCE = libva-$(LIBVA_VERSION).tar.bz2
+ LIBVA_SITE = https://github.com/intel/libva/releases/download/$(LIBVA_VERSION)
+ LIBVA_LICENSE = MIT
 -- 
-2.30.2
+2.29.2
