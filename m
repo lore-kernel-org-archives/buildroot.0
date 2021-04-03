@@ -1,51 +1,87 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Apr 2021 13:50:08 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/tzdata: bump
- version to 2021a
-Message-ID: <20210403112715.05838882A2@busybox.osuosl.org>
+Date: Sat, 3 Apr 2021 13:51:59 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/efivar: disable
+ -Werror
+Message-ID: <20210403112715.28CD77FB72@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=98fe47d4a2a92548fdf0b7bc56937742628ce0a8
+commit: https://git.buildroot.net/buildroot/commit/?id=9c51cf079b8989762bfea2a1338a4ed2ff3c68da
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-For details see [1].
+Fix the following build failure with gcc 10:
 
-[1] https://mm.icann.org/pipermail/tz-announce/2021-January/000065.html
+/home/buildroot/autobuild/run/instance-1/output-1/host/bin/aarch64-none-linux-gnu-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2   -I/home/buildroot/autobuild/run/instance-1/output-1/build/efivar-37/src/include/   -specs=/home/buildroot/autobuild/run/instance-1/output-1/build/efivar-37/gcc.specs  -L.  -fPIC -Wl,-z,muldefs     -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -o efivar efivar.c -lefivar -ldl
+In file included from efivar.h:28,
+                 from efivar.c:40:
+In function 'text_to_guid',
+    inlined from 'parse_name.constprop' at efivar.c:157:8:
+guid.h:106:2: error: 'strncpy' output may be truncated copying 8 bytes from a string of length 38 [-Werror=stringop-truncation]
+  106 |  strncpy(eightbytes, text, 8);
+      |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Fixes:
+ - http://autobuild.buildroot.org/results/fcba72d359f4128515560e9105384cd4deff5043
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 01dc8f53418e4b91068e53f1fb99d765fe8b3833)
+(cherry picked from commit 720deac3d9619b378bd554e1e3b1bdf1143768a1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tzdata/tzdata.hash | 4 ++--
- package/tzdata/tzdata.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/efivar/0007-gcc.specs-drop-Werror.patch | 44 +++++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
 
-diff --git a/package/tzdata/tzdata.hash b/package/tzdata/tzdata.hash
-index 6a1ccc128d..f70627481a 100644
---- a/package/tzdata/tzdata.hash
-+++ b/package/tzdata/tzdata.hash
-@@ -1,4 +1,4 @@
--# From https://mm.icann.org/pipermail/tz-announce/2020-December/000064.html
--sha512  dd312def18c807452fda2e697514e2064c5f51ebdbedd0cfe6f231252c76ee5d4409f653b295ed5657b7d30b868690047fdb70a10942e69eaa40b77473e3f9ca  tzdata2020f.tar.gz
-+# From https://mm.icann.org/pipermail/tz-announce/2021-January/000065.html
-+sha512  7cdd762ec90ce12a30fa36b1d66d1ea82d9fa21e514e2b9c7fcbe2541514ee0fadf30843ff352c65512fb270857b51d1517b45e1232b89c6f954ba9ff1833bb3  tzdata2021a.tar.gz
- # Locally computed:
- sha256  0613408568889f5739e5ae252b722a2659c02002839ad970a63dc5e9174b27cf  LICENSE
-diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
-index 8201dc1201..922e7420bc 100644
---- a/package/tzdata/tzdata.mk
-+++ b/package/tzdata/tzdata.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TZDATA_VERSION = 2020f
-+TZDATA_VERSION = 2021a
- TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
- TZDATA_SITE = https://www.iana.org/time-zones/repository/releases
- TZDATA_STRIP_COMPONENTS = 0
+diff --git a/package/efivar/0007-gcc.specs-drop-Werror.patch b/package/efivar/0007-gcc.specs-drop-Werror.patch
+new file mode 100644
+index 0000000000..aa717fedaf
+--- /dev/null
++++ b/package/efivar/0007-gcc.specs-drop-Werror.patch
+@@ -0,0 +1,44 @@
++From 8d5cf3347cce9d644f670ffd1d48e71d74635481 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 22 Mar 2021 07:52:34 +0100
++Subject: [PATCH] gcc.specs: drop -Werror
++
++Build with -Werror raises the following build failure with gcc 10:
++
++/home/buildroot/autobuild/run/instance-1/output-1/host/bin/aarch64-none-linux-gnu-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2   -I/home/buildroot/autobuild/run/instance-1/output-1/build/efivar-37/src/include/   -specs=/home/buildroot/autobuild/run/instance-1/output-1/build/efivar-37/gcc.specs  -L.  -fPIC -Wl,-z,muldefs     -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -o efivar efivar.c -lefivar -ldl
++In file included from efivar.h:28,
++                 from efivar.c:40:
++In function 'text_to_guid',
++    inlined from 'parse_name.constprop' at efivar.c:157:8:
++guid.h:106:2: error: 'strncpy' output may be truncated copying 8 bytes from a string of length 38 [-Werror=stringop-truncation]
++  106 |  strncpy(eightbytes, text, 8);
++      |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
++cc1: all warnings being treated as errors
++
++Fixes:
++ - http://autobuild.buildroot.org/results/fcba72d359f4128515560e9105384cd4deff5043
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: not upstreamable as Makefiles were reworked and a new
++ERRORS parameter was added:
++https://github.com/rhboot/efivar/commit/998f617cec92d526e1fadb745673ceef63fa1483]
++---
++ gcc.specs | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/gcc.specs b/gcc.specs
++index 45d43d1..1baf11a 100644
++--- a/gcc.specs
+++++ b/gcc.specs
++@@ -2,7 +2,7 @@
++ + -D_GNU_SOURCE
++ 
++ *efivar_cpp_options:
++- -Werror -Wall -std=gnu11 -Wextra
+++ -Wall -std=gnu11 -Wextra
++ 
++ *cpp_options:
++ + %(efivar_cpp_options)
++-- 
++2.30.1
++
