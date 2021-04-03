@@ -1,121 +1,58 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  3 Apr 2021 17:22:34 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/tvheadend: add various options
- to disable optional components
-Message-ID: <20210403152234.2006719-1-bernd.kuhls@t-online.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat,  3 Apr 2021 17:29:30 +0200
+Subject: [Buildroot] [PATCH 1/1] package/botan: fix build with riscv32
+Message-ID: <20210403152930.2221759-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When enabled some IPTV streams are piped using /usr/bin/ffmpeg so make
-sure that the ffmpeg binary is present.
+Fixes:
+ - http://autobuild.buildroot.org/results/1c399312dbec5d7a28ec90d62fdd8f47fa14ff4b
 
-Transcoding support can already be disabled reducing /usr/bin/tvheadend
-by 1,03MB.
-
-By disabling all new options provided by this patch the binary size can
-additionally be reduced by 2,08MB.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-v2: removed build-dependency to ffmpeg for iptv support (Yann)
-    re-wrapped descrambler configure options (Yann)
+ .../botan/0003-Add-support-for-riscv32.patch  | 31 +++++++++++++++++++
+ 1 file changed, 31 insertions(+)
+ create mode 100644 package/botan/0003-Add-support-for-riscv32.patch
 
- package/tvheadend/Config.in    | 27 ++++++++++++++++++++++++++-
- package/tvheadend/tvheadend.mk | 34 ++++++++++++++++++++++++++++++++++
- 2 files changed, 60 insertions(+), 1 deletion(-)
-
-diff --git a/package/tvheadend/Config.in b/package/tvheadend/Config.in
-index 909d955c02..4b9c7267d2 100644
---- a/package/tvheadend/Config.in
-+++ b/package/tvheadend/Config.in
-@@ -3,7 +3,7 @@ comment "tvheadend needs a toolchain w/ NPTL, headers >= 3.2, dynamic library"
- 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2 || BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 
--config BR2_PACKAGE_TVHEADEND
-+menuconfig BR2_PACKAGE_TVHEADEND
- 	bool "tvheadend"
- 	depends on !BR2_STATIC_LIBS # dladdr()
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-@@ -28,6 +28,31 @@ config BR2_PACKAGE_TVHEADEND
- 
- if BR2_PACKAGE_TVHEADEND
- 
-+config BR2_PACKAGE_TVHEADEND_DESCRAMBLER
-+	bool "descrambler support"
-+	default y
-+	help
-+	  Enable support for various descrambler modules.
+diff --git a/package/botan/0003-Add-support-for-riscv32.patch b/package/botan/0003-Add-support-for-riscv32.patch
+new file mode 100644
+index 0000000000..d8978b2f11
+--- /dev/null
++++ b/package/botan/0003-Add-support-for-riscv32.patch
+@@ -0,0 +1,31 @@
++From 443bf46ee2b1b1d7acd63e3f00dcbe66646138f8 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 2 Apr 2021 20:37:03 +0200
++Subject: [PATCH] Add support for riscv32
 +
-+config BR2_PACKAGE_TVHEADEND_IPTV
-+	bool "IPTV support"
-+	default y
-+	select BR2_PACKAGE_FFMPEG_FFMPEG if BR2_PACKAGE_FFMPEG # runtime
-+	help
-+	  Enable IPTV support.
++Fix the following build failure:
 +
-+config BR2_PACKAGE_TVHEADEND_SATIP
-+	bool "SAT>IP support"
-+	default y
-+	help
-+	  Enable SAT>IP support.
++  ERROR: Unknown or unidentifiable processor "riscv32"
 +
-+config BR2_PACKAGE_TVHEADEND_TIMESHIFT
-+	bool "timeshift support"
-+	default y
-+	help
-+	  Enable timeshift support.
++Fixes:
++ - http://autobuild.buildroot.org/results/1c399312dbec5d7a28ec90d62fdd8f47fa14ff4b
 +
- config BR2_PACKAGE_TVHEADEND_TRANSCODING
- 	bool "transcoding support"
- 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
-diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-index 114142bfa9..b694c44e3b 100644
---- a/package/tvheadend/tvheadend.mk
-+++ b/package/tvheadend/tvheadend.mk
-@@ -63,6 +63,40 @@ TVHEADEND_CONF_OPTS += \
- 	--disable-libx265
- endif
- 
-+ifeq ($(BR2_PACKAGE_TVHEADEND_DESCRAMBLER),y)
-+TVHEADEND_CONF_OPTS += \
-+	--enable-cardclient \
-+	--enable-cwc \
-+	--enable-cccam \
-+	--enable-capmt \
-+	--enable-constcw
-+else
-+TVHEADEND_CONF_OPTS += \
-+	--disable-cardclient \
-+	--disable-cwc \
-+	--disable-cccam \
-+	--disable-capmt \
-+	--disable-constcw
-+endif
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/randombit/botan/commit/aa7958880bee2091a8a71bf9e1f6e6efb34581e3]
++---
++ src/build-data/arch/riscv32.txt | 2 ++
++ 1 file changed, 2 insertions(+)
++ create mode 100644 src/build-data/arch/riscv32.txt
 +
-+ifeq ($(BR2_PACKAGE_TVHEADEND_IPTV),y)
-+TVHEADEND_CONF_OPTS += --enable-iptv
-+else
-+TVHEADEND_CONF_OPTS += --disable-iptv
-+endif
++diff --git a/src/build-data/arch/riscv32.txt b/src/build-data/arch/riscv32.txt
++new file mode 100644
++index 000000000..ba88b42e9
++--- /dev/null
+++++ b/src/build-data/arch/riscv32.txt
++@@ -0,0 +1,2 @@
+++family riscv32
+++endian little
++-- 
++2.30.2
 +
-+ifeq ($(BR2_PACKAGE_TVHEADEND_SATIP),y)
-+TVHEADEND_CONF_OPTS += --enable-satip_client --enable-satip_server
-+else
-+TVHEADEND_CONF_OPTS += --disable-satip_client --disable-satip_server
-+endif
-+
-+ifeq ($(BR2_PACKAGE_TVHEADEND_TIMESHIFT),y)
-+TVHEADEND_CONF_OPTS += --enable-timeshift
-+else
-+TVHEADEND_CONF_OPTS += --disable-timeshift
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBDVBCSA),y)
- TVHEADEND_DEPENDENCIES += libdvbcsa
- TVHEADEND_CONF_OPTS += --enable-tvhcsa
 -- 
-2.29.2
+2.30.2
