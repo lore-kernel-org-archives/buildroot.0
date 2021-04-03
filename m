@@ -1,60 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Apr 2021 12:20:33 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/squid: security
- bump to version 4.14
-Message-ID: <20210403095655.73DB7878BC@busybox.osuosl.org>
+Date: Sat, 3 Apr 2021 12:19:21 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/sqlcipher:
+ security bump to version 4.4.3
+Message-ID: <20210403095655.675D58B564@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d6547f7b998921e570a092302d334a9804f71af7
+commit: https://git.buildroot.net/buildroot/commit/?id=ea4b88bb305c92b5c6122346a51b53750dc67a11
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Fixes the following security issues:
+Fix CVE-2021-3119: Zetetic SQLCipher 4.x before 4.4.3 has a NULL pointer
+dereferencing issue related to sqlcipher_export in crypto.c and
+sqlite3StrICmp in sqlite3.c. This may allow an attacker to perform a
+remote denial of service attack. For example, an SQL injection can be
+used to execute the crafted SQL command sequence, which causes a
+segmentation fault.
 
-- CVE-2020-25097: HTTP Request Smuggling
+https://github.com/sqlcipher/sqlcipher/blob/v4.4.3/CHANGELOG.md
 
-  Due to improper input validation Squid is vulnerable to an HTTP Request
-  Smuggling attack.
-
-For more details, see the advisory:
-https://github.com/squid-cache/squid/security/advisories/GHSA-jvf6-h9gj-pmj6
-
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 7b5638460359b41381cd04464ec076e2306dc2fd)
+(cherry picked from commit 6f0a81de6b67aeec9711d899656afe78f016aecc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/squid/squid.hash | 8 ++++----
- package/squid/squid.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/sqlcipher/sqlcipher.hash | 2 +-
+ package/sqlcipher/sqlcipher.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/squid/squid.hash b/package/squid/squid.hash
-index b7e051960e..a2aaba5fd5 100644
---- a/package/squid/squid.hash
-+++ b/package/squid/squid.hash
-@@ -1,6 +1,6 @@
--# From http://www.squid-cache.org/Versions/v4/squid-4.13.tar.xz.asc
--md5  492e54afc15821141ff1d1d9903854d6  squid-4.13.tar.xz
--sha1  cac95c18789e9ecd6620c2f278fc3900498c065b  squid-4.13.tar.xz
-+# From http://www.squid-cache.org/Versions/v4/squid-4.14.tar.xz.asc
-+md5  7d9ba82703cd770b2ede169a0c1de94a  squid-4.14.tar.xz
-+sha1  71ae13a845a6a7ffc69ce11086ea3e427625bc08  squid-4.14.tar.xz
- # Locally calculated
--sha256  6891a0f540e60779b4f24f1802a302f813c6f473ec7336a474ed68c3e2e53ee0  squid-4.13.tar.xz
-+sha256  f1097daa6434897c159bc100978b51347c0339041610845d0afa128151729ffc  squid-4.14.tar.xz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index a3ccbbcf8e..7e6865f8ed 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
+diff --git a/package/sqlcipher/sqlcipher.hash b/package/sqlcipher/sqlcipher.hash
+index 96a6a74013..ddc78ef7d6 100644
+--- a/package/sqlcipher/sqlcipher.hash
++++ b/package/sqlcipher/sqlcipher.hash
+@@ -1,3 +1,3 @@
+ # locally computed
+-sha256  87458e0e16594b3ba6c7a1f046bc1ba783d002d35e0e7b61bb6b7bb862f362a7  sqlcipher-4.4.2.tar.gz
++sha256  b8df69b998c042ce7f8a99f07cf11f45dfebe51110ef92de95f1728358853133  sqlcipher-4.4.3.tar.gz
+ sha256  3eee3c7964a9becc94d747bd36703d31fc86eb994680b06a61bfd4f2661eaac8  LICENSE
+diff --git a/package/sqlcipher/sqlcipher.mk b/package/sqlcipher/sqlcipher.mk
+index 393d50b201..776e2d0dcf 100644
+--- a/package/sqlcipher/sqlcipher.mk
++++ b/package/sqlcipher/sqlcipher.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SQUID_VERSION = 4.13
-+SQUID_VERSION = 4.14
- SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
- SQUID_SITE = http://www.squid-cache.org/Versions/v4
- SQUID_LICENSE = GPL-2.0+
+-SQLCIPHER_VERSION = 4.4.2
++SQLCIPHER_VERSION = 4.4.3
+ SQLCIPHER_SITE = $(call github,sqlcipher,sqlcipher,v$(SQLCIPHER_VERSION))
+ SQLCIPHER_LICENSE = BSD-3-Clause
+ SQLCIPHER_LICENSE_FILES = LICENSE
