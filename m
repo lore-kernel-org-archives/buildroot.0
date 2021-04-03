@@ -1,37 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 03 Apr 2021 13:48:25 +0200
-Subject: [Buildroot] [PATCH 1/1] support/scripts: fix pycompile for
- short filenames
-In-Reply-To: <20210330202253.GE24043@scaer> (Yann E. MORIN's message of "Tue, 
- 30 Mar 2021 22:22:53 +0200")
-References: <20210329105554.1622972-1-outtierbert@gmail.com>
- <20210330202253.GE24043@scaer>
-Message-ID: <87v9934mie.fsf@dell.be.48ers.dk>
+Date: Sat, 03 Apr 2021 13:49:21 +0200
+Subject: [Buildroot] [PATCH 1/1] package/sdl2: drop tslib
+In-Reply-To: <20210321162128.192269-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 21 Mar 2021 17:21:28 +0100")
+References: <20210321162128.192269-1-fontaine.fabrice@gmail.com>
+Message-ID: <87r1jr4mgu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Bert, All,
- > On 2021-03-29 12:55 +0200, Bert Outtier spake thusly:
- >> Signed-off-by: Bert Outtier <outtierbert@gmail.com>
+ > non existing tslib support has been dropped since version 2.0.14 and
+ > https://github.com/libsdl-org/SDL/commit/4c96faee578efcba3f2d6afe8e2122f26b1dfb0b
 
- > I was pretty sure I had already handled that issue some time ago... And
- > indeed, there was a patch posted, some changes were requested, but a v2
- > never materialised.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
- > Applied to master, thanks.
-
- > Regards,
- > Yann E. MORIN.
-
- > http://lists.busybox.net/pipermail/buildroot/2020-December/298707.html
- > http://lists.busybox.net/pipermail/buildroot/2020-December/298734.html
-
-Committed to 2020.02.x, 2020.11.x and 2021.02.x, thanks.
+Committed to 2021.02.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
