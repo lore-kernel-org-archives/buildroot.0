@@ -1,128 +1,35 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 3 Apr 2021 17:37:33 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/tvheadend: add various
- options to disable optional components
-In-Reply-To: <20210403152234.2006719-1-bernd.kuhls@t-online.de>
-References: <20210403152234.2006719-1-bernd.kuhls@t-online.de>
-Message-ID: <20210403153733.GC2252@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat,  3 Apr 2021 17:38:01 +0200
+Subject: [Buildroot] [PATCH 1/1] package/perl-xml-libxml: add CPE variables
+Message-ID: <20210403153801.2222070-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+cpe:2.3:a:xml-libxml_project:xml-libxml is a valid CPE identifier for
+this package:
 
-On 2021-04-03 17:22 +0200, Bernd Kuhls spake thusly:
-> When enabled some IPTV streams are piped using /usr/bin/ffmpeg so make
-> sure that the ffmpeg binary is present.
-> 
-> Transcoding support can already be disabled reducing /usr/bin/tvheadend
-> by 1,03MB.
-> 
-> By disabling all new options provided by this patch the binary size can
-> additionally be reduced by 2,08MB.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-[--SNIP--]
-> +config BR2_PACKAGE_TVHEADEND_IPTV
-> +	bool "IPTV support"
-> +	default y
-> +	select BR2_PACKAGE_FFMPEG_FFMPEG if BR2_PACKAGE_FFMPEG # runtime
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Axml-libxml_project%3Axml-libxml
 
-As we discussed in the previous thread, IPTV really only works fully
-when ffmpeg (the program) is available, which wil not be the case if
-ffmpeg (the package) is not enabled.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/perl-xml-libxml/perl-xml-libxml.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-As I suggested previously, we should ensure that ffmpeg is enabled:
-
-    config BR2_PACKAGE_TVHEADEND_IPTV
-        bool "IPTV support"
-        depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
-        select BR2_PACKAGE_FFMPEG  # runtime
-        select BR2_PACKAGE_FFMPEG_FFMPEG  # runtime
-
-If you agree, I can change that when applying...
-
-Regards,
-Yann E. MORIN.
-
-> +	help
-> +	  Enable IPTV support.
-> +
-> +config BR2_PACKAGE_TVHEADEND_SATIP
-> +	bool "SAT>IP support"
-> +	default y
-> +	help
-> +	  Enable SAT>IP support.
-> +
-> +config BR2_PACKAGE_TVHEADEND_TIMESHIFT
-> +	bool "timeshift support"
-> +	default y
-> +	help
-> +	  Enable timeshift support.
-> +
->  config BR2_PACKAGE_TVHEADEND_TRANSCODING
->  	bool "transcoding support"
->  	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
-> diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-> index 114142bfa9..b694c44e3b 100644
-> --- a/package/tvheadend/tvheadend.mk
-> +++ b/package/tvheadend/tvheadend.mk
-> @@ -63,6 +63,40 @@ TVHEADEND_CONF_OPTS += \
->  	--disable-libx265
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_TVHEADEND_DESCRAMBLER),y)
-> +TVHEADEND_CONF_OPTS += \
-> +	--enable-cardclient \
-> +	--enable-cwc \
-> +	--enable-cccam \
-> +	--enable-capmt \
-> +	--enable-constcw
-> +else
-> +TVHEADEND_CONF_OPTS += \
-> +	--disable-cardclient \
-> +	--disable-cwc \
-> +	--disable-cccam \
-> +	--disable-capmt \
-> +	--disable-constcw
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_TVHEADEND_IPTV),y)
-> +TVHEADEND_CONF_OPTS += --enable-iptv
-> +else
-> +TVHEADEND_CONF_OPTS += --disable-iptv
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_TVHEADEND_SATIP),y)
-> +TVHEADEND_CONF_OPTS += --enable-satip_client --enable-satip_server
-> +else
-> +TVHEADEND_CONF_OPTS += --disable-satip_client --disable-satip_server
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_TVHEADEND_TIMESHIFT),y)
-> +TVHEADEND_CONF_OPTS += --enable-timeshift
-> +else
-> +TVHEADEND_CONF_OPTS += --disable-timeshift
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_LIBDVBCSA),y)
->  TVHEADEND_DEPENDENCIES += libdvbcsa
->  TVHEADEND_CONF_OPTS += --enable-tvhcsa
-> -- 
-> 2.29.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/perl-xml-libxml/perl-xml-libxml.mk b/package/perl-xml-libxml/perl-xml-libxml.mk
+index 23d3e988fa..9b563e29b5 100644
+--- a/package/perl-xml-libxml/perl-xml-libxml.mk
++++ b/package/perl-xml-libxml/perl-xml-libxml.mk
+@@ -10,6 +10,8 @@ PERL_XML_LIBXML_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SH/SHLOMIF
+ PERL_XML_LIBXML_DEPENDENCIES = zlib libxml2
+ PERL_XML_LIBXML_LICENSE = Artistic or GPL-1.0+
+ PERL_XML_LIBXML_LICENSE_FILES = LICENSE
++PERL_XML_LIBXML_CPE_ID_VENDOR = xml-libxml_project
++PERL_XML_LIBXML_CPE_ID_PRODUCT = xml-libxml
+ PERL_XML_LIBXML_DISTNAME = XML-LibXML
+ 
+ PERL_XML_LIBXML_CONF_OPTS = \
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.30.2
