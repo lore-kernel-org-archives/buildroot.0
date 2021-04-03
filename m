@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Apr 2021 11:11:22 +0200
-Subject: [Buildroot] [git commit branch/2020.11.x] board/beaglebone: remove
+Date: Sat, 3 Apr 2021 11:11:12 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] board/beaglebone: remove
  genimage_linux41.cfg
-Message-ID: <20210403094701.367AF8186C@busybox.osuosl.org>
+Message-ID: <20210403094716.69E427F9B4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ae107444db8b17258bd080e5e7e100f2f939627c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=d50ecaff66933cb089ca77a77da1457939a7ecb5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
 Commit 5502a889dd9f065ec4694a993cfa509377da2cce
 ("configs/beaglebone_qt5: don't use custom post-image script") removed the use
