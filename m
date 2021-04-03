@@ -1,33 +1,35 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 03 Apr 2021 12:16:42 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mariadb: security bump to
- version 10.3.28
-In-Reply-To: <20210329202613.293334-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 29 Mar 2021 22:26:13 +0200")
-References: <20210329202613.293334-1-fontaine.fabrice@gmail.com>
-Message-ID: <87h7kn7jw5.fsf@dell.be.48ers.dk>
+From: qblade <qblade@protonmail.com>
+Date: Sat, 03 Apr 2021 10:16:51 +0000
+Subject: [Buildroot] package: add kmscon
+Message-ID: <XQTayAXJ0ouEvKU_bcf0tyt6DOSr7_rf8dmmfl2a69DXbglRV1NCkl0buP5dG9ag5D1-UeOQFi6XBAyQSmPFOUu6W3nrggufcZqjkctXEbM=@protonmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+I added two packages, libtsm is a dependent library of kmscon.
 
- > Fix CVE-2021-27928: A remote code execution issue was discovered in
- > MariaDB 10.2 before 10.2.37, 10.3 before 10.3.28, 10.4 before 10.4.18,
- > and 10.5 before 10.5.9; Percona Server through 2021-03-03; and the wsrep
- > patch through 2021-03-03 for MySQL. An untrusted search path leads to
- > eval injection, in which a database SUPER user can execute OS commands
- > after modifying wsrep_provider and wsrep_notify_cmd. NOTE: this does not
- > affect an Oracle product.
+kmscon does better than fbterm in 256color.
 
- > https://mariadb.com/kb/en/mariadb-10328-release-notes/
- > https://mariadb.com/kb/en/mariadb-10328-changelog/
+Multiple font engine support of kmscon will be added later, currently only unifont is supported.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+I tested it on the following platforms and it works fine
 
-Committed to 2020.02.x, 2020.11.x and 2021.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+x86_64 glibc musl uclibc
+aarch64 glibc musl uclibc
+i386 glibc musl uclibc
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0001-package-add-libtsm.patch
+Type: text/x-patch
+Size: 2670 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210403/12476374/attachment.bin>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0002-package-add-kmscon-a-terminal-emulator-based-on-linu.patch
+Type: text/x-patch
+Size: 2823 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210403/12476374/attachment-0001.bin>
