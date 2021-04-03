@@ -1,192 +1,87 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Apr 2021 13:39:55 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/binutils: add
- patches to fix OpenRisc bug 27624
-Message-ID: <20210403112726.C1A2183A06@busybox.osuosl.org>
+Date: Sat, 3 Apr 2021 13:51:00 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/efivar: disable
+ -Werror
+Message-ID: <20210403112727.1496383A06@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=23e1391bb8d2d7794bd3820f841e3261024d98c5
+commit: https://git.buildroot.net/buildroot/commit/?id=8bfa4319e08d52000afc85664aef51e69e8b6890
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-These patches fix OpenRisc linker bug 27624 that affects packages
-libtheora, protobuf and zeromq.
+Fix the following build failure with gcc 10:
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+/home/buildroot/autobuild/run/instance-1/output-1/host/bin/aarch64-none-linux-gnu-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2   -I/home/buildroot/autobuild/run/instance-1/output-1/build/efivar-37/src/include/   -specs=/home/buildroot/autobuild/run/instance-1/output-1/build/efivar-37/gcc.specs  -L.  -fPIC -Wl,-z,muldefs     -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -o efivar efivar.c -lefivar -ldl
+In file included from efivar.h:28,
+                 from efivar.c:40:
+In function 'text_to_guid',
+    inlined from 'parse_name.constprop' at efivar.c:157:8:
+guid.h:106:2: error: 'strncpy' output may be truncated copying 8 bytes from a string of length 38 [-Werror=stringop-truncation]
+  106 |  strncpy(eightbytes, text, 8);
+      |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
+
+Fixes:
+ - http://autobuild.buildroot.org/results/fcba72d359f4128515560e9105384cd4deff5043
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit da2c1d9c56b54c6022689c3696cd54ea7282b4d4)
+(cherry picked from commit 720deac3d9619b378bd554e1e3b1bdf1143768a1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../2.32/0010-bfd-elf32-or1k-fix-ld-assert.patch   | 35 ++++++++++++++++++++++
- .../2.34/0003-bfd-elf32-or1k-fix-ld-assert.patch   | 35 ++++++++++++++++++++++
- .../2.35.2/0003-bfd-elf32-or1k-fix-ld-assert.patch | 35 ++++++++++++++++++++++
- .../2.36.1/0003-bfd-elf32-or1k-fix-ld-assert.patch | 35 ++++++++++++++++++++++
- 4 files changed, 140 insertions(+)
+ package/efivar/0007-gcc.specs-drop-Werror.patch | 44 +++++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
 
-diff --git a/package/binutils/2.32/0010-bfd-elf32-or1k-fix-ld-assert.patch b/package/binutils/2.32/0010-bfd-elf32-or1k-fix-ld-assert.patch
+diff --git a/package/efivar/0007-gcc.specs-drop-Werror.patch b/package/efivar/0007-gcc.specs-drop-Werror.patch
 new file mode 100644
-index 0000000000..824c9ce3e5
+index 0000000000..aa717fedaf
 --- /dev/null
-+++ b/package/binutils/2.32/0010-bfd-elf32-or1k-fix-ld-assert.patch
-@@ -0,0 +1,35 @@
-+From 93cf62b662499e560812145dd989056fcf14f00e Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Mon, 22 Mar 2021 13:30:07 +0100
-+Subject: [PATCH] bfd/elf32-or1k: fix ld assert
++++ b/package/efivar/0007-gcc.specs-drop-Werror.patch
+@@ -0,0 +1,44 @@
++From 8d5cf3347cce9d644f670ffd1d48e71d74635481 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 22 Mar 2021 07:52:34 +0100
++Subject: [PATCH] gcc.specs: drop -Werror
 +
-+Fixes https://sourceware.org/bugzilla/show_bug.cgi?id=27624
++Build with -Werror raises the following build failure with gcc 10:
 +
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++/home/buildroot/autobuild/run/instance-1/output-1/host/bin/aarch64-none-linux-gnu-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2   -I/home/buildroot/autobuild/run/instance-1/output-1/build/efivar-37/src/include/   -specs=/home/buildroot/autobuild/run/instance-1/output-1/build/efivar-37/gcc.specs  -L.  -fPIC -Wl,-z,muldefs     -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -o efivar efivar.c -lefivar -ldl
++In file included from efivar.h:28,
++                 from efivar.c:40:
++In function 'text_to_guid',
++    inlined from 'parse_name.constprop' at efivar.c:157:8:
++guid.h:106:2: error: 'strncpy' output may be truncated copying 8 bytes from a string of length 38 [-Werror=stringop-truncation]
++  106 |  strncpy(eightbytes, text, 8);
++      |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
++cc1: all warnings being treated as errors
++
++Fixes:
++ - http://autobuild.buildroot.org/results/fcba72d359f4128515560e9105384cd4deff5043
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: not upstreamable as Makefiles were reworked and a new
++ERRORS parameter was added:
++https://github.com/rhboot/efivar/commit/998f617cec92d526e1fadb745673ceef63fa1483]
 +---
-+ bfd/elf32-or1k.c | 9 ++++-----
-+ 1 file changed, 4 insertions(+), 5 deletions(-)
++ gcc.specs | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
-+index 2f200b197b..ae508540f5 100644
-+--- a/bfd/elf32-or1k.c
-++++ b/bfd/elf32-or1k.c
-+@@ -2535,11 +2535,10 @@ or1k_elf_adjust_dynamic_symbol (struct bfd_link_info *info,
-+   if (h->type == STT_FUNC
-+       || h->needs_plt)
-+     {
-+-      if (! bfd_link_pic (info)
-+-	  && !h->def_dynamic
-+-	  && !h->ref_dynamic
-+-	  && h->root.type != bfd_link_hash_undefweak
-+-	  && h->root.type != bfd_link_hash_undefined)
-++      if (h->plt.refcount <= 0
-++         || (SYMBOL_CALLS_LOCAL (info, h)
-++         || (ELF_ST_VISIBILITY (h->other) != STV_DEFAULT
-++             && h->root.type == bfd_link_hash_undefweak)))
-+ 	{
-+ 	  /* This case can occur if we saw a PLT reloc in an input
-+ 	     file, but the symbol was never referred to by a dynamic
++diff --git a/gcc.specs b/gcc.specs
++index 45d43d1..1baf11a 100644
++--- a/gcc.specs
+++++ b/gcc.specs
++@@ -2,7 +2,7 @@
++ + -D_GNU_SOURCE
++ 
++ *efivar_cpp_options:
++- -Werror -Wall -std=gnu11 -Wextra
+++ -Wall -std=gnu11 -Wextra
++ 
++ *cpp_options:
++ + %(efivar_cpp_options)
 +-- 
-+2.25.1
-+
-diff --git a/package/binutils/2.34/0003-bfd-elf32-or1k-fix-ld-assert.patch b/package/binutils/2.34/0003-bfd-elf32-or1k-fix-ld-assert.patch
-new file mode 100644
-index 0000000000..756493667f
---- /dev/null
-+++ b/package/binutils/2.34/0003-bfd-elf32-or1k-fix-ld-assert.patch
-@@ -0,0 +1,35 @@
-+From 1659226a96b1daecfd08c057d0d5c39309d207ee Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Mon, 22 Mar 2021 13:30:07 +0100
-+Subject: [PATCH] bfd/elf32-or1k: fix ld assert
-+
-+Fixes https://sourceware.org/bugzilla/show_bug.cgi?id=27624
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ bfd/elf32-or1k.c | 9 ++++-----
-+ 1 file changed, 4 insertions(+), 5 deletions(-)
-+
-+diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
-+index 65938e5137..41908f8938 100644
-+--- a/bfd/elf32-or1k.c
-++++ b/bfd/elf32-or1k.c
-+@@ -2566,11 +2566,10 @@ or1k_elf_adjust_dynamic_symbol (struct bfd_link_info *info,
-+   if (h->type == STT_FUNC
-+       || h->needs_plt)
-+     {
-+-      if (! bfd_link_pic (info)
-+-	  && !h->def_dynamic
-+-	  && !h->ref_dynamic
-+-	  && h->root.type != bfd_link_hash_undefweak
-+-	  && h->root.type != bfd_link_hash_undefined)
-++      if (h->plt.refcount <= 0
-++         || (SYMBOL_CALLS_LOCAL (info, h)
-++         || (ELF_ST_VISIBILITY (h->other) != STV_DEFAULT
-++             && h->root.type == bfd_link_hash_undefweak)))
-+ 	{
-+ 	  /* This case can occur if we saw a PLT reloc in an input
-+ 	     file, but the symbol was never referred to by a dynamic
-+-- 
-+2.25.1
-+
-diff --git a/package/binutils/2.35.2/0003-bfd-elf32-or1k-fix-ld-assert.patch b/package/binutils/2.35.2/0003-bfd-elf32-or1k-fix-ld-assert.patch
-new file mode 100644
-index 0000000000..756493667f
---- /dev/null
-+++ b/package/binutils/2.35.2/0003-bfd-elf32-or1k-fix-ld-assert.patch
-@@ -0,0 +1,35 @@
-+From 1659226a96b1daecfd08c057d0d5c39309d207ee Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Mon, 22 Mar 2021 13:30:07 +0100
-+Subject: [PATCH] bfd/elf32-or1k: fix ld assert
-+
-+Fixes https://sourceware.org/bugzilla/show_bug.cgi?id=27624
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ bfd/elf32-or1k.c | 9 ++++-----
-+ 1 file changed, 4 insertions(+), 5 deletions(-)
-+
-+diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
-+index 65938e5137..41908f8938 100644
-+--- a/bfd/elf32-or1k.c
-++++ b/bfd/elf32-or1k.c
-+@@ -2566,11 +2566,10 @@ or1k_elf_adjust_dynamic_symbol (struct bfd_link_info *info,
-+   if (h->type == STT_FUNC
-+       || h->needs_plt)
-+     {
-+-      if (! bfd_link_pic (info)
-+-	  && !h->def_dynamic
-+-	  && !h->ref_dynamic
-+-	  && h->root.type != bfd_link_hash_undefweak
-+-	  && h->root.type != bfd_link_hash_undefined)
-++      if (h->plt.refcount <= 0
-++         || (SYMBOL_CALLS_LOCAL (info, h)
-++         || (ELF_ST_VISIBILITY (h->other) != STV_DEFAULT
-++             && h->root.type == bfd_link_hash_undefweak)))
-+ 	{
-+ 	  /* This case can occur if we saw a PLT reloc in an input
-+ 	     file, but the symbol was never referred to by a dynamic
-+-- 
-+2.25.1
-+
-diff --git a/package/binutils/2.36.1/0003-bfd-elf32-or1k-fix-ld-assert.patch b/package/binutils/2.36.1/0003-bfd-elf32-or1k-fix-ld-assert.patch
-new file mode 100644
-index 0000000000..756493667f
---- /dev/null
-+++ b/package/binutils/2.36.1/0003-bfd-elf32-or1k-fix-ld-assert.patch
-@@ -0,0 +1,35 @@
-+From 1659226a96b1daecfd08c057d0d5c39309d207ee Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Mon, 22 Mar 2021 13:30:07 +0100
-+Subject: [PATCH] bfd/elf32-or1k: fix ld assert
-+
-+Fixes https://sourceware.org/bugzilla/show_bug.cgi?id=27624
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ bfd/elf32-or1k.c | 9 ++++-----
-+ 1 file changed, 4 insertions(+), 5 deletions(-)
-+
-+diff --git a/bfd/elf32-or1k.c b/bfd/elf32-or1k.c
-+index 65938e5137..41908f8938 100644
-+--- a/bfd/elf32-or1k.c
-++++ b/bfd/elf32-or1k.c
-+@@ -2566,11 +2566,10 @@ or1k_elf_adjust_dynamic_symbol (struct bfd_link_info *info,
-+   if (h->type == STT_FUNC
-+       || h->needs_plt)
-+     {
-+-      if (! bfd_link_pic (info)
-+-	  && !h->def_dynamic
-+-	  && !h->ref_dynamic
-+-	  && h->root.type != bfd_link_hash_undefweak
-+-	  && h->root.type != bfd_link_hash_undefined)
-++      if (h->plt.refcount <= 0
-++         || (SYMBOL_CALLS_LOCAL (info, h)
-++         || (ELF_ST_VISIBILITY (h->other) != STV_DEFAULT
-++             && h->root.type == bfd_link_hash_undefweak)))
-+ 	{
-+ 	  /* This case can occur if we saw a PLT reloc in an input
-+ 	     file, but the symbol was never referred to by a dynamic
-+-- 
-+2.25.1
++2.30.1
 +
