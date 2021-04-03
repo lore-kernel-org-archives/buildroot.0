@@ -1,12 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 3 Apr 2021 17:33:39 +0200
-Subject: [Buildroot] [PATCH 1/1] package/tvheadend: add various options
- to disable optional components
-In-Reply-To: <7odmjhxhtj.ln2@ID-313208.user.individual.net>
-References: <20210403094958.890489-1-bernd.kuhls@t-online.de>
- <20210403122219.GW24043@scaer>
- <7odmjhxhtj.ln2@ID-313208.user.individual.net>
-Message-ID: <20210403153339.GB2252@scaer>
+Date: Sat, 3 Apr 2021 17:37:33 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/tvheadend: add various
+ options to disable optional components
+In-Reply-To: <20210403152234.2006719-1-bernd.kuhls@t-online.de>
+References: <20210403152234.2006719-1-bernd.kuhls@t-online.de>
+Message-ID: <20210403153733.GC2252@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,46 +13,106 @@ To: buildroot@busybox.net
 
 Bernd, All,
 
-On 2021-04-03 17:21 +0200, Bernd Kuhls spake thusly:
-> Am Sat, 03 Apr 2021 14:22:19 +0200 schrieb Yann E. MORIN:
-> >> +config BR2_PACKAGE_TVHEADEND_IPTV
-> >> +	bool "IPTV support"
-> >> +	default y
-> >> +	select BR2_PACKAGE_FFMPEG_FFMPEG if BR2_PACKAGE_FFMPEG
-> > Here, ffmpeg is not mandatory, but see below...
+On 2021-04-03 17:22 +0200, Bernd Kuhls spake thusly:
+> When enabled some IPTV streams are piped using /usr/bin/ffmpeg so make
+> sure that the ffmpeg binary is present.
 > 
-> Technically yes, the ffmpeg binary is not mandatory.
+> Transcoding support can already be disabled reducing /usr/bin/tvheadend
+> by 1,03MB.
 > 
-> But practically it is needed because many lists of legal public streams 
-> use /usr/bin/ffmpeg to pipe the stream to tvheadend, like
-> https://github.com/jnk22/kodinerds-iptv/tree/master/iptv/pipe
+> By disabling all new options provided by this patch the binary size can
+> additionally be reduced by 2,08MB.
 > 
-> This patch makes sure that, when ffmpeg is enabled, it also provides
-> /usr/bin/ffmpeg, this will avoid problems like this:
-> https://github.com/LibreELEC/LibreELEC.tv/pull/3163#issuecomment-446242298
-> 
-> So I would like to keep the select ...
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+[--SNIP--]
+> +config BR2_PACKAGE_TVHEADEND_IPTV
+> +	bool "IPTV support"
+> +	default y
+> +	select BR2_PACKAGE_FFMPEG_FFMPEG if BR2_PACKAGE_FFMPEG # runtime
 
-OK, but then, does it make sense to not have ffmpeg at all. I.e. how
-valid is it to have BR2_PACKAGE_TVHEADEND_IPTV without the ffmpeg
-package?
+As we discussed in the previous thread, IPTV really only works fully
+when ffmpeg (the program) is available, which wil not be the case if
+ffmpeg (the package) is not enabled.
 
-I think forcing ffmpeg (the package) *and* ffmpeg (the program) is the
-best solution, as I suggested previously.
+As I suggested previously, we should ensure that ffmpeg is enabled:
+
+    config BR2_PACKAGE_TVHEADEND_IPTV
+        bool "IPTV support"
+        depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+        select BR2_PACKAGE_FFMPEG  # runtime
+        select BR2_PACKAGE_FFMPEG_FFMPEG  # runtime
+
+If you agree, I can change that when applying...
 
 Regards,
 Yann E. MORIN.
 
-> >> +TVHEADEND_DEPENDENCIES += ffmpeg
-> > 
-> > Here, you are making ffmpeg mandatory, but nothing ensures it is
-> > enabled...
-> 
-> but will remove the dependency, which is obviously wrong here.
-> 
-> Thanks for noticing.
-> 
-> Regards, Bernd
+> +	help
+> +	  Enable IPTV support.
+> +
+> +config BR2_PACKAGE_TVHEADEND_SATIP
+> +	bool "SAT>IP support"
+> +	default y
+> +	help
+> +	  Enable SAT>IP support.
+> +
+> +config BR2_PACKAGE_TVHEADEND_TIMESHIFT
+> +	bool "timeshift support"
+> +	default y
+> +	help
+> +	  Enable timeshift support.
+> +
+>  config BR2_PACKAGE_TVHEADEND_TRANSCODING
+>  	bool "transcoding support"
+>  	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+> diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+> index 114142bfa9..b694c44e3b 100644
+> --- a/package/tvheadend/tvheadend.mk
+> +++ b/package/tvheadend/tvheadend.mk
+> @@ -63,6 +63,40 @@ TVHEADEND_CONF_OPTS += \
+>  	--disable-libx265
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_TVHEADEND_DESCRAMBLER),y)
+> +TVHEADEND_CONF_OPTS += \
+> +	--enable-cardclient \
+> +	--enable-cwc \
+> +	--enable-cccam \
+> +	--enable-capmt \
+> +	--enable-constcw
+> +else
+> +TVHEADEND_CONF_OPTS += \
+> +	--disable-cardclient \
+> +	--disable-cwc \
+> +	--disable-cccam \
+> +	--disable-capmt \
+> +	--disable-constcw
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_TVHEADEND_IPTV),y)
+> +TVHEADEND_CONF_OPTS += --enable-iptv
+> +else
+> +TVHEADEND_CONF_OPTS += --disable-iptv
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_TVHEADEND_SATIP),y)
+> +TVHEADEND_CONF_OPTS += --enable-satip_client --enable-satip_server
+> +else
+> +TVHEADEND_CONF_OPTS += --disable-satip_client --disable-satip_server
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_TVHEADEND_TIMESHIFT),y)
+> +TVHEADEND_CONF_OPTS += --enable-timeshift
+> +else
+> +TVHEADEND_CONF_OPTS += --disable-timeshift
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_LIBDVBCSA),y)
+>  TVHEADEND_DEPENDENCIES += libdvbcsa
+>  TVHEADEND_CONF_OPTS += --enable-tvhcsa
+> -- 
+> 2.29.2
 > 
 > _______________________________________________
 > buildroot mailing list
