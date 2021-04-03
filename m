@@ -1,45 +1,45 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  3 Apr 2021 15:23:49 +0200
-Subject: [Buildroot] [PATCH 1/1] package/cifs-utils: add missing python
- dependencies
-Message-ID: <20210403132349.2220750-1-fontaine.fabrice@gmail.com>
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Sat, 3 Apr 2021 15:32:14 +0200
+Subject: [Buildroot] [PATCH 3/3] board/amarula/vyasa: set sd-card as
+ boot media
+In-Reply-To: <20210402222039.3812925-4-giulio.benetti@benettiengineering.com>
+References: <20210402222039.3812925-1-giulio.benetti@benettiengineering.com>
+ <20210402222039.3812925-4-giulio.benetti@benettiengineering.com>
+Message-ID: <af2367e1-fede-1357-ac06-92945269e074@benettiengineering.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add missing python dependencies which have been forgotten when bumping
-to version 6.12 in commit b5dede7d1a03ab2b8caa0a8e79b09c8df6c62fe4
+Hi,
 
-Fixes:
- - http://autobuild.buildroot.org/results/acdbf7c58ec8ae648f8048bc75650dcdcdca6285
+please drop this patch. Sd-card when jumper JP4 is closed makes eMMC not 
+available, so sd-card will be registered as mmcblk0.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/cifs-utils/Config.in | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/package/cifs-utils/Config.in b/package/cifs-utils/Config.in
-index 0e61243de4..55829e3dc2 100644
---- a/package/cifs-utils/Config.in
-+++ b/package/cifs-utils/Config.in
-@@ -18,9 +18,16 @@ if BR2_PACKAGE_CIFS_UTILS
- 
- config BR2_PACKAGE_CIFS_UTILS_SMBTOOLS
- 	bool "smbtools"
-+	depends on BR2_USE_WCHAR # python
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # python
-+	depends on !BR2_STATIC_LIBS # python
- 	select BR2_PACKAGE_PYTHON3 if !BR2_PACKAGE_PYTHON # runtime
- 	help
- 	  Install the smb tools smbinfo and smb2-quota (python
- 	  implementations).
- 
-+comment "smbtools needs a toolchain w/ wchar, threads, dynamic library"
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		BR2_STATIC_LIBS
-+
- endif
+Thank you
 -- 
-2.30.2
+Giulio Benetti
+Benetti Engineering sas
+On 4/3/21 12:20 AM, Giulio Benetti wrote:
+> I find easier to test using sd-card(mmcblk1p1) than eMMC(mmcblk0p1) to
+> test this board. If needed one can swap back to mmcblk0p1 for using eMMC,
+> or set a unique UUID for partition, so both sd-card or eMMC can be booted
+> if that UUID partitions is found.
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> ---
+>   board/amarula/vyasa/extlinux.conf | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/board/amarula/vyasa/extlinux.conf b/board/amarula/vyasa/extlinux.conf
+> index a8fcc35f5a..e7e12ab9bc 100644
+> --- a/board/amarula/vyasa/extlinux.conf
+> +++ b/board/amarula/vyasa/extlinux.conf
+> @@ -1,4 +1,4 @@
+>   label Vyasa linux-next
+>     kernel /boot/uImage
+>     devicetree /boot/rk3288-vyasa.dtb
+> -  append console=ttyS2,115200n8 root=/dev/mmcblk0p1 rootwait
+> +  append console=ttyS2,115200n8 root=/dev/mmcblk1p1 rootwait
+> 
