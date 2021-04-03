@@ -1,35 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Apr 2021 09:48:04 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/ipcalc: use
- gitlab macro
-Message-ID: <20210403072612.AE33580298@busybox.osuosl.org>
+Date: Sat, 3 Apr 2021 09:38:13 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/fetchmail: bump
+ version to 6.4.18
+Message-ID: <20210403072612.558418AF32@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fc0ec9988c350c0ed85b14d3532739ea2da951ed
+commit: https://git.buildroot.net/buildroot/commit/?id=3974ae184db73df895c6441dc8693e61066b8f12
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
+Release notes:
+https://sourceforge.net/p/fetchmail/mailman/message/37249830/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit d4e2b61b266e4566f127ff7868ce51c7353c2e49)
+(cherry picked from commit e44c34ac7145d5f5ef71b5321c3d735d3ec3fd1a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ipcalc/ipcalc.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/fetchmail/fetchmail.hash | 6 +++---
+ package/fetchmail/fetchmail.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/ipcalc/ipcalc.mk b/package/ipcalc/ipcalc.mk
-index c4ce8b9ceb..ff9d643389 100644
---- a/package/ipcalc/ipcalc.mk
-+++ b/package/ipcalc/ipcalc.mk
+diff --git a/package/fetchmail/fetchmail.hash b/package/fetchmail/fetchmail.hash
+index b526163849..698d83c88b 100644
+--- a/package/fetchmail/fetchmail.hash
++++ b/package/fetchmail/fetchmail.hash
+@@ -1,6 +1,6 @@
+-# From https://sourceforge.net/p/fetchmail/mailman/message/37215482/
+-sha256  044b9a0ac03afbae7744979defe3e2e32e39141bca68fd0c8deda2ed40884fb9  fetchmail-6.4.16.tar.xz
++# From https://sourceforge.net/p/fetchmail/mailman/message/37249830/
++sha256  302dc9bcdc6927dedf375d2baaead2347557faa70d98b1da83f2409fa6fb259f  fetchmail-6.4.18.tar.xz
+ # From https://sourceforge.net/projects/fetchmail/files/branch_6.4/
+-sha1  ec910eed3db4d8c44469aabaf33f529334a2fdb5  fetchmail-6.4.16.tar.xz
++sha1  1fd3e4f30bd9ba7bdcaed5edfca080dc6f66377e  fetchmail-6.4.18.tar.xz
+ # Locally computed:
+ sha256  8e3ec4863456a26fcd1cf84fadd4146efcb2fd8515bcec482e0f2b7060108895  COPYING
+diff --git a/package/fetchmail/fetchmail.mk b/package/fetchmail/fetchmail.mk
+index 2db635ec66..6fe9b5b3d7 100644
+--- a/package/fetchmail/fetchmail.mk
++++ b/package/fetchmail/fetchmail.mk
 @@ -5,7 +5,7 @@
  ################################################################################
  
- IPCALC_VERSION = 1.0.0
--IPCALC_SITE = https://gitlab.com/ipcalc/ipcalc/-/archive/$(IPCALC_VERSION)
-+IPCALC_SITE = $(call gitlab,ipcalc,ipcalc,$(IPCALC_VERSION))
- IPCALC_SOURCE = ipcalc-$(IPCALC_VERSION).tar.bz2
- IPCALC_LICENSE = GPL-2.0+
- IPCALC_LICENSE_FILES = COPYING
+ FETCHMAIL_VERSION_MAJOR = 6.4
+-FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).16
++FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).18
+ FETCHMAIL_SOURCE = fetchmail-$(FETCHMAIL_VERSION).tar.xz
+ FETCHMAIL_SITE = http://downloads.sourceforge.net/project/fetchmail/branch_$(FETCHMAIL_VERSION_MAJOR)
+ FETCHMAIL_LICENSE = GPL-2.0; some exceptions are mentioned in COPYING
