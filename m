@@ -1,54 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Apr 2021 11:04:08 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/pkg-meson.mk: fix
- setting host C++ compiler
-Message-ID: <20210403094716.27E7C88529@busybox.osuosl.org>
+Date: Sat, 3 Apr 2021 11:13:25 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/wireshark:
+ security bump to version 3.4.4
+Message-ID: <20210403094716.7FBB4834E7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c6cae5f09239e8392d94a64cf89773da46e25641
+commit: https://git.buildroot.net/buildroot/commit/?id=733e98e6142670b9fe47a13fb2b80b187f21c261
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Commit f4a61d1ae23ec7729af3a8a165bbee45b6b9ef75 introduced CC_FOR_BUILD and
-CXX_FOR_BUILD to avoid detecting ccache.
+Fix CVE-2021-22191: Improper URL handling in Wireshark 3.4.0 to 3.4.3
+and 3.2.0 to 3.2.11 could allow remote code execution via via packet
+injection or crafted capture file.
 
-Both values are set to `HOSTCC`. This causes issues where C++ files are
-compiled with the C compiler without passing the `stdc++` flag to the
-linker, too.
+https://www.wireshark.org/security/wnpa-sec-2021-03.html
 
-Therefore, switch to pass the C++ compiler to CXX_FOR_BUILD.
-
-Correctly fixes:
-http://autobuild.buildroot.org/results/871e1362c44e5b68a149e6a5dd3caf99ea0d904a
-
-Commit 9783c04aaf5e4fc94099772f1dc699a974ee6538 proposed a fix which in
-fact is a workaround to get Meson to pass the `stdc++` flag to the C
-linker.
-
-A follow-up commit will revert this commit, as it is no longer
-needed.
-
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 00d41f58ebb286d88914eb3d3501ebf9e4a86b9a)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 705b3dd78cc4a1528308edba3a66bc3c6dfd670f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-meson.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/wireshark/wireshark.hash | 6 +++---
+ package/wireshark/wireshark.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-index aafb441fae..a57820d4d2 100644
---- a/package/pkg-meson.mk
-+++ b/package/pkg-meson.mk
-@@ -83,7 +83,7 @@ define $(2)_CONFIGURE_CMDS
- 	    > $$($$(PKG)_SRCDIR)/build/cross-compilation.conf
- 	PATH=$$(BR_PATH) \
- 	CC_FOR_BUILD="$$(HOSTCC)" \
--	CXX_FOR_BUILD="$$(HOSTCC)" \
-+	CXX_FOR_BUILD="$$(HOSTCXX)" \
- 	$$($$(PKG)_CONF_ENV) \
- 	$$(MESON) \
- 		--prefix=/usr \
+diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
+index 56a0122dd2..71703a2a8b 100644
+--- a/package/wireshark/wireshark.hash
++++ b/package/wireshark/wireshark.hash
+@@ -1,6 +1,6 @@
+-# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.4.3.txt
+-sha1  7dec4332f21827e360b5830d1d6d566365796a67  wireshark-3.4.3.tar.xz
+-sha256  f467cc77f0fc73fce0b854cdbc292f132d4879fca69d417eccad5f967fbf262b  wireshark-3.4.3.tar.xz
++# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.4.4.txt
++sha1  fa5c553596dcc6a59735f96a9a0845e3c40abab2  wireshark-3.4.4.tar.xz
++sha256  729cd11e9715c600e5ad74ca472bacf8af32c20902192d5f2b271268511d4d29  wireshark-3.4.4.tar.xz
+ 
+ # Locally calculated
+ sha256  7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index e751e550bc..8cdc7305d0 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIRESHARK_VERSION = 3.4.3
++WIRESHARK_VERSION = 3.4.4
+ WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
+ WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
+ WIRESHARK_LICENSE = wireshark license
