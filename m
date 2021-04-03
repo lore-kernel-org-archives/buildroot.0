@@ -1,42 +1,112 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 3 Apr 2021 09:11:25 +0200
-Subject: [Buildroot] [git commit] package/samba4: update samba4-cache.txt
- for fcntl flags check
-Message-ID: <20210403064635.AB805818BF@busybox.osuosl.org>
+Date: Sat, 3 Apr 2021 09:29:35 +0200
+Subject: [Buildroot] [PATCH] package/mender: make xz optional
+In-Reply-To: <20210401154453.144605-2-aduskett@gmail.com>
+References: <20210401154453.144605-1-aduskett@gmail.com>
+ <20210401154453.144605-2-aduskett@gmail.com>
+Message-ID: <20210403072935.GU24043@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c86434d720fdf1c42834162331c008e05c710d65
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Adam, All,
 
-Fixes:
-http://autobuild.buildroot.net/results/a5d/a5db81fca8ec07159b69b108b742f3d060e3316a/
+On 2021-04-01 08:44 -0700, Adam Duskett spake thusly:
+> According to the README.md file, xz is optional.
+>   - Remove the dependency on the xz package.
+>   - If the xz package is not selected, add "nolzma" to MENDER_TAGS
+> 
+> Signed-off-by: Adam Duskett <aduskett@gmail.com>
+> ---
+[--SNIP--]
+> diff --git a/package/mender/mender.mk b/package/mender/mender.mk
+> index 794dd4be8c..1ebd5a2e83 100644
+> --- a/package/mender/mender.mk
+> +++ b/package/mender/mender.mk
+[--SNIP--]
+> @@ -81,6 +81,12 @@ endef
+>  
+>  MENDER_POST_INSTALL_TARGET_HOOKS += MENDER_INSTALL_CONFIG_FILES
+>  
+> +ifeq ($(BR2_PACKAGE_XZ),y)
+> +MENDER_DEPENDENCIES += xz
+> +else
+> +MENDER_TAGS += nolzma
 
-Checking whether fcntl supports flags to send direct I/O availability signals                   : not found
-..
-Cross answers file /srv/storage/autobuild/run/instance-3/output-1/build/samba4-4.14.2/cache.txt is incomplete
+FOO_TAGS is supposed to be a comma-separated list (but see later):
 
-Samba4 has added a check for fcntl F_{G,S}ETOWN_EX handling since:
-https://gitlab.com/samba-team/devel/samba/-/commit/5084a69de14f24e9d804998580eefcba773fdd5a
+    https://golang.org/cmd/go/#hdr-Compile_packages_and_dependencies
 
-Which is supported by the Linux kernel since 2.6.32 in commit
-ba0a6c9f6fceed11 (fcntl: add F_[SG]ETOWN_EX), so add it to the cache file.
+    -tags tag,list
+    a comma-separated list of build tags to consider satisfied during the
+    build. For more information about build tags, see the description of
+    build constraints in the documentation for the go/build package.
+    (Earlier versions of Go used a space-separated list, and that form
+    is deprecated but still recognized.)
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/samba4/samba4-cache.txt | 1 +
- 1 file changed, 1 insertion(+)
+However, the += assignment operator in Makefile will create a
+space-separated list. So when we have neither xz nor dbus, we'll
+get:
+    MENDER_TAGS=nolzma nodbus
 
-diff --git a/package/samba4/samba4-cache.txt b/package/samba4/samba4-cache.txt
-index bd7c3654b4..75d0343dc9 100644
---- a/package/samba4/samba4-cache.txt
-+++ b/package/samba4/samba4-cache.txt
-@@ -42,3 +42,4 @@ checking for clnt_create(): OK
- Checking for a 64-bit host to support lmdb: NO
- Checking value of GNUTLS_CIPHER_AES_128_CFB8: 29
- Checking value of GNUTLS_MAC_AES_CMAC_128: 203
-+Checking whether fcntl supports flags to send direct I/O availability signals: OK
+which is pased -as-is to the go build command:
+
+    https://git.buildroot.org/buildroot/tree/package/pkg-golang.mk#n45
+
+    $(2)_BUILD_OPTS += \
+        -ldflags "$$($(2)_LDFLAGS)" \
+        -tags "$$($(2)_TAGS)" \
+        -trimpath \
+        -p $(PARALLEL_JOBS)
+
+So, even though the space-separated list is still supported, we should
+switch over to the comma-separated list.
+
+Either we require that packages do provide such a comma-seprated list,
+or we do it in the infra, with something along those lines:
+
+    diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
+    index d07242310d..bfa1a9e9ce 100644
+    --- a/package/pkg-golang.mk
+    +++ b/package/pkg-golang.mk
+    @@ -42,7 +42,7 @@ define inner-golang-package
+     
+     $(2)_BUILD_OPTS += \
+     	-ldflags "$$($(2)_LDFLAGS)" \
+    -	-tags "$$($(2)_TAGS)" \
+    +	-tags "$$(subst $(space),$(comma),$$(strip $$($(2)_TAGS)))" \
+     	-trimpath \
+     	-p $(PARALLEL_JOBS)
+     
+
+Note that we still need to quote, in case there is no tag, and we need
+to strip in case FOO_TAGS contains expansions itself, like
+    FOO_TAGS = $(FOO_TAG_BLARK_MAYBE) $(FOO_TAG_MEH_MOSTLY)
+
+Care to look further into that, please?
+
+Regards,
+Yann E. MORIN.
+
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_DBUS),y)
+>  define MENDER_INSTALL_DBUS_AUTHENTICATION_MANAGER_CONF
+>  	$(INSTALL) -D -m 0755 $(@D)/support/dbus/io.mender.AuthenticationManager.conf \
+> -- 
+> 2.30.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
