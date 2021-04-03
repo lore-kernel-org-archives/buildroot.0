@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Apr 2021 13:34:12 +0200
-Subject: [Buildroot] [git commit branch/2020.11.x] package/pkg-kconfig: fix
+Date: Sat, 3 Apr 2021 13:34:19 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/pkg-kconfig: fix
  error string
-Message-ID: <20210403110951.8449283E03@busybox.osuosl.org>
+Message-ID: <20210403110959.8B6B97FCB3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0d0ed88caeda0716d21f6b0afbfe82af6d750ba0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=1a9ae3203c3b6a8a887afde40569cd83ad3c0221
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
 Current error string speaks only about "fragment" but here we also deal
 with Kconfig files, so let's add "file or fragment" instead of "fragment".
