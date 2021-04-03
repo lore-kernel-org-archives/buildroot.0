@@ -1,98 +1,48 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 3 Apr 2021 09:01:30 +0200
-Subject: [Buildroot] [PATCH v3 1/1] package/wpa_supplicant: handle
- CONFIG_CTRL_IFACE carefully
-In-Reply-To: <20210403022316.8719-1-tianyuanhao@aliyun.com>
-References: <20210403022316.8719-1-tianyuanhao@aliyun.com>
-Message-ID: <20210403070130.GN24043@scaer>
+Date: Sat, 3 Apr 2021 09:03:24 +0200
+Subject: [Buildroot] [git commit] package/go: bump version to 1.16.3
+Message-ID: <20210403063817.1C75E801C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Tian, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=16123616d3aa4becde957889fabc7f45aa7cc3b7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-04-02 19:23 -0700, Tian Yuanhao via buildroot spake thusly:
-> When BR2_PACKAGE_WPA_SUPPLICANT_CTRL_IFACE is not set and
-> BR2_PACKAGE_WPA_SUPPLICANT_DBUS=y, CONFIG_CTRL_IFACE_DBUS_NEW will be
-> enabled by 's/^#\(CONFIG_CTRL_IFACE_DBUS_NEW\)/\1/' first, and then
-> disabled by 's/^\(CONFIG_CTRL_IFACE\)/#\1/'.
-> 
-> CONFIG_CTRL_IFACE_DBUS_NEW does not depend on CONFIG_CTRL_IFACE, except
-> for using it as a prefix. Fix this wrong behavior by adding '\>' after
-> CONFIG_CTRL_IFACE.
-> 
-> Signed-off-by: Tian Yuanhao <tianyuanhao@aliyun.com>
-> Tested-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-> ---
-> 
-> v1 -> v2:
->   - only handle CONFIG_CTRL_IFACE
-> 
-> v2 -> v3:
->   - rewrite commit message
-> ---
->  package/wpa_supplicant/wpa_supplicant.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-> index c82db43c1c..80d75a57c7 100644
-> --- a/package/wpa_supplicant/wpa_supplicant.mk
-> +++ b/package/wpa_supplicant/wpa_supplicant.mk
-> @@ -135,7 +135,7 @@ WPA_SUPPLICANT_CONFIG_EDITS += 's/\#\(CONFIG_TLS=\).*/\1internal/'
->  endif
->  
->  ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_CTRL_IFACE),)
-> -WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_CTRL_IFACE
-> +WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_CTRL_IFACE\>
+go1.16.3 (released 2021/04/01) includes fixes to the compiler, linker, runtime,
+the go command, and the testing and time packages.
 
-Yes,m this is a tchnically correct change, that will fix this once
-issue.
+https://golang.org/doc/go1.16
 
-However, it singles out this one configuration item among all the
-others, because it is the only one to have this trailing word-boundary
-marker.
+Signed-off-by: Christian Stewart <christian@paral.in>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/go/go.hash | 4 ++--
+ package/go/go.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-And in fact, I think we should ensure this whole-word match for all the
-configurationtiems in a generic way, i.e. in the expansion, later:
-
-    diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-    index 96f0596bfe..001eccbfef 100644
-    --- a/package/wpa_supplicant/wpa_supplicant.mk
-    +++ b/package/wpa_supplicant/wpa_supplicant.mk
-    @@ -188,8 +188,8 @@ endif
-     
-     define WPA_SUPPLICANT_CONFIGURE_CMDS
-     	cp $(@D)/wpa_supplicant/defconfig $(WPA_SUPPLICANT_CONFIG)
-    -	sed -i $(patsubst %,-e 's/^#\(%\)/\1/',$(WPA_SUPPLICANT_CONFIG_ENABLE)) \
-    -		$(patsubst %,-e 's/^\(%\)/#\1/',$(WPA_SUPPLICANT_CONFIG_DISABLE)) \
-    +	sed -i $(patsubst %,-e 's/^#\(%\>\)/\1/',$(WPA_SUPPLICANT_CONFIG_ENABLE)) \
-    +		$(patsubst %,-e 's/^\(%\>\)/#\1/',$(WPA_SUPPLICANT_CONFIG_DISABLE)) \
-     		$(patsubst %,-e '1i%=y',$(WPA_SUPPLICANT_CONFIG_SET)) \
-     		$(patsubst %,-e %,$(WPA_SUPPLICANT_CONFIG_EDITS)) \
-     		$(WPA_SUPPLICANT_CONFIG)
-
-Thoughts?
-
-Regards,
-Yann E. MORIN.
-
->  endif
->  
->  ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DBUS),y)
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/go/go.hash b/package/go/go.hash
+index 524b6131dc..6d8759f97f 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,3 +1,3 @@
+ # From https://golang.org/dl/
+-sha256  37ca14287a23cb8ba2ac3f5c3dd8adbc1f7a54b9701a57824bf19a0b271f83ea  go1.16.2.src.tar.gz
+-sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
++sha256  b298d29de9236ca47a023e382313bcc2d2eed31dfa706b60a04103ce83a71a25  go1.16.3.src.tar.gz
++sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index ff12fb0c62..138b1cbd34 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GO_VERSION = 1.16.2
++GO_VERSION = 1.16.3
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
