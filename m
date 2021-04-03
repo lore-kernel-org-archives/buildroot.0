@@ -1,41 +1,44 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Sat,  3 Apr 2021 14:42:30 +0200
-Subject: [Buildroot] [PATCH] package/jimtcl: bump to version 0.80
-Message-ID: <20210403124230.161485-1-francois.perrad@gadz.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat,  3 Apr 2021 14:55:36 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-cffi: needs threads
+Message-ID: <20210403125536.2219244-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/jimtcl/jimtcl.hash | 4 ++--
- package/jimtcl/jimtcl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+libffi needs threads since commit
+77cf5b5a71aa54039f4dbc509a1c7cb40aa04934 (more than 6 years ago)
 
-diff --git a/package/jimtcl/jimtcl.hash b/package/jimtcl/jimtcl.hash
-index 21d75c4f4..7960f4fdd 100644
---- a/package/jimtcl/jimtcl.hash
-+++ b/package/jimtcl/jimtcl.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256	ab8204cd03b946f5149e1273af9c86d8e73b146084a0fbeb1d4f41a75b0b3411	jimtcl-0.79.tar.gz
--sha256	419f1146334e57fb258d6c957d1f94d43455ec0d24b1b54c4447e5f61a353950	LICENSE
-+sha256  9e79a960de925552eeb4df51121f0ea017e34409568117b1ac461f4c3071289e  jimtcl-0.80.tar.gz
-+sha256  419f1146334e57fb258d6c957d1f94d43455ec0d24b1b54c4447e5f61a353950  LICENSE
-diff --git a/package/jimtcl/jimtcl.mk b/package/jimtcl/jimtcl.mk
-index e712dff0b..5d6b37926 100644
---- a/package/jimtcl/jimtcl.mk
-+++ b/package/jimtcl/jimtcl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Strangely enough this is the first time there is a build failure on the
+autobuilders
+
+Fixes:
+ - http://autobuild.buildroot.org/results/acdbf7c58ec8ae648f8048bc75650dcdcdca6285
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/python-cffi/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/python-cffi/Config.in b/package/python-cffi/Config.in
+index bc9f6a296d..3f332c0504 100644
+--- a/package/python-cffi/Config.in
++++ b/package/python-cffi/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PYTHON_CFFI
+ 	bool "python-cffi"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libffi
+ 	select BR2_PACKAGE_LIBFFI
+ 	select BR2_PACKAGE_PYTHON_PYCPARSER # runtime
+ 	help
+@@ -8,3 +9,6 @@ config BR2_PACKAGE_PYTHON_CFFI
+ 	  and reliable way of calling C code from Python.
  
--JIMTCL_VERSION = 0.79
-+JIMTCL_VERSION = 0.80
- JIMTCL_SITE = $(call github,msteveb,jimtcl,$(JIMTCL_VERSION))
- JIMTCL_INSTALL_STAGING = YES
- JIMTCL_LICENSE = BSD-2-Clause
+ 	  https://pypi.python.org/pypi/cffi
++
++comment "python-cffi needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
 -- 
-2.27.0
+2.30.2
