@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Apr 2021 18:04:49 +0200
-Subject: [Buildroot] [git commit branch/2020.11.x] package/mender/mender.mk:
+Date: Sat, 3 Apr 2021 13:54:10 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/mender/mender.mk:
  use MENDER_PKGDIR variable
-Message-ID: <20210403154203.285EE8392E@busybox.osuosl.org>
+Message-ID: <20210403154209.CDFC786AA7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1580a578577e76a5010e8719eb11c3b572eacabf
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=d3f15dd9338504f9c3e253108a057e79e966cec7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
 Currently there is a mix of calls to package/mender and $(MENDER_PKGDIR) in the
 mender.mk file. Standardize the calls to only $(MENDER_PKGDIR).
