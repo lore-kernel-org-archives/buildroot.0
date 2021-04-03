@@ -1,22 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 03 Apr 2021 13:50:18 +0200
-Subject: [Buildroot] [PATCH v1] package/tzdata: bump version to 2021a
-In-Reply-To: <20210321205806.9643-1-ps.report@gmx.net> (Peter Seiderer's
- message of "Sun, 21 Mar 2021 21:58:06 +0100")
-References: <20210321205806.9643-1-ps.report@gmx.net>
-Message-ID: <87mtuf4mf9.fsf@dell.be.48ers.dk>
+Date: Sat, 03 Apr 2021 13:52:05 +0200
+Subject: [Buildroot] [PATCH 1/1] package/efivar: disable -Werror
+In-Reply-To: <20210322070047.514146-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 22 Mar 2021 08:00:47 +0100")
+References: <20210322070047.514146-1-fontaine.fabrice@gmail.com>
+Message-ID: <87im534mca.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > For details see [1].
- > [1] https://mm.icann.org/pipermail/tz-announce/2021-January/000065.html
+ > Fix the following build failure with gcc 10:
+ > /home/buildroot/autobuild/run/instance-1/output-1/host/bin/aarch64-none-linux-gnu-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2   -I/home/buildroot/autobuild/run/instance-1/output-1/build/efivar-37/src/include/   -specs=/home/buildroot/autobuild/run/instance-1/output-1/build/efivar-37/gcc.specs  -L.  -fPIC -Wl,-z,muldefs     -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -o efivar efivar.c -lefivar -ldl
+ > In file included from efivar.h:28,
+ >                  from efivar.c:40:
+ > In function 'text_to_guid',
+ >     inlined from 'parse_name.constprop' at efivar.c:157:8:
+ > guid.h:106:2: error: 'strncpy' output may be truncated copying 8 bytes from a string of length 38 [-Werror=stringop-truncation]
+ >   106 |  strncpy(eightbytes, text, 8);
+ >       |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ > cc1: all warnings being treated as errors
 
- > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/fcba72d359f4128515560e9105384cd4deff5043
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed to 2020.02.x, 2020.11.x and 2021.02.x, thanks.
 
