@@ -1,29 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 03 Apr 2021 12:19:48 +0200
-Subject: [Buildroot] [PATCH 1/1] package/sqlcipher: security bump to
- version 4.4.3
-In-Reply-To: <20210329204903.320444-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 29 Mar 2021 22:49:03 +0200")
-References: <20210329204903.320444-1-fontaine.fabrice@gmail.com>
-Message-ID: <874kgn7jqz.fsf@dell.be.48ers.dk>
+Date: Sat, 03 Apr 2021 12:21:29 +0200
+Subject: [Buildroot] [PATCH] package/squid: security bump to version 4.14
+In-Reply-To: <20210330061003.23351-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 30 Mar 2021 08:10:03 +0200")
+References: <20210330061003.23351-1-peter@korsgaard.com>
+Message-ID: <87y2dz653q.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Fix CVE-2021-3119: Zetetic SQLCipher 4.x before 4.4.3 has a NULL pointer
- > dereferencing issue related to sqlcipher_export in crypto.c and
- > sqlite3StrICmp in sqlite3.c. This may allow an attacker to perform a
- > remote denial of service attack. For example, an SQL injection can be
- > used to execute the crafted SQL command sequence, which causes a
- > segmentation fault.
+ > Fixes the following security issues:
+ > - CVE-2020-25097: HTTP Request Smuggling
 
- > https://github.com/sqlcipher/sqlcipher/blob/v4.4.3/CHANGELOG.md
+ >   Due to improper input validation Squid is vulnerable to an HTTP Request
+ >   Smuggling attack.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > For more details, see the advisory:
+ > https://github.com/squid-cache/squid/security/advisories/GHSA-jvf6-h9gj-pmj6
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed to 2020.02.x, 2020.11.x and 2021.02.x, thanks.
 
