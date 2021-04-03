@@ -1,35 +1,41 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  3 Apr 2021 17:38:01 +0200
-Subject: [Buildroot] [PATCH 1/1] package/perl-xml-libxml: add CPE variables
-Message-ID: <20210403153801.2222070-1-fontaine.fabrice@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 03 Apr 2021 18:02:10 +0200
+Subject: [Buildroot] [PATCH 1/1] package/tvheadend: add various options
+ to disable optional components
+References: <20210403094958.890489-1-bernd.kuhls@t-online.de>
+ <20210403122219.GW24043@scaer>
+ <7odmjhxhtj.ln2@ID-313208.user.individual.net> <20210403153339.GB2252@scaer>
+Message-ID: <25gmjhxhtj.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:xml-libxml_project:xml-libxml is a valid CPE identifier for
-this package:
+Am Sat, 03 Apr 2021 17:33:39 +0200 schrieb Yann E. MORIN:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Axml-libxml_project%3Axml-libxml
+>> This patch makes sure that, when ffmpeg is enabled, it also provides
+>> /usr/bin/ffmpeg, this will avoid problems like this:
+>> https://github.com/LibreELEC/LibreELEC.tv/pull/
+3163#issuecomment-446242298
+> 
+> OK, but then, does it make sense to not have ffmpeg at all. I.e. how
+> valid is it to have BR2_PACKAGE_TVHEADEND_IPTV without the ffmpeg
+> package?
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/perl-xml-libxml/perl-xml-libxml.mk | 2 ++
- 1 file changed, 2 insertions(+)
+Hi Yann,
 
-diff --git a/package/perl-xml-libxml/perl-xml-libxml.mk b/package/perl-xml-libxml/perl-xml-libxml.mk
-index 23d3e988fa..9b563e29b5 100644
---- a/package/perl-xml-libxml/perl-xml-libxml.mk
-+++ b/package/perl-xml-libxml/perl-xml-libxml.mk
-@@ -10,6 +10,8 @@ PERL_XML_LIBXML_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SH/SHLOMIF
- PERL_XML_LIBXML_DEPENDENCIES = zlib libxml2
- PERL_XML_LIBXML_LICENSE = Artistic or GPL-1.0+
- PERL_XML_LIBXML_LICENSE_FILES = LICENSE
-+PERL_XML_LIBXML_CPE_ID_VENDOR = xml-libxml_project
-+PERL_XML_LIBXML_CPE_ID_PRODUCT = xml-libxml
- PERL_XML_LIBXML_DISTNAME = XML-LibXML
- 
- PERL_XML_LIBXML_CONF_OPTS = \
--- 
-2.30.2
+other streamlists work without piping through ffmpeg, like
+https://github.com/Free-IPTV/Countries
+
+Most tvheadend users already have ffmpeg on their systems, mostly because 
+of transcoding, others because of other packages depending on ffmpeg.
+In this case I want to make sure that /usr/bin/ffmpeg is present out-of-
+the-box when users start to play around with iptv and hit streamlists 
+which use the pipe function, like I did last week ;) My system was indeed 
+missing /usr/bin/ffmpeg...
+
+But I do not want to force building ffmpeg just for iptv support in 
+tvheadend when technically it is an optional runtime dependency.
+
+Regards, Bernd
