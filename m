@@ -1,35 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Apr 2021 09:47:34 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/eigen: use gitlab
+Date: Sat, 3 Apr 2021 09:47:58 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/frotz: use gitlab
  macro
-Message-ID: <20210403072612.97666803D0@busybox.osuosl.org>
+Message-ID: <20210403072612.A133180298@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a63105a989dac2de46c4121b5d663557734529a9
+commit: https://git.buildroot.net/buildroot/commit/?id=f512a970b1add443fd156d49429f5dd864879b69
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 11176ddc1be2f49d118b73ccbbd3889957822c5c)
+(cherry picked from commit 37e56d855d4c97cf0bb9b7699efeb0607f1af22f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/eigen/eigen.mk | 2 +-
+ package/frotz/frotz.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/eigen/eigen.mk b/package/eigen/eigen.mk
-index 1645489717..c9998da357 100644
---- a/package/eigen/eigen.mk
-+++ b/package/eigen/eigen.mk
+diff --git a/package/frotz/frotz.mk b/package/frotz/frotz.mk
+index ce27bdf0bf..2a2865af14 100644
+--- a/package/frotz/frotz.mk
++++ b/package/frotz/frotz.mk
 @@ -6,7 +6,7 @@
  
- EIGEN_VERSION = 3.3.7
- EIGEN_SOURCE = eigen-$(EIGEN_VERSION).tar.bz2
--EIGEN_SITE = https://gitlab.com/libeigen/eigen/-/archive/$(EIGEN_VERSION)
-+EIGEN_SITE = $(call gitlab,libeigen,eigen,$(EIGEN_VERSION))
- EIGEN_LICENSE = MPL2, BSD-3-Clause, LGPL-2.1
- EIGEN_LICENSE_FILES = COPYING.MPL2 COPYING.BSD COPYING.LGPL COPYING.README
- EIGEN_INSTALL_STAGING = YES
+ FROTZ_VERSION = 2.51
+ FROTZ_SOURCE = frotz-$(FROTZ_VERSION).tar.bz2
+-FROTZ_SITE = https://gitlab.com/DavidGriffith/frotz/-/archive/$(FROTZ_VERSION)
++FROTZ_SITE = $(call gitlab,DavidGriffith,frotz,$(FROTZ_VERSION))
+ FROTZ_DEPENDENCIES = host-pkgconf ncurses
+ FROTZ_LICENSE = GPL-2.0+
+ FROTZ_LICENSE_FILES = COPYING
