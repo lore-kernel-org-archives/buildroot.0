@@ -1,56 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Apr 2021 12:17:15 +0200
-Subject: [Buildroot] [git commit branch/2020.11.x] package/python-lxml:
- security bump to version 4.6.3
-Message-ID: <20210403095648.3DD3987404@busybox.osuosl.org>
+Date: Sat, 3 Apr 2021 12:20:49 +0200
+Subject: [Buildroot] [git commit branch/2020.11.x] package/squid: security
+ bump to version 4.14
+Message-ID: <20210403095648.5AC7F87404@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f1865e67499347d47ef793bfe9f2d7f8ff8d736d
+commit: https://git.buildroot.net/buildroot/commit/?id=a405337dc8a378f60a6b970de25b8c6cc382561e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-Fix CVE-2021-28957: lxml 4.6.2 allows XSS. It places the HTML action
-attribute into defs.link_attrs (in html/defs.py) for later use in input
-sanitization, but does not do the same for the HTML5 formaction
-attribute.
+Fixes the following security issues:
 
-https://github.com/lxml/lxml/blob/lxml-4.6.3/CHANGES.txt
+- CVE-2020-25097: HTTP Request Smuggling
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+  Due to improper input validation Squid is vulnerable to an HTTP Request
+  Smuggling attack.
+
+For more details, see the advisory:
+https://github.com/squid-cache/squid/security/advisories/GHSA-jvf6-h9gj-pmj6
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 9d678ed1de2dec9896730c62d2240583bdda71c0)
+(cherry picked from commit 7b5638460359b41381cd04464ec076e2306dc2fd)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-lxml/python-lxml.hash | 2 +-
- package/python-lxml/python-lxml.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/squid/squid.hash | 8 ++++----
+ package/squid/squid.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-lxml/python-lxml.hash b/package/python-lxml/python-lxml.hash
-index 7918e08745..dd6446e6cc 100644
---- a/package/python-lxml/python-lxml.hash
-+++ b/package/python-lxml/python-lxml.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  cd11c7e8d21af997ee8079037fff88f16fda188a9776eb4b81c7e4c9c0a7d7fc  lxml-4.6.2.tar.gz
-+sha256  39b78571b3b30645ac77b95f7c69d1bffc4cf8c3b157c435a34da72e78c82468  lxml-4.6.3.tar.gz
- sha256  41d49dd406aa0e1548a6d5f21a30d6bf638b3cd96eb7289dd348d83ed2e40392  LICENSES.txt
- sha256  69edb445c1335a8312d4c09271847e9956d84f0d9f724d125340cc3fad767b2a  doc/licenses/BSD.txt
- sha256  0497ae8138811ef4466ede653bab7a59feb3d3c14f9ed50fc33a00aeb5bec32e  doc/licenses/elementtree.txt
-diff --git a/package/python-lxml/python-lxml.mk b/package/python-lxml/python-lxml.mk
-index a8874737e2..5aa2b86633 100644
---- a/package/python-lxml/python-lxml.mk
-+++ b/package/python-lxml/python-lxml.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/squid/squid.hash b/package/squid/squid.hash
+index b7e051960e..a2aaba5fd5 100644
+--- a/package/squid/squid.hash
++++ b/package/squid/squid.hash
+@@ -1,6 +1,6 @@
+-# From http://www.squid-cache.org/Versions/v4/squid-4.13.tar.xz.asc
+-md5  492e54afc15821141ff1d1d9903854d6  squid-4.13.tar.xz
+-sha1  cac95c18789e9ecd6620c2f278fc3900498c065b  squid-4.13.tar.xz
++# From http://www.squid-cache.org/Versions/v4/squid-4.14.tar.xz.asc
++md5  7d9ba82703cd770b2ede169a0c1de94a  squid-4.14.tar.xz
++sha1  71ae13a845a6a7ffc69ce11086ea3e427625bc08  squid-4.14.tar.xz
+ # Locally calculated
+-sha256  6891a0f540e60779b4f24f1802a302f813c6f473ec7336a474ed68c3e2e53ee0  squid-4.13.tar.xz
++sha256  f1097daa6434897c159bc100978b51347c0339041610845d0afa128151729ffc  squid-4.14.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index 1ba375e547..83dab24915 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_LXML_VERSION = 4.6.2
--PYTHON_LXML_SITE = https://files.pythonhosted.org/packages/db/f7/43fecb94d66959c1e23aa53d6161231dca0e93ec500224cf31b3c4073e37
-+PYTHON_LXML_VERSION = 4.6.3
-+PYTHON_LXML_SITE = https://files.pythonhosted.org/packages/e5/21/a2e4517e3d216f0051687eea3d3317557bde68736f038a3b105ac3809247
- PYTHON_LXML_SOURCE = lxml-$(PYTHON_LXML_VERSION).tar.gz
- 
- # Not including the GPL, because it is used only for the test scripts.
+-SQUID_VERSION = 4.13
++SQUID_VERSION = 4.14
+ SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
+ SQUID_SITE = http://www.squid-cache.org/Versions/v4
+ SQUID_LICENSE = GPL-2.0+
