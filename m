@@ -1,9 +1,8 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  3 Apr 2021 09:50:46 +0200
-Subject: [Buildroot] [PATCH 5/6] package/perl-net-dns: bump version to 1.30
-In-Reply-To: <20210403075047.598935-1-bernd.kuhls@t-online.de>
-References: <20210403075047.598935-1-bernd.kuhls@t-online.de>
-Message-ID: <20210403075047.598935-5-bernd.kuhls@t-online.de>
+Date: Sat,  3 Apr 2021 09:56:04 +0200
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xkeyboard-config: bump
+ version to 2.32
+Message-ID: <20210403075604.610201-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,35 +11,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/perl-net-dns/perl-net-dns.hash | 4 ++--
- package/perl-net-dns/perl-net-dns.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/x11r7/xkeyboard-config/xkeyboard-config.hash | 2 +-
+ package/x11r7/xkeyboard-config/xkeyboard-config.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/perl-net-dns/perl-net-dns.hash b/package/perl-net-dns/perl-net-dns.hash
-index da09e91b02..6eb9e2e096 100644
---- a/package/perl-net-dns/perl-net-dns.hash
-+++ b/package/perl-net-dns/perl-net-dns.hash
-@@ -1,6 +1,6 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5  2c9120830a68f18deb43a95826ea6372  Net-DNS-1.29.tar.gz
--sha256  852d6ee87e8f0d014223026581cbb56924ba8cddd3ceb29c6191dbb6122d43c5  Net-DNS-1.29.tar.gz
-+md5  2d0751f5f1a92e4cc95835cd4b9a1d8e  Net-DNS-1.30.tar.gz
-+sha256  055e70b67255615724d91ec41788f75af317561c519971f6e6e384273b30a5da  Net-DNS-1.30.tar.gz
- 
- # computed by scancpan
- sha256  e4f3224d86bd79ac3d11ea513fcb83c68c20701346653699225331e2b7a2d447  README
-diff --git a/package/perl-net-dns/perl-net-dns.mk b/package/perl-net-dns/perl-net-dns.mk
-index f5e8328a1e..fc24499239 100644
---- a/package/perl-net-dns/perl-net-dns.mk
-+++ b/package/perl-net-dns/perl-net-dns.mk
+diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.hash b/package/x11r7/xkeyboard-config/xkeyboard-config.hash
+index 3cbd191181..fe80291557 100644
+--- a/package/x11r7/xkeyboard-config/xkeyboard-config.hash
++++ b/package/x11r7/xkeyboard-config/xkeyboard-config.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  da44181f2c8828789c720decf7d13acb3c3950e2a040af5132f50f04bb6aada3  xkeyboard-config-2.31.tar.bz2
++sha256  1feee317ba39b91902b0cbd2987c0c73e6afbfc8f4c096367a5c86c216c036a8  xkeyboard-config-2.32.tar.bz2
+ sha256  6ca90f4b67dced4062894d6d77f4cc39343df9e359fc12f5e5d3c89ef2a3ef6d  COPYING
+diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.mk b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
+index f192836d1a..0fd681b59a 100644
+--- a/package/x11r7/xkeyboard-config/xkeyboard-config.mk
++++ b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_NET_DNS_VERSION = 1.29
-+PERL_NET_DNS_VERSION = 1.30
- PERL_NET_DNS_SOURCE = Net-DNS-$(PERL_NET_DNS_VERSION).tar.gz
- PERL_NET_DNS_SITE = $(BR2_CPAN_MIRROR)/authors/id/N/NL/NLNETLABS
- PERL_NET_DNS_LICENSE = MIT
+-XKEYBOARD_CONFIG_VERSION = 2.31
++XKEYBOARD_CONFIG_VERSION = 2.32
+ XKEYBOARD_CONFIG_SOURCE = xkeyboard-config-$(XKEYBOARD_CONFIG_VERSION).tar.bz2
+ XKEYBOARD_CONFIG_SITE = https://www.x.org/releases/individual/data/xkeyboard-config
+ XKEYBOARD_CONFIG_LICENSE = MIT
 -- 
 2.29.2
