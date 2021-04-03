@@ -1,83 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 2 Apr 2021 18:01:06 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] perl-parse-yapp: new
- package
-Message-ID: <20210403072612.24AEC803D0@busybox.osuosl.org>
+Date: Sat, 3 Apr 2021 09:32:31 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/samba4: update
+ samba4-cache.txt for fcntl flags check
+Message-ID: <20210403072612.4AFB580298@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3408039c4b6d8ef80ae11d9377cfa0053fa193c2
+commit: https://git.buildroot.net/buildroot/commit/?id=8eb0063dc78250e733f98bc7540fdd3ea49882fc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Host version is needed for samba 4.14.x.
+Fixes:
+http://autobuild.buildroot.net/results/a5d/a5db81fca8ec07159b69b108b742f3d060e3316a/
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Checking whether fcntl supports flags to send direct I/O availability signals                   : not found
+..
+Cross answers file /srv/storage/autobuild/run/instance-3/output-1/build/samba4-4.14.2/cache.txt is incomplete
+
+Samba4 has added a check for fcntl F_{G,S}ETOWN_EX handling since:
+https://gitlab.com/samba-team/devel/samba/-/commit/5084a69de14f24e9d804998580eefcba773fdd5a
+
+Which is supported by the Linux kernel since 2.6.32 in commit
+ba0a6c9f6fceed11 (fcntl: add F_[SG]ETOWN_EX), so add it to the cache file.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 038013efd2c65ef766e64d914586d48a38129d0c)
+(cherry picked from commit c86434d720fdf1c42834162331c008e05c710d65)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Config.in                            |  1 +
- package/perl-parse-yapp/Config.in            |  6 ++++++
- package/perl-parse-yapp/perl-parse-yapp.hash |  3 +++
- package/perl-parse-yapp/perl-parse-yapp.mk   | 17 +++++++++++++++++
- 4 files changed, 27 insertions(+)
+ package/samba4/samba4-cache.txt | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/Config.in b/package/Config.in
-index 5304ab141c..e420f02b37 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -818,6 +818,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-number-bytes-human/Config.in"
- 	source "package/perl-package-stash/Config.in"
- 	source "package/perl-params-util/Config.in"
-+	source "package/perl-parse-yapp/Config.in"
- 	source "package/perl-path-tiny/Config.in"
- 	source "package/perl-plack/Config.in"
- 	source "package/perl-posix-strftime-compiler/Config.in"
-diff --git a/package/perl-parse-yapp/Config.in b/package/perl-parse-yapp/Config.in
-new file mode 100644
-index 0000000000..5cde3d9211
---- /dev/null
-+++ b/package/perl-parse-yapp/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PERL_PARSE_YAPP
-+	bool "perl-parse-yapp"
-+	help
-+	  A perl frontend to the Parse::Yapp module
-+
-+	  https://metacpan.org/release/Parse-Yapp
-diff --git a/package/perl-parse-yapp/perl-parse-yapp.hash b/package/perl-parse-yapp/perl-parse-yapp.hash
-new file mode 100644
-index 0000000000..d5880a2a71
---- /dev/null
-+++ b/package/perl-parse-yapp/perl-parse-yapp.hash
-@@ -0,0 +1,3 @@
-+# locally computed
-+sha256  3810e998308fba2e0f4f26043035032b027ce51ce5c8a52a8b8e340ca65f13e5  Parse-Yapp-1.21.tar.gz
-+sha256  a5d97e3ee50ba12b7897841a117790f723795e4a61e5ad1668dc064956c84e96  lib/Parse/Yapp.pm
-diff --git a/package/perl-parse-yapp/perl-parse-yapp.mk b/package/perl-parse-yapp/perl-parse-yapp.mk
-new file mode 100644
-index 0000000000..94f51243fd
---- /dev/null
-+++ b/package/perl-parse-yapp/perl-parse-yapp.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# perl-parse-yapp
-+#
-+################################################################################
-+
-+PERL_PARSE_YAPP_VERSION = 1.21
-+PERL_PARSE_YAPP_SOURCE = Parse-Yapp-$(PERL_PARSE_YAPP_VERSION).tar.gz
-+PERL_PARSE_YAPP_SITE = $(BR2_CPAN_MIRROR)/authors/id/W/WB/WBRASWELL
-+PERL_PARSE_YAPP_DEPENDENCIES = host-perl-module-build
-+PERL_PARSE_YAPP_LICENSE = Artistic or GPL-1.0+
-+PERL_PARSE_YAPP_LICENSE_FILES = lib/Parse/Yapp.pm
-+PERL_PARSE_YAPP_DISTNAME = Parse-Yapp
-+HOST_PERL_PARSE_YAPP_DEPENDENCIES = host-perl-module-build
-+
-+$(eval $(perl-package))
-+$(eval $(host-perl-package))
+diff --git a/package/samba4/samba4-cache.txt b/package/samba4/samba4-cache.txt
+index bd7c3654b4..75d0343dc9 100644
+--- a/package/samba4/samba4-cache.txt
++++ b/package/samba4/samba4-cache.txt
+@@ -42,3 +42,4 @@ checking for clnt_create(): OK
+ Checking for a 64-bit host to support lmdb: NO
+ Checking value of GNUTLS_CIPHER_AES_128_CFB8: 29
+ Checking value of GNUTLS_MAC_AES_CMAC_128: 203
++Checking whether fcntl supports flags to send direct I/O availability signals: OK
