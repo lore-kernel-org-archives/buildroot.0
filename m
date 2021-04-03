@@ -1,50 +1,73 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 3 Apr 2021 15:53:28 +0200
-Subject: [Buildroot] [git commit] package/perl-crypt-openssl-guess: bump
- version to 0.12
-Message-ID: <20210403132816.EE15F8A2E5@busybox.osuosl.org>
+Date: Sat, 3 Apr 2021 15:53:29 +0200
+Subject: [Buildroot] [git commit] perl-html-parser: bump version to 3.76
+Message-ID: <20210403132817.0A895890EA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=012c08f7139f04150168a60dff2582a6b963b3a0
+commit: https://git.buildroot.net/buildroot/commit/?id=dfce8c7b7e0afdbd7d40fc92f4b1d737e865ab8a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Reformatted hashes.
+Added by scancpan:
+- runtime dependencies
+- new project URL
+- new SITE
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.hash | 6 +++---
- package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/perl-html-parser/Config.in             | 4 +++-
+ package/perl-html-parser/perl-html-parser.hash | 4 ++--
+ package/perl-html-parser/perl-html-parser.mk   | 4 ++--
+ 3 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.hash b/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.hash
-index 327b06900a..e6d19cb681 100644
---- a/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.hash
-+++ b/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.hash
+diff --git a/package/perl-html-parser/Config.in b/package/perl-html-parser/Config.in
+index 10cd95e484..191d1b3b76 100644
+--- a/package/perl-html-parser/Config.in
++++ b/package/perl-html-parser/Config.in
+@@ -2,10 +2,12 @@ config BR2_PACKAGE_PERL_HTML_PARSER
+ 	bool "perl-html-parser"
+ 	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_PERL_HTML_TAGSET # runtime
++	select BR2_PACKAGE_PERL_HTTP_MESSAGE # runtime
++	select BR2_PACKAGE_PERL_URI # runtime
+ 	help
+ 	  HTML parser class.
+ 
+-	  https://metacpan.org/release/HTML-Parser
++	  https://github.com/libwww-perl/HTML-Parser
+ 
+ comment "perl-html-parser needs a toolchain w/ dynamic library"
+ 	depends on BR2_STATIC_LIBS
+diff --git a/package/perl-html-parser/perl-html-parser.hash b/package/perl-html-parser/perl-html-parser.hash
+index 021ef26c65..36b094a7cb 100644
+--- a/package/perl-html-parser/perl-html-parser.hash
++++ b/package/perl-html-parser/perl-html-parser.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    e768fe2c07826b0ac9ea604c79f93032 Crypt-OpenSSL-Guess-0.11.tar.gz
--sha256 aa6b18e38cb852cbad80a58cd90c395b40819d4d01e0ab37e7703149094d7167 Crypt-OpenSSL-Guess-0.11.tar.gz
-+md5  9e86baf96828a38c967003a5e66f0c39  Crypt-OpenSSL-Guess-0.12.tar.gz
-+sha256  0a18d18768cf42b49b15c9dea626199dc74346bbbc76acd3d817b9c1d2bd471d  Crypt-OpenSSL-Guess-0.12.tar.gz
+-md5  65bf65aa8b34b35443e094010f991406  HTML-Parser-3.75.tar.gz
+-sha256  ac6b5e25a8df7af54885201e91c45fb9ab6744c08cedc1a38fcc7d95d21193a9  HTML-Parser-3.75.tar.gz
++md5  60e266d5a07fbea671a0383dd8af7b6c  HTML-Parser-3.76.tar.gz
++sha256  64d9e2eb2b420f1492da01ec0e6976363245b4be9290f03f10b7d2cb63fa2f61  HTML-Parser-3.76.tar.gz
  
  # computed by scancpan
--sha256 5c739f181ce7aa31d739277996ff230067dad39332e5597c0dffd36e5d784072 LICENSE
-+sha256  5c739f181ce7aa31d739277996ff230067dad39332e5597c0dffd36e5d784072  LICENSE
-diff --git a/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.mk b/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.mk
-index a53285165b..4f0898cf53 100644
---- a/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.mk
-+++ b/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.mk
-@@ -4,7 +4,7 @@
+ sha256  0e57338bc10d5fb8891012ebee65a7b504b247f5bb485e121b8b48d7a118a60b  LICENSE
+diff --git a/package/perl-html-parser/perl-html-parser.mk b/package/perl-html-parser/perl-html-parser.mk
+index 93e4f6745b..097564dbcb 100644
+--- a/package/perl-html-parser/perl-html-parser.mk
++++ b/package/perl-html-parser/perl-html-parser.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PERL_CRYPT_OPENSSL_GUESS_VERSION = 0.11
-+PERL_CRYPT_OPENSSL_GUESS_VERSION = 0.12
- PERL_CRYPT_OPENSSL_GUESS_SOURCE = Crypt-OpenSSL-Guess-$(PERL_CRYPT_OPENSSL_GUESS_VERSION).tar.gz
- PERL_CRYPT_OPENSSL_GUESS_SITE = $(BR2_CPAN_MIRROR)/authors/id/A/AK/AKIYM
- PERL_CRYPT_OPENSSL_GUESS_LICENSE = Artistic or GPL-1.0+
+-PERL_HTML_PARSER_VERSION = 3.75
++PERL_HTML_PARSER_VERSION = 3.76
+ PERL_HTML_PARSER_SOURCE = HTML-Parser-$(PERL_HTML_PARSER_VERSION).tar.gz
+-PERL_HTML_PARSER_SITE = $(BR2_CPAN_MIRROR)/authors/id/C/CA/CAPOEIRAB
++PERL_HTML_PARSER_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
+ PERL_HTML_PARSER_LICENSE = Artistic or GPL-1.0+
+ PERL_HTML_PARSER_LICENSE_FILES = LICENSE
+ PERL_HTML_PARSER_DISTNAME = HTML-Parser
