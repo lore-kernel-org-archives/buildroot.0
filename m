@@ -1,41 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Apr 2021 12:33:54 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/fastd: add
- FASTD_CPE_ID_VERSION
-Message-ID: <20210403100914.CEBF08B564@busybox.osuosl.org>
+Date: Sat, 3 Apr 2021 12:33:03 +0200
+Subject: [Buildroot] [git commit branch/2020.11.x] package/libqmi: switch to
+ the new option to disable -Werror
+Message-ID: <20210403100921.3F1C78A3C6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ed9993c307d8ae973620e339479f7f77141b2de8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=551f729dad4e8aa7e5afab87a88e861a28761202
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-With that FASTD_CPE_ID expands to:
+--enable-more-warnings has been dropped since version 1.26.0 and
+https://github.com/freedesktop/libqmi/commit/9f31a45d5fc137431705d47b83669f35259932b4
 
-    cpe:2.3:a:fastd_project:fastd:21.0:*:*:*:*:*:*:*
+Instead, a new --disable-Werror option has been added, through the use
+of AX_COMPILER_FLAGS, so use that to explicitly request wrnings not be
+treated as errors.
 
-That's the same as listed on
-https://nvd.nist.gov/products/cpe/detail/826746
-
-Signed-off-by: Alexander Dahl <post@lespocky.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit ebe599de08ec4aa521d9eeb0d6eb452c1285774f)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[yann.morin.1998 at free.fr: use --disable-Werror instead of nothing]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 0de1a23c7521d9fdfa20aff9d6608f7986a636ff)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/fastd/fastd.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/libqmi/libqmi.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/fastd/fastd.mk b/package/fastd/fastd.mk
-index bbec63d963..c1db1cc472 100644
---- a/package/fastd/fastd.mk
-+++ b/package/fastd/fastd.mk
-@@ -9,6 +9,7 @@ FASTD_SITE = https://github.com/NeoRaider/fastd/releases/download/v$(FASTD_VERSI
- FASTD_SOURCE = fastd-$(FASTD_VERSION).tar.xz
- FASTD_LICENSE = BSD-2-Clause
- FASTD_LICENSE_FILES = COPYRIGHT
-+FASTD_CPE_ID_VERSION = $(FASTD_VERSION).0
- FASTD_DEPENDENCIES = host-bison host-pkgconf libuecc libsodium
+diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
+index 6b5ccfcdea..5bd2aa1ed4 100644
+--- a/package/libqmi/libqmi.mk
++++ b/package/libqmi/libqmi.mk
+@@ -13,8 +13,7 @@ LIBQMI_INSTALL_STAGING = YES
  
- ifeq ($(BR2_PACKAGE_LIBCAP),y)
+ LIBQMI_DEPENDENCIES = libglib2
+ 
+-# we don't want -Werror
+-LIBQMI_CONF_OPTS = --enable-more-warnings=no
++LIBQMI_CONF_OPTS = --disable-Werror
+ 
+ # if libgudev available, request udev support for a better
+ # qmi-firmware-update experience
