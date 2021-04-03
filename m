@@ -1,54 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Apr 2021 12:19:21 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/sqlcipher:
- security bump to version 4.4.3
-Message-ID: <20210403095655.675D58B564@busybox.osuosl.org>
+Date: Sat, 03 Apr 2021 12:33:24 +0200
+Subject: [Buildroot] [PATCH 1/2] package/libqmi: drop unrecognized option
+In-Reply-To: <20210329211957.321612-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 29 Mar 2021 23:19:56 +0200")
+References: <20210329211957.321612-1-fontaine.fabrice@gmail.com>
+Message-ID: <87tuon64jv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ea4b88bb305c92b5c6122346a51b53750dc67a11
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Fix CVE-2021-3119: Zetetic SQLCipher 4.x before 4.4.3 has a NULL pointer
-dereferencing issue related to sqlcipher_export in crypto.c and
-sqlite3StrICmp in sqlite3.c. This may allow an attacker to perform a
-remote denial of service attack. For example, an SQL injection can be
-used to execute the crafted SQL command sequence, which causes a
-segmentation fault.
+ > --enable-more-warnings has been dropped since version 1.26.0 and
+ > https://github.com/freedesktop/libqmi/commit/9f31a45d5fc137431705d47b83669f35259932b4
 
-https://github.com/sqlcipher/sqlcipher/blob/v4.4.3/CHANGELOG.md
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 6f0a81de6b67aeec9711d899656afe78f016aecc)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/sqlcipher/sqlcipher.hash | 2 +-
- package/sqlcipher/sqlcipher.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Committed to 2020.11.x and 2021.02.x, thanks.
 
-diff --git a/package/sqlcipher/sqlcipher.hash b/package/sqlcipher/sqlcipher.hash
-index 96a6a74013..ddc78ef7d6 100644
---- a/package/sqlcipher/sqlcipher.hash
-+++ b/package/sqlcipher/sqlcipher.hash
-@@ -1,3 +1,3 @@
- # locally computed
--sha256  87458e0e16594b3ba6c7a1f046bc1ba783d002d35e0e7b61bb6b7bb862f362a7  sqlcipher-4.4.2.tar.gz
-+sha256  b8df69b998c042ce7f8a99f07cf11f45dfebe51110ef92de95f1728358853133  sqlcipher-4.4.3.tar.gz
- sha256  3eee3c7964a9becc94d747bd36703d31fc86eb994680b06a61bfd4f2661eaac8  LICENSE
-diff --git a/package/sqlcipher/sqlcipher.mk b/package/sqlcipher/sqlcipher.mk
-index 393d50b201..776e2d0dcf 100644
---- a/package/sqlcipher/sqlcipher.mk
-+++ b/package/sqlcipher/sqlcipher.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SQLCIPHER_VERSION = 4.4.2
-+SQLCIPHER_VERSION = 4.4.3
- SQLCIPHER_SITE = $(call github,sqlcipher,sqlcipher,v$(SQLCIPHER_VERSION))
- SQLCIPHER_LICENSE = BSD-3-Clause
- SQLCIPHER_LICENSE_FILES = LICENSE
+-- 
+Bye, Peter Korsgaard
