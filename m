@@ -1,28 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 03 Apr 2021 18:06:41 +0200
-Subject: [Buildroot] [PATCH 2/4] package/mender/mender.mk: fix linker
- version argument
-In-Reply-To: <20210320222835.3951325-3-aduskett@gmail.com> (aduskett's message
- of "Sat, 20 Mar 2021 15:28:33 -0700")
-References: <20210320222835.3951325-1-aduskett@gmail.com>
- <20210320222835.3951325-3-aduskett@gmail.com>
-Message-ID: <87zgyf2vzi.fsf@dell.be.48ers.dk>
+Date: Sat, 3 Apr 2021 18:04:58 +0200
+Subject: [Buildroot] [git commit branch/2020.11.x] package/mender/mender.mk:
+ fix linker version argument
+Message-ID: <20210403154203.2F666815F4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "aduskett" == aduskett  <aduskett@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=babb35f5f7d75fd35cacd2fe882ca04ae1356fc9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
- > From: Adam Duskett <Aduskett@rivian.com>
- > The current linker flag "-X main.Version=$(MENDER_VERSION)" no longer points
- > to the correct location, which results in "version: unknown" when runnning
- > "mender -version." Update the linker flag to point to the correct location.
+The current linker flag "-X main.Version=$(MENDER_VERSION)" no longer points
+to the correct location, which results in "version: unknown" when runnning
+"mender -version." Update the linker flag to point to the correct location.
 
- > Signed-off-by: Adam Duskett <Aduskett@rivian.com>
+Signed-off-by: Adam Duskett <Aduskett@rivian.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit b5f7fa88381e3a4aa0e6c1e567dd5f164de176ba)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mender/mender.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Committed to 2020.11.x and 2021.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/mender/mender.mk b/package/mender/mender.mk
+index 1807ccfee0..0224e84a47 100644
+--- a/package/mender/mender.mk
++++ b/package/mender/mender.mk
+@@ -35,7 +35,7 @@ MENDER_LICENSE_FILES = \
+ 
+ MENDER_DEPENDENCIES = xz
+ 
+-MENDER_LDFLAGS = -X main.Version=$(MENDER_VERSION)
++MENDER_LDFLAGS = -X github.com/mendersoftware/mender/conf.Version=$(MENDER_VERSION)
+ 
+ MENDER_UPDATE_MODULES_FILES = \
+ 	directory \
