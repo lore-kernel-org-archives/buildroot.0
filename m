@@ -1,26 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 03 Apr 2021 11:12:03 +0200
-Subject: [Buildroot] [PATCH] board/beaglebone: remove
- genimage_linux41.cfg
-In-Reply-To: <20210322152925.3218412-1-buildroot@heine.tech> (Michael Nosthoff
- via buildroot's message of "Mon, 22 Mar 2021 16:29:17 +0100")
-References: <20210322152925.3218412-1-buildroot@heine.tech>
-Message-ID: <87y2dz7mvw.fsf@dell.be.48ers.dk>
+Date: Sat, 03 Apr 2021 11:14:57 +0200
+Subject: [Buildroot] [PATCH 1/1] package/wireshark: security bump to
+ version 3.4.4
+In-Reply-To: <20210329195407.251619-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 29 Mar 2021 21:54:07 +0200")
+References: <20210329195407.251619-1-fontaine.fabrice@gmail.com>
+Message-ID: <87tuon7mr2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Michael" == Michael Nosthoff via buildroot <buildroot@busybox.net> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Commit 5502a889dd9f065ec4694a993cfa509377da2cce
- > ("configs/beaglebone_qt5: don't use custom post-image script") removed the use
- > of genimage_linux41.cfg but didn't remove the file.
+ > Fix CVE-2021-22191: Improper URL handling in Wireshark 3.4.0 to 3.4.3
+ > and 3.2.0 to 3.2.11 could allow remote code execution via via packet
+ > injection or crafted capture file.
 
- > Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+ > https://www.wireshark.org/security/wnpa-sec-2021-03.html
 
-Committed to 2020.02.x, 2020.11.x and 2021.02.x, thanks.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed to 2020.11.x and 2021.02.x, thanks. For 2020.02.x I will
+instead bump to 3.2.12.
 
 -- 
 Bye, Peter Korsgaard
