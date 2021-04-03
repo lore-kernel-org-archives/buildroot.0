@@ -1,51 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Apr 2021 13:54:10 +0200
+Date: Sat, 3 Apr 2021 18:04:27 +0200
 Subject: [Buildroot] [git commit branch/2021.02.x] package/mender/mender.mk:
- use MENDER_PKGDIR variable
-Message-ID: <20210403154209.CDFC786AA7@busybox.osuosl.org>
+ fix linker version argument
+Message-ID: <20210403154209.D85588A30D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d3f15dd9338504f9c3e253108a057e79e966cec7
+commit: https://git.buildroot.net/buildroot/commit/?id=9262d6a01cb81df8068662cbfaeae5e277e0a450
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Currently there is a mix of calls to package/mender and $(MENDER_PKGDIR) in the
-mender.mk file. Standardize the calls to only $(MENDER_PKGDIR).
+The current linker flag "-X main.Version=$(MENDER_VERSION)" no longer points
+to the correct location, which results in "version: unknown" when runnning
+"mender -version." Update the linker flag to point to the correct location.
 
 Signed-off-by: Adam Duskett <Aduskett@rivian.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit e6c2e3a86928c490e9977c23f6ed781a186176d0)
+(cherry picked from commit b5f7fa88381e3a4aa0e6c1e567dd5f164de176ba)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mender/mender.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/mender/mender.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/mender/mender.mk b/package/mender/mender.mk
-index ca24b853b5..1807ccfee0 100644
+index 1807ccfee0..0224e84a47 100644
 --- a/package/mender/mender.mk
 +++ b/package/mender/mender.mk
-@@ -60,10 +60,10 @@ define MENDER_INSTALL_CONFIG_FILES
- 			$(TARGET_DIR)/usr/share/mender/inventory/mender-inventory-$(f)
- 	)
+@@ -35,7 +35,7 @@ MENDER_LICENSE_FILES = \
  
--	$(INSTALL) -D -m 0755 package/mender/artifact_info \
-+	$(INSTALL) -D -m 0755 $(MENDER_PKGDIR)/artifact_info \
- 			$(TARGET_DIR)/etc/mender/artifact_info
+ MENDER_DEPENDENCIES = xz
  
--	$(INSTALL) -D -m 0755 package/mender/device_type \
-+	$(INSTALL) -D -m 0755 $(MENDER_PKGDIR)/device_type \
- 			$(TARGET_DIR)/etc/mender/device_type
+-MENDER_LDFLAGS = -X main.Version=$(MENDER_VERSION)
++MENDER_LDFLAGS = -X github.com/mendersoftware/mender/conf.Version=$(MENDER_VERSION)
  
- 	mkdir -p $(TARGET_DIR)/var/lib
-@@ -82,7 +82,7 @@ define MENDER_INSTALL_INIT_SYSTEMD
- endef
- 
- define MENDER_INSTALL_INIT_SYSV
--	$(INSTALL) -D -m 755 package/mender/S42mender \
-+	$(INSTALL) -D -m 755 $(MENDER_PKGDIR)/S42mender \
- 		$(TARGET_DIR)/etc/init.d/S42mender
- endef
- 
+ MENDER_UPDATE_MODULES_FILES = \
+ 	directory \
