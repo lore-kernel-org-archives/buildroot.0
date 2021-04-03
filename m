@@ -1,41 +1,58 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Apr 2021 13:42:20 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/wpa_supplicant:
- annotate CVE-2021-27803
-Message-ID: <20210403112726.CCF27882A2@busybox.osuosl.org>
+Date: Sat, 3 Apr 2021 13:44:06 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/wpebackend-fdo:
+ bump to version 1.8.3
+Message-ID: <20210403112726.D9B5183A06@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=968f2e90d0c17aa75d281e1dc640a25b1b490f83
+commit: https://git.buildroot.net/buildroot/commit/?id=5998ddd51e1544ce4be316ab777ac6308207333d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Add a WPA_SUPPLICANT_IGNORE_CVES entry for CVE-2021-27803 which was
-fixed by commit 9ada4eb2f1c3d67ee49f6f5466738bcd821fc647, which we
-have backported as
-0001-P2P-Fix-a-corner-case-in-peer-addition-based-on-PD-R.patch.
+This minor release fixes an issue which would cause applications using
+wpewebkit and webkitgtk freeze under certain conditions during normal
+browsing. Release notes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 1a7cf592a834357c5777e452f0b7ab7652e7d389)
+  https://wpewebkit.org/release/wpebackend-fdo-1.8.3.html
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit b2e85cf0c09a5c69301341948edf6ed9371d9d8f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wpa_supplicant/wpa_supplicant.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/wpebackend-fdo/wpebackend-fdo.hash | 8 ++++----
+ package/wpebackend-fdo/wpebackend-fdo.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-index 284ea06096..46def443e6 100644
---- a/package/wpa_supplicant/wpa_supplicant.mk
-+++ b/package/wpa_supplicant/wpa_supplicant.mk
-@@ -23,6 +23,9 @@ WPA_SUPPLICANT_SELINUX_MODULES = networkmanager
- # 0001-AP-Silently-ignore-management-frame-from-unexpected-.patch
- WPA_SUPPLICANT_IGNORE_CVES += CVE-2019-16275
+diff --git a/package/wpebackend-fdo/wpebackend-fdo.hash b/package/wpebackend-fdo/wpebackend-fdo.hash
+index 89d58051c7..27e827ae2e 100644
+--- a/package/wpebackend-fdo/wpebackend-fdo.hash
++++ b/package/wpebackend-fdo/wpebackend-fdo.hash
+@@ -1,7 +1,7 @@
+-# From https://wpewebkit.org/releases/wpebackend-fdo-1.8.2.tar.xz.sums
+-md5  93ca185b5c0f539abbf7ab32cfdc96b2  wpebackend-fdo-1.8.2.tar.xz
+-sha1  715a1a1e0cfd85898a1f686ec4c5b79a1e8cfb9c  wpebackend-fdo-1.8.2.tar.xz
+-sha256  98c291071128326a72918d670a46ef63268c43267928560ac3b84b6aebb2d78d  wpebackend-fdo-1.8.2.tar.xz
++# From https://wpewebkit.org/releases/wpebackend-fdo-1.8.3.tar.xz.sums
++md5  980cbda207bf8f6263799c5062425737  wpebackend-fdo-1.8.3.tar.xz
++sha1  c849043039d805448715be90cb5b3491f0a90c5f  wpebackend-fdo-1.8.3.tar.xz
++sha256  3d0b4282a1bd9e0664d7a20abe14e982f3285296ac62de56cae2a404b9d28b9e  wpebackend-fdo-1.8.3.tar.xz
  
-+# 0001-P2P-Fix-a-corner-case-in-peer-addition-based-on-PD-R.patch
-+WPA_SUPPLICANT_IGNORE_CVES += CVE-2021-27803
-+
- # install the wpa_client library
- WPA_SUPPLICANT_INSTALL_STAGING = YES
+ # Hashes for license files:
+ sha256  c9f6803371047fad3e72200ec6cd226329a5ee08ac61104c8211c2761fb46825  COPYING
+diff --git a/package/wpebackend-fdo/wpebackend-fdo.mk b/package/wpebackend-fdo/wpebackend-fdo.mk
+index 193b4cf7ed..5f7e7acf30 100644
+--- a/package/wpebackend-fdo/wpebackend-fdo.mk
++++ b/package/wpebackend-fdo/wpebackend-fdo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
+-WPEBACKEND_FDO_VERSION = 1.8.2
++WPEBACKEND_FDO_VERSION = 1.8.3
+ WPEBACKEND_FDO_SITE = https://wpewebkit.org/releases
+ WPEBACKEND_FDO_SOURCE = wpebackend-fdo-$(WPEBACKEND_FDO_VERSION).tar.xz
+ WPEBACKEND_FDO_INSTALL_STAGING = YES
