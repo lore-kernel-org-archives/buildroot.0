@@ -1,24 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 03 Apr 2021 13:34:40 +0200
-Subject: [Buildroot] [PATCH] package/pkg-kconfig: fix error string
-In-Reply-To: <20210329224154.3716438-1-giulio.benetti@benettiengineering.com>
- (Giulio Benetti's message of "Tue, 30 Mar 2021 00:41:54 +0200")
-References: <20210329224154.3716438-1-giulio.benetti@benettiengineering.com>
-Message-ID: <87czvb61pr.fsf@dell.be.48ers.dk>
+Date: Sat, 3 Apr 2021 13:34:28 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/pkg-kconfig: fix
+ error string
+Message-ID: <20210403110947.760AE8B635@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=40ff1272dd86f6ceea9c7d3f415763c2b28df6bc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
- > Current error string speaks only about "fragment" but here we also deal
- > with Kconfig files, so let's add "file or fragment" instead of "fragment".
+Current error string speaks only about "fragment" but here we also deal
+with Kconfig files, so let's add "file or fragment" instead of "fragment".
 
- > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit a7348f0f7de1021ea578cd81784e70b1832adb79)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/pkg-kconfig.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Committed to 2020.02.x, 2020.11.x and 2021.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+index 2aecf2e203..dd727b7200 100644
+--- a/package/pkg-kconfig.mk
++++ b/package/pkg-kconfig.mk
+@@ -117,7 +117,7 @@ $(2)_KCONFIG_STAMP_DOTCONFIG = .stamp_dotconfig
+ $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES): | $(1)-patch
+ 	for f in $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES); do \
+ 		if [ ! -f "$$$${f}" ]; then \
+-			printf "Kconfig fragment '%s' for '%s' does not exist\n" "$$$${f}" "$(1)"; \
++			printf "Kconfig file or fragment '%s' for '%s' does not exist\n" "$$$${f}" "$(1)"; \
+ 			exit 1; \
+ 		fi; \
+ 	done
