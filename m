@@ -1,48 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 3 Apr 2021 15:49:55 +0200
-Subject: [Buildroot] [git commit] package/libebur128: bump version to 1.2.6
-Message-ID: <20210403132549.B9E918B690@busybox.osuosl.org>
+Date: Sat, 3 Apr 2021 15:49:58 +0200
+Subject: [Buildroot] [git commit] package/libvpx: bump version to 1.10.0
+Message-ID: <20210403132549.D5CC28A3C6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cfd57a8a9827aa56982c98f02e9af6e0de7fcb04
+commit: https://git.buildroot.net/buildroot/commit/?id=d5652c4d4ed25f50d43248e33702d7d48586f46e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Reformatted hashes.
-
 Release notes:
-https://github.com/jiixyj/libebur128/blob/master/README.md
+https://chromium.googlesource.com/webm/libvpx/+/refs/tags/v1.10.0
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libebur128/libebur128.hash | 4 ++--
- package/libebur128/libebur128.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libvpx/libvpx.hash | 2 +-
+ package/libvpx/libvpx.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libebur128/libebur128.hash b/package/libebur128/libebur128.hash
-index e2285bc7cf..9c8c9e0c31 100644
---- a/package/libebur128/libebur128.hash
-+++ b/package/libebur128/libebur128.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 2ee41a3a5ae3891601ae975d5ec2642b997d276ef647cf5c5b363b6127f7add8  libebur128-1.2.4.tar.gz
--sha256 d6b4754bb67bdd08b97d5d11b2d7434997a371585a78fe77007149df3af8d09c  COPYING
-+sha256  baa7fc293a3d4651e244d8022ad03ab797ca3c2ad8442c43199afe8059faa613  libebur128-1.2.6.tar.gz
-+sha256  d6b4754bb67bdd08b97d5d11b2d7434997a371585a78fe77007149df3af8d09c  COPYING
-diff --git a/package/libebur128/libebur128.mk b/package/libebur128/libebur128.mk
-index 97c1bdbbd9..b7272fa7e1 100644
---- a/package/libebur128/libebur128.mk
-+++ b/package/libebur128/libebur128.mk
+diff --git a/package/libvpx/libvpx.hash b/package/libvpx/libvpx.hash
+index 57ee7179ba..5b9568837c 100644
+--- a/package/libvpx/libvpx.hash
++++ b/package/libvpx/libvpx.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256  d279c10e4b9316bf11a570ba16c3d55791e1ad6faa4404c67422eb631782c80a  libvpx-1.9.0.tar.gz
++sha256  85803ccbdbdd7a3b03d930187cb055f1353596969c1f92ebec2db839fa4f834a  libvpx-1.10.0.tar.gz
+ sha256  8267348d5af1262c11d1a08de2f5afc77457755f1ac658627dd9acf71011d615  LICENSE
+ sha256  cc3273e0694ea5896145e0677699b53471b03ea43021ddc50e7923fbb9f5023c  PATENTS
+diff --git a/package/libvpx/libvpx.mk b/package/libvpx/libvpx.mk
+index 26d211cf86..d5d202a5da 100644
+--- a/package/libvpx/libvpx.mk
++++ b/package/libvpx/libvpx.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBEBUR128_VERSION = 1.2.4
-+LIBEBUR128_VERSION = 1.2.6
- LIBEBUR128_SITE = $(call github,jiixyj,libebur128,v$(LIBEBUR128_VERSION))
- LIBEBUR128_LICENSE = MIT
- LIBEBUR128_LICENSE_FILES = COPYING
+-LIBVPX_VERSION = 1.9.0
++LIBVPX_VERSION = 1.10.0
+ LIBVPX_SITE = $(call github,webmproject,libvpx,v$(LIBVPX_VERSION))
+ LIBVPX_LICENSE = BSD-3-Clause
+ LIBVPX_LICENSE_FILES = LICENSE PATENTS
