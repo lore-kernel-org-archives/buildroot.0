@@ -1,31 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 3 Apr 2021 15:53:05 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libvpx: bump version to 1.10.0
-In-Reply-To: <20210402171224.771383-1-bernd.kuhls@t-online.de>
-References: <20210402171224.771383-1-bernd.kuhls@t-online.de>
-Message-ID: <20210403155305.57788e0d@windsurf.home>
+Date: Sat, 3 Apr 2021 15:53:28 +0200
+Subject: [Buildroot] [git commit] package/perl-crypt-openssl-guess: bump
+ version to 0.12
+Message-ID: <20210403132816.EE15F8A2E5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri,  2 Apr 2021 19:12:24 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=012c08f7139f04150168a60dff2582a6b963b3a0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Release notes:
-> https://chromium.googlesource.com/webm/libvpx/+/refs/tags/v1.10.0
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/libvpx/libvpx.hash | 2 +-
->  package/libvpx/libvpx.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Reformatted hashes.
 
-Applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.hash | 6 +++---
+ package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.hash b/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.hash
+index 327b06900a..e6d19cb681 100644
+--- a/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.hash
++++ b/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.hash
+@@ -1,6 +1,6 @@
+ # retrieved by scancpan from http://cpan.metacpan.org/
+-md5    e768fe2c07826b0ac9ea604c79f93032 Crypt-OpenSSL-Guess-0.11.tar.gz
+-sha256 aa6b18e38cb852cbad80a58cd90c395b40819d4d01e0ab37e7703149094d7167 Crypt-OpenSSL-Guess-0.11.tar.gz
++md5  9e86baf96828a38c967003a5e66f0c39  Crypt-OpenSSL-Guess-0.12.tar.gz
++sha256  0a18d18768cf42b49b15c9dea626199dc74346bbbc76acd3d817b9c1d2bd471d  Crypt-OpenSSL-Guess-0.12.tar.gz
+ 
+ # computed by scancpan
+-sha256 5c739f181ce7aa31d739277996ff230067dad39332e5597c0dffd36e5d784072 LICENSE
++sha256  5c739f181ce7aa31d739277996ff230067dad39332e5597c0dffd36e5d784072  LICENSE
+diff --git a/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.mk b/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.mk
+index a53285165b..4f0898cf53 100644
+--- a/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.mk
++++ b/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PERL_CRYPT_OPENSSL_GUESS_VERSION = 0.11
++PERL_CRYPT_OPENSSL_GUESS_VERSION = 0.12
+ PERL_CRYPT_OPENSSL_GUESS_SOURCE = Crypt-OpenSSL-Guess-$(PERL_CRYPT_OPENSSL_GUESS_VERSION).tar.gz
+ PERL_CRYPT_OPENSSL_GUESS_SITE = $(BR2_CPAN_MIRROR)/authors/id/A/AK/AKIYM
+ PERL_CRYPT_OPENSSL_GUESS_LICENSE = Artistic or GPL-1.0+
