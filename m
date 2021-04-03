@@ -1,35 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Apr 2021 13:47:41 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] support/scripts: fix
- pycompile for short filenames
-Message-ID: <20210403112726.E5490882A2@busybox.osuosl.org>
+Date: Sat, 3 Apr 2021 13:49:08 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/sdl2: drop tslib
+Message-ID: <20210403112726.F0F9783A06@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a285d24275c739c9d8922a3655b6e8ed7734caa9
+commit: https://git.buildroot.net/buildroot/commit/?id=399feb93e78ee12c1e487111926333cfa6a9294e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Signed-off-by: Bert Outtier <outtierbert@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 6fdc878d73938e70335a667a831ded67a15df53c)
+non existing tslib support has been dropped since version 2.0.14 and
+https://github.com/libsdl-org/SDL/commit/4c96faee578efcba3f2d6afe8e2122f26b1dfb0b
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 083cd205c7e9f32145f7752502df7a2c24b519f2)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/pycompile.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/sdl2/sdl2.mk | 7 -------
+ 1 file changed, 7 deletions(-)
 
-diff --git a/support/scripts/pycompile.py b/support/scripts/pycompile.py
-index 2b636e03cb..b8cd3cee6c 100644
---- a/support/scripts/pycompile.py
-+++ b/support/scripts/pycompile.py
-@@ -30,7 +30,7 @@ def compile_one(host_path, strip_root=None, verbose=False):
-     if os.path.islink(host_path) or not os.path.isfile(host_path):
-         return  # only compile real files
+diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
+index 48148d38e3..a2e426e578 100644
+--- a/package/sdl2/sdl2.mk
++++ b/package/sdl2/sdl2.mk
+@@ -142,13 +142,6 @@ else
+ SDL2_CONF_OPTS += --disable-video-opengles
+ endif
  
--    if not re.match(r"^[_A-Za-z][_A-Za-z0-9]+\.py$",
-+    if not re.match(r"^[_A-Za-z][_A-Za-z0-9]*\.py$",
-                     os.path.basename(host_path)):
-         return  # only compile "importable" python modules
- 
+-ifeq ($(BR2_PACKAGE_TSLIB),y)
+-SDL2_DEPENDENCIES += tslib
+-SDL2_CONF_OPTS += --enable-input-tslib
+-else
+-SDL2_CONF_OPTS += --disable-input-tslib
+-endif
+-
+ ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
+ SDL2_DEPENDENCIES += alsa-lib
+ SDL2_CONF_OPTS += --enable-alsa
