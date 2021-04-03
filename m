@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 03 Apr 2021 09:48:35 +0200
-Subject: [Buildroot] [PATCH 4/7] package/eigen: use gitlab macro
-In-Reply-To: <20210328191355.778786-5-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Sun, 28 Mar 2021 21:13:51 +0200")
+Date: Sat, 03 Apr 2021 09:48:39 +0200
+Subject: [Buildroot] [PATCH 5/7] package/frotz: use gitlab macro
+In-Reply-To: <20210328191355.778786-6-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Sun, 28 Mar 2021 21:13:52 +0200")
 References: <20210328191355.778786-1-thomas.petazzoni@bootlin.com>
- <20210328191355.778786-5-thomas.petazzoni@bootlin.com>
-Message-ID: <87y2dz95bg.fsf@dell.be.48ers.dk>
+ <20210328191355.778786-6-thomas.petazzoni@bootlin.com>
+Message-ID: <87tuon95bc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
