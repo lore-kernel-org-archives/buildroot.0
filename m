@@ -1,61 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Apr 2021 12:16:29 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/mariadb: security
- bump to version 10.3.28
-Message-ID: <20210403095643.914DA81963@busybox.osuosl.org>
+Date: Sat, 3 Apr 2021 12:20:59 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/squid: security
+ bump to version 4.14
+Message-ID: <20210403095643.B4D4687404@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8e81ca5db99755a4392871ce1e1c24442f894950
+commit: https://git.buildroot.net/buildroot/commit/?id=f533d0c2b08422bd90c41de5aa627685ede6714a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Fix CVE-2021-27928: A remote code execution issue was discovered in
-MariaDB 10.2 before 10.2.37, 10.3 before 10.3.28, 10.4 before 10.4.18,
-and 10.5 before 10.5.9; Percona Server through 2021-03-03; and the wsrep
-patch through 2021-03-03 for MySQL. An untrusted search path leads to
-eval injection, in which a database SUPER user can execute OS commands
-after modifying wsrep_provider and wsrep_notify_cmd. NOTE: this does not
-affect an Oracle product.
+Fixes the following security issues:
 
-https://mariadb.com/kb/en/mariadb-10328-release-notes/
-https://mariadb.com/kb/en/mariadb-10328-changelog/
+- CVE-2020-25097: HTTP Request Smuggling
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+  Due to improper input validation Squid is vulnerable to an HTTP Request
+  Smuggling attack.
+
+For more details, see the advisory:
+https://github.com/squid-cache/squid/security/advisories/GHSA-jvf6-h9gj-pmj6
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit f06339f3fcd309c70cfd4d0b3510ad3a3916e0df)
+(cherry picked from commit 7b5638460359b41381cd04464ec076e2306dc2fd)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mariadb/mariadb.hash | 6 +++---
- package/mariadb/mariadb.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/squid/squid.hash | 8 ++++----
+ package/squid/squid.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
-index a210dd9dad..26faf529c2 100644
---- a/package/mariadb/mariadb.hash
-+++ b/package/mariadb/mariadb.hash
+diff --git a/package/squid/squid.hash b/package/squid/squid.hash
+index b7e051960e..a2aaba5fd5 100644
+--- a/package/squid/squid.hash
++++ b/package/squid/squid.hash
 @@ -1,6 +1,6 @@
--# From https://downloads.mariadb.org/mariadb/10.3.27
--sha256  0dadc1650ab2ff40caab58210e93b106ae1e3d1a82e5b0fd92c795b8b43e4619  mariadb-10.3.27.tar.gz
--sha512  1ebfdfa3ef6e13e92615ac2fb6995362ca60fe78f57ff3cf9e384517f95eaf4c701e60fe0977b1eee73889cdfe3367720da9a9bae3dd1a09a4558114ba593369  mariadb-10.3.27.tar.gz
-+# From https://downloads.mariadb.org/mariadb/10.3.28
-+sha256  e8c912cae2e5800d0da364cc23437907ed4be767f2cbdf198cf3afc03db6a6a3  mariadb-10.3.28.tar.gz
-+sha512  f6941bcc818f9b3640e4b5fdbdd3a32b45c62c04087e583f1f0e1c0258b09a21c7639abd1c902e183c057838308ad5eedc00ffee76d44a02043e8e349015fb20  mariadb-10.3.28.tar.gz
- 
- # Hash for license files
- sha256  a4665c1189fe31e0bbc27e9b55439df7dad6e99805407fe58d78da7aabe678f8  README.md
-diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
-index 83965d0437..cd514ec632 100644
---- a/package/mariadb/mariadb.mk
-+++ b/package/mariadb/mariadb.mk
+-# From http://www.squid-cache.org/Versions/v4/squid-4.13.tar.xz.asc
+-md5  492e54afc15821141ff1d1d9903854d6  squid-4.13.tar.xz
+-sha1  cac95c18789e9ecd6620c2f278fc3900498c065b  squid-4.13.tar.xz
++# From http://www.squid-cache.org/Versions/v4/squid-4.14.tar.xz.asc
++md5  7d9ba82703cd770b2ede169a0c1de94a  squid-4.14.tar.xz
++sha1  71ae13a845a6a7ffc69ce11086ea3e427625bc08  squid-4.14.tar.xz
+ # Locally calculated
+-sha256  6891a0f540e60779b4f24f1802a302f813c6f473ec7336a474ed68c3e2e53ee0  squid-4.13.tar.xz
++sha256  f1097daa6434897c159bc100978b51347c0339041610845d0afa128151729ffc  squid-4.14.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index 1ba375e547..83dab24915 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MARIADB_VERSION = 10.3.27
-+MARIADB_VERSION = 10.3.28
- MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
- MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
- # Tarball no longer contains LGPL license text
+-SQUID_VERSION = 4.13
++SQUID_VERSION = 4.14
+ SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
+ SQUID_SITE = http://www.squid-cache.org/Versions/v4
+ SQUID_LICENSE = GPL-2.0+
