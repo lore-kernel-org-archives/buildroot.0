@@ -1,24 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 03 Apr 2021 13:49:21 +0200
-Subject: [Buildroot] [PATCH 1/1] package/sdl2: drop tslib
-In-Reply-To: <20210321162128.192269-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 21 Mar 2021 17:21:28 +0100")
-References: <20210321162128.192269-1-fontaine.fabrice@gmail.com>
-Message-ID: <87r1jr4mgu.fsf@dell.be.48ers.dk>
+Date: Sat, 03 Apr 2021 13:50:18 +0200
+Subject: [Buildroot] [PATCH v1] package/tzdata: bump version to 2021a
+In-Reply-To: <20210321205806.9643-1-ps.report@gmx.net> (Peter Seiderer's
+ message of "Sun, 21 Mar 2021 21:58:06 +0100")
+References: <20210321205806.9643-1-ps.report@gmx.net>
+Message-ID: <87mtuf4mf9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
- > non existing tslib support has been dropped since version 2.0.14 and
- > https://github.com/libsdl-org/SDL/commit/4c96faee578efcba3f2d6afe8e2122f26b1dfb0b
+ > For details see [1].
+ > [1] https://mm.icann.org/pipermail/tz-announce/2021-January/000065.html
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-Committed to 2021.02.x, thanks.
+Committed to 2020.02.x, 2020.11.x and 2021.02.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
