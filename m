@@ -1,56 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Apr 2021 11:13:38 +0200
-Subject: [Buildroot] [git commit branch/2020.11.x] package/wireshark:
- security bump to version 3.4.4
-Message-ID: <20210403094701.424D48B537@busybox.osuosl.org>
+Date: Sat, 3 Apr 2021 11:08:15 +0200
+Subject: [Buildroot] [git commit branch/2020.11.x] package/ca-certificates:
+ bump to version 20210119
+Message-ID: <20210403094701.2912087770@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=71bf8c3f66b429ba4a7b499bdeb4e53586969f7d
+commit: https://git.buildroot.net/buildroot/commit/?id=f9c90c7a497833e2de6980b9d47aa0cb0e7c8b2d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-Fix CVE-2021-22191: Improper URL handling in Wireshark 3.4.0 to 3.4.3
-and 3.2.0 to 3.2.11 could allow remote code execution via via packet
-injection or crafted capture file.
+Upstream has switched to requiring python3, so change the dependency to
+always use host-python3.
 
-https://www.wireshark.org/security/wnpa-sec-2021-03.html
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 705b3dd78cc4a1528308edba3a66bc3c6dfd670f)
+Signed-off-by: John Keeping <john@metanate.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 7e0c490f4558b6922ccddf36a8bab0aef7e17c0a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wireshark/wireshark.hash | 6 +++---
- package/wireshark/wireshark.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/ca-certificates/ca-certificates.hash |  4 ++--
+ package/ca-certificates/ca-certificates.mk   | 10 +++-------
+ 2 files changed, 5 insertions(+), 9 deletions(-)
 
-diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-index 56a0122dd2..71703a2a8b 100644
---- a/package/wireshark/wireshark.hash
-+++ b/package/wireshark/wireshark.hash
+diff --git a/package/ca-certificates/ca-certificates.hash b/package/ca-certificates/ca-certificates.hash
+index 1ed1c3ca06..024034c977 100644
+--- a/package/ca-certificates/ca-certificates.hash
++++ b/package/ca-certificates/ca-certificates.hash
 @@ -1,6 +1,6 @@
--# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.4.3.txt
--sha1  7dec4332f21827e360b5830d1d6d566365796a67  wireshark-3.4.3.tar.xz
--sha256  f467cc77f0fc73fce0b854cdbc292f132d4879fca69d417eccad5f967fbf262b  wireshark-3.4.3.tar.xz
-+# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.4.4.txt
-+sha1  fa5c553596dcc6a59735f96a9a0845e3c40abab2  wireshark-3.4.4.tar.xz
-+sha256  729cd11e9715c600e5ad74ca472bacf8af32c20902192d5f2b271268511d4d29  wireshark-3.4.4.tar.xz
+ # hashes from: $(CA_CERTIFICATES_SITE)/ca-certificates_$(CA_CERTIFICATES_VERSION).dsc :
+-sha1  f17235bc9c3aec538065a655681815c242a6d7d5  ca-certificates_20200601.tar.xz
+-sha256  43766d5a436519503dfd65ab83488ae33ab4d4ca3d0993797b58c92eb9ed4e63  ca-certificates_20200601.tar.xz
++sha1  c9875aa16e42981c6975e59a11727539053e2299  ca-certificates_20210119.tar.xz
++sha256  daa3afae563711c30a0586ddae4336e8e3974c2b627faaca404c4e0141b64665  ca-certificates_20210119.tar.xz
  
- # Locally calculated
- sha256  7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index 55aec25eb7..e2469e937d 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -4,7 +4,7 @@
+ # Locally computed
+ sha256  e85e1bcad3a915dc7e6f41412bc5bdeba275cadd817896ea0451f2140a93967c  debian/copyright
+diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
+index 5c24d4be49..94302ea96b 100644
+--- a/package/ca-certificates/ca-certificates.mk
++++ b/package/ca-certificates/ca-certificates.mk
+@@ -4,14 +4,10 @@
  #
  ################################################################################
  
--WIRESHARK_VERSION = 3.4.3
-+WIRESHARK_VERSION = 3.4.4
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
- WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
+-CA_CERTIFICATES_VERSION = 20200601
++CA_CERTIFICATES_VERSION = 20210119
+ CA_CERTIFICATES_SOURCE = ca-certificates_$(CA_CERTIFICATES_VERSION).tar.xz
+-CA_CERTIFICATES_SITE = http://snapshot.debian.org/archive/debian/20200602T145955Z/pool/main/c/ca-certificates
+-CA_CERTIFICATES_DEPENDENCIES = host-openssl
+-# ca-certificates can be built with either python 2 or python 3
+-# but it must be at least python 2.7
+-CA_CERTIFICATES_DEPENDENCIES += \
+-	$(if $(BR2_PACKAGE_PYTHON3),host-python3,host-python)
++CA_CERTIFICATES_SITE = https://snapshot.debian.org/archive/debian/20210325T091936Z/pool/main/c/ca-certificates
++CA_CERTIFICATES_DEPENDENCIES = host-openssl host-python3
+ CA_CERTIFICATES_LICENSE = GPL-2.0+ (script), MPL-2.0 (data)
+ CA_CERTIFICATES_LICENSE_FILES = debian/copyright
+ 
