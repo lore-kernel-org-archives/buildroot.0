@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Apr 2021 18:09:04 +0200
-Subject: [Buildroot] [git commit branch/2020.11.x] package/qwt: bump version
+Date: Sat, 3 Apr 2021 18:08:31 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/qwt: bump version
  to 6.1.6
-Message-ID: <20210403154513.ACA208160D@busybox.osuosl.org>
+Message-ID: <20210403154519.8769E85730@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=00f6e7ccfbb91d82a8c04fafb060ba22dea3c02f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=0f571b084ff221d3a6ebb92f4688e94fc856ef5d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
 Changelog ([1]):
 
