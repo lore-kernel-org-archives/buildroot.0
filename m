@@ -1,50 +1,80 @@
-From: Tian Yuanhao <tianyuanhao@aliyun.com>
-Date: Fri,  2 Apr 2021 19:23:16 -0700
-Subject: [Buildroot] [PATCH v3 1/1] package/wpa_supplicant: handle
- CONFIG_CTRL_IFACE carefully
-In-Reply-To: <20210317033739.71436-1-tianyuanhao@aliyun.com>
-References: <20210317033739.71436-1-tianyuanhao@aliyun.com>
-Message-ID: <20210403022316.8719-1-tianyuanhao@aliyun.com>
+From: Federico Pellegrin <fede@evolware.org>
+Date: Sat, 3 Apr 2021 06:30:22 +0200
+Subject: [Buildroot] [PATCH 1/1] package/kexec: fix build on pre 4.4
+ kernels
+In-Reply-To: <20210203100939.17390-1-fede@evolware.org>
+References: <20210203100939.17390-1-fede@evolware.org>
+Message-ID: <CAM6O0Ziyh7w31j9KtHd7s4SvMWGkrrHP3JP=ksEPwCvvST1Jow@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When BR2_PACKAGE_WPA_SUPPLICANT_CTRL_IFACE is not set and
-BR2_PACKAGE_WPA_SUPPLICANT_DBUS=y, CONFIG_CTRL_IFACE_DBUS_NEW will be
-enabled by 's/^#\(CONFIG_CTRL_IFACE_DBUS_NEW\)/\1/' first, and then
-disabled by 's/^\(CONFIG_CTRL_IFACE\)/#\1/'.
+Hi Thomas,
+This has now been merged upstream:
+https://github.com/horms/kexec-tools/commit/d73822b8985b68694336cd6a1aa47fe0233b55cc
 
-CONFIG_CTRL_IFACE_DBUS_NEW does not depend on CONFIG_CTRL_IFACE, except
-for using it as a prefix. Fix this wrong behavior by adding '\>' after
-CONFIG_CTRL_IFACE.
+I don't know if you think it's the case to merge therefore to
+Buildroot or we can wait for the next release of kexec-tools (not sure
+when that could happend).
 
-Signed-off-by: Tian Yuanhao <tianyuanhao@aliyun.com>
-Tested-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
----
+Thanks,
+Federico
 
-v1 -> v2:
-  - only handle CONFIG_CTRL_IFACE
-
-v2 -> v3:
-  - rewrite commit message
----
- package/wpa_supplicant/wpa_supplicant.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-index c82db43c1c..80d75a57c7 100644
---- a/package/wpa_supplicant/wpa_supplicant.mk
-+++ b/package/wpa_supplicant/wpa_supplicant.mk
-@@ -135,7 +135,7 @@ WPA_SUPPLICANT_CONFIG_EDITS += 's/\#\(CONFIG_TLS=\).*/\1internal/'
- endif
- 
- ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_CTRL_IFACE),)
--WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_CTRL_IFACE
-+WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_CTRL_IFACE\>
- endif
- 
- ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DBUS),y)
--- 
-2.25.1
+Il giorno mer 3 feb 2021 alle ore 11:09 Federico Pellegrin
+<fede@evolware.org> ha scritto:
+>
+> kexec build will fail on older kernels (pre 4.4) as the define VIDEO_CAPABILITY_64BIT_BASE was not present at that time.
+>
+> This patch adds it, as per linux/include/uapi/linux/screen_info.h, if not present.
+>
+> Signed-off-by: Federico Pellegrin <fede@evolware.org>
+> ---
+>  ...c-tools-fix-build-on-pre-4.4-kernels.patch | 34 +++++++++++++++++++
+>  1 file changed, 34 insertions(+)
+>  create mode 100644 package/kexec/0003-kexec-tools-fix-build-on-pre-4.4-kernels.patch
+>
+> diff --git a/package/kexec/0003-kexec-tools-fix-build-on-pre-4.4-kernels.patch b/package/kexec/0003-kexec-tools-fix-build-on-pre-4.4-kernels.patch
+> new file mode 100644
+> index 0000000000..fcac604dfd
+> --- /dev/null
+> +++ b/package/kexec/0003-kexec-tools-fix-build-on-pre-4.4-kernels.patch
+> @@ -0,0 +1,34 @@
+> +From cbbe4c47cb2acae04083c510dbe0efc5f48f5bb6 Mon Sep 17 00:00:00 2001
+> +From: Federico Pellegrin <fede@evolware.org>
+> +Date: Wed, 3 Feb 2021 11:00:17 +0100
+> +Subject: [PATCH] kexec-tools: fix build on pre 4.4 kernels
+> +
+> +kexec build will fail on older kernels (pre 4.4) as the define
+> +VIDEO_CAPABILITY_64BIT_BASE was not present at that time.
+> +
+> +This patch adds it, as per linux/include/uapi/linux/screen_info.h,
+> +if not present.
+> +
+> +Signed-off-by: Federico Pellegrin <fede@evolware.org>
+> +---
+> + kexec/arch/i386/x86-linux-setup.c | 4 ++++
+> + 1 file changed, 4 insertions(+)
+> +
+> +diff --git a/kexec/arch/i386/x86-linux-setup.c b/kexec/arch/i386/x86-linux-setup.c
+> +index 76e1185..ab54a4a 100644
+> +--- a/kexec/arch/i386/x86-linux-setup.c
+> ++++ b/kexec/arch/i386/x86-linux-setup.c
+> +@@ -37,6 +37,10 @@
+> + #include "x86-linux-setup.h"
+> + #include "../../kexec/kexec-syscall.h"
+> +
+> ++#ifndef VIDEO_CAPABILITY_64BIT_BASE
+> ++#define VIDEO_CAPABILITY_64BIT_BASE (1 << 1)  /* Frame buffer base is 64-bit */
+> ++#endif
+> ++
+> + void init_linux_parameters(struct x86_linux_param_header *real_mode)
+> + {
+> +       /* Fill in the values that are usually provided by the kernel. */
+> +--
+> +2.26.2
+> +
+> --
+> 2.26.2
+>
