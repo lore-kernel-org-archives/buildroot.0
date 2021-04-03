@@ -1,61 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Apr 2021 12:18:12 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/python-urllib3:
- security bump to version 1.26.4
-Message-ID: <20210403095655.57F1C8B587@busybox.osuosl.org>
+Date: Sat, 3 Apr 2021 12:20:33 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/squid: security
+ bump to version 4.14
+Message-ID: <20210403095655.73DB7878BC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=378547b1a0072640c1db84fb501fbf6e5e81c86e
+commit: https://git.buildroot.net/buildroot/commit/?id=d6547f7b998921e570a092302d334a9804f71af7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Fix CVE-2021-28363: The urllib3 library 1.26.x before 1.26.4 for Python
-omits SSL certificate validation in some cases involving HTTPS to HTTPS
-proxies. The initial connection to the HTTPS proxy (if an SSLContext
-isn't given via proxy_config) doesn't verify the hostname of the
-certificate. This means certificates for different servers that still
-validate properly with the default urllib3 SSLContext will be silently
-accepted.
+Fixes the following security issues:
 
-https://github.com/urllib3/urllib3/blob/1.26.4/CHANGES.rst
+- CVE-2020-25097: HTTP Request Smuggling
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+  Due to improper input validation Squid is vulnerable to an HTTP Request
+  Smuggling attack.
+
+For more details, see the advisory:
+https://github.com/squid-cache/squid/security/advisories/GHSA-jvf6-h9gj-pmj6
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 4a8c6746bfbd8bcf91d85239362a1618befcaf56)
+(cherry picked from commit 7b5638460359b41381cd04464ec076e2306dc2fd)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-urllib3/python-urllib3.hash | 4 ++--
- package/python-urllib3/python-urllib3.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/squid/squid.hash | 8 ++++----
+ package/squid/squid.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-urllib3/python-urllib3.hash b/package/python-urllib3/python-urllib3.hash
-index dbc85c9114..820156b4ca 100644
---- a/package/python-urllib3/python-urllib3.hash
-+++ b/package/python-urllib3/python-urllib3.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/urllib3/json
--md5  2233256ccfe140a915f68703f8c2cc1f  urllib3-1.26.2.tar.gz
--sha256  19188f96923873c92ccb987120ec4acaa12f0461fa9ce5d3d0772bc965a39e08  urllib3-1.26.2.tar.gz
-+md5  e2a2039e22fc29b751e26b7042e8db2f  urllib3-1.26.4.tar.gz
-+sha256  e7b021f7241115872f92f43c6508082facffbd1c048e3c6e2bb9c2a157e28937  urllib3-1.26.4.tar.gz
- # Locally computed sha256 checksums
- sha256  c37bf186e27cf9dbe9619e55edfe3cea7b30091ceb3da63c7dacbe0e6d77907b  LICENSE.txt
-diff --git a/package/python-urllib3/python-urllib3.mk b/package/python-urllib3/python-urllib3.mk
-index 82db02fcc2..d5a04163f9 100644
---- a/package/python-urllib3/python-urllib3.mk
-+++ b/package/python-urllib3/python-urllib3.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/squid/squid.hash b/package/squid/squid.hash
+index b7e051960e..a2aaba5fd5 100644
+--- a/package/squid/squid.hash
++++ b/package/squid/squid.hash
+@@ -1,6 +1,6 @@
+-# From http://www.squid-cache.org/Versions/v4/squid-4.13.tar.xz.asc
+-md5  492e54afc15821141ff1d1d9903854d6  squid-4.13.tar.xz
+-sha1  cac95c18789e9ecd6620c2f278fc3900498c065b  squid-4.13.tar.xz
++# From http://www.squid-cache.org/Versions/v4/squid-4.14.tar.xz.asc
++md5  7d9ba82703cd770b2ede169a0c1de94a  squid-4.14.tar.xz
++sha1  71ae13a845a6a7ffc69ce11086ea3e427625bc08  squid-4.14.tar.xz
+ # Locally calculated
+-sha256  6891a0f540e60779b4f24f1802a302f813c6f473ec7336a474ed68c3e2e53ee0  squid-4.13.tar.xz
++sha256  f1097daa6434897c159bc100978b51347c0339041610845d0afa128151729ffc  squid-4.14.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index a3ccbbcf8e..7e6865f8ed 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_URLLIB3_VERSION = 1.26.2
-+PYTHON_URLLIB3_VERSION = 1.26.4
- PYTHON_URLLIB3_SOURCE = urllib3-$(PYTHON_URLLIB3_VERSION).tar.gz
--PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/29/e6/d1a1d78c439cad688757b70f26c50a53332167c364edb0134cadd280e234
-+PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/cb/cf/871177f1fc795c6c10787bc0e1f27bb6cf7b81dbde399fd35860472cecbc
- PYTHON_URLLIB3_LICENSE = MIT
- PYTHON_URLLIB3_LICENSE_FILES = LICENSE.txt
- PYTHON_URLLIB3_CPE_ID_VENDOR = python
+-SQUID_VERSION = 4.13
++SQUID_VERSION = 4.14
+ SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
+ SQUID_SITE = http://www.squid-cache.org/Versions/v4
+ SQUID_LICENSE = GPL-2.0+
