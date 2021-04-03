@@ -1,70 +1,46 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 3 Apr 2021 09:03:53 +0200
-Subject: [Buildroot] [PATCH 1/1] package/go: bump version to 1.16.3
-In-Reply-To: <20210403064538.17449-1-christian@paral.in>
-References: <20210403064538.17449-1-christian@paral.in>
-Message-ID: <20210403070353.GO24043@scaer>
+Date: Sat, 3 Apr 2021 09:04:15 +0200
+Subject: [Buildroot] [git commit] package/kodi-vfs-libarchive: bump version
+ to 2.0.1-Matrix
+Message-ID: <20210403063907.E608287770@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Christian, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=419743daecccbc68b76b243cf1882480f20028a9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-04-02 23:45 -0700, Christian Stewart spake thusly:
-> go1.16.3 (released 2021/04/01) includes fixes to the compiler, linker, runtime,
-> the go command, and the testing and time packages.
-> 
-> https://golang.org/doc/go1.16
-> 
-> Signed-off-by: Christian Stewart <christian@paral.in>
+Release notes:
+https://github.com/xbmc/vfs.libarchive/releases/tag/2.0.1-Matrix
 
-Applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/kodi-vfs-libarchive/kodi-vfs-libarchive.hash | 2 +-
+ package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/go/go.hash | 4 ++--
->  package/go/go.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/go/go.hash b/package/go/go.hash
-> index 524b6131dc..6d8759f97f 100644
-> --- a/package/go/go.hash
-> +++ b/package/go/go.hash
-> @@ -1,3 +1,3 @@
->  # From https://golang.org/dl/
-> -sha256  37ca14287a23cb8ba2ac3f5c3dd8adbc1f7a54b9701a57824bf19a0b271f83ea  go1.16.2.src.tar.gz
-> -sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-> +sha256  b298d29de9236ca47a023e382313bcc2d2eed31dfa706b60a04103ce83a71a25  go1.16.3.src.tar.gz
-> +sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-> diff --git a/package/go/go.mk b/package/go/go.mk
-> index ff12fb0c62..138b1cbd34 100644
-> --- a/package/go/go.mk
-> +++ b/package/go/go.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -GO_VERSION = 1.16.2
-> +GO_VERSION = 1.16.3
->  GO_SITE = https://storage.googleapis.com/golang
->  GO_SOURCE = go$(GO_VERSION).src.tar.gz
->  
-> -- 
-> 2.31.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/kodi-vfs-libarchive/kodi-vfs-libarchive.hash b/package/kodi-vfs-libarchive/kodi-vfs-libarchive.hash
+index 59b3bc1078..3227631491 100644
+--- a/package/kodi-vfs-libarchive/kodi-vfs-libarchive.hash
++++ b/package/kodi-vfs-libarchive/kodi-vfs-libarchive.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  6fd70f0e2775e9c4eef2e8b529396f1e739fe3e43e0d4202d7f08ab4a30fa760  kodi-vfs-libarchive-2.0.0-Matrix.tar.gz
++sha256  87ad2ba0d0d9c7dcaf66a28c0f5c454ec8b4b227fdbb271cb73d143f7d9dd4b7  kodi-vfs-libarchive-2.0.1-Matrix.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk b/package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk
+index 5278f50136..f8bf58c508 100644
+--- a/package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk
++++ b/package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_VFS_LIBARCHIVE_VERSION = 2.0.0-Matrix
++KODI_VFS_LIBARCHIVE_VERSION = 2.0.1-Matrix
+ KODI_VFS_LIBARCHIVE_SITE = $(call github,xbmc,vfs.libarchive,$(KODI_VFS_LIBARCHIVE_VERSION))
+ KODI_VFS_LIBARCHIVE_LICENSE = GPL-2.0+
+ KODI_VFS_LIBARCHIVE_LICENSE_FILES = LICENSE.md
