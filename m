@@ -1,29 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 03 Apr 2021 12:17:32 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-lxml: security bump to
- version 4.6.3
-In-Reply-To: <20210329203341.303201-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 29 Mar 2021 22:33:41 +0200")
-References: <20210329203341.303201-1-fontaine.fabrice@gmail.com>
-Message-ID: <87czvb7jur.fsf@dell.be.48ers.dk>
+Date: Sat, 03 Apr 2021 12:18:48 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-urllib3: security bump
+ to version 1.26.4
+In-Reply-To: <20210329203942.304916-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 29 Mar 2021 22:39:42 +0200")
+References: <20210329203942.304916-1-fontaine.fabrice@gmail.com>
+Message-ID: <878s5z7jsn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "fontaine.fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Fix CVE-2021-28957: lxml 4.6.2 allows XSS. It places the HTML action
- > attribute into defs.link_attrs (in html/defs.py) for later use in input
- > sanitization, but does not do the same for the HTML5 formaction
- > attribute.
+ > Fix CVE-2021-28363: The urllib3 library 1.26.x before 1.26.4 for Python
+ > omits SSL certificate validation in some cases involving HTTPS to HTTPS
+ > proxies. The initial connection to the HTTPS proxy (if an SSLContext
+ > isn't given via proxy_config) doesn't verify the hostname of the
+ > certificate. This means certificates for different servers that still
+ > validate properly with the default urllib3 SSLContext will be silently
+ > accepted.
 
- > https://github.com/lxml/lxml/blob/lxml-4.6.3/CHANGES.txt
+ > https://github.com/urllib3/urllib3/blob/1.26.4/CHANGES.rst
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Committed to 2020.02.x, 2020.11.x and 2021.02.x, thanks.
+Committed to 2021.02.x, thanks (2020.02.x / 2020.11.x use 1.25.x)
 
 -- 
 Bye, Peter Korsgaard
