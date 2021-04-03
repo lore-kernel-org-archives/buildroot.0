@@ -1,87 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Apr 2021 13:51:16 +0200
-Subject: [Buildroot] [git commit branch/2020.11.x] package/efivar: disable
- -Werror
-Message-ID: <20210403112719.23F7E81384@busybox.osuosl.org>
+Date: Sat, 3 Apr 2021 13:42:20 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/wpa_supplicant:
+ annotate CVE-2021-27803
+Message-ID: <20210403112726.CCF27882A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d7ed0cfe92ecbc6d816583caad635b265de67efc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=968f2e90d0c17aa75d281e1dc640a25b1b490f83
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Fix the following build failure with gcc 10:
-
-/home/buildroot/autobuild/run/instance-1/output-1/host/bin/aarch64-none-linux-gnu-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2   -I/home/buildroot/autobuild/run/instance-1/output-1/build/efivar-37/src/include/   -specs=/home/buildroot/autobuild/run/instance-1/output-1/build/efivar-37/gcc.specs  -L.  -fPIC -Wl,-z,muldefs     -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -o efivar efivar.c -lefivar -ldl
-In file included from efivar.h:28,
-                 from efivar.c:40:
-In function 'text_to_guid',
-    inlined from 'parse_name.constprop' at efivar.c:157:8:
-guid.h:106:2: error: 'strncpy' output may be truncated copying 8 bytes from a string of length 38 [-Werror=stringop-truncation]
-  106 |  strncpy(eightbytes, text, 8);
-      |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-cc1: all warnings being treated as errors
-
-Fixes:
- - http://autobuild.buildroot.org/results/fcba72d359f4128515560e9105384cd4deff5043
+Add a WPA_SUPPLICANT_IGNORE_CVES entry for CVE-2021-27803 which was
+fixed by commit 9ada4eb2f1c3d67ee49f6f5466738bcd821fc647, which we
+have backported as
+0001-P2P-Fix-a-corner-case-in-peer-addition-based-on-PD-R.patch.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 720deac3d9619b378bd554e1e3b1bdf1143768a1)
+(cherry picked from commit 1a7cf592a834357c5777e452f0b7ab7652e7d389)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/efivar/0007-gcc.specs-drop-Werror.patch | 44 +++++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
+ package/wpa_supplicant/wpa_supplicant.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/efivar/0007-gcc.specs-drop-Werror.patch b/package/efivar/0007-gcc.specs-drop-Werror.patch
-new file mode 100644
-index 0000000000..aa717fedaf
---- /dev/null
-+++ b/package/efivar/0007-gcc.specs-drop-Werror.patch
-@@ -0,0 +1,44 @@
-+From 8d5cf3347cce9d644f670ffd1d48e71d74635481 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 22 Mar 2021 07:52:34 +0100
-+Subject: [PATCH] gcc.specs: drop -Werror
+diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+index 284ea06096..46def443e6 100644
+--- a/package/wpa_supplicant/wpa_supplicant.mk
++++ b/package/wpa_supplicant/wpa_supplicant.mk
+@@ -23,6 +23,9 @@ WPA_SUPPLICANT_SELINUX_MODULES = networkmanager
+ # 0001-AP-Silently-ignore-management-frame-from-unexpected-.patch
+ WPA_SUPPLICANT_IGNORE_CVES += CVE-2019-16275
+ 
++# 0001-P2P-Fix-a-corner-case-in-peer-addition-based-on-PD-R.patch
++WPA_SUPPLICANT_IGNORE_CVES += CVE-2021-27803
 +
-+Build with -Werror raises the following build failure with gcc 10:
-+
-+/home/buildroot/autobuild/run/instance-1/output-1/host/bin/aarch64-none-linux-gnu-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2   -I/home/buildroot/autobuild/run/instance-1/output-1/build/efivar-37/src/include/   -specs=/home/buildroot/autobuild/run/instance-1/output-1/build/efivar-37/gcc.specs  -L.  -fPIC -Wl,-z,muldefs     -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -o efivar efivar.c -lefivar -ldl
-+In file included from efivar.h:28,
-+                 from efivar.c:40:
-+In function 'text_to_guid',
-+    inlined from 'parse_name.constprop' at efivar.c:157:8:
-+guid.h:106:2: error: 'strncpy' output may be truncated copying 8 bytes from a string of length 38 [-Werror=stringop-truncation]
-+  106 |  strncpy(eightbytes, text, 8);
-+      |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+cc1: all warnings being treated as errors
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/fcba72d359f4128515560e9105384cd4deff5043
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: not upstreamable as Makefiles were reworked and a new
-+ERRORS parameter was added:
-+https://github.com/rhboot/efivar/commit/998f617cec92d526e1fadb745673ceef63fa1483]
-+---
-+ gcc.specs | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/gcc.specs b/gcc.specs
-+index 45d43d1..1baf11a 100644
-+--- a/gcc.specs
-++++ b/gcc.specs
-+@@ -2,7 +2,7 @@
-+ + -D_GNU_SOURCE
-+ 
-+ *efivar_cpp_options:
-+- -Werror -Wall -std=gnu11 -Wextra
-++ -Wall -std=gnu11 -Wextra
-+ 
-+ *cpp_options:
-+ + %(efivar_cpp_options)
-+-- 
-+2.30.1
-+
+ # install the wpa_client library
+ WPA_SUPPLICANT_INSTALL_STAGING = YES
+ 
