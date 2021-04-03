@@ -1,116 +1,85 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 3 Apr 2021 14:22:19 +0200
-Subject: [Buildroot] [PATCH 1/1] package/tvheadend: add various options
- to disable optional components
-In-Reply-To: <20210403094958.890489-1-bernd.kuhls@t-online.de>
-References: <20210403094958.890489-1-bernd.kuhls@t-online.de>
-Message-ID: <20210403122219.GW24043@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat,  3 Apr 2021 14:36:13 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/python-rpi-ws281w: fix build with gcc 4.8
+Message-ID: <20210403123613.2218193-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+Fix build failure with gcc 4.8 which is raised since bump to version
+4.2.6 in commit f21d46bf99e2c3a86a86586bc3e82b214104cd30
 
-On 2021-04-03 11:49 +0200, Bernd Kuhls spake thusly:
-> When enabled some IPTV streams are piped using /usr/bin/ffmpeg so make
-> sure that the ffmpeg binary is present.
-> 
-> Transcoding support can already be disabled reducing /usr/bin/tvheadend
-> by 1,03MB.
-> 
-> By disabling all new options provided by this patch the binary size can
-> additionally be reduced by 2,08MB.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-[--SNIP--]
-> +config BR2_PACKAGE_TVHEADEND_IPTV
-> +	bool "IPTV support"
-> +	default y
-> +	select BR2_PACKAGE_FFMPEG_FFMPEG if BR2_PACKAGE_FFMPEG
+Fixes:
+ - http://autobuild.buildroot.org/results/3d037922484bfc45d0f985f87b38f20c5a4ab064
 
-Here, ffmpeg is not mandatory, but see below...
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2:
+ - Update upstream status
 
-> diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-> index 114142bfa9..f9e748531e 100644
-> --- a/package/tvheadend/tvheadend.mk
-> +++ b/package/tvheadend/tvheadend.mk
-> @@ -63,6 +63,33 @@ TVHEADEND_CONF_OPTS += \
->  	--disable-libx265
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_TVHEADEND_DESCRAMBLER),y)
-> +TVHEADEND_CONF_OPTS += --enable-cardclient --enable-cwc \
-> +	--enable-cccam --enable-capmt --enable-constcw
+ ...0001-ws2811.c-fix-build-with-gcc-4.8.patch | 51 +++++++++++++++++++
+ 1 file changed, 51 insertions(+)
+ create mode 100644 package/python-rpi-ws281x/0001-ws2811.c-fix-build-with-gcc-4.8.patch
 
-When a series of options does not fit on a single line, then only put
-one option per line, please.
-
-> +else
-> +TVHEADEND_CONF_OPTS += --disable-cardclient --disable-cwc \
-> +	--disable-cccam --disable-capmt --disable-constcw
-
-Ditto, of course.
-
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_TVHEADEND_IPTV),y)
-> +TVHEADEND_CONF_OPTS += --enable-iptv
-> +TVHEADEND_DEPENDENCIES += ffmpeg
-
-Here, you are making ffmpeg mandatory, but nothing ensures it is
-enabled...
-
-So, if ffmpeg is mandatory, then we should make that explicit in
-Config.in, e.g.:
-
-    config BR2_PACKAGE_TVHEADEND_IPTV
-        bool "iptv"
-        depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
-        select BR2_PACKAGE_FFMPEG
-        select BR2_PACKAGE_FFMPEG_FFMPEG  # runtime
-        defaut y
-
-Also, since you are selecting BR2_PACKAGE_FFMPEG_FFMPEG, it means this
-is a runtime dependency, right? Then is BR2_PACKAGE_FFMPEG itself needed
-at all at build time?
-
-Regards,
-Yann E. MORIN.
-
-> +else
-> +TVHEADEND_CONF_OPTS += --disable-iptv
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_TVHEADEND_SATIP),y)
-> +TVHEADEND_CONF_OPTS += --enable-satip_client --enable-satip_server
-> +else
-> +TVHEADEND_CONF_OPTS += --disable-satip_client --disable-satip_server
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_TVHEADEND_TIMESHIFT),y)
-> +TVHEADEND_CONF_OPTS += --enable-timeshift
-> +else
-> +TVHEADEND_CONF_OPTS += --disable-timeshift
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_LIBDVBCSA),y)
->  TVHEADEND_DEPENDENCIES += libdvbcsa
->  TVHEADEND_CONF_OPTS += --enable-tvhcsa
-> -- 
-> 2.29.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/python-rpi-ws281x/0001-ws2811.c-fix-build-with-gcc-4.8.patch b/package/python-rpi-ws281x/0001-ws2811.c-fix-build-with-gcc-4.8.patch
+new file mode 100644
+index 0000000000..9b534ac67a
+--- /dev/null
++++ b/package/python-rpi-ws281x/0001-ws2811.c-fix-build-with-gcc-4.8.patch
+@@ -0,0 +1,51 @@
++From 8faa5c2fb2b04b4fb062255aa807abafc50bff66 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 3 Apr 2021 10:27:20 +0200
++Subject: [PATCH] ws2811.c: fix build with gcc 4.8
++
++Fix the following build failure with gcc 4.8 (which has been added by
++commit 391f6e856d28510bd9ae4efd3a166da7f73613ab):
++
++lib/ws2811.c: In function 'ws2811_set_custom_gamma_factor':
++lib/ws2811.c:1289:5: error: 'for' loop initial declarations are only allowed in C99 mode
++     for (int chan = 0; chan < RPI_PWM_CHANNELS; chan++)
++     ^
++lib/ws2811.c:1289:5: note: use option -std=c99 or -std=gnu99 to compile your code
++lib/ws2811.c:1295:11: error: 'for' loop initial declarations are only allowed in C99 mode
++           for(int counter = 0; counter < 256; counter++)
++           ^
++
++Fixes:
++ - http://autobuild.buildroot.org/results/3d037922484bfc45d0f985f87b38f20c5a4ab064
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/jgarff/rpi_ws281x/commit/0814bae544f0184ab1600bc2660486874eef5970]
++---
++ ws2811.c | 5 +++--
++ 1 file changed, 3 insertions(+), 2 deletions(-)
++
++diff --git a/ws2811.c b/ws2811.c
++index f5cdebd..6482796 100644
++--- a/lib/ws2811.c
+++++ b/lib/ws2811.c
++@@ -1286,13 +1286,14 @@ const char * ws2811_get_return_t_str(const ws2811_return_t state)
++ 
++ void ws2811_set_custom_gamma_factor(ws2811_t *ws2811, double gamma_factor)
++ {
++-    for (int chan = 0; chan < RPI_PWM_CHANNELS; chan++)
+++    int chan, counter;
+++    for (chan = 0; chan < RPI_PWM_CHANNELS; chan++)
++     {
++         ws2811_channel_t *channel = &ws2811->channel[chan];
++ 
++         if (channel->gamma)
++         {
++-          for(int counter = 0; counter < 256; counter++)
+++          for(counter = 0; counter < 256; counter++)
++           {
++ 
++              channel->gamma[counter] = (gamma_factor > 0)? (int)(pow((float)counter / (float)255.00, gamma_factor) * 255.00 + 0.5) : counter;
++-- 
++2.30.2
++
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.30.2
