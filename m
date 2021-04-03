@@ -1,44 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Apr 2021 09:32:31 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/samba4: update
- samba4-cache.txt for fcntl flags check
-Message-ID: <20210403072612.4AFB580298@busybox.osuosl.org>
+Date: Sat, 3 Apr 2021 09:44:30 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/php: bump version
+ to 7.4.16
+Message-ID: <20210403072612.6B977803D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8eb0063dc78250e733f98bc7540fdd3ea49882fc
+commit: https://git.buildroot.net/buildroot/commit/?id=c14462adc66cf7a4b485b7ed85c5478bd676a132
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Fixes:
-http://autobuild.buildroot.net/results/a5d/a5db81fca8ec07159b69b108b742f3d060e3316a/
+Changelog: https://www.php.net/ChangeLog-7.php#7.4.16
 
-Checking whether fcntl supports flags to send direct I/O availability signals                   : not found
-..
-Cross answers file /srv/storage/autobuild/run/instance-3/output-1/build/samba4-4.14.2/cache.txt is incomplete
+Update license hash due to copyright year bump:
+http://git.php.net/?p=php-src.git;a=commitdiff;h=8c04944b66fd4a4fa88e54b65a2391397998c51d
 
-Samba4 has added a check for fcntl F_{G,S}ETOWN_EX handling since:
-https://gitlab.com/samba-team/devel/samba/-/commit/5084a69de14f24e9d804998580eefcba773fdd5a
-
-Which is supported by the Linux kernel since 2.6.32 in commit
-ba0a6c9f6fceed11 (fcntl: add F_[SG]ETOWN_EX), so add it to the cache file.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit c86434d720fdf1c42834162331c008e05c710d65)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 92797a892398af4954634a57322b63f0f071cc2b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/samba4/samba4-cache.txt | 1 +
- 1 file changed, 1 insertion(+)
+ package/php/php.hash | 4 ++--
+ package/php/php.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/samba4/samba4-cache.txt b/package/samba4/samba4-cache.txt
-index bd7c3654b4..75d0343dc9 100644
---- a/package/samba4/samba4-cache.txt
-+++ b/package/samba4/samba4-cache.txt
-@@ -42,3 +42,4 @@ checking for clnt_create(): OK
- Checking for a 64-bit host to support lmdb: NO
- Checking value of GNUTLS_CIPHER_AES_128_CFB8: 29
- Checking value of GNUTLS_MAC_AES_CMAC_128: 203
-+Checking whether fcntl supports flags to send direct I/O availability signals: OK
+diff --git a/package/php/php.hash b/package/php/php.hash
+index d60164d96f..14576cf506 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From https://www.php.net/downloads.php
+-sha256  9b859c65f0cf7b3eff9d4a28cfab719fb3d36a1db3c20d874a79b5ec44d43cb8  php-7.4.15.tar.xz
++sha256  1c16cefaf88ded4c92eed6a8a41eb682bb2ef42429deb55f1c4ba159053fb98b  php-7.4.16.tar.xz
+ 
+ # License file
+-sha256  0967ad6cf4b7fe81d38709d7aaef3fecb3bd685be7eebb37b864aa34c991baa7  LICENSE
++sha256  a188db807d711536f71e27b7d36879d63480f7994dc18adc08e624b3c5430fff  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 5ae2467a78..4987f6f3bb 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PHP_VERSION = 7.4.15
++PHP_VERSION = 7.4.16
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
