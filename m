@@ -1,39 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Apr 2021 12:13:46 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/haserl: add
- HASERL_CPE_ID_VENDOR
-Message-ID: <20210403095655.257D6878BC@busybox.osuosl.org>
+Date: Sat, 3 Apr 2021 12:17:04 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/python-lxml:
+ security bump to version 4.6.3
+Message-ID: <20210403095655.4C65C8B564@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=72ee28551fdc198d72226869a840d00fa1eac041
+commit: https://git.buildroot.net/buildroot/commit/?id=3b41afb72cb29ab12a898ceb4e7d0c31f3b6c2fa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-cpe:2.3:a:haserl_project:haserl is a valid CPE identifier for this
-package:
+Fix CVE-2021-28957: lxml 4.6.2 allows XSS. It places the HTML action
+attribute into defs.link_attrs (in html/defs.py) for later use in input
+sanitization, but does not do the same for the HTML5 formaction
+attribute.
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ahaserl_project%3Ahaserl
+https://github.com/lxml/lxml/blob/lxml-4.6.3/CHANGES.txt
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit bbedc2a96b10e1f0134fa619c825bda6d3e53bb0)
+(cherry picked from commit 9d678ed1de2dec9896730c62d2240583bdda71c0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/haserl/haserl.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/python-lxml/python-lxml.hash | 2 +-
+ package/python-lxml/python-lxml.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/haserl/haserl.mk b/package/haserl/haserl.mk
-index 4c24b9bcea..a03afbd61d 100644
---- a/package/haserl/haserl.mk
-+++ b/package/haserl/haserl.mk
-@@ -8,6 +8,7 @@ HASERL_VERSION = 0.9.35
- HASERL_SITE = http://downloads.sourceforge.net/project/haserl/haserl-devel
- HASERL_LICENSE = GPL-2.0
- HASERL_LICENSE_FILES = COPYING
-+HASERL_CPE_ID_VENDOR = haserl_project
- HASERL_DEPENDENCIES = host-pkgconf
+diff --git a/package/python-lxml/python-lxml.hash b/package/python-lxml/python-lxml.hash
+index 7918e08745..dd6446e6cc 100644
+--- a/package/python-lxml/python-lxml.hash
++++ b/package/python-lxml/python-lxml.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  cd11c7e8d21af997ee8079037fff88f16fda188a9776eb4b81c7e4c9c0a7d7fc  lxml-4.6.2.tar.gz
++sha256  39b78571b3b30645ac77b95f7c69d1bffc4cf8c3b157c435a34da72e78c82468  lxml-4.6.3.tar.gz
+ sha256  41d49dd406aa0e1548a6d5f21a30d6bf638b3cd96eb7289dd348d83ed2e40392  LICENSES.txt
+ sha256  69edb445c1335a8312d4c09271847e9956d84f0d9f724d125340cc3fad767b2a  doc/licenses/BSD.txt
+ sha256  0497ae8138811ef4466ede653bab7a59feb3d3c14f9ed50fc33a00aeb5bec32e  doc/licenses/elementtree.txt
+diff --git a/package/python-lxml/python-lxml.mk b/package/python-lxml/python-lxml.mk
+index fe99f82472..0d3775a1bd 100644
+--- a/package/python-lxml/python-lxml.mk
++++ b/package/python-lxml/python-lxml.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_HASERL_WITH_LUA),y)
+-PYTHON_LXML_VERSION = 4.6.2
+-PYTHON_LXML_SITE = https://files.pythonhosted.org/packages/db/f7/43fecb94d66959c1e23aa53d6161231dca0e93ec500224cf31b3c4073e37
++PYTHON_LXML_VERSION = 4.6.3
++PYTHON_LXML_SITE = https://files.pythonhosted.org/packages/e5/21/a2e4517e3d216f0051687eea3d3317557bde68736f038a3b105ac3809247
+ PYTHON_LXML_SOURCE = lxml-$(PYTHON_LXML_VERSION).tar.gz
+ 
+ # Not including the GPL, because it is used only for the test scripts.
