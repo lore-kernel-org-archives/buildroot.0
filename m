@@ -1,58 +1,87 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Apr 2021 13:44:18 +0200
-Subject: [Buildroot] [git commit branch/2020.11.x] package/wpebackend-fdo:
- bump to version 1.8.3
-Message-ID: <20210403112719.004F581384@busybox.osuosl.org>
+Date: Sat, 3 Apr 2021 13:51:16 +0200
+Subject: [Buildroot] [git commit branch/2020.11.x] package/efivar: disable
+ -Werror
+Message-ID: <20210403112719.23F7E81384@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=21742661bb156b48a07d3a6bdc8d1658919c0933
+commit: https://git.buildroot.net/buildroot/commit/?id=d7ed0cfe92ecbc6d816583caad635b265de67efc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-This minor release fixes an issue which would cause applications using
-wpewebkit and webkitgtk freeze under certain conditions during normal
-browsing. Release notes:
+Fix the following build failure with gcc 10:
 
-  https://wpewebkit.org/release/wpebackend-fdo-1.8.3.html
+/home/buildroot/autobuild/run/instance-1/output-1/host/bin/aarch64-none-linux-gnu-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2   -I/home/buildroot/autobuild/run/instance-1/output-1/build/efivar-37/src/include/   -specs=/home/buildroot/autobuild/run/instance-1/output-1/build/efivar-37/gcc.specs  -L.  -fPIC -Wl,-z,muldefs     -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -o efivar efivar.c -lefivar -ldl
+In file included from efivar.h:28,
+                 from efivar.c:40:
+In function 'text_to_guid',
+    inlined from 'parse_name.constprop' at efivar.c:157:8:
+guid.h:106:2: error: 'strncpy' output may be truncated copying 8 bytes from a string of length 38 [-Werror=stringop-truncation]
+  106 |  strncpy(eightbytes, text, 8);
+      |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit b2e85cf0c09a5c69301341948edf6ed9371d9d8f)
+Fixes:
+ - http://autobuild.buildroot.org/results/fcba72d359f4128515560e9105384cd4deff5043
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 720deac3d9619b378bd554e1e3b1bdf1143768a1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wpebackend-fdo/wpebackend-fdo.hash | 8 ++++----
- package/wpebackend-fdo/wpebackend-fdo.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/efivar/0007-gcc.specs-drop-Werror.patch | 44 +++++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
 
-diff --git a/package/wpebackend-fdo/wpebackend-fdo.hash b/package/wpebackend-fdo/wpebackend-fdo.hash
-index 89d58051c7..27e827ae2e 100644
---- a/package/wpebackend-fdo/wpebackend-fdo.hash
-+++ b/package/wpebackend-fdo/wpebackend-fdo.hash
-@@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/wpebackend-fdo-1.8.2.tar.xz.sums
--md5  93ca185b5c0f539abbf7ab32cfdc96b2  wpebackend-fdo-1.8.2.tar.xz
--sha1  715a1a1e0cfd85898a1f686ec4c5b79a1e8cfb9c  wpebackend-fdo-1.8.2.tar.xz
--sha256  98c291071128326a72918d670a46ef63268c43267928560ac3b84b6aebb2d78d  wpebackend-fdo-1.8.2.tar.xz
-+# From https://wpewebkit.org/releases/wpebackend-fdo-1.8.3.tar.xz.sums
-+md5  980cbda207bf8f6263799c5062425737  wpebackend-fdo-1.8.3.tar.xz
-+sha1  c849043039d805448715be90cb5b3491f0a90c5f  wpebackend-fdo-1.8.3.tar.xz
-+sha256  3d0b4282a1bd9e0664d7a20abe14e982f3285296ac62de56cae2a404b9d28b9e  wpebackend-fdo-1.8.3.tar.xz
- 
- # Hashes for license files:
- sha256  c9f6803371047fad3e72200ec6cd226329a5ee08ac61104c8211c2761fb46825  COPYING
-diff --git a/package/wpebackend-fdo/wpebackend-fdo.mk b/package/wpebackend-fdo/wpebackend-fdo.mk
-index 193b4cf7ed..5f7e7acf30 100644
---- a/package/wpebackend-fdo/wpebackend-fdo.mk
-+++ b/package/wpebackend-fdo/wpebackend-fdo.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WPEBACKEND_FDO_VERSION = 1.8.2
-+WPEBACKEND_FDO_VERSION = 1.8.3
- WPEBACKEND_FDO_SITE = https://wpewebkit.org/releases
- WPEBACKEND_FDO_SOURCE = wpebackend-fdo-$(WPEBACKEND_FDO_VERSION).tar.xz
- WPEBACKEND_FDO_INSTALL_STAGING = YES
+diff --git a/package/efivar/0007-gcc.specs-drop-Werror.patch b/package/efivar/0007-gcc.specs-drop-Werror.patch
+new file mode 100644
+index 0000000000..aa717fedaf
+--- /dev/null
++++ b/package/efivar/0007-gcc.specs-drop-Werror.patch
+@@ -0,0 +1,44 @@
++From 8d5cf3347cce9d644f670ffd1d48e71d74635481 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 22 Mar 2021 07:52:34 +0100
++Subject: [PATCH] gcc.specs: drop -Werror
++
++Build with -Werror raises the following build failure with gcc 10:
++
++/home/buildroot/autobuild/run/instance-1/output-1/host/bin/aarch64-none-linux-gnu-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2   -I/home/buildroot/autobuild/run/instance-1/output-1/build/efivar-37/src/include/   -specs=/home/buildroot/autobuild/run/instance-1/output-1/build/efivar-37/gcc.specs  -L.  -fPIC -Wl,-z,muldefs     -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -o efivar efivar.c -lefivar -ldl
++In file included from efivar.h:28,
++                 from efivar.c:40:
++In function 'text_to_guid',
++    inlined from 'parse_name.constprop' at efivar.c:157:8:
++guid.h:106:2: error: 'strncpy' output may be truncated copying 8 bytes from a string of length 38 [-Werror=stringop-truncation]
++  106 |  strncpy(eightbytes, text, 8);
++      |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
++cc1: all warnings being treated as errors
++
++Fixes:
++ - http://autobuild.buildroot.org/results/fcba72d359f4128515560e9105384cd4deff5043
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: not upstreamable as Makefiles were reworked and a new
++ERRORS parameter was added:
++https://github.com/rhboot/efivar/commit/998f617cec92d526e1fadb745673ceef63fa1483]
++---
++ gcc.specs | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/gcc.specs b/gcc.specs
++index 45d43d1..1baf11a 100644
++--- a/gcc.specs
+++++ b/gcc.specs
++@@ -2,7 +2,7 @@
++ + -D_GNU_SOURCE
++ 
++ *efivar_cpp_options:
++- -Werror -Wall -std=gnu11 -Wextra
+++ -Wall -std=gnu11 -Wextra
++ 
++ *cpp_options:
++ + %(efivar_cpp_options)
++-- 
++2.30.1
++
