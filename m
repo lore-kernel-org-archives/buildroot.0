@@ -1,10 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 3 Apr 2021 09:07:51 +0200
-Subject: [Buildroot] [PATCH 1/1] package/lldpd: security bump to version
- 1.0.9
-In-Reply-To: <20210402195252.2036931-1-fontaine.fabrice@gmail.com>
-References: <20210402195252.2036931-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210403070751.GQ24043@scaer>
+Date: Sat, 3 Apr 2021 09:08:05 +0200
+Subject: [Buildroot] [PATCH 1/1] package/lldpd: add LLDPD_CPE_ID_VENDOR
+In-Reply-To: <20210402195407.2037031-1-fontaine.fabrice@gmail.com>
+References: <20210402195407.2037031-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210403070805.GR24043@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,15 +12,11 @@ To: buildroot@busybox.net
 
 Fabrice, All,
 
-On 2021-04-02 21:52 +0200, Fabrice Fontaine spake thusly:
-> - Out-of-bound read access when parsing LLDP-MED civic address in
->   liblldpctl for malformed fields.
-> - Fix memory leak when receiving LLDPU with duplicate fields.
->   CVE-2020-27827.
-> - More memory leak fixes on duplicate TLVs in LLDP, CDP and EDP
->   (related to CVE-2020-27827).
+On 2021-04-02 21:54 +0200, Fabrice Fontaine spake thusly:
+> cpe:2.3:a:lldpd_project:lldpd is a valid CPE identifier for this
+> package:
 > 
-> https://github.com/lldpd/lldpd/blob/1.0.9/NEWS
+>   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alldpd_project%3Alldpd
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
@@ -31,35 +26,21 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/lldpd/lldpd.hash | 4 ++--
->  package/lldpd/lldpd.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/lldpd/lldpd.mk | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/package/lldpd/lldpd.hash b/package/lldpd/lldpd.hash
-> index ee6e72ba55..6e809b2796 100644
-> --- a/package/lldpd/lldpd.hash
-> +++ b/package/lldpd/lldpd.hash
-> @@ -1,5 +1,5 @@
->  # Locally computed after checking gpg key
-> -# https://media.luffy.cx/files/lldpd/lldpd-1.0.7.tar.gz.gpg
-> +# https://media.luffy.cx/files/lldpd/lldpd-1.0.9.tar.gz.gpg
->  # using key AEF2348766F371C689A7360095A42FE8353525F9
-> -sha256  1df79179d489c841b49265f2ab5ff05f284a647e95862d2f3c02b3fb079a87e1  lldpd-1.0.7.tar.gz
-> +sha256  6b64eb3125952b1e33472198b054e8aa0dee45f45d3d4be22789090a474949f5  lldpd-1.0.9.tar.gz
->  sha256  0e96a5aea65f16e2239231ce4ab90497f8bc3bb8fe6abe9299aade4726ff7c8d  LICENSE
 > diff --git a/package/lldpd/lldpd.mk b/package/lldpd/lldpd.mk
-> index 2c5976ed3e..b88dd002e4 100644
+> index 7860b70c39..2c5976ed3e 100644
 > --- a/package/lldpd/lldpd.mk
 > +++ b/package/lldpd/lldpd.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
+> @@ -14,6 +14,7 @@ LLDPD_DEPENDENCIES = \
+>  	$(if $(BR2_PACKAGE_VALGRIND),valgrind)
+>  LLDPD_LICENSE = ISC
+>  LLDPD_LICENSE_FILES = LICENSE
+> +LLDPD_CPE_ID_VENDOR = lldpd_project
 >  
-> -LLDPD_VERSION = 1.0.7
-> +LLDPD_VERSION = 1.0.9
->  LLDPD_SITE = https://media.luffy.cx/files/lldpd
->  LLDPD_DEPENDENCIES = \
->  	$(if $(BR2_PACKAGE_CHECK),check) \
+>  # Detection of c99 support in configure fails without WCHAR. To enable
+>  # automatic detection of c99 support by configure, we need to enable
 > -- 
 > 2.30.2
 > 
