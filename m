@@ -1,54 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Apr 2021 11:04:29 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/pkg-meson.mk: fix
- setting host C++ compiler
-Message-ID: <20210403094654.D8B6D87770@busybox.osuosl.org>
+Date: Sat, 3 Apr 2021 11:08:19 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/ca-certificates:
+ bump to version 20210119
+Message-ID: <20210403094654.ECCD9846A1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dd0666de602f1b77dc8d02211e506bd78bf56770
+commit: https://git.buildroot.net/buildroot/commit/?id=9f900ac132daefad7c92f20a70ab185575cff4b1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Commit f4a61d1ae23ec7729af3a8a165bbee45b6b9ef75 introduced CC_FOR_BUILD and
-CXX_FOR_BUILD to avoid detecting ccache.
+Upstream has switched to requiring python3, so change the dependency to
+always use host-python3.
 
-Both values are set to `HOSTCC`. This causes issues where C++ files are
-compiled with the C compiler without passing the `stdc++` flag to the
-linker, too.
-
-Therefore, switch to pass the C++ compiler to CXX_FOR_BUILD.
-
-Correctly fixes:
-http://autobuild.buildroot.org/results/871e1362c44e5b68a149e6a5dd3caf99ea0d904a
-
-Commit 9783c04aaf5e4fc94099772f1dc699a974ee6538 proposed a fix which in
-fact is a workaround to get Meson to pass the `stdc++` flag to the C
-linker.
-
-A follow-up commit will revert this commit, as it is no longer
-needed.
-
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 00d41f58ebb286d88914eb3d3501ebf9e4a86b9a)
+Signed-off-by: John Keeping <john@metanate.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 7e0c490f4558b6922ccddf36a8bab0aef7e17c0a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-meson.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/ca-certificates/ca-certificates.hash |  4 ++--
+ package/ca-certificates/ca-certificates.mk   | 10 +++-------
+ 2 files changed, 5 insertions(+), 9 deletions(-)
 
-diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-index 5c4598eb00..fa7d04d206 100644
---- a/package/pkg-meson.mk
-+++ b/package/pkg-meson.mk
-@@ -82,7 +82,7 @@ define $(2)_CONFIGURE_CMDS
- 	    > $$($$(PKG)_SRCDIR)/build/cross-compilation.conf
- 	PATH=$$(BR_PATH) \
- 	CC_FOR_BUILD="$$(HOSTCC)" \
--	CXX_FOR_BUILD="$$(HOSTCC)" \
-+	CXX_FOR_BUILD="$$(HOSTCXX)" \
- 	$$($$(PKG)_CONF_ENV) \
- 	$$(MESON) \
- 		--prefix=/usr \
+diff --git a/package/ca-certificates/ca-certificates.hash b/package/ca-certificates/ca-certificates.hash
+index 1ed1c3ca06..024034c977 100644
+--- a/package/ca-certificates/ca-certificates.hash
++++ b/package/ca-certificates/ca-certificates.hash
+@@ -1,6 +1,6 @@
+ # hashes from: $(CA_CERTIFICATES_SITE)/ca-certificates_$(CA_CERTIFICATES_VERSION).dsc :
+-sha1  f17235bc9c3aec538065a655681815c242a6d7d5  ca-certificates_20200601.tar.xz
+-sha256  43766d5a436519503dfd65ab83488ae33ab4d4ca3d0993797b58c92eb9ed4e63  ca-certificates_20200601.tar.xz
++sha1  c9875aa16e42981c6975e59a11727539053e2299  ca-certificates_20210119.tar.xz
++sha256  daa3afae563711c30a0586ddae4336e8e3974c2b627faaca404c4e0141b64665  ca-certificates_20210119.tar.xz
+ 
+ # Locally computed
+ sha256  e85e1bcad3a915dc7e6f41412bc5bdeba275cadd817896ea0451f2140a93967c  debian/copyright
+diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
+index 5c24d4be49..94302ea96b 100644
+--- a/package/ca-certificates/ca-certificates.mk
++++ b/package/ca-certificates/ca-certificates.mk
+@@ -4,14 +4,10 @@
+ #
+ ################################################################################
+ 
+-CA_CERTIFICATES_VERSION = 20200601
++CA_CERTIFICATES_VERSION = 20210119
+ CA_CERTIFICATES_SOURCE = ca-certificates_$(CA_CERTIFICATES_VERSION).tar.xz
+-CA_CERTIFICATES_SITE = http://snapshot.debian.org/archive/debian/20200602T145955Z/pool/main/c/ca-certificates
+-CA_CERTIFICATES_DEPENDENCIES = host-openssl
+-# ca-certificates can be built with either python 2 or python 3
+-# but it must be at least python 2.7
+-CA_CERTIFICATES_DEPENDENCIES += \
+-	$(if $(BR2_PACKAGE_PYTHON3),host-python3,host-python)
++CA_CERTIFICATES_SITE = https://snapshot.debian.org/archive/debian/20210325T091936Z/pool/main/c/ca-certificates
++CA_CERTIFICATES_DEPENDENCIES = host-openssl host-python3
+ CA_CERTIFICATES_LICENSE = GPL-2.0+ (script), MPL-2.0 (data)
+ CA_CERTIFICATES_LICENSE_FILES = debian/copyright
+ 
