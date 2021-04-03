@@ -1,29 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 03 Apr 2021 11:05:36 +0200
-Subject: [Buildroot] [PATCH 2/2] Revert "package/mpd: fix build of
- GenParseName"
-In-Reply-To: <20210323163051.1284416-2-joerg.krause@embedded.rocks>
- (=?utf-8?Q?=22J=C3=B6rg?=
- Krause"'s message of "Tue, 23 Mar 2021 17:30:51 +0100")
-References: <20210323163051.1284416-1-joerg.krause@embedded.rocks>
- <20210323163051.1284416-2-joerg.krause@embedded.rocks>
-Message-ID: <877dlj91r3.fsf@dell.be.48ers.dk>
+Date: Sat, 03 Apr 2021 11:09:04 +0200
+Subject: [Buildroot] [PATCH] package/ca-certificates: bump to version
+ 20210119
+In-Reply-To: <20210325143946.297692-1-john@metanate.com> (John Keeping's
+ message of "Thu, 25 Mar 2021 14:39:46 +0000")
+References: <20210325143946.297692-1-john@metanate.com>
+Message-ID: <8735w791lb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
+>>>>> "John" == John Keeping <john@metanate.com> writes:
 
- > This reverts commit 9783c04aaf5e4fc94099772f1dc699a974ee6538.
- > This commit is actually a workaround to get Meson passing `-libstdc++`
- > to the C linker. The correct fix is to pass the host C++ compiler to
- > Meson instead of the host C compiler using the `CXX_FOR_BUILD` variable.
+ > Upstream has switched to requiring python3, so change the dependency to
+ > always use host-python3.
 
- > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+ > Signed-off-by: John Keeping <john@metanate.com>
 
-Committed to 2021.02.x, thanks.
+Committed to 2020.02.x, 2020.11.x and 2021.02.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
