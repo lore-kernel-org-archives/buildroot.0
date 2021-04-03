@@ -1,23 +1,25 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 3 Apr 2021 15:52:59 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libhdhomerun: bump version to
- 20210224
-In-Reply-To: <20210402164803.694987-1-bernd.kuhls@t-online.de>
-References: <20210402164803.694987-1-bernd.kuhls@t-online.de>
-Message-ID: <20210403155259.291685c2@windsurf.home>
+Date: Sat, 3 Apr 2021 15:53:05 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libvpx: bump version to 1.10.0
+In-Reply-To: <20210402171224.771383-1-bernd.kuhls@t-online.de>
+References: <20210402171224.771383-1-bernd.kuhls@t-online.de>
+Message-ID: <20210403155305.57788e0d@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri,  2 Apr 2021 18:48:03 +0200
+On Fri,  2 Apr 2021 19:12:24 +0200
 Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
+> Release notes:
+> https://chromium.googlesource.com/webm/libvpx/+/refs/tags/v1.10.0
+> 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/libhdhomerun/libhdhomerun.hash | 2 +-
->  package/libhdhomerun/libhdhomerun.mk   | 2 +-
+>  package/libvpx/libvpx.hash | 2 +-
+>  package/libvpx/libvpx.mk   | 2 +-
 >  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
