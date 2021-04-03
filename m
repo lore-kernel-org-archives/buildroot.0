@@ -1,111 +1,54 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  3 Apr 2021 11:49:58 +0200
-Subject: [Buildroot] [PATCH 1/1] package/tvheadend: add various options to
- disable optional components
-Message-ID: <20210403094958.890489-1-bernd.kuhls@t-online.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 3 Apr 2021 11:04:29 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/pkg-meson.mk: fix
+ setting host C++ compiler
+Message-ID: <20210403094654.D8B6D87770@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When enabled some IPTV streams are piped using /usr/bin/ffmpeg so make
-sure that the ffmpeg binary is present.
+commit: https://git.buildroot.net/buildroot/commit/?id=dd0666de602f1b77dc8d02211e506bd78bf56770
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Transcoding support can already be disabled reducing /usr/bin/tvheadend
-by 1,03MB.
+Commit f4a61d1ae23ec7729af3a8a165bbee45b6b9ef75 introduced CC_FOR_BUILD and
+CXX_FOR_BUILD to avoid detecting ccache.
 
-By disabling all new options provided by this patch the binary size can
-additionally be reduced by 2,08MB.
+Both values are set to `HOSTCC`. This causes issues where C++ files are
+compiled with the C compiler without passing the `stdc++` flag to the
+linker, too.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Therefore, switch to pass the C++ compiler to CXX_FOR_BUILD.
+
+Correctly fixes:
+http://autobuild.buildroot.org/results/871e1362c44e5b68a149e6a5dd3caf99ea0d904a
+
+Commit 9783c04aaf5e4fc94099772f1dc699a974ee6538 proposed a fix which in
+fact is a workaround to get Meson to pass the `stdc++` flag to the C
+linker.
+
+A follow-up commit will revert this commit, as it is no longer
+needed.
+
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 00d41f58ebb286d88914eb3d3501ebf9e4a86b9a)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tvheadend/Config.in    | 27 ++++++++++++++++++++++++++-
- package/tvheadend/tvheadend.mk | 27 +++++++++++++++++++++++++++
- 2 files changed, 53 insertions(+), 1 deletion(-)
+ package/pkg-meson.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/tvheadend/Config.in b/package/tvheadend/Config.in
-index 909d955c02..29a7f2d86e 100644
---- a/package/tvheadend/Config.in
-+++ b/package/tvheadend/Config.in
-@@ -3,7 +3,7 @@ comment "tvheadend needs a toolchain w/ NPTL, headers >= 3.2, dynamic library"
- 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2 || BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 
--config BR2_PACKAGE_TVHEADEND
-+menuconfig BR2_PACKAGE_TVHEADEND
- 	bool "tvheadend"
- 	depends on !BR2_STATIC_LIBS # dladdr()
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-@@ -28,6 +28,31 @@ config BR2_PACKAGE_TVHEADEND
- 
- if BR2_PACKAGE_TVHEADEND
- 
-+config BR2_PACKAGE_TVHEADEND_DESCRAMBLER
-+	bool "descrambler support"
-+	default y
-+	help
-+	  Enable support for various descrambler modules.
-+
-+config BR2_PACKAGE_TVHEADEND_IPTV
-+	bool "IPTV support"
-+	default y
-+	select BR2_PACKAGE_FFMPEG_FFMPEG if BR2_PACKAGE_FFMPEG
-+	help
-+	  Enable IPTV support.
-+
-+config BR2_PACKAGE_TVHEADEND_SATIP
-+	bool "SAT>IP support"
-+	default y
-+	help
-+	  Enable SAT>IP support.
-+
-+config BR2_PACKAGE_TVHEADEND_TIMESHIFT
-+	bool "timeshift support"
-+	default y
-+	help
-+	  Enable timeshift support.
-+
- config BR2_PACKAGE_TVHEADEND_TRANSCODING
- 	bool "transcoding support"
- 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
-diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-index 114142bfa9..f9e748531e 100644
---- a/package/tvheadend/tvheadend.mk
-+++ b/package/tvheadend/tvheadend.mk
-@@ -63,6 +63,33 @@ TVHEADEND_CONF_OPTS += \
- 	--disable-libx265
- endif
- 
-+ifeq ($(BR2_PACKAGE_TVHEADEND_DESCRAMBLER),y)
-+TVHEADEND_CONF_OPTS += --enable-cardclient --enable-cwc \
-+	--enable-cccam --enable-capmt --enable-constcw
-+else
-+TVHEADEND_CONF_OPTS += --disable-cardclient --disable-cwc \
-+	--disable-cccam --disable-capmt --disable-constcw
-+endif
-+
-+ifeq ($(BR2_PACKAGE_TVHEADEND_IPTV),y)
-+TVHEADEND_CONF_OPTS += --enable-iptv
-+TVHEADEND_DEPENDENCIES += ffmpeg
-+else
-+TVHEADEND_CONF_OPTS += --disable-iptv
-+endif
-+
-+ifeq ($(BR2_PACKAGE_TVHEADEND_SATIP),y)
-+TVHEADEND_CONF_OPTS += --enable-satip_client --enable-satip_server
-+else
-+TVHEADEND_CONF_OPTS += --disable-satip_client --disable-satip_server
-+endif
-+
-+ifeq ($(BR2_PACKAGE_TVHEADEND_TIMESHIFT),y)
-+TVHEADEND_CONF_OPTS += --enable-timeshift
-+else
-+TVHEADEND_CONF_OPTS += --disable-timeshift
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBDVBCSA),y)
- TVHEADEND_DEPENDENCIES += libdvbcsa
- TVHEADEND_CONF_OPTS += --enable-tvhcsa
--- 
-2.29.2
+diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+index 5c4598eb00..fa7d04d206 100644
+--- a/package/pkg-meson.mk
++++ b/package/pkg-meson.mk
+@@ -82,7 +82,7 @@ define $(2)_CONFIGURE_CMDS
+ 	    > $$($$(PKG)_SRCDIR)/build/cross-compilation.conf
+ 	PATH=$$(BR_PATH) \
+ 	CC_FOR_BUILD="$$(HOSTCC)" \
+-	CXX_FOR_BUILD="$$(HOSTCC)" \
++	CXX_FOR_BUILD="$$(HOSTCXX)" \
+ 	$$($$(PKG)_CONF_ENV) \
+ 	$$(MESON) \
+ 		--prefix=/usr \
