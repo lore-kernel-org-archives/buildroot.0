@@ -1,87 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Apr 2021 13:51:00 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/efivar: disable
- -Werror
-Message-ID: <20210403112727.1496383A06@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 3 Apr 2021 14:18:07 +0200
+Subject: [Buildroot] package: add kmscon
+In-Reply-To: <XQTayAXJ0ouEvKU_bcf0tyt6DOSr7_rf8dmmfl2a69DXbglRV1NCkl0buP5dG9ag5D1-UeOQFi6XBAyQSmPFOUu6W3nrggufcZqjkctXEbM=@protonmail.com>
+References: <XQTayAXJ0ouEvKU_bcf0tyt6DOSr7_rf8dmmfl2a69DXbglRV1NCkl0buP5dG9ag5D1-UeOQFi6XBAyQSmPFOUu6W3nrggufcZqjkctXEbM=@protonmail.com>
+Message-ID: <20210403141807.69534733@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8bfa4319e08d52000afc85664aef51e69e8b6890
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+Hello,
 
-Fix the following build failure with gcc 10:
+On Sat, 03 Apr 2021 10:16:51 +0000
+qblade via buildroot <buildroot@busybox.net> wrote:
 
-/home/buildroot/autobuild/run/instance-1/output-1/host/bin/aarch64-none-linux-gnu-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2   -I/home/buildroot/autobuild/run/instance-1/output-1/build/efivar-37/src/include/   -specs=/home/buildroot/autobuild/run/instance-1/output-1/build/efivar-37/gcc.specs  -L.  -fPIC -Wl,-z,muldefs     -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -o efivar efivar.c -lefivar -ldl
-In file included from efivar.h:28,
-                 from efivar.c:40:
-In function 'text_to_guid',
-    inlined from 'parse_name.constprop' at efivar.c:157:8:
-guid.h:106:2: error: 'strncpy' output may be truncated copying 8 bytes from a string of length 38 [-Werror=stringop-truncation]
-  106 |  strncpy(eightbytes, text, 8);
-      |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-cc1: all warnings being treated as errors
+> I added two packages, libtsm is a dependent library of kmscon.
+> 
+> kmscon does better than fbterm in 256color.
+> 
+> Multiple font engine support of kmscon will be added later, currently only unifont is supported.
+> 
+> I tested it on the following platforms and it works fine
 
-Fixes:
- - http://autobuild.buildroot.org/results/fcba72d359f4128515560e9105384cd4deff5043
+Thanks a lot for your contribution! Could you use "git send-email" to
+send your patches, so that each patch is a separate e-mail on the
+mailing list, and we can do proper review on them ?
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 720deac3d9619b378bd554e1e3b1bdf1143768a1)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/efivar/0007-gcc.specs-drop-Werror.patch | 44 +++++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
+Thanks a lot!
 
-diff --git a/package/efivar/0007-gcc.specs-drop-Werror.patch b/package/efivar/0007-gcc.specs-drop-Werror.patch
-new file mode 100644
-index 0000000000..aa717fedaf
---- /dev/null
-+++ b/package/efivar/0007-gcc.specs-drop-Werror.patch
-@@ -0,0 +1,44 @@
-+From 8d5cf3347cce9d644f670ffd1d48e71d74635481 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 22 Mar 2021 07:52:34 +0100
-+Subject: [PATCH] gcc.specs: drop -Werror
-+
-+Build with -Werror raises the following build failure with gcc 10:
-+
-+/home/buildroot/autobuild/run/instance-1/output-1/host/bin/aarch64-none-linux-gnu-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2   -I/home/buildroot/autobuild/run/instance-1/output-1/build/efivar-37/src/include/   -specs=/home/buildroot/autobuild/run/instance-1/output-1/build/efivar-37/gcc.specs  -L.  -fPIC -Wl,-z,muldefs     -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -o efivar efivar.c -lefivar -ldl
-+In file included from efivar.h:28,
-+                 from efivar.c:40:
-+In function 'text_to_guid',
-+    inlined from 'parse_name.constprop' at efivar.c:157:8:
-+guid.h:106:2: error: 'strncpy' output may be truncated copying 8 bytes from a string of length 38 [-Werror=stringop-truncation]
-+  106 |  strncpy(eightbytes, text, 8);
-+      |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+cc1: all warnings being treated as errors
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/fcba72d359f4128515560e9105384cd4deff5043
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: not upstreamable as Makefiles were reworked and a new
-+ERRORS parameter was added:
-+https://github.com/rhboot/efivar/commit/998f617cec92d526e1fadb745673ceef63fa1483]
-+---
-+ gcc.specs | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/gcc.specs b/gcc.specs
-+index 45d43d1..1baf11a 100644
-+--- a/gcc.specs
-++++ b/gcc.specs
-+@@ -2,7 +2,7 @@
-+ + -D_GNU_SOURCE
-+ 
-+ *efivar_cpp_options:
-+- -Werror -Wall -std=gnu11 -Wextra
-++ -Wall -std=gnu11 -Wextra
-+ 
-+ *cpp_options:
-+ + %(efivar_cpp_options)
-+-- 
-+2.30.1
-+
+Thomas Petazzoni
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
