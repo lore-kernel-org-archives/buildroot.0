@@ -1,7 +1,7 @@
 From: qblade <qblade@protonmail.com>
-Date: Sat, 03 Apr 2021 13:37:47 +0000
-Subject: [Buildroot] [PATCH 1/2] package: add libtsm
-Message-ID: <ABy9Rw02E7bRIqk4kspFrsBCVKgcsk8twRlSzxBSqDAizVWbIC7N_ga3QqdQsGYF9W8EsIwiSPRke5umgfNSHX0ktDtqWmQ9hndkCKukfZs=@protonmail.com>
+Date: Sat, 03 Apr 2021 13:41:58 +0000
+Subject: [Buildroot] [PATCH 2/2] package: add kmscon
+Message-ID: <Tid09bZA4nUDltEiuqvCboxK-cHb0Jk33cy_PRXdZVvU06oGEHtPoqhIeI9ZsFZx-V2PI8RDQly7DwDBSbd-TaGt3O35gdGXHbQzOlje2jk=@protonmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,59 +10,73 @@ To: buildroot@busybox.net
 
 Signed-off-by: qblade <qblade@protonmail.com>
 ---
- package/libtsm/Config.in   | 10 ++++++++++
- package/libtsm/libtsm.hash |  4 ++++
- package/libtsm/libtsm.mk   | 14 ++++++++++++++
- 3 files changed, 28 insertions(+)
- create mode 100644 package/libtsm/Config.in
- create mode 100644 package/libtsm/libtsm.hash
- create mode 100644 package/libtsm/libtsm.mk
+ package/Config.in          |  1 +
+ package/kmscon/Config.in   | 13 +++++++++++++
+ package/kmscon/kmscon.hash |  2 ++
+ package/kmscon/kmscon.mk   | 14 ++++++++++++++
+ 4 files changed, 30 insertions(+)
+ create mode 100644 package/kmscon/Config.in
+ create mode 100644 package/kmscon/kmscon.hash
+ create mode 100644 package/kmscon/kmscon.mk
 
-diff --git a/package/libtsm/Config.in b/package/libtsm/Config.in
+diff --git a/package/Config.in b/package/Config.in
+index 1269bc7b51..ca86e3dd2e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1932,6 +1932,7 @@ menu "Other"
+ 	source "package/libtasn1/Config.in"
+ 	source "package/libtommath/Config.in"
+ 	source "package/libtpl/Config.in"
++	source "package/libtsm/Config.in"
+ 	source "package/libubox/Config.in"
+ 	source "package/libuci/Config.in"
+ 	source "package/libunwind/Config.in"
+diff --git a/package/kmscon/Config.in b/package/kmscon/Config.in
 new file mode 100644
-index 0000000000..03217dbc69
+index 0000000000..356d5f497d
 --- /dev/null
-+++ b/package/libtsm/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_LIBTSM
-+	bool "libtsm"
-+	select BR2_PACKAGE_LIBXKBCOMMON
++++ b/package/kmscon/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_KMSCON
++	bool "kmscon"
++	depends on BR2_PACKAGE_HAS_UDEV
++	depends on BR2_TOOLCHAIN_HAS_SSP
++	select BR2_PACKAGE_LIBDRM
++	select BR2_PACKAGE_LIBTSM
++	select BR2_PACKAGE_XKEYBOARD_CONFIG # keyboard layout support
 +	help
-+	  TSM is a state machine for DEC VT100-VT520
-+	  compatible terminal emulators. It tries to
-+	  support all common standards while keeping
-+	  compatibility to existing emulators.
++	  Kmscon is a simple terminal emulator based on linux kernel
++	  mode setting (KMS). It is an attempt to replace the in-kernel
++	  VT implementation with a userspace console.
 +
-+	  https://github.com/Aetf/libtsm
-diff --git a/package/libtsm/libtsm.hash b/package/libtsm/libtsm.hash
++	https://www.freedesktop.org/wiki/Software/kmscon/
+diff --git a/package/kmscon/kmscon.hash b/package/kmscon/kmscon.hash
 new file mode 100644
-index 0000000000..0b6c01b1a0
+index 0000000000..134e39285b
 --- /dev/null
-+++ b/package/libtsm/libtsm.hash
-@@ -0,0 +1,4 @@
-+sha256 7bab5ac3b5709a3f0c9d43207e8be5651402034d31c96e58140423fce55eb6c9  libtsm-4.0.1.tar.gz
-+sha256 a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  LICENSE_htable
-+sha256 47b3a15b5259545b866f33c302d485fe414c65917de179b33f411c2f8722c7da  COPYING
-+sha256 3d2f828a7b462939e5278ec83c7663a9ebe50851fc64883a4f544ed04f12fe03  external/wcwidth/LICENSE.txt
-diff --git a/package/libtsm/libtsm.mk b/package/libtsm/libtsm.mk
++++ b/package/kmscon/kmscon.hash
+@@ -0,0 +1,2 @@
++sha256 9f4a8c643dc8c7f551cf0f1bd4c6059a019c162c147178aa00a5c09eff8b9fbe  kmscon-01dd0a231e2125a40ceba5f59fd945ff29bf2cdc.tar.gz
++sha256 bf738bc59e8608b783e35d61f49705cdbf668b611d13a32483d734c38dc289f9  COPYING
+diff --git a/package/kmscon/kmscon.mk b/package/kmscon/kmscon.mk
 new file mode 100644
-index 0000000000..2ed567f6f0
+index 0000000000..03e075f019
 --- /dev/null
-+++ b/package/libtsm/libtsm.mk
++++ b/package/kmscon/kmscon.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# libtsm
++# kmscon
 +#
 +################################################################################
 +
-+LIBTSM_VERSION = 4.0.1
-+LIBTSM_SITE = $(call github,Aetf,libtsm,v$(LIBTSM_VERSION))
-+LIBTSM_INSTALL_STAGING = YES
-+LIBTSM_SUPPORTS_IN_SOURCE_BUILD = NO
-+LIBTSM_LICENSE = BSD-2-Clause, MIT, LGPL-2.1+, ISC
-+LIBTSM_LICENSE_FILES = COPYING LICENSE_htable external/wcwidth/LICENSE.txt
++KMSCON_VERSION = 01dd0a231e2125a40ceba5f59fd945ff29bf2cdc
++KMSCON_SITE = $(call github,Aetf,kmscon,$(KMSCON_VERSION))
++KMSCON_AUTORECONF = YES
++KMSCON_DEPENDENCIES = host-automake host-autoconf host-libtool libxkbcommon libtsm udev libdrm
++KMSCON_LICENSE = MIT, LGPL-2.1+, BSD-2-Clause, GPL-2.0+
++KMSCON_LICENSE_FILES = COPYING
 +
-+$(eval $(cmake-package))
++$(eval $(autotools-package))
 --
 2.27.0
