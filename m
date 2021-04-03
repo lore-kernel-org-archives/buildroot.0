@@ -1,92 +1,57 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  3 Apr 2021 09:50:45 +0200
-Subject: [Buildroot] [PATCH 4/6] package/perl-mail-dkim: bump version to
- 1.20200907
-In-Reply-To: <20210403075047.598935-1-bernd.kuhls@t-online.de>
-References: <20210403075047.598935-1-bernd.kuhls@t-online.de>
-Message-ID: <20210403075047.598935-4-bernd.kuhls@t-online.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 3 Apr 2021 09:45:27 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] docs/manual: improve
+ details about the Github macro
+Message-ID: <20210403072557.02F6687826@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-scancpan added runtime dependency to perl-mail-authenticationresults
-and updated test_perl_mail_dkim.py.
+commit: https://git.buildroot.net/buildroot/commit/?id=9376694a4a76bc414914950a09a8e6550f84bee8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+The Github macro example shows something that is now considered
+incorrect: using v1.0 as the VERSION. This is not longer recommended
+as it prevents from matching with release-monitoring.org details.
+
+Let's update the example, and add a note to explain this in more
+details.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit b7cd17eb09701c336d8fb73ee339639b61488c26)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/perl-mail-dkim/Config.in                     | 1 +
- package/perl-mail-dkim/perl-mail-dkim.hash           | 4 ++--
- package/perl-mail-dkim/perl-mail-dkim.mk             | 2 +-
- support/testing/tests/package/test_perl_mail_dkim.py | 7 +++----
- 4 files changed, 7 insertions(+), 7 deletions(-)
+ docs/manual/adding-packages-tips.txt | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/package/perl-mail-dkim/Config.in b/package/perl-mail-dkim/Config.in
-index 057796b501..350a9ea467 100644
---- a/package/perl-mail-dkim/Config.in
-+++ b/package/perl-mail-dkim/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_PERL_MAIL_DKIM
- 	bool "perl-mail-dkim"
- 	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_PERL_CRYPT_OPENSSL_RSA # runtime
-+	select BR2_PACKAGE_PERL_MAIL_AUTHENTICATIONRESULTS # runtime
- 	select BR2_PACKAGE_PERL_MAILTOOLS # runtime
- 	select BR2_PACKAGE_PERL_NET_DNS # runtime
- 	help
-diff --git a/package/perl-mail-dkim/perl-mail-dkim.hash b/package/perl-mail-dkim/perl-mail-dkim.hash
-index e94adfc6ed..d74764dc48 100644
---- a/package/perl-mail-dkim/perl-mail-dkim.hash
-+++ b/package/perl-mail-dkim/perl-mail-dkim.hash
-@@ -1,6 +1,6 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5  9de35f8aa77a85dc17423cbcce2bf46d  Mail-DKIM-1.20200824.tar.gz
--sha256  871d329830acb4840423aa59036622fb2ee394efc1d09316dcc32ae94454e916  Mail-DKIM-1.20200824.tar.gz
-+md5  63ba8a807256ce13f7890c5acb206b3c  Mail-DKIM-1.20200907.tar.gz
-+sha256  abff11bd0977b9b8c3b2c3fc2a0dbdd2d38da249568698710fec1002d4251bf5  Mail-DKIM-1.20200907.tar.gz
+diff --git a/docs/manual/adding-packages-tips.txt b/docs/manual/adding-packages-tips.txt
+index 95a1d599ef..6e4241d570 100644
+--- a/docs/manual/adding-packages-tips.txt
++++ b/docs/manual/adding-packages-tips.txt
+@@ -174,8 +174,8 @@ past, the 'github' helper function should be used as shown below.
  
- # computed by scancpan
- sha256  ffaa40feb768566e52d93879fedd2c5483828b6de483874f30a0a4425351555f  LICENSE
-diff --git a/package/perl-mail-dkim/perl-mail-dkim.mk b/package/perl-mail-dkim/perl-mail-dkim.mk
-index e67bf5ee18..73d432124e 100644
---- a/package/perl-mail-dkim/perl-mail-dkim.mk
-+++ b/package/perl-mail-dkim/perl-mail-dkim.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ ------------------------
+ # Use a tag or a full commit ID
+-FOO_VERSION = v1.0
+-FOO_SITE = $(call github,<user>,<package>,$(FOO_VERSION))
++FOO_VERSION = 1.0
++FOO_SITE = $(call github,<user>,<package>,v$(FOO_VERSION))
+ ------------------------
  
--PERL_MAIL_DKIM_VERSION = 1.20200824
-+PERL_MAIL_DKIM_VERSION = 1.20200907
- PERL_MAIL_DKIM_SOURCE = Mail-DKIM-$(PERL_MAIL_DKIM_VERSION).tar.gz
- PERL_MAIL_DKIM_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MB/MBRADSHAW
- PERL_MAIL_DKIM_LICENSE = Artistic or GPL-1.0+
-diff --git a/support/testing/tests/package/test_perl_mail_dkim.py b/support/testing/tests/package/test_perl_mail_dkim.py
-index cd9e75795b..88f3d7cde9 100644
---- a/support/testing/tests/package/test_perl_mail_dkim.py
-+++ b/support/testing/tests/package/test_perl_mail_dkim.py
-@@ -7,13 +7,13 @@ class TestPerlMailDKIM(TestPerlBase):
-         Mail-DKIM
-     direct dependencies:
-         Crypt-OpenSSL-RSA   XS
-+        Mail-AuthenticationResults
-         MailTools
-         Net-DNS
--        Net-DNS-Resolver-Mock
--        YAML-LibYAML   XS
-     indirect dependencies:
--        Crypt-OpenSSL-Random   XS
-+        Crypt::OpenSSL::Random
-         Digest-HMAC
-+        JSON
-         TimeDate
-     """
+ .Notes
+@@ -184,6 +184,12 @@ FOO_SITE = $(call github,<user>,<package>,$(FOO_VERSION))
+   Buildroot (e.g.: +foo-f6fb6654af62045239caed5950bc6c7971965e60.tar.gz+),
+   so it is not necessary to specify it in the +.mk+ file.
+ - When using a commit ID as version, you should use the full 40 hex characters.
++- When the tag contains a prefix such as +v+ in +v1.0+, then the
++  +VERSION+ variable should contain just +1.0+, and the +v+ should be
++  added directly in the +SITE+ variable, as illustrated above. This
++  ensures that the +VERSION+ variable value can be used to match
++  against http://www.release-monitoring.org/[release-monitoring.org]
++  results.
  
-@@ -25,6 +25,5 @@ class TestPerlMailDKIM(TestPerlBase):
- 
-     def test_run(self):
-         self.login()
--        self.module_test("Crypt::OpenSSL::Random")
-         self.module_test("Crypt::OpenSSL::RSA")
-         self.module_test("Mail::DKIM")
--- 
-2.29.2
+ If the package you wish to add does have a release section on GitHub, the
+ maintainer may have uploaded a release tarball, or the release may just point
