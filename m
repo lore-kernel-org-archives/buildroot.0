@@ -1,41 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Apr 2021 13:42:50 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/wpa_supplicant:
- annotate CVE-2021-27803
-Message-ID: <20210403112714.C2D67882A2@busybox.osuosl.org>
+Date: Sat, 3 Apr 2021 13:48:04 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] support/scripts: fix
+ pycompile for short filenames
+Message-ID: <20210403112714.E39187FB72@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=66e6177ea921d28309d43afe3dd220ce4ab74b1f
+commit: https://git.buildroot.net/buildroot/commit/?id=ea9fdc21ef92aa409afbe5d20af11c1710c5701c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Add a WPA_SUPPLICANT_IGNORE_CVES entry for CVE-2021-27803 which was
-fixed by commit 9ada4eb2f1c3d67ee49f6f5466738bcd821fc647, which we
-have backported as
-0001-P2P-Fix-a-corner-case-in-peer-addition-based-on-PD-R.patch.
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 1a7cf592a834357c5777e452f0b7ab7652e7d389)
+Signed-off-by: Bert Outtier <outtierbert@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 6fdc878d73938e70335a667a831ded67a15df53c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wpa_supplicant/wpa_supplicant.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ support/scripts/pycompile.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-index 9f6f18382f..c4e98cf609 100644
---- a/package/wpa_supplicant/wpa_supplicant.mk
-+++ b/package/wpa_supplicant/wpa_supplicant.mk
-@@ -21,6 +21,9 @@ WPA_SUPPLICANT_LDFLAGS = $(TARGET_LDFLAGS)
- # 0001-AP-Silently-ignore-management-frame-from-unexpected-.patch
- WPA_SUPPLICANT_IGNORE_CVES += CVE-2019-16275
+diff --git a/support/scripts/pycompile.py b/support/scripts/pycompile.py
+index 8399d57936..6b50713bcc 100644
+--- a/support/scripts/pycompile.py
++++ b/support/scripts/pycompile.py
+@@ -28,7 +28,7 @@ def compile_one(host_path, strip_root=None):
+     if os.path.islink(host_path) or not os.path.isfile(host_path):
+         return  # only compile real files
  
-+# 0001-P2P-Fix-a-corner-case-in-peer-addition-based-on-PD-R.patch
-+WPA_SUPPLICANT_IGNORE_CVES += CVE-2021-27803
-+
- # install the wpa_client library
- WPA_SUPPLICANT_INSTALL_STAGING = YES
+-    if not re.match(r"^[_A-Za-z][_A-Za-z0-9]+\.py$",
++    if not re.match(r"^[_A-Za-z][_A-Za-z0-9]*\.py$",
+                     os.path.basename(host_path)):
+         return  # only compile "importable" python modules
  
