@@ -1,61 +1,72 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Apr 2021 11:08:01 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/ca-certificates:
- bump to version 20210119
-Message-ID: <20210403094716.5670D834E7@busybox.osuosl.org>
+Date: Sat, 3 Apr 2021 11:05:27 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] Revert "package/mpd: fix
+ build of GenParseName"
+Message-ID: <20210403094716.429937F9B4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6935a70dec4bc39e12f1e97214300dbcaf9b82aa
+commit: https://git.buildroot.net/buildroot/commit/?id=7806068536bda2b8295bc2e97c911904ff14948b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Upstream has switched to requiring python3, so change the dependency to
-always use host-python3.
+This reverts commit 9783c04aaf5e4fc94099772f1dc699a974ee6538.
 
-Signed-off-by: John Keeping <john@metanate.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 7e0c490f4558b6922ccddf36a8bab0aef7e17c0a)
+This commit is actually a workaround to get Meson passing `-libstdc++`
+to the C linker. The correct fix is to pass the host C++ compiler to
+Meson instead of the host C compiler using the `CXX_FOR_BUILD` variable.
+
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 7205247aaee3bb4593f125bd3bce0dfa2bb0e3fe)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ca-certificates/ca-certificates.hash |  4 ++--
- package/ca-certificates/ca-certificates.mk   | 10 +++-------
- 2 files changed, 5 insertions(+), 9 deletions(-)
+ ...-tag-meson.build-fix-GenParseName-linking.patch | 38 ----------------------
+ 1 file changed, 38 deletions(-)
 
-diff --git a/package/ca-certificates/ca-certificates.hash b/package/ca-certificates/ca-certificates.hash
-index 1ed1c3ca06..024034c977 100644
---- a/package/ca-certificates/ca-certificates.hash
-+++ b/package/ca-certificates/ca-certificates.hash
-@@ -1,6 +1,6 @@
- # hashes from: $(CA_CERTIFICATES_SITE)/ca-certificates_$(CA_CERTIFICATES_VERSION).dsc :
--sha1  f17235bc9c3aec538065a655681815c242a6d7d5  ca-certificates_20200601.tar.xz
--sha256  43766d5a436519503dfd65ab83488ae33ab4d4ca3d0993797b58c92eb9ed4e63  ca-certificates_20200601.tar.xz
-+sha1  c9875aa16e42981c6975e59a11727539053e2299  ca-certificates_20210119.tar.xz
-+sha256  daa3afae563711c30a0586ddae4336e8e3974c2b627faaca404c4e0141b64665  ca-certificates_20210119.tar.xz
- 
- # Locally computed
- sha256  e85e1bcad3a915dc7e6f41412bc5bdeba275cadd817896ea0451f2140a93967c  debian/copyright
-diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
-index 5c24d4be49..94302ea96b 100644
---- a/package/ca-certificates/ca-certificates.mk
-+++ b/package/ca-certificates/ca-certificates.mk
-@@ -4,14 +4,10 @@
- #
- ################################################################################
- 
--CA_CERTIFICATES_VERSION = 20200601
-+CA_CERTIFICATES_VERSION = 20210119
- CA_CERTIFICATES_SOURCE = ca-certificates_$(CA_CERTIFICATES_VERSION).tar.xz
--CA_CERTIFICATES_SITE = http://snapshot.debian.org/archive/debian/20200602T145955Z/pool/main/c/ca-certificates
--CA_CERTIFICATES_DEPENDENCIES = host-openssl
--# ca-certificates can be built with either python 2 or python 3
--# but it must be at least python 2.7
--CA_CERTIFICATES_DEPENDENCIES += \
--	$(if $(BR2_PACKAGE_PYTHON3),host-python3,host-python)
-+CA_CERTIFICATES_SITE = https://snapshot.debian.org/archive/debian/20210325T091936Z/pool/main/c/ca-certificates
-+CA_CERTIFICATES_DEPENDENCIES = host-openssl host-python3
- CA_CERTIFICATES_LICENSE = GPL-2.0+ (script), MPL-2.0 (data)
- CA_CERTIFICATES_LICENSE_FILES = debian/copyright
- 
+diff --git a/package/mpd/0002-src-tag-meson.build-fix-GenParseName-linking.patch b/package/mpd/0002-src-tag-meson.build-fix-GenParseName-linking.patch
+deleted file mode 100644
+index e120b3e4ea..0000000000
+--- a/package/mpd/0002-src-tag-meson.build-fix-GenParseName-linking.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+-From 4c37d0b316a15213381bd7e07c5dee7526471fc8 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Mon, 1 Feb 2021 08:10:45 +0100
+-Subject: [PATCH] src/tag/meson.build: fix GenParseName linking
+-
+-Set link_language to cpp for GenParseName to avoid the following build
+-failure due to gcc being used to link a C and C++ source file:
+-
+-FAILED: src/tag/GenParseName
+-/usr/bin/gcc  -o src/tag/GenParseName src/tag/GenParseName.p/GenParseName.cxx.o src/tag/GenParseName.p/Names.c.o -Wl,--as-needed -Wl,--no-undefined -Wl,-O1
+-/usr/bin/ld: src/tag/GenParseName.p/GenParseName.cxx.o: in function `std::_Rb_tree<std::basic_string_view<char, std::char_traits<char> >, std::pair<std::basic_string_view<char, std::char_traits<char> > const, TagType>, std::_Select1st<std::pair<std::basic_string_view<char, std::char_traits<char> > const, TagType> >, std::less<std::basic_string_view<char, std::char_traits<char> > >, std::allocator<std::pair<std::basic_string_view<char, std::char_traits<char> > const, TagType> > >::_M_erase(std::_Rb_tree_node<std::pair<std::basic_string_view<char, std::char_traits<char> > const, TagType> >*)':
+-GenParseName.cxx:
+-(.text._ZNSt8_Rb_treeISt17basic_string_viewIcSt11char_traitsIcEESt4pairIKS3_7TagTypeESt10_Select1stIS7_ESt4lessIS3_ESaIS7_EE8_M_eraseEPSt13_Rb_tree_nodeIS7_E[_ZNSt8_Rb_treeISt17basic_string_viewIcSt11char_traitsIcEESt4pairIKS3_7TagTypeESt10_Select1stIS7_ESt4lessIS3_ESaIS7_EE8_M_eraseEPSt13_Rb_tree_nodeIS7_E]+0x23): undefined reference to `operator delete(void*)'
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/871e1362c44e5b68a149e6a5dd3caf99ea0d904a
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/MusicPlayerDaemon/MPD/pull/1068]
+----
+- src/tag/meson.build | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/src/tag/meson.build b/src/tag/meson.build
+-index 064eada18..4fda35e52 100644
+---- a/src/tag/meson.build
+-+++ b/src/tag/meson.build
+-@@ -2,6 +2,7 @@ generate_parse_name = executable(
+-   'GenParseName',
+-   'GenParseName.cxx',
+-   'Names.c',
+-+  link_language: 'cpp',
+-   native: true,
+- )
+- 
+--- 
+-2.29.2
+-
