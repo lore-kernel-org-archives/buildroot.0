@@ -1,49 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 3 Apr 2021 15:49:54 +0200
-Subject: [Buildroot] [git commit] package/libva-utils: bump version to 2.11.1
-Message-ID: <20210403132549.AAAF1801B3@busybox.osuosl.org>
+Date: Sat, 3 Apr 2021 15:49:56 +0200
+Subject: [Buildroot] [git commit] package/libhdhomerun: bump version to
+ 20210224
+Message-ID: <20210403132549.C4F0E801B3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=663e1fa563dbd5ed4625744cd4116cec93029b37
+commit: https://git.buildroot.net/buildroot/commit/?id=aa928f06ee4344b6d88729a4c7e58bc682aed2a0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Release notes:
-https://github.com/intel/libva-utils/releases/tag/2.11.1
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libva-utils/libva-utils.hash | 6 +++---
- package/libva-utils/libva-utils.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libhdhomerun/libhdhomerun.hash | 2 +-
+ package/libhdhomerun/libhdhomerun.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libva-utils/libva-utils.hash b/package/libva-utils/libva-utils.hash
-index 349fcc42ae..23d1c7677f 100644
---- a/package/libva-utils/libva-utils.hash
-+++ b/package/libva-utils/libva-utils.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/intel/libva-utils/releases/download/2.10.0/libva-utils-2.10.0.tar.bz2.sha1sum
--sha1  083a31354d2d49a4b9b8d4bccd6e7b77fc447154  libva-utils-2.10.0.tar.bz2
-+# From https://github.com/intel/libva-utils/releases/download/2.11.1/libva-utils-2.11.1.tar.bz2.sha1sum
-+sha1  89988122f76e8c0b3645006b60dfdbd9a3ae2e8c  libva-utils-2.11.1.tar.bz2
+diff --git a/package/libhdhomerun/libhdhomerun.hash b/package/libhdhomerun/libhdhomerun.hash
+index d5ff494adb..8abce42eb9 100644
+--- a/package/libhdhomerun/libhdhomerun.hash
++++ b/package/libhdhomerun/libhdhomerun.hash
+@@ -1,3 +1,3 @@
  # Locally computed
--sha256  33f06929faa395f55ec816432679219c56d70850bf465c848f0418e8a4f0352b  libva-utils-2.10.0.tar.bz2
-+sha256  9e5a6138869c79bdc0cd0598b6a6763110360f301e7294e5270704cb38bf53fb  libva-utils-2.11.1.tar.bz2
- sha256  c6220c9f87832c27abcb8a32eafdd2823e13ce146b3ea63d5deae2a76798ef50  COPYING
-diff --git a/package/libva-utils/libva-utils.mk b/package/libva-utils/libva-utils.mk
-index 4634ba4eb7..181af30337 100644
---- a/package/libva-utils/libva-utils.mk
-+++ b/package/libva-utils/libva-utils.mk
+-sha256  cbaeb779c5a4e07db45310ef4271872bcb7c472402ebc3c58e224653c09400ed  libhdhomerun_20200907.tgz
++sha256  b996389aa6f124a6d9dc1e75ec749e86d06102e2b3e7359d57163d4cc6e633f8  libhdhomerun_20210224.tgz
+ sha256  9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  LICENSE
+diff --git a/package/libhdhomerun/libhdhomerun.mk b/package/libhdhomerun/libhdhomerun.mk
+index 42d4de261f..eaa60a062a 100644
+--- a/package/libhdhomerun/libhdhomerun.mk
++++ b/package/libhdhomerun/libhdhomerun.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBVA_UTILS_VERSION = 2.10.0
-+LIBVA_UTILS_VERSION = 2.11.1
- LIBVA_UTILS_SOURCE = libva-utils-$(LIBVA_UTILS_VERSION).tar.bz2
- LIBVA_UTILS_SITE = https://github.com/intel/libva-utils/releases/download/$(LIBVA_UTILS_VERSION)
- LIBVA_UTILS_LICENSE = MIT
+-LIBHDHOMERUN_VERSION = 20200907
++LIBHDHOMERUN_VERSION = 20210224
+ LIBHDHOMERUN_SOURCE = libhdhomerun_$(LIBHDHOMERUN_VERSION).tgz
+ LIBHDHOMERUN_SITE = http://download.silicondust.com/hdhomerun
+ LIBHDHOMERUN_LICENSE = LGPL-2.1+
