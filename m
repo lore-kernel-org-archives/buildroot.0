@@ -1,57 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Apr 2021 09:45:27 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] docs/manual: improve
- details about the Github macro
-Message-ID: <20210403072557.02F6687826@busybox.osuosl.org>
+Date: Sat, 3 Apr 2021 09:44:38 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/php: bump version
+ to 7.4.16
+Message-ID: <20210403072556.DE3918A3D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9376694a4a76bc414914950a09a8e6550f84bee8
+commit: https://git.buildroot.net/buildroot/commit/?id=b093161acaea585719c32986c1c2801aa5b24716
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-The Github macro example shows something that is now considered
-incorrect: using v1.0 as the VERSION. This is not longer recommended
-as it prevents from matching with release-monitoring.org details.
+Changelog: https://www.php.net/ChangeLog-7.php#7.4.16
 
-Let's update the example, and add a note to explain this in more
-details.
+Update license hash due to copyright year bump:
+http://git.php.net/?p=php-src.git;a=commitdiff;h=8c04944b66fd4a4fa88e54b65a2391397998c51d
 
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit b7cd17eb09701c336d8fb73ee339639b61488c26)
+(cherry picked from commit 92797a892398af4954634a57322b63f0f071cc2b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/adding-packages-tips.txt | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ package/php/php.hash | 4 ++--
+ package/php/php.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/docs/manual/adding-packages-tips.txt b/docs/manual/adding-packages-tips.txt
-index 95a1d599ef..6e4241d570 100644
---- a/docs/manual/adding-packages-tips.txt
-+++ b/docs/manual/adding-packages-tips.txt
-@@ -174,8 +174,8 @@ past, the 'github' helper function should be used as shown below.
+diff --git a/package/php/php.hash b/package/php/php.hash
+index d60164d96f..14576cf506 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From https://www.php.net/downloads.php
+-sha256  9b859c65f0cf7b3eff9d4a28cfab719fb3d36a1db3c20d874a79b5ec44d43cb8  php-7.4.15.tar.xz
++sha256  1c16cefaf88ded4c92eed6a8a41eb682bb2ef42429deb55f1c4ba159053fb98b  php-7.4.16.tar.xz
  
- ------------------------
- # Use a tag or a full commit ID
--FOO_VERSION = v1.0
--FOO_SITE = $(call github,<user>,<package>,$(FOO_VERSION))
-+FOO_VERSION = 1.0
-+FOO_SITE = $(call github,<user>,<package>,v$(FOO_VERSION))
- ------------------------
+ # License file
+-sha256  0967ad6cf4b7fe81d38709d7aaef3fecb3bd685be7eebb37b864aa34c991baa7  LICENSE
++sha256  a188db807d711536f71e27b7d36879d63480f7994dc18adc08e624b3c5430fff  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 0004432216..09ace877d5 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- .Notes
-@@ -184,6 +184,12 @@ FOO_SITE = $(call github,<user>,<package>,$(FOO_VERSION))
-   Buildroot (e.g.: +foo-f6fb6654af62045239caed5950bc6c7971965e60.tar.gz+),
-   so it is not necessary to specify it in the +.mk+ file.
- - When using a commit ID as version, you should use the full 40 hex characters.
-+- When the tag contains a prefix such as +v+ in +v1.0+, then the
-+  +VERSION+ variable should contain just +1.0+, and the +v+ should be
-+  added directly in the +SITE+ variable, as illustrated above. This
-+  ensures that the +VERSION+ variable value can be used to match
-+  against http://www.release-monitoring.org/[release-monitoring.org]
-+  results.
- 
- If the package you wish to add does have a release section on GitHub, the
- maintainer may have uploaded a release tarball, or the release may just point
+-PHP_VERSION = 7.4.15
++PHP_VERSION = 7.4.16
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
