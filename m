@@ -1,63 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Apr 2021 12:15:46 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/haserl: security
- bump to version 0.9.36
-Message-ID: <20210403095643.8558886DA3@busybox.osuosl.org>
+Date: Sat, 3 Apr 2021 12:16:29 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/mariadb: security
+ bump to version 10.3.28
+Message-ID: <20210403095643.914DA81963@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eaea17c4a6dcac7973590096fefd224ff8aa8ca0
+commit: https://git.buildroot.net/buildroot/commit/?id=8e81ca5db99755a4392871ce1e1c24442f894950
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-2021-03-07	0.9.36
-*	Fix sf.net issue #5 - its possible to issue a PUT request
-	without a CONTENT-TYPE.   Assume an octet-stream in that case.
-*	Change the Prefix for variables to be the REQUEST_METHOD
-	(PUT/DELETE/GET/POST)
-	**** THIS IS A BREAKING CHANGE vs 0.9.33 ****
-*	Mitigations vs running haserl to get access to files not
-	available to the user.
+Fix CVE-2021-27928: A remote code execution issue was discovered in
+MariaDB 10.2 before 10.2.37, 10.3 before 10.3.28, 10.4 before 10.4.18,
+and 10.5 before 10.5.9; Percona Server through 2021-03-03; and the wsrep
+patch through 2021-03-03 for MySQL. An untrusted search path leads to
+eval injection, in which a database SUPER user can execute OS commands
+after modifying wsrep_provider and wsrep_notify_cmd. NOTE: this does not
+affect an Oracle product.
 
-- Fix CVE-2021-29133: Lack of verification in haserl, a component of
-  Alpine Linux Configuration Framework, before 0.9.36 allows local users
-  to read the contents of any file on the filesystem.
-- Update indentation in hash file (two spaces)
+https://mariadb.com/kb/en/mariadb-10328-release-notes/
+https://mariadb.com/kb/en/mariadb-10328-changelog/
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 661ce9aac94acbd00412fba81ce65e3ae2e8ba45)
+(cherry picked from commit f06339f3fcd309c70cfd4d0b3510ad3a3916e0df)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/haserl/haserl.hash | 6 +++---
- package/haserl/haserl.mk   | 2 +-
+ package/mariadb/mariadb.hash | 6 +++---
+ package/mariadb/mariadb.mk   | 2 +-
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/haserl/haserl.hash b/package/haserl/haserl.hash
-index 149bf0b0a5..c66b54a0ac 100644
---- a/package/haserl/haserl.hash
-+++ b/package/haserl/haserl.hash
-@@ -1,5 +1,5 @@
- # From http://sourceforge.net/projects/haserl/files/haserl-devel/
--md5	918f0b4f6cec0b438c8b5c78f2989010	haserl-0.9.35.tar.gz
--sha1	9a331d41e9d47a81e81e158f9a16bf5443347cd4	haserl-0.9.35.tar.gz
-+md5  b94cd201a82b410b7f93fe3a31416cff  haserl-0.9.36.tar.gz
-+sha1  a6244b496f06e1fea70581cb02c04bc1f0ffcbc3  haserl-0.9.36.tar.gz
- # Locally computed
--sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/haserl/haserl.mk b/package/haserl/haserl.mk
-index 4c24b9bcea..8bcaa94c0c 100644
---- a/package/haserl/haserl.mk
-+++ b/package/haserl/haserl.mk
+diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
+index a210dd9dad..26faf529c2 100644
+--- a/package/mariadb/mariadb.hash
++++ b/package/mariadb/mariadb.hash
+@@ -1,6 +1,6 @@
+-# From https://downloads.mariadb.org/mariadb/10.3.27
+-sha256  0dadc1650ab2ff40caab58210e93b106ae1e3d1a82e5b0fd92c795b8b43e4619  mariadb-10.3.27.tar.gz
+-sha512  1ebfdfa3ef6e13e92615ac2fb6995362ca60fe78f57ff3cf9e384517f95eaf4c701e60fe0977b1eee73889cdfe3367720da9a9bae3dd1a09a4558114ba593369  mariadb-10.3.27.tar.gz
++# From https://downloads.mariadb.org/mariadb/10.3.28
++sha256  e8c912cae2e5800d0da364cc23437907ed4be767f2cbdf198cf3afc03db6a6a3  mariadb-10.3.28.tar.gz
++sha512  f6941bcc818f9b3640e4b5fdbdd3a32b45c62c04087e583f1f0e1c0258b09a21c7639abd1c902e183c057838308ad5eedc00ffee76d44a02043e8e349015fb20  mariadb-10.3.28.tar.gz
+ 
+ # Hash for license files
+ sha256  a4665c1189fe31e0bbc27e9b55439df7dad6e99805407fe58d78da7aabe678f8  README.md
+diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
+index 83965d0437..cd514ec632 100644
+--- a/package/mariadb/mariadb.mk
++++ b/package/mariadb/mariadb.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--HASERL_VERSION = 0.9.35
-+HASERL_VERSION = 0.9.36
- HASERL_SITE = http://downloads.sourceforge.net/project/haserl/haserl-devel
- HASERL_LICENSE = GPL-2.0
- HASERL_LICENSE_FILES = COPYING
+-MARIADB_VERSION = 10.3.27
++MARIADB_VERSION = 10.3.28
+ MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
+ MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
+ # Tarball no longer contains LGPL license text
