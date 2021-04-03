@@ -1,41 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Apr 2021 13:42:40 +0200
-Subject: [Buildroot] [git commit branch/2020.11.x] package/wpa_supplicant:
- annotate CVE-2021-27803
-Message-ID: <20210403112718.E7FA2813F8@busybox.osuosl.org>
+Date: Sat, 3 Apr 2021 13:49:56 +0200
+Subject: [Buildroot] [git commit branch/2020.11.x] package/tzdata: bump
+ version to 2021a
+Message-ID: <20210403112719.1A79B882A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1d33edbf12e394f4662e213bb15a75e1e4b668ce
+commit: https://git.buildroot.net/buildroot/commit/?id=b973b2127c01de6b1aba4bd481fc4f7ccb37caee
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-Add a WPA_SUPPLICANT_IGNORE_CVES entry for CVE-2021-27803 which was
-fixed by commit 9ada4eb2f1c3d67ee49f6f5466738bcd821fc647, which we
-have backported as
-0001-P2P-Fix-a-corner-case-in-peer-addition-based-on-PD-R.patch.
+For details see [1].
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[1] https://mm.icann.org/pipermail/tz-announce/2021-January/000065.html
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 1a7cf592a834357c5777e452f0b7ab7652e7d389)
+(cherry picked from commit 01dc8f53418e4b91068e53f1fb99d765fe8b3833)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wpa_supplicant/wpa_supplicant.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/tzdata/tzdata.hash | 4 ++--
+ package/tzdata/tzdata.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-index 9f6f18382f..c4e98cf609 100644
---- a/package/wpa_supplicant/wpa_supplicant.mk
-+++ b/package/wpa_supplicant/wpa_supplicant.mk
-@@ -21,6 +21,9 @@ WPA_SUPPLICANT_LDFLAGS = $(TARGET_LDFLAGS)
- # 0001-AP-Silently-ignore-management-frame-from-unexpected-.patch
- WPA_SUPPLICANT_IGNORE_CVES += CVE-2019-16275
+diff --git a/package/tzdata/tzdata.hash b/package/tzdata/tzdata.hash
+index 6a1ccc128d..f70627481a 100644
+--- a/package/tzdata/tzdata.hash
++++ b/package/tzdata/tzdata.hash
+@@ -1,4 +1,4 @@
+-# From https://mm.icann.org/pipermail/tz-announce/2020-December/000064.html
+-sha512  dd312def18c807452fda2e697514e2064c5f51ebdbedd0cfe6f231252c76ee5d4409f653b295ed5657b7d30b868690047fdb70a10942e69eaa40b77473e3f9ca  tzdata2020f.tar.gz
++# From https://mm.icann.org/pipermail/tz-announce/2021-January/000065.html
++sha512  7cdd762ec90ce12a30fa36b1d66d1ea82d9fa21e514e2b9c7fcbe2541514ee0fadf30843ff352c65512fb270857b51d1517b45e1232b89c6f954ba9ff1833bb3  tzdata2021a.tar.gz
+ # Locally computed:
+ sha256  0613408568889f5739e5ae252b722a2659c02002839ad970a63dc5e9174b27cf  LICENSE
+diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
+index 8201dc1201..922e7420bc 100644
+--- a/package/tzdata/tzdata.mk
++++ b/package/tzdata/tzdata.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# 0001-P2P-Fix-a-corner-case-in-peer-addition-based-on-PD-R.patch
-+WPA_SUPPLICANT_IGNORE_CVES += CVE-2021-27803
-+
- # install the wpa_client library
- WPA_SUPPLICANT_INSTALL_STAGING = YES
- 
+-TZDATA_VERSION = 2020f
++TZDATA_VERSION = 2021a
+ TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
+ TZDATA_SITE = https://www.iana.org/time-zones/repository/releases
+ TZDATA_STRIP_COMPONENTS = 0
