@@ -1,35 +1,29 @@
-From: qblade <qblade@protonmail.com>
-Date: Sat, 03 Apr 2021 10:16:51 +0000
-Subject: [Buildroot] package: add kmscon
-Message-ID: <XQTayAXJ0ouEvKU_bcf0tyt6DOSr7_rf8dmmfl2a69DXbglRV1NCkl0buP5dG9ag5D1-UeOQFi6XBAyQSmPFOUu6W3nrggufcZqjkctXEbM=@protonmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 03 Apr 2021 12:17:32 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-lxml: security bump to
+ version 4.6.3
+In-Reply-To: <20210329203341.303201-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 29 Mar 2021 22:33:41 +0200")
+References: <20210329203341.303201-1-fontaine.fabrice@gmail.com>
+Message-ID: <87czvb7jur.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I added two packages, libtsm is a dependent library of kmscon.
+>>>>> "fontaine.fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-kmscon does better than fbterm in 256color.
+ > Fix CVE-2021-28957: lxml 4.6.2 allows XSS. It places the HTML action
+ > attribute into defs.link_attrs (in html/defs.py) for later use in input
+ > sanitization, but does not do the same for the HTML5 formaction
+ > attribute.
 
-Multiple font engine support of kmscon will be added later, currently only unifont is supported.
+ > https://github.com/lxml/lxml/blob/lxml-4.6.3/CHANGES.txt
 
-I tested it on the following platforms and it works fine
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-x86_64 glibc musl uclibc
-aarch64 glibc musl uclibc
-i386 glibc musl uclibc
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0001-package-add-libtsm.patch
-Type: text/x-patch
-Size: 2670 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210403/12476374/attachment.bin>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0002-package-add-kmscon-a-terminal-emulator-based-on-linu.patch
-Type: text/x-patch
-Size: 2823 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210403/12476374/attachment-0001.bin>
+Committed to 2020.02.x, 2020.11.x and 2021.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
