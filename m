@@ -1,35 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 03 Apr 2021 13:40:47 +0200
-Subject: [Buildroot] [PATCH] package/binutils: add patches to fix
- OpenRisc bug 27624
-In-Reply-To: <20210322155655.547476-1-giulio.benetti@benettiengineering.com>
- (Giulio Benetti's message of "Mon, 22 Mar 2021 16:56:55 +0100")
-References: <20210322155655.547476-1-giulio.benetti@benettiengineering.com>
-Message-ID: <878s5z61fk.fsf@dell.be.48ers.dk>
+Date: Sat, 03 Apr 2021 13:43:19 +0200
+Subject: [Buildroot] [PATCH 1/1] package/wpa_supplicant: annotate
+ CVE-2021-27803
+In-Reply-To: <20210322191316.1171234-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 22 Mar 2021 20:13:16 +0100")
+References: <20210322191316.1171234-1-fontaine.fabrice@gmail.com>
+Message-ID: <874kgn61bc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > These patches fix OpenRisc linker bug 27624 that affects packages
- > libtheora, protobuf and zeromq.
+ > Add a WPA_SUPPLICANT_IGNORE_CVES entry for CVE-2021-27803 which was
+ > fixed by commit 9ada4eb2f1c3d67ee49f6f5466738bcd821fc647
 
- > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
- > ---
- >  .../0010-bfd-elf32-or1k-fix-ld-assert.patch   | 33 +++++++++++++++++++
- >  .../0003-bfd-elf32-or1k-fix-ld-assert.patch   | 33 +++++++++++++++++++
- >  .../0003-bfd-elf32-or1k-fix-ld-assert.patch   | 33 +++++++++++++++++++
- >  .../0003-bfd-elf32-or1k-fix-ld-assert.patch   | 33 +++++++++++++++++++
- >  4 files changed, 132 insertions(+)
- >  create mode 100644 package/binutils/2.32/0010-bfd-elf32-or1k-fix-ld-assert.patch
- >  create mode 100644 package/binutils/2.34/0003-bfd-elf32-or1k-fix-ld-assert.patch
- >  create mode 100644 package/binutils/2.35.2/0003-bfd-elf32-or1k-fix-ld-assert.patch
- >  create mode 100644 package/binutils/2.36.1/0003-bfd-elf32-or1k-fix-ld-assert.patch
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Committed to 2021.02.x, thanks.
+Ups, I indeed forgot the _IGNORE_CVES entry.
+
+Committed to 2020.02.x, 2020.11.x and 2021.02.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
