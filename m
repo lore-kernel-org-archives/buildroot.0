@@ -1,54 +1,63 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Apr 2021 12:19:38 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/sqlcipher:
- security bump to version 4.4.3
-Message-ID: <20210403095643.A93B381963@busybox.osuosl.org>
+Date: Sat, 3 Apr 2021 12:15:46 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/haserl: security
+ bump to version 0.9.36
+Message-ID: <20210403095643.8558886DA3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d96b97e6d928e416f4485044fab2c0b0c59373a3
+commit: https://git.buildroot.net/buildroot/commit/?id=eaea17c4a6dcac7973590096fefd224ff8aa8ca0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-Fix CVE-2021-3119: Zetetic SQLCipher 4.x before 4.4.3 has a NULL pointer
-dereferencing issue related to sqlcipher_export in crypto.c and
-sqlite3StrICmp in sqlite3.c. This may allow an attacker to perform a
-remote denial of service attack. For example, an SQL injection can be
-used to execute the crafted SQL command sequence, which causes a
-segmentation fault.
+2021-03-07	0.9.36
+*	Fix sf.net issue #5 - its possible to issue a PUT request
+	without a CONTENT-TYPE.   Assume an octet-stream in that case.
+*	Change the Prefix for variables to be the REQUEST_METHOD
+	(PUT/DELETE/GET/POST)
+	**** THIS IS A BREAKING CHANGE vs 0.9.33 ****
+*	Mitigations vs running haserl to get access to files not
+	available to the user.
 
-https://github.com/sqlcipher/sqlcipher/blob/v4.4.3/CHANGELOG.md
+- Fix CVE-2021-29133: Lack of verification in haserl, a component of
+  Alpine Linux Configuration Framework, before 0.9.36 allows local users
+  to read the contents of any file on the filesystem.
+- Update indentation in hash file (two spaces)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 6f0a81de6b67aeec9711d899656afe78f016aecc)
+(cherry picked from commit 661ce9aac94acbd00412fba81ce65e3ae2e8ba45)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sqlcipher/sqlcipher.hash | 2 +-
- package/sqlcipher/sqlcipher.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/haserl/haserl.hash | 6 +++---
+ package/haserl/haserl.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/sqlcipher/sqlcipher.hash b/package/sqlcipher/sqlcipher.hash
-index 96a6a74013..ddc78ef7d6 100644
---- a/package/sqlcipher/sqlcipher.hash
-+++ b/package/sqlcipher/sqlcipher.hash
-@@ -1,3 +1,3 @@
- # locally computed
--sha256  87458e0e16594b3ba6c7a1f046bc1ba783d002d35e0e7b61bb6b7bb862f362a7  sqlcipher-4.4.2.tar.gz
-+sha256  b8df69b998c042ce7f8a99f07cf11f45dfebe51110ef92de95f1728358853133  sqlcipher-4.4.3.tar.gz
- sha256  3eee3c7964a9becc94d747bd36703d31fc86eb994680b06a61bfd4f2661eaac8  LICENSE
-diff --git a/package/sqlcipher/sqlcipher.mk b/package/sqlcipher/sqlcipher.mk
-index 5a9a77c1ee..a7b4c77849 100644
---- a/package/sqlcipher/sqlcipher.mk
-+++ b/package/sqlcipher/sqlcipher.mk
+diff --git a/package/haserl/haserl.hash b/package/haserl/haserl.hash
+index 149bf0b0a5..c66b54a0ac 100644
+--- a/package/haserl/haserl.hash
++++ b/package/haserl/haserl.hash
+@@ -1,5 +1,5 @@
+ # From http://sourceforge.net/projects/haserl/files/haserl-devel/
+-md5	918f0b4f6cec0b438c8b5c78f2989010	haserl-0.9.35.tar.gz
+-sha1	9a331d41e9d47a81e81e158f9a16bf5443347cd4	haserl-0.9.35.tar.gz
++md5  b94cd201a82b410b7f93fe3a31416cff  haserl-0.9.36.tar.gz
++sha1  a6244b496f06e1fea70581cb02c04bc1f0ffcbc3  haserl-0.9.36.tar.gz
+ # Locally computed
+-sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/haserl/haserl.mk b/package/haserl/haserl.mk
+index 4c24b9bcea..8bcaa94c0c 100644
+--- a/package/haserl/haserl.mk
++++ b/package/haserl/haserl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SQLCIPHER_VERSION = 4.4.2
-+SQLCIPHER_VERSION = 4.4.3
- SQLCIPHER_SITE = $(call github,sqlcipher,sqlcipher,v$(SQLCIPHER_VERSION))
- SQLCIPHER_LICENSE = BSD-3-Clause
- SQLCIPHER_LICENSE_FILES = LICENSE
+-HASERL_VERSION = 0.9.35
++HASERL_VERSION = 0.9.36
+ HASERL_SITE = http://downloads.sourceforge.net/project/haserl/haserl-devel
+ HASERL_LICENSE = GPL-2.0
+ HASERL_LICENSE_FILES = COPYING
