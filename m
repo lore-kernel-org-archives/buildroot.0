@@ -1,80 +1,44 @@
-From: Federico Pellegrin <fede@evolware.org>
-Date: Sat, 3 Apr 2021 06:30:22 +0200
-Subject: [Buildroot] [PATCH 1/1] package/kexec: fix build on pre 4.4
- kernels
-In-Reply-To: <20210203100939.17390-1-fede@evolware.org>
-References: <20210203100939.17390-1-fede@evolware.org>
-Message-ID: <CAM6O0Ziyh7w31j9KtHd7s4SvMWGkrrHP3JP=ksEPwCvvST1Jow@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat,  3 Apr 2021 08:35:59 +0200
+Subject: [Buildroot] [PATCH 1/1] package/kodi-vfs-libarchive: bump version
+ to 2.0.1-Matrix
+Message-ID: <20210403063559.77799-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-This has now been merged upstream:
-https://github.com/horms/kexec-tools/commit/d73822b8985b68694336cd6a1aa47fe0233b55cc
+Release notes:
+https://github.com/xbmc/vfs.libarchive/releases/tag/2.0.1-Matrix
 
-I don't know if you think it's the case to merge therefore to
-Buildroot or we can wait for the next release of kexec-tools (not sure
-when that could happend).
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/kodi-vfs-libarchive/kodi-vfs-libarchive.hash | 2 +-
+ package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thanks,
-Federico
-
-Il giorno mer 3 feb 2021 alle ore 11:09 Federico Pellegrin
-<fede@evolware.org> ha scritto:
->
-> kexec build will fail on older kernels (pre 4.4) as the define VIDEO_CAPABILITY_64BIT_BASE was not present at that time.
->
-> This patch adds it, as per linux/include/uapi/linux/screen_info.h, if not present.
->
-> Signed-off-by: Federico Pellegrin <fede@evolware.org>
-> ---
->  ...c-tools-fix-build-on-pre-4.4-kernels.patch | 34 +++++++++++++++++++
->  1 file changed, 34 insertions(+)
->  create mode 100644 package/kexec/0003-kexec-tools-fix-build-on-pre-4.4-kernels.patch
->
-> diff --git a/package/kexec/0003-kexec-tools-fix-build-on-pre-4.4-kernels.patch b/package/kexec/0003-kexec-tools-fix-build-on-pre-4.4-kernels.patch
-> new file mode 100644
-> index 0000000000..fcac604dfd
-> --- /dev/null
-> +++ b/package/kexec/0003-kexec-tools-fix-build-on-pre-4.4-kernels.patch
-> @@ -0,0 +1,34 @@
-> +From cbbe4c47cb2acae04083c510dbe0efc5f48f5bb6 Mon Sep 17 00:00:00 2001
-> +From: Federico Pellegrin <fede@evolware.org>
-> +Date: Wed, 3 Feb 2021 11:00:17 +0100
-> +Subject: [PATCH] kexec-tools: fix build on pre 4.4 kernels
-> +
-> +kexec build will fail on older kernels (pre 4.4) as the define
-> +VIDEO_CAPABILITY_64BIT_BASE was not present at that time.
-> +
-> +This patch adds it, as per linux/include/uapi/linux/screen_info.h,
-> +if not present.
-> +
-> +Signed-off-by: Federico Pellegrin <fede@evolware.org>
-> +---
-> + kexec/arch/i386/x86-linux-setup.c | 4 ++++
-> + 1 file changed, 4 insertions(+)
-> +
-> +diff --git a/kexec/arch/i386/x86-linux-setup.c b/kexec/arch/i386/x86-linux-setup.c
-> +index 76e1185..ab54a4a 100644
-> +--- a/kexec/arch/i386/x86-linux-setup.c
-> ++++ b/kexec/arch/i386/x86-linux-setup.c
-> +@@ -37,6 +37,10 @@
-> + #include "x86-linux-setup.h"
-> + #include "../../kexec/kexec-syscall.h"
-> +
-> ++#ifndef VIDEO_CAPABILITY_64BIT_BASE
-> ++#define VIDEO_CAPABILITY_64BIT_BASE (1 << 1)  /* Frame buffer base is 64-bit */
-> ++#endif
-> ++
-> + void init_linux_parameters(struct x86_linux_param_header *real_mode)
-> + {
-> +       /* Fill in the values that are usually provided by the kernel. */
-> +--
-> +2.26.2
-> +
-> --
-> 2.26.2
->
+diff --git a/package/kodi-vfs-libarchive/kodi-vfs-libarchive.hash b/package/kodi-vfs-libarchive/kodi-vfs-libarchive.hash
+index 59b3bc1078..3227631491 100644
+--- a/package/kodi-vfs-libarchive/kodi-vfs-libarchive.hash
++++ b/package/kodi-vfs-libarchive/kodi-vfs-libarchive.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  6fd70f0e2775e9c4eef2e8b529396f1e739fe3e43e0d4202d7f08ab4a30fa760  kodi-vfs-libarchive-2.0.0-Matrix.tar.gz
++sha256  87ad2ba0d0d9c7dcaf66a28c0f5c454ec8b4b227fdbb271cb73d143f7d9dd4b7  kodi-vfs-libarchive-2.0.1-Matrix.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk b/package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk
+index 5278f50136..f8bf58c508 100644
+--- a/package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk
++++ b/package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_VFS_LIBARCHIVE_VERSION = 2.0.0-Matrix
++KODI_VFS_LIBARCHIVE_VERSION = 2.0.1-Matrix
+ KODI_VFS_LIBARCHIVE_SITE = $(call github,xbmc,vfs.libarchive,$(KODI_VFS_LIBARCHIVE_VERSION))
+ KODI_VFS_LIBARCHIVE_LICENSE = GPL-2.0+
+ KODI_VFS_LIBARCHIVE_LICENSE_FILES = LICENSE.md
+-- 
+2.29.2
