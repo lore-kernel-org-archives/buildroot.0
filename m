@@ -1,31 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 4 Apr 2021 16:46:34 +0200
-Subject: [Buildroot] [PATCH 1/1] package/openmpi: drop unrecognized
- option
-In-Reply-To: <20210324070413.733545-1-fontaine.fabrice@gmail.com>
-References: <20210324070413.733545-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210404164634.1fd5c24d@windsurf.home>
+Date: Sun, 4 Apr 2021 16:46:45 +0200
+Subject: [Buildroot] [git commit] package/gensio: bump version to 2.2.4
+Message-ID: <20210404142153.EC9B9817A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 24 Mar 2021 08:04:13 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=43611555dc6dd7ca7db26e6c5f6a50faa4f53c43
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> --disable-vt has been dropped since version 2.0.0 and
-> https://github.com/open-mpi/ompi/commit/94190bf04b0877e878223a04c236443774e57ef2
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/openmpi/openmpi.mk | 1 -
->  1 file changed, 1 deletion(-)
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/gensio/gensio.hash | 6 +++---
+ package/gensio/gensio.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/gensio/gensio.hash b/package/gensio/gensio.hash
+index 77963abe40..03bd85cd0f 100644
+--- a/package/gensio/gensio.hash
++++ b/package/gensio/gensio.hash
+@@ -1,7 +1,7 @@
+ # From https://sourceforge.net/projects/ser2net/files/ser2net/
+-md5  3feb9b586f41cdda4025eeac11000127  gensio-2.2.3.tar.gz
+-sha1  85eb2f063e906868672e08c8f7e282272904631c  gensio-2.2.3.tar.gz
++md5  3d1135a7bd7a3aca48493997fed1f1a0  gensio-2.2.4.tar.gz
++sha1  3c59d94e48c0a8ec5ed57ebb4ea95f3709d108ac  gensio-2.2.4.tar.gz
+ # Locally computed:
+-sha256  ffc849be3349ba15cd6f92d109a54c7608c15d33d210a262c02ddcf00ea76262  gensio-2.2.3.tar.gz
++sha256  36cadbc790e03e4150a12bca14b20215afdff0a0f8deaf85c10434dca54d0493  gensio-2.2.4.tar.gz
+ sha256  501f3108e6c03e5a0a5585ebaaa369171aead5319cd0a7a4dc1f66211c1f09f1  COPYING
+ sha256  dcac7d447dd81ab96d28dce00a07a6486e623f7ded94e2a2a8e83312405cdf89  COPYING.LIB
+diff --git a/package/gensio/gensio.mk b/package/gensio/gensio.mk
+index e68e75e2ad..0b2bb63956 100644
+--- a/package/gensio/gensio.mk
++++ b/package/gensio/gensio.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GENSIO_VERSION = 2.2.3
++GENSIO_VERSION = 2.2.4
+ GENSIO_SITE = http://downloads.sourceforge.net/project/ser2net/ser2net
+ GENSIO_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (tools)
+ GENSIO_LICENSE_FILES = COPYING.LIB COPYING
