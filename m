@@ -1,42 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 4 Apr 2021 15:40:34 +0200
-Subject: [Buildroot] [PATCH] package/micropython: Define
- MICROPY_NLR_SETJMP for xtensa
-In-Reply-To: <20210329072828.13989-1-judge.packham@gmail.com>
-References: <20210329072828.13989-1-judge.packham@gmail.com>
-Message-ID: <20210404154034.004bd3a7@windsurf.home>
+Date: Sun, 4 Apr 2021 15:52:59 +0200
+Subject: [Buildroot] [PATCH 1/1] package/iproute2: Bump version to 5.11.0
+In-Reply-To: <20210323181004.25172-1-petr.vorel@gmail.com>
+References: <20210323181004.25172-1-petr.vorel@gmail.com>
+Message-ID: <20210404155259.196253ae@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 29 Mar 2021 20:28:28 +1300
-Chris Packham <judge.packham@gmail.com> wrote:
+Hello Petr,
 
-> As suggested on https://github.com/micropython/micropython/issues/6551
-> define MICROPY_NLR_SETJMP to avoid the xtensa specific implementation
-> of nlr_push.
-> 
-> Fixes:
-> - http://autobuild.buildroot.net/results/5fc8669b5c768ccfc02bd20d1159bce7fe43683e
-> 
-> Signed-off-by: Chris Packham <judge.packham@gmail.com>
+On Tue, 23 Mar 2021 19:10:04 +0100
+Petr Vorel <petr.vorel@gmail.com> wrote:
+
+> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 > ---
->  package/micropython/micropython.mk | 5 +++++
->  1 file changed, 5 insertions(+)
+> Hi,
+> 
+> NOTE: this should not be applied until uclibc based toolchains are
+> regenerated. But posted for people who don't use uclibc and would like
+> to have iproute2 sync with kernel version.
 
-The build error really looks like a toolchain issue, but fair enough as
-a temporary measure what you proposed is fine, so I've applied.
-
-Could you perhaps e-mail the issue to Max Filippov
-<jcmvbkbc@gmail.com> ? He has been maintaining the Xtensa support in BR,
-including toolchain fixes, for quite some time.
+I think they have all been updated now. However, your patch doesn't
+apply: it assumes that Buildroot master has iproute2 5.8.0, but we have
+5.7.0. And the patch we have in package/iproute2/ doesn't apply to
+5.11.0. Could you have a look and respin?
 
 Thanks a lot!
 
 Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
+Thomas Petazzoni, co-owner and CEO, Bootlin
 Embedded Linux and Kernel engineering
 https://bootlin.com
