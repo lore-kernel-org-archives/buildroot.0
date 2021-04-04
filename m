@@ -1,147 +1,64 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 4 Apr 2021 15:15:50 +0200
-Subject: [Buildroot] [PATCH 2/2] package: add kmscon
-In-Reply-To: <DZ_khlMLS7ElBO-RugCaKTq7GSwoRSec11vXyQ1bDzBCaD4ZVEj39iTQyxp37uQila1SHNg2k5CN50OR3z4i07WQvg0itb74fceeX18yFiE=@protonmail.com>
-References: <DZ_khlMLS7ElBO-RugCaKTq7GSwoRSec11vXyQ1bDzBCaD4ZVEj39iTQyxp37uQila1SHNg2k5CN50OR3z4i07WQvg0itb74fceeX18yFiE=@protonmail.com>
-Message-ID: <20210404131550.GJ2252@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 4 Apr 2021 15:37:19 +0200
+Subject: [Buildroot] [git commit] package/python-hiredis: bump to version
+ 2.0.0
+Message-ID: <20210404131209.14CF28C005@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-"qblade", All,
+commit: https://git.buildroot.net/buildroot/commit/?id=69405d89596988b5b7d25886b7f9c07efad70741
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks for your contribution! :-) Please see below a few comments...
+Depends on BR2_PACKAGE_PYTHON3
 
-On 2021-04-03 14:17 +0000, qblade via buildroot spake thusly:
-> From fe3afe752b75094eaa1e67d3130a78b82487ccac Mon Sep 17 00:00:00 2001
-> From: qblade <qblade@protonmail.com>
-> Date: Sat, 3 Apr 2021 14:10:11 +0000
-> Subject: [PATCH 2/2] package: add kmscon
-> 
-> Signed-off-by: qblade <qblade@protonmail.com>
+Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-hiredis/Config.in           | 1 +
+ package/python-hiredis/python-hiredis.hash | 4 ++--
+ package/python-hiredis/python-hiredis.mk   | 4 ++--
+ 3 files changed, 5 insertions(+), 4 deletions(-)
 
-We will need you to submit using your real name, please, both as the
-author of the commit (i.e. as the mail From:) and in the Signed-off-by
-line.
-
-> ---
->  package/Config.in          |  1 +
->  package/kmscon/Config.in   | 13 +++++++++++++
->  package/kmscon/kmscon.hash |  2 ++
->  package/kmscon/kmscon.mk   | 14 ++++++++++++++
->  4 files changed, 30 insertions(+)
->  create mode 100644 package/kmscon/Config.in
->  create mode 100644 package/kmscon/kmscon.hash
->  create mode 100644 package/kmscon/kmscon.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index ca86e3dd2e..4d689a88b4 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -321,6 +321,7 @@ comment "Graphic libraries"
->  	source "package/freerdp/Config.in"
->  	source "package/graphicsmagick/Config.in"
->  	source "package/imagemagick/Config.in"
-> +        source "package/kmscon/Config.in"
->  	source "package/linux-fusion/Config.in"
->  	source "package/lite/Config.in"
->  	source "package/mesa3d/Config.in"
-> diff --git a/package/kmscon/Config.in b/package/kmscon/Config.in
-> new file mode 100644
-> index 0000000000..356d5f497d
-> --- /dev/null
-> +++ b/package/kmscon/Config.in
-> @@ -0,0 +1,13 @@
-> +config BR2_PACKAGE_KMSCON
-> +	bool "kmscon"
-> +	depends on BR2_PACKAGE_HAS_UDEV
-> +	depends on BR2_TOOLCHAIN_HAS_SSP
-
-The order of dependencies are:
-  - architeciture dependencies (none here)
-  - toolchain dependencies (SSP; threads, see below)
-  - system dependencies (udev)
-  - other packages (none here)
-
-> +	select BR2_PACKAGE_LIBDRM
-
-libdrm dependends on threads, so you need to propagate that dependency:
-    depends on BR2_TOOLCHAIN_HAS_THREADS  # libdrm
-
-> +	select BR2_PACKAGE_LIBTSM
-> +	select BR2_PACKAGE_XKEYBOARD_CONFIG # keyboard layout support
-
-No need for the comment, except as it is a runtime dependency:
-
-    select BR2_PACKAGE_XKEYBOARD_CONFIG # runtime
-
-> +	help
-> +	  Kmscon is a simple terminal emulator based on linux kernel
-> +	  mode setting (KMS). It is an attempt to replace the in-kernel
-> +	  VT implementation with a userspace console.
-> +
-> +	https://www.freedesktop.org/wiki/Software/kmscon/
-
-This there are dependencies on toolchain fetures, you will want to add a
-comment:
-
-    comment "kmscon needs udev, and a toolchain w/ SSP, threads"
-        depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_HAS_SSP \
-                || !BR2_PACKAGE_HAS_UDEV
-
-> diff --git a/package/kmscon/kmscon.hash b/package/kmscon/kmscon.hash
-> new file mode 100644
-> index 0000000000..134e39285b
-> --- /dev/null
-> +++ b/package/kmscon/kmscon.hash
-> @@ -0,0 +1,2 @@
-> +sha256 9f4a8c643dc8c7f551cf0f1bd4c6059a019c162c147178aa00a5c09eff8b9fbe  kmscon-01dd0a231e2125a40ceba5f59fd945ff29bf2cdc.tar.gz
-> +sha256 bf738bc59e8608b783e35d61f49705cdbf668b611d13a32483d734c38dc289f9  COPYING
-> diff --git a/package/kmscon/kmscon.mk b/package/kmscon/kmscon.mk
-> new file mode 100644
-> index 0000000000..03e075f019
-> --- /dev/null
-> +++ b/package/kmscon/kmscon.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# kmscon
-> +#
-> +################################################################################
-> +
-> +KMSCON_VERSION = 01dd0a231e2125a40ceba5f59fd945ff29bf2cdc
-> +KMSCON_SITE = $(call github,Aetf,kmscon,$(KMSCON_VERSION))
-> +KMSCON_AUTORECONF = YES
-> +KMSCON_DEPENDENCIES = host-automake host-autoconf host-libtool libxkbcommon libtsm udev libdrm
-
-host-automake, host-autoconf, and host-libtool are already implied by
-the autootls-package infrastructure. Keep the other dependencies in
-alphabetical order.
-
-Care to address the above and respin a new iteration, please?
-
-Regards,
-Yann E. MORIN.
-
-> +KMSCON_LICENSE = MIT, LGPL-2.1+, BSD-2-Clause, GPL-2.0+
-> +KMSCON_LICENSE_FILES = COPYING
-> +
-> +$(eval $(autotools-package))
-> --
-> 2.31.1
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/python-hiredis/Config.in b/package/python-hiredis/Config.in
+index a401de055d..aacdc87cd2 100644
+--- a/package/python-hiredis/Config.in
++++ b/package/python-hiredis/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PYTHON_HIREDIS
+ 	bool "python-hiredis"
++	depends on BR2_PACKAGE_PYTHON3
+ 	help
+ 	  Python wrapper for hiredis.
+ 
+diff --git a/package/python-hiredis/python-hiredis.hash b/package/python-hiredis/python-hiredis.hash
+index 091532dd2a..2e73d2f37b 100644
+--- a/package/python-hiredis/python-hiredis.hash
++++ b/package/python-hiredis/python-hiredis.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/hiredis/json
+-md5  430294afb3ebb37ebc7cc05bf3e5a389  hiredis-1.1.0.tar.gz
+-sha256  996021ef33e0f50b97ff2d6b5f422a0fe5577de21a8873b58a779a5ddd1c3132  hiredis-1.1.0.tar.gz
++md5  0ab76a8b29deb737c9bfc7f631969e38  hiredis-2.0.0.tar.gz
++sha256  81d6d8e39695f2c37954d1011c0480ef7cf444d4e3ae24bc5e89ee5de360139a  hiredis-2.0.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  70edfa6d3e11f9d7497c2c2f298d06f33b11d10f37f76605102c5ab3b1f28262  COPYING
+ sha256  dca05ce8fc87a8261783b4aed0deef8becc9350b6aa770bc714d0c1833b896eb  vendor/hiredis/COPYING
+diff --git a/package/python-hiredis/python-hiredis.mk b/package/python-hiredis/python-hiredis.mk
+index 7d871d1f03..55f9a09f55 100644
+--- a/package/python-hiredis/python-hiredis.mk
++++ b/package/python-hiredis/python-hiredis.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_HIREDIS_VERSION = 1.1.0
++PYTHON_HIREDIS_VERSION = 2.0.0
+ PYTHON_HIREDIS_SOURCE = hiredis-$(PYTHON_HIREDIS_VERSION).tar.gz
+-PYTHON_HIREDIS_SITE = https://files.pythonhosted.org/packages/3d/9f/abc69e73055f73d42ddf9c46b3e01a08b9e74b579b8fc413cbd31112a749
++PYTHON_HIREDIS_SITE = https://files.pythonhosted.org/packages/0c/39/eae11344d69ba435ec13d6bcc1a9eea3d2278324506fcd0e52d1ed8958c8
+ PYTHON_HIREDIS_SETUP_TYPE = setuptools
+ PYTHON_HIREDIS_LICENSE = BSD-3-Clause
+ PYTHON_HIREDIS_LICENSE_FILES = COPYING vendor/hiredis/COPYING
