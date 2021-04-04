@@ -1,29 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 04 Apr 2021 21:54:48 +0200
-Subject: [Buildroot] [PATCH] package/micropython: Define
- MICROPY_NLR_SETJMP for xtensa
-In-Reply-To: <20210329072828.13989-1-judge.packham@gmail.com> (Chris Packham's
- message of "Mon, 29 Mar 2021 20:28:28 +1300")
-References: <20210329072828.13989-1-judge.packham@gmail.com>
-Message-ID: <87ft05ygdz.fsf@dell.be.48ers.dk>
+Date: Sun, 04 Apr 2021 21:58:44 +0200
+Subject: [Buildroot] [PATCH 1/7] package/libvips: add zlib optional
+ dependency
+In-Reply-To: <20210404143048.2308010-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 4 Apr 2021 16:30:42 +0200")
+References: <20210404143048.2308010-1-fontaine.fabrice@gmail.com>
+Message-ID: <87blatyg7f.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Chris" == Chris Packham <judge.packham@gmail.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > As suggested on https://github.com/micropython/micropython/issues/6551
- > define MICROPY_NLR_SETJMP to avoid the xtensa specific implementation
- > of nlr_push.
+ > zlib is an optional dependency which is enabled by default since version
+ > 8.4.2 and
+ > https://github.com/libvips/libvips/commit/5ab0001ec68a5f61396aecd8d2d7a619b1dbe1fa
 
- > Fixes:
- > - http://autobuild.buildroot.net/results/5fc8669b5c768ccfc02bd20d1159bce7fe43683e
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
- > Signed-off-by: Chris Packham <judge.packham@gmail.com>
-
-Committed to 2020.11.x and 2021.02.x, thanks.
+Committed to 2020.02.x, 2020.11.x and 2021.02.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
