@@ -1,44 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Apr 2021 21:57:02 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/libvips: add
- librsvg optional dependency
-Message-ID: <20210404194140.314198CA49@busybox.osuosl.org>
+Date: Sun, 4 Apr 2021 21:53:26 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/micropython:
+ define MICROPY_NLR_SETJMP for xtensa
+Message-ID: <20210404194140.19BF18CA49@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a963eed6f4ebb27eaa18df19bf48e09d37284fa5
+commit: https://git.buildroot.net/buildroot/commit/?id=dba629ad18fa8efdfe813b86534a2080137d5e91
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-librsvg is an optional dependency which is enabled by default since
-version 8.3.0 and
-https://github.com/libvips/libvips/commit/153886d2eb71eebcdca860cb691d8fbb976ad816
+As suggested on https://github.com/micropython/micropython/issues/6551
+define MICROPY_NLR_SETJMP to avoid the xtensa specific implementation
+of nlr_push.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes:
+- http://autobuild.buildroot.net/results/5fc8669b5c768ccfc02bd20d1159bce7fe43683e
+
+Signed-off-by: Chris Packham <judge.packham@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit adc0e0c6afc2011e6ef4d59a93c42f24399b8279)
+(cherry picked from commit 9fd9f4e6752fd0931fa5cc287bf0e6cd598c36a1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libvips/libvips.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/micropython/micropython.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/libvips/libvips.mk b/package/libvips/libvips.mk
-index 12ffac944e..a17daef77a 100644
---- a/package/libvips/libvips.mk
-+++ b/package/libvips/libvips.mk
-@@ -68,6 +68,13 @@ else
- LIBVIPS_CONF_OPTS += --without-png
+diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
+index a126b3eeae..010ac35e8c 100644
+--- a/package/micropython/micropython.mk
++++ b/package/micropython/micropython.mk
+@@ -21,6 +21,11 @@ ifeq ($(BR2_i386)$(BR2_x86_64)$(BR2_arm)$(BR2_armeb),)
+ MICROPYTHON_CFLAGS = -DMICROPY_GCREGS_SETJMP=1
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBRSVG),y)
-+LIBVIPS_CONF_OPTS += --with-rsvg
-+LIBVIPS_DEPENDENCIES += librsvg
-+else
-+LIBVIPS_CONF_OPTS += --without-rsvg
++# xtensa has problems with nlr_push, use setjmp based implementation instead
++ifeq ($(BR2_xtensa),y)
++MICROPYTHON_CFLAGS = -DMICROPY_NLR_SETJMP=1
 +endif
 +
- ifeq ($(BR2_PACKAGE_POPPLER),y)
- LIBVIPS_CONF_OPTS += --with-poppler
- LIBVIPS_DEPENDENCIES += poppler
+ # When building from a tarball we don't have some of the dependencies that are in
+ # the git repository as submodules
+ MICROPYTHON_MAKE_OPTS += \
