@@ -1,51 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Apr 2021 12:30:58 +0200
-Subject: [Buildroot] [git commit] package/ipset: bump to version 7.11
-Message-ID: <20210404101725.0FCF38103E@busybox.osuosl.org>
+Date: Sun, 4 Apr 2021 12:32:08 +0200
+Subject: [Buildroot] [git commit] package/libinput: bump version to 1.17.1
+Message-ID: <20210404101725.7AE4F8103E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=590dc115d39d29c102a52e56a1f8a4ee64723719
+commit: https://git.buildroot.net/buildroot/commit/?id=f5c960f1620fe1ab3689fc62342395cd22739912
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update indentation in hash file (two spaces)
+For details see [1].
 
-http://git.netfilter.org/ipset/tree/ChangeLog?h=v7.11
+[1] https://lists.freedesktop.org/archives/wayland-devel/2021-March/041758.html
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ipset/ipset.hash | 8 +++-----
- package/ipset/ipset.mk   | 2 +-
- 2 files changed, 4 insertions(+), 6 deletions(-)
+ package/libinput/libinput.hash | 6 +++---
+ package/libinput/libinput.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/ipset/ipset.hash b/package/ipset/ipset.hash
-index fb200585d1..afe83f6dce 100644
---- a/package/ipset/ipset.hash
-+++ b/package/ipset/ipset.hash
-@@ -1,6 +1,4 @@
--# From http://ipset.netfilter.org/ipset-7.6.tar.bz2.md5sum.txt
--md5 e107b679c3256af795261cece864d6d9  ipset-7.6.tar.bz2
--# Calculated based on the hash above
--sha256 0e7d44caa9c153d96a9b5f12644fbe35a632537a5a7f653792b72e53d9d5c2db  ipset-7.6.tar.bz2
-+# From https://ipset.netfilter.org/ipset-7.11.tar.bz2.sha512sum.txt
-+sha512  20890de32c17c04d9d3ae42fff64acfe21a252974bee5843ae39bdda707fcef55fde11cffccab9f987bf7e18f5445443c46c50eb854fb6f93f172f7bad07f922  ipset-7.11.tar.bz2
- # Locally calculated
--sha256 231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
-+sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
-diff --git a/package/ipset/ipset.mk b/package/ipset/ipset.mk
-index 4c5a44a56a..07f865d4ec 100644
---- a/package/ipset/ipset.mk
-+++ b/package/ipset/ipset.mk
+diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
+index f39ba3dbb6..e26512afd3 100644
+--- a/package/libinput/libinput.hash
++++ b/package/libinput/libinput.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2021-February/041733.html
+-sha256  c560cfca14cb5c50d2a1b7551df06bc5d4306e32c128f3e3d37e137285dedbad  libinput-1.17.0.tar.xz
+-sha512  490c7e59cbaa43e4190dbc421582dca887b6ae92304c4f8f3ea9df515bd76de41ca9a376e6f1cfe7b235dd2d5d8d8ef5982f5ddcf958e3b31b981e9440bb0888  libinput-1.17.0.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2021-March/041758.html
++sha256  e51c50f3ce253961bed452d9f93102cc26128406975ab88ff9ec9e6c3b875137  libinput-1.17.1.tar.xz
++sha512  2e7baa198fed9c673d28453efb066f9371f2b575a844e41cde455c636bbe1cc68faae7129026944a502cd5d7bfcc72272066b9e3cda5c959f7b464483f9dd860  libinput-1.17.1.tar.xz
+ 
+ # License files
+ sha256  70d5b1dfe5a9c50a1f2ea91b1c2b1c85d876c5c92339585edbb85cf69e945e14  COPYING
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+index 982d92d062..264b19b026 100644
+--- a/package/libinput/libinput.mk
++++ b/package/libinput/libinput.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IPSET_VERSION = 7.6
-+IPSET_VERSION = 7.11
- IPSET_SOURCE = ipset-$(IPSET_VERSION).tar.bz2
- IPSET_SITE = http://ipset.netfilter.org
- IPSET_DEPENDENCIES = libmnl host-pkgconf
+-LIBINPUT_VERSION = 1.17.0
++LIBINPUT_VERSION = 1.17.1
+ LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
+ LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
+ LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
