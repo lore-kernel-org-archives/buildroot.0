@@ -1,44 +1,69 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Apr 2021 11:21:14 +0200
-Subject: [Buildroot] [git commit branch/2020.11.x] package/libvips: add
- poppler optional dependency
-Message-ID: <20210404090013.3CB6E8A3D0@busybox.osuosl.org>
+Date: Sun, 4 Apr 2021 11:22:57 +0200
+Subject: [Buildroot] [git commit branch/2020.11.x] package/libcurl: security
+ bump to version 7.76.0
+Message-ID: <20210404090013.5433E8A3D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8b62cfa7f5d980c17c8e9e1694962c1b075d0777
+commit: https://git.buildroot.net/buildroot/commit/?id=f9104d05a226b46011c5ad8eeb827de6cd651bcb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-poppler is an optional dependency which is enabled by default since
-version 8.3.0 and
-https://github.com/libvips/libvips/commit/8da4e706dd60aba1a69e49bd562d8de225d2404d
+CVE-2021-22890: TLS 1.3 session ticket proxy host mixup (since 7.63.0)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 26439a3beda8b5addb997304641303ac4c757c87)
+CVE-2021-22876: Automatic referer leaks credentials (since 7.1.1)
+
+This version adds optional dependency on libgsasl.
+
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit ab6d38ab8fb9461db8a189fb3efa2c13dfa5dc2f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libvips/libvips.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/libcurl/libcurl.hash | 4 ++--
+ package/libcurl/libcurl.mk   | 9 ++++++++-
+ 2 files changed, 10 insertions(+), 3 deletions(-)
 
-diff --git a/package/libvips/libvips.mk b/package/libvips/libvips.mk
-index 169fda9b10..464d905bd8 100644
---- a/package/libvips/libvips.mk
-+++ b/package/libvips/libvips.mk
-@@ -61,6 +61,13 @@ else
- LIBVIPS_CONF_OPTS += --without-png
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index 368b8f67f1..1906834e7a 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://curl.haxx.se/download/curl-7.75.0.tar.xz.asc
++# https://curl.haxx.se/download/curl-7.76.0.tar.xz.asc
+ # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
+-sha256  fe0c49d8468249000bda75bcfdf9e30ff7e9a86d35f1a21f428d79c389d55675  curl-7.75.0.tar.xz
++sha256  6302e2d75c59cdc6b35ce3fbe716481dd4301841bbb5fd71854653652a014fc8  curl-7.76.0.tar.xz
+ sha256  6fd1a1c008b5ef4c4741dd188c3f8af6944c14c25afa881eb064f98fb98358e7  COPYING
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index f73942a015..6db6e826cd 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBCURL_VERSION = 7.75.0
++LIBCURL_VERSION = 7.76.0
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.haxx.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
+@@ -124,6 +124,13 @@ else
+ LIBCURL_CONF_OPTS += --without-nghttp2
  endif
  
-+ifeq ($(BR2_PACKAGE_POPPLER),y)
-+LIBVIPS_CONF_OPTS += --with-poppler
-+LIBVIPS_DEPENDENCIES += poppler
++ifeq ($(BR2_PACKAGE_LIBGSASL),y)
++LIBCURL_DEPENDENCIES += libgsasl
++LIBCURL_CONF_OPTS += --with-gsasl
 +else
-+LIBVIPS_CONF_OPTS += --without-poppler
++LIBCURL_CONF_OPTS += --without-gsasl
 +endif
 +
- ifeq ($(BR2_PACKAGE_TIFF),y)
- LIBVIPS_CONF_OPTS += --with-tiff
- LIBVIPS_DEPENDENCIES += tiff
+ ifeq ($(BR2_PACKAGE_LIBCURL_COOKIES_SUPPORT),y)
+ LIBCURL_CONF_OPTS += --enable-cookies
+ else
