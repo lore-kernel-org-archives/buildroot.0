@@ -1,60 +1,66 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 4 Apr 2021 12:19:01 +0200
-Subject: [Buildroot] [PATCH 1/1] package/perl-xml-libxml: add CPE
- variables
-In-Reply-To: <20210403153801.2222070-1-fontaine.fabrice@gmail.com>
-References: <20210403153801.2222070-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210404101901.GF2252@scaer>
+Date: Sun, 4 Apr 2021 12:22:18 +0200
+Subject: [Buildroot] [git commit] package/botan: add support for riscv32
+Message-ID: <20210404100057.AD0B38B773@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=08a0e9bd065b925856b5724f955dd0873d85703c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2021-04-03 17:38 +0200, Fabrice Fontaine spake thusly:
-> cpe:2.3:a:xml-libxml_project:xml-libxml is a valid CPE identifier for
-> this package:
-> 
->   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Axml-libxml_project%3Axml-libxml
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Backport an upstream patch to add support for riscv32. Although this is
+a new feature (new arch support), this is an upstream commit, so we can
+expect it to be available in a future release.
 
-Applied to master, thanks.
+Fixes:
+ - http://autobuild.buildroot.org/results/1c399312dbec5d7a28ec90d62fdd8f47fa14ff4b
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[yann.morin.1998 at free.fr:
+  - technically, this is not a bug fix, but new arch support
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/botan/0003-Add-support-for-riscv32.patch | 31 ++++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
 
-> ---
->  package/perl-xml-libxml/perl-xml-libxml.mk | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/perl-xml-libxml/perl-xml-libxml.mk b/package/perl-xml-libxml/perl-xml-libxml.mk
-> index 23d3e988fa..9b563e29b5 100644
-> --- a/package/perl-xml-libxml/perl-xml-libxml.mk
-> +++ b/package/perl-xml-libxml/perl-xml-libxml.mk
-> @@ -10,6 +10,8 @@ PERL_XML_LIBXML_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SH/SHLOMIF
->  PERL_XML_LIBXML_DEPENDENCIES = zlib libxml2
->  PERL_XML_LIBXML_LICENSE = Artistic or GPL-1.0+
->  PERL_XML_LIBXML_LICENSE_FILES = LICENSE
-> +PERL_XML_LIBXML_CPE_ID_VENDOR = xml-libxml_project
-> +PERL_XML_LIBXML_CPE_ID_PRODUCT = xml-libxml
->  PERL_XML_LIBXML_DISTNAME = XML-LibXML
->  
->  PERL_XML_LIBXML_CONF_OPTS = \
-> -- 
-> 2.30.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/botan/0003-Add-support-for-riscv32.patch b/package/botan/0003-Add-support-for-riscv32.patch
+new file mode 100644
+index 0000000000..d8978b2f11
+--- /dev/null
++++ b/package/botan/0003-Add-support-for-riscv32.patch
+@@ -0,0 +1,31 @@
++From 443bf46ee2b1b1d7acd63e3f00dcbe66646138f8 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 2 Apr 2021 20:37:03 +0200
++Subject: [PATCH] Add support for riscv32
++
++Fix the following build failure:
++
++  ERROR: Unknown or unidentifiable processor "riscv32"
++
++Fixes:
++ - http://autobuild.buildroot.org/results/1c399312dbec5d7a28ec90d62fdd8f47fa14ff4b
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/randombit/botan/commit/aa7958880bee2091a8a71bf9e1f6e6efb34581e3]
++---
++ src/build-data/arch/riscv32.txt | 2 ++
++ 1 file changed, 2 insertions(+)
++ create mode 100644 src/build-data/arch/riscv32.txt
++
++diff --git a/src/build-data/arch/riscv32.txt b/src/build-data/arch/riscv32.txt
++new file mode 100644
++index 000000000..ba88b42e9
++--- /dev/null
+++++ b/src/build-data/arch/riscv32.txt
++@@ -0,0 +1,2 @@
+++family riscv32
+++endian little
++-- 
++2.30.2
++
