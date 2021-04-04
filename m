@@ -1,41 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Apr 2021 11:10:09 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/libupnp: disable
- samples
-Message-ID: <20210404085354.22F9C815FC@busybox.osuosl.org>
+Date: Sun, 4 Apr 2021 11:05:52 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/mender: install
+ dbus authentication file if dbus is selected
+Message-ID: <20210404085354.1778687423@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=48919f82f3e01b671c76b467bf20ee7edc8c56ad
+commit: https://git.buildroot.net/buildroot/commit/?id=22ca8558a8912c361595c8ba2dddcab2ba5541cd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Disable samples which are built (but not installed) by default since at
-least version 1.6.0 and
-https://github.com/pupnp/pupnp/commit/89e7a40fcc5c51afacdc9d5f3d18f5338b2bc5e9
+While not a requirement to run mender itself, the mender-connect package
+requires this file to be installed to talk to mender.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Adam Duskett <Aduskett@rivian.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 1f639e7d109df5b68912e319915a5459c8a2d62d)
+(cherry picked from commit 948e2c3467da778b7bf9b002f98fe2309a88d65a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libupnp/libupnp.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/mender/mender.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/libupnp/libupnp.mk b/package/libupnp/libupnp.mk
-index 0b36881e16..8250d30ca0 100644
---- a/package/libupnp/libupnp.mk
-+++ b/package/libupnp/libupnp.mk
-@@ -16,7 +16,9 @@ LIBUPNP_CPE_ID_VENDOR = libupnp_project
- LIBUPNP_DEPENDENCIES = host-pkgconf
+diff --git a/package/mender/mender.mk b/package/mender/mender.mk
+index 0224e84a47..b79f196a6d 100644
+--- a/package/mender/mender.mk
++++ b/package/mender/mender.mk
+@@ -76,6 +76,14 @@ endef
  
- # Bind the internal miniserver socket with reuseaddr to allow clean restarts.
--LIBUPNP_CONF_OPTS += --enable-reuseaddr
-+LIBUPNP_CONF_OPTS += \
-+	--disable-samples \
-+	--enable-reuseaddr
+ MENDER_POST_INSTALL_TARGET_HOOKS += MENDER_INSTALL_CONFIG_FILES
  
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- LIBUPNP_CONF_OPTS += --enable-open-ssl
++ifeq ($(BR2_PACKAGE_DBUS),y)
++define MENDER_INSTALL_DBUS_AUTHENTICATION_MANAGER_CONF
++	$(INSTALL) -D -m 0755 $(@D)/support/dbus/io.mender.AuthenticationManager.conf \
++		      $(TARGET_DIR)/etc/dbus-1/system.d/io.mender.AuthenticationManager.conf
++endef
++MENDER_POST_INSTALL_TARGET_HOOKS += MENDER_INSTALL_DBUS_AUTHENTICATION_MANAGER_CONF
++endif
++
+ define MENDER_INSTALL_INIT_SYSTEMD
+ 	$(INSTALL) -D -m 0644 $(MENDER_PKGDIR)/mender-client.service \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/mender-client.service
