@@ -1,10 +1,10 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  4 Apr 2021 16:30:46 +0200
-Subject: [Buildroot] [PATCH 5/7] package/libvips: add lcms2 optional
+Date: Sun,  4 Apr 2021 16:30:47 +0200
+Subject: [Buildroot] [PATCH 6/7] package/libvips: add matio optional
  dependency
 In-Reply-To: <20210404143048.2308010-1-fontaine.fabrice@gmail.com>
 References: <20210404143048.2308010-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210404143048.2308010-5-fontaine.fabrice@gmail.com>
+Message-ID: <20210404143048.2308010-6-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,30 +17,30 @@ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
  1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/package/libvips/libvips.mk b/package/libvips/libvips.mk
-index 304861ab83..494392de7b 100644
+index 494392de7b..990d3f386f 100644
 --- a/package/libvips/libvips.mk
 +++ b/package/libvips/libvips.mk
-@@ -23,7 +23,6 @@ LIBVIPS_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) $(LIBVIPS_CXXFLAGS)" \
- LIBVIPS_CONF_OPTS = \
- 	--without-dmalloc \
+@@ -25,7 +25,6 @@ LIBVIPS_CONF_OPTS = \
  	--without-gsf \
--	--without-lcms \
  	--without-OpenEXR \
  	--without-openslide \
- 	--without-matio \
-@@ -71,6 +70,13 @@ else
- LIBVIPS_CONF_OPTS += --without-jpeg
+-	--without-matio \
+ 	--without-cfitsio \
+ 	--without-libwebp \
+ 	--without-pangoft2 \
+@@ -91,6 +90,13 @@ else
+ LIBVIPS_CONF_OPTS += --without-rsvg
  endif
  
-+ifeq ($(BR2_PACKAGE_LCMS2),y)
-+LIBVIPS_CONF_OPTS += --with-lcms
-+LIBVIPS_DEPENDENCIES += lcms2
++ifeq ($(BR2_PACKAGE_MATIO),y)
++LIBVIPS_CONF_OPTS += --with-matio
++LIBVIPS_DEPENDENCIES += matio
 +else
-+LIBVIPS_CONF_OPTS += --without-lcms
++LIBVIPS_CONF_OPTS += --without-matio
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBPNG),y)
- LIBVIPS_CONF_OPTS += --with-png
- LIBVIPS_DEPENDENCIES += libpng
+ ifeq ($(BR2_PACKAGE_ORC),y)
+ LIBVIPS_CONF_OPTS += --with-orc
+ LIBVIPS_DEPENDENCIES += orc
 -- 
 2.30.2
