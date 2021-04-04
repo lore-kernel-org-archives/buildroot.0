@@ -1,26 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 04 Apr 2021 11:23:51 +0200
-Subject: [Buildroot] [PATCH] package/libcurl: security bump to version
- 7.76.0
-In-Reply-To: <ab738226f00b0f533fbcd1afa6e1b57a47928956.1617210952.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Wed, 31 Mar 2021 20:15:52 +0300")
-References: <ab738226f00b0f533fbcd1afa6e1b57a47928956.1617210952.git.baruch@tkos.co.il>
-Message-ID: <87eefq2yjc.fsf@dell.be.48ers.dk>
+Date: Sun, 04 Apr 2021 11:25:02 +0200
+Subject: [Buildroot] [PATCH 1/1] package/netsnmp: fix script
+ net-snmp-create-v3-user's usage of 'ps'.
+In-Reply-To: <20210331081447.29552-1-nicolas.cavallari@green-communications.fr>
+ (Nicolas Cavallari's message of "Wed, 31 Mar 2021 10:14:47 +0200")
+References: <20210331081447.29552-1-nicolas.cavallari@green-communications.fr>
+Message-ID: <87a6qe2yhd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Nicolas" == Nicolas Cavallari <nicolas.cavallari@green-communications.fr> writes:
 
- > CVE-2021-22890: TLS 1.3 session ticket proxy host mixup (since 7.63.0)
- > CVE-2021-22876: Automatic referer leaks credentials (since 7.1.1)
+ > net-snmp-create-v3-user uses ps to check if snmpd is running.  To know
+ > how to invoke 'ps', the build system use 'which ps' and does other
+ > checks for the output format of 'ps', therefore inspecting 'ps' on the
+ > build machine instead of the target.
 
- > This version adds optional dependency on libgsasl.
+ > If the build machine runs a OS like Debian, that uses a merged-usr and a
+ > PATH of '/usr/bin:/bin', then 'which ps' returns /usr/bin/ps, which will
+ > not work on the target if it does not also use a merged-usr.
 
- > Cc: Matt Weber <matthew.weber@rockwellcollins.com>
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > Hardcode 'ps' to be /bin/ps to fix this issue and to improve build
+ > reproducibility.
+
+ > Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
 
 Committed to 2020.02.x, 2020.11.x and 2021.02.x, thanks.
 
