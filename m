@@ -1,37 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Apr 2021 22:03:38 +0200
-Subject: [Buildroot] [git commit branch/2020.11.x] package/openmpi: drop
- unrecognized option
-Message-ID: <20210404194031.275F08CA49@busybox.osuosl.org>
+Date: Sun, 4 Apr 2021 21:56:53 +0200
+Subject: [Buildroot] [git commit branch/2020.11.x] package/libvips: add
+ librsvg optional dependency
+Message-ID: <20210404194031.18B5784ABB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=de2152eea41b9eb03eefd40f8e90f3a85df75714
+commit: https://git.buildroot.net/buildroot/commit/?id=15d432c58d7d33892f29f053417d301bc61da708
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
---disable-vt has been dropped since version 2.0.0 and
-https://github.com/open-mpi/ompi/commit/94190bf04b0877e878223a04c236443774e57ef2
+librsvg is an optional dependency which is enabled by default since
+version 8.3.0 and
+https://github.com/libvips/libvips/commit/153886d2eb71eebcdca860cb691d8fbb976ad816
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 210ec9c0d8a32b6ad399898de978348de7c252c4)
+(cherry picked from commit adc0e0c6afc2011e6ef4d59a93c42f24399b8279)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openmpi/openmpi.mk | 1 -
- 1 file changed, 1 deletion(-)
+ package/libvips/libvips.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/openmpi/openmpi.mk b/package/openmpi/openmpi.mk
-index b682e6e74e..8bdc3fa188 100644
---- a/package/openmpi/openmpi.mk
-+++ b/package/openmpi/openmpi.mk
-@@ -11,7 +11,6 @@ OPENMPI_SOURCE = openmpi-$(OPENMPI_VERSION).tar.bz2
- OPENMPI_LICENSE = BSD-3-Clause
- OPENMPI_LICENSE_FILES = LICENSE
- OPENMPI_INSTALL_STAGING = YES
--OPENMPI_CONF_OPTS = --disable-vt
+diff --git a/package/libvips/libvips.mk b/package/libvips/libvips.mk
+index 12ffac944e..a17daef77a 100644
+--- a/package/libvips/libvips.mk
++++ b/package/libvips/libvips.mk
+@@ -68,6 +68,13 @@ else
+ LIBVIPS_CONF_OPTS += --without-png
+ endif
  
- # Enabling Fortran support requires pre-seeding the configure script
- # with various values that cannot be guessed, so we provide cache
++ifeq ($(BR2_PACKAGE_LIBRSVG),y)
++LIBVIPS_CONF_OPTS += --with-rsvg
++LIBVIPS_DEPENDENCIES += librsvg
++else
++LIBVIPS_CONF_OPTS += --without-rsvg
++endif
++
+ ifeq ($(BR2_PACKAGE_POPPLER),y)
+ LIBVIPS_CONF_OPTS += --with-poppler
+ LIBVIPS_DEPENDENCIES += poppler
