@@ -1,147 +1,83 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 4 Apr 2021 14:30:47 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/tvheadend: add various
- options to disable optional components
-In-Reply-To: <20210403152234.2006719-1-bernd.kuhls@t-online.de>
-References: <20210403152234.2006719-1-bernd.kuhls@t-online.de>
-Message-ID: <20210404123047.GH2252@scaer>
+Date: Sun, 4 Apr 2021 14:43:44 +0200
+Subject: [Buildroot] [PATCH v2] package/haveged: bump version to 1.9.14
+In-Reply-To: <20210402200116.GI24043@scaer>
+References: <20210331185001.24790-1-ps.report@gmx.net>
+ <20210331200710.GH24043@scaer> <20210331235221.4c1d1c4f@gmx.net>
+ <20210402200116.GI24043@scaer>
+Message-ID: <20210404124344.GI2252@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bernd, All,
+Peter, All,
 
-On 2021-04-03 17:22 +0200, Bernd Kuhls spake thusly:
-> When enabled some IPTV streams are piped using /usr/bin/ffmpeg so make
-> sure that the ffmpeg binary is present.
+On 2021-04-02 22:01 +0200, Yann E. MORIN spake thusly:
+> On 2021-03-31 23:52 +0200, Peter Seiderer spake thusly:
+> > On Wed, 31 Mar 2021 22:07:10 +0200, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+> > > On 2021-03-31 20:50 +0200, Peter Seiderer spake thusly:
+> > > > - add patch to fix uclibc compile (disable dependency on sys/auxv.h
+> > > >   introduced with upstream commit [1])
+[--SNIP--]
+> > If not started with absolute path and /etc/initrd-release exists (both not
+> > valid for buildroot or easy to avoid)...
 > 
-> Transcoding support can already be disabled reducing /usr/bin/tvheadend
-> by 1,03MB.
+> Having both is probably not very often, but still. Again, in the more
+> general case, i.e. not limited to Buildroot, this now-upstream change
+> does introduce a latent bug.
 > 
-> By disabling all new options provided by this patch the binary size can
-> additionally be reduced by 2,08MB.
+> Starting without a full path is trivial: log on to the device, and run
+> the daemon in foreground to debug it.
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> /etc/initrd-release is defined by systemd, so this is not a random file
+> either: https://systemd.io/INITRD_INTERFACE/
+> 
+> So, people debugging haveged in a systemd-based initrd system will be
+> hit. Or people actually being dumped into a recovery systemd-based
+> initrd and trying to run haveged to have some good entropy to regenerate
+> ssh keys for theis ssh server or whatelse, will be hit.
+> 
+> > And as good/usable as before upstream commit [1]..., only possible improvement
+> > would be to error out (with an early and meaningful error message) in case not
+> > started with absolute path and in case getauxval() is not available (instead of
+> > error out later with with some unusual path/executable name in the error message)
+> > and remove the redundant forcibly set of path[0]?
+> 
+> I have no idea what would be the best course of actions that upstream
+> would see fit.
+> 
+> But, if the program is started without an absolute path, then most
+> probably re-running argv[0] will also resolve it to the same program:
+> 
+>   - if the program was run as 'haveged', it was (most probably) found in
+>     $PATH, and so re-running argv[0] would yield the same;
+> 
+>   - if the priogram was run as './haveged' (e.g. during development on
+>     the developers machine), then again, re-running argv[0] should again
+>     yeld the same.
+> 
+> So I am not sure what this is supposed to attempt. I may have missed
+> something, though, so upstream should really find a proper fix... Seeing
+> that upstream is getting for a new relase, we should at the very least
+> inform them about this issue. Will you do that, or do you want me to do
+> it?
 
-I've split that into one commit per new option.
+So, I've added a comment on the upstream MR:
+    https://patchwork.ozlabs.org/project/buildroot/patch/20210331185001.24790-1-ps.report at gmx.net/
 
-Also, I've dropped selecting ffmpeg's ffmpeg command line tool for the
-IPTV support, because as you said youreself, not all IPTV streams will
-require ffmpeg. Instead, I've added a note in the help text, to direct
-users to enable it if they need it.
+Let's see what upstream has to say about that. If they don't care, then
+we can apply that patch. If they get a better fix, we can backport it.
 
-Applied to master, thanks.
+> In the mean time, I am totally OK with making haveged unavailable on
+> uClibc...
+
+Thats still my position...
 
 Regards,
 Yann E. MORIN.
 
-> ---
-> v2: removed build-dependency to ffmpeg for iptv support (Yann)
->     re-wrapped descrambler configure options (Yann)
-> 
->  package/tvheadend/Config.in    | 27 ++++++++++++++++++++++++++-
->  package/tvheadend/tvheadend.mk | 34 ++++++++++++++++++++++++++++++++++
->  2 files changed, 60 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/tvheadend/Config.in b/package/tvheadend/Config.in
-> index 909d955c02..4b9c7267d2 100644
-> --- a/package/tvheadend/Config.in
-> +++ b/package/tvheadend/Config.in
-> @@ -3,7 +3,7 @@ comment "tvheadend needs a toolchain w/ NPTL, headers >= 3.2, dynamic library"
->  		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2 || BR2_STATIC_LIBS
->  	depends on BR2_TOOLCHAIN_HAS_SYNC_4
->  
-> -config BR2_PACKAGE_TVHEADEND
-> +menuconfig BR2_PACKAGE_TVHEADEND
->  	bool "tvheadend"
->  	depends on !BR2_STATIC_LIBS # dladdr()
->  	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-> @@ -28,6 +28,31 @@ config BR2_PACKAGE_TVHEADEND
->  
->  if BR2_PACKAGE_TVHEADEND
->  
-> +config BR2_PACKAGE_TVHEADEND_DESCRAMBLER
-> +	bool "descrambler support"
-> +	default y
-> +	help
-> +	  Enable support for various descrambler modules.
-> +
-> +config BR2_PACKAGE_TVHEADEND_IPTV
-> +	bool "IPTV support"
-> +	default y
-> +	select BR2_PACKAGE_FFMPEG_FFMPEG if BR2_PACKAGE_FFMPEG # runtime
-> +	help
-> +	  Enable IPTV support.
-> +
-> +config BR2_PACKAGE_TVHEADEND_SATIP
-> +	bool "SAT>IP support"
-> +	default y
-> +	help
-> +	  Enable SAT>IP support.
-> +
-> +config BR2_PACKAGE_TVHEADEND_TIMESHIFT
-> +	bool "timeshift support"
-> +	default y
-> +	help
-> +	  Enable timeshift support.
-> +
->  config BR2_PACKAGE_TVHEADEND_TRANSCODING
->  	bool "transcoding support"
->  	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
-> diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-> index 114142bfa9..b694c44e3b 100644
-> --- a/package/tvheadend/tvheadend.mk
-> +++ b/package/tvheadend/tvheadend.mk
-> @@ -63,6 +63,40 @@ TVHEADEND_CONF_OPTS += \
->  	--disable-libx265
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_TVHEADEND_DESCRAMBLER),y)
-> +TVHEADEND_CONF_OPTS += \
-> +	--enable-cardclient \
-> +	--enable-cwc \
-> +	--enable-cccam \
-> +	--enable-capmt \
-> +	--enable-constcw
-> +else
-> +TVHEADEND_CONF_OPTS += \
-> +	--disable-cardclient \
-> +	--disable-cwc \
-> +	--disable-cccam \
-> +	--disable-capmt \
-> +	--disable-constcw
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_TVHEADEND_IPTV),y)
-> +TVHEADEND_CONF_OPTS += --enable-iptv
-> +else
-> +TVHEADEND_CONF_OPTS += --disable-iptv
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_TVHEADEND_SATIP),y)
-> +TVHEADEND_CONF_OPTS += --enable-satip_client --enable-satip_server
-> +else
-> +TVHEADEND_CONF_OPTS += --disable-satip_client --disable-satip_server
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_TVHEADEND_TIMESHIFT),y)
-> +TVHEADEND_CONF_OPTS += --enable-timeshift
-> +else
-> +TVHEADEND_CONF_OPTS += --disable-timeshift
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_LIBDVBCSA),y)
->  TVHEADEND_DEPENDENCIES += libdvbcsa
->  TVHEADEND_CONF_OPTS += --enable-tvhcsa
-> -- 
-> 2.29.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
