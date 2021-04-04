@@ -1,12 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 04 Apr 2021 21:58:54 +0200
-Subject: [Buildroot] [PATCH 2/7] package/libvips: add librsvg optional
- dependency
-In-Reply-To: <20210404143048.2308010-2-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 4 Apr 2021 16:30:43 +0200")
-References: <20210404143048.2308010-1-fontaine.fabrice@gmail.com>
- <20210404143048.2308010-2-fontaine.fabrice@gmail.com>
-Message-ID: <877dlhyg75.fsf@dell.be.48ers.dk>
+Date: Sun, 04 Apr 2021 22:04:31 +0200
+Subject: [Buildroot] [PATCH 1/1] package/openmpi: drop unrecognized
+ option
+In-Reply-To: <20210324070413.733545-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 24 Mar 2021 08:04:13 +0100")
+References: <20210324070413.733545-1-fontaine.fabrice@gmail.com>
+Message-ID: <8735w5yfxs.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,9 +14,8 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > librsvg is an optional dependency which is enabled by default since
- > version 8.3.0 and
- > https://github.com/libvips/libvips/commit/153886d2eb71eebcdca860cb691d8fbb976ad816
+ > --disable-vt has been dropped since version 2.0.0 and
+ > https://github.com/open-mpi/ompi/commit/94190bf04b0877e878223a04c236443774e57ef2
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
