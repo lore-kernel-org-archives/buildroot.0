@@ -1,28 +1,23 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 4 Apr 2021 16:47:25 +0200
-Subject: [Buildroot] [PATCH 1/2] package/gensio: bump version to 2.2.4
-In-Reply-To: <20210324123605.24228-1-heiko.thiery@gmail.com>
-References: <20210324123605.24228-1-heiko.thiery@gmail.com>
-Message-ID: <20210404164725.343d60dc@windsurf.home>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 04 Apr 2021 16:54:01 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/tvheadend: add various
+ options to disable optional components
+References: <20210403152234.2006719-1-bernd.kuhls@t-online.de>
+ <20210404123047.GH2252@scaer>
+Message-ID: <9h0pjhx6mr.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 24 Mar 2021 13:36:04 +0100
-Heiko Thiery <heiko.thiery@gmail.com> wrote:
+Am Sun, 04 Apr 2021 14:30:47 +0200 schrieb Yann E. MORIN:
 
-> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-> ---
->  package/gensio/gensio.hash | 6 +++---
->  package/gensio/gensio.mk   | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
+> Instead, I've added a note in the help text, to direct
+> users to enable it if they need it.
 
-Both applied, thanks!
+Hi Yann,
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+ok.
+
+Regards, Bernd
