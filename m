@@ -1,49 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Apr 2021 11:24:47 +0200
-Subject: [Buildroot] [git commit branch/2020.11.x] package/netsnmp: fix
- script net-snmp-create-v3-user's usage of 'ps'.
-Message-ID: <20210404090013.6081B8B72E@busybox.osuosl.org>
+Date: Sun, 4 Apr 2021 11:21:22 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/libvips: add
+ poppler optional dependency
+Message-ID: <20210404090020.62CF38B545@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6775abacaf0fc680266fce60a8c9299d221ce489
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=e9420433196b8fe4b328148d88b2067ca0db63c7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-net-snmp-create-v3-user uses ps to check if snmpd is running.  To know
-how to invoke 'ps', the build system use 'which ps' and does other
-checks for the output format of 'ps', therefore inspecting 'ps' on the
-build machine instead of the target.
+poppler is an optional dependency which is enabled by default since
+version 8.3.0 and
+https://github.com/libvips/libvips/commit/8da4e706dd60aba1a69e49bd562d8de225d2404d
 
-If the build machine runs a OS like Debian, that uses a merged-usr and a
-PATH of '/usr/bin:/bin', then 'which ps' returns /usr/bin/ps, which will
-not work on the target if it does not also use a merged-usr.
-
-Hardcode 'ps' to be /bin/ps to fix this issue and to improve build
-reproducibility.
-
-Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 57d339f20bdb46f509fff37629b0e0725241b26d)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 26439a3beda8b5addb997304641303ac4c757c87)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/netsnmp/netsnmp.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/libvips/libvips.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
-index 904279d1fb..c97953c683 100644
---- a/package/netsnmp/netsnmp.mk
-+++ b/package/netsnmp/netsnmp.mk
-@@ -10,7 +10,9 @@ NETSNMP_SOURCE = net-snmp-$(NETSNMP_VERSION).tar.gz
- NETSNMP_LICENSE = Various BSD-like
- NETSNMP_LICENSE_FILES = COPYING
- NETSNMP_INSTALL_STAGING = YES
--NETSNMP_CONF_ENV = ac_cv_NETSNMP_CAN_USE_SYSCTL=no
-+NETSNMP_CONF_ENV = \
-+	ac_cv_NETSNMP_CAN_USE_SYSCTL=no \
-+	ac_cv_path_PSPROG=/bin/ps
- NETSNMP_CONF_OPTS = \
- 	--with-persistent-directory=/var/lib/snmp \
- 	--with-defaults \
+diff --git a/package/libvips/libvips.mk b/package/libvips/libvips.mk
+index 001a148a7e..966599e271 100644
+--- a/package/libvips/libvips.mk
++++ b/package/libvips/libvips.mk
+@@ -55,6 +55,13 @@ else
+ LIBVIPS_CONF_OPTS += --without-png
+ endif
+ 
++ifeq ($(BR2_PACKAGE_POPPLER),y)
++LIBVIPS_CONF_OPTS += --with-poppler
++LIBVIPS_DEPENDENCIES += poppler
++else
++LIBVIPS_CONF_OPTS += --without-poppler
++endif
++
+ ifeq ($(BR2_PACKAGE_TIFF),y)
+ LIBVIPS_CONF_OPTS += --with-tiff
+ LIBVIPS_DEPENDENCIES += tiff
