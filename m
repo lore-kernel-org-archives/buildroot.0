@@ -1,51 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Apr 2021 12:32:08 +0200
-Subject: [Buildroot] [git commit] package/libinput: bump version to 1.17.1
-Message-ID: <20210404101725.7AE4F8103E@busybox.osuosl.org>
+Date: Sun, 4 Apr 2021 12:32:33 +0200
+Subject: [Buildroot] [git commit] package/libostree: bump to version 2021.1
+Message-ID: <20210404101725.95A898114B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f5c960f1620fe1ab3689fc62342395cd22739912
+commit: https://git.buildroot.net/buildroot/commit/?id=8eda00637873bed0d02dce470b3244a8cb37ccab
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For details see [1].
-
-[1] https://lists.freedesktop.org/archives/wayland-devel/2021-March/041758.html
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libinput/libinput.hash | 6 +++---
- package/libinput/libinput.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libostree/libostree.hash | 2 +-
+ package/libostree/libostree.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
-index f39ba3dbb6..e26512afd3 100644
---- a/package/libinput/libinput.hash
-+++ b/package/libinput/libinput.hash
-@@ -1,6 +1,6 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2021-February/041733.html
--sha256  c560cfca14cb5c50d2a1b7551df06bc5d4306e32c128f3e3d37e137285dedbad  libinput-1.17.0.tar.xz
--sha512  490c7e59cbaa43e4190dbc421582dca887b6ae92304c4f8f3ea9df515bd76de41ca9a376e6f1cfe7b235dd2d5d8d8ef5982f5ddcf958e3b31b981e9440bb0888  libinput-1.17.0.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2021-March/041758.html
-+sha256  e51c50f3ce253961bed452d9f93102cc26128406975ab88ff9ec9e6c3b875137  libinput-1.17.1.tar.xz
-+sha512  2e7baa198fed9c673d28453efb066f9371f2b575a844e41cde455c636bbe1cc68faae7129026944a502cd5d7bfcc72272066b9e3cda5c959f7b464483f9dd860  libinput-1.17.1.tar.xz
- 
- # License files
- sha256  70d5b1dfe5a9c50a1f2ea91b1c2b1c85d876c5c92339585edbb85cf69e945e14  COPYING
-diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
-index 982d92d062..264b19b026 100644
---- a/package/libinput/libinput.mk
-+++ b/package/libinput/libinput.mk
+diff --git a/package/libostree/libostree.hash b/package/libostree/libostree.hash
+index 751feb6b2e..bc1249deed 100644
+--- a/package/libostree/libostree.hash
++++ b/package/libostree/libostree.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  fdaa5992d0a6f62157152355449ac8476c50df6602be398e9ad10438cc1e679b  libostree-2020.8.tar.xz
++sha256  91b4bd9264831d20ff00ec442d48ede526db55379bd917606863c05f43b85a51  libostree-2021.1.tar.xz
+ sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
+index 7c887ebee8..a0e7e0ef0d 100644
+--- a/package/libostree/libostree.mk
++++ b/package/libostree/libostree.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBINPUT_VERSION = 1.17.0
-+LIBINPUT_VERSION = 1.17.1
- LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
- LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
- LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
+-LIBOSTREE_VERSION = 2020.8
++LIBOSTREE_VERSION = 2021.1
+ LIBOSTREE_SOURCE = libostree-$(LIBOSTREE_VERSION).tar.xz
+ LIBOSTREE_SITE = https://github.com/ostreedev/ostree/releases/download/v$(LIBOSTREE_VERSION)
+ 
