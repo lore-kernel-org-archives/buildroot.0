@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Apr 2021 11:10:22 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/libupnp: disable
+Date: Sun, 4 Apr 2021 11:10:14 +0200
+Subject: [Buildroot] [git commit branch/2020.11.x] package/libupnp: disable
  samples
-Message-ID: <20210404085301.E9BD487A17@busybox.osuosl.org>
+Message-ID: <20210404085319.078CB8B72E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2a927eff9d85f28b0968d2290b3ef6e4dd765fb3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=cf9b27df0525d9447271bf06aaf6a54b61a73f83
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
 Disable samples which are built (but not installed) by default since at
 least version 1.6.0 and
