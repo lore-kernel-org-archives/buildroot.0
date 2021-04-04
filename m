@@ -1,25 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 04 Apr 2021 12:29:14 +0200
-Subject: [Buildroot] [PATCH 1/1] package/jasper: bump version to 2.0.28
-In-Reply-To: <20210329171502.26661-1-jubalh@iodoru.org> (Michael Vetter's
- message of "Mon, 29 Mar 2021 19:15:02 +0200")
-References: <20210329171502.26661-1-jubalh@iodoru.org>
-Message-ID: <8735w61gxx.fsf@dell.be.48ers.dk>
+Date: Sun, 04 Apr 2021 12:29:54 +0200
+Subject: [Buildroot] [PATCH] package/syslog-ng: Bump version to 3.31.2
+In-Reply-To: <20210329075604.12322-1-judge.packham@gmail.com> (Chris Packham's
+ message of "Mon, 29 Mar 2021 20:56:04 +1300")
+References: <20210329075604.12322-1-judge.packham@gmail.com>
+Message-ID: <87y2dyz6jh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Michael" == Michael Vetter <jubalh@iodoru.org> writes:
+>>>>> "Chris" == Chris Packham <judge.packham@gmail.com> writes:
 
- > Changes:
- >   * Fix potential null pointer dereference in the JP2/JPC decoder. (#269)
- >   * Fix ignoring of JAS_STREAM_FILEOBJ_NOCLOSE at stream close time. (#286)
- >   * Fix integral type sizing problem in JP2 codec. (#284)
- > Signed-off-by: Michael Vetter <jubalh@iodoru.org>
+ > https://github.com/syslog-ng/syslog-ng/releases/tag/syslog-ng-3.31.2
+ > Signed-off-by: Chris Packham <judge.packham@gmail.com>
+ > ---
+ >  package/syslog-ng/syslog-ng.hash | 2 +-
+ >  package/syslog-ng/syslog-ng.mk   | 2 +-
+ >  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Committed, thanks.
+ > diff --git a/package/syslog-ng/syslog-ng.hash b/package/syslog-ng/syslog-ng.hash
+ > index 60ea6b3c61..812655cd49 100644
+ > --- a/package/syslog-ng/syslog-ng.hash
+ > +++ b/package/syslog-ng/syslog-ng.hash
+ > @@ -1,5 +1,5 @@
+ >  # Locally computed
+ > -sha256  44e54a6186af14d01affa06bf7391cfe8fc2460bd4ba211aab5469d8b1ca5b4b  syslog-ng-3.30.1.tar.gz
+ > +sha256  2eeb8e0dbbcb556fdd4e50bc9f29bc8c66c9b153026f87caa7567bd3139c186a  syslog-ng-3.31.2.tar.gz
+ >  sha256  e912cf1e1c09b81d61c0154eb6c179588622c31ad07bfb4a90c612d07ff09d9b  COPYING
+ >  sha256  ce3324c9f22299cfc7c281e5a6ab40fbe9c2ea1a67cee87226cb8cd39db1e1d2  GPL.txt
+ >  sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LGPL.txt
+ > diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
+ > index 3c0c346563..20f5fc2235 100644
+ > --- a/package/syslog-ng/syslog-ng.mk
+ > +++ b/package/syslog-ng/syslog-ng.mk
+ > @@ -6,7 +6,7 @@
+ 
+ >  # When updating the version, please check at runtime if the version in
+ >  # syslog-ng.conf header needs to be updated
+ > -SYSLOG_NG_VERSION = 3.30.1
+ > +SYSLOG_NG_VERSION = 3.31.2
+
+So no need to update syslog-ng.conf?
 
 -- 
 Bye, Peter Korsgaard
