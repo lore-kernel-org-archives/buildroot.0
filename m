@@ -1,50 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Apr 2021 11:39:15 +0200
-Subject: [Buildroot] [git commit branch/2020.11.x] package/lldpd: bump to
- version 1.0.7
-Message-ID: <20210404092638.6CE618B679@busybox.osuosl.org>
+Date: Sun, 4 Apr 2021 11:36:04 +0200
+Subject: [Buildroot] [git commit branch/2020.11.x] package/go: bump version
+ to 1.15.11
+Message-ID: <20210404092638.5FD898B72E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9662156259b43aa0ca07221ad4e622376bae4a6b
+commit: https://git.buildroot.net/buildroot/commit/?id=c661fc4310d0fbd7fa67ebe2137b0c0e446f6ea6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-https://github.com/lldpd/lldpd/blob/1.0.7/NEWS
+go1.15.11 (released 2021/04/01) includes fixes to cgo, the compiler, linker,
+runtime, the go command, and the database/sql and net/http packages
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit c9670dfa21d667c69ea794d5e15055cff134d6c3)
+https://golang.org/doc/go1.15
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit abfb504eafa8bb94cf63b2ef669884fbbacc70db)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lldpd/lldpd.hash | 4 ++--
- package/lldpd/lldpd.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/lldpd/lldpd.hash b/package/lldpd/lldpd.hash
-index 4283b4aec8..ee6e72ba55 100644
---- a/package/lldpd/lldpd.hash
-+++ b/package/lldpd/lldpd.hash
-@@ -1,5 +1,5 @@
- # Locally computed after checking gpg key
--# https://media.luffy.cx/files/lldpd/lldpd-1.0.5.tar.gz.gpg
-+# https://media.luffy.cx/files/lldpd/lldpd-1.0.7.tar.gz.gpg
- # using key AEF2348766F371C689A7360095A42FE8353525F9
--sha256  2dd3b212f4dbabfcbb2794c0010b245f9f8e74b387984e757be6243a74c6cb99  lldpd-1.0.5.tar.gz
-+sha256  1df79179d489c841b49265f2ab5ff05f284a647e95862d2f3c02b3fb079a87e1  lldpd-1.0.7.tar.gz
- sha256  0e96a5aea65f16e2239231ce4ab90497f8bc3bb8fe6abe9299aade4726ff7c8d  LICENSE
-diff --git a/package/lldpd/lldpd.mk b/package/lldpd/lldpd.mk
-index 585d1ed7ba..7860b70c39 100644
---- a/package/lldpd/lldpd.mk
-+++ b/package/lldpd/lldpd.mk
+diff --git a/package/go/go.hash b/package/go/go.hash
+index 19962633fb..871ac026e1 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,3 +1,3 @@
+ # From https://golang.org/dl/
+-sha256  c1dbca6e0910b41d61a95bf9878f6d6e93d15d884c226b91d9d4b1113c10dd65  go1.15.10.src.tar.gz
++sha256  f25b2441d4c76cf63cde94d59bab237cc33e8a2a139040d904c8630f46d061e5  go1.15.11.src.tar.gz
+ sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 3f942a2cf0..418b9bf9fb 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LLDPD_VERSION = 1.0.5
-+LLDPD_VERSION = 1.0.7
- LLDPD_SITE = https://media.luffy.cx/files/lldpd
- LLDPD_DEPENDENCIES = \
- 	$(if $(BR2_PACKAGE_CHECK),check) \
+-GO_VERSION = 1.15.10
++GO_VERSION = 1.15.11
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
