@@ -1,49 +1,69 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Apr 2021 21:24:50 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/jasper: bump
- version to 2.0.28
-Message-ID: <20210404190227.8BC8F8C564@busybox.osuosl.org>
+Date: Sun, 4 Apr 2021 21:07:04 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/botan: add
+ support for riscv32
+Message-ID: <20210404190227.60B4E8427D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=00c28a25005b4b6822e53d4b59cd4d307887b57a
+commit: https://git.buildroot.net/buildroot/commit/?id=2f9552bb50b216a2be071bd4af266ecd2db6e532
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Changes:
-  * Fix potential null pointer dereference in the JP2/JPC decoder. (#269)
-  * Fix ignoring of JAS_STREAM_FILEOBJ_NOCLOSE at stream close time. (#286)
-  * Fix integral type sizing problem in JP2 codec. (#284)
-Signed-off-by: Michael Vetter <jubalh@iodoru.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 7727703a8bd7589f8c1cf4fe47242214707cac50)
+Backport an upstream patch to add support for riscv32. Although this is
+a new feature (new arch support), this is an upstream commit, so we can
+expect it to be available in a future release.
+
+Fixes:
+ - http://autobuild.buildroot.org/results/1c399312dbec5d7a28ec90d62fdd8f47fa14ff4b
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[yann.morin.1998 at free.fr:
+  - technically, this is not a bug fix, but new arch support
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 08a0e9bd065b925856b5724f955dd0873d85703c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/jasper/jasper.hash | 2 +-
- package/jasper/jasper.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/botan/0003-Add-support-for-riscv32.patch | 31 ++++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
 
-diff --git a/package/jasper/jasper.hash b/package/jasper/jasper.hash
-index 17260b00c9..67653a8e88 100644
---- a/package/jasper/jasper.hash
-+++ b/package/jasper/jasper.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  df41bd015a9dd0cc2a2e696f8ca5cbfb633323ca9429621f7fa801778681f2dd  jasper-2.0.27.tar.gz
-+sha256  6b4e5f682be0ab1a5acb0eeb6bf41d6ce17a658bb8e2dbda95de40100939cc88  jasper-2.0.28.tar.gz
- sha256  4ad1bb42aff888c4403d792e6e2c5f1716d6c279fea70b296333c9d577d30b81  LICENSE
-diff --git a/package/jasper/jasper.mk b/package/jasper/jasper.mk
-index e7bb08e200..6ef1afcac7 100644
---- a/package/jasper/jasper.mk
-+++ b/package/jasper/jasper.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--JASPER_VERSION = 2.0.27
-+JASPER_VERSION = 2.0.28
- JASPER_SITE = $(call github,jasper-software,jasper,version-$(JASPER_VERSION))
- JASPER_INSTALL_STAGING = YES
- JASPER_LICENSE = JasPer-2.0
+diff --git a/package/botan/0003-Add-support-for-riscv32.patch b/package/botan/0003-Add-support-for-riscv32.patch
+new file mode 100644
+index 0000000000..d8978b2f11
+--- /dev/null
++++ b/package/botan/0003-Add-support-for-riscv32.patch
+@@ -0,0 +1,31 @@
++From 443bf46ee2b1b1d7acd63e3f00dcbe66646138f8 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 2 Apr 2021 20:37:03 +0200
++Subject: [PATCH] Add support for riscv32
++
++Fix the following build failure:
++
++  ERROR: Unknown or unidentifiable processor "riscv32"
++
++Fixes:
++ - http://autobuild.buildroot.org/results/1c399312dbec5d7a28ec90d62fdd8f47fa14ff4b
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/randombit/botan/commit/aa7958880bee2091a8a71bf9e1f6e6efb34581e3]
++---
++ src/build-data/arch/riscv32.txt | 2 ++
++ 1 file changed, 2 insertions(+)
++ create mode 100644 src/build-data/arch/riscv32.txt
++
++diff --git a/src/build-data/arch/riscv32.txt b/src/build-data/arch/riscv32.txt
++new file mode 100644
++index 000000000..ba88b42e9
++--- /dev/null
+++++ b/src/build-data/arch/riscv32.txt
++@@ -0,0 +1,2 @@
+++family riscv32
+++endian little
++-- 
++2.30.2
++
