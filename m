@@ -1,50 +1,82 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Apr 2021 11:39:42 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/lldpd: bump to
- version 1.0.7
-Message-ID: <20210404092634.536958B800@busybox.osuosl.org>
+Date: Sun, 4 Apr 2021 11:26:56 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/pkg-cmake.mk:
+ don't unconditionally set CMAKE_CXX_COMPILER
+Message-ID: <20210404092634.3C52E890EA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f31579d1c06c4df702b289d17475f76ebbd31722
+commit: https://git.buildroot.net/buildroot/commit/?id=b0cf597510986e7bd679e6f4e4ef3e4cc2d96b8d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-https://github.com/lldpd/lldpd/blob/1.0.7/NEWS
+Don't unconditionally set CMAKE_CXX_COMPILER as it will raise a build
+failure on qpid-proton because "if the toolchain specifies a value for
+CMAKE_CXX_COMPILER, then CMake assumes the compiler works and goes
+straight ahead trying to use it":
+https://cmake.org/cmake/help/latest/module/CheckLanguage.html
+https://issues.apache.org/jira/browse/PROTON-2365
+
+Fixes:
+ - http://autobuild.buildroot.org/results/05f344151100219c159ca4d466a453df96bf07fa
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit c9670dfa21d667c69ea794d5e15055cff134d6c3)
+[yann.morin.1998 at free.fr: rename placeholder]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 2c2c0192a2463b8e8d0f7937b89fa83b16d93cab)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lldpd/lldpd.hash | 4 ++--
- package/lldpd/lldpd.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/pkg-cmake.mk                |  1 +
+ support/misc/toolchainfile.cmake.in | 10 ++++++----
+ 2 files changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/package/lldpd/lldpd.hash b/package/lldpd/lldpd.hash
-index 4283b4aec8..ee6e72ba55 100644
---- a/package/lldpd/lldpd.hash
-+++ b/package/lldpd/lldpd.hash
-@@ -1,5 +1,5 @@
- # Locally computed after checking gpg key
--# https://media.luffy.cx/files/lldpd/lldpd-1.0.5.tar.gz.gpg
-+# https://media.luffy.cx/files/lldpd/lldpd-1.0.7.tar.gz.gpg
- # using key AEF2348766F371C689A7360095A42FE8353525F9
--sha256  2dd3b212f4dbabfcbb2794c0010b245f9f8e74b387984e757be6243a74c6cb99  lldpd-1.0.5.tar.gz
-+sha256  1df79179d489c841b49265f2ab5ff05f284a647e95862d2f3c02b3fb079a87e1  lldpd-1.0.7.tar.gz
- sha256  0e96a5aea65f16e2239231ce4ab90497f8bc3bb8fe6abe9299aade4726ff7c8d  LICENSE
-diff --git a/package/lldpd/lldpd.mk b/package/lldpd/lldpd.mk
-index 585d1ed7ba..7860b70c39 100644
---- a/package/lldpd/lldpd.mk
-+++ b/package/lldpd/lldpd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index ac18bc6cef..9a94f54884 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -263,6 +263,7 @@ define TOOLCHAIN_CMAKE_INSTALL_FILES
+ 		-e 's#@@TARGET_CXX@@#$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_CXX)))#' \
+ 		-e 's#@@TARGET_FC@@#$(subst $(HOST_DIR)/,,$(call qstrip,$(TARGET_FC)))#' \
+ 		-e 's#@@CMAKE_SYSTEM_PROCESSOR@@#$(call qstrip,$(CMAKE_SYSTEM_PROCESSOR))#' \
++		-e 's#@@TOOLCHAIN_HAS_CXX@@#$(if $(BR2_INSTALL_LIBSTDCPP),1,0)#' \
+ 		-e 's#@@TOOLCHAIN_HAS_FORTRAN@@#$(if $(BR2_TOOLCHAIN_HAS_FORTRAN),1,0)#' \
+ 		-e 's#@@CMAKE_BUILD_TYPE@@#$(if $(BR2_ENABLE_DEBUG),Debug,Release)#' \
+ 		$(TOPDIR)/support/misc/toolchainfile.cmake.in \
+diff --git a/support/misc/toolchainfile.cmake.in b/support/misc/toolchainfile.cmake.in
+index b25031a656..be575566a4 100644
+--- a/support/misc/toolchainfile.cmake.in
++++ b/support/misc/toolchainfile.cmake.in
+@@ -29,9 +29,7 @@ set(CMAKE_SYSTEM_PROCESSOR @@CMAKE_SYSTEM_PROCESSOR@@)
+ #   if the project forces some of these flag variables, Buildroot is
+ #   screwed up and there is nothing Buildroot can do about that :(
+ set(CMAKE_C_FLAGS_DEBUG "" CACHE STRING "Debug CFLAGS")
+-set(CMAKE_CXX_FLAGS_DEBUG "" CACHE STRING "Debug CXXFLAGS")
+ set(CMAKE_C_FLAGS_RELEASE " -DNDEBUG" CACHE STRING "Release CFLAGS")
+-set(CMAKE_CXX_FLAGS_RELEASE " -DNDEBUG" CACHE STRING "Release CXXFLAGS")
  
--LLDPD_VERSION = 1.0.5
-+LLDPD_VERSION = 1.0.7
- LLDPD_SITE = https://media.luffy.cx/files/lldpd
- LLDPD_DEPENDENCIES = \
- 	$(if $(BR2_PACKAGE_CHECK),check) \
+ # Build type from the Buildroot configuration
+ set(CMAKE_BUILD_TYPE @@CMAKE_BUILD_TYPE@@ CACHE STRING "Buildroot build configuration")
+@@ -44,7 +42,6 @@ set(CMAKE_BUILD_TYPE @@CMAKE_BUILD_TYPE@@ CACHE STRING "Buildroot build configur
+ # * and make sure the project's CMake code extends them like this if needed:
+ #     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Dsome_definitions")
+ set(CMAKE_C_FLAGS "@@TARGET_CFLAGS@@" CACHE STRING "Buildroot CFLAGS")
+-set(CMAKE_CXX_FLAGS "@@TARGET_CXXFLAGS@@" CACHE STRING "Buildroot CXXFLAGS")
+ set(CMAKE_EXE_LINKER_FLAGS "@@TARGET_LDFLAGS@@" CACHE STRING "Buildroot LDFLAGS for executables")
+ set(CMAKE_SHARED_LINKER_FLAGS "@@TARGET_LDFLAGS@@" CACHE STRING "Buildroot LDFLAGS for shared libraries")
+ set(CMAKE_MODULE_LINKER_FLAGS "@@TARGET_LDFLAGS@@" CACHE STRING "Buildroot LDFLAGS for module libraries")
+@@ -62,7 +59,12 @@ set(ENV{PKG_CONFIG_SYSROOT_DIR} "${RELOCATED_HOST_DIR}/@@STAGING_SUBDIR@@")
+ 
+ # This toolchain file can be used both inside and outside Buildroot.
+ set(CMAKE_C_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CC@@")
+-set(CMAKE_CXX_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CXX@@")
++if(@@TOOLCHAIN_HAS_CXX@@)
++  set(CMAKE_CXX_FLAGS_DEBUG "" CACHE STRING "Debug CXXFLAGS")
++  set(CMAKE_CXX_FLAGS_RELEASE " -DNDEBUG" CACHE STRING "Release CXXFLAGS")
++  set(CMAKE_CXX_FLAGS "@@TARGET_CXXFLAGS@@" CACHE STRING "Buildroot CXXFLAGS")
++  set(CMAKE_CXX_COMPILER "${RELOCATED_HOST_DIR}/@@TARGET_CXX@@")
++endif()
+ if(@@TOOLCHAIN_HAS_FORTRAN@@)
+   set(CMAKE_Fortran_FLAGS_DEBUG "" CACHE STRING "Debug Fortran FLAGS")
+   set(CMAKE_Fortran_FLAGS_RELEASE " -DNDEBUG" CACHE STRING "Release Fortran FLAGS")
