@@ -1,37 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 4 Apr 2021 15:52:59 +0200
-Subject: [Buildroot] [PATCH 1/1] package/iproute2: Bump version to 5.11.0
-In-Reply-To: <20210323181004.25172-1-petr.vorel@gmail.com>
-References: <20210323181004.25172-1-petr.vorel@gmail.com>
-Message-ID: <20210404155259.196253ae@windsurf.home>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  4 Apr 2021 16:30:42 +0200
+Subject: [Buildroot] [PATCH 1/7] package/libvips: add zlib optional
+ dependency
+Message-ID: <20210404143048.2308010-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Petr,
+zlib is an optional dependency which is enabled by default since version
+8.4.2 and
+https://github.com/libvips/libvips/commit/5ab0001ec68a5f61396aecd8d2d7a619b1dbe1fa
 
-On Tue, 23 Mar 2021 19:10:04 +0100
-Petr Vorel <petr.vorel@gmail.com> wrote:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libvips/libvips.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-> ---
-> Hi,
-> 
-> NOTE: this should not be applied until uclibc based toolchains are
-> regenerated. But posted for people who don't use uclibc and would like
-> to have iproute2 sync with kernel version.
-
-I think they have all been updated now. However, your patch doesn't
-apply: it assumes that Buildroot master has iproute2 5.8.0, but we have
-5.7.0. And the patch we have in package/iproute2/ doesn't apply to
-5.11.0. Could you have a look and respin?
-
-Thanks a lot!
-
-Thomas
+diff --git a/package/libvips/libvips.mk b/package/libvips/libvips.mk
+index 0449751380..5f95fc7f1d 100644
+--- a/package/libvips/libvips.mk
++++ b/package/libvips/libvips.mk
+@@ -94,4 +94,11 @@ else
+ LIBVIPS_CONF_OPTS += --without-libexif
+ endif
+ 
++ifeq ($(BR2_PACKAGE_ZLIB),y)
++LIBVIPS_CONF_OPTS += --with-zlib
++LIBVIPS_DEPENDENCIES += zlib
++else
++LIBVIPS_CONF_OPTS += --without-zlib
++endif
++
+ $(eval $(autotools-package))
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.30.2
