@@ -1,23 +1,34 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 04 Apr 2021 16:54:01 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/tvheadend: add various
- options to disable optional components
-References: <20210403152234.2006719-1-bernd.kuhls@t-online.de>
- <20210404123047.GH2252@scaer>
-Message-ID: <9h0pjhx6mr.ln2@ID-313208.user.individual.net>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  4 Apr 2021 18:06:52 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libvips: add LIBVIPS_CPE_ID_VENDOR
+Message-ID: <20210404160652.2898792-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sun, 04 Apr 2021 14:30:47 +0200 schrieb Yann E. MORIN:
+cpe:2.3:a:libvips_project:libvips is a valid CPE identifier for this
+package:
 
-> Instead, I've added a note in the help text, to direct
-> users to enable it if they need it.
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alibvips_project%3Alibvips
 
-Hi Yann,
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libvips/libvips.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-ok.
-
-Regards, Bernd
+diff --git a/package/libvips/libvips.mk b/package/libvips/libvips.mk
+index 82c1adeb21..f7b15e8e06 100644
+--- a/package/libvips/libvips.mk
++++ b/package/libvips/libvips.mk
+@@ -9,6 +9,7 @@ LIBVIPS_SOURCE = vips-$(LIBVIPS_VERSION).tar.gz
+ LIBVIPS_SITE = https://github.com/libvips/libvips/releases/download/v$(LIBVIPS_VERSION)
+ LIBVIPS_LICENSE = LGPL-2.1+
+ LIBVIPS_LICENSE_FILES = COPYING
++LIBVIPS_CPE_ID_VENDOR = libvips_project
+ 
+ # Sparc64 compile fails, for all optimization levels except -O0. To
+ # fix the problem, use -O0 with no optimization instead. Bug reported
+-- 
+2.30.2
