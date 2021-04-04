@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Apr 2021 21:34:18 +0200
-Subject: [Buildroot] [git commit branch/2020.11.x] package/libvips: add
+Date: Sun, 4 Apr 2021 21:34:14 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/libvips: add
  giflib optional dependency
-Message-ID: <20210404191424.CD0218183F@busybox.osuosl.org>
+Message-ID: <20210404191443.23F4D835F6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dedffe87314fcd2b4669032664a71d122be3cd32
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=d1c3a47f3c1c4f1219298d4a8a307fda92eba8eb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
 giflib is an optional dependency which is enabled by default since
 version 8.3.0 and
