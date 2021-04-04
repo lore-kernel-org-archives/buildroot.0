@@ -1,45 +1,48 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  4 Apr 2021 19:28:58 +0200
-Subject: [Buildroot] [PATCH 1/1] package/samba4: AD DC support needs ADS
-Message-ID: <20210404172858.1514191-1-bernd.kuhls@t-online.de>
+Date: Sun,  4 Apr 2021 19:48:57 +0200
+Subject: [Buildroot] [PATCH 1/2] package/ell: bump version to 0.39
+Message-ID: <20210404174858.1889335-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Needed due to upstream commit:
-https://gitlab.com/samba-team/samba/-/commit/607c9ab307db36aee0604d209a13b45d28c63d9b
+Changelog:
+https://git.kernel.org/pub/scm/libs/ell/ell.git/tree/ChangeLog
 
-Fixes:
-http://autobuild.buildroot.net/results/b3f/b3fe797408b9041de37433602b3a47211818e44b/
+Needed for bluez5_utils bump to 5.58:
+http://www.bluez.org/release-of-bluez-5-58-and-5-57/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/samba4/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/ell/ell.hash | 2 +-
+ package/ell/ell.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/samba4/Config.in b/package/samba4/Config.in
-index e890313b71..db7783949a 100644
---- a/package/samba4/Config.in
-+++ b/package/samba4/Config.in
-@@ -31,14 +31,15 @@ if BR2_PACKAGE_SAMBA4
- config BR2_PACKAGE_SAMBA4_AD_DC
- 	bool "AD DC"
- 	depends on BR2_PACKAGE_PYTHON3
-+	depends on BR2_PACKAGE_SAMBA4_ADS
- 	select BR2_PACKAGE_JANSSON
- 	select BR2_PACKAGE_PYTHON_DNSPYTHON
- 	select BR2_PACKAGE_PYTHON_MARKDOWN
- 	help
- 	  Enable Active Directory Domain Controller functionality.
+diff --git a/package/ell/ell.hash b/package/ell/ell.hash
+index cbefd79bb8..a795b1aa0d 100644
+--- a/package/ell/ell.hash
++++ b/package/ell/ell.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  7767306f20db41c28b3138b5323bca05fef92238b6b61f81f66c2af684a13886  ell-0.38-br1.tar.gz
++sha256  deacff70541b2b0aa61758d7e4eafbabd8c603eeea0207a8a2f5f42118c2f49d  ell-0.39-br1.tar.gz
  
--comment "AD DC depends on python3"
--	depends on !BR2_PACKAGE_PYTHON3
-+comment "AD DC depends on python3 and Samba ADS support"
-+	depends on !BR2_PACKAGE_PYTHON3 || !BR2_PACKAGE_SAMBA4_ADS
+ # License files
+ sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING
+diff --git a/package/ell/ell.mk b/package/ell/ell.mk
+index 18f1cf2aac..c83063feda 100644
+--- a/package/ell/ell.mk
++++ b/package/ell/ell.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_SAMBA4_ADS
- 	bool "ADS"
+-ELL_VERSION = 0.38
++ELL_VERSION = 0.39
+ ELL_SITE = https://git.kernel.org/pub/scm/libs/ell/ell.git
+ ELL_SITE_METHOD = git
+ ELL_LICENSE = LGPL-2.1+
 -- 
 2.29.2
