@@ -1,38 +1,24 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 4 Apr 2021 12:07:13 +0200
-Subject: [Buildroot] [PATCH 1/1] package/uftrace: new package
-In-Reply-To: <20210404090338.GD2252@scaer>
-References: <20210403191609.1168606-1-asafka7@gmail.com>
- <20210404090338.GD2252@scaer>
-Message-ID: <20210404120713.42dc0952@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 04 Apr 2021 12:16:17 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libvpx: add LIBVPX_CPE_ID_VENDOR
+In-Reply-To: <20210403085530.2217219-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 3 Apr 2021 10:55:30 +0200")
+References: <20210403085530.2217219-1-fontaine.fabrice@gmail.com>
+Message-ID: <87k0pi1hji.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-(In addition to Yann comments)
+ > cpe:2.3:a:webmproject:libvpx is a valid CPE identifier for this package:
+ >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Awebmproject%3Alibvpx
 
-On Sun, 4 Apr 2021 11:03:38 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-> > +UFTRACE_LICENSE = GPL-2.0
-> > +UFTRACE_LICENSE_FILES = COPYING
-> > +
-> > +ifeq ($(BR2_PACKAGE_ELFUTILS),y)
-> > +UFTRACE_DEPENDENCIES += elfutils
-> > +endif
+Committed to 2021.02.x, thanks.
 
-This optional dependency is a bit odd. How does the uftrace build
-system detects the availability of elfutils? You're not passing any
-specific option when elfutils is available or not available.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
