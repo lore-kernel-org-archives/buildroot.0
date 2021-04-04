@@ -1,53 +1,42 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  4 Apr 2021 16:30:44 +0200
-Subject: [Buildroot] [PATCH 3/7] package/libvips: add {image,
- graphics}magick optional dependencies
+Date: Sun,  4 Apr 2021 16:30:43 +0200
+Subject: [Buildroot] [PATCH 2/7] package/libvips: add librsvg optional
+ dependency
 In-Reply-To: <20210404143048.2308010-1-fontaine.fabrice@gmail.com>
 References: <20210404143048.2308010-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210404143048.2308010-3-fontaine.fabrice@gmail.com>
+Message-ID: <20210404143048.2308010-2-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+librsvg is an optional dependency which is enabled by default since
+version 8.3.0 and
+https://github.com/libvips/libvips/commit/153886d2eb71eebcdca860cb691d8fbb976ad816
+
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libvips/libvips.mk | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
+ package/libvips/libvips.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/package/libvips/libvips.mk b/package/libvips/libvips.mk
-index f35a109502..7e8b705dd2 100644
+index 5f95fc7f1d..f35a109502 100644
 --- a/package/libvips/libvips.mk
 +++ b/package/libvips/libvips.mk
-@@ -23,7 +23,6 @@ LIBVIPS_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) $(LIBVIPS_CXXFLAGS)" \
- LIBVIPS_CONF_OPTS = \
- 	--without-dmalloc \
- 	--without-gsf \
--	--without-magick \
- 	--without-orc \
- 	--without-lcms \
- 	--without-OpenEXR \
-@@ -52,6 +51,20 @@ else
- LIBVIPS_CONF_OPTS += --disable-introspection
+@@ -66,6 +66,13 @@ else
+ LIBVIPS_CONF_OPTS += --without-png
  endif
  
-+ifeq ($(BR2_PACKAGE_IMAGEMAGICK),y)
-+LIBVIPS_CONF_OPTS += \
-+	--with-magick \
-+	--with-magickpackage=MagickCore
-+LIBVIPS_DEPENDENCIES += imagemagick
-+else ifeq ($(BR2_PACKAGE_GRAPHICSMAGICK),y)
-+LIBVIPS_CONF_OPTS += \
-+	--with-magick \
-+	--with-magickpackage=GraphicsMagick
-+LIBVIPS_DEPENDENCIES += graphicsmagick
++ifeq ($(BR2_PACKAGE_LIBRSVG),y)
++LIBVIPS_CONF_OPTS += --with-rsvg
++LIBVIPS_DEPENDENCIES += librsvg
 +else
-+LIBVIPS_CONF_OPTS += --without-magick
++LIBVIPS_CONF_OPTS += --without-rsvg
 +endif
 +
- ifeq ($(BR2_PACKAGE_JPEG),y)
- LIBVIPS_CONF_OPTS += --with-jpeg
- LIBVIPS_DEPENDENCIES += jpeg
+ ifeq ($(BR2_PACKAGE_POPPLER),y)
+ LIBVIPS_CONF_OPTS += --with-poppler
+ LIBVIPS_DEPENDENCIES += poppler
 -- 
 2.30.2
