@@ -1,45 +1,136 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  4 Apr 2021 10:49:33 +0200
-Subject: [Buildroot] [PATCH 1/1] package/samba4: update samba4-cache.txt for
- fcntl flags check
-Message-ID: <20210404084933.859933-1-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 4 Apr 2021 11:03:38 +0200
+Subject: [Buildroot] [PATCH 1/1] package/uftrace: new package
+In-Reply-To: <20210403191609.1168606-1-asafka7@gmail.com>
+References: <20210403191609.1168606-1-asafka7@gmail.com>
+Message-ID: <20210404090338.GD2252@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/76a/76a411b78d764561457decd47b268f65059ba1b0/
+Asaf, All,
 
-Checking whether fcntl supports setting/geting hints : not found
-..
-Cross answers file /home/giuliobenetti/autobuild/run/instance-2/output-1/build/samba4-4.14.2/cache.txt is incomplete
+On 2021-04-03 22:16 +0300, Asaf Kahlon spake thusly:
+> The uftrace tool is to trace and analyze execution of a
+> program written in C/C++. It was heavily inspired by the
+> ftrace framework of the Linux kernel (especially function
+> graph tracer) and supports userspace programs.
+> It supports various kind of commands and filters to help
+> analysis of the program execution and performance.
 
-Samba4 has added a check for fcntl F_{G,S}ET_RW_HINT /
-F_{G,S}ET_FILE_RW_HINT handling since:
-https://gitlab.com/samba-team/devel/samba/-/commit/5084a69de14f24e9d804998580eefcba773fdd5a
+Rather than duplicate the package description in the commit log, I
+think it makes more sense that it contains explanations about the
+packaging in Buildroot. See below.
 
-Which is supported by the Linux kernel since 4.13 in commit
-c75b1d9421f80f41 (fs: add fcntl() interface for setting/getting
- write life time hints), so add it to the cache file.
+> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+> ---
+>  DEVELOPERS                   |  1 +
+>  package/Config.in            |  1 +
+>  package/busybox/busybox.     |  0
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/samba4/samba4.mk | 1 +
- 1 file changed, 1 insertion(+)
+Uh? ;-)
 
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 203d0d1371..99c8af9ab2 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -103,6 +103,7 @@ SAMBA4_POST_INSTALL_TARGET_HOOKS += SAMBA4_REMOVE_CTDB_TESTS
- 
- define SAMBA4_CONFIGURE_CMDS
- 	$(INSTALL) -m 0644 package/samba4/samba4-cache.txt $(@D)/cache.txt;
-+	echo 'Checking whether fcntl supports setting/geting hints: $(if $(BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_13),OK,NO)' >>$(@D)/cache.txt;
- 	echo 'Checking uname machine type: $(BR2_ARCH)' >>$(@D)/cache.txt;
- 	(cd $(@D); \
- 		$(SAMBA4_PYTHON) \
+[--SNIP--]
+> diff --git a/package/uftrace/Config.in b/package/uftrace/Config.in
+> new file mode 100644
+> index 0000000000..ca3041195e
+> --- /dev/null
+> +++ b/package/uftrace/Config.in
+> @@ -0,0 +1,12 @@ 
+> +config BR2_PACKAGE_UFTRACE
+> +	bool "uftrace"
+> +	depends on BR2_arm || BR2_aarch64 || BR2_x86_64
+
+AFAICS, it also support i386...
+
+Even though the architecture dependencies are pretty trivial today, I
+think it would be good to introduce a _ARCH_SUPPORTS symbol:
+
+    config BR2_PACKAGE_UFTRACE_ARCH_SUPPORTS
+        bool
+        default y if BR2_arm
+        default y if BR2_aarch64
+        default y if BR2_i386
+        default y if BR2_x86_64
+
+    config BR2_PACKAGE_UFTRACE
+        bool "uftrace"
+        depends on BR2_PACKAGE_UFTRACE_ARCH_SUPPORTS
+
+[--SNIP--]
+> diff --git a/package/uftrace/uftrace.mk b/package/uftrace/uftrace.mk
+> new file mode 100644
+> index 0000000000..b696ac4c6e
+> --- /dev/null
+> +++ b/package/uftrace/uftrace.mk
+> @@ -0,0 +1,26 @@
+> +################################################################################
+> +#
+> +# uftrace
+> +#
+> +################################################################################
+> +
+> +UFTRACE_VERSION = 0.9.4
+> +UFTRACE_SITE = https://github.com/namhyung/uftrace/archive/refs/tags
+
+Please use the github macro; see e.g. boot/shim/shim.mk and the manual:
+    https://buildroot.org/downloads/manual/manual.html#github-download-url
+
+> +UFTRACE_SOURCE = v0.9.4.tar.gz
+
+No need to specify _SOURCE when using the github macro.
+
+> +UFTRACE_LICENSE = GPL-2.0
+> +UFTRACE_LICENSE_FILES = COPYING
+> +
+> +ifeq ($(BR2_PACKAGE_ELFUTILS),y)
+> +UFTRACE_DEPENDENCIES += elfutils
+> +endif
+> +
+> +define UFTRACE_BUILD_CMDS
+> +	$(TARGET_CONFIGURE_OPTS) ARCH=$(BR2_ARCH) $(MAKE) -C $(@D) $(UFTRACE_MAKE_OPTS)
+
+You are not setting UFTRACE_MAKE_OPTS anywhere that I can see...
+
+> +endef
+> 
+> +define UFTRACE_INSTALL_TARGET_CMDS
+> +	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) \
+> +		$(UFTRACE_MAKE_OPTS) install
+> +endef
+> +
+> +$(eval $(generic-package))
+
+There is a ./configure script (but it is not autotools, so this truly is
+a generic-package indeed): any reason why you are not using it? A little
+note about it in the commit log would be nice.
+
+I was wondering if having a host variant would not be interesting too.
+Indeed, uftrace has a record mode, where it has a 'record' mode where it
+stores all the traces into a file, and replay/report/graph modes where
+it reads from that file to do off-sire analysis. So one might be
+interested in running in record mode in the target, and doing the
+analysis on the development machine...
+
+Thoughts?
+
+Regards,
+Yann E. MORIN.
+
+> -- 
+> 2.27.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.29.2
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
