@@ -1,81 +1,78 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 4 Apr 2021 13:59:11 +0200
-Subject: [Buildroot] [git commit] package/sane-backends: add patch to fix
- compile for toolchains without thread support
-Message-ID: <20210404113358.D5F908B911@busybox.osuosl.org>
+Date: Sun, 4 Apr 2021 14:02:25 +0200
+Subject: [Buildroot] [git commit] package/wget: fix build with uclibc <
+ 1.0.35
+Message-ID: <20210404113715.83D288B4AD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b025ab55aeeb339508f80825294e479ecdb28eb4
+commit: https://git.buildroot.net/buildroot/commit/?id=1527451ceb2f27768e675f234baa709ed715fdc7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Build of wget with uclibc < 1.0.35 is broken since bump to version
+1.21.1 in commit 89a3f73910402ed40066eed076d5a53ac270307c
+
 Fixes:
+ - http://autobuild.buildroot.org/results/d507f8d8ae4dd6aac1e83b7cc81017caf0d2c30e
 
-  - http://autobuild.buildroot.net/results/c9b0e41d66211bcab231b5db78c6eebe4b1d78ba
-
-  genesys/scanner_interface_usb.cpp: In member function ???virtual void genesys::ScannerInterfaceUsb::sleep_us(unsigned int)???:
-  genesys/scanner_interface_usb.cpp:484:10: error: ???std::this_thread??? has not been declared
-    484 |     std::this_thread::sleep_for(std::chrono::microseconds{microseconds});
-        |          ^~~~
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...-usleep-instead-of-std-this_thread-sleep_.patch | 46 ++++++++++++++++++++++
+ ...-getrandom.c-fix-build-with-uclibc-1.0.35.patch | 46 ++++++++++++++++++++++
  1 file changed, 46 insertions(+)
 
-diff --git a/package/sane-backends/0003-genesys-use-usleep-instead-of-std-this_thread-sleep_.patch b/package/sane-backends/0003-genesys-use-usleep-instead-of-std-this_thread-sleep_.patch
+diff --git a/package/wget/0001-lib-getrandom.c-fix-build-with-uclibc-1.0.35.patch b/package/wget/0001-lib-getrandom.c-fix-build-with-uclibc-1.0.35.patch
 new file mode 100644
-index 0000000000..348b73e3fb
+index 0000000000..dd4b01f189
 --- /dev/null
-+++ b/package/sane-backends/0003-genesys-use-usleep-instead-of-std-this_thread-sleep_.patch
++++ b/package/wget/0001-lib-getrandom.c-fix-build-with-uclibc-1.0.35.patch
 @@ -0,0 +1,46 @@
-+From b6e21e3cd0825e7ec2b3b7e6401d25b901deeed2 Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Wed, 31 Mar 2021 22:51:03 +0200
-+Subject: [PATCH] genesys: use usleep instead of std::this_thread::sleep_for to
-+ re-enable thread less compile
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
++From a0594387565e1e6b4a8a8ba04ad13b135cc1f0b5 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Thu, 1 Apr 2021 07:49:46 +0200
++Subject: [PATCH] lib/getrandom.c: fix build with uclibc < 1.0.35
++
++Fix the following build failure with uclibc < 1.0.35 which is raised
++since the addition of getrandom module in
++https://git.savannah.gnu.org/cgit/gnulib.git/commit/?id=682cc4e678aceff32dea2a84b6e5147bdf5a20a7:
++
++In file included from ./sys/random.h:40,
++                 from getrandom.c:22:
++/home/fabrice/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/sys/random.h:27:35: error: unknown type name 'size_t'
++   27 | extern int getrandom(void *__buf, size_t count, unsigned int flags)
++      |                                   ^~~~~~
++/home/fabrice/buildroot/output/host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/sys/random.h:8:1: note: 'size_t' is defined in header '<stddef.h>'; did you forget to '#include <stddef.h>'?
++    7 | #include <features.h>
++  +++ |+#include <stddef.h>
++    8 |
++
++This patch is not upstreamable as it is only a workaround for
++uclibc < 1.0.35, upstream uclibc has been patched with
++https://github.com/wbx-github/uclibc-ng/commit/00972c02c2b6e0a95d5def4a71bdfb188e091782
 +
 +Fixes:
++ - http://autobuild.buildroot.org/results/d507f8d8ae4dd6aac1e83b7cc81017caf0d2c30e
 +
-+  genesys/scanner_interface_usb.cpp: In member function ???virtual void genesys::ScannerInterfaceUsb::sleep_us(unsigned int)???:
-+  genesys/scanner_interface_usb.cpp:484:10: error: ???std::this_thread??? has not been declared
-+    484 |     std::this_thread::sleep_for(std::chrono::microseconds{microseconds});
-+        |          ^~~~~~~~~~~
-+
-+[Upstream: https://gitlab.com/sane-project/backends/-/merge_requests/619]
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
-+ backend/genesys/scanner_interface_usb.cpp | 3 +--
-+ 1 file changed, 1 insertion(+), 2 deletions(-)
++ lib/getrandom.c | 1 +
++ 1 file changed, 1 insertion(+)
 +
-+diff --git a/backend/genesys/scanner_interface_usb.cpp b/backend/genesys/scanner_interface_usb.cpp
-+index 117297c..2ca78ab 100644
-+--- a/backend/genesys/scanner_interface_usb.cpp
-++++ b/backend/genesys/scanner_interface_usb.cpp
-+@@ -43,7 +43,6 @@
++diff --git a/lib/getrandom.c b/lib/getrandom.c
++index 41212fb32..0ad3f9648 100644
++--- a/lib/getrandom.c
+++++ b/lib/getrandom.c
++@@ -19,6 +19,7 @@
 + 
-+ #include "scanner_interface_usb.h"
-+ #include "low.h"
-+-#include <thread>
++ #include <config.h>
 + 
-+ namespace genesys {
+++#include <stddef.h>
++ #include <sys/random.h>
 + 
-+@@ -481,7 +480,7 @@ void ScannerInterfaceUsb::sleep_us(unsigned microseconds)
-+     if (sanei_usb_is_replay_mode_enabled()) {
-+         return;
-+     }
-+-    std::this_thread::sleep_for(std::chrono::microseconds{microseconds});
-++    usleep(microseconds);
-+ }
-+ 
-+ void ScannerInterfaceUsb::record_progress_message(const char* msg)
++ #include <errno.h>
 +-- 
 +2.30.2
 +
