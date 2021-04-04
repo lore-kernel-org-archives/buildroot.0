@@ -1,129 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Apr 2021 21:11:05 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/upx: fix
- CVE-2021-20285
-Message-ID: <20210404190216.08D42815B7@busybox.osuosl.org>
+Date: Sun, 4 Apr 2021 21:25:48 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] package/jasper: bump
+ version to 2.0.28
+Message-ID: <20210404190216.170FB8BF87@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3eff34b241ebca58436c5230e880c15d502d46f9
+commit: https://git.buildroot.net/buildroot/commit/?id=824a5a719efb35fd1bd2bea04f254858c445d2b7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-A flaw was found in upx canPack in p_lx_elf.cpp in UPX 3.96. This flaw
-allows attackers to cause a denial of service (SEGV or buffer overflow
-and application crash) or possibly have unspecified other impacts via a
-crafted ELF. The highest threat from this vulnerability is to system
-availability.
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Changes:
+  * Fix potential null pointer dereference in the JP2/JPC decoder. (#269)
+  * Fix ignoring of JAS_STREAM_FILEOBJ_NOCLOSE at stream close time. (#286)
+  * Fix integral type sizing problem in JP2 codec. (#284)
+Signed-off-by: Michael Vetter <jubalh@iodoru.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 92a6db4fc686b6dd19577f737ceb5e46b82c92c7)
+(cherry picked from commit 7727703a8bd7589f8c1cf4fe47242214707cac50)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...1-Check-DT_REL-DT_RELA-DT_RELSZ-DT_RELASZ.patch | 80 ++++++++++++++++++++++
- package/upx/upx.mk                                 |  3 +
- 2 files changed, 83 insertions(+)
+ package/jasper/jasper.hash | 2 +-
+ package/jasper/jasper.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/upx/0001-Check-DT_REL-DT_RELA-DT_RELSZ-DT_RELASZ.patch b/package/upx/0001-Check-DT_REL-DT_RELA-DT_RELSZ-DT_RELASZ.patch
-new file mode 100644
-index 0000000000..6fae9cac0e
---- /dev/null
-+++ b/package/upx/0001-Check-DT_REL-DT_RELA-DT_RELSZ-DT_RELASZ.patch
-@@ -0,0 +1,80 @@
-+From 3781df9da23840e596d5e9e8493f22666802fe6c Mon Sep 17 00:00:00 2001
-+From: John Reiser <jreiser@BitWagon.com>
-+Date: Fri, 11 Dec 2020 13:38:18 -0800
-+Subject: [PATCH] Check DT_REL/DT_RELA, DT_RELSZ/DT_RELASZ
-+
-+https://github.com/upx/upx/issues/421
-+	modified:   p_lx_elf.cpp
-+
-+[Retrieved from:
-+https://github.com/upx/upx/commit/3781df9da23840e596d5e9e8493f22666802fe6c]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/p_lx_elf.cpp | 34 +++++++++++++++++++++++++++++-----
-+ 1 file changed, 29 insertions(+), 5 deletions(-)
-+
-+diff --git a/src/p_lx_elf.cpp b/src/p_lx_elf.cpp
-+index 182db192f..3a4101cf7 100644
-+--- a/src/p_lx_elf.cpp
-++++ b/src/p_lx_elf.cpp
-+@@ -2222,8 +2222,20 @@ bool PackLinuxElf32::canPack()
-+                         int z_rsz = dt_table[Elf32_Dyn::DT_RELSZ];
-+                         if (z_rel && z_rsz) {
-+                             unsigned rel_off = get_te32(&dynseg[-1+ z_rel].d_val);
-++                            if ((unsigned)file_size <= rel_off) {
-++                                char msg[70]; snprintf(msg, sizeof(msg),
-++                                     "bad Elf32_Dynamic[DT_REL] %#x\n",
-++                                     rel_off);
-++                                throwCantPack(msg);
-++                            }
-+                             Elf32_Rel *rp = (Elf32_Rel *)&file_image[rel_off];
-+                             unsigned relsz   = get_te32(&dynseg[-1+ z_rsz].d_val);
-++                            if ((unsigned)file_size <= relsz) {
-++                                char msg[70]; snprintf(msg, sizeof(msg),
-++                                     "bad Elf32_Dynamic[DT_RELSZ] %#x\n",
-++                                     relsz);
-++                                throwCantPack(msg);
-++                            }
-+                             Elf32_Rel *last = (Elf32_Rel *)(relsz + (char *)rp);
-+                             for (; rp < last; ++rp) {
-+                                 unsigned r_va = get_te32(&rp->r_offset);
-+@@ -2562,14 +2574,26 @@ PackLinuxElf64::canPack()
-+                         int z_rel = dt_table[Elf64_Dyn::DT_RELA];
-+                         int z_rsz = dt_table[Elf64_Dyn::DT_RELASZ];
-+                         if (z_rel && z_rsz) {
-+-                            unsigned rel_off = get_te64(&dynseg[-1+ z_rel].d_val);
-++                            upx_uint64_t rel_off = get_te64(&dynseg[-1+ z_rel].d_val);
-++                            if ((u64_t)file_size <= rel_off) {
-++                                char msg[70]; snprintf(msg, sizeof(msg),
-++                                     "bad Elf64_Dynamic[DT_RELA] %#llx\n",
-++                                     rel_off);
-++                                throwCantPack(msg);
-++                            }
-+                             Elf64_Rela *rp = (Elf64_Rela *)&file_image[rel_off];
-+-                            unsigned relsz   = get_te64(&dynseg[-1+ z_rsz].d_val);
-++                            upx_uint64_t relsz   = get_te64(&dynseg[-1+ z_rsz].d_val);
-++                            if ((u64_t)file_size <= relsz) {
-++                                char msg[70]; snprintf(msg, sizeof(msg),
-++                                     "bad Elf64_Dynamic[DT_RELASZ] %#llx\n",
-++                                     relsz);
-++                                throwCantPack(msg);
-++                            }
-+                             Elf64_Rela *last = (Elf64_Rela *)(relsz + (char *)rp);
-+                             for (; rp < last; ++rp) {
-+-                                unsigned r_va = get_te64(&rp->r_offset);
-++                                upx_uint64_t r_va = get_te64(&rp->r_offset);
-+                                 if (r_va == user_init_ava) { // found the Elf64_Rela
-+-                                    unsigned r_info = get_te64(&rp->r_info);
-++                                    upx_uint64_t r_info = get_te64(&rp->r_info);
-+                                     unsigned r_type = ELF64_R_TYPE(r_info);
-+                                     if (Elf64_Ehdr::EM_AARCH64 == e_machine
-+                                     &&  R_AARCH64_RELATIVE == r_type) {
-+@@ -2581,7 +2605,7 @@ PackLinuxElf64::canPack()
-+                                     }
-+                                     else {
-+                                         char msg[50]; snprintf(msg, sizeof(msg),
-+-                                            "bad relocation %#x DT_INIT_ARRAY[0]",
-++                                            "bad relocation %#llx DT_INIT_ARRAY[0]",
-+                                             r_info);
-+                                         throwCantPack(msg);
-+                                     }
-diff --git a/package/upx/upx.mk b/package/upx/upx.mk
-index c577dfc2df..0c022c824e 100644
---- a/package/upx/upx.mk
-+++ b/package/upx/upx.mk
-@@ -10,6 +10,9 @@ UPX_SOURCE = upx-$(UPX_VERSION)-src.tar.xz
- UPX_LICENSE = GPL-2.0+
- UPX_LICENSE_FILES = COPYING
+diff --git a/package/jasper/jasper.hash b/package/jasper/jasper.hash
+index 17260b00c9..67653a8e88 100644
+--- a/package/jasper/jasper.hash
++++ b/package/jasper/jasper.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  df41bd015a9dd0cc2a2e696f8ca5cbfb633323ca9429621f7fa801778681f2dd  jasper-2.0.27.tar.gz
++sha256  6b4e5f682be0ab1a5acb0eeb6bf41d6ce17a658bb8e2dbda95de40100939cc88  jasper-2.0.28.tar.gz
+ sha256  4ad1bb42aff888c4403d792e6e2c5f1716d6c279fea70b296333c9d577d30b81  LICENSE
+diff --git a/package/jasper/jasper.mk b/package/jasper/jasper.mk
+index aba4c66db4..a00d5f1d8e 100644
+--- a/package/jasper/jasper.mk
++++ b/package/jasper/jasper.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# 0001-Check-DT_REL-DT_RELA-DT_RELSZ-DT_RELASZ.patch
-+UPX_IGNORE_CVES += CVE-2021-20285
-+
- HOST_UPX_DEPENDENCIES = host-ucl host-zlib
- 
- # We need to specify all, otherwise the default target only prints a message
+-JASPER_VERSION = 2.0.27
++JASPER_VERSION = 2.0.28
+ JASPER_SITE = $(call github,jasper-software,jasper,version-$(JASPER_VERSION))
+ JASPER_INSTALL_STAGING = YES
+ JASPER_LICENSE = JasPer-2.0
