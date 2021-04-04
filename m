@@ -1,56 +1,34 @@
-From: Chris Packham <judge.packham@gmail.com>
-Date: Mon, 5 Apr 2021 08:36:39 +1200
-Subject: [Buildroot] [PATCH] package/micropython: Define
- MICROPY_NLR_SETJMP for xtensa
-In-Reply-To: <20210404154034.004bd3a7@windsurf.home>
-References: <20210329072828.13989-1-judge.packham@gmail.com>
- <20210404154034.004bd3a7@windsurf.home>
-Message-ID: <CAFOYHZD3dkwzUuNvreiGM0H8csjxAwg92mhDn46JOQ_qtdZP-Q@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  4 Apr 2021 22:46:59 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-parso: add CPE variables
+Message-ID: <20210404204659.3441300-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Apr 5, 2021 at 1:40 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> On Mon, 29 Mar 2021 20:28:28 +1300
-> Chris Packham <judge.packham@gmail.com> wrote:
->
-> > As suggested on https://github.com/micropython/micropython/issues/6551
-> > define MICROPY_NLR_SETJMP to avoid the xtensa specific implementation
-> > of nlr_push.
-> >
-> > Fixes:
-> > - http://autobuild.buildroot.net/results/5fc8669b5c768ccfc02bd20d1159bce7fe43683e
-> >
-> > Signed-off-by: Chris Packham <judge.packham@gmail.com>
-> > ---
-> >  package/micropython/micropython.mk | 5 +++++
-> >  1 file changed, 5 insertions(+)
->
-> The build error really looks like a toolchain issue, but fair enough as
-> a temporary measure what you proposed is fine, so I've applied.
->
-> Could you perhaps e-mail the issue to Max Filippov
-> <jcmvbkbc@gmail.com> ? He has been maintaining the Xtensa support in BR,
-> including toolchain fixes, for quite some time.
+cpe:2.3:a:parso_project:parso is a valid CPE identifier for this
+package:
 
-I believe Max is already on the issue I raised upstream[1].
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aparso_project%3Aparso
 
-I don't really know anything about xtensa but I suspect there might be
-a difference between building for bare-metal vs building for an OS.
-Either that or the xtensa specific code is just broken and no-one else
-has noticed.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/python-parso/python-parso.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-[1] - https://github.com/micropython/micropython/issues/6551
-
->
-> Thanks a lot!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+diff --git a/package/python-parso/python-parso.mk b/package/python-parso/python-parso.mk
+index a0b6af8732..b7688c2069 100644
+--- a/package/python-parso/python-parso.mk
++++ b/package/python-parso/python-parso.mk
+@@ -10,5 +10,7 @@ PYTHON_PARSO_SITE = https://files.pythonhosted.org/packages/fe/24/c30eb4be8a24b9
+ PYTHON_PARSO_SETUP_TYPE = setuptools
+ PYTHON_PARSO_LICENSE = MIT, Python-2.0, BSD-3-Clause (flask theme)
+ PYTHON_PARSO_LICENSE_FILES = LICENSE.txt docs/_themes/flask/LICENSE test/normalizer_issue_files/LICENSE
++PYTHON_PARSO_CPE_ID_VENDOR = parso_project
++PYTHON_PARSO_CPE_ID_PRODUCT = parso
+ 
+ $(eval $(python-package))
+-- 
+2.30.2
