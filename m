@@ -1,11 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 04 Apr 2021 11:40:01 +0200
-Subject: [Buildroot] [PATCH 1/1] package/lldpd: security bump to version
- 1.0.9
-In-Reply-To: <20210402195252.2036931-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 2 Apr 2021 21:52:52 +0200")
-References: <20210402195252.2036931-1-fontaine.fabrice@gmail.com>
-Message-ID: <87wnti1j7y.fsf@dell.be.48ers.dk>
+Date: Sun, 04 Apr 2021 11:40:09 +0200
+Subject: [Buildroot] [PATCH 1/1] package/lldpd: add LLDPD_CPE_ID_VENDOR
+In-Reply-To: <20210402195407.2037031-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 2 Apr 2021 21:54:07 +0200")
+References: <20210402195407.2037031-1-fontaine.fabrice@gmail.com>
+Message-ID: <87sg461j7q.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,18 +13,14 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > - Out-of-bound read access when parsing LLDP-MED civic address in
- >   liblldpctl for malformed fields.
- > - Fix memory leak when receiving LLDPU with duplicate fields.
- >   CVE-2020-27827.
- > - More memory leak fixes on duplicate TLVs in LLDP, CDP and EDP
- >   (related to CVE-2020-27827).
+ > cpe:2.3:a:lldpd_project:lldpd is a valid CPE identifier for this
+ > package:
 
- > https://github.com/lldpd/lldpd/blob/1.0.9/NEWS
+ >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alldpd_project%3Alldpd
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Committed to 2020.02.x, 2020.11.x and 2021.02.x, thanks.
+Committed to 2021.02.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
