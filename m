@@ -1,45 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Apr 2021 21:53:26 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/micropython:
- define MICROPY_NLR_SETJMP for xtensa
-Message-ID: <20210404194140.19BF18CA49@busybox.osuosl.org>
+Date: Sun, 4 Apr 2021 21:57:00 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/libvips: add zlib
+ optional dependency
+Message-ID: <20210404194140.255FE8CA55@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dba629ad18fa8efdfe813b86534a2080137d5e91
+commit: https://git.buildroot.net/buildroot/commit/?id=24bf52fdc75266393d53ecf5fd93f5503600815a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-As suggested on https://github.com/micropython/micropython/issues/6551
-define MICROPY_NLR_SETJMP to avoid the xtensa specific implementation
-of nlr_push.
+zlib is an optional dependency which is enabled by default since version
+8.4.2 and
+https://github.com/libvips/libvips/commit/5ab0001ec68a5f61396aecd8d2d7a619b1dbe1fa
 
-Fixes:
-- http://autobuild.buildroot.net/results/5fc8669b5c768ccfc02bd20d1159bce7fe43683e
-
-Signed-off-by: Chris Packham <judge.packham@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 9fd9f4e6752fd0931fa5cc287bf0e6cd598c36a1)
+(cherry picked from commit 43a9cfd31781777753bc3f8b1a36996d16583e47)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/micropython/micropython.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/libvips/libvips.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
-index a126b3eeae..010ac35e8c 100644
---- a/package/micropython/micropython.mk
-+++ b/package/micropython/micropython.mk
-@@ -21,6 +21,11 @@ ifeq ($(BR2_i386)$(BR2_x86_64)$(BR2_arm)$(BR2_armeb),)
- MICROPYTHON_CFLAGS = -DMICROPY_GCREGS_SETJMP=1
+diff --git a/package/libvips/libvips.mk b/package/libvips/libvips.mk
+index 91d8a814c4..12ffac944e 100644
+--- a/package/libvips/libvips.mk
++++ b/package/libvips/libvips.mk
+@@ -96,4 +96,11 @@ else
+ LIBVIPS_CONF_OPTS += --without-libexif
  endif
  
-+# xtensa has problems with nlr_push, use setjmp based implementation instead
-+ifeq ($(BR2_xtensa),y)
-+MICROPYTHON_CFLAGS = -DMICROPY_NLR_SETJMP=1
++ifeq ($(BR2_PACKAGE_ZLIB),y)
++LIBVIPS_CONF_OPTS += --with-zlib
++LIBVIPS_DEPENDENCIES += zlib
++else
++LIBVIPS_CONF_OPTS += --without-zlib
 +endif
 +
- # When building from a tarball we don't have some of the dependencies that are in
- # the git repository as submodules
- MICROPYTHON_MAKE_OPTS += \
+ $(eval $(autotools-package))
