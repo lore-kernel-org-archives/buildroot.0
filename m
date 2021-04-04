@@ -1,33 +1,51 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  4 Apr 2021 23:01:22 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-paramiko: add CPE variables
-Message-ID: <20210404210122.3442344-1-fontaine.fabrice@gmail.com>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Sun, 4 Apr 2021 14:07:17 -0700
+Subject: [Buildroot] [PATCH] package/micropython: Define
+ MICROPY_NLR_SETJMP for xtensa
+In-Reply-To: <CAFOYHZD3dkwzUuNvreiGM0H8csjxAwg92mhDn46JOQ_qtdZP-Q@mail.gmail.com>
+References: <20210329072828.13989-1-judge.packham@gmail.com>
+ <20210404154034.004bd3a7@windsurf.home>
+ <CAFOYHZD3dkwzUuNvreiGM0H8csjxAwg92mhDn46JOQ_qtdZP-Q@mail.gmail.com>
+Message-ID: <CAMo8Bf+ig7Wu8YoxSfjO7ekmJgRYUHRWoLry6K4ngybWB61TQg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:paramiko:paramiko is a valid CPE identifier for this package:
+Chris, Thomas,
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aparamiko%3Aparamiko
+On Sun, Apr 4, 2021 at 1:36 PM Chris Packham <judge.packham@gmail.com> wrote:
+> On Mon, Apr 5, 2021 at 1:40 AM Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> wrote:
+> > On Mon, 29 Mar 2021 20:28:28 +1300
+> > Chris Packham <judge.packham@gmail.com> wrote:
+> >
+> > > As suggested on https://github.com/micropython/micropython/issues/6551
+> > > define MICROPY_NLR_SETJMP to avoid the xtensa specific implementation
+> > > of nlr_push.
+> > >
+> > > Fixes:
+> > > - http://autobuild.buildroot.net/results/5fc8669b5c768ccfc02bd20d1159bce7fe43683e
+> > >
+> > > Signed-off-by: Chris Packham <judge.packham@gmail.com>
+> > > ---
+> > >  package/micropython/micropython.mk | 5 +++++
+> > >  1 file changed, 5 insertions(+)
+> >
+> > The build error really looks like a toolchain issue, but fair enough as
+> > a temporary measure what you proposed is fine, so I've applied.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/python-paramiko/python-paramiko.mk | 2 ++
- 1 file changed, 2 insertions(+)
+I'd say that this is an assembly coding issue. The compiler would not
+generate such code and the linker has no support for connecting long
+jumps on its own.
 
-diff --git a/package/python-paramiko/python-paramiko.mk b/package/python-paramiko/python-paramiko.mk
-index c9e144c96e..6dc473d34e 100644
---- a/package/python-paramiko/python-paramiko.mk
-+++ b/package/python-paramiko/python-paramiko.mk
-@@ -10,5 +10,7 @@ PYTHON_PARAMIKO_SITE = https://files.pythonhosted.org/packages/ac/15/4351003352e
- PYTHON_PARAMIKO_SETUP_TYPE = setuptools
- PYTHON_PARAMIKO_LICENSE = LGPL-2.1+
- PYTHON_PARAMIKO_LICENSE_FILES = LICENSE
-+PYTHON_PARAMIKO_CPE_ID_VENDOR = paramiko
-+PYTHON_PARAMIKO_CPE_ID_PRODUCT = paramiko
- 
- $(eval $(python-package))
+> I believe Max is already on the issue I raised upstream[1].
+
+Yeah, there are additional issues. I'll try to see whether proposed solution
+actually works (vs just fixing the build) and what can be done to the
+failing assembly code.
+
 -- 
-2.30.2
+Thanks.
+-- Max
