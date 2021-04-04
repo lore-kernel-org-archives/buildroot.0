@@ -1,27 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 04 Apr 2021 21:06:20 +0200
-Subject: [Buildroot] [PATCH 1/1] package/perl-xml-libxml: add CPE
- variables
-In-Reply-To: <20210403153801.2222070-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 3 Apr 2021 17:38:01 +0200")
-References: <20210403153801.2222070-1-fontaine.fabrice@gmail.com>
-Message-ID: <875z11zx77.fsf@dell.be.48ers.dk>
+Date: Sun, 04 Apr 2021 21:08:01 +0200
+Subject: [Buildroot] [PATCH 1/1] package/botan: fix build with riscv32
+In-Reply-To: <20210404102613.GG2252@scaer> (Yann E. MORIN's message of "Sun, 4
+ Apr 2021 12:26:13 +0200")
+References: <20210403152930.2221759-1-fontaine.fabrice@gmail.com>
+ <20210404102613.GG2252@scaer>
+Message-ID: <871rbpzx4e.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > cpe:2.3:a:xml-libxml_project:xml-libxml is a valid CPE identifier for
- > this package:
+ > Fabrice, All,
+ > On 2021-04-03 17:29 +0200, Fabrice Fontaine spake thusly:
+ >> Fixes:
+ >> - http://autobuild.buildroot.org/results/1c399312dbec5d7a28ec90d62fdd8f47fa14ff4b
 
- >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Axml-libxml_project%3Axml-libxml
+ > Technically, this is not a bug fix, but support for a new architecture,
+ > akin to a new feature. But since this is an upstream commit, this is OK
+ > to backport, as we can drop the patch when we next update the version.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Applied to master, thanks.
 
-Committed to 2021.02.x, thanks.
+And since the patch is so small and unlikely to cause regressions for
+other architectures, committed to 2021.02.x as well - Thanks.
 
 -- 
 Bye, Peter Korsgaard
