@@ -1,112 +1,129 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Apr 2021 21:09:29 +0200
-Subject: [Buildroot] [git commit branch/2020.11.x] package/gnutls: security
- bump to version 3.7.1
-Message-ID: <20210404190222.601D18BF87@busybox.osuosl.org>
+Date: Sun, 4 Apr 2021 21:09:57 +0200
+Subject: [Buildroot] [git commit branch/2020.11.x] package/upx: fix
+ CVE-2021-20285
+Message-ID: <20210404190222.6C417890EA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4670b092af4b022eb7a31057ada89c4711c8207a
+commit: https://git.buildroot.net/buildroot/commit/?id=397b840d8c4c62c0d54156bae78bbbf98aa38cec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
-- Fix CVE-2021-20231 and CVE-2021-20232:
-  https://www.gnutls.org/security-new.html#GNUTLS-SA-2021-03-10
-- Drop patch (not needed since:
-  https://git.savannah.gnu.org/cgit/gnulib.git/commit/?id=b2d4b6c87827e34a694278d085a31508af052a37)
+A flaw was found in upx canPack in p_lx_elf.cpp in UPX 3.96. This flaw
+allows attackers to cause a denial of service (SEGV or buffer overflow
+and application crash) or possibly have unspecified other impacts via a
+crafted ELF. The highest threat from this vulnerability is to system
+availability.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit ce978e0a671995c659b25b4e6441234e5c7a7a0c)
+(cherry picked from commit 92a6db4fc686b6dd19577f737ceb5e46b82c92c7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...0001-Fix-gnulib-stdio.h-include-on-uclibc.patch | 49 ----------------------
- package/gnutls/gnutls.hash                         |  4 +-
- package/gnutls/gnutls.mk                           |  4 +-
- 3 files changed, 4 insertions(+), 53 deletions(-)
+ ...1-Check-DT_REL-DT_RELA-DT_RELSZ-DT_RELASZ.patch | 80 ++++++++++++++++++++++
+ package/upx/upx.mk                                 |  3 +
+ 2 files changed, 83 insertions(+)
 
-diff --git a/package/gnutls/0001-Fix-gnulib-stdio.h-include-on-uclibc.patch b/package/gnutls/0001-Fix-gnulib-stdio.h-include-on-uclibc.patch
-deleted file mode 100644
-index 758e7cca73..0000000000
---- a/package/gnutls/0001-Fix-gnulib-stdio.h-include-on-uclibc.patch
-+++ /dev/null
-@@ -1,49 +0,0 @@
--From 60fa934ffba3c230040328fdbbbf51f417f12871 Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?Stefan=20S=C3=B8rensen?= <stefan.sorensen@spectralink.com>
--Date: Mon, 22 Jun 2020 14:11:05 +0200
--Subject: [PATCH] Fix gnulib stdio.h include on uclibc
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--The __need_FILE define used by gnulib interferes with the uClibc stdio.h
--header, so move the inclusion the stdio.h to after __need_FILE has been
--undefined again.
--
--Signed-off-by: Stefan S??rensen <stefan.sorensen@spectralink.com>
-----
-- gl/fopen.c     | 2 +-
-- src/gl/fopen.c | 2 +-
-- 2 files changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/gl/fopen.c b/gl/fopen.c
--index 8d6625a..248692c 100644
----- a/gl/fopen.c
--+++ b/gl/fopen.c
--@@ -23,8 +23,8 @@
-- #include <config.h>
-- 
-- /* Get the original definition of fopen.  It might be defined as a macro.  */
---#include <stdio.h>
-- #undef __need_FILE
--+#include <stdio.h>
-- 
-- static FILE *
-- orig_fopen (const char *filename, const char *mode)
--diff --git a/src/gl/fopen.c b/src/gl/fopen.c
--index 47d7f19..1f22f4f 100644
----- a/src/gl/fopen.c
--+++ b/src/gl/fopen.c
--@@ -23,8 +23,8 @@
-- #include <config.h>
-- 
-- /* Get the original definition of fopen.  It might be defined as a macro.  */
---#include <stdio.h>
-- #undef __need_FILE
--+#include <stdio.h>
-- 
-- static FILE *
-- orig_fopen (const char *filename, const char *mode)
---- 
--2.25.4
--
-diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
-index c360a56f93..0788a7a6f0 100644
---- a/package/gnutls/gnutls.hash
-+++ b/package/gnutls/gnutls.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/gnutls-3.6.15.tar.xz.sig
--sha256  0ea8c3283de8d8335d7ae338ef27c53a916f15f382753b174c18b45ffd481558  gnutls-3.6.15.tar.xz
-+# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.7/gnutls-3.7.1.tar.xz.sig
-+sha256  3777d7963eca5e06eb315686163b7b3f5045e2baac5e54e038ace9835e5cac6f  gnutls-3.7.1.tar.xz
- # Locally calculated
- sha256  e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b  doc/COPYING
- sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  doc/COPYING.LESSER
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index c8ee45338d..e739104724 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/package/upx/0001-Check-DT_REL-DT_RELA-DT_RELSZ-DT_RELASZ.patch b/package/upx/0001-Check-DT_REL-DT_RELA-DT_RELSZ-DT_RELASZ.patch
+new file mode 100644
+index 0000000000..6fae9cac0e
+--- /dev/null
++++ b/package/upx/0001-Check-DT_REL-DT_RELA-DT_RELSZ-DT_RELASZ.patch
+@@ -0,0 +1,80 @@
++From 3781df9da23840e596d5e9e8493f22666802fe6c Mon Sep 17 00:00:00 2001
++From: John Reiser <jreiser@BitWagon.com>
++Date: Fri, 11 Dec 2020 13:38:18 -0800
++Subject: [PATCH] Check DT_REL/DT_RELA, DT_RELSZ/DT_RELASZ
++
++https://github.com/upx/upx/issues/421
++	modified:   p_lx_elf.cpp
++
++[Retrieved from:
++https://github.com/upx/upx/commit/3781df9da23840e596d5e9e8493f22666802fe6c]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/p_lx_elf.cpp | 34 +++++++++++++++++++++++++++++-----
++ 1 file changed, 29 insertions(+), 5 deletions(-)
++
++diff --git a/src/p_lx_elf.cpp b/src/p_lx_elf.cpp
++index 182db192f..3a4101cf7 100644
++--- a/src/p_lx_elf.cpp
+++++ b/src/p_lx_elf.cpp
++@@ -2222,8 +2222,20 @@ bool PackLinuxElf32::canPack()
++                         int z_rsz = dt_table[Elf32_Dyn::DT_RELSZ];
++                         if (z_rel && z_rsz) {
++                             unsigned rel_off = get_te32(&dynseg[-1+ z_rel].d_val);
+++                            if ((unsigned)file_size <= rel_off) {
+++                                char msg[70]; snprintf(msg, sizeof(msg),
+++                                     "bad Elf32_Dynamic[DT_REL] %#x\n",
+++                                     rel_off);
+++                                throwCantPack(msg);
+++                            }
++                             Elf32_Rel *rp = (Elf32_Rel *)&file_image[rel_off];
++                             unsigned relsz   = get_te32(&dynseg[-1+ z_rsz].d_val);
+++                            if ((unsigned)file_size <= relsz) {
+++                                char msg[70]; snprintf(msg, sizeof(msg),
+++                                     "bad Elf32_Dynamic[DT_RELSZ] %#x\n",
+++                                     relsz);
+++                                throwCantPack(msg);
+++                            }
++                             Elf32_Rel *last = (Elf32_Rel *)(relsz + (char *)rp);
++                             for (; rp < last; ++rp) {
++                                 unsigned r_va = get_te32(&rp->r_offset);
++@@ -2562,14 +2574,26 @@ PackLinuxElf64::canPack()
++                         int z_rel = dt_table[Elf64_Dyn::DT_RELA];
++                         int z_rsz = dt_table[Elf64_Dyn::DT_RELASZ];
++                         if (z_rel && z_rsz) {
++-                            unsigned rel_off = get_te64(&dynseg[-1+ z_rel].d_val);
+++                            upx_uint64_t rel_off = get_te64(&dynseg[-1+ z_rel].d_val);
+++                            if ((u64_t)file_size <= rel_off) {
+++                                char msg[70]; snprintf(msg, sizeof(msg),
+++                                     "bad Elf64_Dynamic[DT_RELA] %#llx\n",
+++                                     rel_off);
+++                                throwCantPack(msg);
+++                            }
++                             Elf64_Rela *rp = (Elf64_Rela *)&file_image[rel_off];
++-                            unsigned relsz   = get_te64(&dynseg[-1+ z_rsz].d_val);
+++                            upx_uint64_t relsz   = get_te64(&dynseg[-1+ z_rsz].d_val);
+++                            if ((u64_t)file_size <= relsz) {
+++                                char msg[70]; snprintf(msg, sizeof(msg),
+++                                     "bad Elf64_Dynamic[DT_RELASZ] %#llx\n",
+++                                     relsz);
+++                                throwCantPack(msg);
+++                            }
++                             Elf64_Rela *last = (Elf64_Rela *)(relsz + (char *)rp);
++                             for (; rp < last; ++rp) {
++-                                unsigned r_va = get_te64(&rp->r_offset);
+++                                upx_uint64_t r_va = get_te64(&rp->r_offset);
++                                 if (r_va == user_init_ava) { // found the Elf64_Rela
++-                                    unsigned r_info = get_te64(&rp->r_info);
+++                                    upx_uint64_t r_info = get_te64(&rp->r_info);
++                                     unsigned r_type = ELF64_R_TYPE(r_info);
++                                     if (Elf64_Ehdr::EM_AARCH64 == e_machine
++                                     &&  R_AARCH64_RELATIVE == r_type) {
++@@ -2581,7 +2605,7 @@ PackLinuxElf64::canPack()
++                                     }
++                                     else {
++                                         char msg[50]; snprintf(msg, sizeof(msg),
++-                                            "bad relocation %#x DT_INIT_ARRAY[0]",
+++                                            "bad relocation %#llx DT_INIT_ARRAY[0]",
++                                             r_info);
++                                         throwCantPack(msg);
++                                     }
+diff --git a/package/upx/upx.mk b/package/upx/upx.mk
+index c577dfc2df..0c022c824e 100644
+--- a/package/upx/upx.mk
++++ b/package/upx/upx.mk
+@@ -10,6 +10,9 @@ UPX_SOURCE = upx-$(UPX_VERSION)-src.tar.xz
+ UPX_LICENSE = GPL-2.0+
+ UPX_LICENSE_FILES = COPYING
  
--GNUTLS_VERSION_MAJOR = 3.6
--GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).15
-+GNUTLS_VERSION_MAJOR = 3.7
-+GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).1
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
- GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
- GNUTLS_LICENSE = LGPL-2.1+ (core library)
++# 0001-Check-DT_REL-DT_RELA-DT_RELSZ-DT_RELASZ.patch
++UPX_IGNORE_CVES += CVE-2021-20285
++
+ HOST_UPX_DEPENDENCIES = host-ucl host-zlib
+ 
+ # We need to specify all, otherwise the default target only prints a message
