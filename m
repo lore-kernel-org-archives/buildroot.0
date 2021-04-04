@@ -1,32 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 04 Apr 2021 21:08:01 +0200
-Subject: [Buildroot] [PATCH 1/1] package/botan: fix build with riscv32
-In-Reply-To: <20210404102613.GG2252@scaer> (Yann E. MORIN's message of "Sun, 4
- Apr 2021 12:26:13 +0200")
-References: <20210403152930.2221759-1-fontaine.fabrice@gmail.com>
- <20210404102613.GG2252@scaer>
-Message-ID: <871rbpzx4e.fsf@dell.be.48ers.dk>
+Date: Sun, 04 Apr 2021 21:11:32 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gnutls: security bump to
+ version 3.7.1
+In-Reply-To: <20210331214705.1492158-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 31 Mar 2021 23:47:05 +0200")
+References: <20210331214705.1492158-1-fontaine.fabrice@gmail.com>
+Message-ID: <87wnthyie3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Fabrice, All,
- > On 2021-04-03 17:29 +0200, Fabrice Fontaine spake thusly:
- >> Fixes:
- >> - http://autobuild.buildroot.org/results/1c399312dbec5d7a28ec90d62fdd8f47fa14ff4b
+ > - Fix CVE-2021-20231 and CVE-2021-20232:
+ >   https://www.gnutls.org/security-new.html#GNUTLS-SA-2021-03-10
+ > - Drop patch (not needed since:
+ >   https://git.savannah.gnu.org/cgit/gnulib.git/commit/?id=b2d4b6c87827e34a694278d085a31508af052a37)
 
- > Technically, this is not a bug fix, but support for a new architecture,
- > akin to a new feature. But since this is an upstream commit, this is OK
- > to backport, as we can drop the patch when we next update the version.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
- > Applied to master, thanks.
-
-And since the patch is so small and unlikely to cause regressions for
-other architectures, committed to 2021.02.x as well - Thanks.
+Committed to 2020.02.x, 2020.11.x and 2021.02.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
