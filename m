@@ -1,15 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 4 Apr 2021 16:44:36 +0200
-Subject: [Buildroot] [git commit] package/libvips: add lcms2 optional
+Date: Sun, 4 Apr 2021 16:44:38 +0200
+Subject: [Buildroot] [git commit] package/libvips: add webp optional
  dependency
-Message-ID: <20210404141921.CE1738C6FD@busybox.osuosl.org>
+Message-ID: <20210404141921.E8FA380F72@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f26d142e35b15b63e0de0b3550e0e05a952e181e
+commit: https://git.buildroot.net/buildroot/commit/?id=f252f6063596910aadbcfdea7b18d6c89e2987b5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
@@ -19,28 +19,28 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
  1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/package/libvips/libvips.mk b/package/libvips/libvips.mk
-index 304861ab83..494392de7b 100644
+index 990d3f386f..7023b11119 100644
 --- a/package/libvips/libvips.mk
 +++ b/package/libvips/libvips.mk
-@@ -23,7 +23,6 @@ LIBVIPS_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) $(LIBVIPS_CXXFLAGS)" \
- LIBVIPS_CONF_OPTS = \
- 	--without-dmalloc \
- 	--without-gsf \
--	--without-lcms \
+@@ -26,7 +26,6 @@ LIBVIPS_CONF_OPTS = \
  	--without-OpenEXR \
  	--without-openslide \
- 	--without-matio \
-@@ -71,6 +70,13 @@ else
- LIBVIPS_CONF_OPTS += --without-jpeg
+ 	--without-cfitsio \
+-	--without-libwebp \
+ 	--without-pangoft2 \
+ 	--without-x
+ LIBVIPS_INSTALL_STAGING = YES
+@@ -132,6 +131,13 @@ else
+ LIBVIPS_CONF_OPTS += --without-libexif
  endif
  
-+ifeq ($(BR2_PACKAGE_LCMS2),y)
-+LIBVIPS_CONF_OPTS += --with-lcms
-+LIBVIPS_DEPENDENCIES += lcms2
++ifeq ($(BR2_PACKAGE_WEBP_DEMUX)$(BR2_PACKAGE_WEBP_MUX),yy)
++LIBVIPS_CONF_OPTS += --with-libwebp
++LIBVIPS_DEPENDENCIES += webp
 +else
-+LIBVIPS_CONF_OPTS += --without-lcms
++LIBVIPS_CONF_OPTS += --without-libwebp
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBPNG),y)
- LIBVIPS_CONF_OPTS += --with-png
- LIBVIPS_DEPENDENCIES += libpng
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ LIBVIPS_CONF_OPTS += --with-zlib
+ LIBVIPS_DEPENDENCIES += zlib
