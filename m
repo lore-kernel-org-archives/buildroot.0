@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Apr 2021 21:36:30 +0200
-Subject: [Buildroot] [git commit branch/2020.02.x] package/libvips: add
+Date: Sun, 4 Apr 2021 21:34:18 +0200
+Subject: [Buildroot] [git commit branch/2020.11.x] package/libvips: add
  giflib optional dependency
-Message-ID: <20210404191417.271238183F@busybox.osuosl.org>
+Message-ID: <20210404191424.CD0218183F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2b669a6648ad2771094346a14f98c223e9c66529
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=dedffe87314fcd2b4669032664a71d122be3cd32
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.11.x
 
 giflib is an optional dependency which is enabled by default since
 version 8.3.0 and
@@ -25,10 +25,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 7 insertions(+)
 
 diff --git a/package/libvips/libvips.mk b/package/libvips/libvips.mk
-index 966599e271..b228c58217 100644
+index 464d905bd8..91d8a814c4 100644
 --- a/package/libvips/libvips.mk
 +++ b/package/libvips/libvips.mk
-@@ -41,6 +41,13 @@ LIBVIPS_DEPENDENCIES = \
+@@ -40,6 +40,13 @@ LIBVIPS_DEPENDENCIES = \
  	host-pkgconf expat libglib2 \
  	$(TARGET_NLS_DEPENDENCIES)
  
@@ -39,6 +39,6 @@ index 966599e271..b228c58217 100644
 +LIBVIPS_CONF_OPTS += --without-giflib
 +endif
 +
- ifeq ($(BR2_PACKAGE_JPEG),y)
- LIBVIPS_CONF_OPTS += --with-jpeg
- LIBVIPS_DEPENDENCIES += jpeg
+ ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
+ LIBVIPS_CONF_OPTS += --enable-introspection
+ LIBVIPS_DEPENDENCIES += gobject-introspection
