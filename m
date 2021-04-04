@@ -1,40 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Apr 2021 21:05:57 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/perl-xml-libxml:
- add CPE variables
-Message-ID: <20210404190227.536648C564@busybox.osuosl.org>
+Date: Sun, 4 Apr 2021 21:24:50 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/jasper: bump
+ version to 2.0.28
+Message-ID: <20210404190227.8BC8F8C564@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fa5cff728e204b3be0cc51b411609e27610d60c8
+commit: https://git.buildroot.net/buildroot/commit/?id=00c28a25005b4b6822e53d4b59cd4d307887b57a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-cpe:2.3:a:xml-libxml_project:xml-libxml is a valid CPE identifier for
-this package:
-
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Axml-libxml_project%3Axml-libxml
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 26d9863c8248943e9bd5d3761cfd8306013fb8c6)
+Changes:
+  * Fix potential null pointer dereference in the JP2/JPC decoder. (#269)
+  * Fix ignoring of JAS_STREAM_FILEOBJ_NOCLOSE at stream close time. (#286)
+  * Fix integral type sizing problem in JP2 codec. (#284)
+Signed-off-by: Michael Vetter <jubalh@iodoru.org>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 7727703a8bd7589f8c1cf4fe47242214707cac50)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/perl-xml-libxml/perl-xml-libxml.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/jasper/jasper.hash | 2 +-
+ package/jasper/jasper.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/perl-xml-libxml/perl-xml-libxml.mk b/package/perl-xml-libxml/perl-xml-libxml.mk
-index 23d3e988fa..9b563e29b5 100644
---- a/package/perl-xml-libxml/perl-xml-libxml.mk
-+++ b/package/perl-xml-libxml/perl-xml-libxml.mk
-@@ -10,6 +10,8 @@ PERL_XML_LIBXML_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SH/SHLOMIF
- PERL_XML_LIBXML_DEPENDENCIES = zlib libxml2
- PERL_XML_LIBXML_LICENSE = Artistic or GPL-1.0+
- PERL_XML_LIBXML_LICENSE_FILES = LICENSE
-+PERL_XML_LIBXML_CPE_ID_VENDOR = xml-libxml_project
-+PERL_XML_LIBXML_CPE_ID_PRODUCT = xml-libxml
- PERL_XML_LIBXML_DISTNAME = XML-LibXML
+diff --git a/package/jasper/jasper.hash b/package/jasper/jasper.hash
+index 17260b00c9..67653a8e88 100644
+--- a/package/jasper/jasper.hash
++++ b/package/jasper/jasper.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  df41bd015a9dd0cc2a2e696f8ca5cbfb633323ca9429621f7fa801778681f2dd  jasper-2.0.27.tar.gz
++sha256  6b4e5f682be0ab1a5acb0eeb6bf41d6ce17a658bb8e2dbda95de40100939cc88  jasper-2.0.28.tar.gz
+ sha256  4ad1bb42aff888c4403d792e6e2c5f1716d6c279fea70b296333c9d577d30b81  LICENSE
+diff --git a/package/jasper/jasper.mk b/package/jasper/jasper.mk
+index e7bb08e200..6ef1afcac7 100644
+--- a/package/jasper/jasper.mk
++++ b/package/jasper/jasper.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- PERL_XML_LIBXML_CONF_OPTS = \
+-JASPER_VERSION = 2.0.27
++JASPER_VERSION = 2.0.28
+ JASPER_SITE = $(call github,jasper-software,jasper,version-$(JASPER_VERSION))
+ JASPER_INSTALL_STAGING = YES
+ JASPER_LICENSE = JasPer-2.0
