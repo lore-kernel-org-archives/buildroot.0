@@ -1,51 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon,  5 Apr 2021 20:52:30 +0200
-Subject: [Buildroot] [PATCH] boot/grub2: ignore the last 3 remaining CVEs
-Message-ID: <20210405185231.1363881-1-thomas.petazzoni@bootlin.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 05 Apr 2021 21:07:53 +0200
+Subject: [Buildroot] [PATCH] boot/at91bootstrap: add legal information
+In-Reply-To: <20210405204307.7ebb5d7c@windsurf.home> (Thomas Petazzoni's
+ message of "Mon, 5 Apr 2021 20:43:07 +0200")
+References: <20210405153249.1352356-1-thomas.petazzoni@bootlin.com>
+ <87blasr8ko.fsf@dell.be.48ers.dk>
+ <20210405204307.7ebb5d7c@windsurf.home>
+Message-ID: <877dlgr1me.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-An analysis of the last 3 remaining CVEs that are reported to affect
-the grub2 package has allowed to ensure that we can safely ignore
-them:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- * CVE-2020-14372 is already fixed by a patch we have in our patch
-   stack for grub2
+ > On Mon, 05 Apr 2021 18:37:43 +0200
+ > Peter Korsgaard <peter@korsgaard.com> wrote:
 
- * CVE-2019-14865 and CVE-2020-15705 are both distro-specific and do
-   not affect grub2 upstream, nor grub2 with the stack of patches we
-   have in Buildroot
+ >> >  AT91BOOTSTRAP_VERSION = 1.16
+ >> >  AT91BOOTSTRAP_SITE = ftp://www.at91.com/pub/at91bootstrap
+ >> >  AT91BOOTSTRAP_SOURCE = AT91Bootstrap$(AT91BOOTSTRAP_VERSION).zip
+ >> > +AT91BOOTSTRAP_LICENSE = BSD-Source-Code
+ >> > +AT91BOOTSTRAP_LICENSE_FILES = main.c  
+ >> 
+ >> Hmm, this doesn't work very well if someone patches main.c :/ But OK, I
+ >> don't really know how common that is / what to do about it.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- boot/grub2/grub2.mk | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ > As Alexander pointed out, at91bootstrap (in this 1.x branch) is no
+ > longer developed, so main.c will never be changed :)
 
-diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
-index c5742ede71..af16ee91e1 100644
---- a/boot/grub2/grub2.mk
-+++ b/boot/grub2/grub2.mk
-@@ -37,6 +37,18 @@ GRUB2_IGNORE_CVES += CVE-2020-15707
- # 2021/03/02 security fixes - patches 0029-0149
- GRUB2_IGNORE_CVES += CVE-2020-25632 CVE-2020-25647 CVE-2020-27749 \
- 	CVE-2020-27779 CVE-2021-3418 CVE-2021-20225 CVE-2021-20233
-+# 0039-acpi-Don-t-register-the-acpi-command-when-locked-dow.patch
-+GRUB2_IGNORE_CVES += CVE-2020-14372
-+# CVE-2019-14865 is about a flaw in the grub2-set-bootflag tool, which
-+# doesn't exist upstream, but is added by the Redhat/Fedora
-+# packaging. Not applicable to Buildroot.
-+GRUB2_IGNORE_CVES += CVE-2019-14865
-+# CVE-2020-15705 is related to a flaw in the use of the
-+# grub_linuxefi_secure_validate(), which was added by Debian/Ubuntu
-+# patches. The issue doesn't affect upstream Grub, and
-+# grub_linuxefi_secure_validate() is not implemented in the grub2
-+# version available in Buildroot.
-+GRUB2_IGNORE_CVES += CVE-2020-15705
- 
- ifeq ($(BR2_TARGET_GRUB2_INSTALL_TOOLS),y)
- GRUB2_INSTALL_TARGET = YES
+"Never" is probably a bit too strong. I know I have done it in the past,
+and there's even a bootlin blog entry about doing it ;)
+
+https://bootlin.com/blog/at91bootstrap-linux/
+
 -- 
-2.30.2
+Bye, Peter Korsgaard
