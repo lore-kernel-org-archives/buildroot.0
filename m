@@ -1,36 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 5 Apr 2021 09:26:16 +0200
-Subject: [Buildroot] [git commit] package/python-flask: add CPE variables
-Message-ID: <20210405070517.55BC08D242@busybox.osuosl.org>
+Date: Mon, 5 Apr 2021 09:27:16 +0200
+Subject: [Buildroot] [git commit] package/python-paramiko: drop
+ python-pyasn1 dependency
+Message-ID: <20210405070517.6CA407FB91@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=21fecfab172ebee36e72baad874fe7a464806f94
+commit: https://git.buildroot.net/buildroot/commit/?id=78da0a0ea38e2cdfdb4afbb7ad2eef3608fdc610
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:palletsprojects:flask is a valid CPE identifier for this
-package:
-
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Apalletsprojects%3Aflask
+python-pyasn1 is truly optional since version 2.5.0 and
+https://github.com/paramiko/paramiko/commit/a31818c28556055341ae3d249e3893d40eb2b232
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-flask/python-flask.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/python-paramiko/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/python-flask/python-flask.mk b/package/python-flask/python-flask.mk
-index cc39bf7e49..077aa600b8 100644
---- a/package/python-flask/python-flask.mk
-+++ b/package/python-flask/python-flask.mk
-@@ -10,5 +10,7 @@ PYTHON_FLASK_SITE = https://files.pythonhosted.org/packages/4e/0b/cb02268c90e675
- PYTHON_FLASK_SETUP_TYPE = setuptools
- PYTHON_FLASK_LICENSE = BSD-3-Clause
- PYTHON_FLASK_LICENSE_FILES = LICENSE.rst docs/license.rst
-+PYTHON_FLASK_CPE_ID_VENDOR = palletsprojects
-+PYTHON_FLASK_CPE_ID_PRODUCT = flask
- 
- $(eval $(python-package))
+diff --git a/package/python-paramiko/Config.in b/package/python-paramiko/Config.in
+index e33199c82c..993c84ef4d 100644
+--- a/package/python-paramiko/Config.in
++++ b/package/python-paramiko/Config.in
+@@ -3,7 +3,6 @@ config BR2_PACKAGE_PYTHON_PARAMIKO
+ 	depends on BR2_INSTALL_LIBSTDCPP # python-cryptography
+ 	select BR2_PACKAGE_PYTHON_BCRYPT # runtime
+ 	select BR2_PACKAGE_PYTHON_CRYPTOGRAPHY # runtime
+-	select BR2_PACKAGE_PYTHON_PYASN1 # runtime
+ 	select BR2_PACKAGE_PYTHON_PYNACL # runtime
+ 	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
+ 	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
