@@ -1,42 +1,41 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon,  5 Apr 2021 15:04:58 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libmaxminddb: bump to version 1.5.2
-Message-ID: <20210405130458.3766921-1-fontaine.fabrice@gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Mon,  5 Apr 2021 15:08:06 +0200
+Subject: [Buildroot] [PATCH] package/enchant: bump to version 2.2.15
+Message-ID: <20210405130806.243629-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://github.com/maxmind/libmaxminddb/blob/1.5.2/Changes.md
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/libmaxminddb/libmaxminddb.hash | 2 +-
- package/libmaxminddb/libmaxminddb.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/enchant/enchant.hash | 4 ++--
+ package/enchant/enchant.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libmaxminddb/libmaxminddb.hash b/package/libmaxminddb/libmaxminddb.hash
-index b83a8d133d..4bdc05f34e 100644
---- a/package/libmaxminddb/libmaxminddb.hash
-+++ b/package/libmaxminddb/libmaxminddb.hash
+diff --git a/package/enchant/enchant.hash b/package/enchant/enchant.hash
+index 84d738ffa..9cee2d78e 100644
+--- a/package/enchant/enchant.hash
++++ b/package/enchant/enchant.hash
 @@ -1,3 +1,3 @@
- # Locally computed:
--sha256  a5fdf6c7b4880fdc7620f8ace5bd5cbe9f65650c9493034b5b9fc7d83551a439  libmaxminddb-1.4.3.tar.gz
-+sha256  5237076d250a5f7c297e331c35a433eeaaf0dc205e070e4db353c9ba10f340a2  libmaxminddb-1.5.2.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/libmaxminddb/libmaxminddb.mk b/package/libmaxminddb/libmaxminddb.mk
-index 81593505e4..c022acf797 100644
---- a/package/libmaxminddb/libmaxminddb.mk
-+++ b/package/libmaxminddb/libmaxminddb.mk
+ # locally computed
+-sha256  a29c5777c4e45fcac2595c15c49d6d2aa434fa5e7c993dff3f9f367b65fe472a  enchant-2.2.11.tar.gz
+-sha256  32434afcc8666ba060e111d715bfdb6c2d5dd8a35fa4d3ab8ad67d8f850d2f2b  COPYING.LIB
++sha256  3b0f2215578115f28e2a6aa549b35128600394304bd79d6f28b0d3b3d6f46c03  enchant-2.2.15.tar.gz
++sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/enchant/enchant.mk b/package/enchant/enchant.mk
+index c342600bd..3135550f7 100644
+--- a/package/enchant/enchant.mk
++++ b/package/enchant/enchant.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBMAXMINDDB_VERSION = 1.4.3
-+LIBMAXMINDDB_VERSION = 1.5.2
- LIBMAXMINDDB_SITE = \
- 	https://github.com/maxmind/libmaxminddb/releases/download/$(LIBMAXMINDDB_VERSION)
- LIBMAXMINDDB_INSTALL_STAGING = YES
+-ENCHANT_VERSION = 2.2.11
++ENCHANT_VERSION = 2.2.15
+ ENCHANT_SITE = \
+ 	https://github.com/AbiWord/enchant/releases/download/v$(ENCHANT_VERSION)
+ ENCHANT_INSTALL_STAGING = YES
 -- 
-2.30.2
+2.27.0
