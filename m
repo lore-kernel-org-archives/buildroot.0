@@ -1,76 +1,73 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon,  5 Apr 2021 15:36:11 +0200
-Subject: [Buildroot] [PATCH 1/2] package/python-parso: bump to version 0.8.2
-Message-ID: <20210405133612.3915580-1-fontaine.fabrice@gmail.com>
+Date: Mon,  5 Apr 2021 15:36:12 +0200
+Subject: [Buildroot] [PATCH 2/2] package/python-jedi: bump to version 0.18.0
+In-Reply-To: <20210405133612.3915580-1-fontaine.fabrice@gmail.com>
+References: <20210405133612.3915580-1-fontaine.fabrice@gmail.com>
+Message-ID: <20210405133612.3915580-2-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-python 2 support has been dropped since versio 0.8.0 and
-https://github.com/davidhalter/parso/commit/b601ade90b5e5d89cf1e56a00997d6e32588e930
+python 2 support has been dropped since version 0.18.0 and
+https://github.com/davidhalter/jedi/commit/d67dfba7f5a65d5ee064d37e1fb894a25b39bdab
 
-https://github.com/davidhalter/parso/blob/v0.8.2/CHANGELOG.rst
+Add django-stubs license file (MIT)
+
+https://github.com/davidhalter/jedi/blob/v0.18.0/CHANGELOG.rst
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/python-jedi/Config.in          | 1 +
- package/python-parso/Config.in         | 1 +
- package/python-parso/python-parso.hash | 4 ++--
- package/python-parso/python-parso.mk   | 4 ++--
- 4 files changed, 6 insertions(+), 4 deletions(-)
+ package/python-jedi/Config.in        | 2 +-
+ package/python-jedi/python-jedi.hash | 5 +++--
+ package/python-jedi/python-jedi.mk   | 6 +++---
+ 3 files changed, 7 insertions(+), 6 deletions(-)
 
 diff --git a/package/python-jedi/Config.in b/package/python-jedi/Config.in
-index 8ceaa1530c..7445589029 100644
+index 7445589029..e14fa54ffb 100644
 --- a/package/python-jedi/Config.in
 +++ b/package/python-jedi/Config.in
-@@ -1,5 +1,6 @@
+@@ -1,6 +1,6 @@
  config BR2_PACKAGE_PYTHON_JEDI
  	bool "python-jedi"
-+	depends on BR2_PACKAGE_PYTHON3 # python-parso
+-	depends on BR2_PACKAGE_PYTHON3 # python-parso
++	depends on BR2_PACKAGE_PYTHON3
  	select BR2_PACKAGE_PYTHON_PARSO # runtime
  	help
  	  An autocompletion tool for Python that can be used for text
-diff --git a/package/python-parso/Config.in b/package/python-parso/Config.in
-index ea1c5a4732..4f5482d8a0 100644
---- a/package/python-parso/Config.in
-+++ b/package/python-parso/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_PARSO
- 	bool "python-parso"
-+	depends on BR2_PACKAGE_PYTHON3
- 	help
- 	  A Python Parser.
- 
-diff --git a/package/python-parso/python-parso.hash b/package/python-parso/python-parso.hash
-index ab2e20943f..538ffccf37 100644
---- a/package/python-parso/python-parso.hash
-+++ b/package/python-parso/python-parso.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/parso/json
--md5  d3a892fb4d9a0ffed838b0a3416145bf  parso-0.7.0.tar.gz
--sha256  908e9fae2144a076d72ae4e25539143d40b8e3eafbaeae03c1bfe226f4cdf12c  parso-0.7.0.tar.gz
-+md5  dd8fed40ceb890d3e277ad44a678c1f1  parso-0.8.2.tar.gz
-+sha256  12b83492c6239ce32ff5eed6d3639d6a536170723c6f3f1506869f1ace413398  parso-0.8.2.tar.gz
+diff --git a/package/python-jedi/python-jedi.hash b/package/python-jedi/python-jedi.hash
+index ac5f82e1de..018429bdfe 100644
+--- a/package/python-jedi/python-jedi.hash
++++ b/package/python-jedi/python-jedi.hash
+@@ -1,6 +1,7 @@
+ # md5, sha256 from https://pypi.org/pypi/jedi/json
+-md5  d6a8e5832939c51dceda474b720696f6  jedi-0.17.0.tar.gz
+-sha256  df40c97641cb943661d2db4c33c2e1ff75d491189423249e989bcea4464f3030  jedi-0.17.0.tar.gz
++md5  72707c00e8d6d0b190a5e5664be1cac5  jedi-0.18.0.tar.gz
++sha256  92550a404bad8afed881a137ec9a461fed49eca661414be45059329614ed0707  jedi-0.18.0.tar.gz
  # Locally computed sha256 checksums
- sha256  fa67973073753d17624caf8684d5ee816d70c89d912c5bca7ca0f08e7b150edb  LICENSE.txt
- sha256  9c1e620a5cf8e74fe81c1fd4c55e9cc0b189fc04e677cfc7ef915de746c3f59e  docs/_themes/flask/LICENSE
-diff --git a/package/python-parso/python-parso.mk b/package/python-parso/python-parso.mk
-index b7688c2069..6862a7e97d 100644
---- a/package/python-parso/python-parso.mk
-+++ b/package/python-parso/python-parso.mk
-@@ -4,9 +4,9 @@
+ sha256  78e60cd0b8f28694f30195482c33d76908d846b0d15278deb7332aa22ba8e412  LICENSE.txt
++sha256  235e993965d399a25e7d493d25c8622f78718510884b9c051f1f1866b6f34e9d  jedi/third_party/django-stubs/LICENSE.txt
+ sha256  b41b78f562a2e65b75cab44354335f6f435d4ef73065509600ac910cf4e22fe0  jedi/third_party/typeshed/LICENSE
+diff --git a/package/python-jedi/python-jedi.mk b/package/python-jedi/python-jedi.mk
+index 245ba99a3c..bfe56b7c36 100644
+--- a/package/python-jedi/python-jedi.mk
++++ b/package/python-jedi/python-jedi.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--PYTHON_PARSO_VERSION = 0.7.0
-+PYTHON_PARSO_VERSION = 0.8.2
- PYTHON_PARSO_SOURCE = parso-$(PYTHON_PARSO_VERSION).tar.gz
--PYTHON_PARSO_SITE = https://files.pythonhosted.org/packages/fe/24/c30eb4be8a24b965cfd6e2e6b41180131789b44042112a16f9eb10c80f6e
-+PYTHON_PARSO_SITE = https://files.pythonhosted.org/packages/5e/61/d119e2683138a934550e47fc8ec023eb7f11b194883e9085dca3af5d4951
- PYTHON_PARSO_SETUP_TYPE = setuptools
- PYTHON_PARSO_LICENSE = MIT, Python-2.0, BSD-3-Clause (flask theme)
- PYTHON_PARSO_LICENSE_FILES = LICENSE.txt docs/_themes/flask/LICENSE test/normalizer_issue_files/LICENSE
+-PYTHON_JEDI_VERSION = 0.17.0
++PYTHON_JEDI_VERSION = 0.18.0
+ PYTHON_JEDI_SOURCE = jedi-$(PYTHON_JEDI_VERSION).tar.gz
+-PYTHON_JEDI_SITE = https://files.pythonhosted.org/packages/e3/5b/65ff9c102d92bf719dfaeff57bc8074d68f26ea480005704a956da995799
++PYTHON_JEDI_SITE = https://files.pythonhosted.org/packages/ac/11/5c542bf206efbae974294a61febc61e09d74cb5d90d8488793909db92537
+ PYTHON_JEDI_SETUP_TYPE = setuptools
+ PYTHON_JEDI_LICENSE = MIT, Apache-2.0 (typeshed)
+-PYTHON_JEDI_LICENSE_FILES = LICENSE.txt jedi/third_party/typeshed/LICENSE
++PYTHON_JEDI_LICENSE_FILES = LICENSE.txt jedi/third_party/django-stubs/LICENSE.txt jedi/third_party/typeshed/LICENSE
+ 
+ $(eval $(python-package))
 -- 
 2.30.2
