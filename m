@@ -1,43 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon,  5 Apr 2021 17:32:48 +0200
-Subject: [Buildroot] [PATCH] boot/at91bootstrap: add legal information
-Message-ID: <20210405153249.1352356-1-thomas.petazzoni@bootlin.com>
+Date: Mon, 5 Apr 2021 17:42:19 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
+ 2021-04-04
+In-Reply-To: <20210405093012.2186140228@smtp2.osuosl.org>
+References: <20210405093012.2186140228@smtp2.osuosl.org>
+Message-ID: <20210405174219.1f530665@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The old at91bootstrap version (1.x) uses a strange variant of the BSD
-license, called "BSD Source Code Attribution" and referenced by SPDX
-as BSD-Source-Code.
+Hello,
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- boot/at91bootstrap/at91bootstrap.hash | 1 +
- boot/at91bootstrap/at91bootstrap.mk   | 2 ++
- 2 files changed, 3 insertions(+)
+On Mon, 05 Apr 2021 09:30:00 -0000
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-diff --git a/boot/at91bootstrap/at91bootstrap.hash b/boot/at91bootstrap/at91bootstrap.hash
-index b1f963b825..e4a6760f12 100644
---- a/boot/at91bootstrap/at91bootstrap.hash
-+++ b/boot/at91bootstrap/at91bootstrap.hash
-@@ -1,2 +1,3 @@
- # locally computed
- sha256  d66192a274247f4baa39fa932eadf903d7add55641d89d30402f967c4f2282a5  AT91Bootstrap1.16.zip
-+sha256  cb53ea8cf7a54929944de5de10569f51068af4f6d63ddfe8735759bdd8cebf38  main.c
-diff --git a/boot/at91bootstrap/at91bootstrap.mk b/boot/at91bootstrap/at91bootstrap.mk
-index c68b56b6ec..001427855f 100644
---- a/boot/at91bootstrap/at91bootstrap.mk
-+++ b/boot/at91bootstrap/at91bootstrap.mk
-@@ -7,6 +7,8 @@
- AT91BOOTSTRAP_VERSION = 1.16
- AT91BOOTSTRAP_SITE = ftp://www.at91.com/pub/at91bootstrap
- AT91BOOTSTRAP_SOURCE = AT91Bootstrap$(AT91BOOTSTRAP_VERSION).zip
-+AT91BOOTSTRAP_LICENSE = BSD-Source-Code
-+AT91BOOTSTRAP_LICENSE_FILES = main.c
- 
- AT91BOOTSTRAP_BOARD = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP_BOARD))
- AT91BOOTSTRAP_MEMORY = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP_MEMORY))
+>                  at91bootstrap | CVE-2020-11683   | https://security-tracker.debian.org/tracker/CVE-2020-11683  
+>                  at91bootstrap | CVE-2020-11684   | https://security-tracker.debian.org/tracker/CVE-2020-11684  
+
+These two CVEs in fact don't affect at91bootstrap in version 1.16.x.
+The NVD database doesn't distinguish the old at91bootstrap (1.x) and
+the new one (3.x). Those CVEs are marked to affect all versions up to
+3.9.2, but in fact the problematic code was added in 3.7.2.
+
+I originally thought of solving this by adding an
+AT91BOOTSTRAP_IGNORE_CVES variable, but thinking more about it, the CVE
+entries should be adjusted to indicate that only version >= 3.7.2 and <
+3.9.2 are affected. I have sent an e-mail to the NVD folks about this.
+We'll see if they respond.
+
+Best regards,
+
+Thomas
 -- 
-2.30.2
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
