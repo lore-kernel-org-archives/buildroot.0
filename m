@@ -1,48 +1,93 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon,  5 Apr 2021 13:14:59 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-jinja2: add CPE variables
-Message-ID: <20210405111459.3568495-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 5 Apr 2021 12:36:40 +0200
+Subject: [Buildroot] [git commit branch/2020.02.x] Update for 2020.02.12
+Message-ID: <20210405105540.BDD3D8D39F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:pocoo:jinja2 is a valid CPE identifier for this package:
+commit: https://git.buildroot.net/buildroot/commit/?id=1a6bd98fa87996f50f42a27857a9e9f029cc83e0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2020.02.x
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Apocoo%3Ajinja2
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-jinja2/python-jinja2.mk   | 2 ++
- package/python3-jinja2/python3-jinja2.mk | 2 ++
- 2 files changed, 4 insertions(+)
+ CHANGES                  | 36 ++++++++++++++++++++++++++++++++++++
+ Makefile                 |  4 ++--
+ support/misc/Vagrantfile |  2 +-
+ 3 files changed, 39 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-jinja2/python-jinja2.mk b/package/python-jinja2/python-jinja2.mk
-index b0dcd89dbd..f91cac6937 100644
---- a/package/python-jinja2/python-jinja2.mk
-+++ b/package/python-jinja2/python-jinja2.mk
-@@ -11,6 +11,8 @@ PYTHON_JINJA2_SITE = https://files.pythonhosted.org/packages/4f/e7/65300e6b32e69
- PYTHON_JINJA2_SETUP_TYPE = setuptools
- PYTHON_JINJA2_LICENSE = BSD-3-Clause
- PYTHON_JINJA2_LICENSE_FILES = LICENSE.rst
-+PYTHON_JINJA2_CPE_ID_VENDOR = pocoo
-+PYTHON_JINJA2_CPE_ID_PRODUCT = jinja2
+diff --git a/CHANGES b/CHANGES
+index 379534fc05..ed15f191fc 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,39 @@
++2020.02.12, released April 5, 2021
++
++	Important / security related fixes.
++
++	Dependencies: Explicitly detect and bail out if PATH contains
++	spaces or tabs. A number of packages fail to build in such
++	setups, so explicitly inform about this.
++
++	utils/scanpypi: Explicitly use python3 for compatibility with
++	packages using python3 syntax in setup.py
++
++	support/download: Fix tarball generation (from git/svn repos)
++	including symlinks pointing to ./<something>
++
++	Meson: Use correct C++ host compiler (rather than C compiler)
++
++	Updated/fixed packages: asterisk, batman-adv, bind,
++	ca-certificates, docker-containerd, dovecot,
++	dovecot-pigeonhole, diffutils, efivar, git, gnuchess, gnutls,
++	grub2, fakeroot, haserl, imagemagick, irqbalance, jasper,
++	kodi, libebml, libglib2, libjpeg, libopenssl, mariadb,
++	mbedtls, mosquitto, nodejs, nettle, openldap, openssh,
++	opkg-utils, perl, php, privoxy, prosody, protobuf,
++	python-aiohttp, python-django, python-lxml, python-pyyaml,
++	python-rpi-ws281x, python3, redis, sconeserver, screen, sox,
++	sqlcipher, squid, sysvinit, tor, transmission, tzdata, uboot,
++	util-linux, wireshark, wolfssl, wpa_supplicant, zstd
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#13516: utils/scanpypi: Failure when parsing diffoscope
++	#13541: 2021.02.rc2: irqbalance: Daemon couldn't be bound to..
++	#13576: Issues compiling buildroot for 5x86
++	#13581: jpegsrc.v9d.tar.gz has changed hash
++	#13616: tar file from git repository generation issue
++
+ 2020.02.11, released February 17, 2021
  
- # In host build, setup.py tries to download markupsafe if it is not installed
- HOST_PYTHON_JINJA2_DEPENDENCIES = host-python-markupsafe
-diff --git a/package/python3-jinja2/python3-jinja2.mk b/package/python3-jinja2/python3-jinja2.mk
-index 188dda91b7..5d29e1d889 100644
---- a/package/python3-jinja2/python3-jinja2.mk
-+++ b/package/python3-jinja2/python3-jinja2.mk
-@@ -10,6 +10,8 @@ PYTHON3_JINJA2_SITE = https://files.pythonhosted.org/packages/4f/e7/65300e6b32e6
- PYTHON3_JINJA2_SETUP_TYPE = setuptools
- PYTHON3_JINJA2_LICENSE = BSD-3-Clause
- PYTHON3_JINJA2_LICENSE_FILES = LICENSE.rst
-+PYTHON3_JINJA2_CPE_ID_VENDOR = pocoo
-+PYTHON3_JINJA2_CPE_ID_PRODUCT = jinja2
+ 	Important / security related fixes.
+diff --git a/Makefile b/Makefile
+index 2feaf20ac8..b5e1270992 100644
+--- a/Makefile
++++ b/Makefile
+@@ -92,9 +92,9 @@ all:
+ .PHONY: all
  
- HOST_PYTHON3_JINJA2_NEEDS_HOST_PYTHON = python3
- # In host build, setup.py tries to download markupsafe if it is not installed
--- 
-2.30.2
+ # Set and export the version string
+-export BR2_VERSION := 2020.02.11
++export BR2_VERSION := 2020.02.12
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1613590000
++BR2_VERSION_EPOCH = 1617619000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
+index a3c5adcca5..eb1dddd7ad 100644
+--- a/support/misc/Vagrantfile
++++ b/support/misc/Vagrantfile
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # Buildroot version to use
+-RELEASE='2020.02.11'
++RELEASE='2020.02.12'
+ 
+ ### Change here for more memory/cores ###
+ VM_MEMORY=2048
