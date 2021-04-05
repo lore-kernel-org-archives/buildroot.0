@@ -1,39 +1,60 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 5 Apr 2021 17:42:19 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
- 2021-04-04
-In-Reply-To: <20210405093012.2186140228@smtp2.osuosl.org>
-References: <20210405093012.2186140228@smtp2.osuosl.org>
-Message-ID: <20210405174219.1f530665@windsurf.home>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Mon, 5 Apr 2021 17:51:26 +0200
+Subject: [Buildroot] [PATCH 1/1] package/modem-manager: enable qcom-soc
+ if libqrtr-glib enabled
+In-Reply-To: <CAAP7ucJuh-y80YWqDyvCv+uDekc2+mg-KZ+-2QT=p7x-2z+jSQ@mail.gmail.com>
+References: <20210404184126.974098-1-petr.vorel@gmail.com>
+ <20210405110250.1e48e10f@windsurf.home> <YGsULQK650v0NBsV@pevik>
+ <20210405163630.577ec83a@windsurf.home>
+ <CAAP7ucJuh-y80YWqDyvCv+uDekc2+mg-KZ+-2QT=p7x-2z+jSQ@mail.gmail.com>
+Message-ID: <YGsx/vYenbBtgRtz@pevik>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas, Aleksander,
 
-On Mon, 05 Apr 2021 09:30:00 -0000
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+> On Mon, 5 Apr 2021, 16:36 Thomas Petazzoni, <thomas.petazzoni@bootlin.com>
+> wrote:
 
->                  at91bootstrap | CVE-2020-11683   | https://security-tracker.debian.org/tracker/CVE-2020-11683  
->                  at91bootstrap | CVE-2020-11684   | https://security-tracker.debian.org/tracker/CVE-2020-11684  
+> > On Mon, 5 Apr 2021 15:44:13 +0200
+> > Petr Vorel <petr.vorel@gmail.com> wrote:
 
-These two CVEs in fact don't affect at91bootstrap in version 1.16.x.
-The NVD database doesn't distinguish the old at91bootstrap (1.x) and
-the new one (3.x). Those CVEs are marked to affect all versions up to
-3.9.2, but in fact the problematic code was added in 3.7.2.
+> > > > > +ifeq ($(BR2_PACKAGE_LIBQRTR_GLIB),y)
+> > > > > +MODEM_MANAGER_CONF_OPTS += --enable-plugin-qcom-soc
 
-I originally thought of solving this by adding an
-AT91BOOTSTRAP_IGNORE_CVES variable, but thinking more about it, the CVE
-entries should be adjusted to indicate that only version >= 3.7.2 and <
-3.9.2 are affected. I have sent an e-mail to the NVD folks about this.
-We'll see if they respond.
+> > > > Isn't that missing a MODEM_MANAGER_DEPENDENCIES += libqrtr-glib line ?
+> > > > Or is it really a runtime dependency ?
+> > > Actually verified locally on buildroot, it works as is.
+> > > (no need for MODEM_MANAGER_DEPENDENCIES += libqrtr-glib).
 
-Best regards,
+> > > Thus I've updated patchwork status to NEW.
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> > How can this work? Does it dlopen() the libqrtr-glib library at
+> > runtime? This deserves some explanation as we would normally imagine
+> > that to be a build-time dependency.
+
+
+
+> It's probably too soon to add libqrtr-glib as a dependency of MM, the QRTR
+> support is not even in MM git master yet (likely this week).
+
+> libqrtr-glib is right now only a dependency of libqmi, I think we should
+> focus on that. Let's add the MM build-time dependency once there is a MM
+> release with QRTR support.
+
+Thomas, sorry for confusion. Aleksander, please correct me if I'm wrong. Looking
+at ModemManager sources (8fc60754 "qcom-soc: new plugin for Qualcomm SoCs") it
+currently does not depend on libqrtr-glib at all (not sure if you want use
+libqrtr-glib dependency later only for qcom-soc for for something else in
+ModemManager).
+
+I based decision for --enable-plugin-qcom-soc on BR2_PACKAGE_LIBQRTR_GLIB,
+because if one wants Qualcomm IPC Router protocol helper library, he probably
+wants also qcom-soc plugin. And even nobody is now using Buildroot for Qualcomm
+phones, it can change in the future.
+
+Kind regards,
+Petr
