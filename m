@@ -1,40 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 05 Apr 2021 21:22:31 +0200
-Subject: [Buildroot] [PATCH] boot/at91bootstrap: add legal information
-In-Reply-To: <20210405211933.65a98d96@windsurf.home> (Thomas Petazzoni's
- message of "Mon, 5 Apr 2021 21:19:33 +0200")
-References: <20210405153249.1352356-1-thomas.petazzoni@bootlin.com>
- <87blasr8ko.fsf@dell.be.48ers.dk>
- <20210405204307.7ebb5d7c@windsurf.home>
- <877dlgr1me.fsf@dell.be.48ers.dk>
- <20210405211933.65a98d96@windsurf.home>
-Message-ID: <8735w4r0y0.fsf@dell.be.48ers.dk>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon,  5 Apr 2021 21:32:18 +0200
+Subject: [Buildroot] [PATCH 1/1] package/janus-gateway: bump to version
+ 0.10.10
+Message-ID: <20210405193218.690576-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+https://github.com/meetecho/janus-gateway/blob/v0.10.10/CHANGELOG.md
 
- > On Mon, 05 Apr 2021 21:07:53 +0200
- > Peter Korsgaard <peter@korsgaard.com> wrote:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/janus-gateway/janus-gateway.hash | 2 +-
+ package/janus-gateway/janus-gateway.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- >> "Never" is probably a bit too strong. I know I have done it in the past,
- >> and there's even a bootlin blog entry about doing it ;)
- >> 
- >> https://bootlin.com/blog/at91bootstrap-linux/
-
- > Fair enough :-)
-
-;)
-
- > Then we could use include/sdramc.h, which is even smaller, and less
- > likely to be changed. Let me know if that makes sense, or if you're
- > fine with keeping main.c.
-
-Given that we have 2 examples of people changing main.c, I would indeed
-prefer to to use sdramc.h instead.
-
+diff --git a/package/janus-gateway/janus-gateway.hash b/package/janus-gateway/janus-gateway.hash
+index ee71979b88..83afc72c98 100644
+--- a/package/janus-gateway/janus-gateway.hash
++++ b/package/janus-gateway/janus-gateway.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  7f8c58e5c5ed94821ce877169da90c00e4adf81920ed383a2e0ec241960d121b  janus-gateway-0.10.3.tar.gz
++sha256  21e2fc7dee4b20ed8d749a69577eccd961b0bfe5b863d42f39ddfcd2af903718  janus-gateway-0.10.10.tar.gz
+ sha256  91d04c97fa1da3fcd28205873276358aafc071c5b00a9ea8c49dd06d487a9dc6  COPYING
+diff --git a/package/janus-gateway/janus-gateway.mk b/package/janus-gateway/janus-gateway.mk
+index bdf8d7a1e0..7e40851242 100644
+--- a/package/janus-gateway/janus-gateway.mk
++++ b/package/janus-gateway/janus-gateway.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-JANUS_GATEWAY_VERSION = 0.10.3
++JANUS_GATEWAY_VERSION = 0.10.10
+ JANUS_GATEWAY_SITE = $(call github,meetecho,janus-gateway,v$(JANUS_GATEWAY_VERSION))
+ JANUS_GATEWAY_LICENSE = GPL-3.0 with OpenSSL exception
+ JANUS_GATEWAY_LICENSE_FILES = COPYING
 -- 
-Bye, Peter Korsgaard
+2.30.2
