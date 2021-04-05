@@ -1,55 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 5 Apr 2021 18:33:19 +0200
-Subject: [Buildroot] [git commit] package/python-paramiko: bump to version
- 2.7.2
-Message-ID: <20210405160910.BA4DC88083@busybox.osuosl.org>
+Date: Mon, 5 Apr 2021 18:29:59 +0200
+Subject: [Buildroot] [git commit] package/ncmpc: bump to version 0.45
+Message-ID: <20210405160910.A0FBC88083@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fcba0aec7b840c6e6e68ba8b5b04c3b093d0f372
+commit: https://git.buildroot.net/buildroot/commit/?id=f15bfa10baede2a6db9869c84452b8a7a786fadb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update indentation in hash file (two spaces)
-
-https://github.com/paramiko/paramiko/blob/2.7.2/sites/www/changelog.rst
+https://github.com/MusicPlayerDaemon/ncmpc/blob/v0.45/NEWS
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-[Peter: fix LICENSE hash]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-paramiko/python-paramiko.hash | 6 +++---
- package/python-paramiko/python-paramiko.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/ncmpc/ncmpc.hash | 2 +-
+ package/ncmpc/ncmpc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-paramiko/python-paramiko.hash b/package/python-paramiko/python-paramiko.hash
-index 6054e8d492..b11acf1dbc 100644
---- a/package/python-paramiko/python-paramiko.hash
-+++ b/package/python-paramiko/python-paramiko.hash
+diff --git a/package/ncmpc/ncmpc.hash b/package/ncmpc/ncmpc.hash
+index 3215b35b1b..b8f79a70b5 100644
+--- a/package/ncmpc/ncmpc.hash
++++ b/package/ncmpc/ncmpc.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/paramiko/json
--md5	bf8239dc820ca86dd3c3226f4281c35f  paramiko-2.7.1.tar.gz
--sha256	920492895db8013f6cc0179293147f830b8c7b21fdfc839b6bad760c27459d9f  paramiko-2.7.1.tar.gz
-+md5  44136d79da4cd7619e368018ad022619  paramiko-2.7.2.tar.gz
-+sha256  7f36f4ba2c0d81d219f4595e35f70d56cc94f9ac40a6acdf51d6ca210ce65035  paramiko-2.7.2.tar.gz
- # Locally computed sha256 checksums
--sha256	5fa25bf5f395fd26e701c2e1de4ca7d162816986dc791c22f8f4226857ad1bb2  LICENSE
-+sha256  5fa25bf5f395fd26e701c2e1de4ca7d162816986dc791c22f8f4226857ad1bb2  LICENSE
-diff --git a/package/python-paramiko/python-paramiko.mk b/package/python-paramiko/python-paramiko.mk
-index 6dc473d34e..3c135cf9b1 100644
---- a/package/python-paramiko/python-paramiko.mk
-+++ b/package/python-paramiko/python-paramiko.mk
-@@ -4,9 +4,9 @@
- #
+ # Locally calculated after checking pgp signature
+-sha256  a5f7471d766a71c222374efa4aa17ef6ee0e42ad48d15528edd935d1f0f6cd4d  ncmpc-0.42.tar.xz
++sha256  17ff446447e002f2ed4342b7324263a830df7d76bcf177dce928f7d3a6f1f785  ncmpc-0.45.tar.xz
+ 
+ # Hash for license file:
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/ncmpc/ncmpc.mk b/package/ncmpc/ncmpc.mk
+index 0cc9765642..9a394ba356 100644
+--- a/package/ncmpc/ncmpc.mk
++++ b/package/ncmpc/ncmpc.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--PYTHON_PARAMIKO_VERSION = 2.7.1
-+PYTHON_PARAMIKO_VERSION = 2.7.2
- PYTHON_PARAMIKO_SOURCE = paramiko-$(PYTHON_PARAMIKO_VERSION).tar.gz
--PYTHON_PARAMIKO_SITE = https://files.pythonhosted.org/packages/ac/15/4351003352e11300b9f44a13576bff52dcdc6e4a911129c07447bda0a358
-+PYTHON_PARAMIKO_SITE = https://files.pythonhosted.org/packages/cf/a1/20d00ce559a692911f11cadb7f94737aca3ede1c51de16e002c7d3a888e0
- PYTHON_PARAMIKO_SETUP_TYPE = setuptools
- PYTHON_PARAMIKO_LICENSE = LGPL-2.1+
- PYTHON_PARAMIKO_LICENSE_FILES = LICENSE
+ NCMPC_VERSION_MAJOR = 0
+-NCMPC_VERSION = $(NCMPC_VERSION_MAJOR).42
++NCMPC_VERSION = $(NCMPC_VERSION_MAJOR).45
+ NCMPC_SOURCE = ncmpc-$(NCMPC_VERSION).tar.xz
+ NCMPC_SITE = http://www.musicpd.org/download/ncmpc/$(NCMPC_VERSION_MAJOR)
+ NCMPC_DEPENDENCIES = \
