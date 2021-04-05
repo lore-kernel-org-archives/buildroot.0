@@ -1,47 +1,50 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon,  5 Apr 2021 22:36:31 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-colorlog: bump to version
- 4.8.0
-Message-ID: <20210405203631.791084-1-fontaine.fabrice@gmail.com>
+Date: Mon,  5 Apr 2021 22:37:03 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-simplelogging: bump to
+ version 0.11.0
+Message-ID: <20210405203703.791180-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Update indentation in hash file (two spaces)
+
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/python-colorlog/python-colorlog.hash | 4 ++--
- package/python-colorlog/python-colorlog.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-simplelogging/python-simplelogging.hash | 6 +++---
+ package/python-simplelogging/python-simplelogging.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-colorlog/python-colorlog.hash b/package/python-colorlog/python-colorlog.hash
-index 4613cf0d3c..7c6fb73be7 100644
---- a/package/python-colorlog/python-colorlog.hash
-+++ b/package/python-colorlog/python-colorlog.hash
+diff --git a/package/python-simplelogging/python-simplelogging.hash b/package/python-simplelogging/python-simplelogging.hash
+index 86698fe88c..6d80fb93ec 100644
+--- a/package/python-simplelogging/python-simplelogging.hash
++++ b/package/python-simplelogging/python-simplelogging.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/colorlog/json
--md5  28500337c5bffc2a90dd19551479c992  colorlog-4.7.2.tar.gz
--sha256  18d05b616438a75762d7d214b9ec3b05d274466c9f3ddd92807e755840c88251  colorlog-4.7.2.tar.gz
-+md5  2111508f7c512976a34b107c17586f79  colorlog-4.8.0.tar.gz
-+sha256  59b53160c60902c405cdec28d38356e09d40686659048893e026ecbd589516b1  colorlog-4.8.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/simplelogging/json
+-md5	e3f9da393098d8fd8ebd8349a00692f2  simplelogging-0.10.0.tar.gz
+-sha256	c070e0d82b68eff6918076a0edbf0a48b2c9a263854bd35f48a12c6adbbe9d80  simplelogging-0.10.0.tar.gz
++md5  97b5f2a5cd9cff1b60c727cd03b3ffe1  simplelogging-0.11.0.tar.gz
++sha256  23a128b47d3e88213adc51fdd102aae15a398cf459d782eb19534945d23f0bc5  simplelogging-0.11.0.tar.gz
  # Locally computed sha256 checksums
- sha256  915d2c0c578d5015fb561f69ce2970a0d0ed566f0b99bdb6a4ebb439e9c81b0d  LICENSE
-diff --git a/package/python-colorlog/python-colorlog.mk b/package/python-colorlog/python-colorlog.mk
-index ba1ef7247b..eb4074d464 100644
---- a/package/python-colorlog/python-colorlog.mk
-+++ b/package/python-colorlog/python-colorlog.mk
+-sha256	bd2a0fe3b3bab7092ffa7f58d46bb05d98f12f107b3a6be947c098f7c2ad1d1a  LICENSE
++sha256  bd2a0fe3b3bab7092ffa7f58d46bb05d98f12f107b3a6be947c098f7c2ad1d1a  LICENSE
+diff --git a/package/python-simplelogging/python-simplelogging.mk b/package/python-simplelogging/python-simplelogging.mk
+index 28acc5c952..556628613b 100644
+--- a/package/python-simplelogging/python-simplelogging.mk
++++ b/package/python-simplelogging/python-simplelogging.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_COLORLOG_VERSION = 4.7.2
-+PYTHON_COLORLOG_VERSION = 4.8.0
- PYTHON_COLORLOG_SOURCE = colorlog-$(PYTHON_COLORLOG_VERSION).tar.gz
--PYTHON_COLORLOG_SITE = https://files.pythonhosted.org/packages/b2/d8/7bd0e6aa6b7dc93611f90a847eefcd048d3cae66dc8867c72486362bdfbd
-+PYTHON_COLORLOG_SITE = https://files.pythonhosted.org/packages/75/32/cdfba08674d72fe7895a8ec7be8f171e8502274999cae9497e4545404873
- PYTHON_COLORLOG_SETUP_TYPE = setuptools
- PYTHON_COLORLOG_LICENSE = MIT
- PYTHON_COLORLOG_LICENSE_FILES = LICENSE
+-PYTHON_SIMPLELOGGING_VERSION = 0.10.0
++PYTHON_SIMPLELOGGING_VERSION = 0.11.0
+ PYTHON_SIMPLELOGGING_SOURCE = simplelogging-$(PYTHON_SIMPLELOGGING_VERSION).tar.gz
+-PYTHON_SIMPLELOGGING_SITE = https://files.pythonhosted.org/packages/17/85/3d2431f971e703916c7254e4560ed15451faedf2461eb484da9e1ebc5da6
++PYTHON_SIMPLELOGGING_SITE = https://files.pythonhosted.org/packages/73/d6/4c06aa7f2c3b9fc09429a1196fd357357cc555de5e16c09b2d12e9db1ebb
+ PYTHON_SIMPLELOGGING_SETUP_TYPE = setuptools
+ PYTHON_SIMPLELOGGING_LICENSE = BSD-3-Clause
+ PYTHON_SIMPLELOGGING_LICENSE_FILES = LICENSE
 -- 
 2.30.2
