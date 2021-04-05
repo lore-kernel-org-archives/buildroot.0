@@ -1,45 +1,48 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon,  5 Apr 2021 15:40:30 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-yatl: bump to version
- 20210326.1
-Message-ID: <20210405134030.3916629-1-fontaine.fabrice@gmail.com>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Mon, 5 Apr 2021 15:44:13 +0200
+Subject: [Buildroot] [PATCH 1/1] package/modem-manager: enable qcom-soc
+ if libqrtr-glib enabled
+In-Reply-To: <20210405110250.1e48e10f@windsurf.home>
+References: <20210404184126.974098-1-petr.vorel@gmail.com>
+ <20210405110250.1e48e10f@windsurf.home>
+Message-ID: <YGsULQK650v0NBsV@pevik>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/python-yatl/python-yatl.hash | 4 ++--
- package/python-yatl/python-yatl.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+> On Sun,  4 Apr 2021 20:41:26 +0200
+> Petr Vorel <petr.vorel@gmail.com> wrote:
 
-diff --git a/package/python-yatl/python-yatl.hash b/package/python-yatl/python-yatl.hash
-index 534d74b654..6f4623c516 100644
---- a/package/python-yatl/python-yatl.hash
-+++ b/package/python-yatl/python-yatl.hash
-@@ -1,3 +1,3 @@
- # md5, sha256 from https://pypi.org/pypi/yatl/json
--md5  3368146e56b35ba5569ff64054c2a3fd  yatl-20200711.1.tar.gz
--sha256  d37b90e7679d2d2873ac634e66adfcd0cd7e4c34438e76a3192cf984faba2595  yatl-20200711.1.tar.gz
-+md5  2954413784ced7e52513ae12b2183c88  yatl-20210326.1.tar.gz
-+sha256  add729efdc2c9c06e0fcf640d97d4c500de611a38d5fdcc2ec12545d5ab14ca1  yatl-20210326.1.tar.gz
-diff --git a/package/python-yatl/python-yatl.mk b/package/python-yatl/python-yatl.mk
-index 6df5fcd83e..3a9e2748a5 100644
---- a/package/python-yatl/python-yatl.mk
-+++ b/package/python-yatl/python-yatl.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_YATL_VERSION = 20200711.1
-+PYTHON_YATL_VERSION = 20210326.1
- PYTHON_YATL_SOURCE = yatl-$(PYTHON_YATL_VERSION).tar.gz
--PYTHON_YATL_SITE = https://files.pythonhosted.org/packages/b4/f5/b6020f8ccb3e156fbe0ed7e4a35fbdce4d6a7ef6a9ab0c54cb8880fb7c04
-+PYTHON_YATL_SITE = https://files.pythonhosted.org/packages/9d/76/5906d641f452dc2ee56795e2152dafc1d212cd411d1cb893af29a7d06e33
- PYTHON_YATL_SETUP_TYPE = setuptools
- PYTHON_YATL_LICENSE = BSD-3-Clause
- 
--- 
-2.30.2
+> > This plugin makes sense only for Qualcomm MSM phone.
+> > Although there is currently no such device defconfig in Buildroot yet,
+> > it makes sense to prepare modem-manager for it.
+
+> > Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+> > ---
+> >  package/modem-manager/modem-manager.mk | 6 ++++++
+> >  1 file changed, 6 insertions(+)
+
+> > diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
+> > index 2cc45d266b..d62d13cf45 100644
+> > --- a/package/modem-manager/modem-manager.mk
+> > +++ b/package/modem-manager/modem-manager.mk
+> > @@ -34,6 +34,12 @@ else
+> >  MODEM_MANAGER_CONF_OPTS += --without-mbim
+> >  endif
+
+> > +ifeq ($(BR2_PACKAGE_LIBQRTR_GLIB),y)
+> > +MODEM_MANAGER_CONF_OPTS += --enable-plugin-qcom-soc
+
+> Isn't that missing a MODEM_MANAGER_DEPENDENCIES += libqrtr-glib line ?
+> Or is it really a runtime dependency ?
+Actually verified locally on buildroot, it works as is.
+(no need for MODEM_MANAGER_DEPENDENCIES += libqrtr-glib).
+
+Thus I've updated patchwork status to NEW.
+
+Kind regards,
+Petr
+
+> Thomas
