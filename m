@@ -1,36 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 5 Apr 2021 18:16:23 +0200
-Subject: [Buildroot] [git commit] package/python-tornado: add CPE variables
-Message-ID: <20210405160039.4B7A18D3CB@busybox.osuosl.org>
+Date: Mon, 5 Apr 2021 18:25:28 +0200
+Subject: [Buildroot] [git commit] package/whois: bump to version 5.5.9
+Message-ID: <20210405160039.C69DC8D3CA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f07f208e14763505ea71318385584b2755ac42d6
+commit: https://git.buildroot.net/buildroot/commit/?id=f06e88d009dd053eecf0880df2a7b86cacf8e690
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-cpe:2.3:a:tornadoweb:tornado is a valid CPE identifier for this package:
-
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Atornadoweb%3Atornado
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-tornado/python-tornado.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/whois/whois.hash | 4 ++--
+ package/whois/whois.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-tornado/python-tornado.mk b/package/python-tornado/python-tornado.mk
-index 15f3b83689..c05a7d65d3 100644
---- a/package/python-tornado/python-tornado.mk
-+++ b/package/python-tornado/python-tornado.mk
-@@ -9,6 +9,8 @@ PYTHON_TORNADO_SOURCE = tornado-$(PYTHON_TORNADO_VERSION).tar.gz
- PYTHON_TORNADO_SITE = https://files.pythonhosted.org/packages/95/84/119a46d494f008969bf0c775cb2c6b3579d3c4cc1bb1b41a022aa93ee242
- PYTHON_TORNADO_LICENSE = Apache-2.0
- PYTHON_TORNADO_LICENSE_FILES = LICENSE
-+PYTHON_TORNADO_CPE_ID_VENDOR = tornadoweb
-+PYTHON_TORNADO_CPE_ID_PRODUCT = tornado
- PYTHON_TORNADO_SETUP_TYPE = setuptools
+diff --git a/package/whois/whois.hash b/package/whois/whois.hash
+index 8bdbf4bb20..699616ef1d 100644
+--- a/package/whois/whois.hash
++++ b/package/whois/whois.hash
+@@ -1,5 +1,5 @@
+-# From http://snapshot.debian.org/archive/debian/20210216T023642Z/pool/main/w/whois/whois_5.5.8.dsc
+-sha256  cd9e7bad3b6968182bfcc311e22be3aec9a974397377d748845147884ce07547  whois_5.5.8.tar.xz
++# From http://snapshot.debian.org/archive/debian/20210328T030002Z/pool/main/w/whois/whois_5.5.9.dsc
++sha256  69088241ed33d2204f153c8005b312a69b60a1429075ff49f42f9f1f73a19c19  whois_5.5.9.tar.xz
  
- $(eval $(python-package))
+ # Hash for license file:
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/whois/whois.mk b/package/whois/whois.mk
+index a09624a7b5..53bbe85f08 100644
+--- a/package/whois/whois.mk
++++ b/package/whois/whois.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-WHOIS_VERSION = 5.5.8
+-WHOIS_SITE = http://snapshot.debian.org/archive/debian/20210216T023642Z/pool/main/w/whois
++WHOIS_VERSION = 5.5.9
++WHOIS_SITE = http://snapshot.debian.org/archive/debian/20210328T030002Z/pool/main/w/whois
+ WHOIS_SOURCE = whois_$(WHOIS_VERSION).tar.xz
+ WHOIS_DEPENDENCIES = \
+ 	host-pkgconf \
