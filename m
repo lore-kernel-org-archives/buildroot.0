@@ -1,51 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 5 Apr 2021 14:03:54 +0200
-Subject: [Buildroot] [git commit] docs/website: update for 2020.02.12
-Message-ID: <20210405113934.BD1E88B8FD@busybox.osuosl.org>
+From: Alexander Dahl <post@lespocky.de>
+Date: Mon, 5 Apr 2021 14:36:01 +0200
+Subject: [Buildroot] fastd CPE/CVE reporting (Was: [autobuild.buildroot.net]
+ Your daily results for 2021-03-21)
+In-Reply-To: <20210329152803.594a910f@windsurf.home>
+References: <20210322114835.6hmpplzygzejxiab@falbala.internal.home.lespocky.de>
+ <20210329132357.zxqt5szg72dchddu@falbala.internal.home.lespocky.de>
+ <20210329152803.594a910f@windsurf.home>
+Message-ID: <20210405123600.mutgqbczb7jqehjj@falbala.internal.home.lespocky.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6b595091c70ce752f7dcaa46ef6f1b700b7df36d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Thomas,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- docs/website/news.html | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+On Mon, Mar 29, 2021 at 03:28:03PM +0200, Thomas Petazzoni wrote:
+> For this particular fastd CVE issue, what needs to be added is (1) the
+> proper CPE identifier information in the Buildroot package and (2) get
+> the NVD database maintainers to fix the CVE entry to indicate which
+> fastd version has fixed the security vulnerability.
 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index c777747116..6fe0f761fe 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,28 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li>
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2020.02.12 released, 2020.02.x series EOL</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>5 April 2021</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2020.02.12 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2020.02.11 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2020.02.12">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2021-April/307630.html">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2020.02.12.tar.bz2">2020.02.12 release</a>.</p>
-+
-+	  <p>Notice that the 2020.02.x series is now end of life. Please migrate to
-+	  the 2021.02 series instead which will be supported until March 2022.</p>
-+      </div>
-+    </div>
-+  </li>
-+
-   <li class="timeline-inverted">
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
+I hoped to have added the proper CPE identifier with ebe599de08ec
+("package/fastd: add FASTD_CPE_ID_VERSION") in master (which was also
+backported to 2021.02.x). However I got another warning mail today.
+
+I'm not sure I understand (2) correctly. As far as I can see at
+https://nvd.nist.gov/vuln/detail/CVE-2020-27638 that CVE is marked as
+fixed for fastd 21.0.
+
+Is there anything I missed to set for the buildroot package?
+
+Greets
+Alex
+
+-- 
+/"\ ASCII RIBBON | ?With the first link, the chain is forged. The first
+\ / CAMPAIGN     | speech censured, the first thought forbidden, the
+ X  AGAINST      | first freedom denied, chains us all irrevocably.?
+/ \ HTML MAIL    | (Jean-Luc Picard, quoting Judge Aaron Satie)
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 833 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210405/c8f8e939/attachment.asc>
