@@ -1,44 +1,45 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon,  5 Apr 2021 15:52:33 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ncmpc: bump to version 0.45
-Message-ID: <20210405135233.4084884-1-fontaine.fabrice@gmail.com>
+Date: Mon,  5 Apr 2021 15:53:21 +0200
+Subject: [Buildroot] [PATCH 1/1] package/haproxy: bump to version 2.2.13
+Message-ID: <20210405135321.4084999-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://github.com/MusicPlayerDaemon/ncmpc/blob/v0.45/NEWS
+http://www.haproxy.org/download/2.2/src/CHANGELOG
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/ncmpc/ncmpc.hash | 2 +-
- package/ncmpc/ncmpc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/haproxy/haproxy.hash | 4 ++--
+ package/haproxy/haproxy.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/ncmpc/ncmpc.hash b/package/ncmpc/ncmpc.hash
-index 3215b35b1b..b8f79a70b5 100644
---- a/package/ncmpc/ncmpc.hash
-+++ b/package/ncmpc/ncmpc.hash
+diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
+index 04cb2e3c06..bea7c4bb2a 100644
+--- a/package/haproxy/haproxy.hash
++++ b/package/haproxy/haproxy.hash
 @@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--sha256  a5f7471d766a71c222374efa4aa17ef6ee0e42ad48d15528edd935d1f0f6cd4d  ncmpc-0.42.tar.xz
-+sha256  17ff446447e002f2ed4342b7324263a830df7d76bcf177dce928f7d3a6f1f785  ncmpc-0.45.tar.xz
- 
- # Hash for license file:
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/ncmpc/ncmpc.mk b/package/ncmpc/ncmpc.mk
-index 0cc9765642..9a394ba356 100644
---- a/package/ncmpc/ncmpc.mk
-+++ b/package/ncmpc/ncmpc.mk
+-# From: http://www.haproxy.org/download/2.2/src/haproxy-2.2.10.tar.gz.sha256
+-sha256  a027e9cd8f703ba48dc193f5ae34d9aa152221f67ab58a4e939c96b9f4edd3bc  haproxy-2.2.10.tar.gz
++# From: http://www.haproxy.org/download/2.2/src/haproxy-2.2.13.tar.gz.sha256
++sha256  9e3e51441c70bedfb494fc9d4b4d3389a71be9a3c915ba3d6f7e8fd9a57ce160  haproxy-2.2.13.tar.gz
+ # Locally computed:
+ sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
+ sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
+diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
+index 03c872e6b2..8502ab8a11 100644
+--- a/package/haproxy/haproxy.mk
++++ b/package/haproxy/haproxy.mk
 @@ -5,7 +5,7 @@
  ################################################################################
  
- NCMPC_VERSION_MAJOR = 0
--NCMPC_VERSION = $(NCMPC_VERSION_MAJOR).42
-+NCMPC_VERSION = $(NCMPC_VERSION_MAJOR).45
- NCMPC_SOURCE = ncmpc-$(NCMPC_VERSION).tar.xz
- NCMPC_SITE = http://www.musicpd.org/download/ncmpc/$(NCMPC_VERSION_MAJOR)
- NCMPC_DEPENDENCIES = \
+ HAPROXY_VERSION_MAJOR = 2.2
+-HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).10
++HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).13
+ HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
+ HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
+ HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
 -- 
 2.30.2
