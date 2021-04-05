@@ -1,39 +1,49 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 05 Apr 2021 21:07:53 +0200
-Subject: [Buildroot] [PATCH] boot/at91bootstrap: add legal information
-In-Reply-To: <20210405204307.7ebb5d7c@windsurf.home> (Thomas Petazzoni's
- message of "Mon, 5 Apr 2021 20:43:07 +0200")
-References: <20210405153249.1352356-1-thomas.petazzoni@bootlin.com>
- <87blasr8ko.fsf@dell.be.48ers.dk>
- <20210405204307.7ebb5d7c@windsurf.home>
-Message-ID: <877dlgr1me.fsf@dell.be.48ers.dk>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon,  5 Apr 2021 21:14:18 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-iso8601: bump to version
+ 0.1.14
+Message-ID: <20210405191418.330759-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+https://github.com/micktwomey/pyiso8601/releases/tag/0.1.14
 
- > On Mon, 05 Apr 2021 18:37:43 +0200
- > Peter Korsgaard <peter@korsgaard.com> wrote:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/python-iso8601/python-iso8601.hash | 4 ++--
+ package/python-iso8601/python-iso8601.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
- >> >  AT91BOOTSTRAP_VERSION = 1.16
- >> >  AT91BOOTSTRAP_SITE = ftp://www.at91.com/pub/at91bootstrap
- >> >  AT91BOOTSTRAP_SOURCE = AT91Bootstrap$(AT91BOOTSTRAP_VERSION).zip
- >> > +AT91BOOTSTRAP_LICENSE = BSD-Source-Code
- >> > +AT91BOOTSTRAP_LICENSE_FILES = main.c  
- >> 
- >> Hmm, this doesn't work very well if someone patches main.c :/ But OK, I
- >> don't really know how common that is / what to do about it.
-
- > As Alexander pointed out, at91bootstrap (in this 1.x branch) is no
- > longer developed, so main.c will never be changed :)
-
-"Never" is probably a bit too strong. I know I have done it in the past,
-and there's even a bootlin blog entry about doing it ;)
-
-https://bootlin.com/blog/at91bootstrap-linux/
-
+diff --git a/package/python-iso8601/python-iso8601.hash b/package/python-iso8601/python-iso8601.hash
+index 18cf3958da..76dd5ec452 100644
+--- a/package/python-iso8601/python-iso8601.hash
++++ b/package/python-iso8601/python-iso8601.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/iso8601/json
+-md5  df6e924305fd799d90be63336b2ab8b3  iso8601-0.1.13.tar.gz
+-sha256  f7dec22af52025d4526be94cc1303c7d8f5379b746a3f54a8c8446384392eeb1  iso8601-0.1.13.tar.gz
++md5  d6fe8ccc847aaf8ac965da3b6023e697  iso8601-0.1.14.tar.gz
++sha256  8aafd56fa0290496c5edbb13c311f78fa3a241f0853540da09d9363eae3ebd79  iso8601-0.1.14.tar.gz
+ # Locally computed sha256 checksums
+ sha256  116d368d14a8cf0061027c944c60ee20b476ce42814818a7d627396906761f16  LICENSE
+diff --git a/package/python-iso8601/python-iso8601.mk b/package/python-iso8601/python-iso8601.mk
+index 3620255db4..3f128d15e4 100644
+--- a/package/python-iso8601/python-iso8601.mk
++++ b/package/python-iso8601/python-iso8601.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_ISO8601_VERSION = 0.1.13
++PYTHON_ISO8601_VERSION = 0.1.14
+ PYTHON_ISO8601_SOURCE = iso8601-$(PYTHON_ISO8601_VERSION).tar.gz
+-PYTHON_ISO8601_SITE = https://files.pythonhosted.org/packages/05/90/2d9927dc2d33192f58fe39d2d216313a8380625cd4b062efb93f1afd7a29
++PYTHON_ISO8601_SITE = https://files.pythonhosted.org/packages/f9/ed/b97abc7877e5b253eef96a469f47d617b0ebcccc735405fa1a620c7ee833
+ PYTHON_ISO8601_SETUP_TYPE = setuptools
+ PYTHON_ISO8601_LICENSE = MIT
+ PYTHON_ISO8601_LICENSE_FILES = LICENSE
 -- 
-Bye, Peter Korsgaard
+2.30.2
