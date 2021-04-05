@@ -1,54 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 5 Apr 2021 18:34:10 +0200
-Subject: [Buildroot] [git commit] package/python-ecdsa: bump to version
- 0.16.1
-Message-ID: <20210405160910.C65538C581@busybox.osuosl.org>
+Date: Mon, 5 Apr 2021 18:33:19 +0200
+Subject: [Buildroot] [git commit] package/python-paramiko: bump to version
+ 2.7.2
+Message-ID: <20210405160910.BA4DC88083@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e1cdaeb454f5c609837326e1ba3dd7cb836db9cd
+commit: https://git.buildroot.net/buildroot/commit/?id=fcba0aec7b840c6e6e68ba8b5b04c3b093d0f372
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Update indentation in hash file (two spaces)
 
-https://github.com/tlsfuzzer/python-ecdsa/blob/python-ecdsa-0.16.1/NEWS
+https://github.com/paramiko/paramiko/blob/2.7.2/sites/www/changelog.rst
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[Peter: fix LICENSE hash]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-ecdsa/python-ecdsa.hash | 6 +++---
- package/python-ecdsa/python-ecdsa.mk   | 4 ++--
+ package/python-paramiko/python-paramiko.hash | 6 +++---
+ package/python-paramiko/python-paramiko.mk   | 4 ++--
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-ecdsa/python-ecdsa.hash b/package/python-ecdsa/python-ecdsa.hash
-index efe396bf0a..fcb8093826 100644
---- a/package/python-ecdsa/python-ecdsa.hash
-+++ b/package/python-ecdsa/python-ecdsa.hash
+diff --git a/package/python-paramiko/python-paramiko.hash b/package/python-paramiko/python-paramiko.hash
+index 6054e8d492..b11acf1dbc 100644
+--- a/package/python-paramiko/python-paramiko.hash
++++ b/package/python-paramiko/python-paramiko.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/ecdsa/json
--md5	821d543047941dd26f543f62912230d4  ecdsa-0.15.tar.gz
--sha256	8f12ac317f8a1318efa75757ef0a651abe12e51fc1af8838fb91079445227277  ecdsa-0.15.tar.gz
-+md5  98c0da4c046286e892fdba727f93edea  ecdsa-0.16.1.tar.gz
-+sha256  cfc046a2ddd425adbd1a78b3c46f0d1325c657811c0f45ecc3a0a6236c1e50ff  ecdsa-0.16.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/paramiko/json
+-md5	bf8239dc820ca86dd3c3226f4281c35f  paramiko-2.7.1.tar.gz
+-sha256	920492895db8013f6cc0179293147f830b8c7b21fdfc839b6bad760c27459d9f  paramiko-2.7.1.tar.gz
++md5  44136d79da4cd7619e368018ad022619  paramiko-2.7.2.tar.gz
++sha256  7f36f4ba2c0d81d219f4595e35f70d56cc94f9ac40a6acdf51d6ca210ce65035  paramiko-2.7.2.tar.gz
  # Locally computed sha256 checksums
--sha256	3eca9845773d2e5b8cc9d8c119d345f00a4806e4bd660d4a3d6cdf9c0e9d8bb2  LICENSE
-+sha256  3eca9845773d2e5b8cc9d8c119d345f00a4806e4bd660d4a3d6cdf9c0e9d8bb2  LICENSE
-diff --git a/package/python-ecdsa/python-ecdsa.mk b/package/python-ecdsa/python-ecdsa.mk
-index 1178c378fb..75c970518e 100644
---- a/package/python-ecdsa/python-ecdsa.mk
-+++ b/package/python-ecdsa/python-ecdsa.mk
+-sha256	5fa25bf5f395fd26e701c2e1de4ca7d162816986dc791c22f8f4226857ad1bb2  LICENSE
++sha256  5fa25bf5f395fd26e701c2e1de4ca7d162816986dc791c22f8f4226857ad1bb2  LICENSE
+diff --git a/package/python-paramiko/python-paramiko.mk b/package/python-paramiko/python-paramiko.mk
+index 6dc473d34e..3c135cf9b1 100644
+--- a/package/python-paramiko/python-paramiko.mk
++++ b/package/python-paramiko/python-paramiko.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_ECDSA_VERSION = 0.15
-+PYTHON_ECDSA_VERSION = 0.16.1
- PYTHON_ECDSA_SOURCE = ecdsa-$(PYTHON_ECDSA_VERSION).tar.gz
--PYTHON_ECDSA_SITE = https://files.pythonhosted.org/packages/e3/7c/b508ade1feb47cd79222e06d85e477f5cfc4fb0455ad3c70eb6330fc49aa
-+PYTHON_ECDSA_SITE = https://files.pythonhosted.org/packages/1d/d4/0684a83b3c16a9d1446ace27a506cef1db9b23984ac7ed6aaf764fdd56e8
- PYTHON_ECDSA_SETUP_TYPE = setuptools
- PYTHON_ECDSA_LICENSE = MIT
- PYTHON_ECDSA_LICENSE_FILES = LICENSE
+-PYTHON_PARAMIKO_VERSION = 2.7.1
++PYTHON_PARAMIKO_VERSION = 2.7.2
+ PYTHON_PARAMIKO_SOURCE = paramiko-$(PYTHON_PARAMIKO_VERSION).tar.gz
+-PYTHON_PARAMIKO_SITE = https://files.pythonhosted.org/packages/ac/15/4351003352e11300b9f44a13576bff52dcdc6e4a911129c07447bda0a358
++PYTHON_PARAMIKO_SITE = https://files.pythonhosted.org/packages/cf/a1/20d00ce559a692911f11cadb7f94737aca3ede1c51de16e002c7d3a888e0
+ PYTHON_PARAMIKO_SETUP_TYPE = setuptools
+ PYTHON_PARAMIKO_LICENSE = LGPL-2.1+
+ PYTHON_PARAMIKO_LICENSE_FILES = LICENSE
