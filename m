@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 05 Apr 2021 09:26:44 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-paramiko: add CPE
- variables
-In-Reply-To: <20210404210122.3442344-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 4 Apr 2021 23:01:22 +0200")
-References: <20210404210122.3442344-1-fontaine.fabrice@gmail.com>
-Message-ID: <87czv9w5sb.fsf@dell.be.48ers.dk>
+Date: Mon, 05 Apr 2021 09:28:25 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-paramiko: drop
+ python-pyasn1 dependency
+In-Reply-To: <20210404211326.3443620-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 4 Apr 2021 23:13:26 +0200")
+References: <20210404211326.3443620-1-fontaine.fabrice@gmail.com>
+Message-ID: <878s5xw5pi.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,10 +14,10 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > cpe:2.3:a:paramiko:paramiko is a valid CPE identifier for this package:
- >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aparamiko%3Aparamiko
+ > python-pyasn1 is truly optional since version 2.5.0 and
+ > https://github.com/paramiko/paramiko/commit/a31818c28556055341ae3d249e3893d40eb2b232
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Good catch!
 
 Committed, thanks.
 
