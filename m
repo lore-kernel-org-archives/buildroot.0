@@ -1,69 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 5 Apr 2021 14:01:20 +0200
-Subject: [Buildroot] [git commit] Update for 2020.02.12
-Message-ID: <20210405113934.A8D2386264@busybox.osuosl.org>
+Date: Mon, 5 Apr 2021 14:03:54 +0200
+Subject: [Buildroot] [git commit] docs/website: update for 2020.02.12
+Message-ID: <20210405113934.BD1E88B8FD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d81ac2e40f6f632a7b48a6eda75a135cedfb647f
+commit: https://git.buildroot.net/buildroot/commit/?id=6b595091c70ce752f7dcaa46ef6f1b700b7df36d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 1a6bd98fa87996f50f42a27857a9e9f029cc83e0)
-[Peter: drop Makefile/Vagrantfile changes]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- CHANGES | 37 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
+ docs/website/news.html | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-diff --git a/CHANGES b/CHANGES
-index f110bc384a..c1ee6c4316 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -964,6 +964,43 @@
- 	#12796: Update OpenSSL to Version 1.1.1g to patch  CVE-2020-1967
- 	#12811: bootstrap stuck and no login prompt
+diff --git a/docs/website/news.html b/docs/website/news.html
+index c777747116..6fe0f761fe 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,28 @@
+ <h2>News</h2>
+ <ul class="timeline">
  
-+2020.02.12, released April 5, 2021
++  <li>
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2020.02.12 released, 2020.02.x series EOL</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>5 April 2021</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>The 2020.02.12 bugfix release is out, fixing a number of important /
++	  security related issues discovered since the 2020.02.11 release. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2020.02.12">CHANGES</a>
++	  file for more details, read the
++	  <a href="http://lists.busybox.net/pipermail/buildroot/2021-April/307630.html">announcement</a>
++	  and go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2020.02.12.tar.bz2">2020.02.12 release</a>.</p>
 +
-+	Important / security related fixes.
++	  <p>Notice that the 2020.02.x series is now end of life. Please migrate to
++	  the 2021.02 series instead which will be supported until March 2022.</p>
++      </div>
++    </div>
++  </li>
 +
-+	Dependencies: Explicitly detect and bail out if PATH contains
-+	spaces or tabs. A number of packages fail to build in such
-+	setups, so explicitly inform about this.
-+
-+	utils/scanpypi: Explicitly use python3 for compatibility with
-+	packages using python3 syntax in setup.py
-+
-+	support/download: Fix tarball generation (from git/svn repos)
-+	including symlinks pointing to ./<something>
-+
-+	Meson: Use correct C++ host compiler (rather than C compiler)
-+
-+	Updated/fixed packages: asterisk, batman-adv, bind,
-+	ca-certificates, docker-containerd, dovecot,
-+	dovecot-pigeonhole, diffutils, efivar, git, gnuchess, gnutls,
-+	grub2, fakeroot, haserl, imagemagick, irqbalance, jasper,
-+	kodi, libcurl, libebml, libglib2, libjpeg, libopenssl,
-+	libupnp, libvips, lldpd, mariadb, mbedtls, mosquitto, nodejs,
-+	netsnmp, nettle, openldap, openmpi, openssh, opkg-utils, perl,
-+	php, privoxy, prosody, protobuf, python-aiohttp,
-+	python-django, python-lxml, python-pyyaml, python-rpi-ws281x,
-+	python3, redis, rpm, sconeserver, screen, sox, sqlcipher,
-+	squid, sysvinit, tor, transmission, tzdata, uboot, upx,
-+	util-linux, wireshark, wolfssl, wpa_supplicant, zstd
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#13516: utils/scanpypi: Failure when parsing diffoscope
-+	#13541: 2021.02.rc2: irqbalance: Daemon couldn't be bound to..
-+	#13576: Issues compiling buildroot for 5x86
-+	#13581: jpegsrc.v9d.tar.gz has changed hash
-+	#13616: tar file from git repository generation issue
-+
- 2020.02.11, released February 17, 2021
- 
- 	Important / security related fixes.
+   <li class="timeline-inverted">
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
