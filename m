@@ -1,52 +1,89 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon,  5 Apr 2021 16:47:08 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-paramiko: bump to version
- 2.7.2
-Message-ID: <20210405144708.4151427-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon,  5 Apr 2021 17:29:54 +0200
+Subject: [Buildroot] [PATCH] package/python3: security bump to version 3.9.4
+Message-ID: <20210405152954.28824-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update indentation in hash file (two spaces)
+Fixes the following security issues:
 
-https://github.com/paramiko/paramiko/blob/2.7.2/sites/www/changelog.rst
+- bpo-42988: CVE-2021-3426: Remove the getfile feature of the pydoc module
+  which could be abused to read arbitrary files on the disk (directory
+  traversal vulnerability).  Moreover, even source code of Python modules
+  can contain sensitive data like passwords.  Vulnerability reported by
+  David Schw?rer.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+- bpo-43285: ftplib no longer trusts the IP address value returned from the
+  server in response to the PASV command by default.  This prevents a
+  malicious FTP server from using the response to probe IPv4 address and
+  port combinations on the client network.
+
+  Code that requires the former vulnerable behavior may set a
+  trust_server_pasv_ipv4_address attribute on their ftplib.FTP instances to
+  True to re-enable it.
+
+- bpo-43439: Add audit hooks for gc.get_objects(), gc.get_referrers() and
+  gc.get_referents().  Patch by Pablo Galindo.
+
+Note: 3.9.3 was recalled due to introducing unintentional ABI
+incompatibility, and fixes re-released as 3.9.4:
+
+https://www.python.org/downloads/release/python-394/
+
+Add host-autoreconf-archive, as it is needed for autoreconf since:
+https://github.com/python/cpython/commit/064bc07f241dceec2fc577cbf5c31fa6d63fe320
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-paramiko/python-paramiko.hash | 6 +++---
- package/python-paramiko/python-paramiko.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python3/python3.hash | 6 +++---
+ package/python3/python3.mk   | 5 +++--
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-paramiko/python-paramiko.hash b/package/python-paramiko/python-paramiko.hash
-index 6054e8d492..cd26774cce 100644
---- a/package/python-paramiko/python-paramiko.hash
-+++ b/package/python-paramiko/python-paramiko.hash
+diff --git a/package/python3/python3.hash b/package/python3/python3.hash
+index 753973721b..2a0ba6ab4f 100644
+--- a/package/python3/python3.hash
++++ b/package/python3/python3.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/paramiko/json
--md5	bf8239dc820ca86dd3c3226f4281c35f  paramiko-2.7.1.tar.gz
--sha256	920492895db8013f6cc0179293147f830b8c7b21fdfc839b6bad760c27459d9f  paramiko-2.7.1.tar.gz
-+md5  44136d79da4cd7619e368018ad022619  paramiko-2.7.2.tar.gz
-+sha256  7f36f4ba2c0d81d219f4595e35f70d56cc94f9ac40a6acdf51d6ca210ce65035  paramiko-2.7.2.tar.gz
- # Locally computed sha256 checksums
--sha256	5fa25bf5f395fd26e701c2e1de4ca7d162816986dc791c22f8f4226857ad1bb2  LICENSE
-+sha256  fa25bf5f395fd26e701c2e1de4ca7d162816986dc791c22f8f4226857ad1bb2  LICENSE
-diff --git a/package/python-paramiko/python-paramiko.mk b/package/python-paramiko/python-paramiko.mk
-index 6dc473d34e..3c135cf9b1 100644
---- a/package/python-paramiko/python-paramiko.mk
-+++ b/package/python-paramiko/python-paramiko.mk
-@@ -4,9 +4,9 @@
- #
+-# From https://www.python.org/downloads/release/python-392/
+-md5  f0dc9000312abeb16de4eccce9a870ab  Python-3.9.2.tar.xz
++# From https://www.python.org/downloads/release/python-394/
++md5  2a3dba5fc75b695c45cf1806156e1a97  Python-3.9.4.tar.xz
+ # Locally computed
+-sha256  3c2034c54f811448f516668dce09d24008a0716c3a794dd8639b5388cbde247d  Python-3.9.2.tar.xz
++sha256  4b0e6644a76f8df864ae24ac500a51bbf68bd098f6a173e27d3b61cdca9aa134  Python-3.9.4.tar.xz
+ sha256  599826df92bfdcd2702eac691072498bb096c55af04ee984cf90f70ed77b5a70  LICENSE
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index def34f46ad..345c6a8699 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--PYTHON_PARAMIKO_VERSION = 2.7.1
-+PYTHON_PARAMIKO_VERSION = 2.7.2
- PYTHON_PARAMIKO_SOURCE = paramiko-$(PYTHON_PARAMIKO_VERSION).tar.gz
--PYTHON_PARAMIKO_SITE = https://files.pythonhosted.org/packages/ac/15/4351003352e11300b9f44a13576bff52dcdc6e4a911129c07447bda0a358
-+PYTHON_PARAMIKO_SITE = https://files.pythonhosted.org/packages/cf/a1/20d00ce559a692911f11cadb7f94737aca3ede1c51de16e002c7d3a888e0
- PYTHON_PARAMIKO_SETUP_TYPE = setuptools
- PYTHON_PARAMIKO_LICENSE = LGPL-2.1+
- PYTHON_PARAMIKO_LICENSE_FILES = LICENSE
+ PYTHON3_VERSION_MAJOR = 3.9
+-PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).2
++PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).4
+ PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
+ PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
+ PYTHON3_LICENSE = Python-2.0, others
+@@ -41,7 +41,7 @@ HOST_PYTHON3_CONF_ENV += \
+ 
+ PYTHON3_DEPENDENCIES = host-python3 libffi
+ 
+-HOST_PYTHON3_DEPENDENCIES = host-expat host-zlib host-libffi
++HOST_PYTHON3_DEPENDENCIES = host-autoconf-archive host-expat host-zlib host-libffi
+ 
+ ifeq ($(BR2_PACKAGE_HOST_PYTHON3_SSL),y)
+ HOST_PYTHON3_DEPENDENCIES += host-openssl
+@@ -242,6 +242,7 @@ endef
+ PYTHON3_POST_INSTALL_TARGET_HOOKS += PYTHON3_ENSURE_LIBPYTHON_STRIPPED
+ 
+ PYTHON3_AUTORECONF = YES
++PYTHON3_AUTORECONF_OPTS = --include=$(HOST_DIR)/share/autoconf-archive
+ 
+ define PYTHON3_INSTALL_SYMLINK
+ 	ln -fs python3 $(TARGET_DIR)/usr/bin/python
 -- 
-2.30.2
+2.20.1
