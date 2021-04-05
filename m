@@ -1,33 +1,51 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon,  5 Apr 2021 12:12:22 +0200
-Subject: [Buildroot] [PATCH 1/1] package/scapy: add CPE variables
-Message-ID: <20210405101222.3565607-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 5 Apr 2021 12:16:27 +0200
+Subject: [Buildroot] [git commit] docs/website: update for 2020.11.4
+Message-ID: <20210405095133.CE98F7FE00@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:scapy:scapy is a valid CPE identifier for this package:
+commit: https://git.buildroot.net/buildroot/commit/?id=cb81c441e30b83e35ed35f069f627c67d8f7d2d5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Ascapy%3Ascapy
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-scapy/python-scapy.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ docs/website/news.html | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-diff --git a/package/python-scapy/python-scapy.mk b/package/python-scapy/python-scapy.mk
-index 3d9a4e1914..3083a84412 100644
---- a/package/python-scapy/python-scapy.mk
-+++ b/package/python-scapy/python-scapy.mk
-@@ -10,5 +10,7 @@ PYTHON_SCAPY_SITE = https://files.pythonhosted.org/packages/c6/8f/438d4d0bab4c8e
- PYTHON_SCAPY_SETUP_TYPE = setuptools
- PYTHON_SCAPY_LICENSE = GPL-2.0
- PYTHON_SCAPY_LICENSE_FILES = LICENSE
-+PYTHON_SCAPY_CPE_ID_VENDOR = scapy
-+PYTHON_SCAPY_CPE_ID_PRODUCT = scapy
+diff --git a/docs/website/news.html b/docs/website/news.html
+index f842d7310a..c777747116 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,28 @@
+ <h2>News</h2>
+ <ul class="timeline">
  
- $(eval $(python-package))
--- 
-2.30.2
++  <li class="timeline-inverted">
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2020.11.4 released, 2020.11.x series EOL</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>5 April 2021</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>The 2020.11.4 bugfix release is out, fixing a number of important /
++	  security related issues discovered since the 2020.11.3 release. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2020.11.4">CHANGES</a>
++	  file for more details, read the
++	  <a href="http://lists.busybox.net/pipermail/buildroot/2021-April/307609.html">announcement</a>
++	  and go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2020.11.4.tar.bz2">2020.11.4 release</a>.</p>
++
++	  <p>Notice that the 2020.11.x series is now end of life. Please migrate to
++	  the 2021.02 series instead which will be supported until March 2022.</p>
++      </div>
++    </div>
++  </li>
++
+   <li>
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
