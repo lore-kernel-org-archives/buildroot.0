@@ -1,45 +1,45 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon,  5 Apr 2021 15:59:30 +0200
-Subject: [Buildroot] [PATCH 1/1] package/boinc: bump to version 7.16.16
-Message-ID: <20210405135930.4132894-1-fontaine.fabrice@gmail.com>
+Date: Mon,  5 Apr 2021 16:03:10 +0200
+Subject: [Buildroot] [PATCH 1/1] package/whois: bump to version 5.5.9
+Message-ID: <20210405140310.4134328-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update indentation in hash file (two spaces)
-
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/boinc/boinc.hash | 6 +++---
- package/boinc/boinc.mk   | 2 +-
+ package/whois/whois.hash | 4 ++--
+ package/whois/whois.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/boinc/boinc.hash b/package/boinc/boinc.hash
-index b842b6c017..0482b0589c 100644
---- a/package/boinc/boinc.hash
-+++ b/package/boinc/boinc.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256 caa567da8d3eb50859efe2eeba1c23c7b27d3b0f15b548136e75302713b25303  boinc-7.16.6.tar.gz
--sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
--sha256 a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LESSER
-+sha256  0d5656a9f8ed1048936a5764270848b892d63f27bdb863d0ace447f1eaae6002  boinc-7.16.16.tar.gz
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-+sha256  a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LESSER
-diff --git a/package/boinc/boinc.mk b/package/boinc/boinc.mk
-index fe972181df..c8eecdc559 100644
---- a/package/boinc/boinc.mk
-+++ b/package/boinc/boinc.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/whois/whois.hash b/package/whois/whois.hash
+index 8bdbf4bb20..699616ef1d 100644
+--- a/package/whois/whois.hash
++++ b/package/whois/whois.hash
+@@ -1,5 +1,5 @@
+-# From http://snapshot.debian.org/archive/debian/20210216T023642Z/pool/main/w/whois/whois_5.5.8.dsc
+-sha256  cd9e7bad3b6968182bfcc311e22be3aec9a974397377d748845147884ce07547  whois_5.5.8.tar.xz
++# From http://snapshot.debian.org/archive/debian/20210328T030002Z/pool/main/w/whois/whois_5.5.9.dsc
++sha256  69088241ed33d2204f153c8005b312a69b60a1429075ff49f42f9f1f73a19c19  whois_5.5.9.tar.xz
+ 
+ # Hash for license file:
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/whois/whois.mk b/package/whois/whois.mk
+index a09624a7b5..53bbe85f08 100644
+--- a/package/whois/whois.mk
++++ b/package/whois/whois.mk
+@@ -4,8 +4,8 @@
+ #
  ################################################################################
  
- BOINC_VERSION_MAJOR = 7.16
--BOINC_VERSION = $(BOINC_VERSION_MAJOR).6
-+BOINC_VERSION = $(BOINC_VERSION_MAJOR).16
- BOINC_SITE = \
- 	$(call github,BOINC,boinc,client_release/$(BOINC_VERSION_MAJOR)/$(BOINC_VERSION))
- BOINC_LICENSE = LGPL-3.0+
+-WHOIS_VERSION = 5.5.8
+-WHOIS_SITE = http://snapshot.debian.org/archive/debian/20210216T023642Z/pool/main/w/whois
++WHOIS_VERSION = 5.5.9
++WHOIS_SITE = http://snapshot.debian.org/archive/debian/20210328T030002Z/pool/main/w/whois
+ WHOIS_SOURCE = whois_$(WHOIS_VERSION).tar.xz
+ WHOIS_DEPENDENCIES = \
+ 	host-pkgconf \
 -- 
 2.30.2
