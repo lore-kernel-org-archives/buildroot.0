@@ -1,48 +1,36 @@
-From: Nicolas Chango <nicolas.chango96@outlook.fr>
-Date: Mon, 5 Apr 2021 14:31:37 +0000
-Subject: [Buildroot] Busybox install error
-Message-ID: <MWHPR02MB236895429FB7ADEBC694608FF1779@MWHPR02MB2368.namprd02.prod.outlook.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 5 Apr 2021 16:36:30 +0200
+Subject: [Buildroot] [PATCH 1/1] package/modem-manager: enable qcom-soc
+ if libqrtr-glib enabled
+In-Reply-To: <YGsULQK650v0NBsV@pevik>
+References: <20210404184126.974098-1-petr.vorel@gmail.com>
+ <20210405110250.1e48e10f@windsurf.home> <YGsULQK650v0NBsV@pevik>
+Message-ID: <20210405163630.577ec83a@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+On Mon, 5 Apr 2021 15:44:13 +0200
+Petr Vorel <petr.vorel@gmail.com> wrote:
 
-I would like to install busybox on ubuntu 20.04,
+> > > +ifeq ($(BR2_PACKAGE_LIBQRTR_GLIB),y)
+> > > +MODEM_MANAGER_CONF_OPTS += --enable-plugin-qcom-soc  
+> 
+> > Isn't that missing a MODEM_MANAGER_DEPENDENCIES += libqrtr-glib line ?
+> > Or is it really a runtime dependency ?  
+> Actually verified locally on buildroot, it works as is.
+> (no need for MODEM_MANAGER_DEPENDENCIES += libqrtr-glib).
+> 
+> Thus I've updated patchwork status to NEW.
 
-I used the following code :
+How can this work? Does it dlopen() the libqrtr-glib library at
+runtime? This deserves some explanation as we would normally imagine
+that to be a build-time dependency.
 
-$git clone git://git.busybox.net/busybox
-$cd busybox
-$git checkout 1_26_stable
-$make defconfig
-$make
-
-After the last command, I have the following error message :
-
-LINK    busybox_unstripped
-Trying libraries: crypt m
-Failed: -Wl,--start-group  -lcrypt -lm  -Wl,--end-group
-Output of:
-gcc -Wall -Wshadow -Wwrite-strings -Wundef -Wstrict-prototypes -Wunused -Wunused-parameter -Wunused-function -Wunused-value -Wmissing-prototypes -Wmissing-declarations -Wno-format-security -Wdeclaration-after-statement -Wold-style-definition -fno-builtin-strlen -finline-limit=0 -fomit-frame-pointer -ffunction-sections -fdata-sections -fno-guess-branch-probability -funsigned-char -static-libgcc -falign-functions=1 -falign-jumps=1 -falign-labels=1 -falign-loops=1 -fno-unwind-tables -fno-asynchronous-unwind-tables -fno-builtin-printf -Os -o busybox_unstripped -Wl,--sort-common -Wl,--sort-section,alignment -Wl,--gc-sections -Wl,--start-group applets/built-in.o archival/lib.a archival/libarchive/lib.a console-tools/lib.a coreutils/lib.a coreutils/libcoreutils/lib.a debianutils/lib.a e2fsprogs/lib.a editors/lib.a findutils/lib.a init/lib.a libbb/lib.a libpwdgrp/lib.a loginutils/lib.a mailutils/lib.a miscutils/lib.a modutils/lib.a networking/lib.a networking/libiproute/lib.a networking/udhcp/lib.a printutils/lib.a procps/lib.a runit/lib.a selinux/lib.a shell/lib.a sysklogd/lib.a util-linux/lib.a util-linux/volume_id/lib.a archival/built-in.o archival/libarchive/built-in.o console-tools/built-in.o coreutils/built-in.o coreutils/libcoreutils/built-in.o debianutils/built-in.o e2fsprogs/built-in.o editors/built-in.o findutils/built-in.o init/built-in.o libbb/built-in.o libpwdgrp/built-in.o loginutils/built-in.o mailutils/built-in.o miscutils/built-in.o modutils/built-in.o networking/built-in.o networking/libiproute/built-in.o networking/udhcp/built-in.o printutils/built-in.o procps/built-in.o runit/built-in.o selinux/built-in.o shell/built-in.o sysklogd/built-in.o util-linux/built-in.o util-linux/volume_id/built-in.o -Wl,--end-group -Wl,--start-group -lcrypt -lm -Wl,--end-group
-==========
-/usr/bin/ld: debianutils/lib.a(mktemp.o): in function `mktemp_main':
-mktemp.c:(.text.mktemp_main+0xa6): warning: the use of `mktemp' is dangerous, better use `mkstemp' or `mkdtemp'
-/usr/bin/ld: util-linux/lib.a(rdate.o): in function `rdate_main':
-rdate.c:(.text.rdate_main+0x11e): undefined reference to `stime'
-/usr/bin/ld: coreutils/lib.a(date.o): in function `date_main':
-date.c:(.text.date_main+0x27e): undefined reference to `stime'
-collect2: error: ld returned 1 exit status
-Note: if build needs additional libraries, put them in CONFIG_EXTRA_LDLIBS.
-Example: CONFIG_EXTRA_LDLIBS="pthread dl tirpc audit pam"
-make: *** [Makefile:717: busybox_unstripped] Error 1
-
-Someone can help me ?
-
-Regards,
-Nicolas
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210405/e5234ecf/attachment.html>
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
