@@ -1,89 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon,  5 Apr 2021 17:29:54 +0200
-Subject: [Buildroot] [PATCH] package/python3: security bump to version 3.9.4
-Message-ID: <20210405152954.28824-1-peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon,  5 Apr 2021 17:32:48 +0200
+Subject: [Buildroot] [PATCH] boot/at91bootstrap: add legal information
+Message-ID: <20210405153249.1352356-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issues:
+The old at91bootstrap version (1.x) uses a strange variant of the BSD
+license, called "BSD Source Code Attribution" and referenced by SPDX
+as BSD-Source-Code.
 
-- bpo-42988: CVE-2021-3426: Remove the getfile feature of the pydoc module
-  which could be abused to read arbitrary files on the disk (directory
-  traversal vulnerability).  Moreover, even source code of Python modules
-  can contain sensitive data like passwords.  Vulnerability reported by
-  David Schw?rer.
-
-- bpo-43285: ftplib no longer trusts the IP address value returned from the
-  server in response to the PASV command by default.  This prevents a
-  malicious FTP server from using the response to probe IPv4 address and
-  port combinations on the client network.
-
-  Code that requires the former vulnerable behavior may set a
-  trust_server_pasv_ipv4_address attribute on their ftplib.FTP instances to
-  True to re-enable it.
-
-- bpo-43439: Add audit hooks for gc.get_objects(), gc.get_referrers() and
-  gc.get_referents().  Patch by Pablo Galindo.
-
-Note: 3.9.3 was recalled due to introducing unintentional ABI
-incompatibility, and fixes re-released as 3.9.4:
-
-https://www.python.org/downloads/release/python-394/
-
-Add host-autoreconf-archive, as it is needed for autoreconf since:
-https://github.com/python/cpython/commit/064bc07f241dceec2fc577cbf5c31fa6d63fe320
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python3/python3.hash | 6 +++---
- package/python3/python3.mk   | 5 +++--
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ boot/at91bootstrap/at91bootstrap.hash | 1 +
+ boot/at91bootstrap/at91bootstrap.mk   | 2 ++
+ 2 files changed, 3 insertions(+)
 
-diff --git a/package/python3/python3.hash b/package/python3/python3.hash
-index 753973721b..2a0ba6ab4f 100644
---- a/package/python3/python3.hash
-+++ b/package/python3/python3.hash
-@@ -1,5 +1,5 @@
--# From https://www.python.org/downloads/release/python-392/
--md5  f0dc9000312abeb16de4eccce9a870ab  Python-3.9.2.tar.xz
-+# From https://www.python.org/downloads/release/python-394/
-+md5  2a3dba5fc75b695c45cf1806156e1a97  Python-3.9.4.tar.xz
- # Locally computed
--sha256  3c2034c54f811448f516668dce09d24008a0716c3a794dd8639b5388cbde247d  Python-3.9.2.tar.xz
-+sha256  4b0e6644a76f8df864ae24ac500a51bbf68bd098f6a173e27d3b61cdca9aa134  Python-3.9.4.tar.xz
- sha256  599826df92bfdcd2702eac691072498bb096c55af04ee984cf90f70ed77b5a70  LICENSE
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index def34f46ad..345c6a8699 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/boot/at91bootstrap/at91bootstrap.hash b/boot/at91bootstrap/at91bootstrap.hash
+index b1f963b825..e4a6760f12 100644
+--- a/boot/at91bootstrap/at91bootstrap.hash
++++ b/boot/at91bootstrap/at91bootstrap.hash
+@@ -1,2 +1,3 @@
+ # locally computed
+ sha256  d66192a274247f4baa39fa932eadf903d7add55641d89d30402f967c4f2282a5  AT91Bootstrap1.16.zip
++sha256  cb53ea8cf7a54929944de5de10569f51068af4f6d63ddfe8735759bdd8cebf38  main.c
+diff --git a/boot/at91bootstrap/at91bootstrap.mk b/boot/at91bootstrap/at91bootstrap.mk
+index c68b56b6ec..001427855f 100644
+--- a/boot/at91bootstrap/at91bootstrap.mk
++++ b/boot/at91bootstrap/at91bootstrap.mk
+@@ -7,6 +7,8 @@
+ AT91BOOTSTRAP_VERSION = 1.16
+ AT91BOOTSTRAP_SITE = ftp://www.at91.com/pub/at91bootstrap
+ AT91BOOTSTRAP_SOURCE = AT91Bootstrap$(AT91BOOTSTRAP_VERSION).zip
++AT91BOOTSTRAP_LICENSE = BSD-Source-Code
++AT91BOOTSTRAP_LICENSE_FILES = main.c
  
- PYTHON3_VERSION_MAJOR = 3.9
--PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).2
-+PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).4
- PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
- PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
- PYTHON3_LICENSE = Python-2.0, others
-@@ -41,7 +41,7 @@ HOST_PYTHON3_CONF_ENV += \
- 
- PYTHON3_DEPENDENCIES = host-python3 libffi
- 
--HOST_PYTHON3_DEPENDENCIES = host-expat host-zlib host-libffi
-+HOST_PYTHON3_DEPENDENCIES = host-autoconf-archive host-expat host-zlib host-libffi
- 
- ifeq ($(BR2_PACKAGE_HOST_PYTHON3_SSL),y)
- HOST_PYTHON3_DEPENDENCIES += host-openssl
-@@ -242,6 +242,7 @@ endef
- PYTHON3_POST_INSTALL_TARGET_HOOKS += PYTHON3_ENSURE_LIBPYTHON_STRIPPED
- 
- PYTHON3_AUTORECONF = YES
-+PYTHON3_AUTORECONF_OPTS = --include=$(HOST_DIR)/share/autoconf-archive
- 
- define PYTHON3_INSTALL_SYMLINK
- 	ln -fs python3 $(TARGET_DIR)/usr/bin/python
+ AT91BOOTSTRAP_BOARD = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP_BOARD))
+ AT91BOOTSTRAP_MEMORY = $(call qstrip,$(BR2_TARGET_AT91BOOTSTRAP_MEMORY))
 -- 
-2.20.1
+2.30.2
