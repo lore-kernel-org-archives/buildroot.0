@@ -1,36 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 5 Apr 2021 09:29:41 +0200
-Subject: [Buildroot] [git commit] package/python-ecdsa: add
- PYTHON_ECDSA_CPE_ID_VENDOR
-Message-ID: <20210405070517.A29907FB91@busybox.osuosl.org>
+Date: Mon, 5 Apr 2021 09:29:06 +0200
+Subject: [Buildroot] [git commit] package/python-pyopenssl: add CPE variables
+Message-ID: <20210405070517.8468E7FB91@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c0747ee4f483121bf0657ccbf4e8ed1b659ddd6d
+commit: https://git.buildroot.net/buildroot/commit/?id=c16848b938e6f7b4652dd487766f18086c2c0730
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:python-ecdsa_project:python-ecdsa is a valid CPE identifier
-for this package:
+cpe:2.3:a:pyopenssl:pyopenssl is a valid CPE identifier for this
+package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Apython-ecdsa_project%3Apython-ecdsa
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Apyopenssl%3Apyopenssl
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-ecdsa/python-ecdsa.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/python-pyopenssl/python-pyopenssl.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/python-ecdsa/python-ecdsa.mk b/package/python-ecdsa/python-ecdsa.mk
-index ffb51a3aa5..1178c378fb 100644
---- a/package/python-ecdsa/python-ecdsa.mk
-+++ b/package/python-ecdsa/python-ecdsa.mk
-@@ -10,5 +10,6 @@ PYTHON_ECDSA_SITE = https://files.pythonhosted.org/packages/e3/7c/b508ade1feb47c
- PYTHON_ECDSA_SETUP_TYPE = setuptools
- PYTHON_ECDSA_LICENSE = MIT
- PYTHON_ECDSA_LICENSE_FILES = LICENSE
-+PYTHON_ECDSA_CPE_ID_VENDOR = python-ecdsa_project
+diff --git a/package/python-pyopenssl/python-pyopenssl.mk b/package/python-pyopenssl/python-pyopenssl.mk
+index bbbd836a1b..a7ea7edfde 100644
+--- a/package/python-pyopenssl/python-pyopenssl.mk
++++ b/package/python-pyopenssl/python-pyopenssl.mk
+@@ -9,6 +9,8 @@ PYTHON_PYOPENSSL_SOURCE = pyOpenSSL-$(PYTHON_PYOPENSSL_VERSION).tar.gz
+ PYTHON_PYOPENSSL_SITE = https://files.pythonhosted.org/packages/0d/1d/6cc4bd4e79f78be6640fab268555a11af48474fac9df187c3361a1d1d2f0
+ PYTHON_PYOPENSSL_LICENSE = Apache-2.0
+ PYTHON_PYOPENSSL_LICENSE_FILES = LICENSE
++PYTHON_PYOPENSSL_CPE_ID_VENDOR = pyopenssl
++PYTHON_PYOPENSSL_CPE_ID_PRODUCT = pyopenssl
+ PYTHON_PYOPENSSL_SETUP_TYPE = setuptools
  
  $(eval $(python-package))
