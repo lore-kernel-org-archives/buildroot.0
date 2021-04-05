@@ -1,49 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 05 Apr 2021 18:37:43 +0200
-Subject: [Buildroot] [PATCH] boot/at91bootstrap: add legal information
-In-Reply-To: <20210405153249.1352356-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Mon, 5 Apr 2021 17:32:48 +0200")
-References: <20210405153249.1352356-1-thomas.petazzoni@bootlin.com>
-Message-ID: <87blasr8ko.fsf@dell.be.48ers.dk>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon,  5 Apr 2021 18:45:36 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-psutil: add CPE variables
+Message-ID: <20210405164536.4154610-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+cpe:2.3:a:psutil_project:psutil is a valid CPE identifier for this
+package:
 
- > The old at91bootstrap version (1.x) uses a strange variant of the BSD
- > license, called "BSD Source Code Attribution" and referenced by SPDX
- > as BSD-Source-Code.
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Apsutil_project%3Apsutil
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- > ---
- >  boot/at91bootstrap/at91bootstrap.hash | 1 +
- >  boot/at91bootstrap/at91bootstrap.mk   | 2 ++
- >  2 files changed, 3 insertions(+)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/python-psutil/python-psutil.mk   | 2 ++
+ package/python3-psutil/python3-psutil.mk | 2 ++
+ 2 files changed, 4 insertions(+)
 
- > diff --git a/boot/at91bootstrap/at91bootstrap.hash b/boot/at91bootstrap/at91bootstrap.hash
- > index b1f963b825..e4a6760f12 100644
- > --- a/boot/at91bootstrap/at91bootstrap.hash
- > +++ b/boot/at91bootstrap/at91bootstrap.hash
- > @@ -1,2 +1,3 @@
- >  # locally computed
- >  sha256  d66192a274247f4baa39fa932eadf903d7add55641d89d30402f967c4f2282a5  AT91Bootstrap1.16.zip
- > +sha256  cb53ea8cf7a54929944de5de10569f51068af4f6d63ddfe8735759bdd8cebf38  main.c
- > diff --git a/boot/at91bootstrap/at91bootstrap.mk b/boot/at91bootstrap/at91bootstrap.mk
- > index c68b56b6ec..001427855f 100644
- > --- a/boot/at91bootstrap/at91bootstrap.mk
- > +++ b/boot/at91bootstrap/at91bootstrap.mk
- > @@ -7,6 +7,8 @@
- >  AT91BOOTSTRAP_VERSION = 1.16
- >  AT91BOOTSTRAP_SITE = ftp://www.at91.com/pub/at91bootstrap
- >  AT91BOOTSTRAP_SOURCE = AT91Bootstrap$(AT91BOOTSTRAP_VERSION).zip
- > +AT91BOOTSTRAP_LICENSE = BSD-Source-Code
- > +AT91BOOTSTRAP_LICENSE_FILES = main.c
-
-Hmm, this doesn't work very well if someone patches main.c :/ But OK, I
-don't really know how common that is / what to do about it.
-
+diff --git a/package/python-psutil/python-psutil.mk b/package/python-psutil/python-psutil.mk
+index 19d97a6f97..9dbc472213 100644
+--- a/package/python-psutil/python-psutil.mk
++++ b/package/python-psutil/python-psutil.mk
+@@ -11,5 +11,7 @@ PYTHON_PSUTIL_SITE = https://files.pythonhosted.org/packages/aa/3e/d18f2c04cf2b5
+ PYTHON_PSUTIL_SETUP_TYPE = setuptools
+ PYTHON_PSUTIL_LICENSE = BSD-3-Clause
+ PYTHON_PSUTIL_LICENSE_FILES = LICENSE
++PYTHON_PSUTIL_CPE_ID_VENDOR = psutil_project
++PYTHON_PSUTIL_CPE_ID_PRODUCT = psutil
+ 
+ $(eval $(python-package))
+diff --git a/package/python3-psutil/python3-psutil.mk b/package/python3-psutil/python3-psutil.mk
+index febf0d3edb..029e1b1c12 100644
+--- a/package/python3-psutil/python3-psutil.mk
++++ b/package/python3-psutil/python3-psutil.mk
+@@ -11,6 +11,8 @@ PYTHON3_PSUTIL_SITE = https://files.pythonhosted.org/packages/aa/3e/d18f2c04cf2b
+ PYTHON3_PSUTIL_SETUP_TYPE = setuptools
+ PYTHON3_PSUTIL_LICENSE = BSD-3-Clause
+ PYTHON3_PSUTIL_LICENSE_FILES = LICENSE
++PYTHON3_PSUTIL_CPE_ID_VENDOR = psutil_project
++PYTHON3_PSUTIL_CPE_ID_PRODUCT = psutil
+ HOST_PYTHON3_PSUTIL_DL_SUBDIR = python-psutil
+ HOST_PYTHON3_PSUTIL_NEEDS_HOST_PYTHON = python3
+ 
 -- 
-Bye, Peter Korsgaard
+2.30.2
