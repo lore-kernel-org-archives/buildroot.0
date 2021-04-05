@@ -1,47 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 5 Apr 2021 18:30:12 +0200
-Subject: [Buildroot] [git commit] package/boinc: bump to version 7.16.16
-Message-ID: <20210405160910.AD56B8C581@busybox.osuosl.org>
+Date: Mon, 5 Apr 2021 18:34:10 +0200
+Subject: [Buildroot] [git commit] package/python-ecdsa: bump to version
+ 0.16.1
+Message-ID: <20210405160910.C65538C581@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=57eaa13382dfa6b38a3d5630756513df5a18736d
+commit: https://git.buildroot.net/buildroot/commit/?id=e1cdaeb454f5c609837326e1ba3dd7cb836db9cd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Update indentation in hash file (two spaces)
 
+https://github.com/tlsfuzzer/python-ecdsa/blob/python-ecdsa-0.16.1/NEWS
+
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/boinc/boinc.hash | 6 +++---
- package/boinc/boinc.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-ecdsa/python-ecdsa.hash | 6 +++---
+ package/python-ecdsa/python-ecdsa.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/boinc/boinc.hash b/package/boinc/boinc.hash
-index b842b6c017..0482b0589c 100644
---- a/package/boinc/boinc.hash
-+++ b/package/boinc/boinc.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256 caa567da8d3eb50859efe2eeba1c23c7b27d3b0f15b548136e75302713b25303  boinc-7.16.6.tar.gz
--sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
--sha256 a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LESSER
-+sha256  0d5656a9f8ed1048936a5764270848b892d63f27bdb863d0ace447f1eaae6002  boinc-7.16.16.tar.gz
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-+sha256  a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LESSER
-diff --git a/package/boinc/boinc.mk b/package/boinc/boinc.mk
-index fe972181df..c8eecdc559 100644
---- a/package/boinc/boinc.mk
-+++ b/package/boinc/boinc.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/python-ecdsa/python-ecdsa.hash b/package/python-ecdsa/python-ecdsa.hash
+index efe396bf0a..fcb8093826 100644
+--- a/package/python-ecdsa/python-ecdsa.hash
++++ b/package/python-ecdsa/python-ecdsa.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/ecdsa/json
+-md5	821d543047941dd26f543f62912230d4  ecdsa-0.15.tar.gz
+-sha256	8f12ac317f8a1318efa75757ef0a651abe12e51fc1af8838fb91079445227277  ecdsa-0.15.tar.gz
++md5  98c0da4c046286e892fdba727f93edea  ecdsa-0.16.1.tar.gz
++sha256  cfc046a2ddd425adbd1a78b3c46f0d1325c657811c0f45ecc3a0a6236c1e50ff  ecdsa-0.16.1.tar.gz
+ # Locally computed sha256 checksums
+-sha256	3eca9845773d2e5b8cc9d8c119d345f00a4806e4bd660d4a3d6cdf9c0e9d8bb2  LICENSE
++sha256  3eca9845773d2e5b8cc9d8c119d345f00a4806e4bd660d4a3d6cdf9c0e9d8bb2  LICENSE
+diff --git a/package/python-ecdsa/python-ecdsa.mk b/package/python-ecdsa/python-ecdsa.mk
+index 1178c378fb..75c970518e 100644
+--- a/package/python-ecdsa/python-ecdsa.mk
++++ b/package/python-ecdsa/python-ecdsa.mk
+@@ -4,9 +4,9 @@
+ #
  ################################################################################
  
- BOINC_VERSION_MAJOR = 7.16
--BOINC_VERSION = $(BOINC_VERSION_MAJOR).6
-+BOINC_VERSION = $(BOINC_VERSION_MAJOR).16
- BOINC_SITE = \
- 	$(call github,BOINC,boinc,client_release/$(BOINC_VERSION_MAJOR)/$(BOINC_VERSION))
- BOINC_LICENSE = LGPL-3.0+
+-PYTHON_ECDSA_VERSION = 0.15
++PYTHON_ECDSA_VERSION = 0.16.1
+ PYTHON_ECDSA_SOURCE = ecdsa-$(PYTHON_ECDSA_VERSION).tar.gz
+-PYTHON_ECDSA_SITE = https://files.pythonhosted.org/packages/e3/7c/b508ade1feb47cd79222e06d85e477f5cfc4fb0455ad3c70eb6330fc49aa
++PYTHON_ECDSA_SITE = https://files.pythonhosted.org/packages/1d/d4/0684a83b3c16a9d1446ace27a506cef1db9b23984ac7ed6aaf764fdd56e8
+ PYTHON_ECDSA_SETUP_TYPE = setuptools
+ PYTHON_ECDSA_LICENSE = MIT
+ PYTHON_ECDSA_LICENSE_FILES = LICENSE
