@@ -1,35 +1,37 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Mon,  5 Apr 2021 12:25:45 +0200
-Subject: [Buildroot] [PATCH 2/2] package/luarocks: improve detection of
- license files
-In-Reply-To: <20210405102545.176490-1-francois.perrad@gadz.org>
-References: <20210405102545.176490-1-francois.perrad@gadz.org>
-Message-ID: <20210405102545.176490-2-francois.perrad@gadz.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon,  5 Apr 2021 12:25:50 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/python-markdown2: add PYTHON_MARKDOWN2_CPE_ID_VENDOR
+Message-ID: <20210405102550.3566334-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/luarocks/buildroot.lua | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+cpe:2.3:a:python-markdown2_project:python-markdown2 is a valid CPE
+identifier for this package:
 
-diff --git a/package/luarocks/buildroot.lua b/package/luarocks/buildroot.lua
-index 67dac33aa..2d160f02b 100644
---- a/package/luarocks/buildroot.lua
-+++ b/package/luarocks/buildroot.lua
-@@ -380,8 +380,8 @@ function buildroot.command(args)
-    if #licenses == 0 then
-       for i = 1, #files do
-          local v = files[i]
--         if v:match('^doc/LICENSE')
--            or v:match('^doc/license')
-+         if v:match('^docs?/LICENSE')
-+            or v:match('^docs?/license')
-             or v:match('^doc/us/license') then
-             licenses[#licenses+1] = v
-             digest[v], err = get_digest(v)
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Apython-markdown2_project%3Apython-markdown2
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2:
+ - Drop PYTHON_MARKDOWN2_CPE_ID_PRODUCT
+
+ package/python-markdown2/python-markdown2.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/python-markdown2/python-markdown2.mk b/package/python-markdown2/python-markdown2.mk
+index c7858a3966..3ffa35796f 100644
+--- a/package/python-markdown2/python-markdown2.mk
++++ b/package/python-markdown2/python-markdown2.mk
+@@ -10,5 +10,6 @@ PYTHON_MARKDOWN2_SITE = https://files.pythonhosted.org/packages/14/69/c542025f80
+ PYTHON_MARKDOWN2_SETUP_TYPE = setuptools
+ PYTHON_MARKDOWN2_LICENSE = MIT
+ PYTHON_MARKDOWN2_LICENSE_FILES = LICENSE.txt
++PYTHON_MARKDOWN2_CPE_ID_VENDOR = python-markdown2_project
+ 
+ $(eval $(python-package))
 -- 
-2.27.0
+2.30.2
