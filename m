@@ -1,49 +1,48 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon,  5 Apr 2021 11:44:02 +0200
-Subject: [Buildroot] [PATCH 1/1] package/expat: bump to version 2.3.0
-Message-ID: <20210405094402.3541746-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 5 Apr 2021 11:45:17 +0200
+Subject: [Buildroot] [PATCH 1/1] package/bash: remove development files
+ and modules on the target.
+In-Reply-To: <20210331081559.29619-1-nicolas.cavallari@green-communications.fr>
+References: <20210331081559.29619-1-nicolas.cavallari@green-communications.fr>
+Message-ID: <20210405114517.54157434@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://github.com/libexpat/libexpat/blob/R_2_3_0/expat/Changes
+Hello Nicolas,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/expat/expat.hash | 8 ++++----
- package/expat/expat.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+On Wed, 31 Mar 2021 10:15:59 +0200
+Nicolas Cavallari <nicolas.cavallari@green-communications.fr> wrote:
 
-diff --git a/package/expat/expat.hash b/package/expat/expat.hash
-index 5a8dd41280..dd448982fe 100644
---- a/package/expat/expat.hash
-+++ b/package/expat/expat.hash
-@@ -1,7 +1,7 @@
--# From https://sourceforge.net/projects/expat/files/expat/2.2.10/
--md5  e0fe49a6b3480827c9455e4cfc799133  expat-2.2.10.tar.xz
--sha1  a333b95121a718a77ee481dbade5efcd72a32eb8  expat-2.2.10.tar.xz
-+# From https://sourceforge.net/projects/expat/files/expat/2.3.0/
-+md5  1c1b523a8d917e6d9f7af4f8881d8ec5  expat-2.3.0.tar.xz
-+sha1  596a37d048b357a58990a538a8d83e2e38325122  expat-2.3.0.tar.xz
- 
- # Locally calculated
--sha256  5dfe538f8b5b63f03e98edac520d7d9a6a4d22e482e5c96d4d06fcc5485c25f2  expat-2.2.10.tar.xz
-+sha256  caa34f99b6e3bcea8502507eb6549a0a84510b244a748dfb287271b2d47467a9  expat-2.3.0.tar.xz
- sha256  8c6b5b6de8fae20b317f4992729abc0e520bfba4c7606cd1e9eeb87418eebdec  COPYING
-diff --git a/package/expat/expat.mk b/package/expat/expat.mk
-index 4acbade2c8..04ea413e1b 100644
---- a/package/expat/expat.mk
-+++ b/package/expat/expat.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--EXPAT_VERSION = 2.2.10
-+EXPAT_VERSION = 2.3.0
- EXPAT_SITE = http://downloads.sourceforge.net/project/expat/expat/$(EXPAT_VERSION)
- EXPAT_SOURCE = expat-$(EXPAT_VERSION).tar.xz
- EXPAT_INSTALL_STAGING = YES
+> diff --git a/package/bash/bash.mk b/package/bash/bash.mk
+> index efe7cbbe59..6af31f182d 100644
+> --- a/package/bash/bash.mk
+> +++ b/package/bash/bash.mk
+> @@ -41,7 +41,8 @@ endif
+>  define BASH_INSTALL_TARGET_CMDS
+>  	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
+>  		DESTDIR=$(TARGET_DIR) exec_prefix=/ install
+> -	rm -f $(TARGET_DIR)/bin/bashbug
+> +	rm -f $(TARGET_DIR)/bin/bashbug $(TARGET_DIR)/lib/pkgconfig/bash.pc
+
+I am wondering if target-finalize shouldn't take care of removing
+/lib/pkgconfig just like it removes /usr/lib/pkgconfig. This would have
+the benefit of also dropping the /lib/pkgconfig folder, which your
+change doesn't do.
+
+What do you think?
+
+> +	rm -rf $(TARGET_DIR)/lib/bash
+>  endef
+>  
+>  # Add /bin/bash to /etc/shells otherwise some login tools like dropbear
+
+Thanks,
+
+Thomas
 -- 
-2.30.2
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
