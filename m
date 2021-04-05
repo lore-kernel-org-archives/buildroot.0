@@ -1,95 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon,  5 Apr 2021 22:21:52 +0200
-Subject: [Buildroot] [PATCH 1/4] boot/shim: fix build issue due to gnu-efi
+Date: Mon,  5 Apr 2021 22:21:55 +0200
+Subject: [Buildroot] [PATCH 4/4] boot/shim: re-enable on ARM32
 In-Reply-To: <20210405202155.1422470-1-thomas.petazzoni@bootlin.com>
 References: <20210405202155.1422470-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20210405202155.1422470-2-thomas.petazzoni@bootlin.com>
+Message-ID: <20210405202155.1422470-5-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-shim fails to build with:
-
-console.c:448:5: error: ?EFI_WARN_UNKOWN_GLYPH? undeclared here (not in a function); did you mean ?EFI_WARN_UNKNOWN_GLYPH??
-  448 |  {  EFI_WARN_UNKOWN_GLYPH,      L"Warning Unknown Glyph"},
-      |     ^~~~~~~~~~~~~~~~~~~~~
-      |     EFI_WARN_UNKNOWN_GLYPH
-make[2]: *** [<builtin>: console.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-
-Backport upstream commit d230d02f990f02293736dca78b108f86c86d1bd0 to
-resolve this issue.
+shim 15.4 builds just fine on ARM32.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...po-in-the-EFI-warning-list-in-gnu-ef.patch | 57 +++++++++++++++++++
- 1 file changed, 57 insertions(+)
- create mode 100644 boot/shim/0001-console-Fix-a-typo-in-the-EFI-warning-list-in-gnu-ef.patch
+ boot/shim/Config.in | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/boot/shim/0001-console-Fix-a-typo-in-the-EFI-warning-list-in-gnu-ef.patch b/boot/shim/0001-console-Fix-a-typo-in-the-EFI-warning-list-in-gnu-ef.patch
-new file mode 100644
-index 0000000000..77d1b54f16
---- /dev/null
-+++ b/boot/shim/0001-console-Fix-a-typo-in-the-EFI-warning-list-in-gnu-ef.patch
-@@ -0,0 +1,57 @@
-+From b00d7f63df7ee6f74a63515f1469768e9cb2aa7a Mon Sep 17 00:00:00 2001
-+From: Peter Jones <pjones@redhat.com>
-+Date: Mon, 26 Aug 2019 16:12:05 -0400
-+Subject: [PATCH] console: Fix a typo in the EFI warning list in gnu-efi
-+
-+Some versions of gnu-efi have a typo, in which "EFI_WARN_UNKNOWN_GLYPH"
-+is accidentally "EFI_WARN_UNKOWN_GLYPH".  Work around that, so that we
-+can use the not-silly one in console.c's list of error and warning
-+messages.
-+
-+This is a backport from devel for:
-+
-+  commit 5f62b22ccd636d326b3229a2b196118701c6f3f7
-+  Author: Peter Jones <pjones@redhat.com>
-+  Date:   Mon Aug 26 16:12:05 2019 -0400
-+
-+Signed-off-by: Peter Jones <pjones@redhat.com>
-+Upstream: d230d02f990f02293736dca78b108f86c86d1bd0
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ include/console.h | 6 ++++++
-+ lib/console.c     | 2 +-
-+ 2 files changed, 7 insertions(+), 1 deletion(-)
-+
-+diff --git a/include/console.h b/include/console.h
-+index deb4fa3..00da98d 100644
-+--- a/include/console.h
-++++ b/include/console.h
-+@@ -7,6 +7,12 @@
-+ #define PrintAt(fmt, ...) \
-+ 	({"Do not directly call PrintAt() use console_print_at() instead" = 1;});
-+ 
-++#if !defined(EFI_WARN_UNKNOWN_GLYPH) && defined(EFI_WARN_UNKOWN_GLYPH)
-++#define EFI_WARN_UNKNOWN_GLYPH EFI_WARN_UNKOWN_GLYPH
-++#elif !defined(EFI_WARN_UNKNOWN_GLYPH)
-++#define EFI_WARN_UNKNOWN_GLYPH EFIWARN(1)
-++#endif
-++
-+ EFI_STATUS
-+ console_get_keystroke(EFI_INPUT_KEY *key);
-+ UINTN
-+diff --git a/lib/console.c b/lib/console.c
-+index 3aee41c..ccd4d4d 100644
-+--- a/lib/console.c
-++++ b/lib/console.c
-+@@ -445,7 +445,7 @@ static struct {
-+ 	{  EFI_SECURITY_VIOLATION,     L"Security Violation"},
-+ 
-+ 	// warnings
-+-	{  EFI_WARN_UNKOWN_GLYPH,      L"Warning Unknown Glyph"},
-++	{  EFI_WARN_UNKNOWN_GLYPH,     L"Warning Unknown Glyph"},
-+ 	{  EFI_WARN_DELETE_FAILURE,    L"Warning Delete Failure"},
-+ 	{  EFI_WARN_WRITE_FAILURE,     L"Warning Write Failure"},
-+ 	{  EFI_WARN_BUFFER_TOO_SMALL,  L"Warning Buffer Too Small"},
-+-- 
-+2.30.2
-+
+diff --git a/boot/shim/Config.in b/boot/shim/Config.in
+index 596ff5b2cf..2f74d6f332 100644
+--- a/boot/shim/Config.in
++++ b/boot/shim/Config.in
+@@ -2,8 +2,6 @@ config BR2_TARGET_SHIM
+ 	bool "shim"
+ 	# it includes gnu-efi
+ 	depends on BR2_PACKAGE_GNU_EFI_ARCH_SUPPORTS
+-	# ARM32 build currently broken
+-	depends on !BR2_ARM_CPU_HAS_ARM
+ 	help
+ 	  Boot loader to chain-load signed boot loaders under Secure
+ 	  Boot.
 -- 
 2.30.2
