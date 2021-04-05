@@ -1,73 +1,83 @@
-From: Joris OFFOUGA <offougajoris@gmail.com>
-Date: Mon, 5 Apr 2021 22:41:16 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-colorlog: bump to
- version 4.8.0
-In-Reply-To: <20210405203631.791084-1-fontaine.fabrice@gmail.com>
-References: <20210405203631.791084-1-fontaine.fabrice@gmail.com>
-Message-ID: <CACr73kDEmX+PrAArSmZuf=2=HPgV7hyZqO4+4-OpZDag3A6O7w@mail.gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 5 Apr 2021 23:08:10 +0200
+Subject: [Buildroot] [PATCH 1/1] package/cifs-utils: add missing python
+ dependencies
+In-Reply-To: <20210403145221.GA2252@scaer>
+References: <20210403132349.2220750-1-fontaine.fabrice@gmail.com>
+ <20210403145221.GA2252@scaer>
+Message-ID: <20210405230810.78ad41b4@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabrice,
+Hello Fabrice, Yann,
 
-Thanks for update.
+On Sat, 3 Apr 2021 16:52:21 +0200, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-Acked-by Joris Offouga <offougajoris@gmail.com>
+> Fabrice, All,
+>
+> On 2021-04-03 15:23 +0200, Fabrice Fontaine spake thusly:
+> > Add missing python dependencies which have been forgotten when bumping
+> > to version 6.12 in commit b5dede7d1a03ab2b8caa0a8e79b09c8df6c62fe4
+> >
+> > Fixes:
+> >  - http://autobuild.buildroot.org/results/acdbf7c58ec8ae648f8048bc75650dcdcdca6285
 
-Best regards,
+This autobuild failure points to an libffi error...., quick search of the last
+autobuild mails did not show an an cifs-utils error (or I did not find it), which
+failure is this commit fixing?
 
-Le lun. 5 avr. 2021 ? 22:36, Fabrice Fontaine <fontaine.fabrice@gmail.com>
-a ?crit :
+> >
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > ---
+> >  package/cifs-utils/Config.in | 7 +++++++
+> >  1 file changed, 7 insertions(+)
+> >
+> > diff --git a/package/cifs-utils/Config.in b/package/cifs-utils/Config.in
+> > index 0e61243de4..55829e3dc2 100644
+> > --- a/package/cifs-utils/Config.in
+> > +++ b/package/cifs-utils/Config.in
+> > @@ -18,9 +18,16 @@ if BR2_PACKAGE_CIFS_UTILS
+> >
+> >  config BR2_PACKAGE_CIFS_UTILS_SMBTOOLS
+> >  	bool "smbtools"
+> > +	depends on BR2_USE_WCHAR # python
+> > +	depends on BR2_TOOLCHAIN_HAS_THREADS # python
+> > +	depends on !BR2_STATIC_LIBS # python
+>
+> We select python3, not python, so the added dependencies are because of
+> python3, not python.
+>
+> Comments fixed accordingly, and patch applied to master, thanks.
+>
+> Regards,
+> Yann E. MORIN.
+>
+> >  	select BR2_PACKAGE_PYTHON3 if !BR2_PACKAGE_PYTHON # runtime
 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/python-colorlog/python-colorlog.hash | 4 ++--
->  package/python-colorlog/python-colorlog.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+If this commit is fixing an error (and there is a build time dependency on
+python) than, this comment 'runtime' is no longer valid...
+
+Regards,
+Peter
+
+
+> >  	help
+> >  	  Install the smb tools smbinfo and smb2-quota (python
+> >  	  implementations).
+> >
+> > +comment "smbtools needs a toolchain w/ wchar, threads, dynamic library"
+> > +	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+> > +		BR2_STATIC_LIBS
+> > +
+> >  endif
+> > --
+> > 2.30.2
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
 >
-> diff --git a/package/python-colorlog/python-colorlog.hash
-> b/package/python-colorlog/python-colorlog.hash
-> index 4613cf0d3c..7c6fb73be7 100644
-> --- a/package/python-colorlog/python-colorlog.hash
-> +++ b/package/python-colorlog/python-colorlog.hash
-> @@ -1,5 +1,5 @@
->  # md5, sha256 from https://pypi.org/pypi/colorlog/json
-> -md5  28500337c5bffc2a90dd19551479c992  colorlog-4.7.2.tar.gz
-> -sha256  18d05b616438a75762d7d214b9ec3b05d274466c9f3ddd92807e755840c88251
-> colorlog-4.7.2.tar.gz
-> +md5  2111508f7c512976a34b107c17586f79  colorlog-4.8.0.tar.gz
-> +sha256  59b53160c60902c405cdec28d38356e09d40686659048893e026ecbd589516b1
-> colorlog-4.8.0.tar.gz
->  # Locally computed sha256 checksums
->  sha256  915d2c0c578d5015fb561f69ce2970a0d0ed566f0b99bdb6a4ebb439e9c81b0d
-> LICENSE
-> diff --git a/package/python-colorlog/python-colorlog.mk
-> b/package/python-colorlog/python-colorlog.mk
-> index ba1ef7247b..eb4074d464 100644
-> --- a/package/python-colorlog/python-colorlog.mk
-> +++ b/package/python-colorlog/python-colorlog.mk
-> @@ -4,9 +4,9 @@
->  #
->
->  ################################################################################
->
-> -PYTHON_COLORLOG_VERSION = 4.7.2
-> +PYTHON_COLORLOG_VERSION = 4.8.0
->  PYTHON_COLORLOG_SOURCE = colorlog-$(PYTHON_COLORLOG_VERSION).tar.gz
-> -PYTHON_COLORLOG_SITE =
-> https://files.pythonhosted.org/packages/b2/d8/7bd0e6aa6b7dc93611f90a847eefcd048d3cae66dc8867c72486362bdfbd
-> +PYTHON_COLORLOG_SITE =
-> https://files.pythonhosted.org/packages/75/32/cdfba08674d72fe7895a8ec7be8f171e8502274999cae9497e4545404873
->  PYTHON_COLORLOG_SETUP_TYPE = setuptools
->  PYTHON_COLORLOG_LICENSE = MIT
->  PYTHON_COLORLOG_LICENSE_FILES = LICENSE
-> --
-> 2.30.2
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210405/fce8f6ea/attachment.html>
