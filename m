@@ -1,36 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 5 Apr 2021 18:16:44 +0200
-Subject: [Buildroot] [git commit] package/python-networkx: add CPE variables
-Message-ID: <20210405160039.549308B774@busybox.osuosl.org>
+Date: Mon, 5 Apr 2021 18:13:57 +0200
+Subject: [Buildroot] [git commit] package/python-bsdiff4: add CPE variables
+Message-ID: <20210405160039.08BB58D3CA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1175f4604486d4db2bfd1f45369fc0c65804f5ca
+commit: https://git.buildroot.net/buildroot/commit/?id=09bd087911b81d41e89841c0c82684012f1d6478
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:python:networkx is a valid CPE identifier for this package:
+cpe:2.3:a:pypi:bsdiff4 is a valid CPE identifier for this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Apython%3Anetworkx
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Apypi%3Absdiff4
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-networkx/python-networkx.mk | 2 ++
+ package/python-bsdiff4/python-bsdiff4.mk | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/python-networkx/python-networkx.mk b/package/python-networkx/python-networkx.mk
-index 2efc53d628..8ebbc84bde 100644
---- a/package/python-networkx/python-networkx.mk
-+++ b/package/python-networkx/python-networkx.mk
-@@ -9,6 +9,8 @@ PYTHON_NETWORKX_SOURCE = networkx-$(PYTHON_NETWORKX_VERSION).tar.gz
- PYTHON_NETWORKX_SITE = https://pypi.python.org/packages/bf/63/7b579dd3b1c49ce6b7fd8f6f864038f255201410905dd183cf7f4a3845cf
- PYTHON_NETWORKX_LICENSE = BSD-3-Clause
- PYTHON_NETWORKX_LICENSE_FILES = LICENSE.txt
-+PYTHON_NETWORKX_CPE_ID_VENDOR = python
-+PYTHON_NETWORKX_CPE_ID_PRODUCT = networkx
- PYTHON_NETWORKX_SETUP_TYPE = setuptools
- HOST_PYTHON_NETWORKX_DEPENDENCIES = host-python3-decorator
- HOST_PYTHON_NETWORKX_NEEDS_HOST_PYTHON = python3
+diff --git a/package/python-bsdiff4/python-bsdiff4.mk b/package/python-bsdiff4/python-bsdiff4.mk
+index 7bc607b2d6..3b789ac9b4 100644
+--- a/package/python-bsdiff4/python-bsdiff4.mk
++++ b/package/python-bsdiff4/python-bsdiff4.mk
+@@ -9,6 +9,8 @@ PYTHON_BSDIFF4_SOURCE = bsdiff4-$(PYTHON_BSDIFF4_VERSION).tar.gz
+ PYTHON_BSDIFF4_SITE = https://files.pythonhosted.org/packages/9b/ca/06cd939630ca78125c36489f92b52918980cbcfee2dcc0969411eb5ae8a8
+ PYTHON_BSDIFF4_LICENSE = BSD-2-Clause, BSD-Protection (core.c)
+ PYTHON_BSDIFF4_LICENSE_FILES = LICENSE
++PYTHON_BSDIFF4_CPE_ID_VENDOR = pypi
++PYTHON_BSDIFF4_CPE_ID_PRODUCT = bsdiff4
+ PYTHON_BSDIFF4_SETUP_TYPE = distutils
+ 
+ $(eval $(python-package))
