@@ -1,66 +1,96 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon,  5 Apr 2021 19:30:27 +0200
-Subject: [Buildroot] [PATCH 2/2] package/python-py: security bump to version
- 1.10.0
-In-Reply-To: <20210405173027.4159626-1-fontaine.fabrice@gmail.com>
-References: <20210405173027.4159626-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210405173027.4159626-2-fontaine.fabrice@gmail.com>
+Date: Mon,  5 Apr 2021 20:32:44 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libfreeglut: fix build with gcc 10
+Message-ID: <20210405183244.123585-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix CVE-2020-29651: A denial of service via regular expression in the
-py.path.svnwc component of py (aka python-py) through 1.9.0 could be
-used by attackers to cause a compute-time denial of service attack by
-supplying malicious input to the blame functionality.
-
-Add py/_vendored_packages/iniconfig-1.1.1.dist-info/LICENSE (MIT) which
-has been added with
-https://github.com/pytest-dev/py/commit/94cf44fd41d957eb50773d3e4fb54e931836779e
-
-https://github.com/pytest-dev/py/blob/1.10.0/CHANGELOG.rst
+Fixes:
+ - http://autobuild.buildroot.org/results/48c11cfc19784cc9c3ba5c6ba3d91ddae192734e
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/python-py/python-py.hash | 5 +++--
- package/python-py/python-py.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ ...ropped-up-with-the-release-of-gcc-10.patch | 69 +++++++++++++++++++
+ 1 file changed, 69 insertions(+)
+ create mode 100644 package/libfreeglut/0001-Work-around-for-an-issue-which-cropped-up-with-the-release-of-gcc-10.patch
 
-diff --git a/package/python-py/python-py.hash b/package/python-py/python-py.hash
-index 98e16fd97b..2d9928f376 100644
---- a/package/python-py/python-py.hash
-+++ b/package/python-py/python-py.hash
-@@ -1,5 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/py/json
--md5  b80db4e61eef724f49feb4d20b649e62  py-1.9.0.tar.gz
--sha256  9ca6883ce56b4e8da7e79ac18787889fa5206c79dcc67fb065376cd2fe03f342  py-1.9.0.tar.gz
-+md5  5f108bfe00d5468cbdb8071051f86a55  py-1.10.0.tar.gz
-+sha256  21b81bda15b66ef5e1a777a21c4dcd9c20ad3efd0b3f817e7a809035269e1bd3  py-1.10.0.tar.gz
- # Locally computed sha256 checksums
- sha256  2af680c39ef493fb82830356d1d3df1acb5a06033cba2dec7a19e21caa77a866  LICENSE
-+sha256  2af680c39ef493fb82830356d1d3df1acb5a06033cba2dec7a19e21caa77a866  py/_vendored_packages/iniconfig-1.1.1.dist-info/LICENSE
-diff --git a/package/python-py/python-py.mk b/package/python-py/python-py.mk
-index 2e9d18ab1a..d8cb6fa544 100644
---- a/package/python-py/python-py.mk
-+++ b/package/python-py/python-py.mk
-@@ -4,13 +4,13 @@
- #
- ################################################################################
- 
--PYTHON_PY_VERSION = 1.9.0
-+PYTHON_PY_VERSION = 1.10.0
- PYTHON_PY_SOURCE = py-$(PYTHON_PY_VERSION).tar.gz
--PYTHON_PY_SITE = https://files.pythonhosted.org/packages/97/a6/ab9183fe08f69a53d06ac0ee8432bc0ffbb3989c575cc69b73a0229a9a99
-+PYTHON_PY_SITE = https://files.pythonhosted.org/packages/0d/8c/50e9f3999419bb7d9639c37e83fa9cdcf0f601a9d407162d6c37ad60be71
- PYTHON_PY_DEPENDENCIES = host-python-setuptools-scm
- PYTHON_PY_SETUP_TYPE = setuptools
- PYTHON_PY_LICENSE = MIT
--PYTHON_PY_LICENSE_FILES = LICENSE
-+PYTHON_PY_LICENSE_FILES = LICENSE py/_vendored_packages/iniconfig-1.1.1.dist-info/LICENSE
- PYTHON_PY_CPE_ID_VENDOR = pytest
- PYTHON_PY_CPE_ID_PRODUCT = py
- 
+diff --git a/package/libfreeglut/0001-Work-around-for-an-issue-which-cropped-up-with-the-release-of-gcc-10.patch b/package/libfreeglut/0001-Work-around-for-an-issue-which-cropped-up-with-the-release-of-gcc-10.patch
+new file mode 100644
+index 0000000000..e98e71537f
+--- /dev/null
++++ b/package/libfreeglut/0001-Work-around-for-an-issue-which-cropped-up-with-the-release-of-gcc-10.patch
+@@ -0,0 +1,69 @@
++From b9998bbc1e1c329f6bf69c24606a2be7a4973b8c Mon Sep 17 00:00:00 2001
++From: jtsiomb <jtsiomb@7f0cb862-5218-0410-a997-914c9d46530a>
++Date: Fri, 21 Feb 2020 22:25:31 +0000
++Subject: [PATCH] Work-around for an issue which cropped up with the release of
++ gcc-10. In their infinite wisdom, they decided to build with -fno-common as
++ default from now on, breaking every piece of C code which used to declare
++ common symbols in header files, as was the convention since the dawn of time.
++ We now have to duplicate all declarations to an arbitrary source file, and
++ change the header-file ones to prefix them with extern.
++
++git-svn-id: https://svn.code.sf.net/p/freeglut/code/trunk at 1863 7f0cb862-5218-0410-a997-914c9d46530a
++[Retrieved from:
++https://github.com/dcnieho/FreeGLUT/commit/b9998bbc1e1c329f6bf69c24606a2be7a4973b8c]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ freeglut/freeglut/src/fg_gl2.c | 14 ++++++++++++++
++ freeglut/freeglut/src/fg_gl2.h | 14 +++++++-------
++ 2 files changed, 21 insertions(+), 7 deletions(-)
++
++diff --git a/src/fg_gl2.c b/src/fg_gl2.c
++index 38b0acbb..54b4285b 100644
++--- a/src/fg_gl2.c
+++++ b/src/fg_gl2.c
++@@ -27,6 +27,20 @@
++ #include "fg_internal.h"
++ #include "fg_gl2.h"
++ 
+++#ifndef GL_ES_VERSION_2_0
+++/* GLES2 has the corresponding entry points built-in, and these fgh-prefixed
+++ * names are defined in fg_gl2.h header to reference them, for any other case,
+++ * define them as function pointers here.
+++ */
+++FGH_PFNGLGENBUFFERSPROC fghGenBuffers;
+++FGH_PFNGLDELETEBUFFERSPROC fghDeleteBuffers;
+++FGH_PFNGLBINDBUFFERPROC fghBindBuffer;
+++FGH_PFNGLBUFFERDATAPROC fghBufferData;
+++FGH_PFNGLENABLEVERTEXATTRIBARRAYPROC fghEnableVertexAttribArray;
+++FGH_PFNGLDISABLEVERTEXATTRIBARRAYPROC fghDisableVertexAttribArray;
+++FGH_PFNGLVERTEXATTRIBPOINTERPROC fghVertexAttribPointer;
+++#endif
+++
++ void FGAPIENTRY glutSetVertexAttribCoord3(GLint attrib) {
++   if (fgStructure.CurrentWindow != NULL)
++     fgStructure.CurrentWindow->Window.attribute_v_coord = attrib;
++diff --git a/src/fg_gl2.h b/src/fg_gl2.h
++index ab8ba5c7..fb3d4676 100644
++--- a/src/fg_gl2.h
+++++ b/src/fg_gl2.h
++@@ -67,13 +67,13 @@ typedef void (APIENTRY *FGH_PFNGLENABLEVERTEXATTRIBARRAYPROC) (GLuint index);
++ typedef void (APIENTRY *FGH_PFNGLDISABLEVERTEXATTRIBARRAYPROC) (GLuint);
++ typedef void (APIENTRY *FGH_PFNGLVERTEXATTRIBPOINTERPROC) (GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid *pointer);
++ 
++-FGH_PFNGLGENBUFFERSPROC fghGenBuffers;
++-FGH_PFNGLDELETEBUFFERSPROC fghDeleteBuffers;
++-FGH_PFNGLBINDBUFFERPROC fghBindBuffer;
++-FGH_PFNGLBUFFERDATAPROC fghBufferData;
++-FGH_PFNGLENABLEVERTEXATTRIBARRAYPROC fghEnableVertexAttribArray;
++-FGH_PFNGLDISABLEVERTEXATTRIBARRAYPROC fghDisableVertexAttribArray;
++-FGH_PFNGLVERTEXATTRIBPOINTERPROC fghVertexAttribPointer;
+++extern FGH_PFNGLGENBUFFERSPROC fghGenBuffers;
+++extern FGH_PFNGLDELETEBUFFERSPROC fghDeleteBuffers;
+++extern FGH_PFNGLBINDBUFFERPROC fghBindBuffer;
+++extern FGH_PFNGLBUFFERDATAPROC fghBufferData;
+++extern FGH_PFNGLENABLEVERTEXATTRIBARRAYPROC fghEnableVertexAttribArray;
+++extern FGH_PFNGLDISABLEVERTEXATTRIBARRAYPROC fghDisableVertexAttribArray;
+++extern FGH_PFNGLVERTEXATTRIBPOINTERPROC fghVertexAttribPointer;
++ 
++ #    endif
++ 
 -- 
 2.30.2
