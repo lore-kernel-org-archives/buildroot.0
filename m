@@ -1,73 +1,50 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 5 Apr 2021 11:52:25 +0200
-Subject: [Buildroot] [PATCH 1/1] package/expat: bump to version 2.3.0
-In-Reply-To: <20210405094402.3541746-1-fontaine.fabrice@gmail.com>
-References: <20210405094402.3541746-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210405095225.GP2252@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon,  5 Apr 2021 11:53:16 +0200
+Subject: [Buildroot] [PATCH 1/1] package/lcms2: bump to version 2.12
+Message-ID: <20210405095316.3563933-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Update hash of COPYING (word wrap:
+https://github.com/mm2/Little-CMS/commit/48a1b9a1cae31b6ae001cd1963ab0170b9bebb34)
 
-On 2021-04-05 11:44 +0200, Fabrice Fontaine spake thusly:
-> https://github.com/libexpat/libexpat/blob/R_2_3_0/expat/Changes
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+https://littlecms.com/blog/2021/02/06/lcms2-2.12
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/lcms2/lcms2.hash | 8 ++++----
+ package/lcms2/lcms2.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/expat/expat.hash | 8 ++++----
->  package/expat/expat.mk   | 2 +-
->  2 files changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/package/expat/expat.hash b/package/expat/expat.hash
-> index 5a8dd41280..dd448982fe 100644
-> --- a/package/expat/expat.hash
-> +++ b/package/expat/expat.hash
-> @@ -1,7 +1,7 @@
-> -# From https://sourceforge.net/projects/expat/files/expat/2.2.10/
-> -md5  e0fe49a6b3480827c9455e4cfc799133  expat-2.2.10.tar.xz
-> -sha1  a333b95121a718a77ee481dbade5efcd72a32eb8  expat-2.2.10.tar.xz
-> +# From https://sourceforge.net/projects/expat/files/expat/2.3.0/
-> +md5  1c1b523a8d917e6d9f7af4f8881d8ec5  expat-2.3.0.tar.xz
-> +sha1  596a37d048b357a58990a538a8d83e2e38325122  expat-2.3.0.tar.xz
->  
->  # Locally calculated
-> -sha256  5dfe538f8b5b63f03e98edac520d7d9a6a4d22e482e5c96d4d06fcc5485c25f2  expat-2.2.10.tar.xz
-> +sha256  caa34f99b6e3bcea8502507eb6549a0a84510b244a748dfb287271b2d47467a9  expat-2.3.0.tar.xz
->  sha256  8c6b5b6de8fae20b317f4992729abc0e520bfba4c7606cd1e9eeb87418eebdec  COPYING
-> diff --git a/package/expat/expat.mk b/package/expat/expat.mk
-> index 4acbade2c8..04ea413e1b 100644
-> --- a/package/expat/expat.mk
-> +++ b/package/expat/expat.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -EXPAT_VERSION = 2.2.10
-> +EXPAT_VERSION = 2.3.0
->  EXPAT_SITE = http://downloads.sourceforge.net/project/expat/expat/$(EXPAT_VERSION)
->  EXPAT_SOURCE = expat-$(EXPAT_VERSION).tar.xz
->  EXPAT_INSTALL_STAGING = YES
-> -- 
-> 2.30.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/lcms2/lcms2.hash b/package/lcms2/lcms2.hash
+index c0916820f7..8477610ff0 100644
+--- a/package/lcms2/lcms2.hash
++++ b/package/lcms2/lcms2.hash
+@@ -1,5 +1,5 @@
+-# From https://sourceforge.net/projects/lcms/files/lcms/2.11
+-sha1  7413047c74de29e20caa5c9afc1b12bf07bbf7a7  lcms2-2.11.tar.gz
++# From https://sourceforge.net/projects/lcms/files/lcms/2.12
++sha1  3d0c0276fcd3930b80c424512ec0b1ed54ec1497  lcms2-2.12.tar.gz
+ # Locally computed:
+-sha256  dc49b9c8e4d7cdff376040571a722902b682a795bf92985a85b48854c270772e  lcms2-2.11.tar.gz
+-sha256  53ad5ca11b8f4079e9c9bfa61575927a33f53526d6d414287149ec3ab61e8e4d  COPYING
++sha256  18663985e864100455ac3e507625c438c3710354d85e5cbb7cd4043e11fe10f5  lcms2-2.12.tar.gz
++sha256  46d4e05af3bce75332a12d01f19bcce7e32b6bac544be28a64043d0231291e31  COPYING
+diff --git a/package/lcms2/lcms2.mk b/package/lcms2/lcms2.mk
+index 44b9965a80..49ddccd82b 100644
+--- a/package/lcms2/lcms2.mk
++++ b/package/lcms2/lcms2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LCMS2_VERSION = 2.11
++LCMS2_VERSION = 2.12
+ LCMS2_SITE = http://downloads.sourceforge.net/project/lcms/lcms/$(LCMS2_VERSION)
+ LCMS2_LICENSE = MIT
+ LCMS2_LICENSE_FILES = COPYING
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.30.2
