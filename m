@@ -1,48 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 5 Apr 2021 11:45:17 +0200
-Subject: [Buildroot] [PATCH 1/1] package/bash: remove development files
- and modules on the target.
-In-Reply-To: <20210331081559.29619-1-nicolas.cavallari@green-communications.fr>
-References: <20210331081559.29619-1-nicolas.cavallari@green-communications.fr>
-Message-ID: <20210405114517.54157434@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 5 Apr 2021 11:41:57 +0200
+Subject: [Buildroot] [git commit] package/python-web2py: add CPE variables
+Message-ID: <20210405092115.1AE957F9EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Nicolas,
+commit: https://git.buildroot.net/buildroot/commit/?id=f684bc46ca1a14d701f019e108e04eea01128ba3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 31 Mar 2021 10:15:59 +0200
-Nicolas Cavallari <nicolas.cavallari@green-communications.fr> wrote:
+cpe:2.3:a:web2py:web2py is a valid CPE identifier for this package:
 
-> diff --git a/package/bash/bash.mk b/package/bash/bash.mk
-> index efe7cbbe59..6af31f182d 100644
-> --- a/package/bash/bash.mk
-> +++ b/package/bash/bash.mk
-> @@ -41,7 +41,8 @@ endif
->  define BASH_INSTALL_TARGET_CMDS
->  	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
->  		DESTDIR=$(TARGET_DIR) exec_prefix=/ install
-> -	rm -f $(TARGET_DIR)/bin/bashbug
-> +	rm -f $(TARGET_DIR)/bin/bashbug $(TARGET_DIR)/lib/pkgconfig/bash.pc
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aweb2py%3Aweb2py
 
-I am wondering if target-finalize shouldn't take care of removing
-/lib/pkgconfig just like it removes /usr/lib/pkgconfig. This would have
-the benefit of also dropping the /lib/pkgconfig folder, which your
-change doesn't do.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/python-web2py/python-web2py.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-What do you think?
-
-> +	rm -rf $(TARGET_DIR)/lib/bash
->  endef
->  
->  # Add /bin/bash to /etc/shells otherwise some login tools like dropbear
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/python-web2py/python-web2py.mk b/package/python-web2py/python-web2py.mk
+index 07251ba53c..26214a8110 100644
+--- a/package/python-web2py/python-web2py.mk
++++ b/package/python-web2py/python-web2py.mk
+@@ -8,6 +8,8 @@ PYTHON_WEB2PY_VERSION = 2.20.4
+ PYTHON_WEB2PY_SITE = $(call github,web2py,web2py,v$(PYTHON_WEB2PY_VERSION))
+ PYTHON_WEB2PY_LICENSE = LGPL-3.0
+ PYTHON_WEB2PY_LICENSE_FILES = LICENSE
++PYTHON_WEB2PY_CPE_ID_VENDOR = web2py
++PYTHON_WEB2PY_CPE_ID_PRODUCT = web2py
+ PYTHON_WEB2PY_DEPENDENCIES = $(if $(BR2_PACKAGE_PYTHON3),host-python3 python3,host-python python) \
+ 	host-python-pydal host-python-yatl
+ 
