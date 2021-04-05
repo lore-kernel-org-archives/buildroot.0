@@ -1,34 +1,27 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon,  5 Apr 2021 00:01:54 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-enum34: add CPE variables
-Message-ID: <20210404220154.3446147-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 05 Apr 2021 09:25:33 +0200
+Subject: [Buildroot] [PATCH v2] package/syslog-ng: Bump version to 3.31.2
+In-Reply-To: <20210404200658.23108-1-judge.packham@gmail.com> (Chris Packham's
+ message of "Mon, 5 Apr 2021 08:06:58 +1200")
+References: <20210404200658.23108-1-judge.packham@gmail.com>
+Message-ID: <87tuolw5ua.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:python:enum34 is a valid CPE identifier for this package:
+>>>>> "Chris" == Chris Packham <judge.packham@gmail.com> writes:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Apython%3Aenum34
+ > https://github.com/syslog-ng/syslog-ng/releases/tag/syslog-ng-3.31.2
+ > Signed-off-by: Chris Packham <judge.packham@gmail.com>
+ > ---
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/python-enum34/python-enum34.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ > Notes:
+ >     Changes in v2:
+ >     - Update version in syslog-ng.conf
 
-diff --git a/package/python-enum34/python-enum34.mk b/package/python-enum34/python-enum34.mk
-index 3d3ce38830..0bd00508aa 100644
---- a/package/python-enum34/python-enum34.mk
-+++ b/package/python-enum34/python-enum34.mk
-@@ -10,6 +10,8 @@ PYTHON_ENUM34_SITE = https://files.pythonhosted.org/packages/11/c4/2da1f4952ba47
- PYTHON_ENUM34_SETUP_TYPE = setuptools
- PYTHON_ENUM34_LICENSE = BSD-3-Clause
- PYTHON_ENUM34_LICENSE_FILES = enum/LICENSE
-+PYTHON_ENUM34_CPE_ID_VENDOR = python
-+PYTHON_ENUM34_CPE_ID_PRODUCT = enum34
- 
- $(eval $(python-package))
- $(eval $(host-python-package))
+Committed, thanks.
+
 -- 
-2.30.2
+Bye, Peter Korsgaard
