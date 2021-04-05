@@ -1,40 +1,51 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 05 Apr 2021 11:49:41 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libvips: add
- LIBVIPS_CPE_ID_VENDOR
-In-Reply-To: <877dlh84ha.fsf@tarshish> (Baruch Siach's message of "Mon, 05 Apr
- 2021 12:28:49 +0300")
-References: <20210404160652.2898792-1-fontaine.fabrice@gmail.com>
- <87y2dxx187.fsf@dell.be.48ers.dk> <877dlh84ha.fsf@tarshish>
-Message-ID: <87im51uklm.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 5 Apr 2021 11:50:29 +0200
+Subject: [Buildroot] [git commit] package/expat: bump to version 2.3.0
+Message-ID: <20210405092637.5F4538B911@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=f2720836b7701225613ca89b676571fa254cd4d8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Hi Peter,
- > On Sun, Apr 04 2021, Peter Korsgaard wrote:
- >>>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
- >> 
- >> > cpe:2.3:a:libvips_project:libvips is a valid CPE identifier for this
- >> > package:
- >> 
- >> >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alibvips_project%3Alibvips
- >> 
- >> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- >> 
- >> Committed to 2020.02.x, 2020.11.x and 2021.02.x, thanks.
+https://github.com/libexpat/libexpat/blob/R_2_3_0/expat/Changes
 
- > Not in origin/2020.11.x or origin/2020.02.x as of commits f748088fa65b
- > and eed984e34a693, respectively.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/expat/expat.hash | 8 ++++----
+ package/expat/expat.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Sorry, just me pressing the wrong macro. The CPE identifiers only make
-sense for 2021.02.x, so I've only added it there.
-
-Thanks for the heads up!
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/expat/expat.hash b/package/expat/expat.hash
+index 5a8dd41280..dd448982fe 100644
+--- a/package/expat/expat.hash
++++ b/package/expat/expat.hash
+@@ -1,7 +1,7 @@
+-# From https://sourceforge.net/projects/expat/files/expat/2.2.10/
+-md5  e0fe49a6b3480827c9455e4cfc799133  expat-2.2.10.tar.xz
+-sha1  a333b95121a718a77ee481dbade5efcd72a32eb8  expat-2.2.10.tar.xz
++# From https://sourceforge.net/projects/expat/files/expat/2.3.0/
++md5  1c1b523a8d917e6d9f7af4f8881d8ec5  expat-2.3.0.tar.xz
++sha1  596a37d048b357a58990a538a8d83e2e38325122  expat-2.3.0.tar.xz
+ 
+ # Locally calculated
+-sha256  5dfe538f8b5b63f03e98edac520d7d9a6a4d22e482e5c96d4d06fcc5485c25f2  expat-2.2.10.tar.xz
++sha256  caa34f99b6e3bcea8502507eb6549a0a84510b244a748dfb287271b2d47467a9  expat-2.3.0.tar.xz
+ sha256  8c6b5b6de8fae20b317f4992729abc0e520bfba4c7606cd1e9eeb87418eebdec  COPYING
+diff --git a/package/expat/expat.mk b/package/expat/expat.mk
+index 4acbade2c8..04ea413e1b 100644
+--- a/package/expat/expat.mk
++++ b/package/expat/expat.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-EXPAT_VERSION = 2.2.10
++EXPAT_VERSION = 2.3.0
+ EXPAT_SITE = http://downloads.sourceforge.net/project/expat/expat/$(EXPAT_VERSION)
+ EXPAT_SOURCE = expat-$(EXPAT_VERSION).tar.xz
+ EXPAT_INSTALL_STAGING = YES
