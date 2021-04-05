@@ -1,45 +1,45 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon,  5 Apr 2021 15:53:21 +0200
-Subject: [Buildroot] [PATCH 1/1] package/haproxy: bump to version 2.2.13
-Message-ID: <20210405135321.4084999-1-fontaine.fabrice@gmail.com>
+Date: Mon,  5 Apr 2021 15:59:30 +0200
+Subject: [Buildroot] [PATCH 1/1] package/boinc: bump to version 7.16.16
+Message-ID: <20210405135930.4132894-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-http://www.haproxy.org/download/2.2/src/CHANGELOG
+Update indentation in hash file (two spaces)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/haproxy/haproxy.hash | 4 ++--
- package/haproxy/haproxy.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/boinc/boinc.hash | 6 +++---
+ package/boinc/boinc.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
-index 04cb2e3c06..bea7c4bb2a 100644
---- a/package/haproxy/haproxy.hash
-+++ b/package/haproxy/haproxy.hash
-@@ -1,5 +1,5 @@
--# From: http://www.haproxy.org/download/2.2/src/haproxy-2.2.10.tar.gz.sha256
--sha256  a027e9cd8f703ba48dc193f5ae34d9aa152221f67ab58a4e939c96b9f4edd3bc  haproxy-2.2.10.tar.gz
-+# From: http://www.haproxy.org/download/2.2/src/haproxy-2.2.13.tar.gz.sha256
-+sha256  9e3e51441c70bedfb494fc9d4b4d3389a71be9a3c915ba3d6f7e8fd9a57ce160  haproxy-2.2.13.tar.gz
+diff --git a/package/boinc/boinc.hash b/package/boinc/boinc.hash
+index b842b6c017..0482b0589c 100644
+--- a/package/boinc/boinc.hash
++++ b/package/boinc/boinc.hash
+@@ -1,4 +1,4 @@
  # Locally computed:
- sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
- sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
-diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
-index 03c872e6b2..8502ab8a11 100644
---- a/package/haproxy/haproxy.mk
-+++ b/package/haproxy/haproxy.mk
+-sha256 caa567da8d3eb50859efe2eeba1c23c7b27d3b0f15b548136e75302713b25303  boinc-7.16.6.tar.gz
+-sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+-sha256 a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LESSER
++sha256  0d5656a9f8ed1048936a5764270848b892d63f27bdb863d0ace447f1eaae6002  boinc-7.16.16.tar.gz
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
++sha256  a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LESSER
+diff --git a/package/boinc/boinc.mk b/package/boinc/boinc.mk
+index fe972181df..c8eecdc559 100644
+--- a/package/boinc/boinc.mk
++++ b/package/boinc/boinc.mk
 @@ -5,7 +5,7 @@
  ################################################################################
  
- HAPROXY_VERSION_MAJOR = 2.2
--HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).10
-+HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).13
- HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
- HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
- HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
+ BOINC_VERSION_MAJOR = 7.16
+-BOINC_VERSION = $(BOINC_VERSION_MAJOR).6
++BOINC_VERSION = $(BOINC_VERSION_MAJOR).16
+ BOINC_SITE = \
+ 	$(call github,BOINC,boinc,client_release/$(BOINC_VERSION_MAJOR)/$(BOINC_VERSION))
+ BOINC_LICENSE = LGPL-3.0+
 -- 
 2.30.2
