@@ -1,52 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 5 Apr 2021 18:19:56 +0200
-Subject: [Buildroot] [git commit] package/lcms2: bump to version 2.12
-Message-ID: <20210405160039.79F4E8B774@busybox.osuosl.org>
+Date: Mon, 5 Apr 2021 18:16:08 +0200
+Subject: [Buildroot] [git commit] package/python-pyro: add CPE variables
+Message-ID: <20210405160039.4023A8D3CA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3962408c30f375c8a2a5aabb91e28dce088c224f
+commit: https://git.buildroot.net/buildroot/commit/?id=4fcc47d5ad1e54074721874f2540857fbca1a4db
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update hash of COPYING (word wrap:
-https://github.com/mm2/Little-CMS/commit/48a1b9a1cae31b6ae001cd1963ab0170b9bebb34)
+cpe:2.3:a:pyro_project:pyro is a valid CPE identifier for this package:
 
-https://littlecms.com/blog/2021/02/06/lcms2-2.12
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Apyro_project%3Apyro
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lcms2/lcms2.hash | 8 ++++----
- package/lcms2/lcms2.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-pyro/python-pyro.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/lcms2/lcms2.hash b/package/lcms2/lcms2.hash
-index c0916820f7..8477610ff0 100644
---- a/package/lcms2/lcms2.hash
-+++ b/package/lcms2/lcms2.hash
-@@ -1,5 +1,5 @@
--# From https://sourceforge.net/projects/lcms/files/lcms/2.11
--sha1  7413047c74de29e20caa5c9afc1b12bf07bbf7a7  lcms2-2.11.tar.gz
-+# From https://sourceforge.net/projects/lcms/files/lcms/2.12
-+sha1  3d0c0276fcd3930b80c424512ec0b1ed54ec1497  lcms2-2.12.tar.gz
- # Locally computed:
--sha256  dc49b9c8e4d7cdff376040571a722902b682a795bf92985a85b48854c270772e  lcms2-2.11.tar.gz
--sha256  53ad5ca11b8f4079e9c9bfa61575927a33f53526d6d414287149ec3ab61e8e4d  COPYING
-+sha256  18663985e864100455ac3e507625c438c3710354d85e5cbb7cd4043e11fe10f5  lcms2-2.12.tar.gz
-+sha256  46d4e05af3bce75332a12d01f19bcce7e32b6bac544be28a64043d0231291e31  COPYING
-diff --git a/package/lcms2/lcms2.mk b/package/lcms2/lcms2.mk
-index 44b9965a80..49ddccd82b 100644
---- a/package/lcms2/lcms2.mk
-+++ b/package/lcms2/lcms2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/python-pyro/python-pyro.mk b/package/python-pyro/python-pyro.mk
+index 06b4f457f2..235575c195 100644
+--- a/package/python-pyro/python-pyro.mk
++++ b/package/python-pyro/python-pyro.mk
+@@ -9,6 +9,8 @@ PYTHON_PYRO_SOURCE = Pyro-$(PYTHON_PYRO_VERSION).tar.gz
+ PYTHON_PYRO_SITE = https://pypi.python.org/packages/61/68/0978adae315261b87acd216517c2c7f00780396e4d1426c5412458c6a28f
+ PYTHON_PYRO_LICENSE = MIT
+ PYTHON_PYRO_LICENSE_FILES = LICENSE
++PYTHON_PYRO_CPE_ID_VENDOR = pyro_project
++PYTHON_PYRO_CPE_ID_PRODUCT = pyro
+ PYTHON_PYRO_SETUP_TYPE = setuptools
  
--LCMS2_VERSION = 2.11
-+LCMS2_VERSION = 2.12
- LCMS2_SITE = http://downloads.sourceforge.net/project/lcms/lcms/$(LCMS2_VERSION)
- LCMS2_LICENSE = MIT
- LCMS2_LICENSE_FILES = COPYING
+ $(eval $(python-package))
