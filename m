@@ -1,36 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 5 Apr 2021 09:25:52 +0200
-Subject: [Buildroot] [git commit] package/python-parso: add CPE variables
-Message-ID: <20210405070517.49E8C8C581@busybox.osuosl.org>
+Date: Mon, 5 Apr 2021 09:29:41 +0200
+Subject: [Buildroot] [git commit] package/python-ecdsa: add
+ PYTHON_ECDSA_CPE_ID_VENDOR
+Message-ID: <20210405070517.A29907FB91@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=821ba90f164c3f7d4314935b2b683b23fffbace2
+commit: https://git.buildroot.net/buildroot/commit/?id=c0747ee4f483121bf0657ccbf4e8ed1b659ddd6d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-cpe:2.3:a:parso_project:parso is a valid CPE identifier for this
-package:
+cpe:2.3:a:python-ecdsa_project:python-ecdsa is a valid CPE identifier
+for this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aparso_project%3Aparso
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Apython-ecdsa_project%3Apython-ecdsa
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-parso/python-parso.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/python-ecdsa/python-ecdsa.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/python-parso/python-parso.mk b/package/python-parso/python-parso.mk
-index a0b6af8732..b7688c2069 100644
---- a/package/python-parso/python-parso.mk
-+++ b/package/python-parso/python-parso.mk
-@@ -10,5 +10,7 @@ PYTHON_PARSO_SITE = https://files.pythonhosted.org/packages/fe/24/c30eb4be8a24b9
- PYTHON_PARSO_SETUP_TYPE = setuptools
- PYTHON_PARSO_LICENSE = MIT, Python-2.0, BSD-3-Clause (flask theme)
- PYTHON_PARSO_LICENSE_FILES = LICENSE.txt docs/_themes/flask/LICENSE test/normalizer_issue_files/LICENSE
-+PYTHON_PARSO_CPE_ID_VENDOR = parso_project
-+PYTHON_PARSO_CPE_ID_PRODUCT = parso
+diff --git a/package/python-ecdsa/python-ecdsa.mk b/package/python-ecdsa/python-ecdsa.mk
+index ffb51a3aa5..1178c378fb 100644
+--- a/package/python-ecdsa/python-ecdsa.mk
++++ b/package/python-ecdsa/python-ecdsa.mk
+@@ -10,5 +10,6 @@ PYTHON_ECDSA_SITE = https://files.pythonhosted.org/packages/e3/7c/b508ade1feb47c
+ PYTHON_ECDSA_SETUP_TYPE = setuptools
+ PYTHON_ECDSA_LICENSE = MIT
+ PYTHON_ECDSA_LICENSE_FILES = LICENSE
++PYTHON_ECDSA_CPE_ID_VENDOR = python-ecdsa_project
  
  $(eval $(python-package))
