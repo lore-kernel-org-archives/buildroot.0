@@ -1,58 +1,40 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 5 Apr 2021 11:48:54 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-web2py: add CPE variables
-In-Reply-To: <20210405093849.3531546-1-fontaine.fabrice@gmail.com>
-References: <20210405093849.3531546-1-fontaine.fabrice@gmail.com>
-Message-ID: <20210405094854.GO2252@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 05 Apr 2021 11:49:41 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libvips: add
+ LIBVIPS_CPE_ID_VENDOR
+In-Reply-To: <877dlh84ha.fsf@tarshish> (Baruch Siach's message of "Mon, 05 Apr
+ 2021 12:28:49 +0300")
+References: <20210404160652.2898792-1-fontaine.fabrice@gmail.com>
+ <87y2dxx187.fsf@dell.be.48ers.dk> <877dlh84ha.fsf@tarshish>
+Message-ID: <87im51uklm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-On 2021-04-05 11:38 +0200, Fabrice Fontaine spake thusly:
-> cpe:2.3:a:web2py:web2py is a valid CPE identifier for this package:
-> 
->   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aweb2py%3Aweb2py
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Hi Peter,
+ > On Sun, Apr 04 2021, Peter Korsgaard wrote:
+ >>>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+ >> 
+ >> > cpe:2.3:a:libvips_project:libvips is a valid CPE identifier for this
+ >> > package:
+ >> 
+ >> >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Alibvips_project%3Alibvips
+ >> 
+ >> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ >> 
+ >> Committed to 2020.02.x, 2020.11.x and 2021.02.x, thanks.
 
-Applied to master, thanks.
+ > Not in origin/2020.11.x or origin/2020.02.x as of commits f748088fa65b
+ > and eed984e34a693, respectively.
 
-Regards,
-Yann E. MORIN.
+Sorry, just me pressing the wrong macro. The CPE identifiers only make
+sense for 2021.02.x, so I've only added it there.
 
-> ---
->  package/python-web2py/python-web2py.mk | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/python-web2py/python-web2py.mk b/package/python-web2py/python-web2py.mk
-> index 07251ba53c..26214a8110 100644
-> --- a/package/python-web2py/python-web2py.mk
-> +++ b/package/python-web2py/python-web2py.mk
-> @@ -8,6 +8,8 @@ PYTHON_WEB2PY_VERSION = 2.20.4
->  PYTHON_WEB2PY_SITE = $(call github,web2py,web2py,v$(PYTHON_WEB2PY_VERSION))
->  PYTHON_WEB2PY_LICENSE = LGPL-3.0
->  PYTHON_WEB2PY_LICENSE_FILES = LICENSE
-> +PYTHON_WEB2PY_CPE_ID_VENDOR = web2py
-> +PYTHON_WEB2PY_CPE_ID_PRODUCT = web2py
->  PYTHON_WEB2PY_DEPENDENCIES = $(if $(BR2_PACKAGE_PYTHON3),host-python3 python3,host-python python) \
->  	host-python-pydal host-python-yatl
->  
-> -- 
-> 2.30.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Thanks for the heads up!
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
