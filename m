@@ -1,96 +1,80 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon,  5 Apr 2021 20:32:44 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libfreeglut: fix build with gcc 10
-Message-ID: <20210405183244.123585-1-fontaine.fabrice@gmail.com>
+From: Alexander Dahl <post@lespocky.de>
+Date: Mon, 5 Apr 2021 20:37:15 +0200
+Subject: [Buildroot] [PATCH] boot/at91bootstrap: add legal information
+In-Reply-To: <87blasr8ko.fsf@dell.be.48ers.dk>
+References: <20210405153249.1352356-1-thomas.petazzoni@bootlin.com>
+ <87blasr8ko.fsf@dell.be.48ers.dk>
+Message-ID: <20210405183714.7gtx25hqmcftnau3@falbala.internal.home.lespocky.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/48c11cfc19784cc9c3ba5c6ba3d91ddae192734e
+Hei hei,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...ropped-up-with-the-release-of-gcc-10.patch | 69 +++++++++++++++++++
- 1 file changed, 69 insertions(+)
- create mode 100644 package/libfreeglut/0001-Work-around-for-an-issue-which-cropped-up-with-the-release-of-gcc-10.patch
+On Mon, Apr 05, 2021 at 06:37:43PM +0200, Peter Korsgaard wrote:
+> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+> 
+>  > The old at91bootstrap version (1.x) uses a strange variant of the BSD
+>  > license, called "BSD Source Code Attribution" and referenced by SPDX
+>  > as BSD-Source-Code.
+> 
+>  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+>  > ---
+>  >  boot/at91bootstrap/at91bootstrap.hash | 1 +
+>  >  boot/at91bootstrap/at91bootstrap.mk   | 2 ++
+>  >  2 files changed, 3 insertions(+)
+> 
+>  > diff --git a/boot/at91bootstrap/at91bootstrap.hash b/boot/at91bootstrap/at91bootstrap.hash
+>  > index b1f963b825..e4a6760f12 100644
+>  > --- a/boot/at91bootstrap/at91bootstrap.hash
+>  > +++ b/boot/at91bootstrap/at91bootstrap.hash
+>  > @@ -1,2 +1,3 @@
+>  >  # locally computed
+>  >  sha256  d66192a274247f4baa39fa932eadf903d7add55641d89d30402f967c4f2282a5  AT91Bootstrap1.16.zip
+>  > +sha256  cb53ea8cf7a54929944de5de10569f51068af4f6d63ddfe8735759bdd8cebf38  main.c
+>  > diff --git a/boot/at91bootstrap/at91bootstrap.mk b/boot/at91bootstrap/at91bootstrap.mk
+>  > index c68b56b6ec..001427855f 100644
+>  > --- a/boot/at91bootstrap/at91bootstrap.mk
+>  > +++ b/boot/at91bootstrap/at91bootstrap.mk
+>  > @@ -7,6 +7,8 @@
+>  >  AT91BOOTSTRAP_VERSION = 1.16
+>  >  AT91BOOTSTRAP_SITE = ftp://www.at91.com/pub/at91bootstrap
+>  >  AT91BOOTSTRAP_SOURCE = AT91Bootstrap$(AT91BOOTSTRAP_VERSION).zip
+>  > +AT91BOOTSTRAP_LICENSE = BSD-Source-Code
+>  > +AT91BOOTSTRAP_LICENSE_FILES = main.c
+> 
+> Hmm, this doesn't work very well if someone patches main.c :/ But OK, I
+> don't really know how common that is / what to do about it.
 
-diff --git a/package/libfreeglut/0001-Work-around-for-an-issue-which-cropped-up-with-the-release-of-gcc-10.patch b/package/libfreeglut/0001-Work-around-for-an-issue-which-cropped-up-with-the-release-of-gcc-10.patch
-new file mode 100644
-index 0000000000..e98e71537f
---- /dev/null
-+++ b/package/libfreeglut/0001-Work-around-for-an-issue-which-cropped-up-with-the-release-of-gcc-10.patch
-@@ -0,0 +1,69 @@
-+From b9998bbc1e1c329f6bf69c24606a2be7a4973b8c Mon Sep 17 00:00:00 2001
-+From: jtsiomb <jtsiomb@7f0cb862-5218-0410-a997-914c9d46530a>
-+Date: Fri, 21 Feb 2020 22:25:31 +0000
-+Subject: [PATCH] Work-around for an issue which cropped up with the release of
-+ gcc-10. In their infinite wisdom, they decided to build with -fno-common as
-+ default from now on, breaking every piece of C code which used to declare
-+ common symbols in header files, as was the convention since the dawn of time.
-+ We now have to duplicate all declarations to an arbitrary source file, and
-+ change the header-file ones to prefix them with extern.
-+
-+git-svn-id: https://svn.code.sf.net/p/freeglut/code/trunk at 1863 7f0cb862-5218-0410-a997-914c9d46530a
-+[Retrieved from:
-+https://github.com/dcnieho/FreeGLUT/commit/b9998bbc1e1c329f6bf69c24606a2be7a4973b8c]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ freeglut/freeglut/src/fg_gl2.c | 14 ++++++++++++++
-+ freeglut/freeglut/src/fg_gl2.h | 14 +++++++-------
-+ 2 files changed, 21 insertions(+), 7 deletions(-)
-+
-+diff --git a/src/fg_gl2.c b/src/fg_gl2.c
-+index 38b0acbb..54b4285b 100644
-+--- a/src/fg_gl2.c
-++++ b/src/fg_gl2.c
-+@@ -27,6 +27,20 @@
-+ #include "fg_internal.h"
-+ #include "fg_gl2.h"
-+ 
-++#ifndef GL_ES_VERSION_2_0
-++/* GLES2 has the corresponding entry points built-in, and these fgh-prefixed
-++ * names are defined in fg_gl2.h header to reference them, for any other case,
-++ * define them as function pointers here.
-++ */
-++FGH_PFNGLGENBUFFERSPROC fghGenBuffers;
-++FGH_PFNGLDELETEBUFFERSPROC fghDeleteBuffers;
-++FGH_PFNGLBINDBUFFERPROC fghBindBuffer;
-++FGH_PFNGLBUFFERDATAPROC fghBufferData;
-++FGH_PFNGLENABLEVERTEXATTRIBARRAYPROC fghEnableVertexAttribArray;
-++FGH_PFNGLDISABLEVERTEXATTRIBARRAYPROC fghDisableVertexAttribArray;
-++FGH_PFNGLVERTEXATTRIBPOINTERPROC fghVertexAttribPointer;
-++#endif
-++
-+ void FGAPIENTRY glutSetVertexAttribCoord3(GLint attrib) {
-+   if (fgStructure.CurrentWindow != NULL)
-+     fgStructure.CurrentWindow->Window.attribute_v_coord = attrib;
-+diff --git a/src/fg_gl2.h b/src/fg_gl2.h
-+index ab8ba5c7..fb3d4676 100644
-+--- a/src/fg_gl2.h
-++++ b/src/fg_gl2.h
-+@@ -67,13 +67,13 @@ typedef void (APIENTRY *FGH_PFNGLENABLEVERTEXATTRIBARRAYPROC) (GLuint index);
-+ typedef void (APIENTRY *FGH_PFNGLDISABLEVERTEXATTRIBARRAYPROC) (GLuint);
-+ typedef void (APIENTRY *FGH_PFNGLVERTEXATTRIBPOINTERPROC) (GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid *pointer);
-+ 
-+-FGH_PFNGLGENBUFFERSPROC fghGenBuffers;
-+-FGH_PFNGLDELETEBUFFERSPROC fghDeleteBuffers;
-+-FGH_PFNGLBINDBUFFERPROC fghBindBuffer;
-+-FGH_PFNGLBUFFERDATAPROC fghBufferData;
-+-FGH_PFNGLENABLEVERTEXATTRIBARRAYPROC fghEnableVertexAttribArray;
-+-FGH_PFNGLDISABLEVERTEXATTRIBARRAYPROC fghDisableVertexAttribArray;
-+-FGH_PFNGLVERTEXATTRIBPOINTERPROC fghVertexAttribPointer;
-++extern FGH_PFNGLGENBUFFERSPROC fghGenBuffers;
-++extern FGH_PFNGLDELETEBUFFERSPROC fghDeleteBuffers;
-++extern FGH_PFNGLBINDBUFFERPROC fghBindBuffer;
-++extern FGH_PFNGLBUFFERDATAPROC fghBufferData;
-++extern FGH_PFNGLENABLEVERTEXATTRIBARRAYPROC fghEnableVertexAttribArray;
-++extern FGH_PFNGLDISABLEVERTEXATTRIBARRAYPROC fghDisableVertexAttribArray;
-++extern FGH_PFNGLVERTEXATTRIBPOINTERPROC fghVertexAttribPointer;
-+ 
-+ #    endif
-+ 
+Two remarks here:
+
+1) atbootstrap 1.16 seems to be the final version, no updates anymore.
+However patching is likely for someone with a certain combination
+board and soc not supported out of the box.
+
+2) in ptxdist license information or let's say hashes for license
+texts for packages not shipping a separate
+license file is frequently based on comment sections in source files,
+but not based on the whole file but on the comment section only. The
+packages contain information on which file and _from_ which line _to_
+which line. Only those lines containing the license information are
+extracted and hashed, making it possible to patch the file. Maybe
+that's an idea to copy?
+
+Greets
+Alex
+
 -- 
-2.30.2
+/"\ ASCII RIBBON | ?With the first link, the chain is forged. The first
+\ / CAMPAIGN     | speech censured, the first thought forbidden, the
+ X  AGAINST      | first freedom denied, chains us all irrevocably.?
+/ \ HTML MAIL    | (Jean-Luc Picard, quoting Judge Aaron Satie)
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 833 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210405/6cfe8ad1/attachment.asc>
