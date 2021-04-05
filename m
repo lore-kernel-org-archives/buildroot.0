@@ -1,49 +1,69 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon,  5 Apr 2021 21:14:18 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-iso8601: bump to version
- 0.1.14
-Message-ID: <20210405191418.330759-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon,  5 Apr 2021 21:17:53 +0200
+Subject: [Buildroot] [PATCH] package/xen: add upstream xsa-36{0, 4,
+ 8} security fixes
+Message-ID: <20210405191753.11410-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://github.com/micktwomey/pyiso8601/releases/tag/0.1.14
+Fixes the following security issues:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+- CVE-2021-3308: IRQ vector leak on x86
+  https://xenbits.xenproject.org/xsa/advisory-360.html
+
+- CVE-2021-26933: arm: The cache may not be cleaned for newly allocated
+  scrubbed pages
+  https://xenbits.xenproject.org/xsa/advisory-364.html
+
+- CVE-2021-28687: HVM soft-reset crashes toolstack
+  https://xenbits.xenproject.org/xsa/advisory-368.html
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-iso8601/python-iso8601.hash | 4 ++--
- package/python-iso8601/python-iso8601.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/xen/xen.hash |  6 ++++++
+ package/xen/xen.mk   | 13 +++++++++++++
+ 2 files changed, 19 insertions(+)
 
-diff --git a/package/python-iso8601/python-iso8601.hash b/package/python-iso8601/python-iso8601.hash
-index 18cf3958da..76dd5ec452 100644
---- a/package/python-iso8601/python-iso8601.hash
-+++ b/package/python-iso8601/python-iso8601.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/iso8601/json
--md5  df6e924305fd799d90be63336b2ab8b3  iso8601-0.1.13.tar.gz
--sha256  f7dec22af52025d4526be94cc1303c7d8f5379b746a3f54a8c8446384392eeb1  iso8601-0.1.13.tar.gz
-+md5  d6fe8ccc847aaf8ac965da3b6023e697  iso8601-0.1.14.tar.gz
-+sha256  8aafd56fa0290496c5edbb13c311f78fa3a241f0853540da09d9363eae3ebd79  iso8601-0.1.14.tar.gz
- # Locally computed sha256 checksums
- sha256  116d368d14a8cf0061027c944c60ee20b476ce42814818a7d627396906761f16  LICENSE
-diff --git a/package/python-iso8601/python-iso8601.mk b/package/python-iso8601/python-iso8601.mk
-index 3620255db4..3f128d15e4 100644
---- a/package/python-iso8601/python-iso8601.mk
-+++ b/package/python-iso8601/python-iso8601.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/xen/xen.hash b/package/xen/xen.hash
+index 95061c3fc8..6893414313 100644
+--- a/package/xen/xen.hash
++++ b/package/xen/xen.hash
+@@ -1,3 +1,9 @@
+ # Locally computed
+ sha256  cf0d7316ad674491f49b7ef0518cb1d906a2e3bfad639deef0ef2343b119ac0c  xen-4.14.1.tar.gz
+ sha256  ecca9538e9d3f7e3c2bff827502f4495e2ef9e22c451298696ea08886b176c2c  COPYING
++# https://xenbits.xenproject.org/xsa/advisory-360.html
++sha256  809515011efb781a2a8742e9acfd76412d3920c2d4142bb187588cd36f77383e  xsa360-4.14.patch
++# https://xenbits.xenproject.org/xsa/advisory-364.html
++sha256  dc313c70bb07b4096bbc4612cbbc180589923277411dede2fda37f04ecc846d6  xsa364.patch
++# https://xenbits.xenproject.org/xsa/advisory-368.html
++sha256  55bbe59c75b69f493e364dfcf6cdbc7db4acd32dbf0b4d2466815b7c1f1823ce  xsa368-4.14.patch
+diff --git a/package/xen/xen.mk b/package/xen/xen.mk
+index 3a758b7b20..533882e05b 100644
+--- a/package/xen/xen.mk
++++ b/package/xen/xen.mk
+@@ -11,6 +11,19 @@ XEN_LICENSE_FILES = COPYING
+ XEN_CPE_ID_VENDOR = xen
+ XEN_CPE_ID_PREFIX = cpe:2.3:o
+ XEN_DEPENDENCIES = host-acpica host-python3
++XEN_PATCH = \
++	https://xenbits.xenproject.org/xsa/xsa360-4.14.patch \
++	https://xenbits.xenproject.org/xsa/xsa364.patch \
++	https://xenbits.xenproject.org/xsa/xsa368-4.14.patch
++
++# xsa360-4.14.patch
++XEN_IGNORE_CVES += CVE-2021-3308
++
++# xsa364.patch
++XEN_IGNORE_CVES += CVE-2021-26933
++
++# xsa368-4.14.patch
++XEN_IGNORE_CVES += CVE-2021-28687
  
--PYTHON_ISO8601_VERSION = 0.1.13
-+PYTHON_ISO8601_VERSION = 0.1.14
- PYTHON_ISO8601_SOURCE = iso8601-$(PYTHON_ISO8601_VERSION).tar.gz
--PYTHON_ISO8601_SITE = https://files.pythonhosted.org/packages/05/90/2d9927dc2d33192f58fe39d2d216313a8380625cd4b062efb93f1afd7a29
-+PYTHON_ISO8601_SITE = https://files.pythonhosted.org/packages/f9/ed/b97abc7877e5b253eef96a469f47d617b0ebcccc735405fa1a620c7ee833
- PYTHON_ISO8601_SETUP_TYPE = setuptools
- PYTHON_ISO8601_LICENSE = MIT
- PYTHON_ISO8601_LICENSE_FILES = LICENSE
+ # Calculate XEN_ARCH
+ ifeq ($(ARCH),aarch64)
 -- 
-2.30.2
+2.20.1
