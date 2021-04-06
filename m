@@ -1,8 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue,  6 Apr 2021 18:03:41 +0200
-Subject: [Buildroot] [PATCH 1/3] package/x11r7/xdriver_xf86-input-libinput:
- bump version to 1.0.0
-Message-ID: <20210406160343.1106797-1-bernd.kuhls@t-online.de>
+Date: Tue,  6 Apr 2021 18:03:43 +0200
+Subject: [Buildroot] [PATCH 3/3] package/x11r7/xlib_libXaw: bump version to
+ 1.0.14
+In-Reply-To: <20210406160343.1106797-1-bernd.kuhls@t-online.de>
+References: <20210406160343.1106797-1-bernd.kuhls@t-online.de>
+Message-ID: <20210406160343.1106797-3-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,46 +12,42 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Release notes:
-https://lists.x.org/archives/xorg-announce/2021-April/003079.html
+https://lists.x.org/archives/xorg-announce/2021-March/003077.html
 
-Updated license hash due to upstream commit:
-https://cgit.freedesktop.org/xorg/driver/xf86-input-libinput/commit/?id=2bbc4727a12471e3699e2803404a013656066a94
+Reformatted hashes.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../xdriver_xf86-input-libinput.hash                  | 11 +++++------
- .../xdriver_xf86-input-libinput.mk                    |  2 +-
- 2 files changed, 6 insertions(+), 7 deletions(-)
+ package/x11r7/xlib_libXaw/xlib_libXaw.hash | 8 +++++---
+ package/x11r7/xlib_libXaw/xlib_libXaw.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
-index 51f0ce7856..daeb8d593a 100644
---- a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
-+++ b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.hash
-@@ -1,7 +1,6 @@
--# From https://lists.x.org/archives/xorg-announce/2020-May/003045.html
--md5  11dcfa2cc39f790731a9545fcdeea717  xf86-input-libinput-0.30.0.tar.bz2
--sha1  b705d0280b4fa7ccf44b9ff3869f5d7846e26414  xf86-input-libinput-0.30.0.tar.bz2
--sha256  f9c7f9fd41ae14061e0e9c3bd45fa170e5e21027a2bc5810034e1e748db996c0  xf86-input-libinput-0.30.0.tar.bz2
--sha512  823f80f7d53866f2f06c1fb7b2d64111bf807329acaaeda4a09413cdb5f3e3235c1dd4f99183aae75adf5a01503e40e35b4449b31f977afd842b4723b062c380  xf86-input-libinput-0.30.0.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2021-April/003079.html
-+sha256  ef55c2f66ae65da476c400205692ff77c9192bdc16fb3a285ea252267cf28a74  xf86-input-libinput-1.0.0.tar.bz2
-+sha512  8135afcdfd1d1bc8196c42680b2f3b3089ee25509776c52db4bdab0afca74d6ca1689a14b5e30a24834293d0377689138bd3ea4b249c9310d5ec5777ff3ebeb8  xf86-input-libinput-1.0.0.tar.bz2
+diff --git a/package/x11r7/xlib_libXaw/xlib_libXaw.hash b/package/x11r7/xlib_libXaw/xlib_libXaw.hash
+index 159e007bc3..f289e66153 100644
+--- a/package/x11r7/xlib_libXaw/xlib_libXaw.hash
++++ b/package/x11r7/xlib_libXaw/xlib_libXaw.hash
+@@ -1,4 +1,6 @@
+-# From http://lists.x.org/archives/xorg-announce/2015-April/002591.html
+-sha256	8ef8067312571292ccc2bbe94c41109dcf022ea5a4ec71656a83d8cce9edb0cd	libXaw-1.0.13.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2021-March/003077.html
++sha256  76aef98ea3df92615faec28004b5ce4e5c6855e716fa16de40c32030722a6f8e  libXaw-1.0.14.tar.bz2
++sha512  29d1c151369523ae6cb418e636b0b7b39ccccc35462a0b394dbeb46d5b6d780badd2eb872a55d9fbba1ee1af034e76c0463f40f8d8a7be2c336d08b3b1bf81d4  libXaw-1.0.14.tar.bz2
 +
- # Locally computed
--sha256  b808a8a077995380c6064bec41616f98546b0b2e79bb7f3d0247d290e275b396  COPYING
-+sha256  4114220b281561e80f3422f0e7ae8d3e1fc85131ffc2e3b6265119e66f1adb27  COPYING
-diff --git a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
-index 64d972cf33..4283f16b25 100644
---- a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
-+++ b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
+ # Locally calculated
+-sha256 9f5adb26952f93b3e4650285b94ec6c61a27aab5a21088bfb6694001be1b360d COPYING
++sha256  9f5adb26952f93b3e4650285b94ec6c61a27aab5a21088bfb6694001be1b360d  COPYING
+diff --git a/package/x11r7/xlib_libXaw/xlib_libXaw.mk b/package/x11r7/xlib_libXaw/xlib_libXaw.mk
+index 17d51a9570..6b615a8de5 100644
+--- a/package/x11r7/xlib_libXaw/xlib_libXaw.mk
++++ b/package/x11r7/xlib_libXaw/xlib_libXaw.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_INPUT_LIBINPUT_VERSION = 0.30.0
-+XDRIVER_XF86_INPUT_LIBINPUT_VERSION = 1.0.0
- XDRIVER_XF86_INPUT_LIBINPUT_SOURCE = xf86-input-libinput-$(XDRIVER_XF86_INPUT_LIBINPUT_VERSION).tar.bz2
- XDRIVER_XF86_INPUT_LIBINPUT_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_INPUT_LIBINPUT_LICENSE = MIT
+-XLIB_LIBXAW_VERSION = 1.0.13
++XLIB_LIBXAW_VERSION = 1.0.14
+ XLIB_LIBXAW_SOURCE = libXaw-$(XLIB_LIBXAW_VERSION).tar.bz2
+ XLIB_LIBXAW_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXAW_LICENSE = MIT
 -- 
 2.29.2
