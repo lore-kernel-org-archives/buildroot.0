@@ -1,9 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 6 Apr 2021 22:34:49 +0200
-Subject: [Buildroot] [PATCH 1/1] package/fail2ban: bump to version 0.11.2
-In-Reply-To: <20210406200910.1280756-1-fontaine.fabrice@gmail.com>
-References: <20210406200910.1280756-1-fontaine.fabrice@gmail.com>
-Message-ID: <688c0dda-7e52-6868-ab63-4f5835896292@mind.be>
+Date: Tue, 6 Apr 2021 22:34:58 +0200
+Subject: [Buildroot] [PATCH 1/1] package/check: bump to version 0.15.2
+In-Reply-To: <20210406201058.1287596-1-fontaine.fabrice@gmail.com>
+References: <20210406201058.1287596-1-fontaine.fabrice@gmail.com>
+Message-ID: <bd846ed6-50e4-e32b-6709-d4c6e6819362@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,8 +12,8 @@ To: buildroot@busybox.net
 
 
 
-On 06/04/2021 22:09, Fabrice Fontaine wrote:
-> https://github.com/fail2ban/fail2ban/blob/0.11.2/ChangeLog
+On 06/04/2021 22:10, Fabrice Fontaine wrote:
+> https://github.com/libcheck/check/releases/tag/0.15.2
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
@@ -23,30 +23,31 @@ On 06/04/2021 22:09, Fabrice Fontaine wrote:
  Arnout
 
 > ---
->  package/fail2ban/fail2ban.hash | 2 +-
->  package/fail2ban/fail2ban.mk   | 2 +-
+>  package/check/check.hash | 2 +-
+>  package/check/check.mk   | 2 +-
 >  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/fail2ban/fail2ban.hash b/package/fail2ban/fail2ban.hash
-> index f807d5a82b..072f0ef961 100644
-> --- a/package/fail2ban/fail2ban.hash
-> +++ b/package/fail2ban/fail2ban.hash
-> @@ -1,3 +1,3 @@
->  # sha256 locally computed
-> -sha256  71d2a52b66bb0f87ac3812246bdd3819ec561913cd44afd39130a342f043aa6d  fail2ban-0.11.1.tar.gz
-> +sha256  383108e5f8644cefb288537950923b7520f642e7e114efb843f6e7ea9268b1e0  fail2ban-0.11.2.tar.gz
->  sha256  a75fec0260742fe6275d63ff6a5d97b924b28766558306b3fa4069763096929b  COPYING
-> diff --git a/package/fail2ban/fail2ban.mk b/package/fail2ban/fail2ban.mk
-> index d2fe19d11e..0e465e9c0b 100644
-> --- a/package/fail2ban/fail2ban.mk
-> +++ b/package/fail2ban/fail2ban.mk
+> diff --git a/package/check/check.hash b/package/check/check.hash
+> index d00956c750..543e78f317 100644
+> --- a/package/check/check.hash
+> +++ b/package/check/check.hash
+> @@ -1,4 +1,4 @@
+>  # Locally computed
+> -sha256  c1cc3d64975c0edd8042ab90d881662f1571278f8ea79d8e3c2cc877dac60001  check-0.15.1.tar.gz
+> +sha256  a8de4e0bacfb4d76dd1c618ded263523b53b85d92a146d8835eb1a52932fa20a  check-0.15.2.tar.gz
+>  # License files, locally calculated
+>  sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LESSER
+> diff --git a/package/check/check.mk b/package/check/check.mk
+> index f80e6b63b3..be82539469 100644
+> --- a/package/check/check.mk
+> +++ b/package/check/check.mk
 > @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
 >  
-> -FAIL2BAN_VERSION = 0.11.1
-> +FAIL2BAN_VERSION = 0.11.2
->  FAIL2BAN_SITE = $(call github,fail2ban,fail2ban,$(FAIL2BAN_VERSION))
->  FAIL2BAN_LICENSE = GPL-2.0+
->  FAIL2BAN_LICENSE_FILES = COPYING
+> -CHECK_VERSION = 0.15.1
+> +CHECK_VERSION = 0.15.2
+>  CHECK_SITE = https://github.com/libcheck/check/releases/download/$(CHECK_VERSION)
+>  CHECK_INSTALL_STAGING = YES
+>  CHECK_DEPENDENCIES = host-pkgconf
 > 
