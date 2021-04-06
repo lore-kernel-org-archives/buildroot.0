@@ -1,49 +1,507 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 6 Apr 2021 09:41:16 +0200
-Subject: [Buildroot] [git commit] package/python-colorlog: bump to version
- 4.8.0
-Message-ID: <20210406071628.650A27FC90@busybox.osuosl.org>
+Date: Tue, 6 Apr 2021 09:39:11 +0200
+Subject: [Buildroot] [git commit] package/hidapi: bump to version 0.10.1
+Message-ID: <20210406071628.3E02B8D3F8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1fa1ed2672e5fdeaab31a3fd158de994d44944ee
+commit: https://git.buildroot.net/buildroot/commit/?id=02b896a06719e44de41a8b077eed75dde4ed58c8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+- Drop patch (already in version)
+- Update indentation in hash file (two spaces)
+
+https://github.com/libusb/hidapi/releases/tag/hidapi-0.10.0
+https://github.com/libusb/hidapi/releases/tag/hidapi-0.10.1
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-colorlog/python-colorlog.hash | 4 ++--
- package/python-colorlog/python-colorlog.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...ont-use-a-C-source-file-since-it-s-pure-C.patch | 445 ---------------------
+ package/hidapi/hidapi.hash                         |  10 +-
+ package/hidapi/hidapi.mk                           |   2 +-
+ 3 files changed, 6 insertions(+), 451 deletions(-)
 
-diff --git a/package/python-colorlog/python-colorlog.hash b/package/python-colorlog/python-colorlog.hash
-index 4613cf0d3c..7c6fb73be7 100644
---- a/package/python-colorlog/python-colorlog.hash
-+++ b/package/python-colorlog/python-colorlog.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/colorlog/json
--md5  28500337c5bffc2a90dd19551479c992  colorlog-4.7.2.tar.gz
--sha256  18d05b616438a75762d7d214b9ec3b05d274466c9f3ddd92807e755840c88251  colorlog-4.7.2.tar.gz
-+md5  2111508f7c512976a34b107c17586f79  colorlog-4.8.0.tar.gz
-+sha256  59b53160c60902c405cdec28d38356e09d40686659048893e026ecbd589516b1  colorlog-4.8.0.tar.gz
- # Locally computed sha256 checksums
- sha256  915d2c0c578d5015fb561f69ce2970a0d0ed566f0b99bdb6a4ebb439e9c81b0d  LICENSE
-diff --git a/package/python-colorlog/python-colorlog.mk b/package/python-colorlog/python-colorlog.mk
-index ba1ef7247b..eb4074d464 100644
---- a/package/python-colorlog/python-colorlog.mk
-+++ b/package/python-colorlog/python-colorlog.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/hidapi/0001-hidtest-dont-use-a-C-source-file-since-it-s-pure-C.patch b/package/hidapi/0001-hidtest-dont-use-a-C-source-file-since-it-s-pure-C.patch
+deleted file mode 100644
+index 4740cb7b88..0000000000
+--- a/package/hidapi/0001-hidtest-dont-use-a-C-source-file-since-it-s-pure-C.patch
++++ /dev/null
+@@ -1,445 +0,0 @@
+-From 2fb04c2245167e247b95400112b5dbea12fcb206 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Wed, 30 Dec 2015 20:02:29 +0100
+-Subject: [PATCH] hidtest: dont' use a C++ source file, since it's pure C
+-
+-This allows to build the test program with toolchains that don't have
+-C++ support.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- hidtest/Makefile.am |   6 +-
+- hidtest/hidtest.c   | 194 ++++++++++++++++++++++++++++++++++++++++++++++++++++
+- hidtest/hidtest.cpp | 194 ----------------------------------------------------
+- 3 files changed, 197 insertions(+), 197 deletions(-)
+- create mode 100644 hidtest/hidtest.c
+- delete mode 100644 hidtest/hidtest.cpp
+-
+-diff --git a/hidtest/Makefile.am b/hidtest/Makefile.am
+-index d278644..5f52c3f 100644
+---- a/hidtest/Makefile.am
+-+++ b/hidtest/Makefile.am
+-@@ -4,17 +4,17 @@ AM_CPPFLAGS = -I$(top_srcdir)/hidapi/
+- if OS_LINUX
+- noinst_PROGRAMS = hidtest-libusb hidtest-hidraw
+- 
+--hidtest_hidraw_SOURCES = hidtest.cpp
+-+hidtest_hidraw_SOURCES = hidtest.c
+- hidtest_hidraw_LDADD = $(top_builddir)/linux/libhidapi-hidraw.la
+- 
+--hidtest_libusb_SOURCES = hidtest.cpp
+-+hidtest_libusb_SOURCES = hidtest.c
+- hidtest_libusb_LDADD = $(top_builddir)/libusb/libhidapi-libusb.la
+- else
+- 
+- # Other OS's
+- noinst_PROGRAMS = hidtest
+- 
+--hidtest_SOURCES = hidtest.cpp
+-+hidtest_SOURCES = hidtest.c
+- hidtest_LDADD = $(top_builddir)/$(backend)/libhidapi.la
+- 
+- endif
+-diff --git a/hidtest/hidtest.c b/hidtest/hidtest.c
+-new file mode 100644
+-index 0000000..94f0a5c
+---- /dev/null
+-+++ b/hidtest/hidtest.c
+-@@ -0,0 +1,194 @@
+-+/*******************************************************
+-+ Windows HID simplification
+-+
+-+ Alan Ott
+-+ Signal 11 Software
+-+
+-+ 8/22/2009
+-+
+-+ Copyright 2009
+-+ 
+-+ This contents of this file may be used by anyone
+-+ for any reason without any conditions and may be
+-+ used as a starting point for your own applications
+-+ which use HIDAPI.
+-+********************************************************/
+-+
+-+#include <stdio.h>
+-+#include <wchar.h>
+-+#include <string.h>
+-+#include <stdlib.h>
+-+#include "hidapi.h"
+-+
+-+// Headers needed for sleeping.
+-+#ifdef _WIN32
+-+	#include <windows.h>
+-+#else
+-+	#include <unistd.h>
+-+#endif
+-+
+-+int main(int argc, char* argv[])
+-+{
+-+	int res;
+-+	unsigned char buf[256];
+-+	#define MAX_STR 255
+-+	wchar_t wstr[MAX_STR];
+-+	hid_device *handle;
+-+	int i;
+-+
+-+#ifdef WIN32
+-+	UNREFERENCED_PARAMETER(argc);
+-+	UNREFERENCED_PARAMETER(argv);
+-+#endif
+-+
+-+	struct hid_device_info *devs, *cur_dev;
+-+	
+-+	if (hid_init())
+-+		return -1;
+-+
+-+	devs = hid_enumerate(0x0, 0x0);
+-+	cur_dev = devs;	
+-+	while (cur_dev) {
+-+		printf("Device Found\n  type: %04hx %04hx\n  path: %s\n  serial_number: %ls", cur_dev->vendor_id, cur_dev->product_id, cur_dev->path, cur_dev->serial_number);
+-+		printf("\n");
+-+		printf("  Manufacturer: %ls\n", cur_dev->manufacturer_string);
+-+		printf("  Product:      %ls\n", cur_dev->product_string);
+-+		printf("  Release:      %hx\n", cur_dev->release_number);
+-+		printf("  Interface:    %d\n",  cur_dev->interface_number);
+-+		printf("\n");
+-+		cur_dev = cur_dev->next;
+-+	}
+-+	hid_free_enumeration(devs);
+-+
+-+	// Set up the command buffer.
+-+	memset(buf,0x00,sizeof(buf));
+-+	buf[0] = 0x01;
+-+	buf[1] = 0x81;
+-+	
+-+
+-+	// Open the device using the VID, PID,
+-+	// and optionally the Serial number.
+-+	////handle = hid_open(0x4d8, 0x3f, L"12345");
+-+	handle = hid_open(0x4d8, 0x3f, NULL);
+-+	if (!handle) {
+-+		printf("unable to open device\n");
+-+ 		return 1;
+-+	}
+-+
+-+	// Read the Manufacturer String
+-+	wstr[0] = 0x0000;
+-+	res = hid_get_manufacturer_string(handle, wstr, MAX_STR);
+-+	if (res < 0)
+-+		printf("Unable to read manufacturer string\n");
+-+	printf("Manufacturer String: %ls\n", wstr);
+-+
+-+	// Read the Product String
+-+	wstr[0] = 0x0000;
+-+	res = hid_get_product_string(handle, wstr, MAX_STR);
+-+	if (res < 0)
+-+		printf("Unable to read product string\n");
+-+	printf("Product String: %ls\n", wstr);
+-+
+-+	// Read the Serial Number String
+-+	wstr[0] = 0x0000;
+-+	res = hid_get_serial_number_string(handle, wstr, MAX_STR);
+-+	if (res < 0)
+-+		printf("Unable to read serial number string\n");
+-+	printf("Serial Number String: (%d) %ls", wstr[0], wstr);
+-+	printf("\n");
+-+
+-+	// Read Indexed String 1
+-+	wstr[0] = 0x0000;
+-+	res = hid_get_indexed_string(handle, 1, wstr, MAX_STR);
+-+	if (res < 0)
+-+		printf("Unable to read indexed string 1\n");
+-+	printf("Indexed String 1: %ls\n", wstr);
+-+
+-+	// Set the hid_read() function to be non-blocking.
+-+	hid_set_nonblocking(handle, 1);
+-+	
+-+	// Try to read from the device. There shoud be no
+-+	// data here, but execution should not block.
+-+	res = hid_read(handle, buf, 17);
+-+
+-+	// Send a Feature Report to the device
+-+	buf[0] = 0x2;
+-+	buf[1] = 0xa0;
+-+	buf[2] = 0x0a;
+-+	buf[3] = 0x00;
+-+	buf[4] = 0x00;
+-+	res = hid_send_feature_report(handle, buf, 17);
+-+	if (res < 0) {
+-+		printf("Unable to send a feature report.\n");
+-+	}
+-+
+-+	memset(buf,0,sizeof(buf));
+-+
+-+	// Read a Feature Report from the device
+-+	buf[0] = 0x2;
+-+	res = hid_get_feature_report(handle, buf, sizeof(buf));
+-+	if (res < 0) {
+-+		printf("Unable to get a feature report.\n");
+-+		printf("%ls", hid_error(handle));
+-+	}
+-+	else {
+-+		// Print out the returned buffer.
+-+		printf("Feature Report\n   ");
+-+		for (i = 0; i < res; i++)
+-+			printf("%02hhx ", buf[i]);
+-+		printf("\n");
+-+	}
+-+
+-+	memset(buf,0,sizeof(buf));
+-+
+-+	// Toggle LED (cmd 0x80). The first byte is the report number (0x1).
+-+	buf[0] = 0x1;
+-+	buf[1] = 0x80;
+-+	res = hid_write(handle, buf, 17);
+-+	if (res < 0) {
+-+		printf("Unable to write()\n");
+-+		printf("Error: %ls\n", hid_error(handle));
+-+	}
+-+	
+-+
+-+	// Request state (cmd 0x81). The first byte is the report number (0x1).
+-+	buf[0] = 0x1;
+-+	buf[1] = 0x81;
+-+	hid_write(handle, buf, 17);
+-+	if (res < 0)
+-+		printf("Unable to write() (2)\n");
+-+
+-+	// Read requested state. hid_read() has been set to be
+-+	// non-blocking by the call to hid_set_nonblocking() above.
+-+	// This loop demonstrates the non-blocking nature of hid_read().
+-+	res = 0;
+-+	while (res == 0) {
+-+		res = hid_read(handle, buf, sizeof(buf));
+-+		if (res == 0)
+-+			printf("waiting...\n");
+-+		if (res < 0)
+-+			printf("Unable to read()\n");
+-+		#ifdef WIN32
+-+		Sleep(500);
+-+		#else
+-+		usleep(500*1000);
+-+		#endif
+-+	}
+-+
+-+	printf("Data read:\n   ");
+-+	// Print out the returned buffer.
+-+	for (i = 0; i < res; i++)
+-+		printf("%02hhx ", buf[i]);
+-+	printf("\n");
+-+
+-+	hid_close(handle);
+-+
+-+	/* Free static HIDAPI objects. */
+-+	hid_exit();
+-+
+-+#ifdef WIN32
+-+	system("pause");
+-+#endif
+-+
+-+	return 0;
+-+}
+-diff --git a/hidtest/hidtest.cpp b/hidtest/hidtest.cpp
+-deleted file mode 100644
+-index 94f0a5c..0000000
+---- a/hidtest/hidtest.cpp
+-+++ /dev/null
+-@@ -1,194 +0,0 @@
+--/*******************************************************
+-- Windows HID simplification
+--
+-- Alan Ott
+-- Signal 11 Software
+--
+-- 8/22/2009
+--
+-- Copyright 2009
+-- 
+-- This contents of this file may be used by anyone
+-- for any reason without any conditions and may be
+-- used as a starting point for your own applications
+-- which use HIDAPI.
+--********************************************************/
+--
+--#include <stdio.h>
+--#include <wchar.h>
+--#include <string.h>
+--#include <stdlib.h>
+--#include "hidapi.h"
+--
+--// Headers needed for sleeping.
+--#ifdef _WIN32
+--	#include <windows.h>
+--#else
+--	#include <unistd.h>
+--#endif
+--
+--int main(int argc, char* argv[])
+--{
+--	int res;
+--	unsigned char buf[256];
+--	#define MAX_STR 255
+--	wchar_t wstr[MAX_STR];
+--	hid_device *handle;
+--	int i;
+--
+--#ifdef WIN32
+--	UNREFERENCED_PARAMETER(argc);
+--	UNREFERENCED_PARAMETER(argv);
+--#endif
+--
+--	struct hid_device_info *devs, *cur_dev;
+--	
+--	if (hid_init())
+--		return -1;
+--
+--	devs = hid_enumerate(0x0, 0x0);
+--	cur_dev = devs;	
+--	while (cur_dev) {
+--		printf("Device Found\n  type: %04hx %04hx\n  path: %s\n  serial_number: %ls", cur_dev->vendor_id, cur_dev->product_id, cur_dev->path, cur_dev->serial_number);
+--		printf("\n");
+--		printf("  Manufacturer: %ls\n", cur_dev->manufacturer_string);
+--		printf("  Product:      %ls\n", cur_dev->product_string);
+--		printf("  Release:      %hx\n", cur_dev->release_number);
+--		printf("  Interface:    %d\n",  cur_dev->interface_number);
+--		printf("\n");
+--		cur_dev = cur_dev->next;
+--	}
+--	hid_free_enumeration(devs);
+--
+--	// Set up the command buffer.
+--	memset(buf,0x00,sizeof(buf));
+--	buf[0] = 0x01;
+--	buf[1] = 0x81;
+--	
+--
+--	// Open the device using the VID, PID,
+--	// and optionally the Serial number.
+--	////handle = hid_open(0x4d8, 0x3f, L"12345");
+--	handle = hid_open(0x4d8, 0x3f, NULL);
+--	if (!handle) {
+--		printf("unable to open device\n");
+-- 		return 1;
+--	}
+--
+--	// Read the Manufacturer String
+--	wstr[0] = 0x0000;
+--	res = hid_get_manufacturer_string(handle, wstr, MAX_STR);
+--	if (res < 0)
+--		printf("Unable to read manufacturer string\n");
+--	printf("Manufacturer String: %ls\n", wstr);
+--
+--	// Read the Product String
+--	wstr[0] = 0x0000;
+--	res = hid_get_product_string(handle, wstr, MAX_STR);
+--	if (res < 0)
+--		printf("Unable to read product string\n");
+--	printf("Product String: %ls\n", wstr);
+--
+--	// Read the Serial Number String
+--	wstr[0] = 0x0000;
+--	res = hid_get_serial_number_string(handle, wstr, MAX_STR);
+--	if (res < 0)
+--		printf("Unable to read serial number string\n");
+--	printf("Serial Number String: (%d) %ls", wstr[0], wstr);
+--	printf("\n");
+--
+--	// Read Indexed String 1
+--	wstr[0] = 0x0000;
+--	res = hid_get_indexed_string(handle, 1, wstr, MAX_STR);
+--	if (res < 0)
+--		printf("Unable to read indexed string 1\n");
+--	printf("Indexed String 1: %ls\n", wstr);
+--
+--	// Set the hid_read() function to be non-blocking.
+--	hid_set_nonblocking(handle, 1);
+--	
+--	// Try to read from the device. There shoud be no
+--	// data here, but execution should not block.
+--	res = hid_read(handle, buf, 17);
+--
+--	// Send a Feature Report to the device
+--	buf[0] = 0x2;
+--	buf[1] = 0xa0;
+--	buf[2] = 0x0a;
+--	buf[3] = 0x00;
+--	buf[4] = 0x00;
+--	res = hid_send_feature_report(handle, buf, 17);
+--	if (res < 0) {
+--		printf("Unable to send a feature report.\n");
+--	}
+--
+--	memset(buf,0,sizeof(buf));
+--
+--	// Read a Feature Report from the device
+--	buf[0] = 0x2;
+--	res = hid_get_feature_report(handle, buf, sizeof(buf));
+--	if (res < 0) {
+--		printf("Unable to get a feature report.\n");
+--		printf("%ls", hid_error(handle));
+--	}
+--	else {
+--		// Print out the returned buffer.
+--		printf("Feature Report\n   ");
+--		for (i = 0; i < res; i++)
+--			printf("%02hhx ", buf[i]);
+--		printf("\n");
+--	}
+--
+--	memset(buf,0,sizeof(buf));
+--
+--	// Toggle LED (cmd 0x80). The first byte is the report number (0x1).
+--	buf[0] = 0x1;
+--	buf[1] = 0x80;
+--	res = hid_write(handle, buf, 17);
+--	if (res < 0) {
+--		printf("Unable to write()\n");
+--		printf("Error: %ls\n", hid_error(handle));
+--	}
+--	
+--
+--	// Request state (cmd 0x81). The first byte is the report number (0x1).
+--	buf[0] = 0x1;
+--	buf[1] = 0x81;
+--	hid_write(handle, buf, 17);
+--	if (res < 0)
+--		printf("Unable to write() (2)\n");
+--
+--	// Read requested state. hid_read() has been set to be
+--	// non-blocking by the call to hid_set_nonblocking() above.
+--	// This loop demonstrates the non-blocking nature of hid_read().
+--	res = 0;
+--	while (res == 0) {
+--		res = hid_read(handle, buf, sizeof(buf));
+--		if (res == 0)
+--			printf("waiting...\n");
+--		if (res < 0)
+--			printf("Unable to read()\n");
+--		#ifdef WIN32
+--		Sleep(500);
+--		#else
+--		usleep(500*1000);
+--		#endif
+--	}
+--
+--	printf("Data read:\n   ");
+--	// Print out the returned buffer.
+--	for (i = 0; i < res; i++)
+--		printf("%02hhx ", buf[i]);
+--	printf("\n");
+--
+--	hid_close(handle);
+--
+--	/* Free static HIDAPI objects. */
+--	hid_exit();
+--
+--#ifdef WIN32
+--	system("pause");
+--#endif
+--
+--	return 0;
+--}
+--- 
+-2.7.4
+-
+diff --git a/package/hidapi/hidapi.hash b/package/hidapi/hidapi.hash
+index 232c1ec48d..b49b6d1f91 100644
+--- a/package/hidapi/hidapi.hash
++++ b/package/hidapi/hidapi.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated
+-sha256 630ee1834bdd5c5761ab079fd04f463a89585df8fcae51a7bfe4229b1e02a652  hidapi-0.9.0.tar.gz
+-sha256 7d3b087c34f35d4d538e3bcddd1ff8f66e92f9ef336881999482800ddf840913  LICENSE.txt
+-sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE-gpl3.txt
+-sha256 30eb1bef29b46f8ba7ab8b416035dbd93cb034a45481dd97815b944284582cd2  LICENSE-bsd.txt
+-sha256 fb5436aa63d1b71a8dfbf74ecaf1a5b4e1ec4df7f80074d11fec99284f69ca5f  LICENSE-orig.txt
++sha256  f71dd8a1f46979c17ee521bc2117573872bbf040f8a4750e492271fc141f2644  hidapi-0.10.1.tar.gz
++sha256  7d3b087c34f35d4d538e3bcddd1ff8f66e92f9ef336881999482800ddf840913  LICENSE.txt
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE-gpl3.txt
++sha256  30eb1bef29b46f8ba7ab8b416035dbd93cb034a45481dd97815b944284582cd2  LICENSE-bsd.txt
++sha256  fb5436aa63d1b71a8dfbf74ecaf1a5b4e1ec4df7f80074d11fec99284f69ca5f  LICENSE-orig.txt
+diff --git a/package/hidapi/hidapi.mk b/package/hidapi/hidapi.mk
+index abbe5878e8..7598ef7fb9 100644
+--- a/package/hidapi/hidapi.mk
++++ b/package/hidapi/hidapi.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_COLORLOG_VERSION = 4.7.2
-+PYTHON_COLORLOG_VERSION = 4.8.0
- PYTHON_COLORLOG_SOURCE = colorlog-$(PYTHON_COLORLOG_VERSION).tar.gz
--PYTHON_COLORLOG_SITE = https://files.pythonhosted.org/packages/b2/d8/7bd0e6aa6b7dc93611f90a847eefcd048d3cae66dc8867c72486362bdfbd
-+PYTHON_COLORLOG_SITE = https://files.pythonhosted.org/packages/75/32/cdfba08674d72fe7895a8ec7be8f171e8502274999cae9497e4545404873
- PYTHON_COLORLOG_SETUP_TYPE = setuptools
- PYTHON_COLORLOG_LICENSE = MIT
- PYTHON_COLORLOG_LICENSE_FILES = LICENSE
+-HIDAPI_VERSION = 0.9.0
++HIDAPI_VERSION = 0.10.1
+ HIDAPI_SITE = $(call github,libusb,hidapi,hidapi-$(HIDAPI_VERSION))
+ HIDAPI_INSTALL_STAGING = YES
+ # No configure provided, so we need to autoreconf.
