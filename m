@@ -1,52 +1,66 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 6 Apr 2021 09:40:44 +0200
-Subject: [Buildroot] [git commit] package/python-simplelogging: bump to
- version 0.11.0
-Message-ID: <20210406071628.5978C8D3EF@busybox.osuosl.org>
+Date: Tue, 6 Apr 2021 09:33:50 +0200
+Subject: [Buildroot] [git commit] package/python-py: security bump to
+ version 1.10.0
+Message-ID: <20210406071628.007318D3F8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cdf26a0da691d445dd10cdcf1f23bcf5a7dc3deb
+commit: https://git.buildroot.net/buildroot/commit/?id=b430894d63ea1119bc7031511f0ccdc399774011
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update indentation in hash file (two spaces)
+Fix CVE-2020-29651: A denial of service via regular expression in the
+py.path.svnwc component of py (aka python-py) through 1.9.0 could be
+used by attackers to cause a compute-time denial of service attack by
+supplying malicious input to the blame functionality.
+
+Add py/_vendored_packages/iniconfig-1.1.1.dist-info/LICENSE (MIT) which
+has been added with
+https://github.com/pytest-dev/py/commit/94cf44fd41d957eb50773d3e4fb54e931836779e
+
+https://github.com/pytest-dev/py/blob/1.10.0/CHANGELOG.rst
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-simplelogging/python-simplelogging.hash | 6 +++---
- package/python-simplelogging/python-simplelogging.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-py/python-py.hash | 5 +++--
+ package/python-py/python-py.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-simplelogging/python-simplelogging.hash b/package/python-simplelogging/python-simplelogging.hash
-index 86698fe88c..6d80fb93ec 100644
---- a/package/python-simplelogging/python-simplelogging.hash
-+++ b/package/python-simplelogging/python-simplelogging.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/simplelogging/json
--md5	e3f9da393098d8fd8ebd8349a00692f2  simplelogging-0.10.0.tar.gz
--sha256	c070e0d82b68eff6918076a0edbf0a48b2c9a263854bd35f48a12c6adbbe9d80  simplelogging-0.10.0.tar.gz
-+md5  97b5f2a5cd9cff1b60c727cd03b3ffe1  simplelogging-0.11.0.tar.gz
-+sha256  23a128b47d3e88213adc51fdd102aae15a398cf459d782eb19534945d23f0bc5  simplelogging-0.11.0.tar.gz
+diff --git a/package/python-py/python-py.hash b/package/python-py/python-py.hash
+index 98e16fd97b..2d9928f376 100644
+--- a/package/python-py/python-py.hash
++++ b/package/python-py/python-py.hash
+@@ -1,5 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/py/json
+-md5  b80db4e61eef724f49feb4d20b649e62  py-1.9.0.tar.gz
+-sha256  9ca6883ce56b4e8da7e79ac18787889fa5206c79dcc67fb065376cd2fe03f342  py-1.9.0.tar.gz
++md5  5f108bfe00d5468cbdb8071051f86a55  py-1.10.0.tar.gz
++sha256  21b81bda15b66ef5e1a777a21c4dcd9c20ad3efd0b3f817e7a809035269e1bd3  py-1.10.0.tar.gz
  # Locally computed sha256 checksums
--sha256	bd2a0fe3b3bab7092ffa7f58d46bb05d98f12f107b3a6be947c098f7c2ad1d1a  LICENSE
-+sha256  bd2a0fe3b3bab7092ffa7f58d46bb05d98f12f107b3a6be947c098f7c2ad1d1a  LICENSE
-diff --git a/package/python-simplelogging/python-simplelogging.mk b/package/python-simplelogging/python-simplelogging.mk
-index 28acc5c952..556628613b 100644
---- a/package/python-simplelogging/python-simplelogging.mk
-+++ b/package/python-simplelogging/python-simplelogging.mk
-@@ -4,9 +4,9 @@
+ sha256  2af680c39ef493fb82830356d1d3df1acb5a06033cba2dec7a19e21caa77a866  LICENSE
++sha256  2af680c39ef493fb82830356d1d3df1acb5a06033cba2dec7a19e21caa77a866  py/_vendored_packages/iniconfig-1.1.1.dist-info/LICENSE
+diff --git a/package/python-py/python-py.mk b/package/python-py/python-py.mk
+index 2e9d18ab1a..d8cb6fa544 100644
+--- a/package/python-py/python-py.mk
++++ b/package/python-py/python-py.mk
+@@ -4,13 +4,13 @@
  #
  ################################################################################
  
--PYTHON_SIMPLELOGGING_VERSION = 0.10.0
-+PYTHON_SIMPLELOGGING_VERSION = 0.11.0
- PYTHON_SIMPLELOGGING_SOURCE = simplelogging-$(PYTHON_SIMPLELOGGING_VERSION).tar.gz
--PYTHON_SIMPLELOGGING_SITE = https://files.pythonhosted.org/packages/17/85/3d2431f971e703916c7254e4560ed15451faedf2461eb484da9e1ebc5da6
-+PYTHON_SIMPLELOGGING_SITE = https://files.pythonhosted.org/packages/73/d6/4c06aa7f2c3b9fc09429a1196fd357357cc555de5e16c09b2d12e9db1ebb
- PYTHON_SIMPLELOGGING_SETUP_TYPE = setuptools
- PYTHON_SIMPLELOGGING_LICENSE = BSD-3-Clause
- PYTHON_SIMPLELOGGING_LICENSE_FILES = LICENSE
+-PYTHON_PY_VERSION = 1.9.0
++PYTHON_PY_VERSION = 1.10.0
+ PYTHON_PY_SOURCE = py-$(PYTHON_PY_VERSION).tar.gz
+-PYTHON_PY_SITE = https://files.pythonhosted.org/packages/97/a6/ab9183fe08f69a53d06ac0ee8432bc0ffbb3989c575cc69b73a0229a9a99
++PYTHON_PY_SITE = https://files.pythonhosted.org/packages/0d/8c/50e9f3999419bb7d9639c37e83fa9cdcf0f601a9d407162d6c37ad60be71
+ PYTHON_PY_DEPENDENCIES = host-python-setuptools-scm
+ PYTHON_PY_SETUP_TYPE = setuptools
+ PYTHON_PY_LICENSE = MIT
+-PYTHON_PY_LICENSE_FILES = LICENSE
++PYTHON_PY_LICENSE_FILES = LICENSE py/_vendored_packages/iniconfig-1.1.1.dist-info/LICENSE
+ PYTHON_PY_CPE_ID_VENDOR = pytest
+ PYTHON_PY_CPE_ID_PRODUCT = py
+ 
