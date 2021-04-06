@@ -1,24 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 06 Apr 2021 09:46:17 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-enum34: add CPE variables
-In-Reply-To: <87mtudur27.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Mon, 05 Apr 2021 09:30:08 +0200")
-References: <20210404220154.3446147-1-fontaine.fabrice@gmail.com>
- <87mtudur27.fsf@dell.be.48ers.dk>
-Message-ID: <87y2dvlut2.fsf@dell.be.48ers.dk>
+Date: Tue, 6 Apr 2021 09:43:10 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/python-parso: add
+ CPE variables
+Message-ID: <20210406072100.213A58BE9A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
- >> cpe:2.3:a:python:enum34 is a valid CPE identifier for this package:
- >> https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Apython%3Aenum34
+commit: https://git.buildroot.net/buildroot/commit/?id=c232567a01418e37b4c4255b7c1ad1c8e46581db
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
- >> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+cpe:2.3:a:parso_project:parso is a valid CPE identifier for this
+package:
 
-Committed to 2021.02.x, thanks.
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aparso_project%3Aparso
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 821ba90f164c3f7d4314935b2b683b23fffbace2)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/python-parso/python-parso.mk | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/package/python-parso/python-parso.mk b/package/python-parso/python-parso.mk
+index a0b6af8732..b7688c2069 100644
+--- a/package/python-parso/python-parso.mk
++++ b/package/python-parso/python-parso.mk
+@@ -10,5 +10,7 @@ PYTHON_PARSO_SITE = https://files.pythonhosted.org/packages/fe/24/c30eb4be8a24b9
+ PYTHON_PARSO_SETUP_TYPE = setuptools
+ PYTHON_PARSO_LICENSE = MIT, Python-2.0, BSD-3-Clause (flask theme)
+ PYTHON_PARSO_LICENSE_FILES = LICENSE.txt docs/_themes/flask/LICENSE test/normalizer_issue_files/LICENSE
++PYTHON_PARSO_CPE_ID_VENDOR = parso_project
++PYTHON_PARSO_CPE_ID_PRODUCT = parso
+ 
+ $(eval $(python-package))
