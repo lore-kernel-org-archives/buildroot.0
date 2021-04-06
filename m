@@ -1,96 +1,44 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue,  6 Apr 2021 22:28:05 +0200
-Subject: [Buildroot] [PATCH 1/1] package/openldap: bump to version 2.4.58
-Message-ID: <20210406202805.1329072-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 6 Apr 2021 22:21:44 +0200
+Subject: [Buildroot] [git commit] package/fail2ban: bump to version 0.11.2
+Message-ID: <20210406200853.5638481D55@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop fifth patch (already in version)
+commit: https://git.buildroot.net/buildroot/commit/?id=2f1cf2eb834f18e199056adbb589f97e47e75cc8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://git.openldap.org/openldap/openldap/-/blob/OPENLDAP_REL_ENG_2_4_58/CHANGES
+https://github.com/fail2ban/fail2ban/blob/0.11.2/ChangeLog
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...TS-9454-fix-issuerAndThisUpdateCheck.patch | 26 -------------------
- package/openldap/openldap.hash                | 10 +++----
- package/openldap/openldap.mk                  |  5 +---
- 3 files changed, 6 insertions(+), 35 deletions(-)
- delete mode 100644 package/openldap/0005-ITS-9454-fix-issuerAndThisUpdateCheck.patch
+ package/fail2ban/fail2ban.hash | 2 +-
+ package/fail2ban/fail2ban.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/openldap/0005-ITS-9454-fix-issuerAndThisUpdateCheck.patch b/package/openldap/0005-ITS-9454-fix-issuerAndThisUpdateCheck.patch
-deleted file mode 100644
-index a611b9ff59..0000000000
---- a/package/openldap/0005-ITS-9454-fix-issuerAndThisUpdateCheck.patch
-+++ /dev/null
-@@ -1,26 +0,0 @@
--From 9badb73425a67768c09bcaed1a9c26c684af6c30 Mon Sep 17 00:00:00 2001
--From: Howard Chu <hyc@openldap.org>
--Date: Sat, 6 Feb 2021 20:52:06 +0000
--Subject: [PATCH] ITS#9454 fix issuerAndThisUpdateCheck
--
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- servers/slapd/schema_init.c | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/servers/slapd/schema_init.c b/servers/slapd/schema_init.c
--index 31be1154e..8b1e25539 100644
----- a/servers/slapd/schema_init.c
--+++ b/servers/slapd/schema_init.c
--@@ -3900,6 +3900,8 @@ issuerAndThisUpdateCheck(
-- 					break;
-- 				}
-- 			}
--+			if ( tu->bv_len < STRLENOF("YYYYmmddHHmmssZ") ) return LDAP_INVALID_SYNTAX;
--+
-- 			x.bv_val += tu->bv_len + 1;
-- 			x.bv_len -= tu->bv_len + 1;
-- 
---- 
--2.20.1
--
-diff --git a/package/openldap/openldap.hash b/package/openldap/openldap.hash
-index f2ffdf53bc..8ce50d6133 100644
---- a/package/openldap/openldap.hash
-+++ b/package/openldap/openldap.hash
-@@ -1,7 +1,7 @@
--# From https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.57.md5
--md5  e3349456c3a66e5e6155be7ddc3f042c  openldap-2.4.57.tgz
--# From https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.57.sha1
--sha1  1cffa70a3ea8545948041fd113f8f53bc24d6d87  openldap-2.4.57.tgz
-+# From https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.58.md5
-+md5  c203d735ba69976e5b28dc39006f29b5  openldap-2.4.58.tgz
-+# From https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.58.sha1
-+sha1  875416827be3ad63f20004510a354db0aaceb2ed  openldap-2.4.58.tgz
- # Locally computed
--sha256  c7ba47e1e6ecb5b436f3d43281df57abeffa99262141aec822628bc220f6b45a  openldap-2.4.57.tgz
-+sha256  57b59254be15d0bf6a9ab3d514c1c05777b02123291533134a87c94468f8f47b  openldap-2.4.58.tgz
- sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
-diff --git a/package/openldap/openldap.mk b/package/openldap/openldap.mk
-index ec11e4fa7d..3b35b4daa3 100644
---- a/package/openldap/openldap.mk
-+++ b/package/openldap/openldap.mk
+diff --git a/package/fail2ban/fail2ban.hash b/package/fail2ban/fail2ban.hash
+index f807d5a82b..072f0ef961 100644
+--- a/package/fail2ban/fail2ban.hash
++++ b/package/fail2ban/fail2ban.hash
+@@ -1,3 +1,3 @@
+ # sha256 locally computed
+-sha256  71d2a52b66bb0f87ac3812246bdd3819ec561913cd44afd39130a342f043aa6d  fail2ban-0.11.1.tar.gz
++sha256  383108e5f8644cefb288537950923b7520f642e7e114efb843f6e7ea9268b1e0  fail2ban-0.11.2.tar.gz
+ sha256  a75fec0260742fe6275d63ff6a5d97b924b28766558306b3fa4069763096929b  COPYING
+diff --git a/package/fail2ban/fail2ban.mk b/package/fail2ban/fail2ban.mk
+index d2fe19d11e..0e465e9c0b 100644
+--- a/package/fail2ban/fail2ban.mk
++++ b/package/fail2ban/fail2ban.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPENLDAP_VERSION = 2.4.57
-+OPENLDAP_VERSION = 2.4.58
- OPENLDAP_SOURCE = openldap-$(OPENLDAP_VERSION).tgz
- OPENLDAP_SITE = https://www.openldap.org/software/download/OpenLDAP/openldap-release
- OPENLDAP_LICENSE = OpenLDAP Public License
-@@ -13,9 +13,6 @@ OPENLDAP_CPE_ID_VENDOR = openldap
- OPENLDAP_INSTALL_STAGING = YES
- OPENLDAP_DEPENDENCIES = host-pkgconf
- 
--# 0005-ITS-9454-fix-issuerAndThisUpdateCheck.patch
--OPENLDAP_IGNORE_CVES += CVE-2021-27212
--
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- OPENLDAP_TLS = openssl
- OPENLDAP_DEPENDENCIES += openssl
--- 
-2.30.2
+-FAIL2BAN_VERSION = 0.11.1
++FAIL2BAN_VERSION = 0.11.2
+ FAIL2BAN_SITE = $(call github,fail2ban,fail2ban,$(FAIL2BAN_VERSION))
+ FAIL2BAN_LICENSE = GPL-2.0+
+ FAIL2BAN_LICENSE_FILES = COPYING
