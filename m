@@ -1,42 +1,45 @@
-From: Dick Olsson <hi@senzilla.io>
-Date: Tue, 06 Apr 2021 17:58:08 +0000
-Subject: [Buildroot] [PATCH 9/9] package/s6-rc: bump to version 0.5.2.1
-Message-ID: <bLWRGA4IHUWHV8ifGUDhbWVY8DVnxPB8bSSrJpB7JA@cp3-web-029.plabs.ch>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue,  6 Apr 2021 20:29:11 +0200
+Subject: [Buildroot] [PATCH 1/1] package/rabbitmq-c: bump to version 0.11.0
+Message-ID: <20210406182911.1261348-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-http://skarnet.org/cgi-bin/archive.cgi?1:mss:1515:mhcdpginfgieagphalne
+Update indentation in hash file (two spaces)
 
-Signed-off-by: Dick Olsson <hi@senzilla.io>
+https://github.com/alanxz/rabbitmq-c/releases/tag/v0.11.0
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/s6-rc/s6-rc.hash | 2 +-
- package/s6-rc/s6-rc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/rabbitmq-c/rabbitmq-c.hash | 4 ++--
+ package/rabbitmq-c/rabbitmq-c.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/s6-rc/s6-rc.hash b/package/s6-rc/s6-rc.hash
-index 918dc0fd2e..be96a989b8 100644
---- a/package/s6-rc/s6-rc.hash
-+++ b/package/s6-rc/s6-rc.hash
+diff --git a/package/rabbitmq-c/rabbitmq-c.hash b/package/rabbitmq-c/rabbitmq-c.hash
+index eb57626518..dc1406d3d5 100644
+--- a/package/rabbitmq-c/rabbitmq-c.hash
++++ b/package/rabbitmq-c/rabbitmq-c.hash
 @@ -1,3 +1,3 @@
- # Locally generated
--sha256 257e2c428336c2b57cd17b65382bc55592759acc65e053e23ad646444f28af52  s6-rc-0.5.1.1.tar.gz
-+sha256 2842fa55e2bddb65573d78d2c475c4a2f2b26b9258a18b457f8a0342e2fafa0a  s6-rc-0.5.2.1.tar.gz
- sha256 487e89990a571700bcdf7c0cbbde2859446f79e85e8b59791adab98fff6b1889  COPYING
-diff --git a/package/s6-rc/s6-rc.mk b/package/s6-rc/s6-rc.mk
-index 3044341371..4e0ef57d7a 100644
---- a/package/s6-rc/s6-rc.mk
-+++ b/package/s6-rc/s6-rc.mk
+ # Locally calculated
+-sha256 6455efbaebad8891c59f274a852b75b5cc51f4d669dfc78d2ae7e6cc97fcd8c0 rabbitmq-c-0.10.0.tar.gz
+-sha256 94a12c906acb31a66c2c8a6c1b6e46cab52bc5694c5ada2a06d86b05d3d3f422 LICENSE-MIT
++sha256  437d45e0e35c18cf3e59bcfe5dfe37566547eb121e69fca64b98f5d2c1c2d424  rabbitmq-c-0.11.0.tar.gz
++sha256  94a12c906acb31a66c2c8a6c1b6e46cab52bc5694c5ada2a06d86b05d3d3f422  LICENSE-MIT
+diff --git a/package/rabbitmq-c/rabbitmq-c.mk b/package/rabbitmq-c/rabbitmq-c.mk
+index e6ac52fd87..18ecaa3098 100644
+--- a/package/rabbitmq-c/rabbitmq-c.mk
++++ b/package/rabbitmq-c/rabbitmq-c.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--S6_RC_VERSION = 0.5.1.1
-+S6_RC_VERSION = 0.5.2.1
- S6_RC_SITE = http://skarnet.org/software/s6-rc
- S6_RC_LICENSE = ISC
- S6_RC_LICENSE_FILES = COPYING
+-RABBITMQ_C_VERSION = 0.10.0
++RABBITMQ_C_VERSION = 0.11.0
+ RABBITMQ_C_SITE = $(call github,alanxz,rabbitmq-c,v$(RABBITMQ_C_VERSION))
+ RABBITMQ_C_LICENSE = MIT
+ RABBITMQ_C_LICENSE_FILES = LICENSE-MIT
 -- 
 2.30.2
