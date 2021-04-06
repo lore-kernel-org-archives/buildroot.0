@@ -1,97 +1,100 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 6 Apr 2021 13:09:17 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] boot/shim: fix build
- issue due to gnu-efi
-Message-ID: <20210406104423.8380D7FCB3@busybox.osuosl.org>
+Date: Tue, 6 Apr 2021 13:02:59 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/libfreeglut: fix
+ build with gcc 10
+Message-ID: <20210406104423.5FBF482A89@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=283662245f9997c88a4698db3f8aeb3bc0823c47
+commit: https://git.buildroot.net/buildroot/commit/?id=7387cb3a05affdc167265ae8d529edfafb06975c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-shim fails to build with:
+Fixes:
+ - http://autobuild.buildroot.org/results/48c11cfc19784cc9c3ba5c6ba3d91ddae192734e
 
-console.c:448:5: error: ???EFI_WARN_UNKOWN_GLYPH??? undeclared here (not in a function); did you mean ???EFI_WARN_UNKNOWN_GLYPH????
-  448 |  {  EFI_WARN_UNKOWN_GLYPH,      L"Warning Unknown Glyph"},
-      |     ^~~~~~~~~~~~~~~~~~~~~
-      |     EFI_WARN_UNKNOWN_GLYPH
-make[2]: *** [<builtin>: console.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-
-Backport upstream commit d230d02f990f02293736dca78b108f86c86d1bd0 to
-resolve this issue.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 888f47cbce17807e3c5f07644e27f2fe37f908dc)
+(cherry picked from commit 8fd514caef4c9ec303dd72e4a8c11ec7a578328a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-a-typo-in-the-EFI-warning-list-in-gnu-ef.patch | 57 ++++++++++++++++++++++
- 1 file changed, 57 insertions(+)
+ ...ich-cropped-up-with-the-release-of-gcc-10.patch | 69 ++++++++++++++++++++++
+ 1 file changed, 69 insertions(+)
 
-diff --git a/boot/shim/0001-console-Fix-a-typo-in-the-EFI-warning-list-in-gnu-ef.patch b/boot/shim/0001-console-Fix-a-typo-in-the-EFI-warning-list-in-gnu-ef.patch
+diff --git a/package/libfreeglut/0001-Work-around-for-an-issue-which-cropped-up-with-the-release-of-gcc-10.patch b/package/libfreeglut/0001-Work-around-for-an-issue-which-cropped-up-with-the-release-of-gcc-10.patch
 new file mode 100644
-index 0000000000..77d1b54f16
+index 0000000000..e98e71537f
 --- /dev/null
-+++ b/boot/shim/0001-console-Fix-a-typo-in-the-EFI-warning-list-in-gnu-ef.patch
-@@ -0,0 +1,57 @@
-+From b00d7f63df7ee6f74a63515f1469768e9cb2aa7a Mon Sep 17 00:00:00 2001
-+From: Peter Jones <pjones@redhat.com>
-+Date: Mon, 26 Aug 2019 16:12:05 -0400
-+Subject: [PATCH] console: Fix a typo in the EFI warning list in gnu-efi
++++ b/package/libfreeglut/0001-Work-around-for-an-issue-which-cropped-up-with-the-release-of-gcc-10.patch
+@@ -0,0 +1,69 @@
++From b9998bbc1e1c329f6bf69c24606a2be7a4973b8c Mon Sep 17 00:00:00 2001
++From: jtsiomb <jtsiomb@7f0cb862-5218-0410-a997-914c9d46530a>
++Date: Fri, 21 Feb 2020 22:25:31 +0000
++Subject: [PATCH] Work-around for an issue which cropped up with the release of
++ gcc-10. In their infinite wisdom, they decided to build with -fno-common as
++ default from now on, breaking every piece of C code which used to declare
++ common symbols in header files, as was the convention since the dawn of time.
++ We now have to duplicate all declarations to an arbitrary source file, and
++ change the header-file ones to prefix them with extern.
 +
-+Some versions of gnu-efi have a typo, in which "EFI_WARN_UNKNOWN_GLYPH"
-+is accidentally "EFI_WARN_UNKOWN_GLYPH".  Work around that, so that we
-+can use the not-silly one in console.c's list of error and warning
-+messages.
-+
-+This is a backport from devel for:
-+
-+  commit 5f62b22ccd636d326b3229a2b196118701c6f3f7
-+  Author: Peter Jones <pjones@redhat.com>
-+  Date:   Mon Aug 26 16:12:05 2019 -0400
-+
-+Signed-off-by: Peter Jones <pjones@redhat.com>
-+Upstream: d230d02f990f02293736dca78b108f86c86d1bd0
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++git-svn-id: https://svn.code.sf.net/p/freeglut/code/trunk at 1863 7f0cb862-5218-0410-a997-914c9d46530a
++[Retrieved from:
++https://github.com/dcnieho/FreeGLUT/commit/b9998bbc1e1c329f6bf69c24606a2be7a4973b8c]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
-+ include/console.h | 6 ++++++
-+ lib/console.c     | 2 +-
-+ 2 files changed, 7 insertions(+), 1 deletion(-)
++ freeglut/freeglut/src/fg_gl2.c | 14 ++++++++++++++
++ freeglut/freeglut/src/fg_gl2.h | 14 +++++++-------
++ 2 files changed, 21 insertions(+), 7 deletions(-)
 +
-+diff --git a/include/console.h b/include/console.h
-+index deb4fa3..00da98d 100644
-+--- a/include/console.h
-++++ b/include/console.h
-+@@ -7,6 +7,12 @@
-+ #define PrintAt(fmt, ...) \
-+ 	({"Do not directly call PrintAt() use console_print_at() instead" = 1;});
++diff --git a/src/fg_gl2.c b/src/fg_gl2.c
++index 38b0acbb..54b4285b 100644
++--- a/src/fg_gl2.c
+++++ b/src/fg_gl2.c
++@@ -27,6 +27,20 @@
++ #include "fg_internal.h"
++ #include "fg_gl2.h"
 + 
-++#if !defined(EFI_WARN_UNKNOWN_GLYPH) && defined(EFI_WARN_UNKOWN_GLYPH)
-++#define EFI_WARN_UNKNOWN_GLYPH EFI_WARN_UNKOWN_GLYPH
-++#elif !defined(EFI_WARN_UNKNOWN_GLYPH)
-++#define EFI_WARN_UNKNOWN_GLYPH EFIWARN(1)
+++#ifndef GL_ES_VERSION_2_0
+++/* GLES2 has the corresponding entry points built-in, and these fgh-prefixed
+++ * names are defined in fg_gl2.h header to reference them, for any other case,
+++ * define them as function pointers here.
+++ */
+++FGH_PFNGLGENBUFFERSPROC fghGenBuffers;
+++FGH_PFNGLDELETEBUFFERSPROC fghDeleteBuffers;
+++FGH_PFNGLBINDBUFFERPROC fghBindBuffer;
+++FGH_PFNGLBUFFERDATAPROC fghBufferData;
+++FGH_PFNGLENABLEVERTEXATTRIBARRAYPROC fghEnableVertexAttribArray;
+++FGH_PFNGLDISABLEVERTEXATTRIBARRAYPROC fghDisableVertexAttribArray;
+++FGH_PFNGLVERTEXATTRIBPOINTERPROC fghVertexAttribPointer;
 ++#endif
 ++
-+ EFI_STATUS
-+ console_get_keystroke(EFI_INPUT_KEY *key);
-+ UINTN
-+diff --git a/lib/console.c b/lib/console.c
-+index 3aee41c..ccd4d4d 100644
-+--- a/lib/console.c
-++++ b/lib/console.c
-+@@ -445,7 +445,7 @@ static struct {
-+ 	{  EFI_SECURITY_VIOLATION,     L"Security Violation"},
++ void FGAPIENTRY glutSetVertexAttribCoord3(GLint attrib) {
++   if (fgStructure.CurrentWindow != NULL)
++     fgStructure.CurrentWindow->Window.attribute_v_coord = attrib;
++diff --git a/src/fg_gl2.h b/src/fg_gl2.h
++index ab8ba5c7..fb3d4676 100644
++--- a/src/fg_gl2.h
+++++ b/src/fg_gl2.h
++@@ -67,13 +67,13 @@ typedef void (APIENTRY *FGH_PFNGLENABLEVERTEXATTRIBARRAYPROC) (GLuint index);
++ typedef void (APIENTRY *FGH_PFNGLDISABLEVERTEXATTRIBARRAYPROC) (GLuint);
++ typedef void (APIENTRY *FGH_PFNGLVERTEXATTRIBPOINTERPROC) (GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid *pointer);
 + 
-+ 	// warnings
-+-	{  EFI_WARN_UNKOWN_GLYPH,      L"Warning Unknown Glyph"},
-++	{  EFI_WARN_UNKNOWN_GLYPH,     L"Warning Unknown Glyph"},
-+ 	{  EFI_WARN_DELETE_FAILURE,    L"Warning Delete Failure"},
-+ 	{  EFI_WARN_WRITE_FAILURE,     L"Warning Write Failure"},
-+ 	{  EFI_WARN_BUFFER_TOO_SMALL,  L"Warning Buffer Too Small"},
-+-- 
-+2.30.2
-+
++-FGH_PFNGLGENBUFFERSPROC fghGenBuffers;
++-FGH_PFNGLDELETEBUFFERSPROC fghDeleteBuffers;
++-FGH_PFNGLBINDBUFFERPROC fghBindBuffer;
++-FGH_PFNGLBUFFERDATAPROC fghBufferData;
++-FGH_PFNGLENABLEVERTEXATTRIBARRAYPROC fghEnableVertexAttribArray;
++-FGH_PFNGLDISABLEVERTEXATTRIBARRAYPROC fghDisableVertexAttribArray;
++-FGH_PFNGLVERTEXATTRIBPOINTERPROC fghVertexAttribPointer;
+++extern FGH_PFNGLGENBUFFERSPROC fghGenBuffers;
+++extern FGH_PFNGLDELETEBUFFERSPROC fghDeleteBuffers;
+++extern FGH_PFNGLBINDBUFFERPROC fghBindBuffer;
+++extern FGH_PFNGLBUFFERDATAPROC fghBufferData;
+++extern FGH_PFNGLENABLEVERTEXATTRIBARRAYPROC fghEnableVertexAttribArray;
+++extern FGH_PFNGLDISABLEVERTEXATTRIBARRAYPROC fghDisableVertexAttribArray;
+++extern FGH_PFNGLVERTEXATTRIBPOINTERPROC fghVertexAttribPointer;
++ 
++ #    endif
++ 
