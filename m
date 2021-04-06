@@ -1,54 +1,70 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 6 Apr 2021 09:36:48 +0200
-Subject: [Buildroot] [git commit] boot/grub2: ignore the last 3 remaining
- CVEs
-Message-ID: <20210406071628.15C818D3EF@busybox.osuosl.org>
+Date: Tue, 6 Apr 2021 09:38:31 +0200
+Subject: [Buildroot] [git commit] package/xen: add upstream xsa-36{0, 4,
+ 8} security fixes
+Message-ID: <20210406071628.3358C8D3EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a490687571ef8e199a2480d0b24904ff62ed9a18
+commit: https://git.buildroot.net/buildroot/commit/?id=34ff4fc32d4b835fa22a5d4620f065837f1e1191
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-An analysis of the last 3 remaining CVEs that are reported to affect
-the grub2 package has allowed to ensure that we can safely ignore
-them:
+Fixes the following security issues:
 
- * CVE-2020-14372 is already fixed by a patch we have in our patch
-   stack for grub2
+- CVE-2021-3308: IRQ vector leak on x86
+  https://xenbits.xenproject.org/xsa/advisory-360.html
 
- * CVE-2019-14865 and CVE-2020-15705 are both distro-specific and do
-   not affect grub2 upstream, nor grub2 with the stack of patches we
-   have in Buildroot
+- CVE-2021-26933: arm: The cache may not be cleaned for newly allocated
+  scrubbed pages
+  https://xenbits.xenproject.org/xsa/advisory-364.html
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+- CVE-2021-28687: HVM soft-reset crashes toolstack
+  https://xenbits.xenproject.org/xsa/advisory-368.html
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/grub2/grub2.mk | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ package/xen/xen.hash |  6 ++++++
+ package/xen/xen.mk   | 13 +++++++++++++
+ 2 files changed, 19 insertions(+)
 
-diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
-index c5742ede71..af16ee91e1 100644
---- a/boot/grub2/grub2.mk
-+++ b/boot/grub2/grub2.mk
-@@ -37,6 +37,18 @@ GRUB2_IGNORE_CVES += CVE-2020-15707
- # 2021/03/02 security fixes - patches 0029-0149
- GRUB2_IGNORE_CVES += CVE-2020-25632 CVE-2020-25647 CVE-2020-27749 \
- 	CVE-2020-27779 CVE-2021-3418 CVE-2021-20225 CVE-2021-20233
-+# 0039-acpi-Don-t-register-the-acpi-command-when-locked-dow.patch
-+GRUB2_IGNORE_CVES += CVE-2020-14372
-+# CVE-2019-14865 is about a flaw in the grub2-set-bootflag tool, which
-+# doesn't exist upstream, but is added by the Redhat/Fedora
-+# packaging. Not applicable to Buildroot.
-+GRUB2_IGNORE_CVES += CVE-2019-14865
-+# CVE-2020-15705 is related to a flaw in the use of the
-+# grub_linuxefi_secure_validate(), which was added by Debian/Ubuntu
-+# patches. The issue doesn't affect upstream Grub, and
-+# grub_linuxefi_secure_validate() is not implemented in the grub2
-+# version available in Buildroot.
-+GRUB2_IGNORE_CVES += CVE-2020-15705
+diff --git a/package/xen/xen.hash b/package/xen/xen.hash
+index 95061c3fc8..6893414313 100644
+--- a/package/xen/xen.hash
++++ b/package/xen/xen.hash
+@@ -1,3 +1,9 @@
+ # Locally computed
+ sha256  cf0d7316ad674491f49b7ef0518cb1d906a2e3bfad639deef0ef2343b119ac0c  xen-4.14.1.tar.gz
+ sha256  ecca9538e9d3f7e3c2bff827502f4495e2ef9e22c451298696ea08886b176c2c  COPYING
++# https://xenbits.xenproject.org/xsa/advisory-360.html
++sha256  809515011efb781a2a8742e9acfd76412d3920c2d4142bb187588cd36f77383e  xsa360-4.14.patch
++# https://xenbits.xenproject.org/xsa/advisory-364.html
++sha256  dc313c70bb07b4096bbc4612cbbc180589923277411dede2fda37f04ecc846d6  xsa364.patch
++# https://xenbits.xenproject.org/xsa/advisory-368.html
++sha256  55bbe59c75b69f493e364dfcf6cdbc7db4acd32dbf0b4d2466815b7c1f1823ce  xsa368-4.14.patch
+diff --git a/package/xen/xen.mk b/package/xen/xen.mk
+index 3a758b7b20..533882e05b 100644
+--- a/package/xen/xen.mk
++++ b/package/xen/xen.mk
+@@ -11,6 +11,19 @@ XEN_LICENSE_FILES = COPYING
+ XEN_CPE_ID_VENDOR = xen
+ XEN_CPE_ID_PREFIX = cpe:2.3:o
+ XEN_DEPENDENCIES = host-acpica host-python3
++XEN_PATCH = \
++	https://xenbits.xenproject.org/xsa/xsa360-4.14.patch \
++	https://xenbits.xenproject.org/xsa/xsa364.patch \
++	https://xenbits.xenproject.org/xsa/xsa368-4.14.patch
++
++# xsa360-4.14.patch
++XEN_IGNORE_CVES += CVE-2021-3308
++
++# xsa364.patch
++XEN_IGNORE_CVES += CVE-2021-26933
++
++# xsa368-4.14.patch
++XEN_IGNORE_CVES += CVE-2021-28687
  
- ifeq ($(BR2_TARGET_GRUB2_INSTALL_TOOLS),y)
- GRUB2_INSTALL_TARGET = YES
+ # Calculate XEN_ARCH
+ ifeq ($(ARCH),aarch64)
