@@ -1,39 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 6 Apr 2021 11:24:54 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/python-web2py:
+Date: Tue, 6 Apr 2021 11:26:58 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/python-docker:
  add CPE variables
-Message-ID: <20210406090707.B4ED682AA0@busybox.osuosl.org>
+Message-ID: <20210406090707.E5E1782AA2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=40f59fb36a5c292a2035c9a16fb649af46e9608b
+commit: https://git.buildroot.net/buildroot/commit/?id=e19652dd89eaff417b9dd5338f7fe8c5f030fceb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-cpe:2.3:a:web2py:web2py is a valid CPE identifier for this package:
+cpe:2.3:a:docker:docker-py is a valid CPE identifier for this package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aweb2py%3Aweb2py
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Adocker%3Adocker-py
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit f684bc46ca1a14d701f019e108e04eea01128ba3)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 66b7d2ce1c0a928b2ad37bc425a38f17e515109a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-web2py/python-web2py.mk | 2 ++
+ package/python-docker/python-docker.mk | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/python-web2py/python-web2py.mk b/package/python-web2py/python-web2py.mk
-index 07251ba53c..26214a8110 100644
---- a/package/python-web2py/python-web2py.mk
-+++ b/package/python-web2py/python-web2py.mk
-@@ -8,6 +8,8 @@ PYTHON_WEB2PY_VERSION = 2.20.4
- PYTHON_WEB2PY_SITE = $(call github,web2py,web2py,v$(PYTHON_WEB2PY_VERSION))
- PYTHON_WEB2PY_LICENSE = LGPL-3.0
- PYTHON_WEB2PY_LICENSE_FILES = LICENSE
-+PYTHON_WEB2PY_CPE_ID_VENDOR = web2py
-+PYTHON_WEB2PY_CPE_ID_PRODUCT = web2py
- PYTHON_WEB2PY_DEPENDENCIES = $(if $(BR2_PACKAGE_PYTHON3),host-python3 python3,host-python python) \
- 	host-python-pydal host-python-yatl
+diff --git a/package/python-docker/python-docker.mk b/package/python-docker/python-docker.mk
+index 67cb150b48..f476a1badd 100644
+--- a/package/python-docker/python-docker.mk
++++ b/package/python-docker/python-docker.mk
+@@ -10,5 +10,7 @@ PYTHON_DOCKER_SITE = https://files.pythonhosted.org/packages/de/54/a822d7116ff2f
+ PYTHON_DOCKER_SETUP_TYPE = setuptools
+ PYTHON_DOCKER_LICENSE = Apache-2.0
+ PYTHON_DOCKER_LICENSE_FILES = LICENSE
++PYTHON_DOCKER_CPE_ID_VENDOR = docker
++PYTHON_DOCKER_CPE_ID_PRODUCT = docker-py
  
+ $(eval $(python-package))
