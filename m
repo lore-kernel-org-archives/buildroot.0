@@ -1,74 +1,58 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue,  6 Apr 2021 22:38:08 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-hiredis: fix build with gcc
- 4.8
-Message-ID: <20210406203808.1339872-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 6 Apr 2021 22:37:18 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/mosquitto:
+ security bump to v2.0.10
+Message-ID: <20210406201250.8CD337FF45@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build fails with gcc 4.8 since bump to version 2.0.0 in commit
-69405d89596988b5b7d25886b7f9c07efad70741
+commit: https://git.buildroot.net/buildroot/commit/?id=b911e2fcca59365bb1a77baff71ecc3f14afd05a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Fixes:
- -  http://autobuild.buildroot.org/results/04cbcddf6d83ebad8c98400754f9445375e9e489
+Versions 2.0.10 of Mosquitto has been released. This is a security and bugfix release.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+CVE-xxxx-xxxx: If an authenticated client connected with MQTT v5 sent a malformed
+CONNACK message to the broker a NULL pointer dereference occurred, most likely
+resulting in a segfault. This will be updated with the CVE number when it is assigned.
+Affects versions 2.0.0 to 2.0.9 inclusive.
+
+See the announcement: https://mosquitto.org/blog/2021/04/version-2-0-10-released/
+
+Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit c32bb6ce1b35de9320fb539a9a1929743e5b8425)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...0001-setup.py-fix-build-with-gcc-4.8.patch | 43 +++++++++++++++++++
- 1 file changed, 43 insertions(+)
- create mode 100644 package/python-hiredis/0001-setup.py-fix-build-with-gcc-4.8.patch
+ package/mosquitto/mosquitto.hash | 4 ++--
+ package/mosquitto/mosquitto.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-hiredis/0001-setup.py-fix-build-with-gcc-4.8.patch b/package/python-hiredis/0001-setup.py-fix-build-with-gcc-4.8.patch
-new file mode 100644
-index 0000000000..93f9440a74
---- /dev/null
-+++ b/package/python-hiredis/0001-setup.py-fix-build-with-gcc-4.8.patch
-@@ -0,0 +1,43 @@
-+From 204898e28c7650089bf664eea8adfc16a22ba4f4 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 6 Apr 2021 10:37:49 +0200
-+Subject: [PATCH] setup.py: fix build with gcc 4.8
-+
-+Fix the following build failure on gcc 4.8 which is raised since version
-+2.0.0 and
-+https://github.com/redis/hiredis-py/commit/9084152f624e8e593b4e86ddf8bd13329fdfc043:
-+
-+vendor/hiredis/read.c: In function 'redisReaderFree':
-+vendor/hiredis/read.c:646:9: error: 'for' loop initial declarations are only allowed in C99 mode
-+         for (int i = 0; i < r->tasks; i++) {
-+         ^
-+vendor/hiredis/read.c:646:9: note: use option -std=c99 or -std=gnu99 to compile your code
-+
-+This build failure is raised because hiredis source code is built
-+without C99:
-+https://github.com/redis/hiredis/commit/13a35bdb64615e381c5e1151cdd4e78bba71a6db
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/04cbcddf6d83ebad8c98400754f9445375e9e489
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/redis/hiredis-py/pull/110]
-+---
-+ setup.py | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/setup.py b/setup.py
-+index d83153b..1f623c9 100755
-+--- a/setup.py
-++++ b/setup.py
-+@@ -13,6 +13,7 @@ def version():
-+ ext = Extension("hiredis.hiredis",
-+   sources=sorted(glob.glob("src/*.c") +
-+                  ["vendor/hiredis/%s.c" % src for src in ("alloc", "read", "sds")]),
-++  extra_compile_args=["-std=c99"],
-+   include_dirs=["vendor"])
-+ 
-+ setup(
-+-- 
-+2.30.2
-+
--- 
-2.30.2
+diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
+index e2c5181223..aa052979ff 100644
+--- a/package/mosquitto/mosquitto.hash
++++ b/package/mosquitto/mosquitto.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking gpg signature
+-# from https://mosquitto.org/files/source/mosquitto-2.0.9.tar.gz.asc
+-sha256  1b8553ef64a1cf5e4f4cfbe098330ae612adccd3d37f35b2db6f6fab501b01d4  mosquitto-2.0.9.tar.gz
++# from https://mosquitto.org/files/source/mosquitto-2.0.10.tar.gz.asc
++sha256  0188f7b21b91d6d80e992b8d6116ba851468b3bd154030e8a003ed28fb6f4a44  mosquitto-2.0.10.tar.gz
+ 
+ # License files
+ sha256  d3c4ccace4e5d3cc89d34cf2a0bc85b8596bfc0a32b815d0d77f9b7c41b5350c  LICENSE.txt
+diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
+index d1699ab860..7820e8fea5 100644
+--- a/package/mosquitto/mosquitto.mk
++++ b/package/mosquitto/mosquitto.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MOSQUITTO_VERSION = 2.0.9
++MOSQUITTO_VERSION = 2.0.10
+ MOSQUITTO_SITE = https://mosquitto.org/files/source
+ MOSQUITTO_LICENSE = EPL-2.0 or EDLv1.0
+ MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v20 edl-v10
