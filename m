@@ -1,7 +1,7 @@
 From: Dick Olsson <hi@senzilla.io>
-Date: Tue, 06 Apr 2021 23:39:59 +0000
-Subject: [Buildroot] [PATCH v2 2/9] package/execline: bump to version 2.8.0.0
-Message-ID: <A5jnZc04JX9nNdJYJaqsICPqMdT2xvRv97lIcAs1g@cp7-web-041.plabs.ch>
+Date: Tue, 06 Apr 2021 23:40:06 +0000
+Subject: [Buildroot] [PATCH v2 3/9] package/s6: bump to version 2.10.0.2
+Message-ID: <9jkYVgZUT9RxyMKOdeIGs7Ey5bmQcp2dk3HG33z8@cp4-web-027.plabs.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,32 +14,32 @@ http://skarnet.org/cgi-bin/archive.cgi?1:mss:1535:lpehbljhhcpaopbnkkbf
 
 Signed-off-by: Dick Olsson <hi@senzilla.io>
 ---
- package/execline/execline.hash | 4 ++--
- package/execline/execline.mk   | 2 +-
+ package/s6/s6.hash | 4 ++--
+ package/s6/s6.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/execline/execline.hash b/package/execline/execline.hash
-index ac6239e86d..35ebc443b9 100644
---- a/package/execline/execline.hash
-+++ b/package/execline/execline.hash
+diff --git a/package/s6/s6.hash b/package/s6/s6.hash
+index 9b355351ea..9cc6f4477d 100644
+--- a/package/s6/s6.hash
++++ b/package/s6/s6.hash
 @@ -1,3 +1,3 @@
  # Locally generated
--sha256  a24c76f097ff44fe50b63b89bcde5d6ba9a481aecddbe88ee01b0e5a7b314556  execline-2.6.1.0.tar.gz
--sha256  5443ac67e8d74ac614ced7bc64211ce90ccedb7778a68bfe9e68a8b234c9503e  COPYING
-+sha256  e7744b4a400eda68b83dcfb1bce65e454606279882d83d8230ddf8afda25766d  execline-2.8.0.0.tar.gz
-+sha256  adecb8bedfaae27fcfe65ecb3ef0e2e71aa2a2b49dc21886a200bc677d93e6ec  COPYING
-diff --git a/package/execline/execline.mk b/package/execline/execline.mk
-index e2423e9536..0ab5a03f2e 100644
---- a/package/execline/execline.mk
-+++ b/package/execline/execline.mk
+-sha256 e0cdbaf26e3ba1c41ecc0a8d1f45fb78194f96109b55cabeb849528b7e966c57  s6-2.9.0.1.tar.gz
+-sha256 d8e17a6418d26867c13801810903a1f78beac8cfe8f92c2a85afe59f3c3fc48c  COPYING
++sha256 b23afce87080b848b89499e85ebd93c20269e6db23f6ef65e58386c9cecd6c21  s6-2.10.0.2.tar.gz
++sha256 adecb8bedfaae27fcfe65ecb3ef0e2e71aa2a2b49dc21886a200bc677d93e6ec  COPYING
+diff --git a/package/s6/s6.mk b/package/s6/s6.mk
+index ec1407381e..443ecbbffd 100644
+--- a/package/s6/s6.mk
++++ b/package/s6/s6.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--EXECLINE_VERSION = 2.6.1.0
-+EXECLINE_VERSION = 2.8.0.0
- EXECLINE_SITE = http://skarnet.org/software/execline
- EXECLINE_LICENSE = ISC
- EXECLINE_LICENSE_FILES = COPYING
+-S6_VERSION = 2.9.0.1
++S6_VERSION = 2.10.0.2
+ S6_SITE = http://skarnet.org/software/s6
+ S6_LICENSE = ISC
+ S6_LICENSE_FILES = COPYING
 -- 
 2.30.2
