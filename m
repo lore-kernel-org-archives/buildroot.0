@@ -1,21 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 06 Apr 2021 09:38:34 +0200
-Subject: [Buildroot] [PATCH 1/1] package/janus-gateway: bump to version
- 0.10.10
-In-Reply-To: <20210405193218.690576-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 5 Apr 2021 21:32:18 +0200")
-References: <20210405193218.690576-1-fontaine.fabrice@gmail.com>
-Message-ID: <87r1jnooat.fsf@dell.be.48ers.dk>
+Date: Tue, 06 Apr 2021 09:38:53 +0200
+Subject: [Buildroot] [PATCH] package/xen: add upstream xsa-36{0, 4,
+ 8} security fixes
+In-Reply-To: <20210405191753.11410-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Mon, 5 Apr 2021 21:17:53 +0200")
+References: <20210405191753.11410-1-peter@korsgaard.com>
+Message-ID: <87mtubooaa.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > https://github.com/meetecho/janus-gateway/blob/v0.10.10/CHANGELOG.md
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Fixes the following security issues:
+ > - CVE-2021-3308: IRQ vector leak on x86
+ >   https://xenbits.xenproject.org/xsa/advisory-360.html
+
+ > - CVE-2021-26933: arm: The cache may not be cleaned for newly allocated
+ >   scrubbed pages
+ >   https://xenbits.xenproject.org/xsa/advisory-364.html
+
+ > - CVE-2021-28687: HVM soft-reset crashes toolstack
+ >   https://xenbits.xenproject.org/xsa/advisory-368.html
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed, thanks.
 
