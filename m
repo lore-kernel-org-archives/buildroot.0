@@ -1,43 +1,43 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 6 Apr 2021 22:06:00 +0200
-Subject: [Buildroot] [git commit] package/wpa_supplicant: handle
- CONFIG_CTRL_IFACE carefully
-Message-ID: <20210406194530.52EE982AA5@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue,  6 Apr 2021 22:10:58 +0200
+Subject: [Buildroot] [PATCH 1/1] package/check: bump to version 0.15.2
+Message-ID: <20210406201058.1287596-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=da80fd41563911cfa46aa94afd626310565251c2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://github.com/libcheck/check/releases/tag/0.15.2
 
-When BR2_PACKAGE_WPA_SUPPLICANT_CTRL_IFACE is not set and
-BR2_PACKAGE_WPA_SUPPLICANT_DBUS=y, CONFIG_CTRL_IFACE_DBUS_NEW will be
-enabled by 's/^#\(CONFIG_CTRL_IFACE_DBUS_NEW\)/\1/' first, and then
-disabled by 's/^\(CONFIG_CTRL_IFACE\)/#\1/'.
-
-CONFIG_CTRL_IFACE_DBUS_NEW does not depend on CONFIG_CTRL_IFACE, except
-for using it as a prefix. Fix this wrong behavior by adding '\>' after
-CONFIG_CTRL_IFACE.
-
-Signed-off-by: Tian Yuanhao <tianyuanhao@aliyun.com>
-Tested-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/wpa_supplicant/wpa_supplicant.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/check/check.hash | 2 +-
+ package/check/check.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-index 96f0596bfe..356ea91828 100644
---- a/package/wpa_supplicant/wpa_supplicant.mk
-+++ b/package/wpa_supplicant/wpa_supplicant.mk
-@@ -138,7 +138,7 @@ WPA_SUPPLICANT_CONFIG_EDITS += 's/\#\(CONFIG_TLS=\).*/\1internal/'
- endif
+diff --git a/package/check/check.hash b/package/check/check.hash
+index d00956c750..543e78f317 100644
+--- a/package/check/check.hash
++++ b/package/check/check.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  c1cc3d64975c0edd8042ab90d881662f1571278f8ea79d8e3c2cc877dac60001  check-0.15.1.tar.gz
++sha256  a8de4e0bacfb4d76dd1c618ded263523b53b85d92a146d8835eb1a52932fa20a  check-0.15.2.tar.gz
+ # License files, locally calculated
+ sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LESSER
+diff --git a/package/check/check.mk b/package/check/check.mk
+index f80e6b63b3..be82539469 100644
+--- a/package/check/check.mk
++++ b/package/check/check.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_CTRL_IFACE),)
--WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_CTRL_IFACE
-+WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_CTRL_IFACE\>
- endif
- 
- ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_DBUS),y)
+-CHECK_VERSION = 0.15.1
++CHECK_VERSION = 0.15.2
+ CHECK_SITE = https://github.com/libcheck/check/releases/download/$(CHECK_VERSION)
+ CHECK_INSTALL_STAGING = YES
+ CHECK_DEPENDENCIES = host-pkgconf
+-- 
+2.30.2
