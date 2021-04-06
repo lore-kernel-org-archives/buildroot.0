@@ -1,65 +1,87 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 6 Apr 2021 13:20:07 +0200
-Subject: [Buildroot] [git commit] configs/olimex_a20_olinuxino_lime*: bump
- Linux and U-Boot versions
-Message-ID: <20210406105624.D8A8682647@busybox.osuosl.org>
+From: Qais Yousef <qais.yousef@arm.com>
+Date: Tue, 6 Apr 2021 12:54:45 +0100
+Subject: [Buildroot] [PATCHv6 4/5] package/bpftrace: new package
+In-Reply-To: <CANLo3JhERRWK_kJCa0phxXVybPJuPM76PEEstN9tRUek04e+gQ@mail.gmail.com>
+References: <20201220151203.2206747-1-romain.naour@gmail.com>
+ <20201220151203.2206747-4-romain.naour@gmail.com>
+ <20201221134549.nk4eu6qpto36ahpq@e107158-lin>
+ <20210123194408.3omcypashiq44le5@e107158-lin>
+ <20210225101849.nt6rnloszarwrgm3@e107158-lin>
+ <CANLo3JhERRWK_kJCa0phxXVybPJuPM76PEEstN9tRUek04e+gQ@mail.gmail.com>
+Message-ID: <20210406115445.iueiqqgxhc7qz3yq@e107158-lin>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=008bd0afef8250add8e1831dc7e74d9f7283d5b8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 02/25/21 12:01, Romain Naour wrote:
+> Hello Quais, All,
+> 
+> Le jeu. 25 f?vr. 2021 ? 11:18, Qais Yousef <qais.yousef@arm.com> a ?crit :
+> 
+>     On 01/23/21 19:44, Qais Yousef wrote:
+>     > On 12/21/20 13:45, Qais Yousef wrote:
+>     > > On 12/20/20 16:12, Romain Naour wrote:
+>     > > > From: Qais Yousef <qais.yousef@arm.com>
+>     > > >
+>     > > > bpftrace is a high-level tracing language for Linux enhanced Berkeley
+>     > > > Packet Filter (eBPF) available in recent Linux kernels (4.x).
+>     > > >
+>     > > > Only tested on x86_64 and aarch64. The package doesn't support i386
+>     and
+>     > > > aarch32.
+>     > > >
+>     > > > The libbpf dependency allow to enable the BTF support:
+>     > > >  # bpftrace --info
+>     > > >  System
+>     > > >    OS: Linux 5.4.58 #1 SMP Sun Dec 20 15:56:56 CET 2020
+>     > > >    Arch: aarch64
+>     > > >
+>     > > >  Build
+>     > > >    version: 2020.11-328-g019a9
+>     > > >    LLVM: 9.0.1
+>     > > >    foreach_sym: yes
+>     > > >    unsafe uprobe: no
+>     > > >    bfd: yes
+>     > > >    bpf_attach_kfunc: yes
+>     > > >    bcc_usdt_addsem: yes
+>     > > >    bcc bpf_attach_uprobe refcount: yes
+>     > > >    libbpf: yes
+>     > > >    libbpf btf dump: yes
+>     > > >    libbpf btf dump type decl: yes
+>     > > >
+>     > > > bfptrace doesn't use the libbpf_bcc library provided by bcc package.
+>     > > >
+>     > > > Signed-off-by: Qais Yousef <qais.yousef@arm.com>
+>     > > > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+>     > > > Cc: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+>     > > > ---
+>     > > > v6: Update DEVELOPERS file
+>     > >
+>     > > LGTM.
+>     >
+>     > Ping.
+>     >
+>     > I had issues with building patch 5, but the rest of the series is in good
+>     shape
+>     > IMO and can be merged independently at least.
+>     >
+>     > Is there anything more needs to be done to help get this support merged?
+> 
+>     Ping again. It'd be great to finally have these merged.
+> 
+> 
+> Maintainers are currently busy at the release 2021.02 version of Buildroot.
+> 
+> But yes, this work has been reviewed and reworked by Quais and me.
+> 
+> I guess It's good to go.
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- configs/olimex_a20_olinuxino_lime2_defconfig | 4 ++--
- configs/olimex_a20_olinuxino_lime_defconfig  | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Another gentle ping. Hopefully the release is done now for this to be
+considered.
 
-diff --git a/configs/olimex_a20_olinuxino_lime2_defconfig b/configs/olimex_a20_olinuxino_lime2_defconfig
-index 8b10502de8..150e0a1445 100644
---- a/configs/olimex_a20_olinuxino_lime2_defconfig
-+++ b/configs/olimex_a20_olinuxino_lime2_defconfig
-@@ -22,7 +22,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.6"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.27"
- BR2_LINUX_KERNEL_USE_DEFCONFIG=y
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -43,7 +43,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.01"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.04"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime2"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
-diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
-index 9ae713569b..4f4a6b1fc9 100644
---- a/configs/olimex_a20_olinuxino_lime_defconfig
-+++ b/configs/olimex_a20_olinuxino_lime_defconfig
-@@ -22,7 +22,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.6"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.27"
- BR2_LINUX_KERNEL_USE_DEFCONFIG=y
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -43,7 +43,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.01"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.04"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+Thanks
+
+--
+Qais Yousef
