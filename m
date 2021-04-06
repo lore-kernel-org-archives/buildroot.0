@@ -1,33 +1,59 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue,  6 Apr 2021 22:45:01 +0200
-Subject: [Buildroot] [PATCH 1/1] package/acl: add ACL_CPE_ID_VENDOR
-Message-ID: <20210406204501.1340302-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue,  6 Apr 2021 22:48:31 +0200
+Subject: [Buildroot] [PATCH] package/python-django: security bump to version
+ 3.0.14
+Message-ID: <20210406204831.1046-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:acl_projectt:acl is a valid CPE identifier for this package:
+Fixes the following security issue:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aacl_project%3Aacl
+CVE-2021-28658: Potential directory-traversal via uploaded files
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+MultiPartParser allowed directory-traversal via uploaded files with suitably crafted file names.
+
+Built-in upload handlers were not affected by this vulnerability.
+
+For more details, see the announcement:
+https://www.djangoproject.com/weblog/2021/apr/06/security-releases/
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/acl/acl.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/python-django/python-django.hash | 4 ++--
+ package/python-django/python-django.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/acl/acl.mk b/package/acl/acl.mk
-index bc33a4b71f..5a6acddbc2 100644
---- a/package/acl/acl.mk
-+++ b/package/acl/acl.mk
-@@ -8,6 +8,7 @@ ACL_VERSION = 2.3.1
- ACL_SITE = http://download.savannah.gnu.org/releases/acl
- ACL_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
- ACL_LICENSE_FILES = doc/COPYING doc/COPYING.LGPL
-+ACL_CPE_ID_VENDOR = acl_project
+diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
+index f40cfa8f3c..1cc4b5ecc9 100644
+--- a/package/python-django/python-django.hash
++++ b/package/python-django/python-django.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/django/json
+-md5  7020810fb65b17e82d22001883b63a12  Django-3.0.13.tar.gz
+-sha256  6f13c3e8109236129c49d65a42fbf30c928e66b05ca6862246061b9343ecbaf2  Django-3.0.13.tar.gz
++md5  f444fdd6ff8edec132991cbc343368d4  Django-3.0.14.tar.gz
++sha256  d58d8394036db75a81896037d757357e79406e8f68816c3e8a28721c1d9d4c11  Django-3.0.14.tar.gz
+ # Locally computed sha256 checksums
+ sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
+index 593b0c6043..cb8f5492d6 100644
+--- a/package/python-django/python-django.mk
++++ b/package/python-django/python-django.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
  
- ACL_DEPENDENCIES = attr
- HOST_ACL_DEPENDENCIES = host-attr
+-PYTHON_DJANGO_VERSION = 3.0.13
++PYTHON_DJANGO_VERSION = 3.0.14
+ PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
+ # The official Django site has an unpractical URL
+-PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/3b/fe/11ec9b4cbae447e7b90d551be035d55c1293973592b491540334452f1f1f
++PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/76/0e/5d847a77b7b42cacd01405b45e4e370124c1d8a15970865df5ab0f09f83a
+ PYTHON_DJANGO_LICENSE = BSD-3-Clause
+ PYTHON_DJANGO_LICENSE_FILES = LICENSE
+ PYTHON_DJANGO_CPE_ID_VENDOR = djangoproject
 -- 
-2.30.2
+2.20.1
