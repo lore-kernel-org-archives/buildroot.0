@@ -1,39 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 6 Apr 2021 09:46:01 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/python-enum34:
+Date: Tue, 6 Apr 2021 09:45:14 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/python-pyopenssl:
  add CPE variables
-Message-ID: <20210406072100.E3BDE8BE9A@busybox.osuosl.org>
+Message-ID: <20210406072100.967938BE9A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=28a2c76031ea8d124c532447f4ba055d95786058
+commit: https://git.buildroot.net/buildroot/commit/?id=a23c3996070f3dc4abbd1292a33688f6a2e22d73
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-cpe:2.3:a:python:enum34 is a valid CPE identifier for this package:
+cpe:2.3:a:pyopenssl:pyopenssl is a valid CPE identifier for this
+package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Apython%3Aenum34
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Apyopenssl%3Apyopenssl
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 9496ed58bc291019492f6501c37065d494bdcb6d)
+(cherry picked from commit c16848b938e6f7b4652dd487766f18086c2c0730)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-enum34/python-enum34.mk | 2 ++
+ package/python-pyopenssl/python-pyopenssl.mk | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/python-enum34/python-enum34.mk b/package/python-enum34/python-enum34.mk
-index 3d3ce38830..0bd00508aa 100644
---- a/package/python-enum34/python-enum34.mk
-+++ b/package/python-enum34/python-enum34.mk
-@@ -10,6 +10,8 @@ PYTHON_ENUM34_SITE = https://files.pythonhosted.org/packages/11/c4/2da1f4952ba47
- PYTHON_ENUM34_SETUP_TYPE = setuptools
- PYTHON_ENUM34_LICENSE = BSD-3-Clause
- PYTHON_ENUM34_LICENSE_FILES = enum/LICENSE
-+PYTHON_ENUM34_CPE_ID_VENDOR = python
-+PYTHON_ENUM34_CPE_ID_PRODUCT = enum34
+diff --git a/package/python-pyopenssl/python-pyopenssl.mk b/package/python-pyopenssl/python-pyopenssl.mk
+index bbbd836a1b..a7ea7edfde 100644
+--- a/package/python-pyopenssl/python-pyopenssl.mk
++++ b/package/python-pyopenssl/python-pyopenssl.mk
+@@ -9,6 +9,8 @@ PYTHON_PYOPENSSL_SOURCE = pyOpenSSL-$(PYTHON_PYOPENSSL_VERSION).tar.gz
+ PYTHON_PYOPENSSL_SITE = https://files.pythonhosted.org/packages/0d/1d/6cc4bd4e79f78be6640fab268555a11af48474fac9df187c3361a1d1d2f0
+ PYTHON_PYOPENSSL_LICENSE = Apache-2.0
+ PYTHON_PYOPENSSL_LICENSE_FILES = LICENSE
++PYTHON_PYOPENSSL_CPE_ID_VENDOR = pyopenssl
++PYTHON_PYOPENSSL_CPE_ID_PRODUCT = pyopenssl
+ PYTHON_PYOPENSSL_SETUP_TYPE = setuptools
  
  $(eval $(python-package))
- $(eval $(host-python-package))
