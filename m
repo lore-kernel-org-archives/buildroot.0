@@ -1,97 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 6 Apr 2021 09:35:15 +0200
-Subject: [Buildroot] [git commit] package/libfreeglut: fix build with gcc 10
-Message-ID: <20210406071628.0C8F8847D2@busybox.osuosl.org>
+Date: Tue, 6 Apr 2021 09:33:42 +0200
+Subject: [Buildroot] [git commit] package/python-py: add CPE variables
+Message-ID: <20210406071627.E81E78D3EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8fd514caef4c9ec303dd72e4a8c11ec7a578328a
+commit: https://git.buildroot.net/buildroot/commit/?id=24729c897192f987847035b18cbc5aebe3c6d16d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
- - http://autobuild.buildroot.org/results/48c11cfc19784cc9c3ba5c6ba3d91ddae192734e
+cpe:2.3:a:pytest:py is a valid CPE identifier for this package:
+
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Apytest%3Apy
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ich-cropped-up-with-the-release-of-gcc-10.patch | 69 ++++++++++++++++++++++
- 1 file changed, 69 insertions(+)
+ package/python-py/python-py.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/libfreeglut/0001-Work-around-for-an-issue-which-cropped-up-with-the-release-of-gcc-10.patch b/package/libfreeglut/0001-Work-around-for-an-issue-which-cropped-up-with-the-release-of-gcc-10.patch
-new file mode 100644
-index 0000000000..e98e71537f
---- /dev/null
-+++ b/package/libfreeglut/0001-Work-around-for-an-issue-which-cropped-up-with-the-release-of-gcc-10.patch
-@@ -0,0 +1,69 @@
-+From b9998bbc1e1c329f6bf69c24606a2be7a4973b8c Mon Sep 17 00:00:00 2001
-+From: jtsiomb <jtsiomb@7f0cb862-5218-0410-a997-914c9d46530a>
-+Date: Fri, 21 Feb 2020 22:25:31 +0000
-+Subject: [PATCH] Work-around for an issue which cropped up with the release of
-+ gcc-10. In their infinite wisdom, they decided to build with -fno-common as
-+ default from now on, breaking every piece of C code which used to declare
-+ common symbols in header files, as was the convention since the dawn of time.
-+ We now have to duplicate all declarations to an arbitrary source file, and
-+ change the header-file ones to prefix them with extern.
-+
-+git-svn-id: https://svn.code.sf.net/p/freeglut/code/trunk at 1863 7f0cb862-5218-0410-a997-914c9d46530a
-+[Retrieved from:
-+https://github.com/dcnieho/FreeGLUT/commit/b9998bbc1e1c329f6bf69c24606a2be7a4973b8c]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ freeglut/freeglut/src/fg_gl2.c | 14 ++++++++++++++
-+ freeglut/freeglut/src/fg_gl2.h | 14 +++++++-------
-+ 2 files changed, 21 insertions(+), 7 deletions(-)
-+
-+diff --git a/src/fg_gl2.c b/src/fg_gl2.c
-+index 38b0acbb..54b4285b 100644
-+--- a/src/fg_gl2.c
-++++ b/src/fg_gl2.c
-+@@ -27,6 +27,20 @@
-+ #include "fg_internal.h"
-+ #include "fg_gl2.h"
-+ 
-++#ifndef GL_ES_VERSION_2_0
-++/* GLES2 has the corresponding entry points built-in, and these fgh-prefixed
-++ * names are defined in fg_gl2.h header to reference them, for any other case,
-++ * define them as function pointers here.
-++ */
-++FGH_PFNGLGENBUFFERSPROC fghGenBuffers;
-++FGH_PFNGLDELETEBUFFERSPROC fghDeleteBuffers;
-++FGH_PFNGLBINDBUFFERPROC fghBindBuffer;
-++FGH_PFNGLBUFFERDATAPROC fghBufferData;
-++FGH_PFNGLENABLEVERTEXATTRIBARRAYPROC fghEnableVertexAttribArray;
-++FGH_PFNGLDISABLEVERTEXATTRIBARRAYPROC fghDisableVertexAttribArray;
-++FGH_PFNGLVERTEXATTRIBPOINTERPROC fghVertexAttribPointer;
-++#endif
-++
-+ void FGAPIENTRY glutSetVertexAttribCoord3(GLint attrib) {
-+   if (fgStructure.CurrentWindow != NULL)
-+     fgStructure.CurrentWindow->Window.attribute_v_coord = attrib;
-+diff --git a/src/fg_gl2.h b/src/fg_gl2.h
-+index ab8ba5c7..fb3d4676 100644
-+--- a/src/fg_gl2.h
-++++ b/src/fg_gl2.h
-+@@ -67,13 +67,13 @@ typedef void (APIENTRY *FGH_PFNGLENABLEVERTEXATTRIBARRAYPROC) (GLuint index);
-+ typedef void (APIENTRY *FGH_PFNGLDISABLEVERTEXATTRIBARRAYPROC) (GLuint);
-+ typedef void (APIENTRY *FGH_PFNGLVERTEXATTRIBPOINTERPROC) (GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid *pointer);
-+ 
-+-FGH_PFNGLGENBUFFERSPROC fghGenBuffers;
-+-FGH_PFNGLDELETEBUFFERSPROC fghDeleteBuffers;
-+-FGH_PFNGLBINDBUFFERPROC fghBindBuffer;
-+-FGH_PFNGLBUFFERDATAPROC fghBufferData;
-+-FGH_PFNGLENABLEVERTEXATTRIBARRAYPROC fghEnableVertexAttribArray;
-+-FGH_PFNGLDISABLEVERTEXATTRIBARRAYPROC fghDisableVertexAttribArray;
-+-FGH_PFNGLVERTEXATTRIBPOINTERPROC fghVertexAttribPointer;
-++extern FGH_PFNGLGENBUFFERSPROC fghGenBuffers;
-++extern FGH_PFNGLDELETEBUFFERSPROC fghDeleteBuffers;
-++extern FGH_PFNGLBINDBUFFERPROC fghBindBuffer;
-++extern FGH_PFNGLBUFFERDATAPROC fghBufferData;
-++extern FGH_PFNGLENABLEVERTEXATTRIBARRAYPROC fghEnableVertexAttribArray;
-++extern FGH_PFNGLDISABLEVERTEXATTRIBARRAYPROC fghDisableVertexAttribArray;
-++extern FGH_PFNGLVERTEXATTRIBPOINTERPROC fghVertexAttribPointer;
-+ 
-+ #    endif
-+ 
+diff --git a/package/python-py/python-py.mk b/package/python-py/python-py.mk
+index c753183933..2e9d18ab1a 100644
+--- a/package/python-py/python-py.mk
++++ b/package/python-py/python-py.mk
+@@ -11,5 +11,7 @@ PYTHON_PY_DEPENDENCIES = host-python-setuptools-scm
+ PYTHON_PY_SETUP_TYPE = setuptools
+ PYTHON_PY_LICENSE = MIT
+ PYTHON_PY_LICENSE_FILES = LICENSE
++PYTHON_PY_CPE_ID_VENDOR = pytest
++PYTHON_PY_CPE_ID_PRODUCT = py
+ 
+ $(eval $(python-package))
