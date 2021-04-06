@@ -1,39 +1,38 @@
 From: Dick Olsson <hi@senzilla.io>
-Date: Tue, 06 Apr 2021 22:47:08 +0000
-Subject: [Buildroot] [PATCH 1/4] package/{skalibs, execline, s6,
- s6-dns}: change prefix and shared options
-Message-ID: <HbmuNdRmOn2PdMjzu0i70kXEVtJ7gzFTC74uRm0Le50@cp3-web-012.plabs.ch>
+Date: Tue, 06 Apr 2021 22:47:15 +0000
+Subject: [Buildroot] [PATCH 2/4] package/s6-*: use shared options and
+ cleanup dependencies
+Message-ID: <EZrDhGwS8thHhPYRPdvzlg6TubUgJfFRjCVgug4HG6U@cp3-web-029.plabs.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The s6 suite of tools are predominantly used as an init system and for
-process supervision. It is therefore preferable for these tools to be
-installed with the default prefix / (as opposed to /usr).
-
-Also improve maintainability and extensibility by introducing variables
-that enable dependant packages to use shared configuration options.
-This gives better build guarantees in different configuration scenarios
-such as default paths, shared or static libraries, etc.
+Use shared options provided as variables by each dependency. To enhance
+code clarity, be explicit of each dependency and remove dependencies
+that are not hard dependencies.
 
 Signed-off-by: Dick Olsson <hi@senzilla.io>
 ---
- package/execline/execline.mk | 28 +++++++++++-----------------
- package/s6-dns/s6-dns.mk     | 19 ++++---------------
- package/s6/s6.mk             | 28 ++++++++--------------------
- package/skalibs/skalibs.mk   | 33 +++++++++++++++++++++++++++++++--
- 4 files changed, 54 insertions(+), 54 deletions(-)
+ package/mdevd/mdevd.mk                        | 11 +-------
+ package/s6-linux-init/Config.in               |  2 --
+ package/s6-linux-init/s6-linux-init.mk        | 14 +++-------
+ package/s6-linux-utils/s6-linux-utils.mk      | 11 +-------
+ package/s6-networking/s6-networking.mk        | 16 ++++-------
+ .../s6-portable-utils/s6-portable-utils.mk    | 11 +-------
+ package/s6-rc/s6-rc.mk                        | 28 ++++---------------
+ 7 files changed, 18 insertions(+), 75 deletions(-)
 
-diff --git a/package/execline/execline.mk b/package/execline/execline.mk
-index 0ab5a03f2e..f6001ed3f7 100644
---- a/package/execline/execline.mk
-+++ b/package/execline/execline.mk
-@@ -12,13 +12,12 @@ EXECLINE_INSTALL_STAGING = YES
- EXECLINE_DEPENDENCIES = skalibs
+diff --git a/package/mdevd/mdevd.mk b/package/mdevd/mdevd.mk
+index e2924009f5..b2961c9bef 100644
+--- a/package/mdevd/mdevd.mk
++++ b/package/mdevd/mdevd.mk
+@@ -11,17 +11,8 @@ MDEVD_LICENSE_FILES = COPYING
+ MDEVD_INSTALL_STAGING = YES
+ MDEVD_DEPENDENCIES = skalibs
  
- EXECLINE_CONF_OPTS = \
+-MDEVD_CONF_OPTS = \
 -	--prefix=/usr \
 -	--with-sysdeps=$(STAGING_DIR)/usr/lib/skalibs/sysdeps \
 -	--with-include=$(STAGING_DIR)/usr/include \
@@ -41,182 +40,177 @@ index 0ab5a03f2e..f6001ed3f7 100644
 -	--with-lib=$(STAGING_DIR)/usr/lib/skalibs \
 -	$(if $(BR2_STATIC_LIBS),,--disable-allstatic) \
 -	$(SHARED_STATIC_LIBS_OPTS)
-+	$(SHARED_SKALIBS_CONF_OPTS) \
-+	--shebangdir=/bin
-+
-+# This variable can be used by dependant packages.
-+SHARED_EXECLINE_CONF_OPTS = \
-+	--with-lib=$(STAGING_DIR)/lib/execline
- 
- define EXECLINE_CONFIGURE_CMDS
- 	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure $(EXECLINE_CONF_OPTS))
-@@ -44,17 +43,12 @@ endef
- 
- HOST_EXECLINE_DEPENDENCIES = host-skalibs
- 
--# Set --shebangdir to /usr/bin, as this value is used by the host variant of
--# s6-rc when generating execline scripts for the target.
-+# The host package does not have a run-time dependency on the
-+# --shebangdir option. But it must align with the target variant since
-+# it affects the output of commands.
- HOST_EXECLINE_CONF_OPTS = \
--	--prefix=$(HOST_DIR) \
--	--shebangdir=/usr/bin \
--	--with-sysdeps=$(HOST_DIR)/lib/skalibs/sysdeps \
--	--with-include=$(HOST_DIR)/include \
--	--with-dynlib=$(HOST_DIR)/lib \
--	--disable-static \
--	--enable-shared \
--	--disable-allstatic
-+	$(SHARED_HOST_SKALIBS_CONF_OPTS) \
-+	--shebangdir=/bin
- 
- define HOST_EXECLINE_CONFIGURE_CMDS
- 	(cd $(@D); $(HOST_CONFIGURE_OPTS) ./configure $(HOST_EXECLINE_CONF_OPTS))
-diff --git a/package/s6-dns/s6-dns.mk b/package/s6-dns/s6-dns.mk
-index 9ed75bd600..3b1047dab3 100644
---- a/package/s6-dns/s6-dns.mk
-+++ b/package/s6-dns/s6-dns.mk
-@@ -11,29 +11,18 @@ S6_DNS_LICENSE_FILES = COPYING
- S6_DNS_INSTALL_STAGING = YES
- S6_DNS_DEPENDENCIES = skalibs
- 
--S6_DNS_CONF_OPTS = \
--	--prefix=/usr \
--	--with-sysdeps=$(STAGING_DIR)/usr/lib/skalibs/sysdeps \
--	--with-include=$(STAGING_DIR)/usr/include \
--	--with-dynlib=$(STAGING_DIR)/usr/lib \
--	--with-lib=$(STAGING_DIR)/usr/lib/skalibs \
--	$(if $(BR2_STATIC_LIBS),,--disable-allstatic) \
--	$(SHARED_STATIC_LIBS_OPTS)
-+# This variable can be used by dependant packages.
-+SHARED_S6_DNS_CONF_OPTS = \
-+	--with-lib=$(STAGING_DIR)/lib/s6-dns
- 
- define S6_DNS_CONFIGURE_CMDS
--	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure $(S6_DNS_CONF_OPTS))
+-
+ define MDEVD_CONFIGURE_CMDS
+-	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure $(MDEVD_CONF_OPTS))
 +	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure $(SHARED_SKALIBS_CONF_OPTS))
  endef
  
- define S6_DNS_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
- endef
+ define MDEVD_BUILD_CMDS
+diff --git a/package/s6-linux-init/Config.in b/package/s6-linux-init/Config.in
+index b56b861f99..b2858d2958 100644
+--- a/package/s6-linux-init/Config.in
++++ b/package/s6-linux-init/Config.in
+@@ -2,8 +2,6 @@ config BR2_PACKAGE_S6_LINUX_INIT
+ 	bool "s6-linux-init"
+ 	depends on BR2_USE_MMU # s6
+ 	select BR2_PACKAGE_S6
+-	select BR2_PACKAGE_S6_LINUX_UTILS
+-	select BR2_PACKAGE_S6_PORTABLE_UTILS
+ 	help
+ 	  s6-linux-init is a set of minimalistic tools to create a
+ 	  s6-based init system, including a /sbin/init binary, on a
+diff --git a/package/s6-linux-init/s6-linux-init.mk b/package/s6-linux-init/s6-linux-init.mk
+index efd4984085..ff7b9c0dfd 100644
+--- a/package/s6-linux-init/s6-linux-init.mk
++++ b/package/s6-linux-init/s6-linux-init.mk
+@@ -8,18 +8,12 @@ S6_LINUX_INIT_VERSION = 1.0.6.1
+ S6_LINUX_INIT_SITE = http://skarnet.org/software/s6-linux-init
+ S6_LINUX_INIT_LICENSE = ISC
+ S6_LINUX_INIT_LICENSE_FILES = COPYING
+-S6_LINUX_INIT_DEPENDENCIES = s6 s6-linux-utils s6-portable-utils
++S6_LINUX_INIT_DEPENDENCIES = skalibs s6 execline
  
--define S6_DNS_REMOVE_STATIC_LIB_DIR
--	rm -rf $(TARGET_DIR)/usr/lib/s6-dns
--endef
--
--S6_DNS_POST_INSTALL_TARGET_HOOKS += S6_DNS_REMOVE_STATIC_LIB_DIR
--
- define S6_DNS_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
- endef
-diff --git a/package/s6/s6.mk b/package/s6/s6.mk
-index 443ecbbffd..8068601ab5 100644
---- a/package/s6/s6.mk
-+++ b/package/s6/s6.mk
-@@ -9,17 +9,14 @@ S6_SITE = http://skarnet.org/software/s6
- S6_LICENSE = ISC
- S6_LICENSE_FILES = COPYING
- S6_INSTALL_STAGING = YES
--S6_DEPENDENCIES = execline
-+S6_DEPENDENCIES = skalibs execline
- 
- S6_CONF_OPTS = \
+ S6_LINUX_INIT_CONF_OPTS = \
 -	--prefix=/usr \
 -	--with-sysdeps=$(STAGING_DIR)/usr/lib/skalibs/sysdeps \
 -	--with-include=$(STAGING_DIR)/usr/include \
 -	--with-dynlib=$(STAGING_DIR)/usr/lib \
 -	--with-lib=$(STAGING_DIR)/usr/lib/execline \
+-	--with-lib=$(STAGING_DIR)/usr/lib/s6 \
 -	--with-lib=$(STAGING_DIR)/usr/lib/skalibs \
 -	$(if $(BR2_STATIC_LIBS),,--disable-allstatic) \
 -	$(SHARED_STATIC_LIBS_OPTS)
 +	$(SHARED_SKALIBS_CONF_OPTS) \
-+	$(SHARED_EXECLINE_CONF_OPTS)
-+
-+SHARED_S6_CONF_OPTS = \
-+	--with-lib=$(STAGING_DIR)/lib/s6
++	$(SHARED_EXECLINE_CONF_OPTS) \
++	$(SHARED_S6_CONF_OPTS)
  
- define S6_CONFIGURE_CMDS
- 	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure $(S6_CONF_OPTS))
-@@ -43,19 +40,10 @@ define S6_INSTALL_STAGING_CMDS
+ define S6_LINUX_INIT_CONFIGURE_CMDS
+ 	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure $(S6_LINUX_INIT_CONF_OPTS))
+diff --git a/package/s6-linux-utils/s6-linux-utils.mk b/package/s6-linux-utils/s6-linux-utils.mk
+index dcc4f9e4b2..c2f8a7e71f 100644
+--- a/package/s6-linux-utils/s6-linux-utils.mk
++++ b/package/s6-linux-utils/s6-linux-utils.mk
+@@ -10,17 +10,8 @@ S6_LINUX_UTILS_LICENSE = ISC
+ S6_LINUX_UTILS_LICENSE_FILES = COPYING
+ S6_LINUX_UTILS_DEPENDENCIES = skalibs
+ 
+-S6_LINUX_UTILS_CONF_OPTS = \
+-	--prefix=/usr \
+-	--with-sysdeps=$(STAGING_DIR)/usr/lib/skalibs/sysdeps \
+-	--with-include=$(STAGING_DIR)/usr/include \
+-	--with-dynlib=$(STAGING_DIR)/usr/lib \
+-	--with-lib=$(STAGING_DIR)/usr/lib/skalibs \
+-	$(if $(BR2_STATIC_LIBS),,--disable-allstatic) \
+-	$(SHARED_STATIC_LIBS_OPTS)
+-
+ define S6_LINUX_UTILS_CONFIGURE_CMDS
+-	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure $(S6_LINUX_UTILS_CONF_OPTS))
++	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure $(SHARED_SKALIBS_CONF_OPTS))
+ endef
+ 
+ define S6_LINUX_UTILS_BUILD_CMDS
+diff --git a/package/s6-networking/s6-networking.mk b/package/s6-networking/s6-networking.mk
+index d687c567cd..7f7da1fb71 100644
+--- a/package/s6-networking/s6-networking.mk
++++ b/package/s6-networking/s6-networking.mk
+@@ -9,19 +9,13 @@ S6_NETWORKING_SITE = http://skarnet.org/software/s6-networking
+ S6_NETWORKING_LICENSE = ISC
+ S6_NETWORKING_LICENSE_FILES = COPYING
+ S6_NETWORKING_INSTALL_STAGING = YES
+-S6_NETWORKING_DEPENDENCIES = s6-dns s6
++S6_NETWORKING_DEPENDENCIES = skalibs execline s6 s6-dns
+ 
+ S6_NETWORKING_CONF_OPTS = \
+-	--prefix=/usr \
+-	--with-sysdeps=$(STAGING_DIR)/usr/lib/skalibs/sysdeps \
+-	--with-include=$(STAGING_DIR)/usr/include \
+-	--with-dynlib=$(STAGING_DIR)/usr/lib \
+-	--with-lib=$(STAGING_DIR)/usr/lib/execline \
+-	--with-lib=$(STAGING_DIR)/usr/lib/s6 \
+-	--with-lib=$(STAGING_DIR)/usr/lib/s6-dns \
+-	--with-lib=$(STAGING_DIR)/usr/lib/skalibs \
+-	$(if $(BR2_STATIC_LIBS),,--disable-allstatic) \
+-	$(SHARED_STATIC_LIBS_OPTS)
++	$(SHARED_SKALIBS_CONF_OPTS) \
++	$(SHARED_EXECLINE_CONF_OPTS) \
++	$(SHARED_S6_CONF_OPTS) \
++	$(SHARED_S6_DNS_CONF_OPTS)
+ 
+ ifeq ($(BR2_PACKAGE_LIBRESSL),y)
+ S6_NETWORKING_CONF_OPTS += --enable-ssl=libressl
+diff --git a/package/s6-portable-utils/s6-portable-utils.mk b/package/s6-portable-utils/s6-portable-utils.mk
+index 9da165b49b..adfcc5d451 100644
+--- a/package/s6-portable-utils/s6-portable-utils.mk
++++ b/package/s6-portable-utils/s6-portable-utils.mk
+@@ -10,17 +10,8 @@ S6_PORTABLE_UTILS_LICENSE = ISC
+ S6_PORTABLE_UTILS_LICENSE_FILES = COPYING
+ S6_PORTABLE_UTILS_DEPENDENCIES = skalibs
+ 
+-S6_PORTABLE_UTILS_CONF_OPTS = \
+-	--prefix=/usr \
+-	--with-sysdeps=$(STAGING_DIR)/usr/lib/skalibs/sysdeps \
+-	--with-include=$(STAGING_DIR)/usr/include \
+-	--with-dynlib=$(STAGING_DIR)/usr/lib \
+-	--with-lib=$(STAGING_DIR)/usr/lib/skalibs \
+-	$(if $(BR2_STATIC_LIBS),,--disable-allstatic) \
+-	$(SHARED_STATIC_LIBS_OPTS)
+-
+ define S6_PORTABLE_UTILS_CONFIGURE_CMDS
+-	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure $(S6_PORTABLE_UTILS_CONF_OPTS))
++	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure $(SHARED_SKALIBS_CONF_OPTS))
+ endef
+ 
+ define S6_PORTABLE_UTILS_BUILD_CMDS
+diff --git a/package/s6-rc/s6-rc.mk b/package/s6-rc/s6-rc.mk
+index 4e0ef57d7a..5a6ddca8ea 100644
+--- a/package/s6-rc/s6-rc.mk
++++ b/package/s6-rc/s6-rc.mk
+@@ -9,18 +9,12 @@ S6_RC_SITE = http://skarnet.org/software/s6-rc
+ S6_RC_LICENSE = ISC
+ S6_RC_LICENSE_FILES = COPYING
+ S6_RC_INSTALL_STAGING = YES
+-S6_RC_DEPENDENCIES = s6
++S6_RC_DEPENDENCIES = skalibs s6 execline
+ 
+ S6_RC_CONF_OPTS = \
+-	--prefix=/usr \
+-	--with-sysdeps=$(STAGING_DIR)/usr/lib/skalibs/sysdeps \
+-	--with-include=$(STAGING_DIR)/usr/include \
+-	--with-dynlib=$(STAGING_DIR)/usr/lib \
+-	--with-lib=$(STAGING_DIR)/usr/lib/execline \
+-	--with-lib=$(STAGING_DIR)/usr/lib/s6 \
+-	--with-lib=$(STAGING_DIR)/usr/lib/skalibs \
+-	$(if $(BR2_STATIC_LIBS),,--disable-allstatic) \
+-	$(SHARED_STATIC_LIBS_OPTS)
++	$(SHARED_SKALIBS_CONF_OPTS) \
++	$(SHARED_EXECLINE_CONF_OPTS) \
++	$(SHARED_S6_CONF_OPTS)
+ 
+ define S6_RC_CONFIGURE_CMDS
+ 	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure $(S6_RC_CONF_OPTS))
+@@ -44,20 +38,10 @@ define S6_RC_INSTALL_STAGING_CMDS
  	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
  endef
  
--HOST_S6_DEPENDENCIES = host-execline
+-HOST_S6_RC_DEPENDENCIES = host-s6
 -
--HOST_S6_CONF_OPTS = \
+-HOST_S6_RC_CONF_OPTS = \
 -	--prefix=$(HOST_DIR) \
+-	--libexecdir=/usr/libexec \
 -	--with-sysdeps=$(HOST_DIR)/lib/skalibs/sysdeps \
 -	--with-include=$(HOST_DIR)/include \
 -	--with-dynlib=$(HOST_DIR)/lib \
 -	--disable-static \
 -	--enable-shared \
 -	--disable-allstatic
-+HOST_S6_DEPENDENCIES = host-skalibs host-execline
++HOST_S6_RC_DEPENDENCIES = host-skalibs host-s6 host-execline
  
- define HOST_S6_CONFIGURE_CMDS
--	(cd $(@D); $(HOST_CONFIGURE_OPTS) ./configure $(HOST_S6_CONF_OPTS))
+ define HOST_S6_RC_CONFIGURE_CMDS
+-	(cd $(@D); $(HOST_CONFIGURE_OPTS) ./configure $(HOST_S6_RC_CONF_OPTS))
 +	(cd $(@D); $(HOST_CONFIGURE_OPTS) ./configure $(SHARED_HOST_SKALIBS_CONF_OPTS))
  endef
  
- define HOST_S6_BUILD_CMDS
-diff --git a/package/skalibs/skalibs.mk b/package/skalibs/skalibs.mk
-index f92859ff26..fe042604c2 100644
---- a/package/skalibs/skalibs.mk
-+++ b/package/skalibs/skalibs.mk
-@@ -10,12 +10,24 @@ SKALIBS_LICENSE = ISC
- SKALIBS_LICENSE_FILES = COPYING
- SKALIBS_INSTALL_STAGING = YES
- 
-+SKALIBS_DEFAULT_PATH = $(call qstrip,$(BR2_SYSTEM_DEFAULT_PATH))
- SKALIBS_CONF_OPTS = \
--	--prefix=/usr \
--	--with-default-path=/sbin:/usr/sbin:/bin:/usr/bin \
-+	--prefix=/ \
-+	--libexecdir=/libexec \
-+	--with-default-path=$(SKALIBS_DEFAULT_PATH) \
- 	--with-sysdep-devurandom=yes \
- 	$(SHARED_STATIC_LIBS_OPTS)
- 
-+# This variable can be used by dependant packages.
-+SHARED_SKALIBS_CONF_OPTS = \
-+	--prefix=/ \
-+	--with-sysdeps=$(STAGING_DIR)/lib/skalibs/sysdeps \
-+	--with-include=$(STAGING_DIR)/include \
-+	--with-dynlib=$(STAGING_DIR)/lib \
-+	--with-lib=$(STAGING_DIR)/lib/skalibs \
-+	$(if $(BR2_STATIC_LIBS),,--disable-allstatic) \
-+	$(SHARED_STATIC_LIBS_OPTS)
-+
- define SKALIBS_CONFIGURE_CMDS
- 	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure $(SKALIBS_CONF_OPTS))
- endef
-@@ -33,8 +45,25 @@ define SKALIBS_INSTALL_STAGING_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
- endef
- 
-+# The --with-default-path option needs to match the target variant.
- HOST_SKALIBS_CONF_OPTS = \
- 	--prefix=$(HOST_DIR) \
-+	--with-default-path=$(SKALIBS_DEFAULT_PATH) \
-+	--disable-static \
-+	--enable-shared \
-+	--disable-allstatic
-+
-+# This variable can be used by dependant packages.
-+#
-+# Note: Dependant host packages does not have a run-time dependencies on
-+# the --libexecdir option. But it must align with the target variant
-+# since it affects how target packages run.
-+SHARED_HOST_SKALIBS_CONF_OPTS = \
-+	--prefix=$(HOST_DIR) \
-+	--libexecdir=/libexec \
-+	--with-sysdeps=$(HOST_DIR)/lib/skalibs/sysdeps \
-+	--with-include=$(HOST_DIR)/include \
-+	--with-dynlib=$(HOST_DIR)/lib \
- 	--disable-static \
- 	--enable-shared \
- 	--disable-allstatic
+ define HOST_S6_RC_BUILD_CMDS
 -- 
 2.30.2
