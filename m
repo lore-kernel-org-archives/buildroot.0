@@ -1,66 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 6 Apr 2021 09:33:50 +0200
-Subject: [Buildroot] [git commit] package/python-py: security bump to
- version 1.10.0
-Message-ID: <20210406071628.007318D3F8@busybox.osuosl.org>
+Date: Tue, 6 Apr 2021 09:38:22 +0200
+Subject: [Buildroot] [git commit] package/janus-gateway: bump to version
+ 0.10.10
+Message-ID: <20210406071628.29DBA8D3EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b430894d63ea1119bc7031511f0ccdc399774011
+commit: https://git.buildroot.net/buildroot/commit/?id=ed6e6ebdf382cdb542012c72ad7e6bd00721dfe1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix CVE-2020-29651: A denial of service via regular expression in the
-py.path.svnwc component of py (aka python-py) through 1.9.0 could be
-used by attackers to cause a compute-time denial of service attack by
-supplying malicious input to the blame functionality.
-
-Add py/_vendored_packages/iniconfig-1.1.1.dist-info/LICENSE (MIT) which
-has been added with
-https://github.com/pytest-dev/py/commit/94cf44fd41d957eb50773d3e4fb54e931836779e
-
-https://github.com/pytest-dev/py/blob/1.10.0/CHANGELOG.rst
+https://github.com/meetecho/janus-gateway/blob/v0.10.10/CHANGELOG.md
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-py/python-py.hash | 5 +++--
- package/python-py/python-py.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ package/janus-gateway/janus-gateway.hash | 2 +-
+ package/janus-gateway/janus-gateway.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-py/python-py.hash b/package/python-py/python-py.hash
-index 98e16fd97b..2d9928f376 100644
---- a/package/python-py/python-py.hash
-+++ b/package/python-py/python-py.hash
-@@ -1,5 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/py/json
--md5  b80db4e61eef724f49feb4d20b649e62  py-1.9.0.tar.gz
--sha256  9ca6883ce56b4e8da7e79ac18787889fa5206c79dcc67fb065376cd2fe03f342  py-1.9.0.tar.gz
-+md5  5f108bfe00d5468cbdb8071051f86a55  py-1.10.0.tar.gz
-+sha256  21b81bda15b66ef5e1a777a21c4dcd9c20ad3efd0b3f817e7a809035269e1bd3  py-1.10.0.tar.gz
- # Locally computed sha256 checksums
- sha256  2af680c39ef493fb82830356d1d3df1acb5a06033cba2dec7a19e21caa77a866  LICENSE
-+sha256  2af680c39ef493fb82830356d1d3df1acb5a06033cba2dec7a19e21caa77a866  py/_vendored_packages/iniconfig-1.1.1.dist-info/LICENSE
-diff --git a/package/python-py/python-py.mk b/package/python-py/python-py.mk
-index 2e9d18ab1a..d8cb6fa544 100644
---- a/package/python-py/python-py.mk
-+++ b/package/python-py/python-py.mk
-@@ -4,13 +4,13 @@
+diff --git a/package/janus-gateway/janus-gateway.hash b/package/janus-gateway/janus-gateway.hash
+index ee71979b88..83afc72c98 100644
+--- a/package/janus-gateway/janus-gateway.hash
++++ b/package/janus-gateway/janus-gateway.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  7f8c58e5c5ed94821ce877169da90c00e4adf81920ed383a2e0ec241960d121b  janus-gateway-0.10.3.tar.gz
++sha256  21e2fc7dee4b20ed8d749a69577eccd961b0bfe5b863d42f39ddfcd2af903718  janus-gateway-0.10.10.tar.gz
+ sha256  91d04c97fa1da3fcd28205873276358aafc071c5b00a9ea8c49dd06d487a9dc6  COPYING
+diff --git a/package/janus-gateway/janus-gateway.mk b/package/janus-gateway/janus-gateway.mk
+index 98a2184d7d..40652d802a 100644
+--- a/package/janus-gateway/janus-gateway.mk
++++ b/package/janus-gateway/janus-gateway.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_PY_VERSION = 1.9.0
-+PYTHON_PY_VERSION = 1.10.0
- PYTHON_PY_SOURCE = py-$(PYTHON_PY_VERSION).tar.gz
--PYTHON_PY_SITE = https://files.pythonhosted.org/packages/97/a6/ab9183fe08f69a53d06ac0ee8432bc0ffbb3989c575cc69b73a0229a9a99
-+PYTHON_PY_SITE = https://files.pythonhosted.org/packages/0d/8c/50e9f3999419bb7d9639c37e83fa9cdcf0f601a9d407162d6c37ad60be71
- PYTHON_PY_DEPENDENCIES = host-python-setuptools-scm
- PYTHON_PY_SETUP_TYPE = setuptools
- PYTHON_PY_LICENSE = MIT
--PYTHON_PY_LICENSE_FILES = LICENSE
-+PYTHON_PY_LICENSE_FILES = LICENSE py/_vendored_packages/iniconfig-1.1.1.dist-info/LICENSE
- PYTHON_PY_CPE_ID_VENDOR = pytest
- PYTHON_PY_CPE_ID_PRODUCT = py
- 
+-JANUS_GATEWAY_VERSION = 0.10.3
++JANUS_GATEWAY_VERSION = 0.10.10
+ JANUS_GATEWAY_SITE = $(call github,meetecho,janus-gateway,v$(JANUS_GATEWAY_VERSION))
+ JANUS_GATEWAY_LICENSE = GPL-3.0 with OpenSSL exception
+ JANUS_GATEWAY_LICENSE_FILES = COPYING
