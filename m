@@ -1,47 +1,66 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 6 Apr 2021 22:32:36 +0200
-Subject: [Buildroot] [git commit] package/rabbitmq-c: bump to version 0.11.0
-Message-ID: <20210406200853.ACBE481D55@busybox.osuosl.org>
+Date: Tue, 6 Apr 2021 22:27:42 +0200
+Subject: [Buildroot] [git commit] package/python-zope-interface: bump to
+ version 5.3.0
+Message-ID: <20210406200853.7971A81375@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=049ae2d7a6b21a7c5d2e38f9571977cde93fbe20
+commit: https://git.buildroot.net/buildroot/commit/?id=7133276bdf5112a077b2fa32342c42f0063b1ed6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update indentation in hash file (two spaces)
+- Update indentation in hash file (two spaces)
+- Update URL in Config.in as current URL returns 404 Not Found
 
-https://github.com/alanxz/rabbitmq-c/releases/tag/v0.11.0
+https://github.com/zopefoundation/zope.interface/blob/5.3.0/CHANGES.rst
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/rabbitmq-c/rabbitmq-c.hash | 4 ++--
- package/rabbitmq-c/rabbitmq-c.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-zope-interface/Config.in                  | 2 +-
+ package/python-zope-interface/python-zope-interface.hash | 6 +++---
+ package/python-zope-interface/python-zope-interface.mk   | 4 ++--
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/rabbitmq-c/rabbitmq-c.hash b/package/rabbitmq-c/rabbitmq-c.hash
-index eb57626518..dc1406d3d5 100644
---- a/package/rabbitmq-c/rabbitmq-c.hash
-+++ b/package/rabbitmq-c/rabbitmq-c.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 6455efbaebad8891c59f274a852b75b5cc51f4d669dfc78d2ae7e6cc97fcd8c0 rabbitmq-c-0.10.0.tar.gz
--sha256 94a12c906acb31a66c2c8a6c1b6e46cab52bc5694c5ada2a06d86b05d3d3f422 LICENSE-MIT
-+sha256  437d45e0e35c18cf3e59bcfe5dfe37566547eb121e69fca64b98f5d2c1c2d424  rabbitmq-c-0.11.0.tar.gz
-+sha256  94a12c906acb31a66c2c8a6c1b6e46cab52bc5694c5ada2a06d86b05d3d3f422  LICENSE-MIT
-diff --git a/package/rabbitmq-c/rabbitmq-c.mk b/package/rabbitmq-c/rabbitmq-c.mk
-index e6ac52fd87..18ecaa3098 100644
---- a/package/rabbitmq-c/rabbitmq-c.mk
-+++ b/package/rabbitmq-c/rabbitmq-c.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-zope-interface/Config.in b/package/python-zope-interface/Config.in
+index 4279aa9ef8..17f7aed0d9 100644
+--- a/package/python-zope-interface/Config.in
++++ b/package/python-zope-interface/Config.in
+@@ -9,4 +9,4 @@ config BR2_PACKAGE_PYTHON_ZOPE_INTERFACE
+ 	  implementation of the Design By Contract methodology support
+ 	  in Python.
+ 
+-	  http://docs.zope.org/zope.interface/
++	  https://zopeinterface.readthedocs.io/
+diff --git a/package/python-zope-interface/python-zope-interface.hash b/package/python-zope-interface/python-zope-interface.hash
+index 2828d85c32..6c2f75303d 100644
+--- a/package/python-zope-interface/python-zope-interface.hash
++++ b/package/python-zope-interface/python-zope-interface.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/zope-interface/json
+-md5	a3b24f9d079bae5e13dd7a88aa512112  zope.interface-4.6.0.tar.gz
+-sha256	1b3d0dcabc7c90b470e59e38a9acaa361be43b3a6ea644c0063951964717f0e5  zope.interface-4.6.0.tar.gz
++md5  291fd76bd83dda946674af1526b6c2cd  zope.interface-5.3.0.tar.gz
++sha256  b18a855f8504743e0a2d8b75d008c7720d44e4c76687e13f959e35d9a13eb397  zope.interface-5.3.0.tar.gz
+ # Locally computed sha256 checksums
+-sha256	3e671db11df687516cc1db5b3d65e4aa383eaca3c20cea3faf53a0f7335d0a3c  LICENSE.txt
++sha256  3e671db11df687516cc1db5b3d65e4aa383eaca3c20cea3faf53a0f7335d0a3c  LICENSE.txt
+diff --git a/package/python-zope-interface/python-zope-interface.mk b/package/python-zope-interface/python-zope-interface.mk
+index f36aab692b..db0739405d 100644
+--- a/package/python-zope-interface/python-zope-interface.mk
++++ b/package/python-zope-interface/python-zope-interface.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--RABBITMQ_C_VERSION = 0.10.0
-+RABBITMQ_C_VERSION = 0.11.0
- RABBITMQ_C_SITE = $(call github,alanxz,rabbitmq-c,v$(RABBITMQ_C_VERSION))
- RABBITMQ_C_LICENSE = MIT
- RABBITMQ_C_LICENSE_FILES = LICENSE-MIT
+-PYTHON_ZOPE_INTERFACE_VERSION = 4.6.0
++PYTHON_ZOPE_INTERFACE_VERSION = 5.3.0
+ PYTHON_ZOPE_INTERFACE_SOURCE = zope.interface-$(PYTHON_ZOPE_INTERFACE_VERSION).tar.gz
+-PYTHON_ZOPE_INTERFACE_SITE = https://files.pythonhosted.org/packages/4e/d0/c9d16bd5b38de44a20c6dc5d5ed80a49626fafcb3db9f9efdc2a19026db6
++PYTHON_ZOPE_INTERFACE_SITE = https://files.pythonhosted.org/packages/b1/f8/aa59109d5345ece4820e8e7a05a97203ef21a0ac2c0460c6c929ea5be889
+ PYTHON_ZOPE_INTERFACE_SETUP_TYPE = setuptools
+ PYTHON_ZOPE_INTERFACE_LICENSE = ZPL-2.1
+ PYTHON_ZOPE_INTERFACE_LICENSE_FILES = LICENSE.txt
