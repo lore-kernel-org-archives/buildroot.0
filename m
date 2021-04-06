@@ -1,39 +1,56 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue,  6 Apr 2021 17:42:35 +0200
-Subject: [Buildroot] [PATCH 1/1] package/tor: do not install systemd service
- file
-Message-ID: <20210406154235.609269-1-bernd.kuhls@t-online.de>
+Date: Tue,  6 Apr 2021 18:03:42 +0200
+Subject: [Buildroot] [PATCH 2/3] package/x11r7/xlib_libXres: bump version to
+ 1.2.1
+In-Reply-To: <20210406160343.1106797-1-bernd.kuhls@t-online.de>
+References: <20210406160343.1106797-1-bernd.kuhls@t-online.de>
+Message-ID: <20210406160343.1106797-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Upstream removed the sample service file for use with systemd:
-https://gitweb.torproject.org/tor.git/commit/contrib?h=maint-0.4.5&id=915af1a65bc217fa33490876199bb69f760bea23
+Release notes:
+https://lists.x.org/archives/xorg-announce/2021-March/003078.html
 
-Fixes:
-http://autobuild.buildroot.net/results/b80/b807f19283528b9f0d0c46250b660ea84695679c/
-http://autobuild.buildroot.net/results/de4/de4f1a99b1c524b81579ee804156e26d3f8babe7/
+Reformatted hashes.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/tor/tor.mk | 5 -----
- 1 file changed, 5 deletions(-)
+ package/x11r7/xlib_libXres/xlib_libXres.hash | 10 ++++------
+ package/x11r7/xlib_libXres/xlib_libXres.mk   |  2 +-
+ 2 files changed, 5 insertions(+), 7 deletions(-)
 
-diff --git a/package/tor/tor.mk b/package/tor/tor.mk
-index 56779f1633..6eed5e4a47 100644
---- a/package/tor/tor.mk
-+++ b/package/tor/tor.mk
-@@ -73,9 +73,4 @@ endef
+diff --git a/package/x11r7/xlib_libXres/xlib_libXres.hash b/package/x11r7/xlib_libXres/xlib_libXres.hash
+index ee4823c1a4..700590ad8c 100644
+--- a/package/x11r7/xlib_libXres/xlib_libXres.hash
++++ b/package/x11r7/xlib_libXres/xlib_libXres.hash
+@@ -1,8 +1,6 @@
+-# From https://lists.x.org/archives/xorg-announce/2017-October/002812.html
+-md5 5d6d443d1abc8e1f6fc1c57fb27729bb  libXres-1.2.0.tar.bz2
+-sha1 b6996ab05460a3b7311f02da23ddf117a5442fd9  libXres-1.2.0.tar.bz2
+-sha256 ff75c1643488e64a7cfbced27486f0f944801319c84c18d3bd3da6bf28c812d4  libXres-1.2.0.tar.bz2
+-sha512 8eb5a36b1f030eb4e27e676cc4befcc073da66a7bce2b39089314e1facb629d13b087bb53ca2c95fe5291857da7ff9f80c6ab28fb3e245eeb9e0344937900172  libXres-1.2.0.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2021-March/003078.html
++sha256  b6e6fb1ebb61610e56017edd928fb89a5f53b3f4f990078309877468663b2b11  libXres-1.2.1.tar.bz2
++sha512  c17d28406e17e305dc4976f095e88059735f5bd8c600adf2e556523c9e0dd7fa01dcbf7a9d28a642e77e49a5b30f54bb9b2fc34bfbedce467ee2a020bba5cdf1  libXres-1.2.1.tar.bz2
  
- TOR_POST_INSTALL_TARGET_HOOKS += TOR_INSTALL_CONF
+ # Locally calculated
+-sha256 0d7300168f85833ea2564835f66a61e036ede90b33e76c06a7b4078096fedbcc  COPYING
++sha256  0d7300168f85833ea2564835f66a61e036ede90b33e76c06a7b4078096fedbcc  COPYING
+diff --git a/package/x11r7/xlib_libXres/xlib_libXres.mk b/package/x11r7/xlib_libXres/xlib_libXres.mk
+index 72f2ec4424..1a03745fcf 100644
+--- a/package/x11r7/xlib_libXres/xlib_libXres.mk
++++ b/package/x11r7/xlib_libXres/xlib_libXres.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--define TOR_INSTALL_INIT_SYSTEMD
--	$(INSTALL) -D -m 644 $(@D)/contrib/dist/tor.service \
--		$(TARGET_DIR)/usr/lib/systemd/system/tor.service
--endef
--
- $(eval $(autotools-package))
+-XLIB_LIBXRES_VERSION = 1.2.0
++XLIB_LIBXRES_VERSION = 1.2.1
+ XLIB_LIBXRES_SOURCE = libXres-$(XLIB_LIBXRES_VERSION).tar.bz2
+ XLIB_LIBXRES_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXRES_LICENSE = MIT
 -- 
 2.29.2
