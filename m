@@ -1,39 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 06 Apr 2021 11:22:11 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Daily results for
- 2021-04-04
-In-Reply-To: <20210406100701.386076e0@windsurf.home> (Thomas Petazzoni's
- message of "Tue, 6 Apr 2021 10:07:01 +0200")
-References: <20210405093012.2186140228@smtp2.osuosl.org>
- <20210406100701.386076e0@windsurf.home>
-Message-ID: <87sg43lqd8.fsf@dell.be.48ers.dk>
+Date: Tue, 06 Apr 2021 11:23:07 +0200
+Subject: [Buildroot] [PATCH 1/1] package/samba4: AD DC support needs ADS
+In-Reply-To: <20210404172858.1514191-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sun, 4 Apr 2021 19:28:58 +0200")
+References: <20210404172858.1514191-1-bernd.kuhls@t-online.de>
+Message-ID: <87o8erlqbo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-Hi,
+ > Needed due to upstream commit:
+ > https://gitlab.com/samba-team/samba/-/commit/607c9ab307db36aee0604d209a13b45d28c63d9b
 
- >> shim | CVE-2014-3676 |
- >> https://security-tracker.debian.org/tracker/CVE-2014-3676
+ > Fixes:
+ > http://autobuild.buildroot.net/results/b3f/b3fe797408b9041de37433602b3a47211818e44b/
 
- > These ones are fixed in upstream commit
- > e253c2a2c07bc526de1528ed9839b2b584025fa2, which is in shim since
- > version 0.8 (we are using version 15).
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
- >> shim | CVE-2014-3677 |
- >> https://security-tracker.debian.org/tracker/CVE-2014-3677
-
- > This one is fixed in upstream commit
- > 034466b7734a2749346151d903bbd7c8a1288db1, which is also in shim since
- > version 0.8.
-
- > I have notified NVD maintainers about this.
-
-Thanks! It was on my todo list for a while.
+Committed to 2021.02.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
