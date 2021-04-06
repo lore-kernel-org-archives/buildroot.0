@@ -1,31 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 06 Apr 2021 13:08:39 +0200
-Subject: [Buildroot] [PATCH] package/xen: add upstream xsa-36{0, 4,
- 8} security fixes
-In-Reply-To: <20210405191753.11410-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Mon, 5 Apr 2021 21:17:53 +0200")
-References: <20210405191753.11410-1-peter@korsgaard.com>
-Message-ID: <87v98zfz60.fsf@dell.be.48ers.dk>
+Date: Tue, 06 Apr 2021 13:09:33 +0200
+Subject: [Buildroot] [PATCH 1/4] boot/shim: fix build issue due to
+ gnu-efi
+In-Reply-To: <20210405202155.1422470-2-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Mon, 5 Apr 2021 22:21:52 +0200")
+References: <20210405202155.1422470-1-thomas.petazzoni@bootlin.com>
+ <20210405202155.1422470-2-thomas.petazzoni@bootlin.com>
+Message-ID: <87r1jnfz4i.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > Fixes the following security issues:
- > - CVE-2021-3308: IRQ vector leak on x86
- >   https://xenbits.xenproject.org/xsa/advisory-360.html
+ > shim fails to build with:
+ > console.c:448:5: error: ?EFI_WARN_UNKOWN_GLYPH? undeclared here (not
+ > in a function); did you mean ?EFI_WARN_UNKNOWN_GLYPH??
+ >   448 |  {  EFI_WARN_UNKOWN_GLYPH,      L"Warning Unknown Glyph"},
+ >       |     ^~~~~~~~~~~~~~~~~~~~~
+ >       |     EFI_WARN_UNKNOWN_GLYPH
+ > make[2]: *** [<builtin>: console.o] Error 1
+ > make[2]: *** Waiting for unfinished jobs....
 
- > - CVE-2021-26933: arm: The cache may not be cleaned for newly allocated
- >   scrubbed pages
- >   https://xenbits.xenproject.org/xsa/advisory-364.html
+ > Backport upstream commit d230d02f990f02293736dca78b108f86c86d1bd0 to
+ > resolve this issue.
 
- > - CVE-2021-28687: HVM soft-reset crashes toolstack
- >   https://xenbits.xenproject.org/xsa/advisory-368.html
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
 Committed to 2021.02.x, thanks.
 
