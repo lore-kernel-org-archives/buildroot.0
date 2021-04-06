@@ -1,46 +1,47 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue,  6 Apr 2021 19:05:08 +0200
-Subject: [Buildroot] [PATCH 1/1] package/bridge-utils: bump to version 1.7.1
-Message-ID: <20210406170508.1250152-1-fontaine.fabrice@gmail.com>
+From: Dick Olsson <hi@senzilla.io>
+Date: Tue, 06 Apr 2021 17:57:06 +0000
+Subject: [Buildroot] [PATCH 0/9] Bump all skarnet/s6 packages
+Message-ID: <EAV9vrEvcxUDcc3PIGRVD5m8upmvXYeeRxC4tC6fNgM@cp4-web-032.plabs.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/bridge-utils/bridge-utils.hash | 4 +++-
- package/bridge-utils/bridge-utils.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 4 deletions(-)
+Quick patch set which bumps all skarnet/s6 packages to the latest version.
 
-diff --git a/package/bridge-utils/bridge-utils.hash b/package/bridge-utils/bridge-utils.hash
-index ccf71704b8..60cdd1cec1 100644
---- a/package/bridge-utils/bridge-utils.hash
-+++ b/package/bridge-utils/bridge-utils.hash
-@@ -1,3 +1,5 @@
-+# From https://mirrors.edge.kernel.org/pub/linux/utils/net/bridge-utils/sha256sums.asc
-+sha256  a61d8be4f1a1405c60c8ef38d544f0c18c05b33b9b07e5b4b31033536165e60e  bridge-utils-1.7.1.tar.xz
-+
- # locally computed
--sha256  4b9b12f31d147320dea931f1041b8a69d84741ddb92cf35ea1f896b67da98b7c  bridge-utils-1.7.tar.gz
- sha256  995a31f60a9ddb4c609214cc7d17ca94cc3cbc7f37e1e64dba81e7f8ea9d4f91  COPYING
-diff --git a/package/bridge-utils/bridge-utils.mk b/package/bridge-utils/bridge-utils.mk
-index 2de5517fc5..e8e9a3ca3a 100644
---- a/package/bridge-utils/bridge-utils.mk
-+++ b/package/bridge-utils/bridge-utils.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--BRIDGE_UTILS_VERSION = 1.7
--BRIDGE_UTILS_SITE = \
--	https://git.kernel.org/pub/scm/linux/kernel/git/shemminger/bridge-utils.git/snapshot
-+BRIDGE_UTILS_VERSION = 1.7.1
-+BRIDGE_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/bridge-utils
-+BRIDGE_UTILS_SOURCE = bridge-utils-$(BRIDGE_UTILS_VERSION).tar.xz
- BRIDGE_UTILS_AUTORECONF = YES
- BRIDGE_UTILS_LICENSE = GPL-2.0+
- BRIDGE_UTILS_LICENSE_FILES = COPYING
+Dick Olsson (9):
+  package/skalibs: bump to version 2.10.0.2
+  package/execline: bump to version 2.8.0.0
+  package/s6: bump to version 2.10.0.2
+  package/s6-portable-utils: bump to version 2.2.3.1
+  package/s6-linux-utils: bump to version 2.5.1.4
+  package/s6-linux-init: bump to version 1.0.6.1
+  package/s6-dns: bump to version 2.3.5.0
+  package/s6-networking: bump to version 2.4.1.0
+  package/s6-rc: bump to version 0.5.2.1
+
+ package/execline/execline.hash                |  2 +-
+ package/execline/execline.mk                  |  2 +-
+ package/s6-dns/s6-dns.hash                    |  2 +-
+ package/s6-dns/s6-dns.mk                      |  2 +-
+ package/s6-linux-init/s6-linux-init.hash      |  2 +-
+ package/s6-linux-init/s6-linux-init.mk        |  2 +-
+ package/s6-linux-utils/s6-linux-utils.hash    |  2 +-
+ package/s6-linux-utils/s6-linux-utils.mk      |  2 +-
+ package/s6-networking/s6-networking.hash      |  2 +-
+ package/s6-networking/s6-networking.mk        |  2 +-
+ .../s6-portable-utils/s6-portable-utils.hash  |  2 +-
+ .../s6-portable-utils/s6-portable-utils.mk    |  2 +-
+ package/s6-rc/s6-rc.hash                      |  2 +-
+ package/s6-rc/s6-rc.mk                        |  2 +-
+ package/s6/s6.hash                            |  2 +-
+ package/s6/s6.mk                              |  2 +-
+ ...ker-use-dummy-file-when-testing-libs.patch | 44 -------------------
+ package/skalibs/skalibs.hash                  |  2 +-
+ package/skalibs/skalibs.mk                    |  2 +-
+ 19 files changed, 18 insertions(+), 62 deletions(-)
+ delete mode 100644 package/skalibs/0001-Make-linker-use-dummy-file-when-testing-libs.patch
+
 -- 
 2.30.2
