@@ -1,87 +1,89 @@
-From: Qais Yousef <qais.yousef@arm.com>
-Date: Tue, 6 Apr 2021 12:54:45 +0100
-Subject: [Buildroot] [PATCHv6 4/5] package/bpftrace: new package
-In-Reply-To: <CANLo3JhERRWK_kJCa0phxXVybPJuPM76PEEstN9tRUek04e+gQ@mail.gmail.com>
-References: <20201220151203.2206747-1-romain.naour@gmail.com>
- <20201220151203.2206747-4-romain.naour@gmail.com>
- <20201221134549.nk4eu6qpto36ahpq@e107158-lin>
- <20210123194408.3omcypashiq44le5@e107158-lin>
- <20210225101849.nt6rnloszarwrgm3@e107158-lin>
- <CANLo3JhERRWK_kJCa0phxXVybPJuPM76PEEstN9tRUek04e+gQ@mail.gmail.com>
-Message-ID: <20210406115445.iueiqqgxhc7qz3yq@e107158-lin>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue,  6 Apr 2021 15:07:02 +0200
+Subject: [Buildroot] [PATCH] package/busybox: add upstream gunzip security
+ fix
+Message-ID: <20210406130702.1165-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/25/21 12:01, Romain Naour wrote:
-> Hello Quais, All,
-> 
-> Le jeu. 25 f?vr. 2021 ? 11:18, Qais Yousef <qais.yousef@arm.com> a ?crit :
-> 
->     On 01/23/21 19:44, Qais Yousef wrote:
->     > On 12/21/20 13:45, Qais Yousef wrote:
->     > > On 12/20/20 16:12, Romain Naour wrote:
->     > > > From: Qais Yousef <qais.yousef@arm.com>
->     > > >
->     > > > bpftrace is a high-level tracing language for Linux enhanced Berkeley
->     > > > Packet Filter (eBPF) available in recent Linux kernels (4.x).
->     > > >
->     > > > Only tested on x86_64 and aarch64. The package doesn't support i386
->     and
->     > > > aarch32.
->     > > >
->     > > > The libbpf dependency allow to enable the BTF support:
->     > > >  # bpftrace --info
->     > > >  System
->     > > >    OS: Linux 5.4.58 #1 SMP Sun Dec 20 15:56:56 CET 2020
->     > > >    Arch: aarch64
->     > > >
->     > > >  Build
->     > > >    version: 2020.11-328-g019a9
->     > > >    LLVM: 9.0.1
->     > > >    foreach_sym: yes
->     > > >    unsafe uprobe: no
->     > > >    bfd: yes
->     > > >    bpf_attach_kfunc: yes
->     > > >    bcc_usdt_addsem: yes
->     > > >    bcc bpf_attach_uprobe refcount: yes
->     > > >    libbpf: yes
->     > > >    libbpf btf dump: yes
->     > > >    libbpf btf dump type decl: yes
->     > > >
->     > > > bfptrace doesn't use the libbpf_bcc library provided by bcc package.
->     > > >
->     > > > Signed-off-by: Qais Yousef <qais.yousef@arm.com>
->     > > > Signed-off-by: Romain Naour <romain.naour@gmail.com>
->     > > > Cc: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
->     > > > ---
->     > > > v6: Update DEVELOPERS file
->     > >
->     > > LGTM.
->     >
->     > Ping.
->     >
->     > I had issues with building patch 5, but the rest of the series is in good
->     shape
->     > IMO and can be merged independently at least.
->     >
->     > Is there anything more needs to be done to help get this support merged?
-> 
->     Ping again. It'd be great to finally have these merged.
-> 
-> 
-> Maintainers are currently busy at the release 2021.02 version of Buildroot.
-> 
-> But yes, this work has been reviewed and reworked by Quais and me.
-> 
-> I guess It's good to go.
+Fixes the following security issue:
 
-Another gentle ping. Hopefully the release is done now for this to be
-considered.
+- CVE-2021-28831: decompress_gunzip.c in BusyBox through 1.32.1 mishandles
+  the error bit on the huft_build result pointer, with a resultant invalid
+  free or segmentation fault, via malformed gzip data.
 
-Thanks
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...ss_gunzip-Fix-DoS-if-gzip-is-corrupt.patch | 58 +++++++++++++++++++
+ 1 file changed, 58 insertions(+)
+ create mode 100644 package/busybox/0004-decompress_gunzip-Fix-DoS-if-gzip-is-corrupt.patch
 
---
-Qais Yousef
+diff --git a/package/busybox/0004-decompress_gunzip-Fix-DoS-if-gzip-is-corrupt.patch b/package/busybox/0004-decompress_gunzip-Fix-DoS-if-gzip-is-corrupt.patch
+new file mode 100644
+index 0000000000..d40cb4d6cd
+--- /dev/null
++++ b/package/busybox/0004-decompress_gunzip-Fix-DoS-if-gzip-is-corrupt.patch
+@@ -0,0 +1,58 @@
++From f25d254dfd4243698c31a4f3153d4ac72aa9e9bd Mon Sep 17 00:00:00 2001
++From: Samuel Sapalski <samuel.sapalski@nokia.com>
++Date: Wed, 3 Mar 2021 16:31:22 +0100
++Subject: [PATCH] decompress_gunzip: Fix DoS if gzip is corrupt
++
++On certain corrupt gzip files, huft_build will set the error bit on
++the result pointer. If afterwards abort_unzip is called huft_free
++might run into a segmentation fault or an invalid pointer to
++free(p).
++
++In order to mitigate this, we check in huft_free if the error bit
++is set and clear it before the linked list is freed.
++
++Signed-off-by: Samuel Sapalski <samuel.sapalski@nokia.com>
++Signed-off-by: Peter Kaestle <peter.kaestle@nokia.com>
++Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ archival/libarchive/decompress_gunzip.c | 12 ++++++++++--
++ 1 file changed, 10 insertions(+), 2 deletions(-)
++
++diff --git a/archival/libarchive/decompress_gunzip.c b/archival/libarchive/decompress_gunzip.c
++index eb3b64930..e93cd5005 100644
++--- a/archival/libarchive/decompress_gunzip.c
+++++ b/archival/libarchive/decompress_gunzip.c
++@@ -220,10 +220,20 @@ static const uint8_t border[] ALIGN1 = {
++  * each table.
++  * t: table to free
++  */
+++#define BAD_HUFT(p) ((uintptr_t)(p) & 1)
+++#define ERR_RET     ((huft_t*)(uintptr_t)1)
++ static void huft_free(huft_t *p)
++ {
++ 	huft_t *q;
++ 
+++	/*
+++	 * If 'p' has the error bit set we have to clear it, otherwise we might run
+++	 * into a segmentation fault or an invalid pointer to free(p)
+++	 */
+++	if (BAD_HUFT(p)) {
+++		p = (huft_t*)((uintptr_t)(p) ^ (uintptr_t)(ERR_RET));
+++	}
+++
++ 	/* Go through linked list, freeing from the malloced (t[-1]) address. */
++ 	while (p) {
++ 		q = (--p)->v.t;
++@@ -289,8 +299,6 @@ static unsigned fill_bitbuffer(STATE_PARAM unsigned bitbuffer, unsigned *current
++  * or a valid pointer to a Huffman table, ORed with 0x1 if incompete table
++  * is given: "fixed inflate" decoder feeds us such data.
++  */
++-#define BAD_HUFT(p) ((uintptr_t)(p) & 1)
++-#define ERR_RET     ((huft_t*)(uintptr_t)1)
++ static huft_t* huft_build(const unsigned *b, const unsigned n,
++ 			const unsigned s, const struct cp_ext *cp_ext,
++ 			unsigned *m)
++-- 
++2.20.1
++
+-- 
+2.20.1
