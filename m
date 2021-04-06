@@ -1,91 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 6 Apr 2021 09:28:12 +0200
-Subject: [Buildroot] [git commit] package/python3: security bump to version
- 3.9.4
-Message-ID: <20210406071627.9FAD38D3EF@busybox.osuosl.org>
+Date: Tue, 6 Apr 2021 09:40:24 +0200
+Subject: [Buildroot] [git commit] package/python-toml: bump to version 0.10.2
+Message-ID: <20210406071628.4A453847D2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a14ce17ca69ca5ace1e017b2987330b70381c73c
+commit: https://git.buildroot.net/buildroot/commit/?id=0f0d2408a384894b6c2584ea0772aabffb2a6e89
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following security issues:
+- Update hash of LICENSE (update in year and author added:
+  https://github.com/uiri/toml/commit/a86fc1fbd650a19eba313c3f642c9e2c679dc8d6)
+- Update indentation in hash file (two spaces)
 
-- bpo-42988: CVE-2021-3426: Remove the getfile feature of the pydoc module
-  which could be abused to read arbitrary files on the disk (directory
-  traversal vulnerability).  Moreover, even source code of Python modules
-  can contain sensitive data like passwords.  Vulnerability reported by
-  David Schw??rer.
-
-- bpo-43285: ftplib no longer trusts the IP address value returned from the
-  server in response to the PASV command by default.  This prevents a
-  malicious FTP server from using the response to probe IPv4 address and
-  port combinations on the client network.
-
-  Code that requires the former vulnerable behavior may set a
-  trust_server_pasv_ipv4_address attribute on their ftplib.FTP instances to
-  True to re-enable it.
-
-- bpo-43439: Add audit hooks for gc.get_objects(), gc.get_referrers() and
-  gc.get_referents().  Patch by Pablo Galindo.
-
-Note: 3.9.3 was recalled due to introducing unintentional ABI
-incompatibility, and fixes re-released as 3.9.4:
-
-https://www.python.org/downloads/release/python-394/
-
-Add host-autoreconf-archive, as it is needed for autoreconf since:
-https://github.com/python/cpython/commit/064bc07f241dceec2fc577cbf5c31fa6d63fe320
-
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python3/python3.hash | 6 +++---
- package/python3/python3.mk   | 5 +++--
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ package/python-toml/python-toml.hash | 6 +++---
+ package/python-toml/python-toml.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python3/python3.hash b/package/python3/python3.hash
-index 753973721b..2a0ba6ab4f 100644
---- a/package/python3/python3.hash
-+++ b/package/python3/python3.hash
+diff --git a/package/python-toml/python-toml.hash b/package/python-toml/python-toml.hash
+index f0641ccda8..dd7215e861 100644
+--- a/package/python-toml/python-toml.hash
++++ b/package/python-toml/python-toml.hash
 @@ -1,5 +1,5 @@
--# From https://www.python.org/downloads/release/python-392/
--md5  f0dc9000312abeb16de4eccce9a870ab  Python-3.9.2.tar.xz
-+# From https://www.python.org/downloads/release/python-394/
-+md5  2a3dba5fc75b695c45cf1806156e1a97  Python-3.9.4.tar.xz
- # Locally computed
--sha256  3c2034c54f811448f516668dce09d24008a0716c3a794dd8639b5388cbde247d  Python-3.9.2.tar.xz
-+sha256  4b0e6644a76f8df864ae24ac500a51bbf68bd098f6a173e27d3b61cdca9aa134  Python-3.9.4.tar.xz
- sha256  599826df92bfdcd2702eac691072498bb096c55af04ee984cf90f70ed77b5a70  LICENSE
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index def34f46ad..345c6a8699 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -5,7 +5,7 @@
+ # md5, sha256 from https://pypi.org/pypi/toml/json
+-md5	63fffbe2d632865ec29cd69bfdf36682  toml-0.10.0.tar.gz
+-sha256	229f81c57791a41d65e399fc06bf0848bab550a9dfd5ed66df18ce5f05e73d5c  toml-0.10.0.tar.gz
++md5  59bce5d8d67e858735ec3f399ec90253  toml-0.10.2.tar.gz
++sha256  b3bda1d108d5dd99f4a20d24d9c348e91c4db7ab1b749200bded2f839ccbe68f  toml-0.10.2.tar.gz
+ # Locally computed sha256 checksums
+-sha256	a879cc43c06aca11ada36f71c8db7257449ff4451874a0903f129920c66fcf2d  LICENSE
++sha256  2d9294823df6c89357c8be4927fce79361d6561e5ee7532d5926e63939aaa536  LICENSE
+diff --git a/package/python-toml/python-toml.mk b/package/python-toml/python-toml.mk
+index 8a61be2f4f..0e95652165 100644
+--- a/package/python-toml/python-toml.mk
++++ b/package/python-toml/python-toml.mk
+@@ -4,9 +4,9 @@
+ #
  ################################################################################
  
- PYTHON3_VERSION_MAJOR = 3.9
--PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).2
-+PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).4
- PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
- PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
- PYTHON3_LICENSE = Python-2.0, others
-@@ -41,7 +41,7 @@ HOST_PYTHON3_CONF_ENV += \
- 
- PYTHON3_DEPENDENCIES = host-python3 libffi
- 
--HOST_PYTHON3_DEPENDENCIES = host-expat host-zlib host-libffi
-+HOST_PYTHON3_DEPENDENCIES = host-autoconf-archive host-expat host-zlib host-libffi
- 
- ifeq ($(BR2_PACKAGE_HOST_PYTHON3_SSL),y)
- HOST_PYTHON3_DEPENDENCIES += host-openssl
-@@ -242,6 +242,7 @@ endef
- PYTHON3_POST_INSTALL_TARGET_HOOKS += PYTHON3_ENSURE_LIBPYTHON_STRIPPED
- 
- PYTHON3_AUTORECONF = YES
-+PYTHON3_AUTORECONF_OPTS = --include=$(HOST_DIR)/share/autoconf-archive
- 
- define PYTHON3_INSTALL_SYMLINK
- 	ln -fs python3 $(TARGET_DIR)/usr/bin/python
+-PYTHON_TOML_VERSION = 0.10.0
++PYTHON_TOML_VERSION = 0.10.2
+ PYTHON_TOML_SOURCE = toml-$(PYTHON_TOML_VERSION).tar.gz
+-PYTHON_TOML_SITE = https://files.pythonhosted.org/packages/b9/19/5cbd78eac8b1783671c40e34bb0fa83133a06d340a38b55c645076d40094
++PYTHON_TOML_SITE = https://files.pythonhosted.org/packages/be/ba/1f744cdc819428fc6b5084ec34d9b30660f6f9daaf70eead706e3203ec3c
+ PYTHON_TOML_SETUP_TYPE = setuptools
+ PYTHON_TOML_LICENSE = MIT
+ PYTHON_TOML_LICENSE_FILES = LICENSE
