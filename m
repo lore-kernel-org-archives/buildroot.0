@@ -1,104 +1,79 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue,  6 Apr 2021 15:11:59 +0200
-Subject: [Buildroot] [PATCH v2] package/busybox: add upstream gunzip
- security fix
-Message-ID: <20210406131200.2156-1-peter@korsgaard.com>
+Date: Tue, 6 Apr 2021 15:15:15 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/python-jinja2:
+ security bump to version 2.11.3
+Message-ID: <20210406125229.AA67882A52@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=fafa3cda2f3c6bb3affafbd069c97b3f4cfac656
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+
 Fixes the following security issue:
 
-- CVE-2021-28831: decompress_gunzip.c in BusyBox through 1.32.1 mishandles
-  the error bit on the huft_build result pointer, with a resultant invalid
-  free or segmentation fault, via malformed gzip data.
+- CVE-2020-28493: This affects the package jinja2 from 0.0.0 and before
+  2.11.3.  The ReDoS vulnerability is mainly due to the `_punctuation_re
+  regex` operator and its use of multiple wildcards.  The last wildcard is
+  the most exploitable as it searches for trailing punctuation.  This issue
+  can be mitigated by Markdown to format user content instead of the urlize
+  filter, or by implementing request timeouts and limiting process memory.
 
+  https://snyk.io/vuln/SNYK-PYTHON-JINJA2-1012994
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit ff976939531f8fd0fa141d22b1299a56ec953c5c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ss_gunzip-Fix-DoS-if-gzip-is-corrupt.patch | 58 +++++++++++++++++++
- package/busybox/busybox.mk                    |  3 +
- 2 files changed, 61 insertions(+)
- create mode 100644 package/busybox/0004-decompress_gunzip-Fix-DoS-if-gzip-is-corrupt.patch
+ package/python-jinja2/python-jinja2.hash | 4 ++--
+ package/python-jinja2/python-jinja2.mk   | 4 ++--
+ package/python3-jinja2/python3-jinja2.mk | 4 ++--
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/busybox/0004-decompress_gunzip-Fix-DoS-if-gzip-is-corrupt.patch b/package/busybox/0004-decompress_gunzip-Fix-DoS-if-gzip-is-corrupt.patch
-new file mode 100644
-index 0000000000..d40cb4d6cd
---- /dev/null
-+++ b/package/busybox/0004-decompress_gunzip-Fix-DoS-if-gzip-is-corrupt.patch
-@@ -0,0 +1,58 @@
-+From f25d254dfd4243698c31a4f3153d4ac72aa9e9bd Mon Sep 17 00:00:00 2001
-+From: Samuel Sapalski <samuel.sapalski@nokia.com>
-+Date: Wed, 3 Mar 2021 16:31:22 +0100
-+Subject: [PATCH] decompress_gunzip: Fix DoS if gzip is corrupt
-+
-+On certain corrupt gzip files, huft_build will set the error bit on
-+the result pointer. If afterwards abort_unzip is called huft_free
-+might run into a segmentation fault or an invalid pointer to
-+free(p).
-+
-+In order to mitigate this, we check in huft_free if the error bit
-+is set and clear it before the linked list is freed.
-+
-+Signed-off-by: Samuel Sapalski <samuel.sapalski@nokia.com>
-+Signed-off-by: Peter Kaestle <peter.kaestle@nokia.com>
-+Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ archival/libarchive/decompress_gunzip.c | 12 ++++++++++--
-+ 1 file changed, 10 insertions(+), 2 deletions(-)
-+
-+diff --git a/archival/libarchive/decompress_gunzip.c b/archival/libarchive/decompress_gunzip.c
-+index eb3b64930..e93cd5005 100644
-+--- a/archival/libarchive/decompress_gunzip.c
-++++ b/archival/libarchive/decompress_gunzip.c
-+@@ -220,10 +220,20 @@ static const uint8_t border[] ALIGN1 = {
-+  * each table.
-+  * t: table to free
-+  */
-++#define BAD_HUFT(p) ((uintptr_t)(p) & 1)
-++#define ERR_RET     ((huft_t*)(uintptr_t)1)
-+ static void huft_free(huft_t *p)
-+ {
-+ 	huft_t *q;
-+ 
-++	/*
-++	 * If 'p' has the error bit set we have to clear it, otherwise we might run
-++	 * into a segmentation fault or an invalid pointer to free(p)
-++	 */
-++	if (BAD_HUFT(p)) {
-++		p = (huft_t*)((uintptr_t)(p) ^ (uintptr_t)(ERR_RET));
-++	}
-++
-+ 	/* Go through linked list, freeing from the malloced (t[-1]) address. */
-+ 	while (p) {
-+ 		q = (--p)->v.t;
-+@@ -289,8 +299,6 @@ static unsigned fill_bitbuffer(STATE_PARAM unsigned bitbuffer, unsigned *current
-+  * or a valid pointer to a Huffman table, ORed with 0x1 if incompete table
-+  * is given: "fixed inflate" decoder feeds us such data.
-+  */
-+-#define BAD_HUFT(p) ((uintptr_t)(p) & 1)
-+-#define ERR_RET     ((huft_t*)(uintptr_t)1)
-+ static huft_t* huft_build(const unsigned *b, const unsigned n,
-+ 			const unsigned s, const struct cp_ext *cp_ext,
-+ 			unsigned *m)
-+-- 
-+2.20.1
-+
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 032e487267..e979ac4f4b 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -11,6 +11,9 @@ BUSYBOX_LICENSE = GPL-2.0, bzip2-1.0.4
- BUSYBOX_LICENSE_FILES = LICENSE archival/libarchive/bz/LICENSE
- BUSYBOX_CPE_ID_VENDOR = busybox
+diff --git a/package/python-jinja2/python-jinja2.hash b/package/python-jinja2/python-jinja2.hash
+index 21170a2a99..51590b17d2 100644
+--- a/package/python-jinja2/python-jinja2.hash
++++ b/package/python-jinja2/python-jinja2.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/jinja2/json
+-md5  0362203b22547abca06ed1082bc1e7b4  Jinja2-2.11.2.tar.gz
+-sha256  89aab215427ef59c34ad58735269eb58b1a5808103067f7bb9d5836c651b3bb0  Jinja2-2.11.2.tar.gz
++md5  231dc00d34afb2672c497713fa9cdaaa  Jinja2-2.11.3.tar.gz
++sha256  a6d58433de0ae800347cab1fa3043cebbabe8baa9d29e668f1c768cb87a333c6  Jinja2-2.11.3.tar.gz
+ # Locally computed sha256 checksums
+ sha256  3b49dcee4105eb37bac10faf1be260408fe85d252b8e9df2e0979fc1e094437b  LICENSE.rst
+diff --git a/package/python-jinja2/python-jinja2.mk b/package/python-jinja2/python-jinja2.mk
+index 9b59d2b019..f91cac6937 100644
+--- a/package/python-jinja2/python-jinja2.mk
++++ b/package/python-jinja2/python-jinja2.mk
+@@ -5,9 +5,9 @@
+ ################################################################################
  
-+# 0004-decompress_gunzip-Fix-DoS-if-gzip-is-corrupt.patch
-+BUSYBOX_IGNORE_CVES += CVE-2021-28831
-+
- define BUSYBOX_HELP_CMDS
- 	@echo '  busybox-menuconfig     - Run BusyBox menuconfig'
- endef
--- 
-2.20.1
+ # Please keep in sync with package/python3-jinja2/python3-jinja2.mk
+-PYTHON_JINJA2_VERSION = 2.11.2
++PYTHON_JINJA2_VERSION = 2.11.3
+ PYTHON_JINJA2_SOURCE = Jinja2-$(PYTHON_JINJA2_VERSION).tar.gz
+-PYTHON_JINJA2_SITE = https://files.pythonhosted.org/packages/64/a7/45e11eebf2f15bf987c3bc11d37dcc838d9dc81250e67e4c5968f6008b6c
++PYTHON_JINJA2_SITE = https://files.pythonhosted.org/packages/4f/e7/65300e6b32e69768ded990494809106f87da1d436418d5f1367ed3966fd7
+ PYTHON_JINJA2_SETUP_TYPE = setuptools
+ PYTHON_JINJA2_LICENSE = BSD-3-Clause
+ PYTHON_JINJA2_LICENSE_FILES = LICENSE.rst
+diff --git a/package/python3-jinja2/python3-jinja2.mk b/package/python3-jinja2/python3-jinja2.mk
+index 851ee28b59..5d29e1d889 100644
+--- a/package/python3-jinja2/python3-jinja2.mk
++++ b/package/python3-jinja2/python3-jinja2.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON3_JINJA2_VERSION = 2.11.2
++PYTHON3_JINJA2_VERSION = 2.11.3
+ PYTHON3_JINJA2_SOURCE = Jinja2-$(PYTHON3_JINJA2_VERSION).tar.gz
+-PYTHON3_JINJA2_SITE = https://files.pythonhosted.org/packages/64/a7/45e11eebf2f15bf987c3bc11d37dcc838d9dc81250e67e4c5968f6008b6c
++PYTHON3_JINJA2_SITE = https://files.pythonhosted.org/packages/4f/e7/65300e6b32e69768ded990494809106f87da1d436418d5f1367ed3966fd7
+ PYTHON3_JINJA2_SETUP_TYPE = setuptools
+ PYTHON3_JINJA2_LICENSE = BSD-3-Clause
+ PYTHON3_JINJA2_LICENSE_FILES = LICENSE.rst
