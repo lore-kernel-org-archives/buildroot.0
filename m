@@ -1,53 +1,61 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue,  6 Apr 2021 18:03:43 +0200
-Subject: [Buildroot] [PATCH 3/3] package/x11r7/xlib_libXaw: bump version to
- 1.0.14
-In-Reply-To: <20210406160343.1106797-1-bernd.kuhls@t-online.de>
-References: <20210406160343.1106797-1-bernd.kuhls@t-online.de>
-Message-ID: <20210406160343.1106797-3-bernd.kuhls@t-online.de>
+From: Grzegorz Blach <grzegorz@blach.pl>
+Date: Tue,  6 Apr 2021 18:06:04 +0200
+Subject: [Buildroot] [PATCH] package/python-falcon: Bump to version 3.0.0
+Message-ID: <20210406160605.264867-1-grzegorz@blach.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes:
-https://lists.x.org/archives/xorg-announce/2021-March/003077.html
+Depends on BR2_PACKAGE_PYTHON3
 
-Reformatted hashes.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
 ---
- package/x11r7/xlib_libXaw/xlib_libXaw.hash | 8 +++++---
- package/x11r7/xlib_libXaw/xlib_libXaw.mk   | 2 +-
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ package/python-falcon/Config.in          | 1 +
+ package/python-falcon/python-falcon.hash | 6 +++---
+ package/python-falcon/python-falcon.mk   | 4 ++--
+ 3 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXaw/xlib_libXaw.hash b/package/x11r7/xlib_libXaw/xlib_libXaw.hash
-index 159e007bc3..f289e66153 100644
---- a/package/x11r7/xlib_libXaw/xlib_libXaw.hash
-+++ b/package/x11r7/xlib_libXaw/xlib_libXaw.hash
-@@ -1,4 +1,6 @@
--# From http://lists.x.org/archives/xorg-announce/2015-April/002591.html
--sha256	8ef8067312571292ccc2bbe94c41109dcf022ea5a4ec71656a83d8cce9edb0cd	libXaw-1.0.13.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2021-March/003077.html
-+sha256  76aef98ea3df92615faec28004b5ce4e5c6855e716fa16de40c32030722a6f8e  libXaw-1.0.14.tar.bz2
-+sha512  29d1c151369523ae6cb418e636b0b7b39ccccc35462a0b394dbeb46d5b6d780badd2eb872a55d9fbba1ee1af034e76c0463f40f8d8a7be2c336d08b3b1bf81d4  libXaw-1.0.14.tar.bz2
-+
- # Locally calculated
--sha256 9f5adb26952f93b3e4650285b94ec6c61a27aab5a21088bfb6694001be1b360d COPYING
-+sha256  9f5adb26952f93b3e4650285b94ec6c61a27aab5a21088bfb6694001be1b360d  COPYING
-diff --git a/package/x11r7/xlib_libXaw/xlib_libXaw.mk b/package/x11r7/xlib_libXaw/xlib_libXaw.mk
-index 17d51a9570..6b615a8de5 100644
---- a/package/x11r7/xlib_libXaw/xlib_libXaw.mk
-+++ b/package/x11r7/xlib_libXaw/xlib_libXaw.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-falcon/Config.in b/package/python-falcon/Config.in
+index 1bf93064bb..f90ef55b30 100644
+--- a/package/python-falcon/Config.in
++++ b/package/python-falcon/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PYTHON_FALCON
+ 	bool "python-falcon"
++	depends on BR2_PACKAGE_PYTHON3
+ 	help
+ 	  An unladen web framework for building APIs and app
+ 	  backends.
+diff --git a/package/python-falcon/python-falcon.hash b/package/python-falcon/python-falcon.hash
+index 68b8d4cb2c..80b2aed54f 100644
+--- a/package/python-falcon/python-falcon.hash
++++ b/package/python-falcon/python-falcon.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/falcon/json
+-md5	77c52c144dd284e6259d257c6f008072  falcon-2.0.0.tar.gz
+-sha256	eea593cf466b9c126ce667f6d30503624ef24459f118c75594a69353b6c3d5fc  falcon-2.0.0.tar.gz
++md5  0ebd5316cd7f59b9be4ea13650ea3a0d  falcon-3.0.0.tar.gz
++sha256  8d7c3d52ae4590ddfa0b3d9c75d44ab573340a5e78d72ee687712e757ac53929  falcon-3.0.0.tar.gz
+ # Locally computed sha256 checksums
+-sha256	e9e7f1a7ba764f042e56afce6f3563c2be9c4fffbb1404b20f8050ae051f577c  LICENSE
++sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/python-falcon/python-falcon.mk b/package/python-falcon/python-falcon.mk
+index 1d7c869d6d..5b73b23277 100644
+--- a/package/python-falcon/python-falcon.mk
++++ b/package/python-falcon/python-falcon.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XLIB_LIBXAW_VERSION = 1.0.13
-+XLIB_LIBXAW_VERSION = 1.0.14
- XLIB_LIBXAW_SOURCE = libXaw-$(XLIB_LIBXAW_VERSION).tar.bz2
- XLIB_LIBXAW_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXAW_LICENSE = MIT
+-PYTHON_FALCON_VERSION = 2.0.0
++PYTHON_FALCON_VERSION = 3.0.0
+ PYTHON_FALCON_SOURCE = falcon-$(PYTHON_FALCON_VERSION).tar.gz
+-PYTHON_FALCON_SITE = https://files.pythonhosted.org/packages/19/30/edff5a1fea7a8e9876c8391e170263e1bb207875b6a65cd619818487b27b
++PYTHON_FALCON_SITE = https://files.pythonhosted.org/packages/f1/59/2748d63922a46e040be06cd175a6242a33ade7839aac37f441544bb6d651
+ PYTHON_FALCON_SETUP_TYPE = setuptools
+ PYTHON_FALCON_LICENSE = Apache-2.0
+ PYTHON_FALCON_LICENSE_FILES = LICENSE
 -- 
-2.29.2
+2.27.0
