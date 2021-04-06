@@ -1,72 +1,97 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 6 Apr 2021 13:08:20 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/xen: add upstream
- xsa-36{0, 4, 8} security fixes
-Message-ID: <20210406104423.74F8F82A89@busybox.osuosl.org>
+Date: Tue, 6 Apr 2021 13:09:17 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] boot/shim: fix build
+ issue due to gnu-efi
+Message-ID: <20210406104423.8380D7FCB3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3cc41c40d7c5cf27480c9bd2277d4df2f8b5cfbc
+commit: https://git.buildroot.net/buildroot/commit/?id=283662245f9997c88a4698db3f8aeb3bc0823c47
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Fixes the following security issues:
+shim fails to build with:
 
-- CVE-2021-3308: IRQ vector leak on x86
-  https://xenbits.xenproject.org/xsa/advisory-360.html
+console.c:448:5: error: ???EFI_WARN_UNKOWN_GLYPH??? undeclared here (not in a function); did you mean ???EFI_WARN_UNKNOWN_GLYPH????
+  448 |  {  EFI_WARN_UNKOWN_GLYPH,      L"Warning Unknown Glyph"},
+      |     ^~~~~~~~~~~~~~~~~~~~~
+      |     EFI_WARN_UNKNOWN_GLYPH
+make[2]: *** [<builtin>: console.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
 
-- CVE-2021-26933: arm: The cache may not be cleaned for newly allocated
-  scrubbed pages
-  https://xenbits.xenproject.org/xsa/advisory-364.html
+Backport upstream commit d230d02f990f02293736dca78b108f86c86d1bd0 to
+resolve this issue.
 
-- CVE-2021-28687: HVM soft-reset crashes toolstack
-  https://xenbits.xenproject.org/xsa/advisory-368.html
-
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 34ff4fc32d4b835fa22a5d4620f065837f1e1191)
+(cherry picked from commit 888f47cbce17807e3c5f07644e27f2fe37f908dc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/xen/xen.hash |  6 ++++++
- package/xen/xen.mk   | 13 +++++++++++++
- 2 files changed, 19 insertions(+)
+ ...-a-typo-in-the-EFI-warning-list-in-gnu-ef.patch | 57 ++++++++++++++++++++++
+ 1 file changed, 57 insertions(+)
 
-diff --git a/package/xen/xen.hash b/package/xen/xen.hash
-index 95061c3fc8..6893414313 100644
---- a/package/xen/xen.hash
-+++ b/package/xen/xen.hash
-@@ -1,3 +1,9 @@
- # Locally computed
- sha256  cf0d7316ad674491f49b7ef0518cb1d906a2e3bfad639deef0ef2343b119ac0c  xen-4.14.1.tar.gz
- sha256  ecca9538e9d3f7e3c2bff827502f4495e2ef9e22c451298696ea08886b176c2c  COPYING
-+# https://xenbits.xenproject.org/xsa/advisory-360.html
-+sha256  809515011efb781a2a8742e9acfd76412d3920c2d4142bb187588cd36f77383e  xsa360-4.14.patch
-+# https://xenbits.xenproject.org/xsa/advisory-364.html
-+sha256  dc313c70bb07b4096bbc4612cbbc180589923277411dede2fda37f04ecc846d6  xsa364.patch
-+# https://xenbits.xenproject.org/xsa/advisory-368.html
-+sha256  55bbe59c75b69f493e364dfcf6cdbc7db4acd32dbf0b4d2466815b7c1f1823ce  xsa368-4.14.patch
-diff --git a/package/xen/xen.mk b/package/xen/xen.mk
-index 3a758b7b20..533882e05b 100644
---- a/package/xen/xen.mk
-+++ b/package/xen/xen.mk
-@@ -11,6 +11,19 @@ XEN_LICENSE_FILES = COPYING
- XEN_CPE_ID_VENDOR = xen
- XEN_CPE_ID_PREFIX = cpe:2.3:o
- XEN_DEPENDENCIES = host-acpica host-python3
-+XEN_PATCH = \
-+	https://xenbits.xenproject.org/xsa/xsa360-4.14.patch \
-+	https://xenbits.xenproject.org/xsa/xsa364.patch \
-+	https://xenbits.xenproject.org/xsa/xsa368-4.14.patch
+diff --git a/boot/shim/0001-console-Fix-a-typo-in-the-EFI-warning-list-in-gnu-ef.patch b/boot/shim/0001-console-Fix-a-typo-in-the-EFI-warning-list-in-gnu-ef.patch
+new file mode 100644
+index 0000000000..77d1b54f16
+--- /dev/null
++++ b/boot/shim/0001-console-Fix-a-typo-in-the-EFI-warning-list-in-gnu-ef.patch
+@@ -0,0 +1,57 @@
++From b00d7f63df7ee6f74a63515f1469768e9cb2aa7a Mon Sep 17 00:00:00 2001
++From: Peter Jones <pjones@redhat.com>
++Date: Mon, 26 Aug 2019 16:12:05 -0400
++Subject: [PATCH] console: Fix a typo in the EFI warning list in gnu-efi
 +
-+# xsa360-4.14.patch
-+XEN_IGNORE_CVES += CVE-2021-3308
++Some versions of gnu-efi have a typo, in which "EFI_WARN_UNKNOWN_GLYPH"
++is accidentally "EFI_WARN_UNKOWN_GLYPH".  Work around that, so that we
++can use the not-silly one in console.c's list of error and warning
++messages.
 +
-+# xsa364.patch
-+XEN_IGNORE_CVES += CVE-2021-26933
++This is a backport from devel for:
 +
-+# xsa368-4.14.patch
-+XEN_IGNORE_CVES += CVE-2021-28687
- 
- # Calculate XEN_ARCH
- ifeq ($(ARCH),aarch64)
++  commit 5f62b22ccd636d326b3229a2b196118701c6f3f7
++  Author: Peter Jones <pjones@redhat.com>
++  Date:   Mon Aug 26 16:12:05 2019 -0400
++
++Signed-off-by: Peter Jones <pjones@redhat.com>
++Upstream: d230d02f990f02293736dca78b108f86c86d1bd0
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ include/console.h | 6 ++++++
++ lib/console.c     | 2 +-
++ 2 files changed, 7 insertions(+), 1 deletion(-)
++
++diff --git a/include/console.h b/include/console.h
++index deb4fa3..00da98d 100644
++--- a/include/console.h
+++++ b/include/console.h
++@@ -7,6 +7,12 @@
++ #define PrintAt(fmt, ...) \
++ 	({"Do not directly call PrintAt() use console_print_at() instead" = 1;});
++ 
+++#if !defined(EFI_WARN_UNKNOWN_GLYPH) && defined(EFI_WARN_UNKOWN_GLYPH)
+++#define EFI_WARN_UNKNOWN_GLYPH EFI_WARN_UNKOWN_GLYPH
+++#elif !defined(EFI_WARN_UNKNOWN_GLYPH)
+++#define EFI_WARN_UNKNOWN_GLYPH EFIWARN(1)
+++#endif
+++
++ EFI_STATUS
++ console_get_keystroke(EFI_INPUT_KEY *key);
++ UINTN
++diff --git a/lib/console.c b/lib/console.c
++index 3aee41c..ccd4d4d 100644
++--- a/lib/console.c
+++++ b/lib/console.c
++@@ -445,7 +445,7 @@ static struct {
++ 	{  EFI_SECURITY_VIOLATION,     L"Security Violation"},
++ 
++ 	// warnings
++-	{  EFI_WARN_UNKOWN_GLYPH,      L"Warning Unknown Glyph"},
+++	{  EFI_WARN_UNKNOWN_GLYPH,     L"Warning Unknown Glyph"},
++ 	{  EFI_WARN_DELETE_FAILURE,    L"Warning Delete Failure"},
++ 	{  EFI_WARN_WRITE_FAILURE,     L"Warning Write Failure"},
++ 	{  EFI_WARN_BUFFER_TOO_SMALL,  L"Warning Buffer Too Small"},
++-- 
++2.30.2
++
