@@ -1,215 +1,205 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue,  6 Apr 2021 20:47:59 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-iptables: bump to version
- 1.0.0
-Message-ID: <20210406184759.1271366-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 6 Apr 2021 21:49:07 +0200
+Subject: [Buildroot] [PATCH 1/1] package/zerotier-one: new package
+In-Reply-To: <20210324054413.1705067-1-tianyuanhao@aliyun.com>
+References: <20210324054413.1705067-1-tianyuanhao@aliyun.com>
+Message-ID: <a7bcab84-9426-326c-ad2e-3e611b197f60@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Drop patches (already in version)
-- Update indentation in hash file (two spaces)
+ Hi Tian,
 
-https://github.com/ldx/python-iptables/compare/v0.14.0...v1.0.0
+ Thanks for this patch. I have a few minor comments. Could you please fix and
+resend?
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...-Add-separate-mechanism-to-load-libc.patch | 90 -------------------
- ...o-as-additional-shared-object-suffix.patch | 57 ------------
- package/python-iptables/python-iptables.hash  |  5 +-
- package/python-iptables/python-iptables.mk    |  4 +-
- 4 files changed, 5 insertions(+), 151 deletions(-)
- delete mode 100644 package/python-iptables/0001-Add-separate-mechanism-to-load-libc.patch
- delete mode 100644 package/python-iptables/0002-Add-.so-as-additional-shared-object-suffix.patch
+On 24/03/2021 06:44, Tian Yuanhao via buildroot wrote:
+> ZeroTier One lets you join ZeroTier virtual networks and have them
+> appear as tun/tap ports on your system.
+> 
+> Adapted from:
+> https://github.com/openwrt/packages/tree/openwrt-21.02/net/zerotier
+> 
+> CC: Moritz Warning <moritzwarning@web.de>
+> Signed-off-by: Tian Yuanhao <tianyuanhao@aliyun.com>
+> ---
+>  package/Config.in                             |  1 +
+>  ...ind-miniupnpc.h-in-staging-directory.patch | 22 ++++++++++++
+>  package/zerotier-one/0002-remove-pie.patch    | 28 +++++++++++++++
+>  ...003-remove-arm32-conservative-CFLAGS.patch | 20 +++++++++++
+>  .../0004-accept-external-linker-flags.patch   | 20 +++++++++++
+>  package/zerotier-one/0005-link-natpmp.patch   | 20 +++++++++++
+>  package/zerotier-one/0006-gcc10.patch         | 24 +++++++++++++
+>  ...0007-add-cerrno-header-for-str-errno.patch | 23 ++++++++++++
+>  ...x-compilation-for-arm_cortex-a7-neon.patch | 23 ++++++++++++
+>  package/zerotier-one/0009-auxv.patch          | 11 ++++++
+>  package/zerotier-one/Config.in                | 14 ++++++++
+>  package/zerotier-one/zerotier-one.hash        |  3 ++
+>  package/zerotier-one/zerotier-one.mk          | 35 +++++++++++++++++++
+>  13 files changed, 244 insertions(+)
+>  create mode 100644 package/zerotier-one/0001-find-miniupnpc.h-in-staging-directory.patch
+>  create mode 100644 package/zerotier-one/0002-remove-pie.patch
+>  create mode 100644 package/zerotier-one/0003-remove-arm32-conservative-CFLAGS.patch
+>  create mode 100644 package/zerotier-one/0004-accept-external-linker-flags.patch
+>  create mode 100644 package/zerotier-one/0005-link-natpmp.patch
+>  create mode 100644 package/zerotier-one/0006-gcc10.patch
+>  create mode 100644 package/zerotier-one/0007-add-cerrno-header-for-str-errno.patch
+>  create mode 100644 package/zerotier-one/0008-fix-compilation-for-arm_cortex-a7-neon.patch
+>  create mode 100644 package/zerotier-one/0009-auxv.patch
+>  create mode 100644 package/zerotier-one/Config.in
+>  create mode 100644 package/zerotier-one/zerotier-one.hash
+>  create mode 100644 package/zerotier-one/zerotier-one.mk
+> 
+> diff --git a/package/Config.in b/package/Config.in
+> index d278e78b68..4dec62fe24 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -2323,6 +2323,7 @@ endif
+>  	source "package/xinetd/Config.in"
+>  	source "package/xl2tp/Config.in"
+>  	source "package/xtables-addons/Config.in"
+> +	source "package/zerotier-one/Config.in"
+>  	source "package/znc/Config.in"
+>  
+>  endmenu
+> diff --git a/package/zerotier-one/0001-find-miniupnpc.h-in-staging-directory.patch b/package/zerotier-one/0001-find-miniupnpc.h-in-staging-directory.patch
+> new file mode 100644
+> index 0000000000..e9724f01d2
+> --- /dev/null
+> +++ b/package/zerotier-one/0001-find-miniupnpc.h-in-staging-directory.patch
+> @@ -0,0 +1,22 @@
+> +From 552cda1ebff6c5182eecdcb35961fd6b441dfa52 Mon Sep 17 00:00:00 2001
+> +From: Moritz Warning <moritzwarning@web.de>
+> +Date: Mon, 23 Apr 2018 22:12:31 +0200
+> +Subject: [PATCH 1/8] find miniupnpc.h in staging directory
+> +
 
-diff --git a/package/python-iptables/0001-Add-separate-mechanism-to-load-libc.patch b/package/python-iptables/0001-Add-separate-mechanism-to-load-libc.patch
-deleted file mode 100644
-index 2a344c2f55..0000000000
---- a/package/python-iptables/0001-Add-separate-mechanism-to-load-libc.patch
-+++ /dev/null
-@@ -1,90 +0,0 @@
--From e3557528d7cdcdc2c579212be8837bc9b54635a4 Mon Sep 17 00:00:00 2001
--From: Frank Vanbever <frank.vanbever@essensium.com>
--Date: Thu, 20 Feb 2020 12:14:08 +0100
--Subject: [PATCH] Add separate mechanism to load libc
--
--ctypes.util.find_library() always returns None for systems which do not have the
--tools installed to determine the location of a given shared library (i.e.
--ldconfig, gcc, objdump). If find_libary() fails attempt to load known libc by
--SONAME.
--
--Upstream: https://github.com/ldx/python-iptables/commit/e3557528d7cdcdc2c579212be8837bc9b54635a4
--
--Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
-----
-- iptc/ip4tc.py   |  4 ++--
-- iptc/util.py    | 16 ++++++++++++++++
-- iptc/xtables.py |  4 ++--
-- 3 files changed, 20 insertions(+), 4 deletions(-)
--
--diff --git a/iptc/ip4tc.py b/iptc/ip4tc.py
--index 4c5d690..4ddd2dc 100644
----- a/iptc/ip4tc.py
--+++ b/iptc/ip4tc.py
--@@ -9,7 +9,7 @@ import socket
-- import struct
-- import weakref
-- 
---from .util import find_library, load_kernel
--+from .util import find_library, load_kernel, find_libc
-- from .xtables import (XT_INV_PROTO, NFPROTO_IPV4, XTablesError, xtables,
--                       xt_align, xt_counters, xt_entry_target, xt_entry_match)
-- 
--@@ -26,7 +26,7 @@ if not hasattr(socket, 'IPPROTO_SCTP'):
-- 
-- _IFNAMSIZ = 16
-- 
---_libc = ct.CDLL("libc.so.6")
--+_libc = find_libc()
-- _get_errno_loc = _libc.__errno_location
-- _get_errno_loc.restype = ct.POINTER(ct.c_int)
-- _malloc = _libc.malloc
--diff --git a/iptc/util.py b/iptc/util.py
--index ae5fb9b..e6b1649 100644
----- a/iptc/util.py
--+++ b/iptc/util.py
--@@ -109,3 +109,19 @@ def find_library(*names):
--             major = int(m.group(1))
--         return lib, major
--     return None, None
--+
--+
--+def find_libc():
--+    lib = ctypes.util.find_library('c')
--+    if lib is not None:
--+        return ctypes.CDLL(lib, mode=ctypes.RTLD_GLOBAL)
--+
--+    libnames = ['libc.so.6', 'libc.so.0', 'libc.so']
--+    for name in libnames:
--+        try:
--+            lib = ctypes.CDLL(name, mode=ctypes.RTLD_GLOBAL)
--+            return lib
--+        except:
--+            pass
--+
--+    return None
--diff --git a/iptc/xtables.py b/iptc/xtables.py
--index 93bc080..cf21029 100644
----- a/iptc/xtables.py
--+++ b/iptc/xtables.py
--@@ -6,7 +6,7 @@ import sys
-- import weakref
-- 
-- from . import version
---from .util import find_library
--+from .util import find_library, find_libc
-- from .errors import *
-- 
-- XT_INV_PROTO = 0x40  # invert the sense of PROTO
--@@ -792,7 +792,7 @@ class xtables_target(ct.Union):
--                 ("v12", _xtables_target_v12)]
-- 
-- 
---_libc, _ = find_library("c")
--+_libc = find_libc()
-- _optind = ct.c_long.in_dll(_libc, "optind")
-- _optarg = ct.c_char_p.in_dll(_libc, "optarg")
-- 
---- 
--2.20.1
--
-diff --git a/package/python-iptables/0002-Add-.so-as-additional-shared-object-suffix.patch b/package/python-iptables/0002-Add-.so-as-additional-shared-object-suffix.patch
-deleted file mode 100644
-index 41d49fc1e6..0000000000
---- a/package/python-iptables/0002-Add-.so-as-additional-shared-object-suffix.patch
-+++ /dev/null
-@@ -1,57 +0,0 @@
--From 899d25c511c6ce779b7153e9ae2e41055b30b9c5 Mon Sep 17 00:00:00 2001
--From: Frank Vanbever <frank.vanbever@essensium.com>
--Date: Mon, 9 Mar 2020 12:36:47 +0100
--Subject: [PATCH] Add '.so' as additional shared object suffix
--
--EXT_SUFFIX includes a platform information tag starting from Python 3.5 [0]
--For example:
--
--    >>> sysconfig.get_config_var("EXT_SUFFIX")
--    '.cpython-38-aarch64-linux-gnu.so'
--
--This suffix only applies to cpython extensions i.e. not to the iptables shared
--objects.
--
--Adding '.so' as an additional suffix for shared objects fixes the issue.
--
--Fixes: Issue #301
--
--Signed-off-by: Frank Vanbever <frank.vanbever@essensium.com>
--
--Backported from: 899d25c511c6ce779b7153e9ae2e41055b30b9c5
--
--[0]: https://docs.python.org/3/whatsnew/3.5.html#build-and-c-api-changes
-----
-- iptc/util.py | 13 ++++++++++---
-- 1 file changed, 10 insertions(+), 3 deletions(-)
--
--diff --git a/iptc/util.py b/iptc/util.py
--index e6b1649..04fe905 100644
----- a/iptc/util.py
--+++ b/iptc/util.py
--@@ -80,12 +80,19 @@ def _do_find_library(name):
-- 
-- 
-- def _find_library(*names):
--+    exts = []
--     if version_info >= (3, 3):
---        ext = get_config_var("EXT_SUFFIX")
--+        exts.append(get_config_var("EXT_SUFFIX"))
--     else:
---        ext = get_config_var('SO')
--+        exts.append(get_config_var('SO'))
--+
--+    if version_info >= (3, 5):
--+        exts.append('.so')
--+
--     for name in names:
---        libnames = [name, "lib" + name, name + ext, "lib" + name + ext]
--+        libnames = [name, "lib" + name]
--+        for ext in exts:
--+            libnames += [name + ext, "lib" + name + ext]
--         libdir = os.environ.get('IPTABLES_LIBDIR', None)
--         if libdir is not None:
--             libdirs = libdir.split(':')
---- 
--2.20.1
--
-diff --git a/package/python-iptables/python-iptables.hash b/package/python-iptables/python-iptables.hash
-index 46786699ac..ee5f765fba 100644
---- a/package/python-iptables/python-iptables.hash
-+++ b/package/python-iptables/python-iptables.hash
-@@ -1,5 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/python-iptables/json
--md5	98ee55f239bf8f2d002915d76b416c22  python-iptables-0.14.0.tar.gz
--sha256	61b23850ad5d917436aa73c2847ab941bc0edbe79a324b0eebdb98af0b65b10d  python-iptables-0.14.0.tar.gz
-+md5  3fb27da1107bdb62196850fa70e8b0d4  python-iptables-1.0.0.tar.gz
-+sha256  480470adb5f29bf84269b4e53dbad9623af91c79aa666cc0274dec199a555bc5  python-iptables-1.0.0.tar.gz
-+
- # Locally calculated
- sha256  b827789c74144d9bb92595ed3bc568aef767a7e8d930fba61c2cdd9f6ec27599  NOTICE
-diff --git a/package/python-iptables/python-iptables.mk b/package/python-iptables/python-iptables.mk
-index 66e478a89a..72bf292c77 100644
---- a/package/python-iptables/python-iptables.mk
-+++ b/package/python-iptables/python-iptables.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--PYTHON_IPTABLES_VERSION = 0.14.0
--PYTHON_IPTABLES_SITE = https://files.pythonhosted.org/packages/08/5e/16a5ca35c420b8059eeb72716e316eeb6f0e59ce028998d36b2dc87554e5
-+PYTHON_IPTABLES_VERSION = 1.0.0
-+PYTHON_IPTABLES_SITE = https://files.pythonhosted.org/packages/ca/6e/cba9c6f4b5a1963b7f5b015f5ed5e2eec7a94ac460570e3474177c4004d6
- PYTHON_IPTABLES_SETUP_TYPE = setuptools
- PYTHON_IPTABLES_LICENSE = Apache-2.0
- PYTHON_IPTABLES_LICENSE_FILES = NOTICE
--- 
-2.30.2
+ Every patch requires a separate SoB by yourself, even if you're not the author.
+This way you validate that it is possible to propagate the patch under the
+BUSL-1.1 license.
+
+ Also, please include the provenance of the patch if you didn't create it yourself.
+
+ Finally, please also check if this patch was sent upstream. If yes, please
+include a reference to the upstream bug or PR. If not, ideally you should create
+an upstream PR, or at least indicate why this is not possible.
+
+ So in this case, there should be:
+
+Patch taken from
+https://github.com/openwrt/packages/blob/openwrt-21.02/net/zerotier/patches/0001-find-miniupnpc.h-in-staging-directory.patch
+
+Upstream status: ...
+
+Signed-off-by: Tian Yuanhao <tianyuanhao@aliyun.com>
+
+
+ (Also, normally we don't want the "1/8" part in the subject line. In this case,
+though, it's a straight copy-paste from openwrt so it's OK.)
+
+
+ The same comments obviously apply to all other patches.
+
+[snip]
+> diff --git a/package/zerotier-one/0006-gcc10.patch b/package/zerotier-one/0006-gcc10.patch
+> new file mode 100644
+> index 0000000000..9550dfdde4
+> --- /dev/null
+> +++ b/package/zerotier-one/0006-gcc10.patch
+> @@ -0,0 +1,24 @@
+> +From e0c76c5ccf049d22bc47d723567926346e4d3639 Mon Sep 17 00:00:00 2001
+> +From: Moritz Warning <moritzwarning@web.de>
+> +Date: Sat, 21 Nov 2020 18:19:21 +0100
+> +Subject: [PATCH 6/8] gcc10
+> +
+> +---
+> + osdep/Binder.hpp | 6 +++---
+> + 1 file changed, 3 insertions(+), 3 deletions(-)
+> +
+> +--- a/osdep/Binder.hpp
+> ++++ b/osdep/Binder.hpp
+> +@@ -396,9 +396,9 @@ public:
+> + 					}
+> + #endif // __LINUX__
+> + 					if (_bindingCount < ZT_BINDER_MAX_BINDINGS) {
+> +-						_bindings[_bindingCount].udpSock = udps;
+> +-						_bindings[_bindingCount].tcpListenSock = tcps;
+> +-						_bindings[_bindingCount].address = ii->first;
+> ++						_bindings[(unsigned int)_bindingCount].udpSock = udps;
+> ++						_bindings[(unsigned int)_bindingCount].tcpListenSock = tcps;
+> ++						_bindings[(unsigned int)_bindingCount].address = ii->first;
+> + 						phy.setIfName(udps,(char*)ii->second.c_str(),(int)ii->second.length());
+> + 						++_bindingCount;
+> + 					}
+
+ Upstream reject this patch (https://github.com/zerotier/ZeroTierOne/pull/1232)
+because it is actually a GCC bug that is fixed in GCC 10.2.0. Since we have that
+GCC version in all our releases, we don't need this patch.
+
+ Also note that openwrt copied this patch from an upstream MR, but totally
+destroyed the commit message and authorship. Removing authorship is probably a
+license violation (I haven't checked BUSL, but giving credit is a pretty
+standard license term). So we can't accept this patch. Probably many of the
+other patches are in a similar situation.
+
+
+[snip]
+> diff --git a/package/zerotier-one/zerotier-one.hash b/package/zerotier-one/zerotier-one.hash
+> new file mode 100644
+> index 0000000000..f6892a0cc2
+> --- /dev/null
+> +++ b/package/zerotier-one/zerotier-one.hash
+> @@ -0,0 +1,3 @@
+> +# Locally calculated
+> +sha256  0f45a4050cdfea1018634c88b6c302cbbfcc3f7f93cb94bed840a15e3ffa55ba  zerotier-one-1.6.4.tar.gz
+> +sha256  ef3edeecd9fa4fb5eff7a74afe964a02b7d9136bd07c4b4cd3864432d6890515  LICENSE.txt
+> diff --git a/package/zerotier-one/zerotier-one.mk b/package/zerotier-one/zerotier-one.mk
+> new file mode 100644
+> index 0000000000..f7262e875d
+> --- /dev/null
+> +++ b/package/zerotier-one/zerotier-one.mk
+> @@ -0,0 +1,35 @@
+> +################################################################################
+> +#
+> +# zerotier-one
+> +#
+> +################################################################################
+> +
+> +ZEROTIER_ONE_VERSION = 1.6.4
+> +ZEROTIER_ONE_SITE = $(call github,zerotier,ZeroTierOne,$(ZEROTIER_ONE_VERSION))
+> +ZEROTIER_ONE_DEPENDENCIES = libminiupnpc libnatpmp
+> +ZEROTIER_ONE_LICENSE = BUSL-1.1
+> +ZEROTIER_ONE_LICENSE_FILES = LICENSE.txt
+> +
+> +define ZEROTIER_ONE_BUILD_CMDS
+> +	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
+> +endef
+> +
+> +define ZEROTIER_ONE_INSTALL_TARGET_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
+> +endef
+> +
+> +define ZEROTIER_ONE_INSTALL_INIT_SYSTEMD
+> +	$(INSTALL) -D -m 644 $(@D)/debian/zerotier-one.service \
+> +		$(TARGET_DIR)/usr/lib/systemd/system/zerotier-one.service
+> +endef
+> +
+> +define ZEROTIER_ONE_INSTALL_INIT_SYSV
+> +	$(INSTALL) -D -m 755 $(@D)/debian/zerotier-one.init \
+> +		$(TARGET_DIR)/etc/init.d/S60zerotier-one
+> +endef
+> +
+> +define ZEROTIER_ONE_LINUX_CONFIG_FIXUPS
+> +	$(call KCONFIG_ENABLE_OPT,CONFIG_TUN)
+
+ Is this the only kernel option needed?
+
+ Regards,
+ Arnout
+
+> +endef
+> +
+> +$(eval $(generic-package))
+> 
