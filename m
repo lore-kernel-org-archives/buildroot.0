@@ -1,39 +1,68 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 6 Apr 2021 12:59:45 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/python-ipython:
- add CPE variables
-Message-ID: <20210406104423.084687FCB3@busybox.osuosl.org>
+Date: Tue, 6 Apr 2021 13:02:35 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/python-py:
+ security bump to version 1.10.0
+Message-ID: <20210406104423.516AD82A8A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3f0b6bd4759cfec612087a9b0b10d5fc84598fee
+commit: https://git.buildroot.net/buildroot/commit/?id=8a33568bb8fb8d5ab9a5cc47fdfb0880d1b488b6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-cpe:2.3:a:ipython:ipython is a valid CPE identifier for this package:
+Fix CVE-2020-29651: A denial of service via regular expression in the
+py.path.svnwc component of py (aka python-py) through 1.9.0 could be
+used by attackers to cause a compute-time denial of service attack by
+supplying malicious input to the blame functionality.
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aipython%3Aipython
+Add py/_vendored_packages/iniconfig-1.1.1.dist-info/LICENSE (MIT) which
+has been added with
+https://github.com/pytest-dev/py/commit/94cf44fd41d957eb50773d3e4fb54e931836779e
+
+https://github.com/pytest-dev/py/blob/1.10.0/CHANGELOG.rst
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 398c3ca43e1977241df7ce07e882f98ceb4bfb5e)
+(cherry picked from commit b430894d63ea1119bc7031511f0ccdc399774011)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-ipython/python-ipython.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/python-py/python-py.hash | 5 +++--
+ package/python-py/python-py.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-ipython/python-ipython.mk b/package/python-ipython/python-ipython.mk
-index f340e9b013..8136353ae2 100644
---- a/package/python-ipython/python-ipython.mk
-+++ b/package/python-ipython/python-ipython.mk
-@@ -9,6 +9,8 @@ PYTHON_IPYTHON_SOURCE = ipython-$(PYTHON_IPYTHON_VERSION).tar.gz
- PYTHON_IPYTHON_SITE = https://files.pythonhosted.org/packages/c0/e5/ba19ae58e9bdd80832332873cb4e11a90cf2049df052c1aadeabc2cdadeb
- PYTHON_IPYTHON_LICENSE = BSD-3-Clause
- PYTHON_IPYTHON_LICENSE_FILES = COPYING.rst LICENSE
-+PYTHON_IPYTHON_CPE_ID_VENDOR = ipython
-+PYTHON_IPYTHON_CPE_ID_PRODUCT = ipython
- PYTHON_IPYTHON_SETUP_TYPE = distutils
+diff --git a/package/python-py/python-py.hash b/package/python-py/python-py.hash
+index 98e16fd97b..2d9928f376 100644
+--- a/package/python-py/python-py.hash
++++ b/package/python-py/python-py.hash
+@@ -1,5 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/py/json
+-md5  b80db4e61eef724f49feb4d20b649e62  py-1.9.0.tar.gz
+-sha256  9ca6883ce56b4e8da7e79ac18787889fa5206c79dcc67fb065376cd2fe03f342  py-1.9.0.tar.gz
++md5  5f108bfe00d5468cbdb8071051f86a55  py-1.10.0.tar.gz
++sha256  21b81bda15b66ef5e1a777a21c4dcd9c20ad3efd0b3f817e7a809035269e1bd3  py-1.10.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  2af680c39ef493fb82830356d1d3df1acb5a06033cba2dec7a19e21caa77a866  LICENSE
++sha256  2af680c39ef493fb82830356d1d3df1acb5a06033cba2dec7a19e21caa77a866  py/_vendored_packages/iniconfig-1.1.1.dist-info/LICENSE
+diff --git a/package/python-py/python-py.mk b/package/python-py/python-py.mk
+index 2e9d18ab1a..d8cb6fa544 100644
+--- a/package/python-py/python-py.mk
++++ b/package/python-py/python-py.mk
+@@ -4,13 +4,13 @@
+ #
+ ################################################################################
  
- $(eval $(python-package))
+-PYTHON_PY_VERSION = 1.9.0
++PYTHON_PY_VERSION = 1.10.0
+ PYTHON_PY_SOURCE = py-$(PYTHON_PY_VERSION).tar.gz
+-PYTHON_PY_SITE = https://files.pythonhosted.org/packages/97/a6/ab9183fe08f69a53d06ac0ee8432bc0ffbb3989c575cc69b73a0229a9a99
++PYTHON_PY_SITE = https://files.pythonhosted.org/packages/0d/8c/50e9f3999419bb7d9639c37e83fa9cdcf0f601a9d407162d6c37ad60be71
+ PYTHON_PY_DEPENDENCIES = host-python-setuptools-scm
+ PYTHON_PY_SETUP_TYPE = setuptools
+ PYTHON_PY_LICENSE = MIT
+-PYTHON_PY_LICENSE_FILES = LICENSE
++PYTHON_PY_LICENSE_FILES = LICENSE py/_vendored_packages/iniconfig-1.1.1.dist-info/LICENSE
+ PYTHON_PY_CPE_ID_VENDOR = pytest
+ PYTHON_PY_CPE_ID_PRODUCT = py
+ 
