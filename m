@@ -1,39 +1,35 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 6 Apr 2021 09:45:23 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/python-pyjwt: add
- CPE variables
-Message-ID: <20210406072100.ADDC38BE9A@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 06 Apr 2021 09:52:45 +0200
+Subject: [Buildroot] [PATCH 1/1] package/samba4: add required python
+ deps for AD DC support
+References: <20210404165823.954492-1-bernd.kuhls@t-online.de>
+ <20210405110003.1965aa55@windsurf.home>
+Message-ID: <djgtjhxcg5.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c7700ae5fbd8d5fcd022534b4e7b2c928084dab7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+Am Mon, 05 Apr 2021 11:00:03 +0200 schrieb Thomas Petazzoni:
 
-cpe:2.3:a:pyjwt_project:pyjwt is a valid CPE identifier for this
-package:
+> On Sun,  4 Apr 2021 18:58:23 +0200 Bernd Kuhls
+> <bernd.kuhls@t-online.de> wrote:
+> 
+>>  ifeq ($(BR2_PACKAGE_SAMBA4_AD_DC),y)
+>> -SAMBA4_DEPENDENCIES += jansson +SAMBA4_DEPENDENCIES += \ +	jansson \ 
++
+>> host-python-dnspython \ +	host-python-markdown \
+> 
+> I'm curious: why are the host packages needed? Is it because the
+> configuration stuff checks on the host that they are available, while in
+> fact they are only needed on the target ?
+> 
+> Thomas
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Apyjwt_project%3Apyjwt
+Hi Thomas,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 536a5017f7d17317473ef203326178ba90ce4e42)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python-pyjwt/python-pyjwt.mk | 2 ++
- 1 file changed, 2 insertions(+)
+yes, it seems to. The configure error could only be solved by also adding 
+the host packages.
 
-diff --git a/package/python-pyjwt/python-pyjwt.mk b/package/python-pyjwt/python-pyjwt.mk
-index 9215911389..942499ea49 100644
---- a/package/python-pyjwt/python-pyjwt.mk
-+++ b/package/python-pyjwt/python-pyjwt.mk
-@@ -10,5 +10,7 @@ PYTHON_PYJWT_SITE = https://files.pythonhosted.org/packages/14/6d/096dc269d105ba
- PYTHON_PYJWT_SETUP_TYPE = setuptools
- PYTHON_PYJWT_LICENSE = MIT
- PYTHON_PYJWT_LICENSE_FILES = LICENSE
-+PYTHON_PYJWT_CPE_ID_VENDOR = pyjwt_project
-+PYTHON_PYJWT_CPE_ID_PRODUCT = pyjwt
- 
- $(eval $(python-package))
+Regards, Bernd
