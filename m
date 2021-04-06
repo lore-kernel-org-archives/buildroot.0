@@ -1,39 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 6 Apr 2021 13:02:11 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/python-aiohttp:
- add CPE variables
-Message-ID: <20210406104423.3822B82A8A@busybox.osuosl.org>
+Date: Tue, 6 Apr 2021 13:08:04 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] boot/grub2: ignore the
+ last 3 remaining CVEs
+Message-ID: <20210406104423.698BB7FCB3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7f3aadc196744b3b5dae51913c1f7399dcfbb4e4
+commit: https://git.buildroot.net/buildroot/commit/?id=300c8d20b5f850c7416c7e71029754393413808d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-cpe:2.3:a:aiohttp_project:aiohttp is a valid CPE identifier for this
-package:
+An analysis of the last 3 remaining CVEs that are reported to affect
+the grub2 package has allowed to ensure that we can safely ignore
+them:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aaiohttp_project%3Aaiohttp
+ * CVE-2020-14372 is already fixed by a patch we have in our patch
+   stack for grub2
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ * CVE-2019-14865 and CVE-2020-15705 are both distro-specific and do
+   not affect grub2 upstream, nor grub2 with the stack of patches we
+   have in Buildroot
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 4e53f3fc638aeb2f1247c485ac78fcc46fce7f11)
+(cherry picked from commit a490687571ef8e199a2480d0b24904ff62ed9a18)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-aiohttp/python-aiohttp.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ boot/grub2/grub2.mk | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/package/python-aiohttp/python-aiohttp.mk b/package/python-aiohttp/python-aiohttp.mk
-index f1e755c023..e878ac1a55 100644
---- a/package/python-aiohttp/python-aiohttp.mk
-+++ b/package/python-aiohttp/python-aiohttp.mk
-@@ -10,5 +10,7 @@ PYTHON_AIOHTTP_SITE = https://files.pythonhosted.org/packages/7a/95/eb60aaad7943
- PYTHON_AIOHTTP_SETUP_TYPE = setuptools
- PYTHON_AIOHTTP_LICENSE = Apache-2.0
- PYTHON_AIOHTTP_LICENSE_FILES = LICENSE.txt
-+PYTHON_AIOHTTP_CPE_ID_VENDOR = aiohttp_project
-+PYTHON_AIOHTTP_CPE_ID_PRODUCT = aiohttp
+diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
+index c5742ede71..af16ee91e1 100644
+--- a/boot/grub2/grub2.mk
++++ b/boot/grub2/grub2.mk
+@@ -37,6 +37,18 @@ GRUB2_IGNORE_CVES += CVE-2020-15707
+ # 2021/03/02 security fixes - patches 0029-0149
+ GRUB2_IGNORE_CVES += CVE-2020-25632 CVE-2020-25647 CVE-2020-27749 \
+ 	CVE-2020-27779 CVE-2021-3418 CVE-2021-20225 CVE-2021-20233
++# 0039-acpi-Don-t-register-the-acpi-command-when-locked-dow.patch
++GRUB2_IGNORE_CVES += CVE-2020-14372
++# CVE-2019-14865 is about a flaw in the grub2-set-bootflag tool, which
++# doesn't exist upstream, but is added by the Redhat/Fedora
++# packaging. Not applicable to Buildroot.
++GRUB2_IGNORE_CVES += CVE-2019-14865
++# CVE-2020-15705 is related to a flaw in the use of the
++# grub_linuxefi_secure_validate(), which was added by Debian/Ubuntu
++# patches. The issue doesn't affect upstream Grub, and
++# grub_linuxefi_secure_validate() is not implemented in the grub2
++# version available in Buildroot.
++GRUB2_IGNORE_CVES += CVE-2020-15705
  
- $(eval $(python-package))
+ ifeq ($(BR2_TARGET_GRUB2_INSTALL_TOOLS),y)
+ GRUB2_INSTALL_TARGET = YES
