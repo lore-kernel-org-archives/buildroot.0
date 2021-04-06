@@ -1,55 +1,94 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 06 Apr 2021 11:46:44 +0200
-Subject: [Buildroot] [PATCH 2/4] boot/shim: fix build issues with gcc 9.x
-In-Reply-To: <20210405202155.1422470-3-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Mon, 5 Apr 2021 22:21:53 +0200")
-References: <20210405202155.1422470-1-thomas.petazzoni@bootlin.com>
- <20210405202155.1422470-3-thomas.petazzoni@bootlin.com>
-Message-ID: <8735w3iw3f.fsf@dell.be.48ers.dk>
+Date: Tue, 6 Apr 2021 11:44:06 +0200
+Subject: [Buildroot] [git commit] boot/shim: fix build issue due to gnu-efi
+Message-ID: <20210406092135.A359682AB6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=888f47cbce17807e3c5f07644e27f2fe37f908dc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Backport a set of upstream patches to fix:
- > MokManager.c: In function ?write_back_mok_list?:
- > MokManager.c:1081:19: error: taking address of packed member of
- > ?struct <anonymous>? may result in an unaligned pointer value
- > [-Werror=address-of-packed-member]
- >  1081 |   if (CompareGuid(&(list[i].Type), &X509_GUID) == 0)
- >       |                   ^~~~~~~~~~~~~~~
- > MokManager.c:1103:19: error: taking address of packed member of
- > ?struct <anonymous>? may result in an unaligned pointer value
- > [-Werror=address-of-packed-member]
- >  1103 |   if (CompareGuid(&(list[i].Type), &X509_GUID) == 0) {
- >       |                   ^~~~~~~~~~~~~~~
- > MokManager.c: In function ?delete_cert?:
- > MokManager.c:1144:19: error: taking address of packed member of
- > ?struct <anonymous>? may result in an unaligned pointer value
- > [-Werror=address-of-packed-member]
- >  1144 |   if (CompareGuid(&(mok[i].Type), &X509_GUID) != 0)
- >       |                   ^~~~~~~~~~~~~~
- > MokManager.c: In function ?delete_hash_in_list?:
- > MokManager.c:1195:20: error: taking address of packed member of
- > ?struct <anonymous>? may result in an unaligned pointer value
- > [-Werror=address-of-packed-member]
- >  1195 |   if ((CompareGuid(&(mok[i].Type), &Type) != 0) ||
- >       |                    ^~~~~~~~~~~~~~
- > MokManager.c: In function ?delete_keys?:
- > MokManager.c:1359:19: error: taking address of packed member of
- > ?struct <anonymous>? may result in an unaligned pointer value
- > [-Werror=address-of-packed-member]
- >  1359 |   if (CompareGuid(&(del_key[i].Type), &X509_GUID) == 0) {
- >       |                   ^~~~~~~~~~~~~~~~~~
- > cc1: all warnings being treated as errors
- > make[1]: *** [<builtin>: MokManager.o] Error 1
+shim fails to build with:
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+console.c:448:5: error: ???EFI_WARN_UNKOWN_GLYPH??? undeclared here (not in a function); did you mean ???EFI_WARN_UNKNOWN_GLYPH????
+  448 |  {  EFI_WARN_UNKOWN_GLYPH,      L"Warning Unknown Glyph"},
+      |     ^~~~~~~~~~~~~~~~~~~~~
+      |     EFI_WARN_UNKNOWN_GLYPH
+make[2]: *** [<builtin>: console.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
 
-Committed, thanks.
+Backport upstream commit d230d02f990f02293736dca78b108f86c86d1bd0 to
+resolve this issue.
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...-a-typo-in-the-EFI-warning-list-in-gnu-ef.patch | 57 ++++++++++++++++++++++
+ 1 file changed, 57 insertions(+)
+
+diff --git a/boot/shim/0001-console-Fix-a-typo-in-the-EFI-warning-list-in-gnu-ef.patch b/boot/shim/0001-console-Fix-a-typo-in-the-EFI-warning-list-in-gnu-ef.patch
+new file mode 100644
+index 0000000000..77d1b54f16
+--- /dev/null
++++ b/boot/shim/0001-console-Fix-a-typo-in-the-EFI-warning-list-in-gnu-ef.patch
+@@ -0,0 +1,57 @@
++From b00d7f63df7ee6f74a63515f1469768e9cb2aa7a Mon Sep 17 00:00:00 2001
++From: Peter Jones <pjones@redhat.com>
++Date: Mon, 26 Aug 2019 16:12:05 -0400
++Subject: [PATCH] console: Fix a typo in the EFI warning list in gnu-efi
++
++Some versions of gnu-efi have a typo, in which "EFI_WARN_UNKNOWN_GLYPH"
++is accidentally "EFI_WARN_UNKOWN_GLYPH".  Work around that, so that we
++can use the not-silly one in console.c's list of error and warning
++messages.
++
++This is a backport from devel for:
++
++  commit 5f62b22ccd636d326b3229a2b196118701c6f3f7
++  Author: Peter Jones <pjones@redhat.com>
++  Date:   Mon Aug 26 16:12:05 2019 -0400
++
++Signed-off-by: Peter Jones <pjones@redhat.com>
++Upstream: d230d02f990f02293736dca78b108f86c86d1bd0
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ include/console.h | 6 ++++++
++ lib/console.c     | 2 +-
++ 2 files changed, 7 insertions(+), 1 deletion(-)
++
++diff --git a/include/console.h b/include/console.h
++index deb4fa3..00da98d 100644
++--- a/include/console.h
+++++ b/include/console.h
++@@ -7,6 +7,12 @@
++ #define PrintAt(fmt, ...) \
++ 	({"Do not directly call PrintAt() use console_print_at() instead" = 1;});
++ 
+++#if !defined(EFI_WARN_UNKNOWN_GLYPH) && defined(EFI_WARN_UNKOWN_GLYPH)
+++#define EFI_WARN_UNKNOWN_GLYPH EFI_WARN_UNKOWN_GLYPH
+++#elif !defined(EFI_WARN_UNKNOWN_GLYPH)
+++#define EFI_WARN_UNKNOWN_GLYPH EFIWARN(1)
+++#endif
+++
++ EFI_STATUS
++ console_get_keystroke(EFI_INPUT_KEY *key);
++ UINTN
++diff --git a/lib/console.c b/lib/console.c
++index 3aee41c..ccd4d4d 100644
++--- a/lib/console.c
+++++ b/lib/console.c
++@@ -445,7 +445,7 @@ static struct {
++ 	{  EFI_SECURITY_VIOLATION,     L"Security Violation"},
++ 
++ 	// warnings
++-	{  EFI_WARN_UNKOWN_GLYPH,      L"Warning Unknown Glyph"},
+++	{  EFI_WARN_UNKNOWN_GLYPH,     L"Warning Unknown Glyph"},
++ 	{  EFI_WARN_DELETE_FAILURE,    L"Warning Delete Failure"},
++ 	{  EFI_WARN_WRITE_FAILURE,     L"Warning Write Failure"},
++ 	{  EFI_WARN_BUFFER_TOO_SMALL,  L"Warning Buffer Too Small"},
++-- 
++2.30.2
++
