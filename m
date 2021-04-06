@@ -1,8 +1,8 @@
 From: Dick Olsson <hi@senzilla.io>
-Date: Tue, 06 Apr 2021 22:47:22 +0000
-Subject: [Buildroot] [PATCH 3/4] package/s6-networking: support building
- with bearssl
-Message-ID: <mOPrX3lWBVOCjFZcvH1LPTPlZLmdmDR8p6aErZQkA@cp4-web-038.plabs.ch>
+Date: Tue, 06 Apr 2021 22:47:28 +0000
+Subject: [Buildroot] [PATCH 4/4] DEVELOPERS: Add Dick Olsson for all skarnet
+ and s6 packages
+Message-ID: <9b80PsFuzIwPD5uT0aJJ48q7cTMMiEQj544xA4KvGWA@cp3-web-016.plabs.ch>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,22 +11,32 @@ To: buildroot@busybox.net
 
 Signed-off-by: Dick Olsson <hi@senzilla.io>
 ---
- package/s6-networking/s6-networking.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ DEVELOPERS | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/package/s6-networking/s6-networking.mk b/package/s6-networking/s6-networking.mk
-index 7f7da1fb71..2abb17ffda 100644
---- a/package/s6-networking/s6-networking.mk
-+++ b/package/s6-networking/s6-networking.mk
-@@ -20,6 +20,9 @@ S6_NETWORKING_CONF_OPTS = \
- ifeq ($(BR2_PACKAGE_LIBRESSL),y)
- S6_NETWORKING_CONF_OPTS += --enable-ssl=libressl
- S6_NETWORKING_DEPENDENCIES += libressl
-+else ifeq ($(BR2_PACKAGE_BEARSSL),y)
-+S6_NETWORKING_CONF_OPTS += --enable-ssl=bearssl
-+S6_NETWORKING_DEPENDENCIES += bearssl
- endif
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 6a7e88039e..e0eb683c34 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -673,6 +673,19 @@ F:	package/libstrophe/
+ N:	Derrick Lyndon Pallas <derrick@meter.com>
+ F:	package/ipcalc/
  
- define S6_NETWORKING_CONFIGURE_CMDS
++N:	Dick Olsson <hi@senzilla.io>
++F:	package/bearssl/
++F:	package/execline/
++F:	package/mdevd/
++F:	package/s6-dns/
++F:	package/s6-linux-init/
++F:	package/s6-linux-utils/
++F:	package/s6-networking/
++F:	package/s6-portable-utils/
++F:	package/s6-rc/
++F:	package/s6/
++F:	package/skalibs/
++
+ N:	Dimitrios Siganos <dimitris@siganos.org>
+ F:	package/wireless-regdb/
+ 
 -- 
 2.30.2
