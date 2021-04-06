@@ -1,61 +1,82 @@
-From: Grzegorz Blach <grzegorz@blach.pl>
-Date: Tue,  6 Apr 2021 18:06:04 +0200
-Subject: [Buildroot] [PATCH] package/python-falcon: Bump to version 3.0.0
-Message-ID: <20210406160605.264867-1-grzegorz@blach.pl>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue,  6 Apr 2021 18:40:52 +0200
+Subject: [Buildroot] [PATCH 1/1] package/iwd: bump to version 1.13
+Message-ID: <20210406164052.1245212-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Depends on BR2_PACKAGE_PYTHON3
+iwd fails to build since bump of ell to version 0.39 in commit
+9988ca9eadb90cbf10d150b420f4d1f5eb38482c:
 
-Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+/home/buildroot/autobuild/run/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/powerpc64-buildroot-linux-gnu/9.3.0/../../../../powerpc64-buildroot-linux-gnu/bin/ld: src/ie.o: in function `ie_parse_data_rates':
+ie.c:(.text+0x23ac): undefined reference to `minsize'
+
+This is fixed by
+https://git.kernel.org/pub/scm/network/wireless/iwd.git/commit/?id=17cf4da72613e80d08d51401399d02683ba8664b
+
+Use official iwd tarball which will contain ell/useful.h header
+
+https://git.kernel.org/pub/scm/network/wireless/iwd.git/tree/ChangeLog?h=1.13
+
+Fixes:
+ - http://autobuild.buildroot.org/results/44e243530cbcec1c88511bb22f5e8e4655c43824
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/python-falcon/Config.in          | 1 +
- package/python-falcon/python-falcon.hash | 6 +++---
- package/python-falcon/python-falcon.mk   | 4 ++--
- 3 files changed, 6 insertions(+), 5 deletions(-)
+ package/iwd/iwd.hash |  4 ++--
+ package/iwd/iwd.mk   | 14 +++-----------
+ 2 files changed, 5 insertions(+), 13 deletions(-)
 
-diff --git a/package/python-falcon/Config.in b/package/python-falcon/Config.in
-index 1bf93064bb..f90ef55b30 100644
---- a/package/python-falcon/Config.in
-+++ b/package/python-falcon/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_FALCON
- 	bool "python-falcon"
-+	depends on BR2_PACKAGE_PYTHON3
- 	help
- 	  An unladen web framework for building APIs and app
- 	  backends.
-diff --git a/package/python-falcon/python-falcon.hash b/package/python-falcon/python-falcon.hash
-index 68b8d4cb2c..80b2aed54f 100644
---- a/package/python-falcon/python-falcon.hash
-+++ b/package/python-falcon/python-falcon.hash
+diff --git a/package/iwd/iwd.hash b/package/iwd/iwd.hash
+index b043af745d..7975b0b3ce 100644
+--- a/package/iwd/iwd.hash
++++ b/package/iwd/iwd.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/falcon/json
--md5	77c52c144dd284e6259d257c6f008072  falcon-2.0.0.tar.gz
--sha256	eea593cf466b9c126ce667f6d30503624ef24459f118c75594a69353b6c3d5fc  falcon-2.0.0.tar.gz
-+md5  0ebd5316cd7f59b9be4ea13650ea3a0d  falcon-3.0.0.tar.gz
-+sha256  8d7c3d52ae4590ddfa0b3d9c75d44ab573340a5e78d72ee687712e757ac53929  falcon-3.0.0.tar.gz
- # Locally computed sha256 checksums
--sha256	e9e7f1a7ba764f042e56afce6f3563c2be9c4fffbb1404b20f8050ae051f577c  LICENSE
-+sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/python-falcon/python-falcon.mk b/package/python-falcon/python-falcon.mk
-index 1d7c869d6d..5b73b23277 100644
---- a/package/python-falcon/python-falcon.mk
-+++ b/package/python-falcon/python-falcon.mk
-@@ -4,9 +4,9 @@
+-# Locally computed
+-sha256  c0d827f446012cd14e63d174d52b69b0806ae23f0708933d50c57fea64af9c8a  iwd-1.12-br1.tar.gz
++# From https://mirrors.edge.kernel.org/pub/linux/network/wireless/sha256sums.asc
++sha256  b005f7ed0f0a96a2c6181c44560fc868533a18e7034bd4cb43ea0d40c21b4e7a  iwd-1.13.tar.xz
+ 
+ # License files
+ sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING
+diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
+index f38552de99..aaa07a25ba 100644
+--- a/package/iwd/iwd.mk
++++ b/package/iwd/iwd.mk
+@@ -4,15 +4,13 @@
  #
  ################################################################################
  
--PYTHON_FALCON_VERSION = 2.0.0
-+PYTHON_FALCON_VERSION = 3.0.0
- PYTHON_FALCON_SOURCE = falcon-$(PYTHON_FALCON_VERSION).tar.gz
--PYTHON_FALCON_SITE = https://files.pythonhosted.org/packages/19/30/edff5a1fea7a8e9876c8391e170263e1bb207875b6a65cd619818487b27b
-+PYTHON_FALCON_SITE = https://files.pythonhosted.org/packages/f1/59/2748d63922a46e040be06cd175a6242a33ade7839aac37f441544bb6d651
- PYTHON_FALCON_SETUP_TYPE = setuptools
- PYTHON_FALCON_LICENSE = Apache-2.0
- PYTHON_FALCON_LICENSE_FILES = LICENSE
+-IWD_VERSION = 1.12
+-IWD_SITE = https://git.kernel.org/pub/scm/network/wireless/iwd.git
+-IWD_SITE_METHOD = git
++IWD_VERSION = 1.13
++IWD_SOURCE = iwd-$(IWD_VERSION).tar.xz
++IWD_SITE = $(BR2_KERNEL_MIRROR)/linux/network/wireless
+ IWD_LICENSE = LGPL-2.1+
+ IWD_LICENSE_FILES = COPYING
+ IWD_CPE_ID_VENDOR = intel
+ IWD_CPE_ID_PRODUCT = inet_wireless_daemon
+-# sources from git, no configure script provided
+-IWD_AUTORECONF = YES
+ IWD_SELINUX_MODULES = networkmanager
+ 
+ IWD_CONF_OPTS = \
+@@ -20,12 +18,6 @@ IWD_CONF_OPTS = \
+ 	--enable-external-ell
+ IWD_DEPENDENCIES = ell
+ 
+-# autoreconf requires an existing build-aux directory
+-define IWD_MKDIR_BUILD_AUX
+-	mkdir -p $(@D)/build-aux
+-endef
+-IWD_POST_PATCH_HOOKS += IWD_MKDIR_BUILD_AUX
+-
+ ifeq ($(BR2_PACKAGE_DBUS),y)
+ IWD_CONF_OPTS += --enable-dbus-policy --with-dbus-datadir=/usr/share
+ IWD_DEPENDENCIES += dbus
 -- 
-2.27.0
+2.30.2
