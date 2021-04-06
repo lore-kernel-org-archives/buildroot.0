@@ -1,55 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 06 Apr 2021 13:09:46 +0200
-Subject: [Buildroot] [PATCH 2/4] boot/shim: fix build issues with gcc 9.x
-In-Reply-To: <20210405202155.1422470-3-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Mon, 5 Apr 2021 22:21:53 +0200")
-References: <20210405202155.1422470-1-thomas.petazzoni@bootlin.com>
- <20210405202155.1422470-3-thomas.petazzoni@bootlin.com>
-Message-ID: <87mtubfz45.fsf@dell.be.48ers.dk>
+Date: Tue, 6 Apr 2021 12:59:37 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/python-psutil:
+ add CPE variables
+Message-ID: <20210406104422.DE37682A89@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=5a013b46a9e4b2e4b7cbb4171cd88b4cd6614022
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
- > Backport a set of upstream patches to fix:
- > MokManager.c: In function ?write_back_mok_list?:
- > MokManager.c:1081:19: error: taking address of packed member of
- > ?struct <anonymous>? may result in an unaligned pointer value
- > [-Werror=address-of-packed-member]
- >  1081 |   if (CompareGuid(&(list[i].Type), &X509_GUID) == 0)
- >       |                   ^~~~~~~~~~~~~~~
- > MokManager.c:1103:19: error: taking address of packed member of
- > ?struct <anonymous>? may result in an unaligned pointer value
- > [-Werror=address-of-packed-member]
- >  1103 |   if (CompareGuid(&(list[i].Type), &X509_GUID) == 0) {
- >       |                   ^~~~~~~~~~~~~~~
- > MokManager.c: In function ?delete_cert?:
- > MokManager.c:1144:19: error: taking address of packed member of
- > ?struct <anonymous>? may result in an unaligned pointer value
- > [-Werror=address-of-packed-member]
- >  1144 |   if (CompareGuid(&(mok[i].Type), &X509_GUID) != 0)
- >       |                   ^~~~~~~~~~~~~~
- > MokManager.c: In function ?delete_hash_in_list?:
- > MokManager.c:1195:20: error: taking address of packed member of
- > ?struct <anonymous>? may result in an unaligned pointer value
- > [-Werror=address-of-packed-member]
- >  1195 |   if ((CompareGuid(&(mok[i].Type), &Type) != 0) ||
- >       |                    ^~~~~~~~~~~~~~
- > MokManager.c: In function ?delete_keys?:
- > MokManager.c:1359:19: error: taking address of packed member of
- > ?struct <anonymous>? may result in an unaligned pointer value
- > [-Werror=address-of-packed-member]
- >  1359 |   if (CompareGuid(&(del_key[i].Type), &X509_GUID) == 0) {
- >       |                   ^~~~~~~~~~~~~~~~~~
- > cc1: all warnings being treated as errors
- > make[1]: *** [<builtin>: MokManager.o] Error 1
+cpe:2.3:a:psutil_project:psutil is a valid CPE identifier for this
+package:
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Apsutil_project%3Apsutil
 
-Committed to 2021.02.x, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit d32bf2d6ebe646f629fd0494d9e6cd965a078943)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/python-psutil/python-psutil.mk   | 2 ++
+ package/python3-psutil/python3-psutil.mk | 2 ++
+ 2 files changed, 4 insertions(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/python-psutil/python-psutil.mk b/package/python-psutil/python-psutil.mk
+index 19d97a6f97..9dbc472213 100644
+--- a/package/python-psutil/python-psutil.mk
++++ b/package/python-psutil/python-psutil.mk
+@@ -11,5 +11,7 @@ PYTHON_PSUTIL_SITE = https://files.pythonhosted.org/packages/aa/3e/d18f2c04cf2b5
+ PYTHON_PSUTIL_SETUP_TYPE = setuptools
+ PYTHON_PSUTIL_LICENSE = BSD-3-Clause
+ PYTHON_PSUTIL_LICENSE_FILES = LICENSE
++PYTHON_PSUTIL_CPE_ID_VENDOR = psutil_project
++PYTHON_PSUTIL_CPE_ID_PRODUCT = psutil
+ 
+ $(eval $(python-package))
+diff --git a/package/python3-psutil/python3-psutil.mk b/package/python3-psutil/python3-psutil.mk
+index febf0d3edb..029e1b1c12 100644
+--- a/package/python3-psutil/python3-psutil.mk
++++ b/package/python3-psutil/python3-psutil.mk
+@@ -11,6 +11,8 @@ PYTHON3_PSUTIL_SITE = https://files.pythonhosted.org/packages/aa/3e/d18f2c04cf2b
+ PYTHON3_PSUTIL_SETUP_TYPE = setuptools
+ PYTHON3_PSUTIL_LICENSE = BSD-3-Clause
+ PYTHON3_PSUTIL_LICENSE_FILES = LICENSE
++PYTHON3_PSUTIL_CPE_ID_VENDOR = psutil_project
++PYTHON3_PSUTIL_CPE_ID_PRODUCT = psutil
+ HOST_PYTHON3_PSUTIL_DL_SUBDIR = python-psutil
+ HOST_PYTHON3_PSUTIL_NEEDS_HOST_PYTHON = python3
+ 
