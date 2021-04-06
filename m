@@ -1,39 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 6 Apr 2021 09:43:10 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] package/python-parso: add
+Date: Tue, 6 Apr 2021 09:43:56 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/python-flask: add
  CPE variables
-Message-ID: <20210406072100.213A58BE9A@busybox.osuosl.org>
+Message-ID: <20210406072100.3A96C8BE9A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c232567a01418e37b4c4255b7c1ad1c8e46581db
+commit: https://git.buildroot.net/buildroot/commit/?id=3bec9a2290cfbd88d8995de0affcfc9098a0a102
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-cpe:2.3:a:parso_project:parso is a valid CPE identifier for this
+cpe:2.3:a:palletsprojects:flask is a valid CPE identifier for this
 package:
 
-  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aparso_project%3Aparso
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Apalletsprojects%3Aflask
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 821ba90f164c3f7d4314935b2b683b23fffbace2)
+(cherry picked from commit 21fecfab172ebee36e72baad874fe7a464806f94)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-parso/python-parso.mk | 2 ++
+ package/python-flask/python-flask.mk | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/python-parso/python-parso.mk b/package/python-parso/python-parso.mk
-index a0b6af8732..b7688c2069 100644
---- a/package/python-parso/python-parso.mk
-+++ b/package/python-parso/python-parso.mk
-@@ -10,5 +10,7 @@ PYTHON_PARSO_SITE = https://files.pythonhosted.org/packages/fe/24/c30eb4be8a24b9
- PYTHON_PARSO_SETUP_TYPE = setuptools
- PYTHON_PARSO_LICENSE = MIT, Python-2.0, BSD-3-Clause (flask theme)
- PYTHON_PARSO_LICENSE_FILES = LICENSE.txt docs/_themes/flask/LICENSE test/normalizer_issue_files/LICENSE
-+PYTHON_PARSO_CPE_ID_VENDOR = parso_project
-+PYTHON_PARSO_CPE_ID_PRODUCT = parso
+diff --git a/package/python-flask/python-flask.mk b/package/python-flask/python-flask.mk
+index cc39bf7e49..077aa600b8 100644
+--- a/package/python-flask/python-flask.mk
++++ b/package/python-flask/python-flask.mk
+@@ -10,5 +10,7 @@ PYTHON_FLASK_SITE = https://files.pythonhosted.org/packages/4e/0b/cb02268c90e675
+ PYTHON_FLASK_SETUP_TYPE = setuptools
+ PYTHON_FLASK_LICENSE = BSD-3-Clause
+ PYTHON_FLASK_LICENSE_FILES = LICENSE.rst docs/license.rst
++PYTHON_FLASK_CPE_ID_VENDOR = palletsprojects
++PYTHON_FLASK_CPE_ID_PRODUCT = flask
  
  $(eval $(python-package))
