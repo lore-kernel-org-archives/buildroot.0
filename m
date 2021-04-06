@@ -1,51 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 6 Apr 2021 09:37:59 +0200
-Subject: [Buildroot] [git commit] package/python-iso8601: bump to version
- 0.1.14
-Message-ID: <20210406071628.1FADE7FC90@busybox.osuosl.org>
+Date: Tue, 6 Apr 2021 09:36:48 +0200
+Subject: [Buildroot] [git commit] boot/grub2: ignore the last 3 remaining
+ CVEs
+Message-ID: <20210406071628.15C818D3EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7df870920c96191d6ed7a7db29b48e876c854298
+commit: https://git.buildroot.net/buildroot/commit/?id=a490687571ef8e199a2480d0b24904ff62ed9a18
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/micktwomey/pyiso8601/releases/tag/0.1.14
+An analysis of the last 3 remaining CVEs that are reported to affect
+the grub2 package has allowed to ensure that we can safely ignore
+them:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ * CVE-2020-14372 is already fixed by a patch we have in our patch
+   stack for grub2
+
+ * CVE-2019-14865 and CVE-2020-15705 are both distro-specific and do
+   not affect grub2 upstream, nor grub2 with the stack of patches we
+   have in Buildroot
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-iso8601/python-iso8601.hash | 4 ++--
- package/python-iso8601/python-iso8601.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ boot/grub2/grub2.mk | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/package/python-iso8601/python-iso8601.hash b/package/python-iso8601/python-iso8601.hash
-index 18cf3958da..76dd5ec452 100644
---- a/package/python-iso8601/python-iso8601.hash
-+++ b/package/python-iso8601/python-iso8601.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/iso8601/json
--md5  df6e924305fd799d90be63336b2ab8b3  iso8601-0.1.13.tar.gz
--sha256  f7dec22af52025d4526be94cc1303c7d8f5379b746a3f54a8c8446384392eeb1  iso8601-0.1.13.tar.gz
-+md5  d6fe8ccc847aaf8ac965da3b6023e697  iso8601-0.1.14.tar.gz
-+sha256  8aafd56fa0290496c5edbb13c311f78fa3a241f0853540da09d9363eae3ebd79  iso8601-0.1.14.tar.gz
- # Locally computed sha256 checksums
- sha256  116d368d14a8cf0061027c944c60ee20b476ce42814818a7d627396906761f16  LICENSE
-diff --git a/package/python-iso8601/python-iso8601.mk b/package/python-iso8601/python-iso8601.mk
-index 3620255db4..3f128d15e4 100644
---- a/package/python-iso8601/python-iso8601.mk
-+++ b/package/python-iso8601/python-iso8601.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
+index c5742ede71..af16ee91e1 100644
+--- a/boot/grub2/grub2.mk
++++ b/boot/grub2/grub2.mk
+@@ -37,6 +37,18 @@ GRUB2_IGNORE_CVES += CVE-2020-15707
+ # 2021/03/02 security fixes - patches 0029-0149
+ GRUB2_IGNORE_CVES += CVE-2020-25632 CVE-2020-25647 CVE-2020-27749 \
+ 	CVE-2020-27779 CVE-2021-3418 CVE-2021-20225 CVE-2021-20233
++# 0039-acpi-Don-t-register-the-acpi-command-when-locked-dow.patch
++GRUB2_IGNORE_CVES += CVE-2020-14372
++# CVE-2019-14865 is about a flaw in the grub2-set-bootflag tool, which
++# doesn't exist upstream, but is added by the Redhat/Fedora
++# packaging. Not applicable to Buildroot.
++GRUB2_IGNORE_CVES += CVE-2019-14865
++# CVE-2020-15705 is related to a flaw in the use of the
++# grub_linuxefi_secure_validate(), which was added by Debian/Ubuntu
++# patches. The issue doesn't affect upstream Grub, and
++# grub_linuxefi_secure_validate() is not implemented in the grub2
++# version available in Buildroot.
++GRUB2_IGNORE_CVES += CVE-2020-15705
  
--PYTHON_ISO8601_VERSION = 0.1.13
-+PYTHON_ISO8601_VERSION = 0.1.14
- PYTHON_ISO8601_SOURCE = iso8601-$(PYTHON_ISO8601_VERSION).tar.gz
--PYTHON_ISO8601_SITE = https://files.pythonhosted.org/packages/05/90/2d9927dc2d33192f58fe39d2d216313a8380625cd4b062efb93f1afd7a29
-+PYTHON_ISO8601_SITE = https://files.pythonhosted.org/packages/f9/ed/b97abc7877e5b253eef96a469f47d617b0ebcccc735405fa1a620c7ee833
- PYTHON_ISO8601_SETUP_TYPE = setuptools
- PYTHON_ISO8601_LICENSE = MIT
- PYTHON_ISO8601_LICENSE_FILES = LICENSE
+ ifeq ($(BR2_TARGET_GRUB2_INSTALL_TOOLS),y)
+ GRUB2_INSTALL_TARGET = YES
