@@ -1,106 +1,49 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 7 Apr 2021 13:34:27 +0200
-Subject: [Buildroot] [git commit] Update for 2021.02.1
-Message-ID: <20210407111209.E76C081F6E@busybox.osuosl.org>
+From: Julien Olivain <ju.o@free.fr>
+Date: Wed,  7 Apr 2021 14:21:18 +0200
+Subject: [Buildroot] [PATCH 1/1] package/fluidsynth: bump to version 2.2.0
+Message-ID: <20210407122118.941875-1-ju.o@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a74cb089cb9aae28f64776c7701208abe4c340db
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+For change log since v2.1.5, see:
+- https://github.com/FluidSynth/fluidsynth/releases/tag/v2.1.6
+- https://github.com/FluidSynth/fluidsynth/releases/tag/v2.1.7
+- https://github.com/FluidSynth/fluidsynth/releases/tag/v2.1.8
+- https://github.com/FluidSynth/fluidsynth/releases/tag/v2.2.0
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit bb10b0dfe690a77e137395ad91290d799bf018c5)
-[Peter: drop Makefile change]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+./utils/test-pkg --package fluidsynth
+6 builds, 2 skipped, 0 build failed, 0 legal-info failed
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- CHANGES                  | 63 ++++++++++++++++++++++++++++++++++++++++++++++++
- support/misc/Vagrantfile |  2 +-
- 2 files changed, 64 insertions(+), 1 deletion(-)
+ package/fluidsynth/fluidsynth.hash | 2 +-
+ package/fluidsynth/fluidsynth.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index c1ee6c4316..c74ad45f48 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,66 @@
-+2021.02.1, released April 7, 2021
-+
-+	Important / security related fixes.
-+
-+	Dependencies: Explicitly detect and bail out if PATH contains
-+	spaces or tabs. A number of packages fail to build in such
-+	setups, so explicitly inform about this.
-+
-+	utils/scanpypi: Explicitly use python3 for compatibility with
-+	packages using python3 syntax in setup.py
-+
-+	support/download: Fix tarball generation (from git/svn repos)
-+	including symlinks pointing to ./<something>. Fix svn download
-+	for <1.9 clients or repos using CVS-style keywords.
-+
-+	Meson: Use correct C++ host compiler (rather than C compiler)
-+
-+	Toolchain: Add logic to work around binutils bug 21464,
-+	affecting OpenRISC, and drop the now longer applicable bug
-+	19615 / 20006 handling.
-+
-+	Python{,3}: Fix byte compiling python files with short (single
-+	character before .py) file names.
-+
-+	CPE meta data has been added for a large number of packages
-+
-+	Defconfigs: Correct Beaglebone QT file system overlay
-+
-+	Updated/fixed packages: alsa-utils, at91bootstrap3,
-+	batman-adv, binutils, botan, bridge-utils, busybox,
-+	ca-certificates, cog, coreutils, diffutils, dmidecode,
-+	docker-cli, docker-containerd, docker-engine, efivar,
-+	fetchmail, frr, genimage, git, gnutls, go, grub2, gst-omx,
-+	gst1-devtools, gst1-libav, gst1-plugins-bad,
-+	gst1-plugins-base, gst1-plugins-good, gst1-plugins-ugly,
-+	gst1-python, gst1-rtsp-server, gst1-vaapi, gstreamer1,
-+	gstreamer1-editing-services, haproxy, haserl, hwloc,
-+	irqbalance, jasper, kexec, kexec-lite, kismet, kodi, libcurl,
-+	libfreeglut, libgcrypt, libgeos, libglib2, libopenssl, libqmi,
-+	libressl, libupnp, libvips, libvpx, libwebsockets, linux,
-+	lldpd, logrotate, lttng-libust, lttng-tools, mariadb, mbedtls,
-+	mcelog, mender, micropython, mongoose, mosquitto, mpd,
-+	netsnmp, nodejs, openmpi, openssh, openvpn, opkg-utils,
-+	optee-client, optee-test, perl, php, proftpd, protobuf,
-+	python-django, python-jinja2, python-lxml, python-paramiko,
-+	python-py, python-pygments, python-rpi-ws281x, python-urllib3,
-+	python3, qt5webkit, qwt, rpm, samba4, sconeserver, sdl2, shim,
-+	sqlcipher, squid, sysklogd, syslinux, sysvinit, tor,
-+	transmission, tzdata, uboot, uclibc, upx, webkitgtk,
-+	wireshark, wpebackend-fdo, wpewebkit, xen, zstd
-+
-+	New packages: perl-parse-yapp
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#13516: utils/scanpypi: Failure when parsing diffoscope
-+	#13576: Issues compiling buildroot for 5x86
-+	#13601: Gen image :Iappropriate ioctl error
-+	#13616: tar file from git repository generation issue
-+	#13641: glibc on raspberrypi
-+	#13646: Gen image version 14 error : no sub -section title/..
-+	#13671: openSSH server closes connection before authentication..
-+
- 2021.02, released March 6th, 2021
- 
- 	Various fixes.
-diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
-index 685d8e3b75..5dd75ad8d7 100644
---- a/support/misc/Vagrantfile
-+++ b/support/misc/Vagrantfile
-@@ -5,7 +5,7 @@
+diff --git a/package/fluidsynth/fluidsynth.hash b/package/fluidsynth/fluidsynth.hash
+index 17e37e2479..12620f51c5 100644
+--- a/package/fluidsynth/fluidsynth.hash
++++ b/package/fluidsynth/fluidsynth.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  b539b7c65a650b56f01cd60a4e83c6125c217c5a63c0c214ef6274894a677d00  fluidsynth-2.1.5.tar.gz
++sha256  928fb16f307507485bd1d9b010dafba8c747bce5de2ba47ab1705944c87013b6  fluidsynth-2.2.0.tar.gz
+ sha256  9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  LICENSE
+diff --git a/package/fluidsynth/fluidsynth.mk b/package/fluidsynth/fluidsynth.mk
+index dc777e0bf9..4cce6d6448 100644
+--- a/package/fluidsynth/fluidsynth.mk
++++ b/package/fluidsynth/fluidsynth.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- # Buildroot version to use
--RELEASE='2021.02'
-+RELEASE='2021.02.1'
- 
- ### Change here for more memory/cores ###
- VM_MEMORY=2048
+-FLUIDSYNTH_VERSION = 2.1.5
++FLUIDSYNTH_VERSION = 2.2.0
+ FLUIDSYNTH_SITE = $(call github,FluidSynth,fluidsynth,v$(FLUIDSYNTH_VERSION))
+ FLUIDSYNTH_LICENSE = LGPL-2.1+
+ FLUIDSYNTH_LICENSE_FILES = LICENSE
+-- 
+2.31.1
