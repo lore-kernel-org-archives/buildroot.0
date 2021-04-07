@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 07 Apr 2021 11:21:29 +0200
+Date: Wed, 07 Apr 2021 12:17:38 +0200
 Subject: [Buildroot] [PATCH] package/nodejs: security bump to version
  12.22.1
 In-Reply-To: <20210407071220.25669-1-peter@korsgaard.com> (Peter Korsgaard's
  message of "Wed, 7 Apr 2021 09:12:20 +0200")
 References: <20210407071220.25669-1-peter@korsgaard.com>
-Message-ID: <87h7kicuw6.fsf@dell.be.48ers.dk>
+Message-ID: <87czv6csal.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -25,7 +25,7 @@ To: buildroot@busybox.net
 
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Committed, thanks.
+Committed to next, thanks.
 
 -- 
 Bye, Peter Korsgaard
