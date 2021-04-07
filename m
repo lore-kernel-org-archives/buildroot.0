@@ -1,105 +1,53 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 7 Apr 2021 21:07:37 +0200
-Subject: [Buildroot] [git commit] package/valgrind: fix musl compile
-Message-ID: <20210407184307.1648381601@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 7 Apr 2021 21:17:09 +0200
+Subject: [Buildroot] [PATCH v2 6/9] package/s6-linux-init: bump to
+ version 1.0.6.1
+In-Reply-To: <3Qc0Mb1UeVg5XTeXTX1auYVV8UGZYPL6Q3fDcYOT3HQ@cp4-web-036.plabs.ch>
+References: <3Qc0Mb1UeVg5XTeXTX1auYVV8UGZYPL6Q3fDcYOT3HQ@cp4-web-036.plabs.ch>
+Message-ID: <3f5eca52-b7df-bc8d-9c8b-32b48f28cb85@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=097da083b1fb810d9e462e9ce78c87435d660ac1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The file musl.supp is missing from the download source package, add a
-patch deviated from reduced upstream commit ([1]) re-adding the missing file.
 
-Fixes:
+On 07/04/2021 01:40, Dick Olsson wrote:
+> http://skarnet.org/cgi-bin/archive.cgi?1:mss:1535:lpehbljhhcpaopbnkkbf
+> 
+> Signed-off-by: Dick Olsson <hi@senzilla.io>
+> ---
+>  package/s6-linux-init/s6-linux-init.hash | 2 +-
+>  package/s6-linux-init/s6-linux-init.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/s6-linux-init/s6-linux-init.hash b/package/s6-linux-init/s6-linux-init.hash
+> index bc2f7072ca..c35862efef 100644
+> --- a/package/s6-linux-init/s6-linux-init.hash
+> +++ b/package/s6-linux-init/s6-linux-init.hash
+> @@ -1,3 +1,3 @@
+>  # Locally generated
+> -sha256 216af5589c2bc5dbdea6b6c94d55575c12e31f57b2e0fde5c534a840aeed02fb  s6-linux-init-1.0.3.1.tar.gz
+> +sha256 16f6c84f3c4825ca8b244b89693569d8f69db98c485bd958301a079586f2086b  s6-linux-init-1.0.6.1.tar.gz
+>  sha256 487e89990a571700bcdf7c0cbbde2859446f79e85e8b59791adab98fff6b1889  COPYING
 
-  - http://autobuild.buildroot.net/results/b106be44d6e7d82a4e3ad16c995366a46d39ee3c
+ "make s6-linux-init-legal-info" gives me an error...
 
-  make[1]: *** No rule to make target 'musl.supp', needed by 'default.supp'.  Stop.
+ Regards,
+ Arnout
 
-[1] https://sourceware.org/git/?p=valgrind.git;a=patch;h=f4d98ff79d5a79102b777ea7e23002d9f7326489
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- ...8663-Patch-Suppression-file-for-musl-libc.patch | 69 ++++++++++++++++++++++
- 1 file changed, 69 insertions(+)
-
-diff --git a/package/valgrind/0003-Bug-408663-Patch-Suppression-file-for-musl-libc.patch b/package/valgrind/0003-Bug-408663-Patch-Suppression-file-for-musl-libc.patch
-new file mode 100644
-index 0000000000..b7e075e9fd
---- /dev/null
-+++ b/package/valgrind/0003-Bug-408663-Patch-Suppression-file-for-musl-libc.patch
-@@ -0,0 +1,69 @@
-+From c5a5190ec7936e53bcd2082fb0151bc48a804b8b Mon Sep 17 00:00:00 2001
-+From: Paul Floyd <pjfloyd@wanadoo.fr>
-+Date: Tue, 8 Dec 2020 15:07:29 +0100
-+Subject: [PATCH] Bug 408663 - Patch: Suppression file for musl libc
-+
-+[Upstream https://sourceware.org/git/?p=valgrind.git;a=patch;h=f4d98ff79d5a79102b777ea7e23002d9f7326489
-+ reduced to the missing musl.supp file download source file
-+ Reported https://bugs.kde.org/show_bug.cgi?id=435438]
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ musl.supp | 46 ++++++++++++++++++++++++++++++++++++++++++++++
-+ 1 file changed, 46 insertions(+)
-+ create mode 100644 musl.supp
-+
-+diff --git a/musl.supp b/musl.supp
-+new file mode 100644
-+index 0000000..864172a
-+--- /dev/null
-++++ b/musl.supp
-+@@ -0,0 +1,46 @@
-++# Suppressions for musl libc
-++# See: https://www.openwall.com/lists/musl/2017/06/15/4
-++
-++{
-++   musl-dynlink-false-positive1
-++   Memcheck:Leak
-++   fun:calloc
-++   fun:load_direct_deps
-++   fun:load_deps
-++   fun:load_deps
-++   fun:__dls3
-++   fun:__dls2b
-++   fun:__dls2
-++}
-++
-++{
-++   musl-dynlink-false-positive2
-++   Memcheck:Leak
-++   fun:calloc
-++   fun:load_direct_deps
-++   fun:load_deps
-++   fun:load_deps
-++   fun:__dls3
-++   fun:__dls2
-++}
-++
-++{
-++   musl-dynlink-false-positive3
-++   Memcheck:Leak
-++   fun:calloc
-++   fun:load_library
-++   fun:load_preload
-++   fun:__dls3
-++   fun:__dls2b
-++   fun:__dls2
-++}
-++
-++{
-++   musl-dynlink-false-positive4
-++   Memcheck:Leak
-++   fun:calloc
-++   fun:load_library
-++   fun:load_preload
-++   fun:__dls3
-++   fun:__dls2
-++}
-+-- 
-+2.30.2
-+
+> diff --git a/package/s6-linux-init/s6-linux-init.mk b/package/s6-linux-init/s6-linux-init.mk
+> index 71c727de02..efd4984085 100644
+> --- a/package/s6-linux-init/s6-linux-init.mk
+> +++ b/package/s6-linux-init/s6-linux-init.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -S6_LINUX_INIT_VERSION = 1.0.3.1
+> +S6_LINUX_INIT_VERSION = 1.0.6.1
+>  S6_LINUX_INIT_SITE = http://skarnet.org/software/s6-linux-init
+>  S6_LINUX_INIT_LICENSE = ISC
+>  S6_LINUX_INIT_LICENSE_FILES = COPYING
+> 
