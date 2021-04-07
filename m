@@ -1,53 +1,34 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 7 Apr 2021 21:17:09 +0200
-Subject: [Buildroot] [PATCH v2 6/9] package/s6-linux-init: bump to
- version 1.0.6.1
-In-Reply-To: <3Qc0Mb1UeVg5XTeXTX1auYVV8UGZYPL6Q3fDcYOT3HQ@cp4-web-036.plabs.ch>
-References: <3Qc0Mb1UeVg5XTeXTX1auYVV8UGZYPL6Q3fDcYOT3HQ@cp4-web-036.plabs.ch>
-Message-ID: <3f5eca52-b7df-bc8d-9c8b-32b48f28cb85@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Wed, 7 Apr 2021 21:11:26 +0200
+Subject: [Buildroot] [git commit] package/skalibs: Fix license hash after
+ bump to version 2.10.0.2
+Message-ID: <20210407185256.8463281640@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=965bf9e0ca736df748ff7652105c995b5fff5a5e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Updated license hash due to year change.
 
-On 07/04/2021 01:40, Dick Olsson wrote:
-> http://skarnet.org/cgi-bin/archive.cgi?1:mss:1535:lpehbljhhcpaopbnkkbf
-> 
-> Signed-off-by: Dick Olsson <hi@senzilla.io>
-> ---
->  package/s6-linux-init/s6-linux-init.hash | 2 +-
->  package/s6-linux-init/s6-linux-init.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/s6-linux-init/s6-linux-init.hash b/package/s6-linux-init/s6-linux-init.hash
-> index bc2f7072ca..c35862efef 100644
-> --- a/package/s6-linux-init/s6-linux-init.hash
-> +++ b/package/s6-linux-init/s6-linux-init.hash
-> @@ -1,3 +1,3 @@
->  # Locally generated
-> -sha256 216af5589c2bc5dbdea6b6c94d55575c12e31f57b2e0fde5c534a840aeed02fb  s6-linux-init-1.0.3.1.tar.gz
-> +sha256 16f6c84f3c4825ca8b244b89693569d8f69db98c485bd958301a079586f2086b  s6-linux-init-1.0.6.1.tar.gz
->  sha256 487e89990a571700bcdf7c0cbbde2859446f79e85e8b59791adab98fff6b1889  COPYING
+Commit 4d5587cb56224b2b28f53b0202fb14b2ab32d5fb was accidentally based
+on v1 of this patch.
 
- "make s6-linux-init-legal-info" gives me an error...
+Signed-off-by: Dick Olsson <hi@senzilla.io>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/skalibs/skalibs.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- Regards,
- Arnout
-
-> diff --git a/package/s6-linux-init/s6-linux-init.mk b/package/s6-linux-init/s6-linux-init.mk
-> index 71c727de02..efd4984085 100644
-> --- a/package/s6-linux-init/s6-linux-init.mk
-> +++ b/package/s6-linux-init/s6-linux-init.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -S6_LINUX_INIT_VERSION = 1.0.3.1
-> +S6_LINUX_INIT_VERSION = 1.0.6.1
->  S6_LINUX_INIT_SITE = http://skarnet.org/software/s6-linux-init
->  S6_LINUX_INIT_LICENSE = ISC
->  S6_LINUX_INIT_LICENSE_FILES = COPYING
-> 
+diff --git a/package/skalibs/skalibs.hash b/package/skalibs/skalibs.hash
+index cb563d3cc5..2e486ea901 100644
+--- a/package/skalibs/skalibs.hash
++++ b/package/skalibs/skalibs.hash
+@@ -1,3 +1,3 @@
+ # Locally generated
+ sha256 8bba3d7650bab83d4ea2ad21d6bfb5479a8652e362a478fcb783b3c7cf891e0f  skalibs-2.10.0.2.tar.gz
+-sha256 5443ac67e8d74ac614ced7bc64211ce90ccedb7778a68bfe9e68a8b234c9503e  COPYING
++sha256 adecb8bedfaae27fcfe65ecb3ef0e2e71aa2a2b49dc21886a200bc677d93e6ec  COPYING
