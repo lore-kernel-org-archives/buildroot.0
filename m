@@ -1,10 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 7 Apr 2021 21:02:41 +0200
-Subject: [Buildroot] [PATCH 1/4] package/{skalibs, execline, s6,
- s6-dns}: change prefix and shared options
-In-Reply-To: <HbmuNdRmOn2PdMjzu0i70kXEVtJ7gzFTC74uRm0Le50@cp3-web-012.plabs.ch>
-References: <HbmuNdRmOn2PdMjzu0i70kXEVtJ7gzFTC74uRm0Le50@cp3-web-012.plabs.ch>
-Message-ID: <df3d4c00-dd75-73f5-ed4a-74d53b9e3467@mind.be>
+Date: Wed, 7 Apr 2021 21:08:37 +0200
+Subject: [Buildroot] [PATCH v1] package/valgrind: fix musl compile
+In-Reply-To: <20210406214840.32198-1-ps.report@gmx.net>
+References: <20210406214840.32198-1-ps.report@gmx.net>
+Message-ID: <ba1fbd2d-1b99-c2df-6649-0ef42cd11f13@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,77 +12,103 @@ To: buildroot@busybox.net
 
 
 
-On 07/04/2021 00:47, Dick Olsson via buildroot wrote:
-> diff --git a/package/skalibs/skalibs.mk b/package/skalibs/skalibs.mk
-> index f92859ff26..fe042604c2 100644
-> --- a/package/skalibs/skalibs.mk
-> +++ b/package/skalibs/skalibs.mk
-> @@ -10,12 +10,24 @@ SKALIBS_LICENSE = ISC
->  SKALIBS_LICENSE_FILES = COPYING
->  SKALIBS_INSTALL_STAGING = YES
->  
-> +SKALIBS_DEFAULT_PATH = $(call qstrip,$(BR2_SYSTEM_DEFAULT_PATH))
->  SKALIBS_CONF_OPTS = \
-> -	--prefix=/usr \
-> -	--with-default-path=/sbin:/usr/sbin:/bin:/usr/bin \
-> +	--prefix=/ \
-> +	--libexecdir=/libexec \
-> +	--with-default-path=$(SKALIBS_DEFAULT_PATH) \
->  	--with-sysdep-devurandom=yes \
->  	$(SHARED_STATIC_LIBS_OPTS)
->  
-> +# This variable can be used by dependant packages.
-> +SHARED_SKALIBS_CONF_OPTS = \
-> +	--prefix=/ \
-> +	--with-sysdeps=$(STAGING_DIR)/lib/skalibs/sysdeps \
-> +	--with-include=$(STAGING_DIR)/include \
-> +	--with-dynlib=$(STAGING_DIR)/lib \
-> +	--with-lib=$(STAGING_DIR)/lib/skalibs \
-> +	$(if $(BR2_STATIC_LIBS),,--disable-allstatic) \
-> +	$(SHARED_STATIC_LIBS_OPTS)
-> +
+On 06/04/2021 23:48, Peter Seiderer wrote:
+> The file musl.supp is missing from the download source package, add a
+> patch deviated from reduced upstream commit ([1]) re-adding the missing file.
+> 
+> Fixes:
+> 
+>   - http://autobuild.buildroot.net/results/b106be44d6e7d82a4e3ad16c995366a46d39ee3c
+> 
+>   make[1]: *** No rule to make target 'musl.supp', needed by 'default.supp'.  Stop.
+> 
+> [1] https://sourceware.org/git/?p=valgrind.git;a=patch;h=f4d98ff79d5a79102b777ea7e23002d9f7326489
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
- Hm, I'm not sure I like this...
-
- The good is obviously that it allows you to change all skarnet packages in one
-fell swoop when that is needed.
-
- However, there are also some disadvantages.
-
- The main disadvantage is that it's harder for people to understand how e.g. the
-execline package is configured. When you look at the execline.mk file, you don't
-see what is the contents of the SHARED_SKALIBS_CONF_OPTS variable.
-
- Another disadvantage is that you may introduce a dependency on the order in
-which the different mk files are included. In this case it's fine because the
-variable is only used inside a rule, which is always expanded after all
-makefiles have been processed. But in general it's risky.
-
- If there is shared stuff, then I personally prefer to make sure that it is made
-clear by putting the packages that "belong together" in a subdirectory, and have
-the shared stuff in the .mk file of that subdirectory. freescale-imx is an
-example of that. However, we try to avoid subdirectories because it's annoying
-for other reasons, so those are conflicting forces...
-
-
- I'm not really sure about all this, so I put the other maintainers in Cc of
-this mail.
-
-
- If this change turns out to be acceptable, there's a small nitpick I'd like to
-add: since SHARED_SKALIBS_CONF_OPTS is not used by this package itself, you
-should put it at the very end of the file, after the generic-package.
-
- Oh, and please run check-package on it. SHARED_FOO_ is not allowed, it would
-have to be FOO_SHARED_.
-
- Oh, and also the refactoring should be in a separate commit from the change of
-/usr -> /
-
+ Applied to master, thanks.
 
  Regards,
  Arnout
 
->  define SKALIBS_CONFIGURE_CMDS
->  	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure $(SKALIBS_CONF_OPTS))
->  endef
+> ---
+>  ...Patch-Suppression-file-for-musl-libc.patch | 69 +++++++++++++++++++
+>  1 file changed, 69 insertions(+)
+>  create mode 100644 package/valgrind/0003-Bug-408663-Patch-Suppression-file-for-musl-libc.patch
+> 
+> diff --git a/package/valgrind/0003-Bug-408663-Patch-Suppression-file-for-musl-libc.patch b/package/valgrind/0003-Bug-408663-Patch-Suppression-file-for-musl-libc.patch
+> new file mode 100644
+> index 0000000000..b7e075e9fd
+> --- /dev/null
+> +++ b/package/valgrind/0003-Bug-408663-Patch-Suppression-file-for-musl-libc.patch
+> @@ -0,0 +1,69 @@
+> +From c5a5190ec7936e53bcd2082fb0151bc48a804b8b Mon Sep 17 00:00:00 2001
+> +From: Paul Floyd <pjfloyd@wanadoo.fr>
+> +Date: Tue, 8 Dec 2020 15:07:29 +0100
+> +Subject: [PATCH] Bug 408663 - Patch: Suppression file for musl libc
+> +
+> +[Upstream https://sourceware.org/git/?p=valgrind.git;a=patch;h=f4d98ff79d5a79102b777ea7e23002d9f7326489
+> + reduced to the missing musl.supp file download source file
+> + Reported https://bugs.kde.org/show_bug.cgi?id=435438]
+> +Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> +---
+> + musl.supp | 46 ++++++++++++++++++++++++++++++++++++++++++++++
+> + 1 file changed, 46 insertions(+)
+> + create mode 100644 musl.supp
+> +
+> +diff --git a/musl.supp b/musl.supp
+> +new file mode 100644
+> +index 0000000..864172a
+> +--- /dev/null
+> ++++ b/musl.supp
+> +@@ -0,0 +1,46 @@
+> ++# Suppressions for musl libc
+> ++# See: https://www.openwall.com/lists/musl/2017/06/15/4
+> ++
+> ++{
+> ++   musl-dynlink-false-positive1
+> ++   Memcheck:Leak
+> ++   fun:calloc
+> ++   fun:load_direct_deps
+> ++   fun:load_deps
+> ++   fun:load_deps
+> ++   fun:__dls3
+> ++   fun:__dls2b
+> ++   fun:__dls2
+> ++}
+> ++
+> ++{
+> ++   musl-dynlink-false-positive2
+> ++   Memcheck:Leak
+> ++   fun:calloc
+> ++   fun:load_direct_deps
+> ++   fun:load_deps
+> ++   fun:load_deps
+> ++   fun:__dls3
+> ++   fun:__dls2
+> ++}
+> ++
+> ++{
+> ++   musl-dynlink-false-positive3
+> ++   Memcheck:Leak
+> ++   fun:calloc
+> ++   fun:load_library
+> ++   fun:load_preload
+> ++   fun:__dls3
+> ++   fun:__dls2b
+> ++   fun:__dls2
+> ++}
+> ++
+> ++{
+> ++   musl-dynlink-false-positive4
+> ++   Memcheck:Leak
+> ++   fun:calloc
+> ++   fun:load_library
+> ++   fun:load_preload
+> ++   fun:__dls3
+> ++   fun:__dls2
+> ++}
+> +-- 
+> +2.30.2
+> +
+> 
