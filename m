@@ -1,47 +1,58 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 7 Apr 2021 21:17:50 +0200
-Subject: [Buildroot] [git commit] package/s6-rc: bump to version 0.5.2.1
-Message-ID: <20210407185256.E8E23825BA@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 7 Apr 2021 21:18:57 +0200
+Subject: [Buildroot] [PATCH v2 0/9] Bump all skarnet/s6 packages
+In-Reply-To: <plpxZ2rQkzsU9DXh9KqBF2vdELLSLGY6sNWMqx2wKo@cp4-web-027.plabs.ch>
+References: <plpxZ2rQkzsU9DXh9KqBF2vdELLSLGY6sNWMqx2wKo@cp4-web-027.plabs.ch>
+Message-ID: <30554d7c-4c68-7087-8108-58f02fb7e72f@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=09d3f13053aa21de20a7774c7e7eff73d0e40dd0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update license hash due to year change.
 
-http://skarnet.org/cgi-bin/archive.cgi?1:mss:1515:mhcdpginfgieagphalne
+On 07/04/2021 01:39, Dick Olsson wrote:
+> This second revision now also include updates to all license files
+> due to year change.
+> 
+> Dick Olsson (9):
+>   package/skalibs: bump to version 2.10.0.2
+>   package/execline: bump to version 2.8.0.0
+>   package/s6: bump to version 2.10.0.2
+>   package/s6-portable-utils: bump to version 2.2.3.1
+>   package/s6-linux-utils: bump to version 2.5.1.4
+>   package/s6-linux-init: bump to version 1.0.6.1
+>   package/s6-dns: bump to version 2.3.5.0
+>   package/s6-networking: bump to version 2.4.1.0
+>   package/s6-rc: bump to version 0.5.2.1
 
-Signed-off-by: Dick Olsson <hi@senzilla.io>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/s6-rc/s6-rc.hash | 4 ++--
- package/s6-rc/s6-rc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ Series applied to master, except for s6-linux-init where the COPYING file has
+the wrong hash.
 
-diff --git a/package/s6-rc/s6-rc.hash b/package/s6-rc/s6-rc.hash
-index 918dc0fd2e..3648bec20a 100644
---- a/package/s6-rc/s6-rc.hash
-+++ b/package/s6-rc/s6-rc.hash
-@@ -1,3 +1,3 @@
- # Locally generated
--sha256 257e2c428336c2b57cd17b65382bc55592759acc65e053e23ad646444f28af52  s6-rc-0.5.1.1.tar.gz
--sha256 487e89990a571700bcdf7c0cbbde2859446f79e85e8b59791adab98fff6b1889  COPYING
-+sha256 2842fa55e2bddb65573d78d2c475c4a2f2b26b9258a18b457f8a0342e2fafa0a  s6-rc-0.5.2.1.tar.gz
-+sha256 4a5e44a69d649f0c37b29d7f6e5df1bb292b09898247be07f0c97814dac4b15d  COPYING
-diff --git a/package/s6-rc/s6-rc.mk b/package/s6-rc/s6-rc.mk
-index 3044341371..4e0ef57d7a 100644
---- a/package/s6-rc/s6-rc.mk
-+++ b/package/s6-rc/s6-rc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--S6_RC_VERSION = 0.5.1.1
-+S6_RC_VERSION = 0.5.2.1
- S6_RC_SITE = http://skarnet.org/software/s6-rc
- S6_RC_LICENSE = ISC
- S6_RC_LICENSE_FILES = COPYING
+ Regards,
+ Arnout
+
+> 
+>  package/execline/execline.hash                |  4 +-
+>  package/execline/execline.mk                  |  2 +-
+>  package/s6-dns/s6-dns.hash                    |  4 +-
+>  package/s6-dns/s6-dns.mk                      |  2 +-
+>  package/s6-linux-init/s6-linux-init.hash      |  2 +-
+>  package/s6-linux-init/s6-linux-init.mk        |  2 +-
+>  package/s6-linux-utils/s6-linux-utils.hash    |  4 +-
+>  package/s6-linux-utils/s6-linux-utils.mk      |  2 +-
+>  package/s6-networking/s6-networking.hash      |  4 +-
+>  package/s6-networking/s6-networking.mk        |  2 +-
+>  .../s6-portable-utils/s6-portable-utils.hash  |  4 +-
+>  .../s6-portable-utils/s6-portable-utils.mk    |  2 +-
+>  package/s6-rc/s6-rc.hash                      |  4 +-
+>  package/s6-rc/s6-rc.mk                        |  2 +-
+>  package/s6/s6.hash                            |  4 +-
+>  package/s6/s6.mk                              |  2 +-
+>  ...ker-use-dummy-file-when-testing-libs.patch | 44 -------------------
+>  package/skalibs/skalibs.hash                  |  4 +-
+>  package/skalibs/skalibs.mk                    |  2 +-
+>  19 files changed, 26 insertions(+), 70 deletions(-)
+>  delete mode 100644 package/skalibs/0001-Make-linker-use-dummy-file-when-testing-libs.patch
+> 
