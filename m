@@ -1,53 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed,  7 Apr 2021 09:12:20 +0200
-Subject: [Buildroot] [PATCH] package/nodejs: security bump to version 12.22.1
-Message-ID: <20210407071220.25669-1-peter@korsgaard.com>
+Date: Wed, 07 Apr 2021 09:22:55 +0200
+Subject: [Buildroot] [PATCH v3 1/1] package/wpa_supplicant: handle
+ CONFIG_CTRL_IFACE carefully
+In-Reply-To: <f768f65b-c4e3-89ea-60e7-37e1a68012bb@mind.be> (Arnout
+ Vandecappelle's message of "Tue, 6 Apr 2021 22:10:59 +0200")
+References: <20210403022316.8719-1-tianyuanhao@aliyun.com>
+ <20210403070130.GN24043@scaer>
+ <60bc4344-1e6d-f264-8449-2e44ee787526@aliyun.com>
+ <f768f65b-c4e3-89ea-60e7-37e1a68012bb@mind.be>
+Message-ID: <87ft02eey8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issues:
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-CVE-2020-7774: npm upgrade to 6.14.12 - Update y18n to fix
-Prototype-Pollution (High)
+Hi,
 
-This is a vulnerability in the y18n npm module which may be exploited by
-prototype pollution.
+ >  To fix this, we can simply use "CONFIG_EAP_[A-Z0-9_]*" to disable all the EAP
+ > options. I think EAP is the only one in that situation, but I haven't checked
+ > all config options. There's also CONFIG_DPP that matches CONFIG_DPP2, but I
+ > don't think that's actually intentional...
 
-https://github.com/advisories/GHSA-c4w7-xm78-47vh
+ >  So I think indeed the better solution is to change the patsubst lines.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/nodejs/nodejs.hash | 4 ++--
- package/nodejs/nodejs.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ >  However, that's a much bigger change which requires a bit of testing and
+ > double-checking (and deciding what to do with e.g. DPP2). So for now, I've
+ > applied this patch, thanks. This patch can be backported to the stable branches.
 
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index 7abb3c3b57..1e03587715 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,5 +1,5 @@
--# From https://nodejs.org/dist/v12.21.0/SHASUMS256.txt
--sha256  052f37ace6f569b513b5a1154b2a45d3c4d8b07d7d7c807b79f1566db61e979d  node-v12.21.0.tar.xz
-+# From https://nodejs.org/dist/v12.22.1/SHASUMS256.txt
-+sha256  dd650df7773a6ed3e390320ba51ef33cba6499f0e9397709ea3d1debdcbcb989  node-v12.22.1.tar.xz
- 
- # Hash for license file
- sha256  221417a7ca275112a5ac54639b36ee3c5184e74631ea1e1b01b701293b655190  LICENSE
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index f8b29d3685..108fce0926 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NODEJS_VERSION = 12.21.0
-+NODEJS_VERSION = 12.22.1
- NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
- NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
- NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
+We only added disabling logic post-2021.02, so it only affects master.
+
+Should the disabling logic (and this patch) be backported to 2021.02.x?
+
 -- 
-2.20.1
+Bye, Peter Korsgaard
