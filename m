@@ -1,60 +1,52 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 7 Apr 2021 09:26:25 +0200
-Subject: [Buildroot] [git commit] package/python-django: security bump to
- version 3.0.14
-Message-ID: <20210407070141.5EBE583902@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 7 Apr 2021 09:32:47 +0200
+Subject: [Buildroot] [PATCH v3 1/1] package/wpa_supplicant: handle
+ CONFIG_CTRL_IFACE carefully
+In-Reply-To: <87ft02eey8.fsf@dell.be.48ers.dk>
+References: <20210403022316.8719-1-tianyuanhao@aliyun.com>
+ <20210403070130.GN24043@scaer>
+ <60bc4344-1e6d-f264-8449-2e44ee787526@aliyun.com>
+ <f768f65b-c4e3-89ea-60e7-37e1a68012bb@mind.be>
+ <87ft02eey8.fsf@dell.be.48ers.dk>
+Message-ID: <606433e8-9626-09a8-2d1b-4a85065f91da@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cb5bfd63d9f521e0323ffd52f804900219e49330
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following security issue:
 
-CVE-2021-28658: Potential directory-traversal via uploaded files
+On 07/04/2021 09:22, Peter Korsgaard wrote:
+>>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+> 
+> Hi,
+> 
+>  >  To fix this, we can simply use "CONFIG_EAP_[A-Z0-9_]*" to disable all the EAP
+>  > options. I think EAP is the only one in that situation, but I haven't checked
+>  > all config options. There's also CONFIG_DPP that matches CONFIG_DPP2, but I
+>  > don't think that's actually intentional...
+> 
+>  >  So I think indeed the better solution is to change the patsubst lines.
+> 
+>  >  However, that's a much bigger change which requires a bit of testing and
+>  > double-checking (and deciding what to do with e.g. DPP2). So for now, I've
+>  > applied this patch, thanks. This patch can be backported to the stable branches.
+> 
+> We only added disabling logic post-2021.02, so it only affects master.
+> 
+> Should the disabling logic (and this patch) be backported to 2021.02.x?
 
-MultiPartParser allowed directory-traversal via uploaded files with suitably crafted file names.
+ I applied it to next at the time, not to master, so I guess that was for a
+reason :-)
 
-Built-in upload handlers were not affected by this vulnerability.
+ I don't like putting this kind of risky changes on the stable branch. Since a
+follow-up patch was needed, it clearly was indeed risky. The first patch of that
+series was kind of a fix because it made sure that the wpa_supplicant build
+actually corresponds to the Buildroot configuration. The patch that introduced
+the CTRL_IFACE issue however was really a feature patch.
 
-For more details, see the announcement:
-https://www.djangoproject.com/weblog/2021/apr/06/security-releases/
+ So no, no backporting needed.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python-django/python-django.hash | 4 ++--
- package/python-django/python-django.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-index f40cfa8f3c..1cc4b5ecc9 100644
---- a/package/python-django/python-django.hash
-+++ b/package/python-django/python-django.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/django/json
--md5  7020810fb65b17e82d22001883b63a12  Django-3.0.13.tar.gz
--sha256  6f13c3e8109236129c49d65a42fbf30c928e66b05ca6862246061b9343ecbaf2  Django-3.0.13.tar.gz
-+md5  f444fdd6ff8edec132991cbc343368d4  Django-3.0.14.tar.gz
-+sha256  d58d8394036db75a81896037d757357e79406e8f68816c3e8a28721c1d9d4c11  Django-3.0.14.tar.gz
- # Locally computed sha256 checksums
- sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
-diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-index 593b0c6043..cb8f5492d6 100644
---- a/package/python-django/python-django.mk
-+++ b/package/python-django/python-django.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--PYTHON_DJANGO_VERSION = 3.0.13
-+PYTHON_DJANGO_VERSION = 3.0.14
- PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
- # The official Django site has an unpractical URL
--PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/3b/fe/11ec9b4cbae447e7b90d551be035d55c1293973592b491540334452f1f1f
-+PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/76/0e/5d847a77b7b42cacd01405b45e4e370124c1d8a15970865df5ab0f09f83a
- PYTHON_DJANGO_LICENSE = BSD-3-Clause
- PYTHON_DJANGO_LICENSE_FILES = LICENSE
- PYTHON_DJANGO_CPE_ID_VENDOR = djangoproject
+ Regards,
+ Arnout
