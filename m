@@ -1,58 +1,41 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 7 Apr 2021 21:18:57 +0200
-Subject: [Buildroot] [PATCH v2 0/9] Bump all skarnet/s6 packages
-In-Reply-To: <plpxZ2rQkzsU9DXh9KqBF2vdELLSLGY6sNWMqx2wKo@cp4-web-027.plabs.ch>
-References: <plpxZ2rQkzsU9DXh9KqBF2vdELLSLGY6sNWMqx2wKo@cp4-web-027.plabs.ch>
-Message-ID: <30554d7c-4c68-7087-8108-58f02fb7e72f@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Wed, 7 Apr 2021 21:27:05 +0200
+Subject: [Buildroot] [git commit] package/tor: do not install systemd
+ service file
+Message-ID: <20210407190226.100AD812F5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=acd317d907526d8242874afce96e2f4d8345786a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Upstream removed the sample service file for use with systemd:
+https://gitweb.torproject.org/tor.git/commit/contrib?h=maint-0.4.5&id=915af1a65bc217fa33490876199bb69f760bea23
 
-On 07/04/2021 01:39, Dick Olsson wrote:
-> This second revision now also include updates to all license files
-> due to year change.
-> 
-> Dick Olsson (9):
->   package/skalibs: bump to version 2.10.0.2
->   package/execline: bump to version 2.8.0.0
->   package/s6: bump to version 2.10.0.2
->   package/s6-portable-utils: bump to version 2.2.3.1
->   package/s6-linux-utils: bump to version 2.5.1.4
->   package/s6-linux-init: bump to version 1.0.6.1
->   package/s6-dns: bump to version 2.3.5.0
->   package/s6-networking: bump to version 2.4.1.0
->   package/s6-rc: bump to version 0.5.2.1
+Fixes:
+http://autobuild.buildroot.net/results/b80/b807f19283528b9f0d0c46250b660ea84695679c/
+http://autobuild.buildroot.net/results/de4/de4f1a99b1c524b81579ee804156e26d3f8babe7/
 
- Series applied to master, except for s6-linux-init where the COPYING file has
-the wrong hash.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/tor/tor.mk | 5 -----
+ 1 file changed, 5 deletions(-)
 
- Regards,
- Arnout
-
-> 
->  package/execline/execline.hash                |  4 +-
->  package/execline/execline.mk                  |  2 +-
->  package/s6-dns/s6-dns.hash                    |  4 +-
->  package/s6-dns/s6-dns.mk                      |  2 +-
->  package/s6-linux-init/s6-linux-init.hash      |  2 +-
->  package/s6-linux-init/s6-linux-init.mk        |  2 +-
->  package/s6-linux-utils/s6-linux-utils.hash    |  4 +-
->  package/s6-linux-utils/s6-linux-utils.mk      |  2 +-
->  package/s6-networking/s6-networking.hash      |  4 +-
->  package/s6-networking/s6-networking.mk        |  2 +-
->  .../s6-portable-utils/s6-portable-utils.hash  |  4 +-
->  .../s6-portable-utils/s6-portable-utils.mk    |  2 +-
->  package/s6-rc/s6-rc.hash                      |  4 +-
->  package/s6-rc/s6-rc.mk                        |  2 +-
->  package/s6/s6.hash                            |  4 +-
->  package/s6/s6.mk                              |  2 +-
->  ...ker-use-dummy-file-when-testing-libs.patch | 44 -------------------
->  package/skalibs/skalibs.hash                  |  4 +-
->  package/skalibs/skalibs.mk                    |  2 +-
->  19 files changed, 26 insertions(+), 70 deletions(-)
->  delete mode 100644 package/skalibs/0001-Make-linker-use-dummy-file-when-testing-libs.patch
-> 
+diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+index 56779f1633..6eed5e4a47 100644
+--- a/package/tor/tor.mk
++++ b/package/tor/tor.mk
+@@ -73,9 +73,4 @@ endef
+ 
+ TOR_POST_INSTALL_TARGET_HOOKS += TOR_INSTALL_CONF
+ 
+-define TOR_INSTALL_INIT_SYSTEMD
+-	$(INSTALL) -D -m 644 $(@D)/contrib/dist/tor.service \
+-		$(TARGET_DIR)/usr/lib/systemd/system/tor.service
+-endef
+-
+ $(eval $(autotools-package))
