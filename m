@@ -1,52 +1,39 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 7 Apr 2021 09:32:47 +0200
-Subject: [Buildroot] [PATCH v3 1/1] package/wpa_supplicant: handle
- CONFIG_CTRL_IFACE carefully
-In-Reply-To: <87ft02eey8.fsf@dell.be.48ers.dk>
-References: <20210403022316.8719-1-tianyuanhao@aliyun.com>
- <20210403070130.GN24043@scaer>
- <60bc4344-1e6d-f264-8449-2e44ee787526@aliyun.com>
- <f768f65b-c4e3-89ea-60e7-37e1a68012bb@mind.be>
- <87ft02eey8.fsf@dell.be.48ers.dk>
-Message-ID: <606433e8-9626-09a8-2d1b-4a85065f91da@mind.be>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Wed,  7 Apr 2021 09:46:24 +0200
+Subject: [Buildroot] [PATCH] configs/mx6cubox: bump Linux and U-Boot versions
+Message-ID: <20210407074624.726278-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ configs/mx6cubox_defconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-
-On 07/04/2021 09:22, Peter Korsgaard wrote:
->>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
-> 
-> Hi,
-> 
->  >  To fix this, we can simply use "CONFIG_EAP_[A-Z0-9_]*" to disable all the EAP
->  > options. I think EAP is the only one in that situation, but I haven't checked
->  > all config options. There's also CONFIG_DPP that matches CONFIG_DPP2, but I
->  > don't think that's actually intentional...
-> 
->  >  So I think indeed the better solution is to change the patsubst lines.
-> 
->  >  However, that's a much bigger change which requires a bit of testing and
->  > double-checking (and deciding what to do with e.g. DPP2). So for now, I've
->  > applied this patch, thanks. This patch can be backported to the stable branches.
-> 
-> We only added disabling logic post-2021.02, so it only affects master.
-> 
-> Should the disabling logic (and this patch) be backported to 2021.02.x?
-
- I applied it to next at the time, not to master, so I guess that was for a
-reason :-)
-
- I don't like putting this kind of risky changes on the stable branch. Since a
-follow-up patch was needed, it clearly was indeed risky. The first patch of that
-series was kind of a fix because it made sure that the wpa_supplicant build
-actually corresponds to the Buildroot configuration. The patch that introduced
-the CTRL_IFACE issue however was really a feature patch.
-
- So no, no backporting needed.
-
- Regards,
- Arnout
+diff --git a/configs/mx6cubox_defconfig b/configs/mx6cubox_defconfig
+index 30a64f05f..ae2353582 100644
+--- a/configs/mx6cubox_defconfig
++++ b/configs/mx6cubox_defconfig
+@@ -17,7 +17,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/solidrun/mx6cubox/post-image.sh"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.6"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.27"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-cubox-i imx6dl-cubox-i-emmc-som-v15 imx6dl-cubox-i-som-v15 imx6dl-hummingboard imx6dl-hummingboard-emmc-som-v15 imx6dl-hummingboard-som-v15 imx6q-cubox-i imx6q-cubox-i-emmc-som-v15 imx6q-cubox-i-som-v15 imx6q-hummingboard imx6q-hummingboard-emmc-som-v15 imx6q-hummingboard-som-v15"
+@@ -32,7 +32,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.04"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="mx6cuboxi"
+ BR2_TARGET_UBOOT_NEEDS_PYTHON3=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+-- 
+2.27.0
