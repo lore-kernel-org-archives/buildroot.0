@@ -1,34 +1,47 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 7 Apr 2021 21:13:03 +0200
-Subject: [Buildroot] [git commit] package/execline: Fix license hash after
- bump to version 2.8.0.0
-Message-ID: <20210407185256.990E8825B1@busybox.osuosl.org>
+Date: Wed, 7 Apr 2021 21:13:54 +0200
+Subject: [Buildroot] [git commit] package/s6: bump to version 2.10.0.2
+Message-ID: <20210407185256.A90D381640@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=86f7634bafdb50f144868149f5abe9c2e28550b1
+commit: https://git.buildroot.net/buildroot/commit/?id=7f552c710fc1508e66d8f91939be043817c6db3d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Updated license hash due to year change.
+Update license hash due to year change.
 
-Commit bf66772c9b089dfcd67e1abbe04d7db52562310a was accidentally based
-on v1 of this patch.
+http://skarnet.org/cgi-bin/archive.cgi?1:mss:1535:lpehbljhhcpaopbnkkbf
 
 Signed-off-by: Dick Olsson <hi@senzilla.io>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/execline/execline.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/s6/s6.hash | 4 ++--
+ package/s6/s6.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/execline/execline.hash b/package/execline/execline.hash
-index 935f5111f7..35ebc443b9 100644
---- a/package/execline/execline.hash
-+++ b/package/execline/execline.hash
+diff --git a/package/s6/s6.hash b/package/s6/s6.hash
+index 9b355351ea..9cc6f4477d 100644
+--- a/package/s6/s6.hash
++++ b/package/s6/s6.hash
 @@ -1,3 +1,3 @@
  # Locally generated
- sha256  e7744b4a400eda68b83dcfb1bce65e454606279882d83d8230ddf8afda25766d  execline-2.8.0.0.tar.gz
--sha256  5443ac67e8d74ac614ced7bc64211ce90ccedb7778a68bfe9e68a8b234c9503e  COPYING
-+sha256  adecb8bedfaae27fcfe65ecb3ef0e2e71aa2a2b49dc21886a200bc677d93e6ec  COPYING
+-sha256 e0cdbaf26e3ba1c41ecc0a8d1f45fb78194f96109b55cabeb849528b7e966c57  s6-2.9.0.1.tar.gz
+-sha256 d8e17a6418d26867c13801810903a1f78beac8cfe8f92c2a85afe59f3c3fc48c  COPYING
++sha256 b23afce87080b848b89499e85ebd93c20269e6db23f6ef65e58386c9cecd6c21  s6-2.10.0.2.tar.gz
++sha256 adecb8bedfaae27fcfe65ecb3ef0e2e71aa2a2b49dc21886a200bc677d93e6ec  COPYING
+diff --git a/package/s6/s6.mk b/package/s6/s6.mk
+index ec1407381e..443ecbbffd 100644
+--- a/package/s6/s6.mk
++++ b/package/s6/s6.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-S6_VERSION = 2.9.0.1
++S6_VERSION = 2.10.0.2
+ S6_SITE = http://skarnet.org/software/s6
+ S6_LICENSE = ISC
+ S6_LICENSE_FILES = COPYING
