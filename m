@@ -1,88 +1,33 @@
-From: Arthur Lambert <lambertarthur22@gmail.com>
-Date: Wed, 7 Apr 2021 11:01:59 +0200
-Subject: [Buildroot] issue with timer_create and openblas after update
- buildroot from 2019_02 to 2021_02
-Message-ID: <CAGpqJgqZBG5qMZDaS59syis2y1rm53f1KMWYzJKiwepHcJbadA@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 07 Apr 2021 11:07:51 +0200
+Subject: [Buildroot] [PATCH/2021.2 v1] package/genimage: fix for WSL
+ (Windows-Subsystem for Linux)
+In-Reply-To: <20210310191651.20769-1-ps.report@gmx.net> (Peter Seiderer's
+ message of "Wed, 10 Mar 2021 20:16:51 +0100")
+References: <20210310191651.20769-1-ps.report@gmx.net>
+Message-ID: <87tuoicviw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I am trying to update buildroot from 2019_02 tag to 2021_02. After the
-update I have
-some issue with timer_create function  from uclibc . I get -1 return error
-with  EAGAIN errno.
-The error only occurred with SIGEV_THREAD type.
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
-I was able to track the code responsible from the error without
-understanding the reason
+ > - add upstream patch ([1]) to fix usage with WSL (Windows-Subsystem for Linux)
+ > Fixes:
 
-output/build/uclibc-1.0.37/libpthread/nptl/sysdeps/unix/sysv/linux/timer_create.c
-line-150
+ >   - https://bugs.busybox.net/show_bug.cgi?id=13146
+ >   - https://bugs.busybox.net/show_bug.cgi?id=13601
 
->>     {
->>     /* Create the helper thread.  */
->>     pthread_once (&__helper_once, __start_helper_thread);
->>     if (__helper_tid == 0)
->> {
->>  /* No resources to start the helper thread.  */
->>  __set_errno (EAGAIN);
->>  return -1;
->> }
+ >   ERROR: hdimage(sdcard.img): fiemap .../images/boot.vfat: 25 Inappropriate ioctl for device
+ >   ERROR: hdimage(sdcard.img): failed to write image partition 'boot'
 
-I am was also able to reproduce the issue with a minimalist piece of code.
-The issue seems
-to be related to openblas. I dont see the link between BLAS and
-thread/timer issue ??
+ > [1] https://github.com/pengutronix/genimage/commit/4c2b02df0861e06ca9320d80ad60994d4a239ad6.patch
 
->> #include <stdlib.h>
->> #include <unistd.h>
->> #include <stdio.h>
->> #include <signal.h>
->> #include <time.h>
->>
->>
->> int main(void)
->> {
->>
->> struct sigevent alarm_sigevt;
->> timer_t alarm_timer;
->> int ret = 0;
->>
->> alarm_sigevt.sigev_notify = SIGEV_THREAD;
->> alarm_sigevt.sigev_notify_function = NULL;
->> alarm_sigevt.sigev_notify_attributes = NULL;
->> alarm_sigevt.sigev_value.sival_ptr =  NULL;
->> ret = timer_create(CLOCK_REALTIME, &alarm_sigevt, &alarm_timer);
->> printf ("ret : %d\n", ret);
->>
->> exit(EXIT_SUCCESS);
->> }
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-I compile the code like this :
+Committed to 2021.02.x, thanks.
 
-/home/arthur/work/buildroot/atto_dreem3_dev/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-gcc
-test_timer.c -o test_timer
-
-I run the binary on my arm target :
-
-# ./test_timer
-ret : 0
-#
-
-Everything is working fine here.
-I just add openblas library now :
-
-/home/arthur/work/buildroot/atto_dreem3_dev/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-gcc
-test_timer.c -o test_timer -lopenblas
-
-I now run the new binary :
-
-# ./test_timer
-ret : -1
-
-An issue with openblas which init too many timer ?
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210407/9f6f31fe/attachment.html>
+-- 
+Bye, Peter Korsgaard
