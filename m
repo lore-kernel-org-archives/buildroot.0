@@ -1,34 +1,48 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 7 Apr 2021 21:11:26 +0200
-Subject: [Buildroot] [git commit] package/skalibs: Fix license hash after
- bump to version 2.10.0.2
-Message-ID: <20210407185256.8463281640@busybox.osuosl.org>
+Date: Wed, 7 Apr 2021 21:15:15 +0200
+Subject: [Buildroot] [git commit] package/s6-linux-utils: bump to version
+ 2.5.1.4
+Message-ID: <20210407185256.C271281640@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=965bf9e0ca736df748ff7652105c995b5fff5a5e
+commit: https://git.buildroot.net/buildroot/commit/?id=6d49b14165c040f0ad8439dd6a5a6b52a8a3c405
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Updated license hash due to year change.
+Update license hash due to year change.
 
-Commit 4d5587cb56224b2b28f53b0202fb14b2ab32d5fb was accidentally based
-on v1 of this patch.
+http://skarnet.org/cgi-bin/archive.cgi?1:mss:1515:mhcdpginfgieagphalne
 
 Signed-off-by: Dick Olsson <hi@senzilla.io>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/skalibs/skalibs.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/s6-linux-utils/s6-linux-utils.hash | 4 ++--
+ package/s6-linux-utils/s6-linux-utils.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/skalibs/skalibs.hash b/package/skalibs/skalibs.hash
-index cb563d3cc5..2e486ea901 100644
---- a/package/skalibs/skalibs.hash
-+++ b/package/skalibs/skalibs.hash
+diff --git a/package/s6-linux-utils/s6-linux-utils.hash b/package/s6-linux-utils/s6-linux-utils.hash
+index 638b6b8160..64caef793d 100644
+--- a/package/s6-linux-utils/s6-linux-utils.hash
++++ b/package/s6-linux-utils/s6-linux-utils.hash
 @@ -1,3 +1,3 @@
  # Locally generated
- sha256 8bba3d7650bab83d4ea2ad21d6bfb5479a8652e362a478fcb783b3c7cf891e0f  skalibs-2.10.0.2.tar.gz
--sha256 5443ac67e8d74ac614ced7bc64211ce90ccedb7778a68bfe9e68a8b234c9503e  COPYING
+-sha256 25f61961f3247b9a833536ebd1e19f3b024fa095fce30f93d82fdfd4e015dc02  s6-linux-utils-2.5.1.1.tar.gz
+-sha256 d8e17a6418d26867c13801810903a1f78beac8cfe8f92c2a85afe59f3c3fc48c  COPYING
++sha256 d8ad8dcc8d805646b655971ddcaabcd50094d8347bd49d859ba2c51713fbfd09  s6-linux-utils-2.5.1.4.tar.gz
 +sha256 adecb8bedfaae27fcfe65ecb3ef0e2e71aa2a2b49dc21886a200bc677d93e6ec  COPYING
+diff --git a/package/s6-linux-utils/s6-linux-utils.mk b/package/s6-linux-utils/s6-linux-utils.mk
+index 926ec523a1..dcc4f9e4b2 100644
+--- a/package/s6-linux-utils/s6-linux-utils.mk
++++ b/package/s6-linux-utils/s6-linux-utils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-S6_LINUX_UTILS_VERSION = 2.5.1.1
++S6_LINUX_UTILS_VERSION = 2.5.1.4
+ S6_LINUX_UTILS_SITE = http://skarnet.org/software/s6-linux-utils
+ S6_LINUX_UTILS_LICENSE = ISC
+ S6_LINUX_UTILS_LICENSE_FILES = COPYING
