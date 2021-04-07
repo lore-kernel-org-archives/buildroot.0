@@ -1,46 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 7 Apr 2021 20:05:05 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] Revert "package/mender:
- install dbus authentication file if dbus is selected"
-Message-ID: <20210407174301.C06BA8165E@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 7 Apr 2021 20:31:10 +0200
+Subject: [Buildroot] Xeon variant for x86_64 target
+In-Reply-To: <CACTZKX66V9a2xBXnw_f7esQoWGnw99t2uwX=CaefkXPffwfPrw@mail.gmail.com>
+References: <CACTZKX66V9a2xBXnw_f7esQoWGnw99t2uwX=CaefkXPffwfPrw@mail.gmail.com>
+Message-ID: <23a058d3-46dc-20d4-0e2f-eefda5c16bc3@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=28283f68d6fa258624c1c9cf8c8ad713a1a8259f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
+ Hi Atilla,
 
-Fixes:
-http://autobuild.buildroot.net/results/841d49ffa0ce275fde088b46845d7c74bd30b82a
+On 22/03/2021 12:23, Atilla Filiz wrote:
+> Hello
+> 
+> I am preparing a config for an Intel Xeon D based target. There is no Xeon
+> variant available in the 2021.02 release. I am not very familiar with the x86
+> family but I want to create a pro[er variant if possible.
+> 
+> I see the build variant selects certain flags. E.g. Atom selects
+> BR2_X86_CPU_HAS_MMX [=y] && BR2_X86_CPU_HAS_SSE [=y] && BR2_X86_CPU_HAS_SSE2
+> [=y] && BR2_X86_CPU_HAS_SSE3 [=y] && BR2_X86_CPU_HAS_SSSE3 [=y]
+> 
+> What else does this variant selection affect? I assume a few additional build
+> flags to pass on GCC? Maybe some?kernel?build options?
+> 
+> How does one go about creating a proper x86_64 variant?
 
-This reverts commit 22ca8558a8912c361595c8ba2dddcab2ba5541cd.
+ The only thing that is relevant, really, is the gcc -march option. You have to
+find out what the Xeon corresponds to. This determines the BR2_GCC_TARGET_ARCH
+option. Of course, the easiest for everybody is if you name the buildroot option
+the same as the -march option. There's a StackOverflow answer [1] that lists the
+recent Xeons, but only Xeon E, not Xeon D. So you'll have to browse through
+Intel's websites to find which type it is.
 
-io.mender.AuthenticationManager.conf was only added in mender 2.5.0:
-https://github.com/mendersoftware/mender/commit/2e233164d5f67228c6f6472b4d434f14de6e81be
+ As to the SSE stuff: that's only relevant to pass in configure options to
+ffmpeg and the like. I believe it's just to tell ffmpeg which assembly code it's
+allowed to use. You can easily find which instruction types are supported in the
+GCC man page, and in /proc/cpuinfo if you have a running kernel.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/mender/mender.mk | 8 --------
- 1 file changed, 8 deletions(-)
+ Regards,
+ Arnout
 
-diff --git a/package/mender/mender.mk b/package/mender/mender.mk
-index b79f196a6d..0224e84a47 100644
---- a/package/mender/mender.mk
-+++ b/package/mender/mender.mk
-@@ -76,14 +76,6 @@ endef
- 
- MENDER_POST_INSTALL_TARGET_HOOKS += MENDER_INSTALL_CONFIG_FILES
- 
--ifeq ($(BR2_PACKAGE_DBUS),y)
--define MENDER_INSTALL_DBUS_AUTHENTICATION_MANAGER_CONF
--	$(INSTALL) -D -m 0755 $(@D)/support/dbus/io.mender.AuthenticationManager.conf \
--		      $(TARGET_DIR)/etc/dbus-1/system.d/io.mender.AuthenticationManager.conf
--endef
--MENDER_POST_INSTALL_TARGET_HOOKS += MENDER_INSTALL_DBUS_AUTHENTICATION_MANAGER_CONF
--endif
--
- define MENDER_INSTALL_INIT_SYSTEMD
- 	$(INSTALL) -D -m 0644 $(MENDER_PKGDIR)/mender-client.service \
- 		$(TARGET_DIR)/usr/lib/systemd/system/mender-client.service
+
+[1]
+https://stackoverflow.com/questions/943755/gcc-optimization-flags-for-xeon#25095818
