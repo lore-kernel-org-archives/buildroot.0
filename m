@@ -1,49 +1,72 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 7 Apr 2021 21:29:30 +0200
-Subject: [Buildroot] [PATCH 1/1] package/tor: do not install systemd
- service file
-In-Reply-To: <20210406154235.609269-1-bernd.kuhls@t-online.de>
-References: <20210406154235.609269-1-bernd.kuhls@t-online.de>
-Message-ID: <96d396a5-0c67-4394-a6ec-b274d2cebb11@mind.be>
+From: Christian Stewart <christian@paral.in>
+Date: Wed, 7 Apr 2021 13:16:58 -0700
+Subject: [Buildroot] [RFC] rename docker-containerd package to
+ containerd?
+In-Reply-To: <37926b27-8d30-fb0b-368f-eaab81311bed@mind.be>
+References: <CA+h8R2pH1sffW6iJFZKdxB71ke1nhtSFdCr=x3MzsyVqiXNe1A@mail.gmail.com>
+ <37926b27-8d30-fb0b-368f-eaab81311bed@mind.be>
+Message-ID: <CA+h8R2qagx+X9TnRxqGWe=ozSoGjqQDNme290mc6bSym753+yA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Arnout,
 
+On Wed, Apr 7, 2021, 11:39 AM Arnout Vandecappelle <arnout@mind.be> wrote:
 
-On 06/04/2021 17:42, Bernd Kuhls wrote:
-> Upstream removed the sample service file for use with systemd:
-> https://gitweb.torproject.org/tor.git/commit/contrib?h=maint-0.4.5&id=915af1a65bc217fa33490876199bb69f760bea23
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/b80/b807f19283528b9f0d0c46250b660ea84695679c/
-> http://autobuild.buildroot.net/results/de4/de4f1a99b1c524b81579ee804156e26d3f8babe7/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+>  Hi Christian,
+>
+>  Not much reaction to this RFC :-)
+>
+> On 12/03/2021 22:00, Christian Stewart wrote:
+> > Hi all,
+> >
+> > When introduced, the docker-containerd package was associated with
+> > Docker Engine.
+> >
+> > Now, the project is independent and called simply "containerd."
+> >
+> > https://github.com/containerd/containerd
+> >
+> > Is it worthwhile / standard practice to rename the Buildroot package
+> > to "containerd"? The package is already independent from Docker.
+>
+>  It's done occasionally, there's no real rule for it. Personally I don't
+> like
+> renames too much, because it makes upgrading buildroot harder (though the
+> legacy
+> handling usually covers it pretty well). It also makes backporting patches
+> more
+> difficult, and also consulting history.
+>
+>  If you look at Config.in.legacy ("git log -G '[Rr]enamed'
+> Config.in.legacy"),
+> you'll see that for most renames there was a reason. For example, cegui06
+> was
+> renamed because it was no longer version 6. The rename of rcw -> qoriq-rcw
+> was
+> contributed by someone from NXP (i.e., the chip vendor behind qoriq) so
+> that
+> also carries a bit more clout.
+>
+>  That said, feel free to do this rename if you think it improved things.
+> Since
+> there's only a single package that depends on it, it shouldn't be too hard
+> to do
+> the rename.
+>
 
- Applied to master, thanks.
+I'd rather do the rename now than wait until we have lots of dependencies
+for it. Containerd is increasingly being used in non docker contexts like
+Kubernetes and nerdctl, and should be similarly disassociated with docker
+in the Buildroot naming.
 
- Regards,
- Arnout
+Will submit a patch series for it.
 
-> ---
->  package/tor/tor.mk | 5 -----
->  1 file changed, 5 deletions(-)
-> 
-> diff --git a/package/tor/tor.mk b/package/tor/tor.mk
-> index 56779f1633..6eed5e4a47 100644
-> --- a/package/tor/tor.mk
-> +++ b/package/tor/tor.mk
-> @@ -73,9 +73,4 @@ endef
->  
->  TOR_POST_INSTALL_TARGET_HOOKS += TOR_INSTALL_CONF
->  
-> -define TOR_INSTALL_INIT_SYSTEMD
-> -	$(INSTALL) -D -m 644 $(@D)/contrib/dist/tor.service \
-> -		$(TARGET_DIR)/usr/lib/systemd/system/tor.service
-> -endef
-> -
->  $(eval $(autotools-package))
-> 
+Best,
+Christian
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210407/aafda5bc/attachment.html>
