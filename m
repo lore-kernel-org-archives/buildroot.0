@@ -1,242 +1,226 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed,  7 Apr 2021 16:48:30 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libdrm: bump version to 2.4.105
-Message-ID: <20210407144830.373018-1-bernd.kuhls@t-online.de>
+Date: Wed,  7 Apr 2021 19:31:25 +0200
+Subject: [Buildroot] [PATCH v3 1/1] package/{mesa3d,
+ mesa3d-headers}: bump version to 21.0.2
+Message-ID: <20210407173125.27246-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Removed patch 0001, committed upstream:
-https://cgit.freedesktop.org/mesa/drm/commit/?id=52f05d3d896480ee5431dcd444f53bb2a8e41cce
-
-Renumbered remaining patch.
-
-Updated license hash due to upstream commits:
-https://cgit.freedesktop.org/mesa/drm/log/xf86drm.c
-
 Release notes:
-https://lists.freedesktop.org/archives/dri-devel/2021-April/302515.html
+21.0.0: https://lists.freedesktop.org/archives/mesa-announce/2021-March/000622.html
+21.0.1: https://lists.freedesktop.org/archives/mesa-announce/2021-March/000624.html
+21.0.2: https://lists.freedesktop.org/archives/mesa-announce/2021-April/000625.html
+
+OSMesa classic support was removed:
+https://cgit.freedesktop.org/mesa/mesa/commit/?h=21.0&id=ee802372180a2b4460cc7abb53438e45c6b6f1e4
+
+DRI swrast driver was removed:
+https://cgit.freedesktop.org/mesa/mesa/commit/?h=21.0&id=435de835cd639d1b9bb96f81fc224771dc90af6d
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-Is 0001-meson.build-enable-static-build.patch still needed?
+v3: bump version to 21.0.2
+v2: - osmesa needs swrast driver (Yann)
+    - updated other packages following the renamed osmesa Config.in
+      option (Yann)
 
- ...0001-meson.build-enable-static-build.patch | 169 ------------------
- ...-disable-nouveau-tests-for-static-b.patch} |   0
- package/libdrm/libdrm.hash                    |   8 +-
- package/libdrm/libdrm.mk                      |   2 +-
- 4 files changed, 5 insertions(+), 174 deletions(-)
- delete mode 100644 package/libdrm/0001-meson.build-enable-static-build.patch
- rename package/libdrm/{0002-tests-meson.build-disable-nouveau-tests-for-static-b.patch => 0001-tests-meson.build-disable-nouveau-tests-for-static-b.patch} (100%)
+ Config.in.legacy                         | 22 ++++++++++++++--------
+ package/mesa3d-demos/mesa3d-demos.mk     |  2 +-
+ package/mesa3d-headers/mesa3d-headers.mk |  2 +-
+ package/mesa3d/Config.in                 | 20 +++++---------------
+ package/mesa3d/mesa3d.hash               |  6 +++---
+ package/mesa3d/mesa3d.mk                 |  9 ++++-----
+ package/wine/wine.mk                     |  2 +-
+ 7 files changed, 29 insertions(+), 34 deletions(-)
 
-diff --git a/package/libdrm/0001-meson.build-enable-static-build.patch b/package/libdrm/0001-meson.build-enable-static-build.patch
-deleted file mode 100644
-index 28da702559..0000000000
---- a/package/libdrm/0001-meson.build-enable-static-build.patch
-+++ /dev/null
-@@ -1,169 +0,0 @@
--From d58a32776e08e193c24f7bb192daf72b66fbe550 Mon Sep 17 00:00:00 2001
--From: Peter Seiderer <ps.report@gmx.net>
--Date: Wed, 18 Jul 2018 21:35:18 +0200
--Subject: [PATCH] meson.build: enable static build
--
--Use meson library instead of shared_library to enable static build.
--
--Upstream suggested: https://lists.freedesktop.org/archives/dri-devel/2018-July/183886.html
--Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-----
-- amdgpu/meson.build    | 2 +-
-- etnaviv/meson.build   | 2 +-
-- exynos/meson.build    | 2 +-
-- freedreno/meson.build | 2 +-
-- intel/meson.build     | 2 +-
-- libkms/meson.build    | 2 +-
-- meson.build           | 2 +-
-- nouveau/meson.build   | 2 +-
-- omap/meson.build      | 2 +-
-- radeon/meson.build    | 2 +-
-- tegra/meson.build     | 2 +-
-- 11 files changed, 11 insertions(+), 11 deletions(-)
--
--diff --git a/amdgpu/meson.build b/amdgpu/meson.build
--index f39d7bf..1b4b0be 100644
----- a/amdgpu/meson.build
--+++ b/amdgpu/meson.build
--@@ -21,7 +21,7 @@
--
-- datadir_amdgpu = join_paths(get_option('prefix'), get_option('datadir'), 'libdrm')
--
---libdrm_amdgpu = shared_library(
--+libdrm_amdgpu = library(
--   'drm_amdgpu',
--   [
--     files(
--diff --git a/etnaviv/meson.build b/etnaviv/meson.build
--index ca2aa54..a0d994e 100644
----- a/etnaviv/meson.build
--+++ b/etnaviv/meson.build
--@@ -19,7 +19,7 @@
-- # SOFTWARE.
--
--
---libdrm_etnaviv = shared_library(
--+libdrm_etnaviv = library(
--   'drm_etnaviv',
--   [
--     files(
--diff --git a/exynos/meson.build b/exynos/meson.build
--index 30d3640..fd14f3a 100644
----- a/exynos/meson.build
--+++ b/exynos/meson.build
--@@ -18,7 +18,7 @@
-- # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-- # SOFTWARE.
--
---libdrm_exynos = shared_library(
--+libdrm_exynos = library(
--   'drm_exynos',
--   [files('exynos_drm.c', 'exynos_fimg2d.c'), config_file],
--   c_args : warn_c_args,
--diff --git a/freedreno/meson.build b/freedreno/meson.build
--index 015b7fb..6c8a6a7 100644
----- a/freedreno/meson.build
--+++ b/freedreno/meson.build
--@@ -39,7 +39,7 @@ if with_freedreno_kgsl
--   )
-- endif
--
---libdrm_freedreno = shared_library(
--+libdrm_freedreno = library(
--   'drm_freedreno',
--   [files_freedreno, config_file],
--   c_args : warn_c_args,
--diff --git a/intel/meson.build b/intel/meson.build
--index 53c7fce..14cabd3 100644
----- a/intel/meson.build
--+++ b/intel/meson.build
--@@ -18,7 +18,7 @@
-- # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-- # SOFTWARE.
--
---libdrm_intel = shared_library(
--+libdrm_intel = library(
--   'drm_intel',
--   [
--     files(
--diff --git a/libkms/meson.build b/libkms/meson.build
--index 86d1a4e..9d21e4c 100644
----- a/libkms/meson.build
--+++ b/libkms/meson.build
--@@ -41,7 +41,7 @@ if with_exynos
--   libkms_include += include_directories('../exynos')
-- endif
--
---libkms = shared_library(
--+libkms = library(
--   'kms',
--   [files_libkms, config_file],
--   c_args : warn_c_args,
--diff --git a/meson.build b/meson.build
--index 3c8afb6..7aa5f8c 100644
----- a/meson.build
--+++ b/meson.build
--@@ -279,7 +279,7 @@ add_project_arguments('-include', 'config.h', language : 'c')
-- inc_root = include_directories('.')
-- inc_drm = include_directories('include/drm')
--
---libdrm = shared_library(
--+libdrm = library(
--   'drm',
--   [files(
--      'xf86drm.c', 'xf86drmHash.c', 'xf86drmRandom.c', 'xf86drmSL.c',
--diff --git a/nouveau/meson.build b/nouveau/meson.build
--index 51c9a71..acba048 100644
----- a/nouveau/meson.build
--+++ b/nouveau/meson.build
--@@ -19,7 +19,7 @@
-- # SOFTWARE.
--
--
---libdrm_nouveau = shared_library(
--+libdrm_nouveau = library(
--   'drm_nouveau',
--   [files( 'nouveau.c', 'pushbuf.c', 'bufctx.c', 'abi16.c'), config_file],
--   c_args : warn_c_args,
--diff --git a/omap/meson.build b/omap/meson.build
--index e57b8f5..6cffb99 100644
----- a/omap/meson.build
--+++ b/omap/meson.build
--@@ -18,7 +18,7 @@
-- # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-- # SOFTWARE.
--
---libdrm_omap = shared_library(
--+libdrm_omap = library(
--   'drm_omap',
--   [files('omap_drm.c'), config_file],
--   include_directories : [inc_root, inc_drm],
--diff --git a/radeon/meson.build b/radeon/meson.build
--index b08c744..2f45ff7 100644
----- a/radeon/meson.build
--+++ b/radeon/meson.build
--@@ -19,7 +19,7 @@
-- # SOFTWARE.
--
--
---libdrm_radeon = shared_library(
--+libdrm_radeon = library(
--   'drm_radeon',
--   [
--     files(
--diff --git a/tegra/meson.build b/tegra/meson.build
--index 1f5c74b..8d0cfa9 100644
----- a/tegra/meson.build
--+++ b/tegra/meson.build
--@@ -18,7 +18,7 @@
-- # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-- # SOFTWARE.
--
---libdrm_tegra = shared_library(
--+libdrm_tegra = library(
--   'drm_tegra',
--   [files('tegra.c'), config_file],
--   include_directories : [inc_root, inc_drm],
----
--2.18.0
--
-diff --git a/package/libdrm/0002-tests-meson.build-disable-nouveau-tests-for-static-b.patch b/package/libdrm/0001-tests-meson.build-disable-nouveau-tests-for-static-b.patch
-similarity index 100%
-rename from package/libdrm/0002-tests-meson.build-disable-nouveau-tests-for-static-b.patch
-rename to package/libdrm/0001-tests-meson.build-disable-nouveau-tests-for-static-b.patch
-diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
-index 48f6b69481..25c3a042cb 100644
---- a/package/libdrm/libdrm.hash
-+++ b/package/libdrm/libdrm.hash
-@@ -1,6 +1,6 @@
--# From https://lists.freedesktop.org/archives/dri-devel/2021-January/293654.html
--sha256  d66ad8b5c2441015ac1333e40137bb803c3bde3612ff040286fcc12158ea1bcb  libdrm-2.4.104.tar.xz
--sha512  0fdbef53e0e7c441c805c95ac55ca2c94f11e8fa18e36b4dc7534c22e2b5bc8eca7283fdf41785da753f98d0b589023111abdba70db7e79837729b1540253d6e  libdrm-2.4.104.tar.xz
-+# From https://lists.freedesktop.org/archives/dri-devel/2021-April/302515.html
-+sha256  1d1d024b7cadc63e2b59cddaca94f78864940ab440843841113fbac6afaf2a46  libdrm-2.4.105.tar.xz
-+sha512  083a04af7208e58be21b89c6ebdbe2db3ba00cd29f0d271bd38bfe97dfca741edafddaaf9b5b95c20fac2c9b700434ea5b21397de26f7073169ad6f5b090f715  libdrm-2.4.105.tar.xz
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 8ebbc4c295..da48a78158 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,20 @@ endif
  
- # Hash for license file
--sha256  2ece103921b7b5619198b9572fb9242db7bbfa6d3b33f9f93f22e1fb738ed8ac  xf86drm.c
-+sha256  a69e38953c20a88845cc739c05dd604da4c977844b872e126c91a0ca2e1385b7  xf86drm.c
-diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-index 25f8484782..98e1ac079d 100644
---- a/package/libdrm/libdrm.mk
-+++ b/package/libdrm/libdrm.mk
-@@ -4,7 +4,7 @@
- #
+ comment "Legacy options removed in 2021.05"
+ 
++config BR2_PACKAGE_MESA3D_OSMESA_CLASSIC
++	bool "mesa OSMesa option renamed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_MESA3D_OSMESA
++	help
++	  The option was renamed in order to match the naming used
++	  by the meson buildsystem.
++
++config BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST
++	bool "mesa DRI swrast driver removed"
++	select BR2_LEGACY
++	help
++	  The DRI swrast driver was removed.
++
+ config BR2_PACKAGE_KODI_SCREENSAVER_CRYSTALMORPH
+ 	bool "kodi-screensaver-crystalmorph removed"
+ 	select BR2_LEGACY
+@@ -886,14 +900,6 @@ config BR2_PACKAGE_KODI_AUDIODECODER_OPUS
+ 	help
+ 	  This package is incompatible with Kodi 18.x.
+ 
+-config BR2_PACKAGE_MESA3D_OSMESA
+-	bool "mesa OSMesa option renamed"
+-	select BR2_PACKAGE_MESA3D_OSMESA_CLASSIC if BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST
+-	select BR2_LEGACY
+-	help
+-	  The option was renamed in order to match the naming used
+-	  by the meson buildsystem.
+-
+ config BR2_PACKAGE_HOSTAPD_DRIVER_RTW
+ 	bool "hostapd rtl871xdrv driver removed"
+ 	select BR2_LEGACY
+diff --git a/package/mesa3d-demos/mesa3d-demos.mk b/package/mesa3d-demos/mesa3d-demos.mk
+index e9aa44dc2e..ddff9b9ed9 100644
+--- a/package/mesa3d-demos/mesa3d-demos.mk
++++ b/package/mesa3d-demos/mesa3d-demos.mk
+@@ -61,7 +61,7 @@ ifeq ($(BR2_PACKAGE_LIBFREEGLUT),y)
+ MESA3D_DEMOS_DEPENDENCIES += libfreeglut
+ MESA3D_DEMOS_CONF_OPTS += --with-glut=$(STAGING_DIR)/usr
+ # osmesa support depends on glut
+-ifeq ($(BR2_PACKAGE_MESA3D_OSMESA_CLASSIC),y)
++ifeq ($(BR2_PACKAGE_MESA3D_OSMESA),y)
+ MESA3D_DEMOS_CONF_OPTS += --enable-osmesa
+ else
+ MESA3D_DEMOS_CONF_OPTS += --disable-osmesa
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 6e2f0b5a79..cac50e5b92 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 20.3.4
++MESA3D_HEADERS_VERSION = 21.0.2
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index a96fd46bbe..6a803d65a4 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -64,7 +64,7 @@ config BR2_PACKAGE_MESA3D_DRI_DRIVER
+ 	select BR2_PACKAGE_MESA3D_GBM if \
+ 		!BR2_PACKAGE_MESA3D_OPENGL_GLX && \
+ 		!BR2_PACKAGE_MESA3D_OPENGL_EGL && \
+-		!BR2_PACKAGE_MESA3D_OSMESA_CLASSIC
++		!BR2_PACKAGE_MESA3D_OSMESA
+ 	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if \
+ 		(BR2_PACKAGE_XORG7 && BR2_TOOLCHAIN_HAS_SYNC_4)
+ 
+@@ -242,15 +242,11 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA
+ 
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
+ 	bool "Gallium swrast driver"
+-	depends on !BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ 	help
+ 	  This is a software opengl implementation using the Gallium3D
+ 	  infrastructure.
+ 
+-comment "Gallium swrast: Only one swrast provider can be built"
+-	depends on BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST
+-
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_TEGRA
+ 	bool "Gallium tegra driver"
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+@@ -334,13 +330,6 @@ comment "Gallium XvMC state tracker needs X.org and gallium drivers r600 or nouv
+ 
+ comment "DRI drivers"
+ 
+-config BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST
+-	bool "DRI swrast driver"
+-	select BR2_PACKAGE_MESA3D_DRI_DRIVER
+-	help
+-	  This is a software opengl implementation using the DRI
+-	  infrastructure.
+-
+ config BR2_PACKAGE_MESA3D_DRI_DRIVER_I915
+ 	bool "DRI i915 driver"
+ 	depends on BR2_i386 || BR2_x86_64
+@@ -405,10 +394,11 @@ comment "intel vulkan depends on X.org and needs a glibc toolchain w/ headers >=
+ 
+ comment "Off-screen Rendering"
+ 
+-config BR2_PACKAGE_MESA3D_OSMESA_CLASSIC
+-	bool "OSMesa (classic) library"
++config BR2_PACKAGE_MESA3D_OSMESA
++	bool "OSMesa library"
++	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
+ 	help
+-	  The OSMesa classic API provides functions for
++	  The OSMesa API provides functions for
+ 	  making off-screen renderings.
+ 
+ if BR2_PACKAGE_MESA3D_DRIVER
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index e7b375440d..f171d97a68 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2021-January/000618.html
+-sha256  dc21a987ec1ff45b278fe4b1419b1719f1968debbb80221480e44180849b4084  mesa-20.3.4.tar.xz
+-sha512  81c4d032213b4aef842f1594e0e89bc0045f7ca7ce5f267b62a0f8236eb12ab09c1f780d8b3776b3072f37cd0bd8829f8a1330a749ccf462471b262ef8097477  mesa-20.3.4.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2021-April/000625.html
++sha256  46c1dc5bb54a372dee43ec3c067229c299187d5bdadf1402756bbf66a6df5b88  mesa-21.0.2.tar.xz
++sha512  c3d7969b56e1c31ee642e3b7143d565c4233173dab7cc5576b686c873c27134dc8292a9f2caa0a0dd3c54d0c89d27d6030f36a2c84f85dcedee7ae80b19e5c3b  mesa-21.0.2.tar.xz
+ 
+ # License
+ sha256  1361129baa4519b6ed27a1bf4aeee33a58b060bf7bb9b6ea415ecede04e35e46  docs/license.rst
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 4ca51f5e71..136e134854 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LIBDRM_VERSION = 2.4.104
-+LIBDRM_VERSION = 2.4.105
- LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.xz
- LIBDRM_SITE = https://dri.freedesktop.org/libdrm
- LIBDRM_LICENSE = MIT
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 20.3.4
++MESA3D_VERSION = 21.0.2
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_LICENSE = MIT, SGI, Khronos
+@@ -102,7 +102,6 @@ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D)      += v3d
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4)      += vc4
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL)    += virgl
+ # DRI Drivers
+-MESA3D_DRI_DRIVERS-$(BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST) += swrast
+ MESA3D_DRI_DRIVERS-$(BR2_PACKAGE_MESA3D_DRI_DRIVER_I915)   += i915
+ MESA3D_DRI_DRIVERS-$(BR2_PACKAGE_MESA3D_DRI_DRIVER_I965)   += i965
+ MESA3D_DRI_DRIVERS-$(BR2_PACKAGE_MESA3D_DRI_DRIVER_NOUVEAU) += nouveau
+@@ -149,10 +148,10 @@ endif
+ 
+ # APIs
+ 
+-ifeq ($(BR2_PACKAGE_MESA3D_OSMESA_CLASSIC),y)
+-MESA3D_CONF_OPTS += -Dosmesa=classic
++ifeq ($(BR2_PACKAGE_MESA3D_OSMESA),y)
++MESA3D_CONF_OPTS += -Dosmesa=true
+ else
+-MESA3D_CONF_OPTS += -Dosmesa=none
++MESA3D_CONF_OPTS += -Dosmesa=false
+ endif
+ 
+ # Always enable OpenGL:
+diff --git a/package/wine/wine.mk b/package/wine/wine.mk
+index 3179658cee..0320ca9cd4 100644
+--- a/package/wine/wine.mk
++++ b/package/wine/wine.mk
+@@ -191,7 +191,7 @@ else
+ WINE_CONF_OPTS += --without-ldap
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_MESA3D_OSMESA_CLASSIC),y)
++ifeq ($(BR2_PACKAGE_MESA3D_OSMESA),y)
+ WINE_CONF_OPTS += --with-osmesa
+ WINE_DEPENDENCIES += mesa3d
+ else
 -- 
 2.29.2
