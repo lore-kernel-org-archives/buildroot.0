@@ -1,44 +1,40 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed,  7 Apr 2021 08:44:28 +0200
-Subject: [Buildroot] [PATCH 1/1] package/kodi-pvr-iptvsimple: bump version
- to 7.6.0-Matrix
-Message-ID: <20210407064428.178777-1-bernd.kuhls@t-online.de>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 07 Apr 2021 06:48:44 +0000
+Subject: [Buildroot] [Bug 13731] New: Readline Patch is missing Author
+ Information
+Message-ID: <bug-13731-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes:
-https://github.com/kodi-pvr/pvr.iptvsimple/releases/tag/7.6.0-Matrix
+https://bugs.busybox.net/show_bug.cgi?id=13731
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash | 2 +-
- package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+            Bug ID: 13731
+           Summary: Readline Patch is missing Author Information
+           Product: buildroot
+           Version: 2021.02
+          Hardware: All
+                OS: All
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: contact at sesu8642.de
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
-index 9170da5bc0..4a9b45999d 100644
---- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
-+++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  df020ba77864111476c7ab637fa82d658c248723c64d5fd4a31443def60cd75a  kodi-pvr-iptvsimple-7.5.1-Matrix.tar.gz
-+sha256  97cd991b9b6688db1956e853c0af9df7c20cfd645d348f72df2ad1bfc9c23528  kodi-pvr-iptvsimple-7.6.0-Matrix.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
-index fa14e5677c..51575e76a9 100644
---- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
-+++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_PVR_IPTVSIMPLE_VERSION = 7.5.1-Matrix
-+KODI_PVR_IPTVSIMPLE_VERSION = 7.6.0-Matrix
- KODI_PVR_IPTVSIMPLE_SITE = $(call github,kodi-pvr,pvr.iptvsimple,$(KODI_PVR_IPTVSIMPLE_VERSION))
- KODI_PVR_IPTVSIMPLE_LICENSE = GPL-2.0+
- KODI_PVR_IPTVSIMPLE_LICENSE_FILES = LICENSE.md
+Most patches contain headers which include information about the author (e.g.
+"From: ..." or "Signed-off-by:"). We use this information to give credit to the
+patch authors.
+This patch is missing such information:
+https://git.busybox.net/buildroot/tree/package/readline/0000-curses-link.patch
+
+I suggest adding the information to the patch so that credit can be given
+appopriately.
+
 -- 
-2.29.2
+You are receiving this mail because:
+You are on the CC list for the bug.
