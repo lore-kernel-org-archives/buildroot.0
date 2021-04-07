@@ -1,48 +1,34 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 7 Apr 2021 21:15:15 +0200
-Subject: [Buildroot] [git commit] package/s6-linux-utils: bump to version
- 2.5.1.4
-Message-ID: <20210407185256.C271281640@busybox.osuosl.org>
+Date: Wed, 7 Apr 2021 21:13:03 +0200
+Subject: [Buildroot] [git commit] package/execline: Fix license hash after
+ bump to version 2.8.0.0
+Message-ID: <20210407185256.990E8825B1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6d49b14165c040f0ad8439dd6a5a6b52a8a3c405
+commit: https://git.buildroot.net/buildroot/commit/?id=86f7634bafdb50f144868149f5abe9c2e28550b1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update license hash due to year change.
+Updated license hash due to year change.
 
-http://skarnet.org/cgi-bin/archive.cgi?1:mss:1515:mhcdpginfgieagphalne
+Commit bf66772c9b089dfcd67e1abbe04d7db52562310a was accidentally based
+on v1 of this patch.
 
 Signed-off-by: Dick Olsson <hi@senzilla.io>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/s6-linux-utils/s6-linux-utils.hash | 4 ++--
- package/s6-linux-utils/s6-linux-utils.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/execline/execline.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/s6-linux-utils/s6-linux-utils.hash b/package/s6-linux-utils/s6-linux-utils.hash
-index 638b6b8160..64caef793d 100644
---- a/package/s6-linux-utils/s6-linux-utils.hash
-+++ b/package/s6-linux-utils/s6-linux-utils.hash
+diff --git a/package/execline/execline.hash b/package/execline/execline.hash
+index 935f5111f7..35ebc443b9 100644
+--- a/package/execline/execline.hash
++++ b/package/execline/execline.hash
 @@ -1,3 +1,3 @@
  # Locally generated
--sha256 25f61961f3247b9a833536ebd1e19f3b024fa095fce30f93d82fdfd4e015dc02  s6-linux-utils-2.5.1.1.tar.gz
--sha256 d8e17a6418d26867c13801810903a1f78beac8cfe8f92c2a85afe59f3c3fc48c  COPYING
-+sha256 d8ad8dcc8d805646b655971ddcaabcd50094d8347bd49d859ba2c51713fbfd09  s6-linux-utils-2.5.1.4.tar.gz
-+sha256 adecb8bedfaae27fcfe65ecb3ef0e2e71aa2a2b49dc21886a200bc677d93e6ec  COPYING
-diff --git a/package/s6-linux-utils/s6-linux-utils.mk b/package/s6-linux-utils/s6-linux-utils.mk
-index 926ec523a1..dcc4f9e4b2 100644
---- a/package/s6-linux-utils/s6-linux-utils.mk
-+++ b/package/s6-linux-utils/s6-linux-utils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--S6_LINUX_UTILS_VERSION = 2.5.1.1
-+S6_LINUX_UTILS_VERSION = 2.5.1.4
- S6_LINUX_UTILS_SITE = http://skarnet.org/software/s6-linux-utils
- S6_LINUX_UTILS_LICENSE = ISC
- S6_LINUX_UTILS_LICENSE_FILES = COPYING
+ sha256  e7744b4a400eda68b83dcfb1bce65e454606279882d83d8230ddf8afda25766d  execline-2.8.0.0.tar.gz
+-sha256  5443ac67e8d74ac614ced7bc64211ce90ccedb7778a68bfe9e68a8b234c9503e  COPYING
++sha256  adecb8bedfaae27fcfe65ecb3ef0e2e71aa2a2b49dc21886a200bc677d93e6ec  COPYING
