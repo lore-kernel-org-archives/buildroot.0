@@ -1,42 +1,88 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 07 Apr 2021 10:44:26 +0200
-Subject: [Buildroot] [PATCH v3 1/1] package/wpa_supplicant: handle
- CONFIG_CTRL_IFACE carefully
-In-Reply-To: <606433e8-9626-09a8-2d1b-4a85065f91da@mind.be> (Arnout
- Vandecappelle's message of "Wed, 7 Apr 2021 09:32:47 +0200")
-References: <20210403022316.8719-1-tianyuanhao@aliyun.com>
- <20210403070130.GN24043@scaer>
- <60bc4344-1e6d-f264-8449-2e44ee787526@aliyun.com>
- <f768f65b-c4e3-89ea-60e7-37e1a68012bb@mind.be>
- <87ft02eey8.fsf@dell.be.48ers.dk>
- <606433e8-9626-09a8-2d1b-4a85065f91da@mind.be>
-Message-ID: <87y2ducwlx.fsf@dell.be.48ers.dk>
+From: Arthur Lambert <lambertarthur22@gmail.com>
+Date: Wed, 7 Apr 2021 11:01:59 +0200
+Subject: [Buildroot] issue with timer_create and openblas after update
+ buildroot from 2019_02 to 2021_02
+Message-ID: <CAGpqJgqZBG5qMZDaS59syis2y1rm53f1KMWYzJKiwepHcJbadA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+I am trying to update buildroot from 2019_02 tag to 2021_02. After the
+update I have
+some issue with timer_create function  from uclibc . I get -1 return error
+with  EAGAIN errno.
+The error only occurred with SIGEV_THREAD type.
 
-Hi,
+I was able to track the code responsible from the error without
+understanding the reason
 
- >> We only added disabling logic post-2021.02, so it only affects master.
- >> 
- >> Should the disabling logic (and this patch) be backported to 2021.02.x?
+output/build/uclibc-1.0.37/libpthread/nptl/sysdeps/unix/sysv/linux/timer_create.c
+line-150
 
- >  I applied it to next at the time, not to master, so I guess that was for a
- > reason :-)
+>>     {
+>>     /* Create the helper thread.  */
+>>     pthread_once (&__helper_once, __start_helper_thread);
+>>     if (__helper_tid == 0)
+>> {
+>>  /* No resources to start the helper thread.  */
+>>  __set_errno (EAGAIN);
+>>  return -1;
+>> }
 
- >  I don't like putting this kind of risky changes on the stable branch. Since a
- > follow-up patch was needed, it clearly was indeed risky. The first patch of that
- > series was kind of a fix because it made sure that the wpa_supplicant build
- > actually corresponds to the Buildroot configuration. The patch that introduced
- > the CTRL_IFACE issue however was really a feature patch.
+I am was also able to reproduce the issue with a minimalist piece of code.
+The issue seems
+to be related to openblas. I dont see the link between BLAS and
+thread/timer issue ??
 
- >  So no, no backporting needed.
+>> #include <stdlib.h>
+>> #include <unistd.h>
+>> #include <stdio.h>
+>> #include <signal.h>
+>> #include <time.h>
+>>
+>>
+>> int main(void)
+>> {
+>>
+>> struct sigevent alarm_sigevt;
+>> timer_t alarm_timer;
+>> int ret = 0;
+>>
+>> alarm_sigevt.sigev_notify = SIGEV_THREAD;
+>> alarm_sigevt.sigev_notify_function = NULL;
+>> alarm_sigevt.sigev_notify_attributes = NULL;
+>> alarm_sigevt.sigev_value.sival_ptr =  NULL;
+>> ret = timer_create(CLOCK_REALTIME, &alarm_sigevt, &alarm_timer);
+>> printf ("ret : %d\n", ret);
+>>
+>> exit(EXIT_SUCCESS);
+>> }
 
-Ok, good.
+I compile the code like this :
 
--- 
-Bye, Peter Korsgaard
+/home/arthur/work/buildroot/atto_dreem3_dev/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-gcc
+test_timer.c -o test_timer
+
+I run the binary on my arm target :
+
+# ./test_timer
+ret : 0
+#
+
+Everything is working fine here.
+I just add openblas library now :
+
+/home/arthur/work/buildroot/atto_dreem3_dev/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-gcc
+test_timer.c -o test_timer -lopenblas
+
+I now run the new binary :
+
+# ./test_timer
+ret : -1
+
+An issue with openblas which init too many timer ?
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20210407/9f6f31fe/attachment.html>
