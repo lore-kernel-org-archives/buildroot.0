@@ -1,32 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 07 Apr 2021 11:18:56 +0200
-Subject: [Buildroot] [PATCH] package/python-django: security bump to
- version 3.0.14
-In-Reply-To: <20210406204831.1046-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Tue, 6 Apr 2021 22:48:31 +0200")
-References: <20210406204831.1046-1-peter@korsgaard.com>
-Message-ID: <87lf9ucv0f.fsf@dell.be.48ers.dk>
+Date: Wed, 7 Apr 2021 11:21:12 +0200
+Subject: [Buildroot] [git commit] package/nodejs: security bump to version
+ 12.22.1
+Message-ID: <20210407085549.0681C81826@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=0918d2bf2da0a36d86faced812b25cb0d1980d61
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes the following security issue:
- > CVE-2021-28658: Potential directory-traversal via uploaded files
+Fixes the following security issues:
 
- > MultiPartParser allowed directory-traversal via uploaded files with suitably crafted file names.
+CVE-2020-7774: npm upgrade to 6.14.12 - Update y18n to fix
+Prototype-Pollution (High)
 
- > Built-in upload handlers were not affected by this vulnerability.
+This is a vulnerability in the y18n npm module which may be exploited by
+prototype pollution.
 
- > For more details, see the announcement:
- > https://www.djangoproject.com/weblog/2021/apr/06/security-releases/
+https://github.com/advisories/GHSA-c4w7-xm78-47vh
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/nodejs/nodejs.hash | 4 ++--
+ package/nodejs/nodejs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Committed to 2021.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index 7abb3c3b57..1e03587715 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
+@@ -1,5 +1,5 @@
+-# From https://nodejs.org/dist/v12.21.0/SHASUMS256.txt
+-sha256  052f37ace6f569b513b5a1154b2a45d3c4d8b07d7d7c807b79f1566db61e979d  node-v12.21.0.tar.xz
++# From https://nodejs.org/dist/v12.22.1/SHASUMS256.txt
++sha256  dd650df7773a6ed3e390320ba51ef33cba6499f0e9397709ea3d1debdcbcb989  node-v12.22.1.tar.xz
+ 
+ # Hash for license file
+ sha256  221417a7ca275112a5ac54639b36ee3c5184e74631ea1e1b01b701293b655190  LICENSE
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index f8b29d3685..108fce0926 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NODEJS_VERSION = 12.21.0
++NODEJS_VERSION = 12.22.1
+ NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
+ NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
+ NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
