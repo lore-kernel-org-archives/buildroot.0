@@ -1,44 +1,33 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu,  8 Apr 2021 09:11:28 +0200
-Subject: [Buildroot] [PATCH 1/1] package/kodi-inputstream-ffmpegdirect: bump
- version to 1.19.5
-Message-ID: <20210408071128.214604-1-bernd.kuhls@t-online.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 08 Apr 2021 09:32:36 +0200
+Subject: [Buildroot] [PATCH] package/avahi: ignore CVE-2021-26720
+In-Reply-To: <50c20ed8-3ed3-e75c-fe63-50d8a77eefef@mind.be> (Arnout
+ Vandecappelle's message of "Wed, 7 Apr 2021 20:42:20 +0200")
+References: <20210407135423.28899-1-peter@korsgaard.com>
+ <50c20ed8-3ed3-e75c-fe63-50d8a77eefef@mind.be>
+Message-ID: <87im4xb59n.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog:
-https://github.com/xbmc/inputstream.ffmpegdirect/releases/tag/1.19.5-Matrix
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- .../kodi-inputstream-ffmpegdirect.hash                          | 2 +-
- .../kodi-inputstream-ffmpegdirect.mk                            | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > On 07/04/2021 15:54, Peter Korsgaard wrote:
+ >> CVE-2021-26720 is an issue in avahi-daemon-check-dns.sh, which is part of
+ >> the Debian packaging and not part of upstream avahi - So ignore the CVE.
+ >> 
+ >> https://security-tracker.debian.org/tracker/CVE-2021-26720
+ >> 
+ >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-diff --git a/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.hash b/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.hash
-index 93a681ac5e..a577e2db1e 100644
---- a/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.hash
-+++ b/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  58023053d3b668a5e1e7bd94d91b62df09b7b14fa82cbfb715b8b54a2b99435d  kodi-inputstream-ffmpegdirect-1.19.4-Matrix.tar.gz
-+sha256  d24dcfeba7c39d1ef6e11640c289e470ef27fa2a4a49063d4ef401aa8c549a2e  kodi-inputstream-ffmpegdirect-1.19.5-Matrix.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.mk b/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.mk
-index 4657e07833..93b1201888 100644
---- a/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.mk
-+++ b/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_INPUTSTREAM_FFMPEGDIRECT_VERSION = 1.19.4-Matrix
-+KODI_INPUTSTREAM_FFMPEGDIRECT_VERSION = 1.19.5-Matrix
- KODI_INPUTSTREAM_FFMPEGDIRECT_SITE = $(call github,xbmc,inputstream.ffmpegdirect,$(KODI_INPUTSTREAM_FFMPEGDIRECT_VERSION))
- KODI_INPUTSTREAM_FFMPEGDIRECT_LICENSE = GPL-2.0+
- KODI_INPUTSTREAM_FFMPEGDIRECT_LICENSE_FILES = LICENSE.md
+ >  Applied to master, thanks.
+
+ >  BTW, is there an easy way to run the CVE check for a single package? Or do you
+ > really have to go through configure + pkg-stats?
+
+I'm afraid so. Thomas?
+
 -- 
-2.29.2
+Bye, Peter Korsgaard
