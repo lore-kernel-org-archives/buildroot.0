@@ -1,40 +1,106 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu,  8 Apr 2021 18:54:06 +0200
-Subject: [Buildroot] [PATCH 1/1] package/coremark-pro: disable parallel build
-Message-ID: <20210408165406.2586801-1-fontaine.fabrice@gmail.com>
+Date: Thu,  8 Apr 2021 18:54:45 +0200
+Subject: [Buildroot] [PATCH 1/1] package/freerdp: fix build with gcc 4.8
+Message-ID: <20210408165445.2586926-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Disable parallel build as it seems to be totally broken:
-
-/bin/bash: line 0: cd: /home/buildroot/autobuild/instance-2/output-1/build/coremark-pro-1.1.2743/builds/linux64/gcc64/obj/bench/core: No such file or directory
-
-/bin/sh: 1: cd: can't cd to /home/buildroot/autobuild/instance-1/output-1/build/coremark-pro-1.1.2743/builds/linux/gcc/obj/bench/fp/loops/SP
+Build is broken with gcc 4.8 since bump to version 2.3.1 in commit
+01e78811db25c34d506138994efd981e4ab60caf due to
+https://github.com/FreeRDP/FreeRDP/commit/5b2f35747bb37b09b1803b99ca2b1cb248b5bb16
 
 Fixes:
- - http://autobuild.buildroot.org/results/7ba5e209772af7037fc735ea174d3fc3eaf46f4b
- - http://autobuild.buildroot.org/results/32b51bb9eda7899b6cc331f10a860644bd6004fa
+ - http://autobuild.buildroot.org/results/e8e7d43d6183bb6de7bd2c2b300dbdb89f2052d8
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/coremark-pro/coremark-pro.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ...001-Fix-variable-declaration-in-loop.patch | 33 ++++++++++++++++++
+ ...2-Fixed-variable-declaration-in-loop.patch | 34 +++++++++++++++++++
+ 2 files changed, 67 insertions(+)
+ create mode 100644 package/freerdp/0001-Fix-variable-declaration-in-loop.patch
+ create mode 100644 package/freerdp/0002-Fixed-variable-declaration-in-loop.patch
 
-diff --git a/package/coremark-pro/coremark-pro.mk b/package/coremark-pro/coremark-pro.mk
-index 515b8eafbd..e797f66840 100644
---- a/package/coremark-pro/coremark-pro.mk
-+++ b/package/coremark-pro/coremark-pro.mk
-@@ -40,7 +40,7 @@ COREMARK_PRO_MAKE_OPTS += \
- 	EXE=
- 
- define COREMARK_PRO_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" LD="$(TARGET_CC)" -C $(@D) \
-+	$(TARGET_MAKE_ENV) $(MAKE1) CC="$(TARGET_CC)" LD="$(TARGET_CC)" -C $(@D) \
- 		$(COREMARK_PRO_MAKE_OPTS) build
- endef
- 
+diff --git a/package/freerdp/0001-Fix-variable-declaration-in-loop.patch b/package/freerdp/0001-Fix-variable-declaration-in-loop.patch
+new file mode 100644
+index 0000000000..a391e42ee6
+--- /dev/null
++++ b/package/freerdp/0001-Fix-variable-declaration-in-loop.patch
+@@ -0,0 +1,33 @@
++From ddde652460350b962d32036981ff8ed77ed2f1ed Mon Sep 17 00:00:00 2001
++From: Armin Novak <armin.novak@thincast.com>
++Date: Wed, 16 Sep 2020 09:30:37 +0200
++Subject: [PATCH] Fix variable declaration in loop
++
++[Retrieved from:
++https://github.com/FreeRDP/FreeRDP/commit/ddde652460350b962d32036981ff8ed77ed2f1ed]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ client/X11/xf_graphics.c | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/client/X11/xf_graphics.c b/client/X11/xf_graphics.c
++index 76fbef5bd6..bf71b563c3 100644
++--- a/client/X11/xf_graphics.c
+++++ b/client/X11/xf_graphics.c
++@@ -386,6 +386,7 @@ static BOOL xf_Pointer_New(rdpContext* context, rdpPointer* pointer)
++ static void xf_Pointer_Free(rdpContext* context, rdpPointer* pointer)
++ {
++ #ifdef WITH_XCURSOR
+++	UINT32 i;
++ 	xfContext* xfc = (xfContext*)context;
++ 	xfPointer* xpointer = (xfPointer*)pointer;
++ 
++@@ -395,7 +396,7 @@ static void xf_Pointer_Free(rdpContext* context, rdpPointer* pointer)
++ 	free(xpointer->cursorWidths);
++ 	free(xpointer->cursorHeights);
++ 
++-	for (int i = 0; i < xpointer->nCursors; i++)
+++	for (i = 0; i < xpointer->nCursors; i++)
++ 	{
++ 		XFreeCursor(xfc->display, xpointer->cursors[i]);
++ 	}
+diff --git a/package/freerdp/0002-Fixed-variable-declaration-in-loop.patch b/package/freerdp/0002-Fixed-variable-declaration-in-loop.patch
+new file mode 100644
+index 0000000000..14e1d6c8f4
+--- /dev/null
++++ b/package/freerdp/0002-Fixed-variable-declaration-in-loop.patch
+@@ -0,0 +1,34 @@
++From 4f8a48d96e472e43a5f856c449f61669792ce9fa Mon Sep 17 00:00:00 2001
++From: akallabeth <akallabeth@posteo.net>
++Date: Tue, 22 Sep 2020 07:43:56 +0200
++Subject: [PATCH] Fixed variable declaration in loop
++
++[Retrieved from:
++https://github.com/FreeRDP/FreeRDP/commit/4f8a48d96e472e43a5f856c449f61669792ce9fa]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ client/X11/xf_graphics.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/client/X11/xf_graphics.c b/client/X11/xf_graphics.c
++index bf71b563c3..c50726c8e4 100644
++--- a/client/X11/xf_graphics.c
+++++ b/client/X11/xf_graphics.c
++@@ -240,7 +240,7 @@ static BOOL _xf_Pointer_GetCursorForCurrentScale(rdpContext* context, const rdpP
++ 	double xscale;
++ 	double yscale;
++ 	size_t size;
++-	int cursorIndex = -1;
+++	int cursorIndex = -1, i;
++ 
++ 	if (!context || !pointer || !context->gdi)
++ 		return FALSE;
++@@ -255,7 +255,7 @@ static BOOL _xf_Pointer_GetCursorForCurrentScale(rdpContext* context, const rdpP
++ 	xTargetSize = pointer->width * xscale;
++ 	yTargetSize = pointer->height * yscale;
++ 
++-	for (int i = 0; i < xpointer->nCursors; i++)
+++	for (i = 0; i < xpointer->nCursors; i++)
++ 	{
++ 		if (xpointer->cursorWidths[i] == xTargetSize && xpointer->cursorHeights[i] == yTargetSize)
++ 		{
 -- 
 2.30.2
