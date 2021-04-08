@@ -1,102 +1,44 @@
-From: Maxim Kochetkov <fido_max@inbox.ru>
-Date: Thu, 8 Apr 2021 09:35:39 +0300
-Subject: [Buildroot] [PATCH v3 1/1] package/postgis: new package
-In-Reply-To: <20210213144215.1200ddc0@gmx.net>
-References: <20210212043706.7336-1-fido_max@inbox.ru>
- <20210213144215.1200ddc0@gmx.net>
-Message-ID: <e324e91c-84bc-2a8f-abf6-ce564e5f2d08@inbox.ru>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu,  8 Apr 2021 09:11:28 +0200
+Subject: [Buildroot] [PATCH 1/1] package/kodi-inputstream-ffmpegdirect: bump
+ version to 1.19.5
+Message-ID: <20210408071128.214604-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Changelog:
+https://github.com/xbmc/inputstream.ffmpegdirect/releases/tag/1.19.5-Matrix
 
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ .../kodi-inputstream-ffmpegdirect.hash                          | 2 +-
+ .../kodi-inputstream-ffmpegdirect.mk                            | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-13.02.2021 16:42, Peter Seiderer ?????:
-> Hello Maxim,
-> 
-> On Fri, 12 Feb 2021 07:37:06 +0300, Maxim Kochetkov via buildroot <buildroot@busybox.net> wrote:
-> 
->> PostGIS is a spatial database extender for PostgreSQL object-relational database.
->> It adds support for geographic objects allowing location queries to be run in SQL.
->>
->> https://postgis.net/
->>
->> Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
->> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> 
-> Thanks for the patch iteration, tested with test-pkg and the
-> following config:
-> 
->    BR2_PACKAGE_LIBGEOS=y
->    BR2_PACKAGE_PROJ=y
->    BR2_PACKAGE_LIBXML2=y
->    BR2_PACKAGE_POSTGRESQL=y
->    BR2_PACKAGE_POSTGRESQL_FULL=y
->    BR2_PACKAGE_POSTGIS=y
-> 
-> Result:
->                               andes-nds32 [ 1/45]: SKIPPED
->                               arm-aarch64 [ 2/45]: OK
->                     bootlin-aarch64-glibc [ 3/45]: OK
->                 bootlin-arcle-hs38-uclibc [ 4/45]: OK
->                      bootlin-armv5-uclibc [ 5/45]: OK
->                       bootlin-armv7-glibc [ 6/45]: OK
->                     bootlin-armv7m-uclibc [ 7/45]: SKIPPED
->                        bootlin-armv7-musl [ 8/45]: OK
->                  bootlin-m68k-5208-uclibc [ 9/45]: SKIPPED
->                 bootlin-m68k-68040-uclibc [10/45]: OK
->               bootlin-microblazeel-uclibc [11/45]: FAILED
->                  bootlin-mipsel32r6-glibc [12/45]: OK
->                     bootlin-mipsel-uclibc [13/45]: OK
->                       bootlin-nios2-glibc [14/45]: OK
->                   bootlin-openrisc-uclibc [15/45]: OK
->          bootlin-powerpc64le-power8-glibc [16/45]: OK
->             bootlin-powerpc-e500mc-uclibc [17/45]: OK
->                     bootlin-riscv32-glibc [18/45]: OK
->                     bootlin-riscv64-glibc [19/45]: OK
->                      bootlin-riscv64-musl [20/45]: OK
->                        bootlin-sh4-uclibc [21/45]: OK
->                     bootlin-sparc64-glibc [22/45]: OK
->                      bootlin-sparc-uclibc [23/45]: OK
->                      bootlin-x86-64-glibc [24/45]: OK
->                       bootlin-x86-64-musl [25/45]: OK
->                     bootlin-x86-64-uclibc [26/45]: OK
->                     bootlin-xtensa-uclibc [27/45]: OK
->                              br-arm-basic [28/45]: SKIPPED
->                      br-arm-full-nothread [29/45]: SKIPPED
->                        br-arm-full-static [30/45]: SKIPPED
->                     br-i386-pentium4-full [31/45]: OK
->                  br-i386-pentium-mmx-musl [32/45]: OK
->                        br-mips64-n64-full [33/45]: OK
->                   br-mips64r6-el-hf-glibc [34/45]: OK
->                 br-powerpc-603e-basic-cpp [35/45]: SKIPPED
->                 br-powerpc64-power7-glibc [36/45]: OK
->                         linaro-aarch64-be [37/45]: OK
->                            linaro-aarch64 [38/45]: OK
->                                linaro-arm [39/45]: OK
->                       sourcery-arm-armv4t [40/45]: OK
->                              sourcery-arm [41/45]: OK
->                       sourcery-arm-thumb2 [42/45]: OK
->                           sourcery-mips64 [43/45]: OK
->                             sourcery-mips [44/45]: OK
->                            sourcery-nios2 [45/45]: OK
-> 45 builds, 7 skipped, 1 build failed, 0 legal-info failed
-> 
-> The bootlin-microblazeel-uclibc failure is due to an
-> internal compiler error:
-> 
->    during RTL pass: reload
->    .../bootlin-microblazeel-uclibc/build/libgeos-3.9.0/src/geom/util/Densifier.cpp: In static member function ?static std::unique_ptr<std::vector<geos::geom::Coordinate> > geos::geom::util::Densifier::densifyPoints(geos::geom::Coordinate::Vect, double, const geos::geom::PrecisionModel*)?:
->    .../bootlin-microblazeel-uclibc/build/libgeos-3.9.0/src/geom/util/Densifier.cpp:128:1: internal compiler error: in gen_reg_rtx, at emit-rtl.c:1155
->    128 | }
->        | ^
-
-I just have compiled fine with qemu_microblazeel_mmu_defconfig and some 
-additions:
-BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_PACKAGE_POSTGRESQL=y
-BR2_PACKAGE_POSTGRESQL_FULL=y
-BR2_PACKAGE_POSTGIS=y
+diff --git a/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.hash b/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.hash
+index 93a681ac5e..a577e2db1e 100644
+--- a/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.hash
++++ b/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  58023053d3b668a5e1e7bd94d91b62df09b7b14fa82cbfb715b8b54a2b99435d  kodi-inputstream-ffmpegdirect-1.19.4-Matrix.tar.gz
++sha256  d24dcfeba7c39d1ef6e11640c289e470ef27fa2a4a49063d4ef401aa8c549a2e  kodi-inputstream-ffmpegdirect-1.19.5-Matrix.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.mk b/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.mk
+index 4657e07833..93b1201888 100644
+--- a/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.mk
++++ b/package/kodi-inputstream-ffmpegdirect/kodi-inputstream-ffmpegdirect.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_INPUTSTREAM_FFMPEGDIRECT_VERSION = 1.19.4-Matrix
++KODI_INPUTSTREAM_FFMPEGDIRECT_VERSION = 1.19.5-Matrix
+ KODI_INPUTSTREAM_FFMPEGDIRECT_SITE = $(call github,xbmc,inputstream.ffmpegdirect,$(KODI_INPUTSTREAM_FFMPEGDIRECT_VERSION))
+ KODI_INPUTSTREAM_FFMPEGDIRECT_LICENSE = GPL-2.0+
+ KODI_INPUTSTREAM_FFMPEGDIRECT_LICENSE_FILES = LICENSE.md
+-- 
+2.29.2
