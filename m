@@ -1,21 +1,30 @@
-From: dzeko1234 <aziz.zarrouk@esprit.tn>
-Date: Thu, 8 Apr 2021 07:44:05 -0500 (CDT)
-Subject: [Buildroot] Smart pi touch problems
-Message-ID: <1617885845138-0.post@n4.nabble.com>
+From: Marko Stanisic <sankerspace@gmail.com>
+Date: Thu, 8 Apr 2021 15:41:55 +0200
+Subject: [Buildroot] - Question: How to change safely /var/log --> /tmp in
+ buildroot
+Message-ID: <c2d6ee0a-995c-b403-b21c-2dd642104c6b@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello , I am deploying a Qt app on RPI3 target using buildroot toolchain .
-Also i generated Rpi image from Buildroot . So i would like to use the Pi
-touchscreen but I don't know how to configure it . Currently my App appears
-on rpi but the touchscreen doesn't work .
-Any helps please
-thank you
+Hello,
+
+I have no clue how? the symlink? /var/log --> ../tmp is statically 
+defined. (in buildroot)
+
+I need? to change this behaviour safely, so that /var/log is mounted 
+onto our log partition, i already tried the following:
+
+ ??? mount /dev/mmcblk0p9 /var/log
+
+but then (due to the symlink) /dev/mmcblk0p9 is mounted on /tmp ,and the 
+mount to the tmpfs (RAM) is vanished.
 
 
+Is there maybe a better solution (best practice) to solve that problem?
 
---
-Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
+Thank you for every proposal,
+
+Marko Stanisic
