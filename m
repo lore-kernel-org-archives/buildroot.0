@@ -1,45 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 8 Apr 2021 10:16:50 +0200
-Subject: [Buildroot] [PATCH] package/avahi: ignore CVE-2021-26720
-In-Reply-To: <87im4xb59n.fsf@dell.be.48ers.dk>
-References: <20210407135423.28899-1-peter@korsgaard.com>
- <50c20ed8-3ed3-e75c-fe63-50d8a77eefef@mind.be>
- <87im4xb59n.fsf@dell.be.48ers.dk>
-Message-ID: <20210408101650.49ebb3df@windsurf.home>
+From: Sergey Matyukevich <geomatsi@gmail.com>
+Date: Thu, 8 Apr 2021 11:18:34 +0300
+Subject: [Buildroot] [PATCH] configs/solidrun_macchiatobin_defconfig:
+ include for Singleshot DTS
+In-Reply-To: <20210408073349.16629-1-vadym.kochan@plvision.eu>
+References: <20210408073349.16629-1-vadym.kochan@plvision.eu>
+Message-ID: <YG68WisliSerKFtr@curiosity>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 08 Apr 2021 09:32:36 +0200
-Peter Korsgaard <peter@korsgaard.com> wrote:
+Hello Vadym,
 
-> >>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:  
+> Single- & Double shot boards have many in common except additional
+> RJ45 tranceivers near by each of 10G SFP and a bit different CPU freq.
 > 
->  > On 07/04/2021 15:54, Peter Korsgaard wrote:  
->  >> CVE-2021-26720 is an issue in avahi-daemon-check-dns.sh, which is part of
->  >> the Debian packaging and not part of upstream avahi - So ignore the CVE.
->  >> 
->  >> https://security-tracker.debian.org/tracker/CVE-2021-26720
->  >> 
->  >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>  
+> Signed-off-by: Vadym Kochan <vadym.kochan@plvision.eu>
+> ---
+>  configs/solidrun_macchiatobin_defconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
->  >  Applied to master, thanks.  
-> 
->  >  BTW, is there an easy way to run the CVE check for a single package? Or do you
->  > really have to go through configure + pkg-stats?  
-> 
-> I'm afraid so. Thomas?
+> diff --git a/configs/solidrun_macchiatobin_defconfig b/configs/solidrun_macchiatobin_defconfig
+> index 7d06313b03db..34094a833b66 100644
+> --- a/configs/solidrun_macchiatobin_defconfig
+> +++ b/configs/solidrun_macchiatobin_defconfig
+> @@ -30,7 +30,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+>  BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.5"
+>  BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+>  BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> -BR2_LINUX_KERNEL_INTREE_DTS_NAME="marvell/armada-8040-mcbin"
+> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="marvell/armada-8040-mcbin marvell/armada-8040-mcbin-singleshot"
+>  BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/solidrun/macchiatobin/linux-extras.config"
+>  BR2_LINUX_KERNEL_INSTALL_TARGET=y
+>  BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
 
-Without any Buildroot configuration defined:
+I do not have access to MacchiatoBin hardware anymore, but I have been using
+current defconfig with DoubleShot boards. If this defconfig does not work
+well for SingleShot boards, then it makes sense to add a separate defconfig
+for such boards rather then remove DoubleShot support completely. Probably
+linux-extras.config in board/solidrun/macchiatobin worth another look to
+make sure that features for both boards are included.
 
-./support/scripts/pkg-stats --nvd-path /path/to/nvd/data -p avahi --html foobar.html
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Regards,
+Sergey
