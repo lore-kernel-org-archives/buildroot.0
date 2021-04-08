@@ -1,46 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 8 Apr 2021 09:33:17 +0200
-Subject: [Buildroot] [git commit branch/2021.02.x] DEVELOPERS: Add Dick
- Olsson for all skarnet and s6 packages
-Message-ID: <20210408071433.AAA257FAE8@busybox.osuosl.org>
+Date: Thu, 8 Apr 2021 09:39:22 +0200
+Subject: [Buildroot] [git commit branch/2021.02.x] package/tor: do not
+ install systemd service file
+Message-ID: <20210408071433.B7B0E82ACE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=08dc05d123f8277c2cb20cbd6938b32a39ad2ef1
+commit: https://git.buildroot.net/buildroot/commit/?id=af4bd15ff00456152506eaaaa8e8bbfa606ec09e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2021.02.x
 
-Signed-off-by: Dick Olsson <hi@senzilla.io>
+Upstream removed the sample service file for use with systemd:
+https://gitweb.torproject.org/tor.git/commit/contrib?h=maint-0.4.5&id=915af1a65bc217fa33490876199bb69f760bea23
+
+Fixes:
+http://autobuild.buildroot.net/results/b80/b807f19283528b9f0d0c46250b660ea84695679c/
+http://autobuild.buildroot.net/results/de4/de4f1a99b1c524b81579ee804156e26d3f8babe7/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 39763ca74e79d74704e328f63aa218870d7ed9f1)
+(cherry picked from commit acd317d907526d8242874afce96e2f4d8345786a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ package/tor/tor.mk | 5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 53626566b3..ea07462303 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -671,6 +671,19 @@ F:	package/libstrophe/
- N:	Derrick Lyndon Pallas <derrick@meter.com>
- F:	package/ipcalc/
+diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+index 56779f1633..6eed5e4a47 100644
+--- a/package/tor/tor.mk
++++ b/package/tor/tor.mk
+@@ -73,9 +73,4 @@ endef
  
-+N:	Dick Olsson <hi@senzilla.io>
-+F:	package/bearssl/
-+F:	package/execline/
-+F:	package/mdevd/
-+F:	package/s6-dns/
-+F:	package/s6-linux-init/
-+F:	package/s6-linux-utils/
-+F:	package/s6-networking/
-+F:	package/s6-portable-utils/
-+F:	package/s6-rc/
-+F:	package/s6/
-+F:	package/skalibs/
-+
- N:	Dimitrios Siganos <dimitris@siganos.org>
- F:	package/wireless-regdb/
+ TOR_POST_INSTALL_TARGET_HOOKS += TOR_INSTALL_CONF
  
+-define TOR_INSTALL_INIT_SYSTEMD
+-	$(INSTALL) -D -m 644 $(@D)/contrib/dist/tor.service \
+-		$(TARGET_DIR)/usr/lib/systemd/system/tor.service
+-endef
+-
+ $(eval $(autotools-package))
