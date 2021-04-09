@@ -1,56 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 9 Apr 2021 21:17:56 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xlib_libXres: bump version
- to 1.2.1
-Message-ID: <20210409185753.2984B82B7C@busybox.osuosl.org>
+Date: Fri, 9 Apr 2021 21:21:02 +0200
+Subject: [Buildroot] [git commit] package/acl: add ACL_CPE_ID_VENDOR
+Message-ID: <20210409185753.56D0D82A14@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=248fdccce44c221c28b77bac638729b7735067dc
+commit: https://git.buildroot.net/buildroot/commit/?id=678edb144b640549696e89051dd4261d5c8b92ff
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://lists.x.org/archives/xorg-announce/2021-March/003078.html
+cpe:2.3:a:acl_project:acl is a valid CPE identifier for this package:
 
-Reformatted hashes.
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Aacl_project%3Aacl
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xlib_libXres/xlib_libXres.hash | 10 ++++------
- package/x11r7/xlib_libXres/xlib_libXres.mk   |  2 +-
- 2 files changed, 5 insertions(+), 7 deletions(-)
+ package/acl/acl.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/x11r7/xlib_libXres/xlib_libXres.hash b/package/x11r7/xlib_libXres/xlib_libXres.hash
-index ee4823c1a4..700590ad8c 100644
---- a/package/x11r7/xlib_libXres/xlib_libXres.hash
-+++ b/package/x11r7/xlib_libXres/xlib_libXres.hash
-@@ -1,8 +1,6 @@
--# From https://lists.x.org/archives/xorg-announce/2017-October/002812.html
--md5 5d6d443d1abc8e1f6fc1c57fb27729bb  libXres-1.2.0.tar.bz2
--sha1 b6996ab05460a3b7311f02da23ddf117a5442fd9  libXres-1.2.0.tar.bz2
--sha256 ff75c1643488e64a7cfbced27486f0f944801319c84c18d3bd3da6bf28c812d4  libXres-1.2.0.tar.bz2
--sha512 8eb5a36b1f030eb4e27e676cc4befcc073da66a7bce2b39089314e1facb629d13b087bb53ca2c95fe5291857da7ff9f80c6ab28fb3e245eeb9e0344937900172  libXres-1.2.0.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2021-March/003078.html
-+sha256  b6e6fb1ebb61610e56017edd928fb89a5f53b3f4f990078309877468663b2b11  libXres-1.2.1.tar.bz2
-+sha512  c17d28406e17e305dc4976f095e88059735f5bd8c600adf2e556523c9e0dd7fa01dcbf7a9d28a642e77e49a5b30f54bb9b2fc34bfbedce467ee2a020bba5cdf1  libXres-1.2.1.tar.bz2
+diff --git a/package/acl/acl.mk b/package/acl/acl.mk
+index 8dce274150..1591f4c87e 100644
+--- a/package/acl/acl.mk
++++ b/package/acl/acl.mk
+@@ -8,6 +8,7 @@ ACL_VERSION = 2.2.53
+ ACL_SITE = http://download.savannah.gnu.org/releases/acl
+ ACL_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
+ ACL_LICENSE_FILES = doc/COPYING doc/COPYING.LGPL
++ACL_CPE_ID_VENDOR = acl_project
  
- # Locally calculated
--sha256 0d7300168f85833ea2564835f66a61e036ede90b33e76c06a7b4078096fedbcc  COPYING
-+sha256  0d7300168f85833ea2564835f66a61e036ede90b33e76c06a7b4078096fedbcc  COPYING
-diff --git a/package/x11r7/xlib_libXres/xlib_libXres.mk b/package/x11r7/xlib_libXres/xlib_libXres.mk
-index 72f2ec4424..1a03745fcf 100644
---- a/package/x11r7/xlib_libXres/xlib_libXres.mk
-+++ b/package/x11r7/xlib_libXres/xlib_libXres.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XLIB_LIBXRES_VERSION = 1.2.0
-+XLIB_LIBXRES_VERSION = 1.2.1
- XLIB_LIBXRES_SOURCE = libXres-$(XLIB_LIBXRES_VERSION).tar.bz2
- XLIB_LIBXRES_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXRES_LICENSE = MIT
+ ACL_DEPENDENCIES = attr
+ HOST_ACL_DEPENDENCIES = host-attr
