@@ -1,66 +1,64 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri,  9 Apr 2021 20:21:47 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/kodi-pvr-iptvsimple: bump
- version to 7.6.1-Matrix
-Message-ID: <20210409182147.1437599-1-bernd.kuhls@t-online.de>
+From: Sergey Matyukevich <geomatsi@gmail.com>
+Date: Fri, 9 Apr 2021 21:53:17 +0300
+Subject: [Buildroot] [PATCH] configs/solidrun_macchiatobin_defconfig:
+ include for Singleshot DTS
+In-Reply-To: <20210409124556.GA8110@plvision.eu>
+References: <20210408073349.16629-1-vadym.kochan@plvision.eu>
+ <YG68WisliSerKFtr@curiosity> <20210409124556.GA8110@plvision.eu>
+Message-ID: <YHCinVc5pCs57i1N@curiosity>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog:
-https://github.com/kodi-pvr/pvr.iptvsimple/blob/Matrix/pvr.iptvsimple/changelog.txt
+Hello Vadym,
 
-Upstream added a dependency to xz:
-https://github.com/kodi-pvr/pvr.iptvsimple/commit/8f19dac9a5f394d44a16fcfa4235ea8c11e9cc96
+> > > Single- & Double shot boards have many in common except additional
+> > > RJ45 tranceivers near by each of 10G SFP and a bit different CPU freq.
+> > > 
+> > > Signed-off-by: Vadym Kochan <vadym.kochan@plvision.eu>
+> > > ---
+> > >  configs/solidrun_macchiatobin_defconfig | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > 
+> > > diff --git a/configs/solidrun_macchiatobin_defconfig b/configs/solidrun_macchiatobin_defconfig
+> > > index 7d06313b03db..34094a833b66 100644
+> > > --- a/configs/solidrun_macchiatobin_defconfig
+> > > +++ b/configs/solidrun_macchiatobin_defconfig
+> > > @@ -30,7 +30,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> > >  BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.5"
+> > >  BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+> > >  BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> > > -BR2_LINUX_KERNEL_INTREE_DTS_NAME="marvell/armada-8040-mcbin"
+> > > +BR2_LINUX_KERNEL_INTREE_DTS_NAME="marvell/armada-8040-mcbin marvell/armada-8040-mcbin-singleshot"
+> > >  BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/solidrun/macchiatobin/linux-extras.config"
+> > >  BR2_LINUX_KERNEL_INSTALL_TARGET=y
+> > >  BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+> > 
+> > I do not have access to MacchiatoBin hardware anymore, but I have been using
+> > current defconfig with DoubleShot boards. If this defconfig does not work
+> > well for SingleShot boards, then it makes sense to add a separate defconfig
+> > for such boards rather then remove DoubleShot support completely. Probably
+> > linux-extras.config in board/solidrun/macchiatobin worth another look to
+> > make sure that features for both boards are included.
+> > 
+> > Regards,
+> > Sergey
+> 
+> If comparing Single- and DoubleShot Linux DTS files they have difference
+> only in SFP config and +1 heartbeat LED. Do you think it is worth to duplicate
+> current defconfig for SingleShot board even if SFP will not work by
+> using DualShot DTS instead of just append _INTREE_DTS_NAME with
+> -singleshot version ?
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v2: added dependency to xz
+I think any option will do if it does not break existing use-cases.
+Could you please confirm that DoubleShot image does not work
+properly on SingleShot board ?
 
- package/kodi-pvr-iptvsimple/Config.in                | 1 +
- package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash | 2 +-
- package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk   | 4 ++--
- 3 files changed, 4 insertions(+), 3 deletions(-)
+BTW, I thought that support for autodetect of copper vs fiber with
+some prioritization has been already implemented in Linux for
+mcbin hardware. Do you know if this is true or not ?
 
-diff --git a/package/kodi-pvr-iptvsimple/Config.in b/package/kodi-pvr-iptvsimple/Config.in
-index 00f4d115bf..2f5a208bad 100644
---- a/package/kodi-pvr-iptvsimple/Config.in
-+++ b/package/kodi-pvr-iptvsimple/Config.in
-@@ -7,6 +7,7 @@ config BR2_PACKAGE_KODI_PVR_IPTVSIMPLE
- 	select BR2_PACKAGE_KODI_INPUTSTREAM_FFMPEGDIRECT # runtime
- 	select BR2_PACKAGE_KODI_INPUTSTREAM_RTMP # runtime
- 	select BR2_PACKAGE_PUGIXML
-+	select BR2_PACKAGE_XZ
- 	select BR2_PACKAGE_ZLIB
- 	help
- 	  IPTV Live TV and Radio PVR client addon for Kodi
-diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
-index 4a9b45999d..767f77cca8 100644
---- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
-+++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  97cd991b9b6688db1956e853c0af9df7c20cfd645d348f72df2ad1bfc9c23528  kodi-pvr-iptvsimple-7.6.0-Matrix.tar.gz
-+sha256  0bffd09eba7cf758a818607562b4dec53f4a20acb7a8b43dd0a1499e92cb3057  kodi-pvr-iptvsimple-7.6.1-Matrix.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
-index 51575e76a9..cf8d755766 100644
---- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
-+++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--KODI_PVR_IPTVSIMPLE_VERSION = 7.6.0-Matrix
-+KODI_PVR_IPTVSIMPLE_VERSION = 7.6.1-Matrix
- KODI_PVR_IPTVSIMPLE_SITE = $(call github,kodi-pvr,pvr.iptvsimple,$(KODI_PVR_IPTVSIMPLE_VERSION))
- KODI_PVR_IPTVSIMPLE_LICENSE = GPL-2.0+
- KODI_PVR_IPTVSIMPLE_LICENSE_FILES = LICENSE.md
--KODI_PVR_IPTVSIMPLE_DEPENDENCIES = kodi pugixml zlib
-+KODI_PVR_IPTVSIMPLE_DEPENDENCIES = kodi pugixml xz zlib
- 
- $(eval $(cmake-package))
--- 
-2.29.2
+Regards,
+Sergey
