@@ -1,93 +1,97 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 9 Apr 2021 21:14:18 +0200
-Subject: [Buildroot] [git commit] package/quickjs: bump to version 2021-03-27
-Message-ID: <20210409185753.0AF807FE00@busybox.osuosl.org>
+Date: Fri, 9 Apr 2021 21:20:13 +0200
+Subject: [Buildroot] [git commit] package/openldap: bump to version 2.4.58
+Message-ID: <20210409185753.4ACD182B63@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=22bb5c4e631becb77abf762b19a546e7ed35033b
+commit: https://git.buildroot.net/buildroot/commit/?id=1feedcd84579c8aa95033f152788930114e3088b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- remove patch (merged upstream)
-- file LICENSE added
+Drop fifth patch (already in version)
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+https://git.openldap.org/openldap/openldap/-/blob/OPENLDAP_REL_ENG_2_4_58/CHANGES
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...Makefile-add-optional-link-with-libatomic.patch | 37 ----------------------
- package/quickjs/quickjs.hash                       |  3 +-
- package/quickjs/quickjs.mk                         |  3 +-
- 3 files changed, 4 insertions(+), 39 deletions(-)
+ ...005-ITS-9454-fix-issuerAndThisUpdateCheck.patch | 26 ----------------------
+ package/openldap/openldap.hash                     | 10 ++++-----
+ package/openldap/openldap.mk                       |  5 +----
+ 3 files changed, 6 insertions(+), 35 deletions(-)
 
-diff --git a/package/quickjs/0001-Makefile-add-optional-link-with-libatomic.patch b/package/quickjs/0001-Makefile-add-optional-link-with-libatomic.patch
+diff --git a/package/openldap/0005-ITS-9454-fix-issuerAndThisUpdateCheck.patch b/package/openldap/0005-ITS-9454-fix-issuerAndThisUpdateCheck.patch
 deleted file mode 100644
-index 76634a51a4..0000000000
---- a/package/quickjs/0001-Makefile-add-optional-link-with-libatomic.patch
+index a611b9ff59..0000000000
+--- a/package/openldap/0005-ITS-9454-fix-issuerAndThisUpdateCheck.patch
 +++ /dev/null
-@@ -1,37 +0,0 @@
--From 2cf2aa34d5d55a4eedb1aedd4d56d89d24870230 Mon Sep 17 00:00:00 2001
--From: Peter Seiderer <ps.report@gmx.net>
--Date: Sun, 3 Jan 2021 21:11:44 +0100
--Subject: [PATCH] Makefile: allow linking with extra libraries
+@@ -1,26 +0,0 @@
+-From 9badb73425a67768c09bcaed1a9c26c684af6c30 Mon Sep 17 00:00:00 2001
+-From: Howard Chu <hyc@openldap.org>
+-Date: Sat, 6 Feb 2021 20:52:06 +0000
+-Subject: [PATCH] ITS#9454 fix issuerAndThisUpdateCheck
 -
--With some toolchains, it is neede to link with extra libraries, for
--example with -latomic, to fix:
--
--  .../build/quickjs-2020-11-08/quickjs.c:12229: undefined reference to `__atomic_fetch_xor_1'
--
--Fixes:
--  http://autobuild.buildroot.net/results/e0766eef95a2559d51e58d1a81a9c40df84ae509
--
--Signed-off-by: Peter Seiderer <ps.report@gmx.net>
--[yann.morin.1998 at free.fr:
--  - make it a generic variable, not tied to -latomic
--]
--Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ----
-- Makefile | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
+- servers/slapd/schema_init.c | 2 ++
+- 1 file changed, 2 insertions(+)
 -
--diff --git a/Makefile b/Makefile
--index e6ae827..22ad496 100644
----- a/Makefile
--+++ b/Makefile
--@@ -179,6 +179,7 @@ endif
-- ifndef CONFIG_WIN32
-- LIBS+=-ldl -lpthread
-- endif
--+LIBS+=$(EXTRA_LIBS)
+-diff --git a/servers/slapd/schema_init.c b/servers/slapd/schema_init.c
+-index 31be1154e..8b1e25539 100644
+---- a/servers/slapd/schema_init.c
+-+++ b/servers/slapd/schema_init.c
+-@@ -3900,6 +3900,8 @@ issuerAndThisUpdateCheck(
+- 					break;
+- 				}
+- 			}
+-+			if ( tu->bv_len < STRLENOF("YYYYmmddHHmmssZ") ) return LDAP_INVALID_SYNTAX;
+-+
+- 			x.bv_val += tu->bv_len + 1;
+- 			x.bv_len -= tu->bv_len + 1;
 - 
-- $(OBJDIR):
-- 	mkdir -p $(OBJDIR) $(OBJDIR)/examples $(OBJDIR)/tests
 --- 
--2.29.2
+-2.20.1
 -
-diff --git a/package/quickjs/quickjs.hash b/package/quickjs/quickjs.hash
-index 5dbd4575f0..b6f160800b 100644
---- a/package/quickjs/quickjs.hash
-+++ b/package/quickjs/quickjs.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256  2e9d63dab390a95ed365238f21d8e9069187f7ed195782027f0ab311bb64187b  quickjs-2020-11-08.tar.xz
-+sha256  a45bface4c3379538dea8533878d694e289330488ea7028b105f72572fe7fe1a  quickjs-2021-03-27.tar.xz
-+sha256  f41baf09eef895d468d18c23055d74f711e4b8b2641cef279b5d71285c07bfe8  LICENSE
-diff --git a/package/quickjs/quickjs.mk b/package/quickjs/quickjs.mk
-index b85c255f23..a026eec4f0 100644
---- a/package/quickjs/quickjs.mk
-+++ b/package/quickjs/quickjs.mk
-@@ -4,10 +4,11 @@
+diff --git a/package/openldap/openldap.hash b/package/openldap/openldap.hash
+index f2ffdf53bc..8ce50d6133 100644
+--- a/package/openldap/openldap.hash
++++ b/package/openldap/openldap.hash
+@@ -1,7 +1,7 @@
+-# From https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.57.md5
+-md5  e3349456c3a66e5e6155be7ddc3f042c  openldap-2.4.57.tgz
+-# From https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.57.sha1
+-sha1  1cffa70a3ea8545948041fd113f8f53bc24d6d87  openldap-2.4.57.tgz
++# From https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.58.md5
++md5  c203d735ba69976e5b28dc39006f29b5  openldap-2.4.58.tgz
++# From https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.4.58.sha1
++sha1  875416827be3ad63f20004510a354db0aaceb2ed  openldap-2.4.58.tgz
+ # Locally computed
+-sha256  c7ba47e1e6ecb5b436f3d43281df57abeffa99262141aec822628bc220f6b45a  openldap-2.4.57.tgz
++sha256  57b59254be15d0bf6a9ab3d514c1c05777b02123291533134a87c94468f8f47b  openldap-2.4.58.tgz
+ sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
+diff --git a/package/openldap/openldap.mk b/package/openldap/openldap.mk
+index ec11e4fa7d..3b35b4daa3 100644
+--- a/package/openldap/openldap.mk
++++ b/package/openldap/openldap.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--QUICKJS_VERSION = 2020-11-08
-+QUICKJS_VERSION = 2021-03-27
- QUICKJS_SOURCE = quickjs-$(QUICKJS_VERSION).tar.xz
- QUICKJS_SITE = https://bellard.org/quickjs
- QUICKJS_LICENSE = MIT
-+QUICKJS_LICENSE_FILES = LICENSE
- QUICKJS_INSTALL_STAGING = YES
+-OPENLDAP_VERSION = 2.4.57
++OPENLDAP_VERSION = 2.4.58
+ OPENLDAP_SOURCE = openldap-$(OPENLDAP_VERSION).tgz
+ OPENLDAP_SITE = https://www.openldap.org/software/download/OpenLDAP/openldap-release
+ OPENLDAP_LICENSE = OpenLDAP Public License
+@@ -13,9 +13,6 @@ OPENLDAP_CPE_ID_VENDOR = openldap
+ OPENLDAP_INSTALL_STAGING = YES
+ OPENLDAP_DEPENDENCIES = host-pkgconf
  
- ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+-# 0005-ITS-9454-fix-issuerAndThisUpdateCheck.patch
+-OPENLDAP_IGNORE_CVES += CVE-2021-27212
+-
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ OPENLDAP_TLS = openssl
+ OPENLDAP_DEPENDENCIES += openssl
