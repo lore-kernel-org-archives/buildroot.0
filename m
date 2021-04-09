@@ -1,50 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 9 Apr 2021 21:13:11 +0200
-Subject: [Buildroot] [git commit] package/network-manager-openvpn: bump to
- version 1.8.14
-Message-ID: <20210409185752.F160A82B63@busybox.osuosl.org>
+Date: Fri, 9 Apr 2021 21:15:56 +0200
+Subject: [Buildroot] [git commit] package/python-markdown2: add
+ PYTHON_MARKDOWN2_CPE_ID_VENDOR
+Message-ID: <20210409185753.1016282A14@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=24e26793bc8de0a3093a4550cd11e9730841bdc5
+commit: https://git.buildroot.net/buildroot/commit/?id=aaa96d78877ec9cef82d249d5f899b7c52d239a5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update indentation in hash file (two spaces)
+cpe:2.3:a:python-markdown2_project:python-markdown2 is a valid CPE
+identifier for this package:
 
-https://gitlab.gnome.org/GNOME/NetworkManager-openvpn/-/blob/1.8.14/NEWS
+  https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Apython-markdown2_project%3Apython-markdown2
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/network-manager-openvpn/network-manager-openvpn.hash | 6 +++---
- package/network-manager-openvpn/network-manager-openvpn.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-markdown2/python-markdown2.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/network-manager-openvpn/network-manager-openvpn.hash b/package/network-manager-openvpn/network-manager-openvpn.hash
-index 0c52fb8d13..d0cbc7ca87 100644
---- a/package/network-manager-openvpn/network-manager-openvpn.hash
-+++ b/package/network-manager-openvpn/network-manager-openvpn.hash
-@@ -1,4 +1,4 @@
--# From https://download.gnome.org/sources/NetworkManager-openvpn/1.8/NetworkManager-openvpn-1.8.10.sha256sum
--sha256 af3cc86ba848d21b4ac807a09d575de11335ba4df8ce6fdb089212e77c2231ef  NetworkManager-openvpn-1.8.10.tar.xz
-+# From https://download.gnome.org/sources/NetworkManager-openvpn/1.8/NetworkManager-openvpn-1.8.14.sha256sum
-+sha256  e7419053fc3b5a7e25f1a7517c313ad4531b6ea280255524ebb85a70c76fdbeb  NetworkManager-openvpn-1.8.14.tar.xz
- # Locally computed
--sha256 c39e345d992dfba62db265f8c6d6ff1d90c61d92876635ae05adbfa2f45fff46  COPYING
-+sha256  c39e345d992dfba62db265f8c6d6ff1d90c61d92876635ae05adbfa2f45fff46  COPYING
-diff --git a/package/network-manager-openvpn/network-manager-openvpn.mk b/package/network-manager-openvpn/network-manager-openvpn.mk
-index 1a872dc127..d5d4c5da42 100644
---- a/package/network-manager-openvpn/network-manager-openvpn.mk
-+++ b/package/network-manager-openvpn/network-manager-openvpn.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/python-markdown2/python-markdown2.mk b/package/python-markdown2/python-markdown2.mk
+index c7858a3966..3ffa35796f 100644
+--- a/package/python-markdown2/python-markdown2.mk
++++ b/package/python-markdown2/python-markdown2.mk
+@@ -10,5 +10,6 @@ PYTHON_MARKDOWN2_SITE = https://files.pythonhosted.org/packages/14/69/c542025f80
+ PYTHON_MARKDOWN2_SETUP_TYPE = setuptools
+ PYTHON_MARKDOWN2_LICENSE = MIT
+ PYTHON_MARKDOWN2_LICENSE_FILES = LICENSE.txt
++PYTHON_MARKDOWN2_CPE_ID_VENDOR = python-markdown2_project
  
- NETWORK_MANAGER_OPENVPN_VERSION_MAJOR = 1.8
--NETWORK_MANAGER_OPENVPN_VERSION = $(NETWORK_MANAGER_OPENVPN_VERSION_MAJOR).10
-+NETWORK_MANAGER_OPENVPN_VERSION = $(NETWORK_MANAGER_OPENVPN_VERSION_MAJOR).14
- NETWORK_MANAGER_OPENVPN_SOURCE = NetworkManager-openvpn-$(NETWORK_MANAGER_OPENVPN_VERSION).tar.xz
- NETWORK_MANAGER_OPENVPN_SITE = https://download.gnome.org/sources/NetworkManager-openvpn/$(NETWORK_MANAGER_OPENVPN_VERSION_MAJOR)
- NETWORK_MANAGER_OPENVPN_DEPENDENCIES = network-manager openvpn
+ $(eval $(python-package))
