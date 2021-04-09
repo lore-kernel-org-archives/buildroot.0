@@ -1,37 +1,33 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri,  9 Apr 2021 23:09:21 +0200
-Subject: [Buildroot] [PATCH 2/2] package/docker-engine: add CPE variables
-In-Reply-To: <20210409210921.17774-1-peter@korsgaard.com>
-References: <20210409210921.17774-1-peter@korsgaard.com>
-Message-ID: <20210409210921.17774-2-peter@korsgaard.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 9 Apr 2021 23:10:04 +0200
+Subject: [Buildroot] [PATCH 1/1] package/network-manager: security bump
+ to version 1.22.16
+In-Reply-To: <87eefj9sqt.fsf@dell.be.48ers.dk>
+References: <20210409164319.3326427-1-fontaine.fabrice@gmail.com>
+ <87eefj9sqt.fsf@dell.be.48ers.dk>
+Message-ID: <CAPi7W818bxm6WDytfQCqRSqTNPdx6mUHAZ++gm_jV1k4hE9jKg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-cpe:2.3:a:docker:docker is a valid CPE identifier for this package:
+Dear Peter,
 
-https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Adocker%3Adocker
+Le ven. 9 avr. 2021 ? 21:13, Peter Korsgaard <peter@korsgaard.com> a ?crit :
+>
+> >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>
+>  > ifcfg-rh: handle "802-1x.{,phase2-}ca-path". Otherwise setting this
+>  > property silently fails and a profile might accidentally not perform
+>  > any authentication (CVE-2020-10754).
+>
+> ifcfg-rh sounds like something specific to Redhat distributions? I guess
+> it isn't used in Buildroot?
+Indeed, the "security" part should probably be dropped from this bump.
+>
+> --
+> Bye, Peter Korsgaard
+Best Regards,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/docker-engine/docker-engine.mk | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index d3f4d81572..767818ebba 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
-@@ -13,6 +13,9 @@ DOCKER_ENGINE_LICENSE_FILES = LICENSE
- DOCKER_ENGINE_DEPENDENCIES = host-pkgconf
- DOCKER_ENGINE_GOMOD = github.com/docker/docker
- 
-+DOCKER_ENGINE_CPE_ID_VENDOR = docker
-+DOCKER_ENGINE_CPE_ID_PRODUCT = docker
-+
- DOCKER_ENGINE_LDFLAGS = \
- 	-X $(DOCKER_ENGINE_GOMOD)/dockerversion.BuildTime="" \
- 	-X $(DOCKER_ENGINE_GOMOD)/dockerversion.GitCommit="buildroot" \
--- 
-2.20.1
+Fabrice
