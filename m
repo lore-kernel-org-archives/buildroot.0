@@ -1,56 +1,48 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  9 Apr 2021 18:43:19 +0200
-Subject: [Buildroot] [PATCH 1/1] package/network-manager: security bump to
- version 1.22.16
-Message-ID: <20210409164319.3326427-1-fontaine.fabrice@gmail.com>
+Date: Fri,  9 Apr 2021 18:56:42 +0200
+Subject: [Buildroot] [PATCH 1/1] package/network-manager-openvpn: bump to
+ version 1.8.14
+Message-ID: <20210409165642.3388274-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ifcfg-rh: handle "802-1x.{,phase2-}ca-path". Otherwise setting this
-property silently fails and a profile might accidentally not perform
-any authentication (CVE-2020-10754).
-
 Update indentation in hash file (two spaces)
 
-https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/blob/1.22.16/NEWS
+https://gitlab.gnome.org/GNOME/NetworkManager-openvpn/-/blob/1.8.14/NEWS
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/network-manager/network-manager.hash | 10 +++++-----
- package/network-manager/network-manager.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ .../network-manager-openvpn/network-manager-openvpn.hash    | 6 +++---
+ package/network-manager-openvpn/network-manager-openvpn.mk  | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
-index 93a9b5017e..aef06dde2c 100644
---- a/package/network-manager/network-manager.hash
-+++ b/package/network-manager/network-manager.hash
-@@ -1,6 +1,6 @@
--# From https://download.gnome.org/sources/NetworkManager/1.20/NetworkManager-1.22.10.sha256sum
--sha256 2b29ccc1531ba7ebba95a97f40c22b963838e8b6833745efe8e6fb71fd8fca77  NetworkManager-1.22.10.tar.xz
-+# From https://download.gnome.org/sources/NetworkManager/1.22/NetworkManager-1.22.16.sha256sum
-+sha256  377aa053752eaa304b72c9906f9efcd9fbd5f7f6cb4cd4ad72425a68982cffc6  NetworkManager-1.22.16.tar.xz
+diff --git a/package/network-manager-openvpn/network-manager-openvpn.hash b/package/network-manager-openvpn/network-manager-openvpn.hash
+index 0c52fb8d13..d0cbc7ca87 100644
+--- a/package/network-manager-openvpn/network-manager-openvpn.hash
++++ b/package/network-manager-openvpn/network-manager-openvpn.hash
+@@ -1,4 +1,4 @@
+-# From https://download.gnome.org/sources/NetworkManager-openvpn/1.8/NetworkManager-openvpn-1.8.10.sha256sum
+-sha256 af3cc86ba848d21b4ac807a09d575de11335ba4df8ce6fdb089212e77c2231ef  NetworkManager-openvpn-1.8.10.tar.xz
++# From https://download.gnome.org/sources/NetworkManager-openvpn/1.8/NetworkManager-openvpn-1.8.14.sha256sum
++sha256  e7419053fc3b5a7e25f1a7517c313ad4531b6ea280255524ebb85a70c76fdbeb  NetworkManager-openvpn-1.8.14.tar.xz
  # Locally computed
--sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
--sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
--sha256 f0543c137bc0eece552d42642d1bab31707ca3b3663d9c7a81ac3b270a4780e7  CONTRIBUTING
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
-+sha256  f0543c137bc0eece552d42642d1bab31707ca3b3663d9c7a81ac3b270a4780e7  CONTRIBUTING
-diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
-index 9402564cb4..607c2b402b 100644
---- a/package/network-manager/network-manager.mk
-+++ b/package/network-manager/network-manager.mk
+-sha256 c39e345d992dfba62db265f8c6d6ff1d90c61d92876635ae05adbfa2f45fff46  COPYING
++sha256  c39e345d992dfba62db265f8c6d6ff1d90c61d92876635ae05adbfa2f45fff46  COPYING
+diff --git a/package/network-manager-openvpn/network-manager-openvpn.mk b/package/network-manager-openvpn/network-manager-openvpn.mk
+index 1a872dc127..d5d4c5da42 100644
+--- a/package/network-manager-openvpn/network-manager-openvpn.mk
++++ b/package/network-manager-openvpn/network-manager-openvpn.mk
 @@ -5,7 +5,7 @@
  ################################################################################
  
- NETWORK_MANAGER_VERSION_MAJOR = 1.22
--NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).10
-+NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).16
- NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
- NETWORK_MANAGER_SITE = https://download.gnome.org/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
- NETWORK_MANAGER_INSTALL_STAGING = YES
+ NETWORK_MANAGER_OPENVPN_VERSION_MAJOR = 1.8
+-NETWORK_MANAGER_OPENVPN_VERSION = $(NETWORK_MANAGER_OPENVPN_VERSION_MAJOR).10
++NETWORK_MANAGER_OPENVPN_VERSION = $(NETWORK_MANAGER_OPENVPN_VERSION_MAJOR).14
+ NETWORK_MANAGER_OPENVPN_SOURCE = NetworkManager-openvpn-$(NETWORK_MANAGER_OPENVPN_VERSION).tar.xz
+ NETWORK_MANAGER_OPENVPN_SITE = https://download.gnome.org/sources/NetworkManager-openvpn/$(NETWORK_MANAGER_OPENVPN_VERSION_MAJOR)
+ NETWORK_MANAGER_OPENVPN_DEPENDENCIES = network-manager openvpn
 -- 
 2.30.2
