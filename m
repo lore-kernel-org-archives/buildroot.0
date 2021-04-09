@@ -1,28 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 09 Apr 2021 21:16:01 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/python-markdown2: add PYTHON_MARKDOWN2_CPE_ID_VENDOR
-In-Reply-To: <20210405102550.3566334-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 5 Apr 2021 12:25:50 +0200")
-References: <20210405102550.3566334-1-fontaine.fabrice@gmail.com>
-Message-ID: <87zgy78e1a.fsf@dell.be.48ers.dk>
+Date: Fri, 09 Apr 2021 21:17:24 +0200
+Subject: [Buildroot] [PATCH 1/3]
+ package/x11r7/xdriver_xf86-input-libinput: bump version to 1.0.0
+In-Reply-To: <20210406160343.1106797-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Tue, 6 Apr 2021 18:03:41 +0200")
+References: <20210406160343.1106797-1-bernd.kuhls@t-online.de>
+Message-ID: <87v98v8dyz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > cpe:2.3:a:python-markdown2_project:python-markdown2 is a valid CPE
- > identifier for this package:
+ > Release notes:
+ > https://lists.x.org/archives/xorg-announce/2021-April/003079.html
 
- >   https://nvd.nist.gov/products/cpe/search/results?namingFormat=2.3&keyword=cpe%3A2.3%3Aa%3Apython-markdown2_project%3Apython-markdown2
+ > Updated license hash due to upstream commit:
+ > https://cgit.freedesktop.org/xorg/driver/xf86-input-libinput/commit/?id=2bbc4727a12471e3699e2803404a013656066a94
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > ---
- > Changes v1 -> v2:
- >  - Drop PYTHON_MARKDOWN2_CPE_ID_PRODUCT
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Committed, thanks.
 
