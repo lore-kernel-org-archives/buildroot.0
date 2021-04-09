@@ -1,33 +1,25 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 9 Apr 2021 23:10:04 +0200
-Subject: [Buildroot] [PATCH 1/1] package/network-manager: security bump
- to version 1.22.16
-In-Reply-To: <87eefj9sqt.fsf@dell.be.48ers.dk>
-References: <20210409164319.3326427-1-fontaine.fabrice@gmail.com>
- <87eefj9sqt.fsf@dell.be.48ers.dk>
-Message-ID: <CAPi7W818bxm6WDytfQCqRSqTNPdx6mUHAZ++gm_jV1k4hE9jKg@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 09 Apr 2021 23:10:47 +0200
+Subject: [Buildroot] [PATCH] package/kexec: bump to version 2.0.21
+In-Reply-To: <20210408150157.3377063-1-john@metanate.com> (John Keeping's
+ message of "Thu, 8 Apr 2021 16:01:57 +0100")
+References: <20210408150157.3377063-1-john@metanate.com>
+Message-ID: <87k0pb6u5k.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter,
+>>>>> "John" == John Keeping <john@metanate.com> writes:
 
-Le ven. 9 avr. 2021 ? 21:13, Peter Korsgaard <peter@korsgaard.com> a ?crit :
->
-> >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
->
->  > ifcfg-rh: handle "802-1x.{,phase2-}ca-path". Otherwise setting this
->  > property silently fails and a profile might accidentally not perform
->  > any authentication (CVE-2020-10754).
->
-> ifcfg-rh sounds like something specific to Redhat distributions? I guess
-> it isn't used in Buildroot?
-Indeed, the "security" part should probably be dropped from this bump.
->
-> --
-> Bye, Peter Korsgaard
-Best Regards,
+ > https://lists.infradead.org/pipermail/kexec/2020-December/021835.html
+ > Both patches were backports and are included in the 2.0.21 release so
+ > they are deleted.
 
-Fabrice
+ > Signed-off-by: John Keeping <john@metanate.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
