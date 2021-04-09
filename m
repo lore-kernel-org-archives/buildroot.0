@@ -1,48 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 9 Apr 2021 21:19:34 +0200
-Subject: [Buildroot] [git commit] package/bridge-utils: bump to version 1.7.1
-Message-ID: <20210409185753.40F0C82B63@busybox.osuosl.org>
+Date: Fri, 9 Apr 2021 21:18:05 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xlib_libXaw: bump version to
+ 1.0.14
+Message-ID: <20210409185753.376D282A14@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5f2d38df4f85f7999cf6d00da089991cba93fee6
+commit: https://git.buildroot.net/buildroot/commit/?id=ad259f06cc6f2a3d38c4e00da20ddf85c7587f81
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Release notes:
+https://lists.x.org/archives/xorg-announce/2021-March/003077.html
+
+Reformatted hashes.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bridge-utils/bridge-utils.hash | 4 +++-
- package/bridge-utils/bridge-utils.mk   | 6 +++---
+ package/x11r7/xlib_libXaw/xlib_libXaw.hash | 8 +++++---
+ package/x11r7/xlib_libXaw/xlib_libXaw.mk   | 2 +-
  2 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/bridge-utils/bridge-utils.hash b/package/bridge-utils/bridge-utils.hash
-index ccf71704b8..60cdd1cec1 100644
---- a/package/bridge-utils/bridge-utils.hash
-+++ b/package/bridge-utils/bridge-utils.hash
-@@ -1,3 +1,5 @@
-+# From https://mirrors.edge.kernel.org/pub/linux/utils/net/bridge-utils/sha256sums.asc
-+sha256  a61d8be4f1a1405c60c8ef38d544f0c18c05b33b9b07e5b4b31033536165e60e  bridge-utils-1.7.1.tar.xz
+diff --git a/package/x11r7/xlib_libXaw/xlib_libXaw.hash b/package/x11r7/xlib_libXaw/xlib_libXaw.hash
+index 159e007bc3..f289e66153 100644
+--- a/package/x11r7/xlib_libXaw/xlib_libXaw.hash
++++ b/package/x11r7/xlib_libXaw/xlib_libXaw.hash
+@@ -1,4 +1,6 @@
+-# From http://lists.x.org/archives/xorg-announce/2015-April/002591.html
+-sha256	8ef8067312571292ccc2bbe94c41109dcf022ea5a4ec71656a83d8cce9edb0cd	libXaw-1.0.13.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2021-March/003077.html
++sha256  76aef98ea3df92615faec28004b5ce4e5c6855e716fa16de40c32030722a6f8e  libXaw-1.0.14.tar.bz2
++sha512  29d1c151369523ae6cb418e636b0b7b39ccccc35462a0b394dbeb46d5b6d780badd2eb872a55d9fbba1ee1af034e76c0463f40f8d8a7be2c336d08b3b1bf81d4  libXaw-1.0.14.tar.bz2
 +
- # locally computed
--sha256  4b9b12f31d147320dea931f1041b8a69d84741ddb92cf35ea1f896b67da98b7c  bridge-utils-1.7.tar.gz
- sha256  995a31f60a9ddb4c609214cc7d17ca94cc3cbc7f37e1e64dba81e7f8ea9d4f91  COPYING
-diff --git a/package/bridge-utils/bridge-utils.mk b/package/bridge-utils/bridge-utils.mk
-index 2de5517fc5..e8e9a3ca3a 100644
---- a/package/bridge-utils/bridge-utils.mk
-+++ b/package/bridge-utils/bridge-utils.mk
-@@ -4,9 +4,9 @@
+ # Locally calculated
+-sha256 9f5adb26952f93b3e4650285b94ec6c61a27aab5a21088bfb6694001be1b360d COPYING
++sha256  9f5adb26952f93b3e4650285b94ec6c61a27aab5a21088bfb6694001be1b360d  COPYING
+diff --git a/package/x11r7/xlib_libXaw/xlib_libXaw.mk b/package/x11r7/xlib_libXaw/xlib_libXaw.mk
+index 17d51a9570..6b615a8de5 100644
+--- a/package/x11r7/xlib_libXaw/xlib_libXaw.mk
++++ b/package/x11r7/xlib_libXaw/xlib_libXaw.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BRIDGE_UTILS_VERSION = 1.7
--BRIDGE_UTILS_SITE = \
--	https://git.kernel.org/pub/scm/linux/kernel/git/shemminger/bridge-utils.git/snapshot
-+BRIDGE_UTILS_VERSION = 1.7.1
-+BRIDGE_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/bridge-utils
-+BRIDGE_UTILS_SOURCE = bridge-utils-$(BRIDGE_UTILS_VERSION).tar.xz
- BRIDGE_UTILS_AUTORECONF = YES
- BRIDGE_UTILS_LICENSE = GPL-2.0+
- BRIDGE_UTILS_LICENSE_FILES = COPYING
+-XLIB_LIBXAW_VERSION = 1.0.13
++XLIB_LIBXAW_VERSION = 1.0.14
+ XLIB_LIBXAW_SOURCE = libXaw-$(XLIB_LIBXAW_VERSION).tar.bz2
+ XLIB_LIBXAW_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXAW_LICENSE = MIT
