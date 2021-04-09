@@ -1,58 +1,58 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri,  9 Apr 2021 13:01:12 +0200
-Subject: [Buildroot] [PATCH] support/scripts/cve.py: use fast ijson backend
- if available on old ijson versions
-Message-ID: <20210409110112.20087-1-peter@korsgaard.com>
+From: Vadym Kochan <vadym.kochan@plvision.eu>
+Date: Fri, 9 Apr 2021 15:45:56 +0300
+Subject: [Buildroot] [PATCH] configs/solidrun_macchiatobin_defconfig:
+ include for Singleshot DTS
+In-Reply-To: <YG68WisliSerKFtr@curiosity>
+References: <20210408073349.16629-1-vadym.kochan@plvision.eu>
+ <YG68WisliSerKFtr@curiosity>
+Message-ID: <20210409124556.GA8110@plvision.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ijson < 2.5 (as available in Debian 10) use the slow python backend by
-default instead of the most efficient one available like modern ijson
-versions, significantly slowing down cve checking. E.G.:
+Hi Sergey,
 
-time ./support/scripts/pkg-stats --nvd-path ~/.nvd -p avahi --html foobar.html
+On Thu, Apr 08, 2021 at 11:18:34AM +0300, Sergey Matyukevich wrote:
+> Hello Vadym,
+> 
+> > Single- & Double shot boards have many in common except additional
+> > RJ45 tranceivers near by each of 10G SFP and a bit different CPU freq.
+> > 
+> > Signed-off-by: Vadym Kochan <vadym.kochan@plvision.eu>
+> > ---
+> >  configs/solidrun_macchiatobin_defconfig | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/configs/solidrun_macchiatobin_defconfig b/configs/solidrun_macchiatobin_defconfig
+> > index 7d06313b03db..34094a833b66 100644
+> > --- a/configs/solidrun_macchiatobin_defconfig
+> > +++ b/configs/solidrun_macchiatobin_defconfig
+> > @@ -30,7 +30,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> >  BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.5"
+> >  BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+> >  BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> > -BR2_LINUX_KERNEL_INTREE_DTS_NAME="marvell/armada-8040-mcbin"
+> > +BR2_LINUX_KERNEL_INTREE_DTS_NAME="marvell/armada-8040-mcbin marvell/armada-8040-mcbin-singleshot"
+> >  BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/solidrun/macchiatobin/linux-extras.config"
+> >  BR2_LINUX_KERNEL_INSTALL_TARGET=y
+> >  BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+> 
+> I do not have access to MacchiatoBin hardware anymore, but I have been using
+> current defconfig with DoubleShot boards. If this defconfig does not work
+> well for SingleShot boards, then it makes sense to add a separate defconfig
+> for such boards rather then remove DoubleShot support completely. Probably
+> linux-extras.config in board/solidrun/macchiatobin worth another look to
+> make sure that features for both boards are included.
+> 
+> Regards,
+> Sergey
 
-Goes from
-174,44s user 2,11s system 99% cpu 2:58,04 total
+If comparing Single- and DoubleShot Linux DTS files they have difference
+only in SFP config and +1 heartbeat LED. Do you think it is worth to duplicate
+current defconfig for SingleShot board even if SFP will not work by
+using DualShot DTS instead of just append _INTREE_DTS_NAME with
+-singleshot version ?
 
-To
-93,53s user 2,00s system 98% cpu 1:36,65 total
-
-E.G. almost 2x as fast.
-
-As a workaround, detect when the python backend is used and try to use a
-more efficient one instead.  Use the yajl2_cffi backend as recommended by
-upstream, as it is most likely to work, and print a warning (and continue)
-if we fail to load it.
-
-The detection is slightly complicated by the fact that ijson.backends used
-to be a reference to a backend module, but is nowadays a string (without the
-ijson.backends prefix).
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- support/scripts/cve.py | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/support/scripts/cve.py b/support/scripts/cve.py
-index 6e97ea193f..965fc2a466 100755
---- a/support/scripts/cve.py
-+++ b/support/scripts/cve.py
-@@ -28,6 +28,12 @@ import operator
- 
- try:
-     import ijson
-+    # backend is a module in < 2.5, a string in >= 2.5
-+    if 'python' in getattr(ijson.backend, '__name__', ijson.backend):
-+        try:
-+            import ijson.backends.yajl2_cffi as ijson
-+        except ImportError:
-+            sys.stderr.write('Warning: Using slow ijson python backend\n')
- except ImportError:
-     sys.stderr.write("You need ijson to parse NVD for CVE check\n")
-     exit(1)
--- 
-2.20.1
+Thanks,
