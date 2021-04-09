@@ -1,48 +1,66 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  9 Apr 2021 18:56:42 +0200
-Subject: [Buildroot] [PATCH 1/1] package/network-manager-openvpn: bump to
- version 1.8.14
-Message-ID: <20210409165642.3388274-1-fontaine.fabrice@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri,  9 Apr 2021 20:21:47 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/kodi-pvr-iptvsimple: bump
+ version to 7.6.1-Matrix
+Message-ID: <20210409182147.1437599-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update indentation in hash file (two spaces)
+Changelog:
+https://github.com/kodi-pvr/pvr.iptvsimple/blob/Matrix/pvr.iptvsimple/changelog.txt
 
-https://gitlab.gnome.org/GNOME/NetworkManager-openvpn/-/blob/1.8.14/NEWS
+Upstream added a dependency to xz:
+https://github.com/kodi-pvr/pvr.iptvsimple/commit/8f19dac9a5f394d44a16fcfa4235ea8c11e9cc96
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../network-manager-openvpn/network-manager-openvpn.hash    | 6 +++---
- package/network-manager-openvpn/network-manager-openvpn.mk  | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+v2: added dependency to xz
 
-diff --git a/package/network-manager-openvpn/network-manager-openvpn.hash b/package/network-manager-openvpn/network-manager-openvpn.hash
-index 0c52fb8d13..d0cbc7ca87 100644
---- a/package/network-manager-openvpn/network-manager-openvpn.hash
-+++ b/package/network-manager-openvpn/network-manager-openvpn.hash
-@@ -1,4 +1,4 @@
--# From https://download.gnome.org/sources/NetworkManager-openvpn/1.8/NetworkManager-openvpn-1.8.10.sha256sum
--sha256 af3cc86ba848d21b4ac807a09d575de11335ba4df8ce6fdb089212e77c2231ef  NetworkManager-openvpn-1.8.10.tar.xz
-+# From https://download.gnome.org/sources/NetworkManager-openvpn/1.8/NetworkManager-openvpn-1.8.14.sha256sum
-+sha256  e7419053fc3b5a7e25f1a7517c313ad4531b6ea280255524ebb85a70c76fdbeb  NetworkManager-openvpn-1.8.14.tar.xz
+ package/kodi-pvr-iptvsimple/Config.in                | 1 +
+ package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash | 2 +-
+ package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk   | 4 ++--
+ 3 files changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/package/kodi-pvr-iptvsimple/Config.in b/package/kodi-pvr-iptvsimple/Config.in
+index 00f4d115bf..2f5a208bad 100644
+--- a/package/kodi-pvr-iptvsimple/Config.in
++++ b/package/kodi-pvr-iptvsimple/Config.in
+@@ -7,6 +7,7 @@ config BR2_PACKAGE_KODI_PVR_IPTVSIMPLE
+ 	select BR2_PACKAGE_KODI_INPUTSTREAM_FFMPEGDIRECT # runtime
+ 	select BR2_PACKAGE_KODI_INPUTSTREAM_RTMP # runtime
+ 	select BR2_PACKAGE_PUGIXML
++	select BR2_PACKAGE_XZ
+ 	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  IPTV Live TV and Radio PVR client addon for Kodi
+diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
+index 4a9b45999d..767f77cca8 100644
+--- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
++++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
+@@ -1,3 +1,3 @@
  # Locally computed
--sha256 c39e345d992dfba62db265f8c6d6ff1d90c61d92876635ae05adbfa2f45fff46  COPYING
-+sha256  c39e345d992dfba62db265f8c6d6ff1d90c61d92876635ae05adbfa2f45fff46  COPYING
-diff --git a/package/network-manager-openvpn/network-manager-openvpn.mk b/package/network-manager-openvpn/network-manager-openvpn.mk
-index 1a872dc127..d5d4c5da42 100644
---- a/package/network-manager-openvpn/network-manager-openvpn.mk
-+++ b/package/network-manager-openvpn/network-manager-openvpn.mk
-@@ -5,7 +5,7 @@
+-sha256  97cd991b9b6688db1956e853c0af9df7c20cfd645d348f72df2ad1bfc9c23528  kodi-pvr-iptvsimple-7.6.0-Matrix.tar.gz
++sha256  0bffd09eba7cf758a818607562b4dec53f4a20acb7a8b43dd0a1499e92cb3057  kodi-pvr-iptvsimple-7.6.1-Matrix.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
+index 51575e76a9..cf8d755766 100644
+--- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
++++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
+@@ -4,10 +4,10 @@
+ #
  ################################################################################
  
- NETWORK_MANAGER_OPENVPN_VERSION_MAJOR = 1.8
--NETWORK_MANAGER_OPENVPN_VERSION = $(NETWORK_MANAGER_OPENVPN_VERSION_MAJOR).10
-+NETWORK_MANAGER_OPENVPN_VERSION = $(NETWORK_MANAGER_OPENVPN_VERSION_MAJOR).14
- NETWORK_MANAGER_OPENVPN_SOURCE = NetworkManager-openvpn-$(NETWORK_MANAGER_OPENVPN_VERSION).tar.xz
- NETWORK_MANAGER_OPENVPN_SITE = https://download.gnome.org/sources/NetworkManager-openvpn/$(NETWORK_MANAGER_OPENVPN_VERSION_MAJOR)
- NETWORK_MANAGER_OPENVPN_DEPENDENCIES = network-manager openvpn
+-KODI_PVR_IPTVSIMPLE_VERSION = 7.6.0-Matrix
++KODI_PVR_IPTVSIMPLE_VERSION = 7.6.1-Matrix
+ KODI_PVR_IPTVSIMPLE_SITE = $(call github,kodi-pvr,pvr.iptvsimple,$(KODI_PVR_IPTVSIMPLE_VERSION))
+ KODI_PVR_IPTVSIMPLE_LICENSE = GPL-2.0+
+ KODI_PVR_IPTVSIMPLE_LICENSE_FILES = LICENSE.md
+-KODI_PVR_IPTVSIMPLE_DEPENDENCIES = kodi pugixml zlib
++KODI_PVR_IPTVSIMPLE_DEPENDENCIES = kodi pugixml xz zlib
+ 
+ $(eval $(cmake-package))
 -- 
-2.30.2
+2.29.2
