@@ -1,176 +1,108 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri,  9 Apr 2021 21:54:18 +0200
-Subject: [Buildroot] [PATCH-2021.02.x] package/tar: add upstream security
- fix for CVE-2021-20193
-Message-ID: <20210409195418.8014-1-peter@korsgaard.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri,  9 Apr 2021 22:20:22 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: bump version to 4.4
+Message-ID: <20210409202022.2183773-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issue:
+Remove wavpack-related patch and configure options due to upstream
+removal of wavpack support:
+http://git.videolan.org/?p=ffmpeg.git;a=commit;h=45070eec4c089b06947f07e25cdb1bc8b2102553
 
-- CVE-2021-20193: A flaw was found in the src/list.c of tar 1.33 and
-  earlier.  This flaw allows an attacker who can submit a crafted input file
-  to tar to cause uncontrolled consumption of memory.  The highest threat
-  from this vulnerability is to system availability
+Changelog:
+http://git.videolan.org/?p=ffmpeg.git;a=blob;f=Changelog;;hb=refs/heads/release/4.4
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../0001-Fix-memory-leak-in-read_header.patch | 129 ++++++++++++++++++
- package/tar/tar.mk                            |   3 +
- 2 files changed, 132 insertions(+)
- create mode 100644 package/tar/0001-Fix-memory-leak-in-read_header.patch
+ ...64-skip-decode-if-pic-has-no-slices.patch} |  0
+ ...quire_pkg_config-to-check-for-wavpac.patch | 31 -------------------
+ package/ffmpeg/ffmpeg.hash                    |  2 +-
+ package/ffmpeg/ffmpeg.mk                      |  9 +-----
+ 4 files changed, 2 insertions(+), 40 deletions(-)
+ rename package/ffmpeg/{0003-avcodec-vaapi_h264-skip-decode-if-pic-has-no-slices.patch => 0002-avcodec-vaapi_h264-skip-decode-if-pic-has-no-slices.patch} (100%)
+ delete mode 100644 package/ffmpeg/0002-configure-use-require_pkg_config-to-check-for-wavpac.patch
 
-diff --git a/package/tar/0001-Fix-memory-leak-in-read_header.patch b/package/tar/0001-Fix-memory-leak-in-read_header.patch
-new file mode 100644
-index 0000000000..874b27df38
---- /dev/null
-+++ b/package/tar/0001-Fix-memory-leak-in-read_header.patch
-@@ -0,0 +1,129 @@
-+From d9d4435692150fa8ff68e1b1a473d187cc3fd777 Mon Sep 17 00:00:00 2001
-+From: Sergey Poznyakoff <gray@gnu.org>
-+Date: Sun, 17 Jan 2021 20:41:11 +0200
-+Subject: [PATCH] Fix memory leak in read_header
-+
-+Bug reported in https://savannah.gnu.org/bugs/?59897
-+
-+* src/list.c (read_header): Don't return directly from the loop.
-+Instead set the status and break.  Return the status.  Free
-+next_long_name and next_long_link before returning.
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/list.c | 40 ++++++++++++++++++++++++++++------------
-+ 1 file changed, 28 insertions(+), 12 deletions(-)
-+
-+diff --git a/src/list.c b/src/list.c
-+index e40a5c8..d7ef441 100644
-+--- a/src/list.c
-++++ b/src/list.c
-+@@ -408,26 +408,27 @@ read_header (union block **return_block, struct tar_stat_info *info,
-+ 	     enum read_header_mode mode)
-+ {
-+   union block *header;
-+-  union block *header_copy;
-+   char *bp;
-+   union block *data_block;
-+   size_t size, written;
-+-  union block *next_long_name = 0;
-+-  union block *next_long_link = 0;
-++  union block *next_long_name = NULL;
-++  union block *next_long_link = NULL;
-+   size_t next_long_name_blocks = 0;
-+   size_t next_long_link_blocks = 0;
-+-
-++  enum read_header status = HEADER_SUCCESS;
-++  
-+   while (1)
-+     {
-+-      enum read_header status;
-+-
-+       header = find_next_block ();
-+       *return_block = header;
-+       if (!header)
-+-	return HEADER_END_OF_FILE;
-++	{
-++	  status = HEADER_END_OF_FILE;
-++	  break;
-++	}
-+ 
-+       if ((status = tar_checksum (header, false)) != HEADER_SUCCESS)
-+-	return status;
-++	break;
-+ 
-+       /* Good block.  Decode file size and return.  */
-+ 
-+@@ -437,7 +438,10 @@ read_header (union block **return_block, struct tar_stat_info *info,
-+ 	{
-+ 	  info->stat.st_size = OFF_FROM_HEADER (header->header.size);
-+ 	  if (info->stat.st_size < 0)
-+-	    return HEADER_FAILURE;
-++	    {
-++	      status = HEADER_FAILURE;
-++	      break;
-++	    }
-+ 	}
-+ 
-+       if (header->header.typeflag == GNUTYPE_LONGNAME
-+@@ -447,10 +451,14 @@ read_header (union block **return_block, struct tar_stat_info *info,
-+ 	  || header->header.typeflag == SOLARIS_XHDTYPE)
-+ 	{
-+ 	  if (mode == read_header_x_raw)
-+-	    return HEADER_SUCCESS_EXTENDED;
-++	    {
-++	      status = HEADER_SUCCESS_EXTENDED;
-++	      break;
-++	    }
-+ 	  else if (header->header.typeflag == GNUTYPE_LONGNAME
-+ 		   || header->header.typeflag == GNUTYPE_LONGLINK)
-+ 	    {
-++	      union block *header_copy;
-+ 	      size_t name_size = info->stat.st_size;
-+ 	      size_t n = name_size % BLOCKSIZE;
-+ 	      size = name_size + BLOCKSIZE;
-+@@ -517,7 +525,10 @@ read_header (union block **return_block, struct tar_stat_info *info,
-+ 	      xheader_decode_global (&xhdr);
-+ 	      xheader_destroy (&xhdr);
-+ 	      if (mode == read_header_x_global)
-+-		return HEADER_SUCCESS_EXTENDED;
-++		{
-++		  status = HEADER_SUCCESS_EXTENDED;
-++		  break;
-++		}
-+ 	    }
-+ 
-+ 	  /* Loop!  */
-+@@ -536,6 +547,7 @@ read_header (union block **return_block, struct tar_stat_info *info,
-+ 	      name = next_long_name->buffer + BLOCKSIZE;
-+ 	      recent_long_name = next_long_name;
-+ 	      recent_long_name_blocks = next_long_name_blocks;
-++	      next_long_name = NULL;
-+ 	    }
-+ 	  else
-+ 	    {
-+@@ -567,6 +579,7 @@ read_header (union block **return_block, struct tar_stat_info *info,
-+ 	      name = next_long_link->buffer + BLOCKSIZE;
-+ 	      recent_long_link = next_long_link;
-+ 	      recent_long_link_blocks = next_long_link_blocks;
-++	      next_long_link = NULL;
-+ 	    }
-+ 	  else
-+ 	    {
-+@@ -578,9 +591,12 @@ read_header (union block **return_block, struct tar_stat_info *info,
-+ 	    }
-+ 	  assign_string (&info->link_name, name);
-+ 
-+-	  return HEADER_SUCCESS;
-++	  break;
-+ 	}
-+     }
-++  free (next_long_name);
-++  free (next_long_link);
-++  return status;
-+ }
-+ 
-+ #define ISOCTAL(c) ((c)>='0'&&(c)<='7')
-+-- 
-+2.20.1
-+
-diff --git a/package/tar/tar.mk b/package/tar/tar.mk
-index 2da731f80a..1a8e4369de 100644
---- a/package/tar/tar.mk
-+++ b/package/tar/tar.mk
-@@ -14,6 +14,9 @@ TAR_LICENSE = GPL-3.0+
- TAR_LICENSE_FILES = COPYING
- TAR_CPE_ID_VENDOR = gnu
+diff --git a/package/ffmpeg/0003-avcodec-vaapi_h264-skip-decode-if-pic-has-no-slices.patch b/package/ffmpeg/0002-avcodec-vaapi_h264-skip-decode-if-pic-has-no-slices.patch
+similarity index 100%
+rename from package/ffmpeg/0003-avcodec-vaapi_h264-skip-decode-if-pic-has-no-slices.patch
+rename to package/ffmpeg/0002-avcodec-vaapi_h264-skip-decode-if-pic-has-no-slices.patch
+diff --git a/package/ffmpeg/0002-configure-use-require_pkg_config-to-check-for-wavpac.patch b/package/ffmpeg/0002-configure-use-require_pkg_config-to-check-for-wavpac.patch
+deleted file mode 100644
+index 49c3ccee9b..0000000000
+--- a/package/ffmpeg/0002-configure-use-require_pkg_config-to-check-for-wavpac.patch
++++ /dev/null
+@@ -1,31 +0,0 @@
+-From a507a9cd6525d5b3a1eea32e25a139b4023800a2 Mon Sep 17 00:00:00 2001
+-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+-Date: Sun, 20 Sep 2020 13:48:00 +0200
+-Subject: [PATCH] configure: use require_pkg_config to check for wavpack
+-
+-Fixes static builds with toolchains needing "-lm" for math functions.
+-
+-Patch sent upstream:
+-http://ffmpeg.org/pipermail/ffmpeg-devel/2020-September/270127.html
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- configure | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/configure b/configure
+-index 5d68695192..4e6c6edd30 100755
+---- a/configure
+-+++ b/configure
+-@@ -6438,7 +6438,7 @@ enabled libvpx            && {
+-     fi
+- }
+- 
+--enabled libwavpack        && require libwavpack wavpack/wavpack.h WavpackOpenFileOutput  -lwavpack
+-+enabled libwavpack        && require_pkg_config libwavpack wavpack "wavpack/wavpack.h" WavpackOpenFileOutput
+- enabled libwebp           && {
+-     enabled libwebp_encoder      && require_pkg_config libwebp "libwebp >= 0.2.0" webp/encode.h WebPGetEncoderVersion
+-     enabled libwebp_anim_encoder && check_pkg_config libwebp_anim_encoder "libwebpmux >= 0.4.0" webp/mux.h WebPAnimEncoderOptionsInit; }
+--- 
+-2.27.0
+-
+diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
+index 81dc0d3e6b..d841afd625 100644
+--- a/package/ffmpeg/ffmpeg.hash
++++ b/package/ffmpeg/ffmpeg.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  46e4e64f1dd0233cbc0934b9f1c0da676008cad34725113fb7f802cfa84ccddb  ffmpeg-4.3.2.tar.xz
++sha256  06b10a183ce5371f915c6bb15b7b1fffbe046e8275099c96affc29e17645d909  ffmpeg-4.4.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPLv2
+ sha256  b634ab5640e258563c536e658cad87080553df6f34f62269a21d554844e58bfe  COPYING.LGPLv2.1
+ sha256  cb48bf09a11f5fb576cddb0431c8f5ed0a60157a9ec942adffc13907cbe083f2  LICENSE.md
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 9b79dff48e..8ff8ea8c6c 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# 0001-Fix-memory-leak-in-read_header.patch
-+TAR_IGNORE_CVES += CVE-2021-20193
-+
- ifeq ($(BR2_PACKAGE_ACL),y)
- TAR_DEPENDENCIES += acl
- TAR_CONF_OPTS += --with-posix-acls
+-FFMPEG_VERSION = 4.3.2
++FFMPEG_VERSION = 4.4
+ FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
+ FFMPEG_SITE = http://ffmpeg.org/releases
+ FFMPEG_INSTALL_STAGING = YES
+@@ -368,13 +368,6 @@ else
+ FFMPEG_CONF_OPTS += --disable-libtheora
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_WAVPACK),y)
+-FFMPEG_CONF_OPTS += --enable-libwavpack
+-FFMPEG_DEPENDENCIES += wavpack
+-else
+-FFMPEG_CONF_OPTS += --disable-libwavpack
+-endif
+-
+ ifeq ($(BR2_PACKAGE_LIBICONV),y)
+ FFMPEG_CONF_OPTS += --enable-iconv
+ FFMPEG_DEPENDENCIES += libiconv
 -- 
-2.20.1
+2.29.2
