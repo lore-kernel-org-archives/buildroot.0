@@ -1,52 +1,87 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 10 Apr 2021 00:43:56 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-zeroconf: bump to version
- 0.29.0
-Message-ID: <20210409224356.3869223-1-fontaine.fabrice@gmail.com>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Sat, 10 Apr 2021 08:06:51 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-hiredis: fix build with
+ gcc 4.8
+In-Reply-To: <20210406203808.1339872-1-fontaine.fabrice@gmail.com>
+References: <20210406203808.1339872-1-fontaine.fabrice@gmail.com>
+Message-ID: <CALFsTFVjEgDHAWHi2ePKBu2gPkSAeSnWLDVdNOuATk-jAATu6w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update indentation in hash file (two spaces)
+Hello,
 
-https://github.com/jstasiak/python-zeroconf/tree/0.29.0#changelog
+On Tue, Apr 6, 2021 at 11:38 PM Fabrice Fontaine
+<fontaine.fabrice@gmail.com> wrote:
+>
+> Build fails with gcc 4.8 since bump to version 2.0.0 in commit
+> 69405d89596988b5b7d25886b7f9c07efad70741
+>
+> Fixes:
+>  -  http://autobuild.buildroot.org/results/04cbcddf6d83ebad8c98400754f9445375e9e489
+>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  ...0001-setup.py-fix-build-with-gcc-4.8.patch | 43 +++++++++++++++++++
+>  1 file changed, 43 insertions(+)
+>  create mode 100644 package/python-hiredis/0001-setup.py-fix-build-with-gcc-4.8.patch
+>
+> diff --git a/package/python-hiredis/0001-setup.py-fix-build-with-gcc-4.8.patch b/package/python-hiredis/0001-setup.py-fix-build-with-gcc-4.8.patch
+> new file mode 100644
+> index 0000000000..93f9440a74
+> --- /dev/null
+> +++ b/package/python-hiredis/0001-setup.py-fix-build-with-gcc-4.8.patch
+> @@ -0,0 +1,43 @@
+> +From 204898e28c7650089bf664eea8adfc16a22ba4f4 Mon Sep 17 00:00:00 2001
+> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Date: Tue, 6 Apr 2021 10:37:49 +0200
+> +Subject: [PATCH] setup.py: fix build with gcc 4.8
+> +
+> +Fix the following build failure on gcc 4.8 which is raised since version
+> +2.0.0 and
+> +https://github.com/redis/hiredis-py/commit/9084152f624e8e593b4e86ddf8bd13329fdfc043:
+> +
+> +vendor/hiredis/read.c: In function 'redisReaderFree':
+> +vendor/hiredis/read.c:646:9: error: 'for' loop initial declarations are only allowed in C99 mode
+> +         for (int i = 0; i < r->tasks; i++) {
+> +         ^
+> +vendor/hiredis/read.c:646:9: note: use option -std=c99 or -std=gnu99 to compile your code
+> +
+> +This build failure is raised because hiredis source code is built
+> +without C99:
+> +https://github.com/redis/hiredis/commit/13a35bdb64615e381c5e1151cdd4e78bba71a6db
+> +
+> +Fixes:
+> + - http://autobuild.buildroot.org/results/04cbcddf6d83ebad8c98400754f9445375e9e489
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +[Upstream status: https://github.com/redis/hiredis-py/pull/110]
+> +---
+> + setup.py | 1 +
+> + 1 file changed, 1 insertion(+)
+> +
+> +diff --git a/setup.py b/setup.py
+> +index d83153b..1f623c9 100755
+> +--- a/setup.py
+> ++++ b/setup.py
+> +@@ -13,6 +13,7 @@ def version():
+> + ext = Extension("hiredis.hiredis",
+> +   sources=sorted(glob.glob("src/*.c") +
+> +                  ["vendor/hiredis/%s.c" % src for src in ("alloc", "read", "sds")]),
+> ++  extra_compile_args=["-std=c99"],
+> +   include_dirs=["vendor"])
+> +
+> + setup(
+> +--
+> +2.30.2
+> +
+> --
+> 2.30.2
+>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/python-zeroconf/python-zeroconf.hash | 6 +++---
- package/python-zeroconf/python-zeroconf.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+Reviewed-by: Asaf Kahlon <asafka7@gmail.com>
 
-diff --git a/package/python-zeroconf/python-zeroconf.hash b/package/python-zeroconf/python-zeroconf.hash
-index a4239b6780..be91b59048 100644
---- a/package/python-zeroconf/python-zeroconf.hash
-+++ b/package/python-zeroconf/python-zeroconf.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/zeroconf/json
--md5	1094639f8688f2c5b1938029877eb4f2  zeroconf-0.23.0.tar.gz
--sha256	e0c333b967c48f8b2e5cc94a1d4d28893023fb06dfd797ee384a94cdd1d0eef5  zeroconf-0.23.0.tar.gz
-+md5  98e683a247fe9915a5d4845c38b37ff3  zeroconf-0.29.0.tar.gz
-+sha256  7aefbb658b452b1fd7e51124364f938c6f5e42d6ea893fa2557bea8c06c540af  zeroconf-0.29.0.tar.gz
- # Locally computed sha256 checksums
--sha256	bb117c0fbd7f57f64170b690285d7df07c2371b578e3b3cd3aa2e1155ef461a0  COPYING
-+sha256  bb117c0fbd7f57f64170b690285d7df07c2371b578e3b3cd3aa2e1155ef461a0  COPYING
-diff --git a/package/python-zeroconf/python-zeroconf.mk b/package/python-zeroconf/python-zeroconf.mk
-index 55da292b46..67bfa72e03 100644
---- a/package/python-zeroconf/python-zeroconf.mk
-+++ b/package/python-zeroconf/python-zeroconf.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_ZEROCONF_VERSION = 0.23.0
-+PYTHON_ZEROCONF_VERSION = 0.29.0
- PYTHON_ZEROCONF_SOURCE = zeroconf-$(PYTHON_ZEROCONF_VERSION).tar.gz
--PYTHON_ZEROCONF_SITE = https://files.pythonhosted.org/packages/d7/25/8bbdd4857820e0cdc380c7e0c3543dc01a55247a1d831c712571783e74ec
-+PYTHON_ZEROCONF_SITE = https://files.pythonhosted.org/packages/ca/77/eb6137997adc60811c6c46b28b00abac5c16daf14383f61d8a0180326b38
- PYTHON_ZEROCONF_SETUP_TYPE = setuptools
- PYTHON_ZEROCONF_LICENSE = LGPL-2.1+
- PYTHON_ZEROCONF_LICENSE_FILES = COPYING
--- 
-2.30.2
+Regards,
+Asaf.
